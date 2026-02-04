@@ -151,9 +151,9 @@ Chat squad → Chat session → Vocal pendant session
 
 ---
 
-## ÉTAT RÉEL DE L'APP (Mise à jour: 4 février 2026 - 21h00)
+## ÉTAT RÉEL DE L'APP (Mise à jour: 4 février 2026 - 23h30)
 
-### Score Global : ~85%
+### Score Global : ~87%
 
 | Fonctionnalité | État | Testé ? | Détails |
 |----------------|------|---------|---------|
@@ -168,12 +168,25 @@ Chat squad → Chat session → Vocal pendant session
 | Check-in | ✅ **FONCTIONNE** | ✅ Oui | Compteurs mis à jour OK |
 | Chat squad | ✅ **FONCTIONNE** | ✅ Oui | Envoi/affichage messages OK |
 | Chat 1-to-1 | ❌ Non implémenté | - | - |
+| **Page Party** | ✅ **FONCTIONNE** | ✅ Oui | Onglet dédié, liste squads, bouton rejoindre |
 | Chat vocal Agora | ✅ Code validé | Partiel | UI fonctionne, connexion OK, test complet nécessite 2 users |
 | Upload photo profil | ⚠️ Policies créées | Non testé | - |
 | IA Planning | ⚠️ Edge function existe | Non testé | - |
 | IA Decision | ⚠️ Edge function existe | Non testé | - |
 | IA Coach | ❌ **TEXTE HARDCODÉ** | - | - |
 | Stripe Premium | ❌ Non configuré | - | - |
+
+### Navigation (mise à jour 4 fév 23h)
+
+| Position | Onglet | Route | État |
+|----------|--------|-------|------|
+| 1 | Accueil | `/` | ✅ |
+| 2 | Squads | `/squads` | ✅ |
+| 3 | **Party** ⭐ | `/party` | ✅ NOUVEAU |
+| 4 | Messages | `/messages` | ✅ |
+| 5 | Profil | `/profile` | ✅ |
+
+**Conforme à la BIBLE** : La Party a son propre onglet comme requis.
 
 ### Parcours Utilisateur - État des Tests
 

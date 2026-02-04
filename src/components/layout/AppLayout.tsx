@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { Home, Users, Calendar, MessageCircle, User, Plus, Zap } from 'lucide-react'
+import { Home, Users, Mic, MessageCircle, User, Plus, Zap } from 'lucide-react'
 import { useAuthStore } from '../../hooks'
 
 interface AppLayoutProps {
@@ -11,7 +11,7 @@ interface AppLayoutProps {
 const navItems = [
   { path: '/', icon: Home, label: 'Accueil' },
   { path: '/squads', icon: Users, label: 'Squads' },
-  { path: '/sessions', icon: Calendar, label: 'Sessions' },
+  { path: '/party', icon: Mic, label: 'Party' },
   { path: '/messages', icon: MessageCircle, label: 'Messages' },
   { path: '/profile', icon: User, label: 'Profil' },
 ]
@@ -83,9 +83,7 @@ export function AppLayout({ children }: AppLayoutProps) {
         {/* Logo */}
         <div className="p-6 border-b border-[rgba(255,255,255,0.06)]">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#5e6dd2] to-[#8b93ff] flex items-center justify-center">
-              <Zap className="w-5 h-5 text-white" strokeWidth={2} />
-            </div>
+            <img src="/favicon.svg" alt="Squad Planner" className="w-10 h-10" />
             <div>
               <h1 className="text-[16px] font-bold text-[#f7f8f8]">Squad Planner</h1>
               <p className="text-[11px] text-[#5e6063]">Jouez ensemble, vraiment</p>
@@ -127,9 +125,17 @@ export function AppLayout({ children }: AppLayoutProps) {
               className="flex items-center gap-3 p-3 rounded-xl hover:bg-[rgba(255,255,255,0.05)] transition-colors"
               whileHover={{ x: 4 }}
             >
-              <div className="w-10 h-10 rounded-full bg-[rgba(139,147,255,0.15)] flex items-center justify-center">
-                <User className="w-5 h-5 text-[#8b93ff]" />
-              </div>
+              {profile?.avatar_url ? (
+                <img
+                  src={profile.avatar_url}
+                  alt={profile.username || 'Avatar'}
+                  className="w-10 h-10 rounded-full object-cover"
+                />
+              ) : (
+                <div className="w-10 h-10 rounded-full bg-[rgba(139,147,255,0.15)] flex items-center justify-center">
+                  <User className="w-5 h-5 text-[#8b93ff]" />
+                </div>
+              )}
               <div className="flex-1 min-w-0">
                 <div className="text-[14px] font-medium text-[#f7f8f8] truncate">
                   {profile?.username || 'Mon profil'}

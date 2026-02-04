@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
-import { Home, Auth, Squads, SquadDetail, SessionDetail, Landing, Sessions, Profile, Messages } from './pages'
+import { Home, Auth, Squads, SquadDetail, SessionDetail, Landing, Sessions, Profile, Messages, Party } from './pages'
 import { AppLayout } from './components/layout'
 import { useAuthStore } from './hooks'
 
@@ -42,6 +42,9 @@ function AppContent() {
         } />
         <Route path="/squad/:id" element={
           <ProtectedRoute><SquadDetail /></ProtectedRoute>
+        } />
+        <Route path="/party" element={
+          <ProtectedRoute><Party /></ProtectedRoute>
         } />
         <Route path="/sessions" element={
           <ProtectedRoute><Sessions /></ProtectedRoute>

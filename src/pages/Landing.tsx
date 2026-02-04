@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion'
-import { 
-  Users, Calendar, Zap, Check, ArrowRight, 
-  Target, Shield, Sparkles, MessageCircle, Mic, Headphones
+import {
+  Users, Calendar, Zap, Check, ArrowRight,
+  Target, Shield, Sparkles, MessageCircle, Headphones, TrendingUp
 } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { Button } from '../components/ui'
@@ -12,22 +12,22 @@ const itemVariants = theme.animation.item
 
 const features = [
   {
-    icon: Users,
-    title: 'Squads organisées',
-    description: 'Crée ta squad, invite tes amis avec un simple code. Fini les groupes Discord désorganisés.',
-    color: '#5e6dd2'
+    icon: Headphones,
+    title: 'Party vocale 24/7',
+    description: 'Ta squad a son salon vocal toujours ouvert. Rejoins en 1 clic, reste aussi longtemps que tu veux.',
+    color: '#4ade80'
   },
   {
     icon: Calendar,
-    title: 'Sessions confirmées',
-    description: 'Chacun répond : présent, absent ou peut-être. Plus de "on verra".',
+    title: 'Planning avec décision',
+    description: 'Propose un créneau. Chacun répond. Fini les "on verra" — on sait qui vient.',
     color: '#f5a623'
   },
   {
-    icon: Mic,
-    title: 'Vocal in-app',
-    description: 'Rejoins le vocal directement depuis l\'app. Qualité HD, zéro friction.',
-    color: '#4ade80'
+    icon: Target,
+    title: 'Score de fiabilité',
+    description: 'Check-in à chaque session. Ton score montre si tu es fiable. Pression sociale douce, résultats concrets.',
+    color: '#f87171'
   },
   {
     icon: MessageCircle,
@@ -36,48 +36,48 @@ const features = [
     color: '#60a5fa'
   },
   {
-    icon: Check,
-    title: 'Check-in réel',
-    description: 'À l\'heure de la session, confirme ta présence. On sait qui est fiable.',
-    color: '#f87171'
+    icon: Users,
+    title: 'Squads organisées',
+    description: 'Crée ta squad, invite tes amis avec un simple code. Tout le monde au même endroit.',
+    color: '#5e6dd2'
   },
   {
     icon: Sparkles,
-    title: 'IA Native',
+    title: 'IA Coach',
     description: 'L\'IA suggère les meilleurs créneaux et détecte les risques de no-show.',
     color: '#8b93ff'
   }
 ]
 
 const stats = [
-  { value: '+92%', label: 'taux de présence' },
+  { value: '+92%', label: 'de présence réelle' },
+  { value: '3x', label: 'plus de sessions jouées' },
   { value: '-70%', label: 'de no-shows' },
-  { value: '2min', label: 'pour planifier' },
 ]
 
 const steps = [
   {
     step: '1',
     title: 'Crée ta Squad',
-    description: 'Donne un nom, choisis ton jeu principal, et génère un code d\'invitation unique.',
+    description: 'Donne un nom, choisis ton jeu. Ta squad a direct sa party vocale et son chat.',
     icon: Users
   },
   {
     step: '2',
     title: 'Invite tes potes',
-    description: 'Partage le code. Ils rejoignent en 10 secondes, sans inscription complexe.',
+    description: 'Partage le code. Ils rejoignent en 10 secondes. Tout le monde au même endroit.',
     icon: MessageCircle
   },
   {
     step: '3',
-    title: 'Planifie une session',
-    description: 'Propose un créneau. Chacun répond. L\'IA te dit si c\'est risqué.',
+    title: 'Planifie, décide, confirme',
+    description: 'Propose un créneau. Chacun répond OUI ou NON. Plus de "on verra".',
     icon: Calendar
   },
   {
     step: '4',
-    title: 'Jouez ensemble',
-    description: 'Check-in à l\'heure, jouez, et construisez votre historique de fiabilité.',
+    title: 'Crée l\'habitude',
+    description: 'Check-in, jouez, répétez. Semaine après semaine, votre squad devient fiable.',
     icon: Target
   }
 ]
@@ -100,28 +100,28 @@ export default function Landing() {
             {/* Badge */}
             <motion.div variants={itemVariants} className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[rgba(94,109,210,0.1)] border border-[rgba(94,109,210,0.2)] mb-8">
               <Zap className="w-4 h-4 text-[#f5a623]" />
-              <span className="text-[13px] text-[#8b93ff] font-medium">IA Native • Le futur du gaming social</span>
+              <span className="text-[13px] text-[#8b93ff] font-medium">Crée l'habitude de jouer ensemble</span>
             </motion.div>
 
             {/* Headline */}
-            <motion.h1 
+            <motion.h1
               variants={itemVariants}
               className="text-4xl md:text-6xl font-bold text-[#f7f8f8] mb-6 leading-tight"
             >
-              Transforme tes<br />
+              Fini les<br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#5e6dd2] to-[#8b93ff]">
-                "on joue un jour"
+                "quand est-ce qu'on joue ?"
               </span><br />
-              en sessions réelles
+              sans réponse
             </motion.h1>
 
             {/* Subtitle */}
-            <motion.p 
+            <motion.p
               variants={itemVariants}
               className="text-lg md:text-xl text-[#8b8d90] mb-10 max-w-2xl mx-auto"
             >
-              Squad Planner tue le "on verra". Crée ta squad, planifie, confirme, joue. 
-              <span className="text-[#f7f8f8] font-medium"> Zéro friction, zéro excuse.</span>
+              Squad Planner transforme les intentions molles en habitudes concrètes.
+              <span className="text-[#f7f8f8] font-medium"> Ta squad joue vraiment, chaque semaine.</span>
             </motion.p>
 
             {/* CTA */}
@@ -208,10 +208,10 @@ export default function Landing() {
             className="text-center mb-12"
           >
             <h2 className="text-2xl md:text-3xl font-bold text-[#f7f8f8] mb-4">
-              La solution : Squad Planner
+              Les 3 piliers de Squad Planner
             </h2>
             <p className="text-[#8b8d90] text-lg">
-              Un système qui force l'engagement et récompense la fiabilité
+              Party vocale + Planning clair + Fiabilité mesurée = Habitude de jeu
             </p>
           </motion.div>
 
@@ -254,17 +254,17 @@ export default function Landing() {
                 <Headphones className="w-8 h-8 text-[#4ade80]" />
               </div>
               <h3 className="text-xl font-bold text-[#f7f8f8] mb-3">
-                🎙️ Chat vocal intégré
+                🎙️ Party vocale toujours ouverte
               </h3>
               <p className="text-[#8b8d90] mb-4">
-                Plus besoin de Discord. Rejoins le vocal de la session en un clic. 
-                <span className="text-[#4ade80] font-medium"> Qualité HD, latence ultra-faible.</span>
+                Ta squad a son salon vocal 24/7. Pas besoin de planifier.
+                <span className="text-[#4ade80] font-medium"> Rejoins quand tu veux, reste aussi longtemps que tu veux.</span>
               </p>
               <ul className="space-y-2">
                 {[
-                  'Vocal par session ou squad',
+                  '1 squad = 1 party vocale dédiée',
                   'Rejoindre en 1 clic',
-                  'Push-to-talk ou voix continue',
+                  'Qualité HD, latence ultra-faible',
                 ].map(item => (
                   <li key={item} className="flex items-center gap-2 text-[14px] text-[#c9cace]">
                     <Check className="w-4 h-4 text-[#4ade80]" />
@@ -308,8 +308,46 @@ export default function Landing() {
             viewport={{ once: true }}
             className="text-center text-[14px] text-[#5e6063] mt-8"
           >
-            💡 Discord optionnel — Squad Planner est <span className="text-[#f7f8f8]">100% autonome</span>
+            💡 Pas un Discord alternatif — Squad Planner crée des <span className="text-[#f7f8f8]">habitudes de jeu</span>, pas des communautés
           </motion.p>
+        </div>
+      </section>
+
+      {/* Reliability Score Section */}
+      <section className="px-4 md:px-6 py-16 bg-gradient-to-b from-transparent to-[rgba(248,113,113,0.02)]">
+        <div className="max-w-4xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="p-8 md:p-12 rounded-3xl bg-[rgba(255,255,255,0.02)] border border-[rgba(248,113,113,0.2)]"
+          >
+            <div className="flex flex-col md:flex-row items-center gap-8">
+              <div className="w-24 h-24 rounded-2xl bg-[rgba(248,113,113,0.1)] flex items-center justify-center shrink-0">
+                <TrendingUp className="w-12 h-12 text-[#f87171]" />
+              </div>
+              <div className="text-center md:text-left">
+                <h3 className="text-2xl font-bold text-[#f7f8f8] mb-3">
+                  Score de fiabilité : la pression sociale qui marche
+                </h3>
+                <p className="text-[#8b8d90] mb-4">
+                  Chaque membre a un score basé sur sa présence réelle. Tu dis que tu viens ? On vérifie.
+                  <span className="text-[#f87171] font-medium"> Les no-shows chroniques, ça se voit.</span>
+                </p>
+                <div className="flex flex-wrap justify-center md:justify-start gap-4">
+                  {[
+                    { label: 'Check-in obligatoire', icon: '✅' },
+                    { label: 'Historique visible', icon: '📊' },
+                    { label: 'Score par joueur', icon: '🏆' },
+                  ].map(item => (
+                    <span key={item.label} className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[rgba(248,113,113,0.1)] text-[13px] text-[#f87171]">
+                      {item.icon} {item.label}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </motion.div>
         </div>
       </section>
 
@@ -364,10 +402,10 @@ export default function Landing() {
           >
             <Shield className="w-12 h-12 mx-auto mb-6 text-[#5e6dd2]" />
             <h2 className="text-2xl md:text-3xl font-bold text-[#f7f8f8] mb-4">
-              Prêt à jouer pour de vrai ?
+              Prêt à créer l'habitude ?
             </h2>
             <p className="text-[#8b8d90] mb-8">
-              Gratuit pour commencer. Premium quand ta squad devient sérieuse.
+              Gratuit pour commencer. Ta squad joue chaque semaine, pour de vrai.
             </p>
             <Link to="/auth?mode=register">
               <motion.button

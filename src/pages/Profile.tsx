@@ -71,6 +71,9 @@ export function Profile() {
     })
   }
 
+  // Local preview state for instant feedback
+  const [localPreviewUrl, setLocalPreviewUrl] = useState<string | null>(null)
+
   const handlePhotoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (!file || !user) return
@@ -81,15 +84,16 @@ export function Profile() {
       return
     }
 
+    // Show local preview IMMEDIATELY
+    const previewUrl = URL.createObjectURL(file)
+    setLocalPreviewUrl(previewUrl)
     setIsUploadingPhoto(true)
-    try {
-      // Compress the image
-      const compressedBlob = await compressImage(file)
 
-      // Create unique file name
+    // Upload in background
+    try {
+      const compressedBlob = await compressImage(file)
       const fileName = `${user.id}-${Date.now()}.jpg`
 
-      // Upload to Supabase Storage
       const { error: uploadError } = await supabase.storage
         .from('avatars')
         .upload(fileName, compressedBlob, {
@@ -99,15 +103,19 @@ export function Profile() {
 
       if (uploadError) throw uploadError
 
-      // Get public URL
       const { data: { publicUrl } } = supabase.storage
         .from('avatars')
         .getPublicUrl(fileName)
 
-      // Update profile with new avatar URL
+      // Update profile with real URL
       await updateProfile({ avatar_url: publicUrl })
+
+      // Clear local preview, profile now has real URL
+      setLocalPreviewUrl(null)
+      URL.revokeObjectURL(previewUrl)
     } catch (error) {
       console.error('Error uploading photo:', error)
+      // Keep local preview on error
     } finally {
       setIsUploadingPhoto(false)
     }
@@ -145,9 +153,9 @@ export function Profile() {
                   {/* Avatar with upload */}
                   <div className="relative">
                     <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-[#5e6dd2] to-[#8b93ff] flex items-center justify-center overflow-hidden">
-                      {profile?.avatar_url ? (
+                      {(localPreviewUrl || profile?.avatar_url) ? (
                         <img
-                          src={profile.avatar_url}
+                          src={localPreviewUrl || profile?.avatar_url}
                           alt="Avatar"
                           className="w-full h-full object-cover"
                         />

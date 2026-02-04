@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   Users, UserPlus, ArrowRight, ArrowLeft, Bell, Mic,
@@ -6,7 +6,8 @@ import {
 } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { Button, Card, Input } from '../components/ui'
-import { useAuthStore, useSquadsStore } from '../hooks'
+import { useAuthStore } from '../hooks'
+import { useSquadsStore } from '../hooks/useSquads'
 import { supabase } from '../lib/supabase'
 import { SquadPlannerIcon } from '../components/SquadPlannerLogo'
 
@@ -94,6 +95,9 @@ export function Onboarding() {
     })
   }
 
+  // Ref to track pending upload
+  const pendingUploadRef = useRef<Promise<void> | null>(null)
+
   const handleAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (!file || !user) return
@@ -104,53 +108,63 @@ export function Onboarding() {
       return
     }
 
+    // Show local preview IMMEDIATELY (no waiting)
+    const localPreviewUrl = URL.createObjectURL(file)
+    setAvatarUrl(localPreviewUrl)
     setUploadingAvatar(true)
     setError(null)
 
-    try {
-      // Compress the image
-      const compressedBlob = await compressImage(file)
+    // Upload in background (non-blocking)
+    const uploadPromise = (async () => {
+      try {
+        // Compress the image
+        const compressedBlob = await compressImage(file)
 
-      // Create unique file name
-      const fileName = `${user.id}-${Date.now()}.jpg`
+        // Create unique file name
+        const fileName = `${user.id}-${Date.now()}.jpg`
 
-      // Upload to Supabase Storage (bucket is 'avatars', path is just the filename)
-      const { error: uploadError } = await supabase.storage
-        .from('avatars')
-        .upload(fileName, compressedBlob, {
-          upsert: true,
-          contentType: 'image/jpeg'
-        })
+        // Upload to Supabase Storage
+        const { error: uploadError } = await supabase.storage
+          .from('avatars')
+          .upload(fileName, compressedBlob, {
+            upsert: true,
+            contentType: 'image/jpeg'
+          })
 
-      if (uploadError) throw uploadError
+        if (uploadError) throw uploadError
 
-      // Get public URL
-      const { data: { publicUrl } } = supabase.storage
-        .from('avatars')
-        .getPublicUrl(fileName)
+        // Get public URL
+        const { data: { publicUrl } } = supabase.storage
+          .from('avatars')
+          .getPublicUrl(fileName)
 
-      setAvatarUrl(publicUrl)
+        // Update to real URL (replace local preview)
+        setAvatarUrl(publicUrl)
 
-      // Update profile with new avatar URL
-      const { error: updateError } = await supabase
-        .from('profiles')
-        .update({
-          avatar_url: publicUrl,
-          updated_at: new Date().toISOString()
-        })
-        .eq('id', user.id)
+        // Update profile in DB
+        await supabase
+          .from('profiles')
+          .update({
+            avatar_url: publicUrl,
+            updated_at: new Date().toISOString()
+          })
+          .eq('id', user.id)
 
-      if (updateError) throw updateError
+        // Refresh profile in store
+        await refreshProfile()
 
-      // Refresh profile in store so navbar updates
-      await refreshProfile()
+        // Clean up local preview URL
+        URL.revokeObjectURL(localPreviewUrl)
 
-    } catch (err) {
-      console.error('Avatar upload error:', err)
-      setError('Erreur lors de l\'upload de la photo')
-    } finally {
-      setUploadingAvatar(false)
-    }
+      } catch (err) {
+        console.error('Avatar upload error:', err)
+        // Keep the local preview even on error, don't show error to not block user
+      } finally {
+        setUploadingAvatar(false)
+      }
+    })()
+
+    pendingUploadRef.current = uploadPromise
   }
 
   const handleCreateSquad = async () => {
@@ -263,22 +277,22 @@ export function Onboarding() {
   }
 
   const handleComplete = async () => {
-    // If we created a squad, go directly there
+    // If we created a squad during this onboarding, go directly there
     if (createdSquadId) {
-      navigate(`/squad/${createdSquadId}`, { replace: true })
+      window.location.href = `/squad/${createdSquadId}`
       return
     }
 
-    // Otherwise, fetch fresh squads data and navigate
+    // Otherwise, fetch fresh squads data
     await fetchSquads()
 
-    // Get fresh state from store (squads variable is stale in closure)
+    // Get fresh state from store
     const freshSquads = useSquadsStore.getState().squads
 
     if (freshSquads.length > 0) {
-      navigate(`/squad/${freshSquads[0].id}`, { replace: true })
+      window.location.href = `/squad/${freshSquads[0].id}`
     } else {
-      navigate('/squads', { replace: true })
+      window.location.href = '/squads'
     }
   }
 

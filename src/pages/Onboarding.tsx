@@ -250,25 +250,27 @@ export function Onboarding() {
     setError(null)
 
     try {
-      // Use upsert to create or update profile
-      const { error: upsertError } = await supabase
+      // Use update (not upsert) - profile should already exist
+      const { error: updateError } = await supabase
         .from('profiles')
-        .upsert({
-          id: user.id,
+        .update({
           username: username.trim() || profile?.username || 'User',
           timezone,
           updated_at: new Date().toISOString()
         })
+        .eq('id', user.id)
 
-      setIsLoading(false)
-
-      if (upsertError) {
-        console.error('Profile save error:', upsertError)
+      if (updateError) {
+        console.error('Profile save error:', updateError)
         setError('Erreur lors de la sauvegarde du profil')
-      } else {
-        await refreshProfile()
-        setStep('complete')
+        setIsLoading(false)
+        return
       }
+
+      // Don't wait for refreshProfile - go to complete immediately
+      refreshProfile().catch(console.error)
+      setIsLoading(false)
+      setStep('complete')
     } catch (err) {
       setIsLoading(false)
       setError('Erreur inattendue')

@@ -1,7 +1,72 @@
 # Squad Planner - Mémoire Projet
 
 > Ce fichier est lu par chaque nouvel agent au début de chaque conversation.
-> Dernière mise à jour: 4 février 2026 - 19h30
+> Dernière mise à jour: 4 février 2026 - 22h15
+
+---
+
+## 📖 BIBLE DU PROJET (LECTURE OBLIGATOIRE)
+
+### AVANT TOUTE ACTION, LIS CE FICHIER :
+
+👉 **[BIBLE.md](./BIBLE.md)** — Document fondateur complet
+
+Ce fichier contient :
+- Le positionnement stratégique (ce que Squad Planner EST et N'EST PAS)
+- Les 3 piliers du produit (Party vocale, Planning, Fiabilité)
+- Tous les parcours utilisateurs détaillés (A → G)
+- La roadmap officielle (V1 → V4)
+- Les conditions de mort du produit
+- Le modèle de monétisation
+
+### Règle Absolue
+
+> **Tant qu'une étape n'est pas 100% fonctionnelle et testée, on n'avance PAS à la suivante.**
+
+### Checklist Nouvel Agent
+
+1. ✅ Lire GEMINI.md (ce fichier)
+2. ✅ Lire **BIBLE.md** en entier
+3. ✅ Identifier l'étape en cours dans la roadmap
+4. ✅ Compléter cette étape à 100%
+5. ✅ Mettre à jour l'état réel ici
+
+---
+
+## 🛠️ OUTILS À UTILISER (OBLIGATOIRE)
+
+### Skills disponibles (dossier `/skills/`)
+
+Utilise ces skills de manière autonome selon le contexte :
+
+| Skill | Quand l'utiliser |
+|-------|------------------|
+| `supabase-expert` | Backend, RLS, triggers, Edge Functions |
+| `react-expert` | Composants React, hooks, state |
+| `typescript-pro` | Types, interfaces, erreurs TS |
+| `playwright-expert` | Tests E2E, sélecteurs, assertions |
+| `postgres-pro` | Requêtes SQL, migrations, optimisation |
+| `api-designer` | Design d'API, endpoints |
+| `front-end-design` | UI/UX, CSS, animations |
+| `security-reviewer` | Audit sécurité, failles |
+| `code-reviewer` | Review de code, best practices |
+| `debugging-wizard` | Debug, erreurs, logs |
+| `devops-engineer` | Déploiement, CI/CD |
+| `test-master` | Stratégie de tests |
+
+### MCP installés
+
+| MCP | Usage |
+|-----|-------|
+| `chrome-devtools` | Débugger le navigateur, prendre des screenshots, tester l'UI |
+| `context7` | Documentation à jour des librairies |
+| `puppeteer` | Automatisation navigateur |
+| `stitch` | Génération UI |
+| `magic (21st.dev)` | Composants UI, logos |
+
+**Règle** : Utilise ces outils proactivement. Ne pas attendre qu'on te le demande.
+
+---
 
 ## Langue
 

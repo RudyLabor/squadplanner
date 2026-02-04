@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion'
 import { 
   Users, Calendar, Zap, Check, ArrowRight, 
-  Target, Shield, Sparkles, MessageCircle
+  Target, Shield, Sparkles, MessageCircle, Mic, Headphones
 } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { Button } from '../components/ui'
@@ -24,10 +24,22 @@ const features = [
     color: '#f5a623'
   },
   {
+    icon: Mic,
+    title: 'Vocal in-app',
+    description: 'Rejoins le vocal directement depuis l\'app. Qualité HD, zéro friction.',
+    color: '#4ade80'
+  },
+  {
+    icon: MessageCircle,
+    title: 'Chat live',
+    description: 'Discute avec ta squad en temps réel. Avant, pendant et après la session.',
+    color: '#60a5fa'
+  },
+  {
     icon: Check,
     title: 'Check-in réel',
     description: 'À l\'heure de la session, confirme ta présence. On sait qui est fiable.',
-    color: '#4ade80'
+    color: '#f87171'
   },
   {
     icon: Sparkles,
@@ -203,7 +215,7 @@ export default function Landing() {
             </p>
           </motion.div>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {features.map((feature, index) => (
               <motion.div
                 key={feature.title}
@@ -224,6 +236,80 @@ export default function Landing() {
               </motion.div>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* Voice & Chat Highlight */}
+      <section className="px-4 md:px-6 py-16 border-t border-[rgba(255,255,255,0.04)]">
+        <div className="max-w-5xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="grid md:grid-cols-2 gap-6"
+          >
+            {/* Voice Card */}
+            <div className="p-8 rounded-3xl bg-gradient-to-br from-[rgba(74,222,128,0.1)] to-[rgba(74,222,128,0.02)] border border-[rgba(74,222,128,0.2)]">
+              <div className="w-16 h-16 rounded-2xl bg-[rgba(74,222,128,0.15)] flex items-center justify-center mb-6">
+                <Headphones className="w-8 h-8 text-[#4ade80]" />
+              </div>
+              <h3 className="text-xl font-bold text-[#f7f8f8] mb-3">
+                🎙️ Chat vocal intégré
+              </h3>
+              <p className="text-[#8b8d90] mb-4">
+                Plus besoin de Discord. Rejoins le vocal de la session en un clic. 
+                <span className="text-[#4ade80] font-medium"> Qualité HD, latence ultra-faible.</span>
+              </p>
+              <ul className="space-y-2">
+                {[
+                  'Vocal par session ou squad',
+                  'Rejoindre en 1 clic',
+                  'Push-to-talk ou voix continue',
+                ].map(item => (
+                  <li key={item} className="flex items-center gap-2 text-[14px] text-[#c9cace]">
+                    <Check className="w-4 h-4 text-[#4ade80]" />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Chat Card */}
+            <div className="p-8 rounded-3xl bg-gradient-to-br from-[rgba(96,165,250,0.1)] to-[rgba(96,165,250,0.02)] border border-[rgba(96,165,250,0.2)]">
+              <div className="w-16 h-16 rounded-2xl bg-[rgba(96,165,250,0.15)] flex items-center justify-center mb-6">
+                <MessageCircle className="w-8 h-8 text-[#60a5fa]" />
+              </div>
+              <h3 className="text-xl font-bold text-[#f7f8f8] mb-3">
+                💬 Chat live avec ta squad
+              </h3>
+              <p className="text-[#8b8d90] mb-4">
+                Discutez avant la session pour vous organiser. Pendant pour rigoler. Après pour le debrief.
+                <span className="text-[#60a5fa] font-medium"> Tout est au même endroit.</span>
+              </p>
+              <ul className="space-y-2">
+                {[
+                  'Chat de squad permanent',
+                  'Chat par session',
+                  'Résumés IA automatiques',
+                ].map(item => (
+                  <li key={item} className="flex items-center gap-2 text-[14px] text-[#c9cace]">
+                    <Check className="w-4 h-4 text-[#60a5fa]" />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </motion.div>
+
+          {/* Discord comparison */}
+          <motion.p
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            className="text-center text-[14px] text-[#5e6063] mt-8"
+          >
+            💡 Discord optionnel — Squad Planner est <span className="text-[#f7f8f8]">100% autonome</span>
+          </motion.p>
         </div>
       </section>
 

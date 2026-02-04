@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import { Users, Plus, ArrowLeft, Gamepad2, Link as LinkIcon, Copy, Check, Loader2, UserPlus } from 'lucide-react'
 import { Link, useNavigate } from 'react-router-dom'
 import { Button, Card, CardContent, Input } from '../components/ui'
@@ -113,41 +113,56 @@ export default function Squads() {
           </motion.div>
 
           {/* Join Form */}
-          {showJoin && (
-            <motion.div variants={itemVariants} className="mb-6">
-              <Card>
-                <CardContent className="p-6">
-                  <h3 className="text-lg font-semibold text-[#f7f8f8] mb-4">Rejoindre une squad</h3>
-                  <form onSubmit={handleJoinSquad} className="space-y-4">
-                    <Input
-                      label="Code d'invitation"
-                      value={inviteCode}
-                      onChange={(e) => setInviteCode(e.target.value.toUpperCase())}
-                      placeholder="ABC123"
-                      icon={<LinkIcon className="w-5 h-5" />}
-                    />
-                    {error && (
-                      <div className="p-3 rounded-lg bg-[rgba(248,113,113,0.1)] border border-[rgba(248,113,113,0.2)]">
-                        <p className="text-[#f87171] text-sm">{error}</p>
+          <AnimatePresence>
+            {showJoin && (
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.2 }}
+                className="mb-6"
+              >
+                <Card>
+                  <CardContent className="p-6">
+                    <h3 className="text-lg font-semibold text-[#f7f8f8] mb-4">Rejoindre une squad</h3>
+                    <form onSubmit={handleJoinSquad} className="space-y-4">
+                      <Input
+                        label="Code d'invitation"
+                        value={inviteCode}
+                        onChange={(e) => setInviteCode(e.target.value.toUpperCase())}
+                        placeholder="ABC123"
+                        icon={<LinkIcon className="w-5 h-5" />}
+                      />
+                      {error && (
+                        <div className="p-3 rounded-lg bg-[rgba(248,113,113,0.1)] border border-[rgba(248,113,113,0.2)]">
+                          <p className="text-[#f87171] text-sm">{error}</p>
+                        </div>
+                      )}
+                      <div className="flex gap-2">
+                        <Button type="button" variant="ghost" onClick={() => { setShowJoin(false); setError(null) }}>
+                          Annuler
+                        </Button>
+                        <Button type="submit" disabled={isLoading}>
+                          {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Rejoindre'}
+                        </Button>
                       </div>
-                    )}
-                    <div className="flex gap-2">
-                      <Button type="button" variant="ghost" onClick={() => { setShowJoin(false); setError(null) }}>
-                        Annuler
-                      </Button>
-                      <Button type="submit" disabled={isLoading}>
-                        {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Rejoindre'}
-                      </Button>
-                    </div>
-                  </form>
-                </CardContent>
-              </Card>
-            </motion.div>
-          )}
+                    </form>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            )}
+          </AnimatePresence>
 
           {/* Create Form */}
-          {showCreate && (
-            <motion.div variants={itemVariants} className="mb-6">
+          <AnimatePresence>
+            {showCreate && (
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.2 }}
+                className="mb-6"
+              >
               <Card>
                 <CardContent className="p-6">
                   <h3 className="text-lg font-semibold text-[#f7f8f8] mb-4">Créer une squad</h3>
@@ -182,8 +197,9 @@ export default function Squads() {
                   </form>
                 </CardContent>
               </Card>
-            </motion.div>
-          )}
+              </motion.div>
+            )}
+          </AnimatePresence>
 
           {/* Squads List */}
           {squads.length > 0 ? (
@@ -255,6 +271,30 @@ export default function Squads() {
               </div>
             </motion.div>
           )}
+
+          {/* How it works - User guidance */}
+          <motion.div variants={itemVariants} className="mt-8">
+            <Card className="p-6">
+              <h3 className="text-[14px] font-semibold text-[#f7f8f8] mb-4">
+                📖 Comment fonctionnent les squads ?
+              </h3>
+              <div className="space-y-3">
+                {[
+                  { num: '1', text: 'Crée une squad et donne-lui un nom et un jeu principal' },
+                  { num: '2', text: 'Partage le code d\'invitation à tes amis' },
+                  { num: '3', text: 'Propose des sessions de jeu à ta squad' },
+                  { num: '4', text: 'Jouez ensemble régulièrement et construisez votre fiabilité !' },
+                ].map(step => (
+                  <div key={step.num} className="flex items-center gap-3">
+                    <div className="w-6 h-6 rounded-lg bg-[rgba(94,109,210,0.15)] flex items-center justify-center">
+                      <span className="text-[12px] font-bold text-[#5e6dd2]">{step.num}</span>
+                    </div>
+                    <span className="text-[13px] text-[#8b8d90]">{step.text}</span>
+                  </div>
+                ))}
+              </div>
+            </Card>
+          </motion.div>
         </motion.div>
       </div>
     </div>

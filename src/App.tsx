@@ -55,6 +55,9 @@ function AppContent() {
         <Route path="/profile" element={
           <ProtectedRoute><Profile /></ProtectedRoute>
         } />
+
+        {/* Catch-all redirect to home */}
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </AppLayout>
   )

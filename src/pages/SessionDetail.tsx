@@ -6,6 +6,7 @@ import {
 } from 'lucide-react'
 import { Link, useParams, useNavigate } from 'react-router-dom'
 import { Button, Card, CardContent, Badge } from '../components/ui'
+import { VoiceChat } from '../components/VoiceChat'
 import { useAuthStore, useSessionsStore } from '../hooks'
 import { theme } from '../lib/theme'
 
@@ -273,6 +274,19 @@ export default function SessionDetail() {
                 <CheckCircle2 className="w-8 h-8 mx-auto mb-2 text-[#4ade80]" />
                 <p className="text-[#4ade80] font-medium">Check-in confirmé !</p>
               </Card>
+            </motion.div>
+          )}
+
+          {/* Voice Chat */}
+          {currentSession.status === 'confirmed' && id && (
+            <motion.div variants={itemVariants} className="mb-8">
+              <h2 className="text-[11px] font-medium text-[rgba(255,255,255,0.35)] uppercase tracking-[0.05em] mb-4">
+                Chat Vocal
+              </h2>
+              <VoiceChat
+                sessionId={id}
+                sessionTitle={currentSession.title || currentSession.game || 'Session'}
+              />
             </motion.div>
           )}
 

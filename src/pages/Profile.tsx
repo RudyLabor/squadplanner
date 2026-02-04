@@ -1,13 +1,14 @@
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
-import { 
-  User, Trophy, Calendar, Target, Shield, 
-  Settings, LogOut, Edit2, Check, X, Sparkles, Zap
+import {
+  User, Trophy, Calendar, Target, Shield,
+  Settings, LogOut, Edit2, Check, X, Sparkles, Zap, Camera, Loader2
 } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { Button, Card, CardContent, Input } from '../components/ui'
 import { useAuthStore } from '../hooks'
 import { theme } from '../lib/theme'
+import { supabase } from '../lib/supabase'
 
 const containerVariants = theme.animation.container
 const itemVariants = theme.animation.item
@@ -15,14 +16,57 @@ const itemVariants = theme.animation.item
 export function Profile() {
   const navigate = useNavigate()
   const { user, profile, signOut, updateProfile, isLoading } = useAuthStore()
-  
+  const fileInputRef = useRef<HTMLInputElement>(null)
+
   const [isEditing, setIsEditing] = useState(false)
-  const [username, setUsername] = useState(profile?.username || '')
-  const [bio, setBio] = useState(profile?.bio || '')
+  const [isUploadingPhoto, setIsUploadingPhoto] = useState(false)
+  const [username, setUsername] = useState('')
+  const [bio, setBio] = useState('')
+
+  // Sync state with profile when it changes
+  useEffect(() => {
+    if (profile) {
+      setUsername(profile.username || '')
+      setBio(profile.bio || '')
+    }
+  }, [profile])
 
   const handleSave = async () => {
-    await updateProfile({ username, bio })
-    setIsEditing(false)
+    const result = await updateProfile({ username, bio })
+    if (!result.error) {
+      setIsEditing(false)
+    }
+  }
+
+  const handlePhotoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file || !user) return
+
+    setIsUploadingPhoto(true)
+    try {
+      // Upload to Supabase Storage
+      const fileExt = file.name.split('.').pop()
+      const fileName = `${user.id}-${Date.now()}.${fileExt}`
+      const filePath = `avatars/${fileName}`
+
+      const { error: uploadError } = await supabase.storage
+        .from('avatars')
+        .upload(filePath, file, { upsert: true })
+
+      if (uploadError) throw uploadError
+
+      // Get public URL
+      const { data: { publicUrl } } = supabase.storage
+        .from('avatars')
+        .getPublicUrl(filePath)
+
+      // Update profile with new avatar URL
+      await updateProfile({ avatar_url: publicUrl })
+    } catch (error) {
+      console.error('Error uploading photo:', error)
+    } finally {
+      setIsUploadingPhoto(false)
+    }
   }
 
   const handleSignOut = async () => {
@@ -54,9 +98,37 @@ export function Profile() {
             <Card>
               <CardContent className="p-6">
                 <div className="flex items-start gap-4">
-                  {/* Avatar */}
-                  <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-[#5e6dd2] to-[#8b93ff] flex items-center justify-center">
-                    <User className="w-10 h-10 text-white" strokeWidth={1.5} />
+                  {/* Avatar with upload */}
+                  <div className="relative">
+                    <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-[#5e6dd2] to-[#8b93ff] flex items-center justify-center overflow-hidden">
+                      {profile?.avatar_url ? (
+                        <img
+                          src={profile.avatar_url}
+                          alt="Avatar"
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <User className="w-10 h-10 text-white" strokeWidth={1.5} />
+                      )}
+                    </div>
+                    <input
+                      ref={fileInputRef}
+                      type="file"
+                      accept="image/*"
+                      onChange={handlePhotoUpload}
+                      className="hidden"
+                    />
+                    <button
+                      onClick={() => fileInputRef.current?.click()}
+                      disabled={isUploadingPhoto}
+                      className="absolute -bottom-1 -right-1 w-8 h-8 rounded-full bg-[#5e6dd2] flex items-center justify-center border-2 border-[#08090a] hover:bg-[#4a59c2] transition-colors"
+                    >
+                      {isUploadingPhoto ? (
+                        <Loader2 className="w-4 h-4 text-white animate-spin" />
+                      ) : (
+                        <Camera className="w-4 h-4 text-white" />
+                      )}
+                    </button>
                   </div>
                   
                   {/* Info */}

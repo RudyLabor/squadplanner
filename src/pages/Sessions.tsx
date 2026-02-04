@@ -1,18 +1,21 @@
 import { useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { Calendar, Plus, Clock, Users, ChevronRight, Sparkles, AlertTriangle } from 'lucide-react'
+import { Calendar, Plus, Clock, Users, ChevronRight, Sparkles, AlertTriangle, TrendingUp } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { Button, Card, Badge } from '../components/ui'
-import { useAuthStore, useSquadsStore, useSessionsStore } from '../hooks'
+import { useAuthStore, useSquadsStore, useSessionsStore, useAIStore } from '../hooks'
 import { theme } from '../lib/theme'
 
 const containerVariants = theme.animation.container
 const itemVariants = theme.animation.item
 
+const dayNames = ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi']
+
 export function Sessions() {
   const { user } = useAuthStore()
   const { squads, fetchSquads } = useSquadsStore()
   const { sessions, fetchSessions } = useSessionsStore()
+  const { slotSuggestions, coachTips, fetchSlotSuggestions, fetchCoachTips } = useAIStore()
 
   useEffect(() => {
     if (user) {
@@ -20,12 +23,14 @@ export function Sessions() {
     }
   }, [user, fetchSquads])
 
-  // Fetch sessions for all squads
+  // Fetch sessions for all squads and AI suggestions
   useEffect(() => {
     squads.forEach(squad => {
       fetchSessions(squad.id)
+      fetchSlotSuggestions(squad.id)
+      fetchCoachTips(squad.id)
     })
-  }, [squads, fetchSessions])
+  }, [squads, fetchSessions, fetchSlotSuggestions, fetchCoachTips])
 
   const formatDate = (dateStr: string) => {
     const date = new Date(dateStr)
@@ -96,25 +101,59 @@ export function Sessions() {
             </motion.div>
           )}
 
-          {/* AI Suggestion placeholder */}
-          <motion.div variants={itemVariants} className="mb-6">
-            <Card className="p-4 border-[rgba(139,147,255,0.2)] bg-[rgba(139,147,255,0.05)]">
-              <div className="flex items-start gap-3">
-                <div className="w-10 h-10 rounded-xl bg-[rgba(139,147,255,0.15)] flex items-center justify-center shrink-0">
-                  <Sparkles className="w-5 h-5 text-[#8b93ff]" />
+          {/* AI Slot Suggestions */}
+          {slotSuggestions.length > 0 && (
+            <motion.div variants={itemVariants} className="mb-6">
+              <Card className="p-4 border-[rgba(139,147,255,0.2)] bg-[rgba(139,147,255,0.05)]">
+                <div className="flex items-start gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-[rgba(139,147,255,0.15)] flex items-center justify-center shrink-0">
+                    <Sparkles className="w-5 h-5 text-[#8b93ff]" />
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="text-[14px] font-semibold text-[#f7f8f8] mb-2">
+                      💡 Meilleurs créneaux suggérés
+                    </h3>
+                    <div className="space-y-2">
+                      {slotSuggestions.slice(0, 3).map((slot, index) => (
+                        <div key={index} className="flex items-center justify-between p-2 rounded-lg bg-[rgba(0,0,0,0.2)]">
+                          <span className="text-[13px] text-[#c9cace]">
+                            {dayNames[slot.day_of_week]} {slot.hour}h
+                          </span>
+                          <div className="flex items-center gap-2">
+                            <TrendingUp className="w-3.5 h-3.5 text-[#4ade80]" />
+                            <span className="text-[12px] font-medium text-[#4ade80]">
+                              {slot.reliability_score}%
+                            </span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
                 </div>
-                <div>
-                  <h3 className="text-[14px] font-semibold text-[#f7f8f8] mb-1">
-                    💡 Suggestion IA
-                  </h3>
-                  <p className="text-[13px] text-[#8b8d90]">
-                    Ta squad joue le mieux le <span className="text-[#f7f8f8] font-medium">jeudi à 21h</span>.
-                    92% de présence historique. Propose un créneau !
-                  </p>
+              </Card>
+            </motion.div>
+          )}
+
+          {/* Coach Tips */}
+          {coachTips.length > 0 && (
+            <motion.div variants={itemVariants} className="mb-6">
+              <Card className="p-4 border-[rgba(245,166,35,0.2)] bg-[rgba(245,166,35,0.05)]">
+                <div className="flex items-start gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-[rgba(245,166,35,0.15)] flex items-center justify-center shrink-0">
+                    <Sparkles className="w-5 h-5 text-[#f5a623]" />
+                  </div>
+                  <div>
+                    <h3 className="text-[14px] font-semibold text-[#f7f8f8] mb-1">
+                      🎯 Conseil Coach
+                    </h3>
+                    <p className="text-[13px] text-[#8b8d90]">
+                      {coachTips[0].content}
+                    </p>
+                  </div>
                 </div>
-              </div>
-            </Card>
-          </motion.div>
+              </Card>
+            </motion.div>
+          )}
 
           {/* Upcoming confirmed */}
           <motion.div variants={itemVariants} className="mb-8">

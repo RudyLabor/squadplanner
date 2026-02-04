@@ -14,6 +14,7 @@ interface AuthState {
   initialize: () => Promise<void>
   signUp: (email: string, password: string, username: string) => Promise<{ error: Error | null }>
   signIn: (email: string, password: string) => Promise<{ error: Error | null }>
+  signInWithGoogle: () => Promise<{ error: Error | null }>
   signOut: () => Promise<void>
   updateProfile: (updates: Partial<Profile>) => Promise<{ error: Error | null }>
 }
@@ -72,41 +73,43 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   signUp: async (email, password, username) => {
     try {
       set({ isLoading: true })
-      
-      // Create auth user
+
+      // Create auth user with username in metadata
+      // The database trigger 'handle_new_user' will create the profile automatically
       const { data, error: authError } = await supabase.auth.signUp({
         email,
         password,
+        options: {
+          data: {
+            username: username
+          }
+        }
       })
 
       if (authError) throw authError
       if (!data.user) throw new Error('No user returned')
 
-      // Create profile
-      const { error: profileError } = await supabase
-        .from('profiles')
-        .insert({
-          id: data.user.id,
-          username,
-          reliability_score: 100,
-        })
+      // Wait a moment for the trigger to create the profile
+      await new Promise(resolve => setTimeout(resolve, 500))
 
-      if (profileError) throw profileError
-
-      // Fetch the created profile
-      const { data: profile } = await supabase
+      // Fetch the profile created by the trigger
+      const { data: profile, error: profileError } = await supabase
         .from('profiles')
         .select('*')
         .eq('id', data.user.id)
         .single()
 
-      set({ 
-        user: data.user, 
+      if (profileError) {
+        console.error('Profile fetch error:', profileError)
+      }
+
+      set({
+        user: data.user,
         session: data.session,
         profile,
-        isLoading: false 
+        isLoading: false
       })
-      
+
       return { error: null }
     } catch (error) {
       set({ isLoading: false })
@@ -117,7 +120,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   signIn: async (email, password) => {
     try {
       set({ isLoading: true })
-      
+
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
@@ -132,13 +135,35 @@ export const useAuthStore = create<AuthState>((set, get) => ({
         .eq('id', data.user.id)
         .single()
 
-      set({ 
-        user: data.user, 
+      set({
+        user: data.user,
         session: data.session,
         profile,
-        isLoading: false 
+        isLoading: false
       })
-      
+
+      return { error: null }
+    } catch (error) {
+      set({ isLoading: false })
+      return { error: error as Error }
+    }
+  },
+
+  signInWithGoogle: async () => {
+    try {
+      set({ isLoading: true })
+
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: `${window.location.origin}/`
+        }
+      })
+
+      if (error) throw error
+
+      // OAuth redirects, so we don't need to set state here
+      // The onAuthStateChange listener will handle it
       return { error: null }
     } catch (error) {
       set({ isLoading: false })

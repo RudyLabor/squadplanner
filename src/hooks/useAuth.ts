@@ -117,9 +117,15 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 
         if (createError) {
           console.error('Profile create error:', createError)
-        } else {
-          profile = newProfile
+          // CRITICAL: Profile MUST exist, throw error if creation fails
+          throw new Error('Impossible de créer le profil. Veuillez réessayer.')
         }
+        profile = newProfile
+      }
+
+      // Final check: profile MUST exist
+      if (!profile) {
+        throw new Error('Profil non créé. Veuillez réessayer.')
       }
 
       set({

@@ -38,27 +38,71 @@ export function Profile() {
     }
   }
 
+  // Compress image before upload
+  const compressImage = (file: File, maxWidth = 400, quality = 0.8): Promise<Blob> => {
+    return new Promise((resolve, reject) => {
+      const canvas = document.createElement('canvas')
+      const ctx = canvas.getContext('2d')
+      const img = new Image()
+
+      img.onload = () => {
+        let { width, height } = img
+        if (width > maxWidth) {
+          height = (height * maxWidth) / width
+          width = maxWidth
+        }
+
+        canvas.width = width
+        canvas.height = height
+        ctx?.drawImage(img, 0, 0, width, height)
+
+        canvas.toBlob(
+          (blob) => {
+            if (blob) resolve(blob)
+            else reject(new Error('Compression failed'))
+          },
+          'image/jpeg',
+          quality
+        )
+      }
+
+      img.onerror = () => reject(new Error('Failed to load image'))
+      img.src = URL.createObjectURL(file)
+    })
+  }
+
   const handlePhotoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (!file || !user) return
 
+    // Check file size (max 5MB before compression)
+    if (file.size > 5 * 1024 * 1024) {
+      alert('Image trop lourde (max 5MB)')
+      return
+    }
+
     setIsUploadingPhoto(true)
     try {
-      // Upload to Supabase Storage
-      const fileExt = file.name.split('.').pop()
-      const fileName = `${user.id}-${Date.now()}.${fileExt}`
-      const filePath = `avatars/${fileName}`
+      // Compress the image
+      const compressedBlob = await compressImage(file)
 
+      // Create unique file name
+      const fileName = `${user.id}-${Date.now()}.jpg`
+
+      // Upload to Supabase Storage
       const { error: uploadError } = await supabase.storage
         .from('avatars')
-        .upload(filePath, file, { upsert: true })
+        .upload(fileName, compressedBlob, {
+          upsert: true,
+          contentType: 'image/jpeg'
+        })
 
       if (uploadError) throw uploadError
 
       // Get public URL
       const { data: { publicUrl } } = supabase.storage
         .from('avatars')
-        .getPublicUrl(filePath)
+        .getPublicUrl(fileName)
 
       // Update profile with new avatar URL
       await updateProfile({ avatar_url: publicUrl })

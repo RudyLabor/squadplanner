@@ -1,0 +1,919 @@
+import { useState, useEffect } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
+import {
+  Users, UserPlus, ArrowRight, ArrowLeft, Bell, Mic,
+  Check, Globe, Camera, Loader2
+} from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
+import { Button, Card, Input } from '../components/ui'
+import { useAuthStore, useSquadsStore } from '../hooks'
+import { supabase } from '../lib/supabase'
+import { SquadPlannerIcon } from '../components/SquadPlannerLogo'
+
+type OnboardingStep = 'splash' | 'squad-choice' | 'create-squad' | 'join-squad' | 'permissions' | 'profile' | 'complete'
+
+export function Onboarding() {
+  const navigate = useNavigate()
+  const { user, profile, refreshProfile } = useAuthStore()
+  const { createSquad, joinSquad, fetchSquads, squads } = useSquadsStore()
+
+  const [step, setStep] = useState<OnboardingStep>('splash')
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+
+  // Squad creation
+  const [squadName, setSquadName] = useState('')
+  const [squadGame, setSquadGame] = useState('')
+
+  // Join squad
+  const [inviteCode, setInviteCode] = useState('')
+
+  // Profile
+  const [username, setUsername] = useState('')
+  const [timezone, setTimezone] = useState(() => Intl.DateTimeFormat().resolvedOptions().timeZone)
+  const [avatarUrl, setAvatarUrl] = useState<string | null>(null)
+  const [uploadingAvatar, setUploadingAvatar] = useState(false)
+
+  // Permissions state
+  const [notifPermission, setNotifPermission] = useState<'granted' | 'denied' | 'default'>('default')
+  const [micPermission, setMicPermission] = useState<'granted' | 'denied' | 'prompt'>('prompt')
+  const [notifRequested, setNotifRequested] = useState(false)
+
+  // Created squad ID for redirection
+  const [createdSquadId, setCreatedSquadId] = useState<string | null>(null)
+
+  useEffect(() => {
+    if ('Notification' in window) {
+      setNotifPermission(Notification.permission)
+      if (Notification.permission !== 'default') {
+        setNotifRequested(true)
+      }
+    }
+  }, [])
+
+  useEffect(() => {
+    if (profile?.username) {
+      setUsername(profile.username)
+    }
+    if (profile?.avatar_url) {
+      setAvatarUrl(profile.avatar_url)
+    }
+  }, [profile])
+
+  // Compress image before upload
+  const compressImage = (file: File, maxWidth = 400, quality = 0.8): Promise<Blob> => {
+    return new Promise((resolve, reject) => {
+      const canvas = document.createElement('canvas')
+      const ctx = canvas.getContext('2d')
+      const img = new Image()
+
+      img.onload = () => {
+        // Calculate new dimensions (max 400px, keep aspect ratio)
+        let { width, height } = img
+        if (width > maxWidth) {
+          height = (height * maxWidth) / width
+          width = maxWidth
+        }
+
+        canvas.width = width
+        canvas.height = height
+        ctx?.drawImage(img, 0, 0, width, height)
+
+        canvas.toBlob(
+          (blob) => {
+            if (blob) resolve(blob)
+            else reject(new Error('Compression failed'))
+          },
+          'image/jpeg',
+          quality
+        )
+      }
+
+      img.onerror = () => reject(new Error('Failed to load image'))
+      img.src = URL.createObjectURL(file)
+    })
+  }
+
+  const handleAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file || !user) return
+
+    // Check file size (max 5MB before compression)
+    if (file.size > 5 * 1024 * 1024) {
+      setError('Image trop lourde (max 5MB)')
+      return
+    }
+
+    setUploadingAvatar(true)
+    setError(null)
+
+    try {
+      // Compress the image
+      const compressedBlob = await compressImage(file)
+
+      // Create unique file name
+      const fileName = `${user.id}-${Date.now()}.jpg`
+
+      // Upload to Supabase Storage (bucket is 'avatars', path is just the filename)
+      const { error: uploadError } = await supabase.storage
+        .from('avatars')
+        .upload(fileName, compressedBlob, {
+          upsert: true,
+          contentType: 'image/jpeg'
+        })
+
+      if (uploadError) throw uploadError
+
+      // Get public URL
+      const { data: { publicUrl } } = supabase.storage
+        .from('avatars')
+        .getPublicUrl(fileName)
+
+      setAvatarUrl(publicUrl)
+
+      // Update profile with new avatar URL
+      const { error: updateError } = await supabase
+        .from('profiles')
+        .update({
+          avatar_url: publicUrl,
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', user.id)
+
+      if (updateError) throw updateError
+
+      // Refresh profile in store so navbar updates
+      await refreshProfile()
+
+    } catch (err) {
+      console.error('Avatar upload error:', err)
+      setError('Erreur lors de l\'upload de la photo')
+    } finally {
+      setUploadingAvatar(false)
+    }
+  }
+
+  const handleCreateSquad = async () => {
+    if (!squadName.trim()) {
+      setError('Le nom de la squad est requis')
+      return
+    }
+
+    setIsLoading(true)
+    setError(null)
+
+    try {
+      const { squad, error } = await createSquad({
+        name: squadName.trim(),
+        game: squadGame.trim() || 'Non défini'
+      })
+
+      setIsLoading(false)
+
+      if (error) {
+        setError(error.message)
+      } else if (squad) {
+        setCreatedSquadId(squad.id)
+        setStep('permissions')
+      } else {
+        setError('Erreur lors de la création')
+      }
+    } catch (err) {
+      setIsLoading(false)
+      setError('Erreur inattendue')
+      console.error('Create squad error:', err)
+    }
+  }
+
+  const handleJoinSquad = async () => {
+    if (!inviteCode.trim()) {
+      setError('Le code d\'invitation est requis')
+      return
+    }
+
+    setIsLoading(true)
+    setError(null)
+
+    const { error } = await joinSquad(inviteCode.trim())
+
+    setIsLoading(false)
+
+    if (error) {
+      setError(error.message)
+    } else {
+      await fetchSquads()
+      setStep('permissions')
+    }
+  }
+
+  const requestNotificationPermission = async () => {
+    if ('Notification' in window) {
+      const permission = await Notification.requestPermission()
+      setNotifPermission(permission)
+      setNotifRequested(true)
+    }
+  }
+
+  const requestMicPermission = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
+      stream.getTracks().forEach(track => track.stop())
+      setMicPermission('granted')
+    } catch {
+      setMicPermission('denied')
+    }
+  }
+
+  const canProceedFromPermissions = () => {
+    // Notifications must be requested (granted or denied after asking)
+    return notifRequested
+  }
+
+  const saveProfile = async () => {
+    if (!user) return
+
+    setIsLoading(true)
+    setError(null)
+
+    try {
+      // Use upsert to create or update profile
+      const { error: upsertError } = await supabase
+        .from('profiles')
+        .upsert({
+          id: user.id,
+          username: username.trim() || profile?.username || 'User',
+          timezone,
+          updated_at: new Date().toISOString()
+        })
+
+      setIsLoading(false)
+
+      if (upsertError) {
+        console.error('Profile save error:', upsertError)
+        setError('Erreur lors de la sauvegarde du profil')
+      } else {
+        await refreshProfile()
+        setStep('complete')
+      }
+    } catch (err) {
+      setIsLoading(false)
+      setError('Erreur inattendue')
+      console.error('Save profile error:', err)
+    }
+  }
+
+  const handleComplete = async () => {
+    // If we created a squad, go directly there
+    if (createdSquadId) {
+      navigate(`/squad/${createdSquadId}`, { replace: true })
+      return
+    }
+
+    // Otherwise, fetch fresh squads data and navigate
+    await fetchSquads()
+
+    // Get fresh state from store (squads variable is stale in closure)
+    const freshSquads = useSquadsStore.getState().squads
+
+    if (freshSquads.length > 0) {
+      navigate(`/squad/${freshSquads[0].id}`, { replace: true })
+    } else {
+      navigate('/squads', { replace: true })
+    }
+  }
+
+  const goBack = () => {
+    setError(null)
+    switch (step) {
+      case 'squad-choice':
+        setStep('splash')
+        break
+      case 'create-squad':
+      case 'join-squad':
+        setStep('squad-choice')
+        break
+      case 'permissions':
+        // Go back to create or join based on what was done
+        setStep('squad-choice')
+        break
+      case 'profile':
+        setStep('permissions')
+        break
+      default:
+        break
+    }
+  }
+
+  // Animation variants
+  const slideVariants = {
+    enter: { opacity: 0, y: 20 },
+    center: { opacity: 1, y: 0 },
+    exit: { opacity: 0, y: -20 }
+  }
+
+  return (
+    <div className="min-h-screen bg-[#08090a] flex items-center justify-center p-4">
+      <div className="w-full max-w-lg">
+        <AnimatePresence mode="wait">
+          {/* Step 1: Splash - Proposition de valeur */}
+          {step === 'splash' && (
+            <motion.div
+              key="splash"
+              variants={slideVariants}
+              initial="enter"
+              animate="center"
+              exit="exit"
+              className="text-center"
+            >
+              {/* Logo */}
+              <motion.div
+                initial={{ scale: 0.8, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{ duration: 0.5 }}
+                className="mb-8 flex justify-center"
+              >
+                <SquadPlannerIcon size={80} />
+              </motion.div>
+
+              {/* Proposition de valeur */}
+              <motion.h1
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2 }}
+                className="text-3xl md:text-4xl font-bold text-[#f7f8f8] mb-4 leading-tight"
+              >
+                Arrêtez de dire<br />
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#5e6dd2] to-[#8b93ff]">
+                  "on verra"
+                </span>
+              </motion.h1>
+
+              <motion.p
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.4 }}
+                className="text-xl text-[#8b8d90] mb-10"
+              >
+                Jouez vraiment ensemble.
+              </motion.p>
+
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.6 }}
+              >
+                <Button
+                  onClick={() => setStep('squad-choice')}
+                  className="w-full h-14 text-[16px]"
+                >
+                  C'est parti
+                  <ArrowRight className="w-5 h-5 ml-2" />
+                </Button>
+              </motion.div>
+
+              <motion.p
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.8 }}
+                className="text-[13px] text-[#5e6063] mt-6"
+              >
+                Ça prend moins de 90 secondes
+              </motion.p>
+            </motion.div>
+          )}
+
+          {/* Step 2: Squad Choice */}
+          {step === 'squad-choice' && (
+            <motion.div
+              key="squad-choice"
+              variants={slideVariants}
+              initial="enter"
+              animate="center"
+              exit="exit"
+            >
+              <button
+                onClick={goBack}
+                className="flex items-center gap-2 text-[#8b8d90] hover:text-[#f7f8f8] transition-colors mb-6"
+              >
+                <ArrowLeft className="w-4 h-4" />
+                Retour
+              </button>
+
+              <div className="text-center mb-8">
+                <h2 className="text-2xl font-bold text-[#f7f8f8] mb-2">
+                  Ta première squad
+                </h2>
+                <p className="text-[#8b8d90]">
+                  Une squad = tes potes + un salon vocal + un planning
+                </p>
+              </div>
+
+              <div className="space-y-4">
+                {/* Create Squad */}
+                <motion.button
+                  onClick={() => setStep('create-squad')}
+                  className="w-full p-6 rounded-2xl bg-[rgba(255,255,255,0.02)] border border-[rgba(255,255,255,0.06)] hover:border-[#5e6dd2] transition-colors text-left group"
+                  whileHover={{ y: -2 }}
+                  whileTap={{ scale: 0.99 }}
+                >
+                  <div className="flex items-start gap-4">
+                    <div className="w-14 h-14 rounded-xl bg-[rgba(94,109,210,0.15)] flex items-center justify-center shrink-0 group-hover:bg-[rgba(94,109,210,0.25)] transition-colors">
+                      <Users className="w-7 h-7 text-[#5e6dd2]" />
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="text-[16px] font-semibold text-[#f7f8f8] mb-1">
+                        Créer une squad
+                      </h3>
+                      <p className="text-[14px] text-[#8b8d90]">
+                        Tu invites tes amis avec un code. En 10 secondes, tout le monde est dedans.
+                      </p>
+                    </div>
+                    <ArrowRight className="w-5 h-5 text-[#5e6063] group-hover:text-[#5e6dd2] transition-colors shrink-0 mt-1" />
+                  </div>
+                </motion.button>
+
+                {/* Join Squad */}
+                <motion.button
+                  onClick={() => setStep('join-squad')}
+                  className="w-full p-6 rounded-2xl bg-[rgba(255,255,255,0.02)] border border-[rgba(255,255,255,0.06)] hover:border-[#4ade80] transition-colors text-left group"
+                  whileHover={{ y: -2 }}
+                  whileTap={{ scale: 0.99 }}
+                >
+                  <div className="flex items-start gap-4">
+                    <div className="w-14 h-14 rounded-xl bg-[rgba(74,222,128,0.15)] flex items-center justify-center shrink-0 group-hover:bg-[rgba(74,222,128,0.25)] transition-colors">
+                      <UserPlus className="w-7 h-7 text-[#4ade80]" />
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="text-[16px] font-semibold text-[#f7f8f8] mb-1">
+                        Rejoindre une squad
+                      </h3>
+                      <p className="text-[14px] text-[#8b8d90]">
+                        Un ami t'a donné un code ? Entre-le ici pour le rejoindre direct.
+                      </p>
+                    </div>
+                    <ArrowRight className="w-5 h-5 text-[#5e6063] group-hover:text-[#4ade80] transition-colors shrink-0 mt-1" />
+                  </div>
+                </motion.button>
+              </div>
+            </motion.div>
+          )}
+
+          {/* Step 3a: Create Squad */}
+          {step === 'create-squad' && (
+            <motion.div
+              key="create-squad"
+              variants={slideVariants}
+              initial="enter"
+              animate="center"
+              exit="exit"
+            >
+              <button
+                onClick={goBack}
+                className="flex items-center gap-2 text-[#8b8d90] hover:text-[#f7f8f8] transition-colors mb-6"
+              >
+                <ArrowLeft className="w-4 h-4" />
+                Retour
+              </button>
+
+              <div className="text-center mb-8">
+                <div className="w-16 h-16 rounded-2xl bg-[rgba(94,109,210,0.15)] flex items-center justify-center mx-auto mb-4">
+                  <Users className="w-8 h-8 text-[#5e6dd2]" />
+                </div>
+                <h2 className="text-2xl font-bold text-[#f7f8f8] mb-2">
+                  Crée ta squad
+                </h2>
+                <p className="text-[#8b8d90]">
+                  Donne-lui un nom et choisis votre jeu principal
+                </p>
+              </div>
+
+              <Card>
+                <div className="p-6 space-y-4">
+                  <Input
+                    label="Nom de la squad"
+                    value={squadName}
+                    onChange={(e) => setSquadName(e.target.value)}
+                    placeholder="Ex: Les Ranked du Soir"
+                    required
+                  />
+
+                  <Input
+                    label="Jeu principal"
+                    value={squadGame}
+                    onChange={(e) => setSquadGame(e.target.value)}
+                    placeholder="Ex: Valorant, LoL, CS2..."
+                  />
+
+                  {error && (
+                    <div className="p-3 rounded-lg bg-[rgba(248,113,113,0.1)] border border-[rgba(248,113,113,0.2)]">
+                      <p className="text-[#f87171] text-sm">{error}</p>
+                    </div>
+                  )}
+
+                  <Button
+                    onClick={handleCreateSquad}
+                    disabled={isLoading}
+                    className="w-full h-12"
+                  >
+                    {isLoading ? (
+                      <>
+                        <Loader2 className="w-5 h-5 animate-spin mr-2" />
+                        Création...
+                      </>
+                    ) : (
+                      <>
+                        Créer ma squad
+                        <ArrowRight className="w-5 h-5 ml-2" />
+                      </>
+                    )}
+                  </Button>
+                </div>
+              </Card>
+            </motion.div>
+          )}
+
+          {/* Step 3b: Join Squad */}
+          {step === 'join-squad' && (
+            <motion.div
+              key="join-squad"
+              variants={slideVariants}
+              initial="enter"
+              animate="center"
+              exit="exit"
+            >
+              <button
+                onClick={goBack}
+                className="flex items-center gap-2 text-[#8b8d90] hover:text-[#f7f8f8] transition-colors mb-6"
+              >
+                <ArrowLeft className="w-4 h-4" />
+                Retour
+              </button>
+
+              <div className="text-center mb-8">
+                <div className="w-16 h-16 rounded-2xl bg-[rgba(74,222,128,0.15)] flex items-center justify-center mx-auto mb-4">
+                  <UserPlus className="w-8 h-8 text-[#4ade80]" />
+                </div>
+                <h2 className="text-2xl font-bold text-[#f7f8f8] mb-2">
+                  Rejoins une squad
+                </h2>
+                <p className="text-[#8b8d90]">
+                  Entre le code que ton ami t'a donné
+                </p>
+              </div>
+
+              <Card>
+                <div className="p-6 space-y-4">
+                  <Input
+                    label="Code d'invitation"
+                    value={inviteCode}
+                    onChange={(e) => setInviteCode(e.target.value.toUpperCase())}
+                    placeholder="Ex: ABC123"
+                    className="text-center text-2xl tracking-widest font-mono"
+                    maxLength={8}
+                  />
+
+                  {error && (
+                    <div className="p-3 rounded-lg bg-[rgba(248,113,113,0.1)] border border-[rgba(248,113,113,0.2)]">
+                      <p className="text-[#f87171] text-sm">{error}</p>
+                    </div>
+                  )}
+
+                  <Button
+                    onClick={handleJoinSquad}
+                    disabled={isLoading}
+                    className="w-full h-12"
+                  >
+                    {isLoading ? (
+                      <>
+                        <Loader2 className="w-5 h-5 animate-spin mr-2" />
+                        Connexion...
+                      </>
+                    ) : (
+                      <>
+                        Rejoindre
+                        <ArrowRight className="w-5 h-5 ml-2" />
+                      </>
+                    )}
+                  </Button>
+                </div>
+              </Card>
+            </motion.div>
+          )}
+
+          {/* Step 4: Permissions */}
+          {step === 'permissions' && (
+            <motion.div
+              key="permissions"
+              variants={slideVariants}
+              initial="enter"
+              animate="center"
+              exit="exit"
+            >
+              <button
+                onClick={goBack}
+                className="flex items-center gap-2 text-[#8b8d90] hover:text-[#f7f8f8] transition-colors mb-6"
+              >
+                <ArrowLeft className="w-4 h-4" />
+                Retour
+              </button>
+
+              <div className="text-center mb-8">
+                <h2 className="text-2xl font-bold text-[#f7f8f8] mb-2">
+                  Reste connecté
+                </h2>
+                <p className="text-[#8b8d90]">
+                  Pour ne jamais rater une session
+                </p>
+              </div>
+
+              <div className="space-y-4">
+                {/* Notifications - OBLIGATOIRE */}
+                <Card className="p-5">
+                  <div className="flex items-start gap-4">
+                    <div className="w-12 h-12 rounded-xl bg-[rgba(245,166,35,0.15)] flex items-center justify-center shrink-0">
+                      <Bell className="w-6 h-6 text-[#f5a623]" />
+                    </div>
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2 mb-1">
+                        <h3 className="text-[15px] font-semibold text-[#f7f8f8]">
+                          Notifications
+                        </h3>
+                        <span className="text-[11px] px-2 py-0.5 rounded-full bg-[rgba(245,166,35,0.15)] text-[#f5a623] font-medium">
+                          Requis
+                        </span>
+                      </div>
+                      <p className="text-[13px] text-[#8b8d90] mb-3">
+                        Sois prévenu quand une session est créée ou quand ta squad t'attend
+                      </p>
+                      {notifPermission === 'granted' ? (
+                        <div className="flex items-center gap-2 text-[#4ade80] text-[14px]">
+                          <Check className="w-4 h-4" />
+                          Activées
+                        </div>
+                      ) : notifPermission === 'denied' ? (
+                        <p className="text-[13px] text-[#f87171]">
+                          Bloquées — active-les dans les paramètres de ton navigateur
+                        </p>
+                      ) : (
+                        <Button
+                          variant="secondary"
+                          size="sm"
+                          onClick={requestNotificationPermission}
+                        >
+                          Activer les notifications
+                        </Button>
+                      )}
+                    </div>
+                  </div>
+                </Card>
+
+                {/* Microphone - OPTIONNEL */}
+                <Card className="p-5">
+                  <div className="flex items-start gap-4">
+                    <div className="w-12 h-12 rounded-xl bg-[rgba(94,109,210,0.15)] flex items-center justify-center shrink-0">
+                      <Mic className="w-6 h-6 text-[#5e6dd2]" />
+                    </div>
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2 mb-1">
+                        <h3 className="text-[15px] font-semibold text-[#f7f8f8]">
+                          Microphone
+                        </h3>
+                        <span className="text-[11px] px-2 py-0.5 rounded-full bg-[rgba(255,255,255,0.05)] text-[#8b8d90] font-medium">
+                          Optionnel
+                        </span>
+                      </div>
+                      <p className="text-[13px] text-[#8b8d90] mb-3">
+                        Pour la party vocale avec ta squad. Tu peux activer plus tard.
+                      </p>
+                      {micPermission === 'granted' ? (
+                        <div className="flex items-center gap-2 text-[#4ade80] text-[14px]">
+                          <Check className="w-4 h-4" />
+                          Autorisé
+                        </div>
+                      ) : micPermission === 'denied' ? (
+                        <p className="text-[13px] text-[#5e6063]">
+                          Tu pourras l'activer plus tard dans les paramètres
+                        </p>
+                      ) : (
+                        <div className="flex gap-2">
+                          <Button
+                            variant="secondary"
+                            size="sm"
+                            onClick={requestMicPermission}
+                          >
+                            Autoriser le micro
+                          </Button>
+                          <button
+                            onClick={() => setMicPermission('denied')}
+                            className="text-[13px] text-[#5e6063] hover:text-[#8b8d90] px-3"
+                          >
+                            Plus tard
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </Card>
+              </div>
+
+              <div className="mt-6">
+                <Button
+                  onClick={() => setStep('profile')}
+                  className="w-full h-12"
+                  disabled={!canProceedFromPermissions()}
+                >
+                  Continuer
+                  <ArrowRight className="w-5 h-5 ml-2" />
+                </Button>
+                {!canProceedFromPermissions() && (
+                  <p className="text-[12px] text-[#f5a623] text-center mt-2">
+                    Active les notifications pour continuer
+                  </p>
+                )}
+              </div>
+            </motion.div>
+          )}
+
+          {/* Step 5: Profile */}
+          {step === 'profile' && (
+            <motion.div
+              key="profile"
+              variants={slideVariants}
+              initial="enter"
+              animate="center"
+              exit="exit"
+            >
+              <button
+                onClick={goBack}
+                className="flex items-center gap-2 text-[#8b8d90] hover:text-[#f7f8f8] transition-colors mb-6"
+              >
+                <ArrowLeft className="w-4 h-4" />
+                Retour
+              </button>
+
+              <div className="text-center mb-8">
+                <h2 className="text-2xl font-bold text-[#f7f8f8] mb-2">
+                  Ton profil
+                </h2>
+                <p className="text-[#8b8d90]">
+                  Quelques infos pour tes coéquipiers
+                </p>
+              </div>
+
+              <Card>
+                <div className="p-6 space-y-6">
+                  {/* Avatar upload */}
+                  <div className="flex flex-col items-center">
+                    <div className="relative mb-3">
+                      <div className="w-24 h-24 rounded-full bg-[rgba(94,109,210,0.15)] flex items-center justify-center overflow-hidden">
+                        {avatarUrl ? (
+                          <img
+                            src={avatarUrl}
+                            alt="Avatar"
+                            className="w-24 h-24 rounded-full object-cover"
+                          />
+                        ) : (
+                          <span className="text-4xl font-bold text-[#5e6dd2]">
+                            {username?.charAt(0).toUpperCase() || '?'}
+                          </span>
+                        )}
+                        {uploadingAvatar && (
+                          <div className="absolute inset-0 bg-black/50 flex items-center justify-center rounded-full">
+                            <Loader2 className="w-6 h-6 text-white animate-spin" />
+                          </div>
+                        )}
+                      </div>
+                      <label className="absolute bottom-0 right-0 w-8 h-8 rounded-full bg-[#5e6dd2] flex items-center justify-center border-2 border-[#08090a] cursor-pointer hover:bg-[#4a5bc0] transition-colors">
+                        <Camera className="w-4 h-4 text-white" />
+                        <input
+                          type="file"
+                          accept="image/*"
+                          onChange={handleAvatarUpload}
+                          className="hidden"
+                          disabled={uploadingAvatar}
+                        />
+                      </label>
+                    </div>
+                    <p className="text-[12px] text-[#5e6063]">
+                      Clique sur l'icône pour changer ta photo
+                    </p>
+                  </div>
+
+                  {/* Username */}
+                  <Input
+                    label="Pseudo"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    placeholder="TonPseudo"
+                    required
+                  />
+
+                  {/* Timezone */}
+                  <div>
+                    <label className="block text-[13px] font-medium text-[#8b8d90] mb-2">
+                      <Globe className="w-4 h-4 inline mr-1.5" />
+                      Fuseau horaire
+                    </label>
+                    <select
+                      value={timezone}
+                      onChange={(e) => setTimezone(e.target.value)}
+                      className="w-full h-11 px-4 rounded-lg bg-[#101012] border border-[rgba(255,255,255,0.1)] text-[#f7f8f8] text-[14px] focus:border-[#5e6dd2] outline-none [&>option]:bg-[#101012] [&>option]:text-[#f7f8f8]"
+                    >
+                      <option value="Europe/Paris">Europe/Paris (France)</option>
+                      <option value="Europe/London">Europe/London (UK)</option>
+                      <option value="Europe/Brussels">Europe/Brussels (Belgique)</option>
+                      <option value="Europe/Zurich">Europe/Zurich (Suisse)</option>
+                      <option value="America/Montreal">America/Montreal (Québec)</option>
+                      <option value="America/New_York">America/New_York (EST)</option>
+                      <option value="America/Los_Angeles">America/Los_Angeles (PST)</option>
+                      <option value="Asia/Tokyo">Asia/Tokyo (Japon)</option>
+                    </select>
+                    <p className="text-[12px] text-[#5e6063] mt-1.5">
+                      Détecté automatiquement : {Intl.DateTimeFormat().resolvedOptions().timeZone}
+                    </p>
+                  </div>
+
+                  <Button
+                    onClick={saveProfile}
+                    disabled={isLoading || !username.trim()}
+                    className="w-full h-12"
+                  >
+                    {isLoading ? (
+                      <>
+                        <Loader2 className="w-5 h-5 animate-spin mr-2" />
+                        Enregistrement...
+                      </>
+                    ) : (
+                      <>
+                        Terminer
+                        <Check className="w-5 h-5 ml-2" />
+                      </>
+                    )}
+                  </Button>
+                </div>
+              </Card>
+            </motion.div>
+          )}
+
+          {/* Step 6: Complete */}
+          {step === 'complete' && (
+            <motion.div
+              key="complete"
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0 }}
+              className="text-center"
+            >
+              <motion.div
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{ type: 'spring', duration: 0.5 }}
+                className="w-24 h-24 rounded-full bg-[#4ade80] flex items-center justify-center mx-auto mb-6"
+              >
+                <Check className="w-12 h-12 text-white" />
+              </motion.div>
+
+              <h2 className="text-2xl font-bold text-[#f7f8f8] mb-3">
+                C'est parti !
+              </h2>
+              <p className="text-[#8b8d90] mb-8">
+                {createdSquadId
+                  ? "Ta squad est prête ! Invite tes amis ou propose une première session."
+                  : squads.length > 0
+                    ? `Tu as rejoint ${squads[0].name} ! Dis bonjour ou propose une session.`
+                    : "Explore les squads ou crée la tienne pour commencer."
+                }
+              </p>
+
+              <Button onClick={handleComplete} className="w-full h-14 text-[16px]">
+                {createdSquadId || squads.length > 0 ? "Voir ma squad" : "Explorer"}
+                <ArrowRight className="w-5 h-5 ml-2" />
+              </Button>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Progress indicator */}
+        {step !== 'splash' && step !== 'complete' && (
+          <div className="flex justify-center gap-2 mt-8">
+            {['squad-choice', 'permissions', 'profile'].map((s, i) => {
+              const currentIndex = ['squad-choice', 'create-squad', 'join-squad'].includes(step) ? 0
+                : step === 'permissions' ? 1
+                : step === 'profile' ? 2 : -1
+              return (
+                <div
+                  key={s}
+                  className={`w-2 h-2 rounded-full transition-colors ${
+                    i <= currentIndex ? 'bg-[#5e6dd2]' : 'bg-[rgba(255,255,255,0.1)]'
+                  }`}
+                />
+              )
+            })}
+          </div>
+        )}
+      </div>
+    </div>
+  )
+}
+
+export default Onboarding

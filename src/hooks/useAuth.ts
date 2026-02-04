@@ -9,7 +9,7 @@ interface AuthState {
   session: Session | null
   isLoading: boolean
   isInitialized: boolean
-  
+
   // Actions
   initialize: () => Promise<void>
   signUp: (email: string, password: string, username: string) => Promise<{ error: Error | null }>
@@ -17,6 +17,7 @@ interface AuthState {
   signInWithGoogle: () => Promise<{ error: Error | null }>
   signOut: () => Promise<void>
   updateProfile: (updates: Partial<Profile>) => Promise<{ error: Error | null }>
+  refreshProfile: () => Promise<void>
 }
 
 export const useAuthStore = create<AuthState>((set, get) => ({
@@ -92,15 +93,33 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       // Wait a moment for the trigger to create the profile
       await new Promise(resolve => setTimeout(resolve, 500))
 
-      // Fetch the profile created by the trigger
-      const { data: profile, error: profileError } = await supabase
+      // Fetch or create the profile
+      const { data: existingProfile, error: profileError } = await supabase
         .from('profiles')
         .select('*')
         .eq('id', data.user.id)
         .single()
 
-      if (profileError) {
-        console.error('Profile fetch error:', profileError)
+      let profile = existingProfile
+
+      // If profile doesn't exist (trigger didn't work), create it manually
+      if (profileError || !profile) {
+        const { data: newProfile, error: createError } = await supabase
+          .from('profiles')
+          .insert({
+            id: data.user.id,
+            username: username,
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString()
+          })
+          .select()
+          .single()
+
+        if (createError) {
+          console.error('Profile create error:', createError)
+        } else {
+          profile = newProfile
+        }
       }
 
       set({
@@ -172,8 +191,29 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   },
 
   signOut: async () => {
-    await supabase.auth.signOut()
-    set({ user: null, session: null, profile: null })
+    try {
+      // Clear local state first
+      set({ user: null, session: null, profile: null, isLoading: true })
+
+      // Sign out from Supabase
+      const { error } = await supabase.auth.signOut()
+
+      if (error) {
+        console.error('Sign out error:', error)
+      }
+
+      // Force clear any cached session
+      localStorage.removeItem('supabase.auth.token')
+
+      set({ isLoading: false })
+
+      // Force redirect to auth page
+      window.location.href = '/auth'
+    } catch (error) {
+      console.error('Sign out error:', error)
+      set({ user: null, session: null, profile: null, isLoading: false })
+      window.location.href = '/auth'
+    }
   },
 
   updateProfile: async (updates) => {
@@ -199,6 +239,21 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       return { error: null }
     } catch (error) {
       return { error: error as Error }
+    }
+  },
+
+  refreshProfile: async () => {
+    const { user } = get()
+    if (!user) return
+
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('*')
+      .eq('id', user.id)
+      .single()
+
+    if (profile) {
+      set({ profile })
     }
   },
 }))

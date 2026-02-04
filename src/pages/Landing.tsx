@@ -1,11 +1,12 @@
 import { motion } from 'framer-motion'
 import {
-  Users, Calendar, Zap, Check, ArrowRight,
+  Users, Calendar, Check, ArrowRight,
   Target, Shield, Sparkles, MessageCircle, Headphones, TrendingUp
 } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { Button } from '../components/ui'
 import { theme } from '../lib/theme'
+import { SquadPlannerLogo, SquadPlannerIcon } from '../components/SquadPlannerLogo'
 
 const containerVariants = theme.animation.container
 const itemVariants = theme.animation.item
@@ -99,7 +100,7 @@ export default function Landing() {
           >
             {/* Badge */}
             <motion.div variants={itemVariants} className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[rgba(94,109,210,0.1)] border border-[rgba(94,109,210,0.2)] mb-8">
-              <Zap className="w-4 h-4 text-[#f5a623]" />
+              <SquadPlannerIcon size={16} />
               <span className="text-[13px] text-[#8b93ff] font-medium">Crée l'habitude de jouer ensemble</span>
             </motion.div>
 
@@ -425,7 +426,7 @@ export default function Landing() {
       <footer className="px-4 md:px-6 py-8 border-t border-[rgba(255,255,255,0.04)]">
         <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2">
-            <Zap className="w-5 h-5 text-[#5e6dd2]" />
+            <SquadPlannerLogo size={20} />
             <span className="text-[14px] font-semibold text-[#f7f8f8]">Squad Planner</span>
           </div>
           <p className="text-[13px] text-[#5e6063]">

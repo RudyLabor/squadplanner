@@ -104,7 +104,7 @@ export default function Auth() {
         if (squads.length === 0) {
           navigate('/onboarding')
         } else {
-          navigate('/')
+          navigate('/home')
         }
       }
     } else {

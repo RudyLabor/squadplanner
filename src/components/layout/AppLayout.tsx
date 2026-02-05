@@ -13,7 +13,7 @@ interface AppLayoutProps {
 
 // Navigation items (Party handled separately on mobile)
 const navItems = [
-  { path: '/', icon: Home, label: 'Accueil' },
+  { path: '/home', icon: Home, label: 'Accueil' },
   { path: '/squads', icon: Users, label: 'Squads' },
   { path: '/party', icon: Mic, label: 'Party' },
   { path: '/messages', icon: MessageCircle, label: 'Messages' },
@@ -22,7 +22,7 @@ const navItems = [
 
 // Mobile nav items (Party sera au centre avec un style spécial)
 const mobileNavLeft = [
-  { path: '/', icon: Home, label: 'Accueil' },
+  { path: '/home', icon: Home, label: 'Accueil' },
   { path: '/squads', icon: Users, label: 'Squads' },
 ]
 

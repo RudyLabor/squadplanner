@@ -2,7 +2,7 @@ import { useState, useEffect, useRef, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   Users, UserPlus, ArrowRight, ArrowLeft, Bell, Mic,
-  Check, Globe, Camera, Loader2
+  Check, Globe, Camera, Loader2, Copy, Gamepad2
 } from 'lucide-react'
 // useNavigate removed - using window.location.href for cleaner navigation
 import { Button, Card, Input } from '../components/ui'
@@ -17,7 +17,7 @@ export function Onboarding() {
   const { user, profile, refreshProfile } = useAuthStore()
   const { createSquad, joinSquad, fetchSquads, squads } = useSquadsStore()
 
-  const [step, setStep] = useState<OnboardingStep>('splash')
+  const [step, setStep] = useState<OnboardingStep>('squad-choice') // Skip splash, go direct to choice
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [isNavigating, setIsNavigating] = useState(false) // Prevents double-clicks during transitions
@@ -60,8 +60,10 @@ export function Onboarding() {
   const [micPermission, setMicPermission] = useState<'granted' | 'denied' | 'prompt'>('prompt')
   const [notifRequested, setNotifRequested] = useState(false)
 
-  // Created squad ID for redirection
+  // Created squad info for redirection and recap
   const [createdSquadId, setCreatedSquadId] = useState<string | null>(null)
+  const [createdSquadName, setCreatedSquadName] = useState<string | null>(null)
+  const [createdSquadCode, setCreatedSquadCode] = useState<string | null>(null)
 
   useEffect(() => {
     if ('Notification' in window) {
@@ -208,7 +210,9 @@ export function Onboarding() {
         setError(error.message)
       } else if (squad) {
         setCreatedSquadId(squad.id)
-        setStep('permissions')
+        setCreatedSquadName(squad.name)
+        setCreatedSquadCode(squad.invite_code)
+        setStep('profile') // Go to profile first, then permissions
       } else {
         setError('Erreur lors de la création')
       }
@@ -236,7 +240,7 @@ export function Onboarding() {
       setError(error.message)
     } else {
       await fetchSquads()
-      setStep('permissions')
+      setStep('profile') // Go to profile first, then permissions
     }
   }
 
@@ -287,10 +291,10 @@ export function Onboarding() {
         return
       }
 
-      // Don't wait for refreshProfile - go to complete immediately
+      // Don't wait for refreshProfile - go to permissions
       refreshProfile().catch(console.error)
       setIsLoading(false)
-      setStep('complete')
+      setStep('permissions')
     } catch (err) {
       setIsLoading(false)
       setError('Erreur inattendue')
@@ -322,17 +326,17 @@ export function Onboarding() {
     if (isNavigating) return
     switch (step) {
       case 'squad-choice':
-        navigateToStep('splash')
+        // No back from first step
         break
       case 'create-squad':
       case 'join-squad':
         navigateToStep('squad-choice')
         break
-      case 'permissions':
+      case 'profile':
         navigateToStep('squad-choice')
         break
-      case 'profile':
-        navigateToStep('permissions')
+      case 'permissions':
+        navigateToStep('profile')
         break
       default:
         break
@@ -428,13 +432,8 @@ export function Onboarding() {
               animate="center"
               exit="exit"
             >
-              <button
-                onClick={goBack}
-                className="flex items-center gap-2 text-[#8b8d90] hover:text-[#f7f8f8] transition-colors mb-6"
-              >
-                <ArrowLeft className="w-4 h-4" />
-                Retour
-              </button>
+              {/* No back button on first step */}
+              <div className="h-10 mb-6" />
 
               <div className="text-center mb-8">
                 <h2 className="text-2xl font-bold text-[#f7f8f8] mb-2">
@@ -662,10 +661,10 @@ export function Onboarding() {
 
               <div className="text-center mb-8">
                 <h2 className="text-2xl font-bold text-[#f7f8f8] mb-2">
-                  Reste connecté
+                  Ne rate jamais une session
                 </h2>
                 <p className="text-[#8b8d90]">
-                  Pour ne jamais rater une session
+                  On te prévient quand ta squad t'attend
                 </p>
               </div>
 
@@ -761,13 +760,13 @@ export function Onboarding() {
 
               <div className="mt-6">
                 <Button
-                  onClick={() => navigateToStep('profile')}
+                  onClick={() => navigateToStep('complete')}
                   data-testid="permissions-continue-button"
                   className="w-full h-12"
                   disabled={!canProceedFromPermissions() || isNavigating}
                 >
-                  Continuer
-                  <ArrowRight className="w-5 h-5 ml-2" />
+                  Terminer
+                  <Check className="w-5 h-5 ml-2" />
                 </Button>
                 {!canProceedFromPermissions() && (
                   <p className="text-[12px] text-[#f5a623] text-center mt-2">
@@ -797,10 +796,10 @@ export function Onboarding() {
 
               <div className="text-center mb-8">
                 <h2 className="text-2xl font-bold text-[#f7f8f8] mb-2">
-                  Ton profil
+                  C'est toi ?
                 </h2>
                 <p className="text-[#8b8d90]">
-                  Quelques infos pour tes coéquipiers
+                  Tes potes te reconnaîtront
                 </p>
               </div>
 
@@ -889,8 +888,8 @@ export function Onboarding() {
                       </>
                     ) : (
                       <>
-                        Terminer
-                        <Check className="w-5 h-5 ml-2" />
+                        Continuer
+                        <ArrowRight className="w-5 h-5 ml-2" />
                       </>
                     )}
                   </Button>
@@ -899,7 +898,7 @@ export function Onboarding() {
             </motion.div>
           )}
 
-          {/* Step 6: Complete */}
+          {/* Step 6: Complete with recap */}
           {step === 'complete' && (
             <motion.div
               key="complete"
@@ -908,26 +907,118 @@ export function Onboarding() {
               exit={{ opacity: 0 }}
               className="text-center"
             >
+              {/* Confetti animation */}
+              <div className="absolute inset-0 pointer-events-none overflow-hidden">
+                {[...Array(20)].map((_, i) => (
+                  <motion.div
+                    key={i}
+                    initial={{
+                      y: -20,
+                      x: Math.random() * 400 - 200,
+                      opacity: 1,
+                      rotate: 0
+                    }}
+                    animate={{
+                      y: 600,
+                      opacity: 0,
+                      rotate: Math.random() * 360
+                    }}
+                    transition={{
+                      duration: 2 + Math.random() * 2,
+                      delay: Math.random() * 0.5,
+                      ease: "easeOut"
+                    }}
+                    className="absolute top-0 left-1/2"
+                    style={{
+                      width: 8 + Math.random() * 8,
+                      height: 8 + Math.random() * 8,
+                      backgroundColor: ['#5e6dd2', '#4ade80', '#f5a623', '#f87171', '#8b93ff'][Math.floor(Math.random() * 5)],
+                      borderRadius: Math.random() > 0.5 ? '50%' : '2px'
+                    }}
+                  />
+                ))}
+              </div>
+
               <motion.div
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
                 transition={{ type: 'spring', duration: 0.5 }}
-                className="w-24 h-24 rounded-full bg-[#4ade80] flex items-center justify-center mx-auto mb-6"
+                className="w-20 h-20 rounded-full bg-[#4ade80] flex items-center justify-center mx-auto mb-6"
               >
-                <Check className="w-12 h-12 text-white" />
+                <Check className="w-10 h-10 text-white" />
               </motion.div>
 
-              <h2 className="text-2xl font-bold text-[#f7f8f8] mb-3">
-                C'est parti !
+              <h2 className="text-2xl font-bold text-[#f7f8f8] mb-2">
+                {createdSquadName ? `${createdSquadName} est prête !` : "C'est parti !"}
               </h2>
-              <p className="text-[#8b8d90] mb-8">
+              <p className="text-[#8b8d90] mb-6">
                 {createdSquadId
-                  ? "Ta squad est prête ! Invite tes amis ou propose une première session."
+                  ? "Invite tes potes et propose une première session"
                   : squads.length > 0
-                    ? `Tu as rejoint ${squads[0].name} ! Dis bonjour ou propose une session.`
-                    : "Explore les squads ou crée la tienne pour commencer."
+                    ? `Tu as rejoint ${squads[0].name} !`
+                    : "Tu peux maintenant explorer ou créer ta squad"
                 }
               </p>
+
+              {/* Squad recap card */}
+              {createdSquadCode && (
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.3 }}
+                  className="mb-6"
+                >
+                  <Card className="p-5 text-left">
+                    <div className="space-y-4">
+                      {/* Squad name */}
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-xl bg-[rgba(94,109,210,0.15)] flex items-center justify-center">
+                          <Users className="w-5 h-5 text-[#5e6dd2]" />
+                        </div>
+                        <div>
+                          <p className="text-[12px] text-[#5e6063]">Squad</p>
+                          <p className="text-[15px] font-semibold text-[#f7f8f8]">{createdSquadName}</p>
+                        </div>
+                      </div>
+
+                      {/* Game */}
+                      {squadGame && (
+                        <div className="flex items-center gap-3">
+                          <div className="w-10 h-10 rounded-xl bg-[rgba(74,222,128,0.15)] flex items-center justify-center">
+                            <Gamepad2 className="w-5 h-5 text-[#4ade80]" />
+                          </div>
+                          <div>
+                            <p className="text-[12px] text-[#5e6063]">Jeu</p>
+                            <p className="text-[15px] font-semibold text-[#f7f8f8]">{squadGame || 'Non défini'}</p>
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Invite code */}
+                      <div className="pt-3 border-t border-[rgba(255,255,255,0.06)]">
+                        <p className="text-[12px] text-[#5e6063] mb-2">Code d'invitation</p>
+                        <div className="flex items-center gap-2">
+                          <code className="flex-1 px-4 py-3 rounded-lg bg-[rgba(255,255,255,0.02)] border border-[rgba(255,255,255,0.06)] text-[18px] font-mono font-bold text-[#f7f8f8] tracking-widest text-center">
+                            {createdSquadCode}
+                          </code>
+                          <button
+                            onClick={() => {
+                              navigator.clipboard.writeText(createdSquadCode)
+                            }}
+                            className="p-3 rounded-lg bg-[rgba(94,109,210,0.15)] hover:bg-[rgba(94,109,210,0.25)] transition-colors"
+                            title="Copier le code"
+                          >
+                            <Copy className="w-5 h-5 text-[#5e6dd2]" />
+                          </button>
+                        </div>
+                        <p className="text-[11px] text-[#5e6063] mt-2">
+                          Partage ce code à tes amis pour qu'ils rejoignent
+                        </p>
+                      </div>
+                    </div>
+                  </Card>
+                </motion.div>
+              )}
 
               <Button onClick={handleComplete} className="w-full h-14 text-[16px]">
                 {createdSquadId || squads.length > 0 ? "Voir ma squad" : "Explorer"}
@@ -937,20 +1028,39 @@ export function Onboarding() {
           )}
         </AnimatePresence>
 
-        {/* Progress indicator */}
+        {/* Progress indicator - Clear numbered steps */}
         {step !== 'splash' && step !== 'complete' && (
-          <div className="flex justify-center gap-2 mt-8">
-            {['squad-choice', 'permissions', 'profile'].map((s, i) => {
+          <div className="flex justify-center items-center gap-3 mt-8">
+            {[
+              { key: 'squad', label: 'Squad' },
+              { key: 'profile', label: 'Profil' },
+              { key: 'permissions', label: 'Notifs' }
+            ].map((item, i) => {
               const currentIndex = ['squad-choice', 'create-squad', 'join-squad'].includes(step) ? 0
-                : step === 'permissions' ? 1
-                : step === 'profile' ? 2 : -1
+                : step === 'profile' ? 1
+                : step === 'permissions' ? 2 : -1
+              const isActive = i === currentIndex
+              const isCompleted = i < currentIndex
               return (
-                <div
-                  key={s}
-                  className={`w-2 h-2 rounded-full transition-colors ${
-                    i <= currentIndex ? 'bg-[#5e6dd2]' : 'bg-[rgba(255,255,255,0.1)]'
-                  }`}
-                />
+                <div key={item.key} className="flex items-center gap-3">
+                  <div className="flex flex-col items-center gap-1">
+                    <div
+                      className={`w-8 h-8 rounded-full flex items-center justify-center text-[13px] font-semibold transition-all ${
+                        isCompleted ? 'bg-[#4ade80] text-white' :
+                        isActive ? 'bg-[#5e6dd2] text-white' :
+                        'bg-[rgba(255,255,255,0.05)] text-[#5e6063]'
+                      }`}
+                    >
+                      {isCompleted ? <Check className="w-4 h-4" /> : i + 1}
+                    </div>
+                    <span className={`text-[11px] ${isActive || isCompleted ? 'text-[#f7f8f8]' : 'text-[#5e6063]'}`}>
+                      {item.label}
+                    </span>
+                  </div>
+                  {i < 2 && (
+                    <div className={`w-8 h-0.5 mb-5 ${i < currentIndex ? 'bg-[#4ade80]' : 'bg-[rgba(255,255,255,0.1)]'}`} />
+                  )}
+                </div>
               )
             })}
           </div>

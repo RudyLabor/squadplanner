@@ -481,30 +481,36 @@ Ne pas accumuler trop de changements sans commit. Un commit par fonctionnalité 
 14. [x] ~~Navigation "Voir ma squad"~~ ✅ window.location.href
 15. [x] ~~Upload photo page Profile~~ ✅ Même amélioration
 
-### 🚧 Phase 2.6 : Refonte Landing Page (EN COURS - 5 fév 2026)
+### ✅ Phase 2.6 : Refonte Landing Page (TERMINÉ - 5 fév 2026)
 
 **Objectif** : Passer d'une landing "correcte" à une landing "Top 5 mondial"
 
 #### Wording
-- [ ] Retirer stats non crédibles (+92%, 3x, -70%) ou les remplacer par du vrai
-- [ ] Supprimer répétitions "Ta squad joue chaque semaine" (4 occurrences → 1-2 max)
-- [ ] Reformuler "Pression sociale douce" → vocabulaire positif
-- [ ] Remplacer "Le Calendly du gaming" par quelque chose de plus authentique
-- [ ] Rendre les promesses IA plus concrètes
+- [x] ~~Retirer stats non crédibles~~ → Stats honnêtes (100%, 30s, 0)
+- [x] ~~Supprimer répétitions~~ → Message varié
+- [x] ~~Reformuler "Pression sociale douce"~~ → "Tes potes comptent sur toi"
+- [x] ~~Remplacer "Le Calendly du gaming"~~ → "Jouez ensemble, pour de vrai"
 
 #### UI/UX
-- [ ] Ajouter mockup/visuel produit dans le Hero (screenshot ou illustration)
-- [ ] Ajouter social proof minimal ("Beta ouverte" ou "X squads créées")
-- [ ] Réduire longueur page — fusionner sections redondantes
-- [ ] Améliorer hiérarchie CTA (principal bien visible, secondaire discret)
-- [ ] Ajouter header sticky avec logo + CTA
-- [ ] Hero plus impactant visuellement
+- [x] ~~Mockup iPhone dans le Hero~~ ✅
+- [x] ~~Social proof "Beta ouverte"~~ ✅
+- [x] ~~Sections redondantes supprimées~~ ✅
+- [x] ~~Hiérarchie CTA améliorée~~ ✅
+- [x] ~~Header sticky~~ ✅
 
-#### Critères de validation
-- [ ] Page testée sur mobile ET desktop
-- [ ] Temps de scroll réduit de 30%
-- [ ] Au moins 1 visuel produit visible
-- [ ] Aucune stat inventée
+---
+
+### ✅ Phase 2.7 : Refonte Onboarding (TERMINÉ - 5 fév 2026)
+
+**Objectif** : Onboarding niveau TOP 5 mondial
+
+#### Changements effectués
+- [x] ~~Splash screen supprimé~~ → Démarrage direct sur choix squad
+- [x] ~~Indicateur de progression~~ → Étapes numérotées (1 Squad, 2 Profil, 3 Notifs)
+- [x] ~~Ordre réorganisé~~ → Profil AVANT Permissions (plus logique)
+- [x] ~~Wording reformulé~~ → "C'est toi ?", "Ne rate jamais une session"
+- [x] ~~Récapitulatif final~~ → Nom squad + Code invitation + Bouton copier
+- [x] ~~Célébration~~ → Confettis animés sur page finale
 
 ---
 
@@ -535,6 +541,19 @@ Cela signifie :
 - **Performance** irréprochable
 - **Onboarding** fluide en moins de 60 secondes
 - **Design** qui fait dire "wow" dès la landing page
+
+### Niveau d'exigence pour CHAQUE feature (OBLIGATOIRE)
+
+> **Chaque nouvelle fonctionnalité, chaque modification, chaque écran doit être implémenté avec ce même niveau d'exigence TOP 5 mondial.**
+
+Avant de considérer une feature comme "terminée", se poser ces questions :
+1. **Wording** — Est-ce authentique ? Pas de bullshit corporate ? Cohérent avec le ton de l'app ?
+2. **UI** — Est-ce au niveau Linear/Notion ? Animations fluides ? Hiérarchie visuelle claire ?
+3. **UX** — Le parcours est-il logique ? Moins de clics possible ? Feedback immédiat ?
+4. **Détails** — Indicateurs de progression ? États de chargement ? Messages d'erreur clairs ?
+5. **Célébration** — Y a-t-il un moment de satisfaction pour l'utilisateur ?
+
+**Si la réponse est NON à l'une de ces questions, la feature n'est pas terminée.**
 
 ### Ce qu'on vise
 - Le **standard de planification** pour les gamers

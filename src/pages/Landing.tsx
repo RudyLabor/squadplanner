@@ -4,12 +4,27 @@ import {
   Target, Shield, MessageCircle, Headphones, TrendingUp
 } from 'lucide-react'
 import { Link } from 'react-router-dom'
-import { Button } from '../components/ui'
 import { theme } from '../lib/theme'
 import { SquadPlannerLogo, SquadPlannerIcon } from '../components/SquadPlannerLogo'
 
 const containerVariants = theme.animation.container
 const itemVariants = theme.animation.item
+
+// Stagger animations for lists
+const staggerContainerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1
+    }
+  }
+}
+
+const staggerItemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0 }
+}
 
 // Les 3 PILIERS principaux (grandes cartes)
 const pillars = [
@@ -269,7 +284,13 @@ export default function Landing() {
             </p>
           </motion.div>
 
-          <div className="grid md:grid-cols-2 gap-4">
+          <motion.div
+            className="grid md:grid-cols-2 gap-4"
+            variants={staggerContainerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+          >
             {[
               { emoji: '💬', text: '"On joue ce soir ?" → Personne ne répond' },
               { emoji: '🤷', text: '"Je sais pas, on verra" → Rien ne se passe' },
@@ -278,16 +299,14 @@ export default function Landing() {
             ].map((item) => (
               <motion.div
                 key={item.text}
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
+                variants={staggerItemVariants}
                 className="flex items-center gap-4 p-4 rounded-xl bg-[rgba(255,255,255,0.02)] border border-[rgba(255,255,255,0.04)]"
               >
                 <span className="text-2xl">{item.emoji}</span>
                 <span className="text-[#c9cace]">{item.text}</span>
               </motion.div>
             ))}
-          </div>
+          </motion.div>
         </div>
       </section>
 
@@ -308,14 +327,17 @@ export default function Landing() {
             </p>
           </motion.div>
 
-          <div className="space-y-4">
-            {steps.map((step, index) => (
+          <motion.div
+            className="space-y-4"
+            variants={staggerContainerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+          >
+            {steps.map((step) => (
               <motion.div
                 key={step.step}
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
+                variants={staggerItemVariants}
                 className="flex items-start gap-4 p-6 rounded-2xl bg-[rgba(255,255,255,0.02)] border border-[rgba(255,255,255,0.06)]"
               >
                 <div className="w-12 h-12 rounded-xl bg-[rgba(94,109,210,0.15)] flex items-center justify-center shrink-0">
@@ -327,7 +349,7 @@ export default function Landing() {
                 </div>
               </motion.div>
             ))}
-          </div>
+          </motion.div>
         </div>
       </section>
 
@@ -349,14 +371,17 @@ export default function Landing() {
           </motion.div>
 
           {/* Les 3 PILIERS - Grandes cartes */}
-          <div className="grid md:grid-cols-3 gap-6 mb-16">
-            {pillars.map((pillar, index) => (
+          <motion.div
+            className="grid md:grid-cols-3 gap-6 mb-16"
+            variants={staggerContainerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+          >
+            {pillars.map((pillar) => (
               <motion.div
                 key={pillar.title}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.15 }}
+                variants={staggerItemVariants}
                 className="p-8 rounded-3xl border transition-all duration-300 hover:scale-[1.02]"
                 style={{
                   backgroundColor: `${pillar.color}08`,
@@ -373,7 +398,7 @@ export default function Landing() {
                 <p className="text-[15px] text-[#8b8d90] leading-relaxed">{pillar.description}</p>
               </motion.div>
             ))}
-          </div>
+          </motion.div>
 
         </div>
       </section>

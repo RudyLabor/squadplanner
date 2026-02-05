@@ -1,7 +1,7 @@
 # Squad Planner - Mémoire Projet
 
 > Ce fichier est lu par chaque nouvel agent au début de chaque conversation.
-> Dernière mise à jour: 5 février 2026 - 01h00
+> Dernière mise à jour: 5 février 2026 - 15h00
 
 ---
 
@@ -31,49 +31,19 @@
 7. Mettre à jour ce fichier
 ```
 
-### TESTS OBLIGATOIRES :
-
-> **Chaque flow doit être testé par AU MOINS 5 agents en parallèle.**
-> Un test qui passe pour 1 agent peut échouer pour les autres.
-
-Exemple pour tester l'onboarding :
-```
-Lancer 5 agents Task en parallèle, chacun avec un nouveau compte différent.
-Tous les 5 doivent réussir pour valider le flow.
-```
-
 ### CE QUI EST INTERDIT :
 
 - ❌ Déclarer "terminé" sans avoir testé avec un nouveau compte
-- ❌ Tester avec UN SEUL compte (minimum 5 tests parallèles)
 - ❌ Ignorer les erreurs console
 - ❌ Modifier du code sans comprendre les foreign keys associées
 - ❌ Faire des corrections ponctuelles sans audit global
 - ❌ Avancer sur une nouvelle feature si la précédente a des bugs
 
-### EN CAS DE BUG DÉCOUVERT :
-
-1. **STOP** — Ne pas continuer à coder
-2. **AUDIT** — Identifier la cause racine ET les bugs similaires potentiels
-3. **CORRIGER TOUT** — Pas juste le symptôme visible
-4. **TESTER** — Avec un nouveau compte
-5. **DOCUMENTER** — Mettre à jour ce fichier
-
 ---
 
 ## 📖 BIBLE DU PROJET (LECTURE OBLIGATOIRE)
 
-### AVANT TOUTE ACTION, LIS CE FICHIER :
-
 👉 **[BIBLE.md](./BIBLE.md)** — Document fondateur complet
-
-Ce fichier contient :
-- Le positionnement stratégique (ce que Squad Planner EST et N'EST PAS)
-- Les 3 piliers du produit (Party vocale, Planning, Fiabilité)
-- Tous les parcours utilisateurs détaillés (A → G)
-- La roadmap officielle (V1 → V4)
-- Les conditions de mort du produit
-- Le modèle de monétisation
 
 ### Règle Absolue
 
@@ -84,325 +54,309 @@ Ce fichier contient :
 1. ✅ Lire GEMINI.md (ce fichier)
 2. ✅ Lire **BIBLE.md** en entier
 3. ✅ Identifier l'étape en cours dans la roadmap
-4. ✅ **TESTER L'ÉTAT ACTUEL** avec un nouveau compte
-5. ✅ Compléter cette étape à 100%
-6. ✅ Mettre à jour l'état réel ici
+4. ✅ Compléter cette étape à 100%
+5. ✅ Mettre à jour l'état réel ici
 
 ---
 
-## 🛠️ OUTILS À UTILISER (OBLIGATOIRE)
+## 🎯 AUDIT TOP 5 MONDIAL 2026 (5 février 2026)
 
-### Skills disponibles (dossier `/skills/`)
+### Score Global : 38.3/50 (77%) — Objectif : 46+/50 (92%)
 
-Utilise ces skills de manière autonome selon le contexte :
+> Audit réalisé selon les critères des meilleures apps mondiales 2026 (Linear, Notion, Arc, Vercel, Discord)
 
-| Skill | Quand l'utiliser |
-|-------|------------------|
-| `supabase-expert` | Backend, RLS, triggers, Edge Functions |
-| `react-expert` | Composants React, hooks, state |
-| `typescript-pro` | Types, interfaces, erreurs TS |
-| `playwright-expert` | Tests E2E, sélecteurs, assertions |
-| `postgres-pro` | Requêtes SQL, migrations, optimisation |
-| `api-designer` | Design d'API, endpoints |
-| `front-end-design` | UI/UX, CSS, animations |
-| `security-reviewer` | Audit sécurité, failles |
-| `code-reviewer` | Review de code, best practices |
-| `debugging-wizard` | Debug, erreurs, logs |
-| `devops-engineer` | Déploiement, CI/CD |
-| `test-master` | Stratégie de tests |
+### 📊 Scores par Page
 
-### MCP installés
+| Page | Score | Wording | UI | UX | Détails | Célébration |
+|------|-------|---------|----|----|---------|-------------|
+| **Landing** | 38/50 | 6/10 | 7/10 | 8/10 | 6/10 | 5/10 |
+| **Home** | 38/50 | 7/10 | 6/10 | 7/10 | 5/10 | 3/10 |
+| **Auth** | 38/50 | 7/10 | 7.5/10 | 8/10 | 6/10 | 9.5/10 |
+| **Squads** | 41/50 | 8/10 | 8.5/10 | 7/10 | 7.5/10 | 6/10 |
+| **SquadDetail** | 38/50 | 7/10 | 8/10 | 7/10 | 7/10 | 2/10 |
+| **Party** | 36/50 | 7/10 | 6/10 | 7/10 | 5/10 | 5/10 |
+| **Messages** | 36/50 | 7/10 | 8/10 | 8/10 | 6/10 | 7/10 |
+| **Profile** | 38/50 | 8/10 | 7/10 | 7/10 | 7/10 | 2/10 |
+| **Navigation** | 42/50 | 8.5/10 | 8/10 | 7.5/10 | 6.5/10 | 5/10 |
 
-| MCP | Usage |
-|-----|-------|
-| `chrome-devtools` | Débugger le navigateur, prendre des screenshots, tester l'UI |
-| `context7` | Documentation à jour des librairies |
-| `puppeteer` | Automatisation navigateur |
-| `stitch` | Génération UI |
-| `magic (21st.dev)` | Composants UI, logos |
+### 📈 Score par Catégorie vs BIBLE
 
-**Règle** : Utilise ces outils proactivement. Ne pas attendre qu'on te le demande.
+| Catégorie | Requis | Implémenté | Score |
+|-----------|--------|------------|-------|
+| 🟢 **Pilier 1 - Party vocale** | 100% | 90% | ✅ |
+| 🟡 **Pilier 2 - Planning** | 100% | 95% | ✅ |
+| 🔵 **Pilier 3 - Fiabilité** | 100% | 100% | ✅ |
+| 💬 **Communication** | 100% | 95% | ✅ |
+| 🤖 **IA** | 100% | 60% | ⚠️ |
+| 💰 **Monétisation** | 100% | 50% | ⚠️ |
+| 📞 **Appels 1-to-1** | 100% | 0% | 🔴 |
+| 🔔 **Notifications Push** | 100% | 10% | 🔴 |
 
----
+### 🔴 2 LACUNES CRITIQUES (Conditions de mort BIBLE)
 
-## Langue
-
-**Toujours répondre en Français.**
-
-## Rôle de l'Agent : CO-FONDATEUR TECHNIQUE
-
-**Tu n'es PAS un simple exécutant. Tu es le co-fondateur technique de Squad Planner.**
-
-### Ce que ça signifie
-
-1. **Force de proposition** — Tu ne demandes pas "qu'est-ce que je fais ?", tu proposes des solutions
-2. **Franc et honnête** — Tu dis quand quelque chose ne fonctionne pas, même si c'est inconfortable
-3. **Intransigeant sur la qualité** — Pas de shortcuts, pas de placeholders, pas de "on verra plus tard"
-4. **Testeur obsessionnel** — Chaque fonctionnalité est testée EN VRAI avant d'être déclarée terminée
-5. **Penseur parcours utilisateur** — Tu ne codes pas des features isolées, tu construis des expériences complètes
-
-### Tes responsabilités
-
-- **Identifier les problèmes** avant qu'on te les signale
-- **Proposer des solutions** concrètes et argumentées
-- **Implémenter** avec rigueur
-- **Tester** comme un vrai utilisateur
-- **Rapporter honnêtement** l'état réel de l'app
-
-### Ce que tu NE fais PAS
-
-- Attendre qu'on te dise quoi faire
-- Déclarer une feature "terminée" sans l'avoir testée
-- Mentir sur l'état d'avancement (pas de "92%" quand c'est 35%)
-- Ajouter des features tant que le core ne fonctionne pas
-
-### Objectif
-
-**App 100% fonctionnelle, prête à lancer sur le marché, parmi les meilleures apps mondiales 2026 en design et UX.**
+1. **Appels 1-to-1** — Parcours D non implémenté du tout
+2. **Notifications Push** — Seulement Browser API (app doit être ouverte)
 
 ---
 
-## Méthodologie : Parcours Utilisateur d'Abord
+## 🔴 PROBLÈMES CRITIQUES À CORRIGER
 
-**On ne code PAS des features isolées. On construit des parcours complets.**
+### Point Faible #1 : CÉLÉBRATION (moyenne 4.9/10)
 
-### Parcours 1 : Onboarding Solo
-```
-Landing → Inscription → Créer squad → Voir sa squad
-```
+| Page | Score | Problème |
+|------|-------|----------|
+| **SquadDetail** | 2/10 | ❌ ZERO toast après RSVP, ZERO feedback party rejoint |
+| **Profile** | 2/10 | ❌ ZERO animation score, ZERO confetti 100% |
+| **Home** | 3/10 | ❌ ZERO gamification, streaks, récompenses visuelles |
+| **Party** | 5/10 | ❌ Pas de toast connexion réussie, pas de confetti |
+| **Landing** | 5/10 | ❌ Pas de vidéo/GIF démo, pas d'interactivité |
 
-### Parcours 2 : Invitation
-```
-Owner copie code → Ami rejoint → Les deux voient la squad
-```
+### Bugs Fonctionnels Critiques
 
-### Parcours 3 : Planification
-```
-Owner crée session → Membres reçoivent notif → Chacun répond (RSVP)
-```
-
-### Parcours 4 : Engagement
-```
-Jour J → Check-in → Score de fiabilité mis à jour
-```
-
-### Parcours 5 : Communication
-```
-Chat squad → Chat session → Vocal pendant session
-```
-
-**Règle : On ne passe au parcours suivant que quand le précédent fonctionne à 100%.**
+| Bug | Impact | Page | Temps Fix |
+|-----|--------|------|-----------|
+| **Username = "User {uid}"** | Impossible d'identifier qui parle | Party.tsx ligne 92 | 1h |
+| **Badge messages cassé** | Faux système de counting (TODO) | AppLayout.tsx | 4h |
+| **Mot de passe oublié vide** | Bouton sans action | Auth.tsx | 2h |
+| **RSVP sans feedback** | Utilisateur doute du clic | SquadDetail.tsx | 2h |
 
 ---
 
-## Projet Supabase
+## ⚡ TOP 10 QUICK WINS (< 4h chaque)
 
-| Clé | Valeur |
-|-----|--------|
-| Project ID | `nxbqiwmfyafgshxzczxo` |
-| URL | `https://nxbqiwmfyafgshxzczxo.supabase.co` |
-| Region | eu-west-1 |
-| Database URL | Voir `.env` (DATABASE_URL) |
-
-**Credentials dans `.env`** — NE PAS COMMITTER !
+| # | Tâche | Temps | Impact | Fichier |
+|---|-------|-------|--------|---------|
+| 1 | **Fix username Party.tsx** | 1h | 🔴 Bug critique | `src/pages/Party.tsx:92` |
+| 2 | **Toast après RSVP** | 2h | +3pts SquadDetail | `src/pages/SquadDetail.tsx` |
+| 3 | **Toast rejoindre Party** | 1h | +2pts Party | `src/pages/Party.tsx` |
+| 4 | **Confetti score 100% Profile** | 2h | +3pts Profile | `src/pages/Profile.tsx` |
+| 5 | **CountUp animation fiabilité** | 2h | +2pts global | Tous les scores |
+| 6 | **Mobile active state visual** | 2h | +1.5pts Nav | `src/components/layout/AppLayout.tsx` |
+| 7 | **Mot de passe oublié fonctionnel** | 2h | +1.5pts Auth | `src/pages/Auth.tsx` |
+| 8 | **Agrandir boutons RSVP mobile** | 30min | +1pt SquadDetail | `src/pages/SquadDetail.tsx` |
+| 9 | **Stagger animations Landing** | 2h | +2pts Landing | `src/pages/Landing.tsx` |
+| 10 | **Badge pop animation** | 1h | +1pt Nav | `src/components/layout/AppLayout.tsx` |
 
 ---
 
-## ÉTAT RÉEL DE L'APP (Mise à jour: 5 février 2026 - 03h00)
+## 🎯 ROADMAP PRIORISÉE
 
-### Score Global : ~90%
+### 🔴 Phase 3 : FONCTIONNALITÉS CRITIQUES (Semaine 1-2)
 
-| Fonctionnalité | État | Testé ? | Détails |
-|----------------|------|---------|---------|
-| Auth email/password | ✅ Fonctionne | ✅ Oui | Connexion/déconnexion OK |
-| Auth Google OAuth | ⚠️ Configuré | Non testé | - |
-| **Onboarding complet** | ✅ **FONCTIONNE** | ✅ Oui | Splash → Squad → Permissions → Profil → Complete |
-| Créer une squad | ✅ Fonctionne | ✅ Oui | Via onboarding ou page squads |
-| Rejoindre une squad | ✅ **FONCTIONNE** | ✅ Oui | Code invite testé et validé |
-| Page squad détail | ✅ **FONCTIONNE** | ✅ Oui | Affiche membres, sessions, stats |
-| Modifier profil (bio) | ✅ Fonctionne | ✅ Oui | Persistence OK |
-| Créer une session | ✅ **FONCTIONNE** | ✅ Oui | Trigger corrigé le 4 fév |
-| RSVP session | ✅ **FONCTIONNE** | ✅ Oui | Réponses + auto-confirm OK |
-| Check-in | ✅ **FONCTIONNE** | ✅ Oui | Compteurs mis à jour OK |
-| Chat squad | ✅ **FONCTIONNE** | ✅ Oui | Envoi/affichage messages OK |
-| Chat 1-to-1 | ❌ Non implémenté | - | - |
-| **Page Party** | ✅ **FONCTIONNE** | ✅ Oui | Onglet dédié, liste squads, bouton rejoindre |
-| Chat vocal Agora | ✅ Code validé | Partiel | UI fonctionne, connexion OK, test complet nécessite 2 users |
-| **Upload photo profil** | ✅ **FONCTIONNE** | ✅ Oui | Compression 400px JPEG, upload rapide |
-| Déconnexion | ✅ **FONCTIONNE** | ✅ Oui | Robuste avec force redirect |
-| IA Planning | ⚠️ Edge function existe | Non testé | - |
-| IA Decision | ⚠️ Edge function existe | Non testé | - |
-| IA Coach | ❌ **TEXTE HARDCODÉ** | - | - |
-| Stripe Premium | ❌ Non configuré | - | - |
+| Tâche | Priorité | Temps | Impact |
+|-------|----------|-------|--------|
+| **Appels 1-to-1 Agora** | 🔴 CRITIQUE | 3-4 jours | Parcours D BIBLE |
+| **Notifications Push (Web Push + SW)** | 🔴 CRITIQUE | 2-3 jours | Condition mort #2 |
+| **Fix badge messages (vrai tracking)** | 🔴 CRITIQUE | 4h | UX cassée |
+| **Fix username Party ("User {uid}")** | 🔴 CRITIQUE | 1h | UX cassée |
+| **Gating Premium actif** | 🔴 HAUTE | 1 jour | Business |
 
-### Navigation (mise à jour 4 fév 23h)
+#### 3.1 Appels 1-to-1 (Parcours D BIBLE) — ❌ NON IMPLÉMENTÉ
+- [ ] Intégration Agora Voice Call SDK (1-to-1)
+- [ ] UI appel entrant/sortant (modal plein écran)
+- [ ] Push notifications VoIP (app fermée)
+- [ ] États : ringing, connected, ended, missed
+- [ ] Historique appels
+- [ ] Bouton appel depuis DM et profil membre
 
-| Position | Onglet | Route | État |
-|----------|--------|-------|------|
-| 1 | Accueil | `/` | ✅ |
-| 2 | Squads | `/squads` | ✅ |
-| 3 | **Party** ⭐ | `/party` | ✅ NOUVEAU |
-| 4 | Messages | `/messages` | ✅ |
-| 5 | Profil | `/profile` | ✅ |
+#### 3.2 Notifications Push — ❌ 10% SEULEMENT
+- [ ] Service Worker (`public/sw.js`)
+- [ ] VAPID keys configuration
+- [ ] Web Push subscription handling
+- [ ] Edge Function pour envoyer les push
+- [ ] Notifications rappel session (1h avant, 15min avant)
+- [ ] Notifications nouveau message / DM
+- [ ] Notifications appel entrant
 
-**Conforme à la BIBLE** : La Party a son propre onglet comme requis.
+#### 3.3 Fix Bugs Critiques
+- [ ] **Party.tsx ligne 92** : Remplacer `User ${uid}` par vrai username
+- [ ] **AppLayout.tsx** : Implémenter vrai tracking messages lus
+- [ ] **Auth.tsx** : Implémenter `handleForgotPassword()` avec `supabase.auth.resetPasswordForEmail()`
+- [ ] **SquadDetail.tsx** : Ajouter toast après RSVP
 
-### Parcours Utilisateur - État des Tests
+---
 
-| Parcours | État | Détail |
-|----------|------|--------|
-| 1. Onboarding Solo | ✅ **VALIDÉ** | Landing → Inscription → Créer squad → Voir squad |
-| 2. Invitation | ✅ **VALIDÉ** | Owner copie code → Ami rejoint → Les deux voient la squad (2 membres) |
-| 3. Planification | ✅ **VALIDÉ** | Créer session → RSVPs → Auto-confirm déclenché |
-| 4. Engagement | ✅ **VALIDÉ** | Check-in → Compteurs mis à jour → Score fiabilité OK |
-| 5. Communication | ⚠️ **PARTIEL** | Chat ✅ OK, Vocal UI ✅ (test complet nécessite 2 users) |
+### 🟠 Phase 4 : COMPLÉTUDE PRODUIT (Semaine 3-4)
 
-### Comptes de Test Créés
+| Tâche | Priorité | Temps | Impact |
+|-------|----------|-------|--------|
+| **IA Coach dynamique (API)** | 🟠 HAUTE | 2 jours | Différenciateur |
+| **Champs Squad complets** | 🟠 HAUTE | 4h | Parcours B BIBLE |
+| **Messages système** | 🟠 HAUTE | 1 jour | Parcours E BIBLE |
+| **Auto-confirm sessions** | 🟠 MOYENNE | 4h | Automatisation |
+| **Reconnect logic Agora** | 🟠 MOYENNE | 4h | Robustesse |
+
+#### 4.1 IA fonctionnelle (Section 7 BIBLE)
+- [ ] Remplacer texte IA Coach hardcodé par appel Edge Function
+- [ ] Intégrer Claude/OpenAI/Gemini pour conseils personnalisés
+- [ ] IA relance RSVP automatique
+- [ ] IA détection no-show chronique
+
+#### 4.2 Création Squad complète (Parcours B BIBLE)
+- [ ] Ajouter champ fuseau horaire
+- [ ] Ajouter champ taille idéale (2-10 joueurs)
+- [ ] Ajouter règles (jours préférés, heure habituelle, durée moyenne)
+
+#### 4.3 Messages système (Parcours E BIBLE)
+- [ ] "X a rejoint la squad"
+- [ ] "Session confirmée pour [date]"
+- [ ] "Y est en retard"
+- [ ] "Session annulée"
+
+---
+
+### 🟡 Phase 5 : CÉLÉBRATION & POLISH (Semaine 5-6)
+
+| Tâche | Priorité | Temps | Impact |
+|-------|----------|-------|--------|
+| **Toast RSVP + Party rejoint** | 🟡 HAUTE | 2h | +3pts SquadDetail |
+| **Confetti score 100%** | 🟡 HAUTE | 2h | +3pts Profile |
+| **CountUp animation scores** | 🟡 HAUTE | 2h | +2pts partout |
+| **Page transitions (AnimatePresence)** | 🟡 MOYENNE | 4h | +2pts global |
+| **Vidéo/GIF démo Landing** | 🟡 MOYENNE | 1 jour | +5pts Landing |
+| **Read receipts (✓✓)** | 🟡 MOYENNE | 4h | +3pts Messages |
+| **Typing indicator** | 🟡 MOYENNE | 4h | +2pts Messages |
+| **Mobile active state visual** | 🟡 BASSE | 2h | +1.5pts Nav |
+
+#### 5.1 Célébrations à ajouter
+```tsx
+// SquadDetail - Après RSVP
+setSuccessMessage('✅ Tu es inscrit présent !')
+
+// Party - Après connexion
+setSuccessMessage('🔴 T\'es live ! Connecté à la party')
+
+// Profile - Score 100%
+<Confetti /> + <Award className="animate-bounce" />
+```
+
+#### 5.2 Animations à améliorer
+- [ ] CountUp animation sur tous les scores (react-countup)
+- [ ] Page transitions avec AnimatePresence
+- [ ] Stagger animations sur listes (0.1s delay par item)
+- [ ] Badge "pop" animation nouveaux messages
+- [ ] Skeleton loading states partout
+
+---
+
+### 🔵 Phase 6 : FEATURES V2/V3 (Semaine 7+)
+
+| Tâche | Priorité | Description |
+|-------|----------|-------------|
+| Stats avancées (graphiques) | V3 | Premium feature |
+| Rôles (coach, manager) | V3 | Premium feature |
+| Qualité audio HD | V3 | Premium feature |
+| Export calendrier | V3 | Google Cal, Apple Cal |
+| IA prédictive | V4 | Machine learning |
+
+---
+
+## 📈 PROJECTION SCORES APRÈS CORRECTIONS
+
+| Phase | Score Actuel | Score Cible | Gain |
+|-------|--------------|-------------|------|
+| **Actuel** | 38.3/50 (77%) | - | - |
+| Après Phase 3 | 38.3/50 | 40/50 (80%) | +2 |
+| Après Phase 4 | 40/50 | 42/50 (84%) | +2 |
+| **Après Phase 5** | 42/50 | **46/50 (92%)** | +4 |
+| Après Phase 6 | 46/50 | **48/50 (96%)** | +2 |
+
+---
+
+## ⚠️ PIÈGES CONNUS (LIRE ABSOLUMENT)
+
+1. **Trigger `on_auth_user_created`** — Ne se déclenche PAS quand on crée un user via Admin API. Créer le profil manuellement.
+
+2. **RLS `squad_members`** — Utilise des fonctions SECURITY DEFINER (`is_squad_member()`, `is_squad_owner()`). Ne pas modifier sans comprendre.
+
+3. **Navigation onboarding** — Les boutons utilisent des CSS transitions (pas Framer Motion) pour éviter les bugs de double-clic.
+
+4. **Upload avatar** — Compression côté client obligatoire (400px max, JPEG 80%) sinon trop lent.
+
+5. **Déconnexion** — Utilise `window.location.href = '/auth'` (pas `navigate()`) pour forcer le clear du state.
+
+6. **Party vocale Agora** — Le code est validé mais JAMAIS testé avec 2+ vrais utilisateurs.
+
+7. **Supabase Realtime** — Les subscriptions doivent être cleanup dans `useEffect` return. Sinon memory leaks.
+
+8. **Party.tsx ligne 92** — 🔴 BUG: Username hardcodé `User ${uid}` au lieu du vrai nom.
+
+9. **AppLayout badge messages** — 🔴 BUG: Système de counting faux (TODO non implémenté).
+
+---
+
+## 🛠️ INFORMATIONS TECHNIQUES
+
+### Structure du projet
+
+```
+src/
+├── components/
+│   ├── ui/              # Composants réutilisables (Button, Card, Input, etc.)
+│   ├── layout/          # AppLayout, MobileNav, DesktopSidebar
+│   └── ...              # Composants métier
+├── hooks/
+│   ├── useAuth.ts       # Auth + profile (Zustand store)
+│   ├── useSquads.ts     # Squads CRUD (Zustand store)
+│   ├── useMessages.ts   # Chat realtime (Zustand store)
+│   ├── useDirectMessages.ts # DM 1-to-1 (Zustand store)
+│   ├── useSessions.ts   # Sessions + RSVP
+│   ├── useVoiceChat.ts  # Agora voice (party vocale)
+│   ├── useAI.ts         # Planning/Decision/Reliability
+│   ├── useSubscription.ts # Stripe integration
+│   └── index.ts         # Exports centralisés
+├── pages/               # Pages par route
+├── lib/
+│   ├── supabase.ts      # Client Supabase
+│   └── theme.ts         # Tokens design + animations
+└── App.tsx              # Routes + providers
+```
+
+### Tables Supabase
+
+| Table | Description |
+|-------|-------------|
+| `profiles` | Profils utilisateurs + `reliability_score`, `total_sessions`, `total_checkins` |
+| `squads` | Squads + `is_premium`, `invite_code` |
+| `squad_members` | Membres d'une squad |
+| `sessions` | Sessions de jeu + `auto_confirm_threshold` |
+| `session_rsvps` | Réponses RSVP + `changed_count` tracking |
+| `session_checkins` | Check-ins réels (present/late/noshow) |
+| `messages` | Messages chat squad + session |
+| `direct_messages` | DM 1-to-1 |
+| `party_participants` | Participants party vocale |
+| `subscriptions` | Stripe sync |
+| `ai_insights` | Insights IA générés |
+
+### Edge Functions Supabase
+
+| Function | Description | État |
+|----------|-------------|------|
+| `ai-planning` | Suggestion créneaux optimaux | ✅ Implémenté |
+| `ai-decision` | Aide à la décision squad | ✅ Implémenté |
+| `ai-reliability` | Score fiabilité + badges | ✅ Implémenté |
+| `agora-token` | Token generation (simplifié) | ✅ Implémenté |
+| `stripe-webhook` | Subscription events | ✅ Implémenté |
+| `create-checkout` | Stripe checkout | ✅ Implémenté |
+| `send-reminders` | Rappels sessions | ✅ Implémenté |
+
+### Commandes
+
+```bash
+npm run dev          # Serveur de dev (localhost:5173)
+npm run build        # Build production
+npm run lint         # Linter
+npm run test         # Tests E2E Playwright
+```
+
+### Comptes de test
 
 | Email | Password | Rôle |
 |-------|----------|------|
 | testowner@squadtest.dev | TestPassword123! | Owner de "Test Squad Alpha" |
 | testmember@squadtest.dev | TestPassword123! | Membre de "Test Squad Alpha" |
 
-Squad de test : **Test Squad Alpha** (Valorant) - Code invite : **43FC85BC**
-
----
-
-## 🐛 BUGS - ÉTAT ACTUEL
-
-### ✅ CORRIGÉ : Trigger `update_squad_session_count`
-
-**Corrigé le 4 février 2026** via `scripts/fix-session-trigger.cjs`
-Le trigger utilisait `session_count` au lieu de `total_sessions`.
-
-### ✅ CORRIGÉ : Navigation onboarding instable (5 février 2026 - 03h00)
-
-**Problèmes corrigés:**
-1. **Navigation instable** — Remplacement des `motion.button` par des boutons standard avec CSS transitions
-2. **Formulaires pré-remplis** — Reset des champs AVANT changement de step (pas dans useEffect)
-3. **Bouton "Continuer" permissions bloqué** — Vérifie maintenant `Notification.permission === 'granted'`
-4. **Double-clics** — Ajout d'un lock `isNavigating` pendant les transitions
-5. **Animations simplifiées** — Durée réduite à 200ms, mode `initial={false}` sur AnimatePresence
-
-**Tests validés (5 février 2026):**
-- ✅ Flow "Créer une squad" : 2/3 agents sans aucun retour au splash
-- ✅ Flow "Rejoindre une squad" : TOUS TESTS PASSENT (bug critique corrigé)
-
-### ✅ CORRIGÉ : Formulaire création squad (anciennement invisible)
-
-**Testé le 4 février 2026** - Le formulaire s'affiche correctement.
-Le bug n'est plus reproduisible. Le formulaire utilise ses propres animations inline (pas `itemVariants`).
-
-### BUG #2 (Low) : Profil non créé automatiquement via Admin API
-
-**Impact** : Users créés via Supabase Admin API n'ont pas de profil automatiquement
-**Cause** : Le trigger `on_auth_user_created` ne se déclenche pas quand on crée un user via l'API Admin
-**Workaround** : Créer manuellement le profil dans la table `profiles`
-
-### ✅ CORRIGÉ : Tests E2E réactivés
-
-**Corrigé le 4 février 2026** - 212/215 tests passent (98.6%)
-- Retrait des `test.skip` dans tous les fichiers
-- Mise à jour des credentials de test
-- Adaptation des sélecteurs pour correspondre à l'UI actuelle
-- 3 tests mineurs échouent (Firefox console + Mobile Safari)
-
-### ✅ CORRIGÉ : Onboarding amélioré (5 février 2026)
-
-**Commits:**
-- `6f15413 fix: amélioration onboarding et upload photo`
-- `4399a00 fix: amélioration navigation onboarding + upload photo instantané`
-
-Corrections apportées :
-1. **Message contextuel page complete** — Affiche le bon message selon création/rejoindre/aucune squad
-2. **Bouton déconnexion robuste** — Gestion erreur + clear state + force redirect `/auth`
-3. **Compression image avatar** — 400px max, JPEG 80%
-4. **Preview photo instantané** — Affichage local immédiat, upload en arrière-plan
-5. **Navigation "Voir ma squad"** — `window.location.href` + import direct useSquadsStore
-6. **Ajout `refreshProfile()`** — Nouvelle action dans useAuth
-7. **Page Profile améliorée** — Même preview instantané pour l'upload photo
-
----
-
-## Bugs Corrigés Précédemment
-
-1. ✅ **RLS squad_members** — Corrigé avec fonctions SECURITY DEFINER `is_squad_member()` et `is_squad_owner()`
-2. ✅ **Trigger member_count** — Corrigé: renommé `member_count` → `total_members`
-3. ✅ **Persistence profil** — Fonctionne correctement
-4. ✅ **Upload photo lent** — Compression côté client avant upload
-5. ✅ **Déconnexion instable** — Force redirect + clear localStorage
-
----
-
-## VISION PRODUIT (NON NÉGOCIABLE)
-
-**Squad Planner n'est PAS :**
-- un réseau social gaming
-- un feed
-- une app communautaire vague
-
-**Squad Planner EST :**
-
-> L'outil qui transforme une intention molle ("on joue un jour")
-> en engagement concret et répété ("on joue mardi 21h et tout le monde est là").
-
-### Règle d'Or
-
-> Si une fonctionnalité n'augmente pas la présence réelle, n'aide pas à décider, ou n'améliore pas la fiabilité — **elle ne doit pas exister**.
-
----
-
-## Fonctionnalités Core
-
-### 1. Squads
-- Créer une squad (Nom, jeu principal)
-- Invitations par code unique
-- Rôles : owner / membre
-
-### 2. Sessions
-- Proposer : date, heure, durée, jeu
-- **RSVP obligatoire** : Présent / Absent / Peut-être
-- Statut : proposée / confirmée / annulée
-
-### 3. Engagement Réel
-- **Check-in** au moment de la session
-- Historique réel (pas déclaratif)
-- Score de fiabilité par joueur
-
----
-
-## IA Native (5 systèmes)
-
-### IA #1 — Planification Intelligente
-Suggère les meilleurs créneaux basés sur l'historique de présence.
-
-### IA #2 — Décision (Anti "on verra")
-Quand la squad hésite, l'IA tranche et explique pourquoi.
-
-### IA #3 — Fiabilité Sociale
-Score par joueur : % présence, no-shows, retards.
-
-### IA #4 — Communication Contextuelle
-Rappels intelligents, suggestions de messages, résumés post-session.
-
-### IA #5 — Coach Discret
-Conseils basés sur les données, jamais moralisateur.
-
----
-
-## Chat & Vocal
-
-- Chat squad (realtime)
-- Chat session
-- Chat 1-to-1
-- Vocal in-app via Agora
-
----
-
-## Monétisation
-
-**Gratuit** : 1-2 squads, IA limitée
-**Premium** : 15-25€/mois/squad — IA avancée, stats complètes, historique illimité
+**Squad de test** : Test Squad Alpha (Valorant) - Code invite : **43FC85BC**
 
 ---
 
@@ -418,153 +372,107 @@ Thème : **Linear Dark**
 | color-primary | #5e6dd2 (Violet) |
 | color-success | #4ade80 (Vert) |
 | color-warning | #f5a623 (Orange) |
-
-**Principes** : Mobile-first, lisibilité > effets, chaque écran répond à "Qu'est-ce qu'on fait maintenant ?"
-
----
-
-## Architecture Technique
-
-| Couche | Technologie |
-|--------|-------------|
-| Frontend | React + Vite + TypeScript |
-| Styling | TailwindCSS + Framer Motion |
-| Backend | Supabase (PostgreSQL, Auth, Realtime, Storage) |
-| Vocal | Agora SDK |
-| IA | Supabase Edge Functions |
+| color-error | #ef4444 (Rouge) |
 
 ---
 
-## Commandes
+## 📦 SERVICES EXTERNES
 
-```bash
-npm run dev          # Serveur de dev (localhost:5173)
-npm run build        # Build production
-npm run lint         # Linter
-npm run test         # Tests E2E Playwright
-```
+### Agora (Party vocale + Appels 1-to-1)
 
-### ⚠️ IMPORTANT : Commits réguliers
+| Info | Valeur |
+|------|--------|
+| Console | https://console.agora.io |
+| SDK | `agora-rtc-sdk-ng` (installé) |
+| État | ⚠️ Party OK, Appels 1-to-1 NON IMPLÉMENTÉS |
 
-**Pousser sur GitHub régulièrement !** Après chaque tâche terminée ou correction de bug :
+### Stripe (Premium)
 
-```bash
-git add -A
-git commit -m "feat/fix: description courte"
-git push
-```
+| Info | Valeur |
+|------|--------|
+| Console | https://dashboard.stripe.com |
+| État | ✅ Webhooks + Checkout implémentés |
+| Gating | ❌ Non actif (features premium accessibles à tous) |
 
-Ne pas accumuler trop de changements sans commit. Un commit par fonctionnalité ou fix.
+### Push Notifications
 
----
-
-## PLAN D'ACTION PRIORITAIRE
-
-### ✅ Phase 1 : Core fonctionnel (TERMINÉ - 4 fév 2026)
-1. [x] ~~Corriger bug RLS squad_members~~ ✅
-2. [x] ~~Tester parcours Invitation~~ ✅ VALIDÉ
-3. [x] ~~Tester chat squad~~ ✅ FONCTIONNE
-4. [x] ~~Corriger trigger `update_squad_session_count`~~ ✅ CORRIGÉ
-5. [x] ~~Tester parcours Planification (créer session → RSVP)~~ ✅ VALIDÉ
-6. [x] ~~Tester parcours Engagement (check-in → score fiabilité)~~ ✅ VALIDÉ
-
-### ✅ Phase 2 : Corriger les bugs UX (TERMINÉ - 4 fév 2026)
-7. [x] ~~Formulaire création squad~~ ✅ Bug non reproduisible, fonctionne
-8. [x] ~~Tester vocal Agora~~ ✅ UI validée, code fonctionnel
-9. [x] ~~Activer les tests E2E~~ ✅ 212/215 tests passent (98.6%)
-
-### ✅ Phase 2.5 : Onboarding (TERMINÉ - 5 fév 2026)
-10. [x] ~~Message contextuel page complete~~ ✅
-11. [x] ~~Bouton déconnexion robuste~~ ✅
-12. [x] ~~Compression upload avatar~~ ✅ 400px JPEG
-13. [x] ~~Preview photo instantané~~ ✅ Local preview + upload background
-14. [x] ~~Navigation "Voir ma squad"~~ ✅ window.location.href
-15. [x] ~~Upload photo page Profile~~ ✅ Même amélioration
-
-### ✅ Phase 2.6 : Refonte Landing Page (TERMINÉ - 5 fév 2026)
-
-**Objectif** : Passer d'une landing "correcte" à une landing "Top 5 mondial"
-
-#### Wording
-- [x] ~~Retirer stats non crédibles~~ → Stats honnêtes (100%, 30s, 0)
-- [x] ~~Supprimer répétitions~~ → Message varié
-- [x] ~~Reformuler "Pression sociale douce"~~ → "Tes potes comptent sur toi"
-- [x] ~~Remplacer "Le Calendly du gaming"~~ → "Jouez ensemble, pour de vrai"
-
-#### UI/UX
-- [x] ~~Mockup iPhone dans le Hero~~ ✅
-- [x] ~~Social proof "Beta ouverte"~~ ✅
-- [x] ~~Sections redondantes supprimées~~ ✅
-- [x] ~~Hiérarchie CTA améliorée~~ ✅
-- [x] ~~Header sticky~~ ✅
+| Info | Valeur |
+|------|--------|
+| Service | Web Push API |
+| État | ❌ 10% - Browser API seulement, pas de Service Worker |
 
 ---
 
-### ✅ Phase 2.7 : Refonte Onboarding (TERMINÉ - 5 fév 2026)
+## Langue
 
-**Objectif** : Onboarding niveau TOP 5 mondial
+**Toujours répondre en Français.**
 
-#### Changements effectués
-- [x] ~~Splash screen supprimé~~ → Démarrage direct sur choix squad
-- [x] ~~Indicateur de progression~~ → Étapes numérotées (1 Squad, 2 Profil, 3 Notifs)
-- [x] ~~Ordre réorganisé~~ → Profil AVANT Permissions (plus logique)
-- [x] ~~Wording reformulé~~ → "C'est toi ?", "Ne rate jamais une session"
-- [x] ~~Récapitulatif final~~ → Nom squad + Code invitation + Bouton copier
-- [x] ~~Célébration~~ → Confettis animés sur page finale
+## Rôle de l'Agent : CO-FONDATEUR TECHNIQUE
 
----
+**Tu n'es PAS un simple exécutant. Tu es le co-fondateur technique de Squad Planner.**
 
-### Phase 3 : IA Fonctionnelle
-15. [ ] Remplacer texte IA Coach hardcodé par vraie IA
-16. [ ] Tester Edge Functions IA avec vraies données
+### Niveau d'exigence TOP 5 MONDIAL
 
-### Phase 4 : Features manquantes
-17. [ ] Implémenter chat 1-to-1
-18. [ ] Configurer Stripe Premium
+Avant de considérer une feature comme "terminée", vérifie :
 
-### Phase 5 : Polish
-19. [ ] Audit UX complet
-20. [ ] Optimisation performances
-21. [ ] Tests E2E sur tous les parcours
-
----
-
-## Objectif Final — TOP 5 MONDIAL 2026
-
-### L'ambition (NON NÉGOCIABLE)
-
-> **Squad Planner doit faire partie du TOP 5 des meilleures apps mondiales en 2026.**
-
-Cela signifie :
-- **UX/UI** au niveau de Linear, Notion, Arc Browser
-- **Wording** authentique, pas de bullshit corporate
-- **Performance** irréprochable
-- **Onboarding** fluide en moins de 60 secondes
-- **Design** qui fait dire "wow" dès la landing page
-
-### Niveau d'exigence pour CHAQUE feature (OBLIGATOIRE)
-
-> **Chaque nouvelle fonctionnalité, chaque modification, chaque écran doit être implémenté avec ce même niveau d'exigence TOP 5 mondial.**
-
-Avant de considérer une feature comme "terminée", se poser ces questions :
-1. **Wording** — Est-ce authentique ? Pas de bullshit corporate ? Cohérent avec le ton de l'app ?
-2. **UI** — Est-ce au niveau Linear/Notion ? Animations fluides ? Hiérarchie visuelle claire ?
-3. **UX** — Le parcours est-il logique ? Moins de clics possible ? Feedback immédiat ?
-4. **Détails** — Indicateurs de progression ? États de chargement ? Messages d'erreur clairs ?
-5. **Célébration** — Y a-t-il un moment de satisfaction pour l'utilisateur ?
+1. **Wording** — Authentique ? Pas de bullshit corporate ?
+2. **UI** — Niveau Linear/Notion ? Animations fluides ?
+3. **UX** — Parcours logique ? Feedback immédiat ?
+4. **Détails** — Loading states ? Messages d'erreur clairs ?
+5. **Célébration** — Moment de satisfaction pour l'utilisateur ?
 
 **Si la réponse est NON à l'une de ces questions, la feature n'est pas terminée.**
 
-### Ce qu'on vise
-- Le **standard de planification** pour les gamers
-- Une **référence mondiale** de coordination sociale gaming
-- Une app que les gens **recommandent** sans qu'on leur demande
+---
 
-### Benchmarks à étudier
-- Linear (dark mode, animations, simplicité)
-- Notion (onboarding, structure)
-- Arc Browser (design audacieux, personnalité)
-- Vercel (landing page, clarté du message)
-- Figma (collaboration, temps réel)
+## VISION PRODUIT (NON NÉGOCIABLE)
+
+**Squad Planner EST :**
+
+> L'outil qui transforme une intention molle ("on joue un jour")
+> en engagement concret et répété ("on joue mardi 21h et tout le monde est là").
+
+### Les 3 Piliers (BIBLE)
+
+1. **Party vocale persistante** (comme PlayStation App)
+2. **Planning avec décision forcée** (RSVP obligatoire)
+3. **Mesure de la fiabilité réelle** (check-in, score)
+
+### Règle d'Or
+
+> Si une fonctionnalité n'augmente pas la présence réelle, n'aide pas à décider, ou n'améliore pas la fiabilité — **elle ne doit pas exister**.
+
+---
+
+## 📋 CHECKLIST PRÉ-LANCEMENT
+
+### Fonctionnalités BIBLE (NON NÉGOCIABLE)
+
+- [x] Party vocale (UI validée, test 2+ users à faire)
+- [x] Chat squad realtime
+- [x] Chat 1-to-1 / DM
+- [ ] **Appels 1-to-1** avec notification app fermée
+- [x] Création session + RSVP + confirmation auto
+- [x] Check-in + score fiabilité
+- [ ] **Notifications push fonctionnelles**
+- [ ] **Gating Premium actif**
+
+### Qualité
+
+- [ ] 0 erreur console
+- [ ] Lighthouse Performance 90+
+- [ ] Testé sur Chrome, Safari, Firefox
+- [ ] Testé sur mobile (iOS + Android)
+- [ ] Tests E2E passent à 100%
+
+### Quick Wins Célébration
+
+- [ ] Toast après RSVP
+- [ ] Toast rejoindre Party
+- [ ] Confetti score 100%
+- [ ] CountUp animations
+- [ ] Page transitions
+
+---
 
 **Tu ne construis pas une app. Tu construis une machine à transformer des intentions molles en habitudes concrètes.**

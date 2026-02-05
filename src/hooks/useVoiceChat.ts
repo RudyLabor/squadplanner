@@ -32,7 +32,7 @@ interface VoiceChatState {
   localAudioTrack: IMicrophoneAudioTrack | null
 
   // Actions
-  joinChannel: (channelName: string, userId: string, username: string) => Promise<void>
+  joinChannel: (channelName: string, userId: string, username: string) => Promise<boolean>
   leaveChannel: () => Promise<void>
   toggleMute: () => Promise<void>
   setVolume: (volume: number) => void
@@ -60,12 +60,12 @@ export const useVoiceChatStore = create<VoiceChatState>((set, get) => ({
 
     if (state.isConnected || state.isConnecting) {
       console.warn('Already connected or connecting')
-      return
+      return false
     }
 
     if (!AGORA_APP_ID) {
       set({ error: 'Agora App ID non configuré. Contactez l\'administrateur.' })
-      return
+      return false
     }
 
     try {
@@ -83,13 +83,28 @@ export const useVoiceChatStore = create<VoiceChatState>((set, get) => ({
           await client.subscribe(user, mediaType)
           user.audioTrack?.play()
 
+          // Récupérer le vrai username depuis Supabase
+          let displayUsername = 'Joueur'
+          try {
+            const { data: profile } = await supabase
+              .from('profiles')
+              .select('username')
+              .eq('id', String(user.uid))
+              .single()
+            if (profile?.username) {
+              displayUsername = profile.username
+            }
+          } catch (err) {
+            console.warn('Could not fetch username for user:', user.uid, err)
+          }
+
           // Add to remote users
           set(state => ({
             remoteUsers: [
               ...state.remoteUsers.filter(u => u.odrop !== user.uid),
               {
                 odrop: user.uid,
-                username: `User ${user.uid}`,
+                username: displayUsername,
                 isMuted: false,
                 isSpeaking: false,
                 volume: 100,
@@ -168,12 +183,14 @@ export const useVoiceChatStore = create<VoiceChatState>((set, get) => ({
       })
 
       console.log('Joined voice channel:', channelName)
+      return true
     } catch (error) {
       console.error('Error joining voice channel:', error)
       set({
         isConnecting: false,
         error: error instanceof Error ? error.message : 'Erreur de connexion au vocal',
       })
+      return false
     }
   },
 

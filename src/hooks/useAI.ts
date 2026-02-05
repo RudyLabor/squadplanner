@@ -63,6 +63,18 @@ interface CoachTip {
   data?: Record<string, unknown>
 }
 
+interface AICoachTip {
+  tip: string
+  tone: 'encouragement' | 'warning' | 'celebration'
+  context?: {
+    reliability_score: number
+    trend: 'improving' | 'stable' | 'declining'
+    days_since_last_session: number
+    recent_noshows: number
+    upcoming_sessions: number
+  }
+}
+
 interface AIInsight {
   id: string
   insight_type: string
@@ -77,6 +89,8 @@ interface AIState {
   decisionRecommendation: DecisionRecommendation | null
   reliabilityReport: SquadReliabilityReport | null
   coachTips: CoachTip[]
+  aiCoachTip: AICoachTip | null
+  aiCoachTipLoading: boolean
   insights: AIInsight[]
   isLoading: boolean
   error: string | null
@@ -87,6 +101,7 @@ interface AIState {
   fetchReliabilityReport: (squadId: string) => Promise<void>
   fetchPlayerReliability: (userId: string) => Promise<PlayerReliability | null>
   fetchCoachTips: (squadId: string) => Promise<void>
+  fetchAICoachTip: (userId: string, contextType?: 'profile' | 'home') => Promise<AICoachTip | null>
   fetchInsights: (squadId: string) => Promise<void>
   dismissInsight: (insightId: string) => Promise<void>
   getSlotReliability: (squadId: string, dayOfWeek: number, hour: number) => Promise<number>
@@ -102,6 +117,8 @@ export const useAIStore = create<AIState>((set) => ({
   decisionRecommendation: null,
   reliabilityReport: null,
   coachTips: [],
+  aiCoachTip: null,
+  aiCoachTipLoading: false,
   insights: [],
   isLoading: false,
   error: null,
@@ -334,6 +351,46 @@ export const useAIStore = create<AIState>((set) => ({
     } catch (error) {
       console.error('Error in fetchCoachTips:', error)
       set({ coachTips: [], isLoading: false })
+    }
+  },
+
+  // ===== AI COACH TIP - Edge Function (Personal Coach) =====
+  fetchAICoachTip: async (userId: string, contextType: 'profile' | 'home' = 'profile'): Promise<AICoachTip | null> => {
+    try {
+      set({ aiCoachTipLoading: true })
+
+      const { data, error } = await supabase.functions.invoke('ai-coach', {
+        body: { user_id: userId, context_type: contextType }
+      })
+
+      if (error) {
+        console.error('Edge Function error:', error)
+        // Return a fallback tip
+        const fallback: AICoachTip = {
+          tip: 'Pret pour la prochaine session ? Tes potes t\'attendent !',
+          tone: 'encouragement'
+        }
+        set({ aiCoachTip: fallback, aiCoachTipLoading: false })
+        return fallback
+      }
+
+      if (data) {
+        const tip = data as AICoachTip
+        set({ aiCoachTip: tip, aiCoachTipLoading: false })
+        return tip
+      }
+
+      set({ aiCoachTipLoading: false })
+      return null
+    } catch (error) {
+      console.error('Error in fetchAICoachTip:', error)
+      // Return a fallback tip
+      const fallback: AICoachTip = {
+        tip: 'Pret pour la prochaine session ? Tes potes t\'attendent !',
+        tone: 'encouragement'
+      }
+      set({ aiCoachTip: fallback, aiCoachTipLoading: false })
+      return fallback
     }
   },
 

@@ -147,7 +147,6 @@ serve(async (req) => {
     }
 
     // Store notifications in ai_insights table for the app to display
-    // In production, you would also send emails/push notifications here
     for (const notif of notifications) {
       await supabaseAdmin.from('ai_insights').upsert({
         id: `reminder-${notif.session_id}-${notif.user_id}-${notif.type}`,
@@ -169,9 +168,64 @@ serve(async (req) => {
       })
     }
 
+    // Send Web Push notifications via send-push Edge Function
+    const pushResults = { sent: 0, failed: 0 }
+
+    // Group notifications by user to avoid duplicate pushes
+    const userNotifications = new Map<string, typeof notifications[0]>()
+    for (const notif of notifications) {
+      // Keep the most urgent notification per user
+      const existing = userNotifications.get(notif.user_id)
+      if (!existing || notif.type === 'urgent') {
+        userNotifications.set(notif.user_id, notif)
+      }
+    }
+
+    // Send push notifications
+    for (const [userId, notif] of userNotifications) {
+      try {
+        const pushPayload = {
+          userId,
+          title: notif.type === 'urgent'
+            ? `${notif.session_title} dans ${notif.minutes_until} min!`
+            : `Session dans ~1h`,
+          body: notif.type === 'urgent'
+            ? `Rejoins ${notif.squad_name} maintenant!`
+            : `${notif.session_title} avec ${notif.squad_name}`,
+          url: `/squads`, // Link to squads page
+          tag: `session-${notif.session_id}-${notif.type}`
+        }
+
+        const response = await fetch(
+          `${Deno.env.get('SUPABASE_URL')}/functions/v1/send-push`,
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')}`
+            },
+            body: JSON.stringify(pushPayload)
+          }
+        )
+
+        if (response.ok) {
+          const result = await response.json()
+          pushResults.sent += result.sent || 0
+          pushResults.failed += result.failed || 0
+        } else {
+          console.error(`Push failed for user ${userId}:`, await response.text())
+          pushResults.failed++
+        }
+      } catch (error) {
+        console.error(`Error sending push to user ${userId}:`, error)
+        pushResults.failed++
+      }
+    }
+
     // Log results
     console.log(`Processed ${urgentSessions?.length || 0} urgent sessions, ${upcomingSessions?.length || 0} upcoming sessions`)
-    console.log(`Created ${notifications.length} notifications`)
+    console.log(`Created ${notifications.length} in-app notifications`)
+    console.log(`Push notifications: ${pushResults.sent} sent, ${pushResults.failed} failed`)
 
     return new Response(
       JSON.stringify({
@@ -179,6 +233,8 @@ serve(async (req) => {
         urgent_sessions: urgentSessions?.length || 0,
         upcoming_sessions: upcomingSessions?.length || 0,
         notifications_sent: notifications.length,
+        push_sent: pushResults.sent,
+        push_failed: pushResults.failed,
       }),
       { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     )

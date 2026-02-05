@@ -1,8 +1,10 @@
 import { useEffect } from 'react'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
-import { Home, Auth, Squads, SquadDetail, SessionDetail, Landing, Sessions, Profile, Messages, Party } from './pages'
+import { Home, Auth, Squads, SquadDetail, SessionDetail, Landing, Sessions, Profile, Messages, Party, Onboarding } from './pages'
 import { AppLayout } from './components/layout'
-import { useAuthStore } from './hooks'
+import { useAuthStore, subscribeToIncomingCalls } from './hooks'
+import { CallModal } from './components/CallModal'
+import { IncomingCallModal } from './components/IncomingCallModal'
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { user, isInitialized } = useAuthStore()
@@ -24,18 +26,34 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
 
 function AppContent() {
   const { initialize, user } = useAuthStore()
-  
+
   useEffect(() => {
     initialize()
   }, [initialize])
 
+  // Subscribe to incoming calls when user is authenticated
+  useEffect(() => {
+    if (!user) return
+
+    const unsubscribe = subscribeToIncomingCalls(user.id)
+    return () => unsubscribe()
+  }, [user])
+
   return (
-    <AppLayout>
-      <Routes>
+    <>
+      {/* Global call modals */}
+      <CallModal />
+      <IncomingCallModal />
+
+      <AppLayout>
+        <Routes>
         {/* Public routes */}
         <Route path="/" element={user ? <Home /> : <Landing />} />
         <Route path="/auth" element={<Auth />} />
-        
+        <Route path="/onboarding" element={
+          <ProtectedRoute><Onboarding /></ProtectedRoute>
+        } />
+
         {/* Protected routes */}
         <Route path="/squads" element={
           <ProtectedRoute><Squads /></ProtectedRoute>
@@ -63,6 +81,7 @@ function AppContent() {
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </AppLayout>
+    </>
   )
 }
 

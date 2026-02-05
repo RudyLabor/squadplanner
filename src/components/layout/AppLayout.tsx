@@ -1,13 +1,17 @@
+import { useEffect, useState } from 'react'
 import type { ReactNode } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { Home, Users, Mic, MessageCircle, User, Plus, Zap } from 'lucide-react'
-import { useAuthStore } from '../../hooks'
+import { useAuthStore, useSquadsStore, useVoiceChatStore } from '../../hooks'
+import { SquadPlannerLogo } from '../SquadPlannerLogo'
+import { supabase } from '../../lib/supabase'
 
 interface AppLayoutProps {
   children: ReactNode
 }
 
+// Navigation items (Party handled separately on mobile)
 const navItems = [
   { path: '/', icon: Home, label: 'Accueil' },
   { path: '/squads', icon: Users, label: 'Squads' },
@@ -16,19 +20,31 @@ const navItems = [
   { path: '/profile', icon: User, label: 'Profil' },
 ]
 
-function NavLink({ path, icon: Icon, label, isActive }: {
+// Mobile nav items (Party sera au centre avec un style spécial)
+const mobileNavLeft = [
+  { path: '/', icon: Home, label: 'Accueil' },
+  { path: '/squads', icon: Users, label: 'Squads' },
+]
+
+const mobileNavRight = [
+  { path: '/messages', icon: MessageCircle, label: 'Messages' },
+  { path: '/profile', icon: User, label: 'Profil' },
+]
+
+function NavLink({ path, icon: Icon, label, isActive, badge }: {
   path: string
   icon: React.ElementType
   label: string
   isActive: boolean
+  badge?: number
 }) {
   return (
     <Link to={path}>
       <motion.div
         className={`
-          flex items-center gap-3 px-4 py-3 rounded-xl transition-all
-          ${isActive 
-            ? 'bg-[rgba(94,109,210,0.15)] text-[#5e6dd2]' 
+          relative flex items-center gap-3 px-4 py-3 rounded-xl transition-all
+          ${isActive
+            ? 'bg-[rgba(94,109,210,0.15)] text-[#5e6dd2]'
             : 'text-[#8b8d90] hover:bg-[rgba(255,255,255,0.05)] hover:text-[#f7f8f8]'
           }
         `}
@@ -37,29 +53,98 @@ function NavLink({ path, icon: Icon, label, isActive }: {
       >
         <Icon className="w-5 h-5" strokeWidth={1.5} />
         <span className="text-[14px] font-medium">{label}</span>
+        {badge && badge > 0 && (
+          <motion.span
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            transition={{ type: "spring", stiffness: 500, damping: 30 }}
+            className="absolute right-3 w-5 h-5 rounded-full bg-[#ef4444] text-white text-[10px] font-bold flex items-center justify-center"
+          >
+            {badge > 9 ? '9+' : badge}
+          </motion.span>
+        )}
       </motion.div>
     </Link>
   )
 }
 
-function MobileNavLink({ path, icon: Icon, label, isActive }: {
+function MobileNavLink({ path, icon: Icon, label, isActive, badge }: {
   path: string
   icon: React.ElementType
   label: string
   isActive: boolean
+  badge?: number
 }) {
   return (
     <Link to={path} className="flex-1">
       <motion.div
         className={`
-          flex flex-col items-center gap-1 py-2
-          ${isActive ? 'text-[#5e6dd2]' : 'text-[#5e6063]'}
+          relative flex flex-col items-center gap-0.5 py-2 px-3 rounded-xl
+          ${isActive
+            ? 'bg-[rgba(94,109,210,0.15)] text-[#5e6dd2]'
+            : 'text-[#5e6063]'
+          }
         `}
         whileTap={{ scale: 0.9 }}
       >
-        <Icon className="w-5 h-5" strokeWidth={isActive ? 2 : 1.5} />
+        <div className="relative">
+          <Icon className="w-6 h-6" strokeWidth={isActive ? 2 : 1.5} />
+          {badge && badge > 0 && (
+            <motion.span
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ type: "spring", stiffness: 500, damping: 30 }}
+              className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-[#ef4444] text-white text-[9px] font-bold flex items-center justify-center"
+            >
+              {badge > 9 ? '9+' : badge}
+            </motion.span>
+          )}
+        </div>
         <span className="text-[10px] font-medium">{label}</span>
       </motion.div>
+    </Link>
+  )
+}
+
+// Bouton Party central - style PS App / Discord
+function PartyButton({ isActive, hasActiveParty }: { isActive: boolean; hasActiveParty: boolean }) {
+  return (
+    <Link to="/party" className="relative -mt-5">
+      <motion.div
+        className={`
+          w-14 h-14 rounded-2xl flex items-center justify-center
+          ${isActive
+            ? 'bg-[#5e6dd2]'
+            : hasActiveParty
+              ? 'bg-[#4ade80]'
+              : 'bg-[#1f2023] border border-[rgba(255,255,255,0.1)]'
+          }
+          shadow-lg
+        `}
+        whileHover={{ scale: 1.05, y: -2 }}
+        whileTap={{ scale: 0.95 }}
+      >
+        <Mic
+          className={`w-6 h-6 ${isActive || hasActiveParty ? 'text-white' : 'text-[#8b8d90]'}`}
+          strokeWidth={2}
+        />
+
+        {/* Indicateur party en cours */}
+        {hasActiveParty && !isActive && (
+          <motion.div
+            className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-[#4ade80] border-2 border-[#101012]"
+            animate={{ scale: [1, 1.2, 1] }}
+            transition={{ duration: 1.5, repeat: Infinity }}
+          />
+        )}
+      </motion.div>
+
+      {/* Label */}
+      <div className={`text-center mt-1 text-[10px] font-semibold ${
+        isActive ? 'text-[#5e6dd2]' : hasActiveParty ? 'text-[#4ade80]' : 'text-[#5e6063]'
+      }`}>
+        Party
+      </div>
     </Link>
   )
 }
@@ -67,14 +152,53 @@ function MobileNavLink({ path, icon: Icon, label, isActive }: {
 export function AppLayout({ children }: AppLayoutProps) {
   const location = useLocation()
   const { profile, user } = useAuthStore()
+  const { squads } = useSquadsStore()
+  const { isConnected: isInVoiceChat } = useVoiceChatStore()
+  const [unreadMessages, setUnreadMessages] = useState(0)
 
-  // Don't show navigation on auth page or landing for non-logged users
+  // Fetch unread messages count
+  useEffect(() => {
+    if (!user) return
+
+    const fetchUnreadCount = async () => {
+      // Pour l'instant, on compte les messages non lus de manière simplifiée
+      // TODO: Implémenter un vrai système de tracking des messages lus
+      const squadIds = squads.map(s => s.id)
+      if (squadIds.length === 0) return
+
+      // Compter les messages des dernières 24h comme "potentiellement non lus"
+      const yesterday = new Date()
+      yesterday.setDate(yesterday.getDate() - 1)
+
+      const { count } = await supabase
+        .from('messages')
+        .select('*', { count: 'exact', head: true })
+        .in('squad_id', squadIds)
+        .neq('user_id', user.id)
+        .gte('created_at', yesterday.toISOString())
+
+      // Simuler des messages non lus (max 5 pour l'affichage)
+      setUnreadMessages(Math.min(count || 0, 5))
+    }
+
+    fetchUnreadCount()
+
+    // Refresh toutes les 30 secondes
+    const interval = setInterval(fetchUnreadCount, 30000)
+    return () => clearInterval(interval)
+  }, [user, squads])
+
+  // Don't show navigation on auth, onboarding, or landing for non-logged users
   const isAuthPage = location.pathname === '/auth'
+  const isOnboarding = location.pathname === '/onboarding'
   const isLanding = location.pathname === '/' && !user
 
-  if (isAuthPage || isLanding) {
+  if (isAuthPage || isOnboarding || isLanding) {
     return <>{children}</>
   }
+
+  const isPartyActive = location.pathname === '/party'
+  const hasActiveParty = isInVoiceChat
 
   return (
     <div className="min-h-screen bg-[#08090a] flex">
@@ -83,7 +207,7 @@ export function AppLayout({ children }: AppLayoutProps) {
         {/* Logo */}
         <div className="p-6 border-b border-[rgba(255,255,255,0.06)]">
           <div className="flex items-center gap-3">
-            <img src="/favicon.svg" alt="Squad Planner" className="w-10 h-10" />
+            <SquadPlannerLogo size={40} />
             <div>
               <h1 className="text-[16px] font-bold text-[#f7f8f8]">Squad Planner</h1>
               <p className="text-[11px] text-[#5e6063]">Jouez ensemble, vraiment</p>
@@ -91,9 +215,9 @@ export function AppLayout({ children }: AppLayoutProps) {
           </div>
         </div>
 
-        {/* Quick action */}
+        {/* Quick action - Lien vers la page des squads */}
         <div className="p-4">
-          <Link to="/squads/new">
+          <Link to="/squads">
             <motion.button
               className="w-full flex items-center justify-center gap-2 h-11 rounded-xl bg-[#5e6dd2] text-white text-[14px] font-semibold"
               whileHover={{ scale: 1.02 }}
@@ -114,6 +238,7 @@ export function AppLayout({ children }: AppLayoutProps) {
               icon={item.icon}
               label={item.label}
               isActive={location.pathname === item.path}
+              badge={item.path === '/messages' ? unreadMessages : undefined}
             />
           ))}
         </nav>
@@ -141,7 +266,7 @@ export function AppLayout({ children }: AppLayoutProps) {
                   {profile?.username || 'Mon profil'}
                 </div>
                 <div className="text-[12px] text-[#5e6063]">
-                  {profile?.reliability_score || 100}% fiabilité
+                  {profile?.reliability_score || 100}% fiable
                 </div>
               </div>
             </motion.div>
@@ -156,10 +281,10 @@ export function AppLayout({ children }: AppLayoutProps) {
           >
             <div className="flex items-center gap-2 mb-2">
               <Zap className="w-4 h-4 text-[#f5a623]" />
-              <span className="text-[13px] font-semibold text-[#f7f8f8]">Premium</span>
+              <span className="text-[13px] font-semibold text-[#f7f8f8]">Passe Premium</span>
             </div>
             <p className="text-[12px] text-[#8b8d90] mb-3">
-              IA avancée, stats complètes, historique illimité
+              Stats avancées, IA coach, qualité audio HD
             </p>
             <button className="text-[12px] font-semibold text-[#5e6dd2] hover:text-[#8b93ff]">
               Découvrir →
@@ -169,20 +294,36 @@ export function AppLayout({ children }: AppLayoutProps) {
       </aside>
 
       {/* Main content */}
-      <main className="flex-1 lg:ml-64 pb-20 lg:pb-0">
+      <main className="flex-1 lg:ml-64 pb-24 lg:pb-0">
         {children}
       </main>
 
-      {/* Bottom navigation - Mobile only */}
-      <nav className="lg:hidden fixed bottom-0 left-0 right-0 bg-[#101012] border-t border-[rgba(255,255,255,0.06)] px-2 py-1 z-50">
-        <div className="flex items-center justify-around max-w-md mx-auto">
-          {navItems.map((item) => (
+      {/* Bottom navigation - Mobile only - Style PS App */}
+      <nav className="lg:hidden fixed bottom-0 left-0 right-0 bg-[#101012]/95 backdrop-blur-lg border-t border-[rgba(255,255,255,0.06)] px-4 pt-2 pb-6 z-50">
+        <div className="flex items-end justify-around max-w-md mx-auto">
+          {/* Left side */}
+          {mobileNavLeft.map((item) => (
             <MobileNavLink
               key={item.path}
               path={item.path}
               icon={item.icon}
               label={item.label}
               isActive={location.pathname === item.path}
+            />
+          ))}
+
+          {/* Party button - Center, elevated */}
+          <PartyButton isActive={isPartyActive} hasActiveParty={hasActiveParty} />
+
+          {/* Right side */}
+          {mobileNavRight.map((item) => (
+            <MobileNavLink
+              key={item.path}
+              path={item.path}
+              icon={item.icon}
+              label={item.label}
+              isActive={location.pathname === item.path}
+              badge={item.path === '/messages' ? unreadMessages : undefined}
             />
           ))}
         </div>

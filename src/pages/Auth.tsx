@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Mail, Lock, User, Loader2, Gamepad2, CheckCircle } from 'lucide-react'
-import { Link, useNavigate, useSearchParams } from 'react-router-dom'
+import { Link, useNavigate, useSearchParams, Navigate } from 'react-router-dom'
 import Confetti from 'react-confetti'
 import { Button, Card, Input } from '../components/ui'
 import { SquadPlannerLogo } from '../components/SquadPlannerLogo'
@@ -24,9 +24,15 @@ export default function Auth() {
   const [showConfetti, setShowConfetti] = useState(false)
   const [passwordUpdated, setPasswordUpdated] = useState(false)
 
-  const { signIn, signUp, signInWithGoogle, isLoading } = useAuthStore()
+  const { signIn, signUp, signInWithGoogle, isLoading, user, isInitialized } = useAuthStore()
   const { fetchSquads } = useSquadsStore()
   const navigate = useNavigate()
+
+  // Si l'utilisateur est déjà connecté, rediriger vers /home
+  // Sauf pour le mode reset (changement de mot de passe)
+  if (isInitialized && user && mode !== 'reset') {
+    return <Navigate to="/home" replace />
+  }
 
   // Handle password update for reset mode
   const handlePasswordUpdate = async (e: React.FormEvent) => {

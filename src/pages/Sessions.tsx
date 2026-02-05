@@ -62,8 +62,17 @@ export function Sessions() {
     }
   }, [needsResponse.length, confirmed.length, sessions.length])
 
+  // Loading state
+  if (!isInitialized || (squadsLoading && squads.length === 0)) {
+    return (
+      <div className="flex-1 flex items-center justify-center min-h-[50vh]">
+        <Loader2 className="w-8 h-8 animate-spin text-[#5e6dd2]" />
+      </div>
+    )
+  }
+
   return (
-    <div className="min-h-screen bg-[#08090a] pb-8">
+    <div className="min-h-0 bg-[#08090a] pb-6">
       {/* Confetti celebration */}
       {showConfetti && typeof window !== 'undefined' && (
         <Confetti
@@ -210,7 +219,7 @@ export function Sessions() {
           {/* Upcoming confirmed */}
           <div className="mb-8">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-[11px] font-medium text-[rgba(255,255,255,0.35)] uppercase tracking-[0.05em]">
+              <h2 className="text-xs font-medium text-[rgba(255,255,255,0.35)] uppercase tracking-[0.05em]">
                 Mes sessions confirmées
               </h2>
               {!sessionsLoading && <Badge variant="success">{confirmed.length}</Badge>}
@@ -227,7 +236,7 @@ export function Sessions() {
                 {confirmed.map(session => (
                   <Link key={session.id} to={`/session/${session.id}`}>
                     <motion.div whileHover={{ y: -2 }} whileTap={{ scale: 0.99 }}>
-                      <Card className="p-4">
+                      <Card className="p-4 transition-all duration-200 hover:shadow-[0_0_15px_rgba(74,222,128,0.15)]">
                         <div className="flex items-center gap-4">
                           <div className="w-12 h-12 rounded-xl bg-[rgba(74,222,128,0.15)] flex items-center justify-center">
                             <Calendar className="w-6 h-6 text-[#4ade80]" strokeWidth={1.5} />
@@ -255,21 +264,33 @@ export function Sessions() {
                 ))}
               </div>
             ) : (
-              <Card className="p-8 text-center">
-                <Calendar className="w-12 h-12 mx-auto mb-4 text-[#5e6063]" strokeWidth={1} />
-                <h3 className="text-[16px] font-semibold text-[#f7f8f8] mb-2">
-                  Aucune session confirmée
-                </h3>
-                <p className="text-[14px] text-[#8b8d90] mb-4">
-                  Réponds "Présent" à une session pour la voir ici.
-                </p>
-                <Link to="/squads">
-                  <Button variant="secondary" size="sm">
-                    <Plus className="w-4 h-4" />
-                    Voir mes squads
-                  </Button>
-                </Link>
-              </Card>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3 }}
+              >
+                <Card className="p-8 text-center">
+                  <motion.div
+                    initial={{ scale: 0.8 }}
+                    animate={{ scale: 1 }}
+                    transition={{ delay: 0.1, type: 'spring', stiffness: 300, damping: 25 }}
+                  >
+                    <Calendar className="w-12 h-12 mx-auto mb-4 text-[#5e6063]" strokeWidth={1} />
+                  </motion.div>
+                  <h3 className="text-[16px] font-semibold text-[#f7f8f8] mb-2">
+                    Aucune session confirmée
+                  </h3>
+                  <p className="text-[14px] text-[#8b8d90] mb-4">
+                    Réponds "Présent" à une session pour la voir ici.
+                  </p>
+                  <Link to="/squads">
+                    <Button variant="secondary" size="sm">
+                      <Plus className="w-4 h-4" />
+                      Voir mes squads
+                    </Button>
+                  </Link>
+                </Card>
+              </motion.div>
             )}
           </div>
 

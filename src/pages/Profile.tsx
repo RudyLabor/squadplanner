@@ -155,7 +155,7 @@ export function Profile() {
                     <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-[#5e6dd2] to-[#8b93ff] flex items-center justify-center overflow-hidden">
                       {(localPreviewUrl || profile?.avatar_url) ? (
                         <img
-                          src={localPreviewUrl || profile?.avatar_url}
+                          src={localPreviewUrl || profile?.avatar_url || undefined}
                           alt="Avatar"
                           className="w-full h-full object-cover"
                         />

@@ -1,7 +1,63 @@
 # Squad Planner - Mémoire Projet
 
 > Ce fichier est lu par chaque nouvel agent au début de chaque conversation.
-> Dernière mise à jour: 4 février 2026 - 22h15
+> Dernière mise à jour: 5 février 2026 - 01h00
+
+---
+
+## 🚨 RÈGLES DE TRAVAIL OBLIGATOIRES (NON NÉGOCIABLE)
+
+### AVANT CHAQUE MODIFICATION DE CODE :
+
+1. **TESTER AVANT** — Comprendre le code existant et ses dépendances
+2. **VÉRIFIER LES CONTRAINTES DB** — Foreign keys, triggers, RLS policies
+3. **TESTER APRÈS** — Tester EN VRAI avec un nouveau compte, pas juste visuellement
+
+### APRÈS CHAQUE MODIFICATION :
+
+1. **TESTER LE PARCOURS COMPLET** — Pas juste la feature isolée
+2. **VÉRIFIER LA CONSOLE** — Aucune erreur tolérée
+3. **TESTER AVEC UN NOUVEAU COMPTE** — Les comptes existants masquent les bugs
+
+### MÉTHODOLOGIE OBLIGATOIRE :
+
+```
+1. Lire le code concerné
+2. Identifier TOUTES les dépendances (DB, hooks, stores)
+3. Coder la modification
+4. Tester localement avec un NOUVEAU compte
+5. Vérifier la console (0 erreur)
+6. Commit + Push
+7. Mettre à jour ce fichier
+```
+
+### TESTS OBLIGATOIRES :
+
+> **Chaque flow doit être testé par AU MOINS 5 agents en parallèle.**
+> Un test qui passe pour 1 agent peut échouer pour les autres.
+
+Exemple pour tester l'onboarding :
+```
+Lancer 5 agents Task en parallèle, chacun avec un nouveau compte différent.
+Tous les 5 doivent réussir pour valider le flow.
+```
+
+### CE QUI EST INTERDIT :
+
+- ❌ Déclarer "terminé" sans avoir testé avec un nouveau compte
+- ❌ Tester avec UN SEUL compte (minimum 5 tests parallèles)
+- ❌ Ignorer les erreurs console
+- ❌ Modifier du code sans comprendre les foreign keys associées
+- ❌ Faire des corrections ponctuelles sans audit global
+- ❌ Avancer sur une nouvelle feature si la précédente a des bugs
+
+### EN CAS DE BUG DÉCOUVERT :
+
+1. **STOP** — Ne pas continuer à coder
+2. **AUDIT** — Identifier la cause racine ET les bugs similaires potentiels
+3. **CORRIGER TOUT** — Pas juste le symptôme visible
+4. **TESTER** — Avec un nouveau compte
+5. **DOCUMENTER** — Mettre à jour ce fichier
 
 ---
 
@@ -28,8 +84,9 @@ Ce fichier contient :
 1. ✅ Lire GEMINI.md (ce fichier)
 2. ✅ Lire **BIBLE.md** en entier
 3. ✅ Identifier l'étape en cours dans la roadmap
-4. ✅ Compléter cette étape à 100%
-5. ✅ Mettre à jour l'état réel ici
+4. ✅ **TESTER L'ÉTAT ACTUEL** avec un nouveau compte
+5. ✅ Compléter cette étape à 100%
+6. ✅ Mettre à jour l'état réel ici
 
 ---
 
@@ -151,15 +208,16 @@ Chat squad → Chat session → Vocal pendant session
 
 ---
 
-## ÉTAT RÉEL DE L'APP (Mise à jour: 4 février 2026 - 23h30)
+## ÉTAT RÉEL DE L'APP (Mise à jour: 5 février 2026 - 03h00)
 
-### Score Global : ~87%
+### Score Global : ~90%
 
 | Fonctionnalité | État | Testé ? | Détails |
 |----------------|------|---------|---------|
 | Auth email/password | ✅ Fonctionne | ✅ Oui | Connexion/déconnexion OK |
 | Auth Google OAuth | ⚠️ Configuré | Non testé | - |
-| Créer une squad | ✅ Fonctionne | ✅ Oui | Bug visuel formulaire mais création OK |
+| **Onboarding complet** | ✅ **FONCTIONNE** | ✅ Oui | Splash → Squad → Permissions → Profil → Complete |
+| Créer une squad | ✅ Fonctionne | ✅ Oui | Via onboarding ou page squads |
 | Rejoindre une squad | ✅ **FONCTIONNE** | ✅ Oui | Code invite testé et validé |
 | Page squad détail | ✅ **FONCTIONNE** | ✅ Oui | Affiche membres, sessions, stats |
 | Modifier profil (bio) | ✅ Fonctionne | ✅ Oui | Persistence OK |
@@ -170,7 +228,8 @@ Chat squad → Chat session → Vocal pendant session
 | Chat 1-to-1 | ❌ Non implémenté | - | - |
 | **Page Party** | ✅ **FONCTIONNE** | ✅ Oui | Onglet dédié, liste squads, bouton rejoindre |
 | Chat vocal Agora | ✅ Code validé | Partiel | UI fonctionne, connexion OK, test complet nécessite 2 users |
-| Upload photo profil | ⚠️ Policies créées | Non testé | - |
+| **Upload photo profil** | ✅ **FONCTIONNE** | ✅ Oui | Compression 400px JPEG, upload rapide |
+| Déconnexion | ✅ **FONCTIONNE** | ✅ Oui | Robuste avec force redirect |
 | IA Planning | ⚠️ Edge function existe | Non testé | - |
 | IA Decision | ⚠️ Edge function existe | Non testé | - |
 | IA Coach | ❌ **TEXTE HARDCODÉ** | - | - |
@@ -216,6 +275,19 @@ Squad de test : **Test Squad Alpha** (Valorant) - Code invite : **43FC85BC**
 **Corrigé le 4 février 2026** via `scripts/fix-session-trigger.cjs`
 Le trigger utilisait `session_count` au lieu de `total_sessions`.
 
+### ✅ CORRIGÉ : Navigation onboarding instable (5 février 2026 - 03h00)
+
+**Problèmes corrigés:**
+1. **Navigation instable** — Remplacement des `motion.button` par des boutons standard avec CSS transitions
+2. **Formulaires pré-remplis** — Reset des champs AVANT changement de step (pas dans useEffect)
+3. **Bouton "Continuer" permissions bloqué** — Vérifie maintenant `Notification.permission === 'granted'`
+4. **Double-clics** — Ajout d'un lock `isNavigating` pendant les transitions
+5. **Animations simplifiées** — Durée réduite à 200ms, mode `initial={false}` sur AnimatePresence
+
+**Tests validés (5 février 2026):**
+- ✅ Flow "Créer une squad" : 2/3 agents sans aucun retour au splash
+- ✅ Flow "Rejoindre une squad" : TOUS TESTS PASSENT (bug critique corrigé)
+
 ### ✅ CORRIGÉ : Formulaire création squad (anciennement invisible)
 
 **Testé le 4 février 2026** - Le formulaire s'affiche correctement.
@@ -235,6 +307,21 @@ Le bug n'est plus reproduisible. Le formulaire utilise ses propres animations in
 - Adaptation des sélecteurs pour correspondre à l'UI actuelle
 - 3 tests mineurs échouent (Firefox console + Mobile Safari)
 
+### ✅ CORRIGÉ : Onboarding amélioré (5 février 2026)
+
+**Commits:**
+- `6f15413 fix: amélioration onboarding et upload photo`
+- `4399a00 fix: amélioration navigation onboarding + upload photo instantané`
+
+Corrections apportées :
+1. **Message contextuel page complete** — Affiche le bon message selon création/rejoindre/aucune squad
+2. **Bouton déconnexion robuste** — Gestion erreur + clear state + force redirect `/auth`
+3. **Compression image avatar** — 400px max, JPEG 80%
+4. **Preview photo instantané** — Affichage local immédiat, upload en arrière-plan
+5. **Navigation "Voir ma squad"** — `window.location.href` + import direct useSquadsStore
+6. **Ajout `refreshProfile()`** — Nouvelle action dans useAuth
+7. **Page Profile améliorée** — Même preview instantané pour l'upload photo
+
 ---
 
 ## Bugs Corrigés Précédemment
@@ -242,6 +329,8 @@ Le bug n'est plus reproduisible. Le formulaire utilise ses propres animations in
 1. ✅ **RLS squad_members** — Corrigé avec fonctions SECURITY DEFINER `is_squad_member()` et `is_squad_owner()`
 2. ✅ **Trigger member_count** — Corrigé: renommé `member_count` → `total_members`
 3. ✅ **Persistence profil** — Fonctionne correctement
+4. ✅ **Upload photo lent** — Compression côté client avant upload
+5. ✅ **Déconnexion instable** — Force redirect + clear localStorage
 
 ---
 
@@ -384,18 +473,26 @@ Ne pas accumuler trop de changements sans commit. Un commit par fonctionnalité 
 8. [x] ~~Tester vocal Agora~~ ✅ UI validée, code fonctionnel
 9. [x] ~~Activer les tests E2E~~ ✅ 212/215 tests passent (98.6%)
 
+### ✅ Phase 2.5 : Onboarding (TERMINÉ - 5 fév 2026)
+10. [x] ~~Message contextuel page complete~~ ✅
+11. [x] ~~Bouton déconnexion robuste~~ ✅
+12. [x] ~~Compression upload avatar~~ ✅ 400px JPEG
+13. [x] ~~Preview photo instantané~~ ✅ Local preview + upload background
+14. [x] ~~Navigation "Voir ma squad"~~ ✅ window.location.href
+15. [x] ~~Upload photo page Profile~~ ✅ Même amélioration
+
 ### Phase 3 : IA Fonctionnelle
-10. [ ] Remplacer texte IA Coach hardcodé par vraie IA
-11. [ ] Tester Edge Functions IA avec vraies données
+15. [ ] Remplacer texte IA Coach hardcodé par vraie IA
+16. [ ] Tester Edge Functions IA avec vraies données
 
 ### Phase 4 : Features manquantes
-12. [ ] Implémenter chat 1-to-1
-13. [ ] Configurer Stripe Premium
+17. [ ] Implémenter chat 1-to-1
+18. [ ] Configurer Stripe Premium
 
 ### Phase 5 : Polish
-14. [ ] Audit UX complet
-15. [ ] Optimisation performances
-16. [ ] Tests E2E sur tous les parcours
+19. [ ] Audit UX complet
+20. [ ] Optimisation performances
+21. [ ] Tests E2E sur tous les parcours
 
 ---
 

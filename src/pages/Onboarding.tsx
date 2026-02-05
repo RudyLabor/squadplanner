@@ -1,10 +1,10 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   Users, UserPlus, ArrowRight, ArrowLeft, Bell, Mic,
   Check, Globe, Camera, Loader2
 } from 'lucide-react'
-import { useNavigate } from 'react-router-dom'
+// useNavigate removed - using window.location.href for cleaner navigation
 import { Button, Card, Input } from '../components/ui'
 import { useAuthStore } from '../hooks'
 import { useSquadsStore } from '../hooks/useSquads'
@@ -14,20 +14,40 @@ import { SquadPlannerIcon } from '../components/SquadPlannerLogo'
 type OnboardingStep = 'splash' | 'squad-choice' | 'create-squad' | 'join-squad' | 'permissions' | 'profile' | 'complete'
 
 export function Onboarding() {
-  const navigate = useNavigate()
   const { user, profile, refreshProfile } = useAuthStore()
   const { createSquad, joinSquad, fetchSquads, squads } = useSquadsStore()
 
   const [step, setStep] = useState<OnboardingStep>('splash')
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [isNavigating, setIsNavigating] = useState(false) // Prevents double-clicks during transitions
 
-  // Squad creation
+  // Squad creation - empty strings to avoid browser autocomplete pollution
   const [squadName, setSquadName] = useState('')
   const [squadGame, setSquadGame] = useState('')
 
   // Join squad
   const [inviteCode, setInviteCode] = useState('')
+
+  // Safe navigation function that prevents race conditions
+  // Reset fields BEFORE changing step to avoid useEffect timing issues
+  const navigateToStep = useCallback((newStep: OnboardingStep) => {
+    if (isNavigating) return // Ignore if already navigating
+    setIsNavigating(true)
+    setError(null)
+
+    // Reset form fields BEFORE changing step (not in useEffect)
+    if (newStep === 'create-squad') {
+      setSquadName('')
+      setSquadGame('')
+    } else if (newStep === 'join-squad') {
+      setInviteCode('')
+    }
+
+    setStep(newStep)
+    // Reset navigation lock after animation completes
+    setTimeout(() => setIsNavigating(false), 400)
+  }, [isNavigating])
 
   // Profile
   const [username, setUsername] = useState('')
@@ -239,8 +259,8 @@ export function Onboarding() {
   }
 
   const canProceedFromPermissions = () => {
-    // Notifications must be requested (granted or denied after asking)
-    return notifRequested
+    // Notifications must be requested OR already granted (browser remembered)
+    return notifRequested || Notification.permission === 'granted'
   }
 
   const saveProfile = async () => {
@@ -298,39 +318,38 @@ export function Onboarding() {
     }
   }
 
-  const goBack = () => {
-    setError(null)
+  const goBack = useCallback(() => {
+    if (isNavigating) return
     switch (step) {
       case 'squad-choice':
-        setStep('splash')
+        navigateToStep('splash')
         break
       case 'create-squad':
       case 'join-squad':
-        setStep('squad-choice')
+        navigateToStep('squad-choice')
         break
       case 'permissions':
-        // Go back to create or join based on what was done
-        setStep('squad-choice')
+        navigateToStep('squad-choice')
         break
       case 'profile':
-        setStep('permissions')
+        navigateToStep('permissions')
         break
       default:
         break
     }
-  }
+  }, [step, isNavigating, navigateToStep])
 
-  // Animation variants
+  // Animation variants - simplified for stability
   const slideVariants = {
-    enter: { opacity: 0, y: 20 },
-    center: { opacity: 1, y: 0 },
-    exit: { opacity: 0, y: -20 }
+    enter: { opacity: 0, x: 10 },
+    center: { opacity: 1, x: 0, transition: { duration: 0.2 } },
+    exit: { opacity: 0, x: -10, transition: { duration: 0.15 } }
   }
 
   return (
     <div className="min-h-screen bg-[#08090a] flex items-center justify-center p-4">
       <div className="w-full max-w-lg">
-        <AnimatePresence mode="wait">
+        <AnimatePresence mode="wait" initial={false}>
           {/* Step 1: Splash - Proposition de valeur */}
           {step === 'splash' && (
             <motion.div
@@ -379,7 +398,9 @@ export function Onboarding() {
                 transition={{ delay: 0.6 }}
               >
                 <Button
-                  onClick={() => setStep('squad-choice')}
+                  onClick={() => navigateToStep('squad-choice')}
+                  disabled={isNavigating}
+                  data-testid="start-onboarding-button"
                   className="w-full h-14 text-[16px]"
                 >
                   C'est parti
@@ -425,12 +446,12 @@ export function Onboarding() {
               </div>
 
               <div className="space-y-4">
-                {/* Create Squad */}
-                <motion.button
-                  onClick={() => setStep('create-squad')}
-                  className="w-full p-6 rounded-2xl bg-[rgba(255,255,255,0.02)] border border-[rgba(255,255,255,0.06)] hover:border-[#5e6dd2] transition-colors text-left group"
-                  whileHover={{ y: -2 }}
-                  whileTap={{ scale: 0.99 }}
+                {/* Create Squad - Using standard button for stability */}
+                <button
+                  onClick={() => navigateToStep('create-squad')}
+                  disabled={isNavigating}
+                  data-testid="create-squad-button"
+                  className="w-full p-6 rounded-2xl bg-[rgba(255,255,255,0.02)] border border-[rgba(255,255,255,0.06)] hover:border-[#5e6dd2] hover:-translate-y-0.5 active:scale-[0.99] transition-all duration-200 text-left group disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <div className="flex items-start gap-4">
                     <div className="w-14 h-14 rounded-xl bg-[rgba(94,109,210,0.15)] flex items-center justify-center shrink-0 group-hover:bg-[rgba(94,109,210,0.25)] transition-colors">
@@ -446,14 +467,14 @@ export function Onboarding() {
                     </div>
                     <ArrowRight className="w-5 h-5 text-[#5e6063] group-hover:text-[#5e6dd2] transition-colors shrink-0 mt-1" />
                   </div>
-                </motion.button>
+                </button>
 
-                {/* Join Squad */}
-                <motion.button
-                  onClick={() => setStep('join-squad')}
-                  className="w-full p-6 rounded-2xl bg-[rgba(255,255,255,0.02)] border border-[rgba(255,255,255,0.06)] hover:border-[#4ade80] transition-colors text-left group"
-                  whileHover={{ y: -2 }}
-                  whileTap={{ scale: 0.99 }}
+                {/* Join Squad - Using standard button for stability */}
+                <button
+                  onClick={() => navigateToStep('join-squad')}
+                  disabled={isNavigating}
+                  data-testid="join-squad-button"
+                  className="w-full p-6 rounded-2xl bg-[rgba(255,255,255,0.02)] border border-[rgba(255,255,255,0.06)] hover:border-[#4ade80] hover:-translate-y-0.5 active:scale-[0.99] transition-all duration-200 text-left group disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <div className="flex items-start gap-4">
                     <div className="w-14 h-14 rounded-xl bg-[rgba(74,222,128,0.15)] flex items-center justify-center shrink-0 group-hover:bg-[rgba(74,222,128,0.25)] transition-colors">
@@ -469,7 +490,7 @@ export function Onboarding() {
                     </div>
                     <ArrowRight className="w-5 h-5 text-[#5e6063] group-hover:text-[#4ade80] transition-colors shrink-0 mt-1" />
                   </div>
-                </motion.button>
+                </button>
               </div>
             </motion.div>
           )}
@@ -510,6 +531,8 @@ export function Onboarding() {
                     value={squadName}
                     onChange={(e) => setSquadName(e.target.value)}
                     placeholder="Ex: Les Ranked du Soir"
+                    autoComplete="off"
+                    data-testid="squad-name-input"
                     required
                   />
 
@@ -518,6 +541,8 @@ export function Onboarding() {
                     value={squadGame}
                     onChange={(e) => setSquadGame(e.target.value)}
                     placeholder="Ex: Valorant, LoL, CS2..."
+                    autoComplete="off"
+                    data-testid="squad-game-input"
                   />
 
                   {error && (
@@ -585,6 +610,8 @@ export function Onboarding() {
                     onChange={(e) => setInviteCode(e.target.value.toUpperCase())}
                     placeholder="Ex: ABC123"
                     className="text-center text-2xl tracking-widest font-mono"
+                    autoComplete="off"
+                    data-testid="invite-code-input"
                     maxLength={8}
                   />
 
@@ -734,9 +761,10 @@ export function Onboarding() {
 
               <div className="mt-6">
                 <Button
-                  onClick={() => setStep('profile')}
+                  onClick={() => navigateToStep('profile')}
+                  data-testid="permissions-continue-button"
                   className="w-full h-12"
-                  disabled={!canProceedFromPermissions()}
+                  disabled={!canProceedFromPermissions() || isNavigating}
                 >
                   Continuer
                   <ArrowRight className="w-5 h-5 ml-2" />

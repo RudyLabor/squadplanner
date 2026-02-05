@@ -481,6 +481,33 @@ Ne pas accumuler trop de changements sans commit. Un commit par fonctionnalité 
 14. [x] ~~Navigation "Voir ma squad"~~ ✅ window.location.href
 15. [x] ~~Upload photo page Profile~~ ✅ Même amélioration
 
+### 🚧 Phase 2.6 : Refonte Landing Page (EN COURS - 5 fév 2026)
+
+**Objectif** : Passer d'une landing "correcte" à une landing "Top 5 mondial"
+
+#### Wording
+- [ ] Retirer stats non crédibles (+92%, 3x, -70%) ou les remplacer par du vrai
+- [ ] Supprimer répétitions "Ta squad joue chaque semaine" (4 occurrences → 1-2 max)
+- [ ] Reformuler "Pression sociale douce" → vocabulaire positif
+- [ ] Remplacer "Le Calendly du gaming" par quelque chose de plus authentique
+- [ ] Rendre les promesses IA plus concrètes
+
+#### UI/UX
+- [ ] Ajouter mockup/visuel produit dans le Hero (screenshot ou illustration)
+- [ ] Ajouter social proof minimal ("Beta ouverte" ou "X squads créées")
+- [ ] Réduire longueur page — fusionner sections redondantes
+- [ ] Améliorer hiérarchie CTA (principal bien visible, secondaire discret)
+- [ ] Ajouter header sticky avec logo + CTA
+- [ ] Hero plus impactant visuellement
+
+#### Critères de validation
+- [ ] Page testée sur mobile ET desktop
+- [ ] Temps de scroll réduit de 30%
+- [ ] Au moins 1 visuel produit visible
+- [ ] Aucune stat inventée
+
+---
+
 ### Phase 3 : IA Fonctionnelle
 15. [ ] Remplacer texte IA Coach hardcodé par vraie IA
 16. [ ] Tester Edge Functions IA avec vraies données
@@ -496,11 +523,29 @@ Ne pas accumuler trop de changements sans commit. Un commit par fonctionnalité 
 
 ---
 
-## Objectif Final
+## Objectif Final — TOP 5 MONDIAL 2026
 
-Squad Planner doit devenir :
-- Le **Calendly du gaming**
-- Le **standard de planification** sur Discord
+### L'ambition (NON NÉGOCIABLE)
+
+> **Squad Planner doit faire partie du TOP 5 des meilleures apps mondiales en 2026.**
+
+Cela signifie :
+- **UX/UI** au niveau de Linear, Notion, Arc Browser
+- **Wording** authentique, pas de bullshit corporate
+- **Performance** irréprochable
+- **Onboarding** fluide en moins de 60 secondes
+- **Design** qui fait dire "wow" dès la landing page
+
+### Ce qu'on vise
+- Le **standard de planification** pour les gamers
 - Une **référence mondiale** de coordination sociale gaming
+- Une app que les gens **recommandent** sans qu'on leur demande
+
+### Benchmarks à étudier
+- Linear (dark mode, animations, simplicité)
+- Notion (onboarding, structure)
+- Arc Browser (design audacieux, personnalité)
+- Vercel (landing page, clarté du message)
+- Figma (collaboration, temps réel)
 
 **Tu ne construis pas une app. Tu construis une machine à transformer des intentions molles en habitudes concrètes.**

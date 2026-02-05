@@ -134,7 +134,7 @@ export default function Auth() {
   }
 
   return (
-    <div className="min-h-screen bg-[#08090a] flex flex-col">
+    <div className="h-[100dvh] bg-[#08090a] flex flex-col overflow-y-auto overflow-x-hidden">
       {/* Celebration confetti on signup */}
       {showConfetti && typeof window !== 'undefined' && (
         <Confetti
@@ -175,7 +175,7 @@ export default function Auth() {
                 <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-[rgba(94,109,210,0.15)] mb-5">
                   <Gamepad2 className="w-7 h-7 text-[#5e6dd2]" />
                 </div>
-                <h1 className="text-[28px] font-bold text-[#f7f8f8] mb-2">
+                <h1 className="text-2xl font-bold text-[#f7f8f8] mb-2">
                   {mode === 'login' ? 'T\'as manqué à ta squad !' : mode === 'reset' ? 'Nouveau mot de passe' : 'Rejoins l\'aventure'}
                 </h1>
                 <p className="text-[15px] text-[#8b8d90]">
@@ -243,7 +243,7 @@ export default function Auth() {
                         type="email"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
-                        placeholder="ton@email.com"
+                        placeholder="Email"
                         icon={<Mail className="w-4 h-4" />}
                         required
                         autoComplete="email"

@@ -189,19 +189,19 @@ function StatsRow({ squadsCount, sessionsThisWeek, reliabilityScore }: {
         <div className="text-[18px] font-semibold text-[#f7f8f8]">
           <CountUp end={squadsCount} duration={1.5} />
         </div>
-        <div className="text-[11px] text-[#5e6063] uppercase tracking-wide">Squads</div>
+        <div className="text-xs text-[#5e6063] uppercase tracking-wide">Squads</div>
       </Card>
       <Card className="p-3 text-center">
         <div className="text-[18px] font-semibold text-[#f7f8f8]">
           <CountUp end={sessionsThisWeek} duration={1.5} />
         </div>
-        <div className="text-[11px] text-[#5e6063] uppercase tracking-wide">Cette semaine</div>
+        <div className="text-xs text-[#5e6063] uppercase tracking-wide">Cette semaine</div>
       </Card>
       <Card className="p-3 text-center">
         <div className="text-[18px] font-semibold text-[#4ade80]">
           <CountUp end={reliabilityScore} duration={1.5} suffix="%" />
         </div>
-        <div className="text-[11px] text-[#5e6063] uppercase tracking-wide">Fiabilité</div>
+        <div className="text-xs text-[#5e6063] uppercase tracking-wide">Fiabilité</div>
       </Card>
     </div>
   )
@@ -316,7 +316,7 @@ export default function Home() {
 
   if (!isInitialized) {
     return (
-      <div className="min-h-screen bg-[#08090a] flex items-center justify-center">
+      <div className="min-h-0 bg-[#08090a] flex items-center justify-center py-12">
         <Loader2 className="w-8 h-8 text-[#5e6dd2] animate-spin" />
       </div>
     )
@@ -342,7 +342,7 @@ export default function Home() {
   const pendingRsvps = upcomingSessions.filter(s => !s.my_rsvp).length
 
   return (
-    <div className="min-h-screen bg-[#08090a] pb-24">
+    <div className="min-h-0 bg-[#08090a] pb-6">
       <div className="px-4 md:px-6 lg:px-8 py-6 max-w-2xl lg:max-w-4xl xl:max-w-6xl mx-auto">
         <div>
           {/* Header avec célébration - Wording gamer */}

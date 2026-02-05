@@ -436,7 +436,7 @@ export function Party() {
   const otherSquads = squads.filter(s => s.id !== activeSquadId)
 
   return (
-    <div className="min-h-screen bg-[#08090a] pb-24">
+    <div className="min-h-0 bg-[#08090a] pb-6">
       {/* Confetti celebration when duo */}
       {showDuoConfetti && (
         <Confetti
@@ -470,7 +470,7 @@ export function Party() {
           {/* Header compact */}
           <div className="flex items-center justify-between mb-6">
             <div>
-              <h1 className="text-xl font-bold text-[#f7f8f8]">Party</h1>
+              <h1 className="text-2xl font-bold text-[#f7f8f8]">Party</h1>
               <p className="text-[13px] text-[#5e6063]">
                 {isConnected ? 'Connecté' : squads.length > 0 ? `${squads.length} squad${squads.length > 1 ? 's' : ''}` : 'Rejoins une squad'}
               </p>

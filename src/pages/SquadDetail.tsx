@@ -8,7 +8,7 @@ import {
 } from 'lucide-react'
 import { Link, useParams, useNavigate } from 'react-router-dom'
 import Confetti from 'react-confetti'
-import { Button, Card, CardContent, Badge, Input } from '../components/ui'
+import { Button, Card, CardContent, Badge, Input, SquadDetailSkeleton } from '../components/ui'
 import { useAuthStore, useSquadsStore, useSessionsStore, useVoiceChatStore, useVoiceCallStore, usePremiumStore } from '../hooks'
 import { PremiumGate, PremiumBadge } from '../components/PremiumGate'
 // theme import removed - animation variants caused mobile rendering issues
@@ -193,7 +193,7 @@ function SessionCard({ session, onRsvp }: {
   const canRsvp = !isPast && session.status !== 'cancelled'
 
   return (
-    <Card className={`p-4 ${isToday && !isPast ? 'border-[#f5a623]/30' : ''}`}>
+    <Card className={`p-4 transition-all duration-200 hover:shadow-[0_0_15px_rgba(94,109,210,0.15)] ${isToday && !isPast ? 'border-[#f5a623]/30 hover:shadow-[0_0_15px_rgba(245,166,35,0.2)]' : ''}`}>
       <div className="flex items-start gap-4">
         <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${
           isToday && !isPast ? 'bg-[#f5a623]/15' : 'bg-[rgba(94,109,210,0.15)]'
@@ -423,7 +423,7 @@ function InviteModal({
           <div className="p-4 rounded-xl bg-[rgba(94,109,210,0.1)] border border-[rgba(94,109,210,0.2)]">
             <p className="text-[12px] text-[#8b8d90] mb-2">Code d'invitation</p>
             <div className="flex items-center gap-3">
-              <span className="text-[24px] font-bold text-[#5e6dd2] tracking-wider flex-1">
+              <span className="text-2xl font-bold text-[#5e6dd2] tracking-wider flex-1">
                 {inviteCode}
               </span>
               <Button size="sm" variant="secondary" onClick={handleCopyCode}>
@@ -714,11 +714,13 @@ export default function SquadDetail() {
   const now = new Date()
   const futureSessions = sessions.filter(s => new Date(s.scheduled_at) >= now || s.status === 'confirmed')
 
-  // Afficher le loader tant que le fetch n'est pas terminé
+  // Afficher le skeleton loader tant que le fetch n'est pas terminé
   if (!isInitialized || isLoading || (!currentSquad && id)) {
     return (
-      <div className="min-h-screen bg-[#08090a] flex items-center justify-center">
-        <Loader2 className="w-8 h-8 text-[#5e6dd2] animate-spin" />
+      <div className="min-h-0 bg-[#08090a] pb-6">
+        <div className="px-4 md:px-6 lg:px-8 py-6 max-w-2xl lg:max-w-4xl xl:max-w-6xl mx-auto">
+          <SquadDetailSkeleton />
+        </div>
       </div>
     )
   }
@@ -726,7 +728,7 @@ export default function SquadDetail() {
   // Squad non trouvée seulement si le fetch est terminé et qu'il n'y a pas de squad
   if (!currentSquad) {
     return (
-      <div className="min-h-screen bg-[#08090a] flex items-center justify-center flex-col gap-4">
+      <div className="min-h-0 bg-[#08090a] flex items-center justify-center flex-col gap-4 py-12">
         <p className="text-[#8b8d90]">Squad non trouvée</p>
         <Button variant="secondary" onClick={() => navigate('/squads')}>
           Retour aux squads
@@ -736,7 +738,7 @@ export default function SquadDetail() {
   }
 
   return (
-    <div className="min-h-screen bg-[#08090a] pb-24">
+    <div className="min-h-0 bg-[#08090a] pb-6">
       {/* Confetti celebration for RSVP present */}
       {showConfetti && typeof window !== 'undefined' && (
         <Confetti
@@ -755,7 +757,7 @@ export default function SquadDetail() {
             <div className="flex items-center justify-between mb-3">
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2">
-                  <h1 className="text-xl font-bold text-[#f7f8f8] truncate">{currentSquad.name}</h1>
+                  <h1 className="text-2xl font-bold text-[#f7f8f8] truncate">{currentSquad.name}</h1>
                   {isOwner && <Crown className="w-5 h-5 text-[#f5a623] flex-shrink-0" />}
                 </div>
                 <p className="text-[13px] text-[#8b8d90]">
@@ -958,15 +960,15 @@ export default function SquadDetail() {
                 </div>
                 <div className="grid grid-cols-3 gap-3">
                   <div className="p-3 rounded-xl bg-[rgba(255,255,255,0.03)]">
-                    <div className="text-[20px] font-bold text-[#4ade80]">{sessions.length}</div>
+                    <div className="text-xl font-bold text-[#4ade80]">{sessions.length}</div>
                     <div className="text-xs text-[#5e6063]">Sessions</div>
                   </div>
                   <div className="p-3 rounded-xl bg-[rgba(255,255,255,0.03)]">
-                    <div className="text-[20px] font-bold text-[#5e6dd2]">{currentSquad.member_count || 0}</div>
+                    <div className="text-xl font-bold text-[#5e6dd2]">{currentSquad.member_count || 0}</div>
                     <div className="text-xs text-[#5e6063]">Membres</div>
                   </div>
                   <div className="p-3 rounded-xl bg-[rgba(255,255,255,0.03)]">
-                    <div className="text-[20px] font-bold text-[#f5a623]">{Math.round(currentSquad.avg_reliability_score || 0)}%</div>
+                    <div className="text-xl font-bold text-[#f5a623]">{Math.round(currentSquad.avg_reliability_score || 0)}%</div>
                     <div className="text-xs text-[#5e6063]">Fiabilité</div>
                   </div>
                 </div>

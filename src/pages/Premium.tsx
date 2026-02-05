@@ -188,7 +188,7 @@ export function Premium() {
   const savings = Math.round((PREMIUM_PRICE_MONTHLY * 12 - PREMIUM_PRICE_YEARLY) / (PREMIUM_PRICE_MONTHLY * 12) * 100)
 
   return (
-    <div className="min-h-screen bg-[#08090a] pb-24">
+    <div className="min-h-0 bg-[#08090a] pb-6">
       {/* Confetti */}
       {showConfetti && typeof window !== 'undefined' && (
         <Confetti
@@ -324,7 +324,7 @@ export function Premium() {
               whileTap={{ scale: 0.99 }}
             >
               {/* Best value badge */}
-              <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full bg-gradient-to-r from-[#4ade80] to-[#4ade80] text-[11px] font-bold text-[#08090a]">
+              <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full bg-gradient-to-r from-[#4ade80] to-[#4ade80] text-xs font-bold text-[#08090a]">
                 🎁 MEILLEURE OFFRE
               </div>
 
@@ -396,7 +396,7 @@ export function Premium() {
           viewport={{ once: true }}
           className="mb-16"
         >
-          <h2 className="text-[20px] font-bold text-[#f7f8f8] text-center mb-8">
+          <h2 className="text-xl font-semibold text-[#f7f8f8] text-center mb-8">
             Comparatif des fonctionnalités
           </h2>
 
@@ -406,7 +406,7 @@ export function Premium() {
               <div className="text-[13px] font-semibold text-[#8b8d90]">Fonctionnalité</div>
               <div className="text-[13px] font-semibold text-[#8b8d90] text-center">Gratuit</div>
               <div className="text-[13px] font-semibold text-center">
-                <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-gradient-to-r from-[#f5a623] to-[#f5a623]/70 text-[11px] font-bold text-[#08090a]">
+                <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-gradient-to-r from-[#f5a623] to-[#f5a623]/70 text-xs font-bold text-[#08090a]">
                   <Crown className="w-3 h-3" />
                   PREMIUM
                 </span>
@@ -461,7 +461,7 @@ export function Premium() {
           viewport={{ once: true }}
           className="mb-16"
         >
-          <h2 className="text-[20px] font-bold text-[#f7f8f8] text-center mb-2">
+          <h2 className="text-xl font-semibold text-[#f7f8f8] text-center mb-2">
             Ils sont passés Premium
           </h2>
           <p className="text-[14px] text-[#8b8d90] text-center mb-8">
@@ -508,7 +508,7 @@ export function Premium() {
           viewport={{ once: true }}
           className="mb-16"
         >
-          <h2 className="text-[20px] font-bold text-[#f7f8f8] text-center mb-8">
+          <h2 className="text-xl font-semibold text-[#f7f8f8] text-center mb-8">
             Questions fréquentes
           </h2>
 
@@ -553,7 +553,7 @@ export function Premium() {
           >
             <Card className="p-8 bg-gradient-to-br from-[rgba(94,109,210,0.15)] to-[rgba(245,166,35,0.1)] border-[rgba(94,109,210,0.3)]">
               <Crown className="w-12 h-12 text-[#f5a623] mx-auto mb-4" />
-              <h3 className="text-[20px] font-bold text-[#f7f8f8] mb-2">
+              <h3 className="text-xl font-semibold text-[#f7f8f8] mb-2">
                 Prêt à passer Premium ?
               </h3>
               <p className="text-[14px] text-[#8b8d90] mb-6 max-w-md mx-auto">

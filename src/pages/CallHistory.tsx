@@ -90,7 +90,7 @@ export function CallHistory() {
   }
 
   return (
-    <div className="min-h-screen bg-[#08090a] pb-28">
+    <div className="min-h-0 bg-[#08090a] pb-6">
       {/* Toast */}
       <CallToast
         message={toastMessage}
@@ -110,7 +110,7 @@ export function CallHistory() {
               <ArrowLeft className="w-5 h-5 text-[#f7f8f8]" />
             </button>
             <div className="flex-1">
-              <h1 className="text-xl font-bold text-[#f7f8f8]">Tes appels récents</h1>
+              <h1 className="text-2xl font-bold text-[#f7f8f8]">Tes appels récents</h1>
               <p className="text-[13px] text-[#888]">
                 {filteredCalls.length > 0
                   ? `${filteredCalls.length} appel${filteredCalls.length !== 1 ? 's' : ''}`

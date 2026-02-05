@@ -395,7 +395,7 @@ export function Onboarding() {
   }
 
   return (
-    <div className="min-h-screen bg-[#08090a] flex items-center justify-center p-4">
+    <div className="h-[100dvh] bg-[#08090a] flex items-center justify-center p-4 overflow-y-auto overflow-x-hidden">
       {/* Mini Confetti for step celebrations */}
       {showMiniConfetti && (
         <Confetti
@@ -744,7 +744,7 @@ export function Onboarding() {
                         <h3 className="text-[15px] font-semibold text-[#f7f8f8]">
                           Notifications
                         </h3>
-                        <span className="text-[11px] px-2 py-0.5 rounded-full bg-[rgba(245,166,35,0.15)] text-[#f5a623] font-medium">
+                        <span className="text-xs px-2 py-0.5 rounded-full bg-[rgba(245,166,35,0.15)] text-[#f5a623] font-medium">
                           Requis
                         </span>
                       </div>
@@ -784,7 +784,7 @@ export function Onboarding() {
                         <h3 className="text-[15px] font-semibold text-[#f7f8f8]">
                           Microphone
                         </h3>
-                        <span className="text-[11px] px-2 py-0.5 rounded-full bg-[rgba(255,255,255,0.05)] text-[#8b8d90] font-medium">
+                        <span className="text-xs px-2 py-0.5 rounded-full bg-[rgba(255,255,255,0.05)] text-[#8b8d90] font-medium">
                           Optionnel
                         </span>
                       </div>
@@ -1075,7 +1075,7 @@ export function Onboarding() {
                             <Copy className="w-5 h-5 text-[#5e6dd2]" aria-hidden="true" />
                           </button>
                         </div>
-                        <p className="text-[11px] text-[#5e6063] mt-2">
+                        <p className="text-xs text-[#5e6063] mt-2">
                           Partage ce code à tes amis pour qu'ils rejoignent
                         </p>
                       </div>
@@ -1117,7 +1117,7 @@ export function Onboarding() {
                     >
                       {isCompleted ? <Check className="w-4 h-4" /> : i + 1}
                     </div>
-                    <span className={`text-[11px] ${isActive || isCompleted ? 'text-[#f7f8f8]' : 'text-[#5e6063]'}`}>
+                    <span className={`text-xs ${isActive || isCompleted ? 'text-[#f7f8f8]' : 'text-[#5e6063]'}`}>
                       {item.label}
                     </span>
                   </div>

@@ -7,7 +7,7 @@ import {
 } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import CountUp from 'react-countup'
-import { Button, Card, Input } from '../components/ui'
+import { Button, Card, Input, ProfileSkeleton } from '../components/ui'
 import { useAuthStore, useAIStore, usePremiumStore, FREE_HISTORY_DAYS } from '../hooks'
 import { PremiumGate, PremiumBadge } from '../components/PremiumGate'
 import { PremiumUpgradeModal } from '../components/PremiumUpgradeModal'
@@ -41,7 +41,7 @@ const getTier = (score: number) => {
 
 export function Profile() {
   const navigate = useNavigate()
-  const { user, profile, signOut, updateProfile, isLoading } = useAuthStore()
+  const { user, profile, signOut, updateProfile, isLoading, isInitialized } = useAuthStore()
   const { aiCoachTip, fetchAICoachTip } = useAIStore()
   const { hasPremium, canAccessFeature, fetchPremiumStatus } = usePremiumStore()
   const fileInputRef = useRef<HTMLInputElement>(null)
@@ -161,8 +161,22 @@ export function Profile() {
     { icon: Trophy, label: 'XP', value: profile?.xp || 0, color: '#8b93ff' },
   ]
 
+  // Loading state with skeleton
+  if (!isInitialized || (isLoading && !profile)) {
+    return (
+      <div className="min-h-0 bg-[#08090a] pb-6">
+        <div className="relative">
+          <div className="absolute inset-0 h-48 bg-gradient-to-b from-[rgba(94,109,210,0.15)] to-transparent" />
+          <div className="relative px-4 md:px-6 lg:px-8 pt-8 pb-4 max-w-2xl lg:max-w-4xl xl:max-w-6xl mx-auto">
+            <ProfileSkeleton />
+          </div>
+        </div>
+      </div>
+    )
+  }
+
   return (
-    <div className="min-h-screen bg-[#08090a] pb-28">
+    <div className="min-h-0 bg-[#08090a] pb-6">
       {/* Hero section avec avatar */}
       <div className="relative">
         {/* Background gradient */}
@@ -244,7 +258,7 @@ export function Profile() {
                   exit={{ opacity: 0, y: -10 }}
                   className="text-center"
                 >
-                  <h1 className="text-xl font-bold text-[#f7f8f8] mb-1">
+                  <h1 className="text-2xl font-bold text-[#f7f8f8] mb-1">
                     {profile?.username || 'Gamer'}
                   </h1>
                   <p className="text-[14px] text-[#8b8d90] mb-1">
@@ -335,7 +349,7 @@ export function Profile() {
                   <stat.icon className="w-5 h-5" style={{ color: stat.color }} />
                 </div>
                 <div>
-                  <div className="text-[20px] font-bold text-[#f7f8f8]">
+                  <div className="text-xl font-bold text-[#f7f8f8]">
                     <CountUp end={stat.value} duration={1.5} />
                   </div>
                   <div className="text-[12px] text-[#5e6063]">{stat.label}</div>
@@ -449,7 +463,7 @@ export function Profile() {
               Historique
             </h3>
             {!canAccessFeature('unlimited_history') && (
-              <span className="text-[11px] text-[#5e6063]">
+              <span className="text-xs text-[#5e6063]">
                 ({FREE_HISTORY_DAYS} derniers jours)
               </span>
             )}
@@ -550,10 +564,10 @@ export function Profile() {
                   >
                     {isUnlocked ? achievement.icon : '🔒'}
                   </motion.div>
-                  <div className={`text-[11px] font-medium ${isUnlocked ? 'text-[#f7f8f8]' : 'text-[#5e6063]'}`}>
+                  <div className={`text-xs font-medium ${isUnlocked ? 'text-[#f7f8f8]' : 'text-[#5e6063]'}`}>
                     {achievement.name}
                   </div>
-                  <div className="text-[10px] text-[#5e6063]">
+                  <div className="text-xs text-[#5e6063]">
                     {achievement.description}
                   </div>
                   {isUnlocked && (

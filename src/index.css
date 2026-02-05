@@ -53,6 +53,63 @@ body,
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Prevent horizontal scroll - vertical only when needed */
+html {
+  overflow-x: hidden;
+  overflow-y: auto;
+  height: 100dvh;
+}
+
+body {
+  overflow-x: hidden;
+  overflow-y: auto;
+  height: 100dvh;
+}
+
+#root {
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Page container that fills available height without scroll when content fits */
+/* Use this instead of min-h-screen on pages with bottom navigation */
+.page-container {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* For pages with AppLayout (has bottom nav on mobile) */
+.page-with-nav {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* For pages without AppLayout (auth, landing, onboarding) */
+.page-full {
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.page-full-scroll {
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* Utility to prevent any scroll */
+.no-scroll {
+  overflow: hidden !important;
+}
+
 /* Custom scrollbar */
 ::-webkit-scrollbar {
   width: 8px;

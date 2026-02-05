@@ -105,7 +105,7 @@ function SquadCard({ squad, isOwner, nextSession, hasActiveParty, copiedCode, on
         <Card className={`cursor-pointer transition-all duration-300 ${
           hasActiveParty
             ? 'border-[#4ade80]/40 shadow-[0_0_20px_rgba(74,222,128,0.15)] bg-gradient-to-r from-[#4ade80]/5 to-transparent'
-            : 'hover:border-[rgba(94,109,210,0.3)]'
+            : 'hover:border-[rgba(94,109,210,0.3)] hover:shadow-[0_0_15px_rgba(94,109,210,0.15)]'
         }`}>
           <CardContent className="p-4">
             <div className="flex items-start gap-4">
@@ -335,11 +335,11 @@ export default function Squads() {
   // Afficher le skeleton loader tant que l'initialisation ou le chargement est en cours
   if (!isInitialized || isLoading) {
     return (
-      <div className="min-h-screen bg-[#08090a] pb-24">
+      <div className="min-h-0 bg-[#08090a] pb-6">
         <div className="px-4 md:px-6 lg:px-8 py-6 max-w-2xl lg:max-w-4xl xl:max-w-6xl mx-auto">
           <div className="flex items-center justify-between mb-6">
             <div>
-              <h1 className="text-xl font-bold text-[#f7f8f8]">Mes Squads</h1>
+              <h1 className="text-2xl font-bold text-[#f7f8f8]">Mes Squads</h1>
               <p className="text-[13px] text-[#5e6063]">Chargement...</p>
             </div>
           </div>
@@ -361,7 +361,7 @@ export default function Squads() {
   }
 
   return (
-    <div className="min-h-screen bg-[#08090a] pb-24">
+    <div className="min-h-0 bg-[#08090a] pb-6">
       {/* Celebration confetti */}
       {showConfetti && typeof window !== 'undefined' && (
         <Confetti
@@ -380,7 +380,7 @@ export default function Squads() {
           {/* Header simplifié */}
           <div className="flex items-center justify-between mb-6">
             <div>
-              <h1 className="text-xl font-bold text-[#f7f8f8]">Mes Squads</h1>
+              <h1 className="text-2xl font-bold text-[#f7f8f8]">Mes Squads</h1>
               <p className="text-[13px] text-[#5e6063]">{getSubtitle()}</p>
             </div>
             <div className="flex gap-2">
@@ -520,11 +520,20 @@ export default function Squads() {
               ))}
             </motion.div>
           ) : !showCreate && !showJoin && (
-            <div>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3 }}
+            >
               <Card className="p-8 text-center">
-                <div className="w-14 h-14 rounded-2xl bg-[#1f2023] flex items-center justify-center mx-auto mb-4">
+                <motion.div
+                  className="w-14 h-14 rounded-2xl bg-[#1f2023] flex items-center justify-center mx-auto mb-4"
+                  initial={{ scale: 0.8, rotate: -10 }}
+                  animate={{ scale: 1, rotate: 0 }}
+                  transition={{ delay: 0.1, type: 'spring', stiffness: 300, damping: 25 }}
+                >
                   <Users className="w-7 h-7 text-[#5e6063]" strokeWidth={1.5} />
-                </div>
+                </motion.div>
                 <h3 className="text-[16px] font-semibold text-[#f7f8f8] mb-2">
                   Pas encore de squad
                 </h3>
@@ -542,7 +551,7 @@ export default function Squads() {
                   </Button>
                 </div>
               </Card>
-            </div>
+            </motion.div>
           )}
         </div>
       </div>

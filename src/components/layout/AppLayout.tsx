@@ -39,7 +39,7 @@ function NavLink({ path, icon: Icon, label, isActive, badge }: {
   badge?: number
 }) {
   return (
-    <Link to={path}>
+    <Link to={path} aria-current={isActive ? 'page' : undefined}>
       <motion.div
         className={`
           relative flex items-center gap-3 px-4 py-3 rounded-xl transition-all
@@ -201,7 +201,7 @@ export function AppLayout({ children }: AppLayoutProps) {
   const hasActiveParty = isInVoiceChat
 
   return (
-    <div className="min-h-screen bg-[#08090a] flex">
+    <div className="h-[100dvh] bg-[#08090a] flex overflow-hidden">
       {/* Sidebar - Desktop only */}
       <aside className="hidden lg:flex flex-col w-64 border-r border-[rgba(255,255,255,0.06)] bg-[#08090a] fixed h-full">
         {/* Logo */}
@@ -296,7 +296,7 @@ export function AppLayout({ children }: AppLayoutProps) {
       </aside>
 
       {/* Main content */}
-      <main className="flex-1 lg:ml-64 pb-24 lg:pb-0">
+      <main className="flex-1 lg:ml-64 pb-24 lg:pb-0 overflow-y-auto overflow-x-hidden">
         {children}
       </main>
 

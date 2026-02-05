@@ -91,7 +91,7 @@ function ConversationCard({ conversation, onClick, isActive }: {
           )}
           {/* Unread indicator */}
           {conversation.unread_count > 0 && (
-            <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 bg-[#5e6dd2] text-white text-[10px] font-bold rounded-full flex items-center justify-center">
+            <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 bg-[#5e6dd2] text-white text-xs font-bold rounded-full flex items-center justify-center">
               {conversation.unread_count > 9 ? '9+' : conversation.unread_count}
             </span>
           )}
@@ -106,7 +106,7 @@ function ConversationCard({ conversation, onClick, isActive }: {
               {conversation.name}
             </h3>
             {conversation.last_message && (
-              <span className="text-[11px] text-[#5e6063] flex-shrink-0 ml-2">
+              <span className="text-xs text-[#5e6063] flex-shrink-0 ml-2">
                 {formatTime(conversation.last_message.created_at)}
               </span>
             )}
@@ -136,7 +136,7 @@ function DateSeparator({ date }: { date: string }) {
   return (
     <div className="flex items-center gap-3 py-4">
       <div className="flex-1 h-px bg-[rgba(255,255,255,0.06)]" />
-      <span className="text-[11px] text-[#5e6063] font-medium uppercase tracking-wider">
+      <span className="text-xs text-[#5e6063] font-medium uppercase tracking-wider">
         {formatDateSeparator(date)}
       </span>
       <div className="flex-1 h-px bg-[rgba(255,255,255,0.06)]" />
@@ -222,7 +222,7 @@ function MessageBubble({ message, isOwn, showAvatar, showName, currentUserId, is
                 className="w-8 h-8 rounded-full object-cover"
               />
             ) : (
-              <div className="w-8 h-8 rounded-full bg-[rgba(94,109,210,0.2)] flex items-center justify-center text-[11px] font-bold text-[#5e6dd2]">
+              <div className="w-8 h-8 rounded-full bg-[rgba(94,109,210,0.2)] flex items-center justify-center text-xs font-bold text-[#5e6dd2]">
                 {initial}
               </div>
             )}
@@ -231,7 +231,7 @@ function MessageBubble({ message, isOwn, showAvatar, showName, currentUserId, is
 
         <div className={`${isOwn ? 'items-end' : 'items-start'} flex flex-col`}>
           {showName && !isOwn && (
-            <span className="text-[11px] text-[#8b8d90] mb-1 ml-1 font-medium">
+            <span className="text-xs text-[#8b8d90] mb-1 ml-1 font-medium">
               {message.sender?.username}
             </span>
           )}
@@ -246,7 +246,7 @@ function MessageBubble({ message, isOwn, showAvatar, showName, currentUserId, is
               {message.content}
             </p>
           </div>
-          <span className="text-[10px] text-[#5e6063] mt-1 mx-1 flex items-center">
+          <span className="text-xs text-[#5e6063] mt-1 mx-1 flex items-center">
             {formatTime(message.created_at)}
             {/* Read receipts - seulement pour les messages envoyés par l'utilisateur */}
             {isOwn && (
@@ -302,7 +302,7 @@ function DMConversationCard({ conversation, onClick }: {
           )}
           {/* Unread indicator */}
           {conversation.unread_count > 0 && (
-            <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 bg-[#5e6dd2] text-white text-[10px] font-bold rounded-full flex items-center justify-center">
+            <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 bg-[#5e6dd2] text-white text-xs font-bold rounded-full flex items-center justify-center">
               {conversation.unread_count > 9 ? '9+' : conversation.unread_count}
             </span>
           )}
@@ -317,7 +317,7 @@ function DMConversationCard({ conversation, onClick }: {
               {conversation.other_user_username}
             </h3>
             {conversation.last_message_at && (
-              <span className="text-[11px] text-[#5e6063] flex-shrink-0 ml-2">
+              <span className="text-xs text-[#5e6063] flex-shrink-0 ml-2">
                 {formatTime(conversation.last_message_at)}
               </span>
             )}
@@ -504,7 +504,7 @@ export function Messages() {
       {/* Header */}
       <div className={`${showOnDesktop ? 'p-4' : 'mb-5'}`}>
         <div className="flex items-center justify-between mb-1">
-          <h1 className={`font-bold text-[#f7f8f8] ${showOnDesktop ? 'text-lg' : 'text-xl'}`}>Messages</h1>
+          <h1 className={`font-bold text-[#f7f8f8] ${showOnDesktop ? 'text-xl' : 'text-2xl'}`}>Messages</h1>
           {totalUnread > 0 && (
             <span className="px-2.5 py-1 bg-[#5e6dd2] text-white text-[12px] font-bold rounded-full">
               {totalUnread} non lu{totalUnread > 1 ? 's' : ''}
@@ -526,7 +526,7 @@ export function Messages() {
           <Users className="w-4 h-4" />
           Squads
           {squadUnread > 0 && (
-            <span className="min-w-[18px] h-[18px] px-1 bg-[#5e6dd2] text-white text-[10px] font-bold rounded-full flex items-center justify-center">
+            <span className="min-w-[18px] h-[18px] px-1 bg-[#5e6dd2] text-white text-xs font-bold rounded-full flex items-center justify-center">
               {squadUnread > 9 ? '9+' : squadUnread}
             </span>
           )}
@@ -542,7 +542,7 @@ export function Messages() {
           <User className="w-4 h-4" />
           Privés
           {dmUnread > 0 && (
-            <span className="min-w-[18px] h-[18px] px-1 bg-[#5e6dd2] text-white text-[10px] font-bold rounded-full flex items-center justify-center">
+            <span className="min-w-[18px] h-[18px] px-1 bg-[#5e6dd2] text-white text-xs font-bold rounded-full flex items-center justify-center">
               {dmUnread > 9 ? '9+' : dmUnread}
             </span>
           )}
@@ -863,7 +863,7 @@ export function Messages() {
   // Si pas de conversation active, afficher la liste
   if (!activeSquadConv && !activeDMConv) {
     return (
-      <div className="min-h-screen bg-[#08090a] pb-24">
+      <div className="min-h-0 bg-[#08090a] pb-6">
         <div className="px-4 md:px-6 lg:px-8 py-6 max-w-2xl lg:max-w-4xl xl:max-w-6xl mx-auto">
           <ConversationsList />
         </div>

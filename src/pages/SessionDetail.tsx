@@ -156,7 +156,7 @@ export default function SessionDetail() {
 
   if (!isInitialized) {
     return (
-      <div className="min-h-screen bg-[#08090a] flex items-center justify-center">
+      <div className="min-h-0 bg-[#08090a] flex items-center justify-center py-12">
         <Loader2 className="w-8 h-8 text-[#5e6dd2] animate-spin" />
       </div>
     )
@@ -164,7 +164,7 @@ export default function SessionDetail() {
 
   if (!currentSession) {
     return (
-      <div className="min-h-screen bg-[#08090a] flex items-center justify-center">
+      <div className="min-h-0 bg-[#08090a] flex items-center justify-center py-12">
         <Loader2 className="w-8 h-8 text-[#5e6dd2] animate-spin" />
       </div>
     )
@@ -175,7 +175,7 @@ export default function SessionDetail() {
   const isCreator = currentSession.created_by === user?.id
 
   return (
-    <div className="min-h-screen bg-[#08090a] pb-8">
+    <div className="min-h-0 bg-[#08090a] pb-6">
       {/* Confetti celebration */}
       {showConfetti && typeof window !== 'undefined' && (
         <Confetti
@@ -248,7 +248,7 @@ export default function SessionDetail() {
 
           {/* RSVP Counts */}
           <div className="mb-8">
-            <h2 className="text-[11px] font-medium text-[rgba(255,255,255,0.35)] uppercase tracking-[0.05em] mb-4">
+            <h2 className="text-xs font-medium text-[rgba(255,255,255,0.35)] uppercase tracking-[0.05em] mb-4">
               Réponses
             </h2>
             <div className="grid grid-cols-3 gap-3 lg:gap-4">
@@ -273,7 +273,7 @@ export default function SessionDetail() {
           {/* My RSVP */}
           {currentSession.status !== 'cancelled' && currentSession.status !== 'completed' && (
             <div className="mb-8">
-              <h2 className="text-[11px] font-medium text-[rgba(255,255,255,0.35)] uppercase tracking-[0.05em] mb-4">
+              <h2 className="text-xs font-medium text-[rgba(255,255,255,0.35)] uppercase tracking-[0.05em] mb-4">
                 Ta réponse
               </h2>
               <Card>
@@ -380,7 +380,7 @@ export default function SessionDetail() {
           {/* Voice Chat */}
           {currentSession.status === 'confirmed' && id && (
             <div className="mb-8">
-              <h2 className="text-[11px] font-medium text-[rgba(255,255,255,0.35)] uppercase tracking-[0.05em] mb-4">
+              <h2 className="text-xs font-medium text-[rgba(255,255,255,0.35)] uppercase tracking-[0.05em] mb-4">
                 Chat Vocal
               </h2>
               <VoiceChat
@@ -392,7 +392,7 @@ export default function SessionDetail() {
 
           {/* Participants */}
           <div className="mb-8">
-            <h2 className="text-[11px] font-medium text-[rgba(255,255,255,0.35)] uppercase tracking-[0.05em] mb-4">
+            <h2 className="text-xs font-medium text-[rgba(255,255,255,0.35)] uppercase tracking-[0.05em] mb-4">
               Participants
             </h2>
             <Card>

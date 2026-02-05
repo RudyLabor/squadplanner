@@ -185,7 +185,7 @@ export default function Landing() {
                 {/* Screen */}
                 <div className="bg-[#08090a] rounded-[2rem] overflow-hidden">
                   {/* Status bar */}
-                  <div className="flex items-center justify-between px-6 py-2 text-[11px] text-[#5e6063]">
+                  <div className="flex items-center justify-between px-6 py-2 text-xs text-[#5e6063]">
                     <span>21:00</span>
                     <div className="flex items-center gap-1">
                       <div className="w-4 h-2 rounded-sm border border-[#5e6063]">
@@ -205,10 +205,10 @@ export default function Landing() {
                           </div>
                           <div>
                             <div className="text-[13px] font-semibold text-[#f7f8f8]">Session Valorant</div>
-                            <div className="text-[11px] text-[#5e6063]">Ce soir, 21h00</div>
+                            <div className="text-xs text-[#5e6063]">Ce soir, 21h00</div>
                           </div>
                         </div>
-                        <span className="px-2 py-1 rounded-full bg-[#4ade80]/20 text-[11px] text-[#4ade80] font-medium">
+                        <span className="px-2 py-1 rounded-full bg-[#4ade80]/20 text-xs text-[#4ade80] font-medium">
                           Confirmée
                         </span>
                       </div>
@@ -219,7 +219,7 @@ export default function Landing() {
                           {['#5e6dd2', '#4ade80', '#f5a623', '#f87171'].map((color, i) => (
                             <div
                               key={i}
-                              className="w-7 h-7 rounded-full border-2 border-[#08090a] flex items-center justify-center text-[10px] font-bold text-white"
+                              className="w-7 h-7 rounded-full border-2 border-[#08090a] flex items-center justify-center text-xs font-bold text-white"
                               style={{ backgroundColor: color }}
                             >
                               {['M', 'L', 'K', 'J'][i]}
@@ -239,7 +239,7 @@ export default function Landing() {
                       ].map((stat) => (
                         <div key={stat.label} className="bg-[rgba(255,255,255,0.02)] rounded-xl p-3 text-center">
                           <div className="text-[16px] font-bold" style={{ color: stat.color }}>{stat.value}</div>
-                          <div className="text-[10px] text-[#5e6063]">{stat.label}</div>
+                          <div className="text-xs text-[#5e6063]">{stat.label}</div>
                         </div>
                       ))}
                     </div>
@@ -394,6 +394,114 @@ export default function Landing() {
                 <p className="text-[15px] text-[#8b8d90] leading-relaxed">{pillar.description}</p>
               </motion.div>
             ))}
+          </motion.div>
+
+          {/* Party Vocale Mockup */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="relative max-w-md mx-auto"
+          >
+            {/* Glow background */}
+            <div className="absolute -inset-8 bg-[radial-gradient(ellipse_at_center,rgba(74,222,128,0.15)_0%,transparent_70%)]" />
+
+            {/* Phone frame */}
+            <div className="relative bg-[#101012] rounded-[2rem] p-3 border border-[rgba(74,222,128,0.2)] shadow-2xl shadow-[#4ade80]/10">
+              <div className="bg-[#08090a] rounded-[1.5rem] overflow-hidden">
+                {/* Header */}
+                <div className="px-4 py-3 border-b border-[rgba(255,255,255,0.06)]">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <motion.div
+                        className="w-2.5 h-2.5 rounded-full bg-[#4ade80]"
+                        animate={{ scale: [1, 1.3, 1], opacity: [1, 0.7, 1] }}
+                        transition={{ duration: 1.5, repeat: Infinity }}
+                      />
+                      <span className="text-[13px] font-semibold text-[#f7f8f8]">Party vocale</span>
+                    </div>
+                    <span className="text-xs text-[#4ade80]">En ligne</span>
+                  </div>
+                  <p className="text-xs text-[#5e6063] mt-1">Les Ranked du Soir • Valorant</p>
+                </div>
+
+                {/* Participants */}
+                <div className="p-6">
+                  <div className="flex items-center justify-center gap-4 mb-6">
+                    {/* Avatar 1 - Speaking */}
+                    <motion.div className="flex flex-col items-center">
+                      <motion.div
+                        className="relative"
+                        animate={{ scale: [1, 1.05, 1] }}
+                        transition={{ duration: 0.8, repeat: Infinity }}
+                      >
+                        <motion.div
+                          className="absolute inset-0 w-14 h-14 rounded-full bg-[#4ade80]"
+                          animate={{ scale: [1, 1.4], opacity: [0.5, 0] }}
+                          transition={{ duration: 1, repeat: Infinity }}
+                        />
+                        <div className="relative w-14 h-14 rounded-full bg-[#4ade80] flex items-center justify-center text-lg font-bold text-[#08090a] ring-2 ring-[#4ade80]/50">
+                          M
+                        </div>
+                      </motion.div>
+                      <span className="text-xs text-[#4ade80] mt-2 font-medium">Max</span>
+                    </motion.div>
+
+                    {/* Avatar 2 - Muted */}
+                    <div className="flex flex-col items-center">
+                      <div className="relative w-14 h-14 rounded-full bg-[#5e6dd2] flex items-center justify-center text-lg font-bold text-white">
+                        L
+                        <div className="absolute -bottom-0.5 -right-0.5 w-5 h-5 rounded-full bg-[#f87171] flex items-center justify-center border-2 border-[#08090a]">
+                          <span className="text-[8px]">🔇</span>
+                        </div>
+                      </div>
+                      <span className="text-xs text-[#8b8d90] mt-2">Luna</span>
+                    </div>
+
+                    {/* Avatar 3 - Active */}
+                    <div className="flex flex-col items-center">
+                      <div className="relative w-14 h-14 rounded-full bg-[#f5a623] flex items-center justify-center text-lg font-bold text-[#08090a]">
+                        K
+                      </div>
+                      <span className="text-xs text-[#8b8d90] mt-2">Kira</span>
+                    </div>
+
+                    {/* Avatar 4 - Active */}
+                    <div className="flex flex-col items-center">
+                      <div className="relative w-14 h-14 rounded-full bg-[#8b93ff] flex items-center justify-center text-lg font-bold text-white">
+                        J
+                      </div>
+                      <span className="text-xs text-[#8b8d90] mt-2">Jay</span>
+                    </div>
+                  </div>
+
+                  {/* Controls */}
+                  <div className="flex items-center justify-center gap-4">
+                    <motion.div
+                      className="w-12 h-12 rounded-full bg-[#4ade80] flex items-center justify-center"
+                      whileHover={{ scale: 1.1 }}
+                    >
+                      <Headphones className="w-5 h-5 text-[#08090a]" />
+                    </motion.div>
+                    <div className="w-12 h-12 rounded-full bg-[#f87171] flex items-center justify-center">
+                      <span className="text-lg">📞</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Bottom info */}
+                <div className="px-4 py-3 bg-[rgba(74,222,128,0.05)] border-t border-[rgba(74,222,128,0.1)]">
+                  <p className="text-center text-xs text-[#4ade80]">
+                    🎮 4 potes connectés • Session dans 15min
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Caption */}
+            <p className="text-center text-[14px] text-[#8b8d90] mt-6">
+              Pas besoin de Discord. Ta squad a son salon vocal dédié.
+            </p>
           </motion.div>
 
         </div>

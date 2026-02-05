@@ -7,6 +7,7 @@ import {
 } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import CountUp from 'react-countup'
+import Confetti from 'react-confetti'
 import { Button, Card, Input, ProfileSkeleton } from '../components/ui'
 import { useAuthStore, useAIStore, usePremiumStore, FREE_HISTORY_DAYS } from '../hooks'
 import { PremiumGate, PremiumBadge } from '../components/PremiumGate'
@@ -52,6 +53,11 @@ export function Profile() {
   const [username, setUsername] = useState('')
   const [bio, setBio] = useState('')
   const [localPreviewUrl, setLocalPreviewUrl] = useState<string | null>(null)
+
+  // Achievement celebration states
+  const [showAchievementConfetti, setShowAchievementConfetti] = useState(false)
+  const [celebratedAchievement, setCelebratedAchievement] = useState<typeof ACHIEVEMENTS[0] | null>(null)
+  const previousUnlockedIdsRef = useRef<string[]>([])
 
   useEffect(() => {
     if (profile) {
@@ -137,7 +143,7 @@ export function Profile() {
 
   const handleSignOut = async () => {
     await signOut()
-    navigate('/')
+    // La redirection est gérée dans signOut() avec window.location.href
   }
 
   const reliabilityScore = profile?.reliability_score ?? 100

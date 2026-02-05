@@ -201,24 +201,36 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       // Clear local state first
       set({ user: null, session: null, profile: null, isLoading: true })
 
-      // Sign out from Supabase
-      const { error } = await supabase.auth.signOut()
+      // Sign out from Supabase (with global scope to clear all sessions)
+      const { error } = await supabase.auth.signOut({ scope: 'global' })
 
       if (error) {
         console.error('Sign out error:', error)
       }
 
-      // Force clear any cached session
-      localStorage.removeItem('supabase.auth.token')
+      // Force clear ALL Supabase auth data from localStorage
+      const keysToRemove = Object.keys(localStorage).filter(key =>
+        key.startsWith('sb-') ||
+        key.includes('supabase') ||
+        key.includes('auth-token')
+      )
+      keysToRemove.forEach(key => localStorage.removeItem(key))
+
+      // Also clear sessionStorage
+      const sessionKeysToRemove = Object.keys(sessionStorage).filter(key =>
+        key.startsWith('sb-') ||
+        key.includes('supabase')
+      )
+      sessionKeysToRemove.forEach(key => sessionStorage.removeItem(key))
 
       set({ isLoading: false })
 
-      // Force redirect to auth page
-      window.location.href = '/auth'
+      // Hard redirect to landing page (clears React state completely)
+      window.location.href = '/'
     } catch (error) {
       console.error('Sign out error:', error)
       set({ user: null, session: null, profile: null, isLoading: false })
-      window.location.href = '/auth'
+      window.location.href = '/'
     }
   },
 

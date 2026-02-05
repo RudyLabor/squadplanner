@@ -1,27 +1,55 @@
 import { useState, useEffect } from 'react'
-import { motion } from 'framer-motion'
-import { 
+import { motion, AnimatePresence } from 'framer-motion'
+import {
   ArrowLeft, Calendar, Clock, Users, Check, X, HelpCircle,
-  CheckCircle2, AlertCircle, XCircle, Loader2, Gamepad2
+  CheckCircle2, AlertCircle, XCircle, Loader2, Gamepad2, Sparkles
 } from 'lucide-react'
 import { Link, useParams, useNavigate } from 'react-router-dom'
+import Confetti from 'react-confetti'
 import { Button, Card, CardContent, Badge } from '../components/ui'
 import { VoiceChat } from '../components/VoiceChat'
 import { useAuthStore, useSessionsStore } from '../hooks'
-import { theme } from '../lib/theme'
 
-const containerVariants = theme.animation.container
-const itemVariants = theme.animation.item
+// Toast component for celebrations
+function CelebrationToast({ message, isVisible, onClose }: { message: string; isVisible: boolean; onClose: () => void }) {
+  useEffect(() => {
+    if (isVisible) {
+      const timer = setTimeout(onClose, 3500)
+      return () => clearTimeout(timer)
+    }
+  }, [isVisible, onClose])
+
+  return (
+    <AnimatePresence>
+      {isVisible && (
+        <motion.div
+          initial={{ opacity: 0, y: -20, scale: 0.9 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          exit={{ opacity: 0, y: -20, scale: 0.9 }}
+          className="fixed top-4 left-1/2 -translate-x-1/2 z-50"
+        >
+          <div className="flex items-center gap-2 px-5 py-3 rounded-xl bg-[#4ade80] text-[#08090a] font-medium shadow-lg">
+            <Sparkles className="w-5 h-5" />
+            <span>{message}</span>
+          </div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  )
+}
 
 type RsvpResponse = 'present' | 'absent' | 'maybe'
 
 export default function SessionDetail() {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
-  
+
   const [rsvpLoading, setRsvpLoading] = useState<RsvpResponse | null>(null)
   const [checkinLoading, setCheckinLoading] = useState(false)
-  
+  const [showConfetti, setShowConfetti] = useState(false)
+  const [toastMessage, setToastMessage] = useState('')
+  const [showToast, setShowToast] = useState(false)
+
   const { user, isInitialized } = useAuthStore()
   const { currentSession, fetchSessionById, updateRsvp, checkin, cancelSession, confirmSession } = useSessionsStore()
 
@@ -36,8 +64,29 @@ export default function SessionDetail() {
   const handleRsvp = async (response: RsvpResponse) => {
     if (!id) return
     setRsvpLoading(response)
-    await updateRsvp(id, response)
-    setRsvpLoading(null)
+
+    try {
+      const { error } = await updateRsvp(id, response)
+      setRsvpLoading(null)
+
+      if (error) {
+        setToastMessage('Erreur: ' + (error.message || 'Réponse non enregistrée'))
+        setShowToast(true)
+        return
+      }
+
+      // 🎉 Celebration when user confirms presence (only on success)
+      if (response === 'present') {
+        setShowConfetti(true)
+        setToastMessage('✅ Ta squad sait qu\'elle peut compter sur toi !')
+        setShowToast(true)
+        setTimeout(() => setShowConfetti(false), 3500)
+      }
+    } catch {
+      setRsvpLoading(null)
+      setToastMessage('Erreur réseau, réessaie')
+      setShowToast(true)
+    }
   }
 
   const handleCheckin = async () => {
@@ -45,6 +94,12 @@ export default function SessionDetail() {
     setCheckinLoading(true)
     await checkin(id, 'present')
     setCheckinLoading(false)
+
+    // 🎮 Big celebration for check-in
+    setShowConfetti(true)
+    setToastMessage('🎮 Check-in validé ! Bon game !')
+    setShowToast(true)
+    setTimeout(() => setShowConfetti(false), 4000)
   }
 
   const handleCancel = async () => {
@@ -121,19 +176,39 @@ export default function SessionDetail() {
 
   return (
     <div className="min-h-screen bg-[#08090a] pb-8">
-      <div className="px-4 md:px-6 py-6 max-w-2xl mx-auto">
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-        >
+      {/* Confetti celebration */}
+      {showConfetti && typeof window !== 'undefined' && (
+        <Confetti
+          width={window.innerWidth}
+          height={window.innerHeight}
+          recycle={false}
+          numberOfPieces={100}
+          gravity={0.25}
+          colors={['#5e6dd2', '#4ade80', '#f5a623', '#8b93ff', '#f7f8f8']}
+          style={{ position: 'fixed', top: 0, left: 0, zIndex: 100, pointerEvents: 'none' }}
+        />
+      )}
+
+      {/* Toast notification */}
+      <CelebrationToast
+        message={toastMessage}
+        isVisible={showToast}
+        onClose={() => setShowToast(false)}
+      />
+
+      <div className="px-4 md:px-6 lg:px-8 py-6 max-w-2xl lg:max-w-4xl xl:max-w-6xl mx-auto">
+        <div>
           {/* Header */}
-          <motion.div variants={itemVariants} className="flex items-center gap-4 mb-8">
-            <Link to={`/squad/${currentSession.squad_id}`} className="p-2 rounded-lg hover:bg-[rgba(255,255,255,0.05)] transition-colors">
+          <div className="flex items-center gap-4 mb-8">
+            <Link
+              to={`/squad/${currentSession.squad_id}`}
+              className="p-2.5 min-w-[44px] min-h-[44px] rounded-lg hover:bg-[rgba(255,255,255,0.05)] transition-colors flex items-center justify-center touch-target"
+              aria-label="Retour a la squad"
+            >
               <ArrowLeft className="w-5 h-5 text-[#8b8d90]" />
             </Link>
             <div className="flex-1">
-              <h1 className="text-xl font-bold text-[#f7f8f8]">
+              <h1 className="text-2xl font-bold text-[#f7f8f8]">
                 {currentSession.title || currentSession.game || 'Session'}
               </h1>
               {statusInfo && (
@@ -143,10 +218,10 @@ export default function SessionDetail() {
                 </div>
               )}
             </div>
-          </motion.div>
+          </div>
 
           {/* Info Cards */}
-          <motion.div variants={itemVariants} className="grid grid-cols-2 gap-3 mb-8">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-4 mb-8">
             <Card className="p-4">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-lg bg-[rgba(245,166,35,0.15)] flex items-center justify-center">
@@ -169,117 +244,142 @@ export default function SessionDetail() {
                 </div>
               </div>
             </Card>
-          </motion.div>
+          </div>
 
           {/* RSVP Counts */}
-          <motion.div variants={itemVariants} className="mb-8">
+          <div className="mb-8">
             <h2 className="text-[11px] font-medium text-[rgba(255,255,255,0.35)] uppercase tracking-[0.05em] mb-4">
               Réponses
             </h2>
-            <div className="grid grid-cols-3 gap-3">
-              <Card className="p-4 text-center">
+            <div className="grid grid-cols-3 gap-3 lg:gap-4">
+              <Card className="p-4 lg:p-5 text-center">
                 <Check className="w-5 h-5 mx-auto mb-2 text-[#4ade80]" />
-                <div className="text-[20px] font-bold text-[#f7f8f8]">{currentSession.rsvp_counts?.present || 0}</div>
+                <div className="text-xl lg:text-2xl font-bold text-[#f7f8f8]">{currentSession.rsvp_counts?.present || 0}</div>
                 <div className="text-[12px] text-[#5e6063]">Présents</div>
               </Card>
-              <Card className="p-4 text-center">
+              <Card className="p-4 lg:p-5 text-center">
                 <HelpCircle className="w-5 h-5 mx-auto mb-2 text-[#f5a623]" />
-                <div className="text-[20px] font-bold text-[#f7f8f8]">{currentSession.rsvp_counts?.maybe || 0}</div>
+                <div className="text-xl lg:text-2xl font-bold text-[#f7f8f8]">{currentSession.rsvp_counts?.maybe || 0}</div>
                 <div className="text-[12px] text-[#5e6063]">Peut-être</div>
               </Card>
-              <Card className="p-4 text-center">
+              <Card className="p-4 lg:p-5 text-center">
                 <X className="w-5 h-5 mx-auto mb-2 text-[#f87171]" />
-                <div className="text-[20px] font-bold text-[#f7f8f8]">{currentSession.rsvp_counts?.absent || 0}</div>
+                <div className="text-xl lg:text-2xl font-bold text-[#f7f8f8]">{currentSession.rsvp_counts?.absent || 0}</div>
                 <div className="text-[12px] text-[#5e6063]">Absents</div>
               </Card>
             </div>
-          </motion.div>
+          </div>
 
           {/* My RSVP */}
           {currentSession.status !== 'cancelled' && currentSession.status !== 'completed' && (
-            <motion.div variants={itemVariants} className="mb-8">
+            <div className="mb-8">
               <h2 className="text-[11px] font-medium text-[rgba(255,255,255,0.35)] uppercase tracking-[0.05em] mb-4">
                 Ta réponse
               </h2>
               <Card>
                 <CardContent className="p-4">
                   <div className="flex gap-2">
-                    <Button
-                      variant={currentSession.my_rsvp === 'present' ? 'primary' : 'secondary'}
-                      className="flex-1"
-                      onClick={() => handleRsvp('present')}
-                      disabled={rsvpLoading !== null}
-                    >
-                      {rsvpLoading === 'present' ? (
-                        <Loader2 className="w-4 h-4 animate-spin" />
-                      ) : (
-                        <Check className="w-4 h-4" />
-                      )}
-                      Présent
-                    </Button>
-                    <Button
-                      variant={currentSession.my_rsvp === 'maybe' ? 'primary' : 'secondary'}
-                      className="flex-1"
-                      onClick={() => handleRsvp('maybe')}
-                      disabled={rsvpLoading !== null}
-                    >
-                      {rsvpLoading === 'maybe' ? (
-                        <Loader2 className="w-5 h-5 animate-spin" />
-                      ) : (
-                        <HelpCircle className="w-4 h-4" />
-                      )}
-                      Peut-être
-                    </Button>
-                    <Button
-                      variant={currentSession.my_rsvp === 'absent' ? 'danger' : 'secondary'}
-                      className="flex-1"
-                      onClick={() => handleRsvp('absent')}
-                      disabled={rsvpLoading !== null}
-                    >
-                      {rsvpLoading === 'absent' ? (
-                        <Loader2 className="w-4 h-4 animate-spin" />
-                      ) : (
-                        <X className="w-4 h-4" />
-                      )}
-                      Absent
-                    </Button>
+                    <motion.div className="flex-1" whileTap={{ scale: 0.97 }}>
+                      <Button
+                        variant={currentSession.my_rsvp === 'present' ? 'primary' : 'secondary'}
+                        className={`w-full ${currentSession.my_rsvp === 'present' ? 'shadow-[0_0_20px_rgba(74,222,128,0.4)] ring-2 ring-[#4ade80]/30' : ''}`}
+                        onClick={() => handleRsvp('present')}
+                        disabled={rsvpLoading !== null}
+                      >
+                        {rsvpLoading === 'present' ? (
+                          <Loader2 className="w-4 h-4 animate-spin" />
+                        ) : (
+                          <Check className="w-4 h-4" />
+                        )}
+                        Présent
+                      </Button>
+                    </motion.div>
+                    <motion.div className="flex-1" whileTap={{ scale: 0.97 }}>
+                      <Button
+                        variant={currentSession.my_rsvp === 'maybe' ? 'primary' : 'secondary'}
+                        className={`w-full ${currentSession.my_rsvp === 'maybe' ? 'shadow-[0_0_20px_rgba(245,166,35,0.4)] ring-2 ring-[#f5a623]/30' : ''}`}
+                        onClick={() => handleRsvp('maybe')}
+                        disabled={rsvpLoading !== null}
+                      >
+                        {rsvpLoading === 'maybe' ? (
+                          <Loader2 className="w-5 h-5 animate-spin" />
+                        ) : (
+                          <HelpCircle className="w-4 h-4" />
+                        )}
+                        Peut-être
+                      </Button>
+                    </motion.div>
+                    <motion.div className="flex-1" whileTap={{ scale: 0.97 }}>
+                      <Button
+                        variant={currentSession.my_rsvp === 'absent' ? 'danger' : 'secondary'}
+                        className="w-full"
+                        onClick={() => handleRsvp('absent')}
+                        disabled={rsvpLoading !== null}
+                      >
+                        {rsvpLoading === 'absent' ? (
+                          <Loader2 className="w-4 h-4 animate-spin" />
+                        ) : (
+                          <X className="w-4 h-4" />
+                        )}
+                        Absent
+                      </Button>
+                    </motion.div>
                   </div>
                 </CardContent>
               </Card>
-            </motion.div>
+            </div>
           )}
 
           {/* Check-in */}
           {isSessionTime() && currentSession.my_rsvp === 'present' && !hasCheckedIn() && (
-            <motion.div variants={itemVariants} className="mb-8">
-              <Card className="p-6 text-center bg-gradient-to-b from-[rgba(74,222,128,0.1)] to-transparent border-[rgba(74,222,128,0.2)]">
-                <Gamepad2 className="w-12 h-12 mx-auto mb-4 text-[#4ade80]" />
-                <h3 className="text-lg font-bold text-[#f7f8f8] mb-2">C'est l'heure !</h3>
-                <p className="text-[#8b8d90] mb-4">Confirme ta présence pour cette session</p>
-                <Button onClick={handleCheckin} disabled={checkinLoading}>
-                  {checkinLoading ? (
-                    <Loader2 className="w-5 h-5 animate-spin" />
-                  ) : (
-                    <CheckCircle2 className="w-5 h-5" />
-                  )}
-                  Je suis là !
-                </Button>
+            <div className="mb-8">
+              <Card className="p-6 text-center bg-gradient-to-b from-[rgba(74,222,128,0.15)] to-transparent border-[rgba(74,222,128,0.3)] relative overflow-hidden">
+                {/* Pulsing background effect */}
+                <motion.div
+                  className="absolute inset-0 bg-[#4ade80]/5"
+                  animate={{ opacity: [0.3, 0.6, 0.3] }}
+                  transition={{ duration: 2, repeat: Infinity }}
+                />
+                <div className="relative">
+                  <motion.div
+                    animate={{ scale: [1, 1.1, 1] }}
+                    transition={{ duration: 1.5, repeat: Infinity }}
+                  >
+                    <Gamepad2 className="w-14 h-14 mx-auto mb-4 text-[#4ade80]" />
+                  </motion.div>
+                  <h3 className="text-xl font-bold text-[#f7f8f8] mb-2">🎮 C'est l'heure du game !</h3>
+                  <p className="text-[#8b8d90] mb-5">Ta squad t'attend. Confirme que t'es là !</p>
+                  <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
+                    <Button
+                      onClick={handleCheckin}
+                      disabled={checkinLoading}
+                      className="h-12 px-8 bg-[#4ade80] hover:bg-[#4ade80] text-[#08090a] font-semibold shadow-[0_0_25px_rgba(74,222,128,0.4)]"
+                    >
+                      {checkinLoading ? (
+                        <Loader2 className="w-5 h-5 animate-spin" />
+                      ) : (
+                        <CheckCircle2 className="w-5 h-5" />
+                      )}
+                      Je suis là !
+                    </Button>
+                  </motion.div>
+                </div>
               </Card>
-            </motion.div>
+            </div>
           )}
 
           {hasCheckedIn() && (
-            <motion.div variants={itemVariants} className="mb-8">
+            <div className="mb-8">
               <Card className="p-4 text-center bg-[rgba(74,222,128,0.1)] border-[rgba(74,222,128,0.2)]">
                 <CheckCircle2 className="w-8 h-8 mx-auto mb-2 text-[#4ade80]" />
                 <p className="text-[#4ade80] font-medium">Check-in confirmé !</p>
               </Card>
-            </motion.div>
+            </div>
           )}
 
           {/* Voice Chat */}
           {currentSession.status === 'confirmed' && id && (
-            <motion.div variants={itemVariants} className="mb-8">
+            <div className="mb-8">
               <h2 className="text-[11px] font-medium text-[rgba(255,255,255,0.35)] uppercase tracking-[0.05em] mb-4">
                 Chat Vocal
               </h2>
@@ -287,11 +387,11 @@ export default function SessionDetail() {
                 sessionId={id}
                 sessionTitle={currentSession.title || currentSession.game || 'Session'}
               />
-            </motion.div>
+            </div>
           )}
 
           {/* Participants */}
-          <motion.div variants={itemVariants} className="mb-8">
+          <div className="mb-8">
             <h2 className="text-[11px] font-medium text-[rgba(255,255,255,0.35)] uppercase tracking-[0.05em] mb-4">
               Participants
             </h2>
@@ -331,11 +431,11 @@ export default function SessionDetail() {
                 )}
               </CardContent>
             </Card>
-          </motion.div>
+          </div>
 
           {/* Creator Actions */}
           {isCreator && currentSession.status === 'proposed' && (
-            <motion.div variants={itemVariants} className="space-y-3">
+            <div className="space-y-3">
               <Button onClick={handleConfirm} className="w-full">
                 <CheckCircle2 className="w-5 h-5" />
                 Confirmer la session
@@ -344,9 +444,9 @@ export default function SessionDetail() {
                 <XCircle className="w-5 h-5" />
                 Annuler la session
               </Button>
-            </motion.div>
+            </div>
           )}
-        </motion.div>
+        </div>
       </div>
     </div>
   )

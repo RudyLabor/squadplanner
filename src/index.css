@@ -70,3 +70,89 @@ body,
 ::-webkit-scrollbar-thumb:hover {
   background: var(--color-text-quaternary);
 }
+
+/* Pulsing glow animation for call buttons */
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 10px 25px rgba(74, 222, 128, 0.3);
+  }
+  50% {
+    box-shadow: 0 10px 40px rgba(74, 222, 128, 0.6);
+  }
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 1.5s ease-in-out infinite;
+}
+
+/* Respect user preference for reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .animate-pulse-glow {
+    animation: none;
+  }
+}
+
+/* iOS Safe Area support */
+.safe-area-pb {
+  padding-bottom: env(safe-area-inset-bottom, 0);
+}
+
+.safe-area-pt {
+  padding-top: env(safe-area-inset-top, 0);
+}
+
+.safe-area-inset-bottom {
+  padding-bottom: calc(env(safe-area-inset-bottom, 0) + 1rem);
+}
+
+/* Mobile navigation with safe area - combines base padding with safe area */
+.mobile-nav-padding {
+  padding-bottom: calc(0.5rem + env(safe-area-inset-bottom, 0));
+}
+
+/* Content padding to account for mobile navigation */
+.pb-mobile-nav {
+  padding-bottom: calc(5rem + env(safe-area-inset-bottom, 0));
+}
+
+/* Minimum touch target for accessibility (44x44px) */
+.touch-target {
+  min-width: 44px;
+  min-height: 44px;
+}
+
+.touch-target-sm {
+  min-width: 36px;
+  min-height: 36px;
+}
+
+/* Focus visible styles for accessibility */
+.focus-ring:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* Skip to main content link (accessibility) */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: var(--color-primary);
+  color: white;
+  padding: 8px 16px;
+  z-index: 100;
+  transition: top 0.2s;
+}
+
+.skip-link:focus {
+  top: 0;
+}

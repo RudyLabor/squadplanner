@@ -1,21 +1,21 @@
-import { useEffect } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { motion } from 'framer-motion'
-import { Calendar, Plus, Clock, Users, ChevronRight, Sparkles, AlertTriangle, TrendingUp } from 'lucide-react'
+import { Calendar, Plus, Clock, Users, ChevronRight, Sparkles, TrendingUp, CheckCircle2, PartyPopper, Loader2 } from 'lucide-react'
 import { Link } from 'react-router-dom'
-import { Button, Card, Badge } from '../components/ui'
+import Confetti from 'react-confetti'
+import { Button, Card, Badge, SessionCardSkeleton } from '../components/ui'
 import { useAuthStore, useSquadsStore, useSessionsStore, useAIStore } from '../hooks'
-import { theme } from '../lib/theme'
-
-const containerVariants = theme.animation.container
-const itemVariants = theme.animation.item
 
 const dayNames = ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi']
 
 export function Sessions() {
-  const { user } = useAuthStore()
-  const { squads, fetchSquads } = useSquadsStore()
-  const { sessions, fetchSessions } = useSessionsStore()
+  const { user, isInitialized } = useAuthStore()
+  const { squads, fetchSquads, isLoading: squadsLoading } = useSquadsStore()
+  const { sessions, fetchSessions, isLoading: sessionsLoading } = useSessionsStore()
   const { slotSuggestions, coachTips, fetchSlotSuggestions, fetchCoachTips } = useAIStore()
+
+  const [showConfetti, setShowConfetti] = useState(false)
+  const hasShownCelebration = useRef(false)
 
   useEffect(() => {
     if (user) {
@@ -50,34 +50,86 @@ export function Sessions() {
   const needsResponse = upcomingSessions.filter(s => !s.my_rsvp)
   const confirmed = upcomingSessions.filter(s => s.my_rsvp === 'present')
 
+  // 🎉 Celebration when user has responded to all sessions
+  useEffect(() => {
+    if (needsResponse.length === 0 && confirmed.length > 0 && !hasShownCelebration.current && sessions.length > 0) {
+      hasShownCelebration.current = true
+      // Defer state updates to avoid cascading renders
+      queueMicrotask(() => {
+        setShowConfetti(true)
+        setTimeout(() => setShowConfetti(false), 3500)
+      })
+    }
+  }, [needsResponse.length, confirmed.length, sessions.length])
+
   return (
     <div className="min-h-screen bg-[#08090a] pb-8">
-      <div className="px-4 md:px-6 py-6 max-w-2xl mx-auto">
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-        >
+      {/* Confetti celebration */}
+      {showConfetti && typeof window !== 'undefined' && (
+        <Confetti
+          width={window.innerWidth}
+          height={window.innerHeight}
+          recycle={false}
+          numberOfPieces={80}
+          gravity={0.25}
+          colors={['#5e6dd2', '#4ade80', '#f5a623', '#8b93ff']}
+          style={{ position: 'fixed', top: 0, left: 0, zIndex: 100, pointerEvents: 'none' }}
+        />
+      )}
+
+      <div className="px-4 md:px-6 lg:px-8 py-6 max-w-2xl lg:max-w-4xl xl:max-w-6xl mx-auto">
+        <div>
           {/* Header with guidance */}
-          <motion.div variants={itemVariants} className="mb-8">
-            <h1 className="text-2xl font-bold text-[#f7f8f8] mb-2">Sessions</h1>
+          <div className="mb-8">
+            <h1 className="text-2xl font-bold text-[#f7f8f8] mb-2">Tes prochaines parties</h1>
             <p className="text-[14px] text-[#8b8d90]">
-              Tes sessions planifiées. Réponds aux invitations et confirme ta présence.
+              {needsResponse.length > 0
+                ? `${needsResponse.length} session${needsResponse.length > 1 ? 's' : ''} en attente de ta réponse`
+                : confirmed.length > 0
+                  ? `${confirmed.length} session${confirmed.length > 1 ? 's' : ''} confirmée${confirmed.length > 1 ? 's' : ''} — ta squad compte sur toi !`
+                  : 'Aucune session planifiée pour le moment'
+              }
             </p>
-          </motion.div>
+          </div>
+
+          {/* Success state - All caught up */}
+          {needsResponse.length === 0 && confirmed.length > 0 && (
+            <div className="mb-6">
+              <Card className="p-4 bg-gradient-to-r from-[rgba(74,222,128,0.1)] to-transparent border-[rgba(74,222,128,0.3)]">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-[rgba(74,222,128,0.2)] flex items-center justify-center">
+                    <CheckCircle2 className="w-5 h-5 text-[#4ade80]" />
+                  </div>
+                  <div>
+                    <h3 className="text-[14px] font-semibold text-[#4ade80]">
+                      🎯 T'es à jour !
+                    </h3>
+                    <p className="text-[12px] text-[#8b8d90]">
+                      Ta squad sait qu'elle peut compter sur toi
+                    </p>
+                  </div>
+                </div>
+              </Card>
+            </div>
+          )}
 
           {/* Action required - User guidance */}
           {needsResponse.length > 0 && (
-            <motion.div variants={itemVariants} className="mb-6">
+            <div className="mb-6">
               <div className="p-4 rounded-xl bg-[rgba(245,166,35,0.1)] border border-[rgba(245,166,35,0.2)]">
                 <div className="flex items-center gap-3 mb-3">
-                  <AlertTriangle className="w-5 h-5 text-[#f5a623]" />
+                  <motion.div
+                    animate={{ rotate: [0, -10, 10, -10, 0] }}
+                    transition={{ duration: 0.5, repeat: Infinity, repeatDelay: 2 }}
+                  >
+                    <PartyPopper className="w-5 h-5 text-[#f5a623]" />
+                  </motion.div>
                   <h2 className="text-[15px] font-semibold text-[#f7f8f8]">
-                    Action requise : {needsResponse.length} session{needsResponse.length > 1 ? 's' : ''} en attente
+                    Ta squad t'attend ! {needsResponse.length} session{needsResponse.length > 1 ? 's' : ''} à confirmer
                   </h2>
                 </div>
                 <p className="text-[13px] text-[#8b8d90] mb-3">
-                  👉 <span className="text-[#f7f8f8]">Clique sur une session</span> pour dire si tu seras présent ou non.
+                  👉 <span className="text-[#f7f8f8]">Réponds maintenant</span> pour que ta squad puisse s'organiser.
                   Plus tu réponds vite, plus ton score de fiabilité augmente !
                 </p>
                 <div className="space-y-2">
@@ -98,12 +150,12 @@ export function Sessions() {
                   ))}
                 </div>
               </div>
-            </motion.div>
+            </div>
           )}
 
           {/* AI Slot Suggestions */}
           {slotSuggestions.length > 0 && (
-            <motion.div variants={itemVariants} className="mb-6">
+            <div className="mb-6">
               <Card className="p-4 border-[rgba(139,147,255,0.2)] bg-[rgba(139,147,255,0.05)]">
                 <div className="flex items-start gap-3">
                   <div className="w-10 h-10 rounded-xl bg-[rgba(139,147,255,0.15)] flex items-center justify-center shrink-0">
@@ -131,12 +183,12 @@ export function Sessions() {
                   </div>
                 </div>
               </Card>
-            </motion.div>
+            </div>
           )}
 
           {/* Coach Tips */}
           {coachTips.length > 0 && (
-            <motion.div variants={itemVariants} className="mb-6">
+            <div className="mb-6">
               <Card className="p-4 border-[rgba(245,166,35,0.2)] bg-[rgba(245,166,35,0.05)]">
                 <div className="flex items-start gap-3">
                   <div className="w-10 h-10 rounded-xl bg-[rgba(245,166,35,0.15)] flex items-center justify-center shrink-0">
@@ -152,20 +204,26 @@ export function Sessions() {
                   </div>
                 </div>
               </Card>
-            </motion.div>
+            </div>
           )}
 
           {/* Upcoming confirmed */}
-          <motion.div variants={itemVariants} className="mb-8">
+          <div className="mb-8">
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-[11px] font-medium text-[rgba(255,255,255,0.35)] uppercase tracking-[0.05em]">
                 Mes sessions confirmées
               </h2>
-              <Badge variant="success">{confirmed.length}</Badge>
+              {!sessionsLoading && <Badge variant="success">{confirmed.length}</Badge>}
             </div>
 
-            {confirmed.length > 0 ? (
-              <div className="space-y-3">
+            {sessionsLoading ? (
+              <div className="space-y-3 lg:grid lg:grid-cols-2 xl:grid-cols-3 lg:gap-4 lg:space-y-0">
+                <SessionCardSkeleton />
+                <SessionCardSkeleton />
+                <SessionCardSkeleton />
+              </div>
+            ) : confirmed.length > 0 ? (
+              <div className="space-y-3 lg:grid lg:grid-cols-2 xl:grid-cols-3 lg:gap-4 lg:space-y-0">
                 {confirmed.map(session => (
                   <Link key={session.id} to={`/session/${session.id}`}>
                     <motion.div whileHover={{ y: -2 }} whileTap={{ scale: 0.99 }}>
@@ -213,10 +271,10 @@ export function Sessions() {
                 </Link>
               </Card>
             )}
-          </motion.div>
+          </div>
 
           {/* How it works - User guidance */}
-          <motion.div variants={itemVariants}>
+          <div>
             <Card className="p-6">
               <h3 className="text-[14px] font-semibold text-[#f7f8f8] mb-4">
                 📖 Comment fonctionnent les sessions ?
@@ -237,8 +295,8 @@ export function Sessions() {
                 ))}
               </div>
             </Card>
-          </motion.div>
-        </motion.div>
+          </div>
+        </div>
       </div>
     </div>
   )

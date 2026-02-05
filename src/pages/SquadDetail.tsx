@@ -1,38 +1,56 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
-  Users, Calendar, Plus, Copy, Check, MessageCircle,
-  Clock, Trash2, LogOut, Loader2, ChevronRight,
-  Mic, MicOff, Settings, Sparkles, Crown, TrendingUp,
+  Users, Calendar, Plus, Copy, Check, MessageCircle, Phone,
+  Clock, Trash2, LogOut, Loader2, ChevronRight, UserPlus, Share2, Search, X,
+  Mic, MicOff, Sparkles, Crown, TrendingUp,
   CheckCircle2, XCircle, HelpCircle, BarChart3, Download, Zap
 } from 'lucide-react'
 import { Link, useParams, useNavigate } from 'react-router-dom'
+import Confetti from 'react-confetti'
 import { Button, Card, CardContent, Badge, Input } from '../components/ui'
-import { useAuthStore, useSquadsStore, useSessionsStore, useVoiceChatStore, usePremiumStore } from '../hooks'
+import { useAuthStore, useSquadsStore, useSessionsStore, useVoiceChatStore, useVoiceCallStore, usePremiumStore } from '../hooks'
 import { PremiumGate, PremiumBadge } from '../components/PremiumGate'
-import { theme } from '../lib/theme'
+// theme import removed - animation variants caused mobile rendering issues
+import { supabase } from '../lib/supabase'
+import { sendMemberJoinedMessage } from '../lib/systemMessages'
 
-const containerVariants = theme.animation.container
-const itemVariants = theme.animation.item
+// Animation variants removed - they can block mobile rendering
 
-// Toast de succès
+// Toast de succès avec célébration
 function SuccessToast({ message, onClose }: { message: string; onClose: () => void }) {
+  const isCelebration = message.includes('confirmé') || message.includes('🔥')
+
   useEffect(() => {
-    const timer = setTimeout(onClose, 3000)
+    const timer = setTimeout(onClose, isCelebration ? 4000 : 3000)
     return () => clearTimeout(timer)
-  }, [onClose])
+  }, [onClose, isCelebration])
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 50, scale: 0.9 }}
+      initial={{ opacity: 0, y: 50, scale: 0.8 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
-      exit={{ opacity: 0, y: 20, scale: 0.9 }}
+      exit={{ opacity: 0, y: 20, scale: 0.8 }}
+      transition={{ type: 'spring', stiffness: 400, damping: 25 }}
       className="fixed bottom-24 left-1/2 -translate-x-1/2 z-50"
     >
-      <div className="flex items-center gap-3 px-5 py-3 rounded-xl bg-[#4ade80] text-[#08090a] font-medium shadow-lg">
-        <Sparkles className="w-5 h-5" />
-        <span>{message}</span>
-      </div>
+      <motion.div
+        className={`flex items-center gap-3 px-5 py-3.5 rounded-xl font-medium shadow-xl ${
+          isCelebration
+            ? 'bg-gradient-to-r from-[#4ade80] to-[#4ade80] text-[#08090a] shadow-[0_0_30px_rgba(74,222,128,0.4)]'
+            : 'bg-[#4ade80] text-[#08090a] shadow-lg'
+        }`}
+        animate={isCelebration ? { scale: [1, 1.02, 1] } : {}}
+        transition={{ duration: 0.3, repeat: isCelebration ? 2 : 0 }}
+      >
+        <motion.div
+          animate={isCelebration ? { rotate: [0, 15, -15, 0] } : {}}
+          transition={{ duration: 0.5, repeat: isCelebration ? 2 : 0 }}
+        >
+          <Sparkles className="w-5 h-5" />
+        </motion.div>
+        <span className="text-[14px]">{message}</span>
+      </motion.div>
     </motion.div>
   )
 }
@@ -68,7 +86,7 @@ function PartySection({ squadId }: { squadId: string }) {
           <div className="flex items-center gap-2 flex-wrap">
             {/* Toi */}
             <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#4ade80]/20 border border-[#4ade80]/30">
-              <div className={`w-2 h-2 rounded-full ${isMuted ? 'bg-[#ef4444]' : 'bg-[#4ade80]'}`} />
+              <div className={`w-2 h-2 rounded-full ${isMuted ? 'bg-[#f87171]' : 'bg-[#4ade80]'}`} />
               <span className="text-[13px] text-[#f7f8f8]">Toi</span>
             </div>
             {/* Autres */}
@@ -202,42 +220,54 @@ function SessionCard({ session, onRsvp }: {
             </span>
           </div>
 
-          {/* RSVP rapide */}
+          {/* RSVP rapide avec animations - touch targets 44px min */}
           {canRsvp && (
             <div className="flex gap-2">
-              <button
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
                 onClick={(e) => { e.preventDefault(); onRsvp(session.id, 'present') }}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[12px] font-medium transition-colors ${
+                aria-label="Marquer comme présent"
+                aria-pressed={session.my_rsvp === 'present'}
+                className={`flex items-center gap-1.5 px-4 py-2.5 min-h-[44px] rounded-lg text-[13px] font-medium transition-all duration-200 ${
                   session.my_rsvp === 'present'
-                    ? 'bg-[#4ade80]/20 text-[#4ade80] border border-[#4ade80]/30'
-                    : 'bg-[rgba(255,255,255,0.05)] text-[#8b8d90] hover:bg-[rgba(255,255,255,0.1)]'
+                    ? 'bg-[#4ade80]/20 text-[#4ade80] border border-[#4ade80]/30 shadow-[0_0_12px_rgba(74,222,128,0.3)]'
+                    : 'bg-[rgba(255,255,255,0.05)] text-[#8b8d90] hover:bg-[rgba(74,222,128,0.15)] hover:text-[#4ade80] hover:border-[#4ade80]/20 border border-transparent'
                 }`}
               >
-                <CheckCircle2 className="w-3.5 h-3.5" />
+                <CheckCircle2 className="w-4 h-4" aria-hidden="true" />
                 Présent
-              </button>
-              <button
+              </motion.button>
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
                 onClick={(e) => { e.preventDefault(); onRsvp(session.id, 'maybe') }}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[12px] font-medium transition-colors ${
+                aria-label="Marquer comme peut-être"
+                aria-pressed={session.my_rsvp === 'maybe'}
+                className={`flex items-center gap-1.5 px-4 py-2.5 min-h-[44px] rounded-lg text-[13px] font-medium transition-all duration-200 ${
                   session.my_rsvp === 'maybe'
-                    ? 'bg-[#f5a623]/20 text-[#f5a623] border border-[#f5a623]/30'
-                    : 'bg-[rgba(255,255,255,0.05)] text-[#8b8d90] hover:bg-[rgba(255,255,255,0.1)]'
+                    ? 'bg-[#f5a623]/20 text-[#f5a623] border border-[#f5a623]/30 shadow-[0_0_12px_rgba(245,166,35,0.3)]'
+                    : 'bg-[rgba(255,255,255,0.05)] text-[#8b8d90] hover:bg-[rgba(245,166,35,0.15)] hover:text-[#f5a623] hover:border-[#f5a623]/20 border border-transparent'
                 }`}
               >
-                <HelpCircle className="w-3.5 h-3.5" />
+                <HelpCircle className="w-4 h-4" aria-hidden="true" />
                 Peut-être
-              </button>
-              <button
+              </motion.button>
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
                 onClick={(e) => { e.preventDefault(); onRsvp(session.id, 'absent') }}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[12px] font-medium transition-colors ${
+                aria-label="Marquer comme absent"
+                aria-pressed={session.my_rsvp === 'absent'}
+                className={`flex items-center gap-1.5 px-4 py-2.5 min-h-[44px] rounded-lg text-[13px] font-medium transition-all duration-200 ${
                   session.my_rsvp === 'absent'
-                    ? 'bg-[#ef4444]/20 text-[#ef4444] border border-[#ef4444]/30'
-                    : 'bg-[rgba(255,255,255,0.05)] text-[#8b8d90] hover:bg-[rgba(255,255,255,0.1)]'
+                    ? 'bg-[#f87171]/20 text-[#f87171] border border-[#f87171]/30 shadow-[0_0_12px_rgba(248,113,113,0.3)]'
+                    : 'bg-[rgba(255,255,255,0.05)] text-[#8b8d90] hover:bg-[rgba(248,113,113,0.15)] hover:text-[#f87171] hover:border-[#f87171]/20 border border-transparent'
                 }`}
               >
-                <XCircle className="w-3.5 h-3.5" />
+                <XCircle className="w-4 h-4" aria-hidden="true" />
                 Absent
-              </button>
+              </motion.button>
             </div>
           )}
         </div>
@@ -250,16 +280,268 @@ function SessionCard({ session, onRsvp }: {
   )
 }
 
-// Card membre
-function MemberCard({ member, isOwner }: {
+// Modal d'invitation
+function InviteModal({
+  isOpen,
+  onClose,
+  squadId,
+  squadName,
+  inviteCode,
+  existingMemberIds
+}: {
+  isOpen: boolean
+  onClose: () => void
+  squadId: string
+  squadName: string
+  inviteCode: string
+  existingMemberIds: string[]
+}) {
+  const [searchQuery, setSearchQuery] = useState('')
+  const [searchResults, setSearchResults] = useState<Array<{ id: string; username: string; avatar_url: string | null }>>([])
+  const [isSearching, setIsSearching] = useState(false)
+  const [invitedUsers, setInvitedUsers] = useState<Set<string>>(new Set())
+  const [invitingUser, setInvitingUser] = useState<string | null>(null)
+  const [inviteError, setInviteError] = useState<string | null>(null)
+  const [copied, setCopied] = useState(false)
+
+  // Recherche d'utilisateurs
+  const handleSearch = async () => {
+    if (searchQuery.length < 2) return
+    setIsSearching(true)
+    setSearchResults([])
+    try {
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('id, username, avatar_url')
+        .ilike('username', `%${searchQuery}%`)
+        .limit(10)
+
+      console.log('Search results:', data, 'Error:', error)
+
+      if (error) {
+        console.error('Erreur recherche:', error)
+      } else if (data) {
+        // Filtrer les membres existants
+        const filtered = data.filter(u => !existingMemberIds.includes(u.id))
+        setSearchResults(filtered)
+      }
+    } catch (err) {
+      console.error('Erreur recherche:', err)
+    }
+    setIsSearching(false)
+  }
+
+  // Inviter un utilisateur directement
+  const handleInvite = async (userId: string, username: string) => {
+    setInvitingUser(userId)
+    setInviteError(null)
+    try {
+      // Insérer le membre
+      const { error } = await supabase
+        .from('squad_members')
+        .insert({ squad_id: squadId, user_id: userId, role: 'member' })
+
+      if (!error) {
+        setInvitedUsers(prev => new Set([...prev, userId]))
+        // Envoyer message système
+        await sendMemberJoinedMessage(squadId, username)
+      } else {
+        console.error('Erreur invitation:', error)
+        // Afficher une erreur plus claire
+        if (error.code === '42501') {
+          setInviteError('Tu dois être propriétaire de la squad pour inviter')
+        } else if (error.code === '23505') {
+          setInviteError('Ce joueur est déjà membre de la squad')
+        } else {
+          setInviteError(error.message || 'Erreur lors de l\'invitation')
+        }
+      }
+    } catch (err) {
+      console.error('Erreur invitation:', err)
+      setInviteError('Erreur réseau, réessaie')
+    } finally {
+      setInvitingUser(null)
+    }
+  }
+
+  // Partager via Web Share API
+  const handleShare = async () => {
+    const shareData = {
+      title: `Rejoins ${squadName} sur Squad Planner !`,
+      text: `Utilise le code ${inviteCode} pour rejoindre ma squad "${squadName}" !`,
+      url: window.location.origin
+    }
+
+    if (navigator.share) {
+      try {
+        await navigator.share(shareData)
+      } catch {
+        // User cancelled ou erreur - intentionally ignored
+      }
+    } else {
+      // Fallback: copier le texte
+      await navigator.clipboard.writeText(`Rejoins ma squad "${squadName}" sur Squad Planner ! Code: ${inviteCode}`)
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000)
+    }
+  }
+
+  // Copier le code
+  const handleCopyCode = async () => {
+    await navigator.clipboard.writeText(inviteCode)
+    setCopied(true)
+    setTimeout(() => setCopied(false), 2000)
+  }
+
+  if (!isOpen) return null
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+      onClick={onClose}
+    >
+      <motion.div
+        initial={{ scale: 0.95, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        exit={{ scale: 0.95, opacity: 0 }}
+        className="w-full max-w-md bg-[#101012] rounded-2xl border border-[rgba(255,255,255,0.08)] overflow-hidden"
+        onClick={e => e.stopPropagation()}
+      >
+        {/* Header */}
+        <div className="flex items-center justify-between p-4 border-b border-[rgba(255,255,255,0.06)]">
+          <h2 className="text-[16px] font-semibold text-[#f7f8f8]">Inviter des joueurs</h2>
+          <button onClick={onClose} aria-label="Fermer" className="p-1 rounded-lg hover:bg-[rgba(255,255,255,0.08)]">
+            <X className="w-5 h-5 text-[#8b8d90]" aria-hidden="true" />
+          </button>
+        </div>
+
+        <div className="p-4 space-y-4">
+          {/* Code d'invitation */}
+          <div className="p-4 rounded-xl bg-[rgba(94,109,210,0.1)] border border-[rgba(94,109,210,0.2)]">
+            <p className="text-[12px] text-[#8b8d90] mb-2">Code d'invitation</p>
+            <div className="flex items-center gap-3">
+              <span className="text-[24px] font-bold text-[#5e6dd2] tracking-wider flex-1">
+                {inviteCode}
+              </span>
+              <Button size="sm" variant="secondary" onClick={handleCopyCode}>
+                {copied ? <Check className="w-4 h-4 text-[#4ade80]" /> : <Copy className="w-4 h-4" />}
+              </Button>
+              <Button size="sm" variant="primary" onClick={handleShare}>
+                <Share2 className="w-4 h-4" />
+                Partager
+              </Button>
+            </div>
+          </div>
+
+          {/* Recherche d'utilisateurs */}
+          <div>
+            <p className="text-[12px] text-[#8b8d90] mb-2">Ou rechercher un joueur</p>
+            <div className="flex gap-2">
+              <div className="flex-1 relative">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#5e6063]" />
+                <Input
+                  placeholder="Nom d'utilisateur..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+                  className="pl-10"
+                />
+              </div>
+              <Button onClick={handleSearch} disabled={isSearching || searchQuery.length < 2}>
+                {isSearching ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Chercher'}
+              </Button>
+            </div>
+          </div>
+
+          {/* Message d'erreur */}
+          {inviteError && (
+            <div className="p-3 rounded-lg bg-[rgba(248,113,113,0.1)] border border-[rgba(248,113,113,0.2)]">
+              <p className="text-[#f87171] text-[13px]">{inviteError}</p>
+            </div>
+          )}
+
+          {/* Résultats de recherche */}
+          {searchResults.length > 0 && (
+            <div className="max-h-48 overflow-y-auto space-y-2">
+              {searchResults.map(user => (
+                <div key={user.id} className="flex items-center gap-3 p-3 rounded-xl bg-[rgba(255,255,255,0.03)]">
+                  {user.avatar_url ? (
+                    <img src={user.avatar_url} alt="" className="w-10 h-10 rounded-full object-cover" />
+                  ) : (
+                    <div className="w-10 h-10 rounded-full bg-[rgba(139,147,255,0.15)] flex items-center justify-center">
+                      <Users className="w-5 h-5 text-[#8b93ff]" />
+                    </div>
+                  )}
+                  <span className="flex-1 text-[14px] text-[#f7f8f8]">{user.username}</span>
+                  {invitedUsers.has(user.id) ? (
+                    <span className="text-[12px] text-[#4ade80] flex items-center gap-1">
+                      <Check className="w-4 h-4" /> Ajouté
+                    </span>
+                  ) : (
+                    <Button
+                      size="sm"
+                      onClick={() => handleInvite(user.id, user.username)}
+                      disabled={invitingUser === user.id}
+                    >
+                      {invitingUser === user.id ? (
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                      ) : (
+                        <UserPlus className="w-4 h-4" />
+                      )}
+                      {invitingUser === user.id ? 'Ajout...' : 'Inviter'}
+                    </Button>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+
+          {searchQuery.length >= 2 && searchResults.length === 0 && !isSearching && (
+            <p className="text-center text-[13px] text-[#5e6063] py-4">
+              Aucun joueur trouvé
+            </p>
+          )}
+        </div>
+      </motion.div>
+    </motion.div>
+  )
+}
+
+// Card membre avec boutons d'appel et message
+function MemberCard({ member, isOwner, currentUserId }: {
   member: {
     user_id: string
     role: string
     profiles?: { username?: string; avatar_url?: string; reliability_score?: number }
   }
   isOwner: boolean
+  currentUserId?: string
 }) {
-  const reliability = member.profiles?.reliability_score || 100
+  const navigate = useNavigate()
+  const { startCall } = useVoiceCallStore()
+  const reliability = member.profiles?.reliability_score ?? 100
+  const isCurrentUser = member.user_id === currentUserId
+
+  const handleCall = async (e: React.MouseEvent) => {
+    e.stopPropagation()
+    console.log('[MemberCard] handleCall clicked, username:', member.profiles?.username)
+    if (!member.profiles?.username) {
+      console.warn('[MemberCard] No username, aborting call')
+      return
+    }
+    console.log('[MemberCard] Starting call to:', member.user_id)
+    await startCall(member.user_id, member.profiles.username, member.profiles.avatar_url)
+    console.log('[MemberCard] startCall completed')
+  }
+
+  const handleMessage = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    // Naviguer vers les DM avec cet utilisateur
+    navigate(`/messages?dm=${member.user_id}`)
+  }
 
   return (
     <div className="flex items-center gap-3 py-2">
@@ -282,13 +564,32 @@ function MemberCard({ member, isOwner }: {
           {isOwner && <Crown className="w-4 h-4 text-[#f5a623]" />}
         </div>
         <div className="flex items-center gap-1 text-[12px]">
-          <TrendingUp className={`w-3 h-3 ${reliability >= 80 ? 'text-[#4ade80]' : reliability >= 60 ? 'text-[#f5a623]' : 'text-[#ef4444]'}`} />
-          <span className={reliability >= 80 ? 'text-[#4ade80]' : reliability >= 60 ? 'text-[#f5a623]' : 'text-[#ef4444]'}>
+          <TrendingUp className={`w-3 h-3 ${reliability >= 80 ? 'text-[#4ade80]' : reliability >= 60 ? 'text-[#f5a623]' : 'text-[#f87171]'}`} />
+          <span className={reliability >= 80 ? 'text-[#4ade80]' : reliability >= 60 ? 'text-[#f5a623]' : 'text-[#f87171]'}>
             {reliability}%
           </span>
           <span className="text-[#5e6063]">fiable</span>
         </div>
       </div>
+      {/* Boutons d'action - seulement si ce n'est pas l'utilisateur courant */}
+      {!isCurrentUser && (
+        <div className="flex items-center gap-1">
+          <button
+            onClick={handleMessage}
+            className="p-2.5 min-w-[44px] min-h-[44px] rounded-lg hover:bg-[rgba(255,255,255,0.08)] transition-colors flex items-center justify-center"
+            aria-label={`Envoyer un message à ${member.profiles?.username || 'ce joueur'}`}
+          >
+            <MessageCircle className="w-5 h-5 text-[#5e6dd2]" aria-hidden="true" />
+          </button>
+          <button
+            onClick={handleCall}
+            className="p-2.5 min-w-[44px] min-h-[44px] rounded-lg hover:bg-[rgba(255,255,255,0.08)] transition-colors flex items-center justify-center"
+            aria-label={`Appeler ${member.profiles?.username || 'ce joueur'}`}
+          >
+            <Phone className="w-5 h-5 text-[#4ade80]" aria-hidden="true" />
+          </button>
+        </div>
+      )}
     </div>
   )
 }
@@ -298,14 +599,16 @@ export default function SquadDetail() {
   const navigate = useNavigate()
 
   const [showCreateSession, setShowCreateSession] = useState(false)
-  const [showSettings, setShowSettings] = useState(false)
+  const [showInviteModal, setShowInviteModal] = useState(false)
   const [sessionTitle, setSessionTitle] = useState('')
   const [sessionDate, setSessionDate] = useState('')
   const [sessionTime, setSessionTime] = useState('')
   const [sessionDuration, setSessionDuration] = useState('120')
+  const [sessionThreshold, setSessionThreshold] = useState('3')
   const [copiedCode, setCopiedCode] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [successMessage, setSuccessMessage] = useState<string | null>(null)
+  const [showConfetti, setShowConfetti] = useState(false)
 
   const { user, isInitialized } = useAuthStore()
   const { currentSquad, fetchSquadById, leaveSquad, deleteSquad, isLoading } = useSquadsStore()
@@ -345,6 +648,7 @@ export default function SquadDetail() {
       title: sessionTitle || undefined,
       scheduled_at: scheduledAt,
       duration_minutes: parseInt(sessionDuration),
+      auto_confirm_threshold: parseInt(sessionThreshold),
       game: currentSquad?.game,
     })
 
@@ -355,21 +659,37 @@ export default function SquadDetail() {
       setSessionTitle('')
       setSessionDate('')
       setSessionTime('')
+      setSessionThreshold('3')
       setSuccessMessage('Session créée !')
     }
   }
 
   const handleRsvp = async (sessionId: string, response: 'present' | 'absent' | 'maybe') => {
-    await updateRsvp(sessionId, response)
-    if (id) fetchSessions(id)
+    try {
+      const { error } = await updateRsvp(sessionId, response)
+      if (error) {
+        setError(error.message || 'Erreur lors de l\'enregistrement')
+        return
+      }
 
-    // Toast de confirmation
-    const labels = {
-      present: 'Presence confirmee !',
-      absent: 'Absence enregistree',
-      maybe: 'Reponse enregistree'
+      if (id) fetchSessions(id)
+
+      // Célébration pour "présent" - moment Wow! (only on success)
+      if (response === 'present') {
+        setShowConfetti(true)
+        setSuccessMessage("T'es confirmé ! 🔥 Ta squad compte sur toi")
+        // Arrêter le confetti après 4 secondes
+        setTimeout(() => setShowConfetti(false), 4000)
+      } else {
+        const labels = {
+          absent: 'Absence enregistrée',
+          maybe: 'Réponse enregistrée'
+        }
+        setSuccessMessage(labels[response])
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Erreur réseau')
     }
-    setSuccessMessage(labels[response])
   }
 
   const handleLeaveSquad = async () => {
@@ -394,7 +714,8 @@ export default function SquadDetail() {
   const now = new Date()
   const futureSessions = sessions.filter(s => new Date(s.scheduled_at) >= now || s.status === 'confirmed')
 
-  if (!isInitialized || isLoading) {
+  // Afficher le loader tant que le fetch n'est pas terminé
+  if (!isInitialized || isLoading || (!currentSquad && id)) {
     return (
       <div className="min-h-screen bg-[#08090a] flex items-center justify-center">
         <Loader2 className="w-8 h-8 text-[#5e6dd2] animate-spin" />
@@ -402,55 +723,69 @@ export default function SquadDetail() {
     )
   }
 
+  // Squad non trouvée seulement si le fetch est terminé et qu'il n'y a pas de squad
   if (!currentSquad) {
     return (
-      <div className="min-h-screen bg-[#08090a] flex items-center justify-center">
+      <div className="min-h-screen bg-[#08090a] flex items-center justify-center flex-col gap-4">
         <p className="text-[#8b8d90]">Squad non trouvée</p>
+        <Button variant="secondary" onClick={() => navigate('/squads')}>
+          Retour aux squads
+        </Button>
       </div>
     )
   }
 
   return (
     <div className="min-h-screen bg-[#08090a] pb-24">
-      <div className="px-4 md:px-6 py-6 max-w-2xl mx-auto">
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-        >
-          {/* Header simplifié */}
-          <motion.div variants={itemVariants} className="flex items-center justify-between mb-6">
-            <div className="flex-1 min-w-0">
-              <div className="flex items-center gap-2">
-                <h1 className="text-[22px] font-bold text-[#f7f8f8] truncate">{currentSquad.name}</h1>
-                {isOwner && <Crown className="w-5 h-5 text-[#f5a623] flex-shrink-0" />}
+      {/* Confetti celebration for RSVP present */}
+      {showConfetti && typeof window !== 'undefined' && (
+        <Confetti
+          width={window.innerWidth}
+          height={window.innerHeight}
+          recycle={false}
+          numberOfPieces={150}
+          gravity={0.3}
+          colors={['#5e6dd2', '#4ade80', '#f5a623', '#f7f8f8', '#8b93ff']}
+        />
+      )}
+      <div className="px-4 md:px-6 lg:px-8 py-6 max-w-2xl lg:max-w-4xl xl:max-w-6xl mx-auto">
+        <div>
+          {/* Header */}
+          <div className="mb-6">
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-2">
+                  <h1 className="text-xl font-bold text-[#f7f8f8] truncate">{currentSquad.name}</h1>
+                  {isOwner && <Crown className="w-5 h-5 text-[#f5a623] flex-shrink-0" />}
+                </div>
+                <p className="text-[13px] text-[#8b8d90]">
+                  {currentSquad.game} · {currentSquad.member_count} membre{(currentSquad.member_count || 0) > 1 ? 's' : ''}
+                </p>
               </div>
-              <p className="text-[13px] text-[#8b8d90]">
-                {currentSquad.game} · {currentSquad.member_count} membre{(currentSquad.member_count || 0) > 1 ? 's' : ''}
-              </p>
-            </div>
-            <div className="flex gap-2">
               <Link to="/messages">
                 <Button variant="ghost" size="sm">
                   <MessageCircle className="w-4 h-4" />
                 </Button>
               </Link>
-              <Button variant="secondary" size="sm" onClick={handleCopyCode}>
-                {copiedCode ? <Check className="w-4 h-4 text-[#4ade80]" /> : <Copy className="w-4 h-4" />}
-                <span className="hidden sm:inline">{currentSquad.invite_code}</span>
-              </Button>
-              {isOwner && (
-                <Button variant="ghost" size="sm" onClick={() => setShowSettings(!showSettings)}>
-                  <Settings className="w-4 h-4" />
-                </Button>
-              )}
             </div>
-          </motion.div>
+
+            {/* Code d'invitation - toujours visible et clair */}
+            <div className="flex items-center gap-2 p-3 rounded-xl bg-[rgba(94,109,210,0.1)] border border-[rgba(94,109,210,0.2)]">
+              <div className="flex-1">
+                <p className="text-xs text-[#8b8d90] uppercase tracking-wide mb-0.5">Code d'invitation</p>
+                <p className="text-[18px] font-bold text-[#5e6dd2] tracking-wider">{currentSquad.invite_code}</p>
+              </div>
+              <Button variant="primary" size="sm" onClick={handleCopyCode}>
+                {copiedCode ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+                {copiedCode ? 'Copié !' : 'Copier'}
+              </Button>
+            </div>
+          </div>
 
           {/* Party Vocale - PRIORITÉ #1 */}
-          <motion.div variants={itemVariants} className="mb-6">
+          <div className="mb-6">
             <PartySection squadId={id || ''} />
-          </motion.div>
+          </div>
 
           {/* Créer session */}
           <AnimatePresence>
@@ -487,20 +822,40 @@ export default function SquadDetail() {
                           required
                         />
                       </div>
-                      <div>
-                        <label className="block text-[13px] font-medium text-[#c9cace] mb-1.5">
-                          Durée
-                        </label>
-                        <select
-                          value={sessionDuration}
-                          onChange={(e) => setSessionDuration(e.target.value)}
-                          className="w-full px-4 py-3 rounded-xl bg-[rgba(255,255,255,0.04)] border border-[rgba(255,255,255,0.08)] text-[#f7f8f8] focus:border-[rgba(94,109,210,0.5)] focus:ring-2 focus:ring-[rgba(94,109,210,0.15)] transition-all"
-                        >
-                          <option value="60">1 heure</option>
-                          <option value="120">2 heures</option>
-                          <option value="180">3 heures</option>
-                          <option value="240">4 heures</option>
-                        </select>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <label className="block text-[13px] font-medium text-[#c9cace] mb-1.5">
+                            Durée
+                          </label>
+                          <select
+                            value={sessionDuration}
+                            onChange={(e) => setSessionDuration(e.target.value)}
+                            className="w-full px-4 py-3 rounded-xl bg-[rgba(255,255,255,0.04)] border border-[rgba(255,255,255,0.08)] text-[#f7f8f8] focus:border-[rgba(94,109,210,0.5)] focus:ring-2 focus:ring-[rgba(94,109,210,0.15)] transition-all"
+                          >
+                            <option value="60">1 heure</option>
+                            <option value="120">2 heures</option>
+                            <option value="180">3 heures</option>
+                            <option value="240">4 heures</option>
+                          </select>
+                        </div>
+                        <div>
+                          <label className="block text-[13px] font-medium text-[#c9cace] mb-1.5">
+                            Auto-confirm à
+                          </label>
+                          <select
+                            value={sessionThreshold}
+                            onChange={(e) => setSessionThreshold(e.target.value)}
+                            className="w-full px-4 py-3 rounded-xl bg-[rgba(255,255,255,0.04)] border border-[rgba(255,255,255,0.08)] text-[#f7f8f8] focus:border-[rgba(94,109,210,0.5)] focus:ring-2 focus:ring-[rgba(94,109,210,0.15)] transition-all"
+                          >
+                            <option value="2">2 joueurs</option>
+                            <option value="3">3 joueurs</option>
+                            <option value="4">4 joueurs</option>
+                            <option value="5">5 joueurs</option>
+                            <option value="6">6 joueurs</option>
+                            <option value="8">8 joueurs</option>
+                            <option value="10">10 joueurs</option>
+                          </select>
+                        </div>
                       </div>
                       {error && (
                         <div className="p-3 rounded-lg bg-[rgba(248,113,113,0.1)] border border-[rgba(248,113,113,0.2)]">
@@ -520,22 +875,22 @@ export default function SquadDetail() {
                 </Card>
               </motion.div>
             ) : (
-              <motion.div variants={itemVariants} className="mb-6">
+              <div className="mb-6">
                 <Button onClick={() => setShowCreateSession(true)} className="w-full">
                   <Plus className="w-5 h-5" />
                   Planifier une session
                 </Button>
-              </motion.div>
+              </div>
             )}
           </AnimatePresence>
 
           {/* Sessions à venir */}
-          <motion.div variants={itemVariants} className="mb-6">
+          <div className="mb-6">
             <h2 className="text-[13px] font-semibold text-[#f7f8f8] uppercase tracking-wide mb-3">
               Sessions à venir
             </h2>
             {futureSessions.length > 0 ? (
-              <div className="space-y-3">
+              <div className="space-y-3 lg:grid lg:grid-cols-2 lg:gap-4 lg:space-y-0">
                 {futureSessions.map((session) => (
                   <SessionCard
                     key={session.id}
@@ -547,16 +902,23 @@ export default function SquadDetail() {
             ) : (
               <Card className="p-6 text-center">
                 <Calendar className="w-10 h-10 mx-auto mb-3 text-[#5e6063]" strokeWidth={1} />
-                <p className="text-[14px] text-[#8b8d90]">Aucune session planifiée</p>
+                <p className="text-[14px] text-[#8b8d90]">Pas encore de session prévue</p>
+                <p className="text-[12px] text-[#5e6063] mt-1">Lance la première !</p>
               </Card>
             )}
-          </motion.div>
+          </div>
 
           {/* Membres */}
-          <motion.div variants={itemVariants} className="mb-6">
-            <h2 className="text-[13px] font-semibold text-[#f7f8f8] uppercase tracking-wide mb-3">
-              Membres ({currentSquad.member_count})
-            </h2>
+          <div className="mb-6">
+            <div className="flex items-center justify-between mb-3">
+              <h2 className="text-[13px] font-semibold text-[#f7f8f8] uppercase tracking-wide">
+                Membres ({currentSquad.member_count})
+              </h2>
+              <Button size="sm" variant="secondary" onClick={() => setShowInviteModal(true)}>
+                <UserPlus className="w-4 h-4" />
+                Inviter
+              </Button>
+            </div>
             <Card>
               <CardContent className="p-4 divide-y divide-[rgba(255,255,255,0.06)]">
                 {currentSquad.members?.map((member: { user_id: string; role: string; profiles?: { username?: string; avatar_url?: string; reliability_score?: number } }) => (
@@ -564,17 +926,18 @@ export default function SquadDetail() {
                     key={member.user_id}
                     member={member}
                     isOwner={member.role === 'leader' || member.user_id === currentSquad.owner_id}
+                    currentUserId={user?.id}
                   />
                 ))}
               </CardContent>
             </Card>
-          </motion.div>
+          </div>
 
-          {/* Stats Avancees - Premium */}
-          <motion.div variants={itemVariants} className="mb-6">
+          {/* Stats Avancées - Premium */}
+          <div className="mb-6">
             <div className="flex items-center gap-2 mb-3">
               <h2 className="text-[13px] font-semibold text-[#f7f8f8] uppercase tracking-wide">
-                Stats avancees
+                Stats avancées
               </h2>
               {!canAccessFeature('advanced_stats', id) && <PremiumBadge small />}
             </div>
@@ -596,23 +959,23 @@ export default function SquadDetail() {
                 <div className="grid grid-cols-3 gap-3">
                   <div className="p-3 rounded-xl bg-[rgba(255,255,255,0.03)]">
                     <div className="text-[20px] font-bold text-[#4ade80]">{sessions.length}</div>
-                    <div className="text-[11px] text-[#5e6063]">Sessions</div>
+                    <div className="text-xs text-[#5e6063]">Sessions</div>
                   </div>
                   <div className="p-3 rounded-xl bg-[rgba(255,255,255,0.03)]">
                     <div className="text-[20px] font-bold text-[#5e6dd2]">{currentSquad.member_count || 0}</div>
-                    <div className="text-[11px] text-[#5e6063]">Membres</div>
+                    <div className="text-xs text-[#5e6063]">Membres</div>
                   </div>
                   <div className="p-3 rounded-xl bg-[rgba(255,255,255,0.03)]">
                     <div className="text-[20px] font-bold text-[#f5a623]">{Math.round(currentSquad.avg_reliability_score || 0)}%</div>
-                    <div className="text-[11px] text-[#5e6063]">Fiabilite</div>
+                    <div className="text-xs text-[#5e6063]">Fiabilité</div>
                   </div>
                 </div>
               </Card>
             </PremiumGate>
-          </motion.div>
+          </div>
 
           {/* Export Calendrier - Premium */}
-          <motion.div variants={itemVariants} className="mb-6">
+          <div className="mb-6">
             <PremiumGate
               feature="calendar_export"
               featureLabel="Export calendrier"
@@ -635,7 +998,7 @@ export default function SquadDetail() {
                     variant="secondary"
                     onClick={() => {
                       // TODO: Implementer export ICS
-                      setSuccessMessage('Export calendrier bientot disponible !')
+                      setSuccessMessage('Export calendrier bientôt disponible !')
                     }}
                   >
                     <Download className="w-4 h-4" />
@@ -644,11 +1007,11 @@ export default function SquadDetail() {
                 </div>
               </Card>
             </PremiumGate>
-          </motion.div>
+          </div>
 
           {/* Audio HD Badge si premium */}
           {isSquadPremium(id || '') && (
-            <motion.div variants={itemVariants} className="mb-6">
+            <div className="mb-6">
               <Card className="p-4 bg-gradient-to-br from-[rgba(245,166,35,0.1)] to-[rgba(245,166,35,0.02)] border-[rgba(245,166,35,0.2)]">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-xl bg-[rgba(245,166,35,0.2)] flex items-center justify-center">
@@ -659,47 +1022,34 @@ export default function SquadDetail() {
                       <h3 className="text-[14px] font-medium text-[#f7f8f8]">Squad Premium</h3>
                       <PremiumBadge small />
                     </div>
-                    <p className="text-[12px] text-[#5e6063]">Audio HD, stats avancees, export calendrier actifs</p>
+                    <p className="text-[12px] text-[#5e6063]">Audio HD, stats avancées, export calendrier actifs</p>
                   </div>
                 </div>
               </Card>
-            </motion.div>
+            </div>
           )}
 
-          {/* Settings (owner only) */}
-          <AnimatePresence>
-            {showSettings && isOwner && (
-              <motion.div
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: 'auto' }}
-                exit={{ opacity: 0, height: 0 }}
-                className="overflow-hidden"
+          {/* Actions squad - toujours visible */}
+          <div className="mt-6">
+            {isOwner ? (
+              <button
+                onClick={handleDeleteSquad}
+                className="w-full py-3 text-[14px] text-[#f87171] hover:text-[#fca5a5] transition-colors flex items-center justify-center gap-2"
               >
-                <motion.div variants={itemVariants}>
-                  <h2 className="text-[13px] font-semibold text-[#f7f8f8] uppercase tracking-wide mb-3">
-                    Paramètres
-                  </h2>
-                  <Card className="p-4">
-                    <Button variant="danger" onClick={handleDeleteSquad} className="w-full">
-                      <Trash2 className="w-4 h-4" />
-                      Supprimer la squad
-                    </Button>
-                  </Card>
-                </motion.div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-
-          {/* Quitter (non-owner) */}
-          {!isOwner && (
-            <motion.div variants={itemVariants}>
-              <Button variant="ghost" onClick={handleLeaveSquad} className="w-full">
+                <Trash2 className="w-4 h-4" />
+                Supprimer la squad
+              </button>
+            ) : (
+              <button
+                onClick={handleLeaveSquad}
+                className="w-full py-3 text-[14px] text-[#f87171] hover:text-[#fca5a5] transition-colors flex items-center justify-center gap-2"
+              >
                 <LogOut className="w-4 h-4" />
                 Quitter la squad
-              </Button>
-            </motion.div>
-          )}
-        </motion.div>
+              </button>
+            )}
+          </div>
+        </div>
       </div>
 
       {/* Toast de succès */}
@@ -708,6 +1058,20 @@ export default function SquadDetail() {
           <SuccessToast
             message={successMessage}
             onClose={() => setSuccessMessage(null)}
+          />
+        )}
+      </AnimatePresence>
+
+      {/* Modal d'invitation */}
+      <AnimatePresence>
+        {showInviteModal && (
+          <InviteModal
+            isOpen={showInviteModal}
+            onClose={() => setShowInviteModal(false)}
+            squadId={id || ''}
+            squadName={currentSquad.name}
+            inviteCode={currentSquad.invite_code || ''}
+            existingMemberIds={currentSquad.members?.map((m: { user_id: string }) => m.user_id) || []}
           />
         )}
       </AnimatePresence>

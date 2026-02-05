@@ -1,6 +1,7 @@
 import { motion, AnimatePresence } from 'framer-motion'
 import { Phone, PhoneOff } from 'lucide-react'
 import { useVoiceCallStore } from '../hooks/useVoiceCall'
+import { useFocusTrap } from '../hooks/useFocusTrap'
 
 export function IncomingCallModal() {
   const {
@@ -12,6 +13,9 @@ export function IncomingCallModal() {
 
   // Only show for incoming calls (ringing state)
   const shouldShow = status === 'ringing' || status === 'missed' || status === 'rejected'
+
+  // Focus trap et gestion Escape pour l'accessibilité
+  const focusTrapRef = useFocusTrap<HTMLDivElement>(shouldShow, rejectCall)
 
   if (!shouldShow || !caller) return null
 
@@ -33,6 +37,10 @@ export function IncomingCallModal() {
   return (
     <AnimatePresence>
       <motion.div
+        ref={focusTrapRef}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="incoming-call-title"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
@@ -52,61 +60,48 @@ export function IncomingCallModal() {
             transition={{ delay: 0.1 }}
             className="relative mb-8"
           >
-            {/* Animated rings for ringing state */}
+            {/* Animated rings for ringing state - reduced to 2 rings with limited repeats */}
             {status === 'ringing' && (
               <>
                 <motion.div
-                  className="absolute inset-[-20px] rounded-full border-2 border-[#22c55e]/30"
+                  className="absolute inset-[-20px] rounded-full border-2 border-[#4ade80]/30"
                   animate={{
                     scale: [1, 1.3, 1.3],
-                    opacity: [0.6, 0, 0],
+                    opacity: [0.5, 0, 0],
                   }}
                   transition={{
                     duration: 1.5,
-                    repeat: Infinity,
+                    repeat: 8,
                     ease: 'easeOut',
                   }}
                 />
                 <motion.div
-                  className="absolute inset-[-20px] rounded-full border-2 border-[#22c55e]/30"
+                  className="absolute inset-[-20px] rounded-full border-2 border-[#4ade80]/30"
                   animate={{
                     scale: [1, 1.3, 1.3],
-                    opacity: [0.6, 0, 0],
+                    opacity: [0.5, 0, 0],
                   }}
                   transition={{
                     duration: 1.5,
-                    repeat: Infinity,
+                    repeat: 8,
                     ease: 'easeOut',
-                    delay: 0.5,
-                  }}
-                />
-                <motion.div
-                  className="absolute inset-[-20px] rounded-full border-2 border-[#22c55e]/30"
-                  animate={{
-                    scale: [1, 1.3, 1.3],
-                    opacity: [0.6, 0, 0],
-                  }}
-                  transition={{
-                    duration: 1.5,
-                    repeat: Infinity,
-                    ease: 'easeOut',
-                    delay: 1,
+                    delay: 0.75,
                   }}
                 />
               </>
             )}
 
-            {/* Shake animation for avatar */}
+            {/* Shake animation for avatar - limited repeats */}
             <motion.div
               animate={status === 'ringing' ? {
-                rotate: [-3, 3, -3, 3, 0],
+                rotate: [-2, 2, -2, 2, 0],
               } : {}}
               transition={{
                 duration: 0.5,
-                repeat: status === 'ringing' ? Infinity : 0,
-                repeatDelay: 0.5,
+                repeat: status === 'ringing' ? 6 : 0,
+                repeatDelay: 0.8,
               }}
-              className="w-32 h-32 rounded-full overflow-hidden bg-[rgba(94,109,210,0.2)] flex items-center justify-center border-4 border-[#22c55e]/50"
+              className="w-32 h-32 rounded-full overflow-hidden bg-[rgba(94,109,210,0.2)] flex items-center justify-center border-4 border-[#4ade80]/50"
             >
               {caller.avatar_url ? (
                 <img
@@ -124,14 +119,14 @@ export function IncomingCallModal() {
               <motion.div
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
-                className="absolute -bottom-2 -right-2 w-10 h-10 rounded-full bg-[#22c55e] flex items-center justify-center shadow-lg shadow-[#22c55e]/30"
+                className="absolute -bottom-2 -right-2 w-10 h-10 rounded-full bg-[#4ade80] flex items-center justify-center shadow-lg shadow-[#4ade80]/30"
               >
                 <motion.div
-                  animate={{ rotate: [0, 15, -15, 15, -15, 0] }}
+                  animate={{ rotate: [0, 12, -12, 12, -12, 0] }}
                   transition={{
                     duration: 0.5,
-                    repeat: Infinity,
-                    repeatDelay: 1,
+                    repeat: 5,
+                    repeatDelay: 1.5,
                   }}
                 >
                   <Phone className="w-5 h-5 text-white" />
@@ -142,12 +137,13 @@ export function IncomingCallModal() {
 
           {/* Name */}
           <motion.h2
+            id="incoming-call-title"
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.2 }}
             className="text-2xl font-bold text-[#f7f8f8] mb-2"
           >
-            {caller.username}
+            Appel de {caller.username}
           </motion.h2>
 
           {/* Status */}
@@ -156,7 +152,7 @@ export function IncomingCallModal() {
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.3 }}
             className={`text-base ${
-              status === 'ringing' ? 'text-[#22c55e]' : 'text-[#8b8d90]'
+              status === 'ringing' ? 'text-[#4ade80]' : 'text-[#8b8d90]'
             }`}
           >
             {getStatusText()}
@@ -174,40 +170,26 @@ export function IncomingCallModal() {
             <div className="flex items-center justify-center gap-12">
               {/* Reject button */}
               <div className="flex flex-col items-center gap-2">
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
+                <button
                   onClick={rejectCall}
-                  className="w-20 h-20 rounded-full bg-[#ef4444] flex items-center justify-center shadow-lg shadow-[#ef4444]/30"
+                  aria-label="Refuser l'appel"
+                  className="w-20 h-20 rounded-full bg-[#f87171] flex items-center justify-center shadow-lg shadow-[#f87171]/30 active:scale-95 transition-transform touch-manipulation"
                 >
-                  <PhoneOff className="w-8 h-8 text-white" />
-                </motion.button>
-                <span className="text-[13px] text-[#8b8d90]">Refuser</span>
+                  <PhoneOff className="w-8 h-8 text-white" aria-hidden="true" />
+                </button>
+                <span className="text-[13px] text-[#8b8d90]" aria-hidden="true">Refuser</span>
               </div>
 
               {/* Accept button */}
               <div className="flex flex-col items-center gap-2">
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
+                <button
                   onClick={acceptCall}
-                  className="w-20 h-20 rounded-full bg-[#22c55e] flex items-center justify-center shadow-lg shadow-[#22c55e]/30"
-                  animate={{
-                    boxShadow: [
-                      '0 10px 25px rgba(34, 197, 94, 0.3)',
-                      '0 10px 35px rgba(34, 197, 94, 0.5)',
-                      '0 10px 25px rgba(34, 197, 94, 0.3)',
-                    ],
-                  }}
-                  transition={{
-                    duration: 1.5,
-                    repeat: Infinity,
-                    ease: 'easeInOut',
-                  }}
+                  aria-label="Accepter l'appel"
+                  className="w-20 h-20 rounded-full bg-[#4ade80] flex items-center justify-center shadow-lg shadow-[#4ade80]/30 active:scale-95 transition-transform touch-manipulation animate-pulse-glow"
                 >
-                  <Phone className="w-8 h-8 text-white" />
-                </motion.button>
-                <span className="text-[13px] text-[#8b8d90]">Accepter</span>
+                  <Phone className="w-8 h-8 text-white" aria-hidden="true" />
+                </button>
+                <span className="text-[13px] text-[#8b8d90]" aria-hidden="true">Accepter</span>
               </div>
             </div>
           </motion.div>

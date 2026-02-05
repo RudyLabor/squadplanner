@@ -75,8 +75,9 @@ export const useNotificationStore = create<NotificationState>((set, get) => ({
     }
   },
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   subscribeToSessionReminders: (_userId: string) => {
-    // Subscribe to session_rsvps changes for this user
+    // Subscribe to session_rsvps changes for this user (userId reserved for future per-user filtering)
     // When a session is about to start, send a notification
     const channel = supabase
       .channel('session-reminders')

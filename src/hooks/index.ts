@@ -11,3 +11,16 @@ export { useNotificationStore, useSessionNotifications } from './useNotification
 export { usePushNotificationStore, usePushNotifications, initializePushNotifications } from './usePushNotifications'
 export { usePremiumStore, usePremium, FREE_SQUAD_LIMIT, FREE_HISTORY_DAYS, PREMIUM_PRICE_MONTHLY, PREMIUM_PRICE_YEARLY } from './usePremium'
 export type { PremiumFeature } from './usePremium'
+export { useCallHistoryStore, formatDuration, formatRelativeTime } from './useCallHistory'
+export type { CallType, CallRecord, CallHistoryItem } from './useCallHistory'
+export {
+  useNetworkQualityStore,
+  useNetworkQuality,
+  setupNetworkQualityListener,
+  adjustAudioQuality,
+  AUDIO_PROFILES,
+  QUALITY_INFO,
+  mapAgoraQualityToLevel
+} from './useNetworkQuality'
+export type { NetworkQualityLevel, AudioProfile } from './useNetworkQuality'
+export { useFocusTrap } from './useFocusTrap'

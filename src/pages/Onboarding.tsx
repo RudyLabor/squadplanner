@@ -2,8 +2,9 @@ import { useState, useEffect, useRef, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   Users, UserPlus, ArrowRight, ArrowLeft, Bell, Mic,
-  Check, Globe, Camera, Loader2, Copy, Gamepad2
+  Check, Globe, Camera, Loader2, Copy, Gamepad2, Sparkles
 } from 'lucide-react'
+import Confetti from 'react-confetti'
 // useNavigate removed - using window.location.href for cleaner navigation
 import { Button, Card, Input } from '../components/ui'
 import { useAuthStore } from '../hooks'
@@ -11,13 +12,41 @@ import { useSquadsStore } from '../hooks/useSquads'
 import { supabase } from '../lib/supabase'
 import { SquadPlannerIcon } from '../components/SquadPlannerLogo'
 
+// Mini toast component
+function StepToast({ message, isVisible, onClose }: { message: string; isVisible: boolean; onClose: () => void }) {
+  useEffect(() => {
+    if (isVisible) {
+      const timer = setTimeout(onClose, 2500)
+      return () => clearTimeout(timer)
+    }
+  }, [isVisible, onClose])
+
+  return (
+    <AnimatePresence>
+      {isVisible && (
+        <motion.div
+          initial={{ opacity: 0, y: 50, scale: 0.9 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          exit={{ opacity: 0, y: 20, scale: 0.9 }}
+          className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50"
+        >
+          <div className="flex items-center gap-2 px-5 py-3 rounded-xl bg-[#4ade80] text-[#08090a] font-medium shadow-lg">
+            <Sparkles className="w-5 h-5" />
+            <span>{message}</span>
+          </div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  )
+}
+
 type OnboardingStep = 'splash' | 'squad-choice' | 'create-squad' | 'join-squad' | 'permissions' | 'profile' | 'complete'
 
 export function Onboarding() {
   const { user, profile, refreshProfile } = useAuthStore()
   const { createSquad, joinSquad, fetchSquads, squads } = useSquadsStore()
 
-  const [step, setStep] = useState<OnboardingStep>('squad-choice') // Skip splash, go direct to choice
+  const [step, setStep] = useState<OnboardingStep>('splash') // Show value proposition first
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [isNavigating, setIsNavigating] = useState(false) // Prevents double-clicks during transitions
@@ -64,6 +93,11 @@ export function Onboarding() {
   const [createdSquadId, setCreatedSquadId] = useState<string | null>(null)
   const [createdSquadName, setCreatedSquadName] = useState<string | null>(null)
   const [createdSquadCode, setCreatedSquadCode] = useState<string | null>(null)
+
+  // Celebration state
+  const [showMiniConfetti, setShowMiniConfetti] = useState(false)
+  const [showToast, setShowToast] = useState(false)
+  const [toastMessage, setToastMessage] = useState('')
 
   useEffect(() => {
     if ('Notification' in window) {
@@ -212,6 +246,11 @@ export function Onboarding() {
         setCreatedSquadId(squad.id)
         setCreatedSquadName(squad.name)
         setCreatedSquadCode(squad.invite_code)
+        // 🎉 Mini celebration
+        setShowMiniConfetti(true)
+        setToastMessage('🎉 Squad créée !')
+        setShowToast(true)
+        setTimeout(() => setShowMiniConfetti(false), 2500)
         setStep('profile') // Go to profile first, then permissions
       } else {
         setError('Erreur lors de la création')
@@ -240,6 +279,11 @@ export function Onboarding() {
       setError(error.message)
     } else {
       await fetchSquads()
+      // 🎉 Mini celebration
+      setShowMiniConfetti(true)
+      setToastMessage('🎉 Bienvenue dans la squad !')
+      setShowToast(true)
+      setTimeout(() => setShowMiniConfetti(false), 2500)
       setStep('profile') // Go to profile first, then permissions
     }
   }
@@ -352,6 +396,26 @@ export function Onboarding() {
 
   return (
     <div className="min-h-screen bg-[#08090a] flex items-center justify-center p-4">
+      {/* Mini Confetti for step celebrations */}
+      {showMiniConfetti && (
+        <Confetti
+          width={window.innerWidth}
+          height={window.innerHeight}
+          recycle={false}
+          numberOfPieces={60}
+          gravity={0.3}
+          colors={['#5e6dd2', '#4ade80', '#f5a623', '#8b93ff']}
+          style={{ position: 'fixed', top: 0, left: 0, zIndex: 100, pointerEvents: 'none' }}
+        />
+      )}
+
+      {/* Toast */}
+      <StepToast
+        message={toastMessage}
+        isVisible={showToast}
+        onClose={() => setShowToast(false)}
+      />
+
       <div className="w-full max-w-lg">
         <AnimatePresence mode="wait" initial={false}>
           {/* Step 1: Splash - Proposition de valeur */}
@@ -907,33 +971,33 @@ export function Onboarding() {
               exit={{ opacity: 0 }}
               className="text-center"
             >
-              {/* Confetti animation */}
+              {/* Confetti animation - reduced to 8 particles for better performance */}
               <div className="absolute inset-0 pointer-events-none overflow-hidden">
-                {[...Array(20)].map((_, i) => (
+                {[...Array(8)].map((_, i) => (
                   <motion.div
                     key={i}
                     initial={{
                       y: -20,
-                      x: Math.random() * 400 - 200,
+                      x: (i - 4) * 60,
                       opacity: 1,
                       rotate: 0
                     }}
                     animate={{
-                      y: 600,
+                      y: 500,
                       opacity: 0,
-                      rotate: Math.random() * 360
+                      rotate: (i % 2 === 0 ? 1 : -1) * 180
                     }}
                     transition={{
-                      duration: 2 + Math.random() * 2,
-                      delay: Math.random() * 0.5,
+                      duration: 2 + (i % 3) * 0.5,
+                      delay: i * 0.08,
                       ease: "easeOut"
                     }}
                     className="absolute top-0 left-1/2"
                     style={{
-                      width: 8 + Math.random() * 8,
-                      height: 8 + Math.random() * 8,
-                      backgroundColor: ['#5e6dd2', '#4ade80', '#f5a623', '#f87171', '#8b93ff'][Math.floor(Math.random() * 5)],
-                      borderRadius: Math.random() > 0.5 ? '50%' : '2px'
+                      width: 8 + (i % 3) * 4,
+                      height: 8 + (i % 3) * 4,
+                      backgroundColor: ['#5e6dd2', '#4ade80', '#f5a623', '#f87171', '#8b93ff'][i % 5],
+                      borderRadius: i % 2 === 0 ? '50%' : '2px'
                     }}
                   />
                 ))}
@@ -942,7 +1006,7 @@ export function Onboarding() {
               <motion.div
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
-                transition={{ type: 'spring', duration: 0.5 }}
+                transition={{ type: 'spring', stiffness: 300, damping: 25 }}
                 className="w-20 h-20 rounded-full bg-[#4ade80] flex items-center justify-center mx-auto mb-6"
               >
                 <Check className="w-10 h-10 text-white" />
@@ -1006,9 +1070,9 @@ export function Onboarding() {
                               navigator.clipboard.writeText(createdSquadCode)
                             }}
                             className="p-3 rounded-lg bg-[rgba(94,109,210,0.15)] hover:bg-[rgba(94,109,210,0.25)] transition-colors"
-                            title="Copier le code"
+                            aria-label="Copier le code d'invitation"
                           >
-                            <Copy className="w-5 h-5 text-[#5e6dd2]" />
+                            <Copy className="w-5 h-5 text-[#5e6dd2]" aria-hidden="true" />
                           </button>
                         </div>
                         <p className="text-[11px] text-[#5e6063] mt-2">

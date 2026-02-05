@@ -1,12 +1,126 @@
 // AI Coach Edge Function
 // Provides personalized coaching tips based on player stats and behavior
+// Uses Claude AI (Anthropic) for personalized messages with template fallback
 
 import { serve } from 'https://deno.land/std@0.177.0/http/server.ts'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.0'
+import {
+  validateString,
+  validateUUID,
+  validateOptional,
+  validateEnum,
+} from '../_shared/schemas.ts'
 
-const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+// CORS Security: Only allow specific origins
+const ALLOWED_ORIGINS = [
+  'http://localhost:5173',
+  'http://localhost:5174',
+  'https://squadplanner.app',
+  Deno.env.get('SUPABASE_URL') || ''
+].filter(Boolean)
+
+function getCorsHeaders(origin: string | null) {
+  const allowedOrigin = origin && ALLOWED_ORIGINS.some(allowed => origin.startsWith(allowed))
+    ? origin
+    : ALLOWED_ORIGINS[0]
+  return {
+    'Access-Control-Allow-Origin': allowedOrigin,
+    'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+  }
+}
+
+// Configuration pour l'API Claude
+const CLAUDE_API_URL = 'https://api.anthropic.com/v1/messages'
+const CLAUDE_MODEL = 'claude-3-haiku-20240307'
+const CLAUDE_TIMEOUT = 10000 // 10 secondes
+
+// Appel a l'API Claude avec timeout
+async function callClaudeAPI(prompt: string): Promise<string | null> {
+  const apiKey = Deno.env.get('ANTHROPIC_API_KEY')
+  if (!apiKey) {
+    console.log('ANTHROPIC_API_KEY non configuree, utilisation du fallback')
+    return null
+  }
+
+  try {
+    const controller = new AbortController()
+    const timeoutId = setTimeout(() => controller.abort(), CLAUDE_TIMEOUT)
+
+    const response = await fetch(CLAUDE_API_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': apiKey,
+        'anthropic-version': '2023-06-01'
+      },
+      body: JSON.stringify({
+        model: CLAUDE_MODEL,
+        max_tokens: 300,
+        messages: [{
+          role: 'user',
+          content: prompt
+        }]
+      }),
+      signal: controller.signal
+    })
+
+    clearTimeout(timeoutId)
+
+    if (!response.ok) {
+      console.error(`Claude API error: ${response.status} ${response.statusText}`)
+      return null
+    }
+
+    const data = await response.json()
+    const aiMessage = data.content?.[0]?.text?.trim()
+
+    if (aiMessage && aiMessage.length > 0 && aiMessage.length < 500) {
+      return aiMessage
+    }
+
+    return null
+  } catch (error) {
+    if (error.name === 'AbortError') {
+      console.error('Claude API timeout apres 10 secondes')
+    } else {
+      console.error('Claude API error:', error)
+    }
+    return null
+  }
+}
+
+// Genere un conseil personnalise avec Claude
+async function generateAICoachTip(
+  username: string,
+  reliabilityScore: number,
+  totalSessions: number,
+  totalCheckins: number,
+  trend: string,
+  recentNoshows: number,
+  daysSinceLastSession: number
+): Promise<string | null> {
+  const prompt = `Tu es le coach IA de Squad Planner, une app pour coordonner des sessions de jeu entre amis.
+Genere un conseil personnalise et motivant pour ${username}.
+
+Statistiques du joueur:
+- Score de fiabilite : ${reliabilityScore}%
+- Sessions jouees : ${totalSessions}
+- Presences : ${totalCheckins}
+- Tendance : ${trend === 'improving' ? 'en amelioration' : trend === 'declining' ? 'en baisse' : 'stable'}
+- Absences recentes : ${recentNoshows}
+- Jours depuis derniere session : ${daysSinceLastSession}
+
+Regles:
+- Ton amical et gamer
+- 2-3 phrases maximum
+- En francais
+- Pas d'emojis
+- Tutoiement
+- Sois specifique selon les stats (felicite si bon score, encourage si en baisse)
+
+Reponds UNIQUEMENT avec le conseil, sans guillemets ni explications.`
+
+  return await callClaudeAPI(prompt)
 }
 
 interface CoachTipResponse {
@@ -32,7 +146,7 @@ interface PlayerStats {
 
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
-    return new Response('ok', { headers: corsHeaders })
+    return new Response('ok', { headers: getCorsHeaders(req.headers.get('origin')) })
   }
 
   try {
@@ -46,14 +160,37 @@ serve(async (req) => {
       }
     )
 
-    const { user_id, context_type = 'profile' } = await req.json()
-
-    if (!user_id) {
+    // Parse and validate request body
+    let rawBody: Record<string, unknown>
+    try {
+      rawBody = await req.json()
+    } catch {
       return new Response(
-        JSON.stringify({ error: 'user_id is required' }),
-        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        JSON.stringify({ error: 'Invalid JSON in request body' }),
+        { status: 400, headers: { ...getCorsHeaders(req.headers.get('origin')), 'Content-Type': 'application/json' } }
       )
     }
+
+    let validatedData: {
+      user_id: string
+      context_type: 'profile' | 'home' | 'session'
+    }
+
+    try {
+      validatedData = {
+        user_id: validateUUID(rawBody.user_id, 'user_id'),
+        context_type: validateOptional(rawBody.context_type, (v) =>
+          validateEnum(v, 'context_type', ['profile', 'home', 'session'])
+        ) || 'profile',
+      }
+    } catch (validationError) {
+      return new Response(
+        JSON.stringify({ error: (validationError as Error).message }),
+        { status: 400, headers: { ...getCorsHeaders(req.headers.get('origin')), 'Content-Type': 'application/json' } }
+      )
+    }
+
+    const { user_id, context_type } = validatedData
 
     // Get user profile
     const { data: profile, error: profileError } = await supabaseClient
@@ -65,7 +202,7 @@ serve(async (req) => {
     if (profileError || !profile) {
       return new Response(
         JSON.stringify({ error: 'User not found' }),
-        { status: 404, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        { status: 404, headers: { ...getCorsHeaders(req.headers.get('origin')), 'Content-Type': 'application/json' } }
       )
     }
 
@@ -175,7 +312,7 @@ serve(async (req) => {
         }
         return new Response(
           JSON.stringify(tip),
-          { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+          { headers: { ...getCorsHeaders(req.headers.get('origin')), 'Content-Type': 'application/json' } }
         )
       }
 
@@ -196,7 +333,7 @@ serve(async (req) => {
         }
         return new Response(
           JSON.stringify(tip),
-          { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+          { headers: { ...getCorsHeaders(req.headers.get('origin')), 'Content-Type': 'application/json' } }
         )
       }
     }
@@ -210,7 +347,7 @@ serve(async (req) => {
         const dayCount: Record<number, number> = {}
         lateDays.forEach(d => { dayCount[d] = (dayCount[d] || 0) + 1 })
 
-        const problemDay = Object.entries(dayCount).find(([_, count]) => count >= 2)
+        const problemDay = Object.entries(dayCount).find(([, count]) => count >= 2)
         if (problemDay) {
           const dayNames = ['dimanche', 'lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi']
           patternTip = `Tu as tendance a etre en retard le ${dayNames[parseInt(problemDay[0])]}. Prevois un peu plus de marge !`
@@ -218,8 +355,60 @@ serve(async (req) => {
       }
     }
 
-    // Generate the coaching tip based on all collected data
-    const tip = generateCoachTip({
+    // Check cache first (ai_insights table)
+    const cacheExpiry = new Date(Date.now() - 6 * 60 * 60 * 1000).toISOString() // 6h cache
+
+    const { data: cachedInsight } = await supabaseClient
+      .from('ai_insights')
+      .select('content')
+      .eq('user_id', user_id)
+      .eq('insight_type', 'coach_tip')
+      .gte('created_at', cacheExpiry)
+      .order('created_at', { ascending: false })
+      .limit(1)
+      .single()
+
+    let aiTip: string | null = null
+    let aiGenerated = false
+
+    // Si pas de cache, essayer Claude
+    if (!cachedInsight) {
+      aiTip = await generateAICoachTip(
+        profile.username || 'Joueur',
+        stats.reliability_score,
+        stats.total_sessions,
+        stats.total_checkins,
+        trend,
+        recentNoshows,
+        daysSinceLastSession
+      )
+
+      if (aiTip) {
+        aiGenerated = true
+        // Cache the AI response
+        await supabaseClient
+          .from('ai_insights')
+          .insert({
+            user_id: user_id,
+            insight_type: 'coach_tip',
+            content: {
+              tip: aiTip,
+              context_type: context_type,
+              generated_by: 'claude',
+              reliability_score: stats.reliability_score,
+              trend
+            },
+            expires_at: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString()
+          })
+      }
+    } else {
+      // Use cached response
+      aiTip = cachedInsight.content?.tip || null
+      aiGenerated = cachedInsight.content?.generated_by === 'claude'
+    }
+
+    // Fallback: Generate template-based tip
+    const templateTip = generateCoachTip({
       reliability_score: stats.reliability_score,
       trend,
       recentNoshows,
@@ -229,8 +418,13 @@ serve(async (req) => {
       contextType: context_type,
     })
 
+    // Use AI tip if available, otherwise template
+    const finalTip = aiTip || templateTip.tip
+    const finalTone = templateTip.tone // Keep template tone for UI logic
+
     const response: CoachTipResponse = {
-      ...tip,
+      tip: finalTip,
+      tone: finalTone,
       context: {
         reliability_score: stats.reliability_score,
         trend,
@@ -241,14 +435,14 @@ serve(async (req) => {
     }
 
     return new Response(
-      JSON.stringify(response),
-      { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      JSON.stringify({ ...response, ai_generated: aiGenerated }),
+      { headers: { ...getCorsHeaders(req.headers.get('origin')), 'Content-Type': 'application/json' } }
     )
   } catch (error) {
     console.error('Error in ai-coach:', error)
     return new Response(
       JSON.stringify({ error: error.message }),
-      { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      { status: 500, headers: { ...getCorsHeaders(req.headers.get('origin')), 'Content-Type': 'application/json' } }
     )
   }
 })

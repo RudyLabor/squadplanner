@@ -5,9 +5,22 @@
 import { serve } from 'https://deno.land/std@0.177.0/http/server.ts'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.0'
 
-const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+// CORS Security: Only allow specific origins
+const ALLOWED_ORIGINS = [
+  'http://localhost:5173',
+  'http://localhost:5174',
+  'https://squadplanner.app',
+  Deno.env.get('SUPABASE_URL') || ''
+].filter(Boolean)
+
+function getCorsHeaders(origin: string | null) {
+  const allowedOrigin = origin && ALLOWED_ORIGINS.some(allowed => origin.startsWith(allowed))
+    ? origin
+    : ALLOWED_ORIGINS[0]
+  return {
+    'Access-Control-Allow-Origin': allowedOrigin,
+    'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type, x-cron-secret',
+  }
 }
 
 interface SessionWithRsvps {
@@ -30,11 +43,29 @@ interface SessionWithRsvps {
 }
 
 serve(async (req) => {
+  const corsHeaders = getCorsHeaders(req.headers.get('origin'))
+
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders })
   }
 
   try {
+    // Security: Verify CRON secret or service role key for CRON jobs
+    const cronSecret = Deno.env.get('CRON_SECRET')
+    const authHeader = req.headers.get('Authorization')
+    const cronHeader = req.headers.get('x-cron-secret')
+    const serviceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') || ''
+
+    const isValidCron = cronSecret && cronHeader === cronSecret
+    const isValidServiceRole = authHeader && authHeader.replace('Bearer ', '') === serviceRoleKey
+
+    if (!isValidCron && !isValidServiceRole) {
+      return new Response(
+        JSON.stringify({ error: 'Unauthorized: Invalid CRON secret or service role key' }),
+        { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      )
+    }
+
     // Use service role for full access
     const supabaseAdmin = createClient(
       Deno.env.get('SUPABASE_URL') ?? '',
@@ -236,13 +267,13 @@ serve(async (req) => {
         push_sent: pushResults.sent,
         push_failed: pushResults.failed,
       }),
-      { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      { headers: { ...getCorsHeaders(req.headers.get('origin')), 'Content-Type': 'application/json' } }
     )
   } catch (error) {
     console.error('Error sending reminders:', error)
     return new Response(
       JSON.stringify({ error: error.message }),
-      { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      { status: 500, headers: { ...getCorsHeaders(req.headers.get('origin')), 'Content-Type': 'application/json' } }
     )
   }
 })

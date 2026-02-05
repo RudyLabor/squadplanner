@@ -1,6 +1,7 @@
 import { create } from 'zustand'
 import { supabase } from '../lib/supabase'
 import type { Session, SessionRsvp, SessionCheckin } from '../types/database'
+import { sendRsvpMessage, sendSessionConfirmedMessage } from '../lib/systemMessages'
 
 type RsvpResponse = 'present' | 'absent' | 'maybe'
 type CheckinStatus = 'present' | 'late' | 'noshow'
@@ -26,6 +27,7 @@ interface SessionsState {
     game?: string
     scheduled_at: string
     duration_minutes?: number
+    auto_confirm_threshold?: number
   }) => Promise<{ session: Session | null; error: Error | null }>
   updateRsvp: (sessionId: string, response: RsvpResponse) => Promise<{ error: Error | null }>
   checkin: (sessionId: string, status: CheckinStatus) => Promise<{ error: Error | null }>
@@ -41,9 +43,9 @@ export const useSessionsStore = create<SessionsState>((set, get) => ({
   fetchSessions: async (squadId: string) => {
     try {
       set({ isLoading: true })
-      
+
       const { data: { user } } = await supabase.auth.getUser()
-      
+
       const { data: sessions, error } = await supabase
         .from('sessions')
         .select('*')
@@ -61,7 +63,7 @@ export const useSessionsStore = create<SessionsState>((set, get) => ({
           .eq('session_id', session.id)
 
         const my_rsvp = user ? (rsvps?.find(r => r.user_id === user.id)?.response as RsvpResponse | undefined) : null
-        
+
         const rsvp_counts = {
           present: rsvps?.filter(r => r.response === 'present').length || 0,
           absent: rsvps?.filter(r => r.response === 'absent').length || 0,
@@ -76,7 +78,15 @@ export const useSessionsStore = create<SessionsState>((set, get) => ({
         })
       }
 
-      set({ sessions: sessionsWithDetails, isLoading: false })
+      // Accumulate sessions from different squads instead of overwriting
+      // Remove existing sessions for this squad and add the new ones
+      set((state) => {
+        const otherSquadSessions = state.sessions.filter(s => s.squad_id !== squadId)
+        return {
+          sessions: [...otherSquadSessions, ...sessionsWithDetails],
+          isLoading: false
+        }
+      })
     } catch (error) {
       console.error('Error fetching sessions:', error)
       set({ isLoading: false })
@@ -148,6 +158,7 @@ export const useSessionsStore = create<SessionsState>((set, get) => ({
           created_by: user.id,
           status: 'proposed' as const,
           duration_minutes: data.duration_minutes || 120,
+          auto_confirm_threshold: data.auto_confirm_threshold || 3,
         })
         .select()
         .single()
@@ -194,7 +205,7 @@ export const useSessionsStore = create<SessionsState>((set, get) => ({
             responded_at: new Date().toISOString(),
           })
           .eq('id', existing.id)
-        
+
         if (error) throw error
       } else {
         // Insert new
@@ -206,8 +217,24 @@ export const useSessionsStore = create<SessionsState>((set, get) => ({
             response,
             responded_at: new Date().toISOString(),
           })
-        
+
         if (error) throw error
+      }
+
+      // Récupérer les infos pour le message système
+      const [{ data: profile }, { data: session }] = await Promise.all([
+        supabase.from('profiles').select('username').eq('id', user.id).single(),
+        supabase.from('sessions').select('squad_id, title').eq('id', sessionId).single()
+      ])
+
+      // Envoyer le message système "X a répondu Y pour la session"
+      if (profile?.username && session?.squad_id) {
+        sendRsvpMessage(
+          session.squad_id,
+          profile.username,
+          session.title,
+          response
+        ).catch(console.error)
       }
 
       // Refresh current session
@@ -279,12 +306,28 @@ export const useSessionsStore = create<SessionsState>((set, get) => ({
 
   confirmSession: async (sessionId: string) => {
     try {
+      // Récupérer les infos de la session avant la mise à jour
+      const { data: session } = await supabase
+        .from('sessions')
+        .select('squad_id, title, scheduled_at')
+        .eq('id', sessionId)
+        .single()
+
       const { error } = await supabase
         .from('sessions')
         .update({ status: 'confirmed' as const })
         .eq('id', sessionId)
 
       if (error) throw error
+
+      // Envoyer le message système "Session confirmée pour [date]"
+      if (session?.squad_id) {
+        sendSessionConfirmedMessage(
+          session.squad_id,
+          session.title,
+          session.scheduled_at
+        ).catch(console.error)
+      }
 
       await get().fetchSessionById(sessionId)
       return { error: null }

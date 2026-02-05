@@ -58,7 +58,7 @@ function NavLink({ path, icon: Icon, label, isActive, badge }: {
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             transition={{ type: "spring", stiffness: 500, damping: 30 }}
-            className="absolute right-3 w-5 h-5 rounded-full bg-[#ef4444] text-white text-[10px] font-bold flex items-center justify-center"
+            className="absolute right-3 w-5 h-5 rounded-full bg-[#f87171] text-white text-xs font-bold flex items-center justify-center"
           >
             {badge > 9 ? '9+' : badge}
           </motion.span>
@@ -76,75 +76,75 @@ function MobileNavLink({ path, icon: Icon, label, isActive, badge }: {
   badge?: number
 }) {
   return (
-    <Link to={path} className="flex-1">
-      <motion.div
-        className={`
-          relative flex flex-col items-center gap-0.5 py-2 px-3 rounded-xl
-          ${isActive
-            ? 'bg-[rgba(94,109,210,0.15)] text-[#5e6dd2]'
-            : 'text-[#5e6063]'
-          }
-        `}
-        whileTap={{ scale: 0.9 }}
-      >
-        <div className="relative">
-          <Icon className="w-6 h-6" strokeWidth={isActive ? 2 : 1.5} />
-          {badge && badge > 0 && (
-            <motion.span
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{ type: "spring", stiffness: 500, damping: 30 }}
-              className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-[#ef4444] text-white text-[9px] font-bold flex items-center justify-center"
-            >
-              {badge > 9 ? '9+' : badge}
-            </motion.span>
-          )}
-        </div>
-        <span className="text-[10px] font-medium">{label}</span>
-      </motion.div>
+    <Link
+      to={path}
+      className="flex flex-col items-center justify-center min-w-[48px] min-h-[48px] touch-target"
+      aria-label={label}
+      aria-current={isActive ? 'page' : undefined}
+    >
+      <div className="relative">
+        <Icon
+          className={`w-6 h-6 transition-colors ${isActive ? 'text-[#f7f8f8]' : 'text-[#6b6e73]'}`}
+          strokeWidth={isActive ? 2 : 1.5}
+          fill={isActive ? 'currentColor' : 'none'}
+          aria-hidden="true"
+        />
+        {badge !== undefined && badge > 0 && (
+          <motion.span
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            transition={{ type: "spring", stiffness: 500, damping: 30 }}
+            className="absolute -top-1.5 -right-2 min-w-[18px] h-[18px] px-1 rounded-full bg-[#0070d1] text-white text-xs font-bold flex items-center justify-center"
+            aria-label={`${badge} non lus`}
+          >
+            {badge > 99 ? '99+' : badge}
+          </motion.span>
+        )}
+      </div>
+      <span className={`text-xs mt-1 transition-colors ${isActive ? 'text-[#f7f8f8]' : 'text-[#6b6e73]'}`}>
+        {label}
+      </span>
     </Link>
   )
 }
 
-// Bouton Party central - style PS App / Discord
+// Bouton Party central - style PS App
 function PartyButton({ isActive, hasActiveParty }: { isActive: boolean; hasActiveParty: boolean }) {
   return (
-    <Link to="/party" className="relative -mt-5">
-      <motion.div
-        className={`
-          w-14 h-14 rounded-2xl flex items-center justify-center
-          ${isActive
-            ? 'bg-[#5e6dd2]'
-            : hasActiveParty
-              ? 'bg-[#4ade80]'
-              : 'bg-[#1f2023] border border-[rgba(255,255,255,0.1)]'
-          }
-          shadow-lg
-        `}
-        whileHover={{ scale: 1.05, y: -2 }}
-        whileTap={{ scale: 0.95 }}
-      >
+    <Link
+      to="/party"
+      className="flex flex-col items-center justify-center min-w-[48px] min-h-[48px] touch-target"
+      aria-label={hasActiveParty ? 'Party vocale - En cours' : 'Party vocale'}
+      aria-current={isActive ? 'page' : undefined}
+    >
+      <div className="relative">
         <Mic
-          className={`w-6 h-6 ${isActive || hasActiveParty ? 'text-white' : 'text-[#8b8d90]'}`}
-          strokeWidth={2}
+          className={`w-6 h-6 transition-colors ${
+            isActive
+              ? 'text-[#f7f8f8]'
+              : hasActiveParty
+                ? 'text-[#4ade80]'
+                : 'text-[#6b6e73]'
+          }`}
+          strokeWidth={isActive ? 2 : 1.5}
+          fill={isActive ? 'currentColor' : 'none'}
+          aria-hidden="true"
         />
-
         {/* Indicateur party en cours */}
-        {hasActiveParty && !isActive && (
+        {hasActiveParty && (
           <motion.div
-            className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-[#4ade80] border-2 border-[#101012]"
-            animate={{ scale: [1, 1.2, 1] }}
+            className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-[#4ade80]"
+            animate={{ scale: [1, 1.3, 1] }}
             transition={{ duration: 1.5, repeat: Infinity }}
+            aria-hidden="true"
           />
         )}
-      </motion.div>
-
-      {/* Label */}
-      <div className={`text-center mt-1 text-[10px] font-semibold ${
-        isActive ? 'text-[#5e6dd2]' : hasActiveParty ? 'text-[#4ade80]' : 'text-[#5e6063]'
+      </div>
+      <span className={`text-xs mt-1 transition-colors ${
+        isActive ? 'text-[#f7f8f8]' : hasActiveParty ? 'text-[#4ade80]' : 'text-[#6b6e73]'
       }`}>
         Party
-      </div>
+      </span>
     </Link>
   )
 }
@@ -210,7 +210,7 @@ export function AppLayout({ children }: AppLayoutProps) {
             <SquadPlannerLogo size={40} />
             <div>
               <h1 className="text-[16px] font-bold text-[#f7f8f8]">Squad Planner</h1>
-              <p className="text-[11px] text-[#5e6063]">Jouez ensemble, vraiment</p>
+              <p className="text-xs text-[#5e6063]">Jouez ensemble, vraiment</p>
             </div>
           </div>
         </div>
@@ -238,7 +238,7 @@ export function AppLayout({ children }: AppLayoutProps) {
               icon={item.icon}
               label={item.label}
               isActive={location.pathname === item.path}
-              badge={item.path === '/messages' ? unreadMessages : undefined}
+              badge={item.path === '/messages' && unreadMessages > 0 ? unreadMessages : undefined}
             />
           ))}
         </nav>
@@ -275,21 +275,23 @@ export function AppLayout({ children }: AppLayoutProps) {
 
         {/* Premium upsell */}
         <div className="p-4">
-          <motion.div
-            className="p-4 rounded-xl bg-gradient-to-br from-[rgba(94,109,210,0.15)] to-[rgba(139,147,255,0.05)] border border-[rgba(94,109,210,0.2)]"
-            whileHover={{ scale: 1.02 }}
-          >
-            <div className="flex items-center gap-2 mb-2">
-              <Zap className="w-4 h-4 text-[#f5a623]" />
-              <span className="text-[13px] font-semibold text-[#f7f8f8]">Passe Premium</span>
-            </div>
-            <p className="text-[12px] text-[#8b8d90] mb-3">
-              Stats avancées, IA coach, qualité audio HD
-            </p>
-            <button className="text-[12px] font-semibold text-[#5e6dd2] hover:text-[#8b93ff]">
-              Découvrir →
-            </button>
-          </motion.div>
+          <Link to="/premium">
+            <motion.div
+              className="p-4 rounded-xl bg-gradient-to-br from-[rgba(94,109,210,0.15)] to-[rgba(139,147,255,0.05)] border border-[rgba(94,109,210,0.2)] cursor-pointer"
+              whileHover={{ scale: 1.02 }}
+            >
+              <div className="flex items-center gap-2 mb-2">
+                <Zap className="w-4 h-4 text-[#f5a623]" />
+                <span className="text-[13px] font-semibold text-[#f7f8f8]">Passe Premium</span>
+              </div>
+              <p className="text-[12px] text-[#8b8d90] mb-3">
+                Stats avancées, IA coach, qualité audio HD
+              </p>
+              <span className="text-[12px] font-semibold text-[#5e6dd2] hover:text-[#8b93ff]">
+                Découvrir →
+              </span>
+            </motion.div>
+          </Link>
         </div>
       </aside>
 
@@ -299,8 +301,8 @@ export function AppLayout({ children }: AppLayoutProps) {
       </main>
 
       {/* Bottom navigation - Mobile only - Style PS App */}
-      <nav className="lg:hidden fixed bottom-0 left-0 right-0 bg-[#101012]/95 backdrop-blur-lg border-t border-[rgba(255,255,255,0.06)] px-4 pt-2 pb-6 z-50">
-        <div className="flex items-end justify-around max-w-md mx-auto">
+      <nav className="lg:hidden fixed bottom-0 left-0 right-0 bg-[#08090a] border-t border-[#18191b] z-50">
+        <div className="flex items-center justify-around py-2 mobile-nav-padding">
           {/* Left side */}
           {mobileNavLeft.map((item) => (
             <MobileNavLink
@@ -312,7 +314,7 @@ export function AppLayout({ children }: AppLayoutProps) {
             />
           ))}
 
-          {/* Party button - Center, elevated */}
+          {/* Party button - Center */}
           <PartyButton isActive={isPartyActive} hasActiveParty={hasActiveParty} />
 
           {/* Right side */}
@@ -323,7 +325,7 @@ export function AppLayout({ children }: AppLayoutProps) {
               icon={item.icon}
               label={item.label}
               isActive={location.pathname === item.path}
-              badge={item.path === '/messages' ? unreadMessages : undefined}
+              badge={item.path === '/messages' && unreadMessages > 0 ? unreadMessages : undefined}
             />
           ))}
         </div>

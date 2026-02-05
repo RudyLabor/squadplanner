@@ -105,6 +105,7 @@ interface AIState {
   fetchInsights: (squadId: string) => Promise<void>
   dismissInsight: (insightId: string) => Promise<void>
   getSlotReliability: (squadId: string, dayOfWeek: number, hour: number) => Promise<number>
+  triggerRsvpReminder: (squadId?: string, sessionId?: string) => Promise<{ success: boolean; remindersSent: number }>
   clearError: () => void
 }
 
@@ -444,6 +445,32 @@ export const useAIStore = create<AIState>((set) => ({
     } catch (error) {
       console.error('Error in getSlotReliability:', error)
       return 50
+    }
+  },
+
+  // ===== AI RSVP REMINDER - Edge Function =====
+  triggerRsvpReminder: async (squadId?: string, sessionId?: string) => {
+    try {
+      const body: Record<string, string> = {}
+      if (squadId) body.squad_id = squadId
+      if (sessionId) body.session_id = sessionId
+
+      const { data, error } = await supabase.functions.invoke('ai-rsvp-reminder', {
+        body
+      })
+
+      if (error) {
+        console.error('Edge Function error:', error)
+        return { success: false, remindersSent: 0 }
+      }
+
+      return {
+        success: data?.success || false,
+        remindersSent: data?.reminders_sent || 0
+      }
+    } catch (error) {
+      console.error('Error in triggerRsvpReminder:', error)
+      return { success: false, remindersSent: 0 }
     }
   },
 }))

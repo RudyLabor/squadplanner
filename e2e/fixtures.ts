@@ -47,6 +47,7 @@ export const test = base.extend<{
     // Give the app time to initialize auth state
     await page.waitForTimeout(1000)
 
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     await use(page)
   }
 })

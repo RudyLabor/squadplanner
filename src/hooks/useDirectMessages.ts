@@ -178,6 +178,33 @@ export const useDirectMessagesStore = create<DirectMessagesState>((set, get) => 
             }
           }
         )
+        .on(
+          'postgres_changes',
+          {
+            event: 'UPDATE',
+            schema: 'public',
+            table: 'direct_messages',
+          },
+          async (payload) => {
+            const updatedMsg = payload.new as DirectMessage
+
+            // Vérifier que le message appartient à cette conversation
+            const isRelevant =
+              (updatedMsg.sender_id === user.id && updatedMsg.receiver_id === otherUserId) ||
+              (updatedMsg.sender_id === otherUserId && updatedMsg.receiver_id === user.id)
+
+            if (!isRelevant) return
+
+            // Mettre à jour le message (pour les read receipts)
+            set(state => ({
+              messages: state.messages.map(msg =>
+                msg.id === updatedMsg.id
+                  ? { ...msg, read_at: updatedMsg.read_at }
+                  : msg
+              )
+            }))
+          }
+        )
         .subscribe()
 
       set({ realtimeChannel: channel })

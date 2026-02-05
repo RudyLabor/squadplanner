@@ -4,9 +4,22 @@
 import { serve } from 'https://deno.land/std@0.177.0/http/server.ts'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.0'
 
-const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+// CORS Security: Only allow specific origins
+const ALLOWED_ORIGINS = [
+  'http://localhost:5173',
+  'http://localhost:5174',
+  'https://squadplanner.app',
+  Deno.env.get('SUPABASE_URL') || ''
+].filter(Boolean)
+
+function getCorsHeaders(origin: string | null) {
+  const allowedOrigin = origin && ALLOWED_ORIGINS.some(allowed => origin.startsWith(allowed))
+    ? origin
+    : ALLOWED_ORIGINS[0]
+  return {
+    'Access-Control-Allow-Origin': allowedOrigin,
+    'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+  }
 }
 
 interface PlayerReliability {
@@ -37,7 +50,7 @@ interface SquadReliabilityReport {
 
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
-    return new Response('ok', { headers: corsHeaders })
+    return new Response('ok', { headers: getCorsHeaders(req.headers.get('origin')) })
   }
 
   try {
@@ -64,7 +77,7 @@ serve(async (req) => {
       if (!profile) {
         return new Response(
           JSON.stringify({ error: 'User not found' }),
-          { status: 404, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+          { status: 404, headers: { ...getCorsHeaders(req.headers.get('origin')), 'Content-Type': 'application/json' } }
         )
       }
 
@@ -117,7 +130,7 @@ serve(async (req) => {
 
       return new Response(
         JSON.stringify({ player: playerStats }),
-        { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        { headers: { ...getCorsHeaders(req.headers.get('origin')), 'Content-Type': 'application/json' } }
       )
     }
 
@@ -125,7 +138,7 @@ serve(async (req) => {
     if (!squad_id) {
       return new Response(
         JSON.stringify({ error: 'squad_id or user_id is required' }),
-        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        { status: 400, headers: { ...getCorsHeaders(req.headers.get('origin')), 'Content-Type': 'application/json' } }
       )
     }
 
@@ -139,7 +152,7 @@ serve(async (req) => {
     if (!squad) {
       return new Response(
         JSON.stringify({ error: 'Squad not found' }),
-        { status: 404, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        { status: 404, headers: { ...getCorsHeaders(req.headers.get('origin')), 'Content-Type': 'application/json' } }
       )
     }
 
@@ -152,7 +165,7 @@ serve(async (req) => {
     if (!members || members.length === 0) {
       return new Response(
         JSON.stringify({ error: 'No members found' }),
-        { status: 404, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        { status: 404, headers: { ...getCorsHeaders(req.headers.get('origin')), 'Content-Type': 'application/json' } }
       )
     }
 
@@ -261,13 +274,13 @@ serve(async (req) => {
 
     return new Response(
       JSON.stringify({ report }),
-      { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      { headers: { ...getCorsHeaders(req.headers.get('origin')), 'Content-Type': 'application/json' } }
     )
   } catch (error) {
     console.error('Error in ai-reliability:', error)
     return new Response(
       JSON.stringify({ error: error.message }),
-      { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      { status: 500, headers: { ...getCorsHeaders(req.headers.get('origin')), 'Content-Type': 'application/json' } }
     )
   }
 })

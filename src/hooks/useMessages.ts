@@ -219,6 +219,28 @@ export const useMessagesStore = create<MessagesState>((set, get) => ({
           }
         }
       )
+      .on(
+        'postgres_changes',
+        {
+          event: 'UPDATE',
+          schema: 'public',
+          table: 'messages',
+          filter: sessionId
+            ? `session_id=eq.${sessionId}`
+            : `squad_id=eq.${squadId}`,
+        },
+        async (payload) => {
+          // Mettre à jour le message (pour les read receipts)
+          const updatedMsg = payload.new as MessageWithSender
+          set(state => ({
+            messages: state.messages.map(msg =>
+              msg.id === updatedMsg.id
+                ? { ...msg, read_by: updatedMsg.read_by }
+                : msg
+            )
+          }))
+        }
+      )
       .subscribe()
 
     set({ realtimeChannel: channel })

@@ -22,12 +22,12 @@ interface PremiumGateProps {
 
 // Labels pour chaque feature
 const FEATURE_LABELS: Record<PremiumFeature, string> = {
-  unlimited_squads: 'Squads illimites',
-  unlimited_history: 'Historique illimite',
-  advanced_stats: 'Stats avancees',
-  ai_coach_advanced: 'IA Coach avance',
+  unlimited_squads: 'Squads illimités',
+  unlimited_history: 'Historique illimité',
+  advanced_stats: 'Stats avancées',
+  ai_coach_advanced: 'IA Coach avancé',
   hd_audio: 'Audio HD',
-  advanced_roles: 'Roles avances',
+  advanced_roles: 'Rôles avancés',
   calendar_export: 'Export calendrier'
 }
 
@@ -82,9 +82,10 @@ export function PremiumGate({
         <div className="absolute inset-0 flex items-center justify-center bg-[rgba(0,0,0,0.3)] rounded-xl">
           <button
             onClick={() => setShowModal(true)}
+            aria-label={`Débloquer ${label} - Premium requis`}
             className="flex flex-col items-center gap-2 p-4 rounded-xl bg-[rgba(0,0,0,0.6)] hover:bg-[rgba(0,0,0,0.8)] transition-colors"
           >
-            <Lock className="w-6 h-6 text-[#f5a623]" />
+            <Lock className="w-6 h-6 text-[#f5a623]" aria-hidden="true" />
             <span className="text-[13px] font-medium text-white">
               {label}
             </span>
@@ -108,13 +109,14 @@ export function PremiumGate({
     <div className={className}>
       <motion.button
         onClick={() => setShowModal(true)}
+        aria-label={`Débloquer ${label} - Passe Premium pour débloquer`}
         className="w-full p-4 rounded-xl bg-[rgba(255,255,255,0.02)] border border-[rgba(255,255,255,0.06)] hover:border-[rgba(245,166,35,0.3)] hover:bg-[rgba(245,166,35,0.05)] transition-all text-left"
         whileHover={{ y: -2 }}
         whileTap={{ scale: 0.99 }}
       >
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-[rgba(245,166,35,0.15)] flex items-center justify-center">
-            <Lock className="w-5 h-5 text-[#f5a623]" />
+            <Lock className="w-5 h-5 text-[#f5a623]" aria-hidden="true" />
           </div>
           <div className="flex-1">
             <div className="flex items-center gap-2">
@@ -122,10 +124,10 @@ export function PremiumGate({
               <PremiumBadge small />
             </div>
             <span className="text-[12px] text-[#5e6063]">
-              Passe Premium pour debloquer
+              Passe Premium pour débloquer
             </span>
           </div>
-          <Zap className="w-5 h-5 text-[#f5a623]" />
+          <Zap className="w-5 h-5 text-[#f5a623]" aria-hidden="true" />
         </div>
       </motion.button>
       <PremiumUpgradeModal
@@ -182,7 +184,7 @@ export function SquadLimitReached({
             Limite atteinte
           </h3>
           <p className="text-[13px] text-[#8b8d90] mb-3">
-            Tu as {currentCount}/{maxCount} squads. Passe Premium pour en creer plus !
+            Tu as {currentCount}/{maxCount} squads. Passe Premium pour en créer plus !
           </p>
           <Button size="sm" onClick={onUpgrade} className="bg-gradient-to-r from-[#f5a623] to-[#f5a623]/80">
             <Zap className="w-4 h-4" />
@@ -195,6 +197,7 @@ export function SquadLimitReached({
 }
 
 // Hook pour ouvrir le modal premium de n'importe ou
+// eslint-disable-next-line react-refresh/only-export-components
 export function usePremiumModal() {
   const [isOpen, setIsOpen] = useState(false)
   const [modalProps, setModalProps] = useState<{

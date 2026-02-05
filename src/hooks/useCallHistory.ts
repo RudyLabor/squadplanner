@@ -1,0 +1,178 @@
+import { create } from 'zustand'
+import { supabase } from '../lib/supabase'
+
+// Types
+export type CallType = 'all' | 'incoming' | 'outgoing' | 'missed'
+
+interface CallerReceiverProfile {
+  id: string
+  username: string
+  avatar_url: string | null
+}
+
+export interface CallRecord {
+  id: string
+  caller_id: string
+  receiver_id: string
+  status: 'answered' | 'missed' | 'rejected'
+  duration_seconds: number | null
+  created_at: string
+  ended_at: string | null
+  // Joined data - Supabase returns arrays for relations
+  caller: CallerReceiverProfile[] | CallerReceiverProfile | null
+  receiver: CallerReceiverProfile[] | CallerReceiverProfile | null
+}
+
+export interface CallHistoryItem {
+  id: string
+  contactId: string
+  contactName: string
+  contactAvatar: string | null
+  type: 'incoming' | 'outgoing'
+  status: 'answered' | 'missed' | 'rejected'
+  durationSeconds: number | null
+  createdAt: Date
+}
+
+interface CallHistoryState {
+  calls: CallHistoryItem[]
+  isLoading: boolean
+  error: string | null
+  filter: CallType
+
+  // Actions
+  fetchCallHistory: () => Promise<void>
+  setFilter: (filter: CallType) => void
+  getFilteredCalls: () => CallHistoryItem[]
+  clearError: () => void
+}
+
+export const useCallHistoryStore = create<CallHistoryState>((set, get) => ({
+  calls: [],
+  isLoading: false,
+  error: null,
+  filter: 'all',
+
+  fetchCallHistory: async () => {
+    set({ isLoading: true, error: null })
+
+    try {
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) {
+        set({ error: 'Utilisateur non connecté', isLoading: false })
+        return
+      }
+
+      // Fetch calls where user is caller or receiver
+      const { data: callsData, error: dbError } = await supabase
+        .from('calls')
+        .select(`
+          id,
+          caller_id,
+          receiver_id,
+          status,
+          duration_seconds,
+          created_at,
+          ended_at,
+          caller:profiles!calls_caller_id_fkey(id, username, avatar_url),
+          receiver:profiles!calls_receiver_id_fkey(id, username, avatar_url)
+        `)
+        .or(`caller_id.eq.${user.id},receiver_id.eq.${user.id}`)
+        .order('created_at', { ascending: false })
+        .limit(100)
+
+      if (dbError) {
+        console.error('Error fetching call history:', dbError)
+        set({ error: 'Erreur lors du chargement de l\'historique', isLoading: false })
+        return
+      }
+
+      // Transform to CallHistoryItem
+      const calls: CallHistoryItem[] = (callsData || []).map((call: CallRecord) => {
+        const isOutgoing = call.caller_id === user.id
+        // Supabase peut retourner un tableau ou un objet selon la relation
+        const rawContact = isOutgoing ? call.receiver : call.caller
+        const contact = Array.isArray(rawContact) ? rawContact[0] : rawContact
+
+        return {
+          id: call.id,
+          contactId: contact?.id || '',
+          contactName: contact?.username || 'Utilisateur inconnu',
+          contactAvatar: contact?.avatar_url || null,
+          type: isOutgoing ? 'outgoing' : 'incoming',
+          status: call.status,
+          durationSeconds: call.duration_seconds,
+          createdAt: new Date(call.created_at),
+        }
+      })
+
+      set({ calls, isLoading: false })
+    } catch (error) {
+      console.error('Error in fetchCallHistory:', error)
+      set({
+        error: error instanceof Error ? error.message : 'Erreur inconnue',
+        isLoading: false
+      })
+    }
+  },
+
+  setFilter: (filter: CallType) => {
+    set({ filter })
+  },
+
+  getFilteredCalls: () => {
+    const { calls, filter } = get()
+
+    switch (filter) {
+      case 'incoming':
+        return calls.filter(c => c.type === 'incoming')
+      case 'outgoing':
+        return calls.filter(c => c.type === 'outgoing')
+      case 'missed':
+        return calls.filter(c => c.status === 'missed' || c.status === 'rejected')
+      default:
+        return calls
+    }
+  },
+
+  clearError: () => set({ error: null }),
+}))
+
+// Format call duration
+export function formatDuration(seconds: number | null): string {
+  if (!seconds || seconds === 0) return ''
+
+  const mins = Math.floor(seconds / 60)
+  const secs = seconds % 60
+
+  if (mins === 0) {
+    return `${secs}s`
+  }
+
+  return `${mins} min ${secs.toString().padStart(2, '0')}s`
+}
+
+// Format relative time
+export function formatRelativeTime(date: Date): string {
+  const now = new Date()
+  const diffMs = now.getTime() - date.getTime()
+  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24))
+
+  // Today
+  if (diffDays === 0) {
+    return date.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })
+  }
+
+  // Yesterday
+  if (diffDays === 1) {
+    return 'Hier'
+  }
+
+  // This week
+  if (diffDays < 7) {
+    return date.toLocaleDateString('fr-FR', { weekday: 'long' })
+  }
+
+  // Older
+  return date.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' })
+}

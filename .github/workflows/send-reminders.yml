@@ -1,0 +1,113 @@
+# GitHub Actions workflow pour appeler send-reminders Edge Function
+# Alternative a pg_cron si celui-ci n'est pas disponible
+#
+# Pour activer ce workflow:
+# 1. Configurer les secrets dans GitHub > Settings > Secrets and variables > Actions
+#    - SUPABASE_URL: https://YOUR_PROJECT_REF.supabase.co
+#    - SUPABASE_ANON_KEY: Votre clef anon publique
+# 2. Decommentez la section 'schedule' ci-dessous
+#
+# NOTE: pg_cron est recommande car plus fiable et integre a Supabase
+
+name: Send Session Reminders
+
+on:
+  # Execution manuelle pour les tests
+  workflow_dispatch:
+    inputs:
+      debug:
+        description: 'Enable debug mode'
+        required: false
+        default: 'false'
+        type: boolean
+
+  # Schedule automatique - DESACTIVE par defaut
+  # Decommentez pour activer (si pg_cron n'est pas disponible)
+  # schedule:
+  #   # Toutes les heures a :00
+  #   - cron: '0 * * * *'
+  #   # Egalement a :30 pour plus de frequence
+  #   - cron: '30 * * * *'
+
+jobs:
+  send-reminders:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Validate secrets
+        run: |
+          if [ -z "${{ secrets.SUPABASE_URL }}" ]; then
+            echo "::error::SUPABASE_URL secret is not set"
+            exit 1
+          fi
+          if [ -z "${{ secrets.SUPABASE_ANON_KEY }}" ]; then
+            echo "::error::SUPABASE_ANON_KEY secret is not set"
+            exit 1
+          fi
+          echo "Secrets validated successfully"
+
+      - name: Call send-reminders Edge Function
+        id: call-function
+        run: |
+          echo "Calling send-reminders at $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+
+          response=$(curl -s -w "\n%{http_code}" -X POST \
+            "${{ secrets.SUPABASE_URL }}/functions/v1/send-reminders" \
+            -H "Authorization: Bearer ${{ secrets.SUPABASE_ANON_KEY }}" \
+            -H "Content-Type: application/json" \
+            --max-time 30)
+
+          # Extraire le code HTTP et le body
+          http_code=$(echo "$response" | tail -n1)
+          body=$(echo "$response" | sed '$d')
+
+          echo "HTTP Status: $http_code"
+          echo "Response: $body"
+
+          # Sauvegarder pour les steps suivants
+          echo "http_code=$http_code" >> $GITHUB_OUTPUT
+          echo "response=$body" >> $GITHUB_OUTPUT
+
+          # Verifier le succes
+          if [ "$http_code" -ge 200 ] && [ "$http_code" -lt 300 ]; then
+            echo "send-reminders executed successfully"
+          else
+            echo "::error::send-reminders failed with HTTP $http_code"
+            exit 1
+          fi
+
+      - name: Parse response
+        if: always()
+        run: |
+          echo "## Send Reminders Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- **Time:** $(date -u +%Y-%m-%dT%H:%M:%SZ)" >> $GITHUB_STEP_SUMMARY
+          echo "- **HTTP Status:** ${{ steps.call-function.outputs.http_code }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          # Essayer de parser le JSON si disponible
+          if command -v jq &> /dev/null; then
+            response='${{ steps.call-function.outputs.response }}'
+            if echo "$response" | jq . 2>/dev/null; then
+              urgent=$(echo "$response" | jq -r '.urgent_sessions // "N/A"')
+              upcoming=$(echo "$response" | jq -r '.upcoming_sessions // "N/A"')
+              notifs=$(echo "$response" | jq -r '.notifications_sent // "N/A"')
+              push_sent=$(echo "$response" | jq -r '.push_sent // "N/A"')
+
+              echo "### Results" >> $GITHUB_STEP_SUMMARY
+              echo "- Urgent sessions: $urgent" >> $GITHUB_STEP_SUMMARY
+              echo "- Upcoming sessions: $upcoming" >> $GITHUB_STEP_SUMMARY
+              echo "- Notifications created: $notifs" >> $GITHUB_STEP_SUMMARY
+              echo "- Push notifications sent: $push_sent" >> $GITHUB_STEP_SUMMARY
+            fi
+          fi
+
+      - name: Debug info
+        if: ${{ inputs.debug == 'true' }}
+        run: |
+          echo "Debug mode enabled"
+          echo "SUPABASE_URL starts with: ${SUPABASE_URL:0:30}..."
+          echo "Workflow triggered by: ${{ github.event_name }}"
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}

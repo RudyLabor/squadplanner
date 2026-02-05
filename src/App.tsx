@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
-import { Home, Auth, Squads, SquadDetail, SessionDetail, Landing, Sessions, Profile, Messages, Party, Onboarding } from './pages'
+import { Home, Auth, Squads, SquadDetail, SessionDetail, Landing, Sessions, Profile, Messages, Party, Onboarding, CallHistory, Premium } from './pages'
 import { AppLayout } from './components/layout'
 import { useAuthStore, subscribeToIncomingCalls } from './hooks'
 import { CallModal } from './components/CallModal'
@@ -18,7 +18,8 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
   }
   
   if (!user) {
-    return <Navigate to="/auth" replace />
+    // Redirect to landing page, not auth - users can choose to login from there
+    return <Navigate to="/" replace />
   }
   
   return <>{children}</>
@@ -75,6 +76,12 @@ function AppContent() {
         } />
         <Route path="/profile" element={
           <ProtectedRoute><Profile /></ProtectedRoute>
+        } />
+        <Route path="/call-history" element={
+          <ProtectedRoute><CallHistory /></ProtectedRoute>
+        } />
+        <Route path="/premium" element={
+          <Premium />
         } />
 
         {/* Catch-all redirect to home */}

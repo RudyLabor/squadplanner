@@ -1,14 +1,11 @@
-import { motion } from 'framer-motion'
+import { motion, useInView } from 'framer-motion'
+import { useRef } from 'react'
 import {
   Users, Calendar, ArrowRight,
-  Target, Shield, MessageCircle, Headphones, TrendingUp
+  Target, MessageCircle, Headphones, TrendingUp, Sparkles
 } from 'lucide-react'
 import { Link } from 'react-router-dom'
-import { theme } from '../lib/theme'
-import { SquadPlannerLogo, SquadPlannerIcon } from '../components/SquadPlannerLogo'
-
-const containerVariants = theme.animation.container
-const itemVariants = theme.animation.item
+import { SquadPlannerLogo } from '../components/SquadPlannerLogo'
 
 // Stagger animations for lists
 const staggerContainerVariants = {
@@ -82,6 +79,9 @@ const steps = [
 ]
 
 export default function Landing() {
+  const heroRef = useRef(null)
+  useInView(heroRef, { once: true })
+
   return (
     <div className="min-h-screen bg-[#08090a]">
       {/* Header Sticky */}
@@ -107,46 +107,35 @@ export default function Landing() {
       </header>
 
       {/* Hero Section */}
-      <section className="relative overflow-hidden pt-20">
-        {/* Background glow */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[600px] bg-[radial-gradient(ellipse_at_center,rgba(94,109,210,0.15)_0%,transparent_70%)]" />
-        
+      <section ref={heroRef} className="relative overflow-hidden pt-20">
+        {/* Background glow - more vibrant */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[700px] bg-[radial-gradient(ellipse_at_center,rgba(94,109,210,0.2)_0%,rgba(139,147,255,0.08)_40%,transparent_70%)]" />
+
         <div className="relative px-4 md:px-6 py-12 md:py-20 max-w-5xl mx-auto">
-          <motion.div
-            variants={containerVariants}
-            initial="hidden"
-            animate="visible"
-            className="text-center"
-          >
-            {/* Badge */}
-            <motion.div variants={itemVariants} className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[rgba(94,109,210,0.1)] border border-[rgba(94,109,210,0.2)] mb-8">
-              <SquadPlannerIcon size={16} />
-              <span className="text-[13px] text-[#8b93ff] font-medium">L'app qui fait que ça arrive vraiment</span>
-            </motion.div>
+          <div className="text-center">
+            {/* Badge with sparkle */}
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[rgba(94,109,210,0.1)] border border-[rgba(94,109,210,0.2)] mb-8">
+              <Sparkles className="w-4 h-4 text-[#8b93ff]" />
+              <span className="text-[13px] text-[#8b93ff] font-medium">Rassemble ta squad. Joue ensemble.</span>
+            </div>
 
-            {/* Headline */}
-            <motion.h1
-              variants={itemVariants}
-              className="text-4xl md:text-6xl font-bold text-[#f7f8f8] mb-6 leading-tight"
-            >
-              Fini les<br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#5e6dd2] to-[#8b93ff]">
-                "quand est-ce qu'on joue ?"
+            {/* Headline - improved wording */}
+            <h1 className="text-4xl md:text-6xl font-bold text-[#f7f8f8] mb-6 leading-tight">
+              Transforme<br />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#5e6dd2] via-[#8b93ff] to-[#4ade80]">
+                "on verra"
               </span><br />
-              sans réponse
-            </motion.h1>
+              en "on y est"
+            </h1>
 
-            {/* Subtitle */}
-            <motion.p
-              variants={itemVariants}
-              className="text-lg md:text-xl text-[#8b8d90] mb-10 max-w-2xl mx-auto"
-            >
-              Squad Planner transforme les "on verra" en sessions qui ont vraiment lieu.
-              <span className="text-[#f7f8f8] font-medium"> Fini les plans qui tombent à l'eau.</span>
-            </motion.p>
+            {/* Subtitle - improved */}
+            <p className="text-lg md:text-xl text-[#8b8d90] mb-10 max-w-2xl mx-auto">
+              Squad Planner fait que vos sessions ont vraiment lieu.
+              <span className="text-[#f7f8f8] font-medium"> Ta squad t'attend.</span>
+            </p>
 
             {/* CTA */}
-            <motion.div variants={itemVariants} className="flex flex-col items-center gap-4 mb-16">
+            <div className="flex flex-col items-center gap-4 mb-16">
               <Link to="/auth?mode=register&redirect=onboarding">
                 <motion.button
                   className="flex items-center gap-2 h-14 px-8 rounded-xl bg-[#5e6dd2] text-white text-[16px] font-semibold shadow-lg shadow-[#5e6dd2]/25"
@@ -160,41 +149,39 @@ export default function Landing() {
               <Link to="/auth" className="text-[14px] text-[#5e6063] hover:text-[#8b8d90] transition-colors">
                 Déjà un compte ? Se connecter
               </Link>
-            </motion.div>
+            </div>
 
             {/* Social proof stats */}
-            <motion.div
-              variants={itemVariants}
-              className="flex items-center justify-center gap-8 md:gap-16 mb-8"
-            >
+            <div className="flex items-center justify-center gap-8 md:gap-16 mb-8">
               {stats.map((stat) => (
                 <div key={stat.label} className="text-center">
                   <div className="text-2xl md:text-3xl font-bold text-[#f7f8f8]">{stat.value}</div>
                   <div className="text-[12px] md:text-[13px] text-[#5e6063]">{stat.label}</div>
                 </div>
               ))}
-            </motion.div>
+            </div>
 
             {/* Social proof badge */}
-            <motion.div
-              variants={itemVariants}
-              className="flex items-center justify-center gap-2 text-[13px] text-[#5e6063]"
-            >
+            <div className="flex items-center justify-center gap-2 text-[13px] text-[#5e6063]">
               <span className="inline-block w-2 h-2 rounded-full bg-[#4ade80] animate-pulse" />
               <span>Beta ouverte — Rejoins les premiers gamers</span>
-            </motion.div>
-          </motion.div>
+            </div>
+          </div>
 
-          {/* App Preview Mockup */}
+          {/* App Preview Mockup with subtle animation */}
           <motion.div
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4, duration: 0.6 }}
             className="mt-12 mx-auto max-w-lg"
           >
-            <div className="relative">
+            <motion.div
+              className="relative"
+              animate={{ rotateY: [0, 2, 0, -2, 0] }}
+              transition={{ duration: 3, repeat: 2, ease: "easeInOut" }}
+            >
               {/* Phone frame */}
-              <div className="bg-[#101012] rounded-[2.5rem] p-3 border border-[rgba(255,255,255,0.1)] shadow-2xl shadow-[#5e6dd2]/10">
+              <div className="bg-[#101012] rounded-[2.5rem] p-3 border border-[rgba(255,255,255,0.1)] shadow-2xl shadow-[#5e6dd2]/20">
                 {/* Screen */}
                 <div className="bg-[#08090a] rounded-[2rem] overflow-hidden">
                   {/* Status bar */}
@@ -261,8 +248,8 @@ export default function Landing() {
               </div>
 
               {/* Decorative glow */}
-              <div className="absolute -inset-4 bg-[radial-gradient(ellipse_at_center,rgba(94,109,210,0.15)_0%,transparent_70%)] -z-10" />
-            </div>
+              <div className="absolute -inset-4 bg-[radial-gradient(ellipse_at_center,rgba(94,109,210,0.2)_0%,transparent_70%)] -z-10" />
+            </motion.div>
           </motion.div>
         </div>
       </section>
@@ -370,7 +357,7 @@ export default function Landing() {
             </p>
           </motion.div>
 
-          {/* Les 3 PILIERS - Grandes cartes */}
+          {/* Les 3 PILIERS - Grandes cartes avec glow */}
           <motion.div
             className="grid md:grid-cols-3 gap-6 mb-16"
             variants={staggerContainerVariants}
@@ -382,18 +369,27 @@ export default function Landing() {
               <motion.div
                 key={pillar.title}
                 variants={staggerItemVariants}
-                className="p-8 rounded-3xl border transition-all duration-300 hover:scale-[1.02]"
+                className="relative p-8 rounded-3xl border transition-all duration-300 group"
                 style={{
                   backgroundColor: `${pillar.color}08`,
                   borderColor: `${pillar.color}25`
                 }}
+                whileHover={{ scale: 1.05, y: -4 }}
+                whileTap={{ scale: 0.98 }}
               >
+                {/* Glow effect on hover */}
                 <div
+                  className="absolute inset-0 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10"
+                  style={{ boxShadow: `0 0 40px ${pillar.color}30, 0 0 80px ${pillar.color}15` }}
+                />
+                <motion.div
                   className="w-14 h-14 rounded-2xl flex items-center justify-center mb-4"
                   style={{ backgroundColor: `${pillar.color}20` }}
+                  whileHover={{ rotate: [0, -5, 5, 0] }}
+                  transition={{ duration: 0.4 }}
                 >
                   <pillar.icon className="w-7 h-7" style={{ color: pillar.color }} />
-                </div>
+                </motion.div>
                 <h3 className="text-xl font-bold text-[#f7f8f8] mb-3">{pillar.title}</h3>
                 <p className="text-[15px] text-[#8b8d90] leading-relaxed">{pillar.description}</p>
               </motion.div>
@@ -441,32 +437,45 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* CTA Final */}
+      {/* CTA Final - Enhanced */}
       <section className="px-4 md:px-6 py-16">
         <div className="max-w-2xl mx-auto">
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
-            className="p-8 md:p-12 rounded-3xl bg-gradient-to-b from-[rgba(94,109,210,0.1)] to-[rgba(94,109,210,0.02)] border border-[rgba(94,109,210,0.2)] text-center"
+            className="relative p-8 md:p-12 rounded-3xl bg-gradient-to-b from-[rgba(94,109,210,0.12)] to-[rgba(94,109,210,0.02)] border border-[rgba(94,109,210,0.25)] text-center overflow-hidden"
           >
-            <Shield className="w-12 h-12 mx-auto mb-6 text-[#5e6dd2]" />
-            <h2 className="text-2xl md:text-3xl font-bold text-[#f7f8f8] mb-4">
-              Prêt à jouer pour de vrai ?
-            </h2>
-            <p className="text-[#8b8d90] mb-8">
-              Gratuit, sans engagement. Crée ta première squad en 30 secondes.
-            </p>
-            <Link to="/auth?mode=register&redirect=onboarding">
-              <motion.button
-                className="flex items-center gap-2 h-14 px-8 rounded-xl bg-[#5e6dd2] text-white text-[16px] font-semibold mx-auto shadow-lg shadow-[#5e6dd2]/25"
-                whileHover={{ scale: 1.05, y: -2 }}
-                whileTap={{ scale: 0.98 }}
+            {/* Animated glow background - limited repeats */}
+            <motion.div
+              className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(94,109,210,0.15)_0%,transparent_60%)]"
+              animate={{ scale: [1, 1.08, 1], opacity: [0.5, 0.7, 0.5] }}
+              transition={{ duration: 3, repeat: 3, ease: "easeInOut" }}
+            />
+            <div className="relative z-10">
+              <motion.div
+                animate={{ rotate: [0, 8, -8, 0] }}
+                transition={{ duration: 2.5, repeat: 4, ease: "easeInOut" }}
               >
-                Créer ma squad maintenant
-                <ArrowRight className="w-5 h-5" />
-              </motion.button>
-            </Link>
+                <Sparkles className="w-12 h-12 mx-auto mb-6 text-[#5e6dd2]" />
+              </motion.div>
+              <h2 className="text-2xl md:text-3xl font-bold text-[#f7f8f8] mb-4">
+                Ta squad t'attend
+              </h2>
+              <p className="text-[#8b8d90] mb-8">
+                Gratuit, sans engagement. Lance ta première session en 30 secondes.
+              </p>
+              <Link to="/auth?mode=register&redirect=onboarding">
+                <motion.button
+                  className="flex items-center gap-2 h-14 px-8 rounded-xl bg-gradient-to-r from-[#5e6dd2] to-[#8b93ff] text-white text-[16px] font-semibold mx-auto shadow-lg shadow-[#5e6dd2]/30"
+                  whileHover={{ scale: 1.05, y: -3 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  Rejoindre l'aventure
+                  <ArrowRight className="w-5 h-5" />
+                </motion.button>
+              </Link>
+            </div>
           </motion.div>
         </div>
       </section>

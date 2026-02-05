@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useVoiceChatStore } from '../hooks/useVoiceChat'
 import { useAuthStore } from '../hooks'
@@ -26,11 +26,21 @@ export function VoiceChat({ sessionId, sessionTitle }: VoiceChatProps) {
 
   const channelName = `session-${sessionId}`
 
+  // Store refs to avoid stale closures in cleanup
+  const isConnectedRef = useRef(isConnected)
+  const leaveChannelRef = useRef(leaveChannel)
+
+  // Update refs in effect to avoid updating during render
+  useEffect(() => {
+    isConnectedRef.current = isConnected
+    leaveChannelRef.current = leaveChannel
+  })
+
   // Clean up on unmount
   useEffect(() => {
     return () => {
-      if (isConnected) {
-        leaveChannel()
+      if (isConnectedRef.current) {
+        leaveChannelRef.current()
       }
     }
   }, [])

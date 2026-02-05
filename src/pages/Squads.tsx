@@ -2,16 +2,13 @@ import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Users, Plus, Gamepad2, Link as LinkIcon, Copy, Check, Loader2, UserPlus, Calendar, Crown, Mic, ChevronRight, Sparkles } from 'lucide-react'
 import { Link, useNavigate } from 'react-router-dom'
-import { Button, Card, CardContent, Input } from '../components/ui'
+import Confetti from 'react-confetti'
+import { Button, Card, CardContent, Input, SquadCardSkeleton } from '../components/ui'
 import { useAuthStore, useSquadsStore, useVoiceChatStore, usePremiumStore } from '../hooks'
 import { SquadLimitReached, PremiumBadge } from '../components/PremiumGate'
 import { PremiumUpgradeModal } from '../components/PremiumUpgradeModal'
-import { theme } from '../lib/theme'
 import { supabase } from '../lib/supabase'
 import { FREE_SQUAD_LIMIT } from '../hooks/usePremium'
-
-const containerVariants = theme.animation.container
-const itemVariants = theme.animation.item
 
 // Stagger animations for squad list
 const staggerContainerVariants = {
@@ -101,11 +98,15 @@ function SquadCard({ squad, isOwner, nextSession, hasActiveParty, copiedCode, on
 
   return (
     <motion.div
-      whileHover={{ y: -2 }}
+      whileHover={{ y: -3, scale: 1.01 }}
       whileTap={{ scale: 0.99 }}
     >
       <Link to={`/squad/${squad.id}`}>
-        <Card className={`cursor-pointer ${hasActiveParty ? 'border-[#4ade80]/30' : ''}`}>
+        <Card className={`cursor-pointer transition-all duration-300 ${
+          hasActiveParty
+            ? 'border-[#4ade80]/40 shadow-[0_0_20px_rgba(74,222,128,0.15)] bg-gradient-to-r from-[#4ade80]/5 to-transparent'
+            : 'hover:border-[rgba(94,109,210,0.3)]'
+        }`}>
           <CardContent className="p-4">
             <div className="flex items-start gap-4">
               {/* Icône avec indicateur party */}
@@ -139,7 +140,7 @@ function SquadCard({ squad, isOwner, nextSession, hasActiveParty, copiedCode, on
                   )}
                 </div>
                 <p className="text-[13px] text-[#8b8d90]">
-                  {squad.game} · {memberCount} membre{memberCount > 1 ? 's' : ''}
+                  {squad.game} · {memberCount} pote{memberCount > 1 ? 's' : ''}
                 </p>
 
                 {/* Prochaine session ou état */}
@@ -172,12 +173,12 @@ function SquadCard({ squad, isOwner, nextSession, hasActiveParty, copiedCode, on
                     onCopyCode(squad.invite_code)
                   }}
                   className="p-2 rounded-lg hover:bg-[rgba(255,255,255,0.05)] transition-colors"
-                  title="Copier le code d'invitation"
+                  aria-label="Copier le code d'invitation"
                 >
                   {copiedCode === squad.invite_code ? (
-                    <Check className="w-4 h-4 text-[#4ade80]" />
+                    <Check className="w-4 h-4 text-[#4ade80]" aria-hidden="true" />
                   ) : (
-                    <Copy className="w-4 h-4 text-[#5e6063]" />
+                    <Copy className="w-4 h-4 text-[#5e6063]" aria-hidden="true" />
                   )}
                 </button>
                 <ChevronRight className="w-5 h-5 text-[#5e6063]" />
@@ -201,6 +202,7 @@ export default function Squads() {
   const [copiedCode, setCopiedCode] = useState<string | null>(null)
   const [successMessage, setSuccessMessage] = useState<string | null>(null)
   const [nextSessions, setNextSessions] = useState<SquadNextSession[]>([])
+  const [showConfetti, setShowConfetti] = useState(false)
 
   const { user, isInitialized } = useAuthStore()
   const { squads, isLoading, fetchSquads, createSquad, joinSquad } = useSquadsStore()
@@ -270,7 +272,7 @@ export default function Squads() {
 
     // Verifier la limite de squads pour les utilisateurs gratuits
     if (!canCreateSquad()) {
-      setError(`Limite de ${FREE_SQUAD_LIMIT} squads atteinte. Passe Premium pour en creer plus !`)
+      setError(`Limite de ${FREE_SQUAD_LIMIT} squads atteinte. Passe Premium pour en créer plus !`)
       setShowPremiumModal(true)
       return
     }
@@ -312,7 +314,10 @@ export default function Squads() {
     } else {
       setShowJoin(false)
       setInviteCode('')
-      setSuccessMessage('Tu as rejoint la squad !')
+      setSuccessMessage('🎉 Bienvenue dans la squad !')
+      // Celebration confetti
+      setShowConfetti(true)
+      setTimeout(() => setShowConfetti(false), 4000)
     }
   }
 
@@ -327,10 +332,23 @@ export default function Squads() {
     return !!(isInVoiceChat && currentChannel?.includes(squadId))
   }
 
-  if (!isInitialized) {
+  // Afficher le skeleton loader tant que l'initialisation ou le chargement est en cours
+  if (!isInitialized || isLoading) {
     return (
-      <div className="min-h-screen bg-[#08090a] flex items-center justify-center">
-        <Loader2 className="w-8 h-8 text-[#5e6dd2] animate-spin" />
+      <div className="min-h-screen bg-[#08090a] pb-24">
+        <div className="px-4 md:px-6 lg:px-8 py-6 max-w-2xl lg:max-w-4xl xl:max-w-6xl mx-auto">
+          <div className="flex items-center justify-between mb-6">
+            <div>
+              <h1 className="text-xl font-bold text-[#f7f8f8]">Mes Squads</h1>
+              <p className="text-[13px] text-[#5e6063]">Chargement...</p>
+            </div>
+          </div>
+          <div className="space-y-3 lg:grid lg:grid-cols-2 xl:grid-cols-3 lg:gap-4 lg:space-y-0">
+            <SquadCardSkeleton />
+            <SquadCardSkeleton />
+            <SquadCardSkeleton />
+          </div>
+        </div>
       </div>
     )
   }
@@ -344,16 +362,25 @@ export default function Squads() {
 
   return (
     <div className="min-h-screen bg-[#08090a] pb-24">
-      <div className="px-4 md:px-6 py-6 max-w-2xl mx-auto">
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-        >
+      {/* Celebration confetti */}
+      {showConfetti && typeof window !== 'undefined' && (
+        <Confetti
+          width={window.innerWidth}
+          height={window.innerHeight}
+          recycle={false}
+          numberOfPieces={100}
+          gravity={0.25}
+          colors={['#5e6dd2', '#4ade80', '#f5a623', '#8b93ff']}
+          style={{ position: 'fixed', top: 0, left: 0, zIndex: 100, pointerEvents: 'none' }}
+        />
+      )}
+
+      <div className="px-4 md:px-6 lg:px-8 py-6 max-w-2xl lg:max-w-4xl xl:max-w-6xl mx-auto">
+        <div>
           {/* Header simplifié */}
-          <motion.div variants={itemVariants} className="flex items-center justify-between mb-6">
+          <div className="flex items-center justify-between mb-6">
             <div>
-              <h1 className="text-[22px] font-bold text-[#f7f8f8]">Mes Squads</h1>
+              <h1 className="text-xl font-bold text-[#f7f8f8]">Mes Squads</h1>
               <p className="text-[13px] text-[#5e6063]">{getSubtitle()}</p>
             </div>
             <div className="flex gap-2">
@@ -363,23 +390,23 @@ export default function Squads() {
               </Button>
               <Button size="sm" onClick={handleOpenCreate}>
                 <Plus className="w-4 h-4" />
-                <span className="hidden sm:inline">Creer</span>
+                <span className="hidden sm:inline">Créer</span>
                 {!hasPremium && userSquadCount >= FREE_SQUAD_LIMIT && (
                   <PremiumBadge small />
                 )}
               </Button>
             </div>
-          </motion.div>
+          </div>
 
           {/* Alerte limite atteinte */}
           {!hasPremium && userSquadCount >= FREE_SQUAD_LIMIT && !showCreate && !showJoin && (
-            <motion.div variants={itemVariants} className="mb-6">
+            <div className="mb-6">
               <SquadLimitReached
                 currentCount={userSquadCount}
                 maxCount={FREE_SQUAD_LIMIT}
                 onUpgrade={() => setShowPremiumModal(true)}
               />
-            </motion.div>
+            </div>
           )}
 
           {/* Join Form */}
@@ -474,7 +501,7 @@ export default function Squads() {
           {/* Squads List */}
           {squads.length > 0 ? (
             <motion.div
-              className="space-y-3"
+              className="space-y-3 lg:grid lg:grid-cols-2 xl:grid-cols-3 lg:gap-4 lg:space-y-0"
               variants={staggerContainerVariants}
               initial="hidden"
               animate="visible"
@@ -493,7 +520,7 @@ export default function Squads() {
               ))}
             </motion.div>
           ) : !showCreate && !showJoin && (
-            <motion.div variants={itemVariants}>
+            <div>
               <Card className="p-8 text-center">
                 <div className="w-14 h-14 rounded-2xl bg-[#1f2023] flex items-center justify-center mx-auto mb-4">
                   <Users className="w-7 h-7 text-[#5e6063]" strokeWidth={1.5} />
@@ -502,22 +529,22 @@ export default function Squads() {
                   Pas encore de squad
                 </h3>
                 <p className="text-[14px] text-[#8b8d90] mb-6 max-w-[280px] mx-auto">
-                  Crée ta squad pour inviter tes potes, ou rejoins-en une avec un code.
+                  Lance ta squad pour inviter tes potes, ou rejoins l'action avec un code.
                 </p>
                 <div className="flex gap-3 justify-center">
                   <Button variant="secondary" onClick={() => setShowJoin(true)}>
                     <UserPlus className="w-4 h-4" />
-                    Rejoindre
+                    Rejoins l'action
                   </Button>
                   <Button onClick={handleOpenCreate}>
                     <Plus className="w-4 h-4" />
-                    Creer
+                    Lance ta squad
                   </Button>
                 </div>
               </Card>
-            </motion.div>
+            </div>
           )}
-        </motion.div>
+        </div>
       </div>
 
       {/* Toast de succès */}

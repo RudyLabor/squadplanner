@@ -5,10 +5,29 @@
 
 import { serve } from 'https://deno.land/std@0.177.0/http/server.ts'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.0'
+import {
+  validateString,
+  validateArray,
+  validateOptional,
+  validateUUID,
+} from '../_shared/schemas.ts'
 
-const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+// CORS Security: Only allow specific origins
+const ALLOWED_ORIGINS = [
+  'http://localhost:5173',
+  'http://localhost:5174',
+  'https://squadplanner.app',
+  Deno.env.get('SUPABASE_URL') || ''
+].filter(Boolean)
+
+function getCorsHeaders(origin: string | null) {
+  const allowedOrigin = origin && ALLOWED_ORIGINS.some(allowed => origin.startsWith(allowed))
+    ? origin
+    : ALLOWED_ORIGINS[0]
+  return {
+    'Access-Control-Allow-Origin': allowedOrigin,
+    'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+  }
 }
 
 // VAPID keys from environment
@@ -24,6 +43,12 @@ interface PushSubscription {
   auth: string
 }
 
+interface PushAction {
+  action: string
+  title: string
+  icon?: string
+}
+
 interface PushPayload {
   userId?: string
   userIds?: string[]
@@ -34,6 +59,7 @@ interface PushPayload {
   icon?: string
   badge?: string
   data?: Record<string, unknown>
+  actions?: PushAction[]
 }
 
 // Convert base64 to Uint8Array
@@ -146,7 +172,8 @@ async function encryptPayload(
   const salt = crypto.getRandomValues(new Uint8Array(16))
 
   // Derive encryption key using HKDF
-  const authSecretBytes = base64ToUint8Array(authSecret)
+  // Note: authSecret is used indirectly via the HKDF derivation process
+  void base64ToUint8Array(authSecret) // Validate authSecret format
 
   // PRK = HKDF-Extract(salt=auth_secret, IKM=shared_secret)
   const prkKey = await crypto.subtle.importKey(
@@ -281,12 +308,47 @@ async function sendPushToSubscription(
 }
 
 serve(async (req) => {
+  const corsHeaders = getCorsHeaders(req.headers.get('origin'))
+
   // Handle CORS preflight
   if (req.method === 'OPTIONS') {
-    return new Response('ok', { headers: corsHeaders })
+    return new Response('ok', { headers: getCorsHeaders(req.headers.get('origin')) })
   }
 
   try {
+    // Security: Verify Authorization header (Bearer token)
+    const authHeader = req.headers.get('Authorization')
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      return new Response(
+        JSON.stringify({ error: 'Unauthorized: Missing or invalid Authorization header' }),
+        { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      )
+    }
+
+    // Validate the token - accept service role key or verify with Supabase
+    const token = authHeader.replace('Bearer ', '')
+    const serviceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') || ''
+
+    // If not service role, verify the user token
+    if (token !== serviceRoleKey) {
+      const supabaseClient = createClient(
+        Deno.env.get('SUPABASE_URL') ?? '',
+        Deno.env.get('SUPABASE_ANON_KEY') ?? '',
+        {
+          global: {
+            headers: { Authorization: authHeader },
+          },
+        }
+      )
+      const { data: { user }, error: authError } = await supabaseClient.auth.getUser()
+      if (authError || !user) {
+        return new Response(
+          JSON.stringify({ error: 'Unauthorized: Invalid token' }),
+          { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        )
+      }
+    }
+
     // Validate VAPID keys
     if (!VAPID_PUBLIC_KEY || !VAPID_PRIVATE_KEY) {
       console.error('VAPID keys not configured')
@@ -296,23 +358,60 @@ serve(async (req) => {
       )
     }
 
-    // Parse request body
-    const body: PushPayload = await req.json()
-
-    if (!body.title || !body.body) {
+    // Parse and validate request body
+    let rawBody: Record<string, unknown>
+    try {
+      rawBody = await req.json()
+    } catch {
       return new Response(
-        JSON.stringify({ error: 'title and body are required' }),
+        JSON.stringify({ error: 'Invalid JSON in request body' }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      )
+    }
+
+    // Validate input data
+    let validatedData: {
+      userId?: string
+      userIds?: string[]
+      title: string
+      body: string
+      url?: string
+      tag?: string
+      icon?: string
+      badge?: string
+      data?: Record<string, unknown>
+      actions?: PushAction[]
+    }
+
+    try {
+      validatedData = {
+        userId: validateOptional(rawBody.userId, (v) => validateUUID(v, 'userId')),
+        userIds: validateOptional(rawBody.userIds, (v) =>
+          validateArray(v, 'userIds', (item) => validateUUID(item, 'userIds item'))
+        ),
+        title: validateString(rawBody.title, 'title', { minLength: 1, maxLength: 100 }),
+        body: validateString(rawBody.body, 'body', { minLength: 1, maxLength: 500 }),
+        url: validateOptional(rawBody.url, (v) => validateString(v, 'url')),
+        tag: validateOptional(rawBody.tag, (v) => validateString(v, 'tag', { maxLength: 100 })),
+        icon: validateOptional(rawBody.icon, (v) => validateString(v, 'icon')),
+        badge: validateOptional(rawBody.badge, (v) => validateString(v, 'badge')),
+        data: rawBody.data as Record<string, unknown> | undefined,
+        actions: rawBody.actions as PushAction[] | undefined,
+      }
+    } catch (validationError) {
+      return new Response(
+        JSON.stringify({ error: (validationError as Error).message }),
         { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       )
     }
 
     // Get user IDs to notify
     const userIds: string[] = []
-    if (body.userId) {
-      userIds.push(body.userId)
+    if (validatedData.userId) {
+      userIds.push(validatedData.userId)
     }
-    if (body.userIds) {
-      userIds.push(...body.userIds)
+    if (validatedData.userIds) {
+      userIds.push(...validatedData.userIds)
     }
 
     if (userIds.length === 0) {
@@ -353,14 +452,27 @@ serve(async (req) => {
     }
 
     // Build notification payload
-    const notificationPayload = {
-      title: body.title,
-      body: body.body,
-      icon: body.icon || '/favicon.svg',
-      badge: body.badge || '/favicon.svg',
-      url: body.url || '/',
-      tag: body.tag || 'squadplanner-notification',
-      data: body.data || {}
+    const notificationPayload: Record<string, unknown> = {
+      title: validatedData.title,
+      body: validatedData.body,
+      icon: validatedData.icon || '/favicon.svg',
+      badge: validatedData.badge || '/favicon.svg',
+      url: validatedData.url || '/',
+      tag: validatedData.tag || 'squadplanner-notification',
+      data: validatedData.data || {}
+    }
+
+    // Ajouter les actions si presentes (pour les appels entrants notamment)
+    if (validatedData.actions && validatedData.actions.length > 0) {
+      notificationPayload.actions = validatedData.actions
+    }
+
+    // Si c'est un appel entrant, configurer des options specifiques
+    if (validatedData.data?.type === 'incoming_call') {
+      notificationPayload.requireInteraction = true // La notification reste jusqu'a action
+      notificationPayload.vibrate = [300, 100, 300, 100, 300] // Vibration type sonnerie
+      notificationPayload.urgency = 'high'
+      console.log('[send-push] Incoming call notification for:', validatedData.data.caller_name)
     }
 
     // Send to all subscriptions

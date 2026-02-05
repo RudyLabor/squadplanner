@@ -1,8 +1,17 @@
 import { create } from 'zustand'
 import { supabase } from '../lib/supabase'
+import { useVoiceCallStore } from './useVoiceCall'
 
 // VAPID public key from environment
 const VAPID_PUBLIC_KEY = import.meta.env.VITE_VAPID_PUBLIC_KEY
+
+// Interface pour les messages du Service Worker
+interface ServiceWorkerMessage {
+  type: 'CALL_ACTION' | string
+  action?: 'answer' | 'decline'
+  callId?: string
+  callerId?: string
+}
 
 interface PushNotificationState {
   isSupported: boolean
@@ -294,6 +303,46 @@ export const usePushNotifications = () => {
   }
 }
 
+// Gestionnaire des messages du Service Worker pour les actions d'appel
+function handleServiceWorkerMessage(event: MessageEvent<ServiceWorkerMessage>) {
+  console.log('[Push] Message from SW:', event.data)
+
+  if (event.data?.type === 'CALL_ACTION') {
+    const { action, callId } = event.data
+    const voiceCallStore = useVoiceCallStore.getState()
+
+    console.log('[Push] Call action received:', action, 'callId:', callId)
+
+    if (action === 'answer') {
+      // L'utilisateur a clique sur "Repondre" depuis la notification push
+      // Le modal d'appel entrant devrait deja etre affiche via Realtime
+      // On accepte directement l'appel
+      if (voiceCallStore.status === 'ringing' && voiceCallStore.currentCallId === callId) {
+        voiceCallStore.acceptCall()
+      } else {
+        console.log('[Push] Call state mismatch, status:', voiceCallStore.status, 'expected callId:', callId)
+      }
+    } else if (action === 'decline') {
+      // L'utilisateur a clique sur "Refuser" depuis la notification push
+      if (voiceCallStore.status === 'ringing' && voiceCallStore.currentCallId === callId) {
+        voiceCallStore.rejectCall()
+      } else {
+        // Si l'appel n'est pas en cours de sonnerie, on essaie de le rejeter via Supabase
+        if (callId) {
+          supabase
+            .from('calls')
+            .update({ status: 'rejected' })
+            .eq('id', callId)
+            .then(({ error }) => {
+              if (error) console.error('[Push] Failed to reject call:', error)
+              else console.log('[Push] Call rejected via database')
+            })
+        }
+      }
+    }
+  }
+}
+
 // Function to initialize push notifications at app startup
 export async function initializePushNotifications(): Promise<void> {
   const store = usePushNotificationStore.getState()
@@ -310,6 +359,10 @@ export async function initializePushNotifications(): Promise<void> {
     if (registration) {
       console.log('[Push] Service worker ready')
 
+      // Ecouter les messages du Service Worker pour les actions d'appel
+      navigator.serviceWorker.addEventListener('message', handleServiceWorkerMessage)
+      console.log('[Push] Service worker message listener registered')
+
       // If user is logged in, check their subscription
       const { data: { session } } = await supabase.auth.getSession()
       if (session?.user) {
@@ -318,5 +371,13 @@ export async function initializePushNotifications(): Promise<void> {
     }
   } catch (error) {
     console.error('[Push] Initialization failed:', error)
+  }
+}
+
+// Fonction pour retirer le listener (cleanup)
+export function cleanupPushNotifications(): void {
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.removeEventListener('message', handleServiceWorkerMessage)
+    console.log('[Push] Service worker message listener removed')
   }
 }

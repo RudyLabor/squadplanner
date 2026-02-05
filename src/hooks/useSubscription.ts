@@ -33,6 +33,11 @@ interface SubscriptionState {
   cancelSubscription: (squadId: string) => Promise<{ error: Error | null }>
 }
 
+// Stripe Price IDs from environment variables
+// These IDs are different between Test and Live modes!
+const STRIPE_PRICE_MONTHLY = import.meta.env.VITE_STRIPE_PRICE_MONTHLY || ''
+const STRIPE_PRICE_YEARLY = import.meta.env.VITE_STRIPE_PRICE_YEARLY || ''
+
 // Pricing plans
 const PLANS: PricingPlan[] = [
   {
@@ -62,7 +67,7 @@ const PLANS: PricingPlan[] = [
       'Rôles avancés',
       'Support prioritaire'
     ],
-    stripePriceId: 'price_premium_monthly' // Replace with actual Stripe price ID
+    stripePriceId: STRIPE_PRICE_MONTHLY
   },
   {
     id: 'premium_yearly',
@@ -74,7 +79,7 @@ const PLANS: PricingPlan[] = [
       '2 mois gratuits',
       'Accès anticipé aux nouveautés'
     ],
-    stripePriceId: 'price_premium_yearly' // Replace with actual Stripe price ID
+    stripePriceId: STRIPE_PRICE_YEARLY
   }
 ]
 

@@ -1,9 +1,10 @@
 import { create } from 'zustand'
 import { supabase } from '../lib/supabase'
 import type { Squad, SquadMember } from '../types/database'
+import { sendMemberJoinedMessage, sendMemberLeftMessage } from '../lib/systemMessages'
 
 interface SquadWithMembers extends Squad {
-  members?: (SquadMember & { profiles?: { username?: string } })[]
+  members?: (SquadMember & { profiles?: { username?: string; avatar_url?: string; reliability_score?: number } })[]
   member_count?: number
 }
 
@@ -95,10 +96,10 @@ export const useSquadsStore = create<SquadsState>((set, get) => ({
 
       if (error) throw error
 
-      // Get members with profiles
+      // Get members with profiles (including avatar_url and reliability_score)
       const { data: members } = await supabase
         .from('squad_members')
-        .select('*, profiles(username)')
+        .select('*, profiles(username, avatar_url, reliability_score)')
         .eq('squad_id', id)
 
       const squadWithMembers: SquadWithMembers = {
@@ -187,7 +188,7 @@ export const useSquadsStore = create<SquadsState>((set, get) => ({
   joinSquad: async (inviteCode: string) => {
     try {
       set({ isLoading: true })
-      
+
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) throw new Error('Not authenticated')
 
@@ -221,6 +222,18 @@ export const useSquadsStore = create<SquadsState>((set, get) => ({
 
       if (joinError) throw joinError
 
+      // Récupérer le username pour le message système
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('username')
+        .eq('id', user.id)
+        .single()
+
+      // Envoyer le message système "X a rejoint la squad"
+      if (profile?.username) {
+        sendMemberJoinedMessage(squad.id, profile.username).catch(console.error)
+      }
+
       await get().fetchSquads()
       set({ isLoading: false })
       return { error: null }
@@ -234,6 +247,18 @@ export const useSquadsStore = create<SquadsState>((set, get) => ({
     try {
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) throw new Error('Not authenticated')
+
+      // Récupérer le username avant de quitter pour le message système
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('username')
+        .eq('id', user.id)
+        .single()
+
+      // Envoyer le message système AVANT de quitter (sinon on n'a plus accès)
+      if (profile?.username) {
+        await sendMemberLeftMessage(squadId, profile.username)
+      }
 
       const { error } = await supabase
         .from('squad_members')

@@ -2,11 +2,12 @@ import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   X, Zap, Check, Crown, Sparkles, BarChart3,
-  Mic2, Calendar, Users, Infinity, Loader2
+  Mic2, Calendar, Users, Infinity as InfinityIcon, Loader2
 } from 'lucide-react'
 import { Button } from './ui'
 import { useSubscriptionStore } from '../hooks'
 import { PREMIUM_PRICE_MONTHLY, PREMIUM_PRICE_YEARLY } from '../hooks/usePremium'
+import { useFocusTrap } from '../hooks/useFocusTrap'
 
 interface PremiumUpgradeModalProps {
   isOpen: boolean
@@ -17,29 +18,29 @@ interface PremiumUpgradeModalProps {
 
 const PREMIUM_FEATURES = [
   {
-    icon: Infinity,
-    title: 'Squads illimites',
-    description: 'Cree autant de squads que tu veux'
+    icon: InfinityIcon,
+    title: 'Squads illimités',
+    description: 'Crée autant de squads que tu veux'
   },
   {
     icon: BarChart3,
-    title: 'Stats avancees',
-    description: 'Graphiques, tendances, analyses detaillees'
+    title: 'Stats avancées',
+    description: 'Graphiques, tendances, analyses détaillées'
   },
   {
     icon: Sparkles,
-    title: 'IA Coach avance',
-    description: 'Conseils personnalises et predictions'
+    title: 'IA Coach avancé',
+    description: 'Conseils personnalisés et prédictions'
   },
   {
     icon: Mic2,
     title: 'Audio HD',
-    description: 'Qualite audio superieure en party vocale'
+    description: 'Qualité audio supérieure en party vocale'
   },
   {
     icon: Users,
-    title: 'Roles avances',
-    description: 'Coach, manager, permissions personnalisees'
+    title: 'Rôles avancés',
+    description: 'Coach, manager, permissions personnalisées'
   },
   {
     icon: Calendar,
@@ -60,9 +61,12 @@ export function PremiumUpgradeModal({
 
   const { createCheckoutSession, plans } = useSubscriptionStore()
 
+  // Focus trap et gestion Escape pour l'accessibilité
+  const focusTrapRef = useFocusTrap<HTMLDivElement>(isOpen, onClose)
+
   const handleUpgrade = async () => {
     if (!squadId) {
-      setError('Selectionne d\'abord une squad')
+      setError('Sélectionne d\'abord une squad')
       return
     }
 
@@ -106,19 +110,24 @@ export function PremiumUpgradeModal({
 
           {/* Modal */}
           <motion.div
+            ref={focusTrapRef}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="premium-modal-title"
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
             className="fixed inset-x-4 top-[5%] bottom-[5%] md:inset-auto md:left-1/2 md:top-1/2 md:-translate-x-1/2 md:-translate-y-1/2 md:w-full md:max-w-lg z-50 overflow-hidden rounded-2xl"
           >
-            <div className="h-full bg-[#0c0d0e] border border-[rgba(255,255,255,0.08)] rounded-2xl flex flex-col overflow-hidden">
+            <div className="h-full bg-[#101012] border border-[rgba(255,255,255,0.08)] rounded-2xl flex flex-col overflow-hidden">
               {/* Header gradient */}
               <div className="relative bg-gradient-to-br from-[#5e6dd2] via-[#8b93ff] to-[#f5a623] p-6 pb-8">
                 <button
                   onClick={onClose}
+                  aria-label="Fermer"
                   className="absolute top-4 right-4 w-8 h-8 rounded-full bg-black/20 flex items-center justify-center hover:bg-black/40 transition-colors"
                 >
-                  <X className="w-5 h-5 text-white" />
+                  <X className="w-5 h-5 text-white" aria-hidden="true" />
                 </button>
 
                 <div className="flex items-center gap-3 mb-3">
@@ -126,15 +135,15 @@ export function PremiumUpgradeModal({
                     <Crown className="w-6 h-6 text-white" />
                   </div>
                   <div>
-                    <h2 className="text-[20px] font-bold text-white">Passe Premium</h2>
-                    <p className="text-[14px] text-white/80">Debloquer toutes les features</p>
+                    <h2 id="premium-modal-title" className="text-[20px] font-bold text-white">Passe Premium</h2>
+                    <p className="text-[14px] text-white/80">Débloquer toutes les features</p>
                   </div>
                 </div>
 
                 {feature && (
                   <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/20 text-white text-[13px]">
                     <Zap className="w-4 h-4" />
-                    <span>Pour acceder a: {feature}</span>
+                    <span>Pour accéder à: {feature}</span>
                   </div>
                 )}
               </div>
@@ -166,7 +175,7 @@ export function PremiumUpgradeModal({
                         : 'border-[rgba(255,255,255,0.08)] hover:border-[rgba(255,255,255,0.15)]'
                     }`}
                   >
-                    <div className="absolute -top-2 right-2 px-2 py-0.5 rounded-full bg-[#4ade80] text-[10px] font-bold text-[#08090a]">
+                    <div className="absolute -top-2 right-2 px-2 py-0.5 rounded-full bg-[#4ade80] text-xs font-bold text-[#08090a]">
                       -20%
                     </div>
                     <div className="text-[13px] text-[#8b8d90] mb-1">Annuel</div>
@@ -225,7 +234,7 @@ export function PremiumUpgradeModal({
                   )}
                 </Button>
                 <p className="text-[11px] text-[#5e6063] text-center mt-3">
-                  Annulation possible a tout moment. Satisfait ou rembourse 30 jours.
+                  Annulation possible à tout moment. Satisfait ou remboursé 30 jours.
                 </p>
               </div>
             </div>

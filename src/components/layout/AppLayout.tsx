@@ -301,7 +301,7 @@ export function AppLayout({ children }: AppLayoutProps) {
       </aside>
 
       {/* Main content */}
-      <main className="flex-1 lg:ml-64 pb-24 lg:pb-0 overflow-y-auto overflow-x-hidden">
+      <main className="flex-1 lg:ml-64 pb-mobile-nav lg:pb-0 overflow-y-auto overflow-x-hidden">
         {/* Breadcrumbs - Desktop only */}
         <div className="hidden lg:block pt-4">
           <Breadcrumbs />

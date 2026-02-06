@@ -675,7 +675,7 @@ export default function Home() {
             <h2 className="text-[13px] font-semibold text-[#f7f8f8] uppercase tracking-wide mb-3">
               Ton tableau de bord
             </h2>
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 items-start">
               <StatsRow
                 squadsCount={squads.length}
                 sessionsThisWeek={sessionsThisWeek}

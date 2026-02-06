@@ -15,7 +15,7 @@ import {
 import { Link } from 'react-router-dom'
 import Confetti from 'react-confetti'
 import { Card, Button } from '../components/ui'
-import { useAuthStore, useSquadsStore, useVoiceChatStore, getSavedPartyInfo } from '../hooks'
+import { useAuthStore, useSquadsStore, useVoiceChatStore, usePremiumStore, getSavedPartyInfo } from '../hooks'
 import { NetworkQualityIndicator, QualityChangeToast } from '../components/NetworkQualityIndicator'
 import { useNetworkQualityStore } from '../hooks/useNetworkQuality'
 import { VoiceWaveformDemo } from '../components/VoiceWaveform'
@@ -418,6 +418,7 @@ function Toast({ message, isVisible, onClose, variant = 'success' }: {
 
 export function Party() {
   const { user, profile } = useAuthStore()
+  const { hasPremium } = usePremiumStore()
   const { squads, fetchSquads, isLoading: squadsLoading } = useSquadsStore()
   const {
     isConnected,
@@ -463,7 +464,7 @@ export function Party() {
 
       // Small delay to let the page render first
       setTimeout(() => {
-        joinChannel(savedParty.channelName, savedParty.userId, savedParty.username)
+        joinChannel(savedParty.channelName, savedParty.userId, savedParty.username, hasPremium)
           .then(success => {
             if (success) {
               setToastMessage('Reconnecté à la party !')
@@ -530,7 +531,7 @@ export function Party() {
     if (!user || !profile) return
     const channelName = `squad-${squadId}`
     const squad = squads.find(s => s.id === squadId)
-    const success = await joinChannel(channelName, user.id, profile.username || 'Joueur')
+    const success = await joinChannel(channelName, user.id, profile.username || 'Joueur', hasPremium)
     if (success) {
       setToastMessage(`Tu as rejoint la party ${squad?.name || ''}`)
       setToastVariant('success')

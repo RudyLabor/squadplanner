@@ -1,5 +1,6 @@
-import { useEffect, useState, useRef, useCallback, useMemo } from 'react'
+import { useEffect, useState, useRef, useCallback, useMemo, memo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { useVirtualizer } from '@tanstack/react-virtual'
 import {
   Send,
   ArrowLeft,
@@ -29,6 +30,7 @@ import { PinnedMessages, type PinnedMessage } from '../components/PinnedMessages
 import { EmptyState } from '../components/EmptyState'
 import { ReplyComposer } from '../components/ReplyComposer'
 import { MessageReplyPreview } from '../components/MessageReplyPreview'
+import { ConversationListSkeleton, MessageListSkeleton } from '../components/VirtualizedMessageList'
 
 // Simple toast component for Messages
 function MessageToast({ message, isVisible, variant = 'success' }: {
@@ -184,6 +186,167 @@ function DateSeparator({ date }: { date: string }) {
     </div>
   )
 }
+
+// =============================================================================
+// VIRTUALIZED MESSAGE CONTAINER - For large message lists (50+ messages)
+// =============================================================================
+
+interface VirtualizedMessagesProps {
+  messages: Array<{
+    id: string
+    content: string
+    created_at: string
+    is_system_message?: boolean
+    is_pinned?: boolean
+    edited_at?: string | null
+    sender_id: string
+    sender?: { username?: string; avatar_url?: string | null }
+    reply_to_id?: string | null
+    read_by?: string[]
+    read_at?: string | null
+  }>
+  userId: string | undefined
+  isSquadChat: boolean
+  isAdmin: boolean
+  onEditMessage: (msg: { id: string; content: string }) => void
+  onDeleteMessage: (id: string) => void
+  onPinMessage: (id: string, isPinned: boolean) => void
+  onReplyMessage: (msg: { id: string; content: string; sender: string }) => void
+  onScrollToMessage: (id: string) => void
+  getMessageDate: (date: string) => string
+  containerRef: React.RefObject<HTMLDivElement | null>
+  endRef: React.RefObject<HTMLDivElement | null>
+  onScroll: () => void
+}
+
+const VirtualizedMessages = memo(function VirtualizedMessages({
+  messages,
+  userId,
+  isSquadChat,
+  isAdmin,
+  onEditMessage,
+  onDeleteMessage,
+  onPinMessage,
+  onReplyMessage,
+  onScrollToMessage,
+  getMessageDate,
+  containerRef,
+  endRef,
+  onScroll,
+}: VirtualizedMessagesProps) {
+  const virtualizer = useVirtualizer({
+    count: messages.length,
+    getScrollElement: () => containerRef.current,
+    estimateSize: useCallback((index: number) => {
+      const msg = messages[index]
+      if (!msg) return 80
+      if (msg.is_system_message) return 60
+      // Estimate based on content length
+      const baseHeight = 70
+      const contentLines = Math.ceil(msg.content.length / 50)
+      const hasReply = !!msg.reply_to_id
+      return Math.min(baseHeight + contentLines * 20 + (hasReply ? 40 : 0), 300)
+    }, [messages]),
+    overscan: 5,
+    getItemKey: (index) => messages[index]?.id || index,
+  })
+
+  // Auto-scroll to bottom on new messages
+  const lastCountRef = useRef(messages.length)
+  useEffect(() => {
+    if (messages.length > lastCountRef.current && messages.length > 0) {
+      virtualizer.scrollToIndex(messages.length - 1, { align: 'end', behavior: 'smooth' })
+    }
+    lastCountRef.current = messages.length
+  }, [messages.length, virtualizer])
+
+  // Initial scroll to bottom
+  useEffect(() => {
+    if (messages.length > 0) {
+      virtualizer.scrollToIndex(messages.length - 1, { align: 'end' })
+    }
+  }, [])
+
+  const items = virtualizer.getVirtualItems()
+
+  return (
+    <div
+      ref={containerRef}
+      onScroll={onScroll}
+      className="flex-1 overflow-y-auto px-4"
+      style={{ contain: 'strict' }}
+    >
+      <div
+        style={{
+          height: `${virtualizer.getTotalSize()}px`,
+          width: '100%',
+          position: 'relative',
+        }}
+      >
+        {items.map((virtualRow) => {
+          const message = messages[virtualRow.index]
+          const index = virtualRow.index
+          const isOwn = message.sender_id === userId
+          const prevMessage = messages[index - 1]
+          const showAvatar = !prevMessage || prevMessage.sender_id !== message.sender_id
+          const showName = showAvatar && isSquadChat
+
+          const messageDate = getMessageDate(message.created_at)
+          const prevMessageDate = prevMessage ? getMessageDate(prevMessage.created_at) : ''
+          const showDateSeparator = messageDate !== prevMessageDate
+
+          const replyToId = 'reply_to_id' in message ? message.reply_to_id : null
+          const replyToMessage = replyToId ? messages.find(m => m.id === replyToId) : null
+          const replyToData = replyToMessage ? {
+            id: replyToMessage.id,
+            sender_id: replyToMessage.sender_id,
+            sender_username: replyToMessage.sender?.username || 'Utilisateur',
+            sender_avatar: replyToMessage.sender?.avatar_url || undefined,
+            content: replyToMessage.content
+          } : null
+
+          return (
+            <div
+              key={virtualRow.key}
+              data-index={virtualRow.index}
+              ref={virtualizer.measureElement}
+              style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                width: '100%',
+                transform: `translateY(${virtualRow.start}px)`,
+              }}
+            >
+              <div id={`message-${message.id}`} className="transition-all duration-300">
+                {showDateSeparator && <DateSeparator date={message.created_at} />}
+                <MessageBubble
+                  message={message}
+                  isOwn={isOwn}
+                  showAvatar={showAvatar}
+                  showName={showName}
+                  currentUserId={userId || ''}
+                  isSquadChat={isSquadChat}
+                  isAdmin={isAdmin}
+                  onEdit={onEditMessage}
+                  onDelete={onDeleteMessage}
+                  onPin={onPinMessage}
+                  onReply={onReplyMessage}
+                  replyToMessage={replyToData}
+                  onScrollToMessage={onScrollToMessage}
+                />
+              </div>
+            </div>
+          )
+        })}
+      </div>
+      <div ref={endRef} />
+    </div>
+  )
+})
+
+// Threshold for enabling virtualization (messages count)
+const VIRTUALIZATION_THRESHOLD = 50
 
 // System message component - centré, gris, italic, pas de bulle
 // Celebration pour messages importants (confirmation, rejoint)
@@ -803,9 +966,7 @@ export function Messages() {
       {/* Liste conversations */}
       <div className={`${showOnDesktop ? 'flex-1 overflow-y-auto px-4 pb-4' : ''}`}>
         {isLoading ? (
-          <div className="flex justify-center py-16">
-            <Loader2 className="w-8 h-8 text-[#6366f1] animate-spin" />
-          </div>
+          <ConversationListSkeleton count={6} type={activeTab === 'squads' ? 'squad' : 'dm'} />
         ) : activeTab === 'squads' ? (
           // Squad conversations
           squadConversations.length === 0 ? (
@@ -951,33 +1112,85 @@ export function Messages() {
         />
       )}
 
-      {/* Zone messages */}
-      <div
-        ref={messagesContainerRef}
-        onScroll={handleScroll}
-        className="flex-1 overflow-y-auto px-4 py-4 relative"
-      >
-        <div className={embedded ? '' : 'max-w-4xl lg:max-w-5xl mx-auto'}>
-          {messages.length === 0 && !isLoading ? (
+      {/* Zone messages - Virtual scrolling for large lists */}
+      {isLoading && messages.length === 0 ? (
+        <div className="flex-1 overflow-y-auto px-4 py-4">
+          <div className={embedded ? '' : 'max-w-4xl lg:max-w-5xl mx-auto'}>
+            <MessageListSkeleton count={10} />
+          </div>
+        </div>
+      ) : messages.length === 0 ? (
+        <div className="flex-1 overflow-y-auto px-4 py-4">
+          <div className={embedded ? '' : 'max-w-4xl lg:max-w-5xl mx-auto'}>
             <EmptyState
               type="no_messages"
               title="Nouvelle conversation"
               message="Envoie le premier message !"
             />
-          ) : (
+          </div>
+        </div>
+      ) : messages.length >= VIRTUALIZATION_THRESHOLD ? (
+        // Virtualized rendering for large message lists (50+)
+        <div className="flex-1 relative flex flex-col">
+          <VirtualizedMessages
+            messages={messages}
+            userId={user?.id}
+            isSquadChat={isSquadChat}
+            isAdmin={isAdmin}
+            onEditMessage={setEditingMessage}
+            onDeleteMessage={handleDeleteMessage}
+            onPinMessage={handlePinMessage}
+            onReplyMessage={handleReply}
+            onScrollToMessage={scrollToMessage}
+            getMessageDate={getMessageDate}
+            containerRef={messagesContainerRef}
+            endRef={messagesEndRef}
+            onScroll={handleScroll}
+          />
+          {/* Typing Indicator */}
+          <AnimatePresence>
+            {typingText && (
+              <div className="px-4 pb-2">
+                <TypingIndicator text={typingText} />
+              </div>
+            )}
+          </AnimatePresence>
+          {/* Scroll to bottom button */}
+          <AnimatePresence>
+            {showScrollButton && (
+              <motion.button
+                initial={{ opacity: 0, y: 20, scale: 0.8 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: 20, scale: 0.8 }}
+                transition={{ type: 'spring', stiffness: 300, damping: 25 }}
+                onClick={scrollToBottom}
+                className={`${embedded ? 'absolute' : 'fixed'} bottom-28 right-6 w-10 h-10 bg-[#6366f1] hover:bg-[#7c7ffa] rounded-full flex items-center justify-center shadow-md shadow-[rgba(99,102,241,0.15)] transition-colors z-50`}
+                aria-label="Scroll to bottom"
+              >
+                <ChevronDown className="w-5 h-5 text-white" />
+              </motion.button>
+            )}
+          </AnimatePresence>
+        </div>
+      ) : (
+        // Standard rendering for small message lists (<50)
+        <div
+          ref={messagesContainerRef}
+          onScroll={handleScroll}
+          className="flex-1 overflow-y-auto px-4 py-4 relative"
+        >
+          <div className={embedded ? '' : 'max-w-4xl lg:max-w-5xl mx-auto'}>
             <AnimatePresence initial={false}>
               {messages.map((message, index) => {
                 const isOwn = message.sender_id === user?.id
                 const prevMessage = messages[index - 1]
                 const showAvatar = !prevMessage || prevMessage.sender_id !== message.sender_id
-                const showName = showAvatar && isSquadChat // Only show names in squad chats
+                const showName = showAvatar && isSquadChat
 
-                // Séparateur de date - comparer avec le message précédent
                 const messageDate = getMessageDate(message.created_at)
                 const prevMessageDate = prevMessage ? getMessageDate(prevMessage.created_at) : ''
                 const showDateSeparator = messageDate !== prevMessageDate
 
-                // Find reply-to message if exists - Phase 3.3
                 const replyToId = 'reply_to_id' in message ? message.reply_to_id : null
                 const replyToMessage = replyToId
                   ? messages.find(m => m.id === replyToId)
@@ -1014,35 +1227,35 @@ export function Messages() {
                 )
               })}
             </AnimatePresence>
-          )}
 
-          {/* Typing Indicator */}
+            {/* Typing Indicator */}
+            <AnimatePresence>
+              {typingText && (
+                <TypingIndicator text={typingText} />
+              )}
+            </AnimatePresence>
+
+            <div ref={messagesEndRef} />
+          </div>
+
+          {/* Scroll to bottom button */}
           <AnimatePresence>
-            {typingText && (
-              <TypingIndicator text={typingText} />
+            {showScrollButton && (
+              <motion.button
+                initial={{ opacity: 0, y: 20, scale: 0.8 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: 20, scale: 0.8 }}
+                transition={{ type: 'spring', stiffness: 300, damping: 25 }}
+                onClick={scrollToBottom}
+                className={`${embedded ? 'absolute' : 'fixed'} bottom-28 right-6 w-10 h-10 bg-[#6366f1] hover:bg-[#7c7ffa] rounded-full flex items-center justify-center shadow-md shadow-[rgba(99,102,241,0.15)] transition-colors z-50`}
+                aria-label="Scroll to bottom"
+              >
+                <ChevronDown className="w-5 h-5 text-white" />
+              </motion.button>
             )}
           </AnimatePresence>
-
-          <div ref={messagesEndRef} />
         </div>
-
-        {/* Scroll to bottom button - animated */}
-        <AnimatePresence>
-          {showScrollButton && (
-            <motion.button
-              initial={{ opacity: 0, y: 20, scale: 0.8 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: 20, scale: 0.8 }}
-              transition={{ type: 'spring', stiffness: 300, damping: 25 }}
-              onClick={scrollToBottom}
-              className={`${embedded ? 'absolute' : 'fixed'} bottom-28 right-6 w-10 h-10 bg-[#6366f1] hover:bg-[#7c7ffa] rounded-full flex items-center justify-center shadow-md shadow-[rgba(99,102,241,0.15)] transition-colors z-50`}
-              aria-label="Scroll to bottom"
-            >
-              <ChevronDown className="w-5 h-5 text-white" />
-            </motion.button>
-          )}
-        </AnimatePresence>
-      </div>
+      )}
 
       {/* Input message */}
       <div className={`flex-shrink-0 px-4 py-3 ${embedded ? 'pb-3' : 'pb-6'} border-t border-[rgba(255,255,255,0.06)] ${embedded ? '' : 'bg-[#101012]/80 backdrop-blur-xl'}`}>

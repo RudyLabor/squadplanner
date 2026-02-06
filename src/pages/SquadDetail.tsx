@@ -15,6 +15,7 @@ import { SquadLeaderboard } from '../components/SquadLeaderboard'
 // theme import removed - animation variants caused mobile rendering issues
 import { supabase } from '../lib/supabase'
 import { sendMemberJoinedMessage } from '../lib/systemMessages'
+import { exportSessionsToICS } from '../utils/calendarExport'
 
 // Animation variants removed - they can block mobile rendering
 
@@ -59,12 +60,14 @@ function SuccessToast({ message, onClose }: { message: string; onClose: () => vo
 // Section Party Vocale
 function PartySection({ squadId }: { squadId: string }) {
   const { user, profile } = useAuthStore()
+  const { hasPremium } = usePremiumStore()
   const { isConnected, isConnecting, isMuted, remoteUsers, joinChannel, leaveChannel, toggleMute, error } = useVoiceChatStore()
 
   const handleJoinParty = async () => {
     if (!user || !profile) return
     const channelName = `squad-${squadId}`
-    await joinChannel(channelName, user.id, profile.username || 'Joueur')
+    // Premium users get HD audio quality
+    await joinChannel(channelName, user.id, profile.username || 'Joueur', hasPremium)
   }
 
   const participantCount = isConnected ? remoteUsers.length + 1 : remoteUsers.length
@@ -1033,8 +1036,12 @@ export default function SquadDetail() {
                     size="sm"
                     variant="secondary"
                     onClick={() => {
-                      // TODO: Implementer export ICS
-                      setSuccessMessage('Export calendrier bientôt disponible !')
+                      try {
+                        exportSessionsToICS(sessions, currentSquad?.name)
+                        setSuccessMessage('Calendrier exporté ! Importez le fichier .ics dans votre app calendrier.')
+                      } catch (error) {
+                        setSuccessMessage(error instanceof Error ? error.message : 'Erreur lors de l\'export')
+                      }
                     }}
                   >
                     <Download className="w-4 h-4" />

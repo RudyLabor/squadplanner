@@ -54,7 +54,7 @@ interface VoiceChatState {
   reconnectInfo: { channelName: string; userId: string; username: string } | null
 
   // Actions
-  joinChannel: (channelName: string, userId: string, username: string) => Promise<boolean>
+  joinChannel: (channelName: string, userId: string, username: string, isPremium?: boolean) => Promise<boolean>
   leaveChannel: () => Promise<void>
   toggleMute: () => Promise<void>
   setVolume: (volume: number) => void
@@ -133,7 +133,7 @@ export const useVoiceChatStore = create<VoiceChatState>((set, get) => ({
 
   clearNetworkQualityNotification: () => set({ networkQualityChanged: null }),
 
-  joinChannel: async (channelName: string, userId: string, username: string) => {
+  joinChannel: async (channelName: string, userId: string, username: string, isPremium: boolean = false) => {
     const state = get()
 
     if (state.isConnected || state.isConnecting) {
@@ -338,8 +338,15 @@ export const useVoiceChatStore = create<VoiceChatState>((set, get) => ({
       const uid = await client.join(AGORA_APP_ID, channelName, token, numericUid)
       console.log('[VoiceChat] Joined successfully!')
 
-      // Create and publish audio track
-      const localAudioTrack = await AgoraRTC.createMicrophoneAudioTrack()
+      // Create and publish audio track with quality based on premium status
+      // Premium: high_quality_stereo (48kHz, stereo, 192 Kbps)
+      // Free: speech_standard (32kHz, mono, 24 Kbps)
+      const audioConfig = isPremium
+        ? { encoderConfig: 'high_quality_stereo' as const }
+        : { encoderConfig: 'speech_standard' as const }
+
+      console.log(`[VoiceChat] Audio quality: ${isPremium ? 'HD (Premium)' : 'Standard'}`)
+      const localAudioTrack = await AgoraRTC.createMicrophoneAudioTrack(audioConfig)
       await client.publish([localAudioTrack])
 
       set({
@@ -466,10 +473,10 @@ export const useVoiceChatStore = create<VoiceChatState>((set, get) => ({
 export const useSessionVoiceChat = (sessionId: string | null) => {
   const store = useVoiceChatStore()
 
-  const joinSessionVoice = async (userId: string, username: string) => {
+  const joinSessionVoice = async (userId: string, username: string, isPremium: boolean = false) => {
     if (!sessionId) return
     const channelName = `session-${sessionId}`
-    await store.joinChannel(channelName, userId, username)
+    await store.joinChannel(channelName, userId, username, isPremium)
   }
 
   return {

@@ -56,15 +56,15 @@ const PLANS: PricingPlan[] = [
   {
     id: 'premium_monthly',
     name: 'Premium',
-    price: 19.99,
+    price: 4.99,
     interval: 'month',
     features: [
       'Squads illimités',
-      'IA avancée (suggestions, décisions)',
-      'Stats complètes',
+      'IA Coach personnalisé',
+      'Stats avancées & tendances',
       'Historique illimité',
       'Export calendrier',
-      'Rôles avancés',
+      'Audio HD Party',
       'Support prioritaire'
     ],
     stripePriceId: STRIPE_PRICE_MONTHLY
@@ -72,7 +72,7 @@ const PLANS: PricingPlan[] = [
   {
     id: 'premium_yearly',
     name: 'Premium Annuel',
-    price: 191.90, // ~20% discount
+    price: 47.90, // 2 mois offerts (vs 59.88€)
     interval: 'year',
     features: [
       'Tout le Premium',

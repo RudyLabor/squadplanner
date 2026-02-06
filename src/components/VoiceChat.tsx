@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useVoiceChatStore } from '../hooks/useVoiceChat'
-import { useAuthStore } from '../hooks'
+import { useAuthStore, usePremiumStore } from '../hooks'
 import { Button } from './ui'
 
 interface VoiceChatProps {
@@ -11,6 +11,7 @@ interface VoiceChatProps {
 
 export function VoiceChat({ sessionId, sessionTitle }: VoiceChatProps) {
   const { user, profile } = useAuthStore()
+  const { hasPremium } = usePremiumStore()
   const {
     isConnected,
     isConnecting,
@@ -47,7 +48,8 @@ export function VoiceChat({ sessionId, sessionTitle }: VoiceChatProps) {
 
   const handleJoin = async () => {
     if (!user || !profile) return
-    await joinChannel(channelName, user.id, profile.username || 'Anonyme')
+    // Premium users get HD audio quality (48kHz stereo, 192 Kbps)
+    await joinChannel(channelName, user.id, profile.username || 'Anonyme', hasPremium)
   }
 
   const handleLeave = async () => {

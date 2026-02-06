@@ -4,8 +4,8 @@ import { supabase } from '../lib/supabase'
 // Constantes pour le gating
 export const FREE_SQUAD_LIMIT = 2
 export const FREE_HISTORY_DAYS = 30
-export const PREMIUM_PRICE_MONTHLY = 19.99
-export const PREMIUM_PRICE_YEARLY = 191.90 // ~2 mois offerts
+export const PREMIUM_PRICE_MONTHLY = 4.99
+export const PREMIUM_PRICE_YEARLY = 47.90 // ~2 mois offerts (vs 59.88€)
 
 export type PremiumFeature =
   | 'unlimited_squads'

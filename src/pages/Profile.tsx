@@ -19,6 +19,7 @@ import { LevelUpCelebration } from '../components/LevelUpCelebration'
 import { Challenges } from '../components/Challenges'
 import type { Challenge, UserChallenge } from '../components/Challenges'
 import { StreakCounter } from '../components/StreakCounter'
+import { SeasonalBadges } from '../components/SeasonalBadges'
 
 // Systeme d'achievements
 const ACHIEVEMENTS = [
@@ -645,6 +646,15 @@ export function Profile() {
             />
           </div>
         )}
+
+        {/* Seasonal Badges Section */}
+        <Card className="mb-5 overflow-hidden">
+          <div className="flex items-center gap-2 px-4 pt-4 pb-2">
+            <Trophy className="w-4 h-4 text-[#fbbf24]" />
+            <h3 className="text-[14px] font-semibold text-[#f7f8f8]">Badges Saisonniers</h3>
+          </div>
+          <SeasonalBadges />
+        </Card>
 
         {/* IA Coach - Basique (gratuit) */}
         <Card className={`mb-5 p-4 bg-gradient-to-br border ${

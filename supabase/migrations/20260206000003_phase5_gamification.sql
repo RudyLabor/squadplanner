@@ -129,20 +129,27 @@ ALTER TABLE xp_transactions ENABLE ROW LEVEL SECURITY;
 ALTER TABLE seasonal_badges ENABLE ROW LEVEL SECURITY;
 
 -- xp_levels: tout le monde peut lire
+DROP POLICY IF EXISTS "Anyone can view xp levels" ON xp_levels;
 CREATE POLICY "Anyone can view xp levels" ON xp_levels FOR SELECT USING (true);
 
 -- challenges: tout le monde peut voir les challenges actifs
+DROP POLICY IF EXISTS "Anyone can view active challenges" ON challenges;
 CREATE POLICY "Anyone can view active challenges" ON challenges FOR SELECT USING (is_active = true);
 
 -- user_challenges: voir ses propres challenges
+DROP POLICY IF EXISTS "Users can view own challenges" ON user_challenges;
 CREATE POLICY "Users can view own challenges" ON user_challenges FOR SELECT USING (auth.uid() = user_id);
+DROP POLICY IF EXISTS "Users can update own challenges" ON user_challenges;
 CREATE POLICY "Users can update own challenges" ON user_challenges FOR UPDATE USING (auth.uid() = user_id);
+DROP POLICY IF EXISTS "Users can insert own challenges" ON user_challenges;
 CREATE POLICY "Users can insert own challenges" ON user_challenges FOR INSERT WITH CHECK (auth.uid() = user_id);
 
 -- xp_transactions: voir ses propres transactions
+DROP POLICY IF EXISTS "Users can view own xp" ON xp_transactions;
 CREATE POLICY "Users can view own xp" ON xp_transactions FOR SELECT USING (auth.uid() = user_id);
 
 -- seasonal_badges: tout le monde peut voir les badges
+DROP POLICY IF EXISTS "Anyone can view badges" ON seasonal_badges;
 CREATE POLICY "Anyone can view badges" ON seasonal_badges FOR SELECT USING (true);
 
 -- =====================================================

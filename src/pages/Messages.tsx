@@ -570,10 +570,15 @@ export function Messages() {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [])
 
-  // Focus input when entering chat
+  // Focus input when entering chat (only on initial entry, not on every change)
+  const hasEnteredChatRef = useRef(false)
   useEffect(() => {
-    if (activeSquadConv || activeDMConv) {
+    const hasActiveChat = !!(activeSquadConv || activeDMConv)
+    if (hasActiveChat && !hasEnteredChatRef.current) {
+      hasEnteredChatRef.current = true
       setTimeout(() => inputRef.current?.focus(), 100)
+    } else if (!hasActiveChat) {
+      hasEnteredChatRef.current = false
     }
   }, [activeSquadConv, activeDMConv])
 
@@ -1063,6 +1068,11 @@ export function Messages() {
                   placeholder={isSquadChat ? 'Message à la squad...' : `Message à ${chatName}...`}
                   className="w-full h-12 px-4 bg-[#18191b] border border-[rgba(255,255,255,0.06)] rounded-xl text-[14px] text-[#f7f8f8] placeholder:text-[#5e6063] focus:outline-none focus:border-[rgba(99,102,241,0.5)] transition-colors"
                   autoComplete="off"
+                  autoCapitalize="off"
+                  autoCorrect="off"
+                  spellCheck={false}
+                  enterKeyHint="send"
+                  inputMode="text"
                 />
               </div>
               <Button
@@ -1120,15 +1130,15 @@ export function Messages() {
         <div className="h-screen bg-[#050506] flex">
           {/* Sidebar gauche - Liste des conversations */}
           <div className="w-[340px] xl:w-[380px] flex-shrink-0 border-r border-[rgba(255,255,255,0.06)] bg-[#101012]">
-            <ConversationsList showOnDesktop />
+            {ConversationsList({ showOnDesktop: true })}
           </div>
 
           {/* Zone principale - Chat */}
           <div className="flex-1 min-w-0">
             {(activeSquadConv || activeDMConv) ? (
-              <ChatView embedded />
+              ChatView({ embedded: true })
             ) : (
-              <EmptyChatPlaceholder />
+              EmptyChatPlaceholder()
             )}
           </div>
         </div>
@@ -1148,7 +1158,7 @@ export function Messages() {
         />
         <div className="min-h-0 bg-[#050506] pb-6">
           <div className="px-4 md:px-6 lg:px-8 py-6 max-w-2xl lg:max-w-4xl xl:max-w-6xl mx-auto">
-            <ConversationsList />
+            {ConversationsList({ showOnDesktop: false })}
           </div>
         </div>
       </>
@@ -1163,7 +1173,7 @@ export function Messages() {
         isVisible={toast.visible}
         variant={toast.variant}
       />
-      <ChatView />
+      {ChatView({ embedded: false })}
     </>
   )
 }

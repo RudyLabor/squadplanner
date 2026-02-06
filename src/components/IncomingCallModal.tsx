@@ -2,6 +2,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { Phone, PhoneOff } from 'lucide-react'
 import { useVoiceCallStore } from '../hooks/useVoiceCall'
 import { useFocusTrap } from '../hooks/useFocusTrap'
+import { useRingtone } from '../hooks/useRingtone'
 
 export function IncomingCallModal() {
   const {
@@ -13,6 +14,9 @@ export function IncomingCallModal() {
 
   // Only show for incoming calls (ringing state)
   const shouldShow = status === 'ringing' || status === 'missed' || status === 'rejected'
+
+  // Play ringtone when ringing
+  useRingtone(status === 'ringing')
 
   // Focus trap et gestion Escape pour l'accessibilité
   const focusTrapRef = useFocusTrap<HTMLDivElement>(shouldShow, rejectCall)

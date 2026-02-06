@@ -1,12 +1,13 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, memo, useCallback, useMemo } from 'react'
 import type { ReactNode } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { motion } from 'framer-motion'
-import { Home, Users, Mic, MessageCircle, User, Plus, Zap } from 'lucide-react'
-import { useAuthStore, useSquadsStore, useVoiceChatStore } from '../../hooks'
+import { motion, AnimatePresence } from 'framer-motion'
+import { Home, Users, Mic, MessageCircle, User, Plus, Zap, Pin, PinOff } from 'lucide-react'
+import { useShallow } from 'zustand/react/shallow'
+import { useAuthStore, useSquadsStore, useVoiceChatStore, useKeyboardVisible, useUnreadCountStore } from '../../hooks'
 import { SquadPlannerLogo } from '../SquadPlannerLogo'
 import { Breadcrumbs } from './Breadcrumbs'
-import { supabase } from '../../lib/supabase'
+import { GlobalSearch } from '../GlobalSearch'
 
 interface AppLayoutProps {
   children: ReactNode
@@ -19,48 +20,63 @@ const navItems = [
   { path: '/party', icon: Mic, label: 'Party' },
   { path: '/messages', icon: MessageCircle, label: 'Messages' },
   { path: '/profile', icon: User, label: 'Profil' },
-]
+] as const
 
 // Mobile nav items (Party sera au centre avec un style spécial)
 const mobileNavLeft = [
   { path: '/home', icon: Home, label: 'Accueil' },
   { path: '/squads', icon: Users, label: 'Squads' },
-]
+] as const
 
 const mobileNavRight = [
   { path: '/messages', icon: MessageCircle, label: 'Messages' },
   { path: '/profile', icon: User, label: 'Profil' },
-]
+] as const
 
-function NavLink({ path, icon: Icon, label, isActive, badge }: {
+// OPTIMIZED: Memoized NavLink to prevent unnecessary re-renders
+const NavLink = memo(function NavLink({ path, icon: Icon, label, isActive, badge, collapsed }: {
   path: string
   icon: React.ElementType
   label: string
   isActive: boolean
   badge?: number
+  collapsed?: boolean
 }) {
   return (
-    <Link to={path} aria-current={isActive ? 'page' : undefined}>
+    <Link to={path} aria-current={isActive ? 'page' : undefined} title={collapsed ? label : undefined}>
       <motion.div
         className={`
-          relative flex items-center gap-3 px-4 py-3 rounded-xl transition-all
+          relative flex items-center ${collapsed ? 'justify-center px-2' : 'gap-3 px-4'} py-3 rounded-xl transition-all
           ${isActive
             ? 'bg-[rgba(99,102,241,0.08)] text-[#6366f1]'
             : 'text-[#8b8d90] hover:bg-[rgba(255,255,255,0.03)] hover:text-[#f7f8f8]'
           }
         `}
-        whileHover={{ x: 4 }}
+        whileHover={{ x: collapsed ? 0 : 4 }}
         whileTap={{ scale: 0.98 }}
         transition={{ duration: 0.25 }}
       >
-        <Icon className="w-5 h-5" strokeWidth={1.5} />
-        <span className="text-[14px] font-medium">{label}</span>
+        <Icon className="w-5 h-5 flex-shrink-0" strokeWidth={1.5} />
+        <AnimatePresence mode="wait">
+          {!collapsed && (
+            <motion.span
+              key="label"
+              initial={{ opacity: 0, width: 0 }}
+              animate={{ opacity: 1, width: 'auto' }}
+              exit={{ opacity: 0, width: 0 }}
+              transition={{ duration: 0.15 }}
+              className="text-[14px] font-medium whitespace-nowrap overflow-hidden"
+            >
+              {label}
+            </motion.span>
+          )}
+        </AnimatePresence>
         {badge && badge > 0 && (
           <motion.span
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             transition={{ type: "spring", stiffness: 500, damping: 30 }}
-            className="absolute right-3 w-5 h-5 rounded-full bg-[#fb7185] text-white text-xs font-bold flex items-center justify-center"
+            className={`${collapsed ? 'absolute -top-1 -right-1' : 'absolute right-3'} w-5 h-5 rounded-full bg-[#fb7185] text-white text-xs font-bold flex items-center justify-center`}
           >
             {badge > 9 ? '9+' : badge}
           </motion.span>
@@ -68,9 +84,10 @@ function NavLink({ path, icon: Icon, label, isActive, badge }: {
       </motion.div>
     </Link>
   )
-}
+})
 
-function MobileNavLink({ path, icon: Icon, label, isActive, badge }: {
+// OPTIMIZED: Memoized MobileNavLink
+const MobileNavLink = memo(function MobileNavLink({ path, icon: Icon, label, isActive, badge }: {
   path: string
   icon: React.ElementType
   label: string
@@ -108,10 +125,10 @@ function MobileNavLink({ path, icon: Icon, label, isActive, badge }: {
       </span>
     </Link>
   )
-}
+})
 
-// Bouton Party central - style PS App
-function PartyButton({ isActive, hasActiveParty }: { isActive: boolean; hasActiveParty: boolean }) {
+// OPTIMIZED: Memoized Party button
+const PartyButton = memo(function PartyButton({ isActive, hasActiveParty }: { isActive: boolean; hasActiveParty: boolean }) {
   return (
     <Link
       to="/party"
@@ -132,7 +149,6 @@ function PartyButton({ isActive, hasActiveParty }: { isActive: boolean; hasActiv
           fill={isActive ? 'currentColor' : 'none'}
           aria-hidden="true"
         />
-        {/* Indicateur party en cours */}
         {hasActiveParty && (
           <motion.div
             className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-[#34d399]"
@@ -149,191 +165,324 @@ function PartyButton({ isActive, hasActiveParty }: { isActive: boolean; hasActiv
       </span>
     </Link>
   )
-}
+})
 
 export function AppLayout({ children }: AppLayoutProps) {
   const location = useLocation()
-  const { profile, user } = useAuthStore()
-  const { squads } = useSquadsStore()
-  const { isConnected: isInVoiceChat } = useVoiceChatStore()
-  const [unreadMessages, setUnreadMessages] = useState(0)
 
-  // Fetch unread messages count
+  // OPTIMIZED: Use shallow selectors to prevent re-renders on unrelated state changes
+  const { profile, user } = useAuthStore(useShallow(state => ({
+    profile: state.profile,
+    user: state.user
+  })))
+
+  // Keep for potential future use - only subscribes to store
+  useSquadsStore()
+
+  // OPTIMIZED: Select only what we need
+  const isInVoiceChat = useVoiceChatStore(state => state.isConnected)
+  const isKeyboardVisible = useKeyboardVisible()
+
+  // OPTIMIZED: Select only totalUnread and actions with useShallow
+  const { totalUnread: unreadMessages, fetchCounts, subscribe, unsubscribe } = useUnreadCountStore(
+    useShallow(state => ({
+      totalUnread: state.totalUnread,
+      fetchCounts: state.fetchCounts,
+      subscribe: state.subscribe,
+      unsubscribe: state.unsubscribe
+    }))
+  )
+
+  // Sidebar collapse state
+  const [sidebarExpanded, setSidebarExpanded] = useState(false)
+  const [sidebarPinned, setSidebarPinned] = useState(() => {
+    const saved = localStorage.getItem('sidebar-pinned')
+    return saved === 'true'
+  })
+
+  // Determine if sidebar should show expanded content
+  const isExpanded = sidebarExpanded || sidebarPinned
+
+  // OPTIMIZED: Memoize callbacks
+  const handleMouseEnter = useCallback(() => setSidebarExpanded(true), [])
+  const handleMouseLeave = useCallback(() => setSidebarExpanded(false), [])
+  const togglePinned = useCallback(() => setSidebarPinned(p => !p), [])
+
+  // Save pinned state to localStorage
+  useEffect(() => {
+    localStorage.setItem('sidebar-pinned', String(sidebarPinned))
+  }, [sidebarPinned])
+
+  // Subscribe to unread count updates
   useEffect(() => {
     if (!user) return
 
-    const fetchUnreadCount = async () => {
-      // Pour l'instant, on compte les messages non lus de manière simplifiée
-      // TODO: Implémenter un vrai système de tracking des messages lus
-      const squadIds = squads.map(s => s.id)
-      if (squadIds.length === 0) return
+    fetchCounts()
+    subscribe()
 
-      // Compter les messages des dernières 24h comme "potentiellement non lus"
-      const yesterday = new Date()
-      yesterday.setDate(yesterday.getDate() - 1)
-
-      const { count } = await supabase
-        .from('messages')
-        .select('*', { count: 'exact', head: true })
-        .in('squad_id', squadIds)
-        .neq('user_id', user.id)
-        .gte('created_at', yesterday.toISOString())
-
-      // Simuler des messages non lus (max 5 pour l'affichage)
-      setUnreadMessages(Math.min(count || 0, 5))
+    return () => {
+      unsubscribe()
     }
+  }, [user, fetchCounts, subscribe, unsubscribe])
 
-    fetchUnreadCount()
-
-    // Refresh toutes les 30 secondes
-    const interval = setInterval(fetchUnreadCount, 30000)
-    return () => clearInterval(interval)
-  }, [user, squads])
-
-  // Don't show navigation on auth, onboarding, or landing page (regardless of login status)
+  // OPTIMIZED: Memoize route checks
   const isAuthPage = location.pathname === '/auth'
   const isOnboarding = location.pathname === '/onboarding'
   const isLanding = location.pathname === '/'
+  const shouldHideNav = isAuthPage || isOnboarding || isLanding
 
-  if (isAuthPage || isOnboarding || isLanding) {
+  // OPTIMIZED: Memoize computed values
+  const isPartyActive = useMemo(() => location.pathname === '/party', [location.pathname])
+  const currentPath = location.pathname
+
+  if (shouldHideNav) {
     return <>{children}</>
   }
 
-  const isPartyActive = location.pathname === '/party'
-  const hasActiveParty = isInVoiceChat
-
   return (
     <div className="h-[100dvh] bg-[#050506] flex overflow-hidden">
-      {/* Sidebar - Desktop only */}
-      <aside className="hidden lg:flex flex-col w-64 border-r border-[rgba(255,255,255,0.03)] bg-[#050506] fixed h-full">
+      {/* Sidebar - Desktop only - Collapsible */}
+      <motion.aside
+        className="hidden lg:flex flex-col border-r border-[rgba(255,255,255,0.03)] bg-[#050506] fixed h-full z-40"
+        initial={false}
+        animate={{ width: isExpanded ? 256 : 72 }}
+        transition={{ duration: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+      >
         {/* Logo */}
-        <div className="p-6 border-b border-[rgba(255,255,255,0.03)]">
+        <div className={`${isExpanded ? 'p-6' : 'p-4'} border-b border-[rgba(255,255,255,0.03)]`}>
           <div className="flex items-center gap-3">
-            <SquadPlannerLogo size={40} />
-            <div>
-              <h1 className="text-[16px] font-bold text-[#f7f8f8]">Squad Planner</h1>
-              <p className="text-xs text-[#5e6063]">Jouez ensemble, vraiment</p>
-            </div>
+            <SquadPlannerLogo size={isExpanded ? 40 : 32} />
+            <AnimatePresence mode="wait">
+              {isExpanded && (
+                <motion.div
+                  key="logo-text"
+                  initial={{ opacity: 0, width: 0 }}
+                  animate={{ opacity: 1, width: 'auto' }}
+                  exit={{ opacity: 0, width: 0 }}
+                  transition={{ duration: 0.15 }}
+                  className="overflow-hidden"
+                >
+                  <h1 className="text-[16px] font-bold text-[#f7f8f8] whitespace-nowrap">Squad Planner</h1>
+                  <p className="text-xs text-[#5e6063] whitespace-nowrap">Jouez ensemble, vraiment</p>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
         </div>
 
-        {/* Quick action - Lien vers la page des squads */}
-        <div className="p-4">
+        {/* Pin button - Only visible when expanded */}
+        <AnimatePresence>
+          {isExpanded && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.15 }}
+              className="absolute top-4 right-3"
+            >
+              <motion.button
+                onClick={togglePinned}
+                className={`p-1.5 rounded-lg transition-colors ${
+                  sidebarPinned
+                    ? 'bg-[rgba(99,102,241,0.15)] text-[#6366f1]'
+                    : 'text-[#5e6063] hover:bg-[rgba(255,255,255,0.05)] hover:text-[#8b8d90]'
+                }`}
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
+                title={sidebarPinned ? 'Détacher la sidebar' : 'Épingler la sidebar'}
+              >
+                {sidebarPinned ? <PinOff className="w-4 h-4" /> : <Pin className="w-4 h-4" />}
+              </motion.button>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Quick action */}
+        <div className={isExpanded ? 'p-4' : 'p-2'}>
           <Link to="/squads">
             <motion.button
-              className="w-full flex items-center justify-center gap-2 h-11 rounded-xl bg-[#6366f1] text-white text-[14px] font-semibold"
+              className={`flex items-center justify-center gap-2 ${isExpanded ? 'w-full h-11' : 'w-10 h-10 mx-auto'} rounded-xl bg-[#6366f1] text-white text-[14px] font-semibold`}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               transition={{ duration: 0.25 }}
+              title={!isExpanded ? 'Nouvelle session' : undefined}
             >
-              <Plus className="w-4 h-4" />
-              Nouvelle session
+              <Plus className="w-4 h-4 flex-shrink-0" />
+              <AnimatePresence mode="wait">
+                {isExpanded && (
+                  <motion.span
+                    key="btn-text"
+                    initial={{ opacity: 0, width: 0 }}
+                    animate={{ opacity: 1, width: 'auto' }}
+                    exit={{ opacity: 0, width: 0 }}
+                    transition={{ duration: 0.15 }}
+                    className="whitespace-nowrap overflow-hidden"
+                  >
+                    Nouvelle session
+                  </motion.span>
+                )}
+              </AnimatePresence>
             </motion.button>
           </Link>
         </div>
 
         {/* Navigation */}
-        <nav className="flex-1 px-3 py-4 space-y-1">
+        <nav className={`flex-1 ${isExpanded ? 'px-3' : 'px-2'} py-4 space-y-1`}>
           {navItems.map((item) => (
             <NavLink
               key={item.path}
               path={item.path}
               icon={item.icon}
               label={item.label}
-              isActive={location.pathname === item.path}
+              isActive={currentPath === item.path}
               badge={item.path === '/messages' && unreadMessages > 0 ? unreadMessages : undefined}
+              collapsed={!isExpanded}
             />
           ))}
         </nav>
 
         {/* Profile section */}
-        <div className="p-4 border-t border-[rgba(255,255,255,0.03)]">
+        <div className={`${isExpanded ? 'p-4' : 'p-2'} border-t border-[rgba(255,255,255,0.03)]`}>
           <Link to="/profile">
             <motion.div
-              className="flex items-center gap-3 p-3 rounded-xl hover:bg-[rgba(255,255,255,0.03)] transition-colors duration-300"
-              whileHover={{ x: 4 }}
+              className={`flex items-center ${isExpanded ? 'gap-3 p-3' : 'justify-center p-2'} rounded-xl hover:bg-[rgba(255,255,255,0.03)] transition-colors duration-300`}
+              whileHover={{ x: isExpanded ? 4 : 0 }}
               transition={{ duration: 0.25 }}
+              title={!isExpanded ? profile?.username || 'Mon profil' : undefined}
             >
               {profile?.avatar_url ? (
                 <img
                   src={profile.avatar_url}
                   alt={profile.username || 'Avatar'}
-                  className="w-10 h-10 rounded-full object-cover"
+                  className={`${isExpanded ? 'w-10 h-10' : 'w-8 h-8'} rounded-full object-cover flex-shrink-0`}
+                  loading="lazy"
                 />
               ) : (
-                <div className="w-10 h-10 rounded-full bg-[rgba(167,139,250,0.08)] flex items-center justify-center">
-                  <User className="w-5 h-5 text-[#a78bfa]" />
+                <div className={`${isExpanded ? 'w-10 h-10' : 'w-8 h-8'} rounded-full bg-[rgba(167,139,250,0.08)] flex items-center justify-center flex-shrink-0`}>
+                  <User className={`${isExpanded ? 'w-5 h-5' : 'w-4 h-4'} text-[#a78bfa]`} />
                 </div>
               )}
-              <div className="flex-1 min-w-0">
-                <div className="text-[14px] font-medium text-[#f7f8f8] truncate">
-                  {profile?.username || 'Mon profil'}
-                </div>
-                <div className="text-[12px] text-[#5e6063]">
-                  {profile?.reliability_score || 100}% fiable
-                </div>
-              </div>
+              <AnimatePresence mode="wait">
+                {isExpanded && (
+                  <motion.div
+                    key="profile-text"
+                    initial={{ opacity: 0, width: 0 }}
+                    animate={{ opacity: 1, width: 'auto' }}
+                    exit={{ opacity: 0, width: 0 }}
+                    transition={{ duration: 0.15 }}
+                    className="flex-1 min-w-0 overflow-hidden"
+                  >
+                    <div className="text-[14px] font-medium text-[#f7f8f8] truncate">
+                      {profile?.username || 'Mon profil'}
+                    </div>
+                    <div className="text-[12px] text-[#5e6063]">
+                      {profile?.reliability_score || 100}% fiable
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </motion.div>
           </Link>
         </div>
 
-        {/* Premium upsell */}
-        <div className="p-4">
-          <Link to="/premium">
+        {/* Premium upsell - Only when expanded */}
+        <AnimatePresence>
+          {isExpanded && (
             <motion.div
-              className="p-4 rounded-xl bg-gradient-to-br from-[rgba(99,102,241,0.08)] to-[rgba(167,139,250,0.03)] border border-[rgba(99,102,241,0.1)] cursor-pointer"
-              whileHover={{ scale: 1.02 }}
-              transition={{ duration: 0.25 }}
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.2 }}
+              className="p-4 overflow-hidden"
             >
-              <div className="flex items-center gap-2 mb-2">
-                <Zap className="w-4 h-4 text-[#fbbf24]" />
-                <span className="text-[13px] font-semibold text-[#f7f8f8]">Passe Premium</span>
-              </div>
-              <p className="text-[12px] text-[#8b8d90] mb-3">
-                Stats avancées, IA coach, qualité audio HD
-              </p>
-              <span className="text-[12px] font-semibold text-[#6366f1] hover:text-[#a78bfa] transition-colors duration-300">
-                Découvrir →
-              </span>
+              <Link to="/premium">
+                <motion.div
+                  className="p-4 rounded-xl bg-gradient-to-br from-[rgba(99,102,241,0.08)] to-[rgba(167,139,250,0.03)] border border-[rgba(99,102,241,0.1)] cursor-pointer"
+                  whileHover={{ scale: 1.02 }}
+                  transition={{ duration: 0.25 }}
+                >
+                  <div className="flex items-center gap-2 mb-2">
+                    <Zap className="w-4 h-4 text-[#fbbf24]" />
+                    <span className="text-[13px] font-semibold text-[#f7f8f8]">Passe Premium</span>
+                  </div>
+                  <p className="text-[12px] text-[#8b8d90] mb-3">
+                    Stats avancées, IA coach, qualité audio HD
+                  </p>
+                  <span className="text-[12px] font-semibold text-[#6366f1] hover:text-[#a78bfa] transition-colors duration-300">
+                    Découvrir →
+                  </span>
+                </motion.div>
+              </Link>
             </motion.div>
-          </Link>
-        </div>
-      </aside>
+          )}
+        </AnimatePresence>
 
-      {/* Main content */}
-      <main className="flex-1 lg:ml-64 pb-mobile-nav lg:pb-0 overflow-y-auto overflow-x-hidden scrollbar-hide-mobile">
-        {/* Breadcrumbs - Desktop only */}
-        <div className="hidden lg:block pt-4">
-          <Breadcrumbs />
+        {/* Collapsed Premium icon */}
+        {!isExpanded && (
+          <div className="p-2 pb-4">
+            <Link to="/premium">
+              <motion.div
+                className="flex items-center justify-center p-2 rounded-xl hover:bg-[rgba(255,255,255,0.03)] transition-colors"
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
+                title="Passe Premium"
+              >
+                <Zap className="w-5 h-5 text-[#fbbf24]" />
+              </motion.div>
+            </Link>
+          </div>
+        )}
+      </motion.aside>
+
+      {/* Main content - margin adjusts with sidebar */}
+      <main
+        className={`flex-1 lg:pb-0 overflow-y-auto overflow-x-hidden scrollbar-hide-mobile ${isKeyboardVisible ? 'pb-0' : 'pb-mobile-nav'}`}
+        style={{ marginLeft: 0 }}
+      >
+        {/* Desktop content with dynamic margin */}
+        <div className="hidden lg:block">
+          <motion.div
+            initial={false}
+            animate={{ marginLeft: isExpanded ? 256 : 72 }}
+            transition={{ duration: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
+          >
+            {/* Header with Breadcrumbs and GlobalSearch - Desktop only */}
+            <div className="pt-4 px-6 flex items-center justify-between">
+              <Breadcrumbs />
+              <GlobalSearch />
+            </div>
+            {children}
+          </motion.div>
         </div>
-        {children}
+
+        {/* Mobile content - no margin */}
+        <div className="lg:hidden">
+          {children}
+        </div>
       </main>
 
-      {/* Bottom navigation - Mobile only - Style PS App */}
-      <nav className="lg:hidden fixed bottom-0 left-0 right-0 bg-[#050506] border-t border-[rgba(255,255,255,0.03)] z-50">
+      {/* Bottom navigation - Mobile only */}
+      <nav className={`lg:hidden fixed bottom-0 left-0 right-0 bg-[#050506] border-t border-[rgba(255,255,255,0.03)] z-50 transition-transform duration-200 ${isKeyboardVisible ? 'translate-y-full' : 'translate-y-0'}`}>
         <div className="flex items-center justify-around py-2 mobile-nav-padding">
-          {/* Left side */}
           {mobileNavLeft.map((item) => (
             <MobileNavLink
               key={item.path}
               path={item.path}
               icon={item.icon}
               label={item.label}
-              isActive={location.pathname === item.path}
+              isActive={currentPath === item.path}
             />
           ))}
-
-          {/* Party button - Center */}
-          <PartyButton isActive={isPartyActive} hasActiveParty={hasActiveParty} />
-
-          {/* Right side */}
+          <PartyButton isActive={isPartyActive} hasActiveParty={isInVoiceChat} />
           {mobileNavRight.map((item) => (
             <MobileNavLink
               key={item.path}
               path={item.path}
               icon={item.icon}
               label={item.label}
-              isActive={location.pathname === item.path}
+              isActive={currentPath === item.path}
               badge={item.path === '/messages' && unreadMessages > 0 ? unreadMessages : undefined}
             />
           ))}

@@ -186,6 +186,7 @@ CREATE POLICY "Users can remove own reactions"
 ALTER TABLE dm_reactions ENABLE ROW LEVEL SECURITY;
 
 -- Lecture: participants du DM peuvent voir les reactions
+DROP POLICY IF EXISTS "DM participants can view reactions" ON dm_reactions;
 CREATE POLICY "DM participants can view reactions"
     ON dm_reactions FOR SELECT
     USING (
@@ -197,6 +198,7 @@ CREATE POLICY "DM participants can view reactions"
     );
 
 -- Insertion: participants du DM peuvent ajouter des reactions
+DROP POLICY IF EXISTS "DM participants can add reactions" ON dm_reactions;
 CREATE POLICY "DM participants can add reactions"
     ON dm_reactions FOR INSERT
     WITH CHECK (
@@ -209,6 +211,7 @@ CREATE POLICY "DM participants can add reactions"
     );
 
 -- Suppression: on peut retirer ses propres reactions
+DROP POLICY IF EXISTS "Users can remove own DM reactions" ON dm_reactions;
 CREATE POLICY "Users can remove own DM reactions"
     ON dm_reactions FOR DELETE
     USING (auth.uid() = user_id);
@@ -220,6 +223,7 @@ CREATE POLICY "Users can remove own DM reactions"
 ALTER TABLE pinned_messages ENABLE ROW LEVEL SECURITY;
 
 -- Lecture: membres du squad peuvent voir les messages épinglés
+DROP POLICY IF EXISTS "Squad members can view pinned messages" ON pinned_messages;
 CREATE POLICY "Squad members can view pinned messages"
     ON pinned_messages FOR SELECT
     USING (
@@ -231,6 +235,7 @@ CREATE POLICY "Squad members can view pinned messages"
     );
 
 -- Insertion: admins/owners du squad peuvent épingler
+DROP POLICY IF EXISTS "Squad admins can pin messages" ON pinned_messages;
 CREATE POLICY "Squad admins can pin messages"
     ON pinned_messages FOR INSERT
     WITH CHECK (
@@ -244,6 +249,7 @@ CREATE POLICY "Squad admins can pin messages"
     );
 
 -- Suppression: admins/owners du squad peuvent dépingler
+DROP POLICY IF EXISTS "Squad admins can unpin messages" ON pinned_messages;
 CREATE POLICY "Squad admins can unpin messages"
     ON pinned_messages FOR DELETE
     USING (

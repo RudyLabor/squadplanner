@@ -159,8 +159,16 @@ DROP POLICY IF EXISTS "Users can update own notifications" ON notifications;
 CREATE POLICY "Users can update own notifications" ON notifications
     FOR UPDATE USING (auth.uid() = user_id);
 
--- Activer Realtime pour les notifications
-ALTER PUBLICATION supabase_realtime ADD TABLE notifications;
+-- Activer Realtime pour les notifications (si pas déjà fait)
+DO $$
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1 FROM pg_publication_tables
+        WHERE pubname = 'supabase_realtime' AND tablename = 'notifications'
+    ) THEN
+        ALTER PUBLICATION supabase_realtime ADD TABLE notifications;
+    END IF;
+END $$;
 
 -- =====================================================
 -- CONFIRMATION

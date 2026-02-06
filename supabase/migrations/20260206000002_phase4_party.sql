@@ -29,6 +29,8 @@ CREATE TRIGGER update_profiles_last_seen
     EXECUTE FUNCTION update_last_seen();
 
 -- Fonction pour obtenir les amis qui jouent actuellement
+-- Note: cette fonction sera mise à jour dans voice_party_tracking.sql avec plus de colonnes
+DROP FUNCTION IF EXISTS get_friends_playing(UUID);
 CREATE OR REPLACE FUNCTION get_friends_playing(user_id UUID)
 RETURNS TABLE (
     friend_id UUID,

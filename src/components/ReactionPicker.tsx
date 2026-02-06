@@ -44,53 +44,62 @@ export const ReactionPicker = forwardRef<HTMLDivElement, ReactionPickerProps>(
     return (
       <AnimatePresence>
         {isOpen && (
-          <motion.div
-            ref={ref}
-            initial={{ opacity: 0, scale: 0.8, y: position === 'top' ? 10 : -10 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.8, y: position === 'top' ? 10 : -10 }}
-            transition={{
-              type: 'spring',
-              stiffness: 400,
-              damping: 25,
-              duration: 0.2
-            }}
-            className={`absolute z-50 ${positionClasses[position]} ${alignClasses[align]}`}
-          >
-            {/* Backdrop for closing on click outside */}
+          <>
+            {/* Backdrop for closing on click outside - separate from picker */}
             <div
-              className="fixed inset-0 z-[-1]"
+              className="fixed inset-0 z-40"
               onClick={onClose}
+              onTouchEnd={onClose}
               aria-hidden="true"
             />
 
             {/* Picker container */}
-            <div className="flex items-center gap-1 px-2 py-1.5 bg-[#1a1a2e] border border-[rgba(255,255,255,0.1)] rounded-full shadow-lg shadow-black/40">
-              {REACTION_EMOJIS.map((emoji, index) => (
-                <motion.button
-                  key={emoji}
-                  initial={{ opacity: 0, scale: 0 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{
-                    delay: index * 0.03,
-                    type: 'spring',
-                    stiffness: 500,
-                    damping: 25
-                  }}
-                  whileHover={{
-                    scale: 1.3,
-                    transition: { duration: 0.15 }
-                  }}
-                  whileTap={{ scale: 0.9 }}
-                  onClick={() => handleEmojiClick(emoji)}
-                  className="w-9 h-9 flex items-center justify-center rounded-full hover:bg-[rgba(255,255,255,0.1)] transition-colors text-xl"
-                  aria-label={`React with ${emoji}`}
-                >
-                  {emoji}
-                </motion.button>
-              ))}
-            </div>
-          </motion.div>
+            <motion.div
+              ref={ref}
+              initial={{ opacity: 0, scale: 0.8, y: position === 'top' ? 10 : -10 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.8, y: position === 'top' ? 10 : -10 }}
+              transition={{
+                type: 'spring',
+                stiffness: 400,
+                damping: 25,
+                duration: 0.2
+              }}
+              className={`absolute z-50 ${positionClasses[position]} ${alignClasses[align]}`}
+            >
+              <div className="flex items-center gap-1 px-2 py-1.5 bg-[#1a1a2e] border border-[rgba(255,255,255,0.1)] rounded-full shadow-lg shadow-black/40">
+                {REACTION_EMOJIS.map((emoji, index) => (
+                  <motion.button
+                    key={emoji}
+                    initial={{ opacity: 0, scale: 0 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{
+                      delay: index * 0.03,
+                      type: 'spring',
+                      stiffness: 500,
+                      damping: 25
+                    }}
+                    whileHover={{
+                      scale: 1.3,
+                      transition: { duration: 0.15 }
+                    }}
+                    whileTap={{ scale: 0.9 }}
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      handleEmojiClick(emoji)
+                    }}
+                    onTouchEnd={(e) => {
+                      e.stopPropagation()
+                    }}
+                    className="w-9 h-9 flex items-center justify-center rounded-full hover:bg-[rgba(255,255,255,0.1)] transition-colors text-xl touch-manipulation"
+                    aria-label={`React with ${emoji}`}
+                  >
+                    {emoji}
+                  </motion.button>
+                ))}
+              </div>
+            </motion.div>
+          </>
         )}
       </AnimatePresence>
     )

@@ -1,16 +1,24 @@
-// Service Worker for SquadPlanner Push Notifications
+// Service Worker for SquadPlanner - Performance & Push Notifications
 // This runs in the background and handles push events even when the app is closed
 
-const CACHE_NAME = 'squadplanner-v1';
+const CACHE_VERSION = 'v2';
+const STATIC_CACHE = `squadplanner-static-${CACHE_VERSION}`;
+const DYNAMIC_CACHE = `squadplanner-dynamic-${CACHE_VERSION}`;
+const IMAGE_CACHE = `squadplanner-images-${CACHE_VERSION}`;
+
+// Static assets to precache
+const STATIC_ASSETS = [
+  '/favicon.svg',
+  '/vite.svg'
+];
 
 // Install event - cache essential assets
 self.addEventListener('install', function(event) {
   console.log('[SW] Installing service worker...');
   event.waitUntil(
-    caches.open(CACHE_NAME).then(function(cache) {
-      return cache.addAll([
-        '/favicon.svg'
-      ]);
+    caches.open(STATIC_CACHE).then(function(cache) {
+      console.log('[SW] Precaching static assets');
+      return cache.addAll(STATIC_ASSETS);
     })
   );
   // Activate immediately
@@ -24,8 +32,12 @@ self.addEventListener('activate', function(event) {
     caches.keys().then(function(cacheNames) {
       return Promise.all(
         cacheNames.filter(function(cacheName) {
-          return cacheName !== CACHE_NAME;
+          return cacheName.startsWith('squadplanner-') &&
+                 cacheName !== STATIC_CACHE &&
+                 cacheName !== DYNAMIC_CACHE &&
+                 cacheName !== IMAGE_CACHE;
         }).map(function(cacheName) {
+          console.log('[SW] Deleting old cache:', cacheName);
           return caches.delete(cacheName);
         })
       );
@@ -34,6 +46,75 @@ self.addEventListener('activate', function(event) {
   // Take control of all pages immediately
   self.clients.claim();
 });
+
+// Fetch event - smart caching strategies
+self.addEventListener('fetch', function(event) {
+  const request = event.request;
+  const url = new URL(request.url);
+
+  // Skip non-GET requests
+  if (request.method !== 'GET') return;
+
+  // Skip Supabase API calls
+  if (url.hostname.includes('supabase')) return;
+
+  // Skip chrome-extension
+  if (url.protocol === 'chrome-extension:') return;
+
+  // Handle different request types
+  if (isStaticAsset(url)) {
+    event.respondWith(cacheFirst(request, STATIC_CACHE));
+  } else if (isImageRequest(request, url)) {
+    event.respondWith(cacheFirst(request, IMAGE_CACHE));
+  } else if (url.origin === self.location.origin) {
+    event.respondWith(staleWhileRevalidate(request, DYNAMIC_CACHE));
+  }
+});
+
+// Check if static asset
+function isStaticAsset(url) {
+  return /\.(js|css|woff2?|ttf|otf)$/.test(url.pathname);
+}
+
+// Check if image request
+function isImageRequest(request, url) {
+  return request.destination === 'image' ||
+         /\.(png|jpg|jpeg|gif|svg|webp|ico|avif)$/.test(url.pathname);
+}
+
+// Cache First strategy
+async function cacheFirst(request, cacheName) {
+  const cached = await caches.match(request);
+  if (cached) return cached;
+
+  try {
+    const response = await fetch(request);
+    if (response.ok) {
+      const cache = await caches.open(cacheName);
+      cache.put(request, response.clone());
+    }
+    return response;
+  } catch (error) {
+    return new Response('Offline', { status: 503 });
+  }
+}
+
+// Stale While Revalidate strategy
+async function staleWhileRevalidate(request, cacheName) {
+  const cache = await caches.open(cacheName);
+  const cached = await cache.match(request);
+
+  const fetchPromise = fetch(request).then(function(response) {
+    if (response.ok) {
+      cache.put(request, response.clone());
+    }
+    return response;
+  }).catch(function() {
+    return cached;
+  });
+
+  return cached || fetchPromise;
+}
 
 // Push event - handle incoming push notifications
 self.addEventListener('push', function(event) {

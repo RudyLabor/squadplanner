@@ -67,22 +67,27 @@ function AppContent() {
     return () => unsubscribe()
   }, [user])
 
-  // Auto-subscribe to push notifications when user logs in
+  // Auto-subscribe to push notifications when user logs in (non-blocking)
   useEffect(() => {
     if (!user) return
 
-    const pushStore = usePushNotificationStore.getState()
+    // Run in background after 2s to not block initial load
+    const timeoutId = setTimeout(async () => {
+      try {
+        const pushStore = usePushNotificationStore.getState()
+        if (!pushStore.isSupported) return
 
-    // Check if already subscribed, if not, subscribe
-    const setupPush = async () => {
-      const isSubscribed = await pushStore.checkSubscription(user.id)
-      if (!isSubscribed && pushStore.isSupported) {
-        console.log('[App] Auto-subscribing to push notifications...')
-        await pushStore.subscribeToPush(user.id)
+        const isSubscribed = await pushStore.checkSubscription(user.id)
+        if (!isSubscribed) {
+          console.log('[App] Auto-subscribing to push notifications...')
+          await pushStore.subscribeToPush(user.id)
+        }
+      } catch (err) {
+        console.warn('[App] Push setup failed:', err)
       }
-    }
+    }, 2000)
 
-    setupPush().catch(err => console.warn('[App] Push setup failed:', err))
+    return () => clearTimeout(timeoutId)
   }, [user])
 
   return (

@@ -1,6 +1,8 @@
 import { create } from 'zustand'
 import { supabase } from '../lib/supabase'
 import type { RealtimeChannel } from '@supabase/supabase-js'
+import { playNotificationSound } from './useRingtone'
+import { useUnreadCountStore } from './useUnreadCount'
 
 interface DirectMessage {
   id: string
@@ -51,6 +53,7 @@ export const useDirectMessagesStore = create<DirectMessagesState>((set, get) => 
   isLoading: false,
   realtimeChannel: null,
 
+  // OPTIMIZED: Uses single RPC call instead of multiple queries
   fetchConversations: async () => {
     try {
       set({ isLoading: true })
@@ -58,18 +61,47 @@ export const useDirectMessagesStore = create<DirectMessagesState>((set, get) => 
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) throw new Error('Not authenticated')
 
-      // Utiliser la fonction SQL pour obtenir les conversations
-      const { data, error } = await supabase
-        .rpc('get_dm_conversations', { user_id: user.id })
+      // Try optimized RPC first
+      const { data, error } = await supabase.rpc('get_dm_conversations_with_stats', {
+        p_user_id: user.id
+      })
 
       if (error) {
-        // Si la fonction n'existe pas encore, retourner un tableau vide
-        console.warn('get_dm_conversations not available:', error.message)
-        set({ conversations: [], isLoading: false })
+        // Fallback to old RPC if new one doesn't exist
+        const { data: fallbackData, error: fallbackError } = await supabase
+          .rpc('get_dm_conversations', { user_id: user.id })
+
+        if (fallbackError) {
+          console.warn('DM conversations RPC not available:', fallbackError.message)
+          set({ conversations: [], isLoading: false })
+          return
+        }
+
+        set({ conversations: fallbackData || [], isLoading: false })
         return
       }
 
-      set({ conversations: data || [], isLoading: false })
+      // Transform the optimized RPC response
+      const conversations: DMConversation[] = (data || []).map((row: {
+        other_user_id: string
+        other_username: string
+        other_avatar_url: string | null
+        last_message_id: string | null
+        last_message_content: string | null
+        last_message_created_at: string | null
+        last_message_sender_id: string | null
+        unread_count: number
+      }) => ({
+        other_user_id: row.other_user_id,
+        other_user_username: row.other_username || 'Utilisateur',
+        other_user_avatar_url: row.other_avatar_url,
+        last_message_content: row.last_message_content,
+        last_message_at: row.last_message_created_at,
+        last_message_sender_id: row.last_message_sender_id,
+        unread_count: row.unread_count || 0,
+      }))
+
+      set({ conversations, isLoading: false })
     } catch (error) {
       console.error('Error fetching DM conversations:', error)
       set({ conversations: [], isLoading: false })
@@ -83,7 +115,6 @@ export const useDirectMessagesStore = create<DirectMessagesState>((set, get) => 
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) throw new Error('Not authenticated')
 
-      // Récupérer les messages entre les deux utilisateurs
       const { data, error } = await supabase
         .from('direct_messages')
         .select('*, sender:profiles!sender_id(username, avatar_url)')
@@ -152,29 +183,37 @@ export const useDirectMessagesStore = create<DirectMessagesState>((set, get) => 
           async (payload) => {
             const newMsg = payload.new as DirectMessage
 
-            // Vérifier que le message appartient à cette conversation
+            // Check if message belongs to this conversation
             const isRelevant =
               (newMsg.sender_id === user.id && newMsg.receiver_id === otherUserId) ||
               (newMsg.sender_id === otherUserId && newMsg.receiver_id === user.id)
 
             if (!isRelevant) return
 
-            // Récupérer le message complet avec les infos du sender
-            const { data: fullMessage } = await supabase
-              .from('direct_messages')
-              .select('*, sender:profiles!sender_id(username, avatar_url)')
-              .eq('id', newMsg.id)
+            // OPTIMIZED: Only fetch sender info, not the full message
+            const { data: sender } = await supabase
+              .from('profiles')
+              .select('username, avatar_url')
+              .eq('id', newMsg.sender_id)
               .single()
 
-            if (fullMessage) {
-              set(state => ({
-                messages: [...state.messages, fullMessage as DirectMessage]
-              }))
+            const fullMessage: DirectMessage = {
+              ...newMsg,
+              sender: sender || undefined
+            }
 
-              // Si c'est un message reçu, le marquer comme lu
-              if (newMsg.sender_id === otherUserId) {
-                get().markAsRead(otherUserId)
-              }
+            // Play sound for messages from others
+            if (newMsg.sender_id === otherUserId) {
+              playNotificationSound()
+            }
+
+            set(state => ({
+              messages: [...state.messages, fullMessage]
+            }))
+
+            // Mark as read if received
+            if (newMsg.sender_id === otherUserId) {
+              get().markAsRead(otherUserId)
             }
           }
         )
@@ -185,17 +224,15 @@ export const useDirectMessagesStore = create<DirectMessagesState>((set, get) => 
             schema: 'public',
             table: 'direct_messages',
           },
-          async (payload) => {
+          (payload) => {
             const updatedMsg = payload.new as DirectMessage
 
-            // Vérifier que le message appartient à cette conversation
             const isRelevant =
               (updatedMsg.sender_id === user.id && updatedMsg.receiver_id === otherUserId) ||
               (updatedMsg.sender_id === otherUserId && updatedMsg.receiver_id === user.id)
 
             if (!isRelevant) return
 
-            // Mettre à jour le message (pour les read receipts)
             set(state => ({
               messages: state.messages.map(msg =>
                 msg.id === updatedMsg.id
@@ -219,22 +256,29 @@ export const useDirectMessagesStore = create<DirectMessagesState>((set, get) => 
     }
   },
 
+  // OPTIMIZED: Uses batch RPC instead of single update
   markAsRead: async (otherUserId: string) => {
     try {
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) return
 
-      // Marquer tous les messages non lus de cet utilisateur comme lus
-      const { error } = await supabase
-        .from('direct_messages')
-        .update({ read_at: new Date().toISOString() })
-        .eq('sender_id', otherUserId)
-        .eq('receiver_id', user.id)
-        .is('read_at', null)
+      // Try batch RPC first
+      const { error } = await supabase.rpc('batch_mark_dms_read', {
+        p_user_id: user.id,
+        p_other_user_id: otherUserId
+      })
 
-      if (error) throw error
+      if (error) {
+        // Fallback to direct update if RPC doesn't exist
+        await supabase
+          .from('direct_messages')
+          .update({ read_at: new Date().toISOString() })
+          .eq('sender_id', otherUserId)
+          .eq('receiver_id', user.id)
+          .is('read_at', null)
+      }
 
-      // Mettre à jour le compteur local
+      // Update local state
       set(state => ({
         conversations: state.conversations.map(conv => {
           if (conv.other_user_id === otherUserId) {
@@ -243,6 +287,9 @@ export const useDirectMessagesStore = create<DirectMessagesState>((set, get) => 
           return conv
         })
       }))
+
+      // Update global unread count
+      await useUnreadCountStore.getState().fetchCounts()
     } catch (error) {
       console.error('Error marking DMs as read:', error)
     }
@@ -253,12 +300,10 @@ export const useDirectMessagesStore = create<DirectMessagesState>((set, get) => 
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) throw new Error('Not authenticated')
 
-      // Vérifier si la conversation existe déjà
       const { conversations } = get()
       const existing = conversations.find(c => c.other_user_id === userId)
       if (existing) return existing
 
-      // Récupérer les infos de l'utilisateur
       const { data: profile, error } = await supabase
         .from('profiles')
         .select('id, username, avatar_url')
@@ -267,7 +312,6 @@ export const useDirectMessagesStore = create<DirectMessagesState>((set, get) => 
 
       if (error || !profile) throw new Error('User not found')
 
-      // Créer une nouvelle conversation (virtuelle, pas de table conversations)
       const newConv: DMConversation = {
         other_user_id: profile.id,
         other_user_username: profile.username || 'Utilisateur',
@@ -278,7 +322,6 @@ export const useDirectMessagesStore = create<DirectMessagesState>((set, get) => 
         unread_count: 0,
       }
 
-      // Ajouter à la liste des conversations
       set(state => ({
         conversations: [newConv, ...state.conversations]
       }))

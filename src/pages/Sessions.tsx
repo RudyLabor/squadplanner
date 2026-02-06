@@ -236,7 +236,7 @@ export function Sessions() {
                 {confirmed.map(session => (
                   <Link key={session.id} to={`/session/${session.id}`}>
                     <motion.div whileHover={{ y: -2, scale: 1.02 }} whileTap={{ scale: 0.99 }}>
-                      <Card className="p-4 transition-all duration-200 hover:shadow-[0_0_12px_rgba(52,211,153,0.08)]">
+                      <Card className="p-4 transition-interactive hover:shadow-[0_0_12px_rgba(52,211,153,0.08)]">
                         <div className="flex items-center gap-4">
                           <div className="w-12 h-12 rounded-xl bg-[rgba(52,211,153,0.075)] flex items-center justify-center">
                             <Calendar className="w-6 h-6 text-[#34d399]" strokeWidth={1.5} />

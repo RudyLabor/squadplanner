@@ -2,12 +2,13 @@ import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import {
   Bell, Volume2, Palette, Shield, Globe, Languages, Database,
-  ChevronRight, Moon, Mic, Speaker, Trash2, Download, LogOut,
+  ChevronRight, Moon, Sun, Monitor, Mic, Speaker, Trash2, Download, LogOut,
   ArrowLeft
 } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { Card } from '../components/ui'
 import { useAuthStore } from '../hooks'
+import { useThemeStore, type ThemeMode } from '../hooks/useTheme'
 
 // Types
 interface NotificationSettings {
@@ -70,6 +71,36 @@ function SettingRow({ label, description, children }: {
         {description && <p className="text-[12px] text-[#5e6063] mt-0.5">{description}</p>}
       </div>
       {children}
+    </div>
+  )
+}
+
+// Theme Selector Component
+function ThemeSelector() {
+  const { mode, setMode } = useThemeStore()
+
+  const themes: { value: ThemeMode; label: string; icon: React.ElementType }[] = [
+    { value: 'dark', label: 'Sombre', icon: Moon },
+    { value: 'light', label: 'Clair', icon: Sun },
+    { value: 'system', label: 'Auto', icon: Monitor },
+  ]
+
+  return (
+    <div className="flex gap-1 p-1 rounded-lg bg-[rgba(255,255,255,0.05)]">
+      {themes.map(({ value, label, icon: Icon }) => (
+        <button
+          key={value}
+          onClick={() => setMode(value)}
+          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-[13px] font-medium transition-interactive ${
+            mode === value
+              ? 'bg-primary text-white'
+              : 'text-text-secondary hover:text-text-primary hover:bg-[rgba(255,255,255,0.05)]'
+          }`}
+        >
+          <Icon className="w-3.5 h-3.5" />
+          {label}
+        </button>
+      ))}
     </div>
   )
 }
@@ -252,16 +283,13 @@ export function Settings() {
         </Card>
 
         {/* Appearance Section */}
-        <Card className="mb-5 p-5 bg-[#101012]">
+        <Card className="mb-5 p-5 bg-bg-surface">
           <SectionHeader icon={Palette} title="Apparence" />
           <SettingRow
-            label="Thème sombre"
-            description="Optimisé pour le gaming nocturne"
+            label="Thème"
+            description="Adapte l'apparence de l'app"
           >
-            <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[rgba(52,211,153,0.05)] border border-[rgba(52,211,153,0.1)]">
-              <Moon className="w-4 h-4 text-[#34d399]" />
-              <span className="text-[13px] text-[#34d399]">Activé</span>
-            </div>
+            <ThemeSelector />
           </SettingRow>
         </Card>
 
@@ -322,7 +350,7 @@ export function Settings() {
               <div className="flex gap-2">
                 <button
                   onClick={() => setLanguage('fr')}
-                  className={`flex-1 h-11 rounded-xl text-[14px] font-medium transition-all ${
+                  className={`flex-1 h-11 rounded-xl text-[14px] font-medium transition-interactive ${
                     language === 'fr'
                       ? 'bg-[#6366f1] text-white'
                       : 'bg-[rgba(255,255,255,0.05)] text-[#8b8d90] hover:bg-[rgba(255,255,255,0.1)]'
@@ -332,7 +360,7 @@ export function Settings() {
                 </button>
                 <button
                   onClick={() => setLanguage('en')}
-                  className={`flex-1 h-11 rounded-xl text-[14px] font-medium transition-all ${
+                  className={`flex-1 h-11 rounded-xl text-[14px] font-medium transition-interactive ${
                     language === 'en'
                       ? 'bg-[#6366f1] text-white'
                       : 'bg-[rgba(255,255,255,0.05)] text-[#8b8d90] hover:bg-[rgba(255,255,255,0.1)]'

@@ -108,12 +108,19 @@ export default function Auth() {
       if (error) {
         setError(error.message)
       } else {
-        await fetchSquads()
-        const { squads } = useSquadsStore.getState()
-        if (squads.length === 0) {
-          navigate('/onboarding')
+        // Check for redirect URL (e.g., from /join/:code deep link)
+        const redirectUrl = sessionStorage.getItem('redirectAfterAuth')
+        if (redirectUrl) {
+          sessionStorage.removeItem('redirectAfterAuth')
+          navigate(redirectUrl)
         } else {
-          navigate('/home')
+          await fetchSquads()
+          const { squads } = useSquadsStore.getState()
+          if (squads.length === 0) {
+            navigate('/onboarding')
+          } else {
+            navigate('/home')
+          }
         }
       }
     } else {

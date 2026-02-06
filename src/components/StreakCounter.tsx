@@ -321,7 +321,7 @@ export function StreakCounter({ streakDays, lastActiveDate, onCheckIn }: StreakC
               <motion.button
                 onClick={onCheckIn}
                 disabled={hasCheckedInToday}
-                className={`px-4 py-2.5 rounded-xl font-medium text-[13px] transition-all ${
+                className={`px-4 py-2.5 rounded-xl font-medium text-[13px] transition-interactive ${
                   hasCheckedInToday
                     ? 'bg-[#4ade80]/20 text-[#4ade80] cursor-default'
                     : 'bg-gradient-to-r text-white hover:opacity-90 active:scale-95'
@@ -390,7 +390,7 @@ export function StreakCounter({ streakDays, lastActiveDate, onCheckIn }: StreakC
                 <div key={day.date} className="flex flex-col items-center gap-1">
                   <span className="text-[11px] text-[#5e6063]">{day.dayOfWeek}</span>
                   <motion.div
-                    className={`w-8 h-8 rounded-lg flex items-center justify-center transition-all ${
+                    className={`w-8 h-8 rounded-lg flex items-center justify-center transition-interactive ${
                       day.isToday
                         ? 'ring-2 ring-offset-1 ring-offset-[#1a1a2e]'
                         : ''

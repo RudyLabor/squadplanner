@@ -47,7 +47,7 @@ const NavLink = memo(function NavLink({ path, icon: Icon, label, isActive, badge
     <Link to={path} aria-current={isActive ? 'page' : undefined} title={collapsed ? label : undefined}>
       <motion.div
         className={`
-          relative flex items-center ${collapsed ? 'justify-center px-2' : 'gap-3 px-4'} py-3 rounded-xl transition-all
+          relative flex items-center ${collapsed ? 'justify-center px-2' : 'gap-3 px-4'} py-3 rounded-xl transition-interactive
           ${isActive
             ? 'bg-[rgba(99,102,241,0.08)] text-[#6366f1]'
             : 'text-[#8b8d90] hover:bg-[rgba(255,255,255,0.03)] hover:text-[#f7f8f8]'

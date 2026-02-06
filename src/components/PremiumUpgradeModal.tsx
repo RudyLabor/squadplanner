@@ -150,7 +150,7 @@ export function PremiumUpgradeModal({
                 <div className="grid grid-cols-2 gap-3 mb-6">
                   <button
                     onClick={() => setSelectedPlan('monthly')}
-                    className={`p-4 rounded-xl border-2 transition-all ${
+                    className={`p-4 rounded-xl border-2 transition-interactive ${
                       selectedPlan === 'monthly'
                         ? 'border-[#6366f1] bg-[rgba(99,102,241,0.1)]'
                         : 'border-[rgba(255,255,255,0.08)] hover:border-[rgba(255,255,255,0.15)]'
@@ -165,7 +165,7 @@ export function PremiumUpgradeModal({
 
                   <button
                     onClick={() => setSelectedPlan('yearly')}
-                    className={`p-4 rounded-xl border-2 transition-all relative ${
+                    className={`p-4 rounded-xl border-2 transition-interactive relative ${
                       selectedPlan === 'yearly'
                         ? 'border-[#34d399] bg-[rgba(52,211,153,0.1)]'
                         : 'border-[rgba(255,255,255,0.08)] hover:border-[rgba(255,255,255,0.15)]'

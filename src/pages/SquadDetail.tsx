@@ -197,7 +197,7 @@ function SessionCard({ session, onRsvp }: {
   const canRsvp = !isPast && session.status !== 'cancelled'
 
   return (
-    <Card className={`p-4 transition-all duration-200 hover:shadow-[0_0_12px_rgba(99,102,241,0.08)] ${isToday && !isPast ? 'border-[#fbbf24]/30 hover:shadow-[0_0_12px_rgba(251,191,36,0.1)]' : ''}`}>
+    <Card className={`p-4 transition-interactive hover:shadow-[0_0_12px_rgba(99,102,241,0.08)] ${isToday && !isPast ? 'border-[#fbbf24]/30 hover:shadow-[0_0_12px_rgba(251,191,36,0.1)]' : ''}`}>
       <div className="flex items-start gap-4">
         <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${
           isToday && !isPast ? 'bg-[#fbbf24]/15' : 'bg-[rgba(99,102,241,0.15)]'
@@ -233,7 +233,7 @@ function SessionCard({ session, onRsvp }: {
                 onClick={(e) => { e.preventDefault(); onRsvp(session.id, 'present') }}
                 aria-label="Marquer comme présent"
                 aria-pressed={session.my_rsvp === 'present'}
-                className={`flex items-center gap-1.5 px-4 py-2.5 min-h-[44px] rounded-lg text-[13px] font-medium transition-all duration-200 ${
+                className={`flex items-center gap-1.5 px-4 py-2.5 min-h-[44px] rounded-lg text-[13px] font-medium transition-interactive ${
                   session.my_rsvp === 'present'
                     ? 'bg-[#34d399]/20 text-[#34d399] border border-[#34d399]/30 shadow-[0_0_10px_rgba(52,211,153,0.15)]'
                     : 'bg-[rgba(255,255,255,0.05)] text-[#8b8d90] hover:bg-[rgba(52,211,153,0.1)] hover:text-[#34d399] hover:border-[#34d399]/20 border border-transparent'
@@ -248,7 +248,7 @@ function SessionCard({ session, onRsvp }: {
                 onClick={(e) => { e.preventDefault(); onRsvp(session.id, 'maybe') }}
                 aria-label="Marquer comme peut-être"
                 aria-pressed={session.my_rsvp === 'maybe'}
-                className={`flex items-center gap-1.5 px-4 py-2.5 min-h-[44px] rounded-lg text-[13px] font-medium transition-all duration-200 ${
+                className={`flex items-center gap-1.5 px-4 py-2.5 min-h-[44px] rounded-lg text-[13px] font-medium transition-interactive ${
                   session.my_rsvp === 'maybe'
                     ? 'bg-[#fbbf24]/20 text-[#fbbf24] border border-[#fbbf24]/30 shadow-[0_0_10px_rgba(251,191,36,0.15)]'
                     : 'bg-[rgba(255,255,255,0.05)] text-[#8b8d90] hover:bg-[rgba(251,191,36,0.1)] hover:text-[#fbbf24] hover:border-[#fbbf24]/20 border border-transparent'
@@ -263,7 +263,7 @@ function SessionCard({ session, onRsvp }: {
                 onClick={(e) => { e.preventDefault(); onRsvp(session.id, 'absent') }}
                 aria-label="Marquer comme absent"
                 aria-pressed={session.my_rsvp === 'absent'}
-                className={`flex items-center gap-1.5 px-4 py-2.5 min-h-[44px] rounded-lg text-[13px] font-medium transition-all duration-200 ${
+                className={`flex items-center gap-1.5 px-4 py-2.5 min-h-[44px] rounded-lg text-[13px] font-medium transition-interactive ${
                   session.my_rsvp === 'absent'
                     ? 'bg-[#fb7185]/20 text-[#fb7185] border border-[#fb7185]/30 shadow-[0_0_10px_rgba(251,113,133,0.15)]'
                     : 'bg-[rgba(255,255,255,0.05)] text-[#8b8d90] hover:bg-[rgba(251,113,133,0.1)] hover:text-[#fb7185] hover:border-[#fb7185]/20 border border-transparent'
@@ -869,7 +869,7 @@ export default function SquadDetail() {
                           <select
                             value={sessionDuration}
                             onChange={(e) => setSessionDuration(e.target.value)}
-                            className="w-full px-4 py-3 rounded-xl bg-[rgba(255,255,255,0.04)] border border-[rgba(255,255,255,0.08)] text-[#f7f8f8] focus:border-[rgba(99,102,241,0.5)] focus:ring-2 focus:ring-[rgba(99,102,241,0.15)] transition-all"
+                            className="w-full px-4 py-3 rounded-xl bg-[rgba(255,255,255,0.04)] border border-[rgba(255,255,255,0.08)] text-[#f7f8f8] focus:border-[rgba(99,102,241,0.5)] focus:ring-2 focus:ring-[rgba(99,102,241,0.15)] transition-input"
                           >
                             <option value="60">1 heure</option>
                             <option value="120">2 heures</option>
@@ -884,7 +884,7 @@ export default function SquadDetail() {
                           <select
                             value={sessionThreshold}
                             onChange={(e) => setSessionThreshold(e.target.value)}
-                            className="w-full px-4 py-3 rounded-xl bg-[rgba(255,255,255,0.04)] border border-[rgba(255,255,255,0.08)] text-[#f7f8f8] focus:border-[rgba(99,102,241,0.5)] focus:ring-2 focus:ring-[rgba(99,102,241,0.15)] transition-all"
+                            className="w-full px-4 py-3 rounded-xl bg-[rgba(255,255,255,0.04)] border border-[rgba(255,255,255,0.08)] text-[#f7f8f8] focus:border-[rgba(99,102,241,0.5)] focus:ring-2 focus:ring-[rgba(99,102,241,0.15)] transition-input"
                           >
                             <option value="2">2 joueurs</option>
                             <option value="3">3 joueurs</option>

@@ -102,7 +102,7 @@ function SquadCard({ squad, isOwner, nextSession, hasActiveParty, copiedCode, on
       whileTap={{ scale: 0.98 }}
     >
       <Link to={`/squad/${squad.id}`}>
-        <Card className={`cursor-pointer transition-all duration-300 ${
+        <Card className={`cursor-pointer transition-interactive ${
           hasActiveParty
             ? 'border-[#34d399]/30 shadow-[0_0_15px_rgba(52,211,153,0.08)] bg-gradient-to-r from-[#34d399]/5 to-transparent'
             : 'hover:border-[rgba(99,102,241,0.25)] hover:shadow-[0_0_12px_rgba(99,102,241,0.08)]'

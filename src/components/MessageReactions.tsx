@@ -200,7 +200,7 @@ export function MessageReactions({
             whileTap={{ scale: 0.9 }}
             onClick={() => toggleReaction(emoji as ReactionEmoji)}
             disabled={isLoading}
-            className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-sm transition-all ${
+            className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-sm transition-interactive ${
               hasCurrentUser
                 ? 'bg-[rgba(74,222,128,0.15)] border border-[#4ade80]/30 text-[#4ade80]'
                 : 'bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.1)] text-[#8b8d90] hover:bg-[rgba(255,255,255,0.1)]'
@@ -228,7 +228,7 @@ export function MessageReactions({
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
           onClick={() => setIsPickerOpen(!isPickerOpen)}
-          className={`w-7 h-7 flex items-center justify-center rounded-full transition-all ${
+          className={`w-7 h-7 flex items-center justify-center rounded-full transition-interactive ${
             isPickerOpen
               ? 'bg-[rgba(74,222,128,0.15)] border border-[#4ade80]/30'
               : 'bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.1)] opacity-0 group-hover:opacity-100 hover:bg-[rgba(255,255,255,0.1)]'

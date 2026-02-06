@@ -110,7 +110,7 @@ export function PremiumGate({
       <motion.button
         onClick={() => setShowModal(true)}
         aria-label={`Débloquer ${label} - Passe Premium pour débloquer`}
-        className="w-full p-4 rounded-xl bg-[rgba(255,255,255,0.02)] border border-[rgba(255,255,255,0.06)] hover:border-[rgba(251,191,36,0.3)] hover:bg-[rgba(251,191,36,0.05)] transition-all text-left"
+        className="w-full p-4 rounded-xl bg-[rgba(255,255,255,0.02)] border border-[rgba(255,255,255,0.06)] hover:border-[rgba(251,191,36,0.3)] hover:bg-[rgba(251,191,36,0.05)] transition-interactive text-left"
         whileHover={{ y: -2 }}
         whileTap={{ scale: 0.99 }}
       >

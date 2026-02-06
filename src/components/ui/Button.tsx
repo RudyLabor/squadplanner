@@ -10,7 +10,7 @@ interface ButtonProps extends Omit<HTMLMotionProps<'button'>, 'children'> {
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   ({ variant = 'primary', size = 'md', children, isLoading, className = '', ...props }, ref) => {
-    const baseClasses = 'inline-flex items-center justify-center gap-2 font-medium rounded-xl transition-all duration-300 disabled:opacity-40 disabled:cursor-not-allowed'
+    const baseClasses = 'inline-flex items-center justify-center gap-2 font-medium rounded-xl transition-interactive disabled:opacity-40 disabled:cursor-not-allowed'
 
     const variants = {
       primary: 'bg-[#6366f1] hover:bg-[#818cf8] text-white shadow-md shadow-[#6366f1]/10',

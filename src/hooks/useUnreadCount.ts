@@ -2,6 +2,35 @@ import { create } from 'zustand'
 import { supabase } from '../lib/supabase'
 import type { RealtimeChannel } from '@supabase/supabase-js'
 
+// =====================================================
+// PHASE 5.5 - APP BADGE API
+// Updates PWA icon badge with unread count
+// =====================================================
+
+// Check if App Badge API is supported
+function isAppBadgeSupported(): boolean {
+  return typeof navigator !== 'undefined' && 'setAppBadge' in navigator
+}
+
+// Update the app badge with unread count
+async function updateAppBadge(count: number): Promise<void> {
+  if (!isAppBadgeSupported()) return
+
+  try {
+    if (count > 0) {
+      await navigator.setAppBadge(count)
+    } else {
+      await navigator.clearAppBadge()
+    }
+  } catch (error) {
+    // Badge API might fail silently on some platforms
+    // This is expected behavior, no need to log in production
+    if (import.meta.env.DEV) {
+      console.debug('[AppBadge] Failed to update badge:', error)
+    }
+  }
+}
+
 interface UnreadCountState {
   squadUnread: number
   dmUnread: number
@@ -61,11 +90,9 @@ export const useUnreadCountStore = create<UnreadCountState>((set, get) => ({
       const squadUnread = squadCount || 0
       const dmUnread = dmCount || 0
 
-      set({
-        squadUnread,
-        dmUnread,
-        totalUnread: squadUnread + dmUnread
-      })
+      const totalUnread = squadUnread + dmUnread
+      set({ squadUnread, dmUnread, totalUnread })
+      updateAppBadge(totalUnread)
     } catch (error) {
       console.error('Error fetching unread counts:', error)
     }
@@ -99,10 +126,14 @@ export const useUnreadCountStore = create<UnreadCountState>((set, get) => ({
             const msg = payload.new as { sender_id: string; squad_id: string }
             // Only count if it's from someone else and in user's squads
             if (msg.sender_id !== user.id && squadIds.includes(msg.squad_id)) {
-              set(state => ({
-                squadUnread: state.squadUnread + 1,
-                totalUnread: state.totalUnread + 1
-              }))
+              set(state => {
+                const newTotal = state.totalUnread + 1
+                updateAppBadge(newTotal)
+                return {
+                  squadUnread: state.squadUnread + 1,
+                  totalUnread: newTotal
+                }
+              })
             }
           }
         )
@@ -118,10 +149,14 @@ export const useUnreadCountStore = create<UnreadCountState>((set, get) => ({
             const msg = payload.new as { receiver_id: string }
             // Only count if user is the receiver
             if (msg.receiver_id === user.id) {
-              set(state => ({
-                dmUnread: state.dmUnread + 1,
-                totalUnread: state.totalUnread + 1
-              }))
+              set(state => {
+                const newTotal = state.totalUnread + 1
+                updateAppBadge(newTotal)
+                return {
+                  dmUnread: state.dmUnread + 1,
+                  totalUnread: newTotal
+                }
+              })
             }
           }
         )
@@ -145,31 +180,47 @@ export const useUnreadCountStore = create<UnreadCountState>((set, get) => ({
   },
 
   incrementSquad: () => {
-    set(state => ({
-      squadUnread: state.squadUnread + 1,
-      totalUnread: state.totalUnread + 1
-    }))
+    set(state => {
+      const newTotal = state.totalUnread + 1
+      updateAppBadge(newTotal)
+      return {
+        squadUnread: state.squadUnread + 1,
+        totalUnread: newTotal
+      }
+    })
   },
 
   incrementDM: () => {
-    set(state => ({
-      dmUnread: state.dmUnread + 1,
-      totalUnread: state.totalUnread + 1
-    }))
+    set(state => {
+      const newTotal = state.totalUnread + 1
+      updateAppBadge(newTotal)
+      return {
+        dmUnread: state.dmUnread + 1,
+        totalUnread: newTotal
+      }
+    })
   },
 
   decrementSquad: (count = 1) => {
-    set(state => ({
-      squadUnread: Math.max(0, state.squadUnread - count),
-      totalUnread: Math.max(0, state.totalUnread - count)
-    }))
+    set(state => {
+      const newTotal = Math.max(0, state.totalUnread - count)
+      updateAppBadge(newTotal)
+      return {
+        squadUnread: Math.max(0, state.squadUnread - count),
+        totalUnread: newTotal
+      }
+    })
   },
 
   decrementDM: (count = 1) => {
-    set(state => ({
-      dmUnread: Math.max(0, state.dmUnread - count),
-      totalUnread: Math.max(0, state.totalUnread - count)
-    }))
+    set(state => {
+      const newTotal = Math.max(0, state.totalUnread - count)
+      updateAppBadge(newTotal)
+      return {
+        dmUnread: Math.max(0, state.dmUnread - count),
+        totalUnread: newTotal
+      }
+    })
   },
 }))
 

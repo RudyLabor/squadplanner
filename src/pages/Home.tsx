@@ -110,7 +110,7 @@ function NextSessionCard({
       whileTap={{ scale: 0.995 }}
       transition={{ duration: 0.4, ease: "easeOut" }}
     >
-      <Card className="p-4 border-l-4 border-l-[#6366f1] bg-gradient-to-br from-[#6366f1]/8 via-transparent to-[#34d399]/3 hover:from-[#6366f1]/12 hover:to-[#34d399]/6 hover:shadow-[0_0_20px_rgba(99,102,241,0.1)] transition-all duration-400">
+      <Card className="p-4 border-l-4 border-l-[#6366f1] bg-gradient-to-br from-[#6366f1]/8 via-transparent to-[#34d399]/3 hover:from-[#6366f1]/12 hover:to-[#34d399]/6 hover:shadow-[0_0_20px_rgba(99,102,241,0.1)] transition-interactive">
         {/* Header avec lien vers squad */}
         <Link to={`/squad/${session.squad_id}`}>
           <div className="flex items-start justify-between mb-3">
@@ -148,7 +148,7 @@ function NextSessionCard({
               onClick={() => onRsvp(session.id, 'present')}
               aria-label="Marquer comme présent"
               aria-pressed={session.my_rsvp === 'present'}
-              className={`flex-1 flex items-center justify-center gap-1.5 px-3 py-2.5 min-h-[44px] rounded-lg text-[13px] font-medium transition-all duration-400 ${
+              className={`flex-1 flex items-center justify-center gap-1.5 px-3 py-2.5 min-h-[44px] rounded-lg text-[13px] font-medium transition-interactive ${
                 session.my_rsvp === 'present'
                   ? 'bg-[#34d399]/15 text-[#34d399] border border-[#34d399]/20 shadow-[0_0_10px_rgba(52,211,153,0.1)]'
                   : 'bg-[rgba(255,255,255,0.05)] text-[#8b8d90] hover:bg-[rgba(52,211,153,0.1)] hover:text-[#34d399] border border-transparent hover:border-[#34d399]/15'
@@ -166,7 +166,7 @@ function NextSessionCard({
               onClick={() => onRsvp(session.id, 'maybe')}
               aria-label="Marquer comme peut-être"
               aria-pressed={session.my_rsvp === 'maybe'}
-              className={`flex-1 flex items-center justify-center gap-1.5 px-3 py-2.5 min-h-[44px] rounded-lg text-[13px] font-medium transition-all duration-400 ${
+              className={`flex-1 flex items-center justify-center gap-1.5 px-3 py-2.5 min-h-[44px] rounded-lg text-[13px] font-medium transition-interactive ${
                 session.my_rsvp === 'maybe'
                   ? 'bg-[#fbbf24]/15 text-[#fbbf24] border border-[#fbbf24]/20 shadow-[0_0_10px_rgba(251,191,36,0.1)]'
                   : 'bg-[rgba(255,255,255,0.05)] text-[#8b8d90] hover:bg-[rgba(251,191,36,0.1)] hover:text-[#fbbf24] border border-transparent hover:border-[#fbbf24]/15'
@@ -184,7 +184,7 @@ function NextSessionCard({
               onClick={() => onRsvp(session.id, 'absent')}
               aria-label="Marquer comme absent"
               aria-pressed={session.my_rsvp === 'absent'}
-              className={`flex-1 flex items-center justify-center gap-1.5 px-3 py-2.5 min-h-[44px] rounded-lg text-[13px] font-medium transition-all duration-400 ${
+              className={`flex-1 flex items-center justify-center gap-1.5 px-3 py-2.5 min-h-[44px] rounded-lg text-[13px] font-medium transition-interactive ${
                 session.my_rsvp === 'absent'
                   ? 'bg-[#f87171]/15 text-[#f87171] border border-[#f87171]/20 shadow-[0_0_10px_rgba(248,113,113,0.1)]'
                   : 'bg-[rgba(255,255,255,0.05)] text-[#8b8d90] hover:bg-[rgba(248,113,113,0.1)] hover:text-[#f87171] border border-transparent hover:border-[#f87171]/15'
@@ -276,7 +276,7 @@ function StatsRow({ squadsCount, sessionsThisWeek, reliabilityScore }: {
           transition={{ delay: index * 0.1, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
-          className="h-[60px] sm:h-[68px] px-2 sm:px-4 flex items-center gap-2 sm:gap-3 rounded-xl sm:rounded-2xl border border-white/[0.06] bg-white/[0.02] hover:bg-white/[0.04] hover:border-white/[0.1] cursor-pointer transition-all duration-300"
+          className="h-[60px] sm:h-[68px] px-2 sm:px-4 flex items-center gap-2 sm:gap-3 rounded-xl sm:rounded-2xl border border-white/[0.06] bg-white/[0.02] hover:bg-white/[0.04] hover:border-white/[0.1] cursor-pointer transition-interactive"
         >
           <div
             className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl flex items-center justify-center flex-shrink-0"
@@ -679,11 +679,29 @@ export default function Home() {
               Ton tableau de bord
             </h2>
             <div className="space-y-4">
-              <StatsRow
-                squadsCount={squads.length}
-                sessionsThisWeek={sessionsThisWeek}
-                reliabilityScore={reliabilityScore}
-              />
+              {(squadsLoading || sessionsLoading) ? (
+                /* Skeleton pendant le chargement - évite le flash de fausses données */
+                <div className="grid grid-cols-3 gap-2 sm:gap-3">
+                  {[0, 1, 2].map((i) => (
+                    <div
+                      key={i}
+                      className="h-[60px] sm:h-[68px] px-2 sm:px-4 flex items-center gap-2 sm:gap-3 rounded-xl sm:rounded-2xl border border-white/[0.06] bg-white/[0.02]"
+                    >
+                      <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-white/[0.05] animate-pulse" />
+                      <div className="min-w-0 flex-1">
+                        <div className="h-5 sm:h-6 w-12 bg-white/[0.05] rounded animate-pulse mb-1" />
+                        <div className="h-2 sm:h-3 w-16 bg-white/[0.03] rounded animate-pulse" />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <StatsRow
+                  squadsCount={squads.length}
+                  sessionsThisWeek={sessionsThisWeek}
+                  reliabilityScore={reliabilityScore}
+                />
+              )}
               {/* Streak Counter */}
               <StreakCounter
                 streakDays={profile?.streak_days || 0}
@@ -733,7 +751,7 @@ export default function Home() {
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: index * 0.1, duration: 0.4, ease: "easeOut" }}
                     >
-                      <Card className="p-3 hover:shadow-[0_0_15px_rgba(99,102,241,0.1)] transition-all duration-400">
+                      <Card className="p-3 hover:shadow-[0_0_15px_rgba(99,102,241,0.1)] transition-interactive">
                         <div className="flex items-center gap-3">
                           <div className="w-10 h-10 rounded-lg bg-[rgba(99,102,241,0.12)] flex items-center justify-center">
                             <Users className="w-5 h-5 text-[#6366f1]" />
@@ -802,7 +820,7 @@ export default function Home() {
                   whileTap={{ scale: 0.99 }}
                   transition={{ duration: 0.4, ease: "easeOut" }}
                 >
-                  <Card className="p-4 bg-gradient-to-r from-[#6366f1]/8 to-transparent border-dashed border-[#6366f1]/20 hover:border-[#6366f1]/30 hover:shadow-[0_0_15px_rgba(99,102,241,0.1)] transition-all duration-400">
+                  <Card className="p-4 bg-gradient-to-r from-[#6366f1]/8 to-transparent border-dashed border-[#6366f1]/20 hover:border-[#6366f1]/30 hover:shadow-[0_0_15px_rgba(99,102,241,0.1)] transition-interactive">
                     <div className="flex items-center gap-4">
                       <motion.div
                         className="w-10 h-10 rounded-lg bg-[#6366f1]/12 flex items-center justify-center"

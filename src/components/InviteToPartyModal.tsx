@@ -184,7 +184,7 @@ export function InviteToPartyModal({
           <div className="p-4 border-b border-white/5">
             <button
               onClick={copyLink}
-              className={`w-full flex items-center justify-center gap-2 p-3 rounded-xl transition-all ${
+              className={`w-full flex items-center justify-center gap-2 p-3 rounded-xl transition-interactive ${
                 linkCopied
                   ? 'bg-[#34d399]/15 text-[#34d399] border border-[#34d399]/20'
                   : 'bg-white/5 text-[#8b8d90] hover:bg-white/10 hover:text-[#f7f8f8] border border-white/10'

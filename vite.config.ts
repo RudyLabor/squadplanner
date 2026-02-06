@@ -23,7 +23,7 @@ export default defineConfig({
       output: {
         // Manual chunks for optimal caching - function form for better control
         manualChunks: (id) => {
-          // Agora SDK - very heavy, should be isolated and lazy loaded
+          // Agora SDK - very heavy, MUST be isolated
           if (id.includes('agora-rtc-sdk-ng')) {
             return 'vendor-agora';
           }

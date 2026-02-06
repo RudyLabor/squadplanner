@@ -72,7 +72,7 @@ function ParticipantAvatar({
               ? 'bg-[#6366f1]'
               : 'bg-[rgba(99,102,241,0.3)]'
           }
-          transition-all duration-200
+          transition-interactive
         `}>
           <span className={`${textSizes[size]} font-bold text-white`}>
             {username.charAt(0).toUpperCase()}
@@ -329,7 +329,7 @@ function SquadCard({ squad, onJoin, isConnecting }: {
       whileHover={{ y: -1, scale: 1.01 }}
       whileTap={{ scale: 0.99 }}
     >
-      <Card className="p-4 bg-gradient-to-br from-[rgba(99,102,241,0.08)] to-transparent border-[rgba(99,102,241,0.15)] hover:border-[rgba(99,102,241,0.3)] transition-all duration-300">
+      <Card className="p-4 bg-gradient-to-br from-[rgba(99,102,241,0.08)] to-transparent border-[rgba(99,102,241,0.15)] hover:border-[rgba(99,102,241,0.3)] transition-interactive">
         <div className="flex items-center gap-4">
           <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#6366f1] to-[#a78bfa] flex items-center justify-center shadow-md shadow-[#6366f1]/10">
             <Gamepad2 className="w-6 h-6 text-white" />

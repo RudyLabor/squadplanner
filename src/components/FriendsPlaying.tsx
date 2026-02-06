@@ -41,7 +41,7 @@ function FriendCard({
       whileTap={{ scale: 0.98 }}
       className="flex-shrink-0 w-[200px] md:w-auto"
     >
-      <Card className="p-4 bg-gradient-to-br from-[rgba(94,109,210,0.08)] via-transparent to-[rgba(74,222,128,0.05)] hover:from-[rgba(94,109,210,0.12)] hover:to-[rgba(74,222,128,0.08)] hover:shadow-[0_0_20px_rgba(94,109,210,0.2)] transition-all duration-300">
+      <Card className="p-4 bg-gradient-to-br from-[rgba(94,109,210,0.08)] via-transparent to-[rgba(74,222,128,0.05)] hover:from-[rgba(94,109,210,0.12)] hover:to-[rgba(74,222,128,0.08)] hover:shadow-[0_0_20px_rgba(94,109,210,0.2)] transition-interactive">
         <div className="flex flex-col gap-3">
           {/* Avatar with pulse animation */}
           <div className="flex items-center gap-3">
@@ -121,7 +121,7 @@ function FriendCard({
               onClick={() => onJoin(friend.squad_id)}
               whileHover={{ scale: 1.02, boxShadow: '0 0 20px rgba(74, 222, 128, 0.4)' }}
               whileTap={{ scale: 0.98 }}
-              className="w-full flex items-center justify-center gap-2 h-10 min-h-[44px] rounded-lg bg-[#4ade80]/15 hover:bg-[#4ade80]/25 border border-[#4ade80]/30 text-[#4ade80] text-[13px] font-medium transition-all duration-200"
+              className="w-full flex items-center justify-center gap-2 h-10 min-h-[44px] rounded-lg bg-[#4ade80]/15 hover:bg-[#4ade80]/25 border border-[#4ade80]/30 text-[#4ade80] text-[13px] font-medium transition-interactive"
             >
               <LogIn className="w-4 h-4" />
               Rejoindre
@@ -131,7 +131,7 @@ function FriendCard({
               onClick={() => onInvite(friend.friend_id)}
               whileHover={{ scale: 1.02, boxShadow: '0 0 20px rgba(94, 109, 210, 0.4)' }}
               whileTap={{ scale: 0.98 }}
-              className="w-full flex items-center justify-center gap-2 h-10 min-h-[44px] rounded-lg bg-[#5e6dd2]/15 hover:bg-[#5e6dd2]/25 border border-[#5e6dd2]/30 text-[#5e6dd2] text-[13px] font-medium transition-all duration-200"
+              className="w-full flex items-center justify-center gap-2 h-10 min-h-[44px] rounded-lg bg-[#5e6dd2]/15 hover:bg-[#5e6dd2]/25 border border-[#5e6dd2]/30 text-[#5e6dd2] text-[13px] font-medium transition-interactive"
             >
               <UserPlus className="w-4 h-4" />
               Inviter

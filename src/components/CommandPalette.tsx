@@ -2,10 +2,10 @@ import { useState, useEffect, useCallback, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   Search, Home, Users, Mic, MessageCircle, User, Calendar,
-  Settings, Zap, HelpCircle, X, ArrowRight, Command
+  Settings, Zap, HelpCircle, X, ArrowRight, Command, Moon, Sun
 } from 'lucide-react'
-import { useNavigate } from 'react-router-dom'
-import { useSquadsStore, useSessionsStore } from '../hooks'
+import { useSquadsStore, useSessionsStore, useViewTransitionNavigate } from '../hooks'
+import { useThemeStore } from '../hooks/useTheme'
 
 interface CommandItem {
   id: string
@@ -21,10 +21,17 @@ export function CommandPalette() {
   const [query, setQuery] = useState('')
   const [selectedIndex, setSelectedIndex] = useState(0)
   const inputRef = useRef<HTMLInputElement>(null)
-  const navigate = useNavigate()
+  const navigate = useViewTransitionNavigate()
 
   const { squads } = useSquadsStore()
   const { sessions } = useSessionsStore()
+  const { mode, setMode, effectiveTheme } = useThemeStore()
+
+  // Toggle theme: dark -> light -> system -> dark
+  const toggleTheme = useCallback(() => {
+    const nextMode = mode === 'dark' ? 'light' : mode === 'light' ? 'system' : 'dark'
+    setMode(nextMode)
+  }, [mode, setMode])
 
   // Close and reset
   const close = useCallback(() => {
@@ -43,6 +50,18 @@ export function CommandPalette() {
     { id: 'profile', label: 'Mon Profil', description: 'Voir mon profil', icon: User, action: () => { navigate('/profile'); close() }, category: 'navigation' },
     { id: 'settings', label: 'Paramètres', description: 'Réglages de l\'app', icon: Settings, action: () => { navigate('/settings'); close() }, category: 'navigation' },
     { id: 'premium', label: 'Premium', description: 'Passer Premium', icon: Zap, action: () => { navigate('/premium'); close() }, category: 'navigation' },
+  ]
+
+  // Action commands
+  const actionCommands: CommandItem[] = [
+    {
+      id: 'toggle-theme',
+      label: 'Changer le thème',
+      description: `Actuel: ${mode === 'system' ? 'Auto' : mode === 'dark' ? 'Sombre' : 'Clair'}`,
+      icon: effectiveTheme === 'dark' ? Moon : Sun,
+      action: () => { toggleTheme(); close() },
+      category: 'actions'
+    },
   ]
 
   // Squad commands
@@ -66,7 +85,7 @@ export function CommandPalette() {
   }))
 
   // All commands
-  const allCommands = [...navigationCommands, ...squadCommands, ...sessionCommands]
+  const allCommands = [...navigationCommands, ...actionCommands, ...squadCommands, ...sessionCommands]
 
   // Filter commands based on query
   const filteredCommands = query
@@ -76,21 +95,77 @@ export function CommandPalette() {
       )
     : allCommands.slice(0, 8)
 
+  // State for shortcuts help modal
+  const [showShortcutsHelp, setShowShortcutsHelp] = useState(false)
+
   // Keyboard shortcuts
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
+      // Don't trigger shortcuts when typing in input fields
+      const target = e.target as HTMLElement
+      const isTyping = target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable
+
       // Open with Cmd+K or Ctrl+K
       if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
         e.preventDefault()
         setIsOpen(prev => !prev)
+        return
       }
 
       // Close with Escape
-      if (e.key === 'Escape' && isOpen) {
-        close()
+      if (e.key === 'Escape') {
+        if (showShortcutsHelp) {
+          setShowShortcutsHelp(false)
+          return
+        }
+        if (isOpen) {
+          close()
+          return
+        }
       }
 
-      // Navigate with arrows
+      // Global shortcuts (only when not typing and palette is closed)
+      if (!isTyping && !isOpen) {
+        switch (e.key.toLowerCase()) {
+          case 'n':
+            // N → New session (go to sessions page)
+            e.preventDefault()
+            navigate('/sessions?new=true')
+            break
+          case 's':
+            // S → Squads
+            e.preventDefault()
+            navigate('/squads')
+            break
+          case 'm':
+            // M → Messages
+            e.preventDefault()
+            navigate('/messages')
+            break
+          case 'p':
+            // P → Party
+            e.preventDefault()
+            navigate('/party')
+            break
+          case 'h':
+            // H → Home
+            e.preventDefault()
+            navigate('/home')
+            break
+          case 't':
+            // T → Toggle theme
+            e.preventDefault()
+            toggleTheme()
+            break
+          case '?':
+            // ? → Show shortcuts help
+            e.preventDefault()
+            setShowShortcutsHelp(true)
+            break
+        }
+      }
+
+      // Navigate with arrows when palette is open
       if (isOpen && filteredCommands.length > 0) {
         if (e.key === 'ArrowDown') {
           e.preventDefault()
@@ -109,7 +184,7 @@ export function CommandPalette() {
 
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [isOpen, filteredCommands, selectedIndex, close])
+  }, [isOpen, showShortcutsHelp, filteredCommands, selectedIndex, close, navigate, toggleTheme])
 
   // Focus input when opened
   useEffect(() => {
@@ -138,6 +213,7 @@ export function CommandPalette() {
   }
 
   return (
+    <>
     <AnimatePresence>
       {isOpen && (
         <>
@@ -260,6 +336,75 @@ export function CommandPalette() {
         </>
       )}
     </AnimatePresence>
+
+    {/* Shortcuts Help Modal */}
+    <AnimatePresence>
+      {showShortcutsHelp && (
+        <>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setShowShortcutsHelp(false)}
+            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[100]"
+          />
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+            className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-md z-[101] mx-4"
+          >
+            <div className="bg-[#101012] border border-[rgba(255,255,255,0.1)] rounded-2xl shadow-[0_25px_50px_-12px_rgba(0,0,0,0.5)] overflow-hidden">
+              <div className="flex items-center justify-between px-5 py-4 border-b border-[rgba(255,255,255,0.06)]">
+                <h2 className="text-[16px] font-semibold text-[#f7f8f8]">Raccourcis clavier</h2>
+                <button
+                  onClick={() => setShowShortcutsHelp(false)}
+                  className="p-1.5 rounded-lg hover:bg-[rgba(255,255,255,0.05)] transition-colors"
+                >
+                  <X className="w-4 h-4 text-[#5e6063]" />
+                </button>
+              </div>
+              <div className="p-5 space-y-4">
+                <div>
+                  <h3 className="text-[11px] font-semibold text-[#5e6063] uppercase tracking-wider mb-2">Navigation</h3>
+                  <div className="space-y-2">
+                    {[
+                      { key: 'H', action: 'Accueil' },
+                      { key: 'S', action: 'Squads' },
+                      { key: 'M', action: 'Messages' },
+                      { key: 'P', action: 'Party vocale' },
+                      { key: 'N', action: 'Nouvelle session' },
+                      { key: 'T', action: 'Changer le thème' },
+                    ].map(({ key, action }) => (
+                      <div key={key} className="flex items-center justify-between">
+                        <span className="text-[13px] text-[#8b8d90]">{action}</span>
+                        <kbd className="px-2 py-1 rounded bg-[rgba(255,255,255,0.05)] text-[12px] font-mono text-[#f7f8f8]">{key}</kbd>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                <div>
+                  <h3 className="text-[11px] font-semibold text-[#5e6063] uppercase tracking-wider mb-2">Global</h3>
+                  <div className="space-y-2">
+                    {[
+                      { key: '⌘K', action: 'Palette de commandes' },
+                      { key: '?', action: 'Afficher cette aide' },
+                      { key: 'Esc', action: 'Fermer les modals' },
+                    ].map(({ key, action }) => (
+                      <div key={key} className="flex items-center justify-between">
+                        <span className="text-[13px] text-[#8b8d90]">{action}</span>
+                        <kbd className="px-2 py-1 rounded bg-[rgba(255,255,255,0.05)] text-[12px] font-mono text-[#f7f8f8]">{key}</kbd>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        </>
+      )}
+    </AnimatePresence>
+    </>
   )
 }
 

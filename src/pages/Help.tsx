@@ -127,7 +127,7 @@ export function Help() {
         <div className="flex items-center gap-4 mb-8">
           <button
             onClick={() => navigate(-1)}
-            className="w-10 h-10 rounded-xl bg-[rgba(255,255,255,0.05)] flex items-center justify-center hover:bg-[rgba(255,255,255,0.1)] hover:scale-[1.02] transition-all"
+            className="w-10 h-10 rounded-xl bg-[rgba(255,255,255,0.05)] flex items-center justify-center hover:bg-[rgba(255,255,255,0.1)] hover:scale-[1.02] transition-interactive"
           >
             <ArrowLeft className="w-5 h-5 text-[#8b8d90]" />
           </button>
@@ -153,7 +153,7 @@ export function Help() {
         <div className="flex gap-2 overflow-x-auto pb-2 mb-6 scrollbar-hide">
           <button
             onClick={() => setSelectedCategory(null)}
-            className={`flex-shrink-0 px-4 py-2 rounded-full text-[13px] font-medium transition-all ${
+            className={`flex-shrink-0 px-4 py-2 rounded-full text-[13px] font-medium transition-interactive ${
               selectedCategory === null
                 ? 'bg-[#6366f1] text-white'
                 : 'bg-[rgba(255,255,255,0.05)] text-[#8b8d90] hover:bg-[rgba(255,255,255,0.1)] hover:scale-[1.02]'
@@ -165,7 +165,7 @@ export function Help() {
             <button
               key={cat}
               onClick={() => setSelectedCategory(cat)}
-              className={`flex-shrink-0 px-4 py-2 rounded-full text-[13px] font-medium transition-all ${
+              className={`flex-shrink-0 px-4 py-2 rounded-full text-[13px] font-medium transition-interactive ${
                 selectedCategory === cat
                   ? 'bg-[#6366f1] text-white'
                   : 'bg-[rgba(255,255,255,0.05)] text-[#8b8d90] hover:bg-[rgba(255,255,255,0.1)] hover:scale-[1.02]'

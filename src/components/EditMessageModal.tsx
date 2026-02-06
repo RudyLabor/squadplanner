@@ -159,7 +159,7 @@ export function EditMessageModal({
                     onKeyDown={handleKeyDown}
                     placeholder="Tapez votre message..."
                     rows={3}
-                    className="w-full px-4 py-3 bg-[rgba(255,255,255,0.04)] border border-[rgba(255,255,255,0.08)] rounded-xl text-[14px] text-[#f7f8f8] placeholder:text-[#5e6063] resize-none focus:outline-none focus:border-[rgba(94,109,210,0.5)] focus:ring-2 focus:ring-[rgba(94,109,210,0.2)] focus:shadow-[0_0_20px_rgba(94,109,210,0.2)] transition-all min-h-[80px] max-h-[200px]"
+                    className="w-full px-4 py-3 bg-[rgba(255,255,255,0.04)] border border-[rgba(255,255,255,0.08)] rounded-xl text-[14px] text-[#f7f8f8] placeholder:text-[#5e6063] resize-none focus:outline-none focus:border-[rgba(94,109,210,0.5)] focus:ring-2 focus:ring-[rgba(94,109,210,0.2)] focus:shadow-[0_0_20px_rgba(94,109,210,0.2)] transition-input min-h-[80px] max-h-[200px]"
                   />
                   <p className="text-[11px] text-[#5e6063] mt-2">
                     Conseil : Ctrl+Entree pour sauvegarder rapidement

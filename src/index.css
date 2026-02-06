@@ -61,6 +61,55 @@
   --radius-2xl: 24px;
 }
 
+/* =====================================================
+   PHASE 4.4 - LIGHT THEME SUPPORT
+   Overrides dark theme variables when [data-theme="light"]
+   ===================================================== */
+
+[data-theme="light"] {
+  /* Backgrounds - Clean, bright surfaces */
+  --color-bg-base: #ffffff;
+  --color-bg-elevated: #f8f9fa;
+  --color-bg-surface: #f1f3f5;
+  --color-bg-hover: #e9ecef;
+  --color-bg-active: #dee2e6;
+
+  /* Text - Dark text for light backgrounds */
+  --color-text-primary: #1a1a1b;
+  --color-text-secondary: #495057;
+  --color-text-tertiary: #6c757d;
+  --color-text-quaternary: #adb5bd;
+
+  /* Accents remain similar but slightly adjusted for light mode */
+  --color-primary: #5b5fc7;
+  --color-primary-hover: #4f52b2;
+
+  /* Border - Subtle on light */
+  --color-border-subtle: rgba(0, 0, 0, 0.04);
+  --color-border-default: rgba(0, 0, 0, 0.08);
+  --color-border-hover: rgba(0, 0, 0, 0.12);
+
+  /* Shadows - Softer for light mode */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.12);
+  --shadow-glow-primary: 0 0 40px rgba(99, 102, 241, 0.1);
+}
+
+/* Light theme selection color */
+[data-theme="light"] ::selection {
+  background: rgba(99, 102, 241, 0.2);
+  color: #1a1a1b;
+}
+
+/* Light theme scrollbar */
+[data-theme="light"] ::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.15);
+}
+[data-theme="light"] ::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.25);
+}
+
 /* Base styles - Premium foundation */
 html,
 body,
@@ -516,4 +565,72 @@ select:focus-visible,
   background-size: 200% 100%;
   animation: shimmer 1.5s ease-in-out infinite;
   border-radius: 0.5rem;
+}
+
+/* =====================================================
+   PHASE 1.3 - OPTIMIZED TRANSITIONS
+   Replaces transition-all with targeted properties
+   ===================================================== */
+
+/* Interactive elements - buttons, cards, links */
+.transition-interactive {
+  transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow, transform;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+
+/* Form inputs - focus states */
+.transition-input {
+  transition-property: border-color, box-shadow, background-color;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+
+/* Scale animations only */
+.transition-scale {
+  transition-property: transform;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+
+/* =====================================================
+   PHASE 4.1 - VIEW TRANSITIONS API
+   Native browser page transitions
+   ===================================================== */
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fade-out {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+@keyframes slide-from-right {
+  from { transform: translateX(20px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes slide-to-left {
+  from { transform: translateX(0); opacity: 1; }
+  to { transform: translateX(-20px); opacity: 0; }
+}
+
+/* View Transition animations */
+::view-transition-old(root) {
+  animation: fade-out 150ms ease-out forwards, slide-to-left 150ms ease-out forwards;
+}
+
+::view-transition-new(root) {
+  animation: fade-in 150ms ease-in forwards, slide-from-right 150ms ease-in forwards;
+}
+
+/* Respect reduced motion for view transitions */
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none;
+  }
 }

@@ -521,7 +521,7 @@ export function Onboarding() {
                   onClick={() => navigateToStep('create-squad')}
                   disabled={isNavigating}
                   data-testid="create-squad-button"
-                  className="w-full p-6 rounded-2xl bg-[rgba(255,255,255,0.02)] border border-[rgba(255,255,255,0.06)] hover:border-[#6366f1] hover:scale-[1.02] active:scale-[0.99] transition-all duration-200 text-left group disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full p-6 rounded-2xl bg-[rgba(255,255,255,0.02)] border border-[rgba(255,255,255,0.06)] hover:border-[#6366f1] hover:scale-[1.02] active:scale-[0.99] transition-interactive text-left group disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <div className="flex items-start gap-4">
                     <div className="w-14 h-14 rounded-xl bg-[rgba(99,102,241,0.08)] flex items-center justify-center shrink-0 group-hover:bg-[rgba(99,102,241,0.12)] transition-colors">
@@ -544,7 +544,7 @@ export function Onboarding() {
                   onClick={() => navigateToStep('join-squad')}
                   disabled={isNavigating}
                   data-testid="join-squad-button"
-                  className="w-full p-6 rounded-2xl bg-[rgba(255,255,255,0.02)] border border-[rgba(255,255,255,0.06)] hover:border-[#34d399] hover:scale-[1.02] active:scale-[0.99] transition-all duration-200 text-left group disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full p-6 rounded-2xl bg-[rgba(255,255,255,0.02)] border border-[rgba(255,255,255,0.06)] hover:border-[#34d399] hover:scale-[1.02] active:scale-[0.99] transition-interactive text-left group disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <div className="flex items-start gap-4">
                     <div className="w-14 h-14 rounded-xl bg-[rgba(52,211,153,0.08)] flex items-center justify-center shrink-0 group-hover:bg-[rgba(52,211,153,0.12)] transition-colors">
@@ -897,7 +897,7 @@ export function Onboarding() {
                           </div>
                         )}
                       </div>
-                      <label className="absolute bottom-0 right-0 w-8 h-8 rounded-full bg-[#6366f1] flex items-center justify-center border-2 border-[#050506] cursor-pointer hover:bg-[#4f46e5] hover:scale-[1.02] transition-all">
+                      <label className="absolute bottom-0 right-0 w-8 h-8 rounded-full bg-[#6366f1] flex items-center justify-center border-2 border-[#050506] cursor-pointer hover:bg-[#4f46e5] hover:scale-[1.02] transition-interactive">
                         <Camera className="w-4 h-4 text-white" />
                         <input
                           type="file"
@@ -1076,7 +1076,7 @@ export function Onboarding() {
                             onClick={() => {
                               navigator.clipboard.writeText(createdSquadCode)
                             }}
-                            className="p-3 rounded-lg bg-[rgba(99,102,241,0.08)] hover:bg-[rgba(99,102,241,0.12)] hover:scale-[1.02] transition-all"
+                            className="p-3 rounded-lg bg-[rgba(99,102,241,0.08)] hover:bg-[rgba(99,102,241,0.12)] hover:scale-[1.02] transition-interactive"
                             aria-label="Copier le code d'invitation"
                           >
                             <Copy className="w-5 h-5 text-[#6366f1]" aria-hidden="true" />
@@ -1116,7 +1116,7 @@ export function Onboarding() {
                 <div key={item.key} className="flex items-center gap-3">
                   <div className="flex flex-col items-center gap-1">
                     <div
-                      className={`w-8 h-8 rounded-full flex items-center justify-center text-[13px] font-semibold transition-all ${
+                      className={`w-8 h-8 rounded-full flex items-center justify-center text-[13px] font-semibold transition-interactive ${
                         isCompleted ? 'bg-[#34d399] text-white' :
                         isActive ? 'bg-[#6366f1] text-white' :
                         'bg-[rgba(255,255,255,0.05)] text-[#5e6063]'

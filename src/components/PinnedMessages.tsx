@@ -104,7 +104,7 @@ export function PinnedMessages({
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.05, duration: 0.2 }}
-                  className="group relative bg-[#18191b] rounded-xl border border-[rgba(255,255,255,0.04)] hover:border-[rgba(245,166,35,0.2)] transition-all"
+                  className="group relative bg-[#18191b] rounded-xl border border-[rgba(255,255,255,0.04)] hover:border-[rgba(245,166,35,0.2)] transition-interactive"
                 >
                   {/* Clickable area to scroll to message */}
                   <button
@@ -148,7 +148,7 @@ export function PinnedMessages({
                         e.stopPropagation()
                         onUnpin(pinned.message_id)
                       }}
-                      className="absolute top-3 right-3 w-7 h-7 rounded-lg bg-[rgba(255,255,255,0.03)] hover:bg-[rgba(239,68,68,0.15)] flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all"
+                      className="absolute top-3 right-3 w-7 h-7 rounded-lg bg-[rgba(255,255,255,0.03)] hover:bg-[rgba(239,68,68,0.15)] flex items-center justify-center opacity-0 group-hover:opacity-100 transition-interactive"
                       aria-label="Desepingler ce message"
                     >
                       <X className="w-4 h-4 text-[#5e6063] hover:text-[#ef4444] transition-colors" />

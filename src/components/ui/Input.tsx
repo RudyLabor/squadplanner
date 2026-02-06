@@ -45,7 +45,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
               focus:border-[rgba(99,102,241,0.6)] focus:ring-2 focus:ring-[rgba(99,102,241,0.1)] focus:outline-none
               focus:shadow-[0_0_20px_rgba(99,102,241,0.15)]
               text-[#f7f8f8] placeholder-[#5e6063]
-              transition-all duration-200
+              transition-input
               ${icon ? 'pl-12' : 'pl-4'}
               ${isPasswordField && showPasswordToggle ? 'pr-12' : 'pr-4'}
               ${error ? 'border-[rgba(251,113,133,0.5)] focus:border-[#fb7185] focus:ring-[rgba(251,113,133,0.08)] focus:shadow-[0_0_20px_rgba(251,113,133,0.1)]' : ''}

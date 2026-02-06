@@ -10,7 +10,7 @@ interface CardProps {
 }
 
 export function Card({ children, className = '', hoverable = false, onClick, 'aria-label': ariaLabel }: CardProps) {
-  const baseClasses = 'bg-[rgba(255,255,255,0.015)] border border-[rgba(255,255,255,0.04)] rounded-2xl transition-all duration-300'
+  const baseClasses = 'bg-[rgba(255,255,255,0.015)] border border-[rgba(255,255,255,0.04)] rounded-2xl transition-interactive'
   const hoverClasses = hoverable ? 'hover:bg-[rgba(255,255,255,0.025)] hover:border-[rgba(255,255,255,0.08)] cursor-pointer' : ''
   const isClickable = !!onClick
 

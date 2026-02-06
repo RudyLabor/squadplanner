@@ -287,7 +287,7 @@ export function Premium() {
             {/* Monthly */}
             <motion.button
               onClick={() => setSelectedPlan('monthly')}
-              className={`relative p-6 rounded-2xl border-2 text-left transition-all ${
+              className={`relative p-6 rounded-2xl border-2 text-left transition-interactive ${
                 selectedPlan === 'monthly'
                   ? 'border-[#6366f1] bg-[rgba(99,102,241,0.05)] shadow-[0_0_15px_rgba(99,102,241,0.1)]'
                   : 'border-[rgba(255,255,255,0.08)] bg-[rgba(255,255,255,0.02)] hover:border-[rgba(255,255,255,0.15)]'
@@ -315,7 +315,7 @@ export function Premium() {
             {/* Yearly */}
             <motion.button
               onClick={() => setSelectedPlan('yearly')}
-              className={`relative p-6 rounded-2xl border-2 text-left transition-all ${
+              className={`relative p-6 rounded-2xl border-2 text-left transition-interactive ${
                 selectedPlan === 'yearly'
                   ? 'border-[#34d399] bg-[rgba(52,211,153,0.05)] shadow-[0_0_15px_rgba(52,211,153,0.1)]'
                   : 'border-[rgba(255,255,255,0.08)] bg-[rgba(255,255,255,0.02)] hover:border-[rgba(255,255,255,0.15)]'
@@ -371,7 +371,7 @@ export function Premium() {
             <Button
               onClick={handleUpgrade}
               disabled={isLoading}
-              className="h-14 px-10 text-[16px] bg-gradient-to-r from-[#6366f1] via-[#a78bfa] to-[#6366f1] bg-[length:200%_100%] hover:bg-[position:100%_0] transition-all shadow-[0_0_15px_rgba(99,102,241,0.2)]"
+              className="h-14 px-10 text-[16px] bg-gradient-to-r from-[#6366f1] via-[#a78bfa] to-[#6366f1] bg-[length:200%_100%] hover:bg-[position:100%_0] transition-interactive shadow-[0_0_15px_rgba(99,102,241,0.2)]"
             >
               {isLoading ? (
                 <Loader2 className="w-5 h-5 animate-spin" />

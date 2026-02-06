@@ -163,7 +163,7 @@ export function Challenges({ challenges, onClaimXP }: ChallengesProps) {
           <button
             key={tab.key}
             onClick={() => setActiveTab(tab.key)}
-            className={`flex items-center gap-2 px-4 py-2 rounded-xl text-[13px] font-medium whitespace-nowrap transition-all ${
+            className={`flex items-center gap-2 px-4 py-2 rounded-xl text-[13px] font-medium whitespace-nowrap transition-interactive ${
               activeTab === tab.key
                 ? 'bg-[rgba(255,255,255,0.1)] text-[#f7f8f8] border border-[rgba(255,255,255,0.2)]'
                 : 'bg-[rgba(255,255,255,0.02)] text-[#8b8d90] border border-transparent hover:bg-[rgba(255,255,255,0.05)]'
@@ -244,7 +244,7 @@ function ChallengeCard({ challenge, index, onClaim, isClaiming }: ChallengeCardP
       transition={{ delay: index * 0.05 }}
     >
       <Card
-        className={`p-4 transition-all ${
+        className={`p-4 transition-interactive ${
           isClaimed
             ? 'bg-[rgba(255,255,255,0.01)] opacity-60'
             : canClaim

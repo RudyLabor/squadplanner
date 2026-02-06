@@ -154,7 +154,7 @@ export function CreateSessionModal() {
                       <select
                         value={selectedSquadId}
                         onChange={(e) => setSelectedSquadId(e.target.value)}
-                        className="w-full px-4 py-3 pr-10 rounded-xl bg-[rgba(255,255,255,0.04)] border border-[rgba(255,255,255,0.08)] text-[#f7f8f8] focus:border-[rgba(99,102,241,0.5)] focus:ring-2 focus:ring-[rgba(99,102,241,0.15)] transition-all appearance-none cursor-pointer"
+                        className="w-full px-4 py-3 pr-10 rounded-xl bg-[rgba(255,255,255,0.04)] border border-[rgba(255,255,255,0.08)] text-[#f7f8f8] focus:border-[rgba(99,102,241,0.5)] focus:ring-2 focus:ring-[rgba(99,102,241,0.15)] transition-input appearance-none cursor-pointer"
                         required
                       >
                         <option value="">Sélectionner un squad</option>
@@ -190,7 +190,7 @@ export function CreateSessionModal() {
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
                     placeholder="Ranked grind, Fun time..."
-                    className="w-full px-4 py-3 rounded-xl bg-[rgba(255,255,255,0.04)] border border-[rgba(255,255,255,0.08)] text-[#f7f8f8] placeholder-[#5e6063] focus:border-[rgba(99,102,241,0.5)] focus:ring-2 focus:ring-[rgba(99,102,241,0.15)] transition-all"
+                    className="w-full px-4 py-3 rounded-xl bg-[rgba(255,255,255,0.04)] border border-[rgba(255,255,255,0.08)] text-[#f7f8f8] placeholder-[#5e6063] focus:border-[rgba(99,102,241,0.5)] focus:ring-2 focus:ring-[rgba(99,102,241,0.15)] transition-input"
                   />
                 </div>
 
@@ -206,7 +206,7 @@ export function CreateSessionModal() {
                       value={date}
                       onChange={(e) => setDate(e.target.value)}
                       required
-                      className="w-full px-4 py-3 rounded-xl bg-[rgba(255,255,255,0.04)] border border-[rgba(255,255,255,0.08)] text-[#f7f8f8] focus:border-[rgba(99,102,241,0.5)] focus:ring-2 focus:ring-[rgba(99,102,241,0.15)] transition-all"
+                      className="w-full px-4 py-3 rounded-xl bg-[rgba(255,255,255,0.04)] border border-[rgba(255,255,255,0.08)] text-[#f7f8f8] focus:border-[rgba(99,102,241,0.5)] focus:ring-2 focus:ring-[rgba(99,102,241,0.15)] transition-input"
                     />
                   </div>
                   <div>
@@ -219,7 +219,7 @@ export function CreateSessionModal() {
                       value={time}
                       onChange={(e) => setTime(e.target.value)}
                       required
-                      className="w-full px-4 py-3 rounded-xl bg-[rgba(255,255,255,0.04)] border border-[rgba(255,255,255,0.08)] text-[#f7f8f8] focus:border-[rgba(99,102,241,0.5)] focus:ring-2 focus:ring-[rgba(99,102,241,0.15)] transition-all"
+                      className="w-full px-4 py-3 rounded-xl bg-[rgba(255,255,255,0.04)] border border-[rgba(255,255,255,0.08)] text-[#f7f8f8] focus:border-[rgba(99,102,241,0.5)] focus:ring-2 focus:ring-[rgba(99,102,241,0.15)] transition-input"
                     />
                   </div>
                 </div>
@@ -233,7 +233,7 @@ export function CreateSessionModal() {
                     <select
                       value={duration}
                       onChange={(e) => setDuration(e.target.value)}
-                      className="w-full px-4 py-3 rounded-xl bg-[rgba(255,255,255,0.04)] border border-[rgba(255,255,255,0.08)] text-[#f7f8f8] focus:border-[rgba(99,102,241,0.5)] focus:ring-2 focus:ring-[rgba(99,102,241,0.15)] transition-all"
+                      className="w-full px-4 py-3 rounded-xl bg-[rgba(255,255,255,0.04)] border border-[rgba(255,255,255,0.08)] text-[#f7f8f8] focus:border-[rgba(99,102,241,0.5)] focus:ring-2 focus:ring-[rgba(99,102,241,0.15)] transition-input"
                     >
                       <option value="60">1 heure</option>
                       <option value="120">2 heures</option>
@@ -248,7 +248,7 @@ export function CreateSessionModal() {
                     <select
                       value={threshold}
                       onChange={(e) => setThreshold(e.target.value)}
-                      className="w-full px-4 py-3 rounded-xl bg-[rgba(255,255,255,0.04)] border border-[rgba(255,255,255,0.08)] text-[#f7f8f8] focus:border-[rgba(99,102,241,0.5)] focus:ring-2 focus:ring-[rgba(99,102,241,0.15)] transition-all"
+                      className="w-full px-4 py-3 rounded-xl bg-[rgba(255,255,255,0.04)] border border-[rgba(255,255,255,0.08)] text-[#f7f8f8] focus:border-[rgba(99,102,241,0.5)] focus:ring-2 focus:ring-[rgba(99,102,241,0.15)] transition-input"
                     >
                       <option value="2">2 joueurs</option>
                       <option value="3">3 joueurs</option>

@@ -104,7 +104,7 @@ export function CallHistory() {
           <div className="flex items-center gap-3 mb-4">
             <button
               onClick={() => navigate(-1)}
-              className="w-11 h-11 min-w-[44px] min-h-[44px] rounded-xl bg-[rgba(255,255,255,0.03)] flex items-center justify-center hover:bg-[rgba(255,255,255,0.06)] hover:scale-[1.02] transition-all touch-target"
+              className="w-11 h-11 min-w-[44px] min-h-[44px] rounded-xl bg-[rgba(255,255,255,0.03)] flex items-center justify-center hover:bg-[rgba(255,255,255,0.06)] hover:scale-[1.02] transition-interactive touch-target"
               aria-label="Retour"
             >
               <ArrowLeft className="w-5 h-5 text-[#f7f8f8]" />
@@ -121,7 +121,7 @@ export function CallHistory() {
             <button
               onClick={() => fetchCallHistory()}
               disabled={isLoading}
-              className="w-11 h-11 min-w-[44px] min-h-[44px] rounded-xl bg-[rgba(255,255,255,0.03)] flex items-center justify-center hover:bg-[rgba(255,255,255,0.06)] hover:scale-[1.02] transition-all disabled:opacity-50 touch-target"
+              className="w-11 h-11 min-w-[44px] min-h-[44px] rounded-xl bg-[rgba(255,255,255,0.03)] flex items-center justify-center hover:bg-[rgba(255,255,255,0.06)] hover:scale-[1.02] transition-interactive disabled:opacity-50 touch-target"
               aria-label="Rafraichir"
             >
               <RefreshCw className={`w-5 h-5 text-[#888] ${isLoading ? 'animate-spin' : ''}`} />
@@ -134,7 +134,7 @@ export function CallHistory() {
               <button
                 key={option.value}
                 onClick={() => setFilter(option.value)}
-                className={`px-4 py-2.5 min-h-[44px] rounded-xl text-[13px] font-medium whitespace-nowrap transition-all touch-target ${
+                className={`px-4 py-2.5 min-h-[44px] rounded-xl text-[13px] font-medium whitespace-nowrap transition-interactive touch-target ${
                   filter === option.value
                     ? 'bg-[#6366f1] text-white'
                     : 'bg-[rgba(255,255,255,0.03)] text-[#888] hover:bg-[rgba(255,255,255,0.06)] hover:text-[#f7f8f8] hover:scale-[1.02]'
@@ -285,7 +285,7 @@ export function CallHistory() {
                         handleCall(call.contactId, call.contactName, call.contactAvatar)
                       }}
                       disabled={callStatus !== 'idle'}
-                      className="w-11 h-11 min-w-[44px] min-h-[44px] rounded-xl bg-[rgba(52,211,153,0.05)] flex items-center justify-center hover:bg-[rgba(52,211,153,0.1)] hover:scale-[1.02] transition-all disabled:opacity-50 disabled:cursor-not-allowed touch-target"
+                      className="w-11 h-11 min-w-[44px] min-h-[44px] rounded-xl bg-[rgba(52,211,153,0.05)] flex items-center justify-center hover:bg-[rgba(52,211,153,0.1)] hover:scale-[1.02] transition-interactive disabled:opacity-50 disabled:cursor-not-allowed touch-target"
                       aria-label={`Appeler ${call.contactName}`}
                     >
                       <Phone className="w-5 h-5 text-[#34d399]" aria-hidden="true" />

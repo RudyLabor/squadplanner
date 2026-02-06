@@ -114,7 +114,7 @@ function ConversationCard({ conversation, onClick, isActive }: {
   return (
     <button
       onClick={onClick}
-      className={`w-full p-3 rounded-xl text-left transition-all ${
+      className={`w-full p-3 rounded-xl text-left transition-interactive ${
         isActive
           ? 'bg-[rgba(99,102,241,0.15)] border border-[rgba(99,102,241,0.3)]'
           : 'hover:bg-[#18191b] border border-transparent'
@@ -318,7 +318,7 @@ const VirtualizedMessages = memo(function VirtualizedMessages({
                 transform: `translateY(${virtualRow.start}px)`,
               }}
             >
-              <div id={`message-${message.id}`} className="transition-all duration-300">
+              <div id={`message-${message.id}`} className="transition-interactive">
                 {showDateSeparator && <DateSeparator date={message.created_at} />}
                 <MessageBubble
                   message={message}
@@ -493,7 +493,7 @@ function MessageBubble({ message, isOwn, showAvatar, showName, currentUserId, is
             )}
 
             <div
-              className={`px-4 py-2.5 rounded-2xl transition-all duration-150 ${
+              className={`px-4 py-2.5 rounded-2xl transition-colors duration-150 ${
                 isOwn
                   ? 'bg-[#6366f1] text-white rounded-br-lg hover:bg-[#7c7ffa] hover:shadow-[0_0_10px_rgba(99,102,241,0.15)]'
                   : 'bg-[#18191b] text-[#f7f8f8] rounded-bl-lg hover:bg-[#1f2023] hover:shadow-[0_0_10px_rgba(255,255,255,0.025)]'
@@ -576,7 +576,7 @@ function DMConversationCard({ conversation, onClick }: {
   return (
     <button
       onClick={onClick}
-      className="w-full p-3 rounded-xl text-left transition-all hover:bg-[#18191b] border border-transparent"
+      className="w-full p-3 rounded-xl text-left transition-interactive hover:bg-[#18191b] border border-transparent"
     >
       <div className="flex items-center gap-3">
         {/* Avatar */}
@@ -919,7 +919,7 @@ export function Messages() {
       <div className={`flex gap-1 p-1 bg-[#18191b] rounded-xl ${showOnDesktop ? 'mx-4 mb-3' : 'mb-5'}`}>
         <button
           onClick={() => setActiveTab('squads')}
-          className={`flex-1 py-2.5 px-4 rounded-lg text-[13px] font-medium transition-all flex items-center justify-center gap-2 ${
+          className={`flex-1 py-2.5 px-4 rounded-lg text-[13px] font-medium transition-interactive flex items-center justify-center gap-2 ${
             activeTab === 'squads'
               ? 'bg-[#1f2023] text-[#f7f8f8]'
               : 'text-[#8b8d90] hover:text-[#f7f8f8]'
@@ -935,7 +935,7 @@ export function Messages() {
         </button>
         <button
           onClick={() => setActiveTab('dms')}
-          className={`flex-1 py-2.5 px-4 rounded-lg text-[13px] font-medium transition-all flex items-center justify-center gap-2 ${
+          className={`flex-1 py-2.5 px-4 rounded-lg text-[13px] font-medium transition-interactive flex items-center justify-center gap-2 ${
             activeTab === 'dms'
               ? 'bg-[#1f2023] text-[#f7f8f8]'
               : 'text-[#8b8d90] hover:text-[#f7f8f8]'
@@ -1204,7 +1204,7 @@ export function Messages() {
                 } : null
 
                 return (
-                  <div key={message.id} id={`message-${message.id}`} className="transition-all duration-300">
+                  <div key={message.id} id={`message-${message.id}`} className="transition-interactive">
                     {showDateSeparator && (
                       <DateSeparator date={message.created_at} />
                     )}

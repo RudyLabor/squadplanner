@@ -121,7 +121,7 @@ export function ParticipantVolumeControl({
         <div className="relative flex-1 h-4 flex items-center">
           <div className="absolute inset-x-0 h-1.5 rounded-full bg-[rgba(255,255,255,0.08)] overflow-hidden">
             <div
-              className="h-full rounded-full transition-all duration-100"
+              className="h-full rounded-full transition-transform duration-100"
               style={{
                 width: `${fillPercent}%`,
                 backgroundColor: trackColor

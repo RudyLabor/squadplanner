@@ -401,7 +401,7 @@ export default function Landing() {
               <motion.div
                 key={pillar.title}
                 variants={staggerItemVariants}
-                className="relative p-8 rounded-3xl border transition-all duration-300 group"
+                className="relative p-8 rounded-3xl border transition-interactive group"
                 style={{
                   backgroundColor: `${pillar.color}08`,
                   borderColor: `${pillar.color}25`

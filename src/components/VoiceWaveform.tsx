@@ -117,7 +117,7 @@ export function VoiceWaveform({
       aria-label={isActive && isSpeaking ? 'Audio waveform - speaking' : 'Audio waveform - silent'}
     >
       <div
-        className="flex items-center justify-center transition-all duration-300"
+        className="flex items-center justify-center transition-interactive"
         style={{
           gap: config.gap,
           height: config.height,
@@ -183,7 +183,7 @@ export function VoiceWaveformDemo({
       }}
     >
       <div
-        className="flex items-center justify-center transition-all duration-300"
+        className="flex items-center justify-center transition-interactive"
         style={{
           gap: config.gap,
           height: config.height,

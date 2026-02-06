@@ -57,3 +57,30 @@ export const voiceChatLogger = createLogger('[VoiceChat]')
 export const pushLogger = createLogger('[Push]')
 export const authLogger = createLogger('[Auth]')
 export const networkLogger = createLogger('[Network]')
+export const aiLogger = createLogger('[AI]')
+export const messagesLogger = createLogger('[Messages]')
+export const sessionsLogger = createLogger('[Sessions]')
+export const subscriptionLogger = createLogger('[Subscription]')
+export const presenceLogger = createLogger('[Presence]')
+export const squadsLogger = createLogger('[Squads]')
+
+/**
+ * Quick dev-only log helper for one-off debugging
+ * Usage: devLog('debug message', data)
+ */
+export const devLog = (...args: unknown[]) => {
+  if (isDev) {
+    console.log('[Dev]', ...args)
+  }
+}
+
+/**
+ * Silent error catch - logs error only in dev, returns undefined
+ * Usage: const data = await fetch().catch(silentCatch)
+ */
+export const silentCatch = (error: unknown) => {
+  if (isDev) {
+    console.warn('[SilentCatch]', error)
+  }
+  return undefined
+}

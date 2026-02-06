@@ -33,3 +33,13 @@ export { useSoundEffects } from './useSoundEffects'
 export { useRingtone, playNotificationSound } from './useRingtone'
 export { useKeyboardVisible } from './useKeyboardVisible'
 export { useUnreadCountStore } from './useUnreadCount'
+export { useThemeStore } from './useTheme'
+export type { ThemeMode } from './useTheme'
+export { useViewTransitionNavigate, isViewTransitionSupported, withViewTransition } from './useViewTransition'
+
+// PHASE 5.4 - Realtime presence
+export { usePresence, useUserOnlineStatus, getOnlineIndicatorClasses } from './usePresence'
+export type { PresenceUser, OnlineIndicatorProps } from './usePresence'
+
+// PHASE 1.1 - React Query hooks
+export * from './queries'

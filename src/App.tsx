@@ -2,11 +2,16 @@ import { useEffect, useState, lazy, Suspense, memo, useRef } from 'react'
 import { BrowserRouter, Routes, Route, Navigate, useLocation, useSearchParams } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
 import { Toaster } from 'sonner'
+import { QueryClientProvider } from '@tanstack/react-query'
 import { AppLayout } from './components/layout'
-import { useAuthStore, useSquadsStore, subscribeToIncomingCalls, usePushNotificationStore, useVoiceCallStore } from './hooks'
+import { useAuthStore, useSquadsStore, subscribeToIncomingCalls, usePushNotificationStore, useVoiceCallStore, useThemeStore } from './hooks'
 import { pageTransitionVariants, pageTransitionConfig } from './components/PageTransition'
 import { supabase } from './lib/supabase'
 import { ErrorBoundary } from './components/ErrorBoundary'
+import { queryClient } from './lib/queryClient'
+
+// Initialize theme on app load - triggers theme initialization before first render
+void useThemeStore.getState()
 
 // Lazy load all pages for code splitting
 const Home = lazy(() => import('./pages/Home'))
@@ -305,29 +310,31 @@ function AppContent() {
 
 export default function App() {
   return (
-    <BrowserRouter>
-      <AppContent />
-      {/* Global toast notifications - Phase 3.4 */}
-      <Toaster
-        position="top-center"
-        toastOptions={{
-          duration: 4000,
-          style: {
-            background: '#0f1012',
-            border: '1px solid rgba(255, 255, 255, 0.06)',
-            color: '#fafafa',
-            fontSize: '14px',
-            borderRadius: '12px',
-            padding: '12px 16px',
-          },
-          classNames: {
-            success: 'border-[#34d399]/20 bg-[#34d399]/10',
-            error: 'border-[#f87171]/20 bg-[#f87171]/10',
-            warning: 'border-[#fbbf24]/20 bg-[#fbbf24]/10',
-            info: 'border-[#6366f1]/20 bg-[#6366f1]/10',
-          },
-        }}
-      />
-    </BrowserRouter>
+    <QueryClientProvider client={queryClient}>
+      <BrowserRouter>
+        <AppContent />
+        {/* Global toast notifications - Phase 3.4 */}
+        <Toaster
+          position="top-center"
+          toastOptions={{
+            duration: 4000,
+            style: {
+              background: '#0f1012',
+              border: '1px solid rgba(255, 255, 255, 0.06)',
+              color: '#fafafa',
+              fontSize: '14px',
+              borderRadius: '12px',
+              padding: '12px 16px',
+            },
+            classNames: {
+              success: 'border-[#34d399]/20 bg-[#34d399]/10',
+              error: 'border-[#f87171]/20 bg-[#f87171]/10',
+              warning: 'border-[#fbbf24]/20 bg-[#fbbf24]/10',
+              info: 'border-[#6366f1]/20 bg-[#6366f1]/10',
+            },
+          }}
+        />
+      </BrowserRouter>
+    </QueryClientProvider>
   )
 }

@@ -283,7 +283,7 @@ const VirtualizedMessages = memo(function VirtualizedMessages({
           position: 'relative',
         }}
       >
-        {items.map((virtualRow: { key: string | number; index: number; start: number }) => {
+        {items.map((virtualRow) => {
           const message = messages[virtualRow.index]
           const index = virtualRow.index
           const isOwn = message.sender_id === userId

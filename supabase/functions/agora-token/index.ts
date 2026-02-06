@@ -20,6 +20,8 @@ const ALLOWED_ORIGINS = [
   'http://localhost:5179',
   'https://squadplanner.app',
   'https://www.squadplanner.app',
+  'https://squadplanner.fr',
+  'https://www.squadplanner.fr',
   Deno.env.get('SUPABASE_URL') || ''
 ].filter(Boolean)
 

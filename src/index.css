@@ -108,6 +108,18 @@ body {
   height: 100dvh;
 }
 
+/* Hide scrollbar on mobile for cleaner look */
+@media (max-width: 1023px) {
+  html, body {
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE/Edge */
+  }
+  html::-webkit-scrollbar,
+  body::-webkit-scrollbar {
+    display: none; /* Chrome/Safari/Opera */
+  }
+}
+
 #root {
   height: 100dvh;
   display: flex;

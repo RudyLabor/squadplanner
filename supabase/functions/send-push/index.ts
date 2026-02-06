@@ -87,14 +87,37 @@ function uint8ArrayToBase64Url(array: Uint8Array): string {
   return btoa(binary).replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '')
 }
 
-// Import a crypto key
+// Import a crypto key (VAPID keys are raw EC keys, not PKCS8)
 async function importVapidKey(base64Key: string, isPrivate: boolean): Promise<CryptoKey> {
   const keyData = base64ToUint8Array(base64Key)
 
   if (isPrivate) {
+    // VAPID private key is a raw 32-byte scalar, need to convert to JWK format
+    const jwk = {
+      kty: 'EC',
+      crv: 'P-256',
+      // For private key, we need d (the private scalar) and x, y (public point)
+      // But we only have d, so we'll use a different approach
+      d: base64Key.replace(/-/g, '+').replace(/_/g, '/'),
+      x: '', // Will be derived
+      y: '', // Will be derived
+    }
+
+    // Alternative: Import as raw and wrap in proper format
+    // The private key needs to be in JWK or PKCS8 format for WebCrypto
+    // Since we have raw bytes, convert to JWK
+    const privateKeyJwk = {
+      kty: 'EC',
+      crv: 'P-256',
+      d: uint8ArrayToBase64Url(keyData),
+      // x and y are required for JWK import, derive from public key
+      x: uint8ArrayToBase64Url(base64ToUint8Array(VAPID_PUBLIC_KEY).slice(1, 33)),
+      y: uint8ArrayToBase64Url(base64ToUint8Array(VAPID_PUBLIC_KEY).slice(33, 65)),
+    }
+
     return await crypto.subtle.importKey(
-      'pkcs8',
-      keyData,
+      'jwk',
+      privateKeyJwk,
       { name: 'ECDSA', namedCurve: 'P-256' },
       false,
       ['sign']

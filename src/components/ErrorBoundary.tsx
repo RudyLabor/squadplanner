@@ -1,5 +1,6 @@
 import { Component, type ReactNode } from 'react'
 import { RefreshCw, AlertTriangle, Home, ArrowLeft, Trash2 } from 'lucide-react'
+import { captureException } from '../lib/sentry'
 
 interface Props {
   children: ReactNode
@@ -61,14 +62,14 @@ export class ErrorBoundary extends Component<Props, State> {
   }
 
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
-    // Log error for debugging (in production, send to error tracking service)
-    if (import.meta.env.PROD) {
-      console.error('[ErrorBoundary] Error caught:', error.message)
-      // TODO: Send to Sentry when configured
-      // Sentry.captureException(error, { extra: { componentStack: errorInfo.componentStack } })
-    } else {
-      console.error('[ErrorBoundary] Error caught:', error, errorInfo)
-    }
+    // Log error for debugging and send to error tracking
+    console.error('[ErrorBoundary] Error caught:', error.message)
+
+    // Send to Sentry (only works in production when configured)
+    captureException(error, {
+      componentStack: errorInfo.componentStack,
+      isChunkError: this.state.isChunkError,
+    })
   }
 
   handleRetry = () => {

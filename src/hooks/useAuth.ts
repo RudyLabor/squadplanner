@@ -2,6 +2,7 @@ import { create } from 'zustand'
 import { supabase } from '../lib/supabase'
 import type { User, Session } from '@supabase/supabase-js'
 import type { Profile } from '../types/database'
+import { forceLeaveVoiceParty } from './useVoiceChat'
 
 interface AuthState {
   user: User | null
@@ -198,6 +199,9 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 
   signOut: async () => {
     try {
+      // Leave voice party before signing out
+      await forceLeaveVoiceParty()
+
       // Clear local state first
       set({ user: null, session: null, profile: null, isLoading: true })
 

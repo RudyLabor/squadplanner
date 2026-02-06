@@ -128,6 +128,82 @@ function clearSavedParty() {
   }
 }
 
+// Cleanup voice party status in database (used on browser close/logout)
+async function cleanupVoicePartyInDb() {
+  try {
+    await supabase.rpc('leave_voice_party')
+  } catch (e) {
+    // Ignore errors during cleanup
+  }
+}
+
+// Setup browser close/tab close listeners to cleanup voice party
+let cleanupListenersInitialized = false
+
+function setupBrowserCloseListeners() {
+  if (cleanupListenersInitialized || typeof window === 'undefined') return
+  cleanupListenersInitialized = true
+
+  // Handle page unload (browser/tab close)
+  const handleBeforeUnload = () => {
+    const state = useVoiceChatStore.getState()
+    if (state.isConnected) {
+      // Use sendBeacon for reliable delivery on page close
+      // We need to call the Supabase function via REST API
+      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
+      const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY
+
+      if (supabaseUrl && supabaseKey) {
+        const url = `${supabaseUrl}/rest/v1/rpc/leave_voice_party`
+
+        // Get the current session token for auth
+        const sessionData = localStorage.getItem('sb-nxbqiwmfyafgshxzczxo-auth-token')
+        if (sessionData) {
+          try {
+            const session = JSON.parse(sessionData)
+            const accessToken = session?.access_token
+
+            // sendBeacon doesn't support custom headers, so we use fetch with keepalive
+            fetch(url, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'apikey': supabaseKey,
+                'Authorization': `Bearer ${accessToken}`,
+              },
+              body: JSON.stringify({}),
+              keepalive: true, // Ensures request completes even after page unloads
+            }).catch(() => {})
+          } catch {
+            // Ignore parse errors
+          }
+        }
+      }
+
+      clearSavedParty()
+    }
+  }
+
+  // pagehide is more reliable on mobile browsers
+  window.addEventListener('pagehide', handleBeforeUnload)
+  window.addEventListener('beforeunload', handleBeforeUnload)
+}
+
+// Initialize listeners when module loads
+setupBrowserCloseListeners()
+
+// Export cleanup function for use in signOut
+export async function forceLeaveVoiceParty() {
+  const state = useVoiceChatStore.getState()
+  if (state.isConnected) {
+    await state.leaveChannel()
+  } else {
+    // Even if not connected locally, clear DB state
+    await cleanupVoicePartyInDb()
+  }
+  clearSavedParty()
+}
+
 export const useVoiceChatStore = create<VoiceChatState>((set, get) => ({
   isConnected: false,
   isConnecting: false,

@@ -1,6 +1,7 @@
 import { useEffect, useState, lazy, Suspense, memo, useRef } from 'react'
 import { BrowserRouter, Routes, Route, Navigate, useLocation, useSearchParams } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
+import { Toaster } from 'sonner'
 import { AppLayout } from './components/layout'
 import { useAuthStore, useSquadsStore, subscribeToIncomingCalls, usePushNotificationStore, useVoiceCallStore } from './hooks'
 import { pageTransitionVariants, pageTransitionConfig } from './components/PageTransition'
@@ -23,11 +24,13 @@ const CallHistory = lazy(() => import('./pages/CallHistory').then(m => ({ defaul
 const Premium = lazy(() => import('./pages/Premium').then(m => ({ default: m.Premium })))
 const Settings = lazy(() => import('./pages/Settings').then(m => ({ default: m.Settings })))
 const Help = lazy(() => import('./pages/Help').then(m => ({ default: m.Help })))
+const JoinSquad = lazy(() => import('./pages/JoinSquad').then(m => ({ default: m.JoinSquad })))
 
 // Lazy load heavy modals (only loaded when needed)
 const CallModal = lazy(() => import('./components/CallModal').then(m => ({ default: m.CallModal })))
 const IncomingCallModal = lazy(() => import('./components/IncomingCallModal').then(m => ({ default: m.IncomingCallModal })))
 const CommandPalette = lazy(() => import('./components/CommandPalette').then(m => ({ default: m.CommandPalette })))
+const CreateSessionModal = lazy(() => import('./components/CreateSessionModal').then(m => ({ default: m.CreateSessionModal })))
 
 // Optimized loading spinner - memoized to prevent re-renders
 const LoadingSpinner = memo(function LoadingSpinner() {
@@ -224,6 +227,11 @@ function AppContent() {
         <CommandPalette />
       </Suspense>
 
+      {/* Create Session Modal - PHASE 3.1 */}
+      <Suspense fallback={null}>
+        <CreateSessionModal />
+      </Suspense>
+
       <AppLayout>
         <AnimatePresence mode="wait">
           <motion.div
@@ -280,6 +288,9 @@ function AppContent() {
                 } />
                 <Route path="/help" element={<Help />} />
 
+                {/* Deep linking - Join squad via invite code */}
+                <Route path="/join/:code" element={<JoinSquad />} />
+
                 {/* Catch-all redirect to home */}
                   <Route path="*" element={<Navigate to="/" replace />} />
                 </Routes>
@@ -296,6 +307,27 @@ export default function App() {
   return (
     <BrowserRouter>
       <AppContent />
+      {/* Global toast notifications - Phase 3.4 */}
+      <Toaster
+        position="top-center"
+        toastOptions={{
+          duration: 4000,
+          style: {
+            background: '#0f1012',
+            border: '1px solid rgba(255, 255, 255, 0.06)',
+            color: '#fafafa',
+            fontSize: '14px',
+            borderRadius: '12px',
+            padding: '12px 16px',
+          },
+          classNames: {
+            success: 'border-[#34d399]/20 bg-[#34d399]/10',
+            error: 'border-[#f87171]/20 bg-[#f87171]/10',
+            warning: 'border-[#fbbf24]/20 bg-[#fbbf24]/10',
+            info: 'border-[#6366f1]/20 bg-[#6366f1]/10',
+          },
+        }}
+      />
     </BrowserRouter>
   )
 }

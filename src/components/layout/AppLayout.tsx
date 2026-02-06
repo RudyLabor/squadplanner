@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { Home, Users, Mic, MessageCircle, User, Plus, Zap, Pin, PinOff } from 'lucide-react'
 import { useShallow } from 'zustand/react/shallow'
 import { useAuthStore, useSquadsStore, useVoiceChatStore, useKeyboardVisible, useUnreadCountStore } from '../../hooks'
+import { useCreateSessionModal } from '../CreateSessionModal'
 import { SquadPlannerLogo } from '../SquadPlannerLogo'
 import { Breadcrumbs } from './Breadcrumbs'
 import { GlobalSearch } from '../GlobalSearch'
@@ -183,6 +184,9 @@ export function AppLayout({ children }: AppLayoutProps) {
   const isInVoiceChat = useVoiceChatStore(state => state.isConnected)
   const isKeyboardVisible = useKeyboardVisible()
 
+  // PHASE 3.1: Create session modal
+  const openCreateSessionModal = useCreateSessionModal(state => state.open)
+
   // OPTIMIZED: Select only totalUnread and actions with useShallow
   const { totalUnread: unreadMessages, fetchCounts, subscribe, unsubscribe } = useUnreadCountStore(
     useShallow(state => ({
@@ -241,8 +245,14 @@ export function AppLayout({ children }: AppLayoutProps) {
 
   return (
     <div className="h-[100dvh] bg-[#050506] flex overflow-hidden">
+      {/* Skip to main content link - PHASE 6.1 Accessibility */}
+      <a href="#main-content" className="skip-link">
+        Aller au contenu principal
+      </a>
+
       {/* Sidebar - Desktop only - Collapsible */}
       <motion.aside
+        aria-label="Navigation principale"
         className="hidden lg:flex flex-col border-r border-[rgba(255,255,255,0.03)] bg-[#050506] fixed h-full z-40"
         initial={false}
         animate={{ width: isExpanded ? 256 : 72 }}
@@ -299,37 +309,37 @@ export function AppLayout({ children }: AppLayoutProps) {
           )}
         </AnimatePresence>
 
-        {/* Quick action */}
+        {/* Quick action - PHASE 3.1: Opens modal directly */}
         <div className={isExpanded ? 'p-4' : 'p-2'}>
-          <Link to="/squads">
-            <motion.button
-              className={`flex items-center justify-center gap-2 ${isExpanded ? 'w-full h-11' : 'w-10 h-10 mx-auto'} rounded-xl bg-[#6366f1] text-white text-[14px] font-semibold`}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              transition={{ duration: 0.25 }}
-              title={!isExpanded ? 'Nouvelle session' : undefined}
-            >
-              <Plus className="w-4 h-4 flex-shrink-0" />
-              <AnimatePresence mode="wait">
-                {isExpanded && (
-                  <motion.span
-                    key="btn-text"
-                    initial={{ opacity: 0, width: 0 }}
-                    animate={{ opacity: 1, width: 'auto' }}
-                    exit={{ opacity: 0, width: 0 }}
-                    transition={{ duration: 0.15 }}
-                    className="whitespace-nowrap overflow-hidden"
-                  >
-                    Nouvelle session
-                  </motion.span>
-                )}
-              </AnimatePresence>
-            </motion.button>
-          </Link>
+          <motion.button
+            onClick={() => openCreateSessionModal()}
+            className={`flex items-center justify-center gap-2 ${isExpanded ? 'w-full h-11' : 'w-10 h-10 mx-auto'} rounded-xl bg-[#6366f1] text-white text-[14px] font-semibold`}
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            transition={{ duration: 0.25 }}
+            title={!isExpanded ? 'Nouvelle session' : undefined}
+            aria-label="Créer une nouvelle session"
+          >
+            <Plus className="w-4 h-4 flex-shrink-0" />
+            <AnimatePresence mode="wait">
+              {isExpanded && (
+                <motion.span
+                  key="btn-text"
+                  initial={{ opacity: 0, width: 0 }}
+                  animate={{ opacity: 1, width: 'auto' }}
+                  exit={{ opacity: 0, width: 0 }}
+                  transition={{ duration: 0.15 }}
+                  className="whitespace-nowrap overflow-hidden"
+                >
+                  Nouvelle session
+                </motion.span>
+              )}
+            </AnimatePresence>
+          </motion.button>
         </div>
 
         {/* Navigation */}
-        <nav className={`flex-1 ${isExpanded ? 'px-3' : 'px-2'} py-4 space-y-1`}>
+        <nav aria-label="Menu principal" className={`flex-1 ${isExpanded ? 'px-3' : 'px-2'} py-4 space-y-1`}>
           {navItems.map((item) => (
             <NavLink
               key={item.path}
@@ -438,6 +448,8 @@ export function AppLayout({ children }: AppLayoutProps) {
 
       {/* Main content - margin adjusts with sidebar */}
       <main
+        id="main-content"
+        tabIndex={-1}
         className={`flex-1 lg:pb-0 overflow-y-auto overflow-x-hidden scrollbar-hide-mobile ${isKeyboardVisible ? 'pb-0' : 'pb-mobile-nav'}`}
         style={{ marginLeft: 0 }}
       >
@@ -464,7 +476,10 @@ export function AppLayout({ children }: AppLayoutProps) {
       </main>
 
       {/* Bottom navigation - Mobile only */}
-      <nav className={`lg:hidden fixed bottom-0 left-0 right-0 bg-[#050506] border-t border-[rgba(255,255,255,0.03)] z-50 transition-transform duration-200 ${isKeyboardVisible ? 'translate-y-full' : 'translate-y-0'}`}>
+      <nav
+        aria-label="Navigation mobile"
+        className={`lg:hidden fixed bottom-0 left-0 right-0 bg-[#050506] border-t border-[rgba(255,255,255,0.03)] z-50 transition-transform duration-200 ${isKeyboardVisible ? 'translate-y-full' : 'translate-y-0'}`}
+      >
         <div className="flex items-center justify-around py-2 mobile-nav-padding">
           {mobileNavLeft.map((item) => (
             <MobileNavLink

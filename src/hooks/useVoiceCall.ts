@@ -1,5 +1,4 @@
 import { create } from 'zustand'
-import AgoraRTC from 'agora-rtc-sdk-ng'
 import type {
   IAgoraRTCClient,
   IMicrophoneAudioTrack,
@@ -11,6 +10,22 @@ import {
   setupNetworkQualityListener,
   type NetworkQualityLevel,
 } from './useNetworkQuality'
+
+// Lazy load Agora SDK only when needed (1.3MB)
+let AgoraRTC: typeof import('agora-rtc-sdk-ng').default | null = null
+
+async function getAgoraRTC() {
+  if (!AgoraRTC) {
+    const module = await import('agora-rtc-sdk-ng')
+    AgoraRTC = module.default
+    // PHASE 6.4: Set log level to errors only in production
+    // 0 = debug, 1 = info, 2 = warning, 3 = error, 4 = none
+    if (import.meta.env.PROD) {
+      AgoraRTC.setLogLevel(3) // Only show errors
+    }
+  }
+  return AgoraRTC
+}
 
 // Types
 export type CallStatus = 'idle' | 'calling' | 'ringing' | 'connected' | 'ended' | 'missed' | 'rejected'
@@ -169,11 +184,15 @@ export const useVoiceCallStore = create<VoiceCallState>((set, get) => ({
 
   // Start an outgoing call
   startCall: async (receiverId: string, receiverUsername: string, receiverAvatar?: string | null) => {
-    console.log('[VoiceCall] startCall called:', { receiverId, receiverUsername, receiverAvatar })
+    if (!import.meta.env.PROD) {
+      console.log('[VoiceCall] startCall called:', { receiverId, receiverUsername, receiverAvatar })
+    }
     const state = get()
 
     if (state.status !== 'idle') {
-      console.warn('[VoiceCall] Already in a call, status:', state.status)
+      if (!import.meta.env.PROD) {
+        console.warn('[VoiceCall] Already in a call, status:', state.status)
+      }
       return
     }
 
@@ -183,7 +202,9 @@ export const useVoiceCallStore = create<VoiceCallState>((set, get) => ({
       return
     }
 
-    console.log('[VoiceCall] Agora App ID is configured')
+    if (!import.meta.env.PROD) {
+      console.log('[VoiceCall] Agora App ID is configured')
+    }
 
     try {
       // Get current user
@@ -251,14 +272,20 @@ export const useVoiceCallStore = create<VoiceCallState>((set, get) => ({
               ]
             }
           })
-          console.log('[VoiceCall] Push notification sent for incoming call')
+          if (!import.meta.env.PROD) {
+            console.log('[VoiceCall] Push notification sent for incoming call')
+          }
         } catch (pushError) {
-          console.warn('[VoiceCall] Failed to send push notification:', pushError)
+          if (!import.meta.env.PROD) {
+            console.warn('[VoiceCall] Failed to send push notification:', pushError)
+          }
           // On continue meme si la push echoue
         }
       }
 
-      console.log('[VoiceCall] Setting state to calling with receiver:', receiver)
+      if (!import.meta.env.PROD) {
+        console.log('[VoiceCall] Setting state to calling with receiver:', receiver)
+      }
       set({
         status: 'calling',
         caller,
@@ -267,7 +294,9 @@ export const useVoiceCallStore = create<VoiceCallState>((set, get) => ({
         currentCallId: callRecord?.id || null,
         error: null,
       })
-      console.log('[VoiceCall] State set to calling')
+      if (!import.meta.env.PROD) {
+        console.log('[VoiceCall] State set to calling')
+      }
 
       // Setup ring timeout
       const ringTimeout = setTimeout(() => {
@@ -489,19 +518,26 @@ async function initializeAgoraClient(currentUserId: string, otherUserId: string)
   const channelName = generateChannelName(currentUserId, otherUserId)
 
   try {
+    // Lazy load Agora SDK (1.3MB) only when actually needed
+    const AgoraSDK = await getAgoraRTC()
+
     // Create client
-    const client = AgoraRTC.createClient({
+    const client = AgoraSDK.createClient({
       mode: 'rtc',
       codec: 'vp8',
     })
 
     // Gestion des changements d'etat de connexion (reconnexion automatique)
     client.on('connection-state-change', async (curState, prevState, reason) => {
-      console.log(`[VoiceCall] Connection state: ${prevState} -> ${curState}, reason: ${reason}`)
+      if (!import.meta.env.PROD) {
+        console.log(`[VoiceCall] Connection state: ${prevState} -> ${curState}, reason: ${reason}`)
+      }
 
       if (curState === 'RECONNECTING') {
         useVoiceCallStore.setState({ isReconnecting: true })
-        console.log('[VoiceCall] Reconnexion en cours...')
+        if (!import.meta.env.PROD) {
+          console.log('[VoiceCall] Reconnexion en cours...')
+        }
       } else if (curState === 'CONNECTED' && prevState === 'RECONNECTING') {
         // Reconnexion reussie automatiquement par Agora
         useVoiceCallStore.setState({
@@ -509,7 +545,9 @@ async function initializeAgoraClient(currentUserId: string, otherUserId: string)
           reconnectAttempts: 0,
           error: null
         })
-        console.log('[VoiceCall] Reconnexion automatique reussie !')
+        if (!import.meta.env.PROD) {
+          console.log('[VoiceCall] Reconnexion automatique reussie !')
+        }
       } else if (curState === 'DISCONNECTED') {
         const currentState = useVoiceCallStore.getState()
 
@@ -518,7 +556,9 @@ async function initializeAgoraClient(currentUserId: string, otherUserId: string)
           const attempts = currentState.reconnectAttempts + 1
 
           if (attempts <= MAX_RECONNECT_ATTEMPTS) {
-            console.log(`[VoiceCall] Tentative de reconnexion manuelle ${attempts}/${MAX_RECONNECT_ATTEMPTS}...`)
+            if (!import.meta.env.PROD) {
+              console.log(`[VoiceCall] Tentative de reconnexion manuelle ${attempts}/${MAX_RECONNECT_ATTEMPTS}...`)
+            }
             useVoiceCallStore.setState({
               isReconnecting: true,
               reconnectAttempts: attempts
@@ -536,13 +576,19 @@ async function initializeAgoraClient(currentUserId: string, otherUserId: string)
 
               // Tenter de rejoindre a nouveau
               await initializeAgoraClient(currentUserId, otherUserId)
-              console.log('[VoiceCall] Reconnexion manuelle reussie !')
+              if (!import.meta.env.PROD) {
+                console.log('[VoiceCall] Reconnexion manuelle reussie !')
+              }
             } catch (err) {
-              console.error('[VoiceCall] Erreur lors de la reconnexion manuelle:', err)
+              if (!import.meta.env.PROD) {
+                console.error('[VoiceCall] Erreur lors de la reconnexion manuelle:', err)
+              }
             }
           } else {
             // Echec apres toutes les tentatives
-            console.error('[VoiceCall] Echec de la reconnexion apres 3 tentatives')
+            if (!import.meta.env.PROD) {
+              console.error('[VoiceCall] Echec de la reconnexion apres 3 tentatives')
+            }
             useVoiceCallStore.setState({
               isReconnecting: false,
               reconnectAttempts: 0,
@@ -606,7 +652,9 @@ async function initializeAgoraClient(currentUserId: string, otherUserId: string)
     const cleanupNetworkQuality = setupNetworkQualityListener(
       client,
       (newQuality, oldQuality) => {
-        console.log(`[VoiceCall] Qualite reseau: ${oldQuality} -> ${newQuality}`)
+        if (!import.meta.env.PROD) {
+          console.log(`[VoiceCall] Qualite reseau: ${oldQuality} -> ${newQuality}`)
+        }
         // Notifier le changement de qualite pour afficher un toast
         useVoiceCallStore.setState({ networkQualityChanged: newQuality })
       }
@@ -614,10 +662,14 @@ async function initializeAgoraClient(currentUserId: string, otherUserId: string)
 
     // Convert UUID to numeric UID for Agora
     const numericUid = uuidToNumericUid(currentUserId)
-    console.log('[VoiceCall] Using numeric UID:', numericUid, 'for channel:', channelName)
+    if (!import.meta.env.PROD) {
+      console.log('[VoiceCall] Using numeric UID:', numericUid, 'for channel:', channelName)
+    }
 
     // Get token from Edge Function
-    console.log('[VoiceCall] Getting token from Edge Function...')
+    if (!import.meta.env.PROD) {
+      console.log('[VoiceCall] Getting token from Edge Function...')
+    }
     let token: string | null = null
 
     try {
@@ -626,20 +678,30 @@ async function initializeAgoraClient(currentUserId: string, otherUserId: string)
       })
 
       if (error) {
-        console.warn('[VoiceCall] Token fetch error:', error)
+        if (!import.meta.env.PROD) {
+          console.warn('[VoiceCall] Token fetch error:', error)
+        }
       } else {
         token = data?.token || null
-        console.log('[VoiceCall] Token received:', token ? `${token.substring(0, 20)}...` : 'null')
+        if (!import.meta.env.PROD) {
+          console.log('[VoiceCall] Token received:', token ? `${token.substring(0, 20)}...` : 'null')
+        }
       }
     } catch (tokenError) {
-      console.warn('[VoiceCall] Failed to get token:', tokenError)
+      if (!import.meta.env.PROD) {
+        console.warn('[VoiceCall] Failed to get token:', tokenError)
+      }
     }
 
     // Join channel with token (or null if token generation failed)
     try {
-      console.log('[VoiceCall] Joining channel...')
+      if (!import.meta.env.PROD) {
+        console.log('[VoiceCall] Joining channel...')
+      }
       await client.join(AGORA_APP_ID, channelName, token, numericUid)
-      console.log('[VoiceCall] Joined successfully!')
+      if (!import.meta.env.PROD) {
+        console.log('[VoiceCall] Joined successfully!')
+      }
     } catch (joinError: unknown) {
       const errorMessage = joinError instanceof Error ? joinError.message : String(joinError)
       console.error('[VoiceCall] Join failed:', errorMessage)
@@ -647,7 +709,7 @@ async function initializeAgoraClient(currentUserId: string, otherUserId: string)
     }
 
     // Create and publish audio track
-    const localAudioTrack = await AgoraRTC.createMicrophoneAudioTrack()
+    const localAudioTrack = await AgoraSDK.createMicrophoneAudioTrack()
     await client.publish([localAudioTrack])
 
     useVoiceCallStore.setState({
@@ -656,7 +718,9 @@ async function initializeAgoraClient(currentUserId: string, otherUserId: string)
       cleanupNetworkQuality,
     })
 
-    console.log('Joined voice call channel:', channelName)
+    if (!import.meta.env.PROD) {
+      console.log('Joined voice call channel:', channelName)
+    }
 
   } catch (error) {
     console.error('Error initializing Agora client:', error)
@@ -669,7 +733,9 @@ async function initializeAgoraClient(currentUserId: string, otherUserId: string)
 
 // Subscribe to incoming calls via Supabase Realtime
 export function subscribeToIncomingCalls(userId: string) {
-  console.log('[VoiceCall] Subscribing to incoming calls for user:', userId.substring(0, 8) + '...')
+  if (!import.meta.env.PROD) {
+    console.log('[VoiceCall] Subscribing to incoming calls for user:', userId.substring(0, 8) + '...')
+  }
 
   const channel = supabase
     .channel(`calls:${userId}`)
@@ -683,7 +749,9 @@ export function subscribeToIncomingCalls(userId: string) {
         filter: `receiver_id=eq.${userId}`,
       },
       async (payload) => {
-        console.log('[VoiceCall] Received INSERT on calls table:', payload)
+        if (!import.meta.env.PROD) {
+          console.log('[VoiceCall] Received INSERT on calls table:', payload)
+        }
 
         const call = payload.new as {
           id: string
@@ -691,19 +759,27 @@ export function subscribeToIncomingCalls(userId: string) {
           status: string
         }
 
-        console.log('[VoiceCall] Call data:', { id: call.id, caller_id: call.caller_id, status: call.status })
+        if (!import.meta.env.PROD) {
+          console.log('[VoiceCall] Call data:', { id: call.id, caller_id: call.caller_id, status: call.status })
+        }
 
         // Only handle new calls (missed status means not yet answered)
         if (call.status !== 'missed') {
-          console.log('[VoiceCall] Ignoring call with status:', call.status)
+          if (!import.meta.env.PROD) {
+            console.log('[VoiceCall] Ignoring call with status:', call.status)
+          }
           return
         }
 
         const currentState = useVoiceCallStore.getState()
-        console.log('[VoiceCall] Current state:', currentState.status)
+        if (!import.meta.env.PROD) {
+          console.log('[VoiceCall] Current state:', currentState.status)
+        }
 
         if (currentState.status !== 'idle') {
-          console.log('[VoiceCall] Already in a call, rejecting incoming call')
+          if (!import.meta.env.PROD) {
+            console.log('[VoiceCall] Already in a call, rejecting incoming call')
+          }
           // Already in a call, reject
           await supabase
             .from('calls')
@@ -713,7 +789,9 @@ export function subscribeToIncomingCalls(userId: string) {
         }
 
         // Get caller info
-        console.log('[VoiceCall] Fetching caller profile:', call.caller_id)
+        if (!import.meta.env.PROD) {
+          console.log('[VoiceCall] Fetching caller profile:', call.caller_id)
+        }
         const { data: callerProfile, error: profileError } = await supabase
           .from('profiles')
           .select('username, avatar_url')
@@ -726,7 +804,9 @@ export function subscribeToIncomingCalls(userId: string) {
         }
 
         if (callerProfile) {
-          console.log('[VoiceCall] Setting incoming call from:', callerProfile.username)
+          if (!import.meta.env.PROD) {
+            console.log('[VoiceCall] Setting incoming call from:', callerProfile.username)
+          }
           currentState.setIncomingCall(
             {
               id: call.caller_id,
@@ -759,7 +839,9 @@ export function subscribeToIncomingCalls(userId: string) {
         // Si c'est l'appel en cours et qu'il est terminé/rejeté
         if (currentState.currentCallId === call.id) {
           if (call.status === 'rejected' || call.status === 'ended' || call.ended_at) {
-            console.log('[VoiceCall] Call ended by other party, closing...')
+            if (!import.meta.env.PROD) {
+              console.log('[VoiceCall] Call ended by other party, closing...')
+            }
             currentState.resetCall()
           }
         }
@@ -786,21 +868,29 @@ export function subscribeToIncomingCalls(userId: string) {
         // Si c'est l'appel en cours et que le destinataire a rejeté/raccroché
         if (currentState.currentCallId === call.id) {
           if (call.status === 'rejected') {
-            console.log('[VoiceCall] Call rejected by receiver')
+            if (!import.meta.env.PROD) {
+              console.log('[VoiceCall] Call rejected by receiver')
+            }
             currentState.resetCall()
           } else if (call.ended_at && currentState.status !== 'idle') {
-            console.log('[VoiceCall] Call ended by receiver')
+            if (!import.meta.env.PROD) {
+              console.log('[VoiceCall] Call ended by receiver')
+            }
             currentState.resetCall()
           }
         }
       }
     )
     .subscribe((status) => {
-      console.log('[VoiceCall] Realtime subscription status:', status)
+      if (!import.meta.env.PROD) {
+        console.log('[VoiceCall] Realtime subscription status:', status)
+      }
     })
 
   return () => {
-    console.log('[VoiceCall] Unsubscribing from incoming calls')
+    if (!import.meta.env.PROD) {
+      console.log('[VoiceCall] Unsubscribing from incoming calls')
+    }
     supabase.removeChannel(channel)
   }
 }

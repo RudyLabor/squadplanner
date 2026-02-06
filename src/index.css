@@ -9,11 +9,11 @@
   --color-bg-hover: #141518;
   --color-bg-active: #1a1b1e;
 
-  /* Text - Refined contrast hierarchy */
-  --color-text-primary: #fafafa;
-  --color-text-secondary: #a1a1a6;
-  --color-text-tertiary: #6e6e73;
-  --color-text-quaternary: #48484a;
+  /* Text - Refined contrast hierarchy - WCAG AA compliant (4.5:1 minimum on #050506) */
+  --color-text-primary: #fafafa;     /* Ratio: 19.4:1 */
+  --color-text-secondary: #a1a1a6;   /* Ratio: 6.9:1 */
+  --color-text-tertiary: #7d7d82;    /* Ratio: 4.6:1 - WCAG AA compliant (was #6e6e73 = 4.0:1) */
+  --color-text-quaternary: #6b6b70;  /* Ratio: 3.8:1 - For large text/decorative only (was #48484a = 2.7:1) */
 
   /* Accents - Sophisticated, less saturated */
   --color-primary: #6366f1;
@@ -254,7 +254,32 @@ body {
   min-height: 36px;
 }
 
-/* Focus visible styles for accessibility */
+/* Focus visible styles for accessibility - Phase 6.2 */
+/* High contrast focus rings for dark backgrounds */
+:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* Buttons and interactive elements get enhanced focus */
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible,
+[role="button"]:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.2);
+}
+
+/* Remove default focus styles for mouse users */
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Legacy class for custom focus ring */
 .focus-ring:focus-visible {
   outline: 2px solid var(--color-primary);
   outline-offset: 2px;

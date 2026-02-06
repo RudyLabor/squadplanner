@@ -19,6 +19,11 @@ async function getAgoraRTC() {
   if (!AgoraRTC) {
     const module = await import('agora-rtc-sdk-ng')
     AgoraRTC = module.default
+    // PHASE 6.4: Set log level to errors only in production
+    // 0 = debug, 1 = info, 2 = warning, 3 = error, 4 = none
+    if (import.meta.env.PROD) {
+      AgoraRTC.setLogLevel(3) // Only show errors
+    }
   }
   return AgoraRTC
 }

@@ -140,7 +140,7 @@ export default function Auth() {
   }
 
   return (
-    <div className="h-[100dvh] bg-[#050506] flex flex-col overflow-y-auto overflow-x-hidden">
+    <div className="h-[100dvh] bg-[#050506] flex flex-col overflow-y-auto overflow-x-hidden scrollbar-hide-mobile">
       {/* Celebration confetti on signup */}
       {showConfetti && typeof window !== 'undefined' && (
         <Confetti

@@ -395,7 +395,7 @@ export function Onboarding() {
   }
 
   return (
-    <div className="h-[100dvh] bg-[#050506] flex items-center justify-center p-4 overflow-y-auto overflow-x-hidden">
+    <div className="h-[100dvh] bg-[#050506] flex items-center justify-center p-4 overflow-y-auto overflow-x-hidden scrollbar-hide-mobile">
       {/* Mini Confetti for step celebrations */}
       {showMiniConfetti && (
         <Confetti

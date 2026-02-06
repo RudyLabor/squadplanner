@@ -364,6 +364,17 @@ body {
   display: none; /* Chrome, Safari and Opera */
 }
 
+/* Hide scrollbar on mobile only - keeps scrollbar visible on desktop */
+@media (max-width: 1023px) {
+  .scrollbar-hide-mobile {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide-mobile::-webkit-scrollbar {
+    display: none;
+  }
+}
+
 /* Respect reduced motion for new animations */
 @media (prefers-reduced-motion: reduce) {
   .glow-pulse,

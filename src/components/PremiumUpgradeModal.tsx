@@ -65,11 +65,6 @@ export function PremiumUpgradeModal({
   const focusTrapRef = useFocusTrap<HTMLDivElement>(isOpen, onClose)
 
   const handleUpgrade = async () => {
-    if (!squadId) {
-      setError('Sélectionne d\'abord une squad')
-      return
-    }
-
     setIsLoading(true)
     setError(null)
 
@@ -79,17 +74,18 @@ export function PremiumUpgradeModal({
         : plans.find(p => p.id === 'premium_yearly')?.stripePriceId
 
       if (!priceId) {
-        throw new Error('Plan non trouve')
+        throw new Error('Plan non trouvé')
       }
 
-      const { url, error } = await createCheckoutSession(squadId, priceId)
+      // Premium subscription is personal, squadId is optional
+      const { url, error } = await createCheckoutSession(squadId || '', priceId)
 
       if (error) throw error
       if (url) {
         window.location.href = url
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Erreur lors de la creation du paiement')
+      setError(err instanceof Error ? err.message : 'Erreur lors de la création du paiement')
     } finally {
       setIsLoading(false)
     }
@@ -218,7 +214,7 @@ export function PremiumUpgradeModal({
               <div className="p-6 pt-0">
                 <Button
                   onClick={handleUpgrade}
-                  disabled={isLoading || !squadId}
+                  disabled={isLoading}
                   className="w-full h-12 bg-gradient-to-r from-[#6366f1] to-[#a78bfa] hover:opacity-90"
                 >
                   {isLoading ? (

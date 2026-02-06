@@ -19,6 +19,7 @@ const stripe = new Stripe(Deno.env.get('STRIPE_SECRET_KEY') || '', {
 const ALLOWED_ORIGINS = [
   'http://localhost:5173',
   'http://localhost:5174',
+  'https://squadplanner.fr',
   'https://squadplanner.app',
   Deno.env.get('SUPABASE_URL') || ''
 ].filter(Boolean)
@@ -70,15 +71,20 @@ serve(async (req) => {
     }
 
     let validatedData: {
-      squad_id: string
+      squad_id?: string
       price_id: string
       success_url?: string
       cancel_url?: string
     }
 
     try {
+      // squad_id is optional - personal subscriptions don't need a squad
+      const squadId = rawBody.squad_id && rawBody.squad_id !== ''
+        ? validateUUID(rawBody.squad_id, 'squad_id')
+        : undefined
+
       validatedData = {
-        squad_id: validateUUID(rawBody.squad_id, 'squad_id'),
+        squad_id: squadId,
         price_id: validateString(rawBody.price_id, 'price_id', { minLength: 1, maxLength: 100 }),
         success_url: validateOptional(rawBody.success_url, (v) => validateString(v, 'success_url')),
         cancel_url: validateOptional(rawBody.cancel_url, (v) => validateString(v, 'cancel_url')),
@@ -92,18 +98,23 @@ serve(async (req) => {
 
     const { squad_id, price_id, success_url, cancel_url } = validatedData
 
-    // Verify user is squad owner
-    const { data: squad } = await supabaseClient
-      .from('squads')
-      .select('id, name, owner_id')
-      .eq('id', squad_id)
-      .single()
+    // If squad_id provided, verify user is squad owner
+    let squad = null
+    if (squad_id) {
+      const { data } = await supabaseClient
+        .from('squads')
+        .select('id, name, owner_id')
+        .eq('id', squad_id)
+        .single()
 
-    if (!squad || squad.owner_id !== user.id) {
-      return new Response(
-        JSON.stringify({ error: 'Only squad owner can purchase premium' }),
-        { status: 403, headers: { ...getCorsHeaders(req.headers.get('origin')), 'Content-Type': 'application/json' } }
-      )
+      squad = data
+
+      if (!squad || squad.owner_id !== user.id) {
+        return new Response(
+          JSON.stringify({ error: 'Only squad owner can purchase premium' }),
+          { status: 403, headers: { ...getCorsHeaders(req.headers.get('origin')), 'Content-Type': 'application/json' } }
+        )
+      }
     }
 
     // Get or create Stripe customer
@@ -134,6 +145,13 @@ serve(async (req) => {
     }
 
     // Create checkout session
+    const defaultSuccessUrl = squad_id
+      ? `${req.headers.get('origin')}/squad/${squad_id}?checkout=success`
+      : `${req.headers.get('origin')}/profile?checkout=success`
+    const defaultCancelUrl = squad_id
+      ? `${req.headers.get('origin')}/squad/${squad_id}?checkout=cancelled`
+      : `${req.headers.get('origin')}/profile?checkout=cancelled`
+
     const session = await stripe.checkout.sessions.create({
       customer: customerId,
       mode: 'subscription',
@@ -145,17 +163,17 @@ serve(async (req) => {
         },
       ],
       metadata: {
-        squad_id,
+        ...(squad_id && { squad_id }),
         user_id: user.id,
       },
       subscription_data: {
         metadata: {
-          squad_id,
+          ...(squad_id && { squad_id }),
           user_id: user.id,
         },
       },
-      success_url: success_url || `${req.headers.get('origin')}/squads/${squad_id}?checkout=success`,
-      cancel_url: cancel_url || `${req.headers.get('origin')}/squads/${squad_id}?checkout=cancelled`,
+      success_url: success_url || defaultSuccessUrl,
+      cancel_url: cancel_url || defaultCancelUrl,
       allow_promotion_codes: true,
     })
 

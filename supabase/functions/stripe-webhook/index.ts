@@ -14,6 +14,7 @@ const stripe = new Stripe(Deno.env.get('STRIPE_SECRET_KEY') || '', {
 const ALLOWED_ORIGINS = [
   'http://localhost:5173',
   'http://localhost:5174',
+  'https://squadplanner.fr',
   'https://squadplanner.app',
   Deno.env.get('SUPABASE_URL') || ''
 ].filter(Boolean)

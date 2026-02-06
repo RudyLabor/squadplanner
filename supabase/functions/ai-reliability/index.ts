@@ -3,11 +3,13 @@
 
 import { serve } from 'https://deno.land/std@0.177.0/http/server.ts'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.0'
+import { validateUUID, validateOptional } from '../_shared/schemas.ts'
 
 // CORS Security: Only allow specific origins
 const ALLOWED_ORIGINS = [
   'http://localhost:5173',
   'http://localhost:5174',
+  'https://squadplanner.fr',
   'https://squadplanner.app',
   Deno.env.get('SUPABASE_URL') || ''
 ].filter(Boolean)
@@ -64,7 +66,35 @@ serve(async (req) => {
       }
     )
 
-    const { squad_id, user_id } = await req.json()
+    // Parse and validate request body
+    let rawBody: Record<string, unknown>
+    try {
+      rawBody = await req.json()
+    } catch {
+      return new Response(
+        JSON.stringify({ error: 'Invalid JSON in request body' }),
+        { status: 400, headers: { ...getCorsHeaders(req.headers.get('origin')), 'Content-Type': 'application/json' } }
+      )
+    }
+
+    let validatedData: {
+      squad_id?: string
+      user_id?: string
+    }
+
+    try {
+      validatedData = {
+        squad_id: validateOptional(rawBody.squad_id, (v) => validateUUID(v, 'squad_id')),
+        user_id: validateOptional(rawBody.user_id, (v) => validateUUID(v, 'user_id')),
+      }
+    } catch (validationError) {
+      return new Response(
+        JSON.stringify({ error: (validationError as Error).message }),
+        { status: 400, headers: { ...getCorsHeaders(req.headers.get('origin')), 'Content-Type': 'application/json' } }
+      )
+    }
+
+    const { squad_id, user_id } = validatedData
 
     // If user_id provided, return individual stats
     if (user_id) {

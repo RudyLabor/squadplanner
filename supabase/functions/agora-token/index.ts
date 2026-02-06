@@ -18,6 +18,7 @@ const ALLOWED_ORIGINS = [
   'http://localhost:5177',
   'http://localhost:5178',
   'http://localhost:5179',
+  'https://squadplanner.fr',
   'https://squadplanner.app',
   'https://www.squadplanner.app',
   'https://squadplanner.fr',

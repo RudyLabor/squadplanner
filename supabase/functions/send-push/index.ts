@@ -20,6 +20,7 @@ import {
 const ALLOWED_ORIGINS = [
   'http://localhost:5173',
   'http://localhost:5174',
+  'https://squadplanner.fr',
   'https://squadplanner.app',
   'https://squadplanner.fr',
   'https://www.squadplanner.fr',

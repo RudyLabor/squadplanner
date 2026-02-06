@@ -4,6 +4,10 @@
 import { serve } from 'https://deno.land/std@0.177.0/http/server.ts'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.0'
 import Stripe from 'https://esm.sh/stripe@14.10.0?target=deno'
+import {
+  validateString,
+  validateOptional,
+} from '../_shared/schemas.ts'
 
 const stripe = new Stripe(Deno.env.get('STRIPE_SECRET_KEY') || '', {
   apiVersion: '2023-10-16',
@@ -14,6 +18,7 @@ const stripe = new Stripe(Deno.env.get('STRIPE_SECRET_KEY') || '', {
 const ALLOWED_ORIGINS = [
   'http://localhost:5173',
   'http://localhost:5174',
+  'https://squadplanner.fr',
   'https://squadplanner.app',
   Deno.env.get('SUPABASE_URL') || ''
 ].filter(Boolean)
@@ -53,7 +58,35 @@ serve(async (req) => {
       )
     }
 
-    const { customer_id, return_url } = await req.json()
+    // Parse and validate request body
+    let rawBody: Record<string, unknown>
+    try {
+      rawBody = await req.json()
+    } catch {
+      return new Response(
+        JSON.stringify({ error: 'Invalid JSON in request body' }),
+        { status: 400, headers: { ...getCorsHeaders(req.headers.get('origin')), 'Content-Type': 'application/json' } }
+      )
+    }
+
+    let validatedData: {
+      customer_id?: string
+      return_url?: string
+    }
+
+    try {
+      validatedData = {
+        customer_id: validateOptional(rawBody.customer_id, (v) => validateString(v, 'customer_id', { minLength: 1, maxLength: 100 })),
+        return_url: validateOptional(rawBody.return_url, (v) => validateString(v, 'return_url')),
+      }
+    } catch (validationError) {
+      return new Response(
+        JSON.stringify({ error: (validationError as Error).message }),
+        { status: 400, headers: { ...getCorsHeaders(req.headers.get('origin')), 'Content-Type': 'application/json' } }
+      )
+    }
+
+    const { customer_id, return_url } = validatedData
 
     // If customer_id not provided, get it from user profile
     let stripeCustomerId = customer_id

@@ -5,11 +5,13 @@
 
 import { serve } from 'https://deno.land/std@0.177.0/http/server.ts'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.0'
+import { validateUUID, validateOptional } from '../_shared/schemas.ts'
 
 // CORS Security: Only allow specific origins
 const ALLOWED_ORIGINS = [
   'http://localhost:5173',
   'http://localhost:5174',
+  'https://squadplanner.fr',
   'https://squadplanner.app',
   Deno.env.get('SUPABASE_URL') || ''
 ].filter(Boolean)
@@ -296,9 +298,22 @@ serve(async (req) => {
     let targetSessionId: string | null = null
 
     try {
-      const body = await req.json()
-      targetSquadId = body.squad_id || null
-      targetSessionId = body.session_id || null
+      const rawBody = await req.json()
+
+      // Validate optional parameters
+      try {
+        const validatedData = {
+          squad_id: validateOptional(rawBody.squad_id, (v) => validateUUID(v, 'squad_id')),
+          session_id: validateOptional(rawBody.session_id, (v) => validateUUID(v, 'session_id')),
+        }
+        targetSquadId = validatedData.squad_id || null
+        targetSessionId = validatedData.session_id || null
+      } catch (validationError) {
+        return new Response(
+          JSON.stringify({ error: (validationError as Error).message }),
+          { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        )
+      }
     } catch {
       // No body, process all
     }

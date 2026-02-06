@@ -15,6 +15,7 @@ import {
 const ALLOWED_ORIGINS = [
   'http://localhost:5173',
   'http://localhost:5174',
+  'https://squadplanner.fr',
   'https://squadplanner.app',
   Deno.env.get('SUPABASE_URL') || ''
 ].filter(Boolean)
@@ -191,6 +192,16 @@ serve(async (req) => {
     }
 
     const { user_id, context_type } = validatedData
+
+    // Use admin client to check premium status
+    const supabaseAdmin = createClient(
+      Deno.env.get('SUPABASE_URL') ?? '',
+      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
+    )
+
+    // Check if user is premium (for advanced AI features)
+    const { data: premiumCheck } = await supabaseAdmin.rpc('is_user_premium', { p_user_id: user_id })
+    const isPremium = premiumCheck === true
 
     // Get user profile
     const { data: profile, error: profileError } = await supabaseClient
@@ -371,8 +382,8 @@ serve(async (req) => {
     let aiTip: string | null = null
     let aiGenerated = false
 
-    // Si pas de cache, essayer Claude
-    if (!cachedInsight) {
+    // Si pas de cache, essayer Claude (seulement pour premium)
+    if (!cachedInsight && isPremium) {
       aiTip = await generateAICoachTip(
         profile.username || 'Joueur',
         stats.reliability_score,
@@ -435,7 +446,7 @@ serve(async (req) => {
     }
 
     return new Response(
-      JSON.stringify({ ...response, ai_generated: aiGenerated }),
+      JSON.stringify({ ...response, ai_generated: aiGenerated, is_premium: isPremium }),
       { headers: { ...getCorsHeaders(req.headers.get('origin')), 'Content-Type': 'application/json' } }
     )
   } catch (error) {

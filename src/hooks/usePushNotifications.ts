@@ -11,6 +11,7 @@ const isNativePlatform = Capacitor.isNativePlatform()
 
 // VAPID public key from environment (for web push)
 const VAPID_PUBLIC_KEY = import.meta.env.VITE_VAPID_PUBLIC_KEY
+console.log('[Push] VAPID key configured:', VAPID_PUBLIC_KEY ? 'Yes (' + VAPID_PUBLIC_KEY.substring(0, 20) + '...)' : 'NO - MISSING!')
 
 // Interface pour les messages du Service Worker
 interface ServiceWorkerMessage {
@@ -144,7 +145,23 @@ export const usePushNotificationStore = create<PushNotificationState>((set, get)
         return false
       }
 
-      // Subscribe to push notifications
+      // Check for existing subscription and unsubscribe if VAPID key changed
+      const existingSubscription = await swRegistration.pushManager.getSubscription()
+      if (existingSubscription) {
+        try {
+          await existingSubscription.unsubscribe()
+          console.log('[Push] Unsubscribed from old subscription')
+          // Also remove from database
+          await supabase
+            .from('push_subscriptions')
+            .delete()
+            .eq('user_id', userId)
+        } catch (e) {
+          console.warn('[Push] Failed to unsubscribe old subscription:', e)
+        }
+      }
+
+      // Subscribe to push notifications with new VAPID key
       const applicationServerKey = urlBase64ToUint8Array(VAPID_PUBLIC_KEY)
       const subscription = await swRegistration.pushManager.subscribe({
         userVisibleOnly: true,

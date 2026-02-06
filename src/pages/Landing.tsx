@@ -1,10 +1,10 @@
 import { motion, useInView } from 'framer-motion'
-import { useRef, useEffect } from 'react'
+import { useRef } from 'react'
 import {
   Users, Calendar, ArrowRight, Check,
   Target, MessageCircle, Headphones, TrendingUp, Sparkles
 } from 'lucide-react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { SquadPlannerLogo } from '../components/SquadPlannerLogo'
 import { useAuthStore } from '../hooks'
 
@@ -82,33 +82,10 @@ const steps = [
 export default function Landing() {
   const heroRef = useRef(null)
   useInView(heroRef, { once: true })
-  const { user, isInitialized } = useAuthStore()
-  const navigate = useNavigate()
+  const { user } = useAuthStore()
 
-  // Redirect authenticated users to /home (which will then handle onboarding check)
-  useEffect(() => {
-    if (isInitialized && user) {
-      navigate('/home', { replace: true })
-    }
-  }, [isInitialized, user, navigate])
-
-  // Show loading while checking auth
-  if (!isInitialized) {
-    return (
-      <div className="min-h-screen bg-[#050506] flex items-center justify-center">
-        <div className="w-8 h-8 border-2 border-[#5e6dd2] border-t-transparent rounded-full animate-spin" />
-      </div>
-    )
-  }
-
-  // Don't render landing if user is authenticated (redirect in progress)
-  if (user) {
-    return (
-      <div className="min-h-screen bg-[#050506] flex items-center justify-center">
-        <div className="w-8 h-8 border-2 border-[#5e6dd2] border-t-transparent rounded-full animate-spin" />
-      </div>
-    )
-  }
+  // Determine if user is logged in for different header buttons
+  const isLoggedIn = !!user
 
   return (
     <div className="min-h-screen bg-[#050506]">
@@ -120,16 +97,26 @@ export default function Landing() {
             <span className="text-[15px] font-semibold text-[#f7f8f8]">Squad Planner</span>
           </Link>
           <div className="flex items-center gap-3">
-            <Link to="/auth">
-              <button className="px-4 py-2 text-[14px] text-[#8b8d90] hover:text-[#f7f8f8] transition-colors">
-                Se connecter
-              </button>
-            </Link>
-            <Link to="/auth?mode=register&redirect=onboarding">
-              <button className="px-4 py-2 rounded-lg bg-[#6366f1] text-white text-[14px] font-medium hover:bg-[#7c7ff7] transition-colors duration-300">
-                Créer ma squad
-              </button>
-            </Link>
+            {isLoggedIn ? (
+              <Link to="/home">
+                <button className="px-4 py-2 rounded-lg bg-[#6366f1] text-white text-[14px] font-medium hover:bg-[#7c7ff7] transition-colors duration-300">
+                  Aller à l'app
+                </button>
+              </Link>
+            ) : (
+              <>
+                <Link to="/auth">
+                  <button className="px-4 py-2 text-[14px] text-[#8b8d90] hover:text-[#f7f8f8] transition-colors">
+                    Se connecter
+                  </button>
+                </Link>
+                <Link to="/auth?mode=register&redirect=onboarding">
+                  <button className="px-4 py-2 rounded-lg bg-[#6366f1] text-white text-[14px] font-medium hover:bg-[#7c7ff7] transition-colors duration-300">
+                    Créer ma squad
+                  </button>
+                </Link>
+              </>
+            )}
           </div>
         </div>
       </header>
@@ -164,20 +151,36 @@ export default function Landing() {
 
             {/* CTA */}
             <div className="flex flex-col items-center gap-4 mb-16">
-              <Link to="/auth?mode=register&redirect=onboarding">
-                <motion.button
-                  className="flex items-center gap-2 h-14 px-8 rounded-xl bg-[#6366f1] text-white text-[16px] font-semibold shadow-lg shadow-[#6366f1]/10"
-                  whileHover={{ scale: 1.02, y: -2 }}
-                  whileTap={{ scale: 0.98 }}
-                  transition={{ duration: 0.4, ease: "easeOut" }}
-                >
-                  Créer ma squad gratuitement
-                  <ArrowRight className="w-5 h-5" />
-                </motion.button>
-              </Link>
-              <Link to="/auth" className="text-[14px] text-[#5e6063] hover:text-[#8b8d90] transition-colors">
-                Déjà un compte ? Se connecter
-              </Link>
+              {isLoggedIn ? (
+                <Link to="/home">
+                  <motion.button
+                    className="flex items-center gap-2 h-14 px-8 rounded-xl bg-[#6366f1] text-white text-[16px] font-semibold shadow-lg shadow-[#6366f1]/10"
+                    whileHover={{ scale: 1.02, y: -2 }}
+                    whileTap={{ scale: 0.98 }}
+                    transition={{ duration: 0.4, ease: "easeOut" }}
+                  >
+                    Accéder à mes squads
+                    <ArrowRight className="w-5 h-5" />
+                  </motion.button>
+                </Link>
+              ) : (
+                <>
+                  <Link to="/auth?mode=register&redirect=onboarding">
+                    <motion.button
+                      className="flex items-center gap-2 h-14 px-8 rounded-xl bg-[#6366f1] text-white text-[16px] font-semibold shadow-lg shadow-[#6366f1]/10"
+                      whileHover={{ scale: 1.02, y: -2 }}
+                      whileTap={{ scale: 0.98 }}
+                      transition={{ duration: 0.4, ease: "easeOut" }}
+                    >
+                      Créer ma squad gratuitement
+                      <ArrowRight className="w-5 h-5" />
+                    </motion.button>
+                  </Link>
+                  <Link to="/auth" className="text-[14px] text-[#5e6063] hover:text-[#8b8d90] transition-colors">
+                    Déjà un compte ? Se connecter
+                  </Link>
+                </>
+              )}
             </div>
 
             {/* Social proof stats */}

@@ -361,7 +361,8 @@ async function sendFCMNotification(
   accessToken: string
 ): Promise<{ success: boolean; error?: string }> {
   try {
-    const isCall = data.type === 'party_invite' || data.type === 'call' || data.type === 'incoming_call'
+    // Seuls les vrais appels vocaux sonnent en continu
+    const isCall = data.type === 'incoming_call'
 
     const message = {
       message: {

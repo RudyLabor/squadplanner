@@ -95,7 +95,7 @@ export function InviteToPartyModal({
   const inviteMember = async (memberId: string) => {
     setSendingInvite(memberId)
     try {
-      // Create a notification for the member
+      // Create a notification for the member (in-app)
       await supabase.from('notifications').insert({
         user_id: memberId,
         type: 'party_invite',
@@ -107,6 +107,30 @@ export function InviteToPartyModal({
           invited_by: currentUserId
         }
       })
+
+      // Send push notification (native + web) pour sonnerie/vibration
+      try {
+        await supabase.functions.invoke('send-push', {
+          body: {
+            userId: memberId,
+            title: 'Invitation Party',
+            body: `Tu es invité à rejoindre la party de ${squadName}`,
+            icon: '/icon-192.png',
+            tag: `party-invite-${squadId}`,
+            url: partyLink,
+            data: {
+              type: 'party_invite',
+              squad_id: squadId,
+              party_link: partyLink,
+              invited_by: currentUserId
+            }
+          }
+        })
+        console.log('[InviteToPartyModal] Push notification sent')
+      } catch (pushError) {
+        console.warn('[InviteToPartyModal] Push notification failed:', pushError)
+        // Continue même si push échoue
+      }
 
       setInvitedMembers(prev => new Set([...prev, memberId]))
     } catch (error) {

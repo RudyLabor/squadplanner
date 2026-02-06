@@ -959,6 +959,7 @@ export function Messages() {
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           placeholder={activeTab === 'squads' ? 'Rechercher une squad...' : 'Rechercher un contact...'}
+          aria-label="Rechercher une conversation"
           className="w-full h-11 pl-10 pr-4 bg-[#18191b] border border-[rgba(255,255,255,0.06)] rounded-xl text-[14px] text-[#f7f8f8] placeholder:text-[#5e6063] focus:outline-none focus:border-[rgba(99,102,241,0.5)] transition-colors"
         />
       </div>

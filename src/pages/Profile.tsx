@@ -8,7 +8,7 @@ import {
 import { useNavigate } from 'react-router-dom'
 import CountUp from 'react-countup'
 import Confetti from 'react-confetti'
-import toast from 'react-hot-toast'
+import { toast } from 'sonner'
 import { Button, Card, Input, ProfileSkeleton } from '../components/ui'
 import { useAuthStore, useAIStore, usePremiumStore, FREE_HISTORY_DAYS } from '../hooks'
 import { PremiumGate, PremiumBadge } from '../components/PremiumGate'
@@ -190,6 +190,9 @@ export function Profile() {
     const result = await updateProfile({ username, bio })
     if (!result.error) {
       setIsEditing(false)
+      toast.success('Profil mis a jour')
+    } else {
+      toast.error('Erreur lors de la mise a jour')
     }
   }
 

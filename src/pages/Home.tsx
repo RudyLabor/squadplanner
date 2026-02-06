@@ -1,15 +1,16 @@
-import { useEffect, useState, useMemo } from 'react'
+import { useState, useMemo } from 'react'
 import { motion } from 'framer-motion'
 import { Users, Calendar, TrendingUp, ChevronRight, Loader2, Mic, CheckCircle2, AlertCircle, Sparkles, Star, HelpCircle, XCircle } from 'lucide-react'
 import { Link, useNavigate } from 'react-router-dom'
 import CountUp from 'react-countup'
 import Confetti from 'react-confetti'
 import { Card, Badge, SessionCardSkeleton, SquadCardSkeleton } from '../components/ui'
-import { useAuthStore, useVoiceChatStore, useAIStore } from '../hooks'
+import { useAuthStore, useVoiceChatStore } from '../hooks'
 import { useSquadsQuery } from '../hooks/queries/useSquadsQuery'
 import { useRsvpMutation, useUpcomingSessionsQuery } from '../hooks/queries/useSessionsQuery'
-import { supabase } from '../lib/supabase'
-import { FriendsPlaying, type FriendPlaying } from '../components/FriendsPlaying'
+import { useFriendsPlayingQuery } from '../hooks/queries/useFriendsPlaying'
+import { useAICoachQuery } from '../hooks/queries/useAICoach'
+import { FriendsPlaying } from '../components/FriendsPlaying'
 import { StreakCounter } from '../components/StreakCounter'
 import { haptic } from '../utils/haptics'
 
@@ -304,7 +305,6 @@ function StatsRow({ squadsCount, sessionsThisWeek, reliabilityScore }: {
 export default function Home() {
   const { user, profile, isInitialized } = useAuthStore()
   const { isConnected: isInVoiceChat, currentChannel, remoteUsers } = useVoiceChatStore()
-  const { aiCoachTip, fetchAICoachTip } = useAIStore()
   const navigate = useNavigate()
 
   // React Query hooks - automatic caching and deduplication
@@ -312,10 +312,14 @@ export default function Home() {
   const { data: rawSessions = [], isLoading: sessionsQueryLoading } = useUpcomingSessionsQuery(user?.id)
   const rsvpMutation = useRsvpMutation()
 
+  // Friends playing - React Query with automatic caching (replaces useEffect)
+  const { data: friendsPlaying = [], isLoading: friendsLoading } = useFriendsPlayingQuery(user?.id)
+
+  // AI Coach tip - React Query with Infinity staleTime (only fetches once per session)
+  const { data: aiCoachTip } = useAICoachQuery(user?.id, 'home')
+
   const [showConfetti, setShowConfetti] = useState(false)
   const [successMessage, setSuccessMessage] = useState<string | null>(null)
-  const [friendsPlaying, setFriendsPlaying] = useState<FriendPlaying[]>([])
-  const [friendsLoading, setFriendsLoading] = useState(true)
 
   // Transform sessions to include squad names (memoized)
   const upcomingSessions = useMemo<UpcomingSession[]>(() => {
@@ -358,43 +362,6 @@ export default function Home() {
   }, [rawSessions])
 
   const sessionsLoading = sessionsQueryLoading || (squadsLoading && !squads.length)
-
-  // Fetch AI Coach tip for home context
-  useEffect(() => {
-    if (user?.id) {
-      fetchAICoachTip(user.id, 'home')
-    }
-  }, [user?.id, fetchAICoachTip])
-
-  // Fetch friends playing
-  useEffect(() => {
-    const fetchFriendsPlaying = async () => {
-      if (!user?.id) {
-        setFriendsLoading(false)
-        return
-      }
-
-      setFriendsLoading(true)
-      try {
-        const { data, error } = await supabase.rpc('get_friends_playing', { p_user_id: user.id })
-
-        if (error) {
-          // If the RPC doesn't exist yet, just set empty array
-          console.warn('get_friends_playing RPC not available:', error.message)
-          setFriendsPlaying([])
-        } else {
-          setFriendsPlaying(data || [])
-        }
-      } catch (error) {
-        console.error('Error fetching friends playing:', error)
-        setFriendsPlaying([])
-      } finally {
-        setFriendsLoading(false)
-      }
-    }
-
-    fetchFriendsPlaying()
-  }, [user?.id])
 
   // Handle joining a friend's party
   const handleJoinFriendParty = (squadId: string) => {

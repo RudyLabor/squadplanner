@@ -2,18 +2,18 @@ import { motion } from 'framer-motion'
 import { Gamepad2, UserPlus, Users, LogIn } from 'lucide-react'
 import { Card } from './ui'
 
-// Types
+// Types - matches the return type from get_friends_playing RPC
 export interface FriendPlaying {
   friend_id: string
   username: string
   avatar_url: string | null
   current_game: string | null
-  last_seen_at: string
+  last_seen_at: string | null
   squad_id: string
   squad_name: string
   party_member_count: number
-  voice_channel_id?: string | null
-  is_in_voice?: boolean
+  voice_channel_id: string | null
+  is_in_voice: boolean
 }
 
 export interface FriendsPlayingProps {

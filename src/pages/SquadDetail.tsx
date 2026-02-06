@@ -16,6 +16,7 @@ import { SquadLeaderboard } from '../components/SquadLeaderboard'
 import { supabase } from '../lib/supabase'
 import { sendMemberJoinedMessage } from '../lib/systemMessages'
 import { exportSessionsToICS } from '../utils/calendarExport'
+import { showSuccess } from '../lib/toast'
 
 // Animation variants removed - they can block mobile rendering
 
@@ -666,6 +667,7 @@ export default function SquadDetail() {
     if (!currentSquad) return
     await navigator.clipboard.writeText(currentSquad.invite_code)
     setCopiedCode(true)
+    showSuccess('Code copie !')
     setTimeout(() => setCopiedCode(false), 2000)
   }
 

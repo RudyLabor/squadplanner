@@ -25,8 +25,8 @@ export const queryClient = new QueryClient({
       // Retry failed requests with exponential backoff
       retry: 2,
       retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 10000),
-      // Refetch on window focus (user comes back to tab)
-      refetchOnWindowFocus: true,
+      // Don't refetch on window focus to reduce network calls
+      refetchOnWindowFocus: false,
       // Don't refetch on mount if data is fresh
       refetchOnMount: true,
       // Refetch on reconnect

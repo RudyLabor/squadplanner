@@ -33,5 +33,46 @@ export {
   type SessionWithDetails,
 } from './useSessionsQuery'
 
+// Squad Members
+export {
+  useSquadMembersQuery,
+  useUserSquadIdsQuery,
+  useMemberCountsQuery,
+  type SquadMemberWithProfile,
+} from './useSquadMembers'
+
+// User Profile
+export {
+  useProfileQuery,
+  useCurrentProfileQuery,
+  useUpdateProfileMutation,
+} from './useUserProfile'
+
+// Subscriptions
+export {
+  useSquadSubscriptionQuery,
+  useUserSubscriptionsQuery,
+  type Subscription,
+} from './useSquadSubscriptions'
+
+// Squad Details
+export {
+  useSquadDetailsQuery,
+  useSquadsPremiumStatusQuery,
+  type SquadDetails,
+} from './useSquadDetails'
+
+// Auth
+export { useAuthUserQuery } from './useAuthQuery'
+
+// AI Coach
+export { useAICoachQuery, type AICoachTip } from './useAICoach'
+
+// Friends Playing
+export { useFriendsPlayingQuery, type FriendPlaying } from './useFriendsPlaying'
+
+// Unread Count
+export { useUnreadCountQuery } from './useUnreadCountQuery'
+
 // Re-export query client and keys
 export { queryClient, queryKeys } from '../../lib/queryClient'

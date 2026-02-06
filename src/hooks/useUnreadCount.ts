@@ -72,18 +72,18 @@ export const useUnreadCountStore = create<UnreadCountState>((set, get) => ({
 
       const squadIds = memberships.map(m => m.squad_id)
 
-      // Count unread squad messages
+      // Count unread squad messages - use 'id' instead of '*' to reduce server load (fixes 503 errors)
       const { count: squadCount } = await supabase
         .from('messages')
-        .select('*', { count: 'exact', head: true })
+        .select('id', { count: 'exact', head: true })
         .in('squad_id', squadIds)
         .neq('sender_id', user.id)
         .not('read_by', 'cs', `{${user.id}}`)
 
-      // Count unread DMs
+      // Count unread DMs - use 'id' instead of '*' to reduce server load (fixes 503 errors)
       const { count: dmCount } = await supabase
         .from('direct_messages')
-        .select('*', { count: 'exact', head: true })
+        .select('id', { count: 'exact', head: true })
         .eq('receiver_id', user.id)
         .is('read_at', null)
 

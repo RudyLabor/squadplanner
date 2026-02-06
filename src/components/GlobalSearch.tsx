@@ -282,11 +282,13 @@ export function GlobalSearch() {
                       setSelectedIndex(0)
                     }}
                     placeholder="Rechercher squads, sessions, messages, membres..."
+                    aria-label="Recherche globale"
                     className="flex-1 bg-transparent text-[#f7f8f8] placeholder-[#5e6063] outline-none text-[15px]"
                   />
                   {query && (
                     <motion.button
                       onClick={() => setQuery('')}
+                      aria-label="Effacer la recherche"
                       className="p-1 rounded-lg hover:bg-[rgba(255,255,255,0.05)] text-[#5e6063] hover:text-[#8b8d90]"
                       whileHover={{ scale: 1.1 }}
                       whileTap={{ scale: 0.9 }}

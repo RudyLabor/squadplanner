@@ -151,7 +151,7 @@ export function Challenges({ challenges, onClaimXP }: ChallengesProps) {
           >
             <Gift className="w-4 h-4 text-[#4ade80]" />
             <span className="text-[13px] font-medium text-[#4ade80]">
-              {claimableCount} a reclamer
+              {claimableCount} à réclamer
             </span>
           </motion.div>
         )}
@@ -374,7 +374,7 @@ function ChallengeCard({ challenge, index, onClaim, isClaiming }: ChallengeCardP
             {isClaimed && (
               <div className="mt-3 flex items-center gap-2 text-[12px] text-[#5e6063]">
                 <Check className="w-4 h-4 text-[#4ade80]" />
-                <span>XP reclames</span>
+                <span>XP réclamés</span>
               </div>
             )}
           </div>

@@ -178,10 +178,10 @@ export function Profile() {
       await fetchChallenges()
       if (refreshProfile) await refreshProfile()
 
-      toast.success(`+${challenge.xp_reward} XP reclames!`, { icon: '⚡' })
+      toast.success(`+${challenge.xp_reward} XP réclamés !`, { icon: '⚡' })
     } catch (error) {
       console.error('Error claiming XP:', error)
-      toast.error('Erreur lors de la reclamation des XP')
+      toast.error('Erreur lors de la réclamation des XP')
     }
   }
 
@@ -715,9 +715,9 @@ export function Profile() {
                   <Sparkles className="w-5 h-5 text-[#fbbf24]" />
                 </div>
                 <div className="flex-1">
-                  <h4 className="text-[14px] font-medium text-[#f7f8f8] mb-1">Conseils personnalises</h4>
+                  <h4 className="text-[14px] font-medium text-[#f7f8f8] mb-1">Conseils personnalisés</h4>
                   <p className="text-[13px] text-[#8b8d90]">
-                    Predictions de disponibilite, analyse des patterns de jeu, suggestions de creneaux optimaux pour ta squad.
+                    Prédictions de disponibilité, analyse des patterns de jeu, suggestions de créneaux optimaux pour ta squad.
                   </p>
                 </div>
               </div>

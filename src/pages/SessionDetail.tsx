@@ -203,7 +203,7 @@ export default function SessionDetail() {
             <Link
               to={`/squad/${currentSession.squad_id}`}
               className="p-2.5 min-w-[44px] min-h-[44px] rounded-lg hover:bg-[rgba(255,255,255,0.05)] transition-colors flex items-center justify-center touch-target"
-              aria-label="Retour a la squad"
+              aria-label="Retour à la squad"
             >
               <ArrowLeft className="w-5 h-5 text-[#8b8d90]" />
             </Link>

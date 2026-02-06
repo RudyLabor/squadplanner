@@ -75,7 +75,7 @@ export function PinnedMessages({
             <Pin className="w-4 h-4 text-[#f5a623]" />
           </div>
           <span className="text-[14px] font-medium text-[#f7f8f8]">
-            {pinnedMessages.length} message{pinnedMessages.length > 1 ? 's' : ''} epingle{pinnedMessages.length > 1 ? 's' : ''}
+            {pinnedMessages.length} message{pinnedMessages.length > 1 ? 's' : ''} épinglé{pinnedMessages.length > 1 ? 's' : ''}
           </span>
         </div>
         <motion.div

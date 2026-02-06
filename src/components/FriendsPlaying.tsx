@@ -163,7 +163,7 @@ function EmptyState() {
           Aucun pote en ligne
         </p>
         <p className="text-[12px] text-[#5e6063]">
-          Invite-les a rejoindre Squad Planner !
+          Invite-les à rejoindre Squad Planner !
         </p>
       </Card>
     </motion.div>

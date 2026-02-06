@@ -190,10 +190,10 @@ export function AppLayout({ children }: AppLayoutProps) {
     return () => clearInterval(interval)
   }, [user, squads])
 
-  // Don't show navigation on auth, onboarding, or landing for non-logged users
+  // Don't show navigation on auth, onboarding, or landing page (regardless of login status)
   const isAuthPage = location.pathname === '/auth'
   const isOnboarding = location.pathname === '/onboarding'
-  const isLanding = location.pathname === '/' && !user
+  const isLanding = location.pathname === '/'
 
   if (isAuthPage || isOnboarding || isLanding) {
     return <>{children}</>

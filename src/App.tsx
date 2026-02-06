@@ -8,6 +8,7 @@ import { useAuthStore, useSquadsStore, subscribeToIncomingCalls, usePushNotifica
 import { pageTransitionVariants, pageTransitionConfig } from './components/PageTransition'
 import { supabase } from './lib/supabase'
 import { ErrorBoundary } from './components/ErrorBoundary'
+import { OfflineBanner } from './components/OfflineBanner'
 import { queryClient } from './lib/queryClient'
 
 // Initialize theme on app load - triggers theme initialization before first render
@@ -313,6 +314,8 @@ export default function App() {
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
         <AppContent />
+        {/* Offline/Online status banner */}
+        <OfflineBanner />
         {/* Global toast notifications - Phase 3.4 */}
         <Toaster
           position="top-center"
@@ -333,6 +336,20 @@ export default function App() {
               info: 'border-[#6366f1]/20 bg-[#6366f1]/10',
             },
           }}
+        />
+
+        {/* Aria-live regions for screen reader announcements */}
+        <div
+          id="aria-live-polite"
+          aria-live="polite"
+          aria-atomic="true"
+          className="sr-only"
+        />
+        <div
+          id="aria-live-assertive"
+          aria-live="assertive"
+          aria-atomic="true"
+          className="sr-only"
         />
       </BrowserRouter>
     </QueryClientProvider>

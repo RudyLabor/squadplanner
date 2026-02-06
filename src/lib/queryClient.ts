@@ -100,3 +100,96 @@ export const queryKeys = {
     completed: () => [...queryKeys.challenges.all, 'completed'] as const,
   },
 }
+
+/**
+ * PHASE - Prefetching utilities for critical routes
+ *
+ * Prefetch data before navigation to make page transitions instant.
+ */
+
+/**
+ * Prefetch data for a route before navigation
+ */
+export async function prefetchRoute(route: string, userId?: string) {
+  switch (route) {
+    case '/home':
+      // Prefetch squads and upcoming sessions for home page
+      if (userId) {
+        await Promise.all([
+          queryClient.prefetchQuery({
+            queryKey: queryKeys.squads.list(),
+            staleTime: 30 * 1000,
+          }),
+          queryClient.prefetchQuery({
+            queryKey: queryKeys.sessions.upcoming(),
+            staleTime: 30 * 1000,
+          }),
+        ])
+      }
+      break
+
+    case '/squads':
+      // Prefetch squads list
+      await queryClient.prefetchQuery({
+        queryKey: queryKeys.squads.list(),
+        staleTime: 30 * 1000,
+      })
+      break
+
+    case '/messages':
+      // Prefetch conversations and unread count
+      await Promise.all([
+        queryClient.prefetchQuery({
+          queryKey: queryKeys.messages.conversations(),
+          staleTime: 30 * 1000,
+        }),
+        queryClient.prefetchQuery({
+          queryKey: queryKeys.messages.unread(),
+          staleTime: 30 * 1000,
+        }),
+      ])
+      break
+
+    case '/premium':
+      // Prefetch premium status
+      await queryClient.prefetchQuery({
+        queryKey: queryKeys.premium.status(),
+        staleTime: 60 * 1000,
+      })
+      break
+  }
+}
+
+/**
+ * Prefetch squad detail data
+ */
+export async function prefetchSquadDetail(squadId: string) {
+  await Promise.all([
+    queryClient.prefetchQuery({
+      queryKey: queryKeys.squads.detail(squadId),
+      staleTime: 30 * 1000,
+    }),
+    queryClient.prefetchQuery({
+      queryKey: queryKeys.squads.members(squadId),
+      staleTime: 30 * 1000,
+    }),
+    queryClient.prefetchQuery({
+      queryKey: queryKeys.sessions.list(squadId),
+      staleTime: 30 * 1000,
+    }),
+    queryClient.prefetchQuery({
+      queryKey: queryKeys.messages.squad(squadId),
+      staleTime: 30 * 1000,
+    }),
+  ])
+}
+
+/**
+ * Prefetch session detail data
+ */
+export async function prefetchSessionDetail(sessionId: string) {
+  await queryClient.prefetchQuery({
+    queryKey: queryKeys.sessions.detail(sessionId),
+    staleTime: 15 * 1000,
+  })
+}

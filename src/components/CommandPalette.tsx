@@ -248,6 +248,7 @@ export function CommandPalette() {
                 />
                 <button
                   onClick={close}
+                  aria-label="Fermer la palette de commandes"
                   className="p-1.5 rounded-lg hover:bg-[rgba(255,255,255,0.05)] transition-colors"
                 >
                   <X className="w-4 h-4 text-[#5e6063]" />

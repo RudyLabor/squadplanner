@@ -1,20 +1,23 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useMemo } from 'react'
 import { motion } from 'framer-motion'
 import { Users, Calendar, TrendingUp, ChevronRight, Loader2, Mic, CheckCircle2, AlertCircle, Sparkles, Star, HelpCircle, XCircle } from 'lucide-react'
 import { Link, useNavigate } from 'react-router-dom'
 import CountUp from 'react-countup'
 import Confetti from 'react-confetti'
 import { Card, Badge, SessionCardSkeleton, SquadCardSkeleton } from '../components/ui'
-import { useAuthStore, useSquadsStore, useVoiceChatStore, useAIStore, useSessionsStore } from '../hooks'
+import { useAuthStore, useVoiceChatStore, useAIStore } from '../hooks'
+import { useSquadsQuery } from '../hooks/queries/useSquadsQuery'
+import { useRsvpMutation, useUpcomingSessionsQuery } from '../hooks/queries/useSessionsQuery'
 import { supabase } from '../lib/supabase'
 import { FriendsPlaying, type FriendPlaying } from '../components/FriendsPlaying'
 import { StreakCounter } from '../components/StreakCounter'
+import { haptic } from '../utils/haptics'
 
 // Types
 interface UpcomingSession {
   id: string
-  title?: string
-  game?: string
+  title?: string | null
+  game?: string | null
   scheduled_at: string
   status: string
   squad_id: string
@@ -300,27 +303,61 @@ function StatsRow({ squadsCount, sessionsThisWeek, reliabilityScore }: {
 
 export default function Home() {
   const { user, profile, isInitialized } = useAuthStore()
-  const { squads, fetchSquads, isLoading: squadsLoading } = useSquadsStore()
   const { isConnected: isInVoiceChat, currentChannel, remoteUsers } = useVoiceChatStore()
   const { aiCoachTip, fetchAICoachTip } = useAIStore()
-  const { updateRsvp } = useSessionsStore()
   const navigate = useNavigate()
 
-  const [upcomingSessions, setUpcomingSessions] = useState<UpcomingSession[]>([])
-  const [sessionsThisWeek, setSessionsThisWeek] = useState(0)
-  const [sessionsLoading, setSessionsLoading] = useState(true)
+  // React Query hooks - automatic caching and deduplication
+  const { data: squads = [], isLoading: squadsLoading } = useSquadsQuery()
+  const { data: rawSessions = [], isLoading: sessionsQueryLoading } = useUpcomingSessionsQuery(user?.id)
+  const rsvpMutation = useRsvpMutation()
+
   const [showConfetti, setShowConfetti] = useState(false)
   const [successMessage, setSuccessMessage] = useState<string | null>(null)
-  const [rsvpLoading, setRsvpLoading] = useState(false)
   const [friendsPlaying, setFriendsPlaying] = useState<FriendPlaying[]>([])
   const [friendsLoading, setFriendsLoading] = useState(true)
 
-  // Fetch squads
-  useEffect(() => {
-    if (user) {
-      fetchSquads()
-    }
-  }, [user, fetchSquads])
+  // Transform sessions to include squad names (memoized)
+  const upcomingSessions = useMemo<UpcomingSession[]>(() => {
+    if (!rawSessions.length || !squads.length) return []
+
+    return rawSessions
+      .filter(s => s.status !== 'cancelled')
+      .slice(0, 5)
+      .map(session => {
+        const squad = squads.find(s => s.id === session.squad_id)
+        return {
+          id: session.id,
+          title: session.title,
+          game: session.game,
+          scheduled_at: session.scheduled_at,
+          status: session.status,
+          squad_id: session.squad_id,
+          squad_name: squad?.name || 'Squad',
+          total_members: squad?.member_count || squad?.total_members || 1,
+          rsvp_counts: session.rsvp_counts || { present: 0, absent: 0, maybe: 0 },
+          my_rsvp: session.my_rsvp || null,
+        }
+      })
+  }, [rawSessions, squads])
+
+  // Calculate sessions this week (memoized)
+  const sessionsThisWeek = useMemo(() => {
+    if (!rawSessions.length) return 0
+    const now = new Date()
+    const startOfWeek = new Date(now)
+    startOfWeek.setDate(now.getDate() - now.getDay())
+    startOfWeek.setHours(0, 0, 0, 0)
+    const endOfWeek = new Date(startOfWeek)
+    endOfWeek.setDate(startOfWeek.getDate() + 7)
+
+    return rawSessions.filter(s => {
+      const date = new Date(s.scheduled_at)
+      return date >= startOfWeek && date < endOfWeek
+    }).length
+  }, [rawSessions])
+
+  const sessionsLoading = sessionsQueryLoading || (squadsLoading && !squads.length)
 
   // Fetch AI Coach tip for home context
   useEffect(() => {
@@ -328,103 +365,6 @@ export default function Home() {
       fetchAICoachTip(user.id, 'home')
     }
   }, [user?.id, fetchAICoachTip])
-
-  // Fetch upcoming sessions from all squads
-  useEffect(() => {
-    const fetchUpcomingSessions = async () => {
-      if (!user || squads.length === 0) {
-        setSessionsLoading(false)
-        return
-      }
-
-      setSessionsLoading(true)
-      try {
-        const squadIds = squads.map(s => s.id)
-        const now = new Date()
-        const startOfWeek = new Date(now)
-        startOfWeek.setDate(now.getDate() - now.getDay())
-        startOfWeek.setHours(0, 0, 0, 0)
-        const endOfWeek = new Date(startOfWeek)
-        endOfWeek.setDate(startOfWeek.getDate() + 7)
-
-        // Fetch sessions and week count in parallel
-        const [sessionsResult, weekCountResult] = await Promise.all([
-          supabase
-            .from('sessions')
-            .select('*')
-            .in('squad_id', squadIds)
-            .neq('status', 'cancelled')
-            .gte('scheduled_at', new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString())
-            .order('scheduled_at', { ascending: true })
-            .limit(5),
-          supabase
-            .from('sessions')
-            .select('*', { count: 'exact', head: true })
-            .in('squad_id', squadIds)
-            .gte('scheduled_at', startOfWeek.toISOString())
-            .lt('scheduled_at', endOfWeek.toISOString())
-        ])
-
-        if (sessionsResult.error) throw sessionsResult.error
-
-        const sessions = sessionsResult.data || []
-        setSessionsThisWeek(weekCountResult.count || 0)
-
-        if (sessions.length === 0) {
-          setUpcomingSessions([])
-          return
-        }
-
-        // Get all RSVPs for all sessions in ONE query
-        const sessionIds = sessions.map(s => s.id)
-        const { data: allRsvps } = await supabase
-          .from('session_rsvps')
-          .select('*')
-          .in('session_id', sessionIds)
-
-        // Group RSVPs by session
-        const rsvpsBySession: Record<string, typeof allRsvps> = {}
-        allRsvps?.forEach(rsvp => {
-          if (!rsvpsBySession[rsvp.session_id]) {
-            rsvpsBySession[rsvp.session_id] = []
-          }
-          rsvpsBySession[rsvp.session_id]!.push(rsvp)
-        })
-
-        // Enrich sessions with squad info and RSVPs
-        const enrichedSessions: UpcomingSession[] = sessions.map(session => {
-          const squad = squads.find(s => s.id === session.squad_id)
-          const rsvps = rsvpsBySession[session.id] || []
-          const my_rsvp = rsvps.find(r => r.user_id === user.id)?.response as 'present' | 'absent' | 'maybe' | null || null
-
-          return {
-            id: session.id,
-            title: session.title,
-            game: session.game,
-            scheduled_at: session.scheduled_at,
-            status: session.status,
-            squad_id: session.squad_id,
-            squad_name: squad?.name || 'Squad',
-            total_members: squad?.member_count || squad?.total_members || 1,
-            rsvp_counts: {
-              present: rsvps.filter(r => r.response === 'present').length,
-              absent: rsvps.filter(r => r.response === 'absent').length,
-              maybe: rsvps.filter(r => r.response === 'maybe').length,
-            },
-            my_rsvp,
-          }
-        })
-
-        setUpcomingSessions(enrichedSessions)
-      } catch (error) {
-        console.error('Error fetching upcoming sessions:', error)
-      } finally {
-        setSessionsLoading(false)
-      }
-    }
-
-    fetchUpcomingSessions()
-  }, [user, squads])
 
   // Fetch friends playing
   useEffect(() => {
@@ -436,7 +376,7 @@ export default function Home() {
 
       setFriendsLoading(true)
       try {
-        const { data, error } = await supabase.rpc('get_friends_playing', { user_id: user.id })
+        const { data, error } = await supabase.rpc('get_friends_playing', { p_user_id: user.id })
 
         if (error) {
           // If the RPC doesn't exist yet, just set empty array
@@ -467,33 +407,18 @@ export default function Home() {
     console.log('Invite friend:', friendId)
   }
 
-  // Handle RSVP avec célébration
+  // Handle RSVP avec célébration - Uses React Query mutation with optimistic updates
   const handleRsvp = async (sessionId: string, response: 'present' | 'absent' | 'maybe') => {
-    setRsvpLoading(true)
+    // Trigger haptic feedback on mobile
+    haptic.medium()
+
     try {
-      const { error } = await updateRsvp(sessionId, response)
-      if (error) {
-        console.error('RSVP error:', error)
-        return
-      }
+      await rsvpMutation.mutateAsync({ sessionId, response })
 
-      // Update local state immédiatement pour UX réactive
-      setUpcomingSessions(prev => prev.map(s =>
-        s.id === sessionId
-          ? {
-              ...s,
-              my_rsvp: response,
-              rsvp_counts: {
-                ...s.rsvp_counts,
-                [response]: s.rsvp_counts[response] + (s.my_rsvp === response ? 0 : 1),
-                ...(s.my_rsvp && s.my_rsvp !== response ? { [s.my_rsvp]: Math.max(0, s.rsvp_counts[s.my_rsvp] - 1) } : {})
-              }
-            }
-          : s
-      ))
-
+      // React Query handles cache invalidation automatically via the mutation's onSuccess
       // Célébration pour "présent" - moment Wow!
       if (response === 'present') {
+        haptic.success()
         setShowConfetti(true)
         setSuccessMessage("T'es confirme ! Ta squad compte sur toi")
         setTimeout(() => setShowConfetti(false), 4000)
@@ -507,9 +432,8 @@ export default function Home() {
         setTimeout(() => setSuccessMessage(null), 3000)
       }
     } catch (error) {
+      haptic.error()
       console.error('RSVP error:', error)
-    } finally {
-      setRsvpLoading(false)
     }
   }
 
@@ -660,7 +584,7 @@ export default function Home() {
                   </Link>
                 )}
               </div>
-              <NextSessionCard session={nextSession} onRsvp={handleRsvp} isRsvpLoading={rsvpLoading} />
+              <NextSessionCard session={nextSession} onRsvp={handleRsvp} isRsvpLoading={rsvpMutation.isPending} />
             </div>
           )}
 

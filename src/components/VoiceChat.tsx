@@ -231,6 +231,7 @@ export function VoiceChat({ sessionId, sessionTitle }: VoiceChatProps) {
             <Button
               variant="ghost"
               onClick={handleLeave}
+              aria-label="Quitter le vocal"
               className="text-danger hover:bg-danger/10"
             >
               <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">

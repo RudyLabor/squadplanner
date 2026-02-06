@@ -1,10 +1,17 @@
 // Service Worker for SquadPlanner - Performance & Push Notifications
 // This runs in the background and handles push events even when the app is closed
 
-const CACHE_VERSION = 'v2';
+// Cache version - UPDATE THIS ON EACH DEPLOYMENT
+const CACHE_VERSION = 'v3';
 const STATIC_CACHE = `squadplanner-static-${CACHE_VERSION}`;
 const DYNAMIC_CACHE = `squadplanner-dynamic-${CACHE_VERSION}`;
 const IMAGE_CACHE = `squadplanner-images-${CACHE_VERSION}`;
+
+// Maximum age for dynamic cache entries (15 minutes)
+const DYNAMIC_CACHE_MAX_AGE = 15 * 60 * 1000;
+
+// Maximum cache size (50 entries)
+const MAX_CACHE_ENTRIES = 50;
 
 // Static assets to precache
 const STATIC_ASSETS = [
@@ -25,13 +32,14 @@ self.addEventListener('install', function(event) {
   self.skipWaiting();
 });
 
-// Activate event - clean up old caches
+// Activate event - clean up ALL old caches and take control
 self.addEventListener('activate', function(event) {
   console.log('[SW] Activating service worker...');
   event.waitUntil(
     caches.keys().then(function(cacheNames) {
       return Promise.all(
         cacheNames.filter(function(cacheName) {
+          // Delete ANY cache that doesn't match current version
           return cacheName.startsWith('squadplanner-') &&
                  cacheName !== STATIC_CACHE &&
                  cacheName !== DYNAMIC_CACHE &&
@@ -41,11 +49,50 @@ self.addEventListener('activate', function(event) {
           return caches.delete(cacheName);
         })
       );
+    }).then(function() {
+      // Also clean up any corrupted entries in current caches
+      return cleanupCaches();
     })
   );
   // Take control of all pages immediately
   self.clients.claim();
 });
+
+// Clean up corrupted or expired cache entries
+async function cleanupCaches() {
+  try {
+    const cache = await caches.open(DYNAMIC_CACHE);
+    const requests = await cache.keys();
+    const now = Date.now();
+
+    for (const request of requests) {
+      const response = await cache.match(request);
+      if (response) {
+        // Check if response has metadata header with timestamp
+        const cachedAt = response.headers.get('sw-cached-at');
+        if (cachedAt) {
+          const age = now - parseInt(cachedAt, 10);
+          if (age > DYNAMIC_CACHE_MAX_AGE) {
+            console.log('[SW] Removing expired cache entry:', request.url);
+            await cache.delete(request);
+          }
+        }
+      }
+    }
+
+    // Limit cache size
+    const remainingRequests = await cache.keys();
+    if (remainingRequests.length > MAX_CACHE_ENTRIES) {
+      const toDelete = remainingRequests.slice(0, remainingRequests.length - MAX_CACHE_ENTRIES);
+      for (const request of toDelete) {
+        await cache.delete(request);
+      }
+      console.log('[SW] Trimmed cache to', MAX_CACHE_ENTRIES, 'entries');
+    }
+  } catch (error) {
+    console.error('[SW] Error cleaning up caches:', error);
+  }
+}
 
 // Fetch event - smart caching strategies
 self.addEventListener('fetch', function(event) {
@@ -55,25 +102,40 @@ self.addEventListener('fetch', function(event) {
   // Skip non-GET requests
   if (request.method !== 'GET') return;
 
-  // Skip Supabase API calls
+  // Skip Supabase API calls - NEVER cache API data
   if (url.hostname.includes('supabase')) return;
 
   // Skip chrome-extension
   if (url.protocol === 'chrome-extension:') return;
 
+  // Skip WebSocket and EventSource
+  if (url.protocol === 'ws:' || url.protocol === 'wss:') return;
+
+  // CRITICAL: Never cache HTML navigation requests (SPA routes)
+  // This prevents the "black screen" issue from corrupted cached HTML
+  if (request.mode === 'navigate' || request.destination === 'document') {
+    event.respondWith(networkFirst(request));
+    return;
+  }
+
   // Handle different request types
   if (isStaticAsset(url)) {
+    // Static assets: Cache first (JS, CSS, fonts with hash in filename)
     event.respondWith(cacheFirst(request, STATIC_CACHE));
   } else if (isImageRequest(request, url)) {
-    event.respondWith(cacheFirst(request, IMAGE_CACHE));
+    // Images: Cache first with validation
+    event.respondWith(cacheFirstWithValidation(request, IMAGE_CACHE));
   } else if (url.origin === self.location.origin) {
-    event.respondWith(staleWhileRevalidate(request, DYNAMIC_CACHE));
+    // Other same-origin requests: Network first with cache fallback
+    event.respondWith(networkFirst(request));
   }
 });
 
-// Check if static asset
+// Check if static asset (versioned files are safe to cache long-term)
 function isStaticAsset(url) {
-  return /\.(js|css|woff2?|ttf|otf)$/.test(url.pathname);
+  // Match hashed assets like main.abc123.js
+  return /\.(js|css|woff2?|ttf|otf)$/.test(url.pathname) &&
+         (/[.-][a-f0-9]{8,}\./.test(url.pathname) || url.pathname.includes('/assets/'));
 }
 
 // Check if image request
@@ -82,38 +144,119 @@ function isImageRequest(request, url) {
          /\.(png|jpg|jpeg|gif|svg|webp|ico|avif)$/.test(url.pathname);
 }
 
-// Cache First strategy
+// Validate response before caching
+function isValidResponse(response) {
+  // Must be a successful response
+  if (!response || !response.ok) return false;
+
+  // Must have valid status (200-299)
+  if (response.status < 200 || response.status >= 300) return false;
+
+  // Check Content-Type for HTML/JSON responses
+  const contentType = response.headers.get('content-type') || '';
+
+  // Don't cache error pages disguised as HTML
+  if (contentType.includes('text/html')) {
+    // For HTML, we're being very strict - only cache if truly valid
+    return response.status === 200;
+  }
+
+  return true;
+}
+
+// Network First strategy (for HTML and dynamic content)
+async function networkFirst(request) {
+  try {
+    const response = await fetch(request);
+
+    // Only return valid responses
+    if (isValidResponse(response)) {
+      return response;
+    }
+
+    // If network response is invalid, try cache
+    const cached = await caches.match(request);
+    if (cached) return cached;
+
+    // Return the network response anyway (let the app handle the error)
+    return response;
+  } catch (error) {
+    // Network failed, try cache
+    const cached = await caches.match(request);
+    if (cached) {
+      console.log('[SW] Serving from cache (offline):', request.url);
+      return cached;
+    }
+
+    // For navigation requests, return a basic offline page
+    if (request.mode === 'navigate') {
+      return new Response(
+        '<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>Hors ligne</title><style>body{font-family:system-ui;display:flex;align-items:center;justify-content:center;min-height:100vh;margin:0;background:#050506;color:#f7f8f8}div{text-align:center;padding:2rem}.btn{display:inline-block;margin-top:1rem;padding:0.75rem 1.5rem;background:#6366f1;color:white;border-radius:0.5rem;text-decoration:none}</style></head><body><div><h1>Hors ligne</h1><p>Vérifie ta connexion internet</p><a href="/" class="btn" onclick="location.reload();return false;">Réessayer</a></div></body></html>',
+        { status: 503, headers: { 'Content-Type': 'text/html; charset=utf-8' } }
+      );
+    }
+
+    return new Response('Offline', { status: 503 });
+  }
+}
+
+// Cache First strategy (for static assets)
 async function cacheFirst(request, cacheName) {
   const cached = await caches.match(request);
   if (cached) return cached;
 
   try {
     const response = await fetch(request);
-    if (response.ok) {
+
+    // Only cache valid responses
+    if (isValidResponse(response)) {
+      const responseToCache = response.clone();
       const cache = await caches.open(cacheName);
-      cache.put(request, response.clone());
+      cache.put(request, responseToCache);
     }
+
     return response;
   } catch (error) {
+    console.error('[SW] Fetch failed for static asset:', request.url);
     return new Response('Offline', { status: 503 });
   }
 }
 
-// Stale While Revalidate strategy
-async function staleWhileRevalidate(request, cacheName) {
-  const cache = await caches.open(cacheName);
-  const cached = await cache.match(request);
+// Cache First with validation (for images)
+async function cacheFirstWithValidation(request, cacheName) {
+  const cached = await caches.match(request);
 
-  const fetchPromise = fetch(request).then(function(response) {
-    if (response.ok) {
-      cache.put(request, response.clone());
+  if (cached) {
+    // Validate cached response isn't corrupted
+    const contentLength = cached.headers.get('content-length');
+    if (contentLength && parseInt(contentLength, 10) > 0) {
+      return cached;
     }
-    return response;
-  }).catch(function() {
-    return cached;
-  });
+    // If corrupted, delete and fetch fresh
+    const cache = await caches.open(cacheName);
+    await cache.delete(request);
+  }
 
-  return cached || fetchPromise;
+  try {
+    const response = await fetch(request);
+
+    // Validate before caching
+    if (isValidResponse(response)) {
+      const contentLength = response.headers.get('content-length');
+      // Only cache if we have content
+      if (!contentLength || parseInt(contentLength, 10) > 0) {
+        const responseToCache = response.clone();
+        const cache = await caches.open(cacheName);
+        cache.put(request, responseToCache);
+      }
+    }
+
+    return response;
+  } catch (error) {
+    // Return cached even if potentially stale
+    if (cached) return cached;
+    return new Response('Offline', { status: 503 });
+  }
 }
 
 // Push event - handle incoming push notifications
@@ -326,6 +469,25 @@ self.addEventListener('message', function(event) {
   if (event.data && event.data.type === 'SKIP_WAITING') {
     self.skipWaiting();
   }
+
+  // Allow app to clear cache on demand
+  if (event.data && event.data.type === 'CLEAR_CACHE') {
+    event.waitUntil(
+      caches.keys().then(function(cacheNames) {
+        return Promise.all(
+          cacheNames.filter(function(cacheName) {
+            return cacheName.startsWith('squadplanner-');
+          }).map(function(cacheName) {
+            console.log('[SW] Clearing cache:', cacheName);
+            return caches.delete(cacheName);
+          })
+        );
+      }).then(function() {
+        // Notify the app that cache was cleared
+        event.ports[0]?.postMessage({ success: true });
+      })
+    );
+  }
 });
 
 // Background sync event (for offline support)
@@ -340,4 +502,4 @@ self.addEventListener('sync', function(event) {
   }
 });
 
-console.log('[SW] Service worker loaded');
+console.log('[SW] Service worker loaded - version', CACHE_VERSION);

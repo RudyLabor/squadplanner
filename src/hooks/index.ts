@@ -43,3 +43,17 @@ export type { PresenceUser, OnlineIndicatorProps } from './usePresence'
 
 // PHASE 1.1 - React Query hooks
 export * from './queries'
+
+// Offline detection
+export { useOffline, useOfflineBanner, useOfflineStore } from './useOffline'
+
+// Focus management for accessibility
+export {
+  useFocusOnNavigate,
+  useFocusTrap as useFocusTrapNew,
+  useRestoreFocus,
+  useAnnounce,
+  useSkipLink,
+  useAutoFocus,
+  useRovingTabindex
+} from './useFocusManagement'

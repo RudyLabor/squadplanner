@@ -158,6 +158,9 @@ export function InviteToPartyModal({
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 20 }}
           transition={{ duration: 0.2 }}
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="invite-party-title"
           className="w-full max-w-md bg-[#0c0c0e] border border-white/10 rounded-2xl overflow-hidden shadow-xl"
           onClick={(e) => e.stopPropagation()}
         >
@@ -168,12 +171,13 @@ export function InviteToPartyModal({
                 <UserPlus className="w-5 h-5 text-[#6366f1]" />
               </div>
               <div>
-                <h2 className="text-[16px] font-semibold text-[#f7f8f8]">Inviter à la Party</h2>
+                <h2 id="invite-party-title" className="text-[16px] font-semibold text-[#f7f8f8]">Inviter à la Party</h2>
                 <p className="text-[12px] text-[#8b8d90]">{squadName}</p>
               </div>
             </div>
             <button
               onClick={onClose}
+              aria-label="Fermer"
               className="p-2 rounded-lg hover:bg-white/5 transition-colors"
             >
               <X className="w-5 h-5 text-[#8b8d90]" />

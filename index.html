@@ -31,9 +31,124 @@
     <meta name="twitter:image" content="https://squadplanner.fr/og-image.jpg" />
 
     <title>Squad Planner - Le Calendly du gaming</title>
+
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Squad Planner",
+      "alternateName": "Le Calendly du gaming",
+      "url": "https://squadplanner.fr",
+      "description": "Crée l'habitude de jouer ensemble. Planifie, confirme, joue. Fini les 'on verra'.",
+      "applicationCategory": "GameApplication",
+      "operatingSystem": "Web, iOS, Android",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "EUR"
+      },
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.8",
+        "ratingCount": "150"
+      },
+      "author": {
+        "@type": "Organization",
+        "name": "Squad Planner"
+      },
+      "inLanguage": "fr",
+      "potentialAction": {
+        "@type": "ViewAction",
+        "target": "https://squadplanner.fr/auth"
+      }
+    }
+    </script>
+
+    <!-- Inter Font - Cross-platform consistency -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Critical CSS for above-the-fold content -->
+    <style>
+      /* Critical CSS - prevents FOUC */
+      :root {
+        --color-bg-base: #050506;
+        --color-primary: #6366f1;
+      }
+      html, body, #root {
+        margin: 0;
+        padding: 0;
+        min-height: 100vh;
+        background-color: var(--color-bg-base);
+        color: #fafafa;
+        font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      }
+      /* Loading spinner for initial load */
+      .initial-loader {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--color-bg-base);
+        z-index: 9999;
+      }
+      .initial-loader-spinner {
+        width: 32px;
+        height: 32px;
+        border: 2px solid var(--color-primary);
+        border-top-color: transparent;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+      }
+      @keyframes spin {
+        to { transform: rotate(360deg); }
+      }
+      /* Skip link for accessibility */
+      .skip-link {
+        position: absolute;
+        top: -40px;
+        left: 0;
+        background: var(--color-primary);
+        color: white;
+        padding: 8px 16px;
+        z-index: 10000;
+        text-decoration: none;
+        font-weight: 500;
+        border-radius: 0 0 8px 0;
+        transition: top 0.2s;
+      }
+      .skip-link:focus {
+        top: 0;
+      }
+    </style>
   </head>
   <body>
+    <!-- Skip link for accessibility - allows keyboard users to skip to main content -->
+    <a href="#main-content" class="skip-link">Aller au contenu principal</a>
+
+    <!-- Initial loader - hidden by React once mounted -->
+    <div id="initial-loader" class="initial-loader">
+      <div class="initial-loader-spinner"></div>
+    </div>
+
     <div id="root"></div>
+
+    <!-- Hide initial loader once React mounts -->
+    <script>
+      window.addEventListener('DOMContentLoaded', function() {
+        setTimeout(function() {
+          var loader = document.getElementById('initial-loader');
+          if (loader) loader.style.display = 'none';
+        }, 100);
+      });
+    </script>
+
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

@@ -540,7 +540,13 @@ export function Party() {
   }
 
   const handleLeaveParty = async () => {
-    await leaveChannel()
+    console.log('[Party] Leaving party...')
+    try {
+      await leaveChannel()
+      console.log('[Party] Left party successfully')
+    } catch (err) {
+      console.error('[Party] Error leaving party:', err)
+    }
   }
 
   // Trouver la squad active

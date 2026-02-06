@@ -248,7 +248,7 @@ const VirtualizedMessages = memo(function VirtualizedMessages({
       return Math.min(baseHeight + contentLines * 20 + (hasReply ? 40 : 0), 300)
     }, [messages]),
     overscan: 5,
-    getItemKey: (index) => messages[index]?.id || index,
+    getItemKey: (index: number) => messages[index]?.id || index,
   })
 
   // Auto-scroll to bottom on new messages
@@ -283,7 +283,7 @@ const VirtualizedMessages = memo(function VirtualizedMessages({
           position: 'relative',
         }}
       >
-        {items.map((virtualRow) => {
+        {items.map((virtualRow: { key: string | number; index: number; start: number }) => {
           const message = messages[virtualRow.index]
           const index = virtualRow.index
           const isOwn = message.sender_id === userId

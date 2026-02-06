@@ -7,6 +7,8 @@ import Confetti from 'react-confetti'
 import { Card, Badge, SessionCardSkeleton, SquadCardSkeleton } from '../components/ui'
 import { useAuthStore, useSquadsStore, useVoiceChatStore, useAIStore, useSessionsStore } from '../hooks'
 import { supabase } from '../lib/supabase'
+import { FriendsPlaying, type FriendPlaying } from '../components/FriendsPlaying'
+import { StreakCounter } from '../components/StreakCounter'
 
 // Types
 interface UpcomingSession {
@@ -27,40 +29,40 @@ function ReliabilityBadge({ score }: { score: number }) {
   if (score >= 95) {
     return (
       <motion.div
-        className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-gradient-to-r from-[#4ade80]/20 to-[#4ade80]/10 border border-[#4ade80]/30 shadow-[0_0_15px_rgba(74,222,128,0.3)]"
+        className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-gradient-to-r from-[#34d399]/15 to-[#34d399]/5 border border-[#34d399]/20 shadow-[0_0_12px_rgba(52,211,153,0.1)]"
         initial={{ scale: 0.9, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
-        transition={{ delay: 0.3, type: "spring", stiffness: 300, damping: 25 }}
-        whileHover={{ scale: 1.05, boxShadow: "0 0 25px rgba(74,222,128,0.5)" }}
+        transition={{ delay: 0.4, type: "spring", stiffness: 300, damping: 25 }}
+        whileHover={{ scale: 1.02, boxShadow: "0 0 16px rgba(52,211,153,0.15)" }}
       >
         <motion.div
-          animate={{ rotate: [0, 12, -12, 0] }}
-          transition={{ duration: 2, repeat: 3, repeatDelay: 3 }}
+          animate={{ rotate: [0, 8, -8, 0] }}
+          transition={{ duration: 2.5, repeat: 2, repeatDelay: 4 }}
         >
-          <Star className="w-4 h-4 text-[#4ade80] fill-[#4ade80]" />
+          <Star className="w-4 h-4 text-[#34d399] fill-[#34d399]" />
         </motion.div>
-        <span className="text-[13px] font-medium text-[#4ade80]">100% fiable</span>
+        <span className="text-[13px] font-medium text-[#34d399]">100% fiable</span>
       </motion.div>
     )
   }
   if (score >= 80) {
     return (
-      <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#4ade80]/10 border border-[#4ade80]/20">
-        <TrendingUp className="w-4 h-4 text-[#4ade80]" />
-        <span className="text-[13px] font-medium text-[#4ade80]">{score}% fiable</span>
+      <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#34d399]/10 border border-[#34d399]/15">
+        <TrendingUp className="w-4 h-4 text-[#34d399]" />
+        <span className="text-[13px] font-medium text-[#34d399]">{score}% fiable</span>
       </div>
     )
   }
   if (score >= 60) {
     return (
-      <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#f5a623]/10 border border-[#f5a623]/20">
-        <TrendingUp className="w-4 h-4 text-[#f5a623]" />
-        <span className="text-[13px] font-medium text-[#f5a623]">{score}%</span>
+      <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#fbbf24]/10 border border-[#fbbf24]/15">
+        <TrendingUp className="w-4 h-4 text-[#fbbf24]" />
+        <span className="text-[13px] font-medium text-[#fbbf24]">{score}%</span>
       </div>
     )
   }
   return (
-    <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#f87171]/10 border border-[#f87171]/20">
+    <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#f87171]/10 border border-[#f87171]/15">
       <AlertCircle className="w-4 h-4 text-[#f87171]" />
       <span className="text-[13px] font-medium text-[#f87171]">{score}%</span>
     </div>
@@ -106,13 +108,14 @@ function NextSessionCard({
     <motion.div
       whileHover={{ y: -2 }}
       whileTap={{ scale: 0.995 }}
+      transition={{ duration: 0.4, ease: "easeOut" }}
     >
-      <Card className="p-4 border-l-4 border-l-[#5e6dd2] bg-gradient-to-br from-[#5e6dd2]/10 via-transparent to-[#4ade80]/5 hover:from-[#5e6dd2]/15 hover:to-[#4ade80]/10 hover:shadow-[0_0_20px_rgba(94,109,210,0.2)] transition-all duration-300">
+      <Card className="p-4 border-l-4 border-l-[#6366f1] bg-gradient-to-br from-[#6366f1]/8 via-transparent to-[#34d399]/3 hover:from-[#6366f1]/12 hover:to-[#34d399]/6 hover:shadow-[0_0_20px_rgba(99,102,241,0.1)] transition-all duration-400">
         {/* Header avec lien vers squad */}
         <Link to={`/squad/${session.squad_id}`}>
           <div className="flex items-start justify-between mb-3">
             <div>
-              <div className="text-[15px] font-semibold text-[#f7f8f8] hover:text-[#5e6dd2] transition-colors">
+              <div className="text-[15px] font-semibold text-[#f7f8f8] hover:text-[#6366f1] transition-colors duration-400">
                 {session.title || session.game || 'Session'}
               </div>
               <div className="text-[13px] text-[#8b8d90]">{session.squad_name}</div>
@@ -140,14 +143,15 @@ function NextSessionCard({
             <motion.button
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
+              transition={{ duration: 0.4, ease: "easeOut" }}
               disabled={isRsvpLoading}
               onClick={() => onRsvp(session.id, 'present')}
               aria-label="Marquer comme présent"
               aria-pressed={session.my_rsvp === 'present'}
-              className={`flex-1 flex items-center justify-center gap-1.5 px-3 py-2.5 min-h-[44px] rounded-lg text-[13px] font-medium transition-all duration-200 ${
+              className={`flex-1 flex items-center justify-center gap-1.5 px-3 py-2.5 min-h-[44px] rounded-lg text-[13px] font-medium transition-all duration-400 ${
                 session.my_rsvp === 'present'
-                  ? 'bg-[#4ade80]/20 text-[#4ade80] border border-[#4ade80]/30 shadow-[0_0_12px_rgba(74,222,128,0.3)]'
-                  : 'bg-[rgba(255,255,255,0.05)] text-[#8b8d90] hover:bg-[rgba(74,222,128,0.15)] hover:text-[#4ade80] border border-transparent hover:border-[#4ade80]/20'
+                  ? 'bg-[#34d399]/15 text-[#34d399] border border-[#34d399]/20 shadow-[0_0_10px_rgba(52,211,153,0.1)]'
+                  : 'bg-[rgba(255,255,255,0.05)] text-[#8b8d90] hover:bg-[rgba(52,211,153,0.1)] hover:text-[#34d399] border border-transparent hover:border-[#34d399]/15'
               }`}
             >
               <CheckCircle2 className="w-4 h-4" />
@@ -157,14 +161,15 @@ function NextSessionCard({
             <motion.button
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
+              transition={{ duration: 0.4, ease: "easeOut" }}
               disabled={isRsvpLoading}
               onClick={() => onRsvp(session.id, 'maybe')}
               aria-label="Marquer comme peut-être"
               aria-pressed={session.my_rsvp === 'maybe'}
-              className={`flex-1 flex items-center justify-center gap-1.5 px-3 py-2.5 min-h-[44px] rounded-lg text-[13px] font-medium transition-all duration-200 ${
+              className={`flex-1 flex items-center justify-center gap-1.5 px-3 py-2.5 min-h-[44px] rounded-lg text-[13px] font-medium transition-all duration-400 ${
                 session.my_rsvp === 'maybe'
-                  ? 'bg-[#f5a623]/20 text-[#f5a623] border border-[#f5a623]/30 shadow-[0_0_12px_rgba(245,166,35,0.3)]'
-                  : 'bg-[rgba(255,255,255,0.05)] text-[#8b8d90] hover:bg-[rgba(245,166,35,0.15)] hover:text-[#f5a623] border border-transparent hover:border-[#f5a623]/20'
+                  ? 'bg-[#fbbf24]/15 text-[#fbbf24] border border-[#fbbf24]/20 shadow-[0_0_10px_rgba(251,191,36,0.1)]'
+                  : 'bg-[rgba(255,255,255,0.05)] text-[#8b8d90] hover:bg-[rgba(251,191,36,0.1)] hover:text-[#fbbf24] border border-transparent hover:border-[#fbbf24]/15'
               }`}
             >
               <HelpCircle className="w-4 h-4" />
@@ -174,14 +179,15 @@ function NextSessionCard({
             <motion.button
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
+              transition={{ duration: 0.4, ease: "easeOut" }}
               disabled={isRsvpLoading}
               onClick={() => onRsvp(session.id, 'absent')}
               aria-label="Marquer comme absent"
               aria-pressed={session.my_rsvp === 'absent'}
-              className={`flex-1 flex items-center justify-center gap-1.5 px-3 py-2.5 min-h-[44px] rounded-lg text-[13px] font-medium transition-all duration-200 ${
+              className={`flex-1 flex items-center justify-center gap-1.5 px-3 py-2.5 min-h-[44px] rounded-lg text-[13px] font-medium transition-all duration-400 ${
                 session.my_rsvp === 'absent'
-                  ? 'bg-[#f87171]/20 text-[#f87171] border border-[#f87171]/30 shadow-[0_0_12px_rgba(248,113,113,0.3)]'
-                  : 'bg-[rgba(255,255,255,0.05)] text-[#8b8d90] hover:bg-[rgba(248,113,113,0.15)] hover:text-[#f87171] border border-transparent hover:border-[#f87171]/20'
+                  ? 'bg-[#f87171]/15 text-[#f87171] border border-[#f87171]/20 shadow-[0_0_10px_rgba(248,113,113,0.1)]'
+                  : 'bg-[rgba(255,255,255,0.05)] text-[#8b8d90] hover:bg-[rgba(248,113,113,0.1)] hover:text-[#f87171] border border-transparent hover:border-[#f87171]/15'
               }`}
             >
               <XCircle className="w-4 h-4" />
@@ -195,9 +201,10 @@ function NextSessionCard({
           <motion.div
             initial={{ opacity: 0, y: -5 }}
             animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, ease: "easeOut" }}
             className={`flex items-center gap-2 text-[13px] mt-2 pt-2 border-t border-white/5 ${
-              session.my_rsvp === 'present' ? 'text-[#4ade80]' :
-              session.my_rsvp === 'absent' ? 'text-[#f87171]' : 'text-[#f5a623]'
+              session.my_rsvp === 'present' ? 'text-[#34d399]' :
+              session.my_rsvp === 'absent' ? 'text-[#f87171]' : 'text-[#fbbf24]'
             }`}
           >
             <CheckCircle2 className="w-4 h-4" />
@@ -219,11 +226,12 @@ function ActivePartyCard({ squadName, participantCount }: { squadName: string; p
       <motion.div
         whileHover={{ y: -2 }}
         whileTap={{ scale: 0.99 }}
+        transition={{ duration: 0.4, ease: "easeOut" }}
       >
-        <Card className="p-4 bg-gradient-to-r from-[#5e6dd2]/10 to-transparent border-[#5e6dd2]/30">
+        <Card className="p-4 bg-gradient-to-r from-[#6366f1]/8 to-transparent border-[#6366f1]/20">
           <div className="flex items-center gap-4">
-            <div className="w-12 h-12 rounded-xl bg-[#5e6dd2]/20 flex items-center justify-center">
-              <Mic className="w-6 h-6 text-[#5e6dd2]" />
+            <div className="w-12 h-12 rounded-xl bg-[#6366f1]/15 flex items-center justify-center">
+              <Mic className="w-6 h-6 text-[#6366f1]" />
             </div>
             <div className="flex-1">
               <div className="text-[15px] font-semibold text-[#f7f8f8]">
@@ -232,9 +240,10 @@ function ActivePartyCard({ squadName, participantCount }: { squadName: string; p
               <div className="text-[13px] text-[#8b8d90]">Party vocale en cours</div>
             </div>
             <motion.div
-              className="px-4 py-2 rounded-lg bg-[#5e6dd2] text-white text-[14px] font-medium"
+              className="px-4 py-2 rounded-lg bg-[#6366f1] text-white text-[14px] font-medium"
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
+              transition={{ duration: 0.4, ease: "easeOut" }}
             >
               Rejoindre
             </motion.div>
@@ -266,7 +275,7 @@ function StatsRow({ squadsCount, sessionsThisWeek, reliabilityScore }: {
         <div className="text-xs text-[#5e6063] uppercase tracking-wide">Cette semaine</div>
       </Card>
       <Card className="p-3 text-center">
-        <div className="text-[18px] font-semibold text-[#4ade80]">
+        <div className="text-[18px] font-semibold text-[#34d399]">
           <CountUp end={reliabilityScore} duration={1.5} suffix="%" />
         </div>
         <div className="text-xs text-[#5e6063] uppercase tracking-wide">Fiabilité</div>
@@ -289,6 +298,8 @@ export default function Home() {
   const [showConfetti, setShowConfetti] = useState(false)
   const [successMessage, setSuccessMessage] = useState<string | null>(null)
   const [rsvpLoading, setRsvpLoading] = useState(false)
+  const [friendsPlaying, setFriendsPlaying] = useState<FriendPlaying[]>([])
+  const [friendsLoading, setFriendsLoading] = useState(true)
 
   // Fetch squads
   useEffect(() => {
@@ -386,6 +397,47 @@ export default function Home() {
     fetchUpcomingSessions()
   }, [user, squads])
 
+  // Fetch friends playing
+  useEffect(() => {
+    const fetchFriendsPlaying = async () => {
+      if (!user?.id) {
+        setFriendsLoading(false)
+        return
+      }
+
+      setFriendsLoading(true)
+      try {
+        const { data, error } = await supabase.rpc('get_friends_playing', { user_id: user.id })
+
+        if (error) {
+          // If the RPC doesn't exist yet, just set empty array
+          console.warn('get_friends_playing RPC not available:', error.message)
+          setFriendsPlaying([])
+        } else {
+          setFriendsPlaying(data || [])
+        }
+      } catch (error) {
+        console.error('Error fetching friends playing:', error)
+        setFriendsPlaying([])
+      } finally {
+        setFriendsLoading(false)
+      }
+    }
+
+    fetchFriendsPlaying()
+  }, [user?.id])
+
+  // Handle joining a friend's party
+  const handleJoinFriendParty = (squadId: string) => {
+    navigate(`/party?squad=${squadId}`)
+  }
+
+  // Handle inviting a friend
+  const handleInviteFriend = (friendId: string) => {
+    // TODO: Open invite modal
+    console.log('Invite friend:', friendId)
+  }
+
   // Handle RSVP avec célébration
   const handleRsvp = async (sessionId: string, response: 'present' | 'absent' | 'maybe') => {
     setRsvpLoading(true)
@@ -434,8 +486,8 @@ export default function Home() {
 
   if (!isInitialized) {
     return (
-      <div className="min-h-0 bg-[#08090a] flex items-center justify-center py-12">
-        <Loader2 className="w-8 h-8 text-[#5e6dd2] animate-spin" />
+      <div className="min-h-0 bg-[#050506] flex items-center justify-center py-12">
+        <Loader2 className="w-8 h-8 text-[#6366f1] animate-spin" />
       </div>
     )
   }
@@ -582,16 +634,32 @@ export default function Home() {
             </div>
           )}
 
+          {/* Friends Playing Section */}
+          {!friendsLoading && (
+            <FriendsPlaying
+              friends={friendsPlaying}
+              onJoin={handleJoinFriendParty}
+              onInvite={handleInviteFriend}
+            />
+          )}
+
           {/* Stats - Wording gamer */}
           <div className="mb-6">
             <h2 className="text-[13px] font-semibold text-[#f7f8f8] uppercase tracking-wide mb-3">
               Ton tableau de bord
             </h2>
-            <StatsRow
-              squadsCount={squads.length}
-              sessionsThisWeek={sessionsThisWeek}
-              reliabilityScore={reliabilityScore}
-            />
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+              <StatsRow
+                squadsCount={squads.length}
+                sessionsThisWeek={sessionsThisWeek}
+                reliabilityScore={reliabilityScore}
+              />
+              {/* Streak Counter - Compact version */}
+              <StreakCounter
+                streakDays={profile?.streak_days || 0}
+                lastActiveDate={profile?.streak_last_date || null}
+              />
+            </div>
           </div>
 
           {/* Mes squads */}

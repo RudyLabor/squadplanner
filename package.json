@@ -16,6 +16,7 @@
   "dependencies": {
     "@supabase/supabase-js": "^2.94.0",
     "agora-rtc-sdk-ng": "^4.24.2",
+    "canvas-confetti": "^1.9.4",
     "framer-motion": "^12.31.0",
     "lucide-react": "^0.563.0",
     "react": "^19.2.0",
@@ -29,6 +30,7 @@
     "@eslint/js": "^9.39.1",
     "@playwright/test": "^1.58.1",
     "@tailwindcss/vite": "^4.1.18",
+    "@types/canvas-confetti": "^1.9.0",
     "@types/node": "^24.10.1",
     "@types/react": "^19.2.5",
     "@types/react-dom": "^19.2.3",

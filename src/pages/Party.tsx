@@ -20,6 +20,9 @@ import { Card, Button } from '../components/ui'
 import { useAuthStore, useSquadsStore, useVoiceChatStore } from '../hooks'
 import { NetworkQualityIndicator, QualityChangeToast } from '../components/NetworkQualityIndicator'
 import { useNetworkQualityStore } from '../hooks/useNetworkQuality'
+import { VoiceWaveformDemo } from '../components/VoiceWaveform'
+import { ParticipantVolumeControl } from '../components/ParticipantVolumeControl'
+import { useParticipantVolumes } from '../hooks/useParticipantVolumes'
 
 // Participant avatar avec animation speaking
 function ParticipantAvatar({
@@ -90,13 +93,30 @@ function ParticipantAvatar({
 }
 
 // Section Party Active (grande, en haut)
-function ActivePartySection({ squad, onLeave }: {
+function ActivePartySection({ squad, onLeave, currentUserId: _currentUserId }: {
   squad: { id: string; name: string; game: string }
   onLeave: () => void
+  currentUserId: string
 }) {
-  const { localUser, remoteUsers, isMuted, toggleMute, error, isReconnecting, reconnectAttempts } = useVoiceChatStore()
+  const { localUser, remoteUsers, isMuted, toggleMute, error, isReconnecting, reconnectAttempts, client } = useVoiceChatStore()
   const { localQuality } = useNetworkQualityStore()
   const [linkCopied, setLinkCopied] = useState(false)
+
+  // Volume control hook
+  const { getVolume, setVolume, isMuted: isParticipantMuted, setMuted, getEffectiveVolume } = useParticipantVolumes()
+
+  // Apply volume settings to remote audio tracks
+  useEffect(() => {
+    if (!client) return
+
+    remoteUsers.forEach(user => {
+      const remoteUser = client.remoteUsers.find(u => u.uid === user.odrop)
+      if (remoteUser?.audioTrack) {
+        const effectiveVolume = getEffectiveVolume(String(user.odrop))
+        remoteUser.audioTrack.setVolume(effectiveVolume)
+      }
+    })
+  }, [client, remoteUsers, getEffectiveVolume])
 
   // Generate shareable party link
   const partyLink = `${window.location.origin}/squad/${squad.id}?join=party`
@@ -192,24 +212,57 @@ function ActivePartySection({ squad, onLeave }: {
 
       {/* Participants */}
       <div className="p-6 bg-[rgba(0,0,0,0.2)]">
-        <div className="flex items-center justify-center gap-6 flex-wrap">
+        <div className="flex items-center justify-center gap-8 flex-wrap">
           <AnimatePresence mode="popLayout">
-            {participants.map((p) => (
-              <motion.div
-                key={String(p.odrop)}
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.8 }}
-              >
-                <ParticipantAvatar
-                  username={p.username}
-                  isSpeaking={p.isSpeaking}
-                  isMuted={p.isMuted}
-                  isLocal={p.isLocal}
-                  size="lg"
-                />
-              </motion.div>
-            ))}
+            {participants.map((p) => {
+              const participantId = String(p.odrop)
+              const isRemote = !p.isLocal
+              const participantMuted = isRemote ? isParticipantMuted(participantId) : false
+
+              return (
+                <motion.div
+                  key={participantId}
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.8 }}
+                  className="flex flex-col items-center gap-3"
+                >
+                  {/* Avatar and name */}
+                  <ParticipantAvatar
+                    username={p.username}
+                    isSpeaking={p.isSpeaking && !participantMuted}
+                    isMuted={p.isMuted}
+                    isLocal={p.isLocal}
+                    size="lg"
+                  />
+
+                  {/* Voice waveform - shows when participant is speaking */}
+                  <div className="h-6">
+                    <VoiceWaveformDemo
+                      isActive={p.isSpeaking && !participantMuted}
+                      size="sm"
+                      color={p.isLocal ? '#5e6dd2' : '#4ade80'}
+                      barCount={5}
+                    />
+                  </div>
+
+                  {/* Volume control - only for other participants, not self */}
+                  {isRemote && (
+                    <div className="mt-1">
+                      <ParticipantVolumeControl
+                        participantId={participantId}
+                        participantName={p.username}
+                        initialVolume={getVolume(participantId)}
+                        onVolumeChange={setVolume}
+                        onMute={setMuted}
+                        isMuted={participantMuted}
+                        compact
+                      />
+                    </div>
+                  )}
+                </motion.div>
+              )
+            })}
           </AnimatePresence>
         </div>
         {participants.length === 1 && (
@@ -219,7 +272,7 @@ function ActivePartySection({ squad, onLeave }: {
             animate={{ opacity: 1 }}
           >
             <p className="text-[13px] text-[#8b8d90]">
-              🎤 Invite tes potes ! La party t'attend
+              Invite tes potes ! La party t'attend
             </p>
           </motion.div>
         )}
@@ -614,7 +667,7 @@ export function Party() {
           ) : (
             <>
               {/* Party Active (en haut, grande) */}
-              {isConnected && activeSquad && (
+              {isConnected && activeSquad && user && (
                 <div className="mb-6">
                   <ActivePartySection
                     squad={{
@@ -623,6 +676,7 @@ export function Party() {
                       game: activeSquad.game || 'Jeu'
                     }}
                     onLeave={handleLeaveParty}
+                    currentUserId={user.id}
                   />
                 </div>
               )}

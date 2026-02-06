@@ -27,10 +27,10 @@ const ACHIEVEMENTS = [
 // Système de tiers basé sur le score de fiabilité - avec next tier pour progress bar
 const TIERS = [
   { name: 'Débutant', color: '#8b8d90', icon: '🎮', minScore: 0, glow: false },
-  { name: 'Confirmé', color: '#5e6dd2', icon: '✓', minScore: 50, glow: false },
-  { name: 'Expert', color: '#4ade80', icon: '⭐', minScore: 70, glow: false },
-  { name: 'Master', color: '#8b93ff', icon: '💎', minScore: 85, glow: true },
-  { name: 'Légende', color: '#f5a623', icon: '👑', minScore: 95, glow: true },
+  { name: 'Confirmé', color: '#6366f1', icon: '✓', minScore: 50, glow: false },
+  { name: 'Expert', color: '#34d399', icon: '⭐', minScore: 70, glow: false },
+  { name: 'Master', color: '#a78bfa', icon: '💎', minScore: 85, glow: true },
+  { name: 'Légende', color: '#fbbf24', icon: '👑', minScore: 95, glow: true },
 ]
 
 const getTier = (score: number) => {
@@ -161,10 +161,10 @@ export function Profile() {
   })
 
   const stats = [
-    { icon: Calendar, label: 'Sessions', value: profile?.total_sessions || 0, color: '#f5a623' },
-    { icon: Check, label: 'Check-ins', value: profile?.total_checkins || 0, color: '#4ade80' },
-    { icon: Target, label: 'Niveau', value: profile?.level || 1, color: '#5e6dd2' },
-    { icon: Trophy, label: 'XP', value: profile?.xp || 0, color: '#8b93ff' },
+    { icon: Calendar, label: 'Sessions', value: profile?.total_sessions || 0, color: '#fbbf24' },
+    { icon: Check, label: 'Check-ins', value: profile?.total_checkins || 0, color: '#34d399' },
+    { icon: Target, label: 'Niveau', value: profile?.level || 1, color: '#6366f1' },
+    { icon: Trophy, label: 'XP', value: profile?.xp || 0, color: '#a78bfa' },
   ]
 
   // Detect new achievements and celebrate
@@ -196,9 +196,9 @@ export function Profile() {
   // Loading state with skeleton
   if (!isInitialized || (isLoading && !profile)) {
     return (
-      <div className="min-h-0 bg-[#08090a] pb-6">
+      <div className="min-h-0 bg-[#050506] pb-6">
         <div className="relative">
-          <div className="absolute inset-0 h-48 bg-gradient-to-b from-[rgba(94,109,210,0.15)] to-transparent" />
+          <div className="absolute inset-0 h-48 bg-gradient-to-b from-[rgba(99,102,241,0.12)] to-transparent" />
           <div className="relative px-4 md:px-6 lg:px-8 pt-8 pb-4 max-w-2xl lg:max-w-4xl xl:max-w-6xl mx-auto">
             <ProfileSkeleton />
           </div>
@@ -208,7 +208,7 @@ export function Profile() {
   }
 
   return (
-    <div className="min-h-0 bg-[#08090a] pb-6">
+    <div className="min-h-0 bg-[#050506] pb-6">
       {/* Achievement Celebration Confetti */}
       {showAchievementConfetti && typeof window !== 'undefined' && (
         <Confetti
@@ -217,7 +217,7 @@ export function Profile() {
           recycle={false}
           numberOfPieces={200}
           gravity={0.25}
-          colors={['#4ade80', '#5e6dd2', '#f5a623', '#8b93ff', '#f7f8f8']}
+          colors={['#34d399', '#6366f1', '#fbbf24', '#a78bfa', '#f7f8f8']}
           style={{ position: 'fixed', top: 0, left: 0, zIndex: 100, pointerEvents: 'none' }}
         />
       )}
@@ -229,7 +229,7 @@ export function Profile() {
             initial={{ opacity: 0, y: -50, scale: 0.8 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -20, scale: 0.9 }}
-            className="fixed top-4 left-1/2 -translate-x-1/2 z-50 px-6 py-4 rounded-2xl bg-gradient-to-r from-[#5e6dd2]/90 to-[#8b93ff]/90 border border-[#5e6dd2]/50 backdrop-blur-xl shadow-[0_0_40px_rgba(94,109,210,0.5)]"
+            className="fixed top-4 left-1/2 -translate-x-1/2 z-50 px-6 py-4 rounded-2xl bg-gradient-to-r from-[#6366f1]/90 to-[#a78bfa]/90 border border-[#6366f1]/40 backdrop-blur-xl shadow-lg"
           >
             <div className="flex items-center gap-4">
               <motion.div
@@ -274,13 +274,13 @@ export function Profile() {
       {/* Hero section avec avatar */}
       <div className="relative">
         {/* Background gradient */}
-        <div className="absolute inset-0 h-48 bg-gradient-to-b from-[rgba(94,109,210,0.15)] to-transparent" />
+        <div className="absolute inset-0 h-48 bg-gradient-to-b from-[rgba(99,102,241,0.12)] to-transparent" />
 
         <div className="relative px-4 md:px-6 lg:px-8 pt-8 pb-4 max-w-2xl lg:max-w-4xl xl:max-w-6xl mx-auto">
           {/* Avatar central */}
           <div className="flex flex-col items-center mb-6">
             <div className="relative mb-4">
-              <div className="w-24 h-24 rounded-2xl bg-gradient-to-br from-[#5e6dd2] to-[#8b93ff] flex items-center justify-center overflow-hidden ring-4 ring-[#08090a]">
+              <div className="w-24 h-24 rounded-2xl bg-gradient-to-br from-[#6366f1] to-[#a78bfa] flex items-center justify-center overflow-hidden ring-4 ring-[#050506]">
                 {(localPreviewUrl || profile?.avatar_url) ? (
                   <img
                     src={localPreviewUrl || profile?.avatar_url || undefined}
@@ -302,7 +302,7 @@ export function Profile() {
                 onClick={() => fileInputRef.current?.click()}
                 disabled={isUploadingPhoto}
                 aria-label="Changer la photo de profil"
-                className="absolute -bottom-2 -right-2 w-9 h-9 rounded-full bg-[#5e6dd2] flex items-center justify-center border-3 border-[#08090a] hover:bg-[#4a59c2] transition-colors shadow-lg"
+                className="absolute -bottom-2 -right-2 w-9 h-9 rounded-full bg-[#6366f1] flex items-center justify-center border-3 border-[#050506] hover:bg-[#4f46e5] transition-colors shadow-md"
               >
                 {isUploadingPhoto ? (
                   <Loader2 className="w-4 h-4 text-white animate-spin" aria-hidden="true" />
@@ -361,7 +361,7 @@ export function Profile() {
                   <p className="text-[12px] text-[#5e6063] mb-3">{user?.email}</p>
                   <button
                     onClick={() => setIsEditing(true)}
-                    className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[rgba(94,109,210,0.15)] text-[#8b93ff] text-[13px] font-medium hover:bg-[rgba(94,109,210,0.25)] transition-colors active:scale-95"
+                    className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[rgba(99,102,241,0.12)] text-[#a78bfa] text-[13px] font-medium hover:bg-[rgba(99,102,241,0.2)] transition-colors active:scale-[0.97]"
                   >
                     <Edit2 className="w-4 h-4" />
                     Modifier le profil
@@ -375,7 +375,7 @@ export function Profile() {
 
       <div className="px-4 md:px-6 lg:px-8 max-w-2xl lg:max-w-4xl xl:max-w-6xl mx-auto">
         {/* Score de fiabilité - Card principale avec Tier System */}
-        <Card className={`mb-5 overflow-hidden bg-[#101012] ${tier.glow ? 'ring-2 ring-[#f5a623]/40 ring-offset-2 ring-offset-[#08090a]' : ''}`}>
+        <Card className={`mb-5 overflow-hidden bg-[#101012] ${tier.glow ? 'ring-1 ring-[#fbbf24]/30 ring-offset-1 ring-offset-[#050506]' : ''}`}>
           <div
             className="h-1.5"
             style={{
@@ -394,8 +394,8 @@ export function Profile() {
                 {tier.glow && (
                   <motion.div
                     className="absolute inset-0 rounded-xl"
-                    style={{ boxShadow: `0 0 20px ${reliabilityColor}40` }}
-                    animate={{ opacity: [0.5, 1, 0.5] }}
+                    style={{ boxShadow: `0 0 12px ${reliabilityColor}25` }}
+                    animate={{ opacity: [0.4, 0.8, 0.4] }}
                     transition={{ duration: 2, repeat: 3 }}
                   />
                 )}
@@ -451,7 +451,7 @@ export function Profile() {
                     className="text-[12px] mt-2 flex items-center gap-1"
                     style={{ color: tier.color }}
                     animate={{ opacity: [0.7, 1, 0.7] }}
-                    transition={{ duration: 2, repeat: Infinity }}
+                    transition={{ duration: 2, repeat: 3 }}
                   >
                     <Sparkles className="w-3 h-3" />
                     Tu as atteint le rang maximum !
@@ -466,7 +466,7 @@ export function Profile() {
                   <Sparkles className="w-5 h-5" style={{ color: reliabilityColor }} />
                 </motion.div>
               )}
-              {!tier.glow && <TrendingUp className="w-5 h-5 text-[#4ade80]" />}
+              {!tier.glow && <TrendingUp className="w-5 h-5 text-[#34d399]" />}
             </div>
           </div>
         </Card>
@@ -496,25 +496,25 @@ export function Profile() {
         {/* IA Coach - Basique (gratuit) */}
         <Card className={`mb-5 p-4 bg-gradient-to-br border ${
           aiCoachTip?.tone === 'celebration'
-            ? 'from-[rgba(74,222,128,0.08)] to-[rgba(74,222,128,0.02)] border-[rgba(74,222,128,0.15)]'
+            ? 'from-[rgba(52,211,153,0.06)] to-[rgba(52,211,153,0.02)] border-[rgba(52,211,153,0.12)]'
             : aiCoachTip?.tone === 'warning'
-              ? 'from-[rgba(248,113,113,0.08)] to-[rgba(248,113,113,0.02)] border-[rgba(248,113,113,0.15)]'
-              : 'from-[rgba(139,147,255,0.08)] to-[rgba(139,147,255,0.02)] border-[rgba(139,147,255,0.15)]'
+              ? 'from-[rgba(251,113,133,0.06)] to-[rgba(251,113,133,0.02)] border-[rgba(251,113,133,0.12)]'
+              : 'from-[rgba(167,139,250,0.06)] to-[rgba(167,139,250,0.02)] border-[rgba(167,139,250,0.12)]'
         }`}>
           <div className="flex items-start gap-3">
             <div className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 ${
               aiCoachTip?.tone === 'celebration'
-                ? 'bg-[rgba(74,222,128,0.15)]'
+                ? 'bg-[rgba(52,211,153,0.12)]'
                 : aiCoachTip?.tone === 'warning'
-                  ? 'bg-[rgba(248,113,113,0.15)]'
-                  : 'bg-[rgba(139,147,255,0.15)]'
+                  ? 'bg-[rgba(251,113,133,0.12)]'
+                  : 'bg-[rgba(167,139,250,0.12)]'
             }`}>
               <Sparkles className={`w-5 h-5 ${
                 aiCoachTip?.tone === 'celebration'
-                  ? 'text-[#4ade80]'
+                  ? 'text-[#34d399]'
                   : aiCoachTip?.tone === 'warning'
-                    ? 'text-[#f87171]'
-                    : 'text-[#8b93ff]'
+                    ? 'text-[#fb7185]'
+                    : 'text-[#a78bfa]'
               }`} />
             </div>
             <div className="flex-1">
@@ -522,19 +522,19 @@ export function Profile() {
                 <h3 className="text-[14px] font-semibold text-[#f7f8f8]">Coach IA</h3>
                 <span className={`text-xs px-1.5 py-0.5 rounded-full font-medium ${
                   aiCoachTip?.tone === 'celebration'
-                    ? 'bg-[rgba(74,222,128,0.2)] text-[#4ade80]'
+                    ? 'bg-[rgba(52,211,153,0.15)] text-[#34d399]'
                     : aiCoachTip?.tone === 'warning'
-                      ? 'bg-[rgba(248,113,113,0.2)] text-[#f87171]'
-                      : 'bg-[rgba(139,147,255,0.2)] text-[#8b93ff]'
+                      ? 'bg-[rgba(251,113,133,0.15)] text-[#fb7185]'
+                      : 'bg-[rgba(167,139,250,0.15)] text-[#a78bfa]'
                 }`}>
                   {aiCoachTip?.tone === 'celebration' ? 'BRAVO' : aiCoachTip?.tone === 'warning' ? 'ATTENTION' : 'CONSEIL'}
                 </span>
               </div>
               <p className={`text-[13px] leading-relaxed ${
                 aiCoachTip?.tone === 'celebration'
-                  ? 'text-[#4ade80]'
+                  ? 'text-[#34d399]'
                   : aiCoachTip?.tone === 'warning'
-                    ? 'text-[#f87171]'
+                    ? 'text-[#fb7185]'
                     : 'text-[#8b8d90]'
               }`}>
                 {aiCoachTip?.tip || 'Prêt pour la prochaine session ? Tes potes t\'attendent !'}
@@ -556,10 +556,10 @@ export function Profile() {
             featureLabel="Coach IA Avancé"
             fallback="lock"
           >
-            <Card className="p-4 bg-gradient-to-br from-[rgba(245,166,35,0.08)] to-[rgba(245,166,35,0.02)] border-[rgba(245,166,35,0.15)]">
+            <Card className="p-4 bg-gradient-to-br from-[rgba(251,191,36,0.06)] to-[rgba(251,191,36,0.02)] border-[rgba(251,191,36,0.12)]">
               <div className="flex items-start gap-3">
-                <div className="w-10 h-10 rounded-xl bg-[rgba(245,166,35,0.15)] flex items-center justify-center flex-shrink-0">
-                  <Sparkles className="w-5 h-5 text-[#f5a623]" />
+                <div className="w-10 h-10 rounded-xl bg-[rgba(251,191,36,0.12)] flex items-center justify-center flex-shrink-0">
+                  <Sparkles className="w-5 h-5 text-[#fbbf24]" />
                 </div>
                 <div className="flex-1">
                   <h4 className="text-[14px] font-medium text-[#f7f8f8] mb-1">Conseils personnalisés</h4>
@@ -579,8 +579,8 @@ export function Profile() {
           onClick={() => navigate('/call-history')}
         >
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-[rgba(74,222,128,0.15)] flex items-center justify-center">
-              <Phone className="w-5 h-5 text-[#4ade80]" />
+            <div className="w-10 h-10 rounded-xl bg-[rgba(52,211,153,0.12)] flex items-center justify-center">
+              <Phone className="w-5 h-5 text-[#34d399]" />
             </div>
             <div className="flex-1">
               <h4 className="text-[14px] font-medium text-[#f7f8f8]">Historique des appels</h4>
@@ -610,8 +610,8 @@ export function Profile() {
           >
             <Card className="p-4">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-[rgba(94,109,210,0.15)] flex items-center justify-center">
-                  <Clock className="w-5 h-5 text-[#5e6dd2]" />
+                <div className="w-10 h-10 rounded-xl bg-[rgba(99,102,241,0.12)] flex items-center justify-center">
+                  <Clock className="w-5 h-5 text-[#6366f1]" />
                 </div>
                 <div className="flex-1">
                   <h4 className="text-[14px] font-medium text-[#f7f8f8]">Historique complet</h4>
@@ -625,10 +625,10 @@ export function Profile() {
         {/* Premium upsell - Design amélioré */}
         {!hasPremium && (
           <Card className="mb-5 overflow-hidden bg-[#101012]">
-            <div className="h-1 bg-gradient-to-r from-[#5e6dd2] via-[#f5a623] to-[#4ade80]" />
+            <div className="h-1 bg-gradient-to-r from-[#6366f1] via-[#fbbf24] to-[#34d399]" />
             <div className="p-5">
               <div className="flex items-start gap-4">
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#f5a623] to-[#f5a623]/50 flex items-center justify-center flex-shrink-0">
+                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#fbbf24] to-[#fbbf24]/50 flex items-center justify-center flex-shrink-0">
                   <Zap className="w-6 h-6 text-white" />
                 </div>
                 <div className="flex-1">
@@ -640,7 +640,7 @@ export function Profile() {
                   </p>
                   <Button
                     size="sm"
-                    className="bg-gradient-to-r from-[#5e6dd2] to-[#8b93ff]"
+                    className="bg-gradient-to-r from-[#6366f1] to-[#a78bfa]"
                     onClick={() => navigate('/premium')}
                   >
                     Découvrir
@@ -654,10 +654,10 @@ export function Profile() {
 
         {/* Badge Premium si actif */}
         {hasPremium && (
-          <Card className="mb-5 p-4 bg-gradient-to-br from-[rgba(245,166,35,0.1)] to-[rgba(245,166,35,0.02)] border-[rgba(245,166,35,0.2)]">
+          <Card className="mb-5 p-4 bg-gradient-to-br from-[rgba(251,191,36,0.08)] to-[rgba(251,191,36,0.02)] border-[rgba(251,191,36,0.15)]">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-[rgba(245,166,35,0.2)] flex items-center justify-center">
-                <Zap className="w-5 h-5 text-[#f5a623]" />
+              <div className="w-10 h-10 rounded-xl bg-[rgba(251,191,36,0.15)] flex items-center justify-center">
+                <Zap className="w-5 h-5 text-[#fbbf24]" />
               </div>
               <div className="flex-1">
                 <div className="flex items-center gap-2">
@@ -687,13 +687,13 @@ export function Profile() {
                   transition={{ delay: index * 0.1 }}
                   className={`relative p-3 rounded-xl text-center ${
                     isUnlocked
-                      ? 'bg-gradient-to-br from-[rgba(94,109,210,0.2)] to-[rgba(139,147,255,0.1)] border border-[rgba(94,109,210,0.3)]'
+                      ? 'bg-gradient-to-br from-[rgba(99,102,241,0.15)] to-[rgba(167,139,250,0.08)] border border-[rgba(99,102,241,0.2)]'
                       : 'bg-[rgba(255,255,255,0.03)] border border-transparent'
                   }`}
                 >
                   <motion.div
                     className="text-2xl mb-1"
-                    animate={isUnlocked ? { scale: [1, 1.2, 1] } : {}}
+                    animate={isUnlocked ? { scale: [1, 1.04, 1] } : {}}
                     transition={{ duration: 0.5 }}
                   >
                     {isUnlocked ? achievement.icon : '🔒'}
@@ -706,12 +706,12 @@ export function Profile() {
                   </div>
                   {isUnlocked && (
                     <motion.div
-                      className="absolute -top-1 -right-1 w-5 h-5 bg-[#4ade80] rounded-full flex items-center justify-center"
+                      className="absolute -top-1 -right-1 w-5 h-5 bg-[#34d399] rounded-full flex items-center justify-center"
                       initial={{ scale: 0 }}
                       animate={{ scale: 1 }}
                       transition={{ type: 'spring', stiffness: 500, damping: 25, delay: index * 0.1 + 0.3 }}
                     >
-                      <Check className="w-3 h-3 text-[#08090a]" />
+                      <Check className="w-3 h-3 text-[#050506]" />
                     </motion.div>
                   )}
                 </motion.div>
@@ -723,7 +723,7 @@ export function Profile() {
         {/* Déconnexion - Discret en bas */}
         <button
           onClick={handleSignOut}
-          className="w-full py-3 text-[14px] text-[#f87171] hover:text-[#fca5a5] transition-colors flex items-center justify-center gap-2"
+          className="w-full py-3 text-[14px] text-[#fb7185] hover:text-[#fda4af] transition-colors flex items-center justify-center gap-2"
         >
           <LogOut className="w-4 h-4" />
           Se déconnecter

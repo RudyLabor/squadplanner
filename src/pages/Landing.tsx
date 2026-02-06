@@ -29,7 +29,7 @@ const pillars = [
     icon: Headphones,
     title: 'Party vocale 24/7',
     description: 'Ta squad a son salon vocal toujours ouvert. Rejoins en 1 clic, reste aussi longtemps que tu veux.',
-    color: '#4ade80'
+    color: '#34d399'
   },
   {
     icon: Calendar,
@@ -83,9 +83,9 @@ export default function Landing() {
   useInView(heroRef, { once: true })
 
   return (
-    <div className="min-h-screen bg-[#08090a]">
+    <div className="min-h-screen bg-[#050506]">
       {/* Header Sticky */}
-      <header className="fixed top-0 left-0 right-0 z-50 px-4 md:px-6 py-4 bg-[#08090a]/80 backdrop-blur-lg border-b border-[rgba(255,255,255,0.04)]">
+      <header className="fixed top-0 left-0 right-0 z-50 px-4 md:px-6 py-4 bg-[#050506]/80 backdrop-blur-lg border-b border-[rgba(255,255,255,0.04)]">
         <div className="max-w-5xl mx-auto flex items-center justify-between">
           <Link to="/" className="flex items-center gap-2">
             <SquadPlannerLogo size={24} />
@@ -98,7 +98,7 @@ export default function Landing() {
               </button>
             </Link>
             <Link to="/auth?mode=register&redirect=onboarding">
-              <button className="px-4 py-2 rounded-lg bg-[#5e6dd2] text-white text-[14px] font-medium hover:bg-[#6b7ae0] transition-colors">
+              <button className="px-4 py-2 rounded-lg bg-[#6366f1] text-white text-[14px] font-medium hover:bg-[#7c7ff7] transition-colors duration-300">
                 Créer ma squad
               </button>
             </Link>
@@ -108,21 +108,21 @@ export default function Landing() {
 
       {/* Hero Section */}
       <section ref={heroRef} className="relative overflow-hidden pt-20">
-        {/* Background glow - more vibrant */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[700px] bg-[radial-gradient(ellipse_at_center,rgba(94,109,210,0.2)_0%,rgba(139,147,255,0.08)_40%,transparent_70%)]" />
+        {/* Background glow - subtle */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[700px] bg-[radial-gradient(ellipse_at_center,rgba(99,102,241,0.12)_0%,rgba(167,139,250,0.04)_40%,transparent_70%)]" />
 
         <div className="relative px-4 md:px-6 py-12 md:py-20 max-w-5xl mx-auto">
           <div className="text-center">
             {/* Badge with sparkle */}
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[rgba(94,109,210,0.1)] border border-[rgba(94,109,210,0.2)] mb-8">
-              <Sparkles className="w-4 h-4 text-[#8b93ff]" />
-              <span className="text-[13px] text-[#8b93ff] font-medium">Rassemble ta squad. Joue ensemble.</span>
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[rgba(99,102,241,0.06)] border border-[rgba(99,102,241,0.12)] mb-8">
+              <Sparkles className="w-4 h-4 text-[#a78bfa]" />
+              <span className="text-[13px] text-[#a78bfa] font-medium">Rassemble ta squad. Joue ensemble.</span>
             </div>
 
             {/* Headline - improved wording */}
             <h1 className="text-4xl md:text-6xl font-bold text-[#f7f8f8] mb-6 leading-tight">
               Transforme<br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#5e6dd2] via-[#8b93ff] to-[#4ade80]">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#6366f1] via-[#a78bfa] to-[#34d399]">
                 "on verra"
               </span><br />
               en "on y est"
@@ -138,9 +138,10 @@ export default function Landing() {
             <div className="flex flex-col items-center gap-4 mb-16">
               <Link to="/auth?mode=register&redirect=onboarding">
                 <motion.button
-                  className="flex items-center gap-2 h-14 px-8 rounded-xl bg-[#5e6dd2] text-white text-[16px] font-semibold shadow-lg shadow-[#5e6dd2]/25"
-                  whileHover={{ scale: 1.05, y: -2 }}
+                  className="flex items-center gap-2 h-14 px-8 rounded-xl bg-[#6366f1] text-white text-[16px] font-semibold shadow-lg shadow-[#6366f1]/10"
+                  whileHover={{ scale: 1.02, y: -2 }}
                   whileTap={{ scale: 0.98 }}
+                  transition={{ duration: 0.4, ease: "easeOut" }}
                 >
                   Créer ma squad gratuitement
                   <ArrowRight className="w-5 h-5" />
@@ -163,7 +164,7 @@ export default function Landing() {
 
             {/* Social proof badge */}
             <div className="flex items-center justify-center gap-2 text-[13px] text-[#5e6063]">
-              <span className="inline-block w-2 h-2 rounded-full bg-[#4ade80] animate-pulse" />
+              <span className="inline-block w-2 h-2 rounded-full bg-[#34d399] animate-pulse" />
               <span>Beta ouverte — Rejoins les premiers gamers</span>
             </div>
           </div>
@@ -181,15 +182,15 @@ export default function Landing() {
               transition={{ duration: 3, repeat: 2, ease: "easeInOut" }}
             >
               {/* Phone frame */}
-              <div className="bg-[#101012] rounded-[2.5rem] p-3 border border-[rgba(255,255,255,0.1)] shadow-2xl shadow-[#5e6dd2]/20">
+              <div className="bg-[#101012] rounded-[2.5rem] p-3 border border-[rgba(255,255,255,0.08)] shadow-2xl shadow-[#6366f1]/10">
                 {/* Screen */}
-                <div className="bg-[#08090a] rounded-[2rem] overflow-hidden">
+                <div className="bg-[#050506] rounded-[2rem] overflow-hidden">
                   {/* Status bar */}
                   <div className="flex items-center justify-between px-6 py-2 text-xs text-[#5e6063]">
                     <span>21:00</span>
                     <div className="flex items-center gap-1">
                       <div className="w-4 h-2 rounded-sm border border-[#5e6063]">
-                        <div className="w-3 h-1.5 bg-[#4ade80] rounded-sm" />
+                        <div className="w-3 h-1.5 bg-[#34d399] rounded-sm" />
                       </div>
                     </div>
                   </div>
@@ -197,10 +198,10 @@ export default function Landing() {
                   {/* App content */}
                   <div className="px-4 pb-6">
                     {/* Session card */}
-                    <div className="bg-[rgba(94,109,210,0.1)] border border-[rgba(94,109,210,0.2)] rounded-2xl p-4 mb-4">
+                    <div className="bg-[rgba(99,102,241,0.06)] border border-[rgba(99,102,241,0.12)] rounded-2xl p-4 mb-4">
                       <div className="flex items-center justify-between mb-3">
                         <div className="flex items-center gap-2">
-                          <div className="w-8 h-8 rounded-lg bg-[#5e6dd2] flex items-center justify-center">
+                          <div className="w-8 h-8 rounded-lg bg-[#6366f1] flex items-center justify-center">
                             <Calendar className="w-4 h-4 text-white" />
                           </div>
                           <div>
@@ -208,7 +209,7 @@ export default function Landing() {
                             <div className="text-xs text-[#5e6063]">Ce soir, 21h00</div>
                           </div>
                         </div>
-                        <span className="px-2 py-1 rounded-full bg-[#4ade80]/20 text-xs text-[#4ade80] font-medium">
+                        <span className="px-2 py-1 rounded-full bg-[#34d399]/20 text-xs text-[#34d399] font-medium">
                           Confirmée
                         </span>
                       </div>
@@ -216,10 +217,10 @@ export default function Landing() {
                       {/* Members */}
                       <div className="flex items-center gap-2">
                         <div className="flex -space-x-2">
-                          {['#5e6dd2', '#4ade80', '#f5a623', '#f87171'].map((color, i) => (
+                          {['#6366f1', '#34d399', '#f5a623', '#f87171'].map((color, i) => (
                             <div
                               key={i}
-                              className="w-7 h-7 rounded-full border-2 border-[#08090a] flex items-center justify-center text-xs font-bold text-white"
+                              className="w-7 h-7 rounded-full border-2 border-[#050506] flex items-center justify-center text-xs font-bold text-white"
                               style={{ backgroundColor: color }}
                             >
                               {['M', 'L', 'K', 'J'][i]}
@@ -233,8 +234,8 @@ export default function Landing() {
                     {/* Quick stats */}
                     <div className="grid grid-cols-3 gap-2">
                       {[
-                        { label: 'Fiabilité', value: '94%', color: '#4ade80' },
-                        { label: 'Sessions', value: '12', color: '#5e6dd2' },
+                        { label: 'Fiabilité', value: '94%', color: '#34d399' },
+                        { label: 'Sessions', value: '12', color: '#6366f1' },
                         { label: 'Squad', value: '5', color: '#f5a623' },
                       ].map((stat) => (
                         <div key={stat.label} className="bg-[rgba(255,255,255,0.02)] rounded-xl p-3 text-center">
@@ -248,7 +249,7 @@ export default function Landing() {
               </div>
 
               {/* Decorative glow */}
-              <div className="absolute -inset-4 bg-[radial-gradient(ellipse_at_center,rgba(94,109,210,0.2)_0%,transparent_70%)] -z-10" />
+              <div className="absolute -inset-4 bg-[radial-gradient(ellipse_at_center,rgba(99,102,241,0.1)_0%,transparent_70%)] -z-10" />
             </motion.div>
           </motion.div>
         </div>
@@ -298,7 +299,7 @@ export default function Landing() {
       </section>
 
       {/* How it works - REMONTÉ pour montrer que c'est simple */}
-      <section className="px-4 md:px-6 py-16 bg-gradient-to-b from-transparent to-[rgba(94,109,210,0.02)]">
+      <section className="px-4 md:px-6 py-16 bg-gradient-to-b from-transparent to-[rgba(99,102,241,0.015)]">
         <div className="max-w-4xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -327,8 +328,8 @@ export default function Landing() {
                 variants={staggerItemVariants}
                 className="flex items-start gap-4 p-6 rounded-2xl bg-[rgba(255,255,255,0.02)] border border-[rgba(255,255,255,0.06)]"
               >
-                <div className="w-12 h-12 rounded-xl bg-[rgba(94,109,210,0.15)] flex items-center justify-center shrink-0">
-                  <span className="text-[18px] font-bold text-[#5e6dd2]">{step.step}</span>
+                <div className="w-12 h-12 rounded-xl bg-[rgba(99,102,241,0.1)] flex items-center justify-center shrink-0">
+                  <span className="text-[18px] font-bold text-[#6366f1]">{step.step}</span>
                 </div>
                 <div>
                   <h3 className="text-[16px] font-semibold text-[#f7f8f8] mb-1">{step.title}</h3>
@@ -341,7 +342,7 @@ export default function Landing() {
       </section>
 
       {/* Solution - Les 3 Piliers */}
-      <section className="px-4 md:px-6 py-16 bg-gradient-to-b from-transparent to-[rgba(94,109,210,0.02)]">
+      <section className="px-4 md:px-6 py-16 bg-gradient-to-b from-transparent to-[rgba(99,102,241,0.015)]">
         <div className="max-w-5xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -374,13 +375,14 @@ export default function Landing() {
                   backgroundColor: `${pillar.color}08`,
                   borderColor: `${pillar.color}25`
                 }}
-                whileHover={{ scale: 1.05, y: -4 }}
+                whileHover={{ scale: 1.02, y: -2 }}
                 whileTap={{ scale: 0.98 }}
+                transition={{ duration: 0.4, ease: "easeOut" }}
               >
                 {/* Glow effect on hover */}
                 <div
-                  className="absolute inset-0 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10"
-                  style={{ boxShadow: `0 0 40px ${pillar.color}30, 0 0 80px ${pillar.color}15` }}
+                  className="absolute inset-0 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 -z-10"
+                  style={{ boxShadow: `0 0 30px ${pillar.color}15, 0 0 60px ${pillar.color}08` }}
                 />
                 <motion.div
                   className="w-14 h-14 rounded-2xl flex items-center justify-center mb-4"
@@ -409,19 +411,19 @@ export default function Landing() {
           >
             {/* Voice Card */}
             <motion.div
-              className="p-8 rounded-3xl bg-gradient-to-br from-[rgba(74,222,128,0.1)] to-[rgba(74,222,128,0.02)] border border-[rgba(74,222,128,0.2)] group"
-              whileHover={{ scale: 1.02, y: -4 }}
-              transition={{ duration: 0.3 }}
+              className="p-8 rounded-3xl bg-gradient-to-br from-[rgba(52,211,153,0.08)] to-[rgba(52,211,153,0.01)] border border-[rgba(52,211,153,0.15)] group"
+              whileHover={{ scale: 1.01, y: -2 }}
+              transition={{ duration: 0.5, ease: "easeOut" }}
             >
-              <div className="w-16 h-16 rounded-2xl bg-[rgba(74,222,128,0.15)] flex items-center justify-center mb-6 group-hover:shadow-[0_0_30px_rgba(74,222,128,0.3)] transition-shadow duration-300">
-                <Headphones className="w-8 h-8 text-[#4ade80]" />
+              <div className="w-16 h-16 rounded-2xl bg-[rgba(52,211,153,0.12)] flex items-center justify-center mb-6 group-hover:shadow-[0_0_20px_rgba(52,211,153,0.15)] transition-shadow duration-500">
+                <Headphones className="w-8 h-8 text-[#34d399]" />
               </div>
               <h3 className="text-xl font-bold text-[#f7f8f8] mb-3">
                 Party vocale toujours ouverte
               </h3>
               <p className="text-[#8b8d90] mb-4">
                 Ta squad a son salon vocal 24/7. Pas besoin de planifier.
-                <span className="text-[#4ade80] font-medium"> Rejoins quand tu veux, reste aussi longtemps que tu veux.</span>
+                <span className="text-[#34d399] font-medium"> Rejoins quand tu veux, reste aussi longtemps que tu veux.</span>
               </p>
               <ul className="space-y-2">
                 {[
@@ -430,7 +432,7 @@ export default function Landing() {
                   'Qualité HD, latence ultra-faible',
                 ].map(item => (
                   <li key={item} className="flex items-center gap-2 text-[14px] text-[#c9cace]">
-                    <Check className="w-4 h-4 text-[#4ade80]" />
+                    <Check className="w-4 h-4 text-[#34d399]" />
                     {item}
                   </li>
                 ))}
@@ -439,11 +441,11 @@ export default function Landing() {
 
             {/* Chat Card */}
             <motion.div
-              className="p-8 rounded-3xl bg-gradient-to-br from-[rgba(96,165,250,0.1)] to-[rgba(96,165,250,0.02)] border border-[rgba(96,165,250,0.2)] group"
-              whileHover={{ scale: 1.02, y: -4 }}
-              transition={{ duration: 0.3 }}
+              className="p-8 rounded-3xl bg-gradient-to-br from-[rgba(96,165,250,0.08)] to-[rgba(96,165,250,0.01)] border border-[rgba(96,165,250,0.15)] group"
+              whileHover={{ scale: 1.01, y: -2 }}
+              transition={{ duration: 0.5, ease: "easeOut" }}
             >
-              <div className="w-16 h-16 rounded-2xl bg-[rgba(96,165,250,0.15)] flex items-center justify-center mb-6 group-hover:shadow-[0_0_30px_rgba(96,165,250,0.3)] transition-shadow duration-300">
+              <div className="w-16 h-16 rounded-2xl bg-[rgba(96,165,250,0.12)] flex items-center justify-center mb-6 group-hover:shadow-[0_0_20px_rgba(96,165,250,0.15)] transition-shadow duration-500">
                 <MessageCircle className="w-8 h-8 text-[#60a5fa]" />
               </div>
               <h3 className="text-xl font-bold text-[#f7f8f8] mb-3">
@@ -476,23 +478,23 @@ export default function Landing() {
             className="relative max-w-sm mx-auto mt-12"
           >
             {/* Glow background */}
-            <div className="absolute -inset-8 bg-[radial-gradient(ellipse_at_center,rgba(74,222,128,0.15)_0%,transparent_70%)]" />
+            <div className="absolute -inset-8 bg-[radial-gradient(ellipse_at_center,rgba(52,211,153,0.08)_0%,transparent_70%)]" />
 
             {/* Phone frame */}
-            <div className="relative bg-[#101012] rounded-[2rem] p-3 border border-[rgba(74,222,128,0.2)] shadow-2xl shadow-[#4ade80]/10">
-              <div className="bg-[#08090a] rounded-[1.5rem] overflow-hidden">
+            <div className="relative bg-[#101012] rounded-[2rem] p-3 border border-[rgba(52,211,153,0.15)] shadow-2xl shadow-[#34d399]/5">
+              <div className="bg-[#050506] rounded-[1.5rem] overflow-hidden">
                 {/* Header */}
                 <div className="px-4 py-3 border-b border-[rgba(255,255,255,0.06)]">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <motion.div
-                        className="w-2.5 h-2.5 rounded-full bg-[#4ade80]"
-                        animate={{ scale: [1, 1.3, 1], opacity: [1, 0.7, 1] }}
-                        transition={{ duration: 1.5, repeat: Infinity }}
+                        className="w-2.5 h-2.5 rounded-full bg-[#34d399]"
+                        animate={{ scale: [1, 1.2, 1], opacity: [1, 0.8, 1] }}
+                        transition={{ duration: 2, repeat: 3, ease: "easeInOut" }}
                       />
                       <span className="text-[13px] font-semibold text-[#f7f8f8]">Party vocale</span>
                     </div>
-                    <span className="text-xs text-[#4ade80]">En ligne</span>
+                    <span className="text-xs text-[#34d399]">En ligne</span>
                   </div>
                   <p className="text-xs text-[#5e6063] mt-1">Les Ranked du Soir</p>
                 </div>
@@ -504,24 +506,24 @@ export default function Landing() {
                     <motion.div className="flex flex-col items-center">
                       <motion.div
                         className="relative"
-                        animate={{ scale: [1, 1.05, 1] }}
-                        transition={{ duration: 0.8, repeat: Infinity }}
+                        animate={{ scale: [1, 1.03, 1] }}
+                        transition={{ duration: 1.2, repeat: 3, ease: "easeInOut" }}
                       >
                         <motion.div
-                          className="absolute inset-0 w-12 h-12 rounded-full bg-[#4ade80]"
-                          animate={{ scale: [1, 1.4], opacity: [0.5, 0] }}
-                          transition={{ duration: 1, repeat: Infinity }}
+                          className="absolute inset-0 w-12 h-12 rounded-full bg-[#34d399]"
+                          animate={{ scale: [1, 1.3], opacity: [0.3, 0] }}
+                          transition={{ duration: 1.5, repeat: 3, ease: "easeOut" }}
                         />
-                        <div className="relative w-12 h-12 rounded-full bg-[#4ade80] flex items-center justify-center text-base font-bold text-[#08090a] ring-2 ring-[#4ade80]/50">
+                        <div className="relative w-12 h-12 rounded-full bg-[#34d399] flex items-center justify-center text-base font-bold text-[#050506] ring-2 ring-[#34d399]/50">
                           M
                         </div>
                       </motion.div>
-                      <span className="text-[10px] text-[#4ade80] mt-1.5 font-medium">Max</span>
+                      <span className="text-[10px] text-[#34d399] mt-1.5 font-medium">Max</span>
                     </motion.div>
 
                     {/* Avatar 2 */}
                     <div className="flex flex-col items-center">
-                      <div className="relative w-12 h-12 rounded-full bg-[#5e6dd2] flex items-center justify-center text-base font-bold text-white">
+                      <div className="relative w-12 h-12 rounded-full bg-[#6366f1] flex items-center justify-center text-base font-bold text-white">
                         L
                       </div>
                       <span className="text-[10px] text-[#8b8d90] mt-1.5">Luna</span>
@@ -529,7 +531,7 @@ export default function Landing() {
 
                     {/* Avatar 3 */}
                     <div className="flex flex-col items-center">
-                      <div className="relative w-12 h-12 rounded-full bg-[#f5a623] flex items-center justify-center text-base font-bold text-[#08090a]">
+                      <div className="relative w-12 h-12 rounded-full bg-[#f5a623] flex items-center justify-center text-base font-bold text-[#050506]">
                         K
                       </div>
                       <span className="text-[10px] text-[#8b8d90] mt-1.5">Kira</span>
@@ -537,7 +539,7 @@ export default function Landing() {
 
                     {/* Avatar 4 */}
                     <div className="flex flex-col items-center">
-                      <div className="relative w-12 h-12 rounded-full bg-[#8b93ff] flex items-center justify-center text-base font-bold text-white">
+                      <div className="relative w-12 h-12 rounded-full bg-[#a78bfa] flex items-center justify-center text-base font-bold text-white">
                         J
                       </div>
                       <span className="text-[10px] text-[#8b8d90] mt-1.5">Jay</span>
@@ -547,10 +549,11 @@ export default function Landing() {
                   {/* Controls */}
                   <div className="flex items-center justify-center gap-3">
                     <motion.div
-                      className="w-10 h-10 rounded-full bg-[#4ade80] flex items-center justify-center"
-                      whileHover={{ scale: 1.1 }}
+                      className="w-10 h-10 rounded-full bg-[#34d399] flex items-center justify-center"
+                      whileHover={{ scale: 1.05 }}
+                      transition={{ duration: 0.3, ease: "easeOut" }}
                     >
-                      <Headphones className="w-4 h-4 text-[#08090a]" />
+                      <Headphones className="w-4 h-4 text-[#050506]" />
                     </motion.div>
                     <div className="w-10 h-10 rounded-full bg-[#f87171] flex items-center justify-center">
                       <span className="text-sm">📞</span>
@@ -618,20 +621,20 @@ export default function Landing() {
             initial={{ opacity: 0, scale: 0.95 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
-            className="relative p-8 md:p-12 rounded-3xl bg-gradient-to-b from-[rgba(94,109,210,0.12)] to-[rgba(94,109,210,0.02)] border border-[rgba(94,109,210,0.25)] text-center overflow-hidden"
+            className="relative p-8 md:p-12 rounded-3xl bg-gradient-to-b from-[rgba(99,102,241,0.08)] to-[rgba(99,102,241,0.01)] border border-[rgba(99,102,241,0.15)] text-center overflow-hidden"
           >
             {/* Animated glow background - limited repeats */}
             <motion.div
-              className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(94,109,210,0.15)_0%,transparent_60%)]"
-              animate={{ scale: [1, 1.08, 1], opacity: [0.5, 0.7, 0.5] }}
-              transition={{ duration: 3, repeat: 3, ease: "easeInOut" }}
+              className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(99,102,241,0.08)_0%,transparent_60%)]"
+              animate={{ scale: [1, 1.05, 1], opacity: [0.4, 0.6, 0.4] }}
+              transition={{ duration: 4, repeat: 2, ease: "easeInOut" }}
             />
             <div className="relative z-10">
               <motion.div
-                animate={{ rotate: [0, 8, -8, 0] }}
-                transition={{ duration: 2.5, repeat: 4, ease: "easeInOut" }}
+                animate={{ rotate: [0, 5, -5, 0] }}
+                transition={{ duration: 3, repeat: 2, ease: "easeInOut" }}
               >
-                <Sparkles className="w-12 h-12 mx-auto mb-6 text-[#5e6dd2]" />
+                <Sparkles className="w-12 h-12 mx-auto mb-6 text-[#6366f1]" />
               </motion.div>
               <h2 className="text-2xl md:text-3xl font-bold text-[#f7f8f8] mb-4">
                 Ta squad t'attend
@@ -641,9 +644,10 @@ export default function Landing() {
               </p>
               <Link to="/auth?mode=register&redirect=onboarding">
                 <motion.button
-                  className="flex items-center gap-2 h-14 px-8 rounded-xl bg-gradient-to-r from-[#5e6dd2] to-[#8b93ff] text-white text-[16px] font-semibold mx-auto shadow-lg shadow-[#5e6dd2]/30"
-                  whileHover={{ scale: 1.05, y: -3 }}
+                  className="flex items-center gap-2 h-14 px-8 rounded-xl bg-gradient-to-r from-[#6366f1] to-[#a78bfa] text-white text-[16px] font-semibold mx-auto shadow-lg shadow-[#6366f1]/10"
+                  whileHover={{ scale: 1.02, y: -2 }}
                   whileTap={{ scale: 0.98 }}
+                  transition={{ duration: 0.4, ease: "easeOut" }}
                 >
                   Rejoindre l'aventure
                   <ArrowRight className="w-5 h-5" />

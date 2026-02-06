@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import {
   Users, Calendar, Plus, Copy, Check, MessageCircle, Phone,
   Clock, Trash2, LogOut, Loader2, ChevronRight, UserPlus, Share2, Search, X,
-  Mic, MicOff, Sparkles, Crown, TrendingUp,
+  Mic, MicOff, Sparkles, Crown, TrendingUp, Trophy,
   CheckCircle2, XCircle, HelpCircle, BarChart3, Download, Zap
 } from 'lucide-react'
 import { Link, useParams, useNavigate } from 'react-router-dom'
@@ -11,6 +11,7 @@ import Confetti from 'react-confetti'
 import { Button, Card, CardContent, Badge, Input, SquadDetailSkeleton } from '../components/ui'
 import { useAuthStore, useSquadsStore, useSessionsStore, useVoiceChatStore, useVoiceCallStore, usePremiumStore } from '../hooks'
 import { PremiumGate, PremiumBadge } from '../components/PremiumGate'
+import { SquadLeaderboard } from '../components/SquadLeaderboard'
 // theme import removed - animation variants caused mobile rendering issues
 import { supabase } from '../lib/supabase'
 import { sendMemberJoinedMessage } from '../lib/systemMessages'
@@ -609,11 +610,43 @@ export default function SquadDetail() {
   const [error, setError] = useState<string | null>(null)
   const [successMessage, setSuccessMessage] = useState<string | null>(null)
   const [showConfetti, setShowConfetti] = useState(false)
+  const [leaderboard, setLeaderboard] = useState<Array<{
+    rank: number
+    user_id: string
+    username: string
+    avatar_url: string | null
+    xp: number
+    level: number
+    reliability_score: number
+    streak_days: number
+  }>>([])
+  const [leaderboardLoading, setLeaderboardLoading] = useState(false)
 
   const { user, isInitialized } = useAuthStore()
   const { currentSquad, fetchSquadById, leaveSquad, deleteSquad, isLoading } = useSquadsStore()
   const { sessions, fetchSessions, createSession, updateRsvp, isLoading: sessionsLoading } = useSessionsStore()
   const { canAccessFeature, fetchPremiumStatus, isSquadPremium } = usePremiumStore()
+
+  // Fetch leaderboard data
+  const fetchLeaderboard = async (squadId: string) => {
+    setLeaderboardLoading(true)
+    try {
+      const { data, error } = await supabase
+        .rpc('get_squad_leaderboard', { p_squad_id: squadId })
+
+      if (error) {
+        console.error('Error fetching leaderboard:', error)
+        setLeaderboard([])
+      } else {
+        setLeaderboard(data || [])
+      }
+    } catch (err) {
+      console.error('Error fetching leaderboard:', err)
+      setLeaderboard([])
+    } finally {
+      setLeaderboardLoading(false)
+    }
+  }
 
   useEffect(() => {
     if (isInitialized && !user) {
@@ -622,6 +655,7 @@ export default function SquadDetail() {
       fetchSquadById(id)
       fetchSessions(id)
       fetchPremiumStatus()
+      fetchLeaderboard(id)
     }
   }, [id, user, isInitialized, navigate, fetchSquadById, fetchSessions, fetchPremiumStatus])
 
@@ -1028,6 +1062,25 @@ export default function SquadDetail() {
                   </div>
                 </div>
               </Card>
+            </div>
+          )}
+
+          {/* Classement Squad */}
+          {leaderboard.length > 0 && (
+            <div className="mb-6">
+              <h3 className="text-[14px] font-semibold text-[#f7f8f8] mb-3 flex items-center gap-2">
+                <Trophy className="w-4 h-4 text-yellow-400" />
+                Classement
+              </h3>
+              <SquadLeaderboard
+                entries={leaderboard}
+                currentUserId={user?.id || ''}
+              />
+            </div>
+          )}
+          {leaderboardLoading && (
+            <div className="mb-6 flex justify-center py-4">
+              <Loader2 className="w-5 h-5 animate-spin text-[#5e6063]" />
             </div>
           )}
 

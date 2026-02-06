@@ -10,7 +10,9 @@ import {
   Sparkles,
   User,
   Phone,
-  ChevronDown
+  ChevronDown,
+  CheckCircle2,
+  AlertCircle
 } from 'lucide-react'
 import { Button, Card } from '../components/ui'
 import { useMessagesStore } from '../hooks/useMessages'
@@ -20,6 +22,40 @@ import { useVoiceCallStore } from '../hooks/useVoiceCall'
 import { useTypingIndicator } from '../hooks/useTypingIndicator'
 import { MessageStatus } from '../components/MessageStatus'
 import { TypingIndicator } from '../components/TypingIndicator'
+import { MessageActions } from '../components/MessageActions'
+import { EditMessageModal } from '../components/EditMessageModal'
+
+// Simple toast component for Messages
+function MessageToast({ message, isVisible, variant = 'success' }: {
+  message: string
+  isVisible: boolean
+  variant?: 'success' | 'error'
+}) {
+  const styles = {
+    success: { bg: 'bg-[#4ade80]', text: 'text-[#08090a]', Icon: CheckCircle2 },
+    error: { bg: 'bg-[#f87171]', text: 'text-white', Icon: AlertCircle }
+  }
+  const style = styles[variant]
+  const Icon = style.Icon
+
+  return (
+    <AnimatePresence>
+      {isVisible && (
+        <motion.div
+          className="fixed top-4 left-1/2 -translate-x-1/2 z-[100]"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -20 }}
+        >
+          <div className={`flex items-center gap-2 px-4 py-3 rounded-xl ${style.bg} ${style.text} shadow-lg`}>
+            <Icon className="w-5 h-5" />
+            <span className="text-[14px] font-medium">{message}</span>
+          </div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  )
+}
 
 // Formatage du temps relatif
 function formatTime(dateStr: string) {
@@ -179,12 +215,15 @@ function SystemMessage({ message }: {
 }
 
 // Message bubble
-function MessageBubble({ message, isOwn, showAvatar, showName, currentUserId, isSquadChat }: {
+function MessageBubble({ message, isOwn, showAvatar, showName, currentUserId, isSquadChat, isAdmin, onEdit, onDelete, onPin, onReply }: {
   message: {
     id: string
     content: string
     created_at: string
     is_system_message?: boolean
+    is_pinned?: boolean
+    edited_at?: string | null
+    sender_id: string
     sender?: { username?: string; avatar_url?: string | null }
     // Pour les squad messages
     read_by?: string[]
@@ -196,6 +235,11 @@ function MessageBubble({ message, isOwn, showAvatar, showName, currentUserId, is
   showName: boolean
   currentUserId: string
   isSquadChat: boolean
+  isAdmin: boolean
+  onEdit: (message: { id: string; content: string }) => void
+  onDelete: (messageId: string) => void
+  onPin: (messageId: string, isPinned: boolean) => void
+  onReply: (message: { id: string; content: string; sender: string }) => void
 }) {
   // Si c'est un message système, utiliser le composant dédié
   if (message.is_system_message) {
@@ -209,7 +253,7 @@ function MessageBubble({ message, isOwn, showAvatar, showName, currentUserId, is
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.15 }}
-      className={`flex ${isOwn ? 'justify-end' : 'justify-start'} ${showAvatar ? 'mt-3' : 'mt-0.5'}`}
+      className={`group flex ${isOwn ? 'justify-end' : 'justify-start'} ${showAvatar ? 'mt-3' : 'mt-0.5'}`}
     >
       <div className={`flex items-end gap-2 max-w-[85%] ${isOwn ? 'flex-row-reverse' : ''}`}>
         {/* Avatar */}
@@ -229,25 +273,78 @@ function MessageBubble({ message, isOwn, showAvatar, showName, currentUserId, is
           </div>
         )}
 
-        <div className={`${isOwn ? 'items-end' : 'items-start'} flex flex-col`}>
+        <div className={`${isOwn ? 'items-end' : 'items-start'} flex flex-col relative`}>
           {showName && !isOwn && (
             <span className="text-xs text-[#8b8d90] mb-1 ml-1 font-medium">
               {message.sender?.username}
             </span>
           )}
-          <div
-            className={`px-4 py-2.5 rounded-2xl transition-all duration-150 ${
-              isOwn
-                ? 'bg-[#5e6dd2] text-white rounded-br-lg hover:bg-[#6b7ae0] hover:shadow-[0_0_12px_rgba(94,109,210,0.3)]'
-                : 'bg-[#18191b] text-[#f7f8f8] rounded-bl-lg hover:bg-[#1f2023] hover:shadow-[0_0_12px_rgba(255,255,255,0.05)]'
-            }`}
-          >
-            <p className="text-[14px] leading-relaxed whitespace-pre-wrap break-words">
-              {message.content}
-            </p>
+
+          {/* Pinned indicator */}
+          {message.is_pinned && (
+            <span className="text-[10px] text-[#f5a623] mb-1 ml-1 flex items-center gap-1">
+              <span>📌</span> Epingle
+            </span>
+          )}
+
+          <div className="flex items-center gap-1">
+            {/* Message Actions - on the left for own messages */}
+            {isOwn && (
+              <div className="flex-shrink-0">
+                <MessageActions
+                  message={{ id: message.id, sender_id: message.sender_id, content: message.content }}
+                  currentUserId={currentUserId}
+                  isAdmin={isAdmin}
+                  onEdit={() => onEdit({ id: message.id, content: message.content })}
+                  onDelete={() => onDelete(message.id)}
+                  onPin={() => onPin(message.id, !message.is_pinned)}
+                  onReply={() => onReply({
+                    id: message.id,
+                    content: message.content,
+                    sender: message.sender?.username || 'Utilisateur'
+                  })}
+                />
+              </div>
+            )}
+
+            <div
+              className={`px-4 py-2.5 rounded-2xl transition-all duration-150 ${
+                isOwn
+                  ? 'bg-[#5e6dd2] text-white rounded-br-lg hover:bg-[#6b7ae0] hover:shadow-[0_0_12px_rgba(94,109,210,0.3)]'
+                  : 'bg-[#18191b] text-[#f7f8f8] rounded-bl-lg hover:bg-[#1f2023] hover:shadow-[0_0_12px_rgba(255,255,255,0.05)]'
+              }`}
+            >
+              <p className="text-[14px] leading-relaxed whitespace-pre-wrap break-words">
+                {message.content}
+              </p>
+            </div>
+
+            {/* Message Actions - on the right for other's messages */}
+            {!isOwn && (
+              <div className="flex-shrink-0">
+                <MessageActions
+                  message={{ id: message.id, sender_id: message.sender_id, content: message.content }}
+                  currentUserId={currentUserId}
+                  isAdmin={isAdmin}
+                  onEdit={() => onEdit({ id: message.id, content: message.content })}
+                  onDelete={() => onDelete(message.id)}
+                  onPin={() => onPin(message.id, !message.is_pinned)}
+                  onReply={() => onReply({
+                    id: message.id,
+                    content: message.content,
+                    sender: message.sender?.username || 'Utilisateur'
+                  })}
+                />
+              </div>
+            )}
           </div>
-          <span className="text-xs text-[#5e6063] mt-1 mx-1 flex items-center">
+
+          <span className="text-xs text-[#5e6063] mt-1 mx-1 flex items-center gap-1">
             {formatTime(message.created_at)}
+            {/* Edited indicator */}
+            {message.edited_at && (
+              <span className="text-[#8b8d90] italic">(modifie)</span>
+            )}
             {/* Read receipts - seulement pour les messages envoyés par l'utilisateur */}
             {isOwn && (
               isSquadChat ? (
@@ -345,6 +442,9 @@ export function Messages() {
     fetchConversations: fetchSquadConvs,
     setActiveConversation: setActiveSquadConv,
     sendMessage: sendSquadMessage,
+    editMessage: editSquadMessage,
+    deleteMessage: deleteSquadMessage,
+    pinMessage: pinSquadMessage,
     markAsRead: markSquadAsRead,
     unsubscribe: unsubscribeSquad,
   } = useMessagesStore()
@@ -366,6 +466,13 @@ export function Messages() {
   const [isSending, setIsSending] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
   const [showScrollButton, setShowScrollButton] = useState(false)
+  const [editingMessage, setEditingMessage] = useState<{ id: string; content: string } | null>(null)
+  const [replyingTo, setReplyingTo] = useState<{ id: string; content: string; sender: string } | null>(null)
+  const [toast, setToast] = useState<{ message: string; variant: 'success' | 'error'; visible: boolean }>({
+    message: '',
+    variant: 'success',
+    visible: false
+  })
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const messagesContainerRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
@@ -453,16 +560,28 @@ export function Messages() {
 
     setIsSending(true)
 
+    // Prepare message content with reply context if applicable
+    let messageContent = newMessage
+    if (replyingTo) {
+      messageContent = `> ${replyingTo.sender}: ${replyingTo.content.substring(0, 50)}${replyingTo.content.length > 50 ? '...' : ''}\n\n${newMessage}`
+    }
+
     if (activeSquadConv) {
       const { error } = await sendSquadMessage(
-        newMessage,
+        messageContent,
         activeSquadConv.squad_id,
         activeSquadConv.session_id
       )
-      if (!error) setNewMessage('')
+      if (!error) {
+        setNewMessage('')
+        setReplyingTo(null)
+      }
     } else if (activeDMConv) {
-      const { error } = await sendDMMessage(newMessage, activeDMConv.other_user_id)
-      if (!error) setNewMessage('')
+      const { error } = await sendDMMessage(messageContent, activeDMConv.other_user_id)
+      if (!error) {
+        setNewMessage('')
+        setReplyingTo(null)
+      }
     }
 
     setIsSending(false)
@@ -472,6 +591,63 @@ export function Messages() {
     if (activeSquadConv) setActiveSquadConv(null)
     if (activeDMConv) setActiveDMConv(null)
   }
+
+  // Show toast helper
+  const showToast = (message: string, variant: 'success' | 'error' = 'success') => {
+    setToast({ message, variant, visible: true })
+    setTimeout(() => setToast(t => ({ ...t, visible: false })), 3000)
+  }
+
+  // Handle message edit
+  const handleEditMessage = async (newContent: string) => {
+    if (!editingMessage) return
+
+    const { error } = await editSquadMessage(editingMessage.id, newContent)
+    if (error) {
+      showToast('Erreur lors de la modification', 'error')
+    } else {
+      showToast('Message modifie')
+    }
+    setEditingMessage(null)
+  }
+
+  // Handle message delete
+  const handleDeleteMessage = async (messageId: string) => {
+    const { error } = await deleteSquadMessage(messageId)
+    if (error) {
+      showToast('Erreur lors de la suppression', 'error')
+    } else {
+      showToast('Message supprime')
+    }
+  }
+
+  // Handle message pin
+  const handlePinMessage = async (messageId: string, isPinned: boolean) => {
+    const { error } = await pinSquadMessage(messageId, isPinned)
+    if (error) {
+      showToast('Erreur lors de l\'epinglage', 'error')
+    } else {
+      showToast(isPinned ? 'Message epingle' : 'Message desepingle')
+    }
+  }
+
+  // Handle reply - focus input and add reply prefix
+  const handleReply = (replyInfo: { id: string; content: string; sender: string }) => {
+    setReplyingTo(replyInfo)
+    inputRef.current?.focus()
+  }
+
+  // Cancel reply
+  const cancelReply = () => {
+    setReplyingTo(null)
+  }
+
+  // Check if current user is admin in current squad
+  const isAdmin = (() => {
+    // For now, we'll consider the user as admin if they are viewing their own squad
+    // This should be enhanced with actual role checking from squad_members
+    return true // Placeholder - should be based on actual role
+  })()
 
   // Compteurs
   const squadUnread = squadConversations.reduce((sum, c) => sum + c.unread_count, 0)
@@ -754,6 +930,11 @@ export function Messages() {
                       showName={showName}
                       currentUserId={user?.id || ''}
                       isSquadChat={isSquadChat}
+                      isAdmin={isAdmin}
+                      onEdit={setEditingMessage}
+                      onDelete={handleDeleteMessage}
+                      onPin={handlePinMessage}
+                      onReply={handleReply}
                     />
                   </div>
                 )
@@ -791,33 +972,73 @@ export function Messages() {
 
       {/* Input message */}
       <div className={`flex-shrink-0 px-4 py-3 ${embedded ? 'pb-3' : 'pb-6'} border-t border-[rgba(255,255,255,0.06)] ${embedded ? '' : 'bg-[#101012]/80 backdrop-blur-xl'}`}>
-        <form onSubmit={handleSendMessage} className={embedded ? '' : 'max-w-4xl lg:max-w-5xl mx-auto'}>
-          <div className="flex items-center gap-2">
-            <div className="flex-1 relative">
-              <input
-                ref={inputRef}
-                type="text"
-                value={newMessage}
-                onChange={handleMessageChange}
-                placeholder={isSquadChat ? 'Message à la squad...' : `Message à ${chatName}...`}
-                className="w-full h-12 px-4 bg-[#18191b] border border-[rgba(255,255,255,0.06)] rounded-xl text-[14px] text-[#f7f8f8] placeholder:text-[#5e6063] focus:outline-none focus:border-[rgba(94,109,210,0.5)] transition-colors"
-                autoComplete="off"
-              />
+        <div className={embedded ? '' : 'max-w-4xl lg:max-w-5xl mx-auto'}>
+          {/* Reply indicator */}
+          <AnimatePresence>
+            {replyingTo && (
+              <motion.div
+                initial={{ opacity: 0, height: 0, marginBottom: 0 }}
+                animate={{ opacity: 1, height: 'auto', marginBottom: 8 }}
+                exit={{ opacity: 0, height: 0, marginBottom: 0 }}
+                className="overflow-hidden"
+              >
+                <div className="flex items-center gap-2 px-3 py-2 bg-[rgba(94,109,210,0.1)] border-l-2 border-[#5e6dd2] rounded-lg">
+                  <div className="flex-1 min-w-0">
+                    <p className="text-[11px] text-[#5e6dd2] font-medium mb-0.5">
+                      Reponse a {replyingTo.sender}
+                    </p>
+                    <p className="text-[12px] text-[#8b8d90] truncate">
+                      {replyingTo.content}
+                    </p>
+                  </div>
+                  <button
+                    onClick={cancelReply}
+                    className="p-1 rounded hover:bg-[rgba(255,255,255,0.1)] transition-colors"
+                    aria-label="Annuler la reponse"
+                  >
+                    <span className="text-[#8b8d90] text-lg leading-none">&times;</span>
+                  </button>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          <form onSubmit={handleSendMessage}>
+            <div className="flex items-center gap-2">
+              <div className="flex-1 relative">
+                <input
+                  ref={inputRef}
+                  type="text"
+                  value={newMessage}
+                  onChange={handleMessageChange}
+                  placeholder={isSquadChat ? 'Message à la squad...' : `Message à ${chatName}...`}
+                  className="w-full h-12 px-4 bg-[#18191b] border border-[rgba(255,255,255,0.06)] rounded-xl text-[14px] text-[#f7f8f8] placeholder:text-[#5e6063] focus:outline-none focus:border-[rgba(94,109,210,0.5)] transition-colors"
+                  autoComplete="off"
+                />
+              </div>
+              <Button
+                type="submit"
+                disabled={!newMessage.trim() || isSending}
+                className="w-12 h-12 p-0 rounded-xl"
+              >
+                {isSending ? (
+                  <Loader2 className="w-5 h-5 animate-spin" />
+                ) : (
+                  <Send className="w-5 h-5" />
+                )}
+              </Button>
             </div>
-            <Button
-              type="submit"
-              disabled={!newMessage.trim() || isSending}
-              className="w-12 h-12 p-0 rounded-xl"
-            >
-              {isSending ? (
-                <Loader2 className="w-5 h-5 animate-spin" />
-              ) : (
-                <Send className="w-5 h-5" />
-              )}
-            </Button>
-          </div>
-        </form>
+          </form>
+        </div>
       </div>
+
+      {/* Edit Message Modal */}
+      <EditMessageModal
+        isOpen={!!editingMessage}
+        message={editingMessage || { id: '', content: '' }}
+        onSave={handleEditMessage}
+        onClose={() => setEditingMessage(null)}
+      />
     </div>
   )
 
@@ -841,21 +1062,28 @@ export function Messages() {
   // ========== RENDU DESKTOP : SPLIT VIEW ==========
   if (isDesktop) {
     return (
-      <div className="h-screen bg-[#08090a] flex">
-        {/* Sidebar gauche - Liste des conversations */}
-        <div className="w-[340px] xl:w-[380px] flex-shrink-0 border-r border-[rgba(255,255,255,0.06)] bg-[#101012]">
-          <ConversationsList showOnDesktop />
-        </div>
+      <>
+        <MessageToast
+          message={toast.message}
+          isVisible={toast.visible}
+          variant={toast.variant}
+        />
+        <div className="h-screen bg-[#08090a] flex">
+          {/* Sidebar gauche - Liste des conversations */}
+          <div className="w-[340px] xl:w-[380px] flex-shrink-0 border-r border-[rgba(255,255,255,0.06)] bg-[#101012]">
+            <ConversationsList showOnDesktop />
+          </div>
 
-        {/* Zone principale - Chat */}
-        <div className="flex-1 min-w-0">
-          {(activeSquadConv || activeDMConv) ? (
-            <ChatView embedded />
-          ) : (
-            <EmptyChatPlaceholder />
-          )}
+          {/* Zone principale - Chat */}
+          <div className="flex-1 min-w-0">
+            {(activeSquadConv || activeDMConv) ? (
+              <ChatView embedded />
+            ) : (
+              <EmptyChatPlaceholder />
+            )}
+          </div>
         </div>
-      </div>
+      </>
     )
   }
 
@@ -863,16 +1091,32 @@ export function Messages() {
   // Si pas de conversation active, afficher la liste
   if (!activeSquadConv && !activeDMConv) {
     return (
-      <div className="min-h-0 bg-[#08090a] pb-6">
-        <div className="px-4 md:px-6 lg:px-8 py-6 max-w-2xl lg:max-w-4xl xl:max-w-6xl mx-auto">
-          <ConversationsList />
+      <>
+        <MessageToast
+          message={toast.message}
+          isVisible={toast.visible}
+          variant={toast.variant}
+        />
+        <div className="min-h-0 bg-[#08090a] pb-6">
+          <div className="px-4 md:px-6 lg:px-8 py-6 max-w-2xl lg:max-w-4xl xl:max-w-6xl mx-auto">
+            <ConversationsList />
+          </div>
         </div>
-      </div>
+      </>
     )
   }
 
   // Sinon afficher le chat
-  return <ChatView />
+  return (
+    <>
+      <MessageToast
+        message={toast.message}
+        isVisible={toast.visible}
+        variant={toast.variant}
+      />
+      <ChatView />
+    </>
+  )
 }
 
 export default Messages

@@ -1,0 +1,206 @@
+import { useState, useEffect, useRef } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { X, Loader2, Pencil } from 'lucide-react'
+import { Button } from './ui'
+import { useFocusTrap } from '../hooks/useFocusTrap'
+
+export interface EditMessageModalProps {
+  isOpen: boolean
+  message: { id: string; content: string }
+  onSave: (newContent: string) => void
+  onClose: () => void
+}
+
+/**
+ * Modal for editing a message
+ * - Shows the original message
+ * - Provides a textarea for editing
+ * - Save/Cancel buttons
+ * - Dark theme styling consistent with app design
+ */
+export function EditMessageModal({
+  isOpen,
+  message,
+  onSave,
+  onClose
+}: EditMessageModalProps) {
+  const [content, setContent] = useState(message.content)
+  const [isSaving, setIsSaving] = useState(false)
+  const textareaRef = useRef<HTMLTextAreaElement>(null)
+
+  // Focus trap for accessibility
+  const focusTrapRef = useFocusTrap<HTMLDivElement>(isOpen, onClose)
+
+  // Reset content when message changes or modal opens
+  useEffect(() => {
+    if (isOpen) {
+      setContent(message.content)
+      // Focus textarea after a brief delay
+      setTimeout(() => {
+        textareaRef.current?.focus()
+        // Move cursor to end
+        textareaRef.current?.setSelectionRange(
+          message.content.length,
+          message.content.length
+        )
+      }, 100)
+    }
+  }, [isOpen, message.content])
+
+  // Auto-resize textarea
+  useEffect(() => {
+    if (textareaRef.current) {
+      textareaRef.current.style.height = 'auto'
+      textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`
+    }
+  }, [content])
+
+  const handleSave = async () => {
+    const trimmedContent = content.trim()
+    if (!trimmedContent || trimmedContent === message.content) {
+      onClose()
+      return
+    }
+
+    setIsSaving(true)
+    try {
+      await onSave(trimmedContent)
+      onClose()
+    } catch (error) {
+      console.error('Failed to save message:', error)
+    } finally {
+      setIsSaving(false)
+    }
+  }
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    // Submit on Ctrl+Enter or Cmd+Enter
+    if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+      e.preventDefault()
+      handleSave()
+    }
+  }
+
+  const hasChanges = content.trim() !== message.content
+  const canSave = content.trim().length > 0 && hasChanges && !isSaving
+
+  return (
+    <AnimatePresence>
+      {isOpen && (
+        <>
+          {/* Backdrop */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={onClose}
+            className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50"
+          />
+
+          {/* Modal */}
+          <motion.div
+            ref={focusTrapRef}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="edit-message-title"
+            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.95, y: 20 }}
+            transition={{ type: 'spring', stiffness: 300, damping: 25 }}
+            className="fixed inset-x-4 top-[15%] md:inset-auto md:left-1/2 md:top-1/2 md:-translate-x-1/2 md:-translate-y-1/2 md:w-full md:max-w-lg z-50"
+          >
+            <div className="bg-[#101012] border border-[rgba(255,255,255,0.08)] rounded-2xl overflow-hidden shadow-2xl">
+              {/* Header */}
+              <div className="flex items-center justify-between px-5 py-4 border-b border-[rgba(255,255,255,0.06)]">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-[rgba(94,109,210,0.15)] flex items-center justify-center">
+                    <Pencil className="w-5 h-5 text-[#5e6dd2]" />
+                  </div>
+                  <h2 id="edit-message-title" className="text-[17px] font-semibold text-[#f7f8f8]">
+                    Modifier le message
+                  </h2>
+                </div>
+                <button
+                  onClick={onClose}
+                  aria-label="Fermer"
+                  className="w-8 h-8 rounded-lg flex items-center justify-center hover:bg-[rgba(255,255,255,0.06)] transition-colors"
+                >
+                  <X className="w-5 h-5 text-[#8b8d90]" />
+                </button>
+              </div>
+
+              {/* Content */}
+              <div className="p-5">
+                {/* Original message preview */}
+                <div className="mb-4">
+                  <label className="block text-[12px] font-medium text-[#5e6063] uppercase tracking-wider mb-2">
+                    Message original
+                  </label>
+                  <div className="p-3 rounded-xl bg-[rgba(255,255,255,0.02)] border border-[rgba(255,255,255,0.04)]">
+                    <p className="text-[13px] text-[#8b8d90] whitespace-pre-wrap break-words">
+                      {message.content}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Edit textarea */}
+                <div>
+                  <label
+                    htmlFor="edit-message-content"
+                    className="block text-[12px] font-medium text-[#5e6063] uppercase tracking-wider mb-2"
+                  >
+                    Nouveau contenu
+                  </label>
+                  <textarea
+                    ref={textareaRef}
+                    id="edit-message-content"
+                    value={content}
+                    onChange={(e) => setContent(e.target.value)}
+                    onKeyDown={handleKeyDown}
+                    placeholder="Tapez votre message..."
+                    rows={3}
+                    className="w-full px-4 py-3 bg-[rgba(255,255,255,0.04)] border border-[rgba(255,255,255,0.08)] rounded-xl text-[14px] text-[#f7f8f8] placeholder:text-[#5e6063] resize-none focus:outline-none focus:border-[rgba(94,109,210,0.5)] focus:ring-2 focus:ring-[rgba(94,109,210,0.2)] focus:shadow-[0_0_20px_rgba(94,109,210,0.2)] transition-all min-h-[80px] max-h-[200px]"
+                  />
+                  <p className="text-[11px] text-[#5e6063] mt-2">
+                    Conseil : Ctrl+Entree pour sauvegarder rapidement
+                  </p>
+                </div>
+              </div>
+
+              {/* Footer */}
+              <div className="flex items-center justify-between px-5 py-4 border-t border-[rgba(255,255,255,0.06)] bg-[rgba(255,255,255,0.01)]">
+                <span className="text-[12px] text-[#5e6063]">
+                  {hasChanges ? '(modifie) sera affiche' : 'Aucune modification'}
+                </span>
+                <div className="flex items-center gap-3">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={onClose}
+                    disabled={isSaving}
+                  >
+                    Annuler
+                  </Button>
+                  <Button
+                    variant="primary"
+                    size="sm"
+                    onClick={handleSave}
+                    disabled={!canSave}
+                  >
+                    {isSaving ? (
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                    ) : (
+                      'Sauvegarder'
+                    )}
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        </>
+      )}
+    </AnimatePresence>
+  )
+}
+
+export default EditMessageModal

@@ -31,6 +31,9 @@ interface MessagesState {
   fetchConversations: () => Promise<void>
   fetchMessages: (squadId: string, sessionId?: string) => Promise<void>
   sendMessage: (content: string, squadId: string, sessionId?: string) => Promise<{ error: Error | null }>
+  editMessage: (messageId: string, newContent: string) => Promise<{ error: Error | null }>
+  deleteMessage: (messageId: string) => Promise<{ error: Error | null }>
+  pinMessage: (messageId: string, isPinned: boolean) => Promise<{ error: Error | null }>
   setActiveConversation: (conversation: Conversation | null) => void
   subscribeToMessages: (squadId: string, sessionId?: string) => void
   unsubscribe: () => void
@@ -176,6 +179,105 @@ export const useMessagesStore = create<MessagesState>((set, get) => ({
     }
   },
 
+  editMessage: async (messageId: string, newContent: string) => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) throw new Error('Not authenticated')
+
+      // Verify ownership
+      const { data: message } = await supabase
+        .from('messages')
+        .select('sender_id')
+        .eq('id', messageId)
+        .single()
+
+      if (!message || message.sender_id !== user.id) {
+        throw new Error('Cannot edit message: not the sender')
+      }
+
+      const { error } = await supabase
+        .from('messages')
+        .update({
+          content: newContent.trim(),
+          edited_at: new Date().toISOString()
+        })
+        .eq('id', messageId)
+
+      if (error) throw error
+
+      // Update local state
+      set(state => ({
+        messages: state.messages.map(msg =>
+          msg.id === messageId
+            ? { ...msg, content: newContent.trim(), edited_at: new Date().toISOString() }
+            : msg
+        )
+      }))
+
+      return { error: null }
+    } catch (error) {
+      return { error: error as Error }
+    }
+  },
+
+  deleteMessage: async (messageId: string) => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) throw new Error('Not authenticated')
+
+      // Verify ownership
+      const { data: message } = await supabase
+        .from('messages')
+        .select('sender_id')
+        .eq('id', messageId)
+        .single()
+
+      if (!message || message.sender_id !== user.id) {
+        throw new Error('Cannot delete message: not the sender')
+      }
+
+      const { error } = await supabase
+        .from('messages')
+        .delete()
+        .eq('id', messageId)
+
+      if (error) throw error
+
+      // Update local state
+      set(state => ({
+        messages: state.messages.filter(msg => msg.id !== messageId)
+      }))
+
+      return { error: null }
+    } catch (error) {
+      return { error: error as Error }
+    }
+  },
+
+  pinMessage: async (messageId: string, isPinned: boolean) => {
+    try {
+      const { error } = await supabase
+        .from('messages')
+        .update({ is_pinned: isPinned })
+        .eq('id', messageId)
+
+      if (error) throw error
+
+      // Update local state
+      set(state => ({
+        messages: state.messages.map(msg =>
+          msg.id === messageId
+            ? { ...msg, is_pinned: isPinned }
+            : msg
+        )
+      }))
+
+      return { error: null }
+    } catch (error) {
+      return { error: error as Error }
+    }
+  },
+
   setActiveConversation: (conversation) => {
     set({ activeConversation: conversation })
     if (conversation) {
@@ -230,14 +332,38 @@ export const useMessagesStore = create<MessagesState>((set, get) => ({
             : `squad_id=eq.${squadId}`,
         },
         async (payload) => {
-          // Mettre à jour le message (pour les read receipts)
+          // Mettre à jour le message (read receipts, content, edited_at, is_pinned)
           const updatedMsg = payload.new as MessageWithSender
           set(state => ({
             messages: state.messages.map(msg =>
               msg.id === updatedMsg.id
-                ? { ...msg, read_by: updatedMsg.read_by }
+                ? {
+                    ...msg,
+                    content: updatedMsg.content,
+                    read_by: updatedMsg.read_by,
+                    edited_at: updatedMsg.edited_at,
+                    is_pinned: updatedMsg.is_pinned
+                  }
                 : msg
             )
+          }))
+        }
+      )
+      .on(
+        'postgres_changes',
+        {
+          event: 'DELETE',
+          schema: 'public',
+          table: 'messages',
+          filter: sessionId
+            ? `session_id=eq.${sessionId}`
+            : `squad_id=eq.${squadId}`,
+        },
+        async (payload) => {
+          // Remove deleted message from state
+          const deletedId = payload.old.id as string
+          set(state => ({
+            messages: state.messages.filter(msg => msg.id !== deletedId)
           }))
         }
       )

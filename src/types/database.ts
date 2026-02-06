@@ -33,6 +33,9 @@ export interface Database {
           // Gamification
           xp: number
           level: number
+          // Streak tracking
+          streak_days: number
+          streak_last_date: string | null
           // Subscription
           subscription_tier: SubscriptionTier
           subscription_expires_at: string | null
@@ -55,6 +58,8 @@ export interface Database {
           total_late?: number
           xp?: number
           level?: number
+          streak_days?: number
+          streak_last_date?: string | null
           subscription_tier?: SubscriptionTier
           subscription_expires_at?: string | null
           stripe_customer_id?: string | null
@@ -75,6 +80,8 @@ export interface Database {
           total_late?: number
           xp?: number
           level?: number
+          streak_days?: number
+          streak_last_date?: string | null
           subscription_tier?: SubscriptionTier
           subscription_expires_at?: string | null
           stripe_customer_id?: string | null
@@ -281,7 +288,9 @@ export interface Database {
           content: string
           is_ai_suggestion: boolean
           is_system_message: boolean
+          is_pinned: boolean
           read_by: string[]
+          edited_at: string | null
           created_at: string
           updated_at: string
         }
@@ -293,7 +302,9 @@ export interface Database {
           content: string
           is_ai_suggestion?: boolean
           is_system_message?: boolean
+          is_pinned?: boolean
           read_by?: string[]
+          edited_at?: string | null
           created_at?: string
           updated_at?: string
         }
@@ -305,7 +316,9 @@ export interface Database {
           content?: string
           is_ai_suggestion?: boolean
           is_system_message?: boolean
+          is_pinned?: boolean
           read_by?: string[]
+          edited_at?: string | null
           created_at?: string
           updated_at?: string
         }

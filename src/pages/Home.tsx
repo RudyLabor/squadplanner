@@ -274,7 +274,9 @@ function StatsRow({ squadsCount, sessionsThisWeek, reliabilityScore }: {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: index * 0.1, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-          className="flex-1 h-[68px] px-4 flex items-center gap-3 rounded-2xl border border-white/[0.06] bg-white/[0.02] transition-all duration-300"
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+          className="flex-1 h-[68px] px-4 flex items-center gap-3 rounded-2xl border border-white/[0.06] bg-white/[0.02] hover:bg-white/[0.04] hover:border-white/[0.1] cursor-pointer transition-all duration-300"
         >
           <div
             className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"

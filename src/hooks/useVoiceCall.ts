@@ -669,6 +669,8 @@ async function initializeAgoraClient(currentUserId: string, otherUserId: string)
 
 // Subscribe to incoming calls via Supabase Realtime
 export function subscribeToIncomingCalls(userId: string) {
+  console.log('[VoiceCall] Subscribing to incoming calls for user:', userId.substring(0, 8) + '...')
+
   const channel = supabase
     .channel(`calls:${userId}`)
     // Écouter les nouveaux appels entrants
@@ -681,17 +683,27 @@ export function subscribeToIncomingCalls(userId: string) {
         filter: `receiver_id=eq.${userId}`,
       },
       async (payload) => {
+        console.log('[VoiceCall] Received INSERT on calls table:', payload)
+
         const call = payload.new as {
           id: string
           caller_id: string
           status: string
         }
 
+        console.log('[VoiceCall] Call data:', { id: call.id, caller_id: call.caller_id, status: call.status })
+
         // Only handle new calls (missed status means not yet answered)
-        if (call.status !== 'missed') return
+        if (call.status !== 'missed') {
+          console.log('[VoiceCall] Ignoring call with status:', call.status)
+          return
+        }
 
         const currentState = useVoiceCallStore.getState()
+        console.log('[VoiceCall] Current state:', currentState.status)
+
         if (currentState.status !== 'idle') {
+          console.log('[VoiceCall] Already in a call, rejecting incoming call')
           // Already in a call, reject
           await supabase
             .from('calls')
@@ -701,13 +713,20 @@ export function subscribeToIncomingCalls(userId: string) {
         }
 
         // Get caller info
-        const { data: callerProfile } = await supabase
+        console.log('[VoiceCall] Fetching caller profile:', call.caller_id)
+        const { data: callerProfile, error: profileError } = await supabase
           .from('profiles')
           .select('username, avatar_url')
           .eq('id', call.caller_id)
           .single()
 
+        if (profileError) {
+          console.error('[VoiceCall] Error fetching caller profile:', profileError)
+          return
+        }
+
         if (callerProfile) {
+          console.log('[VoiceCall] Setting incoming call from:', callerProfile.username)
           currentState.setIncomingCall(
             {
               id: call.caller_id,
@@ -776,9 +795,12 @@ export function subscribeToIncomingCalls(userId: string) {
         }
       }
     )
-    .subscribe()
+    .subscribe((status) => {
+      console.log('[VoiceCall] Realtime subscription status:', status)
+    })
 
   return () => {
+    console.log('[VoiceCall] Unsubscribing from incoming calls')
     supabase.removeChannel(channel)
   }
 }

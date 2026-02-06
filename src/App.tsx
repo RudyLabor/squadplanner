@@ -71,21 +71,25 @@ function AppContent() {
   useEffect(() => {
     if (!user) return
 
-    // Run in background after 2s to not block initial load
+    // Run in background after 500ms to not block initial load
     const timeoutId = setTimeout(async () => {
       try {
         const pushStore = usePushNotificationStore.getState()
-        if (!pushStore.isSupported) return
 
-        const isSubscribed = await pushStore.checkSubscription(user.id)
-        if (!isSubscribed) {
-          console.log('[App] Auto-subscribing to push notifications...')
-          await pushStore.subscribeToPush(user.id)
+        if (!pushStore.isSupported) {
+          console.log('[App] Push notifications not supported on this browser')
+          return
         }
+
+        console.log('[App] Checking push subscription for user:', user.id.substring(0, 8) + '...')
+
+        // Always try to subscribe (subscribeToPush handles existing subscriptions)
+        const success = await pushStore.subscribeToPush(user.id)
+        console.log('[App] Push subscription result:', success ? 'subscribed' : 'failed')
       } catch (err) {
         console.warn('[App] Push setup failed:', err)
       }
-    }, 2000)
+    }, 500)
 
     return () => clearTimeout(timeoutId)
   }, [user])

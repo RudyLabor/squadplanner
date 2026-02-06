@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-route
 import { AnimatePresence, motion } from 'framer-motion'
 import { Home, Auth, Squads, SquadDetail, SessionDetail, Landing, Sessions, Profile, Messages, Party, Onboarding, CallHistory, Premium, Settings, Help } from './pages'
 import { AppLayout } from './components/layout'
-import { useAuthStore, useSquadsStore, subscribeToIncomingCalls } from './hooks'
+import { useAuthStore, useSquadsStore, subscribeToIncomingCalls, usePushNotificationStore } from './hooks'
 import { CallModal } from './components/CallModal'
 import { IncomingCallModal } from './components/IncomingCallModal'
 import { CommandPalette } from './components/CommandPalette'
@@ -65,6 +65,24 @@ function AppContent() {
 
     const unsubscribe = subscribeToIncomingCalls(user.id)
     return () => unsubscribe()
+  }, [user])
+
+  // Auto-subscribe to push notifications when user logs in
+  useEffect(() => {
+    if (!user) return
+
+    const pushStore = usePushNotificationStore.getState()
+
+    // Check if already subscribed, if not, subscribe
+    const setupPush = async () => {
+      const isSubscribed = await pushStore.checkSubscription(user.id)
+      if (!isSubscribed && pushStore.isSupported) {
+        console.log('[App] Auto-subscribing to push notifications...')
+        await pushStore.subscribeToPush(user.id)
+      }
+    }
+
+    setupPush().catch(err => console.warn('[App] Push setup failed:', err))
   }, [user])
 
   return (

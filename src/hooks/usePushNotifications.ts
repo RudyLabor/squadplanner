@@ -1,8 +1,15 @@
 import { create } from 'zustand'
+import { Capacitor } from '@capacitor/core'
+import { PushNotifications, type Token, type PushNotificationSchema, type ActionPerformed } from '@capacitor/push-notifications'
+import { LocalNotifications } from '@capacitor/local-notifications'
+import { Haptics, ImpactStyle, NotificationType } from '@capacitor/haptics'
 import { supabase } from '../lib/supabase'
 import { useVoiceCallStore } from './useVoiceCall'
 
-// VAPID public key from environment
+// Check if running on native platform
+const isNativePlatform = Capacitor.isNativePlatform()
+
+// VAPID public key from environment (for web push)
 const VAPID_PUBLIC_KEY = import.meta.env.VITE_VAPID_PUBLIC_KEY
 
 // Interface pour les messages du Service Worker
@@ -379,5 +386,202 @@ export function cleanupPushNotifications(): void {
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.removeEventListener('message', handleServiceWorkerMessage)
     console.log('[Push] Service worker message listener removed')
+  }
+}
+
+// =====================================================
+// NATIVE PUSH NOTIFICATIONS (Capacitor iOS/Android)
+// =====================================================
+
+// Save native push token to database
+async function saveNativeTokenToDatabase(token: string, userId: string) {
+  try {
+    const { error } = await supabase
+      .from('push_tokens')
+      .upsert({
+        user_id: userId,
+        token: token,
+        platform: Capacitor.getPlatform(),
+        updated_at: new Date().toISOString()
+      }, {
+        onConflict: 'user_id,token'
+      })
+
+    if (error) {
+      console.error('[NativePush] Error saving token:', error)
+    } else {
+      console.log('[NativePush] Token saved to database')
+    }
+  } catch (error) {
+    console.error('[NativePush] Error saving token:', error)
+  }
+}
+
+// Handle native notification received while app is open
+async function handleNativeNotificationReceived(notification: PushNotificationSchema) {
+  console.log('[NativePush] Notification received:', notification)
+
+  const notifType = notification.data?.type as string
+
+  // Vibrate based on notification type
+  if (notifType === 'party_invite' || notifType === 'call') {
+    // Strong vibration for party invites / calls (like a phone call)
+    await Haptics.notification({ type: NotificationType.Warning })
+
+    // Show persistent notification with sound
+    await LocalNotifications.schedule({
+      notifications: [{
+        id: Date.now(),
+        title: notification.title || 'Invitation Party',
+        body: notification.body || 'Tu es invité à rejoindre une Party',
+        sound: 'ringtone.wav',
+        ongoing: true,
+        autoCancel: false,
+        extra: notification.data
+      }]
+    })
+  } else {
+    // Light vibration for other notifications
+    await Haptics.impact({ style: ImpactStyle.Medium })
+  }
+}
+
+// Handle native notification tap (app was in background)
+function handleNativeNotificationAction(action: ActionPerformed) {
+  console.log('[NativePush] Notification action:', action)
+
+  const data = action.notification.data
+  const notifType = data?.type as string
+
+  // Navigate based on notification type
+  switch (notifType) {
+    case 'party_invite':
+    case 'call':
+      window.location.href = `/party?squad=${data?.squad_id}`
+      break
+    case 'message':
+      window.location.href = `/messages?squad=${data?.squad_id}`
+      break
+    case 'session_reminder':
+      window.location.href = `/squad/${data?.squad_id}`
+      break
+    case 'squad_invite':
+      window.location.href = '/squads'
+      break
+    default:
+      window.location.href = '/home'
+  }
+}
+
+// Register native push notifications
+export async function registerNativePushNotifications(userId: string): Promise<boolean> {
+  if (!isNativePlatform) {
+    console.log('[NativePush] Not a native platform')
+    return false
+  }
+
+  try {
+    // Check permissions
+    let permStatus = await PushNotifications.checkPermissions()
+
+    if (permStatus.receive === 'prompt') {
+      permStatus = await PushNotifications.requestPermissions()
+    }
+
+    if (permStatus.receive !== 'granted') {
+      console.error('[NativePush] Permission denied')
+      return false
+    }
+
+    // Set up listeners
+    await PushNotifications.addListener('registration', async (token: Token) => {
+      console.log('[NativePush] Registration successful, token:', token.value)
+      await saveNativeTokenToDatabase(token.value, userId)
+    })
+
+    await PushNotifications.addListener('registrationError', (error) => {
+      console.error('[NativePush] Registration error:', error)
+    })
+
+    await PushNotifications.addListener('pushNotificationReceived', handleNativeNotificationReceived)
+    await PushNotifications.addListener('pushNotificationActionPerformed', handleNativeNotificationAction)
+
+    // Register with APNS/FCM
+    await PushNotifications.register()
+    console.log('[NativePush] Registered for push notifications')
+
+    return true
+  } catch (error) {
+    console.error('[NativePush] Registration failed:', error)
+    return false
+  }
+}
+
+// Helper function to trigger haptic feedback
+export async function triggerHaptic(type: 'light' | 'medium' | 'heavy' | 'success' | 'warning' | 'error' = 'medium') {
+  if (!isNativePlatform) {
+    // Fallback to web vibration API
+    if ('vibrate' in navigator) {
+      switch (type) {
+        case 'light':
+          navigator.vibrate(10)
+          break
+        case 'medium':
+          navigator.vibrate(25)
+          break
+        case 'heavy':
+          navigator.vibrate(50)
+          break
+        case 'success':
+          navigator.vibrate([10, 50, 10])
+          break
+        case 'warning':
+        case 'error':
+          navigator.vibrate([50, 100, 50])
+          break
+      }
+    }
+    return
+  }
+
+  try {
+    switch (type) {
+      case 'light':
+        await Haptics.impact({ style: ImpactStyle.Light })
+        break
+      case 'medium':
+        await Haptics.impact({ style: ImpactStyle.Medium })
+        break
+      case 'heavy':
+        await Haptics.impact({ style: ImpactStyle.Heavy })
+        break
+      case 'success':
+        await Haptics.notification({ type: NotificationType.Success })
+        break
+      case 'warning':
+        await Haptics.notification({ type: NotificationType.Warning })
+        break
+      case 'error':
+        await Haptics.notification({ type: NotificationType.Error })
+        break
+    }
+  } catch (error) {
+    console.warn('[Haptics] Error:', error)
+  }
+}
+
+// Check if running on native platform
+export function isNative(): boolean {
+  return isNativePlatform
+}
+
+// Initialize push notifications (call at app startup)
+export async function initializeAllPushNotifications(userId?: string): Promise<void> {
+  if (isNativePlatform && userId) {
+    // Native platform: use Capacitor push
+    await registerNativePushNotifications(userId)
+  } else {
+    // Web platform: use service worker push
+    await initializePushNotifications()
   }
 }

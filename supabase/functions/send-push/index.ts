@@ -1,10 +1,14 @@
 // Send Push Notification Edge Function
-// Sends Web Push notifications to users via VAPID
+// Sends Web Push (VAPID) and Native Push (FCM) notifications to users
 // Endpoint: POST /functions/v1/send-push
 // Body: { userId?: string, userIds?: string[], title: string, body: string, url?: string, tag?: string }
 
 import { serve } from 'https://deno.land/std@0.177.0/http/server.ts'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.0'
+
+// Firebase configuration
+const FIREBASE_PROJECT_ID = Deno.env.get('FIREBASE_PROJECT_ID') ?? 'squadplanner-app'
+const FIREBASE_SERVICE_ACCOUNT = Deno.env.get('FIREBASE_SERVICE_ACCOUNT') ?? ''
 import {
   validateString,
   validateArray,
@@ -238,6 +242,169 @@ async function encryptPayload(
     publicKey: new Uint8Array(publicKeyRaw)
   }
 }
+
+// =====================================================
+// FIREBASE CLOUD MESSAGING (FCM) for Native Apps
+// =====================================================
+
+interface PushToken {
+  id: string
+  user_id: string
+  token: string
+  platform: 'ios' | 'android' | 'web'
+}
+
+// Convert PEM to binary for Firebase JWT
+function pemToBinary(pem: string): ArrayBuffer {
+  const lines = pem.split('\n')
+  const base64 = lines.filter(line => !line.includes('-----')).join('')
+  const binary = atob(base64)
+  const bytes = new Uint8Array(binary.length)
+  for (let i = 0; i < binary.length; i++) {
+    bytes[i] = binary.charCodeAt(i)
+  }
+  return bytes.buffer
+}
+
+// Get OAuth2 access token for Firebase
+async function getFirebaseAccessToken(): Promise<string | null> {
+  if (!FIREBASE_SERVICE_ACCOUNT) {
+    console.log('[FCM] Firebase service account not configured')
+    return null
+  }
+
+  try {
+    const serviceAccount = JSON.parse(FIREBASE_SERVICE_ACCOUNT)
+    const now = Math.floor(Date.now() / 1000)
+
+    const payload = {
+      iss: serviceAccount.client_email,
+      sub: serviceAccount.client_email,
+      aud: 'https://oauth2.googleapis.com/token',
+      iat: now,
+      exp: now + 3600,
+      scope: 'https://www.googleapis.com/auth/firebase.messaging'
+    }
+
+    // Create JWT header and payload
+    const header = btoa(JSON.stringify({ alg: 'RS256', typ: 'JWT' }))
+    const body = btoa(JSON.stringify(payload))
+
+    // Import private key
+    const key = await crypto.subtle.importKey(
+      'pkcs8',
+      pemToBinary(serviceAccount.private_key),
+      { name: 'RSASSA-PKCS1-v1_5', hash: 'SHA-256' },
+      false,
+      ['sign']
+    )
+
+    // Sign JWT
+    const encoder = new TextEncoder()
+    const signature = await crypto.subtle.sign(
+      'RSASSA-PKCS1-v1_5',
+      key,
+      encoder.encode(`${header}.${body}`)
+    )
+
+    const signatureB64 = btoa(String.fromCharCode(...new Uint8Array(signature)))
+      .replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '')
+
+    const jwt = `${header}.${body}.${signatureB64}`
+
+    // Exchange JWT for access token
+    const tokenResponse = await fetch('https://oauth2.googleapis.com/token', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: `grant_type=urn:ietf:params:oauth:grant-type:jwt-bearer&assertion=${jwt}`
+    })
+
+    const tokenData = await tokenResponse.json()
+    return tokenData.access_token
+  } catch (error) {
+    console.error('[FCM] Error getting access token:', error)
+    return null
+  }
+}
+
+// Send FCM notification to a single token
+async function sendFCMNotification(
+  token: string,
+  title: string,
+  body: string,
+  data: Record<string, string>,
+  accessToken: string
+): Promise<{ success: boolean; error?: string }> {
+  try {
+    const isCall = data.type === 'party_invite' || data.type === 'call' || data.type === 'incoming_call'
+
+    const message = {
+      message: {
+        token: token,
+        notification: {
+          title: title,
+          body: body
+        },
+        data: data,
+        android: {
+          priority: 'high',
+          notification: {
+            sound: isCall ? 'ringtone' : 'default',
+            channel_id: isCall ? 'calls' : 'default',
+            vibrate_timings: isCall ? ['0s', '0.3s', '0.1s', '0.3s', '0.1s', '0.3s'] : undefined
+          }
+        },
+        apns: {
+          headers: {
+            'apns-priority': '10'
+          },
+          payload: {
+            aps: {
+              sound: isCall ? 'ringtone.caf' : 'default',
+              badge: 1,
+              'content-available': 1,
+              'interruption-level': isCall ? 'critical' : 'active'
+            }
+          }
+        }
+      }
+    }
+
+    const response = await fetch(
+      `https://fcm.googleapis.com/v1/projects/${FIREBASE_PROJECT_ID}/messages:send`,
+      {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(message)
+      }
+    )
+
+    if (!response.ok) {
+      const error = await response.text()
+      console.error('[FCM] Error:', response.status, error)
+
+      // Token invalide ou expiré
+      if (response.status === 404 || response.status === 400) {
+        return { success: false, error: 'token_expired' }
+      }
+
+      return { success: false, error: `HTTP ${response.status}` }
+    }
+
+    console.log('[FCM] Notification sent successfully')
+    return { success: true }
+  } catch (error) {
+    console.error('[FCM] Error sending notification:', error)
+    return { success: false, error: error.message }
+  }
+}
+
+// =====================================================
+// WEB PUSH (VAPID)
+// =====================================================
 
 // Send push notification to a single subscription
 async function sendPushToSubscription(
@@ -475,20 +642,24 @@ serve(async (req) => {
       console.log('[send-push] Incoming call notification for:', validatedData.data.caller_name)
     }
 
+    // =====================================================
+    // SEND TO WEB PUSH SUBSCRIPTIONS
+    // =====================================================
+
     // Send to all subscriptions
-    const results = await Promise.all(
+    const webResults = await Promise.all(
       subscriptions.map((sub: PushSubscription) =>
         sendPushToSubscription(sub, notificationPayload)
       )
     )
 
     // Count successes and failures
-    const sent = results.filter(r => r.success).length
-    const failed = results.filter(r => !r.success).length
+    let webSent = webResults.filter(r => r.success).length
+    let webFailed = webResults.filter(r => !r.success).length
 
     // Clean up expired subscriptions
     const expiredSubs = subscriptions.filter((sub, index) =>
-      results[index].error === 'subscription_expired'
+      webResults[index].error === 'subscription_expired'
     )
 
     if (expiredSubs.length > 0) {
@@ -504,14 +675,94 @@ serve(async (req) => {
       }
     }
 
-    console.log(`Push notifications: ${sent} sent, ${failed} failed`)
+    // =====================================================
+    // SEND TO NATIVE PUSH TOKENS (FCM)
+    // =====================================================
+
+    let nativeSent = 0
+    let nativeFailed = 0
+    let expiredTokens: PushToken[] = []
+
+    // Get native push tokens
+    const { data: nativeTokens, error: tokensError } = await supabaseAdmin
+      .from('push_tokens')
+      .select('*')
+      .in('user_id', userIds)
+
+    if (!tokensError && nativeTokens && nativeTokens.length > 0) {
+      // Get Firebase access token
+      const fcmAccessToken = await getFirebaseAccessToken()
+
+      if (fcmAccessToken) {
+        // Prepare data for FCM (must be string values)
+        const fcmData: Record<string, string> = {
+          url: String(validatedData.url || '/'),
+          tag: String(validatedData.tag || 'squadplanner-notification'),
+          type: String((validatedData.data as Record<string, unknown>)?.type || 'notification')
+        }
+
+        // Add other data fields as strings
+        if (validatedData.data) {
+          for (const [key, value] of Object.entries(validatedData.data)) {
+            fcmData[key] = String(value)
+          }
+        }
+
+        // Send to each native token
+        const nativeResults = await Promise.all(
+          nativeTokens.map((token: PushToken) =>
+            sendFCMNotification(
+              token.token,
+              validatedData.title,
+              validatedData.body,
+              fcmData,
+              fcmAccessToken
+            )
+          )
+        )
+
+        nativeSent = nativeResults.filter(r => r.success).length
+        nativeFailed = nativeResults.filter(r => !r.success).length
+
+        // Collect expired tokens
+        expiredTokens = nativeTokens.filter((token, index) =>
+          nativeResults[index].error === 'token_expired'
+        )
+
+        // Clean up expired tokens
+        if (expiredTokens.length > 0) {
+          const { error: deleteTokenError } = await supabaseAdmin
+            .from('push_tokens')
+            .delete()
+            .in('id', expiredTokens.map(t => t.id))
+
+          if (deleteTokenError) {
+            console.error('Failed to delete expired tokens:', deleteTokenError)
+          } else {
+            console.log(`Deleted ${expiredTokens.length} expired FCM tokens`)
+          }
+        }
+      } else {
+        console.log('[FCM] Skipping native push - Firebase not configured')
+      }
+    }
+
+    const totalSent = webSent + nativeSent
+    const totalFailed = webFailed + nativeFailed
+    const totalExpired = expiredSubs.length + expiredTokens.length
+
+    console.log(`Push notifications: ${totalSent} sent (${webSent} web, ${nativeSent} native), ${totalFailed} failed`)
 
     return new Response(
       JSON.stringify({
         success: true,
-        sent,
-        failed,
-        expired: expiredSubs.length
+        sent: totalSent,
+        failed: totalFailed,
+        expired: totalExpired,
+        breakdown: {
+          web: { sent: webSent, failed: webFailed, expired: expiredSubs.length },
+          native: { sent: nativeSent, failed: nativeFailed, expired: expiredTokens.length }
+        }
       }),
       { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     )

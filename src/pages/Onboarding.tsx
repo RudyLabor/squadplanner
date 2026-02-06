@@ -117,6 +117,16 @@ export function Onboarding() {
     }
   }, [profile])
 
+  // Show celebration when reaching complete step
+  useEffect(() => {
+    if (step === 'complete') {
+      setShowMiniConfetti(true)
+      setToastMessage(createdSquadId ? '🎉 Squad créée !' : '🎉 Bienvenue !')
+      setShowToast(true)
+      setTimeout(() => setShowMiniConfetti(false), 3000)
+    }
+  }, [step, createdSquadId])
+
   // Compress image before upload
   const compressImage = (file: File, maxWidth = 400, quality = 0.8): Promise<Blob> => {
     return new Promise((resolve, reject) => {
@@ -246,11 +256,7 @@ export function Onboarding() {
         setCreatedSquadId(squad.id)
         setCreatedSquadName(squad.name)
         setCreatedSquadCode(squad.invite_code)
-        // 🎉 Mini celebration
-        setShowMiniConfetti(true)
-        setToastMessage('🎉 Squad créée !')
-        setShowToast(true)
-        setTimeout(() => setShowMiniConfetti(false), 2500)
+        // Don't show celebration yet - wait until onboarding complete
         setStep('profile') // Go to profile first, then permissions
       } else {
         setError('Erreur lors de la création')
@@ -279,20 +285,21 @@ export function Onboarding() {
       setError(error.message)
     } else {
       await fetchSquads()
-      // 🎉 Mini celebration
-      setShowMiniConfetti(true)
-      setToastMessage('🎉 Bienvenue dans la squad !')
-      setShowToast(true)
-      setTimeout(() => setShowMiniConfetti(false), 2500)
+      // Don't show celebration yet - wait until onboarding complete
       setStep('profile') // Go to profile first, then permissions
     }
   }
 
-  const requestNotificationPermission = async () => {
+  const requestNotificationPermission = () => {
     if ('Notification' in window) {
-      const permission = await Notification.requestPermission()
-      setNotifPermission(permission)
-      setNotifRequested(true)
+      // Must be called synchronously from user interaction
+      Notification.requestPermission().then((permission) => {
+        setNotifPermission(permission)
+        setNotifRequested(true)
+      }).catch((err) => {
+        console.error('Notification permission error:', err)
+        setNotifRequested(true) // Mark as requested even on error
+      })
     }
   }
 

@@ -692,13 +692,13 @@ export default function Home() {
             <h2 className="text-[13px] font-semibold text-[#f7f8f8] uppercase tracking-wide mb-3">
               Ton tableau de bord
             </h2>
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 items-start">
+            <div className="space-y-4">
               <StatsRow
                 squadsCount={squads.length}
                 sessionsThisWeek={sessionsThisWeek}
                 reliabilityScore={reliabilityScore}
               />
-              {/* Streak Counter - Compact version */}
+              {/* Streak Counter */}
               <StreakCounter
                 streakDays={profile?.streak_days || 0}
                 lastActiveDate={profile?.streak_last_date || null}

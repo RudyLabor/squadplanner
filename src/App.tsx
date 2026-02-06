@@ -1,17 +1,26 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
 import { Home, Auth, Squads, SquadDetail, SessionDetail, Landing, Sessions, Profile, Messages, Party, Onboarding, CallHistory, Premium, Settings, Help } from './pages'
 import { AppLayout } from './components/layout'
-import { useAuthStore, subscribeToIncomingCalls } from './hooks'
+import { useAuthStore, useSquadsStore, subscribeToIncomingCalls } from './hooks'
 import { CallModal } from './components/CallModal'
 import { IncomingCallModal } from './components/IncomingCallModal'
 import { CommandPalette } from './components/CommandPalette'
 import { pageTransitionVariants, pageTransitionConfig } from './components/PageTransition'
 
-function ProtectedRoute({ children }: { children: React.ReactNode }) {
+function ProtectedRoute({ children, skipOnboardingCheck = false }: { children: React.ReactNode; skipOnboardingCheck?: boolean }) {
   const { user, isInitialized } = useAuthStore()
-  
+  const { squads, fetchSquads } = useSquadsStore()
+  const [hasCheckedSquads, setHasCheckedSquads] = useState(false)
+
+  // Fetch squads when user is authenticated
+  useEffect(() => {
+    if (user && !hasCheckedSquads) {
+      fetchSquads().then(() => setHasCheckedSquads(true))
+    }
+  }, [user, hasCheckedSquads, fetchSquads])
+
   if (!isInitialized) {
     return (
       <div className="min-h-screen bg-[#08090a] flex items-center justify-center">
@@ -19,12 +28,26 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
       </div>
     )
   }
-  
+
   if (!user) {
     // Redirect to landing page, not auth - users can choose to login from there
     return <Navigate to="/" replace />
   }
-  
+
+  // Wait for squads check before redirecting to onboarding
+  if (!skipOnboardingCheck && !hasCheckedSquads) {
+    return (
+      <div className="min-h-screen bg-[#08090a] flex items-center justify-center">
+        <div className="w-8 h-8 border-2 border-[#5e6dd2] border-t-transparent rounded-full animate-spin" />
+      </div>
+    )
+  }
+
+  // Redirect to onboarding if user has no squads (new user or incomplete onboarding)
+  if (!skipOnboardingCheck && hasCheckedSquads && squads.length === 0) {
+    return <Navigate to="/onboarding" replace />
+  }
+
   return <>{children}</>
 }
 
@@ -71,7 +94,7 @@ function AppContent() {
               } />
               <Route path="/auth" element={<Auth />} />
               <Route path="/onboarding" element={
-                <ProtectedRoute><Onboarding /></ProtectedRoute>
+                <ProtectedRoute skipOnboardingCheck><Onboarding /></ProtectedRoute>
               } />
 
               {/* Protected routes */}

@@ -1,11 +1,12 @@
 import { motion, useInView } from 'framer-motion'
-import { useRef } from 'react'
+import { useRef, useEffect } from 'react'
 import {
   Users, Calendar, ArrowRight, Check,
   Target, MessageCircle, Headphones, TrendingUp, Sparkles
 } from 'lucide-react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { SquadPlannerLogo } from '../components/SquadPlannerLogo'
+import { useAuthStore } from '../hooks'
 
 // Stagger animations for lists
 const staggerContainerVariants = {
@@ -81,6 +82,33 @@ const steps = [
 export default function Landing() {
   const heroRef = useRef(null)
   useInView(heroRef, { once: true })
+  const { user, isInitialized } = useAuthStore()
+  const navigate = useNavigate()
+
+  // Redirect authenticated users to /home (which will then handle onboarding check)
+  useEffect(() => {
+    if (isInitialized && user) {
+      navigate('/home', { replace: true })
+    }
+  }, [isInitialized, user, navigate])
+
+  // Show loading while checking auth
+  if (!isInitialized) {
+    return (
+      <div className="min-h-screen bg-[#050506] flex items-center justify-center">
+        <div className="w-8 h-8 border-2 border-[#5e6dd2] border-t-transparent rounded-full animate-spin" />
+      </div>
+    )
+  }
+
+  // Don't render landing if user is authenticated (redirect in progress)
+  if (user) {
+    return (
+      <div className="min-h-screen bg-[#050506] flex items-center justify-center">
+        <div className="w-8 h-8 border-2 border-[#5e6dd2] border-t-transparent rounded-full animate-spin" />
+      </div>
+    )
+  }
 
   return (
     <div className="min-h-screen bg-[#050506]">

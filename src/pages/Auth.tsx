@@ -28,9 +28,12 @@ export default function Auth() {
   const { fetchSquads } = useSquadsStore()
   const navigate = useNavigate()
 
-  // Si l'utilisateur est déjà connecté, rediriger vers /home
+  // Si l'utilisateur est déjà connecté, rediriger vers la bonne page
   // Sauf pour le mode reset (changement de mot de passe)
+  // NOTE: La redirection vers onboarding se fait dans ProtectedRoute/App.tsx
+  // pour une meilleure gestion du flow
   if (isInitialized && user && mode !== 'reset') {
+    // Rediriger vers home, le check onboarding sera fait là-bas
     return <Navigate to="/home" replace />
   }
 

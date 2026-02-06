@@ -147,6 +147,7 @@ CREATE INDEX IF NOT EXISTS idx_pinned_messages_message ON pinned_messages(messag
 ALTER TABLE message_reactions ENABLE ROW LEVEL SECURITY;
 
 -- Lecture: membres du squad peuvent voir les reactions
+DROP POLICY IF EXISTS "Squad members can view reactions" ON message_reactions;
 CREATE POLICY "Squad members can view reactions"
     ON message_reactions FOR SELECT
     USING (
@@ -159,6 +160,7 @@ CREATE POLICY "Squad members can view reactions"
     );
 
 -- Insertion: membres du squad peuvent ajouter des reactions
+DROP POLICY IF EXISTS "Squad members can add reactions" ON message_reactions;
 CREATE POLICY "Squad members can add reactions"
     ON message_reactions FOR INSERT
     WITH CHECK (
@@ -172,6 +174,7 @@ CREATE POLICY "Squad members can add reactions"
     );
 
 -- Suppression: on peut retirer ses propres reactions
+DROP POLICY IF EXISTS "Users can remove own reactions" ON message_reactions;
 CREATE POLICY "Users can remove own reactions"
     ON message_reactions FOR DELETE
     USING (auth.uid() = user_id);

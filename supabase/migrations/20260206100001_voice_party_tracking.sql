@@ -10,6 +10,9 @@ ALTER TABLE profiles ADD COLUMN IF NOT EXISTS voice_joined_at TIMESTAMPTZ;
 -- Index pour les requêtes "qui est en party"
 CREATE INDEX IF NOT EXISTS idx_profiles_voice_channel ON profiles(voice_channel_id) WHERE voice_channel_id IS NOT NULL;
 
+-- Supprimer l'ancienne fonction pour pouvoir changer le type de retour
+DROP FUNCTION IF EXISTS get_friends_playing(UUID);
+
 -- Mettre à jour la fonction get_friends_playing pour inclure les gens en Party vocale
 CREATE OR REPLACE FUNCTION get_friends_playing(user_id UUID)
 RETURNS TABLE (

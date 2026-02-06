@@ -267,6 +267,11 @@ serve(async (req) => {
     return new Response('ok', { headers: corsHeaders })
   }
 
+  // Handle HEAD requests for health checks
+  if (req.method === 'HEAD') {
+    return new Response(null, { status: 200, headers: corsHeaders })
+  }
+
   try {
     // Security: Verify CRON secret or service role key for CRON jobs
     const cronSecret = Deno.env.get('CRON_SECRET')

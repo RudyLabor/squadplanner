@@ -150,6 +150,11 @@ serve(async (req) => {
     return new Response('ok', { headers: getCorsHeaders(req.headers.get('origin')) })
   }
 
+  // Handle HEAD requests for health checks
+  if (req.method === 'HEAD') {
+    return new Response(null, { status: 200, headers: getCorsHeaders(req.headers.get('origin')) })
+  }
+
   try {
     const supabaseClient = createClient(
       Deno.env.get('SUPABASE_URL') ?? '',

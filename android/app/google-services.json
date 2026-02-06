@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "843686500063",
+    "project_id": "squad-match-qmm3qh",
+    "storage_bucket": "squad-match-qmm3qh.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:843686500063:android:07f8458e3145400611fb6a",
+        "android_client_info": {
+          "package_name": "com.mycompany.squadmatchv2"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBDGb5evNSYtPqAulzeRBomNjo_ltQNHpc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:843686500063:android:0cb715814c1ca18f11fb6a",
+        "android_client_info": {
+          "package_name": "fr.squadplanner.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBDGb5evNSYtPqAulzeRBomNjo_ltQNHpc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

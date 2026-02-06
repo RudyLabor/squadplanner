@@ -671,6 +671,7 @@ async function initializeAgoraClient(currentUserId: string, otherUserId: string)
 export function subscribeToIncomingCalls(userId: string) {
   const channel = supabase
     .channel(`calls:${userId}`)
+    // Écouter les nouveaux appels entrants
     .on(
       'postgres_changes',
       {
@@ -715,6 +716,63 @@ export function subscribeToIncomingCalls(userId: string) {
             },
             call.id
           )
+        }
+      }
+    )
+    // Écouter les mises à jour de statut (quand l'autre raccroche)
+    .on(
+      'postgres_changes',
+      {
+        event: 'UPDATE',
+        schema: 'public',
+        table: 'calls',
+        filter: `receiver_id=eq.${userId}`,
+      },
+      (payload) => {
+        const call = payload.new as {
+          id: string
+          status: string
+          ended_at: string | null
+        }
+
+        const currentState = useVoiceCallStore.getState()
+
+        // Si c'est l'appel en cours et qu'il est terminé/rejeté
+        if (currentState.currentCallId === call.id) {
+          if (call.status === 'rejected' || call.status === 'ended' || call.ended_at) {
+            console.log('[VoiceCall] Call ended by other party, closing...')
+            currentState.resetCall()
+          }
+        }
+      }
+    )
+    // Écouter aussi les mises à jour pour l'appelant (caller)
+    .on(
+      'postgres_changes',
+      {
+        event: 'UPDATE',
+        schema: 'public',
+        table: 'calls',
+        filter: `caller_id=eq.${userId}`,
+      },
+      (payload) => {
+        const call = payload.new as {
+          id: string
+          status: string
+          ended_at: string | null
+        }
+
+        const currentState = useVoiceCallStore.getState()
+
+        // Si c'est l'appel en cours et que le destinataire a rejeté/raccroché
+        if (currentState.currentCallId === call.id) {
+          if (call.status === 'rejected') {
+            console.log('[VoiceCall] Call rejected by receiver')
+            currentState.resetCall()
+          } else if (call.ended_at && currentState.status !== 'idle') {
+            console.log('[VoiceCall] Call ended by receiver')
+            currentState.resetCall()
+          }
         }
       }
     )

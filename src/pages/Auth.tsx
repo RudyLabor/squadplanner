@@ -140,7 +140,7 @@ export default function Auth() {
   }
 
   return (
-    <div className="h-[100dvh] bg-[#08090a] flex flex-col overflow-y-auto overflow-x-hidden">
+    <div className="h-[100dvh] bg-[#050506] flex flex-col overflow-y-auto overflow-x-hidden">
       {/* Celebration confetti on signup */}
       {showConfetti && typeof window !== 'undefined' && (
         <Confetti
@@ -149,13 +149,13 @@ export default function Auth() {
           recycle={false}
           numberOfPieces={120}
           gravity={0.25}
-          colors={['#5e6dd2', '#4ade80', '#f5a623', '#8b93ff']}
+          colors={['#6366f1', '#34d399', '#fbbf24', '#a78bfa']}
           style={{ position: 'fixed', top: 0, left: 0, zIndex: 100, pointerEvents: 'none' }}
         />
       )}
 
       {/* Background gradient */}
-      <div className="absolute inset-0 bg-gradient-to-b from-[rgba(94,109,210,0.08)] via-transparent to-transparent pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-b from-[rgba(99,102,241,0.04)] via-transparent to-transparent pointer-events-none" />
 
       {/* Header with logo */}
       <header className="relative z-10 px-6 py-5">
@@ -178,8 +178,8 @@ export default function Auth() {
             >
               {/* Header */}
               <div className="text-center mb-8">
-                <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-[rgba(94,109,210,0.15)] mb-5">
-                  <Gamepad2 className="w-7 h-7 text-[#5e6dd2]" />
+                <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-[rgba(99,102,241,0.08)] mb-5">
+                  <Gamepad2 className="w-7 h-7 text-[#6366f1]" />
                 </div>
                 <h1 className="text-2xl font-bold text-[#f7f8f8] mb-2">
                   {mode === 'login' ? 'T\'as manqué à ta squad !' : mode === 'reset' ? 'Nouveau mot de passe' : 'Rejoins l\'aventure'}
@@ -281,8 +281,8 @@ export default function Auth() {
 
                   {/* Success message for password update */}
                   {passwordUpdated && (
-                    <div className="p-3 rounded-xl bg-[rgba(74,222,128,0.1)] border border-[rgba(74,222,128,0.2)]">
-                      <div className="flex items-center gap-2 text-[#4ade80]">
+                    <div className="p-3 rounded-xl bg-[rgba(52,211,153,0.05)] border border-[rgba(52,211,153,0.1)]">
+                      <div className="flex items-center gap-2 text-[#34d399]">
                         <CheckCircle className="w-4 h-4" />
                         <span className="text-[13px]">Mot de passe mis à jour !</span>
                       </div>
@@ -298,8 +298,8 @@ export default function Auth() {
                         exit={{ opacity: 0, height: 0 }}
                         className="overflow-hidden"
                       >
-                        <div className="p-3 rounded-xl bg-[rgba(248,113,113,0.1)] border border-[rgba(248,113,113,0.2)]">
-                          <p className="text-[#f87171] text-[13px]">{error}</p>
+                        <div className="p-3 rounded-xl bg-[rgba(251,113,133,0.05)] border border-[rgba(251,113,133,0.1)]">
+                          <p className="text-[#fb7185] text-[13px]">{error}</p>
                         </div>
                       </motion.div>
                     )}
@@ -318,7 +318,7 @@ export default function Auth() {
                   {mode === 'login' && (
                     <div className="text-center">
                       {resetEmailSent ? (
-                        <div className="flex items-center justify-center gap-2 text-[#4ade80]">
+                        <div className="flex items-center justify-center gap-2 text-[#34d399]">
                           <CheckCircle className="w-4 h-4" />
                           <span className="text-[13px]">Email envoyé ! Vérifie ta boîte mail</span>
                         </div>
@@ -359,7 +359,7 @@ export default function Auth() {
                     <button
                       type="button"
                       onClick={switchMode}
-                      className="text-[#5e6dd2] hover:text-[#8b93ff] font-medium transition-colors"
+                      className="text-[#6366f1] hover:text-[#a78bfa] font-medium transition-colors"
                     >
                       {mode === 'login' ? 'Créer un compte' : 'Se connecter'}
                     </button>

@@ -35,19 +35,19 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
               bg-[rgba(255,255,255,0.04)]
               border border-[rgba(255,255,255,0.08)]
               hover:bg-[rgba(255,255,255,0.06)] hover:border-[rgba(255,255,255,0.12)]
-              focus:border-[rgba(94,109,210,0.6)] focus:ring-2 focus:ring-[rgba(94,109,210,0.2)] focus:outline-none
-              focus:shadow-[0_0_20px_rgba(94,109,210,0.3)]
+              focus:border-[rgba(99,102,241,0.6)] focus:ring-2 focus:ring-[rgba(99,102,241,0.1)] focus:outline-none
+              focus:shadow-[0_0_20px_rgba(99,102,241,0.15)]
               text-[#f7f8f8] placeholder-[#5e6063]
               transition-all duration-200
               ${icon ? 'pl-12 pr-4' : 'px-4'}
-              ${error ? 'border-[rgba(248,113,113,0.5)] focus:border-[#f87171] focus:ring-[rgba(248,113,113,0.15)] focus:shadow-[0_0_20px_rgba(248,113,113,0.2)]' : ''}
+              ${error ? 'border-[rgba(251,113,133,0.5)] focus:border-[#fb7185] focus:ring-[rgba(251,113,133,0.08)] focus:shadow-[0_0_20px_rgba(251,113,133,0.1)]' : ''}
               ${className}
             `}
             {...props}
           />
         </div>
         {error && (
-          <span id={errorId} className="text-[12px] text-[#f87171]" role="alert">
+          <span id={errorId} className="text-[12px] text-[#fb7185]" role="alert">
             {error}
           </span>
         )}

@@ -30,7 +30,7 @@ function StepToast({ message, isVisible, onClose }: { message: string; isVisible
           exit={{ opacity: 0, y: 20, scale: 0.9 }}
           className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50"
         >
-          <div className="flex items-center gap-2 px-5 py-3 rounded-xl bg-[#4ade80] text-[#08090a] font-medium shadow-lg">
+          <div className="flex items-center gap-2 px-5 py-3 rounded-xl bg-[#34d399] text-[#050506] font-medium shadow-lg shadow-[rgba(52,211,153,0.15)]">
             <Sparkles className="w-5 h-5" />
             <span>{message}</span>
           </div>
@@ -395,7 +395,7 @@ export function Onboarding() {
   }
 
   return (
-    <div className="h-[100dvh] bg-[#08090a] flex items-center justify-center p-4 overflow-y-auto overflow-x-hidden">
+    <div className="h-[100dvh] bg-[#050506] flex items-center justify-center p-4 overflow-y-auto overflow-x-hidden">
       {/* Mini Confetti for step celebrations */}
       {showMiniConfetti && (
         <Confetti
@@ -404,7 +404,7 @@ export function Onboarding() {
           recycle={false}
           numberOfPieces={60}
           gravity={0.3}
-          colors={['#5e6dd2', '#4ade80', '#f5a623', '#8b93ff']}
+          colors={['#6366f1', '#34d399', '#fbbf24', '#a78bfa']}
           style={{ position: 'fixed', top: 0, left: 0, zIndex: 100, pointerEvents: 'none' }}
         />
       )}
@@ -446,7 +446,7 @@ export function Onboarding() {
                 className="text-3xl md:text-4xl font-bold text-[#f7f8f8] mb-4 leading-tight"
               >
                 Arrêtez de dire<br />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#5e6dd2] to-[#8b93ff]">
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#6366f1] to-[#a78bfa]">
                   "on verra"
                 </span>
               </motion.h1>
@@ -514,11 +514,11 @@ export function Onboarding() {
                   onClick={() => navigateToStep('create-squad')}
                   disabled={isNavigating}
                   data-testid="create-squad-button"
-                  className="w-full p-6 rounded-2xl bg-[rgba(255,255,255,0.02)] border border-[rgba(255,255,255,0.06)] hover:border-[#5e6dd2] hover:-translate-y-0.5 active:scale-[0.99] transition-all duration-200 text-left group disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full p-6 rounded-2xl bg-[rgba(255,255,255,0.02)] border border-[rgba(255,255,255,0.06)] hover:border-[#6366f1] hover:scale-[1.02] active:scale-[0.99] transition-all duration-200 text-left group disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <div className="flex items-start gap-4">
-                    <div className="w-14 h-14 rounded-xl bg-[rgba(94,109,210,0.15)] flex items-center justify-center shrink-0 group-hover:bg-[rgba(94,109,210,0.25)] transition-colors">
-                      <Users className="w-7 h-7 text-[#5e6dd2]" />
+                    <div className="w-14 h-14 rounded-xl bg-[rgba(99,102,241,0.08)] flex items-center justify-center shrink-0 group-hover:bg-[rgba(99,102,241,0.12)] transition-colors">
+                      <Users className="w-7 h-7 text-[#6366f1]" />
                     </div>
                     <div className="flex-1">
                       <h3 className="text-[16px] font-semibold text-[#f7f8f8] mb-1">
@@ -528,7 +528,7 @@ export function Onboarding() {
                         Tu invites tes amis avec un code. En 10 secondes, tout le monde est dedans.
                       </p>
                     </div>
-                    <ArrowRight className="w-5 h-5 text-[#5e6063] group-hover:text-[#5e6dd2] transition-colors shrink-0 mt-1" />
+                    <ArrowRight className="w-5 h-5 text-[#5e6063] group-hover:text-[#6366f1] transition-colors shrink-0 mt-1" />
                   </div>
                 </button>
 
@@ -537,11 +537,11 @@ export function Onboarding() {
                   onClick={() => navigateToStep('join-squad')}
                   disabled={isNavigating}
                   data-testid="join-squad-button"
-                  className="w-full p-6 rounded-2xl bg-[rgba(255,255,255,0.02)] border border-[rgba(255,255,255,0.06)] hover:border-[#4ade80] hover:-translate-y-0.5 active:scale-[0.99] transition-all duration-200 text-left group disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full p-6 rounded-2xl bg-[rgba(255,255,255,0.02)] border border-[rgba(255,255,255,0.06)] hover:border-[#34d399] hover:scale-[1.02] active:scale-[0.99] transition-all duration-200 text-left group disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <div className="flex items-start gap-4">
-                    <div className="w-14 h-14 rounded-xl bg-[rgba(74,222,128,0.15)] flex items-center justify-center shrink-0 group-hover:bg-[rgba(74,222,128,0.25)] transition-colors">
-                      <UserPlus className="w-7 h-7 text-[#4ade80]" />
+                    <div className="w-14 h-14 rounded-xl bg-[rgba(52,211,153,0.08)] flex items-center justify-center shrink-0 group-hover:bg-[rgba(52,211,153,0.12)] transition-colors">
+                      <UserPlus className="w-7 h-7 text-[#34d399]" />
                     </div>
                     <div className="flex-1">
                       <h3 className="text-[16px] font-semibold text-[#f7f8f8] mb-1">
@@ -551,7 +551,7 @@ export function Onboarding() {
                         Un ami t'a donné un code ? Entre-le ici pour le rejoindre direct.
                       </p>
                     </div>
-                    <ArrowRight className="w-5 h-5 text-[#5e6063] group-hover:text-[#4ade80] transition-colors shrink-0 mt-1" />
+                    <ArrowRight className="w-5 h-5 text-[#5e6063] group-hover:text-[#34d399] transition-colors shrink-0 mt-1" />
                   </div>
                 </button>
               </div>
@@ -576,8 +576,8 @@ export function Onboarding() {
               </button>
 
               <div className="text-center mb-8">
-                <div className="w-16 h-16 rounded-2xl bg-[rgba(94,109,210,0.15)] flex items-center justify-center mx-auto mb-4">
-                  <Users className="w-8 h-8 text-[#5e6dd2]" />
+                <div className="w-16 h-16 rounded-2xl bg-[rgba(99,102,241,0.08)] flex items-center justify-center mx-auto mb-4">
+                  <Users className="w-8 h-8 text-[#6366f1]" />
                 </div>
                 <h2 className="text-2xl font-bold text-[#f7f8f8] mb-2">
                   Crée ta squad
@@ -609,8 +609,8 @@ export function Onboarding() {
                   />
 
                   {error && (
-                    <div className="p-3 rounded-lg bg-[rgba(248,113,113,0.1)] border border-[rgba(248,113,113,0.2)]">
-                      <p className="text-[#f87171] text-sm">{error}</p>
+                    <div className="p-3 rounded-lg bg-[rgba(251,113,133,0.05)] border border-[rgba(251,113,133,0.1)]">
+                      <p className="text-[#fb7185] text-sm">{error}</p>
                     </div>
                   )}
 
@@ -654,8 +654,8 @@ export function Onboarding() {
               </button>
 
               <div className="text-center mb-8">
-                <div className="w-16 h-16 rounded-2xl bg-[rgba(74,222,128,0.15)] flex items-center justify-center mx-auto mb-4">
-                  <UserPlus className="w-8 h-8 text-[#4ade80]" />
+                <div className="w-16 h-16 rounded-2xl bg-[rgba(52,211,153,0.08)] flex items-center justify-center mx-auto mb-4">
+                  <UserPlus className="w-8 h-8 text-[#34d399]" />
                 </div>
                 <h2 className="text-2xl font-bold text-[#f7f8f8] mb-2">
                   Rejoins une squad
@@ -679,8 +679,8 @@ export function Onboarding() {
                   />
 
                   {error && (
-                    <div className="p-3 rounded-lg bg-[rgba(248,113,113,0.1)] border border-[rgba(248,113,113,0.2)]">
-                      <p className="text-[#f87171] text-sm">{error}</p>
+                    <div className="p-3 rounded-lg bg-[rgba(251,113,133,0.05)] border border-[rgba(251,113,133,0.1)]">
+                      <p className="text-[#fb7185] text-sm">{error}</p>
                     </div>
                   )}
 
@@ -736,15 +736,15 @@ export function Onboarding() {
                 {/* Notifications - OBLIGATOIRE */}
                 <Card className="p-5">
                   <div className="flex items-start gap-4">
-                    <div className="w-12 h-12 rounded-xl bg-[rgba(245,166,35,0.15)] flex items-center justify-center shrink-0">
-                      <Bell className="w-6 h-6 text-[#f5a623]" />
+                    <div className="w-12 h-12 rounded-xl bg-[rgba(251,191,36,0.08)] flex items-center justify-center shrink-0">
+                      <Bell className="w-6 h-6 text-[#fbbf24]" />
                     </div>
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-1">
                         <h3 className="text-[15px] font-semibold text-[#f7f8f8]">
                           Notifications
                         </h3>
-                        <span className="text-xs px-2 py-0.5 rounded-full bg-[rgba(245,166,35,0.15)] text-[#f5a623] font-medium">
+                        <span className="text-xs px-2 py-0.5 rounded-full bg-[rgba(251,191,36,0.08)] text-[#fbbf24] font-medium">
                           Requis
                         </span>
                       </div>
@@ -752,12 +752,12 @@ export function Onboarding() {
                         Sois prévenu quand une session est créée ou quand ta squad t'attend
                       </p>
                       {notifPermission === 'granted' ? (
-                        <div className="flex items-center gap-2 text-[#4ade80] text-[14px]">
+                        <div className="flex items-center gap-2 text-[#34d399] text-[14px]">
                           <Check className="w-4 h-4" />
                           Activées
                         </div>
                       ) : notifPermission === 'denied' ? (
-                        <p className="text-[13px] text-[#f87171]">
+                        <p className="text-[13px] text-[#fb7185]">
                           Bloquées — active-les dans les paramètres de ton navigateur
                         </p>
                       ) : (
@@ -776,8 +776,8 @@ export function Onboarding() {
                 {/* Microphone - OPTIONNEL */}
                 <Card className="p-5">
                   <div className="flex items-start gap-4">
-                    <div className="w-12 h-12 rounded-xl bg-[rgba(94,109,210,0.15)] flex items-center justify-center shrink-0">
-                      <Mic className="w-6 h-6 text-[#5e6dd2]" />
+                    <div className="w-12 h-12 rounded-xl bg-[rgba(99,102,241,0.08)] flex items-center justify-center shrink-0">
+                      <Mic className="w-6 h-6 text-[#6366f1]" />
                     </div>
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-1">
@@ -792,7 +792,7 @@ export function Onboarding() {
                         Pour la party vocale avec ta squad. Tu peux activer plus tard.
                       </p>
                       {micPermission === 'granted' ? (
-                        <div className="flex items-center gap-2 text-[#4ade80] text-[14px]">
+                        <div className="flex items-center gap-2 text-[#34d399] text-[14px]">
                           <Check className="w-4 h-4" />
                           Autorisé
                         </div>
@@ -833,7 +833,7 @@ export function Onboarding() {
                   <Check className="w-5 h-5 ml-2" />
                 </Button>
                 {!canProceedFromPermissions() && (
-                  <p className="text-[12px] text-[#f5a623] text-center mt-2">
+                  <p className="text-[12px] text-[#fbbf24] text-center mt-2">
                     Active les notifications pour continuer
                   </p>
                 )}
@@ -872,7 +872,7 @@ export function Onboarding() {
                   {/* Avatar upload */}
                   <div className="flex flex-col items-center">
                     <div className="relative mb-3">
-                      <div className="w-24 h-24 rounded-full bg-[rgba(94,109,210,0.15)] flex items-center justify-center overflow-hidden">
+                      <div className="w-24 h-24 rounded-full bg-[rgba(99,102,241,0.08)] flex items-center justify-center overflow-hidden">
                         {avatarUrl ? (
                           <img
                             src={avatarUrl}
@@ -880,7 +880,7 @@ export function Onboarding() {
                             className="w-24 h-24 rounded-full object-cover"
                           />
                         ) : (
-                          <span className="text-4xl font-bold text-[#5e6dd2]">
+                          <span className="text-4xl font-bold text-[#6366f1]">
                             {username?.charAt(0).toUpperCase() || '?'}
                           </span>
                         )}
@@ -890,7 +890,7 @@ export function Onboarding() {
                           </div>
                         )}
                       </div>
-                      <label className="absolute bottom-0 right-0 w-8 h-8 rounded-full bg-[#5e6dd2] flex items-center justify-center border-2 border-[#08090a] cursor-pointer hover:bg-[#4a5bc0] transition-colors">
+                      <label className="absolute bottom-0 right-0 w-8 h-8 rounded-full bg-[#6366f1] flex items-center justify-center border-2 border-[#050506] cursor-pointer hover:bg-[#4f46e5] hover:scale-[1.02] transition-all">
                         <Camera className="w-4 h-4 text-white" />
                         <input
                           type="file"
@@ -924,7 +924,7 @@ export function Onboarding() {
                     <select
                       value={timezone}
                       onChange={(e) => setTimezone(e.target.value)}
-                      className="w-full h-11 px-4 rounded-lg bg-[#101012] border border-[rgba(255,255,255,0.1)] text-[#f7f8f8] text-[14px] focus:border-[#5e6dd2] outline-none [&>option]:bg-[#101012] [&>option]:text-[#f7f8f8]"
+                      className="w-full h-11 px-4 rounded-lg bg-[#101012] border border-[rgba(255,255,255,0.1)] text-[#f7f8f8] text-[14px] focus:border-[#6366f1] outline-none [&>option]:bg-[#101012] [&>option]:text-[#f7f8f8]"
                     >
                       <option value="Europe/Paris">Europe/Paris (France)</option>
                       <option value="Europe/London">Europe/London (UK)</option>
@@ -996,7 +996,7 @@ export function Onboarding() {
                     style={{
                       width: 8 + (i % 3) * 4,
                       height: 8 + (i % 3) * 4,
-                      backgroundColor: ['#5e6dd2', '#4ade80', '#f5a623', '#f87171', '#8b93ff'][i % 5],
+                      backgroundColor: ['#6366f1', '#34d399', '#fbbf24', '#fb7185', '#a78bfa'][i % 5],
                       borderRadius: i % 2 === 0 ? '50%' : '2px'
                     }}
                   />
@@ -1007,7 +1007,7 @@ export function Onboarding() {
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
                 transition={{ type: 'spring', stiffness: 300, damping: 25 }}
-                className="w-20 h-20 rounded-full bg-[#4ade80] flex items-center justify-center mx-auto mb-6"
+                className="w-20 h-20 rounded-full bg-[#34d399] flex items-center justify-center mx-auto mb-6"
               >
                 <Check className="w-10 h-10 text-white" />
               </motion.div>
@@ -1036,8 +1036,8 @@ export function Onboarding() {
                     <div className="space-y-4">
                       {/* Squad name */}
                       <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-xl bg-[rgba(94,109,210,0.15)] flex items-center justify-center">
-                          <Users className="w-5 h-5 text-[#5e6dd2]" />
+                        <div className="w-10 h-10 rounded-xl bg-[rgba(99,102,241,0.08)] flex items-center justify-center">
+                          <Users className="w-5 h-5 text-[#6366f1]" />
                         </div>
                         <div>
                           <p className="text-[12px] text-[#5e6063]">Squad</p>
@@ -1048,8 +1048,8 @@ export function Onboarding() {
                       {/* Game */}
                       {squadGame && (
                         <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 rounded-xl bg-[rgba(74,222,128,0.15)] flex items-center justify-center">
-                            <Gamepad2 className="w-5 h-5 text-[#4ade80]" />
+                          <div className="w-10 h-10 rounded-xl bg-[rgba(52,211,153,0.08)] flex items-center justify-center">
+                            <Gamepad2 className="w-5 h-5 text-[#34d399]" />
                           </div>
                           <div>
                             <p className="text-[12px] text-[#5e6063]">Jeu</p>
@@ -1069,10 +1069,10 @@ export function Onboarding() {
                             onClick={() => {
                               navigator.clipboard.writeText(createdSquadCode)
                             }}
-                            className="p-3 rounded-lg bg-[rgba(94,109,210,0.15)] hover:bg-[rgba(94,109,210,0.25)] transition-colors"
+                            className="p-3 rounded-lg bg-[rgba(99,102,241,0.08)] hover:bg-[rgba(99,102,241,0.12)] hover:scale-[1.02] transition-all"
                             aria-label="Copier le code d'invitation"
                           >
-                            <Copy className="w-5 h-5 text-[#5e6dd2]" aria-hidden="true" />
+                            <Copy className="w-5 h-5 text-[#6366f1]" aria-hidden="true" />
                           </button>
                         </div>
                         <p className="text-xs text-[#5e6063] mt-2">
@@ -1110,8 +1110,8 @@ export function Onboarding() {
                   <div className="flex flex-col items-center gap-1">
                     <div
                       className={`w-8 h-8 rounded-full flex items-center justify-center text-[13px] font-semibold transition-all ${
-                        isCompleted ? 'bg-[#4ade80] text-white' :
-                        isActive ? 'bg-[#5e6dd2] text-white' :
+                        isCompleted ? 'bg-[#34d399] text-white' :
+                        isActive ? 'bg-[#6366f1] text-white' :
                         'bg-[rgba(255,255,255,0.05)] text-[#5e6063]'
                       }`}
                     >
@@ -1122,7 +1122,7 @@ export function Onboarding() {
                     </span>
                   </div>
                   {i < 2 && (
-                    <div className={`w-8 h-0.5 mb-5 ${i < currentIndex ? 'bg-[#4ade80]' : 'bg-[rgba(255,255,255,0.1)]'}`} />
+                    <div className={`w-8 h-0.5 mb-5 ${i < currentIndex ? 'bg-[#34d399]' : 'bg-[rgba(255,255,255,0.1)]'}`} />
                   )}
                 </div>
               )

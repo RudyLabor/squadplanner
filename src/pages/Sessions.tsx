@@ -66,13 +66,13 @@ export function Sessions() {
   if (!isInitialized || (squadsLoading && squads.length === 0)) {
     return (
       <div className="flex-1 flex items-center justify-center min-h-[50vh]">
-        <Loader2 className="w-8 h-8 animate-spin text-[#5e6dd2]" />
+        <Loader2 className="w-8 h-8 animate-spin text-[#6366f1]" />
       </div>
     )
   }
 
   return (
-    <div className="min-h-0 bg-[#08090a] pb-6">
+    <div className="min-h-0 bg-[#050506] pb-6">
       {/* Confetti celebration */}
       {showConfetti && typeof window !== 'undefined' && (
         <Confetti
@@ -81,7 +81,7 @@ export function Sessions() {
           recycle={false}
           numberOfPieces={80}
           gravity={0.25}
-          colors={['#5e6dd2', '#4ade80', '#f5a623', '#8b93ff']}
+          colors={['#6366f1', '#34d399', '#fbbf24', '#a78bfa']}
           style={{ position: 'fixed', top: 0, left: 0, zIndex: 100, pointerEvents: 'none' }}
         />
       )}
@@ -104,13 +104,13 @@ export function Sessions() {
           {/* Success state - All caught up */}
           {needsResponse.length === 0 && confirmed.length > 0 && (
             <div className="mb-6">
-              <Card className="p-4 bg-gradient-to-r from-[rgba(74,222,128,0.1)] to-transparent border-[rgba(74,222,128,0.3)]">
+              <Card className="p-4 bg-gradient-to-r from-[rgba(52,211,153,0.05)] to-transparent border-[rgba(52,211,153,0.15)]">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-[rgba(74,222,128,0.2)] flex items-center justify-center">
-                    <CheckCircle2 className="w-5 h-5 text-[#4ade80]" />
+                  <div className="w-10 h-10 rounded-xl bg-[rgba(52,211,153,0.1)] flex items-center justify-center">
+                    <CheckCircle2 className="w-5 h-5 text-[#34d399]" />
                   </div>
                   <div>
-                    <h3 className="text-[14px] font-semibold text-[#4ade80]">
+                    <h3 className="text-[14px] font-semibold text-[#34d399]">
                       🎯 T'es à jour !
                     </h3>
                     <p className="text-[12px] text-[#8b8d90]">
@@ -125,13 +125,13 @@ export function Sessions() {
           {/* Action required - User guidance */}
           {needsResponse.length > 0 && (
             <div className="mb-6">
-              <div className="p-4 rounded-xl bg-[rgba(245,166,35,0.1)] border border-[rgba(245,166,35,0.2)]">
+              <div className="p-4 rounded-xl bg-[rgba(251,191,36,0.05)] border border-[rgba(251,191,36,0.1)]">
                 <div className="flex items-center gap-3 mb-3">
                   <motion.div
                     animate={{ rotate: [0, -10, 10, -10, 0] }}
-                    transition={{ duration: 0.5, repeat: Infinity, repeatDelay: 2 }}
+                    transition={{ duration: 0.5, repeat: 3, repeatDelay: 2 }}
                   >
-                    <PartyPopper className="w-5 h-5 text-[#f5a623]" />
+                    <PartyPopper className="w-5 h-5 text-[#fbbf24]" />
                   </motion.div>
                   <h2 className="text-[15px] font-semibold text-[#f7f8f8]">
                     Ta squad t'attend ! {needsResponse.length} session{needsResponse.length > 1 ? 's' : ''} à confirmer
@@ -148,7 +148,7 @@ export function Sessions() {
                         className="flex items-center gap-3 p-3 rounded-lg bg-[rgba(0,0,0,0.3)] hover:bg-[rgba(255,255,255,0.05)]"
                         whileHover={{ x: 4 }}
                       >
-                        <Calendar className="w-4 h-4 text-[#f5a623]" />
+                        <Calendar className="w-4 h-4 text-[#fbbf24]" />
                         <span className="flex-1 text-[14px] text-[#f7f8f8]">
                           {session.title || session.game || 'Session'}
                         </span>
@@ -165,10 +165,10 @@ export function Sessions() {
           {/* AI Slot Suggestions */}
           {slotSuggestions.length > 0 && (
             <div className="mb-6">
-              <Card className="p-4 border-[rgba(139,147,255,0.2)] bg-[rgba(139,147,255,0.05)]">
+              <Card className="p-4 border-[rgba(167,139,250,0.1)] bg-[rgba(167,139,250,0.025)]">
                 <div className="flex items-start gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-[rgba(139,147,255,0.15)] flex items-center justify-center shrink-0">
-                    <Sparkles className="w-5 h-5 text-[#8b93ff]" />
+                  <div className="w-10 h-10 rounded-xl bg-[rgba(167,139,250,0.075)] flex items-center justify-center shrink-0">
+                    <Sparkles className="w-5 h-5 text-[#a78bfa]" />
                   </div>
                   <div className="flex-1">
                     <h3 className="text-[14px] font-semibold text-[#f7f8f8] mb-2">
@@ -181,8 +181,8 @@ export function Sessions() {
                             {dayNames[slot.day_of_week]} {slot.hour}h
                           </span>
                           <div className="flex items-center gap-2">
-                            <TrendingUp className="w-3.5 h-3.5 text-[#4ade80]" />
-                            <span className="text-[12px] font-medium text-[#4ade80]">
+                            <TrendingUp className="w-3.5 h-3.5 text-[#34d399]" />
+                            <span className="text-[12px] font-medium text-[#34d399]">
                               {slot.reliability_score}%
                             </span>
                           </div>
@@ -198,10 +198,10 @@ export function Sessions() {
           {/* Coach Tips */}
           {coachTips.length > 0 && (
             <div className="mb-6">
-              <Card className="p-4 border-[rgba(245,166,35,0.2)] bg-[rgba(245,166,35,0.05)]">
+              <Card className="p-4 border-[rgba(251,191,36,0.1)] bg-[rgba(251,191,36,0.025)]">
                 <div className="flex items-start gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-[rgba(245,166,35,0.15)] flex items-center justify-center shrink-0">
-                    <Sparkles className="w-5 h-5 text-[#f5a623]" />
+                  <div className="w-10 h-10 rounded-xl bg-[rgba(251,191,36,0.075)] flex items-center justify-center shrink-0">
+                    <Sparkles className="w-5 h-5 text-[#fbbf24]" />
                   </div>
                   <div>
                     <h3 className="text-[14px] font-semibold text-[#f7f8f8] mb-1">
@@ -235,11 +235,11 @@ export function Sessions() {
               <div className="space-y-3 lg:grid lg:grid-cols-2 xl:grid-cols-3 lg:gap-4 lg:space-y-0">
                 {confirmed.map(session => (
                   <Link key={session.id} to={`/session/${session.id}`}>
-                    <motion.div whileHover={{ y: -2 }} whileTap={{ scale: 0.99 }}>
-                      <Card className="p-4 transition-all duration-200 hover:shadow-[0_0_15px_rgba(74,222,128,0.15)]">
+                    <motion.div whileHover={{ y: -2, scale: 1.02 }} whileTap={{ scale: 0.99 }}>
+                      <Card className="p-4 transition-all duration-200 hover:shadow-[0_0_12px_rgba(52,211,153,0.08)]">
                         <div className="flex items-center gap-4">
-                          <div className="w-12 h-12 rounded-xl bg-[rgba(74,222,128,0.15)] flex items-center justify-center">
-                            <Calendar className="w-6 h-6 text-[#4ade80]" strokeWidth={1.5} />
+                          <div className="w-12 h-12 rounded-xl bg-[rgba(52,211,153,0.075)] flex items-center justify-center">
+                            <Calendar className="w-6 h-6 text-[#34d399]" strokeWidth={1.5} />
                           </div>
                           <div className="flex-1">
                             <h3 className="text-[15px] font-medium text-[#f7f8f8]">
@@ -308,8 +308,8 @@ export function Sessions() {
                   { num: '4', text: 'Ton score de fiabilité augmente !' },
                 ].map(step => (
                   <div key={step.num} className="flex items-center gap-3">
-                    <div className="w-6 h-6 rounded-lg bg-[rgba(94,109,210,0.15)] flex items-center justify-center">
-                      <span className="text-[12px] font-bold text-[#5e6dd2]">{step.num}</span>
+                    <div className="w-6 h-6 rounded-lg bg-[rgba(99,102,241,0.075)] flex items-center justify-center">
+                      <span className="text-[12px] font-bold text-[#6366f1]">{step.num}</span>
                     </div>
                     <span className="text-[13px] text-[#8b8d90]">{step.text}</span>
                   </div>

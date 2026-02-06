@@ -121,7 +121,7 @@ export function PremiumUpgradeModal({
           >
             <div className="h-full bg-[#101012] border border-[rgba(255,255,255,0.08)] rounded-2xl flex flex-col overflow-hidden">
               {/* Header gradient */}
-              <div className="relative bg-gradient-to-br from-[#5e6dd2] via-[#8b93ff] to-[#f5a623] p-6 pb-8">
+              <div className="relative bg-gradient-to-br from-[#6366f1] via-[#a78bfa] to-[#fbbf24] p-6 pb-8">
                 <button
                   onClick={onClose}
                   aria-label="Fermer"
@@ -156,7 +156,7 @@ export function PremiumUpgradeModal({
                     onClick={() => setSelectedPlan('monthly')}
                     className={`p-4 rounded-xl border-2 transition-all ${
                       selectedPlan === 'monthly'
-                        ? 'border-[#5e6dd2] bg-[rgba(94,109,210,0.1)]'
+                        ? 'border-[#6366f1] bg-[rgba(99,102,241,0.1)]'
                         : 'border-[rgba(255,255,255,0.08)] hover:border-[rgba(255,255,255,0.15)]'
                     }`}
                   >
@@ -171,11 +171,11 @@ export function PremiumUpgradeModal({
                     onClick={() => setSelectedPlan('yearly')}
                     className={`p-4 rounded-xl border-2 transition-all relative ${
                       selectedPlan === 'yearly'
-                        ? 'border-[#4ade80] bg-[rgba(74,222,128,0.1)]'
+                        ? 'border-[#34d399] bg-[rgba(52,211,153,0.1)]'
                         : 'border-[rgba(255,255,255,0.08)] hover:border-[rgba(255,255,255,0.15)]'
                     }`}
                   >
-                    <div className="absolute -top-2 right-2 px-2 py-0.5 rounded-full bg-[#4ade80] text-xs font-bold text-[#08090a]">
+                    <div className="absolute -top-2 right-2 px-2 py-0.5 rounded-full bg-[#34d399] text-xs font-bold text-[#050506]">
                       -20%
                     </div>
                     <div className="text-[13px] text-[#8b8d90] mb-1">Annuel</div>
@@ -183,7 +183,7 @@ export function PremiumUpgradeModal({
                       {(PREMIUM_PRICE_YEARLY / 12).toFixed(2)}
                       <span className="text-[14px] font-normal text-[#5e6063]">/mois</span>
                     </div>
-                    <div className="text-xs text-[#4ade80]">2 mois offerts</div>
+                    <div className="text-xs text-[#34d399]">2 mois offerts</div>
                   </button>
                 </div>
 
@@ -194,22 +194,22 @@ export function PremiumUpgradeModal({
                       key={index}
                       className="flex items-start gap-3 p-3 rounded-xl bg-[rgba(255,255,255,0.02)]"
                     >
-                      <div className="w-9 h-9 rounded-lg bg-[rgba(94,109,210,0.15)] flex items-center justify-center flex-shrink-0">
-                        <feat.icon className="w-4 h-4 text-[#5e6dd2]" />
+                      <div className="w-9 h-9 rounded-lg bg-[rgba(99,102,241,0.15)] flex items-center justify-center flex-shrink-0">
+                        <feat.icon className="w-4 h-4 text-[#6366f1]" />
                       </div>
                       <div>
                         <div className="text-[14px] font-medium text-[#f7f8f8]">{feat.title}</div>
                         <div className="text-[12px] text-[#5e6063]">{feat.description}</div>
                       </div>
-                      <Check className="w-4 h-4 text-[#4ade80] flex-shrink-0 mt-1" />
+                      <Check className="w-4 h-4 text-[#34d399] flex-shrink-0 mt-1" />
                     </div>
                   ))}
                 </div>
 
                 {/* Error message */}
                 {error && (
-                  <div className="mt-4 p-3 rounded-lg bg-[rgba(248,113,113,0.1)] border border-[rgba(248,113,113,0.2)]">
-                    <p className="text-[#f87171] text-[13px]">{error}</p>
+                  <div className="mt-4 p-3 rounded-lg bg-[rgba(251,113,133,0.1)] border border-[rgba(251,113,133,0.2)]">
+                    <p className="text-[#fb7185] text-[13px]">{error}</p>
                   </div>
                 )}
               </div>
@@ -219,7 +219,7 @@ export function PremiumUpgradeModal({
                 <Button
                   onClick={handleUpgrade}
                   disabled={isLoading || !squadId}
-                  className="w-full h-12 bg-gradient-to-r from-[#5e6dd2] to-[#8b93ff] hover:opacity-90"
+                  className="w-full h-12 bg-gradient-to-r from-[#6366f1] to-[#a78bfa] hover:opacity-90"
                 >
                   {isLoading ? (
                     <Loader2 className="w-5 h-5 animate-spin" />

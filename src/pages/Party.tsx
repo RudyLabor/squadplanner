@@ -53,25 +53,25 @@ function ParticipantAvatar({
   return (
     <motion.div
       className="flex flex-col items-center gap-2"
-      animate={isSpeaking ? { scale: [1, 1.08, 1] } : {}}
-      transition={{ duration: 0.3, repeat: isSpeaking ? Infinity : 0 }}
+      animate={isSpeaking ? { scale: [1, 1.02, 1] } : {}}
+      transition={{ duration: 0.3, repeat: isSpeaking ? 3 : 0 }}
     >
       <div className="relative">
         {/* Glow effect when speaking */}
         {isSpeaking && (
           <motion.div
-            className={`absolute inset-0 ${sizeClasses[size]} rounded-full bg-[#4ade80]`}
-            animate={{ scale: [1, 1.3, 1], opacity: [0.5, 0, 0.5] }}
-            transition={{ duration: 1, repeat: Infinity }}
+            className={`absolute inset-0 ${sizeClasses[size]} rounded-full bg-[#34d399]`}
+            animate={{ scale: [1, 1.2, 1], opacity: [0.25, 0, 0.25] }}
+            transition={{ duration: 1, repeat: 2 }}
           />
         )}
         <div className={`
           relative ${sizeClasses[size]} rounded-full flex items-center justify-center
           ${isSpeaking
-            ? 'bg-[#4ade80] ring-4 ring-[#4ade80]/50 shadow-[0_0_25px_rgba(74,222,128,0.5)]'
+            ? 'bg-[#34d399] ring-2 ring-[#34d399]/25 shadow-[0_0_15px_rgba(52,211,153,0.25)]'
             : isLocal
-              ? 'bg-[#5e6dd2]'
-              : 'bg-[rgba(94,109,210,0.3)]'
+              ? 'bg-[#6366f1]'
+              : 'bg-[rgba(99,102,241,0.3)]'
           }
           transition-all duration-200
         `}>
@@ -79,13 +79,13 @@ function ParticipantAvatar({
             {username.charAt(0).toUpperCase()}
           </span>
           {isMuted && (
-            <div className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-[#f87171] flex items-center justify-center">
+            <div className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-[#fb7185] flex items-center justify-center">
               <MicOff className="w-2.5 h-2.5 text-white" />
             </div>
           )}
         </div>
       </div>
-      <span className={`text-xs font-medium ${isLocal ? 'text-[#5e6dd2]' : 'text-[#8b8d90]'}`}>
+      <span className={`text-xs font-medium ${isLocal ? 'text-[#6366f1]' : 'text-[#8b8d90]'}`}>
         {isLocal ? 'Toi' : username}
       </span>
     </motion.div>
@@ -133,12 +133,12 @@ function ActivePartySection({ squad, onLeave, currentUserId: _currentUserId }: {
   ]
 
   return (
-    <Card className="p-0 overflow-hidden border-[#4ade80]/30 bg-gradient-to-b from-[#4ade80]/5 to-transparent">
+    <Card className="p-0 overflow-hidden border-[#34d399]/30 bg-gradient-to-b from-[#34d399]/5 to-transparent">
       {/* Header */}
       <div className="p-4 border-b border-[rgba(255,255,255,0.06)]">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-3 h-3 rounded-full bg-[#4ade80] animate-pulse" />
+            <div className="w-3 h-3 rounded-full bg-[#34d399] animate-pulse" />
             <div>
               <h2 className="text-[16px] font-semibold text-[#f7f8f8]">{squad.name}</h2>
               <p className="text-[12px] text-[#8b8d90]">{squad.game}</p>
@@ -152,12 +152,12 @@ function ActivePartySection({ squad, onLeave, currentUserId: _currentUserId }: {
             {/* Share party link button */}
             <motion.button
               onClick={copyPartyLink}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[12px] font-medium transition-colors ${
                 linkCopied
-                  ? 'bg-[#4ade80]/20 text-[#4ade80]'
-                  : 'bg-[rgba(94,109,210,0.15)] text-[#5e6dd2] hover:bg-[rgba(94,109,210,0.25)]'
+                  ? 'bg-[#34d399]/20 text-[#34d399]'
+                  : 'bg-[rgba(99,102,241,0.15)] text-[#6366f1] hover:bg-[rgba(99,102,241,0.25)]'
               }`}
             >
               {linkCopied ? (
@@ -173,7 +173,7 @@ function ActivePartySection({ squad, onLeave, currentUserId: _currentUserId }: {
               )}
             </motion.button>
             <Link to={`/squad/${squad.id}`}>
-              <span className="text-[12px] text-[#5e6dd2] hover:text-[#8b93ff]">Voir la squad</span>
+              <span className="text-[12px] text-[#6366f1] hover:text-[#a78bfa]">Voir la squad</span>
             </Link>
           </div>
         </div>
@@ -185,26 +185,26 @@ function ActivePartySection({ squad, onLeave, currentUserId: _currentUserId }: {
           initial={{ opacity: 0, height: 0 }}
           animate={{ opacity: 1, height: 'auto' }}
           exit={{ opacity: 0, height: 0 }}
-          className="px-4 py-3 bg-[#f5a623]/10 border-b border-[#f5a623]/20"
+          className="px-4 py-3 bg-[#fbbf24]/10 border-b border-[#fbbf24]/20"
         >
           <div className="flex items-center gap-3">
-            <WifiOff className="w-5 h-5 text-[#f5a623] animate-pulse" />
+            <WifiOff className="w-5 h-5 text-[#fbbf24] animate-pulse" />
             <div className="flex-1">
-              <p className="text-[13px] font-medium text-[#f5a623]">
+              <p className="text-[13px] font-medium text-[#fbbf24]">
                 Reconnexion en cours...
               </p>
-              <p className="text-xs text-[#f5a623]/70">
+              <p className="text-xs text-[#fbbf24]/70">
                 Tentative {reconnectAttempts}/3
               </p>
             </div>
-            <Loader2 className="w-5 h-5 text-[#f5a623] animate-spin" />
+            <Loader2 className="w-5 h-5 text-[#fbbf24] animate-spin" />
           </div>
         </motion.div>
       )}
 
       {/* Error */}
       {error && (
-        <div className="px-4 py-3 bg-[#f87171]/10 text-[#f87171] text-[12px] flex items-center gap-2">
+        <div className="px-4 py-3 bg-[#fb7185]/10 text-[#fb7185] text-[12px] flex items-center gap-2">
           <AlertCircle className="w-4 h-4 flex-shrink-0" />
           {error}
         </div>
@@ -241,7 +241,7 @@ function ActivePartySection({ squad, onLeave, currentUserId: _currentUserId }: {
                     <VoiceWaveformDemo
                       isActive={p.isSpeaking && !participantMuted}
                       size="sm"
-                      color={p.isLocal ? '#5e6dd2' : '#4ade80'}
+                      color={p.isLocal ? '#6366f1' : '#34d399'}
                       barCount={5}
                     />
                   </div>
@@ -284,33 +284,33 @@ function ActivePartySection({ squad, onLeave, currentUserId: _currentUserId }: {
           {/* Pulse animation when mic is active */}
           {!isMuted && (
             <motion.div
-              className="absolute inset-0 w-14 h-14 rounded-full bg-[#4ade80]"
-              animate={{ scale: [1, 1.3], opacity: [0.4, 0] }}
-              transition={{ duration: 1.5, repeat: Infinity }}
+              className="absolute inset-0 w-14 h-14 rounded-full bg-[#34d399]"
+              animate={{ scale: [1, 1.2], opacity: [0.2, 0] }}
+              transition={{ duration: 1.5, repeat: 2 }}
             />
           )}
           <motion.button
             className={`
               relative w-14 h-14 rounded-full flex items-center justify-center
               ${isMuted
-                ? 'bg-[#f87171] text-white'
-                : 'bg-[#4ade80] text-[#08090a]'
+                ? 'bg-[#fb7185] text-white'
+                : 'bg-[#34d399] text-[#050506]'
               }
               transition-colors
             `}
             onClick={toggleMute}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
           >
             {isMuted ? <MicOff className="w-6 h-6" /> : <Mic className="w-6 h-6" />}
           </motion.button>
         </div>
 
         <motion.button
-          className="w-14 h-14 rounded-full bg-[#f87171] text-white flex items-center justify-center"
+          className="w-14 h-14 rounded-full bg-[#fb7185] text-white flex items-center justify-center"
           onClick={onLeave}
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
         >
           <PhoneOff className="w-6 h-6" />
         </motion.button>
@@ -332,12 +332,12 @@ function SquadCard({ squad, onJoin, isConnecting }: {
 }) {
   return (
     <motion.div
-      whileHover={{ y: -2, scale: 1.01 }}
+      whileHover={{ y: -1, scale: 1.01 }}
       whileTap={{ scale: 0.99 }}
     >
-      <Card className="p-4 bg-gradient-to-br from-[rgba(94,109,210,0.08)] to-transparent border-[rgba(94,109,210,0.15)] hover:border-[rgba(94,109,210,0.3)] transition-all duration-300">
+      <Card className="p-4 bg-gradient-to-br from-[rgba(99,102,241,0.08)] to-transparent border-[rgba(99,102,241,0.15)] hover:border-[rgba(99,102,241,0.3)] transition-all duration-300">
         <div className="flex items-center gap-4">
-          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#5e6dd2] to-[#8b93ff] flex items-center justify-center shadow-lg shadow-[#5e6dd2]/20">
+          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#6366f1] to-[#a78bfa] flex items-center justify-center shadow-md shadow-[#6366f1]/10">
             <Gamepad2 className="w-6 h-6 text-white" />
           </div>
 
@@ -351,7 +351,7 @@ function SquadCard({ squad, onJoin, isConnecting }: {
             variant="primary"
             onClick={onJoin}
             disabled={isConnecting}
-            className="shadow-lg shadow-[#5e6dd2]/20"
+            className="shadow-md shadow-[#6366f1]/10"
           >
             {isConnecting ? (
               <Loader2 className="w-4 h-4 animate-spin" />
@@ -384,18 +384,18 @@ function Toast({ message, isVisible, onClose, variant = 'success' }: {
 
   const variantStyles = {
     success: {
-      bg: 'bg-[#4ade80]',
-      text: 'text-[#08090a]',
+      bg: 'bg-[#34d399]',
+      text: 'text-[#050506]',
       Icon: CheckCircle2
     },
     error: {
-      bg: 'bg-[#f87171]',
+      bg: 'bg-[#fb7185]',
       text: 'text-white',
       Icon: AlertCircle
     },
     warning: {
-      bg: 'bg-[#f5a623]',
-      text: 'text-[#08090a]',
+      bg: 'bg-[#fbbf24]',
+      text: 'text-[#050506]',
       Icon: WifiOff
     }
   }
@@ -564,7 +564,7 @@ export function Party() {
   const otherSquads = squads.filter(s => s.id !== activeSquadId)
 
   return (
-    <div className="min-h-0 bg-[#08090a] pb-6">
+    <div className="min-h-0 bg-[#050506] pb-6">
       {/* Confetti celebration when duo */}
       {showDuoConfetti && (
         <Confetti
@@ -573,7 +573,7 @@ export function Party() {
           recycle={false}
           numberOfPieces={120}
           gravity={0.25}
-          colors={['#5e6dd2', '#4ade80', '#f5a623', '#8b93ff', '#f7f8f8']}
+          colors={['#6366f1', '#34d399', '#fbbf24', '#a78bfa', '#f7f8f8']}
           style={{ position: 'fixed', top: 0, left: 0, zIndex: 100, pointerEvents: 'none' }}
         />
       )}
@@ -611,8 +611,8 @@ export function Party() {
                   className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[12px] font-medium transition-colors ${
                     isPushToTalkEnabled
                       ? isPushToTalkActive
-                        ? 'bg-[#4ade80]/20 text-[#4ade80] border border-[#4ade80]/30'
-                        : 'bg-[#5e6dd2]/20 text-[#5e6dd2] border border-[#5e6dd2]/30'
+                        ? 'bg-[#34d399]/20 text-[#34d399] border border-[#34d399]/30'
+                        : 'bg-[#6366f1]/20 text-[#6366f1] border border-[#6366f1]/30'
                       : 'bg-[rgba(255,255,255,0.05)] text-[#8b8d90] hover:bg-[rgba(255,255,255,0.1)]'
                   }`}
                   title={isPushToTalkEnabled ? 'Désactiver Push-to-Talk' : 'Activer Push-to-Talk (Espace)'}
@@ -622,9 +622,9 @@ export function Party() {
                     {isPushToTalkEnabled ? (isPushToTalkActive ? 'Parle...' : 'PTT actif') : 'PTT'}
                   </span>
                 </button>
-                <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#4ade80]/15 border border-[#4ade80]/30">
-                  <div className="w-2 h-2 rounded-full bg-[#4ade80] animate-pulse" />
-                  <span className="text-[12px] font-medium text-[#4ade80]">En ligne</span>
+                <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#34d399]/15 border border-[#34d399]/30">
+                  <div className="w-2 h-2 rounded-full bg-[#34d399] animate-pulse" />
+                  <span className="text-[12px] font-medium text-[#34d399]">En ligne</span>
                 </div>
               </div>
             )}
@@ -633,7 +633,7 @@ export function Party() {
           {/* Loading */}
           {squadsLoading ? (
             <div className="flex justify-center py-12">
-              <Loader2 className="w-8 h-8 text-[#5e6dd2] animate-spin" />
+              <Loader2 className="w-8 h-8 text-[#6366f1] animate-spin" />
             </div>
           ) : squads.length === 0 ? (
             /* État vide - design amélioré */
@@ -642,11 +642,11 @@ export function Party() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4 }}
             >
-              <Card className="p-8 text-center bg-gradient-to-br from-[rgba(94,109,210,0.08)] to-transparent border-[rgba(94,109,210,0.15)]">
+              <Card className="p-8 text-center bg-gradient-to-br from-[rgba(99,102,241,0.08)] to-transparent border-[rgba(99,102,241,0.15)]">
                 <motion.div
-                  className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#5e6dd2] to-[#8b93ff] flex items-center justify-center mx-auto mb-5 shadow-lg shadow-[#5e6dd2]/30"
-                  animate={{ scale: [1, 1.05, 1] }}
-                  transition={{ duration: 2, repeat: Infinity }}
+                  className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#6366f1] to-[#a78bfa] flex items-center justify-center mx-auto mb-5 shadow-md shadow-[#6366f1]/15"
+                  animate={{ scale: [1, 1.02, 1] }}
+                  transition={{ duration: 2, repeat: 3 }}
                 >
                   <Mic className="w-8 h-8 text-white" strokeWidth={1.5} />
                 </motion.div>
@@ -657,7 +657,7 @@ export function Party() {
                   Crée ou rejoins une squad pour lancer des parties vocales avec tes potes.
                 </p>
                 <Link to="/squads">
-                  <Button className="shadow-lg shadow-[#5e6dd2]/20">
+                  <Button className="shadow-md shadow-[#6366f1]/10">
                     <Users className="w-4 h-4" />
                     Trouver une squad
                   </Button>
@@ -691,11 +691,11 @@ export function Party() {
                 >
                   {squads.length === 1 ? (
                     /* Une seule squad - affichage central amélioré */
-                    <Card className="p-8 text-center bg-gradient-to-br from-[rgba(94,109,210,0.1)] via-transparent to-[rgba(74,222,128,0.05)] border-[rgba(94,109,210,0.2)]">
+                    <Card className="p-8 text-center bg-gradient-to-br from-[rgba(99,102,241,0.1)] via-transparent to-[rgba(52,211,153,0.05)] border-[rgba(99,102,241,0.2)]">
                       <motion.div
-                        className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#5e6dd2] to-[#8b93ff] flex items-center justify-center mx-auto mb-5 shadow-xl shadow-[#5e6dd2]/30"
-                        animate={{ scale: [1, 1.08, 1] }}
-                        transition={{ duration: 2, repeat: Infinity }}
+                        className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#6366f1] to-[#a78bfa] flex items-center justify-center mx-auto mb-5 shadow-lg shadow-[#6366f1]/15"
+                        animate={{ scale: [1, 1.02, 1] }}
+                        transition={{ duration: 2, repeat: 3 }}
                       >
                         <Mic className="w-8 h-8 text-white" />
                       </motion.div>
@@ -711,7 +711,7 @@ export function Party() {
                       <Button
                         onClick={() => handleJoinParty(squads[0].id)}
                         disabled={isConnecting}
-                        className="shadow-lg shadow-[#5e6dd2]/20 px-8"
+                        className="shadow-md shadow-[#6366f1]/10 px-8"
                       >
                         {isConnecting ? (
                           <Loader2 className="w-4 h-4 animate-spin" />

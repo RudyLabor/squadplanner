@@ -28,7 +28,7 @@ function CelebrationToast({ message, isVisible, onClose }: { message: string; is
           exit={{ opacity: 0, y: -20, scale: 0.9 }}
           className="fixed top-4 left-1/2 -translate-x-1/2 z-50"
         >
-          <div className="flex items-center gap-2 px-5 py-3 rounded-xl bg-[#4ade80] text-[#08090a] font-medium shadow-lg">
+          <div className="flex items-center gap-2 px-5 py-3 rounded-xl bg-[#34d399] text-[#050506] font-medium shadow-md">
             <Sparkles className="w-5 h-5" />
             <span>{message}</span>
           </div>
@@ -140,32 +140,32 @@ export default function SessionDetail() {
     const sessionDate = new Date(currentSession.scheduled_at)
     
     if (currentSession.status === 'cancelled') {
-      return { color: '#f87171', label: 'Annulée', icon: XCircle }
+      return { color: '#fb7185', label: 'Annulée', icon: XCircle }
     }
     if (currentSession.status === 'completed') {
-      return { color: '#4ade80', label: 'Terminée', icon: CheckCircle2 }
+      return { color: '#34d399', label: 'Terminée', icon: CheckCircle2 }
     }
     if (sessionDate < now) {
       return { color: '#8b8d90', label: 'Passée', icon: Clock }
     }
     if (currentSession.status === 'confirmed') {
-      return { color: '#4ade80', label: 'Confirmée', icon: CheckCircle2 }
+      return { color: '#34d399', label: 'Confirmée', icon: CheckCircle2 }
     }
-    return { color: '#f5a623', label: 'En attente de confirmations', icon: AlertCircle }
+    return { color: '#fbbf24', label: 'En attente de confirmations', icon: AlertCircle }
   }
 
   if (!isInitialized) {
     return (
-      <div className="min-h-0 bg-[#08090a] flex items-center justify-center py-12">
-        <Loader2 className="w-8 h-8 text-[#5e6dd2] animate-spin" />
+      <div className="min-h-0 bg-[#050506] flex items-center justify-center py-12">
+        <Loader2 className="w-8 h-8 text-[#6366f1] animate-spin" />
       </div>
     )
   }
 
   if (!currentSession) {
     return (
-      <div className="min-h-0 bg-[#08090a] flex items-center justify-center py-12">
-        <Loader2 className="w-8 h-8 text-[#5e6dd2] animate-spin" />
+      <div className="min-h-0 bg-[#050506] flex items-center justify-center py-12">
+        <Loader2 className="w-8 h-8 text-[#6366f1] animate-spin" />
       </div>
     )
   }
@@ -175,7 +175,7 @@ export default function SessionDetail() {
   const isCreator = currentSession.created_by === user?.id
 
   return (
-    <div className="min-h-0 bg-[#08090a] pb-6">
+    <div className="min-h-0 bg-[#050506] pb-6">
       {/* Confetti celebration */}
       {showConfetti && typeof window !== 'undefined' && (
         <Confetti
@@ -184,7 +184,7 @@ export default function SessionDetail() {
           recycle={false}
           numberOfPieces={100}
           gravity={0.25}
-          colors={['#5e6dd2', '#4ade80', '#f5a623', '#8b93ff', '#f7f8f8']}
+          colors={['#6366f1', '#34d399', '#fbbf24', '#a78bfa', '#f7f8f8']}
           style={{ position: 'fixed', top: 0, left: 0, zIndex: 100, pointerEvents: 'none' }}
         />
       )}
@@ -224,8 +224,8 @@ export default function SessionDetail() {
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-4 mb-8">
             <Card className="p-4">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-lg bg-[rgba(245,166,35,0.15)] flex items-center justify-center">
-                  <Calendar className="w-5 h-5 text-[#f5a623]" />
+                <div className="w-10 h-10 rounded-lg bg-[rgba(251,191,36,0.075)] flex items-center justify-center">
+                  <Calendar className="w-5 h-5 text-[#fbbf24]" />
                 </div>
                 <div>
                   <div className="text-[15px] font-medium text-[#f7f8f8] capitalize">{dateInfo.day}</div>
@@ -253,17 +253,17 @@ export default function SessionDetail() {
             </h2>
             <div className="grid grid-cols-3 gap-3 lg:gap-4">
               <Card className="p-4 lg:p-5 text-center">
-                <Check className="w-5 h-5 mx-auto mb-2 text-[#4ade80]" />
+                <Check className="w-5 h-5 mx-auto mb-2 text-[#34d399]" />
                 <div className="text-xl lg:text-2xl font-bold text-[#f7f8f8]">{currentSession.rsvp_counts?.present || 0}</div>
                 <div className="text-[12px] text-[#5e6063]">Présents</div>
               </Card>
               <Card className="p-4 lg:p-5 text-center">
-                <HelpCircle className="w-5 h-5 mx-auto mb-2 text-[#f5a623]" />
+                <HelpCircle className="w-5 h-5 mx-auto mb-2 text-[#fbbf24]" />
                 <div className="text-xl lg:text-2xl font-bold text-[#f7f8f8]">{currentSession.rsvp_counts?.maybe || 0}</div>
                 <div className="text-[12px] text-[#5e6063]">Peut-être</div>
               </Card>
               <Card className="p-4 lg:p-5 text-center">
-                <X className="w-5 h-5 mx-auto mb-2 text-[#f87171]" />
+                <X className="w-5 h-5 mx-auto mb-2 text-[#fb7185]" />
                 <div className="text-xl lg:text-2xl font-bold text-[#f7f8f8]">{currentSession.rsvp_counts?.absent || 0}</div>
                 <div className="text-[12px] text-[#5e6063]">Absents</div>
               </Card>
@@ -282,7 +282,7 @@ export default function SessionDetail() {
                     <motion.div className="flex-1" whileTap={{ scale: 0.97 }}>
                       <Button
                         variant={currentSession.my_rsvp === 'present' ? 'primary' : 'secondary'}
-                        className={`w-full ${currentSession.my_rsvp === 'present' ? 'shadow-[0_0_20px_rgba(74,222,128,0.4)] ring-2 ring-[#4ade80]/30' : ''}`}
+                        className={`w-full ${currentSession.my_rsvp === 'present' ? 'shadow-[0_0_10px_rgba(52,211,153,0.2)] ring-2 ring-[#34d399]/15' : ''}`}
                         onClick={() => handleRsvp('present')}
                         disabled={rsvpLoading !== null}
                       >
@@ -297,7 +297,7 @@ export default function SessionDetail() {
                     <motion.div className="flex-1" whileTap={{ scale: 0.97 }}>
                       <Button
                         variant={currentSession.my_rsvp === 'maybe' ? 'primary' : 'secondary'}
-                        className={`w-full ${currentSession.my_rsvp === 'maybe' ? 'shadow-[0_0_20px_rgba(245,166,35,0.4)] ring-2 ring-[#f5a623]/30' : ''}`}
+                        className={`w-full ${currentSession.my_rsvp === 'maybe' ? 'shadow-[0_0_10px_rgba(251,191,36,0.2)] ring-2 ring-[#fbbf24]/15' : ''}`}
                         onClick={() => handleRsvp('maybe')}
                         disabled={rsvpLoading !== null}
                       >
@@ -333,27 +333,27 @@ export default function SessionDetail() {
           {/* Check-in */}
           {isSessionTime() && currentSession.my_rsvp === 'present' && !hasCheckedIn() && (
             <div className="mb-8">
-              <Card className="p-6 text-center bg-gradient-to-b from-[rgba(74,222,128,0.15)] to-transparent border-[rgba(74,222,128,0.3)] relative overflow-hidden">
+              <Card className="p-6 text-center bg-gradient-to-b from-[rgba(52,211,153,0.075)] to-transparent border-[rgba(52,211,153,0.15)] relative overflow-hidden">
                 {/* Pulsing background effect */}
                 <motion.div
-                  className="absolute inset-0 bg-[#4ade80]/5"
-                  animate={{ opacity: [0.3, 0.6, 0.3] }}
-                  transition={{ duration: 2, repeat: Infinity }}
+                  className="absolute inset-0 bg-[#34d399]/2.5"
+                  animate={{ opacity: [0.3, 0.5, 0.3] }}
+                  transition={{ duration: 2, repeat: 3 }}
                 />
                 <div className="relative">
                   <motion.div
-                    animate={{ scale: [1, 1.1, 1] }}
-                    transition={{ duration: 1.5, repeat: Infinity }}
+                    animate={{ scale: [1, 1.05, 1] }}
+                    transition={{ duration: 1.5, repeat: 3 }}
                   >
-                    <Gamepad2 className="w-14 h-14 mx-auto mb-4 text-[#4ade80]" />
+                    <Gamepad2 className="w-14 h-14 mx-auto mb-4 text-[#34d399]" />
                   </motion.div>
                   <h3 className="text-xl font-bold text-[#f7f8f8] mb-2">🎮 C'est l'heure du game !</h3>
                   <p className="text-[#8b8d90] mb-5">Ta squad t'attend. Confirme que t'es là !</p>
-                  <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
+                  <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
                     <Button
                       onClick={handleCheckin}
                       disabled={checkinLoading}
-                      className="h-12 px-8 bg-[#4ade80] hover:bg-[#4ade80] text-[#08090a] font-semibold shadow-[0_0_25px_rgba(74,222,128,0.4)]"
+                      className="h-12 px-8 bg-[#34d399] hover:bg-[#34d399] text-[#050506] font-semibold shadow-[0_0_12px_rgba(52,211,153,0.2)]"
                     >
                       {checkinLoading ? (
                         <Loader2 className="w-5 h-5 animate-spin" />
@@ -370,9 +370,9 @@ export default function SessionDetail() {
 
           {hasCheckedIn() && (
             <div className="mb-8">
-              <Card className="p-4 text-center bg-[rgba(74,222,128,0.1)] border-[rgba(74,222,128,0.2)]">
-                <CheckCircle2 className="w-8 h-8 mx-auto mb-2 text-[#4ade80]" />
-                <p className="text-[#4ade80] font-medium">Check-in confirmé !</p>
+              <Card className="p-4 text-center bg-[rgba(52,211,153,0.05)] border-[rgba(52,211,153,0.1)]">
+                <CheckCircle2 className="w-8 h-8 mx-auto mb-2 text-[#34d399]" />
+                <p className="text-[#34d399] font-medium">Check-in confirmé !</p>
               </Card>
             </div>
           )}
@@ -401,8 +401,8 @@ export default function SessionDetail() {
                   const hasCheckedin = currentSession.checkins?.some(c => c.user_id === rsvp.user_id)
                   return (
                     <div key={rsvp.user_id} className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full bg-[rgba(139,147,255,0.15)] flex items-center justify-center">
-                        <Users className="w-5 h-5 text-[#8b93ff]" />
+                      <div className="w-10 h-10 rounded-full bg-[rgba(167,139,250,0.075)] flex items-center justify-center">
+                        <Users className="w-5 h-5 text-[#a78bfa]" />
                       </div>
                       <div className="flex-1">
                         <span className="text-[15px] text-[#f7f8f8]">

@@ -6,10 +6,10 @@ import { Card } from './ui'
 
 // Milestone rewards configuration
 const MILESTONES = [
-  { days: 7, xp: 100, label: '1 week', emoji: '🔥' },
-  { days: 14, xp: 200, label: '2 weeks', emoji: '💪' },
-  { days: 30, xp: 500, label: '1 month', emoji: '🏆' },
-  { days: 100, xp: 1000, label: '100 days', emoji: '👑' },
+  { days: 7, xp: 100, label: '1 semaine', emoji: '🔥' },
+  { days: 14, xp: 200, label: '2 semaines', emoji: '💪' },
+  { days: 30, xp: 500, label: '1 mois', emoji: '🏆' },
+  { days: 100, xp: 1000, label: '100 jours', emoji: '👑' },
 ]
 
 // Calculate XP for any streak day
@@ -45,7 +45,7 @@ const getNextMilestone = (currentStreak: number) => {
   return {
     days: nextSevenDayMark,
     xp: 50,
-    label: `${nextSevenDayMark} days`,
+    label: `${nextSevenDayMark} jours`,
     emoji: '⭐',
     daysRemaining: nextSevenDayMark - currentStreak,
     progress: ((currentStreak % 7) / 7) * 100,
@@ -100,7 +100,7 @@ export function StreakCounter({ streakDays, lastActiveDate, onCheckIn }: StreakC
       const date = new Date(todayDate)
       date.setDate(date.getDate() - i)
       const dateStr = date.toISOString().split('T')[0]
-      const dayOfWeek = date.toLocaleDateString('en-US', { weekday: 'short' }).charAt(0)
+      const dayOfWeek = date.toLocaleDateString('fr-FR', { weekday: 'short' }).charAt(0).toUpperCase()
 
       // Simple activity calculation based on streak
       // If streak is X days, mark last X days as active (up to 7)
@@ -172,7 +172,7 @@ export function StreakCounter({ streakDays, lastActiveDate, onCheckIn }: StreakC
                   transition={{ delay: 0.3 }}
                   className="text-[12px] font-medium text-white/70 uppercase tracking-wide"
                 >
-                  Milestone Reached!
+                  Objectif atteint !
                 </motion.p>
                 <motion.p
                   initial={{ opacity: 0, x: -10 }}
@@ -180,7 +180,7 @@ export function StreakCounter({ streakDays, lastActiveDate, onCheckIn }: StreakC
                   transition={{ delay: 0.4 }}
                   className="text-[18px] font-bold text-white"
                 >
-                  {celebratedMilestone.days}-Day Streak!
+                  Série de {celebratedMilestone.days} jours !
                 </motion.p>
                 <motion.p
                   initial={{ opacity: 0, x: -10 }}
@@ -189,7 +189,7 @@ export function StreakCounter({ streakDays, lastActiveDate, onCheckIn }: StreakC
                   className="text-[13px] text-white/90 flex items-center gap-1"
                 >
                   <Zap className="w-3 h-3" />
-                  +{celebratedMilestone.xp} XP Earned!
+                  +{celebratedMilestone.xp} XP gagnés !
                 </motion.p>
               </div>
             </div>
@@ -296,10 +296,10 @@ export function StreakCounter({ streakDays, lastActiveDate, onCheckIn }: StreakC
                   {streakDays}
                 </motion.span>
                 <span className="text-[15px] text-[#8b8d90]">
-                  {streakDays === 1 ? 'day' : 'days'}
+                  {streakDays === 1 ? 'jour' : 'jours'}
                 </span>
               </div>
-              <p className="text-[13px] text-[#5e6063]">Current Streak</p>
+              <p className="text-[13px] text-[#5e6063]">Série en cours</p>
 
               {/* Today's XP reward if any */}
               {currentXPReward > 0 && (
@@ -310,7 +310,7 @@ export function StreakCounter({ streakDays, lastActiveDate, onCheckIn }: StreakC
                 >
                   <Zap className="w-3 h-3" style={{ color: flameColors.primary }} />
                   <span className="text-[12px] font-medium" style={{ color: flameColors.primary }}>
-                    +{currentXPReward} XP today!
+                    +{currentXPReward} XP aujourd'hui !
                   </span>
                 </motion.div>
               )}
@@ -335,12 +335,12 @@ export function StreakCounter({ streakDays, lastActiveDate, onCheckIn }: StreakC
                 {hasCheckedInToday ? (
                   <span className="flex items-center gap-1.5">
                     <Check className="w-4 h-4" />
-                    Done
+                    Fait
                   </span>
                 ) : (
                   <span className="flex items-center gap-1.5">
                     <Flame className="w-4 h-4" />
-                    Check In
+                    Pointer
                   </span>
                 )}
               </motion.button>
@@ -352,7 +352,7 @@ export function StreakCounter({ streakDays, lastActiveDate, onCheckIn }: StreakC
             <div className="flex items-center justify-between mb-2">
               <div className="flex items-center gap-2">
                 <Gift className="w-4 h-4 text-[#8b93ff]" />
-                <span className="text-[13px] text-[#8b8d90]">Next Milestone</span>
+                <span className="text-[13px] text-[#8b8d90]">Prochain objectif</span>
               </div>
               <div className="flex items-center gap-2">
                 <span className="text-[13px] font-medium text-[#f7f8f8]">
@@ -378,13 +378,13 @@ export function StreakCounter({ streakDays, lastActiveDate, onCheckIn }: StreakC
             </div>
 
             <p className="text-[11px] text-[#5e6063] mt-1.5 text-right">
-              {nextMilestone.daysRemaining} {nextMilestone.daysRemaining === 1 ? 'day' : 'days'} to go
+              Encore {nextMilestone.daysRemaining} {nextMilestone.daysRemaining === 1 ? 'jour' : 'jours'}
             </p>
           </div>
 
           {/* Mini calendar - Last 7 days */}
           <div>
-            <p className="text-[12px] text-[#5e6063] mb-2 uppercase tracking-wide">Last 7 Days</p>
+            <p className="text-[12px] text-[#5e6063] mb-2 uppercase tracking-wide">7 derniers jours</p>
             <div className="flex gap-2 justify-between">
               {last7Days.map((day) => (
                 <div key={day.date} className="flex flex-col items-center gap-1">
@@ -431,8 +431,8 @@ export function StreakCounter({ streakDays, lastActiveDate, onCheckIn }: StreakC
             >
               <p className="text-[12px] text-[#8b93ff]">
                 {streakDays === 0
-                  ? "Start your streak today! Check in daily to earn XP rewards."
-                  : `${7 - streakDays} more days to your first milestone! Keep it up!`}
+                  ? "Lance ta série aujourd'hui ! Pointe chaque jour pour gagner des XP."
+                  : `Plus que ${7 - streakDays} jours pour ton premier objectif ! Continue comme ça !`}
               </p>
             </motion.div>
           )}
@@ -447,9 +447,9 @@ export function StreakCounter({ streakDays, lastActiveDate, onCheckIn }: StreakC
               <div className="flex items-center gap-2">
                 <span className="text-lg">👑</span>
                 <div>
-                  <p className="text-[13px] font-medium text-[#f7f8f8]">Legendary Status!</p>
+                  <p className="text-[13px] font-medium text-[#f7f8f8]">Statut Légendaire !</p>
                   <p className="text-[11px] text-[#a78bfa]">
-                    You've achieved a 100+ day streak. You're unstoppable!
+                    Tu as atteint une série de 100+ jours. Tu es inarrêtable !
                   </p>
                 </div>
               </div>

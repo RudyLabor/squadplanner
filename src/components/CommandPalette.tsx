@@ -161,7 +161,7 @@ export function CommandPalette() {
             <div className="mx-4 bg-[#101012] border border-[rgba(255,255,255,0.1)] rounded-2xl shadow-[0_25px_50px_-12px_rgba(0,0,0,0.5)] overflow-hidden">
               {/* Search input */}
               <div className="flex items-center gap-3 px-4 py-4 border-b border-[rgba(255,255,255,0.06)]">
-                <Search className="w-5 h-5 text-[#5e6dd2]" />
+                <Search className="w-5 h-5 text-[#6366f1]" />
                 <input
                   ref={inputRef}
                   type="text"
@@ -204,12 +204,12 @@ export function CommandPalette() {
                             onMouseEnter={() => setSelectedIndex(globalIndex)}
                             className={`w-full flex items-center gap-3 px-4 py-2.5 text-left transition-colors ${
                               isSelected
-                                ? 'bg-[rgba(94,109,210,0.15)]'
+                                ? 'bg-[rgba(99,102,241,0.15)]'
                                 : 'hover:bg-[rgba(255,255,255,0.03)]'
                             }`}
                           >
                             <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${
-                              isSelected ? 'bg-[#5e6dd2]' : 'bg-[rgba(255,255,255,0.05)]'
+                              isSelected ? 'bg-[#6366f1]' : 'bg-[rgba(255,255,255,0.05)]'
                             }`}>
                               <cmd.icon className={`w-4 h-4 ${isSelected ? 'text-white' : 'text-[#8b8d90]'}`} />
                             </div>
@@ -224,7 +224,7 @@ export function CommandPalette() {
                               )}
                             </div>
                             {isSelected && (
-                              <ArrowRight className="w-4 h-4 text-[#5e6dd2]" />
+                              <ArrowRight className="w-4 h-4 text-[#6366f1]" />
                             )}
                           </button>
                         )

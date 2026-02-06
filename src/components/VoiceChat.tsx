@@ -191,7 +191,7 @@ export function VoiceChat({ sessionId, sessionTitle }: VoiceChatProps) {
                         }}
                         transition={{
                           duration: 0.5,
-                          repeat: Infinity,
+                          repeat: 3,
                           delay: i * 0.1,
                         }}
                       />

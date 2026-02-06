@@ -121,13 +121,13 @@ export function Help() {
   }, {} as Record<string, (FAQItem & { globalIndex: number })[]>)
 
   return (
-    <div className="min-h-0 bg-[#08090a] pb-6">
+    <div className="min-h-0 bg-[#050506] pb-6">
       <div className="px-4 md:px-6 lg:px-8 py-6 max-w-2xl mx-auto">
         {/* Header */}
         <div className="flex items-center gap-4 mb-8">
           <button
             onClick={() => navigate(-1)}
-            className="w-10 h-10 rounded-xl bg-[rgba(255,255,255,0.05)] flex items-center justify-center hover:bg-[rgba(255,255,255,0.1)] transition-colors"
+            className="w-10 h-10 rounded-xl bg-[rgba(255,255,255,0.05)] flex items-center justify-center hover:bg-[rgba(255,255,255,0.1)] hover:scale-[1.02] transition-all"
           >
             <ArrowLeft className="w-5 h-5 text-[#8b8d90]" />
           </button>
@@ -145,7 +145,7 @@ export function Help() {
             placeholder="Rechercher dans l'aide..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full h-12 pl-12 pr-4 rounded-xl bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.08)] text-[14px] text-[#f7f8f8] placeholder-[#5e6063] focus:outline-none focus:border-[#5e6dd2] transition-colors"
+            className="w-full h-12 pl-12 pr-4 rounded-xl bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.08)] text-[14px] text-[#f7f8f8] placeholder-[#5e6063] focus:outline-none focus:border-[#6366f1] transition-colors"
           />
         </div>
 
@@ -153,10 +153,10 @@ export function Help() {
         <div className="flex gap-2 overflow-x-auto pb-2 mb-6 scrollbar-hide">
           <button
             onClick={() => setSelectedCategory(null)}
-            className={`flex-shrink-0 px-4 py-2 rounded-full text-[13px] font-medium transition-colors ${
+            className={`flex-shrink-0 px-4 py-2 rounded-full text-[13px] font-medium transition-all ${
               selectedCategory === null
-                ? 'bg-[#5e6dd2] text-white'
-                : 'bg-[rgba(255,255,255,0.05)] text-[#8b8d90] hover:bg-[rgba(255,255,255,0.1)]'
+                ? 'bg-[#6366f1] text-white'
+                : 'bg-[rgba(255,255,255,0.05)] text-[#8b8d90] hover:bg-[rgba(255,255,255,0.1)] hover:scale-[1.02]'
             }`}
           >
             Tout
@@ -165,10 +165,10 @@ export function Help() {
             <button
               key={cat}
               onClick={() => setSelectedCategory(cat)}
-              className={`flex-shrink-0 px-4 py-2 rounded-full text-[13px] font-medium transition-colors ${
+              className={`flex-shrink-0 px-4 py-2 rounded-full text-[13px] font-medium transition-all ${
                 selectedCategory === cat
-                  ? 'bg-[#5e6dd2] text-white'
-                  : 'bg-[rgba(255,255,255,0.05)] text-[#8b8d90] hover:bg-[rgba(255,255,255,0.1)]'
+                  ? 'bg-[#6366f1] text-white'
+                  : 'bg-[rgba(255,255,255,0.05)] text-[#8b8d90] hover:bg-[rgba(255,255,255,0.1)] hover:scale-[1.02]'
               }`}
             >
               {cat}
@@ -231,10 +231,10 @@ export function Help() {
         )}
 
         {/* Contact Support */}
-        <Card className="mt-8 p-5 bg-gradient-to-br from-[rgba(94,109,210,0.1)] to-transparent border-[rgba(94,109,210,0.2)]">
+        <Card className="mt-8 p-5 bg-gradient-to-br from-[rgba(99,102,241,0.05)] to-transparent border-[rgba(99,102,241,0.1)]">
           <div className="flex items-start gap-4">
-            <div className="w-12 h-12 rounded-xl bg-[rgba(94,109,210,0.15)] flex items-center justify-center flex-shrink-0">
-              <Mail className="w-6 h-6 text-[#5e6dd2]" />
+            <div className="w-12 h-12 rounded-xl bg-[rgba(99,102,241,0.08)] flex items-center justify-center flex-shrink-0">
+              <Mail className="w-6 h-6 text-[#6366f1]" />
             </div>
             <div className="flex-1">
               <h3 className="text-[16px] font-semibold text-[#f7f8f8] mb-1">
@@ -245,7 +245,7 @@ export function Help() {
               </p>
               <a
                 href="mailto:support@squadplanner.fr"
-                className="inline-flex items-center gap-2 text-[14px] font-medium text-[#5e6dd2] hover:text-[#8b93ff] transition-colors"
+                className="inline-flex items-center gap-2 text-[14px] font-medium text-[#6366f1] hover:text-[#a78bfa] transition-colors"
               >
                 Contacter le support
                 <ExternalLink className="w-4 h-4" />

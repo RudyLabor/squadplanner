@@ -45,12 +45,13 @@ function NavLink({ path, icon: Icon, label, isActive, badge }: {
         className={`
           relative flex items-center gap-3 px-4 py-3 rounded-xl transition-all
           ${isActive
-            ? 'bg-[rgba(94,109,210,0.15)] text-[#5e6dd2]'
-            : 'text-[#8b8d90] hover:bg-[rgba(255,255,255,0.05)] hover:text-[#f7f8f8]'
+            ? 'bg-[rgba(99,102,241,0.08)] text-[#6366f1]'
+            : 'text-[#8b8d90] hover:bg-[rgba(255,255,255,0.03)] hover:text-[#f7f8f8]'
           }
         `}
         whileHover={{ x: 4 }}
         whileTap={{ scale: 0.98 }}
+        transition={{ duration: 0.25 }}
       >
         <Icon className="w-5 h-5" strokeWidth={1.5} />
         <span className="text-[14px] font-medium">{label}</span>
@@ -59,7 +60,7 @@ function NavLink({ path, icon: Icon, label, isActive, badge }: {
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             transition={{ type: "spring", stiffness: 500, damping: 30 }}
-            className="absolute right-3 w-5 h-5 rounded-full bg-[#f87171] text-white text-xs font-bold flex items-center justify-center"
+            className="absolute right-3 w-5 h-5 rounded-full bg-[#fb7185] text-white text-xs font-bold flex items-center justify-center"
           >
             {badge > 9 ? '9+' : badge}
           </motion.span>
@@ -120,11 +121,11 @@ function PartyButton({ isActive, hasActiveParty }: { isActive: boolean; hasActiv
     >
       <div className="relative">
         <Mic
-          className={`w-6 h-6 transition-colors ${
+          className={`w-6 h-6 transition-colors duration-300 ${
             isActive
               ? 'text-[#f7f8f8]'
               : hasActiveParty
-                ? 'text-[#4ade80]'
+                ? 'text-[#34d399]'
                 : 'text-[#6b6e73]'
           }`}
           strokeWidth={isActive ? 2 : 1.5}
@@ -134,15 +135,15 @@ function PartyButton({ isActive, hasActiveParty }: { isActive: boolean; hasActiv
         {/* Indicateur party en cours */}
         {hasActiveParty && (
           <motion.div
-            className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-[#4ade80]"
+            className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-[#34d399]"
             animate={{ scale: [1, 1.3, 1] }}
-            transition={{ duration: 1.5, repeat: Infinity }}
+            transition={{ duration: 2, repeat: 3 }}
             aria-hidden="true"
           />
         )}
       </div>
-      <span className={`text-xs mt-1 transition-colors ${
-        isActive ? 'text-[#f7f8f8]' : hasActiveParty ? 'text-[#4ade80]' : 'text-[#6b6e73]'
+      <span className={`text-xs mt-1 transition-colors duration-300 ${
+        isActive ? 'text-[#f7f8f8]' : hasActiveParty ? 'text-[#34d399]' : 'text-[#6b6e73]'
       }`}>
         Party
       </span>
@@ -202,11 +203,11 @@ export function AppLayout({ children }: AppLayoutProps) {
   const hasActiveParty = isInVoiceChat
 
   return (
-    <div className="h-[100dvh] bg-[#08090a] flex overflow-hidden">
+    <div className="h-[100dvh] bg-[#050506] flex overflow-hidden">
       {/* Sidebar - Desktop only */}
-      <aside className="hidden lg:flex flex-col w-64 border-r border-[rgba(255,255,255,0.06)] bg-[#08090a] fixed h-full">
+      <aside className="hidden lg:flex flex-col w-64 border-r border-[rgba(255,255,255,0.03)] bg-[#050506] fixed h-full">
         {/* Logo */}
-        <div className="p-6 border-b border-[rgba(255,255,255,0.06)]">
+        <div className="p-6 border-b border-[rgba(255,255,255,0.03)]">
           <div className="flex items-center gap-3">
             <SquadPlannerLogo size={40} />
             <div>
@@ -220,9 +221,10 @@ export function AppLayout({ children }: AppLayoutProps) {
         <div className="p-4">
           <Link to="/squads">
             <motion.button
-              className="w-full flex items-center justify-center gap-2 h-11 rounded-xl bg-[#5e6dd2] text-white text-[14px] font-semibold"
+              className="w-full flex items-center justify-center gap-2 h-11 rounded-xl bg-[#6366f1] text-white text-[14px] font-semibold"
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
+              transition={{ duration: 0.25 }}
             >
               <Plus className="w-4 h-4" />
               Nouvelle session
@@ -245,11 +247,12 @@ export function AppLayout({ children }: AppLayoutProps) {
         </nav>
 
         {/* Profile section */}
-        <div className="p-4 border-t border-[rgba(255,255,255,0.06)]">
+        <div className="p-4 border-t border-[rgba(255,255,255,0.03)]">
           <Link to="/profile">
             <motion.div
-              className="flex items-center gap-3 p-3 rounded-xl hover:bg-[rgba(255,255,255,0.05)] transition-colors"
+              className="flex items-center gap-3 p-3 rounded-xl hover:bg-[rgba(255,255,255,0.03)] transition-colors duration-300"
               whileHover={{ x: 4 }}
+              transition={{ duration: 0.25 }}
             >
               {profile?.avatar_url ? (
                 <img
@@ -258,8 +261,8 @@ export function AppLayout({ children }: AppLayoutProps) {
                   className="w-10 h-10 rounded-full object-cover"
                 />
               ) : (
-                <div className="w-10 h-10 rounded-full bg-[rgba(139,147,255,0.15)] flex items-center justify-center">
-                  <User className="w-5 h-5 text-[#8b93ff]" />
+                <div className="w-10 h-10 rounded-full bg-[rgba(167,139,250,0.08)] flex items-center justify-center">
+                  <User className="w-5 h-5 text-[#a78bfa]" />
                 </div>
               )}
               <div className="flex-1 min-w-0">
@@ -278,17 +281,18 @@ export function AppLayout({ children }: AppLayoutProps) {
         <div className="p-4">
           <Link to="/premium">
             <motion.div
-              className="p-4 rounded-xl bg-gradient-to-br from-[rgba(94,109,210,0.15)] to-[rgba(139,147,255,0.05)] border border-[rgba(94,109,210,0.2)] cursor-pointer"
+              className="p-4 rounded-xl bg-gradient-to-br from-[rgba(99,102,241,0.08)] to-[rgba(167,139,250,0.03)] border border-[rgba(99,102,241,0.1)] cursor-pointer"
               whileHover={{ scale: 1.02 }}
+              transition={{ duration: 0.25 }}
             >
               <div className="flex items-center gap-2 mb-2">
-                <Zap className="w-4 h-4 text-[#f5a623]" />
+                <Zap className="w-4 h-4 text-[#fbbf24]" />
                 <span className="text-[13px] font-semibold text-[#f7f8f8]">Passe Premium</span>
               </div>
               <p className="text-[12px] text-[#8b8d90] mb-3">
                 Stats avancées, IA coach, qualité audio HD
               </p>
-              <span className="text-[12px] font-semibold text-[#5e6dd2] hover:text-[#8b93ff]">
+              <span className="text-[12px] font-semibold text-[#6366f1] hover:text-[#a78bfa] transition-colors duration-300">
                 Découvrir →
               </span>
             </motion.div>
@@ -306,7 +310,7 @@ export function AppLayout({ children }: AppLayoutProps) {
       </main>
 
       {/* Bottom navigation - Mobile only - Style PS App */}
-      <nav className="lg:hidden fixed bottom-0 left-0 right-0 bg-[#08090a] border-t border-[#18191b] z-50">
+      <nav className="lg:hidden fixed bottom-0 left-0 right-0 bg-[#050506] border-t border-[rgba(255,255,255,0.03)] z-50">
         <div className="flex items-center justify-around py-2 mobile-nav-padding">
           {/* Left side */}
           {mobileNavLeft.map((item) => (

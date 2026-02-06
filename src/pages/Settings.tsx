@@ -33,7 +33,7 @@ function Toggle({ enabled, onChange, disabled = false }: {
       onClick={() => !disabled && onChange(!enabled)}
       disabled={disabled}
       className={`relative w-11 h-6 rounded-full transition-colors ${
-        enabled ? 'bg-[#4ade80]' : 'bg-[rgba(255,255,255,0.1)]'
+        enabled ? 'bg-[#34d399]' : 'bg-[rgba(255,255,255,0.1)]'
       } ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
     >
       <motion.div
@@ -49,8 +49,8 @@ function Toggle({ enabled, onChange, disabled = false }: {
 function SectionHeader({ icon: Icon, title }: { icon: React.ElementType; title: string }) {
   return (
     <div className="flex items-center gap-3 mb-4">
-      <div className="w-8 h-8 rounded-lg bg-[rgba(94,109,210,0.15)] flex items-center justify-center">
-        <Icon className="w-4 h-4 text-[#5e6dd2]" />
+      <div className="w-8 h-8 rounded-lg bg-[rgba(99,102,241,0.08)] flex items-center justify-center">
+        <Icon className="w-4 h-4 text-[#6366f1]" />
       </div>
       <h2 className="text-[15px] font-semibold text-[#f7f8f8]">{title}</h2>
     </div>
@@ -149,7 +149,7 @@ export function Settings() {
   }
 
   return (
-    <div className="min-h-0 bg-[#08090a] pb-6">
+    <div className="min-h-0 bg-[#050506] pb-6">
       <div className="px-4 md:px-6 lg:px-8 py-6 max-w-2xl mx-auto">
         {/* Header */}
         <div className="flex items-center gap-4 mb-8">
@@ -220,7 +220,7 @@ export function Settings() {
               <select
                 value={audioInput}
                 onChange={(e) => setAudioInput(e.target.value)}
-                className="w-full h-11 px-4 rounded-xl bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.08)] text-[14px] text-[#f7f8f8] focus:outline-none focus:border-[#5e6dd2]"
+                className="w-full h-11 px-4 rounded-xl bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.08)] text-[14px] text-[#f7f8f8] focus:outline-none focus:border-[#6366f1]"
               >
                 <option value="default">Microphone par défaut</option>
                 {inputDevices.map(device => (
@@ -238,7 +238,7 @@ export function Settings() {
               <select
                 value={audioOutput}
                 onChange={(e) => setAudioOutput(e.target.value)}
-                className="w-full h-11 px-4 rounded-xl bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.08)] text-[14px] text-[#f7f8f8] focus:outline-none focus:border-[#5e6dd2]"
+                className="w-full h-11 px-4 rounded-xl bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.08)] text-[14px] text-[#f7f8f8] focus:outline-none focus:border-[#6366f1]"
               >
                 <option value="default">Haut-parleur par défaut</option>
                 {outputDevices.map(device => (
@@ -258,9 +258,9 @@ export function Settings() {
             label="Thème sombre"
             description="Optimisé pour le gaming nocturne"
           >
-            <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[rgba(74,222,128,0.1)] border border-[rgba(74,222,128,0.2)]">
-              <Moon className="w-4 h-4 text-[#4ade80]" />
-              <span className="text-[13px] text-[#4ade80]">Activé</span>
+            <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[rgba(52,211,153,0.05)] border border-[rgba(52,211,153,0.1)]">
+              <Moon className="w-4 h-4 text-[#34d399]" />
+              <span className="text-[13px] text-[#34d399]">Activé</span>
             </div>
           </SettingRow>
         </Card>
@@ -276,7 +276,7 @@ export function Settings() {
               <select
                 value={privacy.profileVisibility}
                 onChange={(e) => setPrivacy({ ...privacy, profileVisibility: e.target.value as 'public' | 'friends' | 'private' })}
-                className="h-9 px-3 rounded-lg bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.08)] text-[13px] text-[#f7f8f8] focus:outline-none focus:border-[#5e6dd2]"
+                className="h-9 px-3 rounded-lg bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.08)] text-[13px] text-[#f7f8f8] focus:outline-none focus:border-[#6366f1]"
               >
                 <option value="public">Tout le monde</option>
                 <option value="friends">Membres de mes squads</option>
@@ -307,7 +307,7 @@ export function Settings() {
               <select
                 value={timezone}
                 onChange={(e) => setTimezone(e.target.value)}
-                className="w-full h-11 px-4 rounded-xl bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.08)] text-[14px] text-[#f7f8f8] focus:outline-none focus:border-[#5e6dd2]"
+                className="w-full h-11 px-4 rounded-xl bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.08)] text-[14px] text-[#f7f8f8] focus:outline-none focus:border-[#6366f1]"
               >
                 {TIMEZONES.map(tz => (
                   <option key={tz.value} value={tz.value}>{tz.label}</option>
@@ -324,17 +324,17 @@ export function Settings() {
                   onClick={() => setLanguage('fr')}
                   className={`flex-1 h-11 rounded-xl text-[14px] font-medium transition-all ${
                     language === 'fr'
-                      ? 'bg-[#5e6dd2] text-white'
+                      ? 'bg-[#6366f1] text-white'
                       : 'bg-[rgba(255,255,255,0.05)] text-[#8b8d90] hover:bg-[rgba(255,255,255,0.1)]'
                   }`}
                 >
-                  Français
+                  Francais
                 </button>
                 <button
                   onClick={() => setLanguage('en')}
                   className={`flex-1 h-11 rounded-xl text-[14px] font-medium transition-all ${
                     language === 'en'
-                      ? 'bg-[#5e6dd2] text-white'
+                      ? 'bg-[#6366f1] text-white'
                       : 'bg-[rgba(255,255,255,0.05)] text-[#8b8d90] hover:bg-[rgba(255,255,255,0.1)]'
                   }`}
                 >
@@ -354,7 +354,7 @@ export function Settings() {
               className="w-full flex items-center justify-between p-4 rounded-xl bg-[rgba(255,255,255,0.03)] hover:bg-[rgba(255,255,255,0.06)] transition-colors"
             >
               <div className="flex items-center gap-3">
-                <Download className="w-5 h-5 text-[#5e6dd2]" />
+                <Download className="w-5 h-5 text-[#6366f1]" />
                 <div className="text-left">
                   <p className="text-[14px] text-[#f7f8f8]">Exporter mes données</p>
                   <p className="text-[12px] text-[#5e6063]">Télécharge toutes tes infos</p>
@@ -365,16 +365,16 @@ export function Settings() {
 
             <button
               onClick={handleDeleteAccount}
-              className="w-full flex items-center justify-between p-4 rounded-xl bg-[rgba(248,113,113,0.05)] hover:bg-[rgba(248,113,113,0.1)] transition-colors border border-[rgba(248,113,113,0.1)]"
+              className="w-full flex items-center justify-between p-4 rounded-xl bg-[rgba(251,113,133,0.03)] hover:bg-[rgba(251,113,133,0.05)] transition-colors border border-[rgba(251,113,133,0.05)]"
             >
               <div className="flex items-center gap-3">
-                <Trash2 className="w-5 h-5 text-[#f87171]" />
+                <Trash2 className="w-5 h-5 text-[#fb7185]" />
                 <div className="text-left">
-                  <p className="text-[14px] text-[#f87171]">Supprimer mon compte</p>
-                  <p className="text-[12px] text-[#f87171]/60">Action irréversible</p>
+                  <p className="text-[14px] text-[#fb7185]">Supprimer mon compte</p>
+                  <p className="text-[12px] text-[#fb7185]/60">Action irréversible</p>
                 </div>
               </div>
-              <ChevronRight className="w-5 h-5 text-[#f87171]/50" />
+              <ChevronRight className="w-5 h-5 text-[#fb7185]/50" />
             </button>
           </div>
         </Card>
@@ -382,7 +382,7 @@ export function Settings() {
         {/* Sign Out */}
         <button
           onClick={handleSignOut}
-          className="w-full py-4 text-[14px] text-[#f87171] hover:text-[#fca5a5] transition-colors flex items-center justify-center gap-2"
+          className="w-full py-4 text-[14px] text-[#fb7185] hover:text-[#fda4af] transition-colors flex items-center justify-center gap-2"
         >
           <LogOut className="w-4 h-4" />
           Se déconnecter

@@ -254,32 +254,58 @@ function ActivePartyCard({ squadName, participantCount }: { squadName: string; p
   )
 }
 
-// Stats compactes
+// Stats compactes avec icônes
 function StatsRow({ squadsCount, sessionsThisWeek, reliabilityScore }: {
   squadsCount: number
   sessionsThisWeek: number
   reliabilityScore: number
 }) {
+  const stats = [
+    {
+      value: squadsCount,
+      label: 'Squads',
+      icon: Users,
+      color: '#6366f1',
+      suffix: ''
+    },
+    {
+      value: sessionsThisWeek,
+      label: 'Cette semaine',
+      icon: Calendar,
+      color: '#fbbf24',
+      suffix: ''
+    },
+    {
+      value: reliabilityScore,
+      label: 'Fiabilité',
+      icon: TrendingUp,
+      color: '#34d399',
+      suffix: '%'
+    },
+  ]
+
   return (
-    <div className="grid grid-cols-3 gap-3 lg:gap-4">
-      <Card className="p-3 text-center">
-        <div className="text-[18px] font-semibold text-[#f7f8f8]">
-          <CountUp end={squadsCount} duration={1.5} />
-        </div>
-        <div className="text-xs text-[#5e6063] uppercase tracking-wide">Squads</div>
-      </Card>
-      <Card className="p-3 text-center">
-        <div className="text-[18px] font-semibold text-[#f7f8f8]">
-          <CountUp end={sessionsThisWeek} duration={1.5} />
-        </div>
-        <div className="text-xs text-[#5e6063] uppercase tracking-wide">Cette semaine</div>
-      </Card>
-      <Card className="p-3 text-center">
-        <div className="text-[18px] font-semibold text-[#34d399]">
-          <CountUp end={reliabilityScore} duration={1.5} suffix="%" />
-        </div>
-        <div className="text-xs text-[#5e6063] uppercase tracking-wide">Fiabilité</div>
-      </Card>
+    <div className="grid grid-cols-3 gap-3">
+      {stats.map((stat) => (
+        <Card key={stat.label} className="p-3 lg:p-4">
+          <div className="flex items-center gap-3">
+            <div
+              className="w-9 h-9 lg:w-10 lg:h-10 rounded-xl flex items-center justify-center flex-shrink-0"
+              style={{ backgroundColor: `${stat.color}15` }}
+            >
+              <stat.icon className="w-4 h-4 lg:w-5 lg:h-5" style={{ color: stat.color }} />
+            </div>
+            <div className="min-w-0">
+              <div className="text-[16px] lg:text-[18px] font-semibold text-[#fafafa]">
+                <CountUp end={stat.value} duration={1.5} suffix={stat.suffix} />
+              </div>
+              <div className="text-[10px] lg:text-[11px] text-[#6e6e73] uppercase tracking-wide truncate">
+                {stat.label}
+              </div>
+            </div>
+          </div>
+        </Card>
+      ))}
     </div>
   )
 }
@@ -466,7 +492,7 @@ export default function Home() {
       // Célébration pour "présent" - moment Wow!
       if (response === 'present') {
         setShowConfetti(true)
-        setSuccessMessage("T'es confirmé ! 🔥 Ta squad compte sur toi")
+        setSuccessMessage("T'es confirme ! Ta squad compte sur toi")
         setTimeout(() => setShowConfetti(false), 4000)
         setTimeout(() => setSuccessMessage(null), 5000)
       } else {
@@ -512,7 +538,7 @@ export default function Home() {
   const pendingRsvps = upcomingSessions.filter(s => !s.my_rsvp).length
 
   return (
-    <div className="min-h-0 bg-[#08090a] pb-6">
+    <div className="min-h-0 bg-[#050506] pb-6">
       {/* Confetti celebration for RSVP present */}
       {showConfetti && typeof window !== 'undefined' && (
         <Confetti
@@ -521,7 +547,7 @@ export default function Home() {
           recycle={false}
           numberOfPieces={150}
           gravity={0.3}
-          colors={['#4ade80', '#5e6dd2', '#f5a623', '#8b93ff', '#f7f8f8']}
+          colors={['#34d399', '#6366f1', '#fbbf24', '#a78bfa', '#f7f8f8']}
           style={{ position: 'fixed', top: 0, left: 0, zIndex: 100, pointerEvents: 'none' }}
         />
       )}
@@ -532,9 +558,10 @@ export default function Home() {
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -20 }}
-          className="fixed top-4 left-1/2 -translate-x-1/2 z-50 px-6 py-3 rounded-xl bg-[#4ade80]/20 border border-[#4ade80]/30 backdrop-blur-sm"
+          transition={{ duration: 0.4, ease: "easeOut" }}
+          className="fixed top-4 left-1/2 -translate-x-1/2 z-50 px-6 py-3 rounded-xl bg-[#34d399]/15 border border-[#34d399]/20 backdrop-blur-sm"
         >
-          <p className="text-[14px] font-medium text-[#4ade80]">{successMessage}</p>
+          <p className="text-[14px] font-medium text-[#34d399]">{successMessage}</p>
         </motion.div>
       )}
 
@@ -565,29 +592,29 @@ export default function Home() {
             <div className="mb-6">
               <Card className={`p-3 flex items-center gap-3 border ${
                 aiCoachTip.tone === 'celebration'
-                  ? 'bg-gradient-to-r from-[#4ade80]/10 to-transparent border-[#4ade80]/20'
+                  ? 'bg-gradient-to-r from-[#34d399]/8 to-transparent border-[#34d399]/15'
                   : aiCoachTip.tone === 'warning'
-                    ? 'bg-gradient-to-r from-[#f87171]/10 to-transparent border-[#f87171]/20'
-                    : 'bg-gradient-to-r from-[#5e6dd2]/10 to-transparent border-[#5e6dd2]/20'
+                    ? 'bg-gradient-to-r from-[#f87171]/8 to-transparent border-[#f87171]/15'
+                    : 'bg-gradient-to-r from-[#6366f1]/8 to-transparent border-[#6366f1]/15'
               }`}>
                 <div className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 ${
                   aiCoachTip.tone === 'celebration'
-                    ? 'bg-[#4ade80]/15'
+                    ? 'bg-[#34d399]/12'
                     : aiCoachTip.tone === 'warning'
-                      ? 'bg-[#f87171]/15'
-                      : 'bg-[#5e6dd2]/15'
+                      ? 'bg-[#f87171]/12'
+                      : 'bg-[#6366f1]/12'
                 }`}>
                   <Sparkles className={`w-4 h-4 ${
                     aiCoachTip.tone === 'celebration'
-                      ? 'text-[#4ade80]'
+                      ? 'text-[#34d399]'
                       : aiCoachTip.tone === 'warning'
                         ? 'text-[#f87171]'
-                        : 'text-[#5e6dd2]'
+                        : 'text-[#6366f1]'
                   }`} />
                 </div>
                 <p className={`text-[13px] leading-relaxed flex-1 ${
                   aiCoachTip.tone === 'celebration'
-                    ? 'text-[#4ade80]'
+                    ? 'text-[#34d399]'
                     : aiCoachTip.tone === 'warning'
                       ? 'text-[#f87171]'
                       : 'text-[#8b8d90]'
@@ -625,7 +652,7 @@ export default function Home() {
                   Prochaine session
                 </h2>
                 {upcomingSessions.length > 1 && (
-                  <Link to="/squads" className="text-[12px] text-[#5e6dd2] font-medium">
+                  <Link to="/squads" className="text-[12px] text-[#6366f1] font-medium">
                     Voir tout ({upcomingSessions.length})
                   </Link>
                 )}
@@ -684,8 +711,9 @@ export default function Home() {
                 </h2>
                 <Link to="/squads">
                   <motion.button
-                    className="text-[12px] text-[#5e6dd2] font-medium flex items-center gap-1"
+                    className="text-[12px] text-[#6366f1] font-medium flex items-center gap-1"
                     whileHover={{ x: 2 }}
+                    transition={{ duration: 0.4, ease: "easeOut" }}
                   >
                     Gérer
                     <ChevronRight className="w-3.5 h-3.5" />
@@ -700,12 +728,12 @@ export default function Home() {
                       whileTap={{ scale: 0.99 }}
                       initial={{ opacity: 0, x: -10 }}
                       animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: index * 0.1 }}
+                      transition={{ delay: index * 0.1, duration: 0.4, ease: "easeOut" }}
                     >
-                      <Card className="p-3 hover:shadow-[0_0_15px_rgba(94,109,210,0.15)] transition-all">
+                      <Card className="p-3 hover:shadow-[0_0_15px_rgba(99,102,241,0.1)] transition-all duration-400">
                         <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 rounded-lg bg-[rgba(94,109,210,0.15)] flex items-center justify-center">
-                            <Users className="w-5 h-5 text-[#5e6dd2]" />
+                          <div className="w-10 h-10 rounded-lg bg-[rgba(99,102,241,0.12)] flex items-center justify-center">
+                            <Users className="w-5 h-5 text-[#6366f1]" />
                           </div>
                           <div className="flex-1 min-w-0">
                             <div className="text-[14px] font-medium text-[#f7f8f8] truncate">{squad.name}</div>
@@ -727,15 +755,15 @@ export default function Home() {
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 }}
+              transition={{ delay: 0.2, duration: 0.4, ease: "easeOut" }}
             >
-              <Card className="p-8 text-center bg-gradient-to-br from-[#5e6dd2]/5 to-transparent border-dashed">
+              <Card className="p-8 text-center bg-gradient-to-br from-[#6366f1]/5 to-transparent border-dashed">
                 <motion.div
-                  className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#5e6dd2]/20 to-[#8b93ff]/10 flex items-center justify-center mx-auto mb-4"
-                  animate={{ rotate: [0, 5, -5, 0] }}
-                  transition={{ duration: 3, repeat: 3 }}
+                  className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#6366f1]/15 to-[#a78bfa]/8 flex items-center justify-center mx-auto mb-4"
+                  animate={{ rotate: [0, 3, -3, 0] }}
+                  transition={{ duration: 4, repeat: 2 }}
                 >
-                  <Users className="w-7 h-7 text-[#5e6dd2]" strokeWidth={1.5} />
+                  <Users className="w-7 h-7 text-[#6366f1]" strokeWidth={1.5} />
                 </motion.div>
                 <h3 className="text-[16px] font-semibold text-[#f7f8f8] mb-2">
                   Tes potes t'attendent !
@@ -745,9 +773,10 @@ export default function Home() {
                 </p>
                 <Link to="/squads">
                   <motion.button
-                    className="inline-flex items-center gap-2 h-11 px-6 rounded-xl bg-[#5e6dd2] text-white text-[14px] font-semibold shadow-[0_0_20px_rgba(94,109,210,0.3)]"
-                    whileHover={{ y: -2, scale: 1.02, boxShadow: "0 0 30px rgba(94,109,210,0.5)" }}
+                    className="inline-flex items-center gap-2 h-11 px-6 rounded-xl bg-[#6366f1] text-white text-[14px] font-semibold shadow-[0_0_16px_rgba(99,102,241,0.15)]"
+                    whileHover={{ y: -2, scale: 1.02, boxShadow: "0 0 20px rgba(99,102,241,0.2)" }}
                     whileTap={{ scale: 0.98 }}
+                    transition={{ duration: 0.4, ease: "easeOut" }}
                   >
                     Créer ma squad
                   </motion.button>
@@ -762,18 +791,22 @@ export default function Home() {
               className="mt-6"
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4 }}
+              transition={{ delay: 0.4, duration: 0.4, ease: "easeOut" }}
             >
               <Link to="/party">
-                <motion.div whileHover={{ scale: 1.01 }} whileTap={{ scale: 0.99 }}>
-                  <Card className="p-4 bg-gradient-to-r from-[#5e6dd2]/10 to-transparent border-dashed border-[#5e6dd2]/30 hover:border-[#5e6dd2]/50 hover:shadow-[0_0_15px_rgba(94,109,210,0.15)] transition-all">
+                <motion.div
+                  whileHover={{ scale: 1.01 }}
+                  whileTap={{ scale: 0.99 }}
+                  transition={{ duration: 0.4, ease: "easeOut" }}
+                >
+                  <Card className="p-4 bg-gradient-to-r from-[#6366f1]/8 to-transparent border-dashed border-[#6366f1]/20 hover:border-[#6366f1]/30 hover:shadow-[0_0_15px_rgba(99,102,241,0.1)] transition-all duration-400">
                     <div className="flex items-center gap-4">
                       <motion.div
-                        className="w-10 h-10 rounded-lg bg-[#5e6dd2]/15 flex items-center justify-center"
-                        animate={{ scale: [1, 1.08, 1] }}
-                        transition={{ duration: 2, repeat: 4 }}
+                        className="w-10 h-10 rounded-lg bg-[#6366f1]/12 flex items-center justify-center"
+                        animate={{ scale: [1, 1.05, 1] }}
+                        transition={{ duration: 2.5, repeat: 3 }}
                       >
-                        <Mic className="w-5 h-5 text-[#5e6dd2]" />
+                        <Mic className="w-5 h-5 text-[#6366f1]" />
                       </motion.div>
                       <div className="flex-1">
                         <div className="text-[14px] font-medium text-[#f7f8f8]">Envie de papoter ?</div>

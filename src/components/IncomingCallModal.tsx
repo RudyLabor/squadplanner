@@ -44,11 +44,11 @@ export function IncomingCallModal() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="fixed inset-0 z-[100] bg-[#08090a]/95 backdrop-blur-xl flex flex-col"
+        className="fixed inset-0 z-[100] bg-[#050506]/95 backdrop-blur-xl flex flex-col"
       >
         {/* Background gradient */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full bg-[#5e6dd2]/10 blur-[120px]" />
+          <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full bg-[#6366f1]/10 blur-[100px]" />
         </div>
 
         {/* Main content */}
@@ -64,26 +64,26 @@ export function IncomingCallModal() {
             {status === 'ringing' && (
               <>
                 <motion.div
-                  className="absolute inset-[-20px] rounded-full border-2 border-[#4ade80]/30"
+                  className="absolute inset-[-20px] rounded-full border-2 border-[#34d399]/30"
                   animate={{
                     scale: [1, 1.3, 1.3],
                     opacity: [0.5, 0, 0],
                   }}
                   transition={{
                     duration: 1.5,
-                    repeat: 8,
+                    repeat: 3,
                     ease: 'easeOut',
                   }}
                 />
                 <motion.div
-                  className="absolute inset-[-20px] rounded-full border-2 border-[#4ade80]/30"
+                  className="absolute inset-[-20px] rounded-full border-2 border-[#34d399]/30"
                   animate={{
                     scale: [1, 1.3, 1.3],
                     opacity: [0.5, 0, 0],
                   }}
                   transition={{
                     duration: 1.5,
-                    repeat: 8,
+                    repeat: 3,
                     ease: 'easeOut',
                     delay: 0.75,
                   }}
@@ -98,10 +98,10 @@ export function IncomingCallModal() {
               } : {}}
               transition={{
                 duration: 0.5,
-                repeat: status === 'ringing' ? 6 : 0,
+                repeat: status === 'ringing' ? 3 : 0,
                 repeatDelay: 0.8,
               }}
-              className="w-32 h-32 rounded-full overflow-hidden bg-[rgba(94,109,210,0.2)] flex items-center justify-center border-4 border-[#4ade80]/50"
+              className="w-32 h-32 rounded-full overflow-hidden bg-[rgba(99,102,241,0.2)] flex items-center justify-center border-4 border-[#34d399]/50"
             >
               {caller.avatar_url ? (
                 <img
@@ -110,7 +110,7 @@ export function IncomingCallModal() {
                   className="w-full h-full object-cover"
                 />
               ) : (
-                <span className="text-4xl font-bold text-[#5e6dd2]">{initial}</span>
+                <span className="text-4xl font-bold text-[#6366f1]">{initial}</span>
               )}
             </motion.div>
 
@@ -119,13 +119,13 @@ export function IncomingCallModal() {
               <motion.div
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
-                className="absolute -bottom-2 -right-2 w-10 h-10 rounded-full bg-[#4ade80] flex items-center justify-center shadow-lg shadow-[#4ade80]/30"
+                className="absolute -bottom-2 -right-2 w-10 h-10 rounded-full bg-[#34d399] flex items-center justify-center shadow-lg shadow-[#34d399]/20"
               >
                 <motion.div
                   animate={{ rotate: [0, 12, -12, 12, -12, 0] }}
                   transition={{
                     duration: 0.5,
-                    repeat: 5,
+                    repeat: 2,
                     repeatDelay: 1.5,
                   }}
                 >
@@ -152,7 +152,7 @@ export function IncomingCallModal() {
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.3 }}
             className={`text-base ${
-              status === 'ringing' ? 'text-[#4ade80]' : 'text-[#8b8d90]'
+              status === 'ringing' ? 'text-[#34d399]' : 'text-[#8b8d90]'
             }`}
           >
             {getStatusText()}
@@ -173,7 +173,7 @@ export function IncomingCallModal() {
                 <button
                   onClick={rejectCall}
                   aria-label="Refuser l'appel"
-                  className="w-20 h-20 rounded-full bg-[#f87171] flex items-center justify-center shadow-lg shadow-[#f87171]/30 active:scale-95 transition-transform touch-manipulation"
+                  className="w-20 h-20 rounded-full bg-[#fb7185] flex items-center justify-center shadow-lg shadow-[#fb7185]/20 active:scale-95 transition-transform touch-manipulation"
                 >
                   <PhoneOff className="w-8 h-8 text-white" aria-hidden="true" />
                 </button>
@@ -185,7 +185,7 @@ export function IncomingCallModal() {
                 <button
                   onClick={acceptCall}
                   aria-label="Accepter l'appel"
-                  className="w-20 h-20 rounded-full bg-[#4ade80] flex items-center justify-center shadow-lg shadow-[#4ade80]/30 active:scale-95 transition-transform touch-manipulation animate-pulse-glow"
+                  className="w-20 h-20 rounded-full bg-[#34d399] flex items-center justify-center shadow-lg shadow-[#34d399]/20 active:scale-95 transition-transform touch-manipulation"
                 >
                   <Phone className="w-8 h-8 text-white" aria-hidden="true" />
                 </button>

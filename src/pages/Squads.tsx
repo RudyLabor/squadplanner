@@ -48,7 +48,7 @@ function SuccessToast({ message, onClose }: { message: string; onClose: () => vo
       exit={{ opacity: 0, y: 20, scale: 0.9 }}
       className="fixed bottom-24 left-1/2 -translate-x-1/2 z-50"
     >
-      <div className="flex items-center gap-3 px-5 py-3 rounded-xl bg-[#4ade80] text-[#08090a] font-medium shadow-lg">
+      <div className="flex items-center gap-3 px-5 py-3 rounded-xl bg-[#34d399] text-[#050506] font-medium shadow-lg">
         <Sparkles className="w-5 h-5" />
         <span>{message}</span>
       </div>
@@ -98,14 +98,14 @@ function SquadCard({ squad, isOwner, nextSession, hasActiveParty, copiedCode, on
 
   return (
     <motion.div
-      whileHover={{ y: -3, scale: 1.01 }}
-      whileTap={{ scale: 0.99 }}
+      whileHover={{ y: -2, scale: 1.02 }}
+      whileTap={{ scale: 0.98 }}
     >
       <Link to={`/squad/${squad.id}`}>
         <Card className={`cursor-pointer transition-all duration-300 ${
           hasActiveParty
-            ? 'border-[#4ade80]/40 shadow-[0_0_20px_rgba(74,222,128,0.15)] bg-gradient-to-r from-[#4ade80]/5 to-transparent'
-            : 'hover:border-[rgba(94,109,210,0.3)] hover:shadow-[0_0_15px_rgba(94,109,210,0.15)]'
+            ? 'border-[#34d399]/30 shadow-[0_0_15px_rgba(52,211,153,0.08)] bg-gradient-to-r from-[#34d399]/5 to-transparent'
+            : 'hover:border-[rgba(99,102,241,0.25)] hover:shadow-[0_0_12px_rgba(99,102,241,0.08)]'
         }`}>
           <CardContent className="p-4">
             <div className="flex items-start gap-4">
@@ -113,20 +113,20 @@ function SquadCard({ squad, isOwner, nextSession, hasActiveParty, copiedCode, on
               <div className="relative">
                 <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${
                   hasActiveParty
-                    ? 'bg-[#4ade80]/15'
-                    : 'bg-[rgba(94,109,210,0.15)]'
+                    ? 'bg-[#34d399]/15'
+                    : 'bg-[rgba(99,102,241,0.15)]'
                 }`}>
                   {hasActiveParty ? (
-                    <Mic className="w-6 h-6 text-[#4ade80]" strokeWidth={1.5} />
+                    <Mic className="w-6 h-6 text-[#34d399]" strokeWidth={1.5} />
                   ) : (
-                    <Gamepad2 className="w-6 h-6 text-[#5e6dd2]" strokeWidth={1.5} />
+                    <Gamepad2 className="w-6 h-6 text-[#6366f1]" strokeWidth={1.5} />
                   )}
                 </div>
                 {hasActiveParty && (
                   <motion.div
-                    className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-[#4ade80] border-2 border-[#101012]"
-                    animate={{ scale: [1, 1.2, 1] }}
-                    transition={{ duration: 1.5, repeat: Infinity }}
+                    className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-[#34d399] border-2 border-[#101012]"
+                    animate={{ scale: [1, 1.15, 1] }}
+                    transition={{ duration: 1.5, repeat: 3 }}
                   />
                 )}
               </div>
@@ -136,7 +136,7 @@ function SquadCard({ squad, isOwner, nextSession, hasActiveParty, copiedCode, on
                 <div className="flex items-center gap-2 mb-0.5">
                   <h3 className="text-[15px] font-semibold text-[#f7f8f8] truncate">{squad.name}</h3>
                   {isOwner && (
-                    <Crown className="w-4 h-4 text-[#f5a623] flex-shrink-0" />
+                    <Crown className="w-4 h-4 text-[#fbbf24] flex-shrink-0" />
                   )}
                 </div>
                 <p className="text-[13px] text-[#8b8d90]">
@@ -146,12 +146,12 @@ function SquadCard({ squad, isOwner, nextSession, hasActiveParty, copiedCode, on
                 {/* Prochaine session ou état */}
                 <div className="mt-2">
                   {hasActiveParty ? (
-                    <div className="flex items-center gap-1.5 text-[12px] text-[#4ade80]">
+                    <div className="flex items-center gap-1.5 text-[12px] text-[#34d399]">
                       <Mic className="w-3.5 h-3.5" />
                       <span>Party en cours</span>
                     </div>
                   ) : nextSession ? (
-                    <div className="flex items-center gap-1.5 text-[12px] text-[#5e6dd2]">
+                    <div className="flex items-center gap-1.5 text-[12px] text-[#6366f1]">
                       <Calendar className="w-3.5 h-3.5" />
                       <span>{sessionLabel}</span>
                     </div>
@@ -176,7 +176,7 @@ function SquadCard({ squad, isOwner, nextSession, hasActiveParty, copiedCode, on
                   aria-label="Copier le code d'invitation"
                 >
                   {copiedCode === squad.invite_code ? (
-                    <Check className="w-4 h-4 text-[#4ade80]" aria-hidden="true" />
+                    <Check className="w-4 h-4 text-[#34d399]" aria-hidden="true" />
                   ) : (
                     <Copy className="w-4 h-4 text-[#5e6063]" aria-hidden="true" />
                   )}
@@ -335,7 +335,7 @@ export default function Squads() {
   // Afficher le skeleton loader tant que l'initialisation ou le chargement est en cours
   if (!isInitialized || isLoading) {
     return (
-      <div className="min-h-0 bg-[#08090a] pb-6">
+      <div className="min-h-0 bg-[#050506] pb-6">
         <div className="px-4 md:px-6 lg:px-8 py-6 max-w-2xl lg:max-w-4xl xl:max-w-6xl mx-auto">
           <div className="flex items-center justify-between mb-6">
             <div>
@@ -361,7 +361,7 @@ export default function Squads() {
   }
 
   return (
-    <div className="min-h-0 bg-[#08090a] pb-6">
+    <div className="min-h-0 bg-[#050506] pb-6">
       {/* Celebration confetti */}
       {showConfetti && typeof window !== 'undefined' && (
         <Confetti
@@ -370,7 +370,7 @@ export default function Squads() {
           recycle={false}
           numberOfPieces={100}
           gravity={0.25}
-          colors={['#5e6dd2', '#4ade80', '#f5a623', '#8b93ff']}
+          colors={['#6366f1', '#34d399', '#fbbf24', '#a78bfa']}
           style={{ position: 'fixed', top: 0, left: 0, zIndex: 100, pointerEvents: 'none' }}
         />
       )}
@@ -431,8 +431,8 @@ export default function Squads() {
                         icon={<LinkIcon className="w-5 h-5" />}
                       />
                       {error && (
-                        <div className="p-3 rounded-lg bg-[rgba(248,113,113,0.1)] border border-[rgba(248,113,113,0.2)]">
-                          <p className="text-[#f87171] text-[13px]">{error}</p>
+                        <div className="p-3 rounded-lg bg-[rgba(251,113,133,0.1)] border border-[rgba(251,113,133,0.2)]">
+                          <p className="text-[#fb7185] text-[13px]">{error}</p>
                         </div>
                       )}
                       <div className="flex gap-2 pt-1">
@@ -479,8 +479,8 @@ export default function Squads() {
                         icon={<Gamepad2 className="w-5 h-5" />}
                       />
                       {error && (
-                        <div className="p-3 rounded-lg bg-[rgba(248,113,113,0.1)] border border-[rgba(248,113,113,0.2)]">
-                          <p className="text-[#f87171] text-[13px]">{error}</p>
+                        <div className="p-3 rounded-lg bg-[rgba(251,113,133,0.1)] border border-[rgba(251,113,133,0.2)]">
+                          <p className="text-[#fb7185] text-[13px]">{error}</p>
                         </div>
                       )}
                       <div className="flex gap-2 pt-1">

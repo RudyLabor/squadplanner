@@ -38,8 +38,8 @@ function SuccessToast({ message, onClose }: { message: string; onClose: () => vo
       <motion.div
         className={`flex items-center gap-3 px-5 py-3.5 rounded-xl font-medium shadow-xl ${
           isCelebration
-            ? 'bg-gradient-to-r from-[#4ade80] to-[#4ade80] text-[#08090a] shadow-[0_0_30px_rgba(74,222,128,0.4)]'
-            : 'bg-[#4ade80] text-[#08090a] shadow-lg'
+            ? 'bg-gradient-to-r from-[#34d399] to-[#34d399] text-[#050506] shadow-[0_0_20px_rgba(52,211,153,0.2)]'
+            : 'bg-[#34d399] text-[#050506] shadow-lg'
         }`}
         animate={isCelebration ? { scale: [1, 1.02, 1] } : {}}
         transition={{ duration: 0.3, repeat: isCelebration ? 2 : 0 }}
@@ -70,10 +70,10 @@ function PartySection({ squadId }: { squadId: string }) {
   const participantCount = isConnected ? remoteUsers.length + 1 : remoteUsers.length
 
   return (
-    <Card className={`p-4 ${isConnected ? 'border-[#4ade80]/30 bg-[#4ade80]/5' : ''}`}>
+    <Card className={`p-4 ${isConnected ? 'border-[#34d399]/30 bg-[#34d399]/5' : ''}`}>
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
-          <Mic className={`w-5 h-5 ${isConnected ? 'text-[#4ade80]' : 'text-[#5e6dd2]'}`} />
+          <Mic className={`w-5 h-5 ${isConnected ? 'text-[#34d399]' : 'text-[#6366f1]'}`} />
           <span className="text-[14px] font-semibold text-[#f7f8f8]">Party vocale</span>
         </div>
         {participantCount > 0 && !isConnected && (
@@ -86,14 +86,14 @@ function PartySection({ squadId }: { squadId: string }) {
           {/* Participants */}
           <div className="flex items-center gap-2 flex-wrap">
             {/* Toi */}
-            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#4ade80]/20 border border-[#4ade80]/30">
-              <div className={`w-2 h-2 rounded-full ${isMuted ? 'bg-[#f87171]' : 'bg-[#4ade80]'}`} />
+            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#34d399]/20 border border-[#34d399]/30">
+              <div className={`w-2 h-2 rounded-full ${isMuted ? 'bg-[#fb7185]' : 'bg-[#34d399]'}`} />
               <span className="text-[13px] text-[#f7f8f8]">Toi</span>
             </div>
             {/* Autres */}
             {remoteUsers.map((u) => (
               <div key={String(u.odrop)} className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.1)]">
-                <div className={`w-2 h-2 rounded-full ${u.isSpeaking ? 'bg-[#4ade80]' : 'bg-[#5e6063]'}`} />
+                <div className={`w-2 h-2 rounded-full ${u.isSpeaking ? 'bg-[#34d399]' : 'bg-[#5e6063]'}`} />
                 <span className="text-[13px] text-[#f7f8f8]">{u.username}</span>
               </div>
             ))}
@@ -122,7 +122,7 @@ function PartySection({ squadId }: { squadId: string }) {
       ) : (
         <div>
           {error && (
-            <p className="text-[12px] text-[#f87171] mb-2">{error}</p>
+            <p className="text-[12px] text-[#fb7185] mb-2">{error}</p>
           )}
           <Button
             onClick={handleJoinParty}
@@ -194,12 +194,12 @@ function SessionCard({ session, onRsvp }: {
   const canRsvp = !isPast && session.status !== 'cancelled'
 
   return (
-    <Card className={`p-4 transition-all duration-200 hover:shadow-[0_0_15px_rgba(94,109,210,0.15)] ${isToday && !isPast ? 'border-[#f5a623]/30 hover:shadow-[0_0_15px_rgba(245,166,35,0.2)]' : ''}`}>
+    <Card className={`p-4 transition-all duration-200 hover:shadow-[0_0_12px_rgba(99,102,241,0.08)] ${isToday && !isPast ? 'border-[#fbbf24]/30 hover:shadow-[0_0_12px_rgba(251,191,36,0.1)]' : ''}`}>
       <div className="flex items-start gap-4">
         <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${
-          isToday && !isPast ? 'bg-[#f5a623]/15' : 'bg-[rgba(94,109,210,0.15)]'
+          isToday && !isPast ? 'bg-[#fbbf24]/15' : 'bg-[rgba(99,102,241,0.15)]'
         }`}>
-          <Calendar className={`w-6 h-6 ${isToday && !isPast ? 'text-[#f5a623]' : 'text-[#5e6dd2]'}`} strokeWidth={1.5} />
+          <Calendar className={`w-6 h-6 ${isToday && !isPast ? 'text-[#fbbf24]' : 'text-[#6366f1]'}`} strokeWidth={1.5} />
         </div>
 
         <div className="flex-1 min-w-0">
@@ -225,45 +225,45 @@ function SessionCard({ session, onRsvp }: {
           {canRsvp && (
             <div className="flex gap-2">
               <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
                 onClick={(e) => { e.preventDefault(); onRsvp(session.id, 'present') }}
                 aria-label="Marquer comme présent"
                 aria-pressed={session.my_rsvp === 'present'}
                 className={`flex items-center gap-1.5 px-4 py-2.5 min-h-[44px] rounded-lg text-[13px] font-medium transition-all duration-200 ${
                   session.my_rsvp === 'present'
-                    ? 'bg-[#4ade80]/20 text-[#4ade80] border border-[#4ade80]/30 shadow-[0_0_12px_rgba(74,222,128,0.3)]'
-                    : 'bg-[rgba(255,255,255,0.05)] text-[#8b8d90] hover:bg-[rgba(74,222,128,0.15)] hover:text-[#4ade80] hover:border-[#4ade80]/20 border border-transparent'
+                    ? 'bg-[#34d399]/20 text-[#34d399] border border-[#34d399]/30 shadow-[0_0_10px_rgba(52,211,153,0.15)]'
+                    : 'bg-[rgba(255,255,255,0.05)] text-[#8b8d90] hover:bg-[rgba(52,211,153,0.1)] hover:text-[#34d399] hover:border-[#34d399]/20 border border-transparent'
                 }`}
               >
                 <CheckCircle2 className="w-4 h-4" aria-hidden="true" />
                 Présent
               </motion.button>
               <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
                 onClick={(e) => { e.preventDefault(); onRsvp(session.id, 'maybe') }}
                 aria-label="Marquer comme peut-être"
                 aria-pressed={session.my_rsvp === 'maybe'}
                 className={`flex items-center gap-1.5 px-4 py-2.5 min-h-[44px] rounded-lg text-[13px] font-medium transition-all duration-200 ${
                   session.my_rsvp === 'maybe'
-                    ? 'bg-[#f5a623]/20 text-[#f5a623] border border-[#f5a623]/30 shadow-[0_0_12px_rgba(245,166,35,0.3)]'
-                    : 'bg-[rgba(255,255,255,0.05)] text-[#8b8d90] hover:bg-[rgba(245,166,35,0.15)] hover:text-[#f5a623] hover:border-[#f5a623]/20 border border-transparent'
+                    ? 'bg-[#fbbf24]/20 text-[#fbbf24] border border-[#fbbf24]/30 shadow-[0_0_10px_rgba(251,191,36,0.15)]'
+                    : 'bg-[rgba(255,255,255,0.05)] text-[#8b8d90] hover:bg-[rgba(251,191,36,0.1)] hover:text-[#fbbf24] hover:border-[#fbbf24]/20 border border-transparent'
                 }`}
               >
                 <HelpCircle className="w-4 h-4" aria-hidden="true" />
                 Peut-être
               </motion.button>
               <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
                 onClick={(e) => { e.preventDefault(); onRsvp(session.id, 'absent') }}
                 aria-label="Marquer comme absent"
                 aria-pressed={session.my_rsvp === 'absent'}
                 className={`flex items-center gap-1.5 px-4 py-2.5 min-h-[44px] rounded-lg text-[13px] font-medium transition-all duration-200 ${
                   session.my_rsvp === 'absent'
-                    ? 'bg-[#f87171]/20 text-[#f87171] border border-[#f87171]/30 shadow-[0_0_12px_rgba(248,113,113,0.3)]'
-                    : 'bg-[rgba(255,255,255,0.05)] text-[#8b8d90] hover:bg-[rgba(248,113,113,0.15)] hover:text-[#f87171] hover:border-[#f87171]/20 border border-transparent'
+                    ? 'bg-[#fb7185]/20 text-[#fb7185] border border-[#fb7185]/30 shadow-[0_0_10px_rgba(251,113,133,0.15)]'
+                    : 'bg-[rgba(255,255,255,0.05)] text-[#8b8d90] hover:bg-[rgba(251,113,133,0.1)] hover:text-[#fb7185] hover:border-[#fb7185]/20 border border-transparent'
                 }`}
               >
                 <XCircle className="w-4 h-4" aria-hidden="true" />
@@ -421,14 +421,14 @@ function InviteModal({
 
         <div className="p-4 space-y-4">
           {/* Code d'invitation */}
-          <div className="p-4 rounded-xl bg-[rgba(94,109,210,0.1)] border border-[rgba(94,109,210,0.2)]">
+          <div className="p-4 rounded-xl bg-[rgba(99,102,241,0.1)] border border-[rgba(99,102,241,0.2)]">
             <p className="text-[12px] text-[#8b8d90] mb-2">Code d'invitation</p>
             <div className="flex items-center gap-3">
-              <span className="text-2xl font-bold text-[#5e6dd2] tracking-wider flex-1">
+              <span className="text-2xl font-bold text-[#6366f1] tracking-wider flex-1">
                 {inviteCode}
               </span>
               <Button size="sm" variant="secondary" onClick={handleCopyCode}>
-                {copied ? <Check className="w-4 h-4 text-[#4ade80]" /> : <Copy className="w-4 h-4" />}
+                {copied ? <Check className="w-4 h-4 text-[#34d399]" /> : <Copy className="w-4 h-4" />}
               </Button>
               <Button size="sm" variant="primary" onClick={handleShare}>
                 <Share2 className="w-4 h-4" />
@@ -459,8 +459,8 @@ function InviteModal({
 
           {/* Message d'erreur */}
           {inviteError && (
-            <div className="p-3 rounded-lg bg-[rgba(248,113,113,0.1)] border border-[rgba(248,113,113,0.2)]">
-              <p className="text-[#f87171] text-[13px]">{inviteError}</p>
+            <div className="p-3 rounded-lg bg-[rgba(251,113,133,0.1)] border border-[rgba(251,113,133,0.2)]">
+              <p className="text-[#fb7185] text-[13px]">{inviteError}</p>
             </div>
           )}
 
@@ -472,13 +472,13 @@ function InviteModal({
                   {user.avatar_url ? (
                     <img src={user.avatar_url} alt="" className="w-10 h-10 rounded-full object-cover" />
                   ) : (
-                    <div className="w-10 h-10 rounded-full bg-[rgba(139,147,255,0.15)] flex items-center justify-center">
-                      <Users className="w-5 h-5 text-[#8b93ff]" />
+                    <div className="w-10 h-10 rounded-full bg-[rgba(167,139,250,0.15)] flex items-center justify-center">
+                      <Users className="w-5 h-5 text-[#a78bfa]" />
                     </div>
                   )}
                   <span className="flex-1 text-[14px] text-[#f7f8f8]">{user.username}</span>
                   {invitedUsers.has(user.id) ? (
-                    <span className="text-[12px] text-[#4ade80] flex items-center gap-1">
+                    <span className="text-[12px] text-[#34d399] flex items-center gap-1">
                       <Check className="w-4 h-4" /> Ajouté
                     </span>
                   ) : (
@@ -553,8 +553,8 @@ function MemberCard({ member, isOwner, currentUserId }: {
           className="w-10 h-10 rounded-full object-cover"
         />
       ) : (
-        <div className="w-10 h-10 rounded-full bg-[rgba(139,147,255,0.15)] flex items-center justify-center">
-          <Users className="w-5 h-5 text-[#8b93ff]" />
+        <div className="w-10 h-10 rounded-full bg-[rgba(167,139,250,0.15)] flex items-center justify-center">
+          <Users className="w-5 h-5 text-[#a78bfa]" />
         </div>
       )}
       <div className="flex-1 min-w-0">
@@ -562,11 +562,11 @@ function MemberCard({ member, isOwner, currentUserId }: {
           <span className="text-[14px] font-medium text-[#f7f8f8] truncate">
             {member.profiles?.username || 'Joueur'}
           </span>
-          {isOwner && <Crown className="w-4 h-4 text-[#f5a623]" />}
+          {isOwner && <Crown className="w-4 h-4 text-[#fbbf24]" />}
         </div>
         <div className="flex items-center gap-1 text-[12px]">
-          <TrendingUp className={`w-3 h-3 ${reliability >= 80 ? 'text-[#4ade80]' : reliability >= 60 ? 'text-[#f5a623]' : 'text-[#f87171]'}`} />
-          <span className={reliability >= 80 ? 'text-[#4ade80]' : reliability >= 60 ? 'text-[#f5a623]' : 'text-[#f87171]'}>
+          <TrendingUp className={`w-3 h-3 ${reliability >= 80 ? 'text-[#34d399]' : reliability >= 60 ? 'text-[#fbbf24]' : 'text-[#fb7185]'}`} />
+          <span className={reliability >= 80 ? 'text-[#34d399]' : reliability >= 60 ? 'text-[#fbbf24]' : 'text-[#fb7185]'}>
             {reliability}%
           </span>
           <span className="text-[#5e6063]">fiable</span>
@@ -580,14 +580,14 @@ function MemberCard({ member, isOwner, currentUserId }: {
             className="p-2.5 min-w-[44px] min-h-[44px] rounded-lg hover:bg-[rgba(255,255,255,0.08)] transition-colors flex items-center justify-center"
             aria-label={`Envoyer un message à ${member.profiles?.username || 'ce joueur'}`}
           >
-            <MessageCircle className="w-5 h-5 text-[#5e6dd2]" aria-hidden="true" />
+            <MessageCircle className="w-5 h-5 text-[#6366f1]" aria-hidden="true" />
           </button>
           <button
             onClick={handleCall}
             className="p-2.5 min-w-[44px] min-h-[44px] rounded-lg hover:bg-[rgba(255,255,255,0.08)] transition-colors flex items-center justify-center"
             aria-label={`Appeler ${member.profiles?.username || 'ce joueur'}`}
           >
-            <Phone className="w-5 h-5 text-[#4ade80]" aria-hidden="true" />
+            <Phone className="w-5 h-5 text-[#34d399]" aria-hidden="true" />
           </button>
         </div>
       )}
@@ -751,7 +751,7 @@ export default function SquadDetail() {
   // Afficher le skeleton loader tant que le fetch n'est pas terminé
   if (!isInitialized || isLoading || (!currentSquad && id)) {
     return (
-      <div className="min-h-0 bg-[#08090a] pb-6">
+      <div className="min-h-0 bg-[#050506] pb-6">
         <div className="px-4 md:px-6 lg:px-8 py-6 max-w-2xl lg:max-w-4xl xl:max-w-6xl mx-auto">
           <SquadDetailSkeleton />
         </div>
@@ -762,7 +762,7 @@ export default function SquadDetail() {
   // Squad non trouvée seulement si le fetch est terminé et qu'il n'y a pas de squad
   if (!currentSquad) {
     return (
-      <div className="min-h-0 bg-[#08090a] flex items-center justify-center flex-col gap-4 py-12">
+      <div className="min-h-0 bg-[#050506] flex items-center justify-center flex-col gap-4 py-12">
         <p className="text-[#8b8d90]">Squad non trouvée</p>
         <Button variant="secondary" onClick={() => navigate('/squads')}>
           Retour aux squads
@@ -772,7 +772,7 @@ export default function SquadDetail() {
   }
 
   return (
-    <div className="min-h-0 bg-[#08090a] pb-6">
+    <div className="min-h-0 bg-[#050506] pb-6">
       {/* Confetti celebration for RSVP present */}
       {showConfetti && typeof window !== 'undefined' && (
         <Confetti
@@ -781,7 +781,7 @@ export default function SquadDetail() {
           recycle={false}
           numberOfPieces={150}
           gravity={0.3}
-          colors={['#5e6dd2', '#4ade80', '#f5a623', '#f7f8f8', '#8b93ff']}
+          colors={['#6366f1', '#34d399', '#fbbf24', '#f7f8f8', '#a78bfa']}
         />
       )}
       <div className="px-4 md:px-6 lg:px-8 py-6 max-w-2xl lg:max-w-4xl xl:max-w-6xl mx-auto">
@@ -792,7 +792,7 @@ export default function SquadDetail() {
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2">
                   <h1 className="text-2xl font-bold text-[#f7f8f8] truncate">{currentSquad.name}</h1>
-                  {isOwner && <Crown className="w-5 h-5 text-[#f5a623] flex-shrink-0" />}
+                  {isOwner && <Crown className="w-5 h-5 text-[#fbbf24] flex-shrink-0" />}
                 </div>
                 <p className="text-[13px] text-[#8b8d90]">
                   {currentSquad.game} · {currentSquad.member_count} membre{(currentSquad.member_count || 0) > 1 ? 's' : ''}
@@ -806,10 +806,10 @@ export default function SquadDetail() {
             </div>
 
             {/* Code d'invitation - toujours visible et clair */}
-            <div className="flex items-center gap-2 p-3 rounded-xl bg-[rgba(94,109,210,0.1)] border border-[rgba(94,109,210,0.2)]">
+            <div className="flex items-center gap-2 p-3 rounded-xl bg-[rgba(99,102,241,0.1)] border border-[rgba(99,102,241,0.2)]">
               <div className="flex-1">
                 <p className="text-xs text-[#8b8d90] uppercase tracking-wide mb-0.5">Code d'invitation</p>
-                <p className="text-[18px] font-bold text-[#5e6dd2] tracking-wider">{currentSquad.invite_code}</p>
+                <p className="text-[18px] font-bold text-[#6366f1] tracking-wider">{currentSquad.invite_code}</p>
               </div>
               <Button variant="primary" size="sm" onClick={handleCopyCode}>
                 {copiedCode ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
@@ -866,7 +866,7 @@ export default function SquadDetail() {
                           <select
                             value={sessionDuration}
                             onChange={(e) => setSessionDuration(e.target.value)}
-                            className="w-full px-4 py-3 rounded-xl bg-[rgba(255,255,255,0.04)] border border-[rgba(255,255,255,0.08)] text-[#f7f8f8] focus:border-[rgba(94,109,210,0.5)] focus:ring-2 focus:ring-[rgba(94,109,210,0.15)] transition-all"
+                            className="w-full px-4 py-3 rounded-xl bg-[rgba(255,255,255,0.04)] border border-[rgba(255,255,255,0.08)] text-[#f7f8f8] focus:border-[rgba(99,102,241,0.5)] focus:ring-2 focus:ring-[rgba(99,102,241,0.15)] transition-all"
                           >
                             <option value="60">1 heure</option>
                             <option value="120">2 heures</option>
@@ -881,7 +881,7 @@ export default function SquadDetail() {
                           <select
                             value={sessionThreshold}
                             onChange={(e) => setSessionThreshold(e.target.value)}
-                            className="w-full px-4 py-3 rounded-xl bg-[rgba(255,255,255,0.04)] border border-[rgba(255,255,255,0.08)] text-[#f7f8f8] focus:border-[rgba(94,109,210,0.5)] focus:ring-2 focus:ring-[rgba(94,109,210,0.15)] transition-all"
+                            className="w-full px-4 py-3 rounded-xl bg-[rgba(255,255,255,0.04)] border border-[rgba(255,255,255,0.08)] text-[#f7f8f8] focus:border-[rgba(99,102,241,0.5)] focus:ring-2 focus:ring-[rgba(99,102,241,0.15)] transition-all"
                           >
                             <option value="2">2 joueurs</option>
                             <option value="3">3 joueurs</option>
@@ -894,8 +894,8 @@ export default function SquadDetail() {
                         </div>
                       </div>
                       {error && (
-                        <div className="p-3 rounded-lg bg-[rgba(248,113,113,0.1)] border border-[rgba(248,113,113,0.2)]">
-                          <p className="text-[#f87171] text-[13px]">{error}</p>
+                        <div className="p-3 rounded-lg bg-[rgba(251,113,133,0.1)] border border-[rgba(251,113,133,0.2)]">
+                          <p className="text-[#fb7185] text-[13px]">{error}</p>
                         </div>
                       )}
                       <div className="flex gap-2 pt-1">
@@ -984,8 +984,8 @@ export default function SquadDetail() {
             >
               <Card className="p-4">
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 rounded-xl bg-[rgba(94,109,210,0.15)] flex items-center justify-center">
-                    <BarChart3 className="w-5 h-5 text-[#5e6dd2]" />
+                  <div className="w-10 h-10 rounded-xl bg-[rgba(99,102,241,0.15)] flex items-center justify-center">
+                    <BarChart3 className="w-5 h-5 text-[#6366f1]" />
                   </div>
                   <div>
                     <h3 className="text-[14px] font-medium text-[#f7f8f8]">Analyse de la squad</h3>
@@ -994,15 +994,15 @@ export default function SquadDetail() {
                 </div>
                 <div className="grid grid-cols-3 gap-3">
                   <div className="p-3 rounded-xl bg-[rgba(255,255,255,0.03)]">
-                    <div className="text-xl font-bold text-[#4ade80]">{sessions.length}</div>
+                    <div className="text-xl font-bold text-[#34d399]">{sessions.length}</div>
                     <div className="text-xs text-[#5e6063]">Sessions</div>
                   </div>
                   <div className="p-3 rounded-xl bg-[rgba(255,255,255,0.03)]">
-                    <div className="text-xl font-bold text-[#5e6dd2]">{currentSquad.member_count || 0}</div>
+                    <div className="text-xl font-bold text-[#6366f1]">{currentSquad.member_count || 0}</div>
                     <div className="text-xs text-[#5e6063]">Membres</div>
                   </div>
                   <div className="p-3 rounded-xl bg-[rgba(255,255,255,0.03)]">
-                    <div className="text-xl font-bold text-[#f5a623]">{Math.round(currentSquad.avg_reliability_score || 0)}%</div>
+                    <div className="text-xl font-bold text-[#fbbf24]">{Math.round(currentSquad.avg_reliability_score || 0)}%</div>
                     <div className="text-xs text-[#5e6063]">Fiabilité</div>
                   </div>
                 </div>
@@ -1021,8 +1021,8 @@ export default function SquadDetail() {
               <Card className="p-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-[rgba(74,222,128,0.15)] flex items-center justify-center">
-                      <Download className="w-5 h-5 text-[#4ade80]" />
+                    <div className="w-10 h-10 rounded-xl bg-[rgba(52,211,153,0.15)] flex items-center justify-center">
+                      <Download className="w-5 h-5 text-[#34d399]" />
                     </div>
                     <div>
                       <h3 className="text-[14px] font-medium text-[#f7f8f8]">Export calendrier</h3>
@@ -1048,10 +1048,10 @@ export default function SquadDetail() {
           {/* Audio HD Badge si premium */}
           {isSquadPremium(id || '') && (
             <div className="mb-6">
-              <Card className="p-4 bg-gradient-to-br from-[rgba(245,166,35,0.1)] to-[rgba(245,166,35,0.02)] border-[rgba(245,166,35,0.2)]">
+              <Card className="p-4 bg-gradient-to-br from-[rgba(251,191,36,0.08)] to-[rgba(251,191,36,0.01)] border-[rgba(251,191,36,0.15)]">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-[rgba(245,166,35,0.2)] flex items-center justify-center">
-                    <Zap className="w-5 h-5 text-[#f5a623]" />
+                  <div className="w-10 h-10 rounded-xl bg-[rgba(251,191,36,0.15)] flex items-center justify-center">
+                    <Zap className="w-5 h-5 text-[#fbbf24]" />
                   </div>
                   <div className="flex-1">
                     <div className="flex items-center gap-2">
@@ -1089,7 +1089,7 @@ export default function SquadDetail() {
             {isOwner ? (
               <button
                 onClick={handleDeleteSquad}
-                className="w-full py-3 text-[14px] text-[#f87171] hover:text-[#fca5a5] transition-colors flex items-center justify-center gap-2"
+                className="w-full py-3 text-[14px] text-[#fb7185] hover:text-[#fca5a5] transition-colors flex items-center justify-center gap-2"
               >
                 <Trash2 className="w-4 h-4" />
                 Supprimer la squad
@@ -1097,7 +1097,7 @@ export default function SquadDetail() {
             ) : (
               <button
                 onClick={handleLeaveSquad}
-                className="w-full py-3 text-[14px] text-[#f87171] hover:text-[#fca5a5] transition-colors flex items-center justify-center gap-2"
+                className="w-full py-3 text-[14px] text-[#fb7185] hover:text-[#fca5a5] transition-colors flex items-center justify-center gap-2"
               >
                 <LogOut className="w-4 h-4" />
                 Quitter la squad

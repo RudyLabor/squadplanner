@@ -11,12 +11,12 @@ interface BadgeProps {
 export function Badge({ variant = 'default', children, className = '' }: BadgeProps) {
   const variants: Record<BadgeVariant, string> = {
     default: 'bg-[#1f2023] text-[#8b8d90]',
-    success: 'bg-[rgba(74,222,128,0.15)] text-[#4ade80]',
-    warning: 'bg-[rgba(245,166,35,0.15)] text-[#f5a623]',
-    error: 'bg-[rgba(248,113,113,0.15)] text-[#f87171]',
-    danger: 'bg-[rgba(248,113,113,0.15)] text-[#f87171]',
+    success: 'bg-[rgba(52,211,153,0.15)] text-[#34d399]',
+    warning: 'bg-[rgba(251,191,36,0.15)] text-[#fbbf24]',
+    error: 'bg-[rgba(251,113,133,0.15)] text-[#fb7185]',
+    danger: 'bg-[rgba(251,113,133,0.15)] text-[#fb7185]',
     info: 'bg-[rgba(96,165,250,0.15)] text-[#60a5fa]',
-    primary: 'bg-[rgba(94,109,210,0.15)] text-[#5e6dd2]',
+    primary: 'bg-[rgba(99,102,241,0.15)] text-[#6366f1]',
   }
 
   return (

@@ -369,7 +369,7 @@ export function Profile() {
                   transition={{ delay: 0.3 }}
                   className="text-[12px] font-medium text-white/70 uppercase tracking-wide"
                 >
-                  Achievement Unlocked!
+                  Succès débloqué !
                 </motion.p>
                 <motion.p
                   initial={{ opacity: 0, x: -10 }}

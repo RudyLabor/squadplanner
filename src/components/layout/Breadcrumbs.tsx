@@ -78,7 +78,7 @@ export function Breadcrumbs() {
             {item.path && !isLast ? (
               <Link
                 to={item.path}
-                className="text-[#8b8d90] hover:text-[#f7f8f8] transition-colors"
+                className="text-[#8b8d90] hover:text-[#f7f8f8] transition-colors duration-300"
               >
                 {item.label}
               </Link>

@@ -571,7 +571,7 @@ export default function Landing() {
             viewport={{ once: true }}
             className="text-center text-[14px] text-[#5e6063] mt-8"
           >
-            Pas un Discord alternatif — Squad Planner crée des <span className="text-[#f7f8f8]">habitudes de jeu</span>, pas des communautés
+            Plus qu'un simple Discord — Squad Planner crée des <span className="text-[#fafafa]">habitudes de jeu régulières</span> pour ta communauté
           </motion.p>
         </div>
       </section>

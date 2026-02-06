@@ -10,8 +10,8 @@ interface CardProps {
 }
 
 export function Card({ children, className = '', hoverable = false, onClick, 'aria-label': ariaLabel }: CardProps) {
-  const baseClasses = 'bg-[rgba(255,255,255,0.02)] border border-border-subtle rounded-xl transition-all'
-  const hoverClasses = hoverable ? 'hover:bg-[rgba(255,255,255,0.04)] hover:border-border-hover cursor-pointer' : ''
+  const baseClasses = 'bg-[rgba(255,255,255,0.015)] border border-[rgba(255,255,255,0.04)] rounded-2xl transition-all duration-300'
+  const hoverClasses = hoverable ? 'hover:bg-[rgba(255,255,255,0.025)] hover:border-[rgba(255,255,255,0.08)] cursor-pointer' : ''
   const isClickable = !!onClick
 
   // Handle keyboard interaction for clickable cards
@@ -30,8 +30,9 @@ export function Card({ children, className = '', hoverable = false, onClick, 'ar
       role={isClickable ? 'button' : undefined}
       tabIndex={isClickable ? 0 : undefined}
       aria-label={ariaLabel}
-      whileHover={hoverable ? { y: -2, scale: 1.01 } : undefined}
-      whileTap={hoverable ? { scale: 0.98 } : undefined}
+      whileHover={hoverable ? { y: -1 } : undefined}
+      whileTap={hoverable ? { scale: 0.995 } : undefined}
+      transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
     >
       {children}
     </motion.div>

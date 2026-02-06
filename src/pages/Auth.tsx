@@ -265,6 +265,7 @@ export default function Auth() {
                       onChange={(e) => setPassword(e.target.value)}
                       placeholder={mode === 'reset' ? 'Nouveau mot de passe' : 'Mot de passe'}
                       icon={<Lock className="w-4 h-4" />}
+                      showPasswordToggle
                       required
                       autoComplete={mode === 'login' ? 'current-password' : 'new-password'}
                     />
@@ -276,6 +277,7 @@ export default function Auth() {
                         onChange={(e) => setConfirmPassword(e.target.value)}
                         placeholder="Confirmer le mot de passe"
                         icon={<Lock className="w-4 h-4" />}
+                        showPasswordToggle
                         required
                         autoComplete="new-password"
                       />

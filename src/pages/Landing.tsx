@@ -131,7 +131,7 @@ export default function Landing() {
             {/* Badge with sparkle */}
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[rgba(99,102,241,0.06)] border border-[rgba(99,102,241,0.12)] mb-8">
               <Sparkles className="w-4 h-4 text-[#a78bfa]" />
-              <span className="text-[13px] text-[#a78bfa] font-medium">Rassemble ta squad. Joue ensemble.</span>
+              <span className="text-[13px] text-[#a78bfa] font-medium">Rassemble ta squad et jouez ensemble</span>
             </div>
 
             {/* Headline - improved wording */}

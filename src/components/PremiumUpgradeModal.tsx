@@ -183,7 +183,7 @@ export function PremiumUpgradeModal({
                       {(PREMIUM_PRICE_YEARLY / 12).toFixed(2)}
                       <span className="text-[14px] font-normal text-[#5e6063]">/mois</span>
                     </div>
-                    <div className="text-[11px] text-[#4ade80]">2 mois offerts</div>
+                    <div className="text-xs text-[#4ade80]">2 mois offerts</div>
                   </button>
                 </div>
 
@@ -233,7 +233,7 @@ export function PremiumUpgradeModal({
                     </>
                   )}
                 </Button>
-                <p className="text-[11px] text-[#5e6063] text-center mt-3">
+                <p className="text-xs text-[#5e6063] text-center mt-3">
                   Annulation possible à tout moment. Satisfait ou remboursé 30 jours.
                 </p>
               </div>

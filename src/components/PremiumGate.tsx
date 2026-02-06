@@ -89,7 +89,7 @@ export function PremiumGate({
             <span className="text-[13px] font-medium text-white">
               {label}
             </span>
-            <span className="text-[11px] text-[#5e6063]">
+            <span className="text-xs text-[#5e6063]">
               Premium requis
             </span>
           </button>
@@ -152,7 +152,7 @@ export function PremiumBadge({ small = false }: { small?: boolean }) {
   }
 
   return (
-    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-gradient-to-r from-[#f5a623] to-[#f5a623]/70 text-[11px] font-bold text-[#08090a]">
+    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-gradient-to-r from-[#f5a623] to-[#f5a623]/70 text-xs font-bold text-[#08090a]">
       <Crown className="w-3.5 h-3.5" />
       PREMIUM
     </span>

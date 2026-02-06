@@ -40,7 +40,7 @@ const SIZES = {
     barGap: 2,
     barHeights: [4, 7, 10, 14],
     iconSize: 12,
-    textSize: 'text-[10px]',
+    textSize: 'text-xs',
   },
   md: {
     containerHeight: 24,
@@ -48,7 +48,7 @@ const SIZES = {
     barGap: 2,
     barHeights: [6, 10, 14, 20],
     iconSize: 16,
-    textSize: 'text-[11px]',
+    textSize: 'text-xs',
   },
   lg: {
     containerHeight: 32,

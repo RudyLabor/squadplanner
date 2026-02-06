@@ -167,6 +167,32 @@ export function Profile() {
     { icon: Trophy, label: 'XP', value: profile?.xp || 0, color: '#8b93ff' },
   ]
 
+  // Detect new achievements and celebrate
+  useEffect(() => {
+    const currentUnlockedIds = unlockedAchievements.map(a => a.id)
+    const previousIds = previousUnlockedIdsRef.current
+
+    // Find newly unlocked achievements (present in current but not in previous)
+    const newlyUnlocked = unlockedAchievements.filter(a => !previousIds.includes(a.id))
+
+    // Only celebrate if we had previous data (not first load) and there are new achievements
+    if (previousIds.length > 0 && newlyUnlocked.length > 0) {
+      // Celebrate the first new achievement (or could loop through all)
+      const achievement = newlyUnlocked[0]
+      setCelebratedAchievement(achievement)
+      setShowAchievementConfetti(true)
+
+      // Auto-hide after 5 seconds
+      setTimeout(() => {
+        setShowAchievementConfetti(false)
+        setTimeout(() => setCelebratedAchievement(null), 500)
+      }, 5000)
+    }
+
+    // Update the ref for next comparison
+    previousUnlockedIdsRef.current = currentUnlockedIds
+  }, [unlockedAchievements])
+
   // Loading state with skeleton
   if (!isInitialized || (isLoading && !profile)) {
     return (
@@ -183,6 +209,68 @@ export function Profile() {
 
   return (
     <div className="min-h-0 bg-[#08090a] pb-6">
+      {/* Achievement Celebration Confetti */}
+      {showAchievementConfetti && typeof window !== 'undefined' && (
+        <Confetti
+          width={window.innerWidth}
+          height={window.innerHeight}
+          recycle={false}
+          numberOfPieces={200}
+          gravity={0.25}
+          colors={['#4ade80', '#5e6dd2', '#f5a623', '#8b93ff', '#f7f8f8']}
+          style={{ position: 'fixed', top: 0, left: 0, zIndex: 100, pointerEvents: 'none' }}
+        />
+      )}
+
+      {/* Achievement Celebration Toast */}
+      <AnimatePresence>
+        {celebratedAchievement && (
+          <motion.div
+            initial={{ opacity: 0, y: -50, scale: 0.8 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -20, scale: 0.9 }}
+            className="fixed top-4 left-1/2 -translate-x-1/2 z-50 px-6 py-4 rounded-2xl bg-gradient-to-r from-[#5e6dd2]/90 to-[#8b93ff]/90 border border-[#5e6dd2]/50 backdrop-blur-xl shadow-[0_0_40px_rgba(94,109,210,0.5)]"
+          >
+            <div className="flex items-center gap-4">
+              <motion.div
+                initial={{ rotate: -180, scale: 0 }}
+                animate={{ rotate: 0, scale: 1 }}
+                transition={{ type: 'spring', stiffness: 300, damping: 20, delay: 0.2 }}
+                className="text-4xl"
+              >
+                {celebratedAchievement.icon}
+              </motion.div>
+              <div>
+                <motion.p
+                  initial={{ opacity: 0, x: -10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.3 }}
+                  className="text-[12px] font-medium text-white/70 uppercase tracking-wide"
+                >
+                  🎉 Achievement Unlocked!
+                </motion.p>
+                <motion.p
+                  initial={{ opacity: 0, x: -10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.4 }}
+                  className="text-[18px] font-bold text-white"
+                >
+                  {celebratedAchievement.name}
+                </motion.p>
+                <motion.p
+                  initial={{ opacity: 0, x: -10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.5 }}
+                  className="text-[13px] text-white/80"
+                >
+                  {celebratedAchievement.description}
+                </motion.p>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* Hero section avec avatar */}
       <div className="relative">
         {/* Background gradient */}
@@ -329,6 +417,46 @@ export function Profile() {
                   </motion.span>
                 </div>
                 <p className="text-[13px] text-[#5e6063]">Score de fiabilité</p>
+
+                {/* Progress bar to next tier */}
+                {tier.nextTier && (
+                  <div className="mt-3">
+                    <div className="flex items-center justify-between text-[11px] mb-1.5">
+                      <span className="text-[#8b8d90]">
+                        Prochain : <span style={{ color: tier.nextTier.color }}>{tier.nextTier.icon} {tier.nextTier.name}</span>
+                      </span>
+                      <span className="text-[#5e6063]">
+                        {tier.nextTier.minScore - reliabilityScore}% restants
+                      </span>
+                    </div>
+                    <div className="relative h-2 bg-[rgba(255,255,255,0.05)] rounded-full overflow-hidden">
+                      <motion.div
+                        className="absolute h-full rounded-full"
+                        style={{
+                          background: `linear-gradient(90deg, ${reliabilityColor}, ${tier.nextTier.color})`
+                        }}
+                        initial={{ width: 0 }}
+                        animate={{
+                          width: `${((reliabilityScore - tier.minScore) / (tier.nextTier.minScore - tier.minScore)) * 100}%`
+                        }}
+                        transition={{ duration: 1.2, ease: "easeOut", delay: 0.5 }}
+                      />
+                    </div>
+                  </div>
+                )}
+
+                {/* At max tier - celebration */}
+                {!tier.nextTier && (
+                  <motion.p
+                    className="text-[12px] mt-2 flex items-center gap-1"
+                    style={{ color: tier.color }}
+                    animate={{ opacity: [0.7, 1, 0.7] }}
+                    transition={{ duration: 2, repeat: Infinity }}
+                  >
+                    <Sparkles className="w-3 h-3" />
+                    Tu as atteint le rang maximum !
+                  </motion.p>
+                )}
               </div>
               {tier.glow && (
                 <motion.div

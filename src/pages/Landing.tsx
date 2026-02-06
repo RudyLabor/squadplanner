@@ -1,7 +1,7 @@
 import { motion, useInView } from 'framer-motion'
 import { useRef } from 'react'
 import {
-  Users, Calendar, ArrowRight,
+  Users, Calendar, ArrowRight, Check,
   Target, MessageCircle, Headphones, TrendingUp, Sparkles
 } from 'lucide-react'
 import { Link } from 'react-router-dom'
@@ -395,13 +395,85 @@ export default function Landing() {
               </motion.div>
             ))}
           </motion.div>
+        </div>
+      </section>
 
-          {/* Party Vocale Mockup */}
+      {/* Voice & Chat Highlight - Détails avec mockup */}
+      <section className="px-4 md:px-6 py-16 border-t border-[rgba(255,255,255,0.04)]">
+        <div className="max-w-5xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="grid md:grid-cols-2 gap-6"
+          >
+            {/* Voice Card */}
+            <motion.div
+              className="p-8 rounded-3xl bg-gradient-to-br from-[rgba(74,222,128,0.1)] to-[rgba(74,222,128,0.02)] border border-[rgba(74,222,128,0.2)] group"
+              whileHover={{ scale: 1.02, y: -4 }}
+              transition={{ duration: 0.3 }}
+            >
+              <div className="w-16 h-16 rounded-2xl bg-[rgba(74,222,128,0.15)] flex items-center justify-center mb-6 group-hover:shadow-[0_0_30px_rgba(74,222,128,0.3)] transition-shadow duration-300">
+                <Headphones className="w-8 h-8 text-[#4ade80]" />
+              </div>
+              <h3 className="text-xl font-bold text-[#f7f8f8] mb-3">
+                Party vocale toujours ouverte
+              </h3>
+              <p className="text-[#8b8d90] mb-4">
+                Ta squad a son salon vocal 24/7. Pas besoin de planifier.
+                <span className="text-[#4ade80] font-medium"> Rejoins quand tu veux, reste aussi longtemps que tu veux.</span>
+              </p>
+              <ul className="space-y-2">
+                {[
+                  '1 squad = 1 party vocale dédiée',
+                  'Rejoindre en 1 clic',
+                  'Qualité HD, latence ultra-faible',
+                ].map(item => (
+                  <li key={item} className="flex items-center gap-2 text-[14px] text-[#c9cace]">
+                    <Check className="w-4 h-4 text-[#4ade80]" />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </motion.div>
+
+            {/* Chat Card */}
+            <motion.div
+              className="p-8 rounded-3xl bg-gradient-to-br from-[rgba(96,165,250,0.1)] to-[rgba(96,165,250,0.02)] border border-[rgba(96,165,250,0.2)] group"
+              whileHover={{ scale: 1.02, y: -4 }}
+              transition={{ duration: 0.3 }}
+            >
+              <div className="w-16 h-16 rounded-2xl bg-[rgba(96,165,250,0.15)] flex items-center justify-center mb-6 group-hover:shadow-[0_0_30px_rgba(96,165,250,0.3)] transition-shadow duration-300">
+                <MessageCircle className="w-8 h-8 text-[#60a5fa]" />
+              </div>
+              <h3 className="text-xl font-bold text-[#f7f8f8] mb-3">
+                Chat live avec ta squad
+              </h3>
+              <p className="text-[#8b8d90] mb-4">
+                Discutez avant la session pour vous organiser. Pendant pour rigoler. Après pour le debrief.
+                <span className="text-[#60a5fa] font-medium"> Tout est au même endroit.</span>
+              </p>
+              <ul className="space-y-2">
+                {[
+                  'Chat de squad permanent',
+                  'Chat par session',
+                  'Résumés IA automatiques',
+                ].map(item => (
+                  <li key={item} className="flex items-center gap-2 text-[14px] text-[#c9cace]">
+                    <Check className="w-4 h-4 text-[#60a5fa]" />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </motion.div>
+          </motion.div>
+
+          {/* Party Vocale Mockup - Illustration visuelle */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="relative max-w-md mx-auto"
+            className="relative max-w-sm mx-auto mt-12"
           >
             {/* Glow background */}
             <div className="absolute -inset-8 bg-[radial-gradient(ellipse_at_center,rgba(74,222,128,0.15)_0%,transparent_70%)]" />
@@ -422,12 +494,12 @@ export default function Landing() {
                     </div>
                     <span className="text-xs text-[#4ade80]">En ligne</span>
                   </div>
-                  <p className="text-xs text-[#5e6063] mt-1">Les Ranked du Soir • Valorant</p>
+                  <p className="text-xs text-[#5e6063] mt-1">Les Ranked du Soir</p>
                 </div>
 
                 {/* Participants */}
-                <div className="p-6">
-                  <div className="flex items-center justify-center gap-4 mb-6">
+                <div className="p-5">
+                  <div className="flex items-center justify-center gap-3 mb-5">
                     {/* Avatar 1 - Speaking */}
                     <motion.div className="flex flex-col items-center">
                       <motion.div
@@ -436,74 +508,68 @@ export default function Landing() {
                         transition={{ duration: 0.8, repeat: Infinity }}
                       >
                         <motion.div
-                          className="absolute inset-0 w-14 h-14 rounded-full bg-[#4ade80]"
+                          className="absolute inset-0 w-12 h-12 rounded-full bg-[#4ade80]"
                           animate={{ scale: [1, 1.4], opacity: [0.5, 0] }}
                           transition={{ duration: 1, repeat: Infinity }}
                         />
-                        <div className="relative w-14 h-14 rounded-full bg-[#4ade80] flex items-center justify-center text-lg font-bold text-[#08090a] ring-2 ring-[#4ade80]/50">
+                        <div className="relative w-12 h-12 rounded-full bg-[#4ade80] flex items-center justify-center text-base font-bold text-[#08090a] ring-2 ring-[#4ade80]/50">
                           M
                         </div>
                       </motion.div>
-                      <span className="text-xs text-[#4ade80] mt-2 font-medium">Max</span>
+                      <span className="text-[10px] text-[#4ade80] mt-1.5 font-medium">Max</span>
                     </motion.div>
 
-                    {/* Avatar 2 - Muted */}
+                    {/* Avatar 2 */}
                     <div className="flex flex-col items-center">
-                      <div className="relative w-14 h-14 rounded-full bg-[#5e6dd2] flex items-center justify-center text-lg font-bold text-white">
+                      <div className="relative w-12 h-12 rounded-full bg-[#5e6dd2] flex items-center justify-center text-base font-bold text-white">
                         L
-                        <div className="absolute -bottom-0.5 -right-0.5 w-5 h-5 rounded-full bg-[#f87171] flex items-center justify-center border-2 border-[#08090a]">
-                          <span className="text-[8px]">🔇</span>
-                        </div>
                       </div>
-                      <span className="text-xs text-[#8b8d90] mt-2">Luna</span>
+                      <span className="text-[10px] text-[#8b8d90] mt-1.5">Luna</span>
                     </div>
 
-                    {/* Avatar 3 - Active */}
+                    {/* Avatar 3 */}
                     <div className="flex flex-col items-center">
-                      <div className="relative w-14 h-14 rounded-full bg-[#f5a623] flex items-center justify-center text-lg font-bold text-[#08090a]">
+                      <div className="relative w-12 h-12 rounded-full bg-[#f5a623] flex items-center justify-center text-base font-bold text-[#08090a]">
                         K
                       </div>
-                      <span className="text-xs text-[#8b8d90] mt-2">Kira</span>
+                      <span className="text-[10px] text-[#8b8d90] mt-1.5">Kira</span>
                     </div>
 
-                    {/* Avatar 4 - Active */}
+                    {/* Avatar 4 */}
                     <div className="flex flex-col items-center">
-                      <div className="relative w-14 h-14 rounded-full bg-[#8b93ff] flex items-center justify-center text-lg font-bold text-white">
+                      <div className="relative w-12 h-12 rounded-full bg-[#8b93ff] flex items-center justify-center text-base font-bold text-white">
                         J
                       </div>
-                      <span className="text-xs text-[#8b8d90] mt-2">Jay</span>
+                      <span className="text-[10px] text-[#8b8d90] mt-1.5">Jay</span>
                     </div>
                   </div>
 
                   {/* Controls */}
-                  <div className="flex items-center justify-center gap-4">
+                  <div className="flex items-center justify-center gap-3">
                     <motion.div
-                      className="w-12 h-12 rounded-full bg-[#4ade80] flex items-center justify-center"
+                      className="w-10 h-10 rounded-full bg-[#4ade80] flex items-center justify-center"
                       whileHover={{ scale: 1.1 }}
                     >
-                      <Headphones className="w-5 h-5 text-[#08090a]" />
+                      <Headphones className="w-4 h-4 text-[#08090a]" />
                     </motion.div>
-                    <div className="w-12 h-12 rounded-full bg-[#f87171] flex items-center justify-center">
-                      <span className="text-lg">📞</span>
+                    <div className="w-10 h-10 rounded-full bg-[#f87171] flex items-center justify-center">
+                      <span className="text-sm">📞</span>
                     </div>
                   </div>
                 </div>
-
-                {/* Bottom info */}
-                <div className="px-4 py-3 bg-[rgba(74,222,128,0.05)] border-t border-[rgba(74,222,128,0.1)]">
-                  <p className="text-center text-xs text-[#4ade80]">
-                    🎮 4 potes connectés • Session dans 15min
-                  </p>
-                </div>
               </div>
             </div>
-
-            {/* Caption */}
-            <p className="text-center text-[14px] text-[#8b8d90] mt-6">
-              Pas besoin de Discord. Ta squad a son salon vocal dédié.
-            </p>
           </motion.div>
 
+          {/* Discord comparison */}
+          <motion.p
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            className="text-center text-[14px] text-[#5e6063] mt-8"
+          >
+            Pas un Discord alternatif — Squad Planner crée des <span className="text-[#f7f8f8]">habitudes de jeu</span>, pas des communautés
+          </motion.p>
         </div>
       </section>
 

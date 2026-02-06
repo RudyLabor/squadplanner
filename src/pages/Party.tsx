@@ -9,7 +9,10 @@ import {
   Gamepad2,
   CheckCircle2,
   WifiOff,
-  AlertCircle
+  AlertCircle,
+  Link2,
+  Check,
+  Hand
 } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import Confetti from 'react-confetti'
@@ -93,6 +96,16 @@ function ActivePartySection({ squad, onLeave }: {
 }) {
   const { localUser, remoteUsers, isMuted, toggleMute, error, isReconnecting, reconnectAttempts } = useVoiceChatStore()
   const { localQuality } = useNetworkQualityStore()
+  const [linkCopied, setLinkCopied] = useState(false)
+
+  // Generate shareable party link
+  const partyLink = `${window.location.origin}/squad/${squad.id}?join=party`
+
+  const copyPartyLink = () => {
+    navigator.clipboard.writeText(partyLink)
+    setLinkCopied(true)
+    setTimeout(() => setLinkCopied(false), 2000)
+  }
 
   const participants = [
     ...(localUser ? [{ ...localUser, isLocal: true }] : []),
@@ -111,13 +124,36 @@ function ActivePartySection({ squad, onLeave }: {
               <p className="text-[12px] text-[#8b8d90]">{squad.game}</p>
             </div>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
             {/* Indicateur de qualite reseau */}
             {localQuality !== 'unknown' && (
               <NetworkQualityIndicator size="sm" showLabel showTooltip />
             )}
+            {/* Share party link button */}
+            <motion.button
+              onClick={copyPartyLink}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[12px] font-medium transition-colors ${
+                linkCopied
+                  ? 'bg-[#4ade80]/20 text-[#4ade80]'
+                  : 'bg-[rgba(94,109,210,0.15)] text-[#5e6dd2] hover:bg-[rgba(94,109,210,0.25)]'
+              }`}
+            >
+              {linkCopied ? (
+                <>
+                  <Check className="w-3.5 h-3.5" />
+                  Copié !
+                </>
+              ) : (
+                <>
+                  <Link2 className="w-3.5 h-3.5" />
+                  Inviter
+                </>
+              )}
+            </motion.button>
             <Link to={`/squad/${squad.id}`}>
-              <span className="text-[12px] text-[#5e6dd2]">Voir la squad</span>
+              <span className="text-[12px] text-[#5e6dd2] hover:text-[#8b93ff]">Voir la squad</span>
             </Link>
           </div>
         </div>
@@ -356,6 +392,10 @@ export function Party() {
   const hadDuoCelebration = useRef(false)
   const prevRemoteCount = useRef(0)
 
+  // Push-to-talk state
+  const [isPushToTalkEnabled, setIsPushToTalkEnabled] = useState(false)
+  const [isPushToTalkActive, setIsPushToTalkActive] = useState(false)
+
   // Toast de changement de qualite reseau
   const [showQualityToast, setShowQualityToast] = useState(false)
   const [qualityToastLevel, setQualityToastLevel] = useState<'excellent' | 'good' | 'medium' | 'poor'>('good')
@@ -365,6 +405,41 @@ export function Party() {
       fetchSquads()
     }
   }, [user, fetchSquads])
+
+  // Push-to-talk keyboard handler
+  useEffect(() => {
+    if (!isPushToTalkEnabled || !isConnected) return
+
+    const { toggleMute, isMuted } = useVoiceChatStore.getState()
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Only handle spacebar when not typing in an input
+      if (e.code === 'Space' && !e.repeat && e.target === document.body) {
+        e.preventDefault()
+        setIsPushToTalkActive(true)
+        // Unmute when spacebar pressed
+        if (isMuted) toggleMute()
+      }
+    }
+
+    const handleKeyUp = (e: KeyboardEvent) => {
+      if (e.code === 'Space') {
+        e.preventDefault()
+        setIsPushToTalkActive(false)
+        // Mute when spacebar released
+        const state = useVoiceChatStore.getState()
+        if (!state.isMuted) state.toggleMute()
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+    window.addEventListener('keyup', handleKeyUp)
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown)
+      window.removeEventListener('keyup', handleKeyUp)
+    }
+  }, [isPushToTalkEnabled, isConnected])
 
   // Detecter la fin de la reconnexion pour afficher un toast
   useEffect(() => {
@@ -476,9 +551,28 @@ export function Party() {
               </p>
             </div>
             {isConnected && (
-              <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#4ade80]/15 border border-[#4ade80]/30">
-                <div className="w-2 h-2 rounded-full bg-[#4ade80] animate-pulse" />
-                <span className="text-[12px] font-medium text-[#4ade80]">En ligne</span>
+              <div className="flex items-center gap-3">
+                {/* Push-to-talk toggle */}
+                <button
+                  onClick={() => setIsPushToTalkEnabled(!isPushToTalkEnabled)}
+                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[12px] font-medium transition-colors ${
+                    isPushToTalkEnabled
+                      ? isPushToTalkActive
+                        ? 'bg-[#4ade80]/20 text-[#4ade80] border border-[#4ade80]/30'
+                        : 'bg-[#5e6dd2]/20 text-[#5e6dd2] border border-[#5e6dd2]/30'
+                      : 'bg-[rgba(255,255,255,0.05)] text-[#8b8d90] hover:bg-[rgba(255,255,255,0.1)]'
+                  }`}
+                  title={isPushToTalkEnabled ? 'Désactiver Push-to-Talk' : 'Activer Push-to-Talk (Espace)'}
+                >
+                  <Hand className="w-3.5 h-3.5" />
+                  <span className="hidden sm:inline">
+                    {isPushToTalkEnabled ? (isPushToTalkActive ? 'Parle...' : 'PTT actif') : 'PTT'}
+                  </span>
+                </button>
+                <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#4ade80]/15 border border-[#4ade80]/30">
+                  <div className="w-2 h-2 rounded-full bg-[#4ade80] animate-pulse" />
+                  <span className="text-[12px] font-medium text-[#4ade80]">En ligne</span>
+                </div>
               </div>
             )}
           </div>

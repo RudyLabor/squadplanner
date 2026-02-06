@@ -5,6 +5,7 @@ import { motion } from 'framer-motion'
 import { Home, Users, Mic, MessageCircle, User, Plus, Zap } from 'lucide-react'
 import { useAuthStore, useSquadsStore, useVoiceChatStore } from '../../hooks'
 import { SquadPlannerLogo } from '../SquadPlannerLogo'
+import { Breadcrumbs } from './Breadcrumbs'
 import { supabase } from '../../lib/supabase'
 
 interface AppLayoutProps {
@@ -297,6 +298,10 @@ export function AppLayout({ children }: AppLayoutProps) {
 
       {/* Main content */}
       <main className="flex-1 lg:ml-64 pb-24 lg:pb-0 overflow-y-auto overflow-x-hidden">
+        {/* Breadcrumbs - Desktop only */}
+        <div className="hidden lg:block pt-4">
+          <Breadcrumbs />
+        </div>
         {children}
       </main>
 

@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
-import { Users, Calendar, TrendingUp, ChevronRight, Loader2, Mic, Clock, CheckCircle2, AlertCircle, Sparkles, Star } from 'lucide-react'
+import { Users, Calendar, TrendingUp, ChevronRight, Loader2, Mic, CheckCircle2, AlertCircle, Sparkles, Star, HelpCircle, XCircle } from 'lucide-react'
 import { Link, useNavigate } from 'react-router-dom'
 import CountUp from 'react-countup'
+import Confetti from 'react-confetti'
 import { Card, Badge, SessionCardSkeleton, SquadCardSkeleton } from '../components/ui'
-import { useAuthStore, useSquadsStore, useVoiceChatStore, useAIStore } from '../hooks'
+import { useAuthStore, useSquadsStore, useVoiceChatStore, useAIStore, useSessionsStore } from '../hooks'
 import { supabase } from '../lib/supabase'
 
 // Types
@@ -66,8 +67,16 @@ function ReliabilityBadge({ score }: { score: number }) {
   )
 }
 
-// Prochaine session card - avec glow et wording gamer
-function NextSessionCard({ session }: { session: UpcomingSession }) {
+// Prochaine session card - avec RSVP inline et célébration
+function NextSessionCard({
+  session,
+  onRsvp,
+  isRsvpLoading
+}: {
+  session: UpcomingSession
+  onRsvp: (sessionId: string, response: 'present' | 'absent' | 'maybe') => void
+  isRsvpLoading?: boolean
+}) {
   const scheduledDate = new Date(session.scheduled_at)
   const now = new Date()
   const diffMs = scheduledDate.getTime() - now.getTime()
@@ -91,18 +100,19 @@ function NextSessionCard({ session }: { session: UpcomingSession }) {
   const dateFormatted = scheduledDate.toLocaleDateString('fr-FR', { weekday: 'short', day: 'numeric', month: 'short' })
 
   const hasResponded = session.my_rsvp !== null
-  const isConfirmed = session.my_rsvp === 'present'
+  const canRsvp = diffMs > -2 * 60 * 60 * 1000 // Can RSVP until 2h after start
 
   return (
-    <Link to={`/squad/${session.squad_id}`}>
-      <motion.div
-        whileHover={{ y: -2 }}
-        whileTap={{ scale: 0.99 }}
-      >
-        <Card className="p-4 border-l-4 border-l-[#5e6dd2] bg-gradient-to-br from-[#5e6dd2]/10 via-transparent to-[#4ade80]/5 hover:from-[#5e6dd2]/15 hover:to-[#4ade80]/10 hover:shadow-[0_0_20px_rgba(94,109,210,0.2)] transition-all duration-300">
+    <motion.div
+      whileHover={{ y: -2 }}
+      whileTap={{ scale: 0.995 }}
+    >
+      <Card className="p-4 border-l-4 border-l-[#5e6dd2] bg-gradient-to-br from-[#5e6dd2]/10 via-transparent to-[#4ade80]/5 hover:from-[#5e6dd2]/15 hover:to-[#4ade80]/10 hover:shadow-[0_0_20px_rgba(94,109,210,0.2)] transition-all duration-300">
+        {/* Header avec lien vers squad */}
+        <Link to={`/squad/${session.squad_id}`}>
           <div className="flex items-start justify-between mb-3">
             <div>
-              <div className="text-[15px] font-semibold text-[#f7f8f8]">
+              <div className="text-[15px] font-semibold text-[#f7f8f8] hover:text-[#5e6dd2] transition-colors">
                 {session.title || session.game || 'Session'}
               </div>
               <div className="text-[13px] text-[#8b8d90]">{session.squad_name}</div>
@@ -122,25 +132,83 @@ function NextSessionCard({ session }: { session: UpcomingSession }) {
               <span>{session.rsvp_counts.present}/{session.total_members}</span>
             </div>
           </div>
+        </Link>
 
-          {hasResponded ? (
-            <div className={`flex items-center gap-2 text-[13px] ${isConfirmed ? 'text-[#4ade80]' : 'text-[#8b8d90]'}`}>
-              <CheckCircle2 className="w-4 h-4" />
-              <span>{isConfirmed ? "T'es chaud, on t'attend !" : session.my_rsvp === 'absent' ? 'Pas dispo cette fois' : 'En mode peut-être...'}</span>
-            </div>
-          ) : (
-            <motion.div
-              className="flex items-center gap-2 text-[13px] text-[#f5a623]"
-              animate={{ x: [0, 3, 0] }}
-              transition={{ duration: 1.5, repeat: Infinity }}
+        {/* RSVP inline buttons - 1 clic pour répondre */}
+        {canRsvp && (
+          <div className="flex gap-2 pt-2 border-t border-white/5">
+            <motion.button
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              disabled={isRsvpLoading}
+              onClick={() => onRsvp(session.id, 'present')}
+              aria-label="Marquer comme présent"
+              aria-pressed={session.my_rsvp === 'present'}
+              className={`flex-1 flex items-center justify-center gap-1.5 px-3 py-2.5 min-h-[44px] rounded-lg text-[13px] font-medium transition-all duration-200 ${
+                session.my_rsvp === 'present'
+                  ? 'bg-[#4ade80]/20 text-[#4ade80] border border-[#4ade80]/30 shadow-[0_0_12px_rgba(74,222,128,0.3)]'
+                  : 'bg-[rgba(255,255,255,0.05)] text-[#8b8d90] hover:bg-[rgba(74,222,128,0.15)] hover:text-[#4ade80] border border-transparent hover:border-[#4ade80]/20'
+              }`}
             >
-              <Clock className="w-4 h-4" />
-              <span>Ta squad attend ta réponse !</span>
-            </motion.div>
-          )}
-        </Card>
-      </motion.div>
-    </Link>
+              <CheckCircle2 className="w-4 h-4" />
+              <span className="hidden sm:inline">Présent</span>
+            </motion.button>
+
+            <motion.button
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              disabled={isRsvpLoading}
+              onClick={() => onRsvp(session.id, 'maybe')}
+              aria-label="Marquer comme peut-être"
+              aria-pressed={session.my_rsvp === 'maybe'}
+              className={`flex-1 flex items-center justify-center gap-1.5 px-3 py-2.5 min-h-[44px] rounded-lg text-[13px] font-medium transition-all duration-200 ${
+                session.my_rsvp === 'maybe'
+                  ? 'bg-[#f5a623]/20 text-[#f5a623] border border-[#f5a623]/30 shadow-[0_0_12px_rgba(245,166,35,0.3)]'
+                  : 'bg-[rgba(255,255,255,0.05)] text-[#8b8d90] hover:bg-[rgba(245,166,35,0.15)] hover:text-[#f5a623] border border-transparent hover:border-[#f5a623]/20'
+              }`}
+            >
+              <HelpCircle className="w-4 h-4" />
+              <span className="hidden sm:inline">Peut-être</span>
+            </motion.button>
+
+            <motion.button
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              disabled={isRsvpLoading}
+              onClick={() => onRsvp(session.id, 'absent')}
+              aria-label="Marquer comme absent"
+              aria-pressed={session.my_rsvp === 'absent'}
+              className={`flex-1 flex items-center justify-center gap-1.5 px-3 py-2.5 min-h-[44px] rounded-lg text-[13px] font-medium transition-all duration-200 ${
+                session.my_rsvp === 'absent'
+                  ? 'bg-[#f87171]/20 text-[#f87171] border border-[#f87171]/30 shadow-[0_0_12px_rgba(248,113,113,0.3)]'
+                  : 'bg-[rgba(255,255,255,0.05)] text-[#8b8d90] hover:bg-[rgba(248,113,113,0.15)] hover:text-[#f87171] border border-transparent hover:border-[#f87171]/20'
+              }`}
+            >
+              <XCircle className="w-4 h-4" />
+              <span className="hidden sm:inline">Absent</span>
+            </motion.button>
+          </div>
+        )}
+
+        {/* Message de confirmation après RSVP */}
+        {hasResponded && (
+          <motion.div
+            initial={{ opacity: 0, y: -5 }}
+            animate={{ opacity: 1, y: 0 }}
+            className={`flex items-center gap-2 text-[13px] mt-2 pt-2 border-t border-white/5 ${
+              session.my_rsvp === 'present' ? 'text-[#4ade80]' :
+              session.my_rsvp === 'absent' ? 'text-[#f87171]' : 'text-[#f5a623]'
+            }`}
+          >
+            <CheckCircle2 className="w-4 h-4" />
+            <span>
+              {session.my_rsvp === 'present' ? "T'es chaud, on t'attend !" :
+               session.my_rsvp === 'absent' ? 'Pas dispo cette fois' : 'En mode peut-être...'}
+            </span>
+          </motion.div>
+        )}
+      </Card>
+    </motion.div>
   )
 }
 
@@ -212,11 +280,15 @@ export default function Home() {
   const { squads, fetchSquads, isLoading: squadsLoading } = useSquadsStore()
   const { isConnected: isInVoiceChat, currentChannel, remoteUsers } = useVoiceChatStore()
   const { aiCoachTip, fetchAICoachTip } = useAIStore()
+  const { updateRsvp } = useSessionsStore()
   const navigate = useNavigate()
 
   const [upcomingSessions, setUpcomingSessions] = useState<UpcomingSession[]>([])
   const [sessionsThisWeek, setSessionsThisWeek] = useState(0)
   const [sessionsLoading, setSessionsLoading] = useState(true)
+  const [showConfetti, setShowConfetti] = useState(false)
+  const [successMessage, setSuccessMessage] = useState<string | null>(null)
+  const [rsvpLoading, setRsvpLoading] = useState(false)
 
   // Fetch squads
   useEffect(() => {
@@ -314,6 +386,52 @@ export default function Home() {
     fetchUpcomingSessions()
   }, [user, squads])
 
+  // Handle RSVP avec célébration
+  const handleRsvp = async (sessionId: string, response: 'present' | 'absent' | 'maybe') => {
+    setRsvpLoading(true)
+    try {
+      const { error } = await updateRsvp(sessionId, response)
+      if (error) {
+        console.error('RSVP error:', error)
+        return
+      }
+
+      // Update local state immédiatement pour UX réactive
+      setUpcomingSessions(prev => prev.map(s =>
+        s.id === sessionId
+          ? {
+              ...s,
+              my_rsvp: response,
+              rsvp_counts: {
+                ...s.rsvp_counts,
+                [response]: s.rsvp_counts[response] + (s.my_rsvp === response ? 0 : 1),
+                ...(s.my_rsvp && s.my_rsvp !== response ? { [s.my_rsvp]: Math.max(0, s.rsvp_counts[s.my_rsvp] - 1) } : {})
+              }
+            }
+          : s
+      ))
+
+      // Célébration pour "présent" - moment Wow!
+      if (response === 'present') {
+        setShowConfetti(true)
+        setSuccessMessage("T'es confirmé ! 🔥 Ta squad compte sur toi")
+        setTimeout(() => setShowConfetti(false), 4000)
+        setTimeout(() => setSuccessMessage(null), 5000)
+      } else {
+        const labels = {
+          absent: 'Absence enregistrée',
+          maybe: 'Réponse enregistrée'
+        }
+        setSuccessMessage(labels[response])
+        setTimeout(() => setSuccessMessage(null), 3000)
+      }
+    } catch (error) {
+      console.error('RSVP error:', error)
+    } finally {
+      setRsvpLoading(false)
+    }
+  }
+
   if (!isInitialized) {
     return (
       <div className="min-h-0 bg-[#08090a] flex items-center justify-center py-12">
@@ -343,6 +461,31 @@ export default function Home() {
 
   return (
     <div className="min-h-0 bg-[#08090a] pb-6">
+      {/* Confetti celebration for RSVP present */}
+      {showConfetti && typeof window !== 'undefined' && (
+        <Confetti
+          width={window.innerWidth}
+          height={window.innerHeight}
+          recycle={false}
+          numberOfPieces={150}
+          gravity={0.3}
+          colors={['#4ade80', '#5e6dd2', '#f5a623', '#8b93ff', '#f7f8f8']}
+          style={{ position: 'fixed', top: 0, left: 0, zIndex: 100, pointerEvents: 'none' }}
+        />
+      )}
+
+      {/* Success message toast */}
+      {successMessage && (
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -20 }}
+          className="fixed top-4 left-1/2 -translate-x-1/2 z-50 px-6 py-3 rounded-xl bg-[#4ade80]/20 border border-[#4ade80]/30 backdrop-blur-sm"
+        >
+          <p className="text-[14px] font-medium text-[#4ade80]">{successMessage}</p>
+        </motion.div>
+      )}
+
       <div className="px-4 md:px-6 lg:px-8 py-6 max-w-2xl lg:max-w-4xl xl:max-w-6xl mx-auto">
         <div>
           {/* Header avec célébration - Wording gamer */}
@@ -435,7 +578,7 @@ export default function Home() {
                   </Link>
                 )}
               </div>
-              <NextSessionCard session={nextSession} />
+              <NextSessionCard session={nextSession} onRsvp={handleRsvp} isRsvpLoading={rsvpLoading} />
             </div>
           )}
 

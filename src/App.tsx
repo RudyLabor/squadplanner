@@ -1,10 +1,11 @@
 import { useEffect } from 'react'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
-import { Home, Auth, Squads, SquadDetail, SessionDetail, Landing, Sessions, Profile, Messages, Party, Onboarding, CallHistory, Premium } from './pages'
+import { Home, Auth, Squads, SquadDetail, SessionDetail, Landing, Sessions, Profile, Messages, Party, Onboarding, CallHistory, Premium, Settings, Help } from './pages'
 import { AppLayout } from './components/layout'
 import { useAuthStore, subscribeToIncomingCalls } from './hooks'
 import { CallModal } from './components/CallModal'
 import { IncomingCallModal } from './components/IncomingCallModal'
+import { CommandPalette } from './components/CommandPalette'
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { user, isInitialized } = useAuthStore()
@@ -46,6 +47,9 @@ function AppContent() {
       <CallModal />
       <IncomingCallModal />
 
+      {/* Command Palette - Cmd+K */}
+      <CommandPalette />
+
       <AppLayout>
         <Routes>
         {/* Public routes */}
@@ -86,6 +90,10 @@ function AppContent() {
         <Route path="/premium" element={
           <Premium />
         } />
+        <Route path="/settings" element={
+          <ProtectedRoute><Settings /></ProtectedRoute>
+        } />
+        <Route path="/help" element={<Help />} />
 
         {/* Catch-all redirect to home */}
         <Route path="*" element={<Navigate to="/" replace />} />

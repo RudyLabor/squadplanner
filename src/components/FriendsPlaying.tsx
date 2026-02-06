@@ -7,11 +7,13 @@ export interface FriendPlaying {
   friend_id: string
   username: string
   avatar_url: string | null
-  current_game: string
+  current_game: string | null
   last_seen_at: string
   squad_id: string
   squad_name: string
   party_member_count: number
+  voice_channel_id?: string | null
+  is_in_voice?: boolean
 }
 
 export interface FriendsPlayingProps {
@@ -30,7 +32,8 @@ function FriendCard({
   onJoin: (squadId: string) => void
   onInvite: (friendId: string) => void
 }) {
-  const isInParty = friend.party_member_count > 0
+  // Un ami est en party vocale s'il a un channel actif
+  const isInParty = friend.is_in_voice || friend.party_member_count > 0
 
   return (
     <motion.div
@@ -79,8 +82,22 @@ function FriendCard({
                 {friend.username}
               </div>
               <div className="flex items-center gap-1.5 text-[12px] text-[#8b8d90]">
-                <Gamepad2 className="w-3.5 h-3.5 text-[#5e6dd2]" />
-                <span className="truncate">{friend.current_game}</span>
+                {friend.is_in_voice ? (
+                  <>
+                    <Users className="w-3.5 h-3.5 text-[#4ade80]" />
+                    <span className="truncate text-[#4ade80]">En Party vocale</span>
+                  </>
+                ) : friend.current_game ? (
+                  <>
+                    <Gamepad2 className="w-3.5 h-3.5 text-[#5e6dd2]" />
+                    <span className="truncate">{friend.current_game}</span>
+                  </>
+                ) : (
+                  <>
+                    <Users className="w-3.5 h-3.5 text-[#5e6dd2]" />
+                    <span className="truncate">En ligne</span>
+                  </>
+                )}
               </div>
             </div>
           </div>

@@ -10,7 +10,7 @@ import {
   CheckCircle2,
   WifiOff,
   AlertCircle,
-  Link2,
+  UserPlus,
   Check
 } from 'lucide-react'
 import { Link } from 'react-router-dom'
@@ -22,6 +22,7 @@ import { useNetworkQualityStore } from '../hooks/useNetworkQuality'
 import { VoiceWaveformDemo } from '../components/VoiceWaveform'
 import { ParticipantVolumeControl } from '../components/ParticipantVolumeControl'
 import { useParticipantVolumes } from '../hooks/useParticipantVolumes'
+import { InviteToPartyModal } from '../components/InviteToPartyModal'
 
 // Participant avatar avec animation speaking
 function ParticipantAvatar({
@@ -92,14 +93,14 @@ function ParticipantAvatar({
 }
 
 // Section Party Active (grande, en haut)
-function ActivePartySection({ squad, onLeave, currentUserId: _currentUserId }: {
+function ActivePartySection({ squad, onLeave, currentUserId }: {
   squad: { id: string; name: string; game: string }
   onLeave: () => void
   currentUserId: string
 }) {
   const { localUser, remoteUsers, isMuted, toggleMute, error, isReconnecting, reconnectAttempts, client } = useVoiceChatStore()
   const { localQuality } = useNetworkQualityStore()
-  const [linkCopied, setLinkCopied] = useState(false)
+  const [showInviteModal, setShowInviteModal] = useState(false)
 
   // Volume control hook
   const { getVolume, setVolume, isMuted: isParticipantMuted, setMuted, getEffectiveVolume } = useParticipantVolumes()
@@ -120,11 +121,8 @@ function ActivePartySection({ squad, onLeave, currentUserId: _currentUserId }: {
   // Generate shareable party link
   const partyLink = `${window.location.origin}/squad/${squad.id}?join=party`
 
-  const copyPartyLink = () => {
-    navigator.clipboard.writeText(partyLink)
-    setLinkCopied(true)
-    setTimeout(() => setLinkCopied(false), 2000)
-  }
+  // Get connected user IDs for the invite modal
+  const connectedUserIds = remoteUsers.map(u => String(u.odrop))
 
   const participants = [
     ...(localUser ? [{ ...localUser, isLocal: true }] : []),
@@ -148,28 +146,15 @@ function ActivePartySection({ squad, onLeave, currentUserId: _currentUserId }: {
             {localQuality !== 'unknown' && (
               <NetworkQualityIndicator size="sm" showLabel showTooltip />
             )}
-            {/* Share party link button */}
+            {/* Invite squad members button */}
             <motion.button
-              onClick={copyPartyLink}
+              onClick={() => setShowInviteModal(true)}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[12px] font-medium transition-colors ${
-                linkCopied
-                  ? 'bg-[#34d399]/20 text-[#34d399]'
-                  : 'bg-[rgba(99,102,241,0.15)] text-[#6366f1] hover:bg-[rgba(99,102,241,0.25)]'
-              }`}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[12px] font-medium transition-colors bg-[rgba(99,102,241,0.15)] text-[#6366f1] hover:bg-[rgba(99,102,241,0.25)]"
             >
-              {linkCopied ? (
-                <>
-                  <Check className="w-3.5 h-3.5" />
-                  Copié !
-                </>
-              ) : (
-                <>
-                  <Link2 className="w-3.5 h-3.5" />
-                  Inviter
-                </>
-              )}
+              <UserPlus className="w-3.5 h-3.5" />
+              Inviter
             </motion.button>
             <Link to={`/squad/${squad.id}`}>
               <span className="text-[12px] text-[#6366f1] hover:text-[#a78bfa]">Voir la squad</span>
@@ -319,6 +304,17 @@ function ActivePartySection({ squad, onLeave, currentUserId: _currentUserId }: {
       <p className="text-center text-xs text-[#5e6063] pb-4">
         {isMuted ? 'Micro coupé' : 'Micro actif'}
       </p>
+
+      {/* Invite modal */}
+      <InviteToPartyModal
+        isOpen={showInviteModal}
+        onClose={() => setShowInviteModal(false)}
+        squadId={squad.id}
+        squadName={squad.name}
+        partyLink={partyLink}
+        currentUserId={currentUserId}
+        connectedUserIds={connectedUserIds}
+      />
     </Card>
   )
 }

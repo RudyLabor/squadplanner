@@ -360,6 +360,15 @@ export const useVoiceChatStore = create<VoiceChatState>((set, get) => ({
         },
       })
 
+      // Sync voice party status to database so other squad members can see us
+      try {
+        await supabase.rpc('join_voice_party', { p_channel_id: channelName })
+        console.log('[VoiceChat] Voice party status synced to database')
+      } catch (syncError) {
+        console.warn('[VoiceChat] Could not sync voice party to database:', syncError)
+        // Non-blocking - continue even if sync fails
+      }
+
       console.log('Joined voice channel:', channelName)
       return true
     } catch (error) {
@@ -395,6 +404,15 @@ export const useVoiceChatStore = create<VoiceChatState>((set, get) => ({
 
       // Clear saved party from localStorage
       clearSavedParty()
+
+      // Clear voice party status from database so other squad members know we left
+      try {
+        await supabase.rpc('leave_voice_party')
+        console.log('[VoiceChat] Voice party status cleared from database')
+      } catch (syncError) {
+        console.warn('[VoiceChat] Could not clear voice party from database:', syncError)
+        // Non-blocking - continue even if sync fails
+      }
 
       set({
         isConnected: false,

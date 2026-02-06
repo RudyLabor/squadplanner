@@ -192,6 +192,30 @@ export const useSquadsStore = create<SquadsState>((set, get) => ({
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) throw new Error('Not authenticated')
 
+      // CRITICAL: Ensure profile exists before joining squad (foreign key constraint)
+      const { data: existingProfile } = await supabase
+        .from('profiles')
+        .select('id')
+        .eq('id', user.id)
+        .single()
+
+      if (!existingProfile) {
+        // Profile doesn't exist, create it
+        const { error: profileError } = await supabase
+          .from('profiles')
+          .insert({
+            id: user.id,
+            username: user.email?.split('@')[0] || 'User',
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString()
+          })
+
+        if (profileError) {
+          console.error('Profile creation error:', profileError)
+          throw new Error('Impossible de créer le profil. Veuillez réessayer.')
+        }
+      }
+
       // Find squad by invite code
       const { data: squad, error: findError } = await supabase
         .from('squads')

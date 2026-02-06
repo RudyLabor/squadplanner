@@ -11,8 +11,7 @@ import {
   WifiOff,
   AlertCircle,
   Link2,
-  Check,
-  Hand
+  Check
 } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import Confetti from 'react-confetti'
@@ -445,10 +444,6 @@ export function Party() {
   const hadDuoCelebration = useRef(false)
   const prevRemoteCount = useRef(0)
 
-  // Push-to-talk state
-  const [isPushToTalkEnabled, setIsPushToTalkEnabled] = useState(false)
-  const [isPushToTalkActive, setIsPushToTalkActive] = useState(false)
-
   // Toast de changement de qualite reseau
   const [showQualityToast, setShowQualityToast] = useState(false)
   const [qualityToastLevel, setQualityToastLevel] = useState<'excellent' | 'good' | 'medium' | 'poor'>('good')
@@ -458,41 +453,6 @@ export function Party() {
       fetchSquads()
     }
   }, [user, fetchSquads])
-
-  // Push-to-talk keyboard handler
-  useEffect(() => {
-    if (!isPushToTalkEnabled || !isConnected) return
-
-    const { toggleMute, isMuted } = useVoiceChatStore.getState()
-
-    const handleKeyDown = (e: KeyboardEvent) => {
-      // Only handle spacebar when not typing in an input
-      if (e.code === 'Space' && !e.repeat && e.target === document.body) {
-        e.preventDefault()
-        setIsPushToTalkActive(true)
-        // Unmute when spacebar pressed
-        if (isMuted) toggleMute()
-      }
-    }
-
-    const handleKeyUp = (e: KeyboardEvent) => {
-      if (e.code === 'Space') {
-        e.preventDefault()
-        setIsPushToTalkActive(false)
-        // Mute when spacebar released
-        const state = useVoiceChatStore.getState()
-        if (!state.isMuted) state.toggleMute()
-      }
-    }
-
-    window.addEventListener('keydown', handleKeyDown)
-    window.addEventListener('keyup', handleKeyUp)
-
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown)
-      window.removeEventListener('keyup', handleKeyUp)
-    }
-  }, [isPushToTalkEnabled, isConnected])
 
   // Detecter la fin de la reconnexion pour afficher un toast
   useEffect(() => {
@@ -604,28 +564,9 @@ export function Party() {
               </p>
             </div>
             {isConnected && (
-              <div className="flex items-center gap-3">
-                {/* Push-to-talk toggle */}
-                <button
-                  onClick={() => setIsPushToTalkEnabled(!isPushToTalkEnabled)}
-                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[12px] font-medium transition-colors ${
-                    isPushToTalkEnabled
-                      ? isPushToTalkActive
-                        ? 'bg-[#34d399]/20 text-[#34d399] border border-[#34d399]/30'
-                        : 'bg-[#6366f1]/20 text-[#6366f1] border border-[#6366f1]/30'
-                      : 'bg-[rgba(255,255,255,0.05)] text-[#8b8d90] hover:bg-[rgba(255,255,255,0.1)]'
-                  }`}
-                  title={isPushToTalkEnabled ? 'Désactiver Push-to-Talk' : 'Activer Push-to-Talk (Espace)'}
-                >
-                  <Hand className="w-3.5 h-3.5" />
-                  <span className="hidden sm:inline">
-                    {isPushToTalkEnabled ? (isPushToTalkActive ? 'Parle...' : 'PTT actif') : 'PTT'}
-                  </span>
-                </button>
-                <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#34d399]/15 border border-[#34d399]/30">
-                  <div className="w-2 h-2 rounded-full bg-[#34d399] animate-pulse" />
-                  <span className="text-[12px] font-medium text-[#34d399]">En ligne</span>
-                </div>
+              <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#34d399]/15 border border-[#34d399]/30">
+                <div className="w-2 h-2 rounded-full bg-[#34d399] animate-pulse" />
+                <span className="text-[12px] font-medium text-[#34d399]">En ligne</span>
               </div>
             )}
           </div>

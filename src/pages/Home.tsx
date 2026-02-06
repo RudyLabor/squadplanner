@@ -515,9 +515,9 @@ export default function Home() {
   const reliabilityScore = profile?.reliability_score || 100
   const nextSession = upcomingSessions[0]
 
-  // Déterminer si une party est active (simulé pour l'instant)
-  // TODO: Implémenter la détection réelle des parties actives via Supabase Realtime
-  const activeParty = isInVoiceChat && currentChannel ? {
+  // Déterminer si une party est active avec d'autres participants
+  // Ne pas afficher si l'utilisateur est seul dans la party (ça n'a pas de sens)
+  const activeParty = isInVoiceChat && currentChannel && remoteUsers.length > 0 ? {
     squadName: squads.find(s => currentChannel.includes(s.id))?.name || 'Ta squad',
     participantCount: remoteUsers.length + 1,
   } : null

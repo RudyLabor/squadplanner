@@ -261,30 +261,9 @@ function StatsRow({ squadsCount, sessionsThisWeek, reliabilityScore }: {
   reliabilityScore: number
 }) {
   const stats = [
-    {
-      value: squadsCount,
-      label: 'Squads',
-      icon: Users,
-      color: '#6366f1',
-      bgGlow: 'rgba(99, 102, 241, 0.08)',
-      suffix: ''
-    },
-    {
-      value: sessionsThisWeek,
-      label: 'Cette semaine',
-      icon: Calendar,
-      color: '#fbbf24',
-      bgGlow: 'rgba(251, 191, 36, 0.08)',
-      suffix: ''
-    },
-    {
-      value: reliabilityScore,
-      label: 'Fiabilité',
-      icon: TrendingUp,
-      color: '#34d399',
-      bgGlow: 'rgba(52, 211, 153, 0.08)',
-      suffix: '%'
-    },
+    { value: squadsCount, label: 'Squads', icon: Users, color: '#6366f1', suffix: '' },
+    { value: sessionsThisWeek, label: 'Cette semaine', icon: Calendar, color: '#fbbf24', suffix: '' },
+    { value: reliabilityScore, label: 'Fiabilité', icon: TrendingUp, color: '#34d399', suffix: '%' },
   ]
 
   return (
@@ -295,29 +274,19 @@ function StatsRow({ squadsCount, sessionsThisWeek, reliabilityScore }: {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: index * 0.1, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-          className="flex-1 h-[68px] px-4 flex items-center gap-3 rounded-2xl border border-white/[0.04] bg-white/[0.02] hover:bg-white/[0.035] hover:border-white/[0.06] transition-all duration-300"
-          style={{
-            background: `linear-gradient(135deg, ${stat.bgGlow} 0%, transparent 60%)`,
-          }}
+          className="flex-1 h-[68px] px-4 flex items-center gap-3 rounded-2xl border border-white/[0.06] bg-white/[0.02] transition-all duration-300"
         >
-          {/* Icon avec glow subtil */}
           <div
-            className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 relative"
-            style={{ backgroundColor: `${stat.color}12` }}
+            className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
+            style={{ backgroundColor: `${stat.color}15` }}
           >
-            <div
-              className="absolute inset-0 rounded-xl opacity-40 blur-sm"
-              style={{ backgroundColor: stat.color }}
-            />
-            <stat.icon className="w-5 h-5 relative z-10" style={{ color: stat.color }} />
+            <stat.icon className="w-5 h-5" style={{ color: stat.color }} />
           </div>
-
-          {/* Contenu */}
           <div className="min-w-0 flex-1">
             <div className="text-[20px] font-bold text-white tracking-tight leading-none">
               <CountUp end={stat.value} duration={1.2} suffix={stat.suffix} />
             </div>
-            <div className="text-[10px] text-white/40 uppercase tracking-wider mt-0.5 truncate font-medium">
+            <div className="text-[10px] text-white/50 uppercase tracking-wider mt-0.5 truncate font-medium">
               {stat.label}
             </div>
           </div>

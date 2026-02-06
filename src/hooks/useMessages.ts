@@ -30,7 +30,7 @@ interface MessagesState {
   // Actions
   fetchConversations: () => Promise<void>
   fetchMessages: (squadId: string, sessionId?: string) => Promise<void>
-  sendMessage: (content: string, squadId: string, sessionId?: string) => Promise<{ error: Error | null }>
+  sendMessage: (content: string, squadId: string, sessionId?: string, replyToId?: string) => Promise<{ error: Error | null }>
   editMessage: (messageId: string, newContent: string) => Promise<{ error: Error | null }>
   deleteMessage: (messageId: string) => Promise<{ error: Error | null }>
   pinMessage: (messageId: string, isPinned: boolean) => Promise<{ error: Error | null }>
@@ -145,7 +145,7 @@ export const useMessagesStore = create<MessagesState>((set, get) => ({
     }
   },
 
-  sendMessage: async (content: string, squadId: string, sessionId?: string) => {
+  sendMessage: async (content: string, squadId: string, sessionId?: string, replyToId?: string) => {
     try {
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) throw new Error('Not authenticated')
@@ -155,6 +155,7 @@ export const useMessagesStore = create<MessagesState>((set, get) => ({
         squad_id: string
         sender_id: string
         session_id?: string
+        reply_to_id?: string
         read_by: string[]
       } = {
         content: content.trim(),
@@ -165,6 +166,10 @@ export const useMessagesStore = create<MessagesState>((set, get) => ({
 
       if (sessionId) {
         messageData.session_id = sessionId
+      }
+
+      if (replyToId) {
+        messageData.reply_to_id = replyToId
       }
 
       const { error } = await supabase

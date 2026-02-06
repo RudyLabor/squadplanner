@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef, useCallback } from 'react'
+import { useEffect, useState, useRef, useCallback, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   Send,
@@ -14,7 +14,7 @@ import {
   CheckCircle2,
   AlertCircle
 } from 'lucide-react'
-import { Button, Card } from '../components/ui'
+import { Button } from '../components/ui'
 import { useMessagesStore } from '../hooks/useMessages'
 import { useDirectMessagesStore } from '../hooks/useDirectMessages'
 import { useAuthStore } from '../hooks/useAuth'
@@ -24,6 +24,11 @@ import { MessageStatus } from '../components/MessageStatus'
 import { TypingIndicator } from '../components/TypingIndicator'
 import { MessageActions } from '../components/MessageActions'
 import { EditMessageModal } from '../components/EditMessageModal'
+import { MessageReactions } from '../components/MessageReactions'
+import { PinnedMessages, type PinnedMessage } from '../components/PinnedMessages'
+import { EmptyState } from '../components/EmptyState'
+import { ReplyComposer } from '../components/ReplyComposer'
+import { MessageReplyPreview } from '../components/MessageReplyPreview'
 
 // Simple toast component for Messages
 function MessageToast({ message, isVisible, variant = 'success' }: {
@@ -32,8 +37,8 @@ function MessageToast({ message, isVisible, variant = 'success' }: {
   variant?: 'success' | 'error'
 }) {
   const styles = {
-    success: { bg: 'bg-[#4ade80]', text: 'text-[#08090a]', Icon: CheckCircle2 },
-    error: { bg: 'bg-[#f87171]', text: 'text-white', Icon: AlertCircle }
+    success: { bg: 'bg-[#34d399]', text: 'text-[#050506]', Icon: CheckCircle2 },
+    error: { bg: 'bg-[#fb7185]', text: 'text-white', Icon: AlertCircle }
   }
   const style = styles[variant]
   const Icon = style.Icon
@@ -109,7 +114,7 @@ function ConversationCard({ conversation, onClick, isActive }: {
       onClick={onClick}
       className={`w-full p-3 rounded-xl text-left transition-all ${
         isActive
-          ? 'bg-[rgba(94,109,210,0.15)] border border-[rgba(94,109,210,0.3)]'
+          ? 'bg-[rgba(99,102,241,0.15)] border border-[rgba(99,102,241,0.3)]'
           : 'hover:bg-[#18191b] border border-transparent'
       }`}
     >
@@ -117,17 +122,17 @@ function ConversationCard({ conversation, onClick, isActive }: {
         {/* Avatar */}
         <div className={`relative w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 ${
           conversation.type === 'session'
-            ? 'bg-[rgba(245,166,35,0.15)]'
-            : 'bg-[rgba(94,109,210,0.15)]'
+            ? 'bg-[rgba(251,191,36,0.15)]'
+            : 'bg-[rgba(99,102,241,0.15)]'
         }`}>
           {conversation.type === 'session' ? (
-            <Gamepad2 className="w-5 h-5 text-[#f5a623]" />
+            <Gamepad2 className="w-5 h-5 text-[#fbbf24]" />
           ) : (
-            <Users className="w-5 h-5 text-[#5e6dd2]" />
+            <Users className="w-5 h-5 text-[#6366f1]" />
           )}
           {/* Unread indicator */}
           {conversation.unread_count > 0 && (
-            <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 bg-[#5e6dd2] text-white text-xs font-bold rounded-full flex items-center justify-center">
+            <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 bg-[#6366f1] text-white text-xs font-bold rounded-full flex items-center justify-center">
               {conversation.unread_count > 9 ? '9+' : conversation.unread_count}
             </span>
           )}
@@ -204,7 +209,7 @@ function SystemMessage({ message }: {
     >
       <p className={`text-[13px] italic text-center px-4 py-1.5 rounded-full ${
         isCelebration
-          ? 'bg-gradient-to-r from-[rgba(94,109,210,0.15)] to-[rgba(139,92,246,0.15)] text-[#a5b4fc] border border-[rgba(94,109,210,0.2)]'
+          ? 'bg-gradient-to-r from-[rgba(99,102,241,0.15)] to-[rgba(167,139,250,0.15)] text-[#a5b4fc] border border-[rgba(99,102,241,0.2)]'
           : 'text-[#888]'
       }`}>
         {isCelebration && <span className="mr-1">🎉</span>}
@@ -215,7 +220,7 @@ function SystemMessage({ message }: {
 }
 
 // Message bubble
-function MessageBubble({ message, isOwn, showAvatar, showName, currentUserId, isSquadChat, isAdmin, onEdit, onDelete, onPin, onReply }: {
+function MessageBubble({ message, isOwn, showAvatar, showName, currentUserId, isSquadChat, isAdmin, onEdit, onDelete, onPin, onReply, replyToMessage, onScrollToMessage }: {
   message: {
     id: string
     content: string
@@ -225,6 +230,7 @@ function MessageBubble({ message, isOwn, showAvatar, showName, currentUserId, is
     edited_at?: string | null
     sender_id: string
     sender?: { username?: string; avatar_url?: string | null }
+    reply_to_id?: string | null
     // Pour les squad messages
     read_by?: string[]
     // Pour les DMs
@@ -240,6 +246,14 @@ function MessageBubble({ message, isOwn, showAvatar, showName, currentUserId, is
   onDelete: (messageId: string) => void
   onPin: (messageId: string, isPinned: boolean) => void
   onReply: (message: { id: string; content: string; sender: string }) => void
+  replyToMessage?: {
+    id: string
+    sender_id: string
+    sender_username: string
+    sender_avatar?: string
+    content: string
+  } | null
+  onScrollToMessage?: (messageId: string) => void
 }) {
   // Si c'est un message système, utiliser le composant dédié
   if (message.is_system_message) {
@@ -266,7 +280,7 @@ function MessageBubble({ message, isOwn, showAvatar, showName, currentUserId, is
                 className="w-8 h-8 rounded-full object-cover"
               />
             ) : (
-              <div className="w-8 h-8 rounded-full bg-[rgba(94,109,210,0.2)] flex items-center justify-center text-xs font-bold text-[#5e6dd2]">
+              <div className="w-8 h-8 rounded-full bg-[rgba(99,102,241,0.2)] flex items-center justify-center text-xs font-bold text-[#6366f1]">
                 {initial}
               </div>
             )}
@@ -282,9 +296,17 @@ function MessageBubble({ message, isOwn, showAvatar, showName, currentUserId, is
 
           {/* Pinned indicator */}
           {message.is_pinned && (
-            <span className="text-[10px] text-[#f5a623] mb-1 ml-1 flex items-center gap-1">
+            <span className="text-[10px] text-[#fbbf24] mb-1 ml-1 flex items-center gap-1">
               <span>📌</span> Epingle
             </span>
+          )}
+
+          {/* Reply Preview - Phase 3.3 */}
+          {replyToMessage && (
+            <MessageReplyPreview
+              originalMessage={replyToMessage}
+              onClickScrollTo={onScrollToMessage ? () => onScrollToMessage(replyToMessage.id) : undefined}
+            />
           )}
 
           <div className="flex items-center gap-1">
@@ -310,8 +332,8 @@ function MessageBubble({ message, isOwn, showAvatar, showName, currentUserId, is
             <div
               className={`px-4 py-2.5 rounded-2xl transition-all duration-150 ${
                 isOwn
-                  ? 'bg-[#5e6dd2] text-white rounded-br-lg hover:bg-[#6b7ae0] hover:shadow-[0_0_12px_rgba(94,109,210,0.3)]'
-                  : 'bg-[#18191b] text-[#f7f8f8] rounded-bl-lg hover:bg-[#1f2023] hover:shadow-[0_0_12px_rgba(255,255,255,0.05)]'
+                  ? 'bg-[#6366f1] text-white rounded-br-lg hover:bg-[#7c7ffa] hover:shadow-[0_0_10px_rgba(99,102,241,0.15)]'
+                  : 'bg-[#18191b] text-[#f7f8f8] rounded-bl-lg hover:bg-[#1f2023] hover:shadow-[0_0_10px_rgba(255,255,255,0.025)]'
               }`}
             >
               <p className="text-[14px] leading-relaxed whitespace-pre-wrap break-words">
@@ -360,6 +382,14 @@ function MessageBubble({ message, isOwn, showAvatar, showName, currentUserId, is
               )
             )}
           </span>
+
+          {/* Emoji Reactions - Phase 3.1 */}
+          {isSquadChat && (
+            <MessageReactions
+              messageId={message.id}
+              isOwnMessage={isOwn}
+            />
+          )}
         </div>
       </div>
     </motion.div>
@@ -387,7 +417,7 @@ function DMConversationCard({ conversation, onClick }: {
     >
       <div className="flex items-center gap-3">
         {/* Avatar */}
-        <div className="relative w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 overflow-hidden bg-[rgba(94,109,210,0.15)]">
+        <div className="relative w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 overflow-hidden bg-[rgba(99,102,241,0.15)]">
           {conversation.other_user_avatar_url ? (
             <img
               src={conversation.other_user_avatar_url}
@@ -395,11 +425,11 @@ function DMConversationCard({ conversation, onClick }: {
               className="w-full h-full object-cover"
             />
           ) : (
-            <span className="text-[14px] font-bold text-[#5e6dd2]">{initial}</span>
+            <span className="text-[14px] font-bold text-[#6366f1]">{initial}</span>
           )}
           {/* Unread indicator */}
           {conversation.unread_count > 0 && (
-            <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 bg-[#5e6dd2] text-white text-xs font-bold rounded-full flex items-center justify-center">
+            <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 bg-[#6366f1] text-white text-xs font-bold rounded-full flex items-center justify-center">
               {conversation.unread_count > 9 ? '9+' : conversation.unread_count}
             </span>
           )}
@@ -560,24 +590,20 @@ export function Messages() {
 
     setIsSending(true)
 
-    // Prepare message content with reply context if applicable
-    let messageContent = newMessage
-    if (replyingTo) {
-      messageContent = `> ${replyingTo.sender}: ${replyingTo.content.substring(0, 50)}${replyingTo.content.length > 50 ? '...' : ''}\n\n${newMessage}`
-    }
-
     if (activeSquadConv) {
+      // Pass reply_to_id for proper reply threading - Phase 3.3
       const { error } = await sendSquadMessage(
-        messageContent,
+        newMessage,
         activeSquadConv.squad_id,
-        activeSquadConv.session_id
+        activeSquadConv.session_id,
+        replyingTo?.id // Pass the reply_to_id
       )
       if (!error) {
         setNewMessage('')
         setReplyingTo(null)
       }
     } else if (activeDMConv) {
-      const { error } = await sendDMMessage(messageContent, activeDMConv.other_user_id)
+      const { error } = await sendDMMessage(newMessage, activeDMConv.other_user_id)
       if (!error) {
         setNewMessage('')
         setReplyingTo(null)
@@ -674,6 +700,38 @@ export function Messages() {
     ? (activeSquadConv?.type === 'squad' ? 'Chat de squad' : 'Chat de session')
     : 'Message privé'
 
+  // Pinned messages - Phase 3.2
+  const pinnedMessages: PinnedMessage[] = useMemo(() => {
+    if (!isSquadChat) return []
+    return messages
+      .filter(msg => 'is_pinned' in msg && msg.is_pinned)
+      .map(msg => ({
+        pin_id: `pin-${msg.id}`,
+        message_id: msg.id,
+        message_content: msg.content,
+        message_sender_id: msg.sender_id,
+        message_sender_username: msg.sender?.username || 'Utilisateur',
+        message_created_at: msg.created_at,
+        pinned_by_id: msg.sender_id, // Simplified - in real app, track who pinned
+        pinned_by_username: msg.sender?.username || 'Utilisateur',
+        pinned_at: msg.created_at
+      }))
+      .slice(0, 25) // Max 25 pinned messages
+  }, [messages, isSquadChat])
+
+  // Scroll to a specific message (for pinned messages)
+  const scrollToMessage = useCallback((messageId: string) => {
+    const messageElement = document.getElementById(`message-${messageId}`)
+    if (messageElement) {
+      messageElement.scrollIntoView({ behavior: 'smooth', block: 'center' })
+      // Highlight the message briefly
+      messageElement.classList.add('ring-2', 'ring-[#f5a623]', 'ring-opacity-50')
+      setTimeout(() => {
+        messageElement.classList.remove('ring-2', 'ring-[#f5a623]', 'ring-opacity-50')
+      }, 2000)
+    }
+  }, [])
+
   // ========== COMPOSANT LISTE DES CONVERSATIONS ==========
   const ConversationsList = ({ showOnDesktop = false }: { showOnDesktop?: boolean }) => (
     <div className={`${showOnDesktop ? 'h-full flex flex-col' : ''}`}>
@@ -682,7 +740,7 @@ export function Messages() {
         <div className="flex items-center justify-between mb-1">
           <h1 className={`font-bold text-[#f7f8f8] ${showOnDesktop ? 'text-xl' : 'text-2xl'}`}>Messages</h1>
           {totalUnread > 0 && (
-            <span className="px-2.5 py-1 bg-[#5e6dd2] text-white text-[12px] font-bold rounded-full">
+            <span className="px-2.5 py-1 bg-[#6366f1] text-white text-[12px] font-bold rounded-full">
               {totalUnread} non lu{totalUnread > 1 ? 's' : ''}
             </span>
           )}
@@ -702,7 +760,7 @@ export function Messages() {
           <Users className="w-4 h-4" />
           Squads
           {squadUnread > 0 && (
-            <span className="min-w-[18px] h-[18px] px-1 bg-[#5e6dd2] text-white text-xs font-bold rounded-full flex items-center justify-center">
+            <span className="min-w-[18px] h-[18px] px-1 bg-[#6366f1] text-white text-xs font-bold rounded-full flex items-center justify-center">
               {squadUnread > 9 ? '9+' : squadUnread}
             </span>
           )}
@@ -718,7 +776,7 @@ export function Messages() {
           <User className="w-4 h-4" />
           Privés
           {dmUnread > 0 && (
-            <span className="min-w-[18px] h-[18px] px-1 bg-[#5e6dd2] text-white text-xs font-bold rounded-full flex items-center justify-center">
+            <span className="min-w-[18px] h-[18px] px-1 bg-[#6366f1] text-white text-xs font-bold rounded-full flex items-center justify-center">
               {dmUnread > 9 ? '9+' : dmUnread}
             </span>
           )}
@@ -733,7 +791,7 @@ export function Messages() {
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           placeholder={activeTab === 'squads' ? 'Rechercher une squad...' : 'Rechercher un contact...'}
-          className="w-full h-11 pl-10 pr-4 bg-[#18191b] border border-[rgba(255,255,255,0.06)] rounded-xl text-[14px] text-[#f7f8f8] placeholder:text-[#5e6063] focus:outline-none focus:border-[rgba(94,109,210,0.5)] transition-colors"
+          className="w-full h-11 pl-10 pr-4 bg-[#18191b] border border-[rgba(255,255,255,0.06)] rounded-xl text-[14px] text-[#f7f8f8] placeholder:text-[#5e6063] focus:outline-none focus:border-[rgba(99,102,241,0.5)] transition-colors"
         />
       </div>
 
@@ -741,29 +799,24 @@ export function Messages() {
       <div className={`${showOnDesktop ? 'flex-1 overflow-y-auto px-4 pb-4' : ''}`}>
         {isLoading ? (
           <div className="flex justify-center py-16">
-            <Loader2 className="w-8 h-8 text-[#5e6dd2] animate-spin" />
+            <Loader2 className="w-8 h-8 text-[#6366f1] animate-spin" />
           </div>
         ) : activeTab === 'squads' ? (
           // Squad conversations
           squadConversations.length === 0 ? (
-            <Card className="p-8 text-center bg-[#101012]">
-              <div className="w-16 h-16 rounded-2xl bg-[rgba(94,109,210,0.1)] flex items-center justify-center mx-auto mb-5">
-                <Users className="w-8 h-8 text-[#5e6dd2]" strokeWidth={1.5} />
-              </div>
-              <h3 className="text-[18px] font-semibold text-[#f7f8f8] mb-2">
-                Pas encore de squads
-              </h3>
-              <p className="text-[14px] text-[#8b8d90] max-w-[280px] mx-auto mb-5">
-                Rejoins une squad pour discuter avec tes potes.
-              </p>
-              <Button onClick={() => window.location.href = '/squads'}>
-                Voir mes squads
-              </Button>
-            </Card>
+            <EmptyState
+              type="no_squads"
+              title="Pas encore de squads"
+              message="Rejoins une squad pour discuter avec tes potes."
+              actionLabel="Voir mes squads"
+              onAction={() => window.location.href = '/squads'}
+            />
           ) : filteredSquadConvs.length === 0 ? (
-            <div className="text-center py-12">
-              <p className="text-[14px] text-[#5e6063]">Aucune squad trouvée</p>
-            </div>
+            <EmptyState
+              type="no_search_results"
+              title="Aucune squad trouvée"
+              message="Essaie avec d'autres mots-clés"
+            />
           ) : (
             <div className="space-y-1">
               {filteredSquadConvs.map(conversation => (
@@ -779,21 +832,17 @@ export function Messages() {
         ) : (
           // DM conversations
           dmConversations.length === 0 ? (
-            <Card className="p-8 text-center bg-[#101012]">
-              <div className="w-16 h-16 rounded-2xl bg-[rgba(94,109,210,0.1)] flex items-center justify-center mx-auto mb-5">
-                <User className="w-8 h-8 text-[#5e6dd2]" strokeWidth={1.5} />
-              </div>
-              <h3 className="text-[18px] font-semibold text-[#f7f8f8] mb-2">
-                Pas encore de messages privés
-              </h3>
-              <p className="text-[14px] text-[#8b8d90] max-w-[280px] mx-auto">
-                Clique sur un membre de ta squad pour lui envoyer un message.
-              </p>
-            </Card>
+            <EmptyState
+              type="no_messages"
+              title="Pas encore de messages prives"
+              message="Clique sur un membre de ta squad pour lui envoyer un message."
+            />
           ) : filteredDMConvs.length === 0 ? (
-            <div className="text-center py-12">
-              <p className="text-[14px] text-[#5e6063]">Aucun contact trouvé</p>
-            </div>
+            <EmptyState
+              type="no_search_results"
+              title="Aucun contact trouve"
+              message="Essaie avec d'autres mots-clés"
+            />
           ) : (
             <div className="space-y-1">
               {filteredDMConvs.map(conversation => (
@@ -812,7 +861,7 @@ export function Messages() {
 
   // ========== COMPOSANT VUE CHAT ==========
   const ChatView = ({ embedded = false }: { embedded?: boolean }) => (
-    <div className={`flex flex-col ${embedded ? 'h-full' : 'h-screen'} bg-[#08090a]`}>
+    <div className={`flex flex-col ${embedded ? 'h-full' : 'h-screen'} bg-[#050506]`}>
       {/* Header chat */}
       <div className={`flex-shrink-0 px-4 py-3 border-b border-[rgba(255,255,255,0.06)] ${embedded ? '' : 'bg-[#101012]/80 backdrop-blur-xl'}`}>
         <div className={`flex items-center gap-3 ${embedded ? '' : 'max-w-4xl lg:max-w-5xl mx-auto'}`}>
@@ -831,13 +880,13 @@ export function Messages() {
             <>
               <div className={`w-11 h-11 rounded-xl flex items-center justify-center ${
                 activeSquadConv.type === 'session'
-                  ? 'bg-[rgba(245,166,35,0.15)]'
-                  : 'bg-[rgba(94,109,210,0.15)]'
+                  ? 'bg-[rgba(251,191,36,0.15)]'
+                  : 'bg-[rgba(99,102,241,0.15)]'
               }`}>
                 {activeSquadConv.type === 'session' ? (
-                  <Gamepad2 className="w-5 h-5 text-[#f5a623]" />
+                  <Gamepad2 className="w-5 h-5 text-[#fbbf24]" />
                 ) : (
-                  <Users className="w-5 h-5 text-[#5e6dd2]" />
+                  <Users className="w-5 h-5 text-[#6366f1]" />
                 )}
               </div>
               <div className="flex-1 min-w-0">
@@ -848,7 +897,7 @@ export function Messages() {
           ) : activeDMConv ? (
             // DM chat header
             <>
-              <div className="w-11 h-11 rounded-full flex items-center justify-center overflow-hidden bg-[rgba(94,109,210,0.15)]">
+              <div className="w-11 h-11 rounded-full flex items-center justify-center overflow-hidden bg-[rgba(99,102,241,0.15)]">
                 {activeDMConv.other_user_avatar_url ? (
                   <img
                     src={activeDMConv.other_user_avatar_url}
@@ -856,7 +905,7 @@ export function Messages() {
                     className="w-full h-full object-cover"
                   />
                 ) : (
-                  <span className="text-[14px] font-bold text-[#5e6dd2]">
+                  <span className="text-[14px] font-bold text-[#6366f1]">
                     {activeDMConv.other_user_username?.charAt(0).toUpperCase() || '?'}
                   </span>
                 )}
@@ -879,12 +928,23 @@ export function Messages() {
                 className="p-2.5 rounded-xl bg-[rgba(34,197,94,0.1)] hover:bg-[rgba(34,197,94,0.2)] transition-colors"
                 aria-label={`Appeler ${activeDMConv.other_user_username}`}
               >
-                <Phone className="w-5 h-5 text-[#4ade80]" aria-hidden="true" />
+                <Phone className="w-5 h-5 text-[#34d399]" aria-hidden="true" />
               </button>
             </>
           ) : null}
         </div>
       </div>
+
+      {/* Pinned Messages Section - Phase 3.2 */}
+      {isSquadChat && pinnedMessages.length > 0 && (
+        <PinnedMessages
+          pinnedMessages={pinnedMessages}
+          currentUserId={user?.id || ''}
+          isAdmin={isAdmin}
+          onUnpin={(messageId) => handlePinMessage(messageId, false)}
+          onScrollToMessage={scrollToMessage}
+        />
+      )}
 
       {/* Zone messages */}
       <div
@@ -894,17 +954,11 @@ export function Messages() {
       >
         <div className={embedded ? '' : 'max-w-4xl lg:max-w-5xl mx-auto'}>
           {messages.length === 0 && !isLoading ? (
-            <div className="text-center py-16">
-              <div className="w-14 h-14 rounded-2xl bg-[rgba(94,109,210,0.1)] flex items-center justify-center mx-auto mb-4">
-                <Sparkles className="w-7 h-7 text-[#5e6dd2]" />
-              </div>
-              <h3 className="text-[16px] font-semibold text-[#f7f8f8] mb-2">
-                Nouvelle conversation
-              </h3>
-              <p className="text-[14px] text-[#5e6063]">
-                Envoie le premier message !
-              </p>
-            </div>
+            <EmptyState
+              type="no_messages"
+              title="Nouvelle conversation"
+              message="Envoie le premier message !"
+            />
           ) : (
             <AnimatePresence initial={false}>
               {messages.map((message, index) => {
@@ -918,8 +972,21 @@ export function Messages() {
                 const prevMessageDate = prevMessage ? getMessageDate(prevMessage.created_at) : ''
                 const showDateSeparator = messageDate !== prevMessageDate
 
+                // Find reply-to message if exists - Phase 3.3
+                const replyToId = 'reply_to_id' in message ? message.reply_to_id : null
+                const replyToMessage = replyToId
+                  ? messages.find(m => m.id === replyToId)
+                  : null
+                const replyToData = replyToMessage ? {
+                  id: replyToMessage.id,
+                  sender_id: replyToMessage.sender_id,
+                  sender_username: replyToMessage.sender?.username || 'Utilisateur',
+                  sender_avatar: replyToMessage.sender?.avatar_url || undefined,
+                  content: replyToMessage.content
+                } : null
+
                 return (
-                  <div key={message.id}>
+                  <div key={message.id} id={`message-${message.id}`} className="transition-all duration-300">
                     {showDateSeparator && (
                       <DateSeparator date={message.created_at} />
                     )}
@@ -935,6 +1002,8 @@ export function Messages() {
                       onDelete={handleDeleteMessage}
                       onPin={handlePinMessage}
                       onReply={handleReply}
+                      replyToMessage={replyToData}
+                      onScrollToMessage={scrollToMessage}
                     />
                   </div>
                 )
@@ -961,7 +1030,7 @@ export function Messages() {
               exit={{ opacity: 0, y: 20, scale: 0.8 }}
               transition={{ type: 'spring', stiffness: 300, damping: 25 }}
               onClick={scrollToBottom}
-              className={`${embedded ? 'absolute' : 'fixed'} bottom-28 right-6 w-10 h-10 bg-[#5e6dd2] hover:bg-[#6b7ae0] rounded-full flex items-center justify-center shadow-lg shadow-[rgba(94,109,210,0.3)] transition-colors z-50`}
+              className={`${embedded ? 'absolute' : 'fixed'} bottom-28 right-6 w-10 h-10 bg-[#6366f1] hover:bg-[#7c7ffa] rounded-full flex items-center justify-center shadow-md shadow-[rgba(99,102,241,0.15)] transition-colors z-50`}
               aria-label="Scroll to bottom"
             >
               <ChevronDown className="w-5 h-5 text-white" />
@@ -973,35 +1042,15 @@ export function Messages() {
       {/* Input message */}
       <div className={`flex-shrink-0 px-4 py-3 ${embedded ? 'pb-3' : 'pb-6'} border-t border-[rgba(255,255,255,0.06)] ${embedded ? '' : 'bg-[#101012]/80 backdrop-blur-xl'}`}>
         <div className={embedded ? '' : 'max-w-4xl lg:max-w-5xl mx-auto'}>
-          {/* Reply indicator */}
-          <AnimatePresence>
-            {replyingTo && (
-              <motion.div
-                initial={{ opacity: 0, height: 0, marginBottom: 0 }}
-                animate={{ opacity: 1, height: 'auto', marginBottom: 8 }}
-                exit={{ opacity: 0, height: 0, marginBottom: 0 }}
-                className="overflow-hidden"
-              >
-                <div className="flex items-center gap-2 px-3 py-2 bg-[rgba(94,109,210,0.1)] border-l-2 border-[#5e6dd2] rounded-lg">
-                  <div className="flex-1 min-w-0">
-                    <p className="text-[11px] text-[#5e6dd2] font-medium mb-0.5">
-                      Reponse a {replyingTo.sender}
-                    </p>
-                    <p className="text-[12px] text-[#8b8d90] truncate">
-                      {replyingTo.content}
-                    </p>
-                  </div>
-                  <button
-                    onClick={cancelReply}
-                    className="p-1 rounded hover:bg-[rgba(255,255,255,0.1)] transition-colors"
-                    aria-label="Annuler la reponse"
-                  >
-                    <span className="text-[#8b8d90] text-lg leading-none">&times;</span>
-                  </button>
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
+          {/* Reply Composer - Phase 3.3 */}
+          <ReplyComposer
+            replyingTo={replyingTo ? {
+              id: replyingTo.id,
+              sender_username: replyingTo.sender,
+              content: replyingTo.content
+            } : null}
+            onCancel={cancelReply}
+          />
 
           <form onSubmit={handleSendMessage}>
             <div className="flex items-center gap-2">
@@ -1012,7 +1061,7 @@ export function Messages() {
                   value={newMessage}
                   onChange={handleMessageChange}
                   placeholder={isSquadChat ? 'Message à la squad...' : `Message à ${chatName}...`}
-                  className="w-full h-12 px-4 bg-[#18191b] border border-[rgba(255,255,255,0.06)] rounded-xl text-[14px] text-[#f7f8f8] placeholder:text-[#5e6063] focus:outline-none focus:border-[rgba(94,109,210,0.5)] transition-colors"
+                  className="w-full h-12 px-4 bg-[#18191b] border border-[rgba(255,255,255,0.06)] rounded-xl text-[14px] text-[#f7f8f8] placeholder:text-[#5e6063] focus:outline-none focus:border-[rgba(99,102,241,0.5)] transition-colors"
                   autoComplete="off"
                 />
               </div>
@@ -1044,10 +1093,10 @@ export function Messages() {
 
   // ========== PLACEHOLDER VUE DESKTOP SANS CHAT ==========
   const EmptyChatPlaceholder = () => (
-    <div className="h-full flex items-center justify-center bg-[#08090a]">
+    <div className="h-full flex items-center justify-center bg-[#050506]">
       <div className="text-center">
-        <div className="w-20 h-20 rounded-2xl bg-[rgba(94,109,210,0.1)] flex items-center justify-center mx-auto mb-5">
-          <Sparkles className="w-10 h-10 text-[#5e6dd2]" />
+        <div className="w-20 h-20 rounded-2xl bg-[rgba(99,102,241,0.1)] flex items-center justify-center mx-auto mb-5">
+          <Sparkles className="w-10 h-10 text-[#6366f1]" />
         </div>
         <h3 className="text-[18px] font-semibold text-[#f7f8f8] mb-2">
           Sélectionne une conversation
@@ -1068,7 +1117,7 @@ export function Messages() {
           isVisible={toast.visible}
           variant={toast.variant}
         />
-        <div className="h-screen bg-[#08090a] flex">
+        <div className="h-screen bg-[#050506] flex">
           {/* Sidebar gauche - Liste des conversations */}
           <div className="w-[340px] xl:w-[380px] flex-shrink-0 border-r border-[rgba(255,255,255,0.06)] bg-[#101012]">
             <ConversationsList showOnDesktop />
@@ -1097,7 +1146,7 @@ export function Messages() {
           isVisible={toast.visible}
           variant={toast.variant}
         />
-        <div className="min-h-0 bg-[#08090a] pb-6">
+        <div className="min-h-0 bg-[#050506] pb-6">
           <div className="px-4 md:px-6 lg:px-8 py-6 max-w-2xl lg:max-w-4xl xl:max-w-6xl mx-auto">
             <ConversationsList />
           </div>

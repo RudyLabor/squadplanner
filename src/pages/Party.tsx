@@ -16,7 +16,7 @@ import {
 import { Link } from 'react-router-dom'
 import Confetti from 'react-confetti'
 import { Card, Button } from '../components/ui'
-import { useAuthStore, useSquadsStore, useVoiceChatStore } from '../hooks'
+import { useAuthStore, useSquadsStore, useVoiceChatStore, getSavedPartyInfo } from '../hooks'
 import { NetworkQualityIndicator, QualityChangeToast } from '../components/NetworkQualityIndicator'
 import { useNetworkQualityStore } from '../hooks/useNetworkQuality'
 import { VoiceWaveformDemo } from '../components/VoiceWaveform'
@@ -443,6 +443,7 @@ export function Party() {
   const [showDuoConfetti, setShowDuoConfetti] = useState(false)
   const hadDuoCelebration = useRef(false)
   const prevRemoteCount = useRef(0)
+  const hasAttemptedAutoReconnect = useRef(false)
 
   // Toast de changement de qualite reseau
   const [showQualityToast, setShowQualityToast] = useState(false)
@@ -453,6 +454,34 @@ export function Party() {
       fetchSquads()
     }
   }, [user, fetchSquads])
+
+  // Auto-reconnect to party after page refresh
+  useEffect(() => {
+    // Only attempt once, and only if not already connected
+    if (hasAttemptedAutoReconnect.current || isConnected || isConnecting) return
+    if (!user || !profile) return
+
+    const savedParty = getSavedPartyInfo()
+    if (savedParty) {
+      hasAttemptedAutoReconnect.current = true
+      console.log('[Party] Auto-reconnecting to saved party:', savedParty.channelName)
+
+      // Small delay to let the page render first
+      setTimeout(() => {
+        joinChannel(savedParty.channelName, savedParty.userId, savedParty.username)
+          .then(success => {
+            if (success) {
+              setToastMessage('Reconnecté à la party !')
+              setToastVariant('success')
+              setShowToast(true)
+            }
+          })
+          .catch(err => {
+            console.error('[Party] Auto-reconnect failed:', err)
+          })
+      }, 500)
+    }
+  }, [user, profile, isConnected, isConnecting, joinChannel])
 
   // Detecter la fin de la reconnexion pour afficher un toast
   useEffect(() => {

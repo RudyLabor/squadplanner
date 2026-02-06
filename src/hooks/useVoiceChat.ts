@@ -69,6 +69,50 @@ const AGORA_APP_ID = import.meta.env.VITE_AGORA_APP_ID || ''
 const MAX_RECONNECT_ATTEMPTS = 3
 const RECONNECT_DELAY_MS = 2000
 
+// LocalStorage key for party persistence
+const PARTY_STORAGE_KEY = 'squadplanner_active_party'
+
+// Helper to save party info for auto-reconnect on refresh
+function savePartyToStorage(channelName: string, userId: string, username: string) {
+  try {
+    localStorage.setItem(PARTY_STORAGE_KEY, JSON.stringify({
+      channelName,
+      userId,
+      username,
+      timestamp: Date.now()
+    }))
+  } catch (e) {
+    console.warn('[VoiceChat] Could not save party to storage:', e)
+  }
+}
+
+// Helper to get saved party info
+export function getSavedPartyInfo(): { channelName: string; userId: string; username: string } | null {
+  try {
+    const data = localStorage.getItem(PARTY_STORAGE_KEY)
+    if (!data) return null
+
+    const parsed = JSON.parse(data)
+    // Only return if party was saved less than 5 minutes ago (page refresh scenario)
+    if (Date.now() - parsed.timestamp > 5 * 60 * 1000) {
+      localStorage.removeItem(PARTY_STORAGE_KEY)
+      return null
+    }
+    return parsed
+  } catch (e) {
+    return null
+  }
+}
+
+// Helper to clear saved party
+function clearSavedParty() {
+  try {
+    localStorage.removeItem(PARTY_STORAGE_KEY)
+  } catch (e) {
+    // Ignore
+  }
+}
+
 export const useVoiceChatStore = create<VoiceChatState>((set, get) => ({
   isConnected: false,
   isConnecting: false,
@@ -111,8 +155,9 @@ export const useVoiceChatStore = create<VoiceChatState>((set, get) => ({
         codec: 'vp8',
       })
 
-      // Stocker les infos pour la reconnexion
+      // Stocker les infos pour la reconnexion (en mémoire et localStorage)
       set({ reconnectInfo: { channelName, userId, username } })
+      savePartyToStorage(channelName, userId, username)
 
       // Gestion des changements d'état de connexion (reconnexion automatique)
       client.on('connection-state-change', async (curState, prevState, reason) => {
@@ -347,6 +392,9 @@ export const useVoiceChatStore = create<VoiceChatState>((set, get) => ({
 
       // Reset network quality store
       useNetworkQualityStore.getState().resetQuality()
+
+      // Clear saved party from localStorage
+      clearSavedParty()
 
       set({
         isConnected: false,

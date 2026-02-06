@@ -347,42 +347,57 @@ export default function Home() {
         const endOfWeek = new Date(startOfWeek)
         endOfWeek.setDate(startOfWeek.getDate() + 7)
 
-        // Fetch upcoming sessions (not cancelled)
-        const { data: sessions, error } = await supabase
-          .from('sessions')
+        // Fetch sessions and week count in parallel
+        const [sessionsResult, weekCountResult] = await Promise.all([
+          supabase
+            .from('sessions')
+            .select('*')
+            .in('squad_id', squadIds)
+            .neq('status', 'cancelled')
+            .gte('scheduled_at', new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString())
+            .order('scheduled_at', { ascending: true })
+            .limit(5),
+          supabase
+            .from('sessions')
+            .select('*', { count: 'exact', head: true })
+            .in('squad_id', squadIds)
+            .gte('scheduled_at', startOfWeek.toISOString())
+            .lt('scheduled_at', endOfWeek.toISOString())
+        ])
+
+        if (sessionsResult.error) throw sessionsResult.error
+
+        const sessions = sessionsResult.data || []
+        setSessionsThisWeek(weekCountResult.count || 0)
+
+        if (sessions.length === 0) {
+          setUpcomingSessions([])
+          return
+        }
+
+        // Get all RSVPs for all sessions in ONE query
+        const sessionIds = sessions.map(s => s.id)
+        const { data: allRsvps } = await supabase
+          .from('session_rsvps')
           .select('*')
-          .in('squad_id', squadIds)
-          .neq('status', 'cancelled')
-          .gte('scheduled_at', new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString()) // Include sessions from 2h ago (in progress)
-          .order('scheduled_at', { ascending: true })
-          .limit(5)
+          .in('session_id', sessionIds)
 
-        if (error) throw error
-
-        // Count sessions this week
-        const { count: weekCount } = await supabase
-          .from('sessions')
-          .select('*', { count: 'exact', head: true })
-          .in('squad_id', squadIds)
-          .gte('scheduled_at', startOfWeek.toISOString())
-          .lt('scheduled_at', endOfWeek.toISOString())
-
-        setSessionsThisWeek(weekCount || 0)
+        // Group RSVPs by session
+        const rsvpsBySession: Record<string, typeof allRsvps> = {}
+        allRsvps?.forEach(rsvp => {
+          if (!rsvpsBySession[rsvp.session_id]) {
+            rsvpsBySession[rsvp.session_id] = []
+          }
+          rsvpsBySession[rsvp.session_id]!.push(rsvp)
+        })
 
         // Enrich sessions with squad info and RSVPs
-        const enrichedSessions: UpcomingSession[] = []
-        for (const session of sessions || []) {
+        const enrichedSessions: UpcomingSession[] = sessions.map(session => {
           const squad = squads.find(s => s.id === session.squad_id)
+          const rsvps = rsvpsBySession[session.id] || []
+          const my_rsvp = rsvps.find(r => r.user_id === user.id)?.response as 'present' | 'absent' | 'maybe' | null || null
 
-          // Get RSVPs
-          const { data: rsvps } = await supabase
-            .from('session_rsvps')
-            .select('*')
-            .eq('session_id', session.id)
-
-          const my_rsvp = rsvps?.find(r => r.user_id === user.id)?.response as 'present' | 'absent' | 'maybe' | null || null
-
-          enrichedSessions.push({
+          return {
             id: session.id,
             title: session.title,
             game: session.game,
@@ -392,13 +407,13 @@ export default function Home() {
             squad_name: squad?.name || 'Squad',
             total_members: squad?.member_count || squad?.total_members || 1,
             rsvp_counts: {
-              present: rsvps?.filter(r => r.response === 'present').length || 0,
-              absent: rsvps?.filter(r => r.response === 'absent').length || 0,
-              maybe: rsvps?.filter(r => r.response === 'maybe').length || 0,
+              present: rsvps.filter(r => r.response === 'present').length,
+              absent: rsvps.filter(r => r.response === 'absent').length,
+              maybe: rsvps.filter(r => r.response === 'maybe').length,
             },
             my_rsvp,
-          })
-        }
+          }
+        })
 
         setUpcomingSessions(enrichedSessions)
       } catch (error) {

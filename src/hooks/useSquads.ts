@@ -41,43 +41,50 @@ export const useSquadsStore = create<SquadsState>((set, get) => ({
   fetchSquads: async () => {
     try {
       set({ isLoading: true })
-      
-      // Get user's squads through squad_members
+
+      // Get user's squads with member count in a single query
       const { data: memberships, error: memberError } = await supabase
         .from('squad_members')
-        .select('squad_id')
-      
+        .select(`
+          squad_id,
+          squads!inner (
+            id,
+            name,
+            game,
+            invite_code,
+            owner_id,
+            created_at
+          )
+        `)
+
       if (memberError) throw memberError
-      
+
       if (!memberships || memberships.length === 0) {
         set({ squads: [], isLoading: false })
         return
       }
 
-      const squadIds = memberships.map(m => m.squad_id)
-      
-      // Fetch squads with member count
-      const { data: squads, error } = await supabase
-        .from('squads')
-        .select('*')
-        .in('id', squadIds)
-        .order('created_at', { ascending: false })
+      // Extract unique squads and get member counts in parallel
+      const squadIds = [...new Set(memberships.map(m => m.squad_id))]
+      const squadsData = memberships.map(m => m.squads as unknown as Squad)
+      const uniqueSquads = squadIds.map(id => squadsData.find(s => s.id === id)!).filter(Boolean)
 
-      if (error) throw error
+      // Get all member counts in one query
+      const { data: memberCounts } = await supabase
+        .from('squad_members')
+        .select('squad_id')
+        .in('squad_id', squadIds)
 
-      // Get member counts separately
-      const squadsWithCount: SquadWithMembers[] = []
-      for (const squad of squads || []) {
-        const { count } = await supabase
-          .from('squad_members')
-          .select('*', { count: 'exact', head: true })
-          .eq('squad_id', squad.id)
-        
-        squadsWithCount.push({
-          ...squad,
-          member_count: count || 0
-        })
-      }
+      // Count members per squad
+      const countBySquad: Record<string, number> = {}
+      memberCounts?.forEach(m => {
+        countBySquad[m.squad_id] = (countBySquad[m.squad_id] || 0) + 1
+      })
+
+      const squadsWithCount: SquadWithMembers[] = uniqueSquads.map(squad => ({
+        ...squad,
+        member_count: countBySquad[squad.id] || 0
+      })).sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
 
       set({ squads: squadsWithCount, isLoading: false })
     } catch (error) {

@@ -267,7 +267,7 @@ function StatsRow({ squadsCount, sessionsThisWeek, reliabilityScore }: {
   ]
 
   return (
-    <div className="flex gap-3">
+    <div className="grid grid-cols-3 gap-2 sm:gap-3">
       {stats.map((stat, index) => (
         <motion.div
           key={stat.label}
@@ -276,19 +276,19 @@ function StatsRow({ squadsCount, sessionsThisWeek, reliabilityScore }: {
           transition={{ delay: index * 0.1, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
-          className="flex-1 h-[68px] px-4 flex items-center gap-3 rounded-2xl border border-white/[0.06] bg-white/[0.02] hover:bg-white/[0.04] hover:border-white/[0.1] cursor-pointer transition-all duration-300"
+          className="h-[60px] sm:h-[68px] px-2 sm:px-4 flex items-center gap-2 sm:gap-3 rounded-xl sm:rounded-2xl border border-white/[0.06] bg-white/[0.02] hover:bg-white/[0.04] hover:border-white/[0.1] cursor-pointer transition-all duration-300"
         >
           <div
-            className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
+            className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl flex items-center justify-center flex-shrink-0"
             style={{ backgroundColor: `${stat.color}15` }}
           >
-            <stat.icon className="w-5 h-5" style={{ color: stat.color }} />
+            <stat.icon className="w-4 h-4 sm:w-5 sm:h-5" style={{ color: stat.color }} />
           </div>
           <div className="min-w-0 flex-1">
-            <div className="text-[20px] font-bold text-white tracking-tight leading-none">
+            <div className="text-[16px] sm:text-[20px] font-bold text-white tracking-tight leading-none">
               <CountUp end={stat.value} duration={1.2} suffix={stat.suffix} />
             </div>
-            <div className="text-[10px] text-white/50 uppercase tracking-wider mt-0.5 truncate font-medium">
+            <div className="text-[8px] sm:text-[10px] text-white/50 uppercase tracking-wider mt-0.5 truncate font-medium">
               {stat.label}
             </div>
           </div>

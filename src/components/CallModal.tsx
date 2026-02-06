@@ -112,9 +112,6 @@ export function CallModal() {
   // Get the other person's info
   const otherPerson = isIncoming ? caller : receiver
 
-  // Debug logging
-  console.log('[CallModal] status:', status, 'shouldShow:', shouldShow, 'otherPerson:', otherPerson, 'isIncoming:', isIncoming)
-
   if (!shouldShow || !otherPerson) return null
 
   const getStatusText = () => {

@@ -1,5 +1,4 @@
 import { create } from 'zustand'
-import AgoraRTC from 'agora-rtc-sdk-ng'
 import type {
   IAgoraRTCClient,
   IMicrophoneAudioTrack,
@@ -12,6 +11,17 @@ import {
   setupNetworkQualityListener,
   type NetworkQualityLevel,
 } from './useNetworkQuality'
+
+// Lazy load Agora SDK only when needed (1.3MB)
+let AgoraRTC: typeof import('agora-rtc-sdk-ng').default | null = null
+
+async function getAgoraRTC() {
+  if (!AgoraRTC) {
+    const module = await import('agora-rtc-sdk-ng')
+    AgoraRTC = module.default
+  }
+  return AgoraRTC
+}
 
 // Convert UUID to a numeric UID for Agora (Agora prefers numeric UIDs)
 function uuidToNumericUid(uuid: string): number {
@@ -149,8 +159,11 @@ export const useVoiceChatStore = create<VoiceChatState>((set, get) => ({
     try {
       set({ isConnecting: true, error: null })
 
+      // Lazy load Agora SDK (1.3MB) only when actually joining
+      const Agora = await getAgoraRTC()
+
       // Create client
-      const client = AgoraRTC.createClient({
+      const client = Agora.createClient({
         mode: 'rtc',
         codec: 'vp8',
       })
@@ -161,11 +174,15 @@ export const useVoiceChatStore = create<VoiceChatState>((set, get) => ({
 
       // Gestion des changements d'état de connexion (reconnexion automatique)
       client.on('connection-state-change', async (curState, prevState, reason) => {
-        console.log(`[VoiceChat] Connection state: ${prevState} -> ${curState}, reason: ${reason}`)
+        if (!import.meta.env.PROD) {
+          console.log(`[VoiceChat] Connection state: ${prevState} -> ${curState}, reason: ${reason}`)
+        }
 
         if (curState === 'RECONNECTING') {
           set({ isReconnecting: true })
-          console.log('[VoiceChat] Reconnexion en cours...')
+          if (!import.meta.env.PROD) {
+            console.log('[VoiceChat] Reconnexion en cours...')
+          }
         } else if (curState === 'CONNECTED' && prevState === 'RECONNECTING') {
           // Reconnexion réussie automatiquement par Agora
           set({
@@ -173,7 +190,9 @@ export const useVoiceChatStore = create<VoiceChatState>((set, get) => ({
             reconnectAttempts: 0,
             error: null
           })
-          console.log('[VoiceChat] Reconnexion automatique réussie !')
+          if (!import.meta.env.PROD) {
+            console.log('[VoiceChat] Reconnexion automatique réussie !')
+          }
           // Le toast sera géré par le composant UI
         } else if (curState === 'DISCONNECTED') {
           const currentState = get()
@@ -183,7 +202,9 @@ export const useVoiceChatStore = create<VoiceChatState>((set, get) => ({
             const attempts = currentState.reconnectAttempts + 1
 
             if (attempts <= MAX_RECONNECT_ATTEMPTS) {
-              console.log(`[VoiceChat] Tentative de reconnexion manuelle ${attempts}/${MAX_RECONNECT_ATTEMPTS}...`)
+              if (!import.meta.env.PROD) {
+                console.log(`[VoiceChat] Tentative de reconnexion manuelle ${attempts}/${MAX_RECONNECT_ATTEMPTS}...`)
+              }
               set({
                 isReconnecting: true,
                 reconnectAttempts: attempts,
@@ -210,16 +231,20 @@ export const useVoiceChatStore = create<VoiceChatState>((set, get) => ({
                     reconnectInfo.username
                   )
 
-                  if (success) {
+                  if (success && !import.meta.env.PROD) {
                     console.log('[VoiceChat] Reconnexion manuelle réussie !')
                   }
                 } catch (err) {
-                  console.error('[VoiceChat] Erreur lors de la reconnexion manuelle:', err)
+                  if (!import.meta.env.PROD) {
+                    console.error('[VoiceChat] Erreur lors de la reconnexion manuelle:', err)
+                  }
                 }
               }
             } else {
               // Échec après toutes les tentatives
-              console.error('[VoiceChat] Échec de la reconnexion après 3 tentatives')
+              if (!import.meta.env.PROD) {
+                console.error('[VoiceChat] Échec de la reconnexion après 3 tentatives')
+              }
               set({
                 isReconnecting: false,
                 reconnectAttempts: 0,
@@ -249,7 +274,9 @@ export const useVoiceChatStore = create<VoiceChatState>((set, get) => ({
               displayUsername = profile.username
             }
           } catch (err) {
-            console.warn('Could not fetch username for user:', user.uid, err)
+            if (!import.meta.env.PROD) {
+              console.warn('Could not fetch username for user:', user.uid, err)
+            }
           }
 
           // Add to remote users
@@ -304,7 +331,9 @@ export const useVoiceChatStore = create<VoiceChatState>((set, get) => ({
       const cleanupNetworkQuality = setupNetworkQualityListener(
         client,
         (newQuality, oldQuality) => {
-          console.log(`[VoiceChat] Qualite reseau: ${oldQuality} -> ${newQuality}`)
+          if (!import.meta.env.PROD) {
+            console.log(`[VoiceChat] Qualite reseau: ${oldQuality} -> ${newQuality}`)
+          }
           // Notifier le changement de qualite pour afficher un toast
           set({ networkQualityChanged: newQuality })
         }
@@ -312,10 +341,14 @@ export const useVoiceChatStore = create<VoiceChatState>((set, get) => ({
 
       // Convert UUID to numeric UID for Agora
       const numericUid = uuidToNumericUid(userId)
-      console.log('[VoiceChat] Using numeric UID:', numericUid, 'for channel:', channelName)
+      if (!import.meta.env.PROD) {
+        console.log('[VoiceChat] Using numeric UID:', numericUid, 'for channel:', channelName)
+      }
 
       // Get token from Edge Function
-      console.log('[VoiceChat] Getting token from Edge Function...')
+      if (!import.meta.env.PROD) {
+        console.log('[VoiceChat] Getting token from Edge Function...')
+      }
       let token: string | null = null
 
       try {
@@ -324,19 +357,29 @@ export const useVoiceChatStore = create<VoiceChatState>((set, get) => ({
         })
 
         if (error) {
-          console.warn('[VoiceChat] Token fetch error:', error)
+          if (!import.meta.env.PROD) {
+            console.warn('[VoiceChat] Token fetch error:', error)
+          }
         } else {
           token = data?.token || null
-          console.log('[VoiceChat] Token received:', token ? `${token.substring(0, 20)}...` : 'null')
+          if (!import.meta.env.PROD) {
+            console.log('[VoiceChat] Token received:', token ? `${token.substring(0, 20)}...` : 'null')
+          }
         }
       } catch (tokenError) {
-        console.warn('[VoiceChat] Failed to get token:', tokenError)
+        if (!import.meta.env.PROD) {
+          console.warn('[VoiceChat] Failed to get token:', tokenError)
+        }
       }
 
       // Join channel with token
-      console.log('[VoiceChat] Joining channel...')
+      if (!import.meta.env.PROD) {
+        console.log('[VoiceChat] Joining channel...')
+      }
       const uid = await client.join(AGORA_APP_ID, channelName, token, numericUid)
-      console.log('[VoiceChat] Joined successfully!')
+      if (!import.meta.env.PROD) {
+        console.log('[VoiceChat] Joined successfully!')
+      }
 
       // Create and publish audio track with quality based on premium status
       // Premium: high_quality_stereo (48kHz, stereo, 192 Kbps)
@@ -345,8 +388,10 @@ export const useVoiceChatStore = create<VoiceChatState>((set, get) => ({
         ? { encoderConfig: 'high_quality_stereo' as const }
         : { encoderConfig: 'speech_standard' as const }
 
-      console.log(`[VoiceChat] Audio quality: ${isPremium ? 'HD (Premium)' : 'Standard'}`)
-      const localAudioTrack = await AgoraRTC.createMicrophoneAudioTrack(audioConfig)
+      if (!import.meta.env.PROD) {
+        console.log(`[VoiceChat] Audio quality: ${isPremium ? 'HD (Premium)' : 'Standard'}`)
+      }
+      const localAudioTrack = await Agora.createMicrophoneAudioTrack(audioConfig)
       await client.publish([localAudioTrack])
 
       set({
@@ -370,13 +415,19 @@ export const useVoiceChatStore = create<VoiceChatState>((set, get) => ({
       // Sync voice party status to database so other squad members can see us
       try {
         await supabase.rpc('join_voice_party', { p_channel_id: channelName })
-        console.log('[VoiceChat] Voice party status synced to database')
+        if (!import.meta.env.PROD) {
+          console.log('[VoiceChat] Voice party status synced to database')
+        }
       } catch (syncError) {
-        console.warn('[VoiceChat] Could not sync voice party to database:', syncError)
+        if (!import.meta.env.PROD) {
+          console.warn('[VoiceChat] Could not sync voice party to database:', syncError)
+        }
         // Non-blocking - continue even if sync fails
       }
 
-      console.log('Joined voice channel:', channelName)
+      if (!import.meta.env.PROD) {
+        console.log('Joined voice channel:', channelName)
+      }
       return true
     } catch (error) {
       console.error('Error joining voice channel:', error)
@@ -415,9 +466,13 @@ export const useVoiceChatStore = create<VoiceChatState>((set, get) => ({
       // Clear voice party status from database so other squad members know we left
       try {
         await supabase.rpc('leave_voice_party')
-        console.log('[VoiceChat] Voice party status cleared from database')
+        if (!import.meta.env.PROD) {
+          console.log('[VoiceChat] Voice party status cleared from database')
+        }
       } catch (syncError) {
-        console.warn('[VoiceChat] Could not clear voice party from database:', syncError)
+        if (!import.meta.env.PROD) {
+          console.warn('[VoiceChat] Could not clear voice party from database:', syncError)
+        }
         // Non-blocking - continue even if sync fails
       }
 
@@ -436,9 +491,13 @@ export const useVoiceChatStore = create<VoiceChatState>((set, get) => ({
         networkQualityChanged: null,
       })
 
-      console.log('Left voice channel')
+      if (!import.meta.env.PROD) {
+        console.log('Left voice channel')
+      }
     } catch (error) {
-      console.error('Error leaving voice channel:', error)
+      if (!import.meta.env.PROD) {
+        console.error('Error leaving voice channel:', error)
+      }
     }
   },
 

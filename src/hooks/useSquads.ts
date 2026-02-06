@@ -12,9 +12,10 @@ interface SquadsState {
   squads: SquadWithMembers[]
   currentSquad: SquadWithMembers | null
   isLoading: boolean
-  
+  lastFetchedAt: number | null
+
   // Actions
-  fetchSquads: () => Promise<void>
+  fetchSquads: (force?: boolean) => Promise<void>
   fetchSquadById: (id: string) => Promise<SquadWithMembers | null>
   createSquad: (data: { name: string; game: string }) => Promise<{ squad: Squad | null; error: Error | null }>
   joinSquad: (inviteCode: string) => Promise<{ error: Error | null }>
@@ -22,6 +23,12 @@ interface SquadsState {
   deleteSquad: (squadId: string) => Promise<{ error: Error | null }>
   setCurrentSquad: (squad: SquadWithMembers | null) => void
 }
+
+// Cache duration in ms (30 seconds)
+const CACHE_DURATION = 30 * 1000
+
+// In-flight request tracking to prevent duplicate concurrent requests
+let inFlightFetchSquads: Promise<void> | null = null
 
 // Generate a random invite code
 function generateInviteCode(): string {
@@ -37,60 +44,80 @@ export const useSquadsStore = create<SquadsState>((set, get) => ({
   squads: [],
   currentSquad: null,
   isLoading: false,
+  lastFetchedAt: null,
 
-  fetchSquads: async () => {
-    try {
-      set({ isLoading: true })
+  fetchSquads: async (force = false) => {
+    const state = get()
 
-      // Get user's squads with member count in a single query
-      const { data: memberships, error: memberError } = await supabase
-        .from('squad_members')
-        .select(`
-          squad_id,
-          squads!inner (
-            id,
-            name,
-            game,
-            invite_code,
-            owner_id,
-            created_at
-          )
-        `)
-
-      if (memberError) throw memberError
-
-      if (!memberships || memberships.length === 0) {
-        set({ squads: [], isLoading: false })
-        return
-      }
-
-      // Extract unique squads and get member counts in parallel
-      const squadIds = [...new Set(memberships.map(m => m.squad_id))]
-      const squadsData = memberships.map(m => m.squads as unknown as Squad)
-      const uniqueSquads = squadIds.map(id => squadsData.find(s => s.id === id)!).filter(Boolean)
-
-      // Get all member counts in one query
-      const { data: memberCounts } = await supabase
-        .from('squad_members')
-        .select('squad_id')
-        .in('squad_id', squadIds)
-
-      // Count members per squad
-      const countBySquad: Record<string, number> = {}
-      memberCounts?.forEach(m => {
-        countBySquad[m.squad_id] = (countBySquad[m.squad_id] || 0) + 1
-      })
-
-      const squadsWithCount: SquadWithMembers[] = uniqueSquads.map(squad => ({
-        ...squad,
-        member_count: countBySquad[squad.id] || 0
-      })).sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
-
-      set({ squads: squadsWithCount, isLoading: false })
-    } catch (error) {
-      console.error('Error fetching squads:', error)
-      set({ isLoading: false })
+    // Return cached data if still fresh (unless force refresh)
+    if (!force && state.lastFetchedAt && Date.now() - state.lastFetchedAt < CACHE_DURATION) {
+      return
     }
+
+    // Deduplicate concurrent requests
+    if (inFlightFetchSquads) {
+      return inFlightFetchSquads
+    }
+
+    const fetchPromise = (async () => {
+      try {
+        set({ isLoading: true })
+
+        // Get user's squads with member count in a single query
+        const { data: memberships, error: memberError } = await supabase
+          .from('squad_members')
+          .select(`
+            squad_id,
+            squads!inner (
+              id,
+              name,
+              game,
+              invite_code,
+              owner_id,
+              created_at
+            )
+          `)
+
+        if (memberError) throw memberError
+
+        if (!memberships || memberships.length === 0) {
+          set({ squads: [], isLoading: false, lastFetchedAt: Date.now() })
+          return
+        }
+
+        // Extract unique squads and get member counts in parallel
+        const squadIds = [...new Set(memberships.map(m => m.squad_id))]
+        const squadsData = memberships.map(m => m.squads as unknown as Squad)
+        const uniqueSquads = squadIds.map(id => squadsData.find(s => s.id === id)!).filter(Boolean)
+
+        // Get all member counts in one query
+        const { data: memberCounts } = await supabase
+          .from('squad_members')
+          .select('squad_id')
+          .in('squad_id', squadIds)
+
+        // Count members per squad
+        const countBySquad: Record<string, number> = {}
+        memberCounts?.forEach(m => {
+          countBySquad[m.squad_id] = (countBySquad[m.squad_id] || 0) + 1
+        })
+
+        const squadsWithCount: SquadWithMembers[] = uniqueSquads.map(squad => ({
+          ...squad,
+          member_count: countBySquad[squad.id] || 0
+        })).sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+
+        set({ squads: squadsWithCount, isLoading: false, lastFetchedAt: Date.now() })
+      } catch (error) {
+        console.error('Error fetching squads:', error)
+        set({ isLoading: false })
+      } finally {
+        inFlightFetchSquads = null
+      }
+    })()
+
+    inFlightFetchSquads = fetchPromise
+    return fetchPromise
   },
 
   fetchSquadById: async (id: string) => {

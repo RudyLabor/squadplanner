@@ -1,10 +1,11 @@
-import { useEffect, useState, lazy, Suspense, memo } from 'react'
+import { useEffect, useState, lazy, Suspense, memo, useRef } from 'react'
 import { BrowserRouter, Routes, Route, Navigate, useLocation, useSearchParams } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
 import { AppLayout } from './components/layout'
 import { useAuthStore, useSquadsStore, subscribeToIncomingCalls, usePushNotificationStore, useVoiceCallStore } from './hooks'
 import { pageTransitionVariants, pageTransitionConfig } from './components/PageTransition'
 import { supabase } from './lib/supabase'
+import { ErrorBoundary } from './components/ErrorBoundary'
 
 // Lazy load all pages for code splitting
 const Home = lazy(() => import('./pages/Home'))
@@ -44,6 +45,24 @@ const PageSkeleton = memo(function PageSkeleton() {
       <div className="w-6 h-6 border-2 border-[#5e6dd2] border-t-transparent rounded-full animate-spin" />
     </div>
   )
+})
+
+// Landing page that redirects logged-in users to /home
+const LandingOrHome = memo(function LandingOrHome() {
+  const { user, isInitialized } = useAuthStore()
+
+  // Show loading while checking auth
+  if (!isInitialized) {
+    return <LoadingSpinner />
+  }
+
+  // Redirect logged-in users to home
+  if (user) {
+    return <Navigate to="/home" replace />
+  }
+
+  // Show landing page for non-authenticated users
+  return <Landing />
 })
 
 // Memoized ProtectedRoute for performance
@@ -141,25 +160,51 @@ function AppContent() {
     return () => unsubscribe()
   }, [user])
 
-  // Auto-subscribe to push notifications when user logs in (non-blocking)
+  // Track if we've already subscribed to push this session to avoid re-subscribing on every navigation
+  const pushSubscribedRef = useRef(false)
+
+  // Auto-subscribe to push notifications when user logs in (non-blocking, once per session)
   useEffect(() => {
-    if (!user) return
+    if (!user) {
+      // Reset flag when user logs out
+      pushSubscribedRef.current = false
+      return
+    }
+
+    // Skip if already subscribed this session
+    if (pushSubscribedRef.current) return
 
     const timeoutId = setTimeout(async () => {
       try {
         const pushStore = usePushNotificationStore.getState()
 
         if (!pushStore.isSupported) {
-          console.log('[App] Push notifications not supported on this browser')
+          if (!import.meta.env.PROD) {
+            console.log('[App] Push notifications not supported on this browser')
+          }
           return
         }
 
-        console.log('[App] Checking push subscription for user:', user.id.substring(0, 8) + '...')
+        // Check if already subscribed in the store
+        if (pushStore.isSubscribed) {
+          pushSubscribedRef.current = true
+          return
+        }
+
+        if (!import.meta.env.PROD) {
+          console.log('[App] Checking push subscription for user:', user.id.substring(0, 8) + '...')
+        }
 
         const success = await pushStore.subscribeToPush(user.id)
-        console.log('[App] Push subscription result:', success ? 'subscribed' : 'failed')
+        pushSubscribedRef.current = success
+
+        if (!import.meta.env.PROD) {
+          console.log('[App] Push subscription result:', success ? 'subscribed' : 'failed')
+        }
       } catch (err) {
-        console.warn('[App] Push setup failed:', err)
+        if (!import.meta.env.PROD) {
+          console.warn('[App] Push setup failed:', err)
+        }
       }
     }, 500)
 
@@ -189,13 +234,14 @@ function AppContent() {
             transition={pageTransitionConfig}
             className="h-full"
           >
-            <Suspense fallback={<PageSkeleton />}>
-              <Routes location={location}>
-                {/* Public routes */}
-                <Route path="/" element={<Landing />} />
-                <Route path="/home" element={
-                  <ProtectedRoute><Home /></ProtectedRoute>
-                } />
+            <ErrorBoundary>
+              <Suspense fallback={<PageSkeleton />}>
+                <Routes location={location}>
+                  {/* Public routes - Redirect logged-in users from landing to home */}
+                  <Route path="/" element={<LandingOrHome />} />
+                  <Route path="/home" element={
+                    <ProtectedRoute><Home /></ProtectedRoute>
+                  } />
                 <Route path="/auth" element={<Auth />} />
                 <Route path="/onboarding" element={
                   <ProtectedRoute skipOnboardingCheck><Onboarding /></ProtectedRoute>
@@ -235,9 +281,10 @@ function AppContent() {
                 <Route path="/help" element={<Help />} />
 
                 {/* Catch-all redirect to home */}
-                <Route path="*" element={<Navigate to="/" replace />} />
-              </Routes>
-            </Suspense>
+                  <Route path="*" element={<Navigate to="/" replace />} />
+                </Routes>
+              </Suspense>
+            </ErrorBoundary>
           </motion.div>
         </AnimatePresence>
       </AppLayout>

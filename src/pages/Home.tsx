@@ -728,7 +728,7 @@ export default function Home() {
                             <div className="text-[12px] text-[#8b8d90]">{squad.game}</div>
                           </div>
                           <div className="text-[12px] text-[#5e6063]">
-                            {squad.member_count || squad.total_members || 1} potes
+                            {squad.member_count || squad.total_members || 1} membre{(squad.member_count || squad.total_members || 1) > 1 ? 's' : ''}
                           </div>
                           <ChevronRight className="w-4 h-4 text-[#5e6063]" />
                         </div>

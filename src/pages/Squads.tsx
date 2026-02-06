@@ -140,7 +140,7 @@ function SquadCard({ squad, isOwner, nextSession, hasActiveParty, copiedCode, on
                   )}
                 </div>
                 <p className="text-[13px] text-[#8b8d90]">
-                  {squad.game} · {memberCount} pote{memberCount > 1 ? 's' : ''}
+                  {squad.game} · {memberCount} membre{memberCount > 1 ? 's' : ''}
                 </p>
 
                 {/* Prochaine session ou état */}

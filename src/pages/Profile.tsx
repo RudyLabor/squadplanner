@@ -3,34 +3,40 @@ import { motion, AnimatePresence } from 'framer-motion'
 import {
   User, Trophy, Calendar, Target, Shield,
   LogOut, Edit2, Check, X, Sparkles, Zap, Camera, Loader2,
-  ChevronRight, TrendingUp, Clock, Phone
+  ChevronRight, TrendingUp, Clock, Phone, Flame
 } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import CountUp from 'react-countup'
 import Confetti from 'react-confetti'
+import toast from 'react-hot-toast'
 import { Button, Card, Input, ProfileSkeleton } from '../components/ui'
 import { useAuthStore, useAIStore, usePremiumStore, FREE_HISTORY_DAYS } from '../hooks'
 import { PremiumGate, PremiumBadge } from '../components/PremiumGate'
 import { PremiumUpgradeModal } from '../components/PremiumUpgradeModal'
 import { supabase } from '../lib/supabase'
+import { XPBar } from '../components/XPBar'
+import { LevelUpCelebration } from '../components/LevelUpCelebration'
+import { Challenges } from '../components/Challenges'
+import type { Challenge, UserChallenge } from '../components/Challenges'
+import { StreakCounter } from '../components/StreakCounter'
 
-// Système d'achievements
+// Systeme d'achievements
 const ACHIEVEMENTS = [
-  { id: 'first_step', name: 'Premier pas', icon: '👶', description: '1ère session', threshold: 1, type: 'sessions' },
+  { id: 'first_step', name: 'Premier pas', icon: '👶', description: '1ere session', threshold: 1, type: 'sessions' },
   { id: 'team_player', name: 'Team Player', icon: '🤝', description: '5 sessions', threshold: 5, type: 'sessions' },
   { id: 'reliable', name: 'Fiable', icon: '⭐', description: '10 check-ins', threshold: 10, type: 'checkins' },
-  { id: 'veteran', name: 'Vétéran', icon: '🏆', description: '20 sessions', threshold: 20, type: 'sessions' },
-  { id: 'perfectionist', name: 'Perfectionniste', icon: '💎', description: '100% fiabilité', threshold: 100, type: 'score' },
-  { id: 'legend', name: 'Légende', icon: '👑', description: '50 sessions', threshold: 50, type: 'sessions' },
+  { id: 'veteran', name: 'Veteran', icon: '🏆', description: '20 sessions', threshold: 20, type: 'sessions' },
+  { id: 'perfectionist', name: 'Perfectionniste', icon: '💎', description: '100% fiabilite', threshold: 100, type: 'score' },
+  { id: 'legend', name: 'Legende', icon: '👑', description: '50 sessions', threshold: 50, type: 'sessions' },
 ]
 
-// Système de tiers basé sur le score de fiabilité - avec next tier pour progress bar
+// Systeme de tiers base sur le score de fiabilite - avec next tier pour progress bar
 const TIERS = [
-  { name: 'Débutant', color: '#8b8d90', icon: '🎮', minScore: 0, glow: false },
-  { name: 'Confirmé', color: '#6366f1', icon: '✓', minScore: 50, glow: false },
+  { name: 'Debutant', color: '#8b8d90', icon: '🎮', minScore: 0, glow: false },
+  { name: 'Confirme', color: '#6366f1', icon: '✓', minScore: 50, glow: false },
   { name: 'Expert', color: '#34d399', icon: '⭐', minScore: 70, glow: false },
   { name: 'Master', color: '#a78bfa', icon: '💎', minScore: 85, glow: true },
-  { name: 'Légende', color: '#fbbf24', icon: '👑', minScore: 95, glow: true },
+  { name: 'Legende', color: '#fbbf24', icon: '👑', minScore: 95, glow: true },
 ]
 
 const getTier = (score: number) => {
@@ -40,9 +46,12 @@ const getTier = (score: number) => {
   return { ...TIERS[0], nextTier: TIERS[1] }
 }
 
+// Type for challenges with user progress
+type ChallengeWithProgress = Challenge & { userProgress?: UserChallenge }
+
 export function Profile() {
   const navigate = useNavigate()
-  const { user, profile, signOut, updateProfile, isLoading, isInitialized } = useAuthStore()
+  const { user, profile, signOut, updateProfile, isLoading, isInitialized, refreshProfile } = useAuthStore()
   const { aiCoachTip, fetchAICoachTip } = useAIStore()
   const { hasPremium, canAccessFeature, fetchPremiumStatus } = usePremiumStore()
   const fileInputRef = useRef<HTMLInputElement>(null)
@@ -59,6 +68,12 @@ export function Profile() {
   const [celebratedAchievement, setCelebratedAchievement] = useState<typeof ACHIEVEMENTS[0] | null>(null)
   const previousUnlockedIdsRef = useRef<string[]>([])
 
+  // Gamification states
+  const [challenges, setChallenges] = useState<ChallengeWithProgress[]>([])
+  const [showLevelUp, setShowLevelUp] = useState(false)
+  const [newLevel, setNewLevel] = useState<number | null>(null)
+  const previousLevelRef = useRef<number | null>(null)
+
   useEffect(() => {
     if (profile) {
       setUsername(profile.username || '')
@@ -71,8 +86,104 @@ export function Profile() {
     if (user?.id) {
       fetchAICoachTip(user.id, 'profile')
       fetchPremiumStatus()
+      fetchChallenges()
     }
   }, [user?.id, fetchAICoachTip, fetchPremiumStatus])
+
+  // Detect level up
+  useEffect(() => {
+    const currentLevel = profile?.level || 1
+    const previousLevel = previousLevelRef.current
+
+    // Only trigger if we have a previous level and current level is higher
+    if (previousLevel !== null && currentLevel > previousLevel) {
+      setNewLevel(currentLevel)
+      setShowLevelUp(true)
+    }
+
+    // Update the ref
+    previousLevelRef.current = currentLevel
+  }, [profile?.level])
+
+  // Fetch challenges from Supabase
+  const fetchChallenges = async () => {
+    if (!user?.id) return
+
+    try {
+      const { data: challengesData, error: challengesError } = await supabase
+        .from('challenges')
+        .select('*')
+        .eq('is_active', true)
+
+      if (challengesError) throw challengesError
+
+      // Fetch user progress for these challenges
+      const { data: userChallengesData, error: userChallengesError } = await supabase
+        .from('user_challenges')
+        .select('*')
+        .eq('user_id', user.id)
+
+      if (userChallengesError) throw userChallengesError
+
+      // Merge challenges with user progress
+      const challengesWithProgress: ChallengeWithProgress[] = (challengesData || []).map(challenge => {
+        const userProgress = userChallengesData?.find(uc => uc.challenge_id === challenge.id)
+        return {
+          ...challenge,
+          userProgress: userProgress ? {
+            challenge_id: userProgress.challenge_id,
+            progress: userProgress.progress,
+            target: userProgress.target || challenge.requirements?.count || 1,
+            completed_at: userProgress.completed_at,
+            xp_claimed: userProgress.xp_claimed
+          } : undefined
+        }
+      })
+
+      setChallenges(challengesWithProgress)
+    } catch (error) {
+      console.error('Error fetching challenges:', error)
+    }
+  }
+
+  // Handle claiming XP for a challenge
+  const handleClaimXP = async (challengeId: string) => {
+    if (!user?.id) return
+
+    const challenge = challenges.find(c => c.id === challengeId)
+    if (!challenge) return
+
+    try {
+      // Call the RPC function to add XP
+      const { error: xpError } = await supabase.rpc('add_xp', {
+        p_user_id: user.id,
+        p_amount: challenge.xp_reward,
+        p_reason: `Challenge: ${challenge.title}`,
+        p_source_type: 'challenge',
+        p_source_id: challengeId
+      })
+
+      if (xpError) throw xpError
+
+      // Update user_challenges to mark XP as claimed
+      const { error: updateError } = await supabase
+        .from('user_challenges')
+        .update({ xp_claimed: true })
+        .eq('user_id', user.id)
+        .eq('challenge_id', challengeId)
+
+      if (updateError) throw updateError
+
+      // Refresh challenges and profile
+      await fetchChallenges()
+      if (refreshProfile) await refreshProfile()
+
+      toast.success(`+${challenge.xp_reward} XP reclames!`, { icon: '⚡' })
+    } catch (error) {
+      console.error('Error claiming XP:', error)
+      toast.error('Erreur lors de la reclamation des XP')
+    }
+  }
 
   const handleSave = async () => {
     const result = await updateProfile({ username, bio })
@@ -143,14 +254,14 @@ export function Profile() {
 
   const handleSignOut = async () => {
     await signOut()
-    // La redirection est gérée dans signOut() avec window.location.href
+    // La redirection est geree dans signOut() avec window.location.href
   }
 
   const reliabilityScore = profile?.reliability_score ?? 100
   const tier = getTier(reliabilityScore)
   const reliabilityColor = tier.color
 
-  // Calculer les achievements débloqués
+  // Calculer les achievements debloques
   const unlockedAchievements = ACHIEVEMENTS.filter(a => {
     const value = a.type === 'sessions'
       ? (profile?.total_sessions || 0)
@@ -209,6 +320,17 @@ export function Profile() {
 
   return (
     <div className="min-h-0 bg-[#050506] pb-6">
+      {/* Level Up Celebration */}
+      {showLevelUp && newLevel && (
+        <LevelUpCelebration
+          newLevel={newLevel}
+          onComplete={() => {
+            setShowLevelUp(false)
+            setNewLevel(null)
+          }}
+        />
+      )}
+
       {/* Achievement Celebration Confetti */}
       {showAchievementConfetti && typeof window !== 'undefined' && (
         <Confetti
@@ -247,7 +369,7 @@ export function Profile() {
                   transition={{ delay: 0.3 }}
                   className="text-[12px] font-medium text-white/70 uppercase tracking-wide"
                 >
-                  🎉 Achievement Unlocked!
+                  Achievement Unlocked!
                 </motion.p>
                 <motion.p
                   initial={{ opacity: 0, x: -10 }}
@@ -374,7 +496,14 @@ export function Profile() {
       </div>
 
       <div className="px-4 md:px-6 lg:px-8 max-w-2xl lg:max-w-4xl xl:max-w-6xl mx-auto">
-        {/* Score de fiabilité - Card principale avec Tier System */}
+        {/* XP Bar - Below avatar section */}
+        <XPBar
+          currentXP={profile?.xp || 0}
+          level={profile?.level || 1}
+          className="mb-5"
+        />
+
+        {/* Score de fiabilite - Card principale avec Tier System */}
         <Card className={`mb-5 overflow-hidden bg-[#101012] ${tier.glow ? 'ring-1 ring-[#fbbf24]/30 ring-offset-1 ring-offset-[#050506]' : ''}`}>
           <div
             className="h-1.5"
@@ -416,7 +545,7 @@ export function Profile() {
                     <span>{tier.name}</span>
                   </motion.span>
                 </div>
-                <p className="text-[13px] text-[#5e6063]">Score de fiabilité</p>
+                <p className="text-[13px] text-[#5e6063]">Score de fiabilite</p>
 
                 {/* Progress bar to next tier */}
                 {tier.nextTier && (
@@ -493,6 +622,30 @@ export function Profile() {
           ))}
         </div>
 
+        {/* Activite Section - StreakCounter */}
+        <div className="mb-5">
+          <div className="flex items-center gap-2 mb-3">
+            <Flame className="w-4 h-4 text-[#f97316]" />
+            <h3 className="text-[13px] font-semibold text-[#f7f8f8] uppercase tracking-wide">
+              Activite
+            </h3>
+          </div>
+          <StreakCounter
+            streakDays={profile?.streak_days || 0}
+            lastActiveDate={profile?.streak_last_date || null}
+          />
+        </div>
+
+        {/* Challenges Section */}
+        {challenges.length > 0 && (
+          <div className="mb-5">
+            <Challenges
+              challenges={challenges}
+              onClaimXP={handleClaimXP}
+            />
+          </div>
+        )}
+
         {/* IA Coach - Basique (gratuit) */}
         <Card className={`mb-5 p-4 bg-gradient-to-br border ${
           aiCoachTip?.tone === 'celebration'
@@ -537,23 +690,23 @@ export function Profile() {
                     ? 'text-[#fb7185]'
                     : 'text-[#8b8d90]'
               }`}>
-                {aiCoachTip?.tip || 'Prêt pour la prochaine session ? Tes potes t\'attendent !'}
+                {aiCoachTip?.tip || 'Pret pour la prochaine session ? Tes potes t\'attendent !'}
               </p>
             </div>
           </div>
         </Card>
 
-        {/* IA Coach Avancé - Premium */}
+        {/* IA Coach Avance - Premium */}
         <div className="mb-5">
           <div className="flex items-center gap-2 mb-3">
             <h3 className="text-[13px] font-semibold text-[#f7f8f8] uppercase tracking-wide">
-              Coach IA Avancé
+              Coach IA Avance
             </h3>
             {!canAccessFeature('ai_coach_advanced') && <PremiumBadge small />}
           </div>
           <PremiumGate
             feature="ai_coach_advanced"
-            featureLabel="Coach IA Avancé"
+            featureLabel="Coach IA Avance"
             fallback="lock"
           >
             <Card className="p-4 bg-gradient-to-br from-[rgba(251,191,36,0.06)] to-[rgba(251,191,36,0.02)] border-[rgba(251,191,36,0.12)]">
@@ -562,9 +715,9 @@ export function Profile() {
                   <Sparkles className="w-5 h-5 text-[#fbbf24]" />
                 </div>
                 <div className="flex-1">
-                  <h4 className="text-[14px] font-medium text-[#f7f8f8] mb-1">Conseils personnalisés</h4>
+                  <h4 className="text-[14px] font-medium text-[#f7f8f8] mb-1">Conseils personnalises</h4>
                   <p className="text-[13px] text-[#8b8d90]">
-                    Prédictions de disponibilité, analyse des patterns de jeu, suggestions de créneaux optimaux pour ta squad.
+                    Predictions de disponibilite, analyse des patterns de jeu, suggestions de creneaux optimaux pour ta squad.
                   </p>
                 </div>
               </div>
@@ -584,7 +737,7 @@ export function Profile() {
             </div>
             <div className="flex-1">
               <h4 className="text-[14px] font-medium text-[#f7f8f8]">Historique des appels</h4>
-              <p className="text-[12px] text-[#5e6063]">Voir tous tes appels passés</p>
+              <p className="text-[12px] text-[#5e6063]">Voir tous tes appels passes</p>
             </div>
             <ChevronRight className="w-5 h-5 text-[#5e6063]" />
           </div>
@@ -605,7 +758,7 @@ export function Profile() {
           </div>
           <PremiumGate
             feature="unlimited_history"
-            featureLabel="Historique illimité"
+            featureLabel="Historique illimite"
             fallback="lock"
           >
             <Card className="p-4">
@@ -622,7 +775,7 @@ export function Profile() {
           </PremiumGate>
         </div>
 
-        {/* Premium upsell - Design amélioré */}
+        {/* Premium upsell - Design ameliore */}
         {!hasPremium && (
           <Card className="mb-5 overflow-hidden bg-[#101012]">
             <div className="h-1 bg-gradient-to-r from-[#6366f1] via-[#fbbf24] to-[#34d399]" />
@@ -636,14 +789,14 @@ export function Profile() {
                     Passe Premium
                   </h3>
                   <p className="text-[13px] text-[#8b8d90] mb-3">
-                    Stats avancées, IA coach avancé, audio HD, historique illimité
+                    Stats avancees, IA coach avance, audio HD, historique illimite
                   </p>
                   <Button
                     size="sm"
                     className="bg-gradient-to-r from-[#6366f1] to-[#a78bfa]"
                     onClick={() => navigate('/premium')}
                   >
-                    Découvrir
+                    Decouvrir
                     <ChevronRight className="w-4 h-4" />
                   </Button>
                 </div>
@@ -664,7 +817,7 @@ export function Profile() {
                   <h3 className="text-[14px] font-medium text-[#f7f8f8]">Compte Premium</h3>
                   <PremiumBadge small />
                 </div>
-                <p className="text-[12px] text-[#5e6063]">Toutes les features sont débloquées</p>
+                <p className="text-[12px] text-[#5e6063]">Toutes les features sont debloquees</p>
               </div>
             </div>
           </Card>
@@ -720,13 +873,13 @@ export function Profile() {
           </div>
         </Card>
 
-        {/* Déconnexion - Discret en bas */}
+        {/* Deconnexion - Discret en bas */}
         <button
           onClick={handleSignOut}
           className="w-full py-3 text-[14px] text-[#fb7185] hover:text-[#fda4af] transition-colors flex items-center justify-center gap-2"
         >
           <LogOut className="w-4 h-4" />
-          Se déconnecter
+          Se deconnecter
         </button>
       </div>
 

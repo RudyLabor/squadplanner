@@ -2,18 +2,10 @@
  * Sentry Error Monitoring Setup
  *
  * This module provides error tracking for production.
- * It's designed to work gracefully when Sentry is not installed.
- *
- * SETUP:
- * 1. Install: npm install @sentry/react
- * 2. Create a Sentry account at https://sentry.io
- * 3. Create a new project (Platform: React)
- * 4. Copy your DSN and add to .env: VITE_SENTRY_DSN=your_dsn_here
  */
+import * as Sentry from '@sentry/react'
 
-// Sentry instance (loaded dynamically)
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-let SentryModule: any = null
+let isInitialized = false
 
 /**
  * Initialize Sentry error monitoring
@@ -33,13 +25,12 @@ export async function initSentry(): Promise<void> {
     return
   }
 
-  try {
-    // Dynamic import to avoid bundling Sentry when not used
-    // Using variable to prevent TypeScript from trying to resolve the module
-    const sentryPackage = '@sentry/react'
-    SentryModule = await import(/* @vite-ignore */ sentryPackage)
+  if (isInitialized) {
+    return
+  }
 
-    SentryModule.init({
+  try {
+    Sentry.init({
       dsn,
       environment: import.meta.env.MODE,
 
@@ -71,8 +62,7 @@ export async function initSentry(): Promise<void> {
       ],
 
       // Don't send PII
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      beforeSend(event: any) {
+      beforeSend(event) {
         // Remove sensitive data
         if (event.request?.cookies) {
           delete event.request.cookies
@@ -86,18 +76,18 @@ export async function initSentry(): Promise<void> {
 
       // Integrations
       integrations: [
-        SentryModule.browserTracingIntegration(),
-        SentryModule.replayIntegration({
+        Sentry.browserTracingIntegration(),
+        Sentry.replayIntegration({
           maskAllText: true, // Hide sensitive text in replays
           blockAllMedia: true, // Don't capture images/videos
         }),
       ],
     })
 
+    isInitialized = true
     console.log('[Sentry] Initialized successfully')
-  } catch {
-    // Sentry not installed - that's fine
-    console.log('[Sentry] Package not installed, error tracking disabled')
+  } catch (error) {
+    console.error('[Sentry] Failed to initialize:', error)
   }
 }
 
@@ -109,8 +99,8 @@ export function captureException(
   error: Error,
   context?: Record<string, unknown>
 ): void {
-  if (SentryModule) {
-    SentryModule.captureException(error, {
+  if (isInitialized) {
+    Sentry.captureException(error, {
       extra: context,
     })
   } else if (import.meta.env.PROD) {
@@ -126,8 +116,8 @@ export function captureMessage(
   message: string,
   level: 'info' | 'warning' | 'error' = 'info'
 ): void {
-  if (SentryModule) {
-    SentryModule.captureMessage(message, level)
+  if (isInitialized) {
+    Sentry.captureMessage(message, level)
   }
 }
 
@@ -136,8 +126,8 @@ export function captureMessage(
  * Call this after user login
  */
 export function setUser(user: { id: string; username?: string } | null): void {
-  if (SentryModule) {
-    SentryModule.setUser(user)
+  if (isInitialized) {
+    Sentry.setUser(user)
   }
 }
 
@@ -150,8 +140,8 @@ export function addBreadcrumb(
   category: string = 'app',
   level: 'debug' | 'info' | 'warning' | 'error' = 'info'
 ): void {
-  if (SentryModule) {
-    SentryModule.addBreadcrumb({
+  if (isInitialized) {
+    Sentry.addBreadcrumb({
       message,
       category,
       level,
@@ -165,8 +155,8 @@ export function addBreadcrumb(
  * Use for tracking slow operations
  */
 export function startTransaction(name: string, op: string = 'task') {
-  if (SentryModule) {
-    return SentryModule.startInactiveSpan({ name, op })
+  if (isInitialized) {
+    return Sentry.startInactiveSpan({ name, op })
   }
   return null
 }

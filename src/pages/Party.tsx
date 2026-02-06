@@ -10,8 +10,7 @@ import {
   CheckCircle2,
   WifiOff,
   AlertCircle,
-  UserPlus,
-  Check
+  UserPlus
 } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import Confetti from 'react-confetti'

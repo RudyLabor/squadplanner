@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { X, UserPlus, Link2, Check, Loader2, Send, Copy } from 'lucide-react'
+import { X, UserPlus, Check, Loader2, Send, Copy } from 'lucide-react'
 import { supabase } from '../lib/supabase'
 import { Button } from './ui'
 

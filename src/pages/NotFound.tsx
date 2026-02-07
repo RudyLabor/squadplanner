@@ -5,8 +5,9 @@ import { Button } from '../components/ui'
 
 export function NotFound() {
   return (
-    <div className="min-h-0 h-full flex-1 bg-[#050506] flex items-center justify-center px-4">
-      <div className="text-center max-w-md">
+    <div className="min-h-0 bg-[#050506] pb-6">
+      <div className="px-4 md:px-6 lg:px-8 py-6 max-w-2xl lg:max-w-4xl xl:max-w-6xl mx-auto flex items-center justify-center min-h-[60vh]">
+        <div className="text-center max-w-md">
         {/* Animated 404 icon */}
         <motion.div
           className="w-24 h-24 rounded-2xl bg-gradient-to-br from-[rgba(99,102,241,0.15)] to-[rgba(167,139,250,0.08)] flex items-center justify-center mx-auto mb-6"
@@ -73,6 +74,7 @@ export function NotFound() {
             Page précédente
           </Button>
         </motion.div>
+        </div>
       </div>
     </div>
   )

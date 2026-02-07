@@ -1027,8 +1027,10 @@ export function Messages() {
   )
 
   // ========== COMPOSANT VUE CHAT ==========
+  // Mobile: use calc to account for bottom nav (80px) + safe area
+  // Desktop embedded: use h-full to fill parent
   const ChatView = ({ embedded = false }: { embedded?: boolean }) => (
-    <div className={`flex flex-col ${embedded ? 'h-full' : 'h-screen'} bg-[#050506]`}>
+    <div className={`flex flex-col ${embedded ? 'h-full' : 'h-[calc(100dvh-80px-env(safe-area-inset-bottom,0px))]'} bg-[#050506] overflow-hidden`}>
       {/* Header chat */}
       <div className={`flex-shrink-0 px-4 py-3 border-b border-[rgba(255,255,255,0.06)] ${embedded ? '' : 'bg-[#101012]/80 backdrop-blur-xl'}`}>
         <div className={`flex items-center gap-3 ${embedded ? '' : 'max-w-4xl lg:max-w-5xl mx-auto'}`}>
@@ -1370,8 +1372,8 @@ export function Messages() {
           isVisible={toast.visible}
           variant={toast.variant}
         />
-        <div className="min-h-0 bg-[#050506] pb-6">
-          <div className="px-4 md:px-6 lg:px-8 py-6 max-w-2xl lg:max-w-4xl xl:max-w-6xl mx-auto">
+        <div className="bg-[#050506]">
+          <div className="px-4 md:px-6 lg:px-8 py-4 max-w-2xl lg:max-w-4xl xl:max-w-6xl mx-auto">
             {ConversationsList({ showOnDesktop: false })}
           </div>
         </div>

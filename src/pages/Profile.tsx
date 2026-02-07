@@ -311,10 +311,10 @@ export function Profile() {
   // Loading state with skeleton
   if (!isInitialized || (isLoading && !profile)) {
     return (
-      <div className="min-h-0 bg-[#050506] pb-6">
+      <div className="bg-[#050506]">
         <div className="relative">
           <div className="absolute inset-0 h-48 bg-gradient-to-b from-[rgba(99,102,241,0.12)] to-transparent" />
-          <div className="relative px-4 md:px-6 lg:px-8 pt-8 pb-4 max-w-2xl lg:max-w-4xl xl:max-w-6xl mx-auto">
+          <div className="relative px-4 md:px-6 lg:px-8 pt-6 pb-4 max-w-2xl lg:max-w-4xl xl:max-w-6xl mx-auto">
             <ProfileSkeleton />
           </div>
         </div>
@@ -323,7 +323,7 @@ export function Profile() {
   }
 
   return (
-    <div className="min-h-0 bg-[#050506] pb-6">
+    <div className="bg-[#050506]">
       {/* Level Up Celebration */}
       {showLevelUp && newLevel && (
         <LevelUpCelebration
@@ -402,9 +402,9 @@ export function Profile() {
         {/* Background gradient */}
         <div className="absolute inset-0 h-48 bg-gradient-to-b from-[rgba(99,102,241,0.12)] to-transparent" />
 
-        <div className="relative px-4 md:px-6 lg:px-8 pt-8 pb-4 max-w-2xl lg:max-w-4xl xl:max-w-6xl mx-auto">
+        <div className="relative px-4 md:px-6 lg:px-8 pt-6 pb-4 max-w-2xl lg:max-w-4xl xl:max-w-6xl mx-auto">
           {/* Avatar central */}
-          <div className="flex flex-col items-center mb-6">
+          <div className="flex flex-col items-center mb-4">
             <div className="relative mb-4">
               <div className="w-24 h-24 rounded-2xl bg-gradient-to-br from-[#6366f1] to-[#a78bfa] flex items-center justify-center overflow-hidden ring-4 ring-[#050506]">
                 {(localPreviewUrl || profile?.avatar_url) ? (
@@ -504,11 +504,11 @@ export function Profile() {
         <XPBar
           currentXP={profile?.xp || 0}
           level={profile?.level || 1}
-          className="mb-5"
+          className="mb-4"
         />
 
         {/* Score de fiabilite - Card principale avec Tier System */}
-        <Card className={`mb-5 overflow-hidden bg-[#101012] ${tier.glow ? 'ring-1 ring-[#fbbf24]/30 ring-offset-1 ring-offset-[#050506]' : ''}`}>
+        <Card className={`mb-4 overflow-hidden bg-[#101012] ${tier.glow ? 'ring-1 ring-[#fbbf24]/30 ring-offset-1 ring-offset-[#050506]' : ''}`}>
           <div
             className="h-1.5"
             style={{
@@ -605,7 +605,7 @@ export function Profile() {
         </Card>
 
         {/* Stats Grid - 2x2 on mobile, 4 cols on desktop */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-4 mb-5">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-4 mb-4">
           {stats.map(stat => (
             <Card key={stat.label} className="p-4 bg-[#101012]">
               <div className="flex items-center gap-3">
@@ -627,7 +627,7 @@ export function Profile() {
         </div>
 
         {/* Activite Section - StreakCounter */}
-        <div className="mb-5">
+        <div className="mb-4">
           <div className="flex items-center gap-2 mb-3">
             <Flame className="w-4 h-4 text-[#f97316]" />
             <h3 className="text-[13px] font-semibold text-[#f7f8f8] uppercase tracking-wide">
@@ -642,7 +642,7 @@ export function Profile() {
 
         {/* Challenges Section */}
         {challenges.length > 0 && (
-          <div className="mb-5">
+          <div className="mb-4">
             <Challenges
               challenges={challenges}
               onClaimXP={handleClaimXP}
@@ -651,7 +651,7 @@ export function Profile() {
         )}
 
         {/* Seasonal Badges Section */}
-        <Card className="mb-5 overflow-hidden">
+        <Card className="mb-4 overflow-hidden">
           <div className="flex items-center gap-2 px-4 pt-4 pb-2">
             <Trophy className="w-4 h-4 text-[#fbbf24]" />
             <h3 className="text-[14px] font-semibold text-[#f7f8f8]">Badges Saisonniers</h3>
@@ -660,7 +660,7 @@ export function Profile() {
         </Card>
 
         {/* IA Coach - Basique (gratuit) */}
-        <Card className={`mb-5 p-4 bg-gradient-to-br border ${
+        <Card className={`mb-4 p-4 bg-gradient-to-br border ${
           aiCoachTip?.tone === 'celebration'
             ? 'from-[rgba(52,211,153,0.06)] to-[rgba(52,211,153,0.02)] border-[rgba(52,211,153,0.12)]'
             : aiCoachTip?.tone === 'warning'
@@ -710,7 +710,7 @@ export function Profile() {
         </Card>
 
         {/* IA Coach Avance - Premium */}
-        <div className="mb-5">
+        <div className="mb-4">
           <div className="flex items-center gap-2 mb-3">
             <h3 className="text-[13px] font-semibold text-[#f7f8f8] uppercase tracking-wide">
               Coach IA Avance
@@ -740,7 +740,7 @@ export function Profile() {
 
         {/* Historique des appels */}
         <Card
-          className="mb-5 p-4 bg-[#101012] cursor-pointer"
+          className="mb-4 p-4 bg-[#101012] cursor-pointer"
           hoverable
           onClick={() => navigate('/call-history')}
         >
@@ -757,7 +757,7 @@ export function Profile() {
         </Card>
 
         {/* Historique - Premium */}
-        <div className="mb-5">
+        <div className="mb-4">
           <div className="flex items-center gap-2 mb-3">
             <h3 className="text-[13px] font-semibold text-[#f7f8f8] uppercase tracking-wide">
               Historique
@@ -790,7 +790,7 @@ export function Profile() {
 
         {/* Premium upsell - Design ameliore */}
         {!hasPremium && (
-          <Card className="mb-5 overflow-hidden bg-[#101012]">
+          <Card className="mb-4 overflow-hidden bg-[#101012]">
             <div className="h-1 bg-gradient-to-r from-[#6366f1] via-[#fbbf24] to-[#34d399]" />
             <div className="p-5">
               <div className="flex items-start gap-4">
@@ -820,7 +820,7 @@ export function Profile() {
 
         {/* Badge Premium si actif */}
         {hasPremium && (
-          <Card className="mb-5 p-4 bg-gradient-to-br from-[rgba(251,191,36,0.08)] to-[rgba(251,191,36,0.02)] border-[rgba(251,191,36,0.15)]">
+          <Card className="mb-4 p-4 bg-gradient-to-br from-[rgba(251,191,36,0.08)] to-[rgba(251,191,36,0.02)] border-[rgba(251,191,36,0.15)]">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-xl bg-[rgba(251,191,36,0.15)] flex items-center justify-center">
                 <Zap className="w-5 h-5 text-[#fbbf24]" />
@@ -837,7 +837,7 @@ export function Profile() {
         )}
 
         {/* Achievements section avec animations */}
-        <Card className="mb-5 p-4 bg-[#101012]">
+        <Card className="mb-4 p-4 bg-[#101012]">
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-[14px] font-semibold text-[#f7f8f8]">Achievements</h3>
             <span className="text-[12px] text-[#5e6063]">{unlockedAchievements.length}/{ACHIEVEMENTS.length}</span>

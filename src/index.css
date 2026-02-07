@@ -281,14 +281,14 @@ body {
 
 /* Content padding to account for mobile navigation */
 .pb-mobile-nav {
-  padding-bottom: calc(6rem + env(safe-area-inset-bottom, 0));
+  padding-bottom: calc(4rem + env(safe-area-inset-bottom, 0));
 }
 
 /* Mobile main content height - excludes navigation bar */
 @media (max-width: 1023px) {
   .pb-mobile-nav {
-    /* Navigation bar is ~80px + safe area */
-    margin-bottom: calc(80px + env(safe-area-inset-bottom, 0));
+    /* Navigation bar is ~64px + safe area - reduced from 80px */
+    margin-bottom: calc(64px + env(safe-area-inset-bottom, 0));
   }
 }
 

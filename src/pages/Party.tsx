@@ -554,8 +554,11 @@ export function Party() {
   const activeSquad = squads.find(s => s.id === activeSquadId)
   const otherSquads = squads.filter(s => s.id !== activeSquadId)
 
+  // Determine if we should center content (single squad, not connected)
+  const shouldCenterContent = !isConnected && squads.length === 1
+
   return (
-    <div className="min-h-0 bg-[#050506] pb-6">
+    <div className={`bg-[#050506] ${shouldCenterContent ? 'min-h-[calc(100dvh-80px-env(safe-area-inset-bottom,0px))] flex flex-col' : ''}`}>
       {/* Confetti celebration when duo */}
       {showDuoConfetti && (
         <Confetti
@@ -584,10 +587,10 @@ export function Party() {
         onClose={() => setShowQualityToast(false)}
       />
 
-      <div className="px-4 md:px-6 py-6 max-w-4xl lg:max-w-5xl mx-auto">
-        <div>
+      <div className={`px-4 md:px-6 py-4 max-w-4xl lg:max-w-5xl mx-auto w-full ${shouldCenterContent ? 'flex-1 flex flex-col' : ''}`}>
+        <div className={shouldCenterContent ? 'flex-1 flex flex-col justify-center' : ''}>
           {/* Header compact */}
-          <div className="flex items-center justify-between mb-6">
+          <div className={`flex items-center justify-between ${shouldCenterContent ? 'mb-4' : 'mb-4'}`}>
             <div>
               <h1 className="text-2xl font-bold text-[#f7f8f8]">Party</h1>
               <p className="text-[13px] text-[#5e6063]">
@@ -625,7 +628,7 @@ export function Party() {
                 <h3 className="text-[18px] font-bold text-[#f7f8f8] mb-2">
                   Parle avec ta squad
                 </h3>
-                <p className="text-[14px] text-[#8b8d90] mb-6 max-w-[280px] mx-auto leading-relaxed">
+                <p className="text-[14px] text-[#8b8d90] mb-4 max-w-[280px] mx-auto leading-relaxed">
                   Crée ou rejoins une squad pour lancer des parties vocales avec tes potes.
                 </p>
                 <Link to="/squads">
@@ -640,7 +643,7 @@ export function Party() {
             <>
               {/* Party Active (en haut, grande) */}
               {isConnected && activeSquad && user && (
-                <div className="mb-6">
+                <div className="mb-4">
                   <ActivePartySection
                     squad={{
                       id: activeSquad.id,

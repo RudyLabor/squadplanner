@@ -2,18 +2,18 @@ import { motion } from 'framer-motion'
 import { Star, Zap } from 'lucide-react'
 import CountUp from 'react-countup'
 
-// Level configuration
+// Level configuration - French translations
 const LEVEL_CONFIG = [
-  { level: 1, title: 'Rookie', xpRequired: 0, color: '#6b7280' },      // gray
-  { level: 2, title: 'Regular', xpRequired: 100, color: '#22c55e' },   // green
-  { level: 3, title: 'Veteran', xpRequired: 300, color: '#06b6d4' },   // cyan
-  { level: 4, title: 'Elite', xpRequired: 600, color: '#a855f7' },     // purple
-  { level: 5, title: 'Champion', xpRequired: 1000, color: '#f97316' }, // orange
-  { level: 6, title: 'Master', xpRequired: 1500, color: '#ec4899' },   // pink
-  { level: 7, title: 'Grandmaster', xpRequired: 2500, color: '#ef4444' }, // red
-  { level: 8, title: 'Legend', xpRequired: 4000, color: '#8b5cf6' },   // violet
-  { level: 9, title: 'Mythic', xpRequired: 6000, color: '#14b8a6' },   // teal
-  { level: 10, title: 'Immortal', xpRequired: 10000, color: '#eab308' }, // gold
+  { level: 1, title: 'Débutant', xpRequired: 0, color: '#6b7280' },      // gray
+  { level: 2, title: 'Régulier', xpRequired: 100, color: '#22c55e' },    // green
+  { level: 3, title: 'Vétéran', xpRequired: 300, color: '#06b6d4' },     // cyan
+  { level: 4, title: 'Élite', xpRequired: 600, color: '#a855f7' },       // purple
+  { level: 5, title: 'Champion', xpRequired: 1000, color: '#f97316' },   // orange
+  { level: 6, title: 'Maître', xpRequired: 1500, color: '#ec4899' },     // pink
+  { level: 7, title: 'Grand Maître', xpRequired: 2500, color: '#ef4444' }, // red
+  { level: 8, title: 'Légende', xpRequired: 4000, color: '#8b5cf6' },    // violet
+  { level: 9, title: 'Mythique', xpRequired: 6000, color: '#14b8a6' },   // teal
+  { level: 10, title: 'Immortel', xpRequired: 10000, color: '#eab308' }, // gold
 ]
 
 export interface XPBarProps {

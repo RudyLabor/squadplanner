@@ -4,6 +4,73 @@ import type { User, Session } from '@supabase/supabase-js'
 import type { Profile } from '../types/database'
 import { forceLeaveVoiceParty } from './useVoiceChat'
 
+/**
+ * Update daily streak and award XP for daily login
+ * Called on every successful auth/profile load
+ */
+async function updateDailyStreak(userId: string, profile: Profile | null): Promise<Profile | null> {
+  if (!profile) return null
+
+  const today = new Date().toISOString().split('T')[0] // YYYY-MM-DD
+  const lastDate = profile.streak_last_date
+
+  // Already checked in today
+  if (lastDate === today) {
+    return profile
+  }
+
+  const yesterday = new Date()
+  yesterday.setDate(yesterday.getDate() - 1)
+  const yesterdayStr = yesterday.toISOString().split('T')[0]
+
+  let newStreakDays = 1
+  let xpBonus = 10 // Base daily login XP
+
+  if (lastDate === yesterdayStr) {
+    // Streak continues!
+    newStreakDays = (profile.streak_days || 0) + 1
+
+    // Bonus XP for streak milestones
+    if (newStreakDays === 7) xpBonus = 100
+    else if (newStreakDays === 14) xpBonus = 200
+    else if (newStreakDays === 30) xpBonus = 500
+    else if (newStreakDays === 100) xpBonus = 1000
+    else if (newStreakDays % 7 === 0) xpBonus = 50 // Every 7 days after
+  }
+
+  // Calculate new XP and level
+  const newXP = (profile.xp || 0) + xpBonus
+  const levelThresholds = [0, 100, 250, 500, 1000, 2000, 3500, 5500, 8000, 11000, 15000, 20000]
+  let newLevel = 1
+  for (let i = levelThresholds.length - 1; i >= 0; i--) {
+    if (newXP >= levelThresholds[i]) {
+      newLevel = i + 1
+      break
+    }
+  }
+
+  // Update profile with new streak and XP
+  const { data: updatedProfile, error } = await supabase
+    .from('profiles')
+    .update({
+      streak_days: newStreakDays,
+      streak_last_date: today,
+      xp: newXP,
+      level: newLevel,
+    })
+    .eq('id', userId)
+    .select()
+    .single()
+
+  if (error) {
+    console.error('Failed to update streak:', error)
+    return profile
+  }
+
+  console.log(`Daily streak updated: Day ${newStreakDays}, +${xpBonus} XP`)
+  return updatedProfile || profile
+}
+
 interface AuthState {
   user: User | null
   profile: Profile | null
@@ -40,11 +107,14 @@ export const useAuthStore = create<AuthState>((set, get) => ({
           .select('*')
           .eq('id', session.user.id)
           .single()
-        
-        set({ 
-          user: session.user, 
-          session, 
-          profile,
+
+        // Update daily streak and XP on login
+        const updatedProfile = await updateDailyStreak(session.user.id, profile)
+
+        set({
+          user: session.user,
+          session,
+          profile: updatedProfile,
           isLoading: false,
           isInitialized: true
         })
@@ -60,8 +130,11 @@ export const useAuthStore = create<AuthState>((set, get) => ({
             .select('*')
             .eq('id', session.user.id)
             .single()
-          
-          set({ user: session.user, session, profile })
+
+          // Update daily streak and XP on login
+          const updatedProfile = await updateDailyStreak(session.user.id, profile)
+
+          set({ user: session.user, session, profile: updatedProfile })
         } else if (event === 'SIGNED_OUT') {
           set({ user: null, session: null, profile: null })
         }

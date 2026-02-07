@@ -270,45 +270,46 @@ function ActivePartyCard({ squadName, participantCount }: { squadName: string; p
   )
 }
 
-// Stats compactes avec icônes - Design premium gaming
+// Stats compactes avec icônes - Design premium gaming - Cards cliquables
 function StatsRow({ squadsCount, sessionsThisWeek, reliabilityScore }: {
   squadsCount: number
   sessionsThisWeek: number
   reliabilityScore: number
 }) {
   const stats = [
-    { value: squadsCount, label: 'Squads', icon: Users, color: '#6366f1', suffix: '' },
-    { value: sessionsThisWeek, label: 'Cette semaine', icon: Calendar, color: '#fbbf24', suffix: '' },
-    { value: reliabilityScore, label: 'Fiabilité', icon: TrendingUp, color: '#34d399', suffix: '%' },
+    { value: squadsCount, label: 'Squads', icon: Users, color: '#6366f1', suffix: '', path: '/squads' },
+    { value: sessionsThisWeek, label: 'Cette semaine', icon: Calendar, color: '#fbbf24', suffix: '', path: '/sessions' },
+    { value: reliabilityScore, label: 'Fiabilité', icon: TrendingUp, color: '#34d399', suffix: '%', path: '/profile' },
   ]
 
   return (
     <div className="grid grid-cols-3 gap-2 sm:gap-3">
       {stats.map((stat, index) => (
-        <motion.div
-          key={stat.label}
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: index * 0.1, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.98 }}
-          className="h-[60px] sm:h-[68px] px-2 sm:px-4 flex items-center gap-2 sm:gap-3 rounded-xl sm:rounded-2xl border border-white/[0.06] bg-white/[0.02] hover:bg-white/[0.04] hover:border-white/[0.1] cursor-pointer transition-interactive"
-        >
-          <div
-            className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl flex items-center justify-center flex-shrink-0"
-            style={{ backgroundColor: `${stat.color}15` }}
+        <Link key={stat.label} to={stat.path}>
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: index * 0.1, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            className="h-[60px] sm:h-[68px] px-2 sm:px-4 flex items-center gap-2 sm:gap-3 rounded-xl sm:rounded-2xl border border-white/[0.06] bg-white/[0.02] hover:bg-white/[0.04] hover:border-white/[0.1] cursor-pointer transition-interactive"
           >
-            <stat.icon className="w-4 h-4 sm:w-5 sm:h-5" style={{ color: stat.color }} />
-          </div>
-          <div className="min-w-0 flex-1">
-            <div className="text-[16px] sm:text-[20px] font-bold text-white tracking-tight leading-none">
-              <CountUp end={stat.value} duration={1.2} suffix={stat.suffix} />
+            <div
+              className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl flex items-center justify-center flex-shrink-0"
+              style={{ backgroundColor: `${stat.color}15` }}
+            >
+              <stat.icon className="w-4 h-4 sm:w-5 sm:h-5" style={{ color: stat.color }} />
             </div>
-            <div className="text-[8px] sm:text-[10px] text-white/50 uppercase tracking-wider mt-0.5 truncate font-medium">
-              {stat.label}
+            <div className="min-w-0 flex-1">
+              <div className="text-[16px] sm:text-[20px] font-bold text-white tracking-tight leading-none">
+                <CountUp end={stat.value} duration={1.2} suffix={stat.suffix} />
+              </div>
+              <div className="text-[8px] sm:text-[10px] text-white/50 uppercase tracking-wider mt-0.5 truncate font-medium">
+                {stat.label}
+              </div>
             </div>
-          </div>
-        </motion.div>
+          </motion.div>
+        </Link>
       ))}
     </div>
   )
@@ -545,7 +546,7 @@ export default function Home() {
           {sessionsLoading ? (
             <div className="mb-6">
               <div className="flex items-center justify-between mb-3">
-                <h2 className="text-[13px] font-semibold text-[#f7f8f8] uppercase tracking-wide">
+                <h2 className="text-[18px] font-semibold text-[#f7f8f8]">
                   Prochaine session
                 </h2>
               </div>
@@ -554,7 +555,7 @@ export default function Home() {
           ) : nextSession && (
             <div className="mb-6">
               <div className="flex items-center justify-between mb-3">
-                <h2 className="text-[13px] font-semibold text-[#f7f8f8] uppercase tracking-wide">
+                <h2 className="text-[18px] font-semibold text-[#f7f8f8]">
                   Prochaine session
                 </h2>
                 {upcomingSessions.length > 1 && (
@@ -578,7 +579,7 @@ export default function Home() {
 
           {/* Stats - Wording gamer */}
           <div className="mb-6">
-            <h2 className="text-[13px] font-semibold text-[#f7f8f8] uppercase tracking-wide mb-3">
+            <h2 className="text-[18px] font-semibold text-[#f7f8f8] mb-3">
               Ton tableau de bord
             </h2>
             <div className="space-y-4">
@@ -617,7 +618,7 @@ export default function Home() {
           {squadsLoading ? (
             <div>
               <div className="flex items-center justify-between mb-3">
-                <h2 className="text-[13px] font-semibold text-[#f7f8f8] uppercase tracking-wide">
+                <h2 className="text-[18px] font-semibold text-[#f7f8f8]">
                   Mes squads
                 </h2>
               </div>
@@ -630,7 +631,7 @@ export default function Home() {
           ) : squads.length > 0 ? (
             <div>
               <div className="flex items-center justify-between mb-3">
-                <h2 className="text-[13px] font-semibold text-[#f7f8f8] uppercase tracking-wide">
+                <h2 className="text-[18px] font-semibold text-[#f7f8f8]">
                   Mes squads
                 </h2>
                 <Link to="/squads">

@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef, useCallback, useMemo, memo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useVirtualizer } from '@tanstack/react-virtual'
+import { useSearchParams } from 'react-router-dom'
 import {
   Send,
   ArrowLeft,
@@ -625,6 +626,7 @@ function DMConversationCard({ conversation, onClick }: {
 
 export function Messages() {
   const { user } = useAuthStore()
+  const [searchParams, setSearchParams] = useSearchParams()
 
   // Squad messages store
   const {
@@ -713,6 +715,52 @@ export function Messages() {
       unsubscribeDM()
     }
   }, [fetchSquadConvs, fetchDMConvs, unsubscribeSquad, unsubscribeDM])
+
+  // Handle DM URL parameter - switch to DMs tab and open conversation
+  useEffect(() => {
+    const dmUserId = searchParams.get('dm')
+    // Wait for loading to complete before handling the dm parameter
+    if (!dmUserId || isLoadingDM) return
+
+    // Switch to DMs tab immediately
+    setActiveTab('dms')
+
+    // Find or create conversation with this user
+    const existingConv = dmConversations.find(c => c.other_user_id === dmUserId)
+
+    if (existingConv) {
+      // Open the existing conversation
+      setActiveDMConv(existingConv)
+      // Clear the URL param to prevent re-triggering
+      setSearchParams({}, { replace: true })
+    } else {
+      // Create a new conversation placeholder (will be created on first message)
+      // Fetch the user info and create a temp conversation
+      const fetchUserAndOpenConv = async () => {
+        const { supabase } = await import('../lib/supabase')
+        const { data: userData } = await supabase
+          .from('profiles')
+          .select('id, username, avatar_url')
+          .eq('id', dmUserId)
+          .single()
+
+        if (userData) {
+          // Set up a temporary conversation that will be created on first message
+          setActiveDMConv({
+            other_user_id: userData.id,
+            other_user_username: userData.username || 'Utilisateur',
+            other_user_avatar_url: userData.avatar_url,
+            last_message_content: null,
+            last_message_at: null,
+            unread_count: 0
+          })
+          // Clear the URL param
+          setSearchParams({}, { replace: true })
+        }
+      }
+      fetchUserAndOpenConv()
+    }
+  }, [searchParams, dmConversations, isLoadingDM, setActiveDMConv, setSearchParams])
 
   // Scroll to bottom when messages change
   const currentMessages = activeSquadConv ? squadMessages : dmMessages

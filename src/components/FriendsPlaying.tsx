@@ -142,8 +142,35 @@ function FriendCard({
   )
 }
 
-// Empty state component
+// Empty state component with actionable invite button
 function EmptyState() {
+  const handleShareInvite = async () => {
+    const inviteText = "Rejoins-moi sur Squad Planner pour organiser nos sessions de jeu ! 🎮"
+    const inviteUrl = window.location.origin
+
+    // Use Web Share API if available
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: 'Squad Planner',
+          text: inviteText,
+          url: inviteUrl,
+        })
+      } catch (err) {
+        // User cancelled or error - fallback to clipboard
+        copyToClipboard(inviteUrl)
+      }
+    } else {
+      copyToClipboard(inviteUrl)
+    }
+  }
+
+  const copyToClipboard = (text: string) => {
+    navigator.clipboard.writeText(text)
+    // Show a brief visual feedback (could use toast here)
+    alert('Lien copié dans le presse-papiers !')
+  }
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 10 }}
@@ -159,11 +186,16 @@ function EmptyState() {
           <Users className="w-7 h-7 text-[#5e6dd2]" strokeWidth={1.5} />
         </motion.div>
         <p className="text-[14px] text-[#8b8d90] mb-1">
-          Aucun pote en ligne
+          Aucun pote en ligne pour l'instant
         </p>
-        <p className="text-[12px] text-[#5e6063]">
-          Invite-les à rejoindre Squad Planner !
-        </p>
+        <motion.button
+          onClick={handleShareInvite}
+          className="text-[13px] text-[#5e6dd2] hover:text-[#8b93ff] font-medium transition-colors cursor-pointer"
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+        >
+          Invite tes potes à rejoindre Squad Planner ! →
+        </motion.button>
       </Card>
     </motion.div>
   )
@@ -174,7 +206,7 @@ export function FriendsPlaying({ friends, onJoin, onInvite }: FriendsPlayingProp
   if (friends.length === 0) {
     return (
       <div className="mb-6">
-        <h2 className="text-[13px] font-semibold text-[#f7f8f8] uppercase tracking-wide mb-3 flex items-center gap-2">
+        <h2 className="text-[18px] font-semibold text-[#f7f8f8] mb-3 flex items-center gap-2">
           <Gamepad2 className="w-4 h-4 text-[#4ade80]" />
           Tes potes jouent maintenant
         </h2>
@@ -185,7 +217,7 @@ export function FriendsPlaying({ friends, onJoin, onInvite }: FriendsPlayingProp
 
   return (
     <div className="mb-6">
-      <h2 className="text-[13px] font-semibold text-[#f7f8f8] uppercase tracking-wide mb-3 flex items-center gap-2">
+      <h2 className="text-[18px] font-semibold text-[#f7f8f8] mb-3 flex items-center gap-2">
         <motion.div
           animate={{
             scale: [1, 1.1, 1],

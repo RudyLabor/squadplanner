@@ -104,17 +104,44 @@ function formatSeason(season: string): string {
 interface SeasonalBadgesProps {
   userId?: string
   compact?: boolean
+  // Optional: pass badges directly to avoid duplicate API calls
+  initialBadges?: Array<{
+    id: string
+    user_id: string
+    badge_type: string
+    season: string
+    squad_id: string | null
+    awarded_at: string
+    squads?: { name: string } | null
+  }>
 }
 
-export function SeasonalBadges({ userId, compact = false }: SeasonalBadgesProps) {
+export function SeasonalBadges({ userId, compact = false, initialBadges }: SeasonalBadgesProps) {
   const { user } = useAuthStore()
   const [badges, setBadges] = useState<SeasonalBadge[]>([])
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(!initialBadges) // Don't show loading if we have initial data
   const [selectedBadge, setSelectedBadge] = useState<SeasonalBadge | null>(null)
 
   const targetUserId = userId || user?.id
 
+  // If badges are passed as props, use them directly (avoids duplicate API call)
   useEffect(() => {
+    if (initialBadges) {
+      const formattedBadges = initialBadges.map((b) => ({
+        id: b.id,
+        user_id: b.user_id,
+        badge_type: b.badge_type,
+        season: b.season,
+        squad_id: b.squad_id,
+        awarded_at: b.awarded_at,
+        squad_name: b.squads?.name
+      }))
+      setBadges(formattedBadges)
+      setLoading(false)
+      return
+    }
+
+    // Only fetch if no initial badges provided
     if (!targetUserId) return
 
     const fetchBadges = async () => {
@@ -154,7 +181,7 @@ export function SeasonalBadges({ userId, compact = false }: SeasonalBadgesProps)
     }
 
     fetchBadges()
-  }, [targetUserId])
+  }, [targetUserId, initialBadges])
 
   if (loading) {
     return (

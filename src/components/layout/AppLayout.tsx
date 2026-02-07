@@ -44,7 +44,7 @@ const NavLink = memo(function NavLink({ path, icon: Icon, label, isActive, badge
   collapsed?: boolean
 }) {
   return (
-    <Link to={path} aria-current={isActive ? 'page' : undefined} title={collapsed ? label : undefined}>
+    <Link to={path} aria-label={label} aria-current={isActive ? 'page' : undefined} title={collapsed ? label : undefined}>
       <motion.div
         className={`
           relative flex items-center ${collapsed ? 'justify-center px-2' : 'gap-3 px-4'} py-3 rounded-xl transition-interactive
@@ -398,7 +398,7 @@ export function AppLayout({ children }: AppLayoutProps) {
         <footer className="mt-auto">
           {/* Profile section */}
           <div className={`${isExpanded ? 'p-4' : 'p-2'} border-t border-[rgba(255,255,255,0.03)]`}>
-            <Link to="/profile">
+            <Link to="/profile" aria-label="Voir mon profil">
               <motion.div
                 className={`flex items-center ${isExpanded ? 'gap-3 p-3' : 'justify-center p-2'} rounded-xl hover:bg-[rgba(255,255,255,0.03)] transition-colors duration-300`}
                 whileHover={{ x: isExpanded ? 4 : 0 }}

@@ -63,26 +63,34 @@ export function Profile() {
   const claimXPMutation = useClaimChallengeXPMutation()
 
   // Transform challenges data to match expected format (map DB fields to component fields)
-  const challenges: ChallengeWithProgress[] = (challengesData?.challenges || []).map(challenge => {
-    const userProgress = challengesData?.userChallenges?.find(uc => uc.challenge_id === challenge.id)
-    return {
-      id: challenge.id,
-      title: challenge.title,
-      description: challenge.description || '',
-      xp_reward: challenge.xp_reward,
-      // Map challenge_type from DB to type expected by component
-      type: (challenge.challenge_type || 'daily') as 'daily' | 'weekly' | 'seasonal' | 'achievement',
-      icon: challenge.icon || 'star',
-      requirements: challenge.requirements || { type: 'sessions', count: 1 },
-      userProgress: userProgress ? {
-        challenge_id: userProgress.challenge_id,
-        progress: userProgress.progress,
-        target: userProgress.target || challenge.requirements?.count || 1,
-        completed_at: userProgress.completed_at,
-        xp_claimed: userProgress.xp_claimed
-      } : undefined
-    }
-  })
+  // Deduplicate challenges by ID to prevent double rendering
+  const seenIds = new Set<string>()
+  const challenges: ChallengeWithProgress[] = (challengesData?.challenges || [])
+    .filter(challenge => {
+      if (seenIds.has(challenge.id)) return false
+      seenIds.add(challenge.id)
+      return true
+    })
+    .map(challenge => {
+      const userProgress = challengesData?.userChallenges?.find(uc => uc.challenge_id === challenge.id)
+      return {
+        id: challenge.id,
+        title: challenge.title,
+        description: challenge.description || '',
+        xp_reward: challenge.xp_reward,
+        // Use 'type' field from DB (not 'challenge_type')
+        type: (challenge.type || 'daily') as 'daily' | 'weekly' | 'seasonal' | 'achievement',
+        icon: challenge.icon || 'star',
+        requirements: challenge.requirements || { type: 'sessions', count: 1 },
+        userProgress: userProgress ? {
+          challenge_id: userProgress.challenge_id,
+          progress: userProgress.progress,
+          target: userProgress.target || challenge.requirements?.count || 1,
+          completed_at: userProgress.completed_at,
+          xp_claimed: userProgress.xp_claimed
+        } : undefined
+      }
+    })
 
   const [isEditing, setIsEditing] = useState(false)
   const [isUploadingPhoto, setIsUploadingPhoto] = useState(false)
@@ -446,13 +454,21 @@ export function Profile() {
                     {profile?.bio || 'Pas encore de bio'}
                   </p>
                   <p className="text-[12px] text-[#5e6063] mb-3">{user?.email}</p>
-                  <button
-                    onClick={() => setIsEditing(true)}
-                    className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[rgba(99,102,241,0.12)] text-[#a78bfa] text-[13px] font-medium hover:bg-[rgba(99,102,241,0.2)] transition-colors active:scale-[0.97]"
-                  >
-                    <Edit2 className="w-4 h-4" />
-                    Modifier le profil
-                  </button>
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={() => setIsEditing(true)}
+                      className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[rgba(99,102,241,0.12)] text-[#a78bfa] text-[13px] font-medium hover:bg-[rgba(99,102,241,0.2)] transition-colors active:scale-[0.97]"
+                    >
+                      <Edit2 className="w-4 h-4" />
+                      Modifier le profil
+                    </button>
+                    <button
+                      onClick={() => navigate('/settings')}
+                      className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[rgba(255,255,255,0.05)] text-[#8b8d90] text-[13px] font-medium hover:bg-[rgba(255,255,255,0.1)] hover:text-[#f7f8f8] transition-colors active:scale-[0.97]"
+                    >
+                      ⚙️ Paramètres
+                    </button>
+                  </div>
                 </motion.div>
               )}
             </AnimatePresence>
@@ -611,13 +627,13 @@ export function Profile() {
           </div>
         )}
 
-        {/* Seasonal Badges Section */}
+        {/* Seasonal Badges Section - pass badges from useChallengesQuery to avoid duplicate API call */}
         <Card className="mb-5 overflow-hidden">
           <div className="flex items-center gap-2 px-4 pt-4 pb-2">
             <Trophy className="w-4 h-4 text-[#fbbf24]" />
             <h3 className="text-[14px] font-semibold text-[#f7f8f8]">Badges Saisonniers</h3>
           </div>
-          <SeasonalBadges />
+          <SeasonalBadges initialBadges={challengesData?.badges} />
         </Card>
 
         {/* IA Coach - Basique (gratuit) */}

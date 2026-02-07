@@ -63,7 +63,8 @@ export const useCallHistoryStore = create<CallHistoryState>((set, get) => ({
         return
       }
 
-      // Fetch calls where user is caller or receiver
+      // Check if the calls table exists by trying a simple query
+      // If table doesn't exist, we'll get an error and show empty state
       const { data: callsData, error: dbError } = await supabase
         .from('calls')
         .select(`
@@ -83,6 +84,12 @@ export const useCallHistoryStore = create<CallHistoryState>((set, get) => ({
 
       if (dbError) {
         console.error('Error fetching call history:', dbError)
+        // If table doesn't exist or relation error, show empty state instead of error
+        if (dbError.code === '42P01' || dbError.code === 'PGRST200' || dbError.message?.includes('relation')) {
+          // Table doesn't exist - show empty state (feature not yet enabled)
+          set({ calls: [], isLoading: false, error: null })
+          return
+        }
         set({ error: 'Erreur lors du chargement de l\'historique', isLoading: false })
         return
       }
@@ -109,8 +116,10 @@ export const useCallHistoryStore = create<CallHistoryState>((set, get) => ({
       set({ calls, isLoading: false })
     } catch (error) {
       console.error('Error in fetchCallHistory:', error)
+      // For any unexpected error, show empty state rather than blocking the UI
       set({
-        error: error instanceof Error ? error.message : 'Erreur inconnue',
+        calls: [],
+        error: null,
         isLoading: false
       })
     }

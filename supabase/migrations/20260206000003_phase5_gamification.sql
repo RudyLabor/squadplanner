@@ -29,18 +29,18 @@ CREATE TABLE IF NOT EXISTS xp_levels (
     badge_color TEXT DEFAULT '#4ade80'
 );
 
--- Insérer les niveaux
+-- Insérer les niveaux (FR)
 INSERT INTO xp_levels (level, xp_required, title, badge_color) VALUES
-    (1, 0, 'Rookie', '#9ca3af'),
-    (2, 100, 'Regular', '#4ade80'),
-    (3, 300, 'Veteran', '#22d3ee'),
-    (4, 600, 'Elite', '#a855f7'),
+    (1, 0, 'Débutant', '#9ca3af'),
+    (2, 100, 'Régulier', '#4ade80'),
+    (3, 300, 'Vétéran', '#22d3ee'),
+    (4, 600, 'Élite', '#a855f7'),
     (5, 1000, 'Champion', '#f59e0b'),
-    (6, 1500, 'Master', '#ec4899'),
-    (7, 2500, 'Grandmaster', '#ef4444'),
-    (8, 4000, 'Legend', '#8b5cf6'),
-    (9, 6000, 'Mythic', '#14b8a6'),
-    (10, 10000, 'Immortal', '#fbbf24')
+    (6, 1500, 'Maître', '#ec4899'),
+    (7, 2500, 'Grand Maître', '#ef4444'),
+    (8, 4000, 'Légende', '#8b5cf6'),
+    (9, 6000, 'Mythique', '#14b8a6'),
+    (10, 10000, 'Immortel', '#fbbf24')
 ON CONFLICT (level) DO NOTHING;
 
 -- =====================================================
@@ -297,15 +297,15 @@ GRANT EXECUTE ON FUNCTION get_squad_leaderboard(UUID) TO authenticated;
 -- =====================================================
 
 INSERT INTO challenges (title, description, xp_reward, type, requirements, icon) VALUES
-    ('Premier RSVP', 'RSVP "Présent" à ta première session', 25, 'achievement', '{"type": "rsvp", "count": 1}', '✅'),
-    ('Participant régulier', 'RSVP "Présent" à 10 sessions', 100, 'achievement', '{"type": "rsvp", "count": 10}', '🎯'),
-    ('Machine de fiabilité', 'Atteindre 90% de reliability score', 200, 'achievement', '{"type": "reliability", "score": 90}', '💎'),
-    ('Semaine parfaite', 'Check-in 7 jours de suite', 100, 'weekly', '{"type": "streak", "days": 7}', '🔥'),
-    ('RSVP du jour', 'RSVP à une session aujourd''hui', 10, 'daily', '{"type": "daily_rsvp", "count": 1}', '📅'),
-    ('Social butterfly', 'Envoyer 10 messages dans le chat squad', 50, 'weekly', '{"type": "messages", "count": 10}', '💬'),
-    ('Party animal', 'Rejoindre 5 voice parties', 75, 'weekly', '{"type": "party", "count": 5}', '🎉'),
-    ('Leader né', 'Créer une session', 30, 'achievement', '{"type": "create_session", "count": 1}', '👑'),
-    ('Squad builder', 'Inviter un ami dans ta squad', 50, 'achievement', '{"type": "invite", "count": 1}', '🤝')
+    ('Première réponse', 'Répondre "Présent" à ta première session', 25, 'achievement', '{"type": "rsvp", "count": 1}', '✅'),
+    ('Participant régulier', 'Répondre "Présent" à 10 sessions', 100, 'seasonal', '{"type": "rsvp", "count": 10}', '🎯'),
+    ('Machine de fiabilité', 'Atteindre 90% de score de fiabilité', 200, 'seasonal', '{"type": "reliability", "score": 90}', '💎'),
+    ('Semaine parfaite', 'Pointer 7 jours de suite', 100, 'weekly', '{"type": "streak", "days": 7}', '🔥'),
+    ('Réponse du jour', 'Répondre à une session aujourd''hui', 10, 'daily', '{"type": "daily_rsvp", "count": 1}', '📅'),
+    ('Papillon social', 'Envoyer 10 messages dans le chat de ta squad', 50, 'weekly', '{"type": "messages", "count": 10}', '💬'),
+    ('Fêtard', 'Rejoindre 5 parties vocales', 75, 'weekly', '{"type": "party", "count": 5}', '🎉'),
+    ('Leader né', 'Créer une session', 30, 'daily', '{"type": "create_session", "count": 1}', '👑'),
+    ('Bâtisseur de squad', 'Inviter un ami dans ta squad', 50, 'weekly', '{"type": "invite", "count": 1}', '🤝')
 ON CONFLICT DO NOTHING;
 
 -- =====================================================

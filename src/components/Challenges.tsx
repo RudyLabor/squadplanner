@@ -196,7 +196,7 @@ export function Challenges({ challenges, onClaimXP }: ChallengesProps) {
                 <Target className="w-8 h-8 text-[#5e6063]" />
               </div>
               <p className="text-[14px] text-[#5e6063]">
-                Aucun challenge dans cette categorie
+                Aucun challenge dans cette catégorie
               </p>
             </motion.div>
           ) : (

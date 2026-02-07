@@ -27,12 +27,13 @@ export interface SeasonalBadge {
 }
 
 // Database row type (different from display type)
+// Note: Database column is 'type', not 'challenge_type'
 interface DbChallenge {
   id: string
   title: string
   description: string | null
   xp_reward: number
-  challenge_type: string
+  type: 'daily' | 'weekly' | 'seasonal' | 'achievement'
   icon: string | null
   requirements: {
     type: string
@@ -151,16 +152,43 @@ export function useClaimChallengeXPMutation() {
 
       if (claimError) throw claimError
 
-      // Award XP to user profile
-      const { error: xpError } = await supabase.rpc('award_xp', {
+      // Award XP to user profile - try RPC first, fallback to direct update
+      const { error: xpError } = await supabase.rpc('add_xp', {
         p_user_id: user.id,
         p_amount: challenge.xp_reward,
         p_reason: `Challenge: ${challengeId}`,
+        p_source_type: 'challenge',
+        p_source_id: challengeId,
       })
 
-      // XP RPC might not exist, that's ok
+      // If RPC fails, fallback to direct profile update
       if (xpError) {
-        console.warn('XP award failed (RPC may not exist):', xpError.message)
+        console.warn('XP RPC failed, using direct update:', xpError.message)
+
+        // Get current XP and calculate new level
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('xp, level')
+          .eq('id', user.id)
+          .single()
+
+        if (profile) {
+          const newXP = (profile.xp || 0) + challenge.xp_reward
+          // Level thresholds: 0, 100, 250, 500, 1000, 2000, 3500, 5500, 8000, 11000, ...
+          const levelThresholds = [0, 100, 250, 500, 1000, 2000, 3500, 5500, 8000, 11000, 15000, 20000]
+          let newLevel = 1
+          for (let i = levelThresholds.length - 1; i >= 0; i--) {
+            if (newXP >= levelThresholds[i]) {
+              newLevel = i + 1
+              break
+            }
+          }
+
+          await supabase
+            .from('profiles')
+            .update({ xp: newXP, level: newLevel })
+            .eq('id', user.id)
+        }
       }
 
       return challenge.xp_reward

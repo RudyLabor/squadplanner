@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   Search, Home, Users, Mic, MessageCircle, User, Calendar,
-  Settings, Zap, HelpCircle, X, ArrowRight, Command, Moon, Sun
+  Settings, Zap, HelpCircle, X, ArrowRight, Moon, Sun
 } from 'lucide-react'
 import { useSquadsStore, useSessionsStore, useViewTransitionNavigate } from '../hooks'
 import { useThemeStore } from '../hooks/useTheme'

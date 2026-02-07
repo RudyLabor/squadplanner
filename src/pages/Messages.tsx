@@ -1001,7 +1001,7 @@ export function Messages() {
           dmConversations.length === 0 ? (
             <EmptyState
               type="no_messages"
-              title="Pas encore de messages prives"
+              title="Pas encore de messages privés"
               message="Clique sur un membre de ta squad pour lui envoyer un message."
             />
           ) : filteredDMConvs.length === 0 ? (

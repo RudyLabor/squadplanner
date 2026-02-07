@@ -368,7 +368,7 @@ export const useAIStore = create<AIState>((set) => ({
         console.error('Edge Function error:', error)
         // Return a fallback tip
         const fallback: AICoachTip = {
-          tip: 'Pret pour la prochaine session ? Tes potes t\'attendent !',
+          tip: 'Prêt pour la prochaine session ? Tes potes t\'attendent !',
           tone: 'encouragement'
         }
         set({ aiCoachTip: fallback, aiCoachTipLoading: false })
@@ -387,7 +387,7 @@ export const useAIStore = create<AIState>((set) => ({
       console.error('Error in fetchAICoachTip:', error)
       // Return a fallback tip
       const fallback: AICoachTip = {
-        tip: 'Pret pour la prochaine session ? Tes potes t\'attendent !',
+        tip: 'Prêt pour la prochaine session ? Tes potes t\'attendent !',
         tone: 'encouragement'
       }
       set({ aiCoachTip: fallback, aiCoachTipLoading: false })

@@ -39,7 +39,6 @@ function FriendCard({
     <motion.div
       whileHover={{ y: -2, scale: 1.02 }}
       whileTap={{ scale: 0.98 }}
-      className="flex-shrink-0 w-[200px] md:w-auto"
     >
       <Card className="p-4 bg-gradient-to-br from-[rgba(94,109,210,0.08)] via-transparent to-[rgba(74,222,128,0.05)] hover:from-[rgba(94,109,210,0.12)] hover:to-[rgba(74,222,128,0.08)] hover:shadow-[0_0_20px_rgba(94,109,210,0.2)] transition-interactive">
         <div className="flex flex-col gap-3">
@@ -201,34 +200,16 @@ export function FriendsPlaying({ friends, onJoin, onInvite }: FriendsPlayingProp
         </span>
       </h2>
 
-      {/* Horizontal scroll on mobile, grid on desktop */}
+      {/* Single render with responsive layout - horizontal scroll on mobile, grid on desktop */}
       <div className="relative">
-        {/* Mobile: horizontal scroll */}
-        <div className="flex gap-3 overflow-x-auto pb-2 -mx-4 px-4 md:hidden scrollbar-hide">
+        <div className="flex gap-3 overflow-x-auto pb-2 -mx-4 px-4 md:mx-0 md:px-0 md:overflow-visible md:grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 md:gap-4 scrollbar-hide">
           {friends.map((friend, index) => (
             <motion.div
               key={friend.friend_id}
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: index * 0.1 }}
-            >
-              <FriendCard
-                friend={friend}
-                onJoin={onJoin}
-                onInvite={onInvite}
-              />
-            </motion.div>
-          ))}
-        </div>
-
-        {/* Desktop: grid layout */}
-        <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-          {friends.map((friend, index) => (
-            <motion.div
-              key={friend.friend_id}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.08 }}
+              className="flex-shrink-0 w-[200px] md:w-auto"
             >
               <FriendCard
                 friend={friend}

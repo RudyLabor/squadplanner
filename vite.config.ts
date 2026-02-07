@@ -45,6 +45,10 @@ export default defineConfig({
           if (id.includes('@supabase')) {
             return 'vendor-supabase';
           }
+          // Sentry
+          if (id.includes('@sentry')) {
+            return 'vendor-sentry';
+          }
           // Confetti libraries
           if (id.includes('confetti')) {
             return 'vendor-confetti';

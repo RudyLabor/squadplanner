@@ -128,6 +128,46 @@ const MobileNavLink = memo(function MobileNavLink({ path, icon: Icon, label, isA
   )
 })
 
+// Desktop content wrapper - handles responsive margin without duplicate rendering
+const DesktopContentWrapper = memo(function DesktopContentWrapper({
+  isExpanded,
+  isKeyboardVisible,
+  children
+}: {
+  isExpanded: boolean
+  isKeyboardVisible: boolean
+  children: ReactNode
+}) {
+  // Track if we're on desktop for margin calculation
+  const [isDesktop, setIsDesktop] = useState(false)
+
+  useEffect(() => {
+    const checkDesktop = () => setIsDesktop(window.innerWidth >= 1024)
+    checkDesktop()
+    window.addEventListener('resize', checkDesktop)
+    return () => window.removeEventListener('resize', checkDesktop)
+  }, [])
+
+  // Calculate margin: 0 on mobile, dynamic on desktop
+  const marginLeft = isDesktop ? (isExpanded ? 256 : 72) : 0
+
+  return (
+    <main
+      id="main-content"
+      tabIndex={-1}
+      className={`flex-1 lg:pb-0 overflow-y-auto overflow-x-hidden scrollbar-hide-mobile ${isKeyboardVisible ? 'pb-0' : 'pb-mobile-nav'}`}
+    >
+      <motion.div
+        initial={false}
+        animate={{ marginLeft }}
+        transition={{ duration: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
+      >
+        {children}
+      </motion.div>
+    </main>
+  )
+})
+
 // OPTIMIZED: Memoized Party button
 const PartyButton = memo(function PartyButton({ isActive, hasActiveParty }: { isActive: boolean; hasActiveParty: boolean }) {
   return (
@@ -451,34 +491,17 @@ export function AppLayout({ children }: AppLayoutProps) {
         </footer>
       </motion.aside>
 
-      {/* Main content - margin adjusts with sidebar */}
-      <main
-        id="main-content"
-        tabIndex={-1}
-        className={`flex-1 lg:pb-0 overflow-y-auto overflow-x-hidden scrollbar-hide-mobile ${isKeyboardVisible ? 'pb-0' : 'pb-mobile-nav'}`}
-        style={{ marginLeft: 0 }}
-      >
-        {/* Desktop content with dynamic margin */}
-        <div className="hidden lg:block">
-          <motion.div
-            initial={false}
-            animate={{ marginLeft: isExpanded ? 256 : 72 }}
-            transition={{ duration: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
-          >
-            {/* Header with Breadcrumbs and GlobalSearch - Desktop only */}
-            <header role="banner" className="pt-4 px-6 flex items-center justify-between">
-              <Breadcrumbs />
-              <GlobalSearch />
-            </header>
-            {children}
-          </motion.div>
-        </div>
+      {/* Main content - single render with responsive margin for desktop sidebar */}
+      <DesktopContentWrapper isExpanded={isExpanded} isKeyboardVisible={isKeyboardVisible}>
+        {/* Header with Breadcrumbs and GlobalSearch - Desktop only */}
+        <header role="banner" className="hidden lg:flex pt-4 px-6 items-center justify-between">
+          <Breadcrumbs />
+          <GlobalSearch />
+        </header>
 
-        {/* Mobile content - no margin */}
-        <div className="lg:hidden">
-          {children}
-        </div>
-      </main>
+        {/* Single render of children - fixes double rendering issue */}
+        {children}
+      </DesktopContentWrapper>
 
       {/* Bottom navigation - Mobile only */}
       <nav

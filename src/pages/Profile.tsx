@@ -24,12 +24,12 @@ import { SeasonalBadges } from '../components/SeasonalBadges'
 
 // Systeme d'achievements
 const ACHIEVEMENTS = [
-  { id: 'first_step', name: 'Premier pas', icon: '👶', description: '1ere session', threshold: 1, type: 'sessions' },
-  { id: 'team_player', name: 'Team Player', icon: '🤝', description: '5 sessions', threshold: 5, type: 'sessions' },
+  { id: 'first_step', name: 'Premier pas', icon: '👶', description: '1ère session', threshold: 1, type: 'sessions' },
+  { id: 'team_player', name: 'Joueur d\'équipe', icon: '🤝', description: '5 sessions', threshold: 5, type: 'sessions' },
   { id: 'reliable', name: 'Fiable', icon: '⭐', description: '10 check-ins', threshold: 10, type: 'checkins' },
-  { id: 'veteran', name: 'Veteran', icon: '🏆', description: '20 sessions', threshold: 20, type: 'sessions' },
-  { id: 'perfectionist', name: 'Perfectionniste', icon: '💎', description: '100% fiabilite', threshold: 100, type: 'score' },
-  { id: 'legend', name: 'Legende', icon: '👑', description: '50 sessions', threshold: 50, type: 'sessions' },
+  { id: 'veteran', name: 'Vétéran', icon: '🏆', description: '20 sessions', threshold: 20, type: 'sessions' },
+  { id: 'perfectionist', name: 'Perfectionniste', icon: '💎', description: '100% fiabilité', threshold: 100, type: 'score' },
+  { id: 'legend', name: 'Légende', icon: '👑', description: '50 sessions', threshold: 50, type: 'sessions' },
 ]
 
 // Systeme de tiers base sur le score de fiabilite - avec next tier pour progress bar
@@ -38,7 +38,7 @@ const TIERS = [
   { name: 'Confirme', color: '#6366f1', icon: '✓', minScore: 50, glow: false },
   { name: 'Expert', color: '#34d399', icon: '⭐', minScore: 70, glow: false },
   { name: 'Master', color: '#a78bfa', icon: '💎', minScore: 85, glow: true },
-  { name: 'Legende', color: '#fbbf24', icon: '👑', minScore: 95, glow: true },
+  { name: 'Légende', color: '#fbbf24', icon: '👑', minScore: 95, glow: true },
 ]
 
 const getTier = (score: number) => {
@@ -468,7 +468,7 @@ export function Profile() {
           className="mb-5"
         />
 
-        {/* Score de fiabilite - Card principale avec Tier System */}
+        {/* Score de fiabilité - Card principale avec Tier System */}
         <Card className={`mb-5 overflow-hidden bg-[#101012] ${tier.glow ? 'ring-1 ring-[#fbbf24]/30 ring-offset-1 ring-offset-[#050506]' : ''}`}>
           <div
             className="h-1.5"
@@ -510,7 +510,7 @@ export function Profile() {
                     <span>{tier.name}</span>
                   </motion.span>
                 </div>
-                <p className="text-[13px] text-[#5e6063]">Score de fiabilite</p>
+                <p className="text-[13px] text-[#5e6063]">Score de fiabilité</p>
 
                 {/* Progress bar to next tier */}
                 {tier.nextTier && (
@@ -587,12 +587,12 @@ export function Profile() {
           ))}
         </div>
 
-        {/* Activite Section - StreakCounter */}
+        {/* Activité Section - StreakCounter */}
         <div className="mb-5">
           <div className="flex items-center gap-2 mb-3">
             <Flame className="w-4 h-4 text-[#f97316]" />
             <h3 className="text-[13px] font-semibold text-[#f7f8f8] uppercase tracking-wide">
-              Activite
+              Activité
             </h3>
           </div>
           <StreakCounter
@@ -664,7 +664,7 @@ export function Profile() {
                     ? 'text-[#fb7185]'
                     : 'text-[#8b8d90]'
               }`}>
-                {aiCoachTip?.tip || 'Pret pour la prochaine session ? Tes potes t\'attendent !'}
+                {aiCoachTip?.tip || 'Prêt pour la prochaine session ? Tes potes t\'attendent !'}
               </p>
             </div>
           </div>
@@ -674,13 +674,13 @@ export function Profile() {
         <div className="mb-5">
           <div className="flex items-center gap-2 mb-3">
             <h3 className="text-[13px] font-semibold text-[#f7f8f8] uppercase tracking-wide">
-              Coach IA Avance
+              Coach IA Avancé
             </h3>
             {!canAccessFeature('ai_coach_advanced') && <PremiumBadge small />}
           </div>
           <PremiumGate
             feature="ai_coach_advanced"
-            featureLabel="Coach IA Avance"
+            featureLabel="Coach IA Avancé"
             fallback="lock"
           >
             <Card className="p-4 bg-gradient-to-br from-[rgba(251,191,36,0.06)] to-[rgba(251,191,36,0.02)] border-[rgba(251,191,36,0.12)]">
@@ -711,7 +711,7 @@ export function Profile() {
             </div>
             <div className="flex-1">
               <h4 className="text-[14px] font-medium text-[#f7f8f8]">Historique des appels</h4>
-              <p className="text-[12px] text-[#5e6063]">Voir tous tes appels passes</p>
+              <p className="text-[12px] text-[#5e6063]">Voir tous tes appels passés</p>
             </div>
             <ChevronRight className="w-5 h-5 text-[#5e6063]" />
           </div>
@@ -732,7 +732,7 @@ export function Profile() {
           </div>
           <PremiumGate
             feature="unlimited_history"
-            featureLabel="Historique illimite"
+            featureLabel="Historique illimité"
             fallback="lock"
           >
             <Card className="p-4">
@@ -763,14 +763,14 @@ export function Profile() {
                     Passe Premium
                   </h3>
                   <p className="text-[13px] text-[#8b8d90] mb-3">
-                    Stats avancees, IA coach avance, audio HD, historique illimite
+                    Stats avancées, IA coach avancé, audio HD, historique illimité
                   </p>
                   <Button
                     size="sm"
                     className="bg-gradient-to-r from-[#6366f1] to-[#a78bfa]"
                     onClick={() => navigate('/premium')}
                   >
-                    Decouvrir
+                    Découvrir
                     <ChevronRight className="w-4 h-4" />
                   </Button>
                 </div>
@@ -800,7 +800,7 @@ export function Profile() {
         {/* Achievements section avec animations */}
         <Card className="mb-5 p-4 bg-[#101012]">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-[14px] font-semibold text-[#f7f8f8]">Achievements</h3>
+            <h3 className="text-[14px] font-semibold text-[#f7f8f8]">Succès</h3>
             <span className="text-[12px] text-[#5e6063]">{unlockedAchievements.length}/{ACHIEVEMENTS.length}</span>
           </div>
           <div className="grid grid-cols-3 lg:grid-cols-6 gap-3 lg:gap-4">
@@ -853,7 +853,7 @@ export function Profile() {
           className="w-full py-3 text-[14px] text-[#fb7185] hover:text-[#fda4af] transition-colors flex items-center justify-center gap-2"
         >
           <LogOut className="w-4 h-4" />
-          Se deconnecter
+          Se déconnecter
         </button>
       </div>
 

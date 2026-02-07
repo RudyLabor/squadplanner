@@ -27,6 +27,10 @@ export function GlobalSearch() {
   const { sessions } = useSessionsStore()
   const { user } = useAuthStore()
 
+  // Detect platform for keyboard shortcut display
+  const isMac = typeof navigator !== 'undefined' && navigator.platform.toLowerCase().includes('mac')
+  const shortcutKey = isMac ? '⌘' : 'Ctrl'
+
   // Global keyboard shortcut (Cmd+K / Ctrl+K)
   useEffect(() => {
     const handleGlobalKeyDown = (e: KeyboardEvent) => {
@@ -74,9 +78,9 @@ export function GlobalSearch() {
             id: squad.id,
             type: 'squad',
             title: squad.name,
-            subtitle: `${squad.member_count || 0} membres`,
+            subtitle: `${squad.member_count || 0} membre${(squad.member_count || 0) > 1 ? 's' : ''}`,
             icon: Users,
-            path: `/squads/${squad.id}`,
+            path: `/squad/${squad.id}`,
             avatar: (squad as { avatar_url?: string }).avatar_url || undefined
           })
         }
@@ -244,7 +248,7 @@ export function GlobalSearch() {
         <Search className="w-4 h-4" />
         <span className="text-sm hidden sm:inline">Rechercher...</span>
         <kbd className="hidden md:inline-flex items-center gap-1 px-1.5 py-0.5 text-[10px] font-medium bg-[rgba(255,255,255,0.05)] rounded border border-[rgba(255,255,255,0.1)]">
-          <span className="text-[10px]">⌘</span>K
+          <span className="text-[10px]">{shortcutKey}</span>K
         </kbd>
       </motion.button>
 

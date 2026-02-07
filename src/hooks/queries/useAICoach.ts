@@ -29,7 +29,7 @@ export interface AICoachTip {
 
 // Default fallback tip
 const FALLBACK_TIP: AICoachTip = {
-  tip: 'Pret pour la prochaine session ? Tes potes t\'attendent !',
+  tip: 'Prêt pour la prochaine session ? Tes potes t\'attendent !',
   tone: 'encouragement'
 }
 

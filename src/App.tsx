@@ -31,6 +31,7 @@ const Premium = lazy(() => import('./pages/Premium').then(m => ({ default: m.Pre
 const Settings = lazy(() => import('./pages/Settings').then(m => ({ default: m.Settings })))
 const Help = lazy(() => import('./pages/Help').then(m => ({ default: m.Help })))
 const JoinSquad = lazy(() => import('./pages/JoinSquad').then(m => ({ default: m.JoinSquad })))
+const NotFound = lazy(() => import('./pages/NotFound').then(m => ({ default: m.NotFound })))
 
 // Lazy load heavy modals (only loaded when needed)
 const CallModal = lazy(() => import('./components/CallModal').then(m => ({ default: m.CallModal })))
@@ -297,8 +298,8 @@ function AppContent() {
                 {/* Deep linking - Join squad via invite code */}
                 <Route path="/join/:code" element={<JoinSquad />} />
 
-                {/* Catch-all redirect to home */}
-                  <Route path="*" element={<Navigate to="/" replace />} />
+                {/* 404 - Page not found */}
+                <Route path="*" element={<NotFound />} />
                 </Routes>
               </Suspense>
             </ErrorBoundary>

@@ -58,7 +58,7 @@ const EMPTY_STATE_CONFIG: Record<EmptyStateType, {
   },
   no_achievements: {
     icon: <Trophy className="w-12 h-12" />,
-    title: "Pas encore d'achievements",
+    title: "Pas encore de succès",
     message: "Participe à des sessions pour débloquer des badges !",
     color: '#eab308'
   },

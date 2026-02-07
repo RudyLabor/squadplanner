@@ -129,7 +129,8 @@ export const useCallHistoryStore = create<CallHistoryState>((set, get) => ({
       case 'outgoing':
         return calls.filter(c => c.type === 'outgoing')
       case 'missed':
-        return calls.filter(c => c.status === 'missed' || c.status === 'rejected')
+        // Ne filtrer que les appels manqués (pas les rejets)
+        return calls.filter(c => c.status === 'missed')
       default:
         return calls
     }
@@ -152,27 +153,37 @@ export function formatDuration(seconds: number | null): string {
   return `${mins} min ${secs.toString().padStart(2, '0')}s`
 }
 
-// Format relative time
+// Format relative time with date (Issue #19 - show dates in call history)
 export function formatRelativeTime(date: Date): string {
   const now = new Date()
   const diffMs = now.getTime() - date.getTime()
   const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24))
+  const timeStr = date.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })
 
-  // Today
+  // Today - show "Aujourd'hui 16:53"
   if (diffDays === 0) {
-    return date.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })
+    return `Aujourd'hui ${timeStr}`
   }
 
-  // Yesterday
+  // Yesterday - show "Hier 13:57"
   if (diffDays === 1) {
-    return 'Hier'
+    return `Hier ${timeStr}`
   }
 
-  // This week
+  // This week - show "Lun 3 fév. 13:32"
   if (diffDays < 7) {
-    return date.toLocaleDateString('fr-FR', { weekday: 'long' })
+    const dayMonth = date.toLocaleDateString('fr-FR', {
+      weekday: 'short',
+      day: 'numeric',
+      month: 'short'
+    })
+    return `${dayMonth} ${timeStr}`
   }
 
-  // Older
-  return date.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' })
+  // Older - show "3 fév. 13:32"
+  const dayMonth = date.toLocaleDateString('fr-FR', {
+    day: 'numeric',
+    month: 'short'
+  })
+  return `${dayMonth} ${timeStr}`
 }

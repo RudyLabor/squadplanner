@@ -10,6 +10,7 @@ import Confetti from 'react-confetti'
 import { Button, Card } from '../components/ui'
 import { useAuthStore, useSubscriptionStore, usePremiumStore } from '../hooks'
 import { PREMIUM_PRICE_MONTHLY, PREMIUM_PRICE_YEARLY } from '../hooks/usePremium'
+import { captureException } from '../lib/sentry'
 
 // const containerVariants = theme.animation.container
 // const itemVariants = theme.animation.item
@@ -47,14 +48,14 @@ const FEATURES = [
   {
     name: 'Qualité audio Party',
     free: 'Standard',
-    premium: 'HD Crystal Clear',
+    premium: 'Audio HD Premium',
     icon: Mic2,
     highlight: false
   },
   {
     name: 'Rôles squad',
     free: 'Membre / Admin',
-    premium: 'Coach, Manager, Custom',
+    premium: 'Coach, Manager, Personnalisé',
     icon: Shield,
     highlight: false
   },
@@ -164,7 +165,23 @@ export function Premium() {
         window.location.href = url
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Erreur lors du paiement')
+      // Log to Sentry but show user-friendly message
+      const error = err instanceof Error ? err : new Error(String(err))
+      captureException(error, {
+        context: 'stripe_checkout',
+        selectedPlan,
+        userId: user.id
+      })
+
+      // User-friendly error message instead of technical details
+      const errorMessage = error.message
+      if (errorMessage.includes('Edge Function') || errorMessage.includes('non-2xx')) {
+        setError('Une erreur est survenue. Réessaye dans quelques instants.')
+      } else if (errorMessage.includes('network') || errorMessage.includes('fetch')) {
+        setError('Problème de connexion. Vérifie ta connexion internet.')
+      } else {
+        setError('Une erreur est survenue. Réessaye dans quelques instants.')
+      }
     } finally {
       setIsLoading(false)
     }

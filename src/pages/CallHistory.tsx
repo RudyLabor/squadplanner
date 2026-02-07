@@ -269,7 +269,7 @@ export function CallHistory() {
                       <div className="flex items-center gap-2 text-[13px] text-[#888]">
                         {getCallIcon(call.type, call.status)}
                         <span>{getCallLabel(call.type, call.status)}</span>
-                        {call.durationSeconds && call.durationSeconds > 0 && (
+                        {typeof call.durationSeconds === 'number' && call.durationSeconds > 0 && (
                           <>
                             <span className="text-[#5e6063]">•</span>
                             <span>{formatDuration(call.durationSeconds)}</span>

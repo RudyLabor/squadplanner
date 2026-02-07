@@ -779,7 +779,7 @@ export default function SquadDetail() {
                   {currentSquad.game} · {currentSquad.member_count} membre{(currentSquad.member_count || 0) > 1 ? 's' : ''}
                 </p>
               </div>
-              <Link to="/messages" aria-label="Ouvrir les messages">
+              <Link to={`/messages?squad=${currentSquad.id}`} aria-label="Ouvrir les messages de cette squad">
                 <Button variant="ghost" size="sm" aria-label="Ouvrir les messages">
                   <MessageCircle className="w-4 h-4" aria-hidden="true" />
                 </Button>
@@ -821,7 +821,7 @@ export default function SquadDetail() {
                         label="Titre (optionnel)"
                         value={sessionTitle}
                         onChange={(e) => setSessionTitle(e.target.value)}
-                        placeholder="Ranked grind, Fun time..."
+                        placeholder="Session ranked, Détente, Tryhard..."
                       />
                       <div className="grid grid-cols-2 gap-4">
                         <Input

@@ -146,7 +146,7 @@ export function XPBar({ currentXP, level, showTitle = true, compact = false, cla
         {!isMaxLevel && (
           <div className="text-right">
             <div className="text-[11px] text-[#5e6063] uppercase tracking-wide mb-0.5">
-              Next Level
+              Prochain niveau
             </div>
             <div className="text-[13px] font-medium" style={{ color: nextLevel.color }}>
               {nextLevel.title}
@@ -206,7 +206,7 @@ export function XPBar({ currentXP, level, showTitle = true, compact = false, cla
           </span>
           {!isMaxLevel && (
             <span className="text-[11px] text-[#5e6063]">
-              {xpNeeded - Math.floor(xpInLevel)} XP to level {level + 1}
+              {xpNeeded - Math.floor(xpInLevel)} XP pour le niveau {level + 1}
             </span>
           )}
         </div>

@@ -28,16 +28,19 @@ interface UpcomingSession {
   total_members: number
 }
 
-// Badge fiabilité avec glow subtil
+// Badge fiabilité avec glow subtil et tooltip explicatif
 function ReliabilityBadge({ score }: { score: number }) {
+  const tooltipText = "Ton score de fiabilité. Il augmente quand tu confirmes ta présence aux sessions."
+
   if (score >= 95) {
     return (
       <motion.div
-        className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-gradient-to-r from-[#34d399]/15 to-[#34d399]/5 border border-[#34d399]/20 shadow-[0_0_12px_rgba(52,211,153,0.1)]"
+        className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-gradient-to-r from-[#34d399]/15 to-[#34d399]/5 border border-[#34d399]/20 shadow-[0_0_12px_rgba(52,211,153,0.1)] cursor-help"
         initial={{ scale: 0.9, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ delay: 0.4, type: "spring", stiffness: 300, damping: 25 }}
         whileHover={{ scale: 1.02, boxShadow: "0 0 16px rgba(52,211,153,0.15)" }}
+        title={tooltipText}
       >
         <motion.div
           animate={{ rotate: [0, 8, -8, 0] }}
@@ -51,7 +54,10 @@ function ReliabilityBadge({ score }: { score: number }) {
   }
   if (score >= 80) {
     return (
-      <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#34d399]/10 border border-[#34d399]/15">
+      <div
+        className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#34d399]/10 border border-[#34d399]/15 cursor-help"
+        title={tooltipText}
+      >
         <TrendingUp className="w-4 h-4 text-[#34d399]" />
         <span className="text-[13px] font-medium text-[#34d399]">{score}% fiable</span>
       </div>
@@ -59,14 +65,20 @@ function ReliabilityBadge({ score }: { score: number }) {
   }
   if (score >= 60) {
     return (
-      <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#fbbf24]/10 border border-[#fbbf24]/15">
+      <div
+        className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#fbbf24]/10 border border-[#fbbf24]/15 cursor-help"
+        title={tooltipText}
+      >
         <TrendingUp className="w-4 h-4 text-[#fbbf24]" />
         <span className="text-[13px] font-medium text-[#fbbf24]">{score}%</span>
       </div>
     )
   }
   return (
-    <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#f87171]/10 border border-[#f87171]/15">
+    <div
+      className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#f87171]/10 border border-[#f87171]/15 cursor-help"
+      title={tooltipText}
+    >
       <AlertCircle className="w-4 h-4 text-[#f87171]" />
       <span className="text-[13px] font-medium text-[#f87171]">{score}%</span>
     </div>

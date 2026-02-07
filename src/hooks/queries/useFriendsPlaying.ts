@@ -28,13 +28,15 @@ export interface FriendPlaying {
 // Fetch friends who are currently playing or in voice party
 async function fetchFriendsPlaying(userId: string): Promise<FriendPlaying[]> {
   try {
+    // Call RPC with p_user_id parameter (matches the fix migration 20260206140001)
     const { data, error } = await supabase.rpc('get_friends_playing', {
-      user_id: userId
+      p_user_id: userId
     })
 
     if (error) {
-      // RPC might not exist yet - silent failure
-      console.warn('get_friends_playing RPC not available:', error.message)
+      // TODO: La fonction get_friends_playing nécessite les colonnes is_online/current_game dans profiles.
+      // En attendant, on retourne gracieusement une liste vide sans polluer la console.
+      // Voir migration 20260206140001_fix_get_friends_playing.sql
       return []
     }
 

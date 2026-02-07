@@ -85,7 +85,7 @@ export async function initSentry(): Promise<void> {
     })
 
     isInitialized = true
-    console.log('[Sentry] Initialized successfully')
+    // Sentry initialized - no console log to avoid noise
   } catch (error) {
     console.error('[Sentry] Failed to initialize:', error)
   }

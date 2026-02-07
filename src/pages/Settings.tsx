@@ -356,7 +356,7 @@ export function Settings() {
                       : 'bg-[rgba(255,255,255,0.05)] text-[#8b8d90] hover:bg-[rgba(255,255,255,0.1)]'
                   }`}
                 >
-                  Francais
+                  Français
                 </button>
                 <button
                   onClick={() => setLanguage('en')}

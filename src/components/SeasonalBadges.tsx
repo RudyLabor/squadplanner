@@ -37,7 +37,7 @@ const BADGE_CONFIGS: Record<string, BadgeConfig> = {
     color: '#34d399',
     bgColor: 'rgba(52, 211, 153, 0.15)',
     glowColor: 'rgba(52, 211, 153, 0.3)',
-    label: 'Most Reliable',
+    label: 'Plus fiable',
     description: 'Plus fiable du mois'
   },
   party_animal: {
@@ -45,7 +45,7 @@ const BADGE_CONFIGS: Record<string, BadgeConfig> = {
     color: '#f472b6',
     bgColor: 'rgba(244, 114, 182, 0.15)',
     glowColor: 'rgba(244, 114, 182, 0.3)',
-    label: 'Party Animal',
+    label: 'Bête de soirée',
     description: 'Le plus actif en party'
   },
   top_scorer: {
@@ -53,7 +53,7 @@ const BADGE_CONFIGS: Record<string, BadgeConfig> = {
     color: '#a78bfa',
     bgColor: 'rgba(167, 139, 250, 0.15)',
     glowColor: 'rgba(167, 139, 250, 0.3)',
-    label: 'Top Scorer',
+    label: 'Meilleur scoreur',
     description: 'Plus de XP gagné'
   },
   streak_master: {
@@ -61,7 +61,7 @@ const BADGE_CONFIGS: Record<string, BadgeConfig> = {
     color: '#22d3ee',
     bgColor: 'rgba(34, 211, 238, 0.15)',
     glowColor: 'rgba(34, 211, 238, 0.3)',
-    label: 'Streak Master',
+    label: 'Maître de la série',
     description: 'Plus longue série'
   },
   squad_champion: {
@@ -69,7 +69,7 @@ const BADGE_CONFIGS: Record<string, BadgeConfig> = {
     color: '#fb923c',
     bgColor: 'rgba(251, 146, 60, 0.15)',
     glowColor: 'rgba(251, 146, 60, 0.3)',
-    label: 'Squad Champion',
+    label: 'Champion de squad',
     description: 'Champion de la squad'
   },
   rising_star: {
@@ -77,7 +77,7 @@ const BADGE_CONFIGS: Record<string, BadgeConfig> = {
     color: '#818cf8',
     bgColor: 'rgba(129, 140, 248, 0.15)',
     glowColor: 'rgba(129, 140, 248, 0.3)',
-    label: 'Rising Star',
+    label: 'Étoile montante',
     description: 'Progression exceptionnelle'
   },
   legend: {

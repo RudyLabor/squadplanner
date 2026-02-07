@@ -189,7 +189,7 @@ export function CreateSessionModal() {
                     type="text"
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
-                    placeholder="Ranked grind, Fun time..."
+                    placeholder="Session ranked, Détente, Tryhard..."
                     className="w-full px-4 py-3 rounded-xl bg-[rgba(255,255,255,0.04)] border border-[rgba(255,255,255,0.08)] text-[#f7f8f8] placeholder-[#5e6063] focus:border-[rgba(99,102,241,0.5)] focus:ring-2 focus:ring-[rgba(99,102,241,0.15)] transition-input"
                   />
                 </div>

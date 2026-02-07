@@ -752,6 +752,7 @@ export function Messages() {
             other_user_avatar_url: userData.avatar_url,
             last_message_content: null,
             last_message_at: null,
+            last_message_sender_id: null,
             unread_count: 0
           })
           // Clear the URL param

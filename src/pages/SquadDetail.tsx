@@ -144,7 +144,7 @@ function PartySection({ squadId }: { squadId: string }) {
           </Button>
           {participantCount === 0 && (
             <p className="text-[12px] text-[#5e6063] text-center mt-2">
-              Personne n'est connecté pour l'instant
+              Personne n'est connectée pour l'instant
             </p>
           )}
         </div>

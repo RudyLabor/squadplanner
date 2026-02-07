@@ -27,6 +27,10 @@ export function CommandPalette() {
   const { sessions } = useSessionsStore()
   const { mode, setMode, effectiveTheme } = useThemeStore()
 
+  // Detect platform for keyboard shortcut display
+  const isMac = typeof navigator !== 'undefined' && navigator.platform.toLowerCase().includes('mac')
+  const shortcutKey = isMac ? '⌘' : 'Ctrl'
+
   // Toggle theme: dark -> light -> system -> dark
   const toggleTheme = useCallback(() => {
     const nextMode = mode === 'dark' ? 'light' : mode === 'light' ? 'system' : 'dark'
@@ -327,10 +331,9 @@ export function CommandPalette() {
                     fermer
                   </span>
                 </div>
-                <div className="flex items-center gap-1.5 text-[11px] text-[#5e6063]">
-                  <Command className="w-3 h-3" />
-                  <span>K</span>
-                </div>
+                <kbd className="flex items-center gap-1 px-1.5 py-0.5 rounded bg-[rgba(255,255,255,0.05)] text-[11px] text-[#5e6063] font-mono">
+                  {shortcutKey} K
+                </kbd>
               </div>
             </div>
           </motion.div>
@@ -388,7 +391,7 @@ export function CommandPalette() {
                   <h3 className="text-[11px] font-semibold text-[#5e6063] uppercase tracking-wider mb-2">Global</h3>
                   <div className="space-y-2">
                     {[
-                      { key: '⌘K', action: 'Palette de commandes' },
+                      { key: `${shortcutKey} K`, action: 'Palette de commandes' },
                       { key: '?', action: 'Afficher cette aide' },
                       { key: 'Esc', action: 'Fermer les modals' },
                     ].map(({ key, action }) => (

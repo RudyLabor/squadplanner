@@ -5,7 +5,7 @@ import { Button } from '../components/ui'
 
 export function NotFound() {
   return (
-    <div className="min-h-screen bg-[#050506] flex items-center justify-center px-4">
+    <div className="min-h-0 h-full flex-1 bg-[#050506] flex items-center justify-center px-4">
       <div className="text-center max-w-md">
         {/* Animated 404 icon */}
         <motion.div

@@ -1,6 +1,8 @@
 import { motion } from 'framer-motion'
 import { Gamepad2, UserPlus, Users, LogIn } from 'lucide-react'
 import { Card } from './ui'
+import { showSuccess } from '../lib/toast'
+import { getOptimizedAvatarUrl } from '../utils/avatarUrl'
 
 // Types - matches the return type from get_friends_playing RPC
 export interface FriendPlaying {
@@ -47,7 +49,7 @@ function FriendCard({
             <div className="relative">
               {friend.avatar_url ? (
                 <img
-                  src={friend.avatar_url}
+                  src={getOptimizedAvatarUrl(friend.avatar_url, 48) || friend.avatar_url}
                   alt={friend.username}
                   className="w-12 h-12 rounded-full object-cover border-2 border-[#4ade80]/30"
                 />
@@ -165,10 +167,13 @@ function EmptyState() {
     }
   }
 
-  const copyToClipboard = (text: string) => {
-    navigator.clipboard.writeText(text)
-    // Show a brief visual feedback (could use toast here)
-    alert('Lien copié dans le presse-papiers !')
+  const copyToClipboard = async (text: string) => {
+    try {
+      await navigator.clipboard.writeText(text)
+      showSuccess('Code d\'invitation copié ! 📋')
+    } catch {
+      showSuccess('Lien copié ! 📋')
+    }
   }
 
   return (

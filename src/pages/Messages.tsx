@@ -763,6 +763,38 @@ export function Messages() {
     }
   }, [searchParams, dmConversations, isLoadingDM, setActiveDMConv, setSearchParams])
 
+  // Handle Squad URL parameter - switch to Squads tab and open conversation
+  useEffect(() => {
+    const squadId = searchParams.get('squad')
+    // Wait for loading to complete before handling the squad parameter
+    if (!squadId || isLoadingSquad) return
+
+    // Switch to Squads tab immediately
+    setActiveTab('squads')
+
+    // Find conversation for this squad
+    const existingConv = squadConversations.find(c => c.squad_id === squadId)
+
+    if (existingConv) {
+      // Open the existing conversation
+      setActiveSquadConv(existingConv)
+      // Clear the URL param to prevent re-triggering
+      setSearchParams({}, { replace: true })
+    } else {
+      // Squad conversation not found - refresh and try again
+      const findAndOpenConv = async () => {
+        await fetchSquadConvs()
+        const conv = squadConversations.find(c => c.squad_id === squadId)
+        if (conv) {
+          setActiveSquadConv(conv)
+        }
+        // Clear the URL param regardless
+        setSearchParams({}, { replace: true })
+      }
+      findAndOpenConv()
+    }
+  }, [searchParams, squadConversations, isLoadingSquad, setActiveSquadConv, setSearchParams, fetchSquadConvs])
+
   // Scroll to bottom when messages change
   const currentMessages = activeSquadConv ? squadMessages : dmMessages
   useEffect(() => {
@@ -967,7 +999,12 @@ export function Messages() {
       {/* Tabs */}
       <div className={`flex gap-1 p-1 bg-[#18191b] rounded-xl ${showOnDesktop ? 'mx-4 mb-3' : 'mb-5'}`}>
         <button
-          onClick={() => setActiveTab('squads')}
+          onClick={() => {
+            setActiveTab('squads')
+            setActiveDMConv(null) // Reset DM conversation when switching to Squads
+            setNewMessage('') // Clear pending message
+            setReplyingTo(null) // Clear reply state
+          }}
           className={`flex-1 py-2.5 px-4 rounded-lg text-[13px] font-medium transition-interactive flex items-center justify-center gap-2 ${
             activeTab === 'squads'
               ? 'bg-[#1f2023] text-[#f7f8f8]'
@@ -983,7 +1020,12 @@ export function Messages() {
           )}
         </button>
         <button
-          onClick={() => setActiveTab('dms')}
+          onClick={() => {
+            setActiveTab('dms')
+            setActiveSquadConv(null) // Reset Squad conversation when switching to DMs
+            setNewMessage('') // Clear pending message
+            setReplyingTo(null) // Clear reply state
+          }}
           className={`flex-1 py-2.5 px-4 rounded-lg text-[13px] font-medium transition-interactive flex items-center justify-center gap-2 ${
             activeTab === 'dms'
               ? 'bg-[#1f2023] text-[#f7f8f8]'

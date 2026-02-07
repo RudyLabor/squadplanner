@@ -242,9 +242,12 @@ export function CreateSessionModal() {
                     </select>
                   </div>
                   <div>
-                    <label className="block text-[13px] font-medium text-[#a1a1a6] mb-1.5">
-                      Auto-confirm à
+                    <label className="block text-[13px] font-medium text-[#a1a1a6] mb-1">
+                      Confirmation automatique
                     </label>
+                    <p className="text-[11px] text-[#5e6063] mb-1.5">
+                      La session sera confirmée quand ce nombre de joueurs aura répondu "Présent"
+                    </p>
                     <select
                       value={threshold}
                       onChange={(e) => setThreshold(e.target.value)}

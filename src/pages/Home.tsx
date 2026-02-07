@@ -4,13 +4,15 @@ import { Users, Calendar, TrendingUp, ChevronRight, Loader2, Mic, CheckCircle2, 
 import { Link, useNavigate } from 'react-router-dom'
 import CountUp from 'react-countup'
 import Confetti from 'react-confetti'
-import { Card, Badge, SessionCardSkeleton, SquadCardSkeleton } from '../components/ui'
+import { Card, Badge, SessionCardSkeleton, SquadCardSkeleton, SkeletonFriendsPlaying, SkeletonStatsRow, SkeletonStreakCounter, SkeletonAICoach, Tooltip } from '../components/ui'
 import { useAuthStore, useVoiceChatStore } from '../hooks'
 import { useSquadsQuery } from '../hooks/queries/useSquadsQuery'
 import { useRsvpMutation, useUpcomingSessionsQuery } from '../hooks/queries/useSessionsQuery'
 import { useFriendsPlayingQuery } from '../hooks/queries/useFriendsPlaying'
-import { useAICoachQuery } from '../hooks/queries/useAICoach'
+import { useAICoachQueryDeferred } from '../hooks/queries/useAICoach'
 import { FriendsPlaying } from '../components/FriendsPlaying'
+import { useCreateSessionModal } from '../components/CreateSessionModal'
+import { OnboardingChecklist } from '../components/OnboardingChecklist'
 import { StreakCounter } from '../components/StreakCounter'
 import { haptic } from '../utils/haptics'
 
@@ -28,60 +30,58 @@ interface UpcomingSession {
   total_members: number
 }
 
-// Badge fiabilité avec glow subtil et tooltip explicatif
+// Badge fiabilité avec glow subtil et tooltip stylisé
 function ReliabilityBadge({ score }: { score: number }) {
   const tooltipText = "Ton score de fiabilité. Il augmente quand tu confirmes ta présence aux sessions."
 
-  if (score >= 95) {
-    return (
-      <motion.div
-        className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-gradient-to-r from-[#34d399]/15 to-[#34d399]/5 border border-[#34d399]/20 shadow-[0_0_12px_rgba(52,211,153,0.1)] cursor-help"
-        initial={{ scale: 0.9, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        transition={{ delay: 0.4, type: "spring", stiffness: 300, damping: 25 }}
-        whileHover={{ scale: 1.02, boxShadow: "0 0 16px rgba(52,211,153,0.15)" }}
-        title={tooltipText}
-      >
+  const getBadgeContent = () => {
+    if (score >= 95) {
+      return (
         <motion.div
-          animate={{ rotate: [0, 8, -8, 0] }}
-          transition={{ duration: 2.5, repeat: 2, repeatDelay: 4 }}
+          className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-gradient-to-r from-[#34d399]/15 to-[#34d399]/5 border border-[#34d399]/20 shadow-[0_0_12px_rgba(52,211,153,0.1)] cursor-help"
+          initial={{ scale: 0.9, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ delay: 0.4, type: "spring", stiffness: 300, damping: 25 }}
+          whileHover={{ scale: 1.02, boxShadow: "0 0 16px rgba(52,211,153,0.15)" }}
         >
-          <Star className="w-4 h-4 text-[#34d399] fill-[#34d399]" />
+          <motion.div
+            animate={{ rotate: [0, 8, -8, 0] }}
+            transition={{ duration: 2.5, repeat: 2, repeatDelay: 4 }}
+          >
+            <Star className="w-4 h-4 text-[#34d399] fill-[#34d399]" />
+          </motion.div>
+          <span className="text-[13px] font-medium text-[#34d399]">100% fiable</span>
         </motion.div>
-        <span className="text-[13px] font-medium text-[#34d399]">100% fiable</span>
-      </motion.div>
-    )
-  }
-  if (score >= 80) {
+      )
+    }
+    if (score >= 80) {
+      return (
+        <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#34d399]/10 border border-[#34d399]/15 cursor-help">
+          <TrendingUp className="w-4 h-4 text-[#34d399]" />
+          <span className="text-[13px] font-medium text-[#34d399]">{score}% fiable</span>
+        </div>
+      )
+    }
+    if (score >= 60) {
+      return (
+        <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#fbbf24]/10 border border-[#fbbf24]/15 cursor-help">
+          <TrendingUp className="w-4 h-4 text-[#fbbf24]" />
+          <span className="text-[13px] font-medium text-[#fbbf24]">{score}%</span>
+        </div>
+      )
+    }
     return (
-      <div
-        className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#34d399]/10 border border-[#34d399]/15 cursor-help"
-        title={tooltipText}
-      >
-        <TrendingUp className="w-4 h-4 text-[#34d399]" />
-        <span className="text-[13px] font-medium text-[#34d399]">{score}% fiable</span>
+      <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#f87171]/10 border border-[#f87171]/15 cursor-help">
+        <AlertCircle className="w-4 h-4 text-[#f87171]" />
+        <span className="text-[13px] font-medium text-[#f87171]">{score}%</span>
       </div>
     )
   }
-  if (score >= 60) {
-    return (
-      <div
-        className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#fbbf24]/10 border border-[#fbbf24]/15 cursor-help"
-        title={tooltipText}
-      >
-        <TrendingUp className="w-4 h-4 text-[#fbbf24]" />
-        <span className="text-[13px] font-medium text-[#fbbf24]">{score}%</span>
-      </div>
-    )
-  }
+
   return (
-    <div
-      className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#f87171]/10 border border-[#f87171]/15 cursor-help"
-      title={tooltipText}
-    >
-      <AlertCircle className="w-4 h-4 text-[#f87171]" />
-      <span className="text-[13px] font-medium text-[#f87171]">{score}%</span>
-    </div>
+    <Tooltip content={tooltipText} position="bottom">
+      {getBadgeContent()}
+    </Tooltip>
   )
 }
 
@@ -290,9 +290,15 @@ function StatsRow({ squadsCount, sessionsThisWeek, reliabilityScore }: {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.1, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-            whileHover={{ scale: 1.02 }}
+            whileHover={{
+              scale: 1.02,
+              boxShadow: `0 0 20px ${stat.color}25`,
+            }}
             whileTap={{ scale: 0.98 }}
-            className="h-[60px] sm:h-[68px] px-2 sm:px-4 flex items-center gap-2 sm:gap-3 rounded-xl sm:rounded-2xl border border-white/[0.06] bg-white/[0.02] hover:bg-white/[0.04] hover:border-white/[0.1] cursor-pointer transition-interactive"
+            className="h-[60px] sm:h-[68px] px-2 sm:px-4 flex items-center gap-2 sm:gap-3 rounded-xl sm:rounded-2xl border border-white/[0.06] bg-white/[0.02] hover:bg-white/[0.04] cursor-pointer transition-all duration-200"
+            style={{
+              transition: 'all 0.2s ease, box-shadow 0.2s ease',
+            }}
           >
             <div
               className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl flex items-center justify-center flex-shrink-0"
@@ -329,7 +335,8 @@ export default function Home() {
   const { data: friendsPlaying = [], isLoading: friendsLoading } = useFriendsPlayingQuery(user?.id)
 
   // AI Coach tip - React Query with Infinity staleTime (only fetches once per session)
-  const { data: aiCoachTip } = useAICoachQuery(user?.id, 'home')
+  const { data: aiCoachTip, isLoading: aiCoachLoading } = useAICoachQueryDeferred(user?.id, 'home')
+  const openCreateSessionModal = useCreateSessionModal(state => state.open)
 
   const [showConfetti, setShowConfetti] = useState(false)
   const [successMessage, setSuccessMessage] = useState<string | null>(null)
@@ -494,15 +501,33 @@ export default function Home() {
             <ReliabilityBadge score={reliabilityScore} />
           </div>
 
-          {/* AI Coach Tip - Contextuel */}
-          {aiCoachTip && (
+          {/* Onboarding Checklist pour les nouveaux utilisateurs */}
+          {(!squadsLoading && !sessionsLoading) && (squads.length === 0 || upcomingSessions.length === 0) && (
+            <OnboardingChecklist
+              hasSquad={squads.length > 0}
+              hasSession={upcomingSessions.length > 0}
+              onCreateSession={openCreateSessionModal}
+            />
+          )}
+
+          {/* AI Coach Tip - Contextuel - Cliquable pour créer une session */}
+          {aiCoachLoading ? (
             <div className="mb-6">
-              <Card className={`p-3 flex items-center gap-3 border ${
+              <SkeletonAICoach />
+            </div>
+          ) : aiCoachTip && (
+            <motion.div
+              className="mb-6 cursor-pointer"
+              onClick={() => openCreateSessionModal()}
+              whileHover={{ scale: 1.01 }}
+              whileTap={{ scale: 0.99 }}
+            >
+              <Card className={`p-3 flex items-center gap-3 border transition-all duration-200 hover:shadow-[0_0_15px_rgba(99,102,241,0.15)] ${
                 aiCoachTip.tone === 'celebration'
-                  ? 'bg-gradient-to-r from-[#34d399]/8 to-transparent border-[#34d399]/15'
+                  ? 'bg-gradient-to-r from-[#34d399]/8 to-transparent border-[#34d399]/15 hover:border-[#34d399]/30'
                   : aiCoachTip.tone === 'warning'
-                    ? 'bg-gradient-to-r from-[#f87171]/8 to-transparent border-[#f87171]/15'
-                    : 'bg-gradient-to-r from-[#6366f1]/8 to-transparent border-[#6366f1]/15'
+                    ? 'bg-gradient-to-r from-[#f87171]/8 to-transparent border-[#f87171]/15 hover:border-[#f87171]/30'
+                    : 'bg-gradient-to-r from-[#6366f1]/8 to-transparent border-[#6366f1]/15 hover:border-[#6366f1]/30'
               }`}>
                 <div className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 ${
                   aiCoachTip.tone === 'celebration'
@@ -528,8 +553,15 @@ export default function Home() {
                 }`}>
                   {aiCoachTip.tip}
                 </p>
+                <ChevronRight className={`w-4 h-4 flex-shrink-0 ${
+                  aiCoachTip.tone === 'celebration'
+                    ? 'text-[#34d399]/60'
+                    : aiCoachTip.tone === 'warning'
+                      ? 'text-[#f87171]/60'
+                      : 'text-[#6366f1]/60'
+                }`} />
               </Card>
-            </div>
+            </motion.div>
           )}
 
           {/* Party en cours */}
@@ -569,7 +601,9 @@ export default function Home() {
           )}
 
           {/* Friends Playing Section */}
-          {!friendsLoading && (
+          {friendsLoading ? (
+            <SkeletonFriendsPlaying />
+          ) : (
             <FriendsPlaying
               friends={friendsPlaying}
               onJoin={handleJoinFriendParty}
@@ -585,20 +619,7 @@ export default function Home() {
             <div className="space-y-4">
               {(squadsLoading || sessionsLoading) ? (
                 /* Skeleton pendant le chargement - évite le flash de fausses données */
-                <div className="grid grid-cols-3 gap-2 sm:gap-3">
-                  {[0, 1, 2].map((i) => (
-                    <div
-                      key={i}
-                      className="h-[60px] sm:h-[68px] px-2 sm:px-4 flex items-center gap-2 sm:gap-3 rounded-xl sm:rounded-2xl border border-white/[0.06] bg-white/[0.02]"
-                    >
-                      <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-white/[0.05] animate-pulse" />
-                      <div className="min-w-0 flex-1">
-                        <div className="h-5 sm:h-6 w-12 bg-white/[0.05] rounded animate-pulse mb-1" />
-                        <div className="h-2 sm:h-3 w-16 bg-white/[0.03] rounded animate-pulse" />
-                      </div>
-                    </div>
-                  ))}
-                </div>
+                <SkeletonStatsRow />
               ) : (
                 <StatsRow
                   squadsCount={squads.length}
@@ -607,10 +628,14 @@ export default function Home() {
                 />
               )}
               {/* Streak Counter */}
-              <StreakCounter
-                streakDays={profile?.streak_days || 0}
-                lastActiveDate={profile?.streak_last_date || null}
-              />
+              {!profile ? (
+                <SkeletonStreakCounter />
+              ) : (
+                <StreakCounter
+                  streakDays={profile.streak_days || 0}
+                  lastActiveDate={profile.streak_last_date || null}
+                />
+              )}
             </div>
           </div>
 

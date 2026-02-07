@@ -8,7 +8,9 @@
  * - Called once per session, not on every mount
  * - Fallback tip if Edge Function fails
  * - No retry on error (silent failure)
+ * - Deferred version delays fetch until browser is idle (reduces initial load time)
  */
+import { useState, useEffect } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { supabase } from '../../lib/supabase'
 
@@ -70,5 +72,46 @@ export function useAICoachQuery(userId: string | undefined, contextType: 'profil
     staleTime: Infinity, // Never refetch - once per session
     gcTime: Infinity, // Keep in cache forever during session
     retry: false, // Don't retry on failure
+  })
+}
+
+/**
+ * Deferred version of AI Coach query that waits for browser idle time
+ * This prevents the AI Coach request from blocking initial page load
+ * Uses requestIdleCallback with 2s timeout fallback
+ */
+export function useAICoachQueryDeferred(userId: string | undefined, contextType: 'profile' | 'home' = 'profile') {
+  const [shouldFetch, setShouldFetch] = useState(false)
+
+  useEffect(() => {
+    // Use requestIdleCallback to defer fetch until browser is idle
+    // Fallback to setTimeout for browsers that don't support it
+    let id: number
+
+    if ('requestIdleCallback' in window) {
+      id = window.requestIdleCallback(
+        () => setShouldFetch(true),
+        { timeout: 2000 } // Max 2 seconds wait
+      )
+    } else {
+      id = window.setTimeout(() => setShouldFetch(true), 500)
+    }
+
+    return () => {
+      if ('requestIdleCallback' in window) {
+        window.cancelIdleCallback(id)
+      } else {
+        window.clearTimeout(id)
+      }
+    }
+  }, [])
+
+  return useQuery({
+    queryKey: ['ai-coach', userId, contextType] as const,
+    queryFn: () => userId ? fetchAICoachTip(userId, contextType) : FALLBACK_TIP,
+    enabled: !!userId && AI_COACH_ENABLED && shouldFetch,
+    staleTime: Infinity,
+    gcTime: Infinity,
+    retry: false,
   })
 }

@@ -3,8 +3,8 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { Users, Plus, Gamepad2, Link as LinkIcon, Copy, Check, Loader2, UserPlus, Calendar, Crown, Mic, ChevronRight, Sparkles } from 'lucide-react'
 import { Link, useNavigate } from 'react-router-dom'
 import Confetti from 'react-confetti'
-import { toast } from 'sonner'
 import { Button, Card, CardContent, Input, SquadCardSkeleton } from '../components/ui'
+import { showSuccess } from '../lib/toast'
 import { useAuthStore, useSquadsStore, useVoiceChatStore, usePremiumStore } from '../hooks'
 import { SquadLimitReached, PremiumBadge } from '../components/PremiumGate'
 import { PremiumUpgradeModal } from '../components/PremiumUpgradeModal'
@@ -177,11 +177,18 @@ function SquadCard({ squad, isOwner, nextSession, hasActiveParty, copiedCode, on
                   className="p-2 rounded-lg hover:bg-[rgba(255,255,255,0.05)] transition-colors"
                   aria-label="Copier le code d'invitation"
                 >
-                  {copiedCode === squad.invite_code ? (
-                    <Check className="w-4 h-4 text-[#34d399]" aria-hidden="true" />
-                  ) : (
-                    <Copy className="w-4 h-4 text-[#5e6063]" aria-hidden="true" />
-                  )}
+                  <motion.div
+                    key={copiedCode === squad.invite_code ? 'check' : 'copy'}
+                    initial={{ scale: 0.5, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    transition={{ type: 'spring', stiffness: 500, damping: 25 }}
+                  >
+                    {copiedCode === squad.invite_code ? (
+                      <Check className="w-4 h-4 text-[#34d399]" aria-hidden="true" />
+                    ) : (
+                      <Copy className="w-4 h-4 text-[#5e6063]" aria-hidden="true" />
+                    )}
+                  </motion.div>
                 </button>
                 <ChevronRight className="w-5 h-5 text-[#5e6063]" aria-hidden="true" />
               </div>
@@ -326,7 +333,7 @@ export default function Squads() {
   const copyInviteCode = async (code: string) => {
     await navigator.clipboard.writeText(code)
     setCopiedCode(code)
-    toast.success('Code d\'invitation copié !')
+    showSuccess('Code d\'invitation copié ! 📋')
     setTimeout(() => setCopiedCode(null), 2000)
   }
 

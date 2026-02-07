@@ -6,6 +6,7 @@ import { Home, Users, Mic, MessageCircle, User, Plus, Zap, Pin, PinOff } from 'l
 import { useShallow } from 'zustand/react/shallow'
 import { useAuthStore, useSquadsStore, useVoiceChatStore, useKeyboardVisible, useUnreadCountStore } from '../../hooks'
 import { useCreateSessionModal } from '../CreateSessionModal'
+import { getOptimizedAvatarUrl } from '../../utils/avatarUrl'
 import { SquadPlannerLogo } from '../SquadPlannerLogo'
 import { Breadcrumbs } from './Breadcrumbs'
 import { GlobalSearch } from '../GlobalSearch'
@@ -407,7 +408,7 @@ export function AppLayout({ children }: AppLayoutProps) {
               >
                 {profile?.avatar_url ? (
                   <img
-                    src={profile.avatar_url}
+                    src={getOptimizedAvatarUrl(profile.avatar_url, isExpanded ? 40 : 32) || profile.avatar_url}
                     alt={profile.username || 'Avatar'}
                     className={`${isExpanded ? 'w-10 h-10' : 'w-8 h-8'} rounded-full object-cover flex-shrink-0`}
                     loading="lazy"

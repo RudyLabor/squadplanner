@@ -90,7 +90,7 @@ export function Sessions() {
         <div>
           {/* Header with guidance */}
           <div className="mb-8">
-            <h1 className="text-2xl font-bold text-[#f7f8f8] mb-2">Tes prochaines parties</h1>
+            <h1 className="text-2xl font-bold text-[#f7f8f8] mb-2">Tes prochaines sessions</h1>
             <p className="text-[14px] text-[#8b8d90]">
               {needsResponse.length > 0
                 ? `${needsResponse.length} session${needsResponse.length > 1 ? 's' : ''} en attente de ta réponse`

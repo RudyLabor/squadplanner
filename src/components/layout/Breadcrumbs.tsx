@@ -7,6 +7,12 @@ interface BreadcrumbItem {
   path?: string
 }
 
+// Capitalize first letter of a string
+function capitalize(str: string): string {
+  if (!str) return str
+  return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase()
+}
+
 // Route config for breadcrumbs
 const routeLabels: Record<string, string> = {
   '/home': 'Accueil',
@@ -51,8 +57,8 @@ export function Breadcrumbs() {
     items.push({ label: 'Profil', path: '/profile' })
     items.push({ label: 'Paramètres' })
   } else {
-    // Simple route
-    const label = routeLabels[location.pathname] || pathParts[0]
+    // Simple route - capitalize unknown segments
+    const label = routeLabels[location.pathname] || capitalize(pathParts[0])
     items.push({ label })
   }
 

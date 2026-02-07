@@ -641,7 +641,7 @@ export default function SquadDetail() {
     if (!currentSquad) return
     await navigator.clipboard.writeText(currentSquad.invite_code)
     setCopiedCode(true)
-    showSuccess('Code copie !')
+    showSuccess('Code copié ! 📋')
     setTimeout(() => setCopiedCode(false), 2000)
   }
 
@@ -856,9 +856,12 @@ export default function SquadDetail() {
                           </select>
                         </div>
                         <div>
-                          <label className="block text-[13px] font-medium text-[#c9cace] mb-1.5">
-                            Auto-confirm à
+                          <label className="block text-[13px] font-medium text-[#c9cace] mb-1">
+                            Confirmation automatique
                           </label>
+                          <p className="text-[11px] text-[#5e6063] mb-1.5">
+                            La session sera confirmée quand ce nombre de joueurs aura répondu "Présent"
+                          </p>
                           <select
                             value={sessionThreshold}
                             onChange={(e) => setSessionThreshold(e.target.value)}

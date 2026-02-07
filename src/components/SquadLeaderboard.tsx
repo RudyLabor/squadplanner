@@ -1,6 +1,8 @@
 import { motion } from 'framer-motion'
 import { Crown, Flame, User, Shield, Zap, Trophy } from 'lucide-react'
+import { Link } from 'react-router-dom'
 import { Card } from './ui'
+import { getOptimizedAvatarUrl } from '../utils/avatarUrl'
 
 interface LeaderboardEntry {
   rank: number
@@ -59,20 +61,22 @@ function PodiumCard({
         stiffness: 200,
         damping: 20,
       }}
-      className={`relative flex flex-col items-center ${isFirst ? 'order-2' : entry.rank === 2 ? 'order-1' : 'order-3'}`}
+      className={`relative flex flex-col items-center ${isFirst ? 'order-1' : entry.rank === 2 ? 'order-2' : 'order-3'}`}
     >
       {/* Podium platform */}
       <div
         className={`relative w-full ${isFirst ? 'pt-0' : entry.rank === 2 ? 'pt-8' : 'pt-12'}`}
       >
-        {/* Card */}
-        <Card
-          className={`
-            relative p-4 text-center overflow-hidden
-            ${isFirst ? 'bg-gradient-to-b from-[rgba(245,166,35,0.15)] to-[#101012]' : 'bg-[#101012]'}
-            ${isCurrentUser ? 'ring-2 ring-[#5e6dd2] ring-offset-2 ring-offset-[#08090a]' : ''}
-          `}
-        >
+        {/* Card - Clickable to user profile */}
+        <Link to={`/profile/${entry.user_id}`} className="block">
+          <Card
+            className={`
+              relative p-4 text-center overflow-hidden cursor-pointer
+              transition-all duration-200 hover:scale-[1.02] hover:shadow-[0_0_20px_rgba(99,102,241,0.15)]
+              ${isFirst ? 'bg-gradient-to-b from-[rgba(245,166,35,0.15)] to-[#101012]' : 'bg-[#101012]'}
+              ${isCurrentUser ? 'ring-2 ring-[#5e6dd2] ring-offset-2 ring-offset-[#08090a]' : ''}
+            `}
+          >
           {/* Glow effect for first place */}
           {isFirst && (
             <motion.div
@@ -130,7 +134,7 @@ function PodiumCard({
           >
             {entry.avatar_url ? (
               <img
-                src={entry.avatar_url}
+                src={getOptimizedAvatarUrl(entry.avatar_url, isFirst ? 80 : 64) || entry.avatar_url}
                 alt={entry.username}
                 className="w-full h-full object-cover"
               />
@@ -182,6 +186,7 @@ function PodiumCard({
             <span>{entry.reliability_score}%</span>
           </div>
         </Card>
+        </Link>
 
         {/* Podium base */}
         <div
@@ -219,22 +224,24 @@ function LeaderboardListItem({
   const levelColor = getLevelColor(entry.level)
 
   return (
-    <motion.div
-      initial={{ opacity: 0, x: -20 }}
-      animate={{ opacity: 1, x: 0 }}
-      transition={{
-        duration: 0.3,
-        delay: 0.6 + index * 0.08,
-        ease: 'easeOut',
-      }}
-      className={`
-        flex items-center gap-3 p-3 rounded-xl transition-colors
-        ${isCurrentUser
-          ? 'bg-[rgba(94,109,210,0.15)] border border-[rgba(94,109,210,0.3)]'
-          : 'bg-[rgba(255,255,255,0.02)] hover:bg-[rgba(255,255,255,0.04)]'
-        }
-      `}
-    >
+    <Link to={`/profile/${entry.user_id}`}>
+      <motion.div
+        initial={{ opacity: 0, x: -20 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{
+          duration: 0.3,
+          delay: 0.6 + index * 0.08,
+          ease: 'easeOut',
+        }}
+        className={`
+          flex items-center gap-3 p-3 rounded-xl transition-all cursor-pointer
+          hover:scale-[1.01] hover:shadow-[0_0_15px_rgba(99,102,241,0.1)]
+          ${isCurrentUser
+            ? 'bg-[rgba(94,109,210,0.15)] border border-[rgba(94,109,210,0.3)]'
+            : 'bg-[rgba(255,255,255,0.02)] hover:bg-[rgba(255,255,255,0.04)]'
+          }
+        `}
+      >
       {/* Rank */}
       <div className="w-8 h-8 rounded-lg bg-[rgba(255,255,255,0.05)] flex items-center justify-center">
         <span className="text-[14px] font-bold text-[#8b8d90]">{entry.rank}</span>
@@ -244,7 +251,7 @@ function LeaderboardListItem({
       <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#5e6dd2]/20 to-[#8b93ff]/10 flex items-center justify-center overflow-hidden">
         {entry.avatar_url ? (
           <img
-            src={entry.avatar_url}
+            src={getOptimizedAvatarUrl(entry.avatar_url, 40) || entry.avatar_url}
             alt={entry.username}
             className="w-full h-full object-cover"
           />
@@ -298,6 +305,7 @@ function LeaderboardListItem({
         )}
       </div>
     </motion.div>
+    </Link>
   )
 }
 

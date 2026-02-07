@@ -19,6 +19,12 @@ export {
   SkeletonHomePage,
   SkeletonChatPage,
   SkeletonSettingsPage,
+  // CLS-prevention skeletons (fixed dimensions)
+  SkeletonAICoach,
+  SkeletonReliabilityBadge,
+  SkeletonFriendsPlaying,
+  SkeletonStatsRow,
+  SkeletonStreakCounter,
   // Utility
   SkeletonWrapper,
   // Legacy aliases (backwards compatibility)

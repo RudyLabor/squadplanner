@@ -335,9 +335,9 @@ export default function Squads() {
   // Afficher le skeleton loader tant que l'initialisation ou le chargement est en cours
   if (!isInitialized || isLoading) {
     return (
-      <div className="bg-[#050506]">
-        <div className="px-4 md:px-6 lg:px-8 py-4 max-w-2xl lg:max-w-4xl xl:max-w-6xl mx-auto">
-          <div className="flex items-center justify-between mb-4">
+      <div className="min-h-0 bg-[#050506] pb-6">
+        <div className="px-4 md:px-6 lg:px-8 py-6 max-w-2xl lg:max-w-4xl xl:max-w-6xl mx-auto">
+          <div className="flex items-center justify-between mb-6">
             <div>
               <h1 className="text-2xl font-bold text-[#f7f8f8]">Mes Squads</h1>
               <p className="text-[13px] text-[#5e6063]">Chargement...</p>
@@ -360,11 +360,8 @@ export default function Squads() {
     return `${squads.length} squads`
   }
 
-  // Determine if we should center content (few squads, no forms open)
-  const shouldCenterContent = squads.length <= 1 && !showCreate && !showJoin
-
   return (
-    <div className={`flex flex-col bg-[#050506] ${shouldCenterContent ? 'min-h-[calc(100dvh-80px-env(safe-area-inset-bottom,0px))]' : ''}`}>
+    <div className="min-h-0 bg-[#050506] pb-6">
       {/* Celebration confetti */}
       {showConfetti && typeof window !== 'undefined' && (
         <Confetti
@@ -378,10 +375,10 @@ export default function Squads() {
         />
       )}
 
-      <div className={`px-4 md:px-6 lg:px-8 py-4 max-w-2xl lg:max-w-4xl xl:max-w-6xl mx-auto w-full ${shouldCenterContent ? 'flex-1 flex flex-col' : ''}`}>
-        <div className={shouldCenterContent ? 'flex-1 flex flex-col' : ''}>
+      <div className="px-4 md:px-6 lg:px-8 py-6 max-w-2xl lg:max-w-4xl xl:max-w-6xl mx-auto">
+        <div>
           {/* Header simplifié */}
-          <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center justify-between mb-6">
             <div>
               <h1 className="text-2xl font-bold text-[#f7f8f8]">Mes Squads</h1>
               <p className="text-[13px] text-[#5e6063]">{getSubtitle()}</p>
@@ -403,7 +400,7 @@ export default function Squads() {
 
           {/* Alerte limite atteinte */}
           {!hasPremium && userSquadCount >= FREE_SQUAD_LIMIT && !showCreate && !showJoin && (
-            <div className="mb-4">
+            <div className="mb-6">
               <SquadLimitReached
                 currentCount={userSquadCount}
                 maxCount={FREE_SQUAD_LIMIT}
@@ -420,7 +417,7 @@ export default function Squads() {
                 animate={{ opacity: 1, height: 'auto' }}
                 exit={{ opacity: 0, height: 0 }}
                 transition={{ duration: 0.2 }}
-                className="mb-4 overflow-hidden"
+                className="mb-6 overflow-hidden"
               >
                 <Card>
                   <CardContent className="p-5">
@@ -461,7 +458,7 @@ export default function Squads() {
                 animate={{ opacity: 1, height: 'auto' }}
                 exit={{ opacity: 0, height: 0 }}
                 transition={{ duration: 0.2 }}
-                className="mb-4 overflow-hidden"
+                className="mb-6 overflow-hidden"
               >
                 <Card>
                   <CardContent className="p-5">
@@ -540,7 +537,7 @@ export default function Squads() {
                 <h3 className="text-[16px] font-semibold text-[#f7f8f8] mb-2">
                   Pas encore de squad
                 </h3>
-                <p className="text-[14px] text-[#8b8d90] mb-4 max-w-[280px] mx-auto">
+                <p className="text-[14px] text-[#8b8d90] mb-6 max-w-[280px] mx-auto">
                   Lance ta squad pour inviter tes potes, ou rejoins l'action avec un code.
                 </p>
                 <div className="flex gap-3 justify-center">

@@ -406,7 +406,7 @@ export default function Home() {
 
   if (!isInitialized) {
     return (
-      <div className="bg-[#050506] flex items-center justify-center py-12">
+      <div className="min-h-0 bg-[#050506] flex items-center justify-center py-12">
         <Loader2 className="w-8 h-8 text-[#6366f1] animate-spin" />
       </div>
     )
@@ -432,7 +432,7 @@ export default function Home() {
   const pendingRsvps = upcomingSessions.filter(s => !s.my_rsvp).length
 
   return (
-    <div className="bg-[#050506]">
+    <div className="min-h-0 bg-[#050506] pb-6">
       {/* Confetti celebration for RSVP present */}
       {showConfetti && typeof window !== 'undefined' && (
         <Confetti
@@ -459,10 +459,10 @@ export default function Home() {
         </motion.div>
       )}
 
-      <div className="px-4 md:px-6 lg:px-8 py-4 max-w-2xl lg:max-w-4xl xl:max-w-6xl mx-auto">
+      <div className="px-4 md:px-6 lg:px-8 py-6 max-w-2xl lg:max-w-4xl xl:max-w-6xl mx-auto">
         <div>
           {/* Header avec célébration - Wording gamer */}
-          <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center justify-between mb-6">
             <div>
               <h1 className="text-2xl font-bold text-[#f7f8f8]">
                 Salut {profile?.username || 'Gamer'} !
@@ -483,7 +483,7 @@ export default function Home() {
 
           {/* AI Coach Tip - Contextuel */}
           {aiCoachTip && (
-            <div className="mb-4">
+            <div className="mb-6">
               <Card className={`p-3 flex items-center gap-3 border ${
                 aiCoachTip.tone === 'celebration'
                   ? 'bg-gradient-to-r from-[#34d399]/8 to-transparent border-[#34d399]/15'
@@ -521,7 +521,7 @@ export default function Home() {
 
           {/* Party en cours */}
           {activeParty && (
-            <div className="mb-4">
+            <div className="mb-6">
               <ActivePartyCard
                 squadName={activeParty.squadName}
                 participantCount={activeParty.participantCount}
@@ -531,7 +531,7 @@ export default function Home() {
 
           {/* Prochaine session */}
           {sessionsLoading ? (
-            <div className="mb-4">
+            <div className="mb-6">
               <div className="flex items-center justify-between mb-3">
                 <h2 className="text-[13px] font-semibold text-[#f7f8f8] uppercase tracking-wide">
                   Prochaine session
@@ -540,7 +540,7 @@ export default function Home() {
               <SessionCardSkeleton />
             </div>
           ) : nextSession && (
-            <div className="mb-4">
+            <div className="mb-6">
               <div className="flex items-center justify-between mb-3">
                 <h2 className="text-[13px] font-semibold text-[#f7f8f8] uppercase tracking-wide">
                   Prochaine session
@@ -565,7 +565,7 @@ export default function Home() {
           )}
 
           {/* Stats - Wording gamer */}
-          <div className="mb-4">
+          <div className="mb-6">
             <h2 className="text-[13px] font-semibold text-[#f7f8f8] uppercase tracking-wide mb-3">
               Ton tableau de bord
             </h2>
@@ -680,7 +680,7 @@ export default function Home() {
                 <h3 className="text-[16px] font-semibold text-[#f7f8f8] mb-2">
                   Tes potes t'attendent !
                 </h3>
-                <p className="text-[14px] text-[#8b8d90] mb-4 max-w-[250px] mx-auto">
+                <p className="text-[14px] text-[#8b8d90] mb-6 max-w-[250px] mx-auto">
                   Crée ta squad et finis-en avec les "on verra". Place à l'action !
                 </p>
                 <Link to="/squads">

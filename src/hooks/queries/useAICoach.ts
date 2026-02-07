@@ -86,22 +86,24 @@ export function useAICoachQueryDeferred(userId: string | undefined, contextType:
   useEffect(() => {
     // Use requestIdleCallback to defer fetch until browser is idle
     // Fallback to setTimeout for browsers that don't support it
-    let id: number
+    let idleCallbackId: number | undefined
+    let timeoutId: ReturnType<typeof setTimeout> | undefined
 
     if ('requestIdleCallback' in window) {
-      id = window.requestIdleCallback(
+      idleCallbackId = window.requestIdleCallback(
         () => setShouldFetch(true),
         { timeout: 2000 } // Max 2 seconds wait
       )
     } else {
-      id = window.setTimeout(() => setShouldFetch(true), 500)
+      timeoutId = setTimeout(() => setShouldFetch(true), 500)
     }
 
     return () => {
-      if ('requestIdleCallback' in window) {
-        window.cancelIdleCallback(id)
-      } else {
-        window.clearTimeout(id)
+      if (idleCallbackId !== undefined) {
+        window.cancelIdleCallback(idleCallbackId)
+      }
+      if (timeoutId !== undefined) {
+        clearTimeout(timeoutId)
       }
     }
   }, [])

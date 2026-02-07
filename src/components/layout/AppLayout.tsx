@@ -302,8 +302,9 @@ export function AppLayout({ children }: AppLayoutProps) {
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
                 title={sidebarPinned ? 'Détacher la sidebar' : 'Épingler la sidebar'}
+                aria-label={sidebarPinned ? 'Détacher la sidebar' : 'Épingler la sidebar'}
               >
-                {sidebarPinned ? <PinOff className="w-4 h-4" /> : <Pin className="w-4 h-4" />}
+                {sidebarPinned ? <PinOff className="w-4 h-4" aria-hidden="true" /> : <Pin className="w-4 h-4" aria-hidden="true" />}
               </motion.button>
             </motion.div>
           )}
@@ -353,97 +354,101 @@ export function AppLayout({ children }: AppLayoutProps) {
           ))}
         </nav>
 
-        {/* Profile section */}
-        <div className={`${isExpanded ? 'p-4' : 'p-2'} border-t border-[rgba(255,255,255,0.03)]`}>
-          <Link to="/profile">
-            <motion.div
-              className={`flex items-center ${isExpanded ? 'gap-3 p-3' : 'justify-center p-2'} rounded-xl hover:bg-[rgba(255,255,255,0.03)] transition-colors duration-300`}
-              whileHover={{ x: isExpanded ? 4 : 0 }}
-              transition={{ duration: 0.25 }}
-              title={!isExpanded ? profile?.username || 'Mon profil' : undefined}
-            >
-              {profile?.avatar_url ? (
-                <img
-                  src={profile.avatar_url}
-                  alt={profile.username || 'Avatar'}
-                  className={`${isExpanded ? 'w-10 h-10' : 'w-8 h-8'} rounded-full object-cover flex-shrink-0`}
-                  loading="lazy"
-                />
-              ) : (
-                <div className={`${isExpanded ? 'w-10 h-10' : 'w-8 h-8'} rounded-full bg-[rgba(167,139,250,0.08)] flex items-center justify-center flex-shrink-0`}>
-                  <User className={`${isExpanded ? 'w-5 h-5' : 'w-4 h-4'} text-[#a78bfa]`} />
-                </div>
-              )}
-              <AnimatePresence mode="wait">
-                {isExpanded && (
-                  <motion.div
-                    key="profile-text"
-                    initial={{ opacity: 0, width: 0 }}
-                    animate={{ opacity: 1, width: 'auto' }}
-                    exit={{ opacity: 0, width: 0 }}
-                    transition={{ duration: 0.15 }}
-                    className="flex-1 min-w-0 overflow-hidden"
-                  >
-                    <div className="text-[14px] font-medium text-[#f7f8f8] truncate">
-                      {profile?.username || 'Mon profil'}
-                    </div>
-                    <div className="text-[12px] text-[#5e6063]">
-                      {profile?.reliability_score || 100}% fiable
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </motion.div>
-          </Link>
-        </div>
-
-        {/* Premium upsell - Only when expanded */}
-        <AnimatePresence>
-          {isExpanded && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 'auto' }}
-              exit={{ opacity: 0, height: 0 }}
-              transition={{ duration: 0.2 }}
-              className="p-4 overflow-hidden"
-            >
-              <Link to="/premium">
-                <motion.div
-                  className="p-4 rounded-xl bg-gradient-to-br from-[rgba(99,102,241,0.08)] to-[rgba(167,139,250,0.03)] border border-[rgba(99,102,241,0.1)] cursor-pointer"
-                  whileHover={{ scale: 1.02 }}
-                  transition={{ duration: 0.25 }}
-                >
-                  <div className="flex items-center gap-2 mb-2">
-                    <Zap className="w-4 h-4 text-[#fbbf24]" />
-                    <span className="text-[13px] font-semibold text-[#f7f8f8]">Passe Premium</span>
-                  </div>
-                  <p className="text-[12px] text-[#8b8d90] mb-3">
-                    Stats avancées, IA coach, qualité audio HD
-                  </p>
-                  <span className="text-[12px] font-semibold text-[#6366f1] hover:text-[#a78bfa] transition-colors duration-300">
-                    Découvrir →
-                  </span>
-                </motion.div>
-              </Link>
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-        {/* Collapsed Premium icon */}
-        {!isExpanded && (
-          <div className="p-2 pb-4">
-            <Link to="/premium">
+        {/* Footer section - Profile and Premium */}
+        <footer className="mt-auto">
+          {/* Profile section */}
+          <div className={`${isExpanded ? 'p-4' : 'p-2'} border-t border-[rgba(255,255,255,0.03)]`}>
+            <Link to="/profile">
               <motion.div
-                className="flex items-center justify-center p-2 rounded-xl hover:bg-[rgba(255,255,255,0.03)] transition-colors"
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
-                title="Passe Premium"
+                className={`flex items-center ${isExpanded ? 'gap-3 p-3' : 'justify-center p-2'} rounded-xl hover:bg-[rgba(255,255,255,0.03)] transition-colors duration-300`}
+                whileHover={{ x: isExpanded ? 4 : 0 }}
+                transition={{ duration: 0.25 }}
+                title={!isExpanded ? profile?.username || 'Mon profil' : undefined}
               >
-                <Zap className="w-5 h-5 text-[#fbbf24]" />
+                {profile?.avatar_url ? (
+                  <img
+                    src={profile.avatar_url}
+                    alt={profile.username || 'Avatar'}
+                    className={`${isExpanded ? 'w-10 h-10' : 'w-8 h-8'} rounded-full object-cover flex-shrink-0`}
+                    loading="lazy"
+                  />
+                ) : (
+                  <div className={`${isExpanded ? 'w-10 h-10' : 'w-8 h-8'} rounded-full bg-[rgba(167,139,250,0.08)] flex items-center justify-center flex-shrink-0`}>
+                    <User className={`${isExpanded ? 'w-5 h-5' : 'w-4 h-4'} text-[#a78bfa]`} />
+                  </div>
+                )}
+                <AnimatePresence mode="wait">
+                  {isExpanded && (
+                    <motion.div
+                      key="profile-text"
+                      initial={{ opacity: 0, width: 0 }}
+                      animate={{ opacity: 1, width: 'auto' }}
+                      exit={{ opacity: 0, width: 0 }}
+                      transition={{ duration: 0.15 }}
+                      className="flex-1 min-w-0 overflow-hidden"
+                    >
+                      <div className="text-[14px] font-medium text-[#f7f8f8] truncate">
+                        {profile?.username || 'Mon profil'}
+                      </div>
+                      <div className="text-[12px] text-[#5e6063]">
+                        {profile?.reliability_score || 100}% fiable
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </motion.div>
             </Link>
           </div>
-        )}
+
+          {/* Premium upsell - Only when expanded */}
+          <AnimatePresence>
+            {isExpanded && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: 'auto' }}
+                exit={{ opacity: 0, height: 0 }}
+                transition={{ duration: 0.2 }}
+                className="p-4 overflow-hidden"
+              >
+                <Link to="/premium">
+                  <motion.div
+                    className="p-4 rounded-xl bg-gradient-to-br from-[rgba(99,102,241,0.08)] to-[rgba(167,139,250,0.03)] border border-[rgba(99,102,241,0.1)] cursor-pointer"
+                    whileHover={{ scale: 1.02 }}
+                    transition={{ duration: 0.25 }}
+                  >
+                    <div className="flex items-center gap-2 mb-2">
+                      <Zap className="w-4 h-4 text-[#fbbf24]" />
+                      <span className="text-[13px] font-semibold text-[#f7f8f8]">Passe Premium</span>
+                    </div>
+                    <p className="text-[12px] text-[#8b8d90] mb-3">
+                      Stats avancées, IA coach, qualité audio HD
+                    </p>
+                    <span className="text-[12px] font-semibold text-[#6366f1] hover:text-[#a78bfa] transition-colors duration-300">
+                      Découvrir →
+                    </span>
+                  </motion.div>
+                </Link>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          {/* Collapsed Premium icon */}
+          {!isExpanded && (
+            <div className="p-2 pb-4">
+              <Link to="/premium">
+                <motion.div
+                  className="flex items-center justify-center p-2 rounded-xl hover:bg-[rgba(255,255,255,0.03)] transition-colors"
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
+                  title="Passe Premium"
+                  aria-label="Passe Premium"
+                >
+                  <Zap className="w-5 h-5 text-[#fbbf24]" />
+                </motion.div>
+              </Link>
+            </div>
+          )}
+        </footer>
       </motion.aside>
 
       {/* Main content - margin adjusts with sidebar */}
@@ -461,10 +466,10 @@ export function AppLayout({ children }: AppLayoutProps) {
             transition={{ duration: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
           >
             {/* Header with Breadcrumbs and GlobalSearch - Desktop only */}
-            <div className="pt-4 px-6 flex items-center justify-between">
+            <header role="banner" className="pt-4 px-6 flex items-center justify-between">
               <Breadcrumbs />
               <GlobalSearch />
-            </div>
+            </header>
             {children}
           </motion.div>
         </div>

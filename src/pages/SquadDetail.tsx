@@ -10,6 +10,7 @@ import { Link, useParams, useNavigate } from 'react-router-dom'
 import Confetti from 'react-confetti'
 import { Button, Card, CardContent, Badge, Input, SquadDetailSkeleton } from '../components/ui'
 import { useAuthStore, useSquadsStore, useSessionsStore, useVoiceChatStore, useVoiceCallStore, usePremiumStore } from '../hooks'
+import { useSquadLeaderboardQuery } from '../hooks/queries'
 import { PremiumGate, PremiumBadge } from '../components/PremiumGate'
 import { SquadLeaderboard } from '../components/SquadLeaderboard'
 // theme import removed - animation variants caused mobile rendering issues
@@ -387,6 +388,7 @@ function InviteModal({
       // Fallback: copier le texte
       await navigator.clipboard.writeText(`Rejoins ma squad "${squadName}" sur Squad Planner ! Code: ${inviteCode}`)
       setCopied(true)
+      showSuccess('Lien d\'invitation copié !')
       setTimeout(() => setCopied(false), 2000)
     }
   }
@@ -395,6 +397,7 @@ function InviteModal({
   const handleCopyCode = async () => {
     await navigator.clipboard.writeText(inviteCode)
     setCopied(true)
+    showSuccess('Code d\'invitation copié !')
     setTimeout(() => setCopied(false), 2000)
   }
 
@@ -431,11 +434,11 @@ function InviteModal({
               <span className="text-2xl font-bold text-[#6366f1] tracking-wider flex-1">
                 {inviteCode}
               </span>
-              <Button size="sm" variant="secondary" onClick={handleCopyCode}>
-                {copied ? <Check className="w-4 h-4 text-[#34d399]" /> : <Copy className="w-4 h-4" />}
+              <Button size="sm" variant="secondary" onClick={handleCopyCode} aria-label="Copier le code d'invitation">
+                {copied ? <Check className="w-4 h-4 text-[#34d399]" aria-hidden="true" /> : <Copy className="w-4 h-4" aria-hidden="true" />}
               </Button>
-              <Button size="sm" variant="primary" onClick={handleShare}>
-                <Share2 className="w-4 h-4" />
+              <Button size="sm" variant="primary" onClick={handleShare} aria-label="Partager le code d'invitation">
+                <Share2 className="w-4 h-4" aria-hidden="true" />
                 Partager
               </Button>
             </div>
@@ -614,43 +617,14 @@ export default function SquadDetail() {
   const [error, setError] = useState<string | null>(null)
   const [successMessage, setSuccessMessage] = useState<string | null>(null)
   const [showConfetti, setShowConfetti] = useState(false)
-  const [leaderboard, setLeaderboard] = useState<Array<{
-    rank: number
-    user_id: string
-    username: string
-    avatar_url: string | null
-    xp: number
-    level: number
-    reliability_score: number
-    streak_days: number
-  }>>([])
-  const [leaderboardLoading, setLeaderboardLoading] = useState(false)
 
   const { user, isInitialized } = useAuthStore()
   const { currentSquad, fetchSquadById, leaveSquad, deleteSquad, isLoading } = useSquadsStore()
   const { sessions, fetchSessions, createSession, updateRsvp, isLoading: sessionsLoading } = useSessionsStore()
   const { canAccessFeature, fetchPremiumStatus, isSquadPremium } = usePremiumStore()
 
-  // Fetch leaderboard data
-  const fetchLeaderboard = async (squadId: string) => {
-    setLeaderboardLoading(true)
-    try {
-      const { data, error } = await supabase
-        .rpc('get_squad_leaderboard', { p_squad_id: squadId })
-
-      if (error) {
-        console.error('Error fetching leaderboard:', error)
-        setLeaderboard([])
-      } else {
-        setLeaderboard(data || [])
-      }
-    } catch (err) {
-      console.error('Error fetching leaderboard:', err)
-      setLeaderboard([])
-    } finally {
-      setLeaderboardLoading(false)
-    }
-  }
+  // React Query hook for leaderboard - replaces direct RPC call
+  const { data: leaderboard = [], isLoading: leaderboardLoading } = useSquadLeaderboardQuery(id)
 
   useEffect(() => {
     if (isInitialized && !user) {
@@ -659,7 +633,7 @@ export default function SquadDetail() {
       fetchSquadById(id)
       fetchSessions(id)
       fetchPremiumStatus()
-      fetchLeaderboard(id)
+      // Leaderboard is now fetched via useSquadLeaderboardQuery hook
     }
   }, [id, user, isInitialized, navigate, fetchSquadById, fetchSessions, fetchPremiumStatus])
 
@@ -736,6 +710,7 @@ export default function SquadDetail() {
     if (!confirm('Quitter cette squad ?')) return
 
     await leaveSquad(id)
+    showSuccess('Tu as quitté la squad')
     navigate('/squads')
   }
 
@@ -744,6 +719,7 @@ export default function SquadDetail() {
     if (!confirm('Supprimer cette squad ? Cette action est irréversible.')) return
 
     await deleteSquad(id)
+    showSuccess('Squad supprimée')
     navigate('/squads')
   }
 
@@ -803,9 +779,9 @@ export default function SquadDetail() {
                   {currentSquad.game} · {currentSquad.member_count} membre{(currentSquad.member_count || 0) > 1 ? 's' : ''}
                 </p>
               </div>
-              <Link to="/messages">
-                <Button variant="ghost" size="sm">
-                  <MessageCircle className="w-4 h-4" />
+              <Link to="/messages" aria-label="Ouvrir les messages">
+                <Button variant="ghost" size="sm" aria-label="Ouvrir les messages">
+                  <MessageCircle className="w-4 h-4" aria-hidden="true" />
                 </Button>
               </Link>
             </div>
@@ -816,8 +792,8 @@ export default function SquadDetail() {
                 <p className="text-xs text-[#8b8d90] uppercase tracking-wide mb-0.5">Code d'invitation</p>
                 <p className="text-[18px] font-bold text-[#6366f1] tracking-wider">{currentSquad.invite_code}</p>
               </div>
-              <Button variant="primary" size="sm" onClick={handleCopyCode}>
-                {copiedCode ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+              <Button variant="primary" size="sm" onClick={handleCopyCode} aria-label="Copier le code d'invitation">
+                {copiedCode ? <Check className="w-4 h-4" aria-hidden="true" /> : <Copy className="w-4 h-4" aria-hidden="true" />}
                 {copiedCode ? 'Copié !' : 'Copier'}
               </Button>
             </div>

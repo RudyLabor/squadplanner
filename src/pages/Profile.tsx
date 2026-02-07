@@ -10,7 +10,8 @@ import CountUp from 'react-countup'
 import Confetti from 'react-confetti'
 import { toast } from 'sonner'
 import { Button, Card, Input, ProfileSkeleton } from '../components/ui'
-import { useAuthStore, useAIStore, usePremiumStore, FREE_HISTORY_DAYS } from '../hooks'
+import { useAuthStore, usePremiumStore, FREE_HISTORY_DAYS } from '../hooks'
+import { useAICoachQuery, useChallengesQuery, useClaimChallengeXPMutation } from '../hooks/queries'
 import { PremiumGate, PremiumBadge } from '../components/PremiumGate'
 import { PremiumUpgradeModal } from '../components/PremiumUpgradeModal'
 import { supabase } from '../lib/supabase'
@@ -53,9 +54,35 @@ type ChallengeWithProgress = Challenge & { userProgress?: UserChallenge }
 export function Profile() {
   const navigate = useNavigate()
   const { user, profile, signOut, updateProfile, isLoading, isInitialized, refreshProfile } = useAuthStore()
-  const { aiCoachTip, fetchAICoachTip } = useAIStore()
   const { hasPremium, canAccessFeature, fetchPremiumStatus } = usePremiumStore()
   const fileInputRef = useRef<HTMLInputElement>(null)
+
+  // React Query hooks - automatic caching and deduplication
+  const { data: aiCoachTip } = useAICoachQuery(user?.id, 'profile')
+  const { data: challengesData } = useChallengesQuery()
+  const claimXPMutation = useClaimChallengeXPMutation()
+
+  // Transform challenges data to match expected format (map DB fields to component fields)
+  const challenges: ChallengeWithProgress[] = (challengesData?.challenges || []).map(challenge => {
+    const userProgress = challengesData?.userChallenges?.find(uc => uc.challenge_id === challenge.id)
+    return {
+      id: challenge.id,
+      title: challenge.title,
+      description: challenge.description || '',
+      xp_reward: challenge.xp_reward,
+      // Map challenge_type from DB to type expected by component
+      type: (challenge.challenge_type || 'daily') as 'daily' | 'weekly' | 'seasonal' | 'achievement',
+      icon: challenge.icon || 'star',
+      requirements: challenge.requirements || { type: 'sessions', count: 1 },
+      userProgress: userProgress ? {
+        challenge_id: userProgress.challenge_id,
+        progress: userProgress.progress,
+        target: userProgress.target || challenge.requirements?.count || 1,
+        completed_at: userProgress.completed_at,
+        xp_claimed: userProgress.xp_claimed
+      } : undefined
+    }
+  })
 
   const [isEditing, setIsEditing] = useState(false)
   const [isUploadingPhoto, setIsUploadingPhoto] = useState(false)
@@ -70,7 +97,6 @@ export function Profile() {
   const previousUnlockedIdsRef = useRef<string[]>([])
 
   // Gamification states
-  const [challenges, setChallenges] = useState<ChallengeWithProgress[]>([])
   const [showLevelUp, setShowLevelUp] = useState(false)
   const [newLevel, setNewLevel] = useState<number | null>(null)
   const previousLevelRef = useRef<number | null>(null)
@@ -82,14 +108,12 @@ export function Profile() {
     }
   }, [profile])
 
-  // Fetch AI Coach tip on mount
+  // Fetch premium status on mount
   useEffect(() => {
     if (user?.id) {
-      fetchAICoachTip(user.id, 'profile')
       fetchPremiumStatus()
-      fetchChallenges()
     }
-  }, [user?.id, fetchAICoachTip, fetchPremiumStatus])
+  }, [user?.id, fetchPremiumStatus])
 
   // Detect level up
   useEffect(() => {
@@ -106,48 +130,7 @@ export function Profile() {
     previousLevelRef.current = currentLevel
   }, [profile?.level])
 
-  // Fetch challenges from Supabase
-  const fetchChallenges = async () => {
-    if (!user?.id) return
-
-    try {
-      const { data: challengesData, error: challengesError } = await supabase
-        .from('challenges')
-        .select('*')
-        .eq('is_active', true)
-
-      if (challengesError) throw challengesError
-
-      // Fetch user progress for these challenges
-      const { data: userChallengesData, error: userChallengesError } = await supabase
-        .from('user_challenges')
-        .select('*')
-        .eq('user_id', user.id)
-
-      if (userChallengesError) throw userChallengesError
-
-      // Merge challenges with user progress
-      const challengesWithProgress: ChallengeWithProgress[] = (challengesData || []).map(challenge => {
-        const userProgress = userChallengesData?.find(uc => uc.challenge_id === challenge.id)
-        return {
-          ...challenge,
-          userProgress: userProgress ? {
-            challenge_id: userProgress.challenge_id,
-            progress: userProgress.progress,
-            target: userProgress.target || challenge.requirements?.count || 1,
-            completed_at: userProgress.completed_at,
-            xp_claimed: userProgress.xp_claimed
-          } : undefined
-        }
-      })
-
-      setChallenges(challengesWithProgress)
-    } catch (error) {
-      console.error('Error fetching challenges:', error)
-    }
-  }
-
-  // Handle claiming XP for a challenge
+  // Handle claiming XP for a challenge - uses React Query mutation
   const handleClaimXP = async (challengeId: string) => {
     if (!user?.id) return
 
@@ -155,31 +138,9 @@ export function Profile() {
     if (!challenge) return
 
     try {
-      // Call the RPC function to add XP
-      const { error: xpError } = await supabase.rpc('add_xp', {
-        p_user_id: user.id,
-        p_amount: challenge.xp_reward,
-        p_reason: `Challenge: ${challenge.title}`,
-        p_source_type: 'challenge',
-        p_source_id: challengeId
-      })
-
-      if (xpError) throw xpError
-
-      // Update user_challenges to mark XP as claimed
-      const { error: updateError } = await supabase
-        .from('user_challenges')
-        .update({ xp_claimed: true })
-        .eq('user_id', user.id)
-        .eq('challenge_id', challengeId)
-
-      if (updateError) throw updateError
-
-      // Refresh challenges and profile
-      await fetchChallenges()
+      const xpReward = await claimXPMutation.mutateAsync(challengeId)
       if (refreshProfile) await refreshProfile()
-
-      toast.success(`+${challenge.xp_reward} XP réclamés !`, { icon: '⚡' })
+      toast.success(`+${xpReward} XP réclamés !`, { icon: '⚡' })
     } catch (error) {
       console.error('Error claiming XP:', error)
       toast.error('Erreur lors de la réclamation des XP')

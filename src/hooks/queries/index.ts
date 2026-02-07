@@ -74,5 +74,21 @@ export { useFriendsPlayingQuery, type FriendPlaying } from './useFriendsPlaying'
 // Unread Count
 export { useUnreadCountQuery } from './useUnreadCountQuery'
 
+// Challenges
+export {
+  useChallengesQuery,
+  useClaimChallengeXPMutation,
+  type Challenge,
+  type UserChallenge,
+  type SeasonalBadge,
+  type ChallengesData,
+} from './useChallenges'
+
+// Squad Leaderboard
+export {
+  useSquadLeaderboardQuery,
+  type LeaderboardEntry,
+} from './useSquadLeaderboard'
+
 // Re-export query client and keys
 export { queryClient, queryKeys } from '../../lib/queryClient'

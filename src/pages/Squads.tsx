@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { Users, Plus, Gamepad2, Link as LinkIcon, Copy, Check, Loader2, UserPlus, Calendar, Crown, Mic, ChevronRight, Sparkles } from 'lucide-react'
 import { Link, useNavigate } from 'react-router-dom'
 import Confetti from 'react-confetti'
+import { toast } from 'sonner'
 import { Button, Card, CardContent, Input, SquadCardSkeleton } from '../components/ui'
 import { useAuthStore, useSquadsStore, useVoiceChatStore, usePremiumStore } from '../hooks'
 import { SquadLimitReached, PremiumBadge } from '../components/PremiumGate'
@@ -97,9 +98,10 @@ function SquadCard({ squad, isOwner, nextSession, hasActiveParty, copiedCode, on
   }
 
   return (
-    <motion.div
+    <motion.article
       whileHover={{ y: -2, scale: 1.02 }}
       whileTap={{ scale: 0.98 }}
+      aria-labelledby={`squad-name-${squad.id}`}
     >
       <Link to={`/squad/${squad.id}`}>
         <Card className={`cursor-pointer transition-interactive ${
@@ -134,7 +136,7 @@ function SquadCard({ squad, isOwner, nextSession, hasActiveParty, copiedCode, on
               {/* Infos squad */}
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 mb-0.5">
-                  <h3 className="text-[15px] font-semibold text-[#f7f8f8] truncate">{squad.name}</h3>
+                  <h3 id={`squad-name-${squad.id}`} className="text-[15px] font-semibold text-[#f7f8f8] truncate">{squad.name}</h3>
                   {isOwner && (
                     <Crown className="w-4 h-4 text-[#fbbf24] flex-shrink-0" />
                   )}
@@ -181,13 +183,13 @@ function SquadCard({ squad, isOwner, nextSession, hasActiveParty, copiedCode, on
                     <Copy className="w-4 h-4 text-[#5e6063]" aria-hidden="true" />
                   )}
                 </button>
-                <ChevronRight className="w-5 h-5 text-[#5e6063]" />
+                <ChevronRight className="w-5 h-5 text-[#5e6063]" aria-hidden="true" />
               </div>
             </div>
           </CardContent>
         </Card>
       </Link>
-    </motion.div>
+    </motion.article>
   )
 }
 
@@ -324,6 +326,7 @@ export default function Squads() {
   const copyInviteCode = async (code: string) => {
     await navigator.clipboard.writeText(code)
     setCopiedCode(code)
+    toast.success('Code d\'invitation copié !')
     setTimeout(() => setCopiedCode(null), 2000)
   }
 

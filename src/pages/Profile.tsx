@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   User, Trophy, Calendar, Target, Shield,
@@ -59,38 +59,40 @@ export function Profile() {
 
   // React Query hooks - automatic caching and deduplication
   const { data: aiCoachTip } = useAICoachQuery(user?.id, 'profile')
-  const { data: challengesData } = useChallengesQuery()
+  const { data: challengesData, isSuccess: challengesLoaded } = useChallengesQuery()
   const claimXPMutation = useClaimChallengeXPMutation()
 
   // Transform challenges data to match expected format (map DB fields to component fields)
-  // Deduplicate challenges by ID to prevent double rendering
-  const seenIds = new Set<string>()
-  const challenges: ChallengeWithProgress[] = (challengesData?.challenges || [])
-    .filter(challenge => {
-      if (seenIds.has(challenge.id)) return false
-      seenIds.add(challenge.id)
-      return true
-    })
-    .map(challenge => {
-      const userProgress = challengesData?.userChallenges?.find(uc => uc.challenge_id === challenge.id)
-      return {
-        id: challenge.id,
-        title: challenge.title,
-        description: challenge.description || '',
-        xp_reward: challenge.xp_reward,
-        // Use 'type' field from DB (not 'challenge_type')
-        type: (challenge.type || 'daily') as 'daily' | 'weekly' | 'seasonal' | 'achievement',
-        icon: challenge.icon || 'star',
-        requirements: challenge.requirements || { type: 'sessions', count: 1 },
-        userProgress: userProgress ? {
-          challenge_id: userProgress.challenge_id,
-          progress: userProgress.progress,
-          target: userProgress.target || challenge.requirements?.count || 1,
-          completed_at: userProgress.completed_at,
-          xp_claimed: userProgress.xp_claimed
-        } : undefined
-      }
-    })
+  // Deduplicate challenges by ID to prevent double rendering - wrapped in useMemo for stability
+  const challenges: ChallengeWithProgress[] = useMemo(() => {
+    const seenIds = new Set<string>()
+    return (challengesData?.challenges || [])
+      .filter(challenge => {
+        if (seenIds.has(challenge.id)) return false
+        seenIds.add(challenge.id)
+        return true
+      })
+      .map(challenge => {
+        const userProgress = challengesData?.userChallenges?.find(uc => uc.challenge_id === challenge.id)
+        return {
+          id: challenge.id,
+          title: challenge.title,
+          description: challenge.description || '',
+          xp_reward: challenge.xp_reward,
+          // Use 'type' field from DB (not 'challenge_type')
+          type: (challenge.type || 'daily') as 'daily' | 'weekly' | 'seasonal' | 'achievement',
+          icon: challenge.icon || 'star',
+          requirements: challenge.requirements || { type: 'sessions', count: 1 },
+          userProgress: userProgress ? {
+            challenge_id: userProgress.challenge_id,
+            progress: userProgress.progress,
+            target: userProgress.target || challenge.requirements?.count || 1,
+            completed_at: userProgress.completed_at,
+            xp_claimed: userProgress.xp_claimed
+          } : undefined
+        }
+      })
+  }, [challengesData])
 
   const [isEditing, setIsEditing] = useState(false)
   const [isUploadingPhoto, setIsUploadingPhoto] = useState(false)
@@ -627,13 +629,26 @@ export function Profile() {
           </div>
         )}
 
-        {/* Seasonal Badges Section - pass badges from useChallengesQuery to avoid duplicate API call */}
+        {/* Seasonal Badges Section - only render after challengesData loaded to avoid duplicate API call */}
         <Card className="mb-5 overflow-hidden">
           <div className="flex items-center gap-2 px-4 pt-4 pb-2">
             <Trophy className="w-4 h-4 text-[#fbbf24]" />
             <h3 className="text-[14px] font-semibold text-[#f7f8f8]">Badges Saisonniers</h3>
           </div>
-          <SeasonalBadges initialBadges={challengesData?.badges} />
+          {challengesLoaded ? (
+            <SeasonalBadges initialBadges={challengesData?.badges} />
+          ) : (
+            <div className="p-4">
+              <div className="flex gap-2">
+                {[1, 2, 3].map(i => (
+                  <div
+                    key={i}
+                    className="w-12 h-12 rounded-xl bg-[rgba(255,255,255,0.03)] animate-pulse"
+                  />
+                ))}
+              </div>
+            </div>
+          )}
         </Card>
 
         {/* IA Coach - Basique (gratuit) */}

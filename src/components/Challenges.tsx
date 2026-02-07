@@ -120,13 +120,17 @@ export function Challenges({ challenges, onClaimXP }: ChallengesProps) {
     }
   }
 
-  const tabs: { key: ChallengeType; label: string }[] = [
+  // Define all possible tabs
+  const allTabs: { key: ChallengeType; label: string }[] = [
     { key: 'all', label: 'Tous' },
     { key: 'daily', label: 'Quotidien' },
     { key: 'weekly', label: 'Hebdo' },
     { key: 'seasonal', label: 'Saison' },
     { key: 'achievement', label: 'Succès' },
   ]
+
+  // Filter tabs to hide empty categories (except "Tous" which always shows)
+  const tabs = allTabs.filter(tab => tab.key === 'all' || counts[tab.key] > 0)
 
   return (
     <div className="space-y-4">

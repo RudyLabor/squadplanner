@@ -31,17 +31,8 @@ export function GlobalSearch() {
   const isMac = typeof navigator !== 'undefined' && navigator.platform.toLowerCase().includes('mac')
   const shortcutKey = isMac ? '⌘' : 'Ctrl'
 
-  // Global keyboard shortcut (Cmd+K / Ctrl+K)
-  useEffect(() => {
-    const handleGlobalKeyDown = (e: KeyboardEvent) => {
-      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
-        e.preventDefault()
-        setIsOpen(prev => !prev)
-      }
-    }
-    window.addEventListener('keydown', handleGlobalKeyDown)
-    return () => window.removeEventListener('keydown', handleGlobalKeyDown)
-  }, [])
+  // Note: Ctrl+K keyboard shortcut is handled by CommandPalette component
+  // The button click dispatches the same event for consistency
 
   // Focus input when opened
   useEffect(() => {
@@ -238,9 +229,18 @@ export function GlobalSearch() {
 
   return (
     <>
-      {/* Search trigger button */}
+      {/* Search trigger button - dispatches Ctrl+K to open CommandPalette for consistency */}
       <motion.button
-        onClick={() => setIsOpen(true)}
+        onClick={() => {
+          // Dispatch Ctrl+K event to open CommandPalette (consistent with keyboard shortcut)
+          const event = new KeyboardEvent('keydown', {
+            key: 'k',
+            ctrlKey: !isMac,
+            metaKey: isMac,
+            bubbles: true
+          })
+          window.dispatchEvent(event)
+        }}
         className="flex items-center gap-2 px-3 py-2 rounded-xl bg-[rgba(255,255,255,0.03)] border border-[rgba(255,255,255,0.05)] text-[#8b8d90] hover:bg-[rgba(255,255,255,0.05)] hover:text-[#f7f8f8] transition-colors"
         whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.98 }}

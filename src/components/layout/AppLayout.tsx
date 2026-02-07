@@ -450,7 +450,7 @@ export function AppLayout({ children }: AppLayoutProps) {
                 transition={{ duration: 0.2 }}
                 className="p-4 overflow-hidden"
               >
-                <Link to="/premium">
+                <Link to="/premium" aria-label="Passer Premium - Stats avancées, IA coach, qualité audio HD">
                   <motion.div
                     className="p-4 rounded-xl bg-gradient-to-br from-[rgba(99,102,241,0.08)] to-[rgba(167,139,250,0.03)] border border-[rgba(99,102,241,0.1)] cursor-pointer"
                     whileHover={{ scale: 1.02 }}
@@ -475,13 +475,11 @@ export function AppLayout({ children }: AppLayoutProps) {
           {/* Collapsed Premium icon */}
           {!isExpanded && (
             <div className="p-2 pb-4">
-              <Link to="/premium">
+              <Link to="/premium" aria-label="Passer Premium" title="Passer Premium">
                 <motion.div
                   className="flex items-center justify-center p-2 rounded-xl hover:bg-[rgba(255,255,255,0.03)] transition-colors"
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.9 }}
-                  title="Passe Premium"
-                  aria-label="Passe Premium"
                 >
                   <Zap className="w-5 h-5 text-[#fbbf24]" />
                 </motion.div>

@@ -1,6 +1,7 @@
 import { useState, useCallback, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { Volume, Volume1, Volume2, VolumeX } from 'lucide-react'
+import { Tooltip } from './ui/Tooltip'
 
 export interface ParticipantVolumeControlProps {
   participantId: string
@@ -100,22 +101,24 @@ export function ParticipantVolumeControl({
     return (
       <div className="flex items-center gap-2 min-w-[140px]">
         {/* Mute button */}
-        <motion.button
-          onClick={handleMuteToggle}
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.9 }}
-          className={`
-            flex-shrink-0 w-7 h-7 rounded-full flex items-center justify-center
-            transition-colors duration-150
-            ${isMuted
-              ? 'bg-[#f87171]/20 text-[#f87171]'
-              : 'bg-[rgba(255,255,255,0.06)] text-[#8b8d90] hover:text-[#f7f8f8] hover:bg-[rgba(255,255,255,0.1)]'
-            }
-          `}
-          title={isMuted ? 'Activer le son' : 'Couper le son'}
-        >
-          <VolumeIcon className="w-3.5 h-3.5" />
-        </motion.button>
+        <Tooltip content={isMuted ? 'Activer le son' : 'Couper le son'} position="top" delay={300}>
+          <motion.button
+            onClick={handleMuteToggle}
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            className={`
+              flex-shrink-0 w-7 h-7 rounded-full flex items-center justify-center
+              transition-colors duration-150
+              ${isMuted
+                ? 'bg-[#f87171]/20 text-[#f87171]'
+                : 'bg-[rgba(255,255,255,0.06)] text-[#8b8d90] hover:text-[#f7f8f8] hover:bg-[rgba(255,255,255,0.1)]'
+              }
+            `}
+            aria-label={isMuted ? 'Activer le son' : 'Couper le son'}
+          >
+            <VolumeIcon className="w-3.5 h-3.5" />
+          </motion.button>
+        </Tooltip>
 
         {/* Compact slider */}
         <div className="relative flex-1 h-4 flex items-center">
@@ -176,22 +179,24 @@ export function ParticipantVolumeControl({
       {/* Slider row */}
       <div className="flex items-center gap-3">
         {/* Mute button */}
-        <motion.button
-          onClick={handleMuteToggle}
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.9 }}
-          className={`
-            flex-shrink-0 w-8 h-8 rounded-lg flex items-center justify-center
-            transition-colors duration-150
-            ${isMuted
-              ? 'bg-[#f87171]/20 text-[#f87171]'
-              : 'bg-[rgba(255,255,255,0.08)] text-[#8b8d90] hover:text-[#f7f8f8] hover:bg-[rgba(255,255,255,0.12)]'
-            }
-          `}
-          title={isMuted ? 'Activer le son' : 'Couper le son'}
-        >
-          <VolumeIcon className="w-4 h-4" />
-        </motion.button>
+        <Tooltip content={isMuted ? 'Activer le son' : 'Couper le son'} position="top" delay={300}>
+          <motion.button
+            onClick={handleMuteToggle}
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            className={`
+              flex-shrink-0 w-8 h-8 rounded-lg flex items-center justify-center
+              transition-colors duration-150
+              ${isMuted
+                ? 'bg-[#f87171]/20 text-[#f87171]'
+                : 'bg-[rgba(255,255,255,0.08)] text-[#8b8d90] hover:text-[#f7f8f8] hover:bg-[rgba(255,255,255,0.12)]'
+              }
+            `}
+            aria-label={isMuted ? 'Activer le son' : 'Couper le son'}
+          >
+            <VolumeIcon className="w-4 h-4" />
+          </motion.button>
+        </Tooltip>
 
         {/* Slider container */}
         <div className="relative flex-1">

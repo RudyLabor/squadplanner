@@ -1,6 +1,7 @@
 import { motion, AnimatePresence } from 'framer-motion'
 import { Wifi, WifiOff } from 'lucide-react'
 import { useNetworkQualityStore, QUALITY_INFO, type NetworkQualityLevel } from '../hooks/useNetworkQuality'
+import { Tooltip } from './ui/Tooltip'
 
 interface NetworkQualityIndicatorProps {
   /**
@@ -78,11 +79,8 @@ export function NetworkQualityIndicator({
 
   // Si qualité inconnue, afficher une icône Wifi avec un point d'interrogation
   if (quality === 'unknown') {
-    return (
-      <div
-        className={`flex items-center gap-1.5 ${className}`}
-        title={showTooltip ? info.description : undefined}
-      >
+    const unknownContent = (
+      <div className={`flex items-center gap-1.5 ${className}`}>
         <Wifi
           style={{ width: sizeConfig.iconSize, height: sizeConfig.iconSize }}
           className="text-[#5e6063] animate-pulse"
@@ -94,14 +92,22 @@ export function NetworkQualityIndicator({
         )}
       </div>
     )
+
+    if (showTooltip) {
+      return (
+        <Tooltip content={info.description} position="bottom" delay={300}>
+          {unknownContent}
+        </Tooltip>
+      )
+    }
+    return unknownContent
   }
 
   const activeBars = info.bars
 
-  return (
+  const indicatorContent = (
     <motion.div
       className={`flex items-center gap-2 ${className}`}
-      title={showTooltip ? info.description : undefined}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.3 }}
@@ -146,6 +152,16 @@ export function NetworkQualityIndicator({
       )}
     </motion.div>
   )
+
+  if (showTooltip) {
+    return (
+      <Tooltip content={info.description} position="bottom" delay={300}>
+        {indicatorContent}
+      </Tooltip>
+    )
+  }
+
+  return indicatorContent
 }
 
 /**

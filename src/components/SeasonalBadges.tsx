@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { Trophy, Crown, Flame, Star, Zap, Target, Award, Sparkles } from 'lucide-react'
 import { supabase } from '../lib/supabase'
 import { useAuthStore } from '../hooks'
+import { Tooltip } from './ui/Tooltip'
 
 interface SeasonalBadge {
   id: string
@@ -229,17 +230,23 @@ export function SeasonalBadges({ userId, compact = false, initialBadges }: Seaso
             const config = BADGE_CONFIGS[badge.badge_type] || BADGE_CONFIGS.mvp
             const Icon = config.icon
             return (
-              <motion.button
+              <Tooltip
                 key={badge.id}
-                onClick={() => setSelectedBadge(badge)}
-                className="relative w-10 h-10 rounded-lg flex items-center justify-center"
-                style={{ backgroundColor: config.bgColor }}
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.95 }}
-                title={`${config.label} - ${formatSeason(badge.season)}`}
+                content={`${config.label} - ${formatSeason(badge.season)}`}
+                position="top"
+                delay={300}
               >
-                <Icon className="w-5 h-5" style={{ color: config.color }} />
-              </motion.button>
+                <motion.button
+                  onClick={() => setSelectedBadge(badge)}
+                  className="relative w-10 h-10 rounded-lg flex items-center justify-center"
+                  style={{ backgroundColor: config.bgColor }}
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.95 }}
+                  aria-label={`${config.label} - ${formatSeason(badge.season)}`}
+                >
+                  <Icon className="w-5 h-5" style={{ color: config.color }} />
+                </motion.button>
+              </Tooltip>
             )
           })}
           {badges.length > 6 && (

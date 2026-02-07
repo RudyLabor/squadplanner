@@ -4,12 +4,13 @@ import { Link, useLocation } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Home, Users, Mic, MessageCircle, User, Plus, Zap, Pin, PinOff } from 'lucide-react'
 import { useShallow } from 'zustand/react/shallow'
-import { useAuthStore, useSquadsStore, useVoiceChatStore, useKeyboardVisible, useUnreadCountStore } from '../../hooks'
+import { useAuthStore, useSquadsStore, useVoiceChatStore, useKeyboardVisible, useUnreadCountStore, useSquadNotificationsStore } from '../../hooks'
 import { useCreateSessionModal } from '../CreateSessionModal'
 import { getOptimizedAvatarUrl } from '../../utils/avatarUrl'
 import { SquadPlannerLogo } from '../SquadPlannerLogo'
 import { Breadcrumbs } from './Breadcrumbs'
 import { GlobalSearch } from '../GlobalSearch'
+import { Tooltip } from '../ui/Tooltip'
 
 interface AppLayoutProps {
   children: ReactNode
@@ -44,8 +45,8 @@ const NavLink = memo(function NavLink({ path, icon: Icon, label, isActive, badge
   badge?: number
   collapsed?: boolean
 }) {
-  return (
-    <Link to={path} aria-label={label} aria-current={isActive ? 'page' : undefined} title={collapsed ? label : undefined}>
+  const linkContent = (
+    <Link to={path} aria-label={label} aria-current={isActive ? 'page' : undefined}>
       <motion.div
         className={`
           relative flex items-center ${collapsed ? 'justify-center px-2' : 'gap-3 px-4'} py-3 rounded-xl transition-interactive
@@ -86,6 +87,17 @@ const NavLink = memo(function NavLink({ path, icon: Icon, label, isActive, badge
       </motion.div>
     </Link>
   )
+
+  // Use styled Tooltip instead of native title when collapsed
+  if (collapsed) {
+    return (
+      <Tooltip content={label} position="right" delay={300}>
+        {linkContent}
+      </Tooltip>
+    )
+  }
+
+  return linkContent
 })
 
 // OPTIMIZED: Memoized MobileNavLink
@@ -238,6 +250,21 @@ export function AppLayout({ children }: AppLayoutProps) {
     }))
   )
 
+  // PHASE 3.5: Squad notifications (pending RSVPs)
+  const {
+    pendingRsvpCount,
+    fetchPendingCounts,
+    subscribe: subscribeSquad,
+    unsubscribe: unsubscribeSquad
+  } = useSquadNotificationsStore(
+    useShallow(state => ({
+      pendingRsvpCount: state.pendingRsvpCount,
+      fetchPendingCounts: state.fetchPendingCounts,
+      subscribe: state.subscribe,
+      unsubscribe: state.unsubscribe
+    }))
+  )
+
   // Sidebar collapse state
   const [sidebarExpanded, setSidebarExpanded] = useState(false)
   const [sidebarPinned, setSidebarPinned] = useState(() => {
@@ -269,6 +296,18 @@ export function AppLayout({ children }: AppLayoutProps) {
       unsubscribe()
     }
   }, [user, fetchCounts, subscribe, unsubscribe])
+
+  // Subscribe to squad notifications (pending RSVPs)
+  useEffect(() => {
+    if (!user) return
+
+    fetchPendingCounts()
+    subscribeSquad()
+
+    return () => {
+      unsubscribeSquad()
+    }
+  }, [user, fetchPendingCounts, subscribeSquad, unsubscribeSquad])
 
   // OPTIMIZED: Memoize route checks
   const isAuthPage = location.pathname === '/auth'
@@ -333,112 +372,151 @@ export function AppLayout({ children }: AppLayoutProps) {
               transition={{ duration: 0.15 }}
               className="absolute top-4 right-3"
             >
-              <motion.button
-                onClick={togglePinned}
-                className={`p-1.5 rounded-lg transition-colors ${
-                  sidebarPinned
-                    ? 'bg-[rgba(99,102,241,0.15)] text-[#6366f1]'
-                    : 'text-[#5e6063] hover:bg-[rgba(255,255,255,0.05)] hover:text-[#8b8d90]'
-                }`}
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
-                title={sidebarPinned ? 'Détacher la sidebar' : 'Épingler la sidebar'}
-                aria-label={sidebarPinned ? 'Détacher la sidebar' : 'Épingler la sidebar'}
-              >
-                {sidebarPinned ? <PinOff className="w-4 h-4" aria-hidden="true" /> : <Pin className="w-4 h-4" aria-hidden="true" />}
-              </motion.button>
+              <Tooltip content={sidebarPinned ? 'Détacher la sidebar' : 'Épingler la sidebar'} position="bottom" delay={300}>
+                <motion.button
+                  onClick={togglePinned}
+                  className={`p-1.5 rounded-lg transition-colors ${
+                    sidebarPinned
+                      ? 'bg-[rgba(99,102,241,0.15)] text-[#6366f1]'
+                      : 'text-[#5e6063] hover:bg-[rgba(255,255,255,0.05)] hover:text-[#8b8d90]'
+                  }`}
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
+                  aria-label={sidebarPinned ? 'Détacher la sidebar' : 'Épingler la sidebar'}
+                >
+                  {sidebarPinned ? <PinOff className="w-4 h-4" aria-hidden="true" /> : <Pin className="w-4 h-4" aria-hidden="true" />}
+                </motion.button>
+              </Tooltip>
             </motion.div>
           )}
         </AnimatePresence>
 
         {/* Quick action - PHASE 3.1: Opens modal directly */}
         <div className={isExpanded ? 'p-4' : 'p-2'}>
-          <motion.button
-            onClick={() => openCreateSessionModal()}
-            className={`flex items-center justify-center gap-2 ${isExpanded ? 'w-full h-11' : 'w-10 h-10 mx-auto'} rounded-xl bg-[#6366f1] text-white text-[14px] font-semibold`}
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            transition={{ duration: 0.25 }}
-            title={!isExpanded ? 'Nouvelle session' : undefined}
-            aria-label="Créer une nouvelle session"
-          >
-            <Plus className="w-4 h-4 flex-shrink-0" />
-            <AnimatePresence mode="wait">
-              {isExpanded && (
-                <motion.span
-                  key="btn-text"
-                  initial={{ opacity: 0, width: 0 }}
-                  animate={{ opacity: 1, width: 'auto' }}
-                  exit={{ opacity: 0, width: 0 }}
-                  transition={{ duration: 0.15 }}
-                  className="whitespace-nowrap overflow-hidden"
-                >
-                  Nouvelle session
-                </motion.span>
-              )}
-            </AnimatePresence>
-          </motion.button>
+          {!isExpanded ? (
+            <Tooltip content="Nouvelle session" position="right" delay={300}>
+              <motion.button
+                onClick={() => openCreateSessionModal()}
+                className="flex items-center justify-center gap-2 w-10 h-10 mx-auto rounded-xl bg-[#6366f1] text-white text-[14px] font-semibold"
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                transition={{ duration: 0.25 }}
+                aria-label="Créer une nouvelle session"
+              >
+                <Plus className="w-4 h-4 flex-shrink-0" />
+              </motion.button>
+            </Tooltip>
+          ) : (
+            <motion.button
+              onClick={() => openCreateSessionModal()}
+              className="flex items-center justify-center gap-2 w-full h-11 rounded-xl bg-[#6366f1] text-white text-[14px] font-semibold"
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              transition={{ duration: 0.25 }}
+              aria-label="Créer une nouvelle session"
+            >
+              <Plus className="w-4 h-4 flex-shrink-0" />
+              <motion.span
+                key="btn-text"
+                initial={{ opacity: 0, width: 0 }}
+                animate={{ opacity: 1, width: 'auto' }}
+                transition={{ duration: 0.15 }}
+                className="whitespace-nowrap overflow-hidden"
+              >
+                Nouvelle session
+              </motion.span>
+            </motion.button>
+          )}
         </div>
 
         {/* Navigation */}
         <nav aria-label="Menu principal" className={`flex-1 ${isExpanded ? 'px-3' : 'px-2'} py-4 space-y-1`}>
-          {navItems.map((item) => (
-            <NavLink
-              key={item.path}
-              path={item.path}
-              icon={item.icon}
-              label={item.label}
-              isActive={currentPath === item.path}
-              badge={item.path === '/messages' && unreadMessages > 0 ? unreadMessages : undefined}
-              collapsed={!isExpanded}
-            />
-          ))}
+          {navItems.map((item) => {
+            // Determine badge count based on path
+            let badgeCount: number | undefined
+            if (item.path === '/messages' && unreadMessages > 0) {
+              badgeCount = unreadMessages
+            } else if (item.path === '/squads' && pendingRsvpCount > 0) {
+              badgeCount = pendingRsvpCount
+            }
+
+            return (
+              <NavLink
+                key={item.path}
+                path={item.path}
+                icon={item.icon}
+                label={item.label}
+                isActive={currentPath === item.path}
+                badge={badgeCount}
+                collapsed={!isExpanded}
+              />
+            )
+          })}
         </nav>
 
         {/* Footer section - Profile and Premium */}
         <footer className="mt-auto">
           {/* Profile section */}
           <div className={`${isExpanded ? 'p-4' : 'p-2'} border-t border-[rgba(255,255,255,0.03)]`}>
-            <Link to="/profile" aria-label="Voir mon profil">
-              <motion.div
-                className={`flex items-center ${isExpanded ? 'gap-3 p-3' : 'justify-center p-2'} rounded-xl hover:bg-[rgba(255,255,255,0.03)] transition-colors duration-300`}
-                whileHover={{ x: isExpanded ? 4 : 0 }}
-                transition={{ duration: 0.25 }}
-                title={!isExpanded ? profile?.username || 'Mon profil' : undefined}
-              >
-                {profile?.avatar_url ? (
-                  <img
-                    src={getOptimizedAvatarUrl(profile.avatar_url, isExpanded ? 40 : 32) || profile.avatar_url}
-                    alt={profile.username || 'Avatar'}
-                    className={`${isExpanded ? 'w-10 h-10' : 'w-8 h-8'} rounded-full object-cover flex-shrink-0`}
-                    loading="lazy"
-                  />
-                ) : (
-                  <div className={`${isExpanded ? 'w-10 h-10' : 'w-8 h-8'} rounded-full bg-[rgba(167,139,250,0.08)] flex items-center justify-center flex-shrink-0`}>
-                    <User className={`${isExpanded ? 'w-5 h-5' : 'w-4 h-4'} text-[#a78bfa]`} />
-                  </div>
-                )}
-                <AnimatePresence mode="wait">
-                  {isExpanded && (
-                    <motion.div
-                      key="profile-text"
-                      initial={{ opacity: 0, width: 0 }}
-                      animate={{ opacity: 1, width: 'auto' }}
-                      exit={{ opacity: 0, width: 0 }}
-                      transition={{ duration: 0.15 }}
-                      className="flex-1 min-w-0 overflow-hidden"
-                    >
-                      <div className="text-[14px] font-medium text-[#f7f8f8] truncate">
-                        {profile?.username || 'Mon profil'}
+            {!isExpanded ? (
+              <Tooltip content={profile?.username || 'Mon profil'} position="right" delay={300}>
+                <Link to="/profile" aria-label="Voir mon profil">
+                  <motion.div
+                    className="flex items-center justify-center p-2 rounded-xl hover:bg-[rgba(255,255,255,0.03)] transition-colors duration-300"
+                    whileHover={{ x: 0 }}
+                    transition={{ duration: 0.25 }}
+                  >
+                    {profile?.avatar_url ? (
+                      <img
+                        src={getOptimizedAvatarUrl(profile.avatar_url, 32) || profile.avatar_url}
+                        alt={profile.username || 'Avatar'}
+                        className="w-8 h-8 rounded-full object-cover flex-shrink-0"
+                        loading="lazy"
+                      />
+                    ) : (
+                      <div className="w-8 h-8 rounded-full bg-[rgba(167,139,250,0.08)] flex items-center justify-center flex-shrink-0">
+                        <User className="w-4 h-4 text-[#a78bfa]" />
                       </div>
-                      <div className="text-[12px] text-[#5e6063]">
-                        {profile?.reliability_score || 100}% fiable
-                      </div>
-                    </motion.div>
+                    )}
+                  </motion.div>
+                </Link>
+              </Tooltip>
+            ) : (
+              <Link to="/profile" aria-label="Voir mon profil">
+                <motion.div
+                  className="flex items-center gap-3 p-3 rounded-xl hover:bg-[rgba(255,255,255,0.03)] transition-colors duration-300"
+                  whileHover={{ x: 4 }}
+                  transition={{ duration: 0.25 }}
+                >
+                  {profile?.avatar_url ? (
+                    <img
+                      src={getOptimizedAvatarUrl(profile.avatar_url, 40) || profile.avatar_url}
+                      alt={profile.username || 'Avatar'}
+                      className="w-10 h-10 rounded-full object-cover flex-shrink-0"
+                      loading="lazy"
+                    />
+                  ) : (
+                    <div className="w-10 h-10 rounded-full bg-[rgba(167,139,250,0.08)] flex items-center justify-center flex-shrink-0">
+                      <User className="w-5 h-5 text-[#a78bfa]" />
+                    </div>
                   )}
-                </AnimatePresence>
-              </motion.div>
-            </Link>
+                  <motion.div
+                    key="profile-text"
+                    initial={{ opacity: 0, width: 0 }}
+                    animate={{ opacity: 1, width: 'auto' }}
+                    transition={{ duration: 0.15 }}
+                    className="flex-1 min-w-0 overflow-hidden"
+                  >
+                    <div className="text-[14px] font-medium text-[#f7f8f8] truncate">
+                      {profile?.username || 'Mon profil'}
+                    </div>
+                    <div className="text-[12px] text-[#5e6063]">
+                      {profile?.reliability_score || 100}% fiable
+                    </div>
+                  </motion.div>
+                </motion.div>
+              </Link>
+            )}
           </div>
 
           {/* Premium upsell - Only when expanded */}
@@ -476,15 +554,17 @@ export function AppLayout({ children }: AppLayoutProps) {
           {/* Collapsed Premium icon */}
           {!isExpanded && (
             <div className="p-2 pb-4">
-              <Link to="/premium" aria-label="Passer Premium" title="Passer Premium">
-                <motion.div
-                  className="flex items-center justify-center p-2 rounded-xl hover:bg-[rgba(255,255,255,0.03)] transition-colors"
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.9 }}
-                >
-                  <Zap className="w-5 h-5 text-[#fbbf24]" />
-                </motion.div>
-              </Link>
+              <Tooltip content="Passer Premium" position="right" delay={300}>
+                <Link to="/premium" aria-label="Passer Premium">
+                  <motion.div
+                    className="flex items-center justify-center p-2 rounded-xl hover:bg-[rgba(255,255,255,0.03)] transition-colors"
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.9 }}
+                  >
+                    <Zap className="w-5 h-5 text-[#fbbf24]" />
+                  </motion.div>
+                </Link>
+              </Tooltip>
             </div>
           )}
         </footer>
@@ -515,6 +595,7 @@ export function AppLayout({ children }: AppLayoutProps) {
               icon={item.icon}
               label={item.label}
               isActive={currentPath === item.path}
+              badge={item.path === '/squads' && pendingRsvpCount > 0 ? pendingRsvpCount : undefined}
             />
           ))}
           <PartyButton isActive={isPartyActive} hasActiveParty={isInVoiceChat} />

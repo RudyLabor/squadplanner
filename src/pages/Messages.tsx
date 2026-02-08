@@ -1456,7 +1456,7 @@ export function Messages() {
                       handleSendMessage({ preventDefault: () => {} } as React.FormEvent)
                     }
                   }}
-                  placeholder="Message à la squad... (@mention)"
+                  placeholder="Message... (@mention)"
                   disabled={isSending}
                   members={mentionMembers}
                   inputRef={inputRef}

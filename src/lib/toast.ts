@@ -1,7 +1,5 @@
 import { toast } from 'sonner'
 import { createElement } from 'react'
-import { Capacitor } from '@capacitor/core'
-import { Haptics, ImpactStyle, NotificationType } from '@capacitor/haptics'
 import { AnimatedCheckmark, AnimatedXMark, AnimatedWarning, AnimatedInfo } from '../components/ui/ToastIcons'
 
 /**
@@ -11,27 +9,31 @@ import { AnimatedCheckmark, AnimatedXMark, AnimatedWarning, AnimatedInfo } from 
  * V3 - Animated icons + progress bar
  */
 
+// Check native platform without importing Capacitor (available on window in native builds)
+const isNativeApp = () => !!(globalThis as any).Capacitor?.isNativePlatform?.()
+
 // Haptic feedback helper — only fires on native platforms (iOS/Android)
+// Uses dynamic import to avoid loading @capacitor in web bundle
 const haptic = {
-  success: () => {
-    if (Capacitor.isNativePlatform()) {
-      Haptics.notification({ type: NotificationType.Success })
-    }
+  success: async () => {
+    if (!isNativeApp()) return
+    const { Haptics, NotificationType } = await import('@capacitor/haptics')
+    Haptics.notification({ type: NotificationType.Success })
   },
-  error: () => {
-    if (Capacitor.isNativePlatform()) {
-      Haptics.notification({ type: NotificationType.Error })
-    }
+  error: async () => {
+    if (!isNativeApp()) return
+    const { Haptics, NotificationType } = await import('@capacitor/haptics')
+    Haptics.notification({ type: NotificationType.Error })
   },
-  warning: () => {
-    if (Capacitor.isNativePlatform()) {
-      Haptics.notification({ type: NotificationType.Warning })
-    }
+  warning: async () => {
+    if (!isNativeApp()) return
+    const { Haptics, NotificationType } = await import('@capacitor/haptics')
+    Haptics.notification({ type: NotificationType.Warning })
   },
-  tap: () => {
-    if (Capacitor.isNativePlatform()) {
-      Haptics.impact({ style: ImpactStyle.Medium })
-    }
+  tap: async () => {
+    if (!isNativeApp()) return
+    const { Haptics, ImpactStyle } = await import('@capacitor/haptics')
+    Haptics.impact({ style: ImpactStyle.Medium })
   },
 }
 

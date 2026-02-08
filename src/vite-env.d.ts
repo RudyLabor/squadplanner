@@ -1,5 +1,8 @@
 /// <reference types="vite/client" />
 
+// Build target flag for Capacitor conditional imports
+declare const __IS_NATIVE__: boolean
+
 interface ImportMetaEnv {
   // Supabase
   readonly VITE_SUPABASE_URL: string

@@ -6,7 +6,6 @@ import { QueryClientProvider } from '@tanstack/react-query'
 import { AppLayout } from './components/layout'
 import { useAuthStore, useSquadsStore, subscribeToIncomingCalls, usePushNotificationStore, useVoiceCallStore, useThemeStore } from './hooks'
 import { pageTransitionVariants, pageTransitionConfig } from './components/PageTransition'
-import { supabase } from './lib/supabase'
 import { initSentry } from './lib/sentry'
 import { useDocumentTitle } from './hooks/useDocumentTitle'
 import { ErrorBoundary } from './components/ErrorBoundary'
@@ -152,6 +151,7 @@ function AppContent() {
 
       const handleIncomingCallFromUrl = async () => {
         try {
+          const { supabase } = await import('./lib/supabase')
           const { data: callerProfile } = await supabase
             .from('profiles')
             .select('username, avatar_url')

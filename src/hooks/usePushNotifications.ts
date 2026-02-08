@@ -1,13 +1,10 @@
 import { create } from 'zustand'
-import { Capacitor } from '@capacitor/core'
-import { PushNotifications, type Token, type PushNotificationSchema, type ActionPerformed } from '@capacitor/push-notifications'
-import { LocalNotifications } from '@capacitor/local-notifications'
-import { Haptics, ImpactStyle, NotificationType } from '@capacitor/haptics'
 import { supabase } from '../lib/supabase'
 import { useVoiceCallStore } from './useVoiceCall'
 
-// Check if running on native platform
-const isNativePlatform = Capacitor.isNativePlatform()
+// Check if running on native platform without static Capacitor import
+// Capacitor injects itself on window in native builds
+const isNativePlatform = !!(globalThis as any).Capacitor?.isNativePlatform?.()
 
 // VAPID public key from environment (for web push)
 const VAPID_PUBLIC_KEY = import.meta.env.VITE_VAPID_PUBLIC_KEY
@@ -453,6 +450,7 @@ export function cleanupPushNotifications(): void {
 // Save native push token to database
 async function saveNativeTokenToDatabase(token: string, userId: string) {
   try {
+    const { Capacitor } = await import('@capacitor/core')
     const { error } = await supabase
       .from('push_tokens')
       .upsert({
@@ -479,12 +477,13 @@ async function saveNativeTokenToDatabase(token: string, userId: string) {
 }
 
 // Handle native notification received while app is open
-async function handleNativeNotificationReceived(notification: PushNotificationSchema) {
+async function handleNativeNotificationReceived(notification: any) {
   if (!import.meta.env.PROD) {
     console.log('[NativePush] Notification received:', notification)
   }
 
   const notifType = notification.data?.type as string
+  const { Haptics, ImpactStyle, NotificationType } = await import('@capacitor/haptics')
 
   // Vibrate based on notification type
   if (notifType === 'party_invite' || notifType === 'call') {
@@ -492,6 +491,7 @@ async function handleNativeNotificationReceived(notification: PushNotificationSc
     await Haptics.notification({ type: NotificationType.Warning })
 
     // Show persistent notification with sound
+    const { LocalNotifications } = await import('@capacitor/local-notifications')
     await LocalNotifications.schedule({
       notifications: [{
         id: Date.now(),
@@ -510,7 +510,7 @@ async function handleNativeNotificationReceived(notification: PushNotificationSc
 }
 
 // Handle native notification tap (app was in background)
-function handleNativeNotificationAction(action: ActionPerformed) {
+function handleNativeNotificationAction(action: any) {
   if (!import.meta.env.PROD) {
     console.log('[NativePush] Notification action:', action)
   }
@@ -548,6 +548,8 @@ export async function registerNativePushNotifications(userId: string): Promise<b
   }
 
   try {
+    // Dynamic import Capacitor push modules (only loaded on native)
+    const { PushNotifications } = await import('@capacitor/push-notifications')
     // Check permissions
     let permStatus = await PushNotifications.checkPermissions()
 
@@ -563,7 +565,7 @@ export async function registerNativePushNotifications(userId: string): Promise<b
     }
 
     // Set up listeners
-    await PushNotifications.addListener('registration', async (token: Token) => {
+    await PushNotifications.addListener('registration', async (token: any) => {
       if (!import.meta.env.PROD) {
         console.log('[NativePush] Registration successful, token:', token.value)
       }
@@ -622,6 +624,7 @@ export async function triggerHaptic(type: 'light' | 'medium' | 'heavy' | 'succes
   }
 
   try {
+    const { Haptics, ImpactStyle, NotificationType } = await import('@capacitor/haptics')
     switch (type) {
       case 'light':
         await Haptics.impact({ style: ImpactStyle.Light })

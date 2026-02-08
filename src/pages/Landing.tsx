@@ -193,7 +193,7 @@ export default function Landing() {
 
   const closeMobileMenu = useCallback(() => setMobileMenuOpen(false), [])
 
-  const handleNewsletterSubmit = useCallback((e: React.FormEvent) => {
+  const handleNewsletterSubmit = useCallback(async (e: React.FormEvent) => {
     e.preventDefault()
     setNewsletterError('')
     setNewsletterSuccess(false)
@@ -203,12 +203,17 @@ export default function Landing() {
       return
     }
     setNewsletterLoading(true)
-    // Simulate API call
-    setTimeout(() => {
-      setNewsletterLoading(false)
+    try {
+      const { supabase } = await import('../lib/supabase')
+      const { error } = await supabase.from('newsletter').insert({ email: newsletterEmail })
+      if (error) throw error
       setNewsletterSuccess(true)
       setNewsletterEmail('')
-    }, 800)
+    } catch {
+      setNewsletterError('Une erreur est survenue. Réessaie.')
+    } finally {
+      setNewsletterLoading(false)
+    }
   }, [newsletterEmail])
 
   const navLinks = [
@@ -336,7 +341,7 @@ export default function Landing() {
       )}
 
       {/* ═══ HERO SECTION (Phase 4 #30-34) ═══ */}
-      <section
+      <main
         ref={heroRef}
         id="main-content"
         aria-label="Accueil"
@@ -364,9 +369,9 @@ export default function Landing() {
             <h1 className="text-4xl md:text-6xl font-extrabold text-text-primary mb-6 leading-tight tracking-tight">
               Transforme<br />
               <span className="text-gradient-animated">
-                "on verra"
+                {'\u00ab\u00a0'}on verra{'\u00a0\u00bb'}
               </span><br />
-              en "on y est"
+              en {'\u00ab\u00a0'}on y est{'\u00a0\u00bb'}
             </h1>
 
             {/* Subtitle */}
@@ -463,7 +468,7 @@ export default function Landing() {
             </motion.div>
           </motion.div>
         </div>
-      </section>
+      </main>
 
       {/* Section divider */}
       <div className="section-divider" />
@@ -1063,7 +1068,7 @@ export default function Landing() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-12">
             {/* Produit */}
             <div>
-              <h4 className="text-[13px] font-semibold text-text-primary mb-4 uppercase tracking-wider">Produit</h4>
+              <h3 className="text-[13px] font-semibold text-text-primary mb-4 uppercase tracking-wider">Produit</h3>
               <ul className="space-y-0">
                 <li><Link to="/auth?mode=register&redirect=onboarding" className="inline-block py-2 text-[14px] text-text-tertiary hover:text-text-primary transition-colors min-h-[44px] leading-[28px]">Créer ma squad</Link></li>
                 <li><Link to="/premium" className="inline-block py-2 text-[14px] text-text-tertiary hover:text-text-primary transition-colors min-h-[44px] leading-[28px]">Premium</Link></li>
@@ -1073,7 +1078,7 @@ export default function Landing() {
 
             {/* Ressources */}
             <div>
-              <h4 className="text-[13px] font-semibold text-text-primary mb-4 uppercase tracking-wider">Ressources</h4>
+              <h3 className="text-[13px] font-semibold text-text-primary mb-4 uppercase tracking-wider">Ressources</h3>
               <ul className="space-y-0">
                 <li><Link to="/help" className="inline-flex items-center gap-1.5 py-2 text-[14px] text-text-tertiary hover:text-text-primary transition-colors min-h-[44px]"><HelpCircle className="w-3.5 h-3.5" />FAQ</Link></li>
                 <li><a href="mailto:contact@squadplanner.fr" className="inline-block py-2 text-[14px] text-text-tertiary hover:text-text-primary transition-colors min-h-[44px] leading-[28px]">Contact</a></li>
@@ -1082,7 +1087,7 @@ export default function Landing() {
 
             {/* Légal */}
             <div>
-              <h4 className="text-[13px] font-semibold text-text-primary mb-4 uppercase tracking-wider">Légal</h4>
+              <h3 className="text-[13px] font-semibold text-text-primary mb-4 uppercase tracking-wider">Légal</h3>
               <ul className="space-y-0">
                 <li><Link to="/legal" className="inline-flex items-center gap-1.5 py-2 text-[14px] text-text-tertiary hover:text-text-primary transition-colors min-h-[44px]"><FileText className="w-3.5 h-3.5" />CGU</Link></li>
                 <li><Link to="/legal?tab=privacy" className="inline-flex items-center gap-1.5 py-2 text-[14px] text-text-tertiary hover:text-text-primary transition-colors min-h-[44px]"><Shield className="w-3.5 h-3.5" />Confidentialité</Link></li>
@@ -1091,7 +1096,7 @@ export default function Landing() {
 
             {/* Communauté */}
             <div>
-              <h4 className="text-[13px] font-semibold text-text-primary mb-4 uppercase tracking-wider">Communauté</h4>
+              <h3 className="text-[13px] font-semibold text-text-primary mb-4 uppercase tracking-wider">Communauté</h3>
               <ul className="space-y-0">
                 <li><span className="inline-flex items-center gap-1.5 py-2 text-[14px] text-text-tertiary min-h-[44px]"><span className="w-2 h-2 rounded-full bg-success animate-pulse" />Beta ouverte</span></li>
                 <li>
@@ -1126,6 +1131,7 @@ export default function Landing() {
                   <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-quaternary" />
                   <input
                     type="email"
+                    name="email"
                     required
                     placeholder="Reçois les updates Squad Planner"
                     className="w-full pl-10 pr-4 py-2.5 bg-bg-elevated border border-border-subtle rounded-lg text-[14px] text-text-primary placeholder:text-text-quaternary focus:border-primary focus:outline-none transition-colors"

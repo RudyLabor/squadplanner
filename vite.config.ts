@@ -6,6 +6,11 @@ import tailwindcss from "@tailwindcss/vite";
 export default defineConfig({
   plugins: [react(), tailwindcss()],
 
+  // Build target flag: set BUILD_TARGET=native for Capacitor builds
+  define: {
+    __IS_NATIVE__: JSON.stringify(process.env.BUILD_TARGET === 'native'),
+  },
+
   // Performance optimizations
   build: {
     // Enable source maps for debugging in production (optional)

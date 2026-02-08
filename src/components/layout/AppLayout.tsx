@@ -168,7 +168,7 @@ const DesktopContentWrapper = memo(function DesktopContentWrapper({
     <main
       id="main-content"
       tabIndex={-1}
-      className={`flex-1 lg:pb-0 overflow-y-auto overflow-x-hidden scrollbar-hide-mobile ${isKeyboardVisible ? 'pb-0' : 'pb-mobile-nav'}`}
+      className={`flex-1 lg:pb-0 overflow-y-auto overflow-x-hidden scrollbar-hide-mobile overscroll-contain ${isKeyboardVisible ? 'pb-0' : 'pb-mobile-nav'}`}
     >
       <motion.div
         initial={false}
@@ -314,7 +314,9 @@ export function AppLayout({ children }: AppLayoutProps) {
   const isOnboarding = location.pathname === '/onboarding'
   const isLanding = location.pathname === '/'
   const isLegalPage = location.pathname === '/legal'
-  const shouldHideNav = isAuthPage || isOnboarding || isLanding || isLegalPage
+  const isHelpPage = location.pathname === '/help'
+  const isPremiumPage = location.pathname === '/premium'
+  const shouldHideNav = isAuthPage || isOnboarding || isLanding || isLegalPage || isHelpPage || isPremiumPage
 
   // OPTIMIZED: Memoize computed values
   const isPartyActive = useMemo(() => location.pathname === '/party', [location.pathname])

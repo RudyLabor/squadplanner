@@ -72,7 +72,7 @@ const PLANS: PricingPlan[] = [
   {
     id: 'premium_yearly',
     name: 'Premium Annuel',
-    price: 47.90, // 2 mois offerts (vs 59.88€)
+    price: 47.88, // 3.99€/mois × 12 = 47.88€ (~2 mois offerts vs 59.88€)
     interval: 'year',
     features: [
       'Tout le Premium',

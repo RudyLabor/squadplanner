@@ -8,10 +8,10 @@ export function NotFound() {
     <div className="min-h-0 bg-[#050506] pb-6">
       <div className="px-4 md:px-6 lg:px-8 py-6 max-w-2xl lg:max-w-4xl xl:max-w-6xl mx-auto flex items-center justify-center min-h-[60vh]">
         <div className="text-center max-w-md">
-        {/* Animated 404 icon */}
+        {/* Animated 404 icon — visible by default, animation is progressive enhancement */}
         <motion.div
-          className="w-24 h-24 rounded-2xl bg-gradient-to-br from-[rgba(99,102,241,0.15)] to-[rgba(167,139,250,0.08)] flex items-center justify-center mx-auto mb-6"
-          initial={{ scale: 0.8, opacity: 0 }}
+          className="w-24 h-24 rounded-2xl bg-gradient-to-br from-[rgba(99,102,241,0.15)] to-[rgba(167,139,250,0.08)] flex items-center justify-center mx-auto mb-6 opacity-100"
+          initial={false}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ type: 'spring', stiffness: 300, damping: 20 }}
         >
@@ -23,49 +23,30 @@ export function NotFound() {
           </motion.div>
         </motion.div>
 
-        {/* Title */}
-        <motion.h1
-          className="text-6xl font-bold text-[#f7f8f8] mb-3"
-          initial={{ y: 20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.1 }}
-        >
+        {/* Title — always visible */}
+        <h1 className="text-6xl font-bold text-[#f7f8f8] mb-3">
           404
-        </motion.h1>
+        </h1>
 
-        {/* Message */}
-        <motion.p
-          className="text-[18px] font-semibold text-[#f7f8f8] mb-2"
-          initial={{ y: 20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.2 }}
-        >
+        {/* Message — always visible */}
+        <p className="text-[18px] font-semibold text-[#f7f8f8] mb-2">
           Oups, cette page n'existe pas !
-        </motion.p>
+        </p>
 
-        <motion.p
-          className="text-[14px] text-[#8b8d90] mb-8"
-          initial={{ y: 20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.3 }}
-        >
+        <p className="text-[14px] text-[#8b8d90] mb-8">
           La page que tu cherches a peut-être été déplacée ou n'existe plus.
-        </motion.p>
+        </p>
 
-        {/* Action buttons */}
-        <motion.div
-          className="flex flex-col sm:flex-row gap-3 justify-center"
-          initial={{ y: 20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.4 }}
-        >
+        {/* Action buttons — always visible */}
+        <div className="flex flex-col sm:flex-row gap-3 justify-center">
           <Link to="/home">
-            <Button className="w-full sm:w-auto">
+            <Button type="button" className="w-full sm:w-auto">
               <Home className="w-4 h-4" />
               Retour à l'accueil
             </Button>
           </Link>
           <Button
+            type="button"
             variant="secondary"
             onClick={() => window.history.back()}
             className="w-full sm:w-auto"
@@ -73,7 +54,7 @@ export function NotFound() {
             <ArrowLeft className="w-4 h-4" />
             Page précédente
           </Button>
-        </motion.div>
+        </div>
         </div>
       </div>
     </div>

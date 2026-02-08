@@ -1,4 +1,4 @@
-import { useEffect, useState, memo, useCallback, useMemo } from 'react'
+import { useEffect, useState, memo, useCallback, useMemo, useRef } from 'react'
 import type { ReactNode } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -10,6 +10,7 @@ import { getOptimizedAvatarUrl } from '../../utils/avatarUrl'
 import { SquadPlannerLogo } from '../SquadPlannerLogo'
 import { Breadcrumbs } from './Breadcrumbs'
 import { GlobalSearch } from '../GlobalSearch'
+import { NotificationBell } from '../NotificationCenter'
 import { Tooltip } from '../ui/Tooltip'
 
 interface AppLayoutProps {
@@ -275,9 +276,15 @@ export function AppLayout({ children }: AppLayoutProps) {
   // Determine if sidebar should show expanded content
   const isExpanded = sidebarExpanded || sidebarPinned
 
-  // OPTIMIZED: Memoize callbacks
-  const handleMouseEnter = useCallback(() => setSidebarExpanded(true), [])
-  const handleMouseLeave = useCallback(() => setSidebarExpanded(false), [])
+  // Debounce sidebar expansion to prevent click interference (UX 3)
+  const sidebarHoverTimer = useRef<ReturnType<typeof setTimeout>>(undefined)
+  const handleMouseEnter = useCallback(() => {
+    sidebarHoverTimer.current = setTimeout(() => setSidebarExpanded(true), 120)
+  }, [])
+  const handleMouseLeave = useCallback(() => {
+    clearTimeout(sidebarHoverTimer.current)
+    setSidebarExpanded(false)
+  }, [])
   const togglePinned = useCallback(() => setSidebarPinned(p => !p), [])
 
   // Save pinned state to localStorage
@@ -343,10 +350,10 @@ export function AppLayout({ children }: AppLayoutProps) {
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
       >
-        {/* Logo */}
-        <div className={`${isExpanded ? 'p-6' : 'p-4'} border-b border-[rgba(255,255,255,0.03)]`}>
-          <div className="flex items-center gap-3">
-            <SquadPlannerLogo size={isExpanded ? 40 : 32} />
+        {/* Logo — pr-10 to account for the pin button */}
+        <div className={`${isExpanded ? 'pl-5 pr-10 py-5' : 'p-4'} border-b border-[rgba(255,255,255,0.03)]`}>
+          <div className="flex items-center gap-2.5 min-w-0">
+            <SquadPlannerLogo size={isExpanded ? 32 : 32} className="flex-shrink-0" />
             <AnimatePresence mode="wait">
               {isExpanded && (
                 <motion.div
@@ -355,10 +362,10 @@ export function AppLayout({ children }: AppLayoutProps) {
                   animate={{ opacity: 1, width: 'auto' }}
                   exit={{ opacity: 0, width: 0 }}
                   transition={{ duration: 0.15 }}
-                  className="overflow-hidden"
+                  className="overflow-hidden min-w-0"
                 >
-                  <h1 className="text-[16px] font-bold text-[#f7f8f8] whitespace-nowrap">Squad Planner</h1>
-                  <p className="text-xs text-[#5e6063] whitespace-nowrap">Jouez ensemble, vraiment</p>
+                  <h1 className="text-[15px] font-bold text-[#f7f8f8] whitespace-nowrap">Squad Planner</h1>
+                  <p className="text-[11px] text-[#5e6063] whitespace-nowrap">Jouez ensemble, vraiment</p>
                 </motion.div>
               )}
             </AnimatePresence>
@@ -377,6 +384,7 @@ export function AppLayout({ children }: AppLayoutProps) {
             >
               <Tooltip content={sidebarPinned ? 'Détacher la sidebar' : 'Épingler la sidebar'} position="bottom" delay={300}>
                 <motion.button
+                  type="button"
                   onClick={togglePinned}
                   className={`p-1.5 rounded-lg transition-colors ${
                     sidebarPinned
@@ -399,6 +407,7 @@ export function AppLayout({ children }: AppLayoutProps) {
           {!isExpanded ? (
             <Tooltip content="Nouvelle session" position="right" delay={300}>
               <motion.button
+                type="button"
                 onClick={() => openCreateSessionModal()}
                 className="flex items-center justify-center gap-2 w-10 h-10 mx-auto rounded-xl bg-[#6366f1] text-white text-[14px] font-semibold"
                 whileHover={{ scale: 1.02 }}
@@ -411,6 +420,7 @@ export function AppLayout({ children }: AppLayoutProps) {
             </Tooltip>
           ) : (
             <motion.button
+              type="button"
               onClick={() => openCreateSessionModal()}
               className="flex items-center justify-center gap-2 w-full h-11 rounded-xl bg-[#6366f1] text-white text-[14px] font-semibold"
               whileHover={{ scale: 1.02 }}
@@ -608,10 +618,13 @@ export function AppLayout({ children }: AppLayoutProps) {
 
       {/* Main content - single render with responsive margin for desktop sidebar */}
       <DesktopContentWrapper isExpanded={isExpanded} isKeyboardVisible={isKeyboardVisible}>
-        {/* Header with Breadcrumbs and GlobalSearch - Desktop only */}
+        {/* Header with Breadcrumbs, GlobalSearch and Notifications - Desktop only */}
         <header role="banner" className="hidden lg:flex pt-4 px-6 items-center justify-between">
           <Breadcrumbs />
-          <GlobalSearch />
+          <div className="flex items-center gap-2">
+            <NotificationBell />
+            <GlobalSearch />
+          </div>
         </header>
 
         {/* Single render of children - fixes double rendering issue */}

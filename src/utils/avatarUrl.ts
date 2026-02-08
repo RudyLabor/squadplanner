@@ -50,10 +50,9 @@ export function getOptimizedAvatarUrl(
   // Calculate optimal size (2x for retina displays)
   const optimizedSize = Math.ceil(size * 2)
 
-  // Add Supabase Storage transform parameters
-  // Format: ?width=X&height=X&resize=cover&quality=80
+  // Add Supabase Storage transform parameters with WebP format
   const separator = url.includes('?') ? '&' : '?'
-  return `${url}${separator}width=${optimizedSize}&height=${optimizedSize}&resize=cover&quality=80`
+  return `${url}${separator}width=${optimizedSize}&height=${optimizedSize}&resize=cover&quality=80&format=webp`
 }
 
 /**

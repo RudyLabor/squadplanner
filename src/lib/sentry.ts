@@ -57,9 +57,18 @@ export async function initSentry(): Promise<void> {
         'moz-extension://',
         'ResizeObserver loop',
         'WebSocket',
+        'Auth session missing',
+        'Auth error',
+        'refresh_token_not_found',
       ],
 
       beforeSend(event) {
+        // Filter out Supabase auth noise that pollutes logs
+        const message = event.exception?.values?.[0]?.value || ''
+        if (message.includes('Auth session missing') || message.includes('refresh_token')) {
+          return null
+        }
+
         if (event.request?.cookies) {
           delete event.request.cookies
         }

@@ -6,6 +6,7 @@ import {
 } from 'lucide-react'
 import { useSquadsStore, useSessionsStore, useViewTransitionNavigate } from '../hooks'
 import { useThemeStore } from '../hooks/useTheme'
+import { useCreateSessionModal } from './CreateSessionModal'
 
 interface CommandItem {
   id: string
@@ -29,6 +30,7 @@ export function CommandPalette() {
   const { squads } = useSquadsStore()
   const { sessions } = useSessionsStore()
   const { mode, setMode, effectiveTheme } = useThemeStore()
+  const createSessionModalOpen = useCreateSessionModal(s => s.isOpen)
 
   // Detect platform for keyboard shortcut display
   const isMac = typeof navigator !== 'undefined' && navigator.platform.toLowerCase().includes('mac')
@@ -82,8 +84,19 @@ export function CommandPalette() {
     { id: 'premium', label: 'Premium', description: 'Passer Premium', icon: Zap, action: () => { navigate('/premium'); close() }, category: 'navigation' },
   ]
 
+  // Open create session modal
+  const openCreateSession = useCreateSessionModal(s => s.open)
+
   // Action commands
   const actionCommands: CommandItem[] = [
+    {
+      id: 'create-session',
+      label: 'Créer une session',
+      description: 'Planifier une nouvelle session de jeu',
+      icon: Calendar,
+      action: () => { openCreateSession(); close() },
+      category: 'actions'
+    },
     {
       id: 'toggle-theme',
       label: 'Changer le thème',
@@ -145,9 +158,10 @@ export function CommandPalette() {
       const target = e.target as HTMLElement
       const isTyping = target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable
 
-      // Open with Cmd+K or Ctrl+K
+      // Open with Cmd+K or Ctrl+K — blocked when CreateSessionModal is open
       if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
         e.preventDefault()
+        if (createSessionModalOpen) return
         setIsOpen(prev => !prev)
         return
       }
@@ -232,7 +246,7 @@ export function CommandPalette() {
 
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [isOpen, showShortcutsHelp, filteredCommands, selectedIndex, close, navigate, toggleTheme, goBack, enterSubCommand, query, parentStack])
+  }, [isOpen, showShortcutsHelp, filteredCommands, selectedIndex, close, navigate, toggleTheme, goBack, enterSubCommand, query, parentStack, createSessionModalOpen])
 
   // Focus input when opened
   useEffect(() => {

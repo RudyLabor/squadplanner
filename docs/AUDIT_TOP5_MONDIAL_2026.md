@@ -504,42 +504,12 @@
 - [ ] **"Derniere connexion"** : Il y a 5 min, Il y a 2h, etc.
 - [ ] **Activite live** : indicateur "En party vocale" / "En session" sur l'avatar
 
----
-
-### PHASE 5 : SURPASSER PLAYSTATION APP (Semaines 5-7) — Gaming & Gamification
-
-#### 5.1 - Gaming Features
-
-| Feature | PS App a | A faire |
-|---------|---------|---------|
-| **Trophees/Succes** | Platine/Or/Argent/Bronze | Badges Squad Planner (deja partiel) |
-| **Game activity feed** | Oui | Feed d'activite squad |
-| **Clips/Screenshots** | Oui | Partage de clips dans le chat |
-| **Events/Tournois** | Oui | Events speciaux saisonniers |
-| **Wishlist jeux** | Oui | Liste "prochains jeux" par squad |
-| **Friends suggestions** | Oui | "Joueurs que tu pourrais connaitre" |
-
-#### 5.2 - Gamification Ultime (deja forte, a perfectionner)
-
-- [ ] **Badges visuels animes** : animations Lottie pour chaque badge debloque
-- [ ] **Saisons competitives** : Classements par saison (reset mensuel)
-- [ ] **Quetes narratives** : "La saga de ta squad" (parcours scenarise)
-- [ ] **Recompenses cosmetiques** : themes de profil, cadres d'avatar, couleurs de pseudo
-- [ ] **Titre personnalise** : "Le Fiable", "L'Organisateur", "Le Fetard" (debloque par achievements)
-- [ ] **Progression de squad** : Niveau de squad collectif (Bronze > Silver > Gold > Platinum)
-- [ ] **Weekly recap** : email/notification resume hebdo avec stats
-
-#### 5.3 - Feed d'Activite
-
-- [ ] Timeline "Activite recente" sur Home
-- [ ] "X a cree une session", "Y a rejoint la party", "Z a obtenu le badge Fetard"
-- [ ] Reactions rapides sur les activites (high-five, applaudissements)
 
 ---
 
-### PHASE 6 : PERFORMANCE & INFRA (Semaines 7-8) — Base technique pour le top mondial
+### PHASE 5 : PERFORMANCE & INFRA (Semaines 7-8) — Base technique pour le top mondial
 
-#### 6.1 - Performance
+#### 5.1 - Performance
 
 > **REGLE D'OR : Une app top 5 mondial n'est pas juste belle, elle est RAPIDE.**
 > Discord charge en < 2s. WhatsApp en < 1s. On doit etre a ce niveau.
@@ -552,7 +522,7 @@
 - [ ] **Service Worker** : cache strategique (stale-while-revalidate)
 - [ ] **Prefetch** : preload les pages liees au hover sur les links
 
-#### 6.2 - PWA Complete
+#### 5.2 - PWA Complete
 
 - [ ] manifest.json complet (icons, screenshots, shortcuts)
 - [ ] Installation prompt intelligente (apres 3 visites)
@@ -560,14 +530,14 @@
 - [ ] Background sync : envoyer messages en offline
 - [x] Push notifications natives (deja fait)
 
-#### 6.3 - Tests & Qualite
+#### 5.3 - Tests & Qualite
 
 - [ ] Tests E2E Playwright : parcours critiques (inscription, RSVP, chat, party)
 - [ ] Tests visuels : screenshot comparison (Chromatic ou Percy)
 - [ ] Monitoring : Sentry errors + Web Vitals tracking
 - [ ] 0 erreur console en production
 
-#### 6.4 - SEO & Marketing
+#### 5.4 - SEO & Marketing
 
 - [x] Meta tags OG complets sur toutes les pages — FAIT (index.html)
 - [x] Schema.org structured data (Application) — FAIT (index.html)
@@ -576,9 +546,9 @@
 
 ---
 
-### PHASE 7 : FEATURES DIFFERENCIANTES (Semaines 8-10) — Ce que PERSONNE n'a
+### PHASE 6 : FEATURES DIFFERENCIANTES (Semaines 8-10) — Ce que PERSONNE n'a
 
-#### 7.1 - IA Coach Avance (Notre avantage unique)
+#### 6.1 - IA Coach Avance (Notre avantage unique)
 
 - [ ] **IA predictive** : "Ta squad joue souvent le mardi soir, propose une session ?"
 - [ ] **IA resume de session** : resume auto de ce qui s'est passe
@@ -586,14 +556,14 @@
 - [ ] **IA conflict resolution** : detecte les tensions (no-shows repetes) et propose des solutions
 - [ ] **IA planning optimal** : croise les dispos de tous les membres automatiquement
 
-#### 7.2 - Social Discovery
+#### 6.2 - Social Discovery
 
 - [ ] **Squad publiques** : decouvrir des squads ouvertes par jeu
 - [ ] **Matchmaking** : trouver des joueurs pour completer ta squad
 - [ ] **Profils publics** : page profil partageable avec stats
 - [ ] **Classement global** : top squads par jeu, par region
 
-#### 7.3 - Integrations
+#### 6.3 - Integrations
 
 - [ ] **Google Calendar sync** : export et import bidirectionnel
 - [ ] **Twitch** : statut "En live" automatique
@@ -608,7 +578,6 @@
 |-----------|---------|--------|-------|------------------------|
 | **Design/UI** | 9/10 | **10/10** | **10/10** | FAIT — Design system 2026, landing refonte, spring physics |
 | **Mobile** | 9/10 | **9.5/10** | **10/10** | PWA install prompt (Phase 6) |
-| **Gamification** | 10/10 | 10/10 | **10/10** | Phase 5 (badges animes, saisons, titres) |
 | **Onboarding** | 7/10 | **9/10** | **10/10** | Ameliorer tour guide + email personnalise |
 | **Chat** | 7/10 | **8/10** | **10/10** | Phase 3 (mentions, GIFs, fichiers, vocal, markdown) |
 | **Voix** | 8/10 | 8/10 | **10/10** | Phase 3 (screen share, video, push-to-talk) |
@@ -628,7 +597,6 @@
 | ~~S2~~ | ~~Phase 2~~ | ~~UI Revolution~~ | ~~48/50~~ **FAIT** |
 | S3-S5 | Phase 3 | Surpasser Discord (chat+voice) | 49/50 |
 | S4-S6 | Phase 4 | Surpasser WhatsApp (DM+statut) | 49.5/50 |
-| S5-S7 | Phase 5 | Surpasser PS App (gaming) | 50/50 |
 | S7-S8 | Phase 6 | Performance & Infra | Maintien |
 | S8-S10 | Phase 7 | Features differenciantes | Au-dela |
 

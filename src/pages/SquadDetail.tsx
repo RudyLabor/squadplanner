@@ -620,12 +620,20 @@ export default function SquadDetail() {
   const [showConfetti, setShowConfetti] = useState(false)
 
   const { user, isInitialized } = useAuthStore()
-  const { currentSquad, fetchSquadById, leaveSquad, deleteSquad, isLoading } = useSquadsStore()
+  const { currentSquad, fetchSquadById, leaveSquad, deleteSquad, isLoading, setCurrentSquad } = useSquadsStore()
   const { sessions, fetchSessions, createSession, updateRsvp, isLoading: sessionsLoading } = useSessionsStore()
   const { canAccessFeature, fetchPremiumStatus, isSquadPremium } = usePremiumStore()
+  const [loadTimeout, setLoadTimeout] = useState(false)
 
   // React Query hook for leaderboard - replaces direct RPC call
   const { data: leaderboard = [], isLoading: leaderboardLoading } = useSquadLeaderboardQuery(id)
+
+  // Reset currentSquad on unmount or id change to avoid stale data
+  useEffect(() => {
+    setCurrentSquad(null)
+    setLoadTimeout(false)
+    return () => setCurrentSquad(null)
+  }, [id, setCurrentSquad])
 
   useEffect(() => {
     if (isInitialized && !user) {
@@ -634,9 +642,15 @@ export default function SquadDetail() {
       fetchSquadById(id)
       fetchSessions(id)
       fetchPremiumStatus()
-      // Leaderboard is now fetched via useSquadLeaderboardQuery hook
     }
   }, [id, user, isInitialized, navigate, fetchSquadById, fetchSessions, fetchPremiumStatus])
+
+  // Timeout fallback — 10 seconds max loading
+  useEffect(() => {
+    if (!isLoading && currentSquad) return
+    const timer = setTimeout(() => setLoadTimeout(true), 10000)
+    return () => clearTimeout(timer)
+  }, [id, isLoading, currentSquad])
 
   const handleCopyCode = async () => {
     if (!currentSquad) return
@@ -689,10 +703,18 @@ export default function SquadDetail() {
       if (id) fetchSessions(id)
 
       // Célébration pour "présent" - moment Wow! (only on success)
+      const ariaLabels = {
+        present: 'Tu es marqué comme présent',
+        absent: 'Tu es marqué comme absent',
+        maybe: 'Tu es marqué comme peut-être'
+      }
+      // A11Y 4: Announce RSVP status to screen readers
+      const ariaRegion = document.getElementById('aria-live-polite')
+      if (ariaRegion) ariaRegion.textContent = ariaLabels[response]
+
       if (response === 'present') {
         setShowConfetti(true)
         setSuccessMessage("T'es confirmé ! 🔥 Ta squad compte sur toi")
-        // Arrêter le confetti après 4 secondes
         setTimeout(() => setShowConfetti(false), 4000)
       } else {
         const labels = {
@@ -731,11 +753,28 @@ export default function SquadDetail() {
   const futureSessions = sessions.filter(s => new Date(s.scheduled_at) >= now || s.status === 'confirmed')
 
   // Afficher le skeleton loader tant que le fetch n'est pas terminé
-  if (!isInitialized || isLoading || (!currentSquad && id)) {
+  if (!isInitialized || isLoading || (!currentSquad && id && !loadTimeout)) {
     return (
       <div className="min-h-0 bg-bg-base pb-6">
         <div className="px-4 md:px-6 lg:px-8 py-6 max-w-2xl lg:max-w-4xl xl:max-w-6xl mx-auto">
           <SquadDetailSkeleton />
+        </div>
+      </div>
+    )
+  }
+
+  // Timeout — chargement trop long
+  if (loadTimeout && !currentSquad) {
+    return (
+      <div className="min-h-0 bg-bg-base flex items-center justify-center flex-col gap-4 py-12">
+        <p className="text-text-tertiary">Le chargement prend trop de temps</p>
+        <div className="flex gap-3">
+          <Button variant="primary" onClick={() => { setLoadTimeout(false); if (id) { fetchSquadById(id); fetchSessions(id) } }}>
+            Réessayer
+          </Button>
+          <Button variant="secondary" onClick={() => navigate('/squads')}>
+            Retour aux squads
+          </Button>
         </div>
       </div>
     )
@@ -923,8 +962,12 @@ export default function SquadDetail() {
             ) : (
               <Card className="p-6 text-center">
                 <Calendar className="w-10 h-10 mx-auto mb-3 text-text-quaternary" strokeWidth={1} />
-                <p className="text-[14px] text-text-tertiary">Pas encore de session prévue</p>
-                <p className="text-[12px] text-text-quaternary mt-1">Lance la première !</p>
+                <p className="text-[14px] text-text-tertiary mb-1">Pas encore de session prévue</p>
+                <p className="text-[12px] text-text-quaternary mb-4">Propose un créneau pour jouer avec ta squad</p>
+                <Button type="button" size="sm" onClick={() => setShowCreateSession(true)}>
+                  <Plus className="w-4 h-4" />
+                  Planifier une session
+                </Button>
               </Card>
             )}
           </div>

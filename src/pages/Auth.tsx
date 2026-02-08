@@ -44,6 +44,7 @@ export default function Auth() {
   const [confirmPassword, setConfirmPassword] = useState('')
   const [username, setUsername] = useState('')
   const [error, setError] = useState<string | null>(null)
+  const [fieldErrors, setFieldErrors] = useState<{ username?: string; email?: string; password?: string }>({})
   const [resetEmailSent, setResetEmailSent] = useState(false)
   const [isResetting, setIsResetting] = useState(false)
   const [showConfetti, setShowConfetti] = useState(false)
@@ -127,6 +128,30 @@ export default function Auth() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError(null)
+    setFieldErrors({})
+
+    // Client-side validation — show all errors at once
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    const errors: { username?: string; email?: string; password?: string } = {}
+
+    if (mode === 'register' && !username.trim()) {
+      errors.username = 'Le pseudo est requis'
+    }
+    if (mode !== 'reset' && !email.trim()) {
+      errors.email = "L'email est requis"
+    } else if (mode !== 'reset' && !emailRegex.test(email)) {
+      errors.email = "L'adresse email n'est pas valide"
+    }
+    if (!password) {
+      errors.password = 'Le mot de passe est requis'
+    } else if (password.length < 6) {
+      errors.password = 'Le mot de passe doit contenir au moins 6 caractères'
+    }
+
+    if (Object.keys(errors).length > 0) {
+      setFieldErrors(errors)
+      return
+    }
 
     if (mode === 'login') {
       const { error } = await signIn(email, password)
@@ -149,15 +174,10 @@ export default function Auth() {
         }
       }
     } else {
-      if (!username.trim()) {
-        setError('Le pseudo est requis')
-        return
-      }
       const { error } = await signUp(email, password, username)
       if (error) {
         setError(translateAuthError(error.message))
       } else {
-        // 🎉 Celebration for new user!
         setShowConfetti(true)
         setTimeout(() => {
           navigate('/onboarding')
@@ -169,6 +189,7 @@ export default function Auth() {
   const switchMode = () => {
     setMode(mode === 'login' ? 'register' : 'login')
     setError(null)
+    setFieldErrors({})
     setEmail('')
     setPassword('')
     setUsername('')
@@ -231,7 +252,7 @@ export default function Auth() {
 
               {/* Form */}
               <Card className="mb-6">
-                <form onSubmit={mode === 'reset' ? handlePasswordUpdate : handleSubmit} className="p-5 space-y-4">
+                <form onSubmit={mode === 'reset' ? handlePasswordUpdate : handleSubmit} noValidate className="p-5 space-y-4">
                   {/* Google - only for login/register */}
                   {mode !== 'reset' && (
                     <>
@@ -268,39 +289,51 @@ export default function Auth() {
                   {/* Fields */}
                   <div className="space-y-3">
                     {mode === 'register' && (
-                      <Input
-                        type="text"
-                        value={username}
-                        onChange={(e) => setUsername(e.target.value)}
-                        placeholder="Ton pseudo de gamer"
-                        icon={<User className="w-4 h-4" />}
-                        required
-                        autoComplete="username"
-                      />
+                      <div>
+                        <Input
+                          type="text"
+                          value={username}
+                          onChange={(e) => { setUsername(e.target.value); setFieldErrors(prev => ({ ...prev, username: undefined })) }}
+                          placeholder="Ton pseudo de gamer"
+                          icon={<User className="w-4 h-4" />}
+                          required
+                          autoComplete="username"
+                          className={fieldErrors.username ? 'border-[#f87171] focus:border-[#f87171]' : ''}
+                        />
+                        {fieldErrors.username && <p className="text-[#f87171] text-[12px] mt-1">{fieldErrors.username}</p>}
+                      </div>
                     )}
 
                     {mode !== 'reset' && (
-                      <Input
-                        type="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        placeholder="Email"
-                        icon={<Mail className="w-4 h-4" />}
-                        required
-                        autoComplete="email"
-                      />
+                      <div>
+                        <Input
+                          type="email"
+                          value={email}
+                          onChange={(e) => { setEmail(e.target.value); setFieldErrors(prev => ({ ...prev, email: undefined })) }}
+                          placeholder="Email"
+                          icon={<Mail className="w-4 h-4" />}
+                          required
+                          autoComplete="email"
+                          className={fieldErrors.email ? 'border-[#f87171] focus:border-[#f87171]' : ''}
+                        />
+                        {fieldErrors.email && <p className="text-[#f87171] text-[12px] mt-1">{fieldErrors.email}</p>}
+                      </div>
                     )}
 
-                    <Input
-                      type="password"
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      placeholder={mode === 'reset' ? 'Nouveau mot de passe' : 'Mot de passe'}
-                      icon={<Lock className="w-4 h-4" />}
-                      showPasswordToggle
-                      required
-                      autoComplete={mode === 'login' ? 'current-password' : 'new-password'}
-                    />
+                    <div>
+                      <Input
+                        type="password"
+                        value={password}
+                        onChange={(e) => { setPassword(e.target.value); setFieldErrors(prev => ({ ...prev, password: undefined })) }}
+                        placeholder={mode === 'reset' ? 'Nouveau mot de passe' : 'Mot de passe'}
+                        icon={<Lock className="w-4 h-4" />}
+                        showPasswordToggle
+                        required
+                        autoComplete={mode === 'login' ? 'current-password' : 'new-password'}
+                        className={fieldErrors.password ? 'border-[#f87171] focus:border-[#f87171]' : ''}
+                      />
+                      {fieldErrors.password && <p className="text-[#f87171] text-[12px] mt-1">{fieldErrors.password}</p>}
+                    </div>
 
                     {mode === 'reset' && (
                       <Input

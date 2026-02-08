@@ -44,47 +44,29 @@ export default defineConfig({
         manualChunks: (id) => {
           const n = id.replace(/\\/g, '/');
 
-          // Agora SDK - very heavy (~1.3MB), MUST be isolated
+          // Agora SDK - very heavy (~1.3MB), MUST be isolated and lazy-loaded
           if (n.includes('agora-rtc-sdk-ng') || n.includes('AgoraRTC')) {
             return 'vendor-agora';
           }
-          // React core
-          if (n.includes('/node_modules/react/') ||
-              n.includes('/node_modules/react-dom/') ||
-              n.includes('/node_modules/react-router')) {
-            return 'vendor-react';
-          }
-          // TanStack (React Query + Virtual) - data layer
-          if (n.includes('@tanstack')) {
-            return 'vendor-tanstack';
-          }
-          // UI animation & icons
-          if (n.includes('framer-motion') || n.includes('lucide-react')) {
-            return 'vendor-ui';
-          }
-          // State management
-          if (n.includes('zustand')) {
-            return 'vendor-state';
-          }
-          // Supabase
-          if (n.includes('@supabase')) {
-            return 'vendor-supabase';
-          }
-          // Sentry monitoring
+          // Sentry monitoring - loaded async only for authenticated users
           if (n.includes('@sentry')) {
             return 'vendor-sentry';
           }
-          // Confetti / celebration
-          if (n.includes('confetti') || n.includes('countup')) {
-            return 'vendor-effects';
+          // Core: React + Router + State management (always needed)
+          if (n.includes('/node_modules/react/') ||
+              n.includes('/node_modules/react-dom/') ||
+              n.includes('/node_modules/react-router') ||
+              n.includes('zustand')) {
+            return 'vendor-core';
           }
-          // Capacitor mobile plugins
-          if (n.includes('@capacitor')) {
-            return 'vendor-capacitor';
-          }
-          // Sonner toast
-          if (n.includes('sonner')) {
+          // UI: animations, icons, toasts, effects
+          if (n.includes('framer-motion') || n.includes('lucide-react') ||
+              n.includes('sonner') || n.includes('confetti') || n.includes('countup')) {
             return 'vendor-ui';
+          }
+          // Data: Supabase + TanStack Query
+          if (n.includes('@supabase') || n.includes('@tanstack')) {
+            return 'vendor-data';
           }
         },
 

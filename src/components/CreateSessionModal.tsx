@@ -134,6 +134,7 @@ export function CreateSessionModal() {
                   Nouvelle session
                 </h2>
                 <button
+                  type="button"
                   onClick={close}
                   className="p-2 rounded-lg text-[#8b8d90] hover:text-[#f7f8f8] hover:bg-[rgba(255,255,255,0.05)] transition-colors"
                   aria-label="Fermer"

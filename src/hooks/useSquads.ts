@@ -122,6 +122,8 @@ export const useSquadsStore = create<SquadsState>((set, get) => ({
 
   fetchSquadById: async (id: string) => {
     try {
+      set({ isLoading: true, currentSquad: null })
+
       const { data: squad, error } = await supabase
         .from('squads')
         .select('*')
@@ -142,10 +144,11 @@ export const useSquadsStore = create<SquadsState>((set, get) => ({
         member_count: members?.length || 0
       }
 
-      set({ currentSquad: squadWithMembers })
+      set({ currentSquad: squadWithMembers, isLoading: false })
       return squadWithMembers
     } catch (error) {
       console.error('Error fetching squad:', error)
+      set({ isLoading: false })
       return null
     }
   },

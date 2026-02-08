@@ -62,21 +62,23 @@ const PageSkeleton = memo(function PageSkeleton() {
   )
 })
 
-// Landing page that redirects logged-in users to /home
+// Landing page that redirects logged-in users to /home (unless ?public=true)
 const LandingOrHome = memo(function LandingOrHome() {
   const { user, isInitialized } = useAuthStore()
+  const [searchParams] = useSearchParams()
+  const showPublic = searchParams.get('public') === 'true'
 
   // Show loading while checking auth
   if (!isInitialized) {
     return <LoadingSpinner />
   }
 
-  // Redirect logged-in users to home
-  if (user) {
+  // Redirect logged-in users to home (unless they want to see the public landing)
+  if (user && !showPublic) {
     return <Navigate to="/home" replace />
   }
 
-  // Show landing page for non-authenticated users
+  // Show landing page for non-authenticated users or when ?public=true
   return <Landing />
 })
 

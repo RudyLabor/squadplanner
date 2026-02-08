@@ -46,6 +46,13 @@ export function Onboarding() {
   const { user, profile, refreshProfile } = useAuthStore()
   const { createSquad, joinSquad, fetchSquads, squads } = useSquadsStore()
 
+  // Redirect if user already has squads (onboarding already completed)
+  useEffect(() => {
+    if (squads.length > 0) {
+      window.location.href = '/home'
+    }
+  }, [squads])
+
   const [step, setStep] = useState<OnboardingStep>('splash') // Show value proposition first
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -489,7 +496,7 @@ export function Onboarding() {
                 transition={{ delay: 0.8 }}
                 className="text-[13px] text-[#5e6063] mt-6"
               >
-                Ça prend moins de 90 secondes
+                Configure ta squad en moins de 60 secondes
               </motion.p>
             </motion.div>
           )}

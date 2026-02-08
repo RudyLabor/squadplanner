@@ -495,6 +495,19 @@ export function Settings() {
               </div>
               <ExternalLink className="w-4 h-4 text-text-quaternary" />
             </Link>
+            <Link
+              to="/?public=true"
+              className="w-full flex items-center justify-between p-4 rounded-xl bg-surface-card hover:bg-surface-card-hover transition-colors"
+            >
+              <div className="flex items-center gap-3">
+                <Globe className="w-5 h-5 text-primary" />
+                <div className="text-left">
+                  <p className="text-[14px] text-text-primary">Page d'accueil publique</p>
+                  <p className="text-[12px] text-text-quaternary">Voir la landing page</p>
+                </div>
+              </div>
+              <ExternalLink className="w-4 h-4 text-text-quaternary" />
+            </Link>
           </div>
         </Card>
 

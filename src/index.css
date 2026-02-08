@@ -576,6 +576,50 @@ select:focus-visible,
   box-shadow: 0 0 0 2px var(--color-bg-base), 0 0 0 3px var(--color-primary);
 }
 
+/* Toast progress bar - V3 auto-countdown */
+[data-sonner-toast] {
+  position: relative;
+  overflow: hidden;
+}
+[data-sonner-toast]::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 2px;
+  background: currentColor;
+  opacity: 0.25;
+  border-radius: 0 0 12px 12px;
+  animation: toast-progress var(--toast-duration, 4s) linear forwards;
+}
+@keyframes toast-progress {
+  from { width: 100%; }
+  to { width: 0%; }
+}
+[data-theme="light"] [data-sonner-toast]::after {
+  opacity: 0.15;
+}
+
+/* Custom cursor on landing page - V3 */
+.landing-custom-cursor,
+.landing-custom-cursor * {
+  cursor: none !important;
+}
+@media (pointer: coarse), (prefers-reduced-motion: reduce) {
+  .landing-custom-cursor,
+  .landing-custom-cursor * {
+    cursor: auto !important;
+  }
+}
+
+/* SVG illustration theme transitions - V3 */
+.illustration-themed svg path,
+.illustration-themed svg circle,
+.illustration-themed svg rect,
+.illustration-themed svg line {
+  transition: stroke 0.3s var(--ease-out, ease-out), fill 0.3s var(--ease-out, ease-out);
+}
+
 /* Loading shimmer - Subtle */
 @keyframes shimmer {
   0% { background-position: -200% 0; }

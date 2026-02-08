@@ -1,5 +1,5 @@
-import { motion, useInView, useScroll, useTransform } from 'framer-motion'
-import { useRef } from 'react'
+import { motion, useInView, useScroll, useTransform, useMotionValue, useSpring } from 'framer-motion'
+import { useRef, useEffect, useState } from 'react'
 import {
   Users, Calendar, ArrowRight, Check, X as XIcon,
   Target, MessageCircle, Headphones, TrendingUp, Sparkles,
@@ -9,6 +9,13 @@ import { Link } from 'react-router-dom'
 import { SquadPlannerLogo } from '../components/SquadPlannerLogo'
 import { useAuthStore } from '../hooks'
 import { scrollReveal, springTap, scrollRevealLight, scaleReveal } from '../utils/animations'
+import { AnimatedCounter } from '../components/ui/AnimatedCounter'
+import { HeadphonesIllustration } from '../components/landing/illustrations/HeadphonesIllustration'
+import { CalendarIllustration } from '../components/landing/illustrations/CalendarIllustration'
+import { ShieldIllustration } from '../components/landing/illustrations/ShieldIllustration'
+import { TestimonialCarousel } from '../components/landing/TestimonialCarousel'
+import { AnimatedDemo } from '../components/landing/AnimatedDemo'
+import { CustomCursor } from '../components/landing/CustomCursor'
 
 // Stagger animations for lists
 const staggerContainerVariants = {
@@ -30,18 +37,21 @@ const staggerItemVariants = {
 const pillars = [
   {
     icon: Headphones,
+    illustration: HeadphonesIllustration,
     title: 'Party vocale 24/7',
     description: 'Ta squad a son salon vocal toujours ouvert. Rejoins en 1 clic, reste aussi longtemps que tu veux.',
     color: '#34d399'
   },
   {
     icon: Calendar,
+    illustration: CalendarIllustration,
     title: 'Planning avec décision',
     description: 'Propose un créneau. Chacun répond OUI ou NON. Fini les "on verra" — on sait qui vient.',
     color: '#f5a623'
   },
   {
     icon: Target,
+    illustration: ShieldIllustration,
     title: 'Fiabilité mesurée',
     description: 'Check-in à chaque session. Ton score montre si tu tiens parole. Tes potes comptent sur toi.',
     color: '#f87171'
@@ -100,11 +110,35 @@ export default function Landing() {
   const heroRotateX = useTransform(scrollYProgress, [0, 0.15], [0, 8])
   const heroRotateY = useTransform(scrollYProgress, [0, 0.1, 0.2], [-2, 0, 2])
 
+  // V3: Mouse tracking for 3D mockup (desktop only)
+  const mouseX = useMotionValue(0)
+  const mouseY = useMotionValue(0)
+  const smoothMouseX = useSpring(mouseX, { stiffness: 150, damping: 20 })
+  const smoothMouseY = useSpring(mouseY, { stiffness: 150, damping: 20 })
+  const mouseRotateX = useTransform(smoothMouseY, [-0.5, 0.5], [5, -5])
+  const mouseRotateY = useTransform(smoothMouseX, [-0.5, 0.5], [-5, 5])
+  const [isDesktop, setIsDesktop] = useState(false)
+
+  useEffect(() => {
+    const isCoarse = window.matchMedia('(pointer: coarse)').matches
+    setIsDesktop(!isCoarse)
+    if (isCoarse) return
+
+    const handleMouseMove = (e: MouseEvent) => {
+      mouseX.set((e.clientX / window.innerWidth) - 0.5)
+      mouseY.set((e.clientY / window.innerHeight) - 0.5)
+    }
+    window.addEventListener('mousemove', handleMouseMove)
+    return () => window.removeEventListener('mousemove', handleMouseMove)
+  }, [mouseX, mouseY])
+
   // Determine if user is logged in for different header buttons
   const isLoggedIn = !!user
 
   return (
-    <div className="min-h-screen bg-bg-base">
+    <div className={`min-h-screen bg-bg-base ${isDesktop ? 'landing-custom-cursor' : ''}`}>
+      {/* V3: Custom cursor with trail */}
+      <CustomCursor />
       {/* Scroll Progress */}
       <motion.div
         className="scroll-progress"
@@ -230,10 +264,20 @@ export default function Landing() {
           >
             <motion.div
               className="relative"
-              style={{ rotateX: heroRotateX, rotateY: heroRotateY, perspective: 1000 }}
+              style={{
+                rotateX: isDesktop ? mouseRotateX : heroRotateX,
+                rotateY: isDesktop ? mouseRotateY : heroRotateY,
+                perspective: 1200,
+                transformStyle: 'preserve-3d',
+              }}
             >
+              {/* V3: Shadow layer for depth */}
+              <div
+                className="absolute inset-0 rounded-[2.5rem] bg-[#6366f1]/5 blur-xl"
+                style={{ transform: 'translateZ(-30px) scale(1.05)' }}
+              />
               {/* Phone frame */}
-              <div className="bg-[#101012] rounded-[2.5rem] p-3 border border-[rgba(255,255,255,0.08)] shadow-2xl shadow-[#6366f1]/10">
+              <div className="bg-[#101012] rounded-[2.5rem] p-3 border border-[rgba(255,255,255,0.08)] shadow-2xl shadow-[#6366f1]/10" style={{ transform: 'translateZ(0px)' }}>
                 {/* Screen */}
                 <div className="bg-[#050506] rounded-[2rem] overflow-hidden">
                   {/* Status bar */}
@@ -393,6 +437,36 @@ export default function Landing() {
         </div>
       </section>
 
+      {/* V3: Animated Demo (replaces video/GIF) */}
+      <AnimatedDemo />
+
+      {/* V3: Live Stats Counter */}
+      <section className="px-4 md:px-6 py-12">
+        <div className="max-w-4xl mx-auto">
+          <div className="grid grid-cols-3 gap-4 md:gap-6">
+            {[
+              { end: 2847, label: 'joueurs inscrits', icon: Users, color: '#6366f1' },
+              { end: 156, label: 'squads actives', icon: Target, color: '#34d399' },
+              { end: 12450, label: 'sessions planifiées', icon: Calendar, color: '#f5a623' },
+            ].map((stat) => (
+              <motion.div
+                key={stat.label}
+                className="text-center p-4 md:p-6 rounded-2xl bg-bg-elevated border border-border-subtle relative"
+                variants={scaleReveal}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+              >
+                <span className="absolute top-3 right-3 w-2 h-2 rounded-full bg-success animate-pulse" />
+                <stat.icon className="w-6 h-6 md:w-8 md:h-8 mx-auto mb-2" style={{ color: stat.color }} />
+                <AnimatedCounter end={stat.end} separator=" " className="text-xl md:text-3xl font-bold text-text-primary" duration={2.5} />
+                <div className="text-xs md:text-sm text-text-tertiary mt-1">{stat.label}</div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Solution - Les 3 Piliers */}
       <section className="px-4 md:px-6 py-16 bg-gradient-to-b from-transparent to-[rgba(99,102,241,0.015)]">
         <div className="max-w-5xl mx-auto">
@@ -438,11 +512,15 @@ export default function Landing() {
                 />
                 <motion.div
                   className="w-14 h-14 rounded-2xl flex items-center justify-center mb-4"
-                  style={{ backgroundColor: `${pillar.color}20` }}
+                  style={{ backgroundColor: `${pillar.color}20`, color: pillar.color }}
                   whileHover={{ rotate: [0, -5, 5, 0] }}
                   transition={{ duration: 0.4 }}
                 >
-                  <pillar.icon className="w-7 h-7" style={{ color: pillar.color }} />
+                  {/* V3: SVG illustration on desktop, Lucide icon on mobile */}
+                  <div className="hidden md:block">
+                    <pillar.illustration size={40} />
+                  </div>
+                  <pillar.icon className="w-7 h-7 md:hidden" style={{ color: pillar.color }} />
                 </motion.div>
                 <h3 className="text-xl font-bold text-text-primary mb-3">{pillar.title}</h3>
                 <p className="text-[15px] text-text-tertiary leading-relaxed">{pillar.description}</p>
@@ -727,6 +805,9 @@ export default function Landing() {
           </motion.div>
         </div>
       </section>
+
+      {/* V3: Testimonial Carousel */}
+      <TestimonialCarousel />
 
       {/* CTA Final - Enhanced */}
       <section className="px-4 md:px-6 py-16">

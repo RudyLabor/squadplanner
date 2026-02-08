@@ -8,6 +8,7 @@ interface AnimatedCounterProps {
   suffix?: string
   duration?: number
   decimals?: number
+  separator?: string
   className?: string
 }
 
@@ -17,6 +18,7 @@ export function AnimatedCounter({
   suffix = '',
   duration = 2,
   decimals = 0,
+  separator,
   className = '',
 }: AnimatedCounterProps) {
   const ref = useRef<HTMLSpanElement>(null)
@@ -31,6 +33,7 @@ export function AnimatedCounter({
           suffix={suffix}
           duration={duration}
           decimals={decimals}
+          separator={separator}
           useEasing
         />
       ) : (

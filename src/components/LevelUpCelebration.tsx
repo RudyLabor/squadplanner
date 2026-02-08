@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Star, Sparkles, Trophy } from 'lucide-react'
-import confetti from 'canvas-confetti'
+import { celebrateLevelUp } from '../utils/celebrations'
 import { LEVEL_CONFIG, getLevelInfo } from './XPBar'
 
 export interface LevelUpCelebrationProps {
@@ -20,71 +20,9 @@ export function LevelUpCelebration({
   const [isVisible, setIsVisible] = useState(true)
   const { currentLevel } = getLevelInfo(newLevel)
 
-  // Trigger confetti on mount
+  // Trigger V3 enhanced confetti on mount
   useEffect(() => {
-    // Create multiple confetti bursts
-    const duration = 2000
-    const end = Date.now() + duration
-
-    const colors = [currentLevel.color, '#ffffff', '#f5a623', '#4ade80', '#8b93ff']
-
-    // Initial big burst
-    confetti({
-      particleCount: 150,
-      spread: 120,
-      startVelocity: 45,
-      origin: { y: 0.6 },
-      colors,
-      ticks: 200
-    })
-
-    // Continuous smaller bursts
-    const interval = setInterval(() => {
-      if (Date.now() > end) {
-        clearInterval(interval)
-        return
-      }
-
-      // Left side burst
-      confetti({
-        particleCount: 30,
-        angle: 60,
-        spread: 55,
-        startVelocity: 35,
-        origin: { x: 0, y: 0.7 },
-        colors,
-        ticks: 150
-      })
-
-      // Right side burst
-      confetti({
-        particleCount: 30,
-        angle: 120,
-        spread: 55,
-        startVelocity: 35,
-        origin: { x: 1, y: 0.7 },
-        colors,
-        ticks: 150
-      })
-    }, 250)
-
-    // Star burst from center
-    setTimeout(() => {
-      confetti({
-        particleCount: 100,
-        spread: 360,
-        startVelocity: 30,
-        origin: { x: 0.5, y: 0.5 },
-        colors,
-        shapes: ['star'],
-        scalar: 1.5,
-        ticks: 150
-      })
-    }, 500)
-
-    return () => {
-      clearInterval(interval)
-    }
+    celebrateLevelUp([currentLevel.color, '#8b93ff'])
   }, [currentLevel.color])
 
   // Auto-dismiss after delay

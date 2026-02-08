@@ -1,11 +1,14 @@
 import { toast } from 'sonner'
+import { createElement } from 'react'
 import { Capacitor } from '@capacitor/core'
 import { Haptics, ImpactStyle, NotificationType } from '@capacitor/haptics'
+import { AnimatedCheckmark, AnimatedXMark, AnimatedWarning, AnimatedInfo } from '../components/ui/ToastIcons'
 
 /**
  * Standardized toast notifications for Squad Planner
  * Phase 3.4 - Notifications et feedback
  * Phase 2.5 - Sound + Haptics (Capacitor integration)
+ * V3 - Animated icons + progress bar
  */
 
 // Haptic feedback helper — only fires on native platforms (iOS/Android)
@@ -37,6 +40,8 @@ export const showSuccess = (message: string) => {
   haptic.success()
   toast.success(message, {
     duration: 4000,
+    icon: createElement(AnimatedCheckmark, { size: 20 }),
+    style: { '--toast-duration': '4s' } as React.CSSProperties,
   })
 }
 
@@ -45,6 +50,8 @@ export const showError = (message: string) => {
   haptic.error()
   toast.error(message, {
     duration: 5000,
+    icon: createElement(AnimatedXMark, { size: 20 }),
+    style: { '--toast-duration': '5s' } as React.CSSProperties,
   })
 }
 
@@ -53,6 +60,8 @@ export const showWarning = (message: string) => {
   haptic.warning()
   toast.warning(message, {
     duration: 4000,
+    icon: createElement(AnimatedWarning, { size: 20 }),
+    style: { '--toast-duration': '4s' } as React.CSSProperties,
   })
 }
 
@@ -60,6 +69,8 @@ export const showWarning = (message: string) => {
 export const showInfo = (message: string) => {
   toast.info(message, {
     duration: 3000,
+    icon: createElement(AnimatedInfo, { size: 20 }),
+    style: { '--toast-duration': '3s' } as React.CSSProperties,
   })
 }
 
@@ -108,6 +119,7 @@ export const showWithUndo = (
       label: 'Annuler',
       onClick: undoAction,
     },
+    style: { '--toast-duration': `${duration / 1000}s` } as React.CSSProperties,
   })
 }
 

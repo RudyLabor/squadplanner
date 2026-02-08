@@ -1,6 +1,6 @@
 import { useEffect, useState, lazy, Suspense, memo, useRef } from 'react'
 import { BrowserRouter, Routes, Route, Navigate, useLocation, useSearchParams } from 'react-router-dom'
-import { AnimatePresence, motion } from 'framer-motion'
+import { AnimatePresence, LayoutGroup, motion } from 'framer-motion'
 import { Toaster } from 'sonner'
 import { QueryClientProvider } from '@tanstack/react-query'
 import { AppLayout } from './components/layout'
@@ -11,6 +11,7 @@ import { ErrorBoundary } from './components/ErrorBoundary'
 import { OfflineBanner } from './components/OfflineBanner'
 import { CookieConsent } from './components/CookieConsent'
 import { TourGuide } from './components/TourGuide'
+import NotificationBanner from './components/NotificationBanner'
 import { queryClient } from './lib/queryClient'
 
 // Initialize theme on app load - triggers theme initialization before first render
@@ -243,12 +244,13 @@ function AppContent() {
       </Suspense>
 
       <AppLayout>
-        <AnimatePresence mode="wait">
+        <LayoutGroup>
+        <AnimatePresence mode="popLayout">
           <motion.div
             key={location.pathname}
             initial={pageTransitionVariants.slide.initial}
             animate={pageTransitionVariants.slide.animate}
-            exit={pageTransitionVariants.slide.exit}
+            exit={{ ...pageTransitionVariants.slide.exit, position: 'absolute' as const, top: 0, left: 0, right: 0 }}
             transition={pageTransitionConfig}
             className="h-full"
           >
@@ -309,6 +311,7 @@ function AppContent() {
             </ErrorBoundary>
           </motion.div>
         </AnimatePresence>
+        </LayoutGroup>
       </AppLayout>
     </>
   )
@@ -321,6 +324,8 @@ export default function App() {
         <AppContent />
         {/* Offline/Online status banner */}
         <OfflineBanner />
+        {/* In-app notification banners - V3 */}
+        <NotificationBanner />
         {/* Cookie consent popup - RGPD compliance */}
         <CookieConsent />
         {/* Tour guide for new users */}
@@ -337,6 +342,8 @@ export default function App() {
               fontSize: '14px',
               borderRadius: '12px',
               padding: '12px 16px',
+              position: 'relative' as const,
+              overflow: 'hidden',
             },
             classNames: {
               success: 'border-[#34d399]/20 bg-[#34d399]/10',

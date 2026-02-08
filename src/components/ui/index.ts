@@ -8,6 +8,7 @@ export { SegmentedControl } from './SegmentedControl'
 export { ProgressRing } from './ProgressRing'
 export { AnimatedCounter } from './AnimatedCounter'
 export { Drawer } from './Drawer'
+export { SharedElement } from './SharedElement'
 export {
   // Base skeleton components
   Skeleton,

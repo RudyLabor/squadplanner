@@ -11,6 +11,7 @@ interface AnimatedAvatarProps {
   status?: AvatarStatus
   showRing?: boolean
   className?: string
+  layoutId?: string
 }
 
 const sizeConfig: Record<AvatarSize, { container: number; ring: number; strokeWidth: number; dotSize: string }> = {
@@ -43,14 +44,18 @@ export const AnimatedAvatar = memo(function AnimatedAvatar({
   status = 'offline',
   showRing = true,
   className = '',
+  layoutId,
 }: AnimatedAvatarProps) {
   const config = sizeConfig[size]
   const color = statusColors[status]
   const isActive = status === 'online' || status === 'in-party'
   const circumference = Math.PI * (config.ring - config.strokeWidth)
 
+  const Wrapper = layoutId ? motion.div : 'div' as unknown as typeof motion.div
+
   return (
-    <div
+    <Wrapper
+      {...(layoutId ? { layoutId, layout: 'position' as const } : {})}
       className={`relative inline-flex items-center justify-center shrink-0 ${className}`}
       style={{ width: config.ring, height: config.ring }}
     >
@@ -124,6 +129,6 @@ export const AnimatedAvatar = memo(function AnimatedAvatar({
           style={{ backgroundColor: color }}
         />
       )}
-    </div>
+    </Wrapper>
   )
 })

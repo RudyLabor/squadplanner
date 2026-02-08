@@ -99,6 +99,7 @@ function SquadCard({ squad, isOwner, nextSession, hasActiveParty, copiedCode, on
 
   return (
     <motion.article
+      layoutId={`squad-card-${squad.id}`}
       whileHover={{ y: -2, scale: 1.02 }}
       whileTap={{ scale: 0.98 }}
       aria-labelledby={`squad-name-${squad.id}`}

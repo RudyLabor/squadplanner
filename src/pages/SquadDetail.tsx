@@ -768,8 +768,8 @@ export default function SquadDetail() {
       )}
       <div className="px-4 md:px-6 lg:px-8 py-6 max-w-2xl lg:max-w-4xl xl:max-w-6xl mx-auto">
         <div>
-          {/* Header */}
-          <div className="mb-6">
+          {/* Header - V3: layoutId for shared element transition from Squads page */}
+          <motion.div className="mb-6" layoutId={`squad-card-${id}`}>
             <div className="flex items-center justify-between mb-3">
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2">
@@ -798,7 +798,7 @@ export default function SquadDetail() {
                 {copiedCode ? 'Copié !' : 'Copier'}
               </Button>
             </div>
-          </div>
+          </motion.div>
 
           {/* Party Vocale - PRIORITÉ #1 */}
           <div className="mb-6">

@@ -14,12 +14,15 @@ interface CommandItem {
   icon: React.ElementType
   action: () => void
   category: 'navigation' | 'squads' | 'sessions' | 'actions'
+  children?: CommandItem[]
+  preview?: { type: 'squad' | 'session' | 'navigation' | 'action'; data?: Record<string, unknown> }
 }
 
 export function CommandPalette() {
   const [isOpen, setIsOpen] = useState(false)
   const [query, setQuery] = useState('')
   const [selectedIndex, setSelectedIndex] = useState(0)
+  const [parentStack, setParentStack] = useState<CommandItem[]>([])
   const inputRef = useRef<HTMLInputElement>(null)
   const navigate = useViewTransitionNavigate()
 
@@ -42,6 +45,29 @@ export function CommandPalette() {
     setIsOpen(false)
     setQuery('')
     setSelectedIndex(0)
+    setParentStack([])
+  }, [])
+
+  // V3: Navigate back in sub-command stack
+  const goBack = useCallback(() => {
+    if (parentStack.length > 0) {
+      setParentStack(prev => prev.slice(0, -1))
+      setQuery('')
+      setSelectedIndex(0)
+      return true
+    }
+    return false
+  }, [parentStack])
+
+  // V3: Enter a sub-command
+  const enterSubCommand = useCallback((cmd: CommandItem) => {
+    if (cmd.children && cmd.children.length > 0) {
+      setParentStack(prev => [...prev, cmd])
+      setQuery('')
+      setSelectedIndex(0)
+    } else {
+      cmd.action()
+    }
   }, [])
 
   // Navigation commands
@@ -68,14 +94,20 @@ export function CommandPalette() {
     },
   ]
 
-  // Squad commands
+  // Squad commands with V3 sub-commands
   const squadCommands: CommandItem[] = squads.slice(0, 5).map(squad => ({
     id: `squad-${squad.id}`,
     label: squad.name,
     description: squad.game || 'Squad',
     icon: Users,
     action: () => { navigate(`/squad/${squad.id}`); close() },
-    category: 'squads' as const
+    category: 'squads' as const,
+    preview: { type: 'squad' as const, data: { name: squad.name, game: squad.game, id: squad.id } },
+    children: [
+      { id: `squad-${squad.id}-open`, label: 'Ouvrir', description: 'Voir la squad', icon: ArrowRight, action: () => { navigate(`/squad/${squad.id}`); close() }, category: 'squads' as const },
+      { id: `squad-${squad.id}-chat`, label: 'Chat', description: 'Ouvrir le chat', icon: MessageCircle, action: () => { navigate('/messages'); close() }, category: 'squads' as const },
+      { id: `squad-${squad.id}-party`, label: 'Party Vocale', description: 'Rejoindre la party', icon: Mic, action: () => { navigate('/party'); close() }, category: 'squads' as const },
+    ],
   }))
 
   // Session commands
@@ -91,13 +123,17 @@ export function CommandPalette() {
   // All commands
   const allCommands = [...navigationCommands, ...actionCommands, ...squadCommands, ...sessionCommands]
 
+  // V3: Get active commands (children if in sub-command, else root)
+  const activeParent = parentStack[parentStack.length - 1]
+  const activeCommands = activeParent?.children ?? allCommands
+
   // Filter commands based on query
   const filteredCommands = query
-    ? allCommands.filter(cmd =>
+    ? activeCommands.filter(cmd =>
         cmd.label.toLowerCase().includes(query.toLowerCase()) ||
         cmd.description?.toLowerCase().includes(query.toLowerCase())
       )
-    : allCommands.slice(0, 8)
+    : activeCommands.slice(0, 10)
 
   // State for shortcuts help modal
   const [showShortcutsHelp, setShowShortcutsHelp] = useState(false)
@@ -116,16 +152,23 @@ export function CommandPalette() {
         return
       }
 
-      // Close with Escape
+      // Close with Escape (or go back in sub-commands)
       if (e.key === 'Escape') {
         if (showShortcutsHelp) {
           setShowShortcutsHelp(false)
           return
         }
         if (isOpen) {
-          close()
+          if (!goBack()) close()
           return
         }
+      }
+
+      // V3: Backspace on empty query goes back in sub-commands
+      if (e.key === 'Backspace' && isOpen && query === '' && parentStack.length > 0) {
+        e.preventDefault()
+        goBack()
+        return
       }
 
       // Global shortcuts (only when not typing and palette is closed)
@@ -181,14 +224,15 @@ export function CommandPalette() {
         }
         if (e.key === 'Enter') {
           e.preventDefault()
-          filteredCommands[selectedIndex]?.action()
+          const cmd = filteredCommands[selectedIndex]
+          if (cmd) enterSubCommand(cmd)
         }
       }
     }
 
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [isOpen, showShortcutsHelp, filteredCommands, selectedIndex, close, navigate, toggleTheme])
+  }, [isOpen, showShortcutsHelp, filteredCommands, selectedIndex, close, navigate, toggleTheme, goBack, enterSubCommand, query, parentStack])
 
   // Focus input when opened
   useEffect(() => {
@@ -236,11 +280,23 @@ export function CommandPalette() {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: -20 }}
             transition={{ type: 'spring', stiffness: 400, damping: 30 }}
-            className="fixed top-[15%] left-1/2 -translate-x-1/2 w-full max-w-xl z-[101]"
+            className="fixed top-[15%] left-1/2 -translate-x-1/2 w-full max-w-xl lg:max-w-3xl z-[101]"
           >
             <div className="mx-4 bg-[#101012] border border-[rgba(255,255,255,0.1)] rounded-2xl shadow-[0_25px_50px_-12px_rgba(0,0,0,0.5)] overflow-hidden">
               {/* Search input */}
               <div className="flex items-center gap-3 px-4 py-4 border-b border-[rgba(255,255,255,0.06)]">
+                {/* V3: Breadcrumb for sub-commands */}
+                {parentStack.length > 0 && (
+                  <button onClick={goBack} className="flex items-center gap-1 text-xs text-primary hover:text-primary/80 shrink-0 mr-1">
+                    <ArrowRight className="w-3 h-3 rotate-180" />
+                    {parentStack.map((p, i) => (
+                      <span key={p.id}>
+                        {i > 0 && <span className="text-[#5e6063] mx-0.5">/</span>}
+                        {p.label}
+                      </span>
+                    ))}
+                  </button>
+                )}
                 <Search className="w-5 h-5 text-[#6366f1]" />
                 <input
                   ref={inputRef}
@@ -259,8 +315,10 @@ export function CommandPalette() {
                 </button>
               </div>
 
+              {/* V3: Two-column layout with preview */}
+              <div className="flex">
               {/* Results */}
-              <div className="max-h-[400px] overflow-y-auto py-2">
+              <div className="max-h-[400px] overflow-y-auto py-2 flex-1 min-w-0">
                 {filteredCommands.length === 0 ? (
                   <div className="px-4 py-8 text-center">
                     <HelpCircle className="w-8 h-8 text-[#5e6063] mx-auto mb-2" />
@@ -281,7 +339,7 @@ export function CommandPalette() {
                         return (
                           <button
                             key={cmd.id}
-                            onClick={cmd.action}
+                            onClick={() => enterSubCommand(cmd)}
                             onMouseEnter={() => setSelectedIndex(globalIndex)}
                             className={`w-full flex items-center gap-3 px-4 py-2.5 text-left transition-colors ${
                               isSelected
@@ -304,7 +362,10 @@ export function CommandPalette() {
                                 </p>
                               )}
                             </div>
-                            {isSelected && (
+                            {cmd.children && cmd.children.length > 0 && (
+                              <ArrowRight className="w-3.5 h-3.5 text-[#5e6063]" />
+                            )}
+                            {isSelected && !cmd.children && (
                               <ArrowRight className="w-4 h-4 text-[#6366f1]" />
                             )}
                           </button>
@@ -314,6 +375,51 @@ export function CommandPalette() {
                   ))
                 )}
               </div>
+
+              {/* V3: Preview panel (desktop only) */}
+              {(() => {
+                const previewCmd = filteredCommands[selectedIndex]
+                const preview = previewCmd?.preview
+                if (!preview) return null
+                return (
+                  <div className="hidden lg:block w-64 border-l border-[rgba(255,255,255,0.06)] p-4 max-h-[400px] overflow-y-auto">
+                    <AnimatePresence mode="wait">
+                      <motion.div
+                        key={previewCmd.id}
+                        initial={{ opacity: 0, x: 10 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: -10 }}
+                        transition={{ duration: 0.15 }}
+                      >
+                        <div className="flex items-center gap-2 mb-3">
+                          <previewCmd.icon className="w-5 h-5 text-primary" />
+                          <span className="text-sm font-medium text-text-primary truncate">{previewCmd.label}</span>
+                        </div>
+                        {preview.data && typeof (preview.data as { game?: string }).game === 'string' && (
+                          <div className="text-xs text-text-tertiary mb-2">
+                            Jeu : <span className="text-text-secondary">{(preview.data as { game: string }).game}</span>
+                          </div>
+                        )}
+                        {previewCmd.description && (
+                          <p className="text-xs text-text-quaternary">{previewCmd.description}</p>
+                        )}
+                        {previewCmd.children && previewCmd.children.length > 0 && (
+                          <div className="mt-3 pt-3 border-t border-[rgba(255,255,255,0.06)]">
+                            <div className="text-[10px] text-[#5e6063] uppercase tracking-wider mb-2">Actions</div>
+                            {previewCmd.children.map(child => (
+                              <div key={child.id} className="text-xs text-text-tertiary flex items-center gap-1.5 mb-1">
+                                <child.icon className="w-3 h-3" />
+                                {child.label}
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </motion.div>
+                    </AnimatePresence>
+                  </div>
+                )
+              })()}
+              </div>{/* end flex container */}
 
               {/* Footer */}
               <div className="flex items-center justify-between px-4 py-3 border-t border-[rgba(255,255,255,0.06)] bg-[rgba(0,0,0,0.2)]">

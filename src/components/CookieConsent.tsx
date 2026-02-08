@@ -5,8 +5,6 @@ import { Link } from 'react-router-dom'
 
 const COOKIE_CONSENT_KEY = 'sq-cookie-consent'
 
-type ConsentState = 'accepted' | 'essential' | null
-
 export function CookieConsent() {
   const [visible, setVisible] = useState(false)
   const [showDetails, setShowDetails] = useState(false)

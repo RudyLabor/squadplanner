@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, ArrowRight, ArrowLeft, Sparkles, Calendar, Users, MessageCircle, Mic } from 'lucide-react'
 
@@ -84,7 +84,6 @@ export function TourGuide() {
   const [currentStep, setCurrentStep] = useState(0)
   const [tooltipPos, setTooltipPos] = useState<{ top: number; left: number } | null>(null)
   const [targetRect, setTargetRect] = useState<DOMRect | null>(null)
-  const observerRef = useRef<ResizeObserver | null>(null)
 
   // Check if tour should be shown (first visit after onboarding)
   useEffect(() => {

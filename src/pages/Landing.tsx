@@ -4,7 +4,7 @@ import {
   Users, Calendar, ArrowRight, Check, X as XIcon,
   Target, MessageCircle, Headphones, TrendingUp, Sparkles,
   HelpCircle, FileText, Shield, ChevronDown, Menu, X as CloseIcon,
-  Mail
+  Mail, MousePointerClick, Clock, Smile
 } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { SquadPlannerLogo } from '../components/SquadPlannerLogo'
@@ -121,33 +121,8 @@ function LazySection({ children, className, minHeight = 200 }: { children: React
 }
 
 // ─── DYNAMIC SOCIAL PROOF (TOP 6) ───────────────────
-function useDynamicStats() {
-  const [userCount, setUserCount] = useState<number | null>(null)
-  const [sessionCount, setSessionCount] = useState<number | null>(null)
-
-  useEffect(() => {
-    let cancelled = false
-    const fetchStats = async () => {
-      try {
-        const { supabase } = await import('../lib/supabase')
-        const [usersRes, sessionsRes] = await Promise.all([
-          supabase.from('profiles').select('id', { count: 'exact', head: true }),
-          supabase.from('sessions').select('id', { count: 'exact', head: true }),
-        ])
-        if (!cancelled) {
-          if (usersRes.count != null) setUserCount(usersRes.count)
-          if (sessionsRes.count != null) setSessionCount(sessionsRes.count)
-        }
-      } catch {
-        // Non-blocking — silently fail
-      }
-    }
-    fetchStats()
-    return () => { cancelled = true }
-  }, [])
-
-  return { userCount, sessionCount }
-}
+// Dynamic stats hook removed — low early counts hurt credibility.
+// Re-enable when user base reaches meaningful numbers (50+ users, 20+ sessions).
 
 // ─── DISCORD SVG ICON ────────────────────────────────
 
@@ -164,7 +139,6 @@ function DiscordIcon({ className }: { className?: string }) {
 export default function Landing() {
   const heroRef = useRef(null)
   const { user } = useAuthStore()
-  const { userCount, sessionCount } = useDynamicStats()
   const { scrollYProgress } = useScroll()
   const heroRotateX = useTransform(scrollYProgress, [0, 0.15], [0, 8])
   const heroRotateY = useTransform(scrollYProgress, [0, 0.1, 0.2], [-2, 0, 2])
@@ -499,9 +473,9 @@ export default function Landing() {
         <div className="max-w-4xl mx-auto">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6">
             {[
-              { end: userCount ?? 100, suffix: userCount != null ? '+' : '%', label: userCount != null ? 'gamers inscrits' : 'gratuit pour commencer', icon: Users, color: '#06B6D4' },
-              { end: sessionCount ?? 3, suffix: sessionCount != null ? '+' : 'x', label: sessionCount != null ? 'sessions organisées' : 'plus de sessions par semaine', icon: TrendingUp, color: '#6366f1' },
-              { end: 30, suffix: 's', label: 'pour créer ta squad', icon: Calendar, color: '#f5a623' },
+              { end: 3, suffix: ' clics', label: 'pour confirmer ta présence', icon: MousePointerClick, color: '#06B6D4' },
+              { end: 5, suffix: ' min/sem', label: 'pour organiser toutes tes sessions', icon: Clock, color: '#6366f1' },
+              { end: 0, suffix: '', label: 'prise de tête pour planifier', icon: Smile, color: '#f5a623' },
               { end: 4, suffix: '.9★', label: 'satisfaction beta testeurs', icon: Target, color: '#34d399' },
             ].map((stat) => (
               <motion.div

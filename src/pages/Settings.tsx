@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   Bell, Volume2, Palette, Shield, Globe, Languages, Database,
@@ -78,7 +78,7 @@ function SettingRow({ label, description, children }: {
 }
 
 // Theme Selector Component - Uses SegmentedControl
-function ThemeSelector() {
+function ThemeSelector({ onSaved }: { onSaved?: () => void }) {
   const { mode, setMode } = useThemeStore()
 
   const themeOptions: { value: ThemeMode; label: string; icon: React.ElementType }[] = [
@@ -91,7 +91,7 @@ function ThemeSelector() {
     <SegmentedControl
       options={themeOptions}
       value={mode}
-      onChange={setMode}
+      onChange={(v: ThemeMode) => { setMode(v); onSaved?.() }}
       size="sm"
       layoutId="theme-selector"
     />
@@ -136,6 +136,16 @@ export function Settings() {
     Intl.DateTimeFormat().resolvedOptions().timeZone
   )
   const [language, setLanguage] = useState<'fr' | 'en'>('fr')
+
+  // Debounced "Paramètres sauvegardés" toast
+  const hasMounted = useRef(false)
+  const saveToastTimeout = useRef<ReturnType<typeof setTimeout>>(undefined)
+  const showSaveToast = useCallback(() => {
+    if (!hasMounted.current) return
+    clearTimeout(saveToastTimeout.current)
+    saveToastTimeout.current = setTimeout(() => showSuccess('Paramètres sauvegardés'), 400)
+  }, [])
+  useEffect(() => { hasMounted.current = true }, [])
 
   // Fetch audio devices
   useEffect(() => {
@@ -272,7 +282,7 @@ export function Settings() {
             >
               <Toggle
                 enabled={notifications.sessions}
-                onChange={(v) => setNotifications({ ...notifications, sessions: v })}
+                onChange={(v) => { setNotifications({ ...notifications, sessions: v }); showSaveToast() }}
               />
             </SettingRow>
             <SettingRow
@@ -281,7 +291,7 @@ export function Settings() {
             >
               <Toggle
                 enabled={notifications.messages}
-                onChange={(v) => setNotifications({ ...notifications, messages: v })}
+                onChange={(v) => { setNotifications({ ...notifications, messages: v }); showSaveToast() }}
               />
             </SettingRow>
             <SettingRow
@@ -290,7 +300,7 @@ export function Settings() {
             >
               <Toggle
                 enabled={notifications.party}
-                onChange={(v) => setNotifications({ ...notifications, party: v })}
+                onChange={(v) => { setNotifications({ ...notifications, party: v }); showSaveToast() }}
               />
             </SettingRow>
             <SettingRow
@@ -299,7 +309,7 @@ export function Settings() {
             >
               <Toggle
                 enabled={notifications.reminders}
-                onChange={(v) => setNotifications({ ...notifications, reminders: v })}
+                onChange={(v) => { setNotifications({ ...notifications, reminders: v }); showSaveToast() }}
               />
             </SettingRow>
           </div>
@@ -316,7 +326,7 @@ export function Settings() {
               </label>
               <select
                 value={audioInput}
-                onChange={(e) => setAudioInput(e.target.value)}
+                onChange={(e) => { setAudioInput(e.target.value); showSaveToast() }}
                 className="w-full h-11 px-4 rounded-xl bg-surface-card border border-border-default text-[14px] text-text-primary focus:outline-none focus:border-primary"
               >
                 <option value="default">Microphone par défaut</option>
@@ -334,7 +344,7 @@ export function Settings() {
               </label>
               <select
                 value={audioOutput}
-                onChange={(e) => setAudioOutput(e.target.value)}
+                onChange={(e) => { setAudioOutput(e.target.value); showSaveToast() }}
                 className="w-full h-11 px-4 rounded-xl bg-surface-card border border-border-default text-[14px] text-text-primary focus:outline-none focus:border-primary"
               >
                 <option value="default">Haut-parleur par défaut</option>
@@ -355,7 +365,7 @@ export function Settings() {
             label="Thème"
             description="Adapte l'apparence de l'app"
           >
-            <ThemeSelector />
+            <ThemeSelector onSaved={showSaveToast} />
           </SettingRow>
         </Card>
 
@@ -369,7 +379,7 @@ export function Settings() {
             >
               <select
                 value={privacy.profileVisibility}
-                onChange={(e) => setPrivacy({ ...privacy, profileVisibility: e.target.value as 'public' | 'friends' | 'private' })}
+                onChange={(e) => { setPrivacy({ ...privacy, profileVisibility: e.target.value as 'public' | 'friends' | 'private' }); showSaveToast() }}
                 className="h-9 px-3 rounded-lg bg-surface-card border border-border-default text-[13px] text-text-primary focus:outline-none focus:border-primary"
               >
                 <option value="public">Tout le monde</option>
@@ -383,7 +393,7 @@ export function Settings() {
             >
               <Toggle
                 enabled={privacy.showOnlineStatus}
-                onChange={(v) => setPrivacy({ ...privacy, showOnlineStatus: v })}
+                onChange={(v) => { setPrivacy({ ...privacy, showOnlineStatus: v }); showSaveToast() }}
               />
             </SettingRow>
           </div>
@@ -400,7 +410,7 @@ export function Settings() {
               </label>
               <select
                 value={timezone}
-                onChange={(e) => setTimezone(e.target.value)}
+                onChange={(e) => { setTimezone(e.target.value); showSaveToast() }}
                 className="w-full h-11 px-4 rounded-xl bg-surface-card border border-border-default text-[14px] text-text-primary focus:outline-none focus:border-primary"
               >
                 {TIMEZONES.map(tz => (
@@ -419,7 +429,7 @@ export function Settings() {
                   { value: 'en' as const, label: 'English' },
                 ]}
                 value={language}
-                onChange={setLanguage}
+                onChange={(v: 'fr' | 'en') => { setLanguage(v); showSaveToast() }}
                 layoutId="language-selector"
               />
             </div>

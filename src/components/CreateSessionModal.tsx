@@ -10,6 +10,7 @@ import { X, Calendar, Clock, Users, Loader2, ChevronDown } from 'lucide-react'
 import { create } from 'zustand'
 import { useSquadsStore, useSessionsStore } from '../hooks'
 import { toast } from 'sonner'
+import { useFocusTrap } from '../hooks/useFocusTrap'
 
 // Store for managing the modal state globally
 interface CreateSessionModalStore {
@@ -30,6 +31,7 @@ export function CreateSessionModal() {
   const { isOpen, preselectedSquadId, close } = useCreateSessionModal()
   const { squads } = useSquadsStore()
   const { createSession, isLoading } = useSessionsStore()
+  const focusTrapRef = useFocusTrap<HTMLDivElement>(isOpen, close)
 
   // Form state
   const [selectedSquadId, setSelectedSquadId] = useState<string>('')
@@ -123,6 +125,7 @@ export function CreateSessionModal() {
             className="fixed inset-x-4 top-1/2 -translate-y-1/2 max-w-md mx-auto z-50 sm:inset-x-auto"
           >
             <div
+              ref={focusTrapRef}
               role="dialog"
               aria-modal="true"
               aria-labelledby="create-session-title"

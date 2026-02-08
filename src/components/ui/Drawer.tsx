@@ -1,6 +1,7 @@
 import { motion, AnimatePresence, useDragControls, type PanInfo } from 'framer-motion'
 import { type ReactNode, useEffect, useCallback } from 'react'
 import { X } from 'lucide-react'
+import { useFocusTrap } from '../../hooks/useFocusTrap'
 
 interface DrawerProps {
   isOpen: boolean
@@ -12,6 +13,7 @@ interface DrawerProps {
 
 export function Drawer({ isOpen, onClose, children, title, className = '' }: DrawerProps) {
   const dragControls = useDragControls()
+  const focusTrapRef = useFocusTrap<HTMLDivElement>(isOpen, onClose)
 
   const handleDragEnd = useCallback(
     (_: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
@@ -21,16 +23,6 @@ export function Drawer({ isOpen, onClose, children, title, className = '' }: Dra
     },
     [onClose]
   )
-
-  // Close on Escape
-  useEffect(() => {
-    if (!isOpen) return
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose()
-    }
-    document.addEventListener('keydown', handleKeyDown)
-    return () => document.removeEventListener('keydown', handleKeyDown)
-  }, [isOpen, onClose])
 
   // Prevent body scroll when open
   useEffect(() => {
@@ -59,6 +51,7 @@ export function Drawer({ isOpen, onClose, children, title, className = '' }: Dra
 
           {/* Drawer panel */}
           <motion.div
+            ref={focusTrapRef}
             initial={{ y: '100%' }}
             animate={{ y: 0 }}
             exit={{ y: '100%' }}

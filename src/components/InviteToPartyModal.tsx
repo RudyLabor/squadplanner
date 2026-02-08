@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { X, UserPlus, Check, Loader2, Send, Copy } from 'lucide-react'
 import { supabase } from '../lib/supabase'
 import { Button } from './ui'
+import { useFocusTrap } from '../hooks/useFocusTrap'
 
 interface SquadMember {
   id: string
@@ -31,6 +32,7 @@ export function InviteToPartyModal({
   currentUserId,
   connectedUserIds
 }: InviteToPartyModalProps) {
+  const focusTrapRef = useFocusTrap<HTMLDivElement>(isOpen, onClose)
   const [members, setMembers] = useState<SquadMember[]>([])
   const [loading, setLoading] = useState(true)
   const [linkCopied, setLinkCopied] = useState(false)
@@ -154,6 +156,7 @@ export function InviteToPartyModal({
         onClick={onClose}
       >
         <motion.div
+          ref={focusTrapRef}
           initial={{ opacity: 0, scale: 0.95, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 20 }}

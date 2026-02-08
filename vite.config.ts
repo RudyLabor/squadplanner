@@ -1,6 +1,7 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
+import { fileURLToPath, URL } from "node:url";
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -9,6 +10,18 @@ export default defineConfig({
   // Build target flag: set BUILD_TARGET=native for Capacitor builds
   define: {
     __IS_NATIVE__: JSON.stringify(process.env.BUILD_TARGET === 'native'),
+  },
+
+  // Exclude Capacitor from web builds (10KB savings)
+  resolve: {
+    alias: {
+      ...(process.env.BUILD_TARGET !== 'native' && {
+        '@capacitor/core': fileURLToPath(new URL('./src/stubs/capacitor.ts', import.meta.url)),
+        '@capacitor/haptics': fileURLToPath(new URL('./src/stubs/capacitor.ts', import.meta.url)),
+        '@capacitor/local-notifications': fileURLToPath(new URL('./src/stubs/capacitor.ts', import.meta.url)),
+        '@capacitor/push-notifications': fileURLToPath(new URL('./src/stubs/capacitor.ts', import.meta.url)),
+      }),
+    },
   },
 
   // Performance optimizations

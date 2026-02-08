@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { supabase } from '../lib/supabase'
+import { supabase, initSupabase } from '../lib/supabase'
 import type { User, Session } from '@supabase/supabase-js'
 import type { Profile } from '../types/database'
 import { forceLeaveVoiceParty } from './useVoiceChat'
@@ -97,6 +97,9 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 
   initialize: async () => {
     try {
+      // Lazy-load @supabase/supabase-js (keeps 166KB out of initial bundle)
+      await initSupabase()
+
       // Get current session
       const { data: { session } } = await supabase.auth.getSession()
       

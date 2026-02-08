@@ -113,7 +113,7 @@ const pillars = [
 
 function DiscordIcon({ className }: { className?: string }) {
   return (
-    <svg className={className} viewBox="0 0 24 24" fill="currentColor">
+    <svg className={className} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
       <path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286z" />
     </svg>
   )
@@ -269,23 +269,17 @@ export default function Landing() {
 
           <div className="flex items-center gap-2 md:gap-3">
             {isLoggedIn ? (
-              <Link to="/home">
-                <button type="button" className="px-4 py-2 rounded-lg bg-primary text-white text-[13px] md:text-[14px] font-medium hover:bg-primary-hover transition-colors duration-300">
-                  Aller à l'app
-                </button>
+              <Link to="/home" className="px-4 py-2 rounded-lg bg-primary text-white text-[13px] md:text-[14px] font-medium hover:bg-primary-hover transition-colors duration-300 inline-flex items-center">
+                Aller à l'app
               </Link>
             ) : (
               <>
-                <Link to="/auth" className="hidden md:inline-flex">
-                  <button type="button" className="px-3 md:px-4 py-2 text-[13px] md:text-[14px] text-text-secondary hover:text-text-primary border border-border-subtle hover:border-border-hover rounded-lg transition-all">
-                    Se connecter
-                  </button>
+                <Link to="/auth" className="hidden md:inline-flex items-center px-3 md:px-4 py-2 text-[13px] md:text-[14px] text-text-secondary hover:text-text-primary border border-border-subtle hover:border-border-hover rounded-lg transition-all">
+                  Se connecter
                 </Link>
-                <Link to="/auth?mode=register&redirect=onboarding" className="hidden md:inline-flex">
-                  <button type="button" className="px-3 md:px-4 py-2 rounded-lg bg-primary text-white text-[13px] md:text-[14px] font-medium hover:bg-primary-hover transition-colors duration-300" data-track="navbar_cta_click">
-                    Créer ma squad
-                    <ArrowRight className="w-3.5 h-3.5 inline ml-1" />
-                  </button>
+                <Link to="/auth?mode=register&redirect=onboarding" className="hidden md:inline-flex items-center px-3 md:px-4 py-2 rounded-lg bg-primary text-white text-[13px] md:text-[14px] font-medium hover:bg-primary-hover transition-colors duration-300" data-track="navbar_cta_click">
+                  Créer ma squad
+                  <ArrowRight className="w-3.5 h-3.5 inline ml-1" />
                 </Link>
                 {/* Mobile hamburger */}
                 <button
@@ -326,15 +320,11 @@ export default function Landing() {
             ))}
           </div>
           <div className="flex flex-col gap-3">
-            <Link to="/auth" onClick={closeMobileMenu}>
-              <button type="button" className="w-full py-3 text-text-secondary border border-border-subtle rounded-xl text-center">
-                Se connecter
-              </button>
+            <Link to="/auth" onClick={closeMobileMenu} className="block w-full py-3 text-text-secondary border border-border-subtle rounded-xl text-center">
+              Se connecter
             </Link>
-            <Link to="/auth?mode=register&redirect=onboarding" onClick={closeMobileMenu}>
-              <button type="button" className="w-full py-3 bg-primary text-white rounded-xl font-medium text-center">
-                Créer ma squad gratuitement
-              </button>
+            <Link to="/auth?mode=register&redirect=onboarding" onClick={closeMobileMenu} className="block w-full py-3 bg-primary text-white rounded-xl font-medium text-center">
+              Créer ma squad gratuitement
             </Link>
           </div>
         </motion.div>
@@ -361,7 +351,7 @@ export default function Landing() {
           <div className="text-center">
             {/* Badge with shimmer */}
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full badge-shimmer border border-primary/12 mb-8">
-              <Sparkles className="w-4 h-4 text-purple" />
+              <Sparkles className="w-4 h-4 text-purple" aria-hidden="true" />
               <span className="text-[13px] text-purple font-medium">Rassemble ta squad et jouez ensemble</span>
             </div>
 
@@ -383,44 +373,34 @@ export default function Landing() {
             {/* CTA buttons (Phase 4 #33) */}
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
               {isLoggedIn ? (
-                <Link to="/home">
-                  <motion.button
-                    type="button"
-                    className="flex items-center gap-2 h-14 px-8 rounded-xl bg-[#6366f1] text-white text-[16px] font-semibold shadow-lg shadow-[#6366f1]/10 cta-glow-idle"
-                    whileHover={{ scale: 1.02, y: -2 }}
-                    whileTap={{ scale: 0.98 }}
-                    transition={{ duration: 0.4, ease: 'easeOut' }}
-                    data-track="hero_cta_click"
-                  >
+                <motion.div
+                  whileHover={{ scale: 1.02, y: -2 }}
+                  whileTap={{ scale: 0.98 }}
+                  transition={{ duration: 0.4, ease: 'easeOut' }}
+                  className="inline-flex"
+                >
+                  <Link to="/home" className="flex items-center gap-2 h-14 px-8 rounded-xl bg-[#6366f1] text-white text-[16px] font-semibold shadow-lg shadow-[#6366f1]/10 cta-glow-idle" data-track="hero_cta_click">
                     Accéder à mes squads
                     <ArrowRight className="w-5 h-5" />
-                  </motion.button>
-                </Link>
+                  </Link>
+                </motion.div>
               ) : (
                 <>
-                  <Link to="/auth?mode=register&redirect=onboarding">
-                    <motion.button
-                      type="button"
-                      className="flex items-center gap-2 h-14 px-8 rounded-xl bg-[#6366f1] text-white text-[16px] font-semibold shadow-lg shadow-[#6366f1]/10 cta-glow-idle w-full sm:w-auto justify-center"
-                      whileHover={{ scale: 1.02, y: -2 }}
-                      {...springTap}
-                      data-track="hero_cta_click"
-                    >
+                  <motion.div whileHover={{ scale: 1.02, y: -2 }} {...springTap} className="w-full sm:w-auto">
+                    <Link to="/auth?mode=register&redirect=onboarding" className="flex items-center gap-2 h-14 px-8 rounded-xl bg-[#6366f1] text-white text-[16px] font-semibold shadow-lg shadow-[#6366f1]/10 cta-glow-idle w-full sm:w-auto justify-center" data-track="hero_cta_click">
                       Créer ma squad gratuitement
                       <ArrowRight className="w-5 h-5" />
-                    </motion.button>
-                  </Link>
-                  <a href="#how-it-works">
-                    <motion.button
-                      type="button"
-                      className="flex items-center gap-2 h-14 px-8 rounded-xl border border-border-hover text-text-secondary hover:text-text-primary hover:border-text-tertiary transition-all w-full sm:w-auto justify-center"
-                      whileHover={{ scale: 1.02, y: -2 }}
-                      {...springTap}
-                      data-track="hero_secondary_cta_click"
-                    >
-                      Comment ça marche ↓
-                    </motion.button>
-                  </a>
+                    </Link>
+                  </motion.div>
+                  <motion.a
+                    href="#how-it-works"
+                    className="flex items-center gap-2 h-14 px-8 rounded-xl border border-border-hover text-text-secondary hover:text-text-primary hover:border-text-tertiary transition-all w-full sm:w-auto justify-center"
+                    whileHover={{ scale: 1.02, y: -2 }}
+                    {...springTap}
+                    data-track="hero_secondary_cta_click"
+                  >
+                    Comment ça marche ↓
+                  </motion.a>
                 </>
               )}
             </div>
@@ -492,7 +472,7 @@ export default function Landing() {
                 viewport={{ once: true }}
               >
                 <span className="absolute top-3 right-3 w-2 h-2 rounded-full bg-success animate-pulse" />
-                <stat.icon className="w-5 h-5 md:w-7 md:h-7 mx-auto mb-2" style={{ color: stat.color }} />
+                <stat.icon className="w-5 h-5 md:w-7 md:h-7 mx-auto mb-2" style={{ color: stat.color }} aria-hidden="true" />
                 <AnimatedCounter end={stat.end} suffix={stat.suffix} separator=" " className="text-xl md:text-3xl font-bold text-text-primary" duration={2.5} />
                 <div className="text-[11px] md:text-sm text-text-tertiary mt-1">{stat.label}</div>
               </motion.div>
@@ -728,7 +708,7 @@ export default function Landing() {
                     <ul className="space-y-2">
                       {pillar.details.map(item => (
                         <li key={item} className="flex items-center gap-2 text-[14px] text-text-secondary">
-                          <Check className="w-4 h-4" style={{ color: pillar.color }} />
+                          <Check className="w-4 h-4" style={{ color: pillar.color }} aria-hidden="true" />
                           {item}
                         </li>
                       ))}
@@ -806,7 +786,7 @@ export default function Landing() {
               {/* Circular progress mockup (Phase 11 #51) */}
               <div className="shrink-0 flex flex-col items-center">
                 <div className="relative w-28 h-28">
-                  <svg className="w-28 h-28 -rotate-90" viewBox="0 0 100 100">
+                  <svg className="w-28 h-28 -rotate-90" viewBox="0 0 100 100" aria-hidden="true">
                     <circle cx="50" cy="50" r="45" fill="none" stroke="rgba(248,113,113,0.1)" strokeWidth="8" />
                     <motion.circle
                       cx="50" cy="50" r="45" fill="none" stroke="#f87171" strokeWidth="8"
@@ -894,20 +874,23 @@ export default function Landing() {
             viewport={{ once: true }}
           >
             <table className="w-full min-w-[500px]">
+              <caption className="sr-only">
+                Comparaison des fonctionnalités entre Discord et Squad Planner
+              </caption>
               <thead>
                 <tr className="bg-bg-surface border-b border-border-subtle">
-                  <th scope="col" className="text-left text-[12px] md:text-[13px] font-medium text-text-secondary px-3 md:px-6 py-3">
+                  <th scope="col" className="text-left text-[12px] md:text-[13px] font-medium text-text-secondary px-3 md:px-6 py-3 sticky left-0 z-10 bg-bg-surface">
                     Fonctionnalité
                   </th>
                   <th scope="col" className="text-center text-[12px] md:text-[13px] font-medium text-text-secondary px-3 md:px-6 py-3">
                     <span className="inline-flex items-center gap-1.5">
-                      <DiscordIcon className="w-4 h-4" />
+                      <DiscordIcon className="w-4 h-4" aria-hidden="true" />
                       Discord
                     </span>
                   </th>
                   <th scope="col" className="text-center text-[12px] md:text-[13px] font-medium text-primary px-3 md:px-6 py-3 border-t-2 border-t-primary">
                     <span className="inline-flex items-center gap-1.5">
-                      <SquadPlannerLogo size={14} />
+                      <SquadPlannerLogo size={14} aria-hidden="true" />
                       SP
                     </span>
                   </th>
@@ -921,27 +904,38 @@ export default function Landing() {
                       !item.discord ? 'bg-[rgba(99,102,241,0.02)]' : ''
                     }`}
                   >
-                    <th scope="row" className="text-left text-[13px] md:text-[14px] text-text-primary px-3 md:px-6 py-3 md:py-4 font-normal">
+                    <th scope="row" className="text-left text-[13px] md:text-[14px] text-text-primary px-3 md:px-6 py-3 md:py-4 font-normal sticky left-0 z-10 bg-bg-base">
                       {item.feature}
                     </th>
                     <td className="text-center px-3 md:px-6 py-3 md:py-4">
                       {item.discord === true ? (
                         <span className="inline-flex flex-col items-center">
-                          <Check className="w-4 h-4 md:w-5 md:h-5 text-success" aria-label="Disponible" />
-                          {item.discordNote && <span className="text-[10px] text-text-quaternary mt-0.5">{item.discordNote}</span>}
+                          <Check className="w-4 h-4 md:w-5 md:h-5 text-success" aria-hidden="true" />
+                          {item.discordNote ? (
+                            <span className="text-[10px] text-text-quaternary mt-0.5">{item.discordNote}</span>
+                          ) : (
+                            <span className="sr-only">Disponible</span>
+                          )}
                         </span>
                       ) : item.discord === 'partial' ? (
                         <span className="inline-flex flex-col items-center">
                           <span className="text-[10px] md:text-[12px] text-warning px-1.5 py-0.5 rounded-full bg-warning/10">{item.discordNote || 'Limité'}</span>
                         </span>
                       ) : (
-                        <XIcon className="w-4 h-4 md:w-5 md:h-5 text-text-quaternary mx-auto" aria-label="Non disponible" />
+                        <span className="inline-flex flex-col items-center">
+                          <XIcon className="w-4 h-4 md:w-5 md:h-5 text-text-quaternary" aria-hidden="true" />
+                          <span className="sr-only">Non disponible</span>
+                        </span>
                       )}
                     </td>
                     <td className="text-center px-3 md:px-6 py-3 md:py-4">
                       <span className="inline-flex flex-col items-center">
-                        <Check className="w-4 h-4 md:w-5 md:h-5 text-success" aria-label="Disponible" />
-                        {item.squadNote && <span className="text-[10px] text-[#06B6D4] mt-0.5">{item.squadNote}</span>}
+                        <Check className="w-4 h-4 md:w-5 md:h-5 text-success" aria-hidden="true" />
+                        {item.squadNote ? (
+                          <span className="text-[10px] text-[#06B6D4] mt-0.5">{item.squadNote}</span>
+                        ) : (
+                          <span className="sr-only">Disponible</span>
+                        )}
                       </span>
                     </td>
                   </tr>
@@ -1026,7 +1020,7 @@ export default function Landing() {
             />
             <div className="relative z-10">
               <motion.div animate={{ rotate: [0, 5, -5, 0] }} transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}>
-                <Sparkles className="w-12 h-12 mx-auto mb-6 text-[#6366f1]" />
+                <Sparkles className="w-12 h-12 mx-auto mb-6 text-[#6366f1]" aria-hidden="true" />
               </motion.div>
               <h2 className="text-2xl md:text-4xl font-bold text-text-primary mb-4">
                 Ta squad t'attend
@@ -1034,18 +1028,12 @@ export default function Landing() {
               <p className="text-text-tertiary mb-8 text-lg">
                 Gratuit, sans engagement. Lance ta première session en 30 secondes.
               </p>
-              <Link to="/auth?mode=register&redirect=onboarding">
-                <motion.button
-                  type="button"
-                  className="flex items-center gap-2 h-16 px-10 rounded-xl bg-gradient-to-r from-[#6366f1] to-[#a78bfa] text-white text-[18px] font-bold mx-auto shadow-lg shadow-[#6366f1]/20 cta-glow-idle"
-                  whileHover={{ scale: 1.03, y: -3 }}
-                  {...springTap}
-                  data-track="bottom_cta_click"
-                >
+              <motion.div whileHover={{ scale: 1.03, y: -3 }} {...springTap} className="inline-flex">
+                <Link to="/auth?mode=register&redirect=onboarding" className="flex items-center gap-2 h-16 px-10 rounded-xl bg-gradient-to-r from-[#6366f1] to-[#a78bfa] text-white text-[18px] font-bold mx-auto shadow-lg shadow-[#6366f1]/20 cta-glow-idle" data-track="bottom_cta_click">
                   Rejoindre l'aventure
                   <ArrowRight className="w-5 h-5" />
-                </motion.button>
-              </Link>
+                </Link>
+              </motion.div>
               {/* Reassurance line (Phase 14 #59) */}
               <p className="text-[13px] text-text-quaternary mt-4">
                 Gratuit · Pas de carte bancaire · 30 secondes
@@ -1080,7 +1068,7 @@ export default function Landing() {
             <div>
               <h3 className="text-[13px] font-semibold text-text-primary mb-4 uppercase tracking-wider">Ressources</h3>
               <ul className="space-y-0">
-                <li><Link to="/help" className="inline-flex items-center gap-1.5 py-2 text-[14px] text-text-tertiary hover:text-text-primary transition-colors min-h-[44px]"><HelpCircle className="w-3.5 h-3.5" />FAQ</Link></li>
+                <li><Link to="/help" className="inline-flex items-center gap-1.5 py-2 text-[14px] text-text-tertiary hover:text-text-primary transition-colors min-h-[44px]"><HelpCircle className="w-3.5 h-3.5" aria-hidden="true" />FAQ</Link></li>
                 <li><a href="mailto:contact@squadplanner.fr" className="inline-block py-2 text-[14px] text-text-tertiary hover:text-text-primary transition-colors min-h-[44px] leading-[28px]">Contact</a></li>
               </ul>
             </div>
@@ -1089,8 +1077,8 @@ export default function Landing() {
             <div>
               <h3 className="text-[13px] font-semibold text-text-primary mb-4 uppercase tracking-wider">Légal</h3>
               <ul className="space-y-0">
-                <li><Link to="/legal" className="inline-flex items-center gap-1.5 py-2 text-[14px] text-text-tertiary hover:text-text-primary transition-colors min-h-[44px]"><FileText className="w-3.5 h-3.5" />CGU</Link></li>
-                <li><Link to="/legal?tab=privacy" className="inline-flex items-center gap-1.5 py-2 text-[14px] text-text-tertiary hover:text-text-primary transition-colors min-h-[44px]"><Shield className="w-3.5 h-3.5" />Confidentialité</Link></li>
+                <li><Link to="/legal" className="inline-flex items-center gap-1.5 py-2 text-[14px] text-text-tertiary hover:text-text-primary transition-colors min-h-[44px]"><FileText className="w-3.5 h-3.5" aria-hidden="true" />CGU</Link></li>
+                <li><Link to="/legal?tab=privacy" className="inline-flex items-center gap-1.5 py-2 text-[14px] text-text-tertiary hover:text-text-primary transition-colors min-h-[44px]"><Shield className="w-3.5 h-3.5" aria-hidden="true" />Confidentialité</Link></li>
               </ul>
             </div>
 
@@ -1101,7 +1089,7 @@ export default function Landing() {
                 <li><span className="inline-flex items-center gap-1.5 py-2 text-[14px] text-text-tertiary min-h-[44px]"><span className="w-2 h-2 rounded-full bg-success animate-pulse" />Beta ouverte</span></li>
                 <li>
                   <a href="https://twitter.com/squadplannerapp" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 py-2 text-[14px] text-text-tertiary hover:text-text-primary transition-colors min-h-[44px]">
-                    <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                    <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
                     Twitter / X
                   </a>
                 </li>

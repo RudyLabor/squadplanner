@@ -7,6 +7,8 @@ import { AppLayout } from './components/layout'
 import { useAuthStore, useSquadsStore, subscribeToIncomingCalls, usePushNotificationStore, useVoiceCallStore, useThemeStore } from './hooks'
 import { pageTransitionVariants, pageTransitionConfig } from './components/PageTransition'
 import { supabase } from './lib/supabase'
+import { initSentry } from './lib/sentry'
+import { useDocumentTitle } from './hooks/useDocumentTitle'
 import { ErrorBoundary } from './components/ErrorBoundary'
 import { OfflineBanner } from './components/OfflineBanner'
 import { CookieConsent } from './components/CookieConsent'
@@ -123,9 +125,22 @@ function AppContent() {
   const [searchParams, setSearchParams] = useSearchParams()
   const { setIncomingCall, status: callStatus } = useVoiceCallStore()
 
+  useDocumentTitle()
+
   useEffect(() => {
     initialize()
   }, [initialize])
+
+  // Initialize Sentry ONLY when user is authenticated (keeps it out of landing bundle)
+  const sentryInitRef = useRef(false)
+  useEffect(() => {
+    if (user && !sentryInitRef.current) {
+      sentryInitRef.current = true
+      initSentry().catch((err) => {
+        console.warn('[App] Sentry initialization failed:', err)
+      })
+    }
+  }, [user])
 
   // Handle incoming call from URL params (when app opened from push notification)
   useEffect(() => {
@@ -227,21 +242,21 @@ function AppContent() {
 
   return (
     <>
-      {/* Global call modals - lazy loaded */}
-      <Suspense fallback={null}>
-        <CallModal />
-        <IncomingCallModal />
-      </Suspense>
-
-      {/* Command Palette - lazy loaded */}
-      <Suspense fallback={null}>
-        <CommandPalette />
-      </Suspense>
-
-      {/* Create Session Modal - PHASE 3.1 */}
-      <Suspense fallback={null}>
-        <CreateSessionModal />
-      </Suspense>
+      {/* Global call modals & command palette - only loaded for authenticated users */}
+      {user && (
+        <>
+          <Suspense fallback={null}>
+            <CallModal />
+            <IncomingCallModal />
+          </Suspense>
+          <Suspense fallback={null}>
+            <CommandPalette />
+          </Suspense>
+          <Suspense fallback={null}>
+            <CreateSessionModal />
+          </Suspense>
+        </>
+      )}
 
       <AppLayout>
         <LayoutGroup>

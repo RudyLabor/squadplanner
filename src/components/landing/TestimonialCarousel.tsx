@@ -185,20 +185,22 @@ export function TestimonialCarousel() {
         onMouseEnter={() => setIsPaused(true)}
         onMouseLeave={() => setIsPaused(false)}
       >
-        {/* Navigation arrows */}
+        {/* Navigation arrows — min 44x44px touch target */}
         <button
+          type="button"
           onClick={prev}
-          className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 md:-translate-x-6 z-10 w-9 h-9 md:w-10 md:h-10 rounded-full bg-bg-elevated border border-border-subtle flex items-center justify-center text-text-secondary hover:text-text-primary hover:border-border-hover transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#6366f1]"
+          className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 md:-translate-x-6 z-10 min-w-[44px] min-h-[44px] w-11 h-11 rounded-full bg-bg-elevated border border-border-subtle flex items-center justify-center text-text-secondary hover:text-text-primary hover:border-border-hover transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#6366f1]"
           aria-label="Témoignage précédent"
         >
-          <ChevronLeft className="w-4 h-4 md:w-5 md:h-5" />
+          <ChevronLeft className="w-5 h-5" />
         </button>
         <button
+          type="button"
           onClick={next}
-          className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-2 md:translate-x-6 z-10 w-9 h-9 md:w-10 md:h-10 rounded-full bg-bg-elevated border border-border-subtle flex items-center justify-center text-text-secondary hover:text-text-primary hover:border-border-hover transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#6366f1]"
+          className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-2 md:translate-x-6 z-10 min-w-[44px] min-h-[44px] w-11 h-11 rounded-full bg-bg-elevated border border-border-subtle flex items-center justify-center text-text-secondary hover:text-text-primary hover:border-border-hover transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#6366f1]"
           aria-label="Témoignage suivant"
         >
-          <ChevronRight className="w-4 h-4 md:w-5 md:h-5" />
+          <ChevronRight className="w-5 h-5" />
         </button>
 
         {/* Testimonial cards */}
@@ -234,19 +236,22 @@ export function TestimonialCarousel() {
           </AnimatePresence>
         </div>
 
-        {/* Dot indicators */}
-        <div className="flex justify-center gap-2 mt-6">
+        {/* Dot indicators — 44x44px touch targets */}
+        <div className="flex justify-center gap-0 mt-4">
           {Array.from({ length: totalSlides }).map((_, i) => (
             <button
               key={i}
+              type="button"
               onClick={() => goToSlide(i)}
-              className={`h-2 rounded-full transition-all duration-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#6366f1] ${
+              className="min-w-[44px] min-h-[44px] flex items-center justify-center focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#6366f1]"
+              aria-label={`Témoignage groupe ${i + 1}`}
+            >
+              <span className={`h-2 rounded-full transition-all duration-300 block ${
                 i === currentIndex
                   ? 'bg-primary w-6'
                   : 'bg-border-hover w-2 hover:bg-text-quaternary'
-              }`}
-              aria-label={`Témoignage groupe ${i + 1}`}
-            />
+              }`} />
+            </button>
           ))}
         </div>
       </div>

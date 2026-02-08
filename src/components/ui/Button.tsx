@@ -28,6 +28,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     return (
       <motion.button
         ref={ref}
+        type={(props as any).type || 'button'}
         className={`${baseClasses} ${variants[variant]} ${sizes[size]} ${className}`}
         whileHover={{ y: -1 }}
         whileTap={{ scale: 0.97 }}

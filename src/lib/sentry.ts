@@ -1,27 +1,28 @@
 /**
  * Sentry Error Monitoring Setup
  *
- * This module provides error tracking for production.
+ * Uses dynamic import() so @sentry/react is NEVER in the initial bundle.
+ * Sentry is loaded asynchronously only when initSentry() is called.
  */
-import * as Sentry from '@sentry/react'
 
+type SentryModule = typeof import('@sentry/react')
+
+let SentryRef: SentryModule | null = null
 let isInitialized = false
 
 /**
  * Initialize Sentry error monitoring
- * Call this in main.tsx before rendering the app
+ * Call this ONLY from authenticated routes, NOT on landing page
  */
 export async function initSentry(): Promise<void> {
   // Only initialize in production and if DSN is configured
   const dsn = import.meta.env.VITE_SENTRY_DSN as string | undefined
 
   if (!import.meta.env.PROD) {
-    console.log('[Sentry] Skipped in development mode')
     return
   }
 
   if (!dsn) {
-    console.log('[Sentry] No DSN configured, skipping initialization')
     return
   }
 
@@ -30,40 +31,35 @@ export async function initSentry(): Promise<void> {
   }
 
   try {
+    // Dynamic import — @sentry/react is NOT bundled in main chunk
+    const Sentry = await import('@sentry/react')
+    SentryRef = Sentry
+
     Sentry.init({
       dsn,
       environment: import.meta.env.MODE,
 
       // Performance monitoring
-      tracesSampleRate: 0.1, // 10% of transactions for performance
+      tracesSampleRate: 0.1,
 
-      // Session replay (optional - captures user interactions)
-      replaysSessionSampleRate: 0.1, // 10% of sessions
-      replaysOnErrorSampleRate: 1.0, // 100% of sessions with errors
+      // Session replay
+      replaysSessionSampleRate: 0.1,
+      replaysOnErrorSampleRate: 1.0,
 
-      // Only send errors in production
       enabled: import.meta.env.PROD,
 
-      // Filter out common non-critical errors
       ignoreErrors: [
-        // Network errors
         'Failed to fetch',
         'NetworkError',
         'Load failed',
-        // Aborted requests
         'AbortError',
-        // Extension interference
         'chrome-extension://',
         'moz-extension://',
-        // ResizeObserver (benign)
         'ResizeObserver loop',
-        // WebSocket connection issues (handled by reconnection logic)
         'WebSocket',
       ],
 
-      // Don't send PII
       beforeSend(event) {
-        // Remove sensitive data
         if (event.request?.cookies) {
           delete event.request.cookies
         }
@@ -74,18 +70,16 @@ export async function initSentry(): Promise<void> {
         return event
       },
 
-      // Integrations
       integrations: [
         Sentry.browserTracingIntegration(),
         Sentry.replayIntegration({
-          maskAllText: true, // Hide sensitive text in replays
-          blockAllMedia: true, // Don't capture images/videos
+          maskAllText: true,
+          blockAllMedia: true,
         }),
       ],
     })
 
     isInitialized = true
-    // Sentry initialized - no console log to avoid noise
   } catch (error) {
     console.error('[Sentry] Failed to initialize:', error)
   }
@@ -93,55 +87,51 @@ export async function initSentry(): Promise<void> {
 
 /**
  * Capture an exception manually
- * Use this in catch blocks for important errors
  */
 export function captureException(
   error: Error,
   context?: Record<string, unknown>
 ): void {
-  if (isInitialized) {
-    Sentry.captureException(error, {
+  if (isInitialized && SentryRef) {
+    SentryRef.captureException(error, {
       extra: context,
     })
   } else if (import.meta.env.PROD) {
-    // Fallback: log to console in production if Sentry not available
     console.error('[Error]', error.message, context)
   }
 }
 
 /**
- * Capture a message (for non-error events you want to track)
+ * Capture a message
  */
 export function captureMessage(
   message: string,
   level: 'info' | 'warning' | 'error' = 'info'
 ): void {
-  if (isInitialized) {
-    Sentry.captureMessage(message, level)
+  if (isInitialized && SentryRef) {
+    SentryRef.captureMessage(message, level)
   }
 }
 
 /**
  * Set user context for error reports
- * Call this after user login
  */
 export function setUser(user: { id: string; username?: string } | null): void {
-  if (isInitialized) {
-    Sentry.setUser(user)
+  if (isInitialized && SentryRef) {
+    SentryRef.setUser(user)
   }
 }
 
 /**
  * Add breadcrumb for debugging
- * Breadcrumbs show the trail of events leading to an error
  */
 export function addBreadcrumb(
   message: string,
   category: string = 'app',
   level: 'debug' | 'info' | 'warning' | 'error' = 'info'
 ): void {
-  if (isInitialized) {
-    Sentry.addBreadcrumb({
+  if (isInitialized && SentryRef) {
+    SentryRef.addBreadcrumb({
       message,
       category,
       level,
@@ -152,11 +142,10 @@ export function addBreadcrumb(
 
 /**
  * Create a performance transaction
- * Use for tracking slow operations
  */
 export function startTransaction(name: string, op: string = 'task') {
-  if (isInitialized) {
-    return Sentry.startInactiveSpan({ name, op })
+  if (isInitialized && SentryRef) {
+    return SentryRef.startInactiveSpan({ name, op })
   }
   return null
 }

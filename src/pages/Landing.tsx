@@ -4,7 +4,7 @@ import {
   Users, Calendar, ArrowRight, Check, X as XIcon,
   Target, MessageCircle, Headphones, TrendingUp, Sparkles,
   HelpCircle, FileText, Shield, ChevronDown, Menu, X as CloseIcon,
-  Play, Mail
+  Mail
 } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { SquadPlannerLogo } from '../components/SquadPlannerLogo'
@@ -141,6 +141,10 @@ export default function Landing() {
   const [expandedFaq, setExpandedFaq] = useState<number | null>(null)
   const [activeFeature, setActiveFeature] = useState(0)
   const [demoStep, setDemoStep] = useState(0)
+  const [newsletterEmail, setNewsletterEmail] = useState('')
+  const [newsletterError, setNewsletterError] = useState('')
+  const [newsletterSuccess, setNewsletterSuccess] = useState(false)
+  const [newsletterLoading, setNewsletterLoading] = useState(false)
 
   useEffect(() => {
     const isCoarse = window.matchMedia('(pointer: coarse)').matches
@@ -189,6 +193,24 @@ export default function Landing() {
 
   const closeMobileMenu = useCallback(() => setMobileMenuOpen(false), [])
 
+  const handleNewsletterSubmit = useCallback((e: React.FormEvent) => {
+    e.preventDefault()
+    setNewsletterError('')
+    setNewsletterSuccess(false)
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!newsletterEmail.trim() || !emailRegex.test(newsletterEmail)) {
+      setNewsletterError('Email invalide')
+      return
+    }
+    setNewsletterLoading(true)
+    // Simulate API call
+    setTimeout(() => {
+      setNewsletterLoading(false)
+      setNewsletterSuccess(true)
+      setNewsletterEmail('')
+    }, 800)
+  }, [newsletterEmail])
+
   const navLinks = [
     { label: 'Fonctionnalités', href: '#features' },
     { label: 'Comment ça marche', href: '#how-it-works' },
@@ -220,7 +242,7 @@ export default function Landing() {
         }`}
       >
         <nav className="max-w-5xl mx-auto flex items-center justify-between" aria-label="Navigation principale">
-          <Link to="/" className="flex items-center gap-2 shrink-0">
+          <Link to="/" className="flex items-center gap-2 shrink-0 min-h-[44px] min-w-[44px]">
             <SquadPlannerLogo size={24} />
             <span className="text-[15px] font-semibold text-text-primary hidden sm:inline">Squad Planner</span>
           </Link>
@@ -243,27 +265,28 @@ export default function Landing() {
           <div className="flex items-center gap-2 md:gap-3">
             {isLoggedIn ? (
               <Link to="/home">
-                <button className="px-4 py-2 rounded-lg bg-primary text-white text-[13px] md:text-[14px] font-medium hover:bg-primary-hover transition-colors duration-300">
+                <button type="button" className="px-4 py-2 rounded-lg bg-primary text-white text-[13px] md:text-[14px] font-medium hover:bg-primary-hover transition-colors duration-300">
                   Aller à l'app
                 </button>
               </Link>
             ) : (
               <>
                 <Link to="/auth" className="hidden md:inline-flex">
-                  <button className="px-3 md:px-4 py-2 text-[13px] md:text-[14px] text-text-secondary hover:text-text-primary border border-border-subtle hover:border-border-hover rounded-lg transition-all">
+                  <button type="button" className="px-3 md:px-4 py-2 text-[13px] md:text-[14px] text-text-secondary hover:text-text-primary border border-border-subtle hover:border-border-hover rounded-lg transition-all">
                     Se connecter
                   </button>
                 </Link>
                 <Link to="/auth?mode=register&redirect=onboarding" className="hidden md:inline-flex">
-                  <button className="px-3 md:px-4 py-2 rounded-lg bg-primary text-white text-[13px] md:text-[14px] font-medium hover:bg-primary-hover transition-colors duration-300" data-track="navbar_cta_click">
+                  <button type="button" className="px-3 md:px-4 py-2 rounded-lg bg-primary text-white text-[13px] md:text-[14px] font-medium hover:bg-primary-hover transition-colors duration-300" data-track="navbar_cta_click">
                     Créer ma squad
                     <ArrowRight className="w-3.5 h-3.5 inline ml-1" />
                   </button>
                 </Link>
                 {/* Mobile hamburger */}
                 <button
+                  type="button"
                   onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                  className="md:hidden w-10 h-10 flex items-center justify-center text-text-secondary hover:text-text-primary"
+                  className="md:hidden min-w-[44px] min-h-[44px] flex items-center justify-center text-text-secondary hover:text-text-primary"
                   aria-label={mobileMenuOpen ? 'Fermer le menu' : 'Ouvrir le menu'}
                   aria-expanded={mobileMenuOpen}
                 >
@@ -299,12 +322,12 @@ export default function Landing() {
           </div>
           <div className="flex flex-col gap-3">
             <Link to="/auth" onClick={closeMobileMenu}>
-              <button className="w-full py-3 text-text-secondary border border-border-subtle rounded-xl text-center">
+              <button type="button" className="w-full py-3 text-text-secondary border border-border-subtle rounded-xl text-center">
                 Se connecter
               </button>
             </Link>
             <Link to="/auth?mode=register&redirect=onboarding" onClick={closeMobileMenu}>
-              <button className="w-full py-3 bg-primary text-white rounded-xl font-medium text-center">
+              <button type="button" className="w-full py-3 bg-primary text-white rounded-xl font-medium text-center">
                 Créer ma squad gratuitement
               </button>
             </Link>
@@ -322,9 +345,9 @@ export default function Landing() {
         {/* Background mesh gradient with pulse animation */}
         <div className="absolute inset-0 mesh-gradient-hero" />
         <motion.div
-          className="absolute top-0 right-0 w-[600px] h-[600px] hero-gradient-pulse"
+          className="absolute top-0 right-0 w-full max-w-full h-[600px] hero-gradient-pulse"
           style={{
-            background: 'radial-gradient(circle, rgba(99,102,241,0.12) 0%, transparent 70%)',
+            background: 'radial-gradient(circle at 80% 0%, rgba(99,102,241,0.12) 0%, transparent 70%)',
             filter: 'blur(60px)',
           }}
         />
@@ -357,6 +380,7 @@ export default function Landing() {
               {isLoggedIn ? (
                 <Link to="/home">
                   <motion.button
+                    type="button"
                     className="flex items-center gap-2 h-14 px-8 rounded-xl bg-[#6366f1] text-white text-[16px] font-semibold shadow-lg shadow-[#6366f1]/10 cta-glow-idle"
                     whileHover={{ scale: 1.02, y: -2 }}
                     whileTap={{ scale: 0.98 }}
@@ -371,6 +395,7 @@ export default function Landing() {
                 <>
                   <Link to="/auth?mode=register&redirect=onboarding">
                     <motion.button
+                      type="button"
                       className="flex items-center gap-2 h-14 px-8 rounded-xl bg-[#6366f1] text-white text-[16px] font-semibold shadow-lg shadow-[#6366f1]/10 cta-glow-idle w-full sm:w-auto justify-center"
                       whileHover={{ scale: 1.02, y: -2 }}
                       {...springTap}
@@ -382,13 +407,13 @@ export default function Landing() {
                   </Link>
                   <a href="#how-it-works">
                     <motion.button
+                      type="button"
                       className="flex items-center gap-2 h-14 px-8 rounded-xl border border-border-hover text-text-secondary hover:text-text-primary hover:border-text-tertiary transition-all w-full sm:w-auto justify-center"
                       whileHover={{ scale: 1.02, y: -2 }}
                       {...springTap}
                       data-track="hero_secondary_cta_click"
                     >
-                      <Play className="w-4 h-4" />
-                      Voir la démo
+                      Comment ça marche ↓
                     </motion.button>
                   </a>
                 </>
@@ -474,7 +499,7 @@ export default function Landing() {
       <div className="section-divider" />
 
       {/* ═══ PROBLEM SECTION (Phase 5 #35-37) ═══ */}
-      <section aria-label="Le problème" className="px-4 md:px-6 py-12 md:py-16">
+      <section aria-label="Le problème" className="px-4 md:px-6 py-10 md:py-14">
         <div className="max-w-4xl mx-auto">
           <motion.div variants={scrollRevealLight} initial="hidden" whileInView="visible" viewport={{ once: true }} className="text-center mb-12">
             <h2 className="text-2xl md:text-3xl font-bold text-text-primary mb-4">
@@ -486,7 +511,7 @@ export default function Landing() {
           </motion.div>
 
           {/* 2x2 grid (Phase 5 #35) */}
-          <motion.div className="grid md:grid-cols-2 gap-4 mb-4" variants={staggerContainerVariants} initial="hidden" whileInView="visible" viewport={{ once: true }}>
+          <motion.div className="grid md:grid-cols-2 gap-4 mb-4" variants={staggerContainerVariants} initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.1 }}>
             {[
               { emoji: '💬', text: '"On joue ce soir ?" → Personne ne répond' },
               { emoji: '🤷', text: '"Je sais pas, on verra" → Rien ne se passe' },
@@ -554,6 +579,7 @@ export default function Landing() {
                     const StepIcon = step.icon
                     return (
                       <button
+                        type="button"
                         key={step.step}
                         onClick={() => setDemoStep(i)}
                         className="relative z-10 flex flex-col items-center text-center"
@@ -581,6 +607,7 @@ export default function Landing() {
                   const StepIcon = step.icon
                   return (
                     <motion.button
+                      type="button"
                       key={step.step}
                       onClick={() => setDemoStep(i)}
                       className={`flex items-start gap-4 p-4 lg:p-5 rounded-2xl w-full text-left transition-all ${
@@ -630,7 +657,7 @@ export default function Landing() {
       <div className="section-divider" />
 
       {/* ═══ FEATURES - MERGED PILLARS + DETAILS (Phase 9-10 #46-50, Phase 20 #83) ═══ */}
-      <section id="features" aria-label="Fonctionnalités principales" className="px-4 md:px-6 py-12 md:py-16">
+      <section id="features" aria-label="Fonctionnalités principales" className="px-4 md:px-6 py-10 md:py-14">
         <div className="max-w-5xl mx-auto">
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-12">
             <h2 className="text-2xl md:text-3xl font-bold text-text-primary mb-4">
@@ -647,6 +674,7 @@ export default function Landing() {
               const PillarIcon = pillar.icon
               return (
                 <button
+                  type="button"
                   key={pillar.id}
                   onClick={() => setActiveFeature(i)}
                   className={`flex items-center gap-2 px-5 py-3 rounded-xl transition-all text-sm font-medium ${
@@ -764,7 +792,7 @@ export default function Landing() {
       <div className="section-divider" />
 
       {/* ═══ RELIABILITY SCORE (Phase 11 #51-52) ═══ */}
-      <section aria-label="Score de fiabilité" className="px-4 md:px-6 py-12 md:py-16 bg-gradient-to-b from-transparent to-[rgba(248,113,113,0.02)]">
+      <section aria-label="Score de fiabilité" className="px-4 md:px-6 py-10 md:py-14 bg-gradient-to-b from-transparent to-[rgba(248,113,113,0.02)]">
         <div className="max-w-4xl mx-auto">
           <motion.div variants={scaleReveal} initial="hidden" whileInView="visible" viewport={{ once: true }}
             className="p-8 md:p-12 rounded-3xl bg-surface-card border border-[rgba(248,113,113,0.2)]"
@@ -841,7 +869,7 @@ export default function Landing() {
       <div className="section-divider" />
 
       {/* ═══ COMPARISON TABLE (Phase 12 #22, #53-54) ═══ */}
-      <section aria-label="Comparaison avec Discord" className="px-4 md:px-6 py-12 md:py-16">
+      <section aria-label="Comparaison avec Discord" className="px-4 md:px-6 py-10 md:py-14">
         <div className="max-w-4xl mx-auto">
           <motion.div variants={scrollReveal} initial="hidden" whileInView="visible" viewport={{ once: true }} className="text-center mb-12">
             <h2 className="text-2xl md:text-3xl font-bold text-text-primary mb-4">
@@ -927,7 +955,7 @@ export default function Landing() {
       <div className="section-divider" />
 
       {/* ═══ TESTIMONIALS (Phase 13 #55-58) ═══ */}
-      <section id="testimonials" aria-label="Témoignages" className="px-4 md:px-6 py-16 md:py-24">
+      <section id="testimonials" aria-label="Témoignages" className="px-4 md:px-6 py-10 md:py-16">
         <div className="max-w-5xl mx-auto">
           <TestimonialCarousel />
         </div>
@@ -936,7 +964,7 @@ export default function Landing() {
       <div className="section-divider" />
 
       {/* ═══ FAQ INLINE (Phase 19 #78) ═══ */}
-      <section aria-label="Questions fréquentes" className="px-4 md:px-6 py-12 md:py-16">
+      <section aria-label="Questions fréquentes" className="px-4 md:px-6 py-10 md:py-14">
         <div className="max-w-3xl mx-auto">
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-12">
             <h2 className="text-2xl md:text-3xl font-bold text-text-primary mb-4">
@@ -955,6 +983,7 @@ export default function Landing() {
                 className="border border-border-subtle rounded-xl overflow-hidden"
               >
                 <button
+                  type="button"
                   onClick={() => setExpandedFaq(expandedFaq === i ? null : i)}
                   className="w-full flex items-center justify-between p-5 text-left hover:bg-bg-elevated/50 transition-colors"
                   aria-expanded={expandedFaq === i}
@@ -1002,6 +1031,7 @@ export default function Landing() {
               </p>
               <Link to="/auth?mode=register&redirect=onboarding">
                 <motion.button
+                  type="button"
                   className="flex items-center gap-2 h-16 px-10 rounded-xl bg-gradient-to-r from-[#6366f1] to-[#a78bfa] text-white text-[18px] font-bold mx-auto shadow-lg shadow-[#6366f1]/20 cta-glow-idle"
                   whileHover={{ scale: 1.03, y: -3 }}
                   {...springTap}
@@ -1018,7 +1048,7 @@ export default function Landing() {
               {/* Secondary CTA (Phase 14 #60) */}
               <a
                 href="mailto:contact@squadplanner.fr"
-                className="inline-block mt-4 text-[13px] text-text-quaternary hover:text-text-tertiary transition-colors underline underline-offset-2"
+                className="inline-block mt-4 py-2 text-[13px] text-text-quaternary hover:text-text-tertiary transition-colors underline underline-offset-2 min-h-[44px]"
               >
                 Une question ? Contacte-nous
               </a>
@@ -1034,43 +1064,43 @@ export default function Landing() {
             {/* Produit */}
             <div>
               <h4 className="text-[13px] font-semibold text-text-primary mb-4 uppercase tracking-wider">Produit</h4>
-              <ul className="space-y-3">
-                <li><Link to="/auth?mode=register&redirect=onboarding" className="text-[14px] text-text-tertiary hover:text-text-primary transition-colors">Créer ma squad</Link></li>
-                <li><Link to="/premium" className="text-[14px] text-text-tertiary hover:text-text-primary transition-colors">Premium</Link></li>
-                <li><a href="#features" className="text-[14px] text-text-tertiary hover:text-text-primary transition-colors">Fonctionnalités</a></li>
+              <ul className="space-y-0">
+                <li><Link to="/auth?mode=register&redirect=onboarding" className="inline-block py-2 text-[14px] text-text-tertiary hover:text-text-primary transition-colors min-h-[44px] leading-[28px]">Créer ma squad</Link></li>
+                <li><Link to="/premium" className="inline-block py-2 text-[14px] text-text-tertiary hover:text-text-primary transition-colors min-h-[44px] leading-[28px]">Premium</Link></li>
+                <li><a href="#features" className="inline-block py-2 text-[14px] text-text-tertiary hover:text-text-primary transition-colors min-h-[44px] leading-[28px]">Fonctionnalités</a></li>
               </ul>
             </div>
 
             {/* Ressources */}
             <div>
               <h4 className="text-[13px] font-semibold text-text-primary mb-4 uppercase tracking-wider">Ressources</h4>
-              <ul className="space-y-3">
-                <li><Link to="/help" className="text-[14px] text-text-tertiary hover:text-text-primary transition-colors flex items-center gap-1.5"><HelpCircle className="w-3.5 h-3.5" />FAQ</Link></li>
-                <li><a href="mailto:contact@squadplanner.fr" className="text-[14px] text-text-tertiary hover:text-text-primary transition-colors">Contact</a></li>
+              <ul className="space-y-0">
+                <li><Link to="/help" className="inline-flex items-center gap-1.5 py-2 text-[14px] text-text-tertiary hover:text-text-primary transition-colors min-h-[44px]"><HelpCircle className="w-3.5 h-3.5" />FAQ</Link></li>
+                <li><a href="mailto:contact@squadplanner.fr" className="inline-block py-2 text-[14px] text-text-tertiary hover:text-text-primary transition-colors min-h-[44px] leading-[28px]">Contact</a></li>
               </ul>
             </div>
 
             {/* Légal */}
             <div>
               <h4 className="text-[13px] font-semibold text-text-primary mb-4 uppercase tracking-wider">Légal</h4>
-              <ul className="space-y-3">
-                <li><Link to="/legal" className="text-[14px] text-text-tertiary hover:text-text-primary transition-colors flex items-center gap-1.5"><FileText className="w-3.5 h-3.5" />CGU</Link></li>
-                <li><Link to="/legal?tab=privacy" className="text-[14px] text-text-tertiary hover:text-text-primary transition-colors flex items-center gap-1.5"><Shield className="w-3.5 h-3.5" />Confidentialité</Link></li>
+              <ul className="space-y-0">
+                <li><Link to="/legal" className="inline-flex items-center gap-1.5 py-2 text-[14px] text-text-tertiary hover:text-text-primary transition-colors min-h-[44px]"><FileText className="w-3.5 h-3.5" />CGU</Link></li>
+                <li><Link to="/legal?tab=privacy" className="inline-flex items-center gap-1.5 py-2 text-[14px] text-text-tertiary hover:text-text-primary transition-colors min-h-[44px]"><Shield className="w-3.5 h-3.5" />Confidentialité</Link></li>
               </ul>
             </div>
 
             {/* Communauté */}
             <div>
               <h4 className="text-[13px] font-semibold text-text-primary mb-4 uppercase tracking-wider">Communauté</h4>
-              <ul className="space-y-3">
-                <li><span className="text-[14px] text-text-tertiary flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-success animate-pulse" />Beta ouverte</span></li>
+              <ul className="space-y-0">
+                <li><span className="inline-flex items-center gap-1.5 py-2 text-[14px] text-text-tertiary min-h-[44px]"><span className="w-2 h-2 rounded-full bg-success animate-pulse" />Beta ouverte</span></li>
                 <li>
-                  <a href="https://twitter.com/squadplannerapp" target="_blank" rel="noopener noreferrer" className="text-[14px] text-text-tertiary hover:text-text-primary transition-colors flex items-center gap-1.5">
+                  <a href="https://twitter.com/squadplannerapp" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 py-2 text-[14px] text-text-tertiary hover:text-text-primary transition-colors min-h-[44px]">
                     <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
                     Twitter / X
                   </a>
                 </li>
-                <li><a href="mailto:contact@squadplanner.fr" className="text-[14px] text-text-tertiary hover:text-text-primary transition-colors">Nous contacter</a></li>
+                <li><a href="mailto:contact@squadplanner.fr" className="inline-block py-2 text-[14px] text-text-tertiary hover:text-text-primary transition-colors min-h-[44px] leading-[28px]">Nous contacter</a></li>
               </ul>
             </div>
           </div>
@@ -1088,22 +1118,37 @@ export default function Landing() {
             ))}
           </div>
 
-          {/* Newsletter (Phase 15 #61) */}
+          {/* Newsletter (Phase 15 #61) — proper form with validation */}
           <div className="max-w-md mx-auto mb-10">
-            <div className="flex gap-2">
-              <div className="flex-1 relative">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-quaternary" />
-                <input
-                  type="email"
-                  placeholder="Reçois les updates Squad Planner"
-                  className="w-full pl-10 pr-4 py-2.5 bg-bg-elevated border border-border-subtle rounded-lg text-[14px] text-text-primary placeholder:text-text-quaternary focus:border-primary focus:outline-none transition-colors"
-                  aria-label="Adresse email pour la newsletter"
-                />
+            <form onSubmit={handleNewsletterSubmit} noValidate>
+              <div className="flex gap-2">
+                <div className="flex-1 relative">
+                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-quaternary" />
+                  <input
+                    type="email"
+                    required
+                    placeholder="Reçois les updates Squad Planner"
+                    className="w-full pl-10 pr-4 py-2.5 bg-bg-elevated border border-border-subtle rounded-lg text-[14px] text-text-primary placeholder:text-text-quaternary focus:border-primary focus:outline-none transition-colors"
+                    aria-label="Adresse email pour la newsletter"
+                    value={newsletterEmail}
+                    onChange={(e) => { setNewsletterEmail(e.target.value); setNewsletterError(''); setNewsletterSuccess(false) }}
+                  />
+                </div>
+                <button
+                  type="submit"
+                  disabled={newsletterLoading}
+                  className="px-5 min-h-[44px] bg-primary text-white text-[14px] font-medium rounded-lg hover:bg-primary-hover transition-colors shrink-0 disabled:opacity-60"
+                >
+                  {newsletterLoading ? (
+                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                  ) : (
+                    "S'abonner"
+                  )}
+                </button>
               </div>
-              <button className="px-5 py-2.5 bg-primary text-white text-[14px] font-medium rounded-lg hover:bg-primary-hover transition-colors shrink-0">
-                S'abonner
-              </button>
-            </div>
+              {newsletterError && <p role="alert" className="text-[#f87171] text-sm mt-1.5">{newsletterError}</p>}
+              {newsletterSuccess && <p role="status" className="text-[#34d399] text-sm mt-1.5">Merci ! Tu recevras nos updates.</p>}
+            </form>
           </div>
 
           {/* Bottom bar */}

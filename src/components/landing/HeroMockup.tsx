@@ -1,9 +1,8 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Calendar, Users, Headphones, Check, Mic, MicOff } from 'lucide-react'
+import { Calendar, Users, Headphones, Check, Mic, MicOff, Home, MessageCircle, User } from 'lucide-react'
 
 // ─── REALISTIC APP SCREENS ─────────────────────────────
-// Based on actual Squad Planner production app captures
 
 const mockMembers = [
   { name: 'Max', initial: 'M', color: '#6366f1', score: 94 },
@@ -12,6 +11,31 @@ const mockMembers = [
   { name: 'Jay', initial: 'J', color: '#a78bfa', score: 92 },
   { name: 'Zoé', initial: 'Z', color: '#f87171', score: 78 },
 ]
+
+// ─── Shared Navbar Component (SVG icons instead of emojis) ───
+function MockNavbar({ active }: { active: string }) {
+  const items = [
+    { icon: Home, label: 'Accueil', id: 'home' },
+    { icon: Users, label: 'Squads', id: 'squads' },
+    { icon: Mic, label: 'Party', id: 'party' },
+    { icon: MessageCircle, label: 'Messages', id: 'messages' },
+    { icon: User, label: 'Profil', id: 'profile' },
+  ]
+  return (
+    <div className="mt-auto px-2 py-2 flex items-center justify-around border-t border-[rgba(255,255,255,0.04)]">
+      {items.map(item => {
+        const Icon = item.icon
+        const isActive = item.id === active
+        return (
+          <div key={item.id} className="flex flex-col items-center gap-0.5">
+            <Icon className="w-[14px] h-[14px]" style={{ color: isActive ? '#6366f1' : '#7d7d82' }} />
+            <span className={`text-[7px] ${isActive ? 'text-[#6366f1] font-medium' : 'text-[#7d7d82]'}`}>{item.label}</span>
+          </div>
+        )
+      })}
+    </div>
+  )
+}
 
 // ─── Screen 1: Home Dashboard ───────────────────────────
 function HomeScreen() {
@@ -115,21 +139,41 @@ function HomeScreen() {
         ))}
       </motion.div>
 
-      {/* Bottom nav */}
-      <div className="mt-auto px-2 py-2 flex items-center justify-around border-t border-[rgba(255,255,255,0.04)]">
-        {[
-          { icon: '🏠', label: 'Accueil', active: true },
-          { icon: '👥', label: 'Squads', active: false },
-          { icon: '🎙️', label: 'Party', active: false },
-          { icon: '💬', label: 'Messages', active: false },
-          { icon: '👤', label: 'Profil', active: false },
-        ].map(item => (
-          <div key={item.label} className="flex flex-col items-center gap-0.5">
-            <span className="text-[12px]">{item.icon}</span>
-            <span className={`text-[7px] ${item.active ? 'text-[#6366f1] font-medium' : 'text-[#7d7d82]'}`}>{item.label}</span>
+      {/* Weekly summary widget — fills the gap */}
+      <motion.div
+        className="mx-4 mt-3 p-3 rounded-xl bg-[#0f1012] border border-[rgba(255,255,255,0.04)]"
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.7 }}
+      >
+        <div className="text-[9px] font-semibold text-[#a1a1a6] uppercase tracking-wider mb-2">Ta semaine</div>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-1.5">
+            <div className="w-5 h-5 rounded-md bg-[#34d399]/15 flex items-center justify-center">
+              <Check className="w-3 h-3 text-[#34d399]" />
+            </div>
+            <span className="text-[9px] text-white">3 sessions jouées</span>
           </div>
-        ))}
-      </div>
+          <span className="text-[8px] text-[#34d399] font-medium">100% présent</span>
+        </div>
+        <div className="flex items-center justify-between mt-1.5">
+          <div className="flex items-center gap-1.5">
+            <div className="w-5 h-5 rounded-md bg-[#6366f1]/15 flex items-center justify-center">
+              <Headphones className="w-3 h-3 text-[#6366f1]" />
+            </div>
+            <span className="text-[9px] text-white">Party vocale active</span>
+          </div>
+          <motion.span
+            className="text-[8px] text-[#6366f1]"
+            animate={{ opacity: [1, 0.5, 1] }}
+            transition={{ duration: 2, repeat: Infinity }}
+          >
+            2 en ligne
+          </motion.span>
+        </div>
+      </motion.div>
+
+      <MockNavbar active="home" />
     </div>
   )
 }
@@ -269,110 +313,123 @@ function SquadScreen() {
         ))}
       </motion.div>
 
-      {/* Bottom nav */}
-      <div className="mt-auto px-2 py-2 flex items-center justify-around border-t border-[rgba(255,255,255,0.04)]">
-        {[
-          { icon: '🏠', label: 'Accueil', active: false },
-          { icon: '👥', label: 'Squads', active: true },
-          { icon: '🎙️', label: 'Party', active: false },
-          { icon: '💬', label: 'Messages', active: false },
-          { icon: '👤', label: 'Profil', active: false },
-        ].map(item => (
-          <div key={item.label} className="flex flex-col items-center gap-0.5">
-            <span className="text-[12px]">{item.icon}</span>
-            <span className={`text-[7px] ${item.active ? 'text-[#6366f1] font-medium' : 'text-[#7d7d82]'}`}>{item.label}</span>
-          </div>
-        ))}
-      </div>
+      <MockNavbar active="squads" />
     </div>
   )
 }
 
-// ─── Screen 3: Voice Party ──────────────────────────────
+// ─── Screen 3: Voice Party (filled — no empty zones) ───
 function PartyScreen() {
   return (
-    <div className="h-full flex flex-col items-center justify-center bg-[#050506] relative">
+    <div className="h-full flex flex-col bg-[#050506] relative">
       {/* Background glow */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_40%,rgba(52,211,153,0.08),transparent_70%)]" />
 
-      <motion.div
-        className="text-[9px] text-[#34d399] font-medium mb-1 relative z-10"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-      >
-        Party vocale en cours
-      </motion.div>
-      <motion.div
-        className="text-[11px] font-bold text-white mb-5 relative z-10"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.1 }}
-      >
-        Les Invaincus
-      </motion.div>
+      <div className="relative z-10 px-4 pt-5 pb-2">
+        <motion.div
+          className="text-[9px] text-[#34d399] font-medium"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+        >
+          Party vocale en cours
+        </motion.div>
+        <motion.div
+          className="text-[13px] font-bold text-white"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.1 }}
+        >
+          Les Invaincus
+        </motion.div>
+        <motion.div
+          className="text-[8px] text-[#7d7d82] mt-0.5"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.15 }}
+        >
+          En ligne depuis 47 min
+        </motion.div>
+      </div>
 
-      {/* Avatars grid */}
-      <div className="flex flex-wrap justify-center gap-4 mb-5 relative z-10">
+      {/* Participants list with audio indicators */}
+      <div className="relative z-10 px-4 mt-2 flex-1">
         {mockMembers.slice(0, 4).map((m, i) => (
           <motion.div
             key={m.name}
-            className="flex flex-col items-center"
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
+            className="flex items-center gap-3 mb-2.5 p-2 rounded-xl bg-[rgba(255,255,255,0.03)] border border-[rgba(255,255,255,0.04)]"
+            initial={{ opacity: 0, x: -15 }}
+            animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.2 + i * 0.1, type: 'spring', stiffness: 300 }}
           >
             <div className="relative">
               {i === 0 && (
                 <motion.div
-                  className="absolute -inset-1 rounded-full border-2 border-[#34d399]"
-                  animate={{ scale: [1, 1.15, 1], opacity: [0.6, 0.2, 0.6] }}
+                  className="absolute -inset-0.5 rounded-full border border-[#34d399]"
+                  animate={{ scale: [1, 1.2, 1], opacity: [0.6, 0.2, 0.6] }}
                   transition={{ duration: 2, repeat: Infinity }}
                 />
               )}
-              <div className={`w-11 h-11 rounded-full flex items-center justify-center text-[12px] font-bold text-white ${i === 0 ? 'ring-2 ring-[#34d399]/40' : ''}`}
+              <div className={`w-9 h-9 rounded-full flex items-center justify-center text-[11px] font-bold text-white ${i === 0 ? 'ring-1 ring-[#34d399]/30' : ''}`}
                 style={{ backgroundColor: m.color }}
               >
                 {m.initial}
               </div>
-              {i < 2 && (
-                <Mic className="absolute -bottom-0.5 -right-0.5 w-3 h-3 text-[#34d399]" />
-              )}
-              {i >= 2 && (
-                <MicOff className="absolute -bottom-0.5 -right-0.5 w-3 h-3 text-[#7d7d82]" />
-              )}
             </div>
-            <span className={`text-[8px] mt-1 ${i === 0 ? 'text-[#34d399] font-medium' : 'text-[#a1a1a6]'}`}>
-              {m.name}
-            </span>
+            <div className="flex-1">
+              <div className={`text-[10px] font-medium ${i === 0 ? 'text-[#34d399]' : 'text-white'}`}>{m.name}</div>
+              <div className="text-[7px] text-[#7d7d82]">{m.score}% fiable</div>
+            </div>
+            {/* Audio level bars per participant */}
+            <div className="flex items-center gap-[2px] mr-1">
+              {[0, 1, 2, 3].map((j) => (
+                <motion.div
+                  key={j}
+                  className="w-[2px] rounded-full"
+                  style={{ backgroundColor: i < 2 ? '#34d399' : '#7d7d82' }}
+                  animate={i < 2 ? { height: [3, 8 + Math.random() * 6, 3] } : { height: 3 }}
+                  transition={i < 2 ? {
+                    duration: 0.4 + Math.random() * 0.3,
+                    repeat: Infinity,
+                    delay: j * 0.08,
+                    ease: 'easeInOut',
+                  } : undefined}
+                />
+              ))}
+            </div>
+            {i < 2 ? (
+              <Mic className="w-3.5 h-3.5 text-[#34d399]" />
+            ) : (
+              <MicOff className="w-3.5 h-3.5 text-[#7d7d82]" />
+            )}
           </motion.div>
         ))}
-      </div>
 
-      {/* Voice wave */}
-      <motion.div
-        className="flex items-center gap-[3px] mb-4 relative z-10"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.6 }}
-      >
-        {[0, 1, 2, 3, 4, 5, 6, 7, 8].map((j) => (
-          <motion.div
-            key={j}
-            className="w-[2px] rounded-full bg-[#34d399]"
-            animate={{ height: [4, 14 + Math.random() * 6, 4] }}
-            transition={{
-              duration: 0.5 + Math.random() * 0.3,
-              repeat: Infinity,
-              delay: j * 0.06,
-              ease: 'easeInOut',
-            }}
-          />
-        ))}
-      </motion.div>
+        {/* Voice wave center */}
+        <motion.div
+          className="flex items-center justify-center gap-[3px] mt-2"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.6 }}
+        >
+          {[0, 1, 2, 3, 4, 5, 6, 7, 8].map((j) => (
+            <motion.div
+              key={j}
+              className="w-[2px] rounded-full bg-[#34d399]"
+              animate={{ height: [3, 10 + Math.random() * 6, 3] }}
+              transition={{
+                duration: 0.5 + Math.random() * 0.3,
+                repeat: Infinity,
+                delay: j * 0.06,
+                ease: 'easeInOut',
+              }}
+            />
+          ))}
+        </motion.div>
+      </div>
 
       {/* Controls */}
       <motion.div
-        className="flex items-center gap-4 relative z-10"
+        className="relative z-10 flex items-center justify-center gap-4 py-3"
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.8 }}
@@ -388,15 +445,7 @@ function PartyScreen() {
         </div>
       </motion.div>
 
-      {/* Timer */}
-      <motion.div
-        className="text-[9px] text-[#7d7d82] mt-3 relative z-10"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1 }}
-      >
-        En ligne depuis 47 min
-      </motion.div>
+      <MockNavbar active="party" />
     </div>
   )
 }
@@ -455,7 +504,6 @@ function ProfileScreen() {
         transition={{ delay: 0.3 }}
       >
         <div className="flex items-center gap-3">
-          {/* Circular progress */}
           <div className="relative w-12 h-12">
             <svg className="w-12 h-12 -rotate-90" viewBox="0 0 48 48">
               <circle cx="24" cy="24" r="20" fill="none" stroke="rgba(245,166,35,0.15)" strokeWidth="3" />
@@ -513,21 +561,7 @@ function ProfileScreen() {
         ))}
       </motion.div>
 
-      {/* Bottom nav */}
-      <div className="mt-auto px-2 py-2 flex items-center justify-around border-t border-[rgba(255,255,255,0.04)]">
-        {[
-          { icon: '🏠', label: 'Accueil', active: false },
-          { icon: '👥', label: 'Squads', active: false },
-          { icon: '🎙️', label: 'Party', active: false },
-          { icon: '💬', label: 'Messages', active: false },
-          { icon: '👤', label: 'Profil', active: true },
-        ].map(item => (
-          <div key={item.label} className="flex flex-col items-center gap-0.5">
-            <span className="text-[12px]">{item.icon}</span>
-            <span className={`text-[7px] ${item.active ? 'text-[#6366f1] font-medium' : 'text-[#7d7d82]'}`}>{item.label}</span>
-          </div>
-        ))}
-      </div>
+      <MockNavbar active="profile" />
     </div>
   )
 }
@@ -611,13 +645,15 @@ export function HeroMockup() {
         </div>
       </div>
 
-      {/* Screen indicator dots */}
-      <div className="flex items-center justify-center gap-2 mt-4">
+      {/* Screen indicator dots — 44x44px touch targets */}
+      <div className="flex items-center justify-center gap-1 mt-4">
         {screens.map((s, i) => (
           <button
             key={s.id}
+            type="button"
             onClick={() => setCurrentScreen(i)}
-            className="flex items-center gap-1.5 group"
+            className="flex items-center justify-center gap-1.5 group min-w-[44px] min-h-[44px]"
+            aria-label={`Écran ${s.label}`}
           >
             <motion.div
               className="h-1 rounded-full"

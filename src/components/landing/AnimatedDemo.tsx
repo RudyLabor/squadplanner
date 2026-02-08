@@ -1,6 +1,6 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import { motion, AnimatePresence, useInView } from 'framer-motion'
-import { Users, UserPlus, CalendarCheck, Headphones } from 'lucide-react'
+import { Users, UserPlus, CalendarCheck, Headphones, Home, MessageCircle, User, Mic, Share2 } from 'lucide-react'
 
 interface DemoStep {
   id: string
@@ -23,7 +23,33 @@ const mockUsers = [
   { name: 'Sarah', emoji: '🎯', color: '#34d399' },
   { name: 'Lucas', emoji: '🔥', color: '#f5a623' },
   { name: 'Emma', emoji: '⭐', color: '#a78bfa' },
+  { name: 'Hugo', emoji: '🎧', color: '#f87171' },
 ]
+
+// Shared navbar for stepper mockups
+function DemoNavbar({ active }: { active: string }) {
+  const items = [
+    { icon: Home, label: 'Accueil', id: 'home' },
+    { icon: Users, label: 'Squads', id: 'squads' },
+    { icon: Mic, label: 'Party', id: 'party' },
+    { icon: MessageCircle, label: 'Chat', id: 'chat' },
+    { icon: User, label: 'Profil', id: 'profile' },
+  ]
+  return (
+    <div className="mt-auto px-2 py-1.5 flex items-center justify-around border-t border-[rgba(255,255,255,0.04)]">
+      {items.map(item => {
+        const Icon = item.icon
+        const isActive = item.id === active
+        return (
+          <div key={item.id} className="flex flex-col items-center gap-0.5">
+            <Icon className="w-3 h-3" style={{ color: isActive ? '#6366f1' : '#7d7d82' }} />
+            <span className={`text-[6px] ${isActive ? 'text-[#6366f1] font-medium' : 'text-[#7d7d82]'}`}>{item.label}</span>
+          </div>
+        )
+      })}
+    </div>
+  )
+}
 
 function PhoneFrame({ children }: { children: React.ReactNode }) {
   return (
@@ -32,7 +58,7 @@ function PhoneFrame({ children }: { children: React.ReactNode }) {
         {/* Notch */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-24 h-5 bg-[#0a0a0c] rounded-b-xl z-10" />
         {/* Screen */}
-        <div className="bg-[#101012] rounded-[1.5rem] overflow-hidden h-[360px] md:h-[400px] relative">
+        <div className="bg-[#101012] rounded-[1.5rem] overflow-hidden h-[340px] md:h-[380px] relative flex flex-col">
           {children}
         </div>
       </div>
@@ -44,7 +70,7 @@ function CreateStep() {
   return (
     <div className="p-5 pt-8 h-full flex flex-col">
       <motion.div
-        className="text-xs text-text-tertiary mb-4"
+        className="text-xs text-text-tertiary mb-3"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
       >
@@ -67,13 +93,29 @@ function CreateStep() {
         </motion.div>
       </motion.div>
       <motion.div
-        className="bg-[#1a1a1e] rounded-xl p-3 border border-[rgba(255,255,255,0.06)] mb-4"
+        className="bg-[#1a1a1e] rounded-xl p-3 border border-[rgba(255,255,255,0.06)] mb-3"
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.8 }}
       >
         <div className="text-xs text-text-quaternary mb-1">Jeu</div>
         <div className="text-sm text-text-primary">Valorant</div>
+      </motion.div>
+      {/* Popular games suggestions — fills the gap */}
+      <motion.div
+        className="mb-3"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1.0 }}
+      >
+        <div className="text-[10px] text-text-quaternary mb-1.5">Jeux populaires</div>
+        <div className="flex flex-wrap gap-1.5">
+          {['League of Legends', 'Fortnite', 'Apex'].map((game) => (
+            <span key={game} className="text-[10px] px-2 py-1 rounded-lg bg-[rgba(255,255,255,0.04)] text-text-tertiary border border-[rgba(255,255,255,0.06)]">
+              {game}
+            </span>
+          ))}
+        </div>
       </motion.div>
       <motion.div
         className="mt-auto bg-primary text-white text-sm font-medium py-2.5 rounded-xl text-center"
@@ -83,13 +125,14 @@ function CreateStep() {
       >
         Créer la squad
       </motion.div>
+      <DemoNavbar active="squads" />
     </div>
   )
 }
 
 function InviteStep() {
   return (
-    <div className="p-5 pt-8 h-full">
+    <div className="p-5 pt-8 h-full flex flex-col">
       <motion.div
         className="text-xs text-text-tertiary mb-2"
         initial={{ opacity: 0 }}
@@ -97,43 +140,55 @@ function InviteStep() {
       >
         Les Invaincus
       </motion.div>
-      <motion.div className="text-sm font-medium text-text-primary mb-4"
+      <motion.div className="text-sm font-medium text-text-primary mb-3"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.2 }}
       >
         Invite tes potes
       </motion.div>
+      {/* Show all 5 members */}
       {mockUsers.map((user, i) => (
         <motion.div
           key={user.name}
-          className="flex items-center gap-3 mb-2.5 p-2 rounded-lg bg-[rgba(255,255,255,0.03)]"
+          className="flex items-center gap-3 mb-2 p-1.5 rounded-lg bg-[rgba(255,255,255,0.03)]"
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
-          transition={{ delay: 0.4 + i * 0.3 }}
+          transition={{ delay: 0.3 + i * 0.2 }}
         >
-          <div className="w-8 h-8 rounded-full flex items-center justify-center text-sm" style={{ backgroundColor: `${user.color}20` }}>
+          <div className="w-7 h-7 rounded-full flex items-center justify-center text-xs" style={{ backgroundColor: `${user.color}20` }}>
             {user.emoji}
           </div>
           <div className="flex-1 text-sm text-text-primary">{user.name}</div>
           <motion.div
-            className="text-xs px-2 py-0.5 rounded-full"
-            style={{ backgroundColor: `${user.color}20`, color: user.color }}
+            className="text-xs px-2 py-0.5 rounded-full bg-[#34d399]/15 text-[#4ADE80] font-medium"
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
-            transition={{ delay: 0.6 + i * 0.3, type: 'spring' }}
+            transition={{ delay: 0.5 + i * 0.2, type: 'spring' }}
           >
             Rejoint
           </motion.div>
         </motion.div>
       ))}
+      {/* Share link */}
+      <motion.div
+        className="mt-auto flex items-center gap-2 p-2.5 rounded-xl bg-[rgba(99,102,241,0.08)] border border-[rgba(99,102,241,0.15)]"
+        initial={{ opacity: 0, y: 5 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 1.3 }}
+      >
+        <Share2 className="w-3.5 h-3.5 text-primary" />
+        <span className="text-[10px] text-text-tertiary flex-1">squadplanner.fr/join/8J9DQR</span>
+        <span className="text-[10px] text-primary font-medium">Copier</span>
+      </motion.div>
+      <DemoNavbar active="squads" />
     </div>
   )
 }
 
 function RSVPStep() {
   return (
-    <div className="p-5 pt-8 h-full">
+    <div className="p-5 pt-8 h-full flex flex-col">
       <motion.div
         className="text-xs text-text-tertiary mb-1"
         initial={{ opacity: 0 }}
@@ -155,7 +210,7 @@ function RSVPStep() {
       >
         Les Invaincus · Valorant
       </motion.div>
-      {mockUsers.map((user, i) => (
+      {mockUsers.slice(0, 4).map((user, i) => (
         <motion.div
           key={user.name}
           className="flex items-center gap-3 mb-2 p-2 rounded-lg"
@@ -179,7 +234,7 @@ function RSVPStep() {
         </motion.div>
       ))}
       <motion.div
-        className="mt-3 text-center text-xs font-medium py-2 rounded-lg"
+        className="mt-auto text-center text-xs font-medium py-2 rounded-lg"
         style={{ backgroundColor: '#34d39920', color: '#34d399' }}
         initial={{ opacity: 0, y: 5 }}
         animate={{ opacity: 1, y: 0 }}
@@ -187,68 +242,87 @@ function RSVPStep() {
       >
         Session confirmée !
       </motion.div>
+      <DemoNavbar active="home" />
     </div>
   )
 }
 
 function PlayStep() {
   return (
-    <div className="p-5 pt-8 h-full flex flex-col items-center justify-center">
+    <div className="p-5 pt-8 h-full flex flex-col">
       <motion.div
-        className="text-xs text-text-tertiary mb-4"
+        className="text-xs text-[#34d399] font-medium mb-1"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
       >
         Party vocale en cours
       </motion.div>
-      <div className="flex -space-x-2 mb-4">
-        {mockUsers.map((user, i) => (
-          <motion.div
-            key={user.name}
-            className="w-10 h-10 rounded-full border-2 border-[#101012] flex items-center justify-center text-sm"
+      <motion.div
+        className="text-sm font-medium text-text-primary mb-3"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.1 }}
+      >
+        Les Invaincus · Valorant
+      </motion.div>
+      {/* Participant list with audio bars */}
+      {mockUsers.slice(0, 4).map((user, i) => (
+        <motion.div
+          key={user.name}
+          className="flex items-center gap-2.5 mb-2 p-1.5 rounded-lg bg-[rgba(255,255,255,0.03)]"
+          initial={{ opacity: 0, x: -10 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 0.2 + i * 0.1, type: 'spring' }}
+        >
+          <div className="w-8 h-8 rounded-full flex items-center justify-center text-xs border-2 border-[#101012]"
             style={{ backgroundColor: `${user.color}30` }}
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            transition={{ delay: 0.2 + i * 0.1, type: 'spring' }}
           >
             {user.emoji}
-          </motion.div>
-        ))}
-      </div>
+          </div>
+          <div className="flex-1">
+            <div className={`text-[11px] font-medium ${i === 0 ? 'text-[#34d399]' : 'text-text-primary'}`}>{user.name}</div>
+          </div>
+          {/* Audio bars */}
+          <div className="flex items-center gap-[2px]">
+            {[0, 1, 2].map((j) => (
+              <motion.div
+                key={j}
+                className="w-[2px] rounded-full"
+                style={{ backgroundColor: i < 2 ? '#34d399' : '#7d7d82' }}
+                animate={i < 2 ? { height: [3, 8 + Math.random() * 4, 3] } : { height: 3 }}
+                transition={i < 2 ? { duration: 0.4, repeat: Infinity, delay: j * 0.1, ease: 'easeInOut' } : undefined}
+              />
+            ))}
+          </div>
+        </motion.div>
+      ))}
       {/* Voice wave animation */}
-      <div className="flex items-center gap-1 mb-4">
+      <div className="flex items-center justify-center gap-1 my-3">
         {[0, 1, 2, 3, 4].map((i) => (
           <motion.div
             key={i}
             className="w-1 rounded-full bg-primary"
-            animate={{
-              height: [8, 20, 8],
-            }}
-            transition={{
-              duration: 0.6,
-              repeat: 4,
-              delay: i * 0.1,
-              ease: 'easeInOut',
-            }}
+            animate={{ height: [8, 20, 8] }}
+            transition={{ duration: 0.6, repeat: 4, delay: i * 0.1, ease: 'easeInOut' }}
           />
         ))}
       </div>
       <motion.div
-        className="text-sm font-medium text-text-primary"
+        className="text-center"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.5 }}
       >
-        4 en ligne
+        <div className="text-sm font-medium text-text-primary">4 en ligne</div>
+        <motion.div
+          className="text-xs text-success mt-0.5"
+          animate={{ opacity: [0.6, 1, 0.6] }}
+          transition={{ duration: 2, repeat: Infinity }}
+        >
+          En jeu · Valorant
+        </motion.div>
       </motion.div>
-      <motion.div
-        className="text-xs text-success mt-1"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: [0, 1, 0.6, 1] }}
-        transition={{ delay: 0.8, duration: 1.5 }}
-      >
-        En jeu · Valorant
-      </motion.div>
+      <DemoNavbar active="party" />
     </div>
   )
 }
@@ -267,21 +341,41 @@ interface AnimatedDemoProps {
 
 export function AnimatedDemo({ currentStep: controlledStep, onStepChange }: AnimatedDemoProps) {
   const [internalStep, setInternalStep] = useState(0)
+  const [isPaused, setIsPaused] = useState(false)
+  const pauseTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const ref = useRef<HTMLDivElement>(null)
   const isInView = useInView(ref, { once: false, amount: 0.3 })
 
   const currentStep = controlledStep ?? internalStep
-  const setCurrentStep = onStepChange ?? setInternalStep
+  const autoAdvanceRef = useRef(false)
+  const setCurrentStep = useCallback((step: number) => {
+    if (onStepChange) onStepChange(step)
+    else setInternalStep(step)
+  }, [onStepChange])
 
-  // Auto-advance steps
+  // Detect manual step changes (from parent stepper clicks) and pause auto-advance
+  const prevStepRef = useRef(currentStep)
   useEffect(() => {
-    if (!isInView) return
+    if (prevStepRef.current !== currentStep && !autoAdvanceRef.current) {
+      // Manual change detected — pause auto-advance for 5s
+      setIsPaused(true)
+      if (pauseTimerRef.current) clearTimeout(pauseTimerRef.current)
+      pauseTimerRef.current = setTimeout(() => setIsPaused(false), 5000)
+    }
+    prevStepRef.current = currentStep
+    autoAdvanceRef.current = false
+  }, [currentStep])
+
+  // Auto-advance steps (paused when user interacts)
+  useEffect(() => {
+    if (!isInView || isPaused) return
     const timer = setInterval(() => {
+      autoAdvanceRef.current = true
       const next = (currentStep + 1) % demoSteps.length
       setCurrentStep(next)
     }, demoSteps[currentStep].duration)
     return () => clearInterval(timer)
-  }, [isInView, currentStep, setCurrentStep])
+  }, [isInView, isPaused, currentStep, setCurrentStep])
 
   const step = demoSteps[currentStep]
   const StepComponent = stepComponents[step.id]
@@ -296,7 +390,7 @@ export function AnimatedDemo({ currentStep: controlledStep, onStepChange }: Anim
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="h-full"
+            className="h-full flex flex-col"
           >
             <StepComponent />
           </motion.div>

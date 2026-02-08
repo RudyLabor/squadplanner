@@ -17,7 +17,7 @@ import { ShieldIllustration } from '../components/landing/illustrations/ShieldIl
 import { TestimonialCarousel } from '../components/landing/TestimonialCarousel'
 import { AnimatedDemo, demoSteps } from '../components/landing/AnimatedDemo'
 import { CustomCursor } from '../components/landing/CustomCursor'
-import { OptimizedVideo } from '../components/OptimizedVideo'
+import { HeroMockup } from '../components/landing/HeroMockup'
 
 // ─── DATA ────────────────────────────────────────────
 
@@ -485,17 +485,7 @@ export default function Landing() {
                 transformStyle: 'preserve-3d',
               }}
             >
-              <OptimizedVideo
-                webmSrc="/videos/hero-walkthrough.webm"
-                mp4Src="/videos/hero-walkthrough.mp4"
-                posterSrc="/videos/hero-walkthrough-poster.webp"
-                alt="Démonstration de l'application Squad Planner"
-                width={280}
-                height={540}
-                loop
-                priority
-                className="mx-auto"
-              />
+              <HeroMockup />
             </motion.div>
           </motion.div>
         </div>

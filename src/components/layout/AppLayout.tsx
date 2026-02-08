@@ -363,8 +363,8 @@ export function AppLayout({ children }: AppLayoutProps) {
                   exit={{ opacity: 0 }}
                   transition={{ duration: 0.15 }}
                 >
-                  <h1 className="text-[15px] font-bold text-[#f7f8f8] whitespace-nowrap">Squad Planner</h1>
-                  <p className="text-[11px] text-[#5e6063] whitespace-nowrap">Jouez ensemble, vraiment</p>
+                  <div className="text-[15px] font-bold text-[#f7f8f8] whitespace-nowrap">Squad Planner</div>
+                  <div className="text-[11px] text-[#5e6063] whitespace-nowrap">Jouez ensemble, vraiment</div>
                 </motion.div>
               )}
             </AnimatePresence>

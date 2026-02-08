@@ -9,9 +9,9 @@
 
 ## SUIVI D'AVANCEMENT EN TEMPS REEL
 
-> **Derniere mise a jour : 8 fevrier 2026 - 17h00**
-> **Score actuel : 48/50 — Phase 1 COMPLETE + Phase 2 COMPLETE (V3 items avances), Phase 3+ a commencer**
-> **Verification code : TOUTES les phases pre-Phase 3 verifiees dans le code le 8 fev 17h**
+> **Derniere mise a jour : 8 fevrier 2026 - 23h30**
+> **Score actuel : 48/50 — Phase 1 COMPLETE + Phase 2 COMPLETE (tous composants UI), Phase 3 EN COURS**
+> **Verification code : TOUTES les phases pre-Phase 3 verifiees et completees le 8 fev 23h30**
 
 ### Phase 1 : Bloquants Critiques (P0) — 100% FAIT
 
@@ -266,7 +266,7 @@
 | 3 | Settings/Help/Call History inaccessibles | **RESOLU** | Ajoutes dans sidebar desktop |
 | 4 | handleDeleteAccount() et handleExportData() = TODO | **RESOLU** | Implementation complete avec modal confirmation |
 
-### IMPORTANTS — MAJORITE RESOLUS
+### IMPORTANTS — TOUS RESOLUS
 
 | # | Probleme | Statut | Resolution |
 |---|----------|--------|------------|
@@ -274,7 +274,7 @@
 | 6 | Pas de lien vers Help/FAQ | **RESOLU** | Dans sidebar desktop |
 | 7 | Call History cache | **RESOLU** | Dans sidebar desktop |
 | 8 | handleInviteFriend = TODO | **RESOLU** | Redirige vers DM |
-| 9 | Deep link /join/:code casse | **A VERIFIER** | Parcours a tester |
+| 9 | Deep link /join/:code casse | **RESOLU** | Implementation complete (JoinSquad.tsx) — preview, auth redirect, join, error handling |
 | 10 | Pas de 404 sur /session/:id invalide | **RESOLU** | Message "Session non trouvee" |
 
 ### MINEURS — MAJORITE RESOLUS
@@ -402,7 +402,7 @@
 | **Illustrations** | Icones Lucide | 4 illustrations SVG animees (Controller, Headphones, Calendar, Shield) | **FAIT** |
 | **Curseur** | Default | Curseur custom landing (trail effect) — `CustomCursor.tsx` | **FAIT** |
 
-#### 2.2 - Nouveaux composants UI — FAIT (10/12 essentiels)
+#### 2.2 - Nouveaux composants UI — FAIT (13/13 essentiels)
 
 - [x] **AnimatedAvatar** : ring SVG anime (online=pulse vert, in-party=pulse violet, away=orange, offline=gris), CSS variables
 - [x] **AnimatedCounter** : compteur anime avec IntersectionObserver + CountUp, className externe
@@ -410,12 +410,12 @@
 - [x] **SegmentedControl** : Generic `<T extends string>`, layoutId shared transitions, spring 400/30
 - [x] **ProgressRing** : cercle SVG anime avec strokeDasharray, useInView, CSS variables
 - [x] **Toast ameliore** : icones animees SVG (`ToastIcons.tsx`) + Capacitor Haptics (undo/progress bar restent V3)
-- [ ] **ContextMenu** : clic droit sur messages/membres (Phase 3)
+- [x] **ContextMenu** : clic droit + long-press mobile, raccourcis clavier, viewport-aware positioning — `ui/ContextMenu.tsx`
 - [x] **CommandPalette ameliore** : sous-commandes, preview, navigation back — `CommandPalette.tsx`
 - [x] **Confetti ameliore** : particules physiques realistes, 5 phases, ribbons custom — `celebrations.ts`
 - [x] **Notification in-app** : banner slide-in avec actions (info, success, warning, achievement, update) — `NotificationBanner.tsx`
-- [ ] **ImageViewer** : lightbox zoom pour images chat (Phase 3)
-- [ ] **EmojiPicker** : selecteur natif pour reactions (Phase 3)
+- [x] **ImageViewer** : lightbox zoom/rotate/download, drag pan, mouse wheel zoom, keyboard shortcuts — `ui/ImageViewer.tsx`
+- [x] **EmojiPicker** : 7 categories (300+ emojis gaming-friendly), recherche, recents localStorage — `ui/EmojiPicker.tsx`
 
 #### 2.3 - Landing Page Refonte — FAIT
 

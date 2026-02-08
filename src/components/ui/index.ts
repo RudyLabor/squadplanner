@@ -9,6 +9,10 @@ export { ProgressRing } from './ProgressRing'
 export { AnimatedCounter } from './AnimatedCounter'
 export { Drawer } from './Drawer'
 export { SharedElement } from './SharedElement'
+export { ContextMenu } from './ContextMenu'
+export type { ContextMenuItem } from './ContextMenu'
+export { ImageViewer } from './ImageViewer'
+export { EmojiPicker } from './EmojiPicker'
 export {
   // Base skeleton components
   Skeleton,

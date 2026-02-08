@@ -17,6 +17,7 @@ import { ShieldIllustration } from '../components/landing/illustrations/ShieldIl
 import { TestimonialCarousel } from '../components/landing/TestimonialCarousel'
 import { AnimatedDemo, demoSteps } from '../components/landing/AnimatedDemo'
 import { CustomCursor } from '../components/landing/CustomCursor'
+import { HeroMockup } from '../components/landing/HeroMockup'
 
 // ─── DATA ────────────────────────────────────────────
 
@@ -418,15 +419,14 @@ export default function Landing() {
             )}
           </div>
 
-          {/* App Preview Mockup */}
+          {/* App Preview - Realistic Phone Mockup with cycling screens */}
           <motion.div
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4, duration: 0.6 }}
-            className="mt-12 mx-auto max-w-lg"
+            transition={{ delay: 0.4, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            className="mt-12 md:mt-16"
           >
             <motion.div
-              className="relative"
               style={{
                 rotateX: isDesktop ? mouseRotateX : heroRotateX,
                 rotateY: isDesktop ? mouseRotateY : heroRotateY,
@@ -434,61 +434,7 @@ export default function Landing() {
                 transformStyle: 'preserve-3d',
               }}
             >
-              <div className="absolute inset-0 rounded-[2.5rem] bg-[#6366f1]/5 blur-xl" style={{ transform: 'translateZ(-30px) scale(1.05)' }} />
-              <div className="bg-gradient-to-b from-[rgba(255,255,255,0.12)] to-[rgba(255,255,255,0.04)] rounded-[2.5rem] p-[1px] shadow-2xl shadow-[#6366f1]/15" style={{ transform: 'translateZ(0px)' }}>
-                <div className="bg-[#101012] rounded-[2.5rem] p-3">
-                  <div className="bg-[#050506] rounded-[2rem] overflow-hidden relative">
-                    <div className="absolute inset-0 bg-gradient-to-br from-white/[0.03] via-transparent to-transparent pointer-events-none z-10 rounded-[2rem]" />
-                    <div className="flex items-center justify-between px-6 py-2 text-xs text-text-quaternary">
-                      <span>21:00</span>
-                      <div className="flex items-center gap-1">
-                        <div className="w-4 h-2 rounded-sm border border-[#5e6063]">
-                          <div className="w-3 h-1.5 bg-[#34d399] rounded-sm" />
-                        </div>
-                      </div>
-                    </div>
-                    <div className="px-4 pb-6">
-                      <div className="bg-[rgba(99,102,241,0.06)] border border-[rgba(99,102,241,0.12)] rounded-2xl p-4 mb-4">
-                        <div className="flex items-center justify-between mb-3">
-                          <div className="flex items-center gap-2">
-                            <div className="w-8 h-8 rounded-lg bg-[#6366f1] flex items-center justify-center">
-                              <Calendar className="w-4 h-4 text-white" />
-                            </div>
-                            <div>
-                              <div className="text-[13px] font-semibold text-text-primary">Session Valorant</div>
-                              <div className="text-xs text-text-quaternary">Ce soir, 21h00</div>
-                            </div>
-                          </div>
-                          <span className="px-2 py-1 rounded-full bg-[#34d399]/20 text-xs text-[#34d399] font-medium">Confirmée</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <div className="flex -space-x-2">
-                            {['#6366f1', '#34d399', '#f5a623', '#f87171'].map((color, i) => (
-                              <div key={i} className="w-7 h-7 rounded-full border-2 border-[#050506] flex items-center justify-center text-xs font-bold text-white" style={{ backgroundColor: color }}>
-                                {['M', 'L', 'K', 'J'][i]}
-                              </div>
-                            ))}
-                          </div>
-                          <span className="text-[12px] text-text-tertiary">4/5 présents</span>
-                        </div>
-                      </div>
-                      <div className="grid grid-cols-3 gap-2">
-                        {[
-                          { label: 'Fiabilité', value: '94%', color: '#34d399' },
-                          { label: 'Sessions', value: '12', color: '#6366f1' },
-                          { label: 'Squad', value: '5', color: '#f5a623' },
-                        ].map((stat) => (
-                          <div key={stat.label} className="bg-surface-card rounded-xl p-3 text-center">
-                            <div className="text-[16px] font-bold" style={{ color: stat.color }}>{stat.value}</div>
-                            <div className="text-xs text-text-quaternary">{stat.label}</div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="absolute -inset-4 bg-[radial-gradient(ellipse_at_center,rgba(99,102,241,0.1)_0%,transparent_70%)] -z-10" />
+              <HeroMockup />
             </motion.div>
           </motion.div>
         </div>

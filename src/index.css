@@ -1046,12 +1046,22 @@ select:focus-visible,
   z-index: 0;
 }
 
+/* Hero phone mockup floating animation */
+@keyframes hero-phone-float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-8px); }
+}
+.hero-phone-float {
+  animation: hero-phone-float 6s ease-in-out infinite;
+}
+
 /* Reduced motion override for all landing animations */
 @media (prefers-reduced-motion: reduce) {
   .cta-glow-idle,
   .badge-shimmer,
   .text-gradient-animated,
   .hero-gradient-pulse,
+  .hero-phone-float,
   .landing-page {
     animation: none !important;
   }

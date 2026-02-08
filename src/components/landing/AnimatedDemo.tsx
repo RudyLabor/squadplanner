@@ -298,7 +298,7 @@ export function AnimatedDemo() {
           De la creation de squad a la session de jeu en 30 secondes
         </motion.p>
 
-        <div className="flex flex-col md:flex-row items-center gap-8 md:gap-12">
+        <div className="flex flex-col md:flex-row items-center justify-center gap-8 md:gap-12">
           {/* Phone mockup */}
           <div className="shrink-0">
             <PhoneFrame>

@@ -32,6 +32,13 @@ import { EmptyState } from '../components/EmptyState'
 import { ReplyComposer } from '../components/ReplyComposer'
 import { MessageReplyPreview } from '../components/MessageReplyPreview'
 import { ConversationListSkeleton, MessageListSkeleton } from '../components/VirtualizedMessageList'
+import { MessageContent } from '../components/MessageContent'
+import { MentionInput, type MentionUser } from '../components/MentionInput'
+import { GifPicker } from '../components/GifPicker'
+import { VoiceRecorder } from '../components/VoiceRecorder'
+import { useSquadMembersQuery } from '../hooks/queries/useSquadMembers'
+import { hasPermission, type SquadRole } from '../lib/roles'
+import { RoleBadge } from '../components/RoleBadge'
 
 // Simple toast component for Messages
 function MessageToast({ message, isVisible, variant = 'success' }: {
@@ -215,6 +222,7 @@ interface VirtualizedMessagesProps {
   onReplyMessage: (msg: { id: string; content: string; sender: string }) => void
   onScrollToMessage: (id: string) => void
   getMessageDate: (date: string) => string
+  memberRolesMap?: Map<string, string>
   containerRef: React.RefObject<HTMLDivElement | null>
   endRef: React.RefObject<HTMLDivElement | null>
   onScroll: () => void
@@ -231,6 +239,7 @@ const VirtualizedMessages = memo(function VirtualizedMessages({
   onReplyMessage,
   onScrollToMessage,
   getMessageDate,
+  memberRolesMap,
   containerRef,
   endRef,
   onScroll,
@@ -335,6 +344,7 @@ const VirtualizedMessages = memo(function VirtualizedMessages({
                   onReply={onReplyMessage}
                   replyToMessage={replyToData}
                   onScrollToMessage={onScrollToMessage}
+                  senderRole={memberRolesMap?.get(message.sender_id)}
                 />
               </div>
             </div>
@@ -384,7 +394,7 @@ function SystemMessage({ message }: {
 }
 
 // Message bubble
-function MessageBubble({ message, isOwn, showAvatar, showName, currentUserId, isSquadChat, isAdmin, onEdit, onDelete, onPin, onReply, replyToMessage, onScrollToMessage }: {
+function MessageBubble({ message, isOwn, showAvatar, showName, currentUserId, isSquadChat, isAdmin, onEdit, onDelete, onPin, onReply, replyToMessage, onScrollToMessage, senderRole }: {
   message: {
     id: string
     content: string
@@ -418,6 +428,7 @@ function MessageBubble({ message, isOwn, showAvatar, showName, currentUserId, is
     content: string
   } | null
   onScrollToMessage?: (messageId: string) => void
+  senderRole?: string
 }) {
   // Si c'est un message système, utiliser le composant dédié
   if (message.is_system_message) {
@@ -453,8 +464,9 @@ function MessageBubble({ message, isOwn, showAvatar, showName, currentUserId, is
 
         <div className={`${isOwn ? 'items-end' : 'items-start'} flex flex-col relative`}>
           {showName && !isOwn && (
-            <span className="text-xs text-text-tertiary mb-1 ml-1 font-medium">
+            <span className="text-xs text-text-tertiary mb-1 ml-1 font-medium flex items-center gap-1.5">
               {message.sender?.username}
+              {senderRole && <RoleBadge role={senderRole} />}
             </span>
           )}
 
@@ -500,9 +512,10 @@ function MessageBubble({ message, isOwn, showAvatar, showName, currentUserId, is
                   : 'bg-bg-surface text-text-primary rounded-bl-lg hover:bg-bg-hover hover:shadow-[0_0_10px_rgba(255,255,255,0.025)]'
               }`}
             >
-              <p className="text-[14px] leading-relaxed whitespace-pre-wrap break-words">
-                {message.content}
-              </p>
+              <MessageContent
+                content={message.content}
+                isOwn={isOwn}
+              />
             </div>
 
             {/* Message Actions - on the right for other's messages */}
@@ -656,6 +669,20 @@ export function Messages() {
     unsubscribe: unsubscribeDM,
   } = useDirectMessagesStore()
 
+  // Fetch squad members for @mention autocomplete (Phase 3.1)
+  const activeSquadId = activeSquadConv?.squad_id
+  const { data: squadMembersData } = useSquadMembersQuery(activeSquadId)
+  const mentionMembers: MentionUser[] = useMemo(() =>
+    (squadMembersData || [])
+      .filter(m => m.user_id !== user?.id)
+      .map(m => ({
+        id: m.user_id,
+        username: m.profiles?.username || 'Utilisateur',
+        avatar_url: m.profiles?.avatar_url || null,
+      })),
+    [squadMembersData, user?.id]
+  )
+
   const [activeTab, setActiveTab] = useState<'squads' | 'dms'>('squads')
   const [newMessage, setNewMessage] = useState('')
   const [isSending, setIsSending] = useState(false)
@@ -665,6 +692,7 @@ export function Messages() {
   const [showScrollButton, setShowScrollButton] = useState(false)
   const [editingMessage, setEditingMessage] = useState<{ id: string; content: string } | null>(null)
   const [replyingTo, setReplyingTo] = useState<{ id: string; content: string; sender: string } | null>(null)
+  const [showGifPicker, setShowGifPicker] = useState(false)
   const [toast, setToast] = useState<{ message: string; variant: 'success' | 'error'; visible: boolean }>({
     message: '',
     variant: 'success',
@@ -920,11 +948,21 @@ export function Messages() {
   }
 
   // Check if current user is admin in current squad
-  const isAdmin = (() => {
-    // For now, we'll consider the user as admin if they are viewing their own squad
-    // This should be enhanced with actual role checking from squad_members
-    return true // Placeholder - should be based on actual role
-  })()
+  // Phase 3.3: Role-based permission check for admin actions (pin, delete others' messages)
+  const currentUserRole: SquadRole = useMemo(() => {
+    if (!activeSquadId || !user?.id || !squadMembersData) return 'member'
+    const memberEntry = squadMembersData.find(m => m.user_id === user.id)
+    return (memberEntry?.role as SquadRole) || 'member'
+  }, [activeSquadId, user?.id, squadMembersData])
+
+  const isAdmin = hasPermission(currentUserRole, 'pin_message')
+
+  // Build a lookup of user_id -> role for displaying role badges on messages
+  const memberRolesMap = useMemo(() => {
+    const map = new Map<string, string>()
+    squadMembersData?.forEach(m => map.set(m.user_id, m.role))
+    return map
+  }, [squadMembersData])
 
   // Compteurs
   const squadUnread = squadConversations.reduce((sum, c) => sum + c.unread_count, 0)
@@ -1275,6 +1313,7 @@ export function Messages() {
             onReplyMessage={handleReply}
             onScrollToMessage={scrollToMessage}
             getMessageDate={getMessageDate}
+            memberRolesMap={memberRolesMap}
             containerRef={messagesContainerRef}
             endRef={messagesEndRef}
             onScroll={handleScroll}
@@ -1354,6 +1393,7 @@ export function Messages() {
                       onReply={handleReply}
                       replyToMessage={replyToData}
                       onScrollToMessage={scrollToMessage}
+                      senderRole={memberRolesMap.get(message.sender_id)}
                     />
                   </div>
                 )
@@ -1404,22 +1444,82 @@ export function Messages() {
 
           <form onSubmit={handleSendMessage}>
             <div className="flex items-center gap-2">
-              <div className="flex-1 relative">
-                <input
-                  ref={inputRef}
-                  type="text"
+              {isSquadChat ? (
+                <MentionInput
                   value={newMessage}
-                  onChange={handleMessageChange}
-                  placeholder={isSquadChat ? 'Message à la squad...' : `Message à ${chatName}...`}
-                  className="w-full h-12 px-4 bg-bg-surface border border-border-default rounded-xl text-[14px] text-text-primary placeholder:text-text-quaternary focus:outline-none focus:border-[rgba(99,102,241,0.5)] transition-colors"
-                  autoComplete="off"
-                  autoCapitalize="off"
-                  autoCorrect="off"
-                  spellCheck={false}
-                  enterKeyHint="send"
-                  inputMode="text"
+                  onChange={(val) => {
+                    setNewMessage(val)
+                    if (val.trim()) handleTyping()
+                  }}
+                  onSubmit={() => {
+                    if (newMessage.trim() && !isSending) {
+                      handleSendMessage({ preventDefault: () => {} } as React.FormEvent)
+                    }
+                  }}
+                  placeholder="Message à la squad... (@mention)"
+                  disabled={isSending}
+                  members={mentionMembers}
+                  inputRef={inputRef}
+                />
+              ) : (
+                <div className="flex-1 relative">
+                  <input
+                    ref={inputRef}
+                    type="text"
+                    value={newMessage}
+                    onChange={handleMessageChange}
+                    placeholder={`Message à ${chatName}...`}
+                    className="w-full h-12 px-4 bg-bg-surface border border-border-default rounded-xl text-[14px] text-text-primary placeholder:text-text-quaternary focus:outline-none focus:border-[rgba(99,102,241,0.5)] transition-colors"
+                    autoComplete="off"
+                    autoCapitalize="off"
+                    autoCorrect="off"
+                    spellCheck={false}
+                    enterKeyHint="send"
+                    inputMode="text"
+                  />
+                </div>
+              )}
+
+              {/* GIF button + picker — Phase 3.1 */}
+              <div className="relative flex-shrink-0">
+                <button
+                  type="button"
+                  onClick={() => setShowGifPicker(!showGifPicker)}
+                  className="p-2.5 rounded-xl text-[#8b8d90] hover:text-[#818cf8] hover:bg-[rgba(99,102,241,0.1)] transition-colors text-[13px] font-bold"
+                  aria-label="Envoyer un GIF"
+                >
+                  GIF
+                </button>
+                <GifPicker
+                  isOpen={showGifPicker}
+                  onSelect={(gifUrl) => {
+                    setNewMessage(gifUrl)
+                    setShowGifPicker(false)
+                    // Auto-send GIF
+                    setTimeout(() => {
+                      handleSendMessage({ preventDefault: () => {} } as React.FormEvent)
+                    }, 50)
+                  }}
+                  onClose={() => setShowGifPicker(false)}
                 />
               </div>
+
+              {/* Voice recorder — Phase 3.1 */}
+              {!newMessage.trim() && (
+                <VoiceRecorder
+                  onSend={async (_blob, dur) => {
+                    // Send as message with audio indicator
+                    const audioMsg = `🎤 Message vocal (${Math.floor(dur / 60)}:${(dur % 60).toString().padStart(2, '0')})`
+                    if (activeSquadConv) {
+                      await sendSquadMessage(audioMsg, activeSquadConv.squad_id, activeSquadConv.session_id)
+                    } else if (activeDMConv) {
+                      await sendDMMessage(audioMsg, activeDMConv.other_user_id)
+                    }
+                  }}
+                  disabled={isSending}
+                />
+              )}
+
               <Button
                 type="submit"
                 disabled={!newMessage.trim() || isSending}

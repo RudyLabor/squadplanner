@@ -10,7 +10,9 @@ import {
   CheckCircle2,
   WifiOff,
   AlertCircle,
-  UserPlus
+  UserPlus,
+  Radio,
+  ShieldCheck
 } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import Confetti from 'react-confetti'
@@ -97,7 +99,11 @@ function ActivePartySection({ squad, onLeave, currentUserId }: {
   onLeave: () => void
   currentUserId: string
 }) {
-  const { localUser, remoteUsers, isMuted, toggleMute, error, isReconnecting, reconnectAttempts, client } = useVoiceChatStore()
+  const {
+    localUser, remoteUsers, isMuted, toggleMute, error, isReconnecting, reconnectAttempts, client,
+    pushToTalkEnabled, pushToTalkActive, setPushToTalk, pushToTalkStart, pushToTalkEnd,
+    noiseSuppressionEnabled, toggleNoiseSuppression,
+  } = useVoiceChatStore()
   const { localQuality } = useNetworkQualityStore()
   const [showInviteModal, setShowInviteModal] = useState(false)
 
@@ -116,6 +122,31 @@ function ActivePartySection({ squad, onLeave, currentUserId }: {
       }
     })
   }, [client, remoteUsers, getEffectiveVolume])
+
+  // Push-to-talk keyboard listener (Space key)
+  useEffect(() => {
+    if (!pushToTalkEnabled) return
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.code === 'Space' && !e.repeat && e.target === document.body) {
+        e.preventDefault()
+        pushToTalkStart()
+      }
+    }
+    const handleKeyUp = (e: KeyboardEvent) => {
+      if (e.code === 'Space') {
+        e.preventDefault()
+        pushToTalkEnd()
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+    window.addEventListener('keyup', handleKeyUp)
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown)
+      window.removeEventListener('keyup', handleKeyUp)
+    }
+  }, [pushToTalkEnabled, pushToTalkStart, pushToTalkEnd])
 
   // Generate shareable party link
   const partyLink = `${window.location.origin}/squad/${squad.id}?join=party`
@@ -262,7 +293,38 @@ function ActivePartySection({ squad, onLeave, currentUserId }: {
       </div>
 
       {/* Controls */}
-      <div className="p-4 flex items-center justify-center gap-4">
+      <div className="p-4 flex items-center justify-center gap-3">
+        {/* Noise suppression toggle */}
+        <motion.button
+          className={`w-10 h-10 rounded-full flex items-center justify-center transition-colors ${
+            noiseSuppressionEnabled
+              ? 'bg-[rgba(99,102,241,0.2)] text-[#818cf8]'
+              : 'bg-[rgba(255,255,255,0.06)] text-[#5e6063]'
+          }`}
+          onClick={toggleNoiseSuppression}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          title={noiseSuppressionEnabled ? 'Désactiver la suppression de bruit' : 'Activer la suppression de bruit'}
+        >
+          <ShieldCheck className="w-4 h-4" />
+        </motion.button>
+
+        {/* Push-to-talk toggle */}
+        <motion.button
+          className={`w-10 h-10 rounded-full flex items-center justify-center transition-colors ${
+            pushToTalkEnabled
+              ? 'bg-[rgba(251,191,36,0.2)] text-[#fbbf24]'
+              : 'bg-[rgba(255,255,255,0.06)] text-[#5e6063]'
+          }`}
+          onClick={() => setPushToTalk(!pushToTalkEnabled)}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          title={pushToTalkEnabled ? 'Désactiver Push-to-Talk' : 'Activer Push-to-Talk (Espace)'}
+        >
+          <Radio className="w-4 h-4" />
+        </motion.button>
+
+        {/* Mic toggle / PTT indicator */}
         <div className="relative">
           {/* Pulse animation when mic is active */}
           {!isMuted && (
@@ -272,21 +334,43 @@ function ActivePartySection({ squad, onLeave, currentUserId }: {
               transition={{ duration: 1.5, repeat: 2 }}
             />
           )}
-          <motion.button
-            className={`
-              relative w-14 h-14 rounded-full flex items-center justify-center
-              ${isMuted
-                ? 'bg-[#fb7185] text-white'
-                : 'bg-[#34d399] text-[#050506]'
-              }
-              transition-colors
-            `}
-            onClick={toggleMute}
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-          >
-            {isMuted ? <MicOff className="w-6 h-6" /> : <Mic className="w-6 h-6" />}
-          </motion.button>
+          {pushToTalkEnabled ? (
+            <motion.button
+              className={`
+                relative w-14 h-14 rounded-full flex items-center justify-center
+                ${pushToTalkActive
+                  ? 'bg-[#34d399] text-[#050506]'
+                  : 'bg-[#fbbf24] text-[#050506]'
+                }
+                transition-colors
+              `}
+              onMouseDown={pushToTalkStart}
+              onMouseUp={pushToTalkEnd}
+              onMouseLeave={pushToTalkEnd}
+              onTouchStart={pushToTalkStart}
+              onTouchEnd={pushToTalkEnd}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+            >
+              {pushToTalkActive ? <Mic className="w-6 h-6" /> : <Radio className="w-6 h-6" />}
+            </motion.button>
+          ) : (
+            <motion.button
+              className={`
+                relative w-14 h-14 rounded-full flex items-center justify-center
+                ${isMuted
+                  ? 'bg-[#fb7185] text-white'
+                  : 'bg-[#34d399] text-[#050506]'
+                }
+                transition-colors
+              `}
+              onClick={toggleMute}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+            >
+              {isMuted ? <MicOff className="w-6 h-6" /> : <Mic className="w-6 h-6" />}
+            </motion.button>
+          )}
         </div>
 
         <motion.button
@@ -299,9 +383,13 @@ function ActivePartySection({ squad, onLeave, currentUserId }: {
         </motion.button>
       </div>
 
-      {/* Mute label */}
+      {/* Mute / PTT label */}
       <p className="text-center text-xs text-[#5e6063] pb-4">
-        {isMuted ? 'Micro coupé' : 'Micro actif'}
+        {pushToTalkEnabled
+          ? (pushToTalkActive ? 'Parle maintenant...' : 'Maintiens Espace pour parler')
+          : (isMuted ? 'Micro coupé' : 'Micro actif')
+        }
+        {noiseSuppressionEnabled && <span className="ml-2 text-[#818cf8]">• Bruit supprimé</span>}
       </p>
 
       {/* Invite modal */}

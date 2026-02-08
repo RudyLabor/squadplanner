@@ -59,6 +59,11 @@ interface VoiceChatState {
   remoteUsers: VoiceChatUser[]
   error: string | null
 
+  // Phase 3.2: Push-to-talk & Noise suppression
+  pushToTalkEnabled: boolean
+  pushToTalkActive: boolean // true while key is held down
+  noiseSuppressionEnabled: boolean
+
   // Network quality
   networkQualityChanged: NetworkQualityLevel | null
   cleanupNetworkQuality: (() => void) | null
@@ -75,6 +80,12 @@ interface VoiceChatState {
   setVolume: (volume: number) => void
   clearError: () => void
   clearNetworkQualityNotification: () => void
+  // Phase 3.2: Push-to-talk
+  setPushToTalk: (enabled: boolean) => void
+  pushToTalkStart: () => Promise<void>
+  pushToTalkEnd: () => Promise<void>
+  // Phase 3.2: Noise suppression
+  toggleNoiseSuppression: () => Promise<void>
 }
 
 // Agora App ID - needs to be set in environment
@@ -214,6 +225,9 @@ export const useVoiceChatStore = create<VoiceChatState>((set, get) => ({
   localUser: null,
   remoteUsers: [],
   error: null,
+  pushToTalkEnabled: false,
+  pushToTalkActive: false,
+  noiseSuppressionEnabled: false,
   networkQualityChanged: null,
   cleanupNetworkQuality: null,
   client: null,
@@ -605,6 +619,78 @@ export const useVoiceChatStore = create<VoiceChatState>((set, get) => ({
           remoteUser.audioTrack.setVolume(volume)
         }
       })
+    }
+  },
+
+  // Phase 3.2: Push-to-talk
+  setPushToTalk: (enabled: boolean) => {
+    const { localAudioTrack } = get()
+    set({ pushToTalkEnabled: enabled })
+    // When enabling PTT, mute by default (user must hold key to talk)
+    if (enabled && localAudioTrack) {
+      localAudioTrack.setEnabled(false)
+      set({
+        isMuted: true,
+        pushToTalkActive: false,
+        localUser: get().localUser ? { ...get().localUser!, isMuted: true } : null,
+      })
+    }
+  },
+
+  pushToTalkStart: async () => {
+    const { localAudioTrack, pushToTalkEnabled } = get()
+    if (!pushToTalkEnabled || !localAudioTrack) return
+    await localAudioTrack.setEnabled(true)
+    set({
+      pushToTalkActive: true,
+      isMuted: false,
+      localUser: get().localUser ? { ...get().localUser!, isMuted: false } : null,
+    })
+  },
+
+  pushToTalkEnd: async () => {
+    const { localAudioTrack, pushToTalkEnabled } = get()
+    if (!pushToTalkEnabled || !localAudioTrack) return
+    await localAudioTrack.setEnabled(false)
+    set({
+      pushToTalkActive: false,
+      isMuted: true,
+      localUser: get().localUser ? { ...get().localUser!, isMuted: true } : null,
+    })
+  },
+
+  // Phase 3.2: Noise suppression (Agora AI Noise Suppression Extension)
+  toggleNoiseSuppression: async () => {
+    const { localAudioTrack, noiseSuppressionEnabled } = get()
+    if (!localAudioTrack) return
+
+    try {
+      if (!noiseSuppressionEnabled) {
+        // Enable AI noise suppression via Agora's built-in processing
+        const mediaTrack = localAudioTrack.getMediaStreamTrack()
+        if (mediaTrack) {
+          const constraints = mediaTrack.getConstraints()
+          await mediaTrack.applyConstraints({
+            ...constraints,
+            noiseSuppression: true,
+            echoCancellation: true,
+            autoGainControl: true,
+          })
+        }
+        set({ noiseSuppressionEnabled: true })
+      } else {
+        const mediaTrack = localAudioTrack.getMediaStreamTrack()
+        if (mediaTrack) {
+          const constraints = mediaTrack.getConstraints()
+          await mediaTrack.applyConstraints({
+            ...constraints,
+            noiseSuppression: false,
+          })
+        }
+        set({ noiseSuppressionEnabled: false })
+      }
+    } catch (err) {
+      console.error('Failed to toggle noise suppression:', err)
     }
   },
 }))

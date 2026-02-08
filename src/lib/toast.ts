@@ -1,12 +1,40 @@
 import { toast } from 'sonner'
+import { Capacitor } from '@capacitor/core'
+import { Haptics, ImpactStyle, NotificationType } from '@capacitor/haptics'
 
 /**
  * Standardized toast notifications for Squad Planner
  * Phase 3.4 - Notifications et feedback
+ * Phase 2.5 - Sound + Haptics (Capacitor integration)
  */
+
+// Haptic feedback helper — only fires on native platforms (iOS/Android)
+const haptic = {
+  success: () => {
+    if (Capacitor.isNativePlatform()) {
+      Haptics.notification({ type: NotificationType.Success })
+    }
+  },
+  error: () => {
+    if (Capacitor.isNativePlatform()) {
+      Haptics.notification({ type: NotificationType.Error })
+    }
+  },
+  warning: () => {
+    if (Capacitor.isNativePlatform()) {
+      Haptics.notification({ type: NotificationType.Warning })
+    }
+  },
+  tap: () => {
+    if (Capacitor.isNativePlatform()) {
+      Haptics.impact({ style: ImpactStyle.Medium })
+    }
+  },
+}
 
 // Success toasts - for completed actions
 export const showSuccess = (message: string) => {
+  haptic.success()
   toast.success(message, {
     duration: 4000,
   })
@@ -14,6 +42,7 @@ export const showSuccess = (message: string) => {
 
 // Error toasts - for API errors, failures
 export const showError = (message: string) => {
+  haptic.error()
   toast.error(message, {
     duration: 5000,
   })
@@ -21,6 +50,7 @@ export const showError = (message: string) => {
 
 // Warning toasts - for important notices
 export const showWarning = (message: string) => {
+  haptic.warning()
   toast.warning(message, {
     duration: 4000,
   })

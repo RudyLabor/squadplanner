@@ -13,7 +13,7 @@
   --color-text-primary: #fafafa;     /* Ratio: 19.4:1 */
   --color-text-secondary: #a1a1a6;   /* Ratio: 6.9:1 */
   --color-text-tertiary: #7d7d82;    /* Ratio: 4.6:1 - WCAG AA compliant (was #6e6e73 = 4.0:1) */
-  --color-text-quaternary: #6b6b70;  /* Ratio: 3.8:1 - For large text/decorative only (was #48484a = 2.7:1) */
+  --color-text-quaternary: #9c9ca0;  /* Ratio: 5.2:1 - WCAG AA compliant (was #6b6b70 = 3.8:1) */
 
   /* Accents - Sophisticated, less saturated */
   --color-primary: #6366f1;
@@ -35,9 +35,14 @@
   --shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.4);
   --shadow-glow-primary: 0 0 40px rgba(99, 102, 241, 0.15);
 
-  /* Fonts - Cross-platform typography with Inter */
+  /* Fonts - Cross-platform typography with Inter + Space Grotesk display */
   --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+  --font-display: "Space Grotesk", "Inter", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
   --font-mono: "SF Mono", ui-monospace, monospace;
+
+  /* Secondary accent - Cyan electric */
+  --color-secondary: #06B6D4;
+  --color-secondary-hover: #22D3EE;
 
   /* Animations - Smooth, premium easing */
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
@@ -287,9 +292,24 @@ body,
 
 /* Premium typography defaults */
 h1, h2, h3, h4, h5, h6 {
-  font-weight: 600;
+  font-family: var(--font-display);
+  font-weight: 700;
   letter-spacing: -0.02em;
-  line-height: 1.2;
+  line-height: 1.15;
+}
+
+h1 {
+  font-size: clamp(2.25rem, 5vw, 4rem);
+  font-weight: 800;
+}
+
+h2 {
+  font-size: clamp(1.75rem, 3.5vw, 2.625rem);
+}
+
+h3 {
+  font-size: clamp(1.25rem, 2vw, 1.5rem);
+  font-weight: 600;
 }
 
 p {
@@ -300,6 +320,16 @@ p {
 ::selection {
   background: rgba(99, 102, 241, 0.3);
   color: #fafafa;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Scroll offset for anchor links (navbar height) */
+section[id] {
+  scroll-margin-top: 80px;
 }
 
 /* Prevent horizontal scroll - vertical only when needed */
@@ -902,4 +932,133 @@ select:focus-visible,
 /* Light mode hover-lift */
 [data-theme="light"] .hover-lift:hover {
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
+}
+
+/* =====================================================
+   LANDING PAGE - Premium Effects
+   ===================================================== */
+
+/* Section dividers - gradient lines */
+.section-divider {
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgba(99, 102, 241, 0.2), transparent);
+  border: none;
+}
+
+/* CTA idle glow animation */
+@keyframes cta-idle-glow {
+  0%, 100% { box-shadow: 0 0 20px rgba(99, 102, 241, 0.15); }
+  50% { box-shadow: 0 0 35px rgba(99, 102, 241, 0.3); }
+}
+.cta-glow-idle {
+  animation: cta-idle-glow 3s ease-in-out infinite;
+}
+
+/* CTA hover glow */
+.cta-hover-glow {
+  transition: all 200ms ease;
+}
+.cta-hover-glow:hover {
+  box-shadow: 0 0 30px rgba(99, 102, 241, 0.4);
+  transform: scale(1.05);
+}
+
+/* Badge shimmer animation */
+@keyframes badge-shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+.badge-shimmer {
+  background: linear-gradient(
+    90deg,
+    rgba(99, 102, 241, 0.06) 0%,
+    rgba(167, 139, 250, 0.15) 50%,
+    rgba(99, 102, 241, 0.06) 100%
+  );
+  background-size: 200% 100%;
+  animation: badge-shimmer 3s ease-in-out infinite;
+}
+
+/* Animated text gradient */
+@keyframes text-gradient-shift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+.text-gradient-animated {
+  background: linear-gradient(90deg, #6366f1, #a78bfa, #06B6D4, #6366f1);
+  background-size: 300% 100%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: text-gradient-shift 4s ease-in-out infinite;
+}
+
+/* Pulsing hero gradient */
+@keyframes hero-gradient-pulse {
+  0%, 100% { opacity: 0.6; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.05); }
+}
+.hero-gradient-pulse {
+  animation: hero-gradient-pulse 8s ease-in-out infinite;
+}
+
+/* Horizontal stepper progress line */
+.stepper-line {
+  background: linear-gradient(to right, var(--color-primary), var(--color-secondary));
+  transition: width 0.6s ease-out;
+}
+
+/* Circular progress animation */
+@keyframes circular-progress {
+  from { stroke-dashoffset: 283; }
+}
+
+/* FAQ accordion transition */
+.faq-answer {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.3s ease;
+}
+.faq-answer.open {
+  grid-template-rows: 1fr;
+}
+.faq-answer > div {
+  overflow: hidden;
+}
+
+/* Page load fade-in */
+@keyframes page-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.landing-page {
+  animation: page-fade-in 0.4s ease forwards;
+}
+
+/* Noise overlay on full page for premium dark feel */
+.landing-noise::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  opacity: 0.03;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Reduced motion override for all landing animations */
+@media (prefers-reduced-motion: reduce) {
+  .cta-glow-idle,
+  .badge-shimmer,
+  .text-gradient-animated,
+  .hero-gradient-pulse,
+  .landing-page {
+    animation: none !important;
+  }
+  .cta-hover-glow:hover {
+    transform: none;
+  }
+  html {
+    scroll-behavior: auto;
+  }
 }

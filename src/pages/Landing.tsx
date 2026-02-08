@@ -1,9 +1,10 @@
-import { motion, useInView, useScroll, useTransform, useMotionValue, useSpring } from 'framer-motion'
-import { useRef, useEffect, useState } from 'react'
+import { motion, useScroll, useTransform, useMotionValue, useSpring } from 'framer-motion'
+import { useRef, useEffect, useState, useCallback } from 'react'
 import {
   Users, Calendar, ArrowRight, Check, X as XIcon,
   Target, MessageCircle, Headphones, TrendingUp, Sparkles,
-  HelpCircle, FileText, Shield
+  HelpCircle, FileText, Shield, ChevronDown, Menu, X as CloseIcon,
+  Play, Mail
 } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { SquadPlannerLogo } from '../components/SquadPlannerLogo'
@@ -14,103 +15,119 @@ import { HeadphonesIllustration } from '../components/landing/illustrations/Head
 import { CalendarIllustration } from '../components/landing/illustrations/CalendarIllustration'
 import { ShieldIllustration } from '../components/landing/illustrations/ShieldIllustration'
 import { TestimonialCarousel } from '../components/landing/TestimonialCarousel'
-import { AnimatedDemo } from '../components/landing/AnimatedDemo'
+import { AnimatedDemo, demoSteps } from '../components/landing/AnimatedDemo'
 import { CustomCursor } from '../components/landing/CustomCursor'
 
-// Stagger animations for lists
+// ─── DATA ────────────────────────────────────────────
+
 const staggerContainerVariants = {
   hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.1
-    }
-  }
+  visible: { opacity: 1, transition: { staggerChildren: 0.12 } }
 }
-
 const staggerItemVariants = {
   hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0 }
+  visible: { opacity: 1, y: 0, transition: { duration: 0.5 } }
 }
 
-// Les 3 PILIERS principaux (grandes cartes)
-const pillars = [
-  {
-    icon: Headphones,
-    illustration: HeadphonesIllustration,
-    title: 'Party vocale 24/7',
-    description: 'Ta squad a son salon vocal toujours ouvert. Rejoins en 1 clic, reste aussi longtemps que tu veux.',
-    color: '#34d399'
-  },
-  {
-    icon: Calendar,
-    illustration: CalendarIllustration,
-    title: 'Planning avec décision',
-    description: 'Propose un créneau. Chacun répond OUI ou NON. Fini les "on verra" — on sait qui vient.',
-    color: '#f5a623'
-  },
-  {
-    icon: Target,
-    illustration: ShieldIllustration,
-    title: 'Fiabilité mesurée',
-    description: 'Check-in à chaque session. Ton score montre si tu tiens parole. Tes potes comptent sur toi.',
-    color: '#f87171'
-  }
-]
-
-const stats = [
+const heroStats = [
   { value: '100%', label: 'gratuit pour commencer' },
   { value: '30s', label: 'pour créer ta squad' },
   { value: '0', label: 'excuse pour ne pas jouer' },
 ]
 
 const steps = [
-  {
-    step: '1',
-    title: 'Crée ta Squad',
-    description: 'Donne un nom, choisis ton jeu. Ta squad a direct sa party vocale et son chat.',
-    icon: Users
-  },
-  {
-    step: '2',
-    title: 'Invite tes potes',
-    description: 'Partage le code. Ils rejoignent en 10 secondes. Tout le monde au même endroit.',
-    icon: MessageCircle
-  },
-  {
-    step: '3',
-    title: 'Planifie, décide, confirme',
-    description: 'Propose un créneau. Chacun répond OUI ou NON. Plus de "on verra".',
-    icon: Calendar
-  },
-  {
-    step: '4',
-    title: 'Jouez chaque semaine',
-    description: 'Check-in, jouez, repetez. Semaine apres semaine, ta squad devient fiable.',
-    icon: Target
-  }
+  { step: '1', title: 'Crée ta Squad', description: 'Donne un nom, choisis ton jeu. Ta squad a direct sa party vocale et son chat.', icon: Users },
+  { step: '2', title: 'Invite tes potes', description: 'Partage le code. Ils rejoignent en 10 secondes. Tout le monde au même endroit.', icon: MessageCircle },
+  { step: '3', title: 'Planifie, décide, confirme', description: 'Propose un créneau. Chacun répond OUI ou NON. Plus de "on verra".', icon: Calendar },
+  { step: '4', title: 'Jouez chaque semaine', description: 'Check-in, jouez, répétez. Semaine après semaine, ta squad devient fiable.', icon: Target },
 ]
 
-// Comparaison vs Discord - données
 const comparisons = [
-  { feature: 'Planning de sessions avec RSVP', discord: false, squad: true },
-  { feature: 'Score de fiabilité par joueur', discord: false, squad: true },
-  { feature: 'Check-in présence réelle', discord: false, squad: true },
-  { feature: 'Coach IA personnalisé', discord: false, squad: true },
-  { feature: 'Party vocale dédiée', discord: true, squad: true },
-  { feature: 'Chat de squad', discord: true, squad: true },
-  { feature: 'Gamification (XP, challenges)', discord: 'partial', squad: true },
+  { feature: 'Planning de sessions avec RSVP', discord: false, discordNote: '', squad: true, squadNote: '' },
+  { feature: 'Score de fiabilité par joueur', discord: false, discordNote: '', squad: true, squadNote: '' },
+  { feature: 'Check-in présence réelle', discord: false, discordNote: '', squad: true, squadNote: '' },
+  { feature: 'Coach IA personnalisé', discord: false, discordNote: '', squad: true, squadNote: '' },
+  { feature: 'Party vocale dédiée', discord: true, discordNote: 'Basique', squad: true, squadNote: 'Optimisé gaming' },
+  { feature: 'Chat de squad', discord: true, discordNote: 'Basique', squad: true, squadNote: 'Optimisé gaming' },
+  { feature: 'Gamification (XP, challenges)', discord: 'partial' as const, discordNote: 'Via bots tiers', squad: true, squadNote: 'Natif' },
 ]
+
+const faqs = [
+  { q: 'Squad Planner est-il gratuit ?', a: 'Oui, Squad Planner est 100% gratuit pour commencer. Crée ta squad, invite tes potes, planifie tes sessions — tout est inclus. Des fonctionnalités premium optionnelles seront disponibles pour les squads qui veulent aller plus loin.' },
+  { q: 'Comment inviter mes amis ?', a: 'Une fois ta squad créée, tu reçois un code d\'invitation unique. Partage-le par message, Discord, ou n\'importe quel canal. Tes potes cliquent sur le lien et rejoignent en 10 secondes.' },
+  { q: 'Quelle est la différence avec Discord ?', a: 'Discord est fait pour discuter. Squad Planner est fait pour jouer ensemble. On ajoute le planning avec RSVP, le score de fiabilité, et les check-ins pour que vos sessions aient vraiment lieu.' },
+  { q: 'Combien de joueurs par squad ?', a: 'Une squad peut accueillir de 2 à 10 joueurs. C\'est la taille idéale pour une équipe de jeu régulière où chacun se sent impliqué.' },
+  { q: 'Mes données sont-elles protégées ?', a: 'Absolument. Squad Planner est hébergé en France, conforme au RGPD. Tes données sont chiffrées et tu peux les supprimer à tout moment depuis les paramètres de ton compte.' },
+]
+
+const pillars = [
+  {
+    id: 'voice',
+    icon: Headphones,
+    illustration: HeadphonesIllustration,
+    title: 'Party vocale 24/7',
+    description: 'Ta squad a son salon vocal toujours ouvert. Rejoins en 1 clic, reste aussi longtemps que tu veux.',
+    color: '#34d399',
+    gradient: 'from-[rgba(52,211,153,0.08)] to-[rgba(52,211,153,0.01)]',
+    details: [
+      '1 squad = 1 party vocale dédiée',
+      'Rejoindre en 1 clic',
+      'Qualité HD, latence ultra-faible',
+    ],
+    detailText: 'Ta squad a son salon vocal 24/7. Pas besoin de planifier. Rejoins quand tu veux, reste aussi longtemps que tu veux.',
+  },
+  {
+    id: 'planning',
+    icon: Calendar,
+    illustration: CalendarIllustration,
+    title: 'Planning avec décision',
+    description: 'Propose un créneau. Chacun répond OUI ou NON. Fini les "on verra" — on sait qui vient.',
+    color: '#f5a623',
+    gradient: 'from-[rgba(245,166,35,0.08)] to-[rgba(245,166,35,0.01)]',
+    details: [
+      'Chat de squad permanent',
+      'Chat par session',
+      'Résumés IA automatiques',
+    ],
+    detailText: 'Discute avant la session pour t\'organiser. Pendant pour rigoler. Après pour le débrief. Tout est au même endroit.',
+  },
+  {
+    id: 'reliability',
+    icon: Target,
+    illustration: ShieldIllustration,
+    title: 'Fiabilité mesurée',
+    description: 'Check-in à chaque session. Ton score montre si tu tiens parole. Tes potes comptent sur toi.',
+    color: '#f87171',
+    gradient: 'from-[rgba(248,113,113,0.08)] to-[rgba(248,113,113,0.01)]',
+    details: [
+      'Check-in obligatoire',
+      'Historique visible',
+      'Score par joueur',
+    ],
+    detailText: 'Chaque membre a un score basé sur sa présence réelle. Tu dis que tu viens ? On vérifie. Les no-shows chroniques, ça se voit.',
+  },
+]
+
+// ─── DISCORD SVG ICON ────────────────────────────────
+
+function DiscordIcon({ className }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="currentColor">
+      <path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286z" />
+    </svg>
+  )
+}
+
+// ─── COMPONENT ───────────────────────────────────────
 
 export default function Landing() {
   const heroRef = useRef(null)
-  useInView(heroRef, { once: true })
   const { user } = useAuthStore()
   const { scrollYProgress } = useScroll()
   const heroRotateX = useTransform(scrollYProgress, [0, 0.15], [0, 8])
   const heroRotateY = useTransform(scrollYProgress, [0, 0.1, 0.2], [-2, 0, 2])
 
-  // V3: Mouse tracking for 3D mockup (desktop only)
+  // Mouse tracking for 3D mockup (desktop only)
   const mouseX = useMotionValue(0)
   const mouseY = useMotionValue(0)
   const smoothMouseX = useSpring(mouseX, { stiffness: 150, damping: 20 })
@@ -118,12 +135,16 @@ export default function Landing() {
   const mouseRotateX = useTransform(smoothMouseY, [-0.5, 0.5], [5, -5])
   const mouseRotateY = useTransform(smoothMouseX, [-0.5, 0.5], [-5, 5])
   const [isDesktop, setIsDesktop] = useState(false)
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [scrolled, setScrolled] = useState(false)
+  const [expandedFaq, setExpandedFaq] = useState<number | null>(null)
+  const [activeFeature, setActiveFeature] = useState(0)
+  const [demoStep, setDemoStep] = useState(0)
 
   useEffect(() => {
     const isCoarse = window.matchMedia('(pointer: coarse)').matches
     setIsDesktop(!isCoarse)
     if (isCoarse) return
-
     const handleMouseMove = (e: MouseEvent) => {
       mouseX.set((e.clientX / window.innerWidth) - 0.5)
       mouseY.set((e.clientY / window.innerHeight) - 0.5)
@@ -132,88 +153,214 @@ export default function Landing() {
     return () => window.removeEventListener('mousemove', handleMouseMove)
   }, [mouseX, mouseY])
 
-  // Determine if user is logged in for different header buttons
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 20)
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
+  // Close mobile menu on escape
+  useEffect(() => {
+    const handleKey = (e: KeyboardEvent) => { if (e.key === 'Escape') setMobileMenuOpen(false) }
+    window.addEventListener('keydown', handleKey)
+    return () => window.removeEventListener('keydown', handleKey)
+  }, [])
+
+  // Inject FAQ Schema
+  useEffect(() => {
+    const schema = {
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      mainEntity: faqs.map(f => ({
+        '@type': 'Question',
+        name: f.q,
+        acceptedAnswer: { '@type': 'Answer', text: f.a }
+      }))
+    }
+    const script = document.createElement('script')
+    script.type = 'application/ld+json'
+    script.textContent = JSON.stringify(schema)
+    document.head.appendChild(script)
+    return () => { document.head.removeChild(script) }
+  }, [])
+
   const isLoggedIn = !!user
 
-  return (
-    <div className={`min-h-screen bg-bg-base ${isDesktop ? 'landing-custom-cursor' : ''}`}>
-      {/* V3: Custom cursor with trail */}
-      <CustomCursor />
-      {/* Scroll Progress */}
-      <motion.div
-        className="scroll-progress"
-        style={{ scaleX: scrollYProgress }}
-      />
+  const closeMobileMenu = useCallback(() => setMobileMenuOpen(false), [])
 
-      {/* Header Sticky */}
-      <header className="fixed top-0 left-0 right-0 z-50 px-4 md:px-6 py-3 bg-bg-base/80 backdrop-blur-lg border-b border-border-subtle">
-        <div className="max-w-5xl mx-auto flex items-center justify-between">
+  const navLinks = [
+    { label: 'Fonctionnalités', href: '#features' },
+    { label: 'Comment ça marche', href: '#how-it-works' },
+    { label: 'Témoignages', href: '#testimonials' },
+    { label: 'FAQ', href: '/help', isRoute: true },
+  ]
+
+  return (
+    <div className={`min-h-screen bg-bg-base landing-page landing-noise ${isDesktop ? 'landing-custom-cursor' : ''}`}>
+      <CustomCursor />
+
+      {/* Scroll Progress */}
+      <motion.div className="scroll-progress" style={{ scaleX: scrollYProgress }} />
+
+      {/* Skip to content (Phase 2 #17) */}
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[100] focus:bg-white focus:text-black focus:px-4 focus:py-2 focus:rounded-lg focus:text-sm focus:font-medium"
+      >
+        Aller au contenu principal
+      </a>
+
+      {/* ═══ NAVBAR (Phase 3 #26-29) ═══ */}
+      <header
+        className={`fixed top-0 left-0 right-0 z-50 px-4 md:px-6 py-3 transition-all duration-300 ${
+          scrolled
+            ? 'bg-[rgba(5,5,6,0.7)] backdrop-blur-xl border-b border-[rgba(255,255,255,0.05)]'
+            : 'bg-transparent border-b border-transparent'
+        }`}
+      >
+        <nav className="max-w-5xl mx-auto flex items-center justify-between" aria-label="Navigation principale">
           <Link to="/" className="flex items-center gap-2 shrink-0">
             <SquadPlannerLogo size={24} />
             <span className="text-[15px] font-semibold text-text-primary hidden sm:inline">Squad Planner</span>
           </Link>
+
+          {/* Desktop nav links */}
+          <div className="hidden md:flex items-center gap-6">
+            {navLinks.map(link => (
+              link.isRoute ? (
+                <Link key={link.label} to={link.href} className="text-[13px] text-text-tertiary hover:text-text-primary transition-colors">
+                  {link.label}
+                </Link>
+              ) : (
+                <a key={link.label} href={link.href} className="text-[13px] text-text-tertiary hover:text-text-primary transition-colors">
+                  {link.label}
+                </a>
+              )
+            ))}
+          </div>
+
           <div className="flex items-center gap-2 md:gap-3">
             {isLoggedIn ? (
               <Link to="/home">
                 <button className="px-4 py-2 rounded-lg bg-primary text-white text-[13px] md:text-[14px] font-medium hover:bg-primary-hover transition-colors duration-300">
-                  Aller a l'app
+                  Aller à l'app
                 </button>
               </Link>
             ) : (
               <>
-                <Link to="/auth">
+                <Link to="/auth" className="hidden md:inline-flex">
                   <button className="px-3 md:px-4 py-2 text-[13px] md:text-[14px] text-text-secondary hover:text-text-primary border border-border-subtle hover:border-border-hover rounded-lg transition-all">
                     Se connecter
                   </button>
                 </Link>
-                <Link to="/auth?mode=register&redirect=onboarding">
-                  <button className="px-3 md:px-4 py-2 rounded-lg bg-primary text-white text-[13px] md:text-[14px] font-medium hover:bg-primary-hover transition-colors duration-300">
-                    Creer ma squad
+                <Link to="/auth?mode=register&redirect=onboarding" className="hidden md:inline-flex">
+                  <button className="px-3 md:px-4 py-2 rounded-lg bg-primary text-white text-[13px] md:text-[14px] font-medium hover:bg-primary-hover transition-colors duration-300" data-track="navbar_cta_click">
+                    Créer ma squad
+                    <ArrowRight className="w-3.5 h-3.5 inline ml-1" />
                   </button>
                 </Link>
+                {/* Mobile hamburger */}
+                <button
+                  onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                  className="md:hidden w-10 h-10 flex items-center justify-center text-text-secondary hover:text-text-primary"
+                  aria-label={mobileMenuOpen ? 'Fermer le menu' : 'Ouvrir le menu'}
+                  aria-expanded={mobileMenuOpen}
+                >
+                  {mobileMenuOpen ? <CloseIcon className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+                </button>
               </>
             )}
           </div>
-        </div>
+        </nav>
       </header>
 
-      {/* Hero Section */}
-      <section ref={heroRef} className="relative overflow-hidden pt-20 noise-overlay">
-        {/* Background mesh gradient */}
+      {/* Mobile menu overlay (Phase 3 #28) */}
+      {mobileMenuOpen && (
+        <motion.div
+          initial={{ x: '100%' }}
+          animate={{ x: 0 }}
+          exit={{ x: '100%' }}
+          transition={{ type: 'spring', damping: 30, stiffness: 300 }}
+          className="fixed inset-0 z-40 bg-bg-base/95 backdrop-blur-xl flex flex-col pt-20 px-6"
+        >
+          <div className="flex flex-col gap-4 mb-8">
+            {navLinks.map(link => (
+              link.isRoute ? (
+                <Link key={link.label} to={link.href} onClick={closeMobileMenu} className="text-lg text-text-primary font-medium py-2">
+                  {link.label}
+                </Link>
+              ) : (
+                <a key={link.label} href={link.href} onClick={closeMobileMenu} className="text-lg text-text-primary font-medium py-2">
+                  {link.label}
+                </a>
+              )
+            ))}
+          </div>
+          <div className="flex flex-col gap-3">
+            <Link to="/auth" onClick={closeMobileMenu}>
+              <button className="w-full py-3 text-text-secondary border border-border-subtle rounded-xl text-center">
+                Se connecter
+              </button>
+            </Link>
+            <Link to="/auth?mode=register&redirect=onboarding" onClick={closeMobileMenu}>
+              <button className="w-full py-3 bg-primary text-white rounded-xl font-medium text-center">
+                Créer ma squad gratuitement
+              </button>
+            </Link>
+          </div>
+        </motion.div>
+      )}
+
+      {/* ═══ HERO SECTION (Phase 4 #30-34) ═══ */}
+      <section
+        ref={heroRef}
+        id="main-content"
+        aria-label="Accueil"
+        className="relative overflow-hidden pt-20 noise-overlay"
+      >
+        {/* Background mesh gradient with pulse animation */}
         <div className="absolute inset-0 mesh-gradient-hero" />
+        <motion.div
+          className="absolute top-0 right-0 w-[600px] h-[600px] hero-gradient-pulse"
+          style={{
+            background: 'radial-gradient(circle, rgba(99,102,241,0.12) 0%, transparent 70%)',
+            filter: 'blur(60px)',
+          }}
+        />
 
         <div className="relative px-4 md:px-6 py-12 md:py-20 max-w-5xl mx-auto">
           <div className="text-center">
-            {/* Badge with sparkle */}
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/6 border border-primary/12 mb-8">
+            {/* Badge with shimmer */}
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full badge-shimmer border border-primary/12 mb-8">
               <Sparkles className="w-4 h-4 text-purple" />
               <span className="text-[13px] text-purple font-medium">Rassemble ta squad et jouez ensemble</span>
             </div>
 
-            {/* Headline - improved wording */}
-            <h1 className="text-4xl md:text-6xl font-bold text-text-primary mb-6 leading-tight">
+            {/* H1 with display font */}
+            <h1 className="text-4xl md:text-6xl font-extrabold text-text-primary mb-6 leading-tight tracking-tight">
               Transforme<br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#6366f1] via-[#a78bfa] to-[#34d399]">
+              <span className="text-gradient-animated">
                 "on verra"
               </span><br />
               en "on y est"
             </h1>
 
-            {/* Subtitle - improved */}
-            <p className="text-lg md:text-xl text-text-tertiary mb-10 max-w-2xl mx-auto">
+            {/* Subtitle */}
+            <p className="text-lg md:text-xl text-text-tertiary mb-10 max-w-2xl mx-auto leading-relaxed">
               Squad Planner fait que tes sessions ont vraiment lieu.
               <span className="text-text-primary font-medium"> Ta squad t'attend.</span>
             </p>
 
-            {/* CTA */}
-            <div className="flex flex-col items-center gap-4 mb-16">
+            {/* CTA buttons (Phase 4 #33) */}
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
               {isLoggedIn ? (
                 <Link to="/home">
                   <motion.button
-                    className="flex items-center gap-2 h-14 px-8 rounded-xl bg-[#6366f1] text-white text-[16px] font-semibold shadow-lg shadow-[#6366f1]/10"
+                    className="flex items-center gap-2 h-14 px-8 rounded-xl bg-[#6366f1] text-white text-[16px] font-semibold shadow-lg shadow-[#6366f1]/10 cta-glow-idle"
                     whileHover={{ scale: 1.02, y: -2 }}
                     whileTap={{ scale: 0.98 }}
-                    transition={{ duration: 0.4, ease: "easeOut" }}
+                    transition={{ duration: 0.4, ease: 'easeOut' }}
+                    data-track="hero_cta_click"
                   >
                     Accéder à mes squads
                     <ArrowRight className="w-5 h-5" />
@@ -223,24 +370,33 @@ export default function Landing() {
                 <>
                   <Link to="/auth?mode=register&redirect=onboarding">
                     <motion.button
-                      className="flex items-center gap-2 h-14 px-8 rounded-xl bg-[#6366f1] text-white text-[16px] font-semibold shadow-lg shadow-[#6366f1]/10"
+                      className="flex items-center gap-2 h-14 px-8 rounded-xl bg-[#6366f1] text-white text-[16px] font-semibold shadow-lg shadow-[#6366f1]/10 cta-glow-idle w-full sm:w-auto justify-center"
                       whileHover={{ scale: 1.02, y: -2 }}
                       {...springTap}
+                      data-track="hero_cta_click"
                     >
                       Créer ma squad gratuitement
                       <ArrowRight className="w-5 h-5" />
                     </motion.button>
                   </Link>
-                  <Link to="/auth" className="text-[14px] text-text-quaternary hover:text-text-tertiary transition-colors">
-                    Déjà un compte ? Se connecter
-                  </Link>
+                  <a href="#how-it-works">
+                    <motion.button
+                      className="flex items-center gap-2 h-14 px-8 rounded-xl border border-border-hover text-text-secondary hover:text-text-primary hover:border-text-tertiary transition-all w-full sm:w-auto justify-center"
+                      whileHover={{ scale: 1.02, y: -2 }}
+                      {...springTap}
+                      data-track="hero_secondary_cta_click"
+                    >
+                      <Play className="w-4 h-4" />
+                      Voir la démo
+                    </motion.button>
+                  </a>
                 </>
               )}
             </div>
 
-            {/* Social proof stats */}
+            {/* Micro-stats */}
             <div className="flex items-center justify-center gap-8 md:gap-16 mb-8">
-              {stats.map((stat) => (
+              {heroStats.map((stat) => (
                 <div key={stat.label} className="text-center">
                   <div className="text-2xl md:text-3xl font-bold text-text-primary">{stat.value}</div>
                   <div className="text-[12px] md:text-[13px] text-text-quaternary">{stat.label}</div>
@@ -248,14 +404,21 @@ export default function Landing() {
               ))}
             </div>
 
-            {/* Social proof badge */}
+            {/* Beta badge */}
             <div className="flex items-center justify-center gap-2 text-[13px] text-text-quaternary">
               <span className="inline-block w-2 h-2 rounded-full bg-[#34d399] animate-pulse" />
               <span>Beta ouverte — Rejoins les premiers gamers</span>
             </div>
+
+            {/* Login link for non-logged users */}
+            {!isLoggedIn && (
+              <Link to="/auth" className="block mt-4 text-[14px] text-text-quaternary hover:text-text-tertiary transition-colors">
+                Déjà un compte ? Se connecter
+              </Link>
+            )}
           </div>
 
-          {/* App Preview Mockup with subtle animation */}
+          {/* App Preview Mockup */}
           <motion.div
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
@@ -271,187 +434,78 @@ export default function Landing() {
                 transformStyle: 'preserve-3d',
               }}
             >
-              {/* V3: Shadow layer for depth */}
-              <div
-                className="absolute inset-0 rounded-[2.5rem] bg-[#6366f1]/5 blur-xl"
-                style={{ transform: 'translateZ(-30px) scale(1.05)' }}
-              />
-              {/* Phone frame with gradient border */}
+              <div className="absolute inset-0 rounded-[2.5rem] bg-[#6366f1]/5 blur-xl" style={{ transform: 'translateZ(-30px) scale(1.05)' }} />
               <div className="bg-gradient-to-b from-[rgba(255,255,255,0.12)] to-[rgba(255,255,255,0.04)] rounded-[2.5rem] p-[1px] shadow-2xl shadow-[#6366f1]/15" style={{ transform: 'translateZ(0px)' }}>
-              <div className="bg-[#101012] rounded-[2.5rem] p-3">
-                {/* Screen */}
-                <div className="bg-[#050506] rounded-[2rem] overflow-hidden relative">
-                  {/* Subtle screen reflection */}
-                  <div className="absolute inset-0 bg-gradient-to-br from-white/[0.03] via-transparent to-transparent pointer-events-none z-10 rounded-[2rem]" />
-                  {/* Status bar */}
-                  <div className="flex items-center justify-between px-6 py-2 text-xs text-text-quaternary">
-                    <span>21:00</span>
-                    <div className="flex items-center gap-1">
-                      <div className="w-4 h-2 rounded-sm border border-[#5e6063]">
-                        <div className="w-3 h-1.5 bg-[#34d399] rounded-sm" />
+                <div className="bg-[#101012] rounded-[2.5rem] p-3">
+                  <div className="bg-[#050506] rounded-[2rem] overflow-hidden relative">
+                    <div className="absolute inset-0 bg-gradient-to-br from-white/[0.03] via-transparent to-transparent pointer-events-none z-10 rounded-[2rem]" />
+                    <div className="flex items-center justify-between px-6 py-2 text-xs text-text-quaternary">
+                      <span>21:00</span>
+                      <div className="flex items-center gap-1">
+                        <div className="w-4 h-2 rounded-sm border border-[#5e6063]">
+                          <div className="w-3 h-1.5 bg-[#34d399] rounded-sm" />
+                        </div>
                       </div>
                     </div>
-                  </div>
-
-                  {/* App content */}
-                  <div className="px-4 pb-6">
-                    {/* Session card */}
-                    <div className="bg-[rgba(99,102,241,0.06)] border border-[rgba(99,102,241,0.12)] rounded-2xl p-4 mb-4">
-                      <div className="flex items-center justify-between mb-3">
-                        <div className="flex items-center gap-2">
-                          <div className="w-8 h-8 rounded-lg bg-[#6366f1] flex items-center justify-center">
-                            <Calendar className="w-4 h-4 text-white" />
-                          </div>
-                          <div>
-                            <div className="text-[13px] font-semibold text-text-primary">Session Valorant</div>
-                            <div className="text-xs text-text-quaternary">Ce soir, 21h00</div>
-                          </div>
-                        </div>
-                        <span className="px-2 py-1 rounded-full bg-[#34d399]/20 text-xs text-[#34d399] font-medium">
-                          Confirmée
-                        </span>
-                      </div>
-
-                      {/* Members */}
-                      <div className="flex items-center gap-2">
-                        <div className="flex -space-x-2">
-                          {['#6366f1', '#34d399', '#f5a623', '#f87171'].map((color, i) => (
-                            <div
-                              key={i}
-                              className="w-7 h-7 rounded-full border-2 border-[#050506] flex items-center justify-center text-xs font-bold text-white"
-                              style={{ backgroundColor: color }}
-                            >
-                              {['M', 'L', 'K', 'J'][i]}
+                    <div className="px-4 pb-6">
+                      <div className="bg-[rgba(99,102,241,0.06)] border border-[rgba(99,102,241,0.12)] rounded-2xl p-4 mb-4">
+                        <div className="flex items-center justify-between mb-3">
+                          <div className="flex items-center gap-2">
+                            <div className="w-8 h-8 rounded-lg bg-[#6366f1] flex items-center justify-center">
+                              <Calendar className="w-4 h-4 text-white" />
                             </div>
-                          ))}
+                            <div>
+                              <div className="text-[13px] font-semibold text-text-primary">Session Valorant</div>
+                              <div className="text-xs text-text-quaternary">Ce soir, 21h00</div>
+                            </div>
+                          </div>
+                          <span className="px-2 py-1 rounded-full bg-[#34d399]/20 text-xs text-[#34d399] font-medium">Confirmée</span>
                         </div>
-                        <span className="text-[12px] text-text-tertiary">4/5 présents</span>
+                        <div className="flex items-center gap-2">
+                          <div className="flex -space-x-2">
+                            {['#6366f1', '#34d399', '#f5a623', '#f87171'].map((color, i) => (
+                              <div key={i} className="w-7 h-7 rounded-full border-2 border-[#050506] flex items-center justify-center text-xs font-bold text-white" style={{ backgroundColor: color }}>
+                                {['M', 'L', 'K', 'J'][i]}
+                              </div>
+                            ))}
+                          </div>
+                          <span className="text-[12px] text-text-tertiary">4/5 présents</span>
+                        </div>
                       </div>
-                    </div>
-
-                    {/* Quick stats */}
-                    <div className="grid grid-cols-3 gap-2">
-                      {[
-                        { label: 'Fiabilité', value: '94%', color: '#34d399' },
-                        { label: 'Sessions', value: '12', color: '#6366f1' },
-                        { label: 'Squad', value: '5', color: '#f5a623' },
-                      ].map((stat) => (
-                        <div key={stat.label} className="bg-surface-card rounded-xl p-3 text-center">
-                          <div className="text-[16px] font-bold" style={{ color: stat.color }}>{stat.value}</div>
-                          <div className="text-xs text-text-quaternary">{stat.label}</div>
-                        </div>
-                      ))}
+                      <div className="grid grid-cols-3 gap-2">
+                        {[
+                          { label: 'Fiabilité', value: '94%', color: '#34d399' },
+                          { label: 'Sessions', value: '12', color: '#6366f1' },
+                          { label: 'Squad', value: '5', color: '#f5a623' },
+                        ].map((stat) => (
+                          <div key={stat.label} className="bg-surface-card rounded-xl p-3 text-center">
+                            <div className="text-[16px] font-bold" style={{ color: stat.color }}>{stat.value}</div>
+                            <div className="text-xs text-text-quaternary">{stat.label}</div>
+                          </div>
+                        ))}
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-              </div>
-
-              {/* Decorative glow */}
               <div className="absolute -inset-4 bg-[radial-gradient(ellipse_at_center,rgba(99,102,241,0.1)_0%,transparent_70%)] -z-10" />
             </motion.div>
           </motion.div>
         </div>
       </section>
 
-      {/* Problem Section */}
-      <section className="px-4 md:px-6 py-12 md:py-16 border-t border-border-subtle">
-        <div className="max-w-4xl mx-auto">
-          <motion.div
-            variants={scrollRevealLight}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            className="text-center mb-12"
-          >
-            <h2 className="text-2xl md:text-3xl font-bold text-text-primary mb-4">
-              Le problème que tu connais trop bien
-            </h2>
-            <p className="text-text-tertiary text-lg">
-              T'as des amis. T'as Discord. T'as des jeux. Mais vous jouez jamais ensemble.
-            </p>
-          </motion.div>
+      {/* Section divider */}
+      <div className="section-divider" />
 
-          <motion.div
-            className="grid md:grid-cols-2 gap-4"
-            variants={staggerContainerVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-          >
+      {/* ═══ SOCIAL PROOF COUNTERS (Phase 8 #43-45) ═══ */}
+      <section aria-label="Statistiques" className="px-4 md:px-6 py-10">
+        <div className="max-w-4xl mx-auto">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6">
             {[
-              { emoji: '💬', text: '"On joue ce soir ?" → Personne ne répond' },
-              { emoji: '🤷', text: '"Je sais pas, on verra" → Rien ne se passe' },
-              { emoji: '👻', text: 'Session prévue → 2 mecs sur 5 se connectent' },
-              { emoji: '😤', text: 'Résultat → Plus personne n\'organise rien' },
-            ].map((item) => (
-              <motion.div
-                key={item.text}
-                variants={staggerItemVariants}
-                className="flex items-center gap-4 p-4 rounded-xl bg-surface-card border border-border-subtle"
-              >
-                <span className="text-2xl">{item.emoji}</span>
-                <span className="text-text-secondary">{item.text}</span>
-              </motion.div>
-            ))}
-          </motion.div>
-        </div>
-      </section>
-
-      {/* How it works */}
-      <section className="px-4 md:px-6 py-12 md:py-16 bg-gradient-to-b from-transparent to-[rgba(99,102,241,0.015)]">
-        <div className="max-w-4xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-12"
-          >
-            <h2 className="text-2xl md:text-3xl font-bold text-text-primary mb-4">
-              Comment ça marche
-            </h2>
-            <p className="text-text-tertiary text-lg">
-              En 4 étapes, ta squad joue régulièrement
-            </p>
-          </motion.div>
-
-          <motion.div
-            className="space-y-4"
-            variants={staggerContainerVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-          >
-            {steps.map((step) => (
-              <motion.div
-                key={step.step}
-                variants={staggerItemVariants}
-                className="flex items-start gap-4 p-6 rounded-2xl bg-surface-card border border-border-default"
-              >
-                <div className="w-12 h-12 rounded-xl bg-[rgba(99,102,241,0.1)] flex items-center justify-center shrink-0">
-                  <span className="text-[18px] font-bold text-[#6366f1]">{step.step}</span>
-                </div>
-                <div>
-                  <h3 className="text-[16px] font-semibold text-text-primary mb-1">{step.title}</h3>
-                  <p className="text-[14px] text-text-tertiary">{step.description}</p>
-                </div>
-              </motion.div>
-            ))}
-          </motion.div>
-        </div>
-      </section>
-
-      {/* V3: Animated Demo (replaces video/GIF) */}
-      <AnimatedDemo />
-
-      {/* V3: Live Stats Counter */}
-      <section className="px-4 md:px-6 py-10">
-        <div className="max-w-4xl mx-auto">
-          <div className="grid grid-cols-3 gap-3 md:gap-6">
-            {[
-              { end: 500, suffix: '+', label: 'gamers en beta', icon: Users, color: '#6366f1' },
-              { end: 80, suffix: '+', label: 'squads creees', icon: Target, color: '#34d399' },
-              { end: 2000, suffix: '+', label: 'sessions planifiees', icon: Calendar, color: '#f5a623' },
+              { end: 94, suffix: '%', label: 'fiabilité moyenne', icon: Target, color: '#34d399' },
+              { end: 3, suffix: 'x', label: 'plus de sessions par semaine', icon: TrendingUp, color: '#6366f1' },
+              { end: 30, suffix: 's', label: 'pour créer ta squad', icon: Calendar, color: '#f5a623' },
+              { end: 500, suffix: '+', label: 'gamers en beta', icon: Users, color: '#06B6D4' },
             ].map((stat) => (
               <motion.div
                 key={stat.label}
@@ -471,15 +525,168 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* Solution - Les 3 Piliers */}
-      <section className="px-4 md:px-6 py-12 md:py-16 bg-gradient-to-b from-transparent to-[rgba(99,102,241,0.015)]">
-        <div className="max-w-5xl mx-auto">
+      <div className="section-divider" />
+
+      {/* ═══ PROBLEM SECTION (Phase 5 #35-37) ═══ */}
+      <section aria-label="Le problème" className="px-4 md:px-6 py-12 md:py-16">
+        <div className="max-w-4xl mx-auto">
+          <motion.div variants={scrollRevealLight} initial="hidden" whileInView="visible" viewport={{ once: true }} className="text-center mb-12">
+            <h2 className="text-2xl md:text-3xl font-bold text-text-primary mb-4">
+              Le problème que tu connais trop bien
+            </h2>
+            <p className="text-text-tertiary text-lg">
+              T'as des amis. T'as Discord. T'as des jeux. Mais vous jouez jamais ensemble.
+            </p>
+          </motion.div>
+
+          {/* 2x2 grid (Phase 5 #35) */}
+          <motion.div className="grid md:grid-cols-2 gap-4 mb-4" variants={staggerContainerVariants} initial="hidden" whileInView="visible" viewport={{ once: true }}>
+            {[
+              { emoji: '💬', text: '"On joue ce soir ?" → Personne ne répond' },
+              { emoji: '🤷', text: '"Je sais pas, on verra" → Rien ne se passe' },
+              { emoji: '👻', text: 'Session prévue → 2 mecs sur 5 se connectent' },
+              { emoji: '😤', text: 'Tout le monde attend que quelqu\'un organise' },
+            ].map((item) => (
+              <motion.div
+                key={item.text}
+                variants={staggerItemVariants}
+                className="flex items-center gap-4 p-4 rounded-xl bg-surface-card border border-border-subtle hover:border-border-hover hover:scale-[1.02] transition-all cursor-default"
+              >
+                <span className="text-2xl">{item.emoji}</span>
+                <span className="text-text-secondary">{item.text}</span>
+              </motion.div>
+            ))}
+          </motion.div>
+
+          {/* Result callout (Phase 5 #36) */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            variants={scrollRevealLight}
+            initial="hidden"
+            whileInView="visible"
             viewport={{ once: true }}
-            className="text-center mb-12"
+            className="p-5 rounded-xl bg-gradient-to-r from-[rgba(248,113,113,0.08)] to-[rgba(251,191,36,0.05)] border border-[rgba(248,113,113,0.2)] text-center"
           >
+            <span className="text-xl mr-2">💥</span>
+            <span className="text-text-primary font-semibold">Résultat → Plus personne n'organise rien. Ta squad meurt à petit feu.</span>
+          </motion.div>
+        </div>
+      </section>
+
+      <div className="section-divider" />
+
+      {/* ═══ HOW IT WORKS + DEMO (Phase 6-7 #38-42, merged Phase 20 #83) ═══ */}
+      <section id="how-it-works" aria-label="Comment ça marche" className="px-4 md:px-6 py-12 md:py-16 bg-gradient-to-b from-transparent to-[rgba(99,102,241,0.015)]">
+        <div className="max-w-5xl mx-auto">
+          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-12">
+            <h2 className="text-2xl md:text-3xl font-bold text-text-primary mb-4">
+              Comment ça marche
+            </h2>
+            <p className="text-text-tertiary text-lg">
+              De la création de squad à la session de jeu en 30 secondes
+            </p>
+          </motion.div>
+
+          <div className="flex flex-col lg:flex-row items-center gap-8 lg:gap-12">
+            {/* Phone mockup (AnimatedDemo) */}
+            <AnimatedDemo currentStep={demoStep} onStepChange={setDemoStep} />
+
+            {/* Horizontal stepper on desktop, vertical on mobile (Phase 6 #38-40) */}
+            <div className="flex-1 w-full">
+              {/* Desktop horizontal stepper */}
+              <div className="hidden lg:block mb-8">
+                <div className="flex items-center justify-between relative">
+                  {/* Progress line background */}
+                  <div className="absolute top-5 left-[5%] right-[5%] h-0.5 bg-border-subtle" />
+                  {/* Active progress line */}
+                  <div
+                    className="absolute top-5 left-[5%] h-0.5 stepper-line"
+                    style={{ width: `${(demoStep / (steps.length - 1)) * 90}%` }}
+                  />
+                  {steps.map((step, i) => {
+                    const isActive = i === demoStep
+                    const isPast = i < demoStep
+                    const StepIcon = step.icon
+                    return (
+                      <button
+                        key={step.step}
+                        onClick={() => setDemoStep(i)}
+                        className="relative z-10 flex flex-col items-center text-center"
+                      >
+                        <div className={`w-10 h-10 rounded-full flex items-center justify-center mb-2 transition-all ${
+                          isActive ? 'bg-primary text-white scale-110' :
+                          isPast ? 'bg-primary/20 text-primary' :
+                          'bg-bg-elevated border border-border-subtle text-text-quaternary'
+                        }`}>
+                          <StepIcon className="w-4 h-4" />
+                        </div>
+                        <span className={`text-xs font-medium transition-colors ${isActive ? 'text-text-primary' : 'text-text-tertiary'}`}>
+                          {step.title}
+                        </span>
+                      </button>
+                    )
+                  })}
+                </div>
+              </div>
+
+              {/* Step details */}
+              <div className="space-y-3 lg:space-y-0">
+                {steps.map((step, i) => {
+                  const isActive = i === demoStep
+                  const StepIcon = step.icon
+                  return (
+                    <motion.button
+                      key={step.step}
+                      onClick={() => setDemoStep(i)}
+                      className={`flex items-start gap-4 p-4 lg:p-5 rounded-2xl w-full text-left transition-all ${
+                        isActive
+                          ? 'bg-bg-elevated border border-border-hover'
+                          : 'border border-transparent hover:bg-bg-elevated/50 lg:hidden'
+                      }`}
+                      initial={false}
+                      animate={isActive ? { scale: 1 } : { scale: 1 }}
+                    >
+                      <div className={`w-10 h-10 lg:w-12 lg:h-12 rounded-xl flex items-center justify-center shrink-0 transition-all ${
+                        isActive ? '' : 'opacity-50'
+                      }`} style={{ backgroundColor: `${demoSteps[i]?.color || '#6366f1'}15` }}>
+                        <StepIcon className="w-5 h-5" style={{ color: demoSteps[i]?.color || '#6366f1' }} />
+                      </div>
+                      <div>
+                        <h3 className={`text-[15px] font-semibold transition-colors ${isActive ? 'text-text-primary' : 'text-text-tertiary'}`}>{step.title}</h3>
+                        {isActive && (
+                          <motion.p
+                            initial={{ opacity: 0, height: 0 }}
+                            animate={{ opacity: 1, height: 'auto' }}
+                            className="text-[14px] text-text-tertiary mt-1"
+                          >
+                            {step.description}
+                          </motion.p>
+                        )}
+                      </div>
+                      {/* Progress bar for active step */}
+                      {isActive && (
+                        <motion.div
+                          className="hidden lg:block h-0.5 bg-primary rounded-full ml-auto self-center"
+                          initial={{ width: 0 }}
+                          animate={{ width: 40 }}
+                          transition={{ duration: (demoSteps[i]?.duration || 3000) / 1000, ease: 'linear' }}
+                          key={`progress-${demoStep}`}
+                        />
+                      )}
+                    </motion.button>
+                  )
+                })}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div className="section-divider" />
+
+      {/* ═══ FEATURES - MERGED PILLARS + DETAILS (Phase 9-10 #46-50, Phase 20 #83) ═══ */}
+      <section id="features" aria-label="Fonctionnalités principales" className="px-4 md:px-6 py-12 md:py-16">
+        <div className="max-w-5xl mx-auto">
+          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-12">
             <h2 className="text-2xl md:text-3xl font-bold text-text-primary mb-4">
               Les 3 piliers de Squad Planner
             </h2>
@@ -488,242 +695,172 @@ export default function Landing() {
             </p>
           </motion.div>
 
-          {/* Les 3 PILIERS - Grandes cartes avec glow */}
-          <motion.div
-            className="grid md:grid-cols-3 gap-6 mb-16"
-            variants={staggerContainerVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-          >
-            {pillars.map((pillar) => (
-              <motion.div
-                key={pillar.title}
-                variants={staggerItemVariants}
-                className="relative p-8 rounded-3xl border transition-interactive group"
-                style={{
-                  backgroundColor: `${pillar.color}08`,
-                  borderColor: `${pillar.color}25`
-                }}
-                whileHover={{ scale: 1.02, y: -2 }}
-                whileTap={{ scale: 0.98 }}
-                transition={{ duration: 0.4, ease: "easeOut" }}
-              >
-                {/* Glow effect on hover */}
-                <div
-                  className="absolute inset-0 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 -z-10"
-                  style={{ boxShadow: `0 0 30px ${pillar.color}15, 0 0 60px ${pillar.color}08` }}
-                />
-                <motion.div
-                  className="w-14 h-14 rounded-2xl flex items-center justify-center mb-4"
-                  style={{ backgroundColor: `${pillar.color}20`, color: pillar.color }}
-                  whileHover={{ rotate: [0, -5, 5, 0] }}
-                  transition={{ duration: 0.4 }}
+          {/* Pillar tabs */}
+          <div className="flex flex-wrap justify-center gap-3 mb-8">
+            {pillars.map((pillar, i) => {
+              const PillarIcon = pillar.icon
+              return (
+                <button
+                  key={pillar.id}
+                  onClick={() => setActiveFeature(i)}
+                  className={`flex items-center gap-2 px-5 py-3 rounded-xl transition-all text-sm font-medium ${
+                    activeFeature === i
+                      ? 'text-white shadow-lg'
+                      : 'bg-surface-card border border-border-subtle text-text-tertiary hover:text-text-primary hover:border-border-hover'
+                  }`}
+                  style={activeFeature === i ? {
+                    backgroundColor: `${pillar.color}20`,
+                    color: pillar.color,
+                    borderColor: `${pillar.color}40`,
+                    border: `1px solid ${pillar.color}40`,
+                    boxShadow: `0 0 20px ${pillar.color}15`,
+                  } : undefined}
                 >
-                  {/* V3: SVG illustration on desktop, Lucide icon on mobile */}
-                  <div className="hidden md:block">
-                    <pillar.illustration size={40} />
-                  </div>
-                  <pillar.icon className="w-7 h-7 md:hidden" style={{ color: pillar.color }} />
-                </motion.div>
-                <h3 className="text-xl font-bold text-text-primary mb-3">{pillar.title}</h3>
-                <p className="text-[15px] text-text-tertiary leading-relaxed">{pillar.description}</p>
-              </motion.div>
-            ))}
-          </motion.div>
-        </div>
-      </section>
+                  <PillarIcon className="w-4 h-4" />
+                  {pillar.title}
+                </button>
+              )
+            })}
+          </div>
 
-      {/* Voice & Chat Highlight */}
-      <section className="px-4 md:px-6 py-12 md:py-16 border-t border-border-subtle">
-        <div className="max-w-5xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="grid md:grid-cols-2 gap-6"
-          >
-            {/* Voice Card */}
-            <motion.div
-              className="p-8 rounded-3xl bg-gradient-to-br from-[rgba(52,211,153,0.08)] to-[rgba(52,211,153,0.01)] border border-[rgba(52,211,153,0.15)] group"
-              whileHover={{ scale: 1.01, y: -2 }}
-              transition={{ duration: 0.5, ease: "easeOut" }}
-            >
-              <div className="w-16 h-16 rounded-2xl bg-[rgba(52,211,153,0.12)] flex items-center justify-center mb-6 group-hover:shadow-[0_0_20px_rgba(52,211,153,0.15)] transition-shadow duration-500">
-                <Headphones className="w-8 h-8 text-[#34d399]" />
-              </div>
-              <h3 className="text-xl font-bold text-text-primary mb-3">
-                Party vocale toujours ouverte
-              </h3>
-              <p className="text-text-tertiary mb-4">
-                Ta squad a son salon vocal 24/7. Pas besoin de planifier.
-                <span className="text-[#34d399] font-medium"> Rejoins quand tu veux, reste aussi longtemps que tu veux.</span>
-              </p>
-              <ul className="space-y-2">
-                {[
-                  '1 squad = 1 party vocale dédiée',
-                  'Rejoindre en 1 clic',
-                  'Qualité HD, latence ultra-faible',
-                ].map(item => (
-                  <li key={item} className="flex items-center gap-2 text-[14px] text-text-secondary">
-                    <Check className="w-4 h-4 text-[#34d399]" />
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </motion.div>
-
-            {/* Chat Card */}
-            <motion.div
-              className="p-8 rounded-3xl bg-gradient-to-br from-[rgba(96,165,250,0.08)] to-[rgba(96,165,250,0.01)] border border-[rgba(96,165,250,0.15)] group"
-              whileHover={{ scale: 1.01, y: -2 }}
-              transition={{ duration: 0.5, ease: "easeOut" }}
-            >
-              <div className="w-16 h-16 rounded-2xl bg-[rgba(96,165,250,0.12)] flex items-center justify-center mb-6 group-hover:shadow-[0_0_20px_rgba(96,165,250,0.15)] transition-shadow duration-500">
-                <MessageCircle className="w-8 h-8 text-[#60a5fa]" />
-              </div>
-              <h3 className="text-xl font-bold text-text-primary mb-3">
-                Chat live avec ta squad
-              </h3>
-              <p className="text-text-tertiary mb-4">
-                Discute avant la session pour t'organiser. Pendant pour rigoler. Apres pour le debrief.
-                <span className="text-[#60a5fa] font-medium"> Tout est au meme endroit.</span>
-              </p>
-              <ul className="space-y-2">
-                {[
-                  'Chat de squad permanent',
-                  'Chat par session',
-                  'Résumés IA automatiques',
-                ].map(item => (
-                  <li key={item} className="flex items-center gap-2 text-[14px] text-text-secondary">
-                    <Check className="w-4 h-4 text-[#60a5fa]" />
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </motion.div>
-          </motion.div>
-
-          {/* Party Vocale Mockup - Illustration visuelle */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="relative max-w-sm mx-auto mt-12"
-          >
-            {/* Glow background */}
-            <div className="absolute -inset-8 bg-[radial-gradient(ellipse_at_center,rgba(52,211,153,0.08)_0%,transparent_70%)]" />
-
-            {/* Phone frame */}
-            <div className="relative bg-[#101012] rounded-[2rem] p-3 border border-[rgba(52,211,153,0.15)] shadow-2xl shadow-[#34d399]/5">
-              <div className="bg-[#050506] rounded-[1.5rem] overflow-hidden">
-                {/* Header */}
-                <div className="px-4 py-3 border-b border-[rgba(255,255,255,0.06)]">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <motion.div
-                        className="w-2.5 h-2.5 rounded-full bg-[#34d399]"
-                        animate={{ scale: [1, 1.2, 1], opacity: [1, 0.8, 1] }}
-                        transition={{ duration: 2, repeat: 3, ease: "easeInOut" }}
-                      />
-                      <span className="text-[13px] font-semibold text-text-primary">Party vocale</span>
+          {/* Active pillar detail card */}
+          {pillars.map((pillar, i) => {
+            if (i !== activeFeature) return null
+            const PillarIcon = pillar.icon
+            return (
+              <motion.div
+                key={pillar.id}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3 }}
+                className={`p-8 md:p-10 rounded-3xl bg-gradient-to-br ${pillar.gradient} border`}
+                style={{ borderColor: `${pillar.color}25` }}
+              >
+                <div className="flex flex-col md:flex-row gap-8">
+                  <div className="flex-1">
+                    <div className="w-16 h-16 rounded-2xl flex items-center justify-center mb-6" style={{ backgroundColor: `${pillar.color}12` }}>
+                      <div className="hidden md:block">
+                        <pillar.illustration size={40} />
+                      </div>
+                      <PillarIcon className="w-8 h-8 md:hidden" style={{ color: pillar.color }} />
                     </div>
-                    <span className="text-xs text-[#34d399]">En ligne</span>
+                    <h3 className="text-xl font-bold text-text-primary mb-3">{pillar.title}</h3>
+                    <p className="text-text-tertiary mb-4">{pillar.detailText}</p>
+                    <ul className="space-y-2">
+                      {pillar.details.map(item => (
+                        <li key={item} className="flex items-center gap-2 text-[14px] text-text-secondary">
+                          <Check className="w-4 h-4" style={{ color: pillar.color }} />
+                          {item}
+                        </li>
+                      ))}
+                    </ul>
                   </div>
-                  <p className="text-xs text-text-quaternary mt-1">Les Ranked du Soir</p>
-                </div>
 
-                {/* Participants */}
-                <div className="p-5">
-                  <div className="flex items-center justify-center gap-3 mb-5">
-                    {/* Avatar 1 - Speaking */}
-                    <motion.div className="flex flex-col items-center">
-                      <motion.div
-                        className="relative"
-                        animate={{ scale: [1, 1.03, 1] }}
-                        transition={{ duration: 1.2, repeat: 3, ease: "easeInOut" }}
-                      >
-                        <motion.div
-                          className="absolute inset-0 w-12 h-12 rounded-full bg-[#34d399]"
-                          animate={{ scale: [1, 1.3], opacity: [0.3, 0] }}
-                          transition={{ duration: 1.5, repeat: 3, ease: "easeOut" }}
-                        />
-                        <div className="relative w-12 h-12 rounded-full bg-[#34d399] flex items-center justify-center text-base font-bold text-[#050506] ring-2 ring-[#34d399]/50">
-                          M
+                  {/* Voice mockup for "voice" pillar */}
+                  {pillar.id === 'voice' && (
+                    <div className="relative max-w-[240px] mx-auto md:mx-0">
+                      <div className="bg-[#101012] rounded-[1.5rem] p-3 border border-[rgba(52,211,153,0.15)]">
+                        <div className="bg-[#050506] rounded-[1.2rem] overflow-hidden p-4">
+                          <div className="flex items-center gap-2 mb-3">
+                            <motion.div className="w-2 h-2 rounded-full bg-[#34d399]" animate={{ scale: [1, 1.2, 1], opacity: [1, 0.8, 1] }} transition={{ duration: 2, repeat: 3, ease: 'easeInOut' }} />
+                            <span className="text-xs font-semibold text-text-primary">Party vocale</span>
+                            <span className="text-xs text-[#34d399] ml-auto">En ligne</span>
+                          </div>
+                          <div className="flex items-center justify-center gap-3 mb-3">
+                            {[
+                              { name: 'Max', color: '#34d399', speaking: true },
+                              { name: 'Luna', color: '#6366f1', speaking: false },
+                              { name: 'Kira', color: '#f5a623', speaking: false },
+                              { name: 'Jay', color: '#a78bfa', speaking: false },
+                            ].map((p) => (
+                              <div key={p.name} className="flex flex-col items-center">
+                                <div className="relative">
+                                  {p.speaking && (
+                                    <motion.div className="absolute inset-0 w-10 h-10 rounded-full bg-[#34d399]" animate={{ scale: [1, 1.3], opacity: [0.3, 0] }} transition={{ duration: 1.5, repeat: 3, ease: 'easeOut' }} />
+                                  )}
+                                  <div className={`relative w-10 h-10 rounded-full flex items-center justify-center text-xs font-bold text-white ${p.speaking ? 'ring-2 ring-[#34d399]/50' : ''}`} style={{ backgroundColor: p.color }}>
+                                    {p.name[0]}
+                                  </div>
+                                </div>
+                                <span className={`text-[9px] mt-1 ${p.speaking ? 'text-[#34d399] font-medium' : 'text-text-tertiary'}`}>{p.name}</span>
+                              </div>
+                            ))}
+                          </div>
+                          {/* Voice wave */}
+                          <div className="flex items-center justify-center gap-0.5">
+                            {[0, 1, 2, 3, 4, 5, 6].map((j) => (
+                              <motion.div key={j} className="w-0.5 rounded-full bg-[#34d399]" animate={{ height: [4, 12, 4] }} transition={{ duration: 0.5, repeat: 4, delay: j * 0.08, ease: 'easeInOut' }} />
+                            ))}
+                          </div>
                         </div>
-                      </motion.div>
-                      <span className="text-[10px] text-[#34d399] mt-1.5 font-medium">Max</span>
-                    </motion.div>
-
-                    {/* Avatar 2 */}
-                    <div className="flex flex-col items-center">
-                      <div className="relative w-12 h-12 rounded-full bg-[#6366f1] flex items-center justify-center text-base font-bold text-white">
-                        L
                       </div>
-                      <span className="text-[10px] text-text-tertiary mt-1.5">Luna</span>
                     </div>
-
-                    {/* Avatar 3 */}
-                    <div className="flex flex-col items-center">
-                      <div className="relative w-12 h-12 rounded-full bg-[#f5a623] flex items-center justify-center text-base font-bold text-[#050506]">
-                        K
-                      </div>
-                      <span className="text-[10px] text-text-tertiary mt-1.5">Kira</span>
-                    </div>
-
-                    {/* Avatar 4 */}
-                    <div className="flex flex-col items-center">
-                      <div className="relative w-12 h-12 rounded-full bg-[#a78bfa] flex items-center justify-center text-base font-bold text-white">
-                        J
-                      </div>
-                      <span className="text-[10px] text-text-tertiary mt-1.5">Jay</span>
-                    </div>
-                  </div>
-
-                  {/* Controls */}
-                  <div className="flex items-center justify-center gap-3">
-                    <motion.div
-                      className="w-10 h-10 rounded-full bg-[#34d399] flex items-center justify-center"
-                      whileHover={{ scale: 1.05 }}
-                      transition={{ duration: 0.3, ease: "easeOut" }}
-                    >
-                      <Headphones className="w-4 h-4 text-[#050506]" />
-                    </motion.div>
-                    <div className="w-10 h-10 rounded-full bg-[#f87171] flex items-center justify-center">
-                      <span className="text-sm">📞</span>
-                    </div>
-                  </div>
+                  )}
                 </div>
-              </div>
-            </div>
-          </motion.div>
+              </motion.div>
+            )
+          })}
 
-          {/* Discord comparison */}
+          {/* Summary text (Phase 10 #50) */}
           <motion.p
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
-            className="text-center text-[14px] text-text-quaternary mt-8"
+            className="text-center text-[15px] text-text-quaternary mt-10"
           >
-            Plus qu'un simple Discord — Squad Planner crée des <span className="text-[#fafafa]">habitudes de jeu régulières</span> pour ta communauté
+            Plus qu'un simple Discord — Squad Planner crée des{' '}
+            <span className="text-text-primary font-semibold text-gradient-animated">habitudes de jeu régulières</span>{' '}
+            pour ta communauté
           </motion.p>
         </div>
       </section>
 
-      {/* Reliability Score Section */}
-      <section className="px-4 md:px-6 py-12 md:py-16 bg-gradient-to-b from-transparent to-[rgba(248,113,113,0.02)]">
+      <div className="section-divider" />
+
+      {/* ═══ RELIABILITY SCORE (Phase 11 #51-52) ═══ */}
+      <section aria-label="Score de fiabilité" className="px-4 md:px-6 py-12 md:py-16 bg-gradient-to-b from-transparent to-[rgba(248,113,113,0.02)]">
         <div className="max-w-4xl mx-auto">
-          <motion.div
-            variants={scaleReveal}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
+          <motion.div variants={scaleReveal} initial="hidden" whileInView="visible" viewport={{ once: true }}
             className="p-8 md:p-12 rounded-3xl bg-surface-card border border-[rgba(248,113,113,0.2)]"
           >
             <div className="flex flex-col md:flex-row items-center gap-8">
-              <div className="w-24 h-24 rounded-2xl bg-[rgba(248,113,113,0.1)] flex items-center justify-center shrink-0">
-                <TrendingUp className="w-12 h-12 text-[#f87171]" />
+              {/* Circular progress mockup (Phase 11 #51) */}
+              <div className="shrink-0 flex flex-col items-center">
+                <div className="relative w-28 h-28">
+                  <svg className="w-28 h-28 -rotate-90" viewBox="0 0 100 100">
+                    <circle cx="50" cy="50" r="45" fill="none" stroke="rgba(248,113,113,0.1)" strokeWidth="8" />
+                    <motion.circle
+                      cx="50" cy="50" r="45" fill="none" stroke="#f87171" strokeWidth="8"
+                      strokeLinecap="round" strokeDasharray="283"
+                      initial={{ strokeDashoffset: 283 }}
+                      whileInView={{ strokeDashoffset: 283 * (1 - 0.94) }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 2, ease: 'easeOut' }}
+                    />
+                  </svg>
+                  <div className="absolute inset-0 flex flex-col items-center justify-center">
+                    <span className="text-2xl font-bold text-[#f87171]">94%</span>
+                    <span className="text-[10px] text-text-tertiary">fiabilité</span>
+                  </div>
+                </div>
+                {/* Session history dots */}
+                <div className="flex gap-1 mt-3">
+                  {['✅', '✅', '✅', '❌', '✅', '✅'].map((s, j) => (
+                    <motion.span
+                      key={j}
+                      className="text-xs"
+                      initial={{ opacity: 0, scale: 0 }}
+                      whileInView={{ opacity: 1, scale: 1 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: 0.3 + j * 0.1 }}
+                    >
+                      {s}
+                    </motion.span>
+                  ))}
+                </div>
+                <span className="text-xs text-text-quaternary mt-1">MaxGamer_94</span>
               </div>
+
               <div className="text-center md:text-left">
                 <h3 className="text-2xl font-bold text-text-primary mb-3">
                   Score de fiabilité : tes potes comptent sur toi
@@ -732,33 +869,35 @@ export default function Landing() {
                   Chaque membre a un score basé sur sa présence réelle. Tu dis que tu viens ? On vérifie.
                   <span className="text-[#f87171] font-medium"> Les no-shows chroniques, ça se voit.</span>
                 </p>
-                <div className="flex flex-wrap justify-center md:justify-start gap-4">
+                <motion.div
+                  className="flex flex-wrap justify-center md:justify-start gap-3"
+                  variants={staggerContainerVariants}
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true }}
+                >
                   {[
                     { label: 'Check-in obligatoire', icon: '✅' },
                     { label: 'Historique visible', icon: '📊' },
                     { label: 'Score par joueur', icon: '🏆' },
                   ].map(item => (
-                    <span key={item.label} className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[rgba(248,113,113,0.1)] text-[13px] text-[#f87171]">
+                    <motion.span key={item.label} variants={staggerItemVariants} className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[rgba(248,113,113,0.1)] text-[13px] text-[#f87171]">
                       {item.icon} {item.label}
-                    </span>
+                    </motion.span>
                   ))}
-                </div>
+                </motion.div>
               </div>
             </div>
           </motion.div>
         </div>
       </section>
 
-      {/* Comparison vs Discord */}
-      <section className="px-4 md:px-6 py-12 md:py-16 border-t border-border-subtle">
+      <div className="section-divider" />
+
+      {/* ═══ COMPARISON TABLE (Phase 12 #22, #53-54) ═══ */}
+      <section aria-label="Comparaison avec Discord" className="px-4 md:px-6 py-12 md:py-16">
         <div className="max-w-4xl mx-auto">
-          <motion.div
-            variants={scrollReveal}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            className="text-center mb-12"
-          >
+          <motion.div variants={scrollReveal} initial="hidden" whileInView="visible" viewport={{ once: true }} className="text-center mb-12">
             <h2 className="text-2xl md:text-3xl font-bold text-text-primary mb-4">
               Plus qu'un Discord pour gamers
             </h2>
@@ -767,96 +906,182 @@ export default function Landing() {
             </p>
           </motion.div>
 
+          {/* Semantic table (Phase 2 #22, Phase 12 #53) */}
           <motion.div
-            className="overflow-hidden rounded-2xl border border-border-default"
+            className="overflow-x-auto rounded-2xl border border-border-default"
             variants={scrollReveal}
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
           >
-            {/* Table header */}
-            <div className="grid grid-cols-[1fr_60px_60px] md:grid-cols-3 bg-bg-surface px-3 md:px-6 py-3 border-b border-border-subtle">
-              <span className="text-[12px] md:text-[13px] font-medium text-text-secondary">Fonctionnalite</span>
-              <span className="text-[12px] md:text-[13px] font-medium text-text-secondary text-center">Discord</span>
-              <span className="text-[12px] md:text-[13px] font-medium text-primary text-center">SP</span>
-            </div>
-
-            {/* Table rows */}
-            {comparisons.map((item, i) => (
-              <motion.div
-                key={item.feature}
-                className={`grid grid-cols-[1fr_60px_60px] md:grid-cols-3 items-center px-3 md:px-6 py-3 md:py-4 ${i < comparisons.length - 1 ? 'border-b border-border-subtle' : ''}`}
-                initial={{ opacity: 0, x: -10 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.05 }}
-              >
-                <span className="text-[13px] md:text-[14px] text-text-primary pr-2">{item.feature}</span>
-                <span className="flex justify-center">
-                  {item.discord === true ? (
-                    <Check className="w-4 h-4 md:w-5 md:h-5 text-success" />
-                  ) : item.discord === 'partial' ? (
-                    <span className="text-[10px] md:text-[12px] text-warning px-1.5 py-0.5 rounded-full bg-warning/10">Limite</span>
-                  ) : (
-                    <XIcon className="w-4 h-4 md:w-5 md:h-5 text-text-quaternary" />
-                  )}
-                </span>
-                <span className="flex justify-center">
-                  <Check className="w-4 h-4 md:w-5 md:h-5 text-success" />
-                </span>
-              </motion.div>
-            ))}
+            <table className="w-full min-w-[500px]">
+              <thead>
+                <tr className="bg-bg-surface border-b border-border-subtle">
+                  <th scope="col" className="text-left text-[12px] md:text-[13px] font-medium text-text-secondary px-3 md:px-6 py-3">
+                    Fonctionnalité
+                  </th>
+                  <th scope="col" className="text-center text-[12px] md:text-[13px] font-medium text-text-secondary px-3 md:px-6 py-3">
+                    <span className="inline-flex items-center gap-1.5">
+                      <DiscordIcon className="w-4 h-4" />
+                      Discord
+                    </span>
+                  </th>
+                  <th scope="col" className="text-center text-[12px] md:text-[13px] font-medium text-primary px-3 md:px-6 py-3 border-t-2 border-t-primary">
+                    <span className="inline-flex items-center gap-1.5">
+                      <SquadPlannerLogo size={14} />
+                      SP
+                    </span>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {comparisons.map((item, i) => (
+                  <tr
+                    key={item.feature}
+                    className={`${i < comparisons.length - 1 ? 'border-b border-border-subtle' : ''} ${
+                      !item.discord ? 'bg-[rgba(99,102,241,0.02)]' : ''
+                    }`}
+                  >
+                    <th scope="row" className="text-left text-[13px] md:text-[14px] text-text-primary px-3 md:px-6 py-3 md:py-4 font-normal">
+                      {item.feature}
+                    </th>
+                    <td className="text-center px-3 md:px-6 py-3 md:py-4">
+                      {item.discord === true ? (
+                        <span className="inline-flex flex-col items-center">
+                          <Check className="w-4 h-4 md:w-5 md:h-5 text-success" aria-label="Disponible" />
+                          {item.discordNote && <span className="text-[10px] text-text-quaternary mt-0.5">{item.discordNote}</span>}
+                        </span>
+                      ) : item.discord === 'partial' ? (
+                        <span className="inline-flex flex-col items-center">
+                          <span className="text-[10px] md:text-[12px] text-warning px-1.5 py-0.5 rounded-full bg-warning/10">{item.discordNote || 'Limité'}</span>
+                        </span>
+                      ) : (
+                        <XIcon className="w-4 h-4 md:w-5 md:h-5 text-text-quaternary mx-auto" aria-label="Non disponible" />
+                      )}
+                    </td>
+                    <td className="text-center px-3 md:px-6 py-3 md:py-4">
+                      <span className="inline-flex flex-col items-center">
+                        <Check className="w-4 h-4 md:w-5 md:h-5 text-success" aria-label="Disponible" />
+                        {item.squadNote && <span className="text-[10px] text-[#06B6D4] mt-0.5">{item.squadNote}</span>}
+                      </span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </motion.div>
+
+          {/* Honesty footnote (Phase 12 #54) */}
+          <p className="text-center text-[13px] text-text-quaternary mt-6 max-w-lg mx-auto">
+            Discord reste indispensable pour les communautés larges. Squad Planner est conçu spécifiquement pour ta squad de 3 à 10 joueurs.
+          </p>
         </div>
       </section>
 
-      {/* V3: Testimonial Carousel */}
-      <TestimonialCarousel />
+      <div className="section-divider" />
 
-      {/* CTA Final - Enhanced */}
-      <section className="px-4 md:px-6 py-16">
+      {/* ═══ TESTIMONIALS (Phase 13 #55-58) ═══ */}
+      <section id="testimonials" aria-label="Témoignages" className="px-4 md:px-6 py-16 md:py-24">
+        <div className="max-w-5xl mx-auto">
+          <TestimonialCarousel />
+        </div>
+      </section>
+
+      <div className="section-divider" />
+
+      {/* ═══ FAQ INLINE (Phase 19 #78) ═══ */}
+      <section aria-label="Questions fréquentes" className="px-4 md:px-6 py-12 md:py-16">
+        <div className="max-w-3xl mx-auto">
+          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-12">
+            <h2 className="text-2xl md:text-3xl font-bold text-text-primary mb-4">
+              Questions fréquentes
+            </h2>
+          </motion.div>
+
+          <div className="space-y-3">
+            {faqs.map((faq, i) => (
+              <motion.div
+                key={i}
+                variants={staggerItemVariants}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+                className="border border-border-subtle rounded-xl overflow-hidden"
+              >
+                <button
+                  onClick={() => setExpandedFaq(expandedFaq === i ? null : i)}
+                  className="w-full flex items-center justify-between p-5 text-left hover:bg-bg-elevated/50 transition-colors"
+                  aria-expanded={expandedFaq === i}
+                >
+                  <span className="text-[15px] font-medium text-text-primary pr-4">{faq.q}</span>
+                  <ChevronDown className={`w-5 h-5 text-text-quaternary shrink-0 transition-transform duration-300 ${expandedFaq === i ? 'rotate-180' : ''}`} />
+                </button>
+                <div className={`faq-answer ${expandedFaq === i ? 'open' : ''}`}>
+                  <div>
+                    <p className="px-5 pb-5 text-[14px] text-text-tertiary leading-relaxed">{faq.a}</p>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <div className="section-divider" />
+
+      {/* ═══ CTA FINAL (Phase 14 #59-60) ═══ */}
+      <section aria-label="Appel à l'action" className="px-4 md:px-6 py-16">
         <div className="max-w-2xl mx-auto">
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
-            className="relative p-8 md:p-12 rounded-3xl bg-gradient-to-b from-[rgba(99,102,241,0.08)] to-[rgba(99,102,241,0.01)] border border-[rgba(99,102,241,0.15)] text-center overflow-hidden"
+            className="relative p-8 md:p-12 rounded-3xl bg-gradient-to-b from-[rgba(99,102,241,0.1)] to-[rgba(6,182,212,0.04)] border border-[rgba(99,102,241,0.15)] text-center overflow-hidden"
           >
-            {/* Animated glow background - limited repeats */}
+            {/* Animated glow background */}
             <motion.div
-              className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(99,102,241,0.08)_0%,transparent_60%)]"
+              className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(99,102,241,0.1)_0%,transparent_60%)]"
               animate={{ scale: [1, 1.05, 1], opacity: [0.4, 0.6, 0.4] }}
-              transition={{ duration: 4, repeat: 2, ease: "easeInOut" }}
+              transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
             />
             <div className="relative z-10">
-              <motion.div
-                animate={{ rotate: [0, 5, -5, 0] }}
-                transition={{ duration: 3, repeat: 2, ease: "easeInOut" }}
-              >
+              <motion.div animate={{ rotate: [0, 5, -5, 0] }} transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}>
                 <Sparkles className="w-12 h-12 mx-auto mb-6 text-[#6366f1]" />
               </motion.div>
-              <h2 className="text-2xl md:text-3xl font-bold text-text-primary mb-4">
+              <h2 className="text-2xl md:text-4xl font-bold text-text-primary mb-4">
                 Ta squad t'attend
               </h2>
-              <p className="text-text-tertiary mb-8">
+              <p className="text-text-tertiary mb-8 text-lg">
                 Gratuit, sans engagement. Lance ta première session en 30 secondes.
               </p>
               <Link to="/auth?mode=register&redirect=onboarding">
                 <motion.button
-                  className="flex items-center gap-2 h-14 px-8 rounded-xl bg-gradient-to-r from-[#6366f1] to-[#a78bfa] text-white text-[16px] font-semibold mx-auto shadow-lg shadow-[#6366f1]/10"
-                  whileHover={{ scale: 1.02, y: -2 }}
+                  className="flex items-center gap-2 h-16 px-10 rounded-xl bg-gradient-to-r from-[#6366f1] to-[#a78bfa] text-white text-[18px] font-bold mx-auto shadow-lg shadow-[#6366f1]/20 cta-glow-idle"
+                  whileHover={{ scale: 1.03, y: -3 }}
                   {...springTap}
+                  data-track="bottom_cta_click"
                 >
                   Rejoindre l'aventure
                   <ArrowRight className="w-5 h-5" />
                 </motion.button>
               </Link>
+              {/* Reassurance line (Phase 14 #59) */}
+              <p className="text-[13px] text-text-quaternary mt-4">
+                Gratuit · Pas de carte bancaire · 30 secondes
+              </p>
+              {/* Secondary CTA (Phase 14 #60) */}
+              <a
+                href="mailto:contact@squadplanner.fr"
+                className="inline-block mt-4 text-[13px] text-text-quaternary hover:text-text-tertiary transition-colors underline underline-offset-2"
+              >
+                Une question ? Contacte-nous
+              </a>
             </div>
           </motion.div>
         </div>
       </section>
 
-      {/* Footer - Complete */}
+      {/* ═══ FOOTER (Phase 15 #61-62) ═══ */}
       <footer className="px-4 md:px-6 py-16 border-t border-border-subtle">
         <div className="max-w-5xl mx-auto">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-12">
@@ -879,7 +1104,7 @@ export default function Landing() {
               </ul>
             </div>
 
-            {/* Legal */}
+            {/* Légal */}
             <div>
               <h4 className="text-[13px] font-semibold text-text-primary mb-4 uppercase tracking-wider">Légal</h4>
               <ul className="space-y-3">
@@ -888,14 +1113,50 @@ export default function Landing() {
               </ul>
             </div>
 
-            {/* Communaute */}
+            {/* Communauté */}
             <div>
-              <h4 className="text-[13px] font-semibold text-text-primary mb-4 uppercase tracking-wider">Communaute</h4>
+              <h4 className="text-[13px] font-semibold text-text-primary mb-4 uppercase tracking-wider">Communauté</h4>
               <ul className="space-y-3">
                 <li><span className="text-[14px] text-text-tertiary flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-success animate-pulse" />Beta ouverte</span></li>
-                <li><a href="https://twitter.com/squadplannerapp" target="_blank" rel="noopener noreferrer" className="text-[14px] text-text-tertiary hover:text-text-primary transition-colors">Twitter / X</a></li>
+                <li>
+                  <a href="https://twitter.com/squadplannerapp" target="_blank" rel="noopener noreferrer" className="text-[14px] text-text-tertiary hover:text-text-primary transition-colors flex items-center gap-1.5">
+                    <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                    Twitter / X
+                  </a>
+                </li>
                 <li><a href="mailto:contact@squadplanner.fr" className="text-[14px] text-text-tertiary hover:text-text-primary transition-colors">Nous contacter</a></li>
               </ul>
+            </div>
+          </div>
+
+          {/* Trust badges (Phase 15 #61) */}
+          <div className="flex flex-wrap justify-center gap-4 mb-8">
+            {[
+              { label: 'Hébergé en France', icon: '🇫🇷' },
+              { label: 'RGPD compliant', icon: '🛡️' },
+              { label: 'Données chiffrées', icon: '🔒' },
+            ].map(badge => (
+              <span key={badge.label} className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-surface-card border border-border-subtle text-[12px] text-text-tertiary">
+                {badge.icon} {badge.label}
+              </span>
+            ))}
+          </div>
+
+          {/* Newsletter (Phase 15 #61) */}
+          <div className="max-w-md mx-auto mb-10">
+            <div className="flex gap-2">
+              <div className="flex-1 relative">
+                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-quaternary" />
+                <input
+                  type="email"
+                  placeholder="Reçois les updates Squad Planner"
+                  className="w-full pl-10 pr-4 py-2.5 bg-bg-elevated border border-border-subtle rounded-lg text-[14px] text-text-primary placeholder:text-text-quaternary focus:border-primary focus:outline-none transition-colors"
+                  aria-label="Adresse email pour la newsletter"
+                />
+              </div>
+              <button className="px-5 py-2.5 bg-primary text-white text-[14px] font-medium rounded-lg hover:bg-primary-hover transition-colors shrink-0">
+                S'abonner
+              </button>
             </div>
           </div>
 
@@ -903,7 +1164,10 @@ export default function Landing() {
           <div className="border-t border-border-subtle pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
             <div className="flex items-center gap-2">
               <SquadPlannerLogo size={20} />
-              <span className="text-[14px] font-semibold text-text-primary">Squad Planner</span>
+              <div>
+                <span className="text-[14px] font-semibold text-text-primary">Squad Planner</span>
+                <span className="text-[12px] text-text-quaternary ml-2">Le Calendly du gaming</span>
+              </div>
             </div>
             <p className="text-[13px] text-text-quaternary">
               © 2026 Squad Planner. Jouez ensemble, pour de vrai.

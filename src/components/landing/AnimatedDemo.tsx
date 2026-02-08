@@ -11,10 +11,10 @@ interface DemoStep {
   color: string
 }
 
-const demoSteps: DemoStep[] = [
-  { id: 'create', title: 'Cree ta Squad', subtitle: '"Les Invaincus"', duration: 3000, icon: Users, color: '#6366f1' },
+export const demoSteps: DemoStep[] = [
+  { id: 'create', title: 'Crée ta Squad', subtitle: '"Les Invaincus"', duration: 3000, icon: Users, color: '#6366f1' },
   { id: 'invite', title: 'Invite tes potes', subtitle: '3 joueurs ont rejoint', duration: 2500, icon: UserPlus, color: '#34d399' },
-  { id: 'rsvp', title: 'Chacun confirme', subtitle: '4/4 presents mardi 21h', duration: 2500, icon: CalendarCheck, color: '#f5a623' },
+  { id: 'rsvp', title: 'Chacun confirme', subtitle: '4/4 présents mardi 21h', duration: 2500, icon: CalendarCheck, color: '#f5a623' },
   { id: 'play', title: 'Jouez ensemble !', subtitle: 'Party vocale en cours', duration: 3000, icon: Headphones, color: '#a78bfa' },
 ]
 
@@ -81,7 +81,7 @@ function CreateStep() {
         animate={{ opacity: 1, scale: 1 }}
         transition={{ delay: 1.2, type: 'spring', stiffness: 300 }}
       >
-        Creer la squad
+        Créer la squad
       </motion.div>
     </div>
   )
@@ -185,7 +185,7 @@ function RSVPStep() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 1.5 }}
       >
-        Session confirmee !
+        Session confirmée !
       </motion.div>
     </div>
   )
@@ -260,109 +260,48 @@ const stepComponents: Record<string, React.FC> = {
   play: PlayStep,
 }
 
-export function AnimatedDemo() {
-  const [currentStep, setCurrentStep] = useState(0)
+interface AnimatedDemoProps {
+  currentStep?: number
+  onStepChange?: (step: number) => void
+}
+
+export function AnimatedDemo({ currentStep: controlledStep, onStepChange }: AnimatedDemoProps) {
+  const [internalStep, setInternalStep] = useState(0)
   const ref = useRef<HTMLDivElement>(null)
   const isInView = useInView(ref, { once: false, amount: 0.3 })
+
+  const currentStep = controlledStep ?? internalStep
+  const setCurrentStep = onStepChange ?? setInternalStep
 
   // Auto-advance steps
   useEffect(() => {
     if (!isInView) return
     const timer = setInterval(() => {
-      setCurrentStep((prev) => (prev + 1) % demoSteps.length)
+      const next = (currentStep + 1) % demoSteps.length
+      setCurrentStep(next)
     }, demoSteps[currentStep].duration)
     return () => clearInterval(timer)
-  }, [isInView, currentStep])
+  }, [isInView, currentStep, setCurrentStep])
 
   const step = demoSteps[currentStep]
   const StepComponent = stepComponents[step.id]
 
   return (
-    <section ref={ref} className="px-4 md:px-6 py-16 md:py-24">
-      <div className="max-w-4xl mx-auto">
-        <motion.h2
-          className="text-2xl md:text-3xl font-bold text-center text-text-primary mb-3"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-        >
-          En action
-        </motion.h2>
-        <motion.p
-          className="text-text-tertiary text-center mb-12"
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.1 }}
-        >
-          De la creation de squad a la session de jeu en 30 secondes
-        </motion.p>
-
-        <div className="flex flex-col md:flex-row items-center justify-center gap-8 md:gap-12">
-          {/* Phone mockup */}
-          <div className="shrink-0">
-            <PhoneFrame>
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={step.id}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.3 }}
-                  className="h-full"
-                >
-                  <StepComponent />
-                </motion.div>
-              </AnimatePresence>
-            </PhoneFrame>
-          </div>
-
-          {/* Step indicators */}
-          <div className="flex md:flex-col gap-4 md:gap-3 w-full md:w-auto">
-            {demoSteps.map((s, i) => {
-              const Icon = s.icon
-              const isActive = i === currentStep
-              const isPast = i < currentStep
-              return (
-                <button
-                  key={s.id}
-                  onClick={() => setCurrentStep(i)}
-                  className={`flex items-center gap-3 p-3 rounded-xl transition-all text-left flex-1 md:flex-initial ${
-                    isActive
-                      ? 'bg-bg-elevated border border-border-hover'
-                      : 'border border-transparent hover:bg-bg-elevated/50'
-                  }`}
-                >
-                  <div
-                    className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 transition-colors ${
-                      isActive || isPast ? '' : 'opacity-40'
-                    }`}
-                    style={{ backgroundColor: `${s.color}15` }}
-                  >
-                    <Icon className="w-5 h-5" style={{ color: s.color }} />
-                  </div>
-                  <div className="hidden md:block">
-                    <div className={`text-sm font-medium transition-colors ${isActive ? 'text-text-primary' : 'text-text-tertiary'}`}>
-                      {s.title}
-                    </div>
-                    <div className="text-xs text-text-quaternary">{s.subtitle}</div>
-                  </div>
-                  {/* Progress bar for active step */}
-                  {isActive && (
-                    <motion.div
-                      className="hidden md:block h-0.5 bg-primary rounded-full ml-auto"
-                      initial={{ width: 0 }}
-                      animate={{ width: 40 }}
-                      transition={{ duration: s.duration / 1000, ease: 'linear' }}
-                      key={`progress-${currentStep}`}
-                    />
-                  )}
-                </button>
-              )
-            })}
-          </div>
-        </div>
-      </div>
-    </section>
+    <div ref={ref} className="shrink-0">
+      <PhoneFrame>
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={step.id}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className="h-full"
+          >
+            <StepComponent />
+          </motion.div>
+        </AnimatePresence>
+      </PhoneFrame>
+    </div>
   )
 }

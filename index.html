@@ -51,11 +51,6 @@
         "price": "0",
         "priceCurrency": "EUR"
       },
-      "aggregateRating": {
-        "@type": "AggregateRating",
-        "ratingValue": "4.8",
-        "ratingCount": "150"
-      },
       "author": {
         "@type": "Organization",
         "name": "Squad Planner"
@@ -68,10 +63,11 @@
     }
     </script>
 
-    <!-- Inter Font - Cross-platform consistency -->
+    <!-- Fonts - Inter + Space Grotesk display -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&display=swap" as="style" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet" />
 
     <!-- Critical CSS for above-the-fold content (external to avoid Vite 7 inline CSS issue) -->
     <link rel="stylesheet" href="/critical.css" />
@@ -84,13 +80,15 @@
 
     <div id="root"></div>
 
-    <!-- Hide initial loader once React mounts -->
+    <!-- Hide initial loader once React mounts (CSS transition, no JS setTimeout) -->
     <script>
       window.addEventListener('DOMContentLoaded', function() {
-        setTimeout(function() {
-          var loader = document.getElementById('initial-loader');
-          if (loader) loader.style.display = 'none';
-        }, 100);
+        var loader = document.getElementById('initial-loader');
+        if (loader) {
+          loader.style.opacity = '0';
+          loader.style.transition = 'opacity 0.3s ease';
+          loader.addEventListener('transitionend', function() { loader.style.display = 'none'; });
+        }
       });
     </script>
 

@@ -65,9 +65,9 @@ const testimonials: Testimonial[] = [
 
 const slideVariants = {
   enter: (direction: number) => ({
-    x: direction > 0 ? 300 : -300,
+    x: direction > 0 ? 80 : -80,
     opacity: 0,
-    scale: 0.95,
+    scale: 0.97,
   }),
   center: {
     x: 0,
@@ -75,9 +75,9 @@ const slideVariants = {
     scale: 1,
   },
   exit: (direction: number) => ({
-    x: direction < 0 ? 300 : -300,
+    x: direction < 0 ? 80 : -80,
     opacity: 0,
-    scale: 0.95,
+    scale: 0.97,
   }),
 }
 
@@ -141,21 +141,21 @@ export function TestimonialCarousel() {
           {/* Navigation arrows */}
           <button
             onClick={prev}
-            className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 md:-translate-x-12 z-10 w-10 h-10 rounded-full bg-bg-elevated border border-border-subtle flex items-center justify-center text-text-secondary hover:text-text-primary hover:border-border-hover transition-colors"
+            className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 md:-translate-x-12 z-10 w-9 h-9 md:w-10 md:h-10 rounded-full bg-bg-elevated border border-border-subtle flex items-center justify-center text-text-secondary hover:text-text-primary hover:border-border-hover transition-colors"
             aria-label="Precedent"
           >
-            <ChevronLeft className="w-5 h-5" />
+            <ChevronLeft className="w-4 h-4 md:w-5 md:h-5" />
           </button>
           <button
             onClick={next}
-            className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 md:translate-x-12 z-10 w-10 h-10 rounded-full bg-bg-elevated border border-border-subtle flex items-center justify-center text-text-secondary hover:text-text-primary hover:border-border-hover transition-colors"
+            className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-2 md:translate-x-12 z-10 w-9 h-9 md:w-10 md:h-10 rounded-full bg-bg-elevated border border-border-subtle flex items-center justify-center text-text-secondary hover:text-text-primary hover:border-border-hover transition-colors"
             aria-label="Suivant"
           >
-            <ChevronRight className="w-5 h-5" />
+            <ChevronRight className="w-4 h-4 md:w-5 md:h-5" />
           </button>
 
           {/* Testimonial card */}
-          <div className="overflow-hidden px-2">
+          <div className="overflow-hidden px-6 md:px-2 min-h-[140px]">
             <AnimatePresence mode="wait" custom={direction}>
               <motion.div
                 key={currentIndex}

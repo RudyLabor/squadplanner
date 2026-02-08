@@ -86,7 +86,7 @@ const steps = [
   {
     step: '4',
     title: 'Jouez chaque semaine',
-    description: 'Check-in, jouez, répétez. Semaine après semaine, votre squad devient fiable.',
+    description: 'Check-in, jouez, repetez. Semaine apres semaine, ta squad devient fiable.',
     icon: Target
   }
 ]
@@ -146,29 +146,29 @@ export default function Landing() {
       />
 
       {/* Header Sticky */}
-      <header className="fixed top-0 left-0 right-0 z-50 px-4 md:px-6 py-4 bg-bg-base/80 backdrop-blur-lg border-b border-border-subtle">
+      <header className="fixed top-0 left-0 right-0 z-50 px-4 md:px-6 py-3 bg-bg-base/80 backdrop-blur-lg border-b border-border-subtle">
         <div className="max-w-5xl mx-auto flex items-center justify-between">
-          <Link to="/" className="flex items-center gap-2">
+          <Link to="/" className="flex items-center gap-2 shrink-0">
             <SquadPlannerLogo size={24} />
-            <span className="text-[15px] font-semibold text-text-primary">Squad Planner</span>
+            <span className="text-[15px] font-semibold text-text-primary hidden sm:inline">Squad Planner</span>
           </Link>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 md:gap-3">
             {isLoggedIn ? (
               <Link to="/home">
-                <button className="px-4 py-2 rounded-lg bg-primary text-white text-[14px] font-medium hover:bg-primary-hover transition-colors duration-300">
-                  Aller à l'app
+                <button className="px-4 py-2 rounded-lg bg-primary text-white text-[13px] md:text-[14px] font-medium hover:bg-primary-hover transition-colors duration-300">
+                  Aller a l'app
                 </button>
               </Link>
             ) : (
               <>
                 <Link to="/auth">
-                  <button className="px-4 py-2 text-[14px] text-text-tertiary hover:text-text-primary transition-colors">
+                  <button className="px-3 md:px-4 py-2 text-[13px] md:text-[14px] text-text-secondary hover:text-text-primary border border-border-subtle hover:border-border-hover rounded-lg transition-all">
                     Se connecter
                   </button>
                 </Link>
                 <Link to="/auth?mode=register&redirect=onboarding">
-                  <button className="px-4 py-2 rounded-lg bg-primary text-white text-[14px] font-medium hover:bg-primary-hover transition-colors duration-300">
-                    Créer ma squad
+                  <button className="px-3 md:px-4 py-2 rounded-lg bg-primary text-white text-[13px] md:text-[14px] font-medium hover:bg-primary-hover transition-colors duration-300">
+                    Creer ma squad
                   </button>
                 </Link>
               </>
@@ -201,7 +201,7 @@ export default function Landing() {
 
             {/* Subtitle - improved */}
             <p className="text-lg md:text-xl text-text-tertiary mb-10 max-w-2xl mx-auto">
-              Squad Planner fait que vos sessions ont vraiment lieu.
+              Squad Planner fait que tes sessions ont vraiment lieu.
               <span className="text-text-primary font-medium"> Ta squad t'attend.</span>
             </p>
 
@@ -276,10 +276,13 @@ export default function Landing() {
                 className="absolute inset-0 rounded-[2.5rem] bg-[#6366f1]/5 blur-xl"
                 style={{ transform: 'translateZ(-30px) scale(1.05)' }}
               />
-              {/* Phone frame */}
-              <div className="bg-[#101012] rounded-[2.5rem] p-3 border border-[rgba(255,255,255,0.08)] shadow-2xl shadow-[#6366f1]/10" style={{ transform: 'translateZ(0px)' }}>
+              {/* Phone frame with gradient border */}
+              <div className="bg-gradient-to-b from-[rgba(255,255,255,0.12)] to-[rgba(255,255,255,0.04)] rounded-[2.5rem] p-[1px] shadow-2xl shadow-[#6366f1]/15" style={{ transform: 'translateZ(0px)' }}>
+              <div className="bg-[#101012] rounded-[2.5rem] p-3">
                 {/* Screen */}
-                <div className="bg-[#050506] rounded-[2rem] overflow-hidden">
+                <div className="bg-[#050506] rounded-[2rem] overflow-hidden relative">
+                  {/* Subtle screen reflection */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-white/[0.03] via-transparent to-transparent pointer-events-none z-10 rounded-[2rem]" />
                   {/* Status bar */}
                   <div className="flex items-center justify-between px-6 py-2 text-xs text-text-quaternary">
                     <span>21:00</span>
@@ -342,6 +345,7 @@ export default function Landing() {
                   </div>
                 </div>
               </div>
+              </div>
 
               {/* Decorative glow */}
               <div className="absolute -inset-4 bg-[radial-gradient(ellipse_at_center,rgba(99,102,241,0.1)_0%,transparent_70%)] -z-10" />
@@ -351,7 +355,7 @@ export default function Landing() {
       </section>
 
       {/* Problem Section */}
-      <section className="px-4 md:px-6 py-16 border-t border-border-subtle">
+      <section className="px-4 md:px-6 py-12 md:py-16 border-t border-border-subtle">
         <div className="max-w-4xl mx-auto">
           <motion.div
             variants={scrollRevealLight}
@@ -394,8 +398,8 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* How it works - REMONTÉ pour montrer que c'est simple */}
-      <section className="px-4 md:px-6 py-16 bg-gradient-to-b from-transparent to-[rgba(99,102,241,0.015)]">
+      {/* How it works */}
+      <section className="px-4 md:px-6 py-12 md:py-16 bg-gradient-to-b from-transparent to-[rgba(99,102,241,0.015)]">
         <div className="max-w-4xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -441,26 +445,26 @@ export default function Landing() {
       <AnimatedDemo />
 
       {/* V3: Live Stats Counter */}
-      <section className="px-4 md:px-6 py-12">
+      <section className="px-4 md:px-6 py-10">
         <div className="max-w-4xl mx-auto">
-          <div className="grid grid-cols-3 gap-4 md:gap-6">
+          <div className="grid grid-cols-3 gap-3 md:gap-6">
             {[
-              { end: 2847, label: 'joueurs inscrits', icon: Users, color: '#6366f1' },
-              { end: 156, label: 'squads actives', icon: Target, color: '#34d399' },
-              { end: 12450, label: 'sessions planifiées', icon: Calendar, color: '#f5a623' },
+              { end: 500, suffix: '+', label: 'gamers en beta', icon: Users, color: '#6366f1' },
+              { end: 80, suffix: '+', label: 'squads creees', icon: Target, color: '#34d399' },
+              { end: 2000, suffix: '+', label: 'sessions planifiees', icon: Calendar, color: '#f5a623' },
             ].map((stat) => (
               <motion.div
                 key={stat.label}
-                className="text-center p-4 md:p-6 rounded-2xl bg-bg-elevated border border-border-subtle relative"
+                className="text-center p-4 md:p-6 rounded-2xl bg-bg-elevated border border-border-subtle relative group hover:border-border-hover transition-colors"
                 variants={scaleReveal}
                 initial="hidden"
                 whileInView="visible"
                 viewport={{ once: true }}
               >
                 <span className="absolute top-3 right-3 w-2 h-2 rounded-full bg-success animate-pulse" />
-                <stat.icon className="w-6 h-6 md:w-8 md:h-8 mx-auto mb-2" style={{ color: stat.color }} />
-                <AnimatedCounter end={stat.end} separator=" " className="text-xl md:text-3xl font-bold text-text-primary" duration={2.5} />
-                <div className="text-xs md:text-sm text-text-tertiary mt-1">{stat.label}</div>
+                <stat.icon className="w-5 h-5 md:w-7 md:h-7 mx-auto mb-2" style={{ color: stat.color }} />
+                <AnimatedCounter end={stat.end} suffix={stat.suffix} separator=" " className="text-xl md:text-3xl font-bold text-text-primary" duration={2.5} />
+                <div className="text-[11px] md:text-sm text-text-tertiary mt-1">{stat.label}</div>
               </motion.div>
             ))}
           </div>
@@ -468,7 +472,7 @@ export default function Landing() {
       </section>
 
       {/* Solution - Les 3 Piliers */}
-      <section className="px-4 md:px-6 py-16 bg-gradient-to-b from-transparent to-[rgba(99,102,241,0.015)]">
+      <section className="px-4 md:px-6 py-12 md:py-16 bg-gradient-to-b from-transparent to-[rgba(99,102,241,0.015)]">
         <div className="max-w-5xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -530,8 +534,8 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* Voice & Chat Highlight - Détails avec mockup */}
-      <section className="px-4 md:px-6 py-16 border-t border-border-subtle">
+      {/* Voice & Chat Highlight */}
+      <section className="px-4 md:px-6 py-12 md:py-16 border-t border-border-subtle">
         <div className="max-w-5xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -582,8 +586,8 @@ export default function Landing() {
                 Chat live avec ta squad
               </h3>
               <p className="text-text-tertiary mb-4">
-                Discutez avant la session pour vous organiser. Pendant pour rigoler. Après pour le debrief.
-                <span className="text-[#60a5fa] font-medium"> Tout est au même endroit.</span>
+                Discute avant la session pour t'organiser. Pendant pour rigoler. Apres pour le debrief.
+                <span className="text-[#60a5fa] font-medium"> Tout est au meme endroit.</span>
               </p>
               <ul className="space-y-2">
                 {[
@@ -707,7 +711,7 @@ export default function Landing() {
       </section>
 
       {/* Reliability Score Section */}
-      <section className="px-4 md:px-6 py-16 bg-gradient-to-b from-transparent to-[rgba(248,113,113,0.02)]">
+      <section className="px-4 md:px-6 py-12 md:py-16 bg-gradient-to-b from-transparent to-[rgba(248,113,113,0.02)]">
         <div className="max-w-4xl mx-auto">
           <motion.div
             variants={scaleReveal}
@@ -746,7 +750,7 @@ export default function Landing() {
       </section>
 
       {/* Comparison vs Discord */}
-      <section className="px-4 md:px-6 py-16 border-t border-border-subtle">
+      <section className="px-4 md:px-6 py-12 md:py-16 border-t border-border-subtle">
         <div className="max-w-4xl mx-auto">
           <motion.div
             variants={scrollReveal}
@@ -771,34 +775,34 @@ export default function Landing() {
             viewport={{ once: true }}
           >
             {/* Table header */}
-            <div className="grid grid-cols-3 bg-bg-surface px-6 py-3 border-b border-border-subtle">
-              <span className="text-[13px] font-medium text-text-secondary">Fonctionnalité</span>
-              <span className="text-[13px] font-medium text-text-secondary text-center">Discord</span>
-              <span className="text-[13px] font-medium text-primary text-center">Squad Planner</span>
+            <div className="grid grid-cols-[1fr_60px_60px] md:grid-cols-3 bg-bg-surface px-3 md:px-6 py-3 border-b border-border-subtle">
+              <span className="text-[12px] md:text-[13px] font-medium text-text-secondary">Fonctionnalite</span>
+              <span className="text-[12px] md:text-[13px] font-medium text-text-secondary text-center">Discord</span>
+              <span className="text-[12px] md:text-[13px] font-medium text-primary text-center">SP</span>
             </div>
 
             {/* Table rows */}
             {comparisons.map((item, i) => (
               <motion.div
                 key={item.feature}
-                className={`grid grid-cols-3 items-center px-6 py-4 ${i < comparisons.length - 1 ? 'border-b border-border-subtle' : ''}`}
+                className={`grid grid-cols-[1fr_60px_60px] md:grid-cols-3 items-center px-3 md:px-6 py-3 md:py-4 ${i < comparisons.length - 1 ? 'border-b border-border-subtle' : ''}`}
                 initial={{ opacity: 0, x: -10 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.05 }}
               >
-                <span className="text-[14px] text-text-primary">{item.feature}</span>
+                <span className="text-[13px] md:text-[14px] text-text-primary pr-2">{item.feature}</span>
                 <span className="flex justify-center">
                   {item.discord === true ? (
-                    <Check className="w-5 h-5 text-success" />
+                    <Check className="w-4 h-4 md:w-5 md:h-5 text-success" />
                   ) : item.discord === 'partial' ? (
-                    <span className="text-[12px] text-warning px-2 py-0.5 rounded-full bg-warning/10">Limité</span>
+                    <span className="text-[10px] md:text-[12px] text-warning px-1.5 py-0.5 rounded-full bg-warning/10">Limite</span>
                   ) : (
-                    <XIcon className="w-5 h-5 text-text-quaternary" />
+                    <XIcon className="w-4 h-4 md:w-5 md:h-5 text-text-quaternary" />
                   )}
                 </span>
                 <span className="flex justify-center">
-                  <Check className="w-5 h-5 text-success" />
+                  <Check className="w-4 h-4 md:w-5 md:h-5 text-success" />
                 </span>
               </motion.div>
             ))}
@@ -884,11 +888,13 @@ export default function Landing() {
               </ul>
             </div>
 
-            {/* Communauté */}
+            {/* Communaute */}
             <div>
-              <h4 className="text-[13px] font-semibold text-text-primary mb-4 uppercase tracking-wider">Communauté</h4>
+              <h4 className="text-[13px] font-semibold text-text-primary mb-4 uppercase tracking-wider">Communaute</h4>
               <ul className="space-y-3">
                 <li><span className="text-[14px] text-text-tertiary flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-success animate-pulse" />Beta ouverte</span></li>
+                <li><a href="https://twitter.com/squadplannerapp" target="_blank" rel="noopener noreferrer" className="text-[14px] text-text-tertiary hover:text-text-primary transition-colors">Twitter / X</a></li>
+                <li><a href="mailto:contact@squadplanner.fr" className="text-[14px] text-text-tertiary hover:text-text-primary transition-colors">Nous contacter</a></li>
               </ul>
             </div>
           </div>

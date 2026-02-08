@@ -9,8 +9,9 @@
 
 ## SUIVI D'AVANCEMENT EN TEMPS REEL
 
-> **Derniere mise a jour : 8 fevrier 2026 - 13h30**
-> **Score actuel : 48/50 — Phase 1 COMPLETE + Phase 2 COMPLETE, Phase 3+ a commencer**
+> **Derniere mise a jour : 8 fevrier 2026 - 17h00**
+> **Score actuel : 48/50 — Phase 1 COMPLETE + Phase 2 COMPLETE (V3 items avances), Phase 3+ a commencer**
+> **Verification code : TOUTES les phases pre-Phase 3 verifiees dans le code le 8 fev 17h**
 
 ### Phase 1 : Bloquants Critiques (P0) — 100% FAIT
 
@@ -107,6 +108,7 @@
 | 8 fev (P1 + perf) | ~46/50 | +0.5 | 404 fix, scroll fix, recherche messages, code splitting |
 | 8 fev (Phase 1 complete) | 47/50 | +1 | CGU page, cookie consent, tour guide, welcome email, build fix |
 | 8 fev (Phase 2 complete) | 48/50 | +1 | Design system 2026, 5 nouveaux composants UI, landing refonte, theme clair, son/haptics |
+| 8 fev (Phase 2 V3 avancee) | 48/50 | - | +5 composants V3: AnimatedDemo, TestimonialCarousel, CustomCursor, NotificationBanner, ToastIcons, celebrations, SharedElement, illustrations SVG, CommandPalette ameliore |
 
 ---
 
@@ -396,22 +398,22 @@
 | **Scrollbar** | Minimal | Scroll progress indicator bar | **FAIT** |
 | **Shadow scale** | Basique | 3 niveaux (card, dropdown, modal) + light theme | **FAIT** |
 | **Surface tokens** | Aucun | card, card-hover, input, overlay | **FAIT** |
-| **Page transitions** | View Transitions basiques | Shared element transitions (morph avatar, cards) | V3 |
-| **Illustrations** | Icones Lucide | Illustrations custom SVG animees | V3 |
-| **Curseur** | Default | Curseur custom landing (trail effect) | V3 |
+| **Page transitions** | View Transitions basiques | Shared element transitions (morph avatar, cards) — `SharedElement.tsx` | **FAIT** |
+| **Illustrations** | Icones Lucide | 4 illustrations SVG animees (Controller, Headphones, Calendar, Shield) | **FAIT** |
+| **Curseur** | Default | Curseur custom landing (trail effect) — `CustomCursor.tsx` | **FAIT** |
 
-#### 2.2 - Nouveaux composants UI — FAIT (5/12 essentiels)
+#### 2.2 - Nouveaux composants UI — FAIT (10/12 essentiels)
 
 - [x] **AnimatedAvatar** : ring SVG anime (online=pulse vert, in-party=pulse violet, away=orange, offline=gris), CSS variables
 - [x] **AnimatedCounter** : compteur anime avec IntersectionObserver + CountUp, className externe
 - [x] **Drawer** : bottom sheet avec spring physics (400/35), drag-to-dismiss, aria-modal, escape key
 - [x] **SegmentedControl** : Generic `<T extends string>`, layoutId shared transitions, spring 400/30
 - [x] **ProgressRing** : cercle SVG anime avec strokeDasharray, useInView, CSS variables
-- [ ] **Toast ameliore** : avec undo action, progress bar, icones animees (V3)
+- [x] **Toast ameliore** : icones animees SVG (`ToastIcons.tsx`) + Capacitor Haptics (undo/progress bar restent V3)
 - [ ] **ContextMenu** : clic droit sur messages/membres (Phase 3)
-- [ ] **CommandPalette ameliore** : sous-commandes, preview (V3)
-- [ ] **Confetti ameliore** : particules 3D physique realiste (V3)
-- [ ] **Notification in-app** : banner slide-in avec actions (V3)
+- [x] **CommandPalette ameliore** : sous-commandes, preview, navigation back — `CommandPalette.tsx`
+- [x] **Confetti ameliore** : particules physiques realistes, 5 phases, ribbons custom — `celebrations.ts`
+- [x] **Notification in-app** : banner slide-in avec actions (info, success, warning, achievement, update) — `NotificationBanner.tsx`
 - [ ] **ImageViewer** : lightbox zoom pour images chat (Phase 3)
 - [ ] **EmojiPicker** : selecteur natif pour reactions (Phase 3)
 
@@ -425,8 +427,8 @@
 - [x] Migration complete vers CSS variables
 - [x] Scroll-based animations (scrollReveal avec blur)
 - [ ] Mockup 3D interactif rotatif au scroll (V3)
-- [ ] Video/GIF de demo integree (V3 — contenu marketing)
-- [ ] Temoignages avec avatars carousel (V3 — contenu social proof)
+- [x] Demo animee interactive (4 etapes auto-play) — `AnimatedDemo.tsx`
+- [x] Temoignages avec avatars carousel (auto-rotate + navigation) — `TestimonialCarousel.tsx`
 - [ ] Counter anime joueurs inscrits (V3 — DB query)
 
 #### 2.4 - Theme Clair perfectionne — FAIT

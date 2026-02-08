@@ -2,10 +2,10 @@ import { useState, useMemo } from 'react'
 import { motion } from 'framer-motion'
 import { Users, Calendar, TrendingUp, ChevronRight, Loader2, Mic, CheckCircle2, AlertCircle, Sparkles, Star, HelpCircle, XCircle } from 'lucide-react'
 import { Link, useNavigate } from 'react-router-dom'
-import CountUp from 'react-countup'
 import Confetti from 'react-confetti'
-import { Card, Badge, SessionCardSkeleton, SquadCardSkeleton, SkeletonFriendsPlaying, SkeletonStatsRow, SkeletonStreakCounter, SkeletonAICoach, Tooltip } from '../components/ui'
+import { Card, Badge, SessionCardSkeleton, SquadCardSkeleton, SkeletonFriendsPlaying, SkeletonStatsRow, SkeletonStreakCounter, SkeletonAICoach, Tooltip, AnimatedCounter } from '../components/ui'
 import { useAuthStore, useVoiceChatStore } from '../hooks'
+import { springTap } from '../utils/animations'
 import { useSquadsQuery } from '../hooks/queries/useSquadsQuery'
 import { useRsvpMutation, useUpcomingSessionsQuery } from '../hooks/queries/useSessionsQuery'
 import { useFriendsPlayingQuery } from '../hooks/queries/useFriendsPlaying'
@@ -308,7 +308,7 @@ function StatsRow({ squadsCount, sessionsThisWeek, reliabilityScore }: {
             </div>
             <div className="min-w-0 flex-1">
               <div className="text-[16px] sm:text-[20px] font-bold text-text-primary tracking-tight leading-none">
-                <CountUp end={stat.value} duration={1.2} suffix={stat.suffix} />
+                <AnimatedCounter end={stat.value} duration={1.2} suffix={stat.suffix} />
               </div>
               <div className="text-[8px] sm:text-[10px] text-text-quaternary uppercase tracking-wider mt-0.5 truncate font-medium">
                 {stat.label}
@@ -725,8 +725,7 @@ export default function Home() {
                   <motion.button
                     className="inline-flex items-center gap-2 h-11 px-6 rounded-xl bg-primary text-white text-[14px] font-semibold shadow-[0_0_16px_rgba(99,102,241,0.15)]"
                     whileHover={{ y: -2, scale: 1.02, boxShadow: "0 0 20px rgba(99,102,241,0.2)" }}
-                    whileTap={{ scale: 0.98 }}
-                    transition={{ duration: 0.4, ease: "easeOut" }}
+                    {...springTap}
                   >
                     Créer ma squad
                   </motion.button>

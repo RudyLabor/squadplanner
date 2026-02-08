@@ -6,7 +6,7 @@ import {
   ArrowLeft, Loader2, AlertTriangle, FileText, ExternalLink
 } from 'lucide-react'
 import { useNavigate, Link } from 'react-router-dom'
-import { Card } from '../components/ui'
+import { Card, SegmentedControl } from '../components/ui'
 import { useAuthStore } from '../hooks'
 import { useThemeStore, type ThemeMode } from '../hooks/useTheme'
 import { supabase } from '../lib/supabase'
@@ -77,33 +77,24 @@ function SettingRow({ label, description, children }: {
   )
 }
 
-// Theme Selector Component
+// Theme Selector Component - Uses SegmentedControl
 function ThemeSelector() {
   const { mode, setMode } = useThemeStore()
 
-  const themes: { value: ThemeMode; label: string; icon: React.ElementType }[] = [
+  const themeOptions: { value: ThemeMode; label: string; icon: React.ElementType }[] = [
     { value: 'dark', label: 'Sombre', icon: Moon },
     { value: 'light', label: 'Clair', icon: Sun },
     { value: 'system', label: 'Auto', icon: Monitor },
   ]
 
   return (
-    <div className="flex gap-1 p-1 rounded-lg bg-surface-card">
-      {themes.map(({ value, label, icon: Icon }) => (
-        <button
-          key={value}
-          onClick={() => setMode(value)}
-          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-[13px] font-medium transition-interactive ${
-            mode === value
-              ? 'bg-primary text-white'
-              : 'text-text-secondary hover:text-text-primary hover:bg-surface-card'
-          }`}
-        >
-          <Icon className="w-3.5 h-3.5" />
-          {label}
-        </button>
-      ))}
-    </div>
+    <SegmentedControl
+      options={themeOptions}
+      value={mode}
+      onChange={setMode}
+      size="sm"
+      layoutId="theme-selector"
+    />
   )
 }
 
@@ -422,28 +413,15 @@ export function Settings() {
                 <Languages className="w-4 h-4" />
                 Langue
               </label>
-              <div className="flex gap-2">
-                <button
-                  onClick={() => setLanguage('fr')}
-                  className={`flex-1 h-11 rounded-xl text-[14px] font-medium transition-interactive ${
-                    language === 'fr'
-                      ? 'bg-primary text-white'
-                      : 'bg-surface-card text-text-tertiary hover:bg-border-hover'
-                  }`}
-                >
-                  Français
-                </button>
-                <button
-                  onClick={() => setLanguage('en')}
-                  className={`flex-1 h-11 rounded-xl text-[14px] font-medium transition-interactive ${
-                    language === 'en'
-                      ? 'bg-primary text-white'
-                      : 'bg-surface-card text-text-tertiary hover:bg-border-hover'
-                  }`}
-                >
-                  English
-                </button>
-              </div>
+              <SegmentedControl
+                options={[
+                  { value: 'fr' as const, label: 'Français' },
+                  { value: 'en' as const, label: 'English' },
+                ]}
+                value={language}
+                onChange={setLanguage}
+                layoutId="language-selector"
+              />
             </div>
           </div>
         </Card>
@@ -542,7 +520,7 @@ export function Settings() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-surface-overlay backdrop-blur-sm"
             onClick={() => !isDeleting && setShowDeleteModal(false)}
           >
             <motion.div
@@ -550,7 +528,7 @@ export function Settings() {
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.95, opacity: 0 }}
               onClick={(e) => e.stopPropagation()}
-              className="w-full max-w-md bg-bg-elevated rounded-2xl border border-[rgba(251,113,133,0.1)] p-6"
+              className="w-full max-w-md bg-bg-elevated rounded-2xl border border-[rgba(251,113,133,0.1)] p-6 shadow-modal"
             >
               <div className="flex items-center gap-3 mb-4">
                 <div className="w-10 h-10 rounded-xl bg-[rgba(251,113,133,0.08)] flex items-center justify-center">

@@ -1,15 +1,14 @@
 import { useState, useEffect, useRef, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
-  User, Trophy, Calendar, Target, Shield,
+  User, Trophy, Calendar, Target,
   LogOut, Edit2, Check, X, Sparkles, Zap, Camera, Loader2,
   ChevronRight, TrendingUp, Clock, Phone, Flame
 } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
-import CountUp from 'react-countup'
 import Confetti from 'react-confetti'
 import { toast } from 'sonner'
-import { Button, Card, Input, ProfileSkeleton } from '../components/ui'
+import { Button, Card, Input, ProfileSkeleton, ProgressRing, AnimatedCounter } from '../components/ui'
 import { useAuthStore, usePremiumStore, FREE_HISTORY_DAYS } from '../hooks'
 import { useAICoachQuery, useChallengesQuery, useClaimChallengeXPMutation } from '../hooks/queries'
 import { PremiumGate, PremiumBadge } from '../components/PremiumGate'
@@ -496,26 +495,17 @@ export function Profile() {
           />
           <div className="p-5">
             <div className="flex items-center gap-4">
-              <motion.div
-                className="w-14 h-14 rounded-xl flex items-center justify-center relative"
-                style={{ backgroundColor: `${reliabilityColor}15` }}
-                animate={tier.glow ? { scale: [1, 1.04, 1] } : {}}
-                transition={{ duration: 2, repeat: 3 }}
-              >
-                <Shield className="w-7 h-7" style={{ color: reliabilityColor }} />
-                {tier.glow && (
-                  <motion.div
-                    className="absolute inset-0 rounded-xl"
-                    style={{ boxShadow: `0 0 12px ${reliabilityColor}25` }}
-                    animate={{ opacity: [0.4, 0.8, 0.4] }}
-                    transition={{ duration: 2, repeat: 3 }}
-                  />
-                )}
-              </motion.div>
+              <ProgressRing
+                value={reliabilityScore}
+                size={64}
+                strokeWidth={5}
+                color={reliabilityColor}
+                showValue={false}
+              />
               <div className="flex-1">
                 <div className="flex items-baseline gap-2 mb-0.5">
                   <span className="text-[32px] font-bold text-text-primary">
-                    <CountUp end={reliabilityScore} duration={1.5} suffix="%" />
+                    <AnimatedCounter end={reliabilityScore} duration={1.5} suffix="%" />
                   </span>
                   <motion.span
                     className="text-[13px] font-medium px-2.5 py-1 rounded-full flex items-center gap-1.5"
@@ -596,7 +586,7 @@ export function Profile() {
                 </div>
                 <div>
                   <div className="text-xl font-bold text-text-primary">
-                    <CountUp end={stat.value} duration={1.5} />
+                    <AnimatedCounter end={stat.value} duration={1.5} />
                   </div>
                   <div className="text-[12px] text-text-quaternary">{stat.label}</div>
                 </div>

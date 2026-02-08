@@ -8,7 +8,7 @@ import {
 import { Link } from 'react-router-dom'
 import { SquadPlannerLogo } from '../components/SquadPlannerLogo'
 import { useAuthStore } from '../hooks'
-import { scrollReveal } from '../utils/animations'
+import { scrollReveal, springTap, scrollRevealLight, scaleReveal } from '../utils/animations'
 
 // Stagger animations for lists
 const staggerContainerVariants = {
@@ -191,8 +191,7 @@ export default function Landing() {
                     <motion.button
                       className="flex items-center gap-2 h-14 px-8 rounded-xl bg-[#6366f1] text-white text-[16px] font-semibold shadow-lg shadow-[#6366f1]/10"
                       whileHover={{ scale: 1.02, y: -2 }}
-                      whileTap={{ scale: 0.98 }}
-                      transition={{ duration: 0.4, ease: "easeOut" }}
+                      {...springTap}
                     >
                       Créer ma squad gratuitement
                       <ArrowRight className="w-5 h-5" />
@@ -311,8 +310,9 @@ export default function Landing() {
       <section className="px-4 md:px-6 py-16 border-t border-border-subtle">
         <div className="max-w-4xl mx-auto">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            variants={scrollRevealLight}
+            initial="hidden"
+            whileInView="visible"
             viewport={{ once: true }}
             className="text-center mb-12"
           >
@@ -632,8 +632,9 @@ export default function Landing() {
       <section className="px-4 md:px-6 py-16 bg-gradient-to-b from-transparent to-[rgba(248,113,113,0.02)]">
         <div className="max-w-4xl mx-auto">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            variants={scaleReveal}
+            initial="hidden"
+            whileInView="visible"
             viewport={{ once: true }}
             className="p-8 md:p-12 rounded-3xl bg-surface-card border border-[rgba(248,113,113,0.2)]"
           >
@@ -759,8 +760,7 @@ export default function Landing() {
                 <motion.button
                   className="flex items-center gap-2 h-14 px-8 rounded-xl bg-gradient-to-r from-[#6366f1] to-[#a78bfa] text-white text-[16px] font-semibold mx-auto shadow-lg shadow-[#6366f1]/10"
                   whileHover={{ scale: 1.02, y: -2 }}
-                  whileTap={{ scale: 0.98 }}
-                  transition={{ duration: 0.4, ease: "easeOut" }}
+                  {...springTap}
                 >
                   Rejoindre l'aventure
                   <ArrowRight className="w-5 h-5" />

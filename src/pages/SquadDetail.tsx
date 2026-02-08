@@ -8,7 +8,7 @@ import {
 } from 'lucide-react'
 import { Link, useParams, useNavigate } from 'react-router-dom'
 import Confetti from 'react-confetti'
-import { Button, Card, CardContent, Badge, Input, SquadDetailSkeleton } from '../components/ui'
+import { Button, Card, CardContent, Badge, Input, SquadDetailSkeleton, Drawer } from '../components/ui'
 import { useAuthStore, useSquadsStore, useSessionsStore, useVoiceChatStore, useVoiceCallStore, usePremiumStore } from '../hooks'
 import { useSquadLeaderboardQuery } from '../hooks/queries'
 import { PremiumGate, PremiumBadge } from '../components/PremiumGate'
@@ -408,14 +408,14 @@ function InviteModal({
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-surface-overlay backdrop-blur-sm"
       onClick={onClose}
     >
       <motion.div
         initial={{ scale: 0.95, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         exit={{ scale: 0.95, opacity: 0 }}
-        className="w-full max-w-md bg-bg-elevated rounded-2xl border border-border-default overflow-hidden"
+        className="w-full max-w-md bg-bg-elevated rounded-2xl border border-border-default overflow-hidden shadow-modal"
         onClick={e => e.stopPropagation()}
       >
         {/* Header */}
@@ -608,6 +608,7 @@ export default function SquadDetail() {
 
   const [showCreateSession, setShowCreateSession] = useState(false)
   const [showInviteModal, setShowInviteModal] = useState(false)
+  const [showActionsDrawer, setShowActionsDrawer] = useState(false)
   const [sessionTitle, setSessionTitle] = useState('')
   const [sessionDate, setSessionDate] = useState('')
   const [sessionTime, setSessionTime] = useState('')
@@ -1072,26 +1073,87 @@ export default function SquadDetail() {
             </div>
           )}
 
-          {/* Actions squad - toujours visible */}
+          {/* Actions squad - opens drawer on mobile */}
           <div className="mt-6">
-            {isOwner ? (
-              <button
-                onClick={handleDeleteSquad}
-                className="w-full py-3 text-[14px] text-error hover:text-[#fca5a5] transition-colors flex items-center justify-center gap-2"
-              >
-                <Trash2 className="w-4 h-4" />
-                Supprimer la squad
-              </button>
-            ) : (
-              <button
-                onClick={handleLeaveSquad}
-                className="w-full py-3 text-[14px] text-error hover:text-[#fca5a5] transition-colors flex items-center justify-center gap-2"
-              >
-                <LogOut className="w-4 h-4" />
-                Quitter la squad
-              </button>
-            )}
+            {/* Desktop: direct buttons */}
+            <div className="hidden md:block">
+              {isOwner ? (
+                <button
+                  onClick={handleDeleteSquad}
+                  className="w-full py-3 text-[14px] text-error hover:text-[#fca5a5] transition-colors flex items-center justify-center gap-2"
+                >
+                  <Trash2 className="w-4 h-4" />
+                  Supprimer la squad
+                </button>
+              ) : (
+                <button
+                  onClick={handleLeaveSquad}
+                  className="w-full py-3 text-[14px] text-error hover:text-[#fca5a5] transition-colors flex items-center justify-center gap-2"
+                >
+                  <LogOut className="w-4 h-4" />
+                  Quitter la squad
+                </button>
+              )}
+            </div>
+            {/* Mobile: open drawer */}
+            <button
+              onClick={() => setShowActionsDrawer(true)}
+              className="md:hidden w-full py-3 text-[14px] text-text-tertiary hover:text-text-primary transition-colors flex items-center justify-center gap-2 border border-border-subtle rounded-xl"
+            >
+              Actions de la squad
+              <ChevronRight className="w-4 h-4" />
+            </button>
           </div>
+
+          {/* Mobile Actions Drawer */}
+          <Drawer
+            isOpen={showActionsDrawer}
+            onClose={() => setShowActionsDrawer(false)}
+            title="Actions"
+          >
+            <div className="space-y-2">
+              <button
+                onClick={() => { setShowInviteModal(true); setShowActionsDrawer(false) }}
+                className="w-full flex items-center gap-3 p-4 rounded-xl bg-surface-card hover:bg-surface-card-hover transition-colors"
+              >
+                <UserPlus className="w-5 h-5 text-primary" />
+                <span className="text-[14px] text-text-primary">Inviter des joueurs</span>
+              </button>
+              <button
+                onClick={() => { setShowCreateSession(true); setShowActionsDrawer(false) }}
+                className="w-full flex items-center gap-3 p-4 rounded-xl bg-surface-card hover:bg-surface-card-hover transition-colors"
+              >
+                <Calendar className="w-5 h-5 text-warning" />
+                <span className="text-[14px] text-text-primary">Créer une session</span>
+              </button>
+              <button
+                onClick={() => { navigate(`/messages?squad=${id}`); setShowActionsDrawer(false) }}
+                className="w-full flex items-center gap-3 p-4 rounded-xl bg-surface-card hover:bg-surface-card-hover transition-colors"
+              >
+                <MessageCircle className="w-5 h-5 text-success" />
+                <span className="text-[14px] text-text-primary">Chat de la squad</span>
+              </button>
+              <div className="border-t border-border-subtle pt-2 mt-2">
+                {isOwner ? (
+                  <button
+                    onClick={() => { handleDeleteSquad(); setShowActionsDrawer(false) }}
+                    className="w-full flex items-center gap-3 p-4 rounded-xl hover:bg-error/5 transition-colors"
+                  >
+                    <Trash2 className="w-5 h-5 text-error" />
+                    <span className="text-[14px] text-error">Supprimer la squad</span>
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => { handleLeaveSquad(); setShowActionsDrawer(false) }}
+                    className="w-full flex items-center gap-3 p-4 rounded-xl hover:bg-error/5 transition-colors"
+                  >
+                    <LogOut className="w-5 h-5 text-error" />
+                    <span className="text-[14px] text-error">Quitter la squad</span>
+                  </button>
+                )}
+              </div>
+            </div>
+          </Drawer>
         </div>
       </div>
 

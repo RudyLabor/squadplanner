@@ -752,7 +752,7 @@ export function Onboarding() {
                           Notifications
                         </h3>
                         <span className="text-xs px-2 py-0.5 rounded-full bg-[rgba(251,191,36,0.08)] text-[#fbbf24] font-medium">
-                          Requis
+                          Recommandé
                         </span>
                       </div>
                       <p className="text-[13px] text-[#8b8d90] mb-3">
@@ -829,20 +829,32 @@ export function Onboarding() {
                 </Card>
               </div>
 
-              <div className="mt-6">
-                <Button
-                  onClick={() => navigateToStep('complete')}
-                  data-testid="permissions-continue-button"
-                  className="w-full h-12"
-                  disabled={!canProceedFromPermissions() || isNavigating}
-                >
-                  Terminer
-                  <Check className="w-5 h-5 ml-2" />
-                </Button>
-                {!canProceedFromPermissions() && (
-                  <p className="text-[12px] text-[#fbbf24] text-center mt-2">
-                    Active les notifications pour continuer
-                  </p>
+              <div className="mt-6 space-y-3">
+                {canProceedFromPermissions() ? (
+                  <Button
+                    onClick={() => navigateToStep('complete')}
+                    data-testid="permissions-continue-button"
+                    className="w-full h-12"
+                    disabled={isNavigating}
+                  >
+                    Terminer
+                    <Check className="w-5 h-5 ml-2" />
+                  </Button>
+                ) : (
+                  <>
+                    <Button
+                      onClick={() => navigateToStep('complete')}
+                      data-testid="permissions-continue-button"
+                      className="w-full h-12"
+                      disabled={isNavigating}
+                    >
+                      Terminer
+                      <Check className="w-5 h-5 ml-2" />
+                    </Button>
+                    <p className="text-[12px] text-[#5e6063] text-center">
+                      Tu pourras activer les notifications plus tard dans les paramètres
+                    </p>
+                  </>
                 )}
               </div>
             </motion.div>

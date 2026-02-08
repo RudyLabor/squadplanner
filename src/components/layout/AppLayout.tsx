@@ -2,7 +2,7 @@ import { useEffect, useState, memo, useCallback, useMemo } from 'react'
 import type { ReactNode } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Home, Users, Mic, MessageCircle, User, Plus, Zap, Pin, PinOff } from 'lucide-react'
+import { Home, Users, Mic, MessageCircle, User, Plus, Zap, Pin, PinOff, Settings, HelpCircle, Phone } from 'lucide-react'
 import { useShallow } from 'zustand/react/shallow'
 import { useAuthStore, useSquadsStore, useVoiceChatStore, useKeyboardVisible, useUnreadCountStore, useSquadNotificationsStore } from '../../hooks'
 import { useCreateSessionModal } from '../CreateSessionModal'
@@ -313,7 +313,8 @@ export function AppLayout({ children }: AppLayoutProps) {
   const isAuthPage = location.pathname === '/auth'
   const isOnboarding = location.pathname === '/onboarding'
   const isLanding = location.pathname === '/'
-  const shouldHideNav = isAuthPage || isOnboarding || isLanding
+  const isLegalPage = location.pathname === '/legal'
+  const shouldHideNav = isAuthPage || isOnboarding || isLanding || isLegalPage
 
   // OPTIMIZED: Memoize computed values
   const isPartyActive = useMemo(() => location.pathname === '/party', [location.pathname])
@@ -440,19 +441,52 @@ export function AppLayout({ children }: AppLayoutProps) {
               badgeCount = pendingRsvpCount
             }
 
+            // Tour guide data attributes
+            const tourId = item.path === '/squads' ? 'squads'
+              : item.path === '/messages' ? 'messages'
+              : item.path === '/party' ? 'party'
+              : item.path === '/home' ? 'sessions'
+              : undefined
+
             return (
-              <NavLink
-                key={item.path}
-                path={item.path}
-                icon={item.icon}
-                label={item.label}
-                isActive={currentPath === item.path}
-                badge={badgeCount}
-                collapsed={!isExpanded}
-              />
+              <div key={item.path} data-tour={tourId}>
+                <NavLink
+                  path={item.path}
+                  icon={item.icon}
+                  label={item.label}
+                  isActive={currentPath === item.path}
+                  badge={badgeCount}
+                  collapsed={!isExpanded}
+                />
+              </div>
             )
           })}
         </nav>
+
+        {/* Secondary navigation - Settings, Help, Call History */}
+        <div className={`${isExpanded ? 'px-3' : 'px-2'} pb-2 space-y-0.5`}>
+          <NavLink
+            path="/settings"
+            icon={Settings}
+            label="Paramètres"
+            isActive={currentPath === '/settings'}
+            collapsed={!isExpanded}
+          />
+          <NavLink
+            path="/help"
+            icon={HelpCircle}
+            label="Aide"
+            isActive={currentPath === '/help'}
+            collapsed={!isExpanded}
+          />
+          <NavLink
+            path="/call-history"
+            icon={Phone}
+            label="Appels"
+            isActive={currentPath === '/call-history'}
+            collapsed={!isExpanded}
+          />
+        </div>
 
         {/* Footer section - Profile and Premium */}
         <footer className="mt-auto">

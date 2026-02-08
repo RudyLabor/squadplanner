@@ -388,10 +388,9 @@ export default function Home() {
     navigate(`/party?squad=${squadId}`)
   }
 
-  // Handle inviting a friend
+  // Handle inviting a friend - navigate to DM to send invite
   const handleInviteFriend = (friendId: string) => {
-    // TODO: Open invite modal
-    console.log('Invite friend:', friendId)
+    navigate(`/messages?dm=${friendId}`)
   }
 
   // Handle RSVP avec célébration - Uses React Query mutation with optimistic updates
@@ -512,12 +511,13 @@ export default function Home() {
 
           {/* AI Coach Tip - Contextuel - Cliquable pour créer une session */}
           {aiCoachLoading ? (
-            <div className="mb-6">
+            <div className="mb-6" data-tour="ai-coach">
               <SkeletonAICoach />
             </div>
           ) : aiCoachTip && (
             <motion.div
               className="mb-6 cursor-pointer"
+              data-tour="ai-coach"
               onClick={() => openCreateSessionModal()}
               whileHover={{ scale: 1.01 }}
               whileTap={{ scale: 0.99 }}

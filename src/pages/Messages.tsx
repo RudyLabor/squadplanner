@@ -660,6 +660,8 @@ export function Messages() {
   const [newMessage, setNewMessage] = useState('')
   const [isSending, setIsSending] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
+  const [messageSearchQuery, setMessageSearchQuery] = useState('')
+  const [showMessageSearch, setShowMessageSearch] = useState(false)
   const [showScrollButton, setShowScrollButton] = useState(false)
   const [editingMessage, setEditingMessage] = useState<{ id: string; content: string } | null>(null)
   const [replyingTo, setReplyingTo] = useState<{ id: string; content: string; sender: string } | null>(null)
@@ -1151,6 +1153,13 @@ export function Messages() {
                 <h2 className="text-[15px] font-semibold text-[#f7f8f8] truncate">{chatName}</h2>
                 <p className="text-[12px] text-[#5e6063]">{chatSubtitle}</p>
               </div>
+              <button
+                onClick={() => { setShowMessageSearch(s => !s); setMessageSearchQuery('') }}
+                className={`p-2.5 rounded-xl transition-colors ${showMessageSearch ? 'bg-[rgba(99,102,241,0.15)] text-[#6366f1]' : 'hover:bg-[rgba(255,255,255,0.05)] text-[#8b8d90]'}`}
+                aria-label="Rechercher dans les messages"
+              >
+                <Search className="w-5 h-5" />
+              </button>
             </>
           ) : activeDMConv ? (
             // DM chat header
@@ -1192,6 +1201,37 @@ export function Messages() {
           ) : null}
         </div>
       </div>
+
+      {/* Message Search Bar */}
+      <AnimatePresence>
+        {showMessageSearch && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            className="overflow-hidden border-b border-[rgba(255,255,255,0.05)]"
+          >
+            <div className="px-4 py-2">
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#5e6063]" />
+                <input
+                  type="text"
+                  value={messageSearchQuery}
+                  onChange={(e) => setMessageSearchQuery(e.target.value)}
+                  placeholder="Rechercher dans les messages..."
+                  className="w-full h-9 pl-9 pr-3 bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.06)] rounded-lg text-[13px] text-[#f7f8f8] placeholder:text-[#5e6063] focus:outline-none focus:border-[rgba(99,102,241,0.5)]"
+                  autoFocus
+                />
+                {messageSearchQuery && (
+                  <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[11px] text-[#5e6063]">
+                    {messages.filter(m => m.content.toLowerCase().includes(messageSearchQuery.toLowerCase())).length} résultat(s)
+                  </span>
+                )}
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Pinned Messages Section - Phase 3.2 */}
       {isSquadChat && pinnedMessages.length > 0 && (

@@ -164,8 +164,12 @@ export default function SessionDetail() {
 
   if (!currentSession) {
     return (
-      <div className="min-h-0 bg-[#050506] flex items-center justify-center py-12">
-        <Loader2 className="w-8 h-8 text-[#6366f1] animate-spin" />
+      <div className="min-h-0 bg-[#050506] flex items-center justify-center flex-col gap-4 py-12">
+        <AlertCircle className="w-8 h-8 text-[#5e6063]" />
+        <p className="text-[#8b8d90]">Session non trouvée</p>
+        <Button variant="secondary" onClick={() => navigate('/home')}>
+          Retour à l'accueil
+        </Button>
       </div>
     )
   }

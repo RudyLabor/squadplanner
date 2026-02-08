@@ -1,14 +1,16 @@
 import { useState, useEffect } from 'react'
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import {
   Bell, Volume2, Palette, Shield, Globe, Languages, Database,
   ChevronRight, Moon, Sun, Monitor, Mic, Speaker, Trash2, Download, LogOut,
-  ArrowLeft
+  ArrowLeft, Loader2, AlertTriangle, FileText, ExternalLink
 } from 'lucide-react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import { Card } from '../components/ui'
 import { useAuthStore } from '../hooks'
 import { useThemeStore, type ThemeMode } from '../hooks/useTheme'
+import { supabase } from '../lib/supabase'
+import { showSuccess, showError } from '../lib/toast'
 
 // Types
 interface NotificationSettings {
@@ -167,16 +169,89 @@ export function Settings() {
     navigate('/')
   }
 
-  const handleDeleteAccount = () => {
-    // TODO: Implement account deletion with confirmation
-    if (confirm('Es-tu sûr de vouloir supprimer ton compte ? Cette action est irréversible.')) {
-      console.log('Delete account requested')
+  const [showDeleteModal, setShowDeleteModal] = useState(false)
+  const [deleteConfirmText, setDeleteConfirmText] = useState('')
+  const [isDeleting, setIsDeleting] = useState(false)
+  const [isExporting, setIsExporting] = useState(false)
+
+  const handleDeleteAccount = async () => {
+    if (deleteConfirmText !== 'SUPPRIMER') return
+
+    setIsDeleting(true)
+    try {
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) throw new Error('Non connecté')
+
+      // Delete user data in order (respecting foreign keys)
+      const userId = user.id
+      await supabase.from('session_checkins').delete().eq('user_id', userId)
+      await supabase.from('session_rsvps').delete().eq('user_id', userId)
+      await supabase.from('messages').delete().eq('user_id', userId)
+      await supabase.from('direct_messages').delete().eq('sender_id', userId)
+      await supabase.from('party_participants').delete().eq('user_id', userId)
+      await supabase.from('push_subscriptions').delete().eq('user_id', userId)
+      await supabase.from('squad_members').delete().eq('user_id', userId)
+      await supabase.from('ai_insights').delete().eq('user_id', userId)
+      await supabase.from('profiles').delete().eq('id', userId)
+
+      // Sign out and redirect
+      await supabase.auth.signOut()
+      localStorage.clear()
+      sessionStorage.clear()
+      window.location.href = '/'
+    } catch (err) {
+      showError('Erreur lors de la suppression. Contacte le support.')
+      setIsDeleting(false)
     }
   }
 
-  const handleExportData = () => {
-    // TODO: Implement data export
-    console.log('Export data requested')
+  const handleExportData = async () => {
+    setIsExporting(true)
+    try {
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) throw new Error('Non connecté')
+
+      const userId = user.id
+
+      // Fetch all user data
+      const [profile, squads, rsvps, checkins, messages, dms, calls] = await Promise.all([
+        supabase.from('profiles').select('*').eq('id', userId).single(),
+        supabase.from('squad_members').select('*, squads(*)').eq('user_id', userId),
+        supabase.from('session_rsvps').select('*, sessions(*)').eq('user_id', userId),
+        supabase.from('session_checkins').select('*').eq('user_id', userId),
+        supabase.from('messages').select('*').eq('user_id', userId),
+        supabase.from('direct_messages').select('*').eq('sender_id', userId),
+        supabase.from('calls').select('*').or(`caller_id.eq.${userId},callee_id.eq.${userId}`),
+      ])
+
+      const exportData = {
+        exported_at: new Date().toISOString(),
+        profile: profile.data,
+        squads: squads.data,
+        rsvps: rsvps.data,
+        checkins: checkins.data,
+        messages: messages.data,
+        direct_messages: dms.data,
+        calls: calls.data,
+      }
+
+      // Download as JSON file
+      const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' })
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = `squad-planner-export-${new Date().toISOString().split('T')[0]}.json`
+      document.body.appendChild(a)
+      a.click()
+      document.body.removeChild(a)
+      URL.revokeObjectURL(url)
+
+      showSuccess('Données exportées avec succès !')
+    } catch (err) {
+      showError('Erreur lors de l\'export des données')
+    } finally {
+      setIsExporting(false)
+    }
   }
 
   return (
@@ -379,20 +454,25 @@ export function Settings() {
           <div className="space-y-3">
             <button
               onClick={handleExportData}
-              className="w-full flex items-center justify-between p-4 rounded-xl bg-[rgba(255,255,255,0.03)] hover:bg-[rgba(255,255,255,0.06)] transition-colors"
+              disabled={isExporting}
+              className="w-full flex items-center justify-between p-4 rounded-xl bg-[rgba(255,255,255,0.03)] hover:bg-[rgba(255,255,255,0.06)] transition-colors disabled:opacity-50"
             >
               <div className="flex items-center gap-3">
-                <Download className="w-5 h-5 text-[#6366f1]" />
+                {isExporting ? (
+                  <Loader2 className="w-5 h-5 text-[#6366f1] animate-spin" />
+                ) : (
+                  <Download className="w-5 h-5 text-[#6366f1]" />
+                )}
                 <div className="text-left">
-                  <p className="text-[14px] text-[#f7f8f8]">Exporter mes données</p>
-                  <p className="text-[12px] text-[#5e6063]">Télécharge toutes tes infos</p>
+                  <p className="text-[14px] text-[#f7f8f8]">{isExporting ? 'Export en cours...' : 'Exporter mes données'}</p>
+                  <p className="text-[12px] text-[#5e6063]">Télécharge toutes tes infos (RGPD)</p>
                 </div>
               </div>
               <ChevronRight className="w-5 h-5 text-[#5e6063]" />
             </button>
 
             <button
-              onClick={handleDeleteAccount}
+              onClick={() => setShowDeleteModal(true)}
               className="w-full flex items-center justify-between p-4 rounded-xl bg-[rgba(251,113,133,0.03)] hover:bg-[rgba(251,113,133,0.05)] transition-colors border border-[rgba(251,113,133,0.05)]"
             >
               <div className="flex items-center gap-3">
@@ -404,6 +484,39 @@ export function Settings() {
               </div>
               <ChevronRight className="w-5 h-5 text-[#fb7185]/50" />
             </button>
+          </div>
+        </Card>
+
+        {/* Legal Section */}
+        <Card className="mb-5 p-5 bg-[#101012]">
+          <SectionHeader icon={FileText} title="Légal" />
+          <div className="space-y-3">
+            <Link
+              to="/legal"
+              className="w-full flex items-center justify-between p-4 rounded-xl bg-[rgba(255,255,255,0.03)] hover:bg-[rgba(255,255,255,0.06)] transition-colors"
+            >
+              <div className="flex items-center gap-3">
+                <FileText className="w-5 h-5 text-[#6366f1]" />
+                <div className="text-left">
+                  <p className="text-[14px] text-[#f7f8f8]">Conditions d'utilisation</p>
+                  <p className="text-[12px] text-[#5e6063]">CGU de Squad Planner</p>
+                </div>
+              </div>
+              <ExternalLink className="w-4 h-4 text-[#5e6063]" />
+            </Link>
+            <Link
+              to="/legal?tab=privacy"
+              className="w-full flex items-center justify-between p-4 rounded-xl bg-[rgba(255,255,255,0.03)] hover:bg-[rgba(255,255,255,0.06)] transition-colors"
+            >
+              <div className="flex items-center gap-3">
+                <Shield className="w-5 h-5 text-[#6366f1]" />
+                <div className="text-left">
+                  <p className="text-[14px] text-[#f7f8f8]">Politique de confidentialité</p>
+                  <p className="text-[12px] text-[#5e6063]">RGPD & protection des données</p>
+                </div>
+              </div>
+              <ExternalLink className="w-4 h-4 text-[#5e6063]" />
+            </Link>
           </div>
         </Card>
 
@@ -421,6 +534,76 @@ export function Settings() {
           Squad Planner v1.0.0
         </p>
       </div>
+
+      {/* Delete Account Confirmation Modal */}
+      <AnimatePresence>
+        {showDeleteModal && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+            onClick={() => !isDeleting && setShowDeleteModal(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.95, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.95, opacity: 0 }}
+              onClick={(e) => e.stopPropagation()}
+              className="w-full max-w-md bg-[#101012] rounded-2xl border border-[rgba(251,113,133,0.1)] p-6"
+            >
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-10 h-10 rounded-xl bg-[rgba(251,113,133,0.08)] flex items-center justify-center">
+                  <AlertTriangle className="w-5 h-5 text-[#fb7185]" />
+                </div>
+                <h3 className="text-lg font-bold text-[#f7f8f8]">Supprimer ton compte</h3>
+              </div>
+
+              <p className="text-[14px] text-[#8b8d90] mb-4">
+                Cette action est <span className="text-[#fb7185] font-semibold">définitive et irréversible</span>.
+                Toutes tes données seront supprimées : profil, messages, squads, statistiques.
+              </p>
+
+              <p className="text-[13px] text-[#8b8d90] mb-3">
+                Tape <span className="font-mono text-[#fb7185] font-bold">SUPPRIMER</span> pour confirmer :
+              </p>
+
+              <input
+                type="text"
+                value={deleteConfirmText}
+                onChange={(e) => setDeleteConfirmText(e.target.value)}
+                placeholder="SUPPRIMER"
+                disabled={isDeleting}
+                className="w-full h-11 px-4 rounded-xl bg-[rgba(255,255,255,0.05)] border border-[rgba(251,113,133,0.15)] text-[14px] text-[#f7f8f8] placeholder:text-[#5e6063] focus:outline-none focus:border-[#fb7185] mb-4"
+              />
+
+              <div className="flex gap-3">
+                <button
+                  onClick={() => { setShowDeleteModal(false); setDeleteConfirmText('') }}
+                  disabled={isDeleting}
+                  className="flex-1 h-11 rounded-xl bg-[rgba(255,255,255,0.05)] text-[14px] text-[#8b8d90] hover:bg-[rgba(255,255,255,0.1)] transition-colors disabled:opacity-50"
+                >
+                  Annuler
+                </button>
+                <button
+                  onClick={handleDeleteAccount}
+                  disabled={deleteConfirmText !== 'SUPPRIMER' || isDeleting}
+                  className="flex-1 h-11 rounded-xl bg-[#fb7185] text-white text-[14px] font-semibold hover:bg-[#f43f5e] transition-colors disabled:opacity-30 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                >
+                  {isDeleting ? (
+                    <>
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                      Suppression...
+                    </>
+                  ) : (
+                    'Supprimer définitivement'
+                  )}
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   )
 }

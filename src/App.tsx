@@ -9,6 +9,8 @@ import { pageTransitionVariants, pageTransitionConfig } from './components/PageT
 import { supabase } from './lib/supabase'
 import { ErrorBoundary } from './components/ErrorBoundary'
 import { OfflineBanner } from './components/OfflineBanner'
+import { CookieConsent } from './components/CookieConsent'
+import { TourGuide } from './components/TourGuide'
 import { queryClient } from './lib/queryClient'
 
 // Initialize theme on app load - triggers theme initialization before first render
@@ -32,6 +34,7 @@ const Settings = lazy(() => import('./pages/Settings').then(m => ({ default: m.S
 const Help = lazy(() => import('./pages/Help').then(m => ({ default: m.Help })))
 const JoinSquad = lazy(() => import('./pages/JoinSquad').then(m => ({ default: m.JoinSquad })))
 const NotFound = lazy(() => import('./pages/NotFound').then(m => ({ default: m.NotFound })))
+const Legal = lazy(() => import('./pages/Legal').then(m => ({ default: m.Legal })))
 
 // Lazy load heavy modals (only loaded when needed)
 const CallModal = lazy(() => import('./components/CallModal').then(m => ({ default: m.CallModal })))
@@ -294,6 +297,7 @@ function AppContent() {
                   <ProtectedRoute><Settings /></ProtectedRoute>
                 } />
                 <Route path="/help" element={<Help />} />
+                <Route path="/legal" element={<Legal />} />
 
                 {/* Deep linking - Join squad via invite code */}
                 <Route path="/join/:code" element={<JoinSquad />} />
@@ -317,6 +321,10 @@ export default function App() {
         <AppContent />
         {/* Offline/Online status banner */}
         <OfflineBanner />
+        {/* Cookie consent popup - RGPD compliance */}
+        <CookieConsent />
+        {/* Tour guide for new users */}
+        <TourGuide />
         {/* Global toast notifications - Phase 3.4 */}
         <Toaster
           position="top-center"

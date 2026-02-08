@@ -8,6 +8,31 @@ import { SquadPlannerLogo } from '../components/SquadPlannerLogo'
 import { useAuthStore, useSquadsStore } from '../hooks'
 import { supabase } from '../lib/supabase'
 
+/** Traduit les erreurs Supabase Auth en francais */
+function translateAuthError(message: string): string {
+  const translations: Record<string, string> = {
+    'Invalid login credentials': 'Email ou mot de passe incorrect',
+    'Email not confirmed': 'Vérifie ton email avant de te connecter',
+    'User already registered': 'Cet email est déjà utilisé',
+    'Password should be at least 6 characters': 'Le mot de passe doit contenir au moins 6 caractères',
+    'Unable to validate email address: invalid format': 'Format d\'email invalide',
+    'Signup requires a valid password': 'Un mot de passe valide est requis',
+    'Email rate limit exceeded': 'Trop de tentatives, réessaie dans quelques minutes',
+    'For security purposes, you can only request this once every 60 seconds': 'Pour des raisons de sécurité, attends 60 secondes avant de réessayer',
+    'New password should be different from the old password.': 'Le nouveau mot de passe doit être différent de l\'ancien',
+    'Auth session missing!': 'Session expirée, reconnecte-toi',
+    'User not found': 'Aucun compte trouvé avec cet email',
+    'Token has expired or is invalid': 'Le lien a expiré, demande un nouveau lien',
+    'Email link is invalid or has expired': 'Le lien a expiré, demande un nouveau lien',
+  }
+
+  for (const [en, fr] of Object.entries(translations)) {
+    if (message.includes(en)) return fr
+  }
+  // Fallback: si pas de traduction, retourner le message tel quel
+  return message
+}
+
 export default function Auth() {
   const [searchParams] = useSearchParams()
   const urlMode = searchParams.get('mode')
@@ -57,7 +82,7 @@ export default function Auth() {
     setIsResetting(false)
 
     if (error) {
-      setError(error.message)
+      setError(translateAuthError(error.message))
     } else {
       setPasswordUpdated(true)
       setShowConfetti(true)
@@ -73,7 +98,7 @@ export default function Auth() {
     setError(null)
     const { error } = await signInWithGoogle()
     if (error) {
-      setError(error.message)
+      setError(translateAuthError(error.message))
     }
   }
 
@@ -93,7 +118,7 @@ export default function Auth() {
     setIsResetting(false)
 
     if (error) {
-      setError(error.message)
+      setError(translateAuthError(error.message))
     } else {
       setResetEmailSent(true)
     }
@@ -106,7 +131,7 @@ export default function Auth() {
     if (mode === 'login') {
       const { error } = await signIn(email, password)
       if (error) {
-        setError(error.message)
+        setError(translateAuthError(error.message))
       } else {
         // Check for redirect URL (e.g., from /join/:code deep link)
         const redirectUrl = sessionStorage.getItem('redirectAfterAuth')
@@ -130,7 +155,7 @@ export default function Auth() {
       }
       const { error } = await signUp(email, password, username)
       if (error) {
-        setError(error.message)
+        setError(translateAuthError(error.message))
       } else {
         // 🎉 Celebration for new user!
         setShowConfetti(true)
@@ -386,7 +411,14 @@ export default function Auth() {
       {/* Footer */}
       <footer className="relative z-10 px-6 py-4 text-center">
         <p className="text-[12px] text-[#5e6063]">
-          En continuant, tu acceptes nos conditions d'utilisation
+          En continuant, tu acceptes nos{' '}
+          <Link to="/legal" className="text-[#6366f1] hover:text-[#a78bfa] underline transition-colors">
+            conditions d'utilisation
+          </Link>
+          {' '}et notre{' '}
+          <Link to="/legal?tab=privacy" className="text-[#6366f1] hover:text-[#a78bfa] underline transition-colors">
+            politique de confidentialité
+          </Link>
         </p>
       </footer>
     </div>

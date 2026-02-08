@@ -1,0 +1,148 @@
+import { useState, useEffect } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { Cookie, Shield, X } from 'lucide-react'
+import { Link } from 'react-router-dom'
+
+const COOKIE_CONSENT_KEY = 'sq-cookie-consent'
+
+type ConsentState = 'accepted' | 'essential' | null
+
+export function CookieConsent() {
+  const [visible, setVisible] = useState(false)
+  const [showDetails, setShowDetails] = useState(false)
+
+  useEffect(() => {
+    // Check if consent was already given
+    const consent = localStorage.getItem(COOKIE_CONSENT_KEY)
+    if (!consent) {
+      // Small delay for better UX (don't show immediately on page load)
+      const timer = setTimeout(() => setVisible(true), 1500)
+      return () => clearTimeout(timer)
+    }
+  }, [])
+
+  const handleAcceptAll = () => {
+    localStorage.setItem(COOKIE_CONSENT_KEY, 'accepted')
+    setVisible(false)
+  }
+
+  const handleEssentialOnly = () => {
+    localStorage.setItem(COOKIE_CONSENT_KEY, 'essential')
+    setVisible(false)
+  }
+
+  return (
+    <AnimatePresence>
+      {visible && (
+        <motion.div
+          initial={{ y: 100, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          exit={{ y: 100, opacity: 0 }}
+          transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+          className="fixed bottom-4 left-4 right-4 md:left-auto md:right-6 md:bottom-6 md:max-w-md z-[60]"
+        >
+          <div className="bg-[#101012] border border-[rgba(255,255,255,0.08)] rounded-2xl shadow-2xl shadow-black/40 overflow-hidden">
+            {/* Header */}
+            <div className="p-5 pb-0">
+              <div className="flex items-start justify-between gap-3">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-[rgba(99,102,241,0.08)] flex items-center justify-center shrink-0">
+                    <Cookie className="w-5 h-5 text-[#6366f1]" />
+                  </div>
+                  <div>
+                    <h3 className="text-[15px] font-semibold text-[#f7f8f8]">Cookies & confidentialité</h3>
+                    <p className="text-[12px] text-[#5e6063] mt-0.5">Tes données, ton choix</p>
+                  </div>
+                </div>
+                <button
+                  onClick={handleEssentialOnly}
+                  className="p-1.5 rounded-lg hover:bg-[rgba(255,255,255,0.05)] transition-colors"
+                  aria-label="Fermer"
+                >
+                  <X className="w-4 h-4 text-[#5e6063]" />
+                </button>
+              </div>
+            </div>
+
+            {/* Content */}
+            <div className="p-5">
+              <p className="text-[13px] text-[#8b8d90] leading-relaxed mb-4">
+                Squad Planner utilise des cookies essentiels pour fonctionner et des cookies analytics
+                pour améliorer ton expérience. Aucun cookie publicitaire.
+              </p>
+
+              {/* Details toggle */}
+              <AnimatePresence>
+                {showDetails && (
+                  <motion.div
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: 'auto', opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    className="overflow-hidden mb-4"
+                  >
+                    <div className="space-y-3 pb-2">
+                      <div className="flex items-start gap-3 p-3 rounded-xl bg-[rgba(255,255,255,0.02)] border border-[rgba(255,255,255,0.04)]">
+                        <div className="w-2 h-2 rounded-full bg-[#34d399] mt-1.5 shrink-0" />
+                        <div>
+                          <p className="text-[13px] font-medium text-[#f7f8f8]">Essentiels</p>
+                          <p className="text-[12px] text-[#5e6063]">Authentification, thème, état de l'app. Toujours actifs.</p>
+                        </div>
+                      </div>
+                      <div className="flex items-start gap-3 p-3 rounded-xl bg-[rgba(255,255,255,0.02)] border border-[rgba(255,255,255,0.04)]">
+                        <div className="w-2 h-2 rounded-full bg-[#6366f1] mt-1.5 shrink-0" />
+                        <div>
+                          <p className="text-[13px] font-medium text-[#f7f8f8]">Analytics</p>
+                          <p className="text-[12px] text-[#5e6063]">Sentry pour le monitoring d'erreurs. Données anonymisées.</p>
+                        </div>
+                      </div>
+                      <div className="flex items-start gap-3 p-3 rounded-xl bg-[rgba(255,255,255,0.02)] border border-[rgba(255,255,255,0.04)]">
+                        <div className="w-2 h-2 rounded-full bg-[#5e6063] mt-1.5 shrink-0" />
+                        <div>
+                          <p className="text-[13px] font-medium text-[#f7f8f8]">Publicitaires</p>
+                          <p className="text-[12px] text-[#5e6063]">Aucun. On ne vend pas tes données.</p>
+                        </div>
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+
+              {/* Actions */}
+              <div className="flex gap-3">
+                <button
+                  onClick={handleEssentialOnly}
+                  className="flex-1 h-11 rounded-xl bg-[rgba(255,255,255,0.05)] text-[14px] text-[#8b8d90] font-medium hover:bg-[rgba(255,255,255,0.1)] transition-colors"
+                >
+                  Essentiels uniquement
+                </button>
+                <button
+                  onClick={handleAcceptAll}
+                  className="flex-1 h-11 rounded-xl bg-[#6366f1] text-[14px] text-white font-semibold hover:bg-[#4f46e5] transition-colors"
+                >
+                  Tout accepter
+                </button>
+              </div>
+
+              {/* Footer links */}
+              <div className="flex items-center justify-between mt-4 pt-3 border-t border-[rgba(255,255,255,0.05)]">
+                <button
+                  onClick={() => setShowDetails(!showDetails)}
+                  className="text-[12px] text-[#5e6063] hover:text-[#8b8d90] transition-colors"
+                >
+                  {showDetails ? 'Masquer les détails' : 'Voir les détails'}
+                </button>
+                <Link
+                  to="/legal?tab=privacy"
+                  className="flex items-center gap-1 text-[12px] text-[#6366f1] hover:text-[#a78bfa] transition-colors"
+                >
+                  <Shield className="w-3 h-3" />
+                  Politique de confidentialité
+                </Link>
+              </div>
+            </div>
+          </div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  )
+}

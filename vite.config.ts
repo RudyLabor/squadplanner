@@ -21,51 +21,57 @@ export default defineConfig({
     // Rolldown code splitting configuration (Vite 7+)
     rollupOptions: {
       output: {
-        // Manual chunks for optimal caching - function form for better control
+        // Manual chunks for optimal caching
+        // Normalize paths with forward slashes for cross-platform (Windows backslash fix)
         manualChunks: (id) => {
-          // Agora SDK - very heavy, MUST be isolated
-          if (id.includes('agora-rtc-sdk-ng')) {
+          const n = id.replace(/\\/g, '/');
+
+          // Agora SDK - very heavy (~1.3MB), MUST be isolated
+          if (n.includes('agora-rtc-sdk-ng') || n.includes('AgoraRTC')) {
             return 'vendor-agora';
           }
-          // React core - frequently used, cached separately
-          if (id.includes('node_modules/react/') ||
-              id.includes('node_modules/react-dom/') ||
-              id.includes('node_modules/react-router')) {
+          // React core
+          if (n.includes('/node_modules/react/') ||
+              n.includes('/node_modules/react-dom/') ||
+              n.includes('/node_modules/react-router')) {
             return 'vendor-react';
           }
-          // UI libraries
-          if (id.includes('framer-motion') || id.includes('lucide-react')) {
+          // TanStack (React Query + Virtual) - data layer
+          if (n.includes('@tanstack')) {
+            return 'vendor-tanstack';
+          }
+          // UI animation & icons
+          if (n.includes('framer-motion') || n.includes('lucide-react')) {
             return 'vendor-ui';
           }
           // State management
-          if (id.includes('zustand')) {
+          if (n.includes('zustand')) {
             return 'vendor-state';
           }
           // Supabase
-          if (id.includes('@supabase')) {
+          if (n.includes('@supabase')) {
             return 'vendor-supabase';
           }
-          // Sentry
-          if (id.includes('@sentry')) {
+          // Sentry monitoring
+          if (n.includes('@sentry')) {
             return 'vendor-sentry';
           }
-          // Confetti libraries
-          if (id.includes('confetti')) {
-            return 'vendor-confetti';
+          // Confetti / celebration
+          if (n.includes('confetti') || n.includes('countup')) {
+            return 'vendor-effects';
           }
           // Capacitor mobile plugins
-          if (id.includes('@capacitor')) {
+          if (n.includes('@capacitor')) {
             return 'vendor-capacitor';
+          }
+          // Sonner toast
+          if (n.includes('sonner')) {
+            return 'vendor-ui';
           }
         },
 
-        // Optimize chunk file names for caching
-        chunkFileNames: (chunkInfo) => {
-          const facadeModuleId = chunkInfo.facadeModuleId
-            ? chunkInfo.facadeModuleId.split("/").pop()?.replace(".tsx", "").replace(".ts", "")
-            : "chunk";
-          return `assets/${facadeModuleId}-[hash].js`;
-        },
+        // Keep named chunks for cache and debugging
+        chunkFileNames: "assets/[name]-[hash].js",
         entryFileNames: "assets/[name]-[hash].js",
         assetFileNames: "assets/[name]-[hash].[ext]",
       },

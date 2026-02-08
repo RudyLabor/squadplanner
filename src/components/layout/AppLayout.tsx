@@ -343,7 +343,7 @@ export function AppLayout({ children }: AppLayoutProps) {
       {/* Sidebar - Desktop only - Collapsible */}
       <motion.aside
         aria-label="Navigation principale"
-        className="hidden lg:flex flex-col border-r border-[rgba(255,255,255,0.03)] bg-[#050506] fixed h-full z-40"
+        className="hidden lg:flex flex-col border-r border-[rgba(255,255,255,0.03)] bg-[#050506] fixed h-full z-40 overflow-hidden"
         initial={false}
         animate={{ width: isExpanded ? 256 : 72 }}
         transition={{ duration: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
@@ -352,17 +352,16 @@ export function AppLayout({ children }: AppLayoutProps) {
       >
         {/* Logo — pr-10 to account for the pin button */}
         <div className={`${isExpanded ? 'pl-5 pr-10 py-5' : 'p-4'} border-b border-[rgba(255,255,255,0.03)]`}>
-          <div className="flex items-center gap-2.5 min-w-0">
-            <SquadPlannerLogo size={isExpanded ? 32 : 32} className="flex-shrink-0" />
+          <div className="flex items-center gap-2.5">
+            <SquadPlannerLogo size={32} className="flex-shrink-0" />
             <AnimatePresence mode="wait">
               {isExpanded && (
                 <motion.div
                   key="logo-text"
-                  initial={{ opacity: 0, width: 0 }}
-                  animate={{ opacity: 1, width: 'auto' }}
-                  exit={{ opacity: 0, width: 0 }}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
                   transition={{ duration: 0.15 }}
-                  className="overflow-hidden min-w-0"
                 >
                   <h1 className="text-[15px] font-bold text-[#f7f8f8] whitespace-nowrap">Squad Planner</h1>
                   <p className="text-[11px] text-[#5e6063] whitespace-nowrap">Jouez ensemble, vraiment</p>
@@ -548,10 +547,10 @@ export function AppLayout({ children }: AppLayoutProps) {
                   )}
                   <motion.div
                     key="profile-text"
-                    initial={{ opacity: 0, width: 0 }}
-                    animate={{ opacity: 1, width: 'auto' }}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
                     transition={{ duration: 0.15 }}
-                    className="flex-1 min-w-0 overflow-hidden"
+                    className="flex-1 min-w-0"
                   >
                     <div className="text-[14px] font-medium text-[#f7f8f8] truncate">
                       {profile?.username || 'Mon profil'}

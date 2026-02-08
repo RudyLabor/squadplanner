@@ -48,32 +48,32 @@ function ReliabilityBadge({ score }: { score: number }) {
             animate={{ rotate: [0, 8, -8, 0] }}
             transition={{ duration: 2.5, repeat: 2, repeatDelay: 4 }}
           >
-            <Star className="w-4 h-4 text-[#34d399] fill-[#34d399]" />
+            <Star className="w-4 h-4 text-success fill-success" />
           </motion.div>
-          <span className="text-[13px] font-medium text-[#34d399]">100% fiable</span>
+          <span className="text-[13px] font-medium text-success">100% fiable</span>
         </motion.div>
       )
     }
     if (score >= 80) {
       return (
         <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#34d399]/10 border border-[#34d399]/15 cursor-help">
-          <TrendingUp className="w-4 h-4 text-[#34d399]" />
-          <span className="text-[13px] font-medium text-[#34d399]">{score}% fiable</span>
+          <TrendingUp className="w-4 h-4 text-success" />
+          <span className="text-[13px] font-medium text-success">{score}% fiable</span>
         </div>
       )
     }
     if (score >= 60) {
       return (
         <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#fbbf24]/10 border border-[#fbbf24]/15 cursor-help">
-          <TrendingUp className="w-4 h-4 text-[#fbbf24]" />
-          <span className="text-[13px] font-medium text-[#fbbf24]">{score}%</span>
+          <TrendingUp className="w-4 h-4 text-warning" />
+          <span className="text-[13px] font-medium text-warning">{score}%</span>
         </div>
       )
     }
     return (
       <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#f87171]/10 border border-[#f87171]/15 cursor-help">
-        <AlertCircle className="w-4 h-4 text-[#f87171]" />
-        <span className="text-[13px] font-medium text-[#f87171]">{score}%</span>
+        <AlertCircle className="w-4 h-4 text-error" />
+        <span className="text-[13px] font-medium text-error">{score}%</span>
       </div>
     )
   }
@@ -126,22 +126,22 @@ function NextSessionCard({
       whileTap={{ scale: 0.995 }}
       transition={{ duration: 0.4, ease: "easeOut" }}
     >
-      <Card className="p-4 border-l-4 border-l-[#6366f1] bg-gradient-to-br from-[#6366f1]/8 via-transparent to-[#34d399]/3 hover:from-[#6366f1]/12 hover:to-[#34d399]/6 hover:shadow-[0_0_20px_rgba(99,102,241,0.1)] transition-interactive">
+      <Card className="p-4 border-l-4 border-l-primary bg-gradient-to-br from-primary/8 via-transparent to-success/3 hover:from-primary/12 hover:to-success/6 hover:shadow-[0_0_20px_rgba(99,102,241,0.1)] transition-interactive">
         {/* Header avec lien vers squad */}
         <Link to={`/squad/${session.squad_id}`}>
           <div className="flex items-start justify-between mb-3">
             <div>
-              <div className="text-[15px] font-semibold text-[#f7f8f8] hover:text-[#6366f1] transition-colors duration-400">
+              <div className="text-[15px] font-semibold text-text-primary hover:text-primary transition-colors duration-400">
                 {session.title || session.game || 'Session'}
               </div>
-              <div className="text-[13px] text-[#8b8d90]">{session.squad_name}</div>
+              <div className="text-[13px] text-text-tertiary">{session.squad_name}</div>
             </div>
             <Badge variant={diffMs < 0 ? 'success' : diffHours < 24 ? 'warning' : 'default'}>
               {timeLabel}
             </Badge>
           </div>
 
-          <div className="flex items-center gap-4 text-[13px] text-[#8b8d90] mb-3">
+          <div className="flex items-center gap-4 text-[13px] text-text-tertiary mb-3">
             <div className="flex items-center gap-1.5">
               <Calendar className="w-4 h-4" />
               <span>{dateFormatted} · {timeFormatted}</span>
@@ -155,7 +155,7 @@ function NextSessionCard({
 
         {/* RSVP inline buttons - 1 clic pour répondre */}
         {canRsvp && (
-          <div className="flex gap-2 pt-2 border-t border-white/5">
+          <div className="flex gap-2 pt-2 border-t border-border-subtle">
             <motion.button
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
@@ -166,8 +166,8 @@ function NextSessionCard({
               aria-pressed={session.my_rsvp === 'present'}
               className={`flex-1 flex items-center justify-center gap-1.5 px-3 py-2.5 min-h-[44px] rounded-lg text-[13px] font-medium transition-interactive ${
                 session.my_rsvp === 'present'
-                  ? 'bg-[#34d399]/15 text-[#34d399] border border-[#34d399]/20 shadow-[0_0_10px_rgba(52,211,153,0.1)]'
-                  : 'bg-[rgba(255,255,255,0.05)] text-[#8b8d90] hover:bg-[rgba(52,211,153,0.1)] hover:text-[#34d399] border border-transparent hover:border-[#34d399]/15'
+                  ? 'bg-success/15 text-success border border-success/20 shadow-[0_0_10px_rgba(52,211,153,0.1)]'
+                  : 'bg-surface-card text-text-tertiary hover:bg-success/10 hover:text-success border border-transparent hover:border-success/15'
               }`}
             >
               <CheckCircle2 className="w-4 h-4" />
@@ -184,8 +184,8 @@ function NextSessionCard({
               aria-pressed={session.my_rsvp === 'maybe'}
               className={`flex-1 flex items-center justify-center gap-1.5 px-3 py-2.5 min-h-[44px] rounded-lg text-[13px] font-medium transition-interactive ${
                 session.my_rsvp === 'maybe'
-                  ? 'bg-[#fbbf24]/15 text-[#fbbf24] border border-[#fbbf24]/20 shadow-[0_0_10px_rgba(251,191,36,0.1)]'
-                  : 'bg-[rgba(255,255,255,0.05)] text-[#8b8d90] hover:bg-[rgba(251,191,36,0.1)] hover:text-[#fbbf24] border border-transparent hover:border-[#fbbf24]/15'
+                  ? 'bg-warning/15 text-warning border border-warning/20 shadow-[0_0_10px_rgba(251,191,36,0.1)]'
+                  : 'bg-surface-card text-text-tertiary hover:bg-warning/10 hover:text-warning border border-transparent hover:border-warning/15'
               }`}
             >
               <HelpCircle className="w-4 h-4" />
@@ -202,8 +202,8 @@ function NextSessionCard({
               aria-pressed={session.my_rsvp === 'absent'}
               className={`flex-1 flex items-center justify-center gap-1.5 px-3 py-2.5 min-h-[44px] rounded-lg text-[13px] font-medium transition-interactive ${
                 session.my_rsvp === 'absent'
-                  ? 'bg-[#f87171]/15 text-[#f87171] border border-[#f87171]/20 shadow-[0_0_10px_rgba(248,113,113,0.1)]'
-                  : 'bg-[rgba(255,255,255,0.05)] text-[#8b8d90] hover:bg-[rgba(248,113,113,0.1)] hover:text-[#f87171] border border-transparent hover:border-[#f87171]/15'
+                  ? 'bg-error/15 text-error border border-error/20 shadow-[0_0_10px_rgba(248,113,113,0.1)]'
+                  : 'bg-surface-card text-text-tertiary hover:bg-error/10 hover:text-error border border-transparent hover:border-error/15'
               }`}
             >
               <XCircle className="w-4 h-4" />
@@ -218,9 +218,9 @@ function NextSessionCard({
             initial={{ opacity: 0, y: -5 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, ease: "easeOut" }}
-            className={`flex items-center gap-2 text-[13px] mt-2 pt-2 border-t border-white/5 ${
-              session.my_rsvp === 'present' ? 'text-[#34d399]' :
-              session.my_rsvp === 'absent' ? 'text-[#f87171]' : 'text-[#fbbf24]'
+            className={`flex items-center gap-2 text-[13px] mt-2 pt-2 border-t border-border-subtle ${
+              session.my_rsvp === 'present' ? 'text-success' :
+              session.my_rsvp === 'absent' ? 'text-error' : 'text-warning'
             }`}
           >
             <CheckCircle2 className="w-4 h-4" />
@@ -244,19 +244,19 @@ function ActivePartyCard({ squadName, participantCount }: { squadName: string; p
         whileTap={{ scale: 0.99 }}
         transition={{ duration: 0.4, ease: "easeOut" }}
       >
-        <Card className="p-4 bg-gradient-to-r from-[#6366f1]/8 to-transparent border-[#6366f1]/20">
+        <Card className="p-4 bg-gradient-to-r from-primary/8 to-transparent border-primary/20">
           <div className="flex items-center gap-4">
-            <div className="w-12 h-12 rounded-xl bg-[#6366f1]/15 flex items-center justify-center">
-              <Mic className="w-6 h-6 text-[#6366f1]" />
+            <div className="w-12 h-12 rounded-xl bg-primary/15 flex items-center justify-center">
+              <Mic className="w-6 h-6 text-primary" />
             </div>
             <div className="flex-1">
-              <div className="text-[15px] font-semibold text-[#f7f8f8]">
+              <div className="text-[15px] font-semibold text-text-primary">
                 {participantCount} {participantCount > 1 ? 'potes' : 'pote'} dans {squadName}
               </div>
-              <div className="text-[13px] text-[#8b8d90]">Party vocale en cours</div>
+              <div className="text-[13px] text-text-tertiary">Party vocale en cours</div>
             </div>
             <motion.div
-              className="px-4 py-2 rounded-lg bg-[#6366f1] text-white text-[14px] font-medium"
+              className="px-4 py-2 rounded-lg bg-primary text-white text-[14px] font-medium"
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               transition={{ duration: 0.4, ease: "easeOut" }}
@@ -295,7 +295,7 @@ function StatsRow({ squadsCount, sessionsThisWeek, reliabilityScore }: {
               boxShadow: `0 0 20px ${stat.color}25`,
             }}
             whileTap={{ scale: 0.98 }}
-            className="h-[60px] sm:h-[68px] px-2 sm:px-4 flex items-center gap-2 sm:gap-3 rounded-xl sm:rounded-2xl border border-white/[0.06] bg-white/[0.02] hover:bg-white/[0.04] cursor-pointer transition-all duration-200"
+            className="h-[60px] sm:h-[68px] px-2 sm:px-4 flex items-center gap-2 sm:gap-3 rounded-xl sm:rounded-2xl border border-border-default bg-surface-card hover:bg-surface-card-hover cursor-pointer transition-all duration-200"
             style={{
               transition: 'all 0.2s ease, box-shadow 0.2s ease',
             }}
@@ -307,10 +307,10 @@ function StatsRow({ squadsCount, sessionsThisWeek, reliabilityScore }: {
               <stat.icon className="w-4 h-4 sm:w-5 sm:h-5" style={{ color: stat.color }} />
             </div>
             <div className="min-w-0 flex-1">
-              <div className="text-[16px] sm:text-[20px] font-bold text-white tracking-tight leading-none">
+              <div className="text-[16px] sm:text-[20px] font-bold text-text-primary tracking-tight leading-none">
                 <CountUp end={stat.value} duration={1.2} suffix={stat.suffix} />
               </div>
-              <div className="text-[8px] sm:text-[10px] text-white/50 uppercase tracking-wider mt-0.5 truncate font-medium">
+              <div className="text-[8px] sm:text-[10px] text-text-quaternary uppercase tracking-wider mt-0.5 truncate font-medium">
                 {stat.label}
               </div>
             </div>
@@ -425,8 +425,8 @@ export default function Home() {
 
   if (!isInitialized) {
     return (
-      <div className="min-h-0 bg-[#050506] flex items-center justify-center py-12">
-        <Loader2 className="w-8 h-8 text-[#6366f1] animate-spin" />
+      <div className="min-h-0 bg-bg-base flex items-center justify-center py-12">
+        <Loader2 className="w-8 h-8 text-primary animate-spin" />
       </div>
     )
   }
@@ -451,7 +451,7 @@ export default function Home() {
   const pendingRsvps = upcomingSessions.filter(s => !s.my_rsvp).length
 
   return (
-    <div className="min-h-0 bg-[#050506] pb-6">
+    <div className="min-h-0 bg-bg-base pb-6">
       {/* Confetti celebration for RSVP present */}
       {showConfetti && typeof window !== 'undefined' && (
         <Confetti
@@ -472,9 +472,9 @@ export default function Home() {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -20 }}
           transition={{ duration: 0.4, ease: "easeOut" }}
-          className="fixed top-4 left-1/2 -translate-x-1/2 z-50 px-6 py-3 rounded-xl bg-[#34d399]/15 border border-[#34d399]/20 backdrop-blur-sm"
+          className="fixed top-4 left-1/2 -translate-x-1/2 z-50 px-6 py-3 rounded-xl bg-success/15 border border-success/20 backdrop-blur-sm"
         >
-          <p className="text-[14px] font-medium text-[#34d399]">{successMessage}</p>
+          <p className="text-[14px] font-medium text-success">{successMessage}</p>
         </motion.div>
       )}
 
@@ -483,18 +483,18 @@ export default function Home() {
           {/* Header avec célébration - Wording gamer */}
           <div className="flex items-center justify-between mb-6">
             <div>
-              <h1 className="text-2xl font-bold text-[#f7f8f8]">
+              <h1 className="text-2xl font-bold text-text-primary">
                 Salut {profile?.username || 'Gamer'} !
               </h1>
               {upcomingSessions.length > 0 ? (
-                <p className="text-[14px] text-[#8b8d90]">
+                <p className="text-[14px] text-text-tertiary">
                   {pendingRsvps > 0
                     ? `${pendingRsvps} session${pendingRsvps > 1 ? 's' : ''} ${pendingRsvps > 1 ? 'attendent' : 'attend'} ta réponse`
                     : "T'es carré, toutes tes sessions sont confirmées"
                   }
                 </p>
               ) : (
-                <p className="text-[14px] text-[#8b8d90]">Ta squad t'attend, lance une session !</p>
+                <p className="text-[14px] text-text-tertiary">Ta squad t'attend, lance une session !</p>
               )}
             </div>
             <ReliabilityBadge score={reliabilityScore} />
@@ -524,41 +524,41 @@ export default function Home() {
             >
               <Card className={`p-3 flex items-center gap-3 border transition-all duration-200 hover:shadow-[0_0_15px_rgba(99,102,241,0.15)] ${
                 aiCoachTip.tone === 'celebration'
-                  ? 'bg-gradient-to-r from-[#34d399]/8 to-transparent border-[#34d399]/15 hover:border-[#34d399]/30'
+                  ? 'bg-gradient-to-r from-success/8 to-transparent border-success/15 hover:border-success/30'
                   : aiCoachTip.tone === 'warning'
-                    ? 'bg-gradient-to-r from-[#f87171]/8 to-transparent border-[#f87171]/15 hover:border-[#f87171]/30'
-                    : 'bg-gradient-to-r from-[#6366f1]/8 to-transparent border-[#6366f1]/15 hover:border-[#6366f1]/30'
+                    ? 'bg-gradient-to-r from-error/8 to-transparent border-error/15 hover:border-error/30'
+                    : 'bg-gradient-to-r from-primary/8 to-transparent border-primary/15 hover:border-primary/30'
               }`}>
                 <div className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 ${
                   aiCoachTip.tone === 'celebration'
-                    ? 'bg-[#34d399]/12'
+                    ? 'bg-success/12'
                     : aiCoachTip.tone === 'warning'
-                      ? 'bg-[#f87171]/12'
-                      : 'bg-[#6366f1]/12'
+                      ? 'bg-error/12'
+                      : 'bg-primary/12'
                 }`}>
                   <Sparkles className={`w-4 h-4 ${
                     aiCoachTip.tone === 'celebration'
-                      ? 'text-[#34d399]'
+                      ? 'text-success'
                       : aiCoachTip.tone === 'warning'
-                        ? 'text-[#f87171]'
-                        : 'text-[#6366f1]'
+                        ? 'text-error'
+                        : 'text-primary'
                   }`} />
                 </div>
                 <p className={`text-[13px] leading-relaxed flex-1 ${
                   aiCoachTip.tone === 'celebration'
-                    ? 'text-[#34d399]'
+                    ? 'text-success'
                     : aiCoachTip.tone === 'warning'
-                      ? 'text-[#f87171]'
-                      : 'text-[#8b8d90]'
+                      ? 'text-error'
+                      : 'text-text-tertiary'
                 }`}>
                   {aiCoachTip.tip}
                 </p>
                 <ChevronRight className={`w-4 h-4 flex-shrink-0 ${
                   aiCoachTip.tone === 'celebration'
-                    ? 'text-[#34d399]/60'
+                    ? 'text-success/60'
                     : aiCoachTip.tone === 'warning'
-                      ? 'text-[#f87171]/60'
-                      : 'text-[#6366f1]/60'
+                      ? 'text-error/60'
+                      : 'text-primary/60'
                 }`} />
               </Card>
             </motion.div>
@@ -578,7 +578,7 @@ export default function Home() {
           {sessionsLoading ? (
             <div className="mb-6">
               <div className="flex items-center justify-between mb-3">
-                <h2 className="text-[18px] font-semibold text-[#f7f8f8]">
+                <h2 className="text-[18px] font-semibold text-text-primary">
                   Prochaine session
                 </h2>
               </div>
@@ -587,11 +587,11 @@ export default function Home() {
           ) : nextSession && (
             <div className="mb-6">
               <div className="flex items-center justify-between mb-3">
-                <h2 className="text-[18px] font-semibold text-[#f7f8f8]">
+                <h2 className="text-[18px] font-semibold text-text-primary">
                   Prochaine session
                 </h2>
                 {upcomingSessions.length > 1 && (
-                  <Link to="/squads" className="text-[12px] text-[#6366f1] font-medium">
+                  <Link to="/squads" className="text-[12px] text-primary font-medium">
                     Voir tout ({upcomingSessions.length})
                   </Link>
                 )}
@@ -613,7 +613,7 @@ export default function Home() {
 
           {/* Stats - Wording gamer */}
           <div className="mb-6">
-            <h2 className="text-[18px] font-semibold text-[#f7f8f8] mb-3">
+            <h2 className="text-[18px] font-semibold text-text-primary mb-3">
               Ton tableau de bord
             </h2>
             <div className="space-y-4">
@@ -643,7 +643,7 @@ export default function Home() {
           {squadsLoading ? (
             <div>
               <div className="flex items-center justify-between mb-3">
-                <h2 className="text-[18px] font-semibold text-[#f7f8f8]">
+                <h2 className="text-[18px] font-semibold text-text-primary">
                   Mes squads
                 </h2>
               </div>
@@ -656,12 +656,12 @@ export default function Home() {
           ) : squads.length > 0 ? (
             <div>
               <div className="flex items-center justify-between mb-3">
-                <h2 className="text-[18px] font-semibold text-[#f7f8f8]">
+                <h2 className="text-[18px] font-semibold text-text-primary">
                   Mes squads
                 </h2>
                 <Link to="/squads">
                   <motion.button
-                    className="text-[12px] text-[#6366f1] font-medium flex items-center gap-1"
+                    className="text-[12px] text-primary font-medium flex items-center gap-1"
                     whileHover={{ x: 2 }}
                     transition={{ duration: 0.4, ease: "easeOut" }}
                   >
@@ -682,17 +682,17 @@ export default function Home() {
                     >
                       <Card className="p-3 hover:shadow-[0_0_15px_rgba(99,102,241,0.1)] transition-interactive">
                         <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 rounded-lg bg-[rgba(99,102,241,0.12)] flex items-center justify-center">
-                            <Users className="w-5 h-5 text-[#6366f1]" />
+                          <div className="w-10 h-10 rounded-lg bg-primary/12 flex items-center justify-center">
+                            <Users className="w-5 h-5 text-primary" />
                           </div>
                           <div className="flex-1 min-w-0">
-                            <div className="text-[14px] font-medium text-[#f7f8f8] truncate">{squad.name}</div>
-                            <div className="text-[12px] text-[#8b8d90]">{squad.game}</div>
+                            <div className="text-[14px] font-medium text-text-primary truncate">{squad.name}</div>
+                            <div className="text-[12px] text-text-tertiary">{squad.game}</div>
                           </div>
-                          <div className="text-[12px] text-[#5e6063]">
+                          <div className="text-[12px] text-text-quaternary">
                             {squad.member_count || squad.total_members || 1} membre{(squad.member_count || squad.total_members || 1) > 1 ? 's' : ''}
                           </div>
-                          <ChevronRight className="w-4 h-4 text-[#5e6063]" />
+                          <ChevronRight className="w-4 h-4 text-text-quaternary" />
                         </div>
                       </Card>
                     </motion.div>
@@ -707,23 +707,23 @@ export default function Home() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2, duration: 0.4, ease: "easeOut" }}
             >
-              <Card className="p-8 text-center bg-gradient-to-br from-[#6366f1]/5 to-transparent border-dashed">
+              <Card className="p-8 text-center bg-gradient-to-br from-primary/5 to-transparent border-dashed">
                 <motion.div
-                  className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#6366f1]/15 to-[#a78bfa]/8 flex items-center justify-center mx-auto mb-4"
+                  className="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary/15 to-[#a78bfa]/8 flex items-center justify-center mx-auto mb-4"
                   animate={{ rotate: [0, 3, -3, 0] }}
                   transition={{ duration: 4, repeat: 2 }}
                 >
-                  <Users className="w-7 h-7 text-[#6366f1]" strokeWidth={1.5} />
+                  <Users className="w-7 h-7 text-primary" strokeWidth={1.5} />
                 </motion.div>
-                <h3 className="text-[16px] font-semibold text-[#f7f8f8] mb-2">
+                <h3 className="text-[16px] font-semibold text-text-primary mb-2">
                   Tes potes t'attendent !
                 </h3>
-                <p className="text-[14px] text-[#8b8d90] mb-6 max-w-[250px] mx-auto">
+                <p className="text-[14px] text-text-tertiary mb-6 max-w-[250px] mx-auto">
                   Crée ta squad et finis-en avec les "on verra". Place à l'action !
                 </p>
                 <Link to="/squads">
                   <motion.button
-                    className="inline-flex items-center gap-2 h-11 px-6 rounded-xl bg-[#6366f1] text-white text-[14px] font-semibold shadow-[0_0_16px_rgba(99,102,241,0.15)]"
+                    className="inline-flex items-center gap-2 h-11 px-6 rounded-xl bg-primary text-white text-[14px] font-semibold shadow-[0_0_16px_rgba(99,102,241,0.15)]"
                     whileHover={{ y: -2, scale: 1.02, boxShadow: "0 0 20px rgba(99,102,241,0.2)" }}
                     whileTap={{ scale: 0.98 }}
                     transition={{ duration: 0.4, ease: "easeOut" }}
@@ -759,10 +759,10 @@ export default function Home() {
                         <Mic className="w-5 h-5 text-[#6366f1]" />
                       </motion.div>
                       <div className="flex-1">
-                        <div className="text-[14px] font-medium text-[#f7f8f8]">Envie de papoter ?</div>
-                        <div className="text-[12px] text-[#8b8d90]">Lance une party, ta squad est peut-être dispo !</div>
+                        <div className="text-[14px] font-medium text-text-primary">Envie de papoter ?</div>
+                        <div className="text-[12px] text-text-tertiary">Lance une party, ta squad est peut-être dispo !</div>
                       </div>
-                      <ChevronRight className="w-5 h-5 text-[#5e6063]" />
+                      <ChevronRight className="w-5 h-5 text-text-quaternary" />
                     </div>
                   </Card>
                 </motion.div>

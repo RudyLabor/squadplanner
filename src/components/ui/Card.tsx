@@ -10,8 +10,8 @@ interface CardProps {
 }
 
 export function Card({ children, className = '', hoverable = false, onClick, 'aria-label': ariaLabel }: CardProps) {
-  const baseClasses = 'bg-[rgba(255,255,255,0.015)] border border-[rgba(255,255,255,0.04)] rounded-2xl transition-interactive'
-  const hoverClasses = hoverable ? 'hover:bg-[rgba(255,255,255,0.025)] hover:border-[rgba(255,255,255,0.08)] cursor-pointer' : ''
+  const baseClasses = 'bg-surface-card border border-border-subtle rounded-2xl transition-interactive'
+  const hoverClasses = hoverable ? 'hover:bg-surface-card-hover hover:border-border-hover cursor-pointer' : ''
   const isClickable = !!onClick
 
   // Handle keyboard interaction for clickable cards

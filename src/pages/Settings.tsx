@@ -36,7 +36,7 @@ function Toggle({ enabled, onChange, disabled = false }: {
       onClick={() => !disabled && onChange(!enabled)}
       disabled={disabled}
       className={`relative w-11 h-6 rounded-full transition-colors ${
-        enabled ? 'bg-[#34d399]' : 'bg-[rgba(255,255,255,0.1)]'
+        enabled ? 'bg-success' : 'bg-border-hover'
       } ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
     >
       <motion.div
@@ -52,10 +52,10 @@ function Toggle({ enabled, onChange, disabled = false }: {
 function SectionHeader({ icon: Icon, title }: { icon: React.ElementType; title: string }) {
   return (
     <div className="flex items-center gap-3 mb-4">
-      <div className="w-8 h-8 rounded-lg bg-[rgba(99,102,241,0.08)] flex items-center justify-center">
-        <Icon className="w-4 h-4 text-[#6366f1]" />
+      <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
+        <Icon className="w-4 h-4 text-primary" />
       </div>
-      <h2 className="text-[15px] font-semibold text-[#f7f8f8]">{title}</h2>
+      <h2 className="text-[15px] font-semibold text-text-primary">{title}</h2>
     </div>
   )
 }
@@ -67,10 +67,10 @@ function SettingRow({ label, description, children }: {
   children: React.ReactNode
 }) {
   return (
-    <div className="flex items-center justify-between py-3 border-b border-[rgba(255,255,255,0.05)] last:border-0">
+    <div className="flex items-center justify-between py-3 border-b border-border-default last:border-0">
       <div className="flex-1 mr-4">
-        <p className="text-[14px] text-[#f7f8f8]">{label}</p>
-        {description && <p className="text-[12px] text-[#5e6063] mt-0.5">{description}</p>}
+        <p className="text-[14px] text-text-primary">{label}</p>
+        {description && <p className="text-[12px] text-text-quaternary mt-0.5">{description}</p>}
       </div>
       {children}
     </div>
@@ -88,7 +88,7 @@ function ThemeSelector() {
   ]
 
   return (
-    <div className="flex gap-1 p-1 rounded-lg bg-[rgba(255,255,255,0.05)]">
+    <div className="flex gap-1 p-1 rounded-lg bg-surface-card">
       {themes.map(({ value, label, icon: Icon }) => (
         <button
           key={value}
@@ -96,7 +96,7 @@ function ThemeSelector() {
           className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-[13px] font-medium transition-interactive ${
             mode === value
               ? 'bg-primary text-white'
-              : 'text-text-secondary hover:text-text-primary hover:bg-[rgba(255,255,255,0.05)]'
+              : 'text-text-secondary hover:text-text-primary hover:bg-surface-card'
           }`}
         >
           <Icon className="w-3.5 h-3.5" />
@@ -255,24 +255,24 @@ export function Settings() {
   }
 
   return (
-    <div className="min-h-0 bg-[#050506] pb-6">
+    <div className="min-h-0 bg-bg-base pb-6">
       <div className="px-4 md:px-6 lg:px-8 py-6 max-w-2xl mx-auto">
         {/* Header */}
         <div className="flex items-center gap-4 mb-8">
           <button
             onClick={() => navigate(-1)}
-            className="w-10 h-10 rounded-xl bg-[rgba(255,255,255,0.05)] flex items-center justify-center hover:bg-[rgba(255,255,255,0.1)] transition-colors"
+            className="w-10 h-10 rounded-xl bg-surface-card flex items-center justify-center hover:bg-border-hover transition-colors"
           >
-            <ArrowLeft className="w-5 h-5 text-[#8b8d90]" />
+            <ArrowLeft className="w-5 h-5 text-text-tertiary" />
           </button>
           <div>
-            <h1 className="text-2xl font-bold text-[#f7f8f8]">Paramètres</h1>
-            <p className="text-[14px] text-[#8b8d90]">Personnalise ton expérience</p>
+            <h1 className="text-2xl font-bold text-text-primary">Paramètres</h1>
+            <p className="text-[14px] text-text-tertiary">Personnalise ton expérience</p>
           </div>
         </div>
 
         {/* Notifications Section */}
-        <Card className="mb-5 p-5 bg-[#101012]">
+        <Card className="mb-5 p-5 bg-bg-elevated">
           <SectionHeader icon={Bell} title="Notifications" />
           <div className="space-y-1">
             <SettingRow
@@ -315,18 +315,18 @@ export function Settings() {
         </Card>
 
         {/* Audio Section */}
-        <Card className="mb-5 p-5 bg-[#101012]">
+        <Card className="mb-5 p-5 bg-bg-elevated">
           <SectionHeader icon={Volume2} title="Audio" />
           <div className="space-y-4">
             <div>
-              <label className="flex items-center gap-2 text-[13px] text-[#8b8d90] mb-2">
+              <label className="flex items-center gap-2 text-[13px] text-text-tertiary mb-2">
                 <Mic className="w-4 h-4" />
                 Microphone
               </label>
               <select
                 value={audioInput}
                 onChange={(e) => setAudioInput(e.target.value)}
-                className="w-full h-11 px-4 rounded-xl bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.08)] text-[14px] text-[#f7f8f8] focus:outline-none focus:border-[#6366f1]"
+                className="w-full h-11 px-4 rounded-xl bg-surface-card border border-border-default text-[14px] text-text-primary focus:outline-none focus:border-primary"
               >
                 <option value="default">Microphone par défaut</option>
                 {inputDevices.map(device => (
@@ -337,14 +337,14 @@ export function Settings() {
               </select>
             </div>
             <div>
-              <label className="flex items-center gap-2 text-[13px] text-[#8b8d90] mb-2">
+              <label className="flex items-center gap-2 text-[13px] text-text-tertiary mb-2">
                 <Speaker className="w-4 h-4" />
                 Sortie audio
               </label>
               <select
                 value={audioOutput}
                 onChange={(e) => setAudioOutput(e.target.value)}
-                className="w-full h-11 px-4 rounded-xl bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.08)] text-[14px] text-[#f7f8f8] focus:outline-none focus:border-[#6366f1]"
+                className="w-full h-11 px-4 rounded-xl bg-surface-card border border-border-default text-[14px] text-text-primary focus:outline-none focus:border-primary"
               >
                 <option value="default">Haut-parleur par défaut</option>
                 {outputDevices.map(device => (
@@ -369,7 +369,7 @@ export function Settings() {
         </Card>
 
         {/* Privacy Section */}
-        <Card className="mb-5 p-5 bg-[#101012]">
+        <Card className="mb-5 p-5 bg-bg-elevated">
           <SectionHeader icon={Shield} title="Confidentialité" />
           <div className="space-y-1">
             <SettingRow
@@ -379,7 +379,7 @@ export function Settings() {
               <select
                 value={privacy.profileVisibility}
                 onChange={(e) => setPrivacy({ ...privacy, profileVisibility: e.target.value as 'public' | 'friends' | 'private' })}
-                className="h-9 px-3 rounded-lg bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.08)] text-[13px] text-[#f7f8f8] focus:outline-none focus:border-[#6366f1]"
+                className="h-9 px-3 rounded-lg bg-surface-card border border-border-default text-[13px] text-text-primary focus:outline-none focus:border-primary"
               >
                 <option value="public">Tout le monde</option>
                 <option value="friends">Membres de mes squads</option>
@@ -399,18 +399,18 @@ export function Settings() {
         </Card>
 
         {/* Timezone & Language Section */}
-        <Card className="mb-5 p-5 bg-[#101012]">
+        <Card className="mb-5 p-5 bg-bg-elevated">
           <SectionHeader icon={Globe} title="Région" />
           <div className="space-y-4">
             <div>
-              <label className="flex items-center gap-2 text-[13px] text-[#8b8d90] mb-2">
+              <label className="flex items-center gap-2 text-[13px] text-text-tertiary mb-2">
                 <Globe className="w-4 h-4" />
                 Fuseau horaire
               </label>
               <select
                 value={timezone}
                 onChange={(e) => setTimezone(e.target.value)}
-                className="w-full h-11 px-4 rounded-xl bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.08)] text-[14px] text-[#f7f8f8] focus:outline-none focus:border-[#6366f1]"
+                className="w-full h-11 px-4 rounded-xl bg-surface-card border border-border-default text-[14px] text-text-primary focus:outline-none focus:border-primary"
               >
                 {TIMEZONES.map(tz => (
                   <option key={tz.value} value={tz.value}>{tz.label}</option>
@@ -418,7 +418,7 @@ export function Settings() {
               </select>
             </div>
             <div>
-              <label className="flex items-center gap-2 text-[13px] text-[#8b8d90] mb-2">
+              <label className="flex items-center gap-2 text-[13px] text-text-tertiary mb-2">
                 <Languages className="w-4 h-4" />
                 Langue
               </label>
@@ -427,8 +427,8 @@ export function Settings() {
                   onClick={() => setLanguage('fr')}
                   className={`flex-1 h-11 rounded-xl text-[14px] font-medium transition-interactive ${
                     language === 'fr'
-                      ? 'bg-[#6366f1] text-white'
-                      : 'bg-[rgba(255,255,255,0.05)] text-[#8b8d90] hover:bg-[rgba(255,255,255,0.1)]'
+                      ? 'bg-primary text-white'
+                      : 'bg-surface-card text-text-tertiary hover:bg-border-hover'
                   }`}
                 >
                   Français
@@ -437,8 +437,8 @@ export function Settings() {
                   onClick={() => setLanguage('en')}
                   className={`flex-1 h-11 rounded-xl text-[14px] font-medium transition-interactive ${
                     language === 'en'
-                      ? 'bg-[#6366f1] text-white'
-                      : 'bg-[rgba(255,255,255,0.05)] text-[#8b8d90] hover:bg-[rgba(255,255,255,0.1)]'
+                      ? 'bg-primary text-white'
+                      : 'bg-surface-card text-text-tertiary hover:bg-border-hover'
                   }`}
                 >
                   English
@@ -449,26 +449,26 @@ export function Settings() {
         </Card>
 
         {/* Data Section */}
-        <Card className="mb-5 p-5 bg-[#101012]">
+        <Card className="mb-5 p-5 bg-bg-elevated">
           <SectionHeader icon={Database} title="Données" />
           <div className="space-y-3">
             <button
               onClick={handleExportData}
               disabled={isExporting}
-              className="w-full flex items-center justify-between p-4 rounded-xl bg-[rgba(255,255,255,0.03)] hover:bg-[rgba(255,255,255,0.06)] transition-colors disabled:opacity-50"
+              className="w-full flex items-center justify-between p-4 rounded-xl bg-surface-card hover:bg-surface-card-hover transition-colors disabled:opacity-50"
             >
               <div className="flex items-center gap-3">
                 {isExporting ? (
-                  <Loader2 className="w-5 h-5 text-[#6366f1] animate-spin" />
+                  <Loader2 className="w-5 h-5 text-primary animate-spin" />
                 ) : (
-                  <Download className="w-5 h-5 text-[#6366f1]" />
+                  <Download className="w-5 h-5 text-primary" />
                 )}
                 <div className="text-left">
-                  <p className="text-[14px] text-[#f7f8f8]">{isExporting ? 'Export en cours...' : 'Exporter mes données'}</p>
-                  <p className="text-[12px] text-[#5e6063]">Télécharge toutes tes infos (RGPD)</p>
+                  <p className="text-[14px] text-text-primary">{isExporting ? 'Export en cours...' : 'Exporter mes données'}</p>
+                  <p className="text-[12px] text-text-quaternary">Télécharge toutes tes infos (RGPD)</p>
                 </div>
               </div>
-              <ChevronRight className="w-5 h-5 text-[#5e6063]" />
+              <ChevronRight className="w-5 h-5 text-text-quaternary" />
             </button>
 
             <button
@@ -488,34 +488,34 @@ export function Settings() {
         </Card>
 
         {/* Legal Section */}
-        <Card className="mb-5 p-5 bg-[#101012]">
+        <Card className="mb-5 p-5 bg-bg-elevated">
           <SectionHeader icon={FileText} title="Légal" />
           <div className="space-y-3">
             <Link
               to="/legal"
-              className="w-full flex items-center justify-between p-4 rounded-xl bg-[rgba(255,255,255,0.03)] hover:bg-[rgba(255,255,255,0.06)] transition-colors"
+              className="w-full flex items-center justify-between p-4 rounded-xl bg-surface-card hover:bg-surface-card-hover transition-colors"
             >
               <div className="flex items-center gap-3">
-                <FileText className="w-5 h-5 text-[#6366f1]" />
+                <FileText className="w-5 h-5 text-primary" />
                 <div className="text-left">
-                  <p className="text-[14px] text-[#f7f8f8]">Conditions d'utilisation</p>
-                  <p className="text-[12px] text-[#5e6063]">CGU de Squad Planner</p>
+                  <p className="text-[14px] text-text-primary">Conditions d'utilisation</p>
+                  <p className="text-[12px] text-text-quaternary">CGU de Squad Planner</p>
                 </div>
               </div>
-              <ExternalLink className="w-4 h-4 text-[#5e6063]" />
+              <ExternalLink className="w-4 h-4 text-text-quaternary" />
             </Link>
             <Link
               to="/legal?tab=privacy"
-              className="w-full flex items-center justify-between p-4 rounded-xl bg-[rgba(255,255,255,0.03)] hover:bg-[rgba(255,255,255,0.06)] transition-colors"
+              className="w-full flex items-center justify-between p-4 rounded-xl bg-surface-card hover:bg-surface-card-hover transition-colors"
             >
               <div className="flex items-center gap-3">
-                <Shield className="w-5 h-5 text-[#6366f1]" />
+                <Shield className="w-5 h-5 text-primary" />
                 <div className="text-left">
-                  <p className="text-[14px] text-[#f7f8f8]">Politique de confidentialité</p>
-                  <p className="text-[12px] text-[#5e6063]">RGPD & protection des données</p>
+                  <p className="text-[14px] text-text-primary">Politique de confidentialité</p>
+                  <p className="text-[12px] text-text-quaternary">RGPD & protection des données</p>
                 </div>
               </div>
-              <ExternalLink className="w-4 h-4 text-[#5e6063]" />
+              <ExternalLink className="w-4 h-4 text-text-quaternary" />
             </Link>
           </div>
         </Card>
@@ -530,7 +530,7 @@ export function Settings() {
         </button>
 
         {/* Version */}
-        <p className="text-center text-[12px] text-[#5e6063] mt-6">
+        <p className="text-center text-[12px] text-text-quaternary mt-6">
           Squad Planner v1.0.0
         </p>
       </div>
@@ -550,21 +550,21 @@ export function Settings() {
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.95, opacity: 0 }}
               onClick={(e) => e.stopPropagation()}
-              className="w-full max-w-md bg-[#101012] rounded-2xl border border-[rgba(251,113,133,0.1)] p-6"
+              className="w-full max-w-md bg-bg-elevated rounded-2xl border border-[rgba(251,113,133,0.1)] p-6"
             >
               <div className="flex items-center gap-3 mb-4">
                 <div className="w-10 h-10 rounded-xl bg-[rgba(251,113,133,0.08)] flex items-center justify-center">
                   <AlertTriangle className="w-5 h-5 text-[#fb7185]" />
                 </div>
-                <h3 className="text-lg font-bold text-[#f7f8f8]">Supprimer ton compte</h3>
+                <h3 className="text-lg font-bold text-text-primary">Supprimer ton compte</h3>
               </div>
 
-              <p className="text-[14px] text-[#8b8d90] mb-4">
+              <p className="text-[14px] text-text-tertiary mb-4">
                 Cette action est <span className="text-[#fb7185] font-semibold">définitive et irréversible</span>.
                 Toutes tes données seront supprimées : profil, messages, squads, statistiques.
               </p>
 
-              <p className="text-[13px] text-[#8b8d90] mb-3">
+              <p className="text-[13px] text-text-tertiary mb-3">
                 Tape <span className="font-mono text-[#fb7185] font-bold">SUPPRIMER</span> pour confirmer :
               </p>
 
@@ -574,14 +574,14 @@ export function Settings() {
                 onChange={(e) => setDeleteConfirmText(e.target.value)}
                 placeholder="SUPPRIMER"
                 disabled={isDeleting}
-                className="w-full h-11 px-4 rounded-xl bg-[rgba(255,255,255,0.05)] border border-[rgba(251,113,133,0.15)] text-[14px] text-[#f7f8f8] placeholder:text-[#5e6063] focus:outline-none focus:border-[#fb7185] mb-4"
+                className="w-full h-11 px-4 rounded-xl bg-surface-card border border-[rgba(251,113,133,0.15)] text-[14px] text-text-primary placeholder:text-text-quaternary focus:outline-none focus:border-[#fb7185] mb-4"
               />
 
               <div className="flex gap-3">
                 <button
                   onClick={() => { setShowDeleteModal(false); setDeleteConfirmText('') }}
                   disabled={isDeleting}
-                  className="flex-1 h-11 rounded-xl bg-[rgba(255,255,255,0.05)] text-[14px] text-[#8b8d90] hover:bg-[rgba(255,255,255,0.1)] transition-colors disabled:opacity-50"
+                  className="flex-1 h-11 rounded-xl bg-surface-card text-[14px] text-text-tertiary hover:bg-border-hover transition-colors disabled:opacity-50"
                 >
                   Annuler
                 </button>

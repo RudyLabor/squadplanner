@@ -282,7 +282,7 @@ export function Profile() {
   // Loading state with skeleton
   if (!isInitialized || (isLoading && !profile)) {
     return (
-      <div className="min-h-0 bg-[#050506] pb-6">
+      <div className="min-h-0 bg-bg-base pb-6">
         <div className="relative">
           <div className="absolute inset-0 h-48 bg-gradient-to-b from-[rgba(99,102,241,0.12)] to-transparent" />
           <div className="relative px-4 md:px-6 lg:px-8 pt-8 pb-4 max-w-2xl lg:max-w-4xl xl:max-w-6xl mx-auto">
@@ -294,7 +294,7 @@ export function Profile() {
   }
 
   return (
-    <div className="min-h-0 bg-[#050506] pb-6">
+    <div className="min-h-0 bg-bg-base pb-6">
       {/* Level Up Celebration */}
       {showLevelUp && newLevel && (
         <LevelUpCelebration
@@ -377,7 +377,7 @@ export function Profile() {
           {/* Avatar central */}
           <div className="flex flex-col items-center mb-6">
             <div className="relative mb-4">
-              <div className="w-24 h-24 rounded-2xl bg-gradient-to-br from-[#6366f1] to-[#a78bfa] flex items-center justify-center overflow-hidden ring-4 ring-[#050506]">
+              <div className="w-24 h-24 rounded-2xl bg-gradient-to-br from-[#6366f1] to-[#a78bfa] flex items-center justify-center overflow-hidden ring-4 ring-bg-base">
                 {(localPreviewUrl || profile?.avatar_url) ? (
                   <img
                     src={localPreviewUrl || profile?.avatar_url || undefined}
@@ -399,7 +399,7 @@ export function Profile() {
                 onClick={() => fileInputRef.current?.click()}
                 disabled={isUploadingPhoto}
                 aria-label="Changer la photo de profil"
-                className="absolute -bottom-2 -right-2 w-9 h-9 rounded-full bg-[#6366f1] flex items-center justify-center border-3 border-[#050506] hover:bg-[#4f46e5] transition-colors shadow-md"
+                className="absolute -bottom-2 -right-2 w-9 h-9 rounded-full bg-primary flex items-center justify-center border-3 border-bg-base hover:bg-[#4f46e5] transition-colors shadow-md"
               >
                 {isUploadingPhoto ? (
                   <Loader2 className="w-4 h-4 text-white animate-spin" aria-hidden="true" />
@@ -449,24 +449,24 @@ export function Profile() {
                   exit={{ opacity: 0, y: -10 }}
                   className="text-center"
                 >
-                  <h1 className="text-2xl font-bold text-[#f7f8f8] mb-1">
+                  <h1 className="text-2xl font-bold text-text-primary mb-1">
                     {profile?.username || 'Gamer'}
                   </h1>
-                  <p className="text-[14px] text-[#8b8d90] mb-1">
+                  <p className="text-[14px] text-text-tertiary mb-1">
                     {profile?.bio || 'Pas encore de bio'}
                   </p>
-                  <p className="text-[12px] text-[#5e6063] mb-3">{user?.email}</p>
+                  <p className="text-[12px] text-text-quaternary mb-3">{user?.email}</p>
                   <div className="flex items-center gap-2">
                     <button
                       onClick={() => setIsEditing(true)}
-                      className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[rgba(99,102,241,0.12)] text-[#a78bfa] text-[13px] font-medium hover:bg-[rgba(99,102,241,0.2)] transition-colors active:scale-[0.97]"
+                      className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-primary/12 text-purple text-[13px] font-medium hover:bg-primary/20 transition-colors active:scale-[0.97]"
                     >
                       <Edit2 className="w-4 h-4" />
                       Modifier le profil
                     </button>
                     <button
                       onClick={() => navigate('/settings')}
-                      className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[rgba(255,255,255,0.05)] text-[#8b8d90] text-[13px] font-medium hover:bg-[rgba(255,255,255,0.1)] hover:text-[#f7f8f8] transition-colors active:scale-[0.97]"
+                      className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-surface-card text-text-tertiary text-[13px] font-medium hover:bg-surface-card-hover hover:text-text-primary transition-colors active:scale-[0.97]"
                     >
                       ⚙️ Paramètres
                     </button>
@@ -487,7 +487,7 @@ export function Profile() {
         />
 
         {/* Score de fiabilité - Card principale avec Tier System */}
-        <Card className={`mb-5 overflow-hidden bg-[#101012] ${tier.glow ? 'ring-1 ring-[#fbbf24]/30 ring-offset-1 ring-offset-[#050506]' : ''}`}>
+        <Card className={`mb-5 overflow-hidden bg-bg-elevated ${tier.glow ? 'ring-1 ring-[#fbbf24]/30 ring-offset-1 ring-offset-bg-base' : ''}`}>
           <div
             className="h-1.5"
             style={{
@@ -514,7 +514,7 @@ export function Profile() {
               </motion.div>
               <div className="flex-1">
                 <div className="flex items-baseline gap-2 mb-0.5">
-                  <span className="text-[32px] font-bold text-[#f7f8f8]">
+                  <span className="text-[32px] font-bold text-text-primary">
                     <CountUp end={reliabilityScore} duration={1.5} suffix="%" />
                   </span>
                   <motion.span
@@ -528,20 +528,20 @@ export function Profile() {
                     <span>{tier.name}</span>
                   </motion.span>
                 </div>
-                <p className="text-[13px] text-[#5e6063]">Score de fiabilité</p>
+                <p className="text-[13px] text-text-quaternary">Score de fiabilité</p>
 
                 {/* Progress bar to next tier */}
                 {tier.nextTier && (
                   <div className="mt-3">
                     <div className="flex items-center justify-between text-[11px] mb-1.5">
-                      <span className="text-[#8b8d90]">
+                      <span className="text-text-tertiary">
                         Prochain : <span style={{ color: tier.nextTier.color }}>{tier.nextTier.icon} {tier.nextTier.name}</span>
                       </span>
-                      <span className="text-[#5e6063]">
+                      <span className="text-text-quaternary">
                         {tier.nextTier.minScore - reliabilityScore}% restants
                       </span>
                     </div>
-                    <div className="relative h-2 bg-[rgba(255,255,255,0.05)] rounded-full overflow-hidden">
+                    <div className="relative h-2 bg-surface-card rounded-full overflow-hidden">
                       <motion.div
                         className="absolute h-full rounded-full"
                         style={{
@@ -578,7 +578,7 @@ export function Profile() {
                   <Sparkles className="w-5 h-5" style={{ color: reliabilityColor }} />
                 </motion.div>
               )}
-              {!tier.glow && <TrendingUp className="w-5 h-5 text-[#34d399]" />}
+              {!tier.glow && <TrendingUp className="w-5 h-5 text-success" />}
             </div>
           </div>
         </Card>
@@ -586,7 +586,7 @@ export function Profile() {
         {/* Stats Grid - 2x2 on mobile, 4 cols on desktop */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-4 mb-5">
           {stats.map(stat => (
-            <Card key={stat.label} className="p-4 bg-[#101012]">
+            <Card key={stat.label} className="p-4 bg-bg-elevated">
               <div className="flex items-center gap-3">
                 <div
                   className="w-10 h-10 rounded-xl flex items-center justify-center"
@@ -595,10 +595,10 @@ export function Profile() {
                   <stat.icon className="w-5 h-5" style={{ color: stat.color }} />
                 </div>
                 <div>
-                  <div className="text-xl font-bold text-[#f7f8f8]">
+                  <div className="text-xl font-bold text-text-primary">
                     <CountUp end={stat.value} duration={1.5} />
                   </div>
-                  <div className="text-[12px] text-[#5e6063]">{stat.label}</div>
+                  <div className="text-[12px] text-text-quaternary">{stat.label}</div>
                 </div>
               </div>
             </Card>
@@ -609,7 +609,7 @@ export function Profile() {
         <div className="mb-5">
           <div className="flex items-center gap-2 mb-3">
             <Flame className="w-4 h-4 text-[#f97316]" />
-            <h3 className="text-[13px] font-semibold text-[#f7f8f8] uppercase tracking-wide">
+            <h3 className="text-[13px] font-semibold text-text-primary uppercase tracking-wide">
               Activité
             </h3>
           </div>
@@ -632,8 +632,8 @@ export function Profile() {
         {/* Seasonal Badges Section - only render after challengesData loaded to avoid duplicate API call */}
         <Card className="mb-5 overflow-hidden">
           <div className="flex items-center gap-2 px-4 pt-4 pb-2">
-            <Trophy className="w-4 h-4 text-[#fbbf24]" />
-            <h3 className="text-[14px] font-semibold text-[#f7f8f8]">Badges Saisonniers</h3>
+            <Trophy className="w-4 h-4 text-warning" />
+            <h3 className="text-[14px] font-semibold text-text-primary">Badges Saisonniers</h3>
           </div>
           {challengesLoaded ? (
             <SeasonalBadges initialBadges={challengesData?.badges} />
@@ -643,7 +643,7 @@ export function Profile() {
                 {[1, 2, 3].map(i => (
                   <div
                     key={i}
-                    className="w-12 h-12 rounded-xl bg-[rgba(255,255,255,0.03)] animate-pulse"
+                    className="w-12 h-12 rounded-xl bg-surface-card animate-pulse"
                   />
                 ))}
               </div>
@@ -669,31 +669,31 @@ export function Profile() {
             }`}>
               <Sparkles className={`w-5 h-5 ${
                 aiCoachTip?.tone === 'celebration'
-                  ? 'text-[#34d399]'
+                  ? 'text-success'
                   : aiCoachTip?.tone === 'warning'
-                    ? 'text-[#fb7185]'
-                    : 'text-[#a78bfa]'
+                    ? 'text-error'
+                    : 'text-purple'
               }`} />
             </div>
             <div className="flex-1">
               <div className="flex items-center gap-2 mb-1.5">
-                <h3 className="text-[14px] font-semibold text-[#f7f8f8]">Coach IA</h3>
+                <h3 className="text-[14px] font-semibold text-text-primary">Coach IA</h3>
                 <span className={`text-xs px-1.5 py-0.5 rounded-full font-medium ${
                   aiCoachTip?.tone === 'celebration'
-                    ? 'bg-[rgba(52,211,153,0.15)] text-[#34d399]'
+                    ? 'bg-[rgba(52,211,153,0.15)] text-success'
                     : aiCoachTip?.tone === 'warning'
-                      ? 'bg-[rgba(251,113,133,0.15)] text-[#fb7185]'
-                      : 'bg-[rgba(167,139,250,0.15)] text-[#a78bfa]'
+                      ? 'bg-[rgba(251,113,133,0.15)] text-error'
+                      : 'bg-[rgba(167,139,250,0.15)] text-purple'
                 }`}>
                   {aiCoachTip?.tone === 'celebration' ? 'BRAVO' : aiCoachTip?.tone === 'warning' ? 'ATTENTION' : 'CONSEIL'}
                 </span>
               </div>
               <p className={`text-[13px] leading-relaxed ${
                 aiCoachTip?.tone === 'celebration'
-                  ? 'text-[#34d399]'
+                  ? 'text-success'
                   : aiCoachTip?.tone === 'warning'
-                    ? 'text-[#fb7185]'
-                    : 'text-[#8b8d90]'
+                    ? 'text-error'
+                    : 'text-text-tertiary'
               }`}>
                 {aiCoachTip?.tip || 'Prêt pour la prochaine session ? Tes potes t\'attendent !'}
               </p>
@@ -704,7 +704,7 @@ export function Profile() {
         {/* IA Coach Avance - Premium */}
         <div className="mb-5">
           <div className="flex items-center gap-2 mb-3">
-            <h3 className="text-[13px] font-semibold text-[#f7f8f8] uppercase tracking-wide">
+            <h3 className="text-[13px] font-semibold text-text-primary uppercase tracking-wide">
               Coach IA Avancé
             </h3>
             {!canAccessFeature('ai_coach_advanced') && <PremiumBadge small />}
@@ -717,11 +717,11 @@ export function Profile() {
             <Card className="p-4 bg-gradient-to-br from-[rgba(251,191,36,0.06)] to-[rgba(251,191,36,0.02)] border-[rgba(251,191,36,0.12)]">
               <div className="flex items-start gap-3">
                 <div className="w-10 h-10 rounded-xl bg-[rgba(251,191,36,0.12)] flex items-center justify-center flex-shrink-0">
-                  <Sparkles className="w-5 h-5 text-[#fbbf24]" />
+                  <Sparkles className="w-5 h-5 text-warning" />
                 </div>
                 <div className="flex-1">
-                  <h4 className="text-[14px] font-medium text-[#f7f8f8] mb-1">Conseils personnalisés</h4>
-                  <p className="text-[13px] text-[#8b8d90]">
+                  <h4 className="text-[14px] font-medium text-text-primary mb-1">Conseils personnalisés</h4>
+                  <p className="text-[13px] text-text-tertiary">
                     Prédictions de disponibilité, analyse des patterns de jeu, suggestions de créneaux optimaux pour ta squad.
                   </p>
                 </div>
@@ -732,30 +732,30 @@ export function Profile() {
 
         {/* Historique des appels */}
         <Card
-          className="mb-5 p-4 bg-[#101012] cursor-pointer"
+          className="mb-5 p-4 bg-bg-elevated cursor-pointer"
           hoverable
           onClick={() => navigate('/call-history')}
         >
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-[rgba(52,211,153,0.12)] flex items-center justify-center">
-              <Phone className="w-5 h-5 text-[#34d399]" />
+              <Phone className="w-5 h-5 text-success" />
             </div>
             <div className="flex-1">
-              <h4 className="text-[14px] font-medium text-[#f7f8f8]">Historique des appels</h4>
-              <p className="text-[12px] text-[#5e6063]">Voir tous tes appels passés</p>
+              <h4 className="text-[14px] font-medium text-text-primary">Historique des appels</h4>
+              <p className="text-[12px] text-text-quaternary">Voir tous tes appels passés</p>
             </div>
-            <ChevronRight className="w-5 h-5 text-[#5e6063]" />
+            <ChevronRight className="w-5 h-5 text-text-quaternary" />
           </div>
         </Card>
 
         {/* Historique - Premium */}
         <div className="mb-5">
           <div className="flex items-center gap-2 mb-3">
-            <h3 className="text-[13px] font-semibold text-[#f7f8f8] uppercase tracking-wide">
+            <h3 className="text-[13px] font-semibold text-text-primary uppercase tracking-wide">
               Historique
             </h3>
             {!canAccessFeature('unlimited_history') && (
-              <span className="text-xs text-[#5e6063]">
+              <span className="text-xs text-text-quaternary">
                 ({FREE_HISTORY_DAYS} derniers jours)
               </span>
             )}
@@ -768,12 +768,12 @@ export function Profile() {
           >
             <Card className="p-4">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-[rgba(99,102,241,0.12)] flex items-center justify-center">
-                  <Clock className="w-5 h-5 text-[#6366f1]" />
+                <div className="w-10 h-10 rounded-xl bg-primary/12 flex items-center justify-center">
+                  <Clock className="w-5 h-5 text-primary" />
                 </div>
                 <div className="flex-1">
-                  <h4 className="text-[14px] font-medium text-[#f7f8f8]">Historique complet</h4>
-                  <p className="text-[12px] text-[#5e6063]">Toutes tes sessions depuis le debut</p>
+                  <h4 className="text-[14px] font-medium text-text-primary">Historique complet</h4>
+                  <p className="text-[12px] text-text-quaternary">Toutes tes sessions depuis le debut</p>
                 </div>
               </div>
             </Card>
@@ -782,7 +782,7 @@ export function Profile() {
 
         {/* Premium upsell - Design ameliore */}
         {!hasPremium && (
-          <Card className="mb-5 overflow-hidden bg-[#101012]">
+          <Card className="mb-5 overflow-hidden bg-bg-elevated">
             <div className="h-1 bg-gradient-to-r from-[#6366f1] via-[#fbbf24] to-[#34d399]" />
             <div className="p-5">
               <div className="flex items-start gap-4">
@@ -790,10 +790,10 @@ export function Profile() {
                   <Zap className="w-6 h-6 text-white" />
                 </div>
                 <div className="flex-1">
-                  <h3 className="text-[16px] font-semibold text-[#f7f8f8] mb-1">
+                  <h3 className="text-[16px] font-semibold text-text-primary mb-1">
                     Passe Premium
                   </h3>
-                  <p className="text-[13px] text-[#8b8d90] mb-3">
+                  <p className="text-[13px] text-text-tertiary mb-3">
                     Stats avancées, IA coach avancé, audio HD, historique illimité
                   </p>
                   <Button
@@ -815,24 +815,24 @@ export function Profile() {
           <Card className="mb-5 p-4 bg-gradient-to-br from-[rgba(251,191,36,0.08)] to-[rgba(251,191,36,0.02)] border-[rgba(251,191,36,0.15)]">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-xl bg-[rgba(251,191,36,0.15)] flex items-center justify-center">
-                <Zap className="w-5 h-5 text-[#fbbf24]" />
+                <Zap className="w-5 h-5 text-warning" />
               </div>
               <div className="flex-1">
                 <div className="flex items-center gap-2">
-                  <h3 className="text-[14px] font-medium text-[#f7f8f8]">Compte Premium</h3>
+                  <h3 className="text-[14px] font-medium text-text-primary">Compte Premium</h3>
                   <PremiumBadge small />
                 </div>
-                <p className="text-[12px] text-[#5e6063]">Toutes les features sont debloquees</p>
+                <p className="text-[12px] text-text-quaternary">Toutes les features sont debloquees</p>
               </div>
             </div>
           </Card>
         )}
 
         {/* Achievements section avec animations */}
-        <Card className="mb-5 p-4 bg-[#101012]">
+        <Card className="mb-5 p-4 bg-bg-elevated">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-[14px] font-semibold text-[#f7f8f8]">Succès</h3>
-            <span className="text-[12px] text-[#5e6063]">{unlockedAchievements.length}/{ACHIEVEMENTS.length}</span>
+            <h3 className="text-[14px] font-semibold text-text-primary">Succès</h3>
+            <span className="text-[12px] text-text-quaternary">{unlockedAchievements.length}/{ACHIEVEMENTS.length}</span>
           </div>
           <div className="grid grid-cols-3 lg:grid-cols-6 gap-3 lg:gap-4">
             {ACHIEVEMENTS.map((achievement, index) => {
@@ -846,7 +846,7 @@ export function Profile() {
                   className={`relative p-3 rounded-xl text-center ${
                     isUnlocked
                       ? 'bg-gradient-to-br from-[rgba(99,102,241,0.15)] to-[rgba(167,139,250,0.08)] border border-[rgba(99,102,241,0.2)]'
-                      : 'bg-[rgba(255,255,255,0.03)] border border-transparent'
+                      : 'bg-surface-card border border-transparent'
                   }`}
                 >
                   <motion.div
@@ -856,20 +856,20 @@ export function Profile() {
                   >
                     {isUnlocked ? achievement.icon : '🔒'}
                   </motion.div>
-                  <div className={`text-xs font-medium ${isUnlocked ? 'text-[#f7f8f8]' : 'text-[#5e6063]'}`}>
+                  <div className={`text-xs font-medium ${isUnlocked ? 'text-text-primary' : 'text-text-quaternary'}`}>
                     {achievement.name}
                   </div>
-                  <div className="text-xs text-[#5e6063]">
+                  <div className="text-xs text-text-quaternary">
                     {achievement.description}
                   </div>
                   {isUnlocked && (
                     <motion.div
-                      className="absolute -top-1 -right-1 w-5 h-5 bg-[#34d399] rounded-full flex items-center justify-center"
+                      className="absolute -top-1 -right-1 w-5 h-5 bg-success rounded-full flex items-center justify-center"
                       initial={{ scale: 0 }}
                       animate={{ scale: 1 }}
                       transition={{ type: 'spring', stiffness: 500, damping: 25, delay: index * 0.1 + 0.3 }}
                     >
-                      <Check className="w-3 h-3 text-[#050506]" />
+                      <Check className="w-3 h-3 text-bg-base" />
                     </motion.div>
                   )}
                 </motion.div>
@@ -881,7 +881,7 @@ export function Profile() {
         {/* Deconnexion - Discret en bas */}
         <button
           onClick={handleSignOut}
-          className="w-full py-3 text-[14px] text-[#fb7185] hover:text-[#fda4af] transition-colors flex items-center justify-center gap-2"
+          className="w-full py-3 text-[14px] text-error hover:text-[#fda4af] transition-colors flex items-center justify-center gap-2"
         >
           <LogOut className="w-4 h-4" />
           Se déconnecter

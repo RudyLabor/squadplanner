@@ -59,6 +59,17 @@
   --radius-lg: 16px;
   --radius-xl: 20px;
   --radius-2xl: 24px;
+
+  /* Surface tokens - semantic layer */
+  --color-surface-card: rgba(255, 255, 255, 0.015);
+  --color-surface-card-hover: rgba(255, 255, 255, 0.025);
+  --color-surface-input: rgba(255, 255, 255, 0.04);
+  --color-surface-overlay: rgba(0, 0, 0, 0.6);
+
+  /* Enhanced shadow scale */
+  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.03);
+  --shadow-dropdown: 0 8px 30px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.05);
+  --shadow-modal: 0 16px 70px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.05);
 }
 
 /* =====================================================
@@ -89,11 +100,22 @@
   --color-border-default: rgba(0, 0, 0, 0.08);
   --color-border-hover: rgba(0, 0, 0, 0.12);
 
-  /* Shadows - Softer for light mode */
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
-  --shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.12);
-  --shadow-glow-primary: 0 0 40px rgba(99, 102, 241, 0.1);
+  /* Shadows - More pronounced for depth in light mode */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.06), 0 2px 4px rgba(0, 0, 0, 0.04);
+  --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.1), 0 4px 12px rgba(0, 0, 0, 0.05);
+  --shadow-glow-primary: 0 0 40px rgba(99, 102, 241, 0.08);
+
+  /* Surface tokens - light mode */
+  --color-surface-card: rgba(0, 0, 0, 0.02);
+  --color-surface-card-hover: rgba(0, 0, 0, 0.04);
+  --color-surface-input: rgba(0, 0, 0, 0.04);
+  --color-surface-overlay: rgba(0, 0, 0, 0.4);
+
+  /* Enhanced shadow scale - light mode */
+  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.06), 0 0 0 1px rgba(0, 0, 0, 0.04);
+  --shadow-dropdown: 0 8px 30px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(0, 0, 0, 0.06);
+  --shadow-modal: 0 16px 70px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(0, 0, 0, 0.06);
 }
 
 /* Light theme selection color */
@@ -769,4 +791,71 @@ select:focus-visible,
   ::view-transition-new(root) {
     animation: none;
   }
+}
+
+/* =====================================================
+   PHASE 2.1 - DESIGN SYSTEM 2026 UPGRADE
+   Mesh gradients, noise texture, scroll progress
+   ===================================================== */
+
+/* Mesh Gradient - Premium multi-point gradient for hero sections */
+.mesh-gradient-hero {
+  background:
+    radial-gradient(at 27% 37%, rgba(99, 102, 241, 0.15) 0px, transparent 50%),
+    radial-gradient(at 97% 21%, rgba(167, 139, 250, 0.12) 0px, transparent 50%),
+    radial-gradient(at 52% 99%, rgba(52, 211, 153, 0.08) 0px, transparent 50%),
+    radial-gradient(at 10% 29%, rgba(56, 189, 248, 0.06) 0px, transparent 50%);
+}
+
+[data-theme="light"] .mesh-gradient-hero {
+  background:
+    radial-gradient(at 27% 37%, rgba(99, 102, 241, 0.08) 0px, transparent 50%),
+    radial-gradient(at 97% 21%, rgba(167, 139, 250, 0.06) 0px, transparent 50%),
+    radial-gradient(at 52% 99%, rgba(52, 211, 153, 0.05) 0px, transparent 50%),
+    radial-gradient(at 10% 29%, rgba(56, 189, 248, 0.04) 0px, transparent 50%);
+}
+
+/* Noise Texture Overlay - Subtle grain for depth */
+.noise-overlay {
+  position: relative;
+}
+.noise-overlay::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  opacity: 0.4;
+  pointer-events: none;
+  z-index: 1;
+  border-radius: inherit;
+}
+
+/* Scroll Progress Indicator */
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--color-primary);
+  transform-origin: left;
+  z-index: 100;
+}
+
+/* Light mode glass-card enhancement */
+[data-theme="light"] .glass-card {
+  background: rgba(255, 255, 255, 0.95) !important;
+  border-color: rgba(0, 0, 0, 0.06) !important;
+  box-shadow: var(--shadow-card);
+}
+
+/* Light mode card-interactive */
+[data-theme="light"] .card-interactive:hover {
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+  border-color: rgba(0, 0, 0, 0.1);
+}
+
+/* Light mode hover-lift */
+[data-theme="light"] .hover-lift:hover {
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
 }

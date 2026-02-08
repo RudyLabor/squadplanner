@@ -42,7 +42,7 @@ function SuccessToast({ message, onClose }: { message: string; onClose: () => vo
         className={`flex items-center gap-3 px-5 py-3.5 rounded-xl font-medium shadow-xl ${
           isCelebration
             ? 'bg-gradient-to-r from-[#34d399] to-[#34d399] text-[#050506] shadow-[0_0_20px_rgba(52,211,153,0.2)]'
-            : 'bg-[#34d399] text-[#050506] shadow-lg'
+            : 'bg-success text-[#050506] shadow-lg'
         }`}
         animate={isCelebration ? { scale: [1, 1.02, 1] } : {}}
         transition={{ duration: 0.3, repeat: isCelebration ? 2 : 0 }}
@@ -75,11 +75,11 @@ function PartySection({ squadId }: { squadId: string }) {
   const participantCount = isConnected ? remoteUsers.length + 1 : remoteUsers.length
 
   return (
-    <Card className={`p-4 ${isConnected ? 'border-[#34d399]/30 bg-[#34d399]/5' : ''}`}>
+    <Card className={`p-4 ${isConnected ? 'border-success/30 bg-success/5' : ''}`}>
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
-          <Mic className={`w-5 h-5 ${isConnected ? 'text-[#34d399]' : 'text-[#6366f1]'}`} />
-          <span className="text-[14px] font-semibold text-[#f7f8f8]">Party vocale</span>
+          <Mic className={`w-5 h-5 ${isConnected ? 'text-success' : 'text-primary'}`} />
+          <span className="text-[14px] font-semibold text-text-primary">Party vocale</span>
         </div>
         {participantCount > 0 && !isConnected && (
           <Badge variant="success">{participantCount} connecté{participantCount > 1 ? 's' : ''}</Badge>
@@ -91,15 +91,15 @@ function PartySection({ squadId }: { squadId: string }) {
           {/* Participants */}
           <div className="flex items-center gap-2 flex-wrap">
             {/* Toi */}
-            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#34d399]/20 border border-[#34d399]/30">
-              <div className={`w-2 h-2 rounded-full ${isMuted ? 'bg-[#fb7185]' : 'bg-[#34d399]'}`} />
-              <span className="text-[13px] text-[#f7f8f8]">Toi</span>
+            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-success/20 border border-success/30">
+              <div className={`w-2 h-2 rounded-full ${isMuted ? 'bg-error' : 'bg-success'}`} />
+              <span className="text-[13px] text-text-primary">Toi</span>
             </div>
             {/* Autres */}
             {remoteUsers.map((u) => (
-              <div key={String(u.odrop)} className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.1)]">
-                <div className={`w-2 h-2 rounded-full ${u.isSpeaking ? 'bg-[#34d399]' : 'bg-[#5e6063]'}`} />
-                <span className="text-[13px] text-[#f7f8f8]">{u.username}</span>
+              <div key={String(u.odrop)} className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-surface-card border border-border-hover">
+                <div className={`w-2 h-2 rounded-full ${u.isSpeaking ? 'bg-success' : 'bg-[#5e6063]'}`} />
+                <span className="text-[13px] text-text-primary">{u.username}</span>
               </div>
             ))}
           </div>
@@ -127,7 +127,7 @@ function PartySection({ squadId }: { squadId: string }) {
       ) : (
         <div>
           {error && (
-            <p className="text-[12px] text-[#fb7185] mb-2">{error}</p>
+            <p className="text-[12px] text-error mb-2">{error}</p>
           )}
           <Button
             onClick={handleJoinParty}
@@ -143,7 +143,7 @@ function PartySection({ squadId }: { squadId: string }) {
             {participantCount > 0 ? 'Rejoindre la party' : 'Lancer une party'}
           </Button>
           {participantCount === 0 && (
-            <p className="text-[12px] text-[#5e6063] text-center mt-2">
+            <p className="text-[12px] text-text-quaternary text-center mt-2">
               Personne n'est connectée pour l'instant
             </p>
           )}
@@ -199,23 +199,23 @@ function SessionCard({ session, onRsvp }: {
   const canRsvp = !isPast && session.status !== 'cancelled'
 
   return (
-    <Card className={`p-4 transition-interactive hover:shadow-[0_0_12px_rgba(99,102,241,0.08)] ${isToday && !isPast ? 'border-[#fbbf24]/30 hover:shadow-[0_0_12px_rgba(251,191,36,0.1)]' : ''}`}>
+    <Card className={`p-4 transition-interactive hover:shadow-[0_0_12px_rgba(99,102,241,0.08)] ${isToday && !isPast ? 'border-warning/30 hover:shadow-[0_0_12px_rgba(251,191,36,0.1)]' : ''}`}>
       <div className="flex items-start gap-4">
         <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${
-          isToday && !isPast ? 'bg-[#fbbf24]/15' : 'bg-[rgba(99,102,241,0.15)]'
+          isToday && !isPast ? 'bg-warning/15' : 'bg-primary/15'
         }`}>
-          <Calendar className={`w-6 h-6 ${isToday && !isPast ? 'text-[#fbbf24]' : 'text-[#6366f1]'}`} strokeWidth={1.5} />
+          <Calendar className={`w-6 h-6 ${isToday && !isPast ? 'text-warning' : 'text-primary'}`} strokeWidth={1.5} />
         </div>
 
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 mb-1">
-            <h3 className="text-[15px] font-medium text-[#f7f8f8] truncate">
+            <h3 className="text-[15px] font-medium text-text-primary truncate">
               {session.title || session.game || 'Session'}
             </h3>
             {statusBadge && <Badge variant={statusBadge.variant}>{statusBadge.label}</Badge>}
           </div>
 
-          <div className="flex items-center gap-3 text-[13px] text-[#8b8d90] mb-3">
+          <div className="flex items-center gap-3 text-[13px] text-text-tertiary mb-3">
             <span className="flex items-center gap-1">
               <Clock className="w-3.5 h-3.5" />
               {timeLabel}
@@ -237,8 +237,8 @@ function SessionCard({ session, onRsvp }: {
                 aria-pressed={session.my_rsvp === 'present'}
                 className={`flex items-center gap-1.5 px-4 py-2.5 min-h-[44px] rounded-lg text-[13px] font-medium transition-interactive ${
                   session.my_rsvp === 'present'
-                    ? 'bg-[#34d399]/20 text-[#34d399] border border-[#34d399]/30 shadow-[0_0_10px_rgba(52,211,153,0.15)]'
-                    : 'bg-[rgba(255,255,255,0.05)] text-[#8b8d90] hover:bg-[rgba(52,211,153,0.1)] hover:text-[#34d399] hover:border-[#34d399]/20 border border-transparent'
+                    ? 'bg-success/20 text-success border border-success/30 shadow-[0_0_10px_rgba(52,211,153,0.15)]'
+                    : 'bg-surface-card text-text-tertiary hover:bg-[rgba(52,211,153,0.1)] hover:text-success hover:border-success/20 border border-transparent'
                 }`}
               >
                 <CheckCircle2 className="w-4 h-4" aria-hidden="true" />
@@ -252,8 +252,8 @@ function SessionCard({ session, onRsvp }: {
                 aria-pressed={session.my_rsvp === 'maybe'}
                 className={`flex items-center gap-1.5 px-4 py-2.5 min-h-[44px] rounded-lg text-[13px] font-medium transition-interactive ${
                   session.my_rsvp === 'maybe'
-                    ? 'bg-[#fbbf24]/20 text-[#fbbf24] border border-[#fbbf24]/30 shadow-[0_0_10px_rgba(251,191,36,0.15)]'
-                    : 'bg-[rgba(255,255,255,0.05)] text-[#8b8d90] hover:bg-[rgba(251,191,36,0.1)] hover:text-[#fbbf24] hover:border-[#fbbf24]/20 border border-transparent'
+                    ? 'bg-warning/20 text-warning border border-warning/30 shadow-[0_0_10px_rgba(251,191,36,0.15)]'
+                    : 'bg-surface-card text-text-tertiary hover:bg-[rgba(251,191,36,0.1)] hover:text-warning hover:border-warning/20 border border-transparent'
                 }`}
               >
                 <HelpCircle className="w-4 h-4" aria-hidden="true" />
@@ -267,8 +267,8 @@ function SessionCard({ session, onRsvp }: {
                 aria-pressed={session.my_rsvp === 'absent'}
                 className={`flex items-center gap-1.5 px-4 py-2.5 min-h-[44px] rounded-lg text-[13px] font-medium transition-interactive ${
                   session.my_rsvp === 'absent'
-                    ? 'bg-[#fb7185]/20 text-[#fb7185] border border-[#fb7185]/30 shadow-[0_0_10px_rgba(251,113,133,0.15)]'
-                    : 'bg-[rgba(255,255,255,0.05)] text-[#8b8d90] hover:bg-[rgba(251,113,133,0.1)] hover:text-[#fb7185] hover:border-[#fb7185]/20 border border-transparent'
+                    ? 'bg-error/20 text-error border border-error/30 shadow-[0_0_10px_rgba(251,113,133,0.15)]'
+                    : 'bg-surface-card text-text-tertiary hover:bg-[rgba(251,113,133,0.1)] hover:text-error hover:border-error/20 border border-transparent'
                 }`}
               >
                 <XCircle className="w-4 h-4" aria-hidden="true" />
@@ -279,7 +279,7 @@ function SessionCard({ session, onRsvp }: {
         </div>
 
         <Link to={`/session/${session.id}`} onClick={(e) => e.stopPropagation()}>
-          <ChevronRight className="w-5 h-5 text-[#5e6063]" />
+          <ChevronRight className="w-5 h-5 text-text-quaternary" />
         </Link>
       </div>
     </Card>
@@ -415,27 +415,27 @@ function InviteModal({
         initial={{ scale: 0.95, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         exit={{ scale: 0.95, opacity: 0 }}
-        className="w-full max-w-md bg-[#101012] rounded-2xl border border-[rgba(255,255,255,0.08)] overflow-hidden"
+        className="w-full max-w-md bg-bg-elevated rounded-2xl border border-border-default overflow-hidden"
         onClick={e => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="flex items-center justify-between p-4 border-b border-[rgba(255,255,255,0.06)]">
-          <h2 className="text-[16px] font-semibold text-[#f7f8f8]">Inviter des joueurs</h2>
-          <button onClick={onClose} aria-label="Fermer" className="p-1 rounded-lg hover:bg-[rgba(255,255,255,0.08)]">
-            <X className="w-5 h-5 text-[#8b8d90]" aria-hidden="true" />
+        <div className="flex items-center justify-between p-4 border-b border-border-default">
+          <h2 className="text-[16px] font-semibold text-text-primary">Inviter des joueurs</h2>
+          <button onClick={onClose} aria-label="Fermer" className="p-1 rounded-lg hover:bg-bg-hover">
+            <X className="w-5 h-5 text-text-tertiary" aria-hidden="true" />
           </button>
         </div>
 
         <div className="p-4 space-y-4">
           {/* Code d'invitation */}
           <div className="p-4 rounded-xl bg-[rgba(99,102,241,0.1)] border border-[rgba(99,102,241,0.2)]">
-            <p className="text-[12px] text-[#8b8d90] mb-2">Code d'invitation</p>
+            <p className="text-[12px] text-text-tertiary mb-2">Code d'invitation</p>
             <div className="flex items-center gap-3">
-              <span className="text-2xl font-bold text-[#6366f1] tracking-wider flex-1">
+              <span className="text-2xl font-bold text-primary tracking-wider flex-1">
                 {inviteCode}
               </span>
               <Button size="sm" variant="secondary" onClick={handleCopyCode} aria-label="Copier le code d'invitation">
-                {copied ? <Check className="w-4 h-4 text-[#34d399]" aria-hidden="true" /> : <Copy className="w-4 h-4" aria-hidden="true" />}
+                {copied ? <Check className="w-4 h-4 text-success" aria-hidden="true" /> : <Copy className="w-4 h-4" aria-hidden="true" />}
               </Button>
               <Button size="sm" variant="primary" onClick={handleShare} aria-label="Partager le code d'invitation">
                 <Share2 className="w-4 h-4" aria-hidden="true" />
@@ -446,10 +446,10 @@ function InviteModal({
 
           {/* Recherche d'utilisateurs */}
           <div>
-            <p className="text-[12px] text-[#8b8d90] mb-2">Ou rechercher un joueur</p>
+            <p className="text-[12px] text-text-tertiary mb-2">Ou rechercher un joueur</p>
             <div className="flex gap-2">
               <div className="flex-1 relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#5e6063]" />
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-quaternary" />
                 <Input
                   placeholder="Nom d'utilisateur..."
                   value={searchQuery}
@@ -467,7 +467,7 @@ function InviteModal({
           {/* Message d'erreur */}
           {inviteError && (
             <div className="p-3 rounded-lg bg-[rgba(251,113,133,0.1)] border border-[rgba(251,113,133,0.2)]">
-              <p className="text-[#fb7185] text-[13px]">{inviteError}</p>
+              <p className="text-error text-[13px]">{inviteError}</p>
             </div>
           )}
 
@@ -475,7 +475,7 @@ function InviteModal({
           {searchResults.length > 0 && (
             <div className="max-h-48 overflow-y-auto space-y-2">
               {searchResults.map(user => (
-                <div key={user.id} className="flex items-center gap-3 p-3 rounded-xl bg-[rgba(255,255,255,0.03)]">
+                <div key={user.id} className="flex items-center gap-3 p-3 rounded-xl bg-surface-card">
                   {user.avatar_url ? (
                     <img src={user.avatar_url} alt="" className="w-10 h-10 rounded-full object-cover" />
                   ) : (
@@ -483,9 +483,9 @@ function InviteModal({
                       <Users className="w-5 h-5 text-[#a78bfa]" />
                     </div>
                   )}
-                  <span className="flex-1 text-[14px] text-[#f7f8f8]">{user.username}</span>
+                  <span className="flex-1 text-[14px] text-text-primary">{user.username}</span>
                   {invitedUsers.has(user.id) ? (
-                    <span className="text-[12px] text-[#34d399] flex items-center gap-1">
+                    <span className="text-[12px] text-success flex items-center gap-1">
                       <Check className="w-4 h-4" /> Ajouté
                     </span>
                   ) : (
@@ -508,7 +508,7 @@ function InviteModal({
           )}
 
           {searchQuery.length >= 2 && searchResults.length === 0 && !isSearching && (
-            <p className="text-center text-[13px] text-[#5e6063] py-4">
+            <p className="text-center text-[13px] text-text-quaternary py-4">
               Aucun joueur trouvé
             </p>
           )}
@@ -566,17 +566,17 @@ function MemberCard({ member, isOwner, currentUserId }: {
       )}
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2">
-          <span className="text-[14px] font-medium text-[#f7f8f8] truncate">
+          <span className="text-[14px] font-medium text-text-primary truncate">
             {member.profiles?.username || 'Joueur'}
           </span>
-          {isOwner && <Crown className="w-4 h-4 text-[#fbbf24]" />}
+          {isOwner && <Crown className="w-4 h-4 text-warning" />}
         </div>
         <div className="flex items-center gap-1 text-[12px]">
-          <TrendingUp className={`w-3 h-3 ${reliability >= 80 ? 'text-[#34d399]' : reliability >= 60 ? 'text-[#fbbf24]' : 'text-[#fb7185]'}`} />
-          <span className={reliability >= 80 ? 'text-[#34d399]' : reliability >= 60 ? 'text-[#fbbf24]' : 'text-[#fb7185]'}>
+          <TrendingUp className={`w-3 h-3 ${reliability >= 80 ? 'text-success' : reliability >= 60 ? 'text-warning' : 'text-error'}`} />
+          <span className={reliability >= 80 ? 'text-success' : reliability >= 60 ? 'text-warning' : 'text-error'}>
             {reliability}%
           </span>
-          <span className="text-[#5e6063]">fiable</span>
+          <span className="text-text-quaternary">fiable</span>
         </div>
       </div>
       {/* Boutons d'action - seulement si ce n'est pas l'utilisateur courant */}
@@ -584,17 +584,17 @@ function MemberCard({ member, isOwner, currentUserId }: {
         <div className="flex items-center gap-1">
           <button
             onClick={handleMessage}
-            className="p-2.5 min-w-[44px] min-h-[44px] rounded-lg hover:bg-[rgba(255,255,255,0.08)] transition-colors flex items-center justify-center"
+            className="p-2.5 min-w-[44px] min-h-[44px] rounded-lg hover:bg-bg-hover transition-colors flex items-center justify-center"
             aria-label={`Envoyer un message à ${member.profiles?.username || 'ce joueur'}`}
           >
-            <MessageCircle className="w-5 h-5 text-[#6366f1]" aria-hidden="true" />
+            <MessageCircle className="w-5 h-5 text-primary" aria-hidden="true" />
           </button>
           <button
             onClick={handleCall}
-            className="p-2.5 min-w-[44px] min-h-[44px] rounded-lg hover:bg-[rgba(255,255,255,0.08)] transition-colors flex items-center justify-center"
+            className="p-2.5 min-w-[44px] min-h-[44px] rounded-lg hover:bg-bg-hover transition-colors flex items-center justify-center"
             aria-label={`Appeler ${member.profiles?.username || 'ce joueur'}`}
           >
-            <Phone className="w-5 h-5 text-[#34d399]" aria-hidden="true" />
+            <Phone className="w-5 h-5 text-success" aria-hidden="true" />
           </button>
         </div>
       )}
@@ -732,7 +732,7 @@ export default function SquadDetail() {
   // Afficher le skeleton loader tant que le fetch n'est pas terminé
   if (!isInitialized || isLoading || (!currentSquad && id)) {
     return (
-      <div className="min-h-0 bg-[#050506] pb-6">
+      <div className="min-h-0 bg-bg-base pb-6">
         <div className="px-4 md:px-6 lg:px-8 py-6 max-w-2xl lg:max-w-4xl xl:max-w-6xl mx-auto">
           <SquadDetailSkeleton />
         </div>
@@ -743,8 +743,8 @@ export default function SquadDetail() {
   // Squad non trouvée seulement si le fetch est terminé et qu'il n'y a pas de squad
   if (!currentSquad) {
     return (
-      <div className="min-h-0 bg-[#050506] flex items-center justify-center flex-col gap-4 py-12">
-        <p className="text-[#8b8d90]">Squad non trouvée</p>
+      <div className="min-h-0 bg-bg-base flex items-center justify-center flex-col gap-4 py-12">
+        <p className="text-text-tertiary">Squad non trouvée</p>
         <Button variant="secondary" onClick={() => navigate('/squads')}>
           Retour aux squads
         </Button>
@@ -753,7 +753,7 @@ export default function SquadDetail() {
   }
 
   return (
-    <div className="min-h-0 bg-[#050506] pb-6">
+    <div className="min-h-0 bg-bg-base pb-6">
       {/* Confetti celebration for RSVP present */}
       {showConfetti && typeof window !== 'undefined' && (
         <Confetti
@@ -772,10 +772,10 @@ export default function SquadDetail() {
             <div className="flex items-center justify-between mb-3">
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2">
-                  <h1 className="text-2xl font-bold text-[#f7f8f8] truncate">{currentSquad.name}</h1>
-                  {isOwner && <Crown className="w-5 h-5 text-[#fbbf24] flex-shrink-0" />}
+                  <h1 className="text-2xl font-bold text-text-primary truncate">{currentSquad.name}</h1>
+                  {isOwner && <Crown className="w-5 h-5 text-warning flex-shrink-0" />}
                 </div>
-                <p className="text-[13px] text-[#8b8d90]">
+                <p className="text-[13px] text-text-tertiary">
                   {currentSquad.game} · {currentSquad.member_count} membre{(currentSquad.member_count || 0) > 1 ? 's' : ''}
                 </p>
               </div>
@@ -789,8 +789,8 @@ export default function SquadDetail() {
             {/* Code d'invitation - toujours visible et clair */}
             <div className="flex items-center gap-2 p-3 rounded-xl bg-[rgba(99,102,241,0.1)] border border-[rgba(99,102,241,0.2)]">
               <div className="flex-1">
-                <p className="text-xs text-[#8b8d90] uppercase tracking-wide mb-0.5">Code d'invitation</p>
-                <p className="text-[18px] font-bold text-[#6366f1] tracking-wider">{currentSquad.invite_code}</p>
+                <p className="text-xs text-text-tertiary uppercase tracking-wide mb-0.5">Code d'invitation</p>
+                <p className="text-[18px] font-bold text-primary tracking-wider">{currentSquad.invite_code}</p>
               </div>
               <Button variant="primary" size="sm" onClick={handleCopyCode} aria-label="Copier le code d'invitation">
                 {copiedCode ? <Check className="w-4 h-4" aria-hidden="true" /> : <Copy className="w-4 h-4" aria-hidden="true" />}
@@ -815,7 +815,7 @@ export default function SquadDetail() {
               >
                 <Card>
                   <CardContent className="p-5">
-                    <h3 className="text-[16px] font-semibold text-[#f7f8f8] mb-4">Nouvelle session</h3>
+                    <h3 className="text-[16px] font-semibold text-text-primary mb-4">Nouvelle session</h3>
                     <form onSubmit={handleCreateSession} className="space-y-4">
                       <Input
                         label="Titre (optionnel)"
@@ -841,13 +841,13 @@ export default function SquadDetail() {
                       </div>
                       <div className="grid grid-cols-2 gap-4">
                         <div>
-                          <label className="block text-[13px] font-medium text-[#c9cace] mb-1.5">
+                          <label className="block text-[13px] font-medium text-text-secondary mb-1.5">
                             Durée
                           </label>
                           <select
                             value={sessionDuration}
                             onChange={(e) => setSessionDuration(e.target.value)}
-                            className="w-full px-4 py-3 rounded-xl bg-[rgba(255,255,255,0.04)] border border-[rgba(255,255,255,0.08)] text-[#f7f8f8] focus:border-[rgba(99,102,241,0.5)] focus:ring-2 focus:ring-[rgba(99,102,241,0.15)] transition-input"
+                            className="w-full px-4 py-3 rounded-xl bg-surface-card border border-border-default text-text-primary focus:border-[rgba(99,102,241,0.5)] focus:ring-2 focus:ring-[rgba(99,102,241,0.15)] transition-input"
                           >
                             <option value="60">1 heure</option>
                             <option value="120">2 heures</option>
@@ -856,16 +856,16 @@ export default function SquadDetail() {
                           </select>
                         </div>
                         <div>
-                          <label className="block text-[13px] font-medium text-[#c9cace] mb-1">
+                          <label className="block text-[13px] font-medium text-text-secondary mb-1">
                             Confirmation automatique
                           </label>
-                          <p className="text-[11px] text-[#5e6063] mb-1.5">
+                          <p className="text-[11px] text-text-quaternary mb-1.5">
                             La session sera confirmée quand ce nombre de joueurs aura répondu "Présent"
                           </p>
                           <select
                             value={sessionThreshold}
                             onChange={(e) => setSessionThreshold(e.target.value)}
-                            className="w-full px-4 py-3 rounded-xl bg-[rgba(255,255,255,0.04)] border border-[rgba(255,255,255,0.08)] text-[#f7f8f8] focus:border-[rgba(99,102,241,0.5)] focus:ring-2 focus:ring-[rgba(99,102,241,0.15)] transition-input"
+                            className="w-full px-4 py-3 rounded-xl bg-surface-card border border-border-default text-text-primary focus:border-[rgba(99,102,241,0.5)] focus:ring-2 focus:ring-[rgba(99,102,241,0.15)] transition-input"
                           >
                             <option value="2">2 joueurs</option>
                             <option value="3">3 joueurs</option>
@@ -879,7 +879,7 @@ export default function SquadDetail() {
                       </div>
                       {error && (
                         <div className="p-3 rounded-lg bg-[rgba(251,113,133,0.1)] border border-[rgba(251,113,133,0.2)]">
-                          <p className="text-[#fb7185] text-[13px]">{error}</p>
+                          <p className="text-error text-[13px]">{error}</p>
                         </div>
                       )}
                       <div className="flex gap-2 pt-1">
@@ -906,7 +906,7 @@ export default function SquadDetail() {
 
           {/* Sessions à venir */}
           <div className="mb-6">
-            <h2 className="text-[13px] font-semibold text-[#f7f8f8] uppercase tracking-wide mb-3">
+            <h2 className="text-[13px] font-semibold text-text-primary uppercase tracking-wide mb-3">
               Sessions à venir
             </h2>
             {futureSessions.length > 0 ? (
@@ -921,9 +921,9 @@ export default function SquadDetail() {
               </div>
             ) : (
               <Card className="p-6 text-center">
-                <Calendar className="w-10 h-10 mx-auto mb-3 text-[#5e6063]" strokeWidth={1} />
-                <p className="text-[14px] text-[#8b8d90]">Pas encore de session prévue</p>
-                <p className="text-[12px] text-[#5e6063] mt-1">Lance la première !</p>
+                <Calendar className="w-10 h-10 mx-auto mb-3 text-text-quaternary" strokeWidth={1} />
+                <p className="text-[14px] text-text-tertiary">Pas encore de session prévue</p>
+                <p className="text-[12px] text-text-quaternary mt-1">Lance la première !</p>
               </Card>
             )}
           </div>
@@ -931,7 +931,7 @@ export default function SquadDetail() {
           {/* Membres */}
           <div className="mb-6">
             <div className="flex items-center justify-between mb-3">
-              <h2 className="text-[13px] font-semibold text-[#f7f8f8] uppercase tracking-wide">
+              <h2 className="text-[13px] font-semibold text-text-primary uppercase tracking-wide">
                 Membres ({currentSquad.member_count})
               </h2>
               <Button size="sm" variant="secondary" onClick={() => setShowInviteModal(true)}>
@@ -940,7 +940,7 @@ export default function SquadDetail() {
               </Button>
             </div>
             <Card>
-              <CardContent className="p-4 divide-y divide-[rgba(255,255,255,0.06)]">
+              <CardContent className="p-4 divide-y divide-border-default">
                 {currentSquad.members?.map((member: { user_id: string; role: string; profiles?: { username?: string; avatar_url?: string; reliability_score?: number } }) => (
                   <MemberCard
                     key={member.user_id}
@@ -956,7 +956,7 @@ export default function SquadDetail() {
           {/* Stats Avancées - Premium */}
           <div className="mb-6">
             <div className="flex items-center gap-2 mb-3">
-              <h2 className="text-[13px] font-semibold text-[#f7f8f8] uppercase tracking-wide">
+              <h2 className="text-[13px] font-semibold text-text-primary uppercase tracking-wide">
                 Stats avancées
               </h2>
               {!canAccessFeature('advanced_stats', id) && <PremiumBadge small />}
@@ -968,26 +968,26 @@ export default function SquadDetail() {
             >
               <Card className="p-4">
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 rounded-xl bg-[rgba(99,102,241,0.15)] flex items-center justify-center">
-                    <BarChart3 className="w-5 h-5 text-[#6366f1]" />
+                  <div className="w-10 h-10 rounded-xl bg-primary/15 flex items-center justify-center">
+                    <BarChart3 className="w-5 h-5 text-primary" />
                   </div>
                   <div>
-                    <h3 className="text-[14px] font-medium text-[#f7f8f8]">Analyse de la squad</h3>
-                    <p className="text-[12px] text-[#5e6063]">Tendances et performances</p>
+                    <h3 className="text-[14px] font-medium text-text-primary">Analyse de la squad</h3>
+                    <p className="text-[12px] text-text-quaternary">Tendances et performances</p>
                   </div>
                 </div>
                 <div className="grid grid-cols-3 gap-3">
-                  <div className="p-3 rounded-xl bg-[rgba(255,255,255,0.03)]">
-                    <div className="text-xl font-bold text-[#34d399]">{sessions.length}</div>
-                    <div className="text-xs text-[#5e6063]">Sessions</div>
+                  <div className="p-3 rounded-xl bg-surface-card">
+                    <div className="text-xl font-bold text-success">{sessions.length}</div>
+                    <div className="text-xs text-text-quaternary">Sessions</div>
                   </div>
-                  <div className="p-3 rounded-xl bg-[rgba(255,255,255,0.03)]">
-                    <div className="text-xl font-bold text-[#6366f1]">{currentSquad.member_count || 0}</div>
-                    <div className="text-xs text-[#5e6063]">Membres</div>
+                  <div className="p-3 rounded-xl bg-surface-card">
+                    <div className="text-xl font-bold text-primary">{currentSquad.member_count || 0}</div>
+                    <div className="text-xs text-text-quaternary">Membres</div>
                   </div>
-                  <div className="p-3 rounded-xl bg-[rgba(255,255,255,0.03)]">
-                    <div className="text-xl font-bold text-[#fbbf24]">{Math.round(currentSquad.avg_reliability_score || 0)}%</div>
-                    <div className="text-xs text-[#5e6063]">Fiabilité</div>
+                  <div className="p-3 rounded-xl bg-surface-card">
+                    <div className="text-xl font-bold text-warning">{Math.round(currentSquad.avg_reliability_score || 0)}%</div>
+                    <div className="text-xs text-text-quaternary">Fiabilité</div>
                   </div>
                 </div>
               </Card>
@@ -1005,12 +1005,12 @@ export default function SquadDetail() {
               <Card className="p-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-[rgba(52,211,153,0.15)] flex items-center justify-center">
-                      <Download className="w-5 h-5 text-[#34d399]" />
+                    <div className="w-10 h-10 rounded-xl bg-success/15 flex items-center justify-center">
+                      <Download className="w-5 h-5 text-success" />
                     </div>
                     <div>
-                      <h3 className="text-[14px] font-medium text-[#f7f8f8]">Export calendrier</h3>
-                      <p className="text-[12px] text-[#5e6063]">Synchronise avec Google, Apple...</p>
+                      <h3 className="text-[14px] font-medium text-text-primary">Export calendrier</h3>
+                      <p className="text-[12px] text-text-quaternary">Synchronise avec Google, Apple...</p>
                     </div>
                   </div>
                   <Button
@@ -1039,14 +1039,14 @@ export default function SquadDetail() {
               <Card className="p-4 bg-gradient-to-br from-[rgba(251,191,36,0.08)] to-[rgba(251,191,36,0.01)] border-[rgba(251,191,36,0.15)]">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-xl bg-[rgba(251,191,36,0.15)] flex items-center justify-center">
-                    <Zap className="w-5 h-5 text-[#fbbf24]" />
+                    <Zap className="w-5 h-5 text-warning" />
                   </div>
                   <div className="flex-1">
                     <div className="flex items-center gap-2">
-                      <h3 className="text-[14px] font-medium text-[#f7f8f8]">Squad Premium</h3>
+                      <h3 className="text-[14px] font-medium text-text-primary">Squad Premium</h3>
                       <PremiumBadge small />
                     </div>
-                    <p className="text-[12px] text-[#5e6063]">Audio HD, stats avancées, export calendrier actifs</p>
+                    <p className="text-[12px] text-text-quaternary">Audio HD, stats avancées, export calendrier actifs</p>
                   </div>
                 </div>
               </Card>
@@ -1056,7 +1056,7 @@ export default function SquadDetail() {
           {/* Classement Squad */}
           {leaderboard.length > 0 && (
             <div className="mb-6">
-              <h3 className="text-[14px] font-semibold text-[#f7f8f8] mb-3 flex items-center gap-2">
+              <h3 className="text-[14px] font-semibold text-text-primary mb-3 flex items-center gap-2">
                 <Trophy className="w-4 h-4 text-yellow-400" />
                 Classement
               </h3>
@@ -1068,7 +1068,7 @@ export default function SquadDetail() {
           )}
           {leaderboardLoading && (
             <div className="mb-6 flex justify-center py-4">
-              <Loader2 className="w-5 h-5 animate-spin text-[#5e6063]" />
+              <Loader2 className="w-5 h-5 animate-spin text-text-quaternary" />
             </div>
           )}
 
@@ -1077,7 +1077,7 @@ export default function SquadDetail() {
             {isOwner ? (
               <button
                 onClick={handleDeleteSquad}
-                className="w-full py-3 text-[14px] text-[#fb7185] hover:text-[#fca5a5] transition-colors flex items-center justify-center gap-2"
+                className="w-full py-3 text-[14px] text-error hover:text-[#fca5a5] transition-colors flex items-center justify-center gap-2"
               >
                 <Trash2 className="w-4 h-4" />
                 Supprimer la squad
@@ -1085,7 +1085,7 @@ export default function SquadDetail() {
             ) : (
               <button
                 onClick={handleLeaveSquad}
-                className="w-full py-3 text-[14px] text-[#fb7185] hover:text-[#fca5a5] transition-colors flex items-center justify-center gap-2"
+                className="w-full py-3 text-[14px] text-error hover:text-[#fca5a5] transition-colors flex items-center justify-center gap-2"
               >
                 <LogOut className="w-4 h-4" />
                 Quitter la squad

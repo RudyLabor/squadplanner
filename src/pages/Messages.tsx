@@ -118,7 +118,7 @@ function ConversationCard({ conversation, onClick, isActive }: {
       className={`w-full p-3 rounded-xl text-left transition-interactive ${
         isActive
           ? 'bg-[rgba(99,102,241,0.15)] border border-[rgba(99,102,241,0.3)]'
-          : 'hover:bg-[#18191b] border border-transparent'
+          : 'hover:bg-bg-surface border border-transparent'
       }`}
     >
       <div className="flex items-center gap-3">
@@ -131,11 +131,11 @@ function ConversationCard({ conversation, onClick, isActive }: {
           {conversation.type === 'session' ? (
             <Gamepad2 className="w-5 h-5 text-[#fbbf24]" />
           ) : (
-            <Users className="w-5 h-5 text-[#6366f1]" />
+            <Users className="w-5 h-5 text-primary" />
           )}
           {/* Unread indicator */}
           {conversation.unread_count > 0 && (
-            <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 bg-[#6366f1] text-white text-xs font-bold rounded-full flex items-center justify-center">
+            <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 bg-primary text-white text-xs font-bold rounded-full flex items-center justify-center">
               {conversation.unread_count > 9 ? '9+' : conversation.unread_count}
             </span>
           )}
@@ -145,22 +145,22 @@ function ConversationCard({ conversation, onClick, isActive }: {
         <div className="flex-1 min-w-0">
           <div className="flex items-center justify-between mb-0.5">
             <h3 className={`text-[14px] font-medium truncate ${
-              conversation.unread_count > 0 ? 'text-[#f7f8f8]' : 'text-[#c9cace]'
+              conversation.unread_count > 0 ? 'text-text-primary' : 'text-text-secondary'
             }`}>
               {conversation.name}
             </h3>
             {conversation.last_message && (
-              <span className="text-xs text-[#5e6063] flex-shrink-0 ml-2">
+              <span className="text-xs text-text-quaternary flex-shrink-0 ml-2">
                 {formatTime(conversation.last_message.created_at)}
               </span>
             )}
           </div>
           <p className={`text-[13px] truncate ${
-            conversation.unread_count > 0 ? 'text-[#8b8d90]' : 'text-[#5e6063]'
+            conversation.unread_count > 0 ? 'text-text-tertiary' : 'text-text-quaternary'
           }`}>
             {conversation.last_message ? (
               <>
-                <span className="text-[#8b8d90]">
+                <span className="text-text-tertiary">
                   {conversation.last_message.sender?.username}:
                 </span>{' '}
                 {conversation.last_message.content}
@@ -179,11 +179,11 @@ function ConversationCard({ conversation, onClick, isActive }: {
 function DateSeparator({ date }: { date: string }) {
   return (
     <div className="flex items-center gap-3 py-4">
-      <div className="flex-1 h-px bg-[rgba(255,255,255,0.06)]" />
-      <span className="text-xs text-[#5e6063] font-medium uppercase tracking-wider">
+      <div className="flex-1 h-px bg-surface-card" />
+      <span className="text-xs text-text-quaternary font-medium uppercase tracking-wider">
         {formatDateSeparator(date)}
       </span>
-      <div className="flex-1 h-px bg-[rgba(255,255,255,0.06)]" />
+      <div className="flex-1 h-px bg-surface-card" />
     </div>
   )
 }
@@ -374,7 +374,7 @@ function SystemMessage({ message }: {
       <p className={`text-[13px] italic text-center px-4 py-1.5 rounded-full ${
         isCelebration
           ? 'bg-gradient-to-r from-[rgba(99,102,241,0.15)] to-[rgba(167,139,250,0.15)] text-[#a5b4fc] border border-[rgba(99,102,241,0.2)]'
-          : 'text-[#888]'
+          : 'text-text-tertiary'
       }`}>
         {isCelebration && <span className="mr-1">🎉</span>}
         — {message.content} —
@@ -444,7 +444,7 @@ function MessageBubble({ message, isOwn, showAvatar, showName, currentUserId, is
                 className="w-8 h-8 rounded-full object-cover"
               />
             ) : (
-              <div className="w-8 h-8 rounded-full bg-[rgba(99,102,241,0.2)] flex items-center justify-center text-xs font-bold text-[#6366f1]">
+              <div className="w-8 h-8 rounded-full bg-[rgba(99,102,241,0.2)] flex items-center justify-center text-xs font-bold text-primary">
                 {initial}
               </div>
             )}
@@ -453,7 +453,7 @@ function MessageBubble({ message, isOwn, showAvatar, showName, currentUserId, is
 
         <div className={`${isOwn ? 'items-end' : 'items-start'} flex flex-col relative`}>
           {showName && !isOwn && (
-            <span className="text-xs text-[#8b8d90] mb-1 ml-1 font-medium">
+            <span className="text-xs text-text-tertiary mb-1 ml-1 font-medium">
               {message.sender?.username}
             </span>
           )}
@@ -496,8 +496,8 @@ function MessageBubble({ message, isOwn, showAvatar, showName, currentUserId, is
             <div
               className={`px-4 py-2.5 rounded-2xl transition-colors duration-150 ${
                 isOwn
-                  ? 'bg-[#6366f1] text-white rounded-br-lg hover:bg-[#7c7ffa] hover:shadow-[0_0_10px_rgba(99,102,241,0.15)]'
-                  : 'bg-[#18191b] text-[#f7f8f8] rounded-bl-lg hover:bg-[#1f2023] hover:shadow-[0_0_10px_rgba(255,255,255,0.025)]'
+                  ? 'bg-primary text-white rounded-br-lg hover:bg-[#7c7ffa] hover:shadow-[0_0_10px_rgba(99,102,241,0.15)]'
+                  : 'bg-bg-surface text-text-primary rounded-bl-lg hover:bg-bg-hover hover:shadow-[0_0_10px_rgba(255,255,255,0.025)]'
               }`}
             >
               <p className="text-[14px] leading-relaxed whitespace-pre-wrap break-words">
@@ -525,11 +525,11 @@ function MessageBubble({ message, isOwn, showAvatar, showName, currentUserId, is
             )}
           </div>
 
-          <span className="text-xs text-[#5e6063] mt-1 mx-1 flex items-center gap-1">
+          <span className="text-xs text-text-quaternary mt-1 mx-1 flex items-center gap-1">
             {formatTime(message.created_at)}
             {/* Edited indicator */}
             {message.edited_at && (
-              <span className="text-[#8b8d90] italic">(modifie)</span>
+              <span className="text-text-tertiary italic">(modifie)</span>
             )}
             {/* Read receipts - seulement pour les messages envoyés par l'utilisateur */}
             {isOwn && (
@@ -577,7 +577,7 @@ function DMConversationCard({ conversation, onClick }: {
   return (
     <button
       onClick={onClick}
-      className="w-full p-3 rounded-xl text-left transition-interactive hover:bg-[#18191b] border border-transparent"
+      className="w-full p-3 rounded-xl text-left transition-interactive hover:bg-bg-surface border border-transparent"
     >
       <div className="flex items-center gap-3">
         {/* Avatar */}
@@ -589,11 +589,11 @@ function DMConversationCard({ conversation, onClick }: {
               className="w-full h-full object-cover"
             />
           ) : (
-            <span className="text-[14px] font-bold text-[#6366f1]">{initial}</span>
+            <span className="text-[14px] font-bold text-primary">{initial}</span>
           )}
           {/* Unread indicator */}
           {conversation.unread_count > 0 && (
-            <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 bg-[#6366f1] text-white text-xs font-bold rounded-full flex items-center justify-center">
+            <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 bg-primary text-white text-xs font-bold rounded-full flex items-center justify-center">
               {conversation.unread_count > 9 ? '9+' : conversation.unread_count}
             </span>
           )}
@@ -603,18 +603,18 @@ function DMConversationCard({ conversation, onClick }: {
         <div className="flex-1 min-w-0">
           <div className="flex items-center justify-between mb-0.5">
             <h3 className={`text-[14px] font-medium truncate ${
-              conversation.unread_count > 0 ? 'text-[#f7f8f8]' : 'text-[#c9cace]'
+              conversation.unread_count > 0 ? 'text-text-primary' : 'text-text-secondary'
             }`}>
               {conversation.other_user_username}
             </h3>
             {conversation.last_message_at && (
-              <span className="text-xs text-[#5e6063] flex-shrink-0 ml-2">
+              <span className="text-xs text-text-quaternary flex-shrink-0 ml-2">
                 {formatTime(conversation.last_message_at)}
               </span>
             )}
           </div>
           <p className={`text-[13px] truncate ${
-            conversation.unread_count > 0 ? 'text-[#8b8d90]' : 'text-[#5e6063]'
+            conversation.unread_count > 0 ? 'text-text-tertiary' : 'text-text-quaternary'
           }`}>
             {conversation.last_message_content || <span className="italic">Nouvelle conversation</span>}
           </p>
@@ -989,9 +989,9 @@ export function Messages() {
       {/* Header */}
       <div className={`${showOnDesktop ? 'p-4' : 'mb-5'}`}>
         <div className="flex items-center justify-between mb-1">
-          <h1 className={`font-bold text-[#f7f8f8] ${showOnDesktop ? 'text-xl' : 'text-2xl'}`}>Messages</h1>
+          <h1 className={`font-bold text-text-primary ${showOnDesktop ? 'text-xl' : 'text-2xl'}`}>Messages</h1>
           {totalUnread > 0 && (
-            <span className="px-2.5 py-1 bg-[#6366f1] text-white text-[12px] font-bold rounded-full">
+            <span className="px-2.5 py-1 bg-primary text-white text-[12px] font-bold rounded-full">
               {totalUnread} non lu{totalUnread > 1 ? 's' : ''}
             </span>
           )}
@@ -999,7 +999,7 @@ export function Messages() {
       </div>
 
       {/* Tabs */}
-      <div className={`flex gap-1 p-1 bg-[#18191b] rounded-xl ${showOnDesktop ? 'mx-4 mb-3' : 'mb-5'}`}>
+      <div className={`flex gap-1 p-1 bg-bg-surface rounded-xl ${showOnDesktop ? 'mx-4 mb-3' : 'mb-5'}`}>
         <button
           onClick={() => {
             setActiveTab('squads')
@@ -1009,14 +1009,14 @@ export function Messages() {
           }}
           className={`flex-1 py-2.5 px-4 rounded-lg text-[13px] font-medium transition-interactive flex items-center justify-center gap-2 ${
             activeTab === 'squads'
-              ? 'bg-[#1f2023] text-[#f7f8f8]'
-              : 'text-[#8b8d90] hover:text-[#f7f8f8]'
+              ? 'bg-bg-hover text-text-primary'
+              : 'text-text-tertiary hover:text-text-primary'
           }`}
         >
           <Users className="w-4 h-4" />
           Squads
           {squadUnread > 0 && (
-            <span className="min-w-[18px] h-[18px] px-1 bg-[#6366f1] text-white text-xs font-bold rounded-full flex items-center justify-center">
+            <span className="min-w-[18px] h-[18px] px-1 bg-primary text-white text-xs font-bold rounded-full flex items-center justify-center">
               {squadUnread > 9 ? '9+' : squadUnread}
             </span>
           )}
@@ -1030,14 +1030,14 @@ export function Messages() {
           }}
           className={`flex-1 py-2.5 px-4 rounded-lg text-[13px] font-medium transition-interactive flex items-center justify-center gap-2 ${
             activeTab === 'dms'
-              ? 'bg-[#1f2023] text-[#f7f8f8]'
-              : 'text-[#8b8d90] hover:text-[#f7f8f8]'
+              ? 'bg-bg-hover text-text-primary'
+              : 'text-text-tertiary hover:text-text-primary'
           }`}
         >
           <User className="w-4 h-4" />
           Privés
           {dmUnread > 0 && (
-            <span className="min-w-[18px] h-[18px] px-1 bg-[#6366f1] text-white text-xs font-bold rounded-full flex items-center justify-center">
+            <span className="min-w-[18px] h-[18px] px-1 bg-primary text-white text-xs font-bold rounded-full flex items-center justify-center">
               {dmUnread > 9 ? '9+' : dmUnread}
             </span>
           )}
@@ -1046,14 +1046,14 @@ export function Messages() {
 
       {/* Search bar */}
       <div className={`relative ${showOnDesktop ? 'mx-4 mb-3' : 'mb-5'}`}>
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#5e6063]" />
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-quaternary" />
         <input
           type="text"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           placeholder={activeTab === 'squads' ? 'Rechercher une squad...' : 'Rechercher un contact...'}
           aria-label="Rechercher une conversation"
-          className="w-full h-11 pl-10 pr-4 bg-[#18191b] border border-[rgba(255,255,255,0.06)] rounded-xl text-[14px] text-[#f7f8f8] placeholder:text-[#5e6063] focus:outline-none focus:border-[rgba(99,102,241,0.5)] transition-colors"
+          className="w-full h-11 pl-10 pr-4 bg-bg-surface border border-border-default rounded-xl text-[14px] text-text-primary placeholder:text-text-quaternary focus:outline-none focus:border-[rgba(99,102,241,0.5)] transition-colors"
         />
       </div>
 
@@ -1121,17 +1121,17 @@ export function Messages() {
 
   // ========== COMPOSANT VUE CHAT ==========
   const ChatView = ({ embedded = false }: { embedded?: boolean }) => (
-    <div className={`flex flex-col ${embedded ? 'h-full' : 'h-screen'} bg-[#050506]`}>
+    <div className={`flex flex-col ${embedded ? 'h-full' : 'h-screen'} bg-bg-base`}>
       {/* Header chat */}
-      <div className={`flex-shrink-0 px-4 py-3 border-b border-[rgba(255,255,255,0.06)] ${embedded ? '' : 'bg-[#101012]/80 backdrop-blur-xl'}`}>
+      <div className={`flex-shrink-0 px-4 py-3 border-b border-border-default ${embedded ? '' : 'bg-bg-elevated/80 backdrop-blur-xl'}`}>
         <div className={`flex items-center gap-3 ${embedded ? '' : 'max-w-4xl lg:max-w-5xl mx-auto'}`}>
           {!embedded && (
             <button
               onClick={handleBack}
               aria-label="Retour"
-              className="p-2 -ml-2 rounded-xl hover:bg-[rgba(255,255,255,0.05)] transition-colors"
+              className="p-2 -ml-2 rounded-xl hover:bg-surface-card-hover transition-colors"
             >
-              <ArrowLeft className="w-5 h-5 text-[#8b8d90]" aria-hidden="true" />
+              <ArrowLeft className="w-5 h-5 text-text-tertiary" aria-hidden="true" />
             </button>
           )}
 
@@ -1146,16 +1146,16 @@ export function Messages() {
                 {activeSquadConv.type === 'session' ? (
                   <Gamepad2 className="w-5 h-5 text-[#fbbf24]" />
                 ) : (
-                  <Users className="w-5 h-5 text-[#6366f1]" />
+                  <Users className="w-5 h-5 text-primary" />
                 )}
               </div>
               <div className="flex-1 min-w-0">
-                <h2 className="text-[15px] font-semibold text-[#f7f8f8] truncate">{chatName}</h2>
-                <p className="text-[12px] text-[#5e6063]">{chatSubtitle}</p>
+                <h2 className="text-[15px] font-semibold text-text-primary truncate">{chatName}</h2>
+                <p className="text-[12px] text-text-quaternary">{chatSubtitle}</p>
               </div>
               <button
                 onClick={() => { setShowMessageSearch(s => !s); setMessageSearchQuery('') }}
-                className={`p-2.5 rounded-xl transition-colors ${showMessageSearch ? 'bg-[rgba(99,102,241,0.15)] text-[#6366f1]' : 'hover:bg-[rgba(255,255,255,0.05)] text-[#8b8d90]'}`}
+                className={`p-2.5 rounded-xl transition-colors ${showMessageSearch ? 'bg-[rgba(99,102,241,0.15)] text-primary' : 'hover:bg-surface-card-hover text-text-tertiary'}`}
                 aria-label="Rechercher dans les messages"
               >
                 <Search className="w-5 h-5" />
@@ -1172,14 +1172,14 @@ export function Messages() {
                     className="w-full h-full object-cover"
                   />
                 ) : (
-                  <span className="text-[14px] font-bold text-[#6366f1]">
+                  <span className="text-[14px] font-bold text-primary">
                     {activeDMConv.other_user_username?.charAt(0).toUpperCase() || '?'}
                   </span>
                 )}
               </div>
               <div className="flex-1 min-w-0">
-                <h2 className="text-[15px] font-semibold text-[#f7f8f8] truncate">{chatName}</h2>
-                <p className="text-[12px] text-[#5e6063]">{chatSubtitle}</p>
+                <h2 className="text-[15px] font-semibold text-text-primary truncate">{chatName}</h2>
+                <p className="text-[12px] text-text-quaternary">{chatSubtitle}</p>
               </div>
               {/* Call button for DM */}
               <button
@@ -1195,7 +1195,7 @@ export function Messages() {
                 className="p-2.5 rounded-xl bg-[rgba(34,197,94,0.1)] hover:bg-[rgba(34,197,94,0.2)] transition-colors"
                 aria-label={`Appeler ${activeDMConv.other_user_username}`}
               >
-                <Phone className="w-5 h-5 text-[#34d399]" aria-hidden="true" />
+                <Phone className="w-5 h-5 text-success" aria-hidden="true" />
               </button>
             </>
           ) : null}
@@ -1209,21 +1209,21 @@ export function Messages() {
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: 'auto', opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            className="overflow-hidden border-b border-[rgba(255,255,255,0.05)]"
+            className="overflow-hidden border-b border-border-subtle"
           >
             <div className="px-4 py-2">
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#5e6063]" />
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-quaternary" />
                 <input
                   type="text"
                   value={messageSearchQuery}
                   onChange={(e) => setMessageSearchQuery(e.target.value)}
                   placeholder="Rechercher dans les messages..."
-                  className="w-full h-9 pl-9 pr-3 bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.06)] rounded-lg text-[13px] text-[#f7f8f8] placeholder:text-[#5e6063] focus:outline-none focus:border-[rgba(99,102,241,0.5)]"
+                  className="w-full h-9 pl-9 pr-3 bg-[rgba(255,255,255,0.05)] border border-border-default rounded-lg text-[13px] text-text-primary placeholder:text-text-quaternary focus:outline-none focus:border-[rgba(99,102,241,0.5)]"
                   autoFocus
                 />
                 {messageSearchQuery && (
-                  <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[11px] text-[#5e6063]">
+                  <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[11px] text-text-quaternary">
                     {messages.filter(m => m.content.toLowerCase().includes(messageSearchQuery.toLowerCase())).length} résultat(s)
                   </span>
                 )}
@@ -1296,7 +1296,7 @@ export function Messages() {
                 exit={{ opacity: 0, y: 20, scale: 0.8 }}
                 transition={{ type: 'spring', stiffness: 300, damping: 25 }}
                 onClick={scrollToBottom}
-                className={`${embedded ? 'absolute' : 'fixed'} bottom-28 right-6 w-10 h-10 bg-[#6366f1] hover:bg-[#7c7ffa] rounded-full flex items-center justify-center shadow-md shadow-[rgba(99,102,241,0.15)] transition-colors z-50`}
+                className={`${embedded ? 'absolute' : 'fixed'} bottom-28 right-6 w-10 h-10 bg-primary hover:bg-[#7c7ffa] rounded-full flex items-center justify-center shadow-md shadow-[rgba(99,102,241,0.15)] transition-colors z-50`}
                 aria-label="Scroll to bottom"
               >
                 <ChevronDown className="w-5 h-5 text-white" />
@@ -1379,7 +1379,7 @@ export function Messages() {
                 exit={{ opacity: 0, y: 20, scale: 0.8 }}
                 transition={{ type: 'spring', stiffness: 300, damping: 25 }}
                 onClick={scrollToBottom}
-                className={`${embedded ? 'absolute' : 'fixed'} bottom-28 right-6 w-10 h-10 bg-[#6366f1] hover:bg-[#7c7ffa] rounded-full flex items-center justify-center shadow-md shadow-[rgba(99,102,241,0.15)] transition-colors z-50`}
+                className={`${embedded ? 'absolute' : 'fixed'} bottom-28 right-6 w-10 h-10 bg-primary hover:bg-[#7c7ffa] rounded-full flex items-center justify-center shadow-md shadow-[rgba(99,102,241,0.15)] transition-colors z-50`}
                 aria-label="Scroll to bottom"
               >
                 <ChevronDown className="w-5 h-5 text-white" />
@@ -1390,7 +1390,7 @@ export function Messages() {
       )}
 
       {/* Input message */}
-      <div className={`flex-shrink-0 px-4 py-3 ${embedded ? 'pb-3' : 'pb-6'} border-t border-[rgba(255,255,255,0.06)] ${embedded ? '' : 'bg-[#101012]/80 backdrop-blur-xl'}`}>
+      <div className={`flex-shrink-0 px-4 py-3 ${embedded ? 'pb-3' : 'pb-6'} border-t border-border-default ${embedded ? '' : 'bg-bg-elevated/80 backdrop-blur-xl'}`}>
         <div className={embedded ? '' : 'max-w-4xl lg:max-w-5xl mx-auto'}>
           {/* Reply Composer - Phase 3.3 */}
           <ReplyComposer
@@ -1411,7 +1411,7 @@ export function Messages() {
                   value={newMessage}
                   onChange={handleMessageChange}
                   placeholder={isSquadChat ? 'Message à la squad...' : `Message à ${chatName}...`}
-                  className="w-full h-12 px-4 bg-[#18191b] border border-[rgba(255,255,255,0.06)] rounded-xl text-[14px] text-[#f7f8f8] placeholder:text-[#5e6063] focus:outline-none focus:border-[rgba(99,102,241,0.5)] transition-colors"
+                  className="w-full h-12 px-4 bg-bg-surface border border-border-default rounded-xl text-[14px] text-text-primary placeholder:text-text-quaternary focus:outline-none focus:border-[rgba(99,102,241,0.5)] transition-colors"
                   autoComplete="off"
                   autoCapitalize="off"
                   autoCorrect="off"
@@ -1448,15 +1448,15 @@ export function Messages() {
 
   // ========== PLACEHOLDER VUE DESKTOP SANS CHAT ==========
   const EmptyChatPlaceholder = () => (
-    <div className="h-full flex items-center justify-center bg-[#050506]">
+    <div className="h-full flex items-center justify-center bg-bg-base">
       <div className="text-center">
         <div className="w-20 h-20 rounded-2xl bg-[rgba(99,102,241,0.1)] flex items-center justify-center mx-auto mb-5">
-          <Sparkles className="w-10 h-10 text-[#6366f1]" />
+          <Sparkles className="w-10 h-10 text-primary" />
         </div>
-        <h3 className="text-[18px] font-semibold text-[#f7f8f8] mb-2">
+        <h3 className="text-[18px] font-semibold text-text-primary mb-2">
           Sélectionne une conversation
         </h3>
-        <p className="text-[14px] text-[#5e6063] max-w-[250px] mx-auto">
+        <p className="text-[14px] text-text-quaternary max-w-[250px] mx-auto">
           Choisis une conversation dans la liste pour commencer à chatter.
         </p>
       </div>
@@ -1472,9 +1472,9 @@ export function Messages() {
           isVisible={toast.visible}
           variant={toast.variant}
         />
-        <div className="h-screen bg-[#050506] flex">
+        <div className="h-screen bg-bg-base flex">
           {/* Sidebar gauche - Liste des conversations */}
-          <div className="w-[340px] xl:w-[380px] flex-shrink-0 border-r border-[rgba(255,255,255,0.06)] bg-[#101012]">
+          <div className="w-[340px] xl:w-[380px] flex-shrink-0 border-r border-border-default bg-bg-elevated">
             {ConversationsList({ showOnDesktop: true })}
           </div>
 
@@ -1501,7 +1501,7 @@ export function Messages() {
           isVisible={toast.visible}
           variant={toast.variant}
         />
-        <div className="min-h-0 bg-[#050506] pb-6">
+        <div className="min-h-0 bg-bg-base pb-6">
           <div className="px-4 md:px-6 lg:px-8 py-6 max-w-2xl lg:max-w-4xl xl:max-w-6xl mx-auto">
             {ConversationsList({ showOnDesktop: false })}
           </div>

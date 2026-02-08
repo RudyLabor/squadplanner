@@ -57,7 +57,7 @@ export const theme = {
       scale: 1.01,
     },
     tap: {
-      scale: 0.98,
+      scale: 0.97,
     },
   },
 

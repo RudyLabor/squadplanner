@@ -66,5 +66,33 @@ export const showWithAction = (
   })
 }
 
+// Toast with undo action
+export const showWithUndo = (
+  message: string,
+  undoAction: () => void,
+  duration = 5000
+) => {
+  toast(message, {
+    duration,
+    action: {
+      label: 'Annuler',
+      onClick: undoAction,
+    },
+  })
+}
+
+// Toast with progress tracking for async operations
+export const showProgress = <T,>(
+  message: string,
+  promise: Promise<T>,
+  messages?: { success?: string; error?: string }
+) => {
+  return toast.promise(promise, {
+    loading: message,
+    success: messages?.success || 'Fait !',
+    error: messages?.error || 'Une erreur est survenue',
+  })
+}
+
 // Re-export toast for advanced usage
 export { toast }

@@ -142,12 +142,12 @@ export function Tooltip({
                   zIndex: 9999,
                 }}
                 role="tooltip"
-                className={`px-3 py-2 text-[13px] font-medium text-white bg-[#1a1b1e] border border-white/10 rounded-lg shadow-lg max-w-xs ${className}`}
+                className={`px-3 py-2 text-[13px] font-medium text-text-primary bg-bg-active border border-border-hover rounded-lg shadow-dropdown max-w-xs ${className}`}
               >
                 {content}
                 {/* Arrow */}
                 <div
-                  className="absolute w-2 h-2 bg-[#1a1b1e] border-white/10 rotate-45"
+                  className="absolute w-2 h-2 bg-bg-active border-border-hover rotate-45"
                   style={{
                     ...(position === 'top' && {
                       bottom: -4,

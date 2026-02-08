@@ -49,7 +49,7 @@ function SuccessToast({ message, onClose }: { message: string; onClose: () => vo
       exit={{ opacity: 0, y: 20, scale: 0.9 }}
       className="fixed bottom-24 left-1/2 -translate-x-1/2 z-50"
     >
-      <div className="flex items-center gap-3 px-5 py-3 rounded-xl bg-[#34d399] text-[#050506] font-medium shadow-lg">
+      <div className="flex items-center gap-3 px-5 py-3 rounded-xl bg-success text-bg-base font-medium shadow-lg">
         <Sparkles className="w-5 h-5" />
         <span>{message}</span>
       </div>
@@ -106,8 +106,8 @@ function SquadCard({ squad, isOwner, nextSession, hasActiveParty, copiedCode, on
       <Link to={`/squad/${squad.id}`}>
         <Card className={`cursor-pointer transition-interactive ${
           hasActiveParty
-            ? 'border-[#34d399]/30 shadow-[0_0_15px_rgba(52,211,153,0.08)] bg-gradient-to-r from-[#34d399]/5 to-transparent'
-            : 'hover:border-[rgba(99,102,241,0.25)] hover:shadow-[0_0_12px_rgba(99,102,241,0.08)]'
+            ? 'border-success/30 shadow-[0_0_15px_rgba(52,211,153,0.08)] bg-gradient-to-r from-success/5 to-transparent'
+            : 'hover:border-primary/25 hover:shadow-[0_0_12px_rgba(99,102,241,0.08)]'
         }`}>
           <CardContent className="p-4">
             <div className="flex items-start gap-4">
@@ -115,18 +115,18 @@ function SquadCard({ squad, isOwner, nextSession, hasActiveParty, copiedCode, on
               <div className="relative">
                 <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${
                   hasActiveParty
-                    ? 'bg-[#34d399]/15'
-                    : 'bg-[rgba(99,102,241,0.15)]'
+                    ? 'bg-success/15'
+                    : 'bg-primary/15'
                 }`}>
                   {hasActiveParty ? (
-                    <Mic className="w-6 h-6 text-[#34d399]" strokeWidth={1.5} />
+                    <Mic className="w-6 h-6 text-success" strokeWidth={1.5} />
                   ) : (
-                    <Gamepad2 className="w-6 h-6 text-[#6366f1]" strokeWidth={1.5} />
+                    <Gamepad2 className="w-6 h-6 text-primary" strokeWidth={1.5} />
                   )}
                 </div>
                 {hasActiveParty && (
                   <motion.div
-                    className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-[#34d399] border-2 border-[#101012]"
+                    className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-success border-2 border-bg-elevated"
                     animate={{ scale: [1, 1.15, 1] }}
                     transition={{ duration: 1.5, repeat: 3 }}
                   />
@@ -136,29 +136,29 @@ function SquadCard({ squad, isOwner, nextSession, hasActiveParty, copiedCode, on
               {/* Infos squad */}
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 mb-0.5">
-                  <h3 id={`squad-name-${squad.id}`} className="text-[15px] font-semibold text-[#f7f8f8] truncate">{squad.name}</h3>
+                  <h3 id={`squad-name-${squad.id}`} className="text-[15px] font-semibold text-text-primary truncate">{squad.name}</h3>
                   {isOwner && (
-                    <Crown className="w-4 h-4 text-[#fbbf24] flex-shrink-0" />
+                    <Crown className="w-4 h-4 text-warning flex-shrink-0" />
                   )}
                 </div>
-                <p className="text-[13px] text-[#8b8d90]">
+                <p className="text-[13px] text-text-tertiary">
                   {squad.game} · {memberCount} membre{memberCount > 1 ? 's' : ''}
                 </p>
 
                 {/* Prochaine session ou état */}
                 <div className="mt-2">
                   {hasActiveParty ? (
-                    <div className="flex items-center gap-1.5 text-[12px] text-[#34d399]">
+                    <div className="flex items-center gap-1.5 text-[12px] text-success">
                       <Mic className="w-3.5 h-3.5" />
                       <span>Party en cours</span>
                     </div>
                   ) : nextSession ? (
-                    <div className="flex items-center gap-1.5 text-[12px] text-[#6366f1]">
+                    <div className="flex items-center gap-1.5 text-[12px] text-primary">
                       <Calendar className="w-3.5 h-3.5" />
                       <span>{sessionLabel}</span>
                     </div>
                   ) : (
-                    <div className="flex items-center gap-1.5 text-[12px] text-[#5e6063]">
+                    <div className="flex items-center gap-1.5 text-[12px] text-text-quaternary">
                       <Calendar className="w-3.5 h-3.5" />
                       <span>Aucune session planifiée</span>
                     </div>
@@ -174,7 +174,7 @@ function SquadCard({ squad, isOwner, nextSession, hasActiveParty, copiedCode, on
                     e.stopPropagation()
                     onCopyCode(squad.invite_code)
                   }}
-                  className="p-2 rounded-lg hover:bg-[rgba(255,255,255,0.05)] transition-colors"
+                  className="p-2 rounded-lg hover:bg-surface-card-hover transition-colors"
                   aria-label="Copier le code d'invitation"
                 >
                   <motion.div
@@ -184,13 +184,13 @@ function SquadCard({ squad, isOwner, nextSession, hasActiveParty, copiedCode, on
                     transition={{ type: 'spring', stiffness: 500, damping: 25 }}
                   >
                     {copiedCode === squad.invite_code ? (
-                      <Check className="w-4 h-4 text-[#34d399]" aria-hidden="true" />
+                      <Check className="w-4 h-4 text-success" aria-hidden="true" />
                     ) : (
-                      <Copy className="w-4 h-4 text-[#5e6063]" aria-hidden="true" />
+                      <Copy className="w-4 h-4 text-text-quaternary" aria-hidden="true" />
                     )}
                   </motion.div>
                 </button>
-                <ChevronRight className="w-5 h-5 text-[#5e6063]" aria-hidden="true" />
+                <ChevronRight className="w-5 h-5 text-text-quaternary" aria-hidden="true" />
               </div>
             </div>
           </CardContent>
@@ -345,12 +345,12 @@ export default function Squads() {
   // Afficher le skeleton loader tant que l'initialisation ou le chargement est en cours
   if (!isInitialized || isLoading) {
     return (
-      <div className="min-h-0 bg-[#050506] pb-6">
+      <div className="min-h-0 bg-bg-base pb-6">
         <div className="px-4 md:px-6 lg:px-8 py-6 max-w-2xl lg:max-w-4xl xl:max-w-6xl mx-auto">
           <div className="flex items-center justify-between mb-6">
             <div>
-              <h1 className="text-2xl font-bold text-[#f7f8f8]">Mes Squads</h1>
-              <p className="text-[13px] text-[#5e6063]">Chargement...</p>
+              <h1 className="text-2xl font-bold text-text-primary">Mes Squads</h1>
+              <p className="text-[13px] text-text-quaternary">Chargement...</p>
             </div>
           </div>
           <div className="space-y-3 lg:grid lg:grid-cols-2 xl:grid-cols-3 lg:gap-4 lg:space-y-0">
@@ -371,7 +371,7 @@ export default function Squads() {
   }
 
   return (
-    <div className="min-h-0 bg-[#050506] pb-6">
+    <div className="min-h-0 bg-bg-base pb-6">
       {/* Celebration confetti */}
       {showConfetti && typeof window !== 'undefined' && (
         <Confetti
@@ -390,8 +390,8 @@ export default function Squads() {
           {/* Header simplifié */}
           <div className="flex items-center justify-between mb-6">
             <div>
-              <h1 className="text-2xl font-bold text-[#f7f8f8]">Mes Squads</h1>
-              <p className="text-[13px] text-[#5e6063]">{getSubtitle()}</p>
+              <h1 className="text-2xl font-bold text-text-primary">Mes Squads</h1>
+              <p className="text-[13px] text-text-quaternary">{getSubtitle()}</p>
             </div>
             <div className="flex gap-2">
               <Button variant="secondary" size="sm" onClick={() => setShowJoin(true)}>
@@ -431,7 +431,7 @@ export default function Squads() {
               >
                 <Card>
                   <CardContent className="p-5">
-                    <h3 className="text-[16px] font-semibold text-[#f7f8f8] mb-4">Rejoindre une squad</h3>
+                    <h3 className="text-[16px] font-semibold text-text-primary mb-4">Rejoindre une squad</h3>
                     <form onSubmit={handleJoinSquad} className="space-y-4">
                       <Input
                         label="Code d'invitation"
@@ -441,8 +441,8 @@ export default function Squads() {
                         icon={<LinkIcon className="w-5 h-5" />}
                       />
                       {error && (
-                        <div className="p-3 rounded-lg bg-[rgba(251,113,133,0.1)] border border-[rgba(251,113,133,0.2)]">
-                          <p className="text-[#fb7185] text-[13px]">{error}</p>
+                        <div className="p-3 rounded-lg bg-error/10 border border-error/20">
+                          <p className="text-error text-[13px]">{error}</p>
                         </div>
                       )}
                       <div className="flex gap-2 pt-1">
@@ -472,7 +472,7 @@ export default function Squads() {
               >
                 <Card>
                   <CardContent className="p-5">
-                    <h3 className="text-[16px] font-semibold text-[#f7f8f8] mb-4">Créer une squad</h3>
+                    <h3 className="text-[16px] font-semibold text-text-primary mb-4">Créer une squad</h3>
                     <form onSubmit={handleCreateSquad} className="space-y-4">
                       <Input
                         label="Nom de la squad"
@@ -489,8 +489,8 @@ export default function Squads() {
                         icon={<Gamepad2 className="w-5 h-5" />}
                       />
                       {error && (
-                        <div className="p-3 rounded-lg bg-[rgba(251,113,133,0.1)] border border-[rgba(251,113,133,0.2)]">
-                          <p className="text-[#fb7185] text-[13px]">{error}</p>
+                        <div className="p-3 rounded-lg bg-error/10 border border-error/20">
+                          <p className="text-error text-[13px]">{error}</p>
                         </div>
                       )}
                       <div className="flex gap-2 pt-1">
@@ -537,17 +537,17 @@ export default function Squads() {
             >
               <Card className="p-8 text-center">
                 <motion.div
-                  className="w-14 h-14 rounded-2xl bg-[#1f2023] flex items-center justify-center mx-auto mb-4"
+                  className="w-14 h-14 rounded-2xl bg-bg-hover flex items-center justify-center mx-auto mb-4"
                   initial={{ scale: 0.8, rotate: -10 }}
                   animate={{ scale: 1, rotate: 0 }}
                   transition={{ delay: 0.1, type: 'spring', stiffness: 300, damping: 25 }}
                 >
-                  <Users className="w-7 h-7 text-[#5e6063]" strokeWidth={1.5} />
+                  <Users className="w-7 h-7 text-text-quaternary" strokeWidth={1.5} />
                 </motion.div>
-                <h3 className="text-[16px] font-semibold text-[#f7f8f8] mb-2">
+                <h3 className="text-[16px] font-semibold text-text-primary mb-2">
                   Pas encore de squad
                 </h3>
-                <p className="text-[14px] text-[#8b8d90] mb-6 max-w-[280px] mx-auto">
+                <p className="text-[14px] text-text-tertiary mb-6 max-w-[280px] mx-auto">
                   Lance ta squad pour inviter tes potes, ou rejoins l'action avec un code.
                 </p>
                 <div className="flex gap-3 justify-center">

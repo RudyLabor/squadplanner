@@ -13,10 +13,10 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     const baseClasses = 'inline-flex items-center justify-center gap-2 font-medium rounded-xl transition-interactive disabled:opacity-40 disabled:cursor-not-allowed'
 
     const variants = {
-      primary: 'bg-[#6366f1] hover:bg-[#818cf8] text-white shadow-md shadow-[#6366f1]/10',
-      secondary: 'bg-[rgba(255,255,255,0.02)] border border-[rgba(255,255,255,0.06)] hover:bg-[rgba(255,255,255,0.04)] hover:border-[rgba(255,255,255,0.1)] text-[#fafafa]',
-      ghost: 'bg-transparent hover:bg-[rgba(255,255,255,0.04)] text-[#a1a1a6] hover:text-[#fafafa]',
-      danger: 'bg-[#fb7185]/10 border border-[#fb7185]/15 hover:bg-[#fb7185]/15 text-[#fb7185]',
+      primary: 'bg-primary hover:bg-primary-hover text-white shadow-md shadow-primary/10',
+      secondary: 'bg-surface-card border border-border-default hover:bg-surface-card-hover hover:border-border-hover text-text-primary',
+      ghost: 'bg-transparent hover:bg-bg-hover text-text-secondary hover:text-text-primary',
+      danger: 'bg-error/10 border border-error/15 hover:bg-error/15 text-error',
     }
 
     const sizes = {
@@ -30,8 +30,8 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         ref={ref}
         className={`${baseClasses} ${variants[variant]} ${sizes[size]} ${className}`}
         whileHover={{ y: -1 }}
-        whileTap={{ scale: 0.98 }}
-        transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+        whileTap={{ scale: 0.97 }}
+        transition={{ type: 'spring', stiffness: 400, damping: 17 }}
         disabled={isLoading || props.disabled}
         {...props}
       >

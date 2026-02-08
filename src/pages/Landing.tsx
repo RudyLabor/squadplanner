@@ -2,7 +2,7 @@ import { motion, useScroll, useTransform, useMotionValue, useSpring, useInView }
 import { useRef, useEffect, useState, useCallback, type ReactNode } from 'react'
 import {
   Users, Calendar, ArrowRight, Check, X as XIcon,
-  Target, MessageCircle, Headphones, TrendingUp, Sparkles,
+  Target, MessageCircle, Headphones, Sparkles,
   HelpCircle, FileText, Shield, ChevronDown, Menu, X as CloseIcon,
   Mail, MousePointerClick, Clock, Smile
 } from 'lucide-react'

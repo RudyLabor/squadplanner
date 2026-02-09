@@ -12,6 +12,10 @@ import { useScrollRestoration } from './hooks/useScrollRestoration'
 import { useSwipeBack } from './hooks/useSwipeBack'
 import { ErrorBoundary } from './components/ErrorBoundary'
 import { OfflineBanner } from './components/OfflineBanner'
+import { SessionExpiredModal } from './components/SessionExpiredModal'
+import { RateLimitBanner } from './components/RateLimitBanner'
+import { useSessionExpiry } from './hooks/useSessionExpiry'
+import { useRateLimitStore } from './hooks/useRateLimit'
 import { PWAInstallBanner } from './components/PWAInstallBanner'
 import { usePWAInstallStore } from './hooks/usePWAInstall'
 import { CookieConsent } from './components/CookieConsent'
@@ -43,6 +47,7 @@ const NotFound = lazy(() => import('./pages/NotFound').then(m => ({ default: m.N
 const Legal = lazy(() => import('./pages/Legal').then(m => ({ default: m.Legal })))
 const Discover = lazy(() => import('./pages/Discover'))
 const PublicProfile = lazy(() => import('./pages/PublicProfile'))
+const Maintenance = lazy(() => import('./pages/Maintenance'))
 
 // Lazy load heavy modals (only loaded when needed)
 const CallModal = lazy(() => import('./components/CallModal').then(m => ({ default: m.CallModal })))
@@ -353,6 +358,9 @@ function AppContent() {
                 {/* Deep linking - Join squad via invite code */}
                 <Route path="/join/:code" element={<JoinSquad />} />
 
+                {/* Chantier 9 - Maintenance page */}
+                <Route path="/maintenance" element={<Maintenance />} />
+
                 {/* 404 - Page not found */}
                 <Route path="*" element={<NotFound />} />
                 </Routes>
@@ -366,6 +374,29 @@ function AppContent() {
   )
 }
 
+// Chantier 9: Global state banners (session expiry + rate limit)
+const GlobalStateBanners = memo(function GlobalStateBanners() {
+  const { showModal, dismissModal } = useSessionExpiry()
+  const { isRateLimited, retryAfter, dismiss: dismissRateLimit, reset: resetRateLimit } = useRateLimitStore()
+
+  return (
+    <>
+      <SessionExpiredModal
+        isOpen={showModal}
+        onReconnect={() => { /* navigate handled inside modal */ }}
+        onDismiss={dismissModal}
+      />
+      {isRateLimited && (
+        <RateLimitBanner
+          retryAfter={retryAfter}
+          onRetry={resetRateLimit}
+          onDismiss={dismissRateLimit}
+        />
+      )}
+    </>
+  )
+})
+
 export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
@@ -373,6 +404,8 @@ export default function App() {
         <AppContent />
         {/* Offline/Online status banner */}
         <OfflineBanner />
+        {/* Chantier 9: Session expiry + Rate limit banners */}
+        <GlobalStateBanners />
         {/* PWA install prompt — Phase 5.2 */}
         <PWAInstallBanner />
         {/* In-app notification banners - V3 */}

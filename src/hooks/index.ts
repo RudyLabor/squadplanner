@@ -74,3 +74,6 @@ export {
 
 // Chantier 9 - Auto retry with exponential backoff
 export { useAutoRetry } from './useAutoRetry'
+
+// Chantier 9 - Rate limit detection store
+export { useRateLimitStore } from './useRateLimit'

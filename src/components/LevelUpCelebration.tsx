@@ -161,7 +161,7 @@ export function LevelUpCelebration({
                 }}
               >
                 <motion.span
-                  className="text-6xl font-black"
+                  className="text-6xl font-extrabold"
                   style={{ color: currentLevel.color }}
                   animate={{
                     textShadow: [
@@ -205,7 +205,7 @@ export function LevelUpCelebration({
                 New Rank Achieved
               </motion.div>
               <motion.h2
-                className="text-3xl font-black mb-2"
+                className="text-3xl font-extrabold mb-2"
                 style={{
                   color: currentLevel.color,
                   textShadow: `0 0 30px ${currentLevel.color}60`

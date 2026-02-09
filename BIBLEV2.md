@@ -541,16 +541,15 @@ Line-heights automatiques via le scale typographique :
 --leading-loose: 1.8;     /* Lisibilite maximale */
 ```
 
-### 4.5 Font-weight
+### 4.5 Font-weight 🟢 FAIT (audité, 3 font-black corrigés, hiérarchie respectée)
 
 Standardiser :
-- 400 (regular) : corps de texte
-- 500 (medium) : labels, nav items
-- 600 (semibold) : sous-titres, elements importants
-- 700 (bold) : titres
-- 800 (extrabold) : hero uniquement
-
-Actuellement `font-semibold` et `font-medium` sont utilises de facon aleatoire.
+- 400 (regular) : corps de texte → 4 instances, toutes correctes
+- 500 (medium) : labels, nav items → 257 instances, cohérent
+- 600 (semibold) : sous-titres, elements importants → 148 instances, cohérent
+- 700 (bold) : titres → 134 instances, cohérent
+- 800 (extrabold) : hero uniquement → 4 instances (Landing hero + célébrations)
+- 900 (font-black) : éliminé (3 → 0, remplacés par extrabold)
 
 ---
 

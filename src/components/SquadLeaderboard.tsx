@@ -233,7 +233,7 @@ function PodiumCard({
           }}
         >
           <span
-            className="text-2xl font-black"
+            className="text-2xl font-extrabold"
             style={{ color: medal.primary80 }}
           >
             {entry.rank}

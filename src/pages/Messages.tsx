@@ -744,6 +744,7 @@ export function Messages() {
 
   // Déterminer le contexte de conversation pour le typing indicator
   const isSquadChat = !!activeSquadConv
+  const messages = isSquadChat ? squadMessages : dmMessages
   const conversationType = isSquadChat ? 'squad' : 'dm'
   const conversationId = isSquadChat
     ? activeSquadConv?.squad_id || ''
@@ -1063,8 +1064,7 @@ export function Messages() {
   // Grouper les messages par date
   const getMessageDate = useCallback((dateStr: string) => new Date(dateStr).toDateString(), [])
 
-  // Variables pour la vue chat (isSquadChat déjà défini plus haut)
-  const messages = isSquadChat ? squadMessages : dmMessages
+  // Variables pour la vue chat (isSquadChat et messages déjà définis plus haut)
   const chatName = isSquadChat ? activeSquadConv?.name : activeDMConv?.other_user_username
   const chatSubtitle = isSquadChat
     ? (activeSquadConv?.type === 'squad' ? 'Chat de squad' : 'Chat de session')

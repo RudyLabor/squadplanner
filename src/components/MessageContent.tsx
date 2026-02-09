@@ -1,11 +1,18 @@
-import { memo, useMemo } from 'react'
+import { memo, useMemo, lazy, Suspense } from 'react'
+import { isLocationMessage, parseLocationMessage } from './LocationShare'
+import { isPollMessage, parsePollData } from './ChatPoll'
+
+// Lazy load heavy display components
+const LocationMessageComp = lazy(() => import('./LocationShare').then(m => ({ default: m.LocationMessage })))
+const ChatPollComp = lazy(() => import('./ChatPoll').then(m => ({ default: m.ChatPoll })))
 
 /**
- * MessageContent — Phase 3.1
+ * MessageContent — Phase 3.1 + Phase 4
  * Renders message text with:
  * - @mention highlighting (indigo, clickable)
  * - **bold**, *italic*, ~~strikethrough~~, `inline code`
  * - URL detection → clickable links
+ * - [Phase 4] Location messages, Polls, Forwarded messages
  */
 
 // URL regex
@@ -80,14 +87,65 @@ function tokenize(text: string): Token[] {
 interface MessageContentProps {
   content: string
   isOwn?: boolean
+  messageId?: string
   onMentionClick?: (username: string) => void
+  onPollVote?: (messageId: string, optionIndex: number) => void
 }
 
 export const MessageContent = memo(function MessageContent({
   content,
   isOwn = false,
+  messageId,
   onMentionClick,
+  onPollVote,
 }: MessageContentProps) {
+  // Phase 4: Special message types
+  // Location message
+  if (isLocationMessage(content)) {
+    const coords = parseLocationMessage(content)
+    if (coords) {
+      return (
+        <Suspense fallback={<span className="text-[14px] text-text-quaternary">Chargement...</span>}>
+          <LocationMessageComp lat={coords.lat} lng={coords.lng} isOwn={isOwn} />
+        </Suspense>
+      )
+    }
+  }
+
+  // Poll message
+  if (isPollMessage(content)) {
+    const pollData = parsePollData(content)
+    if (pollData) {
+      return (
+        <Suspense fallback={<span className="text-[14px] text-text-quaternary">Chargement...</span>}>
+          <ChatPollComp
+            pollData={pollData}
+            messageId={messageId || ''}
+            onVote={onPollVote}
+            isOwn={isOwn}
+          />
+        </Suspense>
+      )
+    }
+  }
+
+  // Forwarded message indicator
+  if (content.startsWith('↩️ *Transfere de ')) {
+    const lines = content.split('\n')
+    const header = lines[0]
+    const body = lines.slice(1).join('\n')
+    return (
+      <div className="text-[14px] leading-relaxed whitespace-pre-wrap break-words">
+        <div className={`text-[12px] italic mb-1 flex items-center gap-1 ${isOwn ? 'text-white/60' : 'text-text-quaternary'}`}>
+          ↩️ {header.replace('↩️ ', '').replace(/\*/g, '')}
+        </div>
+        <div className={`pl-3 border-l-2 ${isOwn ? 'border-white/20' : 'border-[rgba(99,102,241,0.3)]'}`}>
+          <MessageContent content={body} isOwn={isOwn} onMentionClick={onMentionClick} />
+        </div>
+      </div>
+    )
+  }
+
   const tokens = useMemo(() => tokenize(content), [content])
 
   if (tokens.length === 0) {

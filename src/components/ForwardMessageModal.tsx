@@ -1,0 +1,182 @@
+/**
+ * Phase 4.1.3 — Forward Message Modal
+ * Select a squad to forward a message to
+ */
+import { useState, memo, useMemo } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { X, Forward, Search, Users, Check } from 'lucide-react'
+import { useSquadsStore } from '../hooks/useSquads'
+import { useMessagesStore } from '../hooks/useMessages'
+
+interface ForwardMessageModalProps {
+  isOpen: boolean
+  onClose: () => void
+  messageContent: string
+  senderUsername: string
+}
+
+export const ForwardMessageModal = memo(function ForwardMessageModal({
+  isOpen,
+  onClose,
+  messageContent,
+  senderUsername,
+}: ForwardMessageModalProps) {
+  const { squads } = useSquadsStore()
+  const { sendMessage } = useMessagesStore()
+  const [searchQuery, setSearchQuery] = useState('')
+  const [selectedSquadId, setSelectedSquadId] = useState<string | null>(null)
+  const [isSending, setIsSending] = useState(false)
+  const [sent, setSent] = useState(false)
+
+  const filteredSquads = useMemo(() =>
+    squads.filter(s => s.name.toLowerCase().includes(searchQuery.toLowerCase())),
+    [squads, searchQuery]
+  )
+
+  const handleForward = async () => {
+    if (!selectedSquadId || isSending) return
+    setIsSending(true)
+
+    const forwardedContent = `↩️ *Transfere de ${senderUsername}:*\n${messageContent}`
+
+    const { error } = await sendMessage(forwardedContent, selectedSquadId)
+
+    if (!error) {
+      setSent(true)
+      setTimeout(() => {
+        setSent(false)
+        setSelectedSquadId(null)
+        setSearchQuery('')
+        onClose()
+      }, 1000)
+    }
+
+    setIsSending(false)
+  }
+
+  const handleClose = () => {
+    setSelectedSquadId(null)
+    setSearchQuery('')
+    setSent(false)
+    onClose()
+  }
+
+  return (
+    <AnimatePresence>
+      {isOpen && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 bg-black/60 flex items-center justify-center z-[200] p-4"
+          onClick={handleClose}
+        >
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.95, y: 20 }}
+            transition={{ type: 'spring', stiffness: 300, damping: 25 }}
+            onClick={(e) => e.stopPropagation()}
+            className="w-full max-w-md bg-[#1a1b1e] border border-[rgba(255,255,255,0.08)] rounded-2xl overflow-hidden"
+          >
+            {/* Header */}
+            <div className="flex items-center justify-between px-5 py-4 border-b border-[rgba(255,255,255,0.06)]">
+              <div className="flex items-center gap-2">
+                <Forward className="w-5 h-5 text-[#818cf8]" />
+                <h2 className="text-[16px] font-semibold text-text-primary">Transferer le message</h2>
+              </div>
+              <button
+                onClick={handleClose}
+                className="p-1.5 rounded-lg hover:bg-[rgba(255,255,255,0.05)] text-text-tertiary transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Message preview */}
+            <div className="mx-5 mt-4 p-3 rounded-xl bg-[rgba(255,255,255,0.03)] border border-[rgba(255,255,255,0.06)]">
+              <p className="text-[11px] text-text-quaternary mb-1">De {senderUsername}</p>
+              <p className="text-[13px] text-text-secondary line-clamp-3">{messageContent}</p>
+            </div>
+
+            {/* Search */}
+            <div className="px-5 mt-4">
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-quaternary" />
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Rechercher une squad..."
+                  className="w-full h-10 pl-10 pr-4 bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.08)] rounded-xl text-[13px] text-text-primary placeholder:text-text-quaternary focus:outline-none focus:border-[rgba(99,102,241,0.4)] transition-colors"
+                />
+              </div>
+            </div>
+
+            {/* Squad list */}
+            <div className="px-5 py-3 max-h-60 overflow-y-auto space-y-1">
+              {filteredSquads.length === 0 ? (
+                <p className="text-[13px] text-text-quaternary text-center py-4">Aucune squad trouvee</p>
+              ) : (
+                filteredSquads.map((squad) => (
+                  <button
+                    key={squad.id}
+                    type="button"
+                    onClick={() => setSelectedSquadId(squad.id === selectedSquadId ? null : squad.id)}
+                    className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-colors ${
+                      selectedSquadId === squad.id
+                        ? 'bg-[rgba(99,102,241,0.15)] border border-[rgba(99,102,241,0.3)]'
+                        : 'hover:bg-[rgba(255,255,255,0.05)] border border-transparent'
+                    }`}
+                  >
+                    <div className="w-9 h-9 rounded-lg bg-[rgba(99,102,241,0.15)] flex items-center justify-center flex-shrink-0">
+                      <Users className="w-4 h-4 text-[#818cf8]" />
+                    </div>
+                    <div className="flex-1 min-w-0 text-left">
+                      <p className="text-[13px] font-medium text-text-primary truncate">{squad.name}</p>
+                      <p className="text-[11px] text-text-quaternary">{squad.game}</p>
+                    </div>
+                    {selectedSquadId === squad.id && (
+                      <Check className="w-4 h-4 text-[#818cf8] flex-shrink-0" />
+                    )}
+                  </button>
+                ))
+              )}
+            </div>
+
+            {/* Footer */}
+            <div className="flex items-center justify-end gap-3 px-5 py-4 border-t border-[rgba(255,255,255,0.06)]">
+              <button
+                type="button"
+                onClick={handleClose}
+                className="px-4 py-2.5 rounded-xl text-[13px] font-medium text-text-tertiary hover:bg-[rgba(255,255,255,0.05)] transition-colors"
+              >
+                Annuler
+              </button>
+              <button
+                type="button"
+                onClick={handleForward}
+                disabled={!selectedSquadId || isSending || sent}
+                className="px-5 py-2.5 rounded-xl text-[13px] font-semibold bg-[#6366f1] text-white hover:bg-[#7c7ffa] transition-colors disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-2"
+              >
+                {sent ? (
+                  <>
+                    <Check className="w-4 h-4" />
+                    Envoye !
+                  </>
+                ) : isSending ? (
+                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                ) : (
+                  <>
+                    <Forward className="w-4 h-4" />
+                    Transferer
+                  </>
+                )}
+              </button>
+            </div>
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  )
+})

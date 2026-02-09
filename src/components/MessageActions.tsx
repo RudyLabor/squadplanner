@@ -7,7 +7,8 @@ import {
   Pin,
   Reply,
   Copy,
-  Check
+  Check,
+  Forward
 } from 'lucide-react'
 
 export interface MessageActionsProps {
@@ -22,6 +23,7 @@ export interface MessageActionsProps {
   onDelete: () => void
   onPin: () => void
   onReply: () => void
+  onForward?: () => void
 }
 
 /**
@@ -40,7 +42,8 @@ export function MessageActions({
   onEdit,
   onDelete,
   onPin,
-  onReply
+  onReply,
+  onForward
 }: MessageActionsProps) {
   const [isOpen, setIsOpen] = useState(false)
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
@@ -139,6 +142,11 @@ export function MessageActions({
     setIsOpen(false)
   }
 
+  const handleForward = () => {
+    onForward?.()
+    setIsOpen(false)
+  }
+
   return (
     <div
       className="relative inline-flex"
@@ -199,6 +207,18 @@ export function MessageActions({
                 </>
               )}
             </button>
+
+            {/* Forward */}
+            {onForward && (
+              <button
+                onClick={handleForward}
+                className="w-full flex items-center gap-3 px-4 py-2.5 text-left text-[14px] text-[#e0e0e0] hover:bg-[rgba(255,255,255,0.06)] transition-colors"
+                role="menuitem"
+              >
+                <Forward className="w-4 h-4 text-[#8b8d90]" />
+                <span>Transferer</span>
+              </button>
+            )}
 
             {/* Pin (admins only) */}
             {isAdmin && (

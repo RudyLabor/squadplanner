@@ -4,7 +4,7 @@ import { Link, useLocation } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Home, Users, Mic, MessageCircle, User, Plus, Zap, Pin, PinOff, Settings, HelpCircle, Phone, Calendar } from 'lucide-react'
 import { useShallow } from 'zustand/react/shallow'
-import { useAuthStore, useSquadsStore, useVoiceChatStore, useKeyboardVisible, useUnreadCountStore, useSquadNotificationsStore } from '../../hooks'
+import { useAuthStore, useSquadsStore, useVoiceChatStore, useKeyboardVisible, useUnreadCountStore, useSquadNotificationsStore, useGlobalPresence } from '../../hooks'
 import { useCreateSessionModal } from '../CreateSessionModal'
 import { getOptimizedAvatarUrl } from '../../utils/avatarUrl'
 import { SquadPlannerLogo } from '../SquadPlannerLogo'
@@ -12,6 +12,8 @@ import { Breadcrumbs } from './Breadcrumbs'
 import { GlobalSearch } from '../GlobalSearch'
 import { NotificationBell } from '../NotificationCenter'
 import { Tooltip } from '../ui/Tooltip'
+import { StatusSelector } from '../StatusSelector'
+import { CustomStatusModal } from '../CustomStatusModal'
 
 interface AppLayoutProps {
   children: ReactNode
@@ -266,6 +268,16 @@ export function AppLayout({ children }: AppLayoutProps) {
       unsubscribe: state.unsubscribe
     }))
   )
+
+  // PHASE 4.2: Global presence — broadcast status to all users
+  useGlobalPresence({
+    userId: user?.id,
+    username: profile?.username || '',
+    avatarUrl: profile?.avatar_url || null,
+  })
+
+  // PHASE 4.2.3: Custom status modal state
+  const [showCustomStatusModal, setShowCustomStatusModal] = useState(false)
 
   // Sidebar collapse state
   const [sidebarExpanded, setSidebarExpanded] = useState(false)
@@ -527,40 +539,47 @@ export function AppLayout({ children }: AppLayoutProps) {
                 </Link>
               </Tooltip>
             ) : (
-              <Link to="/profile" aria-label="Voir mon profil">
-                <motion.div
-                  className="flex items-center gap-3 p-3 rounded-xl hover:bg-[rgba(255,255,255,0.03)] transition-colors duration-300"
-                  whileHover={{ x: 4 }}
-                  transition={{ duration: 0.25 }}
-                >
-                  {profile?.avatar_url ? (
-                    <img
-                      src={getOptimizedAvatarUrl(profile.avatar_url, 40) || profile.avatar_url}
-                      alt={profile.username || 'Avatar'}
-                      className="w-10 h-10 rounded-full object-cover flex-shrink-0"
-                      loading="lazy"
-                    />
-                  ) : (
-                    <div className="w-10 h-10 rounded-full bg-[rgba(167,139,250,0.08)] flex items-center justify-center flex-shrink-0">
-                      <User className="w-5 h-5 text-[#a78bfa]" />
-                    </div>
-                  )}
+              <>
+                <Link to="/profile" aria-label="Voir mon profil">
                   <motion.div
-                    key="profile-text"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ duration: 0.15 }}
-                    className="flex-1 min-w-0"
+                    className="flex items-center gap-3 p-3 rounded-xl hover:bg-[rgba(255,255,255,0.03)] transition-colors duration-300"
+                    whileHover={{ x: 4 }}
+                    transition={{ duration: 0.25 }}
                   >
-                    <div className="text-[14px] font-medium text-[#f7f8f8] truncate">
-                      {profile?.username || 'Mon profil'}
-                    </div>
-                    <div className="text-[12px] text-[#5e6063]">
-                      {profile?.reliability_score || 100}% fiable
-                    </div>
+                    {profile?.avatar_url ? (
+                      <img
+                        src={getOptimizedAvatarUrl(profile.avatar_url, 40) || profile.avatar_url}
+                        alt={profile.username || 'Avatar'}
+                        className="w-10 h-10 rounded-full object-cover flex-shrink-0"
+                        loading="lazy"
+                      />
+                    ) : (
+                      <div className="w-10 h-10 rounded-full bg-[rgba(167,139,250,0.08)] flex items-center justify-center flex-shrink-0">
+                        <User className="w-5 h-5 text-[#a78bfa]" />
+                      </div>
+                    )}
+                    <motion.div
+                      key="profile-text"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ duration: 0.15 }}
+                      className="flex-1 min-w-0"
+                    >
+                      <div className="text-[14px] font-medium text-[#f7f8f8] truncate">
+                        {profile?.username || 'Mon profil'}
+                      </div>
+                      <div className="text-[12px] text-[#5e6063]">
+                        {profile?.reliability_score || 100}% fiable
+                      </div>
+                    </motion.div>
                   </motion.div>
-                </motion.div>
-              </Link>
+                </Link>
+                {/* Phase 4.2: Status selector under profile */}
+                <StatusSelector
+                  onOpenCustomStatus={() => setShowCustomStatusModal(true)}
+                  className="mt-1 px-1"
+                />
+              </>
             )}
           </div>
 
@@ -659,6 +678,12 @@ export function AppLayout({ children }: AppLayoutProps) {
           ))}
         </div>
       </nav>
+
+      {/* Phase 4.2.3: Custom Status Modal */}
+      <CustomStatusModal
+        isOpen={showCustomStatusModal}
+        onClose={() => setShowCustomStatusModal(false)}
+      />
     </div>
   )
 }

@@ -14,7 +14,8 @@ import {
   Phone,
   ChevronDown,
   CheckCircle2,
-  AlertCircle
+  AlertCircle,
+  BarChart3
 } from 'lucide-react'
 import { Button } from '../components/ui'
 import { useMessagesStore } from '../hooks/useMessages'
@@ -39,6 +40,10 @@ import { VoiceRecorder } from '../components/VoiceRecorder'
 import { useSquadMembersQuery } from '../hooks/queries/useSquadMembers'
 import { hasPermission, type SquadRole } from '../lib/roles'
 import { RoleBadge } from '../components/RoleBadge'
+import { LocationShareButton } from '../components/LocationShare'
+import { CreatePollModal } from '../components/CreatePollModal'
+import { ForwardMessageModal } from '../components/ForwardMessageModal'
+import type { PollData } from '../components/ChatPoll'
 
 // Simple toast component for Messages
 function MessageToast({ message, isVisible, variant = 'success' }: {
@@ -220,6 +225,8 @@ interface VirtualizedMessagesProps {
   onDeleteMessage: (id: string) => void
   onPinMessage: (id: string, isPinned: boolean) => void
   onReplyMessage: (msg: { id: string; content: string; sender: string }) => void
+  onForwardMessage: (msg: { content: string; sender: string }) => void
+  onPollVote: (messageId: string, optionIndex: number) => void
   onScrollToMessage: (id: string) => void
   getMessageDate: (date: string) => string
   memberRolesMap?: Map<string, string>
@@ -237,6 +244,8 @@ const VirtualizedMessages = memo(function VirtualizedMessages({
   onDeleteMessage,
   onPinMessage,
   onReplyMessage,
+  onForwardMessage,
+  onPollVote,
   onScrollToMessage,
   getMessageDate,
   memberRolesMap,
@@ -342,6 +351,8 @@ const VirtualizedMessages = memo(function VirtualizedMessages({
                   onDelete={onDeleteMessage}
                   onPin={onPinMessage}
                   onReply={onReplyMessage}
+                  onForward={onForwardMessage}
+                  onPollVote={onPollVote}
                   replyToMessage={replyToData}
                   onScrollToMessage={onScrollToMessage}
                   senderRole={memberRolesMap?.get(message.sender_id)}
@@ -394,7 +405,7 @@ function SystemMessage({ message }: {
 }
 
 // Message bubble
-function MessageBubble({ message, isOwn, showAvatar, showName, currentUserId, isSquadChat, isAdmin, onEdit, onDelete, onPin, onReply, replyToMessage, onScrollToMessage, senderRole }: {
+function MessageBubble({ message, isOwn, showAvatar, showName, currentUserId, isSquadChat, isAdmin, onEdit, onDelete, onPin, onReply, onForward, onPollVote, replyToMessage, onScrollToMessage, senderRole }: {
   message: {
     id: string
     content: string
@@ -420,6 +431,8 @@ function MessageBubble({ message, isOwn, showAvatar, showName, currentUserId, is
   onDelete: (messageId: string) => void
   onPin: (messageId: string, isPinned: boolean) => void
   onReply: (message: { id: string; content: string; sender: string }) => void
+  onForward: (msg: { content: string; sender: string }) => void
+  onPollVote: (messageId: string, optionIndex: number) => void
   replyToMessage?: {
     id: string
     sender_id: string
@@ -501,6 +514,10 @@ function MessageBubble({ message, isOwn, showAvatar, showName, currentUserId, is
                     content: message.content,
                     sender: message.sender?.username || 'Utilisateur'
                   })}
+                  onForward={() => onForward({
+                    content: message.content,
+                    sender: message.sender?.username || 'Utilisateur'
+                  })}
                 />
               </div>
             )}
@@ -515,6 +532,8 @@ function MessageBubble({ message, isOwn, showAvatar, showName, currentUserId, is
               <MessageContent
                 content={message.content}
                 isOwn={isOwn}
+                messageId={message.id}
+                onPollVote={onPollVote}
               />
             </div>
 
@@ -530,6 +549,10 @@ function MessageBubble({ message, isOwn, showAvatar, showName, currentUserId, is
                   onPin={() => onPin(message.id, !message.is_pinned)}
                   onReply={() => onReply({
                     id: message.id,
+                    content: message.content,
+                    sender: message.sender?.username || 'Utilisateur'
+                  })}
+                  onForward={() => onForward({
                     content: message.content,
                     sender: message.sender?.username || 'Utilisateur'
                   })}
@@ -693,6 +716,9 @@ export function Messages() {
   const [editingMessage, setEditingMessage] = useState<{ id: string; content: string } | null>(null)
   const [replyingTo, setReplyingTo] = useState<{ id: string; content: string; sender: string } | null>(null)
   const [showGifPicker, setShowGifPicker] = useState(false)
+  // Phase 4 state
+  const [showPollModal, setShowPollModal] = useState(false)
+  const [forwardMessage, setForwardMessage] = useState<{ content: string; sender: string } | null>(null)
   const [toast, setToast] = useState<{ message: string; variant: 'success' | 'error'; visible: boolean }>({
     message: '',
     variant: 'success',
@@ -945,6 +971,57 @@ export function Messages() {
   // Cancel reply
   const cancelReply = () => {
     setReplyingTo(null)
+  }
+
+  // Phase 4: Handle poll creation
+  const handleCreatePoll = async (question: string, options: string[]) => {
+    const pollData: PollData = {
+      type: 'poll',
+      question,
+      options,
+      votes: {},
+      createdBy: user?.id || '',
+    }
+    const content = JSON.stringify(pollData)
+    if (activeSquadConv) {
+      await sendSquadMessage(content, activeSquadConv.squad_id, activeSquadConv.session_id)
+    } else if (activeDMConv) {
+      await sendDMMessage(content, activeDMConv.other_user_id)
+    }
+  }
+
+  // Phase 4: Handle location share
+  const handleLocationShare = async (lat: number, lng: number) => {
+    const content = `[location:${lat},${lng}]`
+    if (activeSquadConv) {
+      await sendSquadMessage(content, activeSquadConv.squad_id, activeSquadConv.session_id)
+    } else if (activeDMConv) {
+      await sendDMMessage(content, activeDMConv.other_user_id)
+    }
+  }
+
+  // Phase 4: Handle poll vote
+  const handlePollVote = async (messageId: string, optionIndex: number) => {
+    if (!user?.id) return
+    const message = messages.find(m => m.id === messageId)
+    if (!message) return
+    try {
+      const pollData = JSON.parse(message.content) as PollData
+      if (!pollData.votes[optionIndex]) {
+        pollData.votes[optionIndex] = []
+      }
+      if (!pollData.votes[optionIndex].includes(user.id)) {
+        pollData.votes[optionIndex].push(user.id)
+        if (isSquadChat) {
+          await editSquadMessage(messageId, JSON.stringify(pollData))
+        }
+      }
+    } catch { /* ignore parse errors */ }
+  }
+
+  // Phase 4: Handle forward message
+  const handleForwardMessage = (msg: { content: string; sender: string }) => {
+    setForwardMessage(msg)
   }
 
   // Check if current user is admin in current squad
@@ -1318,6 +1395,8 @@ export function Messages() {
             onDeleteMessage={handleDeleteMessage}
             onPinMessage={handlePinMessage}
             onReplyMessage={handleReply}
+            onForwardMessage={handleForwardMessage}
+            onPollVote={handlePollVote}
             onScrollToMessage={scrollToMessage}
             getMessageDate={getMessageDate}
             memberRolesMap={memberRolesMap}
@@ -1398,6 +1477,8 @@ export function Messages() {
                       onDelete={handleDeleteMessage}
                       onPin={handlePinMessage}
                       onReply={handleReply}
+                      onForward={handleForwardMessage}
+                      onPollVote={handlePollVote}
                       replyToMessage={replyToData}
                       onScrollToMessage={scrollToMessage}
                       senderRole={memberRolesMap.get(message.sender_id)}
@@ -1487,6 +1568,25 @@ export function Messages() {
                 </div>
               )}
 
+              {/* Phase 4: Location share button */}
+              <LocationShareButton
+                onShare={handleLocationShare}
+                disabled={isSending}
+              />
+
+              {/* Phase 4: Poll button */}
+              {isSquadChat && (
+                <button
+                  type="button"
+                  onClick={() => setShowPollModal(true)}
+                  className="p-2.5 rounded-xl text-text-quaternary hover:text-[#818cf8] hover:bg-[rgba(99,102,241,0.1)] transition-colors"
+                  aria-label="Creer un sondage"
+                  title="Sondage"
+                >
+                  <BarChart3 className="w-5 h-5" />
+                </button>
+              )}
+
               {/* GIF button + picker — Phase 3.1 */}
               <div className="relative flex-shrink-0">
                 <button
@@ -1549,6 +1649,21 @@ export function Messages() {
         message={editingMessage || { id: '', content: '' }}
         onSave={handleEditMessage}
         onClose={() => setEditingMessage(null)}
+      />
+
+      {/* Phase 4: Create Poll Modal */}
+      <CreatePollModal
+        isOpen={showPollModal}
+        onClose={() => setShowPollModal(false)}
+        onCreatePoll={handleCreatePoll}
+      />
+
+      {/* Phase 4: Forward Message Modal */}
+      <ForwardMessageModal
+        isOpen={!!forwardMessage}
+        onClose={() => setForwardMessage(null)}
+        messageContent={forwardMessage?.content || ''}
+        senderUsername={forwardMessage?.sender || ''}
       />
     </div>
   )

@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion'
 import { memo } from 'react'
 
-type AvatarStatus = 'online' | 'in-party' | 'away' | 'offline'
+export type AvatarStatus = 'online' | 'in-party' | 'in-session' | 'in-call' | 'busy' | 'dnd' | 'away' | 'offline'
 type AvatarSize = 'sm' | 'md' | 'lg' | 'xl'
 
 interface AnimatedAvatarProps {
@@ -24,6 +24,10 @@ const sizeConfig: Record<AvatarSize, { container: number; ring: number; strokeWi
 const statusColors: Record<AvatarStatus, string> = {
   online: 'var(--color-success)',
   'in-party': 'var(--color-purple, #a78bfa)',
+  'in-session': '#3b82f6',
+  'in-call': '#34d399',
+  busy: '#f59e0b',
+  dnd: '#ef4444',
   away: 'var(--color-warning)',
   offline: 'var(--color-text-quaternary)',
 }
@@ -48,7 +52,7 @@ export const AnimatedAvatar = memo(function AnimatedAvatar({
 }: AnimatedAvatarProps) {
   const config = sizeConfig[size]
   const color = statusColors[status]
-  const isActive = status === 'online' || status === 'in-party'
+  const isActive = status === 'online' || status === 'in-party' || status === 'in-session' || status === 'in-call'
   const circumference = Math.PI * (config.ring - config.strokeWidth)
 
   const Wrapper = layoutId ? motion.div : 'div' as unknown as typeof motion.div

@@ -42,6 +42,12 @@ export { useViewTransitionNavigate, isViewTransitionSupported, withViewTransitio
 export { usePresence, useUserOnlineStatus, getOnlineIndicatorClasses } from './usePresence'
 export type { PresenceUser, OnlineIndicatorProps } from './usePresence'
 
+// PHASE 4.2 - Global presence + User status
+export { useGlobalPresence, useGlobalPresenceStore, updatePresenceActivity } from './useGlobalPresence'
+export type { GlobalPresenceUser } from './useGlobalPresence'
+export { useUserStatusStore, AVAILABILITY_CONFIG } from './useUserStatus'
+export type { AvailabilityStatus, CustomStatus, GameStatus } from './useUserStatus'
+
 // PHASE 1.1 - React Query hooks
 export * from './queries'
 

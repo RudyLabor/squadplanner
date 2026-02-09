@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { Home, Gamepad2, ArrowLeft } from 'lucide-react'
+import { Home, Gamepad2, ArrowLeft, Users, MessageCircle, HelpCircle } from 'lucide-react'
 import { Button } from '../components/ui'
 
 export function NotFound() {
@@ -38,7 +38,7 @@ export function NotFound() {
         </p>
 
         {/* Action buttons — always visible */}
-        <div className="flex flex-col sm:flex-row gap-3 justify-center">
+        <div className="flex flex-col sm:flex-row gap-3 justify-center mb-10">
           <Link to="/home">
             <Button type="button" className="w-full sm:w-auto">
               <Home className="w-4 h-4" />
@@ -54,6 +54,27 @@ export function NotFound() {
             <ArrowLeft className="w-4 h-4" />
             Page précédente
           </Button>
+        </div>
+
+        {/* Page suggestions */}
+        <div className="border-t border-border-subtle pt-6">
+          <p className="text-sm text-text-tertiary mb-4">Pages populaires</p>
+          <div className="flex flex-wrap justify-center gap-3">
+            {[
+              { to: '/squads', icon: Users, label: 'Mes squads' },
+              { to: '/messages', icon: MessageCircle, label: 'Messages' },
+              { to: '/help', icon: HelpCircle, label: 'Aide' },
+            ].map(({ to, icon: Icon, label }) => (
+              <Link
+                key={to}
+                to={to}
+                className="flex items-center gap-2 px-4 py-2 rounded-lg bg-surface-card border border-border-subtle text-sm text-text-secondary hover:text-text-primary hover:border-border-hover transition-interactive"
+              >
+                <Icon className="w-4 h-4" />
+                {label}
+              </Link>
+            ))}
+          </div>
         </div>
         </div>
       </div>

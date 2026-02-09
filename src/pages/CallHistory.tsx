@@ -179,7 +179,7 @@ export function CallHistory() {
             animate={{ opacity: 1, y: 0 }}
             className="flex flex-col items-center justify-center py-20"
           >
-            <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-primary/[0.08] to-primary/[0.02] flex items-center justify-center mb-5">
+            <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-primary-10 to-transparent flex items-center justify-center mb-5">
               <Phone className="w-10 h-10 text-primary" />
             </div>
             <h3 className="text-xl font-semibold text-text-primary mb-2">
@@ -217,7 +217,7 @@ export function CallHistory() {
                 transition={{ delay: index * 0.03 }}
               >
                 <Card
-                  className="p-4 bg-bg-surface hover:bg-bg-hover transition-colors"
+                  className="p-4 bg-bg-elevated hover:bg-overlay-light transition-colors"
                   hoverable
                 >
                   <div className="flex items-center gap-3">
@@ -237,7 +237,7 @@ export function CallHistory() {
                         )}
                       </div>
                       {/* Call type indicator */}
-                      <div className={`absolute -bottom-1 -right-1 w-6 h-6 rounded-full flex items-center justify-center border-2 border-bg-surface ${
+                      <div className={`absolute -bottom-1 -right-1 w-6 h-6 rounded-full flex items-center justify-center border-2 border-bg-base ${
                         call.status === 'missed' || call.status === 'rejected'
                           ? 'bg-error'
                           : call.type === 'incoming'

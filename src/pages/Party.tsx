@@ -225,7 +225,7 @@ function ActivePartySection({ squad, onLeave, currentUserId }: {
       )}
 
       {/* Participants */}
-      <div className="p-6 bg-black/20">
+      <div className="p-6 bg-surface-dark">
         <div className="flex items-center justify-center gap-8 flex-wrap">
           <AnimatePresence mode="popLayout">
             {participants.map((p) => {
@@ -255,7 +255,7 @@ function ActivePartySection({ squad, onLeave, currentUserId }: {
                     <VoiceWaveformDemo
                       isActive={p.isSpeaking && !participantMuted}
                       size="sm"
-                      color={p.isLocal ? '#6366f1' : '#34d399'}
+                      color={p.isLocal ? 'var(--color-primary)' : 'var(--color-success)'}
                       barCount={5}
                     />
                   </div>
@@ -652,7 +652,7 @@ export function Party() {
           recycle={false}
           numberOfPieces={120}
           gravity={0.25}
-          colors={['#6366f1', '#34d399', '#fbbf24', '#a78bfa', '#f7f8f8']}
+          colors={['var(--color-primary)', 'var(--color-success)', 'var(--color-warning)', 'var(--color-purple)', 'var(--color-text-primary)']}
           style={{ position: 'fixed', top: 0, left: 0, zIndex: 100, pointerEvents: 'none' }}
         />
       )}

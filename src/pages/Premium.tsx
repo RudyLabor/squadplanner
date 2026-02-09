@@ -211,7 +211,7 @@ export function Premium() {
           recycle={false}
           numberOfPieces={80}
           gravity={0.2}
-          colors={['#6366f1', '#fbbf24', '#34d399', '#a78bfa', '#f7f8f8']}
+          colors={['var(--color-primary)', 'var(--color-warning)', 'var(--color-success)', 'var(--color-purple)', 'var(--color-text-primary)']}
           style={{ position: 'fixed', top: 0, left: 0, zIndex: 100, pointerEvents: 'none' }}
         />
       )}
@@ -385,7 +385,7 @@ export function Premium() {
             <Button
               onClick={handleUpgrade}
               disabled={isLoading}
-              className="h-14 px-10 text-lg bg-gradient-to-r from-primary via-purple to-primary bg-[length:200%_100%] hover:bg-[position:100%_0] transition-interactive shadow-glow-primary-md"
+              className="h-14 px-10 text-lg bg-gradient-to-r from-primary via-purple to-primary bg-[length:200%_100%] hover:bg-[position:100%_0] transition-interactive shadow-glow-primary-md animate-pulse-glow"
             >
               {isLoading ? (
                 <Loader2 className="w-5 h-5 animate-spin" />
@@ -437,7 +437,7 @@ export function Premium() {
                   viewport={{ once: true }}
                   transition={{ delay: index * 0.05 }}
                   className={`grid grid-cols-3 gap-4 p-4 items-center ${
-                    feature.highlight ? 'bg-primary/[0.025]' : ''
+                    feature.highlight ? 'bg-primary-5' : ''
                   }`}
                 >
                   <div className="flex items-center gap-3">

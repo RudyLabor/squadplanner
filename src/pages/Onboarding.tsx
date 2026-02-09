@@ -105,6 +105,7 @@ export function Onboarding() {
   const [showMiniConfetti, setShowMiniConfetti] = useState(false)
   const [showToast, setShowToast] = useState(false)
   const [toastMessage, setToastMessage] = useState('')
+  const [codeCopied, setCodeCopied] = useState(false)
 
   useEffect(() => {
     if ('Notification' in window) {
@@ -418,7 +419,7 @@ export function Onboarding() {
           recycle={false}
           numberOfPieces={60}
           gravity={0.3}
-          colors={['#6366f1', '#34d399', '#fbbf24', '#a78bfa']}
+          colors={['var(--color-primary)', 'var(--color-success)', 'var(--color-warning)', 'var(--color-purple)']}
           style={{ position: 'fixed', top: 0, left: 0, zIndex: 100, pointerEvents: 'none' }}
         />
       )}
@@ -498,6 +499,17 @@ export function Onboarding() {
               >
                 Configure ta squad en moins de 60 secondes
               </motion.p>
+
+              <motion.button
+                type="button"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 1 }}
+                onClick={() => { window.location.href = '/home' }}
+                className="text-sm text-text-quaternary hover:text-text-tertiary transition-colors mt-3"
+              >
+                Passer pour l'instant
+              </motion.button>
             </motion.div>
           )}
 
@@ -913,7 +925,7 @@ export function Onboarding() {
                           </span>
                         )}
                         {uploadingAvatar && (
-                          <div className="absolute inset-0 bg-black/50 flex items-center justify-center rounded-full">
+                          <div className="absolute inset-0 bg-surface-overlay flex items-center justify-center rounded-full">
                             <Loader2 className="w-6 h-6 text-white animate-spin" />
                           </div>
                         )}
@@ -1096,11 +1108,17 @@ export function Onboarding() {
                           <button
                             onClick={() => {
                               navigator.clipboard.writeText(createdSquadCode)
+                              setCodeCopied(true)
+                              setTimeout(() => setCodeCopied(false), 2000)
                             }}
-                            className="p-3 rounded-lg bg-primary-10 hover:bg-primary-15 hover:scale-[1.02] transition-interactive"
-                            aria-label="Copier le code d'invitation"
+                            className={`p-3 rounded-lg hover:scale-[1.02] transition-interactive ${codeCopied ? 'bg-success-10' : 'bg-primary-10 hover:bg-primary-15'}`}
+                            aria-label={codeCopied ? 'Code copié' : "Copier le code d'invitation"}
                           >
-                            <Copy className="w-5 h-5 text-primary" aria-hidden="true" />
+                            {codeCopied ? (
+                              <Check className="w-5 h-5 text-success" aria-hidden="true" />
+                            ) : (
+                              <Copy className="w-5 h-5 text-primary" aria-hidden="true" />
+                            )}
                           </button>
                         </div>
                         <p className="text-xs text-text-tertiary mt-2">

@@ -40,7 +40,7 @@ function Toggle({ enabled, onChange, disabled = false }: {
       } ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
     >
       <motion.div
-        className="absolute top-1 w-4 h-4 bg-white rounded-full shadow-sm"
+        className="absolute top-1 w-4 h-4 bg-bg-base rounded-full shadow-sm"
         animate={{ left: enabled ? 24 : 4 }}
         transition={{ type: 'spring', stiffness: 500, damping: 30 }}
       />
@@ -52,7 +52,7 @@ function Toggle({ enabled, onChange, disabled = false }: {
 function SectionHeader({ icon: Icon, title }: { icon: React.ElementType; title: string }) {
   return (
     <div className="flex items-center gap-3 mb-4">
-      <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
+      <div className="w-8 h-8 rounded-lg bg-primary-10 flex items-center justify-center">
         <Icon className="w-4 h-4 text-primary" />
       </div>
       <h2 className="text-md font-semibold text-text-primary">{title}</h2>
@@ -360,7 +360,7 @@ export function Settings() {
         </Card>
 
         {/* Appearance Section */}
-        <Card className="mb-5 p-5 bg-bg-surface">
+        <Card className="mb-5 p-5 bg-bg-elevated">
           <SectionHeader icon={Palette} title="Apparence" />
           <SettingRow
             label="Thème"
@@ -462,7 +462,7 @@ export function Settings() {
 
             <button
               onClick={() => setShowDeleteModal(true)}
-              className="w-full flex items-center justify-between p-4 rounded-xl bg-error/[0.03] hover:bg-error/5 transition-colors border border-error/5"
+              className="w-full flex items-center justify-between p-4 rounded-xl bg-error-5 hover:bg-error-10 transition-colors border border-error/10"
             >
               <div className="flex items-center gap-3">
                 <Trash2 className="w-5 h-5 text-error" />
@@ -555,7 +555,7 @@ export function Settings() {
               className="w-full max-w-md bg-bg-elevated rounded-2xl border border-error/10 p-6 shadow-modal"
             >
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-10 h-10 rounded-xl bg-error/[0.08] flex items-center justify-center">
+                <div className="w-10 h-10 rounded-xl bg-error-10 flex items-center justify-center">
                   <AlertTriangle className="w-5 h-5 text-error" />
                 </div>
                 <h3 className="text-lg font-bold text-text-primary">Supprimer ton compte</h3>

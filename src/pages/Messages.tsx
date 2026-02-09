@@ -1767,16 +1767,16 @@ export function Messages() {
     )
   }
 
-  // Sinon afficher le chat
+  // Sinon afficher le chat — wrapper fixed pour éviter le double-scroll mobile
   return (
-    <>
+    <div className="fixed inset-0 z-50 flex flex-col">
       <MessageToast
         message={toast.message}
         isVisible={toast.visible}
         variant={toast.variant}
       />
       {ChatView({ embedded: false })}
-    </>
+    </div>
   )
 }
 

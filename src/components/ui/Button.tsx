@@ -123,6 +123,7 @@ function ButtonInner<C extends ElementType = 'button'>(
       transition={{ type: 'spring', stiffness: 400, damping: 17 }}
       disabled={isLoading || props.disabled}
       aria-busy={isLoading || undefined}
+      aria-label={isLoading && !loadingText && typeof children === 'string' ? children : undefined}
       {...props}
     >
       {content}

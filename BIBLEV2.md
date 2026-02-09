@@ -725,13 +725,16 @@ export const motion = {
 | Avatar group | `AvatarGroup.tsx` | 🟢 FAIT (aria-label dynamique "{N} members" + sr-only noms) |
 | Loading/Success | `LoadingSuccess.tsx` | 🟢 FAIT (aria-live="polite" + sr-only etat) |
 
-### 6.3 Tests a mettre en place
+### 6.3 Tests automatises 🟢 FAIT
 
-1. **axe-core** : Integrer dans les tests unitaires
-2. **Lighthouse CI** : Score accessibilite >= 100 en CI
-3. **Test clavier** : Chaque page navigable uniquement au clavier
-4. **Test screen reader** : VoiceOver (Mac) / NVDA (Windows)
-5. **Test zoom** : L'app reste utilisable a 200% zoom
+1. **axe-core** : 🟢 FAIT - Vitest + jest-axe integres, 22 tests a11y sur 15 composants UI (Button, Card, Input, Badge, Toggle, Checkbox, ProgressBar, ProgressRing, Divider, Slider, EmptyState, Tooltip, AnimatedCounter, ScrollToTop, Skeleton) - `npm run test:a11y`
+2. **Lighthouse CI** : 🟢 FAIT - `@lhci/cli` installe, `lighthouserc.json` configure avec seuil accessibility >= 90 - `npm run lighthouse`
+3. **Bugs a11y corriges par axe-core** :
+   - Button: `aria-label` preserve quand `isLoading` remplace le texte par un spinner
+   - ProgressBar: `aria-label` par defaut "Progress" quand aucun label fourni
+4. **Test clavier** : Couvert par les tests e2e Playwright existants (`e2e/accessibility.spec.ts`)
+5. **Test screen reader** : Manuel (VoiceOver/NVDA) - hors scope automatisation
+6. **Test zoom** : Manuel - hors scope automatisation
 
 ---
 

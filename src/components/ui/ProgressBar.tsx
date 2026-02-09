@@ -96,7 +96,7 @@ export function ProgressBar({
         aria-valuenow={isIndeterminate ? undefined : Math.round(percent)}
         aria-valuemin={0}
         aria-valuemax={100}
-        aria-label={label}
+        aria-label={label || 'Progress'}
       >
         {isIndeterminate ? (
           <div

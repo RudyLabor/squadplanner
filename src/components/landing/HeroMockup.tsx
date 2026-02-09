@@ -5,11 +5,11 @@ import { Calendar, Users, Headphones, Check, Mic, MicOff, Home, MessageCircle, U
 // ─── REALISTIC APP SCREENS ─────────────────────────────
 
 const mockMembers = [
-  { name: 'Max', initial: 'M', color: '#6366f1', score: 94 },
-  { name: 'Luna', initial: 'L', color: '#34d399', score: 100 },
-  { name: 'Kira', initial: 'K', color: '#f5a623', score: 87 },
-  { name: 'Jay', initial: 'J', color: '#a78bfa', score: 92 },
-  { name: 'Zoé', initial: 'Z', color: '#f87171', score: 78 },
+  { name: 'Max', initial: 'M', color: 'var(--color-primary)', score: 94 },
+  { name: 'Luna', initial: 'L', color: 'var(--color-success)', score: 100 },
+  { name: 'Kira', initial: 'K', color: 'var(--color-warning)', score: 87 },
+  { name: 'Jay', initial: 'J', color: 'var(--color-purple)', score: 92 },
+  { name: 'Zoé', initial: 'Z', color: 'var(--color-error)', score: 78 },
 ]
 
 // ─── Shared Navbar Component (SVG icons instead of emojis) ───
@@ -28,7 +28,7 @@ function MockNavbar({ active }: { active: string }) {
         const isActive = item.id === active
         return (
           <div key={item.id} className="flex flex-col items-center gap-0.5">
-            <Icon className="w-[14px] h-[14px]" style={{ color: isActive ? '#6366f1' : '#7d7d82' }} />
+            <Icon className="w-[14px] h-[14px]" style={{ color: isActive ? 'var(--color-primary)' : 'var(--color-text-tertiary)' }} />
             <span className={`text-[7px] ${isActive ? 'text-primary font-medium' : 'text-text-tertiary'}`}>{item.label}</span>
           </div>
         )
@@ -128,9 +128,9 @@ function HomeScreen() {
         transition={{ delay: 0.5 }}
       >
         {[
-          { label: 'Fiabilité', value: '94%', color: '#34d399' },
-          { label: 'Sessions', value: '12', color: '#6366f1' },
-          { label: 'Streak', value: '🔥 5', color: '#f5a623' },
+          { label: 'Fiabilité', value: '94%', color: 'var(--color-success)' },
+          { label: 'Sessions', value: '12', color: 'var(--color-primary)' },
+          { label: 'Streak', value: '🔥 5', color: 'var(--color-gold)' },
         ].map((s) => (
           <div key={s.label} className="bg-bg-surface rounded-lg p-2.5 text-center border border-border-subtle">
             <div className="text-[13px] font-bold" style={{ color: s.color }}>{s.value}</div>
@@ -268,9 +268,9 @@ function SquadScreen() {
         {/* RSVP buttons */}
         <div className="flex gap-2">
           {[
-            { label: 'Présent', color: '#34d399', active: true },
-            { label: 'Peut-être', color: '#f5a623', active: false },
-            { label: 'Absent', color: '#f87171', active: false },
+            { label: 'Présent', color: 'var(--color-success)', active: true },
+            { label: 'Peut-être', color: 'var(--color-gold)', active: false },
+            { label: 'Absent', color: 'var(--color-error)', active: false },
           ].map((opt, i) => (
             <motion.div
               key={opt.label}
@@ -323,7 +323,7 @@ function PartyScreen() {
   return (
     <div className="h-full flex flex-col bg-bg-base relative">
       {/* Background glow */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_40%,rgba(52,211,153,0.08),transparent_70%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_40%,var(--color-success-8),transparent_70%)]" />
 
       <div className="relative z-10 px-4 pt-5 pb-2">
         <motion.div
@@ -385,7 +385,7 @@ function PartyScreen() {
                 <motion.div
                   key={j}
                   className="w-[2px] rounded-full"
-                  style={{ backgroundColor: i < 2 ? '#34d399' : '#7d7d82' }}
+                  style={{ backgroundColor: i < 2 ? 'var(--color-success)' : 'var(--color-text-secondary)' }}
                   animate={i < 2 ? { height: [3, 8 + Math.random() * 6, 3] } : { height: 3 }}
                   transition={i < 2 ? {
                     duration: 0.4 + Math.random() * 0.3,
@@ -506,9 +506,9 @@ function ProfileScreen() {
         <div className="flex items-center gap-3">
           <div className="relative w-12 h-12">
             <svg className="w-12 h-12 -rotate-90" viewBox="0 0 48 48">
-              <circle cx="24" cy="24" r="20" fill="none" stroke="rgba(245,166,35,0.15)" strokeWidth="3" />
+              <circle cx="24" cy="24" r="20" fill="none" stroke="var(--color-gold-15)" strokeWidth="3" />
               <motion.circle
-                cx="24" cy="24" r="20" fill="none" stroke="#f5a623" strokeWidth="3"
+                cx="24" cy="24" r="20" fill="none" stroke="var(--color-gold)" strokeWidth="3"
                 strokeLinecap="round" strokeDasharray="125.6"
                 initial={{ strokeDashoffset: 125.6 }}
                 animate={{ strokeDashoffset: 125.6 * (1 - 0.94) }}
@@ -594,7 +594,7 @@ export function HeroMockup() {
       <motion.div
         className="absolute -inset-8 rounded-[3rem]"
         style={{
-          background: 'radial-gradient(ellipse at center, rgba(99,102,241,0.12) 0%, transparent 70%)',
+          background: 'radial-gradient(ellipse at center, var(--color-primary-12) 0%, transparent 70%)',
         }}
         animate={{ opacity: [0.5, 0.8, 0.5] }}
         transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
@@ -614,9 +614,9 @@ export function HeroMockup() {
             <div className="absolute top-0 left-0 right-0 z-10 flex items-center justify-between px-5 pt-1.5 pb-1">
               <span className="text-[9px] text-text-secondary font-medium">21:00</span>
               <div className="flex items-center gap-1">
-                <div className="flex gap-0.5">
+                <div className="flex items-end gap-[1px]">
                   {[1, 2, 3, 4].map(i => (
-                    <div key={i} className={`w-[2px] rounded-sm ${i <= 3 ? 'bg-white' : 'bg-text-tertiary'}`} style={{ height: 4 + i * 1.5 }} />
+                    <div key={i} className={`w-[2px] rounded-sm ${i <= 3 ? 'bg-white' : 'bg-text-tertiary'}`} style={{ height: 2 + i * 2 }} />
                   ))}
                 </div>
                 <div className="w-5 h-2.5 rounded-[2px] border border-text-tertiary ml-1">
@@ -659,7 +659,7 @@ export function HeroMockup() {
               className="h-1 rounded-full"
               animate={{
                 width: i === currentScreen ? 24 : 6,
-                backgroundColor: i === currentScreen ? '#6366f1' : 'rgba(255,255,255,0.15)',
+                backgroundColor: i === currentScreen ? 'var(--color-primary)' : 'var(--color-overlay-medium)',
               }}
               transition={{ duration: 0.3 }}
             />

@@ -121,7 +121,7 @@ export const AvatarWithStatus = memo(function AvatarWithStatus({
         />
       ) : (
         <div
-          className={`${avatarSizeClasses[size]} rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-medium`}
+          className={`${avatarSizeClasses[size]} rounded-full bg-gradient-to-br from-primary to-purple flex items-center justify-center text-white font-medium`}
         >
           {alt.charAt(0).toUpperCase()}
         </div>

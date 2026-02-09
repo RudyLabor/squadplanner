@@ -3,8 +3,10 @@
  *
  * Reusable animation variants for Framer Motion.
  * Provides consistent stagger animations across all lists.
+ * Values are sourced from motionTokens where they match exactly.
  */
 import type { Variants, Transition } from 'framer-motion'
+import { motion as motionTokens } from './motionTokens'
 
 /**
  * Container variants for staggered children animations
@@ -136,8 +138,8 @@ export const slideUpFadeIn: Variants = {
     opacity: 1,
     y: 0,
     transition: {
-      duration: 0.4,
-      ease: [0.16, 1, 0.3, 1],
+      duration: motionTokens.duration.slow,
+      ease: [...motionTokens.easing.easeOut],
     },
   },
 }
@@ -151,15 +153,13 @@ export const popIn: Variants = {
     opacity: 1,
     scale: 1,
     transition: {
-      type: 'spring',
-      stiffness: 400,
-      damping: 25,
+      ...motionTokens.easing.spring,
     },
   },
   exit: {
     opacity: 0,
     scale: 0.9,
-    transition: { duration: 0.15 },
+    transition: { duration: motionTokens.duration.fast },
   },
 }
 
@@ -177,7 +177,7 @@ export const springTransition: Transition = {
  */
 export const fastEaseOut: Transition = {
   duration: 0.2,
-  ease: [0.16, 1, 0.3, 1],
+  ease: [...motionTokens.easing.easeOut],
 }
 
 /**
@@ -243,7 +243,7 @@ export const scrollReveal: Variants = {
     opacity: 1,
     y: 0,
     filter: 'blur(0px)',
-    transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] },
+    transition: { duration: motionTokens.duration.slower, ease: [...motionTokens.easing.easeOut] },
   },
 }
 
@@ -255,7 +255,19 @@ export const scrollRevealLight: Variants = {
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] },
+    transition: { duration: 0.5, ease: [...motionTokens.easing.easeOut] },
+  },
+}
+
+/**
+ * Error shake animation for invalid inputs
+ * Usage: <motion.div variants={errorShake} initial="initial" animate="animate">
+ */
+export const errorShake: Variants = {
+  initial: { x: 0 },
+  animate: {
+    x: [0, -8, 8, -6, 6, -3, 3, 0],
+    transition: { duration: motionTokens.duration.slow },
   },
 }
 

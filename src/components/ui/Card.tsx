@@ -37,7 +37,6 @@ export function Card({
     ? 'hover:bg-surface-card-hover hover:border-border-hover cursor-pointer'
     : ''
 
-  const selectedClasses = selected ? 'border-primary ring-1 ring-primary/20' : ''
   const disabledClasses = disabled ? 'opacity-50 cursor-not-allowed pointer-events-none' : ''
   const isClickable = !!onClick && !disabled
 
@@ -54,10 +53,23 @@ export function Card({
         relative rounded-2xl transition-interactive
         ${variants[variant]}
         ${hoverClasses}
-        ${selectedClasses}
         ${disabledClasses}
         ${className}
       `}
+      style={{
+        borderColor: selected ? 'var(--color-primary)' : undefined,
+        boxShadow: selected ? '0 0 0 1px color-mix(in srgb, var(--color-primary) 20%, transparent)' : undefined,
+        backgroundColor: selected ? 'color-mix(in srgb, var(--color-primary) 5%, var(--color-surface-card))' : undefined,
+      }}
+      animate={{
+        borderColor: selected ? 'var(--color-primary)' : 'var(--color-border-subtle)',
+        boxShadow: selected
+          ? '0 0 0 1px color-mix(in srgb, var(--color-primary) 20%, transparent)'
+          : '0 0 0 0px transparent',
+        backgroundColor: selected
+          ? 'color-mix(in srgb, var(--color-primary) 5%, var(--color-surface-card))'
+          : 'var(--color-surface-card)',
+      }}
       onClick={isClickable ? onClick : undefined}
       onKeyDown={isClickable ? handleKeyDown : undefined}
       role={isClickable ? 'button' : undefined}
@@ -68,7 +80,7 @@ export function Card({
       aria-selected={selected || undefined}
       whileHover={hoverable && !disabled ? { y: -1 } : undefined}
       whileTap={hoverable && !disabled ? { scale: 0.995 } : undefined}
-      transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+      transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
     >
       {loading && (
         <div className="absolute inset-0 z-10 rounded-2xl bg-surface-card/80 flex items-center justify-center">

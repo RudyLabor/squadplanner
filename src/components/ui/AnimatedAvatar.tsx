@@ -55,13 +55,13 @@ export const AnimatedAvatar = memo(function AnimatedAvatar({
   const isActive = status === 'online' || status === 'in-party' || status === 'in-session' || status === 'in-call'
   const circumference = Math.PI * (config.ring - config.strokeWidth)
 
-  const Wrapper = layoutId ? motion.div : 'div' as unknown as typeof motion.div
-
   return (
-    <Wrapper
+    <motion.div
       {...(layoutId ? { layoutId, layout: 'position' as const } : {})}
-      className={`relative inline-flex items-center justify-center shrink-0 ${className}`}
+      className={`relative inline-flex items-center justify-center shrink-0 group ${className}`}
       style={{ width: config.ring, height: config.ring }}
+      whileHover={{ scale: 1.05 }}
+      transition={{ type: 'spring', stiffness: 400, damping: 17 }}
     >
       {/* Animated ring */}
       {showRing && status !== 'offline' && (
@@ -109,7 +109,7 @@ export const AnimatedAvatar = memo(function AnimatedAvatar({
 
       {/* Avatar image or initials */}
       <div
-        className="rounded-full overflow-hidden bg-bg-surface flex items-center justify-center"
+        className="rounded-full overflow-hidden bg-bg-surface flex items-center justify-center ring-0 group-hover:shadow-glow-primary-sm transition-shadow duration-200"
         style={{ width: config.container, height: config.container }}
       >
         {src ? (
@@ -133,6 +133,6 @@ export const AnimatedAvatar = memo(function AnimatedAvatar({
           style={{ backgroundColor: color }}
         />
       )}
-    </Wrapper>
+    </motion.div>
   )
 })

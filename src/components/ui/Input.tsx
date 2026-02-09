@@ -1,4 +1,5 @@
-import { forwardRef, useState, useId, type InputHTMLAttributes, type TextareaHTMLAttributes, type ReactNode } from 'react'
+import { forwardRef, useState, useRef, useEffect, useId, type InputHTMLAttributes, type TextareaHTMLAttributes, type ReactNode } from 'react'
+import { motion, useAnimationControls } from 'framer-motion'
 import { Eye, EyeOff, X } from 'lucide-react'
 
 type BaseInputProps = {
@@ -50,6 +51,18 @@ export const Input = forwardRef<HTMLInputElement | HTMLTextAreaElement, InputPro
     const errorId = `${inputId}-error`
     const hintId = `${inputId}-hint`
     const [showPassword, setShowPassword] = useState(false)
+    const shakeControls = useAnimationControls()
+    const prevErrorRef = useRef<string | undefined>(undefined)
+
+    useEffect(() => {
+      if (error && !prevErrorRef.current) {
+        shakeControls.start({
+          x: [0, -8, 8, -6, 6, -3, 3, 0],
+          transition: { duration: 0.4 },
+        })
+      }
+      prevErrorRef.current = error
+    }, [error, shakeControls])
 
     const isMultiline = 'multiline' in props && props.multiline === true
     const type = !isMultiline ? (props as InputFieldProps).type : undefined
@@ -91,7 +104,7 @@ export const Input = forwardRef<HTMLInputElement | HTMLTextAreaElement, InputPro
             {label}
           </label>
         )}
-        <div className="relative">
+        <motion.div className="relative" animate={shakeControls}>
           {hasLeftElement && (
             <div className={`absolute left-4 ${isMultiline ? 'top-3' : 'top-1/2 -translate-y-1/2'} flex items-center gap-1.5 text-text-quaternary`} aria-hidden="true">
               {icon}
@@ -152,7 +165,7 @@ export const Input = forwardRef<HTMLInputElement | HTMLTextAreaElement, InputPro
               )}
             </div>
           )}
-        </div>
+        </motion.div>
         <div className="flex items-center justify-between gap-2">
           <div>
             {error && (

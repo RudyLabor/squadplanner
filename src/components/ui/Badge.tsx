@@ -1,5 +1,5 @@
-import { type ReactNode } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { useEffect, useRef, type ReactNode } from 'react'
+import { motion, AnimatePresence, useAnimate } from 'framer-motion'
 import { X } from 'lucide-react'
 
 export type BadgeVariant = 'default' | 'success' | 'warning' | 'error' | 'info' | 'primary' | 'danger'
@@ -58,9 +58,20 @@ export function Badge({
   const ariaLabel =
     count !== undefined ? `${count} ${count === 1 ? 'notification' : 'notifications'}` : undefined
 
+  const [scope, animate] = useAnimate()
+  const prevCount = useRef(count)
+
+  useEffect(() => {
+    if (count !== undefined && prevCount.current !== undefined && count !== prevCount.current) {
+      animate(scope.current, { scale: [1, 1.2, 1] }, { type: 'spring', stiffness: 400, damping: 15 })
+    }
+    prevCount.current = count
+  }, [count, animate, scope])
+
   return (
     <AnimatePresence>
       <motion.span
+        ref={scope}
         initial={{ scale: 0.8, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         exit={{ scale: 0.8, opacity: 0 }}

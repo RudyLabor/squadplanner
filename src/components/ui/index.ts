@@ -61,3 +61,6 @@ export { AvatarGroup } from './AvatarGroup'
 export { Slider } from './Slider'
 export { ProgressBar } from './ProgressBar'
 export { Divider } from './Divider'
+// Chantier 4 - Transition animations
+export { ContentTransition } from './ContentTransition'
+export { AnimatedList, AnimatedListItem } from './AnimatedList'

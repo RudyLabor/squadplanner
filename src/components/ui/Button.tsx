@@ -1,4 +1,4 @@
-import { motion, type HTMLMotionProps } from 'framer-motion'
+import { motion, AnimatePresence, type HTMLMotionProps } from 'framer-motion'
 import { forwardRef, type ReactNode, type ElementType, type ComponentPropsWithRef } from 'react'
 
 type ButtonBaseProps = {
@@ -11,6 +11,7 @@ type ButtonBaseProps = {
   iconOnly?: boolean
   leftIcon?: ReactNode
   rightIcon?: ReactNode
+  showSuccess?: boolean
 }
 
 // Polymorphic: when as="a", renders <motion.a>; when as={Link}, renders a router Link wrapped in motion
@@ -56,6 +57,7 @@ function ButtonInner<C extends ElementType = 'button'>(
     iconOnly,
     leftIcon,
     rightIcon,
+    showSuccess,
     className = '',
     ...props
   }: ButtonProps<C>,
@@ -65,17 +67,33 @@ function ButtonInner<C extends ElementType = 'button'>(
   const wc = fullWidth ? 'w-full' : ''
   const cls = `${baseClasses} ${variantClasses[variant]} ${sc} ${wc} ${className}`
 
-  const content = isLoading ? (
-    <>
-      <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" aria-hidden="true" />
-      {loadingText && <span>{loadingText}</span>}
-    </>
-  ) : (
-    <>
-      {leftIcon && <span className="shrink-0" aria-hidden="true">{leftIcon}</span>}
-      {children}
-      {rightIcon && <span className="shrink-0" aria-hidden="true">{rightIcon}</span>}
-    </>
+  const content = (
+    <AnimatePresence mode="wait">
+      {showSuccess ? (
+        <motion.span
+          key="success"
+          initial={{ scale: 0, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          exit={{ scale: 0, opacity: 0 }}
+          transition={{ type: 'spring', stiffness: 400, damping: 15 }}
+          className="text-success text-base"
+          aria-label="Success"
+        >
+          &#10003;
+        </motion.span>
+      ) : isLoading ? (
+        <motion.span key="loading" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="inline-flex items-center gap-2">
+          <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" aria-hidden="true" />
+          {loadingText && <span>{loadingText}</span>}
+        </motion.span>
+      ) : (
+        <motion.span key="content" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="inline-flex items-center gap-2">
+          {leftIcon && <span className="shrink-0" aria-hidden="true">{leftIcon}</span>}
+          {children}
+          {rightIcon && <span className="shrink-0" aria-hidden="true">{rightIcon}</span>}
+        </motion.span>
+      )}
+    </AnimatePresence>
   )
 
   // For non-button elements (a, Link), render motion.div wrapping the element

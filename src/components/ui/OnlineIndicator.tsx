@@ -9,6 +9,7 @@
  * <OnlineIndicator isOnline={false} size="lg" />
  */
 import { memo } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
 
 interface OnlineIndicatorProps {
   /** Whether the user is currently online */
@@ -43,22 +44,38 @@ export const OnlineIndicator = memo(function OnlineIndicator({
   className = '',
 }: OnlineIndicatorProps) {
   return (
-    <span
-      className={`
-        ${sizeClasses[size]}
-        ${positionClasses[position]}
-        rounded-full
-        border-2 border-bg-base
-        ${isOnline
-          ? 'bg-emerald-500 shadow-glow-success'
-          : 'bg-zinc-600'
+    <AnimatePresence mode="wait">
+      <motion.span
+        key={isOnline ? 'online' : 'offline'}
+        className={`
+          ${sizeClasses[size]}
+          ${positionClasses[position]}
+          rounded-full
+          border-2 border-bg-base
+          ${isOnline
+            ? 'bg-success shadow-glow-success'
+            : 'bg-text-tertiary'
+          }
+          ${className}
+        `.trim()}
+        role="status"
+        aria-label={isOnline ? 'En ligne' : 'Hors ligne'}
+        initial={{ scale: 0.6, opacity: 0 }}
+        animate={{
+          scale: isOnline && pulse ? [1, 1.3, 1] : 1,
+          opacity: isOnline && pulse ? [1, 0.7, 1] : 1,
+        }}
+        exit={{ scale: 0.6, opacity: 0 }}
+        transition={
+          isOnline && pulse
+            ? {
+                scale: { repeat: Infinity, duration: 1.8, ease: 'easeInOut' },
+                opacity: { repeat: Infinity, duration: 1.8, ease: 'easeInOut' },
+              }
+            : { type: 'spring', stiffness: 400, damping: 20 }
         }
-        ${isOnline && pulse ? 'animate-pulse' : ''}
-        ${className}
-      `.trim()}
-      role="status"
-      aria-label={isOnline ? 'En ligne' : 'Hors ligne'}
-    />
+      />
+    </AnimatePresence>
   )
 })
 

@@ -553,65 +553,56 @@ Standardiser :
 
 ---
 
-## 5. CHANTIER 4 - ANIMATIONS & MOTION DESIGN
+## 5. CHANTIER 4 - ANIMATIONS & MOTION DESIGN 🟢 FAIT
 
 ### 5.1 Ce qui existe et marche bien
 
 - `src/utils/animations.ts` : 20+ variants Framer Motion reutilisables - BIEN
 - Button : `whileHover={{ y: -1 }}`, `whileTap={{ scale: 0.97 }}` - BIEN
 - Card : `whileHover={{ y: -1 }}`, `whileTap={{ scale: 0.995 }}` - BIEN
-- AnimatedAvatar : stroke dash animation - BIEN
+- AnimatedAvatar : stroke dash animation + hover scale/glow - BIEN
 - Stagger containers (fast/normal/slow) - BIEN
 
-### 5.2 Ce qui manque ou est casse
+### 5.2 Ce qui manquait → corrigé 🟢 FAIT
 
-#### Page transitions trop rapides
-`PageTransition.tsx` ligne 29 : `duration: 0.15` (150ms)
-- PS5 utilise 200-300ms pour les transitions de page
-- 150ms c'est "snappy" mais donne une impression de teleportation, pas de transition fluide
-- **Action** : Passer a 250ms avec ease-out
+#### Page transitions 🟢 FAIT (150ms → 400ms avec motion tokens)
+- `PageTransition.tsx` utilise maintenant `transitions.pageTransition` du systeme de tokens
+- Duration augmentee pour des transitions fluides style PS5
 
-#### EmptyState sans animation
-`ui/EmptyState.tsx` : Aucun `motion.div`, aucune animation
-- **Action** : Wrapper dans `motion.div` avec `fadeIn` + scale sur l'icone
+#### EmptyState 🟢 DEJA FAIT (spring + fade-in existaient)
+- Verifie : `motion.div` avec fade + slideUp + spring scale sur l'icone
 
-#### ErrorState couleurs hardcodees
-`ErrorState.tsx` lignes 27-62 : 5 configurations avec des couleurs hardcodees :
-- `color: '#f5a623'` au lieu de `var(--color-warning)`
-- `color: '#60a5fa'` au lieu de `var(--color-info)`
-- `bgColor: 'rgba(245, 166, 35, 0.1)'` au lieu de token
-- **Action** : Migrer vers les tokens CSS
+#### ErrorState 🟢 DEJA FAIT (tokens CSS corrects)
+- Verifie : utilise `var(--color-warning)`, `var(--color-info)`, etc.
 
-#### Animations absentes sur des elements cles
+#### Animations sur elements cles 🟢 FAIT
 
-| Element | Animation attendue | Etat actuel |
+| Element | Animation attendue | Etat |
 |---|---|---|
-| Toast notifications | Slide + fade depuis le haut | Delegue a Sonner (pas de controle) |
-| Badge count change | Scale bounce quand le nombre change | Aucune animation |
-| Online/Offline indicator | Pulse quand online, fade quand offline | Statique |
-| Tab switch | Underline qui glisse | Pas d'indicator anime |
-| List item removal | Fade + height collapse | Disparition instantanee |
-| Skeleton to content | Crossfade | Remplacement brut |
-| Message sent | Slide up + fade in | Probablement la mais a verifier |
-| Pull to refresh | Spring physics | Existe (PullToRefresh.tsx) mais a verifier |
+| Toast notifications | Slide + fade depuis le haut | Delegue a Sonner - OK |
+| Badge count change | Scale bounce quand le nombre change | 🟢 FAIT (spring stiffness:400, damping:15) |
+| Online/Offline indicator | Pulse quand online, fade quand offline | 🟢 FAIT (Framer Motion spring pulse + AnimatePresence) |
+| Tab switch | Underline qui glisse | 🟢 FAIT (layoutId + spring stiffness:400, damping:30) |
+| List item removal | Fade + height collapse | 🟢 FAIT (AnimatedList + AnimatedListItem) |
+| Skeleton to content | Crossfade | 🟢 FAIT (ContentTransition avec AnimatePresence mode="wait") |
+| Message sent | Slide up + fade in | Existait deja - OK |
+| Pull to refresh | Spring physics | Existe (PullToRefresh.tsx) - OK |
 | Navigation sidebar | Items stagger | Existe (AppLayout.tsx) - OK |
 
-#### Micro-interactions manquantes (ce qui fait "premium")
+#### Micro-interactions 🟢 FAIT
 
-1. **Hover sur avatar** : Leager scale up + ring glow - pas fait
-2. **Toggle switch** : Spring physics sur le thumb - pas de toggle component
-3. **Checkbox check** : Path drawing animation - pas de checkbox component
-4. **Input focus** : Border animate de gauche a droite - pas fait
-5. **Card selection** : Border + background transition - pas fait
-6. **Button success feedback** : Check icon qui apparait apres action - pas fait
-7. **Loading to success** : Spinner qui se transforme en checkmark - pas fait
-8. **Error shake** : Input qui tremble quand erreur - pas fait
-9. **Confetti** : Existe (LazyConfetti.tsx) mais utilise que pour streak
-10. **Scroll-to-top** : Bouton qui apparait au scroll - pas fait
+1. **Hover sur avatar** : 🟢 FAIT - scale 1.05 + shadow-glow-primary-sm (spring stiffness:400, damping:17)
+2. **Toggle switch** : 🟢 DEJA FAIT - spring stiffness:500, damping:30 + layout animation
+3. **Checkbox check** : 🟢 DEJA FAIT - pathLength animation + spring physics
+4. **Input focus** : 🟢 DEJA FAIT - focus:border-primary + shadow-glow-primary-sm via CSS tokens
+5. **Card selection** : 🟢 FAIT - Framer Motion animate border/shadow/bg transition (0.2s)
+6. **Button success feedback** : 🟢 FAIT - showSuccess prop avec AnimatePresence checkmark
+7. **Loading to success** : 🟢 FAIT - LoadingSuccess.tsx (spinner → checkmark pathLength animation)
+8. **Error shake** : 🟢 FAIT - errorShake variant + useAnimationControls dans Input
+9. **Confetti** : Existe (LazyConfetti.tsx) - OK
+10. **Scroll-to-top** : 🟢 FAIT - ScrollToTop.tsx (AnimatePresence slide-up + fade)
 
-### 5.3 Systeme de motion tokens
-
-Standardiser les durees et easings :
+### 5.3 Systeme de motion tokens 🟢 FAIT (`src/utils/motionTokens.ts`)
 
 ```typescript
 export const motion = {
@@ -625,11 +616,19 @@ export const motion = {
   easing: {
     easeOut: [0.16, 1, 0.3, 1],        // Entrees
     easeInOut: [0.65, 0, 0.35, 1],      // Transitions
-    spring: { stiffness: 400, damping: 25 }, // Interactions
-    bounce: { stiffness: 300, damping: 10 }, // Celebrations
+    spring: { type: 'spring', stiffness: 400, damping: 25 }, // Interactions
+    springSnappy: { type: 'spring', stiffness: 500, damping: 30 }, // Quick feedback
+    springBouncy: { type: 'spring', stiffness: 300, damping: 10 }, // Celebrations
+    springSmooth: { type: 'spring', stiffness: 200, damping: 20 }, // Subtle
   },
 }
+// + createTransition() helper + transitions presets (fast, normal, slow, pageTransition)
+// + animations.ts refactored to use motionTokens (backwards compatible)
 ```
+
+### 5.4 Theme transition 🟢 FAIT
+- CSS `transition: background-color 0.3s ease, color 0.3s ease` sur html/body/#root
+- Respecte `prefers-reduced-motion` (neutralise via transition-duration: 0.01ms)
 
 ---
 

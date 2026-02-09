@@ -1,5 +1,6 @@
-import { motion } from 'framer-motion'
+import { motion as framerMotion } from 'framer-motion'
 import type { ReactNode } from 'react'
+import { transitions } from '../utils/motionTokens'
 
 interface PageTransitionProps {
   children: ReactNode
@@ -26,8 +27,8 @@ const variants = {
 }
 
 const transition = {
-  duration: 0.15,
-  ease: [0.25, 0.1, 0.25, 1] as [number, number, number, number], // Custom cubic bezier for snappy feel
+  duration: transitions.pageTransition.duration,
+  ease: transitions.pageTransition.ease as [number, number, number, number],
 }
 
 export function PageTransition({
@@ -38,7 +39,7 @@ export function PageTransition({
   const selectedVariant = variants[variant]
 
   return (
-    <motion.div
+    <framerMotion.div
       initial={selectedVariant.initial}
       animate={selectedVariant.animate}
       exit={selectedVariant.exit}
@@ -46,7 +47,7 @@ export function PageTransition({
       className={className}
     >
       {children}
-    </motion.div>
+    </framerMotion.div>
   )
 }
 

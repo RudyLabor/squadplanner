@@ -313,6 +313,9 @@ export function CommandPalette() {
     setSelectedIndex(0)
   }, [query])
 
+  // Recent IDs must be computed before groupedCommands uses them
+  const recentIds = getRecentIds()
+
   // Group commands by category for display (with "recent" pseudo-category)
   const groupedCommands = filteredCommands.reduce((acc, cmd) => {
     const cat = !query && recentIds.includes(cmd.id) ? 'recent' : cmd.category
@@ -328,9 +331,6 @@ export function CommandPalette() {
     sessions: 'Sessions',
     actions: 'Actions'
   }
-
-  // Override grouped commands to insert "recent" category when no query
-  const recentIds = getRecentIds()
 
   return (
     <>

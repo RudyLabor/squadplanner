@@ -117,19 +117,19 @@ export function JoinSquad() {
   // Loading state
   if (!isInitialized || status === 'loading') {
     return (
-      <div className="min-h-screen bg-bg-base flex items-center justify-center p-4">
+      <main className="min-h-screen bg-bg-base flex items-center justify-center p-4" aria-label="Rejoindre une squad">
         <div className="text-center">
           <Loader2 className="w-8 h-8 text-primary animate-spin mx-auto mb-4" />
           <p className="text-text-secondary">Chargement de l'invitation...</p>
         </div>
-      </div>
+      </main>
     )
   }
 
   // Not found
   if (status === 'not-found') {
     return (
-      <div className="min-h-screen bg-bg-base flex items-center justify-center p-4">
+      <main className="min-h-screen bg-bg-base flex items-center justify-center p-4" aria-label="Rejoindre une squad">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -148,14 +148,14 @@ export function JoinSquad() {
             <Button>Retour à l'accueil</Button>
           </Link>
         </motion.div>
-      </div>
+      </main>
     )
   }
 
   // Success state
   if (status === 'success') {
     return (
-      <div className="min-h-screen bg-bg-base flex items-center justify-center p-4">
+      <main className="min-h-screen bg-bg-base flex items-center justify-center p-4" aria-label="Rejoindre une squad">
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -176,13 +176,13 @@ export function JoinSquad() {
             Tu fais maintenant partie de {squadPreview?.name}
           </p>
         </motion.div>
-      </div>
+      </main>
     )
   }
 
   // Preview / Join state
   return (
-    <div className="min-h-screen bg-bg-base flex items-center justify-center p-4">
+    <main className="min-h-screen bg-bg-base flex items-center justify-center p-4" aria-label="Rejoindre une squad">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -254,7 +254,7 @@ export function JoinSquad() {
           </Link>
         </div>
       </motion.div>
-    </div>
+    </main>
   )
 }
 

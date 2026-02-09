@@ -8,7 +8,13 @@ interface LoadingSuccessProps {
 
 export function LoadingSuccess({ success, size = 24, className = '' }: LoadingSuccessProps) {
   return (
-    <div className={`inline-flex items-center justify-center ${className}`} style={{ width: size, height: size }}>
+    <div
+      className={`inline-flex items-center justify-center ${className}`}
+      style={{ width: size, height: size }}
+      aria-live="polite"
+      aria-atomic="true"
+    >
+      <span className="sr-only">{success ? 'Completed' : 'Loading'}</span>
       <AnimatePresence mode="wait">
         {success ? (
           <motion.svg

@@ -5,6 +5,7 @@
  * and in modal/dialog contexts.
  */
 import { useEffect, useRef, useCallback } from 'react'
+import type { RefObject } from 'react'
 import { useLocation } from 'react-router-dom'
 
 /**
@@ -14,6 +15,7 @@ import { useLocation } from 'react-router-dom'
 export function useFocusOnNavigate() {
   const location = useLocation()
   const isFirstRender = useRef(true)
+  const announce = useAnnounce()
 
   useEffect(() => {
     // Skip focus on initial render
@@ -36,14 +38,28 @@ export function useFocusOnNavigate() {
         mainContent.removeAttribute('tabindex')
       }
     }
-  }, [location.pathname])
+
+    // Announce the page title to screen readers
+    const pageTitle = document.title
+    if (pageTitle) {
+      announce(pageTitle.replace(' — Squad Planner', ''))
+    }
+  }, [location.pathname, announce])
 }
 
 /**
  * Trap focus within a container (for modals, dialogs)
+ * Keeps focus inside the container when active.
+ *
+ * @param isActive - Whether the focus trap is active
+ * @param onEscape - Optional callback when Escape is pressed
+ * @returns RefObject to attach to the container element
  */
-export function useFocusTrap(isActive: boolean = true) {
-  const containerRef = useRef<HTMLDivElement>(null)
+export function useFocusTrap<T extends HTMLElement = HTMLDivElement>(
+  isActive: boolean = true,
+  onEscape?: () => void
+): RefObject<T | null> {
+  const containerRef = useRef<T>(null)
 
   useEffect(() => {
     if (!isActive || !containerRef.current) return
@@ -52,34 +68,43 @@ export function useFocusTrap(isActive: boolean = true) {
     const focusableElements = container.querySelectorAll<HTMLElement>(
       'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
     )
-
     const firstElement = focusableElements[0]
-    const lastElement = focusableElements[focusableElements.length - 1]
 
-    // Focus the first element when trap activates
+    // Focus the first focusable element when trap activates
     firstElement?.focus()
 
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key !== 'Tab') return
+      if (e.key === 'Escape' && onEscape) {
+        e.preventDefault()
+        onEscape()
+        return
+      }
 
-      if (e.shiftKey) {
-        // Shift + Tab: if on first element, wrap to last
-        if (document.activeElement === firstElement) {
-          e.preventDefault()
-          lastElement?.focus()
-        }
-      } else {
-        // Tab: if on last element, wrap to first
-        if (document.activeElement === lastElement) {
-          e.preventDefault()
-          firstElement?.focus()
+      if (e.key === 'Tab') {
+        // Re-query elements in case DOM changed
+        const currentFocusableElements = container.querySelectorAll<HTMLElement>(
+          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+        )
+        const currentFirst = currentFocusableElements[0]
+        const currentLast = currentFocusableElements[currentFocusableElements.length - 1]
+
+        if (e.shiftKey) {
+          if (document.activeElement === currentFirst) {
+            e.preventDefault()
+            currentLast?.focus()
+          }
+        } else {
+          if (document.activeElement === currentLast) {
+            e.preventDefault()
+            currentFirst?.focus()
+          }
         }
       }
     }
 
     document.addEventListener('keydown', handleKeyDown)
     return () => document.removeEventListener('keydown', handleKeyDown)
-  }, [isActive])
+  }, [isActive, onEscape])
 
   return containerRef
 }
@@ -253,4 +278,34 @@ export function useRovingTabindex<T extends HTMLElement>(
       })
     }
   }, [items, orientation, wrap])
+}
+
+/**
+ * Provides helper functions for common screen reader announcements.
+ * Uses useAnnounce() internally with appropriate priorities.
+ */
+export function useA11yAnnouncements() {
+  const announce = useAnnounce()
+
+  const announceAction = useCallback((action: string) => {
+    announce(action, 'polite')
+  }, [announce])
+
+  const announceError = useCallback((error: string) => {
+    announce(error, 'assertive')
+  }, [announce])
+
+  const announceLoading = useCallback((isLoading: boolean, context?: string) => {
+    if (isLoading) {
+      announce(context ? `Loading ${context}...` : 'Loading...', 'polite')
+    } else {
+      announce(context ? `${context} loaded` : 'Loaded', 'polite')
+    }
+  }, [announce])
+
+  const announceNavigation = useCallback((pageName: string) => {
+    announce(`Navigated to ${pageName}`, 'polite')
+  }, [announce])
+
+  return { announceAction, announceError, announceLoading, announceNavigation }
 }

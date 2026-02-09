@@ -473,6 +473,7 @@ export default function Home() {
           exit={{ opacity: 0, y: -20 }}
           transition={{ duration: 0.4, ease: "easeOut" }}
           className="fixed top-4 left-1/2 -translate-x-1/2 z-50 px-6 py-3 rounded-xl bg-success/15 border border-success/20 backdrop-blur-sm"
+          role="status"
         >
           <p className="text-md font-medium text-success">{successMessage}</p>
         </motion.div>
@@ -481,7 +482,7 @@ export default function Home() {
       <div className="px-4 md:px-6 lg:px-8 py-6 max-w-2xl lg:max-w-4xl xl:max-w-6xl mx-auto">
         <div>
           {/* Header avec célébration - Wording gamer */}
-          <div className="flex items-center justify-between mb-6">
+          <header className="flex items-center justify-between mb-6">
             <div>
               <h1 className="text-2xl font-bold text-text-primary">
                 Salut {profile?.username || 'Gamer'} !
@@ -498,7 +499,7 @@ export default function Home() {
               )}
             </div>
             <ReliabilityBadge score={reliabilityScore} />
-          </div>
+          </header>
 
           {/* Onboarding Checklist pour les nouveaux utilisateurs */}
           {(!squadsLoading && !sessionsLoading) && (squads.length === 0 || upcomingSessions.length === 0) && (
@@ -576,16 +577,16 @@ export default function Home() {
 
           {/* Prochaine session */}
           {sessionsLoading ? (
-            <div className="mb-6">
+            <section aria-label="Prochaine session" className="mb-6">
               <div className="flex items-center justify-between mb-3">
                 <h2 className="text-xl font-semibold text-text-primary">
                   Prochaine session
                 </h2>
               </div>
               <SessionCardSkeleton />
-            </div>
+            </section>
           ) : nextSession && (
-            <div className="mb-6">
+            <section aria-label="Prochaine session" className="mb-6">
               <div className="flex items-center justify-between mb-3">
                 <h2 className="text-xl font-semibold text-text-primary">
                   Prochaine session
@@ -597,7 +598,7 @@ export default function Home() {
                 )}
               </div>
               <NextSessionCard session={nextSession} onRsvp={handleRsvp} isRsvpLoading={rsvpMutation.isPending} />
-            </div>
+            </section>
           )}
 
           {/* Friends Playing Section */}
@@ -612,7 +613,7 @@ export default function Home() {
           )}
 
           {/* Stats - Wording gamer */}
-          <div className="mb-6">
+          <section aria-label="Tableau de bord" className="mb-6">
             <h2 className="text-xl font-semibold text-text-primary mb-3">
               Ton tableau de bord
             </h2>
@@ -637,11 +638,11 @@ export default function Home() {
                 />
               )}
             </div>
-          </div>
+          </section>
 
           {/* Mes squads */}
           {squadsLoading ? (
-            <div>
+            <section aria-label="Mes squads">
               <div className="flex items-center justify-between mb-3">
                 <h2 className="text-xl font-semibold text-text-primary">
                   Mes squads
@@ -652,9 +653,9 @@ export default function Home() {
                 <SquadCardSkeleton />
                 <SquadCardSkeleton />
               </div>
-            </div>
+            </section>
           ) : squads.length > 0 ? (
-            <div>
+            <section aria-label="Mes squads">
               <div className="flex items-center justify-between mb-3">
                 <h2 className="text-xl font-semibold text-text-primary">
                   Mes squads
@@ -670,9 +671,9 @@ export default function Home() {
                   </motion.button>
                 </Link>
               </div>
-              <div className="space-y-2 lg:grid lg:grid-cols-2 xl:grid-cols-3 lg:gap-4 lg:space-y-0">
+              <ul className="space-y-2 lg:grid lg:grid-cols-2 xl:grid-cols-3 lg:gap-4 lg:space-y-0 list-none">
                 {squads.slice(0, 6).map((squad, index) => (
-                  <Link key={squad.id} to={`/squad/${squad.id}`}>
+                  <li key={squad.id}><Link to={`/squad/${squad.id}`}>
                     <motion.div
                       whileHover={{ y: -2, scale: 1.01 }}
                       whileTap={{ scale: 0.99 }}
@@ -696,10 +697,10 @@ export default function Home() {
                         </div>
                       </Card>
                     </motion.div>
-                  </Link>
+                  </Link></li>
                 ))}
-              </div>
-            </div>
+              </ul>
+            </section>
           ) : (
             /* État vide - Pas de squad - Wording motivant */
             <motion.div

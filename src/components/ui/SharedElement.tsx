@@ -18,6 +18,7 @@ export function SharedElement({ id, children, className, ...props }: SharedEleme
       layout="position"
       transition={{ type: 'spring', stiffness: 350, damping: 30, duration: 0.3 }}
       className={className}
+      aria-hidden="true"
       {...props}
     >
       {children}

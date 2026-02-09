@@ -82,6 +82,8 @@ export function ErrorState({
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4 }}
+      role="alert"
+      aria-live="assertive"
     >
       {/* Icon container with glow effect */}
       <motion.div

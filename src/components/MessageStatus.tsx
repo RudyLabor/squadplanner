@@ -29,10 +29,11 @@ export function MessageStatus({
     return (
       <span className="inline-flex items-center ml-1">
         {isRead ? (
-          <CheckCheck className="w-3.5 h-3.5 text-primary" strokeWidth={2.5} />
+          <CheckCheck className="w-3.5 h-3.5 text-primary" strokeWidth={2.5} aria-hidden="true" />
         ) : (
-          <Check className="w-3.5 h-3.5 text-text-tertiary" strokeWidth={2.5} />
+          <Check className="w-3.5 h-3.5 text-text-tertiary" strokeWidth={2.5} aria-hidden="true" />
         )}
+        <span className="sr-only">{isRead ? 'Lu' : 'Envoye'}</span>
       </span>
     )
   }
@@ -49,10 +50,11 @@ export function MessageStatus({
     return (
       <span className="inline-flex items-center ml-1">
         {isRead ? (
-          <CheckCheck className="w-3.5 h-3.5 text-primary" strokeWidth={2.5} />
+          <CheckCheck className="w-3.5 h-3.5 text-primary" strokeWidth={2.5} aria-hidden="true" />
         ) : (
-          <Check className="w-3.5 h-3.5 text-text-tertiary" strokeWidth={2.5} />
+          <Check className="w-3.5 h-3.5 text-text-tertiary" strokeWidth={2.5} aria-hidden="true" />
         )}
+        <span className="sr-only">{isRead ? 'Lu' : 'Envoye'}</span>
       </span>
     )
   }
@@ -60,7 +62,8 @@ export function MessageStatus({
   // Par défaut: envoyé mais pas lu
   return (
     <span className="inline-flex items-center ml-1">
-      <Check className="w-3.5 h-3.5 text-text-tertiary" strokeWidth={2.5} />
+      <Check className="w-3.5 h-3.5 text-text-tertiary" strokeWidth={2.5} aria-hidden="true" />
+      <span className="sr-only">Envoye</span>
     </span>
   )
 }

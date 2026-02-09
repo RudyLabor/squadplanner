@@ -210,7 +210,7 @@ export function StreakCounter({ streakDays, lastActiveDate, onCheckIn }: StreakC
         )}
       </AnimatePresence>
 
-      <Card className={`overflow-hidden bg-surface-dark ${intensity >= 2 ? 'ring-2 ring-offset-2 ring-offset-bg-base ring-orange-500' : ''}`}>
+      <Card className={`overflow-hidden bg-surface-dark ${intensity >= 2 ? 'ring-2 ring-offset-2 ring-offset-bg-base ring-orange-500' : ''}`} aria-label={`Serie de ${streakDays} ${streakDays === 1 ? 'jour' : 'jours'}`}>
         {/* Gradient top bar */}
         <div
           className="h-1.5"

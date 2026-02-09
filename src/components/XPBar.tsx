@@ -63,7 +63,14 @@ export function XPBar({ currentXP, level, showTitle = true, compact = false, cla
         >
           {level}
         </div>
-        <div className="flex-1 h-2 bg-border-subtle rounded-full overflow-hidden">
+        <div
+          className="flex-1 h-2 bg-border-subtle rounded-full overflow-hidden"
+          role="progressbar"
+          aria-valuenow={Math.floor(xpInLevel)}
+          aria-valuemin={0}
+          aria-valuemax={isMaxLevel ? Math.floor(xpInLevel) : xpNeeded}
+          aria-label={`Niveau ${level} - ${currentLevel.title} : ${isMaxLevel ? 'Niveau maximum atteint' : `${Math.floor(xpInLevel)} XP sur ${xpNeeded}`}`}
+        >
           <motion.div
             className="h-full rounded-full"
             style={{
@@ -174,7 +181,14 @@ export function XPBar({ currentXP, level, showTitle = true, compact = false, cla
       {/* XP Progress bar */}
       <div className="relative">
         {/* Background bar */}
-        <div className="h-3 bg-border-subtle rounded-full overflow-hidden">
+        <div
+          className="h-3 bg-border-subtle rounded-full overflow-hidden"
+          role="progressbar"
+          aria-valuenow={Math.floor(xpInLevel)}
+          aria-valuemin={0}
+          aria-valuemax={isMaxLevel ? Math.floor(xpInLevel) : xpNeeded}
+          aria-label={`Niveau ${level} - ${currentLevel.title} : ${isMaxLevel ? 'Niveau maximum atteint' : `${Math.floor(xpInLevel)} XP sur ${xpNeeded}`}`}
+        >
           {/* Animated fill */}
           <motion.div
             className="h-full rounded-full relative overflow-hidden"

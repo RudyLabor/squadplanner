@@ -121,21 +121,22 @@ export function Help() {
   }, {} as Record<string, (FAQItem & { globalIndex: number })[]>)
 
   return (
-    <div className="min-h-0 bg-bg-base pb-6">
+    <main className="min-h-0 bg-bg-base pb-6" aria-label="Aide">
       <div className="px-4 md:px-6 lg:px-8 py-6 max-w-2xl mx-auto">
         {/* Header */}
-        <div className="flex items-center gap-4 mb-8">
+        <header className="flex items-center gap-4 mb-8">
           <button
             onClick={() => navigate(-1)}
             className="w-10 h-10 rounded-xl bg-border-subtle flex items-center justify-center hover:bg-border-hover hover:scale-[1.02] transition-interactive"
+            aria-label="Retour"
           >
-            <ArrowLeft className="w-5 h-5 text-text-secondary" />
+            <ArrowLeft className="w-5 h-5 text-text-secondary" aria-hidden="true" />
           </button>
           <div>
             <h1 className="text-2xl font-bold text-text-primary">Aide & FAQ</h1>
             <p className="text-md text-text-secondary">Trouve des réponses à tes questions</p>
           </div>
-        </div>
+        </header>
 
         {/* Search */}
         <div className="relative mb-6">
@@ -259,7 +260,7 @@ export function Help() {
           Squad Planner v1.0.0
         </p>
       </div>
-    </div>
+    </main>
   )
 }
 

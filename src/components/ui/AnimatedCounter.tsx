@@ -37,7 +37,7 @@ export function AnimatedCounter({
   }, [prefix, suffix, singularSuffix, decimals, separator])
 
   return (
-    <span ref={ref} className={className}>
+    <span ref={ref} className={className} aria-live="polite" aria-atomic="true">
       {isInView ? (
         <CountUp
           end={end}

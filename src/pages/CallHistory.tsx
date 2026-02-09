@@ -90,7 +90,7 @@ export function CallHistory() {
   }
 
   return (
-    <div className="min-h-0 bg-bg-base pb-6">
+    <main className="min-h-0 bg-bg-base pb-6" aria-label="Historique d'appels">
       {/* Toast */}
       <CallToast
         message={toastMessage}
@@ -99,7 +99,7 @@ export function CallHistory() {
       />
 
       {/* Header */}
-      <div className="sticky top-0 z-10 bg-bg-base/95 backdrop-blur-lg border-b border-border-default">
+      <header className="sticky top-0 z-10 bg-bg-base/95 backdrop-blur-lg border-b border-border-default">
         <div className="px-4 py-4 max-w-4xl lg:max-w-5xl mx-auto">
           <div className="flex items-center gap-3 mb-4">
             <button
@@ -145,7 +145,7 @@ export function CallHistory() {
             ))}
           </div>
         </div>
-      </div>
+      </header>
 
       {/* Content */}
       <div className="px-4 py-4 max-w-4xl lg:max-w-5xl mx-auto">
@@ -297,7 +297,7 @@ export function CallHistory() {
           </div>
         </AnimatePresence>
       </div>
-    </div>
+    </main>
   )
 }
 

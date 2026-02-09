@@ -147,6 +147,7 @@ export function ParticipantVolumeControl({
             onTouchStart={() => setIsDragging(true)}
             onTouchEnd={() => setIsDragging(false)}
             className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+            aria-label={`Volume de ${participantName}`}
           />
         </div>
 
@@ -249,6 +250,7 @@ export function ParticipantVolumeControl({
             onTouchEnd={() => setIsDragging(false)}
             className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
             style={{ margin: 0 }}
+            aria-label={`Volume de ${participantName}`}
           />
         </div>
       </div>

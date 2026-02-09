@@ -202,7 +202,7 @@ export function Premium() {
   const savings = Math.round((PREMIUM_PRICE_MONTHLY * 12 - PREMIUM_PRICE_YEARLY) / (PREMIUM_PRICE_MONTHLY * 12) * 100)
 
   return (
-    <div className="min-h-0 bg-bg-base pb-6">
+    <main className="min-h-0 bg-bg-base pb-6" aria-label="Premium">
       {/* Confetti */}
       {showConfetti && typeof window !== 'undefined' && (
         <Confetti
@@ -594,7 +594,7 @@ export function Premium() {
           </motion.div>
         )}
       </div>
-    </div>
+    </main>
   )
 }
 

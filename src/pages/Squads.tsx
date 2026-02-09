@@ -372,7 +372,7 @@ export default function Squads() {
   }
 
   return (
-    <div className="min-h-0 bg-bg-base pb-6">
+    <main className="min-h-0 bg-bg-base pb-6" aria-label="Squads">
       {/* Celebration confetti */}
       {showConfetti && typeof window !== 'undefined' && (
         <Confetti
@@ -389,7 +389,7 @@ export default function Squads() {
       <div className="px-4 md:px-6 lg:px-8 py-6 max-w-2xl lg:max-w-4xl xl:max-w-6xl mx-auto">
         <div>
           {/* Header simplifié */}
-          <div className="flex items-center justify-between mb-6">
+          <header className="flex items-center justify-between mb-6">
             <div>
               <h1 className="text-2xl font-bold text-text-primary">Mes Squads</h1>
               <p className="text-base text-text-quaternary">{getSubtitle()}</p>
@@ -407,7 +407,7 @@ export default function Squads() {
                 )}
               </Button>
             </div>
-          </div>
+          </header>
 
           {/* Alerte limite atteinte */}
           {!hasPremium && userSquadCount >= FREE_SQUAD_LIMIT && !showCreate && !showJoin && (
@@ -511,14 +511,15 @@ export default function Squads() {
 
           {/* Squads List */}
           {squads.length > 0 ? (
-            <motion.div
-              className="space-y-3 lg:grid lg:grid-cols-2 xl:grid-cols-3 lg:gap-4 lg:space-y-0"
+            <motion.ul
+              className="space-y-3 lg:grid lg:grid-cols-2 xl:grid-cols-3 lg:gap-4 lg:space-y-0 list-none"
               variants={staggerContainerVariants}
               initial="hidden"
               animate="visible"
+              aria-label="Liste des squads"
             >
               {squads.map((squad) => (
-                <motion.div key={squad.id} variants={staggerItemVariants}>
+                <motion.li key={squad.id} variants={staggerItemVariants}>
                   <SquadCard
                     squad={squad}
                     isOwner={squad.owner_id === user?.id}
@@ -527,9 +528,9 @@ export default function Squads() {
                     copiedCode={copiedCode}
                     onCopyCode={copyInviteCode}
                   />
-                </motion.div>
+                </motion.li>
               ))}
-            </motion.div>
+            </motion.ul>
           ) : !showCreate && !showJoin && (
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -584,6 +585,6 @@ export default function Squads() {
         squadId={squads[0]?.id}
         feature="Squads illimites"
       />
-    </div>
+    </main>
   )
 }

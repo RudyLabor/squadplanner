@@ -409,7 +409,7 @@ export function Onboarding() {
   }
 
   return (
-    <div className="h-[100dvh] bg-bg-base flex items-center justify-center p-4 overflow-y-auto overflow-x-hidden scrollbar-hide-mobile">
+    <main className="h-[100dvh] bg-bg-base flex items-center justify-center p-4 overflow-y-auto overflow-x-hidden scrollbar-hide-mobile" aria-label="Onboarding">
       {/* Mini Confetti for step celebrations */}
       {showMiniConfetti && (
         <Confetti
@@ -1156,7 +1156,7 @@ export function Onboarding() {
           </div>
         )}
       </div>
-    </div>
+    </main>
   )
 }
 

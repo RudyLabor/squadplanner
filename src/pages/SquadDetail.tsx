@@ -793,7 +793,7 @@ export default function SquadDetail() {
   }
 
   return (
-    <div className="min-h-0 bg-bg-base pb-6">
+    <main className="min-h-0 bg-bg-base pb-6" aria-label="Détail de la squad">
       {/* Confetti celebration for RSVP present */}
       {showConfetti && typeof window !== 'undefined' && (
         <Confetti
@@ -1224,6 +1224,6 @@ export default function SquadDetail() {
         )}
       </AnimatePresence>
 
-    </div>
+    </main>
   )
 }

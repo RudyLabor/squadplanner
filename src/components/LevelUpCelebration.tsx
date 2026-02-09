@@ -56,6 +56,9 @@ export function LevelUpCelebration({
           exit={{ opacity: 0 }}
           transition={{ duration: 0.3 }}
           onClick={handleClick}
+          role="status"
+          aria-live="polite"
+          aria-label={`Niveau ${newLevel} atteint : ${currentLevel.title}`}
         >
           {/* Radial glow background */}
           <motion.div

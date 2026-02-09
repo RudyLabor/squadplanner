@@ -31,7 +31,14 @@ export function ProgressRing({
   const offset = circumference - (clampedValue / 100) * circumference
 
   return (
-    <div className={`inline-flex flex-col items-center gap-1 ${className}`}>
+    <div
+      className={`inline-flex flex-col items-center gap-1 ${className}`}
+      role="progressbar"
+      aria-valuenow={clampedValue}
+      aria-valuemin={0}
+      aria-valuemax={100}
+      aria-label={label || `${clampedValue}%`}
+    >
       <div className="relative" style={{ width: size, height: size }}>
         <svg
           ref={ref}
@@ -39,6 +46,7 @@ export function ProgressRing({
           height={size}
           viewBox={`0 0 ${size} ${size}`}
           className="-rotate-90"
+          aria-hidden="true"
         >
           {/* Track */}
           <circle

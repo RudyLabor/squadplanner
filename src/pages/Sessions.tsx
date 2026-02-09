@@ -72,7 +72,7 @@ export function Sessions() {
   }
 
   return (
-    <div className="min-h-0 bg-bg-base pb-6">
+    <main className="min-h-0 bg-bg-base pb-6" aria-label="Sessions">
       {/* Confetti celebration */}
       {showConfetti && typeof window !== 'undefined' && (
         <Confetti
@@ -89,7 +89,7 @@ export function Sessions() {
       <div className="px-4 md:px-6 lg:px-8 py-6 max-w-2xl lg:max-w-4xl xl:max-w-6xl mx-auto">
         <div>
           {/* Header with guidance */}
-          <div className="mb-8">
+          <header className="mb-8">
             <h1 className="text-2xl font-bold text-text-primary mb-2">Tes prochaines sessions</h1>
             <p className="text-md text-text-secondary">
               {needsResponse.length > 0
@@ -99,7 +99,7 @@ export function Sessions() {
                   : 'Aucune session planifiée pour le moment'
               }
             </p>
-          </div>
+          </header>
 
           {/* Success state - All caught up */}
           {needsResponse.length === 0 && confirmed.length > 0 && (
@@ -124,8 +124,8 @@ export function Sessions() {
 
           {/* Action required - User guidance */}
           {needsResponse.length > 0 && (
-            <div className="mb-6">
-              <div className="p-4 rounded-xl bg-warning-5 border border-warning">
+            <section className="mb-6" aria-label="Sessions en attente de réponse">
+              <div className="p-4 rounded-xl bg-warning-5 border border-warning" role="alert">
                 <div className="flex items-center gap-3 mb-3">
                   <motion.div
                     animate={{ rotate: [0, -10, 10, -10, 0] }}
@@ -141,30 +141,32 @@ export function Sessions() {
                   👉 <span className="text-text-primary">Réponds maintenant</span> pour que ta squad puisse s'organiser.
                   Plus tu réponds vite, plus ton score de fiabilité augmente !
                 </p>
-                <div className="space-y-2">
+                <ul className="space-y-2" aria-label="Sessions en attente">
                   {needsResponse.slice(0, 3).map(session => (
-                    <Link key={session.id} to={`/session/${session.id}`}>
-                      <motion.div 
-                        className="flex items-center gap-3 p-3 rounded-lg bg-black/30 hover:bg-border-subtle"
-                        whileHover={{ x: 4 }}
-                      >
-                        <Calendar className="w-4 h-4 text-warning" />
-                        <span className="flex-1 text-md text-text-primary">
-                          {session.title || session.game || 'Session'}
-                        </span>
-                        <span className="text-sm text-text-secondary">{formatDate(session.scheduled_at)}</span>
-                        <ChevronRight className="w-4 h-4 text-text-tertiary" />
-                      </motion.div>
-                    </Link>
+                    <li key={session.id}>
+                      <Link to={`/session/${session.id}`}>
+                        <motion.div
+                          className="flex items-center gap-3 p-3 rounded-lg bg-black/30 hover:bg-border-subtle"
+                          whileHover={{ x: 4 }}
+                        >
+                          <Calendar className="w-4 h-4 text-warning" aria-hidden="true" />
+                          <span className="flex-1 text-md text-text-primary">
+                            {session.title || session.game || 'Session'}
+                          </span>
+                          <span className="text-sm text-text-secondary">{formatDate(session.scheduled_at)}</span>
+                          <ChevronRight className="w-4 h-4 text-text-tertiary" aria-hidden="true" />
+                        </motion.div>
+                      </Link>
+                    </li>
                   ))}
-                </div>
+                </ul>
               </div>
-            </div>
+            </section>
           )}
 
           {/* AI Slot Suggestions */}
           {slotSuggestions.length > 0 && (
-            <div className="mb-6">
+            <section className="mb-6" aria-label="Suggestions de créneaux IA">
               <Card className="p-4 border-purple bg-purple-10">
                 <div className="flex items-start gap-3">
                   <div className="w-10 h-10 rounded-xl bg-purple-10 flex items-center justify-center shrink-0">
@@ -192,12 +194,12 @@ export function Sessions() {
                   </div>
                 </div>
               </Card>
-            </div>
+            </section>
           )}
 
           {/* Coach Tips */}
           {coachTips.length > 0 && (
-            <div className="mb-6">
+            <section className="mb-6" aria-label="Conseil Coach IA">
               <Card className="p-4 border-warning bg-warning-5">
                 <div className="flex items-start gap-3">
                   <div className="w-10 h-10 rounded-xl bg-warning-10 flex items-center justify-center shrink-0">
@@ -213,11 +215,11 @@ export function Sessions() {
                   </div>
                 </div>
               </Card>
-            </div>
+            </section>
           )}
 
           {/* Upcoming confirmed */}
-          <div className="mb-8">
+          <section className="mb-8" aria-label="Sessions confirmées">
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-xs font-medium text-text-tertiary uppercase tracking-[0.05em]">
                 Mes sessions confirmées
@@ -232,37 +234,39 @@ export function Sessions() {
                 <SessionCardSkeleton />
               </div>
             ) : confirmed.length > 0 ? (
-              <div className="space-y-3 lg:grid lg:grid-cols-2 xl:grid-cols-3 lg:gap-4 lg:space-y-0">
+              <ul className="space-y-3 lg:grid lg:grid-cols-2 xl:grid-cols-3 lg:gap-4 lg:space-y-0 list-none">
                 {confirmed.map(session => (
-                  <Link key={session.id} to={`/session/${session.id}`}>
-                    <motion.div whileHover={{ y: -2, scale: 1.02 }} whileTap={{ scale: 0.99 }}>
-                      <Card className="p-4 transition-interactive hover:shadow-glow-success">
-                        <div className="flex items-center gap-4">
-                          <div className="w-12 h-12 rounded-xl bg-success-10 flex items-center justify-center">
-                            <Calendar className="w-6 h-6 text-success" strokeWidth={1.5} />
-                          </div>
-                          <div className="flex-1">
-                            <h3 className="text-md font-medium text-text-primary">
-                              {session.title || session.game || 'Session'}
-                            </h3>
-                            <div className="flex items-center gap-3 text-base text-text-secondary">
-                              <span className="flex items-center gap-1">
-                                <Clock className="w-3.5 h-3.5" />
-                                {formatDate(session.scheduled_at)}
-                              </span>
-                              <span className="flex items-center gap-1">
-                                <Users className="w-3.5 h-3.5" />
-                                {session.rsvp_counts?.present || 0} présents
-                              </span>
+                  <li key={session.id}>
+                    <Link to={`/session/${session.id}`}>
+                      <motion.div whileHover={{ y: -2, scale: 1.02 }} whileTap={{ scale: 0.99 }}>
+                        <Card className="p-4 transition-interactive hover:shadow-glow-success">
+                          <div className="flex items-center gap-4">
+                            <div className="w-12 h-12 rounded-xl bg-success-10 flex items-center justify-center">
+                              <Calendar className="w-6 h-6 text-success" strokeWidth={1.5} aria-hidden="true" />
                             </div>
+                            <div className="flex-1">
+                              <h3 className="text-md font-medium text-text-primary">
+                                {session.title || session.game || 'Session'}
+                              </h3>
+                              <div className="flex items-center gap-3 text-base text-text-secondary">
+                                <span className="flex items-center gap-1">
+                                  <Clock className="w-3.5 h-3.5" aria-hidden="true" />
+                                  {formatDate(session.scheduled_at)}
+                                </span>
+                                <span className="flex items-center gap-1">
+                                  <Users className="w-3.5 h-3.5" aria-hidden="true" />
+                                  {session.rsvp_counts?.present || 0} présents
+                                </span>
+                              </div>
+                            </div>
+                            <Badge variant="success">Confirmé</Badge>
                           </div>
-                          <Badge variant="success">Confirmé</Badge>
-                        </div>
-                      </Card>
-                    </motion.div>
-                  </Link>
+                        </Card>
+                      </motion.div>
+                    </Link>
+                  </li>
                 ))}
-              </div>
+              </ul>
             ) : (
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -292,33 +296,33 @@ export function Sessions() {
                 </Card>
               </motion.div>
             )}
-          </div>
+          </section>
 
           {/* How it works - User guidance */}
-          <div>
+          <section aria-label="Guide des sessions">
             <Card className="p-6">
-              <h3 className="text-md font-semibold text-text-primary mb-4">
-                📖 Comment fonctionnent les sessions ?
-              </h3>
-              <div className="space-y-3">
+              <h2 className="text-md font-semibold text-text-primary mb-4">
+                Comment fonctionnent les sessions ?
+              </h2>
+              <ol className="space-y-3 list-none">
                 {[
                   { num: '1', text: 'Un membre de ta squad propose un créneau' },
                   { num: '2', text: 'Tu cliques "Présent", "Absent" ou "Peut-être"' },
                   { num: '3', text: 'À l\'heure, tu fais ton check-in' },
                   { num: '4', text: 'Ton score de fiabilité augmente !' },
                 ].map(step => (
-                  <div key={step.num} className="flex items-center gap-3">
-                    <div className="w-6 h-6 rounded-lg bg-primary-10 flex items-center justify-center">
+                  <li key={step.num} className="flex items-center gap-3">
+                    <div className="w-6 h-6 rounded-lg bg-primary-10 flex items-center justify-center" aria-hidden="true">
                       <span className="text-sm font-bold text-primary">{step.num}</span>
                     </div>
                     <span className="text-base text-text-secondary">{step.text}</span>
-                  </div>
+                  </li>
                 ))}
-              </div>
+              </ol>
             </Card>
-          </div>
+          </section>
         </div>
       </div>
-    </div>
+    </main>
   )
 }

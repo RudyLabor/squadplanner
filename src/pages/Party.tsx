@@ -643,7 +643,7 @@ export function Party() {
   const otherSquads = squads.filter(s => s.id !== activeSquadId)
 
   return (
-    <div className="min-h-0 bg-bg-base pb-6">
+    <main className="min-h-0 bg-bg-base pb-6" aria-label="Party vocale">
       {/* Confetti celebration when duo */}
       {showDuoConfetti && (
         <Confetti
@@ -675,7 +675,7 @@ export function Party() {
       <div className="px-4 md:px-6 py-6 max-w-4xl lg:max-w-5xl mx-auto">
         <div>
           {/* Header compact */}
-          <div className="flex items-center justify-between mb-6">
+          <header className="flex items-center justify-between mb-6">
             <div>
               <h1 className="text-2xl font-bold text-text-primary">Party</h1>
               <p className="text-base text-text-tertiary">
@@ -688,7 +688,7 @@ export function Party() {
                 <span className="text-sm font-medium text-success">En ligne</span>
               </div>
             )}
-          </div>
+          </header>
 
           {/* Loading */}
           {squadsLoading ? (
@@ -829,7 +829,7 @@ export function Party() {
           )}
         </div>
       </div>
-    </div>
+    </main>
   )
 }
 

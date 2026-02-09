@@ -115,7 +115,8 @@ export function AvatarGroup({
   const overflow = avatars.length - max
 
   return (
-    <div className={`flex items-center ${className}`} role="group" aria-label="Avatar group">
+    <div className={`flex items-center ${className}`} role="group" aria-label={`${avatars.length} members`}>
+      <span className="sr-only">{`${avatars.length} members: ${visible.map(a => a.name).join(', ')}${overflow > 0 ? ` and ${overflow} more` : ''}`}</span>
       {visible.map((avatar, i) => (
         <SingleAvatar key={`${avatar.name}-${i}`} avatar={avatar} size={size} index={i} />
       ))}

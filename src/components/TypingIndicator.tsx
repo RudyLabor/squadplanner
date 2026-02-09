@@ -36,7 +36,10 @@ export function TypingIndicator({ text, compact = false }: TypingIndicatorProps)
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: 10 }}
+        role="status"
+        aria-live="polite"
       >
+        <span className="sr-only">{text}</span>
         <motion.div
           className="flex items-center gap-0.5"
           variants={containerVariants}
@@ -71,6 +74,8 @@ export function TypingIndicator({ text, compact = false }: TypingIndicatorProps)
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: 10 }}
       transition={{ duration: 0.2 }}
+      role="status"
+      aria-live="polite"
     >
       {/* Bulle avec les trois points animés */}
       <div className="flex items-center gap-2 px-3 py-2 bg-bg-hover rounded-2xl rounded-bl-lg">

@@ -113,8 +113,7 @@ export function VoiceWaveform({
         height: config.height,
         width: containerWidth
       }}
-      role="img"
-      aria-label={isActive && isSpeaking ? 'Audio waveform - speaking' : 'Audio waveform - silent'}
+      aria-hidden="true"
     >
       <div
         className="flex items-center justify-center transition-interactive"
@@ -181,6 +180,7 @@ export function VoiceWaveformDemo({
         height: config.height,
         width: containerWidth
       }}
+      aria-hidden="true"
     >
       <div
         className="flex items-center justify-center transition-interactive"

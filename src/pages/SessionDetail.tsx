@@ -179,7 +179,7 @@ export default function SessionDetail() {
   const isCreator = currentSession.created_by === user?.id
 
   return (
-    <div className="min-h-0 bg-bg-base pb-6">
+    <main className="min-h-0 bg-bg-base pb-6" aria-label="Détail de session">
       {/* Confetti celebration */}
       {showConfetti && typeof window !== 'undefined' && (
         <Confetti
@@ -203,13 +203,13 @@ export default function SessionDetail() {
       <div className="px-4 md:px-6 lg:px-8 py-6 max-w-2xl lg:max-w-4xl xl:max-w-6xl mx-auto">
         <div>
           {/* Header */}
-          <div className="flex items-center gap-4 mb-8">
+          <header className="flex items-center gap-4 mb-8">
             <Link
               to={`/squad/${currentSession.squad_id}`}
               className="p-2.5 min-w-[44px] min-h-[44px] rounded-lg hover:bg-border-subtle transition-colors flex items-center justify-center touch-target"
               aria-label="Retour à la squad"
             >
-              <ArrowLeft className="w-5 h-5 text-text-secondary" />
+              <ArrowLeft className="w-5 h-5 text-text-secondary" aria-hidden="true" />
             </Link>
             <div className="flex-1">
               <h1 className="text-2xl font-bold text-text-primary">
@@ -222,7 +222,7 @@ export default function SessionDetail() {
                 </div>
               )}
             </div>
-          </div>
+          </header>
 
           {/* Info Cards */}
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-4 mb-8">
@@ -452,6 +452,6 @@ export default function SessionDetail() {
           )}
         </div>
       </div>
-    </div>
+    </main>
   )
 }

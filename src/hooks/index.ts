@@ -60,10 +60,11 @@ export { useOffline, useOfflineBanner, useOfflineStore } from './useOffline'
 // Focus management for accessibility
 export {
   useFocusOnNavigate,
-  useFocusTrap as useFocusTrapNew,
+  useFocusTrap as useFocusTrapManaged,
   useRestoreFocus,
   useAnnounce,
   useSkipLink,
   useAutoFocus,
-  useRovingTabindex
+  useRovingTabindex,
+  useA11yAnnouncements
 } from './useFocusManagement'

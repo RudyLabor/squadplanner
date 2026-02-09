@@ -84,7 +84,9 @@ export function NetworkQualityIndicator({
         <Wifi
           style={{ width: sizeConfig.iconSize, height: sizeConfig.iconSize }}
           className="text-text-tertiary animate-pulse"
+          aria-hidden="true"
         />
+        <span className="sr-only">Qualite reseau : {info.label}</span>
         {showLabel && (
           <span className={`${sizeConfig.textSize} text-text-tertiary`}>
             {info.label}
@@ -112,6 +114,7 @@ export function NetworkQualityIndicator({
       animate={{ opacity: 1 }}
       transition={{ duration: 0.3 }}
     >
+      <span className="sr-only">Qualite reseau : {info.label}</span>
       {/* Barres de signal */}
       <div
         className="flex items-end"

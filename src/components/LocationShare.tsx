@@ -107,6 +107,7 @@ export const LocationMessage = memo(function LocationMessage({ lat, lng, isOwn =
         href={mapsUrl}
         target="_blank"
         rel="noopener noreferrer"
+        aria-label="Ouvrir la position dans Google Maps"
         className={`flex items-center gap-2 px-3 py-2.5 transition-colors ${
           isOwn
             ? 'text-white/80 hover:text-white hover:bg-border-subtle'

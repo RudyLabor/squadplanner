@@ -74,7 +74,9 @@ export const OnlineIndicator = memo(function OnlineIndicator({
               }
             : { type: 'spring', stiffness: 400, damping: 20 }
         }
-      />
+      >
+        <span className="sr-only">{isOnline ? 'En ligne' : 'Hors ligne'}</span>
+      </motion.span>
     </AnimatePresence>
   )
 })

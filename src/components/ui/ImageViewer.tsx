@@ -126,6 +126,9 @@ export function ImageViewer({ src, alt = 'Image', isOpen, onClose }: ImageViewer
           exit={{ opacity: 0 }}
           transition={{ duration: 0.2 }}
           className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 backdrop-blur-sm"
+          role="dialog"
+          aria-modal="true"
+          aria-label={`Image viewer: ${alt}`}
           onClick={(e) => {
             if (e.target === e.currentTarget) onClose()
           }}

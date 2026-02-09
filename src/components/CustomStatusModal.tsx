@@ -107,14 +107,18 @@ export const CustomStatusModal = memo(function CustomStatusModal({ isOpen, onClo
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
             transition={{ type: 'spring', stiffness: 300, damping: 25 }}
             onClick={(e) => e.stopPropagation()}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="custom-status-title"
             className="w-full max-w-md bg-surface-dark border border-border-hover rounded-2xl overflow-hidden"
           >
             {/* Header */}
             <div className="flex items-center justify-between px-5 py-4 border-b border-border-default">
-              <h2 className="text-lg font-semibold text-text-primary">Definir un statut</h2>
+              <h2 id="custom-status-title" className="text-lg font-semibold text-text-primary">Definir un statut</h2>
               <button
                 onClick={onClose}
                 className="p-1.5 rounded-lg hover:bg-border-subtle text-text-tertiary transition-colors"
+                aria-label="Fermer"
               >
                 <X className="w-5 h-5" />
               </button>

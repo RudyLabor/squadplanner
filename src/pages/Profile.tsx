@@ -295,7 +295,7 @@ export function Profile() {
   }
 
   return (
-    <div className="min-h-0 bg-bg-base pb-6">
+    <main className="min-h-0 bg-bg-base pb-6" aria-label="Profil">
       {/* Level Up Celebration */}
       {showLevelUp && newLevel && (
         <LevelUpCelebration
@@ -604,7 +604,7 @@ export function Profile() {
 
         {/* Stats Grid - 2x2 on mobile, 4 cols on desktop */}
         {!profileReady ? (
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-4 mb-5">
+          <section className="grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-4 mb-5" aria-label="Statistiques">
             {[1, 2, 3, 4].map(i => (
               <Card key={i} className="p-4 bg-bg-elevated">
                 <div className="flex items-center gap-3">
@@ -616,9 +616,9 @@ export function Profile() {
                 </div>
               </Card>
             ))}
-          </div>
+          </section>
         ) : (
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-4 mb-5">
+        <section className="grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-4 mb-5" aria-label="Statistiques">
           {stats.map(stat => (
             <Card key={stat.label} className="p-4 bg-bg-elevated">
               <div className="flex items-center gap-3">
@@ -637,11 +637,11 @@ export function Profile() {
               </div>
             </Card>
           ))}
-        </div>
+        </section>
         )}
 
         {/* Activité Section - StreakCounter */}
-        <div className="mb-5">
+        <section className="mb-5" aria-label="Activité">
           <div className="flex items-center gap-2 mb-3">
             <Flame className="w-4 h-4 text-warning" />
             <h3 className="text-base font-semibold text-text-primary uppercase tracking-wide">
@@ -652,16 +652,16 @@ export function Profile() {
             streakDays={profile?.streak_days || 0}
             lastActiveDate={profile?.streak_last_date || null}
           />
-        </div>
+        </section>
 
         {/* Challenges Section */}
         {challenges.length > 0 && (
-          <div className="mb-5">
+          <section className="mb-5" aria-label="Défis">
             <Challenges
               challenges={challenges}
               onClaimXP={handleClaimXP}
             />
-          </div>
+          </section>
         )}
 
         {/* Seasonal Badges Section - only render after challengesData loaded to avoid duplicate API call */}
@@ -929,6 +929,6 @@ export function Profile() {
         onClose={() => setShowPremiumModal(false)}
         feature="Compte Premium"
       />
-    </div>
+    </main>
   )
 }

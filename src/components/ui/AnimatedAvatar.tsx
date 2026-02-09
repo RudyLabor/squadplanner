@@ -71,6 +71,7 @@ export const AnimatedAvatar = memo(function AnimatedAvatar({
           height={config.ring}
           viewBox={`0 0 ${config.ring} ${config.ring}`}
           fill="none"
+          aria-hidden="true"
         >
           <motion.circle
             cx={config.ring / 2}
@@ -131,8 +132,10 @@ export const AnimatedAvatar = memo(function AnimatedAvatar({
         <span
           className={`absolute bottom-0 right-0 ${config.dotSize} rounded-full border-2 border-bg-base`}
           style={{ backgroundColor: color }}
+          aria-hidden="true"
         />
       )}
+      <span className="sr-only">{alt} ({status})</span>
     </motion.div>
   )
 })

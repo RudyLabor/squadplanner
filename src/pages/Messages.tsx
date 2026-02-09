@@ -1102,7 +1102,7 @@ export function Messages() {
   const ConversationsList = ({ showOnDesktop = false }: { showOnDesktop?: boolean }) => (
     <div className={`${showOnDesktop ? 'h-full flex flex-col' : ''}`}>
       {/* Header */}
-      <div className={`${showOnDesktop ? 'p-4 pl-5' : 'mb-5'}`}>
+      <header className={`${showOnDesktop ? 'p-4 pl-5' : 'mb-5'}`}>
         <div className="flex items-center justify-between mb-1">
           <h1 className={`font-bold text-text-primary ${showOnDesktop ? 'text-xl' : 'text-2xl'}`}>Messages</h1>
           {totalUnread > 0 && (
@@ -1111,11 +1111,13 @@ export function Messages() {
             </span>
           )}
         </div>
-      </div>
+      </header>
 
       {/* Tabs */}
-      <div className={`flex gap-1 p-1 bg-bg-surface rounded-xl ${showOnDesktop ? 'mx-4 mb-3' : 'mb-5'}`}>
+      <div className={`flex gap-1 p-1 bg-bg-surface rounded-xl ${showOnDesktop ? 'mx-4 mb-3' : 'mb-5'}`} role="tablist" aria-label="Type de conversations">
         <button
+          role="tab"
+          aria-selected={activeTab === 'squads'}
           onClick={() => {
             setActiveTab('squads')
             setActiveDMConv(null) // Reset DM conversation when switching to Squads
@@ -1137,6 +1139,8 @@ export function Messages() {
           )}
         </button>
         <button
+          role="tab"
+          aria-selected={activeTab === 'dms'}
           onClick={() => {
             setActiveTab('dms')
             setActiveSquadConv(null) // Reset Squad conversation when switching to DMs
@@ -1694,11 +1698,11 @@ export function Messages() {
           isVisible={toast.visible}
           variant={toast.variant}
         />
-        <div className="h-[calc(100vh-3.5rem)] bg-bg-base flex">
+        <main className="h-[calc(100vh-3.5rem)] bg-bg-base flex" aria-label="Messages">
           {/* Sidebar gauche - Liste des conversations */}
-          <div className="w-[340px] xl:w-[380px] flex-shrink-0 border-r border-border-default bg-bg-elevated overflow-hidden">
+          <nav className="w-[340px] xl:w-[380px] flex-shrink-0 border-r border-border-default bg-bg-elevated overflow-hidden" aria-label="Conversations">
             {ConversationsList({ showOnDesktop: true })}
-          </div>
+          </nav>
 
           {/* Zone principale - Chat */}
           <div className="flex-1 min-w-0">
@@ -1708,7 +1712,7 @@ export function Messages() {
               EmptyChatPlaceholder()
             )}
           </div>
-        </div>
+        </main>
       </>
     )
   }
@@ -1723,11 +1727,11 @@ export function Messages() {
           isVisible={toast.visible}
           variant={toast.variant}
         />
-        <div className="min-h-0 bg-bg-base pb-6">
+        <main className="min-h-0 bg-bg-base pb-6" aria-label="Messages">
           <div className="px-4 md:px-6 lg:px-8 py-6 max-w-2xl lg:max-w-4xl xl:max-w-6xl mx-auto">
             {ConversationsList({ showOnDesktop: false })}
           </div>
-        </div>
+        </main>
       </>
     )
   }

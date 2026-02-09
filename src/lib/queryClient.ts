@@ -99,6 +99,22 @@ export const queryKeys = {
     active: () => [...queryKeys.challenges.all, 'active'] as const,
     completed: () => [...queryKeys.challenges.all, 'completed'] as const,
   },
+
+  // Phase 6: Social Discovery
+  discover: {
+    all: ['discover'] as const,
+    publicSquads: (game?: string, region?: string) => [...queryKeys.discover.all, 'squads', { game, region }] as const,
+    globalLeaderboard: (game?: string, region?: string) => [...queryKeys.discover.all, 'leaderboard', { game, region }] as const,
+    matchmaking: (game?: string, region?: string) => [...queryKeys.discover.all, 'matchmaking', { game, region }] as const,
+    publicProfile: (username: string) => [...queryKeys.discover.all, 'profile', username] as const,
+  },
+
+  // Phase 6: AI Advanced
+  aiAdvanced: {
+    all: ['ai-advanced'] as const,
+    sessionSummary: (sessionId: string) => [...queryKeys.aiAdvanced.all, 'session-summary', sessionId] as const,
+    predictions: (squadId: string) => [...queryKeys.aiAdvanced.all, 'predictions', squadId] as const,
+  },
 }
 
 /**

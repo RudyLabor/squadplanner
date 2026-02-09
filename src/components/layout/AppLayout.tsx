@@ -2,7 +2,7 @@ import { useEffect, useState, memo, useCallback, useMemo, useRef } from 'react'
 import type { ReactNode } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Home, Users, Mic, MessageCircle, User, Plus, Zap, Pin, PinOff, Settings, HelpCircle, Phone, Calendar } from 'lucide-react'
+import { Home, Users, Mic, MessageCircle, User, Plus, Zap, Pin, PinOff, Settings, HelpCircle, Phone, Calendar, Compass } from 'lucide-react'
 import { useShallow } from 'zustand/react/shallow'
 import { useAuthStore, useSquadsStore, useVoiceChatStore, useKeyboardVisible, useUnreadCountStore, useSquadNotificationsStore, useGlobalPresence } from '../../hooks'
 import { useCreateSessionModal } from '../CreateSessionModal'
@@ -27,6 +27,7 @@ const navItems = [
   { path: '/sessions', icon: Calendar, label: 'Sessions' },
   { path: '/party', icon: Mic, label: 'Party' },
   { path: '/messages', icon: MessageCircle, label: 'Messages' },
+  { path: '/discover', icon: Compass, label: 'Decouvrir' },
   { path: '/profile', icon: User, label: 'Profil' },
 ] as const
 

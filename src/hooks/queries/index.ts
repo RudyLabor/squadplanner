@@ -90,5 +90,21 @@ export {
   type LeaderboardEntry,
 } from './useSquadLeaderboard'
 
+// Phase 6: Social Discovery
+export {
+  useBrowseSquadsQuery,
+  useGlobalLeaderboardQuery,
+  useMatchmakingQuery,
+  usePublicProfileQuery,
+} from './useDiscoverQueries'
+
+// Phase 6: AI Advanced
+export {
+  useSessionSummaryQuery,
+  useAIPredictionsQuery,
+  type SessionSummaryData,
+  type PredictiveSuggestion,
+} from './useAIAdvancedQueries'
+
 // Re-export query client and keys
 export { queryClient, queryKeys } from '../../lib/queryClient'

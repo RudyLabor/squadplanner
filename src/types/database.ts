@@ -40,6 +40,13 @@ export interface Database {
           subscription_tier: SubscriptionTier
           subscription_expires_at: string | null
           stripe_customer_id: string | null
+          // Phase 6: Social Discovery
+          region: string | null
+          preferred_games: string[]
+          looking_for_squad: boolean
+          playstyle: string | null
+          twitch_username: string | null
+          discord_username: string | null
           // Timestamps
           created_at: string
           updated_at: string
@@ -63,6 +70,12 @@ export interface Database {
           subscription_tier?: SubscriptionTier
           subscription_expires_at?: string | null
           stripe_customer_id?: string | null
+          region?: string | null
+          preferred_games?: string[]
+          looking_for_squad?: boolean
+          playstyle?: string | null
+          twitch_username?: string | null
+          discord_username?: string | null
           created_at?: string
           updated_at?: string
         }
@@ -85,6 +98,12 @@ export interface Database {
           subscription_tier?: SubscriptionTier
           subscription_expires_at?: string | null
           stripe_customer_id?: string | null
+          region?: string | null
+          preferred_games?: string[]
+          looking_for_squad?: boolean
+          playstyle?: string | null
+          twitch_username?: string | null
+          discord_username?: string | null
           created_at?: string
           updated_at?: string
         }
@@ -104,6 +123,10 @@ export interface Database {
           total_sessions: number
           total_members: number
           avg_reliability_score: number
+          // Phase 6: Social Discovery
+          is_public: boolean
+          tags: string[]
+          region: string | null
           created_at: string
           updated_at: string
         }
@@ -120,6 +143,9 @@ export interface Database {
           total_sessions?: number
           total_members?: number
           avg_reliability_score?: number
+          is_public?: boolean
+          tags?: string[]
+          region?: string | null
           created_at?: string
           updated_at?: string
         }
@@ -136,6 +162,9 @@ export interface Database {
           total_sessions?: number
           total_members?: number
           avg_reliability_score?: number
+          is_public?: boolean
+          tags?: string[]
+          region?: string | null
           created_at?: string
           updated_at?: string
         }
@@ -455,6 +484,19 @@ export interface Database {
         Args: { p_total_checkins: number; p_total_noshow: number; p_total_late: number }
         Returns: number
       }
+      // Phase 6: Social Discovery RPCs
+      browse_public_squads: {
+        Args: { p_game?: string; p_region?: string; p_limit?: number; p_offset?: number }
+        Returns: PublicSquadResult[]
+      }
+      get_global_leaderboard: {
+        Args: { p_game?: string; p_region?: string; p_limit?: number }
+        Returns: GlobalLeaderboardEntry[]
+      }
+      find_players_for_squad: {
+        Args: { p_game?: string; p_region?: string; p_limit?: number }
+        Returns: MatchmakingPlayer[]
+      }
     }
     Enums: {
       squad_role: SquadRole
@@ -476,3 +518,69 @@ export type SessionCheckin = Database['public']['Tables']['session_checkins']['R
 export type Message = Database['public']['Tables']['messages']['Row']
 export type AIInsight = Database['public']['Tables']['ai_insights']['Row']
 export type Subscription = Database['public']['Tables']['subscriptions']['Row']
+
+// Phase 6: RPC result types
+export interface PublicSquadResult {
+  id: string
+  name: string
+  description: string | null
+  game: string
+  region: string | null
+  member_count: number
+  avg_reliability: number
+  owner_username: string
+  owner_avatar: string | null
+  tags: string[]
+  invite_code: string
+  created_at: string
+}
+
+export interface GlobalLeaderboardEntry {
+  rank: number
+  user_id: string
+  username: string
+  avatar_url: string | null
+  xp: number
+  level: number
+  reliability_score: number
+  streak_days: number
+  total_sessions: number
+  region: string | null
+}
+
+export interface MatchmakingPlayer {
+  user_id: string
+  username: string
+  avatar_url: string | null
+  reliability_score: number
+  level: number
+  xp: number
+  preferred_games: string[]
+  region: string | null
+  total_sessions: number
+  playstyle: string | null
+  bio: string | null
+}
+
+export interface MatchmakingRequest {
+  id: string
+  user_id: string
+  squad_id: string
+  game: string
+  region: string | null
+  message: string | null
+  status: 'pending' | 'accepted' | 'rejected' | 'expired'
+  created_at: string
+  expires_at: string
+}
+
+export interface UserIntegration {
+  id: string
+  user_id: string
+  provider: 'google_calendar' | 'twitch' | 'discord' | 'steam'
+  external_id: string | null
+  metadata: Record<string, unknown>
+  is_active: boolean
+  created_at: string
+  updated_at: string
+}

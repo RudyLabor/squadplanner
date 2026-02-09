@@ -39,6 +39,8 @@ const Help = lazy(() => import('./pages/Help').then(m => ({ default: m.Help })))
 const JoinSquad = lazy(() => import('./pages/JoinSquad').then(m => ({ default: m.JoinSquad })))
 const NotFound = lazy(() => import('./pages/NotFound').then(m => ({ default: m.NotFound })))
 const Legal = lazy(() => import('./pages/Legal').then(m => ({ default: m.Legal })))
+const Discover = lazy(() => import('./pages/Discover'))
+const PublicProfile = lazy(() => import('./pages/PublicProfile'))
 
 // Lazy load heavy modals (only loaded when needed)
 const CallModal = lazy(() => import('./components/CallModal').then(m => ({ default: m.CallModal })))
@@ -330,6 +332,14 @@ function AppContent() {
                 } />
                 <Route path="/help" element={<Help />} />
                 <Route path="/legal" element={<Legal />} />
+
+                {/* Phase 6: Social Discovery */}
+                <Route path="/discover" element={
+                  <ProtectedRoute><Discover /></ProtectedRoute>
+                } />
+                <Route path="/u/:username" element={
+                  <ProtectedRoute><PublicProfile /></ProtectedRoute>
+                } />
 
                 {/* Deep linking - Join squad via invite code */}
                 <Route path="/join/:code" element={<JoinSquad />} />

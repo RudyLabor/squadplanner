@@ -30,14 +30,8 @@ function cssVar(name: string, fallback: string): string {
  * resolve them at call-time via getComputedStyle.
  */
 const TOKEN = {
-  primary:      () => cssVar('--color-primary', '#6366f1'),
-  primaryHover: () => cssVar('--color-primary-hover', '#818cf8'),
   success:      () => cssVar('--color-success', '#34d399'),
-  error:        () => cssVar('--color-error', '#f87171'),
-  warning:      () => cssVar('--color-warning', '#fbbf24'),
-  purple:       () => cssVar('--color-purple', '#a78bfa'),
   gold:         () => cssVar('--color-gold', '#f5a623'),
-  cyan:         () => cssVar('--color-cyan', '#22d3ee'),
 } as const
 
 // Custom ribbon shape via shapeFromPath
@@ -137,114 +131,3 @@ export function celebrateLevelUp(colors: string[]) {
   }, 1200)
 }
 
-/**
- * Milestone celebration - dramatic burst + sustained shower
- */
-export function celebrateMilestone(colors: string[] = [TOKEN.primary(), TOKEN.success(), TOKEN.gold()]) {
-  if (prefersReducedMotion()) return
-
-  // Big initial burst
-  confetti({
-    particleCount: 200,
-    spread: 180,
-    startVelocity: 45,
-    origin: { y: 0.55 },
-    colors,
-    gravity: 0.6,
-    drift: 0.5,
-    ticks: 250,
-    shapes: ['star', 'circle', ribbonShape],
-    scalar: 1.5,
-  })
-
-  // Sustained shower
-  let count = 0
-  const maxCount = 4
-  const interval = setInterval(() => {
-    if (count >= maxCount) {
-      clearInterval(interval)
-      return
-    }
-    confetti({
-      particleCount: 20,
-      spread: 100,
-      startVelocity: 20,
-      origin: { x: 0.2 + Math.random() * 0.6, y: -0.1 },
-      colors,
-      gravity: 0.4,
-      drift: (Math.random() - 0.5) * 2,
-      ticks: 250,
-    })
-    count++
-  }, 300)
-}
-
-/**
- * Achievement celebration - compact satisfying burst
- */
-export function celebrateAchievement(color: string = TOKEN.purple()) {
-  if (prefersReducedMotion()) return
-
-  confetti({
-    particleCount: 60,
-    spread: 80,
-    startVelocity: 25,
-    origin: { y: 0.7 },
-    colors: [color, '#ffffff', TOKEN.warning()],
-    shapes: ['star', 'circle'],
-    scalar: 1.3,
-    gravity: 0.6,
-    ticks: 180,
-  })
-}
-
-/**
- * RSVP confirmed - mini pop
- */
-export function celebrateRSVP() {
-  if (prefersReducedMotion()) return
-
-  confetti({
-    particleCount: 30,
-    spread: 50,
-    startVelocity: 22,
-    origin: { y: 0.65, x: 0.5 },
-    colors: [TOKEN.success(), TOKEN.success(), '#ffffff'],
-    gravity: 0.7,
-    ticks: 120,
-    scalar: 0.9,
-  })
-}
-
-/**
- * Squad created - side cannons
- */
-export function celebrateSquadCreated() {
-  if (prefersReducedMotion()) return
-
-  // Left cannon
-  confetti({
-    particleCount: 50,
-    angle: 60,
-    spread: 55,
-    startVelocity: 35,
-    origin: { x: 0, y: 0.6 },
-    colors: [TOKEN.primary(), TOKEN.primaryHover(), TOKEN.purple(), '#ffffff'],
-    gravity: 0.7,
-    ticks: 180,
-  })
-
-  // Right cannon (slight delay)
-  setTimeout(() => {
-    confetti({
-      particleCount: 50,
-      angle: 120,
-      spread: 55,
-      startVelocity: 35,
-      origin: { x: 1, y: 0.6 },
-      colors: [TOKEN.primary(), TOKEN.primaryHover(), TOKEN.purple(), '#ffffff'],
-      gravity: 0.7,
-      ticks: 180,
-    })
-  }, 150)
-}

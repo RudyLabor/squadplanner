@@ -14,9 +14,9 @@ export function prefetchProbableRoutes() {
   // Use requestIdleCallback to not block the main thread
   const schedulePreload = (callback: () => void) => {
     if ('requestIdleCallback' in window) {
-      requestIdleCallback(callback, { timeout: 3000 });
+      requestIdleCallback(callback, { timeout: 5000 });
     } else {
-      setTimeout(callback, 2000);
+      setTimeout(callback, 3000);
     }
   };
 
@@ -29,29 +29,21 @@ export function prefetchProbableRoutes() {
       supabaseLink.href = supabaseUrl;
       document.head.appendChild(supabaseLink);
     }
+
+    // Prefetch most visited route chunks via dynamic import
+    // These are no-ops if already loaded, and warm the cache for first visit
+    const prefetchRoutes = [
+      () => import('../pages/Home'),
+      () => import('../pages/Messages'),
+      () => import('../pages/Squads'),
+      () => import('../pages/Sessions'),
+    ];
+
+    prefetchRoutes.forEach((prefetch, index) => {
+      setTimeout(() => {
+        prefetch().catch(() => {/* ignore prefetch failures */});
+      }, index * 500); // Stagger prefetches by 500ms to avoid bandwidth contention
+    });
   });
 }
 
-/**
- * Prefetch a route's data when user shows intent (hover/focus on nav link).
- * Uses intersection observer for visible links.
- */
-export function setupVisibilityPrefetch(
-  element: HTMLElement,
-  onVisible: () => void
-) {
-  const observer = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          onVisible();
-          observer.disconnect();
-        }
-      });
-    },
-    { rootMargin: '100px' }
-  );
-
-  observer.observe(element);
-  return () => observer.disconnect();
-}

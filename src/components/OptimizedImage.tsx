@@ -14,10 +14,31 @@ interface OptimizedImageProps {
   avifSrc?: string
   /** Show skeleton placeholder while loading */
   showPlaceholder?: boolean
+  /** Placeholder type: 'skeleton' (default), 'blur' (tiny blurred thumbnail), or a custom URL */
+  placeholder?: 'skeleton' | 'blur' | (string & {})
   /** Responsive image srcSet */
   srcSet?: string
   /** Responsive image sizes hint */
   sizes?: string
+}
+
+/**
+ * Generate a tiny placeholder URL for Supabase storage images.
+ * Returns a 10px wide, low-quality WebP version for blur-up effect.
+ */
+function getPlaceholderUrl(src: string, width: number = 10): string | undefined {
+  if (src.includes('supabase') && src.includes('/storage/')) {
+    try {
+      const url = new URL(src)
+      url.searchParams.set('width', String(width))
+      url.searchParams.set('quality', '20')
+      url.searchParams.set('format', 'webp')
+      return url.toString()
+    } catch {
+      return undefined
+    }
+  }
+  return undefined
 }
 
 // Check format support (cached)
@@ -79,6 +100,7 @@ export const OptimizedImage = memo(function OptimizedImage({
   webpSrc,
   avifSrc,
   showPlaceholder = true,
+  placeholder = 'skeleton',
   srcSet,
   sizes,
 }: OptimizedImageProps) {
@@ -120,19 +142,37 @@ export const OptimizedImage = memo(function OptimizedImage({
 
   const optimizedSrc = isInView ? getOptimizedSrc(src, webpSrc, avifSrc) : undefined
 
+  // Determine blur placeholder URL
+  const blurSrc = placeholder === 'blur'
+    ? getPlaceholderUrl(src)
+    : placeholder !== 'skeleton'
+      ? placeholder // custom URL string
+      : undefined
+
   return (
     <div
       ref={imgRef}
-      className="relative"
+      className="relative overflow-hidden"
       style={{
         ...(width && height ? { aspectRatio: `${width}/${height}` } : {}),
       }}
     >
-      {/* Skeleton placeholder */}
-      {showPlaceholder && !isLoaded && (
+      {/* Skeleton placeholder (default) */}
+      {showPlaceholder && !isLoaded && !blurSrc && (
         <div
           className="absolute inset-0 bg-white/5 animate-pulse rounded-inherit"
           aria-hidden="true"
+        />
+      )}
+
+      {/* Blur-up placeholder */}
+      {showPlaceholder && !isLoaded && blurSrc && (
+        <img
+          src={blurSrc}
+          alt=""
+          aria-hidden="true"
+          className="absolute inset-0 w-full h-full object-cover"
+          style={{ filter: 'blur(20px)', transform: 'scale(1.1)' }}
         />
       )}
 
@@ -190,9 +230,14 @@ export const Avatar = memo(function Avatar({
   fallbackIcon,
 }: AvatarProps) {
   const [hasError, setHasError] = useState(false)
+  const [isLoaded, setIsLoaded] = useState(false)
 
   const handleError = useCallback(() => {
     setHasError(true)
+  }, [])
+
+  const handleLoad = useCallback(() => {
+    setIsLoaded(true)
   }, [])
 
   const sizeClass = sizeClasses[size]
@@ -210,17 +255,32 @@ export const Avatar = memo(function Avatar({
     )
   }
 
+  const placeholderSrc = getPlaceholderUrl(src, 10)
+
   return (
-    <img
-      src={src}
-      alt={alt}
-      width={dimension}
-      height={dimension}
-      loading="lazy"
-      decoding="async"
-      onError={handleError}
-      className={`${sizeClass} rounded-full object-cover flex-shrink-0 ${className}`}
-    />
+    <div className={`${sizeClass} rounded-full flex-shrink-0 relative overflow-hidden ${className}`}>
+      {/* Blurred tiny placeholder */}
+      {placeholderSrc && !isLoaded && (
+        <img
+          src={placeholderSrc}
+          alt=""
+          aria-hidden="true"
+          className="absolute inset-0 w-full h-full object-cover rounded-full"
+          style={{ filter: 'blur(10px)', transform: 'scale(1.1)' }}
+        />
+      )}
+      <img
+        src={src}
+        alt={alt}
+        width={dimension}
+        height={dimension}
+        loading="lazy"
+        decoding="async"
+        onLoad={handleLoad}
+        onError={handleError}
+        className={`w-full h-full rounded-full object-cover transition-opacity duration-200 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}
+      />
+    </div>
   )
 })
 

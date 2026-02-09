@@ -106,34 +106,6 @@ export const playSound = (name: SoundName, volume = 0.5): void => {
 }
 
 /**
- * Play a sound with custom options
- */
-export const playSoundWithOptions = (
-  name: SoundName,
-  options: {
-    volume?: number
-    playbackRate?: number
-    loop?: boolean
-  } = {}
-): HTMLAudioElement | null => {
-  if (!getSoundEnabled()) return null
-
-  const sound = getSound(name)
-  if (!sound) return null
-
-  try {
-    sound.volume = Math.max(0, Math.min(1, options.volume ?? 0.5))
-    sound.playbackRate = options.playbackRate ?? 1
-    sound.loop = options.loop ?? false
-    sound.currentTime = 0
-    sound.play().catch(() => {})
-    return sound
-  } catch {
-    return null
-  }
-}
-
-/**
  * Stop a currently playing sound
  */
 export const stopSound = (name: SoundName): void => {

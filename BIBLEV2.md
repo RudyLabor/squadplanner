@@ -778,6 +778,14 @@ Budgets definis dans `public/performance-budget.json` :
 - Genere `dist/bundle-analysis.html` avec treemap, gzip + brotli sizes, ouverture auto
 - **Scripts** : `npm run analyze` (Windows) + `npm run analyze:unix` (Unix/macOS)
 
+**Elimination code mort** : 13 fichiers supprimes + exports nettoyes
+- 5 composants AI morts (AIPredictiveSuggestion, AICrossAvailability, AITeamInsights, AISessionSummary, AIPredictionsQuery)
+- 3 composants UI morts (LazyConfetti, ErrorState, LazyImage, LoadingSuccess)
+- 2 utilitaires morts (formatLastSeen, barrel index.ts)
+- 1 illustration morte (ControllerIllustration)
+- Exports nettoyes : animations.ts (14 exports morts), celebrations.ts (4 exports morts), avatarUrl.ts, calendarExport.ts, motionTokens.ts, sounds.ts
+- CSS reduit de ~4.2 KB
+
 #### Fonts 🟢 FAIT (deja optimise + Font Loading API)
 
 **Etat verifie** :
@@ -785,22 +793,30 @@ Budgets definis dans `public/performance-budget.json` :
 - `font-display: swap` - OK
 - Variable fonts (1 fichier par font) - OK
 - Preconnect vers `fonts.gstatic.com` - OK
+- Subsetting latin : deja applique (fichiers .woff2 statiques de Google, pre-subsetted)
 
 **Amelioration** : `src/utils/fontOptimization.ts`
 - `initFontOptimization()` : detecte le chargement des fonts via Font Loading API
 - Ajoute classe `fonts-loaded` sur `<html>` quand les fonts sont chargees
 - Permet d'utiliser des fallbacks systeme en attendant le chargement
 
-#### Images 🟢 FAIT (srcset + audit loading/decoding)
+#### Images 🟢 FAIT (LQIP + audit loading/decoding + pipeline AVIF)
 
-**Ameliorations** :
-- `getAvatarSrcSet()` dans `avatarUrl.ts` : genere srcset avec variantes 1x, 1.5x, 2x, 3x DPR
-- `OptimizedImage.tsx` : ajout props `srcSet` et `sizes` passees au `<img>`
-- Format AVIF/WebP avec detection automatique deja en place via `OptimizedImage`
+**LQIP (Low Quality Image Placeholder)** :
+- `OptimizedImage.tsx` : prop `placeholder` accepte `'skeleton'` (defaut), `'blur'`, ou URL custom
+- Mode blur : genere une version 10px floue (filter: blur(20px)) pour les images Supabase
+- Cross-fade du placeholder flou vers l'image reelle au chargement
+- Avatar : blur-up automatique pour les URLs Supabase
 
-**Audit `loading="lazy"` + `decoding="async"`** : 28 `<img>` corrigees dans 20 fichiers :
-- Messages.tsx, SquadDetail.tsx, Profile.tsx, CallModal.tsx, AppLayout.tsx, etc.
-- AnimatedAvatar, AvatarGroup, GifPicker : `decoding="async"` ajoute
+**Pipeline AVIF** :
+- `scripts/optimize-images.mjs` : script de conversion PNG/JPG vers WebP + AVIF via sharp
+- `npm run optimize-images` (necessite `npm install --save-dev sharp`)
+- Report taille avant/apres pour chaque image
+
+**Props srcSet/sizes** : ajoutees sur `OptimizedImage.tsx`
+- Format AVIF/WebP avec detection automatique deja en place
+
+**Audit `loading="lazy"` + `decoding="async"`** : 28 `<img>` corrigees dans 20 fichiers
 
 #### Re-renders inutiles 🟢 FAIT
 
@@ -816,16 +832,11 @@ Budgets definis dans `public/performance-budget.json` :
 - SquadDetail.tsx : 1 handler (handleRsvp)
 - Home.tsx : 2 handlers (handleJoinFriendParty, handleInviteFriend)
 
-**Outils de dev** : `src/utils/performanceUtils.ts`
-- `useWhyDidYouRender()` : log les props qui changent (dev only)
-- `useRenderTime()` : alerte si un render depasse 16ms (dev only)
-
 #### Preloading/Prefetching 🟢 FAIT
 
 **`src/utils/routePrefetch.ts`** :
-- `prefetchProbableRoutes()` : warm Supabase preconnect via `requestIdleCallback` (non-bloquant)
-- `setupVisibilityPrefetch()` : IntersectionObserver helper pour prefetch au scroll
-- Initialise dans App.tsx apres authentification
+- `prefetchProbableRoutes()` : warm Supabase preconnect + prefetch 4 routes principales (Home, Messages, Squads, Sessions) via `import()` dynamique echelonne (500ms entre chaque)
+- Initialise dans App.tsx apres authentification via `requestIdleCallback` (non-bloquant)
 
 **`src/utils/webVitals.ts`** : Core Web Vitals reporting
 - `observeWebVitals()` : PerformanceObserver pour LCP, FCP, CLS, TTFB avec seuils good/needs-improvement/poor

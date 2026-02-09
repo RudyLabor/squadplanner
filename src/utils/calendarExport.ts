@@ -63,7 +63,7 @@ function escapeICS(text: string): string {
 /**
  * Generates ICS content for multiple events
  */
-export function generateICS(events: CalendarEvent[]): string {
+function generateICS(events: CalendarEvent[]): string {
   const lines: string[] = [
     'BEGIN:VCALENDAR',
     'VERSION:2.0',
@@ -108,7 +108,7 @@ export function generateICS(events: CalendarEvent[]): string {
 /**
  * Downloads an ICS file
  */
-export function downloadICS(content: string, filename: string = 'sessions.ics'): void {
+function downloadICS(content: string, filename: string = 'sessions.ics'): void {
   const blob = new Blob([content], { type: 'text/calendar;charset=utf-8' })
   const url = URL.createObjectURL(blob)
 

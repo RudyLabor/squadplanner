@@ -24,7 +24,7 @@ export const motion = {
 } as const;
 
 // Helper to create transition config
-export const createTransition = (duration: number = motion.duration.normal, ease: number[] = [...motion.easing.easeOut]) => ({
+const createTransition = (duration: number = motion.duration.normal, ease: number[] = [...motion.easing.easeOut]) => ({
   duration,
   ease,
 });

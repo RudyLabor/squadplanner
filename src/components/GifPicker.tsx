@@ -1,11 +1,12 @@
 import { useState, useRef, useEffect, useCallback, memo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Search, X, Loader2, Sparkles, RefreshCw } from 'lucide-react'
+import { supabase } from '../lib/supabase'
 
 /**
  * GifPicker — Phase 3.1
- * Search and select GIFs using Tenor API v2 (free tier, no key needed for basic search).
- * Mobile-optimized: renders as a full-width bottom sheet on small screens.
+ * Search and select GIFs via Supabase Edge Function proxy (tenor-proxy).
+ * API key stays server-side. Mobile-optimized bottom sheet on small screens.
  */
 
 interface GifResult {
@@ -14,17 +15,6 @@ interface GifResult {
   preview: string    // Tiny preview (thumbnail)
   width: number
   height: number
-}
-
-// Tenor API v2 — key from env or fallback to public key
-const TENOR_API_KEY = import.meta.env.VITE_TENOR_API_KEY || 'AIzaSyDDAz5l3nFi8fMbEGMKOvTjdykyH_ugYK8'
-const TENOR_BASE = 'https://tenor.googleapis.com/v2'
-
-// Build Tenor URL manually to avoid URLSearchParams encoding commas in media_filter
-function buildTenorUrl(endpoint: string, extra: Record<string, string> = {}) {
-  const base = `${TENOR_BASE}/${endpoint}?key=${encodeURIComponent(TENOR_API_KEY)}&client_key=squad_planner&media_filter=tinygif,gif&contentfilter=medium&locale=fr_FR`
-  const extras = Object.entries(extra).map(([k, v]) => `${k}=${encodeURIComponent(v)}`).join('&')
-  return extras ? `${base}&${extras}` : base
 }
 
 function mapResults(data: any): GifResult[] {
@@ -39,10 +29,11 @@ function mapResults(data: any): GifResult[] {
 
 async function searchGifs(query: string, limit = 20): Promise<GifResult[]> {
   try {
-    const url = buildTenorUrl('search', { q: query, limit: String(limit) })
-    const res = await fetch(url)
-    if (!res.ok) throw new Error(`Tenor API ${res.status}`)
-    return mapResults(await res.json())
+    const { data, error } = await supabase.functions.invoke('tenor-proxy', {
+      body: { action: 'search', query, limit }
+    })
+    if (error) throw error
+    return mapResults(data)
   } catch (err) {
     console.warn('[GifPicker] Search error:', err)
     return []
@@ -51,10 +42,11 @@ async function searchGifs(query: string, limit = 20): Promise<GifResult[]> {
 
 async function fetchTrendingGifs(limit = 20): Promise<GifResult[]> {
   try {
-    const url = buildTenorUrl('featured', { limit: String(limit) })
-    const res = await fetch(url)
-    if (!res.ok) throw new Error(`Tenor API ${res.status}`)
-    return mapResults(await res.json())
+    const { data, error } = await supabase.functions.invoke('tenor-proxy', {
+      body: { action: 'featured', limit }
+    })
+    if (error) throw error
+    return mapResults(data)
   } catch (err) {
     console.warn('[GifPicker] Trending error:', err)
     return []

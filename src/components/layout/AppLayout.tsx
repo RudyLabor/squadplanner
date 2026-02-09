@@ -643,7 +643,7 @@ export function AppLayout({ children }: AppLayoutProps) {
               icon={item.icon}
               label={item.label}
               isActive={currentPath === item.path}
-              badge={item.path === '/squads' && pendingRsvpCount > 0 ? pendingRsvpCount : undefined}
+              badge={undefined}
             />
           ))}
           <PartyButton isActive={isPartyActive} hasActiveParty={isInVoiceChat} />

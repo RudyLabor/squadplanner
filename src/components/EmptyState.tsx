@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion'
 import {
-  Inbox, Calendar, Users, MessageCircle, Trophy, Zap,
-  Bell, Search, FolderOpen, UserPlus, CalendarPlus, Send,
+  Inbox, Users, Trophy,
+  Search, FolderOpen, UserPlus, CalendarPlus, Send,
   PartyPopper, Gamepad2
 } from 'lucide-react'
 import { Button } from './ui'

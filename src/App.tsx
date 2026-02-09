@@ -9,6 +9,7 @@ import { pageTransitionVariants, pageTransitionConfig } from './components/PageT
 import { initSentry } from './lib/sentry'
 import { useDocumentTitle } from './hooks/useDocumentTitle'
 import { useScrollRestoration } from './hooks/useScrollRestoration'
+import { useSwipeBack } from './hooks/useSwipeBack'
 import { ErrorBoundary } from './components/ErrorBoundary'
 import { OfflineBanner } from './components/OfflineBanner'
 import { PWAInstallBanner } from './components/PWAInstallBanner'
@@ -133,6 +134,7 @@ function AppContent() {
 
   useDocumentTitle()
   useScrollRestoration()
+  useSwipeBack()
 
   useEffect(() => {
     initialize()

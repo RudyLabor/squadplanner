@@ -75,13 +75,15 @@ function useToasts() {
   return toasts
 }
 
-// --- Icons ---
-const typeIcons: Record<ToastType, ReactNode> = {
-  success: <CheckCircle className="w-5 h-5 text-success" />,
-  error: <AlertCircle className="w-5 h-5 text-error" />,
-  warning: <AlertTriangle className="w-5 h-5 text-warning" />,
-  info: <Info className="w-5 h-5 text-primary" />,
-  default: null,
+// --- Icons (lazy to avoid TDZ in minified builds) ---
+function getTypeIcon(type: ToastType): ReactNode {
+  switch (type) {
+    case 'success': return <CheckCircle className="w-5 h-5 text-success" />
+    case 'error': return <AlertCircle className="w-5 h-5 text-error" />
+    case 'warning': return <AlertTriangle className="w-5 h-5 text-warning" />
+    case 'info': return <Info className="w-5 h-5 text-primary" />
+    default: return null
+  }
 }
 
 const typeBorderColors: Record<ToastType, string> = {
@@ -147,7 +149,7 @@ function ToastItem({ data, onDismiss }: { data: ToastEntry; onDismiss: (id: stri
       <div className="flex items-start gap-3 px-4 py-3">
         {/* Icon */}
         <div className="shrink-0 mt-0.5" aria-hidden="true">
-          {data.icon ?? typeIcons[type]}
+          {data.icon ?? getTypeIcon(type)}
         </div>
 
         {/* Content */}

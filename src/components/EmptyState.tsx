@@ -1,7 +1,8 @@
 import { motion } from 'framer-motion'
 import {
   Inbox, Calendar, Users, MessageCircle, Trophy, Zap,
-  Bell, Search, FolderOpen
+  Bell, Search, FolderOpen, UserPlus, CalendarPlus, Send,
+  PartyPopper, Gamepad2
 } from 'lucide-react'
 import { Button } from './ui'
 
@@ -31,53 +32,58 @@ const EMPTY_STATE_CONFIG: Record<EmptyStateType, {
   title: string
   message: string
   color: string
+  defaultActionLabel?: string
 }> = {
   no_squads: {
     icon: <Users className="w-12 h-12" />,
     title: "Pas encore de squad",
     message: "Crée ta première squad et invite tes potes à jouer !",
-    color: '#a855f7'
+    color: '#a855f7',
+    defaultActionLabel: 'Créer ma squad'
   },
   no_sessions: {
-    icon: <Calendar className="w-12 h-12" />,
+    icon: <CalendarPlus className="w-12 h-12" />,
     title: "Aucune session prévue",
-    message: "Planifie une session de jeu avec ta squad",
-    color: '#22d3ee'
+    message: "Ta squad t'attend ! Planifie une session et fini les « on verra ».",
+    color: '#22d3ee',
+    defaultActionLabel: 'Planifier maintenant'
   },
   no_messages: {
-    icon: <MessageCircle className="w-12 h-12" />,
-    title: "Pas de messages",
-    message: "Commence une conversation avec ta squad !",
+    icon: <Send className="w-12 h-12" />,
+    title: "Pas encore de messages",
+    message: "Envoie le premier message à ta squad pour lancer la conversation !",
     color: '#4ade80'
   },
   no_friends: {
-    icon: <Users className="w-12 h-12" />,
-    title: "Aucun ami en ligne",
-    message: "Tes potes sont sûrement occupés. Invite-les à jouer !",
-    color: '#f59e0b'
+    icon: <UserPlus className="w-12 h-12" />,
+    title: "Aucun pote en ligne",
+    message: "Personne n'est connecté pour le moment. Invite tes amis à rejoindre Squad Planner !",
+    color: '#f59e0b',
+    defaultActionLabel: 'Invite tes amis'
   },
   no_achievements: {
     icon: <Trophy className="w-12 h-12" />,
     title: "Pas encore de succès",
-    message: "Participe à des sessions pour débloquer des badges !",
-    color: '#eab308'
+    message: "Participe à des sessions et relève des défis pour débloquer tes premiers badges !",
+    color: '#eab308',
+    defaultActionLabel: 'Voir les sessions'
   },
   no_challenges: {
-    icon: <Zap className="w-12 h-12" />,
+    icon: <Gamepad2 className="w-12 h-12" />,
     title: "Aucun défi disponible",
-    message: "Reviens demain pour de nouveaux défis !",
+    message: "Les défis se renouvellent chaque jour. Reviens demain pour de nouvelles missions !",
     color: '#ec4899'
   },
   no_notifications: {
-    icon: <Bell className="w-12 h-12" />,
-    title: "Pas de notifications",
-    message: "Tu es à jour ! Aucune notification pour le moment.",
+    icon: <PartyPopper className="w-12 h-12" />,
+    title: "Tout est lu !",
+    message: "Aucune notification en attente. Profites-en pour planifier ta prochaine session.",
     color: '#6366f1'
   },
   no_search_results: {
     icon: <Search className="w-12 h-12" />,
     title: "Aucun résultat",
-    message: "Essaie avec d'autres mots-clés",
+    message: "Essaie avec d'autres mots-clés ou vérifie l'orthographe.",
     color: '#8b5cf6'
   },
   empty_folder: {
@@ -174,7 +180,7 @@ export function EmptyState({
       </motion.p>
 
       {/* CTA Button with pulse glow */}
-      {actionLabel && onAction && (
+      {(actionLabel || config.defaultActionLabel) && onAction && (
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -204,7 +210,7 @@ export function EmptyState({
               color: '#fff'
             }}
           >
-            {actionLabel}
+            {actionLabel || config.defaultActionLabel}
           </Button>
         </motion.div>
       )}

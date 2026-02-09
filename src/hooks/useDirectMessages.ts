@@ -58,7 +58,8 @@ export const useDirectMessagesStore = create<DirectMessagesState>((set, get) => 
     try {
       set({ isLoading: true })
 
-      const { data: { user } } = await supabase.auth.getUser()
+      const { data: { session } } = await supabase.auth.getSession()
+      const user = session?.user
       if (!user) throw new Error('Not authenticated')
 
       // Try optimized RPC first
@@ -112,7 +113,8 @@ export const useDirectMessagesStore = create<DirectMessagesState>((set, get) => 
     try {
       set({ isLoading: true })
 
-      const { data: { user } } = await supabase.auth.getUser()
+      const { data: { session } } = await supabase.auth.getSession()
+      const user = session?.user
       if (!user) throw new Error('Not authenticated')
 
       const { data, error } = await supabase
@@ -133,7 +135,8 @@ export const useDirectMessagesStore = create<DirectMessagesState>((set, get) => 
 
   sendMessage: async (content: string, receiverId: string) => {
     try {
-      const { data: { user } } = await supabase.auth.getUser()
+      const { data: { session } } = await supabase.auth.getSession()
+      const user = session?.user
       if (!user) throw new Error('Not authenticated')
 
       const { error } = await supabase
@@ -165,8 +168,9 @@ export const useDirectMessagesStore = create<DirectMessagesState>((set, get) => 
   subscribeToMessages: (otherUserId: string) => {
     get().unsubscribe()
 
-    const currentUser = supabase.auth.getUser()
-    currentUser.then(({ data: { user } }) => {
+    const currentSession = supabase.auth.getSession()
+    currentSession.then(({ data: { session } }) => {
+      const user = session?.user
       if (!user) return
 
       const channelName = `dm:${[user.id, otherUserId].sort().join(':')}`
@@ -259,7 +263,8 @@ export const useDirectMessagesStore = create<DirectMessagesState>((set, get) => 
   // OPTIMIZED: Uses batch RPC instead of single update
   markAsRead: async (otherUserId: string) => {
     try {
-      const { data: { user } } = await supabase.auth.getUser()
+      const { data: { session } } = await supabase.auth.getSession()
+      const user = session?.user
       if (!user) return
 
       // Try batch RPC first
@@ -297,7 +302,8 @@ export const useDirectMessagesStore = create<DirectMessagesState>((set, get) => 
 
   startConversation: async (userId: string) => {
     try {
-      const { data: { user } } = await supabase.auth.getUser()
+      const { data: { session } } = await supabase.auth.getSession()
+      const user = session?.user
       if (!user) throw new Error('Not authenticated')
 
       const { conversations } = get()

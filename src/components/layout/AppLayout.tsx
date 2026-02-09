@@ -2,7 +2,7 @@ import { useEffect, useState, memo, useCallback, useMemo, useRef } from 'react'
 import type { ReactNode } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Home, Users, Mic, MessageCircle, User, Plus, Zap, Pin, PinOff, Settings, HelpCircle, Phone } from 'lucide-react'
+import { Home, Users, Mic, MessageCircle, User, Plus, Zap, Pin, PinOff, Settings, HelpCircle, Phone, Calendar } from 'lucide-react'
 import { useShallow } from 'zustand/react/shallow'
 import { useAuthStore, useSquadsStore, useVoiceChatStore, useKeyboardVisible, useUnreadCountStore, useSquadNotificationsStore } from '../../hooks'
 import { useCreateSessionModal } from '../CreateSessionModal'
@@ -21,6 +21,7 @@ interface AppLayoutProps {
 const navItems = [
   { path: '/home', icon: Home, label: 'Accueil' },
   { path: '/squads', icon: Users, label: 'Squads' },
+  { path: '/sessions', icon: Calendar, label: 'Sessions' },
   { path: '/party', icon: Mic, label: 'Party' },
   { path: '/messages', icon: MessageCircle, label: 'Messages' },
   { path: '/profile', icon: User, label: 'Profil' },
@@ -29,7 +30,7 @@ const navItems = [
 // Mobile nav items (Party sera au centre avec un style spécial)
 const mobileNavLeft = [
   { path: '/home', icon: Home, label: 'Accueil' },
-  { path: '/squads', icon: Users, label: 'Squads' },
+  { path: '/sessions', icon: Calendar, label: 'Sessions' },
 ] as const
 
 const mobileNavRight = [
@@ -320,10 +321,9 @@ export function AppLayout({ children }: AppLayoutProps) {
   const isAuthPage = location.pathname === '/auth'
   const isOnboarding = location.pathname === '/onboarding'
   const isLanding = location.pathname === '/'
-  const isLegalPage = location.pathname === '/legal'
-  const isHelpPage = location.pathname === '/help'
-  const isPremiumPage = location.pathname === '/premium'
-  const shouldHideNav = isAuthPage || isOnboarding || isLanding || isLegalPage || isHelpPage || isPremiumPage
+  const isPublicPage = ['/legal', '/help', '/premium'].includes(location.pathname)
+  // Show nav for all pages except auth/onboarding/landing. Public pages get nav only if user is logged in.
+  const shouldHideNav = isAuthPage || isOnboarding || isLanding || (isPublicPage && !user)
 
   // OPTIMIZED: Memoize computed values
   const isPartyActive = useMemo(() => location.pathname === '/party', [location.pathname])

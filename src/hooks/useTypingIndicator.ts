@@ -45,7 +45,8 @@ export function useTypingIndicator({
 
   // Récupérer l'utilisateur courant
   useEffect(() => {
-    supabase.auth.getUser().then(({ data: { user } }) => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      const user = session?.user
       if (user) setCurrentUserId(user.id)
     })
   }, [])

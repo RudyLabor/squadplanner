@@ -57,7 +57,8 @@ export const useCallHistoryStore = create<CallHistoryState>((set, get) => ({
     set({ isLoading: true, error: null })
 
     try {
-      const { data: { user } } = await supabase.auth.getUser()
+      const { data: { session } } = await supabase.auth.getSession()
+      const user = session?.user
       if (!user) {
         set({ error: 'Utilisateur non connecté', isLoading: false })
         return

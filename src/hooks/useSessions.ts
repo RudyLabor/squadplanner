@@ -44,7 +44,8 @@ export const useSessionsStore = create<SessionsState>((set, get) => ({
     try {
       set({ isLoading: true })
 
-      const { data: { user } } = await supabase.auth.getUser()
+      const { data: { session } } = await supabase.auth.getSession()
+      const user = session?.user
 
       const { data: sessions, error } = await supabase
         .from('sessions')
@@ -95,9 +96,10 @@ export const useSessionsStore = create<SessionsState>((set, get) => ({
 
   fetchSessionById: async (id: string) => {
     try {
-      const { data: { user } } = await supabase.auth.getUser()
-      
-      const { data: session, error } = await supabase
+      const { data: { session: authSession } } = await supabase.auth.getSession()
+      const user = authSession?.user
+
+      const { data: sessionData, error } = await supabase
         .from('sessions')
         .select('*')
         .eq('id', id)
@@ -126,7 +128,7 @@ export const useSessionsStore = create<SessionsState>((set, get) => ({
       }
 
       const sessionWithDetails: SessionWithDetails = {
-        ...session,
+        ...sessionData,
         rsvps: rsvps || [],
         checkins: checkins || [],
         my_rsvp: my_rsvp || null,
@@ -144,11 +146,12 @@ export const useSessionsStore = create<SessionsState>((set, get) => ({
   createSession: async (data) => {
     try {
       set({ isLoading: true })
-      
-      const { data: { user } } = await supabase.auth.getUser()
+
+      const { data: { session: authSession2 } } = await supabase.auth.getSession()
+      const user = authSession2?.user
       if (!user) throw new Error('Not authenticated')
 
-      const { data: session, error } = await supabase
+      const { data: newSession, error } = await supabase
         .from('sessions')
         .insert({
           squad_id: data.squad_id,
@@ -169,14 +172,14 @@ export const useSessionsStore = create<SessionsState>((set, get) => ({
       await supabase
         .from('session_rsvps')
         .insert({
-          session_id: session.id,
+          session_id: newSession.id,
           user_id: user.id,
           response: 'present' as const,
         })
 
       await get().fetchSessions(data.squad_id)
       set({ isLoading: false })
-      return { session, error: null }
+      return { session: newSession, error: null }
     } catch (error) {
       set({ isLoading: false })
       return { session: null, error: error as Error }
@@ -185,7 +188,8 @@ export const useSessionsStore = create<SessionsState>((set, get) => ({
 
   updateRsvp: async (sessionId: string, response: RsvpResponse) => {
     try {
-      const { data: { user } } = await supabase.auth.getUser()
+      const { data: { session: authSession3 } } = await supabase.auth.getSession()
+      const user = authSession3?.user
       if (!user) throw new Error('Not authenticated')
 
       // Check if RSVP exists
@@ -222,17 +226,17 @@ export const useSessionsStore = create<SessionsState>((set, get) => ({
       }
 
       // Récupérer les infos pour le message système
-      const [{ data: profile }, { data: session }] = await Promise.all([
+      const [{ data: profile }, { data: rsvpSession }] = await Promise.all([
         supabase.from('profiles').select('username').eq('id', user.id).single(),
         supabase.from('sessions').select('squad_id, title').eq('id', sessionId).single()
       ])
 
       // Envoyer le message système "X a répondu Y pour la session"
-      if (profile?.username && session?.squad_id) {
+      if (profile?.username && rsvpSession?.squad_id) {
         sendRsvpMessage(
-          session.squad_id,
+          rsvpSession.squad_id,
           profile.username,
-          session.title,
+          rsvpSession.title,
           response
         ).catch(console.error)
       }
@@ -247,7 +251,8 @@ export const useSessionsStore = create<SessionsState>((set, get) => ({
 
   checkin: async (sessionId: string, status: CheckinStatus) => {
     try {
-      const { data: { user } } = await supabase.auth.getUser()
+      const { data: { session } } = await supabase.auth.getSession()
+      const user = session?.user
       if (!user) throw new Error('Not authenticated')
 
       // Check if checkin exists

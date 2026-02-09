@@ -38,6 +38,19 @@ export function useDocumentTitle() {
     const title = getTitleForPath(pathname)
     document.title = title
 
+    // Update canonical URL dynamically
+    const canonicalUrl = `https://squadplanner.fr${pathname === '/' ? '' : pathname}`
+    const canonical = document.querySelector('link[rel="canonical"]') as HTMLLinkElement
+    if (canonical) canonical.href = canonicalUrl
+
+    // Update og:url
+    const ogUrl = document.querySelector('meta[property="og:url"]') as HTMLMetaElement
+    if (ogUrl) ogUrl.content = canonicalUrl
+
+    // Update twitter:url
+    const twitterUrl = document.querySelector('meta[name="twitter:url"]') as HTMLMetaElement
+    if (twitterUrl) twitterUrl.content = canonicalUrl
+
     // Announce route change to screen readers (A11Y 3)
     const ariaRegion = document.getElementById('aria-live-polite')
     if (ariaRegion) {

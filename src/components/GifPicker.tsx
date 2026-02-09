@@ -16,61 +16,47 @@ interface GifResult {
   height: number
 }
 
-// Tenor API v2 search (using the public anonymous key)
-const TENOR_API_KEY = 'AIzaSyDDAz5l3nFi8fMbEGMKOvTjdykyH_ugYK8' // Google's public Tenor API key
+// Tenor API v2 — key from env or fallback to public key
+const TENOR_API_KEY = import.meta.env.VITE_TENOR_API_KEY || 'AIzaSyDDAz5l3nFi8fMbEGMKOvTjdykyH_ugYK8'
 const TENOR_BASE = 'https://tenor.googleapis.com/v2'
+
+// Build Tenor URL manually to avoid URLSearchParams encoding commas in media_filter
+function buildTenorUrl(endpoint: string, extra: Record<string, string> = {}) {
+  const base = `${TENOR_BASE}/${endpoint}?key=${encodeURIComponent(TENOR_API_KEY)}&client_key=squad_planner&media_filter=tinygif,gif&contentfilter=medium&locale=fr_FR`
+  const extras = Object.entries(extra).map(([k, v]) => `${k}=${encodeURIComponent(v)}`).join('&')
+  return extras ? `${base}&${extras}` : base
+}
+
+function mapResults(data: any): GifResult[] {
+  return (data.results || []).map((r: any) => ({
+    id: r.id,
+    url: r.media_formats?.gif?.url || r.media_formats?.tinygif?.url || '',
+    preview: r.media_formats?.tinygif?.url || r.media_formats?.gif?.url || '',
+    width: r.media_formats?.tinygif?.dims?.[0] || 200,
+    height: r.media_formats?.tinygif?.dims?.[1] || 150,
+  }))
+}
 
 async function searchGifs(query: string, limit = 20): Promise<GifResult[]> {
   try {
-    const params = new URLSearchParams({
-      q: query,
-      key: TENOR_API_KEY,
-      client_key: 'squad_planner',
-      limit: String(limit),
-      media_filter: 'tinygif,gif',
-      contentfilter: 'medium',
-      locale: 'fr_FR',
-    })
-
-    const res = await fetch(`${TENOR_BASE}/search?${params}`)
-    if (!res.ok) throw new Error('Tenor API error')
-
-    const data = await res.json()
-    return (data.results || []).map((r: any) => ({
-      id: r.id,
-      url: r.media_formats?.gif?.url || r.media_formats?.tinygif?.url || '',
-      preview: r.media_formats?.tinygif?.url || r.media_formats?.gif?.url || '',
-      width: r.media_formats?.tinygif?.dims?.[0] || 200,
-      height: r.media_formats?.tinygif?.dims?.[1] || 150,
-    }))
-  } catch {
+    const url = buildTenorUrl('search', { q: query, limit: String(limit) })
+    const res = await fetch(url)
+    if (!res.ok) throw new Error(`Tenor API ${res.status}`)
+    return mapResults(await res.json())
+  } catch (err) {
+    console.warn('[GifPicker] Search error:', err)
     return []
   }
 }
 
 async function fetchTrendingGifs(limit = 20): Promise<GifResult[]> {
   try {
-    const params = new URLSearchParams({
-      key: TENOR_API_KEY,
-      client_key: 'squad_planner',
-      limit: String(limit),
-      media_filter: 'tinygif,gif',
-      contentfilter: 'medium',
-      locale: 'fr_FR',
-    })
-
-    const res = await fetch(`${TENOR_BASE}/featured?${params}`)
-    if (!res.ok) throw new Error('Tenor API error')
-
-    const data = await res.json()
-    return (data.results || []).map((r: any) => ({
-      id: r.id,
-      url: r.media_formats?.gif?.url || r.media_formats?.tinygif?.url || '',
-      preview: r.media_formats?.tinygif?.url || r.media_formats?.gif?.url || '',
-      width: r.media_formats?.tinygif?.dims?.[0] || 200,
-      height: r.media_formats?.tinygif?.dims?.[1] || 150,
-    }))
-  } catch {
+    const url = buildTenorUrl('featured', { limit: String(limit) })
+    const res = await fetch(url)
+    if (!res.ok) throw new Error(`Tenor API ${res.status}`)
+    return mapResults(await res.json())
+  } catch (err) {
+    console.warn('[GifPicker] Trending error:', err)
     return []
   }
 }
@@ -121,6 +107,16 @@ export const GifPicker = memo(function GifPicker({ isOpen, onSelect, onClose }: 
 
     setTimeout(() => searchRef.current?.focus(), 200)
   }, [isOpen])
+
+  // Close on Escape key
+  useEffect(() => {
+    if (!isOpen) return
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose()
+    }
+    document.addEventListener('keydown', handleKeyDown)
+    return () => document.removeEventListener('keydown', handleKeyDown)
+  }, [isOpen, onClose])
 
   // Debounced search
   const handleSearch = useCallback((value: string) => {

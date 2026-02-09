@@ -68,10 +68,11 @@
     }
     </script>
 
-    <!-- Fonts - Inter + Space Grotesk display -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet" />
+    <!-- Fonts — self-hosted via preloaded woff2 above + @font-face in CSS (no duplicate Google Fonts CSS) -->
+    <style>
+      @font-face { font-family: 'Inter'; font-style: normal; font-weight: 400 500 600 700; font-display: swap; src: url('https://fonts.gstatic.com/s/inter/v18/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuLyfAZ9hiJ-Ek-_EeA.woff2') format('woff2'); }
+      @font-face { font-family: 'Space Grotesk'; font-style: normal; font-weight: 600 700; font-display: swap; src: url('https://fonts.gstatic.com/s/spacegrotesk/v16/V8mDoQDjQSkFtoMM3T6r8E7mPbF4Cw.woff2') format('woff2'); }
+    </style>
 
     <!-- Critical CSS for above-the-fold content (external to avoid Vite 7 inline CSS issue) -->
     <link rel="stylesheet" href="/critical.css" />

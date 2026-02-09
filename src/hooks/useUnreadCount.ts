@@ -57,7 +57,8 @@ export const useUnreadCountStore = create<UnreadCountState>((set, get) => ({
 
   fetchCounts: async () => {
     try {
-      const { data: { user } } = await supabase.auth.getUser()
+      const { data: { session } } = await supabase.auth.getSession()
+      const user = session?.user
       if (!user) return
 
       // Get user's squads
@@ -102,7 +103,8 @@ export const useUnreadCountStore = create<UnreadCountState>((set, get) => ({
     if (get().isSubscribed) return
 
     const setupSubscription = async () => {
-      const { data: { user } } = await supabase.auth.getUser()
+      const { data: { session } } = await supabase.auth.getSession()
+      const user = session?.user
       if (!user) return
 
       // Get user's squads for filtering

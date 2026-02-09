@@ -1025,7 +1025,7 @@ export function Messages() {
   const ConversationsList = ({ showOnDesktop = false }: { showOnDesktop?: boolean }) => (
     <div className={`${showOnDesktop ? 'h-full flex flex-col' : ''}`}>
       {/* Header */}
-      <div className={`${showOnDesktop ? 'p-4' : 'mb-5'}`}>
+      <div className={`${showOnDesktop ? 'p-4 pl-5' : 'mb-5'}`}>
         <div className="flex items-center justify-between mb-1">
           <h1 className={`font-bold text-text-primary ${showOnDesktop ? 'text-xl' : 'text-2xl'}`}>Messages</h1>
           {totalUnread > 0 && (
@@ -1121,7 +1121,12 @@ export function Messages() {
                 <ConversationCard
                   key={conversation.id}
                   conversation={conversation}
-                  onClick={() => setActiveSquadConv(conversation)}
+                  onClick={() => {
+                    if (activeSquadConv?.id !== conversation.id) {
+                      setActiveDMConv(null)
+                    }
+                    setActiveSquadConv(conversation)
+                  }}
                   isActive={isDesktop && activeSquadConv?.id === conversation.id}
                 />
               ))}
@@ -1134,6 +1139,8 @@ export function Messages() {
               type="no_messages"
               title="Pas encore de messages privés"
               message="Clique sur un membre de ta squad pour lui envoyer un message."
+              actionLabel="Voir mes squads"
+              onAction={() => window.location.href = '/squads'}
             />
           ) : filteredDMConvs.length === 0 ? (
             <EmptyState
@@ -1159,9 +1166,9 @@ export function Messages() {
 
   // ========== COMPOSANT VUE CHAT ==========
   const ChatView = ({ embedded = false }: { embedded?: boolean }) => (
-    <div className={`flex flex-col ${embedded ? 'h-full' : 'h-screen'} bg-bg-base`}>
-      {/* Header chat */}
-      <div className={`flex-shrink-0 px-4 py-3 border-b border-border-default ${embedded ? '' : 'bg-bg-elevated/80 backdrop-blur-xl'}`}>
+    <div className={`flex flex-col ${embedded ? 'h-full' : 'h-[100dvh]'} bg-bg-base`}>
+      {/* Header chat — sticky on mobile for always-visible back button */}
+      <div className={`flex-shrink-0 px-4 py-3 border-b border-border-default ${embedded ? '' : 'bg-bg-elevated/80 backdrop-blur-xl sticky top-0 z-10'}`}>
         <div className={`flex items-center gap-3 ${embedded ? '' : 'max-w-4xl lg:max-w-5xl mx-auto'}`}>
           {!embedded && (
             <button
@@ -1572,9 +1579,9 @@ export function Messages() {
           isVisible={toast.visible}
           variant={toast.variant}
         />
-        <div className="h-screen bg-bg-base flex">
+        <div className="h-[calc(100vh-3.5rem)] bg-bg-base flex">
           {/* Sidebar gauche - Liste des conversations */}
-          <div className="w-[340px] xl:w-[380px] flex-shrink-0 border-r border-border-default bg-bg-elevated">
+          <div className="w-[340px] xl:w-[380px] flex-shrink-0 border-r border-border-default bg-bg-elevated overflow-hidden">
             {ConversationsList({ showOnDesktop: true })}
           </div>
 

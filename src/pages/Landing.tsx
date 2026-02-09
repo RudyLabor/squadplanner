@@ -473,10 +473,10 @@ export default function Landing() {
         <div className="max-w-4xl mx-auto">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6">
             {[
-              { end: 3, suffix: ' clics', label: 'pour confirmer ta présence', icon: MousePointerClick, color: '#06B6D4' },
-              { end: 5, suffix: ' min/sem', label: 'pour organiser toutes tes sessions', icon: Clock, color: '#6366f1' },
-              { end: 0, suffix: '', label: 'prise de tête pour planifier', icon: Smile, color: '#f5a623' },
-              { end: 4, suffix: '.9★', label: 'satisfaction beta testeurs', icon: Target, color: '#34d399' },
+              { end: 3, suffix: ' clics', singularSuffix: ' clic' as string | undefined, label: 'pour confirmer ta présence', icon: MousePointerClick, color: '#06B6D4' },
+              { end: 5, suffix: ' min/sem', singularSuffix: undefined as string | undefined, label: 'pour organiser toutes tes sessions', icon: Clock, color: '#6366f1' },
+              { end: 0, suffix: '', singularSuffix: undefined as string | undefined, label: 'prise de tête pour planifier', icon: Smile, color: '#f5a623' },
+              { end: 4.9, suffix: '★', singularSuffix: undefined as string | undefined, label: 'satisfaction beta testeurs', icon: Target, color: '#34d399', decimals: 1 },
             ].map((stat) => (
               <motion.div
                 key={stat.label}
@@ -488,7 +488,7 @@ export default function Landing() {
               >
                 <span className="absolute top-3 right-3 w-2 h-2 rounded-full bg-success animate-pulse" />
                 <stat.icon className="w-5 h-5 md:w-7 md:h-7 mx-auto mb-2" style={{ color: stat.color }} aria-hidden="true" />
-                <AnimatedCounter end={stat.end} suffix={stat.suffix} separator=" " className="text-xl md:text-3xl font-bold text-text-primary" duration={2.5} />
+                <AnimatedCounter end={stat.end} suffix={stat.suffix} singularSuffix={stat.singularSuffix} separator=" " className="text-xl md:text-3xl font-bold text-text-primary" duration={2.5} decimals={stat.decimals || 0} />
                 <div className="text-[11px] md:text-sm text-text-tertiary mt-1">{stat.label}</div>
               </motion.div>
             ))}
@@ -979,6 +979,95 @@ export default function Landing() {
       <section id="testimonials" aria-label="Témoignages" className="px-4 md:px-6 py-10 md:py-16">
         <div className="max-w-5xl mx-auto">
           <TestimonialCarousel />
+        </div>
+      </section>
+      </LazySection>
+
+      <div className="section-divider" />
+
+      {/* ═══ PRICING SECTION ═══ */}
+      <LazySection minHeight={400}>
+      <section id="pricing" aria-label="Tarifs" className="px-4 md:px-6 py-10 md:py-14">
+        <div className="max-w-4xl mx-auto">
+          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-12">
+            <h2 className="text-2xl md:text-3xl font-bold text-text-primary mb-4">
+              Tarifs simples, sans surprise
+            </h2>
+            <p className="text-text-tertiary text-[15px] max-w-md mx-auto">
+              Commence gratuitement. Passe Premium quand tu veux débloquer tout le potentiel.
+            </p>
+          </motion.div>
+
+          <div className="grid md:grid-cols-2 gap-6 max-w-3xl mx-auto">
+            {/* Free Plan */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.1 }}
+              className="p-6 rounded-2xl border border-border-default bg-bg-elevated"
+            >
+              <h3 className="text-[18px] font-bold text-text-primary mb-1">Gratuit</h3>
+              <div className="flex items-baseline gap-1 mb-4">
+                <span className="text-3xl font-bold text-text-primary">0€</span>
+                <span className="text-text-quaternary text-sm">/mois</span>
+              </div>
+              <p className="text-[13px] text-text-tertiary mb-5">Tout ce qu'il faut pour jouer avec ta squad.</p>
+              <ul className="space-y-2.5 mb-6">
+                {['Squads illimitées', 'Sessions avec RSVP', 'Chat de squad', 'Score de fiabilité', 'Party vocale', 'Notifications push'].map(f => (
+                  <li key={f} className="flex items-center gap-2 text-[13px] text-text-secondary">
+                    <Check className="w-4 h-4 text-success flex-shrink-0" />
+                    {f}
+                  </li>
+                ))}
+              </ul>
+              <Link to="/auth">
+                <motion.button
+                  className="w-full py-3 rounded-xl border border-border-default text-text-primary text-[14px] font-medium hover:bg-bg-hover transition-colors"
+                  whileHover={{ scale: 1.01 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  Commencer gratuitement
+                </motion.button>
+              </Link>
+            </motion.div>
+
+            {/* Premium Plan */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.2 }}
+              className="p-6 rounded-2xl border-2 border-primary/30 bg-gradient-to-br from-primary/8 to-transparent relative overflow-hidden"
+            >
+              <div className="absolute top-0 right-0 px-3 py-1 bg-primary text-white text-[11px] font-bold rounded-bl-xl">
+                POPULAIRE
+              </div>
+              <h3 className="text-[18px] font-bold text-text-primary mb-1">Premium</h3>
+              <div className="flex items-baseline gap-1 mb-4">
+                <span className="text-3xl font-bold text-text-primary">4,99€</span>
+                <span className="text-text-quaternary text-sm">/mois</span>
+              </div>
+              <p className="text-[13px] text-text-tertiary mb-5">Pour les squads qui veulent aller plus loin.</p>
+              <ul className="space-y-2.5 mb-6">
+                {['Tout le plan Gratuit', 'Coach IA avancé', 'Qualité audio HD', 'Historique illimité', 'Stats avancées', 'Badges exclusifs'].map(f => (
+                  <li key={f} className="flex items-center gap-2 text-[13px] text-text-secondary">
+                    <Check className="w-4 h-4 text-primary flex-shrink-0" />
+                    {f}
+                  </li>
+                ))}
+              </ul>
+              <Link to="/auth">
+                <motion.button
+                  className="w-full py-3 rounded-xl bg-primary text-white text-[14px] font-semibold hover:bg-[#818cf8] transition-colors shadow-[0_0_20px_rgba(99,102,241,0.2)]"
+                  whileHover={{ scale: 1.01 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  Essayer Premium
+                </motion.button>
+              </Link>
+            </motion.div>
+          </div>
         </div>
       </section>
       </LazySection>

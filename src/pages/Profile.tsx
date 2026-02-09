@@ -231,6 +231,8 @@ export function Profile() {
     // La redirection est geree dans signOut() avec window.location.href
   }
 
+  // profileReady: true only when profile data has actually loaded (not defaults)
+  const profileReady = !!profile && isInitialized
   const reliabilityScore = profile?.reliability_score ?? 100
   const tier = getTier(reliabilityScore)
   const reliabilityColor = tier.color
@@ -413,30 +415,38 @@ export function Profile() {
               {isEditing ? (
                 <motion.div
                   key="editing"
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
-                  className="w-full max-w-[300px] space-y-3"
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.95 }}
+                  className="w-full max-w-[340px] p-5 rounded-2xl bg-bg-elevated border border-border-default shadow-xl space-y-4"
                 >
-                  <Input
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
-                    placeholder="Ton pseudo"
-                    className="text-center"
-                  />
-                  <Input
-                    value={bio}
-                    onChange={(e) => setBio(e.target.value)}
-                    placeholder="Bio (optionnel)"
-                    className="text-center"
-                  />
-                  <div className="flex gap-2 justify-center">
-                    <Button size="sm" onClick={handleSave} disabled={isLoading}>
-                      <Check className="w-4 h-4" />
-                      Sauver
-                    </Button>
+                  <h3 className="text-[15px] font-semibold text-text-primary text-center">Modifier le profil</h3>
+                  <div className="space-y-3">
+                    <div>
+                      <label className="block text-[12px] text-text-tertiary mb-1">Pseudo</label>
+                      <Input
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)}
+                        placeholder="Ton pseudo"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[12px] text-text-tertiary mb-1">Bio</label>
+                      <Input
+                        value={bio}
+                        onChange={(e) => setBio(e.target.value)}
+                        placeholder="Bio (optionnel)"
+                      />
+                    </div>
+                  </div>
+                  <div className="flex gap-2 justify-end pt-1">
                     <Button size="sm" variant="ghost" onClick={() => setIsEditing(false)}>
                       <X className="w-4 h-4" />
+                      Annuler
+                    </Button>
+                    <Button size="sm" onClick={handleSave} disabled={isLoading}>
+                      <Check className="w-4 h-4" />
+                      Sauvegarder
                     </Button>
                   </div>
                 </motion.div>
@@ -458,7 +468,7 @@ export function Profile() {
                   <div className="flex items-center gap-2">
                     <button
                       onClick={() => setIsEditing(true)}
-                      className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-primary/12 text-purple text-[13px] font-medium hover:bg-primary/20 transition-colors active:scale-[0.97]"
+                      className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-primary/12 text-primary text-[13px] font-medium hover:bg-primary/20 transition-colors active:scale-[0.97]"
                     >
                       <Edit2 className="w-4 h-4" />
                       Modifier le profil
@@ -478,14 +488,32 @@ export function Profile() {
       </div>
 
       <div className="px-4 md:px-6 lg:px-8 max-w-2xl lg:max-w-4xl xl:max-w-6xl mx-auto">
-        {/* XP Bar - Below avatar section */}
-        <XPBar
-          currentXP={profile?.xp || 0}
-          level={profile?.level || 1}
-          className="mb-5"
-        />
+        {/* XP Bar - Below avatar section — skeleton while loading */}
+        {!profileReady ? (
+          <div className="mb-5 h-[52px] rounded-xl bg-surface-card animate-pulse" />
+        ) : (
+          <XPBar
+            currentXP={profile?.xp || 0}
+            level={profile?.level || 1}
+            className="mb-5"
+          />
+        )}
 
         {/* Score de fiabilité - Card principale avec Tier System */}
+        {!profileReady ? (
+          <Card className="mb-5 overflow-hidden bg-bg-elevated">
+            <div className="h-1.5 bg-surface-card" />
+            <div className="p-5">
+              <div className="flex items-center gap-4">
+                <div className="w-16 h-16 rounded-full bg-surface-card animate-pulse" />
+                <div className="flex-1 space-y-2">
+                  <div className="h-8 w-24 rounded bg-surface-card animate-pulse" />
+                  <div className="h-4 w-32 rounded bg-surface-card animate-pulse" />
+                </div>
+              </div>
+            </div>
+          </Card>
+        ) : (
         <Card className={`mb-5 overflow-hidden bg-bg-elevated ${tier.glow ? 'ring-1 ring-[#fbbf24]/30 ring-offset-1 ring-offset-bg-base' : ''}`}>
           <div
             className="h-1.5"
@@ -572,8 +600,24 @@ export function Profile() {
             </div>
           </div>
         </Card>
+        )}
 
         {/* Stats Grid - 2x2 on mobile, 4 cols on desktop */}
+        {!profileReady ? (
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-4 mb-5">
+            {[1, 2, 3, 4].map(i => (
+              <Card key={i} className="p-4 bg-bg-elevated">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-surface-card animate-pulse" />
+                  <div className="space-y-1.5">
+                    <div className="h-5 w-10 rounded bg-surface-card animate-pulse" />
+                    <div className="h-3 w-14 rounded bg-surface-card animate-pulse" />
+                  </div>
+                </div>
+              </Card>
+            ))}
+          </div>
+        ) : (
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-4 mb-5">
           {stats.map(stat => (
             <Card key={stat.label} className="p-4 bg-bg-elevated">
@@ -594,6 +638,7 @@ export function Profile() {
             </Card>
           ))}
         </div>
+        )}
 
         {/* Activité Section - StreakCounter */}
         <div className="mb-5">

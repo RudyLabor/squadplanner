@@ -41,7 +41,8 @@ export const useSquadNotificationsStore = create<SquadNotificationsState>((set, 
     try {
       set({ isLoading: true })
 
-      const { data: { user } } = await supabase.auth.getUser()
+      const { data: { session } } = await supabase.auth.getSession()
+      const user = session?.user
       if (!user) {
         set({ pendingRsvpCount: 0, isLoading: false })
         return

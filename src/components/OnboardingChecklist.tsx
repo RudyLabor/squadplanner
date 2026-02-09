@@ -12,6 +12,7 @@ interface OnboardingChecklistProps {
 }
 
 const STORAGE_KEY = 'squadplanner-onboarding-dismissed'
+const INVITE_COPIED_KEY = 'squadplanner-invite-copied'
 
 export function OnboardingChecklist({
   hasSquad,
@@ -22,13 +23,16 @@ export function OnboardingChecklist({
     if (typeof window === 'undefined') return false
     return localStorage.getItem(STORAGE_KEY) === 'true'
   })
+  const [inviteCopied, setInviteCopied] = useState(() => {
+    if (typeof window === 'undefined') return false
+    return localStorage.getItem(INVITE_COPIED_KEY) === 'true'
+  })
 
   // If all steps are complete, auto-hide after a celebration
-  const allComplete = hasSquad && hasSession
+  const allComplete = hasSquad && hasSession && inviteCopied
 
   useEffect(() => {
     if (allComplete && !dismissed) {
-      // Show celebration and auto-dismiss after 3 seconds
       const timer = setTimeout(() => {
         setDismissed(true)
         localStorage.setItem(STORAGE_KEY, 'true')
@@ -37,7 +41,6 @@ export function OnboardingChecklist({
     }
   }, [allComplete, dismissed])
 
-  // Don't show if dismissed or all complete
   if (dismissed) return null
 
   const handleDismiss = () => {
@@ -46,9 +49,24 @@ export function OnboardingChecklist({
   }
 
   const handleCopyInvite = async () => {
-    const inviteUrl = window.location.origin
-    await navigator.clipboard.writeText(inviteUrl)
-    showSuccess('Lien d\'invitation copié ! 📋')
+    const inviteUrl = `${window.location.origin}/auth`
+    try {
+      await navigator.clipboard.writeText(inviteUrl)
+      setInviteCopied(true)
+      localStorage.setItem(INVITE_COPIED_KEY, 'true')
+      showSuccess('Lien d\'invitation copié ! Partage-le à tes potes')
+    } catch {
+      // Fallback: select text in a temp input
+      const input = document.createElement('input')
+      input.value = inviteUrl
+      document.body.appendChild(input)
+      input.select()
+      document.execCommand('copy')
+      document.body.removeChild(input)
+      setInviteCopied(true)
+      localStorage.setItem(INVITE_COPIED_KEY, 'true')
+      showSuccess('Lien copié !')
+    }
   }
 
   const steps = [
@@ -62,9 +80,9 @@ export function OnboardingChecklist({
     {
       id: 'invite',
       label: 'Inviter un ami',
-      done: false, // Always show as actionable
+      done: inviteCopied,
       icon: UserPlus,
-      action: { type: 'button' as const, onClick: handleCopyInvite },
+      action: inviteCopied ? undefined : { type: 'button' as const, onClick: handleCopyInvite },
     },
     {
       id: 'session',
@@ -75,8 +93,8 @@ export function OnboardingChecklist({
     },
   ]
 
-  const completedCount = [hasSquad, hasSession].filter(Boolean).length
-  const totalSteps = 2 // Only count squad and session as completion criteria
+  const completedCount = [hasSquad, inviteCopied, hasSession].filter(Boolean).length
+  const totalSteps = 3
   const progress = (completedCount / totalSteps) * 100
 
   return (

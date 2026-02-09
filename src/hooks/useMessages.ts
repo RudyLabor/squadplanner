@@ -56,7 +56,8 @@ export const useMessagesStore = create<MessagesState>((set, get) => ({
     try {
       set({ isLoading: true })
 
-      const { data: { user } } = await supabase.auth.getUser()
+      const { data: { session } } = await supabase.auth.getSession()
+      const user = session?.user
       if (!user) throw new Error('Not authenticated')
 
       // Single RPC call replaces 20+ individual queries
@@ -113,7 +114,8 @@ export const useMessagesStore = create<MessagesState>((set, get) => ({
 
   // Fallback method for when RPC is not yet deployed
   fetchConversationsFallback: async () => {
-    const { data: { user } } = await supabase.auth.getUser()
+    const { data: { session } } = await supabase.auth.getSession()
+    const user = session?.user
     if (!user) throw new Error('Not authenticated')
 
     const { data: memberships } = await supabase
@@ -199,7 +201,8 @@ export const useMessagesStore = create<MessagesState>((set, get) => ({
 
   sendMessage: async (content: string, squadId: string, sessionId?: string, replyToId?: string) => {
     try {
-      const { data: { user } } = await supabase.auth.getUser()
+      const { data: { session } } = await supabase.auth.getSession()
+      const user = session?.user
       if (!user) throw new Error('Not authenticated')
 
       const messageData: {
@@ -238,7 +241,8 @@ export const useMessagesStore = create<MessagesState>((set, get) => ({
 
   editMessage: async (messageId: string, newContent: string) => {
     try {
-      const { data: { user } } = await supabase.auth.getUser()
+      const { data: { session } } = await supabase.auth.getSession()
+      const user = session?.user
       if (!user) throw new Error('Not authenticated')
 
       const { data: message } = await supabase
@@ -277,7 +281,8 @@ export const useMessagesStore = create<MessagesState>((set, get) => ({
 
   deleteMessage: async (messageId: string) => {
     try {
-      const { data: { user } } = await supabase.auth.getUser()
+      const { data: { session } } = await supabase.auth.getSession()
+      const user = session?.user
       if (!user) throw new Error('Not authenticated')
 
       const { data: message } = await supabase
@@ -375,7 +380,8 @@ export const useMessagesStore = create<MessagesState>((set, get) => ({
           }
 
           // Get current user to check if this is their own message
-          const { data: { user } } = await supabase.auth.getUser()
+          const { data: { session } } = await supabase.auth.getSession()
+          const user = session?.user
           const isOwnMessage = user && newMessage.sender_id === user.id
 
           // Play sound and vibrate for messages from others
@@ -448,7 +454,8 @@ export const useMessagesStore = create<MessagesState>((set, get) => ({
   // OPTIMIZED: Uses single RPC call instead of N individual UPDATE queries
   markAsRead: async (squadId: string, sessionId?: string) => {
     try {
-      const { data: { user } } = await supabase.auth.getUser()
+      const { data: { session } } = await supabase.auth.getSession()
+      const user = session?.user
       if (!user) return
 
       // Try batch RPC first
@@ -484,7 +491,8 @@ export const useMessagesStore = create<MessagesState>((set, get) => ({
 
   // Fallback for markAsRead when RPC is not deployed
   markAsReadFallback: async (squadId: string, sessionId?: string) => {
-    const { data: { user } } = await supabase.auth.getUser()
+    const { data: { session } } = await supabase.auth.getSession()
+    const user = session?.user
     if (!user) return
 
     let query = supabase

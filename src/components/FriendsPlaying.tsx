@@ -108,7 +108,7 @@ const FriendCard = memo(function FriendCard({
 
           {/* Squad info */}
           {isInParty && (
-            <div className="flex items-center gap-2 px-2.5 py-1.5 rounded-lg bg-surface-card border border-white/5">
+            <div className="flex items-center gap-2 px-2.5 py-1.5 rounded-lg bg-surface-card border border-border-subtle">
               <Users className="w-3.5 h-3.5 text-primary" />
               <span className="text-sm text-text-secondary truncate">
                 {friend.squad_name}

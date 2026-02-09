@@ -132,7 +132,7 @@ export function OnboardingChecklist({
             </div>
             <button
               onClick={handleDismiss}
-              className="p-1 rounded-lg hover:bg-white/5 transition-colors"
+              className="p-1 rounded-lg hover:bg-overlay-subtle transition-colors"
               aria-label="Fermer l'onboarding"
             >
               <X className="w-4 h-4 text-text-tertiary" />
@@ -140,7 +140,7 @@ export function OnboardingChecklist({
           </div>
 
           {/* Progress bar */}
-          <div className="h-1.5 bg-white/5 rounded-full mb-4 overflow-hidden">
+          <div className="h-1.5 bg-overlay-subtle rounded-full mb-4 overflow-hidden">
             <motion.div
               className={`h-full rounded-full ${allComplete ? 'bg-success' : 'bg-primary'}`}
               initial={{ width: 0 }}
@@ -156,7 +156,7 @@ export function OnboardingChecklist({
                 <div
                   key={step.id}
                   className={`flex items-center gap-3 p-2 rounded-lg ${
-                    step.done ? 'bg-white/[0.02]' : 'bg-white/[0.04]'
+                    step.done ? 'bg-overlay-faint' : 'bg-overlay-subtle'
                   }`}
                 >
                   <div className={`w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0 ${

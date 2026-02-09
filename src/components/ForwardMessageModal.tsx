@@ -169,7 +169,7 @@ export const ForwardMessageModal = memo(function ForwardMessageModal({
                     Envoye !
                   </>
                 ) : isSending ? (
-                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                  <div className="w-4 h-4 border-2 border-text-primary border-t-transparent rounded-full animate-spin" />
                 ) : (
                   <>
                     <Forward className="w-4 h-4" />

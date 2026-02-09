@@ -57,8 +57,8 @@ export function ReplyComposer({ replyingTo, onCancel }: ReplyComposerProps) {
               onClick={onCancel}
               className="
                 w-6 h-6 flex items-center justify-center
-                rounded-full bg-white/5 hover:bg-white/10
-                text-text-secondary hover:text-white
+                rounded-full bg-overlay-subtle hover:bg-overlay-light
+                text-text-secondary hover:text-text-primary
                 transition-colors flex-shrink-0
               "
               aria-label="Cancel reply"

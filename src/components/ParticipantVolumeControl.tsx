@@ -225,7 +225,7 @@ export function ParticipantVolumeControl({
           <motion.div
             className={`
               absolute top-1/2 w-4 h-4 rounded-full
-              border-2 border-white shadow-lg pointer-events-none
+              border-2 border-bg-base shadow-lg pointer-events-none
               ${isMuted ? 'bg-error' : isBoosted ? 'bg-warning' : 'bg-success'}
             `}
             initial={false}

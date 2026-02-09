@@ -38,15 +38,15 @@ export function PublicProfile() {
     return (
       <div className="max-w-lg mx-auto px-4 py-6 pb-24">
         <div className="animate-pulse space-y-4">
-          <div className="h-6 w-24 bg-white/10 rounded" />
+          <div className="h-6 w-24 bg-overlay-light rounded" />
           <div className="flex flex-col items-center gap-3">
-            <div className="w-20 h-20 rounded-full bg-white/10" />
-            <div className="h-5 w-32 bg-white/10 rounded" />
-            <div className="h-4 w-48 bg-white/5 rounded" />
+            <div className="w-20 h-20 rounded-full bg-overlay-light" />
+            <div className="h-5 w-32 bg-overlay-light rounded" />
+            <div className="h-4 w-48 bg-overlay-subtle rounded" />
           </div>
           <div className="grid grid-cols-2 gap-2">
             {Array.from({ length: 4 }).map((_, i) => (
-              <div key={i} className="h-16 bg-white/5 rounded-lg" />
+              <div key={i} className="h-16 bg-overlay-subtle rounded-lg" />
             ))}
           </div>
         </div>
@@ -80,9 +80,9 @@ export function PublicProfile() {
       {/* Profile header */}
       <div className="flex flex-col items-center text-center mb-6">
         {profile.avatar_url ? (
-          <img src={profile.avatar_url} alt="" className="w-20 h-20 rounded-full border-2 border-white/10" loading="lazy" decoding="async" />
+          <img src={profile.avatar_url} alt="" className="w-20 h-20 rounded-full border-2 border-border-subtle" loading="lazy" decoding="async" />
         ) : (
-          <div className="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center border-2 border-white/10">
+          <div className="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center border-2 border-border-subtle">
             <span className="text-2xl font-bold text-primary">{profile.username?.charAt(0).toUpperCase()}</span>
           </div>
         )}
@@ -163,14 +163,14 @@ export function PublicProfile() {
 
       {/* Preferred games */}
       {profile.preferred_games && profile.preferred_games.length > 0 && (
-        <div className="rounded-xl border border-white/5 bg-surface-card p-4 mb-4">
+        <div className="rounded-xl border border-border-subtle bg-surface-card p-4 mb-4">
           <div className="flex items-center gap-2 mb-2">
             <Gamepad2 className="w-4 h-4 text-primary" />
             <h3 className="text-sm font-semibold text-text-primary">Jeux preferes</h3>
           </div>
           <div className="flex gap-1.5 flex-wrap">
             {profile.preferred_games.map((g: string) => (
-              <span key={g} className="text-xs px-2 py-1 rounded-lg bg-white/5 text-text-secondary">{g}</span>
+              <span key={g} className="text-xs px-2 py-1 rounded-lg bg-overlay-subtle text-text-secondary">{g}</span>
             ))}
           </div>
         </div>
@@ -188,7 +188,7 @@ export function PublicProfile() {
 
 function StatCard({ icon, label, value, sub }: { icon: React.ReactNode; label: string; value: string; sub: string }) {
   return (
-    <div className="rounded-xl border border-white/5 bg-surface-card p-3">
+    <div className="rounded-xl border border-border-subtle bg-surface-card p-3">
       <div className="flex items-center gap-1.5 mb-1">
         {icon}
         <span className="text-sm text-text-tertiary">{label}</span>

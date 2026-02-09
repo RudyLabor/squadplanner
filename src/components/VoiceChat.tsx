@@ -62,11 +62,11 @@ export function VoiceChat({ sessionId, sessionTitle }: VoiceChatProps) {
   ]
 
   return (
-    <div className="bg-elevated rounded-xl p-4 border border-white/5">
+    <div className="bg-elevated rounded-xl p-4 border border-border-subtle">
       {/* Header */}
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
-          <div className={`w-2 h-2 rounded-full ${isConnected ? 'bg-success animate-pulse' : 'bg-white/20'}`} />
+          <div className={`w-2 h-2 rounded-full ${isConnected ? 'bg-success animate-pulse' : 'bg-overlay-heavy'}`} />
           <span className="text-sm font-medium">
             {isConnected ? 'Vocal connecté' : 'Chat Vocal'}
           </span>
@@ -152,7 +152,7 @@ export function VoiceChat({ sessionId, sessionTitle }: VoiceChatProps) {
                 initial={{ opacity: 0, x: -10 }}
                 animate={{ opacity: 1, x: 0 }}
                 className={`flex items-center gap-3 p-2 rounded-lg transition-colors ${
-                  participant.isSpeaking ? 'bg-primary/10' : 'bg-white/5'
+                  participant.isSpeaking ? 'bg-primary/10' : 'bg-overlay-subtle'
                 }`}
               >
                 {/* Avatar with speaking indicator */}
@@ -244,7 +244,7 @@ export function VoiceChat({ sessionId, sessionTitle }: VoiceChatProps) {
 
       {/* Session info */}
       {sessionTitle && (
-        <div className="mt-4 pt-4 border-t border-white/5">
+        <div className="mt-4 pt-4 border-t border-border-subtle">
           <p className="text-xs text-secondary text-center">
             Session: {sessionTitle}
           </p>

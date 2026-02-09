@@ -73,7 +73,7 @@ const PlayerCard = memo(function PlayerCard({ player }: { player: MatchmakingPla
     <motion.div
       initial={{ opacity: 0, y: 5 }}
       animate={{ opacity: 1, y: 0 }}
-      className="rounded-xl border border-white/5 bg-surface-card p-4"
+      className="rounded-xl border border-border-subtle bg-surface-card p-4"
     >
       <div className="flex items-start gap-3">
         {/* Avatar */}
@@ -121,7 +121,7 @@ const PlayerCard = memo(function PlayerCard({ player }: { player: MatchmakingPla
           {player.preferred_games && player.preferred_games.length > 0 && (
             <div className="flex gap-1 mt-1.5 flex-wrap">
               {player.preferred_games.slice(0, 4).map(g => (
-                <span key={g} className="inline-flex items-center gap-0.5 text-xs px-1.5 py-0.5 rounded bg-white/5 text-text-tertiary">
+                <span key={g} className="inline-flex items-center gap-0.5 text-xs px-1.5 py-0.5 rounded bg-overlay-subtle text-text-tertiary">
                   <Gamepad2 className="w-2.5 h-2.5" />
                   {g}
                 </span>

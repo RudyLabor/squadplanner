@@ -164,11 +164,11 @@ export function InviteToPartyModal({
           role="dialog"
           aria-modal="true"
           aria-labelledby="invite-party-title"
-          className="w-full max-w-md bg-bg-base border border-white/10 rounded-2xl overflow-hidden shadow-xl"
+          className="w-full max-w-md bg-bg-base border border-border-subtle rounded-2xl overflow-hidden shadow-xl"
           onClick={(e) => e.stopPropagation()}
         >
           {/* Header */}
-          <div className="flex items-center justify-between p-4 border-b border-white/5">
+          <div className="flex items-center justify-between p-4 border-b border-border-subtle">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-xl bg-primary-15 flex items-center justify-center">
                 <UserPlus className="w-5 h-5 text-primary" />
@@ -181,20 +181,20 @@ export function InviteToPartyModal({
             <button
               onClick={onClose}
               aria-label="Fermer"
-              className="p-2 rounded-lg hover:bg-white/5 transition-colors"
+              className="p-2 rounded-lg hover:bg-overlay-subtle transition-colors"
             >
               <X className="w-5 h-5 text-text-secondary" />
             </button>
           </div>
 
           {/* Copy link section */}
-          <div className="p-4 border-b border-white/5">
+          <div className="p-4 border-b border-border-subtle">
             <button
               onClick={copyLink}
               className={`w-full flex items-center justify-center gap-2 p-3 rounded-xl transition-interactive ${
                 linkCopied
                   ? 'bg-success-15 text-success border border-success/20'
-                  : 'bg-white/5 text-text-secondary hover:bg-white/10 hover:text-text-primary border border-white/10'
+                  : 'bg-overlay-subtle text-text-secondary hover:bg-overlay-light hover:text-text-primary border border-border-subtle'
               }`}
             >
               {linkCopied ? (
@@ -237,7 +237,7 @@ export function InviteToPartyModal({
                       key={member.id}
                       initial={{ opacity: 0, y: 5 }}
                       animate={{ opacity: 1, y: 0 }}
-                      className="flex items-center gap-3 p-3 rounded-xl bg-white/[0.02] hover:bg-white/[0.04] transition-colors"
+                      className="flex items-center gap-3 p-3 rounded-xl bg-overlay-faint hover:bg-overlay-subtle transition-colors"
                     >
                       {/* Avatar */}
                       <div className="relative">
@@ -302,7 +302,7 @@ export function InviteToPartyModal({
           </div>
 
           {/* Footer */}
-          <div className="p-4 border-t border-white/5">
+          <div className="p-4 border-t border-border-subtle">
             <Button
               variant="ghost"
               className="w-full"

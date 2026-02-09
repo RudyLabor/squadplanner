@@ -38,7 +38,7 @@ export const IntegrationsSection = memo(function IntegrationsSection() {
   }
 
   return (
-    <div className="rounded-xl border border-white/5 bg-surface-card p-5">
+    <div className="rounded-xl border border-border-subtle bg-surface-card p-5">
       <div className="flex items-center gap-2 mb-4">
         <Plug className="w-5 h-5 text-indigo-400" />
         <h2 className="text-base font-semibold text-text-primary">Integrations</h2>
@@ -79,7 +79,7 @@ export const IntegrationsSection = memo(function IntegrationsSection() {
                 placeholder="Pseudo Twitch"
                 value={twitchUsername}
                 onChange={(e) => setTwitchUsername(e.target.value)}
-                className="w-32 px-2 py-1 rounded bg-white/5 border border-white/10 text-xs text-text-primary placeholder:text-text-tertiary focus:outline-none focus:ring-1 focus:ring-purple-500/50"
+                className="w-32 px-2 py-1 rounded bg-overlay-subtle border border-border-subtle text-xs text-text-primary placeholder:text-text-tertiary focus:outline-none focus:ring-1 focus:ring-purple-500/50"
               />
             </div>
           }
@@ -97,7 +97,7 @@ export const IntegrationsSection = memo(function IntegrationsSection() {
               placeholder="Pseudo#1234"
               value={discordUsername}
               onChange={(e) => setDiscordUsername(e.target.value)}
-              className="w-32 px-2 py-1 rounded bg-white/5 border border-white/10 text-xs text-text-primary placeholder:text-text-tertiary focus:outline-none focus:ring-1 focus:ring-blue-500/50"
+              className="w-32 px-2 py-1 rounded bg-overlay-subtle border border-border-subtle text-xs text-text-primary placeholder:text-text-tertiary focus:outline-none focus:ring-1 focus:ring-blue-500/50"
             />
           }
         />
@@ -140,14 +140,14 @@ function IntegrationRow({
 }) {
   return (
     <div className="flex items-start gap-3 py-2">
-      <div className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center flex-shrink-0 mt-0.5">
+      <div className="w-8 h-8 rounded-lg bg-overlay-subtle flex items-center justify-center flex-shrink-0 mt-0.5">
         {icon}
       </div>
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2">
           <span className="text-sm font-medium text-text-primary">{name}</span>
           {status === 'coming' && (
-            <span className="text-xs px-1.5 py-0.5 rounded-full bg-white/5 text-text-tertiary font-medium">Bientot</span>
+            <span className="text-xs px-1.5 py-0.5 rounded-full bg-overlay-subtle text-text-tertiary font-medium">Bientot</span>
           )}
         </div>
         <p className="text-xs text-text-tertiary mt-0.5">{description}</p>

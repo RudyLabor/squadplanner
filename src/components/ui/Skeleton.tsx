@@ -482,7 +482,7 @@ export function SkeletonSettingsPage() {
 export function SkeletonAICoach() {
   return (
     <div
-      className="p-3 rounded-xl bg-bg-hover border border-white/[0.06] min-h-[72px] flex items-center gap-3"
+      className="p-3 rounded-xl bg-bg-hover border border-border-subtle min-h-[72px] flex items-center gap-3"
       aria-hidden="true"
     >
       <Skeleton className="w-8 h-8 flex-shrink-0" rounded="lg" />
@@ -500,7 +500,7 @@ export function SkeletonAICoach() {
 export function SkeletonReliabilityBadge() {
   return (
     <div
-      className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/[0.05] min-h-[40px]"
+      className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-overlay-faint min-h-[40px]"
       aria-hidden="true"
     >
       <Skeleton className="w-4 h-4" rounded="full" />
@@ -521,7 +521,7 @@ export function SkeletonFriendsPlaying() {
       </div>
       <div className="flex gap-3 overflow-hidden">
         {[1, 2, 3].map((i) => (
-          <div key={i} className="flex-shrink-0 w-[200px] p-4 rounded-xl bg-bg-hover border border-white/[0.06]">
+          <div key={i} className="flex-shrink-0 w-[200px] p-4 rounded-xl bg-bg-hover border border-border-subtle">
             <div className="flex items-center gap-3 mb-3">
               <Skeleton className="w-12 h-12" rounded="full" />
               <div className="flex-1">
@@ -546,7 +546,7 @@ export function SkeletonStatsRow() {
       {[1, 2, 3].map((i) => (
         <div
           key={i}
-          className="h-[60px] sm:h-[68px] px-2 sm:px-4 flex items-center gap-2 sm:gap-3 rounded-xl sm:rounded-2xl border border-white/[0.06] bg-white/[0.02]"
+          className="h-[60px] sm:h-[68px] px-2 sm:px-4 flex items-center gap-2 sm:gap-3 rounded-xl sm:rounded-2xl border border-border-subtle bg-overlay-faint"
         >
           <Skeleton className="w-8 h-8" rounded="lg" />
           <div className="flex-1">
@@ -564,7 +564,7 @@ export function SkeletonStatsRow() {
  */
 export function SkeletonStreakCounter() {
   return (
-    <div className="min-h-[200px] p-4 rounded-xl bg-bg-hover border border-white/[0.06]" aria-hidden="true">
+    <div className="min-h-[200px] p-4 rounded-xl bg-bg-hover border border-border-subtle" aria-hidden="true">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
           <Skeleton className="w-5 h-5" rounded="md" />

@@ -146,7 +146,7 @@ export function Sessions() {
                     <li key={session.id}>
                       <Link to={`/session/${session.id}`}>
                         <motion.div
-                          className="flex items-center gap-3 p-3 rounded-lg bg-black/30 hover:bg-border-subtle"
+                          className="flex items-center gap-3 p-3 rounded-lg bg-overlay-heavy hover:bg-border-subtle"
                           whileHover={{ x: 4 }}
                         >
                           <Calendar className="w-4 h-4 text-warning" aria-hidden="true" />
@@ -178,7 +178,7 @@ export function Sessions() {
                     </h3>
                     <div className="space-y-2">
                       {slotSuggestions.slice(0, 3).map((slot, index) => (
-                        <div key={index} className="flex items-center justify-between p-2 rounded-lg bg-black/20">
+                        <div key={index} className="flex items-center justify-between p-2 rounded-lg bg-overlay-medium">
                           <span className="text-base text-text-secondary">
                             {dayNames[slot.day_of_week]} {slot.hour}h
                           </span>

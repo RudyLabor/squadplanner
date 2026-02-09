@@ -77,9 +77,9 @@ const PodiumCard = memo(function PodiumCard({ entry, index }: { entry: GlobalLea
       >
         <span className="text-lg">{style.icon}</span>
         {entry.avatar_url ? (
-          <img src={entry.avatar_url} alt="" className="w-10 h-10 rounded-full mx-auto mt-1 border-2 border-white/10" loading="lazy" decoding="async" />
+          <img src={entry.avatar_url} alt="" className="w-10 h-10 rounded-full mx-auto mt-1 border-2 border-border-subtle" loading="lazy" decoding="async" />
         ) : (
-          <div className={`w-10 h-10 rounded-full mx-auto mt-1 ${style.bg} flex items-center justify-center border-2 border-white/10`}>
+          <div className={`w-10 h-10 rounded-full mx-auto mt-1 ${style.bg} flex items-center justify-center border-2 border-border-subtle`}>
             <span className={`text-sm font-bold ${style.text}`}>{entry.username.charAt(0).toUpperCase()}</span>
           </div>
         )}

@@ -26,7 +26,7 @@ export const DiscoverSquadCard = memo(function DiscoverSquadCard({ squad }: Prop
     <motion.div
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      className="rounded-xl border border-white/5 bg-surface-card hover:bg-surface-card-hover transition-colors p-4"
+      className="rounded-xl border border-border-subtle bg-surface-card hover:bg-surface-card-hover transition-colors p-4"
     >
       <div className="flex items-start gap-3">
         {/* Squad icon */}
@@ -63,7 +63,7 @@ export const DiscoverSquadCard = memo(function DiscoverSquadCard({ squad }: Prop
           {squad.tags && squad.tags.length > 0 && (
             <div className="flex gap-1 mt-2 flex-wrap">
               {squad.tags.map(tag => (
-                <span key={tag} className="text-xs px-1.5 py-0.5 rounded bg-white/5 text-text-tertiary">
+                <span key={tag} className="text-xs px-1.5 py-0.5 rounded bg-overlay-subtle text-text-tertiary">
                   {tag}
                 </span>
               ))}
@@ -82,7 +82,7 @@ export const DiscoverSquadCard = memo(function DiscoverSquadCard({ squad }: Prop
       </div>
 
       {/* Owner */}
-      <div className="mt-3 pt-3 border-t border-white/5 flex items-center gap-2">
+      <div className="mt-3 pt-3 border-t border-border-subtle flex items-center gap-2">
         {squad.owner_avatar ? (
           <img src={squad.owner_avatar} alt="" className="w-4 h-4 rounded-full" loading="lazy" decoding="async" />
         ) : (

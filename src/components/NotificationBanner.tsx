@@ -89,7 +89,7 @@ export default function NotificationBanner() {
                         className={`text-xs font-medium px-3 py-1 rounded-lg transition-colors ${
                           action.variant === 'primary'
                             ? 'bg-primary text-white hover:bg-primary/80'
-                            : 'bg-white/10 text-text-primary hover:bg-white/15'
+                            : 'bg-overlay-light text-text-primary hover:bg-overlay-medium'
                         }`}
                       >
                         {action.label}

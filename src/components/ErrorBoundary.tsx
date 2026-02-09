@@ -143,7 +143,7 @@ export class ErrorBoundary extends Component<Props, State> {
             <div className="flex gap-2">
               <button
                 onClick={this.handleGoBack}
-                className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-white/5 text-text-secondary text-base font-medium hover:bg-white/10 transition-colors border border-white/10"
+                className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-overlay-subtle text-text-secondary text-base font-medium hover:bg-overlay-light transition-colors border border-border-subtle"
               >
                 <ArrowLeft className="w-4 h-4" />
                 Retour
@@ -151,7 +151,7 @@ export class ErrorBoundary extends Component<Props, State> {
 
               <button
                 onClick={this.handleGoHome}
-                className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-white/5 text-text-secondary text-base font-medium hover:bg-white/10 transition-colors border border-white/10"
+                className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-overlay-subtle text-text-secondary text-base font-medium hover:bg-overlay-light transition-colors border border-border-subtle"
               >
                 <Home className="w-4 h-4" />
                 Accueil

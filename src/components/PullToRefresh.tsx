@@ -125,7 +125,7 @@ export function PullToRefresh({
           className={`w-10 h-10 rounded-full flex items-center justify-center ${
             shouldTrigger
               ? 'bg-primary/20 border border-primary/30'
-              : 'bg-white/10 border border-white/20'
+              : 'bg-overlay-light border border-border-default'
           }`}
           animate={{
             rotate: isRefreshing ? 360 : progress * 180,
@@ -138,7 +138,7 @@ export function PullToRefresh({
         >
           <RefreshCw
             className={`w-5 h-5 ${
-              shouldTrigger ? 'text-primary' : 'text-white/60'
+              shouldTrigger ? 'text-primary' : 'text-text-secondary'
             }`}
           />
         </motion.div>

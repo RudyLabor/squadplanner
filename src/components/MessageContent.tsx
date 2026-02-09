@@ -139,7 +139,7 @@ export const MessageContent = memo(function MessageContent({
         <div className={`text-sm italic mb-1 flex items-center gap-1 ${isOwn ? 'text-white/60' : 'text-text-quaternary'}`}>
           ↩️ {header.replace('↩️ ', '').replace(/\*/g, '')}
         </div>
-        <div className={`pl-3 border-l-2 ${isOwn ? 'border-white/20' : 'border-primary'}`}>
+        <div className={`pl-3 border-l-2 ${isOwn ? 'border-overlay-heavy' : 'border-primary'}`}>
           <MessageContent content={body} isOwn={isOwn} onMentionClick={onMentionClick} />
         </div>
       </div>

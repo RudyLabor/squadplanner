@@ -95,8 +95,8 @@ export const LocationMessage = memo(function LocationMessage({ lat, lng, isOwn =
         isOwn ? 'bg-border-subtle' : 'bg-primary-5'
       }`}>
         <div className="text-center">
-          <MapPin className={`w-8 h-8 mx-auto mb-1 ${isOwn ? 'text-white/60' : 'text-primary-hover'}`} />
-          <p className={`text-sm ${isOwn ? 'text-white/40' : 'text-text-quaternary'}`}>
+          <MapPin className={`w-8 h-8 mx-auto mb-1 ${isOwn ? 'text-text-tertiary' : 'text-primary-hover'}`} />
+          <p className={`text-sm ${isOwn ? 'text-text-quaternary' : 'text-text-quaternary'}`}>
             {lat.toFixed(4)}, {lng.toFixed(4)}
           </p>
         </div>
@@ -110,7 +110,7 @@ export const LocationMessage = memo(function LocationMessage({ lat, lng, isOwn =
         aria-label="Ouvrir la position dans Google Maps"
         className={`flex items-center gap-2 px-3 py-2.5 transition-colors ${
           isOwn
-            ? 'text-white/80 hover:text-white hover:bg-border-subtle'
+            ? 'text-text-secondary hover:text-text-primary hover:bg-border-subtle'
             : 'text-primary-hover hover:text-primary-hover hover:bg-primary-5'
         }`}
         onClick={(e) => e.stopPropagation()}

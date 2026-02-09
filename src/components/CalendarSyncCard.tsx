@@ -36,7 +36,7 @@ export const CalendarSyncCard = memo(function CalendarSyncCard({ sessions, sessi
   }
 
   return (
-    <div className="flex items-center gap-2 p-3 rounded-lg border border-white/5 bg-surface-card">
+    <div className="flex items-center gap-2 p-3 rounded-lg border border-border-subtle bg-surface-card">
       <Calendar className="w-4 h-4 text-blue-400 flex-shrink-0" />
       <span className="text-xs text-text-secondary flex-1">Calendrier</span>
       <div className="flex gap-1.5">
@@ -51,7 +51,7 @@ export const CalendarSyncCard = memo(function CalendarSyncCard({ sessions, sessi
         )}
         <button
           onClick={handleDownloadICS}
-          className="inline-flex items-center gap-1 px-2 py-1 rounded text-sm bg-white/5 text-text-secondary hover:bg-white/10 transition-colors"
+          className="inline-flex items-center gap-1 px-2 py-1 rounded text-sm bg-overlay-subtle text-text-secondary hover:bg-overlay-light transition-colors"
         >
           <Download className="w-3 h-3" />
           .ics

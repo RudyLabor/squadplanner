@@ -1251,7 +1251,7 @@ export default function Landing() {
                   className="px-5 min-h-[44px] bg-primary text-white text-md font-medium rounded-lg hover:bg-primary-hover transition-colors shrink-0 disabled:opacity-60"
                 >
                   {newsletterLoading ? (
-                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                    <div className="w-4 h-4 border-2 border-text-primary border-t-transparent rounded-full animate-spin" />
                   ) : (
                     "S'abonner"
                   )}

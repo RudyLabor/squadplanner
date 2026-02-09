@@ -45,7 +45,7 @@ export function OfflineBanner() {
                 </div>
                 <button
                   onClick={dismissOfflineBanner}
-                  className="p-2 rounded-lg hover:bg-white/10 transition-colors"
+                  className="p-2 rounded-lg hover:bg-overlay-light transition-colors"
                   aria-label="Fermer"
                 >
                   <X className="w-4 h-4 text-error/60" />
@@ -80,7 +80,7 @@ export function OfflineBanner() {
                 </div>
                 <button
                   onClick={dismissReconnectedBanner}
-                  className="p-2 rounded-lg hover:bg-white/10 transition-colors"
+                  className="p-2 rounded-lg hover:bg-overlay-light transition-colors"
                   aria-label="Fermer"
                 >
                   <X className="w-4 h-4 text-success/60" />

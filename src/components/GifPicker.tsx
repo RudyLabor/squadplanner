@@ -196,7 +196,7 @@ export const GifPicker = memo(function GifPicker({ isOpen, onSelect, onClose }: 
                 <span className="text-xs text-text-tertiary ml-auto">Powered by Tenor</span>
                 <button
                   onClick={onClose}
-                  className="p-1 rounded-lg text-text-tertiary hover:text-white hover:bg-border-hover transition-colors sm:hidden"
+                  className="p-1 rounded-lg text-text-tertiary hover:text-text-primary hover:bg-border-hover transition-colors sm:hidden"
                   aria-label="Fermer"
                 >
                   <X className="w-4 h-4" />
@@ -210,12 +210,12 @@ export const GifPicker = memo(function GifPicker({ isOpen, onSelect, onClose }: 
                   value={query}
                   onChange={(e) => handleSearch(e.target.value)}
                   placeholder="Chercher un GIF..."
-                  className="w-full pl-8 pr-8 py-2 bg-border-default border border-border-default rounded-lg text-base text-white placeholder:text-text-tertiary focus:outline-none focus:border-primary"
+                  className="w-full pl-8 pr-8 py-2 bg-border-default border border-border-default rounded-lg text-base text-text-primary placeholder:text-text-tertiary focus:outline-none focus:border-primary"
                 />
                 {query && (
                   <button
                     onClick={() => handleSearch('')}
-                    className="absolute right-2 top-1/2 -translate-y-1/2 p-0.5 text-text-tertiary hover:text-white"
+                    className="absolute right-2 top-1/2 -translate-y-1/2 p-0.5 text-text-tertiary hover:text-text-primary"
                   >
                     <X className="w-3.5 h-3.5" />
                   </button>

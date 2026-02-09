@@ -39,8 +39,8 @@ export async function initSentry(): Promise<void> {
       dsn,
       environment: import.meta.env.MODE,
 
-      // Performance monitoring
-      tracesSampleRate: 0.1,
+      // Performance monitoring — PHASE 5: 25% for better Web Vitals coverage
+      tracesSampleRate: 0.25,
 
       // Session replay
       replaysSessionSampleRate: 0.1,

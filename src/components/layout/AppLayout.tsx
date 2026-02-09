@@ -7,6 +7,7 @@ import { useShallow } from 'zustand/react/shallow'
 import { useAuthStore, useSquadsStore, useVoiceChatStore, useKeyboardVisible, useUnreadCountStore, useSquadNotificationsStore, useGlobalPresence } from '../../hooks'
 import { useCreateSessionModal } from '../CreateSessionModal'
 import { getOptimizedAvatarUrl } from '../../utils/avatarUrl'
+import { prefetchRoute } from '../../lib/queryClient'
 import { SquadPlannerLogo } from '../SquadPlannerLogo'
 import { Breadcrumbs } from './Breadcrumbs'
 import { GlobalSearch } from '../GlobalSearch'
@@ -40,17 +41,29 @@ const mobileNavRight = [
   { path: '/profile', icon: User, label: 'Profil' },
 ] as const
 
+// PHASE 5: Track prefetched routes to avoid redundant prefetch calls
+const prefetchedRoutes = new Set<string>()
+
 // OPTIMIZED: Memoized NavLink to prevent unnecessary re-renders
-const NavLink = memo(function NavLink({ path, icon: Icon, label, isActive, badge, collapsed }: {
+const NavLink = memo(function NavLink({ path, icon: Icon, label, isActive, badge, collapsed, userId }: {
   path: string
   icon: React.ElementType
   label: string
   isActive: boolean
   badge?: number
   collapsed?: boolean
+  userId?: string
 }) {
+  // PHASE 5: Prefetch route data on hover for instant navigation
+  const handlePrefetch = useCallback(() => {
+    if (!prefetchedRoutes.has(path)) {
+      prefetchedRoutes.add(path)
+      prefetchRoute(path, userId).catch(() => {})
+    }
+  }, [path, userId])
+
   const linkContent = (
-    <Link to={path} aria-label={label} aria-current={isActive ? 'page' : undefined}>
+    <Link to={path} aria-label={label} aria-current={isActive ? 'page' : undefined} onPointerEnter={handlePrefetch}>
       <motion.div
         className={`
           relative flex items-center ${collapsed ? 'justify-center px-2' : 'gap-3 px-4'} py-3 rounded-xl transition-interactive
@@ -480,6 +493,7 @@ export function AppLayout({ children }: AppLayoutProps) {
                   isActive={currentPath === item.path}
                   badge={badgeCount}
                   collapsed={!isExpanded}
+                  userId={user?.id}
                 />
               </div>
             )
@@ -494,6 +508,7 @@ export function AppLayout({ children }: AppLayoutProps) {
             label="Paramètres"
             isActive={currentPath === '/settings'}
             collapsed={!isExpanded}
+            userId={user?.id}
           />
           <NavLink
             path="/help"
@@ -501,6 +516,7 @@ export function AppLayout({ children }: AppLayoutProps) {
             label="Aide"
             isActive={currentPath === '/help'}
             collapsed={!isExpanded}
+            userId={user?.id}
           />
           <NavLink
             path="/call-history"
@@ -508,6 +524,7 @@ export function AppLayout({ children }: AppLayoutProps) {
             label="Appels"
             isActive={currentPath === '/call-history'}
             collapsed={!isExpanded}
+            userId={user?.id}
           />
         </div>
 

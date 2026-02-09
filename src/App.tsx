@@ -10,6 +10,8 @@ import { initSentry } from './lib/sentry'
 import { useDocumentTitle } from './hooks/useDocumentTitle'
 import { ErrorBoundary } from './components/ErrorBoundary'
 import { OfflineBanner } from './components/OfflineBanner'
+import { PWAInstallBanner } from './components/PWAInstallBanner'
+import { usePWAInstallStore } from './hooks/usePWAInstall'
 import { CookieConsent } from './components/CookieConsent'
 import { TourGuide } from './components/TourGuide'
 import NotificationBanner from './components/NotificationBanner'
@@ -131,6 +133,17 @@ function AppContent() {
   useEffect(() => {
     initialize()
   }, [initialize])
+
+  // PHASE 5.2: Capture PWA install prompt event
+  useEffect(() => {
+    const handler = (e: Event) => {
+      e.preventDefault()
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      usePWAInstallStore.getState().setDeferredPrompt(e as any)
+    }
+    window.addEventListener('beforeinstallprompt', handler)
+    return () => window.removeEventListener('beforeinstallprompt', handler)
+  }, [])
 
   // Initialize Sentry ONLY when user is authenticated (keeps it out of landing bundle)
   const sentryInitRef = useRef(false)
@@ -341,6 +354,8 @@ export default function App() {
         <AppContent />
         {/* Offline/Online status banner */}
         <OfflineBanner />
+        {/* PWA install prompt — Phase 5.2 */}
+        <PWAInstallBanner />
         {/* In-app notification banners - V3 */}
         <NotificationBanner />
         {/* Cookie consent popup - RGPD compliance */}

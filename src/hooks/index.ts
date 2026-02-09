@@ -51,6 +51,9 @@ export type { AvailabilityStatus, CustomStatus, GameStatus } from './useUserStat
 // PHASE 1.1 - React Query hooks
 export * from './queries'
 
+// PHASE 5.2 - PWA install prompt
+export { usePWAInstallStore } from './usePWAInstall'
+
 // Offline detection
 export { useOffline, useOfflineBanner, useOfflineStore } from './useOffline'
 

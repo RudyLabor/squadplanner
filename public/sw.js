@@ -13,10 +13,13 @@ const DYNAMIC_CACHE_MAX_AGE = 15 * 60 * 1000;
 // Maximum cache size (50 entries)
 const MAX_CACHE_ENTRIES = 50;
 
-// Static assets to precache
+// Static assets to precache — PHASE 5: expanded for faster repeat visits
 const STATIC_ASSETS = [
   '/favicon.svg',
-  '/vite.svg'
+  '/vite.svg',
+  '/critical.css',
+  '/manifest.json',
+  '/icon-192.png'
 ];
 
 // Install event - cache essential assets

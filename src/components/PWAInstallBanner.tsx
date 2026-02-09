@@ -1,0 +1,77 @@
+/**
+ * PHASE 5.2 — PWA Install Banner
+ *
+ * Bottom banner prompting users to install the app.
+ * Uses Framer Motion for smooth enter/exit animations.
+ * French wording, consistent with the app's design system.
+ */
+import { memo } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { Download, X } from 'lucide-react'
+import { usePWAInstallStore } from '../hooks/usePWAInstall'
+
+export const PWAInstallBanner = memo(function PWAInstallBanner() {
+  const showBanner = usePWAInstallStore(state => state.showBanner)
+  const promptInstall = usePWAInstallStore(state => state.promptInstall)
+  const dismissBanner = usePWAInstallStore(state => state.dismissBanner)
+
+  return (
+    <AnimatePresence>
+      {showBanner && (
+        <motion.div
+          initial={{ y: 100, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          exit={{ y: 100, opacity: 0 }}
+          transition={{ type: 'spring', stiffness: 400, damping: 35 }}
+          className="fixed bottom-20 lg:bottom-6 left-4 right-4 lg:left-auto lg:right-6 lg:w-[380px] z-[60] rounded-2xl bg-[#101012] border border-[rgba(255,255,255,0.06)] shadow-[0_8px_32px_rgba(0,0,0,0.4)] p-4"
+          role="alert"
+        >
+          <div className="flex items-start gap-3">
+            {/* App icon */}
+            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#6366f1] to-[#a78bfa] flex items-center justify-center flex-shrink-0">
+              <Download className="w-6 h-6 text-white" />
+            </div>
+
+            {/* Content */}
+            <div className="flex-1 min-w-0">
+              <h3 className="text-[15px] font-semibold text-[#f7f8f8]">
+                Installer Squad Planner
+              </h3>
+              <p className="text-[13px] text-[#8b8d90] mt-0.5">
+                Acces rapide depuis ton ecran d'accueil
+              </p>
+
+              {/* Actions */}
+              <div className="flex items-center gap-2 mt-3">
+                <button
+                  type="button"
+                  onClick={() => promptInstall()}
+                  className="px-4 py-2 rounded-lg bg-[#6366f1] text-white text-[13px] font-semibold hover:bg-[#5457e5] active:scale-[0.97] transition-all"
+                >
+                  Installer
+                </button>
+                <button
+                  type="button"
+                  onClick={dismissBanner}
+                  className="px-3 py-2 rounded-lg text-[#8b8d90] text-[13px] hover:bg-[rgba(255,255,255,0.05)] transition-colors"
+                >
+                  Plus tard
+                </button>
+              </div>
+            </div>
+
+            {/* Close button */}
+            <button
+              type="button"
+              onClick={dismissBanner}
+              className="p-1 rounded-lg text-[#5e6063] hover:text-[#8b8d90] hover:bg-[rgba(255,255,255,0.05)] transition-colors flex-shrink-0"
+              aria-label="Fermer"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  )
+})

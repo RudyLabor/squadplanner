@@ -24,6 +24,13 @@ export default defineConfig({
     },
   },
 
+  // Strip console.log/warn/info/debug from production builds (keep console.error)
+  esbuild: {
+    pure: process.env.NODE_ENV === 'production'
+      ? ['console.log', 'console.warn', 'console.info', 'console.debug']
+      : [],
+  },
+
   // Performance optimizations
   build: {
     // Enable source maps for debugging in production (optional)

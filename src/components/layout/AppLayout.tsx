@@ -86,7 +86,7 @@ const NavLink = memo(function NavLink({ path, icon: Icon, label, isActive, badge
               animate={{ opacity: 1, width: 'auto' }}
               exit={{ opacity: 0, width: 0 }}
               transition={{ duration: 0.15 }}
-              className="text-[14px] font-medium whitespace-nowrap overflow-hidden"
+              className="text-md font-medium whitespace-nowrap overflow-hidden"
             >
               {label}
             </motion.span>
@@ -389,8 +389,8 @@ export function AppLayout({ children }: AppLayoutProps) {
                   exit={{ opacity: 0 }}
                   transition={{ duration: 0.15 }}
                 >
-                  <div className="text-[15px] font-bold text-text-primary whitespace-nowrap">Squad Planner</div>
-                  <div className="text-[11px] text-text-tertiary whitespace-nowrap">Jouez ensemble, vraiment</div>
+                  <div className="text-md font-bold text-text-primary whitespace-nowrap">Squad Planner</div>
+                  <div className="text-sm text-text-tertiary whitespace-nowrap">Jouez ensemble, vraiment</div>
                 </motion.div>
               )}
             </AnimatePresence>
@@ -434,7 +434,7 @@ export function AppLayout({ children }: AppLayoutProps) {
               <motion.button
                 type="button"
                 onClick={() => openCreateSessionModal()}
-                className="flex items-center justify-center gap-2 w-10 h-10 mx-auto rounded-xl bg-primary text-white text-[14px] font-semibold"
+                className="flex items-center justify-center gap-2 w-10 h-10 mx-auto rounded-xl bg-primary text-white text-md font-semibold"
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 transition={{ duration: 0.25 }}
@@ -447,7 +447,7 @@ export function AppLayout({ children }: AppLayoutProps) {
             <motion.button
               type="button"
               onClick={() => openCreateSessionModal()}
-              className="flex items-center justify-center gap-2 w-full h-11 rounded-xl bg-primary text-white text-[14px] font-semibold"
+              className="flex items-center justify-center gap-2 w-full h-11 rounded-xl bg-primary text-white text-md font-semibold"
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               transition={{ duration: 0.25 }}
@@ -583,10 +583,10 @@ export function AppLayout({ children }: AppLayoutProps) {
                       transition={{ duration: 0.15 }}
                       className="flex-1 min-w-0"
                     >
-                      <div className="text-[14px] font-medium text-text-primary truncate">
+                      <div className="text-md font-medium text-text-primary truncate">
                         {profile?.username || 'Mon profil'}
                       </div>
-                      <div className="text-[12px] text-text-tertiary">
+                      <div className="text-sm text-text-tertiary">
                         {profile?.reliability_score || 100}% fiable
                       </div>
                     </motion.div>
@@ -619,12 +619,12 @@ export function AppLayout({ children }: AppLayoutProps) {
                   >
                     <div className="flex items-center gap-2 mb-2">
                       <Zap className="w-4 h-4 text-warning" />
-                      <span className="text-[13px] font-semibold text-text-primary">Passe Premium</span>
+                      <span className="text-base font-semibold text-text-primary">Passe Premium</span>
                     </div>
-                    <p className="text-[12px] text-text-secondary mb-3">
+                    <p className="text-sm text-text-secondary mb-3">
                       Stats avancées, IA coach, qualité audio HD
                     </p>
-                    <span className="text-[12px] font-semibold text-primary hover:text-purple transition-colors duration-300">
+                    <span className="text-sm font-semibold text-primary hover:text-purple transition-colors duration-300">
                       Découvrir →
                     </span>
                   </motion.div>

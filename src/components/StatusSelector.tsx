@@ -59,7 +59,7 @@ export const StatusSelector = memo(function StatusSelector({ onOpenCustomStatus,
         aria-expanded={isOpen}
       >
         <span className={`w-2.5 h-2.5 rounded-full ${currentConfig.dotClass} flex-shrink-0`} />
-        <span className="text-[12px] text-text-tertiary truncate">
+        <span className="text-sm text-text-tertiary truncate">
           {customStatus ? `${customStatus.emoji} ${customStatus.text}` : currentConfig.label}
         </span>
       </button>
@@ -77,7 +77,7 @@ export const StatusSelector = memo(function StatusSelector({ onOpenCustomStatus,
             {/* Custom status section */}
             {customStatus && (
               <div className="px-3 py-2 border-b border-border-default">
-                <div className="flex items-center gap-2 text-[13px]">
+                <div className="flex items-center gap-2 text-base">
                   <span>{customStatus.emoji}</span>
                   <span className="text-text-secondary truncate">{customStatus.text}</span>
                 </div>
@@ -87,7 +87,7 @@ export const StatusSelector = memo(function StatusSelector({ onOpenCustomStatus,
             {/* Game status */}
             {gameStatus && (
               <div className="px-3 py-2 border-b border-border-default">
-                <div className="flex items-center gap-2 text-[13px]">
+                <div className="flex items-center gap-2 text-base">
                   <Gamepad2 className="w-3.5 h-3.5 text-success" />
                   <span className="text-success truncate">{gameStatus.game}</span>
                 </div>
@@ -114,7 +114,7 @@ export const StatusSelector = memo(function StatusSelector({ onOpenCustomStatus,
                     }`}
                   >
                     <Icon className="w-4 h-4" style={{ color: config.color }} strokeWidth={2} />
-                    <span className="text-[13px] font-medium">{config.label}</span>
+                    <span className="text-base font-medium">{config.label}</span>
                   </button>
                 )
               })}
@@ -132,7 +132,7 @@ export const StatusSelector = memo(function StatusSelector({ onOpenCustomStatus,
                   className="w-full flex items-center gap-3 px-3 py-2 text-left text-text-secondary hover:bg-border-subtle hover:text-text-primary transition-colors"
                 >
                   <span className="text-sm">😊</span>
-                  <span className="text-[13px] font-medium">
+                  <span className="text-base font-medium">
                     {customStatus ? 'Modifier le statut' : 'Definir un statut'}
                   </span>
                 </button>

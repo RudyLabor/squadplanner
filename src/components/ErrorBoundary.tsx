@@ -121,7 +121,7 @@ export class ErrorBoundary extends Component<Props, State> {
               {this.state.isChunkError ? 'Mise à jour disponible' : 'Oups, quelque chose s\'est mal passé'}
             </h2>
 
-            <p className="text-[14px] text-text-secondary mb-6">
+            <p className="text-md text-text-secondary mb-6">
               {this.state.isChunkError
                 ? 'Une nouvelle version de l\'app est disponible. Recharge la page pour en profiter.'
                 : hasRetried
@@ -133,7 +133,7 @@ export class ErrorBoundary extends Component<Props, State> {
             {/* Primary action */}
             <button
               onClick={this.handleRetry}
-              className="w-full inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-primary text-white text-[14px] font-medium hover:bg-primary-hover transition-colors mb-3"
+              className="w-full inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-primary text-white text-md font-medium hover:bg-primary-hover transition-colors mb-3"
             >
               <RefreshCw className="w-4 h-4" />
               {this.state.isChunkError ? 'Mettre à jour' : 'Réessayer'}
@@ -143,7 +143,7 @@ export class ErrorBoundary extends Component<Props, State> {
             <div className="flex gap-2">
               <button
                 onClick={this.handleGoBack}
-                className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-white/5 text-text-secondary text-[13px] font-medium hover:bg-white/10 transition-colors border border-white/10"
+                className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-white/5 text-text-secondary text-base font-medium hover:bg-white/10 transition-colors border border-white/10"
               >
                 <ArrowLeft className="w-4 h-4" />
                 Retour
@@ -151,7 +151,7 @@ export class ErrorBoundary extends Component<Props, State> {
 
               <button
                 onClick={this.handleGoHome}
-                className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-white/5 text-text-secondary text-[13px] font-medium hover:bg-white/10 transition-colors border border-white/10"
+                className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-white/5 text-text-secondary text-base font-medium hover:bg-white/10 transition-colors border border-white/10"
               >
                 <Home className="w-4 h-4" />
                 Accueil
@@ -162,7 +162,7 @@ export class ErrorBoundary extends Component<Props, State> {
             {hasRetried && (
               <button
                 onClick={this.handleClearCacheAndReload}
-                className="w-full mt-3 inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-error/10 text-error text-[13px] font-medium hover:bg-error/20 transition-colors border border-error/20"
+                className="w-full mt-3 inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-error/10 text-error text-base font-medium hover:bg-error/20 transition-colors border border-error/20"
               >
                 <Trash2 className="w-4 h-4" />
                 Vider le cache et recharger
@@ -172,12 +172,12 @@ export class ErrorBoundary extends Component<Props, State> {
             {/* Show technical details in dev mode */}
             {!import.meta.env.PROD && this.state.error && (
               <div className="mt-6 p-4 rounded-xl bg-surface-card border border-border-default text-left">
-                <p className="text-[11px] font-medium text-text-secondary mb-1">Détails techniques :</p>
-                <p className="text-[12px] font-mono text-error break-all">
+                <p className="text-sm font-medium text-text-secondary mb-1">Détails techniques :</p>
+                <p className="text-sm font-mono text-error break-all">
                   {this.state.error.message}
                 </p>
                 {this.state.error.stack && (
-                  <pre className="text-[10px] font-mono text-text-tertiary mt-2 overflow-auto max-h-32">
+                  <pre className="text-xs font-mono text-text-tertiary mt-2 overflow-auto max-h-32">
                     {this.state.error.stack}
                   </pre>
                 )}

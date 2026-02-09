@@ -147,7 +147,7 @@ function IntegrationRow({
         <div className="flex items-center gap-2">
           <span className="text-sm font-medium text-text-primary">{name}</span>
           {status === 'coming' && (
-            <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-white/5 text-text-tertiary font-medium">Bientot</span>
+            <span className="text-xs px-1.5 py-0.5 rounded-full bg-white/5 text-text-tertiary font-medium">Bientot</span>
           )}
         </div>
         <p className="text-xs text-text-tertiary mt-0.5">{description}</p>

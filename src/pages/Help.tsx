@@ -133,7 +133,7 @@ export function Help() {
           </button>
           <div>
             <h1 className="text-2xl font-bold text-text-primary">Aide & FAQ</h1>
-            <p className="text-[14px] text-text-secondary">Trouve des réponses à tes questions</p>
+            <p className="text-md text-text-secondary">Trouve des réponses à tes questions</p>
           </div>
         </div>
 
@@ -145,7 +145,7 @@ export function Help() {
             placeholder="Rechercher dans l'aide..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full h-12 pl-12 pr-4 rounded-xl bg-border-subtle border border-border-hover text-[14px] text-text-primary placeholder-text-tertiary focus:outline-none focus:border-primary transition-colors"
+            className="w-full h-12 pl-12 pr-4 rounded-xl bg-border-subtle border border-border-hover text-md text-text-primary placeholder-text-tertiary focus:outline-none focus:border-primary transition-colors"
           />
         </div>
 
@@ -153,7 +153,7 @@ export function Help() {
         <div className="flex gap-2 overflow-x-auto pb-2 mb-6 scrollbar-hide">
           <button
             onClick={() => setSelectedCategory(null)}
-            className={`flex-shrink-0 px-4 py-2 rounded-full text-[13px] font-medium transition-interactive ${
+            className={`flex-shrink-0 px-4 py-2 rounded-full text-base font-medium transition-interactive ${
               selectedCategory === null
                 ? 'bg-primary text-white'
                 : 'bg-border-subtle text-text-secondary hover:bg-border-hover hover:scale-[1.02]'
@@ -165,7 +165,7 @@ export function Help() {
             <button
               key={cat}
               onClick={() => setSelectedCategory(cat)}
-              className={`flex-shrink-0 px-4 py-2 rounded-full text-[13px] font-medium transition-interactive ${
+              className={`flex-shrink-0 px-4 py-2 rounded-full text-base font-medium transition-interactive ${
                 selectedCategory === cat
                   ? 'bg-primary text-white'
                   : 'bg-border-subtle text-text-secondary hover:bg-border-hover hover:scale-[1.02]'
@@ -180,13 +180,13 @@ export function Help() {
         {Object.entries(groupedItems).length === 0 ? (
           <Card className="p-8 text-center">
             <HelpCircle className="w-12 h-12 text-text-tertiary mx-auto mb-3" />
-            <p className="text-[15px] text-text-primary mb-1">Aucun résultat</p>
-            <p className="text-[13px] text-text-tertiary">Essaie avec d'autres mots-clés</p>
+            <p className="text-md text-text-primary mb-1">Aucun résultat</p>
+            <p className="text-base text-text-tertiary">Essaie avec d'autres mots-clés</p>
           </Card>
         ) : (
           Object.entries(groupedItems).map(([category, items]) => (
             <div key={category} className="mb-6">
-              <h2 className="text-[13px] font-semibold text-text-tertiary uppercase tracking-wider mb-3">
+              <h2 className="text-base font-semibold text-text-tertiary uppercase tracking-wider mb-3">
                 {category}
               </h2>
               <div className="space-y-2">
@@ -196,7 +196,7 @@ export function Help() {
                       onClick={() => setOpenIndex(openIndex === item.globalIndex ? null : item.globalIndex)}
                       className="w-full flex items-center justify-between p-4 text-left"
                     >
-                      <span className="text-[14px] font-medium text-text-primary pr-4">
+                      <span className="text-md font-medium text-text-primary pr-4">
                         {item.question}
                       </span>
                       <motion.div
@@ -216,7 +216,7 @@ export function Help() {
                           className="overflow-hidden"
                         >
                           <div className="px-4 pb-4">
-                            <p className="text-[14px] text-text-secondary leading-relaxed">
+                            <p className="text-md text-text-secondary leading-relaxed">
                               {item.answer}
                             </p>
                           </div>
@@ -237,15 +237,15 @@ export function Help() {
               <Mail className="w-6 h-6 text-primary" />
             </div>
             <div className="flex-1">
-              <h3 className="text-[16px] font-semibold text-text-primary mb-1">
+              <h3 className="text-lg font-semibold text-text-primary mb-1">
                 Besoin d'aide supplémentaire ?
               </h3>
-              <p className="text-[13px] text-text-secondary mb-3">
+              <p className="text-base text-text-secondary mb-3">
                 Notre équipe est là pour t'aider. Contacte-nous et on te répond sous 24h.
               </p>
               <a
                 href="mailto:support@squadplanner.fr"
-                className="inline-flex items-center gap-2 text-[14px] font-medium text-primary hover:text-purple transition-colors"
+                className="inline-flex items-center gap-2 text-md font-medium text-primary hover:text-purple transition-colors"
               >
                 Contacter le support
                 <ExternalLink className="w-4 h-4" />
@@ -255,7 +255,7 @@ export function Help() {
         </Card>
 
         {/* Version */}
-        <p className="text-center text-[12px] text-text-tertiary mt-8">
+        <p className="text-center text-sm text-text-tertiary mt-8">
           Squad Planner v1.0.0
         </p>
       </div>

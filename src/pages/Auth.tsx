@@ -217,7 +217,7 @@ export default function Auth() {
       <header className="relative z-10 px-6 py-5">
         <Link to="/" className="inline-flex items-center gap-2 hover:opacity-80 transition-opacity">
           <SquadPlannerLogo size={28} />
-          <span className="text-[15px] font-semibold text-text-primary">Squad Planner</span>
+          <span className="text-md font-semibold text-text-primary">Squad Planner</span>
         </Link>
       </header>
 
@@ -240,7 +240,7 @@ export default function Auth() {
                 <h1 className="text-2xl font-bold text-text-primary mb-2">
                   {mode === 'login' ? 'T\'as manqué à ta squad !' : mode === 'reset' ? 'Nouveau mot de passe' : 'Rejoins l\'aventure'}
                 </h1>
-                <p className="text-[15px] text-text-secondary">
+                <p className="text-md text-text-secondary">
                   {mode === 'login'
                     ? 'Tes potes t\'attendent'
                     : mode === 'reset'
@@ -278,7 +278,7 @@ export default function Auth() {
                           <div className="w-full border-t border-border-hover" />
                         </div>
                         <div className="relative flex justify-center">
-                          <span className="px-4 bg-bg-surface text-[12px] text-text-tertiary uppercase tracking-wider">
+                          <span className="px-4 bg-bg-surface text-sm text-text-tertiary uppercase tracking-wider">
                             ou par email
                           </span>
                         </div>
@@ -300,7 +300,7 @@ export default function Auth() {
                           autoComplete="username"
                           className={fieldErrors.username ? 'border-error focus:border-error' : ''}
                         />
-                        {fieldErrors.username && <p className="text-error text-[12px] mt-1">{fieldErrors.username}</p>}
+                        {fieldErrors.username && <p className="text-error text-sm mt-1">{fieldErrors.username}</p>}
                       </div>
                     )}
 
@@ -316,7 +316,7 @@ export default function Auth() {
                           autoComplete="email"
                           className={fieldErrors.email ? 'border-error focus:border-error' : ''}
                         />
-                        {fieldErrors.email && <p className="text-error text-[12px] mt-1">{fieldErrors.email}</p>}
+                        {fieldErrors.email && <p className="text-error text-sm mt-1">{fieldErrors.email}</p>}
                       </div>
                     )}
 
@@ -332,7 +332,7 @@ export default function Auth() {
                         autoComplete={mode === 'login' ? 'current-password' : 'new-password'}
                         className={fieldErrors.password ? 'border-error focus:border-error' : ''}
                       />
-                      {fieldErrors.password && <p className="text-error text-[12px] mt-1">{fieldErrors.password}</p>}
+                      {fieldErrors.password && <p className="text-error text-sm mt-1">{fieldErrors.password}</p>}
                     </div>
 
                     {mode === 'reset' && (
@@ -354,7 +354,7 @@ export default function Auth() {
                     <div className="p-3 rounded-xl bg-success-5 border border-success/10">
                       <div className="flex items-center gap-2 text-success">
                         <CheckCircle className="w-4 h-4" />
-                        <span className="text-[13px]">Mot de passe mis à jour !</span>
+                        <span className="text-base">Mot de passe mis à jour !</span>
                       </div>
                     </div>
                   )}
@@ -369,7 +369,7 @@ export default function Auth() {
                         className="overflow-hidden"
                       >
                         <div className="p-3 rounded-xl bg-error-5 border border-error">
-                          <p className="text-error text-[13px]">{error}</p>
+                          <p className="text-error text-base">{error}</p>
                         </div>
                       </motion.div>
                     )}
@@ -390,14 +390,14 @@ export default function Auth() {
                       {resetEmailSent ? (
                         <div className="flex items-center justify-center gap-2 text-success">
                           <CheckCircle className="w-4 h-4" />
-                          <span className="text-[13px]">Email envoyé ! Vérifie ta boîte mail</span>
+                          <span className="text-base">Email envoyé ! Vérifie ta boîte mail</span>
                         </div>
                       ) : (
                         <button
                           type="button"
                           onClick={handleForgotPassword}
                           disabled={isResetting}
-                          className="text-[13px] text-text-tertiary hover:text-text-secondary transition-colors disabled:opacity-50"
+                          className="text-base text-text-tertiary hover:text-text-secondary transition-colors disabled:opacity-50"
                         >
                           {isResetting ? 'Envoi en cours...' : 'Mot de passe oublié ?'}
                         </button>
@@ -411,7 +411,7 @@ export default function Auth() {
                       <button
                         type="button"
                         onClick={() => setMode('login')}
-                        className="text-[13px] text-text-tertiary hover:text-text-secondary transition-colors"
+                        className="text-base text-text-tertiary hover:text-text-secondary transition-colors"
                       >
                         Retour à la connexion
                       </button>
@@ -423,7 +423,7 @@ export default function Auth() {
               {/* Toggle mode - not shown in reset mode */}
               {mode !== 'reset' && (
                 <div className="text-center">
-                  <p className="text-[14px] text-text-secondary">
+                  <p className="text-md text-text-secondary">
                     {mode === 'login' ? 'Première fois ?' : 'Déjà un compte ?'}
                     {' '}
                     <button
@@ -443,7 +443,7 @@ export default function Auth() {
 
       {/* Footer */}
       <footer className="relative z-10 px-6 py-4 text-center">
-        <p className="text-[12px] text-text-tertiary">
+        <p className="text-sm text-text-tertiary">
           En continuant, tu acceptes nos{' '}
           <Link to="/legal" className="text-primary hover:text-purple underline transition-colors">
             conditions d'utilisation

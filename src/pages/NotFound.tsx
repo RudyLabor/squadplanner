@@ -29,11 +29,11 @@ export function NotFound() {
         </h1>
 
         {/* Message — always visible */}
-        <p className="text-[18px] font-semibold text-text-primary mb-2">
+        <p className="text-xl font-semibold text-text-primary mb-2">
           Oups, cette page n'existe pas !
         </p>
 
-        <p className="text-[14px] text-text-secondary mb-8">
+        <p className="text-md text-text-secondary mb-8">
           La page que tu cherches a peut-être été déplacée ou n'existe plus.
         </p>
 

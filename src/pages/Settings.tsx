@@ -55,7 +55,7 @@ function SectionHeader({ icon: Icon, title }: { icon: React.ElementType; title: 
       <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
         <Icon className="w-4 h-4 text-primary" />
       </div>
-      <h2 className="text-[15px] font-semibold text-text-primary">{title}</h2>
+      <h2 className="text-md font-semibold text-text-primary">{title}</h2>
     </div>
   )
 }
@@ -69,8 +69,8 @@ function SettingRow({ label, description, children }: {
   return (
     <div className="flex items-center justify-between py-3 border-b border-border-default last:border-0">
       <div className="flex-1 mr-4">
-        <p className="text-[14px] text-text-primary">{label}</p>
-        {description && <p className="text-[12px] text-text-quaternary mt-0.5">{description}</p>}
+        <p className="text-md text-text-primary">{label}</p>
+        {description && <p className="text-sm text-text-quaternary mt-0.5">{description}</p>}
       </div>
       {children}
     </div>
@@ -268,7 +268,7 @@ export function Settings() {
           </button>
           <div>
             <h1 className="text-2xl font-bold text-text-primary">Paramètres</h1>
-            <p className="text-[14px] text-text-tertiary">Personnalise ton expérience</p>
+            <p className="text-md text-text-tertiary">Personnalise ton expérience</p>
           </div>
         </div>
 
@@ -320,14 +320,14 @@ export function Settings() {
           <SectionHeader icon={Volume2} title="Audio" />
           <div className="space-y-4">
             <div>
-              <label className="flex items-center gap-2 text-[13px] text-text-tertiary mb-2">
+              <label className="flex items-center gap-2 text-base text-text-tertiary mb-2">
                 <Mic className="w-4 h-4" />
                 Microphone
               </label>
               <select
                 value={audioInput}
                 onChange={(e) => { setAudioInput(e.target.value); showSaveToast() }}
-                className="w-full h-11 px-4 rounded-xl bg-surface-card border border-border-default text-[14px] text-text-primary focus:outline-none focus:border-primary"
+                className="w-full h-11 px-4 rounded-xl bg-surface-card border border-border-default text-md text-text-primary focus:outline-none focus:border-primary"
               >
                 <option value="default">Microphone par défaut</option>
                 {inputDevices.map(device => (
@@ -338,14 +338,14 @@ export function Settings() {
               </select>
             </div>
             <div>
-              <label className="flex items-center gap-2 text-[13px] text-text-tertiary mb-2">
+              <label className="flex items-center gap-2 text-base text-text-tertiary mb-2">
                 <Speaker className="w-4 h-4" />
                 Sortie audio
               </label>
               <select
                 value={audioOutput}
                 onChange={(e) => { setAudioOutput(e.target.value); showSaveToast() }}
-                className="w-full h-11 px-4 rounded-xl bg-surface-card border border-border-default text-[14px] text-text-primary focus:outline-none focus:border-primary"
+                className="w-full h-11 px-4 rounded-xl bg-surface-card border border-border-default text-md text-text-primary focus:outline-none focus:border-primary"
               >
                 <option value="default">Haut-parleur par défaut</option>
                 {outputDevices.map(device => (
@@ -380,7 +380,7 @@ export function Settings() {
               <select
                 value={privacy.profileVisibility}
                 onChange={(e) => { setPrivacy({ ...privacy, profileVisibility: e.target.value as 'public' | 'friends' | 'private' }); showSaveToast() }}
-                className="h-9 px-3 rounded-lg bg-surface-card border border-border-default text-[13px] text-text-primary focus:outline-none focus:border-primary"
+                className="h-9 px-3 rounded-lg bg-surface-card border border-border-default text-base text-text-primary focus:outline-none focus:border-primary"
               >
                 <option value="public">Tout le monde</option>
                 <option value="friends">Membres de mes squads</option>
@@ -404,14 +404,14 @@ export function Settings() {
           <SectionHeader icon={Globe} title="Région" />
           <div className="space-y-4">
             <div>
-              <label className="flex items-center gap-2 text-[13px] text-text-tertiary mb-2">
+              <label className="flex items-center gap-2 text-base text-text-tertiary mb-2">
                 <Globe className="w-4 h-4" />
                 Fuseau horaire
               </label>
               <select
                 value={timezone}
                 onChange={(e) => { setTimezone(e.target.value); showSaveToast() }}
-                className="w-full h-11 px-4 rounded-xl bg-surface-card border border-border-default text-[14px] text-text-primary focus:outline-none focus:border-primary"
+                className="w-full h-11 px-4 rounded-xl bg-surface-card border border-border-default text-md text-text-primary focus:outline-none focus:border-primary"
               >
                 {TIMEZONES.map(tz => (
                   <option key={tz.value} value={tz.value}>{tz.label}</option>
@@ -419,7 +419,7 @@ export function Settings() {
               </select>
             </div>
             <div>
-              <label className="flex items-center gap-2 text-[13px] text-text-tertiary mb-2">
+              <label className="flex items-center gap-2 text-base text-text-tertiary mb-2">
                 <Languages className="w-4 h-4" />
                 Langue
               </label>
@@ -452,8 +452,8 @@ export function Settings() {
                   <Download className="w-5 h-5 text-primary" />
                 )}
                 <div className="text-left">
-                  <p className="text-[14px] text-text-primary">{isExporting ? 'Export en cours...' : 'Exporter mes données'}</p>
-                  <p className="text-[12px] text-text-quaternary">Télécharge toutes tes infos (RGPD)</p>
+                  <p className="text-md text-text-primary">{isExporting ? 'Export en cours...' : 'Exporter mes données'}</p>
+                  <p className="text-sm text-text-quaternary">Télécharge toutes tes infos (RGPD)</p>
                 </div>
               </div>
               <ChevronRight className="w-5 h-5 text-text-quaternary" />
@@ -466,8 +466,8 @@ export function Settings() {
               <div className="flex items-center gap-3">
                 <Trash2 className="w-5 h-5 text-error" />
                 <div className="text-left">
-                  <p className="text-[14px] text-error">Supprimer mon compte</p>
-                  <p className="text-[12px] text-error/60">Action irréversible</p>
+                  <p className="text-md text-error">Supprimer mon compte</p>
+                  <p className="text-sm text-error/60">Action irréversible</p>
                 </div>
               </div>
               <ChevronRight className="w-5 h-5 text-error/50" />
@@ -486,8 +486,8 @@ export function Settings() {
               <div className="flex items-center gap-3">
                 <FileText className="w-5 h-5 text-primary" />
                 <div className="text-left">
-                  <p className="text-[14px] text-text-primary">Conditions d'utilisation</p>
-                  <p className="text-[12px] text-text-quaternary">CGU de Squad Planner</p>
+                  <p className="text-md text-text-primary">Conditions d'utilisation</p>
+                  <p className="text-sm text-text-quaternary">CGU de Squad Planner</p>
                 </div>
               </div>
               <ExternalLink className="w-4 h-4 text-text-quaternary" />
@@ -499,8 +499,8 @@ export function Settings() {
               <div className="flex items-center gap-3">
                 <Shield className="w-5 h-5 text-primary" />
                 <div className="text-left">
-                  <p className="text-[14px] text-text-primary">Politique de confidentialité</p>
-                  <p className="text-[12px] text-text-quaternary">RGPD & protection des données</p>
+                  <p className="text-md text-text-primary">Politique de confidentialité</p>
+                  <p className="text-sm text-text-quaternary">RGPD & protection des données</p>
                 </div>
               </div>
               <ExternalLink className="w-4 h-4 text-text-quaternary" />
@@ -512,8 +512,8 @@ export function Settings() {
               <div className="flex items-center gap-3">
                 <Globe className="w-5 h-5 text-primary" />
                 <div className="text-left">
-                  <p className="text-[14px] text-text-primary">Page d'accueil publique</p>
-                  <p className="text-[12px] text-text-quaternary">Voir la landing page</p>
+                  <p className="text-md text-text-primary">Page d'accueil publique</p>
+                  <p className="text-sm text-text-quaternary">Voir la landing page</p>
                 </div>
               </div>
               <ExternalLink className="w-4 h-4 text-text-quaternary" />
@@ -524,14 +524,14 @@ export function Settings() {
         {/* Sign Out */}
         <button
           onClick={handleSignOut}
-          className="w-full py-4 text-[14px] text-error hover:text-error-hover transition-colors flex items-center justify-center gap-2"
+          className="w-full py-4 text-md text-error hover:text-error-hover transition-colors flex items-center justify-center gap-2"
         >
           <LogOut className="w-4 h-4" />
           Se déconnecter
         </button>
 
         {/* Version */}
-        <p className="text-center text-[12px] text-text-quaternary mt-6">
+        <p className="text-center text-sm text-text-quaternary mt-6">
           Squad Planner v1.0.0
         </p>
       </div>
@@ -560,12 +560,12 @@ export function Settings() {
                 <h3 className="text-lg font-bold text-text-primary">Supprimer ton compte</h3>
               </div>
 
-              <p className="text-[14px] text-text-tertiary mb-4">
+              <p className="text-md text-text-tertiary mb-4">
                 Cette action est <span className="text-error font-semibold">définitive et irréversible</span>.
                 Toutes tes données seront supprimées : profil, messages, squads, statistiques.
               </p>
 
-              <p className="text-[13px] text-text-tertiary mb-3">
+              <p className="text-base text-text-tertiary mb-3">
                 Tape <span className="font-mono text-error font-bold">SUPPRIMER</span> pour confirmer :
               </p>
 
@@ -575,21 +575,21 @@ export function Settings() {
                 onChange={(e) => setDeleteConfirmText(e.target.value)}
                 placeholder="SUPPRIMER"
                 disabled={isDeleting}
-                className="w-full h-11 px-4 rounded-xl bg-surface-card border border-error/15 text-[14px] text-text-primary placeholder:text-text-quaternary focus:outline-none focus:border-error mb-4"
+                className="w-full h-11 px-4 rounded-xl bg-surface-card border border-error/15 text-md text-text-primary placeholder:text-text-quaternary focus:outline-none focus:border-error mb-4"
               />
 
               <div className="flex gap-3">
                 <button
                   onClick={() => { setShowDeleteModal(false); setDeleteConfirmText('') }}
                   disabled={isDeleting}
-                  className="flex-1 h-11 rounded-xl bg-surface-card text-[14px] text-text-tertiary hover:bg-border-hover transition-colors disabled:opacity-50"
+                  className="flex-1 h-11 rounded-xl bg-surface-card text-md text-text-tertiary hover:bg-border-hover transition-colors disabled:opacity-50"
                 >
                   Annuler
                 </button>
                 <button
                   onClick={handleDeleteAccount}
                   disabled={deleteConfirmText !== 'SUPPRIMER' || isDeleting}
-                  className="flex-1 h-11 rounded-xl bg-error text-white text-[14px] font-semibold hover:bg-error-hover transition-colors disabled:opacity-30 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                  className="flex-1 h-11 rounded-xl bg-error text-white text-md font-semibold hover:bg-error-hover transition-colors disabled:opacity-30 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                 >
                   {isDeleting ? (
                     <>

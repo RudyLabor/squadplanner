@@ -88,7 +88,7 @@ export const AITeamInsights = memo(function AITeamInsights({ squadId }: Props) {
             <div key={player.user_id} className="flex items-center justify-between px-3 py-2 rounded-lg bg-amber-500/5 border border-amber-500/10">
               <div className="flex items-center gap-2">
                 <div className="w-6 h-6 rounded-full bg-amber-500/10 flex items-center justify-center">
-                  <span className="text-[10px] font-bold text-amber-400">
+                  <span className="text-xs font-bold text-amber-400">
                     {player.username.charAt(0).toUpperCase()}
                   </span>
                 </div>

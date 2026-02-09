@@ -29,7 +29,7 @@ function MockNavbar({ active }: { active: string }) {
         return (
           <div key={item.id} className="flex flex-col items-center gap-0.5">
             <Icon className="w-[14px] h-[14px]" style={{ color: isActive ? 'var(--color-primary)' : 'var(--color-text-tertiary)' }} />
-            <span className={`text-[7px] ${isActive ? 'text-primary font-medium' : 'text-text-tertiary'}`}>{item.label}</span>
+            <span className={`text-xs ${isActive ? 'text-primary font-medium' : 'text-text-tertiary'}`}>{item.label}</span>
           </div>
         )
       })}
@@ -48,10 +48,10 @@ function HomeScreen() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
         >
-          <div className="text-[15px] font-bold text-text-primary leading-tight">
+          <div className="text-md font-bold text-text-primary leading-tight">
             Salut MaxGamer_94 !
           </div>
-          <div className="text-[10px] text-text-tertiary mt-0.5">
+          <div className="text-xs text-text-tertiary mt-0.5">
             T'es carré, toutes tes sessions sont confirmées
           </div>
         </motion.div>
@@ -62,8 +62,8 @@ function HomeScreen() {
           animate={{ scale: 1 }}
           transition={{ delay: 0.3, type: 'spring', stiffness: 400 }}
         >
-          <span className="text-[10px] font-bold text-success">100%</span>
-          <span className="text-[8px] text-success/70">fiable</span>
+          <span className="text-xs font-bold text-success">100%</span>
+          <span className="text-xs text-success/70">fiable</span>
         </motion.div>
       </div>
 
@@ -79,11 +79,11 @@ function HomeScreen() {
             <Calendar className="w-3.5 h-3.5 text-text-primary" />
           </div>
           <div className="flex-1">
-            <div className="text-[11px] font-semibold text-text-primary">Ranked du Mardi</div>
-            <div className="text-[9px] text-text-tertiary">Les Invaincus · Demain 21h</div>
+            <div className="text-sm font-semibold text-text-primary">Ranked du Mardi</div>
+            <div className="text-xs text-text-tertiary">Les Invaincus · Demain 21h</div>
           </div>
           <motion.span
-            className="px-2 py-0.5 rounded-full bg-success/15 text-[8px] text-success font-medium"
+            className="px-2 py-0.5 rounded-full bg-success/15 text-xs text-success font-medium"
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             transition={{ delay: 0.6, type: 'spring' }}
@@ -97,7 +97,7 @@ function HomeScreen() {
             {mockMembers.slice(0, 4).map((m, i) => (
               <motion.div
                 key={m.name}
-                className="w-6 h-6 rounded-full border-[1.5px] border-bg-base flex items-center justify-center text-[8px] font-bold text-text-primary"
+                className="w-6 h-6 rounded-full border-[1.5px] border-bg-base flex items-center justify-center text-xs font-bold text-text-primary"
                 style={{ backgroundColor: m.color }}
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
@@ -107,7 +107,7 @@ function HomeScreen() {
               </motion.div>
             ))}
           </div>
-          <span className="text-[9px] text-text-secondary">4/5 présents</span>
+          <span className="text-xs text-text-secondary">4/5 présents</span>
           <motion.div
             className="ml-auto flex items-center gap-1"
             initial={{ opacity: 0 }}
@@ -115,7 +115,7 @@ function HomeScreen() {
             transition={{ delay: 0.8 }}
           >
             <Check className="w-3 h-3 text-success" />
-            <span className="text-[8px] text-success font-medium">Présent</span>
+            <span className="text-xs text-success font-medium">Présent</span>
           </motion.div>
         </div>
       </motion.div>
@@ -133,8 +133,8 @@ function HomeScreen() {
           { label: 'Streak', value: '🔥 5', color: 'var(--color-gold)' },
         ].map((s) => (
           <div key={s.label} className="bg-bg-surface rounded-lg p-2.5 text-center border border-border-subtle">
-            <div className="text-[13px] font-bold" style={{ color: s.color }}>{s.value}</div>
-            <div className="text-[8px] text-text-tertiary">{s.label}</div>
+            <div className="text-base font-bold" style={{ color: s.color }}>{s.value}</div>
+            <div className="text-xs text-text-tertiary">{s.label}</div>
           </div>
         ))}
       </motion.div>
@@ -146,25 +146,25 @@ function HomeScreen() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.7 }}
       >
-        <div className="text-[9px] font-semibold text-text-secondary uppercase tracking-wider mb-2">Ta semaine</div>
+        <div className="text-xs font-semibold text-text-secondary uppercase tracking-wider mb-2">Ta semaine</div>
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-1.5">
             <div className="w-5 h-5 rounded-md bg-success/15 flex items-center justify-center">
               <Check className="w-3 h-3 text-success" />
             </div>
-            <span className="text-[9px] text-text-primary">3 sessions jouées</span>
+            <span className="text-xs text-text-primary">3 sessions jouées</span>
           </div>
-          <span className="text-[8px] text-success font-medium">100% présent</span>
+          <span className="text-xs text-success font-medium">100% présent</span>
         </div>
         <div className="flex items-center justify-between mt-1.5">
           <div className="flex items-center gap-1.5">
             <div className="w-5 h-5 rounded-md bg-primary/15 flex items-center justify-center">
               <Headphones className="w-3 h-3 text-primary" />
             </div>
-            <span className="text-[9px] text-text-primary">Party vocale active</span>
+            <span className="text-xs text-text-primary">Party vocale active</span>
           </div>
           <motion.span
-            className="text-[8px] text-primary"
+            className="text-xs text-primary"
             animate={{ opacity: [1, 0.5, 1] }}
             transition={{ duration: 2, repeat: Infinity }}
           >
@@ -188,10 +188,10 @@ function SquadScreen() {
           animate={{ opacity: 1 }}
           className="flex items-center gap-2"
         >
-          <div className="text-[15px] font-bold text-text-primary">Les Invaincus</div>
-          <span className="text-[10px]">👑</span>
+          <div className="text-md font-bold text-text-primary">Les Invaincus</div>
+          <span className="text-xs">👑</span>
         </motion.div>
-        <div className="text-[9px] text-text-tertiary mt-0.5">Valorant · 5 membres</div>
+        <div className="text-xs text-text-tertiary mt-0.5">Valorant · 5 membres</div>
       </div>
 
       {/* Invite code */}
@@ -202,10 +202,10 @@ function SquadScreen() {
         transition={{ delay: 0.15 }}
       >
         <div>
-          <div className="text-[7px] text-text-tertiary uppercase tracking-wider">Code d'invitation</div>
-          <div className="text-[12px] font-bold text-text-primary tracking-[0.15em]">8J9DQR</div>
+          <div className="text-xs text-text-tertiary uppercase tracking-wider">Code d'invitation</div>
+          <div className="text-sm font-bold text-text-primary tracking-[0.15em]">8J9DQR</div>
         </div>
-        <div className="px-3 py-1.5 rounded-md bg-primary text-[8px] text-text-primary font-medium">Copier</div>
+        <div className="px-3 py-1.5 rounded-md bg-primary text-xs text-text-primary font-medium">Copier</div>
       </motion.div>
 
       {/* Party vocale */}
@@ -217,9 +217,9 @@ function SquadScreen() {
       >
         <div className="flex items-center gap-2 mb-2">
           <Headphones className="w-3 h-3 text-success" />
-          <span className="text-[10px] font-medium text-text-primary">Party vocale</span>
+          <span className="text-xs font-medium text-text-primary">Party vocale</span>
           <motion.span
-            className="ml-auto text-[8px] text-success"
+            className="ml-auto text-xs text-success"
             animate={{ opacity: [1, 0.5, 1] }}
             transition={{ duration: 2, repeat: Infinity }}
           >
@@ -241,11 +241,11 @@ function SquadScreen() {
                     transition={{ duration: 1.5, repeat: Infinity }}
                   />
                 )}
-                <div className="w-6 h-6 rounded-full flex items-center justify-center text-[8px] font-bold text-text-primary" style={{ backgroundColor: m.color }}>
+                <div className="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold text-text-primary" style={{ backgroundColor: m.color }}>
                   {m.initial}
                 </div>
               </div>
-              <span className="text-[8px] text-text-secondary">{m.name}</span>
+              <span className="text-xs text-text-secondary">{m.name}</span>
             </motion.div>
           ))}
         </div>
@@ -261,8 +261,8 @@ function SquadScreen() {
         <div className="flex items-center gap-2 mb-2.5">
           <Calendar className="w-3.5 h-3.5 text-primary" />
           <div>
-            <div className="text-[10px] font-semibold text-text-primary">Ranked du Mardi</div>
-            <div className="text-[8px] text-text-tertiary">Demain 21:00 · 4/5 présents</div>
+            <div className="text-xs font-semibold text-text-primary">Ranked du Mardi</div>
+            <div className="text-xs text-text-tertiary">Demain 21:00 · 4/5 présents</div>
           </div>
         </div>
         {/* RSVP buttons */}
@@ -274,7 +274,7 @@ function SquadScreen() {
           ].map((opt, i) => (
             <motion.div
               key={opt.label}
-              className={`flex-1 py-1.5 rounded-lg text-center text-[8px] font-medium ${
+              className={`flex-1 py-1.5 rounded-lg text-center text-xs font-medium ${
                 opt.active
                   ? 'text-text-primary border'
                   : 'text-text-tertiary border border-border-default'
@@ -301,14 +301,14 @@ function SquadScreen() {
         animate={{ opacity: 1 }}
         transition={{ delay: 0.7 }}
       >
-        <div className="text-[9px] font-semibold text-text-secondary uppercase tracking-wider mb-2">Membres (5)</div>
+        <div className="text-xs font-semibold text-text-secondary uppercase tracking-wider mb-2">Membres (5)</div>
         {mockMembers.slice(0, 3).map((m) => (
           <div key={m.name} className="flex items-center gap-2 mb-1.5">
-            <div className="w-5 h-5 rounded-full flex items-center justify-center text-[7px] font-bold text-text-primary" style={{ backgroundColor: m.color }}>
+            <div className="w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold text-text-primary" style={{ backgroundColor: m.color }}>
               {m.initial}
             </div>
-            <span className="text-[9px] text-text-primary flex-1">{m.name}</span>
-            <span className="text-[7px] text-success">{m.score}%</span>
+            <span className="text-xs text-text-primary flex-1">{m.name}</span>
+            <span className="text-xs text-success">{m.score}%</span>
           </div>
         ))}
       </motion.div>
@@ -327,14 +327,14 @@ function PartyScreen() {
 
       <div className="relative z-10 px-4 pt-5 pb-2">
         <motion.div
-          className="text-[9px] text-success font-medium"
+          className="text-xs text-success font-medium"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
         >
           Party vocale en cours
         </motion.div>
         <motion.div
-          className="text-[13px] font-bold text-text-primary"
+          className="text-base font-bold text-text-primary"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.1 }}
@@ -342,7 +342,7 @@ function PartyScreen() {
           Les Invaincus
         </motion.div>
         <motion.div
-          className="text-[8px] text-text-tertiary mt-0.5"
+          className="text-xs text-text-tertiary mt-0.5"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.15 }}
@@ -369,15 +369,15 @@ function PartyScreen() {
                   transition={{ duration: 2, repeat: Infinity }}
                 />
               )}
-              <div className={`w-9 h-9 rounded-full flex items-center justify-center text-[11px] font-bold text-text-primary ${i === 0 ? 'ring-1 ring-success/30' : ''}`}
+              <div className={`w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold text-text-primary ${i === 0 ? 'ring-1 ring-success/30' : ''}`}
                 style={{ backgroundColor: m.color }}
               >
                 {m.initial}
               </div>
             </div>
             <div className="flex-1">
-              <div className={`text-[10px] font-medium ${i === 0 ? 'text-success' : 'text-text-primary'}`}>{m.name}</div>
-              <div className="text-[7px] text-text-tertiary">{m.score}% fiable</div>
+              <div className={`text-xs font-medium ${i === 0 ? 'text-success' : 'text-text-primary'}`}>{m.name}</div>
+              <div className="text-xs text-text-tertiary">{m.score}% fiable</div>
             </div>
             {/* Audio level bars per participant */}
             <div className="flex items-center gap-[2px] mr-1">
@@ -457,15 +457,15 @@ function ProfileScreen() {
       {/* Avatar section */}
       <div className="flex flex-col items-center pt-5 pb-3">
         <motion.div
-          className="w-14 h-14 rounded-2xl bg-primary flex items-center justify-center text-[20px] font-bold text-text-primary mb-2"
+          className="w-14 h-14 rounded-2xl bg-primary flex items-center justify-center text-xl font-bold text-text-primary mb-2"
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
           transition={{ type: 'spring', stiffness: 300 }}
         >
           M
         </motion.div>
-        <div className="text-[13px] font-bold text-text-primary">MaxGamer_94</div>
-        <div className="text-[8px] text-text-tertiary">Membre depuis janv. 2026</div>
+        <div className="text-base font-bold text-text-primary">MaxGamer_94</div>
+        <div className="text-xs text-text-tertiary">Membre depuis janv. 2026</div>
       </div>
 
       {/* XP Progress */}
@@ -477,10 +477,10 @@ function ProfileScreen() {
       >
         <div className="flex items-center justify-between mb-1.5">
           <div className="flex items-center gap-1.5">
-            <span className="text-[10px]">⚡</span>
-            <span className="text-[10px] font-semibold text-text-primary">Niveau 4 — Régulier</span>
+            <span className="text-xs">⚡</span>
+            <span className="text-xs font-semibold text-text-primary">Niveau 4 — Régulier</span>
           </div>
-          <span className="text-[8px] text-primary">340 XP</span>
+          <span className="text-xs text-primary">340 XP</span>
         </div>
         <div className="h-1.5 rounded-full bg-overlay-light overflow-hidden">
           <motion.div
@@ -491,8 +491,8 @@ function ProfileScreen() {
           />
         </div>
         <div className="flex justify-between mt-1">
-          <span className="text-[7px] text-text-tertiary">340 XP</span>
-          <span className="text-[7px] text-text-tertiary">500 XP pour le niveau 5</span>
+          <span className="text-xs text-text-tertiary">340 XP</span>
+          <span className="text-xs text-text-tertiary">500 XP pour le niveau 5</span>
         </div>
       </motion.div>
 
@@ -516,16 +516,16 @@ function ProfileScreen() {
               />
             </svg>
             <div className="absolute inset-0 flex items-center justify-center">
-              <span className="text-[11px] font-bold text-warning">94%</span>
+              <span className="text-sm font-bold text-warning">94%</span>
             </div>
           </div>
           <div>
-            <div className="text-[10px] font-semibold text-text-primary">Score de fiabilité</div>
-            <div className="text-[8px] text-warning">🏆 Légende</div>
+            <div className="text-xs font-semibold text-text-primary">Score de fiabilité</div>
+            <div className="text-xs text-warning">🏆 Légende</div>
             <div className="flex gap-0.5 mt-1">
               {['✅', '✅', '✅', '❌', '✅', '✅'].map((s, j) => (
                 <motion.span
-                  key={j} className="text-[7px]"
+                  key={j} className="text-xs"
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
                   transition={{ delay: 0.8 + j * 0.05 }}
@@ -553,10 +553,10 @@ function ProfileScreen() {
         ].map(s => (
           <div key={s.label} className="p-2.5 rounded-lg bg-bg-surface border border-border-subtle">
             <div className="flex items-center gap-1.5">
-              <span className="text-[10px]">{s.icon}</span>
-              <span className="text-[12px] font-bold text-text-primary">{s.value}</span>
+              <span className="text-xs">{s.icon}</span>
+              <span className="text-sm font-bold text-text-primary">{s.value}</span>
             </div>
-            <span className="text-[7px] text-text-tertiary">{s.label}</span>
+            <span className="text-xs text-text-tertiary">{s.label}</span>
           </div>
         ))}
       </motion.div>
@@ -612,7 +612,7 @@ export function HeroMockup() {
           <div className="bg-bg-base rounded-[2rem] overflow-hidden relative" style={{ height: 480 }}>
             {/* Status bar */}
             <div className="absolute top-0 left-0 right-0 z-10 flex items-center justify-between px-5 pt-1.5 pb-1">
-              <span className="text-[9px] text-text-secondary font-medium">21:00</span>
+              <span className="text-xs text-text-secondary font-medium">21:00</span>
               <div className="flex items-center gap-1">
                 <div className="flex items-end gap-[1px]">
                   {[1, 2, 3, 4].map(i => (
@@ -665,7 +665,7 @@ export function HeroMockup() {
             />
             {i === currentScreen && (
               <motion.span
-                className="text-[10px] text-primary font-medium"
+                className="text-xs text-primary font-medium"
                 initial={{ opacity: 0, x: -5 }}
                 animate={{ opacity: 1, x: 0 }}
               >

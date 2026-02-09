@@ -73,7 +73,7 @@ export function ProgressRing({
         )}
       </div>
       {label && (
-        <span className="text-text-tertiary text-[12px] font-medium">{label}</span>
+        <span className="text-text-tertiary text-sm font-medium">{label}</span>
       )}
     </div>
   )

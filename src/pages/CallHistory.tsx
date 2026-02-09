@@ -111,7 +111,7 @@ export function CallHistory() {
             </button>
             <div className="flex-1">
               <h1 className="text-2xl font-bold text-text-primary">Tes appels récents</h1>
-              <p className="text-[13px] text-text-tertiary">
+              <p className="text-base text-text-tertiary">
                 {filteredCalls.length > 0
                   ? `${filteredCalls.length} appel${filteredCalls.length !== 1 ? 's' : ''}`
                   : 'Aucun appel pour le moment'
@@ -134,7 +134,7 @@ export function CallHistory() {
               <button
                 key={option.value}
                 onClick={() => setFilter(option.value)}
-                className={`px-4 py-2.5 min-h-[44px] rounded-xl text-[13px] font-medium whitespace-nowrap transition-interactive touch-target ${
+                className={`px-4 py-2.5 min-h-[44px] rounded-xl text-base font-medium whitespace-nowrap transition-interactive touch-target ${
                   filter === option.value
                     ? 'bg-primary text-white'
                     : 'bg-surface-card text-text-tertiary hover:bg-border-default hover:text-text-primary hover:scale-[1.02]'
@@ -153,14 +153,14 @@ export function CallHistory() {
         {isLoading && filteredCalls.length === 0 && (
           <div className="flex flex-col items-center justify-center py-20">
             <div className="w-10 h-10 border-2 border-primary border-t-transparent rounded-full animate-spin mb-4" />
-            <p className="text-[14px] text-text-tertiary">Chargement de l'historique...</p>
+            <p className="text-md text-text-tertiary">Chargement de l'historique...</p>
           </div>
         )}
 
         {/* Error state */}
         {error && (
           <Card className="p-4 bg-error/5 border-error/10">
-            <p className="text-[14px] text-error">{error}</p>
+            <p className="text-md text-error">{error}</p>
             <Button
               size="sm"
               variant="ghost"
@@ -182,10 +182,10 @@ export function CallHistory() {
             <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-primary/[0.08] to-primary/[0.02] flex items-center justify-center mb-5">
               <Phone className="w-10 h-10 text-primary" />
             </div>
-            <h3 className="text-[18px] font-semibold text-text-primary mb-2">
+            <h3 className="text-xl font-semibold text-text-primary mb-2">
               {filter === 'all' ? 'Pas encore d\'appels' : 'Aucun appel ici'}
             </h3>
-            <p className="text-[14px] text-text-tertiary text-center max-w-[260px] mb-6">
+            <p className="text-md text-text-tertiary text-center max-w-[260px] mb-6">
               {filter === 'all'
                 ? "Appelle un pote pour commencer ! Tes appels apparaîtront ici."
                 : `Aucun appel ${
@@ -255,18 +255,18 @@ export function CallHistory() {
                     {/* Call info */}
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between mb-0.5">
-                        <h3 className={`text-[15px] font-semibold truncate ${
+                        <h3 className={`text-md font-semibold truncate ${
                           call.status === 'missed' || call.status === 'rejected'
                             ? 'text-error'
                             : 'text-text-primary'
                         }`}>
                           {call.contactName}
                         </h3>
-                        <span className="text-[13px] text-text-tertiary flex-shrink-0 ml-2">
+                        <span className="text-base text-text-tertiary flex-shrink-0 ml-2">
                           {formatRelativeTime(call.createdAt)}
                         </span>
                       </div>
-                      <div className="flex items-center gap-2 text-[13px] text-text-tertiary">
+                      <div className="flex items-center gap-2 text-base text-text-tertiary">
                         {getCallIcon(call.type, call.status)}
                         <span>{getCallLabel(call.type, call.status)}</span>
                         {typeof call.durationSeconds === 'number' && call.durationSeconds > 0 && (

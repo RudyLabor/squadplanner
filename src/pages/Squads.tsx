@@ -137,29 +137,29 @@ function SquadCard({ squad, isOwner, nextSession, hasActiveParty, copiedCode, on
               {/* Infos squad */}
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 mb-0.5">
-                  <h3 id={`squad-name-${squad.id}`} className="text-[15px] font-semibold text-text-primary truncate">{squad.name}</h3>
+                  <h3 id={`squad-name-${squad.id}`} className="text-md font-semibold text-text-primary truncate">{squad.name}</h3>
                   {isOwner && (
                     <Crown className="w-4 h-4 text-warning flex-shrink-0" />
                   )}
                 </div>
-                <p className="text-[13px] text-text-tertiary">
+                <p className="text-base text-text-tertiary">
                   {squad.game} · {memberCount} membre{memberCount > 1 ? 's' : ''}
                 </p>
 
                 {/* Prochaine session ou état */}
                 <div className="mt-2">
                   {hasActiveParty ? (
-                    <div className="flex items-center gap-1.5 text-[12px] text-success">
+                    <div className="flex items-center gap-1.5 text-sm text-success">
                       <Mic className="w-3.5 h-3.5" />
                       <span>Party en cours</span>
                     </div>
                   ) : nextSession ? (
-                    <div className="flex items-center gap-1.5 text-[12px] text-primary">
+                    <div className="flex items-center gap-1.5 text-sm text-primary">
                       <Calendar className="w-3.5 h-3.5" />
                       <span>{sessionLabel}</span>
                     </div>
                   ) : (
-                    <div className="flex items-center gap-1.5 text-[12px] text-text-quaternary">
+                    <div className="flex items-center gap-1.5 text-sm text-text-quaternary">
                       <Calendar className="w-3.5 h-3.5" />
                       <span>Aucune session planifiée</span>
                     </div>
@@ -351,7 +351,7 @@ export default function Squads() {
           <div className="flex items-center justify-between mb-6">
             <div>
               <h1 className="text-2xl font-bold text-text-primary">Mes Squads</h1>
-              <p className="text-[13px] text-text-quaternary">Chargement...</p>
+              <p className="text-base text-text-quaternary">Chargement...</p>
             </div>
           </div>
           <div className="space-y-3 lg:grid lg:grid-cols-2 xl:grid-cols-3 lg:gap-4 lg:space-y-0">
@@ -392,7 +392,7 @@ export default function Squads() {
           <div className="flex items-center justify-between mb-6">
             <div>
               <h1 className="text-2xl font-bold text-text-primary">Mes Squads</h1>
-              <p className="text-[13px] text-text-quaternary">{getSubtitle()}</p>
+              <p className="text-base text-text-quaternary">{getSubtitle()}</p>
             </div>
             <div className="flex gap-2">
               <Button variant="secondary" size="sm" onClick={() => setShowJoin(true)}>
@@ -432,7 +432,7 @@ export default function Squads() {
               >
                 <Card>
                   <CardContent className="p-5">
-                    <h3 className="text-[16px] font-semibold text-text-primary mb-4">Rejoindre une squad</h3>
+                    <h3 className="text-lg font-semibold text-text-primary mb-4">Rejoindre une squad</h3>
                     <form onSubmit={handleJoinSquad} className="space-y-4">
                       <Input
                         label="Code d'invitation"
@@ -443,7 +443,7 @@ export default function Squads() {
                       />
                       {error && (
                         <div className="p-3 rounded-lg bg-error/10 border border-error/20">
-                          <p className="text-error text-[13px]">{error}</p>
+                          <p className="text-error text-base">{error}</p>
                         </div>
                       )}
                       <div className="flex gap-2 pt-1">
@@ -473,7 +473,7 @@ export default function Squads() {
               >
                 <Card>
                   <CardContent className="p-5">
-                    <h3 className="text-[16px] font-semibold text-text-primary mb-4">Créer une squad</h3>
+                    <h3 className="text-lg font-semibold text-text-primary mb-4">Créer une squad</h3>
                     <form onSubmit={handleCreateSquad} className="space-y-4">
                       <Input
                         label="Nom de la squad"
@@ -491,7 +491,7 @@ export default function Squads() {
                       />
                       {error && (
                         <div className="p-3 rounded-lg bg-error/10 border border-error/20">
-                          <p className="text-error text-[13px]">{error}</p>
+                          <p className="text-error text-base">{error}</p>
                         </div>
                       )}
                       <div className="flex gap-2 pt-1">
@@ -545,10 +545,10 @@ export default function Squads() {
                 >
                   <Users className="w-7 h-7 text-text-quaternary" strokeWidth={1.5} />
                 </motion.div>
-                <h3 className="text-[16px] font-semibold text-text-primary mb-2">
+                <h3 className="text-lg font-semibold text-text-primary mb-2">
                   Pas encore de squad
                 </h3>
-                <p className="text-[14px] text-text-tertiary mb-6 max-w-[280px] mx-auto">
+                <p className="text-md text-text-tertiary mb-6 max-w-[280px] mx-auto">
                   Lance ta squad pour inviter tes potes, ou rejoins l'action avec un code.
                 </p>
                 <div className="flex gap-3 justify-center">

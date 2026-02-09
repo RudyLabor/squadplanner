@@ -39,7 +39,7 @@ function CallToast({ message, isVisible, variant = 'success' }: {
         >
           <div className={`flex items-center gap-2 px-4 py-3 rounded-xl ${style.bg} ${style.text} shadow-lg`}>
             <Icon className="w-5 h-5" />
-            <span className="text-[14px] font-medium">{message}</span>
+            <span className="text-md font-medium">{message}</span>
           </div>
         </motion.div>
       )}
@@ -165,7 +165,7 @@ export function CallModal() {
             >
               <div className="flex items-center justify-center gap-3">
                 <WifiOff className="w-5 h-5 text-warning animate-pulse" />
-                <p className="text-[14px] font-medium text-warning">
+                <p className="text-md font-medium text-warning">
                   Reconnexion en cours...
                 </p>
                 <Loader2 className="w-5 h-5 text-warning animate-spin" />
@@ -338,7 +338,7 @@ export function CallModal() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 1 }}
-              className="text-center text-[13px] text-text-tertiary mt-6"
+              className="text-center text-base text-text-tertiary mt-6"
             >
               En attente de réponse...
             </motion.p>

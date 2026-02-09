@@ -111,7 +111,7 @@ export function LevelUpCelebration({
 
             {/* "LEVEL UP" text */}
             <motion.div
-              className="text-[14px] font-bold uppercase tracking-[0.3em] mb-4"
+              className="text-md font-bold uppercase tracking-[0.3em] mb-4"
               style={{ color: currentLevel.color }}
               initial={{ y: -50, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
@@ -200,7 +200,7 @@ export function LevelUpCelebration({
               transition={{ delay: 0.6 }}
             >
               <motion.div
-                className="text-[12px] text-text-secondary uppercase tracking-wide mb-2"
+                className="text-sm text-text-secondary uppercase tracking-wide mb-2"
               >
                 New Rank Achieved
               </motion.div>
@@ -225,7 +225,7 @@ export function LevelUpCelebration({
 
               {/* Subtitle based on level */}
               <motion.p
-                className="text-[14px] text-text-tertiary max-w-[250px]"
+                className="text-md text-text-tertiary max-w-[250px]"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.8 }}
@@ -243,7 +243,7 @@ export function LevelUpCelebration({
 
             {/* Tap to continue hint */}
             <motion.div
-              className="absolute -bottom-16 text-[12px] text-text-tertiary"
+              className="absolute -bottom-16 text-sm text-text-tertiary"
               initial={{ opacity: 0 }}
               animate={{ opacity: [0, 1, 0] }}
               transition={{ duration: 2, repeat: Infinity, delay: 1.5 }}

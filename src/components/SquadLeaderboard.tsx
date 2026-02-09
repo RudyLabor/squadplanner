@@ -140,7 +140,7 @@ function PodiumCard({
 
           {/* Rank badge */}
           <motion.div
-            className="absolute top-2 left-2 w-7 h-7 rounded-full flex items-center justify-center text-[12px] font-bold"
+            className="absolute top-2 left-2 w-7 h-7 rounded-full flex items-center justify-center text-sm font-bold"
             style={{
               backgroundColor: medal.primary20,
               color: medal.primary,
@@ -180,7 +180,7 @@ function PodiumCard({
 
           {/* Username */}
           <h3
-            className={`font-bold text-text-primary truncate mb-1 ${isFirst ? 'text-[16px]' : 'text-[14px]'}`}
+            className={`font-bold text-text-primary truncate mb-1 ${isFirst ? 'text-lg' : 'text-md'}`}
           >
             {entry.username}
           </h3>
@@ -188,7 +188,7 @@ function PodiumCard({
           {/* Level badge */}
           <div className="flex items-center justify-center gap-1 mb-2">
             <span
-              className="px-2 py-0.5 rounded-full text-[11px] font-medium"
+              className="px-2 py-0.5 rounded-full text-sm font-medium"
               style={{
                 backgroundColor: levelColor.bg20,
                 color: levelColor.color,
@@ -197,7 +197,7 @@ function PodiumCard({
               Niv. {entry.level}
             </span>
             {entry.streak_days > 0 && (
-              <span className="flex items-center gap-0.5 text-[11px] text-gold">
+              <span className="flex items-center gap-0.5 text-sm text-gold">
                 <Flame className="w-3 h-3" />
                 {entry.streak_days}
               </span>
@@ -205,7 +205,7 @@ function PodiumCard({
           </div>
 
           {/* XP */}
-          <div className="flex items-center justify-center gap-1 text-[12px] text-text-secondary mb-1">
+          <div className="flex items-center justify-center gap-1 text-sm text-text-secondary mb-1">
             <Zap className="w-3 h-3 text-primary-hover" />
             <span className="font-medium text-text-primary">
               {entry.xp.toLocaleString()}
@@ -214,7 +214,7 @@ function PodiumCard({
           </div>
 
           {/* Reliability score */}
-          <div className="flex items-center justify-center gap-1 text-[11px] text-text-tertiary">
+          <div className="flex items-center justify-center gap-1 text-sm text-text-tertiary">
             <Shield className="w-3 h-3 text-success" />
             <span>{entry.reliability_score}%</span>
           </div>
@@ -233,7 +233,7 @@ function PodiumCard({
           }}
         >
           <span
-            className="text-[24px] font-black"
+            className="text-2xl font-black"
             style={{ color: medal.primary80 }}
           >
             {entry.rank}
@@ -277,7 +277,7 @@ function LeaderboardListItem({
       >
       {/* Rank */}
       <div className="w-8 h-8 rounded-lg bg-border-subtle flex items-center justify-center">
-        <span className="text-[14px] font-bold text-text-secondary">{entry.rank}</span>
+        <span className="text-md font-bold text-text-secondary">{entry.rank}</span>
       </div>
 
       {/* Avatar */}
@@ -296,16 +296,16 @@ function LeaderboardListItem({
       {/* User info */}
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2">
-          <span className="text-[14px] font-medium text-text-primary truncate">
+          <span className="text-md font-medium text-text-primary truncate">
             {entry.username}
           </span>
           {isCurrentUser && (
-            <span className="text-[10px] px-1.5 py-0.5 rounded bg-primary/30 text-primary-hover">
+            <span className="text-xs px-1.5 py-0.5 rounded bg-primary/30 text-primary-hover">
               Toi
             </span>
           )}
         </div>
-        <div className="flex items-center gap-2 text-[11px] text-text-tertiary">
+        <div className="flex items-center gap-2 text-sm text-text-tertiary">
           <span
             className="px-1.5 py-0.5 rounded-full"
             style={{
@@ -324,14 +324,14 @@ function LeaderboardListItem({
 
       {/* XP and streak */}
       <div className="text-right">
-        <div className="flex items-center gap-1 text-[13px]">
+        <div className="flex items-center gap-1 text-base">
           <Zap className="w-3 h-3 text-primary-hover" />
           <span className="font-medium text-text-primary">
             {entry.xp.toLocaleString()}
           </span>
         </div>
         {entry.streak_days > 0 && (
-          <div className="flex items-center justify-end gap-0.5 text-[11px] text-gold">
+          <div className="flex items-center justify-end gap-0.5 text-sm text-gold">
             <Flame className="w-3 h-3" />
             {entry.streak_days}j
           </div>
@@ -362,8 +362,8 @@ export function SquadLeaderboard({ entries, currentUserId }: SquadLeaderboardPro
           <Trophy className="w-5 h-5 text-gold" />
         </div>
         <div>
-          <h2 className="text-[18px] font-bold text-text-primary">Classement Squad</h2>
-          <p className="text-[12px] text-text-tertiary">Top joueurs cette semaine</p>
+          <h2 className="text-xl font-bold text-text-primary">Classement Squad</h2>
+          <p className="text-sm text-text-tertiary">Top joueurs cette semaine</p>
         </div>
       </motion.div>
 
@@ -405,8 +405,8 @@ export function SquadLeaderboard({ entries, currentUserId }: SquadLeaderboardPro
           className="text-center py-12"
         >
           <Trophy className="w-12 h-12 text-text-tertiary mx-auto mb-3" />
-          <p className="text-[14px] text-text-secondary">Aucun classement disponible</p>
-          <p className="text-[12px] text-text-tertiary">
+          <p className="text-md text-text-secondary">Aucun classement disponible</p>
+          <p className="text-sm text-text-tertiary">
             Participe a des sessions pour apparaitre ici !
           </p>
         </motion.div>

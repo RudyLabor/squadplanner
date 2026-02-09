@@ -167,8 +167,8 @@ function ActivePartySection({ squad, onLeave, currentUserId }: {
           <div className="flex items-center gap-3">
             <div className="w-3 h-3 rounded-full bg-success animate-pulse" />
             <div>
-              <h2 className="text-[16px] font-semibold text-text-primary">{squad.name}</h2>
-              <p className="text-[12px] text-text-secondary">{squad.game}</p>
+              <h2 className="text-lg font-semibold text-text-primary">{squad.name}</h2>
+              <p className="text-sm text-text-secondary">{squad.game}</p>
             </div>
           </div>
           <div className="flex items-center gap-2">
@@ -181,13 +181,13 @@ function ActivePartySection({ squad, onLeave, currentUserId }: {
               onClick={() => setShowInviteModal(true)}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[12px] font-medium transition-colors bg-primary-15 text-primary hover:bg-primary-20"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors bg-primary-15 text-primary hover:bg-primary-20"
             >
               <UserPlus className="w-3.5 h-3.5" />
               Inviter
             </motion.button>
             <Link to={`/squad/${squad.id}`}>
-              <span className="text-[12px] text-primary hover:text-purple">Voir la squad</span>
+              <span className="text-sm text-primary hover:text-purple">Voir la squad</span>
             </Link>
           </div>
         </div>
@@ -204,7 +204,7 @@ function ActivePartySection({ squad, onLeave, currentUserId }: {
           <div className="flex items-center gap-3">
             <WifiOff className="w-5 h-5 text-warning animate-pulse" />
             <div className="flex-1">
-              <p className="text-[13px] font-medium text-warning">
+              <p className="text-base font-medium text-warning">
                 Reconnexion en cours...
               </p>
               <p className="text-xs text-warning/70">
@@ -218,7 +218,7 @@ function ActivePartySection({ squad, onLeave, currentUserId }: {
 
       {/* Error */}
       {error && (
-        <div className="px-4 py-3 bg-error/10 text-error text-[12px] flex items-center gap-2">
+        <div className="px-4 py-3 bg-error/10 text-error text-sm flex items-center gap-2">
           <AlertCircle className="w-4 h-4 flex-shrink-0" />
           {error}
         </div>
@@ -285,7 +285,7 @@ function ActivePartySection({ squad, onLeave, currentUserId }: {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
           >
-            <p className="text-[13px] text-text-secondary">
+            <p className="text-base text-text-secondary">
               Invite tes potes ! La party t'attend
             </p>
           </motion.div>
@@ -424,8 +424,8 @@ function SquadCard({ squad, onJoin, isConnecting }: {
           </div>
 
           <div className="flex-1 min-w-0">
-            <h3 className="text-[15px] font-semibold text-text-primary truncate">{squad.name}</h3>
-            <p className="text-[12px] text-text-secondary">{squad.game} · {squad.member_count} membre{squad.member_count > 1 ? 's' : ''}</p>
+            <h3 className="text-md font-semibold text-text-primary truncate">{squad.name}</h3>
+            <p className="text-sm text-text-secondary">{squad.game} · {squad.member_count} membre{squad.member_count > 1 ? 's' : ''}</p>
           </div>
 
           <Button
@@ -496,7 +496,7 @@ function Toast({ message, isVisible, onClose, variant = 'success' }: {
         >
           <div className={`flex items-center gap-2 px-4 py-3 rounded-xl ${style.bg} ${style.text} shadow-lg`}>
             <Icon className="w-5 h-5" />
-            <span className="text-[14px] font-medium">{message}</span>
+            <span className="text-md font-medium">{message}</span>
           </div>
         </motion.div>
       )}
@@ -678,14 +678,14 @@ export function Party() {
           <div className="flex items-center justify-between mb-6">
             <div>
               <h1 className="text-2xl font-bold text-text-primary">Party</h1>
-              <p className="text-[13px] text-text-tertiary">
+              <p className="text-base text-text-tertiary">
                 {isConnected ? 'Connecté' : squads.length > 0 ? `${squads.length} squad${squads.length > 1 ? 's' : ''}` : 'Rejoins une squad'}
               </p>
             </div>
             {isConnected && (
               <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-success/15 border border-success/30">
                 <div className="w-2 h-2 rounded-full bg-success animate-pulse" />
-                <span className="text-[12px] font-medium text-success">En ligne</span>
+                <span className="text-sm font-medium text-success">En ligne</span>
               </div>
             )}
           </div>
@@ -710,10 +710,10 @@ export function Party() {
                 >
                   <Mic className="w-8 h-8 text-white" strokeWidth={1.5} />
                 </motion.div>
-                <h3 className="text-[18px] font-bold text-text-primary mb-2">
+                <h3 className="text-xl font-bold text-text-primary mb-2">
                   Parle avec ta squad
                 </h3>
-                <p className="text-[14px] text-text-secondary mb-6 max-w-[280px] mx-auto leading-relaxed">
+                <p className="text-md text-text-secondary mb-6 max-w-[280px] mx-auto leading-relaxed">
                   Crée ou rejoins une squad pour lancer des parties vocales avec tes potes.
                 </p>
                 <Link to="/squads">
@@ -759,13 +759,13 @@ export function Party() {
                       >
                         <Mic className="w-8 h-8 text-white" />
                       </motion.div>
-                      <h3 className="text-[18px] font-bold text-text-primary mb-2">
+                      <h3 className="text-xl font-bold text-text-primary mb-2">
                         🎤 Prêt à parler ?
                       </h3>
-                      <p className="text-[14px] text-text-secondary mb-2">
+                      <p className="text-md text-text-secondary mb-2">
                         {squads[0].name}
                       </p>
-                      <p className="text-[12px] text-text-tertiary mb-5">
+                      <p className="text-sm text-text-tertiary mb-5">
                         {squads[0].game} · {squads[0].member_count || 1} membre{(squads[0].member_count || 1) > 1 ? 's' : ''}
                       </p>
                       <Button
@@ -805,7 +805,7 @@ export function Party() {
               {/* Autres squads quand connecté */}
               {isConnected && otherSquads.length > 0 && (
                 <div>
-                  <h2 className="text-[13px] font-semibold text-text-primary uppercase tracking-wide mb-3">
+                  <h2 className="text-base font-semibold text-text-primary uppercase tracking-wide mb-3">
                     Autres squads
                   </h2>
                   <div className="space-y-3">

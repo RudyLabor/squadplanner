@@ -260,7 +260,7 @@ export function SeasonalBadges({ userId, compact = false, initialBadges }: Seaso
         <div className="space-y-4">
           {Object.entries(badgesBySeason).map(([season, seasonBadges]) => (
             <div key={season}>
-              <h4 className="text-[12px] font-semibold text-text-secondary uppercase tracking-wider mb-2">
+              <h4 className="text-sm font-semibold text-text-secondary uppercase tracking-wider mb-2">
                 {formatSeason(season)}
               </h4>
               <div className="flex flex-wrap gap-3">
@@ -285,7 +285,7 @@ export function SeasonalBadges({ userId, compact = false, initialBadges }: Seaso
                         <Icon className="w-7 h-7" style={{ color: config.color }} />
                       </div>
                       <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
-                        <div className="px-2 py-1 rounded-lg bg-bg-hover border border-border-hover text-[10px] text-text-primary whitespace-nowrap">
+                        <div className="px-2 py-1 rounded-lg bg-bg-hover border border-border-hover text-xs text-text-primary whitespace-nowrap">
                           {config.label}
                         </div>
                       </div>

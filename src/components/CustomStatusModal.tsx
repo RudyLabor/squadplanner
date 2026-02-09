@@ -111,7 +111,7 @@ export const CustomStatusModal = memo(function CustomStatusModal({ isOpen, onClo
           >
             {/* Header */}
             <div className="flex items-center justify-between px-5 py-4 border-b border-border-default">
-              <h2 className="text-[16px] font-semibold text-text-primary">Definir un statut</h2>
+              <h2 className="text-lg font-semibold text-text-primary">Definir un statut</h2>
               <button
                 onClick={onClose}
                 className="p-1.5 rounded-lg hover:bg-border-subtle text-text-tertiary transition-colors"
@@ -123,7 +123,7 @@ export const CustomStatusModal = memo(function CustomStatusModal({ isOpen, onClo
             <div className="p-5 space-y-5">
               {/* Emoji + Text */}
               <div>
-                <label className="text-[13px] text-text-tertiary font-medium mb-2 block">Statut personnalise</label>
+                <label className="text-base text-text-tertiary font-medium mb-2 block">Statut personnalise</label>
                 <div className="flex items-center gap-2">
                   <button
                     type="button"
@@ -136,11 +136,11 @@ export const CustomStatusModal = memo(function CustomStatusModal({ isOpen, onClo
                     value={text}
                     onChange={(e) => setText(e.target.value.slice(0, 80))}
                     placeholder="Que fais-tu ?"
-                    className="flex-1 h-12 px-4 bg-border-subtle border border-border-hover rounded-xl text-[14px] text-text-primary placeholder:text-text-quaternary focus:outline-none focus:border-primary transition-colors"
+                    className="flex-1 h-12 px-4 bg-border-subtle border border-border-hover rounded-xl text-md text-text-primary placeholder:text-text-quaternary focus:outline-none focus:border-primary transition-colors"
                     maxLength={80}
                   />
                 </div>
-                <div className="text-right text-[11px] text-text-quaternary mt-1">{text.length}/80</div>
+                <div className="text-right text-sm text-text-quaternary mt-1">{text.length}/80</div>
               </div>
 
               {/* Quick emojis */}
@@ -163,7 +163,7 @@ export const CustomStatusModal = memo(function CustomStatusModal({ isOpen, onClo
 
               {/* Duration */}
               <div>
-                <label className="text-[13px] text-text-tertiary font-medium mb-2 flex items-center gap-1.5">
+                <label className="text-base text-text-tertiary font-medium mb-2 flex items-center gap-1.5">
                   <Clock className="w-3.5 h-3.5" />
                   Effacer apres
                 </label>
@@ -173,7 +173,7 @@ export const CustomStatusModal = memo(function CustomStatusModal({ isOpen, onClo
                       key={option.label}
                       type="button"
                       onClick={() => setDurationIndex(i)}
-                      className={`px-3 py-2 rounded-lg text-[13px] font-medium transition-colors ${
+                      className={`px-3 py-2 rounded-lg text-base font-medium transition-colors ${
                         durationIndex === i
                           ? 'bg-primary-15 text-primary-hover border border-primary'
                           : 'bg-surface-card text-text-secondary border border-transparent hover:bg-border-default'
@@ -187,7 +187,7 @@ export const CustomStatusModal = memo(function CustomStatusModal({ isOpen, onClo
 
               {/* Game Status */}
               <div>
-                <label className="text-[13px] text-text-tertiary font-medium mb-2 flex items-center gap-1.5">
+                <label className="text-base text-text-tertiary font-medium mb-2 flex items-center gap-1.5">
                   <Gamepad2 className="w-3.5 h-3.5" />
                   Jeu en cours
                 </label>
@@ -202,7 +202,7 @@ export const CustomStatusModal = memo(function CustomStatusModal({ isOpen, onClo
                     onFocus={() => setShowGameSuggestions(true)}
                     onBlur={() => setTimeout(() => setShowGameSuggestions(false), 200)}
                     placeholder="Ex: Valorant, League of Legends..."
-                    className="w-full h-11 px-4 bg-border-subtle border border-border-hover rounded-xl text-[14px] text-text-primary placeholder:text-text-quaternary focus:outline-none focus:border-primary transition-colors"
+                    className="w-full h-11 px-4 bg-border-subtle border border-border-hover rounded-xl text-md text-text-primary placeholder:text-text-quaternary focus:outline-none focus:border-primary transition-colors"
                   />
                   {/* Autocomplete suggestions */}
                   {showGameSuggestions && filteredGames.length > 0 && (
@@ -215,7 +215,7 @@ export const CustomStatusModal = memo(function CustomStatusModal({ isOpen, onClo
                             setGameInput(game)
                             setShowGameSuggestions(false)
                           }}
-                          className="w-full px-3 py-2 text-left text-[13px] text-text-secondary hover:bg-border-subtle hover:text-text-primary transition-colors"
+                          className="w-full px-3 py-2 text-left text-base text-text-secondary hover:bg-border-subtle hover:text-text-primary transition-colors"
                         >
                           {game}
                         </button>
@@ -232,7 +232,7 @@ export const CustomStatusModal = memo(function CustomStatusModal({ isOpen, onClo
                 <button
                   type="button"
                   onClick={handleClear}
-                  className="px-4 py-2.5 rounded-xl text-[13px] font-medium text-red-400 hover:bg-error-10 transition-colors"
+                  className="px-4 py-2.5 rounded-xl text-base font-medium text-red-400 hover:bg-error-10 transition-colors"
                 >
                   Effacer
                 </button>
@@ -241,14 +241,14 @@ export const CustomStatusModal = memo(function CustomStatusModal({ isOpen, onClo
               <button
                 type="button"
                 onClick={onClose}
-                className="px-4 py-2.5 rounded-xl text-[13px] font-medium text-text-tertiary hover:bg-border-subtle transition-colors"
+                className="px-4 py-2.5 rounded-xl text-base font-medium text-text-tertiary hover:bg-border-subtle transition-colors"
               >
                 Annuler
               </button>
               <button
                 type="button"
                 onClick={handleSave}
-                className="px-5 py-2.5 rounded-xl text-[13px] font-semibold bg-primary text-white hover:bg-primary-hover transition-colors"
+                className="px-5 py-2.5 rounded-xl text-base font-semibold bg-primary text-white hover:bg-primary-hover transition-colors"
               >
                 Enregistrer
               </button>

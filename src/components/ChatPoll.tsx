@@ -79,14 +79,14 @@ export const ChatPoll = memo(function ChatPoll({ pollData, messageId, onVote, is
       {/* Header */}
       <div className="px-4 pt-3 pb-2 flex items-center gap-2">
         <BarChart3 className={`w-4 h-4 ${isOwn ? 'text-white/70' : 'text-primary-hover'}`} />
-        <span className={`text-[13px] font-semibold ${isOwn ? 'text-white' : 'text-text-primary'}`}>
+        <span className={`text-base font-semibold ${isOwn ? 'text-white' : 'text-text-primary'}`}>
           Sondage
         </span>
       </div>
 
       {/* Question */}
       <div className="px-4 pb-3">
-        <p className={`text-[15px] font-medium ${isOwn ? 'text-white' : 'text-text-primary'}`}>
+        <p className={`text-md font-medium ${isOwn ? 'text-white' : 'text-text-primary'}`}>
           {pollData.question}
         </p>
       </div>
@@ -131,7 +131,7 @@ export const ChatPoll = memo(function ChatPoll({ pollData, messageId, onVote, is
                   {isMyVote && (
                     <Check className="w-3.5 h-3.5 text-primary-hover" />
                   )}
-                  <span className={`text-[13px] ${
+                  <span className={`text-base ${
                     isOwn
                       ? 'text-white/90'
                       : isMyVote ? 'text-primary-hover font-medium' : 'text-text-secondary'
@@ -143,7 +143,7 @@ export const ChatPoll = memo(function ChatPoll({ pollData, messageId, onVote, is
                   )}
                 </div>
                 {hasVoted && (
-                  <span className={`text-[12px] font-medium ${
+                  <span className={`text-sm font-medium ${
                     isOwn ? 'text-white/60' : 'text-text-quaternary'
                   }`}>
                     {percentage}%
@@ -160,7 +160,7 @@ export const ChatPoll = memo(function ChatPoll({ pollData, messageId, onVote, is
         isOwn ? 'border-white/10' : 'border-border-default'
       }`}>
         <Users className={`w-3 h-3 ${isOwn ? 'text-white/40' : 'text-text-quaternary'}`} />
-        <span className={`text-[11px] ${isOwn ? 'text-white/40' : 'text-text-quaternary'}`}>
+        <span className={`text-sm ${isOwn ? 'text-white/40' : 'text-text-quaternary'}`}>
           {totalVotes} vote{totalVotes !== 1 ? 's' : ''}
         </span>
       </div>

@@ -123,10 +123,10 @@ export function OnboardingChecklist({
                 </motion.div>
               ) : (
                 <div className="w-6 h-6 rounded-full bg-primary/15 flex items-center justify-center">
-                  <span className="text-[12px] font-bold text-primary">{completedCount}/{totalSteps}</span>
+                  <span className="text-sm font-bold text-primary">{completedCount}/{totalSteps}</span>
                 </div>
               )}
-              <h3 className="text-[14px] font-semibold text-text-primary">
+              <h3 className="text-md font-semibold text-text-primary">
                 {allComplete ? 'Bien joué ! Tu es prêt' : 'Pour bien démarrer'}
               </h3>
             </div>
@@ -170,7 +170,7 @@ export function OnboardingChecklist({
                       <step.icon className="w-4 h-4 text-primary" />
                     )}
                   </div>
-                  <span className={`text-[13px] flex-1 ${
+                  <span className={`text-base flex-1 ${
                     step.done
                       ? 'text-success line-through'
                       : 'text-text-primary'
@@ -181,7 +181,7 @@ export function OnboardingChecklist({
                     step.action.type === 'link' ? (
                       <Link
                         to={step.action.to}
-                        className="flex items-center gap-1 text-[12px] text-primary font-medium hover:text-primary-hover transition-colors"
+                        className="flex items-center gap-1 text-sm text-primary font-medium hover:text-primary-hover transition-colors"
                       >
                         Faire
                         <ChevronRight className="w-3 h-3" />
@@ -189,7 +189,7 @@ export function OnboardingChecklist({
                     ) : (
                       <button
                         onClick={step.action.onClick}
-                        className="flex items-center gap-1 text-[12px] text-primary font-medium hover:text-primary-hover transition-colors"
+                        className="flex items-center gap-1 text-sm text-primary font-medium hover:text-primary-hover transition-colors"
                       >
                         Faire
                         <ChevronRight className="w-3 h-3" />
@@ -206,7 +206,7 @@ export function OnboardingChecklist({
             <motion.p
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className="text-[13px] text-success text-center"
+              className="text-base text-success text-center"
             >
               Ta squad t'attend. C'est parti !
             </motion.p>

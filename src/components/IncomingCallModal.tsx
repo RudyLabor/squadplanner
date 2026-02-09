@@ -181,7 +181,7 @@ export function IncomingCallModal() {
                 >
                   <PhoneOff className="w-8 h-8 text-white" aria-hidden="true" />
                 </button>
-                <span className="text-[13px] text-text-secondary" aria-hidden="true">Refuser</span>
+                <span className="text-base text-text-secondary" aria-hidden="true">Refuser</span>
               </div>
 
               {/* Accept button */}
@@ -193,7 +193,7 @@ export function IncomingCallModal() {
                 >
                   <Phone className="w-8 h-8 text-white" aria-hidden="true" />
                 </button>
-                <span className="text-[13px] text-text-secondary" aria-hidden="true">Accepter</span>
+                <span className="text-base text-text-secondary" aria-hidden="true">Accepter</span>
               </div>
             </div>
           </motion.div>

@@ -218,7 +218,7 @@ export default function SessionDetail() {
               {statusInfo && (
                 <div className="flex items-center gap-1.5 mt-1">
                   <statusInfo.icon className="w-4 h-4" style={{ color: statusInfo.color }} />
-                  <span className="text-[13px]" style={{ color: statusInfo.color }}>{statusInfo.label}</span>
+                  <span className="text-base" style={{ color: statusInfo.color }}>{statusInfo.label}</span>
                 </div>
               )}
             </div>
@@ -232,8 +232,8 @@ export default function SessionDetail() {
                   <Calendar className="w-5 h-5 text-warning" />
                 </div>
                 <div>
-                  <div className="text-[15px] font-medium text-text-primary capitalize">{dateInfo.day}</div>
-                  <div className="text-[13px] text-text-secondary">{dateInfo.time}</div>
+                  <div className="text-md font-medium text-text-primary capitalize">{dateInfo.day}</div>
+                  <div className="text-base text-text-secondary">{dateInfo.time}</div>
                 </div>
               </div>
             </Card>
@@ -243,8 +243,8 @@ export default function SessionDetail() {
                   <Clock className="w-5 h-5 text-info" />
                 </div>
                 <div>
-                  <div className="text-[15px] font-medium text-text-primary">{currentSession.duration_minutes} min</div>
-                  <div className="text-[13px] text-text-secondary">Durée</div>
+                  <div className="text-md font-medium text-text-primary">{currentSession.duration_minutes} min</div>
+                  <div className="text-base text-text-secondary">Durée</div>
                 </div>
               </div>
             </Card>
@@ -259,17 +259,17 @@ export default function SessionDetail() {
               <Card className="p-4 lg:p-5 text-center">
                 <Check className="w-5 h-5 mx-auto mb-2 text-success" />
                 <div className="text-xl lg:text-2xl font-bold text-text-primary">{currentSession.rsvp_counts?.present || 0}</div>
-                <div className="text-[12px] text-text-tertiary">Présents</div>
+                <div className="text-sm text-text-tertiary">Présents</div>
               </Card>
               <Card className="p-4 lg:p-5 text-center">
                 <HelpCircle className="w-5 h-5 mx-auto mb-2 text-warning" />
                 <div className="text-xl lg:text-2xl font-bold text-text-primary">{currentSession.rsvp_counts?.maybe || 0}</div>
-                <div className="text-[12px] text-text-tertiary">Peut-être</div>
+                <div className="text-sm text-text-tertiary">Peut-être</div>
               </Card>
               <Card className="p-4 lg:p-5 text-center">
                 <X className="w-5 h-5 mx-auto mb-2 text-error" />
                 <div className="text-xl lg:text-2xl font-bold text-text-primary">{currentSession.rsvp_counts?.absent || 0}</div>
-                <div className="text-[12px] text-text-tertiary">Absents</div>
+                <div className="text-sm text-text-tertiary">Absents</div>
               </Card>
             </div>
           </div>
@@ -409,7 +409,7 @@ export default function SessionDetail() {
                         <Users className="w-5 h-5 text-purple" />
                       </div>
                       <div className="flex-1">
-                        <span className="text-[15px] text-text-primary">
+                        <span className="text-md text-text-primary">
                           {(rsvp as { profiles?: { username?: string } }).profiles?.username || 'Joueur'}
                         </span>
                       </div>

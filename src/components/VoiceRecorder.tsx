@@ -162,7 +162,7 @@ export const VoiceRecorder = memo(function VoiceRecorder({ onSend, disabled }: V
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="text-[12px] text-error mb-1"
+            className="text-sm text-error mb-1"
           >
             {error}
           </motion.p>
@@ -211,7 +211,7 @@ export const VoiceRecorder = memo(function VoiceRecorder({ onSend, disabled }: V
             </div>
 
             {/* Duration */}
-            <span className={`text-[13px] font-mono min-w-[40px] text-center ${isRecording ? 'text-error' : 'text-text-tertiary'}`}>
+            <span className={`text-base font-mono min-w-[40px] text-center ${isRecording ? 'text-error' : 'text-text-tertiary'}`}>
               {formatDuration(duration)}
             </span>
 

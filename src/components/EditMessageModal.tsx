@@ -116,7 +116,7 @@ export function EditMessageModal({
                   <div className="w-10 h-10 rounded-xl bg-primary-15 flex items-center justify-center">
                     <Pencil className="w-5 h-5 text-primary" />
                   </div>
-                  <h2 id="edit-message-title" className="text-[17px] font-semibold text-text-primary">
+                  <h2 id="edit-message-title" className="text-xl font-semibold text-text-primary">
                     Modifier le message
                   </h2>
                 </div>
@@ -133,11 +133,11 @@ export function EditMessageModal({
               <div className="p-5">
                 {/* Original message preview */}
                 <div className="mb-4">
-                  <label className="block text-[12px] font-medium text-text-tertiary uppercase tracking-wider mb-2">
+                  <label className="block text-sm font-medium text-text-tertiary uppercase tracking-wider mb-2">
                     Message original
                   </label>
                   <div className="p-3 rounded-xl bg-surface-card border border-border-subtle">
-                    <p className="text-[13px] text-text-secondary whitespace-pre-wrap break-words">
+                    <p className="text-base text-text-secondary whitespace-pre-wrap break-words">
                       {message.content}
                     </p>
                   </div>
@@ -147,7 +147,7 @@ export function EditMessageModal({
                 <div>
                   <label
                     htmlFor="edit-message-content"
-                    className="block text-[12px] font-medium text-text-tertiary uppercase tracking-wider mb-2"
+                    className="block text-sm font-medium text-text-tertiary uppercase tracking-wider mb-2"
                   >
                     Nouveau contenu
                   </label>
@@ -159,9 +159,9 @@ export function EditMessageModal({
                     onKeyDown={handleKeyDown}
                     placeholder="Tapez votre message..."
                     rows={3}
-                    className="w-full px-4 py-3 bg-border-subtle border border-border-hover rounded-xl text-[14px] text-text-primary placeholder:text-text-tertiary resize-none focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary-20 focus:shadow-glow-primary-md transition-input min-h-[80px] max-h-[200px]"
+                    className="w-full px-4 py-3 bg-border-subtle border border-border-hover rounded-xl text-md text-text-primary placeholder:text-text-tertiary resize-none focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary-20 focus:shadow-glow-primary-md transition-input min-h-[80px] max-h-[200px]"
                   />
-                  <p className="text-[11px] text-text-tertiary mt-2">
+                  <p className="text-sm text-text-tertiary mt-2">
                     Conseil : Ctrl+Entree pour sauvegarder rapidement
                   </p>
                 </div>
@@ -169,7 +169,7 @@ export function EditMessageModal({
 
               {/* Footer */}
               <div className="flex items-center justify-between px-5 py-4 border-t border-border-default bg-surface-card">
-                <span className="text-[12px] text-text-tertiary">
+                <span className="text-sm text-text-tertiary">
                   {hasChanges ? '(modifie) sera affiche' : 'Aucune modification'}
                 </span>
                 <div className="flex items-center gap-3">

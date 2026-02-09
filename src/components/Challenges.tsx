@@ -145,8 +145,8 @@ export function Challenges({ challenges, onClaimXP }: ChallengesProps) {
             <Target className="w-5 h-5 text-warning" />
           </div>
           <div>
-            <h2 className="text-[16px] font-semibold text-text-primary">Challenges</h2>
-            <p className="text-[12px] text-text-tertiary">
+            <h2 className="text-lg font-semibold text-text-primary">Challenges</h2>
+            <p className="text-sm text-text-tertiary">
               {challenges.length} challenges disponibles
             </p>
           </div>
@@ -158,7 +158,7 @@ export function Challenges({ challenges, onClaimXP }: ChallengesProps) {
             className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-success-15 border border-success"
           >
             <Gift className="w-4 h-4 text-success" />
-            <span className="text-[13px] font-medium text-success">
+            <span className="text-base font-medium text-success">
               {claimableCount} à réclamer
             </span>
           </motion.div>
@@ -171,7 +171,7 @@ export function Challenges({ challenges, onClaimXP }: ChallengesProps) {
           <button
             key={tab.key}
             onClick={() => setActiveTab(tab.key)}
-            className={`flex items-center gap-2 px-4 py-2 rounded-xl text-[13px] font-medium whitespace-nowrap transition-interactive ${
+            className={`flex items-center gap-2 px-4 py-2 rounded-xl text-base font-medium whitespace-nowrap transition-interactive ${
               activeTab === tab.key
                 ? 'bg-border-hover text-text-primary border border-border-hover'
                 : 'bg-surface-card text-text-secondary border border-transparent hover:bg-border-subtle'
@@ -179,7 +179,7 @@ export function Challenges({ challenges, onClaimXP }: ChallengesProps) {
           >
             {tab.label}
             {counts[tab.key] > 0 && (
-              <span className={`px-1.5 py-0.5 rounded-full text-[11px] ${
+              <span className={`px-1.5 py-0.5 rounded-full text-sm ${
                 activeTab === tab.key
                   ? 'bg-overlay-medium text-text-primary'
                   : 'bg-border-subtle text-text-tertiary'
@@ -203,7 +203,7 @@ export function Challenges({ challenges, onClaimXP }: ChallengesProps) {
               <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-surface-card flex items-center justify-center">
                 <Target className="w-8 h-8 text-text-tertiary" />
               </div>
-              <p className="text-[14px] text-text-tertiary">
+              <p className="text-md text-text-tertiary">
                 Aucun challenge dans cette catégorie
               </p>
             </motion.div>
@@ -286,13 +286,13 @@ function ChallengeCard({ challenge, index, onClaim, isClaiming }: ChallengeCardP
             <div className="flex items-start justify-between gap-2 mb-1">
               <div className="flex-1">
                 <div className="flex items-center gap-2 mb-0.5">
-                  <h3 className={`text-[14px] font-semibold ${
+                  <h3 className={`text-md font-semibold ${
                     isClaimed ? 'text-text-tertiary line-through' : 'text-text-primary'
                   }`}>
                     {challenge.title}
                   </h3>
                   <span
-                    className="text-[10px] font-medium px-1.5 py-0.5 rounded-full uppercase"
+                    className="text-xs font-medium px-1.5 py-0.5 rounded-full uppercase"
                     style={{
                       backgroundColor: config.bgColor,
                       color: config.color,
@@ -301,7 +301,7 @@ function ChallengeCard({ challenge, index, onClaim, isClaiming }: ChallengeCardP
                     {config.label}
                   </span>
                 </div>
-                <p className={`text-[12px] ${
+                <p className={`text-sm ${
                   isClaimed ? 'text-text-tertiary' : 'text-text-secondary'
                 }`}>
                   {challenge.description}
@@ -317,7 +317,7 @@ function ChallengeCard({ challenge, index, onClaim, isClaiming }: ChallengeCardP
                 <Zap className={`w-3.5 h-3.5 ${
                   isClaimed ? 'text-text-tertiary' : 'text-warning'
                 }`} />
-                <span className={`text-[12px] font-bold ${
+                <span className={`text-sm font-bold ${
                   isClaimed ? 'text-text-tertiary' : 'text-warning'
                 }`}>
                   {challenge.xp_reward} XP
@@ -328,7 +328,7 @@ function ChallengeCard({ challenge, index, onClaim, isClaiming }: ChallengeCardP
             {/* Progress bar */}
             {!isClaimed && (
               <div className="mt-3">
-                <div className="flex items-center justify-between text-[11px] mb-1.5">
+                <div className="flex items-center justify-between text-sm mb-1.5">
                   <span className="text-text-secondary">
                     Progression
                   </span>
@@ -380,7 +380,7 @@ function ChallengeCard({ challenge, index, onClaim, isClaiming }: ChallengeCardP
 
             {/* Claimed indicator */}
             {isClaimed && (
-              <div className="mt-3 flex items-center gap-2 text-[12px] text-text-tertiary">
+              <div className="mt-3 flex items-center gap-2 text-sm text-text-tertiary">
                 <Check className="w-4 h-4 text-success" />
                 <span>XP réclamés</span>
               </div>

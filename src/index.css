@@ -179,6 +179,29 @@
   /* Gradients tokenisés */
   --gradient-primary: linear-gradient(135deg, var(--color-primary) 0%, var(--color-purple) 100%);
   --gradient-success: linear-gradient(135deg, var(--color-success) 0%, #06b6d4 100%);
+
+  /* === CHANTIER 3 - TYPOGRAPHIC SCALE (Section 4.2) === */
+  /* 8-level fluid scale with clamp() for responsive typography */
+
+  /* Body text */
+  --text-xs: clamp(0.6875rem, 0.65rem + 0.1vw, 0.75rem);
+  --text-xs--line-height: 1.5;
+  --text-sm: clamp(0.75rem, 0.7rem + 0.15vw, 0.8125rem);
+  --text-sm--line-height: 1.5;
+  --text-base: clamp(0.8125rem, 0.78rem + 0.15vw, 0.875rem);
+  --text-base--line-height: 1.5;
+  --text-md: clamp(0.875rem, 0.85rem + 0.15vw, 0.9375rem);
+  --text-md--line-height: 1.5;
+
+  /* Headings */
+  --text-lg: clamp(0.9375rem, 0.9rem + 0.2vw, 1.0625rem);
+  --text-lg--line-height: 1.3;
+  --text-xl: clamp(1.125rem, 1rem + 0.3vw, 1.25rem);
+  --text-xl--line-height: 1.3;
+  --text-2xl: clamp(1.375rem, 1.2rem + 0.5vw, 1.625rem);
+  --text-2xl--line-height: 1.15;
+  --text-3xl: clamp(1.75rem, 1.5rem + 0.8vw, 2.25rem);
+  --text-3xl--line-height: 1.15;
 }
 
 /* =====================================================

@@ -191,10 +191,10 @@ function StatCard({ icon, label, value, sub }: { icon: React.ReactNode; label: s
     <div className="rounded-xl border border-white/5 bg-surface-card p-3">
       <div className="flex items-center gap-1.5 mb-1">
         {icon}
-        <span className="text-[11px] text-text-tertiary">{label}</span>
+        <span className="text-sm text-text-tertiary">{label}</span>
       </div>
       <p className="text-lg font-bold text-text-primary">{value}</p>
-      <p className="text-[10px] text-text-tertiary">{sub}</p>
+      <p className="text-xs text-text-tertiary">{sub}</p>
     </div>
   )
 }

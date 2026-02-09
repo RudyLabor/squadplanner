@@ -192,8 +192,8 @@ export const GifPicker = memo(function GifPicker({ isOpen, onSelect, onClose }: 
             <div className="p-3 border-b border-border-default flex-shrink-0">
               <div className="flex items-center gap-2 mb-2">
                 <Sparkles className="w-4 h-4 text-primary-hover" />
-                <span className="text-[13px] font-medium text-text-primary">GIFs</span>
-                <span className="text-[10px] text-text-tertiary ml-auto">Powered by Tenor</span>
+                <span className="text-base font-medium text-text-primary">GIFs</span>
+                <span className="text-xs text-text-tertiary ml-auto">Powered by Tenor</span>
                 <button
                   onClick={onClose}
                   className="p-1 rounded-lg text-text-tertiary hover:text-white hover:bg-border-hover transition-colors sm:hidden"
@@ -210,7 +210,7 @@ export const GifPicker = memo(function GifPicker({ isOpen, onSelect, onClose }: 
                   value={query}
                   onChange={(e) => handleSearch(e.target.value)}
                   placeholder="Chercher un GIF..."
-                  className="w-full pl-8 pr-8 py-2 bg-border-default border border-border-default rounded-lg text-[13px] text-white placeholder:text-text-tertiary focus:outline-none focus:border-primary"
+                  className="w-full pl-8 pr-8 py-2 bg-border-default border border-border-default rounded-lg text-base text-white placeholder:text-text-tertiary focus:outline-none focus:border-primary"
                 />
                 {query && (
                   <button
@@ -230,7 +230,7 @@ export const GifPicker = memo(function GifPicker({ isOpen, onSelect, onClose }: 
                   <button
                     key={cat.query}
                     onClick={() => handleCategoryClick(cat.query)}
-                    className="flex-shrink-0 px-2.5 py-1 rounded-full text-[12px] bg-border-default text-text-secondary hover:bg-primary-15 hover:text-primary-hover transition-colors"
+                    className="flex-shrink-0 px-2.5 py-1 rounded-full text-sm bg-border-default text-text-secondary hover:bg-primary-15 hover:text-primary-hover transition-colors"
                   >
                     {cat.label}
                   </button>
@@ -255,7 +255,7 @@ export const GifPicker = memo(function GifPicker({ isOpen, onSelect, onClose }: 
                       </p>
                       <button
                         onClick={handleRetry}
-                        className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[12px] bg-primary-15 text-primary-hover hover:bg-primary-20 transition-colors"
+                        className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm bg-primary-15 text-primary-hover hover:bg-primary-20 transition-colors"
                       >
                         <RefreshCw className="w-3.5 h-3.5" />
                         Réessayer

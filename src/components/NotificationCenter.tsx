@@ -127,7 +127,7 @@ export function NotificationBell() {
           <motion.span
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
-            className="absolute -top-0.5 -right-0.5 w-4 h-4 rounded-full bg-error text-white text-[10px] font-bold flex items-center justify-center"
+            className="absolute -top-0.5 -right-0.5 w-4 h-4 rounded-full bg-error text-white text-xs font-bold flex items-center justify-center"
           >
             {unreadCount > 9 ? '9+' : unreadCount}
           </motion.span>
@@ -145,13 +145,13 @@ export function NotificationBell() {
           >
             {/* Header */}
             <div className="flex items-center justify-between px-4 py-3 border-b border-border-default">
-              <h3 className="text-[14px] font-semibold text-text-primary">Notifications</h3>
+              <h3 className="text-md font-semibold text-text-primary">Notifications</h3>
               <div className="flex items-center gap-2">
                 {unreadCount > 0 && (
                   <button
                     type="button"
                     onClick={markAllAsRead}
-                    className="text-[12px] text-primary hover:text-purple transition-colors"
+                    className="text-sm text-primary hover:text-purple transition-colors"
                   >
                     <CheckCheck className="w-4 h-4" />
                   </button>
@@ -171,7 +171,7 @@ export function NotificationBell() {
               {notifications.length === 0 ? (
                 <div className="px-4 py-8 text-center">
                   <Bell className="w-8 h-8 text-text-tertiary mx-auto mb-2" />
-                  <p className="text-[13px] text-text-tertiary">Aucune notification</p>
+                  <p className="text-base text-text-tertiary">Aucune notification</p>
                 </div>
               ) : (
                 notifications.slice(0, 15).map(notif => (
@@ -188,10 +188,10 @@ export function NotificationBell() {
                         <span className="w-2 h-2 rounded-full bg-primary mt-1.5 flex-shrink-0" />
                       )}
                       <div className={`flex-1 min-w-0 ${notif.read ? 'ml-5' : ''}`}>
-                        <p className="text-[13px] font-medium text-text-primary truncate">{notif.title}</p>
-                        <p className="text-[12px] text-text-secondary truncate">{notif.body}</p>
+                        <p className="text-base font-medium text-text-primary truncate">{notif.title}</p>
+                        <p className="text-sm text-text-secondary truncate">{notif.body}</p>
                       </div>
-                      <span className="text-[11px] text-text-tertiary flex-shrink-0">{formatTime(notif.created_at)}</span>
+                      <span className="text-sm text-text-tertiary flex-shrink-0">{formatTime(notif.created_at)}</span>
                     </div>
                   </button>
                 ))

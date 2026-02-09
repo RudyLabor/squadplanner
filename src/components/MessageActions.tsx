@@ -182,7 +182,7 @@ export function MessageActions({
             {/* Reply */}
             <button
               onClick={handleReply}
-              className="w-full flex items-center gap-3 px-4 py-2.5 text-left text-[14px] text-text-primary hover:bg-border-default transition-colors"
+              className="w-full flex items-center gap-3 px-4 py-2.5 text-left text-md text-text-primary hover:bg-border-default transition-colors"
               role="menuitem"
             >
               <Reply className="w-4 h-4 text-text-secondary" />
@@ -192,7 +192,7 @@ export function MessageActions({
             {/* Copy */}
             <button
               onClick={handleCopy}
-              className="w-full flex items-center gap-3 px-4 py-2.5 text-left text-[14px] text-text-primary hover:bg-border-default transition-colors"
+              className="w-full flex items-center gap-3 px-4 py-2.5 text-left text-md text-text-primary hover:bg-border-default transition-colors"
               role="menuitem"
             >
               {copied ? (
@@ -212,7 +212,7 @@ export function MessageActions({
             {onForward && (
               <button
                 onClick={handleForward}
-                className="w-full flex items-center gap-3 px-4 py-2.5 text-left text-[14px] text-text-primary hover:bg-border-default transition-colors"
+                className="w-full flex items-center gap-3 px-4 py-2.5 text-left text-md text-text-primary hover:bg-border-default transition-colors"
                 role="menuitem"
               >
                 <Forward className="w-4 h-4 text-text-secondary" />
@@ -224,7 +224,7 @@ export function MessageActions({
             {isAdmin && (
               <button
                 onClick={handlePin}
-                className="w-full flex items-center gap-3 px-4 py-2.5 text-left text-[14px] text-text-primary hover:bg-border-default transition-colors"
+                className="w-full flex items-center gap-3 px-4 py-2.5 text-left text-md text-text-primary hover:bg-border-default transition-colors"
                 role="menuitem"
               >
                 <Pin className="w-4 h-4 text-warning" />
@@ -238,7 +238,7 @@ export function MessageActions({
                 <div className="my-1.5 h-px bg-border-default" role="separator" />
                 <button
                   onClick={handleEdit}
-                  className="w-full flex items-center gap-3 px-4 py-2.5 text-left text-[14px] text-text-primary hover:bg-border-default transition-colors"
+                  className="w-full flex items-center gap-3 px-4 py-2.5 text-left text-md text-text-primary hover:bg-border-default transition-colors"
                   role="menuitem"
                 >
                   <Pencil className="w-4 h-4 text-primary" />
@@ -251,7 +251,7 @@ export function MessageActions({
             {isOwnMessage && (
               <button
                 onClick={handleDelete}
-                className={`w-full flex items-center gap-3 px-4 py-2.5 text-left text-[14px] transition-colors ${
+                className={`w-full flex items-center gap-3 px-4 py-2.5 text-left text-md transition-colors ${
                   showDeleteConfirm
                     ? 'bg-error/15 text-error'
                     : 'text-error hover:bg-error/10'

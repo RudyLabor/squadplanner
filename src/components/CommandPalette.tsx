@@ -376,7 +376,7 @@ export function CommandPalette() {
                   placeholder="Rechercher une commande, squad, session..."
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
-                  className="flex-1 bg-transparent text-[15px] text-text-primary placeholder-text-tertiary outline-none"
+                  className="flex-1 bg-transparent text-md text-text-primary placeholder-text-tertiary outline-none"
                 />
                 <button
                   onClick={close}
@@ -394,13 +394,13 @@ export function CommandPalette() {
                 {filteredCommands.length === 0 ? (
                   <div className="px-4 py-8 text-center">
                     <HelpCircle className="w-8 h-8 text-text-tertiary mx-auto mb-2" />
-                    <p className="text-[14px] text-text-secondary">Aucun résultat pour "{query}"</p>
+                    <p className="text-md text-text-secondary">Aucun résultat pour "{query}"</p>
                   </div>
                 ) : (
                   Object.entries(groupedCommands).map(([category, commands]) => (
                     <div key={category} className="mb-2">
                       <div className="px-4 py-1.5">
-                        <span className="text-[11px] font-semibold text-text-tertiary uppercase tracking-wider">
+                        <span className="text-sm font-semibold text-text-tertiary uppercase tracking-wider">
                           {categoryLabels[category]}
                         </span>
                       </div>
@@ -425,11 +425,11 @@ export function CommandPalette() {
                               <cmd.icon className={`w-4 h-4 ${isSelected ? 'text-white' : 'text-text-secondary'}`} />
                             </div>
                             <div className="flex-1 min-w-0">
-                              <p className={`text-[14px] truncate ${isSelected ? 'text-text-primary' : 'text-text-secondary'}`}>
+                              <p className={`text-md truncate ${isSelected ? 'text-text-primary' : 'text-text-secondary'}`}>
                                 {cmd.label}
                               </p>
                               {cmd.description && (
-                                <p className="text-[12px] text-text-tertiary truncate">
+                                <p className="text-sm text-text-tertiary truncate">
                                   {cmd.description}
                                 </p>
                               )}
@@ -477,7 +477,7 @@ export function CommandPalette() {
                         )}
                         {previewCmd.children && previewCmd.children.length > 0 && (
                           <div className="mt-3 pt-3 border-t border-border-default">
-                            <div className="text-[10px] text-text-tertiary uppercase tracking-wider mb-2">Actions</div>
+                            <div className="text-xs text-text-tertiary uppercase tracking-wider mb-2">Actions</div>
                             {previewCmd.children.map(child => (
                               <div key={child.id} className="text-xs text-text-tertiary flex items-center gap-1.5 mb-1">
                                 <child.icon className="w-3 h-3" />
@@ -495,7 +495,7 @@ export function CommandPalette() {
 
               {/* Footer */}
               <div className="flex items-center justify-between px-4 py-3 border-t border-border-default bg-black/20">
-                <div className="flex items-center gap-4 text-[11px] text-text-tertiary">
+                <div className="flex items-center gap-4 text-sm text-text-tertiary">
                   <span className="flex items-center gap-1">
                     <kbd className="px-1.5 py-0.5 rounded bg-border-subtle font-mono">↑↓</kbd>
                     naviguer
@@ -509,7 +509,7 @@ export function CommandPalette() {
                     fermer
                   </span>
                 </div>
-                <kbd className="flex items-center gap-1 px-1.5 py-0.5 rounded bg-border-subtle text-[11px] text-text-tertiary font-mono">
+                <kbd className="flex items-center gap-1 px-1.5 py-0.5 rounded bg-border-subtle text-sm text-text-tertiary font-mono">
                   {shortcutKey} K
                 </kbd>
               </div>
@@ -538,7 +538,7 @@ export function CommandPalette() {
           >
             <div className="bg-bg-surface border border-border-hover rounded-2xl shadow-2xl overflow-hidden">
               <div className="flex items-center justify-between px-5 py-4 border-b border-border-default">
-                <h2 className="text-[16px] font-semibold text-text-primary">Raccourcis clavier</h2>
+                <h2 className="text-lg font-semibold text-text-primary">Raccourcis clavier</h2>
                 <button
                   onClick={() => setShowShortcutsHelp(false)}
                   className="p-1.5 rounded-lg hover:bg-border-subtle transition-colors"
@@ -548,7 +548,7 @@ export function CommandPalette() {
               </div>
               <div className="p-5 space-y-4">
                 <div>
-                  <h3 className="text-[11px] font-semibold text-text-tertiary uppercase tracking-wider mb-2">Navigation</h3>
+                  <h3 className="text-sm font-semibold text-text-tertiary uppercase tracking-wider mb-2">Navigation</h3>
                   <div className="space-y-2">
                     {[
                       { key: 'H', action: 'Accueil' },
@@ -559,14 +559,14 @@ export function CommandPalette() {
                       { key: 'T', action: 'Changer le thème' },
                     ].map(({ key, action }) => (
                       <div key={key} className="flex items-center justify-between">
-                        <span className="text-[13px] text-text-secondary">{action}</span>
-                        <kbd className="px-2 py-1 rounded bg-border-subtle text-[12px] font-mono text-text-primary">{key}</kbd>
+                        <span className="text-base text-text-secondary">{action}</span>
+                        <kbd className="px-2 py-1 rounded bg-border-subtle text-sm font-mono text-text-primary">{key}</kbd>
                       </div>
                     ))}
                   </div>
                 </div>
                 <div>
-                  <h3 className="text-[11px] font-semibold text-text-tertiary uppercase tracking-wider mb-2">Global</h3>
+                  <h3 className="text-sm font-semibold text-text-tertiary uppercase tracking-wider mb-2">Global</h3>
                   <div className="space-y-2">
                     {[
                       { key: `${shortcutKey} K`, action: 'Palette de commandes' },
@@ -574,8 +574,8 @@ export function CommandPalette() {
                       { key: 'Esc', action: 'Fermer les modals' },
                     ].map(({ key, action }) => (
                       <div key={key} className="flex items-center justify-between">
-                        <span className="text-[13px] text-text-secondary">{action}</span>
-                        <kbd className="px-2 py-1 rounded bg-border-subtle text-[12px] font-mono text-text-primary">{key}</kbd>
+                        <span className="text-base text-text-secondary">{action}</span>
+                        <kbd className="px-2 py-1 rounded bg-border-subtle text-sm font-mono text-text-primary">{key}</kbd>
                       </div>
                     ))}
                   </div>

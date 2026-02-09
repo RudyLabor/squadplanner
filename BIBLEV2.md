@@ -472,9 +472,9 @@ Manque :
 
 ---
 
-## 4. CHANTIER 3 - TYPOGRAPHIE
+## 4. CHANTIER 3 - TYPOGRAPHIE 🟢 FAIT
 
-### 4.1 Le probleme
+### 4.1 Le probleme 🟢 FAIT (780 → 4 instances, 99.5% migré)
 
 795+ tailles de police arbitraires reparties dans 83 fichiers. Aucune echelle typographique.
 
@@ -496,7 +496,7 @@ Manque :
 
 13 tailles differentes. C'est le chaos.
 
-### 4.2 L'echelle typographique cible
+### 4.2 L'echelle typographique cible 🟢 FAIT (8 niveaux avec clamp() dans @theme)
 
 Definir une echelle a 8 niveaux maximum, avec `clamp()` pour le fluid :
 
@@ -516,7 +516,7 @@ Definir une echelle a 8 niveaux maximum, avec `clamp()` pour le fluid :
 --text-3xl: clamp(1.75rem, 1.5rem + 0.8vw, 2.25rem);        /* 28-36px */
 ```
 
-### 4.3 Table de migration
+### 4.3 Table de migration 🟢 FAIT (780 instances migrées dans 78 fichiers)
 
 | Ancien | Nouveau | Utilisation |
 |---|---|---|
@@ -529,9 +529,9 @@ Definir une echelle a 8 niveaux maximum, avec `clamp()` pour le fluid :
 | `text-[24px]`, `text-[28px]` | `text-2xl` | Titres de page |
 | `text-[32px]`+ | `text-3xl` | Hero, titres majeurs |
 
-### 4.4 Line-height
+### 4.4 Line-height 🟢 FAIT (intégré via --text-*--line-height dans @theme)
 
-Actuellement, aucune line-height systematique. Definir :
+Line-heights automatiques via le scale typographique :
 
 ```css
 --leading-tight: 1.15;    /* Titres */

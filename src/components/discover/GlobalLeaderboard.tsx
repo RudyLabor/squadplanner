@@ -87,7 +87,7 @@ const PodiumCard = memo(function PodiumCard({ entry, index }: { entry: GlobalLea
         <p className={`text-xs font-bold ${style.text}`}>{entry.xp.toLocaleString()} XP</p>
         <div className="flex items-center justify-center gap-1 mt-1">
           <Star className="w-3 h-3 text-indigo-400" />
-          <span className="text-[10px] text-text-tertiary">Nv.{entry.level}</span>
+          <span className="text-xs text-text-tertiary">Nv.{entry.level}</span>
         </div>
       </Link>
     </motion.div>
@@ -113,8 +113,8 @@ const LeaderboardRow = memo(function LeaderboardRow({ entry }: { entry: GlobalLe
       <div className="flex-1 min-w-0">
         <p className="text-sm font-medium text-text-primary truncate">{entry.username}</p>
         <div className="flex items-center gap-2">
-          <span className="text-[10px] text-indigo-400">Nv.{entry.level}</span>
-          <span className="text-[10px] text-text-tertiary">{entry.xp.toLocaleString()} XP</span>
+          <span className="text-xs text-indigo-400">Nv.{entry.level}</span>
+          <span className="text-xs text-text-tertiary">{entry.xp.toLocaleString()} XP</span>
         </div>
       </div>
 

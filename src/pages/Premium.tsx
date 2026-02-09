@@ -247,7 +247,7 @@ export function Premium() {
             <div className="flex justify-center mb-6">
               <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-warning/10 to-warning/025 border border-warning/15">
                 <Gift className="w-4 h-4 text-warning" />
-                <span className="text-[13px] font-medium text-warning">
+                <span className="text-base font-medium text-warning">
                   2 mois offerts sur l'annuel
                 </span>
               </div>
@@ -265,7 +265,7 @@ export function Premium() {
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-warning to-warning/70"> supérieur</span>
             </h1>
 
-            <p className="text-[16px] md:text-[18px] text-text-secondary max-w-xl mx-auto mb-8">
+            <p className="text-lg md:text-xl text-text-secondary max-w-xl mx-auto mb-8">
               Débloquer tout le potentiel de Squad Planner. Stats avancées, IA coach personnalisé, audio HD et bien plus.
             </p>
 
@@ -274,7 +274,7 @@ export function Premium() {
               <div className="mb-8">
                 <div className="inline-flex items-center gap-3 px-6 py-3 rounded-xl bg-success/05 border border-success/15">
                   <Check className="w-5 h-5 text-success" />
-                  <span className="text-[15px] font-medium text-success">
+                  <span className="text-md font-medium text-success">
                     Tu es déjà Premium !
                   </span>
                 </div>
@@ -309,14 +309,14 @@ export function Premium() {
               whileHover={{ y: -2, scale: 1.02 }}
               whileTap={{ scale: 0.99 }}
             >
-              <div className="text-[14px] text-text-secondary mb-2">Mensuel</div>
+              <div className="text-md text-text-secondary mb-2">Mensuel</div>
               <div className="flex items-baseline gap-1 mb-1">
-                <span className="text-[36px] font-bold text-text-primary">
+                <span className="text-3xl font-bold text-text-primary">
                   {PREMIUM_PRICE_MONTHLY.toFixed(2)}€
                 </span>
-                <span className="text-[14px] text-text-tertiary">/mois</span>
+                <span className="text-md text-text-tertiary">/mois</span>
               </div>
-              <p className="text-[13px] text-text-tertiary">
+              <p className="text-base text-text-tertiary">
                 Flexibilité maximale, annule quand tu veux
               </p>
               {selectedPlan === 'monthly' && (
@@ -342,22 +342,22 @@ export function Premium() {
                 🎁 MEILLEURE OFFRE
               </div>
 
-              <div className="text-[14px] text-text-secondary mb-2">Annuel</div>
+              <div className="text-md text-text-secondary mb-2">Annuel</div>
               <div className="flex items-baseline gap-1 mb-1">
-                <span className="text-[36px] font-bold text-text-primary">
+                <span className="text-3xl font-bold text-text-primary">
                   {(PREMIUM_PRICE_YEARLY / 12).toFixed(2)}€
                 </span>
-                <span className="text-[14px] text-text-tertiary">/mois</span>
+                <span className="text-md text-text-tertiary">/mois</span>
               </div>
               <div className="flex items-center gap-2 mb-1">
-                <span className="text-[13px] line-through text-text-tertiary">
+                <span className="text-base line-through text-text-tertiary">
                   {(PREMIUM_PRICE_MONTHLY * 12).toFixed(2)}€/an
                 </span>
-                <span className="text-[13px] font-semibold text-success">
+                <span className="text-base font-semibold text-success">
                   {PREMIUM_PRICE_YEARLY.toFixed(2)}€/an
                 </span>
               </div>
-              <p className="text-[13px] text-success">
+              <p className="text-base text-success">
                 Économise {savings}% — 2 mois offerts !
               </p>
               {selectedPlan === 'yearly' && (
@@ -379,13 +379,13 @@ export function Premium() {
           >
             {error && (
               <div className="mb-4 p-3 rounded-lg bg-error/5 border border-error/10">
-                <p className="text-error text-[13px]">{error}</p>
+                <p className="text-error text-base">{error}</p>
               </div>
             )}
             <Button
               onClick={handleUpgrade}
               disabled={isLoading}
-              className="h-14 px-10 text-[16px] bg-gradient-to-r from-primary via-purple to-primary bg-[length:200%_100%] hover:bg-[position:100%_0] transition-interactive shadow-glow-primary-md"
+              className="h-14 px-10 text-lg bg-gradient-to-r from-primary via-purple to-primary bg-[length:200%_100%] hover:bg-[position:100%_0] transition-interactive shadow-glow-primary-md"
             >
               {isLoading ? (
                 <Loader2 className="w-5 h-5 animate-spin" />
@@ -397,7 +397,7 @@ export function Premium() {
                 </>
               )}
             </Button>
-            <p className="text-[12px] text-text-tertiary mt-3">
+            <p className="text-sm text-text-tertiary mt-3">
               🔒 Paiement sécurisé · Annulation facile · Satisfait ou remboursé 30j
             </p>
           </motion.div>
@@ -417,9 +417,9 @@ export function Premium() {
           <Card className="overflow-hidden">
             {/* Header */}
             <div className="grid grid-cols-3 gap-4 p-4 bg-white/[0.02] border-b border-border-default">
-              <div className="text-[13px] font-semibold text-text-secondary">Fonctionnalité</div>
-              <div className="text-[13px] font-semibold text-text-secondary text-center">Gratuit</div>
-              <div className="text-[13px] font-semibold text-center">
+              <div className="text-base font-semibold text-text-secondary">Fonctionnalité</div>
+              <div className="text-base font-semibold text-text-secondary text-center">Gratuit</div>
+              <div className="text-base font-semibold text-center">
                 <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-gradient-to-r from-warning to-warning/70 text-xs font-bold text-bg-base">
                   <Crown className="w-3 h-3" />
                   PREMIUM
@@ -442,7 +442,7 @@ export function Premium() {
                 >
                   <div className="flex items-center gap-3">
                     <feature.icon className="w-4 h-4 text-primary" />
-                    <span className="text-[14px] text-text-primary">{feature.name}</span>
+                    <span className="text-md text-text-primary">{feature.name}</span>
                   </div>
                   <div className="text-center">
                     {typeof feature.free === 'boolean' ? (
@@ -452,14 +452,14 @@ export function Premium() {
                         <X className="w-5 h-5 text-text-tertiary mx-auto" />
                       )
                     ) : (
-                      <span className="text-[13px] text-text-secondary">{feature.free}</span>
+                      <span className="text-base text-text-secondary">{feature.free}</span>
                     )}
                   </div>
                   <div className="text-center">
                     {typeof feature.premium === 'boolean' ? (
                       <Check className="w-5 h-5 text-success mx-auto" />
                     ) : (
-                      <span className="text-[13px] font-medium text-success">{feature.premium}</span>
+                      <span className="text-base font-medium text-success">{feature.premium}</span>
                     )}
                   </div>
                 </motion.div>
@@ -478,7 +478,7 @@ export function Premium() {
           <h2 className="text-xl font-semibold text-text-primary text-center mb-2">
             Ils sont passés Premium
           </h2>
-          <p className="text-[14px] text-text-secondary text-center mb-8">
+          <p className="text-md text-text-secondary text-center mb-8">
             Et ils ne reviendraient pas en arrière
           </p>
 
@@ -497,11 +497,11 @@ export function Premium() {
                       {testimonial.avatar}
                     </div>
                     <div>
-                      <div className="text-[14px] font-semibold text-text-primary">{testimonial.name}</div>
-                      <div className="text-[12px] text-text-tertiary">{testimonial.squad}</div>
+                      <div className="text-md font-semibold text-text-primary">{testimonial.name}</div>
+                      <div className="text-sm text-text-tertiary">{testimonial.squad}</div>
                     </div>
                   </div>
-                  <p className="text-[14px] text-text-secondary leading-relaxed">
+                  <p className="text-md text-text-secondary leading-relaxed">
                     "{testimonial.text}"
                   </p>
                   <div className="flex gap-0.5 mt-3">
@@ -533,7 +533,7 @@ export function Premium() {
                   onClick={() => setOpenFaq(openFaq === index ? null : index)}
                   className="w-full p-4 flex items-center justify-between text-left"
                 >
-                  <span className="text-[15px] font-medium text-text-primary">{item.q}</span>
+                  <span className="text-md font-medium text-text-primary">{item.q}</span>
                   <ChevronDown
                     className={`w-5 h-5 text-text-tertiary transition-transform ${
                       openFaq === index ? 'rotate-180' : ''
@@ -547,7 +547,7 @@ export function Premium() {
                     exit={{ height: 0, opacity: 0 }}
                     className="px-4 pb-4"
                   >
-                    <p className="text-[14px] text-text-secondary leading-relaxed">
+                    <p className="text-md text-text-secondary leading-relaxed">
                       {item.a}
                     </p>
                   </motion.div>
@@ -570,7 +570,7 @@ export function Premium() {
               <h3 className="text-xl font-semibold text-text-primary mb-2">
                 Prêt à passer Premium ?
               </h3>
-              <p className="text-[14px] text-text-secondary mb-6 max-w-md mx-auto">
+              <p className="text-md text-text-secondary mb-6 max-w-md mx-auto">
                 Rejoins les squads qui ont choisi de jouer sérieusement ensemble.
               </p>
               <Button

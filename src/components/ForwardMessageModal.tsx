@@ -83,7 +83,7 @@ export const ForwardMessageModal = memo(function ForwardMessageModal({
             <div className="flex items-center justify-between px-5 py-4 border-b border-border-default">
               <div className="flex items-center gap-2">
                 <Forward className="w-5 h-5 text-primary-hover" />
-                <h2 className="text-[16px] font-semibold text-text-primary">Transferer le message</h2>
+                <h2 className="text-lg font-semibold text-text-primary">Transferer le message</h2>
               </div>
               <button
                 onClick={handleClose}
@@ -95,8 +95,8 @@ export const ForwardMessageModal = memo(function ForwardMessageModal({
 
             {/* Message preview */}
             <div className="mx-5 mt-4 p-3 rounded-xl bg-surface-card border border-border-default">
-              <p className="text-[11px] text-text-quaternary mb-1">De {senderUsername}</p>
-              <p className="text-[13px] text-text-secondary line-clamp-3">{messageContent}</p>
+              <p className="text-sm text-text-quaternary mb-1">De {senderUsername}</p>
+              <p className="text-base text-text-secondary line-clamp-3">{messageContent}</p>
             </div>
 
             {/* Search */}
@@ -108,7 +108,7 @@ export const ForwardMessageModal = memo(function ForwardMessageModal({
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Rechercher une squad..."
-                  className="w-full h-10 pl-10 pr-4 bg-border-subtle border border-border-hover rounded-xl text-[13px] text-text-primary placeholder:text-text-quaternary focus:outline-none focus:border-primary transition-colors"
+                  className="w-full h-10 pl-10 pr-4 bg-border-subtle border border-border-hover rounded-xl text-base text-text-primary placeholder:text-text-quaternary focus:outline-none focus:border-primary transition-colors"
                 />
               </div>
             </div>
@@ -116,7 +116,7 @@ export const ForwardMessageModal = memo(function ForwardMessageModal({
             {/* Squad list */}
             <div className="px-5 py-3 max-h-60 overflow-y-auto space-y-1">
               {filteredSquads.length === 0 ? (
-                <p className="text-[13px] text-text-quaternary text-center py-4">Aucune squad trouvee</p>
+                <p className="text-base text-text-quaternary text-center py-4">Aucune squad trouvee</p>
               ) : (
                 filteredSquads.map((squad) => (
                   <button
@@ -133,8 +133,8 @@ export const ForwardMessageModal = memo(function ForwardMessageModal({
                       <Users className="w-4 h-4 text-primary-hover" />
                     </div>
                     <div className="flex-1 min-w-0 text-left">
-                      <p className="text-[13px] font-medium text-text-primary truncate">{squad.name}</p>
-                      <p className="text-[11px] text-text-quaternary">{squad.game}</p>
+                      <p className="text-base font-medium text-text-primary truncate">{squad.name}</p>
+                      <p className="text-sm text-text-quaternary">{squad.game}</p>
                     </div>
                     {selectedSquadId === squad.id && (
                       <Check className="w-4 h-4 text-primary-hover flex-shrink-0" />
@@ -149,7 +149,7 @@ export const ForwardMessageModal = memo(function ForwardMessageModal({
               <button
                 type="button"
                 onClick={handleClose}
-                className="px-4 py-2.5 rounded-xl text-[13px] font-medium text-text-tertiary hover:bg-border-subtle transition-colors"
+                className="px-4 py-2.5 rounded-xl text-base font-medium text-text-tertiary hover:bg-border-subtle transition-colors"
               >
                 Annuler
               </button>
@@ -157,7 +157,7 @@ export const ForwardMessageModal = memo(function ForwardMessageModal({
                 type="button"
                 onClick={handleForward}
                 disabled={!selectedSquadId || isSending || sent}
-                className="px-5 py-2.5 rounded-xl text-[13px] font-semibold bg-primary text-white hover:bg-primary-hover transition-colors disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-2"
+                className="px-5 py-2.5 rounded-xl text-base font-semibold bg-primary text-white hover:bg-primary-hover transition-colors disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-2"
               >
                 {sent ? (
                   <>

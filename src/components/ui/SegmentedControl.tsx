@@ -23,8 +23,8 @@ export function SegmentedControl<T extends string>({
   layoutId = 'segment-indicator',
 }: SegmentedControlProps<T>) {
   const sizeClasses = {
-    sm: 'h-8 text-[12px] px-3 gap-1.5',
-    md: 'h-10 text-[13px] px-4 gap-2',
+    sm: 'h-8 text-sm px-3 gap-1.5',
+    md: 'h-10 text-base px-4 gap-2',
   }
 
   const containerPadding = {

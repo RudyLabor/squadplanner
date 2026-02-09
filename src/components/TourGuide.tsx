@@ -246,8 +246,8 @@ export function TourGuide() {
                   <Icon className="w-5 h-5 text-primary" />
                 </div>
                 <div>
-                  <h4 className="text-[15px] font-semibold text-text-primary">{step.title}</h4>
-                  <p className="text-[11px] text-text-tertiary">{currentStep + 1} / {TOUR_STEPS.length}</p>
+                  <h4 className="text-md font-semibold text-text-primary">{step.title}</h4>
+                  <p className="text-sm text-text-tertiary">{currentStep + 1} / {TOUR_STEPS.length}</p>
                 </div>
               </div>
               <button
@@ -261,7 +261,7 @@ export function TourGuide() {
 
             {/* Description */}
             <div className="px-5 pb-4">
-              <p className="text-[13px] text-text-secondary leading-relaxed">{step.description}</p>
+              <p className="text-base text-text-secondary leading-relaxed">{step.description}</p>
             </div>
 
             {/* Progress bar */}
@@ -280,7 +280,7 @@ export function TourGuide() {
             <div className="px-5 pb-5 flex items-center justify-between">
               <button
                 onClick={skipTour}
-                className="text-[12px] text-text-tertiary hover:text-text-secondary transition-colors"
+                className="text-sm text-text-tertiary hover:text-text-secondary transition-colors"
               >
                 Passer le guide
               </button>
@@ -295,7 +295,7 @@ export function TourGuide() {
                 )}
                 <button
                   onClick={nextStep}
-                  className="h-9 px-4 rounded-lg bg-primary text-[13px] text-white font-medium hover:bg-primary transition-colors flex items-center gap-1.5"
+                  className="h-9 px-4 rounded-lg bg-primary text-base text-white font-medium hover:bg-primary transition-colors flex items-center gap-1.5"
                 >
                   {currentStep === TOUR_STEPS.length - 1 ? 'Terminé !' : 'Suivant'}
                   {currentStep < TOUR_STEPS.length - 1 && <ArrowRight className="w-3.5 h-3.5" />}

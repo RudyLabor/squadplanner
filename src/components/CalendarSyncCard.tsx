@@ -43,7 +43,7 @@ export const CalendarSyncCard = memo(function CalendarSyncCard({ sessions, sessi
         {session && (
           <button
             onClick={handleGoogleCalendar}
-            className="inline-flex items-center gap-1 px-2 py-1 rounded text-[11px] bg-blue-500/10 text-blue-400 hover:bg-blue-500/20 transition-colors"
+            className="inline-flex items-center gap-1 px-2 py-1 rounded text-sm bg-blue-500/10 text-blue-400 hover:bg-blue-500/20 transition-colors"
           >
             <ExternalLink className="w-3 h-3" />
             Google
@@ -51,7 +51,7 @@ export const CalendarSyncCard = memo(function CalendarSyncCard({ sessions, sessi
         )}
         <button
           onClick={handleDownloadICS}
-          className="inline-flex items-center gap-1 px-2 py-1 rounded text-[11px] bg-white/5 text-text-secondary hover:bg-white/10 transition-colors"
+          className="inline-flex items-center gap-1 px-2 py-1 rounded text-sm bg-white/5 text-text-secondary hover:bg-white/10 transition-colors"
         >
           <Download className="w-3 h-3" />
           .ics

@@ -14,11 +14,11 @@ function Section({ title, children, defaultOpen = false }: { title: string; chil
         onClick={() => setOpen(!open)}
         className="w-full flex items-center justify-between py-4 text-left group"
       >
-        <h3 className="text-[15px] font-semibold text-text-primary group-hover:text-purple transition-colors">{title}</h3>
+        <h3 className="text-md font-semibold text-text-primary group-hover:text-purple transition-colors">{title}</h3>
         <ChevronDown className={`w-4 h-4 text-text-tertiary transition-transform ${open ? 'rotate-180' : ''}`} />
       </button>
       {open && (
-        <div className="pb-4 text-[14px] text-text-secondary leading-relaxed space-y-3">
+        <div className="pb-4 text-md text-text-secondary leading-relaxed space-y-3">
           {children}
         </div>
       )}
@@ -44,7 +44,7 @@ export function Legal() {
           </Link>
           <div className="flex items-center gap-2">
             <SquadPlannerLogo size={24} />
-            <span className="text-[15px] font-semibold text-text-primary">Squad Planner</span>
+            <span className="text-md font-semibold text-text-primary">Squad Planner</span>
           </div>
         </div>
       </header>
@@ -54,7 +54,7 @@ export function Legal() {
         <div className="flex gap-2 p-1 rounded-xl bg-surface-card border border-border-default mb-8">
           <button
             onClick={() => setActiveTab('cgu')}
-            className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-lg text-[14px] font-medium transition-all ${
+            className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-lg text-md font-medium transition-all ${
               activeTab === 'cgu'
                 ? 'bg-primary text-white shadow-lg shadow-primary/20'
                 : 'text-text-secondary hover:text-text-primary hover:bg-border-subtle'
@@ -65,7 +65,7 @@ export function Legal() {
           </button>
           <button
             onClick={() => setActiveTab('privacy')}
-            className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-lg text-[14px] font-medium transition-all ${
+            className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-lg text-md font-medium transition-all ${
               activeTab === 'privacy'
                 ? 'bg-primary text-white shadow-lg shadow-primary/20'
                 : 'text-text-secondary hover:text-text-primary hover:bg-border-subtle'
@@ -81,7 +81,7 @@ export function Legal() {
           <div>
             <div className="mb-8">
               <h1 className="text-2xl font-bold text-text-primary mb-2">Conditions Générales d'Utilisation</h1>
-              <p className="text-[14px] text-text-tertiary">Dernière mise à jour : 8 février 2026</p>
+              <p className="text-md text-text-tertiary">Dernière mise à jour : 8 février 2026</p>
             </div>
 
             <Card className="p-6 bg-bg-surface">
@@ -207,7 +207,7 @@ export function Legal() {
           <div>
             <div className="mb-8">
               <h1 className="text-2xl font-bold text-text-primary mb-2">Politique de Confidentialité</h1>
-              <p className="text-[14px] text-text-tertiary">Dernière mise à jour : 8 février 2026</p>
+              <p className="text-md text-text-tertiary">Dernière mise à jour : 8 février 2026</p>
             </div>
 
             <Card className="p-6 bg-bg-surface">
@@ -338,7 +338,7 @@ export function Legal() {
 
         {/* Footer */}
         <div className="mt-8 text-center">
-          <p className="text-[12px] text-text-tertiary">
+          <p className="text-sm text-text-tertiary">
             Squad Planner SAS — France
           </p>
         </div>

@@ -131,13 +131,13 @@ export function PremiumUpgradeModal({
                     <Crown className="w-6 h-6 text-white" />
                   </div>
                   <div>
-                    <h2 id="premium-modal-title" className="text-[20px] font-bold text-white">Passe Premium</h2>
-                    <p className="text-[14px] text-white/80">Débloquer toutes les features</p>
+                    <h2 id="premium-modal-title" className="text-xl font-bold text-white">Passe Premium</h2>
+                    <p className="text-md text-white/80">Débloquer toutes les features</p>
                   </div>
                 </div>
 
                 {feature && (
-                  <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/20 text-white text-[13px]">
+                  <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/20 text-white text-base">
                     <Zap className="w-4 h-4" />
                     <span>Pour accéder à: {feature}</span>
                   </div>
@@ -156,10 +156,10 @@ export function PremiumUpgradeModal({
                         : 'border-border-hover hover:border-overlay-medium'
                     }`}
                   >
-                    <div className="text-[13px] text-text-secondary mb-1">Mensuel</div>
-                    <div className="text-[24px] font-bold text-text-primary">
+                    <div className="text-base text-text-secondary mb-1">Mensuel</div>
+                    <div className="text-2xl font-bold text-text-primary">
                       {PREMIUM_PRICE_MONTHLY.toFixed(2)}
-                      <span className="text-[14px] font-normal text-text-tertiary">/mois</span>
+                      <span className="text-md font-normal text-text-tertiary">/mois</span>
                     </div>
                   </button>
 
@@ -174,10 +174,10 @@ export function PremiumUpgradeModal({
                     <div className="absolute -top-2 right-2 px-2 py-0.5 rounded-full bg-success text-xs font-bold text-bg-base">
                       -20%
                     </div>
-                    <div className="text-[13px] text-text-secondary mb-1">Annuel</div>
-                    <div className="text-[24px] font-bold text-text-primary">
+                    <div className="text-base text-text-secondary mb-1">Annuel</div>
+                    <div className="text-2xl font-bold text-text-primary">
                       {(PREMIUM_PRICE_YEARLY / 12).toFixed(2)}
-                      <span className="text-[14px] font-normal text-text-tertiary">/mois</span>
+                      <span className="text-md font-normal text-text-tertiary">/mois</span>
                     </div>
                     <div className="text-xs text-success">2 mois offerts</div>
                   </button>
@@ -194,8 +194,8 @@ export function PremiumUpgradeModal({
                         <feat.icon className="w-4 h-4 text-primary" />
                       </div>
                       <div>
-                        <div className="text-[14px] font-medium text-text-primary">{feat.title}</div>
-                        <div className="text-[12px] text-text-tertiary">{feat.description}</div>
+                        <div className="text-md font-medium text-text-primary">{feat.title}</div>
+                        <div className="text-sm text-text-tertiary">{feat.description}</div>
                       </div>
                       <Check className="w-4 h-4 text-success flex-shrink-0 mt-1" />
                     </div>
@@ -205,7 +205,7 @@ export function PremiumUpgradeModal({
                 {/* Error message */}
                 {error && (
                   <div className="mt-4 p-3 rounded-lg bg-error-10 border border-error">
-                    <p className="text-error text-[13px]">{error}</p>
+                    <p className="text-error text-base">{error}</p>
                   </div>
                 )}
               </div>

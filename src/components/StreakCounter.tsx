@@ -183,7 +183,7 @@ export function StreakCounter({ streakDays, lastActiveDate, onCheckIn }: StreakC
                   initial={{ opacity: 0, x: -10 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.3 }}
-                  className="text-[12px] font-medium text-white/70 uppercase tracking-wide"
+                  className="text-sm font-medium text-white/70 uppercase tracking-wide"
                 >
                   Objectif atteint !
                 </motion.p>
@@ -191,7 +191,7 @@ export function StreakCounter({ streakDays, lastActiveDate, onCheckIn }: StreakC
                   initial={{ opacity: 0, x: -10 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.4 }}
-                  className="text-[18px] font-bold text-white"
+                  className="text-xl font-bold text-white"
                 >
                   Série de {celebratedMilestone.days} jours !
                 </motion.p>
@@ -199,7 +199,7 @@ export function StreakCounter({ streakDays, lastActiveDate, onCheckIn }: StreakC
                   initial={{ opacity: 0, x: -10 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.5 }}
-                  className="text-[13px] text-white/90 flex items-center gap-1"
+                  className="text-base text-white/90 flex items-center gap-1"
                 >
                   <Zap className="w-3 h-3" />
                   +{celebratedMilestone.xp} XP gagnés !
@@ -308,11 +308,11 @@ export function StreakCounter({ streakDays, lastActiveDate, onCheckIn }: StreakC
                 >
                   {streakDays}
                 </motion.span>
-                <span className="text-[15px] text-text-secondary">
+                <span className="text-md text-text-secondary">
                   {streakDays === 1 ? 'jour' : 'jours'}
                 </span>
               </div>
-              <p className="text-[13px] text-text-tertiary">Série en cours</p>
+              <p className="text-base text-text-tertiary">Série en cours</p>
 
               {/* Today's XP reward if any */}
               {currentXPReward > 0 && (
@@ -322,7 +322,7 @@ export function StreakCounter({ streakDays, lastActiveDate, onCheckIn }: StreakC
                   className="flex items-center gap-1 mt-1"
                 >
                   <Zap className="w-3 h-3" style={{ color: flameColors.primary }} />
-                  <span className="text-[12px] font-medium" style={{ color: flameColors.primary }}>
+                  <span className="text-sm font-medium" style={{ color: flameColors.primary }}>
                     +{currentXPReward} XP aujourd'hui !
                   </span>
                 </motion.div>
@@ -334,7 +334,7 @@ export function StreakCounter({ streakDays, lastActiveDate, onCheckIn }: StreakC
               <motion.button
                 onClick={onCheckIn}
                 disabled={hasCheckedInToday}
-                className={`px-4 py-2.5 rounded-xl font-medium text-[13px] transition-interactive ${
+                className={`px-4 py-2.5 rounded-xl font-medium text-base transition-interactive ${
                   hasCheckedInToday
                     ? 'bg-success/20 text-success cursor-default'
                     : 'bg-gradient-to-r text-white hover:opacity-90 active:scale-95'
@@ -365,13 +365,13 @@ export function StreakCounter({ streakDays, lastActiveDate, onCheckIn }: StreakC
             <div className="flex items-center justify-between mb-2">
               <div className="flex items-center gap-2">
                 <Gift className="w-4 h-4 text-primary-hover" />
-                <span className="text-[13px] text-text-secondary">Prochain objectif</span>
+                <span className="text-base text-text-secondary">Prochain objectif</span>
               </div>
               <div className="flex items-center gap-2">
-                <span className="text-[13px] font-medium text-text-primary">
+                <span className="text-base font-medium text-text-primary">
                   {nextMilestone.emoji} {nextMilestone.label}
                 </span>
-                <span className="text-[12px] px-2 py-0.5 rounded-full bg-success/20 text-success">
+                <span className="text-sm px-2 py-0.5 rounded-full bg-success/20 text-success">
                   +{nextMilestone.xp} XP
                 </span>
               </div>
@@ -390,18 +390,18 @@ export function StreakCounter({ streakDays, lastActiveDate, onCheckIn }: StreakC
               />
             </div>
 
-            <p className="text-[11px] text-text-tertiary mt-1.5 text-right">
+            <p className="text-sm text-text-tertiary mt-1.5 text-right">
               Encore {nextMilestone.daysRemaining} {nextMilestone.daysRemaining === 1 ? 'jour' : 'jours'}
             </p>
           </div>
 
           {/* Mini calendar - Last 7 days */}
           <div>
-            <p className="text-[12px] text-text-tertiary mb-2 uppercase tracking-wide">7 derniers jours</p>
+            <p className="text-sm text-text-tertiary mb-2 uppercase tracking-wide">7 derniers jours</p>
             <div className="flex gap-2 justify-between">
               {last7Days.map((day) => (
                 <div key={day.date} className="flex flex-col items-center gap-1">
-                  <span className="text-[11px] text-text-tertiary">{day.dayOfWeek}</span>
+                  <span className="text-sm text-text-tertiary">{day.dayOfWeek}</span>
                   <motion.div
                     className={`w-8 h-8 rounded-lg flex items-center justify-center transition-interactive ${
                       day.isToday
@@ -442,7 +442,7 @@ export function StreakCounter({ streakDays, lastActiveDate, onCheckIn }: StreakC
               animate={{ opacity: 1, y: 0 }}
               className="mt-4 p-3 rounded-xl bg-primary-hover/[0.08] border border-primary-hover/15"
             >
-              <p className="text-[12px] text-primary-hover">
+              <p className="text-sm text-primary-hover">
                 {streakDays === 0
                   ? "Lance ta série aujourd'hui ! Pointe chaque jour pour gagner des XP."
                   : `Plus que ${7 - streakDays} jours pour ton premier objectif ! Continue comme ça !`}
@@ -460,8 +460,8 @@ export function StreakCounter({ streakDays, lastActiveDate, onCheckIn }: StreakC
               <div className="flex items-center gap-2">
                 <span className="text-lg">👑</span>
                 <div>
-                  <p className="text-[13px] font-medium text-text-primary">Statut Légendaire !</p>
-                  <p className="text-[11px] text-purple">
+                  <p className="text-base font-medium text-text-primary">Statut Légendaire !</p>
+                  <p className="text-sm text-purple">
                     Tu as atteint une série de 100+ jours. Tu es inarrêtable !
                   </p>
                 </div>

@@ -152,7 +152,7 @@ export function ParticipantVolumeControl({
 
         {/* Volume percentage */}
         <span className={`
-          flex-shrink-0 text-[11px] font-medium min-w-[32px] text-right tabular-nums
+          flex-shrink-0 text-sm font-medium min-w-[32px] text-right tabular-nums
           ${isBoosted ? 'text-warning' : isMuted ? 'text-error' : 'text-text-secondary'}
         `}>
           {displayVolume}%
@@ -165,11 +165,11 @@ export function ParticipantVolumeControl({
     <div className="flex flex-col gap-2 p-3 rounded-lg bg-surface-card border border-border-default">
       {/* Header row */}
       <div className="flex items-center justify-between">
-        <span className="text-[13px] font-medium text-text-primary truncate">
+        <span className="text-base font-medium text-text-primary truncate">
           {participantName}
         </span>
         <span className={`
-          text-[12px] font-semibold tabular-nums
+          text-sm font-semibold tabular-nums
           ${isBoosted ? 'text-warning' : isMuted ? 'text-error' : 'text-success'}
         `}>
           {displayVolume}%
@@ -254,7 +254,7 @@ export function ParticipantVolumeControl({
       </div>
 
       {/* Volume labels */}
-      <div className="flex justify-between text-[10px] text-text-tertiary px-11">
+      <div className="flex justify-between text-xs text-text-tertiary px-11">
         <span>0%</span>
         <span className="text-text-secondary">100%</span>
         <span className="text-warning/70">200%</span>

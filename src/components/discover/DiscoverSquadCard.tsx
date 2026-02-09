@@ -63,7 +63,7 @@ export const DiscoverSquadCard = memo(function DiscoverSquadCard({ squad }: Prop
           {squad.tags && squad.tags.length > 0 && (
             <div className="flex gap-1 mt-2 flex-wrap">
               {squad.tags.map(tag => (
-                <span key={tag} className="text-[10px] px-1.5 py-0.5 rounded bg-white/5 text-text-tertiary">
+                <span key={tag} className="text-xs px-1.5 py-0.5 rounded bg-white/5 text-text-tertiary">
                   {tag}
                 </span>
               ))}
@@ -90,7 +90,7 @@ export const DiscoverSquadCard = memo(function DiscoverSquadCard({ squad }: Prop
             <span className="text-[8px] text-indigo-400 font-bold">{squad.owner_username?.charAt(0).toUpperCase()}</span>
           </div>
         )}
-        <span className="text-[11px] text-text-tertiary">Cree par {squad.owner_username}</span>
+        <span className="text-sm text-text-tertiary">Cree par {squad.owner_username}</span>
       </div>
     </motion.div>
   )

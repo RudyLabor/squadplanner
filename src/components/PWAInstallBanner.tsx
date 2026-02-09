@@ -34,10 +34,10 @@ export const PWAInstallBanner = memo(function PWAInstallBanner() {
 
             {/* Content */}
             <div className="flex-1 min-w-0">
-              <h3 className="text-[15px] font-semibold text-text-primary">
+              <h3 className="text-md font-semibold text-text-primary">
                 Installer Squad Planner
               </h3>
-              <p className="text-[13px] text-text-secondary mt-0.5">
+              <p className="text-base text-text-secondary mt-0.5">
                 Acces rapide depuis ton ecran d'accueil
               </p>
 
@@ -46,14 +46,14 @@ export const PWAInstallBanner = memo(function PWAInstallBanner() {
                 <button
                   type="button"
                   onClick={() => promptInstall()}
-                  className="px-4 py-2 rounded-lg bg-primary text-white text-[13px] font-semibold hover:bg-primary-hover active:scale-[0.97] transition-all"
+                  className="px-4 py-2 rounded-lg bg-primary text-white text-base font-semibold hover:bg-primary-hover active:scale-[0.97] transition-all"
                 >
                   Installer
                 </button>
                 <button
                   type="button"
                   onClick={dismissBanner}
-                  className="px-3 py-2 rounded-lg text-text-secondary text-[13px] hover:bg-border-subtle transition-colors"
+                  className="px-3 py-2 rounded-lg text-text-secondary text-base hover:bg-border-subtle transition-colors"
                 >
                   Plus tard
                 </button>

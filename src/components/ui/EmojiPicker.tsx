@@ -168,7 +168,7 @@ export function EmojiPicker({ isOpen, onSelect, onClose, position = 'bottom', al
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                   placeholder="Chercher un emoji..."
-                  className="w-full pl-8 pr-8 py-1.5 bg-border-default border border-border-default rounded-lg text-[13px] text-white placeholder:text-text-tertiary focus:outline-none focus:border-primary"
+                  className="w-full pl-8 pr-8 py-1.5 bg-border-default border border-border-default rounded-lg text-base text-white placeholder:text-text-tertiary focus:outline-none focus:border-primary"
                 />
                 {search && (
                   <button
@@ -220,7 +220,7 @@ export function EmojiPicker({ isOpen, onSelect, onClose, position = 'bottom', al
             >
               {/* Category label */}
               {!search && (
-                <p className="text-[11px] text-text-tertiary uppercase tracking-wider px-1 mb-1.5">
+                <p className="text-sm text-text-tertiary uppercase tracking-wider px-1 mb-1.5">
                   {EMOJI_CATEGORIES[activeCategory].label}
                 </p>
               )}
@@ -246,7 +246,7 @@ export function EmojiPicker({ isOpen, onSelect, onClose, position = 'bottom', al
             </div>
 
             {/* Footer - currently hovered emoji name could go here */}
-            <div className="px-3 py-1.5 border-t border-border-default text-[11px] text-text-tertiary">
+            <div className="px-3 py-1.5 border-t border-border-default text-sm text-text-tertiary">
               {search
                 ? `${displayedEmojis.length} résultat${displayedEmojis.length !== 1 ? 's' : ''}`
                 : EMOJI_CATEGORIES[activeCategory].label

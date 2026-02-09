@@ -57,7 +57,7 @@ const SIZES = {
     barGap: 3,
     barHeights: [8, 14, 20, 28],
     iconSize: 20,
-    textSize: 'text-[13px]',
+    textSize: 'text-base',
   },
 }
 
@@ -189,7 +189,7 @@ export function NetworkQualityBadge({
     >
       <NetworkQualityIndicator size="sm" showLabel={false} showTooltip={false} />
       <span
-        className="text-[12px] font-medium"
+        className="text-sm font-medium"
         style={{ color: info.color }}
       >
         {info.label}
@@ -249,10 +249,10 @@ export function QualityChangeToast({
 
             {/* Message */}
             <div className="flex flex-col">
-              <span className="text-[14px] font-medium text-text-primary">
+              <span className="text-md font-medium text-text-primary">
                 {isImproving ? 'Connexion amelioree' : 'Connexion degradee'}
               </span>
-              <span className="text-[12px]" style={{ color: info.color }}>
+              <span className="text-sm" style={{ color: info.color }}>
                 {info.description}
               </span>
             </div>

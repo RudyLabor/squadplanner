@@ -50,7 +50,7 @@ function ReliabilityBadge({ score }: { score: number }) {
           >
             <Star className="w-4 h-4 text-success fill-success" />
           </motion.div>
-          <span className="text-[13px] font-medium text-success">100% fiable</span>
+          <span className="text-base font-medium text-success">100% fiable</span>
         </motion.div>
       )
     }
@@ -58,7 +58,7 @@ function ReliabilityBadge({ score }: { score: number }) {
       return (
         <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-success/10 border border-success/15 cursor-help">
           <TrendingUp className="w-4 h-4 text-success" />
-          <span className="text-[13px] font-medium text-success">{score}% fiable</span>
+          <span className="text-base font-medium text-success">{score}% fiable</span>
         </div>
       )
     }
@@ -66,14 +66,14 @@ function ReliabilityBadge({ score }: { score: number }) {
       return (
         <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-warning/10 border border-warning/15 cursor-help">
           <TrendingUp className="w-4 h-4 text-warning" />
-          <span className="text-[13px] font-medium text-warning">{score}%</span>
+          <span className="text-base font-medium text-warning">{score}%</span>
         </div>
       )
     }
     return (
       <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-error/10 border border-error/15 cursor-help">
         <AlertCircle className="w-4 h-4 text-error" />
-        <span className="text-[13px] font-medium text-error">{score}%</span>
+        <span className="text-base font-medium text-error">{score}%</span>
       </div>
     )
   }
@@ -131,17 +131,17 @@ function NextSessionCard({
         <Link to={`/squad/${session.squad_id}`}>
           <div className="flex items-start justify-between mb-3">
             <div>
-              <div className="text-[15px] font-semibold text-text-primary hover:text-primary transition-colors duration-400">
+              <div className="text-md font-semibold text-text-primary hover:text-primary transition-colors duration-400">
                 {session.title || session.game || 'Session'}
               </div>
-              <div className="text-[13px] text-text-tertiary">{session.squad_name}</div>
+              <div className="text-base text-text-tertiary">{session.squad_name}</div>
             </div>
             <Badge variant={diffMs < 0 ? 'success' : diffHours < 24 ? 'warning' : 'default'}>
               {timeLabel}
             </Badge>
           </div>
 
-          <div className="flex items-center gap-4 text-[13px] text-text-tertiary mb-3">
+          <div className="flex items-center gap-4 text-base text-text-tertiary mb-3">
             <div className="flex items-center gap-1.5">
               <Calendar className="w-4 h-4" />
               <span>{dateFormatted} · {timeFormatted}</span>
@@ -164,7 +164,7 @@ function NextSessionCard({
               onClick={() => onRsvp(session.id, 'present')}
               aria-label="Marquer comme présent"
               aria-pressed={session.my_rsvp === 'present'}
-              className={`flex-1 flex items-center justify-center gap-1.5 px-3 py-2.5 min-h-[44px] rounded-lg text-[13px] font-medium transition-interactive ${
+              className={`flex-1 flex items-center justify-center gap-1.5 px-3 py-2.5 min-h-[44px] rounded-lg text-base font-medium transition-interactive ${
                 session.my_rsvp === 'present'
                   ? 'bg-success/15 text-success border border-success/20 shadow-glow-success'
                   : 'bg-surface-card text-text-tertiary hover:bg-success/10 hover:text-success border border-transparent hover:border-success/15'
@@ -182,7 +182,7 @@ function NextSessionCard({
               onClick={() => onRsvp(session.id, 'maybe')}
               aria-label="Marquer comme peut-être"
               aria-pressed={session.my_rsvp === 'maybe'}
-              className={`flex-1 flex items-center justify-center gap-1.5 px-3 py-2.5 min-h-[44px] rounded-lg text-[13px] font-medium transition-interactive ${
+              className={`flex-1 flex items-center justify-center gap-1.5 px-3 py-2.5 min-h-[44px] rounded-lg text-base font-medium transition-interactive ${
                 session.my_rsvp === 'maybe'
                   ? 'bg-warning/15 text-warning border border-warning/20 shadow-glow-warning'
                   : 'bg-surface-card text-text-tertiary hover:bg-warning/10 hover:text-warning border border-transparent hover:border-warning/15'
@@ -200,7 +200,7 @@ function NextSessionCard({
               onClick={() => onRsvp(session.id, 'absent')}
               aria-label="Marquer comme absent"
               aria-pressed={session.my_rsvp === 'absent'}
-              className={`flex-1 flex items-center justify-center gap-1.5 px-3 py-2.5 min-h-[44px] rounded-lg text-[13px] font-medium transition-interactive ${
+              className={`flex-1 flex items-center justify-center gap-1.5 px-3 py-2.5 min-h-[44px] rounded-lg text-base font-medium transition-interactive ${
                 session.my_rsvp === 'absent'
                   ? 'bg-error/15 text-error border border-error/20 shadow-glow-error'
                   : 'bg-surface-card text-text-tertiary hover:bg-error/10 hover:text-error border border-transparent hover:border-error/15'
@@ -218,7 +218,7 @@ function NextSessionCard({
             initial={{ opacity: 0, y: -5 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, ease: "easeOut" }}
-            className={`flex items-center gap-2 text-[13px] mt-2 pt-2 border-t border-border-subtle ${
+            className={`flex items-center gap-2 text-base mt-2 pt-2 border-t border-border-subtle ${
               session.my_rsvp === 'present' ? 'text-success' :
               session.my_rsvp === 'absent' ? 'text-error' : 'text-warning'
             }`}
@@ -250,13 +250,13 @@ function ActivePartyCard({ squadName, participantCount }: { squadName: string; p
               <Mic className="w-6 h-6 text-primary" />
             </div>
             <div className="flex-1">
-              <div className="text-[15px] font-semibold text-text-primary">
+              <div className="text-md font-semibold text-text-primary">
                 {participantCount} {participantCount > 1 ? 'potes' : 'pote'} dans {squadName}
               </div>
-              <div className="text-[13px] text-text-tertiary">Party vocale en cours</div>
+              <div className="text-base text-text-tertiary">Party vocale en cours</div>
             </div>
             <motion.div
-              className="px-4 py-2 rounded-lg bg-primary text-white text-[14px] font-medium"
+              className="px-4 py-2 rounded-lg bg-primary text-white text-md font-medium"
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               transition={{ duration: 0.4, ease: "easeOut" }}
@@ -307,10 +307,10 @@ function StatsRow({ squadsCount, sessionsThisWeek, reliabilityScore }: {
               <stat.icon className="w-4 h-4 sm:w-5 sm:h-5" style={{ color: stat.color }} />
             </div>
             <div className="min-w-0 flex-1">
-              <div className="text-[16px] sm:text-[20px] font-bold text-text-primary tracking-tight leading-none">
+              <div className="text-lg sm:text-xl font-bold text-text-primary tracking-tight leading-none">
                 <AnimatedCounter end={stat.value} duration={1.2} suffix={stat.suffix} />
               </div>
-              <div className="text-[8px] sm:text-[10px] text-text-quaternary uppercase tracking-wider mt-0.5 truncate font-medium">
+              <div className="text-[8px] sm:text-xs text-text-quaternary uppercase tracking-wider mt-0.5 truncate font-medium">
                 {stat.label}
               </div>
             </div>
@@ -474,7 +474,7 @@ export default function Home() {
           transition={{ duration: 0.4, ease: "easeOut" }}
           className="fixed top-4 left-1/2 -translate-x-1/2 z-50 px-6 py-3 rounded-xl bg-success/15 border border-success/20 backdrop-blur-sm"
         >
-          <p className="text-[14px] font-medium text-success">{successMessage}</p>
+          <p className="text-md font-medium text-success">{successMessage}</p>
         </motion.div>
       )}
 
@@ -487,14 +487,14 @@ export default function Home() {
                 Salut {profile?.username || 'Gamer'} !
               </h1>
               {upcomingSessions.length > 0 ? (
-                <p className="text-[14px] text-text-tertiary">
+                <p className="text-md text-text-tertiary">
                   {pendingRsvps > 0
                     ? `${pendingRsvps} session${pendingRsvps > 1 ? 's' : ''} ${pendingRsvps > 1 ? 'attendent' : 'attend'} ta réponse`
                     : "T'es carré, toutes tes sessions sont confirmées"
                   }
                 </p>
               ) : (
-                <p className="text-[14px] text-text-tertiary">Ta squad t'attend, lance une session !</p>
+                <p className="text-md text-text-tertiary">Ta squad t'attend, lance une session !</p>
               )}
             </div>
             <ReliabilityBadge score={reliabilityScore} />
@@ -544,7 +544,7 @@ export default function Home() {
                         : 'text-primary'
                   }`} />
                 </div>
-                <p className={`text-[13px] leading-relaxed flex-1 ${
+                <p className={`text-base leading-relaxed flex-1 ${
                   aiCoachTip.tone === 'celebration'
                     ? 'text-success'
                     : aiCoachTip.tone === 'warning'
@@ -578,7 +578,7 @@ export default function Home() {
           {sessionsLoading ? (
             <div className="mb-6">
               <div className="flex items-center justify-between mb-3">
-                <h2 className="text-[18px] font-semibold text-text-primary">
+                <h2 className="text-xl font-semibold text-text-primary">
                   Prochaine session
                 </h2>
               </div>
@@ -587,11 +587,11 @@ export default function Home() {
           ) : nextSession && (
             <div className="mb-6">
               <div className="flex items-center justify-between mb-3">
-                <h2 className="text-[18px] font-semibold text-text-primary">
+                <h2 className="text-xl font-semibold text-text-primary">
                   Prochaine session
                 </h2>
                 {upcomingSessions.length > 1 && (
-                  <Link to="/squads" className="text-[12px] text-primary font-medium">
+                  <Link to="/squads" className="text-sm text-primary font-medium">
                     Voir tout ({upcomingSessions.length})
                   </Link>
                 )}
@@ -613,7 +613,7 @@ export default function Home() {
 
           {/* Stats - Wording gamer */}
           <div className="mb-6">
-            <h2 className="text-[18px] font-semibold text-text-primary mb-3">
+            <h2 className="text-xl font-semibold text-text-primary mb-3">
               Ton tableau de bord
             </h2>
             <div className="space-y-4">
@@ -643,7 +643,7 @@ export default function Home() {
           {squadsLoading ? (
             <div>
               <div className="flex items-center justify-between mb-3">
-                <h2 className="text-[18px] font-semibold text-text-primary">
+                <h2 className="text-xl font-semibold text-text-primary">
                   Mes squads
                 </h2>
               </div>
@@ -656,12 +656,12 @@ export default function Home() {
           ) : squads.length > 0 ? (
             <div>
               <div className="flex items-center justify-between mb-3">
-                <h2 className="text-[18px] font-semibold text-text-primary">
+                <h2 className="text-xl font-semibold text-text-primary">
                   Mes squads
                 </h2>
                 <Link to="/squads">
                   <motion.button
-                    className="text-[12px] text-primary font-medium flex items-center gap-1"
+                    className="text-sm text-primary font-medium flex items-center gap-1"
                     whileHover={{ x: 2 }}
                     transition={{ duration: 0.4, ease: "easeOut" }}
                   >
@@ -686,10 +686,10 @@ export default function Home() {
                             <Users className="w-5 h-5 text-primary" />
                           </div>
                           <div className="flex-1 min-w-0">
-                            <div className="text-[14px] font-medium text-text-primary truncate">{squad.name}</div>
-                            <div className="text-[12px] text-text-tertiary">{squad.game}</div>
+                            <div className="text-md font-medium text-text-primary truncate">{squad.name}</div>
+                            <div className="text-sm text-text-tertiary">{squad.game}</div>
                           </div>
-                          <div className="text-[12px] text-text-quaternary">
+                          <div className="text-sm text-text-quaternary">
                             {squad.member_count || squad.total_members || 1} membre{(squad.member_count || squad.total_members || 1) > 1 ? 's' : ''}
                           </div>
                           <ChevronRight className="w-4 h-4 text-text-quaternary" />
@@ -715,15 +715,15 @@ export default function Home() {
                 >
                   <Users className="w-7 h-7 text-primary" strokeWidth={1.5} />
                 </motion.div>
-                <h3 className="text-[16px] font-semibold text-text-primary mb-2">
+                <h3 className="text-lg font-semibold text-text-primary mb-2">
                   Tes potes t'attendent !
                 </h3>
-                <p className="text-[14px] text-text-tertiary mb-6 max-w-[250px] mx-auto">
+                <p className="text-md text-text-tertiary mb-6 max-w-[250px] mx-auto">
                   Crée ta squad et finis-en avec les "on verra". Place à l'action !
                 </p>
                 <Link to="/squads">
                   <motion.button
-                    className="inline-flex items-center gap-2 h-11 px-6 rounded-xl bg-primary text-white text-[14px] font-semibold shadow-glow-primary-sm"
+                    className="inline-flex items-center gap-2 h-11 px-6 rounded-xl bg-primary text-white text-md font-semibold shadow-glow-primary-sm"
                     whileHover={{ y: -2, scale: 1.02, boxShadow: "var(--shadow-glow-primary-md)" }}
                     {...springTap}
                   >
@@ -758,8 +758,8 @@ export default function Home() {
                         <Mic className="w-5 h-5 text-primary" />
                       </motion.div>
                       <div className="flex-1">
-                        <div className="text-[14px] font-medium text-text-primary">Envie de papoter ?</div>
-                        <div className="text-[12px] text-text-tertiary">Lance une party, ta squad est peut-être dispo !</div>
+                        <div className="text-md font-medium text-text-primary">Envie de papoter ?</div>
+                        <div className="text-sm text-text-tertiary">Lance une party, ta squad est peut-être dispo !</div>
                       </div>
                       <ChevronRight className="w-5 h-5 text-text-quaternary" />
                     </div>

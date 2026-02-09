@@ -483,7 +483,7 @@ export function Onboarding() {
                   onClick={() => navigateToStep('squad-choice')}
                   disabled={isNavigating}
                   data-testid="start-onboarding-button"
-                  className="w-full h-14 text-[16px]"
+                  className="w-full h-14 text-lg"
                 >
                   C'est parti
                   <ArrowRight className="w-5 h-5 ml-2" />
@@ -494,7 +494,7 @@ export function Onboarding() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.8 }}
-                className="text-[13px] text-text-tertiary mt-6"
+                className="text-base text-text-tertiary mt-6"
               >
                 Configure ta squad en moins de 60 secondes
               </motion.p>
@@ -535,10 +535,10 @@ export function Onboarding() {
                       <Users className="w-7 h-7 text-primary" />
                     </div>
                     <div className="flex-1">
-                      <h3 className="text-[16px] font-semibold text-text-primary mb-1">
+                      <h3 className="text-lg font-semibold text-text-primary mb-1">
                         Créer une squad
                       </h3>
-                      <p className="text-[14px] text-text-secondary">
+                      <p className="text-md text-text-secondary">
                         Tu invites tes amis avec un code. En 10 secondes, tout le monde est dedans.
                       </p>
                     </div>
@@ -558,10 +558,10 @@ export function Onboarding() {
                       <UserPlus className="w-7 h-7 text-success" />
                     </div>
                     <div className="flex-1">
-                      <h3 className="text-[16px] font-semibold text-text-primary mb-1">
+                      <h3 className="text-lg font-semibold text-text-primary mb-1">
                         Rejoindre une squad
                       </h3>
-                      <p className="text-[14px] text-text-secondary">
+                      <p className="text-md text-text-secondary">
                         Un ami t'a donné un code ? Entre-le ici pour le rejoindre direct.
                       </p>
                     </div>
@@ -755,23 +755,23 @@ export function Onboarding() {
                     </div>
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-1">
-                        <h3 className="text-[15px] font-semibold text-text-primary">
+                        <h3 className="text-md font-semibold text-text-primary">
                           Notifications
                         </h3>
                         <span className="text-xs px-2 py-0.5 rounded-full bg-warning-10 text-warning font-medium">
                           Recommandé
                         </span>
                       </div>
-                      <p className="text-[13px] text-text-secondary mb-3">
+                      <p className="text-base text-text-secondary mb-3">
                         Sois prévenu quand une session est créée ou quand ta squad t'attend
                       </p>
                       {notifPermission === 'granted' ? (
-                        <div className="flex items-center gap-2 text-success text-[14px]">
+                        <div className="flex items-center gap-2 text-success text-md">
                           <Check className="w-4 h-4" />
                           Activées
                         </div>
                       ) : notifPermission === 'denied' ? (
-                        <p className="text-[13px] text-error">
+                        <p className="text-base text-error">
                           Bloquées — active-les dans les paramètres de ton navigateur
                         </p>
                       ) : (
@@ -795,23 +795,23 @@ export function Onboarding() {
                     </div>
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-1">
-                        <h3 className="text-[15px] font-semibold text-text-primary">
+                        <h3 className="text-md font-semibold text-text-primary">
                           Microphone
                         </h3>
                         <span className="text-xs px-2 py-0.5 rounded-full bg-border-subtle text-text-secondary font-medium">
                           Optionnel
                         </span>
                       </div>
-                      <p className="text-[13px] text-text-secondary mb-3">
+                      <p className="text-base text-text-secondary mb-3">
                         Pour la party vocale avec ta squad. Tu peux activer plus tard.
                       </p>
                       {micPermission === 'granted' ? (
-                        <div className="flex items-center gap-2 text-success text-[14px]">
+                        <div className="flex items-center gap-2 text-success text-md">
                           <Check className="w-4 h-4" />
                           Autorisé
                         </div>
                       ) : micPermission === 'denied' ? (
-                        <p className="text-[13px] text-text-tertiary">
+                        <p className="text-base text-text-tertiary">
                           Tu pourras l'activer plus tard dans les paramètres
                         </p>
                       ) : (
@@ -825,7 +825,7 @@ export function Onboarding() {
                           </Button>
                           <button
                             onClick={() => setMicPermission('denied')}
-                            className="text-[13px] text-text-tertiary hover:text-text-secondary px-3"
+                            className="text-base text-text-tertiary hover:text-text-secondary px-3"
                           >
                             Plus tard
                           </button>
@@ -858,7 +858,7 @@ export function Onboarding() {
                       Terminer
                       <Check className="w-5 h-5 ml-2" />
                     </Button>
-                    <p className="text-[12px] text-text-tertiary text-center">
+                    <p className="text-sm text-text-tertiary text-center">
                       Tu pourras activer les notifications plus tard dans les paramètres
                     </p>
                   </>
@@ -927,7 +927,7 @@ export function Onboarding() {
                         />
                       </label>
                     </div>
-                    <p className="text-[12px] text-text-tertiary">
+                    <p className="text-sm text-text-tertiary">
                       Clique sur l'icône pour changer ta photo
                     </p>
                   </div>
@@ -943,14 +943,14 @@ export function Onboarding() {
 
                   {/* Timezone */}
                   <div>
-                    <label className="block text-[13px] font-medium text-text-secondary mb-2">
+                    <label className="block text-base font-medium text-text-secondary mb-2">
                       <Globe className="w-4 h-4 inline mr-1.5" />
                       Fuseau horaire
                     </label>
                     <select
                       value={timezone}
                       onChange={(e) => setTimezone(e.target.value)}
-                      className="w-full h-11 px-4 rounded-lg bg-bg-surface border border-border-hover text-text-primary text-[14px] focus:border-primary outline-none [&>option]:bg-bg-surface [&>option]:text-text-primary"
+                      className="w-full h-11 px-4 rounded-lg bg-bg-surface border border-border-hover text-text-primary text-md focus:border-primary outline-none [&>option]:bg-bg-surface [&>option]:text-text-primary"
                     >
                       <option value="Europe/Paris">Europe/Paris (France)</option>
                       <option value="Europe/London">Europe/London (UK)</option>
@@ -961,7 +961,7 @@ export function Onboarding() {
                       <option value="America/Los_Angeles">America/Los_Angeles (PST)</option>
                       <option value="Asia/Tokyo">Asia/Tokyo (Japon)</option>
                     </select>
-                    <p className="text-[12px] text-text-tertiary mt-1.5">
+                    <p className="text-sm text-text-tertiary mt-1.5">
                       Détecté automatiquement : {Intl.DateTimeFormat().resolvedOptions().timeZone}
                     </p>
                   </div>
@@ -1066,8 +1066,8 @@ export function Onboarding() {
                           <Users className="w-5 h-5 text-primary" />
                         </div>
                         <div>
-                          <p className="text-[12px] text-text-tertiary">Squad</p>
-                          <p className="text-[15px] font-semibold text-text-primary">{createdSquadName}</p>
+                          <p className="text-sm text-text-tertiary">Squad</p>
+                          <p className="text-md font-semibold text-text-primary">{createdSquadName}</p>
                         </div>
                       </div>
 
@@ -1078,17 +1078,17 @@ export function Onboarding() {
                             <Gamepad2 className="w-5 h-5 text-success" />
                           </div>
                           <div>
-                            <p className="text-[12px] text-text-tertiary">Jeu</p>
-                            <p className="text-[15px] font-semibold text-text-primary">{squadGame || 'Non défini'}</p>
+                            <p className="text-sm text-text-tertiary">Jeu</p>
+                            <p className="text-md font-semibold text-text-primary">{squadGame || 'Non défini'}</p>
                           </div>
                         </div>
                       )}
 
                       {/* Invite code */}
                       <div className="pt-3 border-t border-border-default">
-                        <p className="text-[12px] text-text-tertiary mb-2">Code d'invitation</p>
+                        <p className="text-sm text-text-tertiary mb-2">Code d'invitation</p>
                         <div className="flex items-center gap-2">
-                          <code className="flex-1 px-4 py-3 rounded-lg bg-surface-card border border-border-default text-[18px] font-mono font-bold text-text-primary tracking-widest text-center">
+                          <code className="flex-1 px-4 py-3 rounded-lg bg-surface-card border border-border-default text-xl font-mono font-bold text-text-primary tracking-widest text-center">
                             {createdSquadCode}
                           </code>
                           <button
@@ -1110,7 +1110,7 @@ export function Onboarding() {
                 </motion.div>
               )}
 
-              <Button onClick={handleComplete} className="w-full h-14 text-[16px]">
+              <Button onClick={handleComplete} className="w-full h-14 text-lg">
                 {createdSquadId || squads.length > 0 ? "Voir ma squad" : "Explorer"}
                 <ArrowRight className="w-5 h-5 ml-2" />
               </Button>
@@ -1135,7 +1135,7 @@ export function Onboarding() {
                 <div key={item.key} className="flex items-center gap-3">
                   <div className="flex flex-col items-center gap-1">
                     <div
-                      className={`w-8 h-8 rounded-full flex items-center justify-center text-[13px] font-semibold transition-interactive ${
+                      className={`w-8 h-8 rounded-full flex items-center justify-center text-base font-semibold transition-interactive ${
                         isCompleted ? 'bg-success text-white' :
                         isActive ? 'bg-primary text-white' :
                         'bg-border-subtle text-text-tertiary'

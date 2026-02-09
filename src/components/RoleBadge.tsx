@@ -18,8 +18,8 @@ export const RoleBadge = memo(function RoleBadge({ role, size = 'sm', showIcon =
   const config = getRoleConfig(role)
 
   const sizeClasses = size === 'sm'
-    ? 'text-[10px] px-1.5 py-0.5 gap-0.5'
-    : 'text-[11px] px-2 py-0.5 gap-1'
+    ? 'text-xs px-1.5 py-0.5 gap-0.5'
+    : 'text-sm px-2 py-0.5 gap-1'
 
   return (
     <span

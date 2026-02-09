@@ -69,7 +69,7 @@ function MessageToast({ message, isVisible, variant = 'success' }: {
         >
           <div className={`flex items-center gap-2 px-4 py-3 rounded-xl ${style.bg} ${style.text} shadow-lg`}>
             <Icon className="w-5 h-5" />
-            <span className="text-[14px] font-medium">{message}</span>
+            <span className="text-md font-medium">{message}</span>
           </div>
         </motion.div>
       )}
@@ -156,7 +156,7 @@ function ConversationCard({ conversation, onClick, isActive }: {
         {/* Content */}
         <div className="flex-1 min-w-0">
           <div className="flex items-center justify-between mb-0.5">
-            <h3 className={`text-[14px] font-medium truncate ${
+            <h3 className={`text-md font-medium truncate ${
               conversation.unread_count > 0 ? 'text-text-primary' : 'text-text-secondary'
             }`}>
               {conversation.name}
@@ -167,7 +167,7 @@ function ConversationCard({ conversation, onClick, isActive }: {
               </span>
             )}
           </div>
-          <p className={`text-[13px] truncate ${
+          <p className={`text-base truncate ${
             conversation.unread_count > 0 ? 'text-text-tertiary' : 'text-text-quaternary'
           }`}>
             {conversation.last_message ? (
@@ -392,7 +392,7 @@ function SystemMessage({ message }: {
       transition={{ duration: 0.25, type: 'spring', stiffness: 200, damping: 20 }}
       className="flex justify-center my-3"
     >
-      <p className={`text-[13px] italic text-center px-4 py-1.5 rounded-full ${
+      <p className={`text-base italic text-center px-4 py-1.5 rounded-full ${
         isCelebration
           ? 'bg-gradient-to-r from-primary-15 to-purple-15 text-primary-light border border-primary'
           : 'text-text-tertiary'
@@ -485,7 +485,7 @@ function MessageBubble({ message, isOwn, showAvatar, showName, currentUserId, is
 
           {/* Pinned indicator */}
           {message.is_pinned && (
-            <span className="text-[10px] text-warning mb-1 ml-1 flex items-center gap-1">
+            <span className="text-xs text-warning mb-1 ml-1 flex items-center gap-1">
               <span>📌</span> Epingle
             </span>
           )}
@@ -625,7 +625,7 @@ function DMConversationCard({ conversation, onClick }: {
               className="w-full h-full object-cover"
             />
           ) : (
-            <span className="text-[14px] font-bold text-primary">{initial}</span>
+            <span className="text-md font-bold text-primary">{initial}</span>
           )}
           {/* Unread indicator */}
           {conversation.unread_count > 0 && (
@@ -638,7 +638,7 @@ function DMConversationCard({ conversation, onClick }: {
         {/* Content */}
         <div className="flex-1 min-w-0">
           <div className="flex items-center justify-between mb-0.5">
-            <h3 className={`text-[14px] font-medium truncate ${
+            <h3 className={`text-md font-medium truncate ${
               conversation.unread_count > 0 ? 'text-text-primary' : 'text-text-secondary'
             }`}>
               {conversation.other_user_username}
@@ -649,7 +649,7 @@ function DMConversationCard({ conversation, onClick }: {
               </span>
             )}
           </div>
-          <p className={`text-[13px] truncate ${
+          <p className={`text-base truncate ${
             conversation.unread_count > 0 ? 'text-text-tertiary' : 'text-text-quaternary'
           }`}>
             {conversation.last_message_content || <span className="italic">Nouvelle conversation</span>}
@@ -1106,7 +1106,7 @@ export function Messages() {
         <div className="flex items-center justify-between mb-1">
           <h1 className={`font-bold text-text-primary ${showOnDesktop ? 'text-xl' : 'text-2xl'}`}>Messages</h1>
           {totalUnread > 0 && (
-            <span className="px-2.5 py-1 bg-primary text-white text-[12px] font-bold rounded-full">
+            <span className="px-2.5 py-1 bg-primary text-white text-sm font-bold rounded-full">
               {totalUnread} non lu{totalUnread > 1 ? 's' : ''}
             </span>
           )}
@@ -1122,7 +1122,7 @@ export function Messages() {
             setNewMessage('') // Clear pending message
             setReplyingTo(null) // Clear reply state
           }}
-          className={`flex-1 py-2.5 px-4 rounded-lg text-[13px] font-medium transition-interactive flex items-center justify-center gap-2 ${
+          className={`flex-1 py-2.5 px-4 rounded-lg text-base font-medium transition-interactive flex items-center justify-center gap-2 ${
             activeTab === 'squads'
               ? 'bg-bg-hover text-text-primary'
               : 'text-text-tertiary hover:text-text-primary'
@@ -1143,7 +1143,7 @@ export function Messages() {
             setNewMessage('') // Clear pending message
             setReplyingTo(null) // Clear reply state
           }}
-          className={`flex-1 py-2.5 px-4 rounded-lg text-[13px] font-medium transition-interactive flex items-center justify-center gap-2 ${
+          className={`flex-1 py-2.5 px-4 rounded-lg text-base font-medium transition-interactive flex items-center justify-center gap-2 ${
             activeTab === 'dms'
               ? 'bg-bg-hover text-text-primary'
               : 'text-text-tertiary hover:text-text-primary'
@@ -1168,7 +1168,7 @@ export function Messages() {
           onChange={(e) => setSearchQuery(e.target.value)}
           placeholder={activeTab === 'squads' ? 'Rechercher une squad...' : 'Rechercher un contact...'}
           aria-label="Rechercher une conversation"
-          className="w-full h-11 pl-10 pr-4 bg-bg-surface border border-border-default rounded-xl text-[14px] text-text-primary placeholder:text-text-quaternary focus:outline-none focus:border-primary transition-colors"
+          className="w-full h-11 pl-10 pr-4 bg-bg-surface border border-border-default rounded-xl text-md text-text-primary placeholder:text-text-quaternary focus:outline-none focus:border-primary transition-colors"
         />
       </div>
 
@@ -1272,8 +1272,8 @@ export function Messages() {
                 )}
               </div>
               <div className="flex-1 min-w-0">
-                <h2 className="text-[15px] font-semibold text-text-primary truncate">{chatName}</h2>
-                <p className="text-[12px] text-text-quaternary">{chatSubtitle}</p>
+                <h2 className="text-md font-semibold text-text-primary truncate">{chatName}</h2>
+                <p className="text-sm text-text-quaternary">{chatSubtitle}</p>
               </div>
               <button
                 onClick={() => { setShowMessageSearch(s => !s); setMessageSearchQuery('') }}
@@ -1294,14 +1294,14 @@ export function Messages() {
                     className="w-full h-full object-cover"
                   />
                 ) : (
-                  <span className="text-[14px] font-bold text-primary">
+                  <span className="text-md font-bold text-primary">
                     {activeDMConv.other_user_username?.charAt(0).toUpperCase() || '?'}
                   </span>
                 )}
               </div>
               <div className="flex-1 min-w-0">
-                <h2 className="text-[15px] font-semibold text-text-primary truncate">{chatName}</h2>
-                <p className="text-[12px] text-text-quaternary">{chatSubtitle}</p>
+                <h2 className="text-md font-semibold text-text-primary truncate">{chatName}</h2>
+                <p className="text-sm text-text-quaternary">{chatSubtitle}</p>
               </div>
               {/* Call button for DM */}
               <button
@@ -1341,11 +1341,11 @@ export function Messages() {
                   value={messageSearchQuery}
                   onChange={(e) => setMessageSearchQuery(e.target.value)}
                   placeholder="Rechercher dans les messages..."
-                  className="w-full h-9 pl-9 pr-3 bg-border-subtle border border-border-default rounded-lg text-[13px] text-text-primary placeholder:text-text-quaternary focus:outline-none focus:border-primary"
+                  className="w-full h-9 pl-9 pr-3 bg-border-subtle border border-border-default rounded-lg text-base text-text-primary placeholder:text-text-quaternary focus:outline-none focus:border-primary"
                   autoFocus
                 />
                 {messageSearchQuery && (
-                  <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[11px] text-text-quaternary">
+                  <span className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-text-quaternary">
                     {messages.filter(m => m.content.toLowerCase().includes(messageSearchQuery.toLowerCase())).length} résultat(s)
                   </span>
                 )}
@@ -1557,7 +1557,7 @@ export function Messages() {
                     value={newMessage}
                     onChange={handleMessageChange}
                     placeholder={`Message à ${chatName}...`}
-                    className="w-full h-12 px-4 bg-bg-surface border border-border-default rounded-xl text-[14px] text-text-primary placeholder:text-text-quaternary focus:outline-none focus:border-primary transition-colors"
+                    className="w-full h-12 px-4 bg-bg-surface border border-border-default rounded-xl text-md text-text-primary placeholder:text-text-quaternary focus:outline-none focus:border-primary transition-colors"
                     autoComplete="off"
                     autoCapitalize="off"
                     autoCorrect="off"
@@ -1592,7 +1592,7 @@ export function Messages() {
                 <button
                   type="button"
                   onClick={() => setShowGifPicker(!showGifPicker)}
-                  className="p-2.5 rounded-xl text-text-secondary hover:text-primary-hover hover:bg-primary-10 transition-colors text-[13px] font-bold"
+                  className="p-2.5 rounded-xl text-text-secondary hover:text-primary-hover hover:bg-primary-10 transition-colors text-base font-bold"
                   aria-label="Envoyer un GIF"
                 >
                   GIF
@@ -1675,10 +1675,10 @@ export function Messages() {
         <div className="w-20 h-20 rounded-2xl bg-primary-10 flex items-center justify-center mx-auto mb-5">
           <Sparkles className="w-10 h-10 text-primary" />
         </div>
-        <h3 className="text-[18px] font-semibold text-text-primary mb-2">
+        <h3 className="text-xl font-semibold text-text-primary mb-2">
           Sélectionne une conversation
         </h3>
-        <p className="text-[14px] text-text-quaternary max-w-[250px] mx-auto">
+        <p className="text-md text-text-quaternary max-w-[250px] mx-auto">
           Choisis une conversation dans la liste pour commencer à chatter.
         </p>
       </div>

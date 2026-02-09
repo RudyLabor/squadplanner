@@ -264,18 +264,18 @@ export default function Landing() {
         <nav className="max-w-5xl mx-auto flex items-center justify-between" aria-label="Navigation principale">
           <Link to="/" className="flex items-center gap-2 shrink-0 min-h-[44px] min-w-[44px]">
             <SquadPlannerLogo size={24} />
-            <span className="text-[15px] font-semibold text-text-primary hidden sm:inline">Squad Planner</span>
+            <span className="text-md font-semibold text-text-primary hidden sm:inline">Squad Planner</span>
           </Link>
 
           {/* Desktop nav links */}
           <div className="hidden md:flex items-center gap-6">
             {navLinks.map(link => (
               link.isRoute ? (
-                <Link key={link.label} to={link.href} className="text-[13px] text-text-tertiary hover:text-text-primary transition-colors">
+                <Link key={link.label} to={link.href} className="text-base text-text-tertiary hover:text-text-primary transition-colors">
                   {link.label}
                 </Link>
               ) : (
-                <a key={link.label} href={link.href} className="text-[13px] text-text-tertiary hover:text-text-primary transition-colors">
+                <a key={link.label} href={link.href} className="text-base text-text-tertiary hover:text-text-primary transition-colors">
                   {link.label}
                 </a>
               )
@@ -284,15 +284,15 @@ export default function Landing() {
 
           <div className="flex items-center gap-2 md:gap-3">
             {isLoggedIn ? (
-              <Link to="/home" className="px-4 py-2 rounded-lg bg-primary text-white text-[13px] md:text-[14px] font-medium hover:bg-primary-hover transition-colors duration-300 inline-flex items-center">
+              <Link to="/home" className="px-4 py-2 rounded-lg bg-primary text-white text-base md:text-md font-medium hover:bg-primary-hover transition-colors duration-300 inline-flex items-center">
                 Aller à l'app
               </Link>
             ) : (
               <>
-                <Link to="/auth" className="hidden md:inline-flex items-center px-3 md:px-4 py-2 text-[13px] md:text-[14px] text-text-secondary hover:text-text-primary border border-border-subtle hover:border-border-hover rounded-lg transition-all">
+                <Link to="/auth" className="hidden md:inline-flex items-center px-3 md:px-4 py-2 text-base md:text-md text-text-secondary hover:text-text-primary border border-border-subtle hover:border-border-hover rounded-lg transition-all">
                   Se connecter
                 </Link>
-                <Link to="/auth?mode=register&redirect=onboarding" className="hidden md:inline-flex items-center px-3 md:px-4 py-2 rounded-lg bg-primary text-white text-[13px] md:text-[14px] font-medium hover:bg-primary-hover transition-colors duration-300" data-track="navbar_cta_click">
+                <Link to="/auth?mode=register&redirect=onboarding" className="hidden md:inline-flex items-center px-3 md:px-4 py-2 rounded-lg bg-primary text-white text-base md:text-md font-medium hover:bg-primary-hover transition-colors duration-300" data-track="navbar_cta_click">
                   Créer ma squad
                   <ArrowRight className="w-3.5 h-3.5 inline ml-1" />
                 </Link>
@@ -367,7 +367,7 @@ export default function Landing() {
             {/* Badge with shimmer */}
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full badge-shimmer border border-primary/12 mb-8">
               <Sparkles className="w-4 h-4 text-purple" aria-hidden="true" />
-              <span className="text-[13px] text-purple font-medium">Rassemble ta squad et jouez ensemble</span>
+              <span className="text-base text-purple font-medium">Rassemble ta squad et jouez ensemble</span>
             </div>
 
             {/* H1 with display font */}
@@ -394,7 +394,7 @@ export default function Landing() {
                   transition={{ duration: 0.4, ease: 'easeOut' }}
                   className="inline-flex"
                 >
-                  <Link to="/home" className="flex items-center gap-2 h-14 px-8 rounded-xl bg-primary text-white text-[16px] font-semibold shadow-lg shadow-primary/10 cta-glow-idle" data-track="hero_cta_click">
+                  <Link to="/home" className="flex items-center gap-2 h-14 px-8 rounded-xl bg-primary text-white text-lg font-semibold shadow-lg shadow-primary/10 cta-glow-idle" data-track="hero_cta_click">
                     Accéder à mes squads
                     <ArrowRight className="w-5 h-5" />
                   </Link>
@@ -402,7 +402,7 @@ export default function Landing() {
               ) : (
                 <>
                   <motion.div whileHover={{ scale: 1.02, y: -2 }} {...springTap} className="w-full sm:w-auto">
-                    <Link to="/auth?mode=register&redirect=onboarding" className="flex items-center gap-2 h-14 px-8 rounded-xl bg-primary text-white text-[16px] font-semibold shadow-lg shadow-primary/10 cta-glow-idle w-full sm:w-auto justify-center" data-track="hero_cta_click">
+                    <Link to="/auth?mode=register&redirect=onboarding" className="flex items-center gap-2 h-14 px-8 rounded-xl bg-primary text-white text-lg font-semibold shadow-lg shadow-primary/10 cta-glow-idle w-full sm:w-auto justify-center" data-track="hero_cta_click">
                       Créer ma squad gratuitement
                       <ArrowRight className="w-5 h-5" />
                     </Link>
@@ -425,20 +425,20 @@ export default function Landing() {
               {heroStats.map((stat) => (
                 <div key={stat.label} className="text-center">
                   <div className="text-2xl md:text-3xl font-bold text-text-primary">{stat.value}</div>
-                  <div className="text-[12px] md:text-[13px] text-text-quaternary">{stat.label}</div>
+                  <div className="text-sm md:text-base text-text-quaternary">{stat.label}</div>
                 </div>
               ))}
             </div>
 
             {/* Beta badge */}
-            <div className="flex items-center justify-center gap-2 text-[13px] text-text-quaternary">
+            <div className="flex items-center justify-center gap-2 text-base text-text-quaternary">
               <span className="inline-block w-2 h-2 rounded-full bg-success animate-pulse" />
               <span>Beta ouverte — Rejoins les premiers gamers</span>
             </div>
 
             {/* Login link for non-logged users */}
             {!isLoggedIn && (
-              <Link to="/auth" className="block mt-4 text-[14px] text-text-quaternary hover:text-text-tertiary transition-colors">
+              <Link to="/auth" className="block mt-4 text-md text-text-quaternary hover:text-text-tertiary transition-colors">
                 Déjà un compte ? Se connecter
               </Link>
             )}
@@ -489,7 +489,7 @@ export default function Landing() {
                 <span className="absolute top-3 right-3 w-2 h-2 rounded-full bg-success animate-pulse" />
                 <stat.icon className="w-5 h-5 md:w-7 md:h-7 mx-auto mb-2" style={{ color: stat.color }} aria-hidden="true" />
                 <AnimatedCounter end={stat.end} suffix={stat.suffix} singularSuffix={stat.singularSuffix} separator=" " className="text-xl md:text-3xl font-bold text-text-primary" duration={2.5} decimals={stat.decimals || 0} />
-                <div className="text-[11px] md:text-sm text-text-tertiary mt-1">{stat.label}</div>
+                <div className="text-sm md:text-sm text-text-tertiary mt-1">{stat.label}</div>
               </motion.div>
             ))}
           </div>
@@ -624,12 +624,12 @@ export default function Landing() {
                         <StepIcon className="w-5 h-5" style={{ color: demoSteps[i]?.color || 'var(--color-primary)' }} />
                       </div>
                       <div>
-                        <h3 className={`text-[15px] font-semibold transition-colors ${isActive ? 'text-text-primary' : 'text-text-tertiary'}`}>{step.title}</h3>
+                        <h3 className={`text-md font-semibold transition-colors ${isActive ? 'text-text-primary' : 'text-text-tertiary'}`}>{step.title}</h3>
                         {isActive && (
                           <motion.p
                             initial={{ opacity: 0, height: 0 }}
                             animate={{ opacity: 1, height: 'auto' }}
-                            className="text-[14px] text-text-tertiary mt-1"
+                            className="text-md text-text-tertiary mt-1"
                           >
                             {step.description}
                           </motion.p>
@@ -723,7 +723,7 @@ export default function Landing() {
                     <p className="text-text-tertiary mb-4">{pillar.detailText}</p>
                     <ul className="space-y-2">
                       {pillar.details.map(item => (
-                        <li key={item} className="flex items-center gap-2 text-[14px] text-text-secondary">
+                        <li key={item} className="flex items-center gap-2 text-md text-text-secondary">
                           <Check className="w-4 h-4" style={{ color: pillar.color }} aria-hidden="true" />
                           {item}
                         </li>
@@ -757,7 +757,7 @@ export default function Landing() {
                                     {p.name[0]}
                                   </div>
                                 </div>
-                                <span className={`text-[9px] mt-1 ${p.speaking ? 'text-success font-medium' : 'text-text-tertiary'}`}>{p.name}</span>
+                                <span className={`text-xs mt-1 ${p.speaking ? 'text-success font-medium' : 'text-text-tertiary'}`}>{p.name}</span>
                               </div>
                             ))}
                           </div>
@@ -781,7 +781,7 @@ export default function Landing() {
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
-            className="text-center text-[15px] text-text-quaternary mt-10"
+            className="text-center text-md text-text-quaternary mt-10"
           >
             Plus qu'un simple Discord — Squad Planner crée des{' '}
             <span className="text-text-primary font-semibold text-gradient-animated">habitudes de jeu régulières</span>{' '}
@@ -817,7 +817,7 @@ export default function Landing() {
                   </svg>
                   <div className="absolute inset-0 flex flex-col items-center justify-center">
                     <span className="text-2xl font-bold text-error">94%</span>
-                    <span className="text-[10px] text-text-tertiary">fiabilité</span>
+                    <span className="text-xs text-text-tertiary">fiabilité</span>
                   </div>
                 </div>
                 {/* Session history dots */}
@@ -858,7 +858,7 @@ export default function Landing() {
                     { label: 'Historique visible', icon: '📊' },
                     { label: 'Score par joueur', icon: '🏆' },
                   ].map(item => (
-                    <motion.span key={item.label} variants={staggerItemVariants} className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-error/10 text-[13px] text-error">
+                    <motion.span key={item.label} variants={staggerItemVariants} className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-error/10 text-base text-error">
                       {item.icon} {item.label}
                     </motion.span>
                   ))}
@@ -899,16 +899,16 @@ export default function Landing() {
               </caption>
               <thead>
                 <tr className="bg-bg-surface border-b border-border-subtle">
-                  <th scope="col" className="text-left text-[12px] md:text-[13px] font-medium text-text-secondary px-3 md:px-6 py-3 sticky left-0 z-10 bg-bg-surface">
+                  <th scope="col" className="text-left text-sm md:text-base font-medium text-text-secondary px-3 md:px-6 py-3 sticky left-0 z-10 bg-bg-surface">
                     Fonctionnalité
                   </th>
-                  <th scope="col" className="text-center text-[12px] md:text-[13px] font-medium text-text-secondary px-3 md:px-6 py-3">
+                  <th scope="col" className="text-center text-sm md:text-base font-medium text-text-secondary px-3 md:px-6 py-3">
                     <span className="inline-flex items-center gap-1.5">
                       <DiscordIcon className="w-4 h-4" aria-hidden="true" />
                       Discord
                     </span>
                   </th>
-                  <th scope="col" className="text-center text-[12px] md:text-[13px] font-medium text-primary px-3 md:px-6 py-3 border-t-2 border-t-primary">
+                  <th scope="col" className="text-center text-sm md:text-base font-medium text-primary px-3 md:px-6 py-3 border-t-2 border-t-primary">
                     <span className="inline-flex items-center gap-1.5">
                       <SquadPlannerLogo size={14} aria-hidden="true" />
                       SP
@@ -924,7 +924,7 @@ export default function Landing() {
                       !item.discord ? 'bg-primary/[0.02]' : ''
                     }`}
                   >
-                    <th scope="row" className="text-left text-[13px] md:text-[14px] text-text-primary px-3 md:px-6 py-3 md:py-4 font-normal sticky left-0 z-10 bg-bg-base">
+                    <th scope="row" className="text-left text-base md:text-md text-text-primary px-3 md:px-6 py-3 md:py-4 font-normal sticky left-0 z-10 bg-bg-base">
                       {item.feature}
                     </th>
                     <td className="text-center px-3 md:px-6 py-3 md:py-4">
@@ -932,14 +932,14 @@ export default function Landing() {
                         <span className="inline-flex flex-col items-center">
                           <Check className="w-4 h-4 md:w-5 md:h-5 text-success" aria-hidden="true" />
                           {item.discordNote ? (
-                            <span className="text-[10px] text-text-quaternary mt-0.5">{item.discordNote}</span>
+                            <span className="text-xs text-text-quaternary mt-0.5">{item.discordNote}</span>
                           ) : (
                             <span className="sr-only">Disponible</span>
                           )}
                         </span>
                       ) : item.discord === 'partial' ? (
                         <span className="inline-flex flex-col items-center">
-                          <span className="text-[10px] md:text-[12px] text-warning px-1.5 py-0.5 rounded-full bg-warning/10">{item.discordNote || 'Limité'}</span>
+                          <span className="text-xs md:text-sm text-warning px-1.5 py-0.5 rounded-full bg-warning/10">{item.discordNote || 'Limité'}</span>
                         </span>
                       ) : (
                         <span className="inline-flex flex-col items-center">
@@ -952,7 +952,7 @@ export default function Landing() {
                       <span className="inline-flex flex-col items-center">
                         <Check className="w-4 h-4 md:w-5 md:h-5 text-success" aria-hidden="true" />
                         {item.squadNote ? (
-                          <span className="text-[10px] text-cyan-400 mt-0.5">{item.squadNote}</span>
+                          <span className="text-xs text-cyan-400 mt-0.5">{item.squadNote}</span>
                         ) : (
                           <span className="sr-only">Disponible</span>
                         )}
@@ -965,7 +965,7 @@ export default function Landing() {
           </motion.div>
 
           {/* Honesty footnote (Phase 12 #54) */}
-          <p className="text-center text-[13px] text-text-quaternary mt-6 max-w-lg mx-auto">
+          <p className="text-center text-base text-text-quaternary mt-6 max-w-lg mx-auto">
             Discord reste indispensable pour les communautés larges. Squad Planner est conçu spécifiquement pour ta squad de 3 à 10 joueurs.
           </p>
         </div>
@@ -993,7 +993,7 @@ export default function Landing() {
             <h2 className="text-2xl md:text-3xl font-bold text-text-primary mb-4">
               Tarifs simples, sans surprise
             </h2>
-            <p className="text-text-tertiary text-[15px] max-w-md mx-auto">
+            <p className="text-text-tertiary text-md max-w-md mx-auto">
               Commence gratuitement. Passe Premium quand tu veux débloquer tout le potentiel.
             </p>
           </motion.div>
@@ -1007,15 +1007,15 @@ export default function Landing() {
               transition={{ delay: 0.1 }}
               className="p-6 rounded-2xl border border-border-default bg-bg-elevated"
             >
-              <h3 className="text-[18px] font-bold text-text-primary mb-1">Gratuit</h3>
+              <h3 className="text-xl font-bold text-text-primary mb-1">Gratuit</h3>
               <div className="flex items-baseline gap-1 mb-4">
                 <span className="text-3xl font-bold text-text-primary">0€</span>
                 <span className="text-text-quaternary text-sm">/mois</span>
               </div>
-              <p className="text-[13px] text-text-tertiary mb-5">Tout ce qu'il faut pour jouer avec ta squad.</p>
+              <p className="text-base text-text-tertiary mb-5">Tout ce qu'il faut pour jouer avec ta squad.</p>
               <ul className="space-y-2.5 mb-6">
                 {['Squads illimitées', 'Sessions avec RSVP', 'Chat de squad', 'Score de fiabilité', 'Party vocale', 'Notifications push'].map(f => (
-                  <li key={f} className="flex items-center gap-2 text-[13px] text-text-secondary">
+                  <li key={f} className="flex items-center gap-2 text-base text-text-secondary">
                     <Check className="w-4 h-4 text-success flex-shrink-0" />
                     {f}
                   </li>
@@ -1023,7 +1023,7 @@ export default function Landing() {
               </ul>
               <Link to="/auth">
                 <motion.button
-                  className="w-full py-3 rounded-xl border border-border-default text-text-primary text-[14px] font-medium hover:bg-bg-hover transition-colors"
+                  className="w-full py-3 rounded-xl border border-border-default text-text-primary text-md font-medium hover:bg-bg-hover transition-colors"
                   whileHover={{ scale: 1.01 }}
                   whileTap={{ scale: 0.98 }}
                 >
@@ -1040,18 +1040,18 @@ export default function Landing() {
               transition={{ delay: 0.2 }}
               className="p-6 rounded-2xl border-2 border-primary/30 bg-gradient-to-br from-primary/8 to-transparent relative overflow-hidden"
             >
-              <div className="absolute top-0 right-0 px-3 py-1 bg-primary text-white text-[11px] font-bold rounded-bl-xl">
+              <div className="absolute top-0 right-0 px-3 py-1 bg-primary text-white text-sm font-bold rounded-bl-xl">
                 POPULAIRE
               </div>
-              <h3 className="text-[18px] font-bold text-text-primary mb-1">Premium</h3>
+              <h3 className="text-xl font-bold text-text-primary mb-1">Premium</h3>
               <div className="flex items-baseline gap-1 mb-4">
                 <span className="text-3xl font-bold text-text-primary">4,99€</span>
                 <span className="text-text-quaternary text-sm">/mois</span>
               </div>
-              <p className="text-[13px] text-text-tertiary mb-5">Pour les squads qui veulent aller plus loin.</p>
+              <p className="text-base text-text-tertiary mb-5">Pour les squads qui veulent aller plus loin.</p>
               <ul className="space-y-2.5 mb-6">
                 {['Tout le plan Gratuit', 'Coach IA avancé', 'Qualité audio HD', 'Historique illimité', 'Stats avancées', 'Badges exclusifs'].map(f => (
-                  <li key={f} className="flex items-center gap-2 text-[13px] text-text-secondary">
+                  <li key={f} className="flex items-center gap-2 text-base text-text-secondary">
                     <Check className="w-4 h-4 text-primary flex-shrink-0" />
                     {f}
                   </li>
@@ -1059,7 +1059,7 @@ export default function Landing() {
               </ul>
               <Link to="/auth">
                 <motion.button
-                  className="w-full py-3 rounded-xl bg-primary text-white text-[14px] font-semibold hover:bg-primary-hover transition-colors shadow-glow-primary-sm"
+                  className="w-full py-3 rounded-xl bg-primary text-white text-md font-semibold hover:bg-primary-hover transition-colors shadow-glow-primary-sm"
                   whileHover={{ scale: 1.01 }}
                   whileTap={{ scale: 0.98 }}
                 >
@@ -1100,12 +1100,12 @@ export default function Landing() {
                   className="w-full flex items-center justify-between p-5 text-left hover:bg-bg-elevated/50 transition-colors"
                   aria-expanded={expandedFaq === i}
                 >
-                  <span className="text-[15px] font-medium text-text-primary pr-4">{faq.q}</span>
+                  <span className="text-md font-medium text-text-primary pr-4">{faq.q}</span>
                   <ChevronDown className={`w-5 h-5 text-text-quaternary shrink-0 transition-transform duration-300 ${expandedFaq === i ? 'rotate-180' : ''}`} />
                 </button>
                 <div className={`faq-answer ${expandedFaq === i ? 'open' : ''}`}>
                   <div>
-                    <p className="px-5 pb-5 text-[14px] text-text-tertiary leading-relaxed">{faq.a}</p>
+                    <p className="px-5 pb-5 text-md text-text-tertiary leading-relaxed">{faq.a}</p>
                   </div>
                 </div>
               </motion.div>
@@ -1144,19 +1144,19 @@ export default function Landing() {
                 Gratuit, sans engagement. Lance ta première session en 30 secondes.
               </p>
               <motion.div whileHover={{ scale: 1.03, y: -3 }} {...springTap} className="inline-flex">
-                <Link to="/auth?mode=register&redirect=onboarding" className="flex items-center gap-2 h-16 px-10 rounded-xl bg-gradient-to-r from-primary to-purple text-white text-[18px] font-bold mx-auto shadow-lg shadow-primary/20 cta-glow-idle" data-track="bottom_cta_click">
+                <Link to="/auth?mode=register&redirect=onboarding" className="flex items-center gap-2 h-16 px-10 rounded-xl bg-gradient-to-r from-primary to-purple text-white text-xl font-bold mx-auto shadow-lg shadow-primary/20 cta-glow-idle" data-track="bottom_cta_click">
                   Rejoindre l'aventure
                   <ArrowRight className="w-5 h-5" />
                 </Link>
               </motion.div>
               {/* Reassurance line (Phase 14 #59) */}
-              <p className="text-[13px] text-text-quaternary mt-4">
+              <p className="text-base text-text-quaternary mt-4">
                 Gratuit · Pas de carte bancaire · 30 secondes
               </p>
               {/* Secondary CTA (Phase 14 #60) */}
               <a
                 href="mailto:contact@squadplanner.fr"
-                className="inline-block mt-4 py-2 text-[13px] text-text-quaternary hover:text-text-tertiary transition-colors underline underline-offset-2 min-h-[44px]"
+                className="inline-block mt-4 py-2 text-base text-text-quaternary hover:text-text-tertiary transition-colors underline underline-offset-2 min-h-[44px]"
               >
                 Une question ? Contacte-nous
               </a>
@@ -1172,45 +1172,45 @@ export default function Landing() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-12">
             {/* Produit */}
             <div>
-              <h3 className="text-[13px] font-semibold text-text-primary mb-4 uppercase tracking-wider">Produit</h3>
+              <h3 className="text-base font-semibold text-text-primary mb-4 uppercase tracking-wider">Produit</h3>
               <ul className="space-y-0">
-                <li><Link to="/auth?mode=register&redirect=onboarding" className="inline-block py-2 text-[14px] text-text-tertiary hover:text-text-primary transition-colors min-h-[44px] leading-[28px]">Créer ma squad</Link></li>
-                <li><Link to="/premium" className="inline-block py-2 text-[14px] text-text-tertiary hover:text-text-primary transition-colors min-h-[44px] leading-[28px]">Premium</Link></li>
-                <li><a href="#features" className="inline-block py-2 text-[14px] text-text-tertiary hover:text-text-primary transition-colors min-h-[44px] leading-[28px]">Fonctionnalités</a></li>
+                <li><Link to="/auth?mode=register&redirect=onboarding" className="inline-block py-2 text-md text-text-tertiary hover:text-text-primary transition-colors min-h-[44px] leading-[28px]">Créer ma squad</Link></li>
+                <li><Link to="/premium" className="inline-block py-2 text-md text-text-tertiary hover:text-text-primary transition-colors min-h-[44px] leading-[28px]">Premium</Link></li>
+                <li><a href="#features" className="inline-block py-2 text-md text-text-tertiary hover:text-text-primary transition-colors min-h-[44px] leading-[28px]">Fonctionnalités</a></li>
               </ul>
             </div>
 
             {/* Ressources */}
             <div>
-              <h3 className="text-[13px] font-semibold text-text-primary mb-4 uppercase tracking-wider">Ressources</h3>
+              <h3 className="text-base font-semibold text-text-primary mb-4 uppercase tracking-wider">Ressources</h3>
               <ul className="space-y-0">
-                <li><Link to="/help" className="inline-flex items-center gap-1.5 py-2 text-[14px] text-text-tertiary hover:text-text-primary transition-colors min-h-[44px]"><HelpCircle className="w-3.5 h-3.5" aria-hidden="true" />FAQ</Link></li>
-                <li><a href="mailto:contact@squadplanner.fr" className="inline-block py-2 text-[14px] text-text-tertiary hover:text-text-primary transition-colors min-h-[44px] leading-[28px]">Contact</a></li>
+                <li><Link to="/help" className="inline-flex items-center gap-1.5 py-2 text-md text-text-tertiary hover:text-text-primary transition-colors min-h-[44px]"><HelpCircle className="w-3.5 h-3.5" aria-hidden="true" />FAQ</Link></li>
+                <li><a href="mailto:contact@squadplanner.fr" className="inline-block py-2 text-md text-text-tertiary hover:text-text-primary transition-colors min-h-[44px] leading-[28px]">Contact</a></li>
               </ul>
             </div>
 
             {/* Légal */}
             <div>
-              <h3 className="text-[13px] font-semibold text-text-primary mb-4 uppercase tracking-wider">Légal</h3>
+              <h3 className="text-base font-semibold text-text-primary mb-4 uppercase tracking-wider">Légal</h3>
               <ul className="space-y-0">
-                <li><Link to="/legal" className="inline-flex items-center gap-1.5 py-2 text-[14px] text-text-tertiary hover:text-text-primary transition-colors min-h-[44px]"><FileText className="w-3.5 h-3.5" aria-hidden="true" />CGU</Link></li>
-                <li><Link to="/legal?tab=privacy" className="inline-flex items-center gap-1.5 py-2 text-[14px] text-text-tertiary hover:text-text-primary transition-colors min-h-[44px]"><Shield className="w-3.5 h-3.5" aria-hidden="true" />Confidentialité</Link></li>
+                <li><Link to="/legal" className="inline-flex items-center gap-1.5 py-2 text-md text-text-tertiary hover:text-text-primary transition-colors min-h-[44px]"><FileText className="w-3.5 h-3.5" aria-hidden="true" />CGU</Link></li>
+                <li><Link to="/legal?tab=privacy" className="inline-flex items-center gap-1.5 py-2 text-md text-text-tertiary hover:text-text-primary transition-colors min-h-[44px]"><Shield className="w-3.5 h-3.5" aria-hidden="true" />Confidentialité</Link></li>
               </ul>
             </div>
 
             {/* Communauté */}
             <div>
-              <h3 className="text-[13px] font-semibold text-text-primary mb-4 uppercase tracking-wider">Communauté</h3>
+              <h3 className="text-base font-semibold text-text-primary mb-4 uppercase tracking-wider">Communauté</h3>
               <ul className="space-y-0">
-                <li><span className="inline-flex items-center gap-1.5 py-2 text-[14px] text-text-tertiary min-h-[44px]"><span className="w-2 h-2 rounded-full bg-success animate-pulse" />Beta ouverte</span></li>
+                <li><span className="inline-flex items-center gap-1.5 py-2 text-md text-text-tertiary min-h-[44px]"><span className="w-2 h-2 rounded-full bg-success animate-pulse" />Beta ouverte</span></li>
                 {/* TODO: Réactiver quand le compte @squadplannerapp existera sur X */}
                 <li>
-                  <span className="inline-flex items-center gap-1.5 py-2 text-[14px] text-text-quaternary min-h-[44px] cursor-default">
+                  <span className="inline-flex items-center gap-1.5 py-2 text-md text-text-quaternary min-h-[44px] cursor-default">
                     <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
                     Twitter / X (bientôt)
                   </span>
                 </li>
-                <li><a href="mailto:contact@squadplanner.fr" className="inline-block py-2 text-[14px] text-text-tertiary hover:text-text-primary transition-colors min-h-[44px] leading-[28px]">Nous contacter</a></li>
+                <li><a href="mailto:contact@squadplanner.fr" className="inline-block py-2 text-md text-text-tertiary hover:text-text-primary transition-colors min-h-[44px] leading-[28px]">Nous contacter</a></li>
               </ul>
             </div>
           </div>
@@ -1222,7 +1222,7 @@ export default function Landing() {
               { label: 'RGPD compliant', icon: '🛡️' },
               { label: 'Données chiffrées', icon: '🔒' },
             ].map(badge => (
-              <span key={badge.label} className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-surface-card border border-border-subtle text-[12px] text-text-tertiary">
+              <span key={badge.label} className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-surface-card border border-border-subtle text-sm text-text-tertiary">
                 {badge.icon} {badge.label}
               </span>
             ))}
@@ -1239,7 +1239,7 @@ export default function Landing() {
                     name="email"
                     required
                     placeholder="Reçois les updates Squad Planner"
-                    className="w-full pl-10 pr-4 py-2.5 bg-bg-elevated border border-border-subtle rounded-lg text-[14px] text-text-primary placeholder:text-text-quaternary focus:border-primary focus:outline-none transition-colors"
+                    className="w-full pl-10 pr-4 py-2.5 bg-bg-elevated border border-border-subtle rounded-lg text-md text-text-primary placeholder:text-text-quaternary focus:border-primary focus:outline-none transition-colors"
                     aria-label="Adresse email pour la newsletter"
                     value={newsletterEmail}
                     onChange={(e) => { setNewsletterEmail(e.target.value); setNewsletterError(''); setNewsletterSuccess(false) }}
@@ -1248,7 +1248,7 @@ export default function Landing() {
                 <button
                   type="submit"
                   disabled={newsletterLoading}
-                  className="px-5 min-h-[44px] bg-primary text-white text-[14px] font-medium rounded-lg hover:bg-primary-hover transition-colors shrink-0 disabled:opacity-60"
+                  className="px-5 min-h-[44px] bg-primary text-white text-md font-medium rounded-lg hover:bg-primary-hover transition-colors shrink-0 disabled:opacity-60"
                 >
                   {newsletterLoading ? (
                     <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
@@ -1267,11 +1267,11 @@ export default function Landing() {
             <div className="flex items-center gap-2">
               <SquadPlannerLogo size={20} />
               <div>
-                <span className="text-[14px] font-semibold text-text-primary">Squad Planner</span>
-                <span className="text-[12px] text-text-quaternary ml-2">Le Calendly du gaming</span>
+                <span className="text-md font-semibold text-text-primary">Squad Planner</span>
+                <span className="text-sm text-text-quaternary ml-2">Le Calendly du gaming</span>
               </div>
             </div>
-            <p className="text-[13px] text-text-quaternary">
+            <p className="text-base text-text-quaternary">
               © 2026 Squad Planner. Jouez ensemble, pour de vrai.
             </p>
           </div>

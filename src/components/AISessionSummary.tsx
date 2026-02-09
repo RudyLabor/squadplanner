@@ -40,7 +40,7 @@ export const AISessionSummary = memo(function AISessionSummary({ sessionId, sess
         <FileText className="w-4.5 h-4.5 text-indigo-400" />
         <h3 className="text-sm font-semibold text-text-primary">Resume de session</h3>
         {summary.ai_generated && (
-          <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-indigo-500/10 text-indigo-400 font-medium">IA</span>
+          <span className="text-xs px-1.5 py-0.5 rounded-full bg-indigo-500/10 text-indigo-400 font-medium">IA</span>
         )}
       </div>
 
@@ -100,7 +100,7 @@ function StatBadge({ icon, label, value, color }: { icon: React.ReactNode; label
     <div className="flex items-center gap-1.5 px-2 py-1.5 rounded-lg bg-white/3">
       <span className={color}>{icon}</span>
       <div>
-        <p className="text-[10px] text-text-tertiary">{label}</p>
+        <p className="text-xs text-text-tertiary">{label}</p>
         <p className={`text-xs font-medium ${color}`}>{value}</p>
       </div>
     </div>

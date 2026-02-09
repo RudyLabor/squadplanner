@@ -77,7 +77,7 @@ export function XPBar({ currentXP, level, showTitle = true, compact = false, cla
             transition={{ duration: 1, ease: 'easeOut' }}
           />
         </div>
-        <span className="text-[11px] text-text-secondary tabular-nums">
+        <span className="text-sm text-text-secondary tabular-nums">
           {isMaxLevel ? 'MAX' : `${Math.floor(xpInLevel)}/${xpNeeded}`}
         </span>
       </div>
@@ -127,7 +127,7 @@ export function XPBar({ currentXP, level, showTitle = true, compact = false, cla
           <div>
             {showTitle && (
               <motion.div
-                className="text-[16px] font-bold mb-0.5"
+                className="text-lg font-bold mb-0.5"
                 style={{ color: currentLevel.color }}
                 initial={{ opacity: 0, x: -10 }}
                 animate={{ opacity: 1, x: 0 }}
@@ -136,7 +136,7 @@ export function XPBar({ currentXP, level, showTitle = true, compact = false, cla
                 {currentLevel.title}
               </motion.div>
             )}
-            <div className="flex items-center gap-1.5 text-[13px] text-text-secondary">
+            <div className="flex items-center gap-1.5 text-base text-text-secondary">
               <Zap className="w-3.5 h-3.5" style={{ color: currentLevel.color }} />
               <CountUp end={currentXP} duration={1.5} separator="," /> XP
             </div>
@@ -146,10 +146,10 @@ export function XPBar({ currentXP, level, showTitle = true, compact = false, cla
         {/* Next level indicator */}
         {!isMaxLevel && (
           <div className="text-right">
-            <div className="text-[11px] text-text-tertiary uppercase tracking-wide mb-0.5">
+            <div className="text-sm text-text-tertiary uppercase tracking-wide mb-0.5">
               Prochain niveau
             </div>
-            <div className="text-[13px] font-medium" style={{ color: nextLevel.color }}>
+            <div className="text-base font-medium" style={{ color: nextLevel.color }}>
               {nextLevel.title}
             </div>
           </div>
@@ -166,7 +166,7 @@ export function XPBar({ currentXP, level, showTitle = true, compact = false, cla
             transition={{ duration: 2, repeat: Infinity }}
           >
             <Star className="w-4 h-4 fill-current" />
-            <span className="text-[12px] font-bold">MAX LEVEL</span>
+            <span className="text-sm font-bold">MAX LEVEL</span>
           </motion.div>
         )}
       </div>
@@ -202,11 +202,11 @@ export function XPBar({ currentXP, level, showTitle = true, compact = false, cla
 
         {/* XP text below bar */}
         <div className="flex items-center justify-between mt-2">
-          <span className="text-[11px] text-text-tertiary">
+          <span className="text-sm text-text-tertiary">
             <CountUp end={Math.floor(xpInLevel)} duration={1} /> XP
           </span>
           {!isMaxLevel && (
-            <span className="text-[11px] text-text-tertiary">
+            <span className="text-sm text-text-tertiary">
               {xpNeeded - Math.floor(xpInLevel)} XP pour le niveau {level + 1}
             </span>
           )}

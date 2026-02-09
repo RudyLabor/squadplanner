@@ -343,7 +343,7 @@ export function Profile() {
                   initial={{ opacity: 0, x: -10 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.3 }}
-                  className="text-[12px] font-medium text-white/70 uppercase tracking-wide"
+                  className="text-sm font-medium text-white/70 uppercase tracking-wide"
                 >
                   Succès débloqué !
                 </motion.p>
@@ -351,7 +351,7 @@ export function Profile() {
                   initial={{ opacity: 0, x: -10 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.4 }}
-                  className="text-[18px] font-bold text-white"
+                  className="text-xl font-bold text-white"
                 >
                   {celebratedAchievement.name}
                 </motion.p>
@@ -359,7 +359,7 @@ export function Profile() {
                   initial={{ opacity: 0, x: -10 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.5 }}
-                  className="text-[13px] text-white/80"
+                  className="text-base text-white/80"
                 >
                   {celebratedAchievement.description}
                 </motion.p>
@@ -420,10 +420,10 @@ export function Profile() {
                   exit={{ opacity: 0, scale: 0.95 }}
                   className="w-full max-w-[340px] p-5 rounded-2xl bg-bg-elevated border border-border-default shadow-xl space-y-4"
                 >
-                  <h3 className="text-[15px] font-semibold text-text-primary text-center">Modifier le profil</h3>
+                  <h3 className="text-md font-semibold text-text-primary text-center">Modifier le profil</h3>
                   <div className="space-y-3">
                     <div>
-                      <label className="block text-[12px] text-text-tertiary mb-1">Pseudo</label>
+                      <label className="block text-sm text-text-tertiary mb-1">Pseudo</label>
                       <Input
                         value={username}
                         onChange={(e) => setUsername(e.target.value)}
@@ -431,7 +431,7 @@ export function Profile() {
                       />
                     </div>
                     <div>
-                      <label className="block text-[12px] text-text-tertiary mb-1">Bio</label>
+                      <label className="block text-sm text-text-tertiary mb-1">Bio</label>
                       <Input
                         value={bio}
                         onChange={(e) => setBio(e.target.value)}
@@ -461,21 +461,21 @@ export function Profile() {
                   <h1 className="text-2xl font-bold text-text-primary mb-1">
                     {profile?.username || 'Gamer'}
                   </h1>
-                  <p className="text-[14px] text-text-tertiary mb-1">
+                  <p className="text-md text-text-tertiary mb-1">
                     {profile?.bio || 'Pas encore de bio'}
                   </p>
-                  <p className="text-[12px] text-text-quaternary mb-3">{user?.email}</p>
+                  <p className="text-sm text-text-quaternary mb-3">{user?.email}</p>
                   <div className="flex items-center gap-2">
                     <button
                       onClick={() => setIsEditing(true)}
-                      className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-primary/12 text-primary text-[13px] font-medium hover:bg-primary/20 transition-colors active:scale-[0.97]"
+                      className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-primary/12 text-primary text-base font-medium hover:bg-primary/20 transition-colors active:scale-[0.97]"
                     >
                       <Edit2 className="w-4 h-4" />
                       Modifier le profil
                     </button>
                     <button
                       onClick={() => navigate('/settings')}
-                      className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-surface-card text-text-tertiary text-[13px] font-medium hover:bg-surface-card-hover hover:text-text-primary transition-colors active:scale-[0.97]"
+                      className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-surface-card text-text-tertiary text-base font-medium hover:bg-surface-card-hover hover:text-text-primary transition-colors active:scale-[0.97]"
                     >
                       ⚙️ Paramètres
                     </button>
@@ -532,11 +532,11 @@ export function Profile() {
               />
               <div className="flex-1">
                 <div className="flex items-baseline gap-2 mb-0.5">
-                  <span className="text-[32px] font-bold text-text-primary">
+                  <span className="text-3xl font-bold text-text-primary">
                     <AnimatedCounter end={reliabilityScore} duration={1.5} suffix="%" />
                   </span>
                   <motion.span
-                    className="text-[13px] font-medium px-2.5 py-1 rounded-full flex items-center gap-1.5"
+                    className="text-base font-medium px-2.5 py-1 rounded-full flex items-center gap-1.5"
                     style={{ backgroundColor: tier.bgColor, color: reliabilityColor }}
                     initial={{ scale: 0.8 }}
                     animate={{ scale: 1 }}
@@ -546,12 +546,12 @@ export function Profile() {
                     <span>{tier.name}</span>
                   </motion.span>
                 </div>
-                <p className="text-[13px] text-text-quaternary">Score de fiabilité</p>
+                <p className="text-base text-text-quaternary">Score de fiabilité</p>
 
                 {/* Progress bar to next tier */}
                 {tier.nextTier && (
                   <div className="mt-3">
-                    <div className="flex items-center justify-between text-[11px] mb-1.5">
+                    <div className="flex items-center justify-between text-sm mb-1.5">
                       <span className="text-text-tertiary">
                         Prochain : <span style={{ color: tier.nextTier.color }}>{tier.nextTier.icon} {tier.nextTier.name}</span>
                       </span>
@@ -578,7 +578,7 @@ export function Profile() {
                 {/* At max tier - celebration */}
                 {!tier.nextTier && (
                   <motion.p
-                    className="text-[12px] mt-2 flex items-center gap-1"
+                    className="text-sm mt-2 flex items-center gap-1"
                     style={{ color: tier.color }}
                     animate={{ opacity: [0.7, 1, 0.7] }}
                     transition={{ duration: 2, repeat: 3 }}
@@ -632,7 +632,7 @@ export function Profile() {
                   <div className="text-xl font-bold text-text-primary">
                     <AnimatedCounter end={stat.value} duration={1.5} />
                   </div>
-                  <div className="text-[12px] text-text-quaternary">{stat.label}</div>
+                  <div className="text-sm text-text-quaternary">{stat.label}</div>
                 </div>
               </div>
             </Card>
@@ -644,7 +644,7 @@ export function Profile() {
         <div className="mb-5">
           <div className="flex items-center gap-2 mb-3">
             <Flame className="w-4 h-4 text-warning" />
-            <h3 className="text-[13px] font-semibold text-text-primary uppercase tracking-wide">
+            <h3 className="text-base font-semibold text-text-primary uppercase tracking-wide">
               Activité
             </h3>
           </div>
@@ -668,7 +668,7 @@ export function Profile() {
         <Card className="mb-5 overflow-hidden">
           <div className="flex items-center gap-2 px-4 pt-4 pb-2">
             <Trophy className="w-4 h-4 text-warning" />
-            <h3 className="text-[14px] font-semibold text-text-primary">Badges Saisonniers</h3>
+            <h3 className="text-md font-semibold text-text-primary">Badges Saisonniers</h3>
           </div>
           {challengesLoaded ? (
             <SeasonalBadges initialBadges={challengesData?.badges} />
@@ -712,7 +712,7 @@ export function Profile() {
             </div>
             <div className="flex-1">
               <div className="flex items-center gap-2 mb-1.5">
-                <h3 className="text-[14px] font-semibold text-text-primary">Coach IA</h3>
+                <h3 className="text-md font-semibold text-text-primary">Coach IA</h3>
                 <span className={`text-xs px-1.5 py-0.5 rounded-full font-medium ${
                   aiCoachTip?.tone === 'celebration'
                     ? 'bg-success-15 text-success'
@@ -723,7 +723,7 @@ export function Profile() {
                   {aiCoachTip?.tone === 'celebration' ? 'BRAVO' : aiCoachTip?.tone === 'warning' ? 'ATTENTION' : 'CONSEIL'}
                 </span>
               </div>
-              <p className={`text-[13px] leading-relaxed ${
+              <p className={`text-base leading-relaxed ${
                 aiCoachTip?.tone === 'celebration'
                   ? 'text-success'
                   : aiCoachTip?.tone === 'warning'
@@ -739,7 +739,7 @@ export function Profile() {
         {/* IA Coach Avance - Premium */}
         <div className="mb-5">
           <div className="flex items-center gap-2 mb-3">
-            <h3 className="text-[13px] font-semibold text-text-primary uppercase tracking-wide">
+            <h3 className="text-base font-semibold text-text-primary uppercase tracking-wide">
               Coach IA Avancé
             </h3>
             {!canAccessFeature('ai_coach_advanced') && <PremiumBadge small />}
@@ -755,8 +755,8 @@ export function Profile() {
                   <Sparkles className="w-5 h-5 text-warning" />
                 </div>
                 <div className="flex-1">
-                  <h4 className="text-[14px] font-medium text-text-primary mb-1">Conseils personnalisés</h4>
-                  <p className="text-[13px] text-text-tertiary">
+                  <h4 className="text-md font-medium text-text-primary mb-1">Conseils personnalisés</h4>
+                  <p className="text-base text-text-tertiary">
                     Prédictions de disponibilité, analyse des patterns de jeu, suggestions de créneaux optimaux pour ta squad.
                   </p>
                 </div>
@@ -776,8 +776,8 @@ export function Profile() {
               <Phone className="w-5 h-5 text-success" />
             </div>
             <div className="flex-1">
-              <h4 className="text-[14px] font-medium text-text-primary">Historique des appels</h4>
-              <p className="text-[12px] text-text-quaternary">Voir tous tes appels passés</p>
+              <h4 className="text-md font-medium text-text-primary">Historique des appels</h4>
+              <p className="text-sm text-text-quaternary">Voir tous tes appels passés</p>
             </div>
             <ChevronRight className="w-5 h-5 text-text-quaternary" />
           </div>
@@ -786,7 +786,7 @@ export function Profile() {
         {/* Historique - Premium */}
         <div className="mb-5">
           <div className="flex items-center gap-2 mb-3">
-            <h3 className="text-[13px] font-semibold text-text-primary uppercase tracking-wide">
+            <h3 className="text-base font-semibold text-text-primary uppercase tracking-wide">
               Historique
             </h3>
             {!canAccessFeature('unlimited_history') && (
@@ -807,8 +807,8 @@ export function Profile() {
                   <Clock className="w-5 h-5 text-primary" />
                 </div>
                 <div className="flex-1">
-                  <h4 className="text-[14px] font-medium text-text-primary">Historique complet</h4>
-                  <p className="text-[12px] text-text-quaternary">Toutes tes sessions depuis le debut</p>
+                  <h4 className="text-md font-medium text-text-primary">Historique complet</h4>
+                  <p className="text-sm text-text-quaternary">Toutes tes sessions depuis le debut</p>
                 </div>
               </div>
             </Card>
@@ -825,10 +825,10 @@ export function Profile() {
                   <Zap className="w-6 h-6 text-white" />
                 </div>
                 <div className="flex-1">
-                  <h3 className="text-[16px] font-semibold text-text-primary mb-1">
+                  <h3 className="text-lg font-semibold text-text-primary mb-1">
                     Passe Premium
                   </h3>
-                  <p className="text-[13px] text-text-tertiary mb-3">
+                  <p className="text-base text-text-tertiary mb-3">
                     Stats avancées, IA coach avancé, audio HD, historique illimité
                   </p>
                   <Button
@@ -854,10 +854,10 @@ export function Profile() {
               </div>
               <div className="flex-1">
                 <div className="flex items-center gap-2">
-                  <h3 className="text-[14px] font-medium text-text-primary">Compte Premium</h3>
+                  <h3 className="text-md font-medium text-text-primary">Compte Premium</h3>
                   <PremiumBadge small />
                 </div>
-                <p className="text-[12px] text-text-quaternary">Toutes les features sont debloquees</p>
+                <p className="text-sm text-text-quaternary">Toutes les features sont debloquees</p>
               </div>
             </div>
           </Card>
@@ -866,8 +866,8 @@ export function Profile() {
         {/* Achievements section avec animations */}
         <Card className="mb-5 p-4 bg-bg-elevated">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-[14px] font-semibold text-text-primary">Succès</h3>
-            <span className="text-[12px] text-text-quaternary">{unlockedAchievements.length}/{ACHIEVEMENTS.length}</span>
+            <h3 className="text-md font-semibold text-text-primary">Succès</h3>
+            <span className="text-sm text-text-quaternary">{unlockedAchievements.length}/{ACHIEVEMENTS.length}</span>
           </div>
           <div className="grid grid-cols-3 lg:grid-cols-6 gap-3 lg:gap-4">
             {ACHIEVEMENTS.map((achievement, index) => {
@@ -916,7 +916,7 @@ export function Profile() {
         {/* Deconnexion - Discret en bas */}
         <button
           onClick={handleSignOut}
-          className="w-full py-3 text-[14px] text-error hover:text-error/70 transition-colors flex items-center justify-center gap-2"
+          className="w-full py-3 text-md text-error hover:text-error/70 transition-colors flex items-center justify-center gap-2"
         >
           <LogOut className="w-4 h-4" />
           Se déconnecter

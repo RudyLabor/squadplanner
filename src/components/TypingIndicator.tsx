@@ -101,7 +101,7 @@ export function TypingIndicator({ text, compact = false }: TypingIndicatorProps)
 
       {/* Texte avec animation pulse subtile */}
       <motion.span
-        className="text-[12px] text-text-secondary italic"
+        className="text-sm text-text-secondary italic"
         animate={{
           opacity: [0.7, 1, 0.7],
         }}

@@ -55,7 +55,7 @@ function FriendCard({
                 />
               ) : (
                 <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary/30 to-primary-hover/20 flex items-center justify-center border-2 border-success/30">
-                  <span className="text-[16px] font-semibold text-text-primary">
+                  <span className="text-lg font-semibold text-text-primary">
                     {friend.username.charAt(0).toUpperCase()}
                   </span>
                 </div>
@@ -79,10 +79,10 @@ function FriendCard({
               />
             </div>
             <div className="flex-1 min-w-0">
-              <div className="text-[14px] font-semibold text-text-primary truncate">
+              <div className="text-md font-semibold text-text-primary truncate">
                 {friend.username}
               </div>
-              <div className="flex items-center gap-1.5 text-[12px] text-text-secondary">
+              <div className="flex items-center gap-1.5 text-sm text-text-secondary">
                 {friend.is_in_voice ? (
                   <>
                     <Users className="w-3.5 h-3.5 text-success" />
@@ -107,10 +107,10 @@ function FriendCard({
           {isInParty && (
             <div className="flex items-center gap-2 px-2.5 py-1.5 rounded-lg bg-surface-card border border-white/5">
               <Users className="w-3.5 h-3.5 text-primary" />
-              <span className="text-[12px] text-text-secondary truncate">
+              <span className="text-sm text-text-secondary truncate">
                 {friend.squad_name}
               </span>
-              <span className="text-[11px] text-text-tertiary ml-auto">
+              <span className="text-sm text-text-tertiary ml-auto">
                 {friend.party_member_count} {friend.party_member_count > 1 ? 'joueurs' : 'joueur'}
               </span>
             </div>
@@ -122,7 +122,7 @@ function FriendCard({
               onClick={() => onJoin(friend.squad_id)}
               whileHover={{ scale: 1.02, boxShadow: 'var(--shadow-glow-success)' }}
               whileTap={{ scale: 0.98 }}
-              className="w-full flex items-center justify-center gap-2 h-10 min-h-[44px] rounded-lg bg-success/15 hover:bg-success/25 border border-success/30 text-success text-[13px] font-medium transition-interactive"
+              className="w-full flex items-center justify-center gap-2 h-10 min-h-[44px] rounded-lg bg-success/15 hover:bg-success/25 border border-success/30 text-success text-base font-medium transition-interactive"
             >
               <LogIn className="w-4 h-4" />
               Rejoindre
@@ -132,7 +132,7 @@ function FriendCard({
               onClick={() => onInvite(friend.friend_id)}
               whileHover={{ scale: 1.02, boxShadow: 'var(--shadow-glow-primary-md)' }}
               whileTap={{ scale: 0.98 }}
-              className="w-full flex items-center justify-center gap-2 h-10 min-h-[44px] rounded-lg bg-primary/15 hover:bg-primary/25 border border-primary/30 text-primary text-[13px] font-medium transition-interactive"
+              className="w-full flex items-center justify-center gap-2 h-10 min-h-[44px] rounded-lg bg-primary/15 hover:bg-primary/25 border border-primary/30 text-primary text-base font-medium transition-interactive"
             >
               <UserPlus className="w-4 h-4" />
               Inviter
@@ -190,12 +190,12 @@ function EmptyState() {
         >
           <Users className="w-7 h-7 text-primary" strokeWidth={1.5} />
         </motion.div>
-        <p className="text-[14px] text-text-secondary mb-1">
+        <p className="text-md text-text-secondary mb-1">
           Aucun pote en ligne pour l'instant
         </p>
         <motion.button
           onClick={handleShareInvite}
-          className="text-[13px] text-primary hover:text-primary-hover font-medium transition-colors cursor-pointer"
+          className="text-base text-primary hover:text-primary-hover font-medium transition-colors cursor-pointer"
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
         >
@@ -211,7 +211,7 @@ export function FriendsPlaying({ friends, onJoin, onInvite }: FriendsPlayingProp
   if (friends.length === 0) {
     return (
       <div className="mb-6">
-        <h2 className="text-[18px] font-semibold text-text-primary mb-3 flex items-center gap-2">
+        <h2 className="text-xl font-semibold text-text-primary mb-3 flex items-center gap-2">
           <Gamepad2 className="w-4 h-4 text-success" />
           Tes potes jouent maintenant
         </h2>
@@ -222,7 +222,7 @@ export function FriendsPlaying({ friends, onJoin, onInvite }: FriendsPlayingProp
 
   return (
     <div className="mb-6">
-      <h2 className="text-[18px] font-semibold text-text-primary mb-3 flex items-center gap-2">
+      <h2 className="text-xl font-semibold text-text-primary mb-3 flex items-center gap-2">
         <motion.div
           animate={{
             scale: [1, 1.1, 1],
@@ -232,7 +232,7 @@ export function FriendsPlaying({ friends, onJoin, onInvite }: FriendsPlayingProp
           <Gamepad2 className="w-4 h-4 text-success" />
         </motion.div>
         Tes potes jouent maintenant
-        <span className="ml-auto text-[12px] font-normal text-primary">
+        <span className="ml-auto text-sm font-normal text-primary">
           {friends.length} en ligne
         </span>
       </h2>

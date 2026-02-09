@@ -71,7 +71,7 @@ export const CreatePollModal = memo(function CreatePollModal({ isOpen, onClose, 
             <div className="flex items-center justify-between px-5 py-4 border-b border-border-default">
               <div className="flex items-center gap-2">
                 <BarChart3 className="w-5 h-5 text-primary-hover" />
-                <h2 className="text-[16px] font-semibold text-text-primary">Creer un sondage</h2>
+                <h2 className="text-lg font-semibold text-text-primary">Creer un sondage</h2>
               </div>
               <button
                 onClick={handleClose}
@@ -84,13 +84,13 @@ export const CreatePollModal = memo(function CreatePollModal({ isOpen, onClose, 
             <div className="p-5 space-y-4">
               {/* Question */}
               <div>
-                <label className="text-[13px] text-text-tertiary font-medium mb-2 block">Question</label>
+                <label className="text-base text-text-tertiary font-medium mb-2 block">Question</label>
                 <input
                   type="text"
                   value={question}
                   onChange={(e) => setQuestion(e.target.value)}
                   placeholder="Pose ta question..."
-                  className="w-full h-12 px-4 bg-border-subtle border border-border-hover rounded-xl text-[14px] text-text-primary placeholder:text-text-quaternary focus:outline-none focus:border-primary transition-colors"
+                  className="w-full h-12 px-4 bg-border-subtle border border-border-hover rounded-xl text-md text-text-primary placeholder:text-text-quaternary focus:outline-none focus:border-primary transition-colors"
                   maxLength={200}
                   autoFocus
                 />
@@ -98,11 +98,11 @@ export const CreatePollModal = memo(function CreatePollModal({ isOpen, onClose, 
 
               {/* Options */}
               <div>
-                <label className="text-[13px] text-text-tertiary font-medium mb-2 block">Options</label>
+                <label className="text-base text-text-tertiary font-medium mb-2 block">Options</label>
                 <div className="space-y-2">
                   {options.map((option, index) => (
                     <div key={index} className="flex items-center gap-2">
-                      <span className="text-[12px] text-text-quaternary font-medium w-5 text-center flex-shrink-0">
+                      <span className="text-sm text-text-quaternary font-medium w-5 text-center flex-shrink-0">
                         {index + 1}.
                       </span>
                       <input
@@ -110,7 +110,7 @@ export const CreatePollModal = memo(function CreatePollModal({ isOpen, onClose, 
                         value={option}
                         onChange={(e) => handleOptionChange(index, e.target.value)}
                         placeholder={`Option ${index + 1}`}
-                        className="flex-1 h-10 px-3 bg-border-subtle border border-border-hover rounded-lg text-[13px] text-text-primary placeholder:text-text-quaternary focus:outline-none focus:border-primary transition-colors"
+                        className="flex-1 h-10 px-3 bg-border-subtle border border-border-hover rounded-lg text-base text-text-primary placeholder:text-text-quaternary focus:outline-none focus:border-primary transition-colors"
                         maxLength={100}
                       />
                       {options.length > 2 && (
@@ -130,7 +130,7 @@ export const CreatePollModal = memo(function CreatePollModal({ isOpen, onClose, 
                   <button
                     type="button"
                     onClick={handleAddOption}
-                    className="mt-2 flex items-center gap-1.5 text-[13px] text-primary-hover hover:text-primary-hover transition-colors"
+                    className="mt-2 flex items-center gap-1.5 text-base text-primary-hover hover:text-primary-hover transition-colors"
                   >
                     <Plus className="w-3.5 h-3.5" />
                     Ajouter une option
@@ -144,7 +144,7 @@ export const CreatePollModal = memo(function CreatePollModal({ isOpen, onClose, 
               <button
                 type="button"
                 onClick={handleClose}
-                className="px-4 py-2.5 rounded-xl text-[13px] font-medium text-text-tertiary hover:bg-border-subtle transition-colors"
+                className="px-4 py-2.5 rounded-xl text-base font-medium text-text-tertiary hover:bg-border-subtle transition-colors"
               >
                 Annuler
               </button>
@@ -152,7 +152,7 @@ export const CreatePollModal = memo(function CreatePollModal({ isOpen, onClose, 
                 type="button"
                 onClick={handleSubmit}
                 disabled={!isValid}
-                className="px-5 py-2.5 rounded-xl text-[13px] font-semibold bg-primary text-white hover:bg-primary-hover transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                className="px-5 py-2.5 rounded-xl text-base font-semibold bg-primary text-white hover:bg-primary-hover transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
               >
                 Creer le sondage
               </button>

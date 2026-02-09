@@ -40,12 +40,12 @@ export function ReplyComposer({ replyingTo, onCancel }: ReplyComposerProps) {
             {/* Reply content */}
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-1">
-                <span className="text-[11px] text-text-secondary">Replying to</span>
-                <span className="text-[11px] font-medium text-primary">
+                <span className="text-sm text-text-secondary">Replying to</span>
+                <span className="text-sm font-medium text-primary">
                   {replyingTo.sender_username}
                 </span>
               </div>
-              <p className="text-[12px] text-text-secondary truncate">
+              <p className="text-sm text-text-secondary truncate">
                 {truncatedContent}
               </p>
             </div>

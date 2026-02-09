@@ -247,8 +247,8 @@ export function GlobalSearch() {
       >
         <Search className="w-4 h-4" />
         <span className="text-sm hidden sm:inline">Rechercher...</span>
-        <kbd className="hidden md:inline-flex items-center gap-1 px-1.5 py-0.5 text-[10px] font-medium bg-border-subtle rounded border border-border-hover">
-          <span className="text-[10px]">{shortcutKey}</span>K
+        <kbd className="hidden md:inline-flex items-center gap-1 px-1.5 py-0.5 text-xs font-medium bg-border-subtle rounded border border-border-hover">
+          <span className="text-xs">{shortcutKey}</span>K
         </kbd>
       </motion.button>
 
@@ -287,7 +287,7 @@ export function GlobalSearch() {
                     }}
                     placeholder="Rechercher squads, sessions, messages, membres..."
                     aria-label="Recherche globale"
-                    className="flex-1 bg-transparent text-text-primary placeholder-text-tertiary outline-none text-[15px]"
+                    className="flex-1 bg-transparent text-text-primary placeholder-text-tertiary outline-none text-md"
                   />
                   {query && (
                     <motion.button
@@ -356,11 +356,11 @@ export function GlobalSearch() {
                                     </div>
                                   )}
                                   <div className="flex-1 text-left min-w-0">
-                                    <div className="text-[14px] text-text-primary truncate">
+                                    <div className="text-md text-text-primary truncate">
                                       {result.title}
                                     </div>
                                     {result.subtitle && (
-                                      <div className="text-[12px] text-text-tertiary truncate">
+                                      <div className="text-sm text-text-tertiary truncate">
                                         {result.subtitle}
                                       </div>
                                     )}
@@ -385,7 +385,7 @@ export function GlobalSearch() {
                 </div>
 
                 {/* Footer */}
-                <div className="flex items-center justify-between px-4 py-3 border-t border-border-subtle text-[11px] text-text-tertiary">
+                <div className="flex items-center justify-between px-4 py-3 border-t border-border-subtle text-sm text-text-tertiary">
                   <div className="flex items-center gap-4">
                     <span className="flex items-center gap-1">
                       <kbd className="px-1.5 py-0.5 bg-border-subtle rounded">↑</kbd>

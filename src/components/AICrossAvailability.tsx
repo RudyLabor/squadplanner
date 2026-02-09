@@ -61,16 +61,16 @@ export const AICrossAvailability = memo(function AICrossAvailability({ squadId, 
         <div className="min-w-[320px]">
           {/* Header row */}
           <div className="grid grid-cols-8 gap-1 mb-1">
-            <div className="text-[10px] text-text-tertiary" />
+            <div className="text-xs text-text-tertiary" />
             {DAYS.map(day => (
-              <div key={day} className="text-[10px] text-text-tertiary text-center font-medium">{day}</div>
+              <div key={day} className="text-xs text-text-tertiary text-center font-medium">{day}</div>
             ))}
           </div>
 
           {/* Data rows */}
           {HOURS.map(hour => (
             <div key={hour} className="grid grid-cols-8 gap-1 mb-1">
-              <div className="text-[10px] text-text-tertiary flex items-center justify-end pr-1">{hour}h</div>
+              <div className="text-xs text-text-tertiary flex items-center justify-end pr-1">{hour}h</div>
               {DAYS.map((_, dayIdx) => {
                 const key = `${dayIdx}-${hour}`
                 const score = heatmapData[key] || 0
@@ -80,7 +80,7 @@ export const AICrossAvailability = memo(function AICrossAvailability({ squadId, 
                   <button
                     key={key}
                     onClick={() => onSelectSlot?.(dayIdx, hour)}
-                    className={`h-7 rounded text-[10px] font-medium transition-all hover:ring-1 hover:ring-indigo-500/50 ${colorClass}`}
+                    className={`h-7 rounded text-xs font-medium transition-all hover:ring-1 hover:ring-indigo-500/50 ${colorClass}`}
                     title={score > 0 ? `${score}% de presence` : 'Pas de donnees'}
                   >
                     {score > 0 ? `${score}%` : ''}
@@ -94,22 +94,22 @@ export const AICrossAvailability = memo(function AICrossAvailability({ squadId, 
 
       {/* Legend */}
       <div className="flex items-center gap-3 mt-3 pt-3 border-t border-white/5">
-        <span className="text-[10px] text-text-tertiary">Legende :</span>
+        <span className="text-xs text-text-tertiary">Legende :</span>
         <div className="flex items-center gap-1">
           <div className="w-3 h-3 rounded bg-emerald-500/40" />
-          <span className="text-[10px] text-text-tertiary">80%+</span>
+          <span className="text-xs text-text-tertiary">80%+</span>
         </div>
         <div className="flex items-center gap-1">
           <div className="w-3 h-3 rounded bg-emerald-500/20" />
-          <span className="text-[10px] text-text-tertiary">60%+</span>
+          <span className="text-xs text-text-tertiary">60%+</span>
         </div>
         <div className="flex items-center gap-1">
           <div className="w-3 h-3 rounded bg-amber-500/15" />
-          <span className="text-[10px] text-text-tertiary">40%+</span>
+          <span className="text-xs text-text-tertiary">40%+</span>
         </div>
         <div className="flex items-center gap-1">
           <div className="w-3 h-3 rounded bg-rose-500/10" />
-          <span className="text-[10px] text-text-tertiary">&lt;40%</span>
+          <span className="text-xs text-text-tertiary">&lt;40%</span>
         </div>
       </div>
     </motion.div>

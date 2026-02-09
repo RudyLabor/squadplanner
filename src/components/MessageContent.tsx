@@ -105,7 +105,7 @@ export const MessageContent = memo(function MessageContent({
     const coords = parseLocationMessage(content)
     if (coords) {
       return (
-        <Suspense fallback={<span className="text-[14px] text-text-quaternary">Chargement...</span>}>
+        <Suspense fallback={<span className="text-md text-text-quaternary">Chargement...</span>}>
           <LocationMessageComp lat={coords.lat} lng={coords.lng} isOwn={isOwn} />
         </Suspense>
       )
@@ -117,7 +117,7 @@ export const MessageContent = memo(function MessageContent({
     const pollData = parsePollData(content)
     if (pollData) {
       return (
-        <Suspense fallback={<span className="text-[14px] text-text-quaternary">Chargement...</span>}>
+        <Suspense fallback={<span className="text-md text-text-quaternary">Chargement...</span>}>
           <ChatPollComp
             pollData={pollData}
             messageId={messageId || ''}
@@ -135,8 +135,8 @@ export const MessageContent = memo(function MessageContent({
     const header = lines[0]
     const body = lines.slice(1).join('\n')
     return (
-      <div className="text-[14px] leading-relaxed whitespace-pre-wrap break-words">
-        <div className={`text-[12px] italic mb-1 flex items-center gap-1 ${isOwn ? 'text-white/60' : 'text-text-quaternary'}`}>
+      <div className="text-md leading-relaxed whitespace-pre-wrap break-words">
+        <div className={`text-sm italic mb-1 flex items-center gap-1 ${isOwn ? 'text-white/60' : 'text-text-quaternary'}`}>
           ↩️ {header.replace('↩️ ', '').replace(/\*/g, '')}
         </div>
         <div className={`pl-3 border-l-2 ${isOwn ? 'border-white/20' : 'border-primary'}`}>
@@ -153,7 +153,7 @@ export const MessageContent = memo(function MessageContent({
   }
 
   return (
-    <span className="text-[14px] leading-relaxed whitespace-pre-wrap break-words">
+    <span className="text-md leading-relaxed whitespace-pre-wrap break-words">
       {tokens.map((token, i) => {
         switch (token.type) {
           case 'text':
@@ -172,7 +172,7 @@ export const MessageContent = memo(function MessageContent({
             return (
               <code
                 key={i}
-                className={`px-1.5 py-0.5 rounded text-[13px] font-mono ${
+                className={`px-1.5 py-0.5 rounded text-base font-mono ${
                   isOwn
                     ? 'bg-overlay-heavy text-white'
                     : 'bg-primary-10 text-primary-hover'

@@ -133,7 +133,7 @@ export function CreateSessionModal() {
             >
               {/* Header */}
               <div className="flex items-center justify-between p-5 border-b border-border-default">
-                <h2 id="create-session-title" className="text-[18px] font-semibold text-text-primary">
+                <h2 id="create-session-title" className="text-xl font-semibold text-text-primary">
                   Nouvelle session
                 </h2>
                 <button
@@ -151,7 +151,7 @@ export function CreateSessionModal() {
                 {/* Squad selector - only if multiple squads */}
                 {squads.length > 1 && (
                   <div>
-                    <label className="block text-[13px] font-medium text-text-secondary mb-1.5">
+                    <label className="block text-base font-medium text-text-secondary mb-1.5">
                       Squad
                     </label>
                     <div className="relative">
@@ -178,15 +178,15 @@ export function CreateSessionModal() {
                   <div className="flex items-center gap-3 p-3 rounded-xl bg-primary-10 border border-primary">
                     <Users className="w-5 h-5 text-primary" />
                     <div>
-                      <div className="text-[14px] font-medium text-text-primary">{selectedSquad.name}</div>
-                      <div className="text-[12px] text-text-secondary">{selectedSquad.game}</div>
+                      <div className="text-md font-medium text-text-primary">{selectedSquad.name}</div>
+                      <div className="text-sm text-text-secondary">{selectedSquad.game}</div>
                     </div>
                   </div>
                 )}
 
                 {/* Title */}
                 <div>
-                  <label className="block text-[13px] font-medium text-text-secondary mb-1.5">
+                  <label className="block text-base font-medium text-text-secondary mb-1.5">
                     Titre (optionnel)
                   </label>
                   <input
@@ -201,7 +201,7 @@ export function CreateSessionModal() {
                 {/* Date & Time */}
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-[13px] font-medium text-text-secondary mb-1.5">
+                    <label className="block text-base font-medium text-text-secondary mb-1.5">
                       <Calendar className="w-4 h-4 inline mr-1" />
                       Date
                     </label>
@@ -214,7 +214,7 @@ export function CreateSessionModal() {
                     />
                   </div>
                   <div>
-                    <label className="block text-[13px] font-medium text-text-secondary mb-1.5">
+                    <label className="block text-base font-medium text-text-secondary mb-1.5">
                       <Clock className="w-4 h-4 inline mr-1" />
                       Heure
                     </label>
@@ -231,7 +231,7 @@ export function CreateSessionModal() {
                 {/* Duration & Threshold */}
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-[13px] font-medium text-text-secondary mb-1.5">
+                    <label className="block text-base font-medium text-text-secondary mb-1.5">
                       Durée
                     </label>
                     <select
@@ -246,10 +246,10 @@ export function CreateSessionModal() {
                     </select>
                   </div>
                   <div>
-                    <label className="block text-[13px] font-medium text-text-secondary mb-1">
+                    <label className="block text-base font-medium text-text-secondary mb-1">
                       Confirmation automatique
                     </label>
-                    <p className="text-[11px] text-text-tertiary mb-1.5">
+                    <p className="text-sm text-text-tertiary mb-1.5">
                       La session sera confirmée quand ce nombre de joueurs aura répondu "Présent"
                     </p>
                     <select
@@ -269,7 +269,7 @@ export function CreateSessionModal() {
                 {/* Error */}
                 {error && (
                   <div className="p-3 rounded-lg bg-error-10 border border-error">
-                    <p className="text-error text-[13px]">{error}</p>
+                    <p className="text-error text-base">{error}</p>
                   </div>
                 )}
 
@@ -278,14 +278,14 @@ export function CreateSessionModal() {
                   <button
                     type="button"
                     onClick={close}
-                    className="flex-1 px-4 py-3 rounded-xl text-[14px] font-medium text-text-secondary hover:text-text-primary hover:bg-border-subtle transition-colors"
+                    className="flex-1 px-4 py-3 rounded-xl text-md font-medium text-text-secondary hover:text-text-primary hover:bg-border-subtle transition-colors"
                   >
                     Annuler
                   </button>
                   <button
                     type="submit"
                     disabled={isLoading || !selectedSquadId}
-                    className="flex-1 px-4 py-3 rounded-xl bg-primary text-white text-[14px] font-semibold hover:bg-primary-hover disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2"
+                    className="flex-1 px-4 py-3 rounded-xl bg-primary text-white text-md font-semibold hover:bg-primary-hover disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2"
                   >
                     {isLoading ? (
                       <Loader2 className="w-4 h-4 animate-spin" />

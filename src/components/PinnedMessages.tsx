@@ -74,7 +74,7 @@ export function PinnedMessages({
           <div className="w-7 h-7 rounded-lg bg-warning-15 flex items-center justify-center">
             <Pin className="w-4 h-4 text-warning" />
           </div>
-          <span className="text-[14px] font-medium text-text-primary">
+          <span className="text-md font-medium text-text-primary">
             {pinnedMessages.length} message{pinnedMessages.length > 1 ? 's' : ''} épinglé{pinnedMessages.length > 1 ? 's' : ''}
           </span>
         </div>
@@ -115,27 +115,27 @@ export function PinnedMessages({
                     {/* Sender info */}
                     <div className="flex items-center gap-2 mb-2">
                       <div className="w-6 h-6 rounded-full bg-primary-20 flex items-center justify-center">
-                        <span className="text-[10px] font-bold text-primary">
+                        <span className="text-xs font-bold text-primary">
                           {pinned.message_sender_username.charAt(0).toUpperCase()}
                         </span>
                       </div>
-                      <span className="text-[13px] font-medium text-text-secondary">
+                      <span className="text-base font-medium text-text-secondary">
                         {pinned.message_sender_username}
                       </span>
-                      <span className="text-[11px] text-text-tertiary">
+                      <span className="text-sm text-text-tertiary">
                         {formatPinnedDate(pinned.message_created_at)}
                       </span>
                     </div>
 
                     {/* Message preview */}
-                    <p className="text-[14px] text-text-secondary leading-relaxed">
+                    <p className="text-md text-text-secondary leading-relaxed">
                       {truncateMessage(pinned.message_content)}
                     </p>
 
                     {/* Pinned by info */}
                     <div className="flex items-center gap-1.5 mt-2">
                       <Pin className="w-3 h-3 text-gold" />
-                      <span className="text-[11px] text-text-tertiary">
+                      <span className="text-sm text-text-tertiary">
                         Epingle par {pinned.pinned_by_username} {formatPinnedDate(pinned.pinned_at)}
                       </span>
                     </div>

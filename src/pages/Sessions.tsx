@@ -91,7 +91,7 @@ export function Sessions() {
           {/* Header with guidance */}
           <div className="mb-8">
             <h1 className="text-2xl font-bold text-text-primary mb-2">Tes prochaines sessions</h1>
-            <p className="text-[14px] text-text-secondary">
+            <p className="text-md text-text-secondary">
               {needsResponse.length > 0
                 ? `${needsResponse.length} session${needsResponse.length > 1 ? 's' : ''} en attente de ta réponse`
                 : confirmed.length > 0
@@ -110,10 +110,10 @@ export function Sessions() {
                     <CheckCircle2 className="w-5 h-5 text-success" />
                   </div>
                   <div>
-                    <h3 className="text-[14px] font-semibold text-success">
+                    <h3 className="text-md font-semibold text-success">
                       🎯 T'es à jour !
                     </h3>
-                    <p className="text-[12px] text-text-secondary">
+                    <p className="text-sm text-text-secondary">
                       Ta squad sait qu'elle peut compter sur toi
                     </p>
                   </div>
@@ -133,11 +133,11 @@ export function Sessions() {
                   >
                     <PartyPopper className="w-5 h-5 text-warning" />
                   </motion.div>
-                  <h2 className="text-[15px] font-semibold text-text-primary">
+                  <h2 className="text-md font-semibold text-text-primary">
                     Ta squad t'attend ! {needsResponse.length} session{needsResponse.length > 1 ? 's' : ''} à confirmer
                   </h2>
                 </div>
-                <p className="text-[13px] text-text-secondary mb-3">
+                <p className="text-base text-text-secondary mb-3">
                   👉 <span className="text-text-primary">Réponds maintenant</span> pour que ta squad puisse s'organiser.
                   Plus tu réponds vite, plus ton score de fiabilité augmente !
                 </p>
@@ -149,10 +149,10 @@ export function Sessions() {
                         whileHover={{ x: 4 }}
                       >
                         <Calendar className="w-4 h-4 text-warning" />
-                        <span className="flex-1 text-[14px] text-text-primary">
+                        <span className="flex-1 text-md text-text-primary">
                           {session.title || session.game || 'Session'}
                         </span>
-                        <span className="text-[12px] text-text-secondary">{formatDate(session.scheduled_at)}</span>
+                        <span className="text-sm text-text-secondary">{formatDate(session.scheduled_at)}</span>
                         <ChevronRight className="w-4 h-4 text-text-tertiary" />
                       </motion.div>
                     </Link>
@@ -171,18 +171,18 @@ export function Sessions() {
                     <Sparkles className="w-5 h-5 text-purple" />
                   </div>
                   <div className="flex-1">
-                    <h3 className="text-[14px] font-semibold text-text-primary mb-2">
+                    <h3 className="text-md font-semibold text-text-primary mb-2">
                       💡 Meilleurs créneaux suggérés
                     </h3>
                     <div className="space-y-2">
                       {slotSuggestions.slice(0, 3).map((slot, index) => (
                         <div key={index} className="flex items-center justify-between p-2 rounded-lg bg-black/20">
-                          <span className="text-[13px] text-text-secondary">
+                          <span className="text-base text-text-secondary">
                             {dayNames[slot.day_of_week]} {slot.hour}h
                           </span>
                           <div className="flex items-center gap-2">
                             <TrendingUp className="w-3.5 h-3.5 text-success" />
-                            <span className="text-[12px] font-medium text-success">
+                            <span className="text-sm font-medium text-success">
                               {slot.reliability_score}%
                             </span>
                           </div>
@@ -204,10 +204,10 @@ export function Sessions() {
                     <Sparkles className="w-5 h-5 text-warning" />
                   </div>
                   <div>
-                    <h3 className="text-[14px] font-semibold text-text-primary mb-1">
+                    <h3 className="text-md font-semibold text-text-primary mb-1">
                       🎯 Conseil Coach
                     </h3>
-                    <p className="text-[13px] text-text-secondary">
+                    <p className="text-base text-text-secondary">
                       {coachTips[0].content}
                     </p>
                   </div>
@@ -242,10 +242,10 @@ export function Sessions() {
                             <Calendar className="w-6 h-6 text-success" strokeWidth={1.5} />
                           </div>
                           <div className="flex-1">
-                            <h3 className="text-[15px] font-medium text-text-primary">
+                            <h3 className="text-md font-medium text-text-primary">
                               {session.title || session.game || 'Session'}
                             </h3>
-                            <div className="flex items-center gap-3 text-[13px] text-text-secondary">
+                            <div className="flex items-center gap-3 text-base text-text-secondary">
                               <span className="flex items-center gap-1">
                                 <Clock className="w-3.5 h-3.5" />
                                 {formatDate(session.scheduled_at)}
@@ -277,10 +277,10 @@ export function Sessions() {
                   >
                     <Calendar className="w-12 h-12 mx-auto mb-4 text-text-tertiary" strokeWidth={1} />
                   </motion.div>
-                  <h3 className="text-[16px] font-semibold text-text-primary mb-2">
+                  <h3 className="text-lg font-semibold text-text-primary mb-2">
                     Aucune session confirmée
                   </h3>
-                  <p className="text-[14px] text-text-secondary mb-4">
+                  <p className="text-md text-text-secondary mb-4">
                     Réponds "Présent" à une session pour la voir ici.
                   </p>
                   <Link to="/squads">
@@ -297,7 +297,7 @@ export function Sessions() {
           {/* How it works - User guidance */}
           <div>
             <Card className="p-6">
-              <h3 className="text-[14px] font-semibold text-text-primary mb-4">
+              <h3 className="text-md font-semibold text-text-primary mb-4">
                 📖 Comment fonctionnent les sessions ?
               </h3>
               <div className="space-y-3">
@@ -309,9 +309,9 @@ export function Sessions() {
                 ].map(step => (
                   <div key={step.num} className="flex items-center gap-3">
                     <div className="w-6 h-6 rounded-lg bg-primary-10 flex items-center justify-center">
-                      <span className="text-[12px] font-bold text-primary">{step.num}</span>
+                      <span className="text-sm font-bold text-primary">{step.num}</span>
                     </div>
-                    <span className="text-[13px] text-text-secondary">{step.text}</span>
+                    <span className="text-base text-text-secondary">{step.text}</span>
                   </div>
                 ))}
               </div>

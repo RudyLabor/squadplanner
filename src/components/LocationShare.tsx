@@ -96,7 +96,7 @@ export const LocationMessage = memo(function LocationMessage({ lat, lng, isOwn =
       }`}>
         <div className="text-center">
           <MapPin className={`w-8 h-8 mx-auto mb-1 ${isOwn ? 'text-white/60' : 'text-primary-hover'}`} />
-          <p className={`text-[11px] ${isOwn ? 'text-white/40' : 'text-text-quaternary'}`}>
+          <p className={`text-sm ${isOwn ? 'text-white/40' : 'text-text-quaternary'}`}>
             {lat.toFixed(4)}, {lng.toFixed(4)}
           </p>
         </div>
@@ -115,7 +115,7 @@ export const LocationMessage = memo(function LocationMessage({ lat, lng, isOwn =
         onClick={(e) => e.stopPropagation()}
       >
         <MapPin className="w-4 h-4" />
-        <span className="text-[13px] font-medium flex-1">Je suis la</span>
+        <span className="text-base font-medium flex-1">Je suis la</span>
         <ExternalLink className="w-3.5 h-3.5 opacity-60" />
       </a>
     </div>

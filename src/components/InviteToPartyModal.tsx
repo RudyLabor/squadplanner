@@ -174,8 +174,8 @@ export function InviteToPartyModal({
                 <UserPlus className="w-5 h-5 text-primary" />
               </div>
               <div>
-                <h2 id="invite-party-title" className="text-[16px] font-semibold text-text-primary">Inviter à la Party</h2>
-                <p className="text-[12px] text-text-secondary">{squadName}</p>
+                <h2 id="invite-party-title" className="text-lg font-semibold text-text-primary">Inviter à la Party</h2>
+                <p className="text-sm text-text-secondary">{squadName}</p>
               </div>
             </div>
             <button
@@ -219,13 +219,13 @@ export function InviteToPartyModal({
               </div>
             ) : members.length === 0 ? (
               <div className="text-center py-8">
-                <p className="text-[14px] text-text-secondary">
+                <p className="text-md text-text-secondary">
                   Tous les membres sont déjà dans la party !
                 </p>
               </div>
             ) : (
               <div className="space-y-2">
-                <p className="text-[12px] text-text-tertiary mb-3 uppercase tracking-wide font-medium">
+                <p className="text-sm text-text-tertiary mb-3 uppercase tracking-wide font-medium">
                   Membres de la squad ({members.length})
                 </p>
                 {members.map((member) => {
@@ -249,7 +249,7 @@ export function InviteToPartyModal({
                           />
                         ) : (
                           <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center">
-                            <span className="text-[14px] font-semibold text-primary">
+                            <span className="text-md font-semibold text-primary">
                               {member.username.charAt(0).toUpperCase()}
                             </span>
                           </div>
@@ -262,10 +262,10 @@ export function InviteToPartyModal({
 
                       {/* Name */}
                       <div className="flex-1 min-w-0">
-                        <p className="text-[14px] font-medium text-text-primary truncate">
+                        <p className="text-md font-medium text-text-primary truncate">
                           {member.username}
                         </p>
-                        <p className="text-[12px] text-text-tertiary">
+                        <p className="text-sm text-text-tertiary">
                           {member.is_online ? 'En ligne' : 'Hors ligne'}
                         </p>
                       </div>

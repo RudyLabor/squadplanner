@@ -220,7 +220,7 @@ export function ImageViewer({ src, alt = 'Image', isOpen, onClose }: ImageViewer
           </motion.div>
 
           {/* Keyboard hints */}
-          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-3 text-[11px] text-white/30">
+          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-3 text-sm text-white/30">
             <span>Scroll: zoom</span>
             <span>Double-clic: zoom 2.5x</span>
             <span>R: pivoter</span>

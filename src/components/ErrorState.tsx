@@ -141,7 +141,7 @@ export function ErrorState({
 
       {/* Message */}
       <motion.p
-        className="text-text-secondary text-[15px] max-w-sm mb-8 leading-relaxed"
+        className="text-text-secondary text-md max-w-sm mb-8 leading-relaxed"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.2 }}

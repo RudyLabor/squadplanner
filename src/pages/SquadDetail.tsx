@@ -53,7 +53,7 @@ function SuccessToast({ message, onClose }: { message: string; onClose: () => vo
         >
           <Sparkles className="w-5 h-5" />
         </motion.div>
-        <span className="text-[14px]">{message}</span>
+        <span className="text-md">{message}</span>
       </motion.div>
     </motion.div>
   )
@@ -79,7 +79,7 @@ function PartySection({ squadId }: { squadId: string }) {
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
           <Mic className={`w-5 h-5 ${isConnected ? 'text-success' : 'text-primary'}`} />
-          <span className="text-[14px] font-semibold text-text-primary">Party vocale</span>
+          <span className="text-md font-semibold text-text-primary">Party vocale</span>
         </div>
         {participantCount > 0 && !isConnected && (
           <Badge variant="success">{participantCount} connecté{participantCount > 1 ? 's' : ''}</Badge>
@@ -93,13 +93,13 @@ function PartySection({ squadId }: { squadId: string }) {
             {/* Toi */}
             <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-success/20 border border-success/30">
               <div className={`w-2 h-2 rounded-full ${isMuted ? 'bg-error' : 'bg-success'}`} />
-              <span className="text-[13px] text-text-primary">Toi</span>
+              <span className="text-base text-text-primary">Toi</span>
             </div>
             {/* Autres */}
             {remoteUsers.map((u) => (
               <div key={String(u.odrop)} className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-surface-card border border-border-hover">
                 <div className={`w-2 h-2 rounded-full ${u.isSpeaking ? 'bg-success' : 'bg-text-tertiary'}`} />
-                <span className="text-[13px] text-text-primary">{u.username}</span>
+                <span className="text-base text-text-primary">{u.username}</span>
               </div>
             ))}
           </div>
@@ -127,7 +127,7 @@ function PartySection({ squadId }: { squadId: string }) {
       ) : (
         <div>
           {error && (
-            <p className="text-[12px] text-error mb-2">{error}</p>
+            <p className="text-sm text-error mb-2">{error}</p>
           )}
           <Button
             onClick={handleJoinParty}
@@ -143,7 +143,7 @@ function PartySection({ squadId }: { squadId: string }) {
             {participantCount > 0 ? 'Rejoindre la party' : 'Lancer une party'}
           </Button>
           {participantCount === 0 && (
-            <p className="text-[12px] text-text-quaternary text-center mt-2">
+            <p className="text-sm text-text-quaternary text-center mt-2">
               Personne n'est connectée pour l'instant
             </p>
           )}
@@ -209,13 +209,13 @@ function SessionCard({ session, onRsvp }: {
 
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 mb-1">
-            <h3 className="text-[15px] font-medium text-text-primary truncate">
+            <h3 className="text-md font-medium text-text-primary truncate">
               {session.title || session.game || 'Session'}
             </h3>
             {statusBadge && <Badge variant={statusBadge.variant}>{statusBadge.label}</Badge>}
           </div>
 
-          <div className="flex items-center gap-3 text-[13px] text-text-tertiary mb-3">
+          <div className="flex items-center gap-3 text-base text-text-tertiary mb-3">
             <span className="flex items-center gap-1">
               <Clock className="w-3.5 h-3.5" />
               {timeLabel}
@@ -235,7 +235,7 @@ function SessionCard({ session, onRsvp }: {
                 onClick={(e) => { e.preventDefault(); onRsvp(session.id, 'present') }}
                 aria-label="Marquer comme présent"
                 aria-pressed={session.my_rsvp === 'present'}
-                className={`flex items-center gap-1.5 px-4 py-2.5 min-h-[44px] rounded-lg text-[13px] font-medium transition-interactive ${
+                className={`flex items-center gap-1.5 px-4 py-2.5 min-h-[44px] rounded-lg text-base font-medium transition-interactive ${
                   session.my_rsvp === 'present'
                     ? 'bg-success/20 text-success border border-success/30 shadow-glow-success'
                     : 'bg-surface-card text-text-tertiary hover:bg-success-10 hover:text-success hover:border-success/20 border border-transparent'
@@ -250,7 +250,7 @@ function SessionCard({ session, onRsvp }: {
                 onClick={(e) => { e.preventDefault(); onRsvp(session.id, 'maybe') }}
                 aria-label="Marquer comme peut-être"
                 aria-pressed={session.my_rsvp === 'maybe'}
-                className={`flex items-center gap-1.5 px-4 py-2.5 min-h-[44px] rounded-lg text-[13px] font-medium transition-interactive ${
+                className={`flex items-center gap-1.5 px-4 py-2.5 min-h-[44px] rounded-lg text-base font-medium transition-interactive ${
                   session.my_rsvp === 'maybe'
                     ? 'bg-warning/20 text-warning border border-warning/30 shadow-glow-warning'
                     : 'bg-surface-card text-text-tertiary hover:bg-warning-10 hover:text-warning hover:border-warning/20 border border-transparent'
@@ -265,7 +265,7 @@ function SessionCard({ session, onRsvp }: {
                 onClick={(e) => { e.preventDefault(); onRsvp(session.id, 'absent') }}
                 aria-label="Marquer comme absent"
                 aria-pressed={session.my_rsvp === 'absent'}
-                className={`flex items-center gap-1.5 px-4 py-2.5 min-h-[44px] rounded-lg text-[13px] font-medium transition-interactive ${
+                className={`flex items-center gap-1.5 px-4 py-2.5 min-h-[44px] rounded-lg text-base font-medium transition-interactive ${
                   session.my_rsvp === 'absent'
                     ? 'bg-error/20 text-error border border-error/30 shadow-glow-error'
                     : 'bg-surface-card text-text-tertiary hover:bg-error-10 hover:text-error hover:border-error/20 border border-transparent'
@@ -420,7 +420,7 @@ function InviteModal({
       >
         {/* Header */}
         <div className="flex items-center justify-between p-4 border-b border-border-default">
-          <h2 className="text-[16px] font-semibold text-text-primary">Inviter des joueurs</h2>
+          <h2 className="text-lg font-semibold text-text-primary">Inviter des joueurs</h2>
           <button onClick={onClose} aria-label="Fermer" className="p-1 rounded-lg hover:bg-bg-hover">
             <X className="w-5 h-5 text-text-tertiary" aria-hidden="true" />
           </button>
@@ -429,7 +429,7 @@ function InviteModal({
         <div className="p-4 space-y-4">
           {/* Code d'invitation */}
           <div className="p-4 rounded-xl bg-primary-10 border border-primary/20">
-            <p className="text-[12px] text-text-tertiary mb-2">Code d'invitation</p>
+            <p className="text-sm text-text-tertiary mb-2">Code d'invitation</p>
             <div className="flex items-center gap-3">
               <span className="text-2xl font-bold text-primary tracking-wider flex-1">
                 {inviteCode}
@@ -446,7 +446,7 @@ function InviteModal({
 
           {/* Recherche d'utilisateurs */}
           <div>
-            <p className="text-[12px] text-text-tertiary mb-2">Ou rechercher un joueur</p>
+            <p className="text-sm text-text-tertiary mb-2">Ou rechercher un joueur</p>
             <div className="flex gap-2">
               <div className="flex-1 relative">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-quaternary" />
@@ -467,7 +467,7 @@ function InviteModal({
           {/* Message d'erreur */}
           {inviteError && (
             <div className="p-3 rounded-lg bg-error/10 border border-error/20">
-              <p className="text-error text-[13px]">{inviteError}</p>
+              <p className="text-error text-base">{inviteError}</p>
             </div>
           )}
 
@@ -483,9 +483,9 @@ function InviteModal({
                       <Users className="w-5 h-5 text-purple" />
                     </div>
                   )}
-                  <span className="flex-1 text-[14px] text-text-primary">{user.username}</span>
+                  <span className="flex-1 text-md text-text-primary">{user.username}</span>
                   {invitedUsers.has(user.id) ? (
-                    <span className="text-[12px] text-success flex items-center gap-1">
+                    <span className="text-sm text-success flex items-center gap-1">
                       <Check className="w-4 h-4" /> Ajouté
                     </span>
                   ) : (
@@ -508,7 +508,7 @@ function InviteModal({
           )}
 
           {searchQuery.length >= 2 && searchResults.length === 0 && !isSearching && (
-            <p className="text-center text-[13px] text-text-quaternary py-4">
+            <p className="text-center text-base text-text-quaternary py-4">
               Aucun joueur trouvé
             </p>
           )}
@@ -566,12 +566,12 @@ function MemberCard({ member, isOwner, currentUserId }: {
       )}
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2">
-          <span className="text-[14px] font-medium text-text-primary truncate">
+          <span className="text-md font-medium text-text-primary truncate">
             {member.profiles?.username || 'Joueur'}
           </span>
           {isOwner && <Crown className="w-4 h-4 text-warning" />}
         </div>
-        <div className="flex items-center gap-1 text-[12px]">
+        <div className="flex items-center gap-1 text-sm">
           <TrendingUp className={`w-3 h-3 ${reliability >= 80 ? 'text-success' : reliability >= 60 ? 'text-warning' : 'text-error'}`} />
           <span className={reliability >= 80 ? 'text-success' : reliability >= 60 ? 'text-warning' : 'text-error'}>
             {reliability}%
@@ -815,7 +815,7 @@ export default function SquadDetail() {
                   <h1 className="text-2xl font-bold text-text-primary truncate">{currentSquad.name}</h1>
                   {isOwner && <Crown className="w-5 h-5 text-warning flex-shrink-0" />}
                 </div>
-                <p className="text-[13px] text-text-tertiary">
+                <p className="text-base text-text-tertiary">
                   {currentSquad.game} · {currentSquad.member_count} membre{(currentSquad.member_count || 0) > 1 ? 's' : ''}
                 </p>
               </div>
@@ -830,7 +830,7 @@ export default function SquadDetail() {
             <div className="flex items-center gap-2 p-3 rounded-xl bg-primary-10 border border-primary/20">
               <div className="flex-1">
                 <p className="text-xs text-text-tertiary uppercase tracking-wide mb-0.5">Code d'invitation</p>
-                <p className="text-[18px] font-bold text-primary tracking-wider">{currentSquad.invite_code}</p>
+                <p className="text-xl font-bold text-primary tracking-wider">{currentSquad.invite_code}</p>
               </div>
               <Button variant="primary" size="sm" onClick={handleCopyCode} aria-label="Copier le code d'invitation">
                 {copiedCode ? <Check className="w-4 h-4" aria-hidden="true" /> : <Copy className="w-4 h-4" aria-hidden="true" />}
@@ -855,7 +855,7 @@ export default function SquadDetail() {
               >
                 <Card>
                   <CardContent className="p-5">
-                    <h3 className="text-[16px] font-semibold text-text-primary mb-4">Nouvelle session</h3>
+                    <h3 className="text-lg font-semibold text-text-primary mb-4">Nouvelle session</h3>
                     <form onSubmit={handleCreateSession} className="space-y-4">
                       <Input
                         label="Titre (optionnel)"
@@ -881,7 +881,7 @@ export default function SquadDetail() {
                       </div>
                       <div className="grid grid-cols-2 gap-4">
                         <div>
-                          <label className="block text-[13px] font-medium text-text-secondary mb-1.5">
+                          <label className="block text-base font-medium text-text-secondary mb-1.5">
                             Durée
                           </label>
                           <select
@@ -896,10 +896,10 @@ export default function SquadDetail() {
                           </select>
                         </div>
                         <div>
-                          <label className="block text-[13px] font-medium text-text-secondary mb-1">
+                          <label className="block text-base font-medium text-text-secondary mb-1">
                             Confirmation automatique
                           </label>
-                          <p className="text-[11px] text-text-quaternary mb-1.5">
+                          <p className="text-sm text-text-quaternary mb-1.5">
                             La session sera confirmée quand ce nombre de joueurs aura répondu "Présent"
                           </p>
                           <select
@@ -919,7 +919,7 @@ export default function SquadDetail() {
                       </div>
                       {error && (
                         <div className="p-3 rounded-lg bg-error/10 border border-error/20">
-                          <p className="text-error text-[13px]">{error}</p>
+                          <p className="text-error text-base">{error}</p>
                         </div>
                       )}
                       <div className="flex gap-2 pt-1">
@@ -946,7 +946,7 @@ export default function SquadDetail() {
 
           {/* Sessions à venir */}
           <div className="mb-6">
-            <h2 className="text-[13px] font-semibold text-text-primary uppercase tracking-wide mb-3">
+            <h2 className="text-base font-semibold text-text-primary uppercase tracking-wide mb-3">
               Sessions à venir
             </h2>
             {futureSessions.length > 0 ? (
@@ -962,8 +962,8 @@ export default function SquadDetail() {
             ) : (
               <Card className="p-6 text-center">
                 <Calendar className="w-10 h-10 mx-auto mb-3 text-text-quaternary" strokeWidth={1} />
-                <p className="text-[14px] text-text-tertiary mb-1">Pas encore de session prévue</p>
-                <p className="text-[12px] text-text-quaternary mb-4">Propose un créneau pour jouer avec ta squad</p>
+                <p className="text-md text-text-tertiary mb-1">Pas encore de session prévue</p>
+                <p className="text-sm text-text-quaternary mb-4">Propose un créneau pour jouer avec ta squad</p>
                 <Button type="button" size="sm" onClick={() => setShowCreateSession(true)}>
                   <Plus className="w-4 h-4" />
                   Planifier une session
@@ -975,7 +975,7 @@ export default function SquadDetail() {
           {/* Membres */}
           <div className="mb-6">
             <div className="flex items-center justify-between mb-3">
-              <h2 className="text-[13px] font-semibold text-text-primary uppercase tracking-wide">
+              <h2 className="text-base font-semibold text-text-primary uppercase tracking-wide">
                 Membres ({currentSquad.member_count})
               </h2>
               <Button size="sm" variant="secondary" onClick={() => setShowInviteModal(true)}>
@@ -1000,7 +1000,7 @@ export default function SquadDetail() {
           {/* Stats Avancées - Premium */}
           <div className="mb-6">
             <div className="flex items-center gap-2 mb-3">
-              <h2 className="text-[13px] font-semibold text-text-primary uppercase tracking-wide">
+              <h2 className="text-base font-semibold text-text-primary uppercase tracking-wide">
                 Stats avancées
               </h2>
               {!canAccessFeature('advanced_stats', id) && <PremiumBadge small />}
@@ -1016,8 +1016,8 @@ export default function SquadDetail() {
                     <BarChart3 className="w-5 h-5 text-primary" />
                   </div>
                   <div>
-                    <h3 className="text-[14px] font-medium text-text-primary">Analyse de la squad</h3>
-                    <p className="text-[12px] text-text-quaternary">Tendances et performances</p>
+                    <h3 className="text-md font-medium text-text-primary">Analyse de la squad</h3>
+                    <p className="text-sm text-text-quaternary">Tendances et performances</p>
                   </div>
                 </div>
                 <div className="grid grid-cols-3 gap-3">
@@ -1053,8 +1053,8 @@ export default function SquadDetail() {
                       <Download className="w-5 h-5 text-success" />
                     </div>
                     <div>
-                      <h3 className="text-[14px] font-medium text-text-primary">Export calendrier</h3>
-                      <p className="text-[12px] text-text-quaternary">Synchronise avec Google, Apple...</p>
+                      <h3 className="text-md font-medium text-text-primary">Export calendrier</h3>
+                      <p className="text-sm text-text-quaternary">Synchronise avec Google, Apple...</p>
                     </div>
                   </div>
                   <Button
@@ -1087,10 +1087,10 @@ export default function SquadDetail() {
                   </div>
                   <div className="flex-1">
                     <div className="flex items-center gap-2">
-                      <h3 className="text-[14px] font-medium text-text-primary">Squad Premium</h3>
+                      <h3 className="text-md font-medium text-text-primary">Squad Premium</h3>
                       <PremiumBadge small />
                     </div>
-                    <p className="text-[12px] text-text-quaternary">Audio HD, stats avancées, export calendrier actifs</p>
+                    <p className="text-sm text-text-quaternary">Audio HD, stats avancées, export calendrier actifs</p>
                   </div>
                 </div>
               </Card>
@@ -1100,7 +1100,7 @@ export default function SquadDetail() {
           {/* Classement Squad */}
           {leaderboard.length > 0 && (
             <div className="mb-6">
-              <h3 className="text-[14px] font-semibold text-text-primary mb-3 flex items-center gap-2">
+              <h3 className="text-md font-semibold text-text-primary mb-3 flex items-center gap-2">
                 <Trophy className="w-4 h-4 text-warning" />
                 Classement
               </h3>
@@ -1123,7 +1123,7 @@ export default function SquadDetail() {
               {isOwner ? (
                 <button
                   onClick={handleDeleteSquad}
-                  className="w-full py-3 text-[14px] text-error hover:text-error/70 transition-colors flex items-center justify-center gap-2"
+                  className="w-full py-3 text-md text-error hover:text-error/70 transition-colors flex items-center justify-center gap-2"
                 >
                   <Trash2 className="w-4 h-4" />
                   Supprimer la squad
@@ -1131,7 +1131,7 @@ export default function SquadDetail() {
               ) : (
                 <button
                   onClick={handleLeaveSquad}
-                  className="w-full py-3 text-[14px] text-error hover:text-error/70 transition-colors flex items-center justify-center gap-2"
+                  className="w-full py-3 text-md text-error hover:text-error/70 transition-colors flex items-center justify-center gap-2"
                 >
                   <LogOut className="w-4 h-4" />
                   Quitter la squad
@@ -1141,7 +1141,7 @@ export default function SquadDetail() {
             {/* Mobile: open drawer */}
             <button
               onClick={() => setShowActionsDrawer(true)}
-              className="md:hidden w-full py-3 text-[14px] text-text-tertiary hover:text-text-primary transition-colors flex items-center justify-center gap-2 border border-border-subtle rounded-xl"
+              className="md:hidden w-full py-3 text-md text-text-tertiary hover:text-text-primary transition-colors flex items-center justify-center gap-2 border border-border-subtle rounded-xl"
             >
               Actions de la squad
               <ChevronRight className="w-4 h-4" />
@@ -1160,21 +1160,21 @@ export default function SquadDetail() {
                 className="w-full flex items-center gap-3 p-4 rounded-xl bg-surface-card hover:bg-surface-card-hover transition-colors"
               >
                 <UserPlus className="w-5 h-5 text-primary" />
-                <span className="text-[14px] text-text-primary">Inviter des joueurs</span>
+                <span className="text-md text-text-primary">Inviter des joueurs</span>
               </button>
               <button
                 onClick={() => { setShowCreateSession(true); setShowActionsDrawer(false) }}
                 className="w-full flex items-center gap-3 p-4 rounded-xl bg-surface-card hover:bg-surface-card-hover transition-colors"
               >
                 <Calendar className="w-5 h-5 text-warning" />
-                <span className="text-[14px] text-text-primary">Créer une session</span>
+                <span className="text-md text-text-primary">Créer une session</span>
               </button>
               <button
                 onClick={() => { navigate(`/messages?squad=${id}`); setShowActionsDrawer(false) }}
                 className="w-full flex items-center gap-3 p-4 rounded-xl bg-surface-card hover:bg-surface-card-hover transition-colors"
               >
                 <MessageCircle className="w-5 h-5 text-success" />
-                <span className="text-[14px] text-text-primary">Chat de la squad</span>
+                <span className="text-md text-text-primary">Chat de la squad</span>
               </button>
               <div className="border-t border-border-subtle pt-2 mt-2">
                 {isOwner ? (
@@ -1183,7 +1183,7 @@ export default function SquadDetail() {
                     className="w-full flex items-center gap-3 p-4 rounded-xl hover:bg-error/5 transition-colors"
                   >
                     <Trash2 className="w-5 h-5 text-error" />
-                    <span className="text-[14px] text-error">Supprimer la squad</span>
+                    <span className="text-md text-error">Supprimer la squad</span>
                   </button>
                 ) : (
                   <button
@@ -1191,7 +1191,7 @@ export default function SquadDetail() {
                     className="w-full flex items-center gap-3 p-4 rounded-xl hover:bg-error/5 transition-colors"
                   >
                     <LogOut className="w-5 h-5 text-error" />
-                    <span className="text-[14px] text-error">Quitter la squad</span>
+                    <span className="text-md text-error">Quitter la squad</span>
                   </button>
                 )}
               </div>

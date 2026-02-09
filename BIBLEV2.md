@@ -244,9 +244,9 @@ Les lignes 147-274 de `index.css` sont des PANSEMENTS. Elles existent uniquement
 
 ---
 
-## 3. CHANTIER 2 - BIBLIOTHEQUE DE COMPOSANTS
+## 3. CHANTIER 2 - BIBLIOTHEQUE DE COMPOSANTS 🟢 FAIT
 
-### 3.1 Composants existants et leur niveau
+### 3.1 Composants existants et leur niveau 🟢 FAIT (5 refactorés)
 
 | Composant | Fichier | Lignes | Niveau | Problemes |
 |---|---|---|---|---|
@@ -270,13 +270,13 @@ Les lignes 147-274 de `index.css` sont des PANSEMENTS. Elles existent uniquement
 | SharedElement | `ui/SharedElement.tsx` | ~40 | 5/10 | Prototype, pas fini |
 | ToastIcons | `ui/ToastIcons.tsx` | ~30 | 5/10 | Juste des icones |
 
-### 3.2 Composants MANQUANTS (a creer)
+### 3.2 Composants MANQUANTS (a creer) 🟢 FAIT (14 créés → 33 composants total)
 
 Pour atteindre le niveau d'une app tier-1, il faut ces primitives :
 
-#### CRITIQUE (bloque la qualite UI)
+#### CRITIQUE (bloque la qualite UI) 🟢 FAIT
 
-**1. Dialog/Modal**
+**1. Dialog/Modal** 🟢 FAIT
 - Overlay avec blur backdrop
 - Animation open/close (scale + opacity)
 - Focus trap
@@ -288,7 +288,7 @@ Pour atteindre le niveau d'une app tier-1, il faut ces primitives :
 - `aria-modal="true"`, `role="dialog"`
 - Actuellement : chaque modal est custom (CallModal, EditMessageModal, CreateSessionModal, etc.) = code duplique et inconsistant
 
-**2. Dropdown/Menu**
+**2. Dropdown/Menu** 🟢 FAIT
 - Trigger + Portal content
 - Keyboard navigation (fleches haut/bas, Enter, Escape)
 - Animation slide + fade
@@ -299,7 +299,7 @@ Pour atteindre le niveau d'une app tier-1, il faut ces primitives :
 - `role="menu"`, `role="menuitem"`
 - Actuellement : ContextMenu est partiel, pas reutilisable
 
-**3. Select/Combobox**
+**3. Select/Combobox** 🟢 FAIT
 - Input avec dropdown
 - Recherche/filtre
 - Multi-select
@@ -311,7 +311,7 @@ Pour atteindre le niveau d'une app tier-1, il faut ces primitives :
 - Keyboard navigation complete
 - Actuellement : utilise des `<select>` natifs = laid et inconsistant
 
-**4. Sheet/BottomSheet (mobile)**
+**4. Sheet/BottomSheet (mobile)** 🟢 FAIT
 - Apparait du bas sur mobile
 - Snap points (25%, 50%, 75%, 100%)
 - Gesture swipe pour fermer
@@ -319,16 +319,16 @@ Pour atteindre le niveau d'une app tier-1, il faut ces primitives :
 - Alternative a Dialog sur mobile
 - Actuellement : Drawer existe mais sans snap points ni swipe
 
-#### IMPORTANT (ameliore significativement l'UX)
+#### IMPORTANT (ameliore significativement l'UX) 🟢 FAIT
 
-**5. Tabs**
+**5. Tabs** 🟢 FAIT
 - Animated indicator (underline qui glisse)
 - Variants : underline, pills, enclosed
 - Overflow scroll sur mobile
 - `role="tablist"`, `role="tab"`, `role="tabpanel"`
 - Actuellement : SegmentedControl fait un truc similaire mais sans la flexibilite
 
-**6. Accordion**
+**6. Accordion** 🟢 FAIT
 - Animated expand/collapse
 - Multiple ou single mode
 - Icon rotation
@@ -336,7 +336,7 @@ Pour atteindre le niveau d'une app tier-1, il faut ces primitives :
 - `aria-expanded`, `aria-controls`
 - Actuellement : FAQ sur Landing utilise du CSS custom non reutilisable
 
-**7. Toggle/Switch**
+**7. Toggle/Switch** 🟢 FAIT
 - Animated thumb
 - On/off states
 - Label integre
@@ -344,14 +344,14 @@ Pour atteindre le niveau d'une app tier-1, il faut ces primitives :
 - `role="switch"`, `aria-checked`
 - Actuellement : aucun composant, utilise des checkboxes standard
 
-**8. Radio Group**
+**8. Radio Group** 🟢 FAIT
 - Custom styled radio buttons
 - Variants : default, card
 - Description par option
 - Keyboard navigation
 - Actuellement : aucun
 
-**9. Checkbox**
+**9. Checkbox** 🟢 FAIT
 - Custom styled
 - Indeterminate state
 - Animated check mark
@@ -365,7 +365,7 @@ Pour atteindre le niveau d'une app tier-1, il faut ces primitives :
 - Actuellement : utilise Sonner (library externe) = ok mais pas de controle total
 
 
-**11. Popover**
+**11. Popover** 🟢 FAIT
 - Position auto (flip/shift)
 - Arrow
 - Controlled/uncontrolled
@@ -378,30 +378,30 @@ Pour atteindre le niveau d'une app tier-1, il faut ces primitives :
   - Pas de fuzzy search
   - Animation trop basique
 
-**13. Avatar Group**
+**13. Avatar Group** 🟢 FAIT
 - Stacked avatars
 - +N overflow
 - Click pour voir la liste
 - Actuellement : fait a la main dans SquadDetail
 
-**14. Slider/Range**
+**14. Slider/Range** 🟢 FAIT
 - Volume control
 - Rating
 - Min/max labels
 
-**15. Progress Bar**
+**15. Progress Bar** 🟢 FAIT
 - Animated fill
 - Labels
 - Variants : linear, stepped
 
-**16. Divider**
+**16. Divider** 🟢 FAIT
 - Horizontal/Vertical
 - With text
 - Variants : subtle, default, strong
 
-### 3.3 Ameliorations des composants existants
+### 3.3 Ameliorations des composants existants 🟢 FAIT
 
-#### Button.tsx - A refactorer
+#### Button.tsx - A refactorer 🟢 FAIT (50 → 102 lignes)
 
 Problemes actuels :
 - Pas de variante `icon-only` (bouton carre avec juste une icone)
@@ -426,7 +426,7 @@ interface ButtonProps {
 }
 ```
 
-#### Badge.tsx - A refactorer completement
+#### Badge.tsx - A refactorer completement 🟢 FAIT (35 → 96 lignes)
 
 35 lignes. C'est un placeholder, pas un composant.
 
@@ -439,7 +439,7 @@ Manque :
 - `max` prop (affiche "99+" si > 99)
 - Actuellement : meme padding/taille quoi qu'il arrive
 
-#### EmptyState.tsx - A refaire entierement
+#### EmptyState.tsx - A refaire entierement 🟢 FAIT (35 → 90 lignes)
 
 35 lignes, ZERO animation. Pour une app qui pretend avoir un systeme d'animation premium, c'est inacceptable.
 
@@ -451,7 +451,7 @@ Manque :
 - Secondary action
 - `aria-live="polite"` pour annoncer aux screen readers
 
-#### Card.tsx - Ameliorer
+#### Card.tsx - Ameliorer 🟢 FAIT (67 → 109 lignes)
 
 Manque :
 - Variantes : `elevated` (ombre plus forte), `outlined` (bordure visible), `ghost` (transparent)
@@ -460,7 +460,7 @@ Manque :
 - `selected` state (bordure accent)
 - `disabled` state
 
-#### Input.tsx - Ameliorer
+#### Input.tsx - Ameliorer 🟢 FAIT (78 → 159 lignes)
 
 Manque :
 - `textarea` variant (multi-line)

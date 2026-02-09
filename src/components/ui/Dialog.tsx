@@ -151,10 +151,7 @@ export function Dialog({
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.95 }}
-            transition={{
-              enter: { duration: 0.2, ease: [0.16, 1, 0.3, 1] },
-              exit: { duration: 0.15, ease: [0.4, 0, 1, 1] },
-            }}
+            transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
             role="dialog"
             aria-modal="true"
             aria-labelledby={title ? titleId : undefined}

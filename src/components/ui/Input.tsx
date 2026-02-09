@@ -1,7 +1,7 @@
-import { forwardRef, useState, useId, type InputHTMLAttributes, type ReactNode } from 'react'
+import { forwardRef, useState, useId, type InputHTMLAttributes, type TextareaHTMLAttributes, type ReactNode } from 'react'
 import { Eye, EyeOff, X } from 'lucide-react'
 
-interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
+type BaseInputProps = {
   label?: string
   error?: string
   hint?: string
@@ -15,7 +15,17 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   charCount?: boolean
 }
 
-export const Input = forwardRef<HTMLInputElement, InputProps>(
+type InputFieldProps = BaseInputProps & Omit<InputHTMLAttributes<HTMLInputElement>, 'size'> & { multiline?: false; rows?: never }
+type TextareaFieldProps = BaseInputProps & Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, 'size'> & { multiline: true }
+
+type InputProps = InputFieldProps | TextareaFieldProps
+
+const sharedClasses = `w-full rounded-xl bg-surface-input border border-border-default
+  hover:bg-bg-hover hover:border-border-hover
+  focus:border-primary/60 focus:ring-2 focus:ring-primary/10 focus:outline-none
+  focus:shadow-glow-primary-sm text-text-primary placeholder-text-quaternary transition-input`
+
+export const Input = forwardRef<HTMLInputElement | HTMLTextAreaElement, InputProps>(
   (
     {
       label,
@@ -30,19 +40,21 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
       suffix,
       charCount,
       className = '',
-      id: providedId,
-      type,
-      value,
-      maxLength,
       ...props
     },
     ref
   ) => {
     const generatedId = useId()
+    const providedId = props.id
     const inputId = providedId || generatedId
     const errorId = `${inputId}-error`
     const hintId = `${inputId}-hint`
     const [showPassword, setShowPassword] = useState(false)
+
+    const isMultiline = 'multiline' in props && props.multiline === true
+    const type = !isMultiline ? (props as InputFieldProps).type : undefined
+    const value = props.value
+    const maxLength = props.maxLength
 
     const isPasswordField = type === 'password'
     const inputType = isPasswordField && showPasswordToggle && showPassword ? 'text' : type
@@ -51,6 +63,12 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
       sm: 'h-9 text-sm',
       md: 'h-11 text-sm',
       lg: 'h-13 text-base',
+    }
+
+    const textareaSizeClasses: Record<string, string> = {
+      sm: 'text-sm py-2',
+      md: 'text-sm py-3',
+      lg: 'text-base py-3.5',
     }
 
     const hasRightElement = (isPasswordField && showPasswordToggle) || clearable || suffix
@@ -63,6 +81,9 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
 
     const currentLength = typeof value === 'string' ? value.length : 0
 
+    const errorClasses = error ? 'border-error/50 focus:border-error focus:ring-error/8 focus:shadow-glow-primary-md' : ''
+    const paddingClasses = `${hasLeftElement ? 'pl-12' : 'pl-4'} ${hasRightElement ? 'pr-12' : 'pr-4'}`
+
     return (
       <div className="flex flex-col gap-1.5">
         {label && (
@@ -72,38 +93,38 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
         )}
         <div className="relative">
           {hasLeftElement && (
-            <div className="absolute left-4 top-1/2 -translate-y-1/2 flex items-center gap-1.5 text-text-quaternary" aria-hidden="true">
+            <div className={`absolute left-4 ${isMultiline ? 'top-3' : 'top-1/2 -translate-y-1/2'} flex items-center gap-1.5 text-text-quaternary`} aria-hidden="true">
               {icon}
               {prefix}
             </div>
           )}
-          <input
-            ref={ref}
-            id={inputId}
-            type={inputType}
-            value={value}
-            maxLength={maxLength}
-            aria-invalid={error ? 'true' : undefined}
-            aria-describedby={describedBy}
-            className={`
-              w-full rounded-xl
-              bg-surface-input
-              border border-border-default
-              hover:bg-bg-hover hover:border-border-hover
-              focus:border-primary/60 focus:ring-2 focus:ring-primary/10 focus:outline-none
-              focus:shadow-glow-primary-sm
-              text-text-primary placeholder-text-quaternary
-              transition-input
-              ${sizeClasses[size]}
-              ${hasLeftElement ? 'pl-12' : 'pl-4'}
-              ${hasRightElement ? 'pr-12' : 'pr-4'}
-              ${error ? 'border-error/50 focus:border-error focus:ring-error/8 focus:shadow-glow-primary-md' : ''}
-              ${className}
-            `}
-            {...props}
-          />
+          {isMultiline ? (
+            <textarea
+              ref={ref as React.Ref<HTMLTextAreaElement>}
+              id={inputId}
+              value={value}
+              maxLength={maxLength}
+              rows={(props as TextareaFieldProps).rows || 3}
+              aria-invalid={error ? 'true' : undefined}
+              aria-describedby={describedBy}
+              className={`${sharedClasses} resize-y min-h-[80px] ${textareaSizeClasses[size]} ${paddingClasses} ${errorClasses} ${className}`}
+              {...((() => { const { multiline: _, id: _id, ...rest } = props as TextareaFieldProps; return rest })())}
+            />
+          ) : (
+            <input
+              ref={ref as React.Ref<HTMLInputElement>}
+              id={inputId}
+              type={inputType}
+              value={value}
+              maxLength={maxLength}
+              aria-invalid={error ? 'true' : undefined}
+              aria-describedby={describedBy}
+              className={`${sharedClasses} ${sizeClasses[size]} ${paddingClasses} ${errorClasses} ${className}`}
+              {...((() => { const { id: _id, ...rest } = props as InputFieldProps; return rest })())}
+            />
+          )}
           {hasRightElement && (
-            <div className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center gap-1.5">
+            <div className={`absolute right-4 ${isMultiline ? 'top-3' : 'top-1/2 -translate-y-1/2'} flex items-center gap-1.5`}>
               {clearable && value && (
                 <button
                   type="button"

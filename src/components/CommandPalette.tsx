@@ -140,13 +140,66 @@ export function CommandPalette() {
   const activeParent = parentStack[parentStack.length - 1]
   const activeCommands = activeParent?.children ?? allCommands
 
-  // Filter commands based on query
-  const filteredCommands = query
-    ? activeCommands.filter(cmd =>
-        cmd.label.toLowerCase().includes(query.toLowerCase()) ||
-        cmd.description?.toLowerCase().includes(query.toLowerCase())
-      )
-    : activeCommands.slice(0, 10)
+  // Fuzzy search scoring: characters must appear in order but not necessarily adjacent
+  const fuzzyScore = useCallback((text: string, pattern: string): number => {
+    const t = text.toLowerCase()
+    const p = pattern.toLowerCase()
+    if (t.includes(p)) return 100 + (p.length / t.length) * 50 // exact substring = high score
+    let ti = 0, pi = 0, score = 0, streak = 0
+    while (ti < t.length && pi < p.length) {
+      if (t[ti] === p[pi]) {
+        score += 10 + streak * 5
+        // Bonus for match at word boundary
+        if (ti === 0 || t[ti - 1] === ' ' || t[ti - 1] === '-') score += 15
+        streak++
+        pi++
+      } else {
+        streak = 0
+      }
+      ti++
+    }
+    return pi === p.length ? score : 0
+  }, [])
+
+  // Recent commands (persisted in localStorage)
+  const RECENT_KEY = 'squadplanner:recent-commands'
+  const getRecentIds = useCallback((): string[] => {
+    try { return JSON.parse(localStorage.getItem(RECENT_KEY) || '[]') } catch { return [] }
+  }, [])
+  const addRecent = useCallback((id: string) => {
+    const recent = getRecentIds().filter(r => r !== id)
+    recent.unshift(id)
+    localStorage.setItem(RECENT_KEY, JSON.stringify(recent.slice(0, 8)))
+  }, [getRecentIds])
+
+  // Wrap enterSubCommand to track recent
+  const originalEnterSubCommand = enterSubCommand
+  const enterSubCommandWithRecent = useCallback((cmd: CommandItem) => {
+    addRecent(cmd.id)
+    originalEnterSubCommand(cmd)
+  }, [originalEnterSubCommand, addRecent])
+
+  // Filter commands with fuzzy search + recent sorting
+  const filteredCommands = (() => {
+    if (!query) {
+      // No query: show recent commands first, then the rest
+      const recentIds = getRecentIds()
+      const recentCmds = recentIds.map(id => activeCommands.find(c => c.id === id)).filter(Boolean) as CommandItem[]
+      const rest = activeCommands.filter(c => !recentIds.includes(c.id))
+      return [...recentCmds, ...rest].slice(0, 10)
+    }
+    return activeCommands
+      .map(cmd => ({
+        cmd,
+        score: Math.max(
+          fuzzyScore(cmd.label, query),
+          fuzzyScore(cmd.description || '', query) * 0.7
+        ),
+      }))
+      .filter(r => r.score > 0)
+      .sort((a, b) => b.score - a.score)
+      .map(r => r.cmd)
+  })()
 
   // State for shortcuts help modal
   const [showShortcutsHelp, setShowShortcutsHelp] = useState(false)
@@ -239,14 +292,14 @@ export function CommandPalette() {
         if (e.key === 'Enter') {
           e.preventDefault()
           const cmd = filteredCommands[selectedIndex]
-          if (cmd) enterSubCommand(cmd)
+          if (cmd) enterSubCommandWithRecent(cmd)
         }
       }
     }
 
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [isOpen, showShortcutsHelp, filteredCommands, selectedIndex, close, navigate, toggleTheme, goBack, enterSubCommand, query, parentStack, createSessionModalOpen])
+  }, [isOpen, showShortcutsHelp, filteredCommands, selectedIndex, close, navigate, toggleTheme, goBack, enterSubCommandWithRecent, query, parentStack, createSessionModalOpen])
 
   // Focus input when opened
   useEffect(() => {
@@ -260,19 +313,24 @@ export function CommandPalette() {
     setSelectedIndex(0)
   }, [query])
 
-  // Group commands by category for display
+  // Group commands by category for display (with "recent" pseudo-category)
   const groupedCommands = filteredCommands.reduce((acc, cmd) => {
-    if (!acc[cmd.category]) acc[cmd.category] = []
-    acc[cmd.category].push(cmd)
+    const cat = !query && recentIds.includes(cmd.id) ? 'recent' : cmd.category
+    if (!acc[cat]) acc[cat] = []
+    acc[cat].push(cmd)
     return acc
   }, {} as Record<string, CommandItem[]>)
 
   const categoryLabels: Record<string, string> = {
+    recent: 'Récents',
     navigation: 'Navigation',
     squads: 'Squads',
     sessions: 'Sessions',
     actions: 'Actions'
   }
+
+  // Override grouped commands to insert "recent" category when no query
+  const recentIds = getRecentIds()
 
   return (
     <>
@@ -353,7 +411,7 @@ export function CommandPalette() {
                         return (
                           <button
                             key={cmd.id}
-                            onClick={() => enterSubCommand(cmd)}
+                            onClick={() => enterSubCommandWithRecent(cmd)}
                             onMouseEnter={() => setSelectedIndex(globalIndex)}
                             className={`w-full flex items-center gap-3 px-4 py-2.5 text-left transition-colors ${
                               isSelected

@@ -1,7 +1,8 @@
 import { useState, memo } from 'react'
 import { motion } from 'framer-motion'
-import { Compass, Search, Gamepad2, MapPin } from 'lucide-react'
-import { SegmentedControl } from '../components/ui'
+import { Compass, Search } from 'lucide-react'
+import { SegmentedControl, Select } from '../components/ui'
+import type { SelectOption } from '../components/ui'
 import { DiscoverSquadCard } from '../components/discover/DiscoverSquadCard'
 import { GlobalLeaderboard } from '../components/discover/GlobalLeaderboard'
 import { MatchmakingSection } from '../components/discover/MatchmakingSection'
@@ -15,9 +16,18 @@ const TABS: { value: Tab; label: string }[] = [
   { value: 'classement', label: 'Classement' },
 ]
 
-const GAMES = ['', 'Valorant', 'League of Legends', 'Fortnite', 'Rocket League', 'CS2', 'Apex Legends', 'Minecraft', 'FIFA', 'Call of Duty']
-const REGIONS = [
-  { value: '', label: 'Toutes les regions' },
+const GAME_OPTIONS: SelectOption[] = [
+  { value: 'Valorant', label: 'Valorant' },
+  { value: 'League of Legends', label: 'League of Legends' },
+  { value: 'Fortnite', label: 'Fortnite' },
+  { value: 'Rocket League', label: 'Rocket League' },
+  { value: 'CS2', label: 'CS2' },
+  { value: 'Apex Legends', label: 'Apex Legends' },
+  { value: 'Minecraft', label: 'Minecraft' },
+  { value: 'FIFA', label: 'FIFA' },
+  { value: 'Call of Duty', label: 'Call of Duty' },
+]
+const REGION_OPTIONS: SelectOption[] = [
   { value: 'eu-west', label: 'Europe Ouest' },
   { value: 'eu-east', label: 'Europe Est' },
   { value: 'na', label: 'Amerique du Nord' },
@@ -58,30 +68,25 @@ export function Discover() {
 
       {/* Filters */}
       <div className="flex gap-2 mb-5">
-        <div className="relative flex-1">
-          <Gamepad2 className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-tertiary" />
-          <select
-            value={game}
-            onChange={(e) => setGame(e.target.value)}
-            className="w-full pl-9 pr-3 py-2 rounded-lg bg-surface-card border border-white/5 text-sm text-text-primary appearance-none focus:outline-none focus:ring-1 focus:ring-indigo-500/50"
-          >
-            <option value="">Tous les jeux</option>
-            {GAMES.filter(Boolean).map(g => (
-              <option key={g} value={g}>{g}</option>
-            ))}
-          </select>
+        <div className="flex-1">
+          <Select
+            options={GAME_OPTIONS}
+            value={game || undefined}
+            onChange={(v) => setGame(v as string)}
+            placeholder="Tous les jeux"
+            clearable
+            size="sm"
+          />
         </div>
-        <div className="relative flex-1">
-          <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-tertiary" />
-          <select
-            value={region}
-            onChange={(e) => setRegion(e.target.value)}
-            className="w-full pl-9 pr-3 py-2 rounded-lg bg-surface-card border border-white/5 text-sm text-text-primary appearance-none focus:outline-none focus:ring-1 focus:ring-indigo-500/50"
-          >
-            {REGIONS.map(r => (
-              <option key={r.value} value={r.value}>{r.label}</option>
-            ))}
-          </select>
+        <div className="flex-1">
+          <Select
+            options={REGION_OPTIONS}
+            value={region || undefined}
+            onChange={(v) => setRegion(v as string)}
+            placeholder="Toutes les regions"
+            clearable
+            size="sm"
+          />
         </div>
       </div>
 

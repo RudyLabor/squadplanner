@@ -1,4 +1,4 @@
-import { memo, useRef, useCallback } from 'react'
+import { memo, useRef, useCallback, useMemo } from 'react'
 import { motion, useMotionValue, useTransform, type PanInfo } from 'framer-motion'
 import { Reply, Trash2, MoreHorizontal } from 'lucide-react'
 import { useHapticFeedback } from '../hooks/useHapticFeedback'

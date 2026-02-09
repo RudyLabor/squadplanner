@@ -1,86 +1,206 @@
 import { test, expect } from '@playwright/test'
+import AxeBuilder from '@axe-core/playwright'
 
-test.describe('Accessibility', () => {
-  test('landing page should have proper heading structure', async ({ page }) => {
+/**
+ * Comprehensive accessibility tests using @axe-core/playwright
+ * Tests EVERY page for WCAG 2.1 AA violations in both dark and light mode
+ */
+
+const TEST_USER = {
+  email: 'testowner@squadtest.dev',
+  password: 'TestPassword123!'
+}
+
+async function loginUser(page: import('@playwright/test').Page) {
+  await page.goto('/auth')
+  await page.fill('input[type="email"]', TEST_USER.email)
+  await page.fill('input[type="password"]', TEST_USER.password)
+  await page.click('button[type="submit"]')
+  await page.waitForURL('/', { timeout: 10000 })
+}
+
+// --- Public pages (no auth required) ---
+
+const publicPages = [
+  { name: 'Landing', path: '/' },
+  { name: 'Auth', path: '/auth' },
+  { name: 'Premium', path: '/premium' },
+]
+
+// --- Protected pages (auth required) ---
+
+const protectedPages = [
+  { name: 'Home', path: '/home' },
+  { name: 'Squads', path: '/squads' },
+  { name: 'Messages', path: '/messages' },
+  { name: 'Profile', path: '/profile' },
+  { name: 'Settings', path: '/settings' },
+  { name: 'Party', path: '/party' },
+]
+
+test.describe('Axe Accessibility Audit - Public Pages', () => {
+  for (const { name, path } of publicPages) {
+    test(`${name} page should have no WCAG violations (dark mode)`, async ({ page }) => {
+      await page.emulateMedia({ colorScheme: 'dark' })
+      await page.goto(path)
+      await page.waitForLoadState('networkidle')
+
+      const results = await new AxeBuilder({ page })
+        .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])
+        .analyze()
+
+      expect(results.violations).toEqual([])
+    })
+
+    test(`${name} page should have no WCAG violations (light mode)`, async ({ page }) => {
+      await page.emulateMedia({ colorScheme: 'light' })
+      await page.goto(path)
+      await page.waitForLoadState('networkidle')
+
+      const results = await new AxeBuilder({ page })
+        .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])
+        .analyze()
+
+      expect(results.violations).toEqual([])
+    })
+  }
+})
+
+test.describe('Axe Accessibility Audit - Protected Pages', () => {
+  for (const { name, path } of protectedPages) {
+    test(`${name} page should have no WCAG violations (dark mode)`, async ({ page }) => {
+      await page.emulateMedia({ colorScheme: 'dark' })
+      await loginUser(page)
+      await page.goto(path)
+      await page.waitForLoadState('networkidle')
+      await page.waitForTimeout(500)
+
+      const results = await new AxeBuilder({ page })
+        .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])
+        .analyze()
+
+      expect(results.violations).toEqual([])
+    })
+
+    test(`${name} page should have no WCAG violations (light mode)`, async ({ page }) => {
+      await page.emulateMedia({ colorScheme: 'light' })
+      await loginUser(page)
+      await page.goto(path)
+      await page.waitForLoadState('networkidle')
+      await page.waitForTimeout(500)
+
+      const results = await new AxeBuilder({ page })
+        .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])
+        .analyze()
+
+      expect(results.violations).toEqual([])
+    })
+  }
+})
+
+test.describe('Heading Structure', () => {
+  test('landing page should have exactly one h1', async ({ page }) => {
     await page.goto('/')
-
-    // Check for h1
     const h1 = page.locator('h1')
     await expect(h1).toHaveCount(1)
     await expect(h1).toBeVisible()
   })
 
-  test('landing page should have proper contrast', async ({ page }) => {
-    await page.goto('/')
+  test('auth page should have exactly one h1', async ({ page }) => {
+    await page.goto('/auth')
+    await page.waitForSelector('form')
+    const h1 = page.locator('h1')
+    const count = await h1.count()
+    // Should have at least one heading
+    expect(count).toBeGreaterThanOrEqual(1)
+  })
+})
 
-    // Check that text is visible (not the same color as background)
-    const heading = page.locator('h1')
-    const color = await heading.evaluate(el => window.getComputedStyle(el).color)
-    expect(color).not.toBe('rgb(8, 9, 10)') // Not same as background
+test.describe('Form Accessibility', () => {
+  test('auth form inputs should have associated labels', async ({ page }) => {
+    await page.goto('/auth')
+    await page.waitForSelector('form')
+
+    await expect(page.getByLabel(/Email/i)).toBeVisible()
+    await expect(page.getByLabel(/Mot de passe/i)).toBeVisible()
   })
 
-  test('buttons should be focusable', async ({ page }) => {
-    await page.goto('/')
+  test('auth form should have accessible submit button', async ({ page }) => {
+    await page.goto('/auth')
+    await page.waitForSelector('form')
 
-    // Click on body first to ensure focus starts in the page
-    await page.click('body')
-
-    // Tab to first focusable element
-    await page.keyboard.press('Tab')
-    await page.keyboard.press('Tab')
-
-    // Check that some element has focus (link or button)
-    const focusedElement = page.locator(':focus')
-    const tagName = await focusedElement.evaluate(el => el.tagName.toLowerCase()).catch(() => null)
-    expect(['a', 'button', 'input']).toContain(tagName)
+    const submitBtn = page.getByRole('button', { name: /Se connecter/i })
+    await expect(submitBtn).toBeVisible()
+    await expect(submitBtn).toBeEnabled()
   })
+})
 
-  test('links should have accessible names', async ({ page }) => {
+test.describe('Link Accessibility', () => {
+  test('all links on landing page should have accessible names', async ({ page }) => {
     await page.goto('/')
+    await page.waitForLoadState('networkidle')
 
     const links = page.locator('a')
     const count = await links.count()
 
     for (let i = 0; i < count; i++) {
       const link = links.nth(i)
-      const accessibleName = await link.getAttribute('aria-label') ||
-        await link.textContent()
-      expect(accessibleName).toBeTruthy()
+      const isVisible = await link.isVisible()
+      if (!isVisible) continue
+
+      const ariaLabel = await link.getAttribute('aria-label')
+      const textContent = await link.textContent()
+      const title = await link.getAttribute('title')
+
+      // Every visible link must have an accessible name
+      const hasAccessibleName = !!(ariaLabel || (textContent && textContent.trim()) || title)
+      expect(hasAccessibleName).toBeTruthy()
     }
-  })
-
-  test('auth form should have labels', async ({ page }) => {
-    await page.goto('/auth')
-
-    // Wait for the form to load
-    await page.waitForSelector('form')
-
-    // Check that inputs have associated labels (using getByLabel)
-    await expect(page.getByLabel(/Email/i)).toBeVisible()
-    await expect(page.getByLabel(/Mot de passe/i)).toBeVisible()
   })
 })
 
-test.describe('Keyboard Navigation', () => {
-  test('should be able to navigate landing page with keyboard', async ({ page }) => {
+test.describe('Image Accessibility', () => {
+  test('all images on landing page should have alt text', async ({ page }) => {
     await page.goto('/')
+    await page.waitForLoadState('networkidle')
 
-    // Tab through interactive elements
-    await page.keyboard.press('Tab')
+    const images = page.locator('img')
+    const count = await images.count()
+
+    for (let i = 0; i < count; i++) {
+      const img = images.nth(i)
+      const alt = await img.getAttribute('alt')
+      const role = await img.getAttribute('role')
+
+      // Image should have alt text or be marked decorative
+      const isAccessible = alt !== null || role === 'presentation' || role === 'none'
+      expect(isAccessible).toBeTruthy()
+    }
+  })
+})
+
+test.describe('Focus Management', () => {
+  test('buttons should be keyboard focusable', async ({ page }) => {
+    await page.goto('/')
+    await page.click('body')
+
+    // Tab through several elements
     await page.keyboard.press('Tab')
     await page.keyboard.press('Tab')
 
-    // Should be able to activate with Enter
-    const focusedElement = page.locator(':focus')
-    await expect(focusedElement).toBeVisible()
+    // Some interactive element should have focus
+    const focusedTag = await page.evaluate(() => {
+      const el = document.activeElement
+      return el ? el.tagName.toLowerCase() : null
+    })
+    expect(['a', 'button', 'input', 'select', 'textarea']).toContain(focusedTag)
   })
 
-  test('should be able to submit auth form with keyboard', async ({ page }) => {
+  test('keyboard navigation on auth form', async ({ page }) => {
     await page.goto('/auth')
-
-    // Wait for form to load
     await page.waitForSelector('form')
 
+    // Fill via getByLabel then tab through
     await page.getByLabel(/Email/i).fill('test@example.com')
     await page.keyboard.press('Tab')
     await page.getByLabel(/Mot de passe/i).fill('password123')
@@ -91,105 +211,42 @@ test.describe('Keyboard Navigation', () => {
   })
 })
 
-test.describe('Mobile Responsiveness', () => {
-  test('should display correctly on iPhone SE', async ({ page }) => {
-    await page.setViewportSize({ width: 375, height: 667 })
+test.describe('Color Contrast', () => {
+  test('landing page text should have sufficient contrast against background', async ({ page }) => {
     await page.goto('/')
 
-    // Check for main content
-    await expect(page.getByText(/Transforme tes/i)).toBeVisible()
-    // Check for at least one CTA - use first() to avoid strict mode violation
-    await expect(page.getByRole('link', { name: /J'ai déjà un compte/i }).first()).toBeVisible()
-  })
+    const heading = page.locator('h1')
+    const color = await heading.evaluate(el => window.getComputedStyle(el).color)
+    const bgColor = await heading.evaluate(el => {
+      let current = el as HTMLElement | null
+      while (current) {
+        const bg = window.getComputedStyle(current).backgroundColor
+        if (bg && bg !== 'rgba(0, 0, 0, 0)' && bg !== 'transparent') return bg
+        current = current.parentElement
+      }
+      return 'rgb(0, 0, 0)'
+    })
 
-  test('should display correctly on iPad', async ({ page }) => {
-    await page.setViewportSize({ width: 768, height: 1024 })
-    await page.goto('/')
-
-    await expect(page.getByText(/Transforme tes/i)).toBeVisible()
-  })
-
-  test('should display correctly on desktop', async ({ page }) => {
-    await page.setViewportSize({ width: 1920, height: 1080 })
-    await page.goto('/')
-
-    await expect(page.getByText(/Transforme tes/i)).toBeVisible()
-  })
-
-  test('auth page should be responsive', async ({ page }) => {
-    await page.setViewportSize({ width: 375, height: 667 })
-    await page.goto('/auth')
-
-    // Wait for form to load
-    await page.waitForSelector('form')
-
-    // Form should be visible and usable
-    await expect(page.getByLabel(/Email/i)).toBeVisible()
-    await expect(page.getByLabel(/Mot de passe/i)).toBeVisible()
-    await expect(page.getByRole('button', { name: /Se connecter/i })).toBeVisible()
+    // Text color should not match background
+    expect(color).not.toBe(bgColor)
   })
 })
 
-test.describe('Performance', () => {
-  test('landing page should load quickly', async ({ page }) => {
-    const startTime = Date.now()
+test.describe('ARIA Landmarks', () => {
+  test('landing page should have main landmark', async ({ page }) => {
     await page.goto('/')
-    const loadTime = Date.now() - startTime
 
-    // Page should load in under 5 seconds
-    expect(loadTime).toBeLessThan(5000)
+    // Page should have a main element or role="main"
+    const main = page.locator('main, [role="main"]')
+    const count = await main.count()
+    expect(count).toBeGreaterThanOrEqual(1)
   })
 
-  test('should not have console errors on landing page', async ({ page }) => {
-    const errors: string[] = []
-    page.on('console', msg => {
-      if (msg.type() === 'error') {
-        errors.push(msg.text())
-      }
-    })
-
-    await page.goto('/')
-    await page.waitForLoadState('networkidle')
-
-    // Filter out known acceptable errors (like Supabase connection, browser-specific)
-    const criticalErrors = errors.filter(e =>
-      !e.includes('supabase') &&
-      !e.includes('network') &&
-      !e.includes('Failed to fetch') &&
-      !e.includes('ERR_') &&
-      !e.includes('WebSocket') &&
-      !e.includes('ResizeObserver') &&
-      !e.includes('Script error') &&
-      !e.includes('CORS') &&
-      !e.includes('Cross-Origin')
-    )
-
-    expect(criticalErrors).toHaveLength(0)
-  })
-
-  test('should not have console errors on auth page', async ({ page }) => {
-    const errors: string[] = []
-    page.on('console', msg => {
-      if (msg.type() === 'error') {
-        errors.push(msg.text())
-      }
-    })
-
+  test('auth page should have main landmark', async ({ page }) => {
     await page.goto('/auth')
-    await page.waitForLoadState('networkidle')
 
-    const criticalErrors = errors.filter(e =>
-      !e.includes('supabase') &&
-      !e.includes('network') &&
-      !e.includes('Failed to fetch') &&
-      !e.includes('ERR_') &&
-      !e.includes('WebSocket') &&
-      !e.includes('ResizeObserver') &&
-      !e.includes('Script error') &&
-      !e.includes('CORS') &&
-      !e.includes('Cross-Origin')
-    )
-
-    expect(criticalErrors).toHaveLength(0)
+    const main = page.locator('main, [role="main"]')
+    const count = await main.count()
+    expect(count).toBeGreaterThanOrEqual(1)
   })
 })

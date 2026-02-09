@@ -1264,7 +1264,7 @@ export function Messages() {
 
   // ========== COMPOSANT VUE CHAT ==========
   const ChatView = ({ embedded = false }: { embedded?: boolean }) => (
-    <div className={`flex flex-col ${embedded ? 'h-full' : 'h-[100dvh]'} bg-bg-base`}>
+    <div className={`flex flex-col h-full bg-bg-base`}>
       {/* Header chat — sticky on mobile for always-visible back button */}
       <div className={`flex-shrink-0 px-4 py-3 border-b border-border-default ${embedded ? '' : 'bg-bg-elevated/80 backdrop-blur-xl sticky top-0 z-10'}`}>
         <div className={`flex items-center gap-3 ${embedded ? '' : 'max-w-4xl lg:max-w-5xl mx-auto'}`}>
@@ -1767,9 +1767,12 @@ export function Messages() {
     )
   }
 
-  // Sinon afficher le chat — wrapper fixed pour éviter le double-scroll mobile
+  // Sinon afficher le chat — wrapper fixed au-dessus de la nav pour éviter le double-scroll mobile
   return (
-    <div className="fixed inset-0 z-[60] flex flex-col">
+    <div
+      className="fixed inset-x-0 top-0 z-[60] flex flex-col lg:inset-0 lg:z-auto lg:static"
+      style={{ bottom: 'calc(80px + env(safe-area-inset-bottom, 0px))' }}
+    >
       <MessageToast
         message={toast.message}
         isVisible={toast.visible}

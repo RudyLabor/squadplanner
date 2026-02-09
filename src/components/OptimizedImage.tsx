@@ -192,7 +192,7 @@ export const Avatar = memo(function Avatar({
 
   if (!src || hasError) {
     return (
-      <div className={`${sizeClass} rounded-full bg-[rgba(167,139,250,0.08)] flex items-center justify-center flex-shrink-0 ${className}`}>
+      <div className={`${sizeClass} rounded-full bg-purple-10 flex items-center justify-center flex-shrink-0 ${className}`}>
         {fallbackIcon || (
           <span className="text-[#a78bfa] font-medium">
             {alt?.charAt(0)?.toUpperCase() || '?'}

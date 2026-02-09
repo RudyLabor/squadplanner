@@ -436,7 +436,7 @@ export function CommandPalette() {
               </div>{/* end flex container */}
 
               {/* Footer */}
-              <div className="flex items-center justify-between px-4 py-3 border-t border-border-default bg-[rgba(0,0,0,0.2)]">
+              <div className="flex items-center justify-between px-4 py-3 border-t border-border-default bg-black/20">
                 <div className="flex items-center gap-4 text-[11px] text-text-tertiary">
                   <span className="flex items-center gap-1">
                     <kbd className="px-1.5 py-0.5 rounded bg-border-subtle font-mono">↑↓</kbd>

@@ -42,7 +42,7 @@ function FriendCard({
       whileHover={{ y: -2, scale: 1.02 }}
       whileTap={{ scale: 0.98 }}
     >
-      <Card className="p-4 bg-gradient-to-br from-[rgba(94,109,210,0.08)] via-transparent to-[rgba(74,222,128,0.05)] hover:from-[rgba(94,109,210,0.12)] hover:to-[rgba(74,222,128,0.08)] hover:shadow-[0_0_20px_rgba(94,109,210,0.2)] transition-interactive">
+      <Card className="p-4 bg-gradient-to-br from-primary-10 via-transparent to-success-5 hover:from-primary-15 hover:to-success-10 hover:shadow-glow-primary-md transition-interactive">
         <div className="flex flex-col gap-3">
           {/* Avatar with pulse animation */}
           <div className="flex items-center gap-3">

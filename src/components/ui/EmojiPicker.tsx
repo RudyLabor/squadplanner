@@ -168,7 +168,7 @@ export function EmojiPicker({ isOpen, onSelect, onClose, position = 'bottom', al
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                   placeholder="Chercher un emoji..."
-                  className="w-full pl-8 pr-8 py-1.5 bg-border-default border border-border-default rounded-lg text-[13px] text-white placeholder:text-[#6b6b80] focus:outline-none focus:border-[rgba(94,109,210,0.5)]"
+                  className="w-full pl-8 pr-8 py-1.5 bg-border-default border border-border-default rounded-lg text-[13px] text-white placeholder:text-[#6b6b80] focus:outline-none focus:border-primary"
                 />
                 {search && (
                   <button

@@ -210,7 +210,7 @@ export const GifPicker = memo(function GifPicker({ isOpen, onSelect, onClose }: 
                   value={query}
                   onChange={(e) => handleSearch(e.target.value)}
                   placeholder="Chercher un GIF..."
-                  className="w-full pl-8 pr-8 py-2 bg-border-default border border-border-default rounded-lg text-[13px] text-white placeholder:text-text-tertiary focus:outline-none focus:border-[rgba(94,109,210,0.5)]"
+                  className="w-full pl-8 pr-8 py-2 bg-border-default border border-border-default rounded-lg text-[13px] text-white placeholder:text-text-tertiary focus:outline-none focus:border-primary"
                 />
                 {query && (
                   <button

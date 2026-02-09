@@ -48,11 +48,11 @@ export function IncomingCallModal() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="fixed inset-0 z-[100] bg-[#050506]/95 backdrop-blur-xl flex flex-col"
+        className="fixed inset-0 z-[100] bg-bg-base/95 backdrop-blur-xl flex flex-col"
       >
         {/* Background gradient */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full bg-[#6366f1]/10 blur-[100px]" />
+          <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full bg-primary-10 blur-[100px]" />
         </div>
 
         {/* Main content */}
@@ -68,7 +68,7 @@ export function IncomingCallModal() {
             {status === 'ringing' && (
               <>
                 <motion.div
-                  className="absolute inset-[-20px] rounded-full border-2 border-[#34d399]/30"
+                  className="absolute inset-[-20px] rounded-full border-2 border-success/30"
                   animate={{
                     scale: [1, 1.3, 1.3],
                     opacity: [0.5, 0, 0],
@@ -80,7 +80,7 @@ export function IncomingCallModal() {
                   }}
                 />
                 <motion.div
-                  className="absolute inset-[-20px] rounded-full border-2 border-[#34d399]/30"
+                  className="absolute inset-[-20px] rounded-full border-2 border-success/30"
                   animate={{
                     scale: [1, 1.3, 1.3],
                     opacity: [0.5, 0, 0],

@@ -132,7 +132,7 @@ export function ParticipantVolumeControl({
             />
             {/* 100% marker */}
             <div
-              className="absolute top-0 bottom-0 w-px bg-[rgba(255,255,255,0.3)]"
+              className="absolute top-0 bottom-0 w-px bg-overlay-heavy"
               style={{ left: '50%' }}
             />
           </div>
@@ -216,7 +216,7 @@ export function ParticipantVolumeControl({
 
           {/* 100% marker (default position) */}
           <div
-            className="absolute top-1/2 -translate-y-1/2 w-0.5 h-4 bg-[rgba(255,255,255,0.3)] rounded-full pointer-events-none"
+            className="absolute top-1/2 -translate-y-1/2 w-0.5 h-4 bg-overlay-heavy rounded-full pointer-events-none"
             style={{ left: '50%', transform: 'translate(-50%, -50%)' }}
           />
 

@@ -110,7 +110,7 @@ export function PremiumGate({
       <motion.button
         onClick={() => setShowModal(true)}
         aria-label={`Débloquer ${label} - Passe Premium pour débloquer`}
-        className="w-full p-4 rounded-xl bg-[rgba(255,255,255,0.02)] border border-border-default hover:border-warning hover:bg-warning-5 transition-interactive text-left"
+        className="w-full p-4 rounded-xl bg-surface-card border border-border-default hover:border-warning hover:bg-warning-5 transition-interactive text-left"
         whileHover={{ y: -2 }}
         whileTap={{ scale: 0.99 }}
       >
@@ -173,10 +173,10 @@ export function SquadLimitReached({
     <motion.div
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      className="p-4 rounded-xl bg-gradient-to-br from-[rgba(251,191,36,0.1)] to-[rgba(251,191,36,0.02)] border border-warning"
+      className="p-4 rounded-xl bg-gradient-to-br from-warning-10 to-transparent border border-warning"
     >
       <div className="flex items-start gap-3">
-        <div className="w-10 h-10 rounded-xl bg-[rgba(251,191,36,0.2)] flex items-center justify-center flex-shrink-0">
+        <div className="w-10 h-10 rounded-xl bg-warning-15 flex items-center justify-center flex-shrink-0">
           <Lock className="w-5 h-5 text-warning" />
         </div>
         <div className="flex-1">

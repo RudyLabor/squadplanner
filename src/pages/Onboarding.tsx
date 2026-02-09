@@ -528,7 +528,7 @@ export function Onboarding() {
                   onClick={() => navigateToStep('create-squad')}
                   disabled={isNavigating}
                   data-testid="create-squad-button"
-                  className="w-full p-6 rounded-2xl bg-[rgba(255,255,255,0.02)] border border-border-default hover:border-primary hover:scale-[1.02] active:scale-[0.99] transition-interactive text-left group disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full p-6 rounded-2xl bg-surface-card border border-border-default hover:border-primary hover:scale-[1.02] active:scale-[0.99] transition-interactive text-left group disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <div className="flex items-start gap-4">
                     <div className="w-14 h-14 rounded-xl bg-primary-10 flex items-center justify-center shrink-0 group-hover:bg-primary-15 transition-colors">
@@ -551,7 +551,7 @@ export function Onboarding() {
                   onClick={() => navigateToStep('join-squad')}
                   disabled={isNavigating}
                   data-testid="join-squad-button"
-                  className="w-full p-6 rounded-2xl bg-[rgba(255,255,255,0.02)] border border-border-default hover:border-success hover:scale-[1.02] active:scale-[0.99] transition-interactive text-left group disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full p-6 rounded-2xl bg-surface-card border border-border-default hover:border-success hover:scale-[1.02] active:scale-[0.99] transition-interactive text-left group disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <div className="flex items-start gap-4">
                     <div className="w-14 h-14 rounded-xl bg-success-10 flex items-center justify-center shrink-0 group-hover:bg-success-15 transition-colors">
@@ -1088,7 +1088,7 @@ export function Onboarding() {
                       <div className="pt-3 border-t border-border-default">
                         <p className="text-[12px] text-text-tertiary mb-2">Code d'invitation</p>
                         <div className="flex items-center gap-2">
-                          <code className="flex-1 px-4 py-3 rounded-lg bg-[rgba(255,255,255,0.02)] border border-border-default text-[18px] font-mono font-bold text-text-primary tracking-widest text-center">
+                          <code className="flex-1 px-4 py-3 rounded-lg bg-surface-card border border-border-default text-[18px] font-mono font-bold text-text-primary tracking-widest text-center">
                             {createdSquadCode}
                           </code>
                           <button

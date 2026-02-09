@@ -207,7 +207,7 @@ export const MessageContent = memo(function MessageContent({
                 type="button"
                 className={`inline rounded px-0.5 font-medium transition-colors ${
                   isOwn
-                    ? 'bg-overlay-heavy text-white hover:bg-[rgba(255,255,255,0.3)]'
+                    ? 'bg-overlay-heavy text-white hover:bg-overlay-heavy'
                     : 'bg-primary-15 text-[#818cf8] hover:bg-primary-20'
                 }`}
                 onClick={(e) => {

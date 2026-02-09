@@ -83,7 +83,7 @@ export function TypingIndicator({ text, compact = false }: TypingIndicatorProps)
           {[0, 1, 2].map((i) => (
             <motion.span
               key={i}
-              className="w-1.5 h-1.5 rounded-full bg-[#8b8d90]"
+              className="w-1.5 h-1.5 rounded-full bg-text-secondary"
               variants={dotVariants}
               animate={{
                 opacity: [0.4, 1, 0.4],
@@ -101,7 +101,7 @@ export function TypingIndicator({ text, compact = false }: TypingIndicatorProps)
 
       {/* Texte avec animation pulse subtile */}
       <motion.span
-        className="text-[12px] text-[#8b8d90] italic"
+        className="text-[12px] text-text-secondary italic"
         animate={{
           opacity: [0.7, 1, 0.7],
         }}

@@ -151,7 +151,7 @@ export function Challenges({ challenges, onClaimXP }: ChallengesProps) {
           <motion.div
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
-            className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-success-15 border border-[rgba(74,222,128,0.3)]"
+            className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-success-15 border border-success"
           >
             <Gift className="w-4 h-4 text-success" />
             <span className="text-[13px] font-medium text-success">
@@ -169,7 +169,7 @@ export function Challenges({ challenges, onClaimXP }: ChallengesProps) {
             onClick={() => setActiveTab(tab.key)}
             className={`flex items-center gap-2 px-4 py-2 rounded-xl text-[13px] font-medium whitespace-nowrap transition-interactive ${
               activeTab === tab.key
-                ? 'bg-border-hover text-text-primary border border-[rgba(255,255,255,0.2)]'
+                ? 'bg-border-hover text-text-primary border border-border-hover'
                 : 'bg-surface-card text-text-secondary border border-transparent hover:bg-border-subtle'
             }`}
           >
@@ -250,9 +250,9 @@ function ChallengeCard({ challenge, index, onClaim, isClaiming }: ChallengeCardP
       <Card
         className={`p-4 transition-interactive ${
           isClaimed
-            ? 'bg-[rgba(255,255,255,0.01)] opacity-60'
+            ? 'bg-surface-card opacity-60'
             : canClaim
-              ? 'bg-surface-dark border-[rgba(74,222,128,0.3)] shadow-glow-success'
+              ? 'bg-surface-dark border-success shadow-glow-success'
               : 'bg-surface-dark border-border-hover'
         }`}
       >

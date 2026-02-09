@@ -153,7 +153,7 @@ export function PremiumUpgradeModal({
                     className={`p-4 rounded-xl border-2 transition-interactive ${
                       selectedPlan === 'monthly'
                         ? 'border-primary bg-primary-10'
-                        : 'border-border-hover hover:border-[rgba(255,255,255,0.15)]'
+                        : 'border-border-hover hover:border-overlay-medium'
                     }`}
                   >
                     <div className="text-[13px] text-text-secondary mb-1">Mensuel</div>
@@ -168,7 +168,7 @@ export function PremiumUpgradeModal({
                     className={`p-4 rounded-xl border-2 transition-interactive relative ${
                       selectedPlan === 'yearly'
                         ? 'border-success bg-success-10'
-                        : 'border-border-hover hover:border-[rgba(255,255,255,0.15)]'
+                        : 'border-border-hover hover:border-overlay-medium'
                     }`}
                   >
                     <div className="absolute -top-2 right-2 px-2 py-0.5 rounded-full bg-success text-xs font-bold text-bg-base">
@@ -188,7 +188,7 @@ export function PremiumUpgradeModal({
                   {PREMIUM_FEATURES.map((feat, index) => (
                     <div
                       key={index}
-                      className="flex items-start gap-3 p-3 rounded-xl bg-[rgba(255,255,255,0.02)]"
+                      className="flex items-start gap-3 p-3 rounded-xl bg-surface-card"
                     >
                       <div className="w-9 h-9 rounded-lg bg-primary-15 flex items-center justify-center flex-shrink-0">
                         <feat.icon className="w-4 h-4 text-primary" />

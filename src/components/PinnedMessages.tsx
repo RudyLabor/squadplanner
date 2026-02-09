@@ -66,7 +66,7 @@ export function PinnedMessages({
       {/* Collapsed header - always visible */}
       <button
         onClick={toggleExpanded}
-        className="w-full flex items-center justify-between px-4 py-3 hover:bg-[rgba(255,255,255,0.02)] transition-colors"
+        className="w-full flex items-center justify-between px-4 py-3 hover:bg-surface-card transition-colors"
         aria-expanded={isExpanded}
         aria-controls="pinned-messages-list"
       >

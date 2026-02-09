@@ -171,7 +171,7 @@ export class ErrorBoundary extends Component<Props, State> {
 
             {/* Show technical details in dev mode */}
             {!import.meta.env.PROD && this.state.error && (
-              <div className="mt-6 p-4 rounded-xl bg-[rgba(255,255,255,0.02)] border border-border-default text-left">
+              <div className="mt-6 p-4 rounded-xl bg-surface-card border border-border-default text-left">
                 <p className="text-[11px] font-medium text-text-secondary mb-1">Détails techniques :</p>
                 <p className="text-[12px] font-mono text-error break-all">
                   {this.state.error.message}

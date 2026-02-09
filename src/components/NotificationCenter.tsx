@@ -179,8 +179,8 @@ export function NotificationBell() {
                     key={notif.id}
                     type="button"
                     onClick={() => markAsRead(notif.id)}
-                    className={`w-full text-left px-4 py-3 border-b border-[rgba(255,255,255,0.03)] hover:bg-surface-card transition-colors ${
-                      !notif.read ? 'bg-[rgba(99,102,241,0.04)]' : ''
+                    className={`w-full text-left px-4 py-3 border-b border-border-subtle hover:bg-surface-card transition-colors ${
+                      !notif.read ? 'bg-primary-5' : ''
                     }`}
                   >
                     <div className="flex items-start gap-3">

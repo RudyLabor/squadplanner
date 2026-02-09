@@ -154,7 +154,7 @@ export function StreakCounter({ streakDays, lastActiveDate, onCheckIn }: StreakC
             initial={{ opacity: 0, y: -50, scale: 0.8 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -20, scale: 0.9 }}
-            className="fixed top-4 left-1/2 -translate-x-1/2 z-50 px-6 py-4 rounded-2xl bg-gradient-to-r from-[#f97316]/90 to-[#fbbf24]/90 border border-[#f97316]/50 backdrop-blur-xl shadow-[0_0_40px_rgba(249,115,22,0.5)]"
+            className="fixed top-4 left-1/2 -translate-x-1/2 z-50 px-6 py-4 rounded-2xl bg-gradient-to-r from-orange-500/90 to-warning/90 border border-orange-500/50 backdrop-blur-xl shadow-glow-warning"
           >
             <div className="flex items-center gap-4">
               <motion.div
@@ -323,7 +323,7 @@ export function StreakCounter({ streakDays, lastActiveDate, onCheckIn }: StreakC
                 disabled={hasCheckedInToday}
                 className={`px-4 py-2.5 rounded-xl font-medium text-[13px] transition-interactive ${
                   hasCheckedInToday
-                    ? 'bg-[#4ade80]/20 text-[#4ade80] cursor-default'
+                    ? 'bg-success/20 text-success cursor-default'
                     : 'bg-gradient-to-r text-white hover:opacity-90 active:scale-95'
                 }`}
                 style={!hasCheckedInToday ? {
@@ -351,14 +351,14 @@ export function StreakCounter({ streakDays, lastActiveDate, onCheckIn }: StreakC
           <div className="mb-5 p-3 rounded-xl bg-surface-card">
             <div className="flex items-center justify-between mb-2">
               <div className="flex items-center gap-2">
-                <Gift className="w-4 h-4 text-[#8b93ff]" />
+                <Gift className="w-4 h-4 text-primary-hover" />
                 <span className="text-[13px] text-text-secondary">Prochain objectif</span>
               </div>
               <div className="flex items-center gap-2">
                 <span className="text-[13px] font-medium text-text-primary">
                   {nextMilestone.emoji} {nextMilestone.label}
                 </span>
-                <span className="text-[12px] px-2 py-0.5 rounded-full bg-[#4ade80]/20 text-[#4ade80]">
+                <span className="text-[12px] px-2 py-0.5 rounded-full bg-success/20 text-success">
                   +{nextMilestone.xp} XP
                 </span>
               </div>
@@ -429,7 +429,7 @@ export function StreakCounter({ streakDays, lastActiveDate, onCheckIn }: StreakC
               animate={{ opacity: 1, y: 0 }}
               className="mt-4 p-3 rounded-xl bg-[rgba(139,147,255,0.08)] border border-[rgba(139,147,255,0.15)]"
             >
-              <p className="text-[12px] text-[#8b93ff]">
+              <p className="text-[12px] text-primary-hover">
                 {streakDays === 0
                   ? "Lance ta série aujourd'hui ! Pointe chaque jour pour gagner des XP."
                   : `Plus que ${7 - streakDays} jours pour ton premier objectif ! Continue comme ça !`}

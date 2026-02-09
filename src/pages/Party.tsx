@@ -225,7 +225,7 @@ function ActivePartySection({ squad, onLeave, currentUserId }: {
       )}
 
       {/* Participants */}
-      <div className="p-6 bg-[rgba(0,0,0,0.2)]">
+      <div className="p-6 bg-black/20">
         <div className="flex items-center justify-center gap-8 flex-wrap">
           <AnimatePresence mode="popLayout">
             {participants.map((p) => {
@@ -419,7 +419,7 @@ function SquadCard({ squad, onJoin, isConnecting }: {
     >
       <Card className="p-4 bg-gradient-to-br from-primary/[0.08] to-transparent border-primary hover:border-primary transition-interactive">
         <div className="flex items-center gap-4">
-          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#6366f1] to-[#a78bfa] flex items-center justify-center shadow-md shadow-[#6366f1]/10">
+          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-purple flex items-center justify-center shadow-md shadow-primary/10">
             <Gamepad2 className="w-6 h-6 text-white" />
           </div>
 
@@ -433,7 +433,7 @@ function SquadCard({ squad, onJoin, isConnecting }: {
             variant="primary"
             onClick={onJoin}
             disabled={isConnecting}
-            className="shadow-md shadow-[#6366f1]/10"
+            className="shadow-md shadow-primary/10"
           >
             {isConnecting ? (
               <Loader2 className="w-4 h-4 animate-spin" />
@@ -704,7 +704,7 @@ export function Party() {
             >
               <Card className="p-8 text-center bg-gradient-to-br from-primary/[0.08] to-transparent border-primary">
                 <motion.div
-                  className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#6366f1] to-[#a78bfa] flex items-center justify-center mx-auto mb-5 shadow-md shadow-[#6366f1]/15"
+                  className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary to-purple flex items-center justify-center mx-auto mb-5 shadow-md shadow-primary/15"
                   animate={{ scale: [1, 1.02, 1] }}
                   transition={{ duration: 2, repeat: 3 }}
                 >
@@ -717,7 +717,7 @@ export function Party() {
                   Crée ou rejoins une squad pour lancer des parties vocales avec tes potes.
                 </p>
                 <Link to="/squads">
-                  <Button className="shadow-md shadow-[#6366f1]/10">
+                  <Button className="shadow-md shadow-primary/10">
                     <Users className="w-4 h-4" />
                     Trouver une squad
                   </Button>
@@ -753,7 +753,7 @@ export function Party() {
                     /* Une seule squad - affichage central amélioré */
                     <Card className="p-8 text-center bg-gradient-to-br from-primary/10 via-transparent to-success/5 border-primary">
                       <motion.div
-                        className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#6366f1] to-[#a78bfa] flex items-center justify-center mx-auto mb-5 shadow-lg shadow-[#6366f1]/15"
+                        className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary to-purple flex items-center justify-center mx-auto mb-5 shadow-lg shadow-primary/15"
                         animate={{ scale: [1, 1.02, 1] }}
                         transition={{ duration: 2, repeat: 3 }}
                       >
@@ -771,7 +771,7 @@ export function Party() {
                       <Button
                         onClick={() => handleJoinParty(squads[0].id)}
                         disabled={isConnecting}
-                        className="shadow-md shadow-[#6366f1]/10 px-8"
+                        className="shadow-md shadow-primary/10 px-8"
                       >
                         {isConnecting ? (
                           <Loader2 className="w-4 h-4 animate-spin" />

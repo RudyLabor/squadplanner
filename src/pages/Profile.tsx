@@ -285,7 +285,7 @@ export function Profile() {
     return (
       <div className="min-h-0 bg-bg-base pb-6">
         <div className="relative">
-          <div className="absolute inset-0 h-48 bg-gradient-to-b from-[rgba(99,102,241,0.12)] to-transparent" />
+          <div className="absolute inset-0 h-48 bg-gradient-to-b from-primary-15 to-transparent" />
           <div className="relative px-4 md:px-6 lg:px-8 pt-8 pb-4 max-w-2xl lg:max-w-4xl xl:max-w-6xl mx-auto">
             <ProfileSkeleton />
           </div>
@@ -372,7 +372,7 @@ export function Profile() {
       {/* Hero section avec avatar */}
       <div className="relative">
         {/* Background gradient */}
-        <div className="absolute inset-0 h-48 bg-gradient-to-b from-[rgba(99,102,241,0.12)] to-transparent" />
+        <div className="absolute inset-0 h-48 bg-gradient-to-b from-primary-15 to-transparent" />
 
         <div className="relative px-4 md:px-6 lg:px-8 pt-8 pb-4 max-w-2xl lg:max-w-4xl xl:max-w-6xl mx-auto">
           {/* Avatar central */}
@@ -689,18 +689,18 @@ export function Profile() {
         {/* IA Coach - Basique (gratuit) */}
         <Card className={`mb-5 p-4 bg-gradient-to-br border ${
           aiCoachTip?.tone === 'celebration'
-            ? 'from-[rgba(52,211,153,0.06)] to-[rgba(52,211,153,0.02)] border-[rgba(52,211,153,0.12)]'
+            ? 'from-success-5 to-transparent border-success'
             : aiCoachTip?.tone === 'warning'
-              ? 'from-[rgba(251,113,133,0.06)] to-[rgba(251,113,133,0.02)] border-[rgba(251,113,133,0.12)]'
-              : 'from-[rgba(167,139,250,0.06)] to-[rgba(167,139,250,0.02)] border-[rgba(167,139,250,0.12)]'
+              ? 'from-error-5 to-transparent border-error'
+              : 'from-purple-10 to-transparent border-purple'
         }`}>
           <div className="flex items-start gap-3">
             <div className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 ${
               aiCoachTip?.tone === 'celebration'
                 ? 'bg-success-15'
                 : aiCoachTip?.tone === 'warning'
-                  ? 'bg-[rgba(251,113,133,0.12)]'
-                  : 'bg-[rgba(167,139,250,0.12)]'
+                  ? 'bg-error-10'
+                  : 'bg-purple-10'
             }`}>
               <Sparkles className={`w-5 h-5 ${
                 aiCoachTip?.tone === 'celebration'
@@ -717,7 +717,7 @@ export function Profile() {
                   aiCoachTip?.tone === 'celebration'
                     ? 'bg-success-15 text-success'
                     : aiCoachTip?.tone === 'warning'
-                      ? 'bg-[rgba(251,113,133,0.15)] text-error'
+                      ? 'bg-error-15 text-error'
                       : 'bg-purple-15 text-purple'
                 }`}>
                   {aiCoachTip?.tone === 'celebration' ? 'BRAVO' : aiCoachTip?.tone === 'warning' ? 'ATTENTION' : 'CONSEIL'}
@@ -749,9 +749,9 @@ export function Profile() {
             featureLabel="Coach IA Avancé"
             fallback="lock"
           >
-            <Card className="p-4 bg-gradient-to-br from-[rgba(251,191,36,0.06)] to-[rgba(251,191,36,0.02)] border-[rgba(251,191,36,0.12)]">
+            <Card className="p-4 bg-gradient-to-br from-warning-5 to-transparent border-warning">
               <div className="flex items-start gap-3">
-                <div className="w-10 h-10 rounded-xl bg-[rgba(251,191,36,0.12)] flex items-center justify-center flex-shrink-0">
+                <div className="w-10 h-10 rounded-xl bg-warning-10 flex items-center justify-center flex-shrink-0">
                   <Sparkles className="w-5 h-5 text-warning" />
                 </div>
                 <div className="flex-1">
@@ -847,7 +847,7 @@ export function Profile() {
 
         {/* Badge Premium si actif */}
         {hasPremium && (
-          <Card className="mb-5 p-4 bg-gradient-to-br from-[rgba(251,191,36,0.08)] to-[rgba(251,191,36,0.02)] border-[rgba(251,191,36,0.15)]">
+          <Card className="mb-5 p-4 bg-gradient-to-br from-warning-10 to-transparent border-warning">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-xl bg-warning-15 flex items-center justify-center">
                 <Zap className="w-5 h-5 text-warning" />
@@ -880,7 +880,7 @@ export function Profile() {
                   transition={{ delay: index * 0.1 }}
                   className={`relative p-3 rounded-xl text-center ${
                     isUnlocked
-                      ? 'bg-gradient-to-br from-primary-15 to-[rgba(167,139,250,0.08)] border border-primary'
+                      ? 'bg-gradient-to-br from-primary-15 to-purple-10 border border-primary'
                       : 'bg-surface-card border border-transparent'
                   }`}
                 >

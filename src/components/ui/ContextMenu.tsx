@@ -129,7 +129,7 @@ export function ContextMenu({ items, children, disabled }: ContextMenuProps) {
               exit={{ opacity: 0, scale: 0.92 }}
               transition={{ type: 'spring', stiffness: 500, damping: 30, duration: 0.12 }}
               style={{ left: position.x, top: position.y }}
-              className="fixed z-[61] min-w-[200px] py-1.5 bg-[#1a1a2e] border border-border-hover rounded-xl shadow-2xl shadow-black/50 backdrop-blur-sm"
+              className="fixed z-[61] min-w-[200px] py-1.5 bg-surface-dark border border-border-hover rounded-xl shadow-2xl shadow-black/50 backdrop-blur-sm"
               role="menu"
               aria-orientation="vertical"
             >
@@ -158,7 +158,7 @@ export function ContextMenu({ items, children, disabled }: ContextMenuProps) {
                       item.disabled
                         ? 'opacity-40 cursor-not-allowed'
                         : item.danger
-                          ? 'text-[#f87171] hover:bg-error-10'
+                          ? 'text-error hover:bg-error-10'
                           : 'text-[#e0e0e0] hover:bg-border-default'
                     }`}
                     role="menuitem"

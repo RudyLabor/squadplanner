@@ -158,7 +158,7 @@ export function MessageActions({
       <button
         ref={buttonRef}
         onClick={() => setIsOpen(!isOpen)}
-        className="p-1.5 rounded-lg opacity-0 group-hover:opacity-100 hover:bg-border-hover transition-interactive focus:opacity-100 focus:outline-none focus:ring-2 focus:ring-[rgba(94,109,210,0.5)]"
+        className="p-1.5 rounded-lg opacity-0 group-hover:opacity-100 hover:bg-border-hover transition-interactive focus:opacity-100 focus:outline-none focus:ring-2 focus:ring-primary"
         aria-label="Actions du message"
         aria-expanded={isOpen}
         aria-haspopup="menu"

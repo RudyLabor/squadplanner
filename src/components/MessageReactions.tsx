@@ -202,7 +202,7 @@ export function MessageReactions({
             disabled={isLoading}
             className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-sm transition-interactive ${
               hasCurrentUser
-                ? 'bg-[rgba(74,222,128,0.15)] border border-[#4ade80]/30 text-[#4ade80]'
+                ? 'bg-success-15 border border-[#4ade80]/30 text-[#4ade80]'
                 : 'bg-border-subtle border border-border-hover text-text-secondary hover:bg-border-hover'
             } ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
             aria-label={`${emoji} reaction, ${count} ${count === 1 ? 'person' : 'people'}${hasCurrentUser ? ', you reacted' : ''}`}
@@ -230,7 +230,7 @@ export function MessageReactions({
           onClick={() => setIsPickerOpen(!isPickerOpen)}
           className={`w-7 h-7 flex items-center justify-center rounded-full transition-interactive ${
             isPickerOpen
-              ? 'bg-[rgba(74,222,128,0.15)] border border-[#4ade80]/30'
+              ? 'bg-success-15 border border-[#4ade80]/30'
               : 'bg-border-subtle border border-border-hover opacity-0 group-hover:opacity-100 hover:bg-border-hover'
           } ${isLongPressing ? 'scale-110' : ''}`}
           aria-label="Add reaction"

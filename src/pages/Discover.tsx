@@ -105,7 +105,7 @@ const SquadsTab = memo(function SquadsTab({ game, region }: { game: string; regi
     return (
       <div className="space-y-2">
         {Array.from({ length: 4 }).map((_, i) => (
-          <div key={i} className="h-28 rounded-xl bg-white/3 animate-pulse" />
+          <div key={i} className="h-28 rounded-xl bg-overlay-faint animate-pulse" />
         ))}
       </div>
     )

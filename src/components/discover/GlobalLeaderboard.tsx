@@ -24,7 +24,7 @@ export const GlobalLeaderboard = memo(function GlobalLeaderboard({ game, region,
     return (
       <div className="space-y-2">
         {Array.from({ length: 5 }).map((_, i) => (
-          <div key={i} className="h-14 rounded-lg bg-white/3 animate-pulse" />
+          <div key={i} className="h-14 rounded-lg bg-overlay-faint animate-pulse" />
         ))}
       </div>
     )
@@ -98,7 +98,7 @@ const LeaderboardRow = memo(function LeaderboardRow({ entry }: { entry: GlobalLe
   return (
     <Link
       to={`/u/${entry.username}`}
-      className="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/3 transition-colors"
+      className="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-overlay-faint transition-colors"
     >
       <span className="w-6 text-center text-xs font-bold text-text-tertiary">#{entry.rank}</span>
 

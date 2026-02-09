@@ -160,7 +160,7 @@ export const OptimizedImage = memo(function OptimizedImage({
       {/* Skeleton placeholder (default) */}
       {showPlaceholder && !isLoaded && !blurSrc && (
         <div
-          className="absolute inset-0 bg-white/5 animate-pulse rounded-inherit"
+          className="absolute inset-0 bg-overlay-faint animate-pulse rounded-inherit"
           aria-hidden="true"
         />
       )}

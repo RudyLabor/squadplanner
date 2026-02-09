@@ -304,7 +304,7 @@ export function Premium() {
               className={`relative p-6 rounded-2xl border-2 text-left transition-interactive ${
                 selectedPlan === 'monthly'
                   ? 'border-primary bg-primary/5 shadow-glow-primary-sm'
-                  : 'border-border-hover bg-white/[0.02] hover:border-border-hover'
+                  : 'border-border-hover bg-overlay-faint hover:border-border-hover'
               }`}
               whileHover={{ y: -2, scale: 1.02 }}
               whileTap={{ scale: 0.99 }}
@@ -332,7 +332,7 @@ export function Premium() {
               className={`relative p-6 rounded-2xl border-2 text-left transition-interactive ${
                 selectedPlan === 'yearly'
                   ? 'border-success bg-success/5 shadow-glow-success'
-                  : 'border-border-hover bg-white/[0.02] hover:border-border-hover'
+                  : 'border-border-hover bg-overlay-faint hover:border-border-hover'
               }`}
               whileHover={{ y: -2, scale: 1.02 }}
               whileTap={{ scale: 0.99 }}
@@ -416,7 +416,7 @@ export function Premium() {
 
           <Card className="overflow-hidden">
             {/* Header */}
-            <div className="grid grid-cols-3 gap-4 p-4 bg-white/[0.02] border-b border-border-default">
+            <div className="grid grid-cols-3 gap-4 p-4 bg-overlay-faint border-b border-border-default">
               <div className="text-base font-semibold text-text-secondary">Fonctionnalité</div>
               <div className="text-base font-semibold text-text-secondary text-center">Gratuit</div>
               <div className="text-base font-semibold text-center">

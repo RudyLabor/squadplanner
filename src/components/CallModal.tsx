@@ -187,7 +187,7 @@ export function CallModal() {
             <button
               onClick={endCall}
               aria-label="Annuler l'appel"
-              className="p-2 rounded-full bg-border-hover hover:bg-white/15 transition-colors"
+              className="p-2 rounded-full bg-border-hover hover:bg-overlay-medium transition-colors"
             >
               <X className="w-6 h-6 text-text-secondary" aria-hidden="true" />
             </button>

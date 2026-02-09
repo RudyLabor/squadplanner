@@ -19,7 +19,7 @@ export const MatchmakingSection = memo(function MatchmakingSection({ game, regio
     return (
       <div className="space-y-2">
         {Array.from({ length: 3 }).map((_, i) => (
-          <div key={i} className="h-20 rounded-lg bg-white/3 animate-pulse" />
+          <div key={i} className="h-20 rounded-lg bg-overlay-faint animate-pulse" />
         ))}
       </div>
     )

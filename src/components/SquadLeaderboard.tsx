@@ -170,6 +170,8 @@ function PodiumCard({
                 src={getOptimizedAvatarUrl(entry.avatar_url, isFirst ? 80 : 64) || entry.avatar_url}
                 alt={entry.username}
                 className="w-full h-full object-cover"
+                loading="lazy"
+                decoding="async"
               />
             ) : (
               <User
@@ -287,6 +289,8 @@ function LeaderboardListItem({
             src={getOptimizedAvatarUrl(entry.avatar_url, 40) || entry.avatar_url}
             alt={entry.username}
             className="w-full h-full object-cover"
+            loading="lazy"
+            decoding="async"
           />
         ) : (
           <User className="w-5 h-5 text-text-secondary" />

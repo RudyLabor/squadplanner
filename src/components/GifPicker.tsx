@@ -277,6 +277,7 @@ export const GifPicker = memo(function GifPicker({ isOpen, onSelect, onClose }: 
                         src={gif.preview}
                         alt="GIF"
                         loading="lazy"
+                        decoding="async"
                         className="w-full h-auto object-cover"
                         style={{ aspectRatio: `${gif.width}/${gif.height}` }}
                       />

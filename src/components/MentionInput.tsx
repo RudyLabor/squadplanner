@@ -197,6 +197,8 @@ export const MentionInput = memo(function MentionInput({
                     src={member.avatar_url}
                     alt=""
                     className="w-7 h-7 rounded-full object-cover flex-shrink-0"
+                    loading="lazy"
+                    decoding="async"
                   />
                 ) : (
                   <div className="w-7 h-7 rounded-full bg-primary-20 flex items-center justify-center text-xs font-bold text-primary-hover flex-shrink-0">

@@ -77,7 +77,7 @@ const PodiumCard = memo(function PodiumCard({ entry, index }: { entry: GlobalLea
       >
         <span className="text-lg">{style.icon}</span>
         {entry.avatar_url ? (
-          <img src={entry.avatar_url} alt="" className="w-10 h-10 rounded-full mx-auto mt-1 border-2 border-white/10" />
+          <img src={entry.avatar_url} alt="" className="w-10 h-10 rounded-full mx-auto mt-1 border-2 border-white/10" loading="lazy" decoding="async" />
         ) : (
           <div className={`w-10 h-10 rounded-full mx-auto mt-1 ${style.bg} flex items-center justify-center border-2 border-white/10`}>
             <span className={`text-sm font-bold ${style.text}`}>{entry.username.charAt(0).toUpperCase()}</span>
@@ -103,7 +103,7 @@ const LeaderboardRow = memo(function LeaderboardRow({ entry }: { entry: GlobalLe
       <span className="w-6 text-center text-xs font-bold text-text-tertiary">#{entry.rank}</span>
 
       {entry.avatar_url ? (
-        <img src={entry.avatar_url} alt="" className="w-8 h-8 rounded-full" />
+        <img src={entry.avatar_url} alt="" className="w-8 h-8 rounded-full" loading="lazy" decoding="async" />
       ) : (
         <div className="w-8 h-8 rounded-full bg-indigo-500/10 flex items-center justify-center">
           <span className="text-xs font-bold text-indigo-400">{entry.username.charAt(0).toUpperCase()}</span>

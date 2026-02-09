@@ -119,6 +119,7 @@ export const AnimatedAvatar = memo(function AnimatedAvatar({
             alt={alt}
             className="w-full h-full object-cover"
             loading="lazy"
+            decoding="async"
           />
         ) : (
           <span className="text-text-secondary font-medium text-xs select-none">

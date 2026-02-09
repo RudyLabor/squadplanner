@@ -547,6 +547,7 @@ export function AppLayout({ children }: AppLayoutProps) {
                         alt={profile.username || 'Avatar'}
                         className="w-8 h-8 rounded-full object-cover flex-shrink-0"
                         loading="lazy"
+                        decoding="async"
                       />
                     ) : (
                       <div className="w-8 h-8 rounded-full bg-purple/8 flex items-center justify-center flex-shrink-0">
@@ -570,6 +571,7 @@ export function AppLayout({ children }: AppLayoutProps) {
                         alt={profile.username || 'Avatar'}
                         className="w-10 h-10 rounded-full object-cover flex-shrink-0"
                         loading="lazy"
+                        decoding="async"
                       />
                     ) : (
                       <div className="w-10 h-10 rounded-full bg-purple/8 flex items-center justify-center flex-shrink-0">

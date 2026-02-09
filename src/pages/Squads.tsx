@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, memo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Users, Plus, Gamepad2, Link as LinkIcon, Copy, Check, Loader2, UserPlus, Calendar, Crown, Mic, ChevronRight, Sparkles } from 'lucide-react'
 import { Link, useNavigate } from 'react-router-dom'
@@ -58,7 +58,7 @@ function SuccessToast({ message, onClose }: { message: string; onClose: () => vo
 }
 
 // Card squad améliorée
-function SquadCard({ squad, isOwner, nextSession, hasActiveParty, copiedCode, onCopyCode }: {
+const SquadCard = memo(function SquadCard({ squad, isOwner, nextSession, hasActiveParty, copiedCode, onCopyCode }: {
   squad: {
     id: string
     name: string
@@ -199,7 +199,7 @@ function SquadCard({ squad, isOwner, nextSession, hasActiveParty, copiedCode, on
       </Link>
     </motion.article>
   )
-}
+})
 
 export default function Squads() {
   const [showCreate, setShowCreate] = useState(false)

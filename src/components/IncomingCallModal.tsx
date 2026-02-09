@@ -112,6 +112,8 @@ export function IncomingCallModal() {
                   src={caller.avatar_url}
                   alt={caller.username}
                   className="w-full h-full object-cover"
+                  loading="lazy"
+                  decoding="async"
                 />
               ) : (
                 <span className="text-4xl font-bold text-primary">{initial}</span>

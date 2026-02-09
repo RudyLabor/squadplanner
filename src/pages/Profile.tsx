@@ -384,6 +384,8 @@ export function Profile() {
                     src={localPreviewUrl || profile?.avatar_url || undefined}
                     alt="Avatar"
                     className="w-full h-full object-cover"
+                    loading="lazy"
+                    decoding="async"
                   />
                 ) : (
                   <User className="w-12 h-12 text-white" strokeWidth={1.5} />

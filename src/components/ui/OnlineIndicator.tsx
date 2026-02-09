@@ -120,6 +120,8 @@ export const AvatarWithStatus = memo(function AvatarWithStatus({
           src={src}
           alt={alt}
           className={`${avatarSizeClasses[size]} rounded-full object-cover bg-white/5`}
+          loading="lazy"
+          decoding="async"
         />
       ) : (
         <div

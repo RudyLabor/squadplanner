@@ -16,7 +16,10 @@
     "test:ui": "playwright test --ui",
     "test:headed": "playwright test --headed",
     "test:report": "playwright show-report",
-    "lighthouse": "lhci autorun"
+    "lighthouse": "lhci autorun",
+    "lighthouse:mobile": "lhci autorun --config=lighthouserc-mobile.json",
+    "analyze": "set ANALYZE=true&& vite build",
+    "analyze:unix": "ANALYZE=true vite build"
   },
   "dependencies": {
     "@capacitor/android": "^8.0.2",
@@ -63,6 +66,7 @@
     "globals": "^16.5.0",
     "jest-axe": "^10.0.0",
     "jsdom": "^28.0.0",
+    "rollup-plugin-visualizer": "^6.0.5",
     "tailwindcss": "^4.1.18",
     "typescript": "~5.9.3",
     "typescript-eslint": "^8.46.4",

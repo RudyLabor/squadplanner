@@ -229,6 +229,8 @@ export function CallHistory() {
                             src={call.contactAvatar}
                             alt={call.contactName}
                             className="w-full h-full object-cover"
+                            loading="lazy"
+                            decoding="async"
                           />
                         ) : (
                           <User className="w-6 h-6 text-white" />

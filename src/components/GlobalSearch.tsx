@@ -349,6 +349,8 @@ export function GlobalSearch() {
                                       src={result.avatar}
                                       alt=""
                                       className="w-9 h-9 rounded-lg object-cover"
+                                      loading="lazy"
+                                      decoding="async"
                                     />
                                   ) : (
                                     <div className={`w-9 h-9 rounded-lg flex items-center justify-center bg-surface-card ${typeColors[result.type]}`}>

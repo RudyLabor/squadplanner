@@ -1,11 +1,47 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
+import { visualizer } from "rollup-plugin-visualizer";
 import { fileURLToPath, URL } from "node:url";
+import { readFileSync, writeFileSync } from "node:fs";
+import { resolve } from "node:path";
+
+// Auto-version the service worker on each build so browsers detect updates
+function swVersionPlugin() {
+  return {
+    name: 'sw-auto-version',
+    closeBundle() {
+      const swPath = resolve(__dirname, 'dist/sw.js');
+      try {
+        const content = readFileSync(swPath, 'utf-8');
+        const buildHash = Date.now().toString(36);
+        const updated = content.replace(
+          /const CACHE_VERSION = ['"].*?['"]/,
+          `const CACHE_VERSION = 'v-${buildHash}'`
+        );
+        writeFileSync(swPath, updated);
+        console.log(`[sw-auto-version] SW updated → v-${buildHash}`);
+      } catch {
+        // sw.js not in dist (dev mode), skip silently
+      }
+    },
+  };
+}
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react(), tailwindcss()],
+  plugins: [
+    react(),
+    tailwindcss(),
+    swVersionPlugin(),
+    process.env.ANALYZE === 'true' && visualizer({
+      filename: 'dist/bundle-analysis.html',
+      open: true,
+      gzipSize: true,
+      brotliSize: true,
+      template: 'treemap',
+    }),
+  ].filter(Boolean),
 
   // Build target flag: set BUILD_TARGET=native for Capacitor builds
   define: {

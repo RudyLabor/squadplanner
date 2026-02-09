@@ -237,6 +237,8 @@ export function CallModal() {
                   src={otherPerson.avatar_url}
                   alt={otherPerson.username}
                   className="w-full h-full object-cover"
+                  loading="lazy"
+                  decoding="async"
                 />
               ) : (
                 <span className="text-4xl font-bold text-primary">{initial}</span>

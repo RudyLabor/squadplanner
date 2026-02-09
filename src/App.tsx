@@ -155,6 +155,11 @@ function AppContent() {
       initSentry().catch((err) => {
         console.warn('[App] Sentry initialization failed:', err)
       })
+
+      // Warm connections for probable next navigations (non-blocking)
+      import('./utils/routePrefetch').then(({ prefetchProbableRoutes }) => {
+        prefetchProbableRoutes()
+      })
     }
   }, [user])
 

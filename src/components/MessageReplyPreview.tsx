@@ -57,6 +57,8 @@ export function MessageReplyPreview({
           src={originalMessage.sender_avatar}
           alt={originalMessage.sender_username}
           className="w-4 h-4 rounded-full flex-shrink-0"
+          loading="lazy"
+          decoding="async"
         />
       ) : (
         <div className="w-4 h-4 rounded-full bg-primary/30 flex items-center justify-center flex-shrink-0">

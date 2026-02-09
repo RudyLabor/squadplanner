@@ -246,6 +246,8 @@ export function InviteToPartyModal({
                             src={member.avatar_url}
                             alt={member.username}
                             className="w-10 h-10 rounded-full object-cover"
+                            loading="lazy"
+                            decoding="async"
                           />
                         ) : (
                           <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center">

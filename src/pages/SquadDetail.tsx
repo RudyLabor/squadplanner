@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, memo, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   Users, Calendar, Plus, Copy, Check, MessageCircle, Phone,
@@ -154,7 +154,7 @@ function PartySection({ squadId }: { squadId: string }) {
 }
 
 // Card session avec RSVP rapide
-function SessionCard({ session, onRsvp }: {
+const SessionCard = memo(function SessionCard({ session, onRsvp }: {
   session: {
     id: string
     title?: string | null
@@ -284,7 +284,7 @@ function SessionCard({ session, onRsvp }: {
       </div>
     </Card>
   )
-}
+})
 
 // Modal d'invitation
 function InviteModal({
@@ -477,7 +477,7 @@ function InviteModal({
               {searchResults.map(user => (
                 <div key={user.id} className="flex items-center gap-3 p-3 rounded-xl bg-surface-card">
                   {user.avatar_url ? (
-                    <img src={user.avatar_url} alt="" className="w-10 h-10 rounded-full object-cover" />
+                    <img src={user.avatar_url} alt="" className="w-10 h-10 rounded-full object-cover" loading="lazy" decoding="async" />
                   ) : (
                     <div className="w-10 h-10 rounded-full bg-purple/15 flex items-center justify-center">
                       <Users className="w-5 h-5 text-purple" />
@@ -519,7 +519,7 @@ function InviteModal({
 }
 
 // Card membre avec boutons d'appel et message
-function MemberCard({ member, isOwner, currentUserId }: {
+const MemberCard = memo(function MemberCard({ member, isOwner, currentUserId }: {
   member: {
     user_id: string
     role: string
@@ -558,6 +558,8 @@ function MemberCard({ member, isOwner, currentUserId }: {
           src={member.profiles.avatar_url}
           alt={member.profiles.username || 'Avatar'}
           className="w-10 h-10 rounded-full object-cover"
+          loading="lazy"
+          decoding="async"
         />
       ) : (
         <div className="w-10 h-10 rounded-full bg-purple/15 flex items-center justify-center">
@@ -600,7 +602,7 @@ function MemberCard({ member, isOwner, currentUserId }: {
       )}
     </div>
   )
-}
+})
 
 export default function SquadDetail() {
   const { id } = useParams<{ id: string }>()
@@ -692,7 +694,7 @@ export default function SquadDetail() {
     }
   }
 
-  const handleRsvp = async (sessionId: string, response: 'present' | 'absent' | 'maybe') => {
+  const handleRsvp = useCallback(async (sessionId: string, response: 'present' | 'absent' | 'maybe') => {
     try {
       const { error } = await updateRsvp(sessionId, response)
       if (error) {
@@ -726,7 +728,7 @@ export default function SquadDetail() {
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Erreur réseau')
     }
-  }
+  }, [id, updateRsvp, fetchSessions])
 
   const handleLeaveSquad = async () => {
     if (!id) return

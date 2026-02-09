@@ -67,3 +67,30 @@ export function getOptimizedAvatarUrlPreset(
 ): string | null {
   return getOptimizedAvatarUrl(url, AVATAR_SIZES[preset])
 }
+
+/**
+ * Generate a srcSet string for responsive avatar images at multiple DPR levels.
+ * Returns 1x, 1.5x, 2x, and 3x variants for sharp rendering on all screens.
+ *
+ * @param url - Original avatar URL
+ * @param baseSize - Display size in CSS pixels
+ * @returns srcSet string for use in <img srcSet="...">
+ */
+export function getAvatarSrcSet(url: string | null | undefined, baseSize: number): string {
+  if (!url) return ''
+
+  // Only generate srcSet for Supabase Storage URLs (others don't support transforms)
+  if (!url.includes('supabase') || !url.includes('/storage/')) {
+    return ''
+  }
+
+  const multipliers = [1, 1.5, 2, 3]
+  return multipliers
+    .map(dpr => {
+      const size = Math.round(baseSize * dpr)
+      const optimized = getOptimizedAvatarUrl(url, size)
+      return optimized ? `${optimized} ${dpr}x` : ''
+    })
+    .filter(Boolean)
+    .join(', ')
+}

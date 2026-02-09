@@ -1,3 +1,4 @@
+import { memo } from 'react'
 import { motion } from 'framer-motion'
 import { Gamepad2, UserPlus, Users, LogIn } from 'lucide-react'
 import { Card } from './ui'
@@ -25,7 +26,7 @@ export interface FriendsPlayingProps {
 }
 
 // Individual friend card
-function FriendCard({
+const FriendCard = memo(function FriendCard({
   friend,
   onJoin,
   onInvite
@@ -52,6 +53,8 @@ function FriendCard({
                   src={getOptimizedAvatarUrl(friend.avatar_url, 48) || friend.avatar_url}
                   alt={friend.username}
                   className="w-12 h-12 rounded-full object-cover border-2 border-success/30"
+                  loading="lazy"
+                  decoding="async"
                 />
               ) : (
                 <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary/30 to-primary-hover/20 flex items-center justify-center border-2 border-success/30">
@@ -142,7 +145,7 @@ function FriendCard({
       </Card>
     </motion.div>
   )
-}
+})
 
 // Empty state component with actionable invite button
 function EmptyState() {

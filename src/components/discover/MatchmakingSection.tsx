@@ -78,7 +78,7 @@ const PlayerCard = memo(function PlayerCard({ player }: { player: MatchmakingPla
       <div className="flex items-start gap-3">
         {/* Avatar */}
         {player.avatar_url ? (
-          <img src={player.avatar_url} alt="" className="w-10 h-10 rounded-full flex-shrink-0" />
+          <img src={player.avatar_url} alt="" className="w-10 h-10 rounded-full flex-shrink-0" loading="lazy" decoding="async" />
         ) : (
           <div className="w-10 h-10 rounded-full bg-indigo-500/10 flex items-center justify-center flex-shrink-0">
             <span className="text-sm font-bold text-indigo-400">{player.username.charAt(0).toUpperCase()}</span>

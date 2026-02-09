@@ -904,6 +904,8 @@ export function Onboarding() {
                             src={avatarUrl}
                             alt="Avatar"
                             className="w-24 h-24 rounded-full object-cover"
+                            loading="lazy"
+                            decoding="async"
                           />
                         ) : (
                           <span className="text-4xl font-bold text-primary">

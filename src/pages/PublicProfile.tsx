@@ -80,7 +80,7 @@ export function PublicProfile() {
       {/* Profile header */}
       <div className="flex flex-col items-center text-center mb-6">
         {profile.avatar_url ? (
-          <img src={profile.avatar_url} alt="" className="w-20 h-20 rounded-full border-2 border-white/10" />
+          <img src={profile.avatar_url} alt="" className="w-20 h-20 rounded-full border-2 border-white/10" loading="lazy" decoding="async" />
         ) : (
           <div className="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center border-2 border-white/10">
             <span className="text-2xl font-bold text-primary">{profile.username?.charAt(0).toUpperCase()}</span>

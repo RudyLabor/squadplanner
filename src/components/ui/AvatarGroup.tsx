@@ -84,6 +84,7 @@ function SingleAvatar({
             alt={avatar.name}
             className="w-full h-full object-cover"
             loading="lazy"
+            decoding="async"
           />
         ) : (
           <div

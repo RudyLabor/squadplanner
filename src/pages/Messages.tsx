@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef, useCallback, useMemo, memo } from 'react'
+import { useEffect, useState, useRef, useCallback, useMemo, memo, type ChangeEvent, type FormEvent } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useVirtualizer } from '@tanstack/react-virtual'
 import { useSearchParams } from 'react-router-dom'
@@ -107,7 +107,7 @@ function formatDateSeparator(dateStr: string) {
 }
 
 // Card conversation compacte
-function ConversationCard({ conversation, onClick, isActive }: {
+const ConversationCard = memo(function ConversationCard({ conversation, onClick, isActive }: {
   conversation: {
     id: string
     name: string
@@ -185,7 +185,7 @@ function ConversationCard({ conversation, onClick, isActive }: {
       </div>
     </button>
   )
-}
+})
 
 // Date separator component
 function DateSeparator({ date }: { date: string }) {
@@ -405,7 +405,7 @@ function SystemMessage({ message }: {
 }
 
 // Message bubble
-function MessageBubble({ message, isOwn, showAvatar, showName, currentUserId, isSquadChat, isAdmin, onEdit, onDelete, onPin, onReply, onForward, onPollVote, replyToMessage, onScrollToMessage, senderRole }: {
+const MessageBubble = memo(function MessageBubble({ message, isOwn, showAvatar, showName, currentUserId, isSquadChat, isAdmin, onEdit, onDelete, onPin, onReply, onForward, onPollVote, replyToMessage, onScrollToMessage, senderRole }: {
   message: {
     id: string
     content: string
@@ -466,6 +466,8 @@ function MessageBubble({ message, isOwn, showAvatar, showName, currentUserId, is
                 src={message.sender.avatar_url}
                 alt=""
                 className="w-8 h-8 rounded-full object-cover"
+                loading="lazy"
+                decoding="async"
               />
             ) : (
               <div className="w-8 h-8 rounded-full bg-primary-20 flex items-center justify-center text-xs font-bold text-primary">
@@ -594,10 +596,10 @@ function MessageBubble({ message, isOwn, showAvatar, showName, currentUserId, is
       </div>
     </motion.div>
   )
-}
+})
 
 // Card DM conversation
-function DMConversationCard({ conversation, onClick }: {
+const DMConversationCard = memo(function DMConversationCard({ conversation, onClick }: {
   conversation: {
     other_user_id: string
     other_user_username: string
@@ -623,6 +625,8 @@ function DMConversationCard({ conversation, onClick }: {
               src={conversation.other_user_avatar_url}
               alt=""
               className="w-full h-full object-cover"
+              loading="lazy"
+              decoding="async"
             />
           ) : (
             <span className="text-md font-bold text-primary">{initial}</span>
@@ -658,7 +662,7 @@ function DMConversationCard({ conversation, onClick }: {
       </div>
     </button>
   )
-}
+})
 
 export function Messages() {
   const { user } = useAuthStore()
@@ -924,13 +928,13 @@ export function Messages() {
   }
 
   // Show toast helper
-  const showToast = (message: string, variant: 'success' | 'error' = 'success') => {
+  const showToast = useCallback((message: string, variant: 'success' | 'error' = 'success') => {
     setToast({ message, variant, visible: true })
     setTimeout(() => setToast(t => ({ ...t, visible: false })), 3000)
-  }
+  }, [])
 
   // Handle message edit
-  const handleEditMessage = async (newContent: string) => {
+  const handleEditMessage = useCallback(async (newContent: string) => {
     if (!editingMessage) return
 
     const { error } = await editSquadMessage(editingMessage.id, newContent)
@@ -940,41 +944,41 @@ export function Messages() {
       showToast('Message modifie')
     }
     setEditingMessage(null)
-  }
+  }, [editingMessage, editSquadMessage, showToast])
 
   // Handle message delete
-  const handleDeleteMessage = async (messageId: string) => {
+  const handleDeleteMessage = useCallback(async (messageId: string) => {
     const { error } = await deleteSquadMessage(messageId)
     if (error) {
       showToast('Erreur lors de la suppression', 'error')
     } else {
       showToast('Message supprime')
     }
-  }
+  }, [deleteSquadMessage, showToast])
 
   // Handle message pin
-  const handlePinMessage = async (messageId: string, isPinned: boolean) => {
+  const handlePinMessage = useCallback(async (messageId: string, isPinned: boolean) => {
     const { error } = await pinSquadMessage(messageId, isPinned)
     if (error) {
       showToast('Erreur lors de l\'epinglage', 'error')
     } else {
       showToast(isPinned ? 'Message epingle' : 'Message desepingle')
     }
-  }
+  }, [pinSquadMessage, showToast])
 
   // Handle reply - focus input and add reply prefix
-  const handleReply = (replyInfo: { id: string; content: string; sender: string }) => {
+  const handleReply = useCallback((replyInfo: { id: string; content: string; sender: string }) => {
     setReplyingTo(replyInfo)
     inputRef.current?.focus()
-  }
+  }, [])
 
   // Cancel reply
-  const cancelReply = () => {
+  const cancelReply = useCallback(() => {
     setReplyingTo(null)
-  }
+  }, [])
 
   // Phase 4: Handle poll creation
-  const handleCreatePoll = async (question: string, options: string[]) => {
+  const handleCreatePoll = useCallback(async (question: string, options: string[]) => {
     const pollData: PollData = {
       type: 'poll',
       question,
@@ -988,20 +992,20 @@ export function Messages() {
     } else if (activeDMConv) {
       await sendDMMessage(content, activeDMConv.other_user_id)
     }
-  }
+  }, [user?.id, activeSquadConv, activeDMConv, sendSquadMessage, sendDMMessage])
 
   // Phase 4: Handle location share
-  const handleLocationShare = async (lat: number, lng: number) => {
+  const handleLocationShare = useCallback(async (lat: number, lng: number) => {
     const content = `[location:${lat},${lng}]`
     if (activeSquadConv) {
       await sendSquadMessage(content, activeSquadConv.squad_id, activeSquadConv.session_id)
     } else if (activeDMConv) {
       await sendDMMessage(content, activeDMConv.other_user_id)
     }
-  }
+  }, [activeSquadConv, activeDMConv, sendSquadMessage, sendDMMessage])
 
   // Phase 4: Handle poll vote
-  const handlePollVote = async (messageId: string, optionIndex: number) => {
+  const handlePollVote = useCallback(async (messageId: string, optionIndex: number) => {
     if (!user?.id) return
     const message = messages.find(m => m.id === messageId)
     if (!message) return
@@ -1017,12 +1021,12 @@ export function Messages() {
         }
       }
     } catch { /* ignore parse errors */ }
-  }
+  }, [user?.id, messages, isSquadChat, editSquadMessage])
 
   // Phase 4: Handle forward message
-  const handleForwardMessage = (msg: { content: string; sender: string }) => {
+  const handleForwardMessage = useCallback((msg: { content: string; sender: string }) => {
     setForwardMessage(msg)
-  }
+  }, [])
 
   // Check if current user is admin in current squad
   // Phase 3.3: Role-based permission check for admin actions (pin, delete others' messages)
@@ -1057,7 +1061,7 @@ export function Messages() {
   const isLoading = activeTab === 'squads' ? isLoadingSquad : isLoadingDM
 
   // Grouper les messages par date
-  const getMessageDate = (dateStr: string) => new Date(dateStr).toDateString()
+  const getMessageDate = useCallback((dateStr: string) => new Date(dateStr).toDateString(), [])
 
   // Variables pour la vue chat (isSquadChat déjà défini plus haut)
   const messages = isSquadChat ? squadMessages : dmMessages
@@ -1296,6 +1300,8 @@ export function Messages() {
                     src={activeDMConv.other_user_avatar_url}
                     alt=""
                     className="w-full h-full object-cover"
+                    loading="lazy"
+                    decoding="async"
                   />
                 ) : (
                   <span className="text-md font-bold text-primary">

@@ -14,6 +14,10 @@ interface OptimizedImageProps {
   avifSrc?: string
   /** Show skeleton placeholder while loading */
   showPlaceholder?: boolean
+  /** Responsive image srcSet */
+  srcSet?: string
+  /** Responsive image sizes hint */
+  sizes?: string
 }
 
 // Check format support (cached)
@@ -75,6 +79,8 @@ export const OptimizedImage = memo(function OptimizedImage({
   webpSrc,
   avifSrc,
   showPlaceholder = true,
+  srcSet,
+  sizes,
 }: OptimizedImageProps) {
   const [isLoaded, setIsLoaded] = useState(false)
   const [hasError, setHasError] = useState(false)
@@ -138,6 +144,8 @@ export const OptimizedImage = memo(function OptimizedImage({
           height={height}
           loading={priority ? 'eager' : 'lazy'}
           decoding="async"
+          srcSet={srcSet}
+          sizes={sizes}
           onLoad={handleLoad}
           onError={handleError}
           className={`${className} transition-opacity duration-300 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}

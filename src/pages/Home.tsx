@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, memo, useCallback } from 'react'
 import { motion } from 'framer-motion'
 import { Users, Calendar, TrendingUp, ChevronRight, Loader2, Mic, CheckCircle2, AlertCircle, Sparkles, Star, HelpCircle, XCircle } from 'lucide-react'
 import { Link, useNavigate } from 'react-router-dom'
@@ -86,7 +86,7 @@ function ReliabilityBadge({ score }: { score: number }) {
 }
 
 // Prochaine session card - avec RSVP inline et célébration
-function NextSessionCard({
+const NextSessionCard = memo(function NextSessionCard({
   session,
   onRsvp,
   isRsvpLoading
@@ -233,7 +233,7 @@ function NextSessionCard({
       </Card>
     </motion.div>
   )
-}
+})
 
 // Party en cours card
 function ActivePartyCard({ squadName, participantCount }: { squadName: string; participantCount: number }) {
@@ -384,14 +384,14 @@ export default function Home() {
   const sessionsLoading = sessionsQueryLoading || (squadsLoading && !squads.length)
 
   // Handle joining a friend's party
-  const handleJoinFriendParty = (squadId: string) => {
+  const handleJoinFriendParty = useCallback((squadId: string) => {
     navigate(`/party?squad=${squadId}`)
-  }
+  }, [navigate])
 
   // Handle inviting a friend - navigate to DM to send invite
-  const handleInviteFriend = (friendId: string) => {
+  const handleInviteFriend = useCallback((friendId: string) => {
     navigate(`/messages?dm=${friendId}`)
-  }
+  }, [navigate])
 
   // Handle RSVP avec célébration - Uses React Query mutation with optimistic updates
   const handleRsvp = async (sessionId: string, response: 'present' | 'absent' | 'maybe') => {

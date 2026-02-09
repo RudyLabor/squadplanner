@@ -220,7 +220,7 @@ export const VoiceRecorder = memo(function VoiceRecorder({ onSend, disabled }: V
               <button
                 type="button"
                 onClick={stopRecording}
-                className="p-2 rounded-xl bg-error text-white hover:bg-[#ef4444] transition-colors"
+                className="p-2 rounded-xl bg-error text-white hover:bg-error transition-colors"
                 aria-label="Arrêter"
               >
                 <Square className="w-4 h-4" fill="currentColor" />
@@ -230,7 +230,7 @@ export const VoiceRecorder = memo(function VoiceRecorder({ onSend, disabled }: V
                 type="button"
                 onClick={handleSend}
                 disabled={isSending}
-                className="p-2 rounded-xl bg-primary text-white hover:bg-[#7c7ffa] transition-colors disabled:opacity-50"
+                className="p-2 rounded-xl bg-primary text-white hover:bg-primary-hover transition-colors disabled:opacity-50"
                 aria-label="Envoyer le message vocal"
               >
                 {isSending ? (

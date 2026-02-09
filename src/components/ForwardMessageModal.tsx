@@ -77,7 +77,7 @@ export const ForwardMessageModal = memo(function ForwardMessageModal({
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
             transition={{ type: 'spring', stiffness: 300, damping: 25 }}
             onClick={(e) => e.stopPropagation()}
-            className="w-full max-w-md bg-[#1a1b1e] border border-border-hover rounded-2xl overflow-hidden"
+            className="w-full max-w-md bg-surface-dark border border-border-hover rounded-2xl overflow-hidden"
           >
             {/* Header */}
             <div className="flex items-center justify-between px-5 py-4 border-b border-border-default">
@@ -157,7 +157,7 @@ export const ForwardMessageModal = memo(function ForwardMessageModal({
                 type="button"
                 onClick={handleForward}
                 disabled={!selectedSquadId || isSending || sent}
-                className="px-5 py-2.5 rounded-xl text-[13px] font-semibold bg-primary text-white hover:bg-[#7c7ffa] transition-colors disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-2"
+                className="px-5 py-2.5 rounded-xl text-[13px] font-semibold bg-primary text-white hover:bg-primary-hover transition-colors disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-2"
               >
                 {sent ? (
                   <>

@@ -205,7 +205,7 @@ export default function Auth() {
           recycle={false}
           numberOfPieces={120}
           gravity={0.25}
-          colors={['#6366f1', '#34d399', '#fbbf24', '#a78bfa']}
+          colors={['var(--color-primary)', 'var(--color-success)', 'var(--color-warning)', 'var(--color-purple)']}
           style={{ position: 'fixed', top: 0, left: 0, zIndex: 100, pointerEvents: 'none' }}
         />
       )}

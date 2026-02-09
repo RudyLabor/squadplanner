@@ -3,17 +3,18 @@ import { Star, Zap } from 'lucide-react'
 import CountUp from 'react-countup'
 
 // Level configuration - French translations
+// Colors use CSS variable references for design system consistency
 const LEVEL_CONFIG = [
-  { level: 1, title: 'Débutant', xpRequired: 0, color: '#6b7280' },      // gray
-  { level: 2, title: 'Régulier', xpRequired: 100, color: '#22c55e' },    // green
-  { level: 3, title: 'Vétéran', xpRequired: 300, color: '#06b6d4' },     // cyan
-  { level: 4, title: 'Élite', xpRequired: 600, color: '#a855f7' },       // purple
-  { level: 5, title: 'Champion', xpRequired: 1000, color: '#f97316' },   // orange
-  { level: 6, title: 'Maître', xpRequired: 1500, color: '#ec4899' },     // pink
-  { level: 7, title: 'Grand Maître', xpRequired: 2500, color: '#ef4444' }, // red
-  { level: 8, title: 'Légende', xpRequired: 4000, color: '#8b5cf6' },    // violet
-  { level: 9, title: 'Mythique', xpRequired: 6000, color: '#14b8a6' },   // teal
-  { level: 10, title: 'Immortel', xpRequired: 10000, color: '#eab308' }, // gold
+  { level: 1, title: 'Débutant', xpRequired: 0, color: 'var(--color-text-quaternary)' },   // gray
+  { level: 2, title: 'Régulier', xpRequired: 100, color: 'var(--color-success)' },          // green
+  { level: 3, title: 'Vétéran', xpRequired: 300, color: 'var(--color-secondary)' },         // cyan
+  { level: 4, title: 'Élite', xpRequired: 600, color: 'var(--color-purple)' },              // purple
+  { level: 5, title: 'Champion', xpRequired: 1000, color: 'var(--color-orange)' },          // orange
+  { level: 6, title: 'Maître', xpRequired: 1500, color: 'var(--color-pink)' },              // pink
+  { level: 7, title: 'Grand Maître', xpRequired: 2500, color: 'var(--color-error)' },       // red
+  { level: 8, title: 'Légende', xpRequired: 4000, color: 'var(--color-primary)' },          // violet
+  { level: 9, title: 'Mythique', xpRequired: 6000, color: 'var(--color-cyan)' },            // teal
+  { level: 10, title: 'Immortel', xpRequired: 10000, color: 'var(--color-warning)' },       // gold
 ]
 
 export interface XPBarProps {
@@ -56,7 +57,7 @@ export function XPBar({ currentXP, level, showTitle = true, compact = false, cla
         <div
           className="w-6 h-6 rounded-lg flex items-center justify-center text-xs font-bold"
           style={{
-            backgroundColor: `${currentLevel.color}20`,
+            backgroundColor: `color-mix(in srgb, ${currentLevel.color} 12%, transparent)`,
             color: currentLevel.color
           }}
         >
@@ -69,7 +70,7 @@ export function XPBar({ currentXP, level, showTitle = true, compact = false, cla
               background: isMaxLevel
                 ? `linear-gradient(90deg, ${currentLevel.color}, ${currentLevel.color})`
                 : `linear-gradient(90deg, ${currentLevel.color}, ${nextLevel.color})`,
-              boxShadow: `0 0 10px ${currentLevel.color}50`
+              boxShadow: `0 0 10px color-mix(in srgb, ${currentLevel.color} 31%, transparent)`
             }}
             initial={{ width: 0 }}
             animate={{ width: `${progress}%` }}
@@ -92,14 +93,14 @@ export function XPBar({ currentXP, level, showTitle = true, compact = false, cla
           <motion.div
             className="relative w-12 h-12 rounded-xl flex items-center justify-center"
             style={{
-              backgroundColor: `${currentLevel.color}20`,
-              boxShadow: `0 0 20px ${currentLevel.color}30`
+              backgroundColor: `color-mix(in srgb, ${currentLevel.color} 12%, transparent)`,
+              boxShadow: `0 0 20px color-mix(in srgb, ${currentLevel.color} 19%, transparent)`
             }}
             animate={{
               boxShadow: [
-                `0 0 20px ${currentLevel.color}30`,
-                `0 0 30px ${currentLevel.color}50`,
-                `0 0 20px ${currentLevel.color}30`
+                `0 0 20px color-mix(in srgb, ${currentLevel.color} 19%, transparent)`,
+                `0 0 30px color-mix(in srgb, ${currentLevel.color} 31%, transparent)`,
+                `0 0 20px color-mix(in srgb, ${currentLevel.color} 19%, transparent)`
               ]
             }}
             transition={{ duration: 2, repeat: Infinity }}
@@ -158,7 +159,7 @@ export function XPBar({ currentXP, level, showTitle = true, compact = false, cla
           <motion.div
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-full"
             style={{
-              backgroundColor: `${currentLevel.color}20`,
+              backgroundColor: `color-mix(in srgb, ${currentLevel.color} 12%, transparent)`,
               color: currentLevel.color
             }}
             animate={{ scale: [1, 1.05, 1] }}
@@ -181,7 +182,7 @@ export function XPBar({ currentXP, level, showTitle = true, compact = false, cla
               background: isMaxLevel
                 ? `linear-gradient(90deg, ${currentLevel.color}, ${currentLevel.color})`
                 : `linear-gradient(90deg, ${currentLevel.color}, ${nextLevel.color})`,
-              boxShadow: `0 0 15px ${currentLevel.color}50, inset 0 1px 0 rgba(255,255,255,0.2)`
+              boxShadow: `0 0 15px color-mix(in srgb, ${currentLevel.color} 31%, transparent), inset 0 1px 0 var(--color-overlay-heavy)`
             }}
             initial={{ width: 0 }}
             animate={{ width: `${progress}%` }}
@@ -191,7 +192,7 @@ export function XPBar({ currentXP, level, showTitle = true, compact = false, cla
             <motion.div
               className="absolute inset-0 w-full"
               style={{
-                background: 'linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.3) 50%, transparent 100%)',
+                background: 'linear-gradient(90deg, transparent 0%, var(--color-overlay-shine) 50%, transparent 100%)',
               }}
               animate={{ x: ['-100%', '200%'] }}
               transition={{ duration: 2, repeat: Infinity, repeatDelay: 1 }}

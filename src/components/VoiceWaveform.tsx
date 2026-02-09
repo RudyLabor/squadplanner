@@ -51,7 +51,7 @@ export function VoiceWaveform({
   audioStream = null,
   isActive,
   size = 'md',
-  color = '#4ade80',
+  color = 'var(--color-logo-green)',
   barCount = 5,
   className = ''
 }: VoiceWaveformProps) {
@@ -167,7 +167,7 @@ export function VoiceWaveform({
 export function VoiceWaveformDemo({
   isActive,
   size = 'md',
-  color = '#4ade80',
+  color = 'var(--color-logo-green)',
   barCount = 5,
   className = ''
 }: Omit<VoiceWaveformProps, 'audioStream'>) {

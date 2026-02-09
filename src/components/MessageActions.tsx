@@ -197,8 +197,8 @@ export function MessageActions({
             >
               {copied ? (
                 <>
-                  <Check className="w-4 h-4 text-[#4ade80]" />
-                  <span className="text-[#4ade80]">Copie !</span>
+                  <Check className="w-4 h-4 text-success" />
+                  <span className="text-success">Copie !</span>
                 </>
               ) : (
                 <>
@@ -227,7 +227,7 @@ export function MessageActions({
                 className="w-full flex items-center gap-3 px-4 py-2.5 text-left text-[14px] text-text-primary hover:bg-border-default transition-colors"
                 role="menuitem"
               >
-                <Pin className="w-4 h-4 text-[#f5a623]" />
+                <Pin className="w-4 h-4 text-warning" />
                 <span>Epingler</span>
               </button>
             )}
@@ -241,7 +241,7 @@ export function MessageActions({
                   className="w-full flex items-center gap-3 px-4 py-2.5 text-left text-[14px] text-text-primary hover:bg-border-default transition-colors"
                   role="menuitem"
                 >
-                  <Pencil className="w-4 h-4 text-[#5e6dd2]" />
+                  <Pencil className="w-4 h-4 text-primary" />
                   <span>Modifier</span>
                 </button>
               </>

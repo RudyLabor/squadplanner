@@ -21,19 +21,52 @@ interface SquadLeaderboardProps {
 }
 
 // Level badge colors based on level ranges
-const getLevelColor = (level: number): string => {
-  if (level >= 50) return '#f5a623' // Gold - Legend
-  if (level >= 30) return '#8b93ff' // Purple - Master
-  if (level >= 20) return '#4ade80' // Green - Expert
-  if (level >= 10) return '#5e6dd2' // Blue - Confirmed
-  return '#8b8d90' // Gray - Beginner
+const getLevelColor = (level: number): { color: string; bg15: string; bg20: string } => {
+  if (level >= 50) return { color: 'var(--color-gold)', bg15: 'var(--color-gold-15)', bg20: 'var(--color-gold-20)' } // Gold - Legend
+  if (level >= 30) return { color: 'var(--color-primary-hover)', bg15: 'var(--color-primary-hover-15)', bg20: 'var(--color-primary-hover-30)' } // Purple - Master
+  if (level >= 20) return { color: 'var(--color-success)', bg15: 'var(--color-success-15)', bg20: 'var(--color-success-20)' } // Green - Expert
+  if (level >= 10) return { color: 'var(--color-primary)', bg15: 'var(--color-primary-15)', bg20: 'var(--color-primary-20)' } // Blue - Confirmed
+  return { color: 'var(--color-text-secondary)', bg15: 'var(--color-overlay-light)', bg20: 'var(--color-overlay-medium)' } // Gray - Beginner
 }
 
 // Medal colors for podium
 const MEDAL_COLORS = {
-  1: { primary: '#f5a623', secondary: '#fcd34d', glow: 'rgba(245, 166, 35, 0.4)' }, // Gold
-  2: { primary: '#c0c0c0', secondary: '#e5e7eb', glow: 'rgba(192, 192, 192, 0.3)' }, // Silver
-  3: { primary: '#cd7f32', secondary: '#d4a574', glow: 'rgba(205, 127, 50, 0.3)' }, // Bronze
+  1: {
+    primary: 'var(--color-gold)',
+    secondary: 'var(--color-warning)',
+    glow: 'var(--color-gold-30)',
+    primary10: 'color-mix(in srgb, var(--color-gold) 10%, transparent)',
+    primary20: 'var(--color-gold-20)',
+    primary30: 'var(--color-gold-30)',
+    primary40: 'color-mix(in srgb, var(--color-gold) 40%, transparent)',
+    primary50: 'color-mix(in srgb, var(--color-gold) 50%, transparent)',
+    primary80: 'color-mix(in srgb, var(--color-gold) 80%, transparent)',
+    secondary20: 'color-mix(in srgb, var(--color-warning) 20%, transparent)',
+  }, // Gold
+  2: {
+    primary: 'var(--color-text-secondary)',
+    secondary: 'var(--color-text-quaternary)',
+    glow: 'var(--color-overlay-light)',
+    primary10: 'color-mix(in srgb, var(--color-text-secondary) 10%, transparent)',
+    primary20: 'color-mix(in srgb, var(--color-text-secondary) 20%, transparent)',
+    primary30: 'color-mix(in srgb, var(--color-text-secondary) 30%, transparent)',
+    primary40: 'color-mix(in srgb, var(--color-text-secondary) 40%, transparent)',
+    primary50: 'color-mix(in srgb, var(--color-text-secondary) 50%, transparent)',
+    primary80: 'color-mix(in srgb, var(--color-text-secondary) 80%, transparent)',
+    secondary20: 'color-mix(in srgb, var(--color-text-quaternary) 20%, transparent)',
+  }, // Silver
+  3: {
+    primary: 'var(--color-orange)',
+    secondary: 'var(--color-warning)',
+    glow: 'var(--color-orange-30)',
+    primary10: 'color-mix(in srgb, var(--color-orange) 10%, transparent)',
+    primary20: 'color-mix(in srgb, var(--color-orange) 20%, transparent)',
+    primary30: 'var(--color-orange-30)',
+    primary40: 'color-mix(in srgb, var(--color-orange) 40%, transparent)',
+    primary50: 'color-mix(in srgb, var(--color-orange) 50%, transparent)',
+    primary80: 'color-mix(in srgb, var(--color-orange) 80%, transparent)',
+    secondary20: 'color-mix(in srgb, var(--color-warning) 20%, transparent)',
+  }, // Bronze
 }
 
 // Podium card component
@@ -73,8 +106,8 @@ function PodiumCard({
             className={`
               relative p-4 text-center overflow-hidden cursor-pointer
               transition-all duration-200 hover:scale-[1.02] hover:shadow-glow-primary-sm
-              ${isFirst ? 'bg-gradient-to-b from-[rgba(245,166,35,0.15)] to-bg-surface' : 'bg-bg-surface'}
-              ${isCurrentUser ? 'ring-2 ring-[#5e6dd2] ring-offset-2 ring-offset-[#08090a]' : ''}
+              ${isFirst ? 'bg-gradient-to-b from-[var(--color-gold-15)] to-bg-surface' : 'bg-bg-surface'}
+              ${isCurrentUser ? 'ring-2 ring-primary ring-offset-2 ring-offset-bg-base' : ''}
             `}
           >
           {/* Glow effect for first place */}
@@ -109,7 +142,7 @@ function PodiumCard({
           <motion.div
             className="absolute top-2 left-2 w-7 h-7 rounded-full flex items-center justify-center text-[12px] font-bold"
             style={{
-              backgroundColor: `${medal.primary}20`,
+              backgroundColor: medal.primary20,
               color: medal.primary,
               boxShadow: `0 0 10px ${medal.glow}`,
             }}
@@ -127,8 +160,8 @@ function PodiumCard({
               ${isFirst ? 'w-20 h-20' : 'w-16 h-16'}
             `}
             style={{
-              background: `linear-gradient(135deg, ${medal.primary}30, ${medal.secondary}20)`,
-              border: `2px solid ${medal.primary}40`,
+              background: `linear-gradient(135deg, ${medal.primary30}, ${medal.secondary20})`,
+              border: `2px solid ${medal.primary40}`,
             }}
             whileHover={{ scale: 1.05 }}
           >
@@ -157,14 +190,14 @@ function PodiumCard({
             <span
               className="px-2 py-0.5 rounded-full text-[11px] font-medium"
               style={{
-                backgroundColor: `${levelColor}20`,
-                color: levelColor,
+                backgroundColor: levelColor.bg20,
+                color: levelColor.color,
               }}
             >
               Niv. {entry.level}
             </span>
             {entry.streak_days > 0 && (
-              <span className="flex items-center gap-0.5 text-[11px] text-[#f5a623]">
+              <span className="flex items-center gap-0.5 text-[11px] text-gold">
                 <Flame className="w-3 h-3" />
                 {entry.streak_days}
               </span>
@@ -173,7 +206,7 @@ function PodiumCard({
 
           {/* XP */}
           <div className="flex items-center justify-center gap-1 text-[12px] text-text-secondary mb-1">
-            <Zap className="w-3 h-3 text-[#8b93ff]" />
+            <Zap className="w-3 h-3 text-primary-hover" />
             <span className="font-medium text-text-primary">
               {entry.xp.toLocaleString()}
             </span>
@@ -182,7 +215,7 @@ function PodiumCard({
 
           {/* Reliability score */}
           <div className="flex items-center justify-center gap-1 text-[11px] text-text-tertiary">
-            <Shield className="w-3 h-3 text-[#4ade80]" />
+            <Shield className="w-3 h-3 text-success" />
             <span>{entry.reliability_score}%</span>
           </div>
         </Card>
@@ -195,13 +228,13 @@ function PodiumCard({
             ${isFirst ? 'h-16' : entry.rank === 2 ? 'h-12' : 'h-8'}
           `}
           style={{
-            background: `linear-gradient(to bottom, ${medal.primary}30, ${medal.primary}10)`,
-            borderTop: `2px solid ${medal.primary}50`,
+            background: `linear-gradient(to bottom, ${medal.primary30}, ${medal.primary10})`,
+            borderTop: `2px solid ${medal.primary50}`,
           }}
         >
           <span
             className="text-[24px] font-black"
-            style={{ color: `${medal.primary}80` }}
+            style={{ color: medal.primary80 }}
           >
             {entry.rank}
           </span>
@@ -237,7 +270,7 @@ function LeaderboardListItem({
           flex items-center gap-3 p-3 rounded-xl transition-all cursor-pointer
           hover:scale-[1.01] hover:shadow-glow-primary-sm
           ${isCurrentUser
-            ? 'bg-[rgba(94,109,210,0.15)] border border-[rgba(94,109,210,0.3)]'
+            ? 'bg-primary-15 border border-primary/30'
             : 'bg-surface-card hover:bg-border-subtle'
           }
         `}
@@ -248,7 +281,7 @@ function LeaderboardListItem({
       </div>
 
       {/* Avatar */}
-      <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#5e6dd2]/20 to-[#8b93ff]/10 flex items-center justify-center overflow-hidden">
+      <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary/20 to-primary-hover/10 flex items-center justify-center overflow-hidden">
         {entry.avatar_url ? (
           <img
             src={getOptimizedAvatarUrl(entry.avatar_url, 40) || entry.avatar_url}
@@ -267,7 +300,7 @@ function LeaderboardListItem({
             {entry.username}
           </span>
           {isCurrentUser && (
-            <span className="text-[10px] px-1.5 py-0.5 rounded bg-[rgba(94,109,210,0.3)] text-[#8b93ff]">
+            <span className="text-[10px] px-1.5 py-0.5 rounded bg-primary/30 text-primary-hover">
               Toi
             </span>
           )}
@@ -276,14 +309,14 @@ function LeaderboardListItem({
           <span
             className="px-1.5 py-0.5 rounded-full"
             style={{
-              backgroundColor: `${levelColor}15`,
-              color: levelColor,
+              backgroundColor: levelColor.bg15,
+              color: levelColor.color,
             }}
           >
             Niv. {entry.level}
           </span>
           <span className="flex items-center gap-0.5">
-            <Shield className="w-3 h-3 text-[#4ade80]" />
+            <Shield className="w-3 h-3 text-success" />
             {entry.reliability_score}%
           </span>
         </div>
@@ -292,13 +325,13 @@ function LeaderboardListItem({
       {/* XP and streak */}
       <div className="text-right">
         <div className="flex items-center gap-1 text-[13px]">
-          <Zap className="w-3 h-3 text-[#8b93ff]" />
+          <Zap className="w-3 h-3 text-primary-hover" />
           <span className="font-medium text-text-primary">
             {entry.xp.toLocaleString()}
           </span>
         </div>
         {entry.streak_days > 0 && (
-          <div className="flex items-center justify-end gap-0.5 text-[11px] text-[#f5a623]">
+          <div className="flex items-center justify-end gap-0.5 text-[11px] text-gold">
             <Flame className="w-3 h-3" />
             {entry.streak_days}j
           </div>
@@ -325,8 +358,8 @@ export function SquadLeaderboard({ entries, currentUserId }: SquadLeaderboardPro
         animate={{ opacity: 1, y: 0 }}
         className="flex items-center gap-3"
       >
-        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#f5a623]/20 to-[#f5a623]/5 flex items-center justify-center">
-          <Trophy className="w-5 h-5 text-[#f5a623]" />
+        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-gold/20 to-gold/5 flex items-center justify-center">
+          <Trophy className="w-5 h-5 text-gold" />
         </div>
         <div>
           <h2 className="text-[18px] font-bold text-text-primary">Classement Squad</h2>

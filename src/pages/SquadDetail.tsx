@@ -1101,7 +1101,7 @@ export default function SquadDetail() {
           {leaderboard.length > 0 && (
             <div className="mb-6">
               <h3 className="text-[14px] font-semibold text-text-primary mb-3 flex items-center gap-2">
-                <Trophy className="w-4 h-4 text-yellow-400" />
+                <Trophy className="w-4 h-4 text-warning" />
                 Classement
               </h3>
               <SquadLeaderboard

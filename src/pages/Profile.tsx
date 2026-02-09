@@ -33,11 +33,11 @@ const ACHIEVEMENTS = [
 
 // Systeme de tiers base sur le score de fiabilite - avec next tier pour progress bar
 const TIERS = [
-  { name: 'Debutant', color: '#8b8d90', icon: '🎮', minScore: 0, glow: false },
-  { name: 'Confirme', color: '#6366f1', icon: '✓', minScore: 50, glow: false },
-  { name: 'Expert', color: '#34d399', icon: '⭐', minScore: 70, glow: false },
-  { name: 'Master', color: '#a78bfa', icon: '💎', minScore: 85, glow: true },
-  { name: 'Légende', color: '#fbbf24', icon: '👑', minScore: 95, glow: true },
+  { name: 'Debutant', color: 'var(--color-text-secondary)', bgColor: 'var(--color-overlay-light)', icon: '🎮', minScore: 0, glow: false },
+  { name: 'Confirme', color: 'var(--color-primary)', bgColor: 'var(--color-primary-15)', icon: '✓', minScore: 50, glow: false },
+  { name: 'Expert', color: 'var(--color-success)', bgColor: 'var(--color-success-15)', icon: '⭐', minScore: 70, glow: false },
+  { name: 'Master', color: 'var(--color-purple)', bgColor: 'var(--color-purple-15)', icon: '💎', minScore: 85, glow: true },
+  { name: 'Légende', color: 'var(--color-warning)', bgColor: 'var(--color-warning-15)', icon: '👑', minScore: 95, glow: true },
 ]
 
 const getTier = (score: number) => {
@@ -248,10 +248,10 @@ export function Profile() {
   })
 
   const stats = [
-    { icon: Calendar, label: 'Sessions', value: profile?.total_sessions || 0, color: '#fbbf24' },
-    { icon: Check, label: 'Check-ins', value: profile?.total_checkins || 0, color: '#34d399' },
-    { icon: Target, label: 'Niveau', value: profile?.level || 1, color: '#6366f1' },
-    { icon: Trophy, label: 'XP', value: profile?.xp || 0, color: '#a78bfa' },
+    { icon: Calendar, label: 'Sessions', value: profile?.total_sessions || 0, color: 'var(--color-warning)', bgColor: 'var(--color-warning-15)' },
+    { icon: Check, label: 'Check-ins', value: profile?.total_checkins || 0, color: 'var(--color-success)', bgColor: 'var(--color-success-15)' },
+    { icon: Target, label: 'Niveau', value: profile?.level || 1, color: 'var(--color-primary)', bgColor: 'var(--color-primary-15)' },
+    { icon: Trophy, label: 'XP', value: profile?.xp || 0, color: 'var(--color-purple)', bgColor: 'var(--color-purple-15)' },
   ]
 
   // Detect new achievements and celebrate
@@ -315,7 +315,7 @@ export function Profile() {
           recycle={false}
           numberOfPieces={200}
           gravity={0.25}
-          colors={['#34d399', '#6366f1', '#fbbf24', '#a78bfa', '#f7f8f8']}
+          colors={['var(--color-success)', 'var(--color-primary)', 'var(--color-warning)', 'var(--color-purple)', 'var(--color-text-primary)']}
           style={{ position: 'fixed', top: 0, left: 0, zIndex: 100, pointerEvents: 'none' }}
         />
       )}
@@ -327,7 +327,7 @@ export function Profile() {
             initial={{ opacity: 0, y: -50, scale: 0.8 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -20, scale: 0.9 }}
-            className="fixed top-4 left-1/2 -translate-x-1/2 z-50 px-6 py-4 rounded-2xl bg-gradient-to-r from-[#6366f1]/90 to-[#a78bfa]/90 border border-[#6366f1]/40 backdrop-blur-xl shadow-lg"
+            className="fixed top-4 left-1/2 -translate-x-1/2 z-50 px-6 py-4 rounded-2xl bg-gradient-to-r from-primary/90 to-purple/90 border border-primary/40 backdrop-blur-xl shadow-lg"
           >
             <div className="flex items-center gap-4">
               <motion.div
@@ -378,7 +378,7 @@ export function Profile() {
           {/* Avatar central */}
           <div className="flex flex-col items-center mb-6">
             <div className="relative mb-4">
-              <div className="w-24 h-24 rounded-2xl bg-gradient-to-br from-[#6366f1] to-[#a78bfa] flex items-center justify-center overflow-hidden ring-4 ring-bg-base">
+              <div className="w-24 h-24 rounded-2xl bg-gradient-to-br from-primary to-purple flex items-center justify-center overflow-hidden ring-4 ring-bg-base">
                 {(localPreviewUrl || profile?.avatar_url) ? (
                   <img
                     src={localPreviewUrl || profile?.avatar_url || undefined}
@@ -400,7 +400,7 @@ export function Profile() {
                 onClick={() => fileInputRef.current?.click()}
                 disabled={isUploadingPhoto}
                 aria-label="Changer la photo de profil"
-                className="absolute -bottom-2 -right-2 w-9 h-9 rounded-full bg-primary flex items-center justify-center border-3 border-bg-base hover:bg-[#4f46e5] transition-colors shadow-md"
+                className="absolute -bottom-2 -right-2 w-9 h-9 rounded-full bg-primary flex items-center justify-center border-3 border-bg-base hover:bg-primary transition-colors shadow-md"
               >
                 {isUploadingPhoto ? (
                   <Loader2 className="w-4 h-4 text-white animate-spin" aria-hidden="true" />
@@ -514,11 +514,11 @@ export function Profile() {
             </div>
           </Card>
         ) : (
-        <Card className={`mb-5 overflow-hidden bg-bg-elevated ${tier.glow ? 'ring-1 ring-[#fbbf24]/30 ring-offset-1 ring-offset-bg-base' : ''}`}>
+        <Card className={`mb-5 overflow-hidden bg-bg-elevated ${tier.glow ? 'ring-1 ring-warning/30 ring-offset-1 ring-offset-bg-base' : ''}`}>
           <div
             className="h-1.5"
             style={{
-              background: `linear-gradient(to right, ${reliabilityColor} ${reliabilityScore}%, rgba(255,255,255,0.05) ${reliabilityScore}%)`
+              background: `linear-gradient(to right, ${reliabilityColor} ${reliabilityScore}%, var(--color-overlay-light) ${reliabilityScore}%)`
             }}
           />
           <div className="p-5">
@@ -537,7 +537,7 @@ export function Profile() {
                   </span>
                   <motion.span
                     className="text-[13px] font-medium px-2.5 py-1 rounded-full flex items-center gap-1.5"
-                    style={{ backgroundColor: `${reliabilityColor}20`, color: reliabilityColor }}
+                    style={{ backgroundColor: tier.bgColor, color: reliabilityColor }}
                     initial={{ scale: 0.8 }}
                     animate={{ scale: 1 }}
                     transition={{ type: 'spring', stiffness: 400, damping: 25 }}
@@ -624,7 +624,7 @@ export function Profile() {
               <div className="flex items-center gap-3">
                 <div
                   className="w-10 h-10 rounded-xl flex items-center justify-center"
-                  style={{ backgroundColor: `${stat.color}15` }}
+                  style={{ backgroundColor: stat.bgColor }}
                 >
                   <stat.icon className="w-5 h-5" style={{ color: stat.color }} />
                 </div>
@@ -643,7 +643,7 @@ export function Profile() {
         {/* Activité Section - StreakCounter */}
         <div className="mb-5">
           <div className="flex items-center gap-2 mb-3">
-            <Flame className="w-4 h-4 text-[#f97316]" />
+            <Flame className="w-4 h-4 text-warning" />
             <h3 className="text-[13px] font-semibold text-text-primary uppercase tracking-wide">
               Activité
             </h3>
@@ -818,10 +818,10 @@ export function Profile() {
         {/* Premium upsell - Design ameliore */}
         {!hasPremium && (
           <Card className="mb-5 overflow-hidden bg-bg-elevated">
-            <div className="h-1 bg-gradient-to-r from-[#6366f1] via-[#fbbf24] to-[#34d399]" />
+            <div className="h-1 bg-gradient-to-r from-primary via-warning to-success" />
             <div className="p-5">
               <div className="flex items-start gap-4">
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#fbbf24] to-[#fbbf24]/50 flex items-center justify-center flex-shrink-0">
+                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-warning to-warning/50 flex items-center justify-center flex-shrink-0">
                   <Zap className="w-6 h-6 text-white" />
                 </div>
                 <div className="flex-1">
@@ -833,7 +833,7 @@ export function Profile() {
                   </p>
                   <Button
                     size="sm"
-                    className="bg-gradient-to-r from-[#6366f1] to-[#a78bfa]"
+                    className="bg-gradient-to-r from-primary to-purple"
                     onClick={() => navigate('/premium')}
                   >
                     Découvrir
@@ -916,7 +916,7 @@ export function Profile() {
         {/* Deconnexion - Discret en bas */}
         <button
           onClick={handleSignOut}
-          className="w-full py-3 text-[14px] text-error hover:text-[#fda4af] transition-colors flex items-center justify-center gap-2"
+          className="w-full py-3 text-[14px] text-error hover:text-error/70 transition-colors flex items-center justify-center gap-2"
         >
           <LogOut className="w-4 h-4" />
           Se déconnecter

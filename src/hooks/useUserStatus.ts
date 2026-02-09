@@ -100,8 +100,8 @@ export const useUserStatusStore = create<UserStatusState>((set, get) => {
 })
 
 export const AVAILABILITY_CONFIG: Record<AvailabilityStatus, { label: string; color: string; dotClass: string }> = {
-  online: { label: 'En ligne', color: '#34d399', dotClass: 'bg-emerald-400' },
-  busy: { label: 'Occupe', color: '#f59e0b', dotClass: 'bg-amber-400' },
-  dnd: { label: 'Ne pas deranger', color: '#ef4444', dotClass: 'bg-red-400' },
-  invisible: { label: 'Invisible', color: '#6b7280', dotClass: 'bg-zinc-500' },
+  online: { label: 'En ligne', color: 'var(--color-success)', dotClass: 'bg-emerald-400' },
+  busy: { label: 'Occupe', color: 'var(--color-warning)', dotClass: 'bg-amber-400' },
+  dnd: { label: 'Ne pas deranger', color: 'var(--color-error)', dotClass: 'bg-red-400' },
+  invisible: { label: 'Invisible', color: 'var(--color-text-tertiary)', dotClass: 'bg-zinc-500' },
 }

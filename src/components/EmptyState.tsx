@@ -38,65 +38,65 @@ const EMPTY_STATE_CONFIG: Record<EmptyStateType, {
     icon: <Users className="w-12 h-12" />,
     title: "Pas encore de squad",
     message: "Crée ta première squad et invite tes potes à jouer !",
-    color: '#a855f7',
+    color: 'var(--color-purple)',
     defaultActionLabel: 'Créer ma squad'
   },
   no_sessions: {
     icon: <CalendarPlus className="w-12 h-12" />,
     title: "Aucune session prévue",
     message: "Ta squad t'attend ! Planifie une session et fini les « on verra ».",
-    color: '#22d3ee',
+    color: 'var(--color-info)',
     defaultActionLabel: 'Planifier maintenant'
   },
   no_messages: {
     icon: <Send className="w-12 h-12" />,
     title: "Pas encore de messages",
     message: "Envoie le premier message à ta squad pour lancer la conversation !",
-    color: '#4ade80'
+    color: 'var(--color-success)'
   },
   no_friends: {
     icon: <UserPlus className="w-12 h-12" />,
     title: "Aucun pote en ligne",
     message: "Personne n'est connecté pour le moment. Invite tes amis à rejoindre Squad Planner !",
-    color: '#f59e0b',
+    color: 'var(--color-warning)',
     defaultActionLabel: 'Invite tes amis'
   },
   no_achievements: {
     icon: <Trophy className="w-12 h-12" />,
     title: "Pas encore de succès",
     message: "Participe à des sessions et relève des défis pour débloquer tes premiers badges !",
-    color: '#eab308',
+    color: 'var(--color-warning)',
     defaultActionLabel: 'Voir les sessions'
   },
   no_challenges: {
     icon: <Gamepad2 className="w-12 h-12" />,
     title: "Aucun défi disponible",
     message: "Les défis se renouvellent chaque jour. Reviens demain pour de nouvelles missions !",
-    color: '#ec4899'
+    color: 'var(--color-error)'
   },
   no_notifications: {
     icon: <PartyPopper className="w-12 h-12" />,
     title: "Tout est lu !",
     message: "Aucune notification en attente. Profites-en pour planifier ta prochaine session.",
-    color: '#6366f1'
+    color: 'var(--color-primary)'
   },
   no_search_results: {
     icon: <Search className="w-12 h-12" />,
     title: "Aucun résultat",
     message: "Essaie avec d'autres mots-clés ou vérifie l'orthographe.",
-    color: '#8b5cf6'
+    color: 'var(--color-purple)'
   },
   empty_folder: {
     icon: <FolderOpen className="w-12 h-12" />,
     title: "Dossier vide",
     message: "Il n'y a rien ici pour le moment",
-    color: '#64748b'
+    color: 'var(--color-text-tertiary)'
   },
   generic: {
     icon: <Inbox className="w-12 h-12" />,
     title: "Rien à afficher",
     message: "Il n'y a rien ici pour le moment",
-    color: '#64748b'
+    color: 'var(--color-text-tertiary)'
   }
 }
 
@@ -164,7 +164,7 @@ export function EmptyState({
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2, duration: 0.3 }}
-        className="text-lg font-semibold text-[#f7f8f8] mb-2"
+        className="text-lg font-semibold text-text-primary mb-2"
       >
         {title || config.title}
       </motion.h3>
@@ -174,7 +174,7 @@ export function EmptyState({
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.3, duration: 0.3 }}
-        className="text-sm text-[#5e6063] max-w-xs mb-6"
+        className="text-sm text-text-tertiary max-w-xs mb-6"
       >
         {message || config.message}
       </motion.p>
@@ -207,7 +207,7 @@ export function EmptyState({
             className="relative"
             style={{
               backgroundColor: config.color,
-              color: '#fff'
+              color: 'var(--color-text-primary)'
             }}
           >
             {actionLabel || config.defaultActionLabel}

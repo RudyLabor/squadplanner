@@ -78,24 +78,24 @@ export function Breadcrumbs() {
         return (
           <div key={index} className="flex items-center gap-2">
             {index === 0 && (
-              <Home className="w-3.5 h-3.5 text-[#5e6063]" />
+              <Home className="w-3.5 h-3.5 text-text-tertiary" />
             )}
 
             {item.path && !isLast ? (
               <Link
                 to={item.path}
-                className="text-[#8b8d90] hover:text-[#f7f8f8] transition-colors duration-300"
+                className="text-text-secondary hover:text-text-primary transition-colors duration-300"
               >
                 {item.label}
               </Link>
             ) : (
-              <span className={isLast ? 'text-[#f7f8f8] font-medium' : 'text-[#8b8d90]'}>
+              <span className={isLast ? 'text-text-primary font-medium' : 'text-text-secondary'}>
                 {item.label}
               </span>
             )}
 
             {!isLast && (
-              <ChevronRight className="w-3.5 h-3.5 text-[#5e6063]" />
+              <ChevronRight className="w-3.5 h-3.5 text-text-tertiary" />
             )}
           </div>
         )

@@ -194,7 +194,7 @@ export const Avatar = memo(function Avatar({
     return (
       <div className={`${sizeClass} rounded-full bg-purple-10 flex items-center justify-center flex-shrink-0 ${className}`}>
         {fallbackIcon || (
-          <span className="text-[#a78bfa] font-medium">
+          <span className="text-purple font-medium">
             {alt?.charAt(0)?.toUpperCase() || '?'}
           </span>
         )}

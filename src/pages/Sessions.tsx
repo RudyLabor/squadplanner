@@ -145,7 +145,7 @@ export function Sessions() {
                   {needsResponse.slice(0, 3).map(session => (
                     <Link key={session.id} to={`/session/${session.id}`}>
                       <motion.div 
-                        className="flex items-center gap-3 p-3 rounded-lg bg-[rgba(0,0,0,0.3)] hover:bg-border-subtle"
+                        className="flex items-center gap-3 p-3 rounded-lg bg-black/30 hover:bg-border-subtle"
                         whileHover={{ x: 4 }}
                       >
                         <Calendar className="w-4 h-4 text-warning" />
@@ -176,7 +176,7 @@ export function Sessions() {
                     </h3>
                     <div className="space-y-2">
                       {slotSuggestions.slice(0, 3).map((slot, index) => (
-                        <div key={index} className="flex items-center justify-between p-2 rounded-lg bg-[rgba(0,0,0,0.2)]">
+                        <div key={index} className="flex items-center justify-between p-2 rounded-lg bg-black/20">
                           <span className="text-[13px] text-text-secondary">
                             {dayNames[slot.day_of_week]} {slot.hour}h
                           </span>

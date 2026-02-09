@@ -22,7 +22,7 @@ export function LevelUpCelebration({
 
   // Trigger V3 enhanced confetti on mount
   useEffect(() => {
-    celebrateLevelUp([currentLevel.color, '#8b93ff'])
+    celebrateLevelUp([currentLevel.color, 'var(--color-primary-hover)'])
   }, [currentLevel.color])
 
   // Auto-dismiss after delay
@@ -200,7 +200,7 @@ export function LevelUpCelebration({
               transition={{ delay: 0.6 }}
             >
               <motion.div
-                className="text-[12px] text-[#8b8d90] uppercase tracking-wide mb-2"
+                className="text-[12px] text-text-secondary uppercase tracking-wide mb-2"
               >
                 New Rank Achieved
               </motion.div>
@@ -225,7 +225,7 @@ export function LevelUpCelebration({
 
               {/* Subtitle based on level */}
               <motion.p
-                className="text-[14px] text-[#5e6063] max-w-[250px]"
+                className="text-[14px] text-text-tertiary max-w-[250px]"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.8 }}
@@ -243,7 +243,7 @@ export function LevelUpCelebration({
 
             {/* Tap to continue hint */}
             <motion.div
-              className="absolute -bottom-16 text-[12px] text-[#5e6063]"
+              className="absolute -bottom-16 text-[12px] text-text-tertiary"
               initial={{ opacity: 0 }}
               animate={{ opacity: [0, 1, 0] }}
               transition={{ duration: 2, repeat: Infinity, delay: 1.5 }}

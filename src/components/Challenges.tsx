@@ -48,27 +48,31 @@ const ICON_MAP: Record<string, React.ComponentType<{ className?: string; style?:
 const TYPE_CONFIG = {
   daily: {
     label: 'Quotidien',
-    color: '#4ade80',
-    bgColor: 'rgba(74, 222, 128, 0.15)',
-    borderColor: 'rgba(74, 222, 128, 0.3)',
+    color: 'var(--color-success)',
+    bgColor: 'var(--color-success-15)',
+    borderColor: 'var(--color-success-30)',
+    glowShadow: 'var(--shadow-glow-success)',
   },
   weekly: {
     label: 'Hebdomadaire',
-    color: '#5e6dd2',
-    bgColor: 'rgba(94, 109, 210, 0.15)',
-    borderColor: 'rgba(94, 109, 210, 0.3)',
+    color: 'var(--color-primary)',
+    bgColor: 'var(--color-primary-15)',
+    borderColor: 'var(--color-primary-30)',
+    glowShadow: 'var(--shadow-glow-primary-md)',
   },
   seasonal: {
     label: 'Saisonnier',
-    color: '#f5a623',
-    bgColor: 'rgba(245, 166, 35, 0.15)',
-    borderColor: 'rgba(245, 166, 35, 0.3)',
+    color: 'var(--color-warning)',
+    bgColor: 'var(--color-warning-15)',
+    borderColor: 'var(--color-warning-30)',
+    glowShadow: 'var(--shadow-glow-warning)',
   },
   achievement: {
     label: 'Accomplissement',
-    color: '#8b93ff',
-    bgColor: 'rgba(139, 147, 255, 0.15)',
-    borderColor: 'rgba(139, 147, 255, 0.3)',
+    color: 'var(--color-primary)',
+    bgColor: 'var(--color-primary-15)',
+    borderColor: 'var(--color-primary-30)',
+    glowShadow: 'var(--shadow-glow-primary-md)',
   },
 }
 
@@ -137,7 +141,7 @@ export function Challenges({ challenges, onClaimXP }: ChallengesProps) {
       {/* Header with claimable badge */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-[rgba(245,166,35,0.15)] flex items-center justify-center">
+          <div className="w-10 h-10 rounded-xl bg-warning-15 flex items-center justify-center">
             <Target className="w-5 h-5 text-warning" />
           </div>
           <div>
@@ -270,7 +274,7 @@ function ChallengeCard({ challenge, index, onClaim, isClaiming }: ChallengeCardP
             {canClaim && (
               <motion.div
                 className="absolute inset-0 rounded-xl"
-                style={{ boxShadow: `0 0 15px ${config.color}40` }}
+                style={{ boxShadow: config.glowShadow }}
                 animate={{ opacity: [0.5, 1, 0.5] }}
                 transition={{ duration: 1.5, repeat: Infinity }}
               />
@@ -308,7 +312,7 @@ function ChallengeCard({ challenge, index, onClaim, isClaiming }: ChallengeCardP
               <div className={`flex items-center gap-1 px-2 py-1 rounded-lg flex-shrink-0 ${
                 isClaimed
                   ? 'bg-surface-card'
-                  : 'bg-[rgba(245,166,35,0.15)]'
+                  : 'bg-warning-15'
               }`}>
                 <Zap className={`w-3.5 h-3.5 ${
                   isClaimed ? 'text-text-tertiary' : 'text-warning'
@@ -337,7 +341,7 @@ function ChallengeCard({ challenge, index, onClaim, isClaiming }: ChallengeCardP
                     className="absolute h-full rounded-full"
                     style={{
                       background: isCompleted
-                        ? `linear-gradient(90deg, ${config.color}, #4ade80)`
+                        ? `linear-gradient(90deg, ${config.color}, var(--color-success))`
                         : config.color,
                     }}
                     initial={{ width: 0 }}

@@ -202,13 +202,13 @@ export function MessageReactions({
             disabled={isLoading}
             className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-sm transition-interactive ${
               hasCurrentUser
-                ? 'bg-success-15 border border-[#4ade80]/30 text-[#4ade80]'
+                ? 'bg-success-15 border border-success/30 text-success'
                 : 'bg-border-subtle border border-border-hover text-text-secondary hover:bg-border-hover'
             } ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
             aria-label={`${emoji} reaction, ${count} ${count === 1 ? 'person' : 'people'}${hasCurrentUser ? ', you reacted' : ''}`}
           >
             <span className="text-base leading-none">{emoji}</span>
-            <span className={`text-xs font-medium ${hasCurrentUser ? 'text-[#4ade80]' : 'text-text-secondary'}`}>
+            <span className={`text-xs font-medium ${hasCurrentUser ? 'text-success' : 'text-text-secondary'}`}>
               {count}
             </span>
           </motion.button>
@@ -230,13 +230,13 @@ export function MessageReactions({
           onClick={() => setIsPickerOpen(!isPickerOpen)}
           className={`w-7 h-7 flex items-center justify-center rounded-full transition-interactive ${
             isPickerOpen
-              ? 'bg-success-15 border border-[#4ade80]/30'
+              ? 'bg-success-15 border border-success/30'
               : 'bg-border-subtle border border-border-hover opacity-0 group-hover:opacity-100 hover:bg-border-hover'
           } ${isLongPressing ? 'scale-110' : ''}`}
           aria-label="Add reaction"
           aria-expanded={isPickerOpen}
         >
-          <Plus className={`w-4 h-4 ${isPickerOpen ? 'text-[#4ade80]' : 'text-text-secondary'}`} />
+          <Plus className={`w-4 h-4 ${isPickerOpen ? 'text-success' : 'text-text-secondary'}`} />
         </motion.button>
 
         {/* Reaction picker */}

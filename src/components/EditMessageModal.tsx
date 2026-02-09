@@ -113,8 +113,8 @@ export function EditMessageModal({
               {/* Header */}
               <div className="flex items-center justify-between px-5 py-4 border-b border-border-default">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-[rgba(94,109,210,0.15)] flex items-center justify-center">
-                    <Pencil className="w-5 h-5 text-[#5e6dd2]" />
+                  <div className="w-10 h-10 rounded-xl bg-primary-15 flex items-center justify-center">
+                    <Pencil className="w-5 h-5 text-primary" />
                   </div>
                   <h2 id="edit-message-title" className="text-[17px] font-semibold text-text-primary">
                     Modifier le message
@@ -159,7 +159,7 @@ export function EditMessageModal({
                     onKeyDown={handleKeyDown}
                     placeholder="Tapez votre message..."
                     rows={3}
-                    className="w-full px-4 py-3 bg-border-subtle border border-border-hover rounded-xl text-[14px] text-text-primary placeholder:text-text-tertiary resize-none focus:outline-none focus:border-primary focus:ring-2 focus:ring-[rgba(94,109,210,0.2)] focus:shadow-glow-primary-md transition-input min-h-[80px] max-h-[200px]"
+                    className="w-full px-4 py-3 bg-border-subtle border border-border-hover rounded-xl text-[14px] text-text-primary placeholder:text-text-tertiary resize-none focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary-20 focus:shadow-glow-primary-md transition-input min-h-[80px] max-h-[200px]"
                   />
                   <p className="text-[11px] text-text-tertiary mt-2">
                     Conseil : Ctrl+Entree pour sauvegarder rapidement

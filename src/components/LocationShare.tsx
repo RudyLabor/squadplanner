@@ -48,7 +48,7 @@ export const LocationShareButton = memo(function LocationShareButton({ onShare, 
       type="button"
       onClick={handleShare}
       disabled={disabled || isLoading}
-      className="p-2.5 rounded-xl text-text-quaternary hover:text-[#818cf8] hover:bg-primary-10 transition-colors disabled:opacity-50"
+      className="p-2.5 rounded-xl text-text-quaternary hover:text-primary-hover hover:bg-primary-10 transition-colors disabled:opacity-50"
       aria-label="Partager ma position"
       title="Je suis la"
     >
@@ -95,7 +95,7 @@ export const LocationMessage = memo(function LocationMessage({ lat, lng, isOwn =
         isOwn ? 'bg-border-subtle' : 'bg-primary-5'
       }`}>
         <div className="text-center">
-          <MapPin className={`w-8 h-8 mx-auto mb-1 ${isOwn ? 'text-white/60' : 'text-[#818cf8]'}`} />
+          <MapPin className={`w-8 h-8 mx-auto mb-1 ${isOwn ? 'text-white/60' : 'text-primary-hover'}`} />
           <p className={`text-[11px] ${isOwn ? 'text-white/40' : 'text-text-quaternary'}`}>
             {lat.toFixed(4)}, {lng.toFixed(4)}
           </p>
@@ -110,7 +110,7 @@ export const LocationMessage = memo(function LocationMessage({ lat, lng, isOwn =
         className={`flex items-center gap-2 px-3 py-2.5 transition-colors ${
           isOwn
             ? 'text-white/80 hover:text-white hover:bg-border-subtle'
-            : 'text-[#818cf8] hover:text-[#a5b4fc] hover:bg-primary-5'
+            : 'text-primary-hover hover:text-primary-hover hover:bg-primary-5'
         }`}
         onClick={(e) => e.stopPropagation()}
       >

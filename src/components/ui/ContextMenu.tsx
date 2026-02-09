@@ -159,7 +159,7 @@ export function ContextMenu({ items, children, disabled }: ContextMenuProps) {
                         ? 'opacity-40 cursor-not-allowed'
                         : item.danger
                           ? 'text-error hover:bg-error-10'
-                          : 'text-[#e0e0e0] hover:bg-border-default'
+                          : 'text-text-primary hover:bg-border-default'
                     }`}
                     role="menuitem"
                   >
@@ -170,7 +170,7 @@ export function ContextMenu({ items, children, disabled }: ContextMenuProps) {
                     )}
                     <span className="flex-1">{item.label}</span>
                     {item.shortcut && (
-                      <span className="text-[11px] text-[#6b6b80] ml-4 font-mono">
+                      <span className="text-[11px] text-text-tertiary ml-4 font-mono">
                         {item.shortcut}
                       </span>
                     )}

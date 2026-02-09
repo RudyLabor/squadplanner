@@ -33,7 +33,7 @@ export function Skeleton({
   const style: React.CSSProperties = {
     width: typeof width === 'number' ? `${width}px` : width,
     height: typeof height === 'number' ? `${height}px` : height,
-    background: 'linear-gradient(90deg, rgba(255,255,255,0.05) 25%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0.05) 75%)',
+    background: 'var(--gradient-shimmer)',
     backgroundSize: '200% 100%',
     animation: 'shimmer 1.5s infinite',
   }
@@ -482,7 +482,7 @@ export function SkeletonSettingsPage() {
 export function SkeletonAICoach() {
   return (
     <div
-      className="p-3 rounded-xl bg-[#18191b] border border-white/[0.06] min-h-[72px] flex items-center gap-3"
+      className="p-3 rounded-xl bg-bg-hover border border-white/[0.06] min-h-[72px] flex items-center gap-3"
       aria-hidden="true"
     >
       <Skeleton className="w-8 h-8 flex-shrink-0" rounded="lg" />
@@ -521,7 +521,7 @@ export function SkeletonFriendsPlaying() {
       </div>
       <div className="flex gap-3 overflow-hidden">
         {[1, 2, 3].map((i) => (
-          <div key={i} className="flex-shrink-0 w-[200px] p-4 rounded-xl bg-[#18191b] border border-white/[0.06]">
+          <div key={i} className="flex-shrink-0 w-[200px] p-4 rounded-xl bg-bg-hover border border-white/[0.06]">
             <div className="flex items-center gap-3 mb-3">
               <Skeleton className="w-12 h-12" rounded="full" />
               <div className="flex-1">
@@ -564,7 +564,7 @@ export function SkeletonStatsRow() {
  */
 export function SkeletonStreakCounter() {
   return (
-    <div className="min-h-[200px] p-4 rounded-xl bg-[#18191b] border border-white/[0.06]" aria-hidden="true">
+    <div className="min-h-[200px] p-4 rounded-xl bg-bg-hover border border-white/[0.06]" aria-hidden="true">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
           <Skeleton className="w-5 h-5" rounded="md" />

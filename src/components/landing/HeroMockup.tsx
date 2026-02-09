@@ -434,13 +434,13 @@ function PartyScreen() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.8 }}
       >
-        <div className="w-9 h-9 rounded-full bg-white/[0.06] flex items-center justify-center">
+        <div className="w-9 h-9 rounded-full bg-overlay-light flex items-center justify-center">
           <Mic className="w-4 h-4 text-text-primary" />
         </div>
         <div className="w-11 h-11 rounded-full bg-error flex items-center justify-center">
           <Headphones className="w-5 h-5 text-text-primary" />
         </div>
-        <div className="w-9 h-9 rounded-full bg-white/[0.06] flex items-center justify-center">
+        <div className="w-9 h-9 rounded-full bg-overlay-light flex items-center justify-center">
           <Users className="w-4 h-4 text-text-primary" />
         </div>
       </motion.div>
@@ -482,7 +482,7 @@ function ProfileScreen() {
           </div>
           <span className="text-[8px] text-primary">340 XP</span>
         </div>
-        <div className="h-1.5 rounded-full bg-white/[0.06] overflow-hidden">
+        <div className="h-1.5 rounded-full bg-overlay-light overflow-hidden">
           <motion.div
             className="h-full rounded-full bg-gradient-to-r from-primary to-purple"
             initial={{ width: 0 }}
@@ -601,7 +601,7 @@ export function HeroMockup() {
       />
 
       {/* Phone body */}
-      <div className="relative bg-gradient-to-b from-white/[0.12] to-white/[0.04] rounded-[2.5rem] p-[1px] shadow-2xl shadow-primary/20">
+      <div className="relative bg-gradient-to-b from-overlay-medium to-white/[0.04] rounded-[2.5rem] p-[1px] shadow-2xl shadow-primary/20">
         <div className="bg-bg-elevated rounded-[2.5rem] p-2.5">
           {/* Notch */}
           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-28 h-6 bg-bg-elevated rounded-b-2xl z-20">

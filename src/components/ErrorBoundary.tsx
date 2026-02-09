@@ -133,7 +133,7 @@ export class ErrorBoundary extends Component<Props, State> {
             {/* Primary action */}
             <button
               onClick={this.handleRetry}
-              className="w-full inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-primary text-white text-[14px] font-medium hover:bg-[#7c7ff7] transition-colors mb-3"
+              className="w-full inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-primary text-white text-[14px] font-medium hover:bg-primary-hover transition-colors mb-3"
             >
               <RefreshCw className="w-4 h-4" />
               {this.state.isChunkError ? 'Mettre à jour' : 'Réessayer'}
@@ -162,7 +162,7 @@ export class ErrorBoundary extends Component<Props, State> {
             {hasRetried && (
               <button
                 onClick={this.handleClearCacheAndReload}
-                className="w-full mt-3 inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-[#f87171]/10 text-[#f87171] text-[13px] font-medium hover:bg-[#f87171]/20 transition-colors border border-[#f87171]/20"
+                className="w-full mt-3 inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-error/10 text-error text-[13px] font-medium hover:bg-error/20 transition-colors border border-error/20"
               >
                 <Trash2 className="w-4 h-4" />
                 Vider le cache et recharger
@@ -177,7 +177,7 @@ export class ErrorBoundary extends Component<Props, State> {
                   {this.state.error.message}
                 </p>
                 {this.state.error.stack && (
-                  <pre className="text-[10px] font-mono text-[#6b6b70] mt-2 overflow-auto max-h-32">
+                  <pre className="text-[10px] font-mono text-text-tertiary mt-2 overflow-auto max-h-32">
                     {this.state.error.stack}
                   </pre>
                 )}

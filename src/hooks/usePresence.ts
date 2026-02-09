@@ -224,10 +224,10 @@ export function getOnlineIndicatorClasses(
     lg: 'w-3 h-3',
   }
 
-  const baseClasses = `${sizeClasses[size]} rounded-full border-2 border-[#08090a]`
+  const baseClasses = `${sizeClasses[size]} rounded-full border-2 border-bg-base`
 
   if (isOnline) {
-    return `${baseClasses} bg-emerald-500 shadow-[0_0_6px_rgba(52,211,153,0.5)]`
+    return `${baseClasses} bg-emerald-500 shadow-glow-success`
   }
 
   return `${baseClasses} bg-zinc-600`

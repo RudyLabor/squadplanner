@@ -5,11 +5,11 @@ import { ArrowLeft, Shield, Flame, Star, Calendar, Gamepad2, MapPin, ExternalLin
 import { usePublicProfileQuery } from '../hooks/queries'
 
 const TIERS = [
-  { name: 'Debutant', color: '#8b8d90', icon: '🎮', minScore: 0 },
-  { name: 'Confirme', color: '#6366f1', icon: '✓', minScore: 50 },
-  { name: 'Expert', color: '#34d399', icon: '⭐', minScore: 70 },
-  { name: 'Master', color: '#a78bfa', icon: '💎', minScore: 85 },
-  { name: 'Legende', color: '#fbbf24', icon: '👑', minScore: 95 },
+  { name: 'Debutant', color: 'var(--color-text-tertiary)', icon: '🎮', minScore: 0 },
+  { name: 'Confirme', color: 'var(--color-primary)', icon: '✓', minScore: 50 },
+  { name: 'Expert', color: 'var(--color-success)', icon: '⭐', minScore: 70 },
+  { name: 'Master', color: 'var(--color-purple)', icon: '💎', minScore: 85 },
+  { name: 'Legende', color: 'var(--color-warning)', icon: '👑', minScore: 95 },
 ]
 
 function getTier(score: number) {
@@ -58,7 +58,7 @@ export function PublicProfile() {
     return (
       <div className="max-w-lg mx-auto px-4 py-6 pb-24 text-center">
         <p className="text-text-tertiary mt-12">Profil introuvable</p>
-        <Link to="/discover" className="text-indigo-400 text-sm mt-2 inline-block hover:underline">
+        <Link to="/discover" className="text-primary text-sm mt-2 inline-block hover:underline">
           Retour a la decouverte
         </Link>
       </div>
@@ -82,8 +82,8 @@ export function PublicProfile() {
         {profile.avatar_url ? (
           <img src={profile.avatar_url} alt="" className="w-20 h-20 rounded-full border-2 border-white/10" />
         ) : (
-          <div className="w-20 h-20 rounded-full bg-indigo-500/10 flex items-center justify-center border-2 border-white/10">
-            <span className="text-2xl font-bold text-indigo-400">{profile.username?.charAt(0).toUpperCase()}</span>
+          <div className="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center border-2 border-white/10">
+            <span className="text-2xl font-bold text-primary">{profile.username?.charAt(0).toUpperCase()}</span>
           </div>
         )}
 
@@ -119,14 +119,14 @@ export function PublicProfile() {
               href={`https://twitch.tv/${profile.twitch_username}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1 text-xs px-2 py-1 rounded bg-purple-500/10 text-purple-400 hover:bg-purple-500/20 transition-colors"
+              className="inline-flex items-center gap-1 text-xs px-2 py-1 rounded bg-purple/10 text-purple hover:bg-purple/20 transition-colors"
             >
               Twitch
               <ExternalLink className="w-3 h-3" />
             </a>
           )}
           {profile.discord_username && (
-            <span className="inline-flex items-center gap-1 text-xs px-2 py-1 rounded bg-blue-500/10 text-blue-400">
+            <span className="inline-flex items-center gap-1 text-xs px-2 py-1 rounded bg-info/10 text-info">
               Discord: {profile.discord_username}
             </span>
           )}
@@ -136,25 +136,25 @@ export function PublicProfile() {
       {/* Stats grid */}
       <div className="grid grid-cols-2 gap-2 mb-6">
         <StatCard
-          icon={<Star className="w-4 h-4 text-indigo-400" />}
+          icon={<Star className="w-4 h-4 text-primary" />}
           label="XP"
           value={(profile.xp ?? 0).toLocaleString()}
           sub={`Niveau ${profile.level ?? 1}`}
         />
         <StatCard
-          icon={<Shield className="w-4 h-4 text-emerald-400" />}
+          icon={<Shield className="w-4 h-4 text-success" />}
           label="Fiabilite"
           value={`${Math.round(profile.reliability_score ?? 100)}%`}
           sub={tier.name}
         />
         <StatCard
-          icon={<Calendar className="w-4 h-4 text-amber-400" />}
+          icon={<Calendar className="w-4 h-4 text-warning" />}
           label="Sessions"
           value={`${profile.total_sessions ?? 0}`}
           sub={`${attendanceRate}% de presence`}
         />
         <StatCard
-          icon={<Flame className="w-4 h-4 text-orange-400" />}
+          icon={<Flame className="w-4 h-4 text-warning" />}
           label="Streak"
           value={`${profile.streak_days ?? 0} jours`}
           sub="Connexion consecutive"
@@ -165,7 +165,7 @@ export function PublicProfile() {
       {profile.preferred_games && profile.preferred_games.length > 0 && (
         <div className="rounded-xl border border-white/5 bg-surface-card p-4 mb-4">
           <div className="flex items-center gap-2 mb-2">
-            <Gamepad2 className="w-4 h-4 text-indigo-400" />
+            <Gamepad2 className="w-4 h-4 text-primary" />
             <h3 className="text-sm font-semibold text-text-primary">Jeux preferes</h3>
           </div>
           <div className="flex gap-1.5 flex-wrap">

@@ -175,7 +175,7 @@ export const MessageContent = memo(function MessageContent({
                 className={`px-1.5 py-0.5 rounded text-[13px] font-mono ${
                   isOwn
                     ? 'bg-overlay-heavy text-white'
-                    : 'bg-primary-10 text-[#a5b4fc]'
+                    : 'bg-primary-10 text-primary-hover'
                 }`}
               >
                 {token.value}
@@ -192,7 +192,7 @@ export const MessageContent = memo(function MessageContent({
                 className={`underline decoration-1 underline-offset-2 transition-colors ${
                   isOwn
                     ? 'text-white/90 hover:text-white'
-                    : 'text-[#818cf8] hover:text-[#a5b4fc]'
+                    : 'text-primary-hover hover:text-primary-hover'
                 }`}
                 onClick={(e) => e.stopPropagation()}
               >
@@ -208,7 +208,7 @@ export const MessageContent = memo(function MessageContent({
                 className={`inline rounded px-0.5 font-medium transition-colors ${
                   isOwn
                     ? 'bg-overlay-heavy text-white hover:bg-overlay-heavy'
-                    : 'bg-primary-15 text-[#818cf8] hover:bg-primary-20'
+                    : 'bg-primary-15 text-primary-hover hover:bg-primary-20'
                 }`}
                 onClick={(e) => {
                   e.stopPropagation()

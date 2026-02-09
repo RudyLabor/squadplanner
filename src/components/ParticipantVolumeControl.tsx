@@ -110,7 +110,7 @@ export function ParticipantVolumeControl({
               flex-shrink-0 w-7 h-7 rounded-full flex items-center justify-center
               transition-colors duration-150
               ${isMuted
-                ? 'bg-[#f87171]/20 text-error'
+                ? 'bg-error/20 text-error'
                 : 'bg-border-default text-text-secondary hover:text-text-primary hover:bg-border-hover'
               }
             `}
@@ -153,7 +153,7 @@ export function ParticipantVolumeControl({
         {/* Volume percentage */}
         <span className={`
           flex-shrink-0 text-[11px] font-medium min-w-[32px] text-right tabular-nums
-          ${isBoosted ? 'text-[#f5a623]' : isMuted ? 'text-error' : 'text-text-secondary'}
+          ${isBoosted ? 'text-warning' : isMuted ? 'text-error' : 'text-text-secondary'}
         `}>
           {displayVolume}%
         </span>
@@ -170,7 +170,7 @@ export function ParticipantVolumeControl({
         </span>
         <span className={`
           text-[12px] font-semibold tabular-nums
-          ${isBoosted ? 'text-[#f5a623]' : isMuted ? 'text-error' : 'text-[#4ade80]'}
+          ${isBoosted ? 'text-warning' : isMuted ? 'text-error' : 'text-success'}
         `}>
           {displayVolume}%
         </span>
@@ -188,7 +188,7 @@ export function ParticipantVolumeControl({
               flex-shrink-0 w-8 h-8 rounded-lg flex items-center justify-center
               transition-colors duration-150
               ${isMuted
-                ? 'bg-[#f87171]/20 text-error'
+                ? 'bg-error/20 text-error'
                 : 'bg-overlay-light text-text-secondary hover:text-text-primary hover:bg-overlay-medium'
               }
             `}
@@ -225,7 +225,7 @@ export function ParticipantVolumeControl({
             className={`
               absolute top-1/2 w-4 h-4 rounded-full
               border-2 border-white shadow-lg pointer-events-none
-              ${isMuted ? 'bg-[#f87171]' : isBoosted ? 'bg-[#f5a623]' : 'bg-[#4ade80]'}
+              ${isMuted ? 'bg-error' : isBoosted ? 'bg-warning' : 'bg-success'}
             `}
             initial={false}
             animate={{
@@ -257,7 +257,7 @@ export function ParticipantVolumeControl({
       <div className="flex justify-between text-[10px] text-text-tertiary px-11">
         <span>0%</span>
         <span className="text-text-secondary">100%</span>
-        <span className="text-[#f5a623]/70">200%</span>
+        <span className="text-warning/70">200%</span>
       </div>
     </div>
   )

@@ -105,7 +105,7 @@ export function IncomingCallModal() {
                 repeat: status === 'ringing' ? 3 : 0,
                 repeatDelay: 0.8,
               }}
-              className="w-32 h-32 rounded-full overflow-hidden bg-primary-20 flex items-center justify-center border-4 border-[#34d399]/50"
+              className="w-32 h-32 rounded-full overflow-hidden bg-primary-20 flex items-center justify-center border-4 border-success/50"
             >
               {caller.avatar_url ? (
                 <img
@@ -114,7 +114,7 @@ export function IncomingCallModal() {
                   className="w-full h-full object-cover"
                 />
               ) : (
-                <span className="text-4xl font-bold text-[#6366f1]">{initial}</span>
+                <span className="text-4xl font-bold text-primary">{initial}</span>
               )}
             </motion.div>
 
@@ -123,7 +123,7 @@ export function IncomingCallModal() {
               <motion.div
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
-                className="absolute -bottom-2 -right-2 w-10 h-10 rounded-full bg-[#34d399] flex items-center justify-center shadow-lg shadow-[#34d399]/20"
+                className="absolute -bottom-2 -right-2 w-10 h-10 rounded-full bg-success flex items-center justify-center shadow-lg shadow-glow-success"
               >
                 <motion.div
                   animate={{ rotate: [0, 12, -12, 12, -12, 0] }}
@@ -145,7 +145,7 @@ export function IncomingCallModal() {
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.2 }}
-            className="text-2xl font-bold text-[#f7f8f8] mb-2"
+            className="text-2xl font-bold text-text-primary mb-2"
           >
             Appel de {caller.username}
           </motion.h2>
@@ -156,7 +156,7 @@ export function IncomingCallModal() {
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.3 }}
             className={`text-base ${
-              status === 'ringing' ? 'text-[#34d399]' : 'text-[#8b8d90]'
+              status === 'ringing' ? 'text-success' : 'text-text-secondary'
             }`}
           >
             {getStatusText()}
@@ -177,11 +177,11 @@ export function IncomingCallModal() {
                 <button
                   onClick={rejectCall}
                   aria-label="Refuser l'appel"
-                  className="w-20 h-20 rounded-full bg-[#fb7185] flex items-center justify-center shadow-lg shadow-[#fb7185]/20 active:scale-95 transition-transform touch-manipulation"
+                  className="w-20 h-20 rounded-full bg-error flex items-center justify-center shadow-lg shadow-glow-error active:scale-95 transition-transform touch-manipulation"
                 >
                   <PhoneOff className="w-8 h-8 text-white" aria-hidden="true" />
                 </button>
-                <span className="text-[13px] text-[#8b8d90]" aria-hidden="true">Refuser</span>
+                <span className="text-[13px] text-text-secondary" aria-hidden="true">Refuser</span>
               </div>
 
               {/* Accept button */}
@@ -189,11 +189,11 @@ export function IncomingCallModal() {
                 <button
                   onClick={acceptCall}
                   aria-label="Accepter l'appel"
-                  className="w-20 h-20 rounded-full bg-[#34d399] flex items-center justify-center shadow-lg shadow-[#34d399]/20 active:scale-95 transition-transform touch-manipulation"
+                  className="w-20 h-20 rounded-full bg-success flex items-center justify-center shadow-lg shadow-glow-success active:scale-95 transition-transform touch-manipulation"
                 >
                   <Phone className="w-8 h-8 text-white" aria-hidden="true" />
                 </button>
-                <span className="text-[13px] text-[#8b8d90]" aria-hidden="true">Accepter</span>
+                <span className="text-[13px] text-text-secondary" aria-hidden="true">Accepter</span>
               </div>
             </div>
           </motion.div>

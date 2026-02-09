@@ -72,7 +72,7 @@ export const StatusSelector = memo(function StatusSelector({ onOpenCustomStatus,
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -4, scale: 0.95 }}
             transition={{ duration: 0.15 }}
-            className="absolute bottom-full left-0 mb-1 w-56 bg-[#1a1b1e] border border-border-hover rounded-xl shadow-xl shadow-black/30 overflow-hidden z-50"
+            className="absolute bottom-full left-0 mb-1 w-56 bg-surface-dark border border-border-hover rounded-xl shadow-xl shadow-black/30 overflow-hidden z-50"
           >
             {/* Custom status section */}
             {customStatus && (
@@ -88,8 +88,8 @@ export const StatusSelector = memo(function StatusSelector({ onOpenCustomStatus,
             {gameStatus && (
               <div className="px-3 py-2 border-b border-border-default">
                 <div className="flex items-center gap-2 text-[13px]">
-                  <Gamepad2 className="w-3.5 h-3.5 text-[#34d399]" />
-                  <span className="text-[#34d399] truncate">{gameStatus.game}</span>
+                  <Gamepad2 className="w-3.5 h-3.5 text-success" />
+                  <span className="text-success truncate">{gameStatus.game}</span>
                 </div>
               </div>
             )}

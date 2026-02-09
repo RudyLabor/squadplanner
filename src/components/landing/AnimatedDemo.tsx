@@ -12,18 +12,18 @@ interface DemoStep {
 }
 
 export const demoSteps: DemoStep[] = [
-  { id: 'create', title: 'Crée ta Squad', subtitle: '"Les Invaincus"', duration: 3000, icon: Users, color: '#6366f1' },
-  { id: 'invite', title: 'Invite tes potes', subtitle: '3 joueurs ont rejoint', duration: 2500, icon: UserPlus, color: '#34d399' },
-  { id: 'rsvp', title: 'Chacun confirme', subtitle: '4/4 présents mardi 21h', duration: 2500, icon: CalendarCheck, color: '#f5a623' },
-  { id: 'play', title: 'Jouez ensemble !', subtitle: 'Party vocale en cours', duration: 3000, icon: Headphones, color: '#a78bfa' },
+  { id: 'create', title: 'Crée ta Squad', subtitle: '"Les Invaincus"', duration: 3000, icon: Users, color: 'var(--color-primary)' },
+  { id: 'invite', title: 'Invite tes potes', subtitle: '3 joueurs ont rejoint', duration: 2500, icon: UserPlus, color: 'var(--color-success)' },
+  { id: 'rsvp', title: 'Chacun confirme', subtitle: '4/4 présents mardi 21h', duration: 2500, icon: CalendarCheck, color: 'var(--color-warning)' },
+  { id: 'play', title: 'Jouez ensemble !', subtitle: 'Party vocale en cours', duration: 3000, icon: Headphones, color: 'var(--color-purple)' },
 ]
 
 const mockUsers = [
-  { name: 'Alex', emoji: '🎮', color: '#6366f1' },
-  { name: 'Sarah', emoji: '🎯', color: '#34d399' },
-  { name: 'Lucas', emoji: '🔥', color: '#f5a623' },
-  { name: 'Emma', emoji: '⭐', color: '#a78bfa' },
-  { name: 'Hugo', emoji: '🎧', color: '#f87171' },
+  { name: 'Alex', emoji: '🎮', color: 'var(--color-primary)' },
+  { name: 'Sarah', emoji: '🎯', color: 'var(--color-success)' },
+  { name: 'Lucas', emoji: '🔥', color: 'var(--color-warning)' },
+  { name: 'Emma', emoji: '⭐', color: 'var(--color-purple)' },
+  { name: 'Hugo', emoji: '🎧', color: 'var(--color-error)' },
 ]
 
 // Shared navbar for stepper mockups
@@ -42,8 +42,8 @@ function DemoNavbar({ active }: { active: string }) {
         const isActive = item.id === active
         return (
           <div key={item.id} className="flex flex-col items-center gap-0.5">
-            <Icon className="w-3 h-3" style={{ color: isActive ? '#6366f1' : '#7d7d82' }} />
-            <span className={`text-[6px] ${isActive ? 'text-primary font-medium' : 'text-[#7d7d82]'}`}>{item.label}</span>
+            <Icon className="w-3 h-3" style={{ color: isActive ? 'var(--color-primary)' : 'var(--color-text-tertiary)' }} />
+            <span className={`text-[6px] ${isActive ? 'text-primary font-medium' : 'text-text-tertiary'}`}>{item.label}</span>
           </div>
         )
       })}
@@ -77,7 +77,7 @@ function CreateStep() {
         Nouvelle Squad
       </motion.div>
       <motion.div
-        className="bg-[#1a1a1e] rounded-xl p-3 border border-border-default mb-3"
+        className="bg-surface-dark rounded-xl p-3 border border-border-default mb-3"
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.3 }}
@@ -93,7 +93,7 @@ function CreateStep() {
         </motion.div>
       </motion.div>
       <motion.div
-        className="bg-[#1a1a1e] rounded-xl p-3 border border-border-default mb-3"
+        className="bg-surface-dark rounded-xl p-3 border border-border-default mb-3"
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.8 }}
@@ -161,7 +161,7 @@ function InviteStep() {
           </div>
           <div className="flex-1 text-sm text-text-primary">{user.name}</div>
           <motion.div
-            className="text-xs px-2 py-0.5 rounded-full bg-success/15 text-[#4ADE80] font-medium"
+            className="text-xs px-2 py-0.5 rounded-full bg-success/15 text-success font-medium"
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             transition={{ delay: 0.5 + i * 0.2, type: 'spring' }}
@@ -235,7 +235,7 @@ function RSVPStep() {
       ))}
       <motion.div
         className="mt-auto text-center text-xs font-medium py-2 rounded-lg"
-        style={{ backgroundColor: '#34d39920', color: '#34d399' }}
+        style={{ backgroundColor: 'var(--color-success-20)', color: 'var(--color-success)' }}
         initial={{ opacity: 0, y: 5 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 1.5 }}
@@ -288,7 +288,7 @@ function PlayStep() {
               <motion.div
                 key={j}
                 className="w-[2px] rounded-full"
-                style={{ backgroundColor: i < 2 ? '#34d399' : '#7d7d82' }}
+                style={{ backgroundColor: i < 2 ? 'var(--color-success)' : 'var(--color-text-tertiary)' }}
                 animate={i < 2 ? { height: [3, 8 + Math.random() * 4, 3] } : { height: 3 }}
                 transition={i < 2 ? { duration: 0.4, repeat: Infinity, delay: j * 0.1, ease: 'easeInOut' } : undefined}
               />

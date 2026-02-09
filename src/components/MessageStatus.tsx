@@ -29,7 +29,7 @@ export function MessageStatus({
     return (
       <span className="inline-flex items-center ml-1">
         {isRead ? (
-          <CheckCheck className="w-3.5 h-3.5 text-[#5e6dd2]" strokeWidth={2.5} />
+          <CheckCheck className="w-3.5 h-3.5 text-primary" strokeWidth={2.5} />
         ) : (
           <Check className="w-3.5 h-3.5 text-text-tertiary" strokeWidth={2.5} />
         )}
@@ -49,7 +49,7 @@ export function MessageStatus({
     return (
       <span className="inline-flex items-center ml-1">
         {isRead ? (
-          <CheckCheck className="w-3.5 h-3.5 text-[#5e6dd2]" strokeWidth={2.5} />
+          <CheckCheck className="w-3.5 h-3.5 text-primary" strokeWidth={2.5} />
         ) : (
           <Check className="w-3.5 h-3.5 text-text-tertiary" strokeWidth={2.5} />
         )}

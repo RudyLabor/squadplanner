@@ -42,7 +42,7 @@ function ReliabilityBadge({ score }: { score: number }) {
           initial={{ scale: 0.9, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ delay: 0.4, type: "spring", stiffness: 300, damping: 25 }}
-          whileHover={{ scale: 1.02, boxShadow: "0 0 16px rgba(52,211,153,0.15)" }}
+          whileHover={{ scale: 1.02, boxShadow: "var(--shadow-glow-success)" }}
         >
           <motion.div
             animate={{ rotate: [0, 8, -8, 0] }}
@@ -277,9 +277,9 @@ function StatsRow({ squadsCount, sessionsThisWeek, reliabilityScore }: {
   reliabilityScore: number
 }) {
   const stats = [
-    { value: squadsCount, label: 'Squads', icon: Users, color: '#6366f1', suffix: '', path: '/squads' },
-    { value: sessionsThisWeek, label: 'Cette semaine', icon: Calendar, color: '#fbbf24', suffix: '', path: '/sessions' },
-    { value: reliabilityScore, label: 'Fiabilité', icon: TrendingUp, color: '#34d399', suffix: '%', path: '/profile' },
+    { value: squadsCount, label: 'Squads', icon: Users, color: 'var(--color-primary)', suffix: '', path: '/squads' },
+    { value: sessionsThisWeek, label: 'Cette semaine', icon: Calendar, color: 'var(--color-warning)', suffix: '', path: '/sessions' },
+    { value: reliabilityScore, label: 'Fiabilité', icon: TrendingUp, color: 'var(--color-success)', suffix: '%', path: '/profile' },
   ]
 
   return (
@@ -724,7 +724,7 @@ export default function Home() {
                 <Link to="/squads">
                   <motion.button
                     className="inline-flex items-center gap-2 h-11 px-6 rounded-xl bg-primary text-white text-[14px] font-semibold shadow-glow-primary-sm"
-                    whileHover={{ y: -2, scale: 1.02, boxShadow: "0 0 20px rgba(99,102,241,0.2)" }}
+                    whileHover={{ y: -2, scale: 1.02, boxShadow: "var(--shadow-glow-primary-md)" }}
                     {...springTap}
                   >
                     Créer ma squad

@@ -36,7 +36,7 @@ export function MessageReplyPreview({
       className={`
         flex items-start gap-2 px-3 py-2 mb-1
         bg-surface-dark/60 rounded-lg
-        border-l-2 border-[#5e6dd2]
+        border-l-2 border-primary
         ${onClickScrollTo ? 'cursor-pointer hover:bg-surface-dark/80 transition-colors' : ''}
       `}
       role={onClickScrollTo ? 'button' : undefined}
@@ -49,7 +49,7 @@ export function MessageReplyPreview({
       }}
     >
       {/* Reply icon */}
-      <CornerUpRight className="w-3 h-3 text-[#5e6dd2] mt-0.5 flex-shrink-0" />
+      <CornerUpRight className="w-3 h-3 text-primary mt-0.5 flex-shrink-0" />
 
       {/* Mini avatar */}
       {originalMessage.sender_avatar ? (
@@ -59,8 +59,8 @@ export function MessageReplyPreview({
           className="w-4 h-4 rounded-full flex-shrink-0"
         />
       ) : (
-        <div className="w-4 h-4 rounded-full bg-[#5e6dd2]/30 flex items-center justify-center flex-shrink-0">
-          <span className="text-[8px] font-medium text-[#5e6dd2]">
+        <div className="w-4 h-4 rounded-full bg-primary/30 flex items-center justify-center flex-shrink-0">
+          <span className="text-[8px] font-medium text-primary">
             {originalMessage.sender_username.charAt(0).toUpperCase()}
           </span>
         </div>
@@ -68,7 +68,7 @@ export function MessageReplyPreview({
 
       {/* Message content */}
       <div className="flex-1 min-w-0">
-        <span className="text-[11px] font-medium text-[#5e6dd2]">
+        <span className="text-[11px] font-medium text-primary">
           {originalMessage.sender_username}
         </span>
         <p className="text-[11px] text-text-secondary truncate leading-tight">

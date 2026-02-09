@@ -10,34 +10,34 @@ const bannerConfig: Record<BannerType, {
   iconColor: string
 }> = {
   info: {
-    bg: 'bg-[#6366f1]/10',
-    border: 'border-[#6366f1]/20',
+    bg: 'bg-primary/10',
+    border: 'border-primary/20',
     icon: Info,
-    iconColor: '#6366f1',
+    iconColor: 'var(--color-primary)',
   },
   success: {
-    bg: 'bg-[#34d399]/10',
-    border: 'border-[#34d399]/20',
+    bg: 'bg-success/10',
+    border: 'border-success/20',
     icon: CheckCircle2,
-    iconColor: '#34d399',
+    iconColor: 'var(--color-success)',
   },
   warning: {
-    bg: 'bg-[#fbbf24]/10',
-    border: 'border-[#fbbf24]/20',
+    bg: 'bg-warning/10',
+    border: 'border-warning/20',
     icon: AlertTriangle,
-    iconColor: '#fbbf24',
+    iconColor: 'var(--color-warning)',
   },
   achievement: {
-    bg: 'bg-gradient-to-r from-[#8b5cf6]/10 to-[#ec4899]/10',
-    border: 'border-[#a78bfa]/20',
+    bg: 'bg-gradient-to-r from-purple/10 to-error/10',
+    border: 'border-purple/20',
     icon: Trophy,
-    iconColor: '#a78bfa',
+    iconColor: 'var(--color-purple)',
   },
   update: {
-    bg: 'bg-[#38bdf8]/10',
-    border: 'border-[#38bdf8]/20',
+    bg: 'bg-info/10',
+    border: 'border-info/20',
     icon: RefreshCw,
-    iconColor: '#38bdf8',
+    iconColor: 'var(--color-info)',
   },
 }
 

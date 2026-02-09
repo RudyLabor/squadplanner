@@ -119,7 +119,7 @@ export function NotificationBell() {
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className="relative p-2 rounded-lg text-[#8b8d90] hover:text-[#f7f8f8] hover:bg-border-subtle transition-colors"
+        className="relative p-2 rounded-lg text-text-secondary hover:text-text-primary hover:bg-border-subtle transition-colors"
         aria-label={`Notifications${unreadCount > 0 ? ` (${unreadCount} non lues)` : ''}`}
       >
         <Bell className="w-5 h-5" />
@@ -127,7 +127,7 @@ export function NotificationBell() {
           <motion.span
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
-            className="absolute -top-0.5 -right-0.5 w-4 h-4 rounded-full bg-[#fb7185] text-white text-[10px] font-bold flex items-center justify-center"
+            className="absolute -top-0.5 -right-0.5 w-4 h-4 rounded-full bg-error text-white text-[10px] font-bold flex items-center justify-center"
           >
             {unreadCount > 9 ? '9+' : unreadCount}
           </motion.span>
@@ -141,17 +141,17 @@ export function NotificationBell() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -8, scale: 0.95 }}
             transition={{ duration: 0.15 }}
-            className="absolute right-0 top-12 w-80 max-h-96 rounded-xl bg-[#0f1012] border border-border-default shadow-2xl overflow-hidden z-50"
+            className="absolute right-0 top-12 w-80 max-h-96 rounded-xl bg-bg-surface border border-border-default shadow-2xl overflow-hidden z-50"
           >
             {/* Header */}
             <div className="flex items-center justify-between px-4 py-3 border-b border-border-default">
-              <h3 className="text-[14px] font-semibold text-[#f7f8f8]">Notifications</h3>
+              <h3 className="text-[14px] font-semibold text-text-primary">Notifications</h3>
               <div className="flex items-center gap-2">
                 {unreadCount > 0 && (
                   <button
                     type="button"
                     onClick={markAllAsRead}
-                    className="text-[12px] text-[#6366f1] hover:text-[#a78bfa] transition-colors"
+                    className="text-[12px] text-primary hover:text-purple transition-colors"
                   >
                     <CheckCheck className="w-4 h-4" />
                   </button>
@@ -159,7 +159,7 @@ export function NotificationBell() {
                 <button
                   type="button"
                   onClick={() => setIsOpen(false)}
-                  className="text-[#5e6063] hover:text-[#f7f8f8] transition-colors"
+                  className="text-text-tertiary hover:text-text-primary transition-colors"
                 >
                   <X className="w-4 h-4" />
                 </button>
@@ -170,8 +170,8 @@ export function NotificationBell() {
             <div className="overflow-y-auto max-h-72">
               {notifications.length === 0 ? (
                 <div className="px-4 py-8 text-center">
-                  <Bell className="w-8 h-8 text-[#5e6063] mx-auto mb-2" />
-                  <p className="text-[13px] text-[#5e6063]">Aucune notification</p>
+                  <Bell className="w-8 h-8 text-text-tertiary mx-auto mb-2" />
+                  <p className="text-[13px] text-text-tertiary">Aucune notification</p>
                 </div>
               ) : (
                 notifications.slice(0, 15).map(notif => (
@@ -185,13 +185,13 @@ export function NotificationBell() {
                   >
                     <div className="flex items-start gap-3">
                       {!notif.read && (
-                        <span className="w-2 h-2 rounded-full bg-[#6366f1] mt-1.5 flex-shrink-0" />
+                        <span className="w-2 h-2 rounded-full bg-primary mt-1.5 flex-shrink-0" />
                       )}
                       <div className={`flex-1 min-w-0 ${notif.read ? 'ml-5' : ''}`}>
-                        <p className="text-[13px] font-medium text-[#f7f8f8] truncate">{notif.title}</p>
-                        <p className="text-[12px] text-[#8b8d90] truncate">{notif.body}</p>
+                        <p className="text-[13px] font-medium text-text-primary truncate">{notif.title}</p>
+                        <p className="text-[12px] text-text-secondary truncate">{notif.body}</p>
                       </div>
-                      <span className="text-[11px] text-[#5e6063] flex-shrink-0">{formatTime(notif.created_at)}</span>
+                      <span className="text-[11px] text-text-tertiary flex-shrink-0">{formatTime(notif.created_at)}</span>
                     </div>
                   </button>
                 ))

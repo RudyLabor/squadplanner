@@ -66,9 +66,9 @@ function FriendCard({
                 animate={{
                   scale: [1, 1.2, 1],
                   boxShadow: [
-                    '0 0 0 0 rgba(74, 222, 128, 0.4)',
-                    '0 0 0 6px rgba(74, 222, 128, 0)',
-                    '0 0 0 0 rgba(74, 222, 128, 0)'
+                    '0 0 0 0 var(--color-success-20)',
+                    '0 0 0 6px transparent',
+                    '0 0 0 0 transparent'
                   ]
                 }}
                 transition={{
@@ -120,7 +120,7 @@ function FriendCard({
           {isInParty ? (
             <motion.button
               onClick={() => onJoin(friend.squad_id)}
-              whileHover={{ scale: 1.02, boxShadow: '0 0 20px rgba(74, 222, 128, 0.4)' }}
+              whileHover={{ scale: 1.02, boxShadow: 'var(--shadow-glow-success)' }}
               whileTap={{ scale: 0.98 }}
               className="w-full flex items-center justify-center gap-2 h-10 min-h-[44px] rounded-lg bg-success/15 hover:bg-success/25 border border-success/30 text-success text-[13px] font-medium transition-interactive"
             >
@@ -130,7 +130,7 @@ function FriendCard({
           ) : (
             <motion.button
               onClick={() => onInvite(friend.friend_id)}
-              whileHover={{ scale: 1.02, boxShadow: '0 0 20px rgba(94, 109, 210, 0.4)' }}
+              whileHover={{ scale: 1.02, boxShadow: 'var(--shadow-glow-primary-md)' }}
               whileTap={{ scale: 0.98 }}
               className="w-full flex items-center justify-center gap-2 h-10 min-h-[44px] rounded-lg bg-primary/15 hover:bg-primary/25 border border-primary/30 text-primary text-[13px] font-medium transition-interactive"
             >
@@ -182,7 +182,7 @@ function EmptyState() {
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.2 }}
     >
-      <Card className="p-6 text-center bg-gradient-to-br from-[rgba(94,109,210,0.05)] to-transparent border-dashed">
+      <Card className="p-6 text-center bg-gradient-to-br from-primary/5 to-transparent border-dashed">
         <motion.div
           className="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary/15 to-primary-hover/10 flex items-center justify-center mx-auto mb-3"
           animate={{ rotate: [0, 5, -5, 0] }}

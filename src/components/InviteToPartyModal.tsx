@@ -164,7 +164,7 @@ export function InviteToPartyModal({
           role="dialog"
           aria-modal="true"
           aria-labelledby="invite-party-title"
-          className="w-full max-w-md bg-[#0c0c0e] border border-white/10 rounded-2xl overflow-hidden shadow-xl"
+          className="w-full max-w-md bg-bg-base border border-white/10 rounded-2xl overflow-hidden shadow-xl"
           onClick={(e) => e.stopPropagation()}
         >
           {/* Header */}

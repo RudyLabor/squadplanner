@@ -64,13 +64,19 @@ const getFlameIntensity = (streak: number): number => {
 // Get flame color based on intensity
 const getFlameColors = (intensity: number) => {
   const colors = [
-    { primary: '#f97316', secondary: '#fb923c', glow: 'rgba(249, 115, 22, 0.3)' }, // Orange (default)
-    { primary: '#f59e0b', secondary: '#fbbf24', glow: 'rgba(245, 158, 11, 0.4)' }, // Amber
-    { primary: '#ef4444', secondary: '#f87171', glow: 'rgba(239, 68, 68, 0.5)' }, // Red
-    { primary: '#ec4899', secondary: '#f472b6', glow: 'rgba(236, 72, 153, 0.5)' }, // Pink
-    { primary: '#8b5cf6', secondary: '#a78bfa', glow: 'rgba(139, 92, 246, 0.6)' }, // Purple (legendary)
+    { primary: 'var(--color-orange)', secondary: 'var(--color-orange)', glow: 'var(--color-orange-30)' },       // Orange (default)
+    { primary: 'var(--color-warning)', secondary: 'var(--color-warning)', glow: 'var(--color-warning-30)' },     // Amber
+    { primary: 'var(--color-error)', secondary: 'var(--color-error)', glow: 'var(--color-error-20)' },           // Red
+    { primary: 'var(--color-pink)', secondary: 'var(--color-pink)', glow: 'var(--color-pink-30)' },              // Pink
+    { primary: 'var(--color-purple)', secondary: 'var(--color-purple)', glow: 'var(--color-purple-20)' },        // Purple (legendary)
   ]
   return colors[Math.min(intensity, colors.length - 1)]
+}
+
+// Resolve CSS variable values at runtime for canvas-based libraries (e.g. Confetti)
+const resolveCSSColor = (varName: string): string => {
+  if (typeof document === 'undefined') return '#888'
+  return getComputedStyle(document.documentElement).getPropertyValue(varName).trim() || '#888'
 }
 
 interface StreakCounterProps {
@@ -142,7 +148,14 @@ export function StreakCounter({ streakDays, lastActiveDate, onCheckIn }: StreakC
           recycle={false}
           numberOfPieces={300}
           gravity={0.2}
-          colors={['#f97316', '#fbbf24', '#ef4444', '#ec4899', '#8b5cf6', '#4ade80']}
+          colors={[
+            resolveCSSColor('--color-orange'),
+            resolveCSSColor('--color-warning'),
+            resolveCSSColor('--color-error'),
+            resolveCSSColor('--color-pink'),
+            resolveCSSColor('--color-purple'),
+            resolveCSSColor('--color-success'),
+          ]}
           style={{ position: 'fixed', top: 0, left: 0, zIndex: 100, pointerEvents: 'none' }}
         />
       )}
@@ -213,7 +226,7 @@ export function StreakCounter({ streakDays, lastActiveDate, onCheckIn }: StreakC
             <div className="relative">
               <motion.div
                 className="w-16 h-16 rounded-2xl flex items-center justify-center relative overflow-hidden"
-                style={{ backgroundColor: `${flameColors.primary}15` }}
+                style={{ backgroundColor: `color-mix(in srgb, ${flameColors.primary} 8%, transparent)` }}
                 animate={intensity >= 1 ? { scale: [1, 1.05, 1] } : {}}
                 transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
               >
@@ -290,7 +303,7 @@ export function StreakCounter({ streakDays, lastActiveDate, onCheckIn }: StreakC
                   className="text-4xl font-bold text-text-primary"
                   key={streakDays}
                   initial={{ scale: 1.3, color: flameColors.primary }}
-                  animate={{ scale: 1, color: '#f7f8f8' }}
+                  animate={{ scale: 1, color: 'var(--color-text-primary)' }}
                   transition={{ duration: 0.3 }}
                 >
                   {streakDays}
@@ -397,8 +410,8 @@ export function StreakCounter({ streakDays, lastActiveDate, onCheckIn }: StreakC
                     }`}
                     style={{
                       backgroundColor: day.isActive
-                        ? `${flameColors.primary}30`
-                        : 'rgba(255,255,255,0.03)',
+                        ? `color-mix(in srgb, ${flameColors.primary} 19%, transparent)`
+                        : 'var(--color-overlay-faint)',
                       ['--tw-ring-color' as string]: day.isToday ? flameColors.primary : undefined,
                     }}
                     initial={day.isActive ? { scale: 0.8 } : {}}
@@ -427,7 +440,7 @@ export function StreakCounter({ streakDays, lastActiveDate, onCheckIn }: StreakC
             <motion.div
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              className="mt-4 p-3 rounded-xl bg-[rgba(139,147,255,0.08)] border border-[rgba(139,147,255,0.15)]"
+              className="mt-4 p-3 rounded-xl bg-primary-hover/[0.08] border border-primary-hover/15"
             >
               <p className="text-[12px] text-primary-hover">
                 {streakDays === 0
@@ -442,7 +455,7 @@ export function StreakCounter({ streakDays, lastActiveDate, onCheckIn }: StreakC
             <motion.div
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              className="mt-4 p-3 rounded-xl bg-gradient-to-r from-[rgba(139,92,246,0.15)] to-[rgba(236,72,153,0.15)] border border-[rgba(139,92,246,0.25)]"
+              className="mt-4 p-3 rounded-xl bg-gradient-to-r from-purple/15 to-pink/15 border border-purple/25"
             >
               <div className="flex items-center gap-2">
                 <span className="text-lg">👑</span>

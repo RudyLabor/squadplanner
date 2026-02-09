@@ -26,9 +26,14 @@ function applyTheme(theme: 'dark' | 'light') {
   root.setAttribute('data-theme', theme)
 
   // Update meta theme-color for mobile browsers
+  // Read the bg-base token so the meta tag stays in sync with the design system
   const metaThemeColor = document.querySelector('meta[name="theme-color"]')
   if (metaThemeColor) {
-    metaThemeColor.setAttribute('content', theme === 'dark' ? '#050506' : '#ffffff')
+    // We must wait a tick for data-theme to take effect before reading the variable
+    requestAnimationFrame(() => {
+      const bgBase = getComputedStyle(root).getPropertyValue('--color-bg-base').trim()
+      metaThemeColor.setAttribute('content', bgBase || (theme === 'dark' ? '#050506' : '#ffffff'))
+    })
   }
 }
 

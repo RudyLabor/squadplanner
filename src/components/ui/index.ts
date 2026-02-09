@@ -43,3 +43,21 @@ export {
   ProfileSkeleton,
   SquadDetailSkeleton,
 } from './Skeleton'
+// Chantier 2 components
+export { Dialog, DialogHeader, DialogBody, DialogFooter } from './Dialog'
+export { DropdownMenu, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuLabel } from './DropdownMenu'
+export { Select } from './Select'
+export type { SelectOption } from './Select'
+export { Sheet } from './Sheet'
+export { Tabs, TabsList, Tab, TabsContent } from './Tabs'
+export { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from './Accordion'
+export { Toggle } from './Toggle'
+export { RadioGroup, Radio } from './RadioGroup'
+export { Checkbox } from './Checkbox'
+export { toast, ToastContainer } from './Toast'
+export type { ToastData, ToastType } from './Toast'
+export { Popover } from './Popover'
+export { AvatarGroup } from './AvatarGroup'
+export { Slider } from './Slider'
+export { ProgressBar } from './ProgressBar'
+export { Divider } from './Divider'

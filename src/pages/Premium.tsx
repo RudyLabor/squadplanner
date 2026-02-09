@@ -262,7 +262,7 @@ export function Premium() {
 
             <h1 className="text-3xl md:text-5xl font-bold text-text-primary mb-4">
               Passe au niveau
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-warning to-yellow-300"> supérieur</span>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-warning to-warning/70"> supérieur</span>
             </h1>
 
             <p className="text-[16px] md:text-[18px] text-text-secondary max-w-xl mx-auto mb-8">
@@ -576,7 +576,7 @@ export function Premium() {
               <Button
                 onClick={handleUpgrade}
                 disabled={isLoading}
-                className="h-12 px-8 bg-gradient-to-r from-warning to-yellow-300 text-bg-base font-semibold hover:opacity-90"
+                className="h-12 px-8 bg-gradient-to-r from-warning to-warning/70 text-bg-base font-semibold hover:opacity-90"
               >
                 {isLoading ? (
                   <Loader2 className="w-5 h-5 animate-spin" />

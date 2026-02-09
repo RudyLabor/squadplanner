@@ -23,12 +23,12 @@ export const PWAInstallBanner = memo(function PWAInstallBanner() {
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: 100, opacity: 0 }}
           transition={{ type: 'spring', stiffness: 400, damping: 35 }}
-          className="fixed bottom-20 lg:bottom-6 left-4 right-4 lg:left-auto lg:right-6 lg:w-[380px] z-[60] rounded-2xl bg-bg-surface border border-border-default shadow-[0_8px_32px_rgba(0,0,0,0.4)] p-4"
+          className="fixed bottom-20 lg:bottom-6 left-4 right-4 lg:left-auto lg:right-6 lg:w-[380px] z-[60] rounded-2xl bg-bg-surface border border-border-default shadow-elevated p-4"
           role="alert"
         >
           <div className="flex items-start gap-3">
             {/* App icon */}
-            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#6366f1] to-[#a78bfa] flex items-center justify-center flex-shrink-0">
+            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-purple flex items-center justify-center flex-shrink-0">
               <Download className="w-6 h-6 text-white" />
             </div>
 
@@ -46,7 +46,7 @@ export const PWAInstallBanner = memo(function PWAInstallBanner() {
                 <button
                   type="button"
                   onClick={() => promptInstall()}
-                  className="px-4 py-2 rounded-lg bg-primary text-white text-[13px] font-semibold hover:bg-[#5457e5] active:scale-[0.97] transition-all"
+                  className="px-4 py-2 rounded-lg bg-primary text-white text-[13px] font-semibold hover:bg-primary-hover active:scale-[0.97] transition-all"
                 >
                   Installer
                 </button>

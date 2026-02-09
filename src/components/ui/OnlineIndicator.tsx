@@ -48,7 +48,7 @@ export const OnlineIndicator = memo(function OnlineIndicator({
         ${sizeClasses[size]}
         ${positionClasses[position]}
         rounded-full
-        border-2 border-[#08090a]
+        border-2 border-bg-base
         ${isOnline
           ? 'bg-emerald-500 shadow-glow-success'
           : 'bg-zinc-600'

@@ -83,10 +83,10 @@ export function NetworkQualityIndicator({
       <div className={`flex items-center gap-1.5 ${className}`}>
         <Wifi
           style={{ width: sizeConfig.iconSize, height: sizeConfig.iconSize }}
-          className="text-[#5e6063] animate-pulse"
+          className="text-text-tertiary animate-pulse"
         />
         {showLabel && (
-          <span className={`${sizeConfig.textSize} text-[#5e6063]`}>
+          <span className={`${sizeConfig.textSize} text-text-tertiary`}>
             {info.label}
           </span>
         )}
@@ -132,7 +132,7 @@ export function NetworkQualityIndicator({
               style={{
                 width: sizeConfig.barWidth,
                 height: height,
-                backgroundColor: isActive ? info.color : 'rgba(94, 96, 99, 0.3)',
+                backgroundColor: isActive ? info.color : 'var(--color-inactive-bar)',
                 borderRadius: sizeConfig.barWidth / 2,
                 originY: 1, // Scale from bottom
               }}
@@ -249,7 +249,7 @@ export function QualityChangeToast({
 
             {/* Message */}
             <div className="flex flex-col">
-              <span className="text-[14px] font-medium text-[#f7f8f8]">
+              <span className="text-[14px] font-medium text-text-primary">
                 {isImproving ? 'Connexion amelioree' : 'Connexion degradee'}
               </span>
               <span className="text-[12px]" style={{ color: info.color }}>

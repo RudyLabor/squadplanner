@@ -23,11 +23,11 @@ const sizeConfig: Record<AvatarSize, { container: number; ring: number; strokeWi
 
 const statusColors: Record<AvatarStatus, string> = {
   online: 'var(--color-success)',
-  'in-party': 'var(--color-purple, #a78bfa)',
-  'in-session': '#3b82f6',
-  'in-call': '#34d399',
-  busy: '#f59e0b',
-  dnd: '#ef4444',
+  'in-party': 'var(--color-purple)',
+  'in-session': 'var(--color-info)',
+  'in-call': 'var(--color-success)',
+  busy: 'var(--color-warning)',
+  dnd: 'var(--color-error)',
   away: 'var(--color-warning)',
   offline: 'var(--color-text-quaternary)',
 }

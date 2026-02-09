@@ -107,7 +107,7 @@ export const CustomStatusModal = memo(function CustomStatusModal({ isOpen, onClo
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
             transition={{ type: 'spring', stiffness: 300, damping: 25 }}
             onClick={(e) => e.stopPropagation()}
-            className="w-full max-w-md bg-[#1a1b1e] border border-border-hover rounded-2xl overflow-hidden"
+            className="w-full max-w-md bg-surface-dark border border-border-hover rounded-2xl overflow-hidden"
           >
             {/* Header */}
             <div className="flex items-center justify-between px-5 py-4 border-b border-border-default">
@@ -206,7 +206,7 @@ export const CustomStatusModal = memo(function CustomStatusModal({ isOpen, onClo
                   />
                   {/* Autocomplete suggestions */}
                   {showGameSuggestions && filteredGames.length > 0 && (
-                    <div className="absolute top-full left-0 right-0 mt-1 bg-[#1a1b1e] border border-border-hover rounded-xl shadow-xl overflow-hidden z-10 max-h-40 overflow-y-auto">
+                    <div className="absolute top-full left-0 right-0 mt-1 bg-surface-dark border border-border-hover rounded-xl shadow-xl overflow-hidden z-10 max-h-40 overflow-y-auto">
                       {filteredGames.map((game) => (
                         <button
                           key={game}
@@ -248,7 +248,7 @@ export const CustomStatusModal = memo(function CustomStatusModal({ isOpen, onClo
               <button
                 type="button"
                 onClick={handleSave}
-                className="px-5 py-2.5 rounded-xl text-[13px] font-semibold bg-primary text-white hover:bg-[#7c7ffa] transition-colors"
+                className="px-5 py-2.5 rounded-xl text-[13px] font-semibold bg-primary text-white hover:bg-primary-hover transition-colors"
               >
                 Enregistrer
               </button>

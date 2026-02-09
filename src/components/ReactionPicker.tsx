@@ -67,7 +67,7 @@ export const ReactionPicker = forwardRef<HTMLDivElement, ReactionPickerProps>(
               }}
               className={`absolute z-50 ${positionClasses[position]} ${alignClasses[align]}`}
             >
-              <div className="flex items-center gap-1 px-2 py-1.5 bg-[#1a1a2e] border border-border-hover rounded-full shadow-lg shadow-black/40">
+              <div className="flex items-center gap-1 px-2 py-1.5 bg-surface-dark border border-border-hover rounded-full shadow-lg shadow-black/40">
                 {REACTION_EMOJIS.map((emoji, index) => (
                   <motion.button
                     key={emoji}

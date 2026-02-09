@@ -71,8 +71,8 @@ export function PinnedMessages({
         aria-controls="pinned-messages-list"
       >
         <div className="flex items-center gap-2">
-          <div className="w-7 h-7 rounded-lg bg-[rgba(245,166,35,0.15)] flex items-center justify-center">
-            <Pin className="w-4 h-4 text-[#f5a623]" />
+          <div className="w-7 h-7 rounded-lg bg-warning-15 flex items-center justify-center">
+            <Pin className="w-4 h-4 text-warning" />
           </div>
           <span className="text-[14px] font-medium text-text-primary">
             {pinnedMessages.length} message{pinnedMessages.length > 1 ? 's' : ''} épinglé{pinnedMessages.length > 1 ? 's' : ''}
@@ -104,7 +104,7 @@ export function PinnedMessages({
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.05, duration: 0.2 }}
-                  className="group relative bg-bg-hover rounded-xl border border-border-subtle hover:border-[rgba(245,166,35,0.2)] transition-interactive"
+                  className="group relative bg-bg-hover rounded-xl border border-border-subtle hover:border-warning/20 transition-interactive"
                 >
                   {/* Clickable area to scroll to message */}
                   <button
@@ -114,8 +114,8 @@ export function PinnedMessages({
                   >
                     {/* Sender info */}
                     <div className="flex items-center gap-2 mb-2">
-                      <div className="w-6 h-6 rounded-full bg-[rgba(94,109,210,0.2)] flex items-center justify-center">
-                        <span className="text-[10px] font-bold text-[#5e6dd2]">
+                      <div className="w-6 h-6 rounded-full bg-primary-20 flex items-center justify-center">
+                        <span className="text-[10px] font-bold text-primary">
                           {pinned.message_sender_username.charAt(0).toUpperCase()}
                         </span>
                       </div>
@@ -134,7 +134,7 @@ export function PinnedMessages({
 
                     {/* Pinned by info */}
                     <div className="flex items-center gap-1.5 mt-2">
-                      <Pin className="w-3 h-3 text-[#f5a623]" />
+                      <Pin className="w-3 h-3 text-gold" />
                       <span className="text-[11px] text-text-tertiary">
                         Epingle par {pinned.pinned_by_username} {formatPinnedDate(pinned.pinned_at)}
                       </span>
@@ -148,10 +148,10 @@ export function PinnedMessages({
                         e.stopPropagation()
                         onUnpin(pinned.message_id)
                       }}
-                      className="absolute top-3 right-3 w-7 h-7 rounded-lg bg-surface-card hover:bg-[rgba(239,68,68,0.15)] flex items-center justify-center opacity-0 group-hover:opacity-100 transition-interactive"
+                      className="absolute top-3 right-3 w-7 h-7 rounded-lg bg-surface-card hover:bg-error-15 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-interactive"
                       aria-label="Desepingler ce message"
                     >
-                      <X className="w-4 h-4 text-text-tertiary hover:text-[#ef4444] transition-colors" />
+                      <X className="w-4 h-4 text-text-tertiary hover:text-error transition-colors" />
                     </button>
                   )}
                 </motion.div>

@@ -139,7 +139,7 @@ export const ChatPoll = memo(function ChatPoll({ pollData, messageId, onVote, is
                     {option}
                   </span>
                   {isVoting && (
-                    <div className="w-3.5 h-3.5 border-2 border-[#818cf8] border-t-transparent rounded-full animate-spin" />
+                    <div className="w-3.5 h-3.5 border-2 border-primary-hover border-t-transparent rounded-full animate-spin" />
                   )}
                 </div>
                 {hasVoted && (

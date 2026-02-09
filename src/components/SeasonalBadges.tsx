@@ -27,65 +27,65 @@ interface BadgeConfig {
 const BADGE_CONFIGS: Record<string, BadgeConfig> = {
   mvp: {
     icon: Crown,
-    color: '#fbbf24',
-    bgColor: 'rgba(251, 191, 36, 0.15)',
-    glowColor: 'rgba(251, 191, 36, 0.3)',
+    color: 'var(--color-warning)',
+    bgColor: 'var(--color-warning-15)',
+    glowColor: 'var(--color-warning-30)',
     label: 'MVP',
     description: 'Meilleur joueur du mois'
   },
   most_reliable: {
     icon: Target,
-    color: '#34d399',
-    bgColor: 'rgba(52, 211, 153, 0.15)',
-    glowColor: 'rgba(52, 211, 153, 0.3)',
+    color: 'var(--color-success)',
+    bgColor: 'var(--color-success-15)',
+    glowColor: 'var(--color-success-30)',
     label: 'Plus fiable',
     description: 'Plus fiable du mois'
   },
   party_animal: {
     icon: Flame,
-    color: '#f472b6',
-    bgColor: 'rgba(244, 114, 182, 0.15)',
-    glowColor: 'rgba(244, 114, 182, 0.3)',
+    color: 'var(--color-pink)',
+    bgColor: 'var(--color-pink-15)',
+    glowColor: 'var(--color-pink-30)',
     label: 'Bête de soirée',
     description: 'Le plus actif en party'
   },
   top_scorer: {
     icon: Star,
-    color: '#a78bfa',
-    bgColor: 'rgba(167, 139, 250, 0.15)',
-    glowColor: 'rgba(167, 139, 250, 0.3)',
+    color: 'var(--color-purple)',
+    bgColor: 'var(--color-purple-15)',
+    glowColor: 'var(--color-purple-20)',
     label: 'Meilleur scoreur',
     description: 'Plus de XP gagné'
   },
   streak_master: {
     icon: Zap,
-    color: '#22d3ee',
-    bgColor: 'rgba(34, 211, 238, 0.15)',
-    glowColor: 'rgba(34, 211, 238, 0.3)',
+    color: 'var(--color-cyan)',
+    bgColor: 'var(--color-cyan-15)',
+    glowColor: 'var(--color-cyan-30)',
     label: 'Maître de la série',
     description: 'Plus longue série'
   },
   squad_champion: {
     icon: Trophy,
-    color: '#fb923c',
-    bgColor: 'rgba(251, 146, 60, 0.15)',
-    glowColor: 'rgba(251, 146, 60, 0.3)',
+    color: 'var(--color-orange)',
+    bgColor: 'var(--color-orange-15)',
+    glowColor: 'var(--color-orange-30)',
     label: 'Champion de squad',
     description: 'Champion de la squad'
   },
   rising_star: {
     icon: Sparkles,
-    color: '#818cf8',
-    bgColor: 'rgba(129, 140, 248, 0.15)',
-    glowColor: 'rgba(129, 140, 248, 0.3)',
+    color: 'var(--color-primary-hover)',
+    bgColor: 'var(--color-primary-hover-15)',
+    glowColor: 'var(--color-primary-hover-30)',
     label: 'Étoile montante',
     description: 'Progression exceptionnelle'
   },
   legend: {
     icon: Award,
-    color: '#f43f5e',
-    bgColor: 'rgba(244, 63, 94, 0.15)',
-    glowColor: 'rgba(244, 63, 94, 0.3)',
+    color: 'var(--color-rose)',
+    bgColor: 'var(--color-rose-15)',
+    glowColor: 'var(--color-rose-30)',
     label: 'Légende',
     description: 'Statut légendaire atteint'
   }
@@ -204,11 +204,11 @@ export function SeasonalBadges({ userId, compact = false, initialBadges }: Seaso
       <div className={`${compact ? 'p-3' : 'p-4'} text-center`}>
         <div className="flex justify-center mb-3">
           <div className="w-12 h-12 rounded-xl bg-surface-card flex items-center justify-center">
-            <Trophy className="w-6 h-6 text-[#3a3a3f]" />
+            <Trophy className="w-6 h-6 text-text-tertiary" />
           </div>
         </div>
         <p className="text-text-tertiary text-sm">Pas encore de badges saisonniers</p>
-        <p className="text-[#3a3a3f] text-xs mt-1">Continue à jouer pour en débloquer !</p>
+        <p className="text-text-tertiary text-xs mt-1">Continue à jouer pour en débloquer !</p>
       </div>
     )
   }

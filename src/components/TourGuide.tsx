@@ -203,7 +203,7 @@ export function TourGuide() {
           <rect
             width="100%"
             height="100%"
-            fill="rgba(0,0,0,0.5)"
+            fill="var(--color-overlay-dark-50)"
             mask="url(#tour-mask)"
           />
         </svg>
@@ -213,7 +213,7 @@ export function TourGuide() {
           <motion.div
             className="absolute border-2 border-primary rounded-xl pointer-events-none"
             animate={{
-              boxShadow: ['0 0 0 0 rgba(99,102,241,0.3)', '0 0 0 8px rgba(99,102,241,0)', '0 0 0 0 rgba(99,102,241,0.3)'],
+              boxShadow: ['0 0 0 0 var(--color-primary-20)', '0 0 0 8px transparent', '0 0 0 0 var(--color-primary-20)'],
             }}
             transition={{ duration: 2, repeat: Infinity }}
             style={{
@@ -238,7 +238,7 @@ export function TourGuide() {
           style={{ top: tooltipPos.top, left: tooltipPos.left }}
           onClick={(e) => e.stopPropagation()}
         >
-          <div className="bg-[#141416] border border-primary rounded-2xl shadow-2xl shadow-[#6366f1]/10 overflow-hidden">
+          <div className="bg-bg-surface border border-primary rounded-2xl shadow-2xl shadow-primary/10 overflow-hidden">
             {/* Header */}
             <div className="px-5 pt-5 pb-3 flex items-start justify-between">
               <div className="flex items-center gap-3">
@@ -295,7 +295,7 @@ export function TourGuide() {
                 )}
                 <button
                   onClick={nextStep}
-                  className="h-9 px-4 rounded-lg bg-primary text-[13px] text-white font-medium hover:bg-[#4f46e5] transition-colors flex items-center gap-1.5"
+                  className="h-9 px-4 rounded-lg bg-primary text-[13px] text-white font-medium hover:bg-primary transition-colors flex items-center gap-1.5"
                 >
                   {currentStep === TOUR_STEPS.length - 1 ? 'Terminé !' : 'Suivant'}
                   {currentStep < TOUR_STEPS.length - 1 && <ArrowRight className="w-3.5 h-3.5" />}

@@ -11,6 +11,35 @@ function prefersReducedMotion(): boolean {
     window.matchMedia('(prefers-reduced-motion: reduce)').matches
 }
 
+/**
+ * Read a CSS custom property value from the document root.
+ * Falls back to the provided default if the variable is not set or
+ * we are running outside a browser context.
+ */
+function cssVar(name: string, fallback: string): string {
+  if (typeof document === 'undefined') return fallback
+  const value = getComputedStyle(document.documentElement)
+    .getPropertyValue(name)
+    .trim()
+  return value || fallback
+}
+
+/**
+ * Design-token colour helpers for canvas-based APIs (confetti).
+ * CSS variables cannot be used directly as canvas paint values, so we
+ * resolve them at call-time via getComputedStyle.
+ */
+const TOKEN = {
+  primary:      () => cssVar('--color-primary', '#6366f1'),
+  primaryHover: () => cssVar('--color-primary-hover', '#818cf8'),
+  success:      () => cssVar('--color-success', '#34d399'),
+  error:        () => cssVar('--color-error', '#f87171'),
+  warning:      () => cssVar('--color-warning', '#fbbf24'),
+  purple:       () => cssVar('--color-purple', '#a78bfa'),
+  gold:         () => cssVar('--color-gold', '#f5a623'),
+  cyan:         () => cssVar('--color-cyan', '#22d3ee'),
+} as const
+
 // Custom ribbon shape via shapeFromPath
 const ribbonShape = confetti.shapeFromPath('M0,0 C5,8 10,-8 15,0 C20,8 25,-8 30,0')
 
@@ -20,7 +49,7 @@ const ribbonShape = confetti.shapeFromPath('M0,0 C5,8 10,-8 15,0 C20,8 25,-8 30,
 export function celebrateLevelUp(colors: string[]) {
   if (prefersReducedMotion()) return
 
-  const allColors = [...colors, '#ffffff', '#f5a623', '#4ade80']
+  const allColors = [...colors, '#ffffff', TOKEN.gold(), TOKEN.success()]
 
   // Phase 1 (0ms): Big center burst with arc
   confetti({
@@ -111,7 +140,7 @@ export function celebrateLevelUp(colors: string[]) {
 /**
  * Milestone celebration - dramatic burst + sustained shower
  */
-export function celebrateMilestone(colors: string[] = ['#6366f1', '#34d399', '#f5a623']) {
+export function celebrateMilestone(colors: string[] = [TOKEN.primary(), TOKEN.success(), TOKEN.gold()]) {
   if (prefersReducedMotion()) return
 
   // Big initial burst
@@ -153,7 +182,7 @@ export function celebrateMilestone(colors: string[] = ['#6366f1', '#34d399', '#f
 /**
  * Achievement celebration - compact satisfying burst
  */
-export function celebrateAchievement(color: string = '#a78bfa') {
+export function celebrateAchievement(color: string = TOKEN.purple()) {
   if (prefersReducedMotion()) return
 
   confetti({
@@ -161,7 +190,7 @@ export function celebrateAchievement(color: string = '#a78bfa') {
     spread: 80,
     startVelocity: 25,
     origin: { y: 0.7 },
-    colors: [color, '#ffffff', '#fbbf24'],
+    colors: [color, '#ffffff', TOKEN.warning()],
     shapes: ['star', 'circle'],
     scalar: 1.3,
     gravity: 0.6,
@@ -180,7 +209,7 @@ export function celebrateRSVP() {
     spread: 50,
     startVelocity: 22,
     origin: { y: 0.65, x: 0.5 },
-    colors: ['#34d399', '#4ade80', '#ffffff'],
+    colors: [TOKEN.success(), TOKEN.success(), '#ffffff'],
     gravity: 0.7,
     ticks: 120,
     scalar: 0.9,
@@ -200,7 +229,7 @@ export function celebrateSquadCreated() {
     spread: 55,
     startVelocity: 35,
     origin: { x: 0, y: 0.6 },
-    colors: ['#6366f1', '#8b5cf6', '#a78bfa', '#ffffff'],
+    colors: [TOKEN.primary(), TOKEN.primaryHover(), TOKEN.purple(), '#ffffff'],
     gravity: 0.7,
     ticks: 180,
   })
@@ -213,7 +242,7 @@ export function celebrateSquadCreated() {
       spread: 55,
       startVelocity: 35,
       origin: { x: 1, y: 0.6 },
-      colors: ['#6366f1', '#8b5cf6', '#a78bfa', '#ffffff'],
+      colors: [TOKEN.primary(), TOKEN.primaryHover(), TOKEN.purple(), '#ffffff'],
       gravity: 0.7,
       ticks: 180,
     })

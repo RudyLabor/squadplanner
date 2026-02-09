@@ -83,25 +83,55 @@
   --color-primary-10: rgba(99, 102, 241, 0.10);
   --color-primary-15: rgba(99, 102, 241, 0.15);
   --color-primary-20: rgba(99, 102, 241, 0.20);
+  --color-primary-30: rgba(99, 102, 241, 0.30);
+  --color-primary-hover-15: rgba(129, 140, 248, 0.15);
+  --color-primary-hover-30: rgba(129, 140, 248, 0.30);
   --color-success-5: rgba(52, 211, 153, 0.05);
   --color-success-10: rgba(52, 211, 153, 0.10);
   --color-success-15: rgba(52, 211, 153, 0.15);
   --color-success-20: rgba(52, 211, 153, 0.20);
+  --color-success-30: rgba(52, 211, 153, 0.30);
   --color-error-5: rgba(248, 113, 113, 0.05);
   --color-error-10: rgba(248, 113, 113, 0.10);
   --color-error-15: rgba(248, 113, 113, 0.15);
+  --color-error-20: rgba(248, 113, 113, 0.20);
   --color-warning-5: rgba(251, 191, 36, 0.05);
   --color-warning-10: rgba(251, 191, 36, 0.10);
   --color-warning-15: rgba(251, 191, 36, 0.15);
+  --color-warning-20: rgba(251, 191, 36, 0.20);
+  --color-warning-30: rgba(251, 191, 36, 0.30);
   --color-info-5: rgba(56, 189, 248, 0.05);
   --color-info-10: rgba(56, 189, 248, 0.10);
+  --color-info-15: rgba(56, 189, 248, 0.15);
+  --color-info-20: rgba(56, 189, 248, 0.20);
   --color-purple-10: rgba(167, 139, 250, 0.10);
   --color-purple-15: rgba(167, 139, 250, 0.15);
+  --color-purple-20: rgba(167, 139, 250, 0.20);
+
+  /* Badge-specific accent colors */
+  --color-pink: #f472b6;
+  --color-pink-15: rgba(244, 114, 182, 0.15);
+  --color-pink-30: rgba(244, 114, 182, 0.3);
+  --color-cyan: #22d3ee;
+  --color-cyan-15: rgba(34, 211, 238, 0.15);
+  --color-cyan-30: rgba(34, 211, 238, 0.3);
+  --color-orange: #fb923c;
+  --color-orange-15: rgba(251, 146, 60, 0.15);
+  --color-orange-30: rgba(251, 146, 60, 0.3);
+  --color-gold: #f5a623;
+  --color-gold-15: rgba(245, 166, 35, 0.15);
+  --color-gold-20: rgba(245, 166, 35, 0.20);
+  --color-gold-30: rgba(245, 166, 35, 0.3);
+  --color-rose: #f43f5e;
+  --color-rose-15: rgba(244, 63, 94, 0.15);
+  --color-rose-30: rgba(244, 63, 94, 0.3);
 
   /* Overlays */
   --color-overlay-light: rgba(255, 255, 255, 0.08);
   --color-overlay-medium: rgba(255, 255, 255, 0.12);
   --color-overlay-heavy: rgba(255, 255, 255, 0.20);
+  --color-overlay-shine: rgba(255, 255, 255, 0.30);
+  --color-overlay-faint: rgba(255, 255, 255, 0.03);
 
   /* Ombres sémantiques */
   --shadow-glow-success: 0 0 20px rgba(52, 211, 153, 0.15);
@@ -111,10 +141,40 @@
   --shadow-glow-primary-lg: 0 0 40px rgba(99, 102, 241, 0.3);
   --shadow-glow-error: 0 0 20px rgba(248, 113, 113, 0.15);
   --shadow-glow-warning: 0 0 20px rgba(251, 191, 36, 0.15);
+  --shadow-glow-warning-strong: 0 0 30px rgba(251, 191, 36, 0.3);
+  --shadow-glow-purple: 0 0 20px rgba(167, 139, 250, 0.3);
+  --shadow-glow-pink: 0 0 20px rgba(244, 114, 182, 0.3);
+  --shadow-glow-cyan: 0 0 20px rgba(34, 211, 238, 0.3);
+  --shadow-glow-orange: 0 0 20px rgba(251, 146, 60, 0.3);
+  --shadow-glow-gold: 0 0 20px rgba(245, 166, 35, 0.4);
+  --shadow-glow-rose: 0 0 20px rgba(244, 63, 94, 0.3);
 
   /* Surfaces supplémentaires */
   --color-surface-dark: #1a1a2e;
   --color-surface-darker: #12121f;
+
+  /* Inactive / muted UI elements */
+  --color-inactive-bar: rgba(94, 96, 99, 0.3);
+
+  /* Overlay variants (black-based) */
+  --color-overlay-dark-30: rgba(0, 0, 0, 0.3);
+  --color-overlay-dark-50: rgba(0, 0, 0, 0.5);
+  --color-overlay-dark-60: rgba(0, 0, 0, 0.6);
+  --color-overlay-dark-80: rgba(0, 0, 0, 0.8);
+
+  /* Overlay subtle (white 5%) for lazy-loaded image placeholders */
+  --color-overlay-subtle: rgba(255, 255, 255, 0.05);
+
+  /* Shimmer gradient for skeleton loaders */
+  --gradient-shimmer: linear-gradient(90deg, rgba(255,255,255,0.05) 25%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0.05) 75%);
+
+  /* Logo brand colors */
+  --color-logo-primary: #5e6dd2;
+  --color-logo-accent: #8b93ff;
+  --color-logo-green: #4ade80;
+
+  /* Shadow - elevated with dark backdrop */
+  --shadow-elevated: 0 8px 32px rgba(0, 0, 0, 0.4);
 
   /* Gradients tokenisés */
   --gradient-primary: linear-gradient(135deg, var(--color-primary) 0%, var(--color-purple) 100%);
@@ -183,6 +243,8 @@
   --color-overlay-light: rgba(0, 0, 0, 0.04);
   --color-overlay-medium: rgba(0, 0, 0, 0.08);
   --color-overlay-heavy: rgba(0, 0, 0, 0.15);
+  --color-overlay-shine: rgba(255, 255, 255, 0.30);
+  --color-overlay-faint: rgba(0, 0, 0, 0.02);
 
   /* Ombres glow en light mode (plus subtiles) */
   --shadow-glow-success: 0 0 20px rgba(5, 150, 105, 0.08);
@@ -205,13 +267,75 @@
   --color-error-5: rgba(220, 38, 38, 0.05);
   --color-error-10: rgba(220, 38, 38, 0.10);
   --color-error-15: rgba(220, 38, 38, 0.15);
+  --color-error-20: rgba(220, 38, 38, 0.20);
   --color-warning-5: rgba(217, 119, 6, 0.05);
   --color-warning-10: rgba(217, 119, 6, 0.10);
   --color-warning-15: rgba(217, 119, 6, 0.15);
+  --color-warning-20: rgba(217, 119, 6, 0.20);
   --color-info-5: rgba(2, 132, 199, 0.05);
   --color-info-10: rgba(2, 132, 199, 0.10);
+  --color-info-15: rgba(2, 132, 199, 0.15);
+  --color-info-20: rgba(2, 132, 199, 0.20);
   --color-purple-10: rgba(124, 58, 237, 0.10);
   --color-purple-15: rgba(124, 58, 237, 0.15);
+  --color-purple-20: rgba(124, 58, 237, 0.20);
+
+  /* Badge-specific accent colors - light mode */
+  --color-pink: #ec4899;
+  --color-pink-15: rgba(236, 72, 153, 0.15);
+  --color-pink-30: rgba(236, 72, 153, 0.3);
+  --color-cyan: #0891b2;
+  --color-cyan-15: rgba(8, 145, 178, 0.15);
+  --color-cyan-30: rgba(8, 145, 178, 0.3);
+  --color-orange: #ea580c;
+  --color-orange-15: rgba(234, 88, 12, 0.15);
+  --color-orange-30: rgba(234, 88, 12, 0.3);
+  --color-gold: #d97706;
+  --color-gold-15: rgba(217, 119, 6, 0.15);
+  --color-gold-20: rgba(217, 119, 6, 0.20);
+  --color-gold-30: rgba(217, 119, 6, 0.3);
+  --color-rose: #e11d48;
+  --color-rose-15: rgba(225, 29, 72, 0.15);
+  --color-rose-30: rgba(225, 29, 72, 0.3);
+
+  /* Additional opacity variants - light mode */
+  --color-warning-30: rgba(217, 119, 6, 0.30);
+  --color-success-30: rgba(5, 150, 105, 0.30);
+  --color-primary-30: rgba(91, 95, 199, 0.30);
+  --color-primary-hover-15: rgba(79, 82, 178, 0.15);
+  --color-primary-hover-30: rgba(79, 82, 178, 0.30);
+
+  /* Shadow glows - light mode badge-specific */
+  --shadow-glow-warning-strong: 0 0 30px rgba(217, 119, 6, 0.12);
+  --shadow-glow-purple: 0 0 20px rgba(124, 58, 237, 0.12);
+  --shadow-glow-pink: 0 0 20px rgba(236, 72, 153, 0.12);
+  --shadow-glow-cyan: 0 0 20px rgba(8, 145, 178, 0.12);
+  --shadow-glow-orange: 0 0 20px rgba(234, 88, 12, 0.12);
+  --shadow-glow-gold: 0 0 20px rgba(217, 119, 6, 0.15);
+  --shadow-glow-rose: 0 0 20px rgba(225, 29, 72, 0.12);
+
+  /* Inactive / muted UI elements - light mode */
+  --color-inactive-bar: rgba(160, 163, 166, 0.3);
+
+  /* Overlay variants (black-based) - same in light mode */
+  --color-overlay-dark-30: rgba(0, 0, 0, 0.3);
+  --color-overlay-dark-50: rgba(0, 0, 0, 0.5);
+  --color-overlay-dark-60: rgba(0, 0, 0, 0.6);
+  --color-overlay-dark-80: rgba(0, 0, 0, 0.8);
+
+  /* Overlay subtle - light mode (darker for light backgrounds) */
+  --color-overlay-subtle: rgba(0, 0, 0, 0.03);
+
+  /* Shimmer gradient - light mode */
+  --gradient-shimmer: linear-gradient(90deg, rgba(0,0,0,0.03) 25%, rgba(0,0,0,0.06) 50%, rgba(0,0,0,0.03) 75%);
+
+  /* Logo brand colors - same in light mode */
+  --color-logo-primary: #5e6dd2;
+  --color-logo-accent: #8b93ff;
+  --color-logo-green: #4ade80;
+
+  /* Shadow - elevated with dark backdrop - light mode */
+  --shadow-elevated: 0 8px 32px rgba(0, 0, 0, 0.12);
 }
 
 /* Light theme selection color */

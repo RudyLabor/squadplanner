@@ -140,18 +140,18 @@ export default function SessionDetail() {
     const sessionDate = new Date(currentSession.scheduled_at)
     
     if (currentSession.status === 'cancelled') {
-      return { color: '#fb7185', label: 'Annulée', icon: XCircle }
+      return { color: 'var(--color-error)', label: 'Annulée', icon: XCircle }
     }
     if (currentSession.status === 'completed') {
-      return { color: '#34d399', label: 'Terminée', icon: CheckCircle2 }
+      return { color: 'var(--color-success)', label: 'Terminée', icon: CheckCircle2 }
     }
     if (sessionDate < now) {
-      return { color: '#8b8d90', label: 'Passée', icon: Clock }
+      return { color: 'var(--color-text-tertiary)', label: 'Passée', icon: Clock }
     }
     if (currentSession.status === 'confirmed') {
-      return { color: '#34d399', label: 'Confirmée', icon: CheckCircle2 }
+      return { color: 'var(--color-success)', label: 'Confirmée', icon: CheckCircle2 }
     }
-    return { color: '#fbbf24', label: 'En attente de confirmations', icon: AlertCircle }
+    return { color: 'var(--color-warning)', label: 'En attente de confirmations', icon: AlertCircle }
   }
 
   if (!isInitialized) {

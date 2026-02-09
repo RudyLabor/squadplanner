@@ -79,11 +79,11 @@ export function PremiumGate({
         <div className="blur-sm pointer-events-none select-none opacity-50">
           {children}
         </div>
-        <div className="absolute inset-0 flex items-center justify-center bg-[rgba(0,0,0,0.3)] rounded-xl">
+        <div className="absolute inset-0 flex items-center justify-center bg-overlay-dark-30 rounded-xl">
           <button
             onClick={() => setShowModal(true)}
             aria-label={`Débloquer ${label} - Premium requis`}
-            className="flex flex-col items-center gap-2 p-4 rounded-xl bg-[rgba(0,0,0,0.6)] hover:bg-[rgba(0,0,0,0.8)] transition-colors"
+            className="flex flex-col items-center gap-2 p-4 rounded-xl bg-overlay-dark-60 hover:bg-overlay-dark-80 transition-colors"
           >
             <Lock className="w-6 h-6 text-warning" aria-hidden="true" />
             <span className="text-[13px] font-medium text-white">
@@ -144,7 +144,7 @@ export function PremiumGate({
 export function PremiumBadge({ small = false }: { small?: boolean }) {
   if (small) {
     return (
-      <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-gradient-to-r from-[#fbbf24] to-[#fbbf24]/70 text-[9px] font-bold text-bg-base">
+      <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-gradient-to-r from-warning to-warning/70 text-[9px] font-bold text-bg-base">
         <Crown className="w-2.5 h-2.5" />
         PRO
       </span>
@@ -152,7 +152,7 @@ export function PremiumBadge({ small = false }: { small?: boolean }) {
   }
 
   return (
-    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-gradient-to-r from-[#fbbf24] to-[#fbbf24]/70 text-xs font-bold text-bg-base">
+    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-gradient-to-r from-warning to-warning/70 text-xs font-bold text-bg-base">
       <Crown className="w-3.5 h-3.5" />
       PREMIUM
     </span>
@@ -186,7 +186,7 @@ export function SquadLimitReached({
           <p className="text-[13px] text-text-secondary mb-3">
             Tu as {currentCount}/{maxCount} squads. Passe Premium pour en créer plus !
           </p>
-          <Button size="sm" onClick={onUpgrade} className="bg-gradient-to-r from-[#fbbf24] to-[#fbbf24]/80">
+          <Button size="sm" onClick={onUpgrade} className="bg-gradient-to-r from-warning to-warning/80">
             <Zap className="w-4 h-4" />
             Passer Premium
           </Button>

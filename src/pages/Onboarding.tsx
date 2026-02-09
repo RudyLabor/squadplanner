@@ -460,7 +460,7 @@ export function Onboarding() {
                 className="text-3xl md:text-4xl font-bold text-text-primary mb-4 leading-tight"
               >
                 Arrêtez de dire<br />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#6366f1] to-[#a78bfa]">
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-purple">
                   "on verra"
                 </span>
               </motion.h1>
@@ -916,7 +916,7 @@ export function Onboarding() {
                           </div>
                         )}
                       </div>
-                      <label className="absolute bottom-0 right-0 w-8 h-8 rounded-full bg-primary flex items-center justify-center border-2 border-bg-base cursor-pointer hover:bg-[#4f46e5] hover:scale-[1.02] transition-interactive">
+                      <label className="absolute bottom-0 right-0 w-8 h-8 rounded-full bg-primary flex items-center justify-center border-2 border-bg-base cursor-pointer hover:brightness-90 hover:scale-[1.02] transition-interactive">
                         <Camera className="w-4 h-4 text-white" />
                         <input
                           type="file"
@@ -1022,7 +1022,7 @@ export function Onboarding() {
                     style={{
                       width: 8 + (i % 3) * 4,
                       height: 8 + (i % 3) * 4,
-                      backgroundColor: ['#6366f1', '#34d399', '#fbbf24', '#fb7185', '#a78bfa'][i % 5],
+                      backgroundColor: ['var(--color-primary)', 'var(--color-success)', 'var(--color-warning)', 'var(--color-error)', 'var(--color-purple)'][i % 5],
                       borderRadius: i % 2 === 0 ? '50%' : '2px'
                     }}
                   />

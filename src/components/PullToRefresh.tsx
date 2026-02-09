@@ -124,7 +124,7 @@ export function PullToRefresh({
         <motion.div
           className={`w-10 h-10 rounded-full flex items-center justify-center ${
             shouldTrigger
-              ? 'bg-[#6366f1]/20 border border-[#6366f1]/30'
+              ? 'bg-primary/20 border border-primary/30'
               : 'bg-white/10 border border-white/20'
           }`}
           animate={{
@@ -138,7 +138,7 @@ export function PullToRefresh({
         >
           <RefreshCw
             className={`w-5 h-5 ${
-              shouldTrigger ? 'text-[#6366f1]' : 'text-white/60'
+              shouldTrigger ? 'text-primary' : 'text-white/60'
             }`}
           />
         </motion.div>

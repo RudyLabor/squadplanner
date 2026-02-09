@@ -4,7 +4,7 @@ interface LazyImageProps extends ImgHTMLAttributes<HTMLImageElement> {
   fallbackColor?: string
 }
 
-export function LazyImage({ fallbackColor = 'rgba(255,255,255,0.05)', style, ...props }: LazyImageProps) {
+export function LazyImage({ fallbackColor = 'var(--color-overlay-subtle)', style, ...props }: LazyImageProps) {
   return (
     <img
       loading="lazy"

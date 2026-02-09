@@ -178,7 +178,7 @@ export const MentionInput = memo(function MentionInput({
             transition={{ type: 'spring', stiffness: 500, damping: 30 }}
             className="absolute bottom-full mb-2 left-0 right-0 max-h-[240px] overflow-y-auto bg-surface-dark border border-border-hover rounded-xl shadow-2xl shadow-black/50 py-1.5 z-50"
           >
-            <p className="px-3 py-1 text-[11px] text-[#6b6b80] uppercase tracking-wider">
+            <p className="px-3 py-1 text-[11px] text-text-tertiary uppercase tracking-wider">
               Membres
             </p>
             {filteredMembers.map((member, i) => (
@@ -203,11 +203,11 @@ export const MentionInput = memo(function MentionInput({
                     {member.username.charAt(0).toUpperCase()}
                   </div>
                 )}
-                <span className="text-[13px] text-[#e0e0e0] truncate">
+                <span className="text-[13px] text-text-primary truncate">
                   {member.username}
                 </span>
                 {i === selectedIndex && (
-                  <span className="ml-auto text-[11px] text-[#6b6b80] font-mono">
+                  <span className="ml-auto text-[11px] text-text-tertiary font-mono">
                     Tab
                   </span>
                 )}

@@ -37,31 +37,31 @@ export const QUALITY_INFO: Record<NetworkQualityLevel, {
 }> = {
   excellent: {
     label: 'Excellente',
-    color: '#4ade80', // Vert
+    color: 'var(--color-success)',
     bars: 4,
     description: 'Audio haute qualité (128kbps)',
   },
   good: {
     label: 'Bonne',
-    color: '#84cc16', // Vert clair
+    color: 'var(--color-success)',
     bars: 3,
     description: 'Audio standard (64kbps)',
   },
   medium: {
     label: 'Moyenne',
-    color: '#f5a623', // Orange
+    color: 'var(--color-gold)',
     bars: 2,
     description: 'Audio économique (32kbps)',
   },
   poor: {
     label: 'Faible',
-    color: '#f87171', // Rouge
+    color: 'var(--color-error)',
     bars: 1,
     description: 'Mode survie (16kbps)',
   },
   unknown: {
     label: 'Inconnue',
-    color: '#8b8d90', // Gris
+    color: 'var(--color-text-tertiary)',
     bars: 0,
     description: 'Qualité en cours d\'évaluation',
   },

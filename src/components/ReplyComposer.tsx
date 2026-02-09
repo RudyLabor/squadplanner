@@ -33,15 +33,15 @@ export function ReplyComposer({ replyingTo, onCancel }: ReplyComposerProps) {
           transition={{ duration: 0.2 }}
           className="overflow-hidden"
         >
-          <div className="flex items-center gap-2 px-4 py-2 bg-surface-dark border-l-2 border-[#5e6dd2] mx-2 mb-2 rounded-lg">
+          <div className="flex items-center gap-2 px-4 py-2 bg-surface-dark border-l-2 border-primary mx-2 mb-2 rounded-lg">
             {/* Reply icon */}
-            <Reply className="w-4 h-4 text-[#5e6dd2] flex-shrink-0" />
+            <Reply className="w-4 h-4 text-primary flex-shrink-0" />
 
             {/* Reply content */}
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-1">
                 <span className="text-[11px] text-text-secondary">Replying to</span>
-                <span className="text-[11px] font-medium text-[#5e6dd2]">
+                <span className="text-[11px] font-medium text-primary">
                   {replyingTo.sender_username}
                 </span>
               </div>

@@ -65,7 +65,7 @@ export const CreatePollModal = memo(function CreatePollModal({ isOpen, onClose, 
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
             transition={{ type: 'spring', stiffness: 300, damping: 25 }}
             onClick={(e) => e.stopPropagation()}
-            className="w-full max-w-md bg-[#1a1b1e] border border-border-hover rounded-2xl overflow-hidden"
+            className="w-full max-w-md bg-surface-dark border border-border-hover rounded-2xl overflow-hidden"
           >
             {/* Header */}
             <div className="flex items-center justify-between px-5 py-4 border-b border-border-default">
@@ -130,7 +130,7 @@ export const CreatePollModal = memo(function CreatePollModal({ isOpen, onClose, 
                   <button
                     type="button"
                     onClick={handleAddOption}
-                    className="mt-2 flex items-center gap-1.5 text-[13px] text-primary-hover hover:text-[#a5b4fc] transition-colors"
+                    className="mt-2 flex items-center gap-1.5 text-[13px] text-primary-hover hover:text-primary-hover transition-colors"
                   >
                     <Plus className="w-3.5 h-3.5" />
                     Ajouter une option
@@ -152,7 +152,7 @@ export const CreatePollModal = memo(function CreatePollModal({ isOpen, onClose, 
                 type="button"
                 onClick={handleSubmit}
                 disabled={!isValid}
-                className="px-5 py-2.5 rounded-xl text-[13px] font-semibold bg-primary text-white hover:bg-[#7c7ffa] transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                className="px-5 py-2.5 rounded-xl text-[13px] font-semibold bg-primary text-white hover:bg-primary-hover transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
               >
                 Creer le sondage
               </button>

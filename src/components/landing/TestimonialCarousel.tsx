@@ -87,14 +87,14 @@ function TestimonialCard({ t }: { t: Testimonial }) {
         <div>
           <div className="font-semibold text-text-primary text-sm">{t.name}</div>
           <div className="text-xs text-text-tertiary">{t.squad}</div>
-          <div className="text-xs text-[#06B6D4] mt-0.5">{t.game}</div>
+          <div className="text-xs text-info mt-0.5">{t.game}</div>
         </div>
       </div>
       <div className="flex gap-0.5 mb-3">
         {Array.from({ length: 5 }).map((_, i) => (
           <Star
             key={i}
-            className={`w-3.5 h-3.5 ${i < t.rating ? 'text-[#fbbf24] fill-[#fbbf24]' : 'text-border-subtle'}`}
+            className={`w-3.5 h-3.5 ${i < t.rating ? 'text-warning fill-warning' : 'text-border-subtle'}`}
           />
         ))}
       </div>

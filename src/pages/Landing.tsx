@@ -68,7 +68,7 @@ const pillars = [
     illustration: HeadphonesIllustration,
     title: 'Party vocale 24/7',
     description: 'Ta squad a son salon vocal toujours ouvert. Rejoins en 1 clic, reste aussi longtemps que tu veux.',
-    color: '#34d399',
+    color: 'var(--color-success)',
     gradient: 'from-success/[0.08] to-success/[0.01]',
     details: [
       '1 squad = 1 party vocale dédiée',
@@ -83,7 +83,7 @@ const pillars = [
     illustration: CalendarIllustration,
     title: 'Planning avec décision',
     description: 'Propose un créneau. Chacun répond OUI ou NON. Fini les "on verra" — on sait qui vient.',
-    color: '#f5a623',
+    color: 'var(--color-gold)',
     gradient: 'from-amber-500/[0.08] to-amber-500/[0.01]',
     details: [
       'Chat de squad permanent',
@@ -98,7 +98,7 @@ const pillars = [
     illustration: ShieldIllustration,
     title: 'Fiabilité mesurée',
     description: 'Check-in à chaque session. Ton score montre si tu tiens parole. Tes potes comptent sur toi.',
-    color: '#f87171',
+    color: 'var(--color-error)',
     gradient: 'from-error/[0.08] to-error/[0.01]',
     details: [
       'Check-in obligatoire',
@@ -357,7 +357,7 @@ export default function Landing() {
         <motion.div
           className="absolute top-0 right-0 w-full max-w-full h-[600px] hero-gradient-pulse"
           style={{
-            background: 'radial-gradient(circle at 80% 0%, rgba(99,102,241,0.12) 0%, transparent 70%)',
+            background: 'radial-gradient(circle at 80% 0%, var(--color-primary-12) 0%, transparent 70%)',
             filter: 'blur(60px)',
           }}
         />
@@ -473,10 +473,10 @@ export default function Landing() {
         <div className="max-w-4xl mx-auto">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6">
             {[
-              { end: 3, suffix: ' clics', singularSuffix: ' clic' as string | undefined, label: 'pour confirmer ta présence', icon: MousePointerClick, color: '#06B6D4' },
-              { end: 5, suffix: ' min/sem', singularSuffix: undefined as string | undefined, label: 'pour organiser toutes tes sessions', icon: Clock, color: '#6366f1' },
-              { end: 0, suffix: '', singularSuffix: undefined as string | undefined, label: 'prise de tête pour planifier', icon: Smile, color: '#f5a623' },
-              { end: 4.9, suffix: '★', singularSuffix: undefined as string | undefined, label: 'satisfaction beta testeurs', icon: Target, color: '#34d399', decimals: 1 },
+              { end: 3, suffix: ' clics', singularSuffix: ' clic' as string | undefined, label: 'pour confirmer ta présence', icon: MousePointerClick, color: 'var(--color-secondary)' },
+              { end: 5, suffix: ' min/sem', singularSuffix: undefined as string | undefined, label: 'pour organiser toutes tes sessions', icon: Clock, color: 'var(--color-primary)' },
+              { end: 0, suffix: '', singularSuffix: undefined as string | undefined, label: 'prise de tête pour planifier', icon: Smile, color: 'var(--color-gold)' },
+              { end: 4.9, suffix: '★', singularSuffix: undefined as string | undefined, label: 'satisfaction beta testeurs', icon: Target, color: 'var(--color-success)', decimals: 1 },
             ].map((stat) => (
               <motion.div
                 key={stat.label}
@@ -620,8 +620,8 @@ export default function Landing() {
                     >
                       <div className={`w-10 h-10 lg:w-12 lg:h-12 rounded-xl flex items-center justify-center shrink-0 transition-all ${
                         isActive ? '' : 'opacity-50'
-                      }`} style={{ backgroundColor: `${demoSteps[i]?.color || '#6366f1'}15` }}>
-                        <StepIcon className="w-5 h-5" style={{ color: demoSteps[i]?.color || '#6366f1' }} />
+                      }`} style={{ backgroundColor: `${demoSteps[i]?.color || 'var(--color-primary)'}15` }}>
+                        <StepIcon className="w-5 h-5" style={{ color: demoSteps[i]?.color || 'var(--color-primary)' }} />
                       </div>
                       <div>
                         <h3 className={`text-[15px] font-semibold transition-colors ${isActive ? 'text-text-primary' : 'text-text-tertiary'}`}>{step.title}</h3>
@@ -743,10 +743,10 @@ export default function Landing() {
                           </div>
                           <div className="flex items-center justify-center gap-3 mb-3">
                             {[
-                              { name: 'Max', color: '#34d399', speaking: true },
-                              { name: 'Luna', color: '#6366f1', speaking: false },
-                              { name: 'Kira', color: '#f5a623', speaking: false },
-                              { name: 'Jay', color: '#a78bfa', speaking: false },
+                              { name: 'Max', color: 'var(--color-success)', speaking: true },
+                              { name: 'Luna', color: 'var(--color-primary)', speaking: false },
+                              { name: 'Kira', color: 'var(--color-gold)', speaking: false },
+                              { name: 'Jay', color: 'var(--color-purple)', speaking: false },
                             ].map((p) => (
                               <div key={p.name} className="flex flex-col items-center">
                                 <div className="relative">
@@ -805,9 +805,9 @@ export default function Landing() {
               <div className="shrink-0 flex flex-col items-center">
                 <div className="relative w-28 h-28">
                   <svg className="w-28 h-28 -rotate-90" viewBox="0 0 100 100" aria-hidden="true">
-                    <circle cx="50" cy="50" r="45" fill="none" stroke="rgba(248,113,113,0.1)" strokeWidth="8" />
+                    <circle cx="50" cy="50" r="45" fill="none" stroke="var(--color-error-10)" strokeWidth="8" />
                     <motion.circle
-                      cx="50" cy="50" r="45" fill="none" stroke="#f87171" strokeWidth="8"
+                      cx="50" cy="50" r="45" fill="none" stroke="var(--color-error)" strokeWidth="8"
                       strokeLinecap="round" strokeDasharray="283"
                       initial={{ strokeDashoffset: 283 }}
                       whileInView={{ strokeDashoffset: 283 * (1 - 0.94) }}
@@ -1129,7 +1129,7 @@ export default function Landing() {
           >
             {/* Animated glow background */}
             <motion.div
-              className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(99,102,241,0.1)_0%,transparent_60%)]"
+              className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,var(--color-primary-10)_0%,transparent_60%)]"
               animate={{ scale: [1, 1.05, 1], opacity: [0.4, 0.6, 0.4] }}
               transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
             />

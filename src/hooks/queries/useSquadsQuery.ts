@@ -10,6 +10,7 @@ import { queryKeys } from '../../lib/queryClient'
 import type { Squad, SquadMember } from '../../types/database'
 import { showSuccess, showError } from '../../lib/toast'
 import { sendMemberJoinedMessage, sendMemberLeftMessage } from '../../lib/systemMessages'
+import { createOptimisticMutation } from '../../utils/optimisticUpdate'
 
 export interface SquadWithMembers extends Squad {
   members?: (SquadMember & { profiles?: { username?: string; avatar_url?: string; reliability_score?: number } })[]
@@ -189,6 +190,7 @@ export function useCreateSquadMutation() {
 
 /**
  * Mutation to join a squad by invite code
+ * Optimistic update: squad list refreshes instantly
  */
 export function useJoinSquadMutation() {
   const queryClient = useQueryClient()
@@ -214,7 +216,7 @@ export function useJoinSquadMutation() {
             created_at: new Date().toISOString(),
             updated_at: new Date().toISOString()
           })
-        if (profileError) throw new Error('Impossible de créer le profil')
+        if (profileError) throw new Error('Impossible de creer le profil')
       }
 
       // Find squad
@@ -234,7 +236,7 @@ export function useJoinSquadMutation() {
         .eq('user_id', user.id)
         .single()
 
-      if (existing) throw new Error('Tu fais déjà partie de cette squad')
+      if (existing) throw new Error('Tu fais deja partie de cette squad')
 
       // Join squad
       const { error: joinError } = await supabase
@@ -272,9 +274,21 @@ export function useJoinSquadMutation() {
 
 /**
  * Mutation to leave a squad
+ * Optimistic update: squad removed from list instantly, rollback on error
  */
 export function useLeaveSquadMutation() {
   const queryClient = useQueryClient()
+
+  const optimistic = createOptimisticMutation<void, string>(queryClient, {
+    queryKeys: [queryKeys.squads.list()],
+    updateCache: (qc, squadId) => {
+      qc.setQueryData<SquadWithMembers[]>(queryKeys.squads.list(), (old) =>
+        old ? old.filter((s) => s.id !== squadId) : []
+      )
+    },
+    errorMessage: 'Impossible de quitter la squad',
+    invalidateKeys: [queryKeys.squads.all],
+  })
 
   return useMutation({
     mutationFn: async (squadId: string) => {
@@ -301,13 +315,12 @@ export function useLeaveSquadMutation() {
 
       if (error) throw error
     },
+    onMutate: optimistic.onMutate,
+    onError: optimistic.onError,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: queryKeys.squads.all })
-      showSuccess('Tu as quitté la squad')
+      showSuccess('Tu as quitte la squad')
     },
-    onError: (error) => {
-      showError(error.message || 'Impossible de quitter la squad')
-    },
+    onSettled: optimistic.onSettled,
   })
 }
 

@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion'
 import { Calendar, Check, Target, Trophy, Sparkles, TrendingUp } from 'lucide-react'
-import { Card, ProgressRing, AnimatedCounter } from '../ui'
+import { Card, ProgressRing, AnimatedCounter, HelpTooltip } from '../ui'
 
 // Systeme de tiers base sur le score de fiabilite
 const TIERS = [
@@ -90,7 +90,9 @@ export function ProfileStats({ profile, profileReady }: ProfileStatsProps) {
                     <span>{tier.name}</span>
                   </motion.span>
                 </div>
-                <p className="text-base text-text-quaternary">Score de fiabilite</p>
+                <HelpTooltip content="Ton score de fiabilite mesure ta regularite aux sessions. Plus tu confirmes et te presentes, plus il monte." position="bottom">
+                  <p className="text-base text-text-quaternary">Score de fiabilite</p>
+                </HelpTooltip>
 
                 {tier.nextTier && (
                   <div className="mt-3">

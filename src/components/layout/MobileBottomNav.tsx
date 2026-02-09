@@ -2,6 +2,7 @@ import { memo } from 'react'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { Home, Mic, MessageCircle, User, Calendar } from 'lucide-react'
+import { usePrefetch } from '../../hooks/usePrefetch'
 
 // Mobile nav items (Party sera au centre avec un style special)
 const mobileNavLeft = [
@@ -110,6 +111,8 @@ export const MobileBottomNav = memo(function MobileBottomNav({
   isKeyboardVisible,
   unreadMessages,
 }: MobileBottomNavProps) {
+  const { createPrefetchHandler, cancelPrefetch } = usePrefetch()
+
   return (
     <nav
       aria-label="Navigation mobile"
@@ -117,25 +120,27 @@ export const MobileBottomNav = memo(function MobileBottomNav({
     >
       <div className="flex items-center justify-around py-2 mobile-nav-padding">
         {mobileNavLeft.map((item) => (
-          <MobileNavLink
-            key={item.path}
-            path={item.path}
-            icon={item.icon}
-            label={item.label}
-            isActive={currentPath === item.path}
-            badge={undefined}
-          />
+          <div key={item.path} onPointerEnter={createPrefetchHandler(item.path)} onPointerLeave={cancelPrefetch}>
+            <MobileNavLink
+              path={item.path}
+              icon={item.icon}
+              label={item.label}
+              isActive={currentPath === item.path}
+              badge={undefined}
+            />
+          </div>
         ))}
         <PartyButton isActive={isPartyActive} hasActiveParty={isInVoiceChat} />
         {mobileNavRight.map((item) => (
-          <MobileNavLink
-            key={item.path}
-            path={item.path}
-            icon={item.icon}
-            label={item.label}
-            isActive={currentPath === item.path}
-            badge={item.path === '/messages' && unreadMessages > 0 ? unreadMessages : undefined}
-          />
+          <div key={item.path} onPointerEnter={createPrefetchHandler(item.path)} onPointerLeave={cancelPrefetch}>
+            <MobileNavLink
+              path={item.path}
+              icon={item.icon}
+              label={item.label}
+              isActive={currentPath === item.path}
+              badge={item.path === '/messages' && unreadMessages > 0 ? unreadMessages : undefined}
+            />
+          </div>
         ))}
       </div>
     </nav>

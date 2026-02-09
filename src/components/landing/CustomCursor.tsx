@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react'
 import { motion, useMotionValue, useSpring } from 'framer-motion'
+import { useReducedMotion } from '../../hooks/useReducedMotion'
 
 const TRAIL_COUNT = 5
 
 export function CustomCursor() {
   const [isVisible, setIsVisible] = useState(false)
   const [isSupported, setIsSupported] = useState(false)
+  const reducedMotion = useReducedMotion()
 
   const cursorX = useMotionValue(-100)
   const cursorY = useMotionValue(-100)
@@ -27,7 +29,6 @@ export function CustomCursor() {
   useEffect(() => {
     // Check support: no touch, no reduced motion
     const isTouch = window.matchMedia('(pointer: coarse)').matches
-    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
     if (isTouch || reducedMotion) return
 
     setIsSupported(true)
@@ -50,7 +51,7 @@ export function CustomCursor() {
       document.removeEventListener('mouseleave', handleMouseLeave)
       document.removeEventListener('mouseenter', handleMouseEnter)
     }
-  }, [cursorX, cursorY, isVisible])
+  }, [cursorX, cursorY, isVisible, reducedMotion])
 
   if (!isSupported) return null
 

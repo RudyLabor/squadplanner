@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { User, Edit2, Check, X, Camera, Loader2 } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
-import { Button, Input } from '../ui'
+import { Button, Input, Expandable } from '../ui'
 import { supabase } from '../../lib/supabase'
 
 interface ProfileHeaderProps {
@@ -195,9 +195,9 @@ export function ProfileHeader({ user, profile, isLoading, updateProfile }: Profi
                 <h1 className="text-2xl font-bold text-text-primary mb-1">
                   {profile?.username || 'Gamer'}
                 </h1>
-                <p className="text-md text-text-tertiary mb-1">
+                <Expandable previewLines={2} className="text-md text-text-tertiary mb-1 max-w-sm">
                   {profile?.bio || 'Pas encore de bio'}
-                </p>
+                </Expandable>
                 <p className="text-sm text-text-quaternary mb-3">{user?.email}</p>
                 <div className="flex items-center gap-2">
                   <button

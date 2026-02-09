@@ -22,6 +22,8 @@ import { CookieConsent } from './components/CookieConsent'
 import { TourGuide } from './components/TourGuide'
 import NotificationBanner from './components/NotificationBanner'
 import { queryClient } from './lib/queryClient'
+import { useNavigationProgress } from './hooks/useNavigationProgress'
+import { TopLoadingBar } from './components/ui/TopLoadingBar'
 
 // Initialize theme on app load - triggers theme initialization before first render
 void useThemeStore.getState()
@@ -140,6 +142,7 @@ function AppContent() {
   useDocumentTitle()
   useScrollRestoration()
   useSwipeBack()
+  useNavigationProgress()
 
   useEffect(() => {
     initialize()
@@ -401,6 +404,7 @@ export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
+        <TopLoadingBar />
         <AppContent />
         {/* Offline/Online status banner */}
         <OfflineBanner />

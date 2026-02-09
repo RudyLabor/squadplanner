@@ -21,7 +21,7 @@
 10. [CHANTIER 9 - ETATS (LOADING, ERROR, EMPTY)](#10-chantier-9---etats)
 11. [CHANTIER 10 - AUDIT PAGE PAR PAGE 🟢 FAIT](#11-chantier-10---audit-page-par-page)
 12. [CHANTIER 11 - QUALITE DE CODE & TESTS 🟢 FAIT](#12-chantier-11---qualite-de-code--tests)
-13. [CHANTIER 12 - POLISH FINAL (CE QUI FAIT LA DIFFERENCE)](#13-chantier-12---polish-final)
+13. [CHANTIER 12 - POLISH FINAL (CE QUI FAIT LA DIFFERENCE) 🟢 FAIT](#13-chantier-12---polish-final)
 14. [PLANNING & PRIORISATION](#14-planning--priorisation)
 
 ---
@@ -1360,52 +1360,52 @@ useKeyboardVisible, useOffline, useDocumentTitle, useTheme, useViewTransition, u
 
 ---
 
-## 13. CHANTIER 12 - POLISH FINAL
+## 13. CHANTIER 12 - POLISH FINAL 🟢 FAIT
 
 ### 13.1 Ce que font Apple et PlayStation qu'on ne fait pas
 
-| Detail | Explication | Priorite |
-|---|---|---|
-| **Fluid typography** | Les textes s'adaptent entre mobile et desktop via `clamp()` | HAUTE |
-| **Variable fonts** | 1 fichier font au lieu de 4, poids adaptatif | MOYENNE |
-| **Motion matching** | Les animations correspondent a la physique reelle (spring, friction) | HAUTE |
-| **Skeleton-to-content crossfade** | Transition douce du skeleton au contenu reel | HAUTE |
-| **Optimistic updates** | L'action se reflete AVANT la confirmation serveur | HAUTE |
-| **Error recovery** | Auto-retry en background, pas besoin de recharger | HAUTE |
-| **Shared element transitions** | L'element clique "voyage" vers la nouvelle page | BASSE |
-| **Adaptive loading** | UI plus legere sur connexions lentes | MOYENNE |
-| **Reduced motion** | Respecte la preference OS (existe deja partiellement) | HAUTE |
-| **State persistence** | Les scrolls positions, filters, onglets sont memorises | HAUTE |
-| **Scroll restoration** | Retour arriere = meme position de scroll | HAUTE |
-| **Infinite scroll** | Charge plus de contenu au scroll, pas de pagination | MOYENNE |
-| **Skeleton-aware CLS** | Les skeletons ont les memes dimensions que le contenu | EXISTE |
-| **Sub-pixel rendering** | Pas de flou sur les bordures/ombres | A VERIFIER |
+| Detail | Explication | Priorite | Statut |
+|---|---|---|---|
+| **Fluid typography** | Les textes s'adaptent entre mobile et desktop via `clamp()` | HAUTE | 🟢 DEJA FAIT (Chantier 3) |
+| **Variable fonts** | 1 fichier font au lieu de 4, poids adaptatif | MOYENNE | 🟢 Font-weight range etendu (Inter 100-900, Space Grotesk 300-700) |
+| **Motion matching** | Les animations correspondent a la physique reelle (spring, friction) | HAUTE | 🟢 DEJA FAIT (motionTokens.ts spring physics) |
+| **Skeleton-to-content crossfade** | Transition douce du skeleton au contenu reel | HAUTE | 🟢 `CrossfadeTransition.tsx` applique sur Home, SquadDetail, Messages |
+| **Optimistic updates** | L'action se reflete AVANT la confirmation serveur | HAUTE | 🟢 Messages, squads (leave), sessions (create/RSVP), profil |
+| **Error recovery** | Auto-retry en background, pas besoin de recharger | HAUTE | 🟢 DEJA FAIT (useAutoRetry, ErrorBoundary) |
+| **Shared element transitions** | L'element clique "voyage" vers la nouvelle page | BASSE | ⚪ Non implemente (complexite excessive, peu de valeur) |
+| **Adaptive loading** | UI plus legere sur connexions lentes | MOYENNE | 🟢 `useAdaptiveLoading` + `AdaptiveImage` (3 tiers: low/medium/high) |
+| **Reduced motion** | Respecte la preference OS (existe deja partiellement) | HAUTE | 🟢 `useReducedMotion` hook centralise, 4 composants refactores |
+| **State persistence** | Les scrolls positions, filters, onglets sont memorises | HAUTE | 🟢 `useStatePersistence` + Discover, Messages, Legal, Help |
+| **Scroll restoration** | Retour arriere = meme position de scroll | HAUTE | 🟢 DEJA FAIT (useScrollRestoration) |
+| **Infinite scroll** | Charge plus de contenu au scroll, pas de pagination | MOYENNE | 🟢 `useInfiniteScroll` hook (IntersectionObserver), pret pour migration |
+| **Skeleton-aware CLS** | Les skeletons ont les memes dimensions que le contenu | EXISTE | 🟢 DEJA FAIT |
+| **Sub-pixel rendering** | Pas de flou sur les bordures/ombres | A VERIFIER | 🟢 OK |
 
 ### 13.2 Details qui font "world-class"
 
-| Detail | Comment l'implementer |
-|---|---|
-| **Cursor custom** | Landing page cursor custom (existe) - etendre a toute l'app ? Non, trop |
-| **Scroll progress** | Barre de progression sur les pages longues (Help, Legal) |
-| **Section anchors** | Deep links vers chaque section (settings#theme, etc.) |
-| **Keyboard shortcuts** | Ctrl+K pour search (existe), mais aussi N pour new, etc. |
-| **Sound design** | Sons subtils pour les actions (message sent, notification) - deja dans useSoundEffects |
-| **Vibration patterns** | Differents patterns pour differentes actions |
-| **Toast with undo** | "Message supprime" avec bouton Annuler et timer |
-| **Contextual help** | Tooltips explicatifs sur les elements complexes |
-| **Progressive disclosure** | Montrer d'abord l'essentiel, le reste au tap/click |
-| **Loading progress** | Barre de chargement en haut de page pendant navigation (comme YouTube) |
+| Detail | Comment l'implementer | Statut |
+|---|---|---|
+| **Cursor custom** | Landing page cursor custom (existe) | 🟢 DEJA FAIT |
+| **Scroll progress** | Barre de progression sur les pages longues (Help, Legal) | 🟢 `ScrollProgress.tsx` applique sur Help et Legal |
+| **Section anchors** | Deep links vers chaque section (settings#theme, etc.) | 🟢 `useHashNavigation` + Settings (7 sections), Help, Legal |
+| **Keyboard shortcuts** | Ctrl+K pour search, H/S/M/P/N/T/? | 🟢 DEJA FAIT (CommandPalette) |
+| **Sound design** | Sons subtils pour les actions | 🟢 DEJA FAIT (useSoundEffects) |
+| **Vibration patterns** | Differents patterns pour differentes actions | 🟢 5 patterns distincts (success/error/warning/notification/selection) |
+| **Toast with undo** | "Message supprime" avec bouton Annuler et timer | 🟢 DEJA FAIT (Sonner + lib/toast.ts) |
+| **Contextual help** | Tooltips explicatifs sur les elements complexes | 🟢 `Tooltip variant="help"` sur fiabilite, XP, roles, sessions |
+| **Progressive disclosure** | Montrer d'abord l'essentiel, le reste au tap/click | 🟢 `Expandable.tsx` applique sur bios profil |
+| **Loading progress** | Barre de chargement en haut de page pendant navigation | 🟢 `TopLoadingBar.tsx` + `useNavigationProgress` (style YouTube) |
 
 ### 13.3 Performance ressentie
 
 Meme si l'app est rapide, elle doit PARAITRE instantanee :
 
-1. **Skeleton immediat** : Le skeleton doit apparaitre en < 50ms (c'est le cas)
-2. **Optimistic UI** : Les actions se refletent instantanement (a implementer systematiquement)
-3. **Prefetch agressif** : Charger les donnees probables avant que l'user clique
-4. **Animation d'attente** : Si une action prend > 300ms, montrer un spinner
-5. **Progress indicators** : Pour les uploads, envois, etc.
-6. **Background sync** : Synchroniser les donnees en arriere-plan sans bloquer l'UI
+1. **Skeleton immediat** : Le skeleton doit apparaitre en < 50ms → 🟢 FAIT
+2. **Optimistic UI** : Les actions se refletent instantanement → 🟢 `optimisticUpdate.ts` + messages, squads, profil, sessions
+3. **Prefetch agressif** : Charger les donnees probables avant que l'user clique → 🟢 `usePrefetch` hook sur nav links + squad cards
+4. **Animation d'attente** : Si une action prend > 300ms, montrer un spinner → 🟢 `useDelayedLoading` hook (300ms delay)
+5. **Progress indicators** : Pour les uploads, envois, etc. → 🟢 `SyncIndicator.tsx` (syncing/synced/error)
+6. **Background sync** : Synchroniser les donnees en arriere-plan sans bloquer l'UI → 🟢 TanStack Query + `useIsMutating()`
 
 ---
 

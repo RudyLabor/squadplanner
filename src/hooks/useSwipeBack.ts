@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { haptic, getHapticEnabled } from '../utils/haptics'
+import { useReducedMotion } from './useReducedMotion'
 
 interface UseSwipeBackOptions {
   /** Width of the edge zone that activates swipe detection (default: 20px) */
@@ -48,6 +49,7 @@ export function useSwipeBack(options?: UseSwipeBackOptions): UseSwipeBackReturn 
   } = options ?? {}
 
   const navigate = useNavigate()
+  const prefersReducedMotion = useReducedMotion()
   const [swipeProgress, setSwipeProgress] = useState(0)
   const [isSwiping, setIsSwiping] = useState(false)
 
@@ -60,18 +62,13 @@ export function useSwipeBack(options?: UseSwipeBackOptions): UseSwipeBackReturn 
   const isHorizontalRef = useRef<boolean | null>(null)
   const overlayRef = useRef<HTMLDivElement | null>(null)
 
-  const prefersReducedMotion = useRef(
-    typeof window !== 'undefined' &&
-    window.matchMedia('(prefers-reduced-motion: reduce)').matches
-  )
-
   const isMobile = useCallback(() => {
     return typeof window !== 'undefined' && window.innerWidth < 1024
   }, [])
 
   // Create/update the visual overlay indicator
   const updateOverlay = useCallback((progress: number) => {
-    if (prefersReducedMotion.current) return
+    if (prefersReducedMotion) return
 
     if (progress > 0) {
       if (!overlayRef.current) {

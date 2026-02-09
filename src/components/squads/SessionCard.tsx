@@ -5,7 +5,7 @@ import {
   CheckCircle2, XCircle, HelpCircle
 } from 'lucide-react'
 import { Link } from 'react-router-dom'
-import { Card, Badge } from '../ui'
+import { Card, Badge, Tooltip } from '../ui'
 
 export const SessionCard = memo(function SessionCard({ session, onRsvp }: {
   session: {
@@ -65,7 +65,19 @@ export const SessionCard = memo(function SessionCard({ session, onRsvp }: {
             <h3 className="text-md font-medium text-text-primary truncate">
               {session.title || session.game || 'Session'}
             </h3>
-            {statusBadge && <Badge variant={statusBadge.variant}>{statusBadge.label}</Badge>}
+            {statusBadge && (
+              <Tooltip
+                content={
+                  statusBadge.label === 'Confirmee' ? 'Assez de joueurs ont confirme leur presence.'
+                  : statusBadge.label === 'Annulee' ? 'Cette session a ete annulee par l\'organisateur.'
+                  : 'Cette session est terminee.'
+                }
+                position="top"
+                delay={200}
+              >
+                <Badge variant={statusBadge.variant}>{statusBadge.label}</Badge>
+              </Tooltip>
+            )}
           </div>
 
           <div className="flex items-center gap-3 text-base text-text-tertiary mb-3">

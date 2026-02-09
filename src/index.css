@@ -1254,3 +1254,62 @@ textarea,
 .touch-animate {
   will-change: transform;
 }
+
+/* =====================================================
+   Sync Indicator - Chantier 12
+   ===================================================== */
+.sync-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--color-bg-elevated);
+  border: 1px solid var(--color-border-subtle);
+}
+
+.sync-icon {
+  width: 14px;
+  height: 14px;
+}
+
+.sync-icon--syncing {
+  color: var(--color-text-secondary);
+}
+
+.sync-icon--synced {
+  color: var(--color-success);
+}
+
+.sync-icon--error {
+  color: var(--color-error);
+}
+
+[data-theme="light"] .sync-indicator {
+  background: var(--color-bg-elevated);
+  border-color: var(--color-border-default);
+}
+
+/* Optimistic message styles */
+.message--optimistic {
+  opacity: 0.7;
+}
+
+.message--failed {
+  opacity: 0.5;
+  border-left: 2px solid var(--color-error);
+}
+
+.message--failed-action {
+  color: var(--color-error);
+  font-size: 0.75rem;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sync-icon--syncing {
+    animation: none !important;
+  }
+}

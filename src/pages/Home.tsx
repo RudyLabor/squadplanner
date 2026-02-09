@@ -3,7 +3,7 @@ import { motion } from 'framer-motion'
 import { TrendingUp, Loader2, AlertCircle, Star } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import Confetti from 'react-confetti'
-import { Tooltip } from '../components/ui'
+import { Tooltip, CrossfadeTransition, SkeletonHomePage } from '../components/ui'
 import { useAuthStore, useVoiceChatStore } from '../hooks'
 import { useSquadsQuery } from '../hooks/queries/useSquadsQuery'
 import { useRsvpMutation, useUpcomingSessionsQuery } from '../hooks/queries/useSessionsQuery'
@@ -159,7 +159,9 @@ export default function Home() {
     }
   }
 
-  if (!isInitialized) {
+  const homeLoading = !isInitialized || (squadsLoading && sessionsQueryLoading)
+
+  if (!isInitialized && !user) {
     return (
       <div className="min-h-0 bg-bg-base flex items-center justify-center py-12">
         <Loader2 className="w-8 h-8 text-primary animate-spin" />
@@ -167,7 +169,7 @@ export default function Home() {
     )
   }
 
-  if (!user) { navigate('/'); return null }
+  if (isInitialized && !user) { navigate('/'); return null }
 
   const reliabilityScore = profile?.reliability_score || 100
   const pendingRsvps = upcomingSessions.filter(s => !s.my_rsvp).length
@@ -195,35 +197,37 @@ export default function Home() {
       )}
 
       <div className="px-4 md:px-6 lg:px-8 py-6 max-w-2xl lg:max-w-4xl xl:max-w-6xl mx-auto">
-        <div>
-          <header className="flex items-center justify-between mb-6">
-            <div>
-              <h1 className="text-2xl font-bold text-text-primary">
-                Salut {profile?.username || 'Gamer'} !
-              </h1>
-              <p className="text-md text-text-tertiary">
-                {upcomingSessions.length > 0
-                  ? pendingRsvps > 0
-                    ? `${pendingRsvps} session${pendingRsvps > 1 ? 's' : ''} ${pendingRsvps > 1 ? 'attendent' : 'attend'} ta réponse`
-                    : "T'es carré, toutes tes sessions sont confirmées"
-                  : 'Ta squad t\'attend, lance une session !'
-                }
-              </p>
-            </div>
-            <ReliabilityBadge score={reliabilityScore} />
-          </header>
+        <CrossfadeTransition isLoading={homeLoading} skeleton={<SkeletonHomePage />}>
+          <div>
+            <header className="flex items-center justify-between mb-6">
+              <div>
+                <h1 className="text-2xl font-bold text-text-primary">
+                  Salut {profile?.username || 'Gamer'} !
+                </h1>
+                <p className="text-md text-text-tertiary">
+                  {upcomingSessions.length > 0
+                    ? pendingRsvps > 0
+                      ? `${pendingRsvps} session${pendingRsvps > 1 ? 's' : ''} ${pendingRsvps > 1 ? 'attendent' : 'attend'} ta réponse`
+                      : "T'es carré, toutes tes sessions sont confirmées"
+                    : 'Ta squad t\'attend, lance une session !'
+                  }
+                </p>
+              </div>
+              <ReliabilityBadge score={reliabilityScore} />
+            </header>
 
-          {(!squadsLoading && !sessionsLoading) && (squads.length === 0 || upcomingSessions.length === 0) && (
-            <OnboardingChecklist hasSquad={squads.length > 0} hasSession={upcomingSessions.length > 0} onCreateSession={openCreateSessionModal} />
-          )}
+            {(!squadsLoading && !sessionsLoading) && (squads.length === 0 || upcomingSessions.length === 0) && (
+              <OnboardingChecklist hasSquad={squads.length > 0} hasSession={upcomingSessions.length > 0} onCreateSession={openCreateSessionModal} />
+            )}
 
-          <HomeAICoachSection aiCoachTip={aiCoachTip} aiCoachLoading={aiCoachLoading} onAction={openCreateSessionModal} />
-          <HomePartySection activeParty={activeParty} showCTA={!upcomingSessions[0] && squads.length > 0 && !activeParty} />
-          <HomeSessionsSection upcomingSessions={upcomingSessions} sessionsLoading={sessionsLoading} onRsvp={handleRsvp} isRsvpLoading={rsvpMutation.isPending} />
-          <HomeFriendsSection friendsPlaying={friendsPlaying} friendsLoading={friendsLoading} onJoin={handleJoinFriendParty} onInvite={handleInviteFriend} />
-          <HomeStatsSection squadsCount={squads.length} sessionsThisWeek={sessionsThisWeek} reliabilityScore={reliabilityScore} squadsLoading={squadsLoading} sessionsLoading={sessionsLoading} profile={profile} />
-          <HomeSquadsSection squads={squads} squadsLoading={squadsLoading} />
-        </div>
+            <HomeAICoachSection aiCoachTip={aiCoachTip} aiCoachLoading={aiCoachLoading} onAction={openCreateSessionModal} />
+            <HomePartySection activeParty={activeParty} showCTA={!upcomingSessions[0] && squads.length > 0 && !activeParty} />
+            <HomeSessionsSection upcomingSessions={upcomingSessions} sessionsLoading={sessionsLoading} onRsvp={handleRsvp} isRsvpLoading={rsvpMutation.isPending} />
+            <HomeFriendsSection friendsPlaying={friendsPlaying} friendsLoading={friendsLoading} onJoin={handleJoinFriendParty} onInvite={handleInviteFriend} />
+            <HomeStatsSection squadsCount={squads.length} sessionsThisWeek={sessionsThisWeek} reliabilityScore={reliabilityScore} squadsLoading={squadsLoading} sessionsLoading={sessionsLoading} profile={profile} />
+            <HomeSquadsSection squads={squads} squadsLoading={squadsLoading} />
+          </div>
+        </CrossfadeTransition>
       </div>
     </div>
   )

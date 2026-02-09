@@ -10,6 +10,7 @@ import {
   type ReactNode,
   type KeyboardEvent,
 } from 'react'
+import { useReducedMotion } from '../../hooks/useReducedMotion'
 import { haptic, getHapticEnabled } from '../../utils/haptics'
 
 // --- Context ---
@@ -221,15 +222,7 @@ export function TabsContent({ value, children, className = '' }: TabsContentProp
   const [containerWidth, setContainerWidth] = useState(0)
   const opacity = useTransform(x, [-containerWidth, 0, containerWidth], [0.5, 1, 0.5])
 
-  // Check for reduced motion preference
-  const [reducedMotion, setReducedMotion] = useState(false)
-  useEffect(() => {
-    const mq = window.matchMedia('(prefers-reduced-motion: reduce)')
-    setReducedMotion(mq.matches)
-    const handler = (e: MediaQueryListEvent) => setReducedMotion(e.matches)
-    mq.addEventListener('change', handler)
-    return () => mq.removeEventListener('change', handler)
-  }, [])
+  const reducedMotion = useReducedMotion()
 
   // Track container width for drag constraints and opacity mapping
   useEffect(() => {

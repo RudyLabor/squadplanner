@@ -9,6 +9,7 @@ import { useNavigate, Link } from 'react-router-dom'
 import { Card, SegmentedControl } from '../components/ui'
 import { useAuthStore } from '../hooks'
 import { useThemeStore, type ThemeMode } from '../hooks/useTheme'
+import { useHashNavigation } from '../hooks/useHashNavigation'
 import { supabase } from '../lib/supabase'
 import { showSuccess, showError } from '../lib/toast'
 
@@ -111,6 +112,7 @@ const TIMEZONES = [
 export function Settings() {
   const navigate = useNavigate()
   const { signOut } = useAuthStore()
+  useHashNavigation()
 
   // Notification settings
   const [notifications, setNotifications] = useState<NotificationSettings>({
@@ -274,7 +276,7 @@ export function Settings() {
         </header>
 
         {/* Notifications Section */}
-        <Card className="mb-5 p-5 bg-bg-elevated">
+        <Card id="notifications" className="mb-5 p-5 bg-bg-elevated scroll-mt-6">
           <SectionHeader icon={Bell} title="Notifications" />
           <div className="space-y-1">
             <SettingRow
@@ -317,7 +319,7 @@ export function Settings() {
         </Card>
 
         {/* Audio Section */}
-        <Card className="mb-5 p-5 bg-bg-elevated">
+        <Card id="audio" className="mb-5 p-5 bg-bg-elevated scroll-mt-6">
           <SectionHeader icon={Volume2} title="Audio" />
           <div className="space-y-4">
             <div>
@@ -360,7 +362,7 @@ export function Settings() {
         </Card>
 
         {/* Appearance Section */}
-        <Card className="mb-5 p-5 bg-bg-elevated">
+        <Card id="theme" className="mb-5 p-5 bg-bg-elevated scroll-mt-6">
           <SectionHeader icon={Palette} title="Apparence" />
           <SettingRow
             label="Thème"
@@ -371,7 +373,7 @@ export function Settings() {
         </Card>
 
         {/* Privacy Section */}
-        <Card className="mb-5 p-5 bg-bg-elevated">
+        <Card id="privacy" className="mb-5 p-5 bg-bg-elevated scroll-mt-6">
           <SectionHeader icon={Shield} title="Confidentialité" />
           <div className="space-y-1">
             <SettingRow
@@ -401,7 +403,7 @@ export function Settings() {
         </Card>
 
         {/* Timezone & Language Section */}
-        <Card className="mb-5 p-5 bg-bg-elevated">
+        <Card id="region" className="mb-5 p-5 bg-bg-elevated scroll-mt-6">
           <SectionHeader icon={Globe} title="Région" />
           <div className="space-y-4">
             <div>
@@ -438,7 +440,7 @@ export function Settings() {
         </Card>
 
         {/* Data Section */}
-        <Card className="mb-5 p-5 bg-bg-elevated">
+        <Card id="data" className="mb-5 p-5 bg-bg-elevated scroll-mt-6">
           <SectionHeader icon={Database} title="Données" />
           <div className="space-y-3">
             <button
@@ -477,7 +479,7 @@ export function Settings() {
         </Card>
 
         {/* Legal Section */}
-        <Card className="mb-5 p-5 bg-bg-elevated">
+        <Card id="legal" className="mb-5 p-5 bg-bg-elevated scroll-mt-6">
           <SectionHeader icon={FileText} title="Légal" />
           <div className="space-y-3">
             <Link

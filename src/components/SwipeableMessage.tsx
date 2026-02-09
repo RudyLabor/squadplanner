@@ -1,7 +1,8 @@
-import { memo, useRef, useCallback, useMemo } from 'react'
+import { memo, useRef, useCallback } from 'react'
 import { motion, useMotionValue, useTransform, type PanInfo } from 'framer-motion'
 import { Reply, Trash2, MoreHorizontal } from 'lucide-react'
 import { useHapticFeedback } from '../hooks/useHapticFeedback'
+import { useReducedMotion } from '../hooks/useReducedMotion'
 import { motion as motionTokens } from '../utils/motionTokens'
 
 /** Swipe threshold in pixels to trigger an action */
@@ -46,15 +47,10 @@ const SwipeableMessage = memo(function SwipeableMessage({
   disabled = false,
 }: SwipeableMessageProps) {
   const { triggerHaptic } = useHapticFeedback()
+  const prefersReducedMotion = useReducedMotion()
 
   // Track whether we already fired haptic for the current gesture
   const hapticFiredRef = useRef(false)
-
-  // Check reduced motion preference
-  const prefersReducedMotion = useMemo(() => {
-    if (typeof window === 'undefined') return false
-    return window.matchMedia('(prefers-reduced-motion: reduce)').matches
-  }, [])
 
   const x = useMotionValue(0)
 

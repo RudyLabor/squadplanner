@@ -1,6 +1,6 @@
 /* Font declarations — moved from inline <style> to fix Vite 7 html-inline-proxy build error */
-@font-face { font-family: 'Inter'; font-style: normal; font-weight: 400 500 600 700; font-display: swap; src: url('https://fonts.gstatic.com/s/inter/v18/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuLyfAZ9hiJ-Ek-_EeA.woff2') format('woff2'); }
-@font-face { font-family: 'Space Grotesk'; font-style: normal; font-weight: 600 700; font-display: swap; src: url('https://fonts.gstatic.com/s/spacegrotesk/v16/V8mDoQDjQSkFtoMM3T6r8E7mPbF4Cw.woff2') format('woff2'); }
+@font-face { font-family: 'Inter'; font-style: normal; font-weight: 100 900; font-display: swap; src: url('https://fonts.gstatic.com/s/inter/v18/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuLyfAZ9hiJ-Ek-_EeA.woff2') format('woff2'); }
+@font-face { font-family: 'Space Grotesk'; font-style: normal; font-weight: 300 700; font-display: swap; src: url('https://fonts.gstatic.com/s/spacegrotesk/v16/V8mDoQDjQSkFtoMM3T6r8E7mPbF4Cw.woff2') format('woff2'); }
 
 /* Critical CSS - prevents FOUC */
 :root {

@@ -2,12 +2,15 @@
  * PHASE - Tooltip Component
  *
  * Accessible tooltip with keyboard support and animations.
+ * Includes a "help" variant that renders a "?" icon trigger.
  */
 import { useState, useRef, useEffect, type ReactNode } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { createPortal } from 'react-dom'
+import { HelpCircle } from 'lucide-react'
 
 type TooltipPosition = 'top' | 'bottom' | 'left' | 'right'
+type TooltipVariant = 'default' | 'help'
 
 interface TooltipProps {
   content: ReactNode
@@ -16,6 +19,10 @@ interface TooltipProps {
   delay?: number
   disabled?: boolean
   className?: string
+  /** "help" variant renders a small "?" icon as the trigger */
+  variant?: TooltipVariant
+  /** Size of the help icon (default 14) */
+  helpIconSize?: number
 }
 
 export function Tooltip({
@@ -25,6 +32,8 @@ export function Tooltip({
   delay = 300,
   disabled = false,
   className = '',
+  variant = 'default',
+  helpIconSize = 14,
 }: TooltipProps) {
   const [isVisible, setIsVisible] = useState(false)
   const [coords, setCoords] = useState({ x: 0, y: 0 })
@@ -111,6 +120,23 @@ export function Tooltip({
     }
   }
 
+  const triggerContent = variant === 'help' ? (
+    <span className="inline-flex items-center gap-1">
+      {children}
+      <button
+        type="button"
+        aria-label="Aide"
+        className="inline-flex items-center justify-center rounded-full text-text-tertiary hover:text-text-secondary hover:bg-surface-card transition-colors focus-visible:outline-2 focus-visible:outline-primary"
+        style={{ width: helpIconSize + 6, height: helpIconSize + 6 }}
+        tabIndex={0}
+      >
+        <HelpCircle style={{ width: helpIconSize, height: helpIconSize }} />
+      </button>
+    </span>
+  ) : (
+    children
+  )
+
   return (
     <>
       <div
@@ -121,7 +147,7 @@ export function Tooltip({
         onBlur={hideTooltip}
         className="inline-block"
       >
-        {children}
+        {triggerContent}
       </div>
 
       {typeof document !== 'undefined' &&
@@ -207,6 +233,23 @@ export function TooltipTrigger({
         {children}
         <span className="sr-only">{content}</span>
       </span>
+    </Tooltip>
+  )
+}
+
+/**
+ * HelpTooltip - Shortcut for variant="help" tooltips.
+ * Renders children with a small "?" icon that shows the help text on hover.
+ */
+export function HelpTooltip({
+  content,
+  children,
+  position = 'top',
+  ...props
+}: Omit<TooltipProps, 'variant'>) {
+  return (
+    <Tooltip content={content} position={position} variant="help" {...props}>
+      {children}
     </Tooltip>
   )
 }

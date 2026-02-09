@@ -5,6 +5,7 @@ import { useMessagesStore } from '../hooks/useMessages'
 import { useDirectMessagesStore } from '../hooks/useDirectMessages'
 import { useAuthStore } from '../hooks/useAuth'
 import { useTypingIndicator } from '../hooks/useTypingIndicator'
+import { useStatePersistence } from '../hooks/useStatePersistence'
 import { PinnedMessages, type PinnedMessage } from '../components/PinnedMessages'
 import { EditMessageModal } from '../components/EditMessageModal'
 import { CreatePollModal } from '../components/CreatePollModal'
@@ -13,6 +14,7 @@ import { useSquadMembersQuery } from '../hooks/queries/useSquadMembers'
 import { hasPermission, type SquadRole } from '../lib/roles'
 import type { MentionUser } from '../components/MentionInput'
 import type { PollData } from '../components/ChatPoll'
+import { CrossfadeTransition, SkeletonChatPage } from '../components/ui'
 import { ConversationList } from '../components/messages/ConversationList'
 import { ConversationHeader } from '../components/messages/ConversationHeader'
 import { MessageThread } from '../components/messages/MessageThread'
@@ -44,7 +46,7 @@ export function Messages() {
     [squadMembersData, user?.id]
   )
 
-  const [activeTab, setActiveTab] = useState<'squads' | 'dms'>('squads')
+  const [activeTab, setActiveTab] = useStatePersistence<'squads' | 'dms'>('messages_tab', 'squads')
   const [newMessage, setNewMessage] = useState('')
   const [isSending, setIsSending] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
@@ -220,11 +222,15 @@ export function Messages() {
     </>
   )
 
+  const initialMessagesLoading = isLoadingSquad && isLoadingDM && squadConversations.length === 0
+
   if (!activeSquadConv && !activeDMConv) return (
     <>{toastEl}
       <main className="min-h-0 bg-bg-base pb-6" aria-label="Messages">
         <div className="px-4 md:px-6 lg:px-8 py-6 max-w-2xl lg:max-w-4xl xl:max-w-6xl mx-auto">
-          <ConversationList {...convListProps} />
+          <CrossfadeTransition isLoading={initialMessagesLoading} skeleton={<SkeletonChatPage />}>
+            <ConversationList {...convListProps} />
+          </CrossfadeTransition>
         </div>
       </main>
     </>

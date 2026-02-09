@@ -8,6 +8,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { supabase } from '../../lib/supabase'
 import type { Profile } from '../../types/database'
 import { showSuccess, showError } from '../../lib/toast'
+import { createOptimisticMutation } from '../../utils/optimisticUpdate'
 
 // Fetch profile by user ID
 async function fetchProfile(userId: string): Promise<Profile | null> {
@@ -59,9 +60,24 @@ export function useCurrentProfileQuery() {
 
 /**
  * Mutation to update the current user's profile
+ * Optimistic update: profile changes reflect instantly, rollback on error
  */
 export function useUpdateProfileMutation() {
   const queryClient = useQueryClient()
+
+  const optimistic = createOptimisticMutation<string, Partial<Profile>>(queryClient, {
+    queryKeys: [['profile', 'current']],
+    updateCache: (qc, updates) => {
+      qc.setQueryData<Profile | null>(['profile', 'current'], (old) =>
+        old ? { ...old, ...updates, updated_at: new Date().toISOString() } : old
+      )
+    },
+    errorMessage: 'Erreur lors de la mise a jour du profil',
+    invalidateKeys: (userId) => [
+      ['profile', userId],
+      ['profile', 'current'],
+    ],
+  })
 
   return useMutation({
     mutationFn: async (updates: Partial<Profile>) => {
@@ -76,13 +92,11 @@ export function useUpdateProfileMutation() {
       if (error) throw error
       return user.id
     },
-    onSuccess: (userId) => {
-      queryClient.invalidateQueries({ queryKey: ['profile', userId] })
-      queryClient.invalidateQueries({ queryKey: ['profile', 'current'] })
+    onMutate: optimistic.onMutate,
+    onError: optimistic.onError,
+    onSuccess: () => {
       showSuccess('Profil mis a jour')
     },
-    onError: (error) => {
-      showError(error.message || 'Erreur lors de la mise a jour')
-    },
+    onSettled: optimistic.onSettled,
   })
 }

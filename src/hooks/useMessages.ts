@@ -4,12 +4,18 @@ import type { Message } from '../types/database'
 import type { RealtimeChannel } from '@supabase/supabase-js'
 import { playNotificationSound } from './useRingtone'
 import { useUnreadCountStore } from './useUnreadCount'
+import { showError } from '../lib/toast'
+import { optimisticId } from '../utils/optimisticUpdate'
 
 interface MessageWithSender extends Message {
   sender?: {
     username?: string
     avatar_url?: string | null
   }
+  /** Optimistic messages that failed to send */
+  _sendFailed?: boolean
+  /** Optimistic temp ID before server confirms */
+  _optimisticId?: string
 }
 
 interface Conversation {
@@ -34,6 +40,8 @@ interface MessagesState {
   fetchConversationsFallback: () => Promise<void>
   fetchMessages: (squadId: string, sessionId?: string) => Promise<void>
   sendMessage: (content: string, squadId: string, sessionId?: string, replyToId?: string) => Promise<{ error: Error | null }>
+  retryMessage: (optimisticMsgId: string) => Promise<void>
+  dismissFailedMessage: (optimisticMsgId: string) => void
   editMessage: (messageId: string, newContent: string) => Promise<{ error: Error | null }>
   deleteMessage: (messageId: string) => Promise<{ error: Error | null }>
   pinMessage: (messageId: string, isPinned: boolean) => Promise<{ error: Error | null }>
@@ -200,11 +208,49 @@ export const useMessagesStore = create<MessagesState>((set, get) => ({
   },
 
   sendMessage: async (content: string, squadId: string, sessionId?: string, replyToId?: string) => {
-    try {
-      const { data: { session } } = await supabase.auth.getSession()
-      const user = session?.user
-      if (!user) throw new Error('Not authenticated')
+    const { data: { session } } = await supabase.auth.getSession()
+    const user = session?.user
+    if (!user) return { error: new Error('Not authenticated') }
 
+    // Optimistic: add message to local state instantly
+    const tempId = optimisticId()
+    const now = new Date().toISOString()
+    const optimisticMsg: MessageWithSender = {
+      id: tempId,
+      content: content.trim(),
+      squad_id: squadId,
+      session_id: sessionId || null,
+      sender_id: user.id,
+      is_ai_suggestion: false,
+      is_system_message: false,
+      is_pinned: false,
+      read_by: [user.id],
+      edited_at: null,
+      created_at: now,
+      updated_at: now,
+      sender: undefined, // will be filled by realtime
+      _optimisticId: tempId,
+    }
+
+    // Fetch sender profile from cache or current session
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('username, avatar_url')
+      .eq('id', user.id)
+      .single()
+
+    if (profile) {
+      optimisticMsg.sender = {
+        username: profile.username,
+        avatar_url: profile.avatar_url,
+      }
+    }
+
+    set(state => ({
+      messages: [...state.messages, optimisticMsg],
+    }))
+
+    try {
       const messageData: {
         content: string
         squad_id: string
@@ -233,10 +279,43 @@ export const useMessagesStore = create<MessagesState>((set, get) => ({
 
       if (error) throw error
 
+      // Remove optimistic message (realtime will deliver the real one)
+      set(state => ({
+        messages: state.messages.filter(m => m._optimisticId !== tempId),
+      }))
+
       return { error: null }
     } catch (error) {
+      // Mark optimistic message as failed instead of removing
+      set(state => ({
+        messages: state.messages.map(m =>
+          m._optimisticId === tempId
+            ? { ...m, _sendFailed: true }
+            : m
+        ),
+      }))
+      showError('Message non envoye. Appuie pour reessayer.')
       return { error: error as Error }
     }
+  },
+
+  retryMessage: async (optimisticMsgId: string) => {
+    const msg = get().messages.find(m => m._optimisticId === optimisticMsgId)
+    if (!msg) return
+
+    // Remove the failed message
+    set(state => ({
+      messages: state.messages.filter(m => m._optimisticId !== optimisticMsgId),
+    }))
+
+    // Retry sending
+    await get().sendMessage(msg.content, msg.squad_id, msg.session_id || undefined)
+  },
+
+  dismissFailedMessage: (optimisticMsgId: string) => {
+    set(state => ({
+      messages: state.messages.filter(m => m._optimisticId !== optimisticMsgId),
+    }))
   },
 
   editMessage: async (messageId: string, newContent: string) => {
@@ -390,7 +469,13 @@ export const useMessagesStore = create<MessagesState>((set, get) => ({
           }
 
           set(state => ({
-            messages: [...state.messages, newMessage]
+            // Filter out any optimistic duplicate from the same sender with same content
+            messages: [
+              ...state.messages.filter(m =>
+                !(m._optimisticId && m.sender_id === newMessage.sender_id && m.content === newMessage.content)
+              ),
+              newMessage,
+            ]
           }))
         }
       )

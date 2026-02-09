@@ -2,7 +2,7 @@ export { Button } from './Button'
 export { Card, CardHeader, CardContent } from './Card'
 export { Input } from './Input'
 export { Badge } from './Badge'
-export { Tooltip, TooltipTrigger } from './Tooltip'
+export { Tooltip, TooltipTrigger, HelpTooltip } from './Tooltip'
 export { AnimatedAvatar } from './AnimatedAvatar'
 export { SegmentedControl } from './SegmentedControl'
 export { ProgressRing } from './ProgressRing'
@@ -64,6 +64,11 @@ export { Divider } from './Divider'
 // Chantier 4 - Transition animations
 export { ContentTransition } from './ContentTransition'
 export { AnimatedList, AnimatedListItem } from './AnimatedList'
+// Chantier 12 - Skeleton-to-content crossfade
+export { CrossfadeTransition } from './CrossfadeTransition'
+// Chantier 12 - UX Polish
+export { Expandable } from './Expandable'
+export { AdaptiveImage } from './AdaptiveImage'
 // Chantier 9 - State feedback
 export { EmptyState } from './EmptyState'
 export { ErrorState } from './ErrorState'

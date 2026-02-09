@@ -12,6 +12,7 @@ import { queryKeys } from '../../lib/queryClient'
 import type { Session, SessionRsvp, SessionCheckin } from '../../types/database'
 import { showSuccess, showError } from '../../lib/toast'
 import { sendRsvpMessage, sendSessionConfirmedMessage } from '../../lib/systemMessages'
+import { createOptimisticMutation, optimisticId } from '../../utils/optimisticUpdate'
 
 type RsvpResponse = 'present' | 'absent' | 'maybe'
 type CheckinStatus = 'present' | 'late' | 'noshow'
@@ -181,19 +182,55 @@ export function useSessionQuery(sessionId: string | undefined, userId?: string) 
 
 /**
  * Mutation to create a new session
+ * Optimistic update: session appears in list instantly
  */
+type CreateSessionVars = {
+  squad_id: string
+  title?: string
+  game?: string
+  scheduled_at: string
+  duration_minutes?: number
+  auto_confirm_threshold?: number
+}
+
 export function useCreateSessionMutation() {
   const queryClient = useQueryClient()
 
+  const optimistic = createOptimisticMutation<Session, CreateSessionVars>(queryClient, {
+    queryKeys: (vars) => [
+      queryKeys.sessions.list(vars.squad_id),
+      queryKeys.sessions.upcoming(),
+    ],
+    updateCache: (qc, vars) => {
+      const tempSession: SessionWithDetails = {
+        id: optimisticId(),
+        squad_id: vars.squad_id,
+        title: vars.title || null,
+        game: vars.game || null,
+        scheduled_at: vars.scheduled_at,
+        created_by: '',
+        status: 'proposed',
+        duration_minutes: vars.duration_minutes || 120,
+        auto_confirm_threshold: vars.auto_confirm_threshold || 3,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        my_rsvp: 'present',
+        rsvp_counts: { present: 1, absent: 0, maybe: 0 },
+      }
+      qc.setQueryData<SessionWithDetails[]>(
+        queryKeys.sessions.list(vars.squad_id),
+        (old) => old ? [...old, tempSession] : [tempSession]
+      )
+    },
+    errorMessage: 'Erreur lors de la creation de la session',
+    invalidateKeys: (data, vars) => [
+      queryKeys.sessions.list(vars.squad_id),
+      queryKeys.sessions.upcoming(),
+    ],
+  })
+
   return useMutation({
-    mutationFn: async (data: {
-      squad_id: string
-      title?: string
-      game?: string
-      scheduled_at: string
-      duration_minutes?: number
-      auto_confirm_threshold?: number
-    }) => {
+    mutationFn: async (data: CreateSessionVars) => {
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) throw new Error('Not authenticated')
 
@@ -225,14 +262,12 @@ export function useCreateSessionMutation() {
 
       return session
     },
-    onSuccess: (session) => {
-      queryClient.invalidateQueries({ queryKey: queryKeys.sessions.list(session.squad_id) })
-      queryClient.invalidateQueries({ queryKey: queryKeys.sessions.upcoming() })
-      showSuccess('Session créée ! Tes potes vont être notifiés.')
+    onMutate: optimistic.onMutate,
+    onError: optimistic.onError,
+    onSuccess: () => {
+      showSuccess('Session creee ! Tes potes vont etre notifies.')
     },
-    onError: (error) => {
-      showError(error.message || 'Erreur lors de la création de la session')
-    },
+    onSettled: optimistic.onSettled,
   })
 }
 

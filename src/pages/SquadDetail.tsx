@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { Sparkles } from 'lucide-react'
 import { useParams, useNavigate } from 'react-router-dom'
 import Confetti from 'react-confetti'
-import { Button, SquadDetailSkeleton } from '../components/ui'
+import { Button, SquadDetailSkeleton, CrossfadeTransition } from '../components/ui'
 import { useAuthStore, useSquadsStore, useSessionsStore, usePremiumStore } from '../hooks'
 import { useSquadLeaderboardQuery } from '../hooks/queries'
 import { showSuccess } from '../lib/toast'
@@ -147,16 +147,7 @@ export default function SquadDetail() {
 
   const isOwner = currentSquad?.owner_id === user?.id
 
-  // Loading state
-  if (!isInitialized || isLoading || (!currentSquad && id && !loadTimeout)) {
-    return (
-      <div className="min-h-0 bg-bg-base pb-6">
-        <div className="px-4 md:px-6 lg:px-8 py-6 max-w-2xl lg:max-w-4xl xl:max-w-6xl mx-auto">
-          <SquadDetailSkeleton />
-        </div>
-      </div>
-    )
-  }
+  const showSkeleton = !isInitialized || isLoading || (!currentSquad && id && !loadTimeout)
 
   // Timeout state
   if (loadTimeout && !currentSquad) {
@@ -176,7 +167,7 @@ export default function SquadDetail() {
   }
 
   // Not found state
-  if (!currentSquad) {
+  if (!showSkeleton && !currentSquad) {
     return (
       <div className="min-h-0 bg-bg-base flex items-center justify-center flex-col gap-4 py-12">
         <p className="text-text-tertiary">Squad non trouvee</p>
@@ -194,8 +185,9 @@ export default function SquadDetail() {
       )}
 
       <div className="px-4 md:px-6 lg:px-8 py-6 max-w-2xl lg:max-w-4xl xl:max-w-6xl mx-auto">
+        <CrossfadeTransition isLoading={showSkeleton} skeleton={<SquadDetailSkeleton />}>
         <div>
-          <SquadHeader squadId={id || ''} squad={currentSquad} isOwner={!!isOwner} />
+          <SquadHeader squadId={id || ''} squad={currentSquad!} isOwner={!!isOwner} />
 
           <div className="mb-6">
             <PartySection squadId={id || ''} />
@@ -241,6 +233,7 @@ export default function SquadDetail() {
             onSuccess={setSuccessMessage}
           />
         </div>
+        </CrossfadeTransition>
       </div>
 
       <AnimatePresence>

@@ -2,14 +2,18 @@ import { useState } from 'react'
 import { ArrowLeft, Shield, FileText, ChevronDown } from 'lucide-react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { Card } from '../components/ui'
+import { ScrollProgress } from '../components/ui/ScrollProgress'
 import { SquadPlannerLogo } from '../components/SquadPlannerLogo'
+import { useStatePersistence } from '../hooks/useStatePersistence'
+import { useHashNavigation } from '../hooks/useHashNavigation'
 
 type LegalTab = 'cgu' | 'privacy'
 
 function Section({ title, children, defaultOpen = false }: { title: string; children: React.ReactNode; defaultOpen?: boolean }) {
   const [open, setOpen] = useState(defaultOpen)
+  const sectionId = title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
   return (
-    <div className="border-b border-border-subtle last:border-0">
+    <div id={sectionId} className="border-b border-border-subtle last:border-0 scroll-mt-6">
       <button
         onClick={() => setOpen(!open)}
         className="w-full flex items-center justify-between py-4 text-left group"
@@ -28,11 +32,13 @@ function Section({ title, children, defaultOpen = false }: { title: string; chil
 
 export function Legal() {
   const [searchParams] = useSearchParams()
+  useHashNavigation()
   const initialTab = searchParams.get('tab') === 'privacy' ? 'privacy' : 'cgu'
-  const [activeTab, setActiveTab] = useState<LegalTab>(initialTab)
+  const [activeTab, setActiveTab] = useStatePersistence<LegalTab>('legal_tab', initialTab)
 
   return (
     <div className="min-h-[100dvh] bg-bg-base">
+      <ScrollProgress />
       {/* Header */}
       <header className="sticky top-0 z-10 bg-bg-base/90 backdrop-blur-xl border-b border-border-subtle">
         <div className="max-w-3xl mx-auto px-4 md:px-6 py-4 flex items-center gap-4">

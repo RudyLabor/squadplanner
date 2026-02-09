@@ -1,4 +1,4 @@
-import { useState, memo } from 'react'
+import { memo } from 'react'
 import { motion } from 'framer-motion'
 import { Compass, Search } from 'lucide-react'
 import { SegmentedControl, Select } from '../components/ui'
@@ -7,6 +7,9 @@ import { DiscoverSquadCard } from '../components/discover/DiscoverSquadCard'
 import { GlobalLeaderboard } from '../components/discover/GlobalLeaderboard'
 import { MatchmakingSection } from '../components/discover/MatchmakingSection'
 import { useBrowseSquadsQuery } from '../hooks/queries'
+import { useStatePersistence } from '../hooks/useStatePersistence'
+import { useInfiniteScroll } from '../hooks/useInfiniteScroll'
+import { LoadingMore } from '../components/ui/LoadingMore'
 
 type Tab = 'squads' | 'joueurs' | 'classement'
 
@@ -36,9 +39,9 @@ const REGION_OPTIONS: SelectOption[] = [
 ]
 
 export function Discover() {
-  const [tab, setTab] = useState<Tab>('squads')
-  const [game, setGame] = useState('')
-  const [region, setRegion] = useState('')
+  const [tab, setTab] = useStatePersistence<Tab>('discover_tab', 'squads')
+  const [game, setGame] = useStatePersistence('discover_game', '')
+  const [region, setRegion] = useStatePersistence('discover_region', '')
 
   return (
     <motion.div
@@ -101,6 +104,14 @@ export function Discover() {
 const SquadsTab = memo(function SquadsTab({ game, region }: { game: string; region: string }) {
   const { data: squads, isLoading } = useBrowseSquadsQuery(game || undefined, region || undefined)
 
+  // Infinite scroll preparation - ready for useInfiniteQuery migration
+  const { sentinelRef } = useInfiniteScroll({
+    hasNextPage: false,
+    isFetchingNextPage: false,
+    fetchNextPage: () => {},
+    enabled: !isLoading && !!squads && squads.length > 0,
+  })
+
   if (isLoading) {
     return (
       <div className="space-y-2">
@@ -126,6 +137,8 @@ const SquadsTab = memo(function SquadsTab({ game, region }: { game: string; regi
       {squads.map(squad => (
         <DiscoverSquadCard key={squad.id} squad={squad} />
       ))}
+      {/* Sentinel element for infinite scroll */}
+      <div ref={sentinelRef} aria-hidden="true" />
     </div>
   )
 })

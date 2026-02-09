@@ -5,6 +5,9 @@ import {
 } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { Card } from '../components/ui'
+import { ScrollProgress } from '../components/ui/ScrollProgress'
+import { useStatePersistence } from '../hooks/useStatePersistence'
+import { useHashNavigation } from '../hooks/useHashNavigation'
 
 interface FAQItem {
   question: string
@@ -98,9 +101,10 @@ const CATEGORIES = ['Démarrage', 'Sessions', 'Party Vocale', 'Premium', 'Compte
 
 export function Help() {
   const navigate = useNavigate()
+  useHashNavigation()
   const [searchQuery, setSearchQuery] = useState('')
   const [openIndex, setOpenIndex] = useState<number | null>(null)
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
+  const [selectedCategory, setSelectedCategory] = useStatePersistence<string | null>('help_category', null)
 
   // Filter FAQ items
   const filteredItems = FAQ_ITEMS.filter(item => {
@@ -122,6 +126,7 @@ export function Help() {
 
   return (
     <main className="min-h-0 bg-bg-base pb-6" aria-label="Aide">
+      <ScrollProgress />
       <div className="px-4 md:px-6 lg:px-8 py-6 max-w-2xl mx-auto">
         {/* Header */}
         <header className="flex items-center gap-4 mb-8">
@@ -186,7 +191,7 @@ export function Help() {
           </Card>
         ) : (
           Object.entries(groupedItems).map(([category, items]) => (
-            <div key={category} className="mb-6">
+            <div key={category} id={category.toLowerCase().replace(/\s+/g, '-').normalize('NFD').replace(/[\u0300-\u036f]/g, '')} className="mb-6 scroll-mt-6">
               <h2 className="text-base font-semibold text-text-tertiary uppercase tracking-wider mb-3">
                 {category}
               </h2>

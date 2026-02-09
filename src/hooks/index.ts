@@ -77,3 +77,22 @@ export { useAutoRetry } from './useAutoRetry'
 
 // Chantier 9 - Rate limit detection store
 export { useRateLimitStore } from './useRateLimit'
+
+// Chantier 12 - Reduced motion preference
+export { useReducedMotion } from './useReducedMotion'
+
+// Chantier 12 - Navigation progress
+export { useNavigationProgress, useNavigationProgressStore } from './useNavigationProgress'
+
+// Chantier 12 - Delayed loading (prevents flash-of-spinner)
+export { useDelayedLoading } from './useDelayedLoading'
+
+// Chantier 12 - State persistence & navigation polish
+export { useStatePersistence } from './useStatePersistence'
+export { useHashNavigation } from './useHashNavigation'
+export { useInfiniteScroll } from './useInfiniteScroll'
+
+// Chantier 12 - Adaptive loading & prefetch
+export { useAdaptiveLoading } from './useAdaptiveLoading'
+export type { QualityTier } from './useAdaptiveLoading'
+export { usePrefetch } from './usePrefetch'

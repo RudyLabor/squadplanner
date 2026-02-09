@@ -17,20 +17,20 @@ export const haptic = {
   /** Heavy tap - for important actions or confirmations */
   heavy: () => navigator.vibrate?.(50),
 
-  /** Success pattern - double pulse for positive feedback */
-  success: () => navigator.vibrate?.([10, 50, 10]),
+  /** Success pattern - short vibration (50ms) for positive feedback */
+  success: () => navigator.vibrate?.(50),
 
-  /** Error pattern - strong double pulse for errors */
+  /** Error pattern - double vibration (50ms-100ms-50ms) for errors */
   error: () => navigator.vibrate?.([50, 100, 50]),
 
-  /** Warning pattern - medium double pulse for warnings */
-  warning: () => navigator.vibrate?.([25, 50, 25]),
+  /** Warning pattern - long vibration (100ms) for warnings */
+  warning: () => navigator.vibrate?.(100),
 
-  /** Selection - very light tap for list item selections */
-  selection: () => navigator.vibrate?.(5),
+  /** Selection - very short tap (10ms) for list item selections */
+  selection: () => navigator.vibrate?.(10),
 
-  /** Notification - attention-grabbing pattern for notifications */
-  notification: () => navigator.vibrate?.([15, 30, 15, 30, 15]),
+  /** Notification - triple short (30ms-50ms-30ms-50ms-30ms) for notifications */
+  notification: () => navigator.vibrate?.([30, 50, 30, 50, 30]),
 
   /** Achievement unlocked - celebratory pattern */
   achievement: () => navigator.vibrate?.([10, 30, 10, 30, 50, 100, 50]),

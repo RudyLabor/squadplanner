@@ -117,10 +117,10 @@ export function JoinSquad() {
   // Loading state
   if (!isInitialized || status === 'loading') {
     return (
-      <div className="min-h-screen bg-[#050506] flex items-center justify-center p-4">
+      <div className="min-h-screen bg-bg-base flex items-center justify-center p-4">
         <div className="text-center">
-          <Loader2 className="w-8 h-8 text-[#6366f1] animate-spin mx-auto mb-4" />
-          <p className="text-[#8b8d90]">Chargement de l'invitation...</p>
+          <Loader2 className="w-8 h-8 text-primary animate-spin mx-auto mb-4" />
+          <p className="text-text-secondary">Chargement de l'invitation...</p>
         </div>
       </div>
     )
@@ -129,19 +129,19 @@ export function JoinSquad() {
   // Not found
   if (status === 'not-found') {
     return (
-      <div className="min-h-screen bg-[#050506] flex items-center justify-center p-4">
+      <div className="min-h-screen bg-bg-base flex items-center justify-center p-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           className="max-w-md w-full text-center"
         >
-          <div className="w-16 h-16 rounded-2xl bg-[#f87171]/10 flex items-center justify-center mx-auto mb-6">
-            <XCircle className="w-8 h-8 text-[#f87171]" />
+          <div className="w-16 h-16 rounded-2xl bg-error/10 flex items-center justify-center mx-auto mb-6">
+            <XCircle className="w-8 h-8 text-error" />
           </div>
-          <h1 className="text-xl font-semibold text-[#f7f8f8] mb-2">
+          <h1 className="text-xl font-semibold text-text-primary mb-2">
             Invitation invalide
           </h1>
-          <p className="text-[#8b8d90] mb-6">
+          <p className="text-text-secondary mb-6">
             Ce code d'invitation n'existe pas ou a expiré.
           </p>
           <Link to="/">
@@ -155,7 +155,7 @@ export function JoinSquad() {
   // Success state
   if (status === 'success') {
     return (
-      <div className="min-h-screen bg-[#050506] flex items-center justify-center p-4">
+      <div className="min-h-screen bg-bg-base flex items-center justify-center p-4">
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -165,14 +165,14 @@ export function JoinSquad() {
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-            className="w-20 h-20 rounded-full bg-[#34d399]/10 flex items-center justify-center mx-auto mb-6"
+            className="w-20 h-20 rounded-full bg-success/10 flex items-center justify-center mx-auto mb-6"
           >
-            <CheckCircle2 className="w-10 h-10 text-[#34d399]" />
+            <CheckCircle2 className="w-10 h-10 text-success" />
           </motion.div>
-          <h1 className="text-2xl font-bold text-[#f7f8f8] mb-2">
+          <h1 className="text-2xl font-bold text-text-primary mb-2">
             Bienvenue dans la squad !
           </h1>
-          <p className="text-[#8b8d90]">
+          <p className="text-text-secondary">
             Tu fais maintenant partie de {squadPreview?.name}
           </p>
         </motion.div>
@@ -182,7 +182,7 @@ export function JoinSquad() {
 
   // Preview / Join state
   return (
-    <div className="min-h-screen bg-[#050506] flex items-center justify-center p-4">
+    <div className="min-h-screen bg-bg-base flex items-center justify-center p-4">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -194,18 +194,18 @@ export function JoinSquad() {
             <motion.div
               initial={{ scale: 0.8 }}
               animate={{ scale: 1 }}
-              className="w-16 h-16 rounded-2xl bg-[#6366f1]/10 flex items-center justify-center mx-auto mb-4"
+              className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center mx-auto mb-4"
             >
-              <Users className="w-8 h-8 text-[#6366f1]" />
+              <Users className="w-8 h-8 text-primary" />
             </motion.div>
 
-            <h1 className="text-xl font-semibold text-[#f7f8f8] mb-1">
+            <h1 className="text-xl font-semibold text-text-primary mb-1">
               {squadPreview?.name}
             </h1>
-            <p className="text-[#8b8d90] text-sm mb-2">
+            <p className="text-text-secondary text-sm mb-2">
               {squadPreview?.game}
             </p>
-            <p className="text-[#5e6063] text-xs">
+            <p className="text-text-tertiary text-xs">
               {squadPreview?.member_count} membre{(squadPreview?.member_count || 0) > 1 ? 's' : ''}
             </p>
           </div>
@@ -229,14 +229,14 @@ export function JoinSquad() {
               </Button>
 
               {status === 'error' && errorMessage && (
-                <p className="text-[#f87171] text-sm text-center">
+                <p className="text-error text-sm text-center">
                   {errorMessage}
                 </p>
               )}
             </div>
           ) : (
             <div className="space-y-3">
-              <p className="text-[#8b8d90] text-sm text-center mb-4">
+              <p className="text-text-secondary text-sm text-center mb-4">
                 Connecte-toi pour rejoindre cette squad
               </p>
               <Button onClick={handleLoginRedirect} className="w-full">
@@ -249,7 +249,7 @@ export function JoinSquad() {
 
         {/* Back link */}
         <div className="text-center mt-4">
-          <Link to="/" className="text-[#5e6063] text-sm hover:text-[#8b8d90] transition-colors">
+          <Link to="/" className="text-text-tertiary text-sm hover:text-text-secondary transition-colors">
             Retour à l'accueil
           </Link>
         </div>

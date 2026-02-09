@@ -296,36 +296,36 @@ export function CommandPalette() {
             transition={{ type: 'spring', stiffness: 400, damping: 30 }}
             className="fixed top-[15%] left-1/2 -translate-x-1/2 w-full max-w-xl lg:max-w-3xl z-[101]"
           >
-            <div className="mx-4 bg-[#101012] border border-[rgba(255,255,255,0.1)] rounded-2xl shadow-[0_25px_50px_-12px_rgba(0,0,0,0.5)] overflow-hidden">
+            <div className="mx-4 bg-bg-surface border border-border-hover rounded-2xl shadow-2xl overflow-hidden">
               {/* Search input */}
-              <div className="flex items-center gap-3 px-4 py-4 border-b border-[rgba(255,255,255,0.06)]">
+              <div className="flex items-center gap-3 px-4 py-4 border-b border-border-default">
                 {/* V3: Breadcrumb for sub-commands */}
                 {parentStack.length > 0 && (
                   <button onClick={goBack} className="flex items-center gap-1 text-xs text-primary hover:text-primary/80 shrink-0 mr-1">
                     <ArrowRight className="w-3 h-3 rotate-180" />
                     {parentStack.map((p, i) => (
                       <span key={p.id}>
-                        {i > 0 && <span className="text-[#5e6063] mx-0.5">/</span>}
+                        {i > 0 && <span className="text-text-tertiary mx-0.5">/</span>}
                         {p.label}
                       </span>
                     ))}
                   </button>
                 )}
-                <Search className="w-5 h-5 text-[#6366f1]" />
+                <Search className="w-5 h-5 text-primary" />
                 <input
                   ref={inputRef}
                   type="text"
                   placeholder="Rechercher une commande, squad, session..."
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
-                  className="flex-1 bg-transparent text-[15px] text-[#f7f8f8] placeholder-[#5e6063] outline-none"
+                  className="flex-1 bg-transparent text-[15px] text-text-primary placeholder-text-tertiary outline-none"
                 />
                 <button
                   onClick={close}
                   aria-label="Fermer la palette de commandes"
-                  className="p-1.5 rounded-lg hover:bg-[rgba(255,255,255,0.05)] transition-colors"
+                  className="p-1.5 rounded-lg hover:bg-border-subtle transition-colors"
                 >
-                  <X className="w-4 h-4 text-[#5e6063]" />
+                  <X className="w-4 h-4 text-text-tertiary" />
                 </button>
               </div>
 
@@ -335,14 +335,14 @@ export function CommandPalette() {
               <div className="max-h-[400px] overflow-y-auto py-2 flex-1 min-w-0">
                 {filteredCommands.length === 0 ? (
                   <div className="px-4 py-8 text-center">
-                    <HelpCircle className="w-8 h-8 text-[#5e6063] mx-auto mb-2" />
-                    <p className="text-[14px] text-[#8b8d90]">Aucun résultat pour "{query}"</p>
+                    <HelpCircle className="w-8 h-8 text-text-tertiary mx-auto mb-2" />
+                    <p className="text-[14px] text-text-secondary">Aucun résultat pour "{query}"</p>
                   </div>
                 ) : (
                   Object.entries(groupedCommands).map(([category, commands]) => (
                     <div key={category} className="mb-2">
                       <div className="px-4 py-1.5">
-                        <span className="text-[11px] font-semibold text-[#5e6063] uppercase tracking-wider">
+                        <span className="text-[11px] font-semibold text-text-tertiary uppercase tracking-wider">
                           {categoryLabels[category]}
                         </span>
                       </div>
@@ -357,30 +357,30 @@ export function CommandPalette() {
                             onMouseEnter={() => setSelectedIndex(globalIndex)}
                             className={`w-full flex items-center gap-3 px-4 py-2.5 text-left transition-colors ${
                               isSelected
-                                ? 'bg-[rgba(99,102,241,0.15)]'
-                                : 'hover:bg-[rgba(255,255,255,0.03)]'
+                                ? 'bg-primary-15'
+                                : 'hover:bg-surface-card'
                             }`}
                           >
                             <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${
-                              isSelected ? 'bg-[#6366f1]' : 'bg-[rgba(255,255,255,0.05)]'
+                              isSelected ? 'bg-primary' : 'bg-border-subtle'
                             }`}>
-                              <cmd.icon className={`w-4 h-4 ${isSelected ? 'text-white' : 'text-[#8b8d90]'}`} />
+                              <cmd.icon className={`w-4 h-4 ${isSelected ? 'text-white' : 'text-text-secondary'}`} />
                             </div>
                             <div className="flex-1 min-w-0">
-                              <p className={`text-[14px] truncate ${isSelected ? 'text-[#f7f8f8]' : 'text-[#8b8d90]'}`}>
+                              <p className={`text-[14px] truncate ${isSelected ? 'text-text-primary' : 'text-text-secondary'}`}>
                                 {cmd.label}
                               </p>
                               {cmd.description && (
-                                <p className="text-[12px] text-[#5e6063] truncate">
+                                <p className="text-[12px] text-text-tertiary truncate">
                                   {cmd.description}
                                 </p>
                               )}
                             </div>
                             {cmd.children && cmd.children.length > 0 && (
-                              <ArrowRight className="w-3.5 h-3.5 text-[#5e6063]" />
+                              <ArrowRight className="w-3.5 h-3.5 text-text-tertiary" />
                             )}
                             {isSelected && !cmd.children && (
-                              <ArrowRight className="w-4 h-4 text-[#6366f1]" />
+                              <ArrowRight className="w-4 h-4 text-primary" />
                             )}
                           </button>
                         )
@@ -396,7 +396,7 @@ export function CommandPalette() {
                 const preview = previewCmd?.preview
                 if (!preview) return null
                 return (
-                  <div className="hidden lg:block w-64 border-l border-[rgba(255,255,255,0.06)] p-4 max-h-[400px] overflow-y-auto">
+                  <div className="hidden lg:block w-64 border-l border-border-default p-4 max-h-[400px] overflow-y-auto">
                     <AnimatePresence mode="wait">
                       <motion.div
                         key={previewCmd.id}
@@ -418,8 +418,8 @@ export function CommandPalette() {
                           <p className="text-xs text-text-quaternary">{previewCmd.description}</p>
                         )}
                         {previewCmd.children && previewCmd.children.length > 0 && (
-                          <div className="mt-3 pt-3 border-t border-[rgba(255,255,255,0.06)]">
-                            <div className="text-[10px] text-[#5e6063] uppercase tracking-wider mb-2">Actions</div>
+                          <div className="mt-3 pt-3 border-t border-border-default">
+                            <div className="text-[10px] text-text-tertiary uppercase tracking-wider mb-2">Actions</div>
                             {previewCmd.children.map(child => (
                               <div key={child.id} className="text-xs text-text-tertiary flex items-center gap-1.5 mb-1">
                                 <child.icon className="w-3 h-3" />
@@ -436,22 +436,22 @@ export function CommandPalette() {
               </div>{/* end flex container */}
 
               {/* Footer */}
-              <div className="flex items-center justify-between px-4 py-3 border-t border-[rgba(255,255,255,0.06)] bg-[rgba(0,0,0,0.2)]">
-                <div className="flex items-center gap-4 text-[11px] text-[#5e6063]">
+              <div className="flex items-center justify-between px-4 py-3 border-t border-border-default bg-[rgba(0,0,0,0.2)]">
+                <div className="flex items-center gap-4 text-[11px] text-text-tertiary">
                   <span className="flex items-center gap-1">
-                    <kbd className="px-1.5 py-0.5 rounded bg-[rgba(255,255,255,0.05)] font-mono">↑↓</kbd>
+                    <kbd className="px-1.5 py-0.5 rounded bg-border-subtle font-mono">↑↓</kbd>
                     naviguer
                   </span>
                   <span className="flex items-center gap-1">
-                    <kbd className="px-1.5 py-0.5 rounded bg-[rgba(255,255,255,0.05)] font-mono">↵</kbd>
+                    <kbd className="px-1.5 py-0.5 rounded bg-border-subtle font-mono">↵</kbd>
                     sélectionner
                   </span>
                   <span className="flex items-center gap-1">
-                    <kbd className="px-1.5 py-0.5 rounded bg-[rgba(255,255,255,0.05)] font-mono">esc</kbd>
+                    <kbd className="px-1.5 py-0.5 rounded bg-border-subtle font-mono">esc</kbd>
                     fermer
                   </span>
                 </div>
-                <kbd className="flex items-center gap-1 px-1.5 py-0.5 rounded bg-[rgba(255,255,255,0.05)] text-[11px] text-[#5e6063] font-mono">
+                <kbd className="flex items-center gap-1 px-1.5 py-0.5 rounded bg-border-subtle text-[11px] text-text-tertiary font-mono">
                   {shortcutKey} K
                 </kbd>
               </div>
@@ -478,19 +478,19 @@ export function CommandPalette() {
             exit={{ opacity: 0, scale: 0.95 }}
             className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-md z-[101] mx-4"
           >
-            <div className="bg-[#101012] border border-[rgba(255,255,255,0.1)] rounded-2xl shadow-[0_25px_50px_-12px_rgba(0,0,0,0.5)] overflow-hidden">
-              <div className="flex items-center justify-between px-5 py-4 border-b border-[rgba(255,255,255,0.06)]">
-                <h2 className="text-[16px] font-semibold text-[#f7f8f8]">Raccourcis clavier</h2>
+            <div className="bg-bg-surface border border-border-hover rounded-2xl shadow-2xl overflow-hidden">
+              <div className="flex items-center justify-between px-5 py-4 border-b border-border-default">
+                <h2 className="text-[16px] font-semibold text-text-primary">Raccourcis clavier</h2>
                 <button
                   onClick={() => setShowShortcutsHelp(false)}
-                  className="p-1.5 rounded-lg hover:bg-[rgba(255,255,255,0.05)] transition-colors"
+                  className="p-1.5 rounded-lg hover:bg-border-subtle transition-colors"
                 >
-                  <X className="w-4 h-4 text-[#5e6063]" />
+                  <X className="w-4 h-4 text-text-tertiary" />
                 </button>
               </div>
               <div className="p-5 space-y-4">
                 <div>
-                  <h3 className="text-[11px] font-semibold text-[#5e6063] uppercase tracking-wider mb-2">Navigation</h3>
+                  <h3 className="text-[11px] font-semibold text-text-tertiary uppercase tracking-wider mb-2">Navigation</h3>
                   <div className="space-y-2">
                     {[
                       { key: 'H', action: 'Accueil' },
@@ -501,14 +501,14 @@ export function CommandPalette() {
                       { key: 'T', action: 'Changer le thème' },
                     ].map(({ key, action }) => (
                       <div key={key} className="flex items-center justify-between">
-                        <span className="text-[13px] text-[#8b8d90]">{action}</span>
-                        <kbd className="px-2 py-1 rounded bg-[rgba(255,255,255,0.05)] text-[12px] font-mono text-[#f7f8f8]">{key}</kbd>
+                        <span className="text-[13px] text-text-secondary">{action}</span>
+                        <kbd className="px-2 py-1 rounded bg-border-subtle text-[12px] font-mono text-text-primary">{key}</kbd>
                       </div>
                     ))}
                   </div>
                 </div>
                 <div>
-                  <h3 className="text-[11px] font-semibold text-[#5e6063] uppercase tracking-wider mb-2">Global</h3>
+                  <h3 className="text-[11px] font-semibold text-text-tertiary uppercase tracking-wider mb-2">Global</h3>
                   <div className="space-y-2">
                     {[
                       { key: `${shortcutKey} K`, action: 'Palette de commandes' },
@@ -516,8 +516,8 @@ export function CommandPalette() {
                       { key: 'Esc', action: 'Fermer les modals' },
                     ].map(({ key, action }) => (
                       <div key={key} className="flex items-center justify-between">
-                        <span className="text-[13px] text-[#8b8d90]">{action}</span>
-                        <kbd className="px-2 py-1 rounded bg-[rgba(255,255,255,0.05)] text-[12px] font-mono text-[#f7f8f8]">{key}</kbd>
+                        <span className="text-[13px] text-text-secondary">{action}</span>
+                        <kbd className="px-2 py-1 rounded bg-border-subtle text-[12px] font-mono text-text-primary">{key}</kbd>
                       </div>
                     ))}
                   </div>

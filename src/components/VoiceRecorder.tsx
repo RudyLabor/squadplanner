@@ -162,7 +162,7 @@ export const VoiceRecorder = memo(function VoiceRecorder({ onSend, disabled }: V
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="text-[12px] text-[#f87171] mb-1"
+            className="text-[12px] text-error mb-1"
           >
             {error}
           </motion.p>
@@ -181,7 +181,7 @@ export const VoiceRecorder = memo(function VoiceRecorder({ onSend, disabled }: V
             <button
               type="button"
               onClick={cancelRecording}
-              className="p-1.5 rounded-lg text-[#f87171] hover:bg-[rgba(248,113,113,0.1)] transition-colors"
+              className="p-1.5 rounded-lg text-error hover:bg-error/10 transition-colors"
               aria-label="Annuler"
             >
               <Trash2 className="w-4 h-4" />
@@ -195,7 +195,7 @@ export const VoiceRecorder = memo(function VoiceRecorder({ onSend, disabled }: V
                   {waveform.map((h, i) => (
                     <div
                       key={i}
-                      className="w-[3px] rounded-full bg-[#f87171] transition-all duration-100"
+                      className="w-[3px] rounded-full bg-error transition-all duration-100"
                       style={{ height: `${h}px` }}
                     />
                   ))}
@@ -211,7 +211,7 @@ export const VoiceRecorder = memo(function VoiceRecorder({ onSend, disabled }: V
             </div>
 
             {/* Duration */}
-            <span className={`text-[13px] font-mono min-w-[40px] text-center ${isRecording ? 'text-[#f87171]' : 'text-text-tertiary'}`}>
+            <span className={`text-[13px] font-mono min-w-[40px] text-center ${isRecording ? 'text-error' : 'text-text-tertiary'}`}>
               {formatDuration(duration)}
             </span>
 
@@ -220,7 +220,7 @@ export const VoiceRecorder = memo(function VoiceRecorder({ onSend, disabled }: V
               <button
                 type="button"
                 onClick={stopRecording}
-                className="p-2 rounded-xl bg-[#f87171] text-white hover:bg-[#ef4444] transition-colors"
+                className="p-2 rounded-xl bg-error text-white hover:bg-[#ef4444] transition-colors"
                 aria-label="Arrêter"
               >
                 <Square className="w-4 h-4" fill="currentColor" />
@@ -251,7 +251,7 @@ export const VoiceRecorder = memo(function VoiceRecorder({ onSend, disabled }: V
             type="button"
             onClick={startRecording}
             disabled={disabled}
-            className="p-2.5 rounded-xl text-[#8b8d90] hover:text-[#818cf8] hover:bg-[rgba(99,102,241,0.1)] transition-colors disabled:opacity-40"
+            className="p-2.5 rounded-xl text-text-secondary hover:text-primary-hover hover:bg-primary-10 transition-colors disabled:opacity-40"
             aria-label="Message vocal"
           >
             <Mic className="w-5 h-5" />

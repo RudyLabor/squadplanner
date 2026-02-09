@@ -35,9 +35,9 @@ export function MessageReplyPreview({
       onClick={onClickScrollTo}
       className={`
         flex items-start gap-2 px-3 py-2 mb-1
-        bg-[#1a1a2e]/60 rounded-lg
+        bg-surface-dark/60 rounded-lg
         border-l-2 border-[#5e6dd2]
-        ${onClickScrollTo ? 'cursor-pointer hover:bg-[#1a1a2e]/80 transition-colors' : ''}
+        ${onClickScrollTo ? 'cursor-pointer hover:bg-surface-dark/80 transition-colors' : ''}
       `}
       role={onClickScrollTo ? 'button' : undefined}
       tabIndex={onClickScrollTo ? 0 : undefined}
@@ -71,7 +71,7 @@ export function MessageReplyPreview({
         <span className="text-[11px] font-medium text-[#5e6dd2]">
           {originalMessage.sender_username}
         </span>
-        <p className="text-[11px] text-[#8b8d90] truncate leading-tight">
+        <p className="text-[11px] text-text-secondary truncate leading-tight">
           {truncatedContent}
         </p>
       </div>

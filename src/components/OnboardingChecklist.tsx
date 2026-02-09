@@ -107,8 +107,8 @@ export function OnboardingChecklist({
       >
         <Card className={`p-4 border ${
           allComplete
-            ? 'bg-gradient-to-r from-[#34d399]/10 to-transparent border-[#34d399]/20'
-            : 'bg-gradient-to-r from-[#6366f1]/8 to-transparent border-[#6366f1]/15'
+            ? 'bg-gradient-to-r from-success/10 to-transparent border-success/20'
+            : 'bg-gradient-to-r from-[#6366f1]/8 to-transparent border-primary/15'
         }`}>
           {/* Header */}
           <div className="flex items-center justify-between mb-3">
@@ -117,16 +117,16 @@ export function OnboardingChecklist({
                 <motion.div
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
-                  className="w-6 h-6 rounded-full bg-[#34d399]/15 flex items-center justify-center"
+                  className="w-6 h-6 rounded-full bg-success/15 flex items-center justify-center"
                 >
-                  <Check className="w-4 h-4 text-[#34d399]" />
+                  <Check className="w-4 h-4 text-success" />
                 </motion.div>
               ) : (
-                <div className="w-6 h-6 rounded-full bg-[#6366f1]/15 flex items-center justify-center">
-                  <span className="text-[12px] font-bold text-[#6366f1]">{completedCount}/{totalSteps}</span>
+                <div className="w-6 h-6 rounded-full bg-primary/15 flex items-center justify-center">
+                  <span className="text-[12px] font-bold text-primary">{completedCount}/{totalSteps}</span>
                 </div>
               )}
-              <h3 className="text-[14px] font-semibold text-[#f7f8f8]">
+              <h3 className="text-[14px] font-semibold text-text-primary">
                 {allComplete ? 'Bien joué ! Tu es prêt' : 'Pour bien démarrer'}
               </h3>
             </div>
@@ -135,14 +135,14 @@ export function OnboardingChecklist({
               className="p-1 rounded-lg hover:bg-white/5 transition-colors"
               aria-label="Fermer l'onboarding"
             >
-              <X className="w-4 h-4 text-[#5e6063]" />
+              <X className="w-4 h-4 text-text-tertiary" />
             </button>
           </div>
 
           {/* Progress bar */}
           <div className="h-1.5 bg-white/5 rounded-full mb-4 overflow-hidden">
             <motion.div
-              className={`h-full rounded-full ${allComplete ? 'bg-[#34d399]' : 'bg-[#6366f1]'}`}
+              className={`h-full rounded-full ${allComplete ? 'bg-success' : 'bg-primary'}`}
               initial={{ width: 0 }}
               animate={{ width: `${progress}%` }}
               transition={{ duration: 0.5, ease: 'easeOut' }}
@@ -161,19 +161,19 @@ export function OnboardingChecklist({
                 >
                   <div className={`w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0 ${
                     step.done
-                      ? 'bg-[#34d399]/15'
-                      : 'bg-[#6366f1]/15'
+                      ? 'bg-success/15'
+                      : 'bg-primary/15'
                   }`}>
                     {step.done ? (
-                      <Check className="w-4 h-4 text-[#34d399]" />
+                      <Check className="w-4 h-4 text-success" />
                     ) : (
-                      <step.icon className="w-4 h-4 text-[#6366f1]" />
+                      <step.icon className="w-4 h-4 text-primary" />
                     )}
                   </div>
                   <span className={`text-[13px] flex-1 ${
                     step.done
-                      ? 'text-[#34d399] line-through'
-                      : 'text-[#f7f8f8]'
+                      ? 'text-success line-through'
+                      : 'text-text-primary'
                   }`}>
                     {step.label}
                   </span>
@@ -181,7 +181,7 @@ export function OnboardingChecklist({
                     step.action.type === 'link' ? (
                       <Link
                         to={step.action.to}
-                        className="flex items-center gap-1 text-[12px] text-[#6366f1] font-medium hover:text-[#8b93ff] transition-colors"
+                        className="flex items-center gap-1 text-[12px] text-primary font-medium hover:text-primary-hover transition-colors"
                       >
                         Faire
                         <ChevronRight className="w-3 h-3" />
@@ -189,7 +189,7 @@ export function OnboardingChecklist({
                     ) : (
                       <button
                         onClick={step.action.onClick}
-                        className="flex items-center gap-1 text-[12px] text-[#6366f1] font-medium hover:text-[#8b93ff] transition-colors"
+                        className="flex items-center gap-1 text-[12px] text-primary font-medium hover:text-primary-hover transition-colors"
                       >
                         Faire
                         <ChevronRight className="w-3 h-3" />
@@ -206,7 +206,7 @@ export function OnboardingChecklist({
             <motion.p
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className="text-[13px] text-[#34d399] text-center"
+              className="text-[13px] text-success text-center"
             >
               Ta squad t'attend. C'est parti !
             </motion.p>

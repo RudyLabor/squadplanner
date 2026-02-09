@@ -48,7 +48,7 @@ export const LocationShareButton = memo(function LocationShareButton({ onShare, 
       type="button"
       onClick={handleShare}
       disabled={disabled || isLoading}
-      className="p-2.5 rounded-xl text-text-quaternary hover:text-[#818cf8] hover:bg-[rgba(99,102,241,0.1)] transition-colors disabled:opacity-50"
+      className="p-2.5 rounded-xl text-text-quaternary hover:text-[#818cf8] hover:bg-primary-10 transition-colors disabled:opacity-50"
       aria-label="Partager ma position"
       title="Je suis la"
     >
@@ -88,11 +88,11 @@ export const LocationMessage = memo(function LocationMessage({ lat, lng, isOwn =
 
   return (
     <div className={`rounded-xl overflow-hidden max-w-[280px] ${
-      isOwn ? 'bg-[rgba(255,255,255,0.1)]' : 'bg-[rgba(99,102,241,0.08)]'
+      isOwn ? 'bg-border-hover' : 'bg-primary-10'
     }`}>
       {/* Static map placeholder (Google Maps API key needed for real image) */}
       <div className={`w-full h-[120px] flex items-center justify-center ${
-        isOwn ? 'bg-[rgba(255,255,255,0.05)]' : 'bg-[rgba(99,102,241,0.05)]'
+        isOwn ? 'bg-border-subtle' : 'bg-primary-5'
       }`}>
         <div className="text-center">
           <MapPin className={`w-8 h-8 mx-auto mb-1 ${isOwn ? 'text-white/60' : 'text-[#818cf8]'}`} />
@@ -109,8 +109,8 @@ export const LocationMessage = memo(function LocationMessage({ lat, lng, isOwn =
         rel="noopener noreferrer"
         className={`flex items-center gap-2 px-3 py-2.5 transition-colors ${
           isOwn
-            ? 'text-white/80 hover:text-white hover:bg-[rgba(255,255,255,0.05)]'
-            : 'text-[#818cf8] hover:text-[#a5b4fc] hover:bg-[rgba(99,102,241,0.05)]'
+            ? 'text-white/80 hover:text-white hover:bg-border-subtle'
+            : 'text-[#818cf8] hover:text-[#a5b4fc] hover:bg-primary-5'
         }`}
         onClick={(e) => e.stopPropagation()}
       >

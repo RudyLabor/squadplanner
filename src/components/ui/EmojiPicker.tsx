@@ -156,10 +156,10 @@ export function EmojiPicker({ isOpen, onSelect, onClose, position = 'bottom', al
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: position === 'top' ? 10 : -10 }}
             transition={{ type: 'spring', stiffness: 400, damping: 25 }}
-            className={`absolute ${positionClasses} ${alignClasses} z-[51] w-[320px] bg-[#1a1a2e] border border-[rgba(255,255,255,0.1)] rounded-xl shadow-2xl shadow-black/50 overflow-hidden`}
+            className={`absolute ${positionClasses} ${alignClasses} z-[51] w-[320px] bg-surface-dark border border-border-hover rounded-xl shadow-2xl shadow-black/50 overflow-hidden`}
           >
             {/* Search bar */}
-            <div className="p-2 border-b border-[rgba(255,255,255,0.06)]">
+            <div className="p-2 border-b border-border-default">
               <div className="relative">
                 <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[#6b6b80]" />
                 <input
@@ -168,7 +168,7 @@ export function EmojiPicker({ isOpen, onSelect, onClose, position = 'bottom', al
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                   placeholder="Chercher un emoji..."
-                  className="w-full pl-8 pr-8 py-1.5 bg-[rgba(255,255,255,0.06)] border border-[rgba(255,255,255,0.06)] rounded-lg text-[13px] text-white placeholder:text-[#6b6b80] focus:outline-none focus:border-[rgba(94,109,210,0.5)]"
+                  className="w-full pl-8 pr-8 py-1.5 bg-border-default border border-border-default rounded-lg text-[13px] text-white placeholder:text-[#6b6b80] focus:outline-none focus:border-[rgba(94,109,210,0.5)]"
                 />
                 {search && (
                   <button
@@ -183,7 +183,7 @@ export function EmojiPicker({ isOpen, onSelect, onClose, position = 'bottom', al
 
             {/* Category tabs */}
             {!search && (
-              <div className="flex items-center gap-0.5 px-1.5 py-1 border-b border-[rgba(255,255,255,0.06)]">
+              <div className="flex items-center gap-0.5 px-1.5 py-1 border-b border-border-default">
                 {(Object.keys(EMOJI_CATEGORIES) as Category[]).map((cat) => {
                   const info = EMOJI_CATEGORIES[cat]
                   const isActive = activeCategory === cat
@@ -199,13 +199,13 @@ export function EmojiPicker({ isOpen, onSelect, onClose, position = 'bottom', al
                       className={`flex-1 py-1.5 rounded-md text-center transition-colors relative ${
                         isActive
                           ? 'bg-[rgba(94,109,210,0.2)]'
-                          : 'hover:bg-[rgba(255,255,255,0.06)]'
+                          : 'hover:bg-border-default'
                       }`}
                       aria-label={info.label}
                       title={info.label}
                     >
                       <span className="text-base">
-                        {isRecent ? <Clock className="w-4 h-4 mx-auto text-[#8b8d90]" /> : info.icon}
+                        {isRecent ? <Clock className="w-4 h-4 mx-auto text-text-secondary" /> : info.icon}
                       </span>
                     </button>
                   )
@@ -216,7 +216,7 @@ export function EmojiPicker({ isOpen, onSelect, onClose, position = 'bottom', al
             {/* Emoji grid */}
             <div
               ref={gridRef}
-              className="h-[240px] overflow-y-auto p-2 scrollbar-thin scrollbar-thumb-[rgba(255,255,255,0.1)] scrollbar-track-transparent"
+              className="h-[240px] overflow-y-auto p-2 scrollbar-thin scrollbar-thumb-border-hover scrollbar-track-transparent"
             >
               {/* Category label */}
               {!search && (
@@ -235,7 +235,7 @@ export function EmojiPicker({ isOpen, onSelect, onClose, position = 'bottom', al
                     <button
                       key={`${emoji}-${i}`}
                       onClick={() => handleSelect(emoji)}
-                      className="w-9 h-9 flex items-center justify-center rounded-lg text-xl hover:bg-[rgba(255,255,255,0.1)] active:scale-90 transition-all touch-manipulation"
+                      className="w-9 h-9 flex items-center justify-center rounded-lg text-xl hover:bg-border-hover active:scale-90 transition-all touch-manipulation"
                       aria-label={emoji}
                     >
                       {emoji}
@@ -246,7 +246,7 @@ export function EmojiPicker({ isOpen, onSelect, onClose, position = 'bottom', al
             </div>
 
             {/* Footer - currently hovered emoji name could go here */}
-            <div className="px-3 py-1.5 border-t border-[rgba(255,255,255,0.06)] text-[11px] text-[#6b6b80]">
+            <div className="px-3 py-1.5 border-t border-border-default text-[11px] text-[#6b6b80]">
               {search
                 ? `${displayedEmojis.length} résultat${displayedEmojis.length !== 1 ? 's' : ''}`
                 : EMOJI_CATEGORIES[activeCategory].label

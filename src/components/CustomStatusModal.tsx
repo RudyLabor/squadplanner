@@ -107,14 +107,14 @@ export const CustomStatusModal = memo(function CustomStatusModal({ isOpen, onClo
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
             transition={{ type: 'spring', stiffness: 300, damping: 25 }}
             onClick={(e) => e.stopPropagation()}
-            className="w-full max-w-md bg-[#1a1b1e] border border-[rgba(255,255,255,0.08)] rounded-2xl overflow-hidden"
+            className="w-full max-w-md bg-[#1a1b1e] border border-border-hover rounded-2xl overflow-hidden"
           >
             {/* Header */}
-            <div className="flex items-center justify-between px-5 py-4 border-b border-[rgba(255,255,255,0.06)]">
+            <div className="flex items-center justify-between px-5 py-4 border-b border-border-default">
               <h2 className="text-[16px] font-semibold text-text-primary">Definir un statut</h2>
               <button
                 onClick={onClose}
-                className="p-1.5 rounded-lg hover:bg-[rgba(255,255,255,0.05)] text-text-tertiary transition-colors"
+                className="p-1.5 rounded-lg hover:bg-border-subtle text-text-tertiary transition-colors"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -127,7 +127,7 @@ export const CustomStatusModal = memo(function CustomStatusModal({ isOpen, onClo
                 <div className="flex items-center gap-2">
                   <button
                     type="button"
-                    className="w-12 h-12 rounded-xl bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.08)] flex items-center justify-center text-xl hover:bg-[rgba(255,255,255,0.08)] transition-colors flex-shrink-0"
+                    className="w-12 h-12 rounded-xl bg-border-subtle border border-border-hover flex items-center justify-center text-xl hover:bg-overlay-light transition-colors flex-shrink-0"
                   >
                     {emoji}
                   </button>
@@ -136,7 +136,7 @@ export const CustomStatusModal = memo(function CustomStatusModal({ isOpen, onClo
                     value={text}
                     onChange={(e) => setText(e.target.value.slice(0, 80))}
                     placeholder="Que fais-tu ?"
-                    className="flex-1 h-12 px-4 bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.08)] rounded-xl text-[14px] text-text-primary placeholder:text-text-quaternary focus:outline-none focus:border-[rgba(99,102,241,0.4)] transition-colors"
+                    className="flex-1 h-12 px-4 bg-border-subtle border border-border-hover rounded-xl text-[14px] text-text-primary placeholder:text-text-quaternary focus:outline-none focus:border-primary transition-colors"
                     maxLength={80}
                   />
                 </div>
@@ -152,8 +152,8 @@ export const CustomStatusModal = memo(function CustomStatusModal({ isOpen, onClo
                     onClick={() => setEmoji(e)}
                     className={`w-9 h-9 rounded-lg flex items-center justify-center text-lg transition-colors ${
                       emoji === e
-                        ? 'bg-[rgba(99,102,241,0.2)] ring-1 ring-[rgba(99,102,241,0.4)]'
-                        : 'hover:bg-[rgba(255,255,255,0.05)]'
+                        ? 'bg-primary-20 ring-1 ring-primary'
+                        : 'hover:bg-border-subtle'
                     }`}
                   >
                     {e}
@@ -175,8 +175,8 @@ export const CustomStatusModal = memo(function CustomStatusModal({ isOpen, onClo
                       onClick={() => setDurationIndex(i)}
                       className={`px-3 py-2 rounded-lg text-[13px] font-medium transition-colors ${
                         durationIndex === i
-                          ? 'bg-[rgba(99,102,241,0.15)] text-[#818cf8] border border-[rgba(99,102,241,0.3)]'
-                          : 'bg-[rgba(255,255,255,0.03)] text-text-secondary border border-transparent hover:bg-[rgba(255,255,255,0.06)]'
+                          ? 'bg-primary-15 text-primary-hover border border-primary'
+                          : 'bg-surface-card text-text-secondary border border-transparent hover:bg-border-default'
                       }`}
                     >
                       {option.label}
@@ -202,11 +202,11 @@ export const CustomStatusModal = memo(function CustomStatusModal({ isOpen, onClo
                     onFocus={() => setShowGameSuggestions(true)}
                     onBlur={() => setTimeout(() => setShowGameSuggestions(false), 200)}
                     placeholder="Ex: Valorant, League of Legends..."
-                    className="w-full h-11 px-4 bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.08)] rounded-xl text-[14px] text-text-primary placeholder:text-text-quaternary focus:outline-none focus:border-[rgba(99,102,241,0.4)] transition-colors"
+                    className="w-full h-11 px-4 bg-border-subtle border border-border-hover rounded-xl text-[14px] text-text-primary placeholder:text-text-quaternary focus:outline-none focus:border-primary transition-colors"
                   />
                   {/* Autocomplete suggestions */}
                   {showGameSuggestions && filteredGames.length > 0 && (
-                    <div className="absolute top-full left-0 right-0 mt-1 bg-[#1a1b1e] border border-[rgba(255,255,255,0.08)] rounded-xl shadow-xl overflow-hidden z-10 max-h-40 overflow-y-auto">
+                    <div className="absolute top-full left-0 right-0 mt-1 bg-[#1a1b1e] border border-border-hover rounded-xl shadow-xl overflow-hidden z-10 max-h-40 overflow-y-auto">
                       {filteredGames.map((game) => (
                         <button
                           key={game}
@@ -215,7 +215,7 @@ export const CustomStatusModal = memo(function CustomStatusModal({ isOpen, onClo
                             setGameInput(game)
                             setShowGameSuggestions(false)
                           }}
-                          className="w-full px-3 py-2 text-left text-[13px] text-text-secondary hover:bg-[rgba(255,255,255,0.05)] hover:text-text-primary transition-colors"
+                          className="w-full px-3 py-2 text-left text-[13px] text-text-secondary hover:bg-border-subtle hover:text-text-primary transition-colors"
                         >
                           {game}
                         </button>
@@ -227,12 +227,12 @@ export const CustomStatusModal = memo(function CustomStatusModal({ isOpen, onClo
             </div>
 
             {/* Footer */}
-            <div className="flex items-center gap-3 px-5 py-4 border-t border-[rgba(255,255,255,0.06)]">
+            <div className="flex items-center gap-3 px-5 py-4 border-t border-border-default">
               {(customStatus || gameStatus) && (
                 <button
                   type="button"
                   onClick={handleClear}
-                  className="px-4 py-2.5 rounded-xl text-[13px] font-medium text-red-400 hover:bg-[rgba(239,68,68,0.1)] transition-colors"
+                  className="px-4 py-2.5 rounded-xl text-[13px] font-medium text-red-400 hover:bg-error-10 transition-colors"
                 >
                   Effacer
                 </button>
@@ -241,14 +241,14 @@ export const CustomStatusModal = memo(function CustomStatusModal({ isOpen, onClo
               <button
                 type="button"
                 onClick={onClose}
-                className="px-4 py-2.5 rounded-xl text-[13px] font-medium text-text-tertiary hover:bg-[rgba(255,255,255,0.05)] transition-colors"
+                className="px-4 py-2.5 rounded-xl text-[13px] font-medium text-text-tertiary hover:bg-border-subtle transition-colors"
               >
                 Annuler
               </button>
               <button
                 type="button"
                 onClick={handleSave}
-                className="px-5 py-2.5 rounded-xl text-[13px] font-semibold bg-[#6366f1] text-white hover:bg-[#7c7ffa] transition-colors"
+                className="px-5 py-2.5 rounded-xl text-[13px] font-semibold bg-primary text-white hover:bg-[#7c7ffa] transition-colors"
               >
                 Enregistrer
               </button>

@@ -51,8 +51,8 @@ const CreateSessionModal = lazy(() => import('./components/CreateSessionModal').
 // Optimized loading spinner - memoized to prevent re-renders
 const LoadingSpinner = memo(function LoadingSpinner() {
   return (
-    <div className="min-h-screen bg-[#08090a] flex items-center justify-center">
-      <div className="w-8 h-8 border-2 border-[#5e6dd2] border-t-transparent rounded-full animate-spin" />
+    <div className="min-h-screen bg-bg-base flex items-center justify-center">
+      <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin" />
     </div>
   )
 })
@@ -61,7 +61,7 @@ const LoadingSpinner = memo(function LoadingSpinner() {
 const PageSkeleton = memo(function PageSkeleton() {
   return (
     <div className="h-full flex items-center justify-center">
-      <div className="w-6 h-6 border-2 border-[#5e6dd2] border-t-transparent rounded-full animate-spin" />
+      <div className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin" />
     </div>
   )
 })
@@ -378,9 +378,9 @@ export default function App() {
           toastOptions={{
             duration: 4000,
             style: {
-              background: '#0f1012',
-              border: '1px solid rgba(255, 255, 255, 0.06)',
-              color: '#fafafa',
+              background: 'var(--color-bg-surface)',
+              border: '1px solid var(--color-border-default)',
+              color: 'var(--color-text-primary)',
               fontSize: '14px',
               borderRadius: '12px',
               padding: '12px 16px',
@@ -388,10 +388,10 @@ export default function App() {
               overflow: 'hidden',
             },
             classNames: {
-              success: 'border-[#34d399]/20 bg-[#34d399]/10',
-              error: 'border-[#f87171]/20 bg-[#f87171]/10',
-              warning: 'border-[#fbbf24]/20 bg-[#fbbf24]/10',
-              info: 'border-[#6366f1]/20 bg-[#6366f1]/10',
+              success: 'border-success/20 bg-success/10',
+              error: 'border-error/20 bg-error/10',
+              warning: 'border-warning/20 bg-warning/10',
+              info: 'border-primary/20 bg-primary/10',
             },
           }}
         />

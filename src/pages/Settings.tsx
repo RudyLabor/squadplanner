@@ -461,16 +461,16 @@ export function Settings() {
 
             <button
               onClick={() => setShowDeleteModal(true)}
-              className="w-full flex items-center justify-between p-4 rounded-xl bg-[rgba(251,113,133,0.03)] hover:bg-[rgba(251,113,133,0.05)] transition-colors border border-[rgba(251,113,133,0.05)]"
+              className="w-full flex items-center justify-between p-4 rounded-xl bg-error/[0.03] hover:bg-error/5 transition-colors border border-error/5"
             >
               <div className="flex items-center gap-3">
-                <Trash2 className="w-5 h-5 text-[#fb7185]" />
+                <Trash2 className="w-5 h-5 text-error" />
                 <div className="text-left">
-                  <p className="text-[14px] text-[#fb7185]">Supprimer mon compte</p>
-                  <p className="text-[12px] text-[#fb7185]/60">Action irréversible</p>
+                  <p className="text-[14px] text-error">Supprimer mon compte</p>
+                  <p className="text-[12px] text-error/60">Action irréversible</p>
                 </div>
               </div>
-              <ChevronRight className="w-5 h-5 text-[#fb7185]/50" />
+              <ChevronRight className="w-5 h-5 text-error/50" />
             </button>
           </div>
         </Card>
@@ -524,7 +524,7 @@ export function Settings() {
         {/* Sign Out */}
         <button
           onClick={handleSignOut}
-          className="w-full py-4 text-[14px] text-[#fb7185] hover:text-[#fda4af] transition-colors flex items-center justify-center gap-2"
+          className="w-full py-4 text-[14px] text-error hover:text-error-hover transition-colors flex items-center justify-center gap-2"
         >
           <LogOut className="w-4 h-4" />
           Se déconnecter
@@ -551,22 +551,22 @@ export function Settings() {
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.95, opacity: 0 }}
               onClick={(e) => e.stopPropagation()}
-              className="w-full max-w-md bg-bg-elevated rounded-2xl border border-[rgba(251,113,133,0.1)] p-6 shadow-modal"
+              className="w-full max-w-md bg-bg-elevated rounded-2xl border border-error/10 p-6 shadow-modal"
             >
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-10 h-10 rounded-xl bg-[rgba(251,113,133,0.08)] flex items-center justify-center">
-                  <AlertTriangle className="w-5 h-5 text-[#fb7185]" />
+                <div className="w-10 h-10 rounded-xl bg-error/[0.08] flex items-center justify-center">
+                  <AlertTriangle className="w-5 h-5 text-error" />
                 </div>
                 <h3 className="text-lg font-bold text-text-primary">Supprimer ton compte</h3>
               </div>
 
               <p className="text-[14px] text-text-tertiary mb-4">
-                Cette action est <span className="text-[#fb7185] font-semibold">définitive et irréversible</span>.
+                Cette action est <span className="text-error font-semibold">définitive et irréversible</span>.
                 Toutes tes données seront supprimées : profil, messages, squads, statistiques.
               </p>
 
               <p className="text-[13px] text-text-tertiary mb-3">
-                Tape <span className="font-mono text-[#fb7185] font-bold">SUPPRIMER</span> pour confirmer :
+                Tape <span className="font-mono text-error font-bold">SUPPRIMER</span> pour confirmer :
               </p>
 
               <input
@@ -575,7 +575,7 @@ export function Settings() {
                 onChange={(e) => setDeleteConfirmText(e.target.value)}
                 placeholder="SUPPRIMER"
                 disabled={isDeleting}
-                className="w-full h-11 px-4 rounded-xl bg-surface-card border border-[rgba(251,113,133,0.15)] text-[14px] text-text-primary placeholder:text-text-quaternary focus:outline-none focus:border-[#fb7185] mb-4"
+                className="w-full h-11 px-4 rounded-xl bg-surface-card border border-error/15 text-[14px] text-text-primary placeholder:text-text-quaternary focus:outline-none focus:border-error mb-4"
               />
 
               <div className="flex gap-3">
@@ -589,7 +589,7 @@ export function Settings() {
                 <button
                   onClick={handleDeleteAccount}
                   disabled={deleteConfirmText !== 'SUPPRIMER' || isDeleting}
-                  className="flex-1 h-11 rounded-xl bg-[#fb7185] text-white text-[14px] font-semibold hover:bg-[#f43f5e] transition-colors disabled:opacity-30 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                  className="flex-1 h-11 rounded-xl bg-error text-white text-[14px] font-semibold hover:bg-error-hover transition-colors disabled:opacity-30 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                 >
                   {isDeleting ? (
                     <>

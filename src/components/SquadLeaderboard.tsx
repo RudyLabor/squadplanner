@@ -72,8 +72,8 @@ function PodiumCard({
           <Card
             className={`
               relative p-4 text-center overflow-hidden cursor-pointer
-              transition-all duration-200 hover:scale-[1.02] hover:shadow-[0_0_20px_rgba(99,102,241,0.15)]
-              ${isFirst ? 'bg-gradient-to-b from-[rgba(245,166,35,0.15)] to-[#101012]' : 'bg-[#101012]'}
+              transition-all duration-200 hover:scale-[1.02] hover:shadow-glow-primary-sm
+              ${isFirst ? 'bg-gradient-to-b from-[rgba(245,166,35,0.15)] to-bg-surface' : 'bg-bg-surface'}
               ${isCurrentUser ? 'ring-2 ring-[#5e6dd2] ring-offset-2 ring-offset-[#08090a]' : ''}
             `}
           >
@@ -140,14 +140,14 @@ function PodiumCard({
               />
             ) : (
               <User
-                className={`${isFirst ? 'w-10 h-10' : 'w-8 h-8'} text-[#8b8d90]`}
+                className={`${isFirst ? 'w-10 h-10' : 'w-8 h-8'} text-text-secondary`}
               />
             )}
           </motion.div>
 
           {/* Username */}
           <h3
-            className={`font-bold text-[#f7f8f8] truncate mb-1 ${isFirst ? 'text-[16px]' : 'text-[14px]'}`}
+            className={`font-bold text-text-primary truncate mb-1 ${isFirst ? 'text-[16px]' : 'text-[14px]'}`}
           >
             {entry.username}
           </h3>
@@ -172,16 +172,16 @@ function PodiumCard({
           </div>
 
           {/* XP */}
-          <div className="flex items-center justify-center gap-1 text-[12px] text-[#8b8d90] mb-1">
+          <div className="flex items-center justify-center gap-1 text-[12px] text-text-secondary mb-1">
             <Zap className="w-3 h-3 text-[#8b93ff]" />
-            <span className="font-medium text-[#f7f8f8]">
+            <span className="font-medium text-text-primary">
               {entry.xp.toLocaleString()}
             </span>
             <span>XP</span>
           </div>
 
           {/* Reliability score */}
-          <div className="flex items-center justify-center gap-1 text-[11px] text-[#5e6063]">
+          <div className="flex items-center justify-center gap-1 text-[11px] text-text-tertiary">
             <Shield className="w-3 h-3 text-[#4ade80]" />
             <span>{entry.reliability_score}%</span>
           </div>
@@ -235,16 +235,16 @@ function LeaderboardListItem({
         }}
         className={`
           flex items-center gap-3 p-3 rounded-xl transition-all cursor-pointer
-          hover:scale-[1.01] hover:shadow-[0_0_15px_rgba(99,102,241,0.1)]
+          hover:scale-[1.01] hover:shadow-glow-primary-sm
           ${isCurrentUser
             ? 'bg-[rgba(94,109,210,0.15)] border border-[rgba(94,109,210,0.3)]'
-            : 'bg-[rgba(255,255,255,0.02)] hover:bg-[rgba(255,255,255,0.04)]'
+            : 'bg-surface-card hover:bg-border-subtle'
           }
         `}
       >
       {/* Rank */}
-      <div className="w-8 h-8 rounded-lg bg-[rgba(255,255,255,0.05)] flex items-center justify-center">
-        <span className="text-[14px] font-bold text-[#8b8d90]">{entry.rank}</span>
+      <div className="w-8 h-8 rounded-lg bg-border-subtle flex items-center justify-center">
+        <span className="text-[14px] font-bold text-text-secondary">{entry.rank}</span>
       </div>
 
       {/* Avatar */}
@@ -256,14 +256,14 @@ function LeaderboardListItem({
             className="w-full h-full object-cover"
           />
         ) : (
-          <User className="w-5 h-5 text-[#8b8d90]" />
+          <User className="w-5 h-5 text-text-secondary" />
         )}
       </div>
 
       {/* User info */}
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2">
-          <span className="text-[14px] font-medium text-[#f7f8f8] truncate">
+          <span className="text-[14px] font-medium text-text-primary truncate">
             {entry.username}
           </span>
           {isCurrentUser && (
@@ -272,7 +272,7 @@ function LeaderboardListItem({
             </span>
           )}
         </div>
-        <div className="flex items-center gap-2 text-[11px] text-[#5e6063]">
+        <div className="flex items-center gap-2 text-[11px] text-text-tertiary">
           <span
             className="px-1.5 py-0.5 rounded-full"
             style={{
@@ -293,7 +293,7 @@ function LeaderboardListItem({
       <div className="text-right">
         <div className="flex items-center gap-1 text-[13px]">
           <Zap className="w-3 h-3 text-[#8b93ff]" />
-          <span className="font-medium text-[#f7f8f8]">
+          <span className="font-medium text-text-primary">
             {entry.xp.toLocaleString()}
           </span>
         </div>
@@ -329,8 +329,8 @@ export function SquadLeaderboard({ entries, currentUserId }: SquadLeaderboardPro
           <Trophy className="w-5 h-5 text-[#f5a623]" />
         </div>
         <div>
-          <h2 className="text-[18px] font-bold text-[#f7f8f8]">Classement Squad</h2>
-          <p className="text-[12px] text-[#5e6063]">Top joueurs cette semaine</p>
+          <h2 className="text-[18px] font-bold text-text-primary">Classement Squad</h2>
+          <p className="text-[12px] text-text-tertiary">Top joueurs cette semaine</p>
         </div>
       </motion.div>
 
@@ -350,7 +350,7 @@ export function SquadLeaderboard({ entries, currentUserId }: SquadLeaderboardPro
 
       {/* List - Ranks 4-10 */}
       {listEntries.length > 0 && (
-        <Card className="p-2 bg-[#101012]">
+        <Card className="p-2 bg-bg-surface">
           <div className="space-y-2">
             {listEntries.map((entry, index) => (
               <LeaderboardListItem
@@ -371,9 +371,9 @@ export function SquadLeaderboard({ entries, currentUserId }: SquadLeaderboardPro
           animate={{ opacity: 1 }}
           className="text-center py-12"
         >
-          <Trophy className="w-12 h-12 text-[#5e6063] mx-auto mb-3" />
-          <p className="text-[14px] text-[#8b8d90]">Aucun classement disponible</p>
-          <p className="text-[12px] text-[#5e6063]">
+          <Trophy className="w-12 h-12 text-text-tertiary mx-auto mb-3" />
+          <p className="text-[14px] text-text-secondary">Aucun classement disponible</p>
+          <p className="text-[12px] text-text-tertiary">
             Participe a des sessions pour apparaitre ici !
           </p>
         </motion.div>

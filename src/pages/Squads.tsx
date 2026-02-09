@@ -107,8 +107,8 @@ function SquadCard({ squad, isOwner, nextSession, hasActiveParty, copiedCode, on
       <Link to={`/squad/${squad.id}`}>
         <Card className={`cursor-pointer transition-interactive ${
           hasActiveParty
-            ? 'border-success/30 shadow-[0_0_15px_rgba(52,211,153,0.08)] bg-gradient-to-r from-success/5 to-transparent'
-            : 'hover:border-primary/25 hover:shadow-[0_0_12px_rgba(99,102,241,0.08)]'
+            ? 'border-success/30 shadow-glow-success bg-gradient-to-r from-success/5 to-transparent'
+            : 'hover:border-primary/25 hover:shadow-glow-primary-sm'
         }`}>
           <CardContent className="p-4">
             <div className="flex items-start gap-4">

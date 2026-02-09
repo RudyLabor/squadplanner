@@ -110,8 +110,8 @@ export function ParticipantVolumeControl({
               flex-shrink-0 w-7 h-7 rounded-full flex items-center justify-center
               transition-colors duration-150
               ${isMuted
-                ? 'bg-[#f87171]/20 text-[#f87171]'
-                : 'bg-[rgba(255,255,255,0.06)] text-[#8b8d90] hover:text-[#f7f8f8] hover:bg-[rgba(255,255,255,0.1)]'
+                ? 'bg-[#f87171]/20 text-error'
+                : 'bg-border-default text-text-secondary hover:text-text-primary hover:bg-border-hover'
               }
             `}
             aria-label={isMuted ? 'Activer le son' : 'Couper le son'}
@@ -122,7 +122,7 @@ export function ParticipantVolumeControl({
 
         {/* Compact slider */}
         <div className="relative flex-1 h-4 flex items-center">
-          <div className="absolute inset-x-0 h-1.5 rounded-full bg-[rgba(255,255,255,0.08)] overflow-hidden">
+          <div className="absolute inset-x-0 h-1.5 rounded-full bg-overlay-light overflow-hidden">
             <div
               className="h-full rounded-full transition-transform duration-100"
               style={{
@@ -153,7 +153,7 @@ export function ParticipantVolumeControl({
         {/* Volume percentage */}
         <span className={`
           flex-shrink-0 text-[11px] font-medium min-w-[32px] text-right tabular-nums
-          ${isBoosted ? 'text-[#f5a623]' : isMuted ? 'text-[#f87171]' : 'text-[#8b8d90]'}
+          ${isBoosted ? 'text-[#f5a623]' : isMuted ? 'text-error' : 'text-text-secondary'}
         `}>
           {displayVolume}%
         </span>
@@ -162,15 +162,15 @@ export function ParticipantVolumeControl({
   }
 
   return (
-    <div className="flex flex-col gap-2 p-3 rounded-lg bg-[rgba(255,255,255,0.03)] border border-[rgba(255,255,255,0.06)]">
+    <div className="flex flex-col gap-2 p-3 rounded-lg bg-surface-card border border-border-default">
       {/* Header row */}
       <div className="flex items-center justify-between">
-        <span className="text-[13px] font-medium text-[#f7f8f8] truncate">
+        <span className="text-[13px] font-medium text-text-primary truncate">
           {participantName}
         </span>
         <span className={`
           text-[12px] font-semibold tabular-nums
-          ${isBoosted ? 'text-[#f5a623]' : isMuted ? 'text-[#f87171]' : 'text-[#4ade80]'}
+          ${isBoosted ? 'text-[#f5a623]' : isMuted ? 'text-error' : 'text-[#4ade80]'}
         `}>
           {displayVolume}%
         </span>
@@ -188,8 +188,8 @@ export function ParticipantVolumeControl({
               flex-shrink-0 w-8 h-8 rounded-lg flex items-center justify-center
               transition-colors duration-150
               ${isMuted
-                ? 'bg-[#f87171]/20 text-[#f87171]'
-                : 'bg-[rgba(255,255,255,0.08)] text-[#8b8d90] hover:text-[#f7f8f8] hover:bg-[rgba(255,255,255,0.12)]'
+                ? 'bg-[#f87171]/20 text-error'
+                : 'bg-overlay-light text-text-secondary hover:text-text-primary hover:bg-overlay-medium'
               }
             `}
             aria-label={isMuted ? 'Activer le son' : 'Couper le son'}
@@ -201,7 +201,7 @@ export function ParticipantVolumeControl({
         {/* Slider container */}
         <div className="relative flex-1">
           {/* Track background */}
-          <div className="h-2 rounded-full bg-[rgba(255,255,255,0.08)] overflow-hidden">
+          <div className="h-2 rounded-full bg-overlay-light overflow-hidden">
             {/* Filled track */}
             <motion.div
               className="h-full rounded-full"
@@ -254,9 +254,9 @@ export function ParticipantVolumeControl({
       </div>
 
       {/* Volume labels */}
-      <div className="flex justify-between text-[10px] text-[#5e6063] px-11">
+      <div className="flex justify-between text-[10px] text-text-tertiary px-11">
         <span>0%</span>
-        <span className="text-[#8b8d90]">100%</span>
+        <span className="text-text-secondary">100%</span>
         <span className="text-[#f5a623]/70">200%</span>
       </div>
     </div>

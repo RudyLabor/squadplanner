@@ -54,7 +54,7 @@ export const StatusSelector = memo(function StatusSelector({ onOpenCustomStatus,
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-2 px-2 py-1.5 rounded-lg hover:bg-[rgba(255,255,255,0.05)] transition-colors text-left w-full"
+        className="flex items-center gap-2 px-2 py-1.5 rounded-lg hover:bg-border-subtle transition-colors text-left w-full"
         aria-label={`Statut: ${currentConfig.label}`}
         aria-expanded={isOpen}
       >
@@ -72,11 +72,11 @@ export const StatusSelector = memo(function StatusSelector({ onOpenCustomStatus,
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -4, scale: 0.95 }}
             transition={{ duration: 0.15 }}
-            className="absolute bottom-full left-0 mb-1 w-56 bg-[#1a1b1e] border border-[rgba(255,255,255,0.08)] rounded-xl shadow-xl shadow-black/30 overflow-hidden z-50"
+            className="absolute bottom-full left-0 mb-1 w-56 bg-[#1a1b1e] border border-border-hover rounded-xl shadow-xl shadow-black/30 overflow-hidden z-50"
           >
             {/* Custom status section */}
             {customStatus && (
-              <div className="px-3 py-2 border-b border-[rgba(255,255,255,0.06)]">
+              <div className="px-3 py-2 border-b border-border-default">
                 <div className="flex items-center gap-2 text-[13px]">
                   <span>{customStatus.emoji}</span>
                   <span className="text-text-secondary truncate">{customStatus.text}</span>
@@ -86,7 +86,7 @@ export const StatusSelector = memo(function StatusSelector({ onOpenCustomStatus,
 
             {/* Game status */}
             {gameStatus && (
-              <div className="px-3 py-2 border-b border-[rgba(255,255,255,0.06)]">
+              <div className="px-3 py-2 border-b border-border-default">
                 <div className="flex items-center gap-2 text-[13px]">
                   <Gamepad2 className="w-3.5 h-3.5 text-[#34d399]" />
                   <span className="text-[#34d399] truncate">{gameStatus.game}</span>
@@ -109,8 +109,8 @@ export const StatusSelector = memo(function StatusSelector({ onOpenCustomStatus,
                     }}
                     className={`w-full flex items-center gap-3 px-3 py-2 text-left transition-colors ${
                       isActive
-                        ? 'bg-[rgba(99,102,241,0.1)] text-text-primary'
-                        : 'text-text-secondary hover:bg-[rgba(255,255,255,0.05)] hover:text-text-primary'
+                        ? 'bg-primary-10 text-text-primary'
+                        : 'text-text-secondary hover:bg-border-subtle hover:text-text-primary'
                     }`}
                   >
                     <Icon className="w-4 h-4" style={{ color: config.color }} strokeWidth={2} />
@@ -122,14 +122,14 @@ export const StatusSelector = memo(function StatusSelector({ onOpenCustomStatus,
 
             {/* Custom status button */}
             {onOpenCustomStatus && (
-              <div className="border-t border-[rgba(255,255,255,0.06)] py-1">
+              <div className="border-t border-border-default py-1">
                 <button
                   type="button"
                   onClick={() => {
                     setIsOpen(false)
                     onOpenCustomStatus()
                   }}
-                  className="w-full flex items-center gap-3 px-3 py-2 text-left text-text-secondary hover:bg-[rgba(255,255,255,0.05)] hover:text-text-primary transition-colors"
+                  className="w-full flex items-center gap-3 px-3 py-2 text-left text-text-secondary hover:bg-border-subtle hover:text-text-primary transition-colors"
                 >
                   <span className="text-sm">😊</span>
                   <span className="text-[13px] font-medium">

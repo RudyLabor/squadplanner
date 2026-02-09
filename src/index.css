@@ -75,6 +75,50 @@
   --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.03);
   --shadow-dropdown: 0 8px 30px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.05);
   --shadow-modal: 0 16px 70px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.05);
+
+  /* === CHANTIER 1 - TOKENS MANQUANTS (Section 2.3) === */
+
+  /* Accents avec opacité (pour backgrounds colorés) */
+  --color-primary-5: rgba(99, 102, 241, 0.05);
+  --color-primary-10: rgba(99, 102, 241, 0.10);
+  --color-primary-15: rgba(99, 102, 241, 0.15);
+  --color-primary-20: rgba(99, 102, 241, 0.20);
+  --color-success-5: rgba(52, 211, 153, 0.05);
+  --color-success-10: rgba(52, 211, 153, 0.10);
+  --color-success-15: rgba(52, 211, 153, 0.15);
+  --color-success-20: rgba(52, 211, 153, 0.20);
+  --color-error-5: rgba(248, 113, 113, 0.05);
+  --color-error-10: rgba(248, 113, 113, 0.10);
+  --color-error-15: rgba(248, 113, 113, 0.15);
+  --color-warning-5: rgba(251, 191, 36, 0.05);
+  --color-warning-10: rgba(251, 191, 36, 0.10);
+  --color-warning-15: rgba(251, 191, 36, 0.15);
+  --color-info-5: rgba(56, 189, 248, 0.05);
+  --color-info-10: rgba(56, 189, 248, 0.10);
+  --color-purple-10: rgba(167, 139, 250, 0.10);
+  --color-purple-15: rgba(167, 139, 250, 0.15);
+
+  /* Overlays */
+  --color-overlay-light: rgba(255, 255, 255, 0.08);
+  --color-overlay-medium: rgba(255, 255, 255, 0.12);
+  --color-overlay-heavy: rgba(255, 255, 255, 0.20);
+
+  /* Ombres sémantiques */
+  --shadow-glow-success: 0 0 20px rgba(52, 211, 153, 0.15);
+  --shadow-glow-success-strong: 0 0 30px rgba(52, 211, 153, 0.3);
+  --shadow-glow-primary-sm: 0 0 10px rgba(99, 102, 241, 0.15);
+  --shadow-glow-primary-md: 0 0 20px rgba(99, 102, 241, 0.2);
+  --shadow-glow-primary-lg: 0 0 40px rgba(99, 102, 241, 0.3);
+  --shadow-glow-error: 0 0 20px rgba(248, 113, 113, 0.15);
+  --shadow-glow-warning: 0 0 20px rgba(251, 191, 36, 0.15);
+
+  /* Surfaces supplémentaires */
+  --color-surface-dark: #1a1a2e;
+  --color-surface-darker: #12121f;
+
+  /* Gradients tokenisés */
+  --gradient-primary: linear-gradient(135deg, var(--color-primary) 0%, var(--color-purple) 100%);
+  --gradient-success: linear-gradient(135deg, var(--color-success) 0%, #06b6d4 100%);
 }
 
 /* =====================================================
@@ -121,6 +165,53 @@
   --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.06), 0 0 0 1px rgba(0, 0, 0, 0.04);
   --shadow-dropdown: 0 8px 30px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(0, 0, 0, 0.06);
   --shadow-modal: 0 16px 70px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(0, 0, 0, 0.06);
+
+  /* === CHANTIER 1 - TOKENS LIGHT MODE MANQUANTS (Section 2.4) === */
+
+  /* Accents ajustés pour fond clair */
+  --color-success: #059669;
+  --color-warning: #d97706;
+  --color-error: #dc2626;
+  --color-info: #0284c7;
+  --color-purple: #7c3aed;
+
+  /* Surfaces supplémentaires - light mode */
+  --color-surface-dark: #e2e8f0;
+  --color-surface-darker: #cbd5e1;
+
+  /* Overlays - light mode (inversé) */
+  --color-overlay-light: rgba(0, 0, 0, 0.04);
+  --color-overlay-medium: rgba(0, 0, 0, 0.08);
+  --color-overlay-heavy: rgba(0, 0, 0, 0.15);
+
+  /* Ombres glow en light mode (plus subtiles) */
+  --shadow-glow-success: 0 0 20px rgba(5, 150, 105, 0.08);
+  --shadow-glow-success-strong: 0 0 30px rgba(5, 150, 105, 0.12);
+  --shadow-glow-primary-sm: 0 0 10px rgba(99, 102, 241, 0.08);
+  --shadow-glow-primary-md: 0 0 20px rgba(99, 102, 241, 0.1);
+  --shadow-glow-primary-lg: 0 0 40px rgba(99, 102, 241, 0.12);
+  --shadow-glow-error: 0 0 20px rgba(220, 38, 38, 0.08);
+  --shadow-glow-warning: 0 0 20px rgba(217, 119, 6, 0.08);
+
+  /* Accents avec opacité - light mode */
+  --color-primary-5: rgba(91, 95, 199, 0.05);
+  --color-primary-10: rgba(91, 95, 199, 0.10);
+  --color-primary-15: rgba(91, 95, 199, 0.15);
+  --color-primary-20: rgba(91, 95, 199, 0.20);
+  --color-success-5: rgba(5, 150, 105, 0.05);
+  --color-success-10: rgba(5, 150, 105, 0.10);
+  --color-success-15: rgba(5, 150, 105, 0.15);
+  --color-success-20: rgba(5, 150, 105, 0.20);
+  --color-error-5: rgba(220, 38, 38, 0.05);
+  --color-error-10: rgba(220, 38, 38, 0.10);
+  --color-error-15: rgba(220, 38, 38, 0.15);
+  --color-warning-5: rgba(217, 119, 6, 0.05);
+  --color-warning-10: rgba(217, 119, 6, 0.10);
+  --color-warning-15: rgba(217, 119, 6, 0.15);
+  --color-info-5: rgba(2, 132, 199, 0.05);
+  --color-info-10: rgba(2, 132, 199, 0.10);
+  --color-purple-10: rgba(124, 58, 237, 0.10);
+  --color-purple-15: rgba(124, 58, 237, 0.15);
 }
 
 /* Light theme selection color */
@@ -137,111 +228,10 @@
   background: rgba(0, 0, 0, 0.25);
 }
 
-/* =====================================================
-   LIGHT THEME - Override hardcoded dark colors
-   These rules target common hardcoded Tailwind arbitrary
-   values that don't use CSS variables
-   ===================================================== */
+/* === CHANTIER 1 - Section 2.6: !important overrides SUPPRIMÉS ===
+   Les couleurs hardcodées ayant été migrées vers les tokens CSS,
+   ces overrides ne sont plus nécessaires. */
 
-/* Main backgrounds */
-[data-theme="light"] .bg-\[\#050506\] {
-  background-color: #ffffff !important;
-}
-[data-theme="light"] .bg-\[\#0a0a0c\] {
-  background-color: #f8f9fa !important;
-}
-[data-theme="light"] .bg-\[\#101012\] {
-  background-color: #f1f3f5 !important;
-}
-[data-theme="light"] .bg-\[\#18191b\] {
-  background-color: #e9ecef !important;
-}
-[data-theme="light"] .bg-\[\#1f2023\] {
-  background-color: #dee2e6 !important;
-}
-
-/* Text colors */
-[data-theme="light"] .text-\[\#f7f8f8\] {
-  color: #1a1a1b !important;
-}
-[data-theme="light"] .text-\[\#fafafa\] {
-  color: #1a1a1b !important;
-}
-[data-theme="light"] .text-\[\#c9cace\] {
-  color: #495057 !important;
-}
-[data-theme="light"] .text-\[\#8b8d90\] {
-  color: #6c757d !important;
-}
-[data-theme="light"] .text-\[\#5e6063\] {
-  color: #868e96 !important;
-}
-[data-theme="light"] .text-\[\#888\] {
-  color: #868e96 !important;
-}
-
-/* Placeholder text */
-[data-theme="light"] .placeholder\:text-\[\#5e6063\]::placeholder {
-  color: #868e96 !important;
-}
-
-/* Border colors */
-[data-theme="light"] .border-\[rgba\(255\,255\,255\,0\.06\)\] {
-  border-color: rgba(0, 0, 0, 0.08) !important;
-}
-[data-theme="light"] .border-\[rgba\(255\,255\,255\,0\.05\)\] {
-  border-color: rgba(0, 0, 0, 0.06) !important;
-}
-[data-theme="light"] .border-\[rgba\(255\,255\,255\,0\.08\)\] {
-  border-color: rgba(0, 0, 0, 0.1) !important;
-}
-[data-theme="light"] .border-\[rgba\(255\,255\,255\,0\.1\)\] {
-  border-color: rgba(0, 0, 0, 0.12) !important;
-}
-
-/* Background with opacity */
-[data-theme="light"] .bg-\[rgba\(255\,255\,255\,0\.05\)\] {
-  background-color: rgba(0, 0, 0, 0.04) !important;
-}
-[data-theme="light"] .bg-\[rgba\(255\,255\,255\,0\.06\)\] {
-  background-color: rgba(0, 0, 0, 0.05) !important;
-}
-[data-theme="light"] .bg-\[rgba\(255\,255\,255\,0\.08\)\] {
-  background-color: rgba(0, 0, 0, 0.06) !important;
-}
-[data-theme="light"] .bg-\[rgba\(255\,255\,255\,0\.1\)\] {
-  background-color: rgba(0, 0, 0, 0.08) !important;
-}
-[data-theme="light"] .bg-\[rgba\(255\,255\,255\,0\.03\)\] {
-  background-color: rgba(0, 0, 0, 0.02) !important;
-}
-
-/* Hover states */
-[data-theme="light"] .hover\:bg-\[\#18191b\]:hover {
-  background-color: #e9ecef !important;
-}
-[data-theme="light"] .hover\:bg-\[\#1f2023\]:hover {
-  background-color: #dee2e6 !important;
-}
-[data-theme="light"] .hover\:bg-\[rgba\(255\,255\,255\,0\.05\)\]:hover {
-  background-color: rgba(0, 0, 0, 0.04) !important;
-}
-[data-theme="light"] .hover\:bg-\[rgba\(255\,255\,255\,0\.1\)\]:hover {
-  background-color: rgba(0, 0, 0, 0.08) !important;
-}
-[data-theme="light"] .hover\:bg-\[rgba\(255\,255\,255\,0\.06\)\]:hover {
-  background-color: rgba(0, 0, 0, 0.05) !important;
-}
-
-/* Hover text */
-[data-theme="light"] .hover\:text-\[\#f7f8f8\]:hover {
-  color: #1a1a1b !important;
-}
-
-/* Focus states */
-[data-theme="light"] .focus\:border-\[rgba\(99\,102\,241\,0\.5\)\]:focus {
-  border-color: rgba(99, 102, 241, 0.5) !important;
-}
 
 /* Glass card adjustments */
 [data-theme="light"] .glass-card {

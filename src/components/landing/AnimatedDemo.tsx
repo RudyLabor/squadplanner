@@ -36,14 +36,14 @@ function DemoNavbar({ active }: { active: string }) {
     { icon: User, label: 'Profil', id: 'profile' },
   ]
   return (
-    <div className="mt-auto px-2 py-1.5 flex items-center justify-around border-t border-[rgba(255,255,255,0.04)]">
+    <div className="mt-auto px-2 py-1.5 flex items-center justify-around border-t border-border-subtle">
       {items.map(item => {
         const Icon = item.icon
         const isActive = item.id === active
         return (
           <div key={item.id} className="flex flex-col items-center gap-0.5">
             <Icon className="w-3 h-3" style={{ color: isActive ? '#6366f1' : '#7d7d82' }} />
-            <span className={`text-[6px] ${isActive ? 'text-[#6366f1] font-medium' : 'text-[#7d7d82]'}`}>{item.label}</span>
+            <span className={`text-[6px] ${isActive ? 'text-primary font-medium' : 'text-[#7d7d82]'}`}>{item.label}</span>
           </div>
         )
       })}
@@ -54,11 +54,11 @@ function DemoNavbar({ active }: { active: string }) {
 function PhoneFrame({ children }: { children: React.ReactNode }) {
   return (
     <div className="relative mx-auto w-[240px] md:w-[280px]">
-      <div className="bg-[#0a0a0c] rounded-[2rem] p-3 border border-[rgba(255,255,255,0.08)] shadow-2xl">
+      <div className="bg-bg-elevated rounded-[2rem] p-3 border border-border-hover shadow-2xl">
         {/* Notch */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-24 h-5 bg-[#0a0a0c] rounded-b-xl z-10" />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-24 h-5 bg-bg-elevated rounded-b-xl z-10" />
         {/* Screen */}
-        <div className="bg-[#101012] rounded-[1.5rem] overflow-hidden h-[340px] md:h-[380px] relative flex flex-col">
+        <div className="bg-bg-surface rounded-[1.5rem] overflow-hidden h-[340px] md:h-[380px] relative flex flex-col">
           {children}
         </div>
       </div>
@@ -77,7 +77,7 @@ function CreateStep() {
         Nouvelle Squad
       </motion.div>
       <motion.div
-        className="bg-[#1a1a1e] rounded-xl p-3 border border-[rgba(255,255,255,0.06)] mb-3"
+        className="bg-[#1a1a1e] rounded-xl p-3 border border-border-default mb-3"
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.3 }}
@@ -93,7 +93,7 @@ function CreateStep() {
         </motion.div>
       </motion.div>
       <motion.div
-        className="bg-[#1a1a1e] rounded-xl p-3 border border-[rgba(255,255,255,0.06)] mb-3"
+        className="bg-[#1a1a1e] rounded-xl p-3 border border-border-default mb-3"
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.8 }}
@@ -111,7 +111,7 @@ function CreateStep() {
         <div className="text-[10px] text-text-quaternary mb-1.5">Jeux populaires</div>
         <div className="flex flex-wrap gap-1.5">
           {['League of Legends', 'Fortnite', 'Apex'].map((game) => (
-            <span key={game} className="text-[10px] px-2 py-1 rounded-lg bg-[rgba(255,255,255,0.04)] text-text-tertiary border border-[rgba(255,255,255,0.06)]">
+            <span key={game} className="text-[10px] px-2 py-1 rounded-lg bg-border-subtle text-text-tertiary border border-border-default">
               {game}
             </span>
           ))}
@@ -151,7 +151,7 @@ function InviteStep() {
       {mockUsers.map((user, i) => (
         <motion.div
           key={user.name}
-          className="flex items-center gap-3 mb-2 p-1.5 rounded-lg bg-[rgba(255,255,255,0.03)]"
+          className="flex items-center gap-3 mb-2 p-1.5 rounded-lg bg-surface-card"
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.3 + i * 0.2 }}
@@ -161,7 +161,7 @@ function InviteStep() {
           </div>
           <div className="flex-1 text-sm text-text-primary">{user.name}</div>
           <motion.div
-            className="text-xs px-2 py-0.5 rounded-full bg-[#34d399]/15 text-[#4ADE80] font-medium"
+            className="text-xs px-2 py-0.5 rounded-full bg-success/15 text-[#4ADE80] font-medium"
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             transition={{ delay: 0.5 + i * 0.2, type: 'spring' }}
@@ -172,7 +172,7 @@ function InviteStep() {
       ))}
       {/* Share link */}
       <motion.div
-        className="mt-auto flex items-center gap-2 p-2.5 rounded-xl bg-[rgba(99,102,241,0.08)] border border-[rgba(99,102,241,0.15)]"
+        className="mt-auto flex items-center gap-2 p-2.5 rounded-xl bg-primary-10 border border-primary"
         initial={{ opacity: 0, y: 5 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 1.3 }}
@@ -227,7 +227,7 @@ function RSVPStep() {
             animate={{ scale: 1 }}
             transition={{ delay: 0.6 + i * 0.25, type: 'spring', stiffness: 400 }}
           >
-            <div className="w-5 h-5 rounded-full bg-[#34d399] flex items-center justify-center">
+            <div className="w-5 h-5 rounded-full bg-success flex items-center justify-center">
               <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5L4 7L8 3" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
             </div>
           </motion.div>
@@ -251,7 +251,7 @@ function PlayStep() {
   return (
     <div className="p-5 pt-8 h-full flex flex-col">
       <motion.div
-        className="text-xs text-[#34d399] font-medium mb-1"
+        className="text-xs text-success font-medium mb-1"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
       >
@@ -269,18 +269,18 @@ function PlayStep() {
       {mockUsers.slice(0, 4).map((user, i) => (
         <motion.div
           key={user.name}
-          className="flex items-center gap-2.5 mb-2 p-1.5 rounded-lg bg-[rgba(255,255,255,0.03)]"
+          className="flex items-center gap-2.5 mb-2 p-1.5 rounded-lg bg-surface-card"
           initial={{ opacity: 0, x: -10 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.2 + i * 0.1, type: 'spring' }}
         >
-          <div className="w-8 h-8 rounded-full flex items-center justify-center text-xs border-2 border-[#101012]"
+          <div className="w-8 h-8 rounded-full flex items-center justify-center text-xs border-2 border-bg-surface"
             style={{ backgroundColor: `${user.color}30` }}
           >
             {user.emoji}
           </div>
           <div className="flex-1">
-            <div className={`text-[11px] font-medium ${i === 0 ? 'text-[#34d399]' : 'text-text-primary'}`}>{user.name}</div>
+            <div className={`text-[11px] font-medium ${i === 0 ? 'text-success' : 'text-text-primary'}`}>{user.name}</div>
           </div>
           {/* Audio bars */}
           <div className="flex items-center gap-[2px]">

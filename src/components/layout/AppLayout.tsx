@@ -69,8 +69,8 @@ const NavLink = memo(function NavLink({ path, icon: Icon, label, isActive, badge
         className={`
           relative flex items-center ${collapsed ? 'justify-center px-2' : 'gap-3 px-4'} py-3 rounded-xl transition-interactive
           ${isActive
-            ? 'bg-[rgba(99,102,241,0.08)] text-[#6366f1]'
-            : 'text-[#8b8d90] hover:bg-[rgba(255,255,255,0.03)] hover:text-[#f7f8f8]'
+            ? 'bg-primary-10 text-primary'
+            : 'text-text-secondary hover:bg-surface-card hover:text-text-primary'
           }
         `}
         whileHover={{ x: collapsed ? 0 : 4 }}
@@ -97,7 +97,7 @@ const NavLink = memo(function NavLink({ path, icon: Icon, label, isActive, badge
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             transition={{ type: "spring", stiffness: 500, damping: 30 }}
-            className={`${collapsed ? 'absolute -top-1 -right-1' : 'absolute right-3'} w-5 h-5 rounded-full bg-[#fb7185] text-white text-xs font-bold flex items-center justify-center`}
+            className={`${collapsed ? 'absolute -top-1 -right-1' : 'absolute right-3'} w-5 h-5 rounded-full bg-error text-white text-xs font-bold flex items-center justify-center`}
           >
             {badge > 9 ? '9+' : badge}
           </motion.span>
@@ -135,7 +135,7 @@ const MobileNavLink = memo(function MobileNavLink({ path, icon: Icon, label, isA
     >
       <div className="relative">
         <Icon
-          className={`w-6 h-6 transition-colors ${isActive ? 'text-[#f7f8f8]' : 'text-[#6b6e73]'}`}
+          className={`w-6 h-6 transition-colors ${isActive ? 'text-text-primary' : 'text-text-tertiary'}`}
           strokeWidth={isActive ? 2 : 1.5}
           fill={isActive ? 'currentColor' : 'none'}
           aria-hidden="true"
@@ -145,14 +145,14 @@ const MobileNavLink = memo(function MobileNavLink({ path, icon: Icon, label, isA
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             transition={{ type: "spring", stiffness: 500, damping: 30 }}
-            className="absolute -top-1.5 -right-2 min-w-[18px] h-[18px] px-1 rounded-full bg-[#0070d1] text-white text-xs font-bold flex items-center justify-center"
+            className="absolute -top-1.5 -right-2 min-w-[18px] h-[18px] px-1 rounded-full bg-info text-white text-xs font-bold flex items-center justify-center"
             aria-label={`${badge} non lus`}
           >
             {badge > 99 ? '99+' : badge}
           </motion.span>
         )}
       </div>
-      <span className={`text-xs mt-1 transition-colors ${isActive ? 'text-[#f7f8f8]' : 'text-[#6b6e73]'}`}>
+      <span className={`text-xs mt-1 transition-colors ${isActive ? 'text-text-primary' : 'text-text-tertiary'}`}>
         {label}
       </span>
     </Link>
@@ -212,10 +212,10 @@ const PartyButton = memo(function PartyButton({ isActive, hasActiveParty }: { is
         <Mic
           className={`w-6 h-6 transition-colors duration-300 ${
             isActive
-              ? 'text-[#f7f8f8]'
+              ? 'text-text-primary'
               : hasActiveParty
-                ? 'text-[#34d399]'
-                : 'text-[#6b6e73]'
+                ? 'text-success'
+                : 'text-text-tertiary'
           }`}
           strokeWidth={isActive ? 2 : 1.5}
           fill={isActive ? 'currentColor' : 'none'}
@@ -223,7 +223,7 @@ const PartyButton = memo(function PartyButton({ isActive, hasActiveParty }: { is
         />
         {hasActiveParty && (
           <motion.div
-            className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-[#34d399]"
+            className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-success"
             animate={{ scale: [1, 1.3, 1] }}
             transition={{ duration: 2, repeat: 3 }}
             aria-hidden="true"
@@ -231,7 +231,7 @@ const PartyButton = memo(function PartyButton({ isActive, hasActiveParty }: { is
         )}
       </div>
       <span className={`text-xs mt-1 transition-colors duration-300 ${
-        isActive ? 'text-[#f7f8f8]' : hasActiveParty ? 'text-[#34d399]' : 'text-[#6b6e73]'
+        isActive ? 'text-text-primary' : hasActiveParty ? 'text-success' : 'text-text-tertiary'
       }`}>
         Party
       </span>
@@ -360,7 +360,7 @@ export function AppLayout({ children }: AppLayoutProps) {
   }
 
   return (
-    <div className="h-[100dvh] bg-[#050506] flex overflow-hidden">
+    <div className="h-[100dvh] bg-bg-base flex overflow-hidden">
       {/* Skip to main content link - PHASE 6.1 Accessibility */}
       <a href="#main-content" className="skip-link">
         Aller au contenu principal
@@ -369,7 +369,7 @@ export function AppLayout({ children }: AppLayoutProps) {
       {/* Sidebar - Desktop only - Collapsible */}
       <motion.aside
         aria-label="Navigation principale"
-        className="hidden lg:flex flex-col border-r border-[rgba(255,255,255,0.03)] bg-[#050506] fixed h-full z-40 overflow-hidden"
+        className="hidden lg:flex flex-col border-r border-surface-card bg-bg-base fixed h-full z-40 overflow-hidden"
         initial={false}
         animate={{ width: isExpanded ? 256 : 72 }}
         transition={{ duration: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
@@ -377,7 +377,7 @@ export function AppLayout({ children }: AppLayoutProps) {
         onMouseLeave={handleMouseLeave}
       >
         {/* Logo — pr-10 to account for the pin button */}
-        <div className={`${isExpanded ? 'pl-5 pr-10 py-5' : 'p-4'} border-b border-[rgba(255,255,255,0.03)]`}>
+        <div className={`${isExpanded ? 'pl-5 pr-10 py-5' : 'p-4'} border-b border-surface-card`}>
           <div className="flex items-center gap-2.5">
             <SquadPlannerLogo size={32} className="flex-shrink-0" />
             <AnimatePresence mode="wait">
@@ -389,8 +389,8 @@ export function AppLayout({ children }: AppLayoutProps) {
                   exit={{ opacity: 0 }}
                   transition={{ duration: 0.15 }}
                 >
-                  <div className="text-[15px] font-bold text-[#f7f8f8] whitespace-nowrap">Squad Planner</div>
-                  <div className="text-[11px] text-[#5e6063] whitespace-nowrap">Jouez ensemble, vraiment</div>
+                  <div className="text-[15px] font-bold text-text-primary whitespace-nowrap">Squad Planner</div>
+                  <div className="text-[11px] text-text-tertiary whitespace-nowrap">Jouez ensemble, vraiment</div>
                 </motion.div>
               )}
             </AnimatePresence>
@@ -413,8 +413,8 @@ export function AppLayout({ children }: AppLayoutProps) {
                   onClick={togglePinned}
                   className={`p-1.5 rounded-lg transition-colors ${
                     sidebarPinned
-                      ? 'bg-[rgba(99,102,241,0.15)] text-[#6366f1]'
-                      : 'text-[#5e6063] hover:bg-[rgba(255,255,255,0.05)] hover:text-[#8b8d90]'
+                      ? 'bg-primary-15 text-primary'
+                      : 'text-text-tertiary hover:bg-border-subtle hover:text-text-secondary'
                   }`}
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.9 }}
@@ -434,7 +434,7 @@ export function AppLayout({ children }: AppLayoutProps) {
               <motion.button
                 type="button"
                 onClick={() => openCreateSessionModal()}
-                className="flex items-center justify-center gap-2 w-10 h-10 mx-auto rounded-xl bg-[#6366f1] text-white text-[14px] font-semibold"
+                className="flex items-center justify-center gap-2 w-10 h-10 mx-auto rounded-xl bg-primary text-white text-[14px] font-semibold"
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 transition={{ duration: 0.25 }}
@@ -447,7 +447,7 @@ export function AppLayout({ children }: AppLayoutProps) {
             <motion.button
               type="button"
               onClick={() => openCreateSessionModal()}
-              className="flex items-center justify-center gap-2 w-full h-11 rounded-xl bg-[#6366f1] text-white text-[14px] font-semibold"
+              className="flex items-center justify-center gap-2 w-full h-11 rounded-xl bg-primary text-white text-[14px] font-semibold"
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               transition={{ duration: 0.25 }}
@@ -532,12 +532,12 @@ export function AppLayout({ children }: AppLayoutProps) {
         {/* Footer section - Profile and Premium */}
         <footer className="mt-auto">
           {/* Profile section */}
-          <div className={`${isExpanded ? 'p-4' : 'p-2'} border-t border-[rgba(255,255,255,0.03)]`}>
+          <div className={`${isExpanded ? 'p-4' : 'p-2'} border-t border-surface-card`}>
             {!isExpanded ? (
               <Tooltip content={profile?.username || 'Mon profil'} position="right" delay={300}>
                 <Link to="/profile" aria-label="Voir mon profil">
                   <motion.div
-                    className="flex items-center justify-center p-2 rounded-xl hover:bg-[rgba(255,255,255,0.03)] transition-colors duration-300"
+                    className="flex items-center justify-center p-2 rounded-xl hover:bg-surface-card transition-colors duration-300"
                     whileHover={{ x: 0 }}
                     transition={{ duration: 0.25 }}
                   >
@@ -549,8 +549,8 @@ export function AppLayout({ children }: AppLayoutProps) {
                         loading="lazy"
                       />
                     ) : (
-                      <div className="w-8 h-8 rounded-full bg-[rgba(167,139,250,0.08)] flex items-center justify-center flex-shrink-0">
-                        <User className="w-4 h-4 text-[#a78bfa]" />
+                      <div className="w-8 h-8 rounded-full bg-purple/8 flex items-center justify-center flex-shrink-0">
+                        <User className="w-4 h-4 text-purple" />
                       </div>
                     )}
                   </motion.div>
@@ -560,7 +560,7 @@ export function AppLayout({ children }: AppLayoutProps) {
               <>
                 <Link to="/profile" aria-label="Voir mon profil">
                   <motion.div
-                    className="flex items-center gap-3 p-3 rounded-xl hover:bg-[rgba(255,255,255,0.03)] transition-colors duration-300"
+                    className="flex items-center gap-3 p-3 rounded-xl hover:bg-surface-card transition-colors duration-300"
                     whileHover={{ x: 4 }}
                     transition={{ duration: 0.25 }}
                   >
@@ -572,8 +572,8 @@ export function AppLayout({ children }: AppLayoutProps) {
                         loading="lazy"
                       />
                     ) : (
-                      <div className="w-10 h-10 rounded-full bg-[rgba(167,139,250,0.08)] flex items-center justify-center flex-shrink-0">
-                        <User className="w-5 h-5 text-[#a78bfa]" />
+                      <div className="w-10 h-10 rounded-full bg-purple/8 flex items-center justify-center flex-shrink-0">
+                        <User className="w-5 h-5 text-purple" />
                       </div>
                     )}
                     <motion.div
@@ -583,10 +583,10 @@ export function AppLayout({ children }: AppLayoutProps) {
                       transition={{ duration: 0.15 }}
                       className="flex-1 min-w-0"
                     >
-                      <div className="text-[14px] font-medium text-[#f7f8f8] truncate">
+                      <div className="text-[14px] font-medium text-text-primary truncate">
                         {profile?.username || 'Mon profil'}
                       </div>
-                      <div className="text-[12px] text-[#5e6063]">
+                      <div className="text-[12px] text-text-tertiary">
                         {profile?.reliability_score || 100}% fiable
                       </div>
                     </motion.div>
@@ -613,18 +613,18 @@ export function AppLayout({ children }: AppLayoutProps) {
               >
                 <Link to="/premium" aria-label="Passer Premium - Stats avancées, IA coach, qualité audio HD">
                   <motion.div
-                    className="p-4 rounded-xl bg-gradient-to-br from-[rgba(99,102,241,0.08)] to-[rgba(167,139,250,0.03)] border border-[rgba(99,102,241,0.1)] cursor-pointer"
+                    className="p-4 rounded-xl bg-gradient-to-br from-primary-10 to-purple/3 border border-primary/10 cursor-pointer"
                     whileHover={{ scale: 1.02 }}
                     transition={{ duration: 0.25 }}
                   >
                     <div className="flex items-center gap-2 mb-2">
-                      <Zap className="w-4 h-4 text-[#fbbf24]" />
-                      <span className="text-[13px] font-semibold text-[#f7f8f8]">Passe Premium</span>
+                      <Zap className="w-4 h-4 text-warning" />
+                      <span className="text-[13px] font-semibold text-text-primary">Passe Premium</span>
                     </div>
-                    <p className="text-[12px] text-[#8b8d90] mb-3">
+                    <p className="text-[12px] text-text-secondary mb-3">
                       Stats avancées, IA coach, qualité audio HD
                     </p>
-                    <span className="text-[12px] font-semibold text-[#6366f1] hover:text-[#a78bfa] transition-colors duration-300">
+                    <span className="text-[12px] font-semibold text-primary hover:text-purple transition-colors duration-300">
                       Découvrir →
                     </span>
                   </motion.div>
@@ -639,11 +639,11 @@ export function AppLayout({ children }: AppLayoutProps) {
               <Tooltip content="Passer Premium" position="right" delay={300}>
                 <Link to="/premium" aria-label="Passer Premium">
                   <motion.div
-                    className="flex items-center justify-center p-2 rounded-xl hover:bg-[rgba(255,255,255,0.03)] transition-colors"
+                    className="flex items-center justify-center p-2 rounded-xl hover:bg-surface-card transition-colors"
                     whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.9 }}
                   >
-                    <Zap className="w-5 h-5 text-[#fbbf24]" />
+                    <Zap className="w-5 h-5 text-warning" />
                   </motion.div>
                 </Link>
               </Tooltip>
@@ -670,7 +670,7 @@ export function AppLayout({ children }: AppLayoutProps) {
       {/* Bottom navigation - Mobile only */}
       <nav
         aria-label="Navigation mobile"
-        className={`lg:hidden fixed bottom-0 left-0 right-0 bg-[#050506] border-t border-[rgba(255,255,255,0.03)] z-50 transition-transform duration-200 ${isKeyboardVisible ? 'translate-y-full' : 'translate-y-0'}`}
+        className={`lg:hidden fixed bottom-0 left-0 right-0 bg-bg-base border-t border-surface-card z-50 transition-transform duration-200 ${isKeyboardVisible ? 'translate-y-full' : 'translate-y-0'}`}
       >
         <div className="flex items-center justify-around py-2 mobile-nav-padding">
           {mobileNavLeft.map((item) => (

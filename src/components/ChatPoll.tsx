@@ -73,12 +73,12 @@ export const ChatPoll = memo(function ChatPoll({ pollData, messageId, onVote, is
   return (
     <div className={`w-full max-w-[320px] rounded-xl overflow-hidden ${
       isOwn
-        ? 'bg-[rgba(255,255,255,0.1)]'
-        : 'bg-[rgba(99,102,241,0.08)] border border-[rgba(99,102,241,0.15)]'
+        ? 'bg-border-hover'
+        : 'bg-primary-10 border border-primary'
     }`}>
       {/* Header */}
       <div className="px-4 pt-3 pb-2 flex items-center gap-2">
-        <BarChart3 className={`w-4 h-4 ${isOwn ? 'text-white/70' : 'text-[#818cf8]'}`} />
+        <BarChart3 className={`w-4 h-4 ${isOwn ? 'text-white/70' : 'text-primary-hover'}`} />
         <span className={`text-[13px] font-semibold ${isOwn ? 'text-white' : 'text-text-primary'}`}>
           Sondage
         </span>
@@ -109,7 +109,7 @@ export const ChatPoll = memo(function ChatPoll({ pollData, messageId, onVote, is
               className={`w-full relative rounded-lg overflow-hidden transition-colors ${
                 hasVoted
                   ? 'cursor-default'
-                  : 'hover:bg-[rgba(255,255,255,0.05)] cursor-pointer'
+                  : 'hover:bg-border-subtle cursor-pointer'
               }`}
             >
               {/* Background bar */}
@@ -120,8 +120,8 @@ export const ChatPoll = memo(function ChatPoll({ pollData, messageId, onVote, is
                   transition={{ duration: 0.5, ease: 'easeOut' }}
                   className={`absolute inset-0 rounded-lg ${
                     isMyVote
-                      ? 'bg-[rgba(99,102,241,0.2)]'
-                      : 'bg-[rgba(255,255,255,0.04)]'
+                      ? 'bg-primary-20'
+                      : 'bg-border-subtle'
                   }`}
                 />
               )}
@@ -129,12 +129,12 @@ export const ChatPoll = memo(function ChatPoll({ pollData, messageId, onVote, is
               <div className="relative flex items-center justify-between px-3 py-2.5">
                 <div className="flex items-center gap-2">
                   {isMyVote && (
-                    <Check className="w-3.5 h-3.5 text-[#818cf8]" />
+                    <Check className="w-3.5 h-3.5 text-primary-hover" />
                   )}
                   <span className={`text-[13px] ${
                     isOwn
                       ? 'text-white/90'
-                      : isMyVote ? 'text-[#818cf8] font-medium' : 'text-text-secondary'
+                      : isMyVote ? 'text-primary-hover font-medium' : 'text-text-secondary'
                   }`}>
                     {option}
                   </span>
@@ -157,7 +157,7 @@ export const ChatPoll = memo(function ChatPoll({ pollData, messageId, onVote, is
 
       {/* Footer */}
       <div className={`px-4 py-2 border-t flex items-center gap-1.5 ${
-        isOwn ? 'border-white/10' : 'border-[rgba(255,255,255,0.06)]'
+        isOwn ? 'border-white/10' : 'border-border-default'
       }`}>
         <Users className={`w-3 h-3 ${isOwn ? 'text-white/40' : 'text-text-quaternary'}`} />
         <span className={`text-[11px] ${isOwn ? 'text-white/40' : 'text-text-quaternary'}`}>

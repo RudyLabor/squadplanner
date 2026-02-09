@@ -28,7 +28,7 @@ function CelebrationToast({ message, isVisible, onClose }: { message: string; is
           exit={{ opacity: 0, y: -20, scale: 0.9 }}
           className="fixed top-4 left-1/2 -translate-x-1/2 z-50"
         >
-          <div className="flex items-center gap-2 px-5 py-3 rounded-xl bg-[#34d399] text-[#050506] font-medium shadow-md">
+          <div className="flex items-center gap-2 px-5 py-3 rounded-xl bg-success text-bg-base font-medium shadow-md">
             <Sparkles className="w-5 h-5" />
             <span>{message}</span>
           </div>
@@ -156,17 +156,17 @@ export default function SessionDetail() {
 
   if (!isInitialized) {
     return (
-      <div className="min-h-0 bg-[#050506] flex items-center justify-center py-12">
-        <Loader2 className="w-8 h-8 text-[#6366f1] animate-spin" />
+      <div className="min-h-0 bg-bg-base flex items-center justify-center py-12">
+        <Loader2 className="w-8 h-8 text-primary animate-spin" />
       </div>
     )
   }
 
   if (!currentSession) {
     return (
-      <div className="min-h-0 bg-[#050506] flex items-center justify-center flex-col gap-4 py-12">
-        <AlertCircle className="w-8 h-8 text-[#5e6063]" />
-        <p className="text-[#8b8d90]">Session non trouvée</p>
+      <div className="min-h-0 bg-bg-base flex items-center justify-center flex-col gap-4 py-12">
+        <AlertCircle className="w-8 h-8 text-text-tertiary" />
+        <p className="text-text-secondary">Session non trouvée</p>
         <Button variant="secondary" onClick={() => navigate('/home')}>
           Retour à l'accueil
         </Button>
@@ -179,7 +179,7 @@ export default function SessionDetail() {
   const isCreator = currentSession.created_by === user?.id
 
   return (
-    <div className="min-h-0 bg-[#050506] pb-6">
+    <div className="min-h-0 bg-bg-base pb-6">
       {/* Confetti celebration */}
       {showConfetti && typeof window !== 'undefined' && (
         <Confetti
@@ -206,13 +206,13 @@ export default function SessionDetail() {
           <div className="flex items-center gap-4 mb-8">
             <Link
               to={`/squad/${currentSession.squad_id}`}
-              className="p-2.5 min-w-[44px] min-h-[44px] rounded-lg hover:bg-[rgba(255,255,255,0.05)] transition-colors flex items-center justify-center touch-target"
+              className="p-2.5 min-w-[44px] min-h-[44px] rounded-lg hover:bg-border-subtle transition-colors flex items-center justify-center touch-target"
               aria-label="Retour à la squad"
             >
-              <ArrowLeft className="w-5 h-5 text-[#8b8d90]" />
+              <ArrowLeft className="w-5 h-5 text-text-secondary" />
             </Link>
             <div className="flex-1">
-              <h1 className="text-2xl font-bold text-[#f7f8f8]">
+              <h1 className="text-2xl font-bold text-text-primary">
                 {currentSession.title || currentSession.game || 'Session'}
               </h1>
               {statusInfo && (
@@ -228,23 +228,23 @@ export default function SessionDetail() {
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-4 mb-8">
             <Card className="p-4">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-lg bg-[rgba(251,191,36,0.075)] flex items-center justify-center">
-                  <Calendar className="w-5 h-5 text-[#fbbf24]" />
+                <div className="w-10 h-10 rounded-lg bg-warning/[0.075] flex items-center justify-center">
+                  <Calendar className="w-5 h-5 text-warning" />
                 </div>
                 <div>
-                  <div className="text-[15px] font-medium text-[#f7f8f8] capitalize">{dateInfo.day}</div>
-                  <div className="text-[13px] text-[#8b8d90]">{dateInfo.time}</div>
+                  <div className="text-[15px] font-medium text-text-primary capitalize">{dateInfo.day}</div>
+                  <div className="text-[13px] text-text-secondary">{dateInfo.time}</div>
                 </div>
               </div>
             </Card>
             <Card className="p-4">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-lg bg-[rgba(96,165,250,0.15)] flex items-center justify-center">
-                  <Clock className="w-5 h-5 text-[#60a5fa]" />
+                <div className="w-10 h-10 rounded-lg bg-info/15 flex items-center justify-center">
+                  <Clock className="w-5 h-5 text-info" />
                 </div>
                 <div>
-                  <div className="text-[15px] font-medium text-[#f7f8f8]">{currentSession.duration_minutes} min</div>
-                  <div className="text-[13px] text-[#8b8d90]">Durée</div>
+                  <div className="text-[15px] font-medium text-text-primary">{currentSession.duration_minutes} min</div>
+                  <div className="text-[13px] text-text-secondary">Durée</div>
                 </div>
               </div>
             </Card>
@@ -252,24 +252,24 @@ export default function SessionDetail() {
 
           {/* RSVP Counts */}
           <div className="mb-8">
-            <h2 className="text-xs font-medium text-[rgba(255,255,255,0.35)] uppercase tracking-[0.05em] mb-4">
+            <h2 className="text-xs font-medium text-text-tertiary/35 uppercase tracking-[0.05em] mb-4">
               Réponses
             </h2>
             <div className="grid grid-cols-3 gap-3 lg:gap-4">
               <Card className="p-4 lg:p-5 text-center">
-                <Check className="w-5 h-5 mx-auto mb-2 text-[#34d399]" />
-                <div className="text-xl lg:text-2xl font-bold text-[#f7f8f8]">{currentSession.rsvp_counts?.present || 0}</div>
-                <div className="text-[12px] text-[#5e6063]">Présents</div>
+                <Check className="w-5 h-5 mx-auto mb-2 text-success" />
+                <div className="text-xl lg:text-2xl font-bold text-text-primary">{currentSession.rsvp_counts?.present || 0}</div>
+                <div className="text-[12px] text-text-tertiary">Présents</div>
               </Card>
               <Card className="p-4 lg:p-5 text-center">
-                <HelpCircle className="w-5 h-5 mx-auto mb-2 text-[#fbbf24]" />
-                <div className="text-xl lg:text-2xl font-bold text-[#f7f8f8]">{currentSession.rsvp_counts?.maybe || 0}</div>
-                <div className="text-[12px] text-[#5e6063]">Peut-être</div>
+                <HelpCircle className="w-5 h-5 mx-auto mb-2 text-warning" />
+                <div className="text-xl lg:text-2xl font-bold text-text-primary">{currentSession.rsvp_counts?.maybe || 0}</div>
+                <div className="text-[12px] text-text-tertiary">Peut-être</div>
               </Card>
               <Card className="p-4 lg:p-5 text-center">
-                <X className="w-5 h-5 mx-auto mb-2 text-[#fb7185]" />
-                <div className="text-xl lg:text-2xl font-bold text-[#f7f8f8]">{currentSession.rsvp_counts?.absent || 0}</div>
-                <div className="text-[12px] text-[#5e6063]">Absents</div>
+                <X className="w-5 h-5 mx-auto mb-2 text-error" />
+                <div className="text-xl lg:text-2xl font-bold text-text-primary">{currentSession.rsvp_counts?.absent || 0}</div>
+                <div className="text-[12px] text-text-tertiary">Absents</div>
               </Card>
             </div>
           </div>
@@ -277,7 +277,7 @@ export default function SessionDetail() {
           {/* My RSVP */}
           {currentSession.status !== 'cancelled' && currentSession.status !== 'completed' && (
             <div className="mb-8">
-              <h2 className="text-xs font-medium text-[rgba(255,255,255,0.35)] uppercase tracking-[0.05em] mb-4">
+              <h2 className="text-xs font-medium text-text-tertiary/35 uppercase tracking-[0.05em] mb-4">
                 Ta réponse
               </h2>
               <Card>
@@ -286,7 +286,7 @@ export default function SessionDetail() {
                     <motion.div className="flex-1" whileTap={{ scale: 0.97 }}>
                       <Button
                         variant={currentSession.my_rsvp === 'present' ? 'primary' : 'secondary'}
-                        className={`w-full ${currentSession.my_rsvp === 'present' ? 'shadow-[0_0_10px_rgba(52,211,153,0.2)] ring-2 ring-[#34d399]/15' : ''}`}
+                        className={`w-full ${currentSession.my_rsvp === 'present' ? 'shadow-glow-success ring-2 ring-success/15' : ''}`}
                         onClick={() => handleRsvp('present')}
                         disabled={rsvpLoading !== null}
                       >
@@ -301,7 +301,7 @@ export default function SessionDetail() {
                     <motion.div className="flex-1" whileTap={{ scale: 0.97 }}>
                       <Button
                         variant={currentSession.my_rsvp === 'maybe' ? 'primary' : 'secondary'}
-                        className={`w-full ${currentSession.my_rsvp === 'maybe' ? 'shadow-[0_0_10px_rgba(251,191,36,0.2)] ring-2 ring-[#fbbf24]/15' : ''}`}
+                        className={`w-full ${currentSession.my_rsvp === 'maybe' ? 'shadow-glow-warning ring-2 ring-warning/15' : ''}`}
                         onClick={() => handleRsvp('maybe')}
                         disabled={rsvpLoading !== null}
                       >
@@ -337,10 +337,10 @@ export default function SessionDetail() {
           {/* Check-in */}
           {isSessionTime() && currentSession.my_rsvp === 'present' && !hasCheckedIn() && (
             <div className="mb-8">
-              <Card className="p-6 text-center bg-gradient-to-b from-[rgba(52,211,153,0.075)] to-transparent border-[rgba(52,211,153,0.15)] relative overflow-hidden">
+              <Card className="p-6 text-center bg-gradient-to-b from-success/[0.075] to-transparent border-success/15 relative overflow-hidden">
                 {/* Pulsing background effect */}
                 <motion.div
-                  className="absolute inset-0 bg-[#34d399]/2.5"
+                  className="absolute inset-0 bg-success/[0.025]"
                   animate={{ opacity: [0.3, 0.5, 0.3] }}
                   transition={{ duration: 2, repeat: 3 }}
                 />
@@ -349,15 +349,15 @@ export default function SessionDetail() {
                     animate={{ scale: [1, 1.05, 1] }}
                     transition={{ duration: 1.5, repeat: 3 }}
                   >
-                    <Gamepad2 className="w-14 h-14 mx-auto mb-4 text-[#34d399]" />
+                    <Gamepad2 className="w-14 h-14 mx-auto mb-4 text-success" />
                   </motion.div>
-                  <h3 className="text-xl font-bold text-[#f7f8f8] mb-2">🎮 C'est l'heure du game !</h3>
-                  <p className="text-[#8b8d90] mb-5">Ta squad t'attend. Confirme que t'es là !</p>
+                  <h3 className="text-xl font-bold text-text-primary mb-2">🎮 C'est l'heure du game !</h3>
+                  <p className="text-text-secondary mb-5">Ta squad t'attend. Confirme que t'es là !</p>
                   <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
                     <Button
                       onClick={handleCheckin}
                       disabled={checkinLoading}
-                      className="h-12 px-8 bg-[#34d399] hover:bg-[#34d399] text-[#050506] font-semibold shadow-[0_0_12px_rgba(52,211,153,0.2)]"
+                      className="h-12 px-8 bg-success hover:bg-success text-bg-base font-semibold shadow-glow-success"
                     >
                       {checkinLoading ? (
                         <Loader2 className="w-5 h-5 animate-spin" />
@@ -374,9 +374,9 @@ export default function SessionDetail() {
 
           {hasCheckedIn() && (
             <div className="mb-8">
-              <Card className="p-4 text-center bg-[rgba(52,211,153,0.05)] border-[rgba(52,211,153,0.1)]">
-                <CheckCircle2 className="w-8 h-8 mx-auto mb-2 text-[#34d399]" />
-                <p className="text-[#34d399] font-medium">Check-in confirmé !</p>
+              <Card className="p-4 text-center bg-success-10 border-success/10">
+                <CheckCircle2 className="w-8 h-8 mx-auto mb-2 text-success" />
+                <p className="text-success font-medium">Check-in confirmé !</p>
               </Card>
             </div>
           )}
@@ -384,7 +384,7 @@ export default function SessionDetail() {
           {/* Voice Chat */}
           {currentSession.status === 'confirmed' && id && (
             <div className="mb-8">
-              <h2 className="text-xs font-medium text-[rgba(255,255,255,0.35)] uppercase tracking-[0.05em] mb-4">
+              <h2 className="text-xs font-medium text-text-tertiary/35 uppercase tracking-[0.05em] mb-4">
                 Chat Vocal
               </h2>
               <VoiceChat
@@ -396,7 +396,7 @@ export default function SessionDetail() {
 
           {/* Participants */}
           <div className="mb-8">
-            <h2 className="text-xs font-medium text-[rgba(255,255,255,0.35)] uppercase tracking-[0.05em] mb-4">
+            <h2 className="text-xs font-medium text-text-tertiary/35 uppercase tracking-[0.05em] mb-4">
               Participants
             </h2>
             <Card>
@@ -405,11 +405,11 @@ export default function SessionDetail() {
                   const hasCheckedin = currentSession.checkins?.some(c => c.user_id === rsvp.user_id)
                   return (
                     <div key={rsvp.user_id} className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full bg-[rgba(167,139,250,0.075)] flex items-center justify-center">
-                        <Users className="w-5 h-5 text-[#a78bfa]" />
+                      <div className="w-10 h-10 rounded-full bg-purple/[0.075] flex items-center justify-center">
+                        <Users className="w-5 h-5 text-purple" />
                       </div>
                       <div className="flex-1">
-                        <span className="text-[15px] text-[#f7f8f8]">
+                        <span className="text-[15px] text-text-primary">
                           {(rsvp as { profiles?: { username?: string } }).profiles?.username || 'Joueur'}
                         </span>
                       </div>
@@ -431,7 +431,7 @@ export default function SessionDetail() {
                   )
                 })}
                 {(!currentSession.rsvps || currentSession.rsvps.length === 0) && (
-                  <p className="text-center text-[#8b8d90] py-4">Aucune réponse pour l'instant</p>
+                  <p className="text-center text-text-secondary py-4">Aucune réponse pour l'instant</p>
                 )}
               </CardContent>
             </Card>

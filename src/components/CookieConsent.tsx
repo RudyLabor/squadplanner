@@ -39,32 +39,32 @@ export function CookieConsent() {
           transition={{ type: 'spring', stiffness: 300, damping: 30 }}
           className="fixed bottom-4 left-4 right-4 md:left-auto md:right-6 md:bottom-6 md:max-w-md z-[60]"
         >
-          <div className="bg-[#101012] border border-[rgba(255,255,255,0.08)] rounded-2xl shadow-2xl shadow-black/40 overflow-hidden">
+          <div className="bg-bg-surface border border-border-hover rounded-2xl shadow-2xl shadow-black/40 overflow-hidden">
             {/* Header */}
             <div className="p-5 pb-0">
               <div className="flex items-start justify-between gap-3">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-[rgba(99,102,241,0.08)] flex items-center justify-center shrink-0">
-                    <Cookie className="w-5 h-5 text-[#6366f1]" />
+                  <div className="w-10 h-10 rounded-xl bg-primary-10 flex items-center justify-center shrink-0">
+                    <Cookie className="w-5 h-5 text-primary" />
                   </div>
                   <div>
-                    <h3 className="text-[15px] font-semibold text-[#f7f8f8]">Cookies & confidentialité</h3>
-                    <p className="text-[12px] text-[#5e6063] mt-0.5">Tes données, ton choix</p>
+                    <h3 className="text-[15px] font-semibold text-text-primary">Cookies & confidentialité</h3>
+                    <p className="text-[12px] text-text-tertiary mt-0.5">Tes données, ton choix</p>
                   </div>
                 </div>
                 <button
                   onClick={handleEssentialOnly}
-                  className="p-1.5 rounded-lg hover:bg-[rgba(255,255,255,0.05)] transition-colors"
+                  className="p-1.5 rounded-lg hover:bg-border-subtle transition-colors"
                   aria-label="Fermer"
                 >
-                  <X className="w-4 h-4 text-[#5e6063]" />
+                  <X className="w-4 h-4 text-text-tertiary" />
                 </button>
               </div>
             </div>
 
             {/* Content */}
             <div className="p-5">
-              <p className="text-[13px] text-[#8b8d90] leading-relaxed mb-4">
+              <p className="text-[13px] text-text-secondary leading-relaxed mb-4">
                 Squad Planner utilise des cookies essentiels pour fonctionner et des cookies analytics
                 pour améliorer ton expérience. Aucun cookie publicitaire.
               </p>
@@ -79,25 +79,25 @@ export function CookieConsent() {
                     className="overflow-hidden mb-4"
                   >
                     <div className="space-y-3 pb-2">
-                      <div className="flex items-start gap-3 p-3 rounded-xl bg-[rgba(255,255,255,0.02)] border border-[rgba(255,255,255,0.04)]">
-                        <div className="w-2 h-2 rounded-full bg-[#34d399] mt-1.5 shrink-0" />
+                      <div className="flex items-start gap-3 p-3 rounded-xl bg-surface-card border border-border-subtle">
+                        <div className="w-2 h-2 rounded-full bg-success mt-1.5 shrink-0" />
                         <div>
-                          <p className="text-[13px] font-medium text-[#f7f8f8]">Essentiels</p>
-                          <p className="text-[12px] text-[#5e6063]">Authentification, thème, état de l'app. Toujours actifs.</p>
+                          <p className="text-[13px] font-medium text-text-primary">Essentiels</p>
+                          <p className="text-[12px] text-text-tertiary">Authentification, thème, état de l'app. Toujours actifs.</p>
                         </div>
                       </div>
-                      <div className="flex items-start gap-3 p-3 rounded-xl bg-[rgba(255,255,255,0.02)] border border-[rgba(255,255,255,0.04)]">
-                        <div className="w-2 h-2 rounded-full bg-[#6366f1] mt-1.5 shrink-0" />
+                      <div className="flex items-start gap-3 p-3 rounded-xl bg-surface-card border border-border-subtle">
+                        <div className="w-2 h-2 rounded-full bg-primary mt-1.5 shrink-0" />
                         <div>
-                          <p className="text-[13px] font-medium text-[#f7f8f8]">Analytics</p>
-                          <p className="text-[12px] text-[#5e6063]">Sentry pour le monitoring d'erreurs. Données anonymisées.</p>
+                          <p className="text-[13px] font-medium text-text-primary">Analytics</p>
+                          <p className="text-[12px] text-text-tertiary">Sentry pour le monitoring d'erreurs. Données anonymisées.</p>
                         </div>
                       </div>
-                      <div className="flex items-start gap-3 p-3 rounded-xl bg-[rgba(255,255,255,0.02)] border border-[rgba(255,255,255,0.04)]">
-                        <div className="w-2 h-2 rounded-full bg-[#5e6063] mt-1.5 shrink-0" />
+                      <div className="flex items-start gap-3 p-3 rounded-xl bg-surface-card border border-border-subtle">
+                        <div className="w-2 h-2 rounded-full bg-text-tertiary mt-1.5 shrink-0" />
                         <div>
-                          <p className="text-[13px] font-medium text-[#f7f8f8]">Publicitaires</p>
-                          <p className="text-[12px] text-[#5e6063]">Aucun. On ne vend pas tes données.</p>
+                          <p className="text-[13px] font-medium text-text-primary">Publicitaires</p>
+                          <p className="text-[12px] text-text-tertiary">Aucun. On ne vend pas tes données.</p>
                         </div>
                       </div>
                     </div>
@@ -109,29 +109,29 @@ export function CookieConsent() {
               <div className="flex gap-3">
                 <button
                   onClick={handleEssentialOnly}
-                  className="flex-1 h-11 rounded-xl bg-[rgba(255,255,255,0.05)] text-[14px] text-[#8b8d90] font-medium hover:bg-[rgba(255,255,255,0.1)] transition-colors"
+                  className="flex-1 h-11 rounded-xl bg-border-subtle text-[14px] text-text-secondary font-medium hover:bg-border-hover transition-colors"
                 >
                   Essentiels uniquement
                 </button>
                 <button
                   onClick={handleAcceptAll}
-                  className="flex-1 h-11 rounded-xl bg-[#6366f1] text-[14px] text-white font-semibold hover:bg-[#4f46e5] transition-colors"
+                  className="flex-1 h-11 rounded-xl bg-primary text-[14px] text-white font-semibold hover:bg-primary-hover transition-colors"
                 >
                   Tout accepter
                 </button>
               </div>
 
               {/* Footer links */}
-              <div className="flex items-center justify-between mt-4 pt-3 border-t border-[rgba(255,255,255,0.05)]">
+              <div className="flex items-center justify-between mt-4 pt-3 border-t border-border-subtle">
                 <button
                   onClick={() => setShowDetails(!showDetails)}
-                  className="text-[12px] text-[#5e6063] hover:text-[#8b8d90] transition-colors"
+                  className="text-[12px] text-text-tertiary hover:text-text-secondary transition-colors"
                 >
                   {showDetails ? 'Masquer les détails' : 'Voir les détails'}
                 </button>
                 <Link
                   to="/legal?tab=privacy"
-                  className="flex items-center gap-1 text-[12px] text-[#6366f1] hover:text-[#a78bfa] transition-colors"
+                  className="flex items-center gap-1 text-[12px] text-primary hover:text-purple transition-colors"
                 >
                   <Shield className="w-3 h-3" />
                   Politique de confidentialité

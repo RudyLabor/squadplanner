@@ -191,7 +191,7 @@ export function SeasonalBadges({ userId, compact = false, initialBadges }: Seaso
           {[1, 2, 3].map(i => (
             <div
               key={i}
-              className="w-12 h-12 rounded-xl bg-[rgba(255,255,255,0.03)] animate-pulse"
+              className="w-12 h-12 rounded-xl bg-surface-card animate-pulse"
             />
           ))}
         </div>
@@ -203,11 +203,11 @@ export function SeasonalBadges({ userId, compact = false, initialBadges }: Seaso
     return (
       <div className={`${compact ? 'p-3' : 'p-4'} text-center`}>
         <div className="flex justify-center mb-3">
-          <div className="w-12 h-12 rounded-xl bg-[rgba(255,255,255,0.03)] flex items-center justify-center">
+          <div className="w-12 h-12 rounded-xl bg-surface-card flex items-center justify-center">
             <Trophy className="w-6 h-6 text-[#3a3a3f]" />
           </div>
         </div>
-        <p className="text-[#5e6063] text-sm">Pas encore de badges saisonniers</p>
+        <p className="text-text-tertiary text-sm">Pas encore de badges saisonniers</p>
         <p className="text-[#3a3a3f] text-xs mt-1">Continue à jouer pour en débloquer !</p>
       </div>
     )
@@ -250,7 +250,7 @@ export function SeasonalBadges({ userId, compact = false, initialBadges }: Seaso
             )
           })}
           {badges.length > 6 && (
-            <div className="w-10 h-10 rounded-lg bg-[rgba(255,255,255,0.03)] flex items-center justify-center text-[#5e6063] text-sm font-medium">
+            <div className="w-10 h-10 rounded-lg bg-surface-card flex items-center justify-center text-text-tertiary text-sm font-medium">
               +{badges.length - 6}
             </div>
           )}
@@ -260,7 +260,7 @@ export function SeasonalBadges({ userId, compact = false, initialBadges }: Seaso
         <div className="space-y-4">
           {Object.entries(badgesBySeason).map(([season, seasonBadges]) => (
             <div key={season}>
-              <h4 className="text-[12px] font-semibold text-[#8b8d90] uppercase tracking-wider mb-2">
+              <h4 className="text-[12px] font-semibold text-text-secondary uppercase tracking-wider mb-2">
                 {formatSeason(season)}
               </h4>
               <div className="flex flex-wrap gap-3">
@@ -285,7 +285,7 @@ export function SeasonalBadges({ userId, compact = false, initialBadges }: Seaso
                         <Icon className="w-7 h-7" style={{ color: config.color }} />
                       </div>
                       <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
-                        <div className="px-2 py-1 rounded-lg bg-[#1a1a1e] border border-[rgba(255,255,255,0.08)] text-[10px] text-[#f7f8f8] whitespace-nowrap">
+                        <div className="px-2 py-1 rounded-lg bg-bg-hover border border-border-hover text-[10px] text-text-primary whitespace-nowrap">
                           {config.label}
                         </div>
                       </div>
@@ -320,7 +320,7 @@ export function SeasonalBadges({ userId, compact = false, initialBadges }: Seaso
                 const config = BADGE_CONFIGS[selectedBadge.badge_type] || BADGE_CONFIGS.mvp
                 const Icon = config.icon
                 return (
-                  <div className="bg-[#0a0a0b] border border-[rgba(255,255,255,0.08)] rounded-2xl p-6 text-center">
+                  <div className="bg-bg-elevated border border-border-hover rounded-2xl p-6 text-center">
                     {/* Badge icon with glow */}
                     <motion.div
                       className="w-24 h-24 mx-auto rounded-2xl flex items-center justify-center mb-4"
@@ -341,32 +341,32 @@ export function SeasonalBadges({ userId, compact = false, initialBadges }: Seaso
                     </motion.div>
 
                     {/* Badge info */}
-                    <h3 className="text-xl font-bold text-[#f7f8f8] mb-1">
+                    <h3 className="text-xl font-bold text-text-primary mb-1">
                       {config.label}
                     </h3>
-                    <p className="text-[#8b8d90] text-sm mb-4">
+                    <p className="text-text-secondary text-sm mb-4">
                       {config.description}
                     </p>
 
                     {/* Season and squad info */}
                     <div className="space-y-2 text-sm">
-                      <div className="flex justify-between items-center py-2 border-t border-[rgba(255,255,255,0.05)]">
-                        <span className="text-[#5e6063]">Saison</span>
-                        <span className="text-[#f7f8f8] font-medium">
+                      <div className="flex justify-between items-center py-2 border-t border-border-subtle">
+                        <span className="text-text-tertiary">Saison</span>
+                        <span className="text-text-primary font-medium">
                           {formatSeason(selectedBadge.season)}
                         </span>
                       </div>
                       {selectedBadge.squad_name && (
-                        <div className="flex justify-between items-center py-2 border-t border-[rgba(255,255,255,0.05)]">
-                          <span className="text-[#5e6063]">Squad</span>
-                          <span className="text-[#f7f8f8] font-medium">
+                        <div className="flex justify-between items-center py-2 border-t border-border-subtle">
+                          <span className="text-text-tertiary">Squad</span>
+                          <span className="text-text-primary font-medium">
                             {selectedBadge.squad_name}
                           </span>
                         </div>
                       )}
-                      <div className="flex justify-between items-center py-2 border-t border-[rgba(255,255,255,0.05)]">
-                        <span className="text-[#5e6063]">Obtenu le</span>
-                        <span className="text-[#f7f8f8] font-medium">
+                      <div className="flex justify-between items-center py-2 border-t border-border-subtle">
+                        <span className="text-text-tertiary">Obtenu le</span>
+                        <span className="text-text-primary font-medium">
                           {new Date(selectedBadge.awarded_at).toLocaleDateString('fr-FR', {
                             day: 'numeric',
                             month: 'long',
@@ -379,7 +379,7 @@ export function SeasonalBadges({ userId, compact = false, initialBadges }: Seaso
                     {/* Close button */}
                     <motion.button
                       onClick={() => setSelectedBadge(null)}
-                      className="mt-6 w-full py-3 rounded-xl bg-[rgba(255,255,255,0.05)] text-[#f7f8f8] font-medium hover:bg-[rgba(255,255,255,0.08)] transition-colors"
+                      className="mt-6 w-full py-3 rounded-xl bg-border-subtle text-text-primary font-medium hover:bg-overlay-light transition-colors"
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
                     >

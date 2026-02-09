@@ -158,7 +158,7 @@ export const MentionInput = memo(function MentionInput({
         onKeyDown={handleKeyDown}
         placeholder={placeholder}
         disabled={disabled}
-        className="w-full h-12 px-4 bg-bg-surface border border-border-default rounded-xl text-[14px] text-text-primary placeholder:text-text-quaternary focus:outline-none focus:border-[rgba(99,102,241,0.5)] transition-colors"
+        className="w-full h-12 px-4 bg-bg-surface border border-border-default rounded-xl text-[14px] text-text-primary placeholder:text-text-quaternary focus:outline-none focus:border-primary transition-colors"
         autoComplete="off"
         autoCapitalize="off"
         autoCorrect="off"
@@ -176,7 +176,7 @@ export const MentionInput = memo(function MentionInput({
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 8 }}
             transition={{ type: 'spring', stiffness: 500, damping: 30 }}
-            className="absolute bottom-full mb-2 left-0 right-0 max-h-[240px] overflow-y-auto bg-[#1a1a2e] border border-[rgba(255,255,255,0.1)] rounded-xl shadow-2xl shadow-black/50 py-1.5 z-50"
+            className="absolute bottom-full mb-2 left-0 right-0 max-h-[240px] overflow-y-auto bg-surface-dark border border-border-hover rounded-xl shadow-2xl shadow-black/50 py-1.5 z-50"
           >
             <p className="px-3 py-1 text-[11px] text-[#6b6b80] uppercase tracking-wider">
               Membres
@@ -188,8 +188,8 @@ export const MentionInput = memo(function MentionInput({
                 onClick={() => insertMention(member)}
                 className={`w-full flex items-center gap-3 px-3 py-2 text-left transition-colors ${
                   i === selectedIndex
-                    ? 'bg-[rgba(99,102,241,0.15)]'
-                    : 'hover:bg-[rgba(255,255,255,0.06)]'
+                    ? 'bg-primary-15'
+                    : 'hover:bg-border-default'
                 }`}
               >
                 {member.avatar_url ? (
@@ -199,7 +199,7 @@ export const MentionInput = memo(function MentionInput({
                     className="w-7 h-7 rounded-full object-cover flex-shrink-0"
                   />
                 ) : (
-                  <div className="w-7 h-7 rounded-full bg-[rgba(99,102,241,0.2)] flex items-center justify-center text-xs font-bold text-[#818cf8] flex-shrink-0">
+                  <div className="w-7 h-7 rounded-full bg-primary-20 flex items-center justify-center text-xs font-bold text-primary-hover flex-shrink-0">
                     {member.username.charAt(0).toUpperCase()}
                   </div>
                 )}

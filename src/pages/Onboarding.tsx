@@ -30,7 +30,7 @@ function StepToast({ message, isVisible, onClose }: { message: string; isVisible
           exit={{ opacity: 0, y: 20, scale: 0.9 }}
           className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50"
         >
-          <div className="flex items-center gap-2 px-5 py-3 rounded-xl bg-[#34d399] text-[#050506] font-medium shadow-lg shadow-[rgba(52,211,153,0.15)]">
+          <div className="flex items-center gap-2 px-5 py-3 rounded-xl bg-success text-bg-base font-medium shadow-lg shadow-glow-success">
             <Sparkles className="w-5 h-5" />
             <span>{message}</span>
           </div>
@@ -409,7 +409,7 @@ export function Onboarding() {
   }
 
   return (
-    <div className="h-[100dvh] bg-[#050506] flex items-center justify-center p-4 overflow-y-auto overflow-x-hidden scrollbar-hide-mobile">
+    <div className="h-[100dvh] bg-bg-base flex items-center justify-center p-4 overflow-y-auto overflow-x-hidden scrollbar-hide-mobile">
       {/* Mini Confetti for step celebrations */}
       {showMiniConfetti && (
         <Confetti
@@ -457,7 +457,7 @@ export function Onboarding() {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 }}
-                className="text-3xl md:text-4xl font-bold text-[#f7f8f8] mb-4 leading-tight"
+                className="text-3xl md:text-4xl font-bold text-text-primary mb-4 leading-tight"
               >
                 Arrêtez de dire<br />
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#6366f1] to-[#a78bfa]">
@@ -469,7 +469,7 @@ export function Onboarding() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.4 }}
-                className="text-xl text-[#8b8d90] mb-10"
+                className="text-xl text-text-secondary mb-10"
               >
                 Jouez vraiment ensemble.
               </motion.p>
@@ -494,7 +494,7 @@ export function Onboarding() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.8 }}
-                className="text-[13px] text-[#5e6063] mt-6"
+                className="text-[13px] text-text-tertiary mt-6"
               >
                 Configure ta squad en moins de 60 secondes
               </motion.p>
@@ -514,10 +514,10 @@ export function Onboarding() {
               <div className="h-10 mb-6" />
 
               <div className="text-center mb-8">
-                <h2 className="text-2xl font-bold text-[#f7f8f8] mb-2">
+                <h2 className="text-2xl font-bold text-text-primary mb-2">
                   Ta première squad
                 </h2>
-                <p className="text-[#8b8d90]">
+                <p className="text-text-secondary">
                   Une squad = tes potes + un salon vocal + un planning
                 </p>
               </div>
@@ -528,21 +528,21 @@ export function Onboarding() {
                   onClick={() => navigateToStep('create-squad')}
                   disabled={isNavigating}
                   data-testid="create-squad-button"
-                  className="w-full p-6 rounded-2xl bg-[rgba(255,255,255,0.02)] border border-[rgba(255,255,255,0.06)] hover:border-[#6366f1] hover:scale-[1.02] active:scale-[0.99] transition-interactive text-left group disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full p-6 rounded-2xl bg-[rgba(255,255,255,0.02)] border border-border-default hover:border-primary hover:scale-[1.02] active:scale-[0.99] transition-interactive text-left group disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <div className="flex items-start gap-4">
-                    <div className="w-14 h-14 rounded-xl bg-[rgba(99,102,241,0.08)] flex items-center justify-center shrink-0 group-hover:bg-[rgba(99,102,241,0.12)] transition-colors">
-                      <Users className="w-7 h-7 text-[#6366f1]" />
+                    <div className="w-14 h-14 rounded-xl bg-primary-10 flex items-center justify-center shrink-0 group-hover:bg-primary-15 transition-colors">
+                      <Users className="w-7 h-7 text-primary" />
                     </div>
                     <div className="flex-1">
-                      <h3 className="text-[16px] font-semibold text-[#f7f8f8] mb-1">
+                      <h3 className="text-[16px] font-semibold text-text-primary mb-1">
                         Créer une squad
                       </h3>
-                      <p className="text-[14px] text-[#8b8d90]">
+                      <p className="text-[14px] text-text-secondary">
                         Tu invites tes amis avec un code. En 10 secondes, tout le monde est dedans.
                       </p>
                     </div>
-                    <ArrowRight className="w-5 h-5 text-[#5e6063] group-hover:text-[#6366f1] transition-colors shrink-0 mt-1" />
+                    <ArrowRight className="w-5 h-5 text-text-tertiary group-hover:text-primary transition-colors shrink-0 mt-1" />
                   </div>
                 </button>
 
@@ -551,21 +551,21 @@ export function Onboarding() {
                   onClick={() => navigateToStep('join-squad')}
                   disabled={isNavigating}
                   data-testid="join-squad-button"
-                  className="w-full p-6 rounded-2xl bg-[rgba(255,255,255,0.02)] border border-[rgba(255,255,255,0.06)] hover:border-[#34d399] hover:scale-[1.02] active:scale-[0.99] transition-interactive text-left group disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full p-6 rounded-2xl bg-[rgba(255,255,255,0.02)] border border-border-default hover:border-success hover:scale-[1.02] active:scale-[0.99] transition-interactive text-left group disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <div className="flex items-start gap-4">
-                    <div className="w-14 h-14 rounded-xl bg-[rgba(52,211,153,0.08)] flex items-center justify-center shrink-0 group-hover:bg-[rgba(52,211,153,0.12)] transition-colors">
-                      <UserPlus className="w-7 h-7 text-[#34d399]" />
+                    <div className="w-14 h-14 rounded-xl bg-success-10 flex items-center justify-center shrink-0 group-hover:bg-success-15 transition-colors">
+                      <UserPlus className="w-7 h-7 text-success" />
                     </div>
                     <div className="flex-1">
-                      <h3 className="text-[16px] font-semibold text-[#f7f8f8] mb-1">
+                      <h3 className="text-[16px] font-semibold text-text-primary mb-1">
                         Rejoindre une squad
                       </h3>
-                      <p className="text-[14px] text-[#8b8d90]">
+                      <p className="text-[14px] text-text-secondary">
                         Un ami t'a donné un code ? Entre-le ici pour le rejoindre direct.
                       </p>
                     </div>
-                    <ArrowRight className="w-5 h-5 text-[#5e6063] group-hover:text-[#34d399] transition-colors shrink-0 mt-1" />
+                    <ArrowRight className="w-5 h-5 text-text-tertiary group-hover:text-success transition-colors shrink-0 mt-1" />
                   </div>
                 </button>
               </div>
@@ -583,20 +583,20 @@ export function Onboarding() {
             >
               <button
                 onClick={goBack}
-                className="flex items-center gap-2 text-[#8b8d90] hover:text-[#f7f8f8] transition-colors mb-6"
+                className="flex items-center gap-2 text-text-secondary hover:text-text-primary transition-colors mb-6"
               >
                 <ArrowLeft className="w-4 h-4" />
                 Retour
               </button>
 
               <div className="text-center mb-8">
-                <div className="w-16 h-16 rounded-2xl bg-[rgba(99,102,241,0.08)] flex items-center justify-center mx-auto mb-4">
-                  <Users className="w-8 h-8 text-[#6366f1]" />
+                <div className="w-16 h-16 rounded-2xl bg-primary-10 flex items-center justify-center mx-auto mb-4">
+                  <Users className="w-8 h-8 text-primary" />
                 </div>
-                <h2 className="text-2xl font-bold text-[#f7f8f8] mb-2">
+                <h2 className="text-2xl font-bold text-text-primary mb-2">
                   Crée ta squad
                 </h2>
-                <p className="text-[#8b8d90]">
+                <p className="text-text-secondary">
                   Donne-lui un nom et choisis votre jeu principal
                 </p>
               </div>
@@ -623,8 +623,8 @@ export function Onboarding() {
                   />
 
                   {error && (
-                    <div className="p-3 rounded-lg bg-[rgba(251,113,133,0.05)] border border-[rgba(251,113,133,0.1)]">
-                      <p className="text-[#fb7185] text-sm">{error}</p>
+                    <div className="p-3 rounded-lg bg-error-5 border border-error">
+                      <p className="text-error text-sm">{error}</p>
                     </div>
                   )}
 
@@ -661,20 +661,20 @@ export function Onboarding() {
             >
               <button
                 onClick={goBack}
-                className="flex items-center gap-2 text-[#8b8d90] hover:text-[#f7f8f8] transition-colors mb-6"
+                className="flex items-center gap-2 text-text-secondary hover:text-text-primary transition-colors mb-6"
               >
                 <ArrowLeft className="w-4 h-4" />
                 Retour
               </button>
 
               <div className="text-center mb-8">
-                <div className="w-16 h-16 rounded-2xl bg-[rgba(52,211,153,0.08)] flex items-center justify-center mx-auto mb-4">
-                  <UserPlus className="w-8 h-8 text-[#34d399]" />
+                <div className="w-16 h-16 rounded-2xl bg-success-10 flex items-center justify-center mx-auto mb-4">
+                  <UserPlus className="w-8 h-8 text-success" />
                 </div>
-                <h2 className="text-2xl font-bold text-[#f7f8f8] mb-2">
+                <h2 className="text-2xl font-bold text-text-primary mb-2">
                   Rejoins une squad
                 </h2>
-                <p className="text-[#8b8d90]">
+                <p className="text-text-secondary">
                   Entre le code que ton ami t'a donné
                 </p>
               </div>
@@ -693,8 +693,8 @@ export function Onboarding() {
                   />
 
                   {error && (
-                    <div className="p-3 rounded-lg bg-[rgba(251,113,133,0.05)] border border-[rgba(251,113,133,0.1)]">
-                      <p className="text-[#fb7185] text-sm">{error}</p>
+                    <div className="p-3 rounded-lg bg-error-5 border border-error">
+                      <p className="text-error text-sm">{error}</p>
                     </div>
                   )}
 
@@ -731,17 +731,17 @@ export function Onboarding() {
             >
               <button
                 onClick={goBack}
-                className="flex items-center gap-2 text-[#8b8d90] hover:text-[#f7f8f8] transition-colors mb-6"
+                className="flex items-center gap-2 text-text-secondary hover:text-text-primary transition-colors mb-6"
               >
                 <ArrowLeft className="w-4 h-4" />
                 Retour
               </button>
 
               <div className="text-center mb-8">
-                <h2 className="text-2xl font-bold text-[#f7f8f8] mb-2">
+                <h2 className="text-2xl font-bold text-text-primary mb-2">
                   Ne rate jamais une session
                 </h2>
-                <p className="text-[#8b8d90]">
+                <p className="text-text-secondary">
                   On te prévient quand ta squad t'attend
                 </p>
               </div>
@@ -750,28 +750,28 @@ export function Onboarding() {
                 {/* Notifications - OBLIGATOIRE */}
                 <Card className="p-5">
                   <div className="flex items-start gap-4">
-                    <div className="w-12 h-12 rounded-xl bg-[rgba(251,191,36,0.08)] flex items-center justify-center shrink-0">
-                      <Bell className="w-6 h-6 text-[#fbbf24]" />
+                    <div className="w-12 h-12 rounded-xl bg-warning-10 flex items-center justify-center shrink-0">
+                      <Bell className="w-6 h-6 text-warning" />
                     </div>
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-1">
-                        <h3 className="text-[15px] font-semibold text-[#f7f8f8]">
+                        <h3 className="text-[15px] font-semibold text-text-primary">
                           Notifications
                         </h3>
-                        <span className="text-xs px-2 py-0.5 rounded-full bg-[rgba(251,191,36,0.08)] text-[#fbbf24] font-medium">
+                        <span className="text-xs px-2 py-0.5 rounded-full bg-warning-10 text-warning font-medium">
                           Recommandé
                         </span>
                       </div>
-                      <p className="text-[13px] text-[#8b8d90] mb-3">
+                      <p className="text-[13px] text-text-secondary mb-3">
                         Sois prévenu quand une session est créée ou quand ta squad t'attend
                       </p>
                       {notifPermission === 'granted' ? (
-                        <div className="flex items-center gap-2 text-[#34d399] text-[14px]">
+                        <div className="flex items-center gap-2 text-success text-[14px]">
                           <Check className="w-4 h-4" />
                           Activées
                         </div>
                       ) : notifPermission === 'denied' ? (
-                        <p className="text-[13px] text-[#fb7185]">
+                        <p className="text-[13px] text-error">
                           Bloquées — active-les dans les paramètres de ton navigateur
                         </p>
                       ) : (
@@ -790,28 +790,28 @@ export function Onboarding() {
                 {/* Microphone - OPTIONNEL */}
                 <Card className="p-5">
                   <div className="flex items-start gap-4">
-                    <div className="w-12 h-12 rounded-xl bg-[rgba(99,102,241,0.08)] flex items-center justify-center shrink-0">
-                      <Mic className="w-6 h-6 text-[#6366f1]" />
+                    <div className="w-12 h-12 rounded-xl bg-primary-10 flex items-center justify-center shrink-0">
+                      <Mic className="w-6 h-6 text-primary" />
                     </div>
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-1">
-                        <h3 className="text-[15px] font-semibold text-[#f7f8f8]">
+                        <h3 className="text-[15px] font-semibold text-text-primary">
                           Microphone
                         </h3>
-                        <span className="text-xs px-2 py-0.5 rounded-full bg-[rgba(255,255,255,0.05)] text-[#8b8d90] font-medium">
+                        <span className="text-xs px-2 py-0.5 rounded-full bg-border-subtle text-text-secondary font-medium">
                           Optionnel
                         </span>
                       </div>
-                      <p className="text-[13px] text-[#8b8d90] mb-3">
+                      <p className="text-[13px] text-text-secondary mb-3">
                         Pour la party vocale avec ta squad. Tu peux activer plus tard.
                       </p>
                       {micPermission === 'granted' ? (
-                        <div className="flex items-center gap-2 text-[#34d399] text-[14px]">
+                        <div className="flex items-center gap-2 text-success text-[14px]">
                           <Check className="w-4 h-4" />
                           Autorisé
                         </div>
                       ) : micPermission === 'denied' ? (
-                        <p className="text-[13px] text-[#5e6063]">
+                        <p className="text-[13px] text-text-tertiary">
                           Tu pourras l'activer plus tard dans les paramètres
                         </p>
                       ) : (
@@ -825,7 +825,7 @@ export function Onboarding() {
                           </Button>
                           <button
                             onClick={() => setMicPermission('denied')}
-                            className="text-[13px] text-[#5e6063] hover:text-[#8b8d90] px-3"
+                            className="text-[13px] text-text-tertiary hover:text-text-secondary px-3"
                           >
                             Plus tard
                           </button>
@@ -858,7 +858,7 @@ export function Onboarding() {
                       Terminer
                       <Check className="w-5 h-5 ml-2" />
                     </Button>
-                    <p className="text-[12px] text-[#5e6063] text-center">
+                    <p className="text-[12px] text-text-tertiary text-center">
                       Tu pourras activer les notifications plus tard dans les paramètres
                     </p>
                   </>
@@ -878,17 +878,17 @@ export function Onboarding() {
             >
               <button
                 onClick={goBack}
-                className="flex items-center gap-2 text-[#8b8d90] hover:text-[#f7f8f8] transition-colors mb-6"
+                className="flex items-center gap-2 text-text-secondary hover:text-text-primary transition-colors mb-6"
               >
                 <ArrowLeft className="w-4 h-4" />
                 Retour
               </button>
 
               <div className="text-center mb-8">
-                <h2 className="text-2xl font-bold text-[#f7f8f8] mb-2">
+                <h2 className="text-2xl font-bold text-text-primary mb-2">
                   C'est toi ?
                 </h2>
-                <p className="text-[#8b8d90]">
+                <p className="text-text-secondary">
                   Tes potes te reconnaîtront
                 </p>
               </div>
@@ -898,7 +898,7 @@ export function Onboarding() {
                   {/* Avatar upload */}
                   <div className="flex flex-col items-center">
                     <div className="relative mb-3">
-                      <div className="w-24 h-24 rounded-full bg-[rgba(99,102,241,0.08)] flex items-center justify-center overflow-hidden">
+                      <div className="w-24 h-24 rounded-full bg-primary-10 flex items-center justify-center overflow-hidden">
                         {avatarUrl ? (
                           <img
                             src={avatarUrl}
@@ -906,7 +906,7 @@ export function Onboarding() {
                             className="w-24 h-24 rounded-full object-cover"
                           />
                         ) : (
-                          <span className="text-4xl font-bold text-[#6366f1]">
+                          <span className="text-4xl font-bold text-primary">
                             {username?.charAt(0).toUpperCase() || '?'}
                           </span>
                         )}
@@ -916,7 +916,7 @@ export function Onboarding() {
                           </div>
                         )}
                       </div>
-                      <label className="absolute bottom-0 right-0 w-8 h-8 rounded-full bg-[#6366f1] flex items-center justify-center border-2 border-[#050506] cursor-pointer hover:bg-[#4f46e5] hover:scale-[1.02] transition-interactive">
+                      <label className="absolute bottom-0 right-0 w-8 h-8 rounded-full bg-primary flex items-center justify-center border-2 border-bg-base cursor-pointer hover:bg-[#4f46e5] hover:scale-[1.02] transition-interactive">
                         <Camera className="w-4 h-4 text-white" />
                         <input
                           type="file"
@@ -927,7 +927,7 @@ export function Onboarding() {
                         />
                       </label>
                     </div>
-                    <p className="text-[12px] text-[#5e6063]">
+                    <p className="text-[12px] text-text-tertiary">
                       Clique sur l'icône pour changer ta photo
                     </p>
                   </div>
@@ -943,14 +943,14 @@ export function Onboarding() {
 
                   {/* Timezone */}
                   <div>
-                    <label className="block text-[13px] font-medium text-[#8b8d90] mb-2">
+                    <label className="block text-[13px] font-medium text-text-secondary mb-2">
                       <Globe className="w-4 h-4 inline mr-1.5" />
                       Fuseau horaire
                     </label>
                     <select
                       value={timezone}
                       onChange={(e) => setTimezone(e.target.value)}
-                      className="w-full h-11 px-4 rounded-lg bg-[#101012] border border-[rgba(255,255,255,0.1)] text-[#f7f8f8] text-[14px] focus:border-[#6366f1] outline-none [&>option]:bg-[#101012] [&>option]:text-[#f7f8f8]"
+                      className="w-full h-11 px-4 rounded-lg bg-bg-surface border border-border-hover text-text-primary text-[14px] focus:border-primary outline-none [&>option]:bg-bg-surface [&>option]:text-text-primary"
                     >
                       <option value="Europe/Paris">Europe/Paris (France)</option>
                       <option value="Europe/London">Europe/London (UK)</option>
@@ -961,7 +961,7 @@ export function Onboarding() {
                       <option value="America/Los_Angeles">America/Los_Angeles (PST)</option>
                       <option value="Asia/Tokyo">Asia/Tokyo (Japon)</option>
                     </select>
-                    <p className="text-[12px] text-[#5e6063] mt-1.5">
+                    <p className="text-[12px] text-text-tertiary mt-1.5">
                       Détecté automatiquement : {Intl.DateTimeFormat().resolvedOptions().timeZone}
                     </p>
                   </div>
@@ -1033,15 +1033,15 @@ export function Onboarding() {
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
                 transition={{ type: 'spring', stiffness: 300, damping: 25 }}
-                className="w-20 h-20 rounded-full bg-[#34d399] flex items-center justify-center mx-auto mb-6"
+                className="w-20 h-20 rounded-full bg-success flex items-center justify-center mx-auto mb-6"
               >
                 <Check className="w-10 h-10 text-white" />
               </motion.div>
 
-              <h2 className="text-2xl font-bold text-[#f7f8f8] mb-2">
+              <h2 className="text-2xl font-bold text-text-primary mb-2">
                 {createdSquadName ? `${createdSquadName} est prête !` : "C'est parti !"}
               </h2>
-              <p className="text-[#8b8d90] mb-6">
+              <p className="text-text-secondary mb-6">
                 {createdSquadId
                   ? "Invite tes potes et propose une première session"
                   : squads.length > 0
@@ -1062,46 +1062,46 @@ export function Onboarding() {
                     <div className="space-y-4">
                       {/* Squad name */}
                       <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-xl bg-[rgba(99,102,241,0.08)] flex items-center justify-center">
-                          <Users className="w-5 h-5 text-[#6366f1]" />
+                        <div className="w-10 h-10 rounded-xl bg-primary-10 flex items-center justify-center">
+                          <Users className="w-5 h-5 text-primary" />
                         </div>
                         <div>
-                          <p className="text-[12px] text-[#5e6063]">Squad</p>
-                          <p className="text-[15px] font-semibold text-[#f7f8f8]">{createdSquadName}</p>
+                          <p className="text-[12px] text-text-tertiary">Squad</p>
+                          <p className="text-[15px] font-semibold text-text-primary">{createdSquadName}</p>
                         </div>
                       </div>
 
                       {/* Game */}
                       {squadGame && (
                         <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 rounded-xl bg-[rgba(52,211,153,0.08)] flex items-center justify-center">
-                            <Gamepad2 className="w-5 h-5 text-[#34d399]" />
+                          <div className="w-10 h-10 rounded-xl bg-success-10 flex items-center justify-center">
+                            <Gamepad2 className="w-5 h-5 text-success" />
                           </div>
                           <div>
-                            <p className="text-[12px] text-[#5e6063]">Jeu</p>
-                            <p className="text-[15px] font-semibold text-[#f7f8f8]">{squadGame || 'Non défini'}</p>
+                            <p className="text-[12px] text-text-tertiary">Jeu</p>
+                            <p className="text-[15px] font-semibold text-text-primary">{squadGame || 'Non défini'}</p>
                           </div>
                         </div>
                       )}
 
                       {/* Invite code */}
-                      <div className="pt-3 border-t border-[rgba(255,255,255,0.06)]">
-                        <p className="text-[12px] text-[#5e6063] mb-2">Code d'invitation</p>
+                      <div className="pt-3 border-t border-border-default">
+                        <p className="text-[12px] text-text-tertiary mb-2">Code d'invitation</p>
                         <div className="flex items-center gap-2">
-                          <code className="flex-1 px-4 py-3 rounded-lg bg-[rgba(255,255,255,0.02)] border border-[rgba(255,255,255,0.06)] text-[18px] font-mono font-bold text-[#f7f8f8] tracking-widest text-center">
+                          <code className="flex-1 px-4 py-3 rounded-lg bg-[rgba(255,255,255,0.02)] border border-border-default text-[18px] font-mono font-bold text-text-primary tracking-widest text-center">
                             {createdSquadCode}
                           </code>
                           <button
                             onClick={() => {
                               navigator.clipboard.writeText(createdSquadCode)
                             }}
-                            className="p-3 rounded-lg bg-[rgba(99,102,241,0.08)] hover:bg-[rgba(99,102,241,0.12)] hover:scale-[1.02] transition-interactive"
+                            className="p-3 rounded-lg bg-primary-10 hover:bg-primary-15 hover:scale-[1.02] transition-interactive"
                             aria-label="Copier le code d'invitation"
                           >
-                            <Copy className="w-5 h-5 text-[#6366f1]" aria-hidden="true" />
+                            <Copy className="w-5 h-5 text-primary" aria-hidden="true" />
                           </button>
                         </div>
-                        <p className="text-xs text-[#5e6063] mt-2">
+                        <p className="text-xs text-text-tertiary mt-2">
                           Partage ce code à tes amis pour qu'ils rejoignent
                         </p>
                       </div>
@@ -1136,19 +1136,19 @@ export function Onboarding() {
                   <div className="flex flex-col items-center gap-1">
                     <div
                       className={`w-8 h-8 rounded-full flex items-center justify-center text-[13px] font-semibold transition-interactive ${
-                        isCompleted ? 'bg-[#34d399] text-white' :
-                        isActive ? 'bg-[#6366f1] text-white' :
-                        'bg-[rgba(255,255,255,0.05)] text-[#5e6063]'
+                        isCompleted ? 'bg-success text-white' :
+                        isActive ? 'bg-primary text-white' :
+                        'bg-border-subtle text-text-tertiary'
                       }`}
                     >
                       {isCompleted ? <Check className="w-4 h-4" /> : i + 1}
                     </div>
-                    <span className={`text-xs ${isActive || isCompleted ? 'text-[#f7f8f8]' : 'text-[#5e6063]'}`}>
+                    <span className={`text-xs ${isActive || isCompleted ? 'text-text-primary' : 'text-text-tertiary'}`}>
                       {item.label}
                     </span>
                   </div>
                   {i < 2 && (
-                    <div className={`w-8 h-0.5 mb-5 ${i < currentIndex ? 'bg-[#34d399]' : 'bg-[rgba(255,255,255,0.1)]'}`} />
+                    <div className={`w-8 h-0.5 mb-5 ${i < currentIndex ? 'bg-success' : 'bg-border-hover'}`} />
                   )}
                 </div>
               )

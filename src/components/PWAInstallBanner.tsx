@@ -23,7 +23,7 @@ export const PWAInstallBanner = memo(function PWAInstallBanner() {
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: 100, opacity: 0 }}
           transition={{ type: 'spring', stiffness: 400, damping: 35 }}
-          className="fixed bottom-20 lg:bottom-6 left-4 right-4 lg:left-auto lg:right-6 lg:w-[380px] z-[60] rounded-2xl bg-[#101012] border border-[rgba(255,255,255,0.06)] shadow-[0_8px_32px_rgba(0,0,0,0.4)] p-4"
+          className="fixed bottom-20 lg:bottom-6 left-4 right-4 lg:left-auto lg:right-6 lg:w-[380px] z-[60] rounded-2xl bg-bg-surface border border-border-default shadow-[0_8px_32px_rgba(0,0,0,0.4)] p-4"
           role="alert"
         >
           <div className="flex items-start gap-3">
@@ -34,10 +34,10 @@ export const PWAInstallBanner = memo(function PWAInstallBanner() {
 
             {/* Content */}
             <div className="flex-1 min-w-0">
-              <h3 className="text-[15px] font-semibold text-[#f7f8f8]">
+              <h3 className="text-[15px] font-semibold text-text-primary">
                 Installer Squad Planner
               </h3>
-              <p className="text-[13px] text-[#8b8d90] mt-0.5">
+              <p className="text-[13px] text-text-secondary mt-0.5">
                 Acces rapide depuis ton ecran d'accueil
               </p>
 
@@ -46,14 +46,14 @@ export const PWAInstallBanner = memo(function PWAInstallBanner() {
                 <button
                   type="button"
                   onClick={() => promptInstall()}
-                  className="px-4 py-2 rounded-lg bg-[#6366f1] text-white text-[13px] font-semibold hover:bg-[#5457e5] active:scale-[0.97] transition-all"
+                  className="px-4 py-2 rounded-lg bg-primary text-white text-[13px] font-semibold hover:bg-[#5457e5] active:scale-[0.97] transition-all"
                 >
                   Installer
                 </button>
                 <button
                   type="button"
                   onClick={dismissBanner}
-                  className="px-3 py-2 rounded-lg text-[#8b8d90] text-[13px] hover:bg-[rgba(255,255,255,0.05)] transition-colors"
+                  className="px-3 py-2 rounded-lg text-text-secondary text-[13px] hover:bg-border-subtle transition-colors"
                 >
                   Plus tard
                 </button>
@@ -64,7 +64,7 @@ export const PWAInstallBanner = memo(function PWAInstallBanner() {
             <button
               type="button"
               onClick={dismissBanner}
-              className="p-1 rounded-lg text-[#5e6063] hover:text-[#8b8d90] hover:bg-[rgba(255,255,255,0.05)] transition-colors flex-shrink-0"
+              className="p-1 rounded-lg text-text-tertiary hover:text-text-secondary hover:bg-border-subtle transition-colors flex-shrink-0"
               aria-label="Fermer"
             >
               <X className="w-4 h-4" />

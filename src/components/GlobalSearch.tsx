@@ -221,10 +221,10 @@ export function GlobalSearch() {
   }
 
   const typeColors: Record<string, string> = {
-    squad: 'text-[#a78bfa]',
-    session: 'text-[#22d3ee]',
-    message: 'text-[#34d399]',
-    member: 'text-[#f472b6]'
+    squad: 'text-purple',
+    session: 'text-info',
+    message: 'text-success',
+    member: 'text-pink'
   }
 
   return (
@@ -241,13 +241,13 @@ export function GlobalSearch() {
           })
           window.dispatchEvent(event)
         }}
-        className="flex items-center gap-2 px-3 py-2 rounded-xl bg-[rgba(255,255,255,0.03)] border border-[rgba(255,255,255,0.05)] text-[#8b8d90] hover:bg-[rgba(255,255,255,0.05)] hover:text-[#f7f8f8] transition-colors"
+        className="flex items-center gap-2 px-3 py-2 rounded-xl bg-surface-card border border-border-subtle text-text-secondary hover:bg-border-subtle hover:text-text-primary transition-colors"
         whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.98 }}
       >
         <Search className="w-4 h-4" />
         <span className="text-sm hidden sm:inline">Rechercher...</span>
-        <kbd className="hidden md:inline-flex items-center gap-1 px-1.5 py-0.5 text-[10px] font-medium bg-[rgba(255,255,255,0.05)] rounded border border-[rgba(255,255,255,0.1)]">
+        <kbd className="hidden md:inline-flex items-center gap-1 px-1.5 py-0.5 text-[10px] font-medium bg-border-subtle rounded border border-border-hover">
           <span className="text-[10px]">{shortcutKey}</span>K
         </kbd>
       </motion.button>
@@ -273,10 +273,10 @@ export function GlobalSearch() {
               transition={{ type: 'spring', damping: 25, stiffness: 300 }}
               className="fixed top-[15%] left-1/2 -translate-x-1/2 w-full max-w-xl z-50 px-4"
             >
-              <div className="bg-[#0a0a0b] border border-[rgba(255,255,255,0.08)] rounded-2xl shadow-2xl overflow-hidden">
+              <div className="bg-bg-elevated border border-border-hover rounded-2xl shadow-2xl overflow-hidden">
                 {/* Search input */}
-                <div className="flex items-center gap-3 p-4 border-b border-[rgba(255,255,255,0.05)]">
-                  <Search className="w-5 h-5 text-[#6366f1]" />
+                <div className="flex items-center gap-3 p-4 border-b border-border-subtle">
+                  <Search className="w-5 h-5 text-primary" />
                   <input
                     ref={inputRef}
                     type="text"
@@ -287,13 +287,13 @@ export function GlobalSearch() {
                     }}
                     placeholder="Rechercher squads, sessions, messages, membres..."
                     aria-label="Recherche globale"
-                    className="flex-1 bg-transparent text-[#f7f8f8] placeholder-[#5e6063] outline-none text-[15px]"
+                    className="flex-1 bg-transparent text-text-primary placeholder-text-tertiary outline-none text-[15px]"
                   />
                   {query && (
                     <motion.button
                       onClick={() => setQuery('')}
                       aria-label="Effacer la recherche"
-                      className="p-1 rounded-lg hover:bg-[rgba(255,255,255,0.05)] text-[#5e6063] hover:text-[#8b8d90]"
+                      className="p-1 rounded-lg hover:bg-border-subtle text-text-tertiary hover:text-text-secondary"
                       whileHover={{ scale: 1.1 }}
                       whileTap={{ scale: 0.9 }}
                     >
@@ -306,14 +306,14 @@ export function GlobalSearch() {
                 <div className="max-h-[400px] overflow-y-auto">
                   {isLoading ? (
                     <div className="p-8 text-center">
-                      <div className="w-6 h-6 border-2 border-[#6366f1] border-t-transparent rounded-full animate-spin mx-auto" />
-                      <p className="text-[#5e6063] text-sm mt-3">Recherche en cours...</p>
+                      <div className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin mx-auto" />
+                      <p className="text-text-tertiary text-sm mt-3">Recherche en cours...</p>
                     </div>
                   ) : query && results.length === 0 ? (
                     <div className="p-8 text-center">
-                      <Search className="w-10 h-10 text-[#3a3a3f] mx-auto mb-3" />
-                      <p className="text-[#8b8d90]">Aucun résultat pour "{query}"</p>
-                      <p className="text-[#5e6063] text-sm mt-1">Essaie avec d'autres termes</p>
+                      <Search className="w-10 h-10 text-text-tertiary mx-auto mb-3" />
+                      <p className="text-text-secondary">Aucun résultat pour "{query}"</p>
+                      <p className="text-text-tertiary text-sm mt-1">Essaie avec d'autres termes</p>
                     </div>
                   ) : query ? (
                     <div className="py-2">
@@ -338,8 +338,8 @@ export function GlobalSearch() {
                                   onClick={() => handleSelect(result)}
                                   className={`w-full flex items-center gap-3 px-4 py-3 transition-colors ${
                                     selectedIndex === globalIdx
-                                      ? 'bg-[rgba(99,102,241,0.1)]'
-                                      : 'hover:bg-[rgba(255,255,255,0.03)]'
+                                      ? 'bg-primary-10'
+                                      : 'hover:bg-surface-card'
                                   }`}
                                   onMouseEnter={() => setSelectedIndex(globalIdx)}
                                   whileTap={{ scale: 0.99 }}
@@ -351,22 +351,22 @@ export function GlobalSearch() {
                                       className="w-9 h-9 rounded-lg object-cover"
                                     />
                                   ) : (
-                                    <div className={`w-9 h-9 rounded-lg flex items-center justify-center bg-[rgba(255,255,255,0.03)] ${typeColors[result.type]}`}>
+                                    <div className={`w-9 h-9 rounded-lg flex items-center justify-center bg-surface-card ${typeColors[result.type]}`}>
                                       <Icon className="w-4 h-4" />
                                     </div>
                                   )}
                                   <div className="flex-1 text-left min-w-0">
-                                    <div className="text-[14px] text-[#f7f8f8] truncate">
+                                    <div className="text-[14px] text-text-primary truncate">
                                       {result.title}
                                     </div>
                                     {result.subtitle && (
-                                      <div className="text-[12px] text-[#5e6063] truncate">
+                                      <div className="text-[12px] text-text-tertiary truncate">
                                         {result.subtitle}
                                       </div>
                                     )}
                                   </div>
                                   {selectedIndex === globalIdx && (
-                                    <ArrowRight className="w-4 h-4 text-[#6366f1]" />
+                                    <ArrowRight className="w-4 h-4 text-primary" />
                                   )}
                                 </motion.button>
                               )
@@ -377,7 +377,7 @@ export function GlobalSearch() {
                     </div>
                   ) : (
                     <div className="p-6 text-center">
-                      <p className="text-[#5e6063] text-sm">
+                      <p className="text-text-tertiary text-sm">
                         Commence à taper pour rechercher
                       </p>
                     </div>
@@ -385,20 +385,20 @@ export function GlobalSearch() {
                 </div>
 
                 {/* Footer */}
-                <div className="flex items-center justify-between px-4 py-3 border-t border-[rgba(255,255,255,0.05)] text-[11px] text-[#5e6063]">
+                <div className="flex items-center justify-between px-4 py-3 border-t border-border-subtle text-[11px] text-text-tertiary">
                   <div className="flex items-center gap-4">
                     <span className="flex items-center gap-1">
-                      <kbd className="px-1.5 py-0.5 bg-[rgba(255,255,255,0.05)] rounded">↑</kbd>
-                      <kbd className="px-1.5 py-0.5 bg-[rgba(255,255,255,0.05)] rounded">↓</kbd>
+                      <kbd className="px-1.5 py-0.5 bg-border-subtle rounded">↑</kbd>
+                      <kbd className="px-1.5 py-0.5 bg-border-subtle rounded">↓</kbd>
                       naviguer
                     </span>
                     <span className="flex items-center gap-1">
-                      <kbd className="px-1.5 py-0.5 bg-[rgba(255,255,255,0.05)] rounded">↵</kbd>
+                      <kbd className="px-1.5 py-0.5 bg-border-subtle rounded">↵</kbd>
                       sélectionner
                     </span>
                   </div>
                   <span className="flex items-center gap-1">
-                    <kbd className="px-1.5 py-0.5 bg-[rgba(255,255,255,0.05)] rounded">esc</kbd>
+                    <kbd className="px-1.5 py-0.5 bg-border-subtle rounded">esc</kbd>
                     fermer
                   </span>
                 </div>

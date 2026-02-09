@@ -27,7 +27,7 @@ function CallToast({ message, isVisible, onClose }: { message: string; isVisible
           exit={{ opacity: 0, y: 20, scale: 0.9 }}
           className="fixed bottom-28 left-1/2 -translate-x-1/2 z-50"
         >
-          <div className="flex items-center gap-2 px-5 py-3 rounded-xl bg-[#34d399] text-[#050506] font-medium shadow-lg shadow-[rgba(52,211,153,0.15)]">
+          <div className="flex items-center gap-2 px-5 py-3 rounded-xl bg-success text-bg-base font-medium shadow-lg shadow-glow-success">
             <Phone className="w-5 h-5" />
             <span>{message}</span>
           </div>
@@ -74,12 +74,12 @@ export function CallHistory() {
 
   const getCallIcon = (type: 'incoming' | 'outgoing', status: string) => {
     if (status === 'missed' || status === 'rejected') {
-      return <PhoneMissed className="w-5 h-5 text-[#fb7185]" />
+      return <PhoneMissed className="w-5 h-5 text-error" />
     }
     if (type === 'incoming') {
-      return <PhoneIncoming className="w-5 h-5 text-[#34d399]" />
+      return <PhoneIncoming className="w-5 h-5 text-success" />
     }
-    return <PhoneOutgoing className="w-5 h-5 text-[#6366f1]" />
+    return <PhoneOutgoing className="w-5 h-5 text-primary" />
   }
 
   const getCallLabel = (type: 'incoming' | 'outgoing', status: string) => {
@@ -90,7 +90,7 @@ export function CallHistory() {
   }
 
   return (
-    <div className="min-h-0 bg-[#050506] pb-6">
+    <div className="min-h-0 bg-bg-base pb-6">
       {/* Toast */}
       <CallToast
         message={toastMessage}
@@ -99,19 +99,19 @@ export function CallHistory() {
       />
 
       {/* Header */}
-      <div className="sticky top-0 z-10 bg-[#050506]/95 backdrop-blur-lg border-b border-[rgba(255,255,255,0.06)]">
+      <div className="sticky top-0 z-10 bg-bg-base/95 backdrop-blur-lg border-b border-border-default">
         <div className="px-4 py-4 max-w-4xl lg:max-w-5xl mx-auto">
           <div className="flex items-center gap-3 mb-4">
             <button
               onClick={() => navigate(-1)}
-              className="w-11 h-11 min-w-[44px] min-h-[44px] rounded-xl bg-[rgba(255,255,255,0.03)] flex items-center justify-center hover:bg-[rgba(255,255,255,0.06)] hover:scale-[1.02] transition-interactive touch-target"
+              className="w-11 h-11 min-w-[44px] min-h-[44px] rounded-xl bg-surface-card flex items-center justify-center hover:bg-border-default hover:scale-[1.02] transition-interactive touch-target"
               aria-label="Retour"
             >
-              <ArrowLeft className="w-5 h-5 text-[#f7f8f8]" />
+              <ArrowLeft className="w-5 h-5 text-text-primary" />
             </button>
             <div className="flex-1">
-              <h1 className="text-2xl font-bold text-[#f7f8f8]">Tes appels récents</h1>
-              <p className="text-[13px] text-[#888]">
+              <h1 className="text-2xl font-bold text-text-primary">Tes appels récents</h1>
+              <p className="text-[13px] text-text-tertiary">
                 {filteredCalls.length > 0
                   ? `${filteredCalls.length} appel${filteredCalls.length !== 1 ? 's' : ''}`
                   : 'Aucun appel pour le moment'
@@ -121,10 +121,10 @@ export function CallHistory() {
             <button
               onClick={() => fetchCallHistory()}
               disabled={isLoading}
-              className="w-11 h-11 min-w-[44px] min-h-[44px] rounded-xl bg-[rgba(255,255,255,0.03)] flex items-center justify-center hover:bg-[rgba(255,255,255,0.06)] hover:scale-[1.02] transition-interactive disabled:opacity-50 touch-target"
+              className="w-11 h-11 min-w-[44px] min-h-[44px] rounded-xl bg-surface-card flex items-center justify-center hover:bg-border-default hover:scale-[1.02] transition-interactive disabled:opacity-50 touch-target"
               aria-label="Rafraichir"
             >
-              <RefreshCw className={`w-5 h-5 text-[#888] ${isLoading ? 'animate-spin' : ''}`} />
+              <RefreshCw className={`w-5 h-5 text-text-tertiary ${isLoading ? 'animate-spin' : ''}`} />
             </button>
           </div>
 
@@ -136,8 +136,8 @@ export function CallHistory() {
                 onClick={() => setFilter(option.value)}
                 className={`px-4 py-2.5 min-h-[44px] rounded-xl text-[13px] font-medium whitespace-nowrap transition-interactive touch-target ${
                   filter === option.value
-                    ? 'bg-[#6366f1] text-white'
-                    : 'bg-[rgba(255,255,255,0.03)] text-[#888] hover:bg-[rgba(255,255,255,0.06)] hover:text-[#f7f8f8] hover:scale-[1.02]'
+                    ? 'bg-primary text-white'
+                    : 'bg-surface-card text-text-tertiary hover:bg-border-default hover:text-text-primary hover:scale-[1.02]'
                 }`}
               >
                 {option.label}
@@ -152,15 +152,15 @@ export function CallHistory() {
         {/* Loading state */}
         {isLoading && filteredCalls.length === 0 && (
           <div className="flex flex-col items-center justify-center py-20">
-            <div className="w-10 h-10 border-2 border-[#6366f1] border-t-transparent rounded-full animate-spin mb-4" />
-            <p className="text-[14px] text-[#888]">Chargement de l'historique...</p>
+            <div className="w-10 h-10 border-2 border-primary border-t-transparent rounded-full animate-spin mb-4" />
+            <p className="text-[14px] text-text-tertiary">Chargement de l'historique...</p>
           </div>
         )}
 
         {/* Error state */}
         {error && (
-          <Card className="p-4 bg-[rgba(251,113,133,0.05)] border-[rgba(251,113,133,0.1)]">
-            <p className="text-[14px] text-[#fb7185]">{error}</p>
+          <Card className="p-4 bg-error/5 border-error/10">
+            <p className="text-[14px] text-error">{error}</p>
             <Button
               size="sm"
               variant="ghost"
@@ -179,13 +179,13 @@ export function CallHistory() {
             animate={{ opacity: 1, y: 0 }}
             className="flex flex-col items-center justify-center py-20"
           >
-            <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-[rgba(99,102,241,0.08)] to-[rgba(99,102,241,0.02)] flex items-center justify-center mb-5">
-              <Phone className="w-10 h-10 text-[#6366f1]" />
+            <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-primary/[0.08] to-primary/[0.02] flex items-center justify-center mb-5">
+              <Phone className="w-10 h-10 text-primary" />
             </div>
-            <h3 className="text-[18px] font-semibold text-[#f7f8f8] mb-2">
+            <h3 className="text-[18px] font-semibold text-text-primary mb-2">
               {filter === 'all' ? 'Pas encore d\'appels' : 'Aucun appel ici'}
             </h3>
-            <p className="text-[14px] text-[#888] text-center max-w-[260px] mb-6">
+            <p className="text-[14px] text-text-tertiary text-center max-w-[260px] mb-6">
               {filter === 'all'
                 ? "Appelle un pote pour commencer ! Tes appels apparaîtront ici."
                 : `Aucun appel ${
@@ -217,13 +217,13 @@ export function CallHistory() {
                 transition={{ delay: index * 0.03 }}
               >
                 <Card
-                  className="p-4 bg-[#101012] hover:bg-[#18191b] transition-colors"
+                  className="p-4 bg-bg-surface hover:bg-bg-hover transition-colors"
                   hoverable
                 >
                   <div className="flex items-center gap-3">
                     {/* Avatar */}
                     <div className="relative">
-                      <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#6366f1] to-[#a78bfa] flex items-center justify-center overflow-hidden">
+                      <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-purple flex items-center justify-center overflow-hidden">
                         {call.contactAvatar ? (
                           <img
                             src={call.contactAvatar}
@@ -235,12 +235,12 @@ export function CallHistory() {
                         )}
                       </div>
                       {/* Call type indicator */}
-                      <div className={`absolute -bottom-1 -right-1 w-6 h-6 rounded-full flex items-center justify-center border-2 border-[#101012] ${
+                      <div className={`absolute -bottom-1 -right-1 w-6 h-6 rounded-full flex items-center justify-center border-2 border-bg-surface ${
                         call.status === 'missed' || call.status === 'rejected'
-                          ? 'bg-[#fb7185]'
+                          ? 'bg-error'
                           : call.type === 'incoming'
-                            ? 'bg-[#34d399]'
-                            : 'bg-[#6366f1]'
+                            ? 'bg-success'
+                            : 'bg-primary'
                       }`}>
                         {call.status === 'missed' || call.status === 'rejected' ? (
                           <PhoneMissed className="w-3 h-3 text-white" />
@@ -257,21 +257,21 @@ export function CallHistory() {
                       <div className="flex items-center justify-between mb-0.5">
                         <h3 className={`text-[15px] font-semibold truncate ${
                           call.status === 'missed' || call.status === 'rejected'
-                            ? 'text-[#fb7185]'
-                            : 'text-[#f7f8f8]'
+                            ? 'text-error'
+                            : 'text-text-primary'
                         }`}>
                           {call.contactName}
                         </h3>
-                        <span className="text-[13px] text-[#888] flex-shrink-0 ml-2">
+                        <span className="text-[13px] text-text-tertiary flex-shrink-0 ml-2">
                           {formatRelativeTime(call.createdAt)}
                         </span>
                       </div>
-                      <div className="flex items-center gap-2 text-[13px] text-[#888]">
+                      <div className="flex items-center gap-2 text-[13px] text-text-tertiary">
                         {getCallIcon(call.type, call.status)}
                         <span>{getCallLabel(call.type, call.status)}</span>
                         {typeof call.durationSeconds === 'number' && call.durationSeconds > 0 && (
                           <>
-                            <span className="text-[#5e6063]">•</span>
+                            <span className="text-text-tertiary">•</span>
                             <span>{formatDuration(call.durationSeconds)}</span>
                           </>
                         )}
@@ -285,10 +285,10 @@ export function CallHistory() {
                         handleCall(call.contactId, call.contactName, call.contactAvatar)
                       }}
                       disabled={callStatus !== 'idle'}
-                      className="w-11 h-11 min-w-[44px] min-h-[44px] rounded-xl bg-[rgba(52,211,153,0.05)] flex items-center justify-center hover:bg-[rgba(52,211,153,0.1)] hover:scale-[1.02] transition-interactive disabled:opacity-50 disabled:cursor-not-allowed touch-target"
+                      className="w-11 h-11 min-w-[44px] min-h-[44px] rounded-xl bg-success-10 flex items-center justify-center hover:bg-success-10 hover:scale-[1.02] transition-interactive disabled:opacity-50 disabled:cursor-not-allowed touch-target"
                       aria-label={`Appeler ${call.contactName}`}
                     >
-                      <Phone className="w-5 h-5 text-[#34d399]" aria-hidden="true" />
+                      <Phone className="w-5 h-5 text-success" aria-hidden="true" />
                     </button>
                   </div>
                 </Card>

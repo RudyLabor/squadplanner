@@ -181,41 +181,41 @@ export const GifPicker = memo(function GifPicker({ isOpen, onSelect, onClose }: 
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 20 }}
             transition={{ type: 'spring', stiffness: 400, damping: 30 }}
-            className="fixed inset-x-0 bottom-0 z-[61] sm:absolute sm:inset-x-auto sm:bottom-full sm:mb-2 sm:right-0 sm:w-[360px] bg-[#1a1a2e] border border-[rgba(255,255,255,0.1)] sm:rounded-xl rounded-t-2xl shadow-2xl shadow-black/50 overflow-hidden max-h-[70vh] sm:max-h-[420px] flex flex-col"
+            className="fixed inset-x-0 bottom-0 z-[61] sm:absolute sm:inset-x-auto sm:bottom-full sm:mb-2 sm:right-0 sm:w-[360px] bg-surface-dark border border-border-hover sm:rounded-xl rounded-t-2xl shadow-2xl shadow-black/50 overflow-hidden max-h-[70vh] sm:max-h-[420px] flex flex-col"
           >
             {/* Drag handle (mobile only) */}
             <div className="sm:hidden flex justify-center pt-2 pb-1">
-              <div className="w-10 h-1 rounded-full bg-[rgba(255,255,255,0.2)]" />
+              <div className="w-10 h-1 rounded-full bg-overlay-heavy" />
             </div>
 
             {/* Header with search */}
-            <div className="p-3 border-b border-[rgba(255,255,255,0.06)] flex-shrink-0">
+            <div className="p-3 border-b border-border-default flex-shrink-0">
               <div className="flex items-center gap-2 mb-2">
-                <Sparkles className="w-4 h-4 text-[#818cf8]" />
-                <span className="text-[13px] font-medium text-[#e0e0e0]">GIFs</span>
-                <span className="text-[10px] text-[#6b6b80] ml-auto">Powered by Tenor</span>
+                <Sparkles className="w-4 h-4 text-primary-hover" />
+                <span className="text-[13px] font-medium text-text-primary">GIFs</span>
+                <span className="text-[10px] text-text-tertiary ml-auto">Powered by Tenor</span>
                 <button
                   onClick={onClose}
-                  className="p-1 rounded-lg text-[#6b6b80] hover:text-white hover:bg-[rgba(255,255,255,0.1)] transition-colors sm:hidden"
+                  className="p-1 rounded-lg text-text-tertiary hover:text-white hover:bg-border-hover transition-colors sm:hidden"
                   aria-label="Fermer"
                 >
                   <X className="w-4 h-4" />
                 </button>
               </div>
               <div className="relative">
-                <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[#6b6b80]" />
+                <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-text-tertiary" />
                 <input
                   ref={searchRef}
                   type="text"
                   value={query}
                   onChange={(e) => handleSearch(e.target.value)}
                   placeholder="Chercher un GIF..."
-                  className="w-full pl-8 pr-8 py-2 bg-[rgba(255,255,255,0.06)] border border-[rgba(255,255,255,0.06)] rounded-lg text-[13px] text-white placeholder:text-[#6b6b80] focus:outline-none focus:border-[rgba(94,109,210,0.5)]"
+                  className="w-full pl-8 pr-8 py-2 bg-border-default border border-border-default rounded-lg text-[13px] text-white placeholder:text-text-tertiary focus:outline-none focus:border-[rgba(94,109,210,0.5)]"
                 />
                 {query && (
                   <button
                     onClick={() => handleSearch('')}
-                    className="absolute right-2 top-1/2 -translate-y-1/2 p-0.5 text-[#6b6b80] hover:text-white"
+                    className="absolute right-2 top-1/2 -translate-y-1/2 p-0.5 text-text-tertiary hover:text-white"
                   >
                     <X className="w-3.5 h-3.5" />
                   </button>
@@ -225,12 +225,12 @@ export const GifPicker = memo(function GifPicker({ isOpen, onSelect, onClose }: 
 
             {/* Quick categories */}
             {!hasSearched && (
-              <div className="flex gap-1.5 px-3 py-2 border-b border-[rgba(255,255,255,0.06)] overflow-x-auto scrollbar-hide flex-shrink-0">
+              <div className="flex gap-1.5 px-3 py-2 border-b border-border-default overflow-x-auto scrollbar-hide flex-shrink-0">
                 {CATEGORIES.map((cat) => (
                   <button
                     key={cat.query}
                     onClick={() => handleCategoryClick(cat.query)}
-                    className="flex-shrink-0 px-2.5 py-1 rounded-full text-[12px] bg-[rgba(255,255,255,0.06)] text-[#8b8d90] hover:bg-[rgba(99,102,241,0.15)] hover:text-[#818cf8] transition-colors"
+                    className="flex-shrink-0 px-2.5 py-1 rounded-full text-[12px] bg-border-default text-text-secondary hover:bg-primary-15 hover:text-primary-hover transition-colors"
                   >
                     {cat.label}
                   </button>
@@ -239,30 +239,30 @@ export const GifPicker = memo(function GifPicker({ isOpen, onSelect, onClose }: 
             )}
 
             {/* GIF grid */}
-            <div className="flex-1 overflow-y-auto p-2 scrollbar-thin scrollbar-thumb-[rgba(255,255,255,0.1)] scrollbar-track-transparent min-h-[200px]">
+            <div className="flex-1 overflow-y-auto p-2 scrollbar-thin scrollbar-thumb-border-hover scrollbar-track-transparent min-h-[200px]">
               {isLoading ? (
                 <div className="flex items-center justify-center h-full min-h-[200px]">
-                  <Loader2 className="w-6 h-6 text-[#818cf8] animate-spin" />
+                  <Loader2 className="w-6 h-6 text-primary-hover animate-spin" />
                 </div>
               ) : gifs.length === 0 ? (
                 <div className="flex flex-col items-center justify-center h-full min-h-[200px] gap-3">
                   {hasSearched ? (
-                    <p className="text-[#6b6b80] text-sm">Aucun GIF trouvé</p>
+                    <p className="text-text-tertiary text-sm">Aucun GIF trouvé</p>
                   ) : hasLoaded ? (
                     <>
-                      <p className="text-[#6b6b80] text-sm text-center px-4">
+                      <p className="text-text-tertiary text-sm text-center px-4">
                         Impossible de charger les GIFs
                       </p>
                       <button
                         onClick={handleRetry}
-                        className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[12px] bg-[rgba(99,102,241,0.15)] text-[#818cf8] hover:bg-[rgba(99,102,241,0.25)] transition-colors"
+                        className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[12px] bg-primary-15 text-primary-hover hover:bg-primary-20 transition-colors"
                       >
                         <RefreshCw className="w-3.5 h-3.5" />
                         Réessayer
                       </button>
                     </>
                   ) : (
-                    <Loader2 className="w-6 h-6 text-[#818cf8] animate-spin" />
+                    <Loader2 className="w-6 h-6 text-primary-hover animate-spin" />
                   )}
                 </div>
               ) : (
@@ -271,7 +271,7 @@ export const GifPicker = memo(function GifPicker({ isOpen, onSelect, onClose }: 
                     <button
                       key={gif.id}
                       onClick={() => handleGifSelect(gif)}
-                      className="w-full mb-1.5 rounded-lg overflow-hidden hover:ring-2 hover:ring-[#818cf8] transition-all break-inside-avoid"
+                      className="w-full mb-1.5 rounded-lg overflow-hidden hover:ring-2 hover:ring-primary-hover transition-all break-inside-avoid"
                     >
                       <img
                         src={gif.preview}

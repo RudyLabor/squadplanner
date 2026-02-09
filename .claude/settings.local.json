@@ -1,4 +1,7 @@
 {
+  "env": {
+    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
+  },
   "permissions": {
     "allow": [
       "Bash(tree:*)",
@@ -6,7 +9,14 @@
       "mcp__chrome-devtools__navigate_page",
       "mcp__chrome-devtools__list_pages",
       "mcp__context7__resolve-library-id",
-      "mcp__magic__logo_search"
+      "mcp__magic__logo_search",
+      "mcp__chrome-devtools__evaluate_script",
+      "mcp__chrome-devtools__take_screenshot",
+      "mcp__chrome-devtools__list_console_messages",
+      "mcp__chrome-devtools__get_console_message",
+      "mcp__chrome-devtools__emulate",
+      "Bash(findstr:*)",
+      "Bash(powershell -c \"\\(Get-Item ''node_modules\\\\agora-rtc-sdk-ng\\\\AgoraRTC_N-production.js''\\).Length\")"
     ]
   }
 }

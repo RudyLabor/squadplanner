@@ -109,9 +109,9 @@ export function EditMessageModal({
             transition={{ type: 'spring', stiffness: 300, damping: 25 }}
             className="fixed inset-x-4 top-[15%] md:inset-auto md:left-1/2 md:top-1/2 md:-translate-x-1/2 md:-translate-y-1/2 md:w-full md:max-w-lg z-50"
           >
-            <div className="bg-[#101012] border border-[rgba(255,255,255,0.08)] rounded-2xl overflow-hidden shadow-2xl">
+            <div className="bg-bg-surface border border-border-hover rounded-2xl overflow-hidden shadow-2xl">
               {/* Header */}
-              <div className="flex items-center justify-between px-5 py-4 border-b border-[rgba(255,255,255,0.06)]">
+              <div className="flex items-center justify-between px-5 py-4 border-b border-border-default">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-xl bg-[rgba(94,109,210,0.15)] flex items-center justify-center">
                     <Pencil className="w-5 h-5 text-[#5e6dd2]" />
@@ -123,7 +123,7 @@ export function EditMessageModal({
                 <button
                   onClick={onClose}
                   aria-label="Fermer"
-                  className="w-8 h-8 rounded-lg flex items-center justify-center hover:bg-[rgba(255,255,255,0.06)] transition-colors"
+                  className="w-8 h-8 rounded-lg flex items-center justify-center hover:bg-border-default transition-colors"
                 >
                   <X className="w-5 h-5 text-[#8b8d90]" />
                 </button>
@@ -136,7 +136,7 @@ export function EditMessageModal({
                   <label className="block text-[12px] font-medium text-[#5e6063] uppercase tracking-wider mb-2">
                     Message original
                   </label>
-                  <div className="p-3 rounded-xl bg-[rgba(255,255,255,0.02)] border border-[rgba(255,255,255,0.04)]">
+                  <div className="p-3 rounded-xl bg-[rgba(255,255,255,0.02)] border border-border-subtle">
                     <p className="text-[13px] text-[#8b8d90] whitespace-pre-wrap break-words">
                       {message.content}
                     </p>
@@ -159,7 +159,7 @@ export function EditMessageModal({
                     onKeyDown={handleKeyDown}
                     placeholder="Tapez votre message..."
                     rows={3}
-                    className="w-full px-4 py-3 bg-[rgba(255,255,255,0.04)] border border-[rgba(255,255,255,0.08)] rounded-xl text-[14px] text-[#f7f8f8] placeholder:text-[#5e6063] resize-none focus:outline-none focus:border-[rgba(94,109,210,0.5)] focus:ring-2 focus:ring-[rgba(94,109,210,0.2)] focus:shadow-[0_0_20px_rgba(94,109,210,0.2)] transition-input min-h-[80px] max-h-[200px]"
+                    className="w-full px-4 py-3 bg-border-subtle border border-border-hover rounded-xl text-[14px] text-[#f7f8f8] placeholder:text-[#5e6063] resize-none focus:outline-none focus:border-[rgba(94,109,210,0.5)] focus:ring-2 focus:ring-[rgba(94,109,210,0.2)] focus:shadow-glow-primary-md transition-input min-h-[80px] max-h-[200px]"
                   />
                   <p className="text-[11px] text-[#5e6063] mt-2">
                     Conseil : Ctrl+Entree pour sauvegarder rapidement
@@ -168,7 +168,7 @@ export function EditMessageModal({
               </div>
 
               {/* Footer */}
-              <div className="flex items-center justify-between px-5 py-4 border-t border-[rgba(255,255,255,0.06)] bg-[rgba(255,255,255,0.01)]">
+              <div className="flex items-center justify-between px-5 py-4 border-t border-border-default bg-[rgba(255,255,255,0.01)]">
                 <span className="text-[12px] text-[#5e6063]">
                   {hasChanges ? '(modifie) sera affiche' : 'Aucune modification'}
                 </span>

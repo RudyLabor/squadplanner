@@ -121,31 +121,31 @@ export function Help() {
   }, {} as Record<string, (FAQItem & { globalIndex: number })[]>)
 
   return (
-    <div className="min-h-0 bg-[#050506] pb-6">
+    <div className="min-h-0 bg-bg-base pb-6">
       <div className="px-4 md:px-6 lg:px-8 py-6 max-w-2xl mx-auto">
         {/* Header */}
         <div className="flex items-center gap-4 mb-8">
           <button
             onClick={() => navigate(-1)}
-            className="w-10 h-10 rounded-xl bg-[rgba(255,255,255,0.05)] flex items-center justify-center hover:bg-[rgba(255,255,255,0.1)] hover:scale-[1.02] transition-interactive"
+            className="w-10 h-10 rounded-xl bg-border-subtle flex items-center justify-center hover:bg-border-hover hover:scale-[1.02] transition-interactive"
           >
-            <ArrowLeft className="w-5 h-5 text-[#8b8d90]" />
+            <ArrowLeft className="w-5 h-5 text-text-secondary" />
           </button>
           <div>
-            <h1 className="text-2xl font-bold text-[#f7f8f8]">Aide & FAQ</h1>
-            <p className="text-[14px] text-[#8b8d90]">Trouve des réponses à tes questions</p>
+            <h1 className="text-2xl font-bold text-text-primary">Aide & FAQ</h1>
+            <p className="text-[14px] text-text-secondary">Trouve des réponses à tes questions</p>
           </div>
         </div>
 
         {/* Search */}
         <div className="relative mb-6">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#5e6063]" />
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-text-tertiary" />
           <input
             type="text"
             placeholder="Rechercher dans l'aide..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full h-12 pl-12 pr-4 rounded-xl bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.08)] text-[14px] text-[#f7f8f8] placeholder-[#5e6063] focus:outline-none focus:border-[#6366f1] transition-colors"
+            className="w-full h-12 pl-12 pr-4 rounded-xl bg-border-subtle border border-border-hover text-[14px] text-text-primary placeholder-text-tertiary focus:outline-none focus:border-primary transition-colors"
           />
         </div>
 
@@ -155,8 +155,8 @@ export function Help() {
             onClick={() => setSelectedCategory(null)}
             className={`flex-shrink-0 px-4 py-2 rounded-full text-[13px] font-medium transition-interactive ${
               selectedCategory === null
-                ? 'bg-[#6366f1] text-white'
-                : 'bg-[rgba(255,255,255,0.05)] text-[#8b8d90] hover:bg-[rgba(255,255,255,0.1)] hover:scale-[1.02]'
+                ? 'bg-primary text-white'
+                : 'bg-border-subtle text-text-secondary hover:bg-border-hover hover:scale-[1.02]'
             }`}
           >
             Tout
@@ -167,8 +167,8 @@ export function Help() {
               onClick={() => setSelectedCategory(cat)}
               className={`flex-shrink-0 px-4 py-2 rounded-full text-[13px] font-medium transition-interactive ${
                 selectedCategory === cat
-                  ? 'bg-[#6366f1] text-white'
-                  : 'bg-[rgba(255,255,255,0.05)] text-[#8b8d90] hover:bg-[rgba(255,255,255,0.1)] hover:scale-[1.02]'
+                  ? 'bg-primary text-white'
+                  : 'bg-border-subtle text-text-secondary hover:bg-border-hover hover:scale-[1.02]'
               }`}
             >
               {cat}
@@ -179,14 +179,14 @@ export function Help() {
         {/* FAQ Items */}
         {Object.entries(groupedItems).length === 0 ? (
           <Card className="p-8 text-center">
-            <HelpCircle className="w-12 h-12 text-[#5e6063] mx-auto mb-3" />
-            <p className="text-[15px] text-[#f7f8f8] mb-1">Aucun résultat</p>
-            <p className="text-[13px] text-[#5e6063]">Essaie avec d'autres mots-clés</p>
+            <HelpCircle className="w-12 h-12 text-text-tertiary mx-auto mb-3" />
+            <p className="text-[15px] text-text-primary mb-1">Aucun résultat</p>
+            <p className="text-[13px] text-text-tertiary">Essaie avec d'autres mots-clés</p>
           </Card>
         ) : (
           Object.entries(groupedItems).map(([category, items]) => (
             <div key={category} className="mb-6">
-              <h2 className="text-[13px] font-semibold text-[#5e6063] uppercase tracking-wider mb-3">
+              <h2 className="text-[13px] font-semibold text-text-tertiary uppercase tracking-wider mb-3">
                 {category}
               </h2>
               <div className="space-y-2">
@@ -196,14 +196,14 @@ export function Help() {
                       onClick={() => setOpenIndex(openIndex === item.globalIndex ? null : item.globalIndex)}
                       className="w-full flex items-center justify-between p-4 text-left"
                     >
-                      <span className="text-[14px] font-medium text-[#f7f8f8] pr-4">
+                      <span className="text-[14px] font-medium text-text-primary pr-4">
                         {item.question}
                       </span>
                       <motion.div
                         animate={{ rotate: openIndex === item.globalIndex ? 180 : 0 }}
                         transition={{ duration: 0.2 }}
                       >
-                        <ChevronDown className="w-5 h-5 text-[#5e6063] flex-shrink-0" />
+                        <ChevronDown className="w-5 h-5 text-text-tertiary flex-shrink-0" />
                       </motion.div>
                     </button>
                     <AnimatePresence>
@@ -216,7 +216,7 @@ export function Help() {
                           className="overflow-hidden"
                         >
                           <div className="px-4 pb-4">
-                            <p className="text-[14px] text-[#8b8d90] leading-relaxed">
+                            <p className="text-[14px] text-text-secondary leading-relaxed">
                               {item.answer}
                             </p>
                           </div>
@@ -231,21 +231,21 @@ export function Help() {
         )}
 
         {/* Contact Support */}
-        <Card className="mt-8 p-5 bg-gradient-to-br from-[rgba(99,102,241,0.05)] to-transparent border-[rgba(99,102,241,0.1)]">
+        <Card className="mt-8 p-5 bg-gradient-to-br from-primary/5 to-transparent border-primary/10">
           <div className="flex items-start gap-4">
-            <div className="w-12 h-12 rounded-xl bg-[rgba(99,102,241,0.08)] flex items-center justify-center flex-shrink-0">
-              <Mail className="w-6 h-6 text-[#6366f1]" />
+            <div className="w-12 h-12 rounded-xl bg-primary-10 flex items-center justify-center flex-shrink-0">
+              <Mail className="w-6 h-6 text-primary" />
             </div>
             <div className="flex-1">
-              <h3 className="text-[16px] font-semibold text-[#f7f8f8] mb-1">
+              <h3 className="text-[16px] font-semibold text-text-primary mb-1">
                 Besoin d'aide supplémentaire ?
               </h3>
-              <p className="text-[13px] text-[#8b8d90] mb-3">
+              <p className="text-[13px] text-text-secondary mb-3">
                 Notre équipe est là pour t'aider. Contacte-nous et on te répond sous 24h.
               </p>
               <a
                 href="mailto:support@squadplanner.fr"
-                className="inline-flex items-center gap-2 text-[14px] font-medium text-[#6366f1] hover:text-[#a78bfa] transition-colors"
+                className="inline-flex items-center gap-2 text-[14px] font-medium text-primary hover:text-purple transition-colors"
               >
                 Contacter le support
                 <ExternalLink className="w-4 h-4" />
@@ -255,7 +255,7 @@ export function Help() {
         </Card>
 
         {/* Version */}
-        <p className="text-center text-[12px] text-[#5e6063] mt-8">
+        <p className="text-center text-[12px] text-text-tertiary mt-8">
           Squad Planner v1.0.0
         </p>
       </div>

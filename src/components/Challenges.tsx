@@ -138,11 +138,11 @@ export function Challenges({ challenges, onClaimXP }: ChallengesProps) {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-[rgba(245,166,35,0.15)] flex items-center justify-center">
-            <Target className="w-5 h-5 text-[#f5a623]" />
+            <Target className="w-5 h-5 text-warning" />
           </div>
           <div>
-            <h2 className="text-[16px] font-semibold text-[#f7f8f8]">Challenges</h2>
-            <p className="text-[12px] text-[#5e6063]">
+            <h2 className="text-[16px] font-semibold text-text-primary">Challenges</h2>
+            <p className="text-[12px] text-text-tertiary">
               {challenges.length} challenges disponibles
             </p>
           </div>
@@ -151,10 +151,10 @@ export function Challenges({ challenges, onClaimXP }: ChallengesProps) {
           <motion.div
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
-            className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[rgba(74,222,128,0.15)] border border-[rgba(74,222,128,0.3)]"
+            className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-success-15 border border-[rgba(74,222,128,0.3)]"
           >
-            <Gift className="w-4 h-4 text-[#4ade80]" />
-            <span className="text-[13px] font-medium text-[#4ade80]">
+            <Gift className="w-4 h-4 text-success" />
+            <span className="text-[13px] font-medium text-success">
               {claimableCount} à réclamer
             </span>
           </motion.div>
@@ -169,16 +169,16 @@ export function Challenges({ challenges, onClaimXP }: ChallengesProps) {
             onClick={() => setActiveTab(tab.key)}
             className={`flex items-center gap-2 px-4 py-2 rounded-xl text-[13px] font-medium whitespace-nowrap transition-interactive ${
               activeTab === tab.key
-                ? 'bg-[rgba(255,255,255,0.1)] text-[#f7f8f8] border border-[rgba(255,255,255,0.2)]'
-                : 'bg-[rgba(255,255,255,0.02)] text-[#8b8d90] border border-transparent hover:bg-[rgba(255,255,255,0.05)]'
+                ? 'bg-border-hover text-text-primary border border-[rgba(255,255,255,0.2)]'
+                : 'bg-surface-card text-text-secondary border border-transparent hover:bg-border-subtle'
             }`}
           >
             {tab.label}
             {counts[tab.key] > 0 && (
               <span className={`px-1.5 py-0.5 rounded-full text-[11px] ${
                 activeTab === tab.key
-                  ? 'bg-[rgba(255,255,255,0.15)] text-[#f7f8f8]'
-                  : 'bg-[rgba(255,255,255,0.05)] text-[#5e6063]'
+                  ? 'bg-overlay-medium text-text-primary'
+                  : 'bg-border-subtle text-text-tertiary'
               }`}>
                 {counts[tab.key]}
               </span>
@@ -196,10 +196,10 @@ export function Challenges({ challenges, onClaimXP }: ChallengesProps) {
               animate={{ opacity: 1 }}
               className="text-center py-8"
             >
-              <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-[rgba(255,255,255,0.02)] flex items-center justify-center">
-                <Target className="w-8 h-8 text-[#5e6063]" />
+              <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-surface-card flex items-center justify-center">
+                <Target className="w-8 h-8 text-text-tertiary" />
               </div>
-              <p className="text-[14px] text-[#5e6063]">
+              <p className="text-[14px] text-text-tertiary">
                 Aucun challenge dans cette catégorie
               </p>
             </motion.div>
@@ -252,8 +252,8 @@ function ChallengeCard({ challenge, index, onClaim, isClaiming }: ChallengeCardP
           isClaimed
             ? 'bg-[rgba(255,255,255,0.01)] opacity-60'
             : canClaim
-              ? 'bg-[#1a1a2e] border-[rgba(74,222,128,0.3)] shadow-[0_0_20px_rgba(74,222,128,0.15)]'
-              : 'bg-[#1a1a2e] border-[rgba(255,255,255,0.1)]'
+              ? 'bg-surface-dark border-[rgba(74,222,128,0.3)] shadow-glow-success'
+              : 'bg-surface-dark border-border-hover'
         }`}
       >
         <div className="flex items-start gap-4">
@@ -283,7 +283,7 @@ function ChallengeCard({ challenge, index, onClaim, isClaiming }: ChallengeCardP
               <div className="flex-1">
                 <div className="flex items-center gap-2 mb-0.5">
                   <h3 className={`text-[14px] font-semibold ${
-                    isClaimed ? 'text-[#5e6063] line-through' : 'text-[#f7f8f8]'
+                    isClaimed ? 'text-text-tertiary line-through' : 'text-text-primary'
                   }`}>
                     {challenge.title}
                   </h3>
@@ -298,7 +298,7 @@ function ChallengeCard({ challenge, index, onClaim, isClaiming }: ChallengeCardP
                   </span>
                 </div>
                 <p className={`text-[12px] ${
-                  isClaimed ? 'text-[#3a3a3a]' : 'text-[#8b8d90]'
+                  isClaimed ? 'text-text-tertiary' : 'text-text-secondary'
                 }`}>
                   {challenge.description}
                 </p>
@@ -307,14 +307,14 @@ function ChallengeCard({ challenge, index, onClaim, isClaiming }: ChallengeCardP
               {/* XP Badge */}
               <div className={`flex items-center gap-1 px-2 py-1 rounded-lg flex-shrink-0 ${
                 isClaimed
-                  ? 'bg-[rgba(255,255,255,0.02)]'
+                  ? 'bg-surface-card'
                   : 'bg-[rgba(245,166,35,0.15)]'
               }`}>
                 <Zap className={`w-3.5 h-3.5 ${
-                  isClaimed ? 'text-[#5e6063]' : 'text-[#f5a623]'
+                  isClaimed ? 'text-text-tertiary' : 'text-warning'
                 }`} />
                 <span className={`text-[12px] font-bold ${
-                  isClaimed ? 'text-[#5e6063]' : 'text-[#f5a623]'
+                  isClaimed ? 'text-text-tertiary' : 'text-warning'
                 }`}>
                   {challenge.xp_reward} XP
                 </span>
@@ -325,14 +325,14 @@ function ChallengeCard({ challenge, index, onClaim, isClaiming }: ChallengeCardP
             {!isClaimed && (
               <div className="mt-3">
                 <div className="flex items-center justify-between text-[11px] mb-1.5">
-                  <span className="text-[#8b8d90]">
+                  <span className="text-text-secondary">
                     Progression
                   </span>
-                  <span className="text-[#5e6063]">
+                  <span className="text-text-tertiary">
                     {progress}/{target}
                   </span>
                 </div>
-                <div className="relative h-2 bg-[rgba(255,255,255,0.05)] rounded-full overflow-hidden">
+                <div className="relative h-2 bg-border-subtle rounded-full overflow-hidden">
                   <motion.div
                     className="absolute h-full rounded-full"
                     style={{
@@ -366,7 +366,7 @@ function ChallengeCard({ challenge, index, onClaim, isClaiming }: ChallengeCardP
                   size="sm"
                   onClick={() => onClaim(challenge.id)}
                   isLoading={isClaiming}
-                  className="w-full bg-gradient-to-r from-[#4ade80] to-[#22c55e] hover:from-[#22c55e] hover:to-[#16a34a] text-[#08090a]"
+                  className="w-full bg-gradient-to-r from-success to-success-dark hover:from-success-dark hover:to-success-darker text-bg-base"
                 >
                   <Gift className="w-4 h-4" />
                   Reclamer {challenge.xp_reward} XP
@@ -376,8 +376,8 @@ function ChallengeCard({ challenge, index, onClaim, isClaiming }: ChallengeCardP
 
             {/* Claimed indicator */}
             {isClaimed && (
-              <div className="mt-3 flex items-center gap-2 text-[12px] text-[#5e6063]">
-                <Check className="w-4 h-4 text-[#4ade80]" />
+              <div className="mt-3 flex items-center gap-2 text-[12px] text-text-tertiary">
+                <Check className="w-4 h-4 text-success" />
                 <span>XP réclamés</span>
               </div>
             )}

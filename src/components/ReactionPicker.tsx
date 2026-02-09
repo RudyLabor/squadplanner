@@ -67,7 +67,7 @@ export const ReactionPicker = forwardRef<HTMLDivElement, ReactionPickerProps>(
               }}
               className={`absolute z-50 ${positionClasses[position]} ${alignClasses[align]}`}
             >
-              <div className="flex items-center gap-1 px-2 py-1.5 bg-[#1a1a2e] border border-[rgba(255,255,255,0.1)] rounded-full shadow-lg shadow-black/40">
+              <div className="flex items-center gap-1 px-2 py-1.5 bg-[#1a1a2e] border border-border-hover rounded-full shadow-lg shadow-black/40">
                 {REACTION_EMOJIS.map((emoji, index) => (
                   <motion.button
                     key={emoji}
@@ -91,7 +91,7 @@ export const ReactionPicker = forwardRef<HTMLDivElement, ReactionPickerProps>(
                     onTouchEnd={(e) => {
                       e.stopPropagation()
                     }}
-                    className="w-9 h-9 flex items-center justify-center rounded-full hover:bg-[rgba(255,255,255,0.1)] transition-colors text-xl touch-manipulation"
+                    className="w-9 h-9 flex items-center justify-center rounded-full hover:bg-border-hover transition-colors text-xl touch-manipulation"
                     aria-label={`React with ${emoji}`}
                   >
                     {emoji}

@@ -46,7 +46,7 @@ export function TypingIndicator({ text, compact = false }: TypingIndicatorProps)
           {[0, 1, 2].map((i) => (
             <motion.span
               key={i}
-              className="w-1.5 h-1.5 rounded-full bg-[#5e6063]"
+              className="w-1.5 h-1.5 rounded-full bg-text-tertiary"
               variants={dotVariants}
               animate={{
                 opacity: [0.4, 1, 0.4],
@@ -73,7 +73,7 @@ export function TypingIndicator({ text, compact = false }: TypingIndicatorProps)
       transition={{ duration: 0.2 }}
     >
       {/* Bulle avec les trois points animés */}
-      <div className="flex items-center gap-2 px-3 py-2 bg-[#18191b] rounded-2xl rounded-bl-lg">
+      <div className="flex items-center gap-2 px-3 py-2 bg-bg-hover rounded-2xl rounded-bl-lg">
         <motion.div
           className="flex items-center gap-0.5"
           variants={containerVariants}

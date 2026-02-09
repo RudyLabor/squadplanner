@@ -43,12 +43,12 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
               border border-border-default
               hover:bg-bg-hover hover:border-border-hover
               focus:border-primary/60 focus:ring-2 focus:ring-primary/10 focus:outline-none
-              focus:shadow-[0_0_20px_rgba(99,102,241,0.15)]
+              focus:shadow-glow-primary-sm
               text-text-primary placeholder-text-quaternary
               transition-input
               ${icon ? 'pl-12' : 'pl-4'}
               ${isPasswordField && showPasswordToggle ? 'pr-12' : 'pr-4'}
-              ${error ? 'border-error/50 focus:border-error focus:ring-error/8 focus:shadow-[0_0_20px_rgba(251,113,133,0.1)]' : ''}
+              ${error ? 'border-error/50 focus:border-error focus:ring-error/8 focus:shadow-glow-primary-md' : ''}
               ${className}
             `}
             {...props}

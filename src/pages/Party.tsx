@@ -61,7 +61,7 @@ function ParticipantAvatar({
         {/* Glow effect when speaking */}
         {isSpeaking && (
           <motion.div
-            className={`absolute inset-0 ${sizeClasses[size]} rounded-full bg-[#34d399]`}
+            className={`absolute inset-0 ${sizeClasses[size]} rounded-full bg-success`}
             animate={{ scale: [1, 1.2, 1], opacity: [0.25, 0, 0.25] }}
             transition={{ duration: 1, repeat: 2 }}
           />
@@ -69,10 +69,10 @@ function ParticipantAvatar({
         <div className={`
           relative ${sizeClasses[size]} rounded-full flex items-center justify-center
           ${isSpeaking
-            ? 'bg-[#34d399] ring-2 ring-[#34d399]/25 shadow-[0_0_15px_rgba(52,211,153,0.25)]'
+            ? 'bg-success ring-2 ring-success/25 shadow-glow-success'
             : isLocal
-              ? 'bg-[#6366f1]'
-              : 'bg-[rgba(99,102,241,0.3)]'
+              ? 'bg-primary'
+              : 'bg-primary/30'
           }
           transition-interactive
         `}>
@@ -80,13 +80,13 @@ function ParticipantAvatar({
             {username.charAt(0).toUpperCase()}
           </span>
           {isMuted && (
-            <div className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-[#fb7185] flex items-center justify-center">
+            <div className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-error flex items-center justify-center">
               <MicOff className="w-2.5 h-2.5 text-white" />
             </div>
           )}
         </div>
       </div>
-      <span className={`text-xs font-medium ${isLocal ? 'text-[#6366f1]' : 'text-[#8b8d90]'}`}>
+      <span className={`text-xs font-medium ${isLocal ? 'text-primary' : 'text-text-secondary'}`}>
         {isLocal ? 'Toi' : username}
       </span>
     </motion.div>
@@ -160,15 +160,15 @@ function ActivePartySection({ squad, onLeave, currentUserId }: {
   ]
 
   return (
-    <Card className="p-0 overflow-hidden border-[#34d399]/30 bg-gradient-to-b from-[#34d399]/5 to-transparent">
+    <Card className="p-0 overflow-hidden border-success/30 bg-gradient-to-b from-success/5 to-transparent">
       {/* Header */}
-      <div className="p-4 border-b border-[rgba(255,255,255,0.06)]">
+      <div className="p-4 border-b border-border-default">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-3 h-3 rounded-full bg-[#34d399] animate-pulse" />
+            <div className="w-3 h-3 rounded-full bg-success animate-pulse" />
             <div>
-              <h2 className="text-[16px] font-semibold text-[#f7f8f8]">{squad.name}</h2>
-              <p className="text-[12px] text-[#8b8d90]">{squad.game}</p>
+              <h2 className="text-[16px] font-semibold text-text-primary">{squad.name}</h2>
+              <p className="text-[12px] text-text-secondary">{squad.game}</p>
             </div>
           </div>
           <div className="flex items-center gap-2">
@@ -181,13 +181,13 @@ function ActivePartySection({ squad, onLeave, currentUserId }: {
               onClick={() => setShowInviteModal(true)}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[12px] font-medium transition-colors bg-[rgba(99,102,241,0.15)] text-[#6366f1] hover:bg-[rgba(99,102,241,0.25)]"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[12px] font-medium transition-colors bg-primary-15 text-primary hover:bg-primary-20"
             >
               <UserPlus className="w-3.5 h-3.5" />
               Inviter
             </motion.button>
             <Link to={`/squad/${squad.id}`}>
-              <span className="text-[12px] text-[#6366f1] hover:text-[#a78bfa]">Voir la squad</span>
+              <span className="text-[12px] text-primary hover:text-purple">Voir la squad</span>
             </Link>
           </div>
         </div>
@@ -199,26 +199,26 @@ function ActivePartySection({ squad, onLeave, currentUserId }: {
           initial={{ opacity: 0, height: 0 }}
           animate={{ opacity: 1, height: 'auto' }}
           exit={{ opacity: 0, height: 0 }}
-          className="px-4 py-3 bg-[#fbbf24]/10 border-b border-[#fbbf24]/20"
+          className="px-4 py-3 bg-warning/10 border-b border-warning/20"
         >
           <div className="flex items-center gap-3">
-            <WifiOff className="w-5 h-5 text-[#fbbf24] animate-pulse" />
+            <WifiOff className="w-5 h-5 text-warning animate-pulse" />
             <div className="flex-1">
-              <p className="text-[13px] font-medium text-[#fbbf24]">
+              <p className="text-[13px] font-medium text-warning">
                 Reconnexion en cours...
               </p>
-              <p className="text-xs text-[#fbbf24]/70">
+              <p className="text-xs text-warning/70">
                 Tentative {reconnectAttempts}/3
               </p>
             </div>
-            <Loader2 className="w-5 h-5 text-[#fbbf24] animate-spin" />
+            <Loader2 className="w-5 h-5 text-warning animate-spin" />
           </div>
         </motion.div>
       )}
 
       {/* Error */}
       {error && (
-        <div className="px-4 py-3 bg-[#fb7185]/10 text-[#fb7185] text-[12px] flex items-center gap-2">
+        <div className="px-4 py-3 bg-error/10 text-error text-[12px] flex items-center gap-2">
           <AlertCircle className="w-4 h-4 flex-shrink-0" />
           {error}
         </div>
@@ -285,7 +285,7 @@ function ActivePartySection({ squad, onLeave, currentUserId }: {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
           >
-            <p className="text-[13px] text-[#8b8d90]">
+            <p className="text-[13px] text-text-secondary">
               Invite tes potes ! La party t'attend
             </p>
           </motion.div>
@@ -298,8 +298,8 @@ function ActivePartySection({ squad, onLeave, currentUserId }: {
         <motion.button
           className={`w-10 h-10 rounded-full flex items-center justify-center transition-colors ${
             noiseSuppressionEnabled
-              ? 'bg-[rgba(99,102,241,0.2)] text-[#818cf8]'
-              : 'bg-[rgba(255,255,255,0.06)] text-[#5e6063]'
+              ? 'bg-primary-20 text-primary-hover'
+              : 'bg-border-default text-text-tertiary'
           }`}
           onClick={toggleNoiseSuppression}
           whileHover={{ scale: 1.05 }}
@@ -313,8 +313,8 @@ function ActivePartySection({ squad, onLeave, currentUserId }: {
         <motion.button
           className={`w-10 h-10 rounded-full flex items-center justify-center transition-colors ${
             pushToTalkEnabled
-              ? 'bg-[rgba(251,191,36,0.2)] text-[#fbbf24]'
-              : 'bg-[rgba(255,255,255,0.06)] text-[#5e6063]'
+              ? 'bg-warning/20 text-warning'
+              : 'bg-border-default text-text-tertiary'
           }`}
           onClick={() => setPushToTalk(!pushToTalkEnabled)}
           whileHover={{ scale: 1.05 }}
@@ -329,7 +329,7 @@ function ActivePartySection({ squad, onLeave, currentUserId }: {
           {/* Pulse animation when mic is active */}
           {!isMuted && (
             <motion.div
-              className="absolute inset-0 w-14 h-14 rounded-full bg-[#34d399]"
+              className="absolute inset-0 w-14 h-14 rounded-full bg-success"
               animate={{ scale: [1, 1.2], opacity: [0.2, 0] }}
               transition={{ duration: 1.5, repeat: 2 }}
             />
@@ -339,8 +339,8 @@ function ActivePartySection({ squad, onLeave, currentUserId }: {
               className={`
                 relative w-14 h-14 rounded-full flex items-center justify-center
                 ${pushToTalkActive
-                  ? 'bg-[#34d399] text-[#050506]'
-                  : 'bg-[#fbbf24] text-[#050506]'
+                  ? 'bg-success text-bg-base'
+                  : 'bg-warning text-bg-base'
                 }
                 transition-colors
               `}
@@ -359,8 +359,8 @@ function ActivePartySection({ squad, onLeave, currentUserId }: {
               className={`
                 relative w-14 h-14 rounded-full flex items-center justify-center
                 ${isMuted
-                  ? 'bg-[#fb7185] text-white'
-                  : 'bg-[#34d399] text-[#050506]'
+                  ? 'bg-error text-white'
+                  : 'bg-success text-bg-base'
                 }
                 transition-colors
               `}
@@ -374,7 +374,7 @@ function ActivePartySection({ squad, onLeave, currentUserId }: {
         </div>
 
         <motion.button
-          className="w-14 h-14 rounded-full bg-[#fb7185] text-white flex items-center justify-center"
+          className="w-14 h-14 rounded-full bg-error text-white flex items-center justify-center"
           onClick={onLeave}
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
@@ -384,12 +384,12 @@ function ActivePartySection({ squad, onLeave, currentUserId }: {
       </div>
 
       {/* Mute / PTT label */}
-      <p className="text-center text-xs text-[#5e6063] pb-4">
+      <p className="text-center text-xs text-text-tertiary pb-4">
         {pushToTalkEnabled
           ? (pushToTalkActive ? 'Parle maintenant...' : 'Maintiens Espace pour parler')
           : (isMuted ? 'Micro coupé' : 'Micro actif')
         }
-        {noiseSuppressionEnabled && <span className="ml-2 text-[#818cf8]">• Bruit supprimé</span>}
+        {noiseSuppressionEnabled && <span className="ml-2 text-primary-hover">• Bruit supprimé</span>}
       </p>
 
       {/* Invite modal */}
@@ -417,15 +417,15 @@ function SquadCard({ squad, onJoin, isConnecting }: {
       whileHover={{ y: -1, scale: 1.01 }}
       whileTap={{ scale: 0.99 }}
     >
-      <Card className="p-4 bg-gradient-to-br from-[rgba(99,102,241,0.08)] to-transparent border-[rgba(99,102,241,0.15)] hover:border-[rgba(99,102,241,0.3)] transition-interactive">
+      <Card className="p-4 bg-gradient-to-br from-primary/[0.08] to-transparent border-primary hover:border-primary transition-interactive">
         <div className="flex items-center gap-4">
           <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#6366f1] to-[#a78bfa] flex items-center justify-center shadow-md shadow-[#6366f1]/10">
             <Gamepad2 className="w-6 h-6 text-white" />
           </div>
 
           <div className="flex-1 min-w-0">
-            <h3 className="text-[15px] font-semibold text-[#f7f8f8] truncate">{squad.name}</h3>
-            <p className="text-[12px] text-[#8b8d90]">{squad.game} · {squad.member_count} membre{squad.member_count > 1 ? 's' : ''}</p>
+            <h3 className="text-[15px] font-semibold text-text-primary truncate">{squad.name}</h3>
+            <p className="text-[12px] text-text-secondary">{squad.game} · {squad.member_count} membre{squad.member_count > 1 ? 's' : ''}</p>
           </div>
 
           <Button
@@ -466,18 +466,18 @@ function Toast({ message, isVisible, onClose, variant = 'success' }: {
 
   const variantStyles = {
     success: {
-      bg: 'bg-[#34d399]',
-      text: 'text-[#050506]',
+      bg: 'bg-success',
+      text: 'text-bg-base',
       Icon: CheckCircle2
     },
     error: {
-      bg: 'bg-[#fb7185]',
+      bg: 'bg-error',
       text: 'text-white',
       Icon: AlertCircle
     },
     warning: {
-      bg: 'bg-[#fbbf24]',
-      text: 'text-[#050506]',
+      bg: 'bg-warning',
+      text: 'text-bg-base',
       Icon: WifiOff
     }
   }
@@ -643,7 +643,7 @@ export function Party() {
   const otherSquads = squads.filter(s => s.id !== activeSquadId)
 
   return (
-    <div className="min-h-0 bg-[#050506] pb-6">
+    <div className="min-h-0 bg-bg-base pb-6">
       {/* Confetti celebration when duo */}
       {showDuoConfetti && (
         <Confetti
@@ -677,15 +677,15 @@ export function Party() {
           {/* Header compact */}
           <div className="flex items-center justify-between mb-6">
             <div>
-              <h1 className="text-2xl font-bold text-[#f7f8f8]">Party</h1>
-              <p className="text-[13px] text-[#5e6063]">
+              <h1 className="text-2xl font-bold text-text-primary">Party</h1>
+              <p className="text-[13px] text-text-tertiary">
                 {isConnected ? 'Connecté' : squads.length > 0 ? `${squads.length} squad${squads.length > 1 ? 's' : ''}` : 'Rejoins une squad'}
               </p>
             </div>
             {isConnected && (
-              <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#34d399]/15 border border-[#34d399]/30">
-                <div className="w-2 h-2 rounded-full bg-[#34d399] animate-pulse" />
-                <span className="text-[12px] font-medium text-[#34d399]">En ligne</span>
+              <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-success/15 border border-success/30">
+                <div className="w-2 h-2 rounded-full bg-success animate-pulse" />
+                <span className="text-[12px] font-medium text-success">En ligne</span>
               </div>
             )}
           </div>
@@ -693,7 +693,7 @@ export function Party() {
           {/* Loading */}
           {squadsLoading ? (
             <div className="flex justify-center py-12">
-              <Loader2 className="w-8 h-8 text-[#6366f1] animate-spin" />
+              <Loader2 className="w-8 h-8 text-primary animate-spin" />
             </div>
           ) : squads.length === 0 ? (
             /* État vide - design amélioré */
@@ -702,7 +702,7 @@ export function Party() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4 }}
             >
-              <Card className="p-8 text-center bg-gradient-to-br from-[rgba(99,102,241,0.08)] to-transparent border-[rgba(99,102,241,0.15)]">
+              <Card className="p-8 text-center bg-gradient-to-br from-primary/[0.08] to-transparent border-primary">
                 <motion.div
                   className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#6366f1] to-[#a78bfa] flex items-center justify-center mx-auto mb-5 shadow-md shadow-[#6366f1]/15"
                   animate={{ scale: [1, 1.02, 1] }}
@@ -710,10 +710,10 @@ export function Party() {
                 >
                   <Mic className="w-8 h-8 text-white" strokeWidth={1.5} />
                 </motion.div>
-                <h3 className="text-[18px] font-bold text-[#f7f8f8] mb-2">
+                <h3 className="text-[18px] font-bold text-text-primary mb-2">
                   Parle avec ta squad
                 </h3>
-                <p className="text-[14px] text-[#8b8d90] mb-6 max-w-[280px] mx-auto leading-relaxed">
+                <p className="text-[14px] text-text-secondary mb-6 max-w-[280px] mx-auto leading-relaxed">
                   Crée ou rejoins une squad pour lancer des parties vocales avec tes potes.
                 </p>
                 <Link to="/squads">
@@ -751,7 +751,7 @@ export function Party() {
                 >
                   {squads.length === 1 ? (
                     /* Une seule squad - affichage central amélioré */
-                    <Card className="p-8 text-center bg-gradient-to-br from-[rgba(99,102,241,0.1)] via-transparent to-[rgba(52,211,153,0.05)] border-[rgba(99,102,241,0.2)]">
+                    <Card className="p-8 text-center bg-gradient-to-br from-primary/10 via-transparent to-success/5 border-primary">
                       <motion.div
                         className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#6366f1] to-[#a78bfa] flex items-center justify-center mx-auto mb-5 shadow-lg shadow-[#6366f1]/15"
                         animate={{ scale: [1, 1.02, 1] }}
@@ -759,13 +759,13 @@ export function Party() {
                       >
                         <Mic className="w-8 h-8 text-white" />
                       </motion.div>
-                      <h3 className="text-[18px] font-bold text-[#f7f8f8] mb-2">
+                      <h3 className="text-[18px] font-bold text-text-primary mb-2">
                         🎤 Prêt à parler ?
                       </h3>
-                      <p className="text-[14px] text-[#8b8d90] mb-2">
+                      <p className="text-[14px] text-text-secondary mb-2">
                         {squads[0].name}
                       </p>
-                      <p className="text-[12px] text-[#5e6063] mb-5">
+                      <p className="text-[12px] text-text-tertiary mb-5">
                         {squads[0].game} · {squads[0].member_count || 1} membre{(squads[0].member_count || 1) > 1 ? 's' : ''}
                       </p>
                       <Button
@@ -805,7 +805,7 @@ export function Party() {
               {/* Autres squads quand connecté */}
               {isConnected && otherSquads.length > 0 && (
                 <div>
-                  <h2 className="text-[13px] font-semibold text-[#f7f8f8] uppercase tracking-wide mb-3">
+                  <h2 className="text-[13px] font-semibold text-text-primary uppercase tracking-wide mb-3">
                     Autres squads
                   </h2>
                   <div className="space-y-3">

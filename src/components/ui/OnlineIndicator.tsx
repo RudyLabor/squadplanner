@@ -50,7 +50,7 @@ export const OnlineIndicator = memo(function OnlineIndicator({
         rounded-full
         border-2 border-[#08090a]
         ${isOnline
-          ? 'bg-emerald-500 shadow-[0_0_6px_rgba(52,211,153,0.5)]'
+          ? 'bg-emerald-500 shadow-glow-success'
           : 'bg-zinc-600'
         }
         ${isOnline && pulse ? 'animate-pulse' : ''}

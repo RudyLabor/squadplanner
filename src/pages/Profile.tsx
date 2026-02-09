@@ -697,7 +697,7 @@ export function Profile() {
           <div className="flex items-start gap-3">
             <div className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 ${
               aiCoachTip?.tone === 'celebration'
-                ? 'bg-[rgba(52,211,153,0.12)]'
+                ? 'bg-success-15'
                 : aiCoachTip?.tone === 'warning'
                   ? 'bg-[rgba(251,113,133,0.12)]'
                   : 'bg-[rgba(167,139,250,0.12)]'
@@ -715,10 +715,10 @@ export function Profile() {
                 <h3 className="text-[14px] font-semibold text-text-primary">Coach IA</h3>
                 <span className={`text-xs px-1.5 py-0.5 rounded-full font-medium ${
                   aiCoachTip?.tone === 'celebration'
-                    ? 'bg-[rgba(52,211,153,0.15)] text-success'
+                    ? 'bg-success-15 text-success'
                     : aiCoachTip?.tone === 'warning'
                       ? 'bg-[rgba(251,113,133,0.15)] text-error'
-                      : 'bg-[rgba(167,139,250,0.15)] text-purple'
+                      : 'bg-purple-15 text-purple'
                 }`}>
                   {aiCoachTip?.tone === 'celebration' ? 'BRAVO' : aiCoachTip?.tone === 'warning' ? 'ATTENTION' : 'CONSEIL'}
                 </span>
@@ -772,7 +772,7 @@ export function Profile() {
           onClick={() => navigate('/call-history')}
         >
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-[rgba(52,211,153,0.12)] flex items-center justify-center">
+            <div className="w-10 h-10 rounded-xl bg-success-15 flex items-center justify-center">
               <Phone className="w-5 h-5 text-success" />
             </div>
             <div className="flex-1">
@@ -849,7 +849,7 @@ export function Profile() {
         {hasPremium && (
           <Card className="mb-5 p-4 bg-gradient-to-br from-[rgba(251,191,36,0.08)] to-[rgba(251,191,36,0.02)] border-[rgba(251,191,36,0.15)]">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-[rgba(251,191,36,0.15)] flex items-center justify-center">
+              <div className="w-10 h-10 rounded-xl bg-warning-15 flex items-center justify-center">
                 <Zap className="w-5 h-5 text-warning" />
               </div>
               <div className="flex-1">
@@ -880,7 +880,7 @@ export function Profile() {
                   transition={{ delay: index * 0.1 }}
                   className={`relative p-3 rounded-xl text-center ${
                     isUnlocked
-                      ? 'bg-gradient-to-br from-[rgba(99,102,241,0.15)] to-[rgba(167,139,250,0.08)] border border-[rgba(99,102,241,0.2)]'
+                      ? 'bg-gradient-to-br from-primary-15 to-[rgba(167,139,250,0.08)] border border-primary'
                       : 'bg-surface-card border border-transparent'
                   }`}
                 >

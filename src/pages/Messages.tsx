@@ -52,8 +52,8 @@ function MessageToast({ message, isVisible, variant = 'success' }: {
   variant?: 'success' | 'error'
 }) {
   const styles = {
-    success: { bg: 'bg-[#34d399]', text: 'text-[#050506]', Icon: CheckCircle2 },
-    error: { bg: 'bg-[#fb7185]', text: 'text-white', Icon: AlertCircle }
+    success: { bg: 'bg-success', text: 'text-bg-base', Icon: CheckCircle2 },
+    error: { bg: 'bg-error', text: 'text-white', Icon: AlertCircle }
   }
   const style = styles[variant]
   const Icon = style.Icon
@@ -129,7 +129,7 @@ function ConversationCard({ conversation, onClick, isActive }: {
       onClick={onClick}
       className={`w-full p-3 rounded-xl text-left transition-interactive ${
         isActive
-          ? 'bg-[rgba(99,102,241,0.15)] border border-[rgba(99,102,241,0.3)]'
+          ? 'bg-primary-15 border border-primary'
           : 'hover:bg-bg-surface border border-transparent'
       }`}
     >
@@ -137,11 +137,11 @@ function ConversationCard({ conversation, onClick, isActive }: {
         {/* Avatar */}
         <div className={`relative w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 ${
           conversation.type === 'session'
-            ? 'bg-[rgba(251,191,36,0.15)]'
-            : 'bg-[rgba(99,102,241,0.15)]'
+            ? 'bg-warning-15'
+            : 'bg-primary-15'
         }`}>
           {conversation.type === 'session' ? (
-            <Gamepad2 className="w-5 h-5 text-[#fbbf24]" />
+            <Gamepad2 className="w-5 h-5 text-warning" />
           ) : (
             <Users className="w-5 h-5 text-primary" />
           )}
@@ -394,7 +394,7 @@ function SystemMessage({ message }: {
     >
       <p className={`text-[13px] italic text-center px-4 py-1.5 rounded-full ${
         isCelebration
-          ? 'bg-gradient-to-r from-[rgba(99,102,241,0.15)] to-[rgba(167,139,250,0.15)] text-[#a5b4fc] border border-[rgba(99,102,241,0.2)]'
+          ? 'bg-gradient-to-r from-primary-15 to-purple-15 text-primary-light border border-primary'
           : 'text-text-tertiary'
       }`}>
         {isCelebration && <span className="mr-1">🎉</span>}
@@ -468,7 +468,7 @@ function MessageBubble({ message, isOwn, showAvatar, showName, currentUserId, is
                 className="w-8 h-8 rounded-full object-cover"
               />
             ) : (
-              <div className="w-8 h-8 rounded-full bg-[rgba(99,102,241,0.2)] flex items-center justify-center text-xs font-bold text-primary">
+              <div className="w-8 h-8 rounded-full bg-primary-20 flex items-center justify-center text-xs font-bold text-primary">
                 {initial}
               </div>
             )}
@@ -485,7 +485,7 @@ function MessageBubble({ message, isOwn, showAvatar, showName, currentUserId, is
 
           {/* Pinned indicator */}
           {message.is_pinned && (
-            <span className="text-[10px] text-[#fbbf24] mb-1 ml-1 flex items-center gap-1">
+            <span className="text-[10px] text-warning mb-1 ml-1 flex items-center gap-1">
               <span>📌</span> Epingle
             </span>
           )}
@@ -525,8 +525,8 @@ function MessageBubble({ message, isOwn, showAvatar, showName, currentUserId, is
             <div
               className={`px-4 py-2.5 rounded-2xl transition-colors duration-150 ${
                 isOwn
-                  ? 'bg-primary text-white rounded-br-lg hover:bg-[#7c7ffa] hover:shadow-[0_0_10px_rgba(99,102,241,0.15)]'
-                  : 'bg-bg-surface text-text-primary rounded-bl-lg hover:bg-bg-hover hover:shadow-[0_0_10px_rgba(255,255,255,0.025)]'
+                  ? 'bg-primary text-white rounded-br-lg hover:bg-primary-hover hover:shadow-glow-primary-sm'
+                  : 'bg-bg-surface text-text-primary rounded-bl-lg hover:bg-bg-hover hover:shadow-sm'
               }`}
             >
               <MessageContent
@@ -617,7 +617,7 @@ function DMConversationCard({ conversation, onClick }: {
     >
       <div className="flex items-center gap-3">
         {/* Avatar */}
-        <div className="relative w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 overflow-hidden bg-[rgba(99,102,241,0.15)]">
+        <div className="relative w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 overflow-hidden bg-primary-15">
           {conversation.other_user_avatar_url ? (
             <img
               src={conversation.other_user_avatar_url}
@@ -1091,9 +1091,9 @@ export function Messages() {
     if (messageElement) {
       messageElement.scrollIntoView({ behavior: 'smooth', block: 'center' })
       // Highlight the message briefly
-      messageElement.classList.add('ring-2', 'ring-[#f5a623]', 'ring-opacity-50')
+      messageElement.classList.add('ring-2', 'ring-warning', 'ring-opacity-50')
       setTimeout(() => {
-        messageElement.classList.remove('ring-2', 'ring-[#f5a623]', 'ring-opacity-50')
+        messageElement.classList.remove('ring-2', 'ring-warning', 'ring-opacity-50')
       }, 2000)
     }
   }, [])
@@ -1168,7 +1168,7 @@ export function Messages() {
           onChange={(e) => setSearchQuery(e.target.value)}
           placeholder={activeTab === 'squads' ? 'Rechercher une squad...' : 'Rechercher un contact...'}
           aria-label="Rechercher une conversation"
-          className="w-full h-11 pl-10 pr-4 bg-bg-surface border border-border-default rounded-xl text-[14px] text-text-primary placeholder:text-text-quaternary focus:outline-none focus:border-[rgba(99,102,241,0.5)] transition-colors"
+          className="w-full h-11 pl-10 pr-4 bg-bg-surface border border-border-default rounded-xl text-[14px] text-text-primary placeholder:text-text-quaternary focus:outline-none focus:border-primary transition-colors"
         />
       </div>
 
@@ -1262,11 +1262,11 @@ export function Messages() {
             <>
               <div className={`w-11 h-11 rounded-xl flex items-center justify-center ${
                 activeSquadConv.type === 'session'
-                  ? 'bg-[rgba(251,191,36,0.15)]'
-                  : 'bg-[rgba(99,102,241,0.15)]'
+                  ? 'bg-warning-15'
+                  : 'bg-primary-15'
               }`}>
                 {activeSquadConv.type === 'session' ? (
-                  <Gamepad2 className="w-5 h-5 text-[#fbbf24]" />
+                  <Gamepad2 className="w-5 h-5 text-warning" />
                 ) : (
                   <Users className="w-5 h-5 text-primary" />
                 )}
@@ -1277,7 +1277,7 @@ export function Messages() {
               </div>
               <button
                 onClick={() => { setShowMessageSearch(s => !s); setMessageSearchQuery('') }}
-                className={`p-2.5 rounded-xl transition-colors ${showMessageSearch ? 'bg-[rgba(99,102,241,0.15)] text-primary' : 'hover:bg-surface-card-hover text-text-tertiary'}`}
+                className={`p-2.5 rounded-xl transition-colors ${showMessageSearch ? 'bg-primary-15 text-primary' : 'hover:bg-surface-card-hover text-text-tertiary'}`}
                 aria-label="Rechercher dans les messages"
               >
                 <Search className="w-5 h-5" />
@@ -1286,7 +1286,7 @@ export function Messages() {
           ) : activeDMConv ? (
             // DM chat header
             <>
-              <div className="w-11 h-11 rounded-full flex items-center justify-center overflow-hidden bg-[rgba(99,102,241,0.15)]">
+              <div className="w-11 h-11 rounded-full flex items-center justify-center overflow-hidden bg-primary-15">
                 {activeDMConv.other_user_avatar_url ? (
                   <img
                     src={activeDMConv.other_user_avatar_url}
@@ -1314,7 +1314,7 @@ export function Messages() {
                     )
                   }
                 }}
-                className="p-2.5 rounded-xl bg-[rgba(34,197,94,0.1)] hover:bg-[rgba(34,197,94,0.2)] transition-colors"
+                className="p-2.5 rounded-xl bg-success-10 hover:bg-success-20 transition-colors"
                 aria-label={`Appeler ${activeDMConv.other_user_username}`}
               >
                 <Phone className="w-5 h-5 text-success" aria-hidden="true" />
@@ -1341,7 +1341,7 @@ export function Messages() {
                   value={messageSearchQuery}
                   onChange={(e) => setMessageSearchQuery(e.target.value)}
                   placeholder="Rechercher dans les messages..."
-                  className="w-full h-9 pl-9 pr-3 bg-[rgba(255,255,255,0.05)] border border-border-default rounded-lg text-[13px] text-text-primary placeholder:text-text-quaternary focus:outline-none focus:border-[rgba(99,102,241,0.5)]"
+                  className="w-full h-9 pl-9 pr-3 bg-border-subtle border border-border-default rounded-lg text-[13px] text-text-primary placeholder:text-text-quaternary focus:outline-none focus:border-primary"
                   autoFocus
                 />
                 {messageSearchQuery && (
@@ -1421,7 +1421,7 @@ export function Messages() {
                 exit={{ opacity: 0, y: 20, scale: 0.8 }}
                 transition={{ type: 'spring', stiffness: 300, damping: 25 }}
                 onClick={scrollToBottom}
-                className={`${embedded ? 'absolute' : 'fixed'} bottom-28 right-6 w-10 h-10 bg-primary hover:bg-[#7c7ffa] rounded-full flex items-center justify-center shadow-md shadow-[rgba(99,102,241,0.15)] transition-colors z-50`}
+                className={`${embedded ? 'absolute' : 'fixed'} bottom-28 right-6 w-10 h-10 bg-primary hover:bg-primary-hover rounded-full flex items-center justify-center shadow-md shadow-glow-primary-sm transition-colors z-50`}
                 aria-label="Scroll to bottom"
               >
                 <ChevronDown className="w-5 h-5 text-white" />
@@ -1507,7 +1507,7 @@ export function Messages() {
                 exit={{ opacity: 0, y: 20, scale: 0.8 }}
                 transition={{ type: 'spring', stiffness: 300, damping: 25 }}
                 onClick={scrollToBottom}
-                className={`${embedded ? 'absolute' : 'fixed'} bottom-28 right-6 w-10 h-10 bg-primary hover:bg-[#7c7ffa] rounded-full flex items-center justify-center shadow-md shadow-[rgba(99,102,241,0.15)] transition-colors z-50`}
+                className={`${embedded ? 'absolute' : 'fixed'} bottom-28 right-6 w-10 h-10 bg-primary hover:bg-primary-hover rounded-full flex items-center justify-center shadow-md shadow-glow-primary-sm transition-colors z-50`}
                 aria-label="Scroll to bottom"
               >
                 <ChevronDown className="w-5 h-5 text-white" />
@@ -1557,7 +1557,7 @@ export function Messages() {
                     value={newMessage}
                     onChange={handleMessageChange}
                     placeholder={`Message à ${chatName}...`}
-                    className="w-full h-12 px-4 bg-bg-surface border border-border-default rounded-xl text-[14px] text-text-primary placeholder:text-text-quaternary focus:outline-none focus:border-[rgba(99,102,241,0.5)] transition-colors"
+                    className="w-full h-12 px-4 bg-bg-surface border border-border-default rounded-xl text-[14px] text-text-primary placeholder:text-text-quaternary focus:outline-none focus:border-primary transition-colors"
                     autoComplete="off"
                     autoCapitalize="off"
                     autoCorrect="off"
@@ -1579,7 +1579,7 @@ export function Messages() {
                 <button
                   type="button"
                   onClick={() => setShowPollModal(true)}
-                  className="p-2.5 rounded-xl text-text-quaternary hover:text-[#818cf8] hover:bg-[rgba(99,102,241,0.1)] transition-colors"
+                  className="p-2.5 rounded-xl text-text-quaternary hover:text-primary-hover hover:bg-primary-10 transition-colors"
                   aria-label="Creer un sondage"
                   title="Sondage"
                 >
@@ -1592,7 +1592,7 @@ export function Messages() {
                 <button
                   type="button"
                   onClick={() => setShowGifPicker(!showGifPicker)}
-                  className="p-2.5 rounded-xl text-[#8b8d90] hover:text-[#818cf8] hover:bg-[rgba(99,102,241,0.1)] transition-colors text-[13px] font-bold"
+                  className="p-2.5 rounded-xl text-text-secondary hover:text-primary-hover hover:bg-primary-10 transition-colors text-[13px] font-bold"
                   aria-label="Envoyer un GIF"
                 >
                   GIF
@@ -1672,7 +1672,7 @@ export function Messages() {
   const EmptyChatPlaceholder = () => (
     <div className="h-full flex items-center justify-center bg-bg-base">
       <div className="text-center">
-        <div className="w-20 h-20 rounded-2xl bg-[rgba(99,102,241,0.1)] flex items-center justify-center mx-auto mb-5">
+        <div className="w-20 h-20 rounded-2xl bg-primary-10 flex items-center justify-center mx-auto mb-5">
           <Sparkles className="w-10 h-10 text-primary" />
         </div>
         <h3 className="text-[18px] font-semibold text-text-primary mb-2">

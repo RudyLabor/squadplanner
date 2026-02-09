@@ -158,12 +158,12 @@ export function MessageActions({
       <button
         ref={buttonRef}
         onClick={() => setIsOpen(!isOpen)}
-        className="p-1.5 rounded-lg opacity-0 group-hover:opacity-100 hover:bg-[rgba(255,255,255,0.1)] transition-interactive focus:opacity-100 focus:outline-none focus:ring-2 focus:ring-[rgba(94,109,210,0.5)]"
+        className="p-1.5 rounded-lg opacity-0 group-hover:opacity-100 hover:bg-border-hover transition-interactive focus:opacity-100 focus:outline-none focus:ring-2 focus:ring-[rgba(94,109,210,0.5)]"
         aria-label="Actions du message"
         aria-expanded={isOpen}
         aria-haspopup="menu"
       >
-        <MoreHorizontal className="w-4 h-4 text-[#8b8d90]" />
+        <MoreHorizontal className="w-4 h-4 text-text-secondary" />
       </button>
 
       {/* Dropdown menu */}
@@ -175,24 +175,24 @@ export function MessageActions({
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: -5 }}
             transition={{ type: 'spring', stiffness: 400, damping: 25, duration: 0.15 }}
-            className="absolute right-0 top-full mt-1 z-50 min-w-[180px] py-1.5 bg-[#1a1a2e] border border-[rgba(255,255,255,0.1)] rounded-xl shadow-xl shadow-black/40"
+            className="absolute right-0 top-full mt-1 z-50 min-w-[180px] py-1.5 bg-surface-dark border border-border-hover rounded-xl shadow-xl shadow-black/40"
             role="menu"
             aria-orientation="vertical"
           >
             {/* Reply */}
             <button
               onClick={handleReply}
-              className="w-full flex items-center gap-3 px-4 py-2.5 text-left text-[14px] text-[#e0e0e0] hover:bg-[rgba(255,255,255,0.06)] transition-colors"
+              className="w-full flex items-center gap-3 px-4 py-2.5 text-left text-[14px] text-text-primary hover:bg-border-default transition-colors"
               role="menuitem"
             >
-              <Reply className="w-4 h-4 text-[#8b8d90]" />
+              <Reply className="w-4 h-4 text-text-secondary" />
               <span>Repondre</span>
             </button>
 
             {/* Copy */}
             <button
               onClick={handleCopy}
-              className="w-full flex items-center gap-3 px-4 py-2.5 text-left text-[14px] text-[#e0e0e0] hover:bg-[rgba(255,255,255,0.06)] transition-colors"
+              className="w-full flex items-center gap-3 px-4 py-2.5 text-left text-[14px] text-text-primary hover:bg-border-default transition-colors"
               role="menuitem"
             >
               {copied ? (
@@ -202,7 +202,7 @@ export function MessageActions({
                 </>
               ) : (
                 <>
-                  <Copy className="w-4 h-4 text-[#8b8d90]" />
+                  <Copy className="w-4 h-4 text-text-secondary" />
                   <span>Copier le texte</span>
                 </>
               )}
@@ -212,10 +212,10 @@ export function MessageActions({
             {onForward && (
               <button
                 onClick={handleForward}
-                className="w-full flex items-center gap-3 px-4 py-2.5 text-left text-[14px] text-[#e0e0e0] hover:bg-[rgba(255,255,255,0.06)] transition-colors"
+                className="w-full flex items-center gap-3 px-4 py-2.5 text-left text-[14px] text-text-primary hover:bg-border-default transition-colors"
                 role="menuitem"
               >
-                <Forward className="w-4 h-4 text-[#8b8d90]" />
+                <Forward className="w-4 h-4 text-text-secondary" />
                 <span>Transferer</span>
               </button>
             )}
@@ -224,7 +224,7 @@ export function MessageActions({
             {isAdmin && (
               <button
                 onClick={handlePin}
-                className="w-full flex items-center gap-3 px-4 py-2.5 text-left text-[14px] text-[#e0e0e0] hover:bg-[rgba(255,255,255,0.06)] transition-colors"
+                className="w-full flex items-center gap-3 px-4 py-2.5 text-left text-[14px] text-text-primary hover:bg-border-default transition-colors"
                 role="menuitem"
               >
                 <Pin className="w-4 h-4 text-[#f5a623]" />
@@ -235,10 +235,10 @@ export function MessageActions({
             {/* Edit (own messages only) */}
             {isOwnMessage && (
               <>
-                <div className="my-1.5 h-px bg-[rgba(255,255,255,0.06)]" role="separator" />
+                <div className="my-1.5 h-px bg-border-default" role="separator" />
                 <button
                   onClick={handleEdit}
-                  className="w-full flex items-center gap-3 px-4 py-2.5 text-left text-[14px] text-[#e0e0e0] hover:bg-[rgba(255,255,255,0.06)] transition-colors"
+                  className="w-full flex items-center gap-3 px-4 py-2.5 text-left text-[14px] text-text-primary hover:bg-border-default transition-colors"
                   role="menuitem"
                 >
                   <Pencil className="w-4 h-4 text-[#5e6dd2]" />
@@ -253,8 +253,8 @@ export function MessageActions({
                 onClick={handleDelete}
                 className={`w-full flex items-center gap-3 px-4 py-2.5 text-left text-[14px] transition-colors ${
                   showDeleteConfirm
-                    ? 'bg-[rgba(248,113,113,0.15)] text-[#f87171]'
-                    : 'text-[#f87171] hover:bg-[rgba(248,113,113,0.1)]'
+                    ? 'bg-error/15 text-error'
+                    : 'text-error hover:bg-error/10'
                 }`}
                 role="menuitem"
               >

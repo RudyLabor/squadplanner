@@ -62,7 +62,7 @@ export function PinnedMessages({
   const toggleExpanded = () => setIsExpanded(!isExpanded)
 
   return (
-    <div className="border-b border-[rgba(255,255,255,0.06)]">
+    <div className="border-b border-border-default">
       {/* Collapsed header - always visible */}
       <button
         onClick={toggleExpanded}
@@ -74,7 +74,7 @@ export function PinnedMessages({
           <div className="w-7 h-7 rounded-lg bg-[rgba(245,166,35,0.15)] flex items-center justify-center">
             <Pin className="w-4 h-4 text-[#f5a623]" />
           </div>
-          <span className="text-[14px] font-medium text-[#f7f8f8]">
+          <span className="text-[14px] font-medium text-text-primary">
             {pinnedMessages.length} message{pinnedMessages.length > 1 ? 's' : ''} épinglé{pinnedMessages.length > 1 ? 's' : ''}
           </span>
         </div>
@@ -82,7 +82,7 @@ export function PinnedMessages({
           animate={{ rotate: isExpanded ? 180 : 0 }}
           transition={{ duration: 0.2 }}
         >
-          <ChevronDown className="w-5 h-5 text-[#5e6063]" />
+          <ChevronDown className="w-5 h-5 text-text-tertiary" />
         </motion.div>
       </button>
 
@@ -104,7 +104,7 @@ export function PinnedMessages({
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.05, duration: 0.2 }}
-                  className="group relative bg-[#18191b] rounded-xl border border-[rgba(255,255,255,0.04)] hover:border-[rgba(245,166,35,0.2)] transition-interactive"
+                  className="group relative bg-bg-hover rounded-xl border border-border-subtle hover:border-[rgba(245,166,35,0.2)] transition-interactive"
                 >
                   {/* Clickable area to scroll to message */}
                   <button
@@ -119,23 +119,23 @@ export function PinnedMessages({
                           {pinned.message_sender_username.charAt(0).toUpperCase()}
                         </span>
                       </div>
-                      <span className="text-[13px] font-medium text-[#c9cace]">
+                      <span className="text-[13px] font-medium text-text-secondary">
                         {pinned.message_sender_username}
                       </span>
-                      <span className="text-[11px] text-[#5e6063]">
+                      <span className="text-[11px] text-text-tertiary">
                         {formatPinnedDate(pinned.message_created_at)}
                       </span>
                     </div>
 
                     {/* Message preview */}
-                    <p className="text-[14px] text-[#8b8d90] leading-relaxed">
+                    <p className="text-[14px] text-text-secondary leading-relaxed">
                       {truncateMessage(pinned.message_content)}
                     </p>
 
                     {/* Pinned by info */}
                     <div className="flex items-center gap-1.5 mt-2">
                       <Pin className="w-3 h-3 text-[#f5a623]" />
-                      <span className="text-[11px] text-[#5e6063]">
+                      <span className="text-[11px] text-text-tertiary">
                         Epingle par {pinned.pinned_by_username} {formatPinnedDate(pinned.pinned_at)}
                       </span>
                     </div>
@@ -148,10 +148,10 @@ export function PinnedMessages({
                         e.stopPropagation()
                         onUnpin(pinned.message_id)
                       }}
-                      className="absolute top-3 right-3 w-7 h-7 rounded-lg bg-[rgba(255,255,255,0.03)] hover:bg-[rgba(239,68,68,0.15)] flex items-center justify-center opacity-0 group-hover:opacity-100 transition-interactive"
+                      className="absolute top-3 right-3 w-7 h-7 rounded-lg bg-surface-card hover:bg-[rgba(239,68,68,0.15)] flex items-center justify-center opacity-0 group-hover:opacity-100 transition-interactive"
                       aria-label="Desepingler ce message"
                     >
-                      <X className="w-4 h-4 text-[#5e6063] hover:text-[#ef4444] transition-colors" />
+                      <X className="w-4 h-4 text-text-tertiary hover:text-[#ef4444] transition-colors" />
                     </button>
                   )}
                 </motion.div>

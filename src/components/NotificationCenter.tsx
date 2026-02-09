@@ -119,7 +119,7 @@ export function NotificationBell() {
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className="relative p-2 rounded-lg text-[#8b8d90] hover:text-[#f7f8f8] hover:bg-[rgba(255,255,255,0.05)] transition-colors"
+        className="relative p-2 rounded-lg text-[#8b8d90] hover:text-[#f7f8f8] hover:bg-border-subtle transition-colors"
         aria-label={`Notifications${unreadCount > 0 ? ` (${unreadCount} non lues)` : ''}`}
       >
         <Bell className="w-5 h-5" />
@@ -141,10 +141,10 @@ export function NotificationBell() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -8, scale: 0.95 }}
             transition={{ duration: 0.15 }}
-            className="absolute right-0 top-12 w-80 max-h-96 rounded-xl bg-[#0f1012] border border-[rgba(255,255,255,0.06)] shadow-2xl overflow-hidden z-50"
+            className="absolute right-0 top-12 w-80 max-h-96 rounded-xl bg-[#0f1012] border border-border-default shadow-2xl overflow-hidden z-50"
           >
             {/* Header */}
-            <div className="flex items-center justify-between px-4 py-3 border-b border-[rgba(255,255,255,0.06)]">
+            <div className="flex items-center justify-between px-4 py-3 border-b border-border-default">
               <h3 className="text-[14px] font-semibold text-[#f7f8f8]">Notifications</h3>
               <div className="flex items-center gap-2">
                 {unreadCount > 0 && (
@@ -179,7 +179,7 @@ export function NotificationBell() {
                     key={notif.id}
                     type="button"
                     onClick={() => markAsRead(notif.id)}
-                    className={`w-full text-left px-4 py-3 border-b border-[rgba(255,255,255,0.03)] hover:bg-[rgba(255,255,255,0.03)] transition-colors ${
+                    className={`w-full text-left px-4 py-3 border-b border-[rgba(255,255,255,0.03)] hover:bg-surface-card transition-colors ${
                       !notif.read ? 'bg-[rgba(99,102,241,0.04)]' : ''
                     }`}
                   >

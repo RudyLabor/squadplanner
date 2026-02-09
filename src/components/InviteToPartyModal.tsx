@@ -170,12 +170,12 @@ export function InviteToPartyModal({
           {/* Header */}
           <div className="flex items-center justify-between p-4 border-b border-white/5">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-[#6366f1]/15 flex items-center justify-center">
-                <UserPlus className="w-5 h-5 text-[#6366f1]" />
+              <div className="w-10 h-10 rounded-xl bg-primary-15 flex items-center justify-center">
+                <UserPlus className="w-5 h-5 text-primary" />
               </div>
               <div>
-                <h2 id="invite-party-title" className="text-[16px] font-semibold text-[#f7f8f8]">Inviter à la Party</h2>
-                <p className="text-[12px] text-[#8b8d90]">{squadName}</p>
+                <h2 id="invite-party-title" className="text-[16px] font-semibold text-text-primary">Inviter à la Party</h2>
+                <p className="text-[12px] text-text-secondary">{squadName}</p>
               </div>
             </div>
             <button
@@ -183,7 +183,7 @@ export function InviteToPartyModal({
               aria-label="Fermer"
               className="p-2 rounded-lg hover:bg-white/5 transition-colors"
             >
-              <X className="w-5 h-5 text-[#8b8d90]" />
+              <X className="w-5 h-5 text-text-secondary" />
             </button>
           </div>
 
@@ -193,8 +193,8 @@ export function InviteToPartyModal({
               onClick={copyLink}
               className={`w-full flex items-center justify-center gap-2 p-3 rounded-xl transition-interactive ${
                 linkCopied
-                  ? 'bg-[#34d399]/15 text-[#34d399] border border-[#34d399]/20'
-                  : 'bg-white/5 text-[#8b8d90] hover:bg-white/10 hover:text-[#f7f8f8] border border-white/10'
+                  ? 'bg-success-15 text-success border border-success/20'
+                  : 'bg-white/5 text-text-secondary hover:bg-white/10 hover:text-text-primary border border-white/10'
               }`}
             >
               {linkCopied ? (
@@ -215,17 +215,17 @@ export function InviteToPartyModal({
           <div className="p-4 max-h-[300px] overflow-y-auto">
             {loading ? (
               <div className="flex justify-center py-8">
-                <Loader2 className="w-6 h-6 text-[#6366f1] animate-spin" />
+                <Loader2 className="w-6 h-6 text-primary animate-spin" />
               </div>
             ) : members.length === 0 ? (
               <div className="text-center py-8">
-                <p className="text-[14px] text-[#8b8d90]">
+                <p className="text-[14px] text-text-secondary">
                   Tous les membres sont déjà dans la party !
                 </p>
               </div>
             ) : (
               <div className="space-y-2">
-                <p className="text-[12px] text-[#5e6063] mb-3 uppercase tracking-wide font-medium">
+                <p className="text-[12px] text-text-tertiary mb-3 uppercase tracking-wide font-medium">
                   Membres de la squad ({members.length})
                 </p>
                 {members.map((member) => {
@@ -248,24 +248,24 @@ export function InviteToPartyModal({
                             className="w-10 h-10 rounded-full object-cover"
                           />
                         ) : (
-                          <div className="w-10 h-10 rounded-full bg-[#6366f1]/20 flex items-center justify-center">
-                            <span className="text-[14px] font-semibold text-[#6366f1]">
+                          <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center">
+                            <span className="text-[14px] font-semibold text-primary">
                               {member.username.charAt(0).toUpperCase()}
                             </span>
                           </div>
                         )}
                         {/* Online indicator */}
                         {member.is_online && (
-                          <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-[#34d399] border-2 border-[#0c0c0e]" />
+                          <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-success border-2 border-bg-base" />
                         )}
                       </div>
 
                       {/* Name */}
                       <div className="flex-1 min-w-0">
-                        <p className="text-[14px] font-medium text-[#f7f8f8] truncate">
+                        <p className="text-[14px] font-medium text-text-primary truncate">
                           {member.username}
                         </p>
-                        <p className="text-[12px] text-[#5e6063]">
+                        <p className="text-[12px] text-text-tertiary">
                           {member.is_online ? 'En ligne' : 'Hors ligne'}
                         </p>
                       </div>
@@ -276,7 +276,7 @@ export function InviteToPartyModal({
                         variant={isInvited ? 'ghost' : 'primary'}
                         onClick={() => !isInvited && inviteMember(member.id)}
                         disabled={isInvited || isSending}
-                        className={isInvited ? 'text-[#34d399] bg-[#34d399]/10' : ''}
+                        className={isInvited ? 'text-success bg-success-10' : ''}
                       >
                         {isSending ? (
                           <Loader2 className="w-4 h-4 animate-spin" />

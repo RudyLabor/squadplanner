@@ -30,16 +30,16 @@ export function OfflineBanner() {
             role="alert"
             aria-live="assertive"
           >
-            <div className="mx-4 mt-2 p-3 rounded-xl bg-[#f87171]/15 border border-[#f87171]/20 backdrop-blur-md shadow-lg">
+            <div className="mx-4 mt-2 p-3 rounded-xl bg-error/15 border border-error/20 backdrop-blur-md shadow-lg">
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-lg bg-[#f87171]/20 flex items-center justify-center flex-shrink-0">
-                  <WifiOff className="w-4 h-4 text-[#f87171]" />
+                <div className="w-8 h-8 rounded-lg bg-error/20 flex items-center justify-center flex-shrink-0">
+                  <WifiOff className="w-4 h-4 text-error" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-[14px] font-medium text-[#f87171]">
+                  <p className="text-[14px] font-medium text-error">
                     Hors ligne
                   </p>
-                  <p className="text-[12px] text-[#f87171]/80">
+                  <p className="text-[12px] text-error/80">
                     Vérifie ta connexion internet
                   </p>
                 </div>
@@ -48,7 +48,7 @@ export function OfflineBanner() {
                   className="p-2 rounded-lg hover:bg-white/10 transition-colors"
                   aria-label="Fermer"
                 >
-                  <X className="w-4 h-4 text-[#f87171]/60" />
+                  <X className="w-4 h-4 text-error/60" />
                 </button>
               </div>
             </div>
@@ -68,13 +68,13 @@ export function OfflineBanner() {
             role="status"
             aria-live="polite"
           >
-            <div className="mx-4 mt-2 p-3 rounded-xl bg-[#34d399]/15 border border-[#34d399]/20 backdrop-blur-md shadow-lg">
+            <div className="mx-4 mt-2 p-3 rounded-xl bg-success/15 border border-success/20 backdrop-blur-md shadow-lg">
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-lg bg-[#34d399]/20 flex items-center justify-center flex-shrink-0">
-                  <Wifi className="w-4 h-4 text-[#34d399]" />
+                <div className="w-8 h-8 rounded-lg bg-success/20 flex items-center justify-center flex-shrink-0">
+                  <Wifi className="w-4 h-4 text-success" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-[14px] font-medium text-[#34d399]">
+                  <p className="text-[14px] font-medium text-success">
                     Connexion rétablie
                   </p>
                 </div>
@@ -83,7 +83,7 @@ export function OfflineBanner() {
                   className="p-2 rounded-lg hover:bg-white/10 transition-colors"
                   aria-label="Fermer"
                 >
-                  <X className="w-4 h-4 text-[#34d399]/60" />
+                  <X className="w-4 h-4 text-success/60" />
                 </button>
               </div>
             </div>

@@ -139,7 +139,7 @@ export const MessageContent = memo(function MessageContent({
         <div className={`text-[12px] italic mb-1 flex items-center gap-1 ${isOwn ? 'text-white/60' : 'text-text-quaternary'}`}>
           ↩️ {header.replace('↩️ ', '').replace(/\*/g, '')}
         </div>
-        <div className={`pl-3 border-l-2 ${isOwn ? 'border-white/20' : 'border-[rgba(99,102,241,0.3)]'}`}>
+        <div className={`pl-3 border-l-2 ${isOwn ? 'border-white/20' : 'border-primary'}`}>
           <MessageContent content={body} isOwn={isOwn} onMentionClick={onMentionClick} />
         </div>
       </div>
@@ -174,8 +174,8 @@ export const MessageContent = memo(function MessageContent({
                 key={i}
                 className={`px-1.5 py-0.5 rounded text-[13px] font-mono ${
                   isOwn
-                    ? 'bg-[rgba(255,255,255,0.2)] text-white'
-                    : 'bg-[rgba(99,102,241,0.1)] text-[#a5b4fc]'
+                    ? 'bg-overlay-heavy text-white'
+                    : 'bg-primary-10 text-[#a5b4fc]'
                 }`}
               >
                 {token.value}
@@ -207,8 +207,8 @@ export const MessageContent = memo(function MessageContent({
                 type="button"
                 className={`inline rounded px-0.5 font-medium transition-colors ${
                   isOwn
-                    ? 'bg-[rgba(255,255,255,0.2)] text-white hover:bg-[rgba(255,255,255,0.3)]'
-                    : 'bg-[rgba(99,102,241,0.15)] text-[#818cf8] hover:bg-[rgba(99,102,241,0.25)]'
+                    ? 'bg-overlay-heavy text-white hover:bg-[rgba(255,255,255,0.3)]'
+                    : 'bg-primary-15 text-[#818cf8] hover:bg-primary-20'
                 }`}
                 onClick={(e) => {
                   e.stopPropagation()

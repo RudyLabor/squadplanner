@@ -5,12 +5,12 @@ import { Button } from '../components/ui'
 
 export function NotFound() {
   return (
-    <div className="min-h-0 bg-[#050506] pb-6">
+    <div className="min-h-0 bg-bg-base pb-6">
       <div className="px-4 md:px-6 lg:px-8 py-6 max-w-2xl lg:max-w-4xl xl:max-w-6xl mx-auto flex items-center justify-center min-h-[60vh]">
         <div className="text-center max-w-md">
         {/* Animated 404 icon — visible by default, animation is progressive enhancement */}
         <motion.div
-          className="w-24 h-24 rounded-2xl bg-gradient-to-br from-[rgba(99,102,241,0.15)] to-[rgba(167,139,250,0.08)] flex items-center justify-center mx-auto mb-6 opacity-100"
+          className="w-24 h-24 rounded-2xl bg-gradient-to-br from-primary-15 to-purple/[0.08] flex items-center justify-center mx-auto mb-6 opacity-100"
           initial={false}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ type: 'spring', stiffness: 300, damping: 20 }}
@@ -19,21 +19,21 @@ export function NotFound() {
             animate={{ rotate: [0, 10, -10, 0] }}
             transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
           >
-            <Gamepad2 className="w-12 h-12 text-[#6366f1]" />
+            <Gamepad2 className="w-12 h-12 text-primary" />
           </motion.div>
         </motion.div>
 
         {/* Title — always visible */}
-        <h1 className="text-6xl font-bold text-[#f7f8f8] mb-3">
+        <h1 className="text-6xl font-bold text-text-primary mb-3">
           404
         </h1>
 
         {/* Message — always visible */}
-        <p className="text-[18px] font-semibold text-[#f7f8f8] mb-2">
+        <p className="text-[18px] font-semibold text-text-primary mb-2">
           Oups, cette page n'existe pas !
         </p>
 
-        <p className="text-[14px] text-[#8b8d90] mb-8">
+        <p className="text-[14px] text-text-secondary mb-8">
           La page que tu cherches a peut-être été déplacée ou n'existe plus.
         </p>
 

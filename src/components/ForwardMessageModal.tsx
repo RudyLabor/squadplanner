@@ -77,24 +77,24 @@ export const ForwardMessageModal = memo(function ForwardMessageModal({
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
             transition={{ type: 'spring', stiffness: 300, damping: 25 }}
             onClick={(e) => e.stopPropagation()}
-            className="w-full max-w-md bg-[#1a1b1e] border border-[rgba(255,255,255,0.08)] rounded-2xl overflow-hidden"
+            className="w-full max-w-md bg-[#1a1b1e] border border-border-hover rounded-2xl overflow-hidden"
           >
             {/* Header */}
-            <div className="flex items-center justify-between px-5 py-4 border-b border-[rgba(255,255,255,0.06)]">
+            <div className="flex items-center justify-between px-5 py-4 border-b border-border-default">
               <div className="flex items-center gap-2">
-                <Forward className="w-5 h-5 text-[#818cf8]" />
+                <Forward className="w-5 h-5 text-primary-hover" />
                 <h2 className="text-[16px] font-semibold text-text-primary">Transferer le message</h2>
               </div>
               <button
                 onClick={handleClose}
-                className="p-1.5 rounded-lg hover:bg-[rgba(255,255,255,0.05)] text-text-tertiary transition-colors"
+                className="p-1.5 rounded-lg hover:bg-border-subtle text-text-tertiary transition-colors"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
             {/* Message preview */}
-            <div className="mx-5 mt-4 p-3 rounded-xl bg-[rgba(255,255,255,0.03)] border border-[rgba(255,255,255,0.06)]">
+            <div className="mx-5 mt-4 p-3 rounded-xl bg-surface-card border border-border-default">
               <p className="text-[11px] text-text-quaternary mb-1">De {senderUsername}</p>
               <p className="text-[13px] text-text-secondary line-clamp-3">{messageContent}</p>
             </div>
@@ -108,7 +108,7 @@ export const ForwardMessageModal = memo(function ForwardMessageModal({
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Rechercher une squad..."
-                  className="w-full h-10 pl-10 pr-4 bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.08)] rounded-xl text-[13px] text-text-primary placeholder:text-text-quaternary focus:outline-none focus:border-[rgba(99,102,241,0.4)] transition-colors"
+                  className="w-full h-10 pl-10 pr-4 bg-border-subtle border border-border-hover rounded-xl text-[13px] text-text-primary placeholder:text-text-quaternary focus:outline-none focus:border-primary transition-colors"
                 />
               </div>
             </div>
@@ -125,19 +125,19 @@ export const ForwardMessageModal = memo(function ForwardMessageModal({
                     onClick={() => setSelectedSquadId(squad.id === selectedSquadId ? null : squad.id)}
                     className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-colors ${
                       selectedSquadId === squad.id
-                        ? 'bg-[rgba(99,102,241,0.15)] border border-[rgba(99,102,241,0.3)]'
-                        : 'hover:bg-[rgba(255,255,255,0.05)] border border-transparent'
+                        ? 'bg-primary-15 border border-primary'
+                        : 'hover:bg-border-subtle border border-transparent'
                     }`}
                   >
-                    <div className="w-9 h-9 rounded-lg bg-[rgba(99,102,241,0.15)] flex items-center justify-center flex-shrink-0">
-                      <Users className="w-4 h-4 text-[#818cf8]" />
+                    <div className="w-9 h-9 rounded-lg bg-primary-15 flex items-center justify-center flex-shrink-0">
+                      <Users className="w-4 h-4 text-primary-hover" />
                     </div>
                     <div className="flex-1 min-w-0 text-left">
                       <p className="text-[13px] font-medium text-text-primary truncate">{squad.name}</p>
                       <p className="text-[11px] text-text-quaternary">{squad.game}</p>
                     </div>
                     {selectedSquadId === squad.id && (
-                      <Check className="w-4 h-4 text-[#818cf8] flex-shrink-0" />
+                      <Check className="w-4 h-4 text-primary-hover flex-shrink-0" />
                     )}
                   </button>
                 ))
@@ -145,11 +145,11 @@ export const ForwardMessageModal = memo(function ForwardMessageModal({
             </div>
 
             {/* Footer */}
-            <div className="flex items-center justify-end gap-3 px-5 py-4 border-t border-[rgba(255,255,255,0.06)]">
+            <div className="flex items-center justify-end gap-3 px-5 py-4 border-t border-border-default">
               <button
                 type="button"
                 onClick={handleClose}
-                className="px-4 py-2.5 rounded-xl text-[13px] font-medium text-text-tertiary hover:bg-[rgba(255,255,255,0.05)] transition-colors"
+                className="px-4 py-2.5 rounded-xl text-[13px] font-medium text-text-tertiary hover:bg-border-subtle transition-colors"
               >
                 Annuler
               </button>
@@ -157,7 +157,7 @@ export const ForwardMessageModal = memo(function ForwardMessageModal({
                 type="button"
                 onClick={handleForward}
                 disabled={!selectedSquadId || isSending || sent}
-                className="px-5 py-2.5 rounded-xl text-[13px] font-semibold bg-[#6366f1] text-white hover:bg-[#7c7ffa] transition-colors disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-2"
+                className="px-5 py-2.5 rounded-xl text-[13px] font-semibold bg-primary text-white hover:bg-[#7c7ffa] transition-colors disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-2"
               >
                 {sent ? (
                   <>

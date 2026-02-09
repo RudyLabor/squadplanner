@@ -62,7 +62,7 @@ export function XPBar({ currentXP, level, showTitle = true, compact = false, cla
         >
           {level}
         </div>
-        <div className="flex-1 h-2 bg-[rgba(255,255,255,0.05)] rounded-full overflow-hidden">
+        <div className="flex-1 h-2 bg-border-subtle rounded-full overflow-hidden">
           <motion.div
             className="h-full rounded-full"
             style={{
@@ -76,7 +76,7 @@ export function XPBar({ currentXP, level, showTitle = true, compact = false, cla
             transition={{ duration: 1, ease: 'easeOut' }}
           />
         </div>
-        <span className="text-[11px] text-[#8b8d90] tabular-nums">
+        <span className="text-[11px] text-text-secondary tabular-nums">
           {isMaxLevel ? 'MAX' : `${Math.floor(xpInLevel)}/${xpNeeded}`}
         </span>
       </div>
@@ -84,7 +84,7 @@ export function XPBar({ currentXP, level, showTitle = true, compact = false, cla
   }
 
   return (
-    <div className={`bg-[#1a1a2e] rounded-2xl p-4 ${className}`}>
+    <div className={`bg-surface-dark rounded-2xl p-4 ${className}`}>
       {/* Header with level badge and title */}
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-3">
@@ -135,7 +135,7 @@ export function XPBar({ currentXP, level, showTitle = true, compact = false, cla
                 {currentLevel.title}
               </motion.div>
             )}
-            <div className="flex items-center gap-1.5 text-[13px] text-[#8b8d90]">
+            <div className="flex items-center gap-1.5 text-[13px] text-text-secondary">
               <Zap className="w-3.5 h-3.5" style={{ color: currentLevel.color }} />
               <CountUp end={currentXP} duration={1.5} separator="," /> XP
             </div>
@@ -145,7 +145,7 @@ export function XPBar({ currentXP, level, showTitle = true, compact = false, cla
         {/* Next level indicator */}
         {!isMaxLevel && (
           <div className="text-right">
-            <div className="text-[11px] text-[#5e6063] uppercase tracking-wide mb-0.5">
+            <div className="text-[11px] text-text-tertiary uppercase tracking-wide mb-0.5">
               Prochain niveau
             </div>
             <div className="text-[13px] font-medium" style={{ color: nextLevel.color }}>
@@ -173,7 +173,7 @@ export function XPBar({ currentXP, level, showTitle = true, compact = false, cla
       {/* XP Progress bar */}
       <div className="relative">
         {/* Background bar */}
-        <div className="h-3 bg-[rgba(255,255,255,0.05)] rounded-full overflow-hidden">
+        <div className="h-3 bg-border-subtle rounded-full overflow-hidden">
           {/* Animated fill */}
           <motion.div
             className="h-full rounded-full relative overflow-hidden"
@@ -201,11 +201,11 @@ export function XPBar({ currentXP, level, showTitle = true, compact = false, cla
 
         {/* XP text below bar */}
         <div className="flex items-center justify-between mt-2">
-          <span className="text-[11px] text-[#5e6063]">
+          <span className="text-[11px] text-text-tertiary">
             <CountUp end={Math.floor(xpInLevel)} duration={1} /> XP
           </span>
           {!isMaxLevel && (
-            <span className="text-[11px] text-[#5e6063]">
+            <span className="text-[11px] text-text-tertiary">
               {xpNeeded - Math.floor(xpInLevel)} XP pour le niveau {level + 1}
             </span>
           )}

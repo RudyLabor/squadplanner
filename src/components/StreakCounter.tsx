@@ -197,7 +197,7 @@ export function StreakCounter({ streakDays, lastActiveDate, onCheckIn }: StreakC
         )}
       </AnimatePresence>
 
-      <Card className={`overflow-hidden bg-[#1a1a2e] ${intensity >= 2 ? 'ring-2 ring-offset-2 ring-offset-[#08090a] ring-orange-500' : ''}`}>
+      <Card className={`overflow-hidden bg-surface-dark ${intensity >= 2 ? 'ring-2 ring-offset-2 ring-offset-bg-base ring-orange-500' : ''}`}>
         {/* Gradient top bar */}
         <div
           className="h-1.5"
@@ -287,7 +287,7 @@ export function StreakCounter({ streakDays, lastActiveDate, onCheckIn }: StreakC
             <div className="flex-1">
               <div className="flex items-baseline gap-2">
                 <motion.span
-                  className="text-4xl font-bold text-[#f7f8f8]"
+                  className="text-4xl font-bold text-text-primary"
                   key={streakDays}
                   initial={{ scale: 1.3, color: flameColors.primary }}
                   animate={{ scale: 1, color: '#f7f8f8' }}
@@ -295,11 +295,11 @@ export function StreakCounter({ streakDays, lastActiveDate, onCheckIn }: StreakC
                 >
                   {streakDays}
                 </motion.span>
-                <span className="text-[15px] text-[#8b8d90]">
+                <span className="text-[15px] text-text-secondary">
                   {streakDays === 1 ? 'jour' : 'jours'}
                 </span>
               </div>
-              <p className="text-[13px] text-[#5e6063]">Série en cours</p>
+              <p className="text-[13px] text-text-tertiary">Série en cours</p>
 
               {/* Today's XP reward if any */}
               {currentXPReward > 0 && (
@@ -348,14 +348,14 @@ export function StreakCounter({ streakDays, lastActiveDate, onCheckIn }: StreakC
           </div>
 
           {/* Next milestone progress */}
-          <div className="mb-5 p-3 rounded-xl bg-[rgba(255,255,255,0.03)]">
+          <div className="mb-5 p-3 rounded-xl bg-surface-card">
             <div className="flex items-center justify-between mb-2">
               <div className="flex items-center gap-2">
                 <Gift className="w-4 h-4 text-[#8b93ff]" />
-                <span className="text-[13px] text-[#8b8d90]">Prochain objectif</span>
+                <span className="text-[13px] text-text-secondary">Prochain objectif</span>
               </div>
               <div className="flex items-center gap-2">
-                <span className="text-[13px] font-medium text-[#f7f8f8]">
+                <span className="text-[13px] font-medium text-text-primary">
                   {nextMilestone.emoji} {nextMilestone.label}
                 </span>
                 <span className="text-[12px] px-2 py-0.5 rounded-full bg-[#4ade80]/20 text-[#4ade80]">
@@ -365,7 +365,7 @@ export function StreakCounter({ streakDays, lastActiveDate, onCheckIn }: StreakC
             </div>
 
             {/* Progress bar */}
-            <div className="relative h-2 bg-[rgba(255,255,255,0.05)] rounded-full overflow-hidden">
+            <div className="relative h-2 bg-border-subtle rounded-full overflow-hidden">
               <motion.div
                 className="absolute h-full rounded-full"
                 style={{
@@ -377,22 +377,22 @@ export function StreakCounter({ streakDays, lastActiveDate, onCheckIn }: StreakC
               />
             </div>
 
-            <p className="text-[11px] text-[#5e6063] mt-1.5 text-right">
+            <p className="text-[11px] text-text-tertiary mt-1.5 text-right">
               Encore {nextMilestone.daysRemaining} {nextMilestone.daysRemaining === 1 ? 'jour' : 'jours'}
             </p>
           </div>
 
           {/* Mini calendar - Last 7 days */}
           <div>
-            <p className="text-[12px] text-[#5e6063] mb-2 uppercase tracking-wide">7 derniers jours</p>
+            <p className="text-[12px] text-text-tertiary mb-2 uppercase tracking-wide">7 derniers jours</p>
             <div className="flex gap-2 justify-between">
               {last7Days.map((day) => (
                 <div key={day.date} className="flex flex-col items-center gap-1">
-                  <span className="text-[11px] text-[#5e6063]">{day.dayOfWeek}</span>
+                  <span className="text-[11px] text-text-tertiary">{day.dayOfWeek}</span>
                   <motion.div
                     className={`w-8 h-8 rounded-lg flex items-center justify-center transition-interactive ${
                       day.isToday
-                        ? 'ring-2 ring-offset-1 ring-offset-[#1a1a2e]'
+                        ? 'ring-2 ring-offset-1 ring-offset-surface-dark'
                         : ''
                     }`}
                     style={{
@@ -414,7 +414,7 @@ export function StreakCounter({ streakDays, lastActiveDate, onCheckIn }: StreakC
                         style={{ backgroundColor: flameColors.primary }}
                       />
                     ) : (
-                      <div className="w-3 h-3 rounded-full bg-[rgba(255,255,255,0.1)]" />
+                      <div className="w-3 h-3 rounded-full bg-border-hover" />
                     )}
                   </motion.div>
                 </div>
@@ -447,8 +447,8 @@ export function StreakCounter({ streakDays, lastActiveDate, onCheckIn }: StreakC
               <div className="flex items-center gap-2">
                 <span className="text-lg">👑</span>
                 <div>
-                  <p className="text-[13px] font-medium text-[#f7f8f8]">Statut Légendaire !</p>
-                  <p className="text-[11px] text-[#a78bfa]">
+                  <p className="text-[13px] font-medium text-text-primary">Statut Légendaire !</p>
+                  <p className="text-[11px] text-purple">
                     Tu as atteint une série de 100+ jours. Tu es inarrêtable !
                   </p>
                 </div>

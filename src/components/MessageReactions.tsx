@@ -203,12 +203,12 @@ export function MessageReactions({
             className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-sm transition-interactive ${
               hasCurrentUser
                 ? 'bg-[rgba(74,222,128,0.15)] border border-[#4ade80]/30 text-[#4ade80]'
-                : 'bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.1)] text-[#8b8d90] hover:bg-[rgba(255,255,255,0.1)]'
+                : 'bg-border-subtle border border-border-hover text-text-secondary hover:bg-border-hover'
             } ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
             aria-label={`${emoji} reaction, ${count} ${count === 1 ? 'person' : 'people'}${hasCurrentUser ? ', you reacted' : ''}`}
           >
             <span className="text-base leading-none">{emoji}</span>
-            <span className={`text-xs font-medium ${hasCurrentUser ? 'text-[#4ade80]' : 'text-[#8b8d90]'}`}>
+            <span className={`text-xs font-medium ${hasCurrentUser ? 'text-[#4ade80]' : 'text-text-secondary'}`}>
               {count}
             </span>
           </motion.button>
@@ -231,12 +231,12 @@ export function MessageReactions({
           className={`w-7 h-7 flex items-center justify-center rounded-full transition-interactive ${
             isPickerOpen
               ? 'bg-[rgba(74,222,128,0.15)] border border-[#4ade80]/30'
-              : 'bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.1)] opacity-0 group-hover:opacity-100 hover:bg-[rgba(255,255,255,0.1)]'
+              : 'bg-border-subtle border border-border-hover opacity-0 group-hover:opacity-100 hover:bg-border-hover'
           } ${isLongPressing ? 'scale-110' : ''}`}
           aria-label="Add reaction"
           aria-expanded={isPickerOpen}
         >
-          <Plus className={`w-4 h-4 ${isPickerOpen ? 'text-[#4ade80]' : 'text-[#8b8d90]'}`} />
+          <Plus className={`w-4 h-4 ${isPickerOpen ? 'text-[#4ade80]' : 'text-text-secondary'}`} />
         </motion.button>
 
         {/* Reaction picker */}

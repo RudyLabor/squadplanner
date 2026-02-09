@@ -51,18 +51,18 @@ function FriendCard({
                 <img
                   src={getOptimizedAvatarUrl(friend.avatar_url, 48) || friend.avatar_url}
                   alt={friend.username}
-                  className="w-12 h-12 rounded-full object-cover border-2 border-[#4ade80]/30"
+                  className="w-12 h-12 rounded-full object-cover border-2 border-success/30"
                 />
               ) : (
-                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#5e6dd2]/30 to-[#8b93ff]/20 flex items-center justify-center border-2 border-[#4ade80]/30">
-                  <span className="text-[16px] font-semibold text-[#f7f8f8]">
+                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary/30 to-primary-hover/20 flex items-center justify-center border-2 border-success/30">
+                  <span className="text-[16px] font-semibold text-text-primary">
                     {friend.username.charAt(0).toUpperCase()}
                   </span>
                 </div>
               )}
               {/* Live pulse indicator */}
               <motion.div
-                className="absolute -bottom-0.5 -right-0.5 w-4 h-4 rounded-full bg-[#4ade80] border-2 border-[#08090a]"
+                className="absolute -bottom-0.5 -right-0.5 w-4 h-4 rounded-full bg-success border-2 border-bg-base"
                 animate={{
                   scale: [1, 1.2, 1],
                   boxShadow: [
@@ -79,23 +79,23 @@ function FriendCard({
               />
             </div>
             <div className="flex-1 min-w-0">
-              <div className="text-[14px] font-semibold text-[#f7f8f8] truncate">
+              <div className="text-[14px] font-semibold text-text-primary truncate">
                 {friend.username}
               </div>
-              <div className="flex items-center gap-1.5 text-[12px] text-[#8b8d90]">
+              <div className="flex items-center gap-1.5 text-[12px] text-text-secondary">
                 {friend.is_in_voice ? (
                   <>
-                    <Users className="w-3.5 h-3.5 text-[#4ade80]" />
-                    <span className="truncate text-[#4ade80]">En Party vocale</span>
+                    <Users className="w-3.5 h-3.5 text-success" />
+                    <span className="truncate text-success">En Party vocale</span>
                   </>
                 ) : friend.current_game ? (
                   <>
-                    <Gamepad2 className="w-3.5 h-3.5 text-[#5e6dd2]" />
+                    <Gamepad2 className="w-3.5 h-3.5 text-primary" />
                     <span className="truncate">{friend.current_game}</span>
                   </>
                 ) : (
                   <>
-                    <Users className="w-3.5 h-3.5 text-[#5e6dd2]" />
+                    <Users className="w-3.5 h-3.5 text-primary" />
                     <span className="truncate">En ligne</span>
                   </>
                 )}
@@ -105,12 +105,12 @@ function FriendCard({
 
           {/* Squad info */}
           {isInParty && (
-            <div className="flex items-center gap-2 px-2.5 py-1.5 rounded-lg bg-[rgba(255,255,255,0.03)] border border-white/5">
-              <Users className="w-3.5 h-3.5 text-[#5e6dd2]" />
-              <span className="text-[12px] text-[#8b8d90] truncate">
+            <div className="flex items-center gap-2 px-2.5 py-1.5 rounded-lg bg-surface-card border border-white/5">
+              <Users className="w-3.5 h-3.5 text-primary" />
+              <span className="text-[12px] text-text-secondary truncate">
                 {friend.squad_name}
               </span>
-              <span className="text-[11px] text-[#5e6063] ml-auto">
+              <span className="text-[11px] text-text-tertiary ml-auto">
                 {friend.party_member_count} {friend.party_member_count > 1 ? 'joueurs' : 'joueur'}
               </span>
             </div>
@@ -122,7 +122,7 @@ function FriendCard({
               onClick={() => onJoin(friend.squad_id)}
               whileHover={{ scale: 1.02, boxShadow: '0 0 20px rgba(74, 222, 128, 0.4)' }}
               whileTap={{ scale: 0.98 }}
-              className="w-full flex items-center justify-center gap-2 h-10 min-h-[44px] rounded-lg bg-[#4ade80]/15 hover:bg-[#4ade80]/25 border border-[#4ade80]/30 text-[#4ade80] text-[13px] font-medium transition-interactive"
+              className="w-full flex items-center justify-center gap-2 h-10 min-h-[44px] rounded-lg bg-success/15 hover:bg-success/25 border border-success/30 text-success text-[13px] font-medium transition-interactive"
             >
               <LogIn className="w-4 h-4" />
               Rejoindre
@@ -132,7 +132,7 @@ function FriendCard({
               onClick={() => onInvite(friend.friend_id)}
               whileHover={{ scale: 1.02, boxShadow: '0 0 20px rgba(94, 109, 210, 0.4)' }}
               whileTap={{ scale: 0.98 }}
-              className="w-full flex items-center justify-center gap-2 h-10 min-h-[44px] rounded-lg bg-[#5e6dd2]/15 hover:bg-[#5e6dd2]/25 border border-[#5e6dd2]/30 text-[#5e6dd2] text-[13px] font-medium transition-interactive"
+              className="w-full flex items-center justify-center gap-2 h-10 min-h-[44px] rounded-lg bg-primary/15 hover:bg-primary/25 border border-primary/30 text-primary text-[13px] font-medium transition-interactive"
             >
               <UserPlus className="w-4 h-4" />
               Inviter
@@ -184,18 +184,18 @@ function EmptyState() {
     >
       <Card className="p-6 text-center bg-gradient-to-br from-[rgba(94,109,210,0.05)] to-transparent border-dashed">
         <motion.div
-          className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#5e6dd2]/15 to-[#8b93ff]/10 flex items-center justify-center mx-auto mb-3"
+          className="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary/15 to-primary-hover/10 flex items-center justify-center mx-auto mb-3"
           animate={{ rotate: [0, 5, -5, 0] }}
           transition={{ duration: 3, repeat: Infinity, repeatDelay: 2 }}
         >
-          <Users className="w-7 h-7 text-[#5e6dd2]" strokeWidth={1.5} />
+          <Users className="w-7 h-7 text-primary" strokeWidth={1.5} />
         </motion.div>
-        <p className="text-[14px] text-[#8b8d90] mb-1">
+        <p className="text-[14px] text-text-secondary mb-1">
           Aucun pote en ligne pour l'instant
         </p>
         <motion.button
           onClick={handleShareInvite}
-          className="text-[13px] text-[#5e6dd2] hover:text-[#8b93ff] font-medium transition-colors cursor-pointer"
+          className="text-[13px] text-primary hover:text-primary-hover font-medium transition-colors cursor-pointer"
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
         >
@@ -211,8 +211,8 @@ export function FriendsPlaying({ friends, onJoin, onInvite }: FriendsPlayingProp
   if (friends.length === 0) {
     return (
       <div className="mb-6">
-        <h2 className="text-[18px] font-semibold text-[#f7f8f8] mb-3 flex items-center gap-2">
-          <Gamepad2 className="w-4 h-4 text-[#4ade80]" />
+        <h2 className="text-[18px] font-semibold text-text-primary mb-3 flex items-center gap-2">
+          <Gamepad2 className="w-4 h-4 text-success" />
           Tes potes jouent maintenant
         </h2>
         <EmptyState />
@@ -222,17 +222,17 @@ export function FriendsPlaying({ friends, onJoin, onInvite }: FriendsPlayingProp
 
   return (
     <div className="mb-6">
-      <h2 className="text-[18px] font-semibold text-[#f7f8f8] mb-3 flex items-center gap-2">
+      <h2 className="text-[18px] font-semibold text-text-primary mb-3 flex items-center gap-2">
         <motion.div
           animate={{
             scale: [1, 1.1, 1],
           }}
           transition={{ duration: 2, repeat: Infinity }}
         >
-          <Gamepad2 className="w-4 h-4 text-[#4ade80]" />
+          <Gamepad2 className="w-4 h-4 text-success" />
         </motion.div>
         Tes potes jouent maintenant
-        <span className="ml-auto text-[12px] font-normal text-[#5e6dd2]">
+        <span className="ml-auto text-[12px] font-normal text-primary">
           {friends.length} en ligne
         </span>
       </h2>

@@ -41,8 +41,8 @@ function SuccessToast({ message, onClose }: { message: string; onClose: () => vo
       <motion.div
         className={`flex items-center gap-3 px-5 py-3.5 rounded-xl font-medium shadow-xl ${
           isCelebration
-            ? 'bg-gradient-to-r from-[#34d399] to-[#34d399] text-[#050506] shadow-[0_0_20px_rgba(52,211,153,0.2)]'
-            : 'bg-success text-[#050506] shadow-lg'
+            ? 'bg-gradient-to-r from-success to-success text-bg-base shadow-glow-success'
+            : 'bg-success text-bg-base shadow-lg'
         }`}
         animate={isCelebration ? { scale: [1, 1.02, 1] } : {}}
         transition={{ duration: 0.3, repeat: isCelebration ? 2 : 0 }}
@@ -98,7 +98,7 @@ function PartySection({ squadId }: { squadId: string }) {
             {/* Autres */}
             {remoteUsers.map((u) => (
               <div key={String(u.odrop)} className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-surface-card border border-border-hover">
-                <div className={`w-2 h-2 rounded-full ${u.isSpeaking ? 'bg-success' : 'bg-[#5e6063]'}`} />
+                <div className={`w-2 h-2 rounded-full ${u.isSpeaking ? 'bg-success' : 'bg-text-tertiary'}`} />
                 <span className="text-[13px] text-text-primary">{u.username}</span>
               </div>
             ))}
@@ -199,7 +199,7 @@ function SessionCard({ session, onRsvp }: {
   const canRsvp = !isPast && session.status !== 'cancelled'
 
   return (
-    <Card className={`p-4 transition-interactive hover:shadow-[0_0_12px_rgba(99,102,241,0.08)] ${isToday && !isPast ? 'border-warning/30 hover:shadow-[0_0_12px_rgba(251,191,36,0.1)]' : ''}`}>
+    <Card className={`p-4 transition-interactive hover:shadow-glow-primary-sm ${isToday && !isPast ? 'border-warning/30 hover:shadow-glow-warning-sm' : ''}`}>
       <div className="flex items-start gap-4">
         <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${
           isToday && !isPast ? 'bg-warning/15' : 'bg-primary/15'
@@ -237,8 +237,8 @@ function SessionCard({ session, onRsvp }: {
                 aria-pressed={session.my_rsvp === 'present'}
                 className={`flex items-center gap-1.5 px-4 py-2.5 min-h-[44px] rounded-lg text-[13px] font-medium transition-interactive ${
                   session.my_rsvp === 'present'
-                    ? 'bg-success/20 text-success border border-success/30 shadow-[0_0_10px_rgba(52,211,153,0.15)]'
-                    : 'bg-surface-card text-text-tertiary hover:bg-[rgba(52,211,153,0.1)] hover:text-success hover:border-success/20 border border-transparent'
+                    ? 'bg-success/20 text-success border border-success/30 shadow-glow-success'
+                    : 'bg-surface-card text-text-tertiary hover:bg-success-10 hover:text-success hover:border-success/20 border border-transparent'
                 }`}
               >
                 <CheckCircle2 className="w-4 h-4" aria-hidden="true" />
@@ -252,8 +252,8 @@ function SessionCard({ session, onRsvp }: {
                 aria-pressed={session.my_rsvp === 'maybe'}
                 className={`flex items-center gap-1.5 px-4 py-2.5 min-h-[44px] rounded-lg text-[13px] font-medium transition-interactive ${
                   session.my_rsvp === 'maybe'
-                    ? 'bg-warning/20 text-warning border border-warning/30 shadow-[0_0_10px_rgba(251,191,36,0.15)]'
-                    : 'bg-surface-card text-text-tertiary hover:bg-[rgba(251,191,36,0.1)] hover:text-warning hover:border-warning/20 border border-transparent'
+                    ? 'bg-warning/20 text-warning border border-warning/30 shadow-glow-warning'
+                    : 'bg-surface-card text-text-tertiary hover:bg-warning-10 hover:text-warning hover:border-warning/20 border border-transparent'
                 }`}
               >
                 <HelpCircle className="w-4 h-4" aria-hidden="true" />
@@ -267,8 +267,8 @@ function SessionCard({ session, onRsvp }: {
                 aria-pressed={session.my_rsvp === 'absent'}
                 className={`flex items-center gap-1.5 px-4 py-2.5 min-h-[44px] rounded-lg text-[13px] font-medium transition-interactive ${
                   session.my_rsvp === 'absent'
-                    ? 'bg-error/20 text-error border border-error/30 shadow-[0_0_10px_rgba(251,113,133,0.15)]'
-                    : 'bg-surface-card text-text-tertiary hover:bg-[rgba(251,113,133,0.1)] hover:text-error hover:border-error/20 border border-transparent'
+                    ? 'bg-error/20 text-error border border-error/30 shadow-glow-error'
+                    : 'bg-surface-card text-text-tertiary hover:bg-error-10 hover:text-error hover:border-error/20 border border-transparent'
                 }`}
               >
                 <XCircle className="w-4 h-4" aria-hidden="true" />
@@ -428,7 +428,7 @@ function InviteModal({
 
         <div className="p-4 space-y-4">
           {/* Code d'invitation */}
-          <div className="p-4 rounded-xl bg-[rgba(99,102,241,0.1)] border border-[rgba(99,102,241,0.2)]">
+          <div className="p-4 rounded-xl bg-primary-10 border border-primary/20">
             <p className="text-[12px] text-text-tertiary mb-2">Code d'invitation</p>
             <div className="flex items-center gap-3">
               <span className="text-2xl font-bold text-primary tracking-wider flex-1">
@@ -466,7 +466,7 @@ function InviteModal({
 
           {/* Message d'erreur */}
           {inviteError && (
-            <div className="p-3 rounded-lg bg-[rgba(251,113,133,0.1)] border border-[rgba(251,113,133,0.2)]">
+            <div className="p-3 rounded-lg bg-error/10 border border-error/20">
               <p className="text-error text-[13px]">{inviteError}</p>
             </div>
           )}
@@ -479,8 +479,8 @@ function InviteModal({
                   {user.avatar_url ? (
                     <img src={user.avatar_url} alt="" className="w-10 h-10 rounded-full object-cover" />
                   ) : (
-                    <div className="w-10 h-10 rounded-full bg-[rgba(167,139,250,0.15)] flex items-center justify-center">
-                      <Users className="w-5 h-5 text-[#a78bfa]" />
+                    <div className="w-10 h-10 rounded-full bg-purple/15 flex items-center justify-center">
+                      <Users className="w-5 h-5 text-purple" />
                     </div>
                   )}
                   <span className="flex-1 text-[14px] text-text-primary">{user.username}</span>
@@ -560,8 +560,8 @@ function MemberCard({ member, isOwner, currentUserId }: {
           className="w-10 h-10 rounded-full object-cover"
         />
       ) : (
-        <div className="w-10 h-10 rounded-full bg-[rgba(167,139,250,0.15)] flex items-center justify-center">
-          <Users className="w-5 h-5 text-[#a78bfa]" />
+        <div className="w-10 h-10 rounded-full bg-purple/15 flex items-center justify-center">
+          <Users className="w-5 h-5 text-purple" />
         </div>
       )}
       <div className="flex-1 min-w-0">
@@ -827,7 +827,7 @@ export default function SquadDetail() {
             </div>
 
             {/* Code d'invitation - toujours visible et clair */}
-            <div className="flex items-center gap-2 p-3 rounded-xl bg-[rgba(99,102,241,0.1)] border border-[rgba(99,102,241,0.2)]">
+            <div className="flex items-center gap-2 p-3 rounded-xl bg-primary-10 border border-primary/20">
               <div className="flex-1">
                 <p className="text-xs text-text-tertiary uppercase tracking-wide mb-0.5">Code d'invitation</p>
                 <p className="text-[18px] font-bold text-primary tracking-wider">{currentSquad.invite_code}</p>
@@ -887,7 +887,7 @@ export default function SquadDetail() {
                           <select
                             value={sessionDuration}
                             onChange={(e) => setSessionDuration(e.target.value)}
-                            className="w-full px-4 py-3 rounded-xl bg-surface-card border border-border-default text-text-primary focus:border-[rgba(99,102,241,0.5)] focus:ring-2 focus:ring-[rgba(99,102,241,0.15)] transition-input"
+                            className="w-full px-4 py-3 rounded-xl bg-surface-card border border-border-default text-text-primary focus:border-primary/50 focus:ring-2 focus:ring-primary/15 transition-input"
                           >
                             <option value="60">1 heure</option>
                             <option value="120">2 heures</option>
@@ -905,7 +905,7 @@ export default function SquadDetail() {
                           <select
                             value={sessionThreshold}
                             onChange={(e) => setSessionThreshold(e.target.value)}
-                            className="w-full px-4 py-3 rounded-xl bg-surface-card border border-border-default text-text-primary focus:border-[rgba(99,102,241,0.5)] focus:ring-2 focus:ring-[rgba(99,102,241,0.15)] transition-input"
+                            className="w-full px-4 py-3 rounded-xl bg-surface-card border border-border-default text-text-primary focus:border-primary/50 focus:ring-2 focus:ring-primary/15 transition-input"
                           >
                             <option value="2">2 joueurs</option>
                             <option value="3">3 joueurs</option>
@@ -918,7 +918,7 @@ export default function SquadDetail() {
                         </div>
                       </div>
                       {error && (
-                        <div className="p-3 rounded-lg bg-[rgba(251,113,133,0.1)] border border-[rgba(251,113,133,0.2)]">
+                        <div className="p-3 rounded-lg bg-error/10 border border-error/20">
                           <p className="text-error text-[13px]">{error}</p>
                         </div>
                       )}
@@ -1080,9 +1080,9 @@ export default function SquadDetail() {
           {/* Audio HD Badge si premium */}
           {isSquadPremium(id || '') && (
             <div className="mb-6">
-              <Card className="p-4 bg-gradient-to-br from-[rgba(251,191,36,0.08)] to-[rgba(251,191,36,0.01)] border-[rgba(251,191,36,0.15)]">
+              <Card className="p-4 bg-gradient-to-br from-warning/8 to-warning/[0.01] border-warning/15">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-[rgba(251,191,36,0.15)] flex items-center justify-center">
+                  <div className="w-10 h-10 rounded-xl bg-warning/15 flex items-center justify-center">
                     <Zap className="w-5 h-5 text-warning" />
                   </div>
                   <div className="flex-1">
@@ -1123,7 +1123,7 @@ export default function SquadDetail() {
               {isOwner ? (
                 <button
                   onClick={handleDeleteSquad}
-                  className="w-full py-3 text-[14px] text-error hover:text-[#fca5a5] transition-colors flex items-center justify-center gap-2"
+                  className="w-full py-3 text-[14px] text-error hover:text-error/70 transition-colors flex items-center justify-center gap-2"
                 >
                   <Trash2 className="w-4 h-4" />
                   Supprimer la squad
@@ -1131,7 +1131,7 @@ export default function SquadDetail() {
               ) : (
                 <button
                   onClick={handleLeaveSquad}
-                  className="w-full py-3 text-[14px] text-error hover:text-[#fca5a5] transition-colors flex items-center justify-center gap-2"
+                  className="w-full py-3 text-[14px] text-error hover:text-error/70 transition-colors flex items-center justify-center gap-2"
                 >
                   <LogOut className="w-4 h-4" />
                   Quitter la squad

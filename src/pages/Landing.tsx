@@ -69,7 +69,7 @@ const pillars = [
     title: 'Party vocale 24/7',
     description: 'Ta squad a son salon vocal toujours ouvert. Rejoins en 1 clic, reste aussi longtemps que tu veux.',
     color: '#34d399',
-    gradient: 'from-[rgba(52,211,153,0.08)] to-[rgba(52,211,153,0.01)]',
+    gradient: 'from-success/[0.08] to-success/[0.01]',
     details: [
       '1 squad = 1 party vocale dédiée',
       'Rejoindre en 1 clic',
@@ -84,7 +84,7 @@ const pillars = [
     title: 'Planning avec décision',
     description: 'Propose un créneau. Chacun répond OUI ou NON. Fini les "on verra" — on sait qui vient.',
     color: '#f5a623',
-    gradient: 'from-[rgba(245,166,35,0.08)] to-[rgba(245,166,35,0.01)]',
+    gradient: 'from-amber-500/[0.08] to-amber-500/[0.01]',
     details: [
       'Chat de squad permanent',
       'Chat par session',
@@ -99,7 +99,7 @@ const pillars = [
     title: 'Fiabilité mesurée',
     description: 'Check-in à chaque session. Ton score montre si tu tiens parole. Tes potes comptent sur toi.',
     color: '#f87171',
-    gradient: 'from-[rgba(248,113,113,0.08)] to-[rgba(248,113,113,0.01)]',
+    gradient: 'from-error/[0.08] to-error/[0.01]',
     details: [
       'Check-in obligatoire',
       'Historique visible',
@@ -257,7 +257,7 @@ export default function Landing() {
       <header
         className={`fixed top-0 left-0 right-0 z-50 px-4 md:px-6 py-3 transition-all duration-300 ${
           scrolled
-            ? 'bg-[rgba(5,5,6,0.7)] backdrop-blur-xl border-b border-[rgba(255,255,255,0.05)]'
+            ? 'bg-bg-base/70 backdrop-blur-xl border-b border-border-subtle'
             : 'bg-transparent border-b border-transparent'
         }`}
       >
@@ -394,7 +394,7 @@ export default function Landing() {
                   transition={{ duration: 0.4, ease: 'easeOut' }}
                   className="inline-flex"
                 >
-                  <Link to="/home" className="flex items-center gap-2 h-14 px-8 rounded-xl bg-[#6366f1] text-white text-[16px] font-semibold shadow-lg shadow-[#6366f1]/10 cta-glow-idle" data-track="hero_cta_click">
+                  <Link to="/home" className="flex items-center gap-2 h-14 px-8 rounded-xl bg-primary text-white text-[16px] font-semibold shadow-lg shadow-primary/10 cta-glow-idle" data-track="hero_cta_click">
                     Accéder à mes squads
                     <ArrowRight className="w-5 h-5" />
                   </Link>
@@ -402,7 +402,7 @@ export default function Landing() {
               ) : (
                 <>
                   <motion.div whileHover={{ scale: 1.02, y: -2 }} {...springTap} className="w-full sm:w-auto">
-                    <Link to="/auth?mode=register&redirect=onboarding" className="flex items-center gap-2 h-14 px-8 rounded-xl bg-[#6366f1] text-white text-[16px] font-semibold shadow-lg shadow-[#6366f1]/10 cta-glow-idle w-full sm:w-auto justify-center" data-track="hero_cta_click">
+                    <Link to="/auth?mode=register&redirect=onboarding" className="flex items-center gap-2 h-14 px-8 rounded-xl bg-primary text-white text-[16px] font-semibold shadow-lg shadow-primary/10 cta-glow-idle w-full sm:w-auto justify-center" data-track="hero_cta_click">
                       Créer ma squad gratuitement
                       <ArrowRight className="w-5 h-5" />
                     </Link>
@@ -432,7 +432,7 @@ export default function Landing() {
 
             {/* Beta badge */}
             <div className="flex items-center justify-center gap-2 text-[13px] text-text-quaternary">
-              <span className="inline-block w-2 h-2 rounded-full bg-[#34d399] animate-pulse" />
+              <span className="inline-block w-2 h-2 rounded-full bg-success animate-pulse" />
               <span>Beta ouverte — Rejoins les premiers gamers</span>
             </div>
 
@@ -535,7 +535,7 @@ export default function Landing() {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
-            className="p-5 rounded-xl bg-gradient-to-r from-[rgba(248,113,113,0.08)] to-[rgba(251,191,36,0.05)] border border-[rgba(248,113,113,0.2)] text-center"
+            className="p-5 rounded-xl bg-gradient-to-r from-error/[0.08] to-warning/[0.05] border border-error/20 text-center"
           >
             <span className="text-xl mr-2">💥</span>
             <span className="text-text-primary font-semibold">Résultat → Plus personne n'organise rien. Ta squad meurt à petit feu.</span>
@@ -546,7 +546,7 @@ export default function Landing() {
       <div className="section-divider" />
 
       {/* ═══ HOW IT WORKS + DEMO (Phase 6-7 #38-42, merged Phase 20 #83) ═══ */}
-      <section id="how-it-works" aria-label="Comment ça marche" className="px-4 md:px-6 py-12 md:py-16 bg-gradient-to-b from-transparent to-[rgba(99,102,241,0.015)]">
+      <section id="how-it-works" aria-label="Comment ça marche" className="px-4 md:px-6 py-12 md:py-16 bg-gradient-to-b from-transparent to-primary/[0.015]">
         <div className="max-w-5xl mx-auto">
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-12">
             <h2 className="text-2xl md:text-3xl font-bold text-text-primary mb-4">
@@ -734,12 +734,12 @@ export default function Landing() {
                   {/* Voice mockup for "voice" pillar */}
                   {pillar.id === 'voice' && (
                     <div className="relative max-w-[240px] mx-auto md:mx-0">
-                      <div className="bg-[#101012] rounded-[1.5rem] p-3 border border-[rgba(52,211,153,0.15)]">
-                        <div className="bg-[#050506] rounded-[1.2rem] overflow-hidden p-4">
+                      <div className="bg-bg-surface rounded-[1.5rem] p-3 border border-success/15">
+                        <div className="bg-bg-base rounded-[1.2rem] overflow-hidden p-4">
                           <div className="flex items-center gap-2 mb-3">
-                            <motion.div className="w-2 h-2 rounded-full bg-[#34d399]" animate={{ scale: [1, 1.2, 1], opacity: [1, 0.8, 1] }} transition={{ duration: 2, repeat: 3, ease: 'easeInOut' }} />
+                            <motion.div className="w-2 h-2 rounded-full bg-success" animate={{ scale: [1, 1.2, 1], opacity: [1, 0.8, 1] }} transition={{ duration: 2, repeat: 3, ease: 'easeInOut' }} />
                             <span className="text-xs font-semibold text-text-primary">Party vocale</span>
-                            <span className="text-xs text-[#34d399] ml-auto">En ligne</span>
+                            <span className="text-xs text-success ml-auto">En ligne</span>
                           </div>
                           <div className="flex items-center justify-center gap-3 mb-3">
                             {[
@@ -751,20 +751,20 @@ export default function Landing() {
                               <div key={p.name} className="flex flex-col items-center">
                                 <div className="relative">
                                   {p.speaking && (
-                                    <motion.div className="absolute inset-0 w-10 h-10 rounded-full bg-[#34d399]" animate={{ scale: [1, 1.3], opacity: [0.3, 0] }} transition={{ duration: 1.5, repeat: 3, ease: 'easeOut' }} />
+                                    <motion.div className="absolute inset-0 w-10 h-10 rounded-full bg-success" animate={{ scale: [1, 1.3], opacity: [0.3, 0] }} transition={{ duration: 1.5, repeat: 3, ease: 'easeOut' }} />
                                   )}
-                                  <div className={`relative w-10 h-10 rounded-full flex items-center justify-center text-xs font-bold text-white ${p.speaking ? 'ring-2 ring-[#34d399]/50' : ''}`} style={{ backgroundColor: p.color }}>
+                                  <div className={`relative w-10 h-10 rounded-full flex items-center justify-center text-xs font-bold text-white ${p.speaking ? 'ring-2 ring-success/50' : ''}`} style={{ backgroundColor: p.color }}>
                                     {p.name[0]}
                                   </div>
                                 </div>
-                                <span className={`text-[9px] mt-1 ${p.speaking ? 'text-[#34d399] font-medium' : 'text-text-tertiary'}`}>{p.name}</span>
+                                <span className={`text-[9px] mt-1 ${p.speaking ? 'text-success font-medium' : 'text-text-tertiary'}`}>{p.name}</span>
                               </div>
                             ))}
                           </div>
                           {/* Voice wave */}
                           <div className="flex items-center justify-center gap-0.5">
                             {[0, 1, 2, 3, 4, 5, 6].map((j) => (
-                              <motion.div key={j} className="w-0.5 rounded-full bg-[#34d399]" animate={{ height: [4, 12, 4] }} transition={{ duration: 0.5, repeat: 4, delay: j * 0.08, ease: 'easeInOut' }} />
+                              <motion.div key={j} className="w-0.5 rounded-full bg-success" animate={{ height: [4, 12, 4] }} transition={{ duration: 0.5, repeat: 4, delay: j * 0.08, ease: 'easeInOut' }} />
                             ))}
                           </div>
                         </div>
@@ -795,10 +795,10 @@ export default function Landing() {
 
       {/* ═══ RELIABILITY SCORE (Phase 11 #51-52) ═══ */}
       <LazySection minHeight={300}>
-      <section aria-label="Score de fiabilité" className="px-4 md:px-6 py-10 md:py-14 bg-gradient-to-b from-transparent to-[rgba(248,113,113,0.02)]">
+      <section aria-label="Score de fiabilité" className="px-4 md:px-6 py-10 md:py-14 bg-gradient-to-b from-transparent to-error/[0.02]">
         <div className="max-w-4xl mx-auto">
           <motion.div variants={scaleReveal} initial="hidden" whileInView="visible" viewport={{ once: true }}
-            className="p-8 md:p-12 rounded-3xl bg-surface-card border border-[rgba(248,113,113,0.2)]"
+            className="p-8 md:p-12 rounded-3xl bg-surface-card border border-error/20"
           >
             <div className="flex flex-col md:flex-row items-center gap-8">
               {/* Circular progress mockup (Phase 11 #51) */}
@@ -816,7 +816,7 @@ export default function Landing() {
                     />
                   </svg>
                   <div className="absolute inset-0 flex flex-col items-center justify-center">
-                    <span className="text-2xl font-bold text-[#f87171]">94%</span>
+                    <span className="text-2xl font-bold text-error">94%</span>
                     <span className="text-[10px] text-text-tertiary">fiabilité</span>
                   </div>
                 </div>
@@ -844,7 +844,7 @@ export default function Landing() {
                 </h3>
                 <p className="text-text-tertiary mb-4">
                   Chaque membre a un score basé sur sa présence réelle. Tu dis que tu viens ? On vérifie.
-                  <span className="text-[#f87171] font-medium"> Les no-shows chroniques, ça se voit.</span>
+                  <span className="text-error font-medium"> Les no-shows chroniques, ça se voit.</span>
                 </p>
                 <motion.div
                   className="flex flex-wrap justify-center md:justify-start gap-3"
@@ -858,7 +858,7 @@ export default function Landing() {
                     { label: 'Historique visible', icon: '📊' },
                     { label: 'Score par joueur', icon: '🏆' },
                   ].map(item => (
-                    <motion.span key={item.label} variants={staggerItemVariants} className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[rgba(248,113,113,0.1)] text-[13px] text-[#f87171]">
+                    <motion.span key={item.label} variants={staggerItemVariants} className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-error/10 text-[13px] text-error">
                       {item.icon} {item.label}
                     </motion.span>
                   ))}
@@ -921,7 +921,7 @@ export default function Landing() {
                   <tr
                     key={item.feature}
                     className={`${i < comparisons.length - 1 ? 'border-b border-border-subtle' : ''} ${
-                      !item.discord ? 'bg-[rgba(99,102,241,0.02)]' : ''
+                      !item.discord ? 'bg-primary/[0.02]' : ''
                     }`}
                   >
                     <th scope="row" className="text-left text-[13px] md:text-[14px] text-text-primary px-3 md:px-6 py-3 md:py-4 font-normal sticky left-0 z-10 bg-bg-base">
@@ -952,7 +952,7 @@ export default function Landing() {
                       <span className="inline-flex flex-col items-center">
                         <Check className="w-4 h-4 md:w-5 md:h-5 text-success" aria-hidden="true" />
                         {item.squadNote ? (
-                          <span className="text-[10px] text-[#06B6D4] mt-0.5">{item.squadNote}</span>
+                          <span className="text-[10px] text-cyan-400 mt-0.5">{item.squadNote}</span>
                         ) : (
                           <span className="sr-only">Disponible</span>
                         )}
@@ -1059,7 +1059,7 @@ export default function Landing() {
               </ul>
               <Link to="/auth">
                 <motion.button
-                  className="w-full py-3 rounded-xl bg-primary text-white text-[14px] font-semibold hover:bg-[#818cf8] transition-colors shadow-[0_0_20px_rgba(99,102,241,0.2)]"
+                  className="w-full py-3 rounded-xl bg-primary text-white text-[14px] font-semibold hover:bg-primary-hover transition-colors shadow-glow-primary-sm"
                   whileHover={{ scale: 1.01 }}
                   whileTap={{ scale: 0.98 }}
                 >
@@ -1125,7 +1125,7 @@ export default function Landing() {
             initial={{ opacity: 0, scale: 0.95 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
-            className="relative p-8 md:p-12 rounded-3xl bg-gradient-to-b from-[rgba(99,102,241,0.1)] to-[rgba(6,182,212,0.04)] border border-[rgba(99,102,241,0.15)] text-center overflow-hidden"
+            className="relative p-8 md:p-12 rounded-3xl bg-gradient-to-b from-primary/10 to-cyan-500/[0.04] border border-primary/15 text-center overflow-hidden"
           >
             {/* Animated glow background */}
             <motion.div
@@ -1135,7 +1135,7 @@ export default function Landing() {
             />
             <div className="relative z-10">
               <motion.div animate={{ rotate: [0, 5, -5, 0] }} transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}>
-                <Sparkles className="w-12 h-12 mx-auto mb-6 text-[#6366f1]" aria-hidden="true" />
+                <Sparkles className="w-12 h-12 mx-auto mb-6 text-primary" aria-hidden="true" />
               </motion.div>
               <h2 className="text-2xl md:text-4xl font-bold text-text-primary mb-4">
                 Ta squad t'attend
@@ -1144,7 +1144,7 @@ export default function Landing() {
                 Gratuit, sans engagement. Lance ta première session en 30 secondes.
               </p>
               <motion.div whileHover={{ scale: 1.03, y: -3 }} {...springTap} className="inline-flex">
-                <Link to="/auth?mode=register&redirect=onboarding" className="flex items-center gap-2 h-16 px-10 rounded-xl bg-gradient-to-r from-[#6366f1] to-[#a78bfa] text-white text-[18px] font-bold mx-auto shadow-lg shadow-[#6366f1]/20 cta-glow-idle" data-track="bottom_cta_click">
+                <Link to="/auth?mode=register&redirect=onboarding" className="flex items-center gap-2 h-16 px-10 rounded-xl bg-gradient-to-r from-primary to-purple text-white text-[18px] font-bold mx-auto shadow-lg shadow-primary/20 cta-glow-idle" data-track="bottom_cta_click">
                   Rejoindre l'aventure
                   <ArrowRight className="w-5 h-5" />
                 </Link>
@@ -1257,8 +1257,8 @@ export default function Landing() {
                   )}
                 </button>
               </div>
-              {newsletterError && <p role="alert" className="text-[#f87171] text-sm mt-1.5">{newsletterError}</p>}
-              {newsletterSuccess && <p role="status" className="text-[#34d399] text-sm mt-1.5">Merci ! Tu recevras nos updates.</p>}
+              {newsletterError && <p role="alert" className="text-error text-sm mt-1.5">{newsletterError}</p>}
+              {newsletterSuccess && <p role="status" className="text-success text-sm mt-1.5">Merci ! Tu recevras nos updates.</p>}
             </form>
           </div>
 

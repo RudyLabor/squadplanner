@@ -12,9 +12,6 @@ import { useAuthStore, useSubscriptionStore, usePremiumStore } from '../hooks'
 import { PREMIUM_PRICE_MONTHLY, PREMIUM_PRICE_YEARLY } from '../hooks/usePremium'
 import { captureException } from '../lib/sentry'
 
-// const containerVariants = theme.animation.container
-// const itemVariants = theme.animation.item
-
 // Features comparison
 const FEATURES = [
   {
@@ -205,7 +202,7 @@ export function Premium() {
   const savings = Math.round((PREMIUM_PRICE_MONTHLY * 12 - PREMIUM_PRICE_YEARLY) / (PREMIUM_PRICE_MONTHLY * 12) * 100)
 
   return (
-    <div className="min-h-0 bg-[#050506] pb-6">
+    <div className="min-h-0 bg-bg-base pb-6">
       {/* Confetti */}
       {showConfetti && typeof window !== 'undefined' && (
         <Confetti
@@ -222,12 +219,12 @@ export function Premium() {
       {/* Hero Section */}
       <div
         ref={heroRef}
-        className="relative overflow-hidden bg-gradient-to-b from-[#1a1b2e] via-[#0f1015] to-[#050506] pt-8 pb-16"
+        className="relative overflow-hidden bg-gradient-to-b from-surface-dark via-bg-surface to-bg-base pt-8 pb-16"
       >
         {/* Animated gradient background - reduced animation */}
         <div className="absolute inset-0 overflow-hidden">
           <motion.div
-            className="absolute -top-1/2 -left-1/2 w-full h-full rounded-full bg-gradient-to-r from-[#6366f1]/10 to-[#fbbf24]/05 blur-3xl"
+            className="absolute -top-1/2 -left-1/2 w-full h-full rounded-full bg-gradient-to-r from-primary/10 to-warning/05 blur-3xl"
             animate={{
               x: [0, 80, 0],
               y: [0, 40, 0],
@@ -235,7 +232,7 @@ export function Premium() {
             transition={{ duration: 3, repeat: 2, ease: "easeInOut" }}
           />
           <motion.div
-            className="absolute -bottom-1/2 -right-1/2 w-full h-full rounded-full bg-gradient-to-l from-[#a78bfa]/10 to-[#34d399]/05 blur-3xl"
+            className="absolute -bottom-1/2 -right-1/2 w-full h-full rounded-full bg-gradient-to-l from-purple/10 to-success/05 blur-3xl"
             animate={{
               x: [0, -80, 0],
               y: [0, -40, 0],
@@ -248,9 +245,9 @@ export function Premium() {
           <div className="text-center">
             {/* Badge */}
             <div className="flex justify-center mb-6">
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-[#fbbf24]/10 to-[#fbbf24]/025 border border-[#fbbf24]/15">
-                <Gift className="w-4 h-4 text-[#fbbf24]" />
-                <span className="text-[13px] font-medium text-[#fbbf24]">
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-warning/10 to-warning/025 border border-warning/15">
+                <Gift className="w-4 h-4 text-warning" />
+                <span className="text-[13px] font-medium text-warning">
                   2 mois offerts sur l'annuel
                 </span>
               </div>
@@ -258,26 +255,26 @@ export function Premium() {
 
             {/* Title */}
             <div className="mb-4">
-              <div className="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-gradient-to-br from-[#fbbf24] to-[#fbbf24]/60 mb-6 shadow-[0_0_20px_rgba(251,191,36,0.15)]">
+              <div className="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-gradient-to-br from-warning to-warning/60 mb-6 shadow-glow-warning">
                 <Crown className="w-10 h-10 text-white" />
               </div>
             </div>
 
-            <h1 className="text-3xl md:text-5xl font-bold text-[#f7f8f8] mb-4">
+            <h1 className="text-3xl md:text-5xl font-bold text-text-primary mb-4">
               Passe au niveau
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#fbbf24] to-[#fcd34d]"> supérieur</span>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-warning to-yellow-300"> supérieur</span>
             </h1>
 
-            <p className="text-[16px] md:text-[18px] text-[#8b8d90] max-w-xl mx-auto mb-8">
+            <p className="text-[16px] md:text-[18px] text-text-secondary max-w-xl mx-auto mb-8">
               Débloquer tout le potentiel de Squad Planner. Stats avancées, IA coach personnalisé, audio HD et bien plus.
             </p>
 
             {/* Already Premium */}
             {hasPremium && (
               <div className="mb-8">
-                <div className="inline-flex items-center gap-3 px-6 py-3 rounded-xl bg-[#34d399]/05 border border-[#34d399]/15">
-                  <Check className="w-5 h-5 text-[#34d399]" />
-                  <span className="text-[15px] font-medium text-[#34d399]">
+                <div className="inline-flex items-center gap-3 px-6 py-3 rounded-xl bg-success/05 border border-success/15">
+                  <Check className="w-5 h-5 text-success" />
+                  <span className="text-[15px] font-medium text-success">
                     Tu es déjà Premium !
                   </span>
                 </div>
@@ -306,24 +303,24 @@ export function Premium() {
               onClick={() => setSelectedPlan('monthly')}
               className={`relative p-6 rounded-2xl border-2 text-left transition-interactive ${
                 selectedPlan === 'monthly'
-                  ? 'border-[#6366f1] bg-[rgba(99,102,241,0.05)] shadow-[0_0_15px_rgba(99,102,241,0.1)]'
-                  : 'border-[rgba(255,255,255,0.08)] bg-[rgba(255,255,255,0.02)] hover:border-[rgba(255,255,255,0.15)]'
+                  ? 'border-primary bg-primary/5 shadow-glow-primary-sm'
+                  : 'border-border-hover bg-white/[0.02] hover:border-border-hover'
               }`}
               whileHover={{ y: -2, scale: 1.02 }}
               whileTap={{ scale: 0.99 }}
             >
-              <div className="text-[14px] text-[#8b8d90] mb-2">Mensuel</div>
+              <div className="text-[14px] text-text-secondary mb-2">Mensuel</div>
               <div className="flex items-baseline gap-1 mb-1">
-                <span className="text-[36px] font-bold text-[#f7f8f8]">
+                <span className="text-[36px] font-bold text-text-primary">
                   {PREMIUM_PRICE_MONTHLY.toFixed(2)}€
                 </span>
-                <span className="text-[14px] text-[#5e6063]">/mois</span>
+                <span className="text-[14px] text-text-tertiary">/mois</span>
               </div>
-              <p className="text-[13px] text-[#5e6063]">
+              <p className="text-[13px] text-text-tertiary">
                 Flexibilité maximale, annule quand tu veux
               </p>
               {selectedPlan === 'monthly' && (
-                <div className="absolute top-4 right-4 w-6 h-6 rounded-full bg-[#6366f1] flex items-center justify-center">
+                <div className="absolute top-4 right-4 w-6 h-6 rounded-full bg-primary flex items-center justify-center">
                   <Check className="w-4 h-4 text-white" />
                 </div>
               )}
@@ -334,37 +331,37 @@ export function Premium() {
               onClick={() => setSelectedPlan('yearly')}
               className={`relative p-6 rounded-2xl border-2 text-left transition-interactive ${
                 selectedPlan === 'yearly'
-                  ? 'border-[#34d399] bg-[rgba(52,211,153,0.05)] shadow-[0_0_15px_rgba(52,211,153,0.1)]'
-                  : 'border-[rgba(255,255,255,0.08)] bg-[rgba(255,255,255,0.02)] hover:border-[rgba(255,255,255,0.15)]'
+                  ? 'border-success bg-success/5 shadow-glow-success'
+                  : 'border-border-hover bg-white/[0.02] hover:border-border-hover'
               }`}
               whileHover={{ y: -2, scale: 1.02 }}
               whileTap={{ scale: 0.99 }}
             >
               {/* Best value badge */}
-              <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full bg-gradient-to-r from-[#34d399] to-[#34d399] text-xs font-bold text-[#050506]">
+              <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full bg-gradient-to-r from-success to-success text-xs font-bold text-bg-base">
                 🎁 MEILLEURE OFFRE
               </div>
 
-              <div className="text-[14px] text-[#8b8d90] mb-2">Annuel</div>
+              <div className="text-[14px] text-text-secondary mb-2">Annuel</div>
               <div className="flex items-baseline gap-1 mb-1">
-                <span className="text-[36px] font-bold text-[#f7f8f8]">
+                <span className="text-[36px] font-bold text-text-primary">
                   {(PREMIUM_PRICE_YEARLY / 12).toFixed(2)}€
                 </span>
-                <span className="text-[14px] text-[#5e6063]">/mois</span>
+                <span className="text-[14px] text-text-tertiary">/mois</span>
               </div>
               <div className="flex items-center gap-2 mb-1">
-                <span className="text-[13px] line-through text-[#5e6063]">
+                <span className="text-[13px] line-through text-text-tertiary">
                   {(PREMIUM_PRICE_MONTHLY * 12).toFixed(2)}€/an
                 </span>
-                <span className="text-[13px] font-semibold text-[#34d399]">
+                <span className="text-[13px] font-semibold text-success">
                   {PREMIUM_PRICE_YEARLY.toFixed(2)}€/an
                 </span>
               </div>
-              <p className="text-[13px] text-[#34d399]">
+              <p className="text-[13px] text-success">
                 Économise {savings}% — 2 mois offerts !
               </p>
               {selectedPlan === 'yearly' && (
-                <div className="absolute top-4 right-4 w-6 h-6 rounded-full bg-[#34d399] flex items-center justify-center">
+                <div className="absolute top-4 right-4 w-6 h-6 rounded-full bg-success flex items-center justify-center">
                   <Check className="w-4 h-4 text-white" />
                 </div>
               )}
@@ -381,14 +378,14 @@ export function Premium() {
             className="text-center mb-16"
           >
             {error && (
-              <div className="mb-4 p-3 rounded-lg bg-[rgba(251,113,133,0.05)] border border-[rgba(251,113,133,0.1)]">
-                <p className="text-[#fb7185] text-[13px]">{error}</p>
+              <div className="mb-4 p-3 rounded-lg bg-error/5 border border-error/10">
+                <p className="text-error text-[13px]">{error}</p>
               </div>
             )}
             <Button
               onClick={handleUpgrade}
               disabled={isLoading}
-              className="h-14 px-10 text-[16px] bg-gradient-to-r from-[#6366f1] via-[#a78bfa] to-[#6366f1] bg-[length:200%_100%] hover:bg-[position:100%_0] transition-interactive shadow-[0_0_15px_rgba(99,102,241,0.2)]"
+              className="h-14 px-10 text-[16px] bg-gradient-to-r from-primary via-purple to-primary bg-[length:200%_100%] hover:bg-[position:100%_0] transition-interactive shadow-glow-primary-md"
             >
               {isLoading ? (
                 <Loader2 className="w-5 h-5 animate-spin" />
@@ -400,7 +397,7 @@ export function Premium() {
                 </>
               )}
             </Button>
-            <p className="text-[12px] text-[#5e6063] mt-3">
+            <p className="text-[12px] text-text-tertiary mt-3">
               🔒 Paiement sécurisé · Annulation facile · Satisfait ou remboursé 30j
             </p>
           </motion.div>
@@ -413,17 +410,17 @@ export function Premium() {
           viewport={{ once: true }}
           className="mb-16"
         >
-          <h2 className="text-xl font-semibold text-[#f7f8f8] text-center mb-8">
+          <h2 className="text-xl font-semibold text-text-primary text-center mb-8">
             Comparatif des fonctionnalités
           </h2>
 
           <Card className="overflow-hidden">
             {/* Header */}
-            <div className="grid grid-cols-3 gap-4 p-4 bg-[rgba(255,255,255,0.02)] border-b border-[rgba(255,255,255,0.06)]">
-              <div className="text-[13px] font-semibold text-[#8b8d90]">Fonctionnalité</div>
-              <div className="text-[13px] font-semibold text-[#8b8d90] text-center">Gratuit</div>
+            <div className="grid grid-cols-3 gap-4 p-4 bg-white/[0.02] border-b border-border-default">
+              <div className="text-[13px] font-semibold text-text-secondary">Fonctionnalité</div>
+              <div className="text-[13px] font-semibold text-text-secondary text-center">Gratuit</div>
               <div className="text-[13px] font-semibold text-center">
-                <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-gradient-to-r from-[#fbbf24] to-[#fbbf24]/70 text-xs font-bold text-[#050506]">
+                <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-gradient-to-r from-warning to-warning/70 text-xs font-bold text-bg-base">
                   <Crown className="w-3 h-3" />
                   PREMIUM
                 </span>
@@ -431,7 +428,7 @@ export function Premium() {
             </div>
 
             {/* Features rows */}
-            <div className="divide-y divide-[rgba(255,255,255,0.06)]">
+            <div className="divide-y divide-border-default">
               {FEATURES.map((feature, index) => (
                 <motion.div
                   key={feature.name}
@@ -440,29 +437,29 @@ export function Premium() {
                   viewport={{ once: true }}
                   transition={{ delay: index * 0.05 }}
                   className={`grid grid-cols-3 gap-4 p-4 items-center ${
-                    feature.highlight ? 'bg-[rgba(99,102,241,0.025)]' : ''
+                    feature.highlight ? 'bg-primary/[0.025]' : ''
                   }`}
                 >
                   <div className="flex items-center gap-3">
-                    <feature.icon className="w-4 h-4 text-[#6366f1]" />
-                    <span className="text-[14px] text-[#f7f8f8]">{feature.name}</span>
+                    <feature.icon className="w-4 h-4 text-primary" />
+                    <span className="text-[14px] text-text-primary">{feature.name}</span>
                   </div>
                   <div className="text-center">
                     {typeof feature.free === 'boolean' ? (
                       feature.free ? (
-                        <Check className="w-5 h-5 text-[#34d399] mx-auto" />
+                        <Check className="w-5 h-5 text-success mx-auto" />
                       ) : (
-                        <X className="w-5 h-5 text-[#5e6063] mx-auto" />
+                        <X className="w-5 h-5 text-text-tertiary mx-auto" />
                       )
                     ) : (
-                      <span className="text-[13px] text-[#8b8d90]">{feature.free}</span>
+                      <span className="text-[13px] text-text-secondary">{feature.free}</span>
                     )}
                   </div>
                   <div className="text-center">
                     {typeof feature.premium === 'boolean' ? (
-                      <Check className="w-5 h-5 text-[#4ade80] mx-auto" />
+                      <Check className="w-5 h-5 text-success mx-auto" />
                     ) : (
-                      <span className="text-[13px] font-medium text-[#34d399]">{feature.premium}</span>
+                      <span className="text-[13px] font-medium text-success">{feature.premium}</span>
                     )}
                   </div>
                 </motion.div>
@@ -478,10 +475,10 @@ export function Premium() {
           viewport={{ once: true }}
           className="mb-16"
         >
-          <h2 className="text-xl font-semibold text-[#f7f8f8] text-center mb-2">
+          <h2 className="text-xl font-semibold text-text-primary text-center mb-2">
             Ils sont passés Premium
           </h2>
-          <p className="text-[14px] text-[#8b8d90] text-center mb-8">
+          <p className="text-[14px] text-text-secondary text-center mb-8">
             Et ils ne reviendraient pas en arrière
           </p>
 
@@ -496,20 +493,20 @@ export function Premium() {
               >
                 <Card className="p-5 h-full">
                   <div className="flex items-center gap-3 mb-4">
-                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#6366f1] to-[#a78bfa] flex items-center justify-center text-2xl">
+                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary to-purple flex items-center justify-center text-2xl">
                       {testimonial.avatar}
                     </div>
                     <div>
-                      <div className="text-[14px] font-semibold text-[#f7f8f8]">{testimonial.name}</div>
-                      <div className="text-[12px] text-[#5e6063]">{testimonial.squad}</div>
+                      <div className="text-[14px] font-semibold text-text-primary">{testimonial.name}</div>
+                      <div className="text-[12px] text-text-tertiary">{testimonial.squad}</div>
                     </div>
                   </div>
-                  <p className="text-[14px] text-[#8b8d90] leading-relaxed">
+                  <p className="text-[14px] text-text-secondary leading-relaxed">
                     "{testimonial.text}"
                   </p>
                   <div className="flex gap-0.5 mt-3">
                     {[...Array(5)].map((_, i) => (
-                      <Star key={i} className="w-4 h-4 fill-[#fbbf24] text-[#fbbf24]" />
+                      <Star key={i} className="w-4 h-4 fill-warning text-warning" />
                     ))}
                   </div>
                 </Card>
@@ -525,7 +522,7 @@ export function Premium() {
           viewport={{ once: true }}
           className="mb-16"
         >
-          <h2 className="text-xl font-semibold text-[#f7f8f8] text-center mb-8">
+          <h2 className="text-xl font-semibold text-text-primary text-center mb-8">
             Questions fréquentes
           </h2>
 
@@ -536,9 +533,9 @@ export function Premium() {
                   onClick={() => setOpenFaq(openFaq === index ? null : index)}
                   className="w-full p-4 flex items-center justify-between text-left"
                 >
-                  <span className="text-[15px] font-medium text-[#f7f8f8]">{item.q}</span>
+                  <span className="text-[15px] font-medium text-text-primary">{item.q}</span>
                   <ChevronDown
-                    className={`w-5 h-5 text-[#5e6063] transition-transform ${
+                    className={`w-5 h-5 text-text-tertiary transition-transform ${
                       openFaq === index ? 'rotate-180' : ''
                     }`}
                   />
@@ -550,7 +547,7 @@ export function Premium() {
                     exit={{ height: 0, opacity: 0 }}
                     className="px-4 pb-4"
                   >
-                    <p className="text-[14px] text-[#8b8d90] leading-relaxed">
+                    <p className="text-[14px] text-text-secondary leading-relaxed">
                       {item.a}
                     </p>
                   </motion.div>
@@ -568,18 +565,18 @@ export function Premium() {
             viewport={{ once: true }}
             className="text-center"
           >
-            <Card className="p-8 bg-gradient-to-br from-[rgba(99,102,241,0.075)] to-[rgba(251,191,36,0.05)] border-[rgba(99,102,241,0.15)]">
-              <Crown className="w-12 h-12 text-[#fbbf24] mx-auto mb-4" />
-              <h3 className="text-xl font-semibold text-[#f7f8f8] mb-2">
+            <Card className="p-8 bg-gradient-to-br from-primary/[0.075] to-warning/5 border-primary">
+              <Crown className="w-12 h-12 text-warning mx-auto mb-4" />
+              <h3 className="text-xl font-semibold text-text-primary mb-2">
                 Prêt à passer Premium ?
               </h3>
-              <p className="text-[14px] text-[#8b8d90] mb-6 max-w-md mx-auto">
+              <p className="text-[14px] text-text-secondary mb-6 max-w-md mx-auto">
                 Rejoins les squads qui ont choisi de jouer sérieusement ensemble.
               </p>
               <Button
                 onClick={handleUpgrade}
                 disabled={isLoading}
-                className="h-12 px-8 bg-gradient-to-r from-[#fbbf24] to-[#fcd34d] text-[#050506] font-semibold hover:opacity-90"
+                className="h-12 px-8 bg-gradient-to-r from-warning to-yellow-300 text-bg-base font-semibold hover:opacity-90"
               >
                 {isLoading ? (
                   <Loader2 className="w-5 h-5 animate-spin" />

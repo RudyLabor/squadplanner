@@ -9,16 +9,16 @@ type LegalTab = 'cgu' | 'privacy'
 function Section({ title, children, defaultOpen = false }: { title: string; children: React.ReactNode; defaultOpen?: boolean }) {
   const [open, setOpen] = useState(defaultOpen)
   return (
-    <div className="border-b border-[rgba(255,255,255,0.05)] last:border-0">
+    <div className="border-b border-border-subtle last:border-0">
       <button
         onClick={() => setOpen(!open)}
         className="w-full flex items-center justify-between py-4 text-left group"
       >
-        <h3 className="text-[15px] font-semibold text-[#f7f8f8] group-hover:text-[#a78bfa] transition-colors">{title}</h3>
-        <ChevronDown className={`w-4 h-4 text-[#5e6063] transition-transform ${open ? 'rotate-180' : ''}`} />
+        <h3 className="text-[15px] font-semibold text-text-primary group-hover:text-purple transition-colors">{title}</h3>
+        <ChevronDown className={`w-4 h-4 text-text-tertiary transition-transform ${open ? 'rotate-180' : ''}`} />
       </button>
       {open && (
-        <div className="pb-4 text-[14px] text-[#8b8d90] leading-relaxed space-y-3">
+        <div className="pb-4 text-[14px] text-text-secondary leading-relaxed space-y-3">
           {children}
         </div>
       )}
@@ -32,32 +32,32 @@ export function Legal() {
   const [activeTab, setActiveTab] = useState<LegalTab>(initialTab)
 
   return (
-    <div className="min-h-[100dvh] bg-[#050506]">
+    <div className="min-h-[100dvh] bg-bg-base">
       {/* Header */}
-      <header className="sticky top-0 z-10 bg-[#050506]/90 backdrop-blur-xl border-b border-[rgba(255,255,255,0.05)]">
+      <header className="sticky top-0 z-10 bg-bg-base/90 backdrop-blur-xl border-b border-border-subtle">
         <div className="max-w-3xl mx-auto px-4 md:px-6 py-4 flex items-center gap-4">
           <Link
             to="/"
-            className="w-10 h-10 rounded-xl bg-[rgba(255,255,255,0.05)] flex items-center justify-center hover:bg-[rgba(255,255,255,0.1)] transition-colors"
+            className="w-10 h-10 rounded-xl bg-border-subtle flex items-center justify-center hover:bg-border-hover transition-colors"
           >
-            <ArrowLeft className="w-5 h-5 text-[#8b8d90]" />
+            <ArrowLeft className="w-5 h-5 text-text-secondary" />
           </Link>
           <div className="flex items-center gap-2">
             <SquadPlannerLogo size={24} />
-            <span className="text-[15px] font-semibold text-[#f7f8f8]">Squad Planner</span>
+            <span className="text-[15px] font-semibold text-text-primary">Squad Planner</span>
           </div>
         </div>
       </header>
 
       <main className="max-w-3xl mx-auto px-4 md:px-6 py-8">
         {/* Tab Selector */}
-        <div className="flex gap-2 p-1 rounded-xl bg-[rgba(255,255,255,0.03)] border border-[rgba(255,255,255,0.06)] mb-8">
+        <div className="flex gap-2 p-1 rounded-xl bg-surface-card border border-border-default mb-8">
           <button
             onClick={() => setActiveTab('cgu')}
             className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-lg text-[14px] font-medium transition-all ${
               activeTab === 'cgu'
-                ? 'bg-[#6366f1] text-white shadow-lg shadow-[#6366f1]/20'
-                : 'text-[#8b8d90] hover:text-[#f7f8f8] hover:bg-[rgba(255,255,255,0.05)]'
+                ? 'bg-primary text-white shadow-lg shadow-primary/20'
+                : 'text-text-secondary hover:text-text-primary hover:bg-border-subtle'
             }`}
           >
             <FileText className="w-4 h-4" />
@@ -67,8 +67,8 @@ export function Legal() {
             onClick={() => setActiveTab('privacy')}
             className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-lg text-[14px] font-medium transition-all ${
               activeTab === 'privacy'
-                ? 'bg-[#6366f1] text-white shadow-lg shadow-[#6366f1]/20'
-                : 'text-[#8b8d90] hover:text-[#f7f8f8] hover:bg-[rgba(255,255,255,0.05)]'
+                ? 'bg-primary text-white shadow-lg shadow-primary/20'
+                : 'text-text-secondary hover:text-text-primary hover:bg-border-subtle'
             }`}
           >
             <Shield className="w-4 h-4" />
@@ -80,11 +80,11 @@ export function Legal() {
         {activeTab === 'cgu' && (
           <div>
             <div className="mb-8">
-              <h1 className="text-2xl font-bold text-[#f7f8f8] mb-2">Conditions Générales d'Utilisation</h1>
-              <p className="text-[14px] text-[#5e6063]">Dernière mise à jour : 8 février 2026</p>
+              <h1 className="text-2xl font-bold text-text-primary mb-2">Conditions Générales d'Utilisation</h1>
+              <p className="text-[14px] text-text-tertiary">Dernière mise à jour : 8 février 2026</p>
             </div>
 
-            <Card className="p-6 bg-[#101012]">
+            <Card className="p-6 bg-bg-surface">
               <Section title="1. Objet" defaultOpen>
                 <p>
                   Les présentes Conditions Générales d'Utilisation (CGU) définissent les règles d'utilisation
@@ -206,11 +206,11 @@ export function Legal() {
         {activeTab === 'privacy' && (
           <div>
             <div className="mb-8">
-              <h1 className="text-2xl font-bold text-[#f7f8f8] mb-2">Politique de Confidentialité</h1>
-              <p className="text-[14px] text-[#5e6063]">Dernière mise à jour : 8 février 2026</p>
+              <h1 className="text-2xl font-bold text-text-primary mb-2">Politique de Confidentialité</h1>
+              <p className="text-[14px] text-text-tertiary">Dernière mise à jour : 8 février 2026</p>
             </div>
 
-            <Card className="p-6 bg-[#101012]">
+            <Card className="p-6 bg-bg-surface">
               <Section title="1. Responsable du traitement" defaultOpen>
                 <p>
                   Le responsable du traitement des données personnelles est Squad Planner SAS,
@@ -224,12 +224,12 @@ export function Legal() {
               <Section title="2. Données collectées">
                 <p>Nous collectons les données suivantes :</p>
                 <ul className="list-disc pl-5 space-y-2">
-                  <li><strong className="text-[#f7f8f8]">Données d'inscription :</strong> email, pseudo, mot de passe (hashé), avatar</li>
-                  <li><strong className="text-[#f7f8f8]">Données de profil :</strong> fuseau horaire, préférences de langue</li>
-                  <li><strong className="text-[#f7f8f8]">Données d'utilisation :</strong> sessions planifiées, RSVP, check-ins, score de fiabilité</li>
-                  <li><strong className="text-[#f7f8f8]">Messages :</strong> contenus des messages squad et DM (chiffrés en transit)</li>
-                  <li><strong className="text-[#f7f8f8]">Données techniques :</strong> logs de connexion, type de navigateur, adresse IP (anonymisée)</li>
-                  <li><strong className="text-[#f7f8f8]">Appels vocaux :</strong> métadonnées (durée, participants), pas d'enregistrement audio</li>
+                  <li><strong className="text-text-primary">Données d'inscription :</strong> email, pseudo, mot de passe (hashé), avatar</li>
+                  <li><strong className="text-text-primary">Données de profil :</strong> fuseau horaire, préférences de langue</li>
+                  <li><strong className="text-text-primary">Données d'utilisation :</strong> sessions planifiées, RSVP, check-ins, score de fiabilité</li>
+                  <li><strong className="text-text-primary">Messages :</strong> contenus des messages squad et DM (chiffrés en transit)</li>
+                  <li><strong className="text-text-primary">Données techniques :</strong> logs de connexion, type de navigateur, adresse IP (anonymisée)</li>
+                  <li><strong className="text-text-primary">Appels vocaux :</strong> métadonnées (durée, participants), pas d'enregistrement audio</li>
                 </ul>
               </Section>
 
@@ -247,45 +247,45 @@ export function Legal() {
 
               <Section title="4. Base légale">
                 <ul className="list-disc pl-5 space-y-2">
-                  <li><strong className="text-[#f7f8f8]">Exécution du contrat :</strong> traitement nécessaire à la fourniture du service</li>
-                  <li><strong className="text-[#f7f8f8]">Consentement :</strong> notifications push, cookies non essentiels</li>
-                  <li><strong className="text-[#f7f8f8]">Intérêt légitime :</strong> sécurité, amélioration du service, analytics anonymisées</li>
+                  <li><strong className="text-text-primary">Exécution du contrat :</strong> traitement nécessaire à la fourniture du service</li>
+                  <li><strong className="text-text-primary">Consentement :</strong> notifications push, cookies non essentiels</li>
+                  <li><strong className="text-text-primary">Intérêt légitime :</strong> sécurité, amélioration du service, analytics anonymisées</li>
                 </ul>
               </Section>
 
               <Section title="5. Partage des données">
                 <p>Vos données ne sont jamais vendues. Elles sont partagées uniquement avec :</p>
                 <ul className="list-disc pl-5 space-y-2">
-                  <li><strong className="text-[#f7f8f8]">Supabase :</strong> hébergement et base de données (serveurs UE)</li>
-                  <li><strong className="text-[#f7f8f8]">Agora :</strong> services d'appels vocaux (données vocales en transit uniquement)</li>
-                  <li><strong className="text-[#f7f8f8]">Stripe :</strong> traitement des paiements Premium</li>
-                  <li><strong className="text-[#f7f8f8]">Anthropic (Claude) :</strong> suggestions IA (données anonymisées)</li>
-                  <li><strong className="text-[#f7f8f8]">Sentry :</strong> monitoring d'erreurs (données techniques uniquement)</li>
+                  <li><strong className="text-text-primary">Supabase :</strong> hébergement et base de données (serveurs UE)</li>
+                  <li><strong className="text-text-primary">Agora :</strong> services d'appels vocaux (données vocales en transit uniquement)</li>
+                  <li><strong className="text-text-primary">Stripe :</strong> traitement des paiements Premium</li>
+                  <li><strong className="text-text-primary">Anthropic (Claude) :</strong> suggestions IA (données anonymisées)</li>
+                  <li><strong className="text-text-primary">Sentry :</strong> monitoring d'erreurs (données techniques uniquement)</li>
                 </ul>
               </Section>
 
               <Section title="6. Conservation des données">
                 <ul className="list-disc pl-5 space-y-2">
-                  <li><strong className="text-[#f7f8f8]">Données de compte :</strong> conservées tant que le compte est actif</li>
-                  <li><strong className="text-[#f7f8f8]">Messages :</strong> conservés tant que le compte est actif</li>
-                  <li><strong className="text-[#f7f8f8]">Logs techniques :</strong> 12 mois maximum</li>
-                  <li><strong className="text-[#f7f8f8]">Données de paiement :</strong> gérées et conservées par Stripe selon leur politique</li>
-                  <li><strong className="text-[#f7f8f8]">Après suppression du compte :</strong> toutes les données sont effacées sous 30 jours</li>
+                  <li><strong className="text-text-primary">Données de compte :</strong> conservées tant que le compte est actif</li>
+                  <li><strong className="text-text-primary">Messages :</strong> conservés tant que le compte est actif</li>
+                  <li><strong className="text-text-primary">Logs techniques :</strong> 12 mois maximum</li>
+                  <li><strong className="text-text-primary">Données de paiement :</strong> gérées et conservées par Stripe selon leur politique</li>
+                  <li><strong className="text-text-primary">Après suppression du compte :</strong> toutes les données sont effacées sous 30 jours</li>
                 </ul>
               </Section>
 
               <Section title="7. Vos droits (RGPD)">
                 <p>Conformément au RGPD, vous disposez des droits suivants :</p>
                 <ul className="list-disc pl-5 space-y-2">
-                  <li><strong className="text-[#f7f8f8]">Droit d'accès :</strong> consulter toutes vos données personnelles</li>
-                  <li><strong className="text-[#f7f8f8]">Droit de rectification :</strong> modifier vos informations depuis votre profil</li>
-                  <li><strong className="text-[#f7f8f8]">Droit à l'effacement :</strong> supprimer votre compte et toutes vos données (Paramètres → Supprimer mon compte)</li>
-                  <li><strong className="text-[#f7f8f8]">Droit à la portabilité :</strong> exporter vos données au format JSON (Paramètres → Exporter mes données)</li>
-                  <li><strong className="text-[#f7f8f8]">Droit d'opposition :</strong> vous opposer au traitement pour les finalités non essentielles</li>
-                  <li><strong className="text-[#f7f8f8]">Droit de retrait du consentement :</strong> retirer votre consentement à tout moment (ex: notifications push)</li>
+                  <li><strong className="text-text-primary">Droit d'accès :</strong> consulter toutes vos données personnelles</li>
+                  <li><strong className="text-text-primary">Droit de rectification :</strong> modifier vos informations depuis votre profil</li>
+                  <li><strong className="text-text-primary">Droit à l'effacement :</strong> supprimer votre compte et toutes vos données (Paramètres → Supprimer mon compte)</li>
+                  <li><strong className="text-text-primary">Droit à la portabilité :</strong> exporter vos données au format JSON (Paramètres → Exporter mes données)</li>
+                  <li><strong className="text-text-primary">Droit d'opposition :</strong> vous opposer au traitement pour les finalités non essentielles</li>
+                  <li><strong className="text-text-primary">Droit de retrait du consentement :</strong> retirer votre consentement à tout moment (ex: notifications push)</li>
                 </ul>
                 <p className="mt-3">
-                  Pour exercer vos droits, contactez-nous à <span className="text-[#6366f1]">privacy@squadplanner.fr</span> ou
+                  Pour exercer vos droits, contactez-nous à <span className="text-primary">privacy@squadplanner.fr</span> ou
                   utilisez les options disponibles dans les Paramètres de l'application.
                 </p>
               </Section>
@@ -293,9 +293,9 @@ export function Legal() {
               <Section title="8. Cookies et stockage local">
                 <p>Squad Planner utilise :</p>
                 <ul className="list-disc pl-5 space-y-2">
-                  <li><strong className="text-[#f7f8f8]">Cookies essentiels :</strong> authentification, préférences de thème (obligatoires)</li>
-                  <li><strong className="text-[#f7f8f8]">LocalStorage :</strong> état de l'application, cache des données (fonctionnel)</li>
-                  <li><strong className="text-[#f7f8f8]">Cookies analytics :</strong> Sentry pour le monitoring d'erreurs (consentement requis)</li>
+                  <li><strong className="text-text-primary">Cookies essentiels :</strong> authentification, préférences de thème (obligatoires)</li>
+                  <li><strong className="text-text-primary">LocalStorage :</strong> état de l'application, cache des données (fonctionnel)</li>
+                  <li><strong className="text-text-primary">Cookies analytics :</strong> Sentry pour le monitoring d'erreurs (consentement requis)</li>
                 </ul>
                 <p>
                   Aucun cookie publicitaire n'est utilisé. Vous pouvez gérer vos préférences cookies
@@ -326,10 +326,10 @@ export function Legal() {
                 <p>
                   Pour toute question relative à vos données personnelles :
                 </p>
-                <p className="text-[#6366f1]">privacy@squadplanner.fr</p>
+                <p className="text-primary">privacy@squadplanner.fr</p>
                 <p className="mt-2">
                   Vous pouvez également introduire une réclamation auprès de la CNIL
-                  (Commission Nationale de l'Informatique et des Libertés) : <span className="text-[#6366f1]">www.cnil.fr</span>
+                  (Commission Nationale de l'Informatique et des Libertés) : <span className="text-primary">www.cnil.fr</span>
                 </p>
               </Section>
             </Card>
@@ -338,7 +338,7 @@ export function Legal() {
 
         {/* Footer */}
         <div className="mt-8 text-center">
-          <p className="text-[12px] text-[#5e6063]">
+          <p className="text-[12px] text-text-tertiary">
             Squad Planner SAS — France
           </p>
         </div>

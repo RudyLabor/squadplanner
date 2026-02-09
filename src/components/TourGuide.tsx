@@ -211,7 +211,7 @@ export function TourGuide() {
         {/* Highlight ring around target */}
         {targetRect && (
           <motion.div
-            className="absolute border-2 border-[#6366f1] rounded-xl pointer-events-none"
+            className="absolute border-2 border-primary rounded-xl pointer-events-none"
             animate={{
               boxShadow: ['0 0 0 0 rgba(99,102,241,0.3)', '0 0 0 8px rgba(99,102,241,0)', '0 0 0 0 rgba(99,102,241,0.3)'],
             }}
@@ -238,37 +238,37 @@ export function TourGuide() {
           style={{ top: tooltipPos.top, left: tooltipPos.left }}
           onClick={(e) => e.stopPropagation()}
         >
-          <div className="bg-[#141416] border border-[rgba(99,102,241,0.2)] rounded-2xl shadow-2xl shadow-[#6366f1]/10 overflow-hidden">
+          <div className="bg-[#141416] border border-primary rounded-2xl shadow-2xl shadow-[#6366f1]/10 overflow-hidden">
             {/* Header */}
             <div className="px-5 pt-5 pb-3 flex items-start justify-between">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-[rgba(99,102,241,0.1)] flex items-center justify-center">
-                  <Icon className="w-5 h-5 text-[#6366f1]" />
+                <div className="w-10 h-10 rounded-xl bg-primary-10 flex items-center justify-center">
+                  <Icon className="w-5 h-5 text-primary" />
                 </div>
                 <div>
-                  <h4 className="text-[15px] font-semibold text-[#f7f8f8]">{step.title}</h4>
-                  <p className="text-[11px] text-[#5e6063]">{currentStep + 1} / {TOUR_STEPS.length}</p>
+                  <h4 className="text-[15px] font-semibold text-text-primary">{step.title}</h4>
+                  <p className="text-[11px] text-text-tertiary">{currentStep + 1} / {TOUR_STEPS.length}</p>
                 </div>
               </div>
               <button
                 onClick={skipTour}
-                className="p-1.5 rounded-lg hover:bg-[rgba(255,255,255,0.05)] transition-colors"
+                className="p-1.5 rounded-lg hover:bg-border-subtle transition-colors"
                 aria-label="Fermer le guide"
               >
-                <X className="w-4 h-4 text-[#5e6063]" />
+                <X className="w-4 h-4 text-text-tertiary" />
               </button>
             </div>
 
             {/* Description */}
             <div className="px-5 pb-4">
-              <p className="text-[13px] text-[#8b8d90] leading-relaxed">{step.description}</p>
+              <p className="text-[13px] text-text-secondary leading-relaxed">{step.description}</p>
             </div>
 
             {/* Progress bar */}
             <div className="px-5 pb-3">
-              <div className="h-1 bg-[rgba(255,255,255,0.05)] rounded-full overflow-hidden">
+              <div className="h-1 bg-border-subtle rounded-full overflow-hidden">
                 <motion.div
-                  className="h-full bg-[#6366f1] rounded-full"
+                  className="h-full bg-primary rounded-full"
                   initial={{ width: `${(currentStep / TOUR_STEPS.length) * 100}%` }}
                   animate={{ width: `${((currentStep + 1) / TOUR_STEPS.length) * 100}%` }}
                   transition={{ duration: 0.3 }}
@@ -280,7 +280,7 @@ export function TourGuide() {
             <div className="px-5 pb-5 flex items-center justify-between">
               <button
                 onClick={skipTour}
-                className="text-[12px] text-[#5e6063] hover:text-[#8b8d90] transition-colors"
+                className="text-[12px] text-text-tertiary hover:text-text-secondary transition-colors"
               >
                 Passer le guide
               </button>
@@ -288,14 +288,14 @@ export function TourGuide() {
                 {currentStep > 0 && (
                   <button
                     onClick={prevStep}
-                    className="w-9 h-9 rounded-lg bg-[rgba(255,255,255,0.05)] flex items-center justify-center hover:bg-[rgba(255,255,255,0.1)] transition-colors"
+                    className="w-9 h-9 rounded-lg bg-border-subtle flex items-center justify-center hover:bg-border-hover transition-colors"
                   >
-                    <ArrowLeft className="w-4 h-4 text-[#8b8d90]" />
+                    <ArrowLeft className="w-4 h-4 text-text-secondary" />
                   </button>
                 )}
                 <button
                   onClick={nextStep}
-                  className="h-9 px-4 rounded-lg bg-[#6366f1] text-[13px] text-white font-medium hover:bg-[#4f46e5] transition-colors flex items-center gap-1.5"
+                  className="h-9 px-4 rounded-lg bg-primary text-[13px] text-white font-medium hover:bg-[#4f46e5] transition-colors flex items-center gap-1.5"
                 >
                   {currentStep === TOUR_STEPS.length - 1 ? 'Terminé !' : 'Suivant'}
                   {currentStep < TOUR_STEPS.length - 1 && <ArrowRight className="w-3.5 h-3.5" />}

@@ -105,7 +105,7 @@ export function IncomingCallModal() {
                 repeat: status === 'ringing' ? 3 : 0,
                 repeatDelay: 0.8,
               }}
-              className="w-32 h-32 rounded-full overflow-hidden bg-[rgba(99,102,241,0.2)] flex items-center justify-center border-4 border-[#34d399]/50"
+              className="w-32 h-32 rounded-full overflow-hidden bg-primary-20 flex items-center justify-center border-4 border-[#34d399]/50"
             >
               {caller.avatar_url ? (
                 <img

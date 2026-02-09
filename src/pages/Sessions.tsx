@@ -3,7 +3,7 @@ import { motion } from 'framer-motion'
 import { Calendar, Plus, Clock, Users, ChevronRight, Sparkles, TrendingUp, CheckCircle2, PartyPopper, Loader2 } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import Confetti from 'react-confetti'
-import { Button, Card, Badge, SessionCardSkeleton } from '../components/ui'
+import { Button, Card, Badge, SessionCardSkeleton, ContentTransition } from '../components/ui'
 import { useAuthStore, useSquadsStore, useSessionsStore, useAIStore } from '../hooks'
 
 const dayNames = ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi']
@@ -227,13 +227,17 @@ export function Sessions() {
               {!sessionsLoading && <Badge variant="success">{confirmed.length}</Badge>}
             </div>
 
-            {sessionsLoading ? (
-              <div className="space-y-3 lg:grid lg:grid-cols-2 xl:grid-cols-3 lg:gap-4 lg:space-y-0">
-                <SessionCardSkeleton />
-                <SessionCardSkeleton />
-                <SessionCardSkeleton />
-              </div>
-            ) : confirmed.length > 0 ? (
+            <ContentTransition
+              isLoading={sessionsLoading}
+              skeleton={
+                <div className="space-y-3 lg:grid lg:grid-cols-2 xl:grid-cols-3 lg:gap-4 lg:space-y-0">
+                  <SessionCardSkeleton />
+                  <SessionCardSkeleton />
+                  <SessionCardSkeleton />
+                </div>
+              }
+            >
+            {confirmed.length > 0 ? (
               <ul className="space-y-3 lg:grid lg:grid-cols-2 xl:grid-cols-3 lg:gap-4 lg:space-y-0 list-none">
                 {confirmed.map(session => (
                   <li key={session.id}>
@@ -296,6 +300,7 @@ export function Sessions() {
                 </Card>
               </motion.div>
             )}
+            </ContentTransition>
           </section>
 
           {/* How it works - User guidance */}

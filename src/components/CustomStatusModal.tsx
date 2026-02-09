@@ -4,7 +4,7 @@
  */
 import { useState, useEffect, memo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { X, Clock, Gamepad2 } from 'lucide-react'
+import { X, Clock, Gamepad2, Loader2 } from 'lucide-react'
 import { useUserStatusStore } from '../hooks/useUserStatus'
 import { useSquadsStore } from '../hooks/useSquads'
 
@@ -56,31 +56,39 @@ export const CustomStatusModal = memo(function CustomStatusModal({ isOpen, onClo
     }
   }, [isOpen, customStatus, gameStatus])
 
-  const handleSave = () => {
-    // Custom status
-    if (text.trim()) {
-      let expiresAt: string | null = null
-      const option = DURATION_OPTIONS[durationIndex]
+  const [isSaving, setIsSaving] = useState(false)
 
-      if (option.ms === null) {
-        // "Today" — end of day
-        const endOfDay = new Date()
-        endOfDay.setHours(23, 59, 59, 999)
-        expiresAt = endOfDay.toISOString()
-      } else if (option.ms > 0) {
-        expiresAt = new Date(Date.now() + option.ms).toISOString()
+  const handleSave = async () => {
+    if (isSaving) return
+    setIsSaving(true)
+    try {
+      // Custom status
+      if (text.trim()) {
+        let expiresAt: string | null = null
+        const option = DURATION_OPTIONS[durationIndex]
+
+        if (option.ms === null) {
+          // "Today" — end of day
+          const endOfDay = new Date()
+          endOfDay.setHours(23, 59, 59, 999)
+          expiresAt = endOfDay.toISOString()
+        } else if (option.ms > 0) {
+          expiresAt = new Date(Date.now() + option.ms).toISOString()
+        }
+        // ms === 0 means "don't clear" → expiresAt stays null
+
+        await setCustomStatus({ emoji, text: text.trim(), expiresAt })
+      } else {
+        await setCustomStatus(null)
       }
-      // ms === 0 means "don't clear" → expiresAt stays null
 
-      setCustomStatus({ emoji, text: text.trim(), expiresAt })
-    } else {
-      setCustomStatus(null)
+      // Game status
+      await setGameStatus(gameInput.trim() || null)
+
+      onClose()
+    } finally {
+      setIsSaving(false)
     }
-
-    // Game status
-    setGameStatus(gameInput.trim() || null)
-
-    onClose()
   }
 
   const handleClear = () => {
@@ -252,9 +260,14 @@ export const CustomStatusModal = memo(function CustomStatusModal({ isOpen, onClo
               <button
                 type="button"
                 onClick={handleSave}
-                className="px-5 py-2.5 rounded-xl text-base font-semibold bg-primary text-white hover:bg-primary-hover transition-colors"
+                disabled={isSaving}
+                className="px-5 py-2.5 rounded-xl text-base font-semibold bg-primary text-white hover:bg-primary-hover transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
               >
-                Enregistrer
+                {isSaving ? (
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                ) : (
+                  'Enregistrer'
+                )}
               </button>
             </div>
           </motion.div>

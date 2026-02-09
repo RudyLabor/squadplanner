@@ -1,0 +1,178 @@
+/**
+ * Chantier 9 - Maintenance Page
+ *
+ * Full-screen page shown when the app is under planned maintenance.
+ * Auto-refreshes every 30 seconds and shows a countdown.
+ */
+import { useState, useEffect, useCallback } from 'react'
+import { motion } from 'framer-motion'
+import { Wrench, RefreshCw, ExternalLink } from 'lucide-react'
+import { useSearchParams } from 'react-router-dom'
+
+const AUTO_REFRESH_SECONDS = 30
+
+export default function Maintenance() {
+  const [searchParams] = useSearchParams()
+  const eta = searchParams.get('eta') // Optional ETA from URL
+  const [secondsSinceCheck, setSecondsSinceCheck] = useState(0)
+
+  // Auto-refresh countdown
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setSecondsSinceCheck((prev) => {
+        if (prev >= AUTO_REFRESH_SECONDS - 1) {
+          // Reload the page
+          window.location.reload()
+          return 0
+        }
+        return prev + 1
+      })
+    }, 1000)
+
+    return () => clearInterval(interval)
+  }, [])
+
+  const handleManualRefresh = useCallback(() => {
+    window.location.reload()
+  }, [])
+
+  const timeUntilRefresh = AUTO_REFRESH_SECONDS - secondsSinceCheck
+
+  return (
+    <div className="min-h-screen bg-bg-base flex items-center justify-center p-4">
+      <div className="max-w-md w-full text-center">
+        {/* Animated wrench icon */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ type: 'spring', stiffness: 200, damping: 20 }}
+          className="relative w-20 h-20 mx-auto mb-8"
+        >
+          {/* Glow */}
+          <motion.div
+            className="absolute inset-0 rounded-full blur-xl bg-warning/20"
+            animate={{
+              scale: [1, 1.3, 1],
+              opacity: [0.2, 0.4, 0.2],
+            }}
+            transition={{
+              duration: 3,
+              repeat: Infinity,
+              ease: 'easeInOut',
+            }}
+          />
+
+          {/* Icon container */}
+          <motion.div
+            className="relative w-20 h-20 rounded-2xl bg-warning/15 flex items-center justify-center"
+            animate={{ rotate: [0, 15, -15, 0] }}
+            transition={{
+              duration: 4,
+              repeat: Infinity,
+              ease: 'easeInOut',
+            }}
+          >
+            <Wrench className="w-10 h-10 text-warning" />
+          </motion.div>
+        </motion.div>
+
+        {/* Title */}
+        <motion.h1
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1, duration: 0.3 }}
+          className="text-2xl font-bold text-text-primary mb-3"
+        >
+          Maintenance en cours
+        </motion.h1>
+
+        {/* Message */}
+        <motion.p
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2, duration: 0.3 }}
+          className="text-md text-text-secondary mb-4"
+        >
+          Nous effectuons une maintenance planifiée. L'application sera de retour très bientôt.
+        </motion.p>
+
+        {/* ETA */}
+        {eta && (
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.25, duration: 0.3 }}
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-surface-card border border-border-subtle mb-6"
+          >
+            <span className="text-sm text-text-tertiary">Retour prévu :</span>
+            <span className="text-sm font-medium text-text-primary">{eta}</span>
+          </motion.div>
+        )}
+
+        {/* Progress bar animation */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.3, duration: 0.3 }}
+          className="w-full h-1.5 bg-border-subtle rounded-full overflow-hidden mb-6 mt-2"
+        >
+          <motion.div
+            className="h-full bg-warning/60 rounded-full"
+            animate={{
+              x: ['-100%', '100%'],
+            }}
+            transition={{
+              duration: 2,
+              repeat: Infinity,
+              ease: 'easeInOut',
+            }}
+            style={{ width: '40%' }}
+          />
+        </motion.div>
+
+        {/* Auto-refresh countdown */}
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.4, duration: 0.3 }}
+          className="text-sm text-text-tertiary mb-6"
+          aria-live="polite"
+        >
+          Dernière vérification il y a {secondsSinceCheck}s
+          {' '}&middot;{' '}
+          prochaine dans {timeUntilRefresh}s
+        </motion.p>
+
+        {/* Manual refresh button */}
+        <motion.button
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5, duration: 0.3 }}
+          onClick={handleManualRefresh}
+          className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-primary text-white text-md font-medium hover:bg-primary-hover transition-colors mb-6"
+        >
+          <RefreshCw className="w-4 h-4" />
+          Vérifier maintenant
+        </motion.button>
+
+        {/* Social links placeholder */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.6, duration: 0.3 }}
+          className="flex items-center justify-center gap-4"
+        >
+          <a
+            href="#"
+            className="inline-flex items-center gap-1.5 text-sm text-text-tertiary hover:text-text-secondary transition-colors"
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            <ExternalLink className="w-3.5 h-3.5" />
+            Suivre les mises à jour
+          </a>
+        </motion.div>
+      </div>
+    </div>
+  )
+}

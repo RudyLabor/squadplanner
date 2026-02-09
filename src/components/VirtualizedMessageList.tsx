@@ -2,6 +2,7 @@ import { useRef, useEffect, useCallback, memo } from 'react'
 import { useVirtualizer } from '@tanstack/react-virtual'
 import { AnimatePresence } from 'framer-motion'
 import { Skeleton, SkeletonAvatar } from './ui/Skeleton'
+import { LoadingMore } from './ui/LoadingMore'
 
 // =============================================================================
 // TYPES
@@ -26,6 +27,7 @@ interface VirtualizedMessageListProps {
   currentUserId: string
   isSquadChat: boolean
   isLoading: boolean
+  isLoadingMore?: boolean
   renderMessage: (message: Message, index: number) => React.ReactNode
   onScroll?: (isNearBottom: boolean) => void
   typingIndicator?: React.ReactNode
@@ -88,6 +90,7 @@ export const VirtualizedMessageList = memo(function VirtualizedMessageList({
   currentUserId: _currentUserId,
   isSquadChat,
   isLoading,
+  isLoadingMore,
   renderMessage,
   onScroll,
   typingIndicator,
@@ -192,6 +195,11 @@ export const VirtualizedMessageList = memo(function VirtualizedMessageList({
       className="flex-1 overflow-y-auto px-4"
       style={{ contain: 'strict' }}
     >
+      {/* Loading more indicator at the top */}
+      <AnimatePresence>
+        {isLoadingMore && <LoadingMore text="Chargement des messages..." />}
+      </AnimatePresence>
+
       <div
         style={{
           height: `${virtualizer.getTotalSize()}px`,

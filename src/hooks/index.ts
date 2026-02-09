@@ -57,6 +57,9 @@ export { usePWAInstallStore } from './usePWAInstall'
 // Offline detection
 export { useOffline, useOfflineBanner, useOfflineStore } from './useOffline'
 
+// Chantier 9 - Session expiry detection
+export { useSessionExpiry } from './useSessionExpiry'
+
 // Focus management for accessibility
 export {
   useFocusOnNavigate,
@@ -68,3 +71,6 @@ export {
   useRovingTabindex,
   useA11yAnnouncements
 } from './useFocusManagement'
+
+// Chantier 9 - Auto retry with exponential backoff
+export { useAutoRetry } from './useAutoRetry'

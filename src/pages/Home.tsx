@@ -3,7 +3,7 @@ import { motion } from 'framer-motion'
 import { Users, Calendar, TrendingUp, ChevronRight, Loader2, Mic, CheckCircle2, AlertCircle, Sparkles, Star, HelpCircle, XCircle } from 'lucide-react'
 import { Link, useNavigate } from 'react-router-dom'
 import Confetti from 'react-confetti'
-import { Card, Badge, SessionCardSkeleton, SquadCardSkeleton, SkeletonFriendsPlaying, SkeletonStatsRow, SkeletonStreakCounter, SkeletonAICoach, Tooltip, AnimatedCounter } from '../components/ui'
+import { Card, Badge, SessionCardSkeleton, SquadCardSkeleton, SkeletonFriendsPlaying, SkeletonStatsRow, SkeletonStreakCounter, SkeletonAICoach, Tooltip, AnimatedCounter, ContentTransition } from '../components/ui'
 import { useAuthStore, useVoiceChatStore } from '../hooks'
 import { springTap } from '../utils/animations'
 import { useSquadsQuery } from '../hooks/queries/useSquadsQuery'
@@ -576,28 +576,26 @@ export default function Home() {
           )}
 
           {/* Prochaine session */}
-          {sessionsLoading ? (
+          {(sessionsLoading || nextSession) && (
             <section aria-label="Prochaine session" className="mb-6">
               <div className="flex items-center justify-between mb-3">
                 <h2 className="text-xl font-semibold text-text-primary">
                   Prochaine session
                 </h2>
-              </div>
-              <SessionCardSkeleton />
-            </section>
-          ) : nextSession && (
-            <section aria-label="Prochaine session" className="mb-6">
-              <div className="flex items-center justify-between mb-3">
-                <h2 className="text-xl font-semibold text-text-primary">
-                  Prochaine session
-                </h2>
-                {upcomingSessions.length > 1 && (
+                {!sessionsLoading && upcomingSessions.length > 1 && (
                   <Link to="/squads" className="text-sm text-primary font-medium">
                     Voir tout ({upcomingSessions.length})
                   </Link>
                 )}
               </div>
-              <NextSessionCard session={nextSession} onRsvp={handleRsvp} isRsvpLoading={rsvpMutation.isPending} />
+              <ContentTransition
+                isLoading={sessionsLoading}
+                skeleton={<SessionCardSkeleton />}
+              >
+                {nextSession && (
+                  <NextSessionCard session={nextSession} onRsvp={handleRsvp} isRsvpLoading={rsvpMutation.isPending} />
+                )}
+              </ContentTransition>
             </section>
           )}
 
@@ -618,16 +616,16 @@ export default function Home() {
               Ton tableau de bord
             </h2>
             <div className="space-y-4">
-              {(squadsLoading || sessionsLoading) ? (
-                /* Skeleton pendant le chargement - évite le flash de fausses données */
-                <SkeletonStatsRow />
-              ) : (
+              <ContentTransition
+                isLoading={squadsLoading || sessionsLoading}
+                skeleton={<SkeletonStatsRow />}
+              >
                 <StatsRow
                   squadsCount={squads.length}
                   sessionsThisWeek={sessionsThisWeek}
                   reliabilityScore={reliabilityScore}
                 />
-              )}
+              </ContentTransition>
               {/* Streak Counter */}
               {!profile ? (
                 <SkeletonStreakCounter />

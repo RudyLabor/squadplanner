@@ -4,7 +4,7 @@
  */
 import { useState, memo, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { X, Forward, Search, Users, Check } from 'lucide-react'
+import { X, Forward, Search, Users, Check, Loader2 } from 'lucide-react'
 import { useSquadsStore } from '../hooks/useSquads'
 import { useMessagesStore } from '../hooks/useMessages'
 
@@ -169,7 +169,7 @@ export const ForwardMessageModal = memo(function ForwardMessageModal({
                     Envoye !
                   </>
                 ) : isSending ? (
-                  <div className="w-4 h-4 border-2 border-text-primary border-t-transparent rounded-full animate-spin" />
+                  <Loader2 className="w-4 h-4 animate-spin" />
                 ) : (
                   <>
                     <Forward className="w-4 h-4" />

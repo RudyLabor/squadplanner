@@ -4,7 +4,7 @@
  */
 import { useState, memo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { X, Plus, Trash2, BarChart3 } from 'lucide-react'
+import { X, Plus, Trash2, BarChart3, Loader2 } from 'lucide-react'
 
 interface CreatePollModalProps {
   isOpen: boolean
@@ -32,15 +32,21 @@ export const CreatePollModal = memo(function CreatePollModal({ isOpen, onClose, 
     setOptions(updated)
   }
 
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const isValid = question.trim().length > 0 && options.filter(o => o.trim()).length >= 2
 
-  const handleSubmit = () => {
-    if (!isValid) return
-    onCreatePoll(question.trim(), options.filter(o => o.trim()))
-    // Reset
-    setQuestion('')
-    setOptions(['', ''])
-    onClose()
+  const handleSubmit = async () => {
+    if (!isValid || isSubmitting) return
+    setIsSubmitting(true)
+    try {
+      await onCreatePoll(question.trim(), options.filter(o => o.trim()))
+      // Reset
+      setQuestion('')
+      setOptions(['', ''])
+      onClose()
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   const handleClose = () => {
@@ -155,10 +161,14 @@ export const CreatePollModal = memo(function CreatePollModal({ isOpen, onClose, 
               <button
                 type="button"
                 onClick={handleSubmit}
-                disabled={!isValid}
-                className="px-5 py-2.5 rounded-xl text-base font-semibold bg-primary text-white hover:bg-primary-hover transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                disabled={!isValid || isSubmitting}
+                className="px-5 py-2.5 rounded-xl text-base font-semibold bg-primary text-white hover:bg-primary-hover transition-colors disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-2"
               >
-                Creer le sondage
+                {isSubmitting ? (
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                ) : (
+                  'Creer le sondage'
+                )}
               </button>
             </div>
           </motion.div>

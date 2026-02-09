@@ -1,0 +1,219 @@
+import { motion } from 'framer-motion'
+import {
+  createContext,
+  useContext,
+  useCallback,
+  useRef,
+  useId,
+  type ReactNode,
+  type KeyboardEvent,
+} from 'react'
+
+// --- Context ---
+
+interface TabsContextValue {
+  value: string
+  onChange: (value: string) => void
+  variant: 'underline' | 'pills' | 'enclosed'
+  baseId: string
+}
+
+const TabsContext = createContext<TabsContextValue | null>(null)
+
+function useTabsContext() {
+  const ctx = useContext(TabsContext)
+  if (!ctx) throw new Error('Tabs compound components must be used within <Tabs>')
+  return ctx
+}
+
+// --- Tabs Root ---
+
+interface TabsProps {
+  value: string
+  onChange: (value: string) => void
+  children: ReactNode
+  variant?: 'underline' | 'pills' | 'enclosed'
+}
+
+export function Tabs({ value, onChange, children, variant = 'underline' }: TabsProps) {
+  const baseId = useId()
+  return (
+    <TabsContext.Provider value={{ value, onChange, variant, baseId }}>
+      <div className="w-full">{children}</div>
+    </TabsContext.Provider>
+  )
+}
+
+// --- TabsList ---
+
+interface TabsListProps {
+  children: ReactNode
+  className?: string
+}
+
+export function TabsList({ children, className = '' }: TabsListProps) {
+  const { variant } = useTabsContext()
+  const listRef = useRef<HTMLDivElement>(null)
+
+  const handleKeyDown = useCallback((e: KeyboardEvent<HTMLDivElement>) => {
+    const list = listRef.current
+    if (!list) return
+
+    const tabs = Array.from(
+      list.querySelectorAll<HTMLButtonElement>('[role="tab"]:not([disabled])')
+    )
+    const currentIndex = tabs.findIndex((t) => t === document.activeElement)
+    if (currentIndex === -1) return
+
+    let nextIndex = currentIndex
+    if (e.key === 'ArrowRight') {
+      e.preventDefault()
+      nextIndex = (currentIndex + 1) % tabs.length
+    } else if (e.key === 'ArrowLeft') {
+      e.preventDefault()
+      nextIndex = (currentIndex - 1 + tabs.length) % tabs.length
+    } else if (e.key === 'Home') {
+      e.preventDefault()
+      nextIndex = 0
+    } else if (e.key === 'End') {
+      e.preventDefault()
+      nextIndex = tabs.length - 1
+    }
+
+    if (nextIndex !== currentIndex) {
+      tabs[nextIndex].focus()
+      tabs[nextIndex].click()
+    }
+  }, [])
+
+  const variantClasses: Record<string, string> = {
+    underline: 'border-b border-border-subtle',
+    pills: 'bg-bg-surface rounded-xl p-1 border border-border-subtle',
+    enclosed: 'border border-border-subtle rounded-t-xl bg-bg-surface',
+  }
+
+  return (
+    <div className="relative">
+      {/* Fade masks for horizontal scroll */}
+      <div className="pointer-events-none absolute left-0 top-0 bottom-0 w-4 bg-gradient-to-r from-bg-base to-transparent z-10 opacity-0 peer-scroll-left:opacity-100" />
+      <div
+        ref={listRef}
+        role="tablist"
+        onKeyDown={handleKeyDown}
+        className={`flex overflow-x-auto scrollbar-hide gap-0.5 ${variantClasses[variant]} ${className}`}
+      >
+        {children}
+      </div>
+    </div>
+  )
+}
+
+// --- Tab ---
+
+interface TabProps {
+  value: string
+  icon?: ReactNode
+  disabled?: boolean
+  children: ReactNode
+}
+
+export function Tab({ value, icon, disabled = false, children }: TabProps) {
+  const { value: activeValue, onChange, variant, baseId } = useTabsContext()
+  const isActive = activeValue === value
+
+  const handleClick = useCallback(() => {
+    if (!disabled) onChange(value)
+  }, [disabled, onChange, value])
+
+  const tabId = `${baseId}-tab-${value}`
+  const panelId = `${baseId}-panel-${value}`
+
+  const baseClasses =
+    'relative inline-flex items-center gap-2 font-medium whitespace-nowrap transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 focus-visible:ring-offset-1'
+
+  const disabledClasses = disabled ? 'opacity-40 cursor-not-allowed' : 'cursor-pointer'
+
+  const variantClasses: Record<string, string> = {
+    underline: `px-4 py-2.5 text-sm ${
+      isActive ? 'text-primary' : 'text-text-tertiary hover:text-text-primary'
+    }`,
+    pills: `px-4 py-2 text-sm rounded-lg ${
+      isActive ? 'text-text-primary' : 'text-text-tertiary hover:text-text-secondary'
+    }`,
+    enclosed: `px-4 py-2.5 text-sm ${
+      isActive
+        ? 'text-text-primary bg-bg-base border-b-2 border-b-transparent -mb-px'
+        : 'text-text-tertiary hover:text-text-secondary'
+    }`,
+  }
+
+  return (
+    <button
+      id={tabId}
+      role="tab"
+      aria-selected={isActive}
+      aria-controls={panelId}
+      aria-disabled={disabled || undefined}
+      disabled={disabled}
+      tabIndex={isActive ? 0 : -1}
+      onClick={handleClick}
+      className={`${baseClasses} ${variantClasses[variant]} ${disabledClasses}`}
+    >
+      {/* Animated indicator */}
+      {isActive && variant === 'underline' && (
+        <motion.div
+          layoutId={`${baseId}-underline`}
+          className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary rounded-full"
+          transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+        />
+      )}
+      {isActive && variant === 'pills' && (
+        <motion.div
+          layoutId={`${baseId}-pill`}
+          className="absolute inset-0 bg-bg-active border border-border-default rounded-lg"
+          transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+        />
+      )}
+      {isActive && variant === 'enclosed' && (
+        <motion.div
+          layoutId={`${baseId}-enclosed`}
+          className="absolute inset-0 bg-bg-base rounded-t-lg border border-border-subtle border-b-transparent"
+          transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+        />
+      )}
+      <span className="relative z-10 flex items-center gap-2">
+        {icon && <span className="w-4 h-4 flex-shrink-0">{icon}</span>}
+        {children}
+      </span>
+    </button>
+  )
+}
+
+// --- TabsContent ---
+
+interface TabsContentProps {
+  value: string
+  children: ReactNode
+  className?: string
+}
+
+export function TabsContent({ value, children, className = '' }: TabsContentProps) {
+  const { value: activeValue, baseId } = useTabsContext()
+
+  if (activeValue !== value) return null
+
+  const tabId = `${baseId}-tab-${value}`
+  const panelId = `${baseId}-panel-${value}`
+
+  return (
+    <div
+      id={panelId}
+      role="tabpanel"
+      aria-labelledby={tabId}
+      tabIndex={0}
+      className={className}
+    >
+      {children}
+    </div>
+  )
+}

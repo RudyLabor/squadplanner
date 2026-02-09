@@ -2,6 +2,11 @@ import { motion } from 'framer-motion'
 import { type ReactNode, type KeyboardEvent } from 'react'
 
 interface CardProps {
+  variant?: 'default' | 'elevated' | 'outlined' | 'ghost'
+  padding?: 'default' | 'compact' | 'none'
+  loading?: boolean
+  selected?: boolean
+  disabled?: boolean
   children: ReactNode
   className?: string
   hoverable?: boolean
@@ -9,12 +14,33 @@ interface CardProps {
   'aria-label'?: string
 }
 
-export function Card({ children, className = '', hoverable = false, onClick, 'aria-label': ariaLabel }: CardProps) {
-  const baseClasses = 'bg-surface-card border border-border-subtle rounded-2xl transition-interactive'
-  const hoverClasses = hoverable ? 'hover:bg-surface-card-hover hover:border-border-hover cursor-pointer' : ''
-  const isClickable = !!onClick
+export function Card({
+  variant = 'default',
+  padding = 'default',
+  loading,
+  selected,
+  disabled,
+  children,
+  className = '',
+  hoverable = false,
+  onClick,
+  'aria-label': ariaLabel,
+}: CardProps) {
+  const variants: Record<string, string> = {
+    default: 'bg-surface-card border border-border-subtle',
+    elevated: 'bg-surface-card border border-border-subtle shadow-lg shadow-black/5',
+    outlined: 'bg-surface-card border-2 border-border-default',
+    ghost: 'bg-transparent border-none',
+  }
 
-  // Handle keyboard interaction for clickable cards
+  const hoverClasses = hoverable && !disabled
+    ? 'hover:bg-surface-card-hover hover:border-border-hover cursor-pointer'
+    : ''
+
+  const selectedClasses = selected ? 'border-primary ring-1 ring-primary/20' : ''
+  const disabledClasses = disabled ? 'opacity-50 cursor-not-allowed pointer-events-none' : ''
+  const isClickable = !!onClick && !disabled
+
   const handleKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
     if (isClickable && (e.key === 'Enter' || e.key === ' ')) {
       e.preventDefault()
@@ -24,17 +50,32 @@ export function Card({ children, className = '', hoverable = false, onClick, 'ar
 
   return (
     <motion.div
-      className={`${baseClasses} ${hoverClasses} ${className}`}
-      onClick={onClick}
+      className={`
+        relative rounded-2xl transition-interactive
+        ${variants[variant]}
+        ${hoverClasses}
+        ${selectedClasses}
+        ${disabledClasses}
+        ${className}
+      `}
+      onClick={isClickable ? onClick : undefined}
       onKeyDown={isClickable ? handleKeyDown : undefined}
       role={isClickable ? 'button' : undefined}
       tabIndex={isClickable ? 0 : undefined}
       aria-label={ariaLabel}
-      whileHover={hoverable ? { y: -1 } : undefined}
-      whileTap={hoverable ? { scale: 0.995 } : undefined}
+      aria-busy={loading || undefined}
+      aria-disabled={disabled || undefined}
+      aria-selected={selected || undefined}
+      whileHover={hoverable && !disabled ? { y: -1 } : undefined}
+      whileTap={hoverable && !disabled ? { scale: 0.995 } : undefined}
       transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
     >
-      {children}
+      {loading && (
+        <div className="absolute inset-0 z-10 rounded-2xl bg-surface-card/80 flex items-center justify-center">
+          <div className="w-5 h-5 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+        </div>
+      )}
+      {loading ? <div className="relative opacity-40">{children}</div> : children}
     </motion.div>
   )
 }
@@ -55,11 +96,12 @@ export function CardHeader({ children, className = '' }: CardHeaderProps) {
 interface CardContentProps {
   children: ReactNode
   className?: string
+  compact?: boolean
 }
 
-export function CardContent({ children, className = '' }: CardContentProps) {
+export function CardContent({ children, className = '', compact }: CardContentProps) {
   return (
-    <div className={`p-5 ${className}`}>
+    <div className={`${compact ? 'p-3' : 'p-5'} ${className}`}>
       {children}
     </div>
   )

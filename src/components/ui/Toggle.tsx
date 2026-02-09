@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion'
 import { useId, useCallback, type KeyboardEvent } from 'react'
+import { haptic } from '../../utils/haptics'
 
 interface ToggleProps {
   checked: boolean
@@ -29,7 +30,10 @@ export function Toggle({
   const config = sizeConfig[size]
 
   const handleClick = useCallback(() => {
-    if (!disabled) onChange(!checked)
+    if (!disabled) {
+      try { haptic.selection() } catch {}
+      onChange(!checked)
+    }
   }, [disabled, onChange, checked])
 
   const handleKeyDown = useCallback(

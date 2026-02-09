@@ -8,6 +8,7 @@ import { useAuthStore, useSquadsStore, subscribeToIncomingCalls, usePushNotifica
 import { pageTransitionVariants, pageTransitionConfig } from './components/PageTransition'
 import { initSentry } from './lib/sentry'
 import { useDocumentTitle } from './hooks/useDocumentTitle'
+import { useScrollRestoration } from './hooks/useScrollRestoration'
 import { ErrorBoundary } from './components/ErrorBoundary'
 import { OfflineBanner } from './components/OfflineBanner'
 import { PWAInstallBanner } from './components/PWAInstallBanner'
@@ -131,6 +132,7 @@ function AppContent() {
   const { setIncomingCall, status: callStatus } = useVoiceCallStore()
 
   useDocumentTitle()
+  useScrollRestoration()
 
   useEffect(() => {
     initialize()

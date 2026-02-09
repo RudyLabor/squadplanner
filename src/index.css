@@ -1211,3 +1211,46 @@ select:focus-visible,
     scroll-behavior: auto;
   }
 }
+
+/* =====================================================
+   iOS Touch Optimizations
+   Prevents 300ms tap delay, removes callout menus,
+   and enables momentum scrolling on iOS Safari.
+   ===================================================== */
+
+/* Prevent 300ms tap delay on interactive elements */
+button,
+a,
+input,
+select,
+textarea,
+[role="button"],
+[role="switch"],
+[role="checkbox"],
+[role="tab"],
+[tabindex] {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Disable long-press callout on custom interactive elements */
+[role="button"],
+[role="switch"],
+[role="checkbox"],
+[role="slider"],
+[role="option"] {
+  -webkit-touch-callout: none;
+}
+
+/* Momentum scrolling for scroll containers */
+.scrollbar-hide,
+.scrollbar-hide-mobile,
+.page-with-nav,
+.page-full-scroll {
+  -webkit-overflow-scrolling: touch;
+}
+
+/* will-change hint for elements that animate during touch */
+.touch-animate {
+  will-change: transform;
+}

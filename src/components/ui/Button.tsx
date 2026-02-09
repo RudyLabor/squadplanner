@@ -1,5 +1,6 @@
 import { motion, AnimatePresence, type HTMLMotionProps } from 'framer-motion'
 import { forwardRef, type ReactNode, type ElementType, type ComponentPropsWithRef } from 'react'
+import { haptic } from '../../utils/haptics'
 
 type ButtonBaseProps = {
   variant?: 'primary' | 'secondary' | 'ghost' | 'danger' | 'link'
@@ -67,6 +68,12 @@ function ButtonInner<C extends ElementType = 'button'>(
   const wc = fullWidth ? 'w-full' : ''
   const cls = `${baseClasses} ${variantClasses[variant]} ${sc} ${wc} ${className}`
 
+  const shouldHaptic = variant === 'primary' || variant === 'danger'
+  const originalOnClick = (props as Record<string, unknown>).onClick as ((...args: unknown[]) => void) | undefined
+  const handleClick = shouldHaptic
+    ? (...args: unknown[]) => { try { haptic.light() } catch {} originalOnClick?.(...args) }
+    : originalOnClick
+
   const content = (
     <AnimatePresence mode="wait">
       {showSuccess ? (
@@ -106,7 +113,7 @@ function ButtonInner<C extends ElementType = 'button'>(
         transition={{ type: 'spring', stiffness: 400, damping: 17 }}
         className="inline-flex"
       >
-        <Component ref={ref} className={cls} aria-busy={isLoading || undefined} {...props}>
+        <Component ref={ref} className={cls} aria-busy={isLoading || undefined} {...props} onClick={handleClick}>
           {content}
         </Component>
       </motion.div>
@@ -125,6 +132,7 @@ function ButtonInner<C extends ElementType = 'button'>(
       aria-busy={isLoading || undefined}
       aria-label={isLoading && !loadingText && typeof children === 'string' ? children : undefined}
       {...props}
+      onClick={handleClick}
     >
       {content}
     </motion.button>

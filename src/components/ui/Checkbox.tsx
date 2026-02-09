@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion'
 import { useId, useCallback, type KeyboardEvent } from 'react'
+import { haptic } from '../../utils/haptics'
 
 interface CheckboxProps {
   checked: boolean | 'indeterminate'
@@ -32,7 +33,10 @@ export function Checkbox({
   const isActive = isChecked || isIndeterminate
 
   const handleClick = useCallback(() => {
-    if (!disabled) onChange(!isChecked)
+    if (!disabled) {
+      try { haptic.light() } catch {}
+      onChange(!isChecked)
+    }
   }, [disabled, onChange, isChecked])
 
   const handleKeyDown = useCallback(

@@ -34,6 +34,7 @@ import { ReplyComposer } from '../components/ReplyComposer'
 import { MessageReplyPreview } from '../components/MessageReplyPreview'
 import { ConversationListSkeleton, MessageListSkeleton } from '../components/VirtualizedMessageList'
 import { MessageContent } from '../components/MessageContent'
+import { SwipeableMessage } from '../components/SwipeableMessage'
 import { MentionInput, type MentionUser } from '../components/MentionInput'
 import { GifPicker } from '../components/GifPicker'
 import { VoiceRecorder } from '../components/VoiceRecorder'
@@ -339,24 +340,36 @@ const VirtualizedMessages = memo(function VirtualizedMessages({
             >
               <div id={`message-${message.id}`} className="transition-interactive">
                 {showDateSeparator && <DateSeparator date={message.created_at} />}
-                <MessageBubble
-                  message={message}
-                  isOwn={isOwn}
-                  showAvatar={showAvatar}
-                  showName={showName}
-                  currentUserId={userId || ''}
-                  isSquadChat={isSquadChat}
-                  isAdmin={isAdmin}
-                  onEdit={onEditMessage}
-                  onDelete={onDeleteMessage}
-                  onPin={onPinMessage}
-                  onReply={onReplyMessage}
-                  onForward={onForwardMessage}
-                  onPollVote={onPollVote}
-                  replyToMessage={replyToData}
-                  onScrollToMessage={onScrollToMessage}
-                  senderRole={memberRolesMap?.get(message.sender_id)}
-                />
+                <SwipeableMessage
+                  enableSwipeLeft={!isOwn}
+                  enableSwipeRight={isOwn}
+                  onReply={() => onReplyMessage({
+                    id: message.id,
+                    content: message.content,
+                    sender: message.sender?.username || 'Utilisateur'
+                  })}
+                  onActions={() => onDeleteMessage(message.id)}
+                  disabled={!!message.is_system_message}
+                >
+                  <MessageBubble
+                    message={message}
+                    isOwn={isOwn}
+                    showAvatar={showAvatar}
+                    showName={showName}
+                    currentUserId={userId || ''}
+                    isSquadChat={isSquadChat}
+                    isAdmin={isAdmin}
+                    onEdit={onEditMessage}
+                    onDelete={onDeleteMessage}
+                    onPin={onPinMessage}
+                    onReply={onReplyMessage}
+                    onForward={onForwardMessage}
+                    onPollVote={onPollVote}
+                    replyToMessage={replyToData}
+                    onScrollToMessage={onScrollToMessage}
+                    senderRole={memberRolesMap?.get(message.sender_id)}
+                  />
+                </SwipeableMessage>
               </div>
             </div>
           )
@@ -1475,24 +1488,36 @@ export function Messages() {
                     {showDateSeparator && (
                       <DateSeparator date={message.created_at} />
                     )}
-                    <MessageBubble
-                      message={message}
-                      isOwn={isOwn}
-                      showAvatar={showAvatar}
-                      showName={showName}
-                      currentUserId={user?.id || ''}
-                      isSquadChat={isSquadChat}
-                      isAdmin={isAdmin}
-                      onEdit={setEditingMessage}
-                      onDelete={handleDeleteMessage}
-                      onPin={handlePinMessage}
-                      onReply={handleReply}
-                      onForward={handleForwardMessage}
-                      onPollVote={handlePollVote}
-                      replyToMessage={replyToData}
-                      onScrollToMessage={scrollToMessage}
-                      senderRole={memberRolesMap.get(message.sender_id)}
-                    />
+                    <SwipeableMessage
+                      enableSwipeLeft={!isOwn}
+                      enableSwipeRight={isOwn}
+                      onReply={() => handleReply({
+                        id: message.id,
+                        content: message.content,
+                        sender: message.sender?.username || 'Utilisateur'
+                      })}
+                      onActions={() => handleDeleteMessage(message.id)}
+                      disabled={!!message.is_system_message}
+                    >
+                      <MessageBubble
+                        message={message}
+                        isOwn={isOwn}
+                        showAvatar={showAvatar}
+                        showName={showName}
+                        currentUserId={user?.id || ''}
+                        isSquadChat={isSquadChat}
+                        isAdmin={isAdmin}
+                        onEdit={setEditingMessage}
+                        onDelete={handleDeleteMessage}
+                        onPin={handlePinMessage}
+                        onReply={handleReply}
+                        onForward={handleForwardMessage}
+                        onPollVote={handlePollVote}
+                        replyToMessage={replyToData}
+                        onScrollToMessage={scrollToMessage}
+                        senderRole={memberRolesMap.get(message.sender_id)}
+                      />
+                    </SwipeableMessage>
                   </div>
                 )
               })}

@@ -1,13 +1,16 @@
-import { motion } from 'framer-motion'
+import { motion, useMotionValue, useTransform, animate } from 'framer-motion'
 import {
   createContext,
   useContext,
   useCallback,
   useRef,
   useId,
+  useState,
+  useEffect,
   type ReactNode,
   type KeyboardEvent,
 } from 'react'
+import { haptic, getHapticEnabled } from '../../utils/haptics'
 
 // --- Context ---
 
@@ -16,6 +19,8 @@ interface TabsContextValue {
   onChange: (value: string) => void
   variant: 'underline' | 'pills' | 'enclosed'
   baseId: string
+  tabKeys: string[]
+  swipeable: boolean
 }
 
 const TabsContext = createContext<TabsContextValue | null>(null)
@@ -33,12 +38,23 @@ interface TabsProps {
   onChange: (value: string) => void
   children: ReactNode
   variant?: 'underline' | 'pills' | 'enclosed'
+  /** Ordered list of tab values for swipe navigation */
+  tabKeys?: string[]
+  /** Enable swipe gestures between tabs (default: true) */
+  swipeable?: boolean
 }
 
-export function Tabs({ value, onChange, children, variant = 'underline' }: TabsProps) {
+export function Tabs({
+  value,
+  onChange,
+  children,
+  variant = 'underline',
+  tabKeys = [],
+  swipeable = true,
+}: TabsProps) {
   const baseId = useId()
   return (
-    <TabsContext.Provider value={{ value, onChange, variant, baseId }}>
+    <TabsContext.Provider value={{ value, onChange, variant, baseId, tabKeys, swipeable }}>
       <div className="w-full">{children}</div>
     </TabsContext.Provider>
   )
@@ -198,22 +214,93 @@ interface TabsContentProps {
 }
 
 export function TabsContent({ value, children, className = '' }: TabsContentProps) {
-  const { value: activeValue, baseId } = useTabsContext()
+  const { value: activeValue, baseId, tabKeys, onChange, swipeable } = useTabsContext()
+
+  const x = useMotionValue(0)
+  const containerRef = useRef<HTMLDivElement>(null)
+  const [containerWidth, setContainerWidth] = useState(0)
+  const opacity = useTransform(x, [-containerWidth, 0, containerWidth], [0.5, 1, 0.5])
+
+  // Check for reduced motion preference
+  const [reducedMotion, setReducedMotion] = useState(false)
+  useEffect(() => {
+    const mq = window.matchMedia('(prefers-reduced-motion: reduce)')
+    setReducedMotion(mq.matches)
+    const handler = (e: MediaQueryListEvent) => setReducedMotion(e.matches)
+    mq.addEventListener('change', handler)
+    return () => mq.removeEventListener('change', handler)
+  }, [])
+
+  // Track container width for drag constraints and opacity mapping
+  useEffect(() => {
+    const el = containerRef.current
+    if (!el) return
+    const observer = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        setContainerWidth(entry.contentRect.width)
+      }
+    })
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [activeValue])
 
   if (activeValue !== value) return null
 
   const tabId = `${baseId}-tab-${value}`
   const panelId = `${baseId}-panel-${value}`
 
+  const currentIndex = tabKeys.indexOf(value)
+  const canSwipe = swipeable && !reducedMotion && tabKeys.length > 1 && currentIndex !== -1
+
+  const handleDragEnd = (_: unknown, info: { offset: { x: number }; velocity: { x: number } }) => {
+    if (!canSwipe) return
+
+    const swipeThreshold = 50
+    const { offset, velocity } = info
+    const swipedLeft = offset.x < -swipeThreshold || velocity.x < -200
+    const swipedRight = offset.x > swipeThreshold || velocity.x > 200
+
+    if (swipedLeft && currentIndex < tabKeys.length - 1) {
+      if (getHapticEnabled()) haptic.selection()
+      onChange(tabKeys[currentIndex + 1])
+    } else if (swipedRight && currentIndex > 0) {
+      if (getHapticEnabled()) haptic.selection()
+      onChange(tabKeys[currentIndex - 1])
+    }
+
+    // Snap back to center
+    animate(x, 0, { type: 'spring', stiffness: 400, damping: 30 })
+  }
+
+  if (!canSwipe) {
+    return (
+      <div
+        id={panelId}
+        role="tabpanel"
+        aria-labelledby={tabId}
+        tabIndex={0}
+        className={className}
+      >
+        {children}
+      </div>
+    )
+  }
+
   return (
-    <div
+    <motion.div
+      ref={containerRef}
       id={panelId}
       role="tabpanel"
       aria-labelledby={tabId}
       tabIndex={0}
-      className={className}
+      className={`touch-pan-y ${className}`}
+      style={{ x, opacity }}
+      drag="x"
+      dragConstraints={{ left: 0, right: 0 }}
+      dragElastic={0.3}
+      onDragEnd={handleDragEnd}
     >
       {children}
-    </div>
+    </motion.div>
   )
 }

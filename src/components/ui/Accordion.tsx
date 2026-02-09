@@ -8,6 +8,7 @@ import {
   type KeyboardEvent,
 } from 'react'
 import { ChevronDown } from 'lucide-react'
+import { haptic } from '../../utils/haptics'
 
 // --- Context ---
 
@@ -121,7 +122,10 @@ export function AccordionTrigger({ children, className = '' }: AccordionTriggerP
   const contentId = `${baseId}-content-${value}`
 
   const handleClick = useCallback(() => {
-    if (!disabled) toggle(value)
+    if (!disabled) {
+      try { haptic.selection() } catch {}
+      toggle(value)
+    }
   }, [disabled, toggle, value])
 
   const handleKeyDown = useCallback(

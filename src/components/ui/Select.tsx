@@ -2,6 +2,7 @@ import { type ReactNode, useState, useRef, useEffect, useCallback, useMemo, useI
 import { motion, AnimatePresence } from 'framer-motion'
 import { createPortal } from 'react-dom'
 import { ChevronDown, X, Search, Loader2, Check } from 'lucide-react'
+import { haptic } from '../../utils/haptics'
 
 export interface SelectOption {
   value: string
@@ -89,6 +90,7 @@ export function Select({
   }, [activeIdx])
 
   const selectOpt = useCallback((val: string) => {
+    try { haptic.selection() } catch {}
     if (multiple) {
       onChange(selected.includes(val) ? selected.filter((v) => v !== val) : [...selected, val])
     } else { onChange(val); setOpen(false) }

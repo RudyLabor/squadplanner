@@ -52,7 +52,7 @@ export const NavLink = memo(function NavLink({ path, icon: Icon, label, isActive
         whileTap={{ scale: 0.98 }}
         transition={{ duration: 0.25 }}
       >
-        <Icon className="w-5 h-5 flex-shrink-0" strokeWidth={1.5} />
+        <Icon className="w-5 h-5 flex-shrink-0" strokeWidth={1.8} />
         {collapsed ? (
           <span className="text-xs font-medium whitespace-nowrap overflow-hidden text-ellipsis max-w-[72px]">
             {label}

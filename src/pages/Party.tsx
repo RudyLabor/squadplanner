@@ -763,7 +763,7 @@ export function Party() {
                     /* Une seule squad - affichage central ameliore avec stats desktop */
                     <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
                       {/* Main card */}
-                      <Card className="md:col-span-3 p-8 text-center bg-gradient-to-br from-primary/10 via-transparent to-success/5 border-primary">
+                      <Card className="md:col-span-3 p-8 text-center bg-gradient-to-br from-primary/10 via-bg-elevated to-success/5 border-primary shadow-md">
                         {/* Mic icon with pulse ring animation */}
                         <div className="relative w-20 h-20 mx-auto mb-5">
                           <motion.div

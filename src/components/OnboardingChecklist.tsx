@@ -107,8 +107,8 @@ export function OnboardingChecklist({
       >
         <Card className={`p-4 border ${
           allComplete
-            ? 'bg-gradient-to-r from-success/10 to-transparent border-success/20'
-            : 'bg-gradient-to-r from-primary/8 to-transparent border-primary/15'
+            ? 'bg-gradient-to-r from-success/10 to-bg-elevated border-success/20'
+            : 'bg-gradient-to-r from-primary/8 to-bg-elevated border-primary/15'
         }`}>
           {/* Header */}
           <div className="flex items-center justify-between mb-3">

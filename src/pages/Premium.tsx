@@ -388,7 +388,7 @@ export function Premium() {
       {/* Hero Section */}
       <div
         ref={heroRef}
-        className="relative overflow-hidden bg-gradient-to-br from-primary/10 via-purple/5 to-bg-base dark:from-surface-dark dark:via-bg-surface dark:to-bg-base pt-8 pb-16"
+        className="relative overflow-hidden bg-gradient-to-br from-primary/20 via-purple/10 to-bg-elevated dark:from-surface-dark dark:via-bg-surface dark:to-bg-base pt-8 pb-16"
       >
         {/* Animated gradient background - reduced animation */}
         <div className="absolute inset-0 overflow-hidden">

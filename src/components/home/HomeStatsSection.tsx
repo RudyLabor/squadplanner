@@ -30,7 +30,7 @@ function StatsRow({ squadsCount, sessionsThisWeek, reliabilityScore }: StatsRowP
               boxShadow: `0 0 20px ${stat.color}25`,
             }}
             whileTap={{ scale: 0.98 }}
-            className="h-[60px] sm:h-[68px] px-2 sm:px-4 flex items-center gap-2 sm:gap-3 rounded-xl sm:rounded-2xl border border-border-default hover:bg-surface-card-hover cursor-pointer transition-all duration-200"
+            className="h-[60px] sm:h-[68px] px-2 sm:px-4 flex items-center gap-2 sm:gap-3 rounded-xl sm:rounded-2xl border border-border-hover shadow-sm hover:bg-surface-card-hover cursor-pointer transition-all duration-200"
             style={{
               background: `linear-gradient(to bottom right, ${stat.color}12, transparent)`,
               transition: 'all 0.2s ease, box-shadow 0.2s ease',

@@ -76,6 +76,9 @@ export default defineConfig({
     minify: "esbuild",
     target: "esnext",
 
+    // Skip modulePreload polyfill for modern browsers (saves ~2KB)
+    modulePreload: { polyfill: false },
+
     // Chunk size warnings
     chunkSizeWarningLimit: 500,
 

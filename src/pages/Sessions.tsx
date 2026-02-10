@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom'
 import Confetti from 'react-confetti'
 import { Button, Card, Badge, SessionCardSkeleton, ContentTransition } from '../components/ui'
 import { useAuthStore, useSquadsStore, useSessionsStore, useAIStore } from '../hooks'
+import { useCreateSessionModal } from '../components/CreateSessionModal'
 
 const dayNames = ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi']
 
@@ -13,6 +14,7 @@ export function Sessions() {
   const { squads, fetchSquads, isLoading: squadsLoading } = useSquadsStore()
   const { sessions, fetchSessions, isLoading: sessionsLoading } = useSessionsStore()
   const { slotSuggestions, coachTips, fetchSlotSuggestions, fetchCoachTips } = useAIStore()
+  const openCreateSession = useCreateSessionModal(s => s.open)
 
   const [showConfetti, setShowConfetti] = useState(false)
   const hasShownCelebration = useRef(false)
@@ -89,16 +91,22 @@ export function Sessions() {
       <div className="px-4 md:px-6 lg:px-8 py-6 max-w-2xl lg:max-w-4xl xl:max-w-6xl mx-auto">
         <div>
           {/* Header with guidance */}
-          <header className="mb-8">
-            <h1 className="text-lg font-bold text-text-primary mb-2">Tes prochaines sessions</h1>
-            <p className="text-md text-text-secondary">
-              {needsResponse.length > 0
-                ? `${needsResponse.length} session${needsResponse.length > 1 ? 's' : ''} en attente de ta réponse`
-                : confirmed.length > 0
-                  ? `${confirmed.length} session${confirmed.length > 1 ? 's' : ''} confirmée${confirmed.length > 1 ? 's' : ''} — ta squad compte sur toi !`
-                  : 'Aucune session planifiée pour le moment'
-              }
-            </p>
+          <header className="flex items-center justify-between mb-8">
+            <div>
+              <h1 className="text-lg font-bold text-text-primary mb-1">Tes prochaines sessions</h1>
+              <p className="text-sm text-text-secondary">
+                {needsResponse.length > 0
+                  ? `${needsResponse.length} session${needsResponse.length > 1 ? 's' : ''} en attente de ta réponse`
+                  : confirmed.length > 0
+                    ? `${confirmed.length} session${confirmed.length > 1 ? 's' : ''} confirmée${confirmed.length > 1 ? 's' : ''} — ta squad compte sur toi !`
+                    : 'Aucune session planifiée pour le moment'
+                }
+              </p>
+            </div>
+            <Button size="sm" onClick={openCreateSession}>
+              <Plus className="w-4 h-4" />
+              Créer
+            </Button>
           </header>
 
           {/* Success state - All caught up */}

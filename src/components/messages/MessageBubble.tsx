@@ -46,12 +46,13 @@ export const MessageBubble = memo(function MessageBubble({
   message, isOwn, showAvatar, showName, currentUserId, isSquadChat, isAdmin,
   onEdit, onDelete, onPin, onReply, onForward, onPollVote, replyToMessage, onScrollToMessage, senderRole,
 }: Props) {
+  if (!message || !message.id) return null
   if (message.is_system_message) return <SystemMessage message={message} />
 
   const initial = message.sender?.username?.charAt(0).toUpperCase() || '?'
   const sender = message.sender?.username || 'Utilisateur'
   const actions = {
-    message: { id: message.id, sender_id: message.sender_id, content: message.content },
+    message: { id: message.id, sender_id: message.sender_id || '', content: message.content || '' },
     currentUserId, isAdmin,
     onEdit: () => onEdit({ id: message.id, content: message.content }),
     onDelete: () => onDelete(message.id),

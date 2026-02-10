@@ -79,9 +79,9 @@ function PodiumCard({
   isCurrentUser: boolean
   index: number
 }) {
-  const medal = MEDAL_COLORS[entry.rank as keyof typeof MEDAL_COLORS]
-  const isFirst = entry.rank === 1
-  const levelColor = getLevelColor(entry.level)
+  const medal = MEDAL_COLORS[(entry.rank ?? 1) as keyof typeof MEDAL_COLORS]
+  const isFirst = (entry.rank ?? 1) === 1
+  const levelColor = getLevelColor(entry.level ?? 1)
 
   return (
     <motion.div
@@ -196,9 +196,9 @@ function PodiumCard({
                 color: levelColor.color,
               }}
             >
-              Niv. {entry.level}
+              Niv. {entry.level ?? 1}
             </span>
-            {entry.streak_days > 0 && (
+            {(entry.streak_days ?? 0) > 0 && (
               <span className="flex items-center gap-0.5 text-sm text-gold">
                 <Flame className="w-3 h-3" />
                 {entry.streak_days}
@@ -210,7 +210,7 @@ function PodiumCard({
           <div className="flex items-center justify-center gap-1 text-sm text-text-secondary mb-1">
             <Zap className="w-3 h-3 text-primary-hover" />
             <span className="font-medium text-text-primary">
-              {entry.xp.toLocaleString()}
+              {(entry.xp ?? 0).toLocaleString()}
             </span>
             <span>XP</span>
           </div>
@@ -218,7 +218,7 @@ function PodiumCard({
           {/* Reliability score */}
           <div className="flex items-center justify-center gap-1 text-sm text-text-tertiary">
             <Shield className="w-3 h-3 text-success" />
-            <span>{entry.reliability_score}%</span>
+            <span>{entry.reliability_score ?? 100}%</span>
           </div>
         </Card>
         </Link>
@@ -256,7 +256,7 @@ function LeaderboardListItem({
   isCurrentUser: boolean
   index: number
 }) {
-  const levelColor = getLevelColor(entry.level)
+  const levelColor = getLevelColor(entry.level ?? 1)
 
   return (
     <Link to={`/profile/${entry.user_id}`}>
@@ -279,7 +279,7 @@ function LeaderboardListItem({
       >
       {/* Rank */}
       <div className="w-8 h-8 rounded-lg bg-border-subtle flex items-center justify-center">
-        <span className="text-md font-bold text-text-secondary">{entry.rank}</span>
+        <span className="text-md font-bold text-text-secondary">{entry.rank ?? index + 4}</span>
       </div>
 
       {/* Avatar */}
@@ -317,11 +317,11 @@ function LeaderboardListItem({
               color: levelColor.color,
             }}
           >
-            Niv. {entry.level}
+            Niv. {entry.level ?? 1}
           </span>
           <span className="flex items-center gap-0.5">
             <Shield className="w-3 h-3 text-success" />
-            {entry.reliability_score}%
+            {entry.reliability_score ?? 100}%
           </span>
         </div>
       </div>
@@ -331,10 +331,10 @@ function LeaderboardListItem({
         <div className="flex items-center gap-1 text-base">
           <Zap className="w-3 h-3 text-primary-hover" />
           <span className="font-medium text-text-primary">
-            {entry.xp.toLocaleString()}
+            {(entry.xp ?? 0).toLocaleString()}
           </span>
         </div>
-        {entry.streak_days > 0 && (
+        {(entry.streak_days ?? 0) > 0 && (
           <div className="flex items-center justify-end gap-0.5 text-sm text-gold">
             <Flame className="w-3 h-3" />
             {entry.streak_days}j
@@ -348,7 +348,7 @@ function LeaderboardListItem({
 
 export function SquadLeaderboard({ entries, currentUserId }: SquadLeaderboardProps) {
   // Sort entries by rank
-  const sortedEntries = [...entries].sort((a, b) => a.rank - b.rank)
+  const sortedEntries = [...entries].sort((a, b) => (a.rank ?? 0) - (b.rank ?? 0))
 
   // Split into podium (top 3) and list (4-10)
   const podiumEntries = sortedEntries.filter((e) => e.rank <= 3)

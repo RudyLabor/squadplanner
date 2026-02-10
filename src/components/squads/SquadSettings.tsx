@@ -1,3 +1,4 @@
+import { useMemo } from 'react'
 import {
   Trash2, LogOut, ChevronRight, UserPlus, Calendar, MessageCircle,
   BarChart3, Download, Zap, Trophy, Loader2
@@ -9,6 +10,21 @@ import { SquadLeaderboard } from '../SquadLeaderboard'
 import { exportSessionsToICS } from '../../utils/calendarExport'
 import { showSuccess } from '../../lib/toast'
 
+interface RawLeaderboardEntry {
+  user_id: string
+  username: string
+  avatar_url?: string | null
+  total_present?: number
+  total_sessions?: number
+  reliability?: number
+  // Fields from the RPC if it returns the full shape
+  rank?: number
+  xp?: number
+  level?: number
+  reliability_score?: number
+  streak_days?: number
+}
+
 interface SquadSettingsProps {
   squadId: string
   squadName?: string
@@ -19,7 +35,7 @@ interface SquadSettingsProps {
   avgReliability: number
   canAccessAdvancedStats: boolean
   // Leaderboard
-  leaderboard: Array<{ user_id: string; username: string; avatar_url?: string; total_present: number; total_sessions: number; reliability: number }>
+  leaderboard: RawLeaderboardEntry[]
   leaderboardLoading: boolean
   currentUserId: string
   // Premium
@@ -62,6 +78,23 @@ export function SquadSettings({
   onSuccess,
 }: SquadSettingsProps) {
   const navigate = useNavigate()
+
+  // Transform raw leaderboard data to the format SquadLeaderboard expects
+  const transformedLeaderboard = useMemo(() => {
+    return leaderboard
+      .map((entry, index) => ({
+        rank: entry.rank ?? index + 1,
+        user_id: entry.user_id,
+        username: entry.username,
+        avatar_url: entry.avatar_url ?? null,
+        xp: entry.xp ?? (entry.total_present ?? 0) * 10,
+        level: entry.level ?? Math.max(1, Math.floor(((entry.total_present ?? 0) * 10) / 100) + 1),
+        reliability_score: entry.reliability_score ?? entry.reliability ?? 100,
+        streak_days: entry.streak_days ?? 0,
+      }))
+      .sort((a, b) => b.xp - a.xp)
+      .map((entry, index) => ({ ...entry, rank: entry.rank ?? index + 1 }))
+  }, [leaderboard])
 
   return (
     <>
@@ -157,13 +190,13 @@ export function SquadSettings({
       )}
 
       {/* Classement Squad */}
-      {leaderboard.length > 0 && (
+      {transformedLeaderboard.length > 0 && (
         <div className="mb-6">
           <h3 className="text-md font-semibold text-text-primary mb-3 flex items-center gap-2">
             <Trophy className="w-4 h-4 text-warning" />
             Classement
           </h3>
-          <SquadLeaderboard entries={leaderboard} currentUserId={currentUserId} />
+          <SquadLeaderboard entries={transformedLeaderboard} currentUserId={currentUserId} />
         </div>
       )}
       {leaderboardLoading && (

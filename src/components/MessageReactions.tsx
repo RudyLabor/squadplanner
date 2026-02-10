@@ -51,15 +51,19 @@ export function MessageReactions({
     if (!messageId) return
 
     const fetchReactions = async () => {
-      const { data, error } = await supabase
-        .from('message_reactions')
-        .select('*')
-        .eq('message_id', messageId)
-        .order('created_at', { ascending: true })
+      try {
+        const { data, error } = await supabase
+          .from('message_reactions')
+          .select('*')
+          .eq('message_id', messageId)
+          .order('created_at', { ascending: true })
 
-      if (!error && data) {
-        setReactions(data)
-        onReactionsChange?.(data)
+        if (!error && data) {
+          setReactions(data)
+          onReactionsChange?.(data)
+        }
+      } catch {
+        // Table might not exist yet - silently ignore
       }
     }
 

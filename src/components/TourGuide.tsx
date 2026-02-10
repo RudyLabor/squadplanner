@@ -90,11 +90,12 @@ export function TourGuide() {
     const completed = localStorage.getItem(TOUR_COMPLETED_KEY)
     if (completed) return
 
-    // Check if user just came from onboarding (has at least one squad)
     // Show tour with a delay to let the page render
     const timer = setTimeout(() => {
       const firstTarget = document.querySelector(TOUR_STEPS[0].target)
       if (firstTarget) {
+        // Mark as shown immediately so it won't re-trigger on refresh/revisit
+        localStorage.setItem(TOUR_COMPLETED_KEY, 'shown')
         setActive(true)
       }
     }, 2000)

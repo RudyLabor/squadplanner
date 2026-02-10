@@ -52,7 +52,7 @@ function ReliabilityBadge({ score }: { score: number }) {
           <motion.div animate={{ rotate: [0, 8, -8, 0] }} transition={{ duration: 2.5, repeat: 2, repeatDelay: 4 }}>
             <Star className="w-4 h-4 text-success fill-success" />
           </motion.div>
-          <span className="text-base font-medium text-success">100% fiable</span>
+          <span className="text-base font-medium text-success">{score}% fiable</span>
         </motion.div>
       )
     }
@@ -171,7 +171,7 @@ export default function Home() {
 
   if (isInitialized && !user) { navigate('/'); return null }
 
-  const reliabilityScore = profile?.reliability_score || 100
+  const reliabilityScore = profile?.reliability_score ?? 100
   const pendingRsvps = upcomingSessions.filter(s => !s.my_rsvp).length
 
   const activeParty = isInVoiceChat && currentChannel && remoteUsers.length > 0 ? {

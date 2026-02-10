@@ -186,8 +186,9 @@ export default function SquadDetail() {
 
       <div className="px-4 md:px-6 lg:px-8 py-6 max-w-2xl lg:max-w-4xl xl:max-w-6xl mx-auto">
         <CrossfadeTransition isLoading={showSkeleton} skeleton={<SquadDetailSkeleton />}>
+        {currentSquad ? (
         <div>
-          <SquadHeader squadId={id || ''} squad={currentSquad!} isOwner={!!isOwner} />
+          <SquadHeader squadId={id || ''} squad={currentSquad} isOwner={!!isOwner} />
 
           <div className="mb-6">
             <PartySection squadId={id || ''} />
@@ -233,6 +234,7 @@ export default function SquadDetail() {
             onSuccess={setSuccessMessage}
           />
         </div>
+        ) : null}
         </CrossfadeTransition>
       </div>
 
@@ -241,7 +243,7 @@ export default function SquadDetail() {
       </AnimatePresence>
 
       <AnimatePresence>
-        {showInviteModal && (
+        {showInviteModal && currentSquad && (
           <InviteModal
             isOpen={showInviteModal}
             onClose={() => setShowInviteModal(false)}

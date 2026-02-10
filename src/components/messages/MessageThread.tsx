@@ -37,25 +37,31 @@ interface SharedProps {
 }
 
 function renderMessage(msg: MessageBubbleMessage, idx: number, all: MessageBubbleMessage[], props: SharedProps) {
-  const prev = all[idx - 1]
-  const isOwn = msg.sender_id === props.userId
-  const showAvatar = !prev || prev.sender_id !== msg.sender_id
-  const mDate = props.getMessageDate(msg.created_at)
-  const pDate = prev ? props.getMessageDate(prev.created_at) : ''
-  const reply = () => props.onReplyMessage({ id: msg.id, content: msg.content, sender: msg.sender?.username || 'Utilisateur' })
-  return (
-    <>
-      {mDate !== pDate && <DateSeparator date={msg.created_at} />}
-      <SwipeableMessage enableSwipeLeft={!isOwn} enableSwipeRight={isOwn} onReply={reply} onActions={() => props.onDeleteMessage(msg.id)} disabled={!!msg.is_system_message}>
-        <MessageBubble message={msg} isOwn={isOwn} showAvatar={showAvatar} showName={showAvatar && props.isSquadChat}
-          currentUserId={props.userId || ''} isSquadChat={props.isSquadChat} isAdmin={props.isAdmin}
-          onEdit={props.onEditMessage} onDelete={props.onDeleteMessage} onPin={props.onPinMessage}
-          onReply={props.onReplyMessage} onForward={props.onForwardMessage} onPollVote={props.onPollVote}
-          replyToMessage={buildReplyData(msg, all)} onScrollToMessage={props.onScrollToMessage}
-          senderRole={props.memberRolesMap?.get(msg.sender_id)} />
-      </SwipeableMessage>
-    </>
-  )
+  if (!msg || !msg.id) return null
+  try {
+    const prev = all[idx - 1]
+    const isOwn = msg.sender_id === props.userId
+    const showAvatar = !prev || prev.sender_id !== msg.sender_id
+    const mDate = props.getMessageDate(msg.created_at || '')
+    const pDate = prev ? props.getMessageDate(prev.created_at || '') : ''
+    const reply = () => props.onReplyMessage({ id: msg.id, content: msg.content || '', sender: msg.sender?.username || 'Utilisateur' })
+    return (
+      <>
+        {mDate !== pDate && msg.created_at && <DateSeparator date={msg.created_at} />}
+        <SwipeableMessage enableSwipeLeft={!isOwn} enableSwipeRight={isOwn} onReply={reply} onActions={() => props.onDeleteMessage(msg.id)} disabled={!!msg.is_system_message}>
+          <MessageBubble message={msg} isOwn={isOwn} showAvatar={showAvatar} showName={showAvatar && props.isSquadChat}
+            currentUserId={props.userId || ''} isSquadChat={props.isSquadChat} isAdmin={props.isAdmin}
+            onEdit={props.onEditMessage} onDelete={props.onDeleteMessage} onPin={props.onPinMessage}
+            onReply={props.onReplyMessage} onForward={props.onForwardMessage} onPollVote={props.onPollVote}
+            replyToMessage={buildReplyData(msg, all)} onScrollToMessage={props.onScrollToMessage}
+            senderRole={props.memberRolesMap?.get(msg.sender_id)} />
+        </SwipeableMessage>
+      </>
+    )
+  } catch (err) {
+    console.error('Error rendering message:', msg?.id, err)
+    return null
+  }
 }
 
 const VirtualizedMessages = memo(function VirtualizedMessages({ containerRef, endRef, onScroll, ...props }: SharedProps & {

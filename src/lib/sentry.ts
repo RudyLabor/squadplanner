@@ -1,11 +1,11 @@
 /**
  * Sentry Error Monitoring Setup
  *
- * Uses dynamic import() so @sentry/react is NEVER in the initial bundle.
+ * Uses dynamic import() so @sentry/browser is NEVER in the initial bundle.
  * Sentry is loaded asynchronously only when initSentry() is called.
  */
 
-type SentryModule = typeof import('@sentry/react')
+type SentryModule = typeof import('@sentry/browser')
 
 let SentryRef: SentryModule | null = null
 let isInitialized = false
@@ -31,20 +31,16 @@ export async function initSentry(): Promise<void> {
   }
 
   try {
-    // Dynamic import — @sentry/react is NOT bundled in main chunk
-    const Sentry = await import('@sentry/react')
+    // Dynamic import — @sentry/browser is NOT bundled in main chunk
+    const Sentry = await import('@sentry/browser')
     SentryRef = Sentry
 
     Sentry.init({
       dsn,
       environment: import.meta.env.MODE,
 
-      // Performance monitoring — PHASE 5: 25% for better Web Vitals coverage
+      // Performance monitoring — 25% for Web Vitals coverage
       tracesSampleRate: 0.25,
-
-      // Session replay
-      replaysSessionSampleRate: 0.1,
-      replaysOnErrorSampleRate: 1.0,
 
       enabled: import.meta.env.PROD,
 
@@ -81,10 +77,6 @@ export async function initSentry(): Promise<void> {
 
       integrations: [
         Sentry.browserTracingIntegration(),
-        Sentry.replayIntegration({
-          maskAllText: true,
-          blockAllMedia: true,
-        }),
       ],
     })
 

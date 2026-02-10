@@ -6,7 +6,7 @@ import { initializePushNotifications } from './hooks/usePushNotifications'
 import { initFontOptimization } from './utils/fontOptimization'
 
 // Sentry is now lazily initialized ONLY in authenticated routes (see App.tsx)
-// This keeps @sentry/react out of the landing page bundle
+// This keeps @sentry/browser out of the landing page bundle
 
 // Detect when web fonts are loaded and add .fonts-loaded class to <html>
 initFontOptimization()

@@ -1093,6 +1093,15 @@ select:focus-visible,
   animation: cta-idle-glow 3s ease-in-out infinite;
 }
 
+/* CTA pulse glow - imposing hero button */
+@keyframes cta-pulse-glow {
+  0%, 100% { box-shadow: 0 0 20px rgba(99, 102, 241, 0.3), 0 0 60px rgba(99, 102, 241, 0.1); }
+  50% { box-shadow: 0 0 30px rgba(99, 102, 241, 0.5), 0 0 80px rgba(99, 102, 241, 0.2); }
+}
+.cta-pulse-glow {
+  animation: cta-pulse-glow 2s ease-in-out infinite;
+}
+
 /* CTA hover glow */
 .cta-hover-glow {
   transition: all 200ms ease;

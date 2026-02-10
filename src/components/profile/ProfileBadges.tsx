@@ -5,12 +5,12 @@ import Confetti from 'react-confetti'
 import { Card } from '../ui'
 
 const ACHIEVEMENTS = [
-  { id: 'first_step', name: 'Premier pas', icon: '', description: '1ere session', threshold: 1, type: 'sessions' },
-  { id: 'team_player', name: 'Joueur d\'equipe', icon: '', description: '5 sessions', threshold: 5, type: 'sessions' },
+  { id: 'first_step', name: 'Premier pas', icon: '', description: '1ère session', threshold: 1, type: 'sessions' },
+  { id: 'team_player', name: "Joueur d'équipe", icon: '', description: '5 sessions', threshold: 5, type: 'sessions' },
   { id: 'reliable', name: 'Fiable', icon: '', description: '10 check-ins', threshold: 10, type: 'checkins' },
-  { id: 'veteran', name: 'Veteran', icon: '', description: '20 sessions', threshold: 20, type: 'sessions' },
-  { id: 'perfectionist', name: 'Perfectionniste', icon: '', description: '100% fiabilite', threshold: 100, type: 'score' },
-  { id: 'legend', name: 'Legende', icon: '', description: '50 sessions', threshold: 50, type: 'sessions' },
+  { id: 'veteran', name: 'Vétéran', icon: '', description: '20 sessions', threshold: 20, type: 'sessions' },
+  { id: 'perfectionist', name: 'Perfectionniste', icon: '', description: '100% fiabilité', threshold: 100, type: 'score' },
+  { id: 'legend', name: 'Légende', icon: '', description: '50 sessions', threshold: 50, type: 'sessions' },
 ]
 
 interface ProfileBadgesProps {
@@ -101,7 +101,7 @@ export function ProfileBadges({ profile, challengesLoaded, challengesData, Seaso
                   transition={{ delay: 0.3 }}
                   className="text-sm font-medium text-white/70 uppercase tracking-wide"
                 >
-                  Succes debloque !
+                  Succès débloqué !
                 </motion.p>
                 <motion.p
                   initial={{ opacity: 0, x: -10 }}
@@ -150,7 +150,7 @@ export function ProfileBadges({ profile, challengesLoaded, challengesData, Seaso
       {/* Achievements section */}
       <Card className="mb-5 p-4 bg-bg-elevated">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-md font-semibold text-text-primary">Succes</h3>
+          <h3 className="text-md font-semibold text-text-primary">Succès</h3>
           <span className="text-sm text-text-quaternary">{unlockedAchievements.length}/{ACHIEVEMENTS.length}</span>
         </div>
         <div className="grid grid-cols-3 lg:grid-cols-6 gap-3 lg:gap-4">

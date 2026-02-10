@@ -11,9 +11,9 @@ export interface DemoStep {
 }
 
 export const demoSteps: DemoStep[] = [
-  { id: 'create', title: 'Cree ta Squad', subtitle: '"Les Invaincus"', duration: 3000, icon: Users, color: 'var(--color-primary)' },
+  { id: 'create', title: 'Crée ta Squad', subtitle: '"Les Invaincus"', duration: 3000, icon: Users, color: 'var(--color-primary)' },
   { id: 'invite', title: 'Invite tes potes', subtitle: '3 joueurs ont rejoint', duration: 2500, icon: UserPlus, color: 'var(--color-success)' },
-  { id: 'rsvp', title: 'Chacun confirme', subtitle: '4/4 presents mardi 21h', duration: 2500, icon: CalendarCheck, color: 'var(--color-warning)' },
+  { id: 'rsvp', title: 'Chacun confirme', subtitle: '4/4 présents mardi 21h', duration: 2500, icon: CalendarCheck, color: 'var(--color-warning)' },
   { id: 'play', title: 'Jouez ensemble !', subtitle: 'Party vocale en cours', duration: 3000, icon: Headphones, color: 'var(--color-purple)' },
 ]
 
@@ -99,7 +99,7 @@ function CreateStep() {
         className="mt-auto bg-primary text-white text-sm font-medium py-2.5 rounded-xl text-center"
         initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 1.2, type: 'spring', stiffness: 300 }}
       >
-        Creer la squad
+        Créer la squad
       </motion.div>
       <DemoNavbar active="squads" />
     </div>
@@ -180,7 +180,7 @@ function RSVPStep() {
         style={{ backgroundColor: 'var(--color-success-20)', color: 'var(--color-success)' }}
         initial={{ opacity: 0, y: 5 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.5 }}
       >
-        Session confirmee !
+        Session confirmée !
       </motion.div>
       <DemoNavbar active="home" />
     </div>

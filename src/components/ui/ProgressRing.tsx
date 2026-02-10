@@ -28,7 +28,8 @@ export function ProgressRing({
   const radius = (size - strokeWidth) / 2
   const circumference = 2 * Math.PI * radius
   const clampedValue = Math.min(100, Math.max(0, value))
-  const offset = circumference - (clampedValue / 100) * circumference
+  const isFull = clampedValue >= 100
+  const offset = isFull ? 0 : circumference - (clampedValue / 100) * circumference
 
   return (
     <div
@@ -65,7 +66,7 @@ export function ProgressRing({
             fill="none"
             stroke={color}
             strokeWidth={strokeWidth}
-            strokeLinecap="round"
+            strokeLinecap={isFull ? "butt" : "round"}
             strokeDasharray={circumference}
             initial={{ strokeDashoffset: circumference }}
             animate={isInView ? { strokeDashoffset: offset } : { strokeDashoffset: circumference }}

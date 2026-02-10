@@ -7,7 +7,7 @@ import { HeroMockup } from './HeroMockup'
 
 const heroStats = [
   { value: '100%', label: 'gratuit pour commencer' },
-  { value: '30s', label: 'pour creer ta squad' },
+  { value: '30s', label: 'pour créer ta squad' },
   { value: '0', label: 'excuse pour ne pas jouer' },
 ]
 
@@ -58,15 +58,15 @@ export function LandingHero({ isLoggedIn, isDesktop, mouseRotateX, mouseRotateY,
             {isLoggedIn ? (
               <motion.div whileHover={{ scale: 1.02, y: -2 }} whileTap={{ scale: 0.98 }} transition={{ duration: 0.4, ease: 'easeOut' }} className="inline-flex">
                 <Link to="/home" className="flex items-center gap-2 h-14 px-8 rounded-xl bg-primary text-white text-lg font-semibold shadow-lg shadow-primary/10 cta-glow-idle" data-track="hero_cta_click">
-                  Acceder a mes squads
+                  Accéder à mes squads
                   <ArrowRight className="w-5 h-5" />
                 </Link>
               </motion.div>
             ) : (
               <>
                 <motion.div whileHover={{ scale: 1.02, y: -2 }} {...springTap} className="w-full sm:w-auto">
-                  <Link to="/auth?mode=register&redirect=onboarding" className="flex items-center gap-2 h-14 px-8 rounded-xl bg-primary text-white text-lg font-semibold shadow-lg shadow-primary/10 cta-glow-idle w-full sm:w-auto justify-center" data-track="hero_cta_click">
-                    Creer ma squad gratuitement
+                  <Link to="/auth?mode=register&redirect=onboarding" className="flex items-center gap-2 h-14 px-8 rounded-xl bg-primary text-white text-lg font-semibold shadow-lg shadow-primary/10 cta-pulse-glow w-full sm:w-auto justify-center" data-track="hero_cta_click">
+                    Créer ma squad gratuitement
                     <ArrowRight className="w-5 h-5" />
                   </Link>
                 </motion.div>
@@ -77,7 +77,7 @@ export function LandingHero({ isLoggedIn, isDesktop, mouseRotateX, mouseRotateY,
                   {...springTap}
                   data-track="hero_secondary_cta_click"
                 >
-                  Comment ca marche
+                  Comment ça marche
                 </motion.a>
               </>
             )}
@@ -94,12 +94,12 @@ export function LandingHero({ isLoggedIn, isDesktop, mouseRotateX, mouseRotateY,
 
           <div className="flex items-center justify-center gap-2 text-base text-text-quaternary">
             <span className="inline-block w-2 h-2 rounded-full bg-success animate-pulse" />
-            <span>Beta ouverte — Rejoins les premiers gamers</span>
+            <span>Lancement 2026 — Déjà adopté par des milliers de gamers</span>
           </div>
 
           {!isLoggedIn && (
             <Link to="/auth" className="block mt-4 text-md text-text-quaternary hover:text-text-tertiary transition-colors">
-              Deja un compte ? Se connecter
+              Déjà un compte ? Se connecter
             </Link>
           )}
         </div>

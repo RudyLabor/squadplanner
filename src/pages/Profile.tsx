@@ -92,10 +92,10 @@ export function Profile() {
     try {
       const xpReward = await claimXPMutation.mutateAsync(challengeId)
       if (refreshProfile) await refreshProfile()
-      toast.success(`+${xpReward} XP reclames !`, { icon: '' })
+      toast.success(`+${xpReward} XP réclamés !`, { icon: '' })
     } catch (error) {
       console.error('Error claiming XP:', error)
-      toast.error('Erreur lors de la reclamation des XP')
+      toast.error('Erreur lors de la réclamation des XP')
     }
   }
 
@@ -155,6 +155,16 @@ export function Profile() {
         {/* Reliability score + Stats grid */}
         <ProfileStats profile={profile} profileReady={profileReady} />
 
+        {/* Challenges Section - moved up for visibility */}
+        {challenges.length > 0 && (
+          <section className="mb-5" aria-label="Défis">
+            <Challenges
+              challenges={challenges}
+              onClaimXP={handleClaimXP}
+            />
+          </section>
+        )}
+
         {/* Activity, AI Coach, Call History, Premium sections */}
         <ProfileHistory
           profile={profile}
@@ -162,16 +172,6 @@ export function Profile() {
           canAccessFeature={canAccessFeature}
           aiCoachTip={aiCoachTip}
         />
-
-        {/* Challenges Section */}
-        {challenges.length > 0 && (
-          <section className="mb-5" aria-label="Defis">
-            <Challenges
-              challenges={challenges}
-              onClaimXP={handleClaimXP}
-            />
-          </section>
-        )}
 
         {/* Badges: Seasonal + Achievements */}
         <ProfileBadges
@@ -187,7 +187,7 @@ export function Profile() {
           className="w-full py-3 text-md text-error hover:text-error/70 transition-colors flex items-center justify-center gap-2"
         >
           <LogOut className="w-4 h-4" />
-          Se deconnecter
+          Se déconnecter
         </button>
       </div>
 

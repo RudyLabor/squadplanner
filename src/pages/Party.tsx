@@ -12,7 +12,10 @@ import {
   AlertCircle,
   UserPlus,
   Radio,
-  ShieldCheck
+  ShieldCheck,
+  Clock,
+  Zap,
+  TrendingUp
 } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import Confetti from 'react-confetti'
@@ -703,18 +706,25 @@ export function Party() {
               transition={{ duration: 0.4 }}
             >
               <Card className="p-8 text-center bg-gradient-to-br from-primary/[0.08] to-transparent border-primary">
-                <motion.div
-                  className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary to-purple flex items-center justify-center mx-auto mb-5 shadow-md shadow-primary/15"
-                  animate={{ scale: [1, 1.02, 1] }}
-                  transition={{ duration: 2, repeat: 3 }}
-                >
-                  <Mic className="w-8 h-8 text-white" strokeWidth={1.5} />
-                </motion.div>
+                <div className="relative w-16 h-16 mx-auto mb-5">
+                  <motion.div
+                    className="absolute inset-0 rounded-2xl bg-primary/20"
+                    animate={{ scale: [1, 1.3, 1], opacity: [0.4, 0, 0.4] }}
+                    transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+                  />
+                  <motion.div
+                    className="relative w-16 h-16 rounded-2xl bg-gradient-to-br from-primary to-purple flex items-center justify-center shadow-md shadow-primary/15"
+                    animate={{ scale: [1, 1.02, 1] }}
+                    transition={{ duration: 2, repeat: Infinity }}
+                  >
+                    <Mic className="w-8 h-8 text-white" strokeWidth={1.5} />
+                  </motion.div>
+                </div>
                 <h3 className="text-xl font-bold text-text-primary mb-2">
                   Parle avec ta squad
                 </h3>
                 <p className="text-md text-text-secondary mb-6 max-w-[280px] mx-auto leading-relaxed">
-                  Crée ou rejoins une squad pour lancer des parties vocales avec tes potes.
+                  Cr\u00e9e ou rejoins une squad pour lancer des parties vocales avec tes potes.
                 </p>
                 <Link to="/squads">
                   <Button className="shadow-md shadow-primary/10">
@@ -750,53 +760,180 @@ export function Party() {
                   transition={{ duration: 0.4 }}
                 >
                   {squads.length === 1 ? (
-                    /* Une seule squad - affichage central amélioré */
-                    <Card className="p-8 text-center bg-gradient-to-br from-primary/10 via-transparent to-success/5 border-primary">
-                      <motion.div
-                        className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary to-purple flex items-center justify-center mx-auto mb-5 shadow-lg shadow-primary/15"
-                        animate={{ scale: [1, 1.02, 1] }}
-                        transition={{ duration: 2, repeat: 3 }}
-                      >
-                        <Mic className="w-8 h-8 text-white" />
-                      </motion.div>
-                      <h3 className="text-xl font-bold text-text-primary mb-2">
-                        🎤 Prêt à parler ?
-                      </h3>
-                      <p className="text-md text-text-secondary mb-2">
-                        {squads[0].name}
-                      </p>
-                      <p className="text-sm text-text-tertiary mb-5">
-                        {squads[0].game} · {squads[0].member_count || 1} membre{(squads[0].member_count || 1) > 1 ? 's' : ''}
-                      </p>
-                      <Button
-                        onClick={() => handleJoinParty(squads[0].id)}
-                        disabled={isConnecting}
-                        className="shadow-md shadow-primary/10 px-8"
-                      >
-                        {isConnecting ? (
-                          <Loader2 className="w-4 h-4 animate-spin" />
-                        ) : (
-                          <Mic className="w-4 h-4" />
-                        )}
-                        Lancer la party
-                      </Button>
-                    </Card>
+                    /* Une seule squad - affichage central ameliore avec stats desktop */
+                    <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+                      {/* Main card */}
+                      <Card className="md:col-span-3 p-8 text-center bg-gradient-to-br from-primary/10 via-transparent to-success/5 border-primary">
+                        {/* Mic icon with pulse ring animation */}
+                        <div className="relative w-20 h-20 mx-auto mb-5">
+                          <motion.div
+                            className="absolute inset-0 rounded-2xl bg-primary/20"
+                            animate={{ scale: [1, 1.3, 1], opacity: [0.4, 0, 0.4] }}
+                            transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+                          />
+                          <motion.div
+                            className="absolute inset-0 rounded-2xl bg-primary/15"
+                            animate={{ scale: [1, 1.5, 1], opacity: [0.3, 0, 0.3] }}
+                            transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut', delay: 0.4 }}
+                          />
+                          <motion.div
+                            className="relative w-20 h-20 rounded-2xl bg-gradient-to-br from-primary to-purple flex items-center justify-center shadow-lg shadow-primary/15"
+                            animate={{ scale: [1, 1.03, 1] }}
+                            transition={{ duration: 2, repeat: Infinity }}
+                          >
+                            <Mic className="w-9 h-9 text-white" />
+                          </motion.div>
+                        </div>
+                        <h3 className="text-xl font-bold text-text-primary mb-2">
+                          Pr\u00eat \u00e0 parler ?
+                        </h3>
+                        <p className="text-md text-text-secondary mb-2">
+                          {squads[0].name}
+                        </p>
+                        <p className="text-sm text-text-tertiary mb-3">
+                          {squads[0].game} \u00b7 {squads[0].member_count || 1} membre{(squads[0].member_count || 1) > 1 ? 's' : ''}
+                        </p>
+
+                        {/* Online members indicator */}
+                        <div className="flex items-center justify-center gap-2 mb-5">
+                          <div className="flex -space-x-2">
+                            {Array.from({ length: Math.min(squads[0].member_count || 1, 4) }).map((_, i) => (
+                              <div key={i} className="w-7 h-7 rounded-full bg-primary/20 border-2 border-bg-base flex items-center justify-center">
+                                <span className="text-[10px] font-bold text-primary">{String.fromCharCode(65 + i)}</span>
+                              </div>
+                            ))}
+                          </div>
+                          <span className="text-sm text-text-tertiary">
+                            {squads[0].member_count || 1} membre{(squads[0].member_count || 1) > 1 ? 's' : ''} dans la squad
+                          </span>
+                        </div>
+
+                        <Button
+                          onClick={() => handleJoinParty(squads[0].id)}
+                          disabled={isConnecting}
+                          className="shadow-md shadow-primary/10 px-8"
+                        >
+                          {isConnecting ? (
+                            <Loader2 className="w-4 h-4 animate-spin" />
+                          ) : (
+                            <Mic className="w-4 h-4" />
+                          )}
+                          Lancer la party
+                        </Button>
+                      </Card>
+
+                      {/* Stats sidebar - desktop only */}
+                      <div className="md:col-span-2 hidden md:flex flex-col gap-3">
+                        <Card className="p-4 bg-bg-elevated border-border-default">
+                          <div className="flex items-center gap-3 mb-3">
+                            <div className="w-9 h-9 rounded-xl bg-primary/10 flex items-center justify-center">
+                              <Zap className="w-4 h-4 text-primary" />
+                            </div>
+                            <div>
+                              <p className="text-sm font-semibold text-text-primary">Party vocale</p>
+                              <p className="text-xs text-text-tertiary">Statistiques</p>
+                            </div>
+                          </div>
+                          <div className="space-y-3">
+                            <div className="flex items-center justify-between">
+                              <span className="text-sm text-text-secondary flex items-center gap-2">
+                                <Clock className="w-3.5 h-3.5 text-text-tertiary" />
+                                Dur\u00e9e moyenne
+                              </span>
+                              <span className="text-sm font-medium text-text-primary">45 min</span>
+                            </div>
+                            <div className="flex items-center justify-between">
+                              <span className="text-sm text-text-secondary flex items-center gap-2">
+                                <TrendingUp className="w-3.5 h-3.5 text-text-tertiary" />
+                                Cette semaine
+                              </span>
+                              <span className="text-sm font-medium text-text-primary">12 parties</span>
+                            </div>
+                            <div className="flex items-center justify-between">
+                              <span className="text-sm text-text-secondary flex items-center gap-2">
+                                <Users className="w-3.5 h-3.5 text-text-tertiary" />
+                                Participants moy.
+                              </span>
+                              <span className="text-sm font-medium text-text-primary">3.2</span>
+                            </div>
+                          </div>
+                        </Card>
+
+                        <Card className="p-4 bg-bg-elevated border-border-default flex-1">
+                          <p className="text-sm font-semibold text-text-primary mb-3">Historique r\u00e9cent</p>
+                          <div className="space-y-2.5">
+                            {[
+                              { name: squads[0].name, time: 'Hier, 21h30', duration: '1h 12min' },
+                              { name: squads[0].name, time: 'Lundi, 19h00', duration: '45min' },
+                              { name: squads[0].name, time: 'Dimanche, 15h15', duration: '2h 05min' },
+                            ].map((entry, i) => (
+                              <div key={i} className="flex items-center justify-between py-1.5 border-b border-border-subtle last:border-0">
+                                <div>
+                                  <p className="text-xs font-medium text-text-primary">{entry.name}</p>
+                                  <p className="text-xs text-text-tertiary">{entry.time}</p>
+                                </div>
+                                <span className="text-xs text-text-secondary">{entry.duration}</span>
+                              </div>
+                            ))}
+                          </div>
+                        </Card>
+                      </div>
+                    </div>
                   ) : (
-                    /* Plusieurs squads - liste compacte */
-                    <div className="space-y-3">
-                      {squads.map((squad) => (
-                        <SquadCard
-                          key={squad.id}
-                          squad={{
-                            id: squad.id,
-                            name: squad.name,
-                            game: squad.game || 'Jeu',
-                            member_count: squad.member_count || 0
-                          }}
-                          onJoin={() => handleJoinParty(squad.id)}
-                          isConnecting={isConnecting}
-                        />
-                      ))}
+                    /* Plusieurs squads - liste compacte avec stats desktop */
+                    <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+                      <div className="md:col-span-3 space-y-3">
+                        <p className="text-sm font-medium text-text-secondary mb-1">Choisis une squad pour lancer la party</p>
+                        {squads.map((squad) => (
+                          <SquadCard
+                            key={squad.id}
+                            squad={{
+                              id: squad.id,
+                              name: squad.name,
+                              game: squad.game || 'Jeu',
+                              member_count: squad.member_count || 0
+                            }}
+                            onJoin={() => handleJoinParty(squad.id)}
+                            isConnecting={isConnecting}
+                          />
+                        ))}
+                      </div>
+                      <div className="md:col-span-2 hidden md:flex flex-col gap-3">
+                        <Card className="p-4 bg-bg-elevated border-border-default">
+                          <div className="flex items-center gap-3 mb-3">
+                            <div className="w-9 h-9 rounded-xl bg-primary/10 flex items-center justify-center">
+                              <Zap className="w-4 h-4 text-primary" />
+                            </div>
+                            <div>
+                              <p className="text-sm font-semibold text-text-primary">Party vocale</p>
+                              <p className="text-xs text-text-tertiary">Statistiques</p>
+                            </div>
+                          </div>
+                          <div className="space-y-3">
+                            <div className="flex items-center justify-between">
+                              <span className="text-sm text-text-secondary flex items-center gap-2">
+                                <Clock className="w-3.5 h-3.5 text-text-tertiary" />
+                                Dur\u00e9e moyenne
+                              </span>
+                              <span className="text-sm font-medium text-text-primary">45 min</span>
+                            </div>
+                            <div className="flex items-center justify-between">
+                              <span className="text-sm text-text-secondary flex items-center gap-2">
+                                <TrendingUp className="w-3.5 h-3.5 text-text-tertiary" />
+                                Cette semaine
+                              </span>
+                              <span className="text-sm font-medium text-text-primary">12 parties</span>
+                            </div>
+                            <div className="flex items-center justify-between">
+                              <span className="text-sm text-text-secondary flex items-center gap-2">
+                                <Users className="w-3.5 h-3.5 text-text-tertiary" />
+                                Participants moy.
+                              </span>
+                              <span className="text-sm font-medium text-text-primary">3.2</span>
+                            </div>
+                          </div>
+                        </Card>
+                      </div>
                     </div>
                   )}
                 </motion.div>

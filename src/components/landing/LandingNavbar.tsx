@@ -5,9 +5,9 @@ import { Link } from 'react-router-dom'
 import { SquadPlannerLogo } from '../SquadPlannerLogo'
 
 const navLinks = [
-  { label: 'Fonctionnalites', href: '#features' },
-  { label: 'Comment ca marche', href: '#how-it-works' },
-  { label: 'Temoignages', href: '#testimonials' },
+  { label: 'Fonctionnalités', href: '#features' },
+  { label: 'Comment ça marche', href: '#how-it-works' },
+  { label: 'Témoignages', href: '#testimonials' },
   { label: 'FAQ', href: '/help', isRoute: true },
 ]
 
@@ -65,7 +65,7 @@ export function LandingNavbar({ isLoggedIn }: LandingNavbarProps) {
           <div className="flex items-center gap-2 md:gap-3">
             {isLoggedIn ? (
               <Link to="/home" className="px-4 py-2 rounded-lg bg-primary text-white text-base md:text-md font-medium hover:bg-primary-hover transition-colors duration-300 inline-flex items-center">
-                Aller a l'app
+                Aller à l'app
               </Link>
             ) : (
               <>
@@ -73,7 +73,7 @@ export function LandingNavbar({ isLoggedIn }: LandingNavbarProps) {
                   Se connecter
                 </Link>
                 <Link to="/auth?mode=register&redirect=onboarding" className="hidden md:inline-flex items-center px-3 md:px-4 py-2 rounded-lg bg-primary text-white text-base md:text-md font-medium hover:bg-primary-hover transition-colors duration-300" data-track="navbar_cta_click">
-                  Creer ma squad
+                  Créer ma squad
                   <ArrowRight className="w-3.5 h-3.5 inline ml-1" />
                 </Link>
                 <button
@@ -118,7 +118,7 @@ export function LandingNavbar({ isLoggedIn }: LandingNavbarProps) {
               Se connecter
             </Link>
             <Link to="/auth?mode=register&redirect=onboarding" onClick={closeMobileMenu} className="block w-full py-3 bg-primary text-white rounded-xl font-medium text-center">
-              Creer ma squad gratuitement
+              Créer ma squad gratuitement
             </Link>
           </div>
         </motion.div>

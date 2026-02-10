@@ -30,7 +30,7 @@ export const MatchmakingSection = memo(function MatchmakingSection({ game, regio
       <div className="text-center py-12">
         <UserPlus className="w-10 h-10 text-text-tertiary mx-auto mb-3 opacity-50" />
         <p className="text-sm text-text-tertiary">Aucun joueur disponible</p>
-        <p className="text-xs text-text-tertiary mt-1">Active "Cherche une squad" dans ton profil pour apparaitre ici</p>
+        <p className="text-xs text-text-tertiary mt-1">Active "Cherche une squad" dans ton profil pour appara\u00eetre ici</p>
       </div>
     )
   }
@@ -57,9 +57,9 @@ const PlayerCard = memo(function PlayerCard({ player }: { player: MatchmakingPla
       await supabase.from('direct_messages').insert({
         sender_id: user.id,
         receiver_id: player.user_id,
-        content: `Salut ${player.username} ! Je t'invite a rejoindre ma squad. Interesse(e) ?`,
+        content: `Salut ${player.username} ! Je t'invite \u00e0 rejoindre ma squad. Int\u00e9ress\u00e9(e) ?`,
       })
-      toast.success(`Message envoye a ${player.username} !`)
+      toast.success(`Message envoy\u00e9 \u00e0 ${player.username} !`)
     } catch {
       toast.error('Erreur lors de l\'envoi')
     } finally {

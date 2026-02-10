@@ -219,7 +219,7 @@ export function Premium() {
       {/* Hero Section */}
       <div
         ref={heroRef}
-        className="relative overflow-hidden bg-gradient-to-b from-surface-dark via-bg-surface to-bg-base pt-8 pb-16"
+        className="relative overflow-hidden bg-gradient-to-br from-primary/10 via-purple/5 to-bg-base dark:from-surface-dark dark:via-bg-surface dark:to-bg-base pt-8 pb-16"
       >
         {/* Animated gradient background - reduced animation */}
         <div className="absolute inset-0 overflow-hidden">
@@ -266,7 +266,7 @@ export function Premium() {
             </h1>
 
             <p className="text-lg md:text-xl text-text-secondary max-w-xl mx-auto mb-8">
-              Débloquer tout le potentiel de Squad Planner. Stats avancées, IA coach personnalisé, audio HD et bien plus.
+              Débloque tout le potentiel de Squad Planner. Stats avancées, IA coach personnalisé, audio HD et bien plus.
             </p>
 
             {/* Already Premium */}
@@ -416,7 +416,7 @@ export function Premium() {
 
           <Card className="overflow-hidden">
             {/* Header */}
-            <div className="grid grid-cols-3 gap-4 p-4 bg-overlay-faint border-b border-border-default">
+            <div className="grid grid-cols-[2fr_1fr_1fr] md:grid-cols-3 gap-2 md:gap-4 p-4 bg-overlay-faint border-b border-border-default">
               <div className="text-base font-semibold text-text-secondary">Fonctionnalité</div>
               <div className="text-base font-semibold text-text-secondary text-center">Gratuit</div>
               <div className="text-base font-semibold text-center">
@@ -432,17 +432,17 @@ export function Premium() {
               {FEATURES.map((feature, index) => (
                 <motion.div
                   key={feature.name}
-                  initial={{ opacity: 0, x: -20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: index * 0.05 }}
-                  className={`grid grid-cols-3 gap-4 p-4 items-center ${
+                  initial={{ opacity: 0, y: 12 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: '-20px' }}
+                  transition={{ delay: index * 0.06, duration: 0.35, ease: 'easeOut' }}
+                  className={`grid grid-cols-[2fr_1fr_1fr] md:grid-cols-3 gap-2 md:gap-4 p-4 items-center ${
                     feature.highlight ? 'bg-primary-5' : ''
                   }`}
                 >
-                  <div className="flex items-center gap-3">
-                    <feature.icon className="w-4 h-4 text-primary" />
-                    <span className="text-md text-text-primary">{feature.name}</span>
+                  <div className="flex items-center gap-2 md:gap-3 min-w-0">
+                    <feature.icon className="w-4 h-4 text-primary flex-shrink-0" />
+                    <span className="text-md text-text-primary break-words">{feature.name}</span>
                   </div>
                   <div className="text-center">
                     {typeof feature.free === 'boolean' ? (
@@ -455,11 +455,11 @@ export function Premium() {
                       <span className="text-base text-text-secondary">{feature.free}</span>
                     )}
                   </div>
-                  <div className="text-center">
+                  <div className="text-center min-w-0">
                     {typeof feature.premium === 'boolean' ? (
                       <Check className="w-5 h-5 text-success mx-auto" />
                     ) : (
-                      <span className="text-base font-medium text-success">{feature.premium}</span>
+                      <span className="text-base font-medium text-success break-words">{feature.premium}</span>
                     )}
                   </div>
                 </motion.div>
@@ -528,7 +528,14 @@ export function Premium() {
 
           <div className="space-y-3 max-w-2xl mx-auto">
             {FAQ.map((item, index) => (
-              <Card key={index} className="overflow-hidden">
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 12 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-20px' }}
+                transition={{ delay: index * 0.08, duration: 0.35, ease: 'easeOut' }}
+              >
+              <Card className="overflow-hidden">
                 <button
                   onClick={() => setOpenFaq(openFaq === index ? null : index)}
                   className="w-full p-4 flex items-center justify-between text-left"
@@ -553,6 +560,7 @@ export function Premium() {
                   </motion.div>
                 )}
               </Card>
+              </motion.div>
             ))}
           </div>
         </motion.div>

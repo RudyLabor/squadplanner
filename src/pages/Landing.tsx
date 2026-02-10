@@ -113,7 +113,7 @@ export default function Landing() {
       <LazySection minHeight={400}><ComparisonSection /></LazySection>
       <div className="section-divider" />
       <LazySection minHeight={300}>
-        <section id="testimonials" aria-label="Temoignages" className="px-4 md:px-6 py-10 md:py-16">
+        <section id="testimonials" aria-label="Témoignages" className="px-4 md:px-6 py-10 md:py-16">
           <div className="max-w-5xl mx-auto"><TestimonialCarousel /></div>
         </section>
       </LazySection>

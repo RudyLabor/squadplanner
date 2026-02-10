@@ -1,7 +1,8 @@
 import { memo } from 'react'
 import { motion } from 'framer-motion'
-import { Compass, Search } from 'lucide-react'
-import { SegmentedControl, Select } from '../components/ui'
+import { Compass, Plus, Sparkles, Users, Gamepad2 } from 'lucide-react'
+import { Link } from 'react-router-dom'
+import { SegmentedControl, Select, Card, Button } from '../components/ui'
 import type { SelectOption } from '../components/ui'
 import { DiscoverSquadCard } from '../components/discover/DiscoverSquadCard'
 import { GlobalLeaderboard } from '../components/discover/GlobalLeaderboard'
@@ -33,9 +34,9 @@ const GAME_OPTIONS: SelectOption[] = [
 const REGION_OPTIONS: SelectOption[] = [
   { value: 'eu-west', label: 'Europe Ouest' },
   { value: 'eu-east', label: 'Europe Est' },
-  { value: 'na', label: 'Amerique du Nord' },
+  { value: 'na', label: 'Am\u00e9rique du Nord' },
   { value: 'asia', label: 'Asie' },
-  { value: 'oce', label: 'Oceanie' },
+  { value: 'oce', label: 'Oc\u00e9anie' },
 ]
 
 export function Discover() {
@@ -55,7 +56,7 @@ export function Discover() {
           <Compass className="w-5 h-5 text-indigo-400" />
         </div>
         <div>
-          <h1 className="text-xl font-bold text-text-primary">Decouvrir</h1>
+          <h1 className="text-xl font-bold text-text-primary">D\u00e9couvrir</h1>
           <p className="text-xs text-text-tertiary">Trouve des squads et joueurs</p>
         </div>
       </div>
@@ -86,7 +87,7 @@ export function Discover() {
             options={REGION_OPTIONS}
             value={region || undefined}
             onChange={(v) => setRegion(v as string)}
-            placeholder="Toutes les regions"
+            placeholder="Toutes les r\u00e9gions"
             clearable
             size="sm"
           />
@@ -124,10 +125,67 @@ const SquadsTab = memo(function SquadsTab({ game, region }: { game: string; regi
 
   if (!squads || squads.length === 0) {
     return (
-      <div className="text-center py-12">
-        <Search className="w-10 h-10 text-text-tertiary mx-auto mb-3 opacity-50" />
-        <p className="text-sm text-text-tertiary">Aucune squad publique trouvee</p>
-        <p className="text-xs text-text-tertiary mt-1">Les leaders peuvent rendre leur squad publique dans les parametres</p>
+      <div className="space-y-6">
+        {/* Engaging empty state */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="text-center py-10"
+        >
+          <motion.div
+            className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary/10 to-purple/10 flex items-center justify-center mx-auto mb-4"
+            animate={{ scale: [1, 1.05, 1] }}
+            transition={{ duration: 3, repeat: Infinity }}
+          >
+            <Compass className="w-8 h-8 text-primary" />
+          </motion.div>
+          <h3 className="text-lg font-bold text-text-primary mb-2">Aucune squad publique trouv\u00e9e</h3>
+          <p className="text-sm text-text-secondary mb-1">Sois le premier \u00e0 cr\u00e9er une squad publique !</p>
+          <p className="text-xs text-text-tertiary mb-5">Les leaders peuvent rendre leur squad publique dans les param\u00e8tres</p>
+          <Link to="/squads">
+            <Button variant="primary" size="sm">
+              <Plus className="w-4 h-4" />
+              Cr\u00e9er une squad
+            </Button>
+          </Link>
+        </motion.div>
+
+        {/* Featured squads placeholder section */}
+        <div>
+          <div className="flex items-center gap-2 mb-3">
+            <Sparkles className="w-4 h-4 text-primary" />
+            <h3 className="text-sm font-semibold text-text-primary">Squads populaires</h3>
+          </div>
+          <div className="space-y-2">
+            {[
+              { name: 'Les Gamers FR', game: 'Valorant', members: 8, desc: 'Squad comp\u00e9titive Valorant' },
+              { name: 'Rocket Masters', game: 'Rocket League', members: 5, desc: 'Du freestyle au ranked' },
+              { name: 'Fortnite Squad', game: 'Fortnite', members: 12, desc: 'Build & chill' },
+            ].map((s, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: i * 0.1 }}
+                className="rounded-xl border border-border-subtle bg-surface-card p-4 opacity-60"
+              >
+                <div className="flex items-start gap-3">
+                  <div className="w-11 h-11 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
+                    <Gamepad2 className="w-5 h-5 text-primary" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <h4 className="text-sm font-semibold text-text-primary">{s.name}</h4>
+                    <p className="text-xs text-primary font-medium">{s.game}</p>
+                    <p className="text-xs text-text-tertiary mt-0.5">{s.desc}</p>
+                    <span className="inline-flex items-center gap-1 text-xs text-text-tertiary mt-1">
+                      <Users className="w-3 h-3" /> {s.members} membres
+                    </span>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
       </div>
     )
   }

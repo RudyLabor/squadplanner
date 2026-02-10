@@ -13,9 +13,9 @@ interface StatsRowProps {
 
 function StatsRow({ squadsCount, sessionsThisWeek, reliabilityScore }: StatsRowProps) {
   const stats = [
-    { value: squadsCount, label: 'Squads', icon: Users, color: 'var(--color-primary)', suffix: '', path: '/squads' },
-    { value: sessionsThisWeek, label: 'Cette semaine', icon: Calendar, color: 'var(--color-warning)', suffix: '', path: '/sessions' },
-    { value: reliabilityScore, label: 'Fiabilité', icon: TrendingUp, color: 'var(--color-success)', suffix: '%', path: '/profile' },
+    { value: squadsCount, label: 'Squads', icon: Users, color: 'var(--color-primary)', bgGradient: 'from-primary/8 to-transparent', suffix: '', path: '/squads' },
+    { value: sessionsThisWeek, label: 'Cette semaine', icon: Calendar, color: 'var(--color-warning)', bgGradient: 'from-warning/8 to-transparent', suffix: '', path: '/sessions' },
+    { value: reliabilityScore, label: 'Fiabilité', icon: TrendingUp, color: 'var(--color-success)', bgGradient: 'from-success/8 to-transparent', suffix: '%', path: '/profile' },
   ]
 
   return (
@@ -31,7 +31,7 @@ function StatsRow({ squadsCount, sessionsThisWeek, reliabilityScore }: StatsRowP
               boxShadow: `0 0 20px ${stat.color}25`,
             }}
             whileTap={{ scale: 0.98 }}
-            className="h-[60px] sm:h-[68px] px-2 sm:px-4 flex items-center gap-2 sm:gap-3 rounded-xl sm:rounded-2xl border border-border-default bg-surface-card hover:bg-surface-card-hover cursor-pointer transition-all duration-200"
+            className={`h-[60px] sm:h-[68px] px-2 sm:px-4 flex items-center gap-2 sm:gap-3 rounded-xl sm:rounded-2xl border border-border-default bg-gradient-to-br ${stat.bgGradient} hover:bg-surface-card-hover cursor-pointer transition-all duration-200`}
             style={{
               transition: 'all 0.2s ease, box-shadow 0.2s ease',
             }}

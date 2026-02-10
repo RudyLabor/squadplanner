@@ -1,11 +1,12 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   Phone, PhoneIncoming, PhoneOutgoing, PhoneMissed,
-  ArrowLeft, User, RefreshCw, UserPlus
+  ArrowLeft, ArrowUpRight, User, RefreshCw, UserPlus, X
 } from 'lucide-react'
 import { useNavigate, Link } from 'react-router-dom'
 import { Card, Button } from '../components/ui'
+import { Tooltip } from '../components/ui/Tooltip'
 import { useCallHistoryStore, formatDuration, formatRelativeTime, type CallType } from '../hooks/useCallHistory'
 import { useVoiceCallStore } from '../hooks/useVoiceCall'
 
@@ -73,21 +74,72 @@ export function CallHistory() {
   }
 
   const getCallIcon = (type: 'incoming' | 'outgoing', status: string) => {
-    if (status === 'missed' || status === 'rejected') {
-      return <PhoneMissed className="w-5 h-5 text-error" />
+    if (status === 'missed') {
+      return <PhoneMissed className="w-4 h-4 text-error" />
+    }
+    if (status === 'rejected') {
+      return <X className="w-4 h-4 text-warning" />
     }
     if (type === 'incoming') {
-      return <PhoneIncoming className="w-5 h-5 text-success" />
+      return <PhoneIncoming className="w-4 h-4 text-success" />
     }
-    return <PhoneOutgoing className="w-5 h-5 text-primary" />
+    return <ArrowUpRight className="w-4 h-4 text-primary" />
   }
 
   const getCallLabel = (type: 'incoming' | 'outgoing', status: string) => {
-    if (status === 'missed') return 'Appel manqué'
-    if (status === 'rejected') return 'Appel rejeté'
-    if (type === 'incoming') return 'Appel entrant'
-    return 'Appel sortant'
+    if (status === 'missed') return 'Manqu\u00e9'
+    if (status === 'rejected') return 'Rejet\u00e9'
+    if (type === 'incoming') return 'Entrant'
+    return 'Sortant'
   }
+
+  const getCallLabelColor = (type: 'incoming' | 'outgoing', status: string) => {
+    if (status === 'missed') return 'text-error'
+    if (status === 'rejected') return 'text-warning'
+    if (type === 'incoming') return 'text-success'
+    return 'text-primary'
+  }
+
+  // Date grouping helper
+  const groupedCalls = useMemo(() => {
+    const now = new Date()
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate())
+    const yesterday = new Date(today.getTime() - 86400000)
+    const thisWeekStart = new Date(today.getTime() - today.getDay() * 86400000)
+    const thisMonthStart = new Date(now.getFullYear(), now.getMonth(), 1)
+
+    const groups: { label: string; calls: typeof filteredCalls }[] = []
+    const buckets: Record<string, typeof filteredCalls> = {
+      "Aujourd'hui": [],
+      'Hier': [],
+      'Cette semaine': [],
+      'Ce mois': [],
+      'Plus ancien': [],
+    }
+
+    for (const call of filteredCalls) {
+      const callDate = new Date(call.createdAt)
+      if (callDate >= today) {
+        buckets["Aujourd'hui"].push(call)
+      } else if (callDate >= yesterday) {
+        buckets['Hier'].push(call)
+      } else if (callDate >= thisWeekStart) {
+        buckets['Cette semaine'].push(call)
+      } else if (callDate >= thisMonthStart) {
+        buckets['Ce mois'].push(call)
+      } else {
+        buckets['Plus ancien'].push(call)
+      }
+    }
+
+    for (const [label, calls] of Object.entries(buckets)) {
+      if (calls.length > 0) {
+        groups.push({ label, calls })
+      }
+    }
+
+    return groups
+  }, [filteredCalls])
 
   return (
     <main className="min-h-0 bg-bg-base pb-6" aria-label="Historique d'appels">
@@ -122,7 +174,7 @@ export function CallHistory() {
               onClick={() => fetchCallHistory()}
               disabled={isLoading}
               className="w-11 h-11 min-w-[44px] min-h-[44px] rounded-xl bg-surface-card flex items-center justify-center hover:bg-border-default hover:scale-[1.02] transition-interactive disabled:opacity-50 touch-target"
-              aria-label="Rafraichir"
+              aria-label="Rafra\u00eechir"
             >
               <RefreshCw className={`w-5 h-5 text-text-tertiary ${isLoading ? 'animate-spin' : ''}`} />
             </button>
@@ -205,96 +257,117 @@ export function CallHistory() {
           </motion.div>
         )}
 
-        {/* Call list */}
+        {/* Call list grouped by date */}
         <AnimatePresence mode="popLayout">
-          <div className="space-y-2">
-            {filteredCalls.map((call, index) => (
-              <motion.div
-                key={call.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.95 }}
-                transition={{ delay: index * 0.03 }}
-              >
-                <Card
-                  className="p-4 bg-bg-elevated hover:bg-overlay-light transition-colors"
-                  hoverable
-                >
-                  <div className="flex items-center gap-3">
-                    {/* Avatar */}
-                    <div className="relative">
-                      <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-purple flex items-center justify-center overflow-hidden">
-                        {call.contactAvatar ? (
-                          <img
-                            src={call.contactAvatar}
-                            alt={call.contactName}
-                            className="w-full h-full object-cover"
-                            loading="lazy"
-                            decoding="async"
-                          />
-                        ) : (
-                          <User className="w-6 h-6 text-white" />
-                        )}
-                      </div>
-                      {/* Call type indicator */}
-                      <div className={`absolute -bottom-1 -right-1 w-6 h-6 rounded-full flex items-center justify-center border-2 border-bg-base ${
-                        call.status === 'missed' || call.status === 'rejected'
-                          ? 'bg-error'
-                          : call.type === 'incoming'
-                            ? 'bg-success'
-                            : 'bg-primary'
-                      }`}>
-                        {call.status === 'missed' || call.status === 'rejected' ? (
-                          <PhoneMissed className="w-3 h-3 text-white" />
-                        ) : call.type === 'incoming' ? (
-                          <PhoneIncoming className="w-3 h-3 text-white" />
-                        ) : (
-                          <PhoneOutgoing className="w-3 h-3 text-white" />
-                        )}
-                      </div>
-                    </div>
-
-                    {/* Call info */}
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center justify-between mb-0.5">
-                        <h3 className={`text-md font-semibold truncate ${
-                          call.status === 'missed' || call.status === 'rejected'
-                            ? 'text-error'
-                            : 'text-text-primary'
-                        }`}>
-                          {call.contactName}
-                        </h3>
-                        <span className="text-base text-text-tertiary flex-shrink-0 ml-2">
-                          {formatRelativeTime(call.createdAt)}
-                        </span>
-                      </div>
-                      <div className="flex items-center gap-2 text-base text-text-tertiary">
-                        {getCallIcon(call.type, call.status)}
-                        <span>{getCallLabel(call.type, call.status)}</span>
-                        {typeof call.durationSeconds === 'number' && call.durationSeconds > 0 && (
-                          <>
-                            <span className="text-text-tertiary">•</span>
-                            <span>{formatDuration(call.durationSeconds)}</span>
-                          </>
-                        )}
-                      </div>
-                    </div>
-
-                    {/* Call button */}
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation()
-                        handleCall(call.contactId, call.contactName, call.contactAvatar)
-                      }}
-                      disabled={callStatus !== 'idle'}
-                      className="w-11 h-11 min-w-[44px] min-h-[44px] rounded-xl bg-success-10 flex items-center justify-center hover:bg-success-10 hover:scale-[1.02] transition-interactive disabled:opacity-50 disabled:cursor-not-allowed touch-target"
-                      aria-label={`Appeler ${call.contactName}`}
+          <div className="space-y-4">
+            {groupedCalls.map((group) => (
+              <div key={group.label}>
+                {/* Date group header */}
+                <div className="flex items-center gap-3 mb-2 mt-2">
+                  <span className="text-xs font-semibold text-text-tertiary uppercase tracking-wider">{group.label}</span>
+                  <div className="flex-1 h-px bg-border-subtle" />
+                </div>
+                <div className="space-y-2">
+                  {group.calls.map((call, index) => (
+                    <motion.div
+                      key={call.id}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, scale: 0.95 }}
+                      transition={{ delay: index * 0.03 }}
                     >
-                      <Phone className="w-5 h-5 text-success" aria-hidden="true" />
-                    </button>
-                  </div>
-                </Card>
-              </motion.div>
+                      <Card
+                        className="p-4 bg-bg-elevated hover:bg-overlay-light transition-colors"
+                        hoverable
+                      >
+                        <div className="flex items-center gap-3">
+                          {/* Avatar */}
+                          <div className="relative">
+                            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-purple flex items-center justify-center overflow-hidden">
+                              {call.contactAvatar ? (
+                                <img
+                                  src={call.contactAvatar}
+                                  alt={call.contactName}
+                                  className="w-full h-full object-cover"
+                                  loading="lazy"
+                                  decoding="async"
+                                />
+                              ) : (
+                                <User className="w-6 h-6 text-white" />
+                              )}
+                            </div>
+                            {/* Call type indicator */}
+                            <div className={`absolute -bottom-1 -right-1 w-6 h-6 rounded-full flex items-center justify-center border-2 border-bg-base ${
+                              call.status === 'missed'
+                                ? 'bg-error'
+                                : call.status === 'rejected'
+                                  ? 'bg-warning'
+                                  : call.type === 'incoming'
+                                    ? 'bg-success'
+                                    : 'bg-primary'
+                            }`}>
+                              {call.status === 'missed' ? (
+                                <PhoneMissed className="w-3 h-3 text-white" />
+                              ) : call.status === 'rejected' ? (
+                                <X className="w-3 h-3 text-white" />
+                              ) : call.type === 'incoming' ? (
+                                <PhoneIncoming className="w-3 h-3 text-white" />
+                              ) : (
+                                <ArrowUpRight className="w-3 h-3 text-white" />
+                              )}
+                            </div>
+                          </div>
+
+                          {/* Call info */}
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center justify-between mb-0.5">
+                              <h3 className={`text-md font-semibold truncate ${
+                                call.status === 'missed'
+                                  ? 'text-error'
+                                  : call.status === 'rejected'
+                                    ? 'text-warning'
+                                    : 'text-text-primary'
+                              }`}>
+                                {call.contactName}
+                              </h3>
+                              <span className="text-base text-text-tertiary flex-shrink-0 ml-2">
+                                {formatRelativeTime(call.createdAt)}
+                              </span>
+                            </div>
+                            <div className="flex items-center gap-2 text-base">
+                              {getCallIcon(call.type, call.status)}
+                              <span className={`text-sm font-medium ${getCallLabelColor(call.type, call.status)}`}>
+                                {getCallLabel(call.type, call.status)}
+                              </span>
+                              {typeof call.durationSeconds === 'number' && call.durationSeconds > 0 && (
+                                <>
+                                  <span className="text-text-tertiary">\u00b7</span>
+                                  <span className="text-text-tertiary">{formatDuration(call.durationSeconds)}</span>
+                                </>
+                              )}
+                            </div>
+                          </div>
+
+                          {/* Call button with tooltip */}
+                          <Tooltip content="Rappeler" position="left">
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation()
+                                handleCall(call.contactId, call.contactName, call.contactAvatar)
+                              }}
+                              disabled={callStatus !== 'idle'}
+                              className="w-11 h-11 min-w-[44px] min-h-[44px] rounded-xl bg-success-10 flex items-center justify-center hover:bg-success/15 hover:scale-[1.02] transition-interactive disabled:opacity-50 disabled:cursor-not-allowed touch-target"
+                              aria-label={`Appeler ${call.contactName}`}
+                            >
+                              <Phone className="w-5 h-5 text-success" aria-hidden="true" />
+                            </button>
+                          </Tooltip>
+                        </div>
+                      </Card>
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
             ))}
           </div>
         </AnimatePresence>

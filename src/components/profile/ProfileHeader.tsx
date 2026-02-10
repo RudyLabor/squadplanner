@@ -98,9 +98,9 @@ export function ProfileHeader({ user, profile, isLoading, updateProfile }: Profi
     const result = await updateProfile({ username, bio })
     if (!result.error) {
       setIsEditing(false)
-      toast.success('Profil mis a jour')
+      toast.success('Profil mis à jour')
     } else {
-      toast.error('Erreur lors de la mise a jour')
+      toast.error('Erreur lors de la mise à jour')
     }
   }
 
@@ -211,7 +211,7 @@ export function ProfileHeader({ user, profile, isLoading, updateProfile }: Profi
                     onClick={() => navigate('/settings')}
                     className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-surface-card text-text-tertiary text-base font-medium hover:bg-surface-card-hover hover:text-text-primary transition-colors active:scale-[0.97]"
                   >
-                    Parametres
+                    Paramètres
                   </button>
                 </div>
               </motion.div>

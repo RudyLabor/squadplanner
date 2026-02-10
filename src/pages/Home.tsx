@@ -35,7 +35,7 @@ interface UpcomingSession {
   total_members: number
 }
 
-// Badge fiabilite avec glow subtil et tooltip
+// Badge fiabilité avec glow subtil et tooltip
 function ReliabilityBadge({ score }: { score: number }) {
   const tooltipText = "Ton score de fiabilité. Il augmente quand tu confirmes ta présence aux sessions."
 
@@ -146,7 +146,7 @@ export default function Home() {
       if (response === 'present') {
         haptic.success()
         setShowConfetti(true)
-        setSuccessMessage("T'es confirme ! Ta squad compte sur toi")
+        setSuccessMessage("T'es confirmé ! Ta squad compte sur toi")
         setTimeout(() => setShowConfetti(false), 4000)
         setTimeout(() => setSuccessMessage(null), 5000)
       } else {
@@ -199,9 +199,14 @@ export default function Home() {
       <div className="px-4 md:px-6 lg:px-8 py-6 max-w-2xl lg:max-w-4xl xl:max-w-6xl mx-auto">
         <CrossfadeTransition isLoading={homeLoading} skeleton={<SkeletonHomePage />}>
           <div>
-            <header className="flex items-center justify-between mb-6">
-              <div>
-                <h1 className="text-2xl font-bold text-text-primary">
+            <motion.header
+              className="flex items-center justify-between mb-6"
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+            >
+              <div className="min-w-0 flex-1 mr-3">
+                <h1 className="text-xl md:text-2xl font-bold text-text-primary truncate">
                   Salut {profile?.username || 'Gamer'} !
                 </h1>
                 <p className="text-md text-text-tertiary">
@@ -214,18 +219,30 @@ export default function Home() {
                 </p>
               </div>
               <ReliabilityBadge score={reliabilityScore} />
-            </header>
+            </motion.header>
 
             {(!squadsLoading && !sessionsLoading) && (squads.length === 0 || upcomingSessions.length === 0) && (
               <OnboardingChecklist hasSquad={squads.length > 0} hasSession={upcomingSessions.length > 0} onCreateSession={openCreateSessionModal} />
             )}
 
-            <HomeAICoachSection aiCoachTip={aiCoachTip} aiCoachLoading={aiCoachLoading} onAction={openCreateSessionModal} />
-            <HomePartySection activeParty={activeParty} showCTA={!upcomingSessions[0] && squads.length > 0 && !activeParty} />
-            <HomeSessionsSection upcomingSessions={upcomingSessions} sessionsLoading={sessionsLoading} onRsvp={handleRsvp} isRsvpLoading={rsvpMutation.isPending} />
-            <HomeFriendsSection friendsPlaying={friendsPlaying} friendsLoading={friendsLoading} onJoin={handleJoinFriendParty} onInvite={handleInviteFriend} />
-            <HomeStatsSection squadsCount={squads.length} sessionsThisWeek={sessionsThisWeek} reliabilityScore={reliabilityScore} squadsLoading={squadsLoading} sessionsLoading={sessionsLoading} profile={profile} />
-            <HomeSquadsSection squads={squads} squadsLoading={squadsLoading} />
+            <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.05, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}>
+              <HomeAICoachSection aiCoachTip={aiCoachTip} aiCoachLoading={aiCoachLoading} onAction={openCreateSessionModal} />
+            </motion.div>
+            <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}>
+              <HomePartySection activeParty={activeParty} showCTA={!upcomingSessions[0] && squads.length > 0 && !activeParty} />
+            </motion.div>
+            <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}>
+              <HomeSessionsSection upcomingSessions={upcomingSessions} sessionsLoading={sessionsLoading} onRsvp={handleRsvp} isRsvpLoading={rsvpMutation.isPending} />
+            </motion.div>
+            <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}>
+              <HomeFriendsSection friendsPlaying={friendsPlaying} friendsLoading={friendsLoading} onJoin={handleJoinFriendParty} onInvite={handleInviteFriend} />
+            </motion.div>
+            <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}>
+              <HomeStatsSection squadsCount={squads.length} sessionsThisWeek={sessionsThisWeek} reliabilityScore={reliabilityScore} squadsLoading={squadsLoading} sessionsLoading={sessionsLoading} profile={profile} />
+            </motion.div>
+            <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}>
+              <HomeSquadsSection squads={squads} squadsLoading={squadsLoading} />
+            </motion.div>
           </div>
         </CrossfadeTransition>
       </div>

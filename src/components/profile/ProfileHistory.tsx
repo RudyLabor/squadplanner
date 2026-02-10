@@ -22,12 +22,12 @@ export function ProfileHistory({ profile, hasPremium, canAccessFeature, aiCoachT
 
   return (
     <>
-      {/* Activite Section - StreakCounter */}
-      <section className="mb-5" aria-label="Activite">
+      {/* Activité Section - StreakCounter */}
+      <section className="mb-5" aria-label="Activité">
         <div className="flex items-center gap-2 mb-3">
           <Flame className="w-4 h-4 text-warning" />
           <h3 className="text-base font-semibold text-text-primary uppercase tracking-wide">
-            Activite
+            Activité
           </h3>
         </div>
         <StreakCounter
@@ -80,40 +80,11 @@ export function ProfileHistory({ profile, hasPremium, canAccessFeature, aiCoachT
                   ? 'text-error'
                   : 'text-text-tertiary'
             }`}>
-              {aiCoachTip?.tip || 'Pret pour la prochaine session ? Tes potes t\'attendent !'}
+              {aiCoachTip?.tip || 'Prêt pour la prochaine session ? Tes potes t\'attendent !'}
             </p>
           </div>
         </div>
       </Card>
-
-      {/* IA Coach Avance - Premium */}
-      <div className="mb-5">
-        <div className="flex items-center gap-2 mb-3">
-          <h3 className="text-base font-semibold text-text-primary uppercase tracking-wide">
-            Coach IA Avance
-          </h3>
-          {!canAccessFeature('ai_coach_advanced') && <PremiumBadge small />}
-        </div>
-        <PremiumGate
-          feature="ai_coach_advanced"
-          featureLabel="Coach IA Avance"
-          fallback="lock"
-        >
-          <Card className="p-4 bg-gradient-to-br from-warning-5 to-transparent border-warning">
-            <div className="flex items-start gap-3">
-              <div className="w-10 h-10 rounded-xl bg-warning-10 flex items-center justify-center flex-shrink-0">
-                <Sparkles className="w-5 h-5 text-warning" />
-              </div>
-              <div className="flex-1">
-                <h4 className="text-md font-medium text-text-primary mb-1">Conseils personnalises</h4>
-                <p className="text-base text-text-tertiary">
-                  Predictions de disponibilite, analyse des patterns de jeu, suggestions de creneaux optimaux pour ta squad.
-                </p>
-              </div>
-            </div>
-          </Card>
-        </PremiumGate>
-      </div>
 
       {/* Historique des appels */}
       <Card
@@ -127,11 +98,42 @@ export function ProfileHistory({ profile, hasPremium, canAccessFeature, aiCoachT
           </div>
           <div className="flex-1">
             <h4 className="text-md font-medium text-text-primary">Historique des appels</h4>
-            <p className="text-sm text-text-quaternary">Voir tous tes appels passes</p>
+            <p className="text-sm text-text-quaternary">Voir tous tes appels passés</p>
           </div>
           <ChevronRight className="w-5 h-5 text-text-quaternary" />
         </div>
       </Card>
+
+      {/* PRO sections below useful content */}
+
+      {/* IA Coach Avancé - Premium */}
+      <div className="mb-5">
+        <div className="flex items-center gap-2 mb-3">
+          <h3 className="text-base font-semibold text-text-primary uppercase tracking-wide">
+            Coach IA Avancé
+          </h3>
+          {!canAccessFeature('ai_coach_advanced') && <PremiumBadge small />}
+        </div>
+        <PremiumGate
+          feature="ai_coach_advanced"
+          featureLabel="Coach IA Avancé"
+          fallback="lock"
+        >
+          <Card className="p-4 bg-gradient-to-br from-warning-5 to-transparent border-warning">
+            <div className="flex items-start gap-3">
+              <div className="w-10 h-10 rounded-xl bg-warning-10 flex items-center justify-center flex-shrink-0">
+                <Sparkles className="w-5 h-5 text-warning" />
+              </div>
+              <div className="flex-1">
+                <h4 className="text-md font-medium text-text-primary mb-1">Conseils personnalisés</h4>
+                <p className="text-base text-text-tertiary">
+                  Prédictions de disponibilité, analyse des patterns de jeu, suggestions de créneaux optimaux pour ta squad.
+                </p>
+              </div>
+            </div>
+          </Card>
+        </PremiumGate>
+      </div>
 
       {/* Historique - Premium */}
       <div className="mb-5">
@@ -148,7 +150,7 @@ export function ProfileHistory({ profile, hasPremium, canAccessFeature, aiCoachT
         </div>
         <PremiumGate
           feature="unlimited_history"
-          featureLabel="Historique illimite"
+          featureLabel="Historique illimité"
           fallback="lock"
         >
           <Card className="p-4">
@@ -158,14 +160,14 @@ export function ProfileHistory({ profile, hasPremium, canAccessFeature, aiCoachT
               </div>
               <div className="flex-1">
                 <h4 className="text-md font-medium text-text-primary">Historique complet</h4>
-                <p className="text-sm text-text-quaternary">Toutes tes sessions depuis le debut</p>
+                <p className="text-sm text-text-quaternary">Toutes tes sessions depuis le début</p>
               </div>
             </div>
           </Card>
         </PremiumGate>
       </div>
 
-      {/* Premium upsell */}
+      {/* Premium upsell - single subtle block at the bottom */}
       {!hasPremium && (
         <Card className="mb-5 overflow-hidden bg-bg-elevated">
           <div className="h-1 bg-gradient-to-r from-primary via-warning to-success" />
@@ -179,14 +181,14 @@ export function ProfileHistory({ profile, hasPremium, canAccessFeature, aiCoachT
                   Passe Premium
                 </h3>
                 <p className="text-base text-text-tertiary mb-3">
-                  Stats avancees, IA coach avance, audio HD, historique illimite
+                  Stats avancées, IA coach avancé, audio HD, historique illimité
                 </p>
                 <Button
                   size="sm"
                   className="bg-gradient-to-r from-primary to-purple"
                   onClick={() => navigate('/premium')}
                 >
-                  Decouvrir
+                  Découvrir
                   <ChevronRight className="w-4 h-4" />
                 </Button>
               </div>
@@ -207,7 +209,7 @@ export function ProfileHistory({ profile, hasPremium, canAccessFeature, aiCoachT
                 <h3 className="text-md font-medium text-text-primary">Compte Premium</h3>
                 <PremiumBadge small />
               </div>
-              <p className="text-sm text-text-quaternary">Toutes les features sont debloquees</p>
+              <p className="text-sm text-text-quaternary">Toutes les features sont débloquées</p>
             </div>
           </div>
         </Card>

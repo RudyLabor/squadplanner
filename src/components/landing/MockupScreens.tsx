@@ -14,7 +14,7 @@ export function HomeScreen() {
       <div className="px-4 pt-6 pb-3">
         <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
           <div className="text-md font-bold text-text-primary leading-tight">Salut MaxGamer_94 !</div>
-          <div className="text-xs text-text-tertiary mt-0.5">T'es carre, toutes tes sessions sont confirmees</div>
+          <div className="text-xs text-text-tertiary mt-0.5">T'es carré, toutes tes sessions sont confirmées</div>
         </motion.div>
         <motion.div
           className="absolute top-5 right-4 flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-success/15 border border-success/20"
@@ -41,7 +41,7 @@ export function HomeScreen() {
             className="px-2 py-0.5 rounded-full bg-success/15 text-xs text-success font-medium"
             initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 0.6, type: 'spring' }}
           >
-            Confirmee
+            Confirmée
           </motion.span>
         </div>
         <div className="flex items-center gap-2">
@@ -57,10 +57,10 @@ export function HomeScreen() {
               </motion.div>
             ))}
           </div>
-          <span className="text-xs text-text-secondary">4/5 presents</span>
+          <span className="text-xs text-text-secondary">4/5 présents</span>
           <motion.div className="ml-auto flex items-center gap-1" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.8 }}>
             <Check className="w-3 h-3 text-success" />
-            <span className="text-xs text-success font-medium">Present</span>
+            <span className="text-xs text-success font-medium">Présent</span>
           </motion.div>
         </div>
       </motion.div>
@@ -70,7 +70,7 @@ export function HomeScreen() {
         initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }}
       >
         {[
-          { label: 'Fiabilite', value: '94%', color: 'var(--color-success)' },
+          { label: 'Fiabilité', value: '94%', color: 'var(--color-success)' },
           { label: 'Sessions', value: '12', color: 'var(--color-primary)' },
           { label: 'Streak', value: '5', color: 'var(--color-gold)' },
         ].map((s) => (
@@ -91,9 +91,9 @@ export function HomeScreen() {
             <div className="w-5 h-5 rounded-md bg-success/15 flex items-center justify-center">
               <Check className="w-3 h-3 text-success" />
             </div>
-            <span className="text-xs text-text-primary">3 sessions jouees</span>
+            <span className="text-xs text-text-primary">3 sessions jouées</span>
           </div>
-          <span className="text-xs text-success font-medium">100% present</span>
+          <span className="text-xs text-success font-medium">100% présent</span>
         </div>
         <div className="flex items-center justify-between mt-1.5">
           <div className="flex items-center gap-1.5">
@@ -175,13 +175,13 @@ export function SquadScreen() {
           <Calendar className="w-3.5 h-3.5 text-primary" />
           <div>
             <div className="text-xs font-semibold text-text-primary">Ranked du Mardi</div>
-            <div className="text-xs text-text-tertiary">Demain 21:00 · 4/5 presents</div>
+            <div className="text-xs text-text-tertiary">Demain 21:00 · 4/5 présents</div>
           </div>
         </div>
         <div className="flex gap-2">
           {[
-            { label: 'Present', color: 'var(--color-success)', active: true },
-            { label: 'Peut-etre', color: 'var(--color-gold)', active: false },
+            { label: 'Présent', color: 'var(--color-success)', active: true },
+            { label: 'Peut-être', color: 'var(--color-gold)', active: false },
             { label: 'Absent', color: 'var(--color-error)', active: false },
           ].map((opt, i) => (
             <motion.div

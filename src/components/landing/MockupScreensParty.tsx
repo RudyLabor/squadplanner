@@ -115,7 +115,7 @@ export function ProfileScreen() {
         <div className="flex items-center justify-between mb-1.5">
           <div className="flex items-center gap-1.5">
             <span className="text-xs">\u26A1</span>
-            <span className="text-xs font-semibold text-text-primary">Niveau 4 \u2014 Regulier</span>
+            <span className="text-xs font-semibold text-text-primary">Niveau 4 \u2014 Régulier</span>
           </div>
           <span className="text-xs text-primary">340 XP</span>
         </div>
@@ -151,8 +151,8 @@ export function ProfileScreen() {
             </div>
           </div>
           <div>
-            <div className="text-xs font-semibold text-text-primary">Score de fiabilite</div>
-            <div className="text-xs text-warning">Legende</div>
+            <div className="text-xs font-semibold text-text-primary">Score de fiabilité</div>
+            <div className="text-xs text-warning">Légende</div>
             <div className="flex gap-0.5 mt-1">
               {[true, true, true, false, true, true].map((ok, j) => (
                 <motion.span key={j} className="text-xs" initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 0.8 + j * 0.05 }}>

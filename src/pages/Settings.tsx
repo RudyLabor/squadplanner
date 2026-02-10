@@ -6,7 +6,7 @@ import {
   ArrowLeft, Loader2, AlertTriangle, FileText, ExternalLink
 } from 'lucide-react'
 import { useNavigate, Link } from 'react-router-dom'
-import { Card, SegmentedControl } from '../components/ui'
+import { Card, SegmentedControl, Select } from '../components/ui'
 import { useAuthStore } from '../hooks'
 import { useThemeStore, type ThemeMode } from '../hooks/useTheme'
 import { useHashNavigation } from '../hooks/useHashNavigation'
@@ -259,7 +259,7 @@ export function Settings() {
 
   return (
     <main className="min-h-0 bg-bg-base pb-6" aria-label="Paramètres">
-      <div className="px-4 md:px-6 lg:px-8 py-6 max-w-2xl mx-auto">
+      <div className="px-4 md:px-6 lg:px-8 py-6 max-w-4xl mx-auto">
         {/* Header */}
         <header className="flex items-center gap-4 mb-8">
           <button
@@ -327,36 +327,36 @@ export function Settings() {
                 <Mic className="w-4 h-4" />
                 Microphone
               </label>
-              <select
+              <Select
                 value={audioInput}
-                onChange={(e) => { setAudioInput(e.target.value); showSaveToast() }}
-                className="w-full h-11 px-4 rounded-xl bg-surface-card border border-border-default text-md text-text-primary focus:outline-none focus:border-primary"
-              >
-                <option value="default">Microphone par défaut</option>
-                {inputDevices.map(device => (
-                  <option key={device.deviceId} value={device.deviceId}>
-                    {device.label || `Microphone ${device.deviceId.slice(0, 8)}`}
-                  </option>
-                ))}
-              </select>
+                onChange={(v) => { setAudioInput(v as string); showSaveToast() }}
+                options={[
+                  { value: 'default', label: 'Microphone par défaut' },
+                  ...inputDevices.map(device => ({
+                    value: device.deviceId,
+                    label: device.label || `Microphone ${device.deviceId.slice(0, 8)}`,
+                  })),
+                ]}
+                placeholder="Microphone par défaut"
+              />
             </div>
             <div>
               <label className="flex items-center gap-2 text-base text-text-tertiary mb-2">
                 <Speaker className="w-4 h-4" />
                 Sortie audio
               </label>
-              <select
+              <Select
                 value={audioOutput}
-                onChange={(e) => { setAudioOutput(e.target.value); showSaveToast() }}
-                className="w-full h-11 px-4 rounded-xl bg-surface-card border border-border-default text-md text-text-primary focus:outline-none focus:border-primary"
-              >
-                <option value="default">Haut-parleur par défaut</option>
-                {outputDevices.map(device => (
-                  <option key={device.deviceId} value={device.deviceId}>
-                    {device.label || `Sortie ${device.deviceId.slice(0, 8)}`}
-                  </option>
-                ))}
-              </select>
+                onChange={(v) => { setAudioOutput(v as string); showSaveToast() }}
+                options={[
+                  { value: 'default', label: 'Haut-parleur par défaut' },
+                  ...outputDevices.map(device => ({
+                    value: device.deviceId,
+                    label: device.label || `Sortie ${device.deviceId.slice(0, 8)}`,
+                  })),
+                ]}
+                placeholder="Haut-parleur par défaut"
+              />
             </div>
           </div>
         </Card>
@@ -380,15 +380,16 @@ export function Settings() {
               label="Visibilité du profil"
               description="Qui peut voir tes stats"
             >
-              <select
+              <Select
                 value={privacy.profileVisibility}
-                onChange={(e) => { setPrivacy({ ...privacy, profileVisibility: e.target.value as 'public' | 'friends' | 'private' }); showSaveToast() }}
-                className="h-9 px-3 rounded-lg bg-surface-card border border-border-default text-base text-text-primary focus:outline-none focus:border-primary"
-              >
-                <option value="public">Tout le monde</option>
-                <option value="friends">Membres de mes squads</option>
-                <option value="private">Personne</option>
-              </select>
+                onChange={(v) => { setPrivacy({ ...privacy, profileVisibility: v as 'public' | 'friends' | 'private' }); showSaveToast() }}
+                options={[
+                  { value: 'public', label: 'Tout le monde' },
+                  { value: 'friends', label: 'Membres de mes squads' },
+                  { value: 'private', label: 'Personne' },
+                ]}
+                size="sm"
+              />
             </SettingRow>
             <SettingRow
               label="Statut en ligne"
@@ -411,15 +412,16 @@ export function Settings() {
                 <Globe className="w-4 h-4" />
                 Fuseau horaire
               </label>
-              <select
+              <Select
                 value={timezone}
-                onChange={(e) => { setTimezone(e.target.value); showSaveToast() }}
-                className="w-full h-11 px-4 rounded-xl bg-surface-card border border-border-default text-md text-text-primary focus:outline-none focus:border-primary"
-              >
-                {TIMEZONES.map(tz => (
-                  <option key={tz.value} value={tz.value}>{tz.label}</option>
-                ))}
-              </select>
+                onChange={(v) => { setTimezone(v as string); showSaveToast() }}
+                options={TIMEZONES.map(tz => ({
+                  value: tz.value,
+                  label: tz.label,
+                }))}
+                searchable
+                placeholder="Choisis un fuseau horaire"
+              />
             </div>
             <div>
               <label className="flex items-center gap-2 text-base text-text-tertiary mb-2">

@@ -185,25 +185,29 @@ function EmptyState() {
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.2 }}
     >
-      <Card className="p-6 text-center bg-gradient-to-br from-primary/5 to-transparent border-dashed">
-        <motion.div
-          className="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary/15 to-primary-hover/10 flex items-center justify-center mx-auto mb-3"
-          animate={{ rotate: [0, 5, -5, 0] }}
-          transition={{ duration: 3, repeat: Infinity, repeatDelay: 2 }}
-        >
-          <Users className="w-7 h-7 text-primary" strokeWidth={1.5} />
-        </motion.div>
-        <p className="text-md text-text-secondary mb-1">
-          Aucun pote en ligne pour l'instant
-        </p>
-        <motion.button
-          onClick={handleShareInvite}
-          className="text-base text-primary hover:text-primary-hover font-medium transition-colors cursor-pointer"
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.98 }}
-        >
-          Invite tes potes à rejoindre Squad Planner ! →
-        </motion.button>
+      <Card className="p-4 bg-gradient-to-br from-primary/5 to-transparent border-dashed">
+        <div className="flex items-center gap-3">
+          <motion.div
+            className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary/15 to-primary-hover/10 flex items-center justify-center flex-shrink-0"
+            animate={{ rotate: [0, 5, -5, 0] }}
+            transition={{ duration: 3, repeat: Infinity, repeatDelay: 2 }}
+          >
+            <UserPlus className="w-5 h-5 text-primary" strokeWidth={1.5} />
+          </motion.div>
+          <div className="flex-1 min-w-0">
+            <p className="text-md font-medium text-text-secondary">
+              Aucun pote en ligne
+            </p>
+            <motion.button
+              onClick={handleShareInvite}
+              className="text-base text-primary hover:text-primary-hover font-medium transition-colors cursor-pointer"
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+            >
+              Invite tes amis
+            </motion.button>
+          </div>
+        </div>
       </Card>
     </motion.div>
   )

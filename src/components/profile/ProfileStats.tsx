@@ -1,14 +1,15 @@
 import { motion } from 'framer-motion'
-import { Calendar, Check, Target, Trophy, Sparkles, TrendingUp } from 'lucide-react'
+import { Calendar, Check, Target, Trophy, Sparkles, TrendingUp, Plus } from 'lucide-react'
+import { Link } from 'react-router-dom'
 import { Card, ProgressRing, AnimatedCounter, HelpTooltip } from '../ui'
 
-// Systeme de tiers base sur le score de fiabilite
+// Système de tiers basé sur le score de fiabilité
 const TIERS = [
-  { name: 'Debutant', color: 'var(--color-text-secondary)', bgColor: 'var(--color-overlay-light)', icon: '', minScore: 0, glow: false },
-  { name: 'Confirme', color: 'var(--color-primary)', bgColor: 'var(--color-primary-15)', icon: '', minScore: 50, glow: false },
+  { name: 'Débutant', color: 'var(--color-text-secondary)', bgColor: 'var(--color-overlay-light)', icon: '', minScore: 0, glow: false },
+  { name: 'Confirmé', color: 'var(--color-primary)', bgColor: 'var(--color-primary-15)', icon: '', minScore: 50, glow: false },
   { name: 'Expert', color: 'var(--color-success)', bgColor: 'var(--color-success-15)', icon: '', minScore: 70, glow: false },
   { name: 'Master', color: 'var(--color-purple)', bgColor: 'var(--color-purple-15)', icon: '', minScore: 85, glow: true },
-  { name: 'Legende', color: 'var(--color-warning)', bgColor: 'var(--color-warning-15)', icon: '', minScore: 95, glow: true },
+  { name: 'Légende', color: 'var(--color-warning)', bgColor: 'var(--color-warning-15)', icon: '', minScore: 95, glow: true },
 ]
 
 const getTier = (score: number) => {
@@ -34,16 +35,20 @@ export function ProfileStats({ profile, profileReady }: ProfileStatsProps) {
   const tier = getTier(reliabilityScore)
   const reliabilityColor = tier.color
 
+  const totalSessions = profile?.total_sessions || 0
+  const totalCheckins = profile?.total_checkins || 0
+  const hasNoActivity = totalSessions === 0 && totalCheckins === 0
+
   const stats = [
-    { icon: Calendar, label: 'Sessions', value: profile?.total_sessions || 0, color: 'var(--color-warning)', bgColor: 'var(--color-warning-15)' },
-    { icon: Check, label: 'Check-ins', value: profile?.total_checkins || 0, color: 'var(--color-success)', bgColor: 'var(--color-success-15)' },
+    { icon: Calendar, label: 'Sessions', value: totalSessions, color: 'var(--color-warning)', bgColor: 'var(--color-warning-15)' },
+    { icon: Check, label: 'Check-ins', value: totalCheckins, color: 'var(--color-success)', bgColor: 'var(--color-success-15)' },
     { icon: Target, label: 'Niveau', value: profile?.level || 1, color: 'var(--color-primary)', bgColor: 'var(--color-primary-15)' },
     { icon: Trophy, label: 'XP', value: profile?.xp || 0, color: 'var(--color-purple)', bgColor: 'var(--color-purple-15)' },
   ]
 
   return (
     <>
-      {/* Score de fiabilite - Card principale avec Tier System */}
+      {/* Score de fiabilité - Card principale avec Tier System */}
       {!profileReady ? (
         <Card className="mb-5 overflow-hidden bg-bg-elevated">
           <div className="h-1.5 bg-surface-card" />
@@ -90,8 +95,8 @@ export function ProfileStats({ profile, profileReady }: ProfileStatsProps) {
                     <span>{tier.name}</span>
                   </motion.span>
                 </div>
-                <HelpTooltip content="Ton score de fiabilite mesure ta regularite aux sessions. Plus tu confirmes et te presentes, plus il monte." position="bottom">
-                  <p className="text-base text-text-quaternary">Score de fiabilite</p>
+                <HelpTooltip content="Ton score de fiabilité mesure ta régularité aux sessions. Plus tu confirmes et te présentes, plus il monte." position="bottom">
+                  <p className="text-base text-text-quaternary">Score de fiabilité</p>
                 </HelpTooltip>
 
                 {tier.nextTier && (
@@ -162,26 +167,43 @@ export function ProfileStats({ profile, profileReady }: ProfileStatsProps) {
           ))}
         </section>
       ) : (
-        <section className="grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-4 mb-5" aria-label="Statistiques">
-          {stats.map(stat => (
-            <Card key={stat.label} className="p-4 bg-bg-elevated">
-              <div className="flex items-center gap-3">
-                <div
-                  className="w-10 h-10 rounded-xl flex items-center justify-center"
-                  style={{ backgroundColor: stat.bgColor }}
-                >
-                  <stat.icon className="w-5 h-5" style={{ color: stat.color }} />
-                </div>
-                <div>
-                  <div className="text-xl font-bold text-text-primary">
-                    <AnimatedCounter end={stat.value} duration={1.5} />
+        <>
+          <section className="grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-4 mb-5" aria-label="Statistiques">
+            {stats.map(stat => (
+              <Card key={stat.label} className="p-4 bg-bg-elevated">
+                <div className="flex items-center gap-3">
+                  <div
+                    className="w-10 h-10 rounded-xl flex items-center justify-center"
+                    style={{ backgroundColor: stat.bgColor }}
+                  >
+                    <stat.icon className="w-5 h-5" style={{ color: stat.color }} />
                   </div>
-                  <div className="text-sm text-text-quaternary">{stat.label}</div>
+                  <div>
+                    <div className="text-xl font-bold text-text-primary">
+                      <AnimatedCounter end={stat.value} duration={1.5} />
+                    </div>
+                    <div className="text-sm text-text-quaternary">{stat.label}</div>
+                  </div>
+                </div>
+              </Card>
+            ))}
+          </section>
+          {hasNoActivity && (
+            <Card className="mb-5 p-4 bg-gradient-to-br from-primary/5 to-transparent border-dashed text-center">
+              <div className="flex items-center justify-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-primary/12 flex items-center justify-center flex-shrink-0">
+                  <Plus className="w-5 h-5 text-primary" />
+                </div>
+                <div className="text-left">
+                  <p className="text-md font-medium text-text-primary">Planifie ta première session !</p>
+                  <Link to="/squads" className="text-base text-primary hover:text-primary-hover font-medium transition-colors">
+                    Créer une session
+                  </Link>
                 </div>
               </div>
             </Card>
-          ))}
-        </section>
+          )}
+        </>
       )}
     </>
   )

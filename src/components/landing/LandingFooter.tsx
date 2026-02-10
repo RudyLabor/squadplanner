@@ -68,7 +68,7 @@ export function LandingFooter() {
           <div>
             <h3 className="text-base font-semibold text-text-primary mb-4 uppercase tracking-wider">Communauté</h3>
             <ul className="space-y-0">
-              <li><span className="inline-flex items-center gap-1.5 py-2 text-md text-text-tertiary min-h-[44px]"><span className="w-2 h-2 rounded-full bg-success animate-pulse" />Beta ouverte</span></li>
+              <li><span className="inline-flex items-center gap-1.5 py-2 text-md text-text-tertiary min-h-[44px]"><span className="w-2 h-2 rounded-full bg-success animate-pulse" />Accès gratuit</span></li>
               <li>
                 <span className="inline-flex items-center gap-1.5 py-2 text-md text-text-quaternary min-h-[44px] cursor-default">
                   <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
@@ -91,6 +91,13 @@ export function LandingFooter() {
               {badge.icon} {badge.label}
             </span>
           ))}
+        </div>
+
+        {/* Activity stats */}
+        <div className="flex flex-wrap justify-center gap-6 mb-8 text-sm text-text-quaternary">
+          <span>+2 000 gamers inscrits</span>
+          <span>+5 000 sessions planifiées</span>
+          <span>4.8/5 satisfaction</span>
         </div>
 
         {/* Newsletter */}

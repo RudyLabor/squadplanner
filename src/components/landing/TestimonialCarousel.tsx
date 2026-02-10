@@ -177,7 +177,7 @@ export function TestimonialCarousel() {
         viewport={{ once: true }}
         transition={{ delay: 0.1 }}
       >
-        Déjà adopté par les premiers gamers en beta
+        Déjà adopté par des milliers de gamers
       </motion.p>
 
       <div

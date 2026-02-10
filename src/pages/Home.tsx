@@ -97,7 +97,11 @@ export default function Home() {
   const queryClient = useQueryClient()
 
   const handleRefresh = useCallback(async () => {
-    await queryClient.refetchQueries({ type: 'active' })
+    await Promise.all([
+      queryClient.invalidateQueries({ queryKey: ['squads'] }),
+      queryClient.invalidateQueries({ queryKey: ['sessions'] }),
+      queryClient.invalidateQueries({ queryKey: ['friends-playing'] }),
+    ])
   }, [queryClient])
 
   const { data: squads = [], isLoading: squadsLoading } = useSquadsQuery()

@@ -222,10 +222,6 @@ export function FriendsPlaying({ friends, onJoin, onInvite }: FriendsPlayingProp
   if (friends.length === 0) {
     return (
       <div className="mb-6">
-        <h2 className="text-lg font-semibold text-text-primary mb-3 flex items-center gap-2">
-          <Gamepad2 className="w-5 h-5 text-success shrink-0" />
-          En train de jouer
-        </h2>
         <EmptyState />
       </div>
     )

@@ -179,7 +179,7 @@ export function ProfileStats({ profile, profileReady }: ProfileStatsProps) {
                     <stat.icon className="w-5 h-5" style={{ color: stat.color }} />
                   </div>
                   <div>
-                    <div className="text-xl font-bold text-text-primary">
+                    <div className="text-2xl font-bold text-text-primary">
                       <AnimatedCounter end={stat.value} duration={1.5} />
                     </div>
                     <div className="text-sm text-text-quaternary">{stat.label}</div>

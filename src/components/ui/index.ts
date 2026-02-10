@@ -50,6 +50,7 @@ export { DropdownMenu, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuLabe
 export { Select } from './Select'
 export type { SelectOption } from './Select'
 export { Sheet } from './Sheet'
+export { ResponsiveModal } from './ResponsiveModal'
 export { Tabs, TabsList, Tab, TabsContent } from './Tabs'
 export { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from './Accordion'
 export { Toggle } from './Toggle'

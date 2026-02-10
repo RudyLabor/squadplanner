@@ -6,6 +6,7 @@ import {
 } from 'lucide-react'
 import { useNavigate, Link } from 'react-router-dom'
 import { Card, Button } from '../components/ui'
+import { MobilePageHeader } from '../components/layout/MobilePageHeader'
 import { Tooltip } from '../components/ui/Tooltip'
 import { useCallHistoryStore, formatDuration, formatRelativeTime, type CallType } from '../hooks/useCallHistory'
 import { useVoiceCallStore } from '../hooks/useVoiceCall'
@@ -209,6 +210,7 @@ export function CallHistory() {
 
   return (
     <main className="min-h-0 bg-bg-base pb-6" aria-label="Historique d'appels">
+      <MobilePageHeader title="Historique d'appels" />
       {/* Toast */}
       <CallToast
         message={toastMessage}

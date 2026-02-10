@@ -185,6 +185,7 @@ export function AppLayout({ children }: AppLayoutProps) {
         isInVoiceChat={isInVoiceChat}
         isKeyboardVisible={isKeyboardVisible}
         unreadMessages={unreadMessages}
+        pendingRsvpCount={pendingRsvpCount}
       />
 
       <CustomStatusModal

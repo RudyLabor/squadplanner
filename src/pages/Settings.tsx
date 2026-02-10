@@ -7,6 +7,7 @@ import {
 } from 'lucide-react'
 import { useNavigate, Link } from 'react-router-dom'
 import { Card, SegmentedControl, Select } from '../components/ui'
+import { MobilePageHeader } from '../components/layout/MobilePageHeader'
 import { useAuthStore } from '../hooks'
 import { useThemeStore, type ThemeMode } from '../hooks/useTheme'
 import { useHashNavigation } from '../hooks/useHashNavigation'
@@ -259,6 +260,7 @@ export function Settings() {
 
   return (
     <main className="min-h-0 bg-bg-base pb-6" aria-label="Paramètres">
+      <MobilePageHeader title="Paramètres" />
       <div className="px-4 md:px-6 lg:px-8 py-6 max-w-4xl mx-auto">
         {/* Header */}
         <header className="flex items-center gap-4 mb-8">

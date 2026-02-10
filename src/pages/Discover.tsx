@@ -2,6 +2,7 @@
 import { motion } from 'framer-motion'
 import { Compass, Plus, Sparkles, Users, Gamepad2 } from 'lucide-react'
 import { Link } from 'react-router-dom'
+import { MobilePageHeader } from '../components/layout/MobilePageHeader'
 import { SegmentedControl, Select, Card, Button } from '../components/ui'
 import type { SelectOption } from '../components/ui'
 import { DiscoverSquadCard } from '../components/discover/DiscoverSquadCard'
@@ -50,6 +51,7 @@ export function Discover() {
       animate={{ opacity: 1 }}
       className="max-w-2xl lg:max-w-4xl xl:max-w-5xl mx-auto px-4 md:px-6 lg:px-8 py-6 pb-24"
     >
+      <MobilePageHeader title="Découvrir" />
       {/* Header */}
       <div className="flex items-center gap-3 mb-6">
         <div className="w-10 h-10 rounded-xl bg-indigo-500/10 flex items-center justify-center">

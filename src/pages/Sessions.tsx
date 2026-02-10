@@ -229,8 +229,8 @@ export function Sessions() {
           {/* Upcoming confirmed */}
           <section className="mb-8" aria-label="Sessions confirmées">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-xs font-medium text-text-tertiary uppercase tracking-[0.05em]">
-                Mes sessions confirmées
+              <h2 className="text-xs font-medium text-text-tertiary uppercase tracking-wide">
+                Sessions confirmées
               </h2>
               {!sessionsLoading && <Badge variant="success">{confirmed.length}</Badge>}
             </div>

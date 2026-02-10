@@ -1,13 +1,13 @@
 import { memo } from 'react'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { Home, Mic, MessageCircle, User, Calendar } from 'lucide-react'
+import { Home, Mic, MessageCircle, User, Users } from 'lucide-react'
 import { usePrefetch } from '../../hooks/usePrefetch'
 
 // Mobile nav items (Party sera au centre avec un style special)
 const mobileNavLeft = [
   { path: '/home', icon: Home, label: 'Accueil' },
-  { path: '/sessions', icon: Calendar, label: 'Sessions' },
+  { path: '/squads', icon: Users, label: 'Squads' },
 ] as const
 
 const mobileNavRight = [
@@ -102,6 +102,7 @@ interface MobileBottomNavProps {
   isInVoiceChat: boolean
   isKeyboardVisible: boolean
   unreadMessages: number
+  pendingRsvpCount?: number
 }
 
 export const MobileBottomNav = memo(function MobileBottomNav({
@@ -110,6 +111,7 @@ export const MobileBottomNav = memo(function MobileBottomNav({
   isInVoiceChat,
   isKeyboardVisible,
   unreadMessages,
+  pendingRsvpCount,
 }: MobileBottomNavProps) {
   const { createPrefetchHandler, cancelPrefetch } = usePrefetch()
 
@@ -126,7 +128,7 @@ export const MobileBottomNav = memo(function MobileBottomNav({
               icon={item.icon}
               label={item.label}
               isActive={currentPath === item.path}
-              badge={undefined}
+              badge={item.path === '/squads' && pendingRsvpCount && pendingRsvpCount > 0 ? pendingRsvpCount : undefined}
             />
           </div>
         ))}

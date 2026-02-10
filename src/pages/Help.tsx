@@ -5,6 +5,7 @@ import {
 } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { Card, Select } from '../components/ui'
+import { MobilePageHeader } from '../components/layout/MobilePageHeader'
 import { ScrollProgress } from '../components/ui/ScrollProgress'
 import { useStatePersistence } from '../hooks/useStatePersistence'
 import { useHashNavigation } from '../hooks/useHashNavigation'
@@ -317,6 +318,7 @@ export function Help() {
 
   return (
     <main className="min-h-0 bg-bg-base pb-6" aria-label="Aide">
+      <MobilePageHeader title="Aide" />
       <ScrollProgress />
       <div className="px-4 md:px-6 lg:px-8 py-6 max-w-4xl mx-auto">
         {/* Header */}

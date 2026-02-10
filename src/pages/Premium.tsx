@@ -8,6 +8,7 @@ import {
 import { useNavigate } from 'react-router-dom'
 import Confetti from '../components/LazyConfetti'
 import { Button, Card } from '../components/ui'
+import { MobilePageHeader } from '../components/layout/MobilePageHeader'
 import { useAuthStore, useSubscriptionStore, usePremiumStore } from '../hooks'
 import { showSuccess } from '../lib/toast'
 import { PREMIUM_PRICE_MONTHLY, PREMIUM_PRICE_YEARLY } from '../hooks/usePremium'
@@ -360,6 +361,7 @@ export function Premium() {
 
   return (
     <main className="min-h-0 bg-bg-base pb-6" aria-label="Premium">
+      <MobilePageHeader title="Premium" />
       {/* Confetti */}
       {showConfetti && typeof window !== 'undefined' && (
         <Confetti

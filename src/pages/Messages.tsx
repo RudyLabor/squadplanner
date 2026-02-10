@@ -15,6 +15,7 @@ import { hasPermission, type SquadRole } from '../lib/roles'
 import type { MentionUser } from '../components/MentionInput'
 import type { PollData } from '../components/ChatPoll'
 import { CrossfadeTransition, SkeletonChatPage } from '../components/ui'
+import { PullToRefresh } from '../components/PullToRefresh'
 import { ConversationList } from '../components/messages/ConversationList'
 import { ConversationHeader } from '../components/messages/ConversationHeader'
 import { MessageThread } from '../components/messages/MessageThread'
@@ -37,6 +38,10 @@ export function Messages() {
     isLoading: isLoadingDM, fetchConversations: fetchDMConvs, setActiveConversation: setActiveDMConv,
     sendMessage: sendDMMessage, unsubscribe: unsubscribeDM,
   } = useDirectMessagesStore()
+
+  const handleRefresh = useCallback(async () => {
+    await Promise.all([fetchSquadConvs(), fetchDMConvs()])
+  }, [fetchSquadConvs, fetchDMConvs])
 
   const activeSquadId = activeSquadConv?.squad_id
   const { data: squadMembersData } = useSquadMembersQuery(activeSquadId)
@@ -227,11 +232,11 @@ export function Messages() {
   if (!activeSquadConv && !activeDMConv) return (
     <>{toastEl}
       <main className="min-h-0 bg-bg-base pb-6" aria-label="Messages">
-        <div className="px-4 md:px-6 lg:px-8 py-6 max-w-2xl lg:max-w-4xl xl:max-w-6xl mx-auto">
+        <PullToRefresh onRefresh={handleRefresh} className="px-4 md:px-6 lg:px-8 py-6 max-w-2xl lg:max-w-4xl xl:max-w-6xl mx-auto">
           <CrossfadeTransition isLoading={initialMessagesLoading} skeleton={<SkeletonChatPage />}>
             <ConversationList {...convListProps} />
           </CrossfadeTransition>
-        </div>
+        </PullToRefresh>
       </main>
     </>
   )

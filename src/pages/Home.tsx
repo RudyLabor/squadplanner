@@ -1,8 +1,10 @@
 import { useState, useMemo, useCallback } from 'react'
+import { useQueryClient } from '@tanstack/react-query'
 import { motion } from 'framer-motion'
 import { TrendingUp, Loader2, AlertCircle, Star } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import Confetti from '../components/LazyConfetti'
+import { PullToRefresh } from '../components/PullToRefresh'
 import { Tooltip, CrossfadeTransition, SkeletonHomePage } from '../components/ui'
 import { useAuthStore, useVoiceChatStore } from '../hooks'
 import { useSquadsQuery } from '../hooks/queries/useSquadsQuery'
@@ -44,39 +46,39 @@ function ReliabilityBadge({ score }: { score: number }) {
     if (score >= 95) {
       return (
         <motion.div
-          className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-gradient-to-r from-success/15 to-success/5 border border-success/20 shadow-glow-success cursor-help"
+          className="flex items-center gap-1.5 md:gap-2 px-2 py-1 md:px-3 md:py-1.5 rounded-full bg-gradient-to-r from-success/15 to-success/5 border border-success/20 shadow-glow-success cursor-help"
           initial={{ scale: 0.9, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ delay: 0.4, type: "spring", stiffness: 300, damping: 25 }}
           whileHover={{ scale: 1.02, boxShadow: "var(--shadow-glow-success)" }}
         >
           <motion.div animate={{ rotate: [0, 8, -8, 0] }} transition={{ duration: 2.5, repeat: 2, repeatDelay: 4 }}>
-            <Star className="w-4 h-4 text-success fill-success" />
+            <Star className="w-3.5 h-3.5 md:w-4 md:h-4 text-success fill-success" />
           </motion.div>
-          <span className="text-base font-medium text-success">{score}% fiable</span>
+          <span className="text-sm md:text-base font-medium text-success">{score}% fiable</span>
         </motion.div>
       )
     }
     if (score >= 80) {
       return (
-        <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-success/10 border border-success/15 cursor-help">
-          <TrendingUp className="w-4 h-4 text-success" />
-          <span className="text-base font-medium text-success">{score}% fiable</span>
+        <div className="flex items-center gap-1.5 md:gap-2 px-2 py-1 md:px-3 md:py-1.5 rounded-full bg-success/10 border border-success/15 cursor-help">
+          <TrendingUp className="w-3.5 h-3.5 md:w-4 md:h-4 text-success" />
+          <span className="text-sm md:text-base font-medium text-success">{score}% fiable</span>
         </div>
       )
     }
     if (score >= 60) {
       return (
-        <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-warning/10 border border-warning/15 cursor-help">
-          <TrendingUp className="w-4 h-4 text-warning" />
-          <span className="text-base font-medium text-warning">{score}%</span>
+        <div className="flex items-center gap-1.5 md:gap-2 px-2 py-1 md:px-3 md:py-1.5 rounded-full bg-warning/10 border border-warning/15 cursor-help">
+          <TrendingUp className="w-3.5 h-3.5 md:w-4 md:h-4 text-warning" />
+          <span className="text-sm md:text-base font-medium text-warning">{score}%</span>
         </div>
       )
     }
     return (
-      <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-error/10 border border-error/15 cursor-help">
-        <AlertCircle className="w-4 h-4 text-error" />
-        <span className="text-base font-medium text-error">{score}%</span>
+      <div className="flex items-center gap-1.5 md:gap-2 px-2 py-1 md:px-3 md:py-1.5 rounded-full bg-error/10 border border-error/15 cursor-help">
+        <AlertCircle className="w-3.5 h-3.5 md:w-4 md:h-4 text-error" />
+        <span className="text-sm md:text-base font-medium text-error">{score}%</span>
       </div>
     )
   }
@@ -92,6 +94,11 @@ export default function Home() {
   const { user, profile, isInitialized } = useAuthStore()
   const { isConnected: isInVoiceChat, currentChannel, remoteUsers } = useVoiceChatStore()
   const navigate = useNavigate()
+  const queryClient = useQueryClient()
+
+  const handleRefresh = useCallback(async () => {
+    await queryClient.invalidateQueries()
+  }, [queryClient])
 
   const { data: squads = [], isLoading: squadsLoading } = useSquadsQuery()
   const { data: rawSessions = [], isLoading: sessionsQueryLoading } = useUpcomingSessionsQuery(user?.id)
@@ -197,7 +204,7 @@ export default function Home() {
         </motion.div>
       )}
 
-      <div className="px-4 md:px-6 lg:px-8 py-6 max-w-2xl lg:max-w-4xl xl:max-w-6xl mx-auto">
+      <PullToRefresh onRefresh={handleRefresh} className="px-4 md:px-6 lg:px-8 py-6 max-w-2xl lg:max-w-4xl xl:max-w-6xl mx-auto">
         <CrossfadeTransition isLoading={homeLoading} skeleton={<SkeletonHomePage />}>
           <div>
             <motion.header
@@ -210,7 +217,7 @@ export default function Home() {
                 <h1 className="text-base md:text-lg font-bold text-text-primary truncate">
                   Salut {profile?.username || 'Gamer'} !
                 </h1>
-                <p className="text-sm text-text-tertiary">
+                <p className="text-sm text-text-tertiary line-clamp-2">
                   {upcomingSessions.length > 0
                     ? pendingRsvps > 0
                       ? `${pendingRsvps} session${pendingRsvps > 1 ? 's' : ''} ${pendingRsvps > 1 ? 'attendent' : 'attend'} ta réponse`
@@ -252,7 +259,7 @@ export default function Home() {
             </motion.div>
           </div>
         </CrossfadeTransition>
-      </div>
+      </PullToRefresh>
     </div>
   )
 }

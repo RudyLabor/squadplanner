@@ -42,14 +42,14 @@ const MobileNavLink = memo(function MobileNavLink({ path, icon: Icon, label, isA
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             transition={{ type: "spring", stiffness: 500, damping: 30 }}
-            className="absolute -top-1.5 -right-2 min-w-[18px] h-[18px] px-1 rounded-full bg-info text-white text-xs font-bold flex items-center justify-center"
+            className="absolute -top-1.5 -right-2 min-w-[20px] h-[20px] px-1 rounded-full bg-info text-white text-[11px] font-bold flex items-center justify-center"
             aria-label={`${badge} non lus`}
           >
             {badge > 99 ? '99+' : badge}
           </motion.span>
         )}
       </div>
-      <span className={`text-xs mt-1 transition-colors ${isActive ? 'text-text-primary' : 'text-text-tertiary'}`}>
+      <span className={`text-sm mt-0.5 transition-colors ${isActive ? 'text-text-primary' : 'text-text-tertiary'}`}>
         {label}
       </span>
     </Link>
@@ -87,7 +87,7 @@ const PartyButton = memo(function PartyButton({ isActive, hasActiveParty }: { is
           />
         )}
       </div>
-      <span className={`text-xs mt-1 transition-colors duration-300 ${
+      <span className={`text-sm mt-0.5 transition-colors duration-300 ${
         isActive ? 'text-text-primary' : hasActiveParty ? 'text-success' : 'text-text-tertiary'
       }`}>
         Party

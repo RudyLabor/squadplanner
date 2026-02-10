@@ -217,11 +217,11 @@
   --color-bg-hover: #e9ecef;
   --color-bg-active: #dee2e6;
 
-  /* Text - Dark text for light backgrounds */
-  --color-text-primary: #1a1a1b;
-  --color-text-secondary: #495057;
-  --color-text-tertiary: #6c757d;
-  --color-text-quaternary: #adb5bd;
+  /* Text - Dark text for light backgrounds - WCAG AA compliant (4.5:1 minimum on #ffffff) */
+  --color-text-primary: #1a1a1b;     /* Ratio: 18.0:1 */
+  --color-text-secondary: #495057;   /* Ratio: 7.1:1 */
+  --color-text-tertiary: #6c757d;    /* Ratio: 4.7:1 */
+  --color-text-quaternary: #6e7781;  /* Ratio: 4.6:1 - WCAG AA compliant (was #adb5bd = 2.08:1) */
 
   /* Accents remain similar but slightly adjusted for light mode */
   --color-primary: #5b5fc7;

@@ -17,7 +17,7 @@ export function ProgressRing({
   size = 80,
   strokeWidth = 6,
   color = 'var(--color-primary)',
-  trackColor = 'var(--color-border-hover)',
+  trackColor = 'var(--color-inactive-bar)',
   label,
   showValue = true,
   className = '',

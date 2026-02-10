@@ -229,7 +229,7 @@ export default function Home() {
               </div>
             </motion.header>
 
-            {(!squadsLoading && !sessionsLoading) && (squads.length === 0 || upcomingSessions.length === 0) && (
+            {(!squadsLoading && !sessionsLoading) && (squads.length === 0 || upcomingSessions.length === 0) && profile?.created_at && (Date.now() - new Date(profile.created_at).getTime() < 7 * 24 * 60 * 60 * 1000) && (
               <OnboardingChecklist hasSquad={squads.length > 0} hasSession={upcomingSessions.length > 0} onCreateSession={openCreateSessionModal} />
             )}
 

@@ -1322,3 +1322,38 @@ textarea,
     animation: none !important;
   }
 }
+
+/* =====================================================
+   Coach IA - Animated Gradient Border
+   ===================================================== */
+@keyframes coach-gradient-border {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.coach-ia-card-wrapper {
+  position: relative;
+  border-radius: var(--radius-md);
+  padding: 1px;
+  background: linear-gradient(
+    135deg,
+    var(--color-purple),
+    var(--color-primary),
+    var(--color-success),
+    var(--color-purple)
+  );
+  background-size: 300% 300%;
+  animation: coach-gradient-border 6s ease infinite;
+}
+
+.coach-ia-card-wrapper > * {
+  border-radius: calc(var(--radius-md) - 1px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .coach-ia-card-wrapper {
+    animation: none;
+    background: var(--color-border-default);
+  }
+}

@@ -1,23 +1,55 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { screens } from './MockupScreens'
+import { Play } from 'lucide-react'
+import { demoSteps, stepComponents } from './DemoSteps'
 
-// ─── PHONE FRAME ────────────────────────────────────────
+// ─── HERO PHONE FRAME — animated demo visible above the fold ────────
 export function HeroMockup() {
-  const [currentScreen, setCurrentScreen] = useState(0)
+  const [currentStep, setCurrentStep] = useState(0)
+  const [isPaused, setIsPaused] = useState(false)
+  const pauseTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const autoAdvanceRef = useRef(false)
 
+  // Auto-advance through demo steps
   useEffect(() => {
+    if (isPaused) return
     const timer = setInterval(() => {
-      setCurrentScreen(prev => (prev + 1) % screens.length)
-    }, screens[currentScreen].duration)
+      autoAdvanceRef.current = true
+      setCurrentStep(prev => (prev + 1) % demoSteps.length)
+    }, demoSteps[currentStep].duration)
     return () => clearInterval(timer)
-  }, [currentScreen])
+  }, [isPaused, currentStep])
 
-  const screen = screens[currentScreen]
-  const ScreenComponent = screen.component
+  const handleStepClick = useCallback((index: number) => {
+    setCurrentStep(index)
+    setIsPaused(true)
+    if (pauseTimerRef.current) clearTimeout(pauseTimerRef.current)
+    pauseTimerRef.current = setTimeout(() => setIsPaused(false), 5000)
+  }, [])
+
+  const step = demoSteps[currentStep]
+  const StepComponent = stepComponents[step.id]
 
   return (
     <div className="relative mx-auto hero-phone-float" style={{ width: 280 }}>
+      {/* "Voir la demo" badge */}
+      <motion.div
+        className="flex items-center justify-center gap-1.5 mb-3"
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.6 }}
+      >
+        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 border border-primary/20">
+          <motion.div
+            animate={{ scale: [1, 1.2, 1] }}
+            transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+          >
+            <Play className="w-3 h-3 text-primary fill-primary" />
+          </motion.div>
+          <span className="text-xs font-medium text-primary">Voir la demo</span>
+        </div>
+      </motion.div>
+
       {/* Glow behind phone */}
       <motion.div
         className="absolute -inset-8 rounded-[3rem]"
@@ -53,17 +85,17 @@ export function HeroMockup() {
               </div>
             </div>
 
-            {/* Screen content with transitions */}
+            {/* Animated demo step content */}
             <AnimatePresence mode="wait">
               <motion.div
-                key={screen.id}
+                key={step.id}
                 initial={{ opacity: 0, x: 30 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -30 }}
                 transition={{ duration: 0.35, ease: [0.4, 0, 0.2, 1] }}
                 className="h-full pt-6"
               >
-                <ScreenComponent />
+                <StepComponent />
               </motion.div>
             </AnimatePresence>
 
@@ -73,35 +105,52 @@ export function HeroMockup() {
         </div>
       </div>
 
-      {/* Screen indicator dots */}
-      <div className="flex items-center justify-center gap-1 mt-4">
-        {screens.map((s, i) => (
-          <button
-            key={s.id}
-            type="button"
-            onClick={() => setCurrentScreen(i)}
-            className="flex items-center justify-center gap-1.5 group min-w-[44px] min-h-[44px]"
-            aria-label={`Ecran ${s.label}`}
-          >
-            <motion.div
-              className="h-1 rounded-full"
-              animate={{
-                width: i === currentScreen ? 24 : 6,
-                backgroundColor: i === currentScreen ? 'var(--color-primary)' : 'var(--color-overlay-medium)',
-              }}
-              transition={{ duration: 0.3 }}
-            />
-            {i === currentScreen && (
-              <motion.span
-                className="text-xs text-primary font-medium"
-                initial={{ opacity: 0, x: -5 }}
-                animate={{ opacity: 1, x: 0 }}
-              >
-                {s.label}
-              </motion.span>
-            )}
-          </button>
-        ))}
+      {/* Step indicator dots with label + progress bar */}
+      <div className="flex flex-col items-center gap-2 mt-4">
+        {/* Dots */}
+        <div className="flex items-center justify-center gap-1">
+          {demoSteps.map((s, i) => (
+            <button
+              key={s.id}
+              type="button"
+              onClick={() => handleStepClick(i)}
+              className="flex items-center justify-center gap-1.5 group min-w-[44px] min-h-[44px]"
+              aria-label={`Etape ${i + 1}: ${s.title}`}
+            >
+              <motion.div
+                className="h-1 rounded-full"
+                animate={{
+                  width: i === currentStep ? 24 : 6,
+                  backgroundColor: i === currentStep ? 'var(--color-primary)' : 'var(--color-overlay-medium)',
+                }}
+                transition={{ duration: 0.3 }}
+              />
+              {i === currentStep && (
+                <motion.span
+                  className="text-xs text-primary font-medium"
+                  initial={{ opacity: 0, x: -5 }}
+                  animate={{ opacity: 1, x: 0 }}
+                >
+                  {s.title}
+                </motion.span>
+              )}
+            </button>
+          ))}
+        </div>
+
+        {/* Step progress bar (auto-advance indicator) */}
+        <div className="w-32 h-0.5 rounded-full bg-border-subtle overflow-hidden">
+          <motion.div
+            className="h-full bg-primary rounded-full"
+            key={`hero-progress-${currentStep}`}
+            initial={{ width: '0%' }}
+            animate={{ width: '100%' }}
+            transition={{
+              duration: demoSteps[currentStep].duration / 1000,
+              ease: 'linear',
+            }}
+          />
+        </div>
       </div>
     </div>
   )

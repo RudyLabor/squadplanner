@@ -1,8 +1,8 @@
-﻿import { useEffect, useState, useMemo } from 'react'
+﻿import { useEffect, useState, useMemo, useRef, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   Phone, PhoneIncoming, PhoneOutgoing, PhoneMissed,
-  ArrowLeft, ArrowUpRight, User, RefreshCw, UserPlus, X
+  ArrowLeft, ArrowUpRight, ArrowUp, User, RefreshCw, UserPlus, X, Loader2
 } from 'lucide-react'
 import { useNavigate, Link } from 'react-router-dom'
 import { Card, Button } from '../components/ui'
@@ -37,6 +37,8 @@ function CallToast({ message, isVisible, onClose }: { message: string; isVisible
     </AnimatePresence>
   )
 }
+
+const PAGE_SIZE = 10
 
 const filterOptions: { value: CallType; label: string }[] = [
   { value: 'all', label: 'Tous' },
@@ -141,6 +143,70 @@ export function CallHistory() {
     return groups
   }, [filteredCalls])
 
+  // --- Infinite scroll pagination ---
+  const [displayCount, setDisplayCount] = useState(PAGE_SIZE)
+  const loadMoreRef = useRef<HTMLDivElement>(null)
+  const [showScrollTop, setShowScrollTop] = useState(false)
+
+  const totalCalls = filteredCalls.length
+  const hasMore = displayCount < totalCalls
+
+  // Reset displayCount when filter changes
+  useEffect(() => {
+    setDisplayCount(PAGE_SIZE)
+  }, [filter])
+
+  // IntersectionObserver to load more when sentinel is visible
+  useEffect(() => {
+    const sentinel = loadMoreRef.current
+    if (!sentinel) return
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && hasMore) {
+          setDisplayCount((prev) => Math.min(prev + PAGE_SIZE, totalCalls))
+        }
+      },
+      { rootMargin: '200px' }
+    )
+
+    observer.observe(sentinel)
+    return () => observer.disconnect()
+  }, [hasMore, totalCalls])
+
+  // Scroll-to-top visibility
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowScrollTop(window.scrollY > 600)
+    }
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
+  const scrollToTop = useCallback(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }, [])
+
+  // Truncate grouped calls to displayCount
+  const truncatedGroups = useMemo(() => {
+    let remaining = displayCount
+    const result: typeof groupedCalls = []
+
+    for (const group of groupedCalls) {
+      if (remaining <= 0) break
+
+      if (group.calls.length <= remaining) {
+        result.push(group)
+        remaining -= group.calls.length
+      } else {
+        result.push({ label: group.label, calls: group.calls.slice(0, remaining) })
+        remaining = 0
+      }
+    }
+
+    return result
+  }, [groupedCalls, displayCount])
+
   return (
     <main className="min-h-0 bg-bg-base pb-6" aria-label="Historique d'appels">
       {/* Toast */}
@@ -165,7 +231,9 @@ export function CallHistory() {
               <h1 className="text-2xl font-bold text-text-primary">Tes appels récents</h1>
               <p className="text-base text-text-tertiary">
                 {filteredCalls.length > 0
-                  ? `${filteredCalls.length} appel${filteredCalls.length !== 1 ? 's' : ''}`
+                  ? hasMore
+                    ? `Affichage ${Math.min(displayCount, totalCalls)} sur ${totalCalls} appel${totalCalls !== 1 ? 's' : ''}`
+                    : `${totalCalls} appel${totalCalls !== 1 ? 's' : ''}`
                   : 'Aucun appel pour le moment'
                 }
               </p>
@@ -260,7 +328,7 @@ export function CallHistory() {
         {/* Call list grouped by date */}
         <AnimatePresence mode="popLayout">
           <div className="space-y-4">
-            {groupedCalls.map((group) => (
+            {truncatedGroups.map((group) => (
               <div key={group.label}>
                 {/* Date group header */}
                 <div className="flex items-center gap-3 mb-2 mt-2">
@@ -371,7 +439,48 @@ export function CallHistory() {
             ))}
           </div>
         </AnimatePresence>
+
+        {/* Infinite scroll sentinel */}
+        {totalCalls > 0 && (
+          <div ref={loadMoreRef} className="flex items-center justify-center py-6">
+            {hasMore ? (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="flex items-center gap-2 text-text-tertiary"
+              >
+                <Loader2 className="w-5 h-5 animate-spin" />
+                <span className="text-sm">Chargement...</span>
+              </motion.div>
+            ) : (
+              <motion.p
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="text-sm text-text-tertiary text-center"
+              >
+                Tu as vu tous tes appels
+              </motion.p>
+            )}
+          </div>
+        )}
       </div>
+
+      {/* Scroll to top button */}
+      <AnimatePresence>
+        {showScrollTop && (
+          <motion.button
+            initial={{ opacity: 0, scale: 0.8, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.8, y: 20 }}
+            transition={{ type: 'spring', stiffness: 300, damping: 25 }}
+            onClick={scrollToTop}
+            className="fixed bottom-24 right-4 z-40 w-11 h-11 rounded-full bg-primary text-white shadow-lg shadow-primary/25 flex items-center justify-center hover:bg-primary-dark hover:scale-105 transition-interactive"
+            aria-label="Remonter en haut"
+          >
+            <ArrowUp className="w-5 h-5" />
+          </motion.button>
+        )}
+      </AnimatePresence>
     </main>
   )
 }

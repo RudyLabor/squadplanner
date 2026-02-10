@@ -19,6 +19,7 @@ import {
   HomeAICoachSection,
   HomeSquadsSection,
   HomePartySection,
+  HomeActivityFeed,
 } from '../components/home'
 
 // Types
@@ -241,6 +242,9 @@ export default function Home() {
               <HomeStatsSection squadsCount={squads.length} sessionsThisWeek={sessionsThisWeek} reliabilityScore={reliabilityScore} squadsLoading={squadsLoading} sessionsLoading={sessionsLoading} profile={profile} />
             </motion.div>
             <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}>
+              <HomeActivityFeed squads={squads} />
+            </motion.div>
+            <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.35, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}>
               <HomeSquadsSection squads={squads} squadsLoading={squadsLoading} />
             </motion.div>
           </div>

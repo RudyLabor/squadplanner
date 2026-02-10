@@ -1,6 +1,8 @@
+import { useState, useEffect, useMemo, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { motion, AnimatePresence } from 'framer-motion'
 import {
-  Sparkles, Zap, Clock, Phone, Flame, ChevronRight
+  Sparkles, Zap, Clock, Phone, Flame, ChevronRight, CalendarPlus, BarChart3
 } from 'lucide-react'
 import { Card, Button } from '../ui'
 import { PremiumGate, PremiumBadge } from '../PremiumGate'
@@ -11,23 +13,150 @@ interface ProfileHistoryProps {
   profile: {
     streak_days?: number
     streak_last_date?: string | null
+    reliability_score?: number
   } | null
   hasPremium: boolean
   canAccessFeature: (feature: string) => boolean
   aiCoachTip?: { tip?: string; tone?: string } | null
 }
 
+// --- Dynamic Tips Engine ---
+
+interface DynamicTip {
+  text: string
+  badge: string
+}
+
+function buildTipPool(streakDays: number, reliability: number): DynamicTip[] {
+  const tips: DynamicTip[] = []
+
+  // Streak-based tips
+  if (streakDays > 0) {
+    tips.push({
+      text: `Ta s\u00e9rie de ${streakDays} jour${streakDays > 1 ? 's' : ''} est impressionnante ! Continue comme \u00e7a pour d\u00e9bloquer le prochain palier.`,
+      badge: 'STREAK',
+    })
+  }
+  if (streakDays >= 7) {
+    tips.push({
+      text: `${streakDays} jours d\u2019affil\u00e9e ! Tu fais partie du top 10% des joueurs les plus r\u00e9guliers.`,
+      badge: 'ELITE',
+    })
+  }
+
+  // Reliability-based tips
+  if (reliability >= 90) {
+    tips.push({
+      text: 'Score de fiabilit\u00e9 excellent ! Ta squad peut compter sur toi.',
+      badge: 'BRAVO',
+    })
+  } else if (reliability >= 70 && reliability < 90) {
+    tips.push({
+      text: `${Math.round(reliability)}% de fiabilit\u00e9, c\u2019est solide. Quelques sessions confirm\u00e9es de plus et tu passes au niveau sup\u00e9rieur !`,
+      badge: 'CONSEIL',
+    })
+  } else if (reliability < 70) {
+    tips.push({
+      text: 'Ton score de fiabilit\u00e9 peut s\u2019am\u00e9liorer. Confirme tes prochaines sessions pour le booster !',
+      badge: 'ATTENTION',
+    })
+  }
+
+  // Generic tips (always included)
+  tips.push(
+    { text: 'Invite un ami dans ta squad pour des sessions encore plus fun.', badge: 'CONSEIL' },
+    { text: 'Planifie ta prochaine session pour maintenir ta dynamique.', badge: 'CONSEIL' },
+    { text: 'Les joueurs r\u00e9guliers progressent 3x plus vite. Reste constant !', badge: 'CONSEIL' },
+    { text: 'Consulte tes stats pour voir ta progression et identifier tes points forts.', badge: 'CONSEIL' },
+  )
+
+  return tips
+}
+
+// --- Typing animation hook ---
+
+function useTypingEffect(text: string, speed = 18) {
+  const [displayed, setDisplayed] = useState('')
+  const [isTyping, setIsTyping] = useState(false)
+
+  useEffect(() => {
+    setDisplayed('')
+    setIsTyping(true)
+    let i = 0
+    const interval = setInterval(() => {
+      i++
+      setDisplayed(text.slice(0, i))
+      if (i >= text.length) {
+        clearInterval(interval)
+        setIsTyping(false)
+      }
+    }, speed)
+    return () => clearInterval(interval)
+  }, [text, speed])
+
+  return { displayed, isTyping }
+}
+
+// --- Main Component ---
+
 export function ProfileHistory({ profile, hasPremium, canAccessFeature, aiCoachTip }: ProfileHistoryProps) {
   const navigate = useNavigate()
+  const [tipIndex, setTipIndex] = useState(0)
+
+  const hasRealTip = !!(aiCoachTip?.tip)
+
+  // Build the contextual tip pool from profile data
+  const tipPool = useMemo(
+    () => buildTipPool(profile?.streak_days || 0, profile?.reliability_score ?? 100),
+    [profile?.streak_days, profile?.reliability_score]
+  )
+
+  // Current dynamic tip
+  const currentTip = tipPool[tipIndex % tipPool.length]
+
+  // Rotate tips every 8 seconds when no real AI tip is present
+  useEffect(() => {
+    if (hasRealTip || tipPool.length <= 1) return
+    const timer = setInterval(() => {
+      setTipIndex(prev => (prev + 1) % tipPool.length)
+    }, 8000)
+    return () => clearInterval(timer)
+  }, [hasRealTip, tipPool.length])
+
+  // Typing animation for dynamic tips
+  const dynamicText = hasRealTip ? '' : currentTip?.text || ''
+  const { displayed: typedText, isTyping } = useTypingEffect(dynamicText)
+
+  // Determine visual style based on tone (for real tips) or badge (for dynamic tips)
+  const getStyle = useCallback(() => {
+    if (hasRealTip) {
+      const tone = aiCoachTip?.tone
+      if (tone === 'celebration') return { border: 'border-success', gradient: 'from-success-5', bg: 'bg-success-15', iconColor: 'text-success', textColor: 'text-success', badgeBg: 'bg-success-15 text-success', badgeLabel: 'BRAVO' }
+      if (tone === 'warning') return { border: 'border-error', gradient: 'from-error-5', bg: 'bg-error-10', iconColor: 'text-error', textColor: 'text-error', badgeBg: 'bg-error-15 text-error', badgeLabel: 'ATTENTION' }
+      return { border: 'border-purple', gradient: 'from-purple-10', bg: 'bg-purple-10', iconColor: 'text-purple', textColor: 'text-text-tertiary', badgeBg: 'bg-purple-15 text-purple', badgeLabel: 'CONSEIL' }
+    }
+
+    // Dynamic tip styling
+    const badge = currentTip?.badge
+    if (badge === 'BRAVO' || badge === 'ELITE' || badge === 'STREAK') {
+      return { border: 'border-success', gradient: 'from-success-5', bg: 'bg-success-15', iconColor: 'text-success', textColor: 'text-success', badgeBg: 'bg-success-15 text-success', badgeLabel: badge }
+    }
+    if (badge === 'ATTENTION') {
+      return { border: 'border-error', gradient: 'from-error-5', bg: 'bg-error-10', iconColor: 'text-error', textColor: 'text-error', badgeBg: 'bg-error-15 text-error', badgeLabel: badge }
+    }
+    return { border: 'border-purple', gradient: 'from-purple-10', bg: 'bg-purple-10', iconColor: 'text-purple', textColor: 'text-text-tertiary', badgeBg: 'bg-purple-15 text-purple', badgeLabel: 'CONSEIL' }
+  }, [hasRealTip, aiCoachTip?.tone, currentTip?.badge])
+
+  const style = getStyle()
 
   return (
     <>
-      {/* Activité Section - StreakCounter */}
-      <section className="mb-5" aria-label="Activité">
+      {/* Activit\u00e9 Section - StreakCounter */}
+      <section className="mb-5" aria-label="Activit\u00e9">
         <div className="flex items-center gap-2 mb-3">
           <Flame className="w-4 h-4 text-warning" />
           <h3 className="text-base font-semibold text-text-primary uppercase tracking-wide">
-            Activité
+            Activit\u00e9
           </h3>
         </div>
         <StreakCounter
@@ -37,54 +166,112 @@ export function ProfileHistory({ profile, hasPremium, canAccessFeature, aiCoachT
       </section>
 
       {/* IA Coach - Basique (gratuit) */}
-      <Card className={`mb-5 p-4 bg-gradient-to-br border ${
-        aiCoachTip?.tone === 'celebration'
-          ? 'from-success-5 to-transparent border-success'
-          : aiCoachTip?.tone === 'warning'
-            ? 'from-error-5 to-transparent border-error'
-            : 'from-purple-10 to-transparent border-purple'
-      }`}>
-        <div className="flex items-start gap-3">
-          <div className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 ${
-            aiCoachTip?.tone === 'celebration'
-              ? 'bg-success-15'
-              : aiCoachTip?.tone === 'warning'
-                ? 'bg-error-10'
-                : 'bg-purple-10'
-          }`}>
-            <Sparkles className={`w-5 h-5 ${
-              aiCoachTip?.tone === 'celebration'
-                ? 'text-success'
-                : aiCoachTip?.tone === 'warning'
-                  ? 'text-error'
-                  : 'text-purple'
-            }`} />
-          </div>
-          <div className="flex-1">
-            <div className="flex items-center gap-2 mb-1.5">
-              <h3 className="text-md font-semibold text-text-primary">Coach IA</h3>
-              <span className={`text-xs px-1.5 py-0.5 rounded-full font-medium ${
-                aiCoachTip?.tone === 'celebration'
-                  ? 'bg-success-15 text-success'
-                  : aiCoachTip?.tone === 'warning'
-                    ? 'bg-error-15 text-error'
-                    : 'bg-purple-15 text-purple'
-              }`}>
-                {aiCoachTip?.tone === 'celebration' ? 'BRAVO' : aiCoachTip?.tone === 'warning' ? 'ATTENTION' : 'CONSEIL'}
-              </span>
+      <div className="coach-ia-card-wrapper mb-5">
+        <Card className={`p-4 bg-gradient-to-br border ${style.gradient} to-transparent ${style.border} relative overflow-hidden`}>
+          <div className="flex items-start gap-3">
+            {/* Sparkle icon with animation */}
+            <div className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 ${style.bg}`}>
+              <motion.div
+                animate={{
+                  scale: [1, 1.2, 1],
+                  rotate: [0, 15, -15, 0],
+                }}
+                transition={{
+                  duration: 2.5,
+                  repeat: Infinity,
+                  repeatDelay: 3,
+                  ease: 'easeInOut',
+                }}
+              >
+                <Sparkles className={`w-5 h-5 ${style.iconColor}`} />
+              </motion.div>
             </div>
-            <p className={`text-base leading-relaxed ${
-              aiCoachTip?.tone === 'celebration'
-                ? 'text-success'
-                : aiCoachTip?.tone === 'warning'
-                  ? 'text-error'
-                  : 'text-text-tertiary'
-            }`}>
-              {aiCoachTip?.tip || 'Prêt pour la prochaine session ? Tes potes t\'attendent !'}
-            </p>
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-2 mb-1.5">
+                <h3 className="text-md font-semibold text-text-primary">Coach IA</h3>
+                <AnimatePresence mode="wait">
+                  <motion.span
+                    key={style.badgeLabel}
+                    className={`text-xs px-1.5 py-0.5 rounded-full font-medium ${style.badgeBg}`}
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.8 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    {style.badgeLabel}
+                  </motion.span>
+                </AnimatePresence>
+              </div>
+
+              {/* Tip content */}
+              {hasRealTip ? (
+                <p className={`text-base leading-relaxed ${style.textColor}`}>
+                  {aiCoachTip!.tip}
+                </p>
+              ) : (
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={tipIndex}
+                    initial={{ opacity: 0, y: 6 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -6 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <p className={`text-base leading-relaxed ${style.textColor}`}>
+                      {typedText}
+                      {isTyping && (
+                        <span className="inline-block w-0.5 h-4 bg-purple ml-0.5 align-middle animate-pulse" />
+                      )}
+                    </p>
+                  </motion.div>
+                </AnimatePresence>
+              )}
+
+              {/* Tip progress dots (only for rotating dynamic tips) */}
+              {!hasRealTip && tipPool.length > 1 && (
+                <div className="flex items-center gap-1.5 mt-3">
+                  {tipPool.map((_, i) => (
+                    <button
+                      key={i}
+                      onClick={() => setTipIndex(i)}
+                      className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${
+                        i === tipIndex % tipPool.length
+                          ? 'bg-purple w-4'
+                          : 'bg-purple/30 hover:bg-purple/50'
+                      }`}
+                      aria-label={`Conseil ${i + 1}`}
+                    />
+                  ))}
+                </div>
+              )}
+
+              {/* Action buttons */}
+              {!hasRealTip && (
+                <div className="flex items-center gap-2 mt-3">
+                  <Button
+                    size="sm"
+                    className="bg-purple hover:bg-purple/80 text-white text-xs gap-1.5"
+                    onClick={() => navigate('/sessions')}
+                  >
+                    <CalendarPlus className="w-3.5 h-3.5" />
+                    Planifier une session
+                  </Button>
+                  <button
+                    onClick={() => {
+                      const statsEl = document.querySelector('[aria-label="Statistiques"]')
+                      if (statsEl) statsEl.scrollIntoView({ behavior: 'smooth', block: 'center' })
+                    }}
+                    className="text-xs text-purple hover:text-purple/80 transition-colors flex items-center gap-1 px-2 py-1.5"
+                  >
+                    <BarChart3 className="w-3.5 h-3.5" />
+                    Voir mes stats
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
-        </div>
-      </Card>
+        </Card>
+      </div>
 
       {/* Historique des appels */}
       <Card
@@ -98,7 +285,7 @@ export function ProfileHistory({ profile, hasPremium, canAccessFeature, aiCoachT
           </div>
           <div className="flex-1">
             <h4 className="text-md font-medium text-text-primary">Historique des appels</h4>
-            <p className="text-sm text-text-quaternary">Voir tous tes appels passés</p>
+            <p className="text-sm text-text-quaternary">Voir tous tes appels pass\u00e9s</p>
           </div>
           <ChevronRight className="w-5 h-5 text-text-quaternary" />
         </div>
@@ -106,17 +293,17 @@ export function ProfileHistory({ profile, hasPremium, canAccessFeature, aiCoachT
 
       {/* PRO sections below useful content */}
 
-      {/* IA Coach Avancé - Premium */}
+      {/* IA Coach Avanc\u00e9 - Premium */}
       <div className="mb-5">
         <div className="flex items-center gap-2 mb-3">
           <h3 className="text-base font-semibold text-text-primary uppercase tracking-wide">
-            Coach IA Avancé
+            Coach IA Avanc\u00e9
           </h3>
           {!canAccessFeature('ai_coach_advanced') && <PremiumBadge small />}
         </div>
         <PremiumGate
           feature="ai_coach_advanced"
-          featureLabel="Coach IA Avancé"
+          featureLabel="Coach IA Avanc\u00e9"
           fallback="lock"
         >
           <Card className="p-4 bg-gradient-to-br from-warning-5 to-transparent border-warning">
@@ -125,9 +312,9 @@ export function ProfileHistory({ profile, hasPremium, canAccessFeature, aiCoachT
                 <Sparkles className="w-5 h-5 text-warning" />
               </div>
               <div className="flex-1">
-                <h4 className="text-md font-medium text-text-primary mb-1">Conseils personnalisés</h4>
+                <h4 className="text-md font-medium text-text-primary mb-1">Conseils personnalis\u00e9s</h4>
                 <p className="text-base text-text-tertiary">
-                  Prédictions de disponibilité, analyse des patterns de jeu, suggestions de créneaux optimaux pour ta squad.
+                  Pr\u00e9dictions de disponibilit\u00e9, analyse des patterns de jeu, suggestions de cr\u00e9neaux optimaux pour ta squad.
                 </p>
               </div>
             </div>
@@ -150,7 +337,7 @@ export function ProfileHistory({ profile, hasPremium, canAccessFeature, aiCoachT
         </div>
         <PremiumGate
           feature="unlimited_history"
-          featureLabel="Historique illimité"
+          featureLabel="Historique illimit\u00e9"
           fallback="lock"
         >
           <Card className="p-4">
@@ -160,7 +347,7 @@ export function ProfileHistory({ profile, hasPremium, canAccessFeature, aiCoachT
               </div>
               <div className="flex-1">
                 <h4 className="text-md font-medium text-text-primary">Historique complet</h4>
-                <p className="text-sm text-text-quaternary">Toutes tes sessions depuis le début</p>
+                <p className="text-sm text-text-quaternary">Toutes tes sessions depuis le d\u00e9but</p>
               </div>
             </div>
           </Card>
@@ -181,14 +368,14 @@ export function ProfileHistory({ profile, hasPremium, canAccessFeature, aiCoachT
                   Passe Premium
                 </h3>
                 <p className="text-base text-text-tertiary mb-3">
-                  Stats avancées, IA coach avancé, audio HD, historique illimité
+                  Stats avanc\u00e9es, IA coach avanc\u00e9, audio HD, historique illimit\u00e9
                 </p>
                 <Button
                   size="sm"
                   className="bg-gradient-to-r from-primary to-purple"
                   onClick={() => navigate('/premium')}
                 >
-                  Découvrir
+                  D\u00e9couvrir
                   <ChevronRight className="w-4 h-4" />
                 </Button>
               </div>
@@ -209,7 +396,7 @@ export function ProfileHistory({ profile, hasPremium, canAccessFeature, aiCoachT
                 <h3 className="text-md font-medium text-text-primary">Compte Premium</h3>
                 <PremiumBadge small />
               </div>
-              <p className="text-sm text-text-quaternary">Toutes les features sont débloquées</p>
+              <p className="text-sm text-text-quaternary">Toutes les features sont d\u00e9bloqu\u00e9es</p>
             </div>
           </div>
         </Card>

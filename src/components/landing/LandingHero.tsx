@@ -1,9 +1,10 @@
-import { useRef } from 'react'
+﻿import { useRef } from 'react'
 import { motion, useTransform, type MotionValue } from 'framer-motion'
 import { ArrowRight, Sparkles } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { springTap } from '../../utils/animations'
 import { HeroMockup } from './HeroMockup'
+import { GamingHeroIllustration } from './illustrations'
 
 const heroStats = [
   { value: '100%', label: 'gratuit pour commencer' },
@@ -103,6 +104,17 @@ export function LandingHero({ isLoggedIn, isDesktop, mouseRotateX, mouseRotateY,
             </Link>
           )}
         </div>
+
+        {/* Mobile-only hero illustration */}
+        <motion.div
+          className="flex justify-center mt-10 md:hidden"
+          initial={{ opacity: 0, scale: 0.9 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ delay: 0.2, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+        >
+          <GamingHeroIllustration size={260} />
+        </motion.div>
 
         <motion.div
           initial={{ opacity: 0, y: 40 }}

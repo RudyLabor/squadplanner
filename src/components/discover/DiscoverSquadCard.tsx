@@ -2,7 +2,7 @@
 import { motion } from 'framer-motion'
 import { Users, Star, Copy, Check, Gamepad2 } from 'lucide-react'
 import type { PublicSquadResult } from '../../types/database'
-import { toast } from 'sonner'
+import { showSuccess, showError } from '../../lib/toast'
 
 interface Props {
   squad: PublicSquadResult
@@ -15,10 +15,10 @@ export const DiscoverSquadCard = memo(function DiscoverSquadCard({ squad }: Prop
     try {
       await navigator.clipboard.writeText(squad.invite_code)
       setCopied(true)
-      toast.success('Code copié ! Utilise-le pour rejoindre.')
+      showSuccess('Code copie ! Utilise-le pour rejoindre.')
       setTimeout(() => setCopied(false), 2000)
     } catch {
-      toast.error('Impossible de copier')
+      showError('Impossible de copier')
     }
   }
 

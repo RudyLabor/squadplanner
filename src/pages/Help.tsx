@@ -165,7 +165,7 @@ function ReliabilityScoreIllustration() {
   }
 
   return (
-    <svg viewBox="0 0 260 130" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full max-w-[280px]" role="img" aria-label="Jauge de score de fiabilite : rouge 0-59, jaune 60-79, vert 80-100">
+    <svg viewBox="0 0 260 130" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full max-w-[280px]" role="img" aria-label="Jauge de score de fiabilité : rouge 0-59, jaune 60-79, vert 80-100">
       {/* Red arc 0-59% */}
       <path d={arcPath(0, 0.59)} stroke="var(--color-error)" strokeWidth="12" strokeLinecap="round" fill="none" />
       {/* Yellow arc 60-79% */}

@@ -82,7 +82,7 @@ export function ConversationHeader({
                   <img src={dmConv.other_user_avatar_url} alt="" className="w-full h-full object-cover" loading="lazy" decoding="async" />
                 ) : (
                   <span className="text-md font-bold text-primary">
-                    {dmConv.other_user_username?.charAt(0).toUpperCase() || '?'}
+                    {(dmConv.other_user_username || '?').charAt(0).toUpperCase()}
                   </span>
                 )}
               </div>

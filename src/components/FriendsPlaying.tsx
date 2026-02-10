@@ -185,26 +185,30 @@ function EmptyState() {
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.2 }}
     >
-      <Card className="p-4 bg-gradient-to-br from-primary/5 to-transparent border-dashed">
-        <div className="flex items-center gap-3">
+      <Card className="p-5 bg-gradient-to-br from-primary/5 to-success/5 border-dashed">
+        <div className="flex items-center gap-4">
           <motion.div
-            className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary/15 to-primary-hover/10 flex items-center justify-center flex-shrink-0"
-            animate={{ rotate: [0, 5, -5, 0] }}
+            className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary/15 to-success/10 flex items-center justify-center flex-shrink-0"
+            animate={{ rotate: [0, 5, -5, 0], scale: [1, 1.05, 1] }}
             transition={{ duration: 3, repeat: Infinity, repeatDelay: 2 }}
           >
-            <UserPlus className="w-5 h-5 text-primary" strokeWidth={1.5} />
+            <UserPlus className="w-6 h-6 text-primary" strokeWidth={1.5} />
           </motion.div>
           <div className="flex-1 min-w-0">
-            <p className="text-md font-medium text-text-secondary">
-              Aucun pote en ligne
+            <p className="text-md font-semibold text-text-primary mb-0.5">
+              Invite tes potes sur Squad Planner
+            </p>
+            <p className="text-sm text-text-tertiary mb-2">
+              Partage le lien pour jouer ensemble
             </p>
             <motion.button
               onClick={handleShareInvite}
-              className="text-base text-primary hover:text-primary-hover font-medium transition-colors cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-primary/15 text-primary text-sm font-medium hover:bg-primary/25 transition-colors"
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
             >
-              Invite tes amis
+              <UserPlus className="w-3.5 h-3.5" />
+              Envoyer une invitation
             </motion.button>
           </div>
         </div>

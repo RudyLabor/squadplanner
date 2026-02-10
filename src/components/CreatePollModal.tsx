@@ -80,7 +80,7 @@ export const CreatePollModal = memo(function CreatePollModal({ isOpen, onClose, 
             <div className="flex items-center justify-between px-5 py-4 border-b border-border-default">
               <div className="flex items-center gap-2">
                 <BarChart3 className="w-5 h-5 text-primary-hover" />
-                <h2 id="create-poll-title" className="text-lg font-semibold text-text-primary">Creer un sondage</h2>
+                <h2 id="create-poll-title" className="text-lg font-semibold text-text-primary">Créer un sondage</h2>
               </div>
               <button
                 onClick={handleClose}
@@ -167,7 +167,7 @@ export const CreatePollModal = memo(function CreatePollModal({ isOpen, onClose, 
                 {isSubmitting ? (
                   <Loader2 className="w-4 h-4 animate-spin" />
                 ) : (
-                  'Creer le sondage'
+                  'Créer le sondage'
                 )}
               </button>
             </div>

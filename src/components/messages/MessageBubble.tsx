@@ -51,14 +51,15 @@ export const MessageBubble = memo(function MessageBubble({
 
   const initial = message.sender?.username?.charAt(0).toUpperCase() || '?'
   const sender = message.sender?.username || 'Utilisateur'
+  const content = message.content || ''
   const actions = {
-    message: { id: message.id, sender_id: message.sender_id || '', content: message.content || '' },
+    message: { id: message.id, sender_id: message.sender_id || '', content },
     currentUserId, isAdmin,
-    onEdit: () => onEdit({ id: message.id, content: message.content }),
+    onEdit: () => onEdit({ id: message.id, content }),
     onDelete: () => onDelete(message.id),
     onPin: () => onPin(message.id, !message.is_pinned),
-    onReply: () => onReply({ id: message.id, content: message.content, sender }),
-    onForward: () => onForward({ content: message.content, sender }),
+    onReply: () => onReply({ id: message.id, content, sender }),
+    onForward: () => onForward({ content, sender }),
   }
 
   return (
@@ -78,12 +79,12 @@ export const MessageBubble = memo(function MessageBubble({
               {sender}{senderRole && <RoleBadge role={senderRole} />}
             </span>
           )}
-          {message.is_pinned && <span className="text-xs text-warning mb-1 ml-1 flex items-center gap-1"><span>📌</span> Epingle</span>}
+          {message.is_pinned && <span className="text-xs text-warning mb-1 ml-1 flex items-center gap-1"><span>📌</span> Épinglé</span>}
           {replyToMessage && <MessageReplyPreview originalMessage={replyToMessage} onClickScrollTo={onScrollToMessage ? () => onScrollToMessage(replyToMessage.id) : undefined} />}
           <div className="flex items-center gap-1">
             {isOwn && <div className="flex-shrink-0"><MessageActions {...actions} /></div>}
             <div className={`px-4 py-2.5 rounded-2xl transition-colors duration-150 ${isOwn ? 'bg-primary text-white rounded-br-lg hover:bg-primary-hover hover:shadow-glow-primary-sm' : 'bg-bg-surface text-text-primary rounded-bl-lg hover:bg-bg-hover hover:shadow-sm'}`}>
-              <MessageContent content={message.content} isOwn={isOwn} messageId={message.id} onPollVote={onPollVote} />
+              <MessageContent content={content} isOwn={isOwn} messageId={message.id} onPollVote={onPollVote} />
             </div>
             {!isOwn && <div className="flex-shrink-0"><MessageActions {...actions} /></div>}
           </div>

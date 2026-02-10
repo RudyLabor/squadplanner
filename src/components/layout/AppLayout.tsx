@@ -33,7 +33,7 @@ const DesktopContentWrapper = memo(function DesktopContentWrapper({
     return () => window.removeEventListener('resize', checkDesktop)
   }, [])
 
-  const marginLeft = isDesktop ? (isExpanded ? 256 : 72) : 0
+  const marginLeft = isDesktop ? (isExpanded ? 256 : 140) : 0
 
   return (
     <main

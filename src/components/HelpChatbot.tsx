@@ -20,8 +20,8 @@ interface HelpChatbotProps {
 }
 
 const QUICK_ACTIONS = [
-  'Creer une squad',
-  'Score de fiabilite',
+  'Créer une squad',
+  'Score de fiabilité',
   'Party vocale',
   'Premium',
   'Supprimer mon compte',

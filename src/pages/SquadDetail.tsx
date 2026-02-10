@@ -1,9 +1,9 @@
 import { useState, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Sparkles } from 'lucide-react'
+import { Sparkles, ArrowLeft } from 'lucide-react'
 import { useParams, useNavigate } from 'react-router-dom'
 import Confetti from 'react-confetti'
-import { Button, SquadDetailSkeleton, CrossfadeTransition } from '../components/ui'
+import { Button, SquadDetailSkeleton, CrossfadeTransition, ConfirmDialog } from '../components/ui'
 import { useAuthStore, useSquadsStore, useSessionsStore, usePremiumStore } from '../hooks'
 import { useSquadLeaderboardQuery } from '../hooks/queries'
 import { showSuccess } from '../lib/toast'
@@ -59,6 +59,8 @@ export default function SquadDetail() {
   const [successMessage, setSuccessMessage] = useState<string | null>(null)
   const [showConfetti, setShowConfetti] = useState(false)
   const [loadTimeout, setLoadTimeout] = useState(false)
+  const [showLeaveConfirm, setShowLeaveConfirm] = useState(false)
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
 
   const { user, isInitialized } = useAuthStore()
   const { currentSquad, fetchSquadById, leaveSquad, deleteSquad, isLoading, setCurrentSquad } = useSquadsStore()
@@ -115,33 +117,45 @@ export default function SquadDetail() {
       if (id) fetchSessions(id)
 
       // A11Y: Announce RSVP status to screen readers
-      const ariaLabels = { present: 'Tu es marque comme present', absent: 'Tu es marque comme absent', maybe: 'Tu es marque comme peut-etre' }
+      const ariaLabels = { present: 'Tu es marqué comme présent', absent: 'Tu es marqué comme absent', maybe: 'Tu es marqué comme peut-être' }
       const ariaRegion = document.getElementById('aria-live-polite')
       if (ariaRegion) ariaRegion.textContent = ariaLabels[response]
 
       if (response === 'present') {
         setShowConfetti(true)
-        setSuccessMessage("T'es confirme ! \uD83D\uDD25 Ta squad compte sur toi")
+        setSuccessMessage("T'es confirmé ! \uD83D\uDD25 Ta squad compte sur toi")
         setTimeout(() => setShowConfetti(false), 4000)
       } else {
-        setSuccessMessage(response === 'absent' ? 'Absence enregistree' : 'Reponse enregistree')
+        setSuccessMessage(response === 'absent' ? 'Absence enregistrée' : 'Réponse enregistrée')
       }
     } catch (err) {
       console.error('RSVP error:', err)
     }
   }, [id, updateRsvp, fetchSessions])
 
-  const handleLeaveSquad = async () => {
-    if (!id || !confirm('Quitter cette squad ?')) return
+  const handleLeaveSquad = () => {
+    if (!id) return
+    setShowLeaveConfirm(true)
+  }
+
+  const confirmLeaveSquad = async () => {
+    if (!id) return
+    setShowLeaveConfirm(false)
     await leaveSquad(id)
-    showSuccess('Tu as quitte la squad')
+    showSuccess('Tu as quitté la squad')
     navigate('/squads')
   }
 
-  const handleDeleteSquad = async () => {
-    if (!id || !confirm('Supprimer cette squad ? Cette action est irreversible.')) return
+  const handleDeleteSquad = () => {
+    if (!id) return
+    setShowDeleteConfirm(true)
+  }
+
+  const confirmDeleteSquad = async () => {
+    if (!id) return
+    setShowDeleteConfirm(false)
     await deleteSquad(id)
-    showSuccess('Squad supprimee')
+    showSuccess('Squad supprimée')
     navigate('/squads')
   }
 
@@ -156,7 +170,7 @@ export default function SquadDetail() {
         <p className="text-text-tertiary">Le chargement prend trop de temps</p>
         <div className="flex gap-3">
           <Button variant="primary" onClick={() => { setLoadTimeout(false); if (id) { fetchSquadById(id); fetchSessions(id) } }}>
-            Reessayer
+            Réessayer
           </Button>
           <Button variant="secondary" onClick={() => navigate('/squads')}>
             Retour aux squads
@@ -185,6 +199,16 @@ export default function SquadDetail() {
       )}
 
       <div className="px-4 md:px-6 lg:px-8 py-6 max-w-2xl lg:max-w-4xl xl:max-w-6xl mx-auto">
+        {/* Mobile back button */}
+        <button
+          onClick={() => navigate('/squads')}
+          className="lg:hidden flex items-center gap-2 mb-4 text-text-secondary hover:text-text-primary transition-colors"
+          aria-label="Retour aux squads"
+        >
+          <ArrowLeft className="w-5 h-5" />
+          <span className="text-md">Squads</span>
+        </button>
+
         <CrossfadeTransition isLoading={showSkeleton} skeleton={<SquadDetailSkeleton />}>
         {currentSquad ? (
         <div>
@@ -195,7 +219,7 @@ export default function SquadDetail() {
           </div>
 
           <SquadSessionsList
-            sessions={sessions}
+            sessions={sessions || []}
             squadId={id || ''}
             squadGame={currentSquad.game}
             onRsvp={handleRsvp}
@@ -215,7 +239,7 @@ export default function SquadDetail() {
             squadId={id || ''}
             squadName={currentSquad.name}
             isOwner={!!isOwner}
-            sessionsCount={sessions.length}
+            sessionsCount={sessions?.length || 0}
             memberCount={currentSquad.member_count || 0}
             avgReliability={currentSquad.avg_reliability_score || 0}
             canAccessAdvancedStats={canAccessFeature('advanced_stats', id)}
@@ -223,7 +247,7 @@ export default function SquadDetail() {
             leaderboardLoading={leaderboardLoading}
             currentUserId={user?.id || ''}
             isSquadPremium={isSquadPremium(id || '')}
-            sessions={sessions}
+            sessions={sessions || []}
             onLeaveSquad={handleLeaveSquad}
             onDeleteSquad={handleDeleteSquad}
             onInviteClick={() => setShowInviteModal(true)}
@@ -254,6 +278,26 @@ export default function SquadDetail() {
           />
         )}
       </AnimatePresence>
+
+      <ConfirmDialog
+        open={showLeaveConfirm}
+        onClose={() => setShowLeaveConfirm(false)}
+        onConfirm={confirmLeaveSquad}
+        title="Quitter cette squad ?"
+        description="Tu ne pourras plus voir les sessions et messages de cette squad. Tu pourras la rejoindre avec un code d'invitation."
+        confirmLabel="Quitter"
+        variant="danger"
+      />
+
+      <ConfirmDialog
+        open={showDeleteConfirm}
+        onClose={() => setShowDeleteConfirm(false)}
+        onConfirm={confirmDeleteSquad}
+        title="Supprimer cette squad ?"
+        description="Cette action est irréversible. Toutes les sessions, messages et données de la squad seront supprimés."
+        confirmLabel="Supprimer"
+        variant="danger"
+      />
     </main>
   )
 }

@@ -144,7 +144,7 @@ export function XPBar({ currentXP, level, showTitle = true, compact = false, cla
                 {currentLevel.title}
               </motion.div>
             )}
-            <HelpTooltip content="Gagne de l'XP en participant aux sessions, en confirmant ta presence et en etant fiable." position="bottom">
+            <HelpTooltip content="Gagne de l'XP en participant aux sessions, en confirmant ta présence et en étant fiable." position="bottom">
               <div className="flex items-center gap-1.5 text-base text-text-secondary">
                 <Zap className="w-3.5 h-3.5" style={{ color: currentLevel.color }} />
                 <CountUp end={currentXP} duration={1.5} separator="," /> XP

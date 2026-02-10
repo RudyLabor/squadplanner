@@ -48,7 +48,7 @@ export function Discover() {
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      className="max-w-2xl mx-auto px-4 py-6 pb-24"
+      className="max-w-2xl lg:max-w-4xl xl:max-w-5xl mx-auto px-4 md:px-6 lg:px-8 py-6 pb-24"
     >
       {/* Header */}
       <div className="flex items-center gap-3 mb-6">
@@ -156,7 +156,7 @@ const SquadsTab = memo(function SquadsTab({ game, region }: { game: string; regi
             <Sparkles className="w-4 h-4 text-primary" />
             <h3 className="text-sm font-semibold text-text-primary">Squads populaires</h3>
           </div>
-          <div className="space-y-2">
+          <div className="space-y-2 lg:grid lg:grid-cols-3 lg:gap-3 lg:space-y-0">
             {[
               { name: 'Les Gamers FR', game: 'Valorant', members: 8, desc: 'Squad compétitive Valorant' },
               { name: 'Rocket Masters', game: 'Rocket League', members: 5, desc: 'Du freestyle au ranked' },
@@ -191,7 +191,7 @@ const SquadsTab = memo(function SquadsTab({ game, region }: { game: string; regi
   }
 
   return (
-    <div className="space-y-2">
+    <div className="space-y-2 lg:grid lg:grid-cols-2 xl:grid-cols-3 lg:gap-4 lg:space-y-0">
       {squads.map(squad => (
         <DiscoverSquadCard key={squad.id} squad={squad} />
       ))}

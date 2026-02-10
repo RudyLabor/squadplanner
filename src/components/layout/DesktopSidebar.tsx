@@ -14,7 +14,7 @@ export const navItems = [
   { path: '/sessions', icon: Calendar, label: 'Sessions' },
   { path: '/party', icon: Mic, label: 'Party' },
   { path: '/messages', icon: MessageCircle, label: 'Messages' },
-  { path: '/discover', icon: Compass, label: 'Decouvrir' },
+  { path: '/discover', icon: Compass, label: 'Découvrir' },
   { path: '/profile', icon: User, label: 'Profil' },
 ] as const
 
@@ -38,11 +38,11 @@ export const NavLink = memo(function NavLink({ path, icon: Icon, label, isActive
     }
   }, [path, userId])
 
-  const linkContent = (
+  return (
     <Link to={path} aria-label={label} aria-current={isActive ? 'page' : undefined} onPointerEnter={handlePrefetch}>
       <motion.div
         className={`
-          relative flex items-center ${collapsed ? 'justify-center px-2' : 'gap-3 px-4'} py-3 rounded-xl transition-interactive
+          relative flex items-center ${collapsed ? 'gap-2 px-2.5' : 'gap-3 px-4'} py-3 rounded-xl transition-interactive
           ${isActive
             ? 'bg-primary-10 text-primary'
             : 'text-text-secondary hover:bg-surface-card hover:text-text-primary'
@@ -53,8 +53,12 @@ export const NavLink = memo(function NavLink({ path, icon: Icon, label, isActive
         transition={{ duration: 0.25 }}
       >
         <Icon className="w-5 h-5 flex-shrink-0" strokeWidth={1.5} />
-        <AnimatePresence mode="wait">
-          {!collapsed && (
+        {collapsed ? (
+          <span className="text-xs font-medium whitespace-nowrap overflow-hidden text-ellipsis max-w-[72px]">
+            {label}
+          </span>
+        ) : (
+          <AnimatePresence mode="wait">
             <motion.span
               key="label"
               initial={{ opacity: 0, width: 0 }}
@@ -65,14 +69,14 @@ export const NavLink = memo(function NavLink({ path, icon: Icon, label, isActive
             >
               {label}
             </motion.span>
-          )}
-        </AnimatePresence>
+          </AnimatePresence>
+        )}
         {badge && badge > 0 && (
           <motion.span
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             transition={{ type: "spring", stiffness: 500, damping: 30 }}
-            className={`${collapsed ? 'absolute -top-1 -right-1' : 'absolute right-3'} w-5 h-5 rounded-full bg-error text-white text-xs font-bold flex items-center justify-center`}
+            className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-error text-white text-xs font-bold flex items-center justify-center"
           >
             {badge > 9 ? '9+' : badge}
           </motion.span>
@@ -80,16 +84,6 @@ export const NavLink = memo(function NavLink({ path, icon: Icon, label, isActive
       </motion.div>
     </Link>
   )
-
-  if (collapsed) {
-    return (
-      <Tooltip content={label} position="right" delay={300}>
-        {linkContent}
-      </Tooltip>
-    )
-  }
-
-  return linkContent
 })
 
 interface DesktopSidebarProps {
@@ -126,7 +120,7 @@ export const DesktopSidebar = memo(function DesktopSidebar({
       aria-label="Navigation principale"
       className="hidden lg:flex flex-col border-r border-surface-card bg-bg-base fixed h-full z-40 overflow-hidden"
       initial={false}
-      animate={{ width: isExpanded ? 256 : 72 }}
+      animate={{ width: isExpanded ? 256 : 140 }}
       transition={{ duration: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
@@ -162,7 +156,7 @@ export const DesktopSidebar = memo(function DesktopSidebar({
             transition={{ duration: 0.15 }}
             className="absolute top-4 right-3"
           >
-            <Tooltip content={sidebarPinned ? 'Detacher la sidebar' : 'Epingler la sidebar'} position="bottom" delay={300}>
+            <Tooltip content={sidebarPinned ? 'Détacher la sidebar' : 'Épingler la sidebar'} position="bottom" delay={300}>
               <motion.button
                 type="button"
                 onClick={onTogglePinned}
@@ -173,7 +167,7 @@ export const DesktopSidebar = memo(function DesktopSidebar({
                 }`}
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
-                aria-label={sidebarPinned ? 'Detacher la sidebar' : 'Epingler la sidebar'}
+                aria-label={sidebarPinned ? 'Détacher la sidebar' : 'Épingler la sidebar'}
               >
                 {sidebarPinned ? <PinOff className="w-4 h-4" aria-hidden="true" /> : <Pin className="w-4 h-4" aria-hidden="true" />}
               </motion.button>
@@ -185,19 +179,18 @@ export const DesktopSidebar = memo(function DesktopSidebar({
       {/* Quick action */}
       <div className={isExpanded ? 'p-4' : 'p-2'}>
         {!isExpanded ? (
-          <Tooltip content="Nouvelle session" position="right" delay={300}>
             <motion.button
               type="button"
               onClick={() => onOpenCreateSessionModal()}
-              className="flex items-center justify-center gap-2 w-10 h-10 mx-auto rounded-xl bg-primary text-white text-md font-semibold"
+              className="flex items-center justify-center gap-2 w-full h-10 rounded-xl bg-primary text-white text-xs font-semibold"
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               transition={{ duration: 0.25 }}
-              aria-label="Creer une nouvelle session"
+              aria-label="Créer une nouvelle session"
             >
               <Plus className="w-4 h-4 flex-shrink-0" />
+              <span className="whitespace-nowrap">Nouveau</span>
             </motion.button>
-          </Tooltip>
         ) : (
           <motion.button
             type="button"
@@ -206,7 +199,7 @@ export const DesktopSidebar = memo(function DesktopSidebar({
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             transition={{ duration: 0.25 }}
-            aria-label="Creer une nouvelle session"
+            aria-label="Créer une nouvelle session"
           >
             <Plus className="w-4 h-4 flex-shrink-0" />
             <motion.span
@@ -256,7 +249,7 @@ export const DesktopSidebar = memo(function DesktopSidebar({
 
       {/* Secondary navigation */}
       <div className={`${isExpanded ? 'px-3' : 'px-2'} pb-2 space-y-0.5`}>
-        <NavLink path="/settings" icon={Settings} label="Parametres" isActive={currentPath === '/settings'} collapsed={!isExpanded} userId={userId} />
+        <NavLink path="/settings" icon={Settings} label="Paramètres" isActive={currentPath === '/settings'} collapsed={!isExpanded} userId={userId} />
         <NavLink path="/help" icon={HelpCircle} label="Aide" isActive={currentPath === '/help'} collapsed={!isExpanded} userId={userId} />
         <NavLink path="/call-history" icon={Phone} label="Appels" isActive={currentPath === '/call-history'} collapsed={!isExpanded} userId={userId} />
       </div>

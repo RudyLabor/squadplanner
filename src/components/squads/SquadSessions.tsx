@@ -27,7 +27,7 @@ export function PartySection({ squadId }: PartySectionProps) {
     await joinChannel(channelName, user.id, profile.username || 'Joueur', hasPremium)
   }
 
-  const participantCount = isConnected ? remoteUsers.length + 1 : remoteUsers.length
+  const participantCount = isConnected ? (remoteUsers?.length || 0) + 1 : (remoteUsers?.length || 0)
 
   return (
     <Card className={`p-4 ${isConnected ? 'border-success/30 bg-success/5' : ''}`}>
@@ -48,7 +48,7 @@ export function PartySection({ squadId }: PartySectionProps) {
               <div className={`w-2 h-2 rounded-full ${isMuted ? 'bg-error' : 'bg-success'}`} />
               <span className="text-base text-text-primary">Toi</span>
             </div>
-            {remoteUsers.map((u) => (
+            {(remoteUsers || []).map((u) => (
               <div key={String(u.odrop)} className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-surface-card border border-border-hover">
                 <div className={`w-2 h-2 rounded-full ${u.isSpeaking ? 'bg-success' : 'bg-text-tertiary'}`} />
                 <span className="text-base text-text-primary">{u.username}</span>
@@ -131,7 +131,7 @@ export function SquadSessionsList({
   const [error, setError] = useState<string | null>(null)
 
   const now = new Date()
-  const futureSessions = sessions.filter(s => new Date(s.scheduled_at) >= now || s.status === 'confirmed')
+  const futureSessions = (sessions || []).filter(s => new Date(s.scheduled_at) >= now || s.status === 'confirmed')
 
   const handleCreateSession = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -206,7 +206,7 @@ export function SquadSessionsList({
                     <div>
                       <label className="block text-base font-medium text-text-secondary mb-1">Confirmation automatique</label>
                       <p className="text-sm text-text-quaternary mb-1.5">
-                        La session sera confirmee quand ce nombre de joueurs aura repondu "Present"
+                        La session sera confirmée quand ce nombre de joueurs aura répondu "Présent"
                       </p>
                       <select
                         value={sessionThreshold}
@@ -231,7 +231,7 @@ export function SquadSessionsList({
                   <div className="flex gap-2 pt-1">
                     <Button type="button" variant="ghost" onClick={() => setShowCreateSession(false)}>Annuler</Button>
                     <Button type="submit" disabled={sessionsLoading}>
-                      {sessionsLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Creer'}
+                      {sessionsLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Créer'}
                     </Button>
                   </div>
                 </form>

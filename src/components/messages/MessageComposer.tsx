@@ -96,7 +96,7 @@ export function MessageComposer({
                 type="button"
                 onClick={onShowPollModal}
                 className="p-2.5 rounded-xl text-text-quaternary hover:text-primary-hover hover:bg-primary-10 transition-colors"
-                aria-label="Creer un sondage"
+                aria-label="Créer un sondage"
                 title="Sondage"
               >
                 <BarChart3 className="w-5 h-5" />

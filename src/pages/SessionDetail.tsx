@@ -6,7 +6,7 @@ import {
 } from 'lucide-react'
 import { Link, useParams, useNavigate } from 'react-router-dom'
 import Confetti from 'react-confetti'
-import { Button, Card, CardContent, Badge } from '../components/ui'
+import { Button, Card, CardContent, Badge, ConfirmDialog } from '../components/ui'
 import { VoiceChat } from '../components/VoiceChat'
 import { useAuthStore, useSessionsStore } from '../hooks'
 
@@ -49,6 +49,7 @@ export default function SessionDetail() {
   const [showConfetti, setShowConfetti] = useState(false)
   const [toastMessage, setToastMessage] = useState('')
   const [showToast, setShowToast] = useState(false)
+  const [showCancelConfirm, setShowCancelConfirm] = useState(false)
 
   const { user, isInitialized } = useAuthStore()
   const { currentSession, fetchSessionById, updateRsvp, checkin, cancelSession, confirmSession } = useSessionsStore()
@@ -102,9 +103,14 @@ export default function SessionDetail() {
     setTimeout(() => setShowConfetti(false), 4000)
   }
 
-  const handleCancel = async () => {
+  const handleCancel = () => {
     if (!id) return
-    if (!confirm('Annuler cette session ?')) return
+    setShowCancelConfirm(true)
+  }
+
+  const confirmCancelSession = async () => {
+    if (!id) return
+    setShowCancelConfirm(false)
     await cancelSession(id)
   }
 
@@ -452,6 +458,16 @@ export default function SessionDetail() {
           )}
         </div>
       </div>
+
+      <ConfirmDialog
+        open={showCancelConfirm}
+        onClose={() => setShowCancelConfirm(false)}
+        onConfirm={confirmCancelSession}
+        title="Annuler cette session ?"
+        description="Les membres de la squad seront notifiés de l'annulation. Cette action ne peut pas être annulée."
+        confirmLabel="Annuler la session"
+        variant="warning"
+      />
     </main>
   )
 }

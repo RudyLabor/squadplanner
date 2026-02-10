@@ -29,7 +29,7 @@ export const IntegrationsSection = memo(function IntegrationsSection() {
         .eq('id', user.id)
 
       if (error) throw error
-      toast.success('Profil mis a jour !')
+      toast.success('Profil mis à jour !')
     } catch {
       toast.error('Erreur lors de la sauvegarde')
     } finally {

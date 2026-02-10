@@ -28,6 +28,7 @@ export function SquadHeader({ squadId, squad, isOwner }: SquadHeaderProps) {
   const [showInviteModal, setShowInviteModal] = useState(false)
 
   const handleCopyCode = async () => {
+    if (!squad.invite_code) return
     await navigator.clipboard.writeText(squad.invite_code)
     setCopiedCode(true)
     showSuccess('Code copie ! ')

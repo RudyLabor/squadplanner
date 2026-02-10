@@ -99,7 +99,7 @@ export const SidebarFooter = memo(function SidebarFooter({
             transition={{ duration: 0.2 }}
             className="p-4 overflow-hidden"
           >
-            <Link to="/premium" aria-label="Passer Premium - Stats avancees, IA coach, qualite audio HD">
+            <Link to="/premium" aria-label="Passer Premium - Stats avancées, IA coach, qualité audio HD">
               <motion.div
                 className="p-4 rounded-xl bg-gradient-to-br from-primary-10 to-purple/3 border border-primary/10 cursor-pointer"
                 whileHover={{ scale: 1.02 }}
@@ -110,10 +110,10 @@ export const SidebarFooter = memo(function SidebarFooter({
                   <span className="text-base font-semibold text-text-primary">Passe Premium</span>
                 </div>
                 <p className="text-sm text-text-secondary mb-3">
-                  Stats avancees, IA coach, qualite audio HD
+                  Stats avancées, IA coach, qualité audio HD
                 </p>
                 <span className="text-sm font-semibold text-primary hover:text-purple transition-colors duration-300">
-                  Decouvrir →
+                  Découvrir →
                 </span>
               </motion.div>
             </Link>

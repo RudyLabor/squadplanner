@@ -153,8 +153,8 @@ export function Messages() {
   }, [activeSquadConv, activeDMConv, sendSquadMessage, sendDMMessage])
 
   const handlePollVote = useCallback(async (messageId: string, optionIndex: number) => {
-    if (!user?.id) return; const msg = messages.find(m => m.id === messageId); if (!msg) return
-    try { const poll = JSON.parse(msg.content) as PollData; if (!poll.votes[optionIndex]) poll.votes[optionIndex] = []; if (!poll.votes[optionIndex].includes(user.id)) { poll.votes[optionIndex].push(user.id); if (isSquadChat) await editSquadMessage(messageId, JSON.stringify(poll)) } } catch { /* ignore */ }
+    if (!user?.id) return; const msg = messages.find(m => m.id === messageId); if (!msg?.content) return
+    try { const poll = JSON.parse(msg.content) as PollData; if (!poll?.votes) return; if (!poll.votes[optionIndex]) poll.votes[optionIndex] = []; if (!poll.votes[optionIndex].includes(user.id)) { poll.votes[optionIndex].push(user.id); if (isSquadChat) await editSquadMessage(messageId, JSON.stringify(poll)) } } catch { /* ignore */ }
   }, [user?.id, messages, isSquadChat, editSquadMessage])
 
   const handleVoiceSend = useCallback(async (_blob: Blob, dur: number) => {
@@ -169,8 +169,8 @@ export function Messages() {
   const memberRolesMap = useMemo(() => { const m = new Map<string, string>(); squadMembersData?.forEach(s => m.set(s.user_id, s.role)); return m }, [squadMembersData])
   const squadUnread = squadConversations.reduce((s, c) => s + c.unread_count, 0)
   const dmUnread = dmConversations.reduce((s, c) => s + c.unread_count, 0)
-  const filteredSquadConvs = squadConversations.filter(c => c.name.toLowerCase().includes(searchQuery.toLowerCase()))
-  const filteredDMConvs = dmConversations.filter(c => c.other_user_username.toLowerCase().includes(searchQuery.toLowerCase()))
+  const filteredSquadConvs = squadConversations.filter(c => (c.name || '').toLowerCase().includes(searchQuery.toLowerCase()))
+  const filteredDMConvs = dmConversations.filter(c => (c.other_user_username || '').toLowerCase().includes(searchQuery.toLowerCase()))
   const isLoading = activeTab === 'squads' ? isLoadingSquad : isLoadingDM
   const getMessageDate = useCallback((d: string) => new Date(d).toDateString(), [])
   const chatName = isSquadChat ? activeSquadConv?.name : activeDMConv?.other_user_username
@@ -178,13 +178,13 @@ export function Messages() {
 
   const pinnedMessages: PinnedMessage[] = useMemo(() => {
     if (!isSquadChat) return []
-    return messages.filter(m => 'is_pinned' in m && m.is_pinned).map(m => ({ pin_id: `pin-${m.id}`, message_id: m.id, message_content: m.content, message_sender_id: m.sender_id, message_sender_username: m.sender?.username || 'Utilisateur', message_created_at: m.created_at, pinned_by_id: m.sender_id, pinned_by_username: m.sender?.username || 'Utilisateur', pinned_at: m.created_at })).slice(0, 25)
+    return messages.filter(m => m && 'is_pinned' in m && m.is_pinned).map(m => ({ pin_id: `pin-${m.id}`, message_id: m.id, message_content: m.content || '', message_sender_id: m.sender_id, message_sender_username: m.sender?.username || 'Utilisateur', message_created_at: m.created_at, pinned_by_id: m.sender_id, pinned_by_username: m.sender?.username || 'Utilisateur', pinned_at: m.created_at })).slice(0, 25)
   }, [messages, isSquadChat])
 
   const scrollToMessage = useCallback((id: string) => { const el = document.getElementById(`message-${id}`); if (el) { el.scrollIntoView({ behavior: 'smooth', block: 'center' }); el.classList.add('ring-2', 'ring-warning', 'ring-opacity-50'); setTimeout(() => el.classList.remove('ring-2', 'ring-warning', 'ring-opacity-50'), 2000) } }, [])
   const handleTabChange = useCallback((tab: 'squads' | 'dms') => { setActiveTab(tab); if (tab === 'squads') setActiveDMConv(null); else setActiveSquadConv(null); setNewMessage(''); setReplyingTo(null) }, [setActiveDMConv, setActiveSquadConv])
   const handleSelectSquadConv = useCallback((conv: typeof squadConversations[0]) => { if (activeSquadConv?.id !== conv.id) setActiveDMConv(null); setActiveSquadConv(conv) }, [activeSquadConv?.id, setActiveDMConv, setActiveSquadConv])
-  const messageSearchCount = messageSearchQuery ? messages.filter(m => m.content.toLowerCase().includes(messageSearchQuery.toLowerCase())).length : 0
+  const messageSearchCount = messageSearchQuery ? messages.filter(m => (m.content || '').toLowerCase().includes(messageSearchQuery.toLowerCase())).length : 0
   const handleGifSelect = useCallback((url: string) => { setNewMessage(url); setShowGifPicker(false); setTimeout(() => handleSendMessage({ preventDefault: () => {} } as React.FormEvent), 50) }, [])
 
   // Shared props
@@ -216,7 +216,7 @@ export function Messages() {
           <ConversationList showOnDesktop {...convListProps} />
         </nav>
         <div className="flex-1 min-w-0">
-          {(activeSquadConv || activeDMConv) ? <ChatView embedded /> : <div className="h-full flex items-center justify-center bg-bg-base"><div className="text-center"><div className="w-20 h-20 rounded-2xl bg-primary-10 flex items-center justify-center mx-auto mb-5"><Sparkles className="w-10 h-10 text-primary" /></div><h3 className="text-xl font-semibold text-text-primary mb-2">Selectionne une conversation</h3><p className="text-md text-text-quaternary max-w-[250px] mx-auto">Choisis une conversation dans la liste pour commencer a chatter.</p></div></div>}
+          {(activeSquadConv || activeDMConv) ? <ChatView embedded /> : <div className="h-full flex items-center justify-center bg-bg-base"><div className="text-center"><div className="w-20 h-20 rounded-2xl bg-primary-10 flex items-center justify-center mx-auto mb-5"><Sparkles className="w-10 h-10 text-primary" /></div><h3 className="text-xl font-semibold text-text-primary mb-2">Sélectionne une conversation</h3><p className="text-md text-text-quaternary max-w-[250px] mx-auto">Choisis une conversation dans la liste pour commencer à chatter.</p></div></div>}
         </div>
       </main>
     </>

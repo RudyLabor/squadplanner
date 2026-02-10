@@ -23,7 +23,9 @@ const routeLabels: Record<string, string> = {
   '/sessions': 'Sessions',
   '/settings': 'Paramètres',
   '/premium': 'Premium',
-  '/call-history': 'Historique appels',
+  '/call-history': 'Historique d\'appels',
+  '/help': 'Aide',
+  '/discover': 'Découvrir',
 }
 
 export function Breadcrumbs() {
@@ -51,11 +53,13 @@ export function Breadcrumbs() {
     items.push({ label: 'Sessions', path: '/sessions' })
     items.push({ label: currentSession?.title || 'Session' })
   } else if (pathParts[0] === 'call-history') {
-    items.push({ label: 'Profil', path: '/profile' })
-    items.push({ label: 'Historique appels' })
+    items.push({ label: 'Historique d\'appels' })
   } else if (pathParts[0] === 'settings') {
-    items.push({ label: 'Profil', path: '/profile' })
     items.push({ label: 'Paramètres' })
+  } else if (pathParts[0] === 'help') {
+    items.push({ label: 'Aide' })
+  } else if (pathParts[0] === 'premium') {
+    items.push({ label: 'Premium' })
   } else {
     // Simple route - capitalize unknown segments
     const label = routeLabels[location.pathname] || capitalize(pathParts[0])

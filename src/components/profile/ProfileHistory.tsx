@@ -2,11 +2,10 @@ import { useState, useEffect, useMemo, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
-  Sparkles, Zap, Clock, Phone, Flame, ChevronRight, CalendarPlus, BarChart3, Gift
+  Sparkles, Zap, Phone, Flame, ChevronRight, CalendarPlus, BarChart3, Gift
 } from 'lucide-react'
 import { Card, Button } from '../ui'
-import { PremiumGate, PremiumBadge } from '../PremiumGate'
-import { FREE_HISTORY_DAYS } from '../../hooks'
+import { PremiumBadge } from '../PremiumGate'
 
 interface ProfileHistoryProps {
   profile: {
@@ -390,95 +389,31 @@ export function ProfileHistory({ profile, hasPremium, canAccessFeature, aiCoachT
         </div>
       </Card>
 
-      {/* PRO sections below useful content */}
-
-      {/* IA Coach Avancé - Premium */}
-      <div className="mb-5">
-        <div className="flex items-center gap-2 mb-3">
-          <h3 className="text-base font-semibold text-text-primary uppercase tracking-wide">
-            Coach IA Avancé
-          </h3>
-          {!canAccessFeature('ai_coach_advanced') && <PremiumBadge small />}
-        </div>
-        <PremiumGate
-          feature="ai_coach_advanced"
-          featureLabel="Coach IA Avancé"
-          fallback="lock"
-        >
-          <Card className="p-4 bg-gradient-to-br from-warning-5 to-transparent border-warning">
-            <div className="flex items-start gap-3">
-              <div className="w-10 h-10 rounded-xl bg-warning-10 flex items-center justify-center flex-shrink-0">
-                <Sparkles className="w-5 h-5 text-warning" />
-              </div>
-              <div className="flex-1">
-                <h4 className="text-md font-medium text-text-primary mb-1">Conseils personnalisés</h4>
-                <p className="text-base text-text-tertiary">
-                  Prédictions de disponibilité, analyse des patterns de jeu, suggestions de créneaux optimaux pour ta squad.
-                </p>
-              </div>
-            </div>
-          </Card>
-        </PremiumGate>
-      </div>
-
-      {/* Historique - Premium */}
-      <div className="mb-5">
-        <div className="flex items-center gap-2 mb-3">
-          <h3 className="text-base font-semibold text-text-primary uppercase tracking-wide">
-            Historique
-          </h3>
-          {!canAccessFeature('unlimited_history') && (
-            <span className="text-xs text-text-quaternary">
-              ({FREE_HISTORY_DAYS} derniers jours)
-            </span>
-          )}
-          {!canAccessFeature('unlimited_history') && <PremiumBadge small />}
-        </div>
-        <PremiumGate
-          feature="unlimited_history"
-          featureLabel="Historique illimité"
-          fallback="lock"
-        >
-          <Card className="p-4">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-primary/12 flex items-center justify-center">
-                <Clock className="w-5 h-5 text-primary" />
-              </div>
-              <div className="flex-1">
-                <h4 className="text-md font-medium text-text-primary">Historique complet</h4>
-                <p className="text-sm text-text-quaternary">Toutes tes sessions depuis le début</p>
-              </div>
-            </div>
-          </Card>
-        </PremiumGate>
-      </div>
-
-      {/* Premium upsell - single subtle block at the bottom */}
+      {/* Premium features - single subtle CTA for non-premium users */}
       {!hasPremium && (
-        <Card className="mb-5 overflow-hidden bg-bg-elevated">
-          <div className="h-1 bg-gradient-to-r from-primary via-warning to-success" />
-          <div className="p-5">
-            <div className="flex items-start gap-4">
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-warning to-warning/50 flex items-center justify-center flex-shrink-0">
-                <Zap className="w-6 h-6 text-white" />
-              </div>
-              <div className="flex-1">
-                <h3 className="text-lg font-semibold text-text-primary mb-1">
-                  Passe Premium
-                </h3>
-                <p className="text-base text-text-tertiary mb-3">
-                  Stats avancées, IA coach avancé, audio HD, historique illimité
-                </p>
-                <Button
-                  size="sm"
-                  className="bg-gradient-to-r from-primary to-purple"
-                  onClick={() => navigate('/premium')}
-                >
-                  Découvrir
-                  <ChevronRight className="w-4 h-4" />
-                </Button>
-              </div>
+        <Card className="mb-5 p-4 bg-bg-elevated border-border-default">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary/15 to-warning/10 flex items-center justify-center flex-shrink-0">
+              <Zap className="w-5 h-5 text-primary" />
             </div>
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-2 mb-0.5">
+                <h3 className="text-md font-medium text-text-primary">Passe Premium</h3>
+                <PremiumBadge small />
+              </div>
+              <p className="text-sm text-text-quaternary">
+                Coach IA avance, historique illimite, audio HD
+              </p>
+            </div>
+            <Button
+              size="sm"
+              variant="ghost"
+              className="text-primary flex-shrink-0"
+              onClick={() => navigate('/premium')}
+            >
+              Voir
+              <ChevronRight className="w-4 h-4" />
+            </Button>
           </div>
         </Card>
       )}

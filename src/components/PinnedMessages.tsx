@@ -136,7 +136,7 @@ export function PinnedMessages({
                     <div className="flex items-center gap-1.5 mt-2">
                       <Pin className="w-3 h-3 text-gold" />
                       <span className="text-sm text-text-tertiary">
-                        Epingle par {pinned.pinned_by_username} {formatPinnedDate(pinned.pinned_at)}
+                        Épinglé par {pinned.pinned_by_username} {formatPinnedDate(pinned.pinned_at)}
                       </span>
                     </div>
                   </button>
@@ -149,7 +149,7 @@ export function PinnedMessages({
                         onUnpin(pinned.message_id)
                       }}
                       className="absolute top-3 right-3 w-7 h-7 rounded-lg bg-surface-card hover:bg-error-15 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-interactive"
-                      aria-label="Desepingler ce message"
+                      aria-label="Désépingler ce message"
                     >
                       <X className="w-4 h-4 text-text-tertiary hover:text-error transition-colors" />
                     </button>

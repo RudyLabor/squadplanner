@@ -29,7 +29,7 @@ export const SessionCard = memo(function SessionCard({ session, onRsvp }: {
 
   let timeLabel = ''
   if (isPast) {
-    timeLabel = 'Passee'
+    timeLabel = 'Passée'
   } else if (diffHours < 1 && diffHours >= 0) {
     timeLabel = 'Maintenant !'
   } else if (isToday) {
@@ -42,9 +42,9 @@ export const SessionCard = memo(function SessionCard({ session, onRsvp }: {
   }
 
   const getStatusBadge = () => {
-    if (session.status === 'cancelled') return { label: 'Annulee', variant: 'danger' as const }
-    if (session.status === 'confirmed') return { label: 'Confirmee', variant: 'success' as const }
-    if (isPast) return { label: 'Passee', variant: 'default' as const }
+    if (session.status === 'cancelled') return { label: 'Annulée', variant: 'danger' as const }
+    if (session.status === 'confirmed') return { label: 'Confirmée', variant: 'success' as const }
+    if (isPast) return { label: 'Passée', variant: 'default' as const }
     return null
   }
 
@@ -68,9 +68,9 @@ export const SessionCard = memo(function SessionCard({ session, onRsvp }: {
             {statusBadge && (
               <Tooltip
                 content={
-                  statusBadge.label === 'Confirmee' ? 'Assez de joueurs ont confirme leur presence.'
-                  : statusBadge.label === 'Annulee' ? 'Cette session a ete annulee par l\'organisateur.'
-                  : 'Cette session est terminee.'
+                  statusBadge.label === 'Confirmée' ? 'Assez de joueurs ont confirmé leur présence.'
+                  : statusBadge.label === 'Annulée' ? 'Cette session a été annulée par l\'organisateur.'
+                  : 'Cette session est terminée.'
                 }
                 position="top"
                 delay={200}

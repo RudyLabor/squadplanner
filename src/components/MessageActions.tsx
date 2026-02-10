@@ -228,7 +228,7 @@ export function MessageActions({
                 role="menuitem"
               >
                 <Pin className="w-4 h-4 text-warning" />
-                <span>Epingler</span>
+                <span>Épingler</span>
               </button>
             )}
 

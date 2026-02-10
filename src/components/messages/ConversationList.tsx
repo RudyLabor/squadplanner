@@ -30,11 +30,11 @@ const ConversationCard = memo(function ConversationCard({ conversation: c, onCli
         </div>
         <div className="flex-1 min-w-0">
           <div className="flex items-center justify-between mb-0.5">
-            <h3 className={`text-md font-medium truncate ${c.unread_count > 0 ? 'text-text-primary' : 'text-text-secondary'}`}>{c.name}</h3>
-            {c.last_message && <span className="text-xs text-text-quaternary flex-shrink-0 ml-2">{formatTime(c.last_message.created_at)}</span>}
+            <h3 className={`text-md font-medium truncate ${c.unread_count > 0 ? 'text-text-primary' : 'text-text-secondary'}`}>{c.name || 'Conversation'}</h3>
+            {c.last_message?.created_at && <span className="text-xs text-text-quaternary flex-shrink-0 ml-2">{formatTime(c.last_message.created_at)}</span>}
           </div>
           <p className={`text-base truncate ${c.unread_count > 0 ? 'text-text-tertiary' : 'text-text-quaternary'}`}>
-            {c.last_message ? <><span className="text-text-tertiary">{c.last_message.sender?.username}:</span> {c.last_message.content}</> : <span className="italic">Aucun message</span>}
+            {c.last_message ? <><span className="text-text-tertiary">{c.last_message.sender?.username || 'Utilisateur'}:</span> {c.last_message.content || ''}</> : <span className="italic">Aucun message</span>}
           </p>
         </div>
       </div>
@@ -47,7 +47,7 @@ const DMConversationCard = memo(function DMConversationCard({ conversation: c, o
     <button onClick={onClick} className="w-full p-3 rounded-xl text-left transition-interactive hover:bg-bg-surface border border-transparent">
       <div className="flex items-center gap-3">
         <div className="relative w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 overflow-hidden bg-primary-15">
-          {c.other_user_avatar_url ? <img src={c.other_user_avatar_url} alt="" className="w-full h-full object-cover" loading="lazy" decoding="async" /> : <span className="text-md font-bold text-primary">{c.other_user_username?.charAt(0).toUpperCase() || '?'}</span>}
+          {c.other_user_avatar_url ? <img src={c.other_user_avatar_url} alt="" className="w-full h-full object-cover" loading="lazy" decoding="async" /> : <span className="text-md font-bold text-primary">{(c.other_user_username || '?').charAt(0).toUpperCase()}</span>}
           <UnreadBadge count={c.unread_count} />
         </div>
         <div className="flex-1 min-w-0">

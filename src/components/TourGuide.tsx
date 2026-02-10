@@ -1,8 +1,10 @@
 import { useState, useEffect, useCallback } from 'react'
+import { useLocation } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, ArrowRight, ArrowLeft, Sparkles, Calendar, Users, MessageCircle, Mic } from 'lucide-react'
 
-const TOUR_COMPLETED_KEY = 'sq-tour-completed'
+const TOUR_VERSION = 'v1'
+const TOUR_COMPLETED_KEY = `sq-tour-completed-${TOUR_VERSION}`
 
 interface TourStep {
   target: string // CSS selector or data-tour attribute
@@ -84,9 +86,13 @@ export function TourGuide() {
   const [currentStep, setCurrentStep] = useState(0)
   const [tooltipPos, setTooltipPos] = useState<{ top: number; left: number } | null>(null)
   const [targetRect, setTargetRect] = useState<DOMRect | null>(null)
+  const location = useLocation()
 
-  // Check if tour should be shown (first visit after onboarding)
+  // Check if tour should be shown (only on /squads, first visit only)
   useEffect(() => {
+    // Only show tour on the squads page
+    if (location.pathname !== '/squads') return
+
     const completed = localStorage.getItem(TOUR_COMPLETED_KEY)
     if (completed) return
 
@@ -101,7 +107,7 @@ export function TourGuide() {
     }, 2000)
 
     return () => clearTimeout(timer)
-  }, [])
+  }, [location.pathname])
 
   // Position tooltip relative to target element
   const updatePosition = useCallback(() => {

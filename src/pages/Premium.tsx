@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
 import {
   Crown, Zap, Check, X, BarChart3, Sparkles,
-  Mic2, Users, Calendar, Shield, ArrowRight, Loader2,
+  Mic2, Users, Calendar, Shield, ArrowRight, ArrowLeft, Loader2,
   Star, ChevronDown, Gift, Rocket, CheckCircle2, Clock
 } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
@@ -373,6 +373,18 @@ export function Premium() {
         />
       )}
 
+      {/* Mobile back button */}
+      <div className="lg:hidden px-4 pt-4">
+        <button
+          onClick={() => navigate(-1)}
+          className="flex items-center gap-2 text-text-secondary hover:text-text-primary transition-colors"
+          aria-label="Retour"
+        >
+          <ArrowLeft className="w-5 h-5" />
+          <span className="text-md">Retour</span>
+        </button>
+      </div>
+
       {/* Hero Section */}
       <div
         ref={heroRef}
@@ -663,7 +675,7 @@ export function Premium() {
 
           <Card className="overflow-hidden">
             {/* Header */}
-            <div className="grid grid-cols-[2fr_1fr_1fr] md:grid-cols-3 gap-2 md:gap-4 p-4 bg-overlay-faint border-b border-border-default">
+            <div className="grid grid-cols-[1.5fr_1fr_1.2fr] md:grid-cols-3 gap-2 md:gap-4 p-4 bg-overlay-faint border-b border-border-default">
               <div className="text-base font-semibold text-text-secondary">Fonctionnalité</div>
               <div className="text-base font-semibold text-text-secondary text-center">Gratuit</div>
               <div className="text-base font-semibold text-center">
@@ -683,7 +695,7 @@ export function Premium() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: '-20px' }}
                   transition={{ delay: index * 0.06, duration: 0.35, ease: 'easeOut' }}
-                  className={`grid grid-cols-[2fr_1fr_1fr] md:grid-cols-3 gap-2 md:gap-4 p-4 items-center ${
+                  className={`grid grid-cols-[1.5fr_1fr_1.2fr] md:grid-cols-3 gap-2 md:gap-4 p-4 items-center ${
                     feature.highlight ? 'bg-primary-5' : ''
                   }`}
                 >
@@ -691,7 +703,7 @@ export function Premium() {
                     <feature.icon className="w-4 h-4 text-primary flex-shrink-0" />
                     <span className="text-md text-text-primary break-words">{feature.name}</span>
                   </div>
-                  <div className="text-center">
+                  <div className="text-center min-w-0">
                     {typeof feature.free === 'boolean' ? (
                       feature.free ? (
                         <Check className="w-5 h-5 text-success mx-auto" />
@@ -699,7 +711,7 @@ export function Premium() {
                         <X className="w-5 h-5 text-text-tertiary mx-auto" />
                       )
                     ) : (
-                      <span className="text-base text-text-secondary">{feature.free}</span>
+                      <span className="text-base text-text-secondary break-words">{feature.free}</span>
                     )}
                   </div>
                   <div className="text-center min-w-0">

@@ -25,7 +25,7 @@ function buildReplyData(msg: MessageBubbleMessage, all: MessageBubbleMessage[]):
   if (!msg.reply_to_id) return null
   const r = all.find(m => m.id === msg.reply_to_id)
   if (!r) return null
-  return { id: r.id, sender_id: r.sender_id, sender_username: r.sender?.username || 'Utilisateur', sender_avatar: r.sender?.avatar_url || undefined, content: r.content }
+  return { id: r.id, sender_id: r.sender_id, sender_username: r.sender?.username || 'Utilisateur', sender_avatar: r.sender?.avatar_url || undefined, content: r.content || '' }
 }
 
 interface SharedProps {
@@ -44,7 +44,8 @@ function renderMessage(msg: MessageBubbleMessage, idx: number, all: MessageBubbl
     const showAvatar = !prev || prev.sender_id !== msg.sender_id
     const mDate = props.getMessageDate(msg.created_at || '')
     const pDate = prev ? props.getMessageDate(prev.created_at || '') : ''
-    const reply = () => props.onReplyMessage({ id: msg.id, content: msg.content || '', sender: msg.sender?.username || 'Utilisateur' })
+    const msgContent = msg.content || ''
+    const reply = () => props.onReplyMessage({ id: msg.id, content: msgContent, sender: msg.sender?.username || 'Utilisateur' })
     return (
       <>
         {mDate !== pDate && msg.created_at && <DateSeparator date={msg.created_at} />}
@@ -73,7 +74,7 @@ const VirtualizedMessages = memo(function VirtualizedMessages({ containerRef, en
     getItemKey: (i: number) => messages[i]?.id || i,
     estimateSize: useCallback((i: number) => {
       const m = messages[i]; if (!m) return 80; if (m.is_system_message) return 60
-      return Math.min(70 + Math.ceil(m.content.length / 50) * 20 + (m.reply_to_id ? 40 : 0), 300)
+      return Math.min(70 + Math.ceil((m.content?.length || 0) / 50) * 20 + (m.reply_to_id ? 40 : 0), 300)
     }, [messages]),
   })
   const lastCount = useRef(messages.length)
@@ -83,14 +84,18 @@ const VirtualizedMessages = memo(function VirtualizedMessages({ containerRef, en
   return (
     <div ref={containerRef} onScroll={onScroll} className="flex-1 overflow-y-auto px-4" style={{ contain: 'strict' }}>
       <div style={{ height: `${virtualizer.getTotalSize()}px`, width: '100%', position: 'relative' }}>
-        {virtualizer.getVirtualItems().map(vr => (
-          <div key={vr.key} data-index={vr.index} ref={virtualizer.measureElement}
-            style={{ position: 'absolute', top: 0, left: 0, width: '100%', transform: `translateY(${vr.start}px)` }}>
-            <div id={`message-${messages[vr.index].id}`} className="transition-interactive">
-              {renderMessage(messages[vr.index], vr.index, messages, props)}
+        {virtualizer.getVirtualItems().map(vr => {
+          const msg = messages[vr.index]
+          if (!msg) return null
+          return (
+            <div key={vr.key} data-index={vr.index} ref={virtualizer.measureElement}
+              style={{ position: 'absolute', top: 0, left: 0, width: '100%', transform: `translateY(${vr.start}px)` }}>
+              <div id={`message-${msg.id}`} className="transition-interactive">
+                {renderMessage(msg, vr.index, messages, props)}
+              </div>
             </div>
-          </div>
-        ))}
+          )
+        })}
       </div>
       <div ref={endRef} />
     </div>

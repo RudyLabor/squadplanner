@@ -1,6 +1,6 @@
 import { useState, useEffect, memo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Users, Plus, Gamepad2, Link as LinkIcon, Copy, Check, Loader2, UserPlus, Calendar, Crown, Mic, ChevronRight, Sparkles } from 'lucide-react'
+import { Users, Plus, Gamepad2, Link as LinkIcon, Copy, Check, Loader2, UserPlus, Calendar, Crown, Mic, ChevronRight } from 'lucide-react'
 import { Link, useNavigate } from 'react-router-dom'
 import Confetti from 'react-confetti'
 import { Button, Card, CardContent, Input, SquadCardSkeleton } from '../components/ui'
@@ -35,27 +35,6 @@ interface SquadNextSession {
   rsvpCount: number
 }
 
-// Composant célébration après création
-function SuccessToast({ message, onClose }: { message: string; onClose: () => void }) {
-  useEffect(() => {
-    const timer = setTimeout(onClose, 3000)
-    return () => clearTimeout(timer)
-  }, [onClose])
-
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 50, scale: 0.9 }}
-      animate={{ opacity: 1, y: 0, scale: 1 }}
-      exit={{ opacity: 0, y: 20, scale: 0.9 }}
-      className="fixed bottom-24 left-1/2 -translate-x-1/2 z-50"
-    >
-      <div className="flex items-center gap-3 px-5 py-3 rounded-xl bg-success text-bg-base font-medium shadow-lg">
-        <Sparkles className="w-5 h-5" />
-        <span>{message}</span>
-      </div>
-    </motion.div>
-  )
-}
 
 // Card squad améliorée
 const SquadCard = memo(function SquadCard({ squad, isOwner, nextSession, hasActiveParty, copiedCode, onCopyCode }: {
@@ -210,7 +189,6 @@ export default function Squads() {
   const [inviteCode, setInviteCode] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [copiedCode, setCopiedCode] = useState<string | null>(null)
-  const [successMessage, setSuccessMessage] = useState<string | null>(null)
   const [nextSessions, setNextSessions] = useState<SquadNextSession[]>([])
   const [showConfetti, setShowConfetti] = useState(false)
 
@@ -294,7 +272,7 @@ export default function Squads() {
       setShowCreate(false)
       setName('')
       setGame('')
-      setSuccessMessage(`Squad "${squad?.name}" créée !`)
+      showSuccess(`Squad "${squad?.name}" creee !`)
       // Refresh premium status apres creation
       fetchPremiumStatus()
     }
@@ -324,7 +302,7 @@ export default function Squads() {
     } else {
       setShowJoin(false)
       setInviteCode('')
-      setSuccessMessage('🎉 Bienvenue dans la squad !')
+      showSuccess('Bienvenue dans la squad !')
       // Celebration confetti
       setShowConfetti(true)
       setTimeout(() => setShowConfetti(false), 4000)
@@ -567,16 +545,6 @@ export default function Squads() {
           )}
         </div>
       </div>
-
-      {/* Toast de succès */}
-      <AnimatePresence>
-        {successMessage && (
-          <SuccessToast
-            message={successMessage}
-            onClose={() => setSuccessMessage(null)}
-          />
-        )}
-      </AnimatePresence>
 
       {/* Modal Premium */}
       <PremiumUpgradeModal

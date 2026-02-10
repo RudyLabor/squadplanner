@@ -74,7 +74,7 @@ export function PublicProfile() {
       {/* Back button */}
       <Link to="/discover" className="inline-flex items-center gap-1.5 text-sm text-text-tertiary hover:text-text-primary transition-colors mb-6">
         <ArrowLeft className="w-4 h-4" />
-        Decouvrir
+        Découvrir
       </Link>
 
       {/* Profile header */}
@@ -143,7 +143,7 @@ export function PublicProfile() {
         />
         <StatCard
           icon={<Shield className="w-4 h-4 text-success" />}
-          label="Fiabilite"
+          label="Fiabilité"
           value={`${Math.round(profile.reliability_score ?? 100)}%`}
           sub={tier.name}
         />
@@ -151,7 +151,7 @@ export function PublicProfile() {
           icon={<Calendar className="w-4 h-4 text-warning" />}
           label="Sessions"
           value={`${profile.total_sessions ?? 0}`}
-          sub={`${attendanceRate}% de presence`}
+          sub={`${attendanceRate}% de présence`}
         />
         <StatCard
           icon={<Flame className="w-4 h-4 text-warning" />}

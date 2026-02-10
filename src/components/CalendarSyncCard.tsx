@@ -17,7 +17,7 @@ export const CalendarSyncCard = memo(function CalendarSyncCard({ sessions, sessi
       const url = getGoogleCalendarUrl(event)
       window.open(url, '_blank', 'noopener,noreferrer')
     } else {
-      toast.info('Selectionne une session pour l\'ajouter a Google Calendar')
+      toast.info('Sélectionne une session pour l\'ajouter à Google Calendar')
     }
   }
 
@@ -25,11 +25,11 @@ export const CalendarSyncCard = memo(function CalendarSyncCard({ sessions, sessi
     try {
       const toExport = sessions || (session ? [session] : [])
       if (toExport.length === 0) {
-        toast.error('Aucune session a exporter')
+        toast.error('Aucune session à exporter')
         return
       }
       exportSessionsToICS(toExport, squadName)
-      toast.success('Fichier .ics telecharge !')
+      toast.success('Fichier .ics téléchargé !')
     } catch (err) {
       toast.error((err as Error).message || 'Erreur d\'export')
     }

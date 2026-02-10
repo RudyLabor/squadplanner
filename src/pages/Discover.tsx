@@ -52,8 +52,8 @@ export function Discover() {
       className="max-w-2xl lg:max-w-4xl xl:max-w-5xl mx-auto px-4 md:px-6 lg:px-8 py-6 pb-24"
     >
       <MobilePageHeader title="Découvrir" />
-      {/* Header */}
-      <div className="flex items-center gap-3 mb-6">
+      {/* Header - hidden on mobile where MobilePageHeader is shown */}
+      <div className="hidden lg:flex items-center gap-3 mb-6">
         <div className="w-10 h-10 rounded-xl bg-indigo-500/10 flex items-center justify-center">
           <Compass className="w-5 h-5 text-indigo-400" />
         </div>

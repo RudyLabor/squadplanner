@@ -210,7 +210,7 @@ export function CallHistory() {
 
   return (
     <main className="min-h-0 bg-bg-base pb-6" aria-label="Historique d'appels">
-      <MobilePageHeader title="Historique d'appels" />
+      <MobilePageHeader title="Appels" />
       {/* Toast */}
       <CallToast
         message={toastMessage}

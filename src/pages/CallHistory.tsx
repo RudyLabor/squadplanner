@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo } from 'react'
+﻿import { useEffect, useState, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   Phone, PhoneIncoming, PhoneOutgoing, PhoneMissed,
@@ -87,8 +87,8 @@ export function CallHistory() {
   }
 
   const getCallLabel = (type: 'incoming' | 'outgoing', status: string) => {
-    if (status === 'missed') return 'Manqu\u00e9'
-    if (status === 'rejected') return 'Rejet\u00e9'
+    if (status === 'missed') return 'Manqué'
+    if (status === 'rejected') return 'Rejeté'
     if (type === 'incoming') return 'Entrant'
     return 'Sortant'
   }
@@ -174,7 +174,7 @@ export function CallHistory() {
               onClick={() => fetchCallHistory()}
               disabled={isLoading}
               className="w-11 h-11 min-w-[44px] min-h-[44px] rounded-xl bg-surface-card flex items-center justify-center hover:bg-border-default hover:scale-[1.02] transition-interactive disabled:opacity-50 touch-target"
-              aria-label="Rafra\u00eechir"
+              aria-label="Rafraîchir"
             >
               <RefreshCw className={`w-5 h-5 text-text-tertiary ${isLoading ? 'animate-spin' : ''}`} />
             </button>
@@ -341,7 +341,7 @@ export function CallHistory() {
                               </span>
                               {typeof call.durationSeconds === 'number' && call.durationSeconds > 0 && (
                                 <>
-                                  <span className="text-text-tertiary">\u00b7</span>
+                                  <span className="text-text-tertiary">·</span>
                                   <span className="text-text-tertiary">{formatDuration(call.durationSeconds)}</span>
                                 </>
                               )}

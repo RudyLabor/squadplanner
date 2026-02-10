@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react'
+﻿import { useEffect, useState, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   Mic,
@@ -699,7 +699,7 @@ export function Party() {
               <Loader2 className="w-8 h-8 text-primary animate-spin" />
             </div>
           ) : squads.length === 0 ? (
-            /* État vide - design amélioré */
+            /* état vide - design amélioré */
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -724,7 +724,7 @@ export function Party() {
                   Parle avec ta squad
                 </h3>
                 <p className="text-md text-text-secondary mb-6 max-w-[280px] mx-auto leading-relaxed">
-                  Cr\u00e9e ou rejoins une squad pour lancer des parties vocales avec tes potes.
+                  Crée ou rejoins une squad pour lancer des parties vocales avec tes potes.
                 </p>
                 <Link to="/squads">
                   <Button className="shadow-md shadow-primary/10">
@@ -785,13 +785,13 @@ export function Party() {
                           </motion.div>
                         </div>
                         <h3 className="text-xl font-bold text-text-primary mb-2">
-                          Pr\u00eat \u00e0 parler ?
+                          Prêt à parler ?
                         </h3>
                         <p className="text-md text-text-secondary mb-2">
                           {squads[0].name}
                         </p>
                         <p className="text-sm text-text-tertiary mb-3">
-                          {squads[0].game} \u00b7 {squads[0].member_count || 1} membre{(squads[0].member_count || 1) > 1 ? 's' : ''}
+                          {squads[0].game} · {squads[0].member_count || 1} membre{(squads[0].member_count || 1) > 1 ? 's' : ''}
                         </p>
 
                         {/* Online members indicator */}
@@ -838,7 +838,7 @@ export function Party() {
                             <div className="flex items-center justify-between">
                               <span className="text-sm text-text-secondary flex items-center gap-2">
                                 <Clock className="w-3.5 h-3.5 text-text-tertiary" />
-                                Dur\u00e9e moyenne
+                                Durée moyenne
                               </span>
                               <span className="text-sm font-medium text-text-primary">45 min</span>
                             </div>
@@ -860,7 +860,7 @@ export function Party() {
                         </Card>
 
                         <Card className="p-4 bg-bg-elevated border-border-default flex-1">
-                          <p className="text-sm font-semibold text-text-primary mb-3">Historique r\u00e9cent</p>
+                          <p className="text-sm font-semibold text-text-primary mb-3">Historique récent</p>
                           <div className="space-y-2.5">
                             {[
                               { name: squads[0].name, time: 'Hier, 21h30', duration: '1h 12min' },
@@ -913,7 +913,7 @@ export function Party() {
                             <div className="flex items-center justify-between">
                               <span className="text-sm text-text-secondary flex items-center gap-2">
                                 <Clock className="w-3.5 h-3.5 text-text-tertiary" />
-                                Dur\u00e9e moyenne
+                                Durée moyenne
                               </span>
                               <span className="text-sm font-medium text-text-primary">45 min</span>
                             </div>

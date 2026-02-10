@@ -1,4 +1,4 @@
-import { memo, useState } from 'react'
+﻿import { memo, useState } from 'react'
 import { motion } from 'framer-motion'
 import { Users, Star, Copy, Check, Gamepad2 } from 'lucide-react'
 import type { PublicSquadResult } from '../../types/database'
@@ -15,7 +15,7 @@ export const DiscoverSquadCard = memo(function DiscoverSquadCard({ squad }: Prop
     try {
       await navigator.clipboard.writeText(squad.invite_code)
       setCopied(true)
-      toast.success('Code copi\u00e9 ! Utilise-le pour rejoindre.')
+      toast.success('Code copié ! Utilise-le pour rejoindre.')
       setTimeout(() => setCopied(false), 2000)
     } catch {
       toast.error('Impossible de copier')
@@ -77,7 +77,7 @@ export const DiscoverSquadCard = memo(function DiscoverSquadCard({ squad }: Prop
           className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-400 text-xs font-medium transition-colors"
         >
           {copied ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
-          {copied ? 'Copi\u00e9 !' : 'Rejoindre'}
+          {copied ? 'Copié !' : 'Rejoindre'}
         </button>
       </div>
 
@@ -90,7 +90,7 @@ export const DiscoverSquadCard = memo(function DiscoverSquadCard({ squad }: Prop
             <span className="text-[8px] text-indigo-400 font-bold">{squad.owner_username?.charAt(0).toUpperCase()}</span>
           </div>
         )}
-        <span className="text-sm text-text-tertiary">Cr\u00e9\u00e9 par {squad.owner_username}</span>
+        <span className="text-sm text-text-tertiary">Créé par {squad.owner_username}</span>
       </div>
     </motion.div>
   )

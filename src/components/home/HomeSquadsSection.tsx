@@ -26,7 +26,7 @@ export const HomeSquadsSection = memo(function HomeSquadsSection({
     return (
       <section aria-label="Mes squads">
         <div className="flex items-center justify-between mb-3">
-          <h2 className="text-xl font-semibold text-text-primary">
+          <h2 className="text-base font-semibold text-text-primary">
             Mes squads
           </h2>
         </div>
@@ -43,7 +43,7 @@ export const HomeSquadsSection = memo(function HomeSquadsSection({
     return (
       <section aria-label="Mes squads">
         <div className="flex items-center justify-between mb-3">
-          <h2 className="text-xl font-semibold text-text-primary">
+          <h2 className="text-base font-semibold text-text-primary">
             Mes squads
           </h2>
           <Link to="/squads">

@@ -86,7 +86,7 @@ export function Legal() {
         {activeTab === 'cgu' && (
           <div>
             <div className="mb-8">
-              <h1 className="text-2xl font-bold text-text-primary mb-2">Conditions Générales d'Utilisation</h1>
+              <h1 className="text-lg font-bold text-text-primary mb-2">Conditions Générales d'Utilisation</h1>
               <p className="text-md text-text-tertiary">Dernière mise à jour : 8 février 2026</p>
             </div>
 
@@ -212,7 +212,7 @@ export function Legal() {
         {activeTab === 'privacy' && (
           <div>
             <div className="mb-8">
-              <h1 className="text-2xl font-bold text-text-primary mb-2">Politique de Confidentialité</h1>
+              <h1 className="text-lg font-bold text-text-primary mb-2">Politique de Confidentialité</h1>
               <p className="text-md text-text-tertiary">Dernière mise à jour : 8 février 2026</p>
             </div>
 

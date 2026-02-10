@@ -227,7 +227,7 @@ export const HomeActivityFeed = memo(function HomeActivityFeed({
   if (activities.length === 0) {
     return (
       <section aria-label="Activité récente" className="mb-6">
-        <h2 className="text-xl font-semibold text-text-primary mb-3">
+        <h2 className="text-base font-semibold text-text-primary mb-3">
           Activité récente
         </h2>
         <Card className="p-6 text-center">
@@ -245,7 +245,7 @@ export const HomeActivityFeed = memo(function HomeActivityFeed({
 
   return (
     <section aria-label="Activité récente" className="mb-6">
-      <h2 className="text-xl font-semibold text-text-primary mb-3">
+      <h2 className="text-base font-semibold text-text-primary mb-3">
         Activité récente
       </h2>
       <Card className="px-4 py-1 divide-y divide-border-subtle">

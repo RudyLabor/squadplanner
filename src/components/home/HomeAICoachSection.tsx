@@ -21,7 +21,7 @@ export const HomeAICoachSection = memo(function HomeAICoachSection({
 }: HomeAICoachSectionProps) {
   if (aiCoachLoading) {
     return (
-      <div className="mb-6" data-tour="ai-coach">
+      <div data-tour="ai-coach">
         <SkeletonAICoach />
       </div>
     )
@@ -31,7 +31,7 @@ export const HomeAICoachSection = memo(function HomeAICoachSection({
 
   return (
     <motion.div
-      className="mb-6 cursor-pointer"
+      className="cursor-pointer"
       data-tour="ai-coach"
       onClick={onAction}
       whileHover={{ scale: 1.01 }}
@@ -64,7 +64,7 @@ export const HomeAICoachSection = memo(function HomeAICoachSection({
             ? 'text-success'
             : aiCoachTip.tone === 'warning'
               ? 'text-error'
-              : 'text-text-tertiary'
+              : 'text-text-primary'
         }`}>
           {aiCoachTip.tip}
         </p>

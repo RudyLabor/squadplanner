@@ -270,7 +270,7 @@ export default function Auth() {
                 <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-primary-10 mb-5">
                   <Gamepad2 className="w-7 h-7 text-primary" />
                 </div>
-                <h1 className="text-2xl font-bold text-text-primary mb-2">
+                <h1 className="text-lg font-bold text-text-primary mb-2">
                   {mode === 'login' ? 'T\'as manqué à ta squad !' : mode === 'reset' ? 'Nouveau mot de passe' : 'Rejoins l\'aventure'}
                 </h1>
                 <p className="text-md text-text-secondary">

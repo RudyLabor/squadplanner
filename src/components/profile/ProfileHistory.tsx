@@ -2,12 +2,11 @@ import { useState, useEffect, useMemo, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
-  Sparkles, Zap, Clock, Phone, Flame, ChevronRight, CalendarPlus, BarChart3
+  Sparkles, Zap, Clock, Phone, ChevronRight, CalendarPlus, BarChart3
 } from 'lucide-react'
 import { Card, Button } from '../ui'
 import { PremiumGate, PremiumBadge } from '../PremiumGate'
 import { FREE_HISTORY_DAYS } from '../../hooks'
-import { StreakCounter } from '../StreakCounter'
 
 interface ProfileHistoryProps {
   profile: {
@@ -133,7 +132,7 @@ export function ProfileHistory({ profile, hasPremium, canAccessFeature, aiCoachT
       const tone = aiCoachTip?.tone
       if (tone === 'celebration') return { border: 'border-success', gradient: 'from-success-5', bg: 'bg-success-15', iconColor: 'text-success', textColor: 'text-success', badgeBg: 'bg-success-15 text-success', badgeLabel: 'BRAVO' }
       if (tone === 'warning') return { border: 'border-error', gradient: 'from-error-5', bg: 'bg-error-10', iconColor: 'text-error', textColor: 'text-error', badgeBg: 'bg-error-15 text-error', badgeLabel: 'ATTENTION' }
-      return { border: 'border-purple', gradient: 'from-purple-10', bg: 'bg-purple-10', iconColor: 'text-purple', textColor: 'text-text-tertiary', badgeBg: 'bg-purple-15 text-purple', badgeLabel: 'CONSEIL' }
+      return { border: 'border-purple', gradient: 'from-purple-10', bg: 'bg-purple-10', iconColor: 'text-purple', textColor: 'text-text-primary', badgeBg: 'bg-purple-15 text-purple', badgeLabel: 'CONSEIL' }
     }
 
     // Dynamic tip styling
@@ -144,30 +143,16 @@ export function ProfileHistory({ profile, hasPremium, canAccessFeature, aiCoachT
     if (badge === 'ATTENTION') {
       return { border: 'border-error', gradient: 'from-error-5', bg: 'bg-error-10', iconColor: 'text-error', textColor: 'text-error', badgeBg: 'bg-error-15 text-error', badgeLabel: badge }
     }
-    return { border: 'border-purple', gradient: 'from-purple-10', bg: 'bg-purple-10', iconColor: 'text-purple', textColor: 'text-text-tertiary', badgeBg: 'bg-purple-15 text-purple', badgeLabel: 'CONSEIL' }
+    return { border: 'border-purple', gradient: 'from-purple-10', bg: 'bg-purple-10', iconColor: 'text-purple', textColor: 'text-text-primary', badgeBg: 'bg-purple-15 text-purple', badgeLabel: 'CONSEIL' }
   }, [hasRealTip, aiCoachTip?.tone, currentTip?.badge])
 
   const style = getStyle()
 
   return (
     <>
-      {/* Activité Section - StreakCounter */}
-      <section className="mb-5" aria-label="Activité">
-        <div className="flex items-center gap-2 mb-3">
-          <Flame className="w-4 h-4 text-warning" />
-          <h3 className="text-base font-semibold text-text-primary uppercase tracking-wide">
-            Activité
-          </h3>
-        </div>
-        <StreakCounter
-          streakDays={profile?.streak_days || 0}
-          lastActiveDate={profile?.streak_last_date || null}
-        />
-      </section>
-
       {/* IA Coach - Basique (gratuit) */}
       <div className="coach-ia-card-wrapper mb-5">
-        <Card className={`p-4 bg-gradient-to-br border ${style.gradient} to-transparent ${style.border} relative overflow-hidden`}>
+        <Card className={`p-4 bg-bg-elevated border ${style.border} relative overflow-hidden`}>
           <div className="flex items-start gap-3">
             {/* Sparkle icon with animation */}
             <div className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 ${style.bg}`}>

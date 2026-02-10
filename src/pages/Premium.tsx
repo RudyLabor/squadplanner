@@ -417,7 +417,7 @@ export function Premium() {
               </div>
             </div>
 
-            <h1 className="text-3xl md:text-5xl font-bold text-text-primary mb-4">
+            <h1 className="text-xl md:text-2xl font-bold text-text-primary mb-4">
               Passe au niveau
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-warning to-warning/70"> supérieur</span>
             </h1>

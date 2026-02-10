@@ -182,7 +182,7 @@ export const HomeSessionsSection = memo(function HomeSessionsSection({
   return (
     <section aria-label="Prochaine session" className="mb-6">
       <div className="flex items-center justify-between mb-3">
-        <h2 className="text-xl font-semibold text-text-primary">
+        <h2 className="text-base font-semibold text-text-primary">
           Prochaine session
         </h2>
         {!sessionsLoading && upcomingSessions.length > 1 && (

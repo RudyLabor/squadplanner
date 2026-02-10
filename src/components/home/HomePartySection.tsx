@@ -46,7 +46,6 @@ function ActivePartyCard({ squadName, participantCount }: ActiveParty) {
 function PartyCTA() {
   return (
     <motion.div
-      className="mt-6"
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.4, duration: 0.4, ease: 'easeOut' }}
@@ -91,7 +90,7 @@ export const HomePartySection = memo(function HomePartySection({
   return (
     <>
       {activeParty && (
-        <div className="mb-6">
+        <div>
           <ActivePartyCard
             squadName={activeParty.squadName}
             participantCount={activeParty.participantCount}

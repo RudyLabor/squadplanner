@@ -228,7 +228,7 @@ export function CallHistory() {
               <ArrowLeft className="w-5 h-5 text-text-primary" />
             </button>
             <div className="flex-1">
-              <h1 className="text-2xl font-bold text-text-primary">Tes appels récents</h1>
+              <h1 className="text-lg font-bold text-text-primary">Tes appels récents</h1>
               <p className="text-base text-text-tertiary">
                 {filteredCalls.length > 0
                   ? hasMore

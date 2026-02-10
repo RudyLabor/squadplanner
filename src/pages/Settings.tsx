@@ -270,7 +270,7 @@ export function Settings() {
             <ArrowLeft className="w-5 h-5 text-text-tertiary" aria-hidden="true" />
           </button>
           <div>
-            <h1 className="text-2xl font-bold text-text-primary">Paramètres</h1>
+            <h1 className="text-lg font-bold text-text-primary">Paramètres</h1>
             <p className="text-md text-text-tertiary">Personnalise ton expérience</p>
           </div>
         </header>

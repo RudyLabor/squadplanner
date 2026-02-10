@@ -350,7 +350,7 @@ export default function Squads() {
         <div className="px-4 md:px-6 lg:px-8 py-6 max-w-2xl lg:max-w-4xl xl:max-w-6xl mx-auto">
           <div className="flex items-center justify-between mb-6">
             <div>
-              <h1 className="text-2xl font-bold text-text-primary">Mes Squads</h1>
+              <h1 className="text-lg font-bold text-text-primary">Mes Squads</h1>
               <p className="text-base text-text-quaternary">Chargement...</p>
             </div>
           </div>
@@ -391,7 +391,7 @@ export default function Squads() {
           {/* Header simplifié */}
           <header className="flex items-center justify-between mb-6">
             <div>
-              <h1 className="text-2xl font-bold text-text-primary">Mes Squads</h1>
+              <h1 className="text-lg font-bold text-text-primary">Mes Squads</h1>
               <p className="text-base text-text-quaternary">{getSubtitle()}</p>
             </div>
             <div className="flex gap-2">

@@ -212,7 +212,7 @@ export default function SessionDetail() {
               <ArrowLeft className="w-5 h-5 text-text-secondary" aria-hidden="true" />
             </Link>
             <div className="flex-1">
-              <h1 className="text-2xl font-bold text-text-primary">
+              <h1 className="text-lg font-bold text-text-primary">
                 {currentSession.title || currentSession.game || 'Session'}
               </h1>
               {statusInfo && (

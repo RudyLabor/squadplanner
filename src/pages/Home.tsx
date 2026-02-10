@@ -207,10 +207,10 @@ export default function Home() {
               transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
             >
               <div className="min-w-0 flex-1 mr-3">
-                <h1 className="text-xl md:text-2xl font-bold text-text-primary truncate">
+                <h1 className="text-lg md:text-xl font-bold text-text-primary truncate">
                   Salut {profile?.username || 'Gamer'} !
                 </h1>
-                <p className="text-md text-text-tertiary">
+                <p className="text-sm text-text-tertiary">
                   {upcomingSessions.length > 0
                     ? pendingRsvps > 0
                       ? `${pendingRsvps} session${pendingRsvps > 1 ? 's' : ''} ${pendingRsvps > 1 ? 'attendent' : 'attend'} ta réponse`
@@ -226,10 +226,13 @@ export default function Home() {
               <OnboardingChecklist hasSquad={squads.length > 0} hasSession={upcomingSessions.length > 0} onCreateSession={openCreateSessionModal} />
             )}
 
-            <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.05, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}>
+            <motion.div
+              className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4"
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.05, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+            >
               <HomeAICoachSection aiCoachTip={aiCoachTip} aiCoachLoading={aiCoachLoading} onAction={openCreateSessionModal} />
-            </motion.div>
-            <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}>
               <HomePartySection activeParty={activeParty} showCTA={!upcomingSessions[0] && squads.length > 0 && !activeParty} />
             </motion.div>
             <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}>

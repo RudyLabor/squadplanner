@@ -2,8 +2,7 @@ import { memo } from 'react'
 import { Users, Calendar, TrendingUp } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
-import { AnimatedCounter, ContentTransition, SkeletonStatsRow, SkeletonStreakCounter } from '../ui'
-import { StreakCounter } from '../StreakCounter'
+import { AnimatedCounter, ContentTransition, SkeletonStatsRow } from '../ui'
 
 interface StatsRowProps {
   squadsCount: number
@@ -73,33 +72,22 @@ export const HomeStatsSection = memo(function HomeStatsSection({
   reliabilityScore,
   squadsLoading,
   sessionsLoading,
-  profile,
 }: HomeStatsSectionProps) {
   return (
     <section aria-label="Tableau de bord" className="mb-6">
-      <h2 className="text-xl font-semibold text-text-primary mb-3">
+      <h2 className="text-base font-semibold text-text-primary mb-3">
         Ton tableau de bord
       </h2>
-      <div className="space-y-4">
-        <ContentTransition
-          isLoading={squadsLoading || sessionsLoading}
-          skeleton={<SkeletonStatsRow />}
-        >
-          <StatsRow
-            squadsCount={squadsCount}
-            sessionsThisWeek={sessionsThisWeek}
-            reliabilityScore={reliabilityScore}
-          />
-        </ContentTransition>
-        {!profile ? (
-          <SkeletonStreakCounter />
-        ) : (
-          <StreakCounter
-            streakDays={profile.streak_days || 0}
-            lastActiveDate={profile.streak_last_date || null}
-          />
-        )}
-      </div>
+      <ContentTransition
+        isLoading={squadsLoading || sessionsLoading}
+        skeleton={<SkeletonStatsRow />}
+      >
+        <StatsRow
+          squadsCount={squadsCount}
+          sessionsThisWeek={sessionsThisWeek}
+          reliabilityScore={reliabilityScore}
+        />
+      </ContentTransition>
     </section>
   )
 })

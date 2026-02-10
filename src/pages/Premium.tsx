@@ -18,42 +18,42 @@ const FEATURES = [
   {
     name: 'Squads',
     free: '2 max',
-    premium: 'Illimit\u00e9',
+    premium: 'Illimité',
     icon: Users,
     highlight: true
   },
   {
     name: 'Historique sessions',
     free: '30 jours',
-    premium: 'Illimit\u00e9',
+    premium: 'Illimité',
     icon: Calendar,
     highlight: true
   },
   {
     name: 'Stats & Analytics',
     free: 'Basiques',
-    premium: 'Avanc\u00e9es + Tendances',
+    premium: 'Avancées + Tendances',
     icon: BarChart3,
     highlight: true
   },
   {
     name: 'IA Coach',
     free: 'Conseils simples',
-    premium: 'Pr\u00e9dictions + Personnalis\u00e9',
+    premium: 'Prédictions + Personnalisé',
     icon: Sparkles,
     highlight: true
   },
   {
-    name: 'Qualit\u00e9 audio Party',
+    name: 'Qualité audio Party',
     free: 'Standard',
     premium: 'Audio HD Premium',
     icon: Mic2,
     highlight: false
   },
   {
-    name: 'R\u00f4les squad',
+    name: 'Rôles squad',
     free: 'Membre / Admin',
-    premium: 'Coach, Manager, Personnalis\u00e9',
+    premium: 'Coach, Manager, Personnalisé',
     icon: Shield,
     highlight: false
   },
@@ -228,14 +228,14 @@ const TESTIMONIALS = [
     name: 'MarieGG',
     squad: 'GG Girls',
     memberSince: 'Membre depuis 4 mois',
-    text: "L'audio HD fait vraiment la diff en ranked. Et les stats nous aident \u00e0 voir qui clutch le plus.",
+    text: "L'audio HD fait vraiment la diff en ranked. Et les stats nous aident à voir qui clutch le plus.",
     avatarType: 'marie' as const
   },
   {
     name: 'LucasApex',
     squad: 'Apex Legends FR',
     memberSince: 'Membre depuis 8 mois',
-    text: "On g\u00e8re 5 squads diff\u00e9rentes maintenant. Impossible sans Premium !",
+    text: "On gère 5 squads différentes maintenant. Impossible sans Premium !",
     avatarType: 'lucas' as const
   }
 ]
@@ -244,15 +244,15 @@ const TESTIMONIALS = [
 const FAQ = [
   {
     q: "Je peux annuler quand je veux ?",
-    a: "Oui ! Tu peux annuler ton abonnement \u00e0 tout moment depuis ton profil. Tu garderas l'acc\u00e8s Premium jusqu'\u00e0 la fin de ta p\u00e9riode pay\u00e9e."
+    a: "Oui ! Tu peux annuler ton abonnement à tout moment depuis ton profil. Tu garderas l'accès Premium jusqu'à la fin de ta période payée."
   },
   {
     q: "C'est pour toute ma squad ou juste moi ?",
-    a: "L'abonnement Premium est personnel. Mais quand tu cr\u00e9es une squad, elle b\u00e9n\u00e9ficie de certains avantages (squads illimit\u00e9es, r\u00f4les avanc\u00e9s)."
+    a: "L'abonnement Premium est personnel. Mais quand tu crées une squad, elle bénéficie de certains avantages (squads illimitées, rôles avancés)."
   },
   {
-    q: "Y a-t-il une p\u00e9riode d'essai ?",
-    a: "Oui ! Tu b\u00e9n\u00e9ficies de 7 jours d'essai gratuit sans carte bancaire. \u00c0 la fin de l'essai, tu choisis ton plan. On offre aussi une garantie satisfait ou rembours\u00e9 de 30 jours sur les abonnements."
+    q: "Y a-t-il une période d'essai ?",
+    a: "Oui ! Tu bénéficies de 7 jours d'essai gratuit sans carte bancaire. À la fin de l'essai, tu choisis ton plan. On offre aussi une garantie satisfait ou remboursé de 30 jours sur les abonnements."
   }
 ]
 
@@ -296,7 +296,7 @@ export function Premium() {
         : plans.find(p => p.id === 'premium_yearly')?.stripePriceId
 
       if (!priceId) {
-        throw new Error('Plan non trouv\u00e9')
+        throw new Error('Plan non trouvé')
       }
 
       // Premium subscription is personal, not tied to a specific squad
@@ -319,11 +319,11 @@ export function Premium() {
       // User-friendly error message instead of technical details
       const errorMessage = error.message
       if (errorMessage.includes('Edge Function') || errorMessage.includes('non-2xx')) {
-        setError('Une erreur est survenue. R\u00e9essaye dans quelques instants.')
+        setError('Une erreur est survenue. Réessaye dans quelques instants.')
       } else if (errorMessage.includes('network') || errorMessage.includes('fetch')) {
-        setError('Probl\u00e8me de connexion. V\u00e9rifie ta connexion internet.')
+        setError('Problème de connexion. Vérifie ta connexion internet.')
       } else {
-        setError('Une erreur est survenue. R\u00e9essaye dans quelques instants.')
+        setError('Une erreur est survenue. Réessaye dans quelques instants.')
       }
     } finally {
       setIsLoading(false)
@@ -353,7 +353,7 @@ export function Premium() {
     // Mock trial activation - no backend logic yet
     setShowConfetti(true)
     setTimeout(() => setShowConfetti(false), 3000)
-    showSuccess('Essai gratuit activ\u00e9 ! Profite de 7 jours Premium.')
+    showSuccess('Essai gratuit activé ! Profite de 7 jours Premium.')
   }
 
   const savings = Math.round((PREMIUM_PRICE_MONTHLY * 12 - PREMIUM_PRICE_YEARLY) / (PREMIUM_PRICE_MONTHLY * 12) * 100)
@@ -419,11 +419,11 @@ export function Premium() {
 
             <h1 className="text-3xl md:text-5xl font-bold text-text-primary mb-4">
               Passe au niveau
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-warning to-warning/70"> sup\u00e9rieur</span>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-warning to-warning/70"> supérieur</span>
             </h1>
 
             <p className="text-lg md:text-xl text-text-secondary max-w-xl mx-auto mb-8">
-              D\u00e9bloque tout le potentiel de Squad Planner. Stats avanc\u00e9es, IA coach personnalis\u00e9, audio HD et bien plus.
+              Débloque tout le potentiel de Squad Planner. Stats avancées, IA coach personnalisé, audio HD et bien plus.
             </p>
 
             {/* Already Premium */}
@@ -432,12 +432,12 @@ export function Premium() {
                 <div className="inline-flex items-center gap-3 px-6 py-3 rounded-xl bg-success/05 border border-success/15">
                   <Check className="w-5 h-5 text-success" />
                   <span className="text-md font-medium text-success">
-                    Tu es d\u00e9j\u00e0 Premium !
+                    Tu es déjà Premium !
                   </span>
                 </div>
                 <div className="mt-4">
                   <Button variant="secondary" onClick={handleManageSubscription} disabled={isLoading}>
-                    {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : 'G\u00e9rer mon abonnement'}
+                    {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Gérer mon abonnement'}
                   </Button>
                 </div>
               </div>
@@ -488,7 +488,7 @@ export function Premium() {
                 Essaie Premium gratuitement pendant 7 jours
               </p>
               <p className="text-base text-text-tertiary mb-5">
-                Pas de carte bancaire requise. Annule \u00e0 tout moment.
+                Pas de carte bancaire requise. Annule à tout moment.
               </p>
 
               <Button
@@ -547,7 +547,7 @@ export function Premium() {
               </div>
               <div className="flex items-baseline gap-1 mb-1">
                 <span className="text-3xl font-bold text-text-primary">
-                  {PREMIUM_PRICE_MONTHLY.toFixed(2)}\u20ac
+                  {PREMIUM_PRICE_MONTHLY.toFixed(2)}€
                 </span>
                 <span className="text-md text-text-tertiary">/mois</span>
               </div>
@@ -555,7 +555,7 @@ export function Premium() {
                 Commence par 7 jours gratuits
               </p>
               <p className="text-base text-text-tertiary">
-                Flexibilit\u00e9 maximale, annule quand tu veux
+                Flexibilité maximale, annule quand tu veux
               </p>
               {selectedPlan === 'monthly' && (
                 <div className="absolute top-4 right-4 w-6 h-6 rounded-full bg-primary flex items-center justify-center">
@@ -589,23 +589,23 @@ export function Premium() {
               </div>
               <div className="flex items-baseline gap-1 mb-1">
                 <span className="text-3xl font-bold text-text-primary">
-                  {(PREMIUM_PRICE_YEARLY / 12).toFixed(2)}\u20ac
+                  {(PREMIUM_PRICE_YEARLY / 12).toFixed(2)}€
                 </span>
                 <span className="text-md text-text-tertiary">/mois</span>
               </div>
               <div className="flex items-center gap-2 mb-1">
                 <span className="text-base line-through text-text-tertiary">
-                  {(PREMIUM_PRICE_MONTHLY * 12).toFixed(2)}\u20ac/an
+                  {(PREMIUM_PRICE_MONTHLY * 12).toFixed(2)}€/an
                 </span>
                 <span className="text-base font-semibold text-success">
-                  {PREMIUM_PRICE_YEARLY.toFixed(2)}\u20ac/an
+                  {PREMIUM_PRICE_YEARLY.toFixed(2)}€/an
                 </span>
               </div>
               <p className="text-base text-success mb-1">
                 Commence par 7 jours gratuits
               </p>
               <p className="text-base text-success">
-                \u00c9conomise {savings}% \u2014 2 mois offerts !
+                Économise {savings}% — 2 mois offerts !
               </p>
               {selectedPlan === 'yearly' && (
                 <div className="absolute top-4 right-4 w-6 h-6 rounded-full bg-success flex items-center justify-center">
@@ -645,7 +645,7 @@ export function Premium() {
               )}
             </Button>
             <p className="text-sm text-text-tertiary mt-3">
-              Paiement s\u00e9curis\u00e9 \u00b7 Annulation facile \u00b7 Satisfait ou rembours\u00e9 30j
+              Paiement sécurisé · Annulation facile · Satisfait ou remboursé 30j
             </p>
           </motion.div>
         )}
@@ -658,13 +658,13 @@ export function Premium() {
           className="mb-16"
         >
           <h2 className="text-xl font-semibold text-text-primary text-center mb-8">
-            Comparatif des fonctionnalit\u00e9s
+            Comparatif des fonctionnalités
           </h2>
 
           <Card className="overflow-hidden">
             {/* Header */}
             <div className="grid grid-cols-[2fr_1fr_1fr] md:grid-cols-3 gap-2 md:gap-4 p-4 bg-overlay-faint border-b border-border-default">
-              <div className="text-base font-semibold text-text-secondary">Fonctionnalit\u00e9</div>
+              <div className="text-base font-semibold text-text-secondary">Fonctionnalité</div>
               <div className="text-base font-semibold text-text-secondary text-center">Gratuit</div>
               <div className="text-base font-semibold text-center">
                 <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-gradient-to-r from-warning to-warning/70 text-xs font-bold text-bg-base">
@@ -723,10 +723,10 @@ export function Premium() {
           className="mb-16"
         >
           <h2 className="text-xl font-semibold text-text-primary text-center mb-2">
-            Ils sont pass\u00e9s Premium
+            Ils sont passés Premium
           </h2>
           <p className="text-md text-text-secondary text-center mb-8">
-            Et ils ne reviendraient pas en arri\u00e8re
+            Et ils ne reviendraient pas en arrière
           </p>
 
           <div className="grid md:grid-cols-3 gap-4">
@@ -779,7 +779,7 @@ export function Premium() {
           className="mb-16"
         >
           <h2 className="text-xl font-semibold text-text-primary text-center mb-8">
-            Questions fr\u00e9quentes
+            Questions fréquentes
           </h2>
 
           <div className="space-y-3 max-w-2xl mx-auto">
@@ -832,13 +832,13 @@ export function Premium() {
             <Card className="p-8 bg-gradient-to-br from-primary/[0.075] to-warning/5 border-primary">
               <Crown className="w-12 h-12 text-warning mx-auto mb-4" />
               <h3 className="text-xl font-semibold text-text-primary mb-2">
-                Pr\u00eat \u00e0 passer Premium ?
+                Prêt à passer Premium ?
               </h3>
               <p className="text-md text-text-secondary mb-2 max-w-md mx-auto">
-                Rejoins les squads qui ont choisi de jouer s\u00e9rieusement ensemble.
+                Rejoins les squads qui ont choisi de jouer sérieusement ensemble.
               </p>
               <p className="text-base text-success mb-6 font-medium">
-                Commence par 7 jours d'essai gratuit \u2014 sans carte bancaire
+                Commence par 7 jours d'essai gratuit — sans carte bancaire
               </p>
               <Button
                 onClick={handleUpgrade}
@@ -850,9 +850,9 @@ export function Premium() {
                 ) : (
                   <>
                     <Zap className="w-5 h-5" />
-                    Commencer \u2014 {selectedPlan === 'monthly'
-                      ? `${PREMIUM_PRICE_MONTHLY.toFixed(2)}\u20ac/mois`
-                      : `${(PREMIUM_PRICE_YEARLY / 12).toFixed(2)}\u20ac/mois`
+                    Commencer — {selectedPlan === 'monthly'
+                      ? `${PREMIUM_PRICE_MONTHLY.toFixed(2)}€/mois`
+                      : `${(PREMIUM_PRICE_YEARLY / 12).toFixed(2)}€/mois`
                     }
                   </>
                 )}

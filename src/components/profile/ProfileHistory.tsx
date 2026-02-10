@@ -33,13 +33,13 @@ function buildTipPool(streakDays: number, reliability: number): DynamicTip[] {
   // Streak-based tips
   if (streakDays > 0) {
     tips.push({
-      text: `Ta s\u00e9rie de ${streakDays} jour${streakDays > 1 ? 's' : ''} est impressionnante ! Continue comme \u00e7a pour d\u00e9bloquer le prochain palier.`,
+      text: `Ta série de ${streakDays} jour${streakDays > 1 ? 's' : ''} est impressionnante ! Continue comme ça pour débloquer le prochain palier.`,
       badge: 'STREAK',
     })
   }
   if (streakDays >= 7) {
     tips.push({
-      text: `${streakDays} jours d\u2019affil\u00e9e ! Tu fais partie du top 10% des joueurs les plus r\u00e9guliers.`,
+      text: `${streakDays} jours d’affilée ! Tu fais partie du top 10% des joueurs les plus réguliers.`,
       badge: 'ELITE',
     })
   }
@@ -47,17 +47,17 @@ function buildTipPool(streakDays: number, reliability: number): DynamicTip[] {
   // Reliability-based tips
   if (reliability >= 90) {
     tips.push({
-      text: 'Score de fiabilit\u00e9 excellent ! Ta squad peut compter sur toi.',
+      text: 'Score de fiabilité excellent ! Ta squad peut compter sur toi.',
       badge: 'BRAVO',
     })
   } else if (reliability >= 70 && reliability < 90) {
     tips.push({
-      text: `${Math.round(reliability)}% de fiabilit\u00e9, c\u2019est solide. Quelques sessions confirm\u00e9es de plus et tu passes au niveau sup\u00e9rieur !`,
+      text: `${Math.round(reliability)}% de fiabilité, c’est solide. Quelques sessions confirmées de plus et tu passes au niveau supérieur !`,
       badge: 'CONSEIL',
     })
   } else if (reliability < 70) {
     tips.push({
-      text: 'Ton score de fiabilit\u00e9 peut s\u2019am\u00e9liorer. Confirme tes prochaines sessions pour le booster !',
+      text: 'Ton score de fiabilité peut s’améliorer. Confirme tes prochaines sessions pour le booster !',
       badge: 'ATTENTION',
     })
   }
@@ -66,7 +66,7 @@ function buildTipPool(streakDays: number, reliability: number): DynamicTip[] {
   tips.push(
     { text: 'Invite un ami dans ta squad pour des sessions encore plus fun.', badge: 'CONSEIL' },
     { text: 'Planifie ta prochaine session pour maintenir ta dynamique.', badge: 'CONSEIL' },
-    { text: 'Les joueurs r\u00e9guliers progressent 3x plus vite. Reste constant !', badge: 'CONSEIL' },
+    { text: 'Les joueurs réguliers progressent 3x plus vite. Reste constant !', badge: 'CONSEIL' },
     { text: 'Consulte tes stats pour voir ta progression et identifier tes points forts.', badge: 'CONSEIL' },
   )
 
@@ -151,12 +151,12 @@ export function ProfileHistory({ profile, hasPremium, canAccessFeature, aiCoachT
 
   return (
     <>
-      {/* Activit\u00e9 Section - StreakCounter */}
-      <section className="mb-5" aria-label="Activit\u00e9">
+      {/* Activité Section - StreakCounter */}
+      <section className="mb-5" aria-label="Activité">
         <div className="flex items-center gap-2 mb-3">
           <Flame className="w-4 h-4 text-warning" />
           <h3 className="text-base font-semibold text-text-primary uppercase tracking-wide">
-            Activit\u00e9
+            Activité
           </h3>
         </div>
         <StreakCounter
@@ -285,7 +285,7 @@ export function ProfileHistory({ profile, hasPremium, canAccessFeature, aiCoachT
           </div>
           <div className="flex-1">
             <h4 className="text-md font-medium text-text-primary">Historique des appels</h4>
-            <p className="text-sm text-text-quaternary">Voir tous tes appels pass\u00e9s</p>
+            <p className="text-sm text-text-quaternary">Voir tous tes appels passés</p>
           </div>
           <ChevronRight className="w-5 h-5 text-text-quaternary" />
         </div>
@@ -293,17 +293,17 @@ export function ProfileHistory({ profile, hasPremium, canAccessFeature, aiCoachT
 
       {/* PRO sections below useful content */}
 
-      {/* IA Coach Avanc\u00e9 - Premium */}
+      {/* IA Coach Avancé - Premium */}
       <div className="mb-5">
         <div className="flex items-center gap-2 mb-3">
           <h3 className="text-base font-semibold text-text-primary uppercase tracking-wide">
-            Coach IA Avanc\u00e9
+            Coach IA Avancé
           </h3>
           {!canAccessFeature('ai_coach_advanced') && <PremiumBadge small />}
         </div>
         <PremiumGate
           feature="ai_coach_advanced"
-          featureLabel="Coach IA Avanc\u00e9"
+          featureLabel="Coach IA Avancé"
           fallback="lock"
         >
           <Card className="p-4 bg-gradient-to-br from-warning-5 to-transparent border-warning">
@@ -312,9 +312,9 @@ export function ProfileHistory({ profile, hasPremium, canAccessFeature, aiCoachT
                 <Sparkles className="w-5 h-5 text-warning" />
               </div>
               <div className="flex-1">
-                <h4 className="text-md font-medium text-text-primary mb-1">Conseils personnalis\u00e9s</h4>
+                <h4 className="text-md font-medium text-text-primary mb-1">Conseils personnalisés</h4>
                 <p className="text-base text-text-tertiary">
-                  Pr\u00e9dictions de disponibilit\u00e9, analyse des patterns de jeu, suggestions de cr\u00e9neaux optimaux pour ta squad.
+                  Prédictions de disponibilité, analyse des patterns de jeu, suggestions de créneaux optimaux pour ta squad.
                 </p>
               </div>
             </div>
@@ -337,7 +337,7 @@ export function ProfileHistory({ profile, hasPremium, canAccessFeature, aiCoachT
         </div>
         <PremiumGate
           feature="unlimited_history"
-          featureLabel="Historique illimit\u00e9"
+          featureLabel="Historique illimité"
           fallback="lock"
         >
           <Card className="p-4">
@@ -347,7 +347,7 @@ export function ProfileHistory({ profile, hasPremium, canAccessFeature, aiCoachT
               </div>
               <div className="flex-1">
                 <h4 className="text-md font-medium text-text-primary">Historique complet</h4>
-                <p className="text-sm text-text-quaternary">Toutes tes sessions depuis le d\u00e9but</p>
+                <p className="text-sm text-text-quaternary">Toutes tes sessions depuis le début</p>
               </div>
             </div>
           </Card>
@@ -368,14 +368,14 @@ export function ProfileHistory({ profile, hasPremium, canAccessFeature, aiCoachT
                   Passe Premium
                 </h3>
                 <p className="text-base text-text-tertiary mb-3">
-                  Stats avanc\u00e9es, IA coach avanc\u00e9, audio HD, historique illimit\u00e9
+                  Stats avancées, IA coach avancé, audio HD, historique illimité
                 </p>
                 <Button
                   size="sm"
                   className="bg-gradient-to-r from-primary to-purple"
                   onClick={() => navigate('/premium')}
                 >
-                  D\u00e9couvrir
+                  Découvrir
                   <ChevronRight className="w-4 h-4" />
                 </Button>
               </div>
@@ -396,7 +396,7 @@ export function ProfileHistory({ profile, hasPremium, canAccessFeature, aiCoachT
                 <h3 className="text-md font-medium text-text-primary">Compte Premium</h3>
                 <PremiumBadge small />
               </div>
-              <p className="text-sm text-text-quaternary">Toutes les features sont d\u00e9bloqu\u00e9es</p>
+              <p className="text-sm text-text-quaternary">Toutes les features sont débloquées</p>
             </div>
           </div>
         </Card>

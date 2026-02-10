@@ -97,7 +97,7 @@ export default function Home() {
   const queryClient = useQueryClient()
 
   const handleRefresh = useCallback(async () => {
-    await queryClient.invalidateQueries()
+    await queryClient.refetchQueries({ type: 'active' })
   }, [queryClient])
 
   const { data: squads = [], isLoading: squadsLoading } = useSquadsQuery()

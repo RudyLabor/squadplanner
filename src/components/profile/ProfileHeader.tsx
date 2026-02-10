@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { User, Edit2, Check, X, Camera, Loader2 } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
-import { toast } from 'sonner'
+import { showSuccess, showError } from '../../lib/toast'
 import { Button, Input, Expandable } from '../ui'
 import { supabase } from '../../lib/supabase'
 
@@ -98,9 +98,9 @@ export function ProfileHeader({ user, profile, isLoading, updateProfile }: Profi
     const result = await updateProfile({ username, bio })
     if (!result.error) {
       setIsEditing(false)
-      toast.success('Profil mis à jour')
+      showSuccess('Profil mis à jour')
     } else {
-      toast.error('Erreur lors de la mise à jour')
+      showError('Erreur lors de la mise à jour')
     }
   }
 

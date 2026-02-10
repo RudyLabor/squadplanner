@@ -4,7 +4,7 @@ import { UserPlus, Shield, Star, Gamepad2, MapPin, MessageSquare } from 'lucide-
 import { useMatchmakingQuery } from '../../hooks/queries'
 import { useAuthStore } from '../../hooks'
 import { supabase } from '../../lib/supabase'
-import { toast } from 'sonner'
+import { showSuccess, showError } from '../../lib/toast'
 import type { MatchmakingPlayer } from '../../types/database'
 
 interface Props {
@@ -59,9 +59,9 @@ const PlayerCard = memo(function PlayerCard({ player }: { player: MatchmakingPla
         receiver_id: player.user_id,
         content: `Salut ${player.username} ! Je t'invite à rejoindre ma squad. Intéressé(e) ?`,
       })
-      toast.success(`Message envoyé à ${player.username} !`)
+      showSuccess(`Message envoyé à ${player.username} !`)
     } catch {
-      toast.error('Erreur lors de l\'envoi')
+      showError('Erreur lors de l\'envoi')
     } finally {
       setInviting(false)
     }

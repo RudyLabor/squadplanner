@@ -34,9 +34,9 @@ export const LocationShareButton = memo(function LocationShareButton({ onShare, 
     } catch (err) {
       const error = err as GeolocationPositionError
       if (error.code === error.PERMISSION_DENIED) {
-        alert('Autorise l\'acces a ta position dans les parametres du navigateur.')
+        alert('Autorise l\'accès à ta position dans les paramètres du navigateur.')
       } else {
-        alert('Impossible de recuperer ta position. Reessaie.')
+        alert('Impossible de récupérer ta position. Réessaie.')
       }
     } finally {
       setIsLoading(false)

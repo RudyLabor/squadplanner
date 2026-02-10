@@ -1,7 +1,7 @@
 import { memo } from 'react'
 import { Calendar, Download, ExternalLink } from 'lucide-react'
 import { sessionToCalendarEvent, getGoogleCalendarUrl, exportSessionsToICS } from '../utils/calendarExport'
-import { toast } from 'sonner'
+import { showSuccess, showError, showInfo } from '../lib/toast'
 import type { Session } from '../types/database'
 
 interface Props {
@@ -17,7 +17,7 @@ export const CalendarSyncCard = memo(function CalendarSyncCard({ sessions, sessi
       const url = getGoogleCalendarUrl(event)
       window.open(url, '_blank', 'noopener,noreferrer')
     } else {
-      toast.info('Sélectionne une session pour l\'ajouter à Google Calendar')
+      showInfo('Sélectionne une session pour l\'ajouter à Google Calendar')
     }
   }
 
@@ -25,13 +25,13 @@ export const CalendarSyncCard = memo(function CalendarSyncCard({ sessions, sessi
     try {
       const toExport = sessions || (session ? [session] : [])
       if (toExport.length === 0) {
-        toast.error('Aucune session à exporter')
+        showError('Aucune session à exporter')
         return
       }
       exportSessionsToICS(toExport, squadName)
-      toast.success('Fichier .ics téléchargé !')
+      showSuccess('Fichier .ics téléchargé !')
     } catch (err) {
-      toast.error((err as Error).message || 'Erreur d\'export')
+      showError((err as Error).message || 'Erreur d\'export')
     }
   }
 

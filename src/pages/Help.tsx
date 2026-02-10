@@ -236,7 +236,7 @@ function PlanSessionIllustration() {
 
 function JoinVoiceIllustration() {
   return (
-    <svg viewBox="0 0 480 110" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full max-w-[480px]" role="img" aria-label="Rejoindre une party vocale : cliquer Rejoindre, autoriser le micro, connecte">
+    <svg viewBox="0 0 480 110" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full max-w-[480px]" role="img" aria-label="Rejoindre une party vocale : cliquer Rejoindre, autoriser le micro, connecté">
       {/* Step 1 - Click "Rejoindre" */}
       <rect x="0" y="8" width="140" height="94" rx="16" fill="var(--color-primary-10)" stroke="var(--color-primary)" strokeWidth="1.5" />
       <rect x="30" y="28" width="80" height="30" rx="10" fill="var(--color-primary)" />

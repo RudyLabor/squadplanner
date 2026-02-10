@@ -9,7 +9,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { X, Calendar, Clock, Users, Loader2, ChevronDown } from 'lucide-react'
 import { create } from 'zustand'
 import { useSquadsStore, useSessionsStore } from '../hooks'
-import { toast } from 'sonner'
+import { showSuccess } from '../lib/toast'
 import { useFocusTrap } from '../hooks/useFocusTrap'
 
 // Store for managing the modal state globally
@@ -94,7 +94,7 @@ export function CreateSessionModal() {
     if (createError) {
       setError(createError.message)
     } else {
-      toast.success('Session créée ! Tes potes vont être notifiés.')
+      showSuccess('Session créée ! Tes potes vont être notifiés.')
       close()
     }
   }

@@ -2,7 +2,7 @@ import { memo, useState } from 'react'
 import { Plug, Calendar, Tv, Gamepad2, MessageSquare, Download } from 'lucide-react'
 import { useAuthStore } from '../hooks'
 import { supabase } from '../lib/supabase'
-import { toast } from 'sonner'
+import { showSuccess, showError, showInfo } from '../lib/toast'
 
 export const IntegrationsSection = memo(function IntegrationsSection() {
   const { user } = useAuthStore()
@@ -19,7 +19,7 @@ export const IntegrationsSection = memo(function IntegrationsSection() {
       if (discordUsername) updates.discord_username = discordUsername
 
       if (Object.keys(updates).length === 0) {
-        toast.error('Aucune modification')
+        showError('Aucune modification')
         return
       }
 
@@ -29,9 +29,9 @@ export const IntegrationsSection = memo(function IntegrationsSection() {
         .eq('id', user.id)
 
       if (error) throw error
-      toast.success('Profil mis à jour !')
+      showSuccess('Profil mis à jour !')
     } catch {
-      toast.error('Erreur lors de la sauvegarde')
+      showError('Erreur lors de la sauvegarde')
     } finally {
       setSaving(false)
     }
@@ -56,7 +56,7 @@ export const IntegrationsSection = memo(function IntegrationsSection() {
               href="#"
               onClick={(e) => {
                 e.preventDefault()
-                toast.info('Utilise le bouton "Calendrier" sur chaque session pour l\'exporter')
+                showInfo('Utilise le bouton "Calendrier" sur chaque session pour l\'exporter')
               }}
               className="text-xs text-indigo-400 hover:text-indigo-300 transition-colors flex items-center gap-1"
             >

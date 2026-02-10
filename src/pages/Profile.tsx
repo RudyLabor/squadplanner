@@ -13,7 +13,7 @@ import { ProfileHeader } from '../components/profile/ProfileHeader'
 import { ProfileStats } from '../components/profile/ProfileStats'
 import { ProfileBadges } from '../components/profile/ProfileBadges'
 import { ProfileHistory } from '../components/profile/ProfileHistory'
-import { toast } from 'sonner'
+import { showSuccess, showError } from '../lib/toast'
 
 type ChallengeWithProgress = Challenge & { userProgress?: UserChallenge }
 
@@ -92,10 +92,10 @@ export function Profile() {
     try {
       const xpReward = await claimXPMutation.mutateAsync(challengeId)
       if (refreshProfile) await refreshProfile()
-      toast.success(`+${xpReward} XP réclamés !`, { icon: '' })
+      showSuccess(`+${xpReward} XP réclamés !`)
     } catch (error) {
       console.error('Error claiming XP:', error)
-      toast.error('Erreur lors de la réclamation des XP')
+      showError('Erreur lors de la réclamation des XP')
     }
   }
 

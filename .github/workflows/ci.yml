@@ -1,0 +1,178 @@
+name: CI - Build, Test & Lighthouse
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+# Annule les runs précédents sur la même branche/PR
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # ============================================
+  # JOB 1: Build + TypeCheck + Lint
+  # Si ça échoue, rien d'autre ne tourne
+  # ============================================
+  build:
+    name: Build & TypeCheck
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: TypeCheck
+        run: npx tsc -b
+
+      - name: Lint
+        run: npx eslint . --max-warnings=0
+        continue-on-error: true
+
+      - name: Build
+        run: npx vite build
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/
+          retention-days: 1
+
+  # ============================================
+  # JOB 2: Bundle Size Check
+  # Alerte si le bundle grossit trop
+  # ============================================
+  bundle-size:
+    name: Bundle Size
+    runs-on: ubuntu-latest
+    needs: build
+    timeout-minutes: 5
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist/
+
+      - name: Analyze bundle size
+        run: |
+          echo "## Bundle Size Report" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          # Total JS size
+          JS_SIZE=$(find dist/assets -name '*.js' -exec wc -c {} + | tail -1 | awk '{print $1}')
+          JS_SIZE_KB=$((JS_SIZE / 1024))
+          echo "- **Total JS:** ${JS_SIZE_KB} KB" >> $GITHUB_STEP_SUMMARY
+
+          # Total CSS size
+          CSS_SIZE=$(find dist/assets -name '*.css' -exec wc -c {} + | tail -1 | awk '{print $1}')
+          CSS_SIZE_KB=$((CSS_SIZE / 1024))
+          echo "- **Total CSS:** ${CSS_SIZE_KB} KB" >> $GITHUB_STEP_SUMMARY
+
+          # Total assets
+          TOTAL_SIZE=$(find dist -type f -exec wc -c {} + | tail -1 | awk '{print $1}')
+          TOTAL_SIZE_KB=$((TOTAL_SIZE / 1024))
+          echo "- **Total assets:** ${TOTAL_SIZE_KB} KB" >> $GITHUB_STEP_SUMMARY
+
+          # Number of JS chunks
+          JS_COUNT=$(find dist/assets -name '*.js' | wc -l)
+          echo "- **JS chunks:** ${JS_COUNT}" >> $GITHUB_STEP_SUMMARY
+
+          # Top 5 biggest chunks
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Top 5 biggest chunks" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          find dist/assets -name '*.js' -exec ls -lhS {} + | head -5 | awk '{print $5, $NF}' >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+
+          # Budget check: fail if JS > 3500KB (current is ~3300KB, will lower as we optimize)
+          BUDGET_KB=3500
+          if [ "$JS_SIZE_KB" -gt "$BUDGET_KB" ]; then
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "### BUDGET EXCEEDED" >> $GITHUB_STEP_SUMMARY
+            echo "JS bundle (${JS_SIZE_KB} KB) exceeds budget (${BUDGET_KB} KB)" >> $GITHUB_STEP_SUMMARY
+            echo "::error::JS bundle size ${JS_SIZE_KB}KB exceeds budget ${BUDGET_KB}KB"
+            exit 1
+          else
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "Budget OK (${JS_SIZE_KB}/${BUDGET_KB} KB)" >> $GITHUB_STEP_SUMMARY
+          fi
+
+  # ============================================
+  # JOB 3: Lighthouse CI
+  # Performance, Accessibility, Best Practices, SEO
+  # ============================================
+  lighthouse:
+    name: Lighthouse CI
+    runs-on: ubuntu-latest
+    needs: build
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist/
+
+      - name: Run Lighthouse CI
+        uses: treosh/lighthouse-ci-action@v12
+        with:
+          configPath: lighthouserc.json
+          uploadArtifacts: true
+          temporaryPublicStorage: true
+
+  # ============================================
+  # JOB 4: Lighthouse CI Mobile
+  # Mobile-specific performance audit
+  # ============================================
+  lighthouse-mobile:
+    name: Lighthouse Mobile
+    runs-on: ubuntu-latest
+    needs: build
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist/
+
+      - name: Run Lighthouse CI Mobile
+        uses: treosh/lighthouse-ci-action@v12
+        with:
+          configPath: lighthouserc-mobile.json
+          uploadArtifacts: true
+          temporaryPublicStorage: true

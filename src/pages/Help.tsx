@@ -321,8 +321,8 @@ export function Help() {
       <MobilePageHeader title="Aide" />
       <ScrollProgress />
       <div className="px-4 md:px-6 lg:px-8 py-6 max-w-4xl mx-auto">
-        {/* Header */}
-        <header className="flex items-center gap-4 mb-8">
+        {/* Header - hidden on mobile where MobilePageHeader is shown */}
+        <header className="hidden lg:flex items-center gap-4 mb-8">
           <button
             onClick={() => navigate(-1)}
             className="w-10 h-10 rounded-xl bg-border-subtle flex items-center justify-center hover:bg-border-hover hover:scale-[1.02] transition-interactive"

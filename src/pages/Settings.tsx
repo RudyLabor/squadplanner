@@ -262,8 +262,8 @@ export function Settings() {
     <main className="min-h-0 bg-bg-base pb-6" aria-label="Paramètres">
       <MobilePageHeader title="Paramètres" />
       <div className="px-4 md:px-6 lg:px-8 py-6 max-w-4xl mx-auto">
-        {/* Header */}
-        <header className="flex items-center gap-4 mb-8">
+        {/* Header - hidden on mobile where MobilePageHeader is shown */}
+        <header className="hidden lg:flex items-center gap-4 mb-8">
           <button
             onClick={() => navigate(-1)}
             className="w-10 h-10 rounded-xl bg-surface-card flex items-center justify-center hover:bg-border-hover transition-colors"

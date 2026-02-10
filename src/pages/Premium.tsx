@@ -375,8 +375,8 @@ export function Premium() {
         />
       )}
 
-      {/* Mobile back button */}
-      <div className="lg:hidden px-4 pt-4">
+      {/* Mobile back button - handled by MobilePageHeader above */}
+      <div className="hidden">
         <button
           onClick={() => navigate(-1)}
           className="flex items-center gap-2 text-text-secondary hover:text-text-primary transition-colors"

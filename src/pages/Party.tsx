@@ -50,8 +50,8 @@ function ParticipantAvatar({
 
   const textSizes = {
     sm: 'text-sm',
-    md: 'text-xl',
-    lg: 'text-2xl'
+    md: 'text-lg',
+    lg: 'text-xl'
   }
 
   return (
@@ -720,7 +720,7 @@ export function Party() {
                     <Mic className="w-8 h-8 text-white" strokeWidth={1.5} />
                   </motion.div>
                 </div>
-                <h3 className="text-xl font-bold text-text-primary mb-2">
+                <h3 className="text-lg font-bold text-text-primary mb-2">
                   Parle avec ta squad
                 </h3>
                 <p className="text-md text-text-secondary mb-6 max-w-[280px] mx-auto leading-relaxed">
@@ -784,7 +784,7 @@ export function Party() {
                             <Mic className="w-9 h-9 text-white" />
                           </motion.div>
                         </div>
-                        <h3 className="text-xl font-bold text-text-primary mb-2">
+                        <h3 className="text-lg font-bold text-text-primary mb-2">
                           Prêt à parler ?
                         </h3>
                         <p className="text-md text-text-secondary mb-2">

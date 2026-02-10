@@ -235,7 +235,7 @@ function PodiumCard({
           }}
         >
           <span
-            className="text-2xl font-extrabold"
+            className="text-xl font-extrabold"
             style={{ color: medal.primary80 }}
           >
             {entry.rank}
@@ -366,7 +366,7 @@ export function SquadLeaderboard({ entries, currentUserId }: SquadLeaderboardPro
           <Trophy className="w-5 h-5 text-gold" />
         </div>
         <div>
-          <h2 className="text-xl font-bold text-text-primary">Classement Squad</h2>
+          <h2 className="text-lg font-bold text-text-primary">Classement Squad</h2>
           <p className="text-sm text-text-tertiary">Top joueurs cette semaine</p>
         </div>
       </motion.div>

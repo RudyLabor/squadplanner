@@ -264,17 +264,17 @@ export default function SessionDetail() {
             <div className="grid grid-cols-3 gap-3 lg:gap-4">
               <Card className="p-4 lg:p-5 text-center">
                 <Check className="w-5 h-5 mx-auto mb-2 text-success" />
-                <div className="text-xl lg:text-2xl font-bold text-text-primary">{currentSession.rsvp_counts?.present || 0}</div>
+                <div className="text-lg lg:text-xl font-bold text-text-primary">{currentSession.rsvp_counts?.present || 0}</div>
                 <div className="text-sm text-text-tertiary">Présents</div>
               </Card>
               <Card className="p-4 lg:p-5 text-center">
                 <HelpCircle className="w-5 h-5 mx-auto mb-2 text-warning" />
-                <div className="text-xl lg:text-2xl font-bold text-text-primary">{currentSession.rsvp_counts?.maybe || 0}</div>
+                <div className="text-lg lg:text-xl font-bold text-text-primary">{currentSession.rsvp_counts?.maybe || 0}</div>
                 <div className="text-sm text-text-tertiary">Peut-être</div>
               </Card>
               <Card className="p-4 lg:p-5 text-center">
                 <X className="w-5 h-5 mx-auto mb-2 text-error" />
-                <div className="text-xl lg:text-2xl font-bold text-text-primary">{currentSession.rsvp_counts?.absent || 0}</div>
+                <div className="text-lg lg:text-xl font-bold text-text-primary">{currentSession.rsvp_counts?.absent || 0}</div>
                 <div className="text-sm text-text-tertiary">Absents</div>
               </Card>
             </div>
@@ -357,7 +357,7 @@ export default function SessionDetail() {
                   >
                     <Gamepad2 className="w-14 h-14 mx-auto mb-4 text-success" />
                   </motion.div>
-                  <h3 className="text-xl font-bold text-text-primary mb-2">🎮 C'est l'heure du game !</h3>
+                  <h3 className="text-lg font-bold text-text-primary mb-2">🎮 C'est l'heure du game !</h3>
                   <p className="text-text-secondary mb-5">Ta squad t'attend. Confirme que t'es là !</p>
                   <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
                     <Button

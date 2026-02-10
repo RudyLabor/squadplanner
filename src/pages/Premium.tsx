@@ -429,12 +429,12 @@ export function Premium() {
               </div>
             </div>
 
-            <h1 className="text-xl md:text-2xl font-bold text-text-primary mb-4">
+            <h1 className="text-lg md:text-xl font-bold text-text-primary mb-4">
               Passe au niveau
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-warning to-warning/70"> supérieur</span>
             </h1>
 
-            <p className="text-lg md:text-xl text-text-secondary max-w-xl mx-auto mb-8">
+            <p className="text-md md:text-lg text-text-secondary max-w-xl mx-auto mb-8">
               Débloque tout le potentiel de Squad Planner. Stats avancées, IA coach personnalisé, audio HD et bien plus.
             </p>
 
@@ -493,7 +493,7 @@ export function Premium() {
                 <Gift className="w-7 h-7 text-white" />
               </motion.div>
 
-              <h2 className="text-xl md:text-2xl font-bold text-text-primary mb-2">
+              <h2 className="text-lg md:text-xl font-bold text-text-primary mb-2">
                 7 jours d'essai gratuit
               </h2>
               <p className="text-md text-text-secondary mb-1">
@@ -558,7 +558,7 @@ export function Premium() {
                 </span>
               </div>
               <div className="flex items-baseline gap-1 mb-1">
-                <span className="text-3xl font-bold text-text-primary">
+                <span className="text-2xl font-bold text-text-primary">
                   {PREMIUM_PRICE_MONTHLY.toFixed(2)}€
                 </span>
                 <span className="text-md text-text-tertiary">/mois</span>
@@ -600,7 +600,7 @@ export function Premium() {
                 </span>
               </div>
               <div className="flex items-baseline gap-1 mb-1">
-                <span className="text-3xl font-bold text-text-primary">
+                <span className="text-2xl font-bold text-text-primary">
                   {(PREMIUM_PRICE_YEARLY / 12).toFixed(2)}€
                 </span>
                 <span className="text-md text-text-tertiary">/mois</span>

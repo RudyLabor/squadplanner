@@ -7,7 +7,7 @@ export function PricingSection() {
     <section id="pricing" aria-label="Tarifs" className="px-4 md:px-6 py-10 md:py-14">
       <div className="max-w-4xl mx-auto">
         <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-12">
-          <h2 className="text-2xl md:text-3xl font-bold text-text-primary mb-4">
+          <h2 className="text-xl md:text-2xl font-bold text-text-primary mb-4">
             Tarifs simples, sans surprise
           </h2>
           <p className="text-text-tertiary text-md max-w-md mx-auto">

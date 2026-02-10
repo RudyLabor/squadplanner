@@ -458,7 +458,7 @@ export function Onboarding() {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 }}
-                className="text-3xl md:text-4xl font-bold text-text-primary mb-4 leading-tight"
+                className="text-2xl md:text-3xl font-bold text-text-primary mb-4 leading-tight"
               >
                 Arrêtez de dire<br />
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-purple">
@@ -470,7 +470,7 @@ export function Onboarding() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.4 }}
-                className="text-xl text-text-secondary mb-10"
+                className="text-lg text-text-secondary mb-10"
               >
                 Jouez vraiment ensemble.
               </motion.p>
@@ -526,7 +526,7 @@ export function Onboarding() {
               <div className="h-10 mb-6" />
 
               <div className="text-center mb-8">
-                <h2 className="text-2xl font-bold text-text-primary mb-2">
+                <h2 className="text-xl font-bold text-text-primary mb-2">
                   Ta première squad
                 </h2>
                 <p className="text-text-secondary">
@@ -605,7 +605,7 @@ export function Onboarding() {
                 <div className="w-16 h-16 rounded-2xl bg-primary-10 flex items-center justify-center mx-auto mb-4">
                   <Users className="w-8 h-8 text-primary" />
                 </div>
-                <h2 className="text-2xl font-bold text-text-primary mb-2">
+                <h2 className="text-xl font-bold text-text-primary mb-2">
                   Crée ta squad
                 </h2>
                 <p className="text-text-secondary">
@@ -683,7 +683,7 @@ export function Onboarding() {
                 <div className="w-16 h-16 rounded-2xl bg-success-10 flex items-center justify-center mx-auto mb-4">
                   <UserPlus className="w-8 h-8 text-success" />
                 </div>
-                <h2 className="text-2xl font-bold text-text-primary mb-2">
+                <h2 className="text-xl font-bold text-text-primary mb-2">
                   Rejoins une squad
                 </h2>
                 <p className="text-text-secondary">
@@ -698,7 +698,7 @@ export function Onboarding() {
                     value={inviteCode}
                     onChange={(e) => setInviteCode(e.target.value.toUpperCase())}
                     placeholder="Ex: ABC123"
-                    className="text-center text-2xl tracking-widest font-mono"
+                    className="text-center text-xl tracking-widest font-mono"
                     autoComplete="off"
                     data-testid="invite-code-input"
                     maxLength={8}
@@ -750,7 +750,7 @@ export function Onboarding() {
               </button>
 
               <div className="text-center mb-8">
-                <h2 className="text-2xl font-bold text-text-primary mb-2">
+                <h2 className="text-xl font-bold text-text-primary mb-2">
                   Ne rate jamais une session
                 </h2>
                 <p className="text-text-secondary">
@@ -897,7 +897,7 @@ export function Onboarding() {
               </button>
 
               <div className="text-center mb-8">
-                <h2 className="text-2xl font-bold text-text-primary mb-2">
+                <h2 className="text-xl font-bold text-text-primary mb-2">
                   C'est toi ?
                 </h2>
                 <p className="text-text-secondary">
@@ -920,7 +920,7 @@ export function Onboarding() {
                             decoding="async"
                           />
                         ) : (
-                          <span className="text-4xl font-bold text-primary">
+                          <span className="text-3xl font-bold text-primary">
                             {username?.charAt(0).toUpperCase() || '?'}
                           </span>
                         )}
@@ -1052,7 +1052,7 @@ export function Onboarding() {
                 <Check className="w-10 h-10 text-white" />
               </motion.div>
 
-              <h2 className="text-2xl font-bold text-text-primary mb-2">
+              <h2 className="text-xl font-bold text-text-primary mb-2">
                 {createdSquadName ? `${createdSquadName} est prête !` : "C'est parti !"}
               </h2>
               <p className="text-text-secondary mb-6">
@@ -1102,7 +1102,7 @@ export function Onboarding() {
                       <div className="pt-3 border-t border-border-default">
                         <p className="text-sm text-text-tertiary mb-2">Code d'invitation</p>
                         <div className="flex items-center gap-2">
-                          <code className="flex-1 px-4 py-3 rounded-lg bg-surface-card border border-border-default text-xl font-mono font-bold text-text-primary tracking-widest text-center">
+                          <code className="flex-1 px-4 py-3 rounded-lg bg-surface-card border border-border-default text-lg font-mono font-bold text-text-primary tracking-widest text-center">
                             {createdSquadCode}
                           </code>
                           <button

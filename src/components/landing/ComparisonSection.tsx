@@ -26,7 +26,7 @@ export function ComparisonSection() {
     <section aria-label="Comparaison avec Discord" className="px-4 md:px-6 py-10 md:py-14">
       <div className="max-w-4xl mx-auto">
         <motion.div variants={scrollReveal} initial="hidden" whileInView="visible" viewport={{ once: true }} className="text-center mb-12">
-          <h2 className="text-2xl md:text-3xl font-bold text-text-primary mb-4">
+          <h2 className="text-xl md:text-2xl font-bold text-text-primary mb-4">
             Plus qu'un Discord pour gamers
           </h2>
           <p className="text-text-tertiary text-lg">

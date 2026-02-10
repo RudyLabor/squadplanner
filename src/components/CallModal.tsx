@@ -241,7 +241,7 @@ export function CallModal() {
                   decoding="async"
                 />
               ) : (
-                <span className="text-4xl font-bold text-primary">{initial}</span>
+                <span className="text-3xl font-bold text-primary">{initial}</span>
               )}
             </div>
           </motion.div>
@@ -252,7 +252,7 @@ export function CallModal() {
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.2 }}
-            className="text-2xl font-bold text-text-primary mb-2"
+            className="text-xl font-bold text-text-primary mb-2"
           >
             Appel avec {otherPerson.username}
           </motion.h2>

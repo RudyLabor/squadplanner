@@ -25,7 +25,7 @@ export function FaqSection() {
     <section aria-label="Questions fréquentes" className="px-4 md:px-6 py-10 md:py-14">
       <div className="max-w-3xl mx-auto">
         <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-12">
-          <h2 className="text-2xl md:text-3xl font-bold text-text-primary mb-4">
+          <h2 className="text-xl md:text-2xl font-bold text-text-primary mb-4">
             Questions fréquentes
           </h2>
         </motion.div>

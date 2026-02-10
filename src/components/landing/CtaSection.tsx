@@ -22,7 +22,7 @@ export function CtaSection() {
             <motion.div animate={{ rotate: [0, 5, -5, 0] }} transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}>
               <Sparkles className="w-12 h-12 mx-auto mb-6 text-primary" aria-hidden="true" />
             </motion.div>
-            <h2 className="text-2xl md:text-4xl font-bold text-text-primary mb-4">
+            <h2 className="text-xl md:text-3xl font-bold text-text-primary mb-4">
               Ta squad t'attend
             </h2>
             <p className="text-text-tertiary mb-8 text-lg">

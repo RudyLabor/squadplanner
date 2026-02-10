@@ -207,7 +207,7 @@ export default function Home() {
               transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
             >
               <div className="min-w-0 flex-1 mr-3">
-                <h1 className="text-lg md:text-xl font-bold text-text-primary truncate">
+                <h1 className="text-base md:text-lg font-bold text-text-primary truncate">
                   Salut {profile?.username || 'Gamer'} !
                 </h1>
                 <p className="text-sm text-text-tertiary">

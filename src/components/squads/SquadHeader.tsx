@@ -41,7 +41,7 @@ export function SquadHeader({ squadId, squad, isOwner }: SquadHeaderProps) {
         <div className="flex items-center justify-between mb-3">
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2">
-              <h1 className="text-2xl font-bold text-text-primary truncate">{squad.name}</h1>
+              <h1 className="text-xl font-bold text-text-primary truncate">{squad.name}</h1>
               {isOwner && <Crown className="w-5 h-5 text-warning flex-shrink-0" />}
             </div>
             <p className="text-base text-text-tertiary">

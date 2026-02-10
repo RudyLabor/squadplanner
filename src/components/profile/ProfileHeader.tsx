@@ -192,7 +192,7 @@ export function ProfileHeader({ user, profile, isLoading, updateProfile }: Profi
                 exit={{ opacity: 0, y: -10 }}
                 className="text-center"
               >
-                <h1 className="text-2xl font-bold text-text-primary mb-1">
+                <h1 className="text-xl font-bold text-text-primary mb-1">
                   {profile?.username || 'Gamer'}
                 </h1>
                 <Expandable previewLines={2} className="text-md text-text-tertiary mb-1 max-w-sm">

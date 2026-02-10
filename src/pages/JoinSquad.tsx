@@ -138,7 +138,7 @@ export function JoinSquad() {
           <div className="w-16 h-16 rounded-2xl bg-error/10 flex items-center justify-center mx-auto mb-6">
             <XCircle className="w-8 h-8 text-error" />
           </div>
-          <h1 className="text-xl font-semibold text-text-primary mb-2">
+          <h1 className="text-lg font-semibold text-text-primary mb-2">
             Invitation invalide
           </h1>
           <p className="text-text-secondary mb-6">
@@ -199,7 +199,7 @@ export function JoinSquad() {
               <Users className="w-8 h-8 text-primary" />
             </motion.div>
 
-            <h1 className="text-xl font-semibold text-text-primary mb-1">
+            <h1 className="text-lg font-semibold text-text-primary mb-1">
               {squadPreview?.name}
             </h1>
             <p className="text-text-secondary text-sm mb-2">

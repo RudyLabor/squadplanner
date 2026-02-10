@@ -41,7 +41,7 @@ export function LandingHero({ isLoggedIn, isDesktop, mouseRotateX, mouseRotateY,
             <span className="text-base text-purple font-medium">Rassemble ta squad et jouez ensemble</span>
           </div>
 
-          <h1 className="text-4xl md:text-6xl font-extrabold text-text-primary mb-6 leading-tight tracking-tight">
+          <h1 className="text-3xl md:text-5xl font-extrabold text-text-primary mb-6 leading-tight tracking-tight">
             Transforme<br />
             <span className="text-gradient-animated">
               {'\u00ab\u00a0'}on verra{'\u00a0\u00bb'}
@@ -86,7 +86,7 @@ export function LandingHero({ isLoggedIn, isDesktop, mouseRotateX, mouseRotateY,
           <div className="flex items-center justify-center gap-8 md:gap-16 mb-8">
             {heroStats.map((stat) => (
               <div key={stat.label} className="text-center">
-                <div className="text-2xl md:text-3xl font-bold text-text-primary">{stat.value}</div>
+                <div className="text-xl md:text-2xl font-bold text-text-primary">{stat.value}</div>
                 <div className="text-sm md:text-base text-text-quaternary">{stat.label}</div>
               </div>
             ))}

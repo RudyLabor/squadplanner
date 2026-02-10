@@ -22,7 +22,7 @@ export function ProblemSection() {
     <section aria-label="Le problème" className="px-4 md:px-6 py-10 md:py-14">
       <div className="max-w-4xl mx-auto">
         <motion.div variants={scrollRevealLight} initial="hidden" whileInView="visible" viewport={{ once: true }} className="text-center mb-12">
-          <h2 className="text-2xl md:text-3xl font-bold text-text-primary mb-4">
+          <h2 className="text-xl md:text-2xl font-bold text-text-primary mb-4">
             Le problème que tu connais trop bien
           </h2>
           <p className="text-text-tertiary text-lg">

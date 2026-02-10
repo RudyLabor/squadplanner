@@ -302,7 +302,7 @@ export function CallHistory() {
             <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-primary-10 to-transparent flex items-center justify-center mb-5">
               <Phone className="w-10 h-10 text-primary" />
             </div>
-            <h3 className="text-xl font-semibold text-text-primary mb-2">
+            <h3 className="text-lg font-semibold text-text-primary mb-2">
               {filter === 'all' ? 'Pas encore d\'appels' : 'Aucun appel ici'}
             </h3>
             <p className="text-md text-text-tertiary text-center max-w-[260px] mb-6">

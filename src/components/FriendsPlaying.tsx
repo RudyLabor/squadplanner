@@ -222,7 +222,7 @@ export function FriendsPlaying({ friends, onJoin, onInvite }: FriendsPlayingProp
   if (friends.length === 0) {
     return (
       <div className="mb-6">
-        <h2 className="text-xl font-semibold text-text-primary mb-3 flex items-center gap-2">
+        <h2 className="text-lg font-semibold text-text-primary mb-3 flex items-center gap-2">
           <Gamepad2 className="w-4 h-4 text-success" />
           Tes potes jouent maintenant
         </h2>
@@ -233,7 +233,7 @@ export function FriendsPlaying({ friends, onJoin, onInvite }: FriendsPlayingProp
 
   return (
     <div className="mb-6">
-      <h2 className="text-xl font-semibold text-text-primary mb-3 flex items-center gap-2">
+      <h2 className="text-lg font-semibold text-text-primary mb-3 flex items-center gap-2">
         <motion.div
           animate={{
             scale: [1, 1.1, 1],

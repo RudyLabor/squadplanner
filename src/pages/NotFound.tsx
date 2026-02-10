@@ -24,12 +24,12 @@ export function NotFound() {
         </motion.div>
 
         {/* Title — always visible */}
-        <h1 className="text-6xl font-bold text-text-primary mb-3">
+        <h1 className="text-4xl font-bold text-text-primary mb-3">
           404
         </h1>
 
         {/* Message — always visible */}
-        <p className="text-xl font-semibold text-text-primary mb-2">
+        <p className="text-lg font-semibold text-text-primary mb-2">
           Oups, cette page n'existe pas !
         </p>
 

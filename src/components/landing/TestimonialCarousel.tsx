@@ -163,7 +163,7 @@ export function TestimonialCarousel() {
       aria-label="Témoignages de joueurs"
     >
       <motion.h2
-        className="text-2xl md:text-3xl font-bold text-center text-text-primary mb-3"
+        className="text-xl md:text-2xl font-bold text-center text-text-primary mb-3"
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}

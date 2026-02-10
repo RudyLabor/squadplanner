@@ -117,7 +117,7 @@ export class ErrorBoundary extends Component<Props, State> {
               <AlertTriangle className="w-8 h-8 text-error" />
             </div>
 
-            <h2 className="text-xl font-semibold text-text-primary mb-2">
+            <h2 className="text-lg font-semibold text-text-primary mb-2">
               {this.state.isChunkError ? 'Mise à jour disponible' : 'Oups, quelque chose s\'est mal passé'}
             </h2>
 

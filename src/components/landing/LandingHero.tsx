@@ -24,7 +24,7 @@ export function LandingHero({ isLoggedIn, isDesktop, mouseRotateX, mouseRotateY,
   const heroRef = useRef(null)
 
   return (
-    <main ref={heroRef} id="main-content" aria-label="Accueil" className="relative overflow-hidden pt-20 noise-overlay">
+    <main ref={heroRef} id="main-content" aria-label="Accueil" className="relative overflow-hidden pt-14 md:pt-20 noise-overlay">
       <div className="absolute inset-0 mesh-gradient-hero" />
       <motion.div
         className="absolute top-0 right-0 w-full max-w-full h-[600px] hero-gradient-pulse"
@@ -34,14 +34,14 @@ export function LandingHero({ isLoggedIn, isDesktop, mouseRotateX, mouseRotateY,
         }}
       />
 
-      <div className="relative px-4 md:px-6 py-12 md:py-20 max-w-5xl mx-auto">
+      <div className="relative px-4 md:px-6 py-4 md:py-20 max-w-5xl mx-auto">
         <div className="text-center">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full badge-shimmer border border-primary/12 mb-8">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full badge-shimmer border border-primary/12 mb-3 md:mb-8">
             <Sparkles className="w-4 h-4 text-purple" aria-hidden="true" />
             <span className="text-base text-purple font-medium">Rassemble ta squad et jouez ensemble</span>
           </div>
 
-          <h1 className="text-3xl md:text-5xl font-extrabold text-text-primary mb-6 leading-tight tracking-tight">
+          <h1 className="text-3xl md:text-5xl font-extrabold text-text-primary mb-2 md:mb-6 leading-tight tracking-tight">
             Transforme<br />
             <span className="text-gradient-animated">
               {'\u00ab\u00a0'}on verra{'\u00a0\u00bb'}
@@ -49,15 +49,15 @@ export function LandingHero({ isLoggedIn, isDesktop, mouseRotateX, mouseRotateY,
             en {'\u00ab\u00a0'}on y est{'\u00a0\u00bb'}
           </h1>
 
-          <p className="text-lg md:text-xl text-text-tertiary mb-10 max-w-2xl mx-auto leading-relaxed">
+          <p className="text-lg md:text-xl text-text-tertiary mb-5 md:mb-10 max-w-2xl mx-auto leading-relaxed">
             Squad Planner fait que tes sessions ont vraiment lieu.
             <span className="text-text-primary font-medium"> Ta squad t'attend.</span>
           </p>
 
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 md:gap-4 mb-6 md:mb-16">
             {isLoggedIn ? (
               <motion.div whileHover={{ scale: 1.02, y: -2 }} whileTap={{ scale: 0.98 }} transition={{ duration: 0.4, ease: 'easeOut' }} className="inline-flex">
-                <Link to="/home" className="flex items-center gap-2 h-14 px-8 rounded-xl bg-primary text-white text-lg font-semibold shadow-lg shadow-primary/10 cta-glow-idle" data-track="hero_cta_click">
+                <Link to="/home" className="flex items-center gap-2 h-12 md:h-14 px-8 rounded-xl bg-primary text-white text-lg font-semibold shadow-lg shadow-primary/10 cta-glow-idle" data-track="hero_cta_click">
                   Accéder à mes squads
                   <ArrowRight className="w-5 h-5" />
                 </Link>
@@ -65,14 +65,14 @@ export function LandingHero({ isLoggedIn, isDesktop, mouseRotateX, mouseRotateY,
             ) : (
               <>
                 <motion.div whileHover={{ scale: 1.02, y: -2 }} {...springTap} className="w-full sm:w-auto">
-                  <Link to="/auth?mode=register&redirect=onboarding" className="flex items-center gap-2 h-14 px-8 rounded-xl bg-primary text-white text-lg font-semibold shadow-lg shadow-primary/10 cta-pulse-glow w-full sm:w-auto justify-center" data-track="hero_cta_click">
+                  <Link to="/auth?mode=register&redirect=onboarding" className="flex items-center gap-2 h-12 md:h-14 px-8 rounded-xl bg-primary text-white text-lg font-semibold shadow-lg shadow-primary/10 cta-pulse-glow w-full sm:w-auto justify-center" data-track="hero_cta_click">
                     Créer ma squad gratuitement
                     <ArrowRight className="w-5 h-5" />
                   </Link>
                 </motion.div>
                 <motion.a
                   href="#how-it-works"
-                  className="flex items-center gap-2 h-14 px-8 rounded-xl border border-border-hover text-text-secondary hover:text-text-primary hover:border-text-tertiary transition-all w-full sm:w-auto justify-center"
+                  className="flex items-center gap-2 h-12 md:h-14 px-8 rounded-xl border border-border-hover text-text-secondary hover:text-text-primary hover:border-text-tertiary transition-all w-full sm:w-auto justify-center"
                   whileHover={{ scale: 1.02, y: -2 }}
                   {...springTap}
                   data-track="hero_secondary_cta_click"
@@ -83,7 +83,7 @@ export function LandingHero({ isLoggedIn, isDesktop, mouseRotateX, mouseRotateY,
             )}
           </div>
 
-          <div className="flex items-center justify-center gap-8 md:gap-16 mb-8">
+          <div className="flex items-center justify-center gap-8 md:gap-16 mb-3 md:mb-8">
             {heroStats.map((stat) => (
               <div key={stat.label} className="text-center">
                 <div className="text-xl md:text-2xl font-bold text-text-primary">{stat.value}</div>
@@ -98,7 +98,7 @@ export function LandingHero({ isLoggedIn, isDesktop, mouseRotateX, mouseRotateY,
           </div>
 
           {!isLoggedIn && (
-            <Link to="/auth" className="block mt-4 text-md text-text-quaternary hover:text-text-tertiary transition-colors">
+            <Link to="/auth" className="block mt-2 md:mt-4 text-md text-text-quaternary hover:text-text-tertiary transition-colors">
               Déjà un compte ? Se connecter
             </Link>
           )}

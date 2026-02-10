@@ -35,29 +35,34 @@ export function ComparisonSection() {
         </motion.div>
 
         <motion.div
-          className="overflow-x-auto rounded-2xl border border-border-default"
+          className="rounded-2xl border border-border-default overflow-hidden"
           variants={scrollReveal}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
         >
-          <table className="w-full min-w-[500px]">
+          <table className="w-full table-fixed">
             <caption className="sr-only">
               Comparaison des fonctionnalités entre Discord et Squad Planner
             </caption>
+            <colgroup>
+              <col className="w-[54%] md:w-auto" />
+              <col className="w-[23%] md:w-auto" />
+              <col className="w-[23%] md:w-auto" />
+            </colgroup>
             <thead>
               <tr className="bg-bg-surface border-b border-border-subtle">
-                <th scope="col" className="text-left text-sm md:text-base font-medium text-text-secondary px-3 md:px-6 py-3 sticky left-0 z-10 bg-bg-surface">
+                <th scope="col" className="text-left text-xs md:text-base font-medium text-text-secondary px-2 md:px-6 py-3">
                   Fonctionnalité
                 </th>
-                <th scope="col" className="text-center text-sm md:text-base font-medium text-text-secondary px-3 md:px-6 py-3">
-                  <span className="inline-flex items-center gap-1.5">
-                    <DiscordIcon className="w-4 h-4" aria-hidden="true" />
-                    Discord
+                <th scope="col" className="text-center text-xs md:text-base font-medium text-text-secondary px-1 md:px-6 py-3">
+                  <span className="inline-flex items-center gap-1 md:gap-1.5">
+                    <DiscordIcon className="w-3.5 h-3.5 md:w-4 md:h-4" aria-hidden="true" />
+                    <span className="hidden sm:inline">Discord</span>
                   </span>
                 </th>
-                <th scope="col" className="text-center text-sm md:text-base font-medium text-primary px-3 md:px-6 py-3 border-t-2 border-t-primary">
-                  <span className="inline-flex items-center gap-1.5">
+                <th scope="col" className="text-center text-xs md:text-base font-medium text-primary px-1 md:px-6 py-3 border-t-2 border-t-primary">
+                  <span className="inline-flex items-center gap-1 md:gap-1.5">
                     <SquadPlannerLogo size={14} aria-hidden="true" />
                     SP
                   </span>
@@ -72,22 +77,22 @@ export function ComparisonSection() {
                     !item.discord ? 'bg-primary/[0.02]' : ''
                   }`}
                 >
-                  <th scope="row" className="text-left text-base md:text-md text-text-primary px-3 md:px-6 py-3 md:py-4 font-normal sticky left-0 z-10 bg-bg-base">
+                  <th scope="row" className="text-left text-xs md:text-md text-text-primary px-2 md:px-6 py-2.5 md:py-4 font-normal">
                     {item.feature}
                   </th>
-                  <td className="text-center px-3 md:px-6 py-3 md:py-4">
+                  <td className="text-center px-1 md:px-6 py-2.5 md:py-4">
                     {item.discord === true ? (
                       <span className="inline-flex flex-col items-center">
                         <Check className="w-4 h-4 md:w-5 md:h-5 text-success" aria-hidden="true" />
                         {item.discordNote ? (
-                          <span className="text-xs text-text-quaternary mt-0.5">{item.discordNote}</span>
+                          <span className="text-[10px] md:text-xs text-text-quaternary mt-0.5">{item.discordNote}</span>
                         ) : (
                           <span className="sr-only">Disponible</span>
                         )}
                       </span>
                     ) : item.discord === 'partial' ? (
                       <span className="inline-flex flex-col items-center">
-                        <span className="text-xs md:text-sm text-warning px-1.5 py-0.5 rounded-full bg-warning/10">{item.discordNote || 'Limité'}</span>
+                        <span className="text-[10px] md:text-sm text-warning px-1 md:px-1.5 py-0.5 rounded-full bg-warning/10">{item.discordNote || 'Limité'}</span>
                       </span>
                     ) : (
                       <span className="inline-flex flex-col items-center">
@@ -96,11 +101,11 @@ export function ComparisonSection() {
                       </span>
                     )}
                   </td>
-                  <td className="text-center px-3 md:px-6 py-3 md:py-4">
+                  <td className="text-center px-1 md:px-6 py-2.5 md:py-4">
                     <span className="inline-flex flex-col items-center">
                       <Check className="w-4 h-4 md:w-5 md:h-5 text-success" aria-hidden="true" />
                       {item.squadNote ? (
-                        <span className="text-xs text-secondary mt-0.5">{item.squadNote}</span>
+                        <span className="text-[10px] md:text-xs text-secondary mt-0.5">{item.squadNote}</span>
                       ) : (
                         <span className="sr-only">Disponible</span>
                       )}

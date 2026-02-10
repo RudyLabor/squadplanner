@@ -1,13 +1,14 @@
 import { motion } from 'framer-motion'
+import { ChevronDown } from 'lucide-react'
 import { scrollRevealLight } from '../../utils/animations'
 
 const staggerContainerVariants = {
   hidden: { opacity: 0 },
-  visible: { opacity: 1, transition: { staggerChildren: 0.12 } }
+  visible: { opacity: 1, transition: { staggerChildren: 0.18 } }
 }
 const staggerItemVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.5 } }
+  hidden: { opacity: 0, y: 12 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.4 } }
 }
 
 const problems = [
@@ -15,6 +16,12 @@ const problems = [
   { emoji: '🤷', text: '"Je sais pas, on verra" → Rien ne se passe' },
   { emoji: '👻', text: 'Session prévue → 2 mecs sur 5 se connectent' },
   { emoji: '😤', text: 'Tout le monde attend que quelqu\'un organise' },
+]
+
+const arrowColors = [
+  'text-text-quaternary/40',
+  'text-warning/40',
+  'text-error/30',
 ]
 
 export function ProblemSection() {
@@ -30,15 +37,24 @@ export function ProblemSection() {
           </p>
         </motion.div>
 
-        <motion.div className="grid md:grid-cols-2 gap-4 mb-4" variants={staggerContainerVariants} initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.1 }}>
-          {problems.map((item) => (
-            <motion.div
-              key={item.text}
-              variants={staggerItemVariants}
-              className="flex items-center gap-4 p-4 rounded-xl bg-surface-card border border-border-subtle hover:border-border-hover hover:scale-[1.02] transition-all cursor-default"
-            >
-              <span className="text-2xl">{item.emoji}</span>
-              <span className="text-text-secondary">{item.text}</span>
+        <motion.div
+          className="max-w-lg mx-auto mb-6"
+          variants={staggerContainerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.1 }}
+        >
+          {problems.map((item, i) => (
+            <motion.div key={item.text} variants={staggerItemVariants}>
+              <div className="flex items-center gap-4 py-3">
+                <span className="text-2xl shrink-0 w-9 text-center">{item.emoji}</span>
+                <p className="text-text-secondary text-md leading-relaxed">{item.text}</p>
+              </div>
+              {i < problems.length - 1 && (
+                <div className="flex justify-center py-1">
+                  <ChevronDown className={`w-4 h-4 ${arrowColors[i]}`} aria-hidden="true" />
+                </div>
+              )}
             </motion.div>
           ))}
         </motion.div>
@@ -48,7 +64,7 @@ export function ProblemSection() {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
-          className="p-5 rounded-xl bg-gradient-to-r from-error/[0.08] to-warning/[0.05] border border-error/20 text-center"
+          className="max-w-lg mx-auto p-5 rounded-xl bg-gradient-to-r from-error/[0.08] to-warning/[0.05] border border-error/20 text-center"
         >
           <span className="text-xl mr-2">💥</span>
           <span className="text-text-primary font-semibold">Résultat → Plus personne n'organise rien. Ta squad meurt à petit feu.</span>

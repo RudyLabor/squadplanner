@@ -69,7 +69,7 @@ function PartyCTA() {
               </motion.div>
               <div className="flex-1">
                 <div className="text-md font-medium text-text-primary">Envie de papoter ?</div>
-                <div className="text-sm text-text-tertiary">Lance une party, ta squad est peut-être dispo !</div>
+                <div className="text-sm text-text-tertiary">Lance une party, ta squad est dispo !</div>
               </div>
               <ChevronRight className="w-5 h-5 text-text-quaternary" />
             </div>

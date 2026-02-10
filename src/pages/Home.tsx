@@ -208,25 +208,25 @@ export default function Home() {
         <CrossfadeTransition isLoading={homeLoading} skeleton={<SkeletonHomePage />}>
           <div>
             <motion.header
-              className="flex items-center justify-between mb-6"
+              className="mb-6"
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
             >
-              <div className="min-w-0 flex-1 mr-3">
-                <h1 className="text-base md:text-lg font-bold text-text-primary truncate">
+              <div className="flex items-center justify-between gap-3 mb-1">
+                <h1 className="text-lg md:text-xl font-bold text-text-primary truncate">
                   Salut {profile?.username || 'Gamer'} !
                 </h1>
-                <p className="text-sm text-text-tertiary line-clamp-2">
-                  {upcomingSessions.length > 0
-                    ? pendingRsvps > 0
-                      ? `${pendingRsvps} session${pendingRsvps > 1 ? 's' : ''} ${pendingRsvps > 1 ? 'attendent' : 'attend'} ta réponse`
-                      : "T'es carré, toutes tes sessions sont confirmées"
-                    : 'Ta squad t\'attend, lance une session !'
-                  }
-                </p>
+                <ReliabilityBadge score={reliabilityScore} />
               </div>
-              <ReliabilityBadge score={reliabilityScore} />
+              <p className="text-sm text-text-tertiary line-clamp-2">
+                {upcomingSessions.length > 0
+                  ? pendingRsvps > 0
+                    ? `${pendingRsvps} session${pendingRsvps > 1 ? 's' : ''} ${pendingRsvps > 1 ? 'attendent' : 'attend'} ta réponse`
+                    : "T'es carré, toutes tes sessions sont confirmées"
+                  : 'Ta squad t\'attend, lance une session !'
+                }
+              </p>
             </motion.header>
 
             {(!squadsLoading && !sessionsLoading) && (squads.length === 0 || upcomingSessions.length === 0) && (

@@ -1,20 +1,21 @@
 import { useState, useEffect, useCallback } from 'react'
 import { useLocation } from 'react-router-dom'
-import { motion, AnimatePresence } from 'framer-motion'
-import { X, ArrowRight, ArrowLeft, Sparkles, Calendar, Users, MessageCircle, Mic } from 'lucide-react'
+import { Sparkles, Calendar, Users, MessageCircle, Mic } from 'lucide-react'
+import { TourOverlay } from './tour/TourOverlay'
+import { TourTooltip } from './tour/TourTooltip'
 
 const TOUR_VERSION = 'v1'
 const TOUR_COMPLETED_KEY = `sq-tour-completed-${TOUR_VERSION}`
 
-interface TourStep {
-  target: string // CSS selector or data-tour attribute
+interface TourStepDef {
+  target: string
   title: string
   description: string
   icon: React.ElementType
   position: 'top' | 'bottom' | 'left' | 'right'
 }
 
-const TOUR_STEPS: TourStep[] = [
+const TOUR_STEPS: TourStepDef[] = [
   {
     target: '[data-tour="squads"]',
     title: 'Tes Squads',
@@ -52,32 +53,20 @@ const TOUR_STEPS: TourStep[] = [
   },
 ]
 
-function getTooltipPosition(rect: DOMRect, position: TourStep['position']) {
+function getTooltipPosition(rect: DOMRect, position: TourStepDef['position']) {
   const gap = 12
   const tooltipWidth = 300
   const tooltipHeight = 160
 
   switch (position) {
     case 'right':
-      return {
-        top: rect.top + rect.height / 2 - tooltipHeight / 2,
-        left: rect.right + gap,
-      }
+      return { top: rect.top + rect.height / 2 - tooltipHeight / 2, left: rect.right + gap }
     case 'left':
-      return {
-        top: rect.top + rect.height / 2 - tooltipHeight / 2,
-        left: rect.left - tooltipWidth - gap,
-      }
+      return { top: rect.top + rect.height / 2 - tooltipHeight / 2, left: rect.left - tooltipWidth - gap }
     case 'bottom':
-      return {
-        top: rect.bottom + gap,
-        left: rect.left + rect.width / 2 - tooltipWidth / 2,
-      }
+      return { top: rect.bottom + gap, left: rect.left + rect.width / 2 - tooltipWidth / 2 }
     case 'top':
-      return {
-        top: rect.top - tooltipHeight - gap,
-        left: rect.left + rect.width / 2 - tooltipWidth / 2,
-      }
+      return { top: rect.top - tooltipHeight - gap, left: rect.left + rect.width / 2 - tooltipWidth / 2 }
   }
 }
 
@@ -88,19 +77,14 @@ export function TourGuide() {
   const [targetRect, setTargetRect] = useState<DOMRect | null>(null)
   const location = useLocation()
 
-  // Check if tour should be shown (only on /squads, first visit only)
   useEffect(() => {
-    // Only show tour on the squads page
     if (location.pathname !== '/squads') return
-
     const completed = localStorage.getItem(TOUR_COMPLETED_KEY)
     if (completed) return
 
-    // Show tour with a delay to let the page render
     const timer = setTimeout(() => {
       const firstTarget = document.querySelector(TOUR_STEPS[0].target)
       if (firstTarget) {
-        // Mark as shown immediately so it won't re-trigger on refresh/revisit
         localStorage.setItem(TOUR_COMPLETED_KEY, 'shown')
         setActive(true)
       }
@@ -109,7 +93,11 @@ export function TourGuide() {
     return () => clearTimeout(timer)
   }, [location.pathname])
 
-  // Position tooltip relative to target element
+  const completeTour = useCallback(() => {
+    localStorage.setItem(TOUR_COMPLETED_KEY, 'true')
+    setActive(false)
+  }, [])
+
   const updatePosition = useCallback(() => {
     if (!active) return
 
@@ -121,8 +109,6 @@ export function TourGuide() {
       setTargetRect(rect)
 
       const pos = getTooltipPosition(rect, step.position)
-
-      // Clamp to viewport
       const maxLeft = window.innerWidth - 320
       const maxTop = window.innerHeight - 200
       pos.left = Math.max(12, Math.min(pos.left, maxLeft))
@@ -130,32 +116,23 @@ export function TourGuide() {
 
       setTooltipPos(pos)
     } else {
-      // Target not found, skip to next step or end
       if (currentStep < TOUR_STEPS.length - 1) {
         setCurrentStep(prev => prev + 1)
       } else {
         completeTour()
       }
     }
-  }, [active, currentStep])
+  }, [active, currentStep, completeTour])
 
   useEffect(() => {
     updatePosition()
-
-    // Update on resize/scroll
     window.addEventListener('resize', updatePosition)
     window.addEventListener('scroll', updatePosition, true)
-
     return () => {
       window.removeEventListener('resize', updatePosition)
       window.removeEventListener('scroll', updatePosition, true)
     }
   }, [updatePosition])
-
-  const completeTour = () => {
-    localStorage.setItem(TOUR_COMPLETED_KEY, 'true')
-    setActive(false)
-  }
 
   const nextStep = () => {
     if (currentStep < TOUR_STEPS.length - 1) {
@@ -171,147 +148,24 @@ export function TourGuide() {
     }
   }
 
-  const skipTour = () => {
-    completeTour()
-  }
-
   if (!active || !tooltipPos) return null
 
   const step = TOUR_STEPS[currentStep]
-  const Icon = step.icon
 
   return (
     <>
-      {/* Overlay - blocks interaction except with the target */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        className="fixed inset-0 z-[70] pointer-events-auto"
-        onClick={skipTour}
-      >
-        {/* Dark overlay with cutout for target */}
-        <svg className="absolute inset-0 w-full h-full">
-          <defs>
-            <mask id="tour-mask">
-              <rect width="100%" height="100%" fill="white" />
-              {targetRect && (
-                <rect
-                  x={targetRect.left - 4}
-                  y={targetRect.top - 4}
-                  width={targetRect.width + 8}
-                  height={targetRect.height + 8}
-                  rx={12}
-                  fill="black"
-                />
-              )}
-            </mask>
-          </defs>
-          <rect
-            width="100%"
-            height="100%"
-            fill="var(--color-overlay-dark-50)"
-            mask="url(#tour-mask)"
-          />
-        </svg>
-
-        {/* Highlight ring around target */}
-        {targetRect && (
-          <motion.div
-            className="absolute border-2 border-primary rounded-xl pointer-events-none"
-            animate={{
-              boxShadow: ['0 0 0 0 var(--color-primary-20)', '0 0 0 8px transparent', '0 0 0 0 var(--color-primary-20)'],
-            }}
-            transition={{ duration: 2, repeat: Infinity }}
-            style={{
-              top: targetRect.top - 4,
-              left: targetRect.left - 4,
-              width: targetRect.width + 8,
-              height: targetRect.height + 8,
-            }}
-          />
-        )}
-      </motion.div>
-
-      {/* Tooltip */}
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={currentStep}
-          initial={{ opacity: 0, scale: 0.95, y: 5 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.95, y: 5 }}
-          transition={{ duration: 0.2 }}
-          className="fixed z-[71] w-[300px] pointer-events-auto"
-          style={{ top: tooltipPos.top, left: tooltipPos.left }}
-          onClick={(e) => e.stopPropagation()}
-        >
-          <div className="bg-bg-surface border border-primary rounded-2xl shadow-2xl shadow-primary/10 overflow-hidden">
-            {/* Header */}
-            <div className="px-5 pt-5 pb-3 flex items-start justify-between">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-primary-10 flex items-center justify-center">
-                  <Icon className="w-5 h-5 text-primary" />
-                </div>
-                <div>
-                  <h4 className="text-md font-semibold text-text-primary">{step.title}</h4>
-                  <p className="text-sm text-text-tertiary">{currentStep + 1} / {TOUR_STEPS.length}</p>
-                </div>
-              </div>
-              <button
-                onClick={skipTour}
-                className="p-1.5 rounded-lg hover:bg-border-subtle transition-colors"
-                aria-label="Fermer le guide"
-              >
-                <X className="w-4 h-4 text-text-tertiary" />
-              </button>
-            </div>
-
-            {/* Description */}
-            <div className="px-5 pb-4">
-              <p className="text-base text-text-secondary leading-relaxed">{step.description}</p>
-            </div>
-
-            {/* Progress bar */}
-            <div className="px-5 pb-3">
-              <div className="h-1 bg-border-subtle rounded-full overflow-hidden">
-                <motion.div
-                  className="h-full bg-primary rounded-full"
-                  initial={{ width: `${(currentStep / TOUR_STEPS.length) * 100}%` }}
-                  animate={{ width: `${((currentStep + 1) / TOUR_STEPS.length) * 100}%` }}
-                  transition={{ duration: 0.3 }}
-                />
-              </div>
-            </div>
-
-            {/* Actions */}
-            <div className="px-5 pb-5 flex items-center justify-between">
-              <button
-                onClick={skipTour}
-                className="text-sm text-text-tertiary hover:text-text-secondary transition-colors"
-              >
-                Passer le guide
-              </button>
-              <div className="flex items-center gap-2">
-                {currentStep > 0 && (
-                  <button
-                    onClick={prevStep}
-                    className="w-9 h-9 rounded-lg bg-border-subtle flex items-center justify-center hover:bg-border-hover transition-colors"
-                  >
-                    <ArrowLeft className="w-4 h-4 text-text-secondary" />
-                  </button>
-                )}
-                <button
-                  onClick={nextStep}
-                  className="h-9 px-4 rounded-lg bg-primary text-base text-white font-medium hover:bg-primary transition-colors flex items-center gap-1.5"
-                >
-                  {currentStep === TOUR_STEPS.length - 1 ? 'Terminé !' : 'Suivant'}
-                  {currentStep < TOUR_STEPS.length - 1 && <ArrowRight className="w-3.5 h-3.5" />}
-                </button>
-              </div>
-            </div>
-          </div>
-        </motion.div>
-      </AnimatePresence>
+      <TourOverlay targetRect={targetRect} onSkip={completeTour} />
+      <TourTooltip
+        currentStep={currentStep}
+        totalSteps={TOUR_STEPS.length}
+        title={step.title}
+        description={step.description}
+        icon={step.icon}
+        tooltipPos={tooltipPos}
+        onNext={nextStep}
+        onPrev={prevStep}
+        onSkip={completeTour}
+      />
     </>
   )
 }

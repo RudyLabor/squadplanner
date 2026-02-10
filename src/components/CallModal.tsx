@@ -1,51 +1,13 @@
 import { useEffect, useRef, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Phone, PhoneOff, Mic, MicOff, Volume2, VolumeX, X, WifiOff, Loader2, CheckCircle2, AlertCircle } from 'lucide-react'
+import { X, WifiOff, Loader2 } from 'lucide-react'
 import { useVoiceCallStore, formatCallDuration } from '../hooks/useVoiceCall'
 import { NetworkQualityIndicator, QualityChangeToast } from './NetworkQualityIndicator'
 import { useNetworkQualityStore } from '../hooks/useNetworkQuality'
 import { useFocusTrap } from '../hooks/useFocusTrap'
-
-// Toast pour les notifications dans le modal d'appel
-function CallToast({ message, isVisible, variant = 'success' }: {
-  message: string
-  isVisible: boolean
-  variant?: 'success' | 'error'
-}) {
-  const variantStyles = {
-    success: {
-      bg: 'bg-success',
-      text: 'text-bg-base',
-      Icon: CheckCircle2
-    },
-    error: {
-      bg: 'bg-error',
-      text: 'text-white',
-      Icon: AlertCircle
-    }
-  }
-
-  const style = variantStyles[variant]
-  const Icon = style.Icon
-
-  return (
-    <AnimatePresence>
-      {isVisible && (
-        <motion.div
-          className="absolute top-4 left-1/2 -translate-x-1/2 z-[110]"
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -20 }}
-        >
-          <div className={`flex items-center gap-2 px-4 py-3 rounded-xl ${style.bg} ${style.text} shadow-lg`}>
-            <Icon className="w-5 h-5" />
-            <span className="text-md font-medium">{message}</span>
-          </div>
-        </motion.div>
-      )}
-    </AnimatePresence>
-  )
-}
+import { CallToast } from './call/CallToast'
+import { CallAvatar } from './call/CallAvatar'
+import { CallControls } from './call/CallControls'
 
 export function CallModal() {
   const {
@@ -70,7 +32,7 @@ export function CallModal() {
   // Only show for outgoing calls or connected calls
   const shouldShow = status === 'calling' || status === 'connected' || status === 'ended'
 
-  // Focus trap et gestion Escape pour l'accessibilité
+  // Focus trap et gestion Escape pour l'accessibilite
   const focusTrapRef = useFocusTrap<HTMLDivElement>(shouldShow, endCall)
 
   const [showToast, setShowToast] = useState(false)
@@ -176,13 +138,11 @@ export function CallModal() {
 
         {/* Header with close button and network quality */}
         <div className="absolute top-4 left-0 right-0 px-4 flex items-center justify-between">
-          {/* Indicateur de qualite reseau (visible seulement en appel connecte) */}
           {status === 'connected' && localQuality !== 'unknown' && (
             <NetworkQualityIndicator size="sm" showLabel showTooltip />
           )}
           {status !== 'connected' && <div />}
 
-          {/* Close button for calling state */}
           {status === 'calling' && (
             <button
               onClick={endCall}
@@ -196,55 +156,12 @@ export function CallModal() {
 
         {/* Main content */}
         <div className="flex-1 flex flex-col items-center justify-center px-6">
-          {/* Avatar */}
-          <motion.div
-            initial={{ scale: 0.8, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ delay: 0.1 }}
-            className="relative mb-8"
-          >
-            {/* Pulse animation for calling state - single subtle animation */}
-            {status === 'calling' && (
-              <motion.div
-                className="absolute inset-0 rounded-full bg-primary/20"
-                animate={{
-                  scale: [1, 1.4, 1.4],
-                  opacity: [0.4, 0, 0],
-                }}
-                transition={{
-                  duration: 1.5,
-                  repeat: 3,
-                  ease: 'easeOut',
-                }}
-              />
-            )}
-
-            {/* Connected indicator */}
-            {status === 'connected' && (
-              <motion.div
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-success border-4 border-bg-base flex items-center justify-center"
-              >
-                <Phone className="w-3 h-3 text-white" />
-              </motion.div>
-            )}
-
-            {/* Avatar image or initial */}
-            <div className="w-32 h-32 rounded-full overflow-hidden bg-primary/20 flex items-center justify-center">
-              {otherPerson.avatar_url ? (
-                <img
-                  src={otherPerson.avatar_url}
-                  alt={otherPerson.username}
-                  className="w-full h-full object-cover"
-                  loading="lazy"
-                  decoding="async"
-                />
-              ) : (
-                <span className="text-3xl font-bold text-primary">{initial}</span>
-              )}
-            </div>
-          </motion.div>
+          <CallAvatar
+            status={status}
+            avatarUrl={otherPerson.avatar_url}
+            username={otherPerson.username}
+            initial={initial}
+          />
 
           {/* Name */}
           <motion.h2
@@ -271,81 +188,14 @@ export function CallModal() {
         </div>
 
         {/* Controls */}
-        <motion.div
-          initial={{ y: 50, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.4 }}
-          className="px-6 pb-12"
-        >
-          <div className="flex items-center justify-center gap-6">
-            {/* Mute button */}
-            {status === 'connected' && (
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={toggleMute}
-                aria-label={isMuted ? 'Réactiver le micro' : 'Couper le micro'}
-                aria-pressed={isMuted}
-                className={`w-16 h-16 rounded-full flex items-center justify-center transition-colors ${
-                  isMuted
-                    ? 'bg-border-hover'
-                    : 'bg-border-subtle'
-                }`}
-              >
-                {isMuted ? (
-                  <MicOff className="w-7 h-7 text-error" aria-hidden="true" />
-                ) : (
-                  <Mic className="w-7 h-7 text-text-secondary" aria-hidden="true" />
-                )}
-              </motion.button>
-            )}
-
-            {/* End call button */}
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={endCall}
-              aria-label="Raccrocher"
-              className="w-20 h-20 rounded-full bg-error flex items-center justify-center shadow-lg shadow-error/20"
-            >
-              <PhoneOff className="w-8 h-8 text-white" aria-hidden="true" />
-            </motion.button>
-
-            {/* Speaker button */}
-            {status === 'connected' && (
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={toggleSpeaker}
-                aria-label={isSpeakerOn ? 'Désactiver le haut-parleur' : 'Activer le haut-parleur'}
-                aria-pressed={isSpeakerOn}
-                className={`w-16 h-16 rounded-full flex items-center justify-center transition-colors ${
-                  !isSpeakerOn
-                    ? 'bg-border-hover'
-                    : 'bg-border-subtle'
-                }`}
-              >
-                {isSpeakerOn ? (
-                  <Volume2 className="w-7 h-7 text-text-secondary" aria-hidden="true" />
-                ) : (
-                  <VolumeX className="w-7 h-7 text-error" aria-hidden="true" />
-                )}
-              </motion.button>
-            )}
-          </div>
-
-          {/* Hint text */}
-          {status === 'calling' && (
-            <motion.p
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 1 }}
-              className="text-center text-base text-text-tertiary mt-6"
-            >
-              En attente de réponse...
-            </motion.p>
-          )}
-        </motion.div>
+        <CallControls
+          status={status}
+          isMuted={isMuted}
+          isSpeakerOn={isSpeakerOn}
+          toggleMute={toggleMute}
+          toggleSpeaker={toggleSpeaker}
+          endCall={endCall}
+        />
       </motion.div>
     </AnimatePresence>
   )

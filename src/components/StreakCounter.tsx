@@ -1,83 +1,10 @@
 import { useState, useEffect, useMemo } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion } from 'framer-motion'
 import { Flame, Gift, Sparkles, Check, Zap } from 'lucide-react'
-import Confetti from './LazyConfetti'
 import { Card } from './ui'
-
-// Milestone rewards configuration
-const MILESTONES = [
-  { days: 7, xp: 100, label: '1 semaine', emoji: '🔥' },
-  { days: 14, xp: 200, label: '2 semaines', emoji: '💪' },
-  { days: 30, xp: 500, label: '1 mois', emoji: '🏆' },
-  { days: 100, xp: 1000, label: '100 jours', emoji: '👑' },
-]
-
-// Calculate XP for any streak day
-const calculateXPReward = (days: number): number => {
-  // Check major milestones first
-  const milestone = MILESTONES.find(m => m.days === days)
-  if (milestone) return milestone.xp
-
-  // Every 7 days after 100 gives +50 XP
-  if (days > 100 && days % 7 === 0) return 50
-
-  return 0
-}
-
-// Get next milestone for a given streak
-const getNextMilestone = (currentStreak: number) => {
-  // Find next major milestone
-  const nextMajor = MILESTONES.find(m => m.days > currentStreak)
-
-  if (nextMajor) {
-    return {
-      days: nextMajor.days,
-      xp: nextMajor.xp,
-      label: nextMajor.label,
-      emoji: nextMajor.emoji,
-      daysRemaining: nextMajor.days - currentStreak,
-      progress: (currentStreak / nextMajor.days) * 100,
-    }
-  }
-
-  // After 100, next milestone is every 7 days
-  const nextSevenDayMark = Math.ceil((currentStreak + 1) / 7) * 7
-  return {
-    days: nextSevenDayMark,
-    xp: 50,
-    label: `${nextSevenDayMark} jours`,
-    emoji: '⭐',
-    daysRemaining: nextSevenDayMark - currentStreak,
-    progress: ((currentStreak % 7) / 7) * 100,
-  }
-}
-
-// Get flame intensity based on streak (0-4)
-const getFlameIntensity = (streak: number): number => {
-  if (streak >= 100) return 4
-  if (streak >= 30) return 3
-  if (streak >= 14) return 2
-  if (streak >= 7) return 1
-  return 0
-}
-
-// Get flame color based on intensity
-const getFlameColors = (intensity: number) => {
-  const colors = [
-    { primary: 'var(--color-orange)', secondary: 'var(--color-orange)', glow: 'var(--color-orange-30)' },       // Orange (default)
-    { primary: 'var(--color-warning)', secondary: 'var(--color-warning)', glow: 'var(--color-warning-30)' },     // Amber
-    { primary: 'var(--color-error)', secondary: 'var(--color-error)', glow: 'var(--color-error-20)' },           // Red
-    { primary: 'var(--color-pink)', secondary: 'var(--color-pink)', glow: 'var(--color-pink-30)' },              // Pink
-    { primary: 'var(--color-purple)', secondary: 'var(--color-purple)', glow: 'var(--color-purple-20)' },        // Purple (legendary)
-  ]
-  return colors[Math.min(intensity, colors.length - 1)]
-}
-
-// Resolve CSS variable values at runtime for canvas-based libraries (e.g. Confetti)
-const resolveCSSColor = (varName: string): string => {
-  if (typeof document === 'undefined') return '#888'
-  return getComputedStyle(document.documentElement).getPropertyValue(varName).trim() || '#888'
-}
+import { MILESTONES, calculateXPReward, getNextMilestone, getFlameIntensity, getFlameColors } from './streak/streakUtils'
+import { StreakMilestoneToast } from './streak/StreakMilestoneToast'
+import { StreakHeatmap } from './streak/StreakHeatmap'
 
 interface StreakCounterProps {
   streakDays: number
@@ -93,36 +20,8 @@ export function StreakCounter({ streakDays, lastActiveDate, onCheckIn }: StreakC
   const flameColors = getFlameColors(intensity)
   const nextMilestone = useMemo(() => getNextMilestone(streakDays), [streakDays])
 
-  // Check if today has been checked in
   const today = new Date().toISOString().split('T')[0]
   const hasCheckedInToday = lastActiveDate === today
-
-  // Day labels for French locale
-  const dayLabels = ['L', 'M', 'M', 'J', 'V', 'S', 'D']
-
-  // Generate 28-day (4 weeks) heatmap grid + weekly activity stats
-  const { heatmapGrid, weeklyStats } = useMemo(() => {
-    const dow = new Date().getDay() // 0=Sun
-    const normalizedDow = dow === 0 ? 6 : dow - 1 // Mon=0..Sun=6
-    type Cell = { daysAgo: number; isActive: boolean; isToday: boolean; intensity: number }
-    const grid: Cell[][] = []
-    const weekTotals = [0, 0, 0, 0]
-
-    for (let week = 0; week < 4; week++) {
-      const row: Cell[] = []
-      for (let day = 0; day < 7; day++) {
-        const daysAgo = (3 - week) * 7 + (normalizedDow - day)
-        if (daysAgo < 0) { row.push({ daysAgo: -1, isActive: false, isToday: false, intensity: 0 }); continue }
-        const isActive = daysAgo < streakDays
-        const isToday = daysAgo === 0
-        const cellIntensity = !isActive ? 0 : isToday ? 3 : daysAgo <= 2 ? 2 : 1
-        row.push({ daysAgo, isActive, isToday, intensity: cellIntensity })
-        if (isActive) weekTotals[week]++
-      }
-      grid.push(row)
-    }
-    return { heatmapGrid: grid, weeklyStats: weekTotals }
-  }, [streakDays])
 
   // Detect milestone achievements
   useEffect(() => {
@@ -131,7 +30,6 @@ export function StreakCounter({ streakDays, lastActiveDate, onCheckIn }: StreakC
       setCelebratedMilestone(milestone)
       setShowMilestoneConfetti(true)
 
-      // Auto-hide after 5 seconds
       const timeout = setTimeout(() => {
         setShowMilestoneConfetti(false)
         setTimeout(() => setCelebratedMilestone(null), 500)
@@ -145,84 +43,11 @@ export function StreakCounter({ streakDays, lastActiveDate, onCheckIn }: StreakC
 
   return (
     <>
-      {/* Milestone Celebration Confetti */}
-      {showMilestoneConfetti && typeof window !== 'undefined' && (
-        <Confetti
-          width={window.innerWidth}
-          height={window.innerHeight}
-          recycle={false}
-          numberOfPieces={300}
-          gravity={0.2}
-          colors={[
-            resolveCSSColor('--color-orange'),
-            resolveCSSColor('--color-warning'),
-            resolveCSSColor('--color-error'),
-            resolveCSSColor('--color-pink'),
-            resolveCSSColor('--color-purple'),
-            resolveCSSColor('--color-success'),
-          ]}
-          style={{ position: 'fixed', top: 0, left: 0, zIndex: 100, pointerEvents: 'none' }}
-        />
-      )}
-
-      {/* Milestone Celebration Toast */}
-      <AnimatePresence>
-        {celebratedMilestone && (
-          <motion.div
-            initial={{ opacity: 0, y: -50, scale: 0.8 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: -20, scale: 0.9 }}
-            className="fixed top-4 left-1/2 -translate-x-1/2 z-50 px-6 py-4 rounded-2xl bg-gradient-to-r from-orange-500/90 to-warning/90 border border-orange-500/50 backdrop-blur-xl shadow-glow-warning"
-          >
-            <div className="flex items-center gap-4">
-              <motion.div
-                initial={{ rotate: -180, scale: 0 }}
-                animate={{ rotate: 0, scale: 1 }}
-                transition={{ type: 'spring', stiffness: 300, damping: 20, delay: 0.2 }}
-                className="text-4xl"
-              >
-                {celebratedMilestone.emoji}
-              </motion.div>
-              <div>
-                <motion.p
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.3 }}
-                  className="text-sm font-medium text-white/70 uppercase tracking-wide"
-                >
-                  Objectif atteint !
-                </motion.p>
-                <motion.p
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.4 }}
-                  className="text-xl font-bold text-white"
-                >
-                  Série de {celebratedMilestone.days} jours !
-                </motion.p>
-                <motion.p
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.5 }}
-                  className="text-base text-white/90 flex items-center gap-1"
-                >
-                  <Zap className="w-3 h-3" />
-                  +{celebratedMilestone.xp} XP gagnés !
-                </motion.p>
-              </div>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      <StreakMilestoneToast showConfetti={showMilestoneConfetti} milestone={celebratedMilestone} />
 
       <Card className={`overflow-hidden bg-surface-dark ${intensity >= 2 ? 'ring-2 ring-offset-2 ring-offset-bg-base ring-orange-500' : ''}`} aria-label={`Serie de ${streakDays} ${streakDays === 1 ? 'jour' : 'jours'}`}>
         {/* Gradient top bar */}
-        <div
-          className="h-1.5"
-          style={{
-            background: `linear-gradient(to right, ${flameColors.primary}, ${flameColors.secondary})`
-          }}
-        />
+        <div className="h-1.5" style={{ background: `linear-gradient(to right, ${flameColors.primary}, ${flameColors.secondary})` }} />
 
         <div className="p-5">
           {/* Main streak display */}
@@ -235,35 +60,23 @@ export function StreakCounter({ streakDays, lastActiveDate, onCheckIn }: StreakC
                 animate={intensity >= 1 ? { scale: [1, 1.05, 1] } : {}}
                 transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
               >
-                {/* Fire emoji with animation */}
                 <motion.span
                   className="text-4xl relative z-10"
-                  animate={{
-                    y: intensity >= 1 ? [0, -3, 0] : 0,
-                    scale: intensity >= 2 ? [1, 1.1, 1] : 1,
-                  }}
-                  transition={{
-                    duration: 0.5 + (0.5 / (intensity + 1)),
-                    repeat: Infinity,
-                    ease: 'easeInOut'
-                  }}
+                  animate={{ y: intensity >= 1 ? [0, -3, 0] : 0, scale: intensity >= 2 ? [1, 1.1, 1] : 1 }}
+                  transition={{ duration: 0.5 + (0.5 / (intensity + 1)), repeat: Infinity, ease: 'easeInOut' }}
                 >
                   🔥
                 </motion.span>
 
-                {/* Glow effect for high streaks */}
                 {intensity >= 2 && (
                   <motion.div
                     className="absolute inset-0 rounded-2xl"
-                    style={{
-                      background: `radial-gradient(circle at center, ${flameColors.glow}, transparent)`
-                    }}
+                    style={{ background: `radial-gradient(circle at center, ${flameColors.glow}, transparent)` }}
                     animate={{ opacity: [0.3, 0.6, 0.3] }}
                     transition={{ duration: 1, repeat: Infinity }}
                   />
                 )}
 
-                {/* Particle effects for legendary streaks */}
                 {intensity >= 3 && (
                   <>
                     {[...Array(3)].map((_, i) => (
@@ -271,25 +84,14 @@ export function StreakCounter({ streakDays, lastActiveDate, onCheckIn }: StreakC
                         key={i}
                         className="absolute w-1.5 h-1.5 rounded-full"
                         style={{ backgroundColor: flameColors.secondary }}
-                        animate={{
-                          y: [-20, -40],
-                          x: [0, (i - 1) * 15],
-                          opacity: [1, 0],
-                          scale: [1, 0.5],
-                        }}
-                        transition={{
-                          duration: 1,
-                          repeat: Infinity,
-                          delay: i * 0.3,
-                          ease: 'easeOut',
-                        }}
+                        animate={{ y: [-20, -40], x: [0, (i - 1) * 15], opacity: [1, 0], scale: [1, 0.5] }}
+                        transition={{ duration: 1, repeat: Infinity, delay: i * 0.3, ease: 'easeOut' }}
                       />
                     ))}
                   </>
                 )}
               </motion.div>
 
-              {/* Sparkles for legendary */}
               {intensity >= 4 && (
                 <motion.div
                   className="absolute -top-1 -right-1"
@@ -313,23 +115,14 @@ export function StreakCounter({ streakDays, lastActiveDate, onCheckIn }: StreakC
                 >
                   {streakDays}
                 </motion.span>
-                <span className="text-md text-text-secondary">
-                  {streakDays === 1 ? 'jour' : 'jours'}
-                </span>
+                <span className="text-md text-text-secondary">{streakDays === 1 ? 'jour' : 'jours'}</span>
               </div>
               <p className="text-base text-text-tertiary">Série en cours</p>
 
-              {/* Today's XP reward if any */}
               {currentXPReward > 0 && (
-                <motion.div
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  className="flex items-center gap-1 mt-1"
-                >
+                <motion.div initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} className="flex items-center gap-1 mt-1">
                   <Zap className="w-3 h-3" style={{ color: flameColors.primary }} />
-                  <span className="text-sm font-medium" style={{ color: flameColors.primary }}>
-                    +{currentXPReward} XP aujourd'hui !
-                  </span>
+                  <span className="text-sm font-medium" style={{ color: flameColors.primary }}>+{currentXPReward} XP aujourd'hui !</span>
                 </motion.div>
               )}
             </div>
@@ -344,22 +137,14 @@ export function StreakCounter({ streakDays, lastActiveDate, onCheckIn }: StreakC
                     ? 'bg-success/20 text-success cursor-default'
                     : 'bg-gradient-to-r text-white hover:opacity-90 active:scale-95'
                 }`}
-                style={!hasCheckedInToday ? {
-                  background: `linear-gradient(135deg, ${flameColors.primary}, ${flameColors.secondary})`
-                } : undefined}
+                style={!hasCheckedInToday ? { background: `linear-gradient(135deg, ${flameColors.primary}, ${flameColors.secondary})` } : undefined}
                 whileHover={!hasCheckedInToday ? { scale: 1.02 } : undefined}
                 whileTap={!hasCheckedInToday ? { scale: 0.98 } : undefined}
               >
                 {hasCheckedInToday ? (
-                  <span className="flex items-center gap-1.5">
-                    <Check className="w-4 h-4" />
-                    Fait
-                  </span>
+                  <span className="flex items-center gap-1.5"><Check className="w-4 h-4" />Fait</span>
                 ) : (
-                  <span className="flex items-center gap-1.5">
-                    <Flame className="w-4 h-4" />
-                    Pointer
-                  </span>
+                  <span className="flex items-center gap-1.5"><Flame className="w-4 h-4" />Pointer</span>
                 )}
               </motion.button>
             )}
@@ -373,105 +158,29 @@ export function StreakCounter({ streakDays, lastActiveDate, onCheckIn }: StreakC
                 <span className="text-base text-text-secondary">Prochain objectif</span>
               </div>
               <div className="flex items-center gap-2">
-                <span className="text-base font-medium text-text-primary">
-                  {nextMilestone.emoji} {nextMilestone.label}
-                </span>
-                <span className="text-sm px-2 py-0.5 rounded-full bg-success/20 text-success">
-                  +{nextMilestone.xp} XP
-                </span>
+                <span className="text-base font-medium text-text-primary">{nextMilestone.emoji} {nextMilestone.label}</span>
+                <span className="text-sm px-2 py-0.5 rounded-full bg-success/20 text-success">+{nextMilestone.xp} XP</span>
               </div>
             </div>
-
-            {/* Progress bar */}
             <div className="relative h-2 bg-border-subtle rounded-full overflow-hidden">
               <motion.div
                 className="absolute h-full rounded-full"
-                style={{
-                  background: `linear-gradient(90deg, ${flameColors.primary}, ${flameColors.secondary})`
-                }}
+                style={{ background: `linear-gradient(90deg, ${flameColors.primary}, ${flameColors.secondary})` }}
                 initial={{ width: 0 }}
                 animate={{ width: `${nextMilestone.progress}%` }}
                 transition={{ duration: 0.8, ease: 'easeOut' }}
               />
             </div>
-
             <p className="text-sm text-text-tertiary mt-1.5 text-right">
               Encore {nextMilestone.daysRemaining} {nextMilestone.daysRemaining === 1 ? 'jour' : 'jours'}
             </p>
           </div>
 
-          {/* 28-day Activity Heatmap */}
-          <div>
-            <p className="text-sm text-text-tertiary mb-2 uppercase tracking-wide">28 derniers jours</p>
-            {/* Day-of-week labels */}
-            <div className="grid grid-cols-7 gap-1 mb-1">
-              {dayLabels.map((label, i) => (
-                <span key={i} className="text-[11px] text-text-tertiary text-center font-medium">{label}</span>
-              ))}
-            </div>
-            {/* Heatmap grid: 4 rows x 7 cols */}
-            <div className="grid grid-cols-7 gap-1">
-              {heatmapGrid.map((week, wi) =>
-                week.map((cell, di) => {
-                  if (cell.daysAgo < 0) {
-                    return <div key={`${wi}-${di}`} className="aspect-square rounded-md" />
-                  }
-                  const bgColor = cell.intensity === 3
-                    ? flameColors.primary
-                    : cell.intensity === 2
-                      ? `color-mix(in srgb, ${flameColors.primary} 60%, transparent)`
-                      : cell.intensity === 1
-                        ? `color-mix(in srgb, ${flameColors.primary} 25%, transparent)`
-                        : 'var(--color-overlay-faint)'
-                  return (
-                    <motion.div
-                      key={`${wi}-${di}`}
-                      className={`aspect-square rounded-md ${cell.isToday ? 'ring-2 ring-offset-1 ring-offset-surface-dark' : ''}`}
-                      style={{
-                        backgroundColor: bgColor,
-                        ['--tw-ring-color' as string]: cell.isToday ? flameColors.primary : undefined,
-                      }}
-                      initial={{ opacity: 0, scale: 0.5 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      transition={{ delay: (wi * 7 + di) * 0.015, duration: 0.2 }}
-                    />
-                  )
-                })
-              )}
-            </div>
-          </div>
-
-          {/* Weekly Activity Bars */}
-          <div className="mt-4">
-            <p className="text-sm text-text-tertiary mb-2 uppercase tracking-wide">4 dernières semaines</p>
-            <div className="flex items-end gap-2 h-12">
-              {weeklyStats.map((count, i) => (
-                <div key={i} className="flex-1 flex flex-col items-center gap-1">
-                  <div className="w-full relative h-10 flex items-end">
-                    <motion.div
-                      className="w-full rounded-t-md"
-                      style={{
-                        background: `linear-gradient(to top, ${flameColors.primary}, ${flameColors.secondary})`,
-                        opacity: count === 0 ? 0.15 : 1,
-                      }}
-                      initial={{ height: 0 }}
-                      animate={{ height: `${Math.max((count / Math.max(...weeklyStats, 1)) * 100, 8)}%` }}
-                      transition={{ delay: 0.3 + i * 0.1, duration: 0.5, ease: 'easeOut' }}
-                    />
-                  </div>
-                  <span className="text-[10px] text-text-tertiary">S{i + 1}</span>
-                </div>
-              ))}
-            </div>
-          </div>
+          <StreakHeatmap streakDays={streakDays} flameColors={flameColors} />
 
           {/* Streak tips for low streaks */}
           {streakDays < 7 && (
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="mt-4 p-3 rounded-xl bg-primary-hover/[0.08] border border-primary-hover/15"
-            >
+            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="mt-4 p-3 rounded-xl bg-primary-hover/[0.08] border border-primary-hover/15">
               <p className="text-sm text-primary-hover">
                 {streakDays === 0
                   ? "Lance ta série aujourd'hui ! Pointe chaque jour pour gagner des XP."
@@ -482,18 +191,12 @@ export function StreakCounter({ streakDays, lastActiveDate, onCheckIn }: StreakC
 
           {/* Legendary status for 100+ */}
           {streakDays >= 100 && (
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="mt-4 p-3 rounded-xl bg-gradient-to-r from-purple/15 to-pink/15 border border-purple/25"
-            >
+            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="mt-4 p-3 rounded-xl bg-gradient-to-r from-purple/15 to-pink/15 border border-purple/25">
               <div className="flex items-center gap-2">
                 <span className="text-lg">👑</span>
                 <div>
                   <p className="text-base font-medium text-text-primary">Statut Légendaire !</p>
-                  <p className="text-sm text-purple">
-                    Tu as atteint une série de 100+ jours. Tu es inarrêtable !
-                  </p>
+                  <p className="text-sm text-purple">Tu as atteint une série de 100+ jours. Tu es inarrêtable !</p>
                 </div>
               </div>
             </motion.div>

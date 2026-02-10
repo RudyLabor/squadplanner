@@ -46,7 +46,7 @@ function StatsRow({ squadsCount, sessionsThisWeek, reliabilityScore }: StatsRowP
               <div className="text-lg sm:text-xl font-bold text-text-primary tracking-tight leading-none">
                 <AnimatedCounter end={stat.value} duration={1.2} suffix={stat.suffix} />
               </div>
-              <div className="text-[8px] sm:text-xs text-text-quaternary uppercase tracking-wider mt-0.5 truncate font-medium">
+              <div className="text-[0.5rem] sm:text-xs text-text-quaternary uppercase tracking-wider mt-0.5 truncate font-medium">
                 {stat.label}
               </div>
             </div>

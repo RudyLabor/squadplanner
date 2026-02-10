@@ -1,17 +1,11 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { X, UserPlus, Check, Loader2, Send, Copy } from 'lucide-react'
+import { X, UserPlus } from 'lucide-react'
 import { supabase } from '../lib/supabase'
 import { Button } from './ui'
 import { useFocusTrap } from '../hooks/useFocusTrap'
-
-interface SquadMember {
-  id: string
-  username: string
-  avatar_url: string | null
-  is_online: boolean
-  voice_channel_id: string | null
-}
+import { CopyLinkButton } from './invite/CopyLinkButton'
+import { InviteUserList, type SquadMember } from './invite/InviteUserList'
 
 interface InviteToPartyModalProps {
   isOpen: boolean
@@ -20,7 +14,7 @@ interface InviteToPartyModalProps {
   squadName: string
   partyLink: string
   currentUserId: string
-  connectedUserIds: string[] // Les IDs des utilisateurs déjà dans la party
+  connectedUserIds: string[]
 }
 
 export function InviteToPartyModal({
@@ -72,7 +66,6 @@ export function InviteToPartyModal({
               : false,
             voice_channel_id: m.profiles.voice_channel_id
           }))
-          // Exclude current user and users already in party
           .filter((m: SquadMember) =>
             m.id !== currentUserId && !connectedUserIds.includes(m.id)
           )
@@ -97,7 +90,6 @@ export function InviteToPartyModal({
   const inviteMember = async (memberId: string) => {
     setSendingInvite(memberId)
     try {
-      // Create a notification for the member (in-app)
       await supabase.from('notifications').insert({
         user_id: memberId,
         type: 'party_invite',
@@ -110,7 +102,6 @@ export function InviteToPartyModal({
         }
       })
 
-      // Send push notification (native + web) pour sonnerie/vibration
       try {
         await supabase.functions.invoke('send-push', {
           body: {
@@ -128,16 +119,13 @@ export function InviteToPartyModal({
             }
           }
         })
-        console.log('[InviteToPartyModal] Push notification sent')
       } catch (pushError) {
         console.warn('[InviteToPartyModal] Push notification failed:', pushError)
-        // Continue même si push échoue
       }
 
       setInvitedMembers(prev => new Set([...prev, memberId]))
     } catch (error) {
       console.error('Error sending invite:', error)
-      // Even if notification fails, mark as invited (link still works)
       setInvitedMembers(prev => new Set([...prev, memberId]))
     } finally {
       setSendingInvite(null)
@@ -174,7 +162,7 @@ export function InviteToPartyModal({
                 <UserPlus className="w-5 h-5 text-primary" />
               </div>
               <div>
-                <h2 id="invite-party-title" className="text-lg font-semibold text-text-primary">Inviter à la Party</h2>
+                <h2 id="invite-party-title" className="text-lg font-semibold text-text-primary">Inviter a la Party</h2>
                 <p className="text-sm text-text-secondary">{squadName}</p>
               </div>
             </div>
@@ -187,118 +175,17 @@ export function InviteToPartyModal({
             </button>
           </div>
 
-          {/* Copy link section */}
-          <div className="p-4 border-b border-border-subtle">
-            <button
-              onClick={copyLink}
-              className={`w-full flex items-center justify-center gap-2 p-3 rounded-xl transition-interactive ${
-                linkCopied
-                  ? 'bg-success-15 text-success border border-success/20'
-                  : 'bg-overlay-subtle text-text-secondary hover:bg-overlay-light hover:text-text-primary border border-border-subtle'
-              }`}
-            >
-              {linkCopied ? (
-                <>
-                  <Check className="w-4 h-4" />
-                  Lien copié !
-                </>
-              ) : (
-                <>
-                  <Copy className="w-4 h-4" />
-                  Copier le lien d'invitation
-                </>
-              )}
-            </button>
-          </div>
+          <CopyLinkButton linkCopied={linkCopied} onCopy={copyLink} />
 
           {/* Members list */}
           <div className="p-4 max-h-[300px] overflow-y-auto">
-            {loading ? (
-              <div className="flex justify-center py-8">
-                <Loader2 className="w-6 h-6 text-primary animate-spin" />
-              </div>
-            ) : members.length === 0 ? (
-              <div className="text-center py-8">
-                <p className="text-md text-text-secondary">
-                  Tous les membres sont déjà dans la party !
-                </p>
-              </div>
-            ) : (
-              <div className="space-y-2">
-                <p className="text-sm text-text-tertiary mb-3 uppercase tracking-wide font-medium">
-                  Membres de la squad ({members.length})
-                </p>
-                {members.map((member) => {
-                  const isInvited = invitedMembers.has(member.id)
-                  const isSending = sendingInvite === member.id
-
-                  return (
-                    <motion.div
-                      key={member.id}
-                      initial={{ opacity: 0, y: 5 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      className="flex items-center gap-3 p-3 rounded-xl bg-overlay-faint hover:bg-overlay-subtle transition-colors"
-                    >
-                      {/* Avatar */}
-                      <div className="relative">
-                        {member.avatar_url ? (
-                          <img
-                            src={member.avatar_url}
-                            alt={member.username}
-                            className="w-10 h-10 rounded-full object-cover"
-                            loading="lazy"
-                            decoding="async"
-                          />
-                        ) : (
-                          <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center">
-                            <span className="text-md font-semibold text-primary">
-                              {member.username.charAt(0).toUpperCase()}
-                            </span>
-                          </div>
-                        )}
-                        {/* Online indicator */}
-                        {member.is_online && (
-                          <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-success border-2 border-bg-base" />
-                        )}
-                      </div>
-
-                      {/* Name */}
-                      <div className="flex-1 min-w-0">
-                        <p className="text-md font-medium text-text-primary truncate">
-                          {member.username}
-                        </p>
-                        <p className="text-sm text-text-tertiary">
-                          {member.is_online ? 'En ligne' : 'Hors ligne'}
-                        </p>
-                      </div>
-
-                      {/* Invite button */}
-                      <Button
-                        size="sm"
-                        variant={isInvited ? 'ghost' : 'primary'}
-                        onClick={() => !isInvited && inviteMember(member.id)}
-                        disabled={isInvited || isSending}
-                        className={isInvited ? 'text-success bg-success-10' : ''}
-                      >
-                        {isSending ? (
-                          <Loader2 className="w-4 h-4 animate-spin" />
-                        ) : isInvited ? (
-                          <>
-                            <Check className="w-4 h-4" />
-                            Invité
-                          </>
-                        ) : (
-                          <>
-                            <Send className="w-4 h-4" />
-                            Inviter
-                          </>
-                        )}
-                      </Button>
-                    </motion.div>
-                  )
-                })}
-              </div>
-            )}
+            <InviteUserList
+              members={members}
+              loading={loading}
+              invitedMembers={invitedMembers}
+              sendingInvite={sendingInvite}
+              onInvite={inviteMember}
+            />
           </div>
 
           {/* Footer */}

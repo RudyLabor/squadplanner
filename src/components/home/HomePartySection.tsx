@@ -46,17 +46,19 @@ function ActivePartyCard({ squadName, participantCount }: ActiveParty) {
 function PartyCTA() {
   return (
     <motion.div
+      className="h-full"
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.4, duration: 0.4, ease: 'easeOut' }}
     >
-      <Link to="/party">
+      <Link to="/party" className="block h-full">
         <motion.div
+          className="h-full"
           whileHover={{ scale: 1.01 }}
           whileTap={{ scale: 0.99 }}
           transition={{ duration: 0.4, ease: 'easeOut' }}
         >
-          <Card className="p-4 bg-gradient-to-r from-primary/8 to-transparent border-dashed border-primary/20 hover:border-primary/30 hover:shadow-glow-primary-sm transition-interactive">
+          <Card className="p-4 h-full bg-gradient-to-r from-primary/8 to-transparent border-dashed border-primary/20 hover:border-primary/30 hover:shadow-glow-primary-sm transition-interactive">
             <div className="flex items-center gap-4">
               <motion.div
                 className="w-10 h-10 rounded-lg bg-primary/12 flex items-center justify-center"

@@ -4,7 +4,7 @@ import {
   Users, UserPlus, ArrowRight, ArrowLeft, Bell, Mic,
   Check, Globe, Camera, Loader2, Copy, Gamepad2, Sparkles
 } from 'lucide-react'
-import Confetti from 'react-confetti'
+import Confetti from '../components/LazyConfetti'
 // useNavigate removed - using window.location.href for cleaner navigation
 import { Button, Card, Input } from '../components/ui'
 import { useAuthStore } from '../hooks'

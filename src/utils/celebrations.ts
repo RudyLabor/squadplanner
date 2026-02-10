@@ -1,8 +1,7 @@
-import confetti from 'canvas-confetti'
-
 /**
  * V3 - Enhanced celebration presets with physics-based particles
  * Uses canvas-confetti for all celebrations (consistent API)
+ * canvas-confetti is dynamically imported to reduce initial bundle size.
  */
 
 // Respect reduced motion preference
@@ -34,14 +33,23 @@ const TOKEN = {
   gold:         () => cssVar('--color-gold', '#f5a623'),
 } as const
 
-// Custom ribbon shape via shapeFromPath
-const ribbonShape = confetti.shapeFromPath('M0,0 C5,8 10,-8 15,0 C20,8 25,-8 30,0')
+// Cached ribbon shape (created on first use)
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+let ribbonShapeCache: any = null
 
 /**
  * Level Up celebration - 5 phase spectacular
  */
-export function celebrateLevelUp(colors: string[]) {
+export async function celebrateLevelUp(colors: string[]) {
   if (prefersReducedMotion()) return
+
+  const { default: confetti } = await import('canvas-confetti')
+
+  // Create ribbon shape on first use
+  if (!ribbonShapeCache) {
+    ribbonShapeCache = confetti.shapeFromPath('M0,0 C5,8 10,-8 15,0 C20,8 25,-8 30,0')
+  }
+  const ribbonShape = ribbonShapeCache
 
   const allColors = [...colors, '#ffffff', TOKEN.gold(), TOKEN.success()]
 
@@ -130,4 +138,3 @@ export function celebrateLevelUp(colors: string[]) {
     })
   }, 1200)
 }
-

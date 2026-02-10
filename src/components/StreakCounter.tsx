@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Flame, Gift, Sparkles, Check, Zap } from 'lucide-react'
-import Confetti from 'react-confetti'
+import Confetti from './LazyConfetti'
 import { Card } from './ui'
 
 // Milestone rewards configuration

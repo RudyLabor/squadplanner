@@ -22,7 +22,7 @@ export function LevelUpCelebration({
 
   // Trigger V3 enhanced confetti on mount
   useEffect(() => {
-    celebrateLevelUp([currentLevel.color, 'var(--color-primary-hover)'])
+    celebrateLevelUp([currentLevel.color, 'var(--color-primary-hover)']).catch(() => {})
   }, [currentLevel.color])
 
   // Auto-dismiss after delay

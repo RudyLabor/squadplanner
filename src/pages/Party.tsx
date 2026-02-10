@@ -18,7 +18,7 @@ import {
   TrendingUp
 } from 'lucide-react'
 import { Link } from 'react-router-dom'
-import Confetti from 'react-confetti'
+import Confetti from '../components/LazyConfetti'
 import { Card, Button } from '../components/ui'
 import { useAuthStore, useSquadsStore, useVoiceChatStore, usePremiumStore, getSavedPartyInfo } from '../hooks'
 import { NetworkQualityIndicator, QualityChangeToast } from '../components/NetworkQualityIndicator'

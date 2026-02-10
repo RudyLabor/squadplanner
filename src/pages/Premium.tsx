@@ -6,7 +6,7 @@ import {
   Star, ChevronDown, Gift, Rocket, CheckCircle2, Clock
 } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
-import Confetti from 'react-confetti'
+import Confetti from '../components/LazyConfetti'
 import { Button, Card } from '../components/ui'
 import { useAuthStore, useSubscriptionStore, usePremiumStore } from '../hooks'
 import { showSuccess } from '../lib/toast'

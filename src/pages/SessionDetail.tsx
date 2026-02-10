@@ -5,7 +5,7 @@ import {
   CheckCircle2, AlertCircle, XCircle, Loader2, Gamepad2, Sparkles
 } from 'lucide-react'
 import { Link, useParams, useNavigate } from 'react-router-dom'
-import Confetti from 'react-confetti'
+import Confetti from '../components/LazyConfetti'
 import { Button, Card, CardContent, Badge, ConfirmDialog } from '../components/ui'
 import { VoiceChat } from '../components/VoiceChat'
 import { useAuthStore, useSessionsStore } from '../hooks'

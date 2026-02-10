@@ -102,9 +102,9 @@ export default defineConfig({
               n.includes('zustand')) {
             return 'vendor-core';
           }
-          // UI: animations, icons, toasts, effects
+          // UI: animations, icons, toasts
           if (n.includes('framer-motion') || n.includes('lucide-react') ||
-              n.includes('sonner') || n.includes('confetti') || n.includes('countup')) {
+              n.includes('sonner')) {
             return 'vendor-ui';
           }
           // Data: Supabase + TanStack Query

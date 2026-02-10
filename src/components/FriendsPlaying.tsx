@@ -223,8 +223,8 @@ export function FriendsPlaying({ friends, onJoin, onInvite }: FriendsPlayingProp
     return (
       <div className="mb-6">
         <h2 className="text-lg font-semibold text-text-primary mb-3 flex items-center gap-2">
-          <Gamepad2 className="w-4 h-4 text-success" />
-          Tes potes jouent maintenant
+          <Gamepad2 className="w-5 h-5 text-success shrink-0" />
+          En train de jouer
         </h2>
         <EmptyState />
       </div>
@@ -235,14 +235,15 @@ export function FriendsPlaying({ friends, onJoin, onInvite }: FriendsPlayingProp
     <div className="mb-6">
       <h2 className="text-lg font-semibold text-text-primary mb-3 flex items-center gap-2">
         <motion.div
+          className="shrink-0"
           animate={{
             scale: [1, 1.1, 1],
           }}
           transition={{ duration: 2, repeat: Infinity }}
         >
-          <Gamepad2 className="w-4 h-4 text-success" />
+          <Gamepad2 className="w-5 h-5 text-success" />
         </motion.div>
-        Tes potes jouent maintenant
+        En train de jouer
         <span className="ml-auto text-sm font-normal text-primary">
           {friends.length} en ligne
         </span>

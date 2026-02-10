@@ -126,7 +126,7 @@ const ProtectedRoute = memo(function ProtectedRoute({
     return <LoadingSpinner />
   }
 
-  if (!skipOnboardingCheck && hasCheckedSquads && squads.length === 0) {
+  if (!skipOnboardingCheck && hasCheckedSquads && squads.length === 0 && localStorage.getItem('sq-onboarding-skipped') !== 'true') {
     return <Navigate to="/onboarding" replace />
   }
 

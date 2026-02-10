@@ -505,7 +505,7 @@ export function Onboarding() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 1 }}
-                onClick={() => { window.location.href = '/home' }}
+                onClick={() => { localStorage.setItem('sq-onboarding-skipped', 'true'); window.location.href = '/home' }}
                 className="text-sm text-text-quaternary hover:text-text-tertiary transition-colors mt-3"
               >
                 Passer pour l'instant

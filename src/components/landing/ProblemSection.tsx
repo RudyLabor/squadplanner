@@ -1,14 +1,17 @@
 import { motion } from 'framer-motion'
-import { ChevronDown } from 'lucide-react'
 import { scrollRevealLight } from '../../utils/animations'
 
 const staggerContainerVariants = {
   hidden: { opacity: 0 },
-  visible: { opacity: 1, transition: { staggerChildren: 0.18 } }
+  visible: { opacity: 1, transition: { staggerChildren: 0.3 } }
 }
 const staggerItemVariants = {
-  hidden: { opacity: 0, y: 12 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.4 } }
+  hidden: { opacity: 0, x: -16 },
+  visible: { opacity: 1, x: 0, transition: { duration: 0.5, ease: 'easeOut' } }
+}
+const chevronVariants = {
+  hidden: { opacity: 0, scale: 0.5 },
+  visible: { opacity: 1, scale: 1, transition: { duration: 0.3 } }
 }
 
 const problems = [
@@ -18,11 +21,7 @@ const problems = [
   { emoji: '😤', text: 'Tout le monde attend que quelqu\'un organise' },
 ]
 
-const arrowColors = [
-  'text-text-quaternary/40',
-  'text-warning/40',
-  'text-error/30',
-]
+const arrowOpacities = [0.25, 0.4, 0.6]
 
 export function ProblemSection() {
   return (
@@ -47,13 +46,36 @@ export function ProblemSection() {
           {problems.map((item, i) => (
             <motion.div key={item.text} variants={staggerItemVariants}>
               <div className="flex items-center gap-4 py-3">
-                <span className="text-2xl shrink-0 w-9 text-center">{item.emoji}</span>
+                <motion.span
+                  className="text-2xl shrink-0 w-9 text-center"
+                  initial={{ scale: 0.6, rotate: -10 }}
+                  whileInView={{ scale: 1, rotate: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.4, delay: i * 0.3 + 0.15, type: 'spring', stiffness: 200 }}
+                >
+                  {item.emoji}
+                </motion.span>
                 <p className="text-text-secondary text-md leading-relaxed">{item.text}</p>
               </div>
               {i < problems.length - 1 && (
-                <div className="flex justify-center py-1">
-                  <ChevronDown className={`w-4 h-4 ${arrowColors[i]}`} aria-hidden="true" />
-                </div>
+                <motion.div
+                  className="flex justify-center py-1"
+                  variants={chevronVariants}
+                >
+                  <motion.svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 16 16"
+                    fill="none"
+                    className="text-error"
+                    style={{ opacity: arrowOpacities[i] }}
+                    aria-hidden="true"
+                    animate={{ y: [0, 3, 0] }}
+                    transition={{ duration: 1.8, repeat: Infinity, delay: i * 0.3, ease: 'easeInOut' }}
+                  >
+                    <path d="M4 6L8 10L12 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                  </motion.svg>
+                </motion.div>
               )}
             </motion.div>
           ))}

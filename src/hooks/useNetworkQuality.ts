@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import type { IAgoraRTCClient } from 'agora-rtc-sdk-ng'
+import { ConnectionQuality, RoomEvent, type Room } from 'livekit-client'
 
 // Types pour la qualité réseau
 export type NetworkQualityLevel = 'excellent' | 'good' | 'medium' | 'poor' | 'unknown'
@@ -9,7 +9,7 @@ export interface AudioProfile {
   sampleRate: number
 }
 
-// Profils audio Agora selon la qualité réseau
+// Profils audio selon la qualité réseau
 export const AUDIO_PROFILES: Record<NetworkQualityLevel, AudioProfile> = {
   excellent: { bitrate: 128, sampleRate: 48000 },
   good: { bitrate: 64, sampleRate: 44100 },
@@ -18,14 +18,20 @@ export const AUDIO_PROFILES: Record<NetworkQualityLevel, AudioProfile> = {
   unknown: { bitrate: 64, sampleRate: 44100 }, // Défaut
 }
 
-// Mapping score Agora -> niveau de qualité
-// Score Agora: 0=inconnu, 1=excellent, 2=bon, 3=moyen, 4=mauvais, 5=très mauvais
-export function mapAgoraQualityToLevel(agoraScore: number): NetworkQualityLevel {
-  if (agoraScore === 0) return 'unknown'
-  if (agoraScore <= 2) return 'excellent'
-  if (agoraScore === 3) return 'good'
-  if (agoraScore === 4) return 'medium'
-  return 'poor'
+// Mapping LiveKit ConnectionQuality -> niveau de qualité
+export function mapLiveKitQualityToLevel(quality: ConnectionQuality): NetworkQualityLevel {
+  switch (quality) {
+    case ConnectionQuality.Excellent:
+      return 'excellent'
+    case ConnectionQuality.Good:
+      return 'good'
+    case ConnectionQuality.Poor:
+      return 'poor'
+    case ConnectionQuality.Lost:
+      return 'poor'
+    default:
+      return 'unknown'
+  }
 }
 
 // Informations affichables pour chaque niveau
@@ -71,7 +77,7 @@ export const QUALITY_INFO: Record<NetworkQualityLevel, {
 interface NetworkQualityState {
   // Qualité réseau locale (uplink)
   localQuality: NetworkQualityLevel
-  localQualityScore: number // Score brut Agora (0-5)
+  localQualityScore: number // Score 0-4 (mapped from LiveKit)
 
   // Qualité réseau distante (downlink)
   remoteQuality: NetworkQualityLevel
@@ -85,7 +91,7 @@ interface NetworkQualityState {
   lastQualityChange: number
 
   // Actions
-  updateQuality: (uplinkScore: number, downlinkScore: number) => NetworkQualityLevel | null
+  updateQuality: (localConnectionQuality: ConnectionQuality, remoteConnectionQuality?: ConnectionQuality) => NetworkQualityLevel | null
   resetQuality: () => void
   getStableQuality: () => NetworkQualityLevel
 }
@@ -96,6 +102,17 @@ const MIN_QUALITY_CHANGE_INTERVAL = 5000
 // Nombre d'échantillons pour la moyenne mobile
 const QUALITY_HISTORY_SIZE = 5
 
+// Convert LiveKit ConnectionQuality to numeric score
+function qualityToScore(quality: ConnectionQuality): number {
+  switch (quality) {
+    case ConnectionQuality.Excellent: return 1
+    case ConnectionQuality.Good: return 2
+    case ConnectionQuality.Poor: return 4
+    case ConnectionQuality.Lost: return 5
+    default: return 0
+  }
+}
+
 export const useNetworkQualityStore = create<NetworkQualityState>((set, get) => ({
   localQuality: 'unknown',
   localQualityScore: 0,
@@ -105,16 +122,23 @@ export const useNetworkQualityStore = create<NetworkQualityState>((set, get) => 
   qualityHistory: [],
   lastQualityChange: 0,
 
-  updateQuality: (uplinkScore: number, downlinkScore: number) => {
+  updateQuality: (localConnectionQuality: ConnectionQuality, remoteConnectionQuality?: ConnectionQuality) => {
     const state = get()
     const now = Date.now()
+
+    const uplinkScore = qualityToScore(localConnectionQuality)
+    const downlinkScore = remoteConnectionQuality ? qualityToScore(remoteConnectionQuality) : 0
 
     // Ajouter à l'historique
     const newHistory = [...state.qualityHistory, uplinkScore].slice(-QUALITY_HISTORY_SIZE)
 
     // Calculer la moyenne mobile
     const averageScore = newHistory.reduce((a, b) => a + b, 0) / newHistory.length
-    const stableQualityLevel = mapAgoraQualityToLevel(Math.round(averageScore))
+    const stableQualityLevel = mapLiveKitQualityToLevel(
+      averageScore <= 1.5 ? ConnectionQuality.Excellent :
+      averageScore <= 2.5 ? ConnectionQuality.Good :
+      ConnectionQuality.Poor
+    )
 
     // Vérifier si on peut changer de qualité
     const canChange = now - state.lastQualityChange > MIN_QUALITY_CHANGE_INTERVAL
@@ -123,7 +147,7 @@ export const useNetworkQualityStore = create<NetworkQualityState>((set, get) => 
     set({
       localQualityScore: uplinkScore,
       remoteQualityScore: downlinkScore,
-      remoteQuality: mapAgoraQualityToLevel(downlinkScore),
+      remoteQuality: remoteConnectionQuality ? mapLiveKitQualityToLevel(remoteConnectionQuality) : state.remoteQuality,
       qualityHistory: newHistory,
       ...(qualityChanged ? {
         localQuality: stableQualityLevel,
@@ -152,60 +176,55 @@ export const useNetworkQualityStore = create<NetworkQualityState>((set, get) => 
     const state = get()
     if (state.qualityHistory.length === 0) return 'unknown'
     const average = state.qualityHistory.reduce((a, b) => a + b, 0) / state.qualityHistory.length
-    return mapAgoraQualityToLevel(Math.round(average))
+    return mapLiveKitQualityToLevel(
+      average <= 1.5 ? ConnectionQuality.Excellent :
+      average <= 2.5 ? ConnectionQuality.Good :
+      ConnectionQuality.Poor
+    )
   },
 }))
 
 /**
- * Configure les listeners de qualité réseau sur un client Agora
+ * Configure les listeners de qualité réseau sur une Room LiveKit
  * Retourne une fonction de nettoyage
  */
 export function setupNetworkQualityListener(
-  client: IAgoraRTCClient,
+  room: Room,
   onQualityChange?: (newQuality: NetworkQualityLevel, oldQuality: NetworkQualityLevel) => void
 ): () => void {
-  const handleNetworkQuality = (stats: { uplinkNetworkQuality: number; downlinkNetworkQuality: number }) => {
-    const previousQuality = useNetworkQualityStore.getState().localQuality
-    const newQuality = useNetworkQualityStore.getState().updateQuality(
-      stats.uplinkNetworkQuality,
-      stats.downlinkNetworkQuality
-    )
+  const handleConnectionQualityChanged = (quality: ConnectionQuality, participant: { identity: string; sid: string }) => {
+    // Only track local participant quality
+    if (participant.sid === room.localParticipant?.sid) {
+      const previousQuality = useNetworkQualityStore.getState().localQuality
+      const newQuality = useNetworkQualityStore.getState().updateQuality(quality)
 
-    // Notifier si la qualité a changé
-    if (newQuality && onQualityChange) {
-      onQualityChange(newQuality, previousQuality)
+      // Notifier si la qualité a changé
+      if (newQuality && onQualityChange) {
+        onQualityChange(newQuality, previousQuality)
+      }
     }
   }
 
-  client.on('network-quality', handleNetworkQuality)
+  room.on(RoomEvent.ConnectionQualityChanged, handleConnectionQualityChanged)
 
   // Retourner la fonction de nettoyage
   return () => {
-    client.off('network-quality', handleNetworkQuality)
+    room.off(RoomEvent.ConnectionQualityChanged, handleConnectionQualityChanged)
     useNetworkQualityStore.getState().resetQuality()
   }
 }
 
 /**
- * Ajuste les paramètres audio du client Agora selon la qualité
- * À appeler quand la qualité change
+ * Ajuste les paramètres audio selon la qualité
  */
 export async function adjustAudioQuality(
-  _client: IAgoraRTCClient,
+  _room: Room,
   quality: NetworkQualityLevel
 ): Promise<void> {
   const profile = AUDIO_PROFILES[quality]
 
   try {
-    // Note: Agora RTC SDK NG n'a pas de méthode directe pour changer le bitrate
-    // après la création de la piste. On peut utiliser setEncoderConfiguration
-    // sur le localAudioTrack si disponible, sinon on log juste le changement.
     console.log(`[NetworkQuality] Ajustement audio vers ${quality}:`, profile)
-
-    // Pour les clients qui supportent les profils audio encodés
-    // Cette fonction peut être étendue selon les capacités du SDK
-    // Le client est passé pour une utilisation future avec setEncoderConfiguration
-
   } catch (error) {
     console.error('[NetworkQuality] Erreur lors de l\'ajustement audio:', error)
   }

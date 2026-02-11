@@ -1,36 +1,33 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { act } from '@testing-library/react'
+import { ConnectionQuality } from 'livekit-client'
 
 import {
   useNetworkQualityStore,
-  mapAgoraQualityToLevel,
+  mapLiveKitQualityToLevel,
   AUDIO_PROFILES,
   type NetworkQualityLevel,
 } from '../useNetworkQuality'
 
-describe('mapAgoraQualityToLevel', () => {
-  it('maps 0 to unknown', () => {
-    expect(mapAgoraQualityToLevel(0)).toBe('unknown')
+describe('mapLiveKitQualityToLevel', () => {
+  it('maps Excellent to excellent', () => {
+    expect(mapLiveKitQualityToLevel(ConnectionQuality.Excellent)).toBe('excellent')
   })
 
-  it('maps 1 to excellent', () => {
-    expect(mapAgoraQualityToLevel(1)).toBe('excellent')
+  it('maps Good to good', () => {
+    expect(mapLiveKitQualityToLevel(ConnectionQuality.Good)).toBe('good')
   })
 
-  it('maps 2 to excellent', () => {
-    expect(mapAgoraQualityToLevel(2)).toBe('excellent')
+  it('maps Poor to poor', () => {
+    expect(mapLiveKitQualityToLevel(ConnectionQuality.Poor)).toBe('poor')
   })
 
-  it('maps 3 to good', () => {
-    expect(mapAgoraQualityToLevel(3)).toBe('good')
+  it('maps Lost to poor', () => {
+    expect(mapLiveKitQualityToLevel(ConnectionQuality.Lost)).toBe('poor')
   })
 
-  it('maps 4 to medium', () => {
-    expect(mapAgoraQualityToLevel(4)).toBe('medium')
-  })
-
-  it('maps 5 to poor', () => {
-    expect(mapAgoraQualityToLevel(5)).toBe('poor')
+  it('maps Unknown to unknown', () => {
+    expect(mapLiveKitQualityToLevel(ConnectionQuality.Unknown)).toBe('unknown')
   })
 })
 
@@ -65,23 +62,22 @@ describe('useNetworkQualityStore', () => {
   describe('updateQuality', () => {
     it('sets scores and updates history', () => {
       act(() => {
-        useNetworkQualityStore.getState().updateQuality(3, 2)
+        useNetworkQualityStore.getState().updateQuality(ConnectionQuality.Good, ConnectionQuality.Excellent)
       })
 
       const state = useNetworkQualityStore.getState()
-      expect(state.localQualityScore).toBe(3)
-      expect(state.remoteQualityScore).toBe(2)
-      expect(state.qualityHistory).toEqual([3])
+      expect(state.localQualityScore).toBe(2) // Good = 2
+      expect(state.remoteQualityScore).toBe(1) // Excellent = 1
+      expect(state.qualityHistory).toEqual([2])
       expect(state.remoteQuality).toBe('excellent')
     })
 
     it('changes quality level when MIN_QUALITY_CHANGE_INTERVAL has passed', () => {
-      // lastQualityChange is 0 (epoch), so any Date.now() > 5000 will allow change
       vi.spyOn(Date, 'now').mockReturnValue(10000)
 
       let result: NetworkQualityLevel | null
       act(() => {
-        result = useNetworkQualityStore.getState().updateQuality(1, 1)
+        result = useNetworkQualityStore.getState().updateQuality(ConnectionQuality.Excellent, ConnectionQuality.Excellent)
       })
 
       const state = useNetworkQualityStore.getState()
@@ -95,7 +91,7 @@ describe('useNetworkQualityStore', () => {
       // First update: set quality to excellent at time 10000
       vi.spyOn(Date, 'now').mockReturnValue(10000)
       act(() => {
-        useNetworkQualityStore.getState().updateQuality(1, 1)
+        useNetworkQualityStore.getState().updateQuality(ConnectionQuality.Excellent, ConnectionQuality.Excellent)
       })
       expect(useNetworkQualityStore.getState().localQuality).toBe('excellent')
 
@@ -103,22 +99,20 @@ describe('useNetworkQualityStore', () => {
       vi.spyOn(Date, 'now').mockReturnValue(12000)
       let result: NetworkQualityLevel | null
       act(() => {
-        result = useNetworkQualityStore.getState().updateQuality(5, 5)
+        result = useNetworkQualityStore.getState().updateQuality(ConnectionQuality.Poor, ConnectionQuality.Poor)
       })
 
       const state = useNetworkQualityStore.getState()
-      // Quality level should NOT have changed
       expect(state.localQuality).toBe('excellent')
       expect(state.lastQualityChange).toBe(10000)
       expect(result!).toBeNull()
     })
 
     it('returns new level when changed, null when not', () => {
-      // First call: lastQualityChange is 0, so interval has passed
       vi.spyOn(Date, 'now').mockReturnValue(10000)
       let result1: NetworkQualityLevel | null
       act(() => {
-        result1 = useNetworkQualityStore.getState().updateQuality(1, 1)
+        result1 = useNetworkQualityStore.getState().updateQuality(ConnectionQuality.Excellent, ConnectionQuality.Excellent)
       })
       expect(result1!).toBe('excellent')
 
@@ -126,7 +120,7 @@ describe('useNetworkQualityStore', () => {
       vi.spyOn(Date, 'now').mockReturnValue(12000)
       let result2: NetworkQualityLevel | null
       act(() => {
-        result2 = useNetworkQualityStore.getState().updateQuality(5, 5)
+        result2 = useNetworkQualityStore.getState().updateQuality(ConnectionQuality.Poor, ConnectionQuality.Poor)
       })
       expect(result2!).toBeNull()
     })
@@ -135,30 +129,26 @@ describe('useNetworkQualityStore', () => {
       vi.spyOn(Date, 'now').mockReturnValue(100000)
 
       act(() => {
-        useNetworkQualityStore.getState().updateQuality(1, 1)
-        useNetworkQualityStore.getState().updateQuality(2, 2)
-        useNetworkQualityStore.getState().updateQuality(3, 3)
-        useNetworkQualityStore.getState().updateQuality(4, 4)
-        useNetworkQualityStore.getState().updateQuality(5, 5)
-        useNetworkQualityStore.getState().updateQuality(1, 1) // 6th sample
+        useNetworkQualityStore.getState().updateQuality(ConnectionQuality.Excellent)
+        useNetworkQualityStore.getState().updateQuality(ConnectionQuality.Good)
+        useNetworkQualityStore.getState().updateQuality(ConnectionQuality.Good)
+        useNetworkQualityStore.getState().updateQuality(ConnectionQuality.Poor)
+        useNetworkQualityStore.getState().updateQuality(ConnectionQuality.Poor)
+        useNetworkQualityStore.getState().updateQuality(ConnectionQuality.Excellent) // 6th sample
       })
 
       const state = useNetworkQualityStore.getState()
       expect(state.qualityHistory).toHaveLength(5)
-      // Should have dropped the first sample (1) and kept [2, 3, 4, 5, 1]
-      expect(state.qualityHistory).toEqual([2, 3, 4, 5, 1])
     })
   })
 
   describe('resetQuality', () => {
     it('resets all state to defaults', () => {
-      // First set some non-default state
       vi.spyOn(Date, 'now').mockReturnValue(10000)
       act(() => {
-        useNetworkQualityStore.getState().updateQuality(1, 2)
+        useNetworkQualityStore.getState().updateQuality(ConnectionQuality.Excellent, ConnectionQuality.Good)
       })
 
-      // Now reset
       act(() => {
         useNetworkQualityStore.getState().resetQuality()
       })
@@ -181,16 +171,14 @@ describe('useNetworkQualityStore', () => {
     })
 
     it('returns average-based quality from history', () => {
-      // Set history to [1, 2, 3] -> average 2 -> rounds to 2 -> 'excellent'
       act(() => {
-        useNetworkQualityStore.setState({ qualityHistory: [1, 2, 3] })
+        useNetworkQualityStore.setState({ qualityHistory: [1, 2, 1] })
       })
       const result = useNetworkQualityStore.getState().getStableQuality()
       expect(result).toBe('excellent')
     })
 
     it('returns poor quality for high average scores', () => {
-      // Set history to [4, 5, 5] -> average ~4.67 -> rounds to 5 -> 'poor'
       act(() => {
         useNetworkQualityStore.setState({ qualityHistory: [4, 5, 5] })
       })

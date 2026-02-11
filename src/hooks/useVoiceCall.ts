@@ -1,31 +1,19 @@
 import { create } from 'zustand'
-import type {
-  IAgoraRTCClient,
-  IMicrophoneAudioTrack,
-  IAgoraRTCRemoteUser,
-} from 'agora-rtc-sdk-ng'
+import {
+  Room,
+  RoomEvent,
+  Track,
+  type RemoteParticipant,
+  type RemoteTrackPublication,
+  type RemoteTrack,
+  type Participant,
+  ConnectionQuality,
+} from 'livekit-client'
 import { supabase } from '../lib/supabase'
 import {
   useNetworkQualityStore,
-  setupNetworkQualityListener,
   type NetworkQualityLevel,
 } from './useNetworkQuality'
-
-// Lazy load Agora SDK only when needed (1.3MB)
-let AgoraRTC: typeof import('agora-rtc-sdk-ng').default | null = null
-
-async function getAgoraRTC() {
-  if (!AgoraRTC) {
-    const module = await import('agora-rtc-sdk-ng')
-    AgoraRTC = module.default
-    // PHASE 6.4: Set log level to errors only in production
-    // 0 = debug, 1 = info, 2 = warning, 3 = error, 4 = none
-    if (import.meta.env.PROD) {
-      AgoraRTC.setLogLevel(3) // Only show errors
-    }
-  }
-  return AgoraRTC
-}
 
 // Types
 export type CallStatus = 'idle' | 'calling' | 'ringing' | 'connected' | 'ended' | 'missed' | 'rejected'
@@ -49,7 +37,6 @@ interface VoiceCallState {
 
   // Network quality
   networkQualityChanged: NetworkQualityLevel | null
-  cleanupNetworkQuality: (() => void) | null
 
   // Call participants
   caller: CallUser | null
@@ -58,8 +45,7 @@ interface VoiceCallState {
   currentCallId: string | null
 
   // Internal refs (not reactive)
-  client: IAgoraRTCClient | null
-  localAudioTrack: IMicrophoneAudioTrack | null
+  room: Room | null
   durationInterval: ReturnType<typeof setInterval> | null
   ringTimeout: ReturnType<typeof setTimeout> | null
 
@@ -76,31 +62,19 @@ interface VoiceCallState {
   clearNetworkQualityNotification: () => void
 }
 
-// Agora App ID
-const AGORA_APP_ID = import.meta.env.VITE_AGORA_APP_ID || ''
+// LiveKit WebSocket URL from environment
+const LIVEKIT_URL = import.meta.env.VITE_LIVEKIT_URL || ''
 
 // Generate channel name from two user IDs (sorted for consistency)
 function generateChannelName(userId1: string, userId2: string): string {
-  // Use short hashes for channel name to stay within Agora's 64 char limit
   const hash1 = hashUserId(userId1)
   const hash2 = hashUserId(userId2)
   const sortedHashes = [hash1, hash2].sort()
   return `call_${sortedHashes.join('_')}`
 }
 
-// Convert UUID to a numeric UID for Agora (Agora prefers numeric UIDs)
-function uuidToNumericUid(uuid: string): number {
-  // Remove hyphens and take first 8 chars, convert to number
-  const cleanUuid = uuid.replace(/-/g, '')
-  // Use parseInt with base 16 on first 8 chars, then modulo to keep it reasonable
-  const num = parseInt(cleanUuid.substring(0, 8), 16)
-  // Agora UID should be a positive 32-bit integer
-  return Math.abs(num) % 2147483647
-}
-
 // Hash user ID to a shorter string for channel names
 function hashUserId(userId: string): string {
-  // Simple hash: take first 8 chars without hyphens
   return userId.replace(/-/g, '').substring(0, 8)
 }
 
@@ -109,7 +83,6 @@ const RING_TIMEOUT = 30000
 
 // Constantes pour la reconnexion
 const MAX_RECONNECT_ATTEMPTS = 3
-const RECONNECT_DELAY_MS = 2000
 
 export const useVoiceCallStore = create<VoiceCallState>((set, get) => ({
   // Initial state
@@ -122,13 +95,11 @@ export const useVoiceCallStore = create<VoiceCallState>((set, get) => ({
   isReconnecting: false,
   reconnectAttempts: 0,
   networkQualityChanged: null,
-  cleanupNetworkQuality: null,
   caller: null,
   receiver: null,
   isIncoming: false,
   currentCallId: null,
-  client: null,
-  localAudioTrack: null,
+  room: null,
   durationInterval: null,
   ringTimeout: null,
 
@@ -137,27 +108,23 @@ export const useVoiceCallStore = create<VoiceCallState>((set, get) => ({
   clearNetworkQualityNotification: () => set({ networkQualityChanged: null }),
 
   resetCall: () => {
-    const { durationInterval, ringTimeout, client, localAudioTrack, cleanupNetworkQuality } = get()
+    const { durationInterval, ringTimeout, room } = get()
 
     // Clear intervals and timeouts
     if (durationInterval) clearInterval(durationInterval)
     if (ringTimeout) clearTimeout(ringTimeout)
 
-    // Cleanup network quality listener
-    if (cleanupNetworkQuality) {
-      cleanupNetworkQuality()
-    }
-
     // Reset network quality store
     useNetworkQualityStore.getState().resetQuality()
 
-    // Cleanup Agora
-    if (localAudioTrack) {
-      localAudioTrack.stop()
-      localAudioTrack.close()
-    }
-    if (client) {
-      client.leave().catch(console.error)
+    // Cleanup LiveKit room
+    if (room) {
+      // Detach all audio elements
+      room.remoteParticipants.forEach((participant) => {
+        const audioEl = document.getElementById(`call-audio-${participant.identity}`)
+        if (audioEl) audioEl.remove()
+      })
+      room.disconnect().catch(console.error)
     }
 
     set({
@@ -170,13 +137,11 @@ export const useVoiceCallStore = create<VoiceCallState>((set, get) => ({
       isReconnecting: false,
       reconnectAttempts: 0,
       networkQualityChanged: null,
-      cleanupNetworkQuality: null,
       caller: null,
       receiver: null,
       isIncoming: false,
       currentCallId: null,
-      client: null,
-      localAudioTrack: null,
+      room: null,
       durationInterval: null,
       ringTimeout: null,
     })
@@ -196,21 +161,17 @@ export const useVoiceCallStore = create<VoiceCallState>((set, get) => ({
       return
     }
 
-    if (!AGORA_APP_ID) {
-      console.error('[VoiceCall] No Agora App ID configured!')
-      set({ error: 'Agora App ID non configure. Contactez l\'administrateur.' })
+    if (!LIVEKIT_URL) {
+      console.error('[VoiceCall] No LiveKit URL configured!')
+      set({ error: 'LiveKit URL non configuré. Contactez l\'administrateur.' })
       return
-    }
-
-    if (!import.meta.env.PROD) {
-      console.log('[VoiceCall] Agora App ID is configured')
     }
 
     try {
       // Get current user
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) {
-        set({ error: 'Utilisateur non connecte' })
+        set({ error: 'Utilisateur non connecté' })
         return
       }
 
@@ -239,7 +200,7 @@ export const useVoiceCallStore = create<VoiceCallState>((set, get) => ({
         .insert({
           caller_id: user.id,
           receiver_id: receiverId,
-          status: 'missed', // Default to missed, will update when answered
+          status: 'missed',
         })
         .select()
         .single()
@@ -248,7 +209,7 @@ export const useVoiceCallStore = create<VoiceCallState>((set, get) => ({
         console.error('Error creating call record:', dbError)
       }
 
-      // Envoyer une notification push au destinataire
+      // Send push notification to receiver
       if (callRecord?.id) {
         try {
           await supabase.functions.invoke('send-push', {
@@ -265,27 +226,19 @@ export const useVoiceCallStore = create<VoiceCallState>((set, get) => ({
                 caller_name: caller.username,
                 caller_avatar: caller.avatar_url
               },
-              // Indicateur pour les actions de notification
               actions: [
-                { action: 'answer', title: 'Repondre' },
+                { action: 'answer', title: 'Répondre' },
                 { action: 'decline', title: 'Refuser' }
               ]
             }
           })
-          if (!import.meta.env.PROD) {
-            console.log('[VoiceCall] Push notification sent for incoming call')
-          }
         } catch (pushError) {
           if (!import.meta.env.PROD) {
             console.warn('[VoiceCall] Failed to send push notification:', pushError)
           }
-          // On continue meme si la push echoue
         }
       }
 
-      if (!import.meta.env.PROD) {
-        console.log('[VoiceCall] Setting state to calling with receiver:', receiver)
-      }
       set({
         status: 'calling',
         caller,
@@ -294,29 +247,25 @@ export const useVoiceCallStore = create<VoiceCallState>((set, get) => ({
         currentCallId: callRecord?.id || null,
         error: null,
       })
-      if (!import.meta.env.PROD) {
-        console.log('[VoiceCall] State set to calling')
-      }
 
       // Setup ring timeout
       const ringTimeout = setTimeout(() => {
         const currentState = get()
         if (currentState.status === 'calling') {
-          // Mark as missed and end
           get().endCall()
         }
       }, RING_TIMEOUT)
 
       set({ ringTimeout })
 
-      // Initialize Agora client and wait for the other user
-      await initializeAgoraClient(user.id, receiver.id)
+      // Initialize LiveKit room and wait for the other user
+      await initializeLiveKitRoom(user.id, receiver.id)
 
     } catch (error) {
       console.error('Error starting call:', error)
       set({
         status: 'idle',
-        error: error instanceof Error ? error.message : 'Erreur lors du demarrage de l\'appel',
+        error: error instanceof Error ? error.message : 'Erreur lors du démarrage de l\'appel',
       })
     }
   },
@@ -335,7 +284,6 @@ export const useVoiceCallStore = create<VoiceCallState>((set, get) => ({
       const currentState = get()
       if (currentState.status === 'ringing') {
         set({ status: 'missed' })
-        // Reset after a moment
         setTimeout(() => get().resetCall(), 2000)
       }
     }, RING_TIMEOUT)
@@ -365,7 +313,7 @@ export const useVoiceCallStore = create<VoiceCallState>((set, get) => ({
       // Get current user
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) {
-        set({ error: 'Utilisateur non connecte' })
+        set({ error: 'Utilisateur non connecté' })
         return
       }
 
@@ -392,8 +340,8 @@ export const useVoiceCallStore = create<VoiceCallState>((set, get) => ({
           .eq('id', state.currentCallId)
       }
 
-      // Initialize Agora and connect
-      await initializeAgoraClient(user.id, state.caller.id)
+      // Initialize LiveKit and connect
+      await initializeLiveKitRoom(user.id, state.caller.id)
 
       // Mark as connected
       const callStartTime = Date.now()
@@ -448,7 +396,7 @@ export const useVoiceCallStore = create<VoiceCallState>((set, get) => ({
   // End current call
   endCall: async () => {
     const state = get()
-    const { client, localAudioTrack, durationInterval, ringTimeout, currentCallId, callStartTime, status } = state
+    const { room, durationInterval, ringTimeout, currentCallId, callStartTime, status } = state
 
     // Clear intervals and timeouts
     if (durationInterval) clearInterval(durationInterval)
@@ -478,17 +426,17 @@ export const useVoiceCallStore = create<VoiceCallState>((set, get) => ({
         .eq('id', currentCallId)
     }
 
-    // Cleanup Agora
+    // Cleanup LiveKit
     try {
-      if (localAudioTrack) {
-        localAudioTrack.stop()
-        localAudioTrack.close()
-      }
-      if (client) {
-        await client.leave()
+      if (room) {
+        room.remoteParticipants.forEach((participant) => {
+          const audioEl = document.getElementById(`call-audio-${participant.identity}`)
+          if (audioEl) audioEl.remove()
+        })
+        await room.disconnect()
       }
     } catch (error) {
-      console.error('Error cleaning up Agora:', error)
+      console.error('Error cleaning up LiveKit:', error)
     }
 
     set({ status: 'ended' })
@@ -499,113 +447,64 @@ export const useVoiceCallStore = create<VoiceCallState>((set, get) => ({
 
   // Toggle mute
   toggleMute: async () => {
-    const { localAudioTrack, isMuted } = get()
+    const { room, isMuted } = get()
 
-    if (localAudioTrack) {
-      await localAudioTrack.setEnabled(isMuted) // Toggle
+    if (room) {
+      await room.localParticipant.setMicrophoneEnabled(isMuted) // Toggle
       set({ isMuted: !isMuted })
     }
   },
 
-  // Toggle speaker (for future implementation with speaker routing)
+  // Toggle speaker
   toggleSpeaker: () => {
     set(state => ({ isSpeakerOn: !state.isSpeakerOn }))
   },
 }))
 
-// Helper function to initialize Agora client
-async function initializeAgoraClient(currentUserId: string, otherUserId: string) {
+// Helper function to initialize LiveKit room for a call
+async function initializeLiveKitRoom(currentUserId: string, otherUserId: string) {
   const channelName = generateChannelName(currentUserId, otherUserId)
 
   try {
-    // Lazy load Agora SDK (1.3MB) only when actually needed
-    const AgoraSDK = await getAgoraRTC()
+    // Get token from Edge Function
+    if (!import.meta.env.PROD) {
+      console.log('[VoiceCall] Getting LiveKit token for channel:', channelName)
+    }
 
-    // Create client
-    const client = AgoraSDK.createClient({
-      mode: 'rtc',
-      codec: 'vp8',
+    const { data, error } = await supabase.functions.invoke('livekit-token', {
+      body: {
+        room_name: channelName,
+        participant_identity: currentUserId,
+        participant_name: currentUserId,
+      },
     })
 
-    // Gestion des changements d'etat de connexion (reconnexion automatique)
-    client.on('connection-state-change', async (curState, prevState, reason) => {
-      if (!import.meta.env.PROD) {
-        console.log(`[VoiceCall] Connection state: ${prevState} -> ${curState}, reason: ${reason}`)
-      }
+    if (error || !data?.token) {
+      throw new Error('Impossible d\'obtenir le token LiveKit')
+    }
 
-      if (curState === 'RECONNECTING') {
-        useVoiceCallStore.setState({ isReconnecting: true })
-        if (!import.meta.env.PROD) {
-          console.log('[VoiceCall] Reconnexion en cours...')
-        }
-      } else if (curState === 'CONNECTED' && prevState === 'RECONNECTING') {
-        // Reconnexion reussie automatiquement par Agora
-        useVoiceCallStore.setState({
-          isReconnecting: false,
-          reconnectAttempts: 0,
-          error: null
-        })
-        if (!import.meta.env.PROD) {
-          console.log('[VoiceCall] Reconnexion automatique reussie !')
-        }
-      } else if (curState === 'DISCONNECTED') {
-        const currentState = useVoiceCallStore.getState()
+    const token = data.token
 
-        // Si deconnecte pour une erreur reseau et appel en cours
-        if (reason !== 'LEAVE' && currentState.status === 'connected') {
-          const attempts = currentState.reconnectAttempts + 1
-
-          if (attempts <= MAX_RECONNECT_ATTEMPTS) {
-            if (!import.meta.env.PROD) {
-              console.log(`[VoiceCall] Tentative de reconnexion manuelle ${attempts}/${MAX_RECONNECT_ATTEMPTS}...`)
-            }
-            useVoiceCallStore.setState({
-              isReconnecting: true,
-              reconnectAttempts: attempts
-            })
-
-            // Attendre avant de tenter la reconnexion
-            await new Promise(resolve => setTimeout(resolve, RECONNECT_DELAY_MS))
-
-            try {
-              // Nettoyer l'ancien client
-              if (currentState.localAudioTrack) {
-                currentState.localAudioTrack.stop()
-                currentState.localAudioTrack.close()
-              }
-
-              // Tenter de rejoindre a nouveau
-              await initializeAgoraClient(currentUserId, otherUserId)
-              if (!import.meta.env.PROD) {
-                console.log('[VoiceCall] Reconnexion manuelle reussie !')
-              }
-            } catch (err) {
-              if (!import.meta.env.PROD) {
-                console.error('[VoiceCall] Erreur lors de la reconnexion manuelle:', err)
-              }
-            }
-          } else {
-            // Echec apres toutes les tentatives
-            if (!import.meta.env.PROD) {
-              console.error('[VoiceCall] Echec de la reconnexion apres 3 tentatives')
-            }
-            useVoiceCallStore.setState({
-              isReconnecting: false,
-              reconnectAttempts: 0,
-              error: 'Impossible de se reconnecter. Verifiez votre connexion internet.'
-            })
-            // Terminer l'appel
-            currentState.endCall()
-          }
-        }
-      }
+    // Create LiveKit Room
+    const room = new Room({
+      adaptiveStream: true,
+      dynacast: true,
+      reconnectPolicy: {
+        nextRetryDelayInMs: (context) => {
+          if (context.retryCount > MAX_RECONNECT_ATTEMPTS) return null
+          return context.retryCount * 2000
+        },
+      },
     })
 
     // Set up event listeners
-    client.on('user-published', async (user: IAgoraRTCRemoteUser, mediaType: 'audio' | 'video') => {
-      if (mediaType === 'audio') {
-        await client.subscribe(user, mediaType)
-        user.audioTrack?.play()
+
+    // Track subscribed - play remote audio
+    room.on(RoomEvent.TrackSubscribed, (track: RemoteTrack, _publication: RemoteTrackPublication, participant: RemoteParticipant) => {
+      if (track.kind === Track.Kind.Audio) {
+        const element = track.attach()
+        element.id = `call-audio-${participant.identity}`
+        document.body.appendChild(element)
 
         // If we were calling, now we're connected
         const currentState = useVoiceCallStore.getState()
@@ -634,96 +533,86 @@ async function initializeAgoraClient(currentUserId: string, otherUserId: string)
       }
     })
 
-    client.on('user-unpublished', (user: IAgoraRTCRemoteUser, mediaType: 'audio' | 'video') => {
-      if (mediaType === 'audio') {
-        user.audioTrack?.stop()
-      }
+    // Track unsubscribed - cleanup
+    room.on(RoomEvent.TrackUnsubscribed, (track: RemoteTrack) => {
+      track.detach().forEach(el => el.remove())
     })
 
-    client.on('user-left', () => {
-      // Other user left, end the call
+    // Participant left - end the call
+    room.on(RoomEvent.ParticipantDisconnected, () => {
       const currentState = useVoiceCallStore.getState()
       if (currentState.status === 'connected' || currentState.status === 'calling') {
         currentState.endCall()
       }
     })
 
-    // Setup network quality monitoring
-    const cleanupNetworkQuality = setupNetworkQualityListener(
-      client,
-      (newQuality, oldQuality) => {
-        if (!import.meta.env.PROD) {
-          console.log(`[VoiceCall] Qualite reseau: ${oldQuality} -> ${newQuality}`)
-        }
-        // Notifier le changement de qualite pour afficher un toast
-        useVoiceCallStore.setState({ networkQualityChanged: newQuality })
-      }
-    )
-
-    // Convert UUID to numeric UID for Agora
-    const numericUid = uuidToNumericUid(currentUserId)
-    if (!import.meta.env.PROD) {
-      console.log('[VoiceCall] Using numeric UID:', numericUid, 'for channel:', channelName)
-    }
-
-    // Get token from Edge Function
-    if (!import.meta.env.PROD) {
-      console.log('[VoiceCall] Getting token from Edge Function...')
-    }
-    let token: string | null = null
-
-    try {
-      const { data, error } = await supabase.functions.invoke('agora-token', {
-        body: { channel_name: channelName, uid: numericUid },
-      })
-
-      if (error) {
-        if (!import.meta.env.PROD) {
-          console.warn('[VoiceCall] Token fetch error:', error)
-        }
-      } else {
-        token = data?.token || null
-        if (!import.meta.env.PROD) {
-          console.log('[VoiceCall] Token received:', token ? `${token.substring(0, 20)}...` : 'null')
-        }
-      }
-    } catch (tokenError) {
+    // Reconnection handling
+    room.on(RoomEvent.Reconnecting, () => {
       if (!import.meta.env.PROD) {
-        console.warn('[VoiceCall] Failed to get token:', tokenError)
+        console.log('[VoiceCall] Reconnexion en cours...')
       }
-    }
-
-    // Join channel with token (or null if token generation failed)
-    try {
-      if (!import.meta.env.PROD) {
-        console.log('[VoiceCall] Joining channel...')
-      }
-      await client.join(AGORA_APP_ID, channelName, token, numericUid)
-      if (!import.meta.env.PROD) {
-        console.log('[VoiceCall] Joined successfully!')
-      }
-    } catch (joinError: unknown) {
-      const errorMessage = joinError instanceof Error ? joinError.message : String(joinError)
-      console.error('[VoiceCall] Join failed:', errorMessage)
-      throw new Error(`Impossible de rejoindre l'appel: ${errorMessage}`)
-    }
-
-    // Create and publish audio track
-    const localAudioTrack = await AgoraSDK.createMicrophoneAudioTrack()
-    await client.publish([localAudioTrack])
-
-    useVoiceCallStore.setState({
-      client,
-      localAudioTrack,
-      cleanupNetworkQuality,
+      useVoiceCallStore.setState({ isReconnecting: true })
     })
+
+    room.on(RoomEvent.Reconnected, () => {
+      if (!import.meta.env.PROD) {
+        console.log('[VoiceCall] Reconnexion réussie !')
+      }
+      useVoiceCallStore.setState({
+        isReconnecting: false,
+        reconnectAttempts: 0,
+        error: null
+      })
+    })
+
+    room.on(RoomEvent.Disconnected, (reason) => {
+      if (!import.meta.env.PROD) {
+        console.log('[VoiceCall] Disconnected, reason:', reason)
+      }
+      const currentState = useVoiceCallStore.getState()
+      if (currentState.status === 'connected' && reason !== 'CLIENT_INITIATED') {
+        useVoiceCallStore.setState({
+          isReconnecting: false,
+          error: 'Impossible de se reconnecter. Vérifiez votre connexion internet.'
+        })
+        currentState.endCall()
+      }
+    })
+
+    // Connection quality monitoring
+    room.on(RoomEvent.ConnectionQualityChanged, (quality: ConnectionQuality, participant: Participant) => {
+      if (participant.sid === room.localParticipant?.sid) {
+        const previousQuality = useNetworkQualityStore.getState().localQuality
+        const newQuality = useNetworkQualityStore.getState().updateQuality(quality)
+        if (newQuality) {
+          if (!import.meta.env.PROD) {
+            console.log(`[VoiceCall] Qualite reseau: ${previousQuality} -> ${newQuality}`)
+          }
+          useVoiceCallStore.setState({ networkQualityChanged: newQuality })
+        }
+      }
+    })
+
+    // Connect to room
+    if (!import.meta.env.PROD) {
+      console.log('[VoiceCall] Connecting to LiveKit room:', channelName)
+    }
+    await room.connect(LIVEKIT_URL, token)
+    if (!import.meta.env.PROD) {
+      console.log('[VoiceCall] Connected successfully!')
+    }
+
+    // Enable microphone
+    await room.localParticipant.setMicrophoneEnabled(true)
+
+    useVoiceCallStore.setState({ room })
 
     if (!import.meta.env.PROD) {
       console.log('Joined voice call channel:', channelName)
     }
 
   } catch (error) {
-    console.error('Error initializing Agora client:', error)
+    console.error('Error initializing LiveKit room:', error)
     useVoiceCallStore.setState({
       error: error instanceof Error ? error.message : 'Erreur de connexion vocale',
     })
@@ -739,7 +628,6 @@ export function subscribeToIncomingCalls(userId: string) {
 
   const channel = supabase
     .channel(`calls:${userId}`)
-    // Écouter les nouveaux appels entrants
     .on(
       'postgres_changes',
       {
@@ -759,28 +647,13 @@ export function subscribeToIncomingCalls(userId: string) {
           status: string
         }
 
-        if (!import.meta.env.PROD) {
-          console.log('[VoiceCall] Call data:', { id: call.id, caller_id: call.caller_id, status: call.status })
-        }
-
-        // Only handle new calls (missed status means not yet answered)
         if (call.status !== 'missed') {
-          if (!import.meta.env.PROD) {
-            console.log('[VoiceCall] Ignoring call with status:', call.status)
-          }
           return
         }
 
         const currentState = useVoiceCallStore.getState()
-        if (!import.meta.env.PROD) {
-          console.log('[VoiceCall] Current state:', currentState.status)
-        }
 
         if (currentState.status !== 'idle') {
-          if (!import.meta.env.PROD) {
-            console.log('[VoiceCall] Already in a call, rejecting incoming call')
-          }
-          // Already in a call, reject
           await supabase
             .from('calls')
             .update({ status: 'rejected' })
@@ -789,9 +662,6 @@ export function subscribeToIncomingCalls(userId: string) {
         }
 
         // Get caller info
-        if (!import.meta.env.PROD) {
-          console.log('[VoiceCall] Fetching caller profile:', call.caller_id)
-        }
         const { data: callerProfile, error: profileError } = await supabase
           .from('profiles')
           .select('username, avatar_url')
@@ -804,9 +674,6 @@ export function subscribeToIncomingCalls(userId: string) {
         }
 
         if (callerProfile) {
-          if (!import.meta.env.PROD) {
-            console.log('[VoiceCall] Setting incoming call from:', callerProfile.username)
-          }
           currentState.setIncomingCall(
             {
               id: call.caller_id,
@@ -818,7 +685,6 @@ export function subscribeToIncomingCalls(userId: string) {
         }
       }
     )
-    // Écouter les mises à jour de statut (quand l'autre raccroche)
     .on(
       'postgres_changes',
       {
@@ -836,18 +702,13 @@ export function subscribeToIncomingCalls(userId: string) {
 
         const currentState = useVoiceCallStore.getState()
 
-        // Si c'est l'appel en cours et qu'il est terminé/rejeté
         if (currentState.currentCallId === call.id) {
           if (call.status === 'rejected' || call.status === 'ended' || call.ended_at) {
-            if (!import.meta.env.PROD) {
-              console.log('[VoiceCall] Call ended by other party, closing...')
-            }
             currentState.resetCall()
           }
         }
       }
     )
-    // Écouter aussi les mises à jour pour l'appelant (caller)
     .on(
       'postgres_changes',
       {
@@ -865,17 +726,10 @@ export function subscribeToIncomingCalls(userId: string) {
 
         const currentState = useVoiceCallStore.getState()
 
-        // Si c'est l'appel en cours et que le destinataire a rejeté/raccroché
         if (currentState.currentCallId === call.id) {
           if (call.status === 'rejected') {
-            if (!import.meta.env.PROD) {
-              console.log('[VoiceCall] Call rejected by receiver')
-            }
             currentState.resetCall()
           } else if (call.ended_at && currentState.status !== 'idle') {
-            if (!import.meta.env.PROD) {
-              console.log('[VoiceCall] Call ended by receiver')
-            }
             currentState.resetCall()
           }
         }

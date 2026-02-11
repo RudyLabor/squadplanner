@@ -13,8 +13,8 @@ interface ImportMetaEnv {
   readonly VITE_STRIPE_PRICE_MONTHLY: string
   readonly VITE_STRIPE_PRICE_YEARLY: string
 
-  // Agora (Voice Chat)
-  readonly VITE_AGORA_APP_ID: string
+  // LiveKit (Voice Chat)
+  readonly VITE_LIVEKIT_URL: string
 
   // Web Push Notifications
   readonly VITE_VAPID_PUBLIC_KEY: string

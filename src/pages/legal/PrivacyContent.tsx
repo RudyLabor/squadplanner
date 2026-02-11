@@ -46,7 +46,7 @@ export function PrivacyContent() {
           <p>Vos données ne sont jamais vendues. Elles sont partagées uniquement avec :</p>
           <ul className="list-disc pl-5 space-y-2">
             <li><strong className="text-text-primary">Supabase :</strong> hébergement et base de données (serveurs UE)</li>
-            <li><strong className="text-text-primary">Agora :</strong> services d'appels vocaux (données vocales en transit uniquement)</li>
+            <li><strong className="text-text-primary">LiveKit :</strong> services d'appels vocaux (données vocales en transit uniquement, open source)</li>
             <li><strong className="text-text-primary">Stripe :</strong> traitement des paiements Premium</li>
             <li><strong className="text-text-primary">Anthropic (Claude) :</strong> suggestions IA (données anonymisées)</li>
             <li><strong className="text-text-primary">Sentry :</strong> monitoring d'erreurs (données techniques uniquement)</li>
@@ -93,7 +93,7 @@ export function PrivacyContent() {
           </ul>
         </LegalSection>
         <LegalSection title="10. Transferts internationaux">
-          <p>Vos données sont principalement hébergées sur des serveurs situés dans l'Union Européenne (Supabase). Certains sous-traitants (Agora, Anthropic, Stripe) peuvent traiter des données hors UE, dans le cadre des clauses contractuelles types approuvées par la Commission Européenne.</p>
+          <p>Vos données sont principalement hébergées sur des serveurs situés dans l'Union Européenne (Supabase). Certains sous-traitants (LiveKit, Anthropic, Stripe) peuvent traiter des données hors UE, dans le cadre des clauses contractuelles types approuvées par la Commission Européenne.</p>
         </LegalSection>
         <LegalSection title="11. Contact et réclamation">
           <p>Pour toute question relative à vos données personnelles :</p>

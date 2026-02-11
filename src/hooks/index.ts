@@ -20,7 +20,7 @@ export {
   adjustAudioQuality,
   AUDIO_PROFILES,
   QUALITY_INFO,
-  mapAgoraQualityToLevel
+  mapLiveKitQualityToLevel
 } from './useNetworkQuality'
 export type { NetworkQualityLevel, AudioProfile } from './useNetworkQuality'
 export { useFocusTrap } from './useFocusTrap'

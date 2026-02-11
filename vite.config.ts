@@ -96,9 +96,9 @@ export default defineConfig({
         manualChunks: (id) => {
           const n = id.replace(/\\/g, '/');
 
-          // Agora SDK - very heavy (~1.3MB), MUST be isolated and lazy-loaded
-          if (n.includes('agora-rtc-sdk-ng') || n.includes('AgoraRTC')) {
-            return 'vendor-agora';
+          // LiveKit SDK - lightweight (~100KB), separate chunk for caching
+          if (n.includes('livekit-client') || n.includes('@livekit')) {
+            return 'vendor-livekit';
           }
           // Sentry monitoring - loaded async only for authenticated users
           if (n.includes('@sentry')) {
@@ -173,7 +173,7 @@ export default defineConfig({
       "lucide-react",
     ],
     // Exclude heavy libs from pre-bundling (lazy loaded)
-    exclude: ["agora-rtc-sdk-ng"],
+    exclude: [],
   },
 
   // Enable JSON tree-shaking

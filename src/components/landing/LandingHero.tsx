@@ -1,5 +1,5 @@
 ﻿import { useRef } from 'react'
-import { motion, useTransform, type MotionValue } from 'framer-motion'
+import { motion, type MotionValue } from 'framer-motion'
 import { ArrowRight, Sparkles } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { springTap } from '../../utils/animations'

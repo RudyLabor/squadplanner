@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { supabase } from '../lib/supabase'
+import { supabase, isSupabaseReady } from '../lib/supabase'
 import type { RealtimeChannel } from '@supabase/supabase-js'
 import { playNotificationSound } from './useRingtone'
 import { useUnreadCountStore } from './useUnreadCount'
@@ -55,6 +55,7 @@ export const useDirectMessagesStore = create<DirectMessagesState>((set, get) => 
 
   // OPTIMIZED: Uses single RPC call instead of multiple queries
   fetchConversations: async () => {
+    if (!isSupabaseReady()) return
     try {
       set({ isLoading: true })
 
@@ -104,12 +105,13 @@ export const useDirectMessagesStore = create<DirectMessagesState>((set, get) => 
 
       set({ conversations, isLoading: false })
     } catch (error) {
-      console.error('Error fetching DM conversations:', error)
+      console.warn('[DM] Error fetching conversations:', error)
       set({ conversations: [], isLoading: false })
     }
   },
 
   fetchMessages: async (otherUserId: string) => {
+    if (!isSupabaseReady()) return
     try {
       set({ isLoading: true })
 
@@ -128,12 +130,13 @@ export const useDirectMessagesStore = create<DirectMessagesState>((set, get) => 
 
       set({ messages: (data || []) as DirectMessage[], isLoading: false })
     } catch (error) {
-      console.error('Error fetching DM messages:', error)
+      console.warn('[DM] Error fetching messages:', error)
       set({ messages: [], isLoading: false })
     }
   },
 
   sendMessage: async (content: string, receiverId: string) => {
+    if (!isSupabaseReady()) return { error: new Error('Supabase not ready') }
     try {
       const { data: { session } } = await supabase.auth.getSession()
       const user = session?.user
@@ -151,7 +154,7 @@ export const useDirectMessagesStore = create<DirectMessagesState>((set, get) => 
 
       return { error: null }
     } catch (error) {
-      console.error('Error sending DM:', error)
+      console.warn('[DM] Error sending message:', error)
       return { error: error as Error }
     }
   },
@@ -166,6 +169,7 @@ export const useDirectMessagesStore = create<DirectMessagesState>((set, get) => 
   },
 
   subscribeToMessages: (otherUserId: string) => {
+    if (!isSupabaseReady()) return
     get().unsubscribe()
 
     const currentSession = supabase.auth.getSession()
@@ -262,6 +266,7 @@ export const useDirectMessagesStore = create<DirectMessagesState>((set, get) => 
 
   // OPTIMIZED: Uses batch RPC instead of single update
   markAsRead: async (otherUserId: string) => {
+    if (!isSupabaseReady()) return
     try {
       const { data: { session } } = await supabase.auth.getSession()
       const user = session?.user
@@ -296,11 +301,12 @@ export const useDirectMessagesStore = create<DirectMessagesState>((set, get) => 
       // Update global unread count
       await useUnreadCountStore.getState().fetchCounts()
     } catch (error) {
-      console.error('Error marking DMs as read:', error)
+      console.warn('[DM] Error marking as read:', error)
     }
   },
 
   startConversation: async (userId: string) => {
+    if (!isSupabaseReady()) return null
     try {
       const { data: { session } } = await supabase.auth.getSession()
       const user = session?.user
@@ -334,7 +340,7 @@ export const useDirectMessagesStore = create<DirectMessagesState>((set, get) => 
 
       return newConv
     } catch (error) {
-      console.error('Error starting conversation:', error)
+      console.warn('[DM] Error starting conversation:', error)
       return null
     }
   },

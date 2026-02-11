@@ -131,7 +131,7 @@ export const usePremiumStore = create<PremiumState>((set, get) => ({
         isLoading: false
       })
     } catch (error) {
-      console.error('Error fetching premium status:', error)
+      console.warn('[Premium] Error fetching status:', error)
       set({ isLoading: false })
     }
   },

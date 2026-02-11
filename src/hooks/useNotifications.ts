@@ -38,7 +38,7 @@ export const useNotificationStore = create<NotificationState>((set, get) => ({
 
       return granted
     } catch (error) {
-      console.error('Error requesting notification permission:', error)
+      console.warn('[Notifications] Error requesting permission:', error)
       set({
         isLoading: false,
         error: 'Erreur lors de la demande de permission'
@@ -71,7 +71,7 @@ export const useNotificationStore = create<NotificationState>((set, get) => ({
         notification.close()
       }
     } catch (error) {
-      console.error('Error sending notification:', error)
+      console.warn('[Notifications] Error sending:', error)
     }
   },
 

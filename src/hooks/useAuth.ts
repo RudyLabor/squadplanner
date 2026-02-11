@@ -63,7 +63,7 @@ async function updateDailyStreak(userId: string, profile: Profile | null): Promi
     .single()
 
   if (error) {
-    console.error('Failed to update streak:', error)
+    console.warn('Failed to update streak:', error)
     return profile
   }
 
@@ -143,7 +143,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
         }
       })
     } catch (error) {
-      console.error('Auth initialization error:', error)
+      console.warn('Auth initialization error:', error)
       set({ isLoading: false, isInitialized: true })
     }
   },
@@ -193,7 +193,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
           .single()
 
         if (createError) {
-          console.error('Profile create error:', createError)
+          console.warn('Profile create error:', createError)
           // CRITICAL: Profile MUST exist, throw error if creation fails
           throw new Error('Impossible de créer le profil. Veuillez réessayer.')
         }
@@ -285,7 +285,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       const { error } = await supabase.auth.signOut({ scope: 'global' })
 
       if (error) {
-        console.error('Sign out error:', error)
+        console.warn('Sign out error:', error)
       }
 
       // Force clear ALL Supabase auth data from localStorage
@@ -308,7 +308,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       // Hard redirect to landing page (clears React state completely)
       window.location.href = '/'
     } catch (error) {
-      console.error('Sign out error:', error)
+      console.warn('Sign out error:', error)
       set({ user: null, session: null, profile: null, isLoading: false })
       window.location.href = '/'
     }

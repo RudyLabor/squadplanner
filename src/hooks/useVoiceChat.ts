@@ -1,14 +1,4 @@
 import { create } from 'zustand'
-import {
-  Room,
-  RoomEvent,
-  Track,
-  type RemoteParticipant,
-  type RemoteTrackPublication,
-  type RemoteTrack,
-  type Participant,
-  ConnectionQuality,
-} from 'livekit-client'
 import { supabase } from '../lib/supabase'
 import {
   useNetworkQualityStore,
@@ -45,8 +35,9 @@ interface VoiceChatState {
   networkQualityChanged: NetworkQualityLevel | null
   cleanupNetworkQuality: (() => void) | null
 
-  // Internal refs (not reactive)
-  room: Room | null
+  // Internal refs (not reactive) — typed as `any` to avoid static livekit-client import
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  room: any | null
   reconnectInfo: { channelName: string; userId: string; username: string } | null
 
   // Actions
@@ -221,7 +212,7 @@ export const useVoiceChatStore = create<VoiceChatState>((set, get) => ({
     }
 
     if (!LIVEKIT_URL) {
-      set({ error: 'LiveKit URL non configuré. Contactez l\'administrateur.' })
+      set({ error: 'LiveKit URL non configure. Contactez l\'administrateur.' })
       return false
     }
 
@@ -252,7 +243,7 @@ export const useVoiceChatStore = create<VoiceChatState>((set, get) => ({
           if (!import.meta.env.PROD) {
             console.warn('[VoiceChat] Token fetch error:', error)
           }
-          throw new Error('Impossible d\'obtenir le token d\'accès')
+          throw new Error('Impossible d\'obtenir le token d\'acces')
         }
 
         token = data?.token || null
@@ -272,15 +263,18 @@ export const useVoiceChatStore = create<VoiceChatState>((set, get) => ({
       }
 
       if (!token) {
-        throw new Error('Token LiveKit non reçu. Vérifiez la configuration du serveur.')
+        throw new Error('Token LiveKit non recu. Verifiez la configuration du serveur.')
       }
+
+      // --- Dynamic import of livekit-client (only loaded when joining a voice channel) ---
+      const { Room, RoomEvent, Track, ConnectionQuality } = await import('livekit-client')
 
       // Create LiveKit Room
       const room = new Room({
         adaptiveStream: true,
         dynacast: true,
         reconnectPolicy: {
-          nextRetryDelayInMs: (context) => {
+          nextRetryDelayInMs: (context: { retryCount: number }) => {
             if (context.retryCount > MAX_RECONNECT_ATTEMPTS) return null // Stop retrying
             return context.retryCount * 2000 // 2s, 4s, 6s
           },
@@ -290,7 +284,7 @@ export const useVoiceChatStore = create<VoiceChatState>((set, get) => ({
       // Set up event listeners
 
       // Track subscribed - play remote audio
-      room.on(RoomEvent.TrackSubscribed, (track: RemoteTrack, _publication: RemoteTrackPublication, participant: RemoteParticipant) => {
+      room.on(RoomEvent.TrackSubscribed, (track: any, _publication: any, participant: any) => {
         if (track.kind === Track.Kind.Audio) {
           const element = track.attach()
           element.id = `audio-${participant.identity}`
@@ -299,12 +293,12 @@ export const useVoiceChatStore = create<VoiceChatState>((set, get) => ({
       })
 
       // Track unsubscribed - cleanup
-      room.on(RoomEvent.TrackUnsubscribed, (track: RemoteTrack, _publication: RemoteTrackPublication, _participant: RemoteParticipant) => {
-        track.detach().forEach(el => el.remove())
+      room.on(RoomEvent.TrackUnsubscribed, (track: any, _publication: any, _participant: any) => {
+        track.detach().forEach((el: HTMLElement) => el.remove())
       })
 
       // Participant connected
-      room.on(RoomEvent.ParticipantConnected, async (participant: RemoteParticipant) => {
+      room.on(RoomEvent.ParticipantConnected, async (participant: any) => {
         // Fetch username from Supabase
         let displayUsername = participant.name || 'Joueur'
         try {
@@ -335,7 +329,7 @@ export const useVoiceChatStore = create<VoiceChatState>((set, get) => ({
       })
 
       // Participant disconnected
-      room.on(RoomEvent.ParticipantDisconnected, (participant: RemoteParticipant) => {
+      room.on(RoomEvent.ParticipantDisconnected, (participant: any) => {
         // Remove audio elements
         const audioEl = document.getElementById(`audio-${participant.identity}`)
         if (audioEl) audioEl.remove()
@@ -346,8 +340,8 @@ export const useVoiceChatStore = create<VoiceChatState>((set, get) => ({
       })
 
       // Active speakers changed
-      room.on(RoomEvent.ActiveSpeakersChanged, (speakers: Participant[]) => {
-        const speakerIdentities = new Set(speakers.map(s => s.identity))
+      room.on(RoomEvent.ActiveSpeakersChanged, (speakers: any[]) => {
+        const speakerIdentities = new Set(speakers.map((s: any) => s.identity))
 
         set(state => ({
           remoteUsers: state.remoteUsers.map(u => ({
@@ -364,7 +358,7 @@ export const useVoiceChatStore = create<VoiceChatState>((set, get) => ({
       })
 
       // Track muted/unmuted for remote participants
-      room.on(RoomEvent.TrackMuted, (_publication: unknown, participant: RemoteParticipant | Participant) => {
+      room.on(RoomEvent.TrackMuted, (_publication: any, participant: any) => {
         if ('identity' in participant && participant !== room.localParticipant) {
           set(state => ({
             remoteUsers: state.remoteUsers.map(u =>
@@ -374,7 +368,7 @@ export const useVoiceChatStore = create<VoiceChatState>((set, get) => ({
         }
       })
 
-      room.on(RoomEvent.TrackUnmuted, (_publication: unknown, participant: RemoteParticipant | Participant) => {
+      room.on(RoomEvent.TrackUnmuted, (_publication: any, participant: any) => {
         if ('identity' in participant && participant !== room.localParticipant) {
           set(state => ({
             remoteUsers: state.remoteUsers.map(u =>
@@ -394,7 +388,7 @@ export const useVoiceChatStore = create<VoiceChatState>((set, get) => ({
 
       room.on(RoomEvent.Reconnected, () => {
         if (!import.meta.env.PROD) {
-          console.log('[VoiceChat] Reconnexion réussie !')
+          console.log('[VoiceChat] Reconnexion reussie !')
         }
         set({
           isReconnecting: false,
@@ -403,7 +397,7 @@ export const useVoiceChatStore = create<VoiceChatState>((set, get) => ({
         })
       })
 
-      room.on(RoomEvent.Disconnected, (reason) => {
+      room.on(RoomEvent.Disconnected, (reason: string) => {
         if (!import.meta.env.PROD) {
           console.log('[VoiceChat] Disconnected, reason:', reason)
         }
@@ -412,13 +406,13 @@ export const useVoiceChatStore = create<VoiceChatState>((set, get) => ({
           set({
             isReconnecting: false,
             isConnected: false,
-            error: 'Impossible de se reconnecter. Vérifiez votre connexion internet.'
+            error: 'Impossible de se reconnecter. Verifiez votre connexion internet.'
           })
         }
       })
 
       // Connection quality monitoring
-      room.on(RoomEvent.ConnectionQualityChanged, (quality: ConnectionQuality, participant: Participant) => {
+      room.on(RoomEvent.ConnectionQualityChanged, (quality: typeof ConnectionQuality[keyof typeof ConnectionQuality], participant: any) => {
         if (participant.sid === room.localParticipant?.sid) {
           const previousQuality = useNetworkQualityStore.getState().localQuality
           const newQuality = useNetworkQualityStore.getState().updateQuality(quality)
@@ -503,7 +497,7 @@ export const useVoiceChatStore = create<VoiceChatState>((set, get) => ({
       }
       return true
     } catch (error) {
-      console.error('Error joining voice channel:', error)
+      console.warn('Error joining voice channel:', error)
       set({
         isConnecting: false,
         error: error instanceof Error ? error.message : 'Erreur de connexion au vocal',
@@ -518,7 +512,7 @@ export const useVoiceChatStore = create<VoiceChatState>((set, get) => ({
     try {
       if (room) {
         // Detach all remote audio elements
-        room.remoteParticipants.forEach((participant) => {
+        room.remoteParticipants.forEach((participant: { identity: string }) => {
           const audioEl = document.getElementById(`audio-${participant.identity}`)
           if (audioEl) audioEl.remove()
         })
@@ -563,7 +557,7 @@ export const useVoiceChatStore = create<VoiceChatState>((set, get) => ({
       }
     } catch (error) {
       if (!import.meta.env.PROD) {
-        console.error('Error leaving voice channel:', error)
+        console.warn('Error leaving voice channel:', error)
       }
     }
   },
@@ -585,8 +579,8 @@ export const useVoiceChatStore = create<VoiceChatState>((set, get) => ({
 
     if (room) {
       // Set volume for all remote participants' audio tracks
-      room.remoteParticipants.forEach(participant => {
-        participant.audioTrackPublications.forEach(publication => {
+      room.remoteParticipants.forEach((participant: any) => {
+        participant.audioTrackPublications.forEach((publication: any) => {
           if (publication.track) {
             // LiveKit volume is 0-1, convert from 0-100
             publication.track.setVolume(volume / 100)
@@ -638,7 +632,8 @@ export const useVoiceChatStore = create<VoiceChatState>((set, get) => ({
     if (!room) return
 
     try {
-      const micPub = room.localParticipant.getTrackPublication(Track.Source.Microphone)
+      // Track.Source.Microphone === 'microphone'
+      const micPub = room.localParticipant.getTrackPublication('microphone')
       if (micPub?.track) {
         const mediaTrack = micPub.track.mediaStreamTrack
         if (mediaTrack) {
@@ -653,7 +648,7 @@ export const useVoiceChatStore = create<VoiceChatState>((set, get) => ({
       }
       set({ noiseSuppressionEnabled: !noiseSuppressionEnabled })
     } catch (err) {
-      console.error('Failed to toggle noise suppression:', err)
+      console.warn('Failed to toggle noise suppression:', err)
     }
   },
 }))

@@ -1,14 +1,4 @@
 import { create } from 'zustand'
-import {
-  Room,
-  RoomEvent,
-  Track,
-  type RemoteParticipant,
-  type RemoteTrackPublication,
-  type RemoteTrack,
-  type Participant,
-  ConnectionQuality,
-} from 'livekit-client'
 import { supabase } from '../lib/supabase'
 import {
   useNetworkQualityStore,
@@ -44,8 +34,9 @@ interface VoiceCallState {
   isIncoming: boolean
   currentCallId: string | null
 
-  // Internal refs (not reactive)
-  room: Room | null
+  // Internal refs (not reactive) — typed as `any` to avoid static livekit-client import
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  room: any | null
   durationInterval: ReturnType<typeof setInterval> | null
   ringTimeout: ReturnType<typeof setTimeout> | null
 
@@ -120,11 +111,11 @@ export const useVoiceCallStore = create<VoiceCallState>((set, get) => ({
     // Cleanup LiveKit room
     if (room) {
       // Detach all audio elements
-      room.remoteParticipants.forEach((participant) => {
+      room.remoteParticipants.forEach((participant: { identity: string }) => {
         const audioEl = document.getElementById(`call-audio-${participant.identity}`)
         if (audioEl) audioEl.remove()
       })
-      room.disconnect().catch(console.error)
+      room.disconnect().catch(() => {})
     }
 
     set({
@@ -162,8 +153,8 @@ export const useVoiceCallStore = create<VoiceCallState>((set, get) => ({
     }
 
     if (!LIVEKIT_URL) {
-      console.error('[VoiceCall] No LiveKit URL configured!')
-      set({ error: 'LiveKit URL non configuré. Contactez l\'administrateur.' })
+      console.warn('[VoiceCall] No LiveKit URL configured!')
+      set({ error: 'LiveKit URL non configure. Contactez l\'administrateur.' })
       return
     }
 
@@ -171,7 +162,7 @@ export const useVoiceCallStore = create<VoiceCallState>((set, get) => ({
       // Get current user
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) {
-        set({ error: 'Utilisateur non connecté' })
+        set({ error: 'Utilisateur non connecte' })
         return
       }
 
@@ -206,7 +197,7 @@ export const useVoiceCallStore = create<VoiceCallState>((set, get) => ({
         .single()
 
       if (dbError) {
-        console.error('Error creating call record:', dbError)
+        console.warn('Error creating call record:', dbError)
       }
 
       // Send push notification to receiver
@@ -227,7 +218,7 @@ export const useVoiceCallStore = create<VoiceCallState>((set, get) => ({
                 caller_avatar: caller.avatar_url
               },
               actions: [
-                { action: 'answer', title: 'Répondre' },
+                { action: 'answer', title: 'Repondre' },
                 { action: 'decline', title: 'Refuser' }
               ]
             }
@@ -262,10 +253,10 @@ export const useVoiceCallStore = create<VoiceCallState>((set, get) => ({
       await initializeLiveKitRoom(user.id, receiver.id)
 
     } catch (error) {
-      console.error('Error starting call:', error)
+      console.warn('Error starting call:', error)
       set({
         status: 'idle',
-        error: error instanceof Error ? error.message : 'Erreur lors du démarrage de l\'appel',
+        error: error instanceof Error ? error.message : 'Erreur lors du demarrage de l\'appel',
       })
     }
   },
@@ -313,7 +304,7 @@ export const useVoiceCallStore = create<VoiceCallState>((set, get) => ({
       // Get current user
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) {
-        set({ error: 'Utilisateur non connecté' })
+        set({ error: 'Utilisateur non connecte' })
         return
       }
 
@@ -360,7 +351,7 @@ export const useVoiceCallStore = create<VoiceCallState>((set, get) => ({
       })
 
     } catch (error) {
-      console.error('Error accepting call:', error)
+      console.warn('Error accepting call:', error)
       set({
         error: error instanceof Error ? error.message : 'Erreur lors de l\'acceptation de l\'appel',
       })
@@ -429,14 +420,14 @@ export const useVoiceCallStore = create<VoiceCallState>((set, get) => ({
     // Cleanup LiveKit
     try {
       if (room) {
-        room.remoteParticipants.forEach((participant) => {
+        room.remoteParticipants.forEach((participant: { identity: string }) => {
           const audioEl = document.getElementById(`call-audio-${participant.identity}`)
           if (audioEl) audioEl.remove()
         })
         await room.disconnect()
       }
     } catch (error) {
-      console.error('Error cleaning up LiveKit:', error)
+      console.warn('Error cleaning up LiveKit:', error)
     }
 
     set({ status: 'ended' })
@@ -462,6 +453,7 @@ export const useVoiceCallStore = create<VoiceCallState>((set, get) => ({
 }))
 
 // Helper function to initialize LiveKit room for a call
+// LiveKit SDK is loaded dynamically here — this is the ONLY place that pulls livekit-client.
 async function initializeLiveKitRoom(currentUserId: string, otherUserId: string) {
   const channelName = generateChannelName(currentUserId, otherUserId)
 
@@ -486,12 +478,15 @@ async function initializeLiveKitRoom(currentUserId: string, otherUserId: string)
 
     const token = data.token
 
+    // --- Dynamic import of livekit-client (only loaded when a call is initiated) ---
+    const { Room, RoomEvent, Track, ConnectionQuality } = await import('livekit-client')
+
     // Create LiveKit Room
     const room = new Room({
       adaptiveStream: true,
       dynacast: true,
       reconnectPolicy: {
-        nextRetryDelayInMs: (context) => {
+        nextRetryDelayInMs: (context: { retryCount: number }) => {
           if (context.retryCount > MAX_RECONNECT_ATTEMPTS) return null
           return context.retryCount * 2000
         },
@@ -501,7 +496,7 @@ async function initializeLiveKitRoom(currentUserId: string, otherUserId: string)
     // Set up event listeners
 
     // Track subscribed - play remote audio
-    room.on(RoomEvent.TrackSubscribed, (track: RemoteTrack, _publication: RemoteTrackPublication, participant: RemoteParticipant) => {
+    room.on(RoomEvent.TrackSubscribed, (track: any, _publication: any, participant: any) => {
       if (track.kind === Track.Kind.Audio) {
         const element = track.attach()
         element.id = `call-audio-${participant.identity}`
@@ -535,8 +530,8 @@ async function initializeLiveKitRoom(currentUserId: string, otherUserId: string)
     })
 
     // Track unsubscribed - cleanup
-    room.on(RoomEvent.TrackUnsubscribed, (track: RemoteTrack) => {
-      track.detach().forEach(el => el.remove())
+    room.on(RoomEvent.TrackUnsubscribed, (track: any) => {
+      track.detach().forEach((el: HTMLElement) => el.remove())
     })
 
     // Participant left - end the call
@@ -557,7 +552,7 @@ async function initializeLiveKitRoom(currentUserId: string, otherUserId: string)
 
     room.on(RoomEvent.Reconnected, () => {
       if (!import.meta.env.PROD) {
-        console.log('[VoiceCall] Reconnexion réussie !')
+        console.log('[VoiceCall] Reconnexion reussie !')
       }
       useVoiceCallStore.setState({
         isReconnecting: false,
@@ -566,7 +561,7 @@ async function initializeLiveKitRoom(currentUserId: string, otherUserId: string)
       })
     })
 
-    room.on(RoomEvent.Disconnected, (reason) => {
+    room.on(RoomEvent.Disconnected, (reason: string) => {
       if (!import.meta.env.PROD) {
         console.log('[VoiceCall] Disconnected, reason:', reason)
       }
@@ -574,14 +569,14 @@ async function initializeLiveKitRoom(currentUserId: string, otherUserId: string)
       if (currentState.status === 'connected' && reason !== 'CLIENT_INITIATED') {
         useVoiceCallStore.setState({
           isReconnecting: false,
-          error: 'Impossible de se reconnecter. Vérifiez votre connexion internet.'
+          error: 'Impossible de se reconnecter. Verifiez votre connexion internet.'
         })
         currentState.endCall()
       }
     })
 
     // Connection quality monitoring
-    room.on(RoomEvent.ConnectionQualityChanged, (quality: ConnectionQuality, participant: Participant) => {
+    room.on(RoomEvent.ConnectionQualityChanged, (quality: typeof ConnectionQuality[keyof typeof ConnectionQuality], participant: any) => {
       if (participant.sid === room.localParticipant?.sid) {
         const previousQuality = useNetworkQualityStore.getState().localQuality
         const newQuality = useNetworkQualityStore.getState().updateQuality(quality)
@@ -613,7 +608,7 @@ async function initializeLiveKitRoom(currentUserId: string, otherUserId: string)
     }
 
   } catch (error) {
-    console.error('Error initializing LiveKit room:', error)
+    console.warn('Error initializing LiveKit room:', error)
     useVoiceCallStore.setState({
       error: error instanceof Error ? error.message : 'Erreur de connexion vocale',
     })
@@ -670,7 +665,7 @@ export function subscribeToIncomingCalls(userId: string) {
           .single()
 
         if (profileError) {
-          console.error('[VoiceCall] Error fetching caller profile:', profileError)
+          console.warn('[VoiceCall] Error fetching caller profile:', profileError)
           return
         }
 

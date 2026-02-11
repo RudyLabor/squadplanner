@@ -97,7 +97,7 @@ export function useAudioAnalyser(stream: MediaStream | null): AudioAnalyserData 
       setIsActive(true)
       analyze()
     } catch (error) {
-      console.error('Failed to create audio analyser:', error)
+      console.warn('Failed to create audio analyser:', error)
       setIsActive(false)
     }
 

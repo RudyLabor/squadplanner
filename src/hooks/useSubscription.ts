@@ -101,12 +101,12 @@ export const useSubscriptionStore = create<SubscriptionState>((set) => ({
 
       if (error && error.code !== 'PGRST116') {
         // PGRST116 = no rows returned
-        console.error('Error fetching subscription:', error)
+        console.warn('[Subscription] Error fetching:', error)
       }
 
       set({ subscription: data || null, isLoading: false })
     } catch (error) {
-      console.error('Error in fetchSubscription:', error)
+      console.warn('[Subscription] Error in fetchSubscription:', error)
       set({ subscription: null, isLoading: false })
     }
   },

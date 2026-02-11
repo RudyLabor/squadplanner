@@ -109,7 +109,7 @@ export const useSquadsStore = create<SquadsState>((set, get) => ({
 
         set({ squads: squadsWithCount, isLoading: false, lastFetchedAt: Date.now() })
       } catch (error) {
-        console.error('Error fetching squads:', error)
+        console.warn('[Squads] Error fetching:', error)
         set({ isLoading: false })
       } finally {
         inFlightFetchSquads = null
@@ -147,7 +147,7 @@ export const useSquadsStore = create<SquadsState>((set, get) => ({
       set({ currentSquad: squadWithMembers, isLoading: false })
       return squadWithMembers
     } catch (error) {
-      console.error('Error fetching squad:', error)
+      console.warn('[Squads] Error fetching squad:', error)
       set({ isLoading: false })
       return null
     }
@@ -179,7 +179,7 @@ export const useSquadsStore = create<SquadsState>((set, get) => ({
           })
 
         if (profileError) {
-          console.error('Profile creation error:', profileError)
+          console.warn('[Squads] Profile creation error:', profileError)
           throw new Error('Impossible de créer le profil. Veuillez réessayer.')
         }
       }
@@ -212,7 +212,7 @@ export const useSquadsStore = create<SquadsState>((set, get) => ({
       if (memberError) throw memberError
 
       // Refresh squads list in background (don't block)
-      get().fetchSquads().catch(console.error)
+      get().fetchSquads().catch(() => {})
 
       set({ isLoading: false })
       return { squad, error: null }
@@ -248,7 +248,7 @@ export const useSquadsStore = create<SquadsState>((set, get) => ({
           })
 
         if (profileError) {
-          console.error('Profile creation error:', profileError)
+          console.warn('[Squads] Profile creation error:', profileError)
           throw new Error('Impossible de créer le profil. Veuillez réessayer.')
         }
       }
@@ -292,7 +292,7 @@ export const useSquadsStore = create<SquadsState>((set, get) => ({
 
       // Envoyer le message système "X a rejoint la squad"
       if (profile?.username) {
-        sendMemberJoinedMessage(squad.id, profile.username).catch(console.error)
+        sendMemberJoinedMessage(squad.id, profile.username).catch(() => {})
       }
 
       await get().fetchSquads()

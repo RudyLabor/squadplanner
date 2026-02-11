@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { supabase } from '../lib/supabase'
+import { supabase, isSupabaseReady } from '../lib/supabase'
 import type { Session, SessionRsvp, SessionCheckin } from '../types/database'
 import { sendRsvpMessage, sendSessionConfirmedMessage } from '../lib/systemMessages'
 
@@ -41,6 +41,7 @@ export const useSessionsStore = create<SessionsState>((set, get) => ({
   isLoading: false,
 
   fetchSessions: async (squadId: string) => {
+    if (!isSupabaseReady()) return
     try {
       set({ isLoading: true })
 
@@ -88,13 +89,13 @@ export const useSessionsStore = create<SessionsState>((set, get) => ({
           isLoading: false
         }
       })
-    } catch (error) {
-      console.error('Error fetching sessions:', error)
+    } catch {
       set({ isLoading: false })
     }
   },
 
   fetchSessionById: async (id: string) => {
+    if (!isSupabaseReady()) return null
     try {
       const { data: { session: authSession } } = await supabase.auth.getSession()
       const user = authSession?.user
@@ -137,13 +138,13 @@ export const useSessionsStore = create<SessionsState>((set, get) => ({
 
       set({ currentSession: sessionWithDetails })
       return sessionWithDetails
-    } catch (error) {
-      console.error('Error fetching session:', error)
+    } catch {
       return null
     }
   },
 
   createSession: async (data) => {
+    if (!isSupabaseReady()) return { session: null, error: new Error('Supabase not ready') }
     try {
       set({ isLoading: true })
 
@@ -187,6 +188,7 @@ export const useSessionsStore = create<SessionsState>((set, get) => ({
   },
 
   updateRsvp: async (sessionId: string, response: RsvpResponse) => {
+    if (!isSupabaseReady()) return { error: new Error('Supabase not ready') }
     try {
       const { data: { session: authSession3 } } = await supabase.auth.getSession()
       const user = authSession3?.user
@@ -238,7 +240,7 @@ export const useSessionsStore = create<SessionsState>((set, get) => ({
           profile.username,
           rsvpSession.title,
           response
-        ).catch(console.error)
+        ).catch(() => {})
       }
 
       // Refresh current session
@@ -250,6 +252,7 @@ export const useSessionsStore = create<SessionsState>((set, get) => ({
   },
 
   checkin: async (sessionId: string, status: CheckinStatus) => {
+    if (!isSupabaseReady()) return { error: new Error('Supabase not ready') }
     try {
       const { data: { session } } = await supabase.auth.getSession()
       const user = session?.user
@@ -294,6 +297,7 @@ export const useSessionsStore = create<SessionsState>((set, get) => ({
   },
 
   cancelSession: async (sessionId: string) => {
+    if (!isSupabaseReady()) return { error: new Error('Supabase not ready') }
     try {
       const { error } = await supabase
         .from('sessions')
@@ -310,6 +314,7 @@ export const useSessionsStore = create<SessionsState>((set, get) => ({
   },
 
   confirmSession: async (sessionId: string) => {
+    if (!isSupabaseReady()) return { error: new Error('Supabase not ready') }
     try {
       // Récupérer les infos de la session avant la mise à jour
       const { data: session } = await supabase
@@ -331,7 +336,7 @@ export const useSessionsStore = create<SessionsState>((set, get) => ({
           session.squad_id,
           session.title,
           session.scheduled_at
-        ).catch(console.error)
+        ).catch(() => {})
       }
 
       await get().fetchSessionById(sessionId)

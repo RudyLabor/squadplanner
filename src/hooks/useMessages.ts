@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { supabase } from '../lib/supabase'
+import { supabase, isSupabaseReady } from '../lib/supabase'
 import type { Message } from '../types/database'
 import type { RealtimeChannel } from '@supabase/supabase-js'
 import { playNotificationSound } from './useRingtone'
@@ -61,6 +61,7 @@ export const useMessagesStore = create<MessagesState>((set, get) => ({
 
   // OPTIMIZED: Uses single RPC call instead of N+1 queries
   fetchConversations: async () => {
+    if (!isSupabaseReady()) return
     try {
       set({ isLoading: true })
 
@@ -115,13 +116,14 @@ export const useMessagesStore = create<MessagesState>((set, get) => ({
 
       set({ conversations, isLoading: false })
     } catch (error) {
-      console.error('Error fetching conversations:', error)
+      console.warn('[Messages] Error fetching conversations:', error)
       set({ isLoading: false })
     }
   },
 
   // Fallback method for when RPC is not yet deployed
   fetchConversationsFallback: async () => {
+    if (!isSupabaseReady()) return
     const { data: { session } } = await supabase.auth.getSession()
     const user = session?.user
     if (!user) throw new Error('Not authenticated')
@@ -180,6 +182,7 @@ export const useMessagesStore = create<MessagesState>((set, get) => ({
   },
 
   fetchMessages: async (squadId: string, sessionId?: string) => {
+    if (!isSupabaseReady()) return
     try {
       set({ isLoading: true })
 
@@ -202,12 +205,13 @@ export const useMessagesStore = create<MessagesState>((set, get) => ({
 
       set({ messages: (data || []) as MessageWithSender[], isLoading: false })
     } catch (error) {
-      console.error('Error fetching messages:', error)
+      console.warn('[Messages] Error fetching messages:', error)
       set({ isLoading: false })
     }
   },
 
   sendMessage: async (content: string, squadId: string, sessionId?: string, replyToId?: string) => {
+    if (!isSupabaseReady()) return { error: new Error('Supabase not ready') }
     const { data: { session } } = await supabase.auth.getSession()
     const user = session?.user
     if (!user) return { error: new Error('Not authenticated') }
@@ -423,6 +427,7 @@ export const useMessagesStore = create<MessagesState>((set, get) => ({
   },
 
   subscribeToMessages: (squadId: string, sessionId?: string) => {
+    if (!isSupabaseReady()) return
     // Unsubscribe from previous channel
     get().unsubscribe()
 
@@ -538,6 +543,7 @@ export const useMessagesStore = create<MessagesState>((set, get) => ({
 
   // OPTIMIZED: Uses single RPC call instead of N individual UPDATE queries
   markAsRead: async (squadId: string, sessionId?: string) => {
+    if (!isSupabaseReady()) return
     try {
       const { data: { session } } = await supabase.auth.getSession()
       const user = session?.user
@@ -570,12 +576,13 @@ export const useMessagesStore = create<MessagesState>((set, get) => ({
       // Update global unread count
       await useUnreadCountStore.getState().fetchCounts()
     } catch (error) {
-      console.error('Error marking messages as read:', error)
+      console.warn('[Messages] Error marking messages as read:', error)
     }
   },
 
   // Fallback for markAsRead when RPC is not deployed
   markAsReadFallback: async (squadId: string, sessionId?: string) => {
+    if (!isSupabaseReady()) return
     const { data: { session } } = await supabase.auth.getSession()
     const user = session?.user
     if (!user) return

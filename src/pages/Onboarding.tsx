@@ -162,7 +162,7 @@ export function Onboarding() {
     try {
       const { error: updateError } = await supabase.from('profiles').update({ username: username.trim() || profile?.username || 'User', timezone, updated_at: new Date().toISOString() }).eq('id', user.id)
       if (updateError) { setError('Erreur lors de la sauvegarde du profil'); setIsLoading(false); return }
-      refreshProfile().catch(console.error); setIsLoading(false); setStep('permissions')
+      refreshProfile().catch(() => {}); setIsLoading(false); setStep('permissions')
     } catch { setIsLoading(false); setError('Erreur inattendue') }
   }
 

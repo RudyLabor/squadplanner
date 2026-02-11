@@ -106,7 +106,7 @@ export function useVoiceMessages() {
       }
     },
     onError: (err: Error) => {
-      console.error('Voice message error:', err)
+      console.warn('Voice message error:', err)
       showError('Erreur lors de l\'envoi du message vocal')
     },
   })

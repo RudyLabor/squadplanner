@@ -94,7 +94,7 @@ export const useSquadNotificationsStore = create<SquadNotificationsState>((set, 
         lastFetchedAt: Date.now()
       })
     } catch (error) {
-      console.error('Error fetching squad notifications:', error)
+      console.warn('[SquadNotif] Error fetching counts:', error)
       set({ isLoading: false })
     }
   },

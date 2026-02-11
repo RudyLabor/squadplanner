@@ -1,5 +1,21 @@
 import { create } from 'zustand'
-import { supabase } from '../lib/supabase'
+import { supabase, isSupabaseReady } from '../lib/supabase'
+
+/** Retry helper with exponential backoff (1s, 2s, 4s). Max 3 attempts. */
+async function withBackoff<T>(fn: () => Promise<T>, maxRetries = 3): Promise<T> {
+  let lastError: unknown
+  for (let attempt = 0; attempt < maxRetries; attempt++) {
+    try {
+      return await fn()
+    } catch (err) {
+      lastError = err
+      if (attempt < maxRetries - 1) {
+        await new Promise(r => setTimeout(r, 1000 * Math.pow(2, attempt)))
+      }
+    }
+  }
+  throw lastError
+}
 
 // Types for AI features
 interface SlotSuggestion {
@@ -128,15 +144,17 @@ export const useAIStore = create<AIState>((set) => ({
 
   // ===== AI PLANNING - Edge Function =====
   fetchSlotSuggestions: async (squadId: string) => {
+    if (!isSupabaseReady()) return
     try {
       set({ isLoading: true, error: null })
 
-      const { data, error } = await supabase.functions.invoke('ai-planning', {
-        body: { squad_id: squadId, limit: 5 }
-      })
+      const { data, error } = await withBackoff(() =>
+        supabase.functions.invoke('ai-planning', {
+          body: { squad_id: squadId, limit: 5 }
+        })
+      )
 
       if (error) {
-        console.error('Edge Function error:', error)
         throw new Error(error.message || 'Erreur lors de l\'analyse des créneaux')
       }
 
@@ -154,8 +172,7 @@ export const useAIStore = create<AIState>((set) => ({
           isLoading: false
         })
       }
-    } catch (error) {
-      console.error('Error in fetchSlotSuggestions:', error)
+    } catch {
       // Fallback to default suggestions
       const fallbackSuggestions: SlotSuggestion[] = [
         { day_of_week: 6, hour: 20, reliability_score: 80, session_count: 0, avg_attendance: 80, reason: `${dayNames[6]} 20h - Créneau populaire le week-end` },
@@ -173,6 +190,7 @@ export const useAIStore = create<AIState>((set) => ({
 
   // ===== AI DECISION - Edge Function =====
   fetchDecisionRecommendation: async (sessionId: string) => {
+    if (!isSupabaseReady()) return
     try {
       set({ isLoading: true, error: null })
 
@@ -181,7 +199,6 @@ export const useAIStore = create<AIState>((set) => ({
       })
 
       if (error) {
-        console.error('Edge Function error:', error)
         throw new Error(error.message || 'Erreur lors de l\'analyse de décision')
       }
 
@@ -196,8 +213,7 @@ export const useAIStore = create<AIState>((set) => ({
           isLoading: false
         })
       }
-    } catch (error) {
-      console.error('Error in fetchDecisionRecommendation:', error)
+    } catch {
       set({
         decisionRecommendation: null,
         isLoading: false,
@@ -208,6 +224,7 @@ export const useAIStore = create<AIState>((set) => ({
 
   // ===== AI RELIABILITY - Edge Function (Squad Report) =====
   fetchReliabilityReport: async (squadId: string) => {
+    if (!isSupabaseReady()) return
     try {
       set({ isLoading: true, error: null })
 
@@ -216,7 +233,6 @@ export const useAIStore = create<AIState>((set) => ({
       })
 
       if (error) {
-        console.error('Edge Function error:', error)
         throw new Error(error.message || 'Erreur lors de l\'analyse de fiabilité')
       }
 
@@ -231,8 +247,7 @@ export const useAIStore = create<AIState>((set) => ({
           isLoading: false
         })
       }
-    } catch (error) {
-      console.error('Error in fetchReliabilityReport:', error)
+    } catch {
       set({
         reliabilityReport: null,
         isLoading: false,
@@ -243,42 +258,42 @@ export const useAIStore = create<AIState>((set) => ({
 
   // ===== AI RELIABILITY - Edge Function (Individual Player) =====
   fetchPlayerReliability: async (userId: string): Promise<PlayerReliability | null> => {
+    if (!isSupabaseReady()) return null
     try {
       const { data, error } = await supabase.functions.invoke('ai-reliability', {
         body: { user_id: userId }
       })
 
-      if (error) {
-        console.error('Edge Function error:', error)
-        return null
-      }
+      if (error) return null
 
       return data?.player || null
-    } catch (error) {
-      console.error('Error in fetchPlayerReliability:', error)
+    } catch {
       return null
     }
   },
 
   // ===== COACH TIPS - Client-side analysis =====
   fetchCoachTips: async (squadId: string) => {
+    if (!isSupabaseReady()) return
     try {
       set({ isLoading: true, error: null })
 
-      // Fetch squad stats
-      const { data: squad } = await supabase
-        .from('squads')
-        .select('total_sessions, total_members')
-        .eq('id', squadId)
-        .single()
-
-      // Fetch recent sessions
-      const { data: sessions } = await supabase
-        .from('sessions')
-        .select('scheduled_at, status, created_at')
-        .eq('squad_id', squadId)
-        .order('scheduled_at', { ascending: false })
-        .limit(20)
+      // Fetch squad stats with backoff
+      const [{ data: squad }, { data: sessions }] = await withBackoff(() =>
+        Promise.all([
+          supabase
+            .from('squads')
+            .select('total_sessions, total_members')
+            .eq('id', squadId)
+            .single(),
+          supabase
+            .from('sessions')
+            .select('scheduled_at, status, created_at')
+            .eq('squad_id', squadId)
+            .order('scheduled_at', { ascending: false })
+            .limit(20),
+        ])
+      )
 
       const tips: CoachTip[] = []
       const completedSessions = sessions?.filter(s => s.status === 'completed') || []
@@ -349,14 +364,14 @@ export const useAIStore = create<AIState>((set) => ({
       }
 
       set({ coachTips: tips, isLoading: false })
-    } catch (error) {
-      console.error('Error in fetchCoachTips:', error)
+    } catch {
       set({ coachTips: [], isLoading: false })
     }
   },
 
   // ===== AI COACH TIP - Edge Function (Personal Coach) =====
   fetchAICoachTip: async (userId: string, contextType: 'profile' | 'home' = 'profile'): Promise<AICoachTip | null> => {
+    if (!isSupabaseReady()) return null
     try {
       set({ aiCoachTipLoading: true })
 
@@ -365,7 +380,6 @@ export const useAIStore = create<AIState>((set) => ({
       })
 
       if (error) {
-        console.error('Edge Function error:', error)
         // Return a fallback tip
         const fallback: AICoachTip = {
           tip: 'Prêt pour la prochaine session ? Tes potes t\'attendent !',
@@ -383,8 +397,7 @@ export const useAIStore = create<AIState>((set) => ({
 
       set({ aiCoachTipLoading: false })
       return null
-    } catch (error) {
-      console.error('Error in fetchAICoachTip:', error)
+    } catch {
       // Return a fallback tip
       const fallback: AICoachTip = {
         tip: 'Prêt pour la prochaine session ? Tes potes t\'attendent !',
@@ -397,6 +410,7 @@ export const useAIStore = create<AIState>((set) => ({
 
   // ===== AI INSIGHTS from Database =====
   fetchInsights: async (squadId: string) => {
+    if (!isSupabaseReady()) return
     try {
       const { data } = await supabase
         .from('ai_insights')
@@ -407,8 +421,8 @@ export const useAIStore = create<AIState>((set) => ({
         .limit(10)
 
       set({ insights: (data || []) as AIInsight[] })
-    } catch (error) {
-      console.error('Error fetching insights:', error)
+    } catch {
+      // Silently ignore - insights are not critical
     }
   },
 
@@ -422,8 +436,8 @@ export const useAIStore = create<AIState>((set) => ({
       set(state => ({
         insights: state.insights.filter(i => i.id !== insightId)
       }))
-    } catch (error) {
-      console.error('Error dismissing insight:', error)
+    } catch {
+      // Silently ignore
     }
   },
 
@@ -436,14 +450,10 @@ export const useAIStore = create<AIState>((set) => ({
         p_hour: hour
       })
 
-      if (error) {
-        console.error('Error getting slot reliability:', error)
-        return 50 // Default fallback
-      }
+      if (error) return 50 // Default fallback
 
       return data || 50
-    } catch (error) {
-      console.error('Error in getSlotReliability:', error)
+    } catch {
       return 50
     }
   },
@@ -459,17 +469,13 @@ export const useAIStore = create<AIState>((set) => ({
         body
       })
 
-      if (error) {
-        console.error('Edge Function error:', error)
-        return { success: false, remindersSent: 0 }
-      }
+      if (error) return { success: false, remindersSent: 0 }
 
       return {
         success: data?.success || false,
         remindersSent: data?.reminders_sent || 0
       }
-    } catch (error) {
-      console.error('Error in triggerRsvpReminder:', error)
+    } catch {
       return { success: false, remindersSent: 0 }
     }
   },

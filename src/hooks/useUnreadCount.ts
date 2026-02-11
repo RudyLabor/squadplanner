@@ -95,7 +95,7 @@ export const useUnreadCountStore = create<UnreadCountState>((set, get) => ({
       set({ squadUnread, dmUnread, totalUnread })
       updateAppBadge(totalUnread)
     } catch (error) {
-      console.error('Error fetching unread counts:', error)
+      console.warn('[Unread] Error fetching counts:', error)
     }
   },
 

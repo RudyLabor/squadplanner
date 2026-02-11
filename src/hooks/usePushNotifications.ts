@@ -101,7 +101,7 @@ export const usePushNotificationStore = create<PushNotificationState>((set, get)
 
       return registration
     } catch (error) {
-      console.error('[Push] Service worker registration failed:', error)
+      console.warn('[Push] Service worker registration failed:', error)
       set({
         isLoading: false,
         error: error instanceof Error ? error.message : 'Failed to register service worker'
@@ -119,7 +119,7 @@ export const usePushNotificationStore = create<PushNotificationState>((set, get)
     }
 
     if (!VAPID_PUBLIC_KEY) {
-      console.error('[Push] VAPID_PUBLIC_KEY not configured')
+      console.warn('[Push] VAPID_PUBLIC_KEY not configured')
       set({ error: 'Push notifications not configured (missing VAPID key)' })
       return false
     }
@@ -199,7 +199,7 @@ export const usePushNotificationStore = create<PushNotificationState>((set, get)
 
       if (dbError) {
         if (!import.meta.env.PROD) {
-          console.error('[Push] Failed to save subscription:', dbError)
+          console.warn('[Push] Failed to save subscription:', dbError)
         }
         throw dbError
       }
@@ -217,7 +217,7 @@ export const usePushNotificationStore = create<PushNotificationState>((set, get)
       return true
     } catch (error) {
       if (!import.meta.env.PROD) {
-        console.error('[Push] Subscription failed:', error)
+        console.warn('[Push] Subscription failed:', error)
       }
       set({
         isLoading: false,
@@ -245,7 +245,7 @@ export const usePushNotificationStore = create<PushNotificationState>((set, get)
         .eq('user_id', userId)
 
       if (dbError && !import.meta.env.PROD) {
-        console.error('[Push] Failed to delete subscription:', dbError)
+        console.warn('[Push] Failed to delete subscription:', dbError)
       }
 
       if (!import.meta.env.PROD) {
@@ -261,7 +261,7 @@ export const usePushNotificationStore = create<PushNotificationState>((set, get)
       return true
     } catch (error) {
       if (!import.meta.env.PROD) {
-        console.error('[Push] Unsubscribe failed:', error)
+        console.warn('[Push] Unsubscribe failed:', error)
       }
       set({
         isLoading: false,
@@ -301,7 +301,7 @@ export const usePushNotificationStore = create<PushNotificationState>((set, get)
       return false
     } catch (error) {
       if (!import.meta.env.PROD) {
-        console.error('[Push] Check subscription failed:', error)
+        console.warn('[Push] Check subscription failed:', error)
       }
       return false
     }
@@ -312,7 +312,7 @@ export const usePushNotificationStore = create<PushNotificationState>((set, get)
 
     if (!registration) {
       if (!import.meta.env.PROD) {
-        console.error('[Push] No service worker registration')
+        console.warn('[Push] No service worker registration')
       }
       return
     }
@@ -384,7 +384,7 @@ function handleServiceWorkerMessage(event: MessageEvent<ServiceWorkerMessage>) {
             .eq('id', callId)
             .then(({ error }) => {
               if (!import.meta.env.PROD) {
-                if (error) console.error('[Push] Failed to reject call:', error)
+                if (error) console.warn('[Push] Failed to reject call:', error)
                 else console.log('[Push] Call rejected via database')
               }
             })
@@ -428,7 +428,7 @@ export async function initializePushNotifications(): Promise<void> {
     }
   } catch (error) {
     if (!import.meta.env.PROD) {
-      console.error('[Push] Initialization failed:', error)
+      console.warn('[Push] Initialization failed:', error)
     }
   }
 }
@@ -464,14 +464,14 @@ async function saveNativeTokenToDatabase(token: string, userId: string) {
 
     if (!import.meta.env.PROD) {
       if (error) {
-        console.error('[NativePush] Error saving token:', error)
+        console.warn('[NativePush] Error saving token:', error)
       } else {
         console.log('[NativePush] Token saved to database')
       }
     }
   } catch (error) {
     if (!import.meta.env.PROD) {
-      console.error('[NativePush] Error saving token:', error)
+      console.warn('[NativePush] Error saving token:', error)
     }
   }
 }
@@ -559,7 +559,7 @@ export async function registerNativePushNotifications(userId: string): Promise<b
 
     if (permStatus.receive !== 'granted') {
       if (!import.meta.env.PROD) {
-        console.error('[NativePush] Permission denied')
+        console.warn('[NativePush] Permission denied')
       }
       return false
     }
@@ -574,7 +574,7 @@ export async function registerNativePushNotifications(userId: string): Promise<b
 
     await PushNotifications.addListener('registrationError', (error) => {
       if (!import.meta.env.PROD) {
-        console.error('[NativePush] Registration error:', error)
+        console.warn('[NativePush] Registration error:', error)
       }
     })
 
@@ -590,7 +590,7 @@ export async function registerNativePushNotifications(userId: string): Promise<b
     return true
   } catch (error) {
     if (!import.meta.env.PROD) {
-      console.error('[NativePush] Registration failed:', error)
+      console.warn('[NativePush] Registration failed:', error)
     }
     return false
   }

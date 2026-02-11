@@ -257,7 +257,7 @@ export function useJoinSquadMutation() {
         .single()
 
       if (profile?.username) {
-        sendMemberJoinedMessage(squad.id, profile.username).catch(console.error)
+        sendMemberJoinedMessage(squad.id, profile.username).catch(() => {})
       }
 
       return squad.id

@@ -316,7 +316,7 @@ export function useRsvpMutation() {
       ])
 
       if (profile?.username && session?.squad_id) {
-        sendRsvpMessage(session.squad_id, profile.username, session.title, response).catch(console.error)
+        sendRsvpMessage(session.squad_id, profile.username, session.title, response).catch(() => {})
       }
 
       return { sessionId, response, userId: user.id, squadId: session?.squad_id }
@@ -447,7 +447,7 @@ export function useConfirmSessionMutation() {
 
       // Send system message
       if (session?.squad_id) {
-        sendSessionConfirmedMessage(session.squad_id, session.title, session.scheduled_at).catch(console.error)
+        sendSessionConfirmedMessage(session.squad_id, session.title, session.scheduled_at).catch(() => {})
       }
 
       return { sessionId, squadId: session?.squad_id }

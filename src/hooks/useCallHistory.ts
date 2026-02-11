@@ -84,7 +84,7 @@ export const useCallHistoryStore = create<CallHistoryState>((set, get) => ({
         .limit(100)
 
       if (dbError) {
-        console.error('Error fetching call history:', dbError)
+        console.warn('[CallHistory] Error fetching:', dbError)
         // If table doesn't exist or relation error, show empty state instead of error
         if (dbError.code === '42P01' || dbError.code === 'PGRST200' || dbError.message?.includes('relation')) {
           // Table doesn't exist - show empty state (feature not yet enabled)
@@ -116,7 +116,7 @@ export const useCallHistoryStore = create<CallHistoryState>((set, get) => ({
 
       set({ calls, isLoading: false })
     } catch (error) {
-      console.error('Error in fetchCallHistory:', error)
+      console.warn('[CallHistory] Error:', error)
       // For any unexpected error, show empty state rather than blocking the UI
       set({
         calls: [],

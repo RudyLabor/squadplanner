@@ -30,12 +30,16 @@ interface WebVitalPayload {
 
 const FLUSH_INTERVAL = 10_000; // 10 seconds
 const MAX_BUFFER_SIZE = 50;
+const MAX_RETRY_COUNT = 3;
 
 let metricsBuffer: WebVitalPayload[] = [];
 let flushTimer: ReturnType<typeof setInterval> | null = null;
 let visibilityListenerAdded = false;
+let consecutiveFailures = 0;
+let endpointDisabled = false;
 
 function getEndpointUrl(): string {
+  if (endpointDisabled) return '';
   const supabaseUrl =
     typeof import.meta !== 'undefined'
       ? (import.meta.env?.VITE_SUPABASE_URL as string | undefined)
@@ -52,11 +56,31 @@ function getConnectionType(): string | undefined {
 
 function flushMetrics(): void {
   if (metricsBuffer.length === 0) return;
+  if (endpointDisabled) {
+    metricsBuffer = [];
+    return;
+  }
 
   const endpoint = getEndpointUrl();
   if (!endpoint) return;
 
   const payload = metricsBuffer.splice(0, MAX_BUFFER_SIZE);
+
+  // Prefer sendBeacon (no console network error) over fetch
+  if (typeof navigator !== 'undefined' && navigator.sendBeacon) {
+    try {
+      const blob = new Blob([JSON.stringify({ metrics: payload })], {
+        type: 'application/json',
+      });
+      const sent = navigator.sendBeacon(endpoint, blob);
+      if (sent) {
+        consecutiveFailures = 0;
+        return;
+      }
+    } catch {
+      // sendBeacon failed, fall through silently
+    }
+  }
 
   if (typeof fetch === 'undefined') return;
 
@@ -66,11 +90,22 @@ function flushMetrics(): void {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ metrics: payload }),
       keepalive: true,
-    }).catch(() => {
-      // Silently fail -- analytics should never break the app
-    });
+    }).then(
+      () => { consecutiveFailures = 0; },
+      () => {
+        consecutiveFailures++;
+        if (consecutiveFailures >= MAX_RETRY_COUNT) {
+          endpointDisabled = true;
+          metricsBuffer = [];
+        }
+      }
+    );
   } catch {
-    // Silently fail
+    consecutiveFailures++;
+    if (consecutiveFailures >= MAX_RETRY_COUNT) {
+      endpointDisabled = true;
+      metricsBuffer = [];
+    }
   }
 }
 

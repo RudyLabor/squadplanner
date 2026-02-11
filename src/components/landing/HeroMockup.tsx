@@ -117,7 +117,7 @@ export function HeroMockup() {
               type="button"
               onClick={() => handleStepClick(i)}
               className="flex items-center justify-center gap-1.5 group min-w-[44px] min-h-[44px]"
-              aria-label={`Etape ${i + 1}: ${s.title}`}
+              aria-label={`Étape ${i + 1}: ${s.title}`}
             >
               <m.div
                 className="h-1 rounded-full"

@@ -134,7 +134,7 @@ export function useRingtone(shouldPlay: boolean): UseRingtoneReturn {
       }
 
     } catch (error) {
-      console.error('[Ringtone] Error playing ringtone:', error)
+      console.warn('[Ringtone] Error playing ringtone:', error)
       isPlayingRef.current = false
     }
   }, [])
@@ -189,6 +189,6 @@ export function playNotificationSound() {
       navigator.vibrate(100)
     }
   } catch (error) {
-    console.error('[Sound] Error playing notification:', error)
+    console.warn('[Sound] Error playing notification:', error)
   }
 }

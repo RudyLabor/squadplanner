@@ -1,5 +1,3 @@
-import { m } from 'framer-motion'
-
 interface ProgressBarProps {
   value?: number
   max?: number
@@ -61,15 +59,12 @@ export function ProgressBar({
           aria-label={label}
         >
           {Array.from({ length: stepped.steps }, (_, i) => (
-            <m.div
+            <div
               key={i}
-              className={`flex-1 ${trackSizes[size]} rounded-full ${
+              className={`flex-1 ${trackSizes[size]} rounded-full transition-transform duration-300 ${
                 i < stepped.current ? fillColors[variant] : 'bg-border-subtle'
               }`}
-              initial={animated ? { scaleX: 0 } : undefined}
-              animate={animated ? { scaleX: 1 } : undefined}
-              transition={animated ? { duration: 0.3, delay: i * 0.08 } : undefined}
-              style={animated ? { transformOrigin: 'left' } : undefined}
+              style={animated ? { transformOrigin: 'left', transitionDelay: `${i * 80}ms` } : undefined}
             />
           ))}
         </div>
@@ -106,11 +101,9 @@ export function ProgressBar({
             }}
           />
         ) : (
-          <m.div
-            className={`absolute inset-y-0 left-0 rounded-full ${fillColors[variant]} ${animated ? 'animate-pulse-subtle' : ''}`}
-            initial={animated ? { width: 0 } : { width: `${percent}%` }}
-            animate={{ width: `${percent}%` }}
-            transition={animated ? { duration: 0.6, ease: 'easeOut' } : { duration: 0.3 }}
+          <div
+            className={`absolute inset-y-0 left-0 rounded-full ${fillColors[variant]} ${animated ? 'animate-pulse-subtle' : ''} transition-[width] ${animated ? 'duration-600 ease-out' : 'duration-300'}`}
+            style={{ width: `${percent}%` }}
           />
         )}
       </div>

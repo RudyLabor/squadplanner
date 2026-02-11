@@ -70,7 +70,7 @@ export function AnimatedCounter({
   }, [isInView, end, duration])
 
   return (
-    <span ref={ref} className={className} aria-live="polite" aria-atomic="true">
+    <span ref={ref} className={className} aria-label={format(end)} role="text">
       {format(isInView ? displayValue : 0)}
     </span>
   )

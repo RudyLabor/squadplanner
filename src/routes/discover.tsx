@@ -37,7 +37,11 @@ export function headers({ loaderHeaders }: { loaderHeaders: Headers }) {
   return loaderHeaders
 }
 
-export default function Component({ loaderData }: { loaderData: any }) {
+interface DiscoverLoaderData {
+  publicSquads: Array<{ id: string; name: string; game: string; created_at: string }>
+}
+
+export default function Component({ loaderData }: { loaderData: DiscoverLoaderData }) {
   return (
     <ClientRouteWrapper seeds={[
       { key: queryKeys.discover.publicSquads(), data: loaderData?.publicSquads },

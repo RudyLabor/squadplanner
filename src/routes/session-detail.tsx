@@ -4,8 +4,24 @@ import type { LoaderFunctionArgs } from 'react-router'
 import { createSupabaseServerClient } from '../lib/supabase.server'
 import { queryKeys } from '../lib/queryClient'
 import { ClientRouteWrapper } from '../components/ClientRouteWrapper'
+import type { Session, SessionRsvp, SessionCheckin, RsvpResponse } from '../types/database'
 
 const SessionDetail = lazy(() => import('../pages/SessionDetail'))
+
+interface RsvpWithProfile extends SessionRsvp {
+  profiles?: { id: string; username: string }
+}
+
+interface SessionDetailData extends Session {
+  rsvps: RsvpWithProfile[]
+  checkins: SessionCheckin[]
+  my_rsvp: RsvpResponse | null
+  rsvp_counts: { present: number; absent: number; maybe: number }
+}
+
+interface SessionDetailLoaderData {
+  session: SessionDetailData | null
+}
 
 export function meta() {
   return [
@@ -38,33 +54,33 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
       .eq('session_id', sessionId),
   ])
 
-  const rsvps = rsvpsResult.data || []
+  const rsvps = (rsvpsResult.data || []) as RsvpWithProfile[]
 
   // Fetch usernames separately to avoid PostgREST join errors
   if (rsvps.length) {
-    const userIds = [...new Set(rsvps.map((r: any) => r.user_id))]
+    const userIds = [...new Set(rsvps.map((r) => r.user_id))]
     const { data: profiles } = await supabase
       .from('profiles')
       .select('id, username')
       .in('id', userIds)
-    const profileMap = new Map((profiles || []).map((p: any) => [p.id, p]))
-    rsvps.forEach((r: any) => {
-      r.profiles = profileMap.get(r.user_id) || { username: 'Joueur' }
+    const profileMap = new Map((profiles || []).map((p: { id: string; username: string }) => [p.id, p]))
+    rsvps.forEach((r) => {
+      r.profiles = profileMap.get(r.user_id) || { id: r.user_id, username: 'Joueur' }
     })
   }
 
-  const myRsvp = rsvps.find((r: any) => r.user_id === user.id)?.response || null
+  const myRsvp = rsvps.find((r) => r.user_id === user.id)?.response || null
 
-  const session = sessionResult.data
+  const session: SessionDetailData | null = sessionResult.data
     ? {
-        ...sessionResult.data,
+        ...(sessionResult.data as Session),
         rsvps,
-        checkins: checkinsResult.data || [],
+        checkins: (checkinsResult.data || []) as SessionCheckin[],
         my_rsvp: myRsvp,
         rsvp_counts: {
-          present: rsvps.filter((r: any) => r.response === 'present').length,
-          absent: rsvps.filter((r: any) => r.response === 'absent').length,
-          maybe: rsvps.filter((r: any) => r.response === 'maybe').length,
+          present: rsvps.filter((r) => r.response === 'present').length,
+          absent: rsvps.filter((r) => r.response === 'absent').length,
+          maybe: rsvps.filter((r) => r.response === 'maybe').length,
         },
       }
     : null
@@ -76,7 +92,7 @@ export function headers({ loaderHeaders }: { loaderHeaders: Headers }) {
   return loaderHeaders
 }
 
-export default function Component({ loaderData }: { loaderData: any }) {
+export default function Component({ loaderData }: { loaderData: SessionDetailLoaderData }) {
   return (
     <ClientRouteWrapper seeds={[
       { key: queryKeys.sessions.detail(loaderData?.session?.id), data: loaderData?.session },

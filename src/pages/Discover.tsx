@@ -9,7 +9,7 @@ import {
   Users,
   Gamepad2,
 } from '../components/icons'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 import { MobilePageHeader } from '../components/layout/MobilePageHeader'
 import { SegmentedControl, Select, Card, Button } from '../components/ui'
 import type { SelectOption } from '../components/ui'
@@ -143,7 +143,7 @@ const FeaturedSection = memo(function FeaturedSection({ squads }: { squads: any[
                 <h4 className="text-sm font-semibold text-text-primary truncate">{squad.name}</h4>
                 <p className="text-xs text-primary font-medium">{squad.game || 'Multi-jeux'}</p>
                 <span className="inline-flex items-center gap-1 text-xs text-text-tertiary mt-1">
-                  <Users className="w-3 h-3" /> {squad.member_count || 0} membres
+                  <Users className="w-3 h-3" /> {Math.max(squad.member_count || 0, 1)} {Math.max(squad.member_count || 0, 1) === 1 ? 'membre' : 'membres'}
                 </span>
               </div>
             </div>

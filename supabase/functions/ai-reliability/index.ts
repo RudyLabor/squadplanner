@@ -209,6 +209,24 @@ serve(async (req) => {
       )
     }
 
+    // Batch-fetch all recent checkins for all members (fixes N+1 query)
+    const memberUserIds = members.map(m => m.user_id)
+    const { data: allCheckins } = await supabaseClient
+      .from('session_checkins')
+      .select('user_id, status, checked_at')
+      .in('user_id', memberUserIds)
+      .order('checked_at', { ascending: false })
+
+    // Group checkins by user_id (take last 5 per user)
+    const checkinsByUser = new Map<string, { status: string }[]>()
+    for (const checkin of allCheckins || []) {
+      const existing = checkinsByUser.get(checkin.user_id) || []
+      if (existing.length < 5) {
+        existing.push({ status: checkin.status })
+        checkinsByUser.set(checkin.user_id, existing)
+      }
+    }
+
     // Process each member
     const players: PlayerReliability[] = []
     let totalReliability = 0
@@ -227,16 +245,11 @@ serve(async (req) => {
 
       if (!profile) continue
 
-      // Get recent checkins for trend
-      const { data: recentCheckins } = await supabaseClient
-        .from('session_checkins')
-        .select('status')
-        .eq('user_id', member.user_id)
-        .order('checked_at', { ascending: false })
-        .limit(5)
+      // Use batch-fetched checkins
+      const recentCheckins = checkinsByUser.get(member.user_id) || []
 
       let trend: 'improving' | 'stable' | 'declining' = 'stable'
-      if (recentCheckins && recentCheckins.length >= 3) {
+      if (recentCheckins.length >= 3) {
         const presentRatio = recentCheckins.filter(c => c.status === 'present').length / recentCheckins.length
         if (presentRatio >= 0.8) trend = 'improving'
         else if (presentRatio <= 0.4) trend = 'declining'

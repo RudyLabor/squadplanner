@@ -8,7 +8,7 @@ import {
   Search,
   ArrowLeft,
 } from '../components/icons'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router'
 import { Card } from '../components/ui'
 import { MobilePageHeader } from '../components/layout/MobilePageHeader'
 import { ScrollProgress } from '../components/ui/ScrollProgress'
@@ -86,7 +86,7 @@ export function Help() {
         ) : (
           Object.entries(groupedItems).map(([category, items]) => (
             <div key={category} id={category.toLowerCase().replace(/\s+/g, '-').normalize('NFD').replace(/[\u0300-\u036f]/g, '')} className="mb-6 scroll-mt-6">
-              <h2 className="text-base font-semibold text-text-tertiary tracking-wider mb-3">{category}</h2>
+              <h2 className="text-md font-semibold text-text-secondary mb-3">{category}</h2>
               <div className="space-y-2">
                 {items.map((item) => (
                   <Card key={item.globalIndex} className="overflow-hidden">

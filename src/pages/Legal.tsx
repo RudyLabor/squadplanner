@@ -1,7 +1,7 @@
 "use client";
 
 import { ArrowLeft, Shield, FileText } from '../components/icons'
-import { Link, useSearchParams } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router'
 import { ScrollProgress } from '../components/ui/ScrollProgress'
 import { SquadPlannerLogo } from '../components/SquadPlannerLogo'
 import { useStatePersistence } from '../hooks/useStatePersistence'

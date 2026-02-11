@@ -67,7 +67,7 @@ export const DiscoverSquadCard = memo(function DiscoverSquadCard({ squad }: Prop
       <div className="flex items-center gap-3 mb-2">
         <span className="inline-flex items-center gap-1 text-xs text-text-tertiary">
           <Users className="w-3 h-3" />
-          {memberCount} membres
+          {memberCount} {memberCount === 1 ? 'membre' : 'membres'}
         </span>
         {reliability !== null && (
           <span className="inline-flex items-center gap-1 text-xs text-text-tertiary">

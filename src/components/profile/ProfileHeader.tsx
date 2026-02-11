@@ -10,7 +10,7 @@ import {
   Camera,
   Loader2,
 } from '../icons'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router'
 import { showSuccess, showError } from '../../lib/toast'
 import { Button, Input, Expandable } from '../ui'
 import { supabase } from '../../lib/supabase'

@@ -4,8 +4,28 @@ import type { LoaderFunctionArgs } from 'react-router'
 import { createSupabaseServerClient } from '../lib/supabase.server'
 import { queryKeys } from '../lib/queryClient'
 import { ClientRouteWrapper } from '../components/ClientRouteWrapper'
+import type { Session, SessionRsvp, RsvpResponse } from '../types/database'
 
 const Sessions = lazy(() => import('../pages/Sessions').then(m => ({ default: m.Sessions })))
+
+interface SquadSummary {
+  id: string
+  name: string
+  game: string
+  invite_code: string
+  owner_id: string
+  created_at: string
+}
+
+interface SessionWithRsvp extends Session {
+  my_rsvp: RsvpResponse | null
+  rsvp_counts: { present: number; absent: number; maybe: number }
+}
+
+interface SessionsLoaderData {
+  squads: SquadSummary[]
+  sessions: SessionWithRsvp[]
+}
 
 export function meta() {
   return [
@@ -28,10 +48,10 @@ export async function loader({ request }: LoaderFunctionArgs) {
     .select('squad_id, squads!inner(id, name, game, invite_code, owner_id, created_at)')
     .eq('user_id', user.id)
 
-  const squads = memberships?.map((m: any) => m.squads) || []
-  const squadIds = squads.map((s: any) => s.id)
+  const squads = (memberships?.map((m: { squads: SquadSummary }) => m.squads) || []) as SquadSummary[]
+  const squadIds = squads.map((s) => s.id)
 
-  let sessions: any[] = []
+  let sessions: SessionWithRsvp[] = []
   if (squadIds.length > 0) {
     const { data: sessionsData } = await supabase
       .from('sessions')
@@ -40,21 +60,21 @@ export async function loader({ request }: LoaderFunctionArgs) {
       .order('scheduled_at', { ascending: true })
 
     if (sessionsData?.length) {
-      const sessionIds = sessionsData.map((s: any) => s.id)
+      const sessionIds = sessionsData.map((s: Session) => s.id)
       const { data: allRsvps } = await supabase
         .from('session_rsvps')
         .select('*')
         .in('session_id', sessionIds)
 
-      sessions = sessionsData.map((session: any) => {
-        const sessionRsvps = allRsvps?.filter((r: any) => r.session_id === session.id) || []
+      sessions = sessionsData.map((session: Session) => {
+        const sessionRsvps = (allRsvps as SessionRsvp[] | null)?.filter((r) => r.session_id === session.id) || []
         return {
           ...session,
-          my_rsvp: sessionRsvps.find((r: any) => r.user_id === user.id)?.response || null,
+          my_rsvp: sessionRsvps.find((r) => r.user_id === user.id)?.response || null,
           rsvp_counts: {
-            present: sessionRsvps.filter((r: any) => r.response === 'present').length,
-            absent: sessionRsvps.filter((r: any) => r.response === 'absent').length,
-            maybe: sessionRsvps.filter((r: any) => r.response === 'maybe').length,
+            present: sessionRsvps.filter((r) => r.response === 'present').length,
+            absent: sessionRsvps.filter((r) => r.response === 'absent').length,
+            maybe: sessionRsvps.filter((r) => r.response === 'maybe').length,
           },
         }
       })
@@ -68,7 +88,7 @@ export function headers({ loaderHeaders }: { loaderHeaders: Headers }) {
   return loaderHeaders
 }
 
-export default function Component({ loaderData }: { loaderData: any }) {
+export default function Component({ loaderData }: { loaderData: SessionsLoaderData }) {
   return (
     <ClientRouteWrapper seeds={[
       { key: queryKeys.squads.list(), data: loaderData?.squads },

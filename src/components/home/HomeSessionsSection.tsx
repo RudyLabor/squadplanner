@@ -7,7 +7,7 @@ import {
   HelpCircle,
   XCircle,
 } from '../icons'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 import { Card, Badge, SessionCardSkeleton, ContentTransition } from '../ui'
 
 interface UpcomingSession {

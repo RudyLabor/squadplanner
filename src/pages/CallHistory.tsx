@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import { AnimatePresence } from 'framer-motion'
 import { Phone, ArrowLeft, RefreshCw } from '../components/icons'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router'
 import { Card, Button } from '../components/ui'
 import { MobilePageHeader } from '../components/layout/MobilePageHeader'
 import { useCallHistoryStore, type CallType } from '../hooks/useCallHistory'

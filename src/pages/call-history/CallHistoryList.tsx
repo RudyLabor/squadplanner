@@ -13,7 +13,7 @@ import {
   X,
   Loader2,
 } from '../../components/icons'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 import { Card, Button } from '../../components/ui'
 import { Tooltip } from '../../components/ui/Tooltip'
 import { formatDuration, formatRelativeTime } from '../../hooks/useCallHistory'

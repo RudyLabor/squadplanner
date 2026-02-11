@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router'
 import { useAuthStore, useSubscriptionStore, usePremiumStore } from '../hooks'
 import { showSuccess } from '../lib/toast'
 import { captureException } from '../lib/sentry'

@@ -43,8 +43,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
         {/* Inline @font-face so browser can match preload to font declaration immediately,
             without waiting for critical.css to parse. Prevents "preloaded but not used" warning. */}
-        <style dangerouslySetInnerHTML={{ __html: `@font-face{font-family:'Inter';font-style:normal;font-weight:100 900;font-display:swap;src:url('/fonts/inter-var-latin.woff2') format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;size-adjust:100%;ascent-override:90%;descent-override:22%;line-gap-override:0%}` }} />
+        <style dangerouslySetInnerHTML={{ __html: `@font-face{font-family:'Inter';font-style:normal;font-weight:100 900;font-display:swap;src:url('/fonts/inter-var-latin.woff2') format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;size-adjust:100%;ascent-override:90%;descent-override:22%;line-gap-override:0%}@font-face{font-family:'Space Grotesk';font-style:normal;font-weight:300 700;font-display:swap;src:url('/fonts/space-grotesk-latin.woff2') format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}` }} />
         <link rel="preload" href="/fonts/inter-var-latin.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
+        <link rel="preload" href="/fonts/space-grotesk-latin.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
 
         {/* Open Graph / Facebook */}
         <meta property="og:type" content="website" />
@@ -109,6 +110,13 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <script
           dangerouslySetInnerHTML={{
             __html: `(function(){try{var s=JSON.parse(localStorage.getItem('squadplanner-theme')||'{}');var m=s&&s.state&&s.state.mode||'system';var t=m==='system'?(window.matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light'):m;document.documentElement.setAttribute('data-theme',t)}catch(e){document.documentElement.setAttribute('data-theme','dark')}})()`,
+          }}
+        />
+
+        {/* Handle stale module scripts after deploy — reload once to get fresh chunks */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `window.addEventListener('vite:preloadError',function(e){e.preventDefault();if(!sessionStorage.getItem('sp-reload')){sessionStorage.setItem('sp-reload','1');location.reload()}})`,
           }}
         />
 

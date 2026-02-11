@@ -1,6 +1,6 @@
 import { m } from 'framer-motion'
 import { Mic, Users } from '../../components/icons'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 import { Card, Button } from '../../components/ui'
 
 export function PartyEmptyState() {

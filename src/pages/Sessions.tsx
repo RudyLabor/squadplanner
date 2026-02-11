@@ -24,7 +24,7 @@ export function Sessions({ loaderData }: SessionsProps) {
   const { user, isInitialized } = useAuthStore()
   const { data: squads = [], isLoading: squadsLoading } = useSquadsQuery()
   const { data: sessions = [], isLoading: sessionsLoading } = useUpcomingSessionsQuery(user?.id)
-  const { slotSuggestions, coachTips, fetchSlotSuggestions, fetchCoachTips } = useAIStore()
+  const { slotSuggestions, hasSlotHistory, coachTips, fetchSlotSuggestions, fetchCoachTips } = useAIStore()
   const openCreateSession = useCreateSessionModal(s => s.open)
 
   const [showConfetti, setShowConfetti] = useState(false)
@@ -101,7 +101,7 @@ export function Sessions({ loaderData }: SessionsProps) {
           <WeekCalendar sessions={upcomingSessions} weekOffset={weekOffset} onWeekChange={setWeekOffset} />
           <AllCaughtUp needsResponse={needsResponse.length} confirmed={confirmed.length} />
           <NeedsResponseSection needsResponse={needsResponse} />
-          <AISlotSuggestions slotSuggestions={slotSuggestions} />
+          <AISlotSuggestions slotSuggestions={slotSuggestions} hasSlotHistory={hasSlotHistory} />
           <CoachTipsSection coachTips={coachTips} />
           <ConfirmedSessions confirmed={confirmed} sessionsLoading={sessionsLoading} />
           <HowItWorksSection />

@@ -5,7 +5,7 @@ import {
   PartyPopper,
   CheckCircle2,
 } from '../../components/icons'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 import { Card } from '../../components/ui'
 import type { SessionEntry } from './types'
 import { formatDate } from './types'

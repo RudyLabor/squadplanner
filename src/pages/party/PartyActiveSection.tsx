@@ -13,7 +13,7 @@ import {
   AlertCircle,
   Loader2,
 } from '../../components/icons'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 import { Card } from '../../components/ui'
 import { useVoiceChatStore } from '../../hooks/useVoiceChat'
 import { NetworkQualityIndicator } from '../../components/NetworkQualityIndicator'

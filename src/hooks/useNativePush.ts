@@ -23,7 +23,7 @@ async function saveNativeTokenToDatabase(token: string, userId: string) {
   }
 }
 
-async function handleNativeNotificationReceived(notification: any) {
+async function handleNativeNotificationReceived(notification: { data?: Record<string, string>; title?: string; body?: string }) {
   if (!import.meta.env.PROD) console.log('[NativePush] Notification received:', notification)
 
   const notifType = notification.data?.type as string
@@ -48,7 +48,7 @@ async function handleNativeNotificationReceived(notification: any) {
   }
 }
 
-function handleNativeNotificationAction(action: any) {
+function handleNativeNotificationAction(action: { notification: { data?: Record<string, string> } }) {
   if (!import.meta.env.PROD) console.log('[NativePush] Notification action:', action)
   const data = action.notification.data
   const notifType = data?.type as string
@@ -83,7 +83,7 @@ export async function registerNativePushNotifications(userId: string): Promise<b
     }
     if (permStatus.receive !== 'granted') return false
 
-    await PushNotifications.addListener('registration', async (token: any) => {
+    await PushNotifications.addListener('registration', async (token: { value: string }) => {
       if (!import.meta.env.PROD) console.log('[NativePush] Registration successful, token:', token.value)
       await saveNativeTokenToDatabase(token.value, userId)
     })

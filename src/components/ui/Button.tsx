@@ -1,4 +1,4 @@
-import { m, AnimatePresence, type HTMLMotionProps } from 'framer-motion'
+import { m, AnimatePresence } from 'framer-motion'
 import { forwardRef, type ReactNode, type ElementType, type ComponentPropsWithRef } from 'react'
 import { haptic } from '../../utils/haptics'
 
@@ -21,7 +21,7 @@ type ButtonProps<C extends ElementType = 'button'> = ButtonBaseProps & {
 } & Omit<ComponentPropsWithRef<C>, keyof ButtonBaseProps | 'as'>
 
 const baseClasses =
-  'inline-flex items-center justify-center gap-2 font-medium rounded-xl transition-interactive disabled:opacity-40 disabled:cursor-not-allowed'
+  'inline-flex items-center justify-center gap-2 font-medium rounded-xl transition-interactive disabled:opacity-40 disabled:cursor-not-allowed hover:-translate-y-px active:scale-[0.97]'
 
 const variantClasses: Record<string, string> = {
   primary: 'bg-primary hover:bg-primary-hover text-white shadow-md shadow-primary/10',
@@ -94,7 +94,7 @@ function ButtonInner<C extends ElementType = 'button'>(
           {loadingText && <span>{loadingText}</span>}
         </m.span>
       ) : (
-        <m.span key="content" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="inline-flex items-center gap-2">
+        <m.span key="content" initial={false} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="inline-flex items-center gap-2">
           {leftIcon && <span className="shrink-0" aria-hidden="true">{leftIcon}</span>}
           {children}
           {rightIcon && <span className="shrink-0" aria-hidden="true">{rightIcon}</span>}
@@ -103,31 +103,21 @@ function ButtonInner<C extends ElementType = 'button'>(
     </AnimatePresence>
   )
 
-  // For non-button elements (a, Link), render motion.div wrapping the element
+  // For non-button elements (a, Link), render the element directly
   if (as && as !== 'button') {
     const Component = as as ElementType
     return (
-      <m.div
-        whileHover={{ y: -1 }}
-        whileTap={{ scale: 0.97 }}
-        transition={{ type: 'spring', stiffness: 400, damping: 17 }}
-        className="inline-flex"
-      >
-        <Component ref={ref} className={cls} aria-busy={isLoading || undefined} {...props} onClick={handleClick}>
-          {content}
-        </Component>
-      </m.div>
+      <Component ref={ref} className={cls} aria-busy={isLoading || undefined} {...props} onClick={handleClick}>
+        {content}
+      </Component>
     )
   }
 
   return (
-    <m.button
+    <button
       ref={ref}
-      type={(props as HTMLMotionProps<'button'>).type || 'button'}
+      type={(props as any).type || 'button'}
       className={cls}
-      whileHover={{ y: -1 }}
-      whileTap={{ scale: 0.97 }}
-      transition={{ type: 'spring', stiffness: 400, damping: 17 }}
       disabled={isLoading || props.disabled}
       aria-busy={isLoading || undefined}
       aria-label={isLoading && !loadingText && typeof children === 'string' ? children : undefined}
@@ -135,7 +125,7 @@ function ButtonInner<C extends ElementType = 'button'>(
       onClick={handleClick}
     >
       {content}
-    </m.button>
+    </button>
   )
 }
 

@@ -5,7 +5,7 @@ import {
   Shield,
   Zap,
 } from '../icons'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 import { getOptimizedAvatarUrl } from '../../utils/avatarUrl'
 import { getLevelColor, type LeaderboardEntry } from './leaderboardConfig'
 

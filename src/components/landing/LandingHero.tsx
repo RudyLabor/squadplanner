@@ -3,7 +3,7 @@
 import { useRef } from 'react'
 import { m, type MotionValue } from 'framer-motion'
 import { ArrowRight, Sparkles } from '../icons'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 import { springTap } from '../../utils/animations'
 import { HeroMockup } from './HeroMockup'
 

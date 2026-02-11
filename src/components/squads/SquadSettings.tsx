@@ -14,7 +14,7 @@ import {
   Trophy,
   Loader2,
 } from '../icons'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router'
 import { Button, Card, Drawer } from '../ui'
 import { PremiumGate, PremiumBadge } from '../PremiumGate'
 import { SquadLeaderboard } from '../SquadLeaderboard'

@@ -8,7 +8,7 @@ import {
   TrendingUp,
   Plus,
 } from '../icons'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 import { Card, ProgressRing, AnimatedCounter, HelpTooltip } from '../ui'
 
 // Système de tiers basé sur le score de fiabilité
@@ -50,8 +50,8 @@ export function ProfileStats({ profile, profileReady }: ProfileStatsProps) {
   const stats = [
     { icon: Calendar, label: 'Sessions', value: totalSessions, color: 'var(--color-warning)', bgColor: 'var(--color-warning-15)' },
     { icon: Check, label: 'Check-ins', value: totalCheckins, color: 'var(--color-success)', bgColor: 'var(--color-success-15)' },
-    { icon: Target, label: 'Niveau', value: profile?.level || 1, color: 'var(--color-primary)', bgColor: 'var(--color-primary-15)' },
-    { icon: Trophy, label: 'XP', value: profile?.xp || 0, color: 'var(--color-purple)', bgColor: 'var(--color-purple-15)' },
+    { icon: Target, label: 'Niveau', value: profile?.level ?? 1, color: 'var(--color-primary)', bgColor: 'var(--color-primary-15)' },
+    { icon: Trophy, label: 'XP', value: profile?.xp ?? 0, color: 'var(--color-purple)', bgColor: 'var(--color-purple-15)' },
   ]
 
   return (

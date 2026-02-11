@@ -7,7 +7,7 @@ import {
   TrendingUp,
   UserPlus,
 } from '../icons'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router'
 import { Button, Card, CardContent } from '../ui'
 import { useVoiceCallStore } from '../../hooks/useVoiceCall'
 

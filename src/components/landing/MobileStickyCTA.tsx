@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
 import { ArrowRight } from '../icons'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 
 export function MobileStickyCTA() {
   const [isVisible, setIsVisible] = useState(false)

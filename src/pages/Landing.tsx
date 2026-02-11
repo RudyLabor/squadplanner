@@ -19,7 +19,7 @@ import { CtaSection } from '../components/landing/CtaSection'
 import { LandingFooter } from '../components/landing/LandingFooter'
 import { MobileStickyCTA } from '../components/landing/MobileStickyCTA'
 import { ArrowRight } from '../components/icons'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 
 // ─── LAZY SECTION (PERF 6 — reduces initial DOM from ~946 to ~400 elements) ──
 function LazySection({ children, className, minHeight = 200 }: { children: ReactNode; className?: string; minHeight?: number }) {

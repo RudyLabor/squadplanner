@@ -29,7 +29,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     .select('squad_id, squads!inner(id, name, game)')
     .eq('user_id', user.id)
 
-  const squads = memberships?.map((m: any) => m.squads) || []
+  const squads = (memberships?.map((m: { squads: { id: string; name: string; game: string } }) => m.squads) || [])
 
   return data({ squads }, { headers })
 }
@@ -38,7 +38,11 @@ export function headers({ loaderHeaders }: { loaderHeaders: Headers }) {
   return loaderHeaders
 }
 
-export default function Component({ loaderData }: { loaderData: any }) {
+interface MessagesLoaderData {
+  squads: Array<{ id: string; name: string; game: string }>
+}
+
+export default function Component({ loaderData }: { loaderData: MessagesLoaderData }) {
   return (
     <ClientRouteWrapper seeds={[
       { key: queryKeys.squads.list(), data: loaderData?.squads },

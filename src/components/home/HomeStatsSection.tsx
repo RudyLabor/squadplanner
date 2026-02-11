@@ -1,7 +1,7 @@
 import { memo } from 'react'
 import { Users, Calendar, TrendingUp, ArrowUp, ArrowDown } from '../icons'
 import { m } from 'framer-motion'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 import { AnimatedCounter, ContentTransition, SkeletonStatsRow } from '../ui'
 
 function getReliabilityTrend(score: number): { icon: typeof ArrowUp | null; color: string; label: string } {
@@ -27,9 +27,9 @@ function StatsRow({ squadsCount, sessionsThisWeek, reliabilityScore }: StatsRowP
   const sessionsTrend = getSessionsTrend(sessionsThisWeek)
 
   const stats = [
-    { value: squadsCount, label: 'Squads', icon: Users, color: 'var(--color-primary)', suffix: '', path: '/squads', trend: null, progress: null },
-    { value: sessionsThisWeek, label: 'Cette semaine', icon: Calendar, color: 'var(--color-warning)', suffix: '', path: '/sessions', trend: sessionsTrend, progress: null },
-    { value: reliabilityScore, label: 'Fiabilite', icon: TrendingUp, color: 'var(--color-success)', suffix: '%', path: '/profile', trend: reliabilityTrend, progress: reliabilityScore },
+    { value: squadsCount, label: 'Squads', mobileLabel: 'Squads', icon: Users, color: 'var(--color-primary)', suffix: '', path: '/squads', trend: null, progress: null },
+    { value: sessionsThisWeek, label: 'Cette semaine', mobileLabel: 'Semaine', icon: Calendar, color: 'var(--color-warning)', suffix: '', path: '/sessions', trend: sessionsTrend, progress: null },
+    { value: reliabilityScore, label: 'Fiabilite', mobileLabel: 'Fiabilite', icon: TrendingUp, color: 'var(--color-success)', suffix: '%', path: '/profile', trend: reliabilityTrend, progress: reliabilityScore },
   ]
 
   return (
@@ -68,7 +68,8 @@ function StatsRow({ squadsCount, sessionsThisWeek, reliabilityScore }: StatsRowP
                   )}
                 </div>
                 <div className="text-2xs sm:text-xs text-text-quaternary uppercase tracking-wider mt-0.5 truncate font-medium">
-                  {stat.label}
+                  <span className="sm:hidden">{stat.mobileLabel}</span>
+                  <span className="hidden sm:inline">{stat.label}</span>
                 </div>
               </div>
             </div>

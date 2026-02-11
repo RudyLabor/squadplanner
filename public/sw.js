@@ -16,10 +16,11 @@ const MAX_CACHE_ENTRIES = 50;
 // Static assets to precache — PHASE 5: expanded for faster repeat visits
 const STATIC_ASSETS = [
   '/favicon.svg',
-  '/vite.svg',
   '/critical.css',
   '/manifest.json',
-  '/icon-192.svg'
+  '/icon-192.svg',
+  '/fonts/inter-var-latin.woff2',
+  '/fonts/space-grotesk-latin.woff2'
 ];
 
 // Install event - cache essential assets

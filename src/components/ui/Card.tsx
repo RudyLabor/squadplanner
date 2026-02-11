@@ -1,4 +1,3 @@
-import { m } from 'framer-motion'
 import { type ReactNode, type KeyboardEvent } from 'react'
 
 interface CardProps {
@@ -34,7 +33,7 @@ export function Card({
   }
 
   const hoverClasses = hoverable && !disabled
-    ? 'hover:bg-surface-card-hover hover:border-border-hover cursor-pointer'
+    ? 'hover:bg-surface-card-hover hover:border-border-hover hover:-translate-y-px active:scale-[0.995] cursor-pointer'
     : ''
 
   const disabledClasses = disabled ? 'opacity-50 cursor-not-allowed pointer-events-none' : ''
@@ -48,7 +47,7 @@ export function Card({
   }
 
   return (
-    <m.div
+    <div
       className={`
         relative rounded-2xl transition-interactive
         ${variants[variant]}
@@ -61,15 +60,6 @@ export function Card({
         boxShadow: selected ? '0 0 0 1px color-mix(in srgb, var(--color-primary) 20%, transparent)' : undefined,
         backgroundColor: selected ? 'color-mix(in srgb, var(--color-primary) 5%, var(--color-surface-card))' : undefined,
       }}
-      animate={{
-        borderColor: selected ? 'var(--color-primary)' : 'var(--color-border-subtle)',
-        boxShadow: selected
-          ? '0 0 0 1px color-mix(in srgb, var(--color-primary) 20%, transparent)'
-          : '0 0 0 0px transparent',
-        backgroundColor: selected
-          ? 'color-mix(in srgb, var(--color-primary) 5%, var(--color-surface-card))'
-          : 'var(--color-surface-card)',
-      }}
       onClick={isClickable ? onClick : undefined}
       onKeyDown={isClickable ? handleKeyDown : undefined}
       role={isClickable ? 'button' : undefined}
@@ -78,9 +68,6 @@ export function Card({
       aria-busy={loading || undefined}
       aria-disabled={disabled || undefined}
       aria-selected={selected || undefined}
-      whileHover={hoverable && !disabled ? { y: -1 } : undefined}
-      whileTap={hoverable && !disabled ? { scale: 0.995 } : undefined}
-      transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
     >
       {loading && (
         <div className="absolute inset-0 z-10 rounded-2xl bg-surface-card/80 flex items-center justify-center">
@@ -88,7 +75,7 @@ export function Card({
         </div>
       )}
       {loading ? <div className="relative opacity-40">{children}</div> : children}
-    </m.div>
+    </div>
   )
 }
 

@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { m } from 'framer-motion'
 import { Users, Plus, UserPlus, Compass } from '../components/icons'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 import Confetti from '../components/LazyConfetti'
 import { Button, Card, SquadCardSkeleton } from '../components/ui'
 import { showSuccess } from '../lib/toast'

@@ -13,7 +13,7 @@ import {
   LogIn,
   Eye,
 } from './icons'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router'
 import { useEffect, useRef } from 'react'
 
 export interface SessionExpiredModalProps {

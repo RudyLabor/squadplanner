@@ -36,7 +36,13 @@ export function headers({ loaderHeaders }: { loaderHeaders: Headers }) {
   return loaderHeaders
 }
 
-export default function Component({ loaderData }: { loaderData: any }) {
+import type { Profile } from '../types/database'
+
+interface SettingsLoaderData {
+  profile: Profile | null
+}
+
+export default function Component({ loaderData }: { loaderData: SettingsLoaderData }) {
   return (
     <ClientRouteWrapper seeds={[
       { key: queryKeys.profile.current(), data: loaderData?.profile },

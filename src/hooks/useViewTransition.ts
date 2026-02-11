@@ -4,7 +4,7 @@
  */
 
 import { useCallback } from 'react'
-import { useNavigate, type NavigateOptions } from 'react-router-dom'
+import { useNavigate, type NavigateOptions } from 'react-router'
 
 // Check if View Transitions API is supported
 export function isViewTransitionSupported(): boolean {

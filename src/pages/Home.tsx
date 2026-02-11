@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useCallback } from 'react'
+import { useState, useMemo, useCallback, useSyncExternalStore } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
 import { m } from 'framer-motion'
 import {
@@ -9,12 +9,29 @@ import {
   AlertCircle,
   Star,
 } from '../components/icons'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router'
 import Confetti from '../components/LazyConfetti'
 import { PullToRefresh } from '../components/PullToRefresh'
 import { Tooltip, CrossfadeTransition, SkeletonHomePage } from '../components/ui'
 import { useAuthStore } from '../hooks'
-import { useVoiceChatStore } from '../hooks/useVoiceChat'
+// Lazy-load voice chat store to avoid pulling livekit into the main bundle
+const voiceChatStorePromise = import('../hooks/useVoiceChat')
+let cachedStore: any = null
+
+function useVoiceChatStoreLazy() {
+  const store = useSyncExternalStore(
+    (cb) => {
+      if (!cachedStore) {
+        voiceChatStorePromise.then(mod => { cachedStore = mod.useVoiceChatStore; cb() })
+      }
+      return () => {}
+    },
+    () => cachedStore,
+    () => null,
+  )
+  if (!store) return { isConnected: false, currentChannel: null, remoteUsers: [] }
+  return store()
+}
 import { useSquadsQuery } from '../hooks/queries/useSquadsQuery'
 import { useRsvpMutation, useUpcomingSessionsQuery } from '../hooks/queries/useSessionsQuery'
 import { useFriendsPlayingQuery } from '../hooks/queries/useFriendsPlaying'
@@ -110,7 +127,7 @@ function ReliabilityBadge({ score }: { score: number }) {
 export default function Home({ loaderData }: HomeProps) {
   const { user, profile: authProfile, isInitialized } = useAuthStore()
   const profile = loaderData?.profile || authProfile
-  const { isConnected: isInVoiceChat, currentChannel, remoteUsers } = useVoiceChatStore()
+  const { isConnected: isInVoiceChat, currentChannel, remoteUsers } = useVoiceChatStoreLazy()
   const navigate = useNavigate()
   const queryClient = useQueryClient()
 
@@ -237,12 +254,12 @@ export default function Home({ loaderData }: HomeProps) {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
             >
-              <h1 className="text-xl md:text-2xl font-bold text-text-primary truncate mb-1">
-                {`Salut ${profile?.username
-                  ? profile.username.length > 15
-                    ? profile.username.slice(0, 15) + '\u2026'
-                    : profile.username
-                  : 'Gamer'} !`}
+              <h1 className="text-xl md:text-2xl font-bold text-text-primary mb-1">
+                Salut{' '}
+                {profile?.username && (
+                  <span className="hidden sm:inline">{profile.username.length > 15 ? profile.username.slice(0, 15) + '\u2026' : profile.username}{' '}</span>
+                )}
+                !
               </h1>
               <div className="flex items-center justify-between gap-3">
                 <p className="text-sm text-text-tertiary line-clamp-1 min-w-0">

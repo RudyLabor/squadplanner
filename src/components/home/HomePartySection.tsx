@@ -1,7 +1,7 @@
 import { memo } from 'react'
 import { m } from 'framer-motion'
 import { Mic, ChevronRight } from '../icons'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 import { Card } from '../ui'
 
 interface ActiveParty {

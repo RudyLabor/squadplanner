@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, useRef, useCallback, useMemo } from 'react'
-import { useSearchParams } from 'react-router-dom'
+import { useSearchParams } from 'react-router'
 import { Sparkles } from '../components/icons'
 import { useMessagesStore } from '../hooks/useMessages'
 import { useDirectMessagesStore } from '../hooks/useDirectMessages'

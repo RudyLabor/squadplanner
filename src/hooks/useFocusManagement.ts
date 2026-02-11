@@ -1,6 +1,6 @@
 import { useEffect, useRef, useCallback } from 'react'
 import type { RefObject } from 'react'
-import { useLocation } from 'react-router-dom'
+import { useLocation } from 'react-router'
 
 export { useRovingTabindex, useA11yAnnouncements } from './useFocusAdvanced'
 

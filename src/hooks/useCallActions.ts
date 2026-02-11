@@ -71,7 +71,7 @@ export async function initializeLiveKitRoom(
       },
     })
 
-    room.on(RoomEvent.TrackSubscribed, (track: any, _publication: any, participant: any) => {
+    room.on(RoomEvent.TrackSubscribed, (track: { kind: string; attach: () => HTMLMediaElement }, _publication: unknown, participant: { identity: string }) => {
       if (track.kind === Track.Kind.Audio) {
         const element = track.attach()
         element.id = `call-audio-${participant.identity}`
@@ -93,7 +93,7 @@ export async function initializeLiveKitRoom(
       }
     })
 
-    room.on(RoomEvent.TrackUnsubscribed, (track: any) => {
+    room.on(RoomEvent.TrackUnsubscribed, (track: { detach: () => HTMLElement[] }) => {
       track.detach().forEach((el: HTMLElement) => el.remove())
     })
 
@@ -123,7 +123,7 @@ export async function initializeLiveKitRoom(
       }
     })
 
-    room.on(RoomEvent.ConnectionQualityChanged, (quality: typeof ConnectionQuality[keyof typeof ConnectionQuality], participant: any) => {
+    room.on(RoomEvent.ConnectionQualityChanged, (quality: typeof ConnectionQuality[keyof typeof ConnectionQuality], participant: { sid: string }) => {
       if (participant.sid === room.localParticipant?.sid) {
         const newQuality = useNetworkQualityStore.getState().updateQuality(quality)
         if (newQuality) {

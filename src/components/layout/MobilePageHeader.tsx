@@ -1,7 +1,7 @@
 "use client";
 
 import { memo } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router'
 import { ChevronLeft } from '../icons'
 interface MobilePageHeaderProps {
   title: string

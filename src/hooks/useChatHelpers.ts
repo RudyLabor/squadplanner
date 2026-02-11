@@ -61,7 +61,8 @@ export async function forceLeaveVoiceParty(storeGetter: () => { isConnected: boo
 
 let cleanupListenersInitialized = false
 
-export function setupBrowserCloseListeners(storeGetter: () => { isConnected: boolean; room: any | null }) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function setupBrowserCloseListeners(storeGetter: () => { isConnected: boolean; room: { disconnect: () => void } | null }) {
   if (cleanupListenersInitialized || typeof window === 'undefined') return
   cleanupListenersInitialized = true
 

@@ -41,10 +41,6 @@
     "@react-router/dev": "^7.13.0",
     "@react-router/node": "^7.13.0",
     "@react-router/serve": "^7.13.0",
-    "@remotion/cli": "^4.0.421",
-    "@remotion/google-fonts": "^4.0.421",
-    "@remotion/player": "^4.0.421",
-    "@remotion/transitions": "^4.0.421",
     "@supabase/ssr": "^0.8.0",
     "@supabase/supabase-js": "^2.94.0",
     "@tailwindcss/vite": "^4.1.18",
@@ -58,13 +54,12 @@
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-router-dom": "^7.13.0",
-    "remotion": "^4.0.421",
-    "remotion-skills": "github:remotion-dev/skills",
     "sonner": "^2.0.7",
     "web-vitals": "^5.1.0",
     "tailwindcss": "^4.1.18",
     "zod": "^3.22.3",
-    "zustand": "^5.0.11"
+    "zustand": "^5.0.11",
+    "isbot": "^5"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.11.1",
@@ -95,6 +90,12 @@
     "typescript": "~5.9.3",
     "typescript-eslint": "^8.46.4",
     "vite": "^7.2.4",
-    "vitest": "^4.0.18"
+    "vitest": "^4.0.18",
+    "@remotion/cli": "^4.0.421",
+    "@remotion/google-fonts": "^4.0.421",
+    "@remotion/player": "^4.0.421",
+    "@remotion/transitions": "^4.0.421",
+    "remotion": "^4.0.421",
+    "remotion-skills": "github:remotion-dev/skills"
   }
 }

@@ -5,7 +5,7 @@ import {
   Clock,
   Users,
 } from '../../components/icons'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 import { Button, Card, Badge, SessionCardSkeleton, ContentTransition } from '../../components/ui'
 import type { SessionEntry } from './types'
 import { formatDate } from './types'

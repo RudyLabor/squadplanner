@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from 'react'
-import { useParams, useNavigate, Link } from 'react-router-dom'
+import { useParams, useNavigate, Link } from 'react-router'
 import { m } from 'framer-motion'
 import {
   Users,

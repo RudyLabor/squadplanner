@@ -79,17 +79,17 @@ export const useVoiceChatStore = create<VoiceChatState>((set, get) => ({
         },
       })
 
-      room.on(RoomEvent.TrackSubscribed, (track: any, _pub: any, participant: any) => {
+      room.on(RoomEvent.TrackSubscribed, (track: { kind: string; attach: () => HTMLMediaElement }, _pub: unknown, participant: { identity: string }) => {
         if (track.kind === Track.Kind.Audio) {
           const el = track.attach()
           el.id = `audio-${participant.identity}`
           document.body.appendChild(el)
         }
       })
-      room.on(RoomEvent.TrackUnsubscribed, (track: any) => {
+      room.on(RoomEvent.TrackUnsubscribed, (track: { detach: () => HTMLElement[] }) => {
         track.detach().forEach((el: HTMLElement) => el.remove())
       })
-      room.on(RoomEvent.ParticipantConnected, async (participant: any) => {
+      room.on(RoomEvent.ParticipantConnected, async (participant: { identity: string; name?: string; isMicrophoneEnabled: boolean; isSpeaking: boolean }) => {
         let displayUsername = participant.name || 'Joueur'
         try {
           const { data: profile } = await supabase.from('profiles').select('username').eq('id', participant.identity).single()
@@ -102,24 +102,24 @@ export const useVoiceChatStore = create<VoiceChatState>((set, get) => ({
           }],
         }))
       })
-      room.on(RoomEvent.ParticipantDisconnected, (participant: any) => {
+      room.on(RoomEvent.ParticipantDisconnected, (participant: { identity: string }) => {
         const audioEl = document.getElementById(`audio-${participant.identity}`)
         if (audioEl) audioEl.remove()
         set(s => ({ remoteUsers: s.remoteUsers.filter(u => u.odrop !== participant.identity) }))
       })
-      room.on(RoomEvent.ActiveSpeakersChanged, (speakers: any[]) => {
-        const ids = new Set(speakers.map((s: any) => s.identity))
+      room.on(RoomEvent.ActiveSpeakersChanged, (speakers: Array<{ identity: string }>) => {
+        const ids = new Set(speakers.map((s) => s.identity))
         set(s => ({
           remoteUsers: s.remoteUsers.map(u => ({ ...u, isSpeaking: ids.has(u.odrop) })),
           localUser: s.localUser ? { ...s.localUser, isSpeaking: ids.has(s.localUser.odrop) } : null,
         }))
       })
-      room.on(RoomEvent.TrackMuted, (_pub: any, participant: any) => {
+      room.on(RoomEvent.TrackMuted, (_pub: unknown, participant: { identity: string; sid?: string }) => {
         if ('identity' in participant && participant !== room.localParticipant) {
           set(s => ({ remoteUsers: s.remoteUsers.map(u => u.odrop === participant.identity ? { ...u, isMuted: true } : u) }))
         }
       })
-      room.on(RoomEvent.TrackUnmuted, (_pub: any, participant: any) => {
+      room.on(RoomEvent.TrackUnmuted, (_pub: unknown, participant: { identity: string; sid?: string }) => {
         if ('identity' in participant && participant !== room.localParticipant) {
           set(s => ({ remoteUsers: s.remoteUsers.map(u => u.odrop === participant.identity ? { ...u, isMuted: false } : u) }))
         }
@@ -131,7 +131,7 @@ export const useVoiceChatStore = create<VoiceChatState>((set, get) => ({
           set({ isReconnecting: false, isConnected: false, error: 'Impossible de se reconnecter. Verifiez votre connexion internet.' })
         }
       })
-      room.on(RoomEvent.ConnectionQualityChanged, (quality: typeof ConnectionQuality[keyof typeof ConnectionQuality], participant: any) => {
+      room.on(RoomEvent.ConnectionQualityChanged, (quality: typeof ConnectionQuality[keyof typeof ConnectionQuality], participant: { sid: string }) => {
         if (participant.sid === room.localParticipant?.sid) {
           const newQuality = useNetworkQualityStore.getState().updateQuality(quality)
           if (newQuality) set({ networkQualityChanged: newQuality })
@@ -207,8 +207,8 @@ export const useVoiceChatStore = create<VoiceChatState>((set, get) => ({
   setVolume: (volume: number) => {
     const { room } = get()
     if (room) {
-      room.remoteParticipants.forEach((p: any) => {
-        p.audioTrackPublications.forEach((pub: any) => {
+      room.remoteParticipants.forEach((p: { audioTrackPublications: Map<string, { track?: { setVolume: (v: number) => void } }> }) => {
+        p.audioTrackPublications.forEach((pub: { track?: { setVolume: (v: number) => void } }) => {
           if (pub.track) pub.track.setVolume(volume / 100)
         })
       })

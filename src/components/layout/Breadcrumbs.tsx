@@ -1,5 +1,5 @@
 import { ChevronRight, Home } from '../icons'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation } from 'react-router'
 import { useSquadsStore, useSessionsStore } from '../../hooks'
 
 interface BreadcrumbItem {

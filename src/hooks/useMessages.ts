@@ -46,7 +46,13 @@ export const useMessagesStore = create<MessagesState>((set, get) => ({
         return
       }
 
-      const conversations: Conversation[] = (data || []).map((row: any) => ({
+      interface ConversationRow {
+        conversation_id: string; conversation_type: string; squad_id: string; session_id?: string; name: string
+        last_message_id?: string; last_message_content?: string; last_message_created_at?: string
+        last_message_sender_id?: string; last_message_sender_username?: string; last_message_sender_avatar?: string
+        unread_count?: number
+      }
+      const conversations: Conversation[] = (data || []).map((row: ConversationRow) => ({
         id: row.conversation_id, type: row.conversation_type as 'squad' | 'session',
         squad_id: row.squad_id, session_id: row.session_id || undefined, name: row.name,
         last_message: row.last_message_id ? {

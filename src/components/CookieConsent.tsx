@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
 import { Cookie, Shield, X } from './icons'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 
 const COOKIE_CONSENT_KEY = 'sq-cookie-consent'
 

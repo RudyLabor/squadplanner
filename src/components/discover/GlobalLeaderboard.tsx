@@ -6,7 +6,7 @@ import {
   Shield,
   Star,
 } from '../icons'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 import { useGlobalLeaderboardQuery } from '../../hooks/queries'
 import type { GlobalLeaderboardEntry } from '../../types/database'
 

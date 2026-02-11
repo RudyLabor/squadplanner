@@ -1,5 +1,5 @@
 import { useEffect, useRef, type RefObject } from 'react'
-import { useLocation } from 'react-router-dom'
+import { useLocation } from 'react-router'
 
 const MAX_STORED_POSITIONS = 50
 const DEBOUNCE_MS = 100

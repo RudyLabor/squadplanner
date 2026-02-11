@@ -1,8 +1,13 @@
+import { lazy, Suspense } from 'react'
 import type { HeadersArgs } from 'react-router'
 import { Navigate, useSearchParams } from 'react-router'
 import { useAuthStore } from '../hooks/useAuth'
-import Landing from '../pages/Landing'
 import { faqs } from '../components/landing/FaqSection'
+
+// SSR: import statically so first paint is complete HTML
+// Client: lazy-load to reduce initial JS bundle
+import LandingSSR from '../pages/Landing'
+const LandingLazy = lazy(() => import('../pages/Landing'))
 
 function LoadingSpinner() {
   return (
@@ -43,11 +48,15 @@ export default function LandingOrHome() {
   const [searchParams] = useSearchParams()
 
   // During SSR, always render Landing (server doesn't know auth state)
-  if (typeof window === 'undefined') return <Landing />
+  if (typeof window === 'undefined') return <LandingSSR />
 
   const showPublic = searchParams.get('public') === 'true'
 
   if (!isInitialized) return <LoadingSpinner />
   if (user && !showPublic) return <Navigate to="/home" replace />
-  return <Landing />
+  return (
+    <Suspense fallback={<LoadingSpinner />}>
+      <LandingLazy />
+    </Suspense>
+  )
 }

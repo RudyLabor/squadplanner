@@ -9,7 +9,7 @@ import {
   XCircle,
   HelpCircle,
 } from '../icons'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 import { Card, Badge, Tooltip } from '../ui'
 
 export const SessionCard = memo(function SessionCard({ session, onRsvp }: {

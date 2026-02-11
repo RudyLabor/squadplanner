@@ -7,6 +7,18 @@ import { ClientRouteWrapper } from '../components/ClientRouteWrapper'
 
 const Party = lazy(() => import('../pages/Party').then(m => ({ default: m.Party })))
 
+interface PartySquad {
+  id: string
+  name: string
+  game: string
+  total_members: number
+  member_count: number
+}
+
+interface PartyLoaderData {
+  squads: PartySquad[]
+}
+
 export function meta() {
   return [
     { title: "Party - Squad Planner" },
@@ -29,7 +41,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     .select('squad_id, squads!inner(id, name, game, total_members)')
     .eq('user_id', user.id)
 
-  const squads = (memberships?.map((m: any) => m.squads) || []).map((squad: any) => ({
+  const squads: PartySquad[] = (memberships?.map((m: { squads: { id: string; name: string; game: string; total_members: number } }) => m.squads) || []).map((squad) => ({
     ...squad,
     member_count: squad.total_members ?? 1,
   }))
@@ -41,7 +53,7 @@ export function headers({ loaderHeaders }: { loaderHeaders: Headers }) {
   return loaderHeaders
 }
 
-export default function Component({ loaderData }: { loaderData: any }) {
+export default function Component({ loaderData }: { loaderData: PartyLoaderData }) {
   return (
     <ClientRouteWrapper seeds={[
       { key: queryKeys.squads.list(), data: loaderData?.squads },

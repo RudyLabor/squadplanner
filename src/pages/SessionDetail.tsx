@@ -10,7 +10,7 @@ import {
   Loader2,
   Sparkles,
 } from '../components/icons'
-import { Link, useParams, useNavigate } from 'react-router-dom'
+import { Link, useParams, useNavigate } from 'react-router'
 import Confetti from '../components/LazyConfetti'
 import { Button, ConfirmDialog } from '../components/ui'
 import { VoiceChat } from '../components/VoiceChat'

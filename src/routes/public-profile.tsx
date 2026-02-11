@@ -37,7 +37,14 @@ export function headers({ loaderHeaders }: { loaderHeaders: Headers }) {
   return loaderHeaders
 }
 
-export default function Component({ loaderData }: { loaderData: any }) {
+import type { Profile } from '../types/database'
+
+interface PublicProfileLoaderData {
+  profile: Profile | null
+  username: string
+}
+
+export default function Component({ loaderData }: { loaderData: PublicProfileLoaderData }) {
   return (
     <ClientRouteWrapper seeds={[
       { key: queryKeys.discover.publicProfile(loaderData?.username), data: loaderData?.profile },

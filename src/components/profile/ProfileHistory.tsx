@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router'
 import { Zap, Phone, ChevronRight } from '../icons'
 import { Card, Button } from '../ui'
 import { PremiumBadge } from '../PremiumGate'

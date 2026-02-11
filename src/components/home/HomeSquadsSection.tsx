@@ -1,7 +1,7 @@
 import { memo } from 'react'
 import { m } from 'framer-motion'
 import { Users, ChevronRight } from '../icons'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 import { Card, SquadCardSkeleton } from '../ui'
 import { springTap } from '../../utils/animations'
 

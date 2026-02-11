@@ -2,6 +2,26 @@ import { redirect, data } from 'react-router'
 import type { LoaderFunctionArgs } from 'react-router'
 import { createSupabaseServerClient } from '../lib/supabase.server'
 import { ProtectedLayoutClient } from '../components/ProtectedLayoutClient'
+import type { Profile } from '../types/database'
+
+interface SquadSummary {
+  id: string
+  name: string
+  game: string
+  invite_code: string
+  owner_id: string
+  created_at: string
+}
+
+interface SquadWithCount extends SquadSummary {
+  member_count: number
+}
+
+interface ProtectedLoaderData {
+  user: { id: string; email: string | undefined }
+  profile: Profile | null
+  squads: SquadWithCount[]
+}
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const { supabase, headers } = createSupabaseServerClient(request)
@@ -20,24 +40,24 @@ export async function loader({ request }: LoaderFunctionArgs) {
       .eq('user_id', user.id),
   ])
 
-  const profile = profileResult.data
-  const squads = membershipsResult.data?.map((m: any) => m.squads) || []
+  const profile = profileResult.data as Profile | null
+  const squads = (membershipsResult.data?.map((m: { squads: SquadSummary }) => m.squads) || []) as SquadSummary[]
 
   // Get member counts for all squads
-  let squadsWithCounts = squads
+  let squadsWithCounts: SquadWithCount[] = squads.map((s) => ({ ...s, member_count: 0 }))
   if (squads.length > 0) {
-    const squadIds = squads.map((s: any) => s.id)
+    const squadIds = squads.map((s) => s.id)
     const { data: memberCounts } = await supabase
       .from('squad_members')
       .select('squad_id')
       .in('squad_id', squadIds)
 
     const countBySquad: Record<string, number> = {}
-    memberCounts?.forEach((m: any) => {
+    memberCounts?.forEach((m: { squad_id: string }) => {
       countBySquad[m.squad_id] = (countBySquad[m.squad_id] || 0) + 1
     })
 
-    squadsWithCounts = squads.map((squad: any) => ({
+    squadsWithCounts = squads.map((squad) => ({
       ...squad,
       member_count: countBySquad[squad.id] || 0,
     }))
@@ -68,6 +88,6 @@ export function headers({ loaderHeaders }: { loaderHeaders: Headers }) {
   return h
 }
 
-export default function Component({ loaderData }: { loaderData: any }) {
+export default function Component({ loaderData }: { loaderData: ProtectedLoaderData }) {
   return <ProtectedLayoutClient loaderData={loaderData} />
 }

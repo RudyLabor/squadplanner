@@ -10,7 +10,7 @@ import {
   Settings,
   X,
 } from '../icons'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 import { Button } from '../ui'
 import { showSuccess } from '../../lib/toast'
 import { useUpdateSquadMutation } from '../../hooks/queries'

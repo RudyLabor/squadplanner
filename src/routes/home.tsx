@@ -6,6 +6,33 @@ import { queryKeys } from '../lib/queryClient'
 import { ClientRouteWrapper } from '../components/ClientRouteWrapper'
 import { DeferredSeed } from '../components/DeferredSeed'
 import Home from '../pages/Home'
+import type { SupabaseClient } from '@supabase/supabase-js'
+import type { Profile, Session, SessionRsvp, RsvpResponse } from '../types/database'
+
+interface SquadSummary {
+  id: string
+  name: string
+  game: string
+  invite_code: string
+  owner_id: string
+  total_members: number
+  created_at: string
+}
+
+interface SquadWithCount extends SquadSummary {
+  member_count: number
+}
+
+interface SessionWithRsvp extends Session {
+  my_rsvp: RsvpResponse | null
+  rsvp_counts: { present: number; absent: number; maybe: number }
+}
+
+interface HomeLoaderData {
+  profile: Profile | null
+  squads: SquadWithCount[]
+  upcomingSessions: SessionWithRsvp[] | Promise<SessionWithRsvp[]>
+}
 
 export function meta() {
   return [
@@ -16,7 +43,7 @@ export function meta() {
 }
 
 // Non-critical data fetcher — runs in parallel, streamed to client
-async function fetchUpcomingSessions(supabase: any, squadIds: string[], userId: string) {
+async function fetchUpcomingSessions(supabase: SupabaseClient, squadIds: string[], userId: string): Promise<SessionWithRsvp[]> {
   if (squadIds.length === 0) return []
 
   const { data: sessions } = await supabase
@@ -29,21 +56,21 @@ async function fetchUpcomingSessions(supabase: any, squadIds: string[], userId: 
 
   if (!sessions?.length) return []
 
-  const sessionIds = sessions.map((s: any) => s.id)
+  const sessionIds = sessions.map((s: Session) => s.id)
   const { data: allRsvps } = await supabase
     .from('session_rsvps')
     .select('*')
     .in('session_id', sessionIds)
 
-  return sessions.map((session: any) => {
-    const sessionRsvps = allRsvps?.filter((r: any) => r.session_id === session.id) || []
+  return sessions.map((session: Session) => {
+    const sessionRsvps = (allRsvps as SessionRsvp[] | null)?.filter((r) => r.session_id === session.id) || []
     return {
       ...session,
-      my_rsvp: sessionRsvps.find((r: any) => r.user_id === userId)?.response || null,
+      my_rsvp: sessionRsvps.find((r) => r.user_id === userId)?.response || null,
       rsvp_counts: {
-        present: sessionRsvps.filter((r: any) => r.response === 'present').length,
-        absent: sessionRsvps.filter((r: any) => r.response === 'absent').length,
-        maybe: sessionRsvps.filter((r: any) => r.response === 'maybe').length,
+        present: sessionRsvps.filter((r) => r.response === 'present').length,
+        absent: sessionRsvps.filter((r) => r.response === 'absent').length,
+        maybe: sessionRsvps.filter((r) => r.response === 'maybe').length,
       },
     }
   })
@@ -66,12 +93,12 @@ export async function loader({ request }: LoaderFunctionArgs) {
       .eq('user_id', user.id),
   ])
 
-  const profile = profileResult.data
-  const squads = membershipsResult.data?.map((m: any) => m.squads) || []
-  const squadIds = squads.map((s: any) => s.id)
+  const profile = profileResult.data as Profile | null
+  const squads = (membershipsResult.data?.map((m: { squads: SquadSummary }) => m.squads) || []) as SquadSummary[]
+  const squadIds = squads.map((s) => s.id)
 
   // Use total_members from the squads table directly (maintained by DB trigger)
-  const squadsWithCounts = squads.map((squad: any) => ({
+  const squadsWithCounts: SquadWithCount[] = squads.map((squad) => ({
     ...squad,
     member_count: squad.total_members ?? 1,
   }))
@@ -90,7 +117,7 @@ export function headers({ loaderHeaders }: { loaderHeaders: Headers }) {
 }
 
 // Streams sessions via Suspense — page shell (profile + squads) renders immediately
-export default function Component({ loaderData }: { loaderData: any }) {
+export default function Component({ loaderData }: { loaderData: HomeLoaderData }) {
   return (
     <ClientRouteWrapper seeds={[
       { key: queryKeys.squads.list(), data: loaderData?.squads },
@@ -99,7 +126,7 @@ export default function Component({ loaderData }: { loaderData: any }) {
         <Home loaderData={{ ...loaderData, upcomingSessions: [] }} />
       }>
         <Await resolve={loaderData.upcomingSessions}>
-          {(sessions: any) => (
+          {(sessions: SessionWithRsvp[]) => (
             <DeferredSeed queryKey={queryKeys.sessions.upcoming()} data={sessions}>
               <Home loaderData={{ ...loaderData, upcomingSessions: sessions }} />
             </DeferredSeed>

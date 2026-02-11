@@ -1,7 +1,7 @@
 "use client";
 
 import { memo, useCallback } from 'react'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 import { m, AnimatePresence } from 'framer-motion'
 import {
   Home,

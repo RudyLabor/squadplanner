@@ -5,9 +5,10 @@ import { dayNames } from './types'
 
 interface AISlotSuggestionsProps {
   slotSuggestions: SlotSuggestion[]
+  hasSlotHistory?: boolean
 }
 
-export function AISlotSuggestions({ slotSuggestions }: AISlotSuggestionsProps) {
+export function AISlotSuggestions({ slotSuggestions, hasSlotHistory = false }: AISlotSuggestionsProps) {
   if (slotSuggestions.length === 0) return null
   return (
     <section className="mb-6" aria-label="Suggestions de créneaux IA">
@@ -17,7 +18,10 @@ export function AISlotSuggestions({ slotSuggestions }: AISlotSuggestionsProps) {
             <Sparkles className="w-5 h-5 text-purple" />
           </div>
           <div className="flex-1">
-            <h3 className="text-md font-semibold text-text-primary mb-2">💡 Meilleurs créneaux suggérés</h3>
+            <h3 className="text-md font-semibold text-text-primary mb-2">Meilleurs créneaux suggérés</h3>
+            {!hasSlotHistory && (
+              <p className="text-sm text-text-tertiary mb-2">Suggestions basées sur les habitudes de ta squad. Plus tu joues, plus elles seront précises.</p>
+            )}
             <div className="space-y-2">
               {slotSuggestions.slice(0, 3).map((slot, index) => (
                 <div key={index} className="flex items-center justify-between p-2 rounded-lg bg-overlay-medium">

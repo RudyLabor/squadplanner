@@ -108,5 +108,5 @@ export default function HomeRoute() {
     seeded.current = true
   }
 
-  return <Home />
+  return <Home loaderData={loaderData} />
 }

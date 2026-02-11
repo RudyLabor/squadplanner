@@ -64,5 +64,5 @@ export default function SquadsRoute() {
     seeded.current = true
   }
 
-  return <Squads />
+  return <Squads loaderData={loaderData} />
 }

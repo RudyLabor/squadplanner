@@ -15,8 +15,8 @@ interface NotificationState {
 }
 
 export const useNotificationStore = create<NotificationState>((set, get) => ({
-  isSupported: 'Notification' in window,
-  isPermissionGranted: 'Notification' in window && Notification.permission === 'granted',
+  isSupported: typeof window !== 'undefined' && 'Notification' in window,
+  isPermissionGranted: typeof window !== 'undefined' && 'Notification' in window && Notification.permission === 'granted',
   isLoading: false,
   error: null,
 

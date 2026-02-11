@@ -4,7 +4,11 @@ import { Link, useParams, useNavigate } from 'react-router-dom'
 import Confetti from '../components/LazyConfetti'
 import { Button, ConfirmDialog } from '../components/ui'
 import { VoiceChat } from '../components/VoiceChat'
-import { useAuthStore, useSessionsStore } from '../hooks'
+import { useAuthStore } from '../hooks'
+import {
+  useSessionQuery, useRsvpMutation, useCheckinMutation,
+  useConfirmSessionMutation, useCancelSessionMutation,
+} from '../hooks/queries'
 import {
   SessionInfoCards, RsvpCounts, RsvpButtons,
   CheckinSection, ParticipantsList
@@ -43,23 +47,21 @@ export default function SessionDetail() {
   const [showToast, setShowToast] = useState(false)
   const [showCancelConfirm, setShowCancelConfirm] = useState(false)
 
-  const { user, isInitialized } = useAuthStore()
-  const { currentSession, fetchSessionById, updateRsvp, checkin, cancelSession, confirmSession } = useSessionsStore()
-
-  useEffect(() => {
-    if (isInitialized && !user) navigate('/auth')
-    else if (id && user) fetchSessionById(id)
-  }, [id, user, isInitialized, navigate, fetchSessionById])
+  const { user } = useAuthStore()
+  const { data: currentSession, isLoading: sessionLoading } = useSessionQuery(id, user?.id)
+  const rsvpMutation = useRsvpMutation()
+  const checkinMutation = useCheckinMutation()
+  const confirmSessionMutation = useConfirmSessionMutation()
+  const cancelSessionMutation = useCancelSessionMutation()
 
   const handleRsvp = async (response: RsvpResponse) => {
     if (!id) return
     setRsvpLoading(response)
     try {
-      const { error } = await updateRsvp(id, response)
+      await rsvpMutation.mutateAsync({ sessionId: id, response })
       setRsvpLoading(null)
-      if (error) { setToastMessage('Erreur: ' + (error.message || 'Réponse non enregistrée')); setShowToast(true); return }
       if (response === 'present') {
-        setShowConfetti(true); setToastMessage('✅ Ta squad sait qu\'elle peut compter sur toi !'); setShowToast(true)
+        setShowConfetti(true); setToastMessage('\u2705 Ta squad sait qu\'elle peut compter sur toi !'); setShowToast(true)
         setTimeout(() => setShowConfetti(false), 3500)
       }
     } catch {
@@ -69,13 +71,15 @@ export default function SessionDetail() {
 
   const handleCheckin = async () => {
     if (!id) return
-    setCheckinLoading(true); await checkin(id, 'present'); setCheckinLoading(false)
-    setShowConfetti(true); setToastMessage('🎮 Check-in validé ! Bon game !'); setShowToast(true)
+    setCheckinLoading(true)
+    await checkinMutation.mutateAsync({ sessionId: id, status: 'present' })
+    setCheckinLoading(false)
+    setShowConfetti(true); setToastMessage('\uD83C\uDFAE Check-in validé ! Bon game !'); setShowToast(true)
     setTimeout(() => setShowConfetti(false), 4000)
   }
 
-  const confirmCancelSession = async () => { if (!id) return; setShowCancelConfirm(false); await cancelSession(id) }
-  const handleConfirm = async () => { if (!id) return; await confirmSession(id) }
+  const confirmCancelSession = async () => { if (!id) return; setShowCancelConfirm(false); await cancelSessionMutation.mutateAsync(id) }
+  const handleConfirm = async () => { if (!id) return; await confirmSessionMutation.mutateAsync(id) }
 
   const formatDate = (dateStr: string) => {
     const date = new Date(dateStr)
@@ -106,7 +110,7 @@ export default function SessionDetail() {
     return { color: 'var(--color-warning)', label: 'En attente de confirmations', icon: AlertCircle }
   }
 
-  if (!isInitialized) {
+  if (sessionLoading && !currentSession) {
     return <div className="min-h-0 bg-bg-base flex items-center justify-center py-12"><Loader2 className="w-8 h-8 text-primary animate-spin" /></div>
   }
 

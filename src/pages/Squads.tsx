@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react'
 import { m } from 'framer-motion'
 import { Users, Plus, UserPlus } from 'lucide-react'
-import { useNavigate } from 'react-router-dom'
 import Confetti from '../components/LazyConfetti'
 import { Button, Card, SquadCardSkeleton } from '../components/ui'
 import { showSuccess } from '../lib/toast'
-import { useAuthStore, useSquadsStore, useVoiceChatStore, usePremiumStore } from '../hooks'
+import { useAuthStore, useVoiceChatStore, usePremiumStore } from '../hooks'
+import { useSquadsQuery, useCreateSquadMutation, useJoinSquadMutation } from '../hooks/queries/useSquadsQuery'
 import { SquadLimitReached, PremiumBadge } from '../components/PremiumGate'
 import { PremiumUpgradeModal } from '../components/PremiumUpgradeModal'
 import { supabase } from '../lib/supabase'
@@ -22,7 +22,13 @@ const staggerItemVariants = {
   visible: { opacity: 1, y: 0 }
 }
 
-export default function Squads() {
+interface SquadsProps {
+  loaderData?: {
+    squads: any[]
+  }
+}
+
+export default function Squads({ loaderData }: SquadsProps) {
   const [showCreate, setShowCreate] = useState(false)
   const [showJoin, setShowJoin] = useState(false)
   const [showPremiumModal, setShowPremiumModal] = useState(false)
@@ -34,24 +40,20 @@ export default function Squads() {
   const [nextSessions, setNextSessions] = useState<SquadNextSession[]>([])
   const [showConfetti, setShowConfetti] = useState(false)
 
-  const { user, isInitialized } = useAuthStore()
-  const { squads, isLoading, fetchSquads, createSquad, joinSquad } = useSquadsStore()
+  const { user } = useAuthStore()
+  const { data: squads = [], isLoading } = useSquadsQuery()
+  const createSquadMutation = useCreateSquadMutation()
+  const joinSquadMutation = useJoinSquadMutation()
   const { isConnected: isInVoiceChat, currentChannel } = useVoiceChatStore()
   const { hasPremium, canCreateSquad, fetchPremiumStatus, userSquadCount } = usePremiumStore()
-  const navigate = useNavigate()
 
   useEffect(() => {
-    if (isInitialized && !user) {
-      navigate('/auth')
-    } else if (user) {
-      fetchSquads()
-      fetchPremiumStatus()
-    }
-  }, [user, isInitialized, navigate, fetchSquads, fetchPremiumStatus])
+    fetchPremiumStatus()
+  }, [fetchPremiumStatus])
 
   useEffect(() => {
     const fetchNextSessions = async () => {
-      if (!user || squads.length === 0) return
+      if (!squads.length) return
       const squadIds = squads.map(s => s.id)
       const { data: sessions } = await supabase
         .from('sessions')
@@ -82,7 +84,7 @@ export default function Squads() {
       }
     }
     fetchNextSessions()
-  }, [user, squads])
+  }, [squads])
 
   const handleCreateSquad = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -93,9 +95,12 @@ export default function Squads() {
       setShowPremiumModal(true)
       return
     }
-    const { squad, error } = await createSquad({ name, game })
-    if (error) { setError(error.message) }
-    else { setShowCreate(false); setName(''); setGame(''); showSuccess(`Squad "${squad?.name}" créée !`); fetchPremiumStatus() }
+    try {
+      await createSquadMutation.mutateAsync({ name, game })
+      setShowCreate(false); setName(''); setGame(''); fetchPremiumStatus()
+    } catch (err: any) {
+      setError(err.message)
+    }
   }
 
   const handleOpenCreate = () => {
@@ -107,9 +112,12 @@ export default function Squads() {
     e.preventDefault()
     setError(null)
     if (!inviteCode.trim()) { setError('Code d\'invitation requis'); return }
-    const { error } = await joinSquad(inviteCode)
-    if (error) { setError(error.message) }
-    else { setShowJoin(false); setInviteCode(''); showSuccess('Bienvenue dans la squad !'); setShowConfetti(true); setTimeout(() => setShowConfetti(false), 4000) }
+    try {
+      await joinSquadMutation.mutateAsync(inviteCode)
+      setShowJoin(false); setInviteCode(''); setShowConfetti(true); setTimeout(() => setShowConfetti(false), 4000)
+    } catch (err: any) {
+      setError(err.message)
+    }
   }
 
   const copyInviteCode = async (code: string) => {
@@ -123,7 +131,7 @@ export default function Squads() {
     return !!(isInVoiceChat && currentChannel?.includes(squadId))
   }
 
-  if (!isInitialized || isLoading) {
+  if (isLoading && squads.length === 0) {
     return (
       <div className="min-h-0 bg-bg-base pb-6">
         <div className="px-4 md:px-6 lg:px-8 py-6 max-w-2xl lg:max-w-4xl xl:max-w-6xl mx-auto">
@@ -180,11 +188,11 @@ export default function Squads() {
           )}
 
           <JoinSquadForm show={showJoin} inviteCode={inviteCode} onInviteCodeChange={setInviteCode}
-            error={error} isLoading={isLoading} onSubmit={handleJoinSquad}
+            error={error} isLoading={joinSquadMutation.isPending} onSubmit={handleJoinSquad}
             onCancel={() => { setShowJoin(false); setError(null) }} />
 
           <CreateSquadForm show={showCreate} name={name} onNameChange={setName}
-            game={game} onGameChange={setGame} error={error} isLoading={isLoading}
+            game={game} onGameChange={setGame} error={error} isLoading={createSquadMutation.isPending}
             onSubmit={handleCreateSquad} onCancel={() => { setShowCreate(false); setError(null) }} />
 
           {squads.length > 0 ? (

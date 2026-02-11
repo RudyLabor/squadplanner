@@ -77,5 +77,5 @@ export default function SessionsRoute() {
     seeded.current = true
   }
 
-  return <Sessions />
+  return <Sessions loaderData={loaderData} />
 }

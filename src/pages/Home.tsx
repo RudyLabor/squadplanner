@@ -24,7 +24,16 @@ import {
   HomeActivityFeed,
 } from '../components/home'
 
-// Types
+interface HomeLoaderData {
+  profile: any
+  squads: any[]
+  upcomingSessions: any[]
+}
+
+interface HomeProps {
+  loaderData?: HomeLoaderData
+}
+
 interface UpcomingSession {
   id: string
   title?: string | null
@@ -90,8 +99,9 @@ function ReliabilityBadge({ score }: { score: number }) {
   )
 }
 
-export default function Home() {
-  const { user, profile, isInitialized } = useAuthStore()
+export default function Home({ loaderData }: HomeProps) {
+  const { user, profile: authProfile, isInitialized } = useAuthStore()
+  const profile = loaderData?.profile || authProfile
   const { isConnected: isInVoiceChat, currentChannel, remoteUsers } = useVoiceChatStore()
   const navigate = useNavigate()
   const queryClient = useQueryClient()
@@ -171,9 +181,10 @@ export default function Home() {
     }
   }
 
-  const homeLoading = !isInitialized || (squadsLoading && sessionsQueryLoading)
+  const hasServerData = !!loaderData?.profile
+  const homeLoading = hasServerData ? false : (!isInitialized || (squadsLoading && sessionsQueryLoading))
 
-  if (!isInitialized && !user) {
+  if (!hasServerData && !isInitialized && !user) {
     return (
       <div className="min-h-0 bg-bg-base flex items-center justify-center py-12">
         <Loader2 className="w-8 h-8 text-primary animate-spin" />
@@ -181,7 +192,7 @@ export default function Home() {
     )
   }
 
-  if (isInitialized && !user) { navigate('/'); return null }
+  if (!hasServerData && isInitialized && !user) { navigate('/'); return null }
 
   const reliabilityScore = profile?.reliability_score ?? 100
   const pendingRsvps = upcomingSessions.filter(s => !s.my_rsvp).length

@@ -73,10 +73,14 @@ export default function ProtectedLayout() {
   const queryClient = useQueryClient()
   const [onboardingSkipped, setOnboardingSkipped] = useState(false)
 
-  // Seed React Query cache with server-fetched data (once)
   const seeded = useRef(false)
-  if (!seeded.current && loaderData?.squads) {
-    queryClient.setQueryData(queryKeys.squads.list(), loaderData.squads)
+  if (!seeded.current && loaderData) {
+    if (loaderData.squads) {
+      queryClient.setQueryData(queryKeys.squads.list(), loaderData.squads)
+    }
+    if (loaderData.profile) {
+      queryClient.setQueryData(queryKeys.profile.current(), loaderData.profile)
+    }
     seeded.current = true
   }
 

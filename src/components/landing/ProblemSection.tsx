@@ -45,7 +45,7 @@ export function ProblemSection() {
         >
           {problems.map((item, i) => (
             <motion.div key={item.text} variants={staggerItemVariants}>
-              <div className="flex items-center gap-4 py-3">
+              <div className="flex items-center justify-center gap-4 py-3">
                 <motion.span
                   className="text-2xl shrink-0 w-9 text-center"
                   initial={{ scale: 0.6, rotate: -10 }}

@@ -1,3 +1,4 @@
+import type { HeadersArgs } from 'react-router'
 import { Navigate, useSearchParams } from 'react-router'
 import { useAuthStore } from '../hooks'
 import Landing from '../pages/Landing'
@@ -8,6 +9,12 @@ function LoadingSpinner() {
       <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin" />
     </div>
   )
+}
+
+export function headers(_args: HeadersArgs) {
+  return {
+    "Cache-Control": "public, s-maxage=3600, stale-while-revalidate=86400",
+  }
 }
 
 export function meta() {

@@ -37,8 +37,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <meta name="robots" content="index, follow" />
 
         {/* Preconnect for faster resource loading */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://nxbqiwmfyafgshxzczxo.supabase.co" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="https://nxbqiwmfyafgshxzczxo.supabase.co" />
+        <link rel="dns-prefetch" href="https://squadplanner-i1mfqcqs.livekit.cloud" />
 
         {/* Font preloads */}
         <link rel="preload" href="https://fonts.gstatic.com/s/inter/v18/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuLyfAZ9hiJ-Ek-_EeA.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />

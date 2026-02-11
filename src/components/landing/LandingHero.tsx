@@ -7,7 +7,7 @@ import { HeroMockup } from './HeroMockup'
 
 const heroStats = [
   { value: '100%', label: 'gratuit pour commencer' },
-  { value: '30s', label: 'pour crÈer ta squad' },
+  { value: '30s', label: 'pour cr√©er ta squad' },
   { value: '0', label: 'excuse pour ne pas jouer' },
 ]
 
@@ -58,7 +58,7 @@ export function LandingHero({ isLoggedIn, isDesktop, mouseRotateX, mouseRotateY,
             {isLoggedIn ? (
               <m.div whileHover={{ scale: 1.02, y: -2 }} whileTap={{ scale: 0.98 }} transition={{ duration: 0.4, ease: 'easeOut' }} className="inline-flex">
                 <Link to="/home" className="flex items-center gap-2 h-14 px-8 rounded-xl bg-primary text-white text-lg font-semibold shadow-lg shadow-primary/10 cta-glow-idle" data-track="hero_cta_click">
-                  AccÈder ‡ mes squads
+                  Acc√©der √† mes squads
                   <ArrowRight className="w-5 h-5" />
                 </Link>
               </m.div>
@@ -66,7 +66,7 @@ export function LandingHero({ isLoggedIn, isDesktop, mouseRotateX, mouseRotateY,
               <>
                 <m.div whileHover={{ scale: 1.02, y: -2 }} {...springTap} className="w-full sm:w-auto">
                   <Link to="/auth?mode=register&redirect=onboarding" className="flex items-center gap-2 h-14 px-8 rounded-xl bg-primary text-white text-lg font-semibold shadow-lg shadow-primary/10 cta-pulse-glow w-full sm:w-auto justify-center" data-track="hero_cta_click">
-                    CrÈer ma squad gratuitement
+                    Cr√©er ma squad gratuitement
                     <ArrowRight className="w-5 h-5" />
                   </Link>
                 </m.div>
@@ -77,7 +77,7 @@ export function LandingHero({ isLoggedIn, isDesktop, mouseRotateX, mouseRotateY,
                   {...springTap}
                   data-track="hero_secondary_cta_click"
                 >
-                  Comment Áa marche
+                  Comment √ßa marche
                 </m.a>
               </>
             )}
@@ -94,12 +94,12 @@ export function LandingHero({ isLoggedIn, isDesktop, mouseRotateX, mouseRotateY,
 
           <div className="flex items-center justify-center gap-2 text-base text-text-quaternary">
             <span className="inline-block w-2 h-2 rounded-full bg-success animate-pulse" />
-            <span>Lancement 2026 ó DÈj‡ adoptÈ par des milliers de gamers</span>
+            <span>Lancement 2026 ‚Äî D√©j√† adopt√© par des milliers de gamers</span>
           </div>
 
           {!isLoggedIn && (
             <Link to="/auth" className="block mt-4 text-md text-text-quaternary hover:text-text-tertiary transition-colors">
-              DÈj‡ un compte ? Se connecter
+              D√©j√† un compte ? Se connecter
             </Link>
           )}
         </div>

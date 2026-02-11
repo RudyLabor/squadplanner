@@ -1,10 +1,13 @@
 import type { EntryContext } from 'react-router'
 import { ServerRouter } from 'react-router'
-import { StrictMode } from 'react'
 import { renderToReadableStream } from 'react-dom/server'
 import { isbot } from 'isbot'
 
-const ABORT_DELAY = 5_000
+// Vercel Edge skew protection — keeps users on the same deployment version
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const env = (globalThis as any).process?.env ?? {}
+const vercelDeploymentId: string | undefined = env.VERCEL_DEPLOYMENT_ID
+const vercelSkewProtection = env.VERCEL_SKEW_PROTECTION_ENABLED === '1'
 
 // Pre-rendered / public pages that can be cached aggressively
 const PRE_RENDERED_PATHS = new Set(['/', '/auth', '/legal', '/help', '/premium', '/maintenance'])
@@ -52,11 +55,10 @@ export default async function handleRequest(
   const isCrawler = userAgent ? isbot(userAgent) : false
 
   const stream = await renderToReadableStream(
-    <StrictMode>
-      <ServerRouter context={entryContext} url={request.url} />
-    </StrictMode>,
+    <ServerRouter context={entryContext} url={request.url} />,
     {
-      signal: AbortSignal.timeout(ABORT_DELAY),
+      // Use request.signal for Edge Runtime compatibility (auto-aborts when client disconnects)
+      signal: request.signal,
       onError(error: unknown) {
         responseStatusCode = 500
         console.error('[SSR Error]', error)
@@ -79,16 +81,19 @@ export default async function handleRequest(
   // Security & performance headers
   setSecurityHeaders(responseHeaders)
 
+  // Vercel Skew Protection — pin users to the same deployment version
+  if (vercelSkewProtection && vercelDeploymentId) {
+    responseHeaders.append('Set-Cookie', `__vdpl=${vercelDeploymentId}; HttpOnly`)
+  }
+
   // Link headers for Early Hints (103) - Vercel uses these to send preconnect/preload
   // hints before the full response is ready, saving ~100-300ms on font loading
   responseHeaders.append(
     'Link',
     [
-      '<https://fonts.gstatic.com>; rel=preconnect; crossorigin',
-      '<https://fonts.googleapis.com>; rel=preconnect',
       '<https://nxbqiwmfyafgshxzczxo.supabase.co>; rel=preconnect; crossorigin',
-      '<https://fonts.gstatic.com/s/inter/v18/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuLyfAZ9hiJ-Ek-_EeA.woff2>; rel=preload; as=font; type=font/woff2; crossorigin',
-      '<https://fonts.gstatic.com/s/spacegrotesk/v16/V8mDoQDjQSkFtoMM3T6r8E7mPbF4Cw.woff2>; rel=preload; as=font; type=font/woff2; crossorigin',
+      '</fonts/inter-var-latin.woff2>; rel=preload; as=font; type=font/woff2; crossorigin',
+      '</fonts/space-grotesk-latin.woff2>; rel=preload; as=font; type=font/woff2; crossorigin',
     ].join(', ')
   )
 

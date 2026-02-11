@@ -62,14 +62,35 @@ function checkAVIFSupport(): boolean {
 }
 
 /**
- * Get optimized image source with WebP/AVIF fallback
+ * Use Vercel Image Optimization API for automatic format negotiation
+ * (WebP/AVIF based on Accept header) and CDN-level resizing.
+ * Falls back to client-side format detection for non-Vercel environments.
  */
-function getOptimizedSrc(src: string, webpSrc?: string, avifSrc?: string): string {
+function getVercelImageUrl(src: string, width?: number, quality: number = 80): string {
+  // Only use Vercel optimization for absolute URLs or local paths
+  // Skip for data URLs, blob URLs, or SVGs
+  if (src.startsWith('data:') || src.startsWith('blob:') || src.endsWith('.svg')) return src
+
+  // Vercel Image Optimization API — handles format negotiation automatically
+  const params = new URLSearchParams()
+  params.set('url', src)
+  if (width) params.set('w', String(width))
+  params.set('q', String(quality))
+  return `/_vercel/image?${params.toString()}`
+}
+
+/**
+ * Get optimized image source with Vercel Image Optimization or WebP/AVIF fallback
+ */
+function getOptimizedSrc(src: string, width?: number, webpSrc?: string, avifSrc?: string): string {
   // Explicit sources take priority
   if (avifSrc && checkAVIFSupport()) return avifSrc
   if (webpSrc && checkWebPSupport()) return webpSrc
 
-  // Auto-convert jpg/png URLs to webp/avif if supported
+  // Use Vercel Image Optimization when a width is specified
+  if (width) return getVercelImageUrl(src, width)
+
+  // Fallback: auto-convert jpg/png URLs to webp/avif if supported
   const isConvertible = /\.(jpe?g|png)$/i.test(src)
   if (!isConvertible) return src
 
@@ -140,7 +161,7 @@ export const OptimizedImage = memo(function OptimizedImage({
     return <>{fallback}</> || null
   }
 
-  const optimizedSrc = isInView ? getOptimizedSrc(src, webpSrc, avifSrc) : undefined
+  const optimizedSrc = isInView ? getOptimizedSrc(src, width, webpSrc, avifSrc) : undefined
 
   // Determine blur placeholder URL
   const blurSrc = placeholder === 'blur'
@@ -184,6 +205,7 @@ export const OptimizedImage = memo(function OptimizedImage({
           height={height}
           loading={priority ? 'eager' : 'lazy'}
           decoding="async"
+          fetchPriority={priority ? 'high' : 'auto'}
           srcSet={srcSet}
           sizes={sizes}
           onLoad={handleLoad}

@@ -1,5 +1,15 @@
 {
   "framework": "react-router",
+  "images": {
+    "formats": ["image/avif", "image/webp"],
+    "minimumCacheTTL": 2592000,
+    "remotePatterns": [
+      {
+        "protocol": "https",
+        "hostname": "nxbqiwmfyafgshxzczxo.supabase.co"
+      }
+    ]
+  },
   "headers": [
     {
       "source": "/assets/(.*)",
@@ -110,6 +120,23 @@
       ]
     },
     {
+      "source": "/(|auth|legal|help|premium|maintenance)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, s-maxage=3600, stale-while-revalidate=86400"
+        },
+        {
+          "key": "CDN-Cache-Control",
+          "value": "public, max-age=3600, stale-while-revalidate=86400"
+        },
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        }
+      ]
+    },
+    {
       "source": "/(.*)",
       "headers": [
         {
@@ -135,7 +162,7 @@
       "headers": [
         {
           "key": "Link",
-          "value": "<https://fonts.gstatic.com>; rel=preconnect; crossorigin, <https://fonts.googleapis.com>; rel=preconnect, <https://nxbqiwmfyafgshxzczxo.supabase.co>; rel=preconnect; crossorigin"
+          "value": "<https://nxbqiwmfyafgshxzczxo.supabase.co>; rel=preconnect; crossorigin"
         }
       ]
     }

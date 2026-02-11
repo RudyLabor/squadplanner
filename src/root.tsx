@@ -14,6 +14,11 @@ import { QueryClientProvider } from '@tanstack/react-query'
 import { queryClient } from './lib/queryClient'
 import './index.css'
 
+// Vercel Edge Runtime — SSR runs at the closest edge location (~50ms cold start)
+export const config = {
+  runtime: 'edge',
+}
+
 // Client-only imports (deferred to avoid SSR issues)
 const ClientShell = lazy(() => import('./ClientShell'))
 
@@ -37,15 +42,13 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <meta name="robots" content="index, follow" />
 
         {/* Preconnect for faster resource loading */}
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://nxbqiwmfyafgshxzczxo.supabase.co" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="https://nxbqiwmfyafgshxzczxo.supabase.co" />
         <link rel="dns-prefetch" href="https://squadplanner-i1mfqcqs.livekit.cloud" />
 
-        {/* Font preloads */}
-        <link rel="preload" href="https://fonts.gstatic.com/s/inter/v18/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuLyfAZ9hiJ-Ek-_EeA.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
-        <link rel="preload" href="https://fonts.gstatic.com/s/spacegrotesk/v16/V8mDoQDjQSkFtoMM3T6r8E7mPbF4Cw.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
+        {/* Font preloads (self-hosted) */}
+        <link rel="preload" href="/fonts/inter-var-latin.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
+        <link rel="preload" href="/fonts/space-grotesk-latin.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
 
         {/* Open Graph / Facebook */}
         <meta property="og:type" content="website" />

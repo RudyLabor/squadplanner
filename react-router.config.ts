@@ -1,4 +1,5 @@
 import type { Config } from "@react-router/dev/config";
+import { vercelPreset } from "@vercel/react-router/vite";
 
 export default {
   appDirectory: "src",
@@ -6,4 +7,5 @@ export default {
   async prerender() {
     return ["/", "/auth", "/legal", "/help", "/premium", "/maintenance"];
   },
+  presets: [vercelPreset()],
 } satisfies Config;

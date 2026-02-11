@@ -1,3 +1,10 @@
+import { useRef } from 'react'
+import { useLoaderData } from 'react-router'
+import { redirect, data } from 'react-router'
+import type { LoaderFunctionArgs } from 'react-router'
+import { useQueryClient } from '@tanstack/react-query'
+import { createSupabaseServerClient } from '../lib/supabase.server'
+import { queryKeys } from '../lib/queryClient'
 import Squads from '../pages/Squads'
 
 export function meta() {
@@ -6,6 +13,56 @@ export function meta() {
   ]
 }
 
+export async function loader({ request }: LoaderFunctionArgs) {
+  const { supabase, headers } = createSupabaseServerClient(request)
+  const { data: { user }, error } = await supabase.auth.getUser()
+
+  if (error || !user) {
+    throw redirect('/', { headers })
+  }
+
+  const { data: memberships } = await supabase
+    .from('squad_members')
+    .select('squad_id, squads!inner(id, name, game, invite_code, owner_id, created_at)')
+    .eq('user_id', user.id)
+
+  const squads = memberships?.map((m: any) => m.squads) || []
+
+  let squadsWithCounts = squads
+  if (squads.length > 0) {
+    const squadIds = squads.map((s: any) => s.id)
+    const { data: memberCounts } = await supabase
+      .from('squad_members')
+      .select('squad_id')
+      .in('squad_id', squadIds)
+
+    const countBySquad: Record<string, number> = {}
+    memberCounts?.forEach((m: any) => {
+      countBySquad[m.squad_id] = (countBySquad[m.squad_id] || 0) + 1
+    })
+
+    squadsWithCounts = squads.map((squad: any) => ({
+      ...squad,
+      member_count: countBySquad[squad.id] || 0,
+    }))
+  }
+
+  return data({ squads: squadsWithCounts }, { headers })
+}
+
+export function headers({ loaderHeaders }: { loaderHeaders: Headers }) {
+  return loaderHeaders
+}
+
 export default function SquadsRoute() {
+  const loaderData = useLoaderData<typeof loader>()
+  const queryClient = useQueryClient()
+
+  const seeded = useRef(false)
+  if (!seeded.current && loaderData?.squads) {
+    queryClient.setQueryData(queryKeys.squads.list(), loaderData.squads)
+    seeded.current = true
+  }
+
   return <Squads />
 }

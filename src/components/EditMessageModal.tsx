@@ -162,7 +162,7 @@ export function EditMessageModal({
                     className="w-full px-4 py-3 bg-border-subtle border border-border-hover rounded-xl text-md text-text-primary placeholder:text-text-tertiary resize-none focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary-20 focus:shadow-glow-primary-md transition-input min-h-[80px] max-h-[200px]"
                   />
                   <p className="text-sm text-text-tertiary mt-2">
-                    Conseil : Ctrl+Entree pour sauvegarder rapidement
+                    Conseil : Ctrl+Entrée pour sauvegarder rapidement
                   </p>
                 </div>
               </div>
@@ -170,7 +170,7 @@ export function EditMessageModal({
               {/* Footer */}
               <div className="flex items-center justify-between px-5 py-4 border-t border-border-default bg-surface-card">
                 <span className="text-sm text-text-tertiary">
-                  {hasChanges ? '(modifie) sera affiche' : 'Aucune modification'}
+                  {hasChanges ? '(modifié) sera affiché' : 'Aucune modification'}
                 </span>
                 <div className="flex items-center gap-3">
                   <Button

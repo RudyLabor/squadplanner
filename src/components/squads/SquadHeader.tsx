@@ -31,7 +31,7 @@ export function SquadHeader({ squadId, squad, isOwner }: SquadHeaderProps) {
     if (!squad.invite_code) return
     await navigator.clipboard.writeText(squad.invite_code)
     setCopiedCode(true)
-    showSuccess('Code copie ! ')
+    showSuccess('Code copié ! ')
     setTimeout(() => setCopiedCode(false), 2000)
   }
 
@@ -63,7 +63,7 @@ export function SquadHeader({ squadId, squad, isOwner }: SquadHeaderProps) {
           </div>
           <Button variant="primary" size="sm" onClick={handleCopyCode} aria-label="Copier le code d'invitation">
             {copiedCode ? <Check className="w-4 h-4" aria-hidden="true" /> : <Copy className="w-4 h-4" aria-hidden="true" />}
-            {copiedCode ? 'Copie !' : 'Copier'}
+            {copiedCode ? 'Copié !' : 'Copier'}
           </Button>
         </div>
       </motion.div>

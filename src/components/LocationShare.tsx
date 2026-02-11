@@ -15,7 +15,7 @@ export const LocationShareButton = memo(function LocationShareButton({ onShare, 
 
   const handleShare = async () => {
     if (!('geolocation' in navigator)) {
-      alert('La geolocalisation n\'est pas supportee par ton navigateur.')
+      alert('La géolocalisation n\'est pas supportée par ton navigateur.')
       return
     }
 

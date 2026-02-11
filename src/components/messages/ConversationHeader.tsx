@@ -130,7 +130,7 @@ export function ConversationHeader({
                 />
                 {messageSearchQuery && (
                   <span className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-text-quaternary">
-                    {messageSearchCount} resultat(s)
+                    {messageSearchCount} résultat(s)
                   </span>
                 )}
               </div>

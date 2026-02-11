@@ -95,7 +95,7 @@ export default function Squads() {
     }
     const { squad, error } = await createSquad({ name, game })
     if (error) { setError(error.message) }
-    else { setShowCreate(false); setName(''); setGame(''); showSuccess(`Squad "${squad?.name}" creee !`); fetchPremiumStatus() }
+    else { setShowCreate(false); setName(''); setGame(''); showSuccess(`Squad "${squad?.name}" créée !`); fetchPremiumStatus() }
   }
 
   const handleOpenCreate = () => {
@@ -226,7 +226,7 @@ export default function Squads() {
       </div>
 
       <PremiumUpgradeModal isOpen={showPremiumModal} onClose={() => setShowPremiumModal(false)}
-        squadId={squads[0]?.id} feature="Squads illimites" />
+        squadId={squads[0]?.id} feature="Squads illimitées" />
     </main>
   )
 }

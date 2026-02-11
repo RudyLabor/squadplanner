@@ -85,14 +85,14 @@ export function ComparisonSection() {
                       <span className="inline-flex flex-col items-center">
                         <Check className="w-4 h-4 md:w-5 md:h-5 text-success" aria-hidden="true" />
                         {item.discordNote ? (
-                          <span className="text-[10px] md:text-xs text-text-quaternary mt-0.5">{item.discordNote}</span>
+                          <span className="text-xs text-text-quaternary mt-0.5">{item.discordNote}</span>
                         ) : (
                           <span className="sr-only">Disponible</span>
                         )}
                       </span>
                     ) : item.discord === 'partial' ? (
                       <span className="inline-flex flex-col items-center">
-                        <span className="text-[10px] md:text-sm text-warning px-1 md:px-1.5 py-0.5 rounded-full bg-warning/10">{item.discordNote || 'Limité'}</span>
+                        <span className="text-xs md:text-sm text-warning px-1 md:px-1.5 py-0.5 rounded-full bg-warning/10">{item.discordNote || 'Limité'}</span>
                       </span>
                     ) : (
                       <span className="inline-flex flex-col items-center">
@@ -105,7 +105,7 @@ export function ComparisonSection() {
                     <span className="inline-flex flex-col items-center">
                       <Check className="w-4 h-4 md:w-5 md:h-5 text-success" aria-hidden="true" />
                       {item.squadNote ? (
-                        <span className="text-[10px] md:text-xs text-secondary mt-0.5">{item.squadNote}</span>
+                        <span className="text-xs text-secondary mt-0.5">{item.squadNote}</span>
                       ) : (
                         <span className="sr-only">Disponible</span>
                       )}

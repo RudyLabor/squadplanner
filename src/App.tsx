@@ -7,16 +7,9 @@ import { initSentry } from './lib/sentry'
 import { useDocumentTitle } from './hooks/useDocumentTitle'
 import { useScrollRestoration } from './hooks/useScrollRestoration'
 import { useSwipeBack } from './hooks/useSwipeBack'
-import { OfflineBanner } from './components/OfflineBanner'
-import { SessionExpiredModal } from './components/SessionExpiredModal'
-import { RateLimitBanner } from './components/RateLimitBanner'
 import { useSessionExpiry } from './hooks/useSessionExpiry'
 import { useRateLimitStore } from './hooks/useRateLimit'
-import { PWAInstallBanner } from './components/PWAInstallBanner'
 import { usePWAInstallStore } from './hooks/usePWAInstall'
-import { CookieConsent } from './components/CookieConsent'
-import { TourGuide } from './components/TourGuide'
-import NotificationBanner from './components/NotificationBanner'
 import { queryClient } from './lib/queryClient'
 import { useNavigationProgress } from './hooks/useNavigationProgress'
 import { TopLoadingBar } from './components/ui/TopLoadingBar'
@@ -25,11 +18,20 @@ import { AppRoutes } from './AppRoutes'
 // Initialize theme on app load
 void useThemeStore.getState()
 
-// Lazy load heavy modals
+// Lazy load heavy modals (only rendered when user is authenticated)
 const CallModal = lazy(() => import('./components/CallModal').then(m => ({ default: m.CallModal })))
 const IncomingCallModal = lazy(() => import('./components/IncomingCallModal').then(m => ({ default: m.IncomingCallModal })))
 const CommandPalette = lazy(() => import('./components/CommandPalette').then(m => ({ default: m.CommandPalette })))
 const CreateSessionModal = lazy(() => import('./components/CreateSessionModal').then(m => ({ default: m.CreateSessionModal })))
+
+// Lazy load shell components - these are conditional or deferred, not needed for first paint
+const OfflineBanner = lazy(() => import('./components/OfflineBanner').then(m => ({ default: m.OfflineBanner })))
+const SessionExpiredModal = lazy(() => import('./components/SessionExpiredModal').then(m => ({ default: m.SessionExpiredModal })))
+const RateLimitBanner = lazy(() => import('./components/RateLimitBanner').then(m => ({ default: m.RateLimitBanner })))
+const PWAInstallBanner = lazy(() => import('./components/PWAInstallBanner').then(m => ({ default: m.PWAInstallBanner })))
+const NotificationBanner = lazy(() => import('./components/NotificationBanner'))
+const CookieConsent = lazy(() => import('./components/CookieConsent').then(m => ({ default: m.CookieConsent })))
+const TourGuide = lazy(() => import('./components/TourGuide').then(m => ({ default: m.TourGuide })))
 
 function AppContent() {
   const { initialize, user } = useAuthStore()
@@ -146,12 +148,14 @@ export default function App() {
       <BrowserRouter>
         <TopLoadingBar />
         <AppContent />
-        <OfflineBanner />
-        <GlobalStateBanners />
-        <PWAInstallBanner />
-        <NotificationBanner />
-        <CookieConsent />
-        <TourGuide />
+        <Suspense fallback={null}>
+          <OfflineBanner />
+          <GlobalStateBanners />
+          <PWAInstallBanner />
+          <NotificationBanner />
+          <CookieConsent />
+          <TourGuide />
+        </Suspense>
         <Toaster
           position="top-center"
           toastOptions={{

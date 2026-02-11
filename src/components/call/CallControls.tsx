@@ -25,7 +25,7 @@ export function CallControls({ status, isMuted, isSpeakerOn, toggleMute, toggleS
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={toggleMute}
-            aria-label={isMuted ? 'Reactiver le micro' : 'Couper le micro'}
+            aria-label={isMuted ? 'Réactiver le micro' : 'Couper le micro'}
             aria-pressed={isMuted}
             className={`w-16 h-16 rounded-full flex items-center justify-center transition-colors ${
               isMuted
@@ -58,7 +58,7 @@ export function CallControls({ status, isMuted, isSpeakerOn, toggleMute, toggleS
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={toggleSpeaker}
-            aria-label={isSpeakerOn ? 'Desactiver le haut-parleur' : 'Activer le haut-parleur'}
+            aria-label={isSpeakerOn ? 'Désactiver le haut-parleur' : 'Activer le haut-parleur'}
             aria-pressed={isSpeakerOn}
             className={`w-16 h-16 rounded-full flex items-center justify-center transition-colors ${
               !isSpeakerOn
@@ -83,7 +83,7 @@ export function CallControls({ status, isMuted, isSpeakerOn, toggleMute, toggleS
           transition={{ delay: 1 }}
           className="text-center text-base text-text-tertiary mt-6"
         >
-          En attente de reponse...
+          En attente de réponse...
         </motion.p>
       )}
     </motion.div>

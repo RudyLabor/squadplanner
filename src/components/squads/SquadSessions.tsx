@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import {
   Calendar, Plus, Loader2, Mic, MicOff
 } from 'lucide-react'
-import { Button, Card, CardContent, Badge, Input } from '../ui'
+import { Button, Card, CardContent, Badge, Input, Select } from '../ui'
 import { useAuthStore, useVoiceChatStore, usePremiumStore } from '../../hooks'
 import { SessionCard } from './SessionCard'
 
@@ -37,7 +37,7 @@ export function PartySection({ squadId }: PartySectionProps) {
           <span className="text-md font-semibold text-text-primary">Party vocale</span>
         </div>
         {participantCount > 0 && !isConnected && (
-          <Badge variant="success">{participantCount} connecte{participantCount > 1 ? 's' : ''}</Badge>
+          <Badge variant="success">{participantCount} connecté{participantCount > 1 ? 's' : ''}</Badge>
         )}
       </div>
 
@@ -79,7 +79,7 @@ export function PartySection({ squadId }: PartySectionProps) {
           </Button>
           {participantCount === 0 && (
             <p className="text-sm text-text-quaternary text-center mt-2">
-              Personne n'est connectee pour l'instant
+              Personne n'est connectée pour l'instant
             </p>
           )}
         </div>
@@ -192,35 +192,35 @@ export function SquadSessionsList({
                   <div className="grid grid-cols-2 gap-4">
                     <div>
                       <label className="block text-base font-medium text-text-secondary mb-1.5">Duree</label>
-                      <select
+                      <Select
+                        options={[
+                          { value: '60', label: '1 heure' },
+                          { value: '120', label: '2 heures' },
+                          { value: '180', label: '3 heures' },
+                          { value: '240', label: '4 heures' },
+                        ]}
                         value={sessionDuration}
-                        onChange={(e) => setSessionDuration(e.target.value)}
-                        className="w-full px-4 py-3 rounded-xl bg-surface-card border border-border-default text-text-primary focus:border-primary/50 focus:ring-2 focus:ring-primary/15 transition-input"
-                      >
-                        <option value="60">1 heure</option>
-                        <option value="120">2 heures</option>
-                        <option value="180">3 heures</option>
-                        <option value="240">4 heures</option>
-                      </select>
+                        onChange={(val) => setSessionDuration(val as string)}
+                      />
                     </div>
                     <div>
                       <label className="block text-base font-medium text-text-secondary mb-1">Confirmation automatique</label>
                       <p className="text-sm text-text-quaternary mb-1.5">
                         La session sera confirmée quand ce nombre de joueurs aura répondu "Présent"
                       </p>
-                      <select
+                      <Select
+                        options={[
+                          { value: '2', label: '2 joueurs' },
+                          { value: '3', label: '3 joueurs' },
+                          { value: '4', label: '4 joueurs' },
+                          { value: '5', label: '5 joueurs' },
+                          { value: '6', label: '6 joueurs' },
+                          { value: '8', label: '8 joueurs' },
+                          { value: '10', label: '10 joueurs' },
+                        ]}
                         value={sessionThreshold}
-                        onChange={(e) => setSessionThreshold(e.target.value)}
-                        className="w-full px-4 py-3 rounded-xl bg-surface-card border border-border-default text-text-primary focus:border-primary/50 focus:ring-2 focus:ring-primary/15 transition-input"
-                      >
-                        <option value="2">2 joueurs</option>
-                        <option value="3">3 joueurs</option>
-                        <option value="4">4 joueurs</option>
-                        <option value="5">5 joueurs</option>
-                        <option value="6">6 joueurs</option>
-                        <option value="8">8 joueurs</option>
-                        <option value="10">10 joueurs</option>
-                      </select>
+                        onChange={(val) => setSessionThreshold(val as string)}
+                      />
                     </div>
                   </div>
                   {error && (
@@ -262,8 +262,8 @@ export function SquadSessionsList({
         ) : (
           <Card className="p-6 text-center">
             <Calendar className="w-10 h-10 mx-auto mb-3 text-text-quaternary" strokeWidth={1} />
-            <p className="text-md text-text-tertiary mb-1">Pas encore de session prevue</p>
-            <p className="text-sm text-text-quaternary mb-4">Propose un creneau pour jouer avec ta squad</p>
+            <p className="text-md text-text-tertiary mb-1">Pas encore de session prévue</p>
+            <p className="text-sm text-text-quaternary mb-4">Propose un créneau pour jouer avec ta squad</p>
             <Button type="button" size="sm" onClick={() => setShowCreateSession(true)}>
               <Plus className="w-4 h-4" />
               Planifier une session

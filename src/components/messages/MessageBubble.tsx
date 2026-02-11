@@ -90,7 +90,7 @@ export const MessageBubble = memo(function MessageBubble({
           </div>
           <span className="text-xs text-text-quaternary mt-1 mx-1 flex items-center gap-1">
             {formatTime(message.created_at)}
-            {message.edited_at && <span className="text-text-tertiary italic">(modifie)</span>}
+            {message.edited_at && <span className="text-text-tertiary italic">(modifié)</span>}
             {isOwn && (isSquadChat ? <MessageStatus readBy={message.read_by} currentUserId={currentUserId} /> : <MessageStatus readAt={message.read_at} currentUserId={currentUserId} />)}
           </span>
           {isSquadChat && <MessageReactions messageId={message.id} isOwnMessage={isOwn} />}

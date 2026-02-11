@@ -66,7 +66,7 @@ export default function SquadDetail() {
   }) => {
     const result = await createSession(data)
     if (!result.error) {
-      setSuccessMessage('Session creee !')
+      setSuccessMessage('Session créée !')
       if (id) fetchSessions(id)
     }
     return result
@@ -147,7 +147,7 @@ export default function SquadDetail() {
   if (!showSkeleton && !currentSquad) {
     return (
       <div className="min-h-0 bg-bg-base flex items-center justify-center flex-col gap-4 py-12">
-        <p className="text-text-tertiary">Squad non trouvee</p>
+        <p className="text-text-tertiary">Squad non trouvée</p>
         <Button variant="secondary" onClick={() => navigate('/squads')}>
           Retour aux squads
         </Button>
@@ -156,7 +156,7 @@ export default function SquadDetail() {
   }
 
   return (
-    <main className="min-h-0 bg-bg-base pb-6" aria-label="Detail de la squad">
+    <main className="min-h-0 bg-bg-base pb-6" aria-label="Détail de la squad">
       {showConfetti && typeof window !== 'undefined' && (
         <Confetti width={window.innerWidth} height={window.innerHeight} recycle={false} numberOfPieces={150} gravity={0.3} colors={['#6366f1', '#34d399', '#fbbf24', '#f7f8f8', '#a78bfa']} />
       )}

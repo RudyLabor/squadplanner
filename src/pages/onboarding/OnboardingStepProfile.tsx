@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion'
 import { ArrowLeft, ArrowRight, Camera, Globe, Loader2 } from 'lucide-react'
-import { Button, Card, Input } from '../../components/ui'
+import { Button, Card, Input, Select } from '../../components/ui'
 
 interface OnboardingStepProfileProps {
   slideVariants: Record<string, unknown>
@@ -101,20 +101,21 @@ export function OnboardingStepProfile({
               <Globe className="w-4 h-4 inline mr-1.5" />
               Fuseau horaire
             </label>
-            <select
+            <Select
+              options={[
+                { value: 'Europe/Paris', label: 'Europe/Paris (France)' },
+                { value: 'Europe/London', label: 'Europe/London (UK)' },
+                { value: 'Europe/Brussels', label: 'Europe/Brussels (Belgique)' },
+                { value: 'Europe/Zurich', label: 'Europe/Zurich (Suisse)' },
+                { value: 'America/Montreal', label: 'America/Montreal (Québec)' },
+                { value: 'America/New_York', label: 'America/New_York (EST)' },
+                { value: 'America/Los_Angeles', label: 'America/Los_Angeles (PST)' },
+                { value: 'Asia/Tokyo', label: 'Asia/Tokyo (Japon)' },
+              ]}
               value={timezone}
-              onChange={(e) => onTimezoneChange(e.target.value)}
-              className="w-full h-11 px-4 rounded-lg bg-bg-surface border border-border-hover text-text-primary text-md focus:border-primary outline-none [&>option]:bg-bg-surface [&>option]:text-text-primary"
-            >
-              <option value="Europe/Paris">Europe/Paris (France)</option>
-              <option value="Europe/London">Europe/London (UK)</option>
-              <option value="Europe/Brussels">Europe/Brussels (Belgique)</option>
-              <option value="Europe/Zurich">Europe/Zurich (Suisse)</option>
-              <option value="America/Montreal">America/Montreal (Qu&eacute;bec)</option>
-              <option value="America/New_York">America/New_York (EST)</option>
-              <option value="America/Los_Angeles">America/Los_Angeles (PST)</option>
-              <option value="Asia/Tokyo">Asia/Tokyo (Japon)</option>
-            </select>
+              onChange={(val) => onTimezoneChange(val as string)}
+              searchable
+            />
             <p className="text-sm text-text-tertiary mt-1.5">
               D&eacute;tect&eacute; automatiquement : {Intl.DateTimeFormat().resolvedOptions().timeZone}
             </p>

@@ -68,15 +68,15 @@ export function InviteModal({
         await sendMemberJoinedMessage(squadId, username)
       } else {
         if (error.code === '42501') {
-          setInviteError('Tu dois etre proprietaire de la squad pour inviter')
+          setInviteError('Tu dois être propriétaire de la squad pour inviter')
         } else if (error.code === '23505') {
-          setInviteError('Ce joueur est deja membre de la squad')
+          setInviteError('Ce joueur est déjà membre de la squad')
         } else {
           setInviteError(error.message || 'Erreur lors de l\'invitation')
         }
       }
     } catch {
-      setInviteError('Erreur reseau, reessaie')
+      setInviteError('Erreur réseau, réessaie')
     } finally {
       setInvitingUser(null)
     }
@@ -98,7 +98,7 @@ export function InviteModal({
     } else {
       await navigator.clipboard.writeText(`Rejoins ma squad "${squadName}" sur Squad Planner ! Code: ${inviteCode}`)
       setCopied(true)
-      showSuccess('Lien d\'invitation copie !')
+      showSuccess('Lien d\'invitation copié !')
       setTimeout(() => setCopied(false), 2000)
     }
   }
@@ -106,7 +106,7 @@ export function InviteModal({
   const handleCopyCode = async () => {
     await navigator.clipboard.writeText(inviteCode)
     setCopied(true)
-    showSuccess('Code d\'invitation copie !')
+    showSuccess('Code d\'invitation copié !')
     setTimeout(() => setCopied(false), 2000)
   }
 

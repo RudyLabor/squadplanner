@@ -87,7 +87,7 @@ export function ChallengeCard({ challenge, index, onClaim, isClaiming }: Challen
               <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="mt-3">
                 <Button size="sm" onClick={() => onClaim(challenge.id)} isLoading={isClaiming} className="w-full bg-gradient-to-r from-success to-success-dark hover:from-success-dark hover:to-success-darker text-bg-base">
                   <Gift className="w-4 h-4" />
-                  Reclamer {challenge.xp_reward} XP
+                  Réclamer {challenge.xp_reward} XP
                 </Button>
               </motion.div>
             )}

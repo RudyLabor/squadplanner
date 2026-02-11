@@ -25,7 +25,7 @@ export function PartySingleSquad({ squad, isConnecting, onJoin }: {
           <div className="flex -space-x-2">
             {Array.from({ length: Math.min(memberCount, 4) }).map((_, i) => (
               <div key={i} className="w-7 h-7 rounded-full bg-primary/20 border-2 border-bg-base flex items-center justify-center">
-                <span className="text-[10px] font-bold text-primary">{String.fromCharCode(65 + i)}</span>
+                <span className="text-xs font-bold text-primary">{String.fromCharCode(65 + i)}</span>
               </div>
             ))}
           </div>

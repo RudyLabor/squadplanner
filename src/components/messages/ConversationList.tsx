@@ -111,11 +111,11 @@ export function ConversationList({ showOnDesktop = false, activeTab, onTabChange
         {isLoading ? <ConversationListSkeleton count={6} type={activeTab === 'squads' ? 'squad' : 'dm'} />
         : activeTab === 'squads' ? (
           squadConversations.length === 0 ? <EmptyState type="no_squads" title="Pas encore de squads" message="Rejoins une squad pour discuter avec tes potes." actionLabel="Voir mes squads" onAction={() => window.location.href = '/squads'} />
-          : filteredSquadConvs.length === 0 ? <EmptyState type="no_search_results" title="Aucune squad trouvee" message="Essaie avec d'autres mots-cles" />
+          : filteredSquadConvs.length === 0 ? <EmptyState type="no_search_results" title="Aucune squad trouvée" message="Essaie avec d'autres mots-clés" />
           : <div className="space-y-1">{filteredSquadConvs.map(c => <ConversationCard key={c.id} conversation={c} onClick={() => onSelectSquadConv(c)} isActive={isDesktop && activeSquadConvId === c.id} />)}</div>
         ) : (
-          dmConversations.length === 0 ? <EmptyState type="no_messages" title="Pas encore de messages prives" message="Clique sur un membre de ta squad pour lui envoyer un message." actionLabel="Voir mes squads" onAction={() => window.location.href = '/squads'} />
-          : filteredDMConvs.length === 0 ? <EmptyState type="no_search_results" title="Aucun contact trouve" message="Essaie avec d'autres mots-cles" />
+          dmConversations.length === 0 ? <EmptyState type="no_messages" title="Pas encore de messages privés" message="Clique sur un membre de ta squad pour lui envoyer un message." actionLabel="Voir mes squads" onAction={() => window.location.href = '/squads'} />
+          : filteredDMConvs.length === 0 ? <EmptyState type="no_search_results" title="Aucun contact trouvé" message="Essaie avec d'autres mots-clés" />
           : <div className="space-y-1">{filteredDMConvs.map(c => <DMConversationCard key={c.other_user_id} conversation={c} onClick={() => onSelectDMConv(c)} />)}</div>
         )}
       </div>

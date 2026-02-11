@@ -3,7 +3,7 @@ import type { FAQItem } from './HelpFAQData'
 
 function CreateSquadIllustration() {
   return (
-    <svg viewBox="0 0 520 120" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full max-w-[520px]" role="img" aria-label="Etapes pour creer une squad : cliquer plus, nommer, partager le code">
+    <svg viewBox="0 0 520 120" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full max-w-[520px]" role="img" aria-label="Étapes pour créer une squad : cliquer plus, nommer, partager le code">
       <rect x="0" y="10" width="140" height="100" rx="16" fill="var(--color-primary-10)" stroke="var(--color-primary)" strokeWidth="1.5" />
       <circle cx="70" cy="48" r="20" fill="var(--color-primary-20)" />
       <line x1="70" y1="38" x2="70" y2="58" stroke="var(--color-primary)" strokeWidth="3" strokeLinecap="round" />
@@ -117,7 +117,7 @@ function JoinVoiceIllustration() {
       <rect x="366" y="8" width="112" height="94" rx="16" fill="var(--color-success-10)" stroke="var(--color-success)" strokeWidth="1.5" />
       <circle cx="422" cy="42" r="16" fill="var(--color-success-20)" stroke="var(--color-success)" strokeWidth="1.5" />
       <polyline points="414,42 419,47 430,36" stroke="var(--color-success)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" fill="none" />
-      <text x="422" y="78" textAnchor="middle" fill="var(--color-success)" fontSize="10" fontWeight="600" fontFamily="system-ui">3. Connecte !</text>
+      <text x="422" y="78" textAnchor="middle" fill="var(--color-success)" fontSize="10" fontWeight="600" fontFamily="system-ui">3. Connecté !</text>
     </svg>
   )
 }

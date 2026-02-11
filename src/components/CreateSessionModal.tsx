@@ -5,9 +5,9 @@
  */
 
 import { useState, useEffect } from 'react'
-import { Calendar, Clock, Users, Loader2, ChevronDown } from 'lucide-react'
+import { Calendar, Clock, Users, Loader2 } from 'lucide-react'
 import { create } from 'zustand'
-import { ResponsiveModal } from './ui'
+import { ResponsiveModal, Select } from './ui'
 import { useSquadsStore, useSessionsStore } from '../hooks'
 import { showSuccess } from '../lib/toast'
 
@@ -109,22 +109,15 @@ export function CreateSessionModal() {
             <label className="block text-base font-medium text-text-secondary mb-1.5">
               Squad
             </label>
-            <div className="relative">
-              <select
+            <Select
+                options={squads.map((squad) => ({
+                  value: squad.id,
+                  label: `${squad.name} (${squad.game})`,
+                }))}
                 value={selectedSquadId}
-                onChange={(e) => setSelectedSquadId(e.target.value)}
-                className="w-full px-4 py-3 pr-10 rounded-xl bg-surface-card border border-border-hover text-text-primary focus:border-primary focus:ring-2 focus:ring-primary/15 transition-input appearance-none cursor-pointer"
-                required
-              >
-                <option value="">Sélectionner un squad</option>
-                {squads.map((squad) => (
-                  <option key={squad.id} value={squad.id}>
-                    {squad.name} ({squad.game})
-                  </option>
-                ))}
-              </select>
-              <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-text-secondary pointer-events-none" />
-            </div>
+                onChange={(val) => setSelectedSquadId(val as string)}
+                placeholder="Sélectionner un squad"
+              />
           </div>
         )}
 
@@ -189,16 +182,16 @@ export function CreateSessionModal() {
             <label className="block text-base font-medium text-text-secondary mb-1.5">
               Durée
             </label>
-            <select
+            <Select
+              options={[
+                { value: '60', label: '1 heure' },
+                { value: '120', label: '2 heures' },
+                { value: '180', label: '3 heures' },
+                { value: '240', label: '4 heures' },
+              ]}
               value={duration}
-              onChange={(e) => setDuration(e.target.value)}
-              className="w-full px-4 py-3 rounded-xl bg-surface-card border border-border-hover text-text-primary focus:border-primary focus:ring-2 focus:ring-primary/15 transition-input"
-            >
-              <option value="60">1 heure</option>
-              <option value="120">2 heures</option>
-              <option value="180">3 heures</option>
-              <option value="240">4 heures</option>
-            </select>
+              onChange={(val) => setDuration(val as string)}
+            />
           </div>
           <div>
             <label className="block text-base font-medium text-text-secondary mb-1">
@@ -207,17 +200,17 @@ export function CreateSessionModal() {
             <p className="text-sm text-text-tertiary mb-1.5">
               La session sera confirmée quand ce nombre de joueurs aura répondu "Présent"
             </p>
-            <select
+            <Select
+              options={[
+                { value: '2', label: '2 joueurs' },
+                { value: '3', label: '3 joueurs' },
+                { value: '4', label: '4 joueurs' },
+                { value: '5', label: '5 joueurs' },
+                { value: '6', label: '6 joueurs' },
+              ]}
               value={threshold}
-              onChange={(e) => setThreshold(e.target.value)}
-              className="w-full px-4 py-3 rounded-xl bg-surface-card border border-border-hover text-text-primary focus:border-primary focus:ring-2 focus:ring-primary/15 transition-input"
-            >
-              <option value="2">2 joueurs</option>
-              <option value="3">3 joueurs</option>
-              <option value="4">4 joueurs</option>
-              <option value="5">5 joueurs</option>
-              <option value="6">6 joueurs</option>
-            </select>
+              onChange={(val) => setThreshold(val as string)}
+            />
           </div>
         </div>
 

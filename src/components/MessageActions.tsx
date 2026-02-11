@@ -186,7 +186,7 @@ export function MessageActions({
               role="menuitem"
             >
               <Reply className="w-4 h-4 text-text-secondary" />
-              <span>Repondre</span>
+              <span>Répondre</span>
             </button>
 
             {/* Copy */}
@@ -198,7 +198,7 @@ export function MessageActions({
               {copied ? (
                 <>
                   <Check className="w-4 h-4 text-success" />
-                  <span className="text-success">Copie !</span>
+                  <span className="text-success">Copié !</span>
                 </>
               ) : (
                 <>
@@ -216,7 +216,7 @@ export function MessageActions({
                 role="menuitem"
               >
                 <Forward className="w-4 h-4 text-text-secondary" />
-                <span>Transferer</span>
+                <span>Transférer</span>
               </button>
             )}
 

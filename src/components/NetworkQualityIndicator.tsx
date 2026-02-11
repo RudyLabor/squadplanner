@@ -86,7 +86,7 @@ export function NetworkQualityIndicator({
           className="text-text-tertiary animate-pulse"
           aria-hidden="true"
         />
-        <span className="sr-only">Qualite reseau : {info.label}</span>
+        <span className="sr-only">Qualité réseau : {info.label}</span>
         {showLabel && (
           <span className={`${sizeConfig.textSize} text-text-tertiary`}>
             {info.label}
@@ -114,7 +114,7 @@ export function NetworkQualityIndicator({
       animate={{ opacity: 1 }}
       transition={{ duration: 0.3 }}
     >
-      <span className="sr-only">Qualite reseau : {info.label}</span>
+      <span className="sr-only">Qualité réseau : {info.label}</span>
       {/* Barres de signal */}
       <div
         className="flex items-end"
@@ -253,7 +253,7 @@ export function QualityChangeToast({
             {/* Message */}
             <div className="flex flex-col">
               <span className="text-md font-medium text-text-primary">
-                {isImproving ? 'Connexion amelioree' : 'Connexion degradee'}
+                {isImproving ? 'Connexion améliorée' : 'Connexion dégradée'}
               </span>
               <span className="text-sm" style={{ color: info.color }}>
                 {info.description}

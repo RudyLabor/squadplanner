@@ -139,9 +139,9 @@ export function Messages() {
   }
 
   const handleBack = () => { setActiveSquadConv(null); setActiveDMConv(null) }
-  const handleEditMessage = useCallback(async (content: string) => { if (!editingMessage) return; const { error } = await editSquadMessage(editingMessage.id, content); showToast(error ? 'Erreur lors de la modification' : 'Message modifie', error ? 'error' : 'success'); setEditingMessage(null) }, [editingMessage, editSquadMessage, showToast])
-  const handleDeleteMessage = useCallback(async (id: string) => { const { error } = await deleteSquadMessage(id); showToast(error ? 'Erreur lors de la suppression' : 'Message supprime', error ? 'error' : 'success') }, [deleteSquadMessage, showToast])
-  const handlePinMessage = useCallback(async (id: string, pin: boolean) => { const { error } = await pinSquadMessage(id, pin); showToast(error ? 'Erreur lors de l\'epinglage' : (pin ? 'Message epingle' : 'Message desepingle'), error ? 'error' : 'success') }, [pinSquadMessage, showToast])
+  const handleEditMessage = useCallback(async (content: string) => { if (!editingMessage) return; const { error } = await editSquadMessage(editingMessage.id, content); showToast(error ? 'Erreur lors de la modification' : 'Message modifié', error ? 'error' : 'success'); setEditingMessage(null) }, [editingMessage, editSquadMessage, showToast])
+  const handleDeleteMessage = useCallback(async (id: string) => { const { error } = await deleteSquadMessage(id); showToast(error ? 'Erreur lors de la suppression' : 'Message supprimé', error ? 'error' : 'success') }, [deleteSquadMessage, showToast])
+  const handlePinMessage = useCallback(async (id: string, pin: boolean) => { const { error } = await pinSquadMessage(id, pin); showToast(error ? 'Erreur lors de l\'épinglage' : (pin ? 'Message épinglé' : 'Message désépinglé'), error ? 'error' : 'success') }, [pinSquadMessage, showToast])
   const handleReply = useCallback((info: { id: string; content: string; sender: string }) => { setReplyingTo(info); inputRef.current?.focus() }, [])
   const handleForwardMessage = useCallback((msg: { content: string; sender: string }) => { setForwardMessage(msg) }, [])
 

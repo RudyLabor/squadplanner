@@ -19,7 +19,7 @@ export function CopyLinkButton({ linkCopied, onCopy }: CopyLinkButtonProps) {
         {linkCopied ? (
           <>
             <Check className="w-4 h-4" />
-            Lien copie !
+            Lien copié !
           </>
         ) : (
           <>

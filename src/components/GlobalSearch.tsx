@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Search, Users, Calendar, MessageCircle, User, X } from 'lucide-react'
+import { Search, Users, Calendar, MessageCircle, User, X, Clock, Trash2 } from 'lucide-react'
 import { useSquadsStore, useSessionsStore, useAuthStore } from '../hooks'
 import { supabase } from '../lib/supabase'
 import { SearchResultsList } from './search/SearchResultsList'
@@ -16,6 +16,27 @@ interface SearchResult {
   avatar?: string
 }
 
+const SEARCH_HISTORY_KEY = 'squad_planner_search_history'
+const MAX_HISTORY = 5
+
+function getSearchHistory(): string[] {
+  try {
+    const raw = localStorage.getItem(SEARCH_HISTORY_KEY)
+    return raw ? JSON.parse(raw) : []
+  } catch { return [] }
+}
+
+function addToSearchHistory(query: string) {
+  if (!query.trim()) return
+  const history = getSearchHistory().filter(h => h !== query)
+  history.unshift(query)
+  localStorage.setItem(SEARCH_HISTORY_KEY, JSON.stringify(history.slice(0, MAX_HISTORY)))
+}
+
+function clearSearchHistory() {
+  localStorage.removeItem(SEARCH_HISTORY_KEY)
+}
+
 export function GlobalSearch() {
   const navigate = useNavigate()
   const [isOpen, setIsOpen] = useState(false)
@@ -23,6 +44,7 @@ export function GlobalSearch() {
   const [results, setResults] = useState<SearchResult[]>([])
   const [selectedIndex, setSelectedIndex] = useState(0)
   const [isLoading, setIsLoading] = useState(false)
+  const [searchHistory, setSearchHistory] = useState<string[]>([])
   const inputRef = useRef<HTMLInputElement>(null)
   const { squads } = useSquadsStore()
   const { sessions } = useSessionsStore()
@@ -31,7 +53,12 @@ export function GlobalSearch() {
   const isMac = typeof navigator !== 'undefined' && navigator.platform.toLowerCase().includes('mac')
   const shortcutKey = isMac ? '⌘' : 'Ctrl'
 
-  useEffect(() => { if (isOpen && inputRef.current) inputRef.current.focus() }, [isOpen])
+  useEffect(() => {
+    if (isOpen) {
+      inputRef.current?.focus()
+      setSearchHistory(getSearchHistory())
+    }
+  }, [isOpen])
   useEffect(() => { if (!isOpen) { setQuery(''); setResults([]); setSelectedIndex(0) } }, [isOpen])
 
   // Search logic
@@ -106,7 +133,21 @@ export function GlobalSearch() {
     return () => window.removeEventListener('keydown', handleKeyDown)
   }, [isOpen, results, selectedIndex])
 
-  const handleSelect = (result: SearchResult) => { setIsOpen(false); navigate(result.path) }
+  const handleSelect = (result: SearchResult) => {
+    if (query.trim()) addToSearchHistory(query.trim())
+    setIsOpen(false)
+    navigate(result.path)
+  }
+
+  const handleHistoryClick = (historyQuery: string) => {
+    setQuery(historyQuery)
+    setSelectedIndex(0)
+  }
+
+  const handleClearHistory = () => {
+    clearSearchHistory()
+    setSearchHistory([])
+  }
 
   const groupedResults = useMemo(() => {
     const groups: Record<string, SearchResult[]> = { squad: [], session: [], message: [], member: [] }
@@ -153,7 +194,32 @@ export function GlobalSearch() {
                 </div>
 
                 <div className="max-h-[400px] overflow-y-auto">
-                  <SearchResultsList query={query} results={results} groupedResults={groupedResults} selectedIndex={selectedIndex} setSelectedIndex={setSelectedIndex} onSelect={handleSelect} isLoading={isLoading} />
+                  {!query.trim() && searchHistory.length > 0 ? (
+                    <div className="p-3">
+                      <div className="flex items-center justify-between mb-2 px-1">
+                        <span className="text-xs font-medium text-text-tertiary uppercase tracking-wider">Recherches récentes</span>
+                        <button onClick={handleClearHistory} className="text-xs text-text-quaternary hover:text-text-secondary transition-colors flex items-center gap-1" aria-label="Effacer l'historique">
+                          <Trash2 className="w-3 h-3" />
+                          Effacer
+                        </button>
+                      </div>
+                      {searchHistory.map((h, i) => (
+                        <motion.button
+                          key={h}
+                          initial={{ opacity: 0, x: -8 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ delay: i * 0.04 }}
+                          onClick={() => handleHistoryClick(h)}
+                          className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-overlay-faint text-left transition-colors"
+                        >
+                          <Clock className="w-4 h-4 text-text-quaternary flex-shrink-0" />
+                          <span className="text-md text-text-secondary truncate">{h}</span>
+                        </motion.button>
+                      ))}
+                    </div>
+                  ) : (
+                    <SearchResultsList query={query} results={results} groupedResults={groupedResults} selectedIndex={selectedIndex} setSelectedIndex={setSelectedIndex} onSelect={handleSelect} isLoading={isLoading} />
+                  )}
                 </div>
 
                 <div className="flex items-center justify-between px-4 py-3 border-t border-border-subtle text-sm text-text-tertiary">

@@ -39,7 +39,7 @@ export function StreakHeatmap({ streakDays, flameColors }: StreakHeatmapProps) {
         <p className="text-sm text-text-tertiary mb-2 uppercase tracking-wide">28 derniers jours</p>
         <div className="grid grid-cols-7 gap-1 mb-1">
           {dayLabels.map((label, i) => (
-            <span key={i} className="text-[11px] text-text-tertiary text-center font-medium">{label}</span>
+            <span key={i} className="text-xs text-text-tertiary text-center font-medium">{label}</span>
           ))}
         </div>
         <div className="grid grid-cols-7 gap-1">
@@ -91,7 +91,7 @@ export function StreakHeatmap({ streakDays, flameColors }: StreakHeatmapProps) {
                   transition={{ delay: 0.3 + i * 0.1, duration: 0.5, ease: 'easeOut' }}
                 />
               </div>
-              <span className="text-[10px] text-text-tertiary">S{i + 1}</span>
+              <span className="text-xs text-text-tertiary">S{i + 1}</span>
             </div>
           ))}
         </div>

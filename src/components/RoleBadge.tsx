@@ -3,9 +3,9 @@ import { getRoleConfig } from '../lib/roles'
 import { Tooltip } from './ui'
 
 const ROLE_DESCRIPTIONS: Record<string, string> = {
-  leader: 'Le leader gere la squad : il peut inviter, promouvoir et supprimer des membres.',
-  co_leader: 'Le co-leader aide a gerer la squad et peut moderer les membres.',
-  moderator: 'Le moderateur peut epingler et supprimer des messages.',
+  leader: 'Le leader gère la squad : il peut inviter, promouvoir et supprimer des membres.',
+  co_leader: 'Le co-leader aide à gérer la squad et peut modérer les membres.',
+  moderator: 'Le modérateur peut épingler et supprimer des messages.',
 }
 
 interface RoleBadgeProps {

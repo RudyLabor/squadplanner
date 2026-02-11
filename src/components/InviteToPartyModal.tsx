@@ -162,7 +162,7 @@ export function InviteToPartyModal({
                 <UserPlus className="w-5 h-5 text-primary" />
               </div>
               <div>
-                <h2 id="invite-party-title" className="text-lg font-semibold text-text-primary">Inviter a la Party</h2>
+                <h2 id="invite-party-title" className="text-lg font-semibold text-text-primary">Inviter à la Party</h2>
                 <p className="text-sm text-text-secondary">{squadName}</p>
               </div>
             </div>

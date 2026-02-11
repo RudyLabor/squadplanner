@@ -30,7 +30,7 @@ export function InviteUserList({ members, loading, invitedMembers, sendingInvite
     return (
       <div className="text-center py-8">
         <p className="text-md text-text-secondary">
-          Tous les membres sont deja dans la party !
+          Tous les membres sont déjà dans la party !
         </p>
       </div>
     )

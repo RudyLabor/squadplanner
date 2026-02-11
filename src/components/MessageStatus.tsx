@@ -33,7 +33,7 @@ export function MessageStatus({
         ) : (
           <Check className="w-3.5 h-3.5 text-text-tertiary" strokeWidth={2.5} aria-hidden="true" />
         )}
-        <span className="sr-only">{isRead ? 'Lu' : 'Envoye'}</span>
+        <span className="sr-only">{isRead ? 'Lu' : 'Envoyé'}</span>
       </span>
     )
   }
@@ -54,7 +54,7 @@ export function MessageStatus({
         ) : (
           <Check className="w-3.5 h-3.5 text-text-tertiary" strokeWidth={2.5} aria-hidden="true" />
         )}
-        <span className="sr-only">{isRead ? 'Lu' : 'Envoye'}</span>
+        <span className="sr-only">{isRead ? 'Lu' : 'Envoyé'}</span>
       </span>
     )
   }

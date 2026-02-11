@@ -30,9 +30,9 @@ export function IncomingCallModal() {
       case 'ringing':
         return 'Appel entrant...'
       case 'missed':
-        return 'Appel manque'
+        return 'Appel manqué'
       case 'rejected':
-        return 'Appel refuse'
+        return 'Appel refusé'
       default:
         return ''
     }

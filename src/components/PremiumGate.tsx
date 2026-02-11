@@ -22,7 +22,7 @@ interface PremiumGateProps {
 
 // Labels pour chaque feature
 const FEATURE_LABELS: Record<PremiumFeature, string> = {
-  unlimited_squads: 'Squads illimités',
+  unlimited_squads: 'Squads illimitées',
   unlimited_history: 'Historique illimité',
   advanced_stats: 'Stats avancées',
   ai_coach_advanced: 'IA Coach avancé',

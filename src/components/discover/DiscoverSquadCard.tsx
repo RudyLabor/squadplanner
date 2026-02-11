@@ -15,7 +15,7 @@ export const DiscoverSquadCard = memo(function DiscoverSquadCard({ squad }: Prop
     try {
       await navigator.clipboard.writeText(squad.invite_code)
       setCopied(true)
-      showSuccess('Code copie ! Utilise-le pour rejoindre.')
+      showSuccess('Code copié ! Utilise-le pour rejoindre.')
       setTimeout(() => setCopied(false), 2000)
     } catch {
       showError('Impossible de copier')

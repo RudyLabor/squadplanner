@@ -85,7 +85,7 @@ export default defineConfig({
     // Rolldown code splitting configuration (Vite 7+)
     rollupOptions: {
       output: {
-        // Manual chunks for optimal caching
+        // Manual chunks for optimal caching and parallel loading
         // Normalize paths with forward slashes for cross-platform (Windows backslash fix)
         manualChunks: (id) => {
           const n = id.replace(/\\/g, '/');
@@ -98,21 +98,39 @@ export default defineConfig({
           if (n.includes('@sentry')) {
             return 'vendor-sentry';
           }
-          // Core: React + Router + State management (always needed)
+          // Core: React + ReactDOM + Router (always needed on every page)
           if (n.includes('/node_modules/react/') ||
               n.includes('/node_modules/react-dom/') ||
-              n.includes('/node_modules/react-router') ||
-              n.includes('zustand')) {
-            return 'vendor-core';
+              n.includes('/node_modules/react-router')) {
+            return 'vendor-react';
           }
-          // UI: animations, icons, toasts
-          if (n.includes('framer-motion') || n.includes('lucide-react') ||
-              n.includes('sonner')) {
+          // State management: Zustand (small, always needed)
+          if (n.includes('zustand')) {
+            return 'vendor-react';
+          }
+          // Animations: framer-motion is ~60KB gzipped, separate chunk for caching
+          if (n.includes('framer-motion')) {
+            return 'vendor-motion';
+          }
+          // Icons: lucide-react tree-shakes but still ~20KB, cache separately
+          if (n.includes('lucide-react')) {
+            return 'vendor-icons';
+          }
+          // UI utilities: sonner (toasts), react-countup
+          if (n.includes('sonner') || n.includes('react-countup')) {
             return 'vendor-ui';
           }
-          // Data: Supabase + TanStack Query
-          if (n.includes('@supabase') || n.includes('@tanstack')) {
-            return 'vendor-data';
+          // Data layer: TanStack Query
+          if (n.includes('@tanstack')) {
+            return 'vendor-query';
+          }
+          // Data layer: Supabase client
+          if (n.includes('@supabase')) {
+            return 'vendor-supabase';
+          }
+          // Confetti libraries - only loaded on celebrations
+          if (n.includes('canvas-confetti') || n.includes('react-confetti')) {
+            return 'vendor-confetti';
           }
         },
 

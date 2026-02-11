@@ -86,7 +86,7 @@ export const ForwardMessageModal = memo(function ForwardMessageModal({
             <div className="flex items-center justify-between px-5 py-4 border-b border-border-default">
               <div className="flex items-center gap-2">
                 <Forward className="w-5 h-5 text-primary-hover" />
-                <h2 id="forward-message-title" className="text-lg font-semibold text-text-primary">Transferer le message</h2>
+                <h2 id="forward-message-title" className="text-lg font-semibold text-text-primary">Transférer le message</h2>
               </div>
               <button
                 onClick={handleClose}
@@ -120,7 +120,7 @@ export const ForwardMessageModal = memo(function ForwardMessageModal({
             {/* Squad list */}
             <div className="px-5 py-3 max-h-60 overflow-y-auto space-y-1">
               {filteredSquads.length === 0 ? (
-                <p className="text-base text-text-quaternary text-center py-4">Aucune squad trouvee</p>
+                <p className="text-base text-text-quaternary text-center py-4">Aucune squad trouvée</p>
               ) : (
                 filteredSquads.map((squad) => (
                   <button
@@ -173,7 +173,7 @@ export const ForwardMessageModal = memo(function ForwardMessageModal({
                 ) : (
                   <>
                     <Forward className="w-4 h-4" />
-                    Transferer
+                    Transférer
                   </>
                 )}
               </button>

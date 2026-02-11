@@ -82,7 +82,7 @@ export function ProfileActivityCard({ streakDays }: ProfileActivityCardProps) {
             </div>
             <div className="flex items-center gap-1.5">
               <span className="text-xs font-medium text-text-primary">{nextMilestone.emoji} {nextMilestone.label}</span>
-              <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-success/12 text-success">+{nextMilestone.xp} XP</span>
+              <span className="text-xs px-1.5 py-0.5 rounded-full bg-success/12 text-success">+{nextMilestone.xp} XP</span>
             </div>
           </div>
           <div className="relative h-1.5 bg-border-subtle rounded-full overflow-hidden">
@@ -93,7 +93,7 @@ export function ProfileActivityCard({ streakDays }: ProfileActivityCardProps) {
               transition={{ duration: 0.8, ease: 'easeOut' }}
             />
           </div>
-          <p className="text-[10px] text-text-quaternary mt-1 text-right">
+          <p className="text-xs text-text-quaternary mt-1 text-right">
             Encore {nextMilestone.daysRemaining} jour{nextMilestone.daysRemaining > 1 ? 's' : ''}
           </p>
         </div>
@@ -102,7 +102,7 @@ export function ProfileActivityCard({ streakDays }: ProfileActivityCardProps) {
         <div className="flex gap-2 justify-between">
           {last7Days.map((day, i) => (
             <div key={i} className="flex flex-col items-center gap-1">
-              <span className="text-[10px] text-text-quaternary">{day.label}</span>
+              <span className="text-xs text-text-quaternary">{day.label}</span>
               <div className={`w-7 h-7 rounded-lg flex items-center justify-center ${
                 day.isToday ? 'ring-1.5 ring-warning ring-offset-1 ring-offset-bg-base' : ''
               } ${day.isActive ? 'bg-warning/20' : 'bg-surface-card'}`}>

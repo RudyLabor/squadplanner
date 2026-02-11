@@ -5,11 +5,11 @@ import { ArrowLeft, Shield, Flame, Star, Calendar, Gamepad2, MapPin, ExternalLin
 import { usePublicProfileQuery } from '../hooks/queries'
 
 const TIERS = [
-  { name: 'Debutant', color: 'var(--color-text-tertiary)', icon: '🎮', minScore: 0 },
-  { name: 'Confirme', color: 'var(--color-primary)', icon: '✓', minScore: 50 },
+  { name: 'Débutant', color: 'var(--color-text-tertiary)', icon: '🎮', minScore: 0 },
+  { name: 'Confirmé', color: 'var(--color-primary)', icon: '✓', minScore: 50 },
   { name: 'Expert', color: 'var(--color-success)', icon: '⭐', minScore: 70 },
   { name: 'Master', color: 'var(--color-purple)', icon: '💎', minScore: 85 },
-  { name: 'Legende', color: 'var(--color-warning)', icon: '👑', minScore: 95 },
+  { name: 'Légende', color: 'var(--color-warning)', icon: '👑', minScore: 95 },
 ]
 
 function getTier(score: number) {

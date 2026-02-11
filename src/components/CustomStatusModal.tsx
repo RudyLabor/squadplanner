@@ -122,7 +122,7 @@ export const CustomStatusModal = memo(function CustomStatusModal({ isOpen, onClo
           >
             {/* Header */}
             <div className="flex items-center justify-between px-5 py-4 border-b border-border-default">
-              <h2 id="custom-status-title" className="text-lg font-semibold text-text-primary">Definir un statut</h2>
+              <h2 id="custom-status-title" className="text-lg font-semibold text-text-primary">Définir un statut</h2>
               <button
                 onClick={onClose}
                 className="p-1.5 rounded-lg hover:bg-border-subtle text-text-tertiary transition-colors"
@@ -135,7 +135,7 @@ export const CustomStatusModal = memo(function CustomStatusModal({ isOpen, onClo
             <div className="p-5 space-y-5">
               {/* Emoji + Text */}
               <div>
-                <label className="text-base text-text-tertiary font-medium mb-2 block">Statut personnalise</label>
+                <label className="text-base text-text-tertiary font-medium mb-2 block">Statut personnalisé</label>
                 <div className="flex items-center gap-2">
                   <button
                     type="button"

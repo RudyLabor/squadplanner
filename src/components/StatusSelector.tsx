@@ -133,7 +133,7 @@ export const StatusSelector = memo(function StatusSelector({ onOpenCustomStatus,
                 >
                   <span className="text-sm">😊</span>
                   <span className="text-base font-medium">
-                    {customStatus ? 'Modifier le statut' : 'Definir un statut'}
+                    {customStatus ? 'Modifier le statut' : 'Définir un statut'}
                   </span>
                 </button>
               </div>

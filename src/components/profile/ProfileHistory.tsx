@@ -63,7 +63,7 @@ export function ProfileHistory({ profile, hasPremium, canAccessFeature, aiCoachT
                 <PremiumBadge small />
               </div>
               <p className="text-sm text-text-quaternary">
-                Coach IA avance, historique illimite, audio HD
+                Coach IA avancé, historique illimité, audio HD
               </p>
             </div>
             <Button

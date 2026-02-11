@@ -26,6 +26,7 @@ const MobileNavLink = memo(function MobileNavLink({ path, icon: Icon, label, isA
   return (
     <Link
       to={path}
+      viewTransition
       className="flex flex-col items-center justify-center min-w-[48px] min-h-[48px] touch-target"
       aria-label={label}
       aria-current={isActive ? 'page' : undefined}

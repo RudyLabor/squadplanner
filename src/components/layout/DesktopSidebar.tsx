@@ -39,7 +39,7 @@ export const NavLink = memo(function NavLink({ path, icon: Icon, label, isActive
   }, [path, userId])
 
   return (
-    <Link to={path} aria-label={label} aria-current={isActive ? 'page' : undefined} onPointerEnter={handlePrefetch}>
+    <Link to={path} aria-label={label} aria-current={isActive ? 'page' : undefined} onPointerEnter={handlePrefetch} viewTransition>
       <m.div
         className={`
           relative flex items-center ${collapsed ? 'gap-2 px-2.5' : 'gap-3 px-4'} py-3 rounded-xl transition-interactive

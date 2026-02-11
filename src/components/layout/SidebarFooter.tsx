@@ -22,7 +22,7 @@ export const SidebarFooter = memo(function SidebarFooter({
       <div className={`${isExpanded ? 'p-4' : 'p-2'} border-t border-surface-card`}>
         {!isExpanded ? (
           <Tooltip content={profile?.username || 'Mon profil'} position="right" delay={300}>
-            <Link to="/profile" aria-label="Voir mon profil">
+            <Link to="/profile" viewTransition aria-label="Voir mon profil">
               <m.div
                 className="flex items-center justify-center p-2 rounded-xl hover:bg-surface-card transition-colors duration-300"
                 whileHover={{ x: 0 }}
@@ -46,7 +46,7 @@ export const SidebarFooter = memo(function SidebarFooter({
           </Tooltip>
         ) : (
           <>
-            <Link to="/profile" aria-label="Voir mon profil">
+            <Link to="/profile" viewTransition aria-label="Voir mon profil">
               <m.div
                 className="flex items-center gap-3 p-3 rounded-xl hover:bg-surface-card transition-colors duration-300"
                 whileHover={{ x: 4 }}
@@ -99,7 +99,7 @@ export const SidebarFooter = memo(function SidebarFooter({
             transition={{ duration: 0.2 }}
             className="p-4 overflow-hidden"
           >
-            <Link to="/premium" aria-label="Passer Premium - Stats avancées, IA coach, qualité audio HD">
+            <Link to="/premium" viewTransition aria-label="Passer Premium - Stats avancées, IA coach, qualité audio HD">
               <m.div
                 className="p-4 rounded-xl bg-gradient-to-br from-primary-10 to-purple/3 border border-primary/10 cursor-pointer"
                 whileHover={{ scale: 1.02 }}
@@ -125,7 +125,7 @@ export const SidebarFooter = memo(function SidebarFooter({
       {!isExpanded && (
         <div className="p-2 pb-4">
           <Tooltip content="Passer Premium" position="right" delay={300}>
-            <Link to="/premium" aria-label="Passer Premium">
+            <Link to="/premium" viewTransition aria-label="Passer Premium">
               <m.div
                 className="flex items-center justify-center p-2 rounded-xl hover:bg-surface-card transition-colors"
                 whileHover={{ scale: 1.1 }}

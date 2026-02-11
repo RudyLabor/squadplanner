@@ -72,7 +72,7 @@ export function OnboardingStepProfile({
                 )}
                 {uploadingAvatar && (
                   <div className="absolute inset-0 bg-surface-overlay flex items-center justify-center rounded-full">
-                    <Loader2 className="w-6 h-6 text-white animate-spin" />
+                    <Loader2 className="w-6 h-6 text-foreground animate-spin" />
                   </div>
                 )}
               </div>

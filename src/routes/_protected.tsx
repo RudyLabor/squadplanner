@@ -60,7 +60,12 @@ export function shouldRevalidate() {
 }
 
 export function headers({ loaderHeaders }: { loaderHeaders: Headers }) {
-  return loaderHeaders
+  // Private cache for authenticated pages — short TTL for browser, no CDN caching
+  const h = new Headers(loaderHeaders)
+  if (!h.has('Cache-Control')) {
+    h.set('Cache-Control', 'private, max-age=60, stale-while-revalidate=300')
+  }
+  return h
 }
 
 export default function Component({ loaderData }: { loaderData: any }) {

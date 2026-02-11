@@ -3,7 +3,7 @@ import { supabase } from '../../lib/supabase'
 import { queryKeys } from '../../lib/queryClient'
 import type { Squad, SquadMember } from '../../types/database'
 
-export { useCreateSquadMutation, useJoinSquadMutation, useLeaveSquadMutation, useDeleteSquadMutation } from './useSquadsMutations'
+export { useCreateSquadMutation, useJoinSquadMutation, useUpdateSquadMutation, useLeaveSquadMutation, useDeleteSquadMutation } from './useSquadsMutations'
 
 export interface SquadWithMembers extends Squad {
   members?: (SquadMember & { profiles?: { username?: string; avatar_url?: string; reliability_score?: number } })[]

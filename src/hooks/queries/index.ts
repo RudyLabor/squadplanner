@@ -15,6 +15,7 @@ export {
   useSquadQuery,
   useCreateSquadMutation,
   useJoinSquadMutation,
+  useUpdateSquadMutation,
   useLeaveSquadMutation,
   useDeleteSquadMutation,
   type SquadWithMembers,
@@ -97,6 +98,13 @@ export {
   useMatchmakingQuery,
   usePublicProfileQuery,
 } from './useDiscoverQueries'
+
+// Activity Feed
+export {
+  useActivityFeedQuery,
+  getRelativeTime,
+  type ActivityItem,
+} from './useActivityFeedQuery'
 
 // Re-export query client and keys
 export { queryClient, queryKeys } from '../../lib/queryClient'

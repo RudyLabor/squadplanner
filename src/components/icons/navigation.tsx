@@ -22,6 +22,13 @@ export const ArrowUp = (p: IconProps) => (
   </svg>
 )
 
+export const ArrowDown = (p: IconProps) => (
+  <svg {...d} {...p}>
+    <path d="m19 12-7 7-7-7" />
+    <path d="M12 5v14" />
+  </svg>
+)
+
 export const ArrowUpRight = (p: IconProps) => (
   <svg {...d} {...p}>
     <path d="M7 7h10v10" />

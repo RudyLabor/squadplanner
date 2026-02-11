@@ -28,11 +28,27 @@ function applyTheme(theme: 'dark' | 'light') {
   }
 }
 
+// Read persisted mode synchronously to avoid theme flash during hydration
+function getPersistedMode(): ThemeMode {
+  if (typeof window === 'undefined') return 'system'
+  try {
+    const raw = localStorage.getItem('squadplanner-theme')
+    if (raw) {
+      const parsed = JSON.parse(raw)
+      if (parsed?.state?.mode) return parsed.state.mode as ThemeMode
+    }
+  } catch {}
+  return 'system'
+}
+
+const initialMode = getPersistedMode()
+const initialEffective = initialMode === 'system' ? getSystemTheme() : initialMode
+
 export const useThemeStore = create<ThemeState>()(
   persist(
     (set) => ({
-      mode: 'system',
-      effectiveTheme: typeof window !== 'undefined' ? getSystemTheme() : 'dark',
+      mode: initialMode,
+      effectiveTheme: initialEffective,
 
       setMode: (mode: ThemeMode) => {
         const effectiveTheme = mode === 'system' ? getSystemTheme() : mode
@@ -42,6 +58,7 @@ export const useThemeStore = create<ThemeState>()(
     }),
     {
       name: 'squadplanner-theme',
+      partialize: (state) => ({ mode: state.mode }),
       onRehydrateStorage: () => (state) => {
         if (state) {
           const effectiveTheme = state.mode === 'system' ? getSystemTheme() : state.mode

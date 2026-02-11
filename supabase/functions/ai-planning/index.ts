@@ -20,9 +20,14 @@ const ALLOWED_ORIGINS = [
 ].filter(Boolean)
 
 function getCorsHeaders(origin: string | null) {
-  const allowedOrigin = origin && ALLOWED_ORIGINS.some(allowed => origin.startsWith(allowed))
+  const allowedOrigin = origin && ALLOWED_ORIGINS.some(allowed => origin === allowed)
     ? origin
-    : ALLOWED_ORIGINS[0]
+    : null
+  if (!allowedOrigin) {
+    return {
+      'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+    }
+  }
   return {
     'Access-Control-Allow-Origin': allowedOrigin,
     'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
@@ -31,7 +36,7 @@ function getCorsHeaders(origin: string | null) {
 
 // Configuration pour l'API Claude
 const CLAUDE_API_URL = 'https://api.anthropic.com/v1/messages'
-const CLAUDE_MODEL = 'claude-3-haiku-20240307'
+const CLAUDE_MODEL = 'claude-haiku-4-5-20251001'
 const CLAUDE_TIMEOUT = 10000 // 10 secondes
 
 // Appel a l'API Claude avec timeout
@@ -105,7 +110,7 @@ ${slotsDescription}
 Regles:
 - Donne une analyse courte et utile (2-3 phrases max)
 - Ton amical et gamer
-- En francais
+- Réponds toujours en français correct avec tous les accents (é, è, ê, à, ç, ù, etc.)
 - Pas d'emojis
 - Sois specifique sur les tendances observees
 

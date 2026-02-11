@@ -122,12 +122,16 @@ export default defineConfig(async () => {
         // Manual chunks for vendor caching (React Router handles route splitting)
         manualChunks: (id) => {
           const n = id.replace(/\\/g, '/');
+          // Vendor chunks — heavy libs cached separately
           if (n.includes('livekit-client') || n.includes('@livekit')) return 'vendor-livekit';
-          if (n.includes('framer-motion')) return 'vendor-motion';
-          if (n.includes('sonner')) return 'vendor-ui';
+          if (n.includes('framer-motion') || n.includes('motion-dom') || n.includes('motion-utils')) return 'vendor-motion';
           if (n.includes('@tanstack')) return 'vendor-query';
           if (n.includes('@supabase')) return 'vendor-supabase';
           if (n.includes('canvas-confetti')) return 'vendor-confetti';
+          // Group small vendor modules into vendor-ui to reduce micro-chunks
+          if (n.includes('node_modules/')) {
+            if (n.includes('sonner') || n.includes('zustand') || n.includes('zod')) return 'vendor-ui';
+          }
         },
         chunkFileNames: "assets/[name]-[hash].js",
         assetFileNames: "assets/[name]-[hash].[ext]",

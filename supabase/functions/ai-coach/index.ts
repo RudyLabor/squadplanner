@@ -21,9 +21,14 @@ const ALLOWED_ORIGINS = [
 ].filter(Boolean)
 
 function getCorsHeaders(origin: string | null) {
-  const allowedOrigin = origin && ALLOWED_ORIGINS.some(allowed => origin.startsWith(allowed))
+  const allowedOrigin = origin && ALLOWED_ORIGINS.some(allowed => origin === allowed)
     ? origin
-    : ALLOWED_ORIGINS[0]
+    : null
+  if (!allowedOrigin) {
+    return {
+      'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+    }
+  }
   return {
     'Access-Control-Allow-Origin': allowedOrigin,
     'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
@@ -32,7 +37,7 @@ function getCorsHeaders(origin: string | null) {
 
 // Configuration pour l'API Claude
 const CLAUDE_API_URL = 'https://api.anthropic.com/v1/messages'
-const CLAUDE_MODEL = 'claude-3-haiku-20240307'
+const CLAUDE_MODEL = 'claude-haiku-4-5-20251001'
 const CLAUDE_TIMEOUT = 10000 // 10 secondes
 
 // Appel a l'API Claude avec timeout
@@ -101,25 +106,25 @@ async function generateAICoachTip(
   daysSinceLastSession: number
 ): Promise<string | null> {
   const prompt = `Tu es le coach IA de Squad Planner, une app pour coordonner des sessions de jeu entre amis.
-Genere un conseil personnalise et motivant pour ${username}.
+G\u00e9n\u00e8re un conseil personnalis\u00e9 et motivant pour ${username}.
 
 Statistiques du joueur:
-- Score de fiabilite : ${reliabilityScore}%
-- Sessions jouees : ${totalSessions}
-- Presences : ${totalCheckins}
-- Tendance : ${trend === 'improving' ? 'en amelioration' : trend === 'declining' ? 'en baisse' : 'stable'}
-- Absences recentes : ${recentNoshows}
-- Jours depuis derniere session : ${daysSinceLastSession}
+- Score de fiabilit\u00e9 : ${reliabilityScore}%
+- Sessions jou\u00e9es : ${totalSessions}
+- Pr\u00e9sences : ${totalCheckins}
+- Tendance : ${trend === 'improving' ? 'en am\u00e9lioration' : trend === 'declining' ? 'en baisse' : 'stable'}
+- Absences r\u00e9centes : ${recentNoshows}
+- Jours depuis derni\u00e8re session : ${daysSinceLastSession}
 
-Regles:
+R\u00e8gles:
 - Ton amical et gamer
 - 2-3 phrases maximum
-- En francais
+- R\u00e9ponds toujours en fran\u00e7ais correct avec tous les accents (\u00e9, \u00e8, \u00ea, \u00e0, \u00e7, \u00f9, etc.)
 - Pas d'emojis
 - Tutoiement
-- Sois specifique selon les stats (felicite si bon score, encourage si en baisse)
+- Sois sp\u00e9cifique selon les stats (f\u00e9licite si bon score, encourage si en baisse)
 
-Reponds UNIQUEMENT avec le conseil, sans guillemets ni explications.`
+R\u00e9ponds UNIQUEMENT avec le conseil, sans guillemets ni explications.`
 
   return await callClaudeAPI(prompt)
 }
@@ -337,8 +342,8 @@ serve(async (req) => {
       if (pendingRsvps && pendingRsvps.length > 0) {
         const tip: CoachTipResponse = {
           tip: pendingRsvps.length === 1
-            ? "Tu as une session en attente de confirmation - tes potes attendent ta reponse !"
-            : `${pendingRsvps.length} sessions attendent ta reponse. Confirme ta presence pour aider l'orga !`,
+            ? "Tu as une session en attente de confirmation - tes potes attendent ta r\u00e9ponse !"
+            : `${pendingRsvps.length} sessions attendent ta r\u00e9ponse. Confirme ta pr\u00e9sence pour aider l'orga !`,
           tone: 'warning',
           context: {
             reliability_score: stats.reliability_score,
@@ -358,7 +363,7 @@ serve(async (req) => {
       if (upcomingSessions > 0) {
         const tip: CoachTipResponse = {
           tip: upcomingSessions === 1
-            ? "Session dans moins de 24h - n'oublie pas de te preparer !"
+            ? "Session dans moins de 24h - n'oublie pas de te pr\u00e9parer !"
             : `${upcomingSessions} sessions dans les 24h. Ta squad compte sur toi !`,
           tone: 'encouragement',
           context: {
@@ -388,7 +393,7 @@ serve(async (req) => {
         const problemDay = Object.entries(dayCount).find(([, count]) => count >= 2)
         if (problemDay) {
           const dayNames = ['dimanche', 'lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi']
-          patternTip = `Tu as tendance a etre en retard le ${dayNames[parseInt(problemDay[0])]}. Prevois un peu plus de marge !`
+          patternTip = `Tu as tendance \u00e0 \u00eatre en retard le ${dayNames[parseInt(problemDay[0])]}. Pr\u00e9vois un peu plus de marge !`
         }
       }
     }
@@ -481,7 +486,7 @@ serve(async (req) => {
     // Return a safe fallback tip instead of crashing
     // This ensures the client always gets a usable response
     const fallbackResponse: CoachTipResponse = {
-      tip: "Pret pour la prochaine session ? Tes potes t'attendent !",
+      tip: "Pr\u00eat pour la prochaine session ? Tes potes t'attendent !",
       tone: 'encouragement',
     }
     return new Response(
@@ -512,9 +517,9 @@ function generateCoachTip(input: TipGeneratorInput): { tip: string; tone: 'encou
   // Score parfait (>= 95%)
   if (reliability_score >= 95) {
     const celebrations = [
-      "Fiabilite au top ! Tes potes peuvent compter sur toi a 100%.",
-      "Tu es un pilier de ta squad. Continue comme ca !",
-      "Excellent ! Ta fiabilite fait de toi le joueur ideal.",
+      "Fiabilit\u00e9 au top ! Tes potes peuvent compter sur toi \u00e0 100%.",
+      "Tu es un pilier de ta squad. Continue comme \u00e7a !",
+      "Excellent ! Ta fiabilit\u00e9 fait de toi le joueur id\u00e9al.",
       "Score parfait ! Tes teammates ont de la chance de t'avoir.",
     ]
     return {
@@ -523,12 +528,12 @@ function generateCoachTip(input: TipGeneratorInput): { tip: string; tone: 'encou
     }
   }
 
-  // En forte amelioration
+  // En forte am\u00e9lioration
   if (trend === 'improving') {
     const improvementTips = [
       "Belle progression ! Tu remontes dans les classements.",
-      "Ca s'ameliore ! Continue sur cette lancee.",
-      "Tes efforts payent - ta fiabilite augmente.",
+      "\u00c7a s'am\u00e9liore ! Continue sur cette lanc\u00e9e.",
+      "Tes efforts payent - ta fiabilit\u00e9 augmente.",
       "Tendance positive ! Tes potes le remarquent.",
     ]
     return {
@@ -537,16 +542,16 @@ function generateCoachTip(input: TipGeneratorInput): { tip: string; tone: 'encou
     }
   }
 
-  // No-shows recents - probleme a adresser
+  // No-shows r\u00e9cents - probl\u00e8me \u00e0 adresser
   if (recentNoshows > 0) {
     if (recentNoshows === 1) {
       return {
-        tip: "1 absence recente. Pas grave, mais essaie de prevenir la prochaine fois !",
+        tip: "1 absence r\u00e9cente. Pas grave, mais essaie de pr\u00e9venir la prochaine fois !",
         tone: 'warning'
       }
     }
     return {
-      tip: `${recentNoshows} absences recentes. Tes potes ont joue sans toi - reviens en force !`,
+      tip: `${recentNoshows} absences r\u00e9centes. Tes potes ont jou\u00e9 sans toi - reviens en force !`,
       tone: 'warning'
     }
   }
@@ -562,7 +567,7 @@ function generateCoachTip(input: TipGeneratorInput): { tip: string; tone: 'encou
   // Pas de session depuis longtemps
   if (daysSinceLastSession > 14) {
     return {
-      tip: "Ca fait plus de 2 semaines ! Propose une session a ta squad.",
+      tip: "\u00c7a fait plus de 2 semaines ! Propose une session \u00e0 ta squad.",
       tone: 'encouragement'
     }
   }
@@ -577,7 +582,7 @@ function generateCoachTip(input: TipGeneratorInput): { tip: string; tone: 'encou
   // Nouveau joueur
   if (totalSessions < 3) {
     return {
-      tip: "Bienvenue ! Participe a quelques sessions pour construire ta reputation.",
+      tip: "Bienvenue ! Participe \u00e0 quelques sessions pour construire ta r\u00e9putation.",
       tone: 'encouragement'
     }
   }
@@ -585,9 +590,9 @@ function generateCoachTip(input: TipGeneratorInput): { tip: string; tone: 'encou
   // Score moyen (50-80)
   if (reliability_score >= 50 && reliability_score < 80) {
     const mediumTips = [
-      "Tu es sur la bonne voie ! Reponds rapidement aux invitations.",
+      "Tu es sur la bonne voie ! R\u00e9ponds rapidement aux invitations.",
       "Score correct. Un peu plus d'engagement et tu seras au top !",
-      "Confirme ta presence tot pour aider tes potes a s'organiser.",
+      "Confirme ta pr\u00e9sence t\u00f4t pour aider tes potes \u00e0 s'organiser.",
     ]
     return {
       tip: mediumTips[Math.floor(Math.random() * mediumTips.length)],
@@ -598,16 +603,16 @@ function generateCoachTip(input: TipGeneratorInput): { tip: string; tone: 'encou
   // Score faible (< 50)
   if (reliability_score < 50) {
     return {
-      tip: "Tes potes comptent sur toi ! Reponds plus souvent aux sessions pour ameliorer ta fiabilite.",
+      tip: "Tes potes comptent sur toi ! R\u00e9ponds plus souvent aux sessions pour am\u00e9liorer ta fiabilit\u00e9.",
       tone: 'warning'
     }
   }
 
   // Default - bon score stable
   const defaultTips = [
-    "Pret pour la prochaine session ? Tes potes t'attendent !",
-    "Bonne fiabilite ! Continue a repondre rapidement aux invitations.",
-    "Tu reponds plus vite que la moyenne - tes teammates apprecient !",
+    "Pr\u00eat pour la prochaine session ? Tes potes t'attendent !",
+    "Bonne fiabilit\u00e9 ! Continue \u00e0 r\u00e9pondre rapidement aux invitations.",
+    "Tu r\u00e9ponds plus vite que la moyenne - tes teammates appr\u00e9cient !",
     "Tout roule ! Garde ce rythme pour ta squad.",
   ]
   return {

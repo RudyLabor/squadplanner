@@ -87,13 +87,21 @@ export function TourGuide() {
 
   useEffect(() => {
     if (location.pathname !== '/squads') return
-    const completed = localStorage.getItem(TOUR_COMPLETED_KEY)
-    if (completed) return
+    try {
+      const completed = localStorage.getItem(TOUR_COMPLETED_KEY)
+      if (completed === 'true' || completed === 'shown') return
+    } catch { return }
 
     const timer = setTimeout(() => {
+      // Double-check in case another tab completed the tour
+      try {
+        const completed = localStorage.getItem(TOUR_COMPLETED_KEY)
+        if (completed === 'true' || completed === 'shown') return
+      } catch { return }
+
       const firstTarget = document.querySelector(TOUR_STEPS[0].target)
       if (firstTarget) {
-        localStorage.setItem(TOUR_COMPLETED_KEY, 'shown')
+        try { localStorage.setItem(TOUR_COMPLETED_KEY, 'true') } catch {}
         setActive(true)
       }
     }, 2000)

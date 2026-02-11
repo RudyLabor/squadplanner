@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from 'react'
 import { m } from 'framer-motion'
-import { Users, Plus, UserPlus } from '../components/icons'
+import { Users, Plus, UserPlus, Compass } from '../components/icons'
+import { Link } from 'react-router-dom'
 import Confetti from '../components/LazyConfetti'
 import { Button, Card, SquadCardSkeleton } from '../components/ui'
 import { showSuccess } from '../lib/toast'
@@ -199,17 +200,41 @@ export default function Squads({ loaderData }: SquadsProps) {
             onSubmit={handleCreateSquad} onCancel={() => { setShowCreate(false); setError(null) }} />
 
           {squads.length > 0 ? (
-            <m.ul className="space-y-3 lg:grid lg:grid-cols-2 xl:grid-cols-3 lg:gap-4 lg:space-y-0 list-none"
-              variants={staggerContainerVariants} initial="hidden" animate="visible" aria-label="Liste des squads">
-              {squads.map((squad) => (
-                <m.li key={squad.id} variants={staggerItemVariants}>
-                  <SquadCard squad={squad} isOwner={squad.owner_id === user?.id}
-                    nextSession={nextSessions.find(s => s.squadId === squad.id)}
-                    hasActiveParty={getSquadHasActiveParty(squad.id)}
-                    copiedCode={copiedCode} onCopyCode={copyInviteCode} />
-                </m.li>
-              ))}
-            </m.ul>
+            <>
+              <m.ul className="space-y-3 lg:grid lg:grid-cols-2 xl:grid-cols-3 lg:gap-4 lg:space-y-0 list-none"
+                variants={staggerContainerVariants} initial="hidden" animate="visible" aria-label="Liste des squads">
+                {squads.map((squad) => (
+                  <m.li key={squad.id} variants={staggerItemVariants}>
+                    <SquadCard squad={squad} isOwner={squad.owner_id === user?.id}
+                      nextSession={nextSessions.find(s => s.squadId === squad.id)}
+                      hasActiveParty={getSquadHasActiveParty(squad.id)}
+                      copiedCode={copiedCode} onCopyCode={copyInviteCode} />
+                  </m.li>
+                ))}
+              </m.ul>
+
+              {squads.length < 3 && !showCreate && !showJoin && (
+                <m.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2, duration: 0.3 }}
+                  className="mt-6">
+                  <Card className="p-5">
+                    <div className="flex items-center gap-4">
+                      <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary/10 to-purple/10 flex items-center justify-center flex-shrink-0">
+                        <Compass className="w-6 h-6 text-primary" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <h3 className="text-md font-semibold text-text-primary mb-0.5">Trouve de nouvelles squads</h3>
+                        <p className="text-sm text-text-tertiary">Explore les squads publiques et rejoins des joueurs qui partagent tes jeux.</p>
+                      </div>
+                      <Link to="/discover" className="flex-shrink-0">
+                        <Button variant="secondary" size="sm">
+                          <Compass className="w-4 h-4" />Découvrir
+                        </Button>
+                      </Link>
+                    </div>
+                  </Card>
+                </m.div>
+              )}
+            </>
           ) : !showCreate && !showJoin && (
             <m.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}>
               <Card className="p-8 text-center">

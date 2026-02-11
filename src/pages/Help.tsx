@@ -86,7 +86,7 @@ export function Help() {
         ) : (
           Object.entries(groupedItems).map(([category, items]) => (
             <div key={category} id={category.toLowerCase().replace(/\s+/g, '-').normalize('NFD').replace(/[\u0300-\u036f]/g, '')} className="mb-6 scroll-mt-6">
-              <h2 className="text-base font-semibold text-text-tertiary uppercase tracking-wider mb-3">{category}</h2>
+              <h2 className="text-base font-semibold text-text-tertiary tracking-wider mb-3">{category}</h2>
               <div className="space-y-2">
                 {items.map((item) => (
                   <Card key={item.globalIndex} className="overflow-hidden">

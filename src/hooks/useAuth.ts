@@ -19,6 +19,9 @@ interface AuthState {
   refreshProfile: () => Promise<void>
 }
 
+// Track the auth subscription to prevent memory leaks
+let _authSubscription: { unsubscribe: () => void } | null = null
+
 export const useAuthStore = create<AuthState>((set, get) => ({
   user: null, profile: null, session: null, isLoading: true, isInitialized: false,
 
@@ -34,7 +37,10 @@ export const useAuthStore = create<AuthState>((set, get) => ({
         set({ isLoading: false, isInitialized: true })
       }
 
-      supabase.auth.onAuthStateChange(async (event, session) => {
+      // Clean up previous subscription if initialize is called again
+      _authSubscription?.unsubscribe()
+
+      const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
         if (event === 'SIGNED_IN' && session?.user) {
           const { data: profile } = await supabase.from('profiles').select('*').eq('id', session.user.id).single()
           const updatedProfile = await updateDailyStreak(session.user.id, profile)
@@ -43,6 +49,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
           set({ user: null, session: null, profile: null })
         }
       })
+      _authSubscription = subscription
     } catch (error) {
       console.warn('Auth initialization error:', error)
       set({ isLoading: false, isInitialized: true })

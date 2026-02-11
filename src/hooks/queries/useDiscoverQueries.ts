@@ -23,7 +23,11 @@ async function fetchPublicSquads(game?: string, region?: string): Promise<Public
     return []
   }
 
-  return (data || []) as PublicSquadResult[]
+  const squads = (data || []) as PublicSquadResult[]
+
+  // Filter out test/debug squads
+  const TEST_PATTERNS = /\b(test|debug|audit)\b/i
+  return squads.filter(s => !TEST_PATTERNS.test(s.name))
 }
 
 export function useBrowseSquadsQuery(game?: string, region?: string) {

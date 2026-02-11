@@ -197,6 +197,30 @@ export function useLeaveSquadMutation() {
   })
 }
 
+export function useUpdateSquadMutation() {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: async ({ squadId, name, game, description }: { squadId: string; name: string; game: string; description?: string }) => {
+      const updates: Record<string, string> = { name, game }
+      if (description !== undefined) updates.description = description
+      const { error } = await supabase
+        .from('squads')
+        .update(updates)
+        .eq('id', squadId)
+      if (error) throw error
+    },
+    onSuccess: (_data, variables) => {
+      queryClient.invalidateQueries({ queryKey: queryKeys.squads.all })
+      queryClient.invalidateQueries({ queryKey: queryKeys.squads.detail(variables.squadId) })
+      showSuccess('Squad modifiée !')
+    },
+    onError: (error) => {
+      showError(error.message || 'Erreur lors de la modification')
+    },
+  })
+}
+
 export function useDeleteSquadMutation() {
   const queryClient = useQueryClient()
 

@@ -15,9 +15,14 @@ const ALLOWED_ORIGINS = [
 ].filter(Boolean)
 
 function getCorsHeaders(origin: string | null) {
-  const allowedOrigin = origin && ALLOWED_ORIGINS.some(allowed => origin.startsWith(allowed))
+  const allowedOrigin = origin && ALLOWED_ORIGINS.some(allowed => origin === allowed)
     ? origin
-    : ALLOWED_ORIGINS[0]
+    : null
+  if (!allowedOrigin) {
+    return {
+      'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+    }
+  }
   return {
     'Access-Control-Allow-Origin': allowedOrigin,
     'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
@@ -25,7 +30,7 @@ function getCorsHeaders(origin: string | null) {
 }
 
 const CLAUDE_API_URL = 'https://api.anthropic.com/v1/messages'
-const CLAUDE_MODEL = 'claude-3-haiku-20240307'
+const CLAUDE_MODEL = 'claude-haiku-4-5-20251001'
 const CLAUDE_TIMEOUT = 10000
 
 async function callClaudeAPI(prompt: string): Promise<string | null> {
@@ -198,7 +203,7 @@ ${mvpUsername ? `- MVP (a l'heure): ${mvpUsername}` : ''}
 
 Regles:
 - Ton amical et gamer
-- En francais, tutoiement
+- Réponds toujours en français correct avec tous les accents (é, è, ê, à, ç, ù, etc.), tutoiement
 - Pas d'emojis
 - Sois factuel et encourageant
 - Mentionne le MVP si present

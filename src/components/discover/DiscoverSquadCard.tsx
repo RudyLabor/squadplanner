@@ -30,9 +30,9 @@ export const DiscoverSquadCard = memo(function DiscoverSquadCard({ squad }: Prop
     }
   }
 
-  // Guard against NaN/undefined for reliability
-  const reliability = Number.isFinite(squad.avg_reliability) ? Math.round(squad.avg_reliability) : 0
-  const memberCount = Number.isFinite(squad.member_count) ? squad.member_count : 0
+  // Guard against NaN/undefined for reliability — owner always counts as 1 member minimum
+  const reliability = Number.isFinite(squad.avg_reliability) && squad.avg_reliability > 0 ? Math.round(squad.avg_reliability) : null
+  const memberCount = Number.isFinite(squad.member_count) && squad.member_count > 0 ? squad.member_count : 1
 
   return (
     <m.div
@@ -48,7 +48,7 @@ export const DiscoverSquadCard = memo(function DiscoverSquadCard({ squad }: Prop
 
         <div className="flex-1 min-w-0">
           {/* Name & game */}
-          <h3 className="text-sm font-semibold text-text-primary truncate">{squad.name}</h3>
+          <h3 className="text-sm font-semibold text-text-primary line-clamp-2">{squad.name}</h3>
           <p className="text-xs text-indigo-400 font-medium">{squad.game}</p>
 
           {/* Description */}
@@ -62,10 +62,12 @@ export const DiscoverSquadCard = memo(function DiscoverSquadCard({ squad }: Prop
               <Users className="w-3 h-3" />
               {memberCount} membres
             </span>
-            <span className="inline-flex items-center gap-1 text-xs text-text-tertiary">
-              <Star className="w-3 h-3 text-amber-400" />
-              {reliability}%
-            </span>
+            {reliability !== null && (
+              <span className="inline-flex items-center gap-1 text-xs text-text-tertiary">
+                <Star className="w-3 h-3 text-amber-400" />
+                {reliability}%
+              </span>
+            )}
             {squad.region && (
               <span className="text-xs text-text-tertiary capitalize">{squad.region}</span>
             )}
@@ -99,10 +101,10 @@ export const DiscoverSquadCard = memo(function DiscoverSquadCard({ squad }: Prop
           <img src={squad.owner_avatar} alt="" className="w-4 h-4 rounded-full" loading="lazy" decoding="async" />
         ) : (
           <div className="w-4 h-4 rounded-full bg-indigo-500/20 flex items-center justify-center">
-            <span className="text-2xs text-indigo-400 font-bold">{squad.owner_username?.charAt(0).toUpperCase()}</span>
+            <span className="text-2xs text-indigo-400 font-bold">{(squad.owner_username || '?').charAt(0).toUpperCase()}</span>
           </div>
         )}
-        <span className="text-sm text-text-tertiary">{`Cr\u00e9\u00e9 par`} {squad.owner_username}</span>
+        <span className="text-sm text-text-tertiary">{`Cr\u00e9\u00e9 par`} {squad.owner_username || 'un joueur'}</span>
       </div>
     </m.div>
   )

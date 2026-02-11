@@ -121,7 +121,7 @@
       ]
     },
     {
-      "source": "/(|auth|legal|help|premium|maintenance)",
+      "source": "/(|legal|help|premium|maintenance)",
       "headers": [
         {
           "key": "Cache-Control",
@@ -130,6 +130,19 @@
         {
           "key": "CDN-Cache-Control",
           "value": "public, max-age=3600, stale-while-revalidate=86400"
+        },
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        }
+      ]
+    },
+    {
+      "source": "/auth",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, s-maxage=60, stale-while-revalidate=300"
         },
         {
           "key": "X-Content-Type-Options",

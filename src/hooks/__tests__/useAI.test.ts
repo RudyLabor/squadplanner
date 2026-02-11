@@ -87,7 +87,7 @@ describe('useAIStore', () => {
       })
     })
 
-    it('uses fallback suggestions on error', async () => {
+    it('returns empty suggestions on error', async () => {
       mockFunctionsInvoke.mockResolvedValue({
         data: null,
         error: { message: 'Server error' },
@@ -98,10 +98,10 @@ describe('useAIStore', () => {
       })
 
       const state = useAIStore.getState()
-      expect(state.slotSuggestions).toHaveLength(3)
+      expect(state.slotSuggestions).toHaveLength(0)
       expect(state.hasSlotHistory).toBe(false)
       expect(state.isLoading).toBe(false)
-      expect(state.error).toBeTruthy()
+      expect(state.error).toBe('Pas assez de donnees pour suggerer des creneaux')
     })
   })
 

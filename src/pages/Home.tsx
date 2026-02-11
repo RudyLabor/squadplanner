@@ -238,9 +238,11 @@ export default function Home({ loaderData }: HomeProps) {
               transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
             >
               <h1 className="text-xl md:text-2xl font-bold text-text-primary truncate mb-1">
-                {(profile?.username && profile.username.length > 12)
-                  ? 'Salut !'
-                  : `Salut ${profile?.username || 'Gamer'} !`}
+                {`Salut ${profile?.username
+                  ? profile.username.length > 15
+                    ? profile.username.slice(0, 15) + '\u2026'
+                    : profile.username
+                  : 'Gamer'} !`}
               </h1>
               <div className="flex items-center justify-between gap-3">
                 <p className="text-sm text-text-tertiary line-clamp-1 min-w-0">
@@ -259,11 +261,14 @@ export default function Home({ loaderData }: HomeProps) {
               <OnboardingChecklist hasSquad={squads.length > 0} hasSession={upcomingSessions.length > 0} onCreateSession={openCreateSessionModal} />
             )}
 
+            <m.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.05, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}>
+              <HomeStatsSection squadsCount={squads.length} sessionsThisWeek={sessionsThisWeek} reliabilityScore={reliabilityScore} squadsLoading={squadsLoading} sessionsLoading={sessionsLoading} profile={profile} />
+            </m.div>
             <m.div
               className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4"
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.05, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+              transition={{ delay: 0.1, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
             >
               <HomeAICoachSection aiCoachTip={aiCoachTip} aiCoachLoading={aiCoachLoading} onAction={openCreateSessionModal} />
               <HomePartySection activeParty={activeParty} showCTA={!upcomingSessions[0] && squads.length > 0 && !activeParty} />
@@ -275,12 +280,9 @@ export default function Home({ loaderData }: HomeProps) {
               <HomeFriendsSection friendsPlaying={friendsPlaying} friendsLoading={friendsLoading} onJoin={handleJoinFriendParty} onInvite={handleInviteFriend} />
             </m.div>
             <m.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}>
-              <HomeStatsSection squadsCount={squads.length} sessionsThisWeek={sessionsThisWeek} reliabilityScore={reliabilityScore} squadsLoading={squadsLoading} sessionsLoading={sessionsLoading} profile={profile} />
-            </m.div>
-            <m.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}>
               <HomeActivityFeed squadIds={squads.map(s => s.id)} />
             </m.div>
-            <m.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.35, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}>
+            <m.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}>
               <HomeSquadsSection squads={squads} squadsLoading={squadsLoading} />
             </m.div>
           </div>

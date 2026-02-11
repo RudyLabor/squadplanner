@@ -1,9 +1,11 @@
+import { lazy, Suspense } from 'react'
 import { redirect, data } from 'react-router'
 import type { LoaderFunctionArgs } from 'react-router'
 import { createSupabaseServerClient } from '../lib/supabase.server'
 import { queryKeys } from '../lib/queryClient'
 import { ClientRouteWrapper } from '../components/ClientRouteWrapper'
-import Squads from '../pages/Squads'
+
+const Squads = lazy(() => import('../pages/Squads'))
 
 export function meta() {
   return [
@@ -57,7 +59,9 @@ export default function Component({ loaderData }: { loaderData: any }) {
     <ClientRouteWrapper seeds={[
       { key: queryKeys.squads.list(), data: loaderData?.squads },
     ]}>
-      <Squads loaderData={loaderData} />
+      <Suspense fallback={<div className="min-h-[50vh] flex items-center justify-center"><div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin" /></div>}>
+        <Squads loaderData={loaderData} />
+      </Suspense>
     </ClientRouteWrapper>
   )
 }

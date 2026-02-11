@@ -52,6 +52,8 @@ export function createDMActions(set: SetState, get: GetState) {
 
         const channelName = `dm:${[user.id, otherUserId].sort().join(':')}`
 
+        const dmFilter = `or(and(sender_id.eq.${user.id},receiver_id.eq.${otherUserId}),and(sender_id.eq.${otherUserId},receiver_id.eq.${user.id}))`
+
         const channel = supabase
           .channel(channelName)
           .on(
@@ -60,6 +62,7 @@ export function createDMActions(set: SetState, get: GetState) {
               event: 'INSERT',
               schema: 'public',
               table: 'direct_messages',
+              filter: dmFilter,
             },
             async (payload) => {
               const newMsg = payload.new as DirectMessage
@@ -100,6 +103,7 @@ export function createDMActions(set: SetState, get: GetState) {
               event: 'UPDATE',
               schema: 'public',
               table: 'direct_messages',
+              filter: dmFilter,
             },
             (payload) => {
               const updatedMsg = payload.new as DirectMessage

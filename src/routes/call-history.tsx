@@ -1,7 +1,9 @@
+import { lazy, Suspense } from 'react'
 import { redirect, data } from 'react-router'
 import type { LoaderFunctionArgs } from 'react-router'
 import { createSupabaseServerClient } from '../lib/supabase.server'
-import { CallHistory } from '../pages/CallHistory'
+
+const CallHistory = lazy(() => import('../pages/CallHistory').then(m => ({ default: m.CallHistory })))
 
 export function meta() {
   return [
@@ -25,5 +27,9 @@ export function headers({ loaderHeaders }: { loaderHeaders: Headers }) {
 }
 
 export default function Component() {
-  return <CallHistory />
+  return (
+    <Suspense fallback={<div className="min-h-[50vh] flex items-center justify-center"><div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin" /></div>}>
+      <CallHistory />
+    </Suspense>
+  )
 }

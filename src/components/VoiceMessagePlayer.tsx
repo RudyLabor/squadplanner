@@ -92,7 +92,7 @@ export const VoiceMessagePlayer = memo(function VoiceMessagePlayer({
 
   const progress = totalDuration > 0 ? (currentTime / totalDuration) * 100 : 0
 
-  // Generate fake waveform bars
+  // Generate decorative waveform bars (visual representation)
   const barCount = 24
   const bars = Array.from({ length: barCount }, (_, i) => {
     const seed = (i * 7 + 13) % 17

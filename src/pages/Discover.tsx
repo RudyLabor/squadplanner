@@ -202,41 +202,11 @@ const SquadsTab = memo(function SquadsTab({ game, region }: { game: string; regi
           </Link>
         </m.div>
 
-        {/* Featured squads placeholder section */}
-        <div>
-          <div className="flex items-center gap-2 mb-3">
-            <Sparkles className="w-4 h-4 text-primary" />
-            <h3 className="text-sm font-semibold text-text-primary">Squads populaires</h3>
-          </div>
-          <div className="space-y-2 lg:grid lg:grid-cols-3 lg:gap-3 lg:space-y-0">
-            {[
-              { name: 'Les Gamers FR', game: 'Valorant', members: 8, desc: 'Squad compétitive Valorant' },
-              { name: 'Rocket Masters', game: 'Rocket League', members: 5, desc: 'Du freestyle au ranked' },
-              { name: 'Fortnite Squad', game: 'Fortnite', members: 12, desc: 'Build & chill' },
-            ].map((s, i) => (
-              <m.div
-                key={i}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.1 }}
-                className="rounded-xl border border-border-subtle bg-surface-card p-4 opacity-60"
-              >
-                <div className="flex items-start gap-3">
-                  <div className="w-11 h-11 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
-                    <Gamepad2 className="w-5 h-5 text-primary" />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <h4 className="text-sm font-semibold text-text-primary">{s.name}</h4>
-                    <p className="text-xs text-primary font-medium">{s.game}</p>
-                    <p className="text-xs text-text-tertiary mt-0.5">{s.desc}</p>
-                    <span className="inline-flex items-center gap-1 text-xs text-text-tertiary mt-1">
-                      <Users className="w-3 h-3" /> {s.members} membres
-                    </span>
-                  </div>
-                </div>
-              </m.div>
-            ))}
-          </div>
+        {/* Encouragement to create public squads */}
+        <div className="rounded-xl border border-border-subtle bg-surface-card p-5 text-center">
+          <Sparkles className="w-5 h-5 text-primary mx-auto mb-2" />
+          <p className="text-sm text-text-secondary">Les squads publiques apparaitront ici.</p>
+          <p className="text-xs text-text-tertiary mt-1">Rends ta squad publique dans les parametres pour la faire decouvrir !</p>
         </div>
       </div>
     )

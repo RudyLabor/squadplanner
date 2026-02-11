@@ -17,19 +17,14 @@ export const useAIStore = create<AIState>((set) => ({
       const { data, error } = await withBackoff(() =>
         supabase.functions.invoke('ai-planning', { body: { squad_id: squadId, limit: 5 } })
       )
-      if (error) throw new Error(error.message || 'Erreur lors de l\'analyse des creneaux')
+      if (error) throw new Error(error.message || 'Erreur lors de l\'analyse des cr\u00e9neaux')
       if (data?.suggestions) {
         set({ slotSuggestions: data.suggestions, hasSlotHistory: data.has_history || false, isLoading: false })
       } else {
         set({ slotSuggestions: [], hasSlotHistory: false, isLoading: false })
       }
     } catch {
-      const fallbackSuggestions: SlotSuggestion[] = [
-        { day_of_week: 6, hour: 20, reliability_score: 80, session_count: 0, avg_attendance: 80, reason: `${dayNames[6]} 20h - Creneau populaire le week-end` },
-        { day_of_week: 0, hour: 15, reliability_score: 75, session_count: 0, avg_attendance: 75, reason: `${dayNames[0]} 15h - Apres-midi detente` },
-        { day_of_week: 4, hour: 21, reliability_score: 70, session_count: 0, avg_attendance: 70, reason: `${dayNames[4]} 21h - Soiree en semaine` },
-      ]
-      set({ slotSuggestions: fallbackSuggestions, hasSlotHistory: false, isLoading: false, error: 'Suggestions par defaut (pas assez d\'historique)' })
+      set({ slotSuggestions: [], hasSlotHistory: false, isLoading: false, error: 'Pas assez de donn\u00e9es pour sugg\u00e9rer des cr\u00e9neaux' })
     }
   },
 
@@ -38,7 +33,7 @@ export const useAIStore = create<AIState>((set) => ({
     try {
       set({ isLoading: true, error: null })
       const { data, error } = await supabase.functions.invoke('ai-decision', { body: { session_id: sessionId } })
-      if (error) throw new Error(error.message || 'Erreur lors de l\'analyse de decision')
+      if (error) throw new Error(error.message || 'Erreur lors de l\'analyse de d\u00e9cision')
       set({ decisionRecommendation: data?.recommendation || null, isLoading: false })
     } catch {
       set({ decisionRecommendation: null, isLoading: false, error: 'Impossible d\'obtenir la recommandation' })
@@ -50,10 +45,10 @@ export const useAIStore = create<AIState>((set) => ({
     try {
       set({ isLoading: true, error: null })
       const { data, error } = await supabase.functions.invoke('ai-reliability', { body: { squad_id: squadId } })
-      if (error) throw new Error(error.message || 'Erreur lors de l\'analyse de fiabilite')
+      if (error) throw new Error(error.message || 'Erreur lors de l\'analyse de fiabilit\u00e9')
       set({ reliabilityReport: data?.report || null, isLoading: false })
     } catch {
-      set({ reliabilityReport: null, isLoading: false, error: 'Impossible d\'obtenir le rapport de fiabilite' })
+      set({ reliabilityReport: null, isLoading: false, error: 'Impossible d\'obtenir le rapport de fiabilit\u00e9' })
     }
   },
 
@@ -86,22 +81,22 @@ export const useAIStore = create<AIState>((set) => ({
           return acc + (new Date(s.scheduled_at).getTime() - new Date(s.created_at).getTime()) / (1000 * 60 * 60)
         }, 0) / completedSessions.length
         if (avgLeadTime < 48) {
-          tips.push({ id: 'plan-ahead', type: 'planning', content: 'Vos sessions ont +40% de presence quand elles sont planifiees 48h a l\'avance.', data: { avgLeadTimeHours: Math.round(avgLeadTime) } })
+          tips.push({ id: 'plan-ahead', type: 'planning', content: 'Vos sessions ont +40% de pr\u00e9sence quand elles sont planifi\u00e9es 48h \u00e0 l\'avance.', data: { avgLeadTimeHours: Math.round(avgLeadTime) } })
         }
       }
 
       if (squad && squad.total_sessions < 5) {
-        tips.push({ id: 'more-sessions', type: 'engagement', content: 'Les squads qui jouent regulierement (2+ fois/semaine) ont des membres 3x plus engages.' })
+        tips.push({ id: 'more-sessions', type: 'engagement', content: 'Les squads qui jouent r\u00e9guli\u00e8rement (2+ fois/semaine) ont des membres 3x plus engag\u00e9s.' })
       }
 
       const eveningSessions = completedSessions.filter(s => new Date(s.scheduled_at).getHours() >= 22).length
       if (completedSessions.length > 0 && eveningSessions > completedSessions.length * 0.5) {
-        tips.push({ id: 'late-sessions', type: 'timing', content: 'Les sessions apres 22h ont +35% de no-show. Essayez des creneaux plus tot.', data: { eveningRatio: Math.round((eveningSessions / completedSessions.length) * 100) } })
+        tips.push({ id: 'late-sessions', type: 'timing', content: 'Les sessions apr\u00e8s 22h ont +35% de no-show. Essayez des cr\u00e9neaux plus t\u00f4t.', data: { eveningRatio: Math.round((eveningSessions / completedSessions.length) * 100) } })
       }
 
       const weekendSessions = completedSessions.filter(s => { const d = new Date(s.scheduled_at).getDay(); return d === 0 || d === 6 }).length
       if (completedSessions.length >= 5 && weekendSessions < completedSessions.length * 0.3) {
-        tips.push({ id: 'try-weekends', type: 'timing', content: 'Les sessions du week-end ont generalement +20% de participation.' })
+        tips.push({ id: 'try-weekends', type: 'timing', content: 'Les sessions du week-end ont g\u00e9n\u00e9ralement +20% de participation.' })
       }
 
       if (tips.length === 0) {
@@ -116,7 +111,7 @@ export const useAIStore = create<AIState>((set) => ({
 
   fetchAICoachTip: async (userId: string, contextType: 'profile' | 'home' = 'profile'): Promise<AICoachTip | null> => {
     if (!isSupabaseReady()) return null
-    const fallback: AICoachTip = { tip: 'Pret pour la prochaine session ? Tes potes t\'attendent !', tone: 'encouragement' }
+    const fallback: AICoachTip = { tip: 'Pr\u00eat pour la prochaine session ? Tes potes t\'attendent !', tone: 'encouragement' }
     try {
       set({ aiCoachTipLoading: true })
       const { data, error } = await supabase.functions.invoke('ai-coach', { body: { user_id: userId, context_type: contextType } })

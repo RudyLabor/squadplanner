@@ -22,9 +22,17 @@ const ALLOWED_ORIGINS = [
 
 function getCorsHeaders(origin: string | null) {
   const allowedOrigin =
-    origin && ALLOWED_ORIGINS.some((allowed) => origin.startsWith(allowed))
+    origin && ALLOWED_ORIGINS.some((allowed) => origin === allowed)
       ? origin
-      : ALLOWED_ORIGINS[0]
+      : null
+  if (!allowedOrigin) {
+    return {
+      'Access-Control-Allow-Headers':
+        'authorization, x-client-info, apikey, content-type',
+      'Access-Control-Allow-Methods': 'POST, OPTIONS',
+      'Access-Control-Allow-Credentials': 'true',
+    }
+  }
   return {
     'Access-Control-Allow-Origin': allowedOrigin,
     'Access-Control-Allow-Headers':

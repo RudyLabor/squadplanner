@@ -15,9 +15,14 @@ const ALLOWED_ORIGINS = [
 ].filter(Boolean)
 
 function getCorsHeaders(origin: string | null) {
-  const allowedOrigin = origin && ALLOWED_ORIGINS.some(allowed => origin.startsWith(allowed))
+  const allowedOrigin = origin && ALLOWED_ORIGINS.some(allowed => origin === allowed)
     ? origin
-    : ALLOWED_ORIGINS[0]
+    : null
+  if (!allowedOrigin) {
+    return {
+      'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+    }
+  }
   return {
     'Access-Control-Allow-Origin': allowedOrigin,
     'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',

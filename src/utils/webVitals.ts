@@ -1,17 +1,18 @@
 /**
- * Core Web Vitals reporting using PerformanceObserver.
- * Reports LCP, FCP, CLS, TTFB, and INP.
+ * Core Web Vitals reporting using Google's web-vitals library.
+ * Reports LCP, FCP, CLS, TTFB, FID, and INP.
+ *
+ * Uses the official web-vitals library for accurate measurements including:
+ * - Back/forward cache (bfcache) handling
+ * - Soft navigation support
+ * - CLS windowed session tracking
  *
  * - DEV: logs to console with color-coded output
  * - PROD: buffers metrics and sends to Supabase Edge Function every 10s
  *         or when the page becomes hidden (visibilitychange)
  */
 
-interface WebVitalMetric {
-  name: string;
-  value: number;
-  rating: 'good' | 'needs-improvement' | 'poor';
-}
+import type { Metric } from 'web-vitals';
 
 interface WebVitalPayload {
   name: string;
@@ -21,25 +22,6 @@ interface WebVitalPayload {
   timestamp: string;
   userAgent: string;
   connectionType: string | undefined;
-}
-
-type WebVitalCallback = (metric: WebVitalMetric) => void;
-
-const thresholds = {
-  LCP: { good: 2500, poor: 4000 },
-  FID: { good: 100, poor: 300 },
-  CLS: { good: 0.1, poor: 0.25 },
-  FCP: { good: 1800, poor: 3000 },
-  TTFB: { good: 800, poor: 1800 },
-  INP: { good: 200, poor: 500 },
-};
-
-function getRating(name: string, value: number): 'good' | 'needs-improvement' | 'poor' {
-  const threshold = thresholds[name as keyof typeof thresholds];
-  if (!threshold) return 'good';
-  if (value <= threshold.good) return 'good';
-  if (value <= threshold.poor) return 'needs-improvement';
-  return 'poor';
 }
 
 // ---------------------------------------------------------------------------
@@ -64,7 +46,6 @@ function getEndpointUrl(): string {
 
 function getConnectionType(): string | undefined {
   if (typeof navigator === 'undefined') return undefined;
-  // navigator.connection is not in all browsers; use optional chaining
   const conn = (navigator as any).connection;
   return conn?.effectiveType as string | undefined;
 }
@@ -93,7 +74,7 @@ function flushMetrics(): void {
   }
 }
 
-function enqueueMetric(metric: WebVitalMetric): void {
+function enqueueMetric(metric: Metric): void {
   const entry: WebVitalPayload = {
     name: metric.name,
     value: metric.value,
@@ -129,144 +110,40 @@ function startFlushSchedule(): void {
 }
 
 // ---------------------------------------------------------------------------
-// Observers
+// Metric handler
+// ---------------------------------------------------------------------------
+
+function handleMetric(metric: Metric): void {
+  if (import.meta.env.DEV) {
+    const color = metric.rating === 'good' ? '#0cce6b' : metric.rating === 'needs-improvement' ? '#ffa400' : '#ff4e42';
+    console.log(
+      `%c[WebVital] ${metric.name}: ${metric.value.toFixed(metric.name === 'CLS' ? 3 : 0)}ms (${metric.rating})`,
+      `color: ${color}; font-weight: bold;`,
+    );
+    return;
+  }
+
+  enqueueMetric(metric);
+}
+
+// ---------------------------------------------------------------------------
+// Public API
 // ---------------------------------------------------------------------------
 
 /**
- * Observe Core Web Vitals using PerformanceObserver.
- * Reports LCP, FCP, CLS, TTFB, FID, and INP.
+ * Report all Core Web Vitals using Google's web-vitals library.
+ * In dev: logs to console. In prod: buffers and sends to edge function.
  */
-export function observeWebVitals(callback: WebVitalCallback) {
-  if (typeof window === 'undefined' || !('PerformanceObserver' in window)) return;
+export function reportWebVitals(): void {
+  if (typeof window === 'undefined') return;
 
-  // LCP
-  try {
-    const lcpObserver = new PerformanceObserver((list) => {
-      const entries = list.getEntries();
-      const lastEntry = entries[entries.length - 1];
-      if (lastEntry) {
-        callback({
-          name: 'LCP',
-          value: lastEntry.startTime,
-          rating: getRating('LCP', lastEntry.startTime),
-        });
-      }
-    });
-    lcpObserver.observe({ type: 'largest-contentful-paint', buffered: true });
-  } catch {
-    // Not supported in this browser
-  }
-
-  // FCP
-  try {
-    const fcpObserver = new PerformanceObserver((list) => {
-      const entries = list.getEntries();
-      const fcpEntry = entries.find(e => e.name === 'first-contentful-paint');
-      if (fcpEntry) {
-        callback({
-          name: 'FCP',
-          value: fcpEntry.startTime,
-          rating: getRating('FCP', fcpEntry.startTime),
-        });
-      }
-    });
-    fcpObserver.observe({ type: 'paint', buffered: true });
-  } catch {
-    // Not supported in this browser
-  }
-
-  // CLS
-  try {
-    let clsValue = 0;
-    const clsObserver = new PerformanceObserver((list) => {
-      for (const entry of list.getEntries()) {
-        if (!(entry as any).hadRecentInput) {
-          clsValue += (entry as any).value;
-        }
-      }
-      callback({
-        name: 'CLS',
-        value: clsValue,
-        rating: getRating('CLS', clsValue),
-      });
-    });
-    clsObserver.observe({ type: 'layout-shift', buffered: true });
-  } catch {
-    // Not supported in this browser
-  }
-
-  // TTFB
-  try {
-    const navEntry = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming;
-    if (navEntry) {
-      const ttfb = navEntry.responseStart - navEntry.requestStart;
-      callback({
-        name: 'TTFB',
-        value: ttfb,
-        rating: getRating('TTFB', ttfb),
-      });
-    }
-  } catch {
-    // Not supported in this browser
-  }
-
-  // FID
-  try {
-    const fidObserver = new PerformanceObserver((list) => {
-      const entries = list.getEntries();
-      const firstEntry = entries[0];
-      if (firstEntry) {
-        const fid = (firstEntry as any).processingStart - firstEntry.startTime;
-        callback({
-          name: 'FID',
-          value: fid,
-          rating: getRating('FID', fid),
-        });
-      }
-    });
-    fidObserver.observe({ type: 'first-input', buffered: true });
-  } catch {
-    // Not supported in this browser
-  }
-
-  // INP
-  try {
-    let maxINP = 0;
-    const inpObserver = new PerformanceObserver((list) => {
-      for (const entry of list.getEntries()) {
-        const duration = (entry as any).duration;
-        if (duration > maxINP) {
-          maxINP = duration;
-          callback({
-            name: 'INP',
-            value: maxINP,
-            rating: getRating('INP', maxINP),
-          });
-        }
-      }
-    });
-    inpObserver.observe({ type: 'event', buffered: true, durationThreshold: 16 });
-  } catch {
-    // Not supported in this browser
-  }
-}
-
-/**
- * Log Web Vitals to console in development, send to analytics in production.
- */
-export function reportWebVitals() {
-  observeWebVitals((metric) => {
-    if (import.meta.env.DEV) {
-      const color = metric.rating === 'good' ? '#0cce6b' : metric.rating === 'needs-improvement' ? '#ffa400' : '#ff4e42';
-      console.log(
-        `%c[WebVital] ${metric.name}: ${metric.value.toFixed(metric.name === 'CLS' ? 3 : 0)}ms (${metric.rating})`,
-        `color: ${color}; font-weight: bold;`
-      );
-      return;
-    }
-
-    // Production: buffer and send to edge function
-    enqueueMetric(metric);
+  import('web-vitals').then(({ onLCP, onFID, onCLS, onINP, onTTFB, onFCP }) => {
+    onLCP(handleMetric);
+    onFID(handleMetric);
+    onCLS(handleMetric);
+    onINP(handleMetric);
+    onTTFB(handleMetric);
+    onFCP(handleMetric);
   });
 
   // Start the flush schedule only in production

@@ -62,6 +62,7 @@
     "remotion": "^4.0.421",
     "remotion-skills": "github:remotion-dev/skills",
     "sonner": "^2.0.7",
+    "web-vitals": "^5.1.0",
     "zod": "^3.22.3",
     "zustand": "^5.0.11"
   },

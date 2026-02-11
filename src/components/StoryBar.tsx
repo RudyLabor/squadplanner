@@ -3,7 +3,7 @@ import { m, AnimatePresence } from 'framer-motion'
 import { Plus, X, ChevronLeft, ChevronRight, Eye } from 'lucide-react'
 import { useStories, STORY_BACKGROUNDS } from '../hooks/useStories'
 import { useAuthStore } from '../hooks/useAuth'
-import type { FeedStory, StoryContentType } from '../types/database'
+import type { FeedStory } from '../types/database'
 
 // Story circle in the horizontal bar
 function StoryCircle({ username, avatarUrl, hasUnviewed, isOwnStory, storyCount, onClick }: {
@@ -160,7 +160,7 @@ function CreateStoryModal({ isOpen, onClose, onSubmit }: {
   isOpen: boolean; onClose: () => void; onSubmit: (content: string, bg: string) => void
 }) {
   const [content, setContent] = useState('')
-  const [selectedBg, setSelectedBg] = useState(STORY_BACKGROUNDS[0].color)
+  const [selectedBg, setSelectedBg] = useState<string>(STORY_BACKGROUNDS[0].color)
 
   const handleSubmit = () => {
     if (!content.trim()) return
@@ -237,8 +237,7 @@ function CreateStoryModal({ isOpen, onClose, onSubmit }: {
 
 // Main story bar component
 export const StoryBar = memo(function StoryBar() {
-  const { user } = useAuthStore()
-  const { storyUsers, stories, isLoading, createStory, viewStory, getUserStories } = useStories()
+  const { storyUsers, isLoading, createStory, viewStory, getUserStories } = useStories()
   const [viewingUserId, setViewingUserId] = useState<string | null>(null)
   const [showCreate, setShowCreate] = useState(false)
   const scrollRef = useRef<HTMLDivElement>(null)

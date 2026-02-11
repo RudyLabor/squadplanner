@@ -4,7 +4,7 @@ import { Bell, Moon, Volume2, Vibrate, Loader2 } from 'lucide-react'
 import { useNotificationPreferences, NOTIFICATION_CATEGORIES } from '../hooks/useNotificationPreferences'
 
 export const NotificationSettings = memo(function NotificationSettings() {
-  const { preferences, isLoading, updatePreference, updateQuietHours, toggleSound, toggleVibration, toggleCategory, isUpdating } = useNotificationPreferences()
+  const { preferences, isLoading, updatePreference, updateQuietHours, toggleSound, toggleVibration, toggleCategory } = useNotificationPreferences()
 
   if (isLoading || !preferences) {
     return (
@@ -98,7 +98,7 @@ export const NotificationSettings = memo(function NotificationSettings() {
               <ToggleRow
                 key={setting.key}
                 label={setting.label}
-                checked={(preferences as Record<string, unknown>)[setting.key] as boolean ?? true}
+                checked={(preferences as unknown as Record<string, unknown>)[setting.key] as boolean ?? true}
                 onChange={(checked) => updatePreference(setting.key, checked)}
               />
             ))}

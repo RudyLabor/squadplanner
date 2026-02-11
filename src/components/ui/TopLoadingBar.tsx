@@ -16,8 +16,8 @@ export function TopLoadingBar() {
   const reducedMotion = useReducedMotion()
   const [progress, setProgress] = useState(0)
   const [visible, setVisible] = useState(false)
-  const crawlRef = useRef<ReturnType<typeof setInterval>>()
-  const fadeRef = useRef<ReturnType<typeof setTimeout>>()
+  const crawlRef = useRef<ReturnType<typeof setInterval>>(undefined)
+  const fadeRef = useRef<ReturnType<typeof setTimeout>>(undefined)
 
   useEffect(() => {
     if (isNavigating) {

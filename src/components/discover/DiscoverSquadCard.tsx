@@ -102,7 +102,7 @@ export const DiscoverSquadCard = memo(function DiscoverSquadCard({ squad }: Prop
             <span className="text-[0.5rem] text-indigo-400 font-bold">{squad.owner_username?.charAt(0).toUpperCase()}</span>
           </div>
         )}
-        <span className="text-sm text-text-tertiary">Cree par {squad.owner_username}</span>
+        <span className="text-sm text-text-tertiary">{`Cr\u00e9\u00e9 par`} {squad.owner_username}</span>
       </div>
     </m.div>
   )

@@ -10,7 +10,9 @@ export function headers(_args: HeadersArgs) {
 export function meta() {
   return [
     { title: "Aide - Squad Planner" },
-    { name: "description", content: "Centre d'aide Squad Planner. FAQ, guides et support." },
+    { name: "description", content: "Centre d'aide Squad Planner : trouvez des réponses à vos questions sur la création de squads, planification de sessions, RSVP et fonctionnalités Premium." },
+    { tagName: "link", rel: "canonical", href: "https://squadplanner.fr/help" },
+    { property: "og:url", content: "https://squadplanner.fr/help" },
   ]
 }
 

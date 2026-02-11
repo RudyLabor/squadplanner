@@ -14,6 +14,9 @@ const faqs = [
   { q: 'Quelle est la différence avec Discord ?', a: 'Discord est fait pour discuter. Squad Planner est fait pour jouer ensemble. On ajoute le planning avec RSVP, le score de fiabilité, et les check-ins pour que vos sessions aient vraiment lieu.' },
   { q: 'Combien de joueurs par squad ?', a: 'Une squad peut accueillir de 2 à 10 joueurs. C\'est la taille idéale pour une équipe de jeu régulière où chacun se sent impliqué.' },
   { q: 'Mes données sont-elles protégées ?', a: 'Absolument. Squad Planner est hébergé en France, conforme au RGPD. Tes données sont chiffrées et tu peux les supprimer à tout moment depuis les paramètres de ton compte.' },
+  { q: 'Pourquoi pas juste un Google Calendar ou Doodle ?', a: 'Parce que Google Calendar, c\'est fait pour des meetings de boulot. Squad Planner est conçu pour le gaming : vocal intégré, score de présence, confirmation auto quand assez de joueurs sont dispo.' },
+  { q: 'Mes potes vont vraiment l\'utiliser ?', a: 'Oui, parce qu\'ils n\'ont qu\'à cliquer OUI ou NON. Pas d\'app à installer obligatoirement (version web). S\'ils veulent les notifs, l\'app mobile existe.' },
+  { q: 'C\'est vraiment 100% gratuit ?', a: 'Oui. Tout le core est gratuit : squads, sessions, RSVP, chat, vocal. Premium ajoute le coach IA et des stats avancées, mais tu n\'en as pas besoin pour jouer.' },
 ]
 
 /** Exported for FAQ schema injection in Landing.tsx */

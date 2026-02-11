@@ -10,6 +10,8 @@ import Home from '../pages/Home'
 export function meta() {
   return [
     { title: "Accueil - Squad Planner" },
+    { tagName: "link", rel: "canonical", href: "https://squadplanner.fr/home" },
+    { property: "og:url", content: "https://squadplanner.fr/home" },
   ]
 }
 

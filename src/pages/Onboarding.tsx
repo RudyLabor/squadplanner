@@ -28,7 +28,7 @@ export function Onboarding() {
     }
   }, [squads])
 
-  const [step, setStep] = useState<OnboardingStep>('splash')
+  const [step, setStep] = useState<OnboardingStep>('squad-choice')
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [isNavigating, setIsNavigating] = useState(false)
@@ -162,7 +162,7 @@ export function Onboarding() {
     try {
       const { error: updateError } = await supabase.from('profiles').update({ username: username.trim() || profile?.username || 'User', timezone, updated_at: new Date().toISOString() }).eq('id', user.id)
       if (updateError) { setError('Erreur lors de la sauvegarde du profil'); setIsLoading(false); return }
-      refreshProfile().catch(() => {}); setIsLoading(false); setStep('permissions')
+      refreshProfile().catch(() => {}); setIsLoading(false); setStep('complete')
     } catch { setIsLoading(false); setError('Erreur inattendue') }
   }
 

@@ -10,6 +10,8 @@ const SessionDetail = lazy(() => import('../pages/SessionDetail'))
 export function meta() {
   return [
     { title: "Détail Session - Squad Planner" },
+    { tagName: "link", rel: "canonical", href: "https://squadplanner.fr/sessions" },
+    { property: "og:url", content: "https://squadplanner.fr/sessions" },
   ]
 }
 

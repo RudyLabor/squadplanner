@@ -78,6 +78,9 @@ export function LandingNavbar({ isLoggedIn }: LandingNavbarProps) {
                   Créer ma squad
                   <ArrowRight className="w-3.5 h-3.5 inline ml-1" />
                 </Link>
+                <Link to="/auth?mode=register&redirect=onboarding" className="md:hidden inline-flex items-center px-3 py-2 rounded-lg bg-primary text-white text-sm font-medium" data-track="navbar_mobile_cta_click">
+                  S'inscrire
+                </Link>
                 <button
                   type="button"
                   onClick={() => setMobileMenuOpen(!mobileMenuOpen)}

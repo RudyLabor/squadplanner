@@ -10,6 +10,8 @@ const Discover = lazy(() => import('../pages/Discover'))
 export function meta() {
   return [
     { title: "Découvrir - Squad Planner" },
+    { tagName: "link", rel: "canonical", href: "https://squadplanner.fr/discover" },
+    { property: "og:url", content: "https://squadplanner.fr/discover" },
   ]
 }
 

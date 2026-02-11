@@ -2,6 +2,7 @@ import type { HeadersArgs } from 'react-router'
 import { Navigate, useSearchParams } from 'react-router'
 import { useAuthStore } from '../hooks/useAuth'
 import Landing from '../pages/Landing'
+import { faqs } from '../components/landing/FaqSection'
 
 function LoadingSpinner() {
   return (
@@ -21,6 +22,19 @@ export function meta() {
   return [
     { title: "Squad Planner - Le Calendly du gaming" },
     { name: "description", content: "Crée ta squad, planifie tes sessions avec RSVP et fiabilité mesurée. Fini les « on verra ». Gratuit." },
+    { tagName: "link", rel: "canonical", href: "https://squadplanner.fr/" },
+    { property: "og:url", content: "https://squadplanner.fr/" },
+    {
+      "script:ld+json": {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        mainEntity: faqs.map(f => ({
+          "@type": "Question",
+          name: f.q,
+          acceptedAnswer: { "@type": "Answer", text: f.a }
+        }))
+      }
+    }
   ]
 }
 

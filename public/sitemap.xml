@@ -16,4 +16,8 @@
     <loc>https://squadplanner.fr/legal</loc>
     <priority>0.3</priority>
   </url>
+  <url>
+    <loc>https://squadplanner.fr/discover</loc>
+    <priority>0.7</priority>
+  </url>
 </urlset>

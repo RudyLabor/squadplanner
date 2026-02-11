@@ -10,7 +10,9 @@ export function headers(_args: HeadersArgs) {
 export function meta() {
   return [
     { title: "Premium - Squad Planner" },
-    { name: "description", content: "Découvre les fonctionnalités Premium de Squad Planner." },
+    { name: "description", content: "Débloquez les fonctionnalités Premium de Squad Planner : squads illimitées, analyses avancées, customisation totale. Essai gratuit 7 jours sans carte bancaire." },
+    { tagName: "link", rel: "canonical", href: "https://squadplanner.fr/premium" },
+    { property: "og:url", content: "https://squadplanner.fr/premium" },
   ]
 }
 

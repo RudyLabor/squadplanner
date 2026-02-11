@@ -11,6 +11,8 @@ export function meta() {
   return [
     { title: "Mentions légales - Squad Planner" },
     { name: "description", content: "Mentions légales, conditions d'utilisation et politique de confidentialité de Squad Planner." },
+    { tagName: "link", rel: "canonical", href: "https://squadplanner.fr/legal" },
+    { property: "og:url", content: "https://squadplanner.fr/legal" },
   ]
 }
 

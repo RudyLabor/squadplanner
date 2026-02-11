@@ -11,6 +11,7 @@ import { useSessionExpiry } from './hooks/useSessionExpiry'
 import { useRateLimitStore } from './hooks/useRateLimit'
 import { usePWAInstallStore } from './hooks/usePWAInstall'
 import { useNavigationProgress } from './hooks/useNavigationProgress'
+import { initTrackingListeners } from './utils/trackEvent'
 import { TopLoadingBar } from './components/ui/TopLoadingBar'
 import { AppLayout } from './components/layout'
 
@@ -58,6 +59,11 @@ export default function ClientShell() {
     initializePushNotifications().catch(() => {
       // Silent fail — push notifications are non-critical
     })
+  }, [])
+
+  // Initialize analytics click tracking for data-track elements
+  useEffect(() => {
+    initTrackingListeners()
   }, [])
 
   // Capture PWA install prompt event

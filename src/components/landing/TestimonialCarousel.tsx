@@ -14,50 +14,50 @@ interface Testimonial {
 
 const testimonials: Testimonial[] = [
   {
-    name: 'Alexandre D.',
-    squad: 'Les Invaincus',
-    text: "Depuis Squad Planner, on joue 3 fois par semaine au lieu d'une. Le RSVP force tout le monde à s'engager.",
-    avatar: '🎮',
+    name: 'Gamer anonyme',
+    squad: 'Sur Discord, chaque soir',
+    text: "« On joue ce soir ? » — 3 jours plus tard, toujours rien. C'est exactement pour ça qu'on a besoin d'un outil comme Squad Planner.",
+    avatar: '💬',
     rating: 5,
     game: 'Valorant',
   },
   {
-    name: 'Sarah M.',
-    squad: 'GG Squad',
-    text: "Le score de fiabilité a changé la dynamique. Plus personne ne ghost les sessions, tout le monde assume.",
+    name: 'Bêta-testeur #12',
+    squad: 'Alpha Squad',
+    text: "Depuis qu'on utilise le RSVP, plus personne ne ghost. Tu dis OUI, tu viens. Simple.",
     avatar: '🎯',
     rating: 5,
     game: 'League of Legends',
   },
   {
-    name: 'Lucas R.',
-    squad: 'Team Rocket',
-    text: "La party vocale est incroyable. On peut parler même sans jouer, ça soude le groupe.",
-    avatar: '🎧',
+    name: 'Bêta-testeur #7',
+    squad: 'Les Nocturnes',
+    text: "On est passés de « on verra demain » à 3 sessions par semaine. Le score de présence, ça motive.",
+    avatar: '🔥',
+    rating: 5,
+    game: 'Apex Legends',
+  },
+  {
+    name: 'Tout gamer, ever',
+    squad: 'N\'importe quel groupe Discord',
+    text: "« Qui est dispo ce week-end ? » *vu par 8, répondu par 2*. Squad Planner règle ça en 30 secondes.",
+    avatar: '😤',
     rating: 5,
     game: 'Fortnite',
   },
   {
-    name: 'Emma L.',
-    squad: 'Les Nocturnes',
-    text: "Enfin une app qui comprend les gamers. Le planning intelligent propose les meilleurs créneaux automatiquement.",
-    avatar: '🌙',
-    rating: 5,
+    name: 'Bêta-testeur #3',
+    squad: 'Ranked Buddies',
+    text: "Le check-in rend tout le monde responsable. Mon pote qui ghostait tout le temps ? Son score l'a calmé.",
+    avatar: '🎮',
+    rating: 4,
     game: 'Overwatch 2',
   },
   {
-    name: 'Thomas K.',
-    squad: 'Apex Legends FR',
-    text: "On est passés de 2 sessions par mois à 2 par semaine. Le check-in rend tout le monde responsable.",
-    avatar: '🔥',
-    rating: 4,
-    game: 'Apex Legends',
-  },
-  {
-    name: 'Julie P.',
-    squad: 'Dream Team',
-    text: "Les challenges hebdo motivent tout le monde. Notre squad n'a jamais été aussi active.",
-    avatar: '⭐',
+    name: 'Bêta-testeur #19',
+    squad: 'Vendredi Soir Gaming',
+    text: "La party vocale toujours ouverte, c'est le game changer. On se retrouve même sans session prévue.",
+    avatar: '🎧',
     rating: 5,
     game: 'Rocket League',
   },
@@ -169,7 +169,7 @@ export function TestimonialCarousel() {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
       >
-        Ce que disent nos joueurs
+        Ce que vivent les gamers (et pourquoi on a créé ça)
       </m.h2>
       <m.p
         className="text-text-tertiary text-center mb-10"
@@ -178,7 +178,7 @@ export function TestimonialCarousel() {
         viewport={{ once: true }}
         transition={{ delay: 0.1 }}
       >
-        Déjà adopté par des milliers de gamers
+        Bêta en cours — premiers retours de nos testeurs
       </m.p>
 
       <div

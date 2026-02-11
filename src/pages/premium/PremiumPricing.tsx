@@ -85,7 +85,16 @@ export function PremiumPricing({ selectedPlan, setSelectedPlan, isLoading, error
         <Button onClick={onUpgrade} disabled={isLoading} className="h-14 px-10 text-lg bg-gradient-to-r from-primary via-purple to-primary bg-[length:200%_100%] hover:bg-[position:100%_0] transition-interactive shadow-glow-primary-md animate-pulse-glow">
           {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <><Rocket className="w-5 h-5" /> Passer Premium maintenant <ArrowRight className="w-5 h-5" /></>}
         </Button>
-        <p className="text-sm text-text-tertiary mt-3">Paiement s&eacute;curis&eacute; · Annulation facile · Satisfait ou rembours&eacute; 30j</p>
+        <div className="flex flex-wrap items-center justify-center gap-3 mt-3 text-sm text-text-tertiary">
+          <span className="flex items-center gap-1">
+            <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
+            Paiement sécurisé
+          </span>
+          <span>·</span>
+          <span>Annulation facile</span>
+          <span>·</span>
+          <span>Satisfait ou remboursé 30j</span>
+        </div>
       </m.div>
 
       {/* Final CTA */}

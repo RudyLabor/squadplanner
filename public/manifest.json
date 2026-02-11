@@ -2,7 +2,7 @@
   "name": "Squad Planner",
   "short_name": "Squad",
   "description": "Le Calendly du gaming - Crée l'habitude de jouer ensemble",
-  "start_url": "/home",
+  "start_url": "/",
   "display": "standalone",
   "theme_color": "#08090a",
   "background_color": "#050506",

@@ -8,6 +8,8 @@ const CallHistory = lazy(() => import('../pages/CallHistory').then(m => ({ defau
 export function meta() {
   return [
     { title: "Historique d'appels - Squad Planner" },
+    { tagName: "link", rel: "canonical", href: "https://squadplanner.fr/call-history" },
+    { property: "og:url", content: "https://squadplanner.fr/call-history" },
   ]
 }
 

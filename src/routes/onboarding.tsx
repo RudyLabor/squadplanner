@@ -6,6 +6,8 @@ import { Onboarding } from '../pages/Onboarding'
 export function meta() {
   return [
     { title: "Bienvenue - Squad Planner" },
+    { tagName: "link", rel: "canonical", href: "https://squadplanner.fr/onboarding" },
+    { property: "og:url", content: "https://squadplanner.fr/onboarding" },
   ]
 }
 

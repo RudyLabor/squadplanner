@@ -10,6 +10,8 @@ const Profile = lazy(() => import('../pages/Profile').then(m => ({ default: m.Pr
 export function meta() {
   return [
     { title: "Mon Profil - Squad Planner" },
+    { tagName: "link", rel: "canonical", href: "https://squadplanner.fr/profile" },
+    { property: "og:url", content: "https://squadplanner.fr/profile" },
   ]
 }
 

@@ -48,7 +48,6 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
         {/* Open Graph / Facebook */}
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://squadplanner.fr/" />
         <meta property="og:title" content="Squad Planner - Le Calendly du gaming" />
         <meta property="og:description" content="Crée ta squad, planifie tes sessions avec RSVP et fiabilité mesurée. Fini les « on verra » — ta squad joue pour de vrai. Gratuit, en 30 secondes." />
         <meta property="og:image" content="https://squadplanner.fr/og-image.png" />
@@ -57,12 +56,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <meta property="og:locale" content="fr_FR" />
         <meta property="og:site_name" content="Squad Planner" />
 
-        {/* Canonical URL */}
-        <link rel="canonical" href="https://squadplanner.fr/" />
-
         {/* Twitter */}
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:url" content="https://squadplanner.fr/" />
         <meta name="twitter:title" content="Squad Planner - Le Calendly du gaming" />
         <meta name="twitter:description" content="Crée ta squad, planifie tes sessions avec RSVP et fiabilité mesurée. Fini les « on verra » — ta squad joue pour de vrai. Gratuit, en 30 secondes." />
         <meta name="twitter:image" content="https://squadplanner.fr/og-image.png" />
@@ -84,6 +79,25 @@ export function Layout({ children }: { children: React.ReactNode }) {
               "author": { "@type": "Organization", "name": "Squad Planner" },
               "inLanguage": "fr",
               "potentialAction": { "@type": "ViewAction", "target": "https://squadplanner.fr/auth" }
+            })
+          }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              "name": "Squad Planner",
+              "url": "https://squadplanner.fr",
+              "logo": "https://squadplanner.fr/favicon.svg",
+              "sameAs": [],
+              "contactPoint": {
+                "@type": "ContactPoint",
+                "email": "contact@squadplanner.fr",
+                "contactType": "customer support",
+                "availableLanguage": "French"
+              }
             })
           }}
         />
@@ -127,6 +141,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
         />
 
         <Meta />
+        {/* Dynamic canonical fallback */}
+        <script dangerouslySetInnerHTML={{ __html: `(function(){var c=document.querySelector('link[rel="canonical"]');if(!c){c=document.createElement('link');c.rel='canonical';document.head.appendChild(c)}c.href='https://squadplanner.fr'+location.pathname;var o=document.querySelector('meta[property="og:url"]');if(o)o.content=c.href})()` }} />
         <Links />
       </head>
       <body suppressHydrationWarning>

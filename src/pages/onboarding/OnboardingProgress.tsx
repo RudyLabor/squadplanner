@@ -11,12 +11,10 @@ export function OnboardingProgress({ step }: OnboardingProgressProps) {
   const items = [
     { key: 'squad', label: 'Squad' },
     { key: 'profile', label: 'Profil' },
-    { key: 'permissions', label: 'Notifs' }
   ]
 
   const currentIndex = ['squad-choice', 'create-squad', 'join-squad'].includes(step) ? 0
-    : step === 'profile' ? 1
-    : step === 'permissions' ? 2 : -1
+    : step === 'profile' ? 1 : -1
 
   return (
     <div className="flex justify-center items-center gap-3 mt-8">
@@ -39,7 +37,7 @@ export function OnboardingProgress({ step }: OnboardingProgressProps) {
                 {item.label}
               </span>
             </div>
-            {i < 2 && (
+            {i < items.length - 1 && (
               <div className={`w-8 h-0.5 mb-5 ${i < currentIndex ? 'bg-success' : 'bg-border-hover'}`} />
             )}
           </div>

@@ -11,6 +11,8 @@ export function meta() {
   return [
     { title: "Connexion - Squad Planner" },
     { name: "description", content: "Connecte-toi ou crée ton compte Squad Planner pour planifier tes sessions gaming." },
+    { tagName: "link", rel: "canonical", href: "https://squadplanner.fr/auth" },
+    { property: "og:url", content: "https://squadplanner.fr/auth" },
   ]
 }
 

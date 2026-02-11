@@ -10,6 +10,8 @@ const Party = lazy(() => import('../pages/Party').then(m => ({ default: m.Party 
 export function meta() {
   return [
     { title: "Party - Squad Planner" },
+    { tagName: "link", rel: "canonical", href: "https://squadplanner.fr/party" },
+    { property: "og:url", content: "https://squadplanner.fr/party" },
   ]
 }
 

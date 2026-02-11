@@ -39,7 +39,7 @@ export function CookieConsent() {
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: 100, opacity: 0 }}
           transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-          className="fixed bottom-4 left-4 right-4 md:left-auto md:right-6 md:bottom-6 md:max-w-md z-[60]"
+          className="fixed bottom-4 left-4 right-4 md:left-auto md:right-6 md:bottom-6 md:max-w-md z-40 pb-[env(safe-area-inset-bottom)]"
         >
           <div className="bg-bg-surface border border-border-hover rounded-2xl shadow-2xl shadow-black/40 overflow-hidden">
             {/* Header */}
@@ -56,7 +56,7 @@ export function CookieConsent() {
                 </div>
                 <button
                   onClick={handleEssentialOnly}
-                  className="p-1.5 rounded-lg hover:bg-border-subtle transition-colors"
+                  className="min-w-[44px] min-h-[44px] flex items-center justify-center rounded-lg hover:bg-border-subtle transition-colors"
                   aria-label="Fermer"
                 >
                   <X className="w-4 h-4 text-text-tertiary" />

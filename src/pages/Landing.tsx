@@ -14,9 +14,12 @@ import { ReliabilitySection } from '../components/landing/ReliabilitySection'
 import { ComparisonSection } from '../components/landing/ComparisonSection'
 import { TestimonialCarousel } from '../components/landing/TestimonialCarousel'
 import { PricingSection } from '../components/landing/PricingSection'
-import { FaqSection, faqs } from '../components/landing/FaqSection'
+import { FaqSection } from '../components/landing/FaqSection'
 import { CtaSection } from '../components/landing/CtaSection'
 import { LandingFooter } from '../components/landing/LandingFooter'
+import { MobileStickyCTA } from '../components/landing/MobileStickyCTA'
+import { ArrowRight } from '../components/icons'
+import { Link } from 'react-router-dom'
 
 // ─── LAZY SECTION (PERF 6 — reduces initial DOM from ~946 to ~400 elements) ──
 function LazySection({ children, className, minHeight = 200 }: { children: ReactNode; className?: string; minHeight?: number }) {
@@ -58,24 +61,6 @@ export default function Landing() {
     return () => window.removeEventListener('mousemove', handleMouseMove)
   }, [mouseX, mouseY])
 
-  // Inject FAQ Schema
-  useEffect(() => {
-    const schema = {
-      '@context': 'https://schema.org',
-      '@type': 'FAQPage',
-      mainEntity: faqs.map(f => ({
-        '@type': 'Question',
-        name: f.q,
-        acceptedAnswer: { '@type': 'Answer', text: f.a }
-      }))
-    }
-    const script = document.createElement('script')
-    script.type = 'application/ld+json'
-    script.textContent = JSON.stringify(schema)
-    document.head.appendChild(script)
-    return () => { document.head.removeChild(script) }
-  }, [])
-
   const isLoggedIn = !!user
 
   return (
@@ -106,6 +91,13 @@ export default function Landing() {
       <div className="section-divider" />
       <ProblemSection />
       <div className="section-divider" />
+      {/* CTA intermédiaire */}
+      <div className="text-center py-8 px-4">
+        <Link to="/auth?mode=register&redirect=onboarding" className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-primary/10 text-primary font-medium hover:bg-primary/20 transition-colors border border-primary/20" data-track="mid_cta_click">
+          Fini les excuses — Créer ma squad
+          <ArrowRight className="w-4 h-4" />
+        </Link>
+      </div>
       <HowItWorksSection demoStep={demoStep} setDemoStep={setDemoStep} />
       <div className="section-divider" />
       <LazySection minHeight={400}><FeaturesSection /></LazySection>
@@ -125,6 +117,7 @@ export default function Landing() {
       <LazySection minHeight={300}><FaqSection /></LazySection>
       <div className="section-divider" />
       <LazySection minHeight={300}><CtaSection /></LazySection>
+      <MobileStickyCTA />
       <LandingFooter />
     </div>
   )

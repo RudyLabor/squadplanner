@@ -8,6 +8,8 @@ import PublicProfile from '../pages/PublicProfile'
 export function meta() {
   return [
     { title: "Profil - Squad Planner" },
+    { tagName: "link", rel: "canonical", href: "https://squadplanner.fr/profile" },
+    { property: "og:url", content: "https://squadplanner.fr/profile" },
   ]
 }
 

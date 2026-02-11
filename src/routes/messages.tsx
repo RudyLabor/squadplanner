@@ -10,6 +10,8 @@ const Messages = lazy(() => import('../pages/Messages'))
 export function meta() {
   return [
     { title: "Messages - Squad Planner" },
+    { tagName: "link", rel: "canonical", href: "https://squadplanner.fr/messages" },
+    { property: "og:url", content: "https://squadplanner.fr/messages" },
   ]
 }
 

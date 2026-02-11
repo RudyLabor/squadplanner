@@ -10,6 +10,8 @@ const SquadDetail = lazy(() => import('../pages/SquadDetail'))
 export function meta() {
   return [
     { title: "Détail Squad - Squad Planner" },
+    { tagName: "link", rel: "canonical", href: "https://squadplanner.fr/squads" },
+    { property: "og:url", content: "https://squadplanner.fr/squads" },
   ]
 }
 

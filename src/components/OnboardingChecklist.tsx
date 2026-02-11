@@ -28,14 +28,14 @@ export function OnboardingChecklist({
   hasSession,
   onCreateSession,
 }: OnboardingChecklistProps) {
-  const [dismissed, setDismissed] = useState(() => {
-    if (typeof window === 'undefined') return false
-    return localStorage.getItem(STORAGE_KEY) === 'true'
-  })
-  const [inviteCopied, setInviteCopied] = useState(() => {
-    if (typeof window === 'undefined') return false
-    return localStorage.getItem(INVITE_COPIED_KEY) === 'true'
-  })
+  const [dismissed, setDismissed] = useState(false)
+  const [inviteCopied, setInviteCopied] = useState(false)
+
+  // Hydrate from localStorage in useEffect to avoid SSR/client mismatch (React #418)
+  useEffect(() => {
+    if (localStorage.getItem(STORAGE_KEY) === 'true') setDismissed(true)
+    if (localStorage.getItem(INVITE_COPIED_KEY) === 'true') setInviteCopied(true)
+  }, [])
 
   // If all steps are complete, auto-hide after a celebration
   const allComplete = hasSquad && hasSession && inviteCopied

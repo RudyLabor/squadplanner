@@ -16,28 +16,16 @@
       "purpose": "any"
     },
     {
-      "src": "/icon-192.svg",
+      "src": "/favicon.svg",
       "sizes": "192x192",
       "type": "image/svg+xml",
-      "purpose": "any"
+      "purpose": "any maskable"
     },
     {
-      "src": "/icon-192.svg",
-      "sizes": "192x192",
-      "type": "image/svg+xml",
-      "purpose": "maskable"
-    },
-    {
-      "src": "/icon-192.svg",
+      "src": "/favicon.svg",
       "sizes": "512x512",
       "type": "image/svg+xml",
-      "purpose": "any"
-    },
-    {
-      "src": "/icon-192.svg",
-      "sizes": "512x512",
-      "type": "image/svg+xml",
-      "purpose": "maskable"
+      "purpose": "any maskable"
     }
   ],
   "shortcuts": [
@@ -46,21 +34,21 @@
       "short_name": "Session",
       "description": "Créer une nouvelle session de jeu",
       "url": "/sessions?new=true",
-      "icons": [{ "src": "/icon-session.svg", "sizes": "96x96", "type": "image/svg+xml" }]
+      "icons": [{ "src": "/favicon.svg", "sizes": "96x96", "type": "image/svg+xml" }]
     },
     {
       "name": "Mes squads",
       "short_name": "Squads",
       "description": "Voir mes squads",
       "url": "/squads",
-      "icons": [{ "src": "/icon-squad.svg", "sizes": "96x96", "type": "image/svg+xml" }]
+      "icons": [{ "src": "/favicon.svg", "sizes": "96x96", "type": "image/svg+xml" }]
     },
     {
       "name": "Party vocale",
       "short_name": "Party",
       "description": "Lancer une party vocale",
       "url": "/party",
-      "icons": [{ "src": "/icon-party.svg", "sizes": "96x96", "type": "image/svg+xml" }]
+      "icons": [{ "src": "/favicon.svg", "sizes": "96x96", "type": "image/svg+xml" }]
     }
   ],
   "related_applications": [],

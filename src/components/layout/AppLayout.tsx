@@ -128,11 +128,13 @@ export function AppLayout({ children }: AppLayoutProps) {
 
   // Sidebar collapse state
   const [sidebarExpanded, setSidebarExpanded] = useState(false)
-  const [sidebarPinned, setSidebarPinned] = useState(() => {
-    if (typeof window === 'undefined') return false
+  const [sidebarPinned, setSidebarPinned] = useState(false)
+
+  // Hydrate sidebar pinned state from localStorage in useEffect to avoid hydration mismatch
+  useEffect(() => {
     const saved = localStorage.getItem('sidebar-pinned')
-    return saved === 'true'
-  })
+    if (saved === 'true') setSidebarPinned(true)
+  }, [])
 
   const isExpanded = sidebarExpanded || sidebarPinned
 

@@ -1,30 +1,14 @@
-import { useEffect, lazy, Suspense, memo, useRef, useState } from 'react'
 import {
   Links,
   Meta,
-  Outlet,
-  Scripts,
   ScrollRestoration,
-  isRouteErrorResponse,
-  useRouteError,
 } from 'react-router'
-import { Toaster } from 'sonner'
-import { LazyMotion } from 'framer-motion'
-import { QueryClientProvider } from '@tanstack/react-query'
-import { queryClient } from './lib/queryClient'
+import { ClientProviders } from './ClientProviders'
+import { ErrorBoundaryClient } from './ErrorBoundaryClient'
 import './index.css'
 
-// Vercel Edge Runtime — SSR runs at the closest edge location (~50ms cold start)
-export const config = {
-  runtime: 'edge',
-}
-
-// Client-only imports (deferred to avoid SSR issues)
-const ClientShell = lazy(() => import('./ClientShell'))
-
-const loadFeatures = () => import('framer-motion').then(mod => mod.domMax)
-
 // Layout component provides the HTML document shell (replaces index.html)
+// This is rendered on the server — zero JS sent to client for this shell.
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="fr">
@@ -129,93 +113,17 @@ export function Layout({ children }: { children: React.ReactNode }) {
       <body>
         {children}
         <ScrollRestoration />
-        <Scripts />
       </body>
     </html>
   )
 }
 
-// Root component - SSR-safe shell, client-only features deferred
-export default function Root() {
-  const [isClient, setIsClient] = useState(false)
-
-  useEffect(() => {
-    setIsClient(true)
-    // Initialize theme on client
-    import('./hooks/useTheme').then(({ useThemeStore }) => {
-      const state = useThemeStore.getState()
-      const effectiveTheme = state.mode === 'system'
-        ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
-        : state.mode
-      document.documentElement.setAttribute('data-theme', effectiveTheme)
-    })
-  }, [])
-
-  return (
-    <QueryClientProvider client={queryClient}>
-      <LazyMotion features={loadFeatures} strict>
-        {isClient ? (
-          <Suspense fallback={<SSRFallback />}>
-            <ClientShell />
-          </Suspense>
-        ) : (
-          <SSRFallback />
-        )}
-        <Toaster
-          position="top-center"
-          toastOptions={{
-            duration: 4000,
-            style: {
-              background: 'var(--color-bg-surface)',
-              border: '1px solid var(--color-border-default)',
-              color: 'var(--color-text-primary)',
-              fontSize: '14px',
-              borderRadius: '12px',
-              padding: '12px 16px',
-              position: 'relative' as const,
-              overflow: 'hidden',
-            },
-            classNames: {
-              success: 'border-success/20 bg-success/10',
-              error: 'border-error/20 bg-error/10',
-              warning: 'border-warning/20 bg-warning/10',
-              info: 'border-primary/20 bg-primary/10',
-            },
-          }}
-        />
-        <div id="aria-live-polite" aria-live="polite" aria-atomic="true" className="sr-only" />
-        <div id="aria-live-assertive" aria-live="assertive" aria-atomic="true" className="sr-only" />
-      </LazyMotion>
-    </QueryClientProvider>
-  )
+// Root Server Component — renders on the server with zero client JS overhead.
+// Client-side providers (QueryClient, LazyMotion, Toaster) are in the
+// ClientProviders client boundary, which hydrates independently.
+export function ServerComponent() {
+  return <ClientProviders />
 }
 
-// SSR-safe fallback - renders just the route content without client-side chrome
-function SSRFallback() {
-  return <Outlet />
-}
-
-// Error boundary for the root route
-export function ErrorBoundary() {
-  const error = useRouteError()
-
-  if (isRouteErrorResponse(error)) {
-    return (
-      <div className="min-h-screen bg-bg-base flex items-center justify-center">
-        <div className="text-center">
-          <h1 className="text-6xl font-bold text-primary mb-4">{error.status}</h1>
-          <p className="text-text-secondary text-lg">{error.statusText}</p>
-        </div>
-      </div>
-    )
-  }
-
-  return (
-    <div className="min-h-screen bg-bg-base flex items-center justify-center">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold text-error mb-4">Oops!</h1>
-        <p className="text-text-secondary text-lg">Une erreur inattendue est survenue.</p>
-      </div>
-    </div>
-  )
-}
+// Error boundary — delegated to client module (useRouteError is client-only in RSC)
+export { ErrorBoundaryClient as ErrorBoundary } from './ErrorBoundaryClient'

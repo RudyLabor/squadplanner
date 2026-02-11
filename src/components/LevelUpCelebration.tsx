@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect, useState } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
 import { Star, Sparkles, Trophy } from './icons'

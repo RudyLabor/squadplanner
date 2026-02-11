@@ -1,10 +1,8 @@
-import { useRef } from 'react'
-import { useLoaderData } from 'react-router'
 import { redirect, data } from 'react-router'
 import type { LoaderFunctionArgs } from 'react-router'
-import { useQueryClient } from '@tanstack/react-query'
 import { createSupabaseServerClient } from '../lib/supabase.server'
 import { queryKeys } from '../lib/queryClient'
+import { ClientRouteWrapper } from '../components/ClientRouteWrapper'
 import { Settings } from '../pages/Settings'
 
 export function meta() {
@@ -34,15 +32,13 @@ export function headers({ loaderHeaders }: { loaderHeaders: Headers }) {
   return loaderHeaders
 }
 
-export default function SettingsRoute() {
-  const loaderData = useLoaderData<typeof loader>()
-  const queryClient = useQueryClient()
-
-  const seeded = useRef(false)
-  if (!seeded.current && loaderData?.profile) {
-    queryClient.setQueryData(queryKeys.profile.current(), loaderData.profile)
-    seeded.current = true
-  }
-
-  return <Settings />
+// Server Component — data loaded on server, React Query seeded via ClientRouteWrapper
+export function ServerComponent({ loaderData }: { loaderData: any }) {
+  return (
+    <ClientRouteWrapper seeds={[
+      { key: queryKeys.profile.current(), data: loaderData?.profile },
+    ]}>
+      <Settings />
+    </ClientRouteWrapper>
+  )
 }

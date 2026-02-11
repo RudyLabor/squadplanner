@@ -1,3 +1,5 @@
+"use client";
+
 import { memo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ChevronLeft } from '../icons'

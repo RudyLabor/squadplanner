@@ -1,3 +1,5 @@
+"use client";
+
 import { useState, useEffect, useRef } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
 import { X, Loader2, Pencil } from './icons'

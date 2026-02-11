@@ -1,3 +1,5 @@
+"use client";
+
 import { useMemo } from 'react'
 import { m } from 'framer-motion'
 import { Flame, Gift, Zap } from '../icons'

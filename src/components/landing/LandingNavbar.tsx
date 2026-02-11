@@ -1,3 +1,5 @@
+"use client";
+
 import { useState, useEffect, useCallback } from 'react'
 import { m } from 'framer-motion'
 import { ArrowRight, Menu, X as CloseIcon } from '../icons'

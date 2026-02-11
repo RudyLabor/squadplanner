@@ -1,10 +1,8 @@
-import { useRef } from 'react'
-import { useLoaderData } from 'react-router'
 import { redirect, data } from 'react-router'
 import type { LoaderFunctionArgs } from 'react-router'
-import { useQueryClient } from '@tanstack/react-query'
 import { createSupabaseServerClient } from '../lib/supabase.server'
 import { queryKeys } from '../lib/queryClient'
+import { ClientRouteWrapper } from '../components/ClientRouteWrapper'
 import SessionDetail from '../pages/SessionDetail'
 
 export function meta() {
@@ -60,18 +58,13 @@ export function headers({ loaderHeaders }: { loaderHeaders: Headers }) {
   return loaderHeaders
 }
 
-export default function SessionDetailRoute() {
-  const loaderData = useLoaderData<typeof loader>()
-  const queryClient = useQueryClient()
-
-  const seeded = useRef(false)
-  if (!seeded.current && loaderData?.session) {
-    queryClient.setQueryData(
-      queryKeys.sessions.detail(loaderData.session.id),
-      loaderData.session
-    )
-    seeded.current = true
-  }
-
-  return <SessionDetail />
+// Server Component — data loaded on server, React Query seeded via ClientRouteWrapper
+export function ServerComponent({ loaderData }: { loaderData: any }) {
+  return (
+    <ClientRouteWrapper seeds={[
+      { key: queryKeys.sessions.detail(loaderData?.session?.id), data: loaderData?.session },
+    ]}>
+      <SessionDetail />
+    </ClientRouteWrapper>
+  )
 }

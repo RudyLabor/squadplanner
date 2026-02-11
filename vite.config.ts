@@ -1,4 +1,5 @@
-import { reactRouter } from "@react-router/dev/vite";
+import { unstable_reactRouterRSC as reactRouterRSC } from "@react-router/dev/vite";
+import rsc from "@vitejs/plugin-rsc";
 import tailwindcss from "@tailwindcss/vite";
 import { defineConfig } from "vite";
 import { visualizer } from "rollup-plugin-visualizer";
@@ -35,7 +36,8 @@ function swVersionPlugin() {
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [
-    reactRouter(),
+    reactRouterRSC(),
+    rsc(),
     tailwindcss(),
     swVersionPlugin(),
     process.env.ANALYZE === 'true' && visualizer({

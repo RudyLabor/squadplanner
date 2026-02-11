@@ -14,6 +14,7 @@ export function meta() {
   ]
 }
 
-export default function HelpRoute() {
+// Server Component — zero JS overhead for this route wrapper.
+export function ServerComponent() {
   return <Help />
 }

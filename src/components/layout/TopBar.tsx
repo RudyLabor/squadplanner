@@ -1,3 +1,5 @@
+"use client";
+
 import { memo, useCallback, useState } from 'react'
 import { Link } from 'react-router-dom'
 import {

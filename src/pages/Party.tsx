@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect, useState, useRef } from 'react'
 import { m } from 'framer-motion'
 import { Loader2 } from '../components/icons'

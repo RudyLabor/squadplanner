@@ -1,3 +1,5 @@
+"use client";
+
 /**
  * Phase 4.1.4 — Location Share
  * "Je suis la" button + location message display

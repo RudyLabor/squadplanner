@@ -1,3 +1,5 @@
+"use client";
+
 import { useState, useEffect } from 'react'
 import { m } from 'framer-motion'
 import { Trophy } from './icons'

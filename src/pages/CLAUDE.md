@@ -32,4 +32,13 @@
 | #2595 | 8:27 AM | 🔵 | Home Page Dashboard Orchestration | ~541 |
 | #2579 | 8:24 AM | 🔵 | Messages Component Architecture Analysis | ~465 |
 | #2577 | 8:23 AM | 🔵 | SquadDetail Component Structure Analysis | ~379 |
+
+### Feb 11, 2026
+
+| ID | Time | T | Title | Read |
+|----|------|---|-------|------|
+| #3791 | 2:53 PM | 🔵 | Help Page Component Uses Client-Side Features | ~378 |
+| #3763 | 2:47 PM | 🔵 | Auth Page Client-Side Authentication Flow | ~327 |
+| #3762 | " | 🔵 | Messages Page Real-Time Architecture | ~384 |
+| #3761 | " | 🔵 | Home Page Component Structure Analysis | ~362 |
 </claude-mem-context>

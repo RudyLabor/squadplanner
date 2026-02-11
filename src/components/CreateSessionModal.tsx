@@ -1,3 +1,5 @@
+"use client";
+
 /**
  * CreateSessionModal - PHASE 3.1
  * Global modal for creating sessions from anywhere in the app

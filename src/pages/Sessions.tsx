@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect, useState, useRef } from 'react'
 import { Plus, Loader2 } from '../components/icons'
 import Confetti from '../components/LazyConfetti'

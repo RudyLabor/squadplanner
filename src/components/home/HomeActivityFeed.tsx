@@ -1,3 +1,5 @@
+"use client";
+
 import { memo, useMemo } from 'react'
 import { m } from 'framer-motion'
 import {

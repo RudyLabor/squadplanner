@@ -1,3 +1,5 @@
+"use client";
+
 import { useState, memo } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
 import { X, Clock } from './icons'

@@ -1,3 +1,5 @@
+"use client";
+
 /**
  * Phase 4.2.2 — Status/Availability Selector
  * Dropdown on avatar to select online/busy/dnd/invisible

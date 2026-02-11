@@ -24,6 +24,7 @@ export function headers({ loaderHeaders }: { loaderHeaders: Headers }) {
   return loaderHeaders
 }
 
-export default function CallHistoryRoute() {
+// Server Component — no seeds needed (simple loader)
+export function ServerComponent() {
   return <CallHistory />
 }

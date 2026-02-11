@@ -1,3 +1,5 @@
+"use client";
+
 import { memo, useMemo, lazy, Suspense } from 'react'
 import { isLocationMessage, parseLocationMessage } from './LocationShare'
 import { isPollMessage, parsePollData } from './ChatPoll'

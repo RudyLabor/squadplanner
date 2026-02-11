@@ -1,3 +1,5 @@
+"use client";
+
 import { useMemo } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { m } from 'framer-motion'

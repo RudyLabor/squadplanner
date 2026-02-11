@@ -1,3 +1,5 @@
+"use client";
+
 /**
  * Chantier 9 - Maintenance Page
  *

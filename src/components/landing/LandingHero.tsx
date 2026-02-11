@@ -1,3 +1,5 @@
+"use client";
+
 import { useRef } from 'react'
 import { m, type MotionValue } from 'framer-motion'
 import { ArrowRight, Sparkles } from '../icons'

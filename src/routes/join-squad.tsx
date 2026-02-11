@@ -6,6 +6,7 @@ export function meta() {
   ]
 }
 
-export default function JoinSquadRoute() {
+// Server Component — zero JS overhead for this route wrapper.
+export function ServerComponent() {
   return <JoinSquad />
 }

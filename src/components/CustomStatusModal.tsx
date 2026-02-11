@@ -1,3 +1,5 @@
+"use client";
+
 /**
  * Phase 4.2.3 + 4.2.4 — Custom Status Modal
  * Set emoji + text + duration + game status

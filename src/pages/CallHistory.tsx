@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect, useState } from 'react'
 import { AnimatePresence } from 'framer-motion'
 import { Phone, ArrowLeft, RefreshCw } from '../components/icons'

@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
 import { CheckCircle2, AlertCircle, WifiOff } from '../../components/icons'

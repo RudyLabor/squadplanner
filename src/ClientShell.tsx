@@ -1,3 +1,5 @@
+"use client";
+
 import { lazy, Suspense, memo, useEffect, useRef } from 'react'
 import { Outlet, useSearchParams } from 'react-router'
 import { useAuthStore, subscribeToIncomingCalls, usePushNotificationStore, useVoiceCallStore } from './hooks'

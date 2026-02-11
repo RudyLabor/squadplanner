@@ -1,3 +1,5 @@
+"use client";
+
 /**
  * Phase 4.1.3 — Forward Message Modal
  * Select a squad to forward a message to

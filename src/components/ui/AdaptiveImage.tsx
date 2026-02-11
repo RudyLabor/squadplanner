@@ -1,3 +1,5 @@
+"use client";
+
 import { useState, useRef, useEffect, memo } from 'react'
 import { useAdaptiveLoading } from '../../hooks/useAdaptiveLoading'
 

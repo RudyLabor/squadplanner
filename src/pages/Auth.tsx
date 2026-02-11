@@ -1,3 +1,5 @@
+"use client";
+
 import { useState } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
 import { Loader2, Gamepad2, CheckCircle } from '../components/icons'

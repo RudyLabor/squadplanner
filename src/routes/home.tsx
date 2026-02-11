@@ -1,10 +1,8 @@
-import { useRef } from 'react'
-import { useLoaderData } from 'react-router'
 import { redirect, data } from 'react-router'
 import type { LoaderFunctionArgs } from 'react-router'
-import { useQueryClient } from '@tanstack/react-query'
 import { createSupabaseServerClient } from '../lib/supabase.server'
 import { queryKeys } from '../lib/queryClient'
+import { ClientRouteWrapper } from '../components/ClientRouteWrapper'
 import Home from '../pages/Home'
 
 export function meta() {
@@ -96,17 +94,14 @@ export function headers({ loaderHeaders }: { loaderHeaders: Headers }) {
   return loaderHeaders
 }
 
-export default function HomeRoute() {
-  const loaderData = useLoaderData<typeof loader>()
-  const queryClient = useQueryClient()
-
-  // Seed React Query cache with server data (once)
-  const seeded = useRef(false)
-  if (!seeded.current && loaderData) {
-    queryClient.setQueryData(queryKeys.squads.list(), loaderData.squads)
-    queryClient.setQueryData(queryKeys.sessions.upcoming(), loaderData.upcomingSessions)
-    seeded.current = true
-  }
-
-  return <Home loaderData={loaderData} />
+// Server Component — data loaded on server, React Query seeded via ClientRouteWrapper
+export function ServerComponent({ loaderData }: { loaderData: any }) {
+  return (
+    <ClientRouteWrapper seeds={[
+      { key: queryKeys.squads.list(), data: loaderData?.squads },
+      { key: queryKeys.sessions.upcoming(), data: loaderData?.upcomingSessions },
+    ]}>
+      <Home loaderData={loaderData} />
+    </ClientRouteWrapper>
+  )
 }

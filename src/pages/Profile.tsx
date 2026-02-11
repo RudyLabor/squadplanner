@@ -1,3 +1,5 @@
+"use client";
+
 import { useState, useEffect, useRef, useMemo } from 'react'
 import { LogOut } from '../components/icons'
 import { ProfileSkeleton } from '../components/ui'

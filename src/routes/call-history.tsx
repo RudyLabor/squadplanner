@@ -24,7 +24,6 @@ export function headers({ loaderHeaders }: { loaderHeaders: Headers }) {
   return loaderHeaders
 }
 
-// Server Component — no seeds needed (simple loader)
-export function ServerComponent() {
+export default function Component() {
   return <CallHistory />
 }

@@ -13,7 +13,6 @@ export function meta() {
   ]
 }
 
-// Server Component — zero JS overhead for this route wrapper.
-export function ServerComponent() {
+export default function Component() {
   return <Maintenance />
 }

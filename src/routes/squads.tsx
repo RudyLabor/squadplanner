@@ -52,8 +52,7 @@ export function headers({ loaderHeaders }: { loaderHeaders: Headers }) {
   return loaderHeaders
 }
 
-// Server Component — data loaded on server, React Query seeded via ClientRouteWrapper
-export function ServerComponent({ loaderData }: { loaderData: any }) {
+export default function Component({ loaderData }: { loaderData: any }) {
   return (
     <ClientRouteWrapper seeds={[
       { key: queryKeys.squads.list(), data: loaderData?.squads },

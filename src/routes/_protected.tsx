@@ -63,7 +63,6 @@ export function headers({ loaderHeaders }: { loaderHeaders: Headers }) {
   return loaderHeaders
 }
 
-// Server Component — delegates layout rendering to ProtectedLayoutClient
-export function ServerComponent({ loaderData }: { loaderData: any }) {
+export default function Component({ loaderData }: { loaderData: any }) {
   return <ProtectedLayoutClient loaderData={loaderData} />
 }

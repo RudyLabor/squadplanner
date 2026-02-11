@@ -32,9 +32,43 @@ function swVersionPlugin() {
   };
 }
 
+// React Compiler — auto-memoization for client components (Phase 1.3)
+// Only transforms "use client" files for safety with SSR/server components
+function reactCompilerPlugin(): import('vite').Plugin {
+  let babel: typeof import('@babel/core');
+  return {
+    name: 'react-compiler',
+    enforce: 'pre',
+    async buildStart() {
+      babel = await import('@babel/core');
+    },
+    async transform(code, id) {
+      if (id.includes('node_modules')) return;
+      if (!/\.tsx?$/.test(id)) return;
+      if (!code.includes('"use client"') && !code.includes("'use client'")) return;
+
+      const result = await babel.transformAsync(code, {
+        babelrc: false,
+        configFile: false,
+        filename: id,
+        parserOpts: {
+          sourceType: 'module',
+          plugins: ['typescript', 'jsx'],
+        },
+        plugins: [['babel-plugin-react-compiler', {}]],
+        sourceMaps: true,
+      });
+
+      if (!result?.code) return;
+      return { code: result.code, map: result.map };
+    },
+  };
+}
+
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [
+    reactCompilerPlugin(),
     reactRouter(),
     tailwindcss(),
     swVersionPlugin(),

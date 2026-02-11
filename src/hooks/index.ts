@@ -5,23 +5,19 @@ export { useMessagesStore } from './useMessages'
 export { useDirectMessagesStore } from './useDirectMessages'
 export { useAIStore, useAI } from './useAI'
 export { useSubscriptionStore } from './useSubscription'
-export { useVoiceChatStore, useSessionVoiceChat, getSavedPartyInfo } from './useVoiceChat'
-export { useVoiceCallStore, subscribeToIncomingCalls, formatCallDuration } from './useVoiceCall'
+// IMPORTANT: LiveKit-dependent hooks are NOT re-exported from this barrel.
+// They pull in 426KB of livekit-client on every page via static imports.
+// Import directly where needed:
+//   import { useVoiceChatStore, ... } from '../hooks/useVoiceChat'
+//   import { useVoiceCallStore, ... } from '../hooks/useVoiceCall'
 export { useNotificationStore, useSessionNotifications } from './useNotifications'
 export { usePushNotificationStore, usePushNotifications, initializePushNotifications } from './usePushNotifications'
 export { usePremiumStore, usePremium, FREE_SQUAD_LIMIT, FREE_HISTORY_DAYS, PREMIUM_PRICE_MONTHLY, PREMIUM_PRICE_YEARLY } from './usePremium'
 export type { PremiumFeature } from './usePremium'
 export { useCallHistoryStore, formatDuration, formatRelativeTime } from './useCallHistory'
 export type { CallType, CallRecord, CallHistoryItem } from './useCallHistory'
-export {
-  useNetworkQualityStore,
-  useNetworkQuality,
-  setupNetworkQualityListener,
-  adjustAudioQuality,
-  AUDIO_PROFILES,
-  QUALITY_INFO,
-  mapLiveKitQualityToLevel
-} from './useNetworkQuality'
+// useNetworkQuality also imports livekit-client — import directly where needed:
+//   import { useNetworkQualityStore, ... } from '../hooks/useNetworkQuality'
 export type { NetworkQualityLevel, AudioProfile } from './useNetworkQuality'
 export { useFocusTrap } from './useFocusTrap'
 export { useParticipantVolumes } from './useParticipantVolumes'

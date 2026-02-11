@@ -15,7 +15,7 @@ import {
 } from '../../components/icons'
 import { Link } from 'react-router-dom'
 import { Card } from '../../components/ui'
-import { useVoiceChatStore } from '../../hooks'
+import { useVoiceChatStore } from '../../hooks/useVoiceChat'
 import { NetworkQualityIndicator } from '../../components/NetworkQualityIndicator'
 import { useNetworkQualityStore } from '../../hooks/useNetworkQuality'
 import { VoiceWaveformDemo } from '../../components/VoiceWaveform'

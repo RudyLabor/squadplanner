@@ -28,13 +28,21 @@ export function Sessions({ loaderData }: SessionsProps) {
 
   const [showConfetti, setShowConfetti] = useState(false)
   const hasShownCelebration = useRef(false)
+  const aiFetchedRef = useRef<Set<string>>(new Set())
+
+  // Stable dep: stringified squad IDs (the squads array changes reference every render)
+  const squadIds = squads.map(s => s.id).sort().join(',')
 
   useEffect(() => {
+    if (!squadIds || !isInitialized) return
     squads.forEach(squad => {
+      // Only fetch once per squad — prevents infinite re-fetch loop
+      if (aiFetchedRef.current.has(squad.id)) return
+      aiFetchedRef.current.add(squad.id)
       fetchSlotSuggestions(squad.id)
       fetchCoachTips(squad.id)
     })
-  }, [squads, fetchSlotSuggestions, fetchCoachTips])
+  }, [squadIds, isInitialized]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const upcomingSessions = sessions
     .filter(s => new Date(s.scheduled_at) > new Date() && s.status !== 'cancelled')

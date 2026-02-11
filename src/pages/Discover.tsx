@@ -43,9 +43,9 @@ const GAME_OPTIONS: SelectOption[] = [
 const REGION_OPTIONS: SelectOption[] = [
   { value: 'eu-west', label: 'Europe Ouest' },
   { value: 'eu-east', label: 'Europe Est' },
-  { value: 'na', label: 'Am�rique du Nord' },
+  { value: 'na', label: 'Amerique du Nord' },
   { value: 'asia', label: 'Asie' },
-  { value: 'oce', label: 'Oc�anie' },
+  { value: 'oce', label: 'Oceanie' },
 ]
 
 export function Discover() {
@@ -59,14 +59,14 @@ export function Discover() {
       animate={{ opacity: 1 }}
       className="max-w-2xl lg:max-w-4xl xl:max-w-5xl mx-auto px-4 md:px-6 lg:px-8 py-6 pb-24"
     >
-      <MobilePageHeader title="D�couvrir" />
+      <MobilePageHeader title="Decouvrir" />
       {/* Header - hidden on mobile where MobilePageHeader is shown */}
       <div className="hidden lg:flex items-center gap-3 mb-6">
         <div className="w-10 h-10 rounded-xl bg-indigo-500/10 flex items-center justify-center">
           <Compass className="w-5 h-5 text-indigo-400" />
         </div>
         <div>
-          <h1 className="text-lg font-bold text-text-primary">D�couvrir</h1>
+          <h1 className="text-lg font-bold text-text-primary">Decouvrir</h1>
           <p className="text-xs text-text-tertiary">Trouve des squads et joueurs</p>
         </div>
       </div>
@@ -97,7 +97,7 @@ export function Discover() {
             options={REGION_OPTIONS}
             value={region || undefined}
             onChange={(v) => setRegion(v as string)}
-            placeholder="Toutes les r�gions"
+            placeholder="Toutes les regions"
             clearable
             size="sm"
           />
@@ -149,13 +149,13 @@ const SquadsTab = memo(function SquadsTab({ game, region }: { game: string; regi
           >
             <Compass className="w-8 h-8 text-primary" />
           </m.div>
-          <h3 className="text-lg font-bold text-text-primary mb-2">Aucune squad publique trouv�e</h3>
-          <p className="text-sm text-text-secondary mb-1">Sois le premier � cr�er une squad publique !</p>
-          <p className="text-xs text-text-tertiary mb-5">Les leaders peuvent rendre leur squad publique dans les param�tres</p>
+          <h3 className="text-lg font-bold text-text-primary mb-2">Aucune squad publique trouvee</h3>
+          <p className="text-sm text-text-secondary mb-1">Sois le premier a creer une squad publique !</p>
+          <p className="text-xs text-text-tertiary mb-5">Les leaders peuvent rendre leur squad publique dans les parametres</p>
           <Link to="/squads">
             <Button variant="primary" size="sm">
               <Plus className="w-4 h-4" />
-              Cr�er une squad
+              Creer une squad
             </Button>
           </Link>
         </m.div>
@@ -168,7 +168,7 @@ const SquadsTab = memo(function SquadsTab({ game, region }: { game: string; regi
           </div>
           <div className="space-y-2 lg:grid lg:grid-cols-3 lg:gap-3 lg:space-y-0">
             {[
-              { name: 'Les Gamers FR', game: 'Valorant', members: 8, desc: 'Squad comp�titive Valorant' },
+              { name: 'Les Gamers FR', game: 'Valorant', members: 8, desc: 'Squad competitive Valorant' },
               { name: 'Rocket Masters', game: 'Rocket League', members: 5, desc: 'Du freestyle au ranked' },
               { name: 'Fortnite Squad', game: 'Fortnite', members: 12, desc: 'Build & chill' },
             ].map((s, i) => (

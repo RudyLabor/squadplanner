@@ -9,7 +9,7 @@ import {
 } from '../icons'
 import { useNavigate } from 'react-router-dom'
 import { Button, Card, CardContent } from '../ui'
-import { useVoiceCallStore } from '../../hooks'
+import { useVoiceCallStore } from '../../hooks/useVoiceCall'
 
 interface MemberProfile {
   username?: string

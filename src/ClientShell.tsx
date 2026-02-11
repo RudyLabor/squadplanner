@@ -2,7 +2,7 @@
 
 import { lazy, Suspense, memo, useEffect, useRef } from 'react'
 import { Outlet, useSearchParams } from 'react-router'
-import { useAuthStore, subscribeToIncomingCalls, usePushNotificationStore, useVoiceCallStore } from './hooks'
+import { useAuthStore, usePushNotificationStore } from './hooks'
 import { initErrorTracker } from './lib/errorTracker'
 import { useDocumentTitle } from './hooks/useDocumentTitle'
 import { useScrollRestoration } from './hooks/useScrollRestoration'
@@ -45,7 +45,6 @@ const GlobalStateBanners = memo(function GlobalStateBanners() {
 export default function ClientShell() {
   const { initialize, user } = useAuthStore()
   const [searchParams, setSearchParams] = useSearchParams()
-  const { setIncomingCall, status: callStatus } = useVoiceCallStore()
 
   useDocumentTitle()
   useScrollRestoration()
@@ -75,14 +74,17 @@ export default function ClientShell() {
     }
   }, [user])
 
-  // Handle incoming call from URL params
+  // Handle incoming call from URL params — lazy-loads voice call module (426KB)
   useEffect(() => {
     const incomingCallId = searchParams.get('incoming_call')
     const callerId = searchParams.get('caller_id')
 
-    if (incomingCallId && callerId && user && callStatus === 'idle') {
+    if (incomingCallId && callerId && user) {
       const handleIncomingCallFromUrl = async () => {
         try {
+          const { useVoiceCallStore } = await import('./hooks/useVoiceCall')
+          const { status, setIncomingCall } = useVoiceCallStore.getState()
+          if (status !== 'idle') return
           const { supabase } = await import('./lib/supabase')
           const { data: callerProfile } = await supabase.from('profiles').select('username, avatar_url').eq('id', callerId).single()
           if (callerProfile) {
@@ -94,13 +96,16 @@ export default function ClientShell() {
       searchParams.delete('incoming_call'); searchParams.delete('caller_id')
       setSearchParams(searchParams, { replace: true })
     }
-  }, [searchParams, setSearchParams, user, callStatus, setIncomingCall])
+  }, [searchParams, setSearchParams, user])
 
-  // Subscribe to incoming calls
+  // Subscribe to incoming calls — lazy-loads voice call module (426KB) only when user is authenticated
   useEffect(() => {
     if (!user) return
-    const unsubscribe = subscribeToIncomingCalls(user.id)
-    return () => unsubscribe()
+    let unsubscribe: (() => void) | undefined
+    import('./hooks/useVoiceCall').then(({ subscribeToIncomingCalls }) => {
+      unsubscribe = subscribeToIncomingCalls(user.id)
+    })
+    return () => { unsubscribe?.() }
   }, [user])
 
   // Auto-subscribe to push notifications

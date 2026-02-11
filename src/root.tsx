@@ -90,6 +90,13 @@ export function Layout({ children }: { children: React.ReactNode }) {
         {/* Critical CSS */}
         <link rel="stylesheet" href="/critical.css" />
 
+        {/* Blocking theme script — runs BEFORE React hydration to prevent FOUC and CLS */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var s=JSON.parse(localStorage.getItem('squadplanner-theme')||'{}');var m=s&&s.state&&s.state.mode||'system';var t=m==='system'?(window.matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light'):m;document.documentElement.setAttribute('data-theme',t)}catch(e){document.documentElement.setAttribute('data-theme','dark')}})()`,
+          }}
+        />
+
         {/* Speculation Rules for predictive navigation */}
         <script
           type="speculationrules"
@@ -136,13 +143,13 @@ export default function Root() {
 
   useEffect(() => {
     setIsClient(true)
-    // Initialize theme on client
+    // Theme is already applied by the blocking <script> in <head>.
+    // Just ensure the Zustand store syncs with the DOM attribute.
     import('./hooks/useTheme').then(({ useThemeStore }) => {
-      const state = useThemeStore.getState()
-      const effectiveTheme = state.mode === 'system'
-        ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
-        : state.mode
-      document.documentElement.setAttribute('data-theme', effectiveTheme)
+      const domTheme = document.documentElement.getAttribute('data-theme') as 'dark' | 'light'
+      if (domTheme) {
+        useThemeStore.setState({ effectiveTheme: domTheme })
+      }
     })
   }, [])
 

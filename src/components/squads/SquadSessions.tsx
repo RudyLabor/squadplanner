@@ -10,7 +10,8 @@ import {
   MicOff,
 } from '../icons'
 import { Button, Card, CardContent, Badge, Input, Select } from '../ui'
-import { useAuthStore, useVoiceChatStore, usePremiumStore } from '../../hooks'
+import { useAuthStore, usePremiumStore } from '../../hooks'
+import { useVoiceChatStore } from '../../hooks/useVoiceChat'
 import { SessionCard } from './SessionCard'
 
 // Re-export SessionCard for barrel consumers

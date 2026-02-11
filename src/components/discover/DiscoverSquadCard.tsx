@@ -23,12 +23,16 @@ export const DiscoverSquadCard = memo(function DiscoverSquadCard({ squad }: Prop
     try {
       await navigator.clipboard.writeText(squad.invite_code)
       setCopied(true)
-      showSuccess('Code copi� ! Utilise-le pour rejoindre.')
+      showSuccess('Code copie ! Utilise-le pour rejoindre.')
       setTimeout(() => setCopied(false), 2000)
     } catch {
       showError('Impossible de copier')
     }
   }
+
+  // Guard against NaN/undefined for reliability
+  const reliability = Number.isFinite(squad.avg_reliability) ? Math.round(squad.avg_reliability) : 0
+  const memberCount = Number.isFinite(squad.member_count) ? squad.member_count : 0
 
   return (
     <m.div
@@ -56,11 +60,11 @@ export const DiscoverSquadCard = memo(function DiscoverSquadCard({ squad }: Prop
           <div className="flex items-center gap-3 mt-2">
             <span className="inline-flex items-center gap-1 text-xs text-text-tertiary">
               <Users className="w-3 h-3" />
-              {squad.member_count} membres
+              {memberCount} membres
             </span>
             <span className="inline-flex items-center gap-1 text-xs text-text-tertiary">
               <Star className="w-3 h-3 text-amber-400" />
-              {Math.round(squad.avg_reliability)}%
+              {reliability}%
             </span>
             {squad.region && (
               <span className="text-xs text-text-tertiary capitalize">{squad.region}</span>
@@ -85,7 +89,7 @@ export const DiscoverSquadCard = memo(function DiscoverSquadCard({ squad }: Prop
           className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-400 text-xs font-medium transition-colors"
         >
           {copied ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
-          {copied ? 'Copi� !' : 'Rejoindre'}
+          {copied ? 'Copie !' : 'Rejoindre'}
         </button>
       </div>
 
@@ -98,7 +102,7 @@ export const DiscoverSquadCard = memo(function DiscoverSquadCard({ squad }: Prop
             <span className="text-[0.5rem] text-indigo-400 font-bold">{squad.owner_username?.charAt(0).toUpperCase()}</span>
           </div>
         )}
-        <span className="text-sm text-text-tertiary">Cr�� par {squad.owner_username}</span>
+        <span className="text-sm text-text-tertiary">Cree par {squad.owner_username}</span>
       </div>
     </m.div>
   )

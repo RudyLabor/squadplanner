@@ -28,12 +28,59 @@ export function initSupabase(): Promise<SupabaseClient> {
   return _initPromise
 }
 
+/** Check if the Supabase client has been initialized */
+export function isSupabaseReady(): boolean {
+  return _client !== null
+}
+
+/** Wait for Supabase to be ready — triggers init if not started */
+export function waitForSupabase(): Promise<SupabaseClient> {
+  if (_client) return Promise.resolve(_client)
+  return initSupabase()
+}
+
+/**
+ * Creates a chainable no-op proxy that mimics the Supabase query builder.
+ * Every method call returns the same proxy, and when awaited resolves to
+ * { data: null, error: { message: '...', code: 'NOT_INITIALIZED' } }.
+ * This prevents crashes when hooks access supabase before init completes.
+ */
+function createPendingProxy(): any {
+  const notReady = { data: null, error: { message: '[Supabase] Not initialized yet', code: 'NOT_INITIALIZED' } }
+  const resolved = Promise.resolve(notReady)
+
+  const handler: ProxyHandler<any> = {
+    get(_, prop) {
+      // Make the proxy awaitable (thenable)
+      if (prop === 'then') return resolved.then.bind(resolved)
+      if (prop === 'catch') return resolved.catch.bind(resolved)
+      if (prop === 'finally') return resolved.finally.bind(resolved)
+      // onAuthStateChange needs to return a subscription-like object
+      if (prop === 'onAuthStateChange') {
+        return () => ({ data: { subscription: { unsubscribe: () => {} } } })
+      }
+      // For channel().on().subscribe() pattern
+      if (prop === 'unsubscribe' || prop === 'removeChannel') return () => {}
+      // Any other property returns the proxy itself (chainable)
+      return createPendingProxy()
+    },
+    apply() {
+      // Function calls return another pending proxy (chainable)
+      return createPendingProxy()
+    },
+  }
+
+  return new Proxy(function () {}, handler)
+}
+
 // Synchronous proxy — all 40+ import sites continue to work unchanged.
-// Safe because initSupabase() is awaited in auth initialization before any usage.
+// When _client is null (before init), returns safe no-op proxies instead of throwing.
+// Hooks receive { data: null, error } and handle gracefully via existing error paths.
 export const supabase = new Proxy({} as SupabaseClient, {
   get(_, prop: string | symbol) {
     if (!_client) {
-      throw new Error('[Supabase] Not initialized. Ensure initSupabase() is awaited first.')
+      // Return a safe chainable no-op instead of crashing
+      return createPendingProxy()
     }
     const value = (_client as any)[prop]
     return typeof value === 'function' ? value.bind(_client) : value

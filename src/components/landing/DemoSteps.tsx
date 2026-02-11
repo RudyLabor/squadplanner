@@ -61,10 +61,21 @@ function DemoNavbar({ active }: { active: string }) {
 
 export function PhoneFrame({ children }: { children: React.ReactNode }) {
   return (
-    <div className="relative mx-auto w-[240px] md:w-[280px]">
-      <div className="bg-bg-elevated rounded-[2rem] p-3 border border-border-hover shadow-2xl">
+    <div className="relative mx-auto w-[260px] md:w-[300px]">
+      {/* Glow effect behind phone */}
+      <div className="absolute -inset-4 bg-primary/10 rounded-[3rem] blur-2xl" />
+      <div className="relative bg-bg-elevated rounded-[2rem] p-3 border border-border-hover shadow-2xl ring-1 ring-primary/10">
+        {/* Notch */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-24 h-5 bg-bg-elevated rounded-b-xl z-10" />
-        <div className="bg-bg-surface rounded-[1.5rem] overflow-hidden h-[340px] md:h-[380px] relative flex flex-col">
+        <div className="bg-bg-surface rounded-[1.5rem] overflow-hidden h-[360px] md:h-[400px] relative flex flex-col">
+          {/* Status bar */}
+          <div className="flex items-center justify-between px-6 pt-2 pb-1 text-2xs text-text-tertiary">
+            <span>21:00</span>
+            <div className="flex items-center gap-1">
+              <svg className="w-3 h-3" viewBox="0 0 24 24" fill="currentColor"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3a4.237 4.237 0 00-6 0zm-4-4l2 2a7.074 7.074 0 0110 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg>
+              <svg className="w-3 h-3" viewBox="0 0 24 24" fill="currentColor"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg>
+            </div>
+          </div>
           {children}
         </div>
       </div>

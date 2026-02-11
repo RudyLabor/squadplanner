@@ -12,6 +12,9 @@ export type SessionStatus = 'proposed' | 'confirmed' | 'cancelled' | 'completed'
 export type RsvpResponse = 'present' | 'absent' | 'maybe'
 export type CheckinStatus = 'present' | 'late' | 'noshow'
 export type SubscriptionTier = 'free' | 'premium'
+export type MessageType = 'text' | 'image' | 'voice' | 'gif' | 'poll' | 'location' | 'file'
+export type ChannelType = 'text' | 'voice' | 'announcements'
+export type StoryContentType = 'text' | 'image' | 'achievement' | 'session_highlight'
 
 export interface Database {
   public: {
@@ -47,6 +50,10 @@ export interface Database {
           playstyle: string | null
           twitch_username: string | null
           discord_username: string | null
+          // Phase 7: Custom Status
+          status_text: string | null
+          status_emoji: string | null
+          status_expires_at: string | null
           // Timestamps
           created_at: string
           updated_at: string
@@ -76,6 +83,9 @@ export interface Database {
           playstyle?: string | null
           twitch_username?: string | null
           discord_username?: string | null
+          status_text?: string | null
+          status_emoji?: string | null
+          status_expires_at?: string | null
           created_at?: string
           updated_at?: string
         }
@@ -104,6 +114,9 @@ export interface Database {
           playstyle?: string | null
           twitch_username?: string | null
           discord_username?: string | null
+          status_text?: string | null
+          status_emoji?: string | null
+          status_expires_at?: string | null
           created_at?: string
           updated_at?: string
         }
@@ -320,6 +333,15 @@ export interface Database {
           is_pinned: boolean
           read_by: string[]
           edited_at: string | null
+          // Phase 7: Channels, Threads, Voice
+          channel_id: string | null
+          thread_id: string | null
+          thread_reply_count: number
+          thread_last_reply_at: string | null
+          voice_url: string | null
+          voice_duration_seconds: number | null
+          message_type: MessageType
+          reply_to_id: string | null
           created_at: string
           updated_at: string
         }
@@ -334,6 +356,12 @@ export interface Database {
           is_pinned?: boolean
           read_by?: string[]
           edited_at?: string | null
+          channel_id?: string | null
+          thread_id?: string | null
+          voice_url?: string | null
+          voice_duration_seconds?: number | null
+          message_type?: MessageType
+          reply_to_id?: string | null
           created_at?: string
           updated_at?: string
         }
@@ -348,6 +376,12 @@ export interface Database {
           is_pinned?: boolean
           read_by?: string[]
           edited_at?: string | null
+          channel_id?: string | null
+          thread_id?: string | null
+          voice_url?: string | null
+          voice_duration_seconds?: number | null
+          message_type?: MessageType
+          reply_to_id?: string | null
           created_at?: string
           updated_at?: string
         }
@@ -583,4 +617,137 @@ export interface UserIntegration {
   is_active: boolean
   created_at: string
   updated_at: string
+}
+
+// Phase 7: Squad Channels
+export interface SquadChannel {
+  id: string
+  squad_id: string
+  name: string
+  description: string | null
+  channel_type: ChannelType
+  is_default: boolean
+  position: number
+  created_by: string
+  created_at: string
+  updated_at: string
+}
+
+// Phase 7: Stories
+export interface Story {
+  id: string
+  user_id: string
+  squad_id: string | null
+  content_type: StoryContentType
+  content: string
+  media_url: string | null
+  background_color: string
+  text_color: string
+  metadata: Record<string, unknown>
+  view_count: number
+  expires_at: string
+  created_at: string
+}
+
+export interface StoryView {
+  id: string
+  story_id: string
+  viewer_id: string
+  viewed_at: string
+}
+
+export interface FeedStory {
+  story_id: string
+  user_id: string
+  username: string
+  avatar_url: string | null
+  content_type: StoryContentType
+  content: string
+  media_url: string | null
+  background_color: string
+  text_color: string
+  metadata: Record<string, unknown>
+  view_count: number
+  has_viewed: boolean
+  created_at: string
+  expires_at: string
+  story_count: number
+}
+
+// Phase 7: Notification Preferences
+export interface NotificationPreferences {
+  id: string
+  user_id: string
+  // Session
+  session_created: boolean
+  session_confirmed: boolean
+  session_cancelled: boolean
+  session_reminder_15min: boolean
+  session_reminder_1h: boolean
+  session_reminder_24h: boolean
+  session_rsvp_received: boolean
+  session_rsvp_changed: boolean
+  session_checkin_reminder: boolean
+  session_completed: boolean
+  // Squad
+  squad_member_joined: boolean
+  squad_member_left: boolean
+  squad_role_changed: boolean
+  squad_settings_changed: boolean
+  // Messages
+  message_received: boolean
+  message_mention: boolean
+  message_reaction: boolean
+  message_thread_reply: boolean
+  dm_received: boolean
+  // Party/Voice
+  party_started: boolean
+  party_member_joined: boolean
+  incoming_call: boolean
+  missed_call: boolean
+  // Social
+  friend_request: boolean
+  friend_online: boolean
+  story_from_friend: boolean
+  matchmaking_request: boolean
+  // Gamification
+  level_up: boolean
+  achievement_unlocked: boolean
+  streak_at_risk: boolean
+  leaderboard_rank_change: boolean
+  challenge_completed: boolean
+  // AI
+  ai_coach_tip: boolean
+  ai_slot_suggestion: boolean
+  // Global
+  quiet_hours_start: string | null
+  quiet_hours_end: string | null
+  sound_enabled: boolean
+  vibration_enabled: boolean
+}
+
+// Phase 7: Search Results
+export interface MessageSearchResult {
+  message_id: string
+  content: string
+  sender_id: string
+  sender_username: string
+  sender_avatar: string | null
+  squad_id: string
+  squad_name: string
+  channel_id: string | null
+  created_at: string
+  relevance: number
+}
+
+export interface DMSearchResult {
+  message_id: string
+  content: string
+  sender_id: string
+  sender_username: string
+  sender_avatar: string | null
+  other_user_id: string
+  other_username: string
+  created_at: string
+  relevance: number
 }

@@ -16,7 +16,7 @@ interface ProfileHistoryProps {
   aiCoachTip?: { tip?: string; tone?: string } | null
 }
 
-export function ProfileHistory({ profile, hasPremium, canAccessFeature, aiCoachTip }: ProfileHistoryProps) {
+export function ProfileHistory({ profile, hasPremium, aiCoachTip }: ProfileHistoryProps) {
   const navigate = useNavigate()
   const streakDays = profile?.streak_days || 0
 

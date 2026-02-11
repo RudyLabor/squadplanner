@@ -16,7 +16,7 @@ interface CardProps {
 
 export function Card({
   variant = 'default',
-  padding = 'default',
+  padding: _padding = 'default',
   loading,
   selected,
   disabled,

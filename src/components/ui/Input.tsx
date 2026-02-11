@@ -121,7 +121,7 @@ export const Input = forwardRef<HTMLInputElement | HTMLTextAreaElement, InputPro
               aria-invalid={error ? 'true' : undefined}
               aria-describedby={describedBy}
               className={`${sharedClasses} resize-y min-h-[80px] ${textareaSizeClasses[size]} ${paddingClasses} ${errorClasses} ${className}`}
-              {...((() => { const { multiline: _, id: _id, ...rest } = props as TextareaFieldProps; return rest })())}
+              {...((() => { const { multiline: _, id: _id, ...rest } = props as any; return rest })())}
             />
           ) : (
             <input
@@ -133,7 +133,7 @@ export const Input = forwardRef<HTMLInputElement | HTMLTextAreaElement, InputPro
               aria-invalid={error ? 'true' : undefined}
               aria-describedby={describedBy}
               className={`${sharedClasses} ${sizeClasses[size]} ${paddingClasses} ${errorClasses} ${className}`}
-              {...((() => { const { id: _id, ...rest } = props as InputFieldProps; return rest })())}
+              {...((() => { const { id: _id, ...rest } = props as any; return rest })())}
             />
           )}
           {hasRightElement && (

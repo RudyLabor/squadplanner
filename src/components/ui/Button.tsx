@@ -139,7 +139,7 @@ function ButtonInner<C extends ElementType = 'button'>(
   )
 }
 
-export const Button = forwardRef(ButtonInner) as <C extends ElementType = 'button'>(
+export const Button = forwardRef(ButtonInner as any) as <C extends ElementType = 'button'>(
   props: ButtonProps<C> & { ref?: React.Ref<HTMLButtonElement> }
 ) => React.ReactElement
 

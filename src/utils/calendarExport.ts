@@ -2,7 +2,15 @@
  * Utility functions for exporting sessions to calendar formats (ICS)
  */
 
-import type { Session } from '../types/database'
+type ExportableSession = {
+  id: string
+  scheduled_at: string
+  status: string
+  title?: string | null
+  game?: string | null
+  duration_minutes?: number
+  description?: string | null
+}
 
 interface CalendarEvent {
   id: string
@@ -17,7 +25,7 @@ interface CalendarEvent {
  * Converts a session to a calendar event
  */
 export function sessionToCalendarEvent(
-  session: Session,
+  session: ExportableSession,
   squadName?: string
 ): CalendarEvent {
   const startDate = new Date(session.scheduled_at)
@@ -126,7 +134,7 @@ function downloadICS(content: string, filename: string = 'sessions.ics'): void {
  * Exports sessions to an ICS file and triggers download
  */
 export function exportSessionsToICS(
-  sessions: Session[],
+  sessions: ExportableSession[],
   squadName?: string,
   filename?: string
 ): void {

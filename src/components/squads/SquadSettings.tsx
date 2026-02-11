@@ -8,7 +8,6 @@ import { Button, Card, Drawer } from '../ui'
 import { PremiumGate, PremiumBadge } from '../PremiumGate'
 import { SquadLeaderboard } from '../SquadLeaderboard'
 import { exportSessionsToICS } from '../../utils/calendarExport'
-import { showSuccess } from '../../lib/toast'
 
 interface RawLeaderboardEntry {
   user_id: string

@@ -18,7 +18,7 @@ interface TouchState {
   panStart: { x: number; y: number }
 }
 
-function getTouchDistance(t1: Touch, t2: Touch): number {
+function getTouchDistance(t1: { clientX: number; clientY: number }, t2: { clientX: number; clientY: number }): number {
   const dx = t1.clientX - t2.clientX
   const dy = t1.clientY - t2.clientY
   return Math.sqrt(dx * dx + dy * dy)

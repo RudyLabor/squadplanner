@@ -4,7 +4,7 @@
  * Mobile-friendly pull-to-refresh with smooth animation.
  * Uses refs to avoid stale closure issues with touch handlers.
  */
-import { useState, useRef, useCallback, useEffect, type ReactNode } from 'react'
+import { useState, useRef, useEffect, type ReactNode } from 'react'
 import { RefreshCw } from 'lucide-react'
 import { haptic } from '../utils/haptics'
 

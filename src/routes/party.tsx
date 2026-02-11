@@ -22,10 +22,13 @@ export async function loader({ request }: LoaderFunctionArgs) {
   // Fetch squads for party room selection
   const { data: memberships } = await supabase
     .from('squad_members')
-    .select('squad_id, squads!inner(id, name, game)')
+    .select('squad_id, squads!inner(id, name, game, total_members)')
     .eq('user_id', user.id)
 
-  const squads = memberships?.map((m: any) => m.squads) || []
+  const squads = (memberships?.map((m: any) => m.squads) || []).map((squad: any) => ({
+    ...squad,
+    member_count: squad.total_members ?? 1,
+  }))
 
   return data({ squads }, { headers })
 }

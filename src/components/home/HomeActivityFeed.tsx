@@ -98,6 +98,8 @@ function pickRandom<T>(arr: T[], seed: number): T {
   return arr[Math.abs(seed) % arr.length]
 }
 
+// TODO: Remplacer par de vraies données depuis Supabase (table activity_feed ou logs).
+// Actuellement, ces activités sont générées à partir de noms fictifs pour la démo.
 function generateMockActivities(squads: Squad[]): ActivityItem[] {
   if (squads.length === 0) return []
 
@@ -251,7 +253,7 @@ export const HomeActivityFeed = memo(function HomeActivityFeed({
         <h2 className="text-base font-semibold text-text-primary">
           Activité récente
         </h2>
-        <span className="text-xs text-text-quaternary italic px-2 py-0.5 rounded-full bg-border-subtle">Aperçu</span>
+        <span className="text-xs text-text-quaternary italic px-2 py-0.5 rounded-full bg-border-subtle">Démo</span>
       </div>
       <Card className="px-4 py-1 divide-y divide-border-subtle">
         {activities.map((item, index) => (

@@ -10,7 +10,7 @@
  * Respects dark/light mode via CSS custom properties.
  */
 import { memo, useEffect, useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { m, AnimatePresence } from 'framer-motion'
 import { useIsMutating } from '@tanstack/react-query'
 
 type SyncStatus = 'idle' | 'syncing' | 'synced' | 'error'
@@ -49,7 +49,7 @@ export const SyncIndicator = memo(function SyncIndicator() {
 
   return (
     <AnimatePresence mode="wait">
-      <motion.div
+      <m.div
         key={status}
         className="sync-indicator"
         initial={{ opacity: 0, scale: 0.8 }}
@@ -63,7 +63,7 @@ export const SyncIndicator = memo(function SyncIndicator() {
         {status === 'syncing' && <SyncingIcon />}
         {status === 'synced' && <SyncedIcon />}
         {status === 'error' && <ErrorIcon />}
-      </motion.div>
+      </m.div>
     </AnimatePresence>
   )
 })
@@ -78,7 +78,7 @@ const statusLabels: Record<SyncStatus, string> = {
 /** Spinning circle icon for syncing state */
 function SyncingIcon() {
   return (
-    <motion.svg
+    <m.svg
       width="16"
       height="16"
       viewBox="0 0 16 16"
@@ -97,21 +97,21 @@ function SyncingIcon() {
         strokeDasharray="28"
         strokeDashoffset="8"
       />
-    </motion.svg>
+    </m.svg>
   )
 }
 
 /** Checkmark icon for synced state */
 function SyncedIcon() {
   return (
-    <motion.svg
+    <m.svg
       width="16"
       height="16"
       viewBox="0 0 16 16"
       fill="none"
       className="sync-icon sync-icon--synced"
     >
-      <motion.path
+      <m.path
         d="M3 8.5L6.5 12L13 4"
         stroke="currentColor"
         strokeWidth="2"
@@ -121,7 +121,7 @@ function SyncedIcon() {
         animate={{ pathLength: 1 }}
         transition={{ duration: 0.3, ease: 'easeOut' }}
       />
-    </motion.svg>
+    </m.svg>
   )
 }
 

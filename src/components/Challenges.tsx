@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { m, AnimatePresence } from 'framer-motion'
 import { Target, Gift } from 'lucide-react'
 import { ChallengeCard } from './challenges/ChallengeCard'
 
@@ -86,10 +86,10 @@ export function Challenges({ challenges, onClaimXP }: ChallengesProps) {
           </div>
         </div>
         {claimableCount > 0 && (
-          <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-success-15 border border-success">
+          <m.div initial={{ scale: 0 }} animate={{ scale: 1 }} className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-success-15 border border-success">
             <Gift className="w-4 h-4 text-success" />
             <span className="text-base font-medium text-success">{claimableCount} à réclamer</span>
-          </motion.div>
+          </m.div>
         )}
       </div>
 
@@ -119,12 +119,12 @@ export function Challenges({ challenges, onClaimXP }: ChallengesProps) {
       <div className="space-y-3">
         <AnimatePresence mode="popLayout">
           {sortedChallenges.length === 0 ? (
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center py-8">
+            <m.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center py-8">
               <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-surface-card flex items-center justify-center">
                 <Target className="w-8 h-8 text-text-tertiary" />
               </div>
               <p className="text-md text-text-tertiary">Aucun challenge dans cette catégorie</p>
-            </motion.div>
+            </m.div>
           ) : (
             sortedChallenges.map((challenge, index) => (
               <ChallengeCard key={challenge.id} challenge={challenge} index={index} onClaim={handleClaim} isClaiming={claimingId === challenge.id} />

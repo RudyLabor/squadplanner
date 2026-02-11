@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import { Trophy } from 'lucide-react'
 import { Card } from './ui'
 import { type LeaderboardEntry } from './leaderboard/leaderboardConfig'
@@ -19,7 +19,7 @@ export function SquadLeaderboard({ entries, currentUserId }: SquadLeaderboardPro
   return (
     <div className="space-y-6">
       {/* Header */}
-      <motion.div
+      <m.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         className="flex items-center gap-3"
@@ -31,7 +31,7 @@ export function SquadLeaderboard({ entries, currentUserId }: SquadLeaderboardPro
           <h2 className="text-lg font-bold text-text-primary">Classement Squad</h2>
           <p className="text-sm text-text-tertiary">Top joueurs cette semaine</p>
         </div>
-      </motion.div>
+      </m.div>
 
       {/* Podium - Top 3 */}
       {podiumEntries.length > 0 && (
@@ -65,7 +65,7 @@ export function SquadLeaderboard({ entries, currentUserId }: SquadLeaderboardPro
 
       {/* Empty state */}
       {entries.length === 0 && (
-        <motion.div
+        <m.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           className="text-center py-12"
@@ -75,7 +75,7 @@ export function SquadLeaderboard({ entries, currentUserId }: SquadLeaderboardPro
           <p className="text-sm text-text-tertiary">
             Participe a des sessions pour apparaitre ici !
           </p>
-        </motion.div>
+        </m.div>
       )}
     </div>
   )

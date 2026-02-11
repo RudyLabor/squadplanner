@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import { Trophy } from 'lucide-react'
 import { supabase } from '../lib/supabase'
 import { useAuthStore } from '../hooks'
@@ -109,7 +109,7 @@ export function SeasonalBadges({ userId, compact = false, initialBadges }: Seaso
             const Icon = config.icon
             return (
               <Tooltip key={badge.id} content={`${config.label} - ${formatSeason(badge.season)}`} position="top" delay={300}>
-                <motion.button
+                <m.button
                   onClick={() => setSelectedBadge(badge)}
                   className="relative w-10 h-10 rounded-lg flex items-center justify-center"
                   style={{ backgroundColor: config.bgColor }}
@@ -118,7 +118,7 @@ export function SeasonalBadges({ userId, compact = false, initialBadges }: Seaso
                   aria-label={`${config.label} - ${formatSeason(badge.season)}`}
                 >
                   <Icon className="w-5 h-5" style={{ color: config.color }} />
-                </motion.button>
+                </m.button>
               </Tooltip>
             )
           })}
@@ -140,14 +140,14 @@ export function SeasonalBadges({ userId, compact = false, initialBadges }: Seaso
                   const config = BADGE_CONFIGS[badge.badge_type] || BADGE_CONFIGS.mvp
                   const Icon = config.icon
                   return (
-                    <motion.button key={badge.id} onClick={() => setSelectedBadge(badge)} className="relative group" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.98 }}>
+                    <m.button key={badge.id} onClick={() => setSelectedBadge(badge)} className="relative group" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.98 }}>
                       <div className="w-14 h-14 rounded-xl flex items-center justify-center transition-shadow" style={{ backgroundColor: config.bgColor, boxShadow: `0 0 20px ${config.glowColor}` }}>
                         <Icon className="w-7 h-7" style={{ color: config.color }} />
                       </div>
                       <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
                         <div className="px-2 py-1 rounded-lg bg-bg-hover border border-border-hover text-xs text-text-primary whitespace-nowrap">{config.label}</div>
                       </div>
-                    </motion.button>
+                    </m.button>
                   )
                 })}
               </div>

@@ -1,4 +1,4 @@
-import { motion, AnimatePresence } from 'framer-motion'
+import { m, AnimatePresence } from 'framer-motion'
 import { X, Reply } from 'lucide-react'
 
 interface ReplyComposerProps {
@@ -26,7 +26,7 @@ export function ReplyComposer({ replyingTo, onCancel }: ReplyComposerProps) {
   return (
     <AnimatePresence>
       {replyingTo && (
-        <motion.div
+        <m.div
           initial={{ opacity: 0, height: 0 }}
           animate={{ opacity: 1, height: 'auto' }}
           exit={{ opacity: 0, height: 0 }}
@@ -51,7 +51,7 @@ export function ReplyComposer({ replyingTo, onCancel }: ReplyComposerProps) {
             </div>
 
             {/* Cancel button */}
-            <motion.button
+            <m.button
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.95 }}
               onClick={onCancel}
@@ -64,9 +64,9 @@ export function ReplyComposer({ replyingTo, onCancel }: ReplyComposerProps) {
               aria-label="Cancel reply"
             >
               <X className="w-3.5 h-3.5" />
-            </motion.button>
+            </m.button>
           </div>
-        </motion.div>
+        </m.div>
       )}
     </AnimatePresence>
   )

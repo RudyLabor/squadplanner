@@ -1,5 +1,5 @@
 import { memo, useMemo } from 'react'
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import {
   CheckCircle2,
   Gamepad2,
@@ -179,7 +179,7 @@ const ActivityRow = memo(function ActivityRow({
   const Icon = config.icon
 
   return (
-    <motion.div
+    <m.div
       initial={{ opacity: 0, x: -8 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{
@@ -215,7 +215,7 @@ const ActivityRow = memo(function ActivityRow({
       <span className="text-sm text-text-quaternary flex-shrink-0 whitespace-nowrap">
         {item.relativeTime}
       </span>
-    </motion.div>
+    </m.div>
   )
 })
 

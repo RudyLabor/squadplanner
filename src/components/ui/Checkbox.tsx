@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import { useId, useCallback, type KeyboardEvent } from 'react'
 import { haptic } from '../../utils/haptics'
 
@@ -74,7 +74,7 @@ export function Checkbox({
       >
         {/* Check mark */}
         {isChecked && (
-          <motion.svg
+          <m.svg
             width={config.icon}
             height={config.icon}
             viewBox="0 0 16 16"
@@ -83,7 +83,7 @@ export function Checkbox({
             animate={{ opacity: 1, scale: 1 }}
             transition={{ type: 'spring', stiffness: 500, damping: 30 }}
           >
-            <motion.path
+            <m.path
               d="M3.5 8.5L6.5 11.5L12.5 5"
               stroke="white"
               strokeWidth={config.stroke}
@@ -93,12 +93,12 @@ export function Checkbox({
               animate={{ pathLength: 1 }}
               transition={{ duration: 0.2, delay: 0.05 }}
             />
-          </motion.svg>
+          </m.svg>
         )}
 
         {/* Indeterminate mark */}
         {isIndeterminate && (
-          <motion.svg
+          <m.svg
             width={config.icon}
             height={config.icon}
             viewBox="0 0 16 16"
@@ -107,7 +107,7 @@ export function Checkbox({
             animate={{ opacity: 1, scale: 1 }}
             transition={{ type: 'spring', stiffness: 500, damping: 30 }}
           >
-            <motion.path
+            <m.path
               d="M4 8H12"
               stroke="white"
               strokeWidth={config.stroke}
@@ -116,7 +116,7 @@ export function Checkbox({
               animate={{ pathLength: 1 }}
               transition={{ duration: 0.15 }}
             />
-          </motion.svg>
+          </m.svg>
         )}
       </button>
       {(label || description) && (

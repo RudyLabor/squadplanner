@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { m, AnimatePresence } from 'framer-motion'
 import { Play } from 'lucide-react'
 import { demoSteps, stepComponents } from './DemoSteps'
 
@@ -33,25 +33,25 @@ export function HeroMockup() {
   return (
     <div className="relative mx-auto hero-phone-float" style={{ width: 280 }}>
       {/* "Voir la demo" badge */}
-      <motion.div
+      <m.div
         className="flex items-center justify-center gap-1.5 mb-3"
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.6 }}
       >
         <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 border border-primary/20">
-          <motion.div
+          <m.div
             animate={{ scale: [1, 1.2, 1] }}
             transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
           >
             <Play className="w-3 h-3 text-primary fill-primary" />
-          </motion.div>
+          </m.div>
           <span className="text-xs font-medium text-primary">Voir la demo</span>
         </div>
-      </motion.div>
+      </m.div>
 
       {/* Glow behind phone */}
-      <motion.div
+      <m.div
         className="absolute -inset-8 rounded-[3rem]"
         style={{
           background: 'radial-gradient(ellipse at center, var(--color-primary-12) 0%, transparent 70%)',
@@ -87,7 +87,7 @@ export function HeroMockup() {
 
             {/* Animated demo step content */}
             <AnimatePresence mode="wait">
-              <motion.div
+              <m.div
                 key={step.id}
                 initial={{ opacity: 0, x: 30 }}
                 animate={{ opacity: 1, x: 0 }}
@@ -96,7 +96,7 @@ export function HeroMockup() {
                 className="h-full pt-6"
               >
                 <StepComponent />
-              </motion.div>
+              </m.div>
             </AnimatePresence>
 
             {/* Screen reflection */}
@@ -117,7 +117,7 @@ export function HeroMockup() {
               className="flex items-center justify-center gap-1.5 group min-w-[44px] min-h-[44px]"
               aria-label={`Etape ${i + 1}: ${s.title}`}
             >
-              <motion.div
+              <m.div
                 className="h-1 rounded-full"
                 animate={{
                   width: i === currentStep ? 24 : 6,
@@ -126,13 +126,13 @@ export function HeroMockup() {
                 transition={{ duration: 0.3 }}
               />
               {i === currentStep && (
-                <motion.span
+                <m.span
                   className="text-xs text-primary font-medium"
                   initial={{ opacity: 0, x: -5 }}
                   animate={{ opacity: 1, x: 0 }}
                 >
                   {s.title}
-                </motion.span>
+                </m.span>
               )}
             </button>
           ))}
@@ -140,7 +140,7 @@ export function HeroMockup() {
 
         {/* Step progress bar (auto-advance indicator) */}
         <div className="w-32 h-0.5 rounded-full bg-border-subtle overflow-hidden">
-          <motion.div
+          <m.div
             className="h-full bg-primary rounded-full"
             key={`hero-progress-${currentStep}`}
             initial={{ width: '0%' }}

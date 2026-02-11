@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import {
   createContext,
   useContext,
@@ -189,7 +189,7 @@ function RadioCircle({ isSelected }: { isSelected: boolean }) {
       aria-hidden="true"
     >
       {isSelected && (
-        <motion.span
+        <m.span
           className="absolute inset-1 rounded-full bg-primary"
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}

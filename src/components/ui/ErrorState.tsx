@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { m, AnimatePresence } from 'framer-motion'
 import {
   AlertTriangle,
   AlertCircle,
@@ -206,7 +206,7 @@ function PageVariant({
   className: string
 }) {
   return (
-    <motion.div
+    <m.div
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
@@ -214,14 +214,14 @@ function PageVariant({
       role="alert"
       aria-live="polite"
     >
-      <motion.div
+      <m.div
         initial={{ scale: 0.8, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ delay: 0.1, type: 'spring', stiffness: 400, damping: 20 }}
         className={`w-16 h-16 rounded-2xl ${preset.iconBgClass} flex items-center justify-center mb-6`}
       >
         <span className={preset.textClass}>{icon}</span>
-      </motion.div>
+      </m.div>
 
       <h2 className="text-xl font-semibold text-text-primary mb-2">
         {title}
@@ -269,7 +269,7 @@ function PageVariant({
           )}
         </div>
       )}
-    </motion.div>
+    </m.div>
   )
 }
 
@@ -297,7 +297,7 @@ function InlineVariant({
   className: string
 }) {
   return (
-    <motion.div
+    <m.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.25 }}
@@ -332,7 +332,7 @@ function InlineVariant({
           </button>
         )}
       </div>
-    </motion.div>
+    </m.div>
   )
 }
 
@@ -363,7 +363,7 @@ function BannerVariant({
 }) {
   return (
     <AnimatePresence>
-      <motion.div
+      <m.div
         initial={{ y: -100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         exit={{ y: -100, opacity: 0 }}
@@ -414,7 +414,7 @@ function BannerVariant({
             )}
           </div>
         </div>
-      </motion.div>
+      </m.div>
     </AnimatePresence>
   )
 }

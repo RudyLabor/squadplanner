@@ -1,5 +1,5 @@
 import { useState, useRef, memo, useCallback, useEffect } from 'react'
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import { Play, Pause, Mic } from 'lucide-react'
 
 interface VoiceMessagePlayerProps {
@@ -144,7 +144,7 @@ export const VoiceMessagePlayer = memo(function VoiceMessagePlayer({
             const isPlayed = barProgress < progress
 
             return (
-              <motion.div
+              <m.div
                 key={i}
                 className={`w-[3px] rounded-full transition-colors duration-150 ${
                   isPlayed

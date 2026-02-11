@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import type { FAQItem } from './HelpFAQData'
 
 function CreateSquadIllustration() {
@@ -125,7 +125,7 @@ function JoinVoiceIllustration() {
 export function FAQIllustration({ type }: { type: FAQItem['illustration'] }) {
   if (!type) return null
   return (
-    <motion.div
+    <m.div
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.35, delay: 0.1 }}
@@ -135,6 +135,6 @@ export function FAQIllustration({ type }: { type: FAQItem['illustration'] }) {
       {type === 'reliability-score' && <ReliabilityScoreIllustration />}
       {type === 'plan-session' && <PlanSessionIllustration />}
       {type === 'join-voice' && <JoinVoiceIllustration />}
-    </motion.div>
+    </m.div>
   )
 }

@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { m, AnimatePresence } from 'framer-motion'
 import { User, Edit2, Check, X, Camera, Loader2 } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { showSuccess, showError } from '../../lib/toast'
@@ -147,7 +147,7 @@ export function ProfileHeader({ user, profile, isLoading, updateProfile }: Profi
 
           <AnimatePresence mode="wait">
             {isEditing ? (
-              <motion.div
+              <m.div
                 key="editing"
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
@@ -183,9 +183,9 @@ export function ProfileHeader({ user, profile, isLoading, updateProfile }: Profi
                     Sauvegarder
                   </Button>
                 </div>
-              </motion.div>
+              </m.div>
             ) : (
-              <motion.div
+              <m.div
                 key="display"
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -214,7 +214,7 @@ export function ProfileHeader({ user, profile, isLoading, updateProfile }: Profi
                     Paramètres
                   </button>
                 </div>
-              </motion.div>
+              </m.div>
             )}
           </AnimatePresence>
         </div>

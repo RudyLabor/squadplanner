@@ -1,4 +1,4 @@
-import { motion, useScroll, useTransform, useMotionValue, useSpring, useInView } from 'framer-motion'
+import { m, useScroll, useTransform, useMotionValue, useSpring, useInView } from 'framer-motion'
 import { useRef, useEffect, useState, type ReactNode } from 'react'
 import { useAuthStore } from '../hooks'
 import { CustomCursor } from '../components/landing/CustomCursor'
@@ -79,7 +79,7 @@ export default function Landing() {
   return (
     <div className={`min-h-screen bg-bg-base landing-page landing-noise ${isDesktop ? 'landing-custom-cursor' : ''}`}>
       <CustomCursor />
-      <motion.div className="scroll-progress" style={{ scaleX: scrollYProgress }} />
+      <m.div className="scroll-progress" style={{ scaleX: scrollYProgress }} />
 
       <a
         href="#main-content"

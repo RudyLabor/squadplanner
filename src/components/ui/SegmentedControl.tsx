@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import { type ElementType } from 'react'
 
 interface SegmentOption<T extends string> {
@@ -52,7 +52,7 @@ export function SegmentedControl<T extends string>({
             }`}
           >
             {isActive && (
-              <motion.div
+              <m.div
                 layoutId={layoutId}
                 className="absolute inset-0 bg-bg-active border border-border-default rounded-lg"
                 transition={{ type: 'spring', stiffness: 400, damping: 30 }}

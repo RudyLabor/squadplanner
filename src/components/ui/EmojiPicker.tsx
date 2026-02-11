@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect, useMemo, useCallback } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { m, AnimatePresence } from 'framer-motion'
 import { Search, X, Clock } from 'lucide-react'
 
 // Emoji categories with curated gaming-friendly selections
@@ -151,7 +151,7 @@ export function EmojiPicker({ isOpen, onSelect, onClose, position = 'bottom', al
           />
 
           {/* Picker */}
-          <motion.div
+          <m.div
             initial={{ opacity: 0, scale: 0.9, y: position === 'top' ? 10 : -10 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: position === 'top' ? 10 : -10 }}
@@ -252,7 +252,7 @@ export function EmojiPicker({ isOpen, onSelect, onClose, position = 'bottom', al
                 : EMOJI_CATEGORIES[activeCategory].label
               }
             </div>
-          </motion.div>
+          </m.div>
         </>
       )}
     </AnimatePresence>

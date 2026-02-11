@@ -1,6 +1,6 @@
 import { useState, useMemo, useCallback } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import { TrendingUp, Loader2, AlertCircle, Star } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import Confetti from '../components/LazyConfetti'
@@ -45,18 +45,18 @@ function ReliabilityBadge({ score }: { score: number }) {
   const getBadgeContent = () => {
     if (score >= 95) {
       return (
-        <motion.div
+        <m.div
           className="flex items-center gap-1.5 md:gap-2 px-2 py-1 md:px-3 md:py-1.5 rounded-full bg-gradient-to-r from-success/15 to-success/5 border border-success/20 shadow-glow-success cursor-help"
           initial={{ scale: 0.9, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ delay: 0.4, type: "spring", stiffness: 300, damping: 25 }}
           whileHover={{ scale: 1.02, boxShadow: "var(--shadow-glow-success)" }}
         >
-          <motion.div animate={{ rotate: [0, 8, -8, 0] }} transition={{ duration: 2.5, repeat: 2, repeatDelay: 4 }}>
+          <m.div animate={{ rotate: [0, 8, -8, 0] }} transition={{ duration: 2.5, repeat: 2, repeatDelay: 4 }}>
             <Star className="w-3.5 h-3.5 md:w-4 md:h-4 text-success fill-success" />
-          </motion.div>
+          </m.div>
           <span className="text-sm md:text-base font-medium text-success">{score}% fiable</span>
-        </motion.div>
+        </m.div>
       )
     }
     if (score >= 80) {
@@ -200,18 +200,18 @@ export default function Home() {
       )}
 
       {successMessage && (
-        <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }}
+        <m.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }}
           transition={{ duration: 0.4, ease: 'easeOut' }}
           className="fixed top-4 left-1/2 -translate-x-1/2 z-50 px-6 py-3 rounded-xl bg-success/15 border border-success/20 backdrop-blur-sm"
           role="status">
           <p className="text-md font-medium text-success">{successMessage}</p>
-        </motion.div>
+        </m.div>
       )}
 
       <PullToRefresh onRefresh={handleRefresh} className="px-4 md:px-6 lg:px-8 py-6 max-w-2xl lg:max-w-4xl xl:max-w-6xl mx-auto">
         <CrossfadeTransition isLoading={homeLoading} skeleton={<SkeletonHomePage />}>
           <div>
-            <motion.header
+            <m.header
               className="mb-6"
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
@@ -231,13 +231,13 @@ export default function Home() {
                 </p>
                 <ReliabilityBadge score={reliabilityScore} />
               </div>
-            </motion.header>
+            </m.header>
 
             {(!squadsLoading && !sessionsLoading) && (squads.length === 0 || upcomingSessions.length === 0) && profile?.created_at && (Date.now() - new Date(profile.created_at).getTime() < 7 * 24 * 60 * 60 * 1000) && (
               <OnboardingChecklist hasSquad={squads.length > 0} hasSession={upcomingSessions.length > 0} onCreateSession={openCreateSessionModal} />
             )}
 
-            <motion.div
+            <m.div
               className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4"
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
@@ -245,22 +245,22 @@ export default function Home() {
             >
               <HomeAICoachSection aiCoachTip={aiCoachTip} aiCoachLoading={aiCoachLoading} onAction={openCreateSessionModal} />
               <HomePartySection activeParty={activeParty} showCTA={!upcomingSessions[0] && squads.length > 0 && !activeParty} />
-            </motion.div>
-            <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}>
+            </m.div>
+            <m.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}>
               <HomeSessionsSection upcomingSessions={upcomingSessions} sessionsLoading={sessionsLoading} onRsvp={handleRsvp} isRsvpLoading={rsvpMutation.isPending} />
-            </motion.div>
-            <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}>
+            </m.div>
+            <m.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}>
               <HomeFriendsSection friendsPlaying={friendsPlaying} friendsLoading={friendsLoading} onJoin={handleJoinFriendParty} onInvite={handleInviteFriend} />
-            </motion.div>
-            <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}>
+            </m.div>
+            <m.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}>
               <HomeStatsSection squadsCount={squads.length} sessionsThisWeek={sessionsThisWeek} reliabilityScore={reliabilityScore} squadsLoading={squadsLoading} sessionsLoading={sessionsLoading} profile={profile} />
-            </motion.div>
-            <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}>
+            </m.div>
+            <m.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}>
               <HomeActivityFeed squads={squads} />
-            </motion.div>
-            <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.35, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}>
+            </m.div>
+            <m.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.35, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}>
               <HomeSquadsSection squads={squads} squadsLoading={squadsLoading} />
-            </motion.div>
+            </m.div>
           </div>
         </CrossfadeTransition>
       </PullToRefresh>

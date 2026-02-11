@@ -1,4 +1,4 @@
-import { motion, AnimatePresence } from 'framer-motion'
+import { m, AnimatePresence } from 'framer-motion'
 
 interface CommandItem {
   id: string
@@ -22,7 +22,7 @@ export function CommandPreviewPanel({ command }: CommandPreviewPanelProps) {
   return (
     <div className="hidden lg:block w-64 border-l border-border-default p-4 max-h-[400px] overflow-y-auto">
       <AnimatePresence mode="wait">
-        <motion.div
+        <m.div
           key={command.id}
           initial={{ opacity: 0, x: 10 }}
           animate={{ opacity: 1, x: 0 }}
@@ -52,7 +52,7 @@ export function CommandPreviewPanel({ command }: CommandPreviewPanelProps) {
               ))}
             </div>
           )}
-        </motion.div>
+        </m.div>
       </AnimatePresence>
     </div>
   )

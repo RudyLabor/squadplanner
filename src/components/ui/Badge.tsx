@@ -1,5 +1,5 @@
 import { useEffect, useRef, type ReactNode } from 'react'
-import { motion, AnimatePresence, useAnimate } from 'framer-motion'
+import { m, AnimatePresence, useAnimate } from 'framer-motion'
 import { X } from 'lucide-react'
 
 export type BadgeVariant = 'default' | 'success' | 'warning' | 'error' | 'info' | 'primary' | 'danger'
@@ -70,7 +70,7 @@ export function Badge({
 
   return (
     <AnimatePresence>
-      <motion.span
+      <m.span
         ref={scope}
         initial={{ scale: 0.8, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
@@ -101,7 +101,7 @@ export function Badge({
             <X className="w-3 h-3" />
           </button>
         )}
-      </motion.span>
+      </m.span>
     </AnimatePresence>
   )
 }

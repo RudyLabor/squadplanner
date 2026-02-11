@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { m, AnimatePresence } from 'framer-motion'
 import { X, Loader2, Pencil } from 'lucide-react'
 import { Button } from './ui'
 import { useFocusTrap } from '../hooks/useFocusTrap'
@@ -89,7 +89,7 @@ export function EditMessageModal({
       {isOpen && (
         <>
           {/* Backdrop */}
-          <motion.div
+          <m.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -98,7 +98,7 @@ export function EditMessageModal({
           />
 
           {/* Modal */}
-          <motion.div
+          <m.div
             ref={focusTrapRef}
             role="dialog"
             aria-modal="true"
@@ -196,7 +196,7 @@ export function EditMessageModal({
                 </div>
               </div>
             </div>
-          </motion.div>
+          </m.div>
         </>
       )}
     </AnimatePresence>

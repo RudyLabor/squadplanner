@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import { Mic, Gamepad2, Loader2 } from 'lucide-react'
 import { Card, Button } from '../../components/ui'
 
@@ -8,7 +8,7 @@ export function PartySquadCard({ squad, onJoin, isConnecting }: {
   isConnecting: boolean
 }) {
   return (
-    <motion.div whileHover={{ y: -1, scale: 1.01 }} whileTap={{ scale: 0.99 }}>
+    <m.div whileHover={{ y: -1, scale: 1.01 }} whileTap={{ scale: 0.99 }}>
       <Card className="p-4 bg-gradient-to-br from-primary/[0.08] to-transparent border-primary hover:border-primary transition-interactive">
         <div className="flex items-center gap-4">
           <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-purple flex items-center justify-center shadow-md shadow-primary/10">
@@ -23,6 +23,6 @@ export function PartySquadCard({ squad, onJoin, isConnecting }: {
           </Button>
         </div>
       </Card>
-    </motion.div>
+    </m.div>
   )
 }

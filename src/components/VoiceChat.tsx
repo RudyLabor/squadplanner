@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { m, AnimatePresence } from 'framer-motion'
 import { useVoiceChatStore } from '../hooks/useVoiceChat'
 import { useAuthStore, usePremiumStore } from '../hooks'
 import { Button } from './ui'
@@ -81,7 +81,7 @@ export function VoiceChat({ sessionId, sessionTitle }: VoiceChatProps) {
       {/* Error */}
       <AnimatePresence>
         {error && (
-          <motion.div
+          <m.div
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
@@ -94,7 +94,7 @@ export function VoiceChat({ sessionId, sessionTitle }: VoiceChatProps) {
             >
               Fermer
             </button>
-          </motion.div>
+          </m.div>
         )}
       </AnimatePresence>
 
@@ -147,7 +147,7 @@ export function VoiceChat({ sessionId, sessionTitle }: VoiceChatProps) {
           {/* Participants */}
           <div className="space-y-2 mb-4">
             {allUsers.map((participant) => (
-              <motion.div
+              <m.div
                 key={String(participant.odrop)}
                 initial={{ opacity: 0, x: -10 }}
                 animate={{ opacity: 1, x: 0 }}
@@ -185,7 +185,7 @@ export function VoiceChat({ sessionId, sessionTitle }: VoiceChatProps) {
                 {participant.isSpeaking && (
                   <div className="flex gap-0.5">
                     {[1, 2, 3].map((i) => (
-                      <motion.div
+                      <m.div
                         key={i}
                         className="w-1 bg-primary rounded-full"
                         animate={{
@@ -200,7 +200,7 @@ export function VoiceChat({ sessionId, sessionTitle }: VoiceChatProps) {
                     ))}
                   </div>
                 )}
-              </motion.div>
+              </m.div>
             ))}
           </div>
 

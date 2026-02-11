@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { m, AnimatePresence } from 'framer-motion'
 import { Crown, Copy, Check, MessageCircle } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { Button } from '../ui'
@@ -37,7 +37,7 @@ export function SquadHeader({ squadId, squad, isOwner }: SquadHeaderProps) {
 
   return (
     <>
-      <motion.div className="mb-6" layoutId={`squad-card-${squadId}`}>
+      <m.div className="mb-6" layoutId={`squad-card-${squadId}`}>
         <div className="flex items-center justify-between mb-3">
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2">
@@ -66,7 +66,7 @@ export function SquadHeader({ squadId, squad, isOwner }: SquadHeaderProps) {
             {copiedCode ? 'Copié !' : 'Copier'}
           </Button>
         </div>
-      </motion.div>
+      </m.div>
 
       {/* Modal d'invitation */}
       <AnimatePresence>

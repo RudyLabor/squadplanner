@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import { Loader2 } from 'lucide-react'
 
 interface LoadingMoreProps {
@@ -11,7 +11,7 @@ interface LoadingMoreProps {
  */
 export function LoadingMore({ text = 'Chargement...' }: LoadingMoreProps) {
   return (
-    <motion.div
+    <m.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
@@ -20,6 +20,6 @@ export function LoadingMore({ text = 'Chargement...' }: LoadingMoreProps) {
     >
       <Loader2 className="w-4 h-4 text-text-tertiary animate-spin" />
       <span className="text-sm text-text-tertiary">{text}</span>
-    </motion.div>
+    </m.div>
   )
 }

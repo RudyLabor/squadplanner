@@ -1,5 +1,5 @@
 import { memo } from 'react'
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import { Gamepad2, Copy, Check, Crown, Mic, Calendar, ChevronRight } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { Card, CardContent } from '../../components/ui'
@@ -51,7 +51,7 @@ export const SquadCard = memo(function SquadCard({ squad, isOwner, nextSession, 
   }
 
   return (
-    <motion.article
+    <m.article
       layoutId={`squad-card-${squad.id}`}
       whileHover={{ y: -2, scale: 1.02 }}
       whileTap={{ scale: 0.98 }}
@@ -79,7 +79,7 @@ export const SquadCard = memo(function SquadCard({ squad, isOwner, nextSession, 
                   )}
                 </div>
                 {hasActiveParty && (
-                  <motion.div
+                  <m.div
                     className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-success border-2 border-bg-elevated"
                     animate={{ scale: [1, 1.15, 1] }}
                     transition={{ duration: 1.5, repeat: 3 }}
@@ -131,7 +131,7 @@ export const SquadCard = memo(function SquadCard({ squad, isOwner, nextSession, 
                   className="p-2 rounded-lg hover:bg-surface-card-hover transition-colors"
                   aria-label="Copier le code d'invitation"
                 >
-                  <motion.div
+                  <m.div
                     key={copiedCode === squad.invite_code ? 'check' : 'copy'}
                     initial={{ scale: 0.5, opacity: 0 }}
                     animate={{ scale: 1, opacity: 1 }}
@@ -142,7 +142,7 @@ export const SquadCard = memo(function SquadCard({ squad, isOwner, nextSession, 
                     ) : (
                       <Copy className="w-4 h-4 text-text-quaternary" aria-hidden="true" />
                     )}
-                  </motion.div>
+                  </m.div>
                 </button>
                 <ChevronRight className="w-5 h-5 text-text-quaternary" aria-hidden="true" />
               </div>
@@ -150,6 +150,6 @@ export const SquadCard = memo(function SquadCard({ squad, isOwner, nextSession, 
           </CardContent>
         </Card>
       </Link>
-    </motion.article>
+    </m.article>
   )
 })

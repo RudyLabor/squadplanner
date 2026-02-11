@@ -5,7 +5,7 @@
  * Auto-refreshes every 30 seconds and shows a countdown.
  */
 import { useState, useEffect, useCallback } from 'react'
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import { Wrench, RefreshCw, ExternalLink } from 'lucide-react'
 import { useSearchParams } from 'react-router-dom'
 
@@ -42,14 +42,14 @@ export default function Maintenance() {
     <div className="min-h-screen bg-bg-base flex items-center justify-center p-4">
       <div className="max-w-md w-full text-center">
         {/* Animated wrench icon */}
-        <motion.div
+        <m.div
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ type: 'spring', stiffness: 200, damping: 20 }}
           className="relative w-20 h-20 mx-auto mb-8"
         >
           {/* Glow */}
-          <motion.div
+          <m.div
             className="absolute inset-0 rounded-full blur-xl bg-warning/20"
             animate={{
               scale: [1, 1.3, 1],
@@ -63,7 +63,7 @@ export default function Maintenance() {
           />
 
           {/* Icon container */}
-          <motion.div
+          <m.div
             className="relative w-20 h-20 rounded-2xl bg-warning/15 flex items-center justify-center"
             animate={{ rotate: [0, 15, -15, 0] }}
             transition={{
@@ -73,32 +73,32 @@ export default function Maintenance() {
             }}
           >
             <Wrench className="w-10 h-10 text-warning" />
-          </motion.div>
-        </motion.div>
+          </m.div>
+        </m.div>
 
         {/* Title */}
-        <motion.h1
+        <m.h1
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1, duration: 0.3 }}
           className="text-xl font-bold text-text-primary mb-3"
         >
           Maintenance en cours
-        </motion.h1>
+        </m.h1>
 
         {/* Message */}
-        <motion.p
+        <m.p
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2, duration: 0.3 }}
           className="text-md text-text-secondary mb-4"
         >
           Nous effectuons une maintenance planifiée. L'application sera de retour très bientôt.
-        </motion.p>
+        </m.p>
 
         {/* ETA */}
         {eta && (
-          <motion.div
+          <m.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.25, duration: 0.3 }}
@@ -106,17 +106,17 @@ export default function Maintenance() {
           >
             <span className="text-sm text-text-tertiary">Retour prévu :</span>
             <span className="text-sm font-medium text-text-primary">{eta}</span>
-          </motion.div>
+          </m.div>
         )}
 
         {/* Progress bar animation */}
-        <motion.div
+        <m.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.3, duration: 0.3 }}
           className="w-full h-1.5 bg-border-subtle rounded-full overflow-hidden mb-6 mt-2"
         >
-          <motion.div
+          <m.div
             className="h-full bg-warning/60 rounded-full"
             animate={{
               x: ['-100%', '100%'],
@@ -128,10 +128,10 @@ export default function Maintenance() {
             }}
             style={{ width: '40%' }}
           />
-        </motion.div>
+        </m.div>
 
         {/* Auto-refresh countdown */}
-        <motion.p
+        <m.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.4, duration: 0.3 }}
@@ -141,10 +141,10 @@ export default function Maintenance() {
           Dernière vérification il y a {secondsSinceCheck}s
           {' '}&middot;{' '}
           prochaine dans {timeUntilRefresh}s
-        </motion.p>
+        </m.p>
 
         {/* Manual refresh button */}
-        <motion.button
+        <m.button
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5, duration: 0.3 }}
@@ -153,10 +153,10 @@ export default function Maintenance() {
         >
           <RefreshCw className="w-4 h-4" />
           Vérifier maintenant
-        </motion.button>
+        </m.button>
 
         {/* Social links placeholder */}
-        <motion.div
+        <m.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.6, duration: 0.3 }}
@@ -171,7 +171,7 @@ export default function Maintenance() {
             <ExternalLink className="w-3.5 h-3.5" />
             Suivre les mises à jour
           </a>
-        </motion.div>
+        </m.div>
       </div>
     </div>
   )

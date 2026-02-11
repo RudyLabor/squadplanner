@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import { UserPlus, ArrowLeft, ArrowRight, Loader2 } from 'lucide-react'
 import { Button, Card, Input } from '../../components/ui'
 
@@ -17,7 +17,7 @@ export function OnboardingStepJoinSquad({
   onInviteCodeChange, onJoinSquad, onBack
 }: OnboardingStepJoinSquadProps) {
   return (
-    <motion.div
+    <m.div
       key="join-squad"
       variants={slideVariants}
       initial="enter"
@@ -82,6 +82,6 @@ export function OnboardingStepJoinSquad({
           </Button>
         </div>
       </Card>
-    </motion.div>
+    </m.div>
   )
 }

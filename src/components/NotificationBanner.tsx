@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { AnimatePresence, motion } from 'framer-motion'
+import { AnimatePresence, m } from 'framer-motion'
 import { X, CheckCircle2, AlertTriangle, Info, Trophy, RefreshCw } from 'lucide-react'
 import { useNotificationBannerStore, type BannerType } from '../hooks/useNotificationBanner'
 
@@ -56,7 +56,7 @@ export default function NotificationBanner() {
   return (
     <AnimatePresence>
       {activeBanner && (
-        <motion.div
+        <m.div
           key={activeBanner.id}
           role="alert"
           aria-live="polite"
@@ -109,7 +109,7 @@ export default function NotificationBanner() {
               )}
             </div>
           </div>
-        </motion.div>
+        </m.div>
       )}
     </AnimatePresence>
   )

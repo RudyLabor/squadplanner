@@ -25,6 +25,25 @@ vi.mock('framer-motion', async () => {
         return <line {...rest} />
       },
     },
+    m: {
+      ...actual.m,
+      svg: ({ children, ...props }: any) => {
+        const { initial, animate, transition, ...rest } = props
+        return <svg {...rest}>{children}</svg>
+      },
+      circle: (props: any) => {
+        const { initial, animate, transition, ...rest } = props
+        return <circle {...rest} />
+      },
+      path: (props: any) => {
+        const { initial, animate, transition, ...rest } = props
+        return <path {...rest} />
+      },
+      line: (props: any) => {
+        const { initial, animate, transition, ...rest } = props
+        return <line {...rest} />
+      },
+    },
   }
 })
 

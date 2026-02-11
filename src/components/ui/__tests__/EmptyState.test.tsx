@@ -24,6 +24,12 @@ vi.mock('framer-motion', async () => {
       button: createMockComponent('button'),
       span: createMockComponent('span'),
     },
+    m: {
+      ...actual.m,
+      div: createMockComponent('div'),
+      button: createMockComponent('button'),
+      span: createMockComponent('span'),
+    },
   }
 })
 

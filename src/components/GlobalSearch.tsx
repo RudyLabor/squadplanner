@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { motion, AnimatePresence } from 'framer-motion'
+import { m, AnimatePresence } from 'framer-motion'
 import { Search, Users, Calendar, MessageCircle, User, X, Clock, Trash2 } from 'lucide-react'
 import { useSquadsStore, useSessionsStore, useAuthStore } from '../hooks'
 import { supabase } from '../lib/supabase'
@@ -157,7 +157,7 @@ export function GlobalSearch() {
 
   return (
     <>
-      <motion.button
+      <m.button
         onClick={() => {
           const event = new KeyboardEvent('keydown', { key: 'k', ctrlKey: !isMac, metaKey: isMac, bubbles: true })
           window.dispatchEvent(event)
@@ -171,13 +171,13 @@ export function GlobalSearch() {
         <kbd className="hidden md:inline-flex items-center gap-1 px-1.5 py-0.5 text-xs font-medium bg-border-subtle rounded border border-border-hover">
           <span className="text-xs">{shortcutKey}</span>K
         </kbd>
-      </motion.button>
+      </m.button>
 
       <AnimatePresence>
         {isOpen && (
           <>
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50" onClick={() => setIsOpen(false)} />
-            <motion.div
+            <m.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50" onClick={() => setIsOpen(false)} />
+            <m.div
               initial={{ opacity: 0, scale: 0.95, y: -20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: -20 }}
               transition={{ type: 'spring', damping: 25, stiffness: 300 }}
               className="fixed top-[15%] left-1/2 -translate-x-1/2 w-full max-w-xl z-50 px-4"
@@ -187,9 +187,9 @@ export function GlobalSearch() {
                   <Search className="w-5 h-5 text-primary" />
                   <input ref={inputRef} type="text" value={query} onChange={(e) => { setQuery(e.target.value); setSelectedIndex(0) }} placeholder="Rechercher squads, sessions, messages, membres..." aria-label="Recherche globale" className="flex-1 bg-transparent text-text-primary placeholder-text-tertiary outline-none text-md" />
                   {query && (
-                    <motion.button onClick={() => setQuery('')} aria-label="Effacer la recherche" className="p-1 rounded-lg hover:bg-border-subtle text-text-tertiary hover:text-text-secondary" whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
+                    <m.button onClick={() => setQuery('')} aria-label="Effacer la recherche" className="p-1 rounded-lg hover:bg-border-subtle text-text-tertiary hover:text-text-secondary" whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
                       <X className="w-4 h-4" />
-                    </motion.button>
+                    </m.button>
                   )}
                 </div>
 
@@ -204,7 +204,7 @@ export function GlobalSearch() {
                         </button>
                       </div>
                       {searchHistory.map((h, i) => (
-                        <motion.button
+                        <m.button
                           key={h}
                           initial={{ opacity: 0, x: -8 }}
                           animate={{ opacity: 1, x: 0 }}
@@ -214,7 +214,7 @@ export function GlobalSearch() {
                         >
                           <Clock className="w-4 h-4 text-text-quaternary flex-shrink-0" />
                           <span className="text-md text-text-secondary truncate">{h}</span>
-                        </motion.button>
+                        </m.button>
                       ))}
                     </div>
                   ) : (
@@ -230,7 +230,7 @@ export function GlobalSearch() {
                   <span className="flex items-center gap-1"><kbd className="px-1.5 py-0.5 bg-border-subtle rounded">esc</kbd> fermer</span>
                 </div>
               </div>
-            </motion.div>
+            </m.div>
           </>
         )}
       </AnimatePresence>

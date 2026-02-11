@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { useParams, Link } from 'react-router-dom'
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import { ArrowLeft, Shield, Flame, Star, Calendar, Gamepad2, MapPin, ExternalLink } from 'lucide-react'
 import { usePublicProfileQuery } from '../hooks/queries'
 
@@ -66,7 +66,7 @@ export function PublicProfile() {
   }
 
   return (
-    <motion.div
+    <m.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       className="max-w-lg mx-auto px-4 py-6 pb-24"
@@ -182,7 +182,7 @@ export function PublicProfile() {
           Membre depuis {new Date(profile.created_at).toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' })}
         </p>
       </div>
-    </motion.div>
+    </m.div>
   )
 }
 

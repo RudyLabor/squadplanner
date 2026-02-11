@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import { ChevronDown } from 'lucide-react'
 
 const staggerItemVariants = {
@@ -24,15 +24,15 @@ export function FaqSection() {
   return (
     <section aria-label="Questions fréquentes" className="px-4 md:px-6 py-10 md:py-14">
       <div className="max-w-3xl mx-auto">
-        <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-12">
+        <m.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-12">
           <h2 className="text-xl md:text-2xl font-bold text-text-primary mb-4">
             Questions fréquentes
           </h2>
-        </motion.div>
+        </m.div>
 
         <div className="space-y-3">
           {faqs.map((faq, i) => (
-            <motion.div
+            <m.div
               key={i}
               variants={staggerItemVariants}
               initial="hidden"
@@ -54,7 +54,7 @@ export function FaqSection() {
                   <p className="px-5 pb-5 text-md text-text-tertiary leading-relaxed">{faq.a}</p>
                 </div>
               </div>
-            </motion.div>
+            </m.div>
           ))}
         </div>
       </div>

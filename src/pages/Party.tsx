@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from 'react'
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import { Loader2 } from 'lucide-react'
 import Confetti from '../components/LazyConfetti'
 import { useAuthStore, useSquadsStore, useVoiceChatStore, usePremiumStore, getSavedPartyInfo } from '../hooks'
@@ -119,7 +119,7 @@ export function Party() {
               )}
 
               {!isConnected && (
-                <motion.div className="space-y-4" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}>
+                <m.div className="space-y-4" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}>
                   {squads.length === 1 ? (
                     <PartySingleSquad squad={{ ...squads[0], game: squads[0].game || 'Jeu' }} isConnecting={isConnecting} onJoin={() => handleJoinParty(squads[0].id)} />
                   ) : (
@@ -135,7 +135,7 @@ export function Party() {
                       </div>
                     </div>
                   )}
-                </motion.div>
+                </m.div>
               )}
 
               {isConnected && otherSquads.length > 0 && (

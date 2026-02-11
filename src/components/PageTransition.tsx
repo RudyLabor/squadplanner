@@ -1,4 +1,4 @@
-import { motion as framerMotion } from 'framer-motion'
+import { m } from 'framer-motion'
 import type { ReactNode } from 'react'
 import { transitions } from '../utils/motionTokens'
 
@@ -39,7 +39,7 @@ export function PageTransition({
   const selectedVariant = variants[variant]
 
   return (
-    <framerMotion.div
+    <m.div
       initial={selectedVariant.initial}
       animate={selectedVariant.animate}
       exit={selectedVariant.exit}
@@ -47,7 +47,7 @@ export function PageTransition({
       className={className}
     >
       {children}
-    </framerMotion.div>
+    </m.div>
   )
 }
 

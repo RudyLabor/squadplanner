@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
 import { Link } from 'react-router-dom'
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import { Button } from './Button'
 
 interface EmptyStateProps {
@@ -29,7 +29,7 @@ export function EmptyState({
   const isCompact = variant === 'compact'
 
   return (
-    <motion.div
+    <m.div
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
@@ -38,7 +38,7 @@ export function EmptyState({
       }`}
       aria-live="polite"
     >
-      <motion.div
+      <m.div
         initial={{ scale: 0.8, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ delay: 0.1, type: 'spring', stiffness: 400, damping: 20 }}
@@ -47,7 +47,7 @@ export function EmptyState({
         }`}
       >
         {icon}
-      </motion.div>
+      </m.div>
       <p
         className={`font-medium text-text-primary ${
           isCompact ? 'text-sm mb-0.5' : 'text-base mb-1'
@@ -85,6 +85,6 @@ export function EmptyState({
           )}
         </div>
       )}
-    </motion.div>
+    </m.div>
   )
 }

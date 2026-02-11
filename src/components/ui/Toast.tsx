@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef, type ReactNode } from 'react'
-import { motion, AnimatePresence, useMotionValue, useTransform, type PanInfo } from 'framer-motion'
+import { m, AnimatePresence, useMotionValue, useTransform, type PanInfo } from 'framer-motion'
 import { X, CheckCircle, AlertTriangle, AlertCircle, Info } from 'lucide-react'
 
 // --- Types ---
@@ -129,7 +129,7 @@ function ToastItem({ data, onDismiss }: { data: ToastEntry; onDismiss: (id: stri
   }
 
   return (
-    <motion.div
+    <m.div
       layout
       initial={{ opacity: 0, y: -40, scale: 0.95 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -180,7 +180,7 @@ function ToastItem({ data, onDismiss }: { data: ToastEntry; onDismiss: (id: stri
       {/* Timer progress bar */}
       {data.duration && data.duration > 0 && (
         <div className="h-0.5 w-full bg-border-subtle">
-          <motion.div
+          <m.div
             className={`h-full ${typeProgressColors[type]}`}
             initial={{ width: '100%' }}
             animate={{ width: paused ? undefined : '0%' }}
@@ -188,7 +188,7 @@ function ToastItem({ data, onDismiss }: { data: ToastEntry; onDismiss: (id: stri
           />
         </div>
       )}
-    </motion.div>
+    </m.div>
   )
 }
 

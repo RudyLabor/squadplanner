@@ -21,6 +21,18 @@ vi.mock('framer-motion', async () => {
         return createElement('div', rest, children)
       },
     },
+    m: {
+      ...actual.m,
+      button: forwardRef(({ children, whileHover, whileTap, transition, initial, animate, exit, ...rest }: any, ref: any) => {
+        return createElement('button', { ...rest, ref }, children)
+      }),
+      span: ({ children, initial, animate, exit, transition, ...rest }: any) => {
+        return createElement('span', rest, children)
+      },
+      div: ({ children, whileHover, whileTap, transition, initial, animate, exit, ...rest }: any) => {
+        return createElement('div', rest, children)
+      },
+    },
   }
 })
 

@@ -5,7 +5,7 @@
  * Includes a "help" variant that renders a "?" icon trigger.
  */
 import { useState, useRef, useEffect, type ReactNode } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { m, AnimatePresence } from 'framer-motion'
 import { createPortal } from 'react-dom'
 import { HelpCircle } from 'lucide-react'
 
@@ -154,7 +154,7 @@ export function Tooltip({
         createPortal(
           <AnimatePresence>
             {isVisible && (
-              <motion.div
+              <m.div
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.95 }}
@@ -209,7 +209,7 @@ export function Tooltip({
                     }),
                   }}
                 />
-              </motion.div>
+              </m.div>
             )}
           </AnimatePresence>,
           document.body

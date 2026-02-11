@@ -1,5 +1,5 @@
 import { useState, memo } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { m, AnimatePresence } from 'framer-motion'
 import { Hash, Volume2, Megaphone, Plus, Settings, Trash2, X } from 'lucide-react'
 import { useSquadChannels } from '../hooks/useSquadChannels'
 import type { SquadChannel, ChannelType } from '../types/database'
@@ -50,7 +50,7 @@ export const ChannelList = memo(function ChannelList({ squadId, activeChannelId,
       {/* Create form */}
       <AnimatePresence>
         {showCreateForm && (
-          <motion.div
+          <m.div
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
@@ -95,7 +95,7 @@ export const ChannelList = memo(function ChannelList({ squadId, activeChannelId,
                 </button>
               </div>
             </div>
-          </motion.div>
+          </m.div>
         )}
       </AnimatePresence>
 

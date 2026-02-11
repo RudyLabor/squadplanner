@@ -1,5 +1,5 @@
 import { type ReactNode, useEffect, useRef, useId } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { m, AnimatePresence } from 'framer-motion'
 import { createPortal } from 'react-dom'
 import { X } from 'lucide-react'
 
@@ -135,7 +135,7 @@ export function Dialog({
       {open && (
         <div className="fixed inset-0 z-50 flex items-center justify-center">
           {/* Overlay */}
-          <motion.div
+          <m.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -146,7 +146,7 @@ export function Dialog({
           />
 
           {/* Dialog panel */}
-          <motion.div
+          <m.div
             ref={dialogRef}
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -197,7 +197,7 @@ export function Dialog({
 
             {/* Content */}
             {children}
-          </motion.div>
+          </m.div>
         </div>
       )}
     </AnimatePresence>,

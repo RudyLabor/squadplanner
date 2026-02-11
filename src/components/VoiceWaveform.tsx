@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import { useAudioAnalyser } from '../hooks/useAudioAnalyser'
 
 export interface VoiceWaveformProps {
@@ -125,7 +125,7 @@ export function VoiceWaveform({
         }}
       >
         {barHeights.map((height, index) => (
-          <motion.div
+          <m.div
             key={index}
             className="rounded-full"
             style={{
@@ -191,7 +191,7 @@ export function VoiceWaveformDemo({
         }}
       >
         {Array(barCount).fill(0).map((_, index) => (
-          <motion.div
+          <m.div
             key={index}
             className="rounded-full"
             style={{

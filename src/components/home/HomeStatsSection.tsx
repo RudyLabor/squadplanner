@@ -1,6 +1,6 @@
 import { memo } from 'react'
 import { Users, Calendar, TrendingUp } from 'lucide-react'
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import { AnimatedCounter, ContentTransition, SkeletonStatsRow } from '../ui'
 
@@ -21,7 +21,7 @@ function StatsRow({ squadsCount, sessionsThisWeek, reliabilityScore }: StatsRowP
     <div className="grid grid-cols-3 gap-2 sm:gap-3">
       {stats.map((stat, index) => (
         <Link key={stat.label} to={stat.path}>
-          <motion.div
+          <m.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.1, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
@@ -50,7 +50,7 @@ function StatsRow({ squadsCount, sessionsThisWeek, reliabilityScore }: StatsRowP
                 {stat.label}
               </div>
             </div>
-          </motion.div>
+          </m.div>
         </Link>
       ))}
     </div>

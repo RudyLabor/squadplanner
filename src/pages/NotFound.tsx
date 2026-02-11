@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import { Home, Gamepad2, ArrowLeft, Users, MessageCircle, HelpCircle } from 'lucide-react'
 import { Button } from '../components/ui'
 
@@ -9,19 +9,19 @@ export function NotFound() {
       <div className="px-4 md:px-6 lg:px-8 py-6 max-w-2xl lg:max-w-4xl xl:max-w-6xl mx-auto flex items-center justify-center min-h-[60vh]">
         <div className="text-center max-w-md">
         {/* Animated 404 icon — visible by default, animation is progressive enhancement */}
-        <motion.div
+        <m.div
           className="w-24 h-24 rounded-2xl bg-gradient-to-br from-primary-15 to-purple/[0.08] flex items-center justify-center mx-auto mb-6 opacity-100"
           initial={false}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ type: 'spring', stiffness: 300, damping: 20 }}
         >
-          <motion.div
+          <m.div
             animate={{ rotate: [0, 10, -10, 0] }}
             transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
           >
             <Gamepad2 className="w-12 h-12 text-primary" />
-          </motion.div>
-        </motion.div>
+          </m.div>
+        </m.div>
 
         {/* Title — always visible */}
         <h1 className="text-4xl font-bold text-text-primary mb-3">

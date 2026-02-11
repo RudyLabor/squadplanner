@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import { Users, Calendar, MessageCircle, Target } from 'lucide-react'
 import { AnimatedDemo, demoSteps } from './AnimatedDemo'
 
@@ -18,14 +18,14 @@ export function HowItWorksSection({ demoStep, setDemoStep }: HowItWorksSectionPr
   return (
     <section id="how-it-works" aria-label="Comment ça marche" className="px-4 md:px-6 py-12 md:py-16 bg-gradient-to-b from-transparent to-primary/[0.015]">
       <div className="max-w-5xl mx-auto">
-        <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-12">
+        <m.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-12">
           <h2 className="text-xl md:text-2xl font-bold text-text-primary mb-4">
             Comment ça marche
           </h2>
           <p className="text-text-tertiary text-lg">
             De la création de squad à la session de jeu en 30 secondes
           </p>
-        </motion.div>
+        </m.div>
 
         <div className="flex flex-col lg:flex-row items-center gap-8 lg:gap-12">
           <AnimatedDemo currentStep={demoStep} onStepChange={setDemoStep} />
@@ -72,7 +72,7 @@ export function HowItWorksSection({ demoStep, setDemoStep }: HowItWorksSectionPr
                 const isActive = i === demoStep
                 const StepIcon = step.icon
                 return (
-                  <motion.button
+                  <m.button
                     type="button"
                     key={step.step}
                     onClick={() => setDemoStep(i)}
@@ -92,17 +92,17 @@ export function HowItWorksSection({ demoStep, setDemoStep }: HowItWorksSectionPr
                     <div>
                       <h3 className={`text-md font-semibold transition-colors ${isActive ? 'text-text-primary' : 'text-text-tertiary'}`}>{step.title}</h3>
                       {isActive && (
-                        <motion.p
+                        <m.p
                           initial={{ opacity: 0, height: 0 }}
                           animate={{ opacity: 1, height: 'auto' }}
                           className="text-md text-text-tertiary mt-1"
                         >
                           {step.description}
-                        </motion.p>
+                        </m.p>
                       )}
                     </div>
                     {isActive && (
-                      <motion.div
+                      <m.div
                         className="hidden lg:block h-0.5 bg-primary rounded-full ml-auto self-center"
                         initial={{ width: 0 }}
                         animate={{ width: 40 }}
@@ -110,7 +110,7 @@ export function HowItWorksSection({ demoStep, setDemoStep }: HowItWorksSectionPr
                         key={`progress-${demoStep}`}
                       />
                     )}
-                  </motion.button>
+                  </m.button>
                 )
               })}
             </div>

@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import { Zap, Check, Target, Gift, Star, Calendar, Trophy, Flame, Clock, Award, Sparkles } from 'lucide-react'
 import { Button, Card } from '../ui'
 import type { Challenge, UserChallenge } from '../Challenges'
@@ -36,13 +36,13 @@ export function ChallengeCard({ challenge, index, onClaim, isClaiming }: Challen
   const canClaim = isCompleted && !isClaimed
 
   return (
-    <motion.div layout initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95 }} transition={{ delay: index * 0.05 }}>
+    <m.div layout initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95 }} transition={{ delay: index * 0.05 }}>
       <Card className={`p-4 transition-interactive ${isClaimed ? 'bg-surface-card opacity-60' : canClaim ? 'bg-surface-dark border-success shadow-glow-success' : 'bg-surface-dark border-border-hover'}`}>
         <div className="flex items-start gap-4">
           <div className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 relative" style={{ backgroundColor: config.bgColor }}>
             {isClaimed ? <Check className="w-6 h-6" style={{ color: config.color }} /> : <IconComponent className="w-6 h-6" style={{ color: config.color }} />}
             {canClaim && (
-              <motion.div className="absolute inset-0 rounded-xl" style={{ boxShadow: config.glowShadow }} animate={{ opacity: [0.5, 1, 0.5] }} transition={{ duration: 1.5, repeat: Infinity }} />
+              <m.div className="absolute inset-0 rounded-xl" style={{ boxShadow: config.glowShadow }} animate={{ opacity: [0.5, 1, 0.5] }} transition={{ duration: 1.5, repeat: Infinity }} />
             )}
           </div>
 
@@ -69,7 +69,7 @@ export function ChallengeCard({ challenge, index, onClaim, isClaiming }: Challen
                   <span className="text-text-tertiary">{progress}/{target}</span>
                 </div>
                 <div className="relative h-2 bg-border-subtle rounded-full overflow-hidden">
-                  <motion.div
+                  <m.div
                     className="absolute h-full rounded-full"
                     style={{ background: isCompleted ? `linear-gradient(90deg, ${config.color}, var(--color-success))` : config.color }}
                     initial={{ width: 0 }}
@@ -77,19 +77,19 @@ export function ChallengeCard({ challenge, index, onClaim, isClaiming }: Challen
                     transition={{ duration: 0.8, ease: "easeOut", delay: index * 0.1 }}
                   />
                   {isCompleted && (
-                    <motion.div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent" animate={{ x: ['-100%', '100%'] }} transition={{ duration: 1.5, repeat: Infinity, repeatDelay: 1 }} />
+                    <m.div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent" animate={{ x: ['-100%', '100%'] }} transition={{ duration: 1.5, repeat: Infinity, repeatDelay: 1 }} />
                   )}
                 </div>
               </div>
             )}
 
             {canClaim && (
-              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="mt-3">
+              <m.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="mt-3">
                 <Button size="sm" onClick={() => onClaim(challenge.id)} isLoading={isClaiming} className="w-full bg-gradient-to-r from-success to-success-dark hover:from-success-dark hover:to-success-darker text-bg-base">
                   <Gift className="w-4 h-4" />
                   Réclamer {challenge.xp_reward} XP
                 </Button>
-              </motion.div>
+              </m.div>
             )}
 
             {isClaimed && (
@@ -101,6 +101,6 @@ export function ChallengeCard({ challenge, index, onClaim, isClaiming }: Challen
           </div>
         </div>
       </Card>
-    </motion.div>
+    </m.div>
   )
 }

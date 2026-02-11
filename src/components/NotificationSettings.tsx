@@ -1,5 +1,5 @@
 import { memo } from 'react'
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import { Bell, Moon, Volume2, Vibrate, Loader2 } from 'lucide-react'
 import { useNotificationPreferences, NOTIFICATION_CATEGORIES } from '../hooks/useNotificationPreferences'
 
@@ -65,7 +65,7 @@ export const NotificationSettings = memo(function NotificationSettings() {
 
       {/* Notification categories */}
       {NOTIFICATION_CATEGORIES.map((category, catIndex) => (
-        <motion.div
+        <m.div
           key={category.key}
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
@@ -103,7 +103,7 @@ export const NotificationSettings = memo(function NotificationSettings() {
               />
             ))}
           </div>
-        </motion.div>
+        </m.div>
       ))}
     </div>
   )

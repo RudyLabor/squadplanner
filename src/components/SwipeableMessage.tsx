@@ -1,5 +1,5 @@
 import { memo, useRef, useCallback, useMemo } from 'react'
-import { motion, useMotionValue, useTransform, type PanInfo } from 'framer-motion'
+import { m, useMotionValue, useTransform, type PanInfo } from 'framer-motion'
 import { Reply, Trash2, MoreHorizontal } from 'lucide-react'
 import { useHapticFeedback } from '../hooks/useHapticFeedback'
 import { useReducedMotion } from '../hooks/useReducedMotion'
@@ -111,44 +111,44 @@ const SwipeableMessage = memo(function SwipeableMessage({
     <div className="relative overflow-hidden">
       {/* Left action indicator (reply) - appears on the RIGHT side when swiping left */}
       {enableSwipeLeft && (
-        <motion.div
+        <m.div
           className="absolute inset-y-0 right-0 flex items-center justify-center w-16"
           style={{ opacity: leftIndicatorOpacity }}
           aria-hidden="true"
         >
-          <motion.div
+          <m.div
             className="flex items-center justify-center w-10 h-10 rounded-full bg-primary-15"
             style={{ scale: leftIndicatorScale }}
           >
             <Reply className="w-5 h-5 text-primary" />
-          </motion.div>
-        </motion.div>
+          </m.div>
+        </m.div>
       )}
 
       {/* Right action indicator (actions) - appears on the LEFT side when swiping right */}
       {enableSwipeRight && (
-        <motion.div
+        <m.div
           className="absolute inset-y-0 left-0 flex items-center gap-1 pl-2"
           style={{ opacity: rightIndicatorOpacity }}
           aria-hidden="true"
         >
-          <motion.div
+          <m.div
             className="flex items-center justify-center w-10 h-10 rounded-full bg-error-10"
             style={{ scale: rightIndicatorScale }}
           >
             <Trash2 className="w-4 h-4 text-error" />
-          </motion.div>
-          <motion.div
+          </m.div>
+          <m.div
             className="flex items-center justify-center w-10 h-10 rounded-full bg-bg-surface"
             style={{ scale: rightIndicatorScale }}
           >
             <MoreHorizontal className="w-4 h-4 text-text-secondary" />
-          </motion.div>
-        </motion.div>
+          </m.div>
+        </m.div>
       )}
 
       {/* Draggable message content */}
-      <motion.div
+      <m.div
         drag="x"
         dragConstraints={dragConstraints}
         dragElastic={0.2}
@@ -161,7 +161,7 @@ const SwipeableMessage = memo(function SwipeableMessage({
         className="relative z-10"
       >
         {children}
-      </motion.div>
+      </m.div>
     </div>
   )
 })

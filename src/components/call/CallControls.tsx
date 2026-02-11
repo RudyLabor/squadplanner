@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import { PhoneOff, Mic, MicOff, Volume2, VolumeX } from 'lucide-react'
 
 interface CallControlsProps {
@@ -12,7 +12,7 @@ interface CallControlsProps {
 
 export function CallControls({ status, isMuted, isSpeakerOn, toggleMute, toggleSpeaker, endCall }: CallControlsProps) {
   return (
-    <motion.div
+    <m.div
       initial={{ y: 50, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ delay: 0.4 }}
@@ -21,7 +21,7 @@ export function CallControls({ status, isMuted, isSpeakerOn, toggleMute, toggleS
       <div className="flex items-center justify-center gap-6">
         {/* Mute button */}
         {status === 'connected' && (
-          <motion.button
+          <m.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={toggleMute}
@@ -38,11 +38,11 @@ export function CallControls({ status, isMuted, isSpeakerOn, toggleMute, toggleS
             ) : (
               <Mic className="w-7 h-7 text-text-secondary" aria-hidden="true" />
             )}
-          </motion.button>
+          </m.button>
         )}
 
         {/* End call button */}
-        <motion.button
+        <m.button
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           onClick={endCall}
@@ -50,11 +50,11 @@ export function CallControls({ status, isMuted, isSpeakerOn, toggleMute, toggleS
           className="w-20 h-20 rounded-full bg-error flex items-center justify-center shadow-lg shadow-error/20"
         >
           <PhoneOff className="w-8 h-8 text-white" aria-hidden="true" />
-        </motion.button>
+        </m.button>
 
         {/* Speaker button */}
         {status === 'connected' && (
-          <motion.button
+          <m.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={toggleSpeaker}
@@ -71,21 +71,21 @@ export function CallControls({ status, isMuted, isSpeakerOn, toggleMute, toggleS
             ) : (
               <VolumeX className="w-7 h-7 text-error" aria-hidden="true" />
             )}
-          </motion.button>
+          </m.button>
         )}
       </div>
 
       {/* Hint text */}
       {status === 'calling' && (
-        <motion.p
+        <m.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 1 }}
           className="text-center text-base text-text-tertiary mt-6"
         >
           En attente de réponse...
-        </motion.p>
+        </m.p>
       )}
-    </motion.div>
+    </m.div>
   )
 }

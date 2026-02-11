@@ -3,7 +3,7 @@
  * Dropdown on avatar to select online/busy/dnd/invisible
  */
 import { useState, useRef, useEffect, memo } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { m, AnimatePresence } from 'framer-motion'
 import { Circle, Minus, BellOff, Eye, Gamepad2 } from 'lucide-react'
 import { useUserStatusStore, AVAILABILITY_CONFIG, type AvailabilityStatus } from '../hooks/useUserStatus'
 
@@ -67,7 +67,7 @@ export const StatusSelector = memo(function StatusSelector({ onOpenCustomStatus,
       {/* Dropdown */}
       <AnimatePresence>
         {isOpen && (
-          <motion.div
+          <m.div
             initial={{ opacity: 0, y: -4, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -4, scale: 0.95 }}
@@ -138,7 +138,7 @@ export const StatusSelector = memo(function StatusSelector({ onOpenCustomStatus,
                 </button>
               </div>
             )}
-          </motion.div>
+          </m.div>
         )}
       </AnimatePresence>
     </div>

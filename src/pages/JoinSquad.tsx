@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useParams, useNavigate, Link } from 'react-router-dom'
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import { Users, Loader2, CheckCircle2, XCircle, LogIn } from 'lucide-react'
 import { Button, Card } from '../components/ui'
 import { useAuthStore } from '../hooks/useAuth'
@@ -130,7 +130,7 @@ export function JoinSquad() {
   if (status === 'not-found') {
     return (
       <main className="min-h-screen bg-bg-base flex items-center justify-center p-4" aria-label="Rejoindre une squad">
-        <motion.div
+        <m.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           className="max-w-md w-full text-center"
@@ -147,7 +147,7 @@ export function JoinSquad() {
           <Link to="/">
             <Button>Retour à l'accueil</Button>
           </Link>
-        </motion.div>
+        </m.div>
       </main>
     )
   }
@@ -156,26 +156,26 @@ export function JoinSquad() {
   if (status === 'success') {
     return (
       <main className="min-h-screen bg-bg-base flex items-center justify-center p-4" aria-label="Rejoindre une squad">
-        <motion.div
+        <m.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           className="max-w-md w-full text-center"
         >
-          <motion.div
+          <m.div
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             transition={{ type: 'spring', stiffness: 300, damping: 20 }}
             className="w-20 h-20 rounded-full bg-success/10 flex items-center justify-center mx-auto mb-6"
           >
             <CheckCircle2 className="w-10 h-10 text-success" />
-          </motion.div>
+          </m.div>
           <h1 className="text-lg font-bold text-text-primary mb-2">
             Bienvenue dans la squad !
           </h1>
           <p className="text-text-secondary">
             Tu fais maintenant partie de {squadPreview?.name}
           </p>
-        </motion.div>
+        </m.div>
       </main>
     )
   }
@@ -183,7 +183,7 @@ export function JoinSquad() {
   // Preview / Join state
   return (
     <main className="min-h-screen bg-bg-base flex items-center justify-center p-4" aria-label="Rejoindre une squad">
-      <motion.div
+      <m.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         className="max-w-md w-full"
@@ -191,13 +191,13 @@ export function JoinSquad() {
         <Card className="p-6">
           {/* Squad info */}
           <div className="text-center mb-6">
-            <motion.div
+            <m.div
               initial={{ scale: 0.8 }}
               animate={{ scale: 1 }}
               className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center mx-auto mb-4"
             >
               <Users className="w-8 h-8 text-primary" />
-            </motion.div>
+            </m.div>
 
             <h1 className="text-lg font-semibold text-text-primary mb-1">
               {squadPreview?.name}
@@ -253,7 +253,7 @@ export function JoinSquad() {
             Retour à l'accueil
           </Link>
         </div>
-      </motion.div>
+      </m.div>
     </main>
   )
 }

@@ -468,6 +468,68 @@ export interface Database {
         }
         Relationships: []
       }
+      direct_messages: {
+        Row: {
+          id: string
+          sender_id: string
+          receiver_id: string
+          content: string
+          read_at: string | null
+          // Phase 7: Voice & Search
+          voice_url: string | null
+          voice_duration_seconds: number | null
+          message_type: MessageType
+          search_vector: string | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          sender_id: string
+          receiver_id: string
+          content: string
+          read_at?: string | null
+          voice_url?: string | null
+          voice_duration_seconds?: number | null
+          message_type?: MessageType
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          sender_id?: string
+          receiver_id?: string
+          content?: string
+          read_at?: string | null
+          voice_url?: string | null
+          voice_duration_seconds?: number | null
+          message_type?: MessageType
+          created_at?: string
+        }
+        Relationships: []
+      }
+      message_reactions: {
+        Row: {
+          id: string
+          message_id: string
+          user_id: string
+          emoji: string
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          message_id: string
+          user_id: string
+          emoji: string
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          message_id?: string
+          user_id?: string
+          emoji?: string
+          created_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       session_stats: {
@@ -531,6 +593,44 @@ export interface Database {
         Args: { p_game?: string; p_region?: string; p_limit?: number }
         Returns: MatchmakingPlayer[]
       }
+      // Phase 7: Custom Status
+      update_user_status: {
+        Args: { p_user_id: string; p_status_emoji: string; p_status_text: string; p_duration_minutes?: number }
+        Returns: void
+      }
+      cleanup_expired_statuses: {
+        Args: Record<string, never>
+        Returns: void
+      }
+      // Phase 7: Threads
+      get_thread_messages: {
+        Args: { p_thread_id: string; p_limit?: number; p_offset?: number }
+        Returns: Array<Message & { sender: { username: string; avatar_url: string | null } }>
+      }
+      // Phase 7: Stories
+      get_feed_stories: {
+        Args: { p_user_id: string }
+        Returns: FeedStory[]
+      }
+      // Phase 7: Notifications
+      should_send_notification: {
+        Args: { p_user_id: string; p_notification_type: string }
+        Returns: boolean
+      }
+      // Phase 7: Search
+      search_messages: {
+        Args: { p_user_id: string; p_query: string; p_squad_id?: string; p_limit?: number; p_offset?: number }
+        Returns: MessageSearchResult[]
+      }
+      search_direct_messages: {
+        Args: { p_user_id: string; p_query: string; p_other_user_id?: string; p_limit?: number; p_offset?: number }
+        Returns: DMSearchResult[]
+      }
+      // Phase 7: Reactions
+      get_message_reactions: {
+        Args: { msg_id: string }
+        Returns: Array<{ emoji: string; count: number; user_ids: string[] }>
+      }
     }
     Enums: {
       squad_role: SquadRole
@@ -552,6 +652,8 @@ export type SessionCheckin = Database['public']['Tables']['session_checkins']['R
 export type Message = Database['public']['Tables']['messages']['Row']
 export type AIInsight = Database['public']['Tables']['ai_insights']['Row']
 export type Subscription = Database['public']['Tables']['subscriptions']['Row']
+export type DirectMessage = Database['public']['Tables']['direct_messages']['Row']
+export type MessageReaction = Database['public']['Tables']['message_reactions']['Row']
 
 // Phase 6: RPC result types
 export interface PublicSquadResult {

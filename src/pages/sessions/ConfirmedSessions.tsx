@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import { Calendar, Plus, Clock, Users } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { Button, Card, Badge, SessionCardSkeleton, ContentTransition } from '../../components/ui'
@@ -28,7 +28,7 @@ export function ConfirmedSessions({ confirmed, sessionsLoading }: ConfirmedSessi
             {confirmed.map(session => (
               <li key={session.id}>
                 <Link to={`/session/${session.id}`}>
-                  <motion.div whileHover={{ y: -2, scale: 1.02 }} whileTap={{ scale: 0.99 }}>
+                  <m.div whileHover={{ y: -2, scale: 1.02 }} whileTap={{ scale: 0.99 }}>
                     <Card className="p-4 transition-interactive hover:shadow-glow-success">
                       <div className="flex items-center gap-4">
                         <div className="w-12 h-12 rounded-xl bg-success-10 flex items-center justify-center">
@@ -48,25 +48,25 @@ export function ConfirmedSessions({ confirmed, sessionsLoading }: ConfirmedSessi
                         <Badge variant="success">Confirmé</Badge>
                       </div>
                     </Card>
-                  </motion.div>
+                  </m.div>
                 </Link>
               </li>
             ))}
           </ul>
         ) : (
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}>
+          <m.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}>
             <Card className="p-8 text-center">
-              <motion.div initial={{ scale: 0.8 }} animate={{ scale: 1 }}
+              <m.div initial={{ scale: 0.8 }} animate={{ scale: 1 }}
                 transition={{ delay: 0.1, type: 'spring', stiffness: 300, damping: 25 }}>
                 <Calendar className="w-12 h-12 mx-auto mb-4 text-text-tertiary" strokeWidth={1} />
-              </motion.div>
+              </m.div>
               <h3 className="text-lg font-semibold text-text-primary mb-2">Aucune session confirmée</h3>
               <p className="text-md text-text-secondary mb-4">Réponds "Présent" à une session pour la voir ici.</p>
               <Link to="/squads">
                 <Button variant="secondary" size="sm"><Plus className="w-4 h-4" />Voir mes squads</Button>
               </Link>
             </Card>
-          </motion.div>
+          </m.div>
         )}
       </ContentTransition>
     </section>

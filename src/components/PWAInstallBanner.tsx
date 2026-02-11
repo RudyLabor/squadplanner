@@ -6,7 +6,7 @@
  * French wording, consistent with the app's design system.
  */
 import { memo } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { m, AnimatePresence } from 'framer-motion'
 import { Download, X } from 'lucide-react'
 import { usePWAInstallStore } from '../hooks/usePWAInstall'
 
@@ -18,7 +18,7 @@ export const PWAInstallBanner = memo(function PWAInstallBanner() {
   return (
     <AnimatePresence>
       {showBanner && (
-        <motion.div
+        <m.div
           initial={{ y: 100, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: 100, opacity: 0 }}
@@ -70,7 +70,7 @@ export const PWAInstallBanner = memo(function PWAInstallBanner() {
               <X className="w-4 h-4" />
             </button>
           </div>
-        </motion.div>
+        </m.div>
       )}
     </AnimatePresence>
   )

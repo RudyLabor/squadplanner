@@ -1,6 +1,6 @@
 import { memo } from 'react'
 import { Link } from 'react-router-dom'
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import { Home, Mic, MessageCircle, User, Users } from 'lucide-react'
 import { usePrefetch } from '../../hooks/usePrefetch'
 
@@ -38,7 +38,7 @@ const MobileNavLink = memo(function MobileNavLink({ path, icon: Icon, label, isA
           aria-hidden="true"
         />
         {badge !== undefined && badge > 0 && (
-          <motion.span
+          <m.span
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             transition={{ type: "spring", stiffness: 500, damping: 30 }}
@@ -46,7 +46,7 @@ const MobileNavLink = memo(function MobileNavLink({ path, icon: Icon, label, isA
             aria-label={`${badge} non lus`}
           >
             {badge > 99 ? '99+' : badge}
-          </motion.span>
+          </m.span>
         )}
       </div>
       <span className={`text-sm mt-0.5 transition-colors ${isActive ? 'text-text-primary' : 'text-text-tertiary'}`}>
@@ -79,7 +79,7 @@ const PartyButton = memo(function PartyButton({ isActive, hasActiveParty }: { is
           aria-hidden="true"
         />
         {hasActiveParty && (
-          <motion.div
+          <m.div
             className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-success"
             animate={{ scale: [1, 1.3, 1] }}
             transition={{ duration: 2, repeat: 3 }}

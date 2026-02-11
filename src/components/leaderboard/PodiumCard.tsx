@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import { Crown, Flame, User, Shield, Zap } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { Card } from '../ui'
@@ -17,7 +17,7 @@ export function PodiumCard({ entry, isCurrentUser, index }: PodiumCardProps) {
   const levelColor = getLevelColor(entry.level ?? 1)
 
   return (
-    <motion.div
+    <m.div
       initial={{ opacity: 0, y: 50, scale: 0.8 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
       transition={{ duration: 0.5, delay: index * 0.15, type: 'spring', stiffness: 200, damping: 20 }}
@@ -29,7 +29,7 @@ export function PodiumCard({ entry, isCurrentUser, index }: PodiumCardProps) {
             className={`relative p-4 text-center overflow-hidden cursor-pointer transition-all duration-200 hover:scale-[1.02] hover:shadow-glow-primary-sm ${isFirst ? 'bg-gradient-to-b from-[var(--color-gold-15)] to-bg-surface' : 'bg-bg-surface'} ${isCurrentUser ? 'ring-2 ring-primary ring-offset-2 ring-offset-bg-base' : ''}`}
           >
           {isFirst && (
-            <motion.div
+            <m.div
               className="absolute inset-0 pointer-events-none"
               style={{ background: `radial-gradient(ellipse at center top, ${medal.glow}, transparent 70%)` }}
               animate={{ opacity: [0.5, 0.8, 0.5] }}
@@ -38,17 +38,17 @@ export function PodiumCard({ entry, isCurrentUser, index }: PodiumCardProps) {
           )}
 
           {isFirst && (
-            <motion.div
+            <m.div
               className="absolute -top-3 left-1/2 -translate-x-1/2"
               initial={{ scale: 0, rotate: -180 }}
               animate={{ scale: 1, rotate: 0 }}
               transition={{ delay: 0.5, type: 'spring', stiffness: 300 }}
             >
               <Crown className="w-8 h-8" style={{ color: medal.primary }} fill={medal.primary} />
-            </motion.div>
+            </m.div>
           )}
 
-          <motion.div
+          <m.div
             className="absolute top-2 left-2 w-7 h-7 rounded-full flex items-center justify-center text-sm font-bold"
             style={{ backgroundColor: medal.primary20, color: medal.primary, boxShadow: `0 0 10px ${medal.glow}` }}
             initial={{ scale: 0 }}
@@ -56,9 +56,9 @@ export function PodiumCard({ entry, isCurrentUser, index }: PodiumCardProps) {
             transition={{ delay: 0.3 + index * 0.1 }}
           >
             {entry.rank}
-          </motion.div>
+          </m.div>
 
-          <motion.div
+          <m.div
             className={`relative mx-auto mb-3 rounded-xl overflow-hidden flex items-center justify-center ${isFirst ? 'w-20 h-20' : 'w-16 h-16'}`}
             style={{ background: `linear-gradient(135deg, ${medal.primary30}, ${medal.secondary20})`, border: `2px solid ${medal.primary40}` }}
             whileHover={{ scale: 1.05 }}
@@ -68,7 +68,7 @@ export function PodiumCard({ entry, isCurrentUser, index }: PodiumCardProps) {
             ) : (
               <User className={`${isFirst ? 'w-10 h-10' : 'w-8 h-8'} text-text-secondary`} />
             )}
-          </motion.div>
+          </m.div>
 
           <h3 className={`font-bold text-text-primary truncate mb-1 ${isFirst ? 'text-lg' : 'text-md'}`}>{entry.username}</h3>
 
@@ -101,6 +101,6 @@ export function PodiumCard({ entry, isCurrentUser, index }: PodiumCardProps) {
           <span className="text-xl font-extrabold" style={{ color: medal.primary80 }}>{entry.rank}</span>
         </div>
       </div>
-    </motion.div>
+    </m.div>
   )
 }

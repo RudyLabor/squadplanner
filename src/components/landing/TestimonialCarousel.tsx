@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
-import { motion, AnimatePresence, useInView } from 'framer-motion'
+import { m, AnimatePresence, useInView } from 'framer-motion'
 import { Star, ChevronLeft, ChevronRight } from 'lucide-react'
 
 interface Testimonial {
@@ -162,15 +162,15 @@ export function TestimonialCarousel() {
       aria-roledescription="carousel"
       aria-label="Témoignages de joueurs"
     >
-      <motion.h2
+      <m.h2
         className="text-xl md:text-2xl font-bold text-center text-text-primary mb-3"
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
       >
         Ce que disent nos joueurs
-      </motion.h2>
-      <motion.p
+      </m.h2>
+      <m.p
         className="text-text-tertiary text-center mb-10"
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
@@ -178,7 +178,7 @@ export function TestimonialCarousel() {
         transition={{ delay: 0.1 }}
       >
         Déjà adopté par des milliers de gamers
-      </motion.p>
+      </m.p>
 
       <div
         className="relative"
@@ -206,7 +206,7 @@ export function TestimonialCarousel() {
         {/* Testimonial cards */}
         <div className="overflow-hidden px-6 md:px-2">
           <AnimatePresence mode="wait" custom={direction}>
-            <motion.div
+            <m.div
               key={currentIndex}
               custom={direction}
               variants={slideVariants}
@@ -232,7 +232,7 @@ export function TestimonialCarousel() {
               {visibleTestimonials.map((t) => (
                 <TestimonialCard key={t.name} t={t} />
               ))}
-            </motion.div>
+            </m.div>
           </AnimatePresence>
         </div>
 

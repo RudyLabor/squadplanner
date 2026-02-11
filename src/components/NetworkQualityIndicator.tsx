@@ -1,4 +1,4 @@
-import { motion, AnimatePresence } from 'framer-motion'
+import { m, AnimatePresence } from 'framer-motion'
 import { Wifi, WifiOff } from 'lucide-react'
 import { useNetworkQualityStore, QUALITY_INFO, type NetworkQualityLevel } from '../hooks/useNetworkQuality'
 import { Tooltip } from './ui/Tooltip'
@@ -108,7 +108,7 @@ export function NetworkQualityIndicator({
   const activeBars = info.bars
 
   const indicatorContent = (
-    <motion.div
+    <m.div
       className={`flex items-center gap-2 ${className}`}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
@@ -127,7 +127,7 @@ export function NetworkQualityIndicator({
           const isActive = index < activeBars
 
           return (
-            <motion.div
+            <m.div
               key={index}
               initial={{ scaleY: 0 }}
               animate={{ scaleY: 1 }}
@@ -153,7 +153,7 @@ export function NetworkQualityIndicator({
           {info.label}
         </span>
       )}
-    </motion.div>
+    </m.div>
   )
 
   if (showTooltip) {
@@ -180,7 +180,7 @@ export function NetworkQualityBadge({
   const info = QUALITY_INFO[localQuality]
 
   return (
-    <motion.div
+    <m.div
       className={`flex items-center gap-2 px-3 py-1.5 rounded-full ${className}`}
       style={{
         backgroundColor: `${info.color}15`,
@@ -197,7 +197,7 @@ export function NetworkQualityBadge({
       >
         {info.label}
       </span>
-    </motion.div>
+    </m.div>
   )
 }
 
@@ -221,7 +221,7 @@ export function QualityChangeToast({
   return (
     <AnimatePresence>
       {isVisible && (
-        <motion.div
+        <m.div
           className="fixed top-4 left-1/2 -translate-x-1/2 z-[200]"
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -260,7 +260,7 @@ export function QualityChangeToast({
               </span>
             </div>
           </div>
-        </motion.div>
+        </m.div>
       )}
     </AnimatePresence>
   )

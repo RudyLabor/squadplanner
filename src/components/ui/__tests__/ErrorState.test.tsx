@@ -15,6 +15,13 @@ vi.mock('framer-motion', async () => {
         return <div {...rest}>{children}</div>
       },
     },
+    m: {
+      ...actual.m,
+      div: ({ children, ...props }: any) => {
+        const { initial, animate, exit, transition, ...rest } = props
+        return <div {...rest}>{children}</div>
+      },
+    },
   }
 })
 

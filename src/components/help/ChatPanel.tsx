@@ -1,5 +1,5 @@
 import { useRef, useEffect } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { m, AnimatePresence } from 'framer-motion'
 import { X, Sparkles, Send, ChevronRight } from 'lucide-react'
 import type { ChatMessage } from './chatbotUtils'
 
@@ -27,7 +27,7 @@ export function ChatPanel({ messages, inputText, setInputText, isTyping, showQui
   }
 
   return (
-    <motion.div
+    <m.div
       initial={{ opacity: 0, y: 20, scale: 0.95 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
       exit={{ opacity: 0, y: 20, scale: 0.95 }}
@@ -52,7 +52,7 @@ export function ChatPanel({ messages, inputText, setInputText, isTyping, showQui
         {/* Messages area */}
         <div className="flex-1 overflow-y-auto px-4 py-3 space-y-3 scrollbar-hide">
           {messages.map((msg) => (
-            <motion.div key={msg.id} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.25 }} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+            <m.div key={msg.id} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.25 }} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
               {msg.role === 'bot' && (
                 <div className="w-7 h-7 rounded-full bg-primary/10 flex items-center justify-center shrink-0 mr-2 mt-0.5">
                   <Sparkles className="w-3.5 h-3.5 text-primary" />
@@ -61,12 +61,12 @@ export function ChatPanel({ messages, inputText, setInputText, isTyping, showQui
               <div className={`max-w-[80%] rounded-2xl px-3.5 py-2.5 text-sm leading-relaxed ${msg.role === 'user' ? 'bg-primary text-white rounded-br-md' : 'bg-surface-card border border-border-subtle text-text-primary rounded-bl-md'}`}>
                 {msg.text}
               </div>
-            </motion.div>
+            </m.div>
           ))}
 
           <AnimatePresence>
             {isTyping && (
-              <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -4 }} className="flex justify-start">
+              <m.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -4 }} className="flex justify-start">
                 <div className="w-7 h-7 rounded-full bg-primary/10 flex items-center justify-center shrink-0 mr-2 mt-0.5">
                   <Sparkles className="w-3.5 h-3.5 text-primary" />
                 </div>
@@ -75,19 +75,19 @@ export function ChatPanel({ messages, inputText, setInputText, isTyping, showQui
                   <span className="w-2 h-2 rounded-full bg-text-tertiary animate-bounce" style={{ animationDelay: '150ms' }} />
                   <span className="w-2 h-2 rounded-full bg-text-tertiary animate-bounce" style={{ animationDelay: '300ms' }} />
                 </div>
-              </motion.div>
+              </m.div>
             )}
           </AnimatePresence>
 
           <AnimatePresence>
             {showQuickActions && !isTyping && (
-              <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="flex flex-wrap gap-1.5 pt-1">
+              <m.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="flex flex-wrap gap-1.5 pt-1">
                 {quickActions.map((action) => (
                   <button key={action} onClick={() => onQuickAction(action)} className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-medium bg-primary/5 border border-primary/15 text-primary hover:bg-primary/10 transition-colors">
                     <ChevronRight className="w-3 h-3" />{action}
                   </button>
                 ))}
-              </motion.div>
+              </m.div>
             )}
           </AnimatePresence>
 
@@ -98,12 +98,12 @@ export function ChatPanel({ messages, inputText, setInputText, isTyping, showQui
         <div className="shrink-0 border-t border-border-subtle bg-surface-card px-3 py-3">
           <div className="flex items-center gap-2">
             <input ref={inputRef} type="text" value={inputText} onChange={(e) => setInputText(e.target.value)} onKeyDown={handleKeyDown} placeholder="Pose ta question..." className="flex-1 h-10 px-4 rounded-xl bg-bg-base border border-border-subtle text-sm text-text-primary placeholder:text-text-quaternary focus:outline-none focus:border-primary transition-colors" disabled={isTyping} />
-            <motion.button onClick={onSend} disabled={!inputText.trim() || isTyping} className="w-10 h-10 rounded-xl bg-primary text-white flex items-center justify-center disabled:opacity-40 disabled:cursor-not-allowed" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} aria-label="Envoyer">
+            <m.button onClick={onSend} disabled={!inputText.trim() || isTyping} className="w-10 h-10 rounded-xl bg-primary text-white flex items-center justify-center disabled:opacity-40 disabled:cursor-not-allowed" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} aria-label="Envoyer">
               <Send className="w-4 h-4" />
-            </motion.button>
+            </m.button>
           </div>
         </div>
       </div>
-    </motion.div>
+    </m.div>
   )
 }

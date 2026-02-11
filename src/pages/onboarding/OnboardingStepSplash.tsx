@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import { ArrowRight } from 'lucide-react'
 import { Button } from '../../components/ui'
 import { SquadPlannerIcon } from '../../components/SquadPlannerLogo'
@@ -12,7 +12,7 @@ interface OnboardingStepSplashProps {
 
 export function OnboardingStepSplash({ slideVariants, isNavigating, onStart, onSkip }: OnboardingStepSplashProps) {
   return (
-    <motion.div
+    <m.div
       key="splash"
       variants={slideVariants}
       initial="enter"
@@ -21,17 +21,17 @@ export function OnboardingStepSplash({ slideVariants, isNavigating, onStart, onS
       className="text-center"
     >
       {/* Logo */}
-      <motion.div
+      <m.div
         initial={{ scale: 0.8, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ duration: 0.5 }}
         className="mb-8 flex justify-center"
       >
         <SquadPlannerIcon size={80} />
-      </motion.div>
+      </m.div>
 
       {/* Proposition de valeur */}
-      <motion.h1
+      <m.h1
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2 }}
@@ -41,18 +41,18 @@ export function OnboardingStepSplash({ slideVariants, isNavigating, onStart, onS
         <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-purple">
           "on verra"
         </span>
-      </motion.h1>
+      </m.h1>
 
-      <motion.p
+      <m.p
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.4 }}
         className="text-lg text-text-secondary mb-10"
       >
         Jouez vraiment ensemble.
-      </motion.p>
+      </m.p>
 
-      <motion.div
+      <m.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.6 }}
@@ -66,18 +66,18 @@ export function OnboardingStepSplash({ slideVariants, isNavigating, onStart, onS
           C'est parti
           <ArrowRight className="w-5 h-5 ml-2" />
         </Button>
-      </motion.div>
+      </m.div>
 
-      <motion.p
+      <m.p
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.8 }}
         className="text-base text-text-tertiary mt-6"
       >
         Configure ta squad en moins de 60 secondes
-      </motion.p>
+      </m.p>
 
-      <motion.button
+      <m.button
         type="button"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -86,7 +86,7 @@ export function OnboardingStepSplash({ slideVariants, isNavigating, onStart, onS
         className="text-sm text-text-quaternary hover:text-text-tertiary transition-colors mt-3"
       >
         Passer pour l'instant
-      </motion.button>
-    </motion.div>
+      </m.button>
+    </m.div>
   )
 }

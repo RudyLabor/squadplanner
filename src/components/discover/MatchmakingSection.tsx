@@ -1,5 +1,5 @@
-ï»¿import { memo, useState } from 'react'
-import { motion } from 'framer-motion'
+import { memo, useState } from 'react'
+import { m } from 'framer-motion'
 import { UserPlus, Shield, Star, Gamepad2, MapPin, MessageSquare } from 'lucide-react'
 import { useMatchmakingQuery } from '../../hooks/queries'
 import { useAuthStore } from '../../hooks'
@@ -30,7 +30,7 @@ export const MatchmakingSection = memo(function MatchmakingSection({ game, regio
       <div className="text-center py-12">
         <UserPlus className="w-10 h-10 text-text-tertiary mx-auto mb-3 opacity-50" />
         <p className="text-sm text-text-tertiary">Aucun joueur disponible</p>
-        <p className="text-xs text-text-tertiary mt-1">Active "Cherche une squad" dans ton profil pour apparaÃ®tre ici</p>
+        <p className="text-xs text-text-tertiary mt-1">Active "Cherche une squad" dans ton profil pour apparaître ici</p>
       </div>
     )
   }
@@ -57,9 +57,9 @@ const PlayerCard = memo(function PlayerCard({ player }: { player: MatchmakingPla
       await supabase.from('direct_messages').insert({
         sender_id: user.id,
         receiver_id: player.user_id,
-        content: `Salut ${player.username} ! Je t'invite Ã  rejoindre ma squad. IntÃ©ressÃ©(e) ?`,
+        content: `Salut ${player.username} ! Je t'invite à rejoindre ma squad. Intéressé(e) ?`,
       })
-      showSuccess(`Message envoyÃ© Ã  ${player.username} !`)
+      showSuccess(`Message envoyé à ${player.username} !`)
     } catch {
       showError('Erreur lors de l\'envoi')
     } finally {
@@ -70,7 +70,7 @@ const PlayerCard = memo(function PlayerCard({ player }: { player: MatchmakingPla
   const isOwnProfile = user?.id === player.user_id
 
   return (
-    <motion.div
+    <m.div
       initial={{ opacity: 0, y: 5 }}
       animate={{ opacity: 1, y: 0 }}
       className="rounded-xl border border-border-subtle bg-surface-card p-4"
@@ -142,6 +142,6 @@ const PlayerCard = memo(function PlayerCard({ player }: { player: MatchmakingPla
           </button>
         )}
       </div>
-    </motion.div>
+    </m.div>
   )
 })

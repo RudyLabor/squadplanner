@@ -1,5 +1,5 @@
 import { type ReactNode, useState, useRef, useEffect, useCallback, useMemo, useId } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { m, AnimatePresence } from 'framer-motion'
 import { createPortal } from 'react-dom'
 import { ChevronDown, X, Search, Loader2, Check } from 'lucide-react'
 import { haptic } from '../../utils/haptics'
@@ -157,7 +157,7 @@ export function Select({
       {typeof document !== 'undefined' && createPortal(
         <AnimatePresence>
           {open && (
-            <motion.div ref={listRef}
+            <m.div ref={listRef}
               initial={{ opacity: 0, y: -4 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -4 }}
               transition={{ type: 'spring', stiffness: 500, damping: 30, duration: 0.15 }}
               style={{ position: 'fixed', left: pos.x, top: pos.y, width: pos.w, zIndex: 9999 }}
@@ -205,7 +205,7 @@ export function Select({
                   ))
                 )}
               </div>
-            </motion.div>
+            </m.div>
           )}
         </AnimatePresence>,
         document.body

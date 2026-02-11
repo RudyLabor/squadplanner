@@ -1,4 +1,4 @@
-import { motion, useInView } from 'framer-motion'
+import { m, useInView } from 'framer-motion'
 import { useRef } from 'react'
 
 interface ProgressRingProps {
@@ -59,7 +59,7 @@ export function ProgressRing({
             strokeWidth={strokeWidth}
           />
           {/* Progress */}
-          <motion.circle
+          <m.circle
             cx={size / 2}
             cy={size / 2}
             r={radius}

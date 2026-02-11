@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import { Flame, Gift, Zap } from 'lucide-react'
 import { Card } from '../ui'
 
@@ -51,13 +51,13 @@ export function ProfileActivityCard({ streakDays }: ProfileActivityCardProps) {
       <Card className="p-4">
         {/* Streak count */}
         <div className="flex items-center gap-3 mb-4">
-          <motion.div
+          <m.div
             className="w-12 h-12 rounded-xl bg-warning/12 flex items-center justify-center"
             animate={streakDays >= 7 ? { scale: [1, 1.05, 1] } : {}}
             transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
           >
             <span className="text-2xl">🔥</span>
-          </motion.div>
+          </m.div>
           <div className="flex-1">
             <div className="flex items-baseline gap-2">
               <span className="text-2xl font-bold text-text-primary">{streakDays}</span>
@@ -86,7 +86,7 @@ export function ProfileActivityCard({ streakDays }: ProfileActivityCardProps) {
             </div>
           </div>
           <div className="relative h-1.5 bg-border-subtle rounded-full overflow-hidden">
-            <motion.div
+            <m.div
               className="absolute h-full rounded-full bg-gradient-to-r from-warning to-warning/70"
               initial={{ width: 0 }}
               animate={{ width: `${nextMilestone.progress}%` }}

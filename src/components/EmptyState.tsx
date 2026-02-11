@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import {
   Inbox, Users, Trophy,
   Search, FolderOpen, UserPlus, CalendarPlus, Send,
@@ -111,21 +111,21 @@ export function EmptyState({
   const config = EMPTY_STATE_CONFIG[type]
 
   return (
-    <motion.div
+    <m.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, ease: 'easeOut' }}
       className="flex flex-col items-center justify-center py-12 px-6 text-center"
     >
       {/* Animated Icon */}
-      <motion.div
+      <m.div
         initial={{ scale: 0.8, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ delay: 0.1, duration: 0.4, type: 'spring', stiffness: 200 }}
         className="relative mb-6"
       >
         {/* Glow background */}
-        <motion.div
+        <m.div
           className="absolute inset-0 rounded-full blur-xl opacity-30"
           style={{ backgroundColor: config.color }}
           animate={{
@@ -140,7 +140,7 @@ export function EmptyState({
         />
 
         {/* Icon container */}
-        <motion.div
+        <m.div
           className="relative w-24 h-24 rounded-2xl flex items-center justify-center"
           style={{
             backgroundColor: `${config.color}15`,
@@ -156,39 +156,39 @@ export function EmptyState({
           }}
         >
           {icon || config.icon}
-        </motion.div>
-      </motion.div>
+        </m.div>
+      </m.div>
 
       {/* Title with staggered animation */}
-      <motion.h3
+      <m.h3
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2, duration: 0.3 }}
         className="text-lg font-semibold text-text-primary mb-2"
       >
         {title || config.title}
-      </motion.h3>
+      </m.h3>
 
       {/* Message */}
-      <motion.p
+      <m.p
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.3, duration: 0.3 }}
         className="text-sm text-text-tertiary max-w-xs mb-6"
       >
         {message || config.message}
-      </motion.p>
+      </m.p>
 
       {/* CTA Button with pulse glow */}
       {(actionLabel || config.defaultActionLabel) && onAction && (
-        <motion.div
+        <m.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.4, duration: 0.3 }}
           className="relative"
         >
           {/* Pulse glow behind button */}
-          <motion.div
+          <m.div
             className="absolute inset-0 rounded-xl blur-md"
             style={{ backgroundColor: config.color }}
             animate={{
@@ -212,9 +212,9 @@ export function EmptyState({
           >
             {actionLabel || config.defaultActionLabel}
           </Button>
-        </motion.div>
+        </m.div>
       )}
-    </motion.div>
+    </m.div>
   )
 }
 

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { m, AnimatePresence } from 'framer-motion'
 import {
   Calendar, Plus, Loader2, Mic, MicOff
 } from 'lucide-react'
@@ -169,7 +169,7 @@ export function SquadSessionsList({
       {/* Create session form */}
       <AnimatePresence>
         {showCreateSession ? (
-          <motion.div
+          <m.div
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
@@ -237,7 +237,7 @@ export function SquadSessionsList({
                 </form>
               </CardContent>
             </Card>
-          </motion.div>
+          </m.div>
         ) : (
           <div className="mb-6">
             <Button onClick={() => setShowCreateSession(true)} className="w-full">

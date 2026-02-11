@@ -4,7 +4,7 @@
  * Full-screen modal that appears when the user's auth session expires.
  * Offers reconnection or read-only mode.
  */
-import { motion, AnimatePresence } from 'framer-motion'
+import { m, AnimatePresence } from 'framer-motion'
 import { Clock, Lock, LogIn, Eye } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { useEffect, useRef } from 'react'
@@ -44,7 +44,7 @@ export function SessionExpiredModal({ isOpen, onReconnect, onDismiss }: SessionE
   return (
     <AnimatePresence>
       {isOpen && (
-        <motion.div
+        <m.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -55,7 +55,7 @@ export function SessionExpiredModal({ isOpen, onReconnect, onDismiss }: SessionE
           aria-labelledby={titleId}
           aria-describedby={descId}
         >
-          <motion.div
+          <m.div
             initial={{ scale: 0.9, opacity: 0, y: 20 }}
             animate={{ scale: 1, opacity: 1, y: 0 }}
             exit={{ scale: 0.9, opacity: 0, y: 20 }}
@@ -65,13 +65,13 @@ export function SessionExpiredModal({ isOpen, onReconnect, onDismiss }: SessionE
             <div className="p-6 text-center">
               {/* Icon */}
               <div className="relative w-16 h-16 mx-auto mb-5">
-                <motion.div
+                <m.div
                   className="absolute inset-0 rounded-2xl bg-warning/15 flex items-center justify-center"
                   animate={{ scale: [1, 1.05, 1] }}
                   transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
                 >
                   <Clock className="w-7 h-7 text-warning" />
-                </motion.div>
+                </m.div>
                 <div className="absolute -bottom-1 -right-1 w-6 h-6 rounded-lg bg-error/15 flex items-center justify-center border-2 border-surface-card">
                   <Lock className="w-3 h-3 text-error" />
                 </div>
@@ -114,8 +114,8 @@ export function SessionExpiredModal({ isOpen, onReconnect, onDismiss }: SessionE
                 </button>
               )}
             </div>
-          </motion.div>
-        </motion.div>
+          </m.div>
+        </m.div>
       )}
     </AnimatePresence>
   )

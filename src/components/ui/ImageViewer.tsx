@@ -1,5 +1,5 @@
 import { useState, useRef, useCallback, useEffect } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { m, AnimatePresence } from 'framer-motion'
 import { ViewerToolbar } from './viewer/ViewerToolbar'
 
 interface ImageViewerProps {
@@ -133,7 +133,7 @@ export function ImageViewer({ src, alt = 'Image', isOpen, onClose }: ImageViewer
   return (
     <AnimatePresence>
       {isOpen && (
-        <motion.div
+        <m.div
           initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.2 }}
           className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 backdrop-blur-sm"
           role="dialog" aria-modal="true" aria-label={`Image viewer: ${alt}`}
@@ -148,7 +148,7 @@ export function ImageViewer({ src, alt = 'Image', isOpen, onClose }: ImageViewer
             onClose={onClose}
           />
 
-          <motion.div
+          <m.div
             className={`select-none ${scale > 1 ? 'cursor-grab' : 'cursor-zoom-in'} ${isDragging ? 'cursor-grabbing' : ''}`}
             style={{ touchAction: 'none' }}
             onWheel={handleWheel} onMouseDown={handleMouseDown} onMouseMove={handleMouseMove} onMouseUp={handleMouseUp} onMouseLeave={handleMouseUp}
@@ -160,7 +160,7 @@ export function ImageViewer({ src, alt = 'Image', isOpen, onClose }: ImageViewer
               style={{ transform: `translate(${position.x}px, ${position.y}px) scale(${scale}) rotate(${rotation}deg)`, transition: isDragging || isTouching ? 'none' : 'transform 0.2s ease-out', maxWidth: '90vw', maxHeight: '85vh', objectFit: 'contain', willChange: isTouching ? 'transform' : 'auto' }}
               className="rounded-lg"
             />
-          </motion.div>
+          </m.div>
 
           <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-3 text-sm text-white/30 max-sm:hidden">
             <span>Scroll: zoom</span><span>Double-clic: zoom 2.5x</span><span>R: pivoter</span><span>0: reset</span><span>Esc: fermer</span>
@@ -168,7 +168,7 @@ export function ImageViewer({ src, alt = 'Image', isOpen, onClose }: ImageViewer
           <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-3 text-sm text-white/30 sm:hidden">
             <span>Pincer: zoom</span><span>Double-tap: zoom 2x</span>
           </div>
-        </motion.div>
+        </m.div>
       )}
     </AnimatePresence>
   )

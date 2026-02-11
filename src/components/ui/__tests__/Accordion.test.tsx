@@ -13,6 +13,11 @@ vi.mock('framer-motion', async () => {
       div: ({ children, ...props }: any) => <div {...stripMotionProps(props)}>{children}</div>,
       span: ({ children, ...props }: any) => <span {...stripMotionProps(props)}>{children}</span>,
     },
+    m: {
+      ...actual.m,
+      div: ({ children, ...props }: any) => <div {...stripMotionProps(props)}>{children}</div>,
+      span: ({ children, ...props }: any) => <span {...stripMotionProps(props)}>{children}</span>,
+    },
   }
 })
 

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { m, AnimatePresence } from 'framer-motion'
 import { HelpCircle, ChevronDown, Search, ArrowLeft } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { Card } from '../components/ui'
@@ -86,19 +86,19 @@ export function Help() {
                     <button onClick={() => setOpenIndex(openIndex === item.globalIndex ? null : item.globalIndex)}
                       className="w-full flex items-center justify-between p-4 text-left">
                       <span className="text-md font-medium text-text-primary pr-4">{item.question}</span>
-                      <motion.div animate={{ rotate: openIndex === item.globalIndex ? 180 : 0 }} transition={{ duration: 0.2 }}>
+                      <m.div animate={{ rotate: openIndex === item.globalIndex ? 180 : 0 }} transition={{ duration: 0.2 }}>
                         <ChevronDown className="w-5 h-5 text-text-tertiary flex-shrink-0" />
-                      </motion.div>
+                      </m.div>
                     </button>
                     <AnimatePresence>
                       {openIndex === item.globalIndex && (
-                        <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }}
+                        <m.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }}
                           exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.2 }} className="overflow-hidden">
                           <div className="px-4 pb-4">
                             <p className="text-md text-text-secondary leading-relaxed">{item.answer}</p>
                             {item.illustration && <FAQIllustration type={item.illustration} />}
                           </div>
-                        </motion.div>
+                        </m.div>
                       )}
                     </AnimatePresence>
                   </Card>

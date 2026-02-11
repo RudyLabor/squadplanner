@@ -1,5 +1,5 @@
 import { memo } from 'react'
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import { Calendar, Users, CheckCircle2, HelpCircle, XCircle } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { Card, Badge, SessionCardSkeleton, ContentTransition } from '../ui'
@@ -52,7 +52,7 @@ const NextSessionCard = memo(function NextSessionCard({
   const canRsvp = diffMs > -2 * 60 * 60 * 1000
 
   return (
-    <motion.div
+    <m.div
       whileHover={{ y: -2 }}
       whileTap={{ scale: 0.995 }}
       transition={{ duration: 0.4, ease: 'easeOut' }}
@@ -84,7 +84,7 @@ const NextSessionCard = memo(function NextSessionCard({
 
         {canRsvp && (
           <div className="flex gap-2 pt-2 border-t border-border-subtle">
-            <motion.button
+            <m.button
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               transition={{ duration: 0.4, ease: 'easeOut' }}
@@ -100,9 +100,9 @@ const NextSessionCard = memo(function NextSessionCard({
             >
               <CheckCircle2 className="w-4 h-4" />
               <span className="hidden sm:inline">Présent</span>
-            </motion.button>
+            </m.button>
 
-            <motion.button
+            <m.button
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               transition={{ duration: 0.4, ease: 'easeOut' }}
@@ -118,9 +118,9 @@ const NextSessionCard = memo(function NextSessionCard({
             >
               <HelpCircle className="w-4 h-4" />
               <span className="hidden sm:inline">Peut-être</span>
-            </motion.button>
+            </m.button>
 
-            <motion.button
+            <m.button
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               transition={{ duration: 0.4, ease: 'easeOut' }}
@@ -136,12 +136,12 @@ const NextSessionCard = memo(function NextSessionCard({
             >
               <XCircle className="w-4 h-4" />
               <span className="hidden sm:inline">Absent</span>
-            </motion.button>
+            </m.button>
           </div>
         )}
 
         {hasResponded && (
-          <motion.div
+          <m.div
             initial={{ opacity: 0, y: -5 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, ease: 'easeOut' }}
@@ -155,10 +155,10 @@ const NextSessionCard = memo(function NextSessionCard({
               {session.my_rsvp === 'present' ? "T'es chaud, on t'attend !" :
                session.my_rsvp === 'absent' ? 'Pas dispo cette fois' : 'En mode peut-être...'}
             </span>
-          </motion.div>
+          </m.div>
         )}
       </Card>
-    </motion.div>
+    </m.div>
   )
 })
 

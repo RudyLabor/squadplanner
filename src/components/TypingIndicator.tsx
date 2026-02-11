@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 
 interface TypingIndicatorProps {
   /** Texte à afficher (ex: "Pierre écrit..." ou null si personne n'écrit) */
@@ -31,7 +31,7 @@ export function TypingIndicator({ text, compact = false }: TypingIndicatorProps)
   if (compact) {
     // Version compacte: juste les trois points animés
     return (
-      <motion.div
+      <m.div
         className="flex items-center gap-1 px-3 py-2"
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
@@ -40,14 +40,14 @@ export function TypingIndicator({ text, compact = false }: TypingIndicatorProps)
         aria-live="polite"
       >
         <span className="sr-only">{text}</span>
-        <motion.div
+        <m.div
           className="flex items-center gap-0.5"
           variants={containerVariants}
           initial="initial"
           animate="animate"
         >
           {[0, 1, 2].map((i) => (
-            <motion.span
+            <m.span
               key={i}
               className="w-1.5 h-1.5 rounded-full bg-text-tertiary"
               variants={dotVariants}
@@ -61,14 +61,14 @@ export function TypingIndicator({ text, compact = false }: TypingIndicatorProps)
               }}
             />
           ))}
-        </motion.div>
-      </motion.div>
+        </m.div>
+      </m.div>
     )
   }
 
   // Version complète avec le texte
   return (
-    <motion.div
+    <m.div
       className="flex items-center gap-2 px-4 py-2"
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
@@ -79,14 +79,14 @@ export function TypingIndicator({ text, compact = false }: TypingIndicatorProps)
     >
       {/* Bulle avec les trois points animés */}
       <div className="flex items-center gap-2 px-3 py-2 bg-bg-hover rounded-2xl rounded-bl-lg">
-        <motion.div
+        <m.div
           className="flex items-center gap-0.5"
           variants={containerVariants}
           initial="initial"
           animate="animate"
         >
           {[0, 1, 2].map((i) => (
-            <motion.span
+            <m.span
               key={i}
               className="w-1.5 h-1.5 rounded-full bg-text-secondary"
               variants={dotVariants}
@@ -101,11 +101,11 @@ export function TypingIndicator({ text, compact = false }: TypingIndicatorProps)
               }}
             />
           ))}
-        </motion.div>
+        </m.div>
       </div>
 
       {/* Texte avec animation pulse subtile */}
-      <motion.span
+      <m.span
         className="text-sm text-text-secondary italic"
         animate={{
           opacity: [0.7, 1, 0.7],
@@ -117,8 +117,8 @@ export function TypingIndicator({ text, compact = false }: TypingIndicatorProps)
         }}
       >
         {text}
-      </motion.span>
-    </motion.div>
+      </m.span>
+    </m.div>
   )
 }
 

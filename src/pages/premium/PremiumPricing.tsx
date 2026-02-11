@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import { Check, Gift, ArrowRight, Loader2, Rocket, Sparkles, Shield, Clock, CheckCircle2, Crown, Zap } from 'lucide-react'
 import { Button, Card } from '../../components/ui'
 import { PREMIUM_PRICE_MONTHLY, PREMIUM_PRICE_YEARLY } from '../../hooks/usePremium'
@@ -18,14 +18,14 @@ export function PremiumPricing({ selectedPlan, setSelectedPlan, isLoading, error
   return (
     <>
       {/* Free Trial Banner */}
-      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}
+      <m.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}
         className="relative mb-8 overflow-hidden rounded-2xl bg-gradient-to-r from-success/10 to-transparent border border-success/20 p-6 md:p-8">
-        <motion.div className="absolute top-3 right-8 text-success/40" animate={{ rotate: [0, 15, -15, 0], scale: [1, 1.2, 1] }} transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}><Sparkles className="w-6 h-6" /></motion.div>
-        <motion.div className="absolute bottom-4 left-6 text-success/30" animate={{ rotate: [0, -10, 10, 0], scale: [1, 1.15, 1] }} transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut', delay: 0.5 }}><Sparkles className="w-5 h-5" /></motion.div>
+        <m.div className="absolute top-3 right-8 text-success/40" animate={{ rotate: [0, 15, -15, 0], scale: [1, 1.2, 1] }} transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}><Sparkles className="w-6 h-6" /></m.div>
+        <m.div className="absolute bottom-4 left-6 text-success/30" animate={{ rotate: [0, -10, 10, 0], scale: [1, 1.15, 1] }} transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut', delay: 0.5 }}><Sparkles className="w-5 h-5" /></m.div>
         <div className="relative text-center">
-          <motion.div className="inline-flex items-center justify-center w-14 h-14 rounded-xl bg-gradient-to-br from-success to-success/60 mb-4 shadow-lg" animate={{ y: [0, -4, 0] }} transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}>
+          <m.div className="inline-flex items-center justify-center w-14 h-14 rounded-xl bg-gradient-to-br from-success to-success/60 mb-4 shadow-lg" animate={{ y: [0, -4, 0] }} transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}>
             <Gift className="w-7 h-7 text-white" />
-          </motion.div>
+          </m.div>
           <h2 className="text-lg md:text-xl font-bold text-text-primary mb-2">7 jours d'essai gratuit</h2>
           <p className="text-md text-text-secondary mb-1">Essaie Premium gratuitement pendant 7 jours</p>
           <p className="text-base text-text-tertiary mb-5">Pas de carte bancaire requise. Annule &agrave; tout moment.</p>
@@ -38,11 +38,11 @@ export function PremiumPricing({ selectedPlan, setSelectedPlan, isLoading, error
             <div className="flex items-center gap-2 text-base text-text-secondary"><CheckCircle2 className="w-4 h-4 text-success" /><span>Pas de CB requise</span></div>
           </div>
         </div>
-      </motion.div>
+      </m.div>
 
       {/* Pricing Cards */}
-      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="grid md:grid-cols-2 gap-4 mb-16">
-        <motion.button onClick={() => setSelectedPlan('monthly')} className={`relative p-6 rounded-2xl border-2 text-left transition-interactive ${selectedPlan === 'monthly' ? 'border-primary bg-primary/5 shadow-glow-primary-sm' : 'border-border-hover bg-overlay-faint hover:border-border-hover'}`} whileHover={{ y: -2, scale: 1.02 }} whileTap={{ scale: 0.99 }}>
+      <m.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="grid md:grid-cols-2 gap-4 mb-16">
+        <m.button onClick={() => setSelectedPlan('monthly')} className={`relative p-6 rounded-2xl border-2 text-left transition-interactive ${selectedPlan === 'monthly' ? 'border-primary bg-primary/5 shadow-glow-primary-sm' : 'border-border-hover bg-overlay-faint hover:border-border-hover'}`} whileHover={{ y: -2, scale: 1.02 }} whileTap={{ scale: 0.99 }}>
           <div className="flex items-center gap-2 mb-2">
             <span className="text-md text-text-secondary">Mensuel</span>
             <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-success/10 border border-success/20 text-xs font-medium text-success"><Gift className="w-3 h-3" />7j gratuits</span>
@@ -51,9 +51,9 @@ export function PremiumPricing({ selectedPlan, setSelectedPlan, isLoading, error
           <p className="text-base text-success mb-1">Commence par 7 jours gratuits</p>
           <p className="text-base text-text-tertiary">Flexibilit&eacute; maximale, annule quand tu veux</p>
           {selectedPlan === 'monthly' && <div className="absolute top-4 right-4 w-6 h-6 rounded-full bg-primary flex items-center justify-center"><Check className="w-4 h-4 text-white" /></div>}
-        </motion.button>
+        </m.button>
 
-        <motion.button onClick={() => setSelectedPlan('yearly')} className={`relative p-6 rounded-2xl border-2 text-left transition-interactive ${selectedPlan === 'yearly' ? 'border-success bg-success/5 shadow-glow-success' : 'border-border-hover bg-overlay-faint hover:border-border-hover'}`} whileHover={{ y: -2, scale: 1.02 }} whileTap={{ scale: 0.99 }}>
+        <m.button onClick={() => setSelectedPlan('yearly')} className={`relative p-6 rounded-2xl border-2 text-left transition-interactive ${selectedPlan === 'yearly' ? 'border-success bg-success/5 shadow-glow-success' : 'border-border-hover bg-overlay-faint hover:border-border-hover'}`} whileHover={{ y: -2, scale: 1.02 }} whileTap={{ scale: 0.99 }}>
           <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full bg-gradient-to-r from-success to-success text-xs font-bold text-bg-base">MEILLEURE OFFRE</div>
           <div className="flex items-center gap-2 mb-2">
             <span className="text-md text-text-secondary">Annuel</span>
@@ -64,20 +64,20 @@ export function PremiumPricing({ selectedPlan, setSelectedPlan, isLoading, error
           <p className="text-base text-success mb-1">Commence par 7 jours gratuits</p>
           <p className="text-base text-success">&Eacute;conomise {savings}% &mdash; 2 mois offerts !</p>
           {selectedPlan === 'yearly' && <div className="absolute top-4 right-4 w-6 h-6 rounded-full bg-success flex items-center justify-center"><Check className="w-4 h-4 text-white" /></div>}
-        </motion.button>
-      </motion.div>
+        </m.button>
+      </m.div>
 
       {/* CTA Button */}
-      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }} className="text-center mb-16">
+      <m.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }} className="text-center mb-16">
         {error && <div className="mb-4 p-3 rounded-lg bg-error/5 border border-error/10"><p className="text-error text-base">{error}</p></div>}
         <Button onClick={onUpgrade} disabled={isLoading} className="h-14 px-10 text-lg bg-gradient-to-r from-primary via-purple to-primary bg-[length:200%_100%] hover:bg-[position:100%_0] transition-interactive shadow-glow-primary-md animate-pulse-glow">
           {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <><Rocket className="w-5 h-5" /> Passer Premium maintenant <ArrowRight className="w-5 h-5" /></>}
         </Button>
         <p className="text-sm text-text-tertiary mt-3">Paiement s&eacute;curis&eacute; · Annulation facile · Satisfait ou rembours&eacute; 30j</p>
-      </motion.div>
+      </m.div>
 
       {/* Final CTA */}
-      <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center">
+      <m.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center">
         <Card className="p-8 bg-gradient-to-br from-primary/[0.075] to-warning/5 border-primary">
           <Crown className="w-12 h-12 text-warning mx-auto mb-4" />
           <h3 className="text-xl font-semibold text-text-primary mb-2">Pr&ecirc;t &agrave; passer Premium ?</h3>
@@ -87,7 +87,7 @@ export function PremiumPricing({ selectedPlan, setSelectedPlan, isLoading, error
             {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <><Zap className="w-5 h-5" /> Commencer &mdash; {selectedPlan === 'monthly' ? `${PREMIUM_PRICE_MONTHLY.toFixed(2)}\u20AC/mois` : `${(PREMIUM_PRICE_YEARLY / 12).toFixed(2)}\u20AC/mois`}</>}
           </Button>
         </Card>
-      </motion.div>
+      </m.div>
     </>
   )
 }

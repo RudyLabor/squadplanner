@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
-import { motion, AnimatePresence, useInView } from 'framer-motion'
+import { m, AnimatePresence, useInView } from 'framer-motion'
 import { demoSteps, stepComponents, PhoneFrame } from './DemoSteps'
 
 // Re-export for consumers
@@ -55,7 +55,7 @@ export function AnimatedDemo({ currentStep: controlledStep, onStepChange }: Anim
     <div ref={ref} className="shrink-0">
       <PhoneFrame>
         <AnimatePresence mode="wait">
-          <motion.div
+          <m.div
             key={step.id}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -64,7 +64,7 @@ export function AnimatedDemo({ currentStep: controlledStep, onStepChange }: Anim
             className="h-full flex flex-col"
           >
             <StepComponent />
-          </motion.div>
+          </m.div>
         </AnimatePresence>
       </PhoneFrame>
     </div>

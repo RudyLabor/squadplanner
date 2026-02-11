@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect, useCallback, type ReactNode } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { m, AnimatePresence } from 'framer-motion'
 import { createPortal } from 'react-dom'
 
 type PopoverSide = 'top' | 'bottom' | 'left' | 'right'
@@ -260,7 +260,7 @@ export function Popover({
         createPortal(
           <AnimatePresence>
             {isOpen && (
-              <motion.div
+              <m.div
                 ref={popoverRef}
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
@@ -286,7 +286,7 @@ export function Popover({
                     aria-hidden="true"
                   />
                 )}
-              </motion.div>
+              </m.div>
             )}
           </AnimatePresence>,
           document.body

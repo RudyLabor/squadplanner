@@ -1,5 +1,5 @@
 import { useState, memo } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { m, AnimatePresence } from 'framer-motion'
 import { X, Clock } from 'lucide-react'
 import { useCustomStatus, STATUS_PRESETS, STATUS_DURATIONS } from '../hooks/useCustomStatus'
 
@@ -42,14 +42,14 @@ export const CustomStatusPicker = memo(function CustomStatusPicker({ isOpen, onC
   return (
     <AnimatePresence>
       {isOpen && (
-        <motion.div
+        <m.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm px-4"
           onClick={onClose}
         >
-          <motion.div
+          <m.div
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
@@ -160,8 +160,8 @@ export const CustomStatusPicker = memo(function CustomStatusPicker({ isOpen, onC
                 {isUpdating ? 'Enregistrement...' : 'Enregistrer'}
               </button>
             </div>
-          </motion.div>
-        </motion.div>
+          </m.div>
+        </m.div>
       )}
     </AnimatePresence>
   )

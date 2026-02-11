@@ -1,4 +1,4 @@
-import { motion, type HTMLMotionProps } from 'framer-motion'
+import { m, type HTMLMotionProps } from 'framer-motion'
 
 interface SharedElementProps extends Omit<HTMLMotionProps<'div'>, 'id'> {
   id: string
@@ -13,7 +13,7 @@ interface SharedElementProps extends Omit<HTMLMotionProps<'div'>, 'id'> {
  */
 export function SharedElement({ id, children, className, ...props }: SharedElementProps) {
   return (
-    <motion.div
+    <m.div
       layoutId={id}
       layout="position"
       transition={{ type: 'spring', stiffness: 350, damping: 30, duration: 0.3 }}
@@ -22,6 +22,6 @@ export function SharedElement({ id, children, className, ...props }: SharedEleme
       {...props}
     >
       {children}
-    </motion.div>
+    </m.div>
   )
 }

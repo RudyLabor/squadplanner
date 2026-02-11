@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect, memo } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { m, AnimatePresence } from 'framer-motion'
 import { X, Send, MessageSquare, Loader2 } from 'lucide-react'
 import { useThreads, useThreadInfo } from '../hooks/useThreads'
 import { useAuthStore } from '../hooks/useAuth'
@@ -40,7 +40,7 @@ export const ThreadView = memo(function ThreadView({ threadId, isOpen, onClose }
   return (
     <AnimatePresence>
       {isOpen && (
-        <motion.div
+        <m.div
           initial={{ x: '100%' }}
           animate={{ x: 0 }}
           exit={{ x: '100%' }}
@@ -94,7 +94,7 @@ export const ThreadView = memo(function ThreadView({ threadId, isOpen, onClose }
               messages.map(msg => {
                 const isOwn = msg.sender_id === user?.id
                 return (
-                  <motion.div
+                  <m.div
                     key={msg.id}
                     initial={{ opacity: 0, y: 8 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -129,7 +129,7 @@ export const ThreadView = memo(function ThreadView({ threadId, isOpen, onClose }
                         </span>
                       </div>
                     </div>
-                  </motion.div>
+                  </m.div>
                 )
               })
             )}
@@ -157,7 +157,7 @@ export const ThreadView = memo(function ThreadView({ threadId, isOpen, onClose }
               </button>
             </div>
           </form>
-        </motion.div>
+        </m.div>
       )}
     </AnimatePresence>
   )

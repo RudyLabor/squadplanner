@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { m, AnimatePresence } from 'framer-motion'
 import { Check, Trophy } from 'lucide-react'
 import Confetti from '../LazyConfetti'
 import { Card } from '../ui'
@@ -79,49 +79,49 @@ export function ProfileBadges({ profile, challengesLoaded, challengesData, Seaso
       {/* Achievement Celebration Toast */}
       <AnimatePresence>
         {celebratedAchievement && (
-          <motion.div
+          <m.div
             initial={{ opacity: 0, y: -50, scale: 0.8 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -20, scale: 0.9 }}
             className="fixed top-4 left-1/2 -translate-x-1/2 z-50 px-6 py-4 rounded-2xl bg-gradient-to-r from-primary/90 to-purple/90 border border-primary/40 backdrop-blur-xl shadow-lg"
           >
             <div className="flex items-center gap-4">
-              <motion.div
+              <m.div
                 initial={{ rotate: -180, scale: 0 }}
                 animate={{ rotate: 0, scale: 1 }}
                 transition={{ type: 'spring', stiffness: 300, damping: 20, delay: 0.2 }}
                 className="text-4xl"
               >
                 {celebratedAchievement.icon}
-              </motion.div>
+              </m.div>
               <div>
-                <motion.p
+                <m.p
                   initial={{ opacity: 0, x: -10 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.3 }}
                   className="text-sm font-medium text-white/70 uppercase tracking-wide"
                 >
                   Succès débloqué !
-                </motion.p>
-                <motion.p
+                </m.p>
+                <m.p
                   initial={{ opacity: 0, x: -10 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.4 }}
                   className="text-xl font-bold text-white"
                 >
                   {celebratedAchievement.name}
-                </motion.p>
-                <motion.p
+                </m.p>
+                <m.p
                   initial={{ opacity: 0, x: -10 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.5 }}
                   className="text-base text-white/80"
                 >
                   {celebratedAchievement.description}
-                </motion.p>
+                </m.p>
               </div>
             </div>
-          </motion.div>
+          </m.div>
         )}
       </AnimatePresence>
 
@@ -157,7 +157,7 @@ export function ProfileBadges({ profile, challengesLoaded, challengesData, Seaso
           {ACHIEVEMENTS.map((achievement, index) => {
             const isUnlocked = unlockedAchievements.some(a => a.id === achievement.id)
             return (
-              <motion.div
+              <m.div
                 key={achievement.id}
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
@@ -168,13 +168,13 @@ export function ProfileBadges({ profile, challengesLoaded, challengesData, Seaso
                     : 'bg-surface-card border border-transparent'
                 }`}
               >
-                <motion.div
+                <m.div
                   className="text-2xl mb-1"
                   animate={isUnlocked ? { scale: [1, 1.04, 1] } : {}}
                   transition={{ duration: 0.5 }}
                 >
                   {isUnlocked ? achievement.icon : ''}
-                </motion.div>
+                </m.div>
                 <div className={`text-xs font-medium ${isUnlocked ? 'text-text-primary' : 'text-text-quaternary'}`}>
                   {achievement.name}
                 </div>
@@ -182,16 +182,16 @@ export function ProfileBadges({ profile, challengesLoaded, challengesData, Seaso
                   {achievement.description}
                 </div>
                 {isUnlocked && (
-                  <motion.div
+                  <m.div
                     className="absolute -top-1 -right-1 w-5 h-5 bg-success rounded-full flex items-center justify-center"
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
                     transition={{ type: 'spring', stiffness: 500, damping: 25, delay: index * 0.1 + 0.3 }}
                   >
                     <Check className="w-3 h-3 text-bg-base" />
-                  </motion.div>
+                  </m.div>
                 )}
-              </motion.div>
+              </m.div>
             )
           })}
         </div>

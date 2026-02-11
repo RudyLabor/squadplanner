@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import { Check } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
@@ -6,18 +6,18 @@ export function PricingSection() {
   return (
     <section id="pricing" aria-label="Tarifs" className="px-4 md:px-6 py-10 md:py-14">
       <div className="max-w-4xl mx-auto">
-        <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-12">
+        <m.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-12">
           <h2 className="text-xl md:text-2xl font-bold text-text-primary mb-4">
             Tarifs simples, sans surprise
           </h2>
           <p className="text-text-tertiary text-md max-w-md mx-auto">
             Commence gratuitement. Passe Premium quand tu veux débloquer tout le potentiel.
           </p>
-        </motion.div>
+        </m.div>
 
         <div className="grid md:grid-cols-2 gap-6 max-w-3xl mx-auto">
           {/* Free Plan */}
-          <motion.div
+          <m.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -39,18 +39,18 @@ export function PricingSection() {
               ))}
             </ul>
             <Link to="/auth">
-              <motion.button
+              <m.button
                 className="w-full py-3 rounded-xl border border-border-default text-text-primary text-md font-medium hover:bg-bg-hover transition-colors"
                 whileHover={{ scale: 1.01 }}
                 whileTap={{ scale: 0.98 }}
               >
                 Commencer gratuitement
-              </motion.button>
+              </m.button>
             </Link>
-          </motion.div>
+          </m.div>
 
           {/* Premium Plan */}
-          <motion.div
+          <m.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -75,15 +75,15 @@ export function PricingSection() {
               ))}
             </ul>
             <Link to="/auth">
-              <motion.button
+              <m.button
                 className="w-full py-3 rounded-xl bg-primary text-white text-md font-semibold hover:bg-primary-hover transition-colors shadow-glow-primary-sm"
                 whileHover={{ scale: 1.01 }}
                 whileTap={{ scale: 0.98 }}
               >
                 Essayer Premium
-              </motion.button>
+              </m.button>
             </Link>
-          </motion.div>
+          </m.div>
         </div>
       </div>
     </section>

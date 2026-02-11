@@ -3,7 +3,7 @@
  * Create a new poll with question + options
  */
 import { useState, memo } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { m, AnimatePresence } from 'framer-motion'
 import { X, Plus, Trash2, BarChart3, Loader2 } from 'lucide-react'
 
 interface CreatePollModalProps {
@@ -58,14 +58,14 @@ export const CreatePollModal = memo(function CreatePollModal({ isOpen, onClose, 
   return (
     <AnimatePresence>
       {isOpen && (
-        <motion.div
+        <m.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           className="fixed inset-0 bg-black/60 flex items-center justify-center z-[200] p-4"
           onClick={handleClose}
         >
-          <motion.div
+          <m.div
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
@@ -171,8 +171,8 @@ export const CreatePollModal = memo(function CreatePollModal({ isOpen, onClose, 
                 )}
               </button>
             </div>
-          </motion.div>
-        </motion.div>
+          </m.div>
+        </m.div>
       )}
     </AnimatePresence>
   )

@@ -1,6 +1,6 @@
 import { memo, useCallback } from 'react'
 import { Link } from 'react-router-dom'
-import { motion, AnimatePresence } from 'framer-motion'
+import { m, AnimatePresence } from 'framer-motion'
 import { Home, Users, Mic, MessageCircle, User, Plus, Pin, PinOff, Settings, HelpCircle, Phone, Calendar, Compass } from 'lucide-react'
 import { prefetchRoute } from '../../lib/queryClient'
 import { SquadPlannerLogo } from '../SquadPlannerLogo'
@@ -40,7 +40,7 @@ export const NavLink = memo(function NavLink({ path, icon: Icon, label, isActive
 
   return (
     <Link to={path} aria-label={label} aria-current={isActive ? 'page' : undefined} onPointerEnter={handlePrefetch}>
-      <motion.div
+      <m.div
         className={`
           relative flex items-center ${collapsed ? 'gap-2 px-2.5' : 'gap-3 px-4'} py-3 rounded-xl transition-interactive
           ${isActive
@@ -59,7 +59,7 @@ export const NavLink = memo(function NavLink({ path, icon: Icon, label, isActive
           </span>
         ) : (
           <AnimatePresence mode="wait">
-            <motion.span
+            <m.span
               key="label"
               initial={{ opacity: 0, width: 0 }}
               animate={{ opacity: 1, width: 'auto' }}
@@ -68,20 +68,20 @@ export const NavLink = memo(function NavLink({ path, icon: Icon, label, isActive
               className="text-md font-medium whitespace-nowrap overflow-hidden"
             >
               {label}
-            </motion.span>
+            </m.span>
           </AnimatePresence>
         )}
         {badge && badge > 0 && (
-          <motion.span
+          <m.span
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             transition={{ type: "spring", stiffness: 500, damping: 30 }}
             className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-error text-white text-xs font-bold flex items-center justify-center"
           >
             {badge > 9 ? '9+' : badge}
-          </motion.span>
+          </m.span>
         )}
-      </motion.div>
+      </m.div>
     </Link>
   )
 })
@@ -116,7 +116,7 @@ export const DesktopSidebar = memo(function DesktopSidebar({
   onOpenCustomStatus,
 }: DesktopSidebarProps) {
   return (
-    <motion.aside
+    <m.aside
       aria-label="Navigation principale"
       className="hidden lg:flex flex-col border-r border-surface-card bg-bg-base fixed h-full z-40 overflow-hidden"
       initial={false}
@@ -131,7 +131,7 @@ export const DesktopSidebar = memo(function DesktopSidebar({
           <SquadPlannerLogo size={32} className="flex-shrink-0" />
           <AnimatePresence mode="wait">
             {isExpanded && (
-              <motion.div
+              <m.div
                 key="logo-text"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -140,7 +140,7 @@ export const DesktopSidebar = memo(function DesktopSidebar({
               >
                 <div className="text-md font-bold text-text-primary whitespace-nowrap">Squad Planner</div>
                 <div className="text-sm text-text-tertiary whitespace-nowrap">Jouez ensemble, vraiment</div>
-              </motion.div>
+              </m.div>
             )}
           </AnimatePresence>
         </div>
@@ -149,7 +149,7 @@ export const DesktopSidebar = memo(function DesktopSidebar({
       {/* Pin button */}
       <AnimatePresence>
         {isExpanded && (
-          <motion.div
+          <m.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -157,7 +157,7 @@ export const DesktopSidebar = memo(function DesktopSidebar({
             className="absolute top-4 right-3"
           >
             <Tooltip content={sidebarPinned ? 'Détacher la sidebar' : 'Épingler la sidebar'} position="bottom" delay={300}>
-              <motion.button
+              <m.button
                 type="button"
                 onClick={onTogglePinned}
                 className={`p-1.5 rounded-lg transition-colors ${
@@ -170,16 +170,16 @@ export const DesktopSidebar = memo(function DesktopSidebar({
                 aria-label={sidebarPinned ? 'Détacher la sidebar' : 'Épingler la sidebar'}
               >
                 {sidebarPinned ? <PinOff className="w-4 h-4" aria-hidden="true" /> : <Pin className="w-4 h-4" aria-hidden="true" />}
-              </motion.button>
+              </m.button>
             </Tooltip>
-          </motion.div>
+          </m.div>
         )}
       </AnimatePresence>
 
       {/* Quick action */}
       <div className={isExpanded ? 'p-4' : 'p-2'}>
         {!isExpanded ? (
-            <motion.button
+            <m.button
               type="button"
               onClick={() => onOpenCreateSessionModal()}
               className="flex items-center justify-center gap-2 w-full h-10 rounded-xl bg-primary text-white text-xs font-semibold"
@@ -190,9 +190,9 @@ export const DesktopSidebar = memo(function DesktopSidebar({
             >
               <Plus className="w-4 h-4 flex-shrink-0" />
               <span className="whitespace-nowrap">Nouveau</span>
-            </motion.button>
+            </m.button>
         ) : (
-          <motion.button
+          <m.button
             type="button"
             onClick={() => onOpenCreateSessionModal()}
             className="flex items-center justify-center gap-2 w-full h-11 rounded-xl bg-primary text-white text-md font-semibold"
@@ -202,7 +202,7 @@ export const DesktopSidebar = memo(function DesktopSidebar({
             aria-label="Créer une nouvelle session"
           >
             <Plus className="w-4 h-4 flex-shrink-0" />
-            <motion.span
+            <m.span
               key="btn-text"
               initial={{ opacity: 0, width: 0 }}
               animate={{ opacity: 1, width: 'auto' }}
@@ -210,8 +210,8 @@ export const DesktopSidebar = memo(function DesktopSidebar({
               className="whitespace-nowrap overflow-hidden"
             >
               Nouvelle session
-            </motion.span>
-          </motion.button>
+            </m.span>
+          </m.button>
         )}
       </div>
 
@@ -259,6 +259,6 @@ export const DesktopSidebar = memo(function DesktopSidebar({
         profile={profile}
         onOpenCustomStatus={onOpenCustomStatus}
       />
-    </motion.aside>
+    </m.aside>
   )
 })

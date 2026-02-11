@@ -1,4 +1,4 @@
-import { motion, AnimatePresence } from 'framer-motion'
+import { m, AnimatePresence } from 'framer-motion'
 import {
   createContext,
   useContext,
@@ -159,14 +159,14 @@ export function AccordionTrigger({ children, className = '' }: AccordionTriggerP
       `}
     >
       <span className="flex-1">{children}</span>
-      <motion.span
+      <m.span
         animate={{ rotate: isExpanded ? 180 : 0 }}
         transition={{ type: 'spring', stiffness: 300, damping: 25 }}
         className="ml-2 flex-shrink-0 text-text-tertiary"
         aria-hidden="true"
       >
         <ChevronDown className="w-4 h-4" />
-      </motion.span>
+      </m.span>
     </button>
   )
 }
@@ -188,7 +188,7 @@ export function AccordionContent({ children, className = '' }: AccordionContentP
   return (
     <AnimatePresence initial={false}>
       {isExpanded && (
-        <motion.div
+        <m.div
           id={contentId}
           role="region"
           aria-labelledby={triggerId}
@@ -201,7 +201,7 @@ export function AccordionContent({ children, className = '' }: AccordionContentP
           <div className={`pb-4 text-sm text-text-secondary ${className}`}>
             {children}
           </div>
-        </motion.div>
+        </m.div>
       )}
     </AnimatePresence>
   )

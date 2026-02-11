@@ -1,5 +1,5 @@
 import { memo } from 'react'
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import { Gamepad2, UserPlus, Users, LogIn } from 'lucide-react'
 import { Card } from './ui'
 import { showSuccess } from '../lib/toast'
@@ -39,7 +39,7 @@ const FriendCard = memo(function FriendCard({
   const isInParty = friend.is_in_voice || friend.party_member_count > 0
 
   return (
-    <motion.div
+    <m.div
       whileHover={{ y: -2, scale: 1.02 }}
       whileTap={{ scale: 0.98 }}
     >
@@ -64,7 +64,7 @@ const FriendCard = memo(function FriendCard({
                 </div>
               )}
               {/* Live pulse indicator */}
-              <motion.div
+              <m.div
                 className="absolute -bottom-0.5 -right-0.5 w-4 h-4 rounded-full bg-success border-2 border-bg-base"
                 animate={{
                   scale: [1, 1.2, 1],
@@ -121,7 +121,7 @@ const FriendCard = memo(function FriendCard({
 
           {/* Action button */}
           {isInParty ? (
-            <motion.button
+            <m.button
               onClick={() => onJoin(friend.squad_id)}
               whileHover={{ scale: 1.02, boxShadow: 'var(--shadow-glow-success)' }}
               whileTap={{ scale: 0.98 }}
@@ -129,9 +129,9 @@ const FriendCard = memo(function FriendCard({
             >
               <LogIn className="w-4 h-4" />
               Rejoindre
-            </motion.button>
+            </m.button>
           ) : (
-            <motion.button
+            <m.button
               onClick={() => onInvite(friend.friend_id)}
               whileHover={{ scale: 1.02, boxShadow: 'var(--shadow-glow-primary-md)' }}
               whileTap={{ scale: 0.98 }}
@@ -139,11 +139,11 @@ const FriendCard = memo(function FriendCard({
             >
               <UserPlus className="w-4 h-4" />
               Inviter
-            </motion.button>
+            </m.button>
           )}
         </div>
       </Card>
-    </motion.div>
+    </m.div>
   )
 })
 
@@ -180,20 +180,20 @@ function EmptyState() {
   }
 
   return (
-    <motion.div
+    <m.div
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.2 }}
     >
       <Card className="p-5 bg-gradient-to-br from-primary/5 to-success/5 border-dashed">
         <div className="flex items-center gap-4">
-          <motion.div
+          <m.div
             className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary/15 to-success/10 flex items-center justify-center flex-shrink-0"
             animate={{ rotate: [0, 5, -5, 0], scale: [1, 1.05, 1] }}
             transition={{ duration: 3, repeat: Infinity, repeatDelay: 2 }}
           >
             <UserPlus className="w-6 h-6 text-primary" strokeWidth={1.5} />
-          </motion.div>
+          </m.div>
           <div className="flex-1 min-w-0">
             <p className="text-md font-semibold text-text-primary mb-0.5">
               Invite tes potes sur Squad Planner
@@ -201,7 +201,7 @@ function EmptyState() {
             <p className="text-sm text-text-tertiary mb-2">
               Partage le lien pour jouer ensemble
             </p>
-            <motion.button
+            <m.button
               onClick={handleShareInvite}
               className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-primary/15 text-primary text-sm font-medium hover:bg-primary/25 transition-colors"
               whileHover={{ scale: 1.02 }}
@@ -209,11 +209,11 @@ function EmptyState() {
             >
               <UserPlus className="w-3.5 h-3.5" />
               Envoyer une invitation
-            </motion.button>
+            </m.button>
           </div>
         </div>
       </Card>
-    </motion.div>
+    </m.div>
   )
 }
 
@@ -230,7 +230,7 @@ export function FriendsPlaying({ friends, onJoin, onInvite }: FriendsPlayingProp
   return (
     <div className="mb-6">
       <h2 className="text-lg font-semibold text-text-primary mb-3 flex items-center gap-2">
-        <motion.div
+        <m.div
           className="shrink-0"
           animate={{
             scale: [1, 1.1, 1],
@@ -238,7 +238,7 @@ export function FriendsPlaying({ friends, onJoin, onInvite }: FriendsPlayingProp
           transition={{ duration: 2, repeat: Infinity }}
         >
           <Gamepad2 className="w-5 h-5 text-success" />
-        </motion.div>
+        </m.div>
         En train de jouer
         <span className="ml-auto text-sm font-normal text-primary">
           {friends.length} en ligne
@@ -249,7 +249,7 @@ export function FriendsPlaying({ friends, onJoin, onInvite }: FriendsPlayingProp
       <div className="relative">
         <div className="flex gap-3 overflow-x-auto pb-2 -mx-4 px-4 md:mx-0 md:px-0 md:overflow-visible md:grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 md:gap-4 scrollbar-hide">
           {friends.map((friend, index) => (
-            <motion.div
+            <m.div
               key={friend.friend_id}
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
@@ -261,7 +261,7 @@ export function FriendsPlaying({ friends, onJoin, onInvite }: FriendsPlayingProp
                 onJoin={onJoin}
                 onInvite={onInvite}
               />
-            </motion.div>
+            </m.div>
           ))}
         </div>
       </div>

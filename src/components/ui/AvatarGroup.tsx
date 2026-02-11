@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 
 interface AvatarData {
   src?: string
@@ -67,7 +67,7 @@ function SingleAvatar({
   const initial = avatar.name.charAt(0).toUpperCase()
 
   return (
-    <motion.div
+    <m.div
       initial={{ opacity: 0, scale: 0.5 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.2, delay: index * 0.05 }}
@@ -101,7 +101,7 @@ function SingleAvatar({
           aria-label={avatar.status}
         />
       )}
-    </motion.div>
+    </m.div>
   )
 }
 
@@ -123,7 +123,7 @@ export function AvatarGroup({
       ))}
 
       {overflow > 0 && (
-        <motion.button
+        <m.button
           initial={{ opacity: 0, scale: 0.5 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.2, delay: visible.length * 0.05 }}
@@ -135,7 +135,7 @@ export function AvatarGroup({
           type="button"
         >
           +{overflow}
-        </motion.button>
+        </m.button>
       )}
     </div>
   )

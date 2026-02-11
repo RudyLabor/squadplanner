@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import { Users, Plus, UserPlus } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import Confetti from '../components/LazyConfetti'
@@ -188,25 +188,25 @@ export default function Squads() {
             onSubmit={handleCreateSquad} onCancel={() => { setShowCreate(false); setError(null) }} />
 
           {squads.length > 0 ? (
-            <motion.ul className="space-y-3 lg:grid lg:grid-cols-2 xl:grid-cols-3 lg:gap-4 lg:space-y-0 list-none"
+            <m.ul className="space-y-3 lg:grid lg:grid-cols-2 xl:grid-cols-3 lg:gap-4 lg:space-y-0 list-none"
               variants={staggerContainerVariants} initial="hidden" animate="visible" aria-label="Liste des squads">
               {squads.map((squad) => (
-                <motion.li key={squad.id} variants={staggerItemVariants}>
+                <m.li key={squad.id} variants={staggerItemVariants}>
                   <SquadCard squad={squad} isOwner={squad.owner_id === user?.id}
                     nextSession={nextSessions.find(s => s.squadId === squad.id)}
                     hasActiveParty={getSquadHasActiveParty(squad.id)}
                     copiedCode={copiedCode} onCopyCode={copyInviteCode} />
-                </motion.li>
+                </m.li>
               ))}
-            </motion.ul>
+            </m.ul>
           ) : !showCreate && !showJoin && (
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}>
+            <m.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}>
               <Card className="p-8 text-center">
-                <motion.div className="w-14 h-14 rounded-2xl bg-bg-hover flex items-center justify-center mx-auto mb-4"
+                <m.div className="w-14 h-14 rounded-2xl bg-bg-hover flex items-center justify-center mx-auto mb-4"
                   initial={{ scale: 0.8, rotate: -10 }} animate={{ scale: 1, rotate: 0 }}
                   transition={{ delay: 0.1, type: 'spring', stiffness: 300, damping: 25 }}>
                   <Users className="w-7 h-7 text-text-quaternary" strokeWidth={1.5} />
-                </motion.div>
+                </m.div>
                 <h3 className="text-lg font-semibold text-text-primary mb-2">Pas encore de squad</h3>
                 <p className="text-md text-text-tertiary mb-6 max-w-[280px] mx-auto">
                   Lance ta squad pour inviter tes potes, ou rejoins l'action avec un code.
@@ -220,7 +220,7 @@ export default function Squads() {
                   </Button>
                 </div>
               </Card>
-            </motion.div>
+            </m.div>
           )}
         </div>
       </div>

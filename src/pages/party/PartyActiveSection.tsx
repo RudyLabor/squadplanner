@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { m, AnimatePresence } from 'framer-motion'
 import { Mic, MicOff, PhoneOff, UserPlus, Radio, ShieldCheck, WifiOff, AlertCircle, Loader2 } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { Card } from '../../components/ui'
@@ -65,17 +65,17 @@ export function ActivePartySection({ squad, onLeave, currentUserId }: {
           </div>
           <div className="flex items-center gap-2">
             {localQuality !== 'unknown' && <NetworkQualityIndicator size="sm" showLabel showTooltip />}
-            <motion.button onClick={() => setShowInviteModal(true)} whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}
+            <m.button onClick={() => setShowInviteModal(true)} whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}
               className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors bg-primary-15 text-primary hover:bg-primary-20">
               <UserPlus className="w-3.5 h-3.5" /> Inviter
-            </motion.button>
+            </m.button>
             <Link to={`/squad/${squad.id}`}><span className="text-sm text-primary hover:text-purple">Voir la squad</span></Link>
           </div>
         </div>
       </div>
 
       {isReconnecting && (
-        <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }}
+        <m.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }}
           className="px-4 py-3 bg-warning/10 border-b border-warning/20">
           <div className="flex items-center gap-3">
             <WifiOff className="w-5 h-5 text-warning animate-pulse" />
@@ -85,7 +85,7 @@ export function ActivePartySection({ squad, onLeave, currentUserId }: {
             </div>
             <Loader2 className="w-5 h-5 text-warning animate-spin" />
           </div>
-        </motion.div>
+        </m.div>
       )}
 
       {error && (
@@ -102,7 +102,7 @@ export function ActivePartySection({ squad, onLeave, currentUserId }: {
               const isRemote = !p.isLocal
               const participantMuted = isRemote ? isParticipantMuted(participantId) : false
               return (
-                <motion.div key={participantId} initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.8 }} className="flex flex-col items-center gap-3">
+                <m.div key={participantId} initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.8 }} className="flex flex-col items-center gap-3">
                   <ParticipantAvatar username={p.username} isSpeaking={p.isSpeaking && !participantMuted} isMuted={p.isMuted} isLocal={p.isLocal} size="lg" />
                   <div className="h-6"><VoiceWaveformDemo isActive={p.isSpeaking && !participantMuted} size="sm" color={p.isLocal ? 'var(--color-primary)' : 'var(--color-success)'} barCount={5} /></div>
                   {isRemote && (
@@ -110,40 +110,40 @@ export function ActivePartySection({ squad, onLeave, currentUserId }: {
                       <ParticipantVolumeControl participantId={participantId} participantName={p.username} initialVolume={getVolume(participantId)} onVolumeChange={setVolume} onMute={setMuted} isMuted={participantMuted} compact />
                     </div>
                   )}
-                </motion.div>
+                </m.div>
               )
             })}
           </AnimatePresence>
         </div>
         {participants.length === 1 && (
-          <motion.div className="text-center mt-4" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+          <m.div className="text-center mt-4" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
             <p className="text-base text-text-secondary">Invite tes potes ! La party t'attend</p>
-          </motion.div>
+          </m.div>
         )}
       </div>
 
       <div className="p-4 flex items-center justify-center gap-3">
-        <motion.button className={`w-10 h-10 rounded-full flex items-center justify-center transition-colors ${noiseSuppressionEnabled ? 'bg-primary-20 text-primary-hover' : 'bg-border-default text-text-tertiary'}`} onClick={toggleNoiseSuppression} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} title={noiseSuppressionEnabled ? 'Désactiver la suppression de bruit' : 'Activer la suppression de bruit'}>
+        <m.button className={`w-10 h-10 rounded-full flex items-center justify-center transition-colors ${noiseSuppressionEnabled ? 'bg-primary-20 text-primary-hover' : 'bg-border-default text-text-tertiary'}`} onClick={toggleNoiseSuppression} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} title={noiseSuppressionEnabled ? 'Désactiver la suppression de bruit' : 'Activer la suppression de bruit'}>
           <ShieldCheck className="w-4 h-4" />
-        </motion.button>
-        <motion.button className={`w-10 h-10 rounded-full flex items-center justify-center transition-colors ${pushToTalkEnabled ? 'bg-warning/20 text-warning' : 'bg-border-default text-text-tertiary'}`} onClick={() => setPushToTalk(!pushToTalkEnabled)} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} title={pushToTalkEnabled ? 'Désactiver Push-to-Talk' : 'Activer Push-to-Talk (Espace)'}>
+        </m.button>
+        <m.button className={`w-10 h-10 rounded-full flex items-center justify-center transition-colors ${pushToTalkEnabled ? 'bg-warning/20 text-warning' : 'bg-border-default text-text-tertiary'}`} onClick={() => setPushToTalk(!pushToTalkEnabled)} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} title={pushToTalkEnabled ? 'Désactiver Push-to-Talk' : 'Activer Push-to-Talk (Espace)'}>
           <Radio className="w-4 h-4" />
-        </motion.button>
+        </m.button>
         <div className="relative">
-          {!isMuted && <motion.div className="absolute inset-0 w-14 h-14 rounded-full bg-success" animate={{ scale: [1, 1.2], opacity: [0.2, 0] }} transition={{ duration: 1.5, repeat: 2 }} />}
+          {!isMuted && <m.div className="absolute inset-0 w-14 h-14 rounded-full bg-success" animate={{ scale: [1, 1.2], opacity: [0.2, 0] }} transition={{ duration: 1.5, repeat: 2 }} />}
           {pushToTalkEnabled ? (
-            <motion.button className={`relative w-14 h-14 rounded-full flex items-center justify-center ${pushToTalkActive ? 'bg-success text-bg-base' : 'bg-warning text-bg-base'} transition-colors`} onMouseDown={pushToTalkStart} onMouseUp={pushToTalkEnd} onMouseLeave={pushToTalkEnd} onTouchStart={pushToTalkStart} onTouchEnd={pushToTalkEnd} whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+            <m.button className={`relative w-14 h-14 rounded-full flex items-center justify-center ${pushToTalkActive ? 'bg-success text-bg-base' : 'bg-warning text-bg-base'} transition-colors`} onMouseDown={pushToTalkStart} onMouseUp={pushToTalkEnd} onMouseLeave={pushToTalkEnd} onTouchStart={pushToTalkStart} onTouchEnd={pushToTalkEnd} whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
               {pushToTalkActive ? <Mic className="w-6 h-6" /> : <Radio className="w-6 h-6" />}
-            </motion.button>
+            </m.button>
           ) : (
-            <motion.button className={`relative w-14 h-14 rounded-full flex items-center justify-center ${isMuted ? 'bg-error text-white' : 'bg-success text-bg-base'} transition-colors`} onClick={toggleMute} whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+            <m.button className={`relative w-14 h-14 rounded-full flex items-center justify-center ${isMuted ? 'bg-error text-white' : 'bg-success text-bg-base'} transition-colors`} onClick={toggleMute} whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
               {isMuted ? <MicOff className="w-6 h-6" /> : <Mic className="w-6 h-6" />}
-            </motion.button>
+            </m.button>
           )}
         </div>
-        <motion.button className="w-14 h-14 rounded-full bg-error text-white flex items-center justify-center" onClick={onLeave} whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+        <m.button className="w-14 h-14 rounded-full bg-error text-white flex items-center justify-center" onClick={onLeave} whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
           <PhoneOff className="w-6 h-6" />
-        </motion.button>
+        </m.button>
       </div>
 
       <p className="text-center text-xs text-text-tertiary pb-4">

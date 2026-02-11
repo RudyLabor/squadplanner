@@ -1,5 +1,5 @@
 import { memo } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { m, AnimatePresence } from 'framer-motion'
 import { Search, X, MessageSquare, User, Hash } from 'lucide-react'
 import { useMessageSearch } from '../hooks/useMessageSearch'
 
@@ -39,7 +39,7 @@ export const MessageSearchPanel = memo(function MessageSearchPanel({
   return (
     <AnimatePresence>
       {isOpen && (
-        <motion.div
+        <m.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -10 }}
@@ -167,7 +167,7 @@ export const MessageSearchPanel = memo(function MessageSearchPanel({
               </p>
             </div>
           )}
-        </motion.div>
+        </m.div>
       )}
     </AnimatePresence>
   )

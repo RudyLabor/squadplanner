@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import { Check, Loader2, Send } from 'lucide-react'
 import { Button } from '../ui'
 
@@ -16,7 +16,7 @@ interface InviteUserItemProps {
 
 export function InviteUserItem({ member, isInvited, isSending, onInvite }: InviteUserItemProps) {
   return (
-    <motion.div
+    <m.div
       initial={{ opacity: 0, y: 5 }}
       animate={{ opacity: 1, y: 0 }}
       className="flex items-center gap-3 p-3 rounded-xl bg-overlay-faint hover:bg-overlay-subtle transition-colors"
@@ -76,6 +76,6 @@ export function InviteUserItem({ member, isInvited, isSending, onInvite }: Invit
           </>
         )}
       </Button>
-    </motion.div>
+    </m.div>
   )
 }

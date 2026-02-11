@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import { Moon, Sun, Monitor } from 'lucide-react'
 import { SegmentedControl } from '../../components/ui'
 import { useThemeStore, type ThemeMode } from '../../hooks/useTheme'
@@ -7,7 +7,7 @@ export function Toggle({ enabled, onChange, disabled = false }: { enabled: boole
   return (
     <button onClick={() => !disabled && onChange(!enabled)} disabled={disabled}
       className={`relative w-11 h-6 rounded-full transition-colors ${enabled ? 'bg-success' : 'bg-border-hover'} ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}>
-      <motion.div className="absolute top-1 w-4 h-4 bg-bg-base rounded-full shadow-sm" animate={{ left: enabled ? 24 : 4 }} transition={{ type: 'spring', stiffness: 500, damping: 30 }} />
+      <m.div className="absolute top-1 w-4 h-4 bg-bg-base rounded-full shadow-sm" animate={{ left: enabled ? 24 : 4 }} transition={{ type: 'spring', stiffness: 500, damping: 30 }} />
     </button>
   )
 }

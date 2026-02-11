@@ -3,7 +3,7 @@
  * Renders inline polls in chat messages
  */
 import { useState, memo, useMemo } from 'react'
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import { BarChart3, Check, Users } from 'lucide-react'
 import { useAuthStore } from '../hooks/useAuth'
 
@@ -114,7 +114,7 @@ export const ChatPoll = memo(function ChatPoll({ pollData, messageId, onVote, is
             >
               {/* Background bar */}
               {hasVoted && (
-                <motion.div
+                <m.div
                   initial={{ width: 0 }}
                   animate={{ width: `${percentage}%` }}
                   transition={{ duration: 0.5, ease: 'easeOut' }}

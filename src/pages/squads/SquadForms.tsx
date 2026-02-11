@@ -1,4 +1,4 @@
-import { motion, AnimatePresence } from 'framer-motion'
+import { m, AnimatePresence } from 'framer-motion'
 import { Users, Gamepad2, Link as LinkIcon, Loader2 } from 'lucide-react'
 import { Button, Card, CardContent, Input } from '../../components/ui'
 
@@ -16,7 +16,7 @@ export function JoinSquadForm({ show, inviteCode, onInviteCodeChange, error, isL
   return (
     <AnimatePresence>
       {show && (
-        <motion.div
+        <m.div
           initial={{ opacity: 0, height: 0 }}
           animate={{ opacity: 1, height: 'auto' }}
           exit={{ opacity: 0, height: 0 }}
@@ -50,7 +50,7 @@ export function JoinSquadForm({ show, inviteCode, onInviteCodeChange, error, isL
               </form>
             </CardContent>
           </Card>
-        </motion.div>
+        </m.div>
       )}
     </AnimatePresence>
   )
@@ -72,7 +72,7 @@ export function CreateSquadForm({ show, name, onNameChange, game, onGameChange, 
   return (
     <AnimatePresence>
       {show && (
-        <motion.div
+        <m.div
           initial={{ opacity: 0, height: 0 }}
           animate={{ opacity: 1, height: 'auto' }}
           exit={{ opacity: 0, height: 0 }}
@@ -113,7 +113,7 @@ export function CreateSquadForm({ show, name, onNameChange, game, onGameChange, 
               </form>
             </CardContent>
           </Card>
-        </motion.div>
+        </m.div>
       )}
     </AnimatePresence>
   )

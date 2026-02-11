@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { m, AnimatePresence } from 'framer-motion'
 import {
   Search, Home, Users, Mic, MessageCircle, User, Calendar,
   Settings, Zap, X, ArrowRight, Moon, Sun
@@ -227,8 +227,8 @@ export function CommandPalette() {
     <AnimatePresence>
       {isOpen && (
         <>
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={close} className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[100]" />
-          <motion.div
+          <m.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={close} className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[100]" />
+          <m.div
             initial={{ opacity: 0, scale: 0.95, y: -20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: -20 }}
             transition={{ type: 'spring', stiffness: 400, damping: 30 }}
             className="fixed top-[15%] left-1/2 -translate-x-1/2 w-full max-w-xl lg:max-w-3xl z-[101]"
@@ -274,7 +274,7 @@ export function CommandPalette() {
                 <kbd className="flex items-center gap-1 px-1.5 py-0.5 rounded bg-border-subtle text-sm text-text-tertiary font-mono">{shortcutKey} K</kbd>
               </div>
             </div>
-          </motion.div>
+          </m.div>
         </>
       )}
     </AnimatePresence>

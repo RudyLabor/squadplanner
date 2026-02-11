@@ -1,5 +1,5 @@
 import { ArrowLeft, Users, Gamepad2, Search, Phone } from 'lucide-react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { m, AnimatePresence } from 'framer-motion'
 import { useVoiceCallStore } from '../../hooks/useVoiceCall'
 
 interface SquadConvHeader {
@@ -111,7 +111,7 @@ export function ConversationHeader({
       {/* Message Search Bar */}
       <AnimatePresence>
         {showMessageSearch && (
-          <motion.div
+          <m.div
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: 'auto', opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
@@ -135,7 +135,7 @@ export function ConversationHeader({
                 )}
               </div>
             </div>
-          </motion.div>
+          </m.div>
         )}
       </AnimatePresence>
     </>

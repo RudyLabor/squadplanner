@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import { ArrowLeft, ArrowRight, Camera, Globe, Loader2 } from 'lucide-react'
 import { Button, Card, Input, Select } from '../../components/ui'
 
@@ -21,7 +21,7 @@ export function OnboardingStepProfile({
   onUsernameChange, onTimezoneChange, onAvatarUpload, onSave, onBack
 }: OnboardingStepProfileProps) {
   return (
-    <motion.div
+    <m.div
       key="profile"
       variants={slideVariants}
       initial="enter"
@@ -140,6 +140,6 @@ export function OnboardingStepProfile({
           </Button>
         </div>
       </Card>
-    </motion.div>
+    </m.div>
   )
 }

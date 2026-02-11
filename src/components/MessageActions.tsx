@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { m, AnimatePresence } from 'framer-motion'
 import {
   MoreHorizontal,
   Pencil,
@@ -169,7 +169,7 @@ export function MessageActions({
       {/* Dropdown menu */}
       <AnimatePresence>
         {isOpen && (
-          <motion.div
+          <m.div
             ref={menuRef}
             initial={{ opacity: 0, scale: 0.9, y: -5 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -262,7 +262,7 @@ export function MessageActions({
                 <span>{showDeleteConfirm ? 'Confirmer la suppression' : 'Supprimer'}</span>
               </button>
             )}
-          </motion.div>
+          </m.div>
         )}
       </AnimatePresence>
     </div>

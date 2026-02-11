@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import { Users, ArrowLeft, ArrowRight, Loader2 } from 'lucide-react'
 import { Button, Card, Input } from '../../components/ui'
 
@@ -19,7 +19,7 @@ export function OnboardingStepCreateSquad({
   onSquadNameChange, onSquadGameChange, onCreateSquad, onBack
 }: OnboardingStepCreateSquadProps) {
   return (
-    <motion.div
+    <m.div
       key="create-squad"
       variants={slideVariants}
       initial="enter"
@@ -92,6 +92,6 @@ export function OnboardingStepCreateSquad({
           </Button>
         </div>
       </Card>
-    </motion.div>
+    </m.div>
   )
 }

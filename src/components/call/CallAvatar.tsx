@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import { Phone } from 'lucide-react'
 
 interface CallAvatarProps {
@@ -10,7 +10,7 @@ interface CallAvatarProps {
 
 export function CallAvatar({ status, avatarUrl, username, initial }: CallAvatarProps) {
   return (
-    <motion.div
+    <m.div
       initial={{ scale: 0.8, opacity: 0 }}
       animate={{ scale: 1, opacity: 1 }}
       transition={{ delay: 0.1 }}
@@ -18,7 +18,7 @@ export function CallAvatar({ status, avatarUrl, username, initial }: CallAvatarP
     >
       {/* Pulse animation for calling state - single subtle animation */}
       {status === 'calling' && (
-        <motion.div
+        <m.div
           className="absolute inset-0 rounded-full bg-primary/20"
           animate={{
             scale: [1, 1.4, 1.4],
@@ -34,13 +34,13 @@ export function CallAvatar({ status, avatarUrl, username, initial }: CallAvatarP
 
       {/* Connected indicator */}
       {status === 'connected' && (
-        <motion.div
+        <m.div
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
           className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-success border-4 border-bg-base flex items-center justify-center"
         >
           <Phone className="w-3 h-3 text-white" />
-        </motion.div>
+        </m.div>
       )}
 
       {/* Avatar image or initial */}
@@ -57,6 +57,6 @@ export function CallAvatar({ status, avatarUrl, username, initial }: CallAvatarP
           <span className="text-3xl font-bold text-primary">{initial}</span>
         )}
       </div>
-    </motion.div>
+    </m.div>
   )
 }

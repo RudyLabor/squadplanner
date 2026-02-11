@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import { Users, Headphones, Mic, MicOff } from 'lucide-react'
 import { mockMembers, MockNavbar } from './MockupShared'
 
@@ -9,20 +9,20 @@ export function PartyScreen() {
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_40%,var(--color-success-8),transparent_70%)]" />
 
       <div className="relative z-10 px-4 pt-5 pb-2">
-        <motion.div className="text-xs text-success font-medium" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+        <m.div className="text-xs text-success font-medium" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
           Party vocale en cours
-        </motion.div>
-        <motion.div className="text-base font-bold text-text-primary" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.1 }}>
+        </m.div>
+        <m.div className="text-base font-bold text-text-primary" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.1 }}>
           Les Invaincus
-        </motion.div>
-        <motion.div className="text-xs text-text-tertiary mt-0.5" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.15 }}>
+        </m.div>
+        <m.div className="text-xs text-text-tertiary mt-0.5" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.15 }}>
           En ligne depuis 47 min
-        </motion.div>
+        </m.div>
       </div>
 
       <div className="relative z-10 px-4 mt-2 flex-1">
         {mockMembers.slice(0, 4).map((m, i) => (
-          <motion.div
+          <m.div
             key={m.name}
             className="flex items-center gap-3 mb-2.5 p-2 rounded-xl bg-white/[0.03] border border-border-subtle"
             initial={{ opacity: 0, x: -15 }} animate={{ opacity: 1, x: 0 }}
@@ -30,7 +30,7 @@ export function PartyScreen() {
           >
             <div className="relative">
               {i === 0 && (
-                <motion.div
+                <m.div
                   className="absolute -inset-0.5 rounded-full border border-success"
                   animate={{ scale: [1, 1.2, 1], opacity: [0.6, 0.2, 0.6] }}
                   transition={{ duration: 2, repeat: Infinity }}
@@ -48,7 +48,7 @@ export function PartyScreen() {
             </div>
             <div className="flex items-center gap-[2px] mr-1">
               {[0, 1, 2, 3].map((j) => (
-                <motion.div
+                <m.div
                   key={j}
                   className="w-[2px] rounded-full"
                   style={{ backgroundColor: i < 2 ? 'var(--color-success)' : 'var(--color-text-secondary)' }}
@@ -58,22 +58,22 @@ export function PartyScreen() {
               ))}
             </div>
             {i < 2 ? <Mic className="w-3.5 h-3.5 text-success" /> : <MicOff className="w-3.5 h-3.5 text-text-tertiary" />}
-          </motion.div>
+          </m.div>
         ))}
 
-        <motion.div className="flex items-center justify-center gap-[3px] mt-2" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.6 }}>
+        <m.div className="flex items-center justify-center gap-[3px] mt-2" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.6 }}>
           {[0, 1, 2, 3, 4, 5, 6, 7, 8].map((j) => (
-            <motion.div
+            <m.div
               key={j}
               className="w-[2px] rounded-full bg-success"
               animate={{ height: [3, 10 + Math.random() * 6, 3] }}
               transition={{ duration: 0.5 + Math.random() * 0.3, repeat: Infinity, delay: j * 0.06, ease: 'easeInOut' }}
             />
           ))}
-        </motion.div>
+        </m.div>
       </div>
 
-      <motion.div
+      <m.div
         className="relative z-10 flex items-center justify-center gap-4 py-3"
         initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.8 }}
       >
@@ -86,7 +86,7 @@ export function PartyScreen() {
         <div className="w-9 h-9 rounded-full bg-overlay-light flex items-center justify-center">
           <Users className="w-4 h-4 text-text-primary" />
         </div>
-      </motion.div>
+      </m.div>
 
       <MockNavbar active="party" />
     </div>
@@ -98,17 +98,17 @@ export function ProfileScreen() {
   return (
     <div className="h-full flex flex-col bg-bg-base">
       <div className="flex flex-col items-center pt-5 pb-3">
-        <motion.div
+        <m.div
           className="w-14 h-14 rounded-2xl bg-primary flex items-center justify-center text-xl font-bold text-text-primary mb-2"
           initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ type: 'spring', stiffness: 300 }}
         >
           M
-        </motion.div>
+        </m.div>
         <div className="text-base font-bold text-text-primary">MaxGamer_94</div>
         <div className="text-xs text-text-tertiary">Membre depuis janv. 2026</div>
       </div>
 
-      <motion.div
+      <m.div
         className="mx-4 p-3 rounded-xl bg-bg-surface border border-border-default mb-3"
         initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}
       >
@@ -120,7 +120,7 @@ export function ProfileScreen() {
           <span className="text-xs text-primary">340 XP</span>
         </div>
         <div className="h-1.5 rounded-full bg-overlay-light overflow-hidden">
-          <motion.div
+          <m.div
             className="h-full rounded-full bg-gradient-to-r from-primary to-purple"
             initial={{ width: 0 }} animate={{ width: '68%' }} transition={{ delay: 0.5, duration: 1.2, ease: 'easeOut' }}
           />
@@ -129,9 +129,9 @@ export function ProfileScreen() {
           <span className="text-xs text-text-tertiary">340 XP</span>
           <span className="text-xs text-text-tertiary">500 XP pour le niveau 5</span>
         </div>
-      </motion.div>
+      </m.div>
 
-      <motion.div
+      <m.div
         className="mx-4 p-3 rounded-xl border border-warning/20 bg-warning/5 mb-3"
         initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}
       >
@@ -139,7 +139,7 @@ export function ProfileScreen() {
           <div className="relative w-12 h-12">
             <svg className="w-12 h-12 -rotate-90" viewBox="0 0 48 48">
               <circle cx="24" cy="24" r="20" fill="none" stroke="var(--color-gold-15)" strokeWidth="3" />
-              <motion.circle
+              <m.circle
                 cx="24" cy="24" r="20" fill="none" stroke="var(--color-gold)" strokeWidth="3"
                 strokeLinecap="round" strokeDasharray="125.6"
                 initial={{ strokeDashoffset: 125.6 }} animate={{ strokeDashoffset: 125.6 * (1 - 0.94) }}
@@ -155,16 +155,16 @@ export function ProfileScreen() {
             <div className="text-xs text-warning">Légende</div>
             <div className="flex gap-0.5 mt-1">
               {[true, true, true, false, true, true].map((ok, j) => (
-                <motion.span key={j} className="text-xs" initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 0.8 + j * 0.05 }}>
+                <m.span key={j} className="text-xs" initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 0.8 + j * 0.05 }}>
                   {ok ? '\u2705' : '\u274C'}
-                </motion.span>
+                </m.span>
               ))}
             </div>
           </div>
         </div>
-      </motion.div>
+      </m.div>
 
-      <motion.div
+      <m.div
         className="grid grid-cols-2 gap-2 mx-4"
         initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }}
       >
@@ -182,7 +182,7 @@ export function ProfileScreen() {
             <span className="text-xs text-text-tertiary">{s.label}</span>
           </div>
         ))}
-      </motion.div>
+      </m.div>
 
       <MockNavbar active="profile" />
     </div>

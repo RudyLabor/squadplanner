@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 
 interface Props {
   size?: number
@@ -19,7 +19,7 @@ const pulse = (delay: number) => ({
 export function GamingHeroIllustration({ size = 300, className = '' }: Props) {
   return (
     <div className={`illustration-themed ${className}`}>
-      <motion.svg
+      <m.svg
         width={size}
         height={size}
         viewBox="0 0 300 300"
@@ -42,7 +42,7 @@ export function GamingHeroIllustration({ size = 300, className = '' }: Props) {
         </defs>
 
         {/* Background ambient glow */}
-        <motion.circle
+        <m.circle
           cx="150"
           cy="150"
           r="120"
@@ -54,7 +54,7 @@ export function GamingHeroIllustration({ size = 300, className = '' }: Props) {
         />
 
         {/* Orbiting ring */}
-        <motion.circle
+        <m.circle
           cx="150"
           cy="150"
           r="95"
@@ -77,7 +77,7 @@ export function GamingHeroIllustration({ size = 300, className = '' }: Props) {
           'M107,95 L210,190',
           'M193,95 L90,190',
         ].map((d, i) => (
-          <motion.path
+          <m.path
             key={`line-${i}`}
             d={d}
             stroke="url(#lineGrad)"
@@ -91,13 +91,13 @@ export function GamingHeroIllustration({ size = 300, className = '' }: Props) {
         ))}
 
         {/* === Avatar 1 - Top Left (Primary / Leader) === */}
-        <motion.g
+        <m.g
           initial={{ scale: 0, opacity: 0 }}
           whileInView={{ scale: 1, opacity: 1 }}
           viewport={{ once: true }}
           transition={{ delay: 0.3, type: 'spring', stiffness: 300, damping: 20 }}
         >
-          <motion.g animate={float(0, 3.2)}>
+          <m.g animate={float(0, 3.2)}>
             {/* Glow ring */}
             <circle cx="107" cy="95" r="32" fill="var(--color-primary, #6366f1)" fillOpacity="0.08" />
             {/* Avatar circle */}
@@ -107,7 +107,7 @@ export function GamingHeroIllustration({ size = 300, className = '' }: Props) {
             {/* Body */}
             <path d="M95 108 C95 100, 107 96, 107 96 C107 96, 119 100, 119 108" fill="var(--color-primary, #6366f1)" fillOpacity="0.4" />
             {/* Crown (leader icon) */}
-            <motion.path
+            <m.path
               d="M99 78 L103 82 L107 78 L111 82 L115 78 L113 86 L101 86 Z"
               fill="var(--color-warning, #f5a623)"
               initial={{ scale: 0, opacity: 0 }}
@@ -115,17 +115,17 @@ export function GamingHeroIllustration({ size = 300, className = '' }: Props) {
               viewport={{ once: true }}
               transition={{ delay: 0.9, type: 'spring', stiffness: 400, damping: 15 }}
             />
-          </motion.g>
-        </motion.g>
+          </m.g>
+        </m.g>
 
         {/* === Avatar 2 - Top Right (Purple) === */}
-        <motion.g
+        <m.g
           initial={{ scale: 0, opacity: 0 }}
           whileInView={{ scale: 1, opacity: 1 }}
           viewport={{ once: true }}
           transition={{ delay: 0.45, type: 'spring', stiffness: 300, damping: 20 }}
         >
-          <motion.g animate={float(0.4, 3.5)}>
+          <m.g animate={float(0.4, 3.5)}>
             <circle cx="193" cy="95" r="32" fill="var(--color-purple, #a855f7)" fillOpacity="0.08" />
             <circle cx="193" cy="95" r="26" fill="var(--color-purple, #a855f7)" fillOpacity="0.15" stroke="var(--color-purple, #a855f7)" strokeWidth="2" />
             <circle cx="193" cy="88" r="8" fill="var(--color-purple, #a855f7)" fillOpacity="0.6" />
@@ -140,45 +140,45 @@ export function GamingHeroIllustration({ size = 300, className = '' }: Props) {
             />
             <rect x="181" y="85" width="4" height="6" rx="2" fill="var(--color-purple, #a855f7)" fillOpacity="0.6" />
             <rect x="201" y="85" width="4" height="6" rx="2" fill="var(--color-purple, #a855f7)" fillOpacity="0.6" />
-          </motion.g>
-        </motion.g>
+          </m.g>
+        </m.g>
 
         {/* === Avatar 3 - Bottom Right (Success/Green) === */}
-        <motion.g
+        <m.g
           initial={{ scale: 0, opacity: 0 }}
           whileInView={{ scale: 1, opacity: 1 }}
           viewport={{ once: true }}
           transition={{ delay: 0.6, type: 'spring', stiffness: 300, damping: 20 }}
         >
-          <motion.g animate={float(0.8, 3)}>
+          <m.g animate={float(0.8, 3)}>
             <circle cx="210" cy="190" r="32" fill="var(--color-success, #34d399)" fillOpacity="0.08" />
             <circle cx="210" cy="190" r="26" fill="var(--color-success, #34d399)" fillOpacity="0.15" stroke="var(--color-success, #34d399)" strokeWidth="2" />
             <circle cx="210" cy="183" r="8" fill="var(--color-success, #34d399)" fillOpacity="0.6" />
             <path d="M198 203 C198 195, 210 191, 210 191 C210 191, 222 195, 222 203" fill="var(--color-success, #34d399)" fillOpacity="0.4" />
             {/* Online indicator */}
-            <motion.circle
+            <m.circle
               cx="224" cy="178"
               r="4"
               fill="var(--color-success, #34d399)"
               animate={pulse(0.5)}
             />
-          </motion.g>
-        </motion.g>
+          </m.g>
+        </m.g>
 
         {/* === Avatar 4 - Bottom Left (Pink) === */}
-        <motion.g
+        <m.g
           initial={{ scale: 0, opacity: 0 }}
           whileInView={{ scale: 1, opacity: 1 }}
           viewport={{ once: true }}
           transition={{ delay: 0.75, type: 'spring', stiffness: 300, damping: 20 }}
         >
-          <motion.g animate={float(1.2, 3.3)}>
+          <m.g animate={float(1.2, 3.3)}>
             <circle cx="90" cy="190" r="32" fill="var(--color-pink, #ec4899)" fillOpacity="0.08" />
             <circle cx="90" cy="190" r="26" fill="var(--color-pink, #ec4899)" fillOpacity="0.15" stroke="var(--color-pink, #ec4899)" strokeWidth="2" />
             <circle cx="90" cy="183" r="8" fill="var(--color-pink, #ec4899)" fillOpacity="0.6" />
             <path d="M78 203 C78 195, 90 191, 90 191 C90 191, 102 195, 102 203" fill="var(--color-pink, #ec4899)" fillOpacity="0.4" />
             {/* Star badge */}
-            <motion.path
+            <m.path
               d="M76 178 L78 174 L80 178 L84 179 L80 181 L78 185 L76 181 L72 179 Z"
               fill="var(--color-warning, #f5a623)"
               initial={{ scale: 0, opacity: 0 }}
@@ -186,17 +186,17 @@ export function GamingHeroIllustration({ size = 300, className = '' }: Props) {
               viewport={{ once: true }}
               transition={{ delay: 1.1, type: 'spring', stiffness: 400, damping: 15 }}
             />
-          </motion.g>
-        </motion.g>
+          </m.g>
+        </m.g>
 
         {/* === Central Game Controller Icon === */}
-        <motion.g
+        <m.g
           initial={{ scale: 0, opacity: 0 }}
           whileInView={{ scale: 1, opacity: 1 }}
           viewport={{ once: true }}
           transition={{ delay: 0.5, type: 'spring', stiffness: 250, damping: 18 }}
         >
-          <motion.g animate={float(0.2, 4)}>
+          <m.g animate={float(0.2, 4)}>
             {/* Controller body background */}
             <circle cx="150" cy="148" r="22" fill="var(--color-primary, #6366f1)" fillOpacity="0.12" />
             {/* Controller body */}
@@ -216,17 +216,17 @@ export function GamingHeroIllustration({ size = 300, className = '' }: Props) {
             {/* Analog sticks */}
             <circle cx="144" cy="150" r="2.5" fill="var(--color-primary, #6366f1)" fillOpacity="0.5" stroke="var(--color-primary, #6366f1)" strokeWidth="0.5" />
             <circle cx="156" cy="150" r="2.5" fill="var(--color-primary, #6366f1)" fillOpacity="0.5" stroke="var(--color-primary, #6366f1)" strokeWidth="0.5" />
-          </motion.g>
-        </motion.g>
+          </m.g>
+        </m.g>
 
         {/* === Floating Calendar/Clock Element (top) === */}
-        <motion.g
+        <m.g
           initial={{ scale: 0, opacity: 0 }}
           whileInView={{ scale: 1, opacity: 1 }}
           viewport={{ once: true }}
           transition={{ delay: 0.85, type: 'spring', stiffness: 300, damping: 20 }}
         >
-          <motion.g animate={float(1.5, 3.8)}>
+          <m.g animate={float(1.5, 3.8)}>
             <rect x="134" y="38" width="32" height="26" rx="6" fill="var(--color-primary, #6366f1)" fillOpacity="0.1" stroke="var(--color-primary, #6366f1)" strokeWidth="1" />
             <line x1="134" y1="48" x2="166" y2="48" stroke="var(--color-primary, #6366f1)" strokeWidth="1" strokeOpacity="0.3" />
             {/* Clock hands */}
@@ -235,8 +235,8 @@ export function GamingHeroIllustration({ size = 300, className = '' }: Props) {
             <circle cx="150" cy="54" r="1" fill="var(--color-primary, #6366f1)" />
             {/* Mini calendar date */}
             <text x="142" y="45" fill="var(--color-primary, #6366f1)" fontSize="6" fontWeight="bold" fontFamily="system-ui">21H</text>
-          </motion.g>
-        </motion.g>
+          </m.g>
+        </m.g>
 
         {/* === Small Floating Particles / Sparkles === */}
         {[
@@ -248,7 +248,7 @@ export function GamingHeroIllustration({ size = 300, className = '' }: Props) {
           { cx: 70, cy: 240, color: 'var(--color-primary, #6366f1)', delay: 0.6, dur: 3.4 },
           { cx: 230, cy: 240, color: 'var(--color-purple, #a855f7)', delay: 1.4, dur: 2.9 },
         ].map((p, i) => (
-          <motion.circle
+          <m.circle
             key={`sparkle-${i}`}
             cx={p.cx}
             cy={p.cy}
@@ -262,7 +262,7 @@ export function GamingHeroIllustration({ size = 300, className = '' }: Props) {
         ))}
 
         {/* Animated pulse rings around center */}
-        <motion.circle
+        <m.circle
           cx="150"
           cy="148"
           r="36"
@@ -276,7 +276,7 @@ export function GamingHeroIllustration({ size = 300, className = '' }: Props) {
           }}
           transition={{ duration: 3, repeat: Infinity, ease: 'easeOut', delay: 1 }}
         />
-        <motion.circle
+        <m.circle
           cx="150"
           cy="148"
           r="36"
@@ -292,7 +292,7 @@ export function GamingHeroIllustration({ size = 300, className = '' }: Props) {
         />
 
         {/* === "SQUAD" text badge at bottom === */}
-        <motion.g
+        <m.g
           initial={{ y: 10, opacity: 0 }}
           whileInView={{ y: 0, opacity: 1 }}
           viewport={{ once: true }}
@@ -302,8 +302,8 @@ export function GamingHeroIllustration({ size = 300, className = '' }: Props) {
           <text x="150" y="280" textAnchor="middle" fill="var(--color-primary, #6366f1)" fontSize="10" fontWeight="700" fontFamily="system-ui" letterSpacing="2">
             SQUAD
           </text>
-        </motion.g>
-      </motion.svg>
+        </m.g>
+      </m.svg>
     </div>
   )
 }

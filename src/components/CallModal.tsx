@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { m, AnimatePresence } from 'framer-motion'
 import { X, WifiOff, Loader2 } from 'lucide-react'
 import { useVoiceCallStore, formatCallDuration } from '../hooks/useVoiceCall'
 import { NetworkQualityIndicator, QualityChangeToast } from './NetworkQualityIndicator'
@@ -96,7 +96,7 @@ export function CallModal() {
 
   return (
     <AnimatePresence>
-      <motion.div
+      <m.div
         ref={focusTrapRef}
         role="dialog"
         aria-modal="true"
@@ -119,7 +119,7 @@ export function CallModal() {
         {/* Banniere de reconnexion */}
         <AnimatePresence>
           {isReconnecting && (
-            <motion.div
+            <m.div
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: 'auto' }}
               exit={{ opacity: 0, height: 0 }}
@@ -132,7 +132,7 @@ export function CallModal() {
                 </p>
                 <Loader2 className="w-5 h-5 text-warning animate-spin" />
               </div>
-            </motion.div>
+            </m.div>
           )}
         </AnimatePresence>
 
@@ -164,7 +164,7 @@ export function CallModal() {
           />
 
           {/* Name */}
-          <motion.h2
+          <m.h2
             id="call-modal-title"
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
@@ -172,10 +172,10 @@ export function CallModal() {
             className="text-xl font-bold text-text-primary mb-2"
           >
             Appel avec {otherPerson.username}
-          </motion.h2>
+          </m.h2>
 
           {/* Status */}
-          <motion.p
+          <m.p
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.3 }}
@@ -184,7 +184,7 @@ export function CallModal() {
             }`}
           >
             {getStatusText()}
-          </motion.p>
+          </m.p>
         </div>
 
         {/* Controls */}
@@ -196,7 +196,7 @@ export function CallModal() {
           toggleSpeaker={toggleSpeaker}
           endCall={endCall}
         />
-      </motion.div>
+      </m.div>
     </AnimatePresence>
   )
 }

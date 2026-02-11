@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import { Headphones, Calendar, Target, Check } from 'lucide-react'
 import { HeadphonesIllustration } from './illustrations/HeadphonesIllustration'
 import { CalendarIllustration } from './illustrations/CalendarIllustration'
@@ -59,7 +59,7 @@ function VoiceMockup() {
       <div className="bg-bg-surface rounded-[1.5rem] p-3 border border-success/15">
         <div className="bg-bg-base rounded-[1.2rem] overflow-hidden p-4">
           <div className="flex items-center gap-2 mb-3">
-            <motion.div className="w-2 h-2 rounded-full bg-success" animate={{ scale: [1, 1.2, 1], opacity: [1, 0.8, 1] }} transition={{ duration: 2, repeat: 3, ease: 'easeInOut' }} />
+            <m.div className="w-2 h-2 rounded-full bg-success" animate={{ scale: [1, 1.2, 1], opacity: [1, 0.8, 1] }} transition={{ duration: 2, repeat: 3, ease: 'easeInOut' }} />
             <span className="text-xs font-semibold text-text-primary">Party vocale</span>
             <span className="text-xs text-success ml-auto">En ligne</span>
           </div>
@@ -73,7 +73,7 @@ function VoiceMockup() {
               <div key={p.name} className="flex flex-col items-center">
                 <div className="relative">
                   {p.speaking && (
-                    <motion.div className="absolute inset-0 w-10 h-10 rounded-full bg-success" animate={{ scale: [1, 1.3], opacity: [0.3, 0] }} transition={{ duration: 1.5, repeat: 3, ease: 'easeOut' }} />
+                    <m.div className="absolute inset-0 w-10 h-10 rounded-full bg-success" animate={{ scale: [1, 1.3], opacity: [0.3, 0] }} transition={{ duration: 1.5, repeat: 3, ease: 'easeOut' }} />
                   )}
                   <div className={`relative w-10 h-10 rounded-full flex items-center justify-center text-xs font-bold text-white ${p.speaking ? 'ring-2 ring-success/50' : ''}`} style={{ backgroundColor: p.color }}>
                     {p.name[0]}
@@ -85,7 +85,7 @@ function VoiceMockup() {
           </div>
           <div className="flex items-center justify-center gap-0.5">
             {[0, 1, 2, 3, 4, 5, 6].map((j) => (
-              <motion.div key={j} className="w-0.5 rounded-full bg-success" animate={{ height: [4, 12, 4] }} transition={{ duration: 0.5, repeat: 4, delay: j * 0.08, ease: 'easeInOut' }} />
+              <m.div key={j} className="w-0.5 rounded-full bg-success" animate={{ height: [4, 12, 4] }} transition={{ duration: 0.5, repeat: 4, delay: j * 0.08, ease: 'easeInOut' }} />
             ))}
           </div>
         </div>
@@ -100,14 +100,14 @@ export function FeaturesSection() {
   return (
     <section id="features" aria-label="Fonctionnalités principales" className="px-4 md:px-6 py-10 md:py-14">
       <div className="max-w-5xl mx-auto">
-        <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-12">
+        <m.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-12">
           <h2 className="text-xl md:text-2xl font-bold text-text-primary mb-4">
             Les 3 piliers de Squad Planner
           </h2>
           <p className="text-text-tertiary text-lg">
             Chacun résout un problème précis. Ensemble, ils font la différence.
           </p>
-        </motion.div>
+        </m.div>
 
         {/* Pillar tabs */}
         <div className="flex flex-wrap justify-center gap-3 mb-8">
@@ -143,7 +143,7 @@ export function FeaturesSection() {
           if (i !== activeFeature) return null
           const PillarIcon = pillar.icon
           return (
-            <motion.div
+            <m.div
               key={pillar.id}
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
@@ -172,11 +172,11 @@ export function FeaturesSection() {
                 </div>
                 {pillar.id === 'voice' && <VoiceMockup />}
               </div>
-            </motion.div>
+            </m.div>
           )
         })}
 
-        <motion.p
+        <m.p
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
@@ -185,7 +185,7 @@ export function FeaturesSection() {
           Plus qu'un simple Discord — Squad Planner crée des{' '}
           <span className="text-text-primary font-semibold text-gradient-animated">habitudes de jeu régulières</span>{' '}
           pour ta communauté
-        </motion.p>
+        </m.p>
       </div>
     </section>
   )

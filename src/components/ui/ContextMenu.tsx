@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect, useCallback, type ReactNode } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { m, AnimatePresence } from 'framer-motion'
 
 export interface ContextMenuItem {
   id: string
@@ -122,7 +122,7 @@ export function ContextMenu({ items, children, disabled }: ContextMenuProps) {
             />
 
             {/* Menu */}
-            <motion.div
+            <m.div
               ref={menuRef}
               initial={{ opacity: 0, scale: 0.92 }}
               animate={{ opacity: 1, scale: 1 }}
@@ -177,7 +177,7 @@ export function ContextMenu({ items, children, disabled }: ContextMenuProps) {
                   </button>
                 )
               })}
-            </motion.div>
+            </m.div>
           </>
         )}
       </AnimatePresence>

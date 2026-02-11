@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import { Calendar, ChevronRight, PartyPopper, CheckCircle2 } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { Card } from '../../components/ui'
@@ -15,10 +15,10 @@ export function NeedsResponseSection({ needsResponse }: NeedsResponseSectionProp
     <section className="mb-6" aria-label="Sessions en attente de réponse">
       <div className="p-4 rounded-xl bg-warning-5 border border-warning" role="alert">
         <div className="flex items-center gap-3 mb-3">
-          <motion.div animate={{ rotate: [0, -10, 10, -10, 0] }}
+          <m.div animate={{ rotate: [0, -10, 10, -10, 0] }}
             transition={{ duration: 0.5, repeat: 3, repeatDelay: 2 }}>
             <PartyPopper className="w-5 h-5 text-warning" />
-          </motion.div>
+          </m.div>
           <h2 className="text-md font-semibold text-text-primary">
             Ta squad t'attend ! {needsResponse.length} session{needsResponse.length > 1 ? 's' : ''} à confirmer
           </h2>
@@ -31,13 +31,13 @@ export function NeedsResponseSection({ needsResponse }: NeedsResponseSectionProp
           {needsResponse.slice(0, 3).map(session => (
             <li key={session.id}>
               <Link to={`/session/${session.id}`}>
-                <motion.div className="flex items-center gap-3 p-3 rounded-lg bg-overlay-heavy hover:bg-border-subtle"
+                <m.div className="flex items-center gap-3 p-3 rounded-lg bg-overlay-heavy hover:bg-border-subtle"
                   whileHover={{ x: 4 }}>
                   <Calendar className="w-4 h-4 text-warning" aria-hidden="true" />
                   <span className="flex-1 text-md text-text-primary">{session.title || session.game || 'Session'}</span>
                   <span className="text-sm text-text-secondary">{formatDate(session.scheduled_at)}</span>
                   <ChevronRight className="w-4 h-4 text-text-tertiary" aria-hidden="true" />
-                </motion.div>
+                </m.div>
               </Link>
             </li>
           ))}

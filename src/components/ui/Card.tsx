@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import { type ReactNode, type KeyboardEvent } from 'react'
 
 interface CardProps {
@@ -48,7 +48,7 @@ export function Card({
   }
 
   return (
-    <motion.div
+    <m.div
       className={`
         relative rounded-2xl transition-interactive
         ${variants[variant]}
@@ -88,7 +88,7 @@ export function Card({
         </div>
       )}
       {loading ? <div className="relative opacity-40">{children}</div> : children}
-    </motion.div>
+    </m.div>
   )
 }
 

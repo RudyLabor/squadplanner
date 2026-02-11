@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import { Users, UserPlus, CalendarCheck, Headphones, Home, MessageCircle, User, Mic, Share2 } from 'lucide-react'
 
 export interface DemoStep {
@@ -66,26 +66,26 @@ export function PhoneFrame({ children }: { children: React.ReactNode }) {
 function CreateStep() {
   return (
     <div className="p-5 pt-8 h-full flex flex-col">
-      <motion.div className="text-xs text-text-tertiary mb-3" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+      <m.div className="text-xs text-text-tertiary mb-3" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
         Nouvelle Squad
-      </motion.div>
-      <motion.div
+      </m.div>
+      <m.div
         className="bg-surface-dark rounded-xl p-3 border border-border-default mb-3"
         initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}
       >
         <div className="text-xs text-text-quaternary mb-1">Nom de la squad</div>
-        <motion.div className="text-sm text-text-primary font-medium" initial={{ width: 0 }} animate={{ width: 'auto' }} transition={{ delay: 0.5, duration: 0.8 }}>
+        <m.div className="text-sm text-text-primary font-medium" initial={{ width: 0 }} animate={{ width: 'auto' }} transition={{ delay: 0.5, duration: 0.8 }}>
           Les Invaincus
-        </motion.div>
-      </motion.div>
-      <motion.div
+        </m.div>
+      </m.div>
+      <m.div
         className="bg-surface-dark rounded-xl p-3 border border-border-default mb-3"
         initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.8 }}
       >
         <div className="text-xs text-text-quaternary mb-1">Jeu</div>
         <div className="text-sm text-text-primary">Valorant</div>
-      </motion.div>
-      <motion.div className="mb-3" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.0 }}>
+      </m.div>
+      <m.div className="mb-3" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.0 }}>
         <div className="text-xs text-text-quaternary mb-1.5">Jeux populaires</div>
         <div className="flex flex-wrap gap-1.5">
           {['League of Legends', 'Fortnite', 'Apex'].map((game) => (
@@ -94,13 +94,13 @@ function CreateStep() {
             </span>
           ))}
         </div>
-      </motion.div>
-      <motion.div
+      </m.div>
+      <m.div
         className="mt-auto bg-primary text-white text-sm font-medium py-2.5 rounded-xl text-center"
         initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 1.2, type: 'spring', stiffness: 300 }}
       >
         Créer la squad
-      </motion.div>
+      </m.div>
       <DemoNavbar active="squads" />
     </div>
   )
@@ -109,14 +109,14 @@ function CreateStep() {
 function InviteStep() {
   return (
     <div className="p-5 pt-8 h-full flex flex-col">
-      <motion.div className="text-xs text-text-tertiary mb-2" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+      <m.div className="text-xs text-text-tertiary mb-2" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
         Les Invaincus
-      </motion.div>
-      <motion.div className="text-sm font-medium text-text-primary mb-3" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2 }}>
+      </m.div>
+      <m.div className="text-sm font-medium text-text-primary mb-3" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2 }}>
         Invite tes potes
-      </motion.div>
+      </m.div>
       {mockUsers.map((user, i) => (
-        <motion.div
+        <m.div
           key={user.name}
           className="flex items-center gap-3 mb-2 p-1.5 rounded-lg bg-surface-card"
           initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.3 + i * 0.2 }}
@@ -125,22 +125,22 @@ function InviteStep() {
             {user.emoji}
           </div>
           <div className="flex-1 text-sm text-text-primary">{user.name}</div>
-          <motion.div
+          <m.div
             className="text-xs px-2 py-0.5 rounded-full bg-success/15 text-success font-medium"
             initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 0.5 + i * 0.2, type: 'spring' }}
           >
             Rejoint
-          </motion.div>
-        </motion.div>
+          </m.div>
+        </m.div>
       ))}
-      <motion.div
+      <m.div
         className="mt-auto flex items-center gap-2 p-2.5 rounded-xl bg-primary-10 border border-primary"
         initial={{ opacity: 0, y: 5 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.3 }}
       >
         <Share2 className="w-3.5 h-3.5 text-primary" />
         <span className="text-xs text-text-tertiary flex-1">squadplanner.fr/join/8J9DQR</span>
         <span className="text-xs text-primary font-medium">Copier</span>
-      </motion.div>
+      </m.div>
       <DemoNavbar active="squads" />
     </div>
   )
@@ -149,17 +149,17 @@ function InviteStep() {
 function RSVPStep() {
   return (
     <div className="p-5 pt-8 h-full flex flex-col">
-      <motion.div className="text-xs text-text-tertiary mb-1" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+      <m.div className="text-xs text-text-tertiary mb-1" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
         Session de jeu
-      </motion.div>
-      <motion.div className="text-sm font-medium text-text-primary mb-1" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.1 }}>
+      </m.div>
+      <m.div className="text-sm font-medium text-text-primary mb-1" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.1 }}>
         Ranked Mardi 21h
-      </motion.div>
-      <motion.div className="text-xs text-text-quaternary mb-4" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2 }}>
+      </m.div>
+      <m.div className="text-xs text-text-quaternary mb-4" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2 }}>
         Les Invaincus · Valorant
-      </motion.div>
+      </m.div>
       {mockUsers.slice(0, 4).map((user, i) => (
-        <motion.div
+        <m.div
           key={user.name}
           className="flex items-center gap-3 mb-2 p-2 rounded-lg"
           initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 + i * 0.2 }}
@@ -168,20 +168,20 @@ function RSVPStep() {
             {user.emoji}
           </div>
           <div className="flex-1 text-sm text-text-secondary">{user.name}</div>
-          <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 0.6 + i * 0.25, type: 'spring', stiffness: 400 }}>
+          <m.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 0.6 + i * 0.25, type: 'spring', stiffness: 400 }}>
             <div className="w-5 h-5 rounded-full bg-success flex items-center justify-center">
               <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5L4 7L8 3" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
             </div>
-          </motion.div>
-        </motion.div>
+          </m.div>
+        </m.div>
       ))}
-      <motion.div
+      <m.div
         className="mt-auto text-center text-xs font-medium py-2 rounded-lg"
         style={{ backgroundColor: 'var(--color-success-20)', color: 'var(--color-success)' }}
         initial={{ opacity: 0, y: 5 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.5 }}
       >
         Session confirmée !
-      </motion.div>
+      </m.div>
       <DemoNavbar active="home" />
     </div>
   )
@@ -190,14 +190,14 @@ function RSVPStep() {
 function PlayStep() {
   return (
     <div className="p-5 pt-8 h-full flex flex-col">
-      <motion.div className="text-xs text-success font-medium mb-1" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+      <m.div className="text-xs text-success font-medium mb-1" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
         Party vocale en cours
-      </motion.div>
-      <motion.div className="text-sm font-medium text-text-primary mb-3" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.1 }}>
+      </m.div>
+      <m.div className="text-sm font-medium text-text-primary mb-3" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.1 }}>
         Les Invaincus · Valorant
-      </motion.div>
+      </m.div>
       {mockUsers.slice(0, 4).map((user, i) => (
-        <motion.div
+        <m.div
           key={user.name}
           className="flex items-center gap-2.5 mb-2 p-1.5 rounded-lg bg-surface-card"
           initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.2 + i * 0.1, type: 'spring' }}
@@ -210,7 +210,7 @@ function PlayStep() {
           </div>
           <div className="flex items-center gap-[2px]">
             {[0, 1, 2].map((j) => (
-              <motion.div
+              <m.div
                 key={j}
                 className="w-[2px] rounded-full"
                 style={{ backgroundColor: i < 2 ? 'var(--color-success)' : 'var(--color-text-tertiary)' }}
@@ -219,11 +219,11 @@ function PlayStep() {
               />
             ))}
           </div>
-        </motion.div>
+        </m.div>
       ))}
       <div className="flex items-center justify-center gap-1 my-3">
         {[0, 1, 2, 3, 4].map((i) => (
-          <motion.div
+          <m.div
             key={i}
             className="w-1 rounded-full bg-primary"
             animate={{ height: [8, 20, 8] }}
@@ -231,12 +231,12 @@ function PlayStep() {
           />
         ))}
       </div>
-      <motion.div className="text-center" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }}>
+      <m.div className="text-center" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }}>
         <div className="text-sm font-medium text-text-primary">4 en ligne</div>
-        <motion.div className="text-xs text-success mt-0.5" animate={{ opacity: [0.6, 1, 0.6] }} transition={{ duration: 2, repeat: Infinity }}>
+        <m.div className="text-xs text-success mt-0.5" animate={{ opacity: [0.6, 1, 0.6] }} transition={{ duration: 2, repeat: Infinity }}>
           En jeu · Valorant
-        </motion.div>
-      </motion.div>
+        </m.div>
+      </m.div>
       <DemoNavbar active="party" />
     </div>
   )

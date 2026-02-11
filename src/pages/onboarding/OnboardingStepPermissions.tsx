@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import { Bell, Mic, ArrowLeft, Check } from 'lucide-react'
 import { Button, Card } from '../../components/ui'
 
@@ -21,7 +21,7 @@ export function OnboardingStepPermissions({
   canProceed, onComplete, onBack
 }: OnboardingStepPermissionsProps) {
   return (
-    <motion.div
+    <m.div
       key="permissions"
       variants={slideVariants}
       initial="enter"
@@ -163,6 +163,6 @@ export function OnboardingStepPermissions({
           </>
         )}
       </div>
-    </motion.div>
+    </m.div>
   )
 }

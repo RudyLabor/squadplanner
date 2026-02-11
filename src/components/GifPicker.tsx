@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect, useCallback, memo } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { m, AnimatePresence } from 'framer-motion'
 import { Search, X, Loader2, Sparkles, RefreshCw } from 'lucide-react'
 import { supabase } from '../lib/supabase'
 
@@ -176,7 +176,7 @@ export const GifPicker = memo(function GifPicker({ isOpen, onSelect, onClose }: 
           />
 
           {/* Picker — full-width bottom sheet on mobile, positioned popup on desktop */}
-          <motion.div
+          <m.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 20 }}
@@ -286,7 +286,7 @@ export const GifPicker = memo(function GifPicker({ isOpen, onSelect, onClose }: 
                 </div>
               )}
             </div>
-          </motion.div>
+          </m.div>
         </>
       )}
     </AnimatePresence>

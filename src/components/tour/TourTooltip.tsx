@@ -1,4 +1,4 @@
-import { motion, AnimatePresence } from 'framer-motion'
+import { m, AnimatePresence } from 'framer-motion'
 import { X, ArrowRight, ArrowLeft } from 'lucide-react'
 
 interface TourTooltipProps {
@@ -26,7 +26,7 @@ export function TourTooltip({
 }: TourTooltipProps) {
   return (
     <AnimatePresence mode="wait">
-      <motion.div
+      <m.div
         key={currentStep}
         initial={{ opacity: 0, scale: 0.95, y: 5 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -65,7 +65,7 @@ export function TourTooltip({
           {/* Progress bar */}
           <div className="px-5 pb-3">
             <div className="h-1 bg-border-subtle rounded-full overflow-hidden">
-              <motion.div
+              <m.div
                 className="h-full bg-primary rounded-full"
                 initial={{ width: `${(currentStep / totalSteps) * 100}%` }}
                 animate={{ width: `${((currentStep + 1) / totalSteps) * 100}%` }}
@@ -101,7 +101,7 @@ export function TourTooltip({
             </div>
           </div>
         </div>
-      </motion.div>
+      </m.div>
     </AnimatePresence>
   )
 }

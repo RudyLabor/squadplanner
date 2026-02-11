@@ -1,5 +1,5 @@
 import { useState, useRef, useCallback, useEffect, memo } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { m, AnimatePresence } from 'framer-motion'
 import { Mic, Square, Send, Trash2, Loader2 } from 'lucide-react'
 
 /**
@@ -158,19 +158,19 @@ export const VoiceRecorder = memo(function VoiceRecorder({ onSend, disabled }: V
       <AnimatePresence mode="wait">
         {/* Error state */}
         {error && (
-          <motion.p
+          <m.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             className="text-sm text-error mb-1"
           >
             {error}
-          </motion.p>
+          </m.p>
         )}
 
         {/* Recording / Preview state */}
         {(isRecording || audioBlob) ? (
-          <motion.div
+          <m.div
             key="recording"
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -240,10 +240,10 @@ export const VoiceRecorder = memo(function VoiceRecorder({ onSend, disabled }: V
                 )}
               </button>
             )}
-          </motion.div>
+          </m.div>
         ) : (
           /* Mic button (idle state) */
-          <motion.button
+          <m.button
             key="mic"
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -255,7 +255,7 @@ export const VoiceRecorder = memo(function VoiceRecorder({ onSend, disabled }: V
             aria-label="Message vocal"
           >
             <Mic className="w-5 h-5" />
-          </motion.button>
+          </m.button>
         )}
       </AnimatePresence>
     </div>

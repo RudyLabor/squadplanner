@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import { Calendar, Check, Target, Trophy, Sparkles, TrendingUp, Plus } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { Card, ProgressRing, AnimatedCounter, HelpTooltip } from '../ui'
@@ -84,7 +84,7 @@ export function ProfileStats({ profile, profileReady }: ProfileStatsProps) {
                   <span className="text-3xl font-bold text-text-primary">
                     <AnimatedCounter end={reliabilityScore} duration={1.5} suffix="%" />
                   </span>
-                  <motion.span
+                  <m.span
                     className="text-base font-medium px-2.5 py-1 rounded-full flex items-center gap-1.5"
                     style={{ backgroundColor: tier.bgColor, color: reliabilityColor }}
                     initial={{ scale: 0.8 }}
@@ -93,7 +93,7 @@ export function ProfileStats({ profile, profileReady }: ProfileStatsProps) {
                   >
                     <span>{tier.icon}</span>
                     <span>{tier.name}</span>
-                  </motion.span>
+                  </m.span>
                 </div>
                 <HelpTooltip content="Ton score de fiabilité mesure ta régularité aux sessions. Plus tu confirmes et te présentes, plus il monte." position="bottom">
                   <p className="text-base text-text-quaternary">Score de fiabilité</p>
@@ -110,7 +110,7 @@ export function ProfileStats({ profile, profileReady }: ProfileStatsProps) {
                       </span>
                     </div>
                     <div className="relative h-2 bg-surface-card rounded-full overflow-hidden">
-                      <motion.div
+                      <m.div
                         className="absolute h-full rounded-full"
                         style={{
                           background: `linear-gradient(90deg, ${reliabilityColor}, ${tier.nextTier.color})`
@@ -126,7 +126,7 @@ export function ProfileStats({ profile, profileReady }: ProfileStatsProps) {
                 )}
 
                 {!tier.nextTier && (
-                  <motion.p
+                  <m.p
                     className="text-sm mt-2 flex items-center gap-1"
                     style={{ color: tier.color }}
                     animate={{ opacity: [0.7, 1, 0.7] }}
@@ -134,16 +134,16 @@ export function ProfileStats({ profile, profileReady }: ProfileStatsProps) {
                   >
                     <Sparkles className="w-3 h-3" />
                     Tu as atteint le rang maximum !
-                  </motion.p>
+                  </m.p>
                 )}
               </div>
               {tier.glow && (
-                <motion.div
+                <m.div
                   animate={{ rotate: [0, 12, -12, 0] }}
                   transition={{ duration: 2, repeat: 3 }}
                 >
                   <Sparkles className="w-5 h-5" style={{ color: reliabilityColor }} />
-                </motion.div>
+                </m.div>
               )}
               {!tier.glow && <TrendingUp className="w-5 h-5 text-success" />}
             </div>

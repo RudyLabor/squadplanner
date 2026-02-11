@@ -1,5 +1,5 @@
 import { memo } from 'react'
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import {
   Calendar, Clock, Users, ChevronRight,
   CheckCircle2, XCircle, HelpCircle
@@ -93,7 +93,7 @@ export const SessionCard = memo(function SessionCard({ session, onRsvp }: {
 
           {canRsvp && (
             <div className="flex gap-2">
-              <motion.button
+              <m.button
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={(e) => { e.preventDefault(); onRsvp(session.id, 'present') }}
@@ -107,8 +107,8 @@ export const SessionCard = memo(function SessionCard({ session, onRsvp }: {
               >
                 <CheckCircle2 className="w-4 h-4" aria-hidden="true" />
                 Present
-              </motion.button>
-              <motion.button
+              </m.button>
+              <m.button
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={(e) => { e.preventDefault(); onRsvp(session.id, 'maybe') }}
@@ -122,8 +122,8 @@ export const SessionCard = memo(function SessionCard({ session, onRsvp }: {
               >
                 <HelpCircle className="w-4 h-4" aria-hidden="true" />
                 Peut-etre
-              </motion.button>
-              <motion.button
+              </m.button>
+              <m.button
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={(e) => { e.preventDefault(); onRsvp(session.id, 'absent') }}
@@ -137,7 +137,7 @@ export const SessionCard = memo(function SessionCard({ session, onRsvp }: {
               >
                 <XCircle className="w-4 h-4" aria-hidden="true" />
                 Absent
-              </motion.button>
+              </m.button>
             </div>
           )}
         </div>

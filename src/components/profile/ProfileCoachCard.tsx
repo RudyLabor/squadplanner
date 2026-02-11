@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { motion, AnimatePresence } from 'framer-motion'
+import { m, AnimatePresence } from 'framer-motion'
 import { Sparkles, CalendarPlus, BarChart3 } from 'lucide-react'
 import { Card, Button } from '../ui'
 
@@ -114,18 +114,18 @@ export function ProfileCoachCard({ streakDays, reliabilityScore, aiCoachTip }: P
       <Card className={`p-4 bg-bg-elevated border ${style.border} relative overflow-hidden`}>
         <div className="flex items-start gap-3">
           <div className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 ${style.bg}`}>
-            <motion.div
+            <m.div
               animate={{ scale: [1, 1.2, 1], rotate: [0, 15, -15, 0] }}
               transition={{ duration: 2.5, repeat: Infinity, repeatDelay: 3, ease: 'easeInOut' }}
             >
               <Sparkles className={`w-5 h-5 ${style.iconColor}`} />
-            </motion.div>
+            </m.div>
           </div>
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 mb-1.5">
               <h3 className="text-md font-semibold text-text-primary">Coach IA</h3>
               <AnimatePresence mode="wait">
-                <motion.span
+                <m.span
                   key={style.badgeLabel}
                   className={`text-xs px-1.5 py-0.5 rounded-full font-medium ${style.badgeBg}`}
                   initial={{ opacity: 0, scale: 0.8 }}
@@ -134,7 +134,7 @@ export function ProfileCoachCard({ streakDays, reliabilityScore, aiCoachTip }: P
                   transition={{ duration: 0.2 }}
                 >
                   {style.badgeLabel}
-                </motion.span>
+                </m.span>
               </AnimatePresence>
             </div>
 
@@ -142,12 +142,12 @@ export function ProfileCoachCard({ streakDays, reliabilityScore, aiCoachTip }: P
               <p className={`text-base leading-relaxed ${style.textColor}`}>{aiCoachTip!.tip}</p>
             ) : (
               <AnimatePresence mode="wait">
-                <motion.div key={tipIndex} initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -6 }} transition={{ duration: 0.3 }}>
+                <m.div key={tipIndex} initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -6 }} transition={{ duration: 0.3 }}>
                   <p className={`text-base leading-relaxed ${style.textColor}`}>
                     {typedText}
                     {isTyping && <span className="inline-block w-0.5 h-4 bg-purple ml-0.5 align-middle animate-pulse" />}
                   </p>
-                </motion.div>
+                </m.div>
               </AnimatePresence>
             )}
 

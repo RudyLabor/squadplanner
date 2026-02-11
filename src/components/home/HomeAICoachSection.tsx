@@ -1,5 +1,5 @@
 import { memo } from 'react'
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import { Sparkles, ChevronRight } from 'lucide-react'
 import { Card, SkeletonAICoach } from '../ui'
 
@@ -30,7 +30,7 @@ export const HomeAICoachSection = memo(function HomeAICoachSection({
   if (!aiCoachTip) return null
 
   return (
-    <motion.div
+    <m.div
       className="cursor-pointer h-full"
       data-tour="ai-coach"
       onClick={onAction}
@@ -76,6 +76,6 @@ export const HomeAICoachSection = memo(function HomeAICoachSection({
               : 'text-primary/60'
         }`} />
       </Card>
-    </motion.div>
+    </m.div>
   )
 })

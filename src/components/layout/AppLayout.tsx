@@ -1,7 +1,7 @@
 import { useEffect, useState, memo, useCallback, useMemo, useRef } from 'react'
 import type { ReactNode } from 'react'
 import { useLocation } from 'react-router-dom'
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import { useShallow } from 'zustand/react/shallow'
 import { useAuthStore, useSquadsStore, useVoiceChatStore, useKeyboardVisible, useUnreadCountStore, useSquadNotificationsStore, useGlobalPresence } from '../../hooks'
 import { useCreateSessionModal } from '../CreateSessionModal'
@@ -41,13 +41,13 @@ const DesktopContentWrapper = memo(function DesktopContentWrapper({
       tabIndex={-1}
       className={`flex-1 lg:pb-0 overflow-y-auto overflow-x-hidden scrollbar-hide-mobile overscroll-contain ${isKeyboardVisible ? 'pb-0' : 'pb-mobile-nav'}`}
     >
-      <motion.div
+      <m.div
         initial={false}
         animate={{ marginLeft }}
         transition={{ duration: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
       >
         {children}
-      </motion.div>
+      </m.div>
     </main>
   )
 })

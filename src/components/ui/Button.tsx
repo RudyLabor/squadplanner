@@ -1,4 +1,4 @@
-import { motion, AnimatePresence, type HTMLMotionProps } from 'framer-motion'
+import { m, AnimatePresence, type HTMLMotionProps } from 'framer-motion'
 import { forwardRef, type ReactNode, type ElementType, type ComponentPropsWithRef } from 'react'
 import { haptic } from '../../utils/haptics'
 
@@ -15,7 +15,7 @@ type ButtonBaseProps = {
   showSuccess?: boolean
 }
 
-// Polymorphic: when as="a", renders <motion.a>; when as={Link}, renders a router Link wrapped in motion
+// Polymorphic: when as="a", renders <m.a>; when as={Link}, renders a router Link wrapped in motion
 type ButtonProps<C extends ElementType = 'button'> = ButtonBaseProps & {
   as?: C
 } & Omit<ComponentPropsWithRef<C>, keyof ButtonBaseProps | 'as'>
@@ -77,7 +77,7 @@ function ButtonInner<C extends ElementType = 'button'>(
   const content = (
     <AnimatePresence mode="wait">
       {showSuccess ? (
-        <motion.span
+        <m.span
           key="success"
           initial={{ scale: 0, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
@@ -87,18 +87,18 @@ function ButtonInner<C extends ElementType = 'button'>(
           aria-label="Success"
         >
           &#10003;
-        </motion.span>
+        </m.span>
       ) : isLoading ? (
-        <motion.span key="loading" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="inline-flex items-center gap-2">
+        <m.span key="loading" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="inline-flex items-center gap-2">
           <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" aria-hidden="true" />
           {loadingText && <span>{loadingText}</span>}
-        </motion.span>
+        </m.span>
       ) : (
-        <motion.span key="content" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="inline-flex items-center gap-2">
+        <m.span key="content" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="inline-flex items-center gap-2">
           {leftIcon && <span className="shrink-0" aria-hidden="true">{leftIcon}</span>}
           {children}
           {rightIcon && <span className="shrink-0" aria-hidden="true">{rightIcon}</span>}
-        </motion.span>
+        </m.span>
       )}
     </AnimatePresence>
   )
@@ -107,7 +107,7 @@ function ButtonInner<C extends ElementType = 'button'>(
   if (as && as !== 'button') {
     const Component = as as ElementType
     return (
-      <motion.div
+      <m.div
         whileHover={{ y: -1 }}
         whileTap={{ scale: 0.97 }}
         transition={{ type: 'spring', stiffness: 400, damping: 17 }}
@@ -116,12 +116,12 @@ function ButtonInner<C extends ElementType = 'button'>(
         <Component ref={ref} className={cls} aria-busy={isLoading || undefined} {...props} onClick={handleClick}>
           {content}
         </Component>
-      </motion.div>
+      </m.div>
     )
   }
 
   return (
-    <motion.button
+    <m.button
       ref={ref}
       type={(props as HTMLMotionProps<'button'>).type || 'button'}
       className={cls}
@@ -135,7 +135,7 @@ function ButtonInner<C extends ElementType = 'button'>(
       onClick={handleClick}
     >
       {content}
-    </motion.button>
+    </m.button>
   )
 }
 

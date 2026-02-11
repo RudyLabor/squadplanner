@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import { Check, ArrowRight, Users, Gamepad2, Copy } from 'lucide-react'
 import { Button, Card } from '../../components/ui'
 
@@ -20,7 +20,7 @@ export function OnboardingStepComplete({
   const [codeCopied, setCodeCopied] = useState(false)
 
   return (
-    <motion.div
+    <m.div
       key="complete"
       initial={{ opacity: 0, scale: 0.95 }}
       animate={{ opacity: 1, scale: 1 }}
@@ -30,7 +30,7 @@ export function OnboardingStepComplete({
       {/* Confetti animation - reduced to 8 particles */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         {[...Array(8)].map((_, i) => (
-          <motion.div
+          <m.div
             key={i}
             initial={{
               y: -20,
@@ -59,14 +59,14 @@ export function OnboardingStepComplete({
         ))}
       </div>
 
-      <motion.div
+      <m.div
         initial={{ scale: 0 }}
         animate={{ scale: 1 }}
         transition={{ type: 'spring', stiffness: 300, damping: 25 }}
         className="w-20 h-20 rounded-full bg-success flex items-center justify-center mx-auto mb-6"
       >
         <Check className="w-10 h-10 text-white" />
-      </motion.div>
+      </m.div>
 
       <h2 className="text-xl font-bold text-text-primary mb-2">
         {createdSquadName ? `${createdSquadName} est pr\u00eate !` : "C'est parti !"}
@@ -82,7 +82,7 @@ export function OnboardingStepComplete({
 
       {/* Squad recap card */}
       {createdSquadCode && (
-        <motion.div
+        <m.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
@@ -140,13 +140,13 @@ export function OnboardingStepComplete({
               </div>
             </div>
           </Card>
-        </motion.div>
+        </m.div>
       )}
 
       <Button onClick={onComplete} className="w-full h-14 text-lg">
         {createdSquadId || squadsLength > 0 ? "Voir ma squad" : "Explorer"}
         <ArrowRight className="w-5 h-5 ml-2" />
       </Button>
-    </motion.div>
+    </m.div>
   )
 }

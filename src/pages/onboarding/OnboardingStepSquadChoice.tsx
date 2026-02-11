@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import { Users, UserPlus, ArrowRight } from 'lucide-react'
 
 interface OnboardingStepSquadChoiceProps {
@@ -10,7 +10,7 @@ interface OnboardingStepSquadChoiceProps {
 
 export function OnboardingStepSquadChoice({ slideVariants, isNavigating, onCreateSquad, onJoinSquad }: OnboardingStepSquadChoiceProps) {
   return (
-    <motion.div
+    <m.div
       key="squad-choice"
       variants={slideVariants}
       initial="enter"
@@ -73,6 +73,6 @@ export function OnboardingStepSquadChoice({ slideVariants, isNavigating, onCreat
           </div>
         </button>
       </div>
-    </motion.div>
+    </m.div>
   )
 }

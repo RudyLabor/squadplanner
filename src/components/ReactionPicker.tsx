@@ -1,4 +1,4 @@
-import { motion, AnimatePresence } from 'framer-motion'
+import { m, AnimatePresence } from 'framer-motion'
 import { forwardRef } from 'react'
 
 // Available emoji reactions
@@ -54,7 +54,7 @@ export const ReactionPicker = forwardRef<HTMLDivElement, ReactionPickerProps>(
             />
 
             {/* Picker container */}
-            <motion.div
+            <m.div
               ref={ref}
               initial={{ opacity: 0, scale: 0.8, y: position === 'top' ? 10 : -10 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -69,7 +69,7 @@ export const ReactionPicker = forwardRef<HTMLDivElement, ReactionPickerProps>(
             >
               <div className="flex items-center gap-1 px-2 py-1.5 bg-surface-dark border border-border-hover rounded-full shadow-lg shadow-black/40">
                 {REACTION_EMOJIS.map((emoji, index) => (
-                  <motion.button
+                  <m.button
                     key={emoji}
                     initial={{ opacity: 0, scale: 0 }}
                     animate={{ opacity: 1, scale: 1 }}
@@ -95,10 +95,10 @@ export const ReactionPicker = forwardRef<HTMLDivElement, ReactionPickerProps>(
                     aria-label={`React with ${emoji}`}
                   >
                     {emoji}
-                  </motion.button>
+                  </m.button>
                 ))}
               </div>
-            </motion.div>
+            </m.div>
           </>
         )}
       </AnimatePresence>

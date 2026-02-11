@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import {
   Calendar, Clock, Users, Check, X, HelpCircle,
   CheckCircle2, Loader2, Gamepad2
@@ -85,29 +85,29 @@ export function RsvpButtons({ myRsvp, rsvpLoading, onRsvp }: RsvpButtonsProps) {
       <Card>
         <CardContent className="p-4">
           <div className="flex gap-2">
-            <motion.div className="flex-1" whileTap={{ scale: 0.97 }}>
+            <m.div className="flex-1" whileTap={{ scale: 0.97 }}>
               <Button variant={myRsvp === 'present' ? 'primary' : 'secondary'}
                 className={`w-full ${myRsvp === 'present' ? 'shadow-glow-success ring-2 ring-success/15' : ''}`}
                 onClick={() => onRsvp('present')} disabled={rsvpLoading !== null}>
                 {rsvpLoading === 'present' ? <Loader2 className="w-4 h-4 animate-spin" /> : <Check className="w-4 h-4" />}
                 Présent
               </Button>
-            </motion.div>
-            <motion.div className="flex-1" whileTap={{ scale: 0.97 }}>
+            </m.div>
+            <m.div className="flex-1" whileTap={{ scale: 0.97 }}>
               <Button variant={myRsvp === 'maybe' ? 'primary' : 'secondary'}
                 className={`w-full ${myRsvp === 'maybe' ? 'shadow-glow-warning ring-2 ring-warning/15' : ''}`}
                 onClick={() => onRsvp('maybe')} disabled={rsvpLoading !== null}>
                 {rsvpLoading === 'maybe' ? <Loader2 className="w-5 h-5 animate-spin" /> : <HelpCircle className="w-4 h-4" />}
                 Peut-être
               </Button>
-            </motion.div>
-            <motion.div className="flex-1" whileTap={{ scale: 0.97 }}>
+            </m.div>
+            <m.div className="flex-1" whileTap={{ scale: 0.97 }}>
               <Button variant={myRsvp === 'absent' ? 'danger' : 'secondary'} className="w-full"
                 onClick={() => onRsvp('absent')} disabled={rsvpLoading !== null}>
                 {rsvpLoading === 'absent' ? <Loader2 className="w-4 h-4 animate-spin" /> : <X className="w-4 h-4" />}
                 Absent
               </Button>
-            </motion.div>
+            </m.div>
           </div>
         </CardContent>
       </Card>
@@ -124,21 +124,21 @@ export function CheckinSection({ checkinLoading, onCheckin }: CheckinSectionProp
   return (
     <div className="mb-8">
       <Card className="p-6 text-center bg-gradient-to-b from-success/[0.075] to-transparent border-success/15 relative overflow-hidden">
-        <motion.div className="absolute inset-0 bg-success/[0.025]"
+        <m.div className="absolute inset-0 bg-success/[0.025]"
           animate={{ opacity: [0.3, 0.5, 0.3] }} transition={{ duration: 2, repeat: 3 }} />
         <div className="relative">
-          <motion.div animate={{ scale: [1, 1.05, 1] }} transition={{ duration: 1.5, repeat: 3 }}>
+          <m.div animate={{ scale: [1, 1.05, 1] }} transition={{ duration: 1.5, repeat: 3 }}>
             <Gamepad2 className="w-14 h-14 mx-auto mb-4 text-success" />
-          </motion.div>
+          </m.div>
           <h3 className="text-lg font-bold text-text-primary mb-2">🎮 C'est l'heure du game !</h3>
           <p className="text-text-secondary mb-5">Ta squad t'attend. Confirme que t'es là !</p>
-          <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+          <m.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
             <Button onClick={onCheckin} disabled={checkinLoading}
               className="h-12 px-8 bg-success hover:bg-success text-bg-base font-semibold shadow-glow-success">
               {checkinLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <CheckCircle2 className="w-5 h-5" />}
               Je suis là !
             </Button>
-          </motion.div>
+          </m.div>
         </div>
       </Card>
     </div>

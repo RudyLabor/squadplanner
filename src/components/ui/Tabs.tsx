@@ -1,4 +1,4 @@
-import { motion, useMotionValue, useTransform, animate } from 'framer-motion'
+import { m, useMotionValue, useTransform, animate } from 'framer-motion'
 import {
   createContext,
   useContext,
@@ -178,21 +178,21 @@ export function Tab({ value, icon, disabled = false, children }: TabProps) {
     >
       {/* Animated indicator */}
       {isActive && variant === 'underline' && (
-        <motion.div
+        <m.div
           layoutId={`${baseId}-underline`}
           className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary rounded-full"
           transition={{ type: 'spring', stiffness: 400, damping: 30 }}
         />
       )}
       {isActive && variant === 'pills' && (
-        <motion.div
+        <m.div
           layoutId={`${baseId}-pill`}
           className="absolute inset-0 bg-bg-active border border-border-default rounded-lg"
           transition={{ type: 'spring', stiffness: 400, damping: 30 }}
         />
       )}
       {isActive && variant === 'enclosed' && (
-        <motion.div
+        <m.div
           layoutId={`${baseId}-enclosed`}
           className="absolute inset-0 bg-bg-base rounded-t-lg border border-border-subtle border-b-transparent"
           transition={{ type: 'spring', stiffness: 400, damping: 30 }}
@@ -280,7 +280,7 @@ export function TabsContent({ value, children, className = '' }: TabsContentProp
   }
 
   return (
-    <motion.div
+    <m.div
       ref={containerRef}
       id={panelId}
       role="tabpanel"
@@ -294,6 +294,6 @@ export function TabsContent({ value, children, className = '' }: TabsContentProp
       onDragEnd={handleDragEnd}
     >
       {children}
-    </motion.div>
+    </m.div>
   )
 }

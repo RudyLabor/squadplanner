@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from 'react'
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import { Flame, Gift, Sparkles, Check, Zap } from 'lucide-react'
 import { Card } from './ui'
 import { MILESTONES, calculateXPReward, getNextMilestone, getFlameIntensity, getFlameColors } from './streak/streakUtils'
@@ -54,22 +54,22 @@ export function StreakCounter({ streakDays, lastActiveDate, onCheckIn }: StreakC
           <div className="flex items-center gap-4 mb-5">
             {/* Animated Fire */}
             <div className="relative">
-              <motion.div
+              <m.div
                 className="w-16 h-16 rounded-2xl flex items-center justify-center relative overflow-hidden"
                 style={{ backgroundColor: `color-mix(in srgb, ${flameColors.primary} 8%, transparent)` }}
                 animate={intensity >= 1 ? { scale: [1, 1.05, 1] } : {}}
                 transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
               >
-                <motion.span
+                <m.span
                   className="text-4xl relative z-10"
                   animate={{ y: intensity >= 1 ? [0, -3, 0] : 0, scale: intensity >= 2 ? [1, 1.1, 1] : 1 }}
                   transition={{ duration: 0.5 + (0.5 / (intensity + 1)), repeat: Infinity, ease: 'easeInOut' }}
                 >
                   🔥
-                </motion.span>
+                </m.span>
 
                 {intensity >= 2 && (
-                  <motion.div
+                  <m.div
                     className="absolute inset-0 rounded-2xl"
                     style={{ background: `radial-gradient(circle at center, ${flameColors.glow}, transparent)` }}
                     animate={{ opacity: [0.3, 0.6, 0.3] }}
@@ -80,7 +80,7 @@ export function StreakCounter({ streakDays, lastActiveDate, onCheckIn }: StreakC
                 {intensity >= 3 && (
                   <>
                     {[...Array(3)].map((_, i) => (
-                      <motion.div
+                      <m.div
                         key={i}
                         className="absolute w-1.5 h-1.5 rounded-full"
                         style={{ backgroundColor: flameColors.secondary }}
@@ -90,23 +90,23 @@ export function StreakCounter({ streakDays, lastActiveDate, onCheckIn }: StreakC
                     ))}
                   </>
                 )}
-              </motion.div>
+              </m.div>
 
               {intensity >= 4 && (
-                <motion.div
+                <m.div
                   className="absolute -top-1 -right-1"
                   animate={{ rotate: [0, 180, 360], scale: [0.8, 1.2, 0.8] }}
                   transition={{ duration: 2, repeat: Infinity }}
                 >
                   <Sparkles className="w-5 h-5" style={{ color: flameColors.secondary }} />
-                </motion.div>
+                </m.div>
               )}
             </div>
 
             {/* Streak number and label */}
             <div className="flex-1">
               <div className="flex items-baseline gap-2">
-                <motion.span
+                <m.span
                   className="text-4xl font-bold text-text-primary"
                   key={streakDays}
                   initial={{ scale: 1.3, color: flameColors.primary }}
@@ -114,22 +114,22 @@ export function StreakCounter({ streakDays, lastActiveDate, onCheckIn }: StreakC
                   transition={{ duration: 0.3 }}
                 >
                   {streakDays}
-                </motion.span>
+                </m.span>
                 <span className="text-md text-text-secondary">{streakDays === 1 ? 'jour' : 'jours'}</span>
               </div>
               <p className="text-base text-text-tertiary">Série en cours</p>
 
               {currentXPReward > 0 && (
-                <motion.div initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} className="flex items-center gap-1 mt-1">
+                <m.div initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} className="flex items-center gap-1 mt-1">
                   <Zap className="w-3 h-3" style={{ color: flameColors.primary }} />
                   <span className="text-sm font-medium" style={{ color: flameColors.primary }}>+{currentXPReward} XP aujourd'hui !</span>
-                </motion.div>
+                </m.div>
               )}
             </div>
 
             {/* Check-in button */}
             {onCheckIn && (
-              <motion.button
+              <m.button
                 onClick={onCheckIn}
                 disabled={hasCheckedInToday}
                 className={`px-4 py-2.5 rounded-xl font-medium text-base transition-interactive ${
@@ -146,7 +146,7 @@ export function StreakCounter({ streakDays, lastActiveDate, onCheckIn }: StreakC
                 ) : (
                   <span className="flex items-center gap-1.5"><Flame className="w-4 h-4" />Pointer</span>
                 )}
-              </motion.button>
+              </m.button>
             )}
           </div>
 
@@ -163,7 +163,7 @@ export function StreakCounter({ streakDays, lastActiveDate, onCheckIn }: StreakC
               </div>
             </div>
             <div className="relative h-2 bg-border-subtle rounded-full overflow-hidden">
-              <motion.div
+              <m.div
                 className="absolute h-full rounded-full"
                 style={{ background: `linear-gradient(90deg, ${flameColors.primary}, ${flameColors.secondary})` }}
                 initial={{ width: 0 }}
@@ -180,18 +180,18 @@ export function StreakCounter({ streakDays, lastActiveDate, onCheckIn }: StreakC
 
           {/* Streak tips for low streaks */}
           {streakDays < 7 && (
-            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="mt-4 p-3 rounded-xl bg-primary-hover/[0.08] border border-primary-hover/15">
+            <m.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="mt-4 p-3 rounded-xl bg-primary-hover/[0.08] border border-primary-hover/15">
               <p className="text-sm text-primary-hover">
                 {streakDays === 0
                   ? "Lance ta série aujourd'hui ! Pointe chaque jour pour gagner des XP."
                   : `Plus que ${7 - streakDays} jours pour ton premier objectif ! Continue comme ça !`}
               </p>
-            </motion.div>
+            </m.div>
           )}
 
           {/* Legendary status for 100+ */}
           {streakDays >= 100 && (
-            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="mt-4 p-3 rounded-xl bg-gradient-to-r from-purple/15 to-pink/15 border border-purple/25">
+            <m.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="mt-4 p-3 rounded-xl bg-gradient-to-r from-purple/15 to-pink/15 border border-purple/25">
               <div className="flex items-center gap-2">
                 <span className="text-lg">👑</span>
                 <div>
@@ -199,7 +199,7 @@ export function StreakCounter({ streakDays, lastActiveDate, onCheckIn }: StreakC
                   <p className="text-sm text-purple">Tu as atteint une série de 100+ jours. Tu es inarrêtable !</p>
                 </div>
               </div>
-            </motion.div>
+            </m.div>
           )}
         </div>
       </Card>

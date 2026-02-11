@@ -1,5 +1,5 @@
 import { memo } from 'react'
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import { Users, ChevronRight } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { Card, SquadCardSkeleton } from '../ui'
@@ -47,21 +47,21 @@ export const HomeSquadsSection = memo(function HomeSquadsSection({
             Mes squads
           </h2>
           <Link to="/squads">
-            <motion.button
+            <m.button
               className="text-sm text-primary font-medium flex items-center gap-1"
               whileHover={{ x: 2 }}
               transition={{ duration: 0.4, ease: 'easeOut' }}
             >
               Gérer
               <ChevronRight className="w-3.5 h-3.5" />
-            </motion.button>
+            </m.button>
           </Link>
         </div>
         <ul className="space-y-2 lg:grid lg:grid-cols-2 xl:grid-cols-3 lg:gap-4 lg:space-y-0 list-none">
           {squads.slice(0, 6).map((squad, index) => (
             <li key={squad.id}>
               <Link to={`/squad/${squad.id}`}>
-                <motion.div
+                <m.div
                   whileHover={{ y: -2, scale: 1.01 }}
                   whileTap={{ scale: 0.99 }}
                   initial={{ opacity: 0, x: -10 }}
@@ -83,7 +83,7 @@ export const HomeSquadsSection = memo(function HomeSquadsSection({
                       <ChevronRight className="w-4 h-4 text-text-quaternary" />
                     </div>
                   </Card>
-                </motion.div>
+                </m.div>
               </Link>
             </li>
           ))}
@@ -94,19 +94,19 @@ export const HomeSquadsSection = memo(function HomeSquadsSection({
 
   // Empty state
   return (
-    <motion.div
+    <m.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.2, duration: 0.4, ease: 'easeOut' }}
     >
       <Card className="p-8 text-center bg-gradient-to-br from-primary/5 to-transparent border-dashed">
-        <motion.div
+        <m.div
           className="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary/15 to-purple/8 flex items-center justify-center mx-auto mb-4"
           animate={{ rotate: [0, 3, -3, 0] }}
           transition={{ duration: 4, repeat: 2 }}
         >
           <Users className="w-7 h-7 text-primary" strokeWidth={1.5} />
-        </motion.div>
+        </m.div>
         <h3 className="text-lg font-semibold text-text-primary mb-2">
           Tes potes t'attendent !
         </h3>
@@ -114,15 +114,15 @@ export const HomeSquadsSection = memo(function HomeSquadsSection({
           Crée ta squad et finis-en avec les "on verra". Place à l'action !
         </p>
         <Link to="/squads">
-          <motion.button
+          <m.button
             className="inline-flex items-center gap-2 h-11 px-6 rounded-xl bg-primary text-white text-md font-semibold shadow-glow-primary-sm"
             whileHover={{ y: -2, scale: 1.02, boxShadow: 'var(--shadow-glow-primary-md)' }}
             {...springTap}
           >
             Créer ma squad
-          </motion.button>
+          </m.button>
         </Link>
       </Card>
-    </motion.div>
+    </m.div>
   )
 })

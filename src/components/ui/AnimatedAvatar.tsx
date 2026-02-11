@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import { memo } from 'react'
 
 export type AvatarStatus = 'online' | 'in-party' | 'in-session' | 'in-call' | 'busy' | 'dnd' | 'away' | 'offline'
@@ -56,7 +56,7 @@ export const AnimatedAvatar = memo(function AnimatedAvatar({
   const circumference = Math.PI * (config.ring - config.strokeWidth)
 
   return (
-    <motion.div
+    <m.div
       {...(layoutId ? { layoutId, layout: 'position' as const } : {})}
       className={`relative inline-flex items-center justify-center shrink-0 group ${className}`}
       style={{ width: config.ring, height: config.ring }}
@@ -73,7 +73,7 @@ export const AnimatedAvatar = memo(function AnimatedAvatar({
           fill="none"
           aria-hidden="true"
         >
-          <motion.circle
+          <m.circle
             cx={config.ring / 2}
             cy={config.ring / 2}
             r={(config.ring - config.strokeWidth) / 2}
@@ -137,6 +137,6 @@ export const AnimatedAvatar = memo(function AnimatedAvatar({
         />
       )}
       <span className="sr-only">{alt} ({status})</span>
-    </motion.div>
+    </m.div>
   )
 })

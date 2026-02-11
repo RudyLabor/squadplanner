@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { m, AnimatePresence } from 'framer-motion'
 import { useNavigationProgressStore } from '../../hooks/useNavigationProgress'
 import { useReducedMotion } from '../../hooks/useReducedMotion'
 
@@ -63,7 +63,7 @@ export function TopLoadingBar() {
   return (
     <AnimatePresence>
       {visible && (
-        <motion.div
+        <m.div
           initial={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.3 }}
@@ -82,7 +82,7 @@ export function TopLoadingBar() {
               boxShadow: '0 0 8px var(--color-primary)',
             }}
           />
-        </motion.div>
+        </m.div>
       )}
     </AnimatePresence>
   )

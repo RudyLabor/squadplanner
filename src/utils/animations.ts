@@ -9,7 +9,7 @@ import { motion as motionTokens } from './motionTokens'
 
 /**
  * Spring tap props - enhanced feel for buttons and interactive elements
- * Usage: <motion.button {...springTap}>
+ * Usage: <m.button {...springTap}>
  */
 export const springTap = {
   whileTap: { scale: 0.97 },
@@ -18,7 +18,7 @@ export const springTap = {
 
 /**
  * Scroll-triggered reveal animation with blur
- * Usage: <motion.div variants={scrollReveal} initial="hidden" whileInView="visible" viewport={{ once: true }}>
+ * Usage: <m.div variants={scrollReveal} initial="hidden" whileInView="visible" viewport={{ once: true }}>
  */
 export const scrollReveal: Variants = {
   hidden: { opacity: 0, y: 30, filter: 'blur(10px)' },

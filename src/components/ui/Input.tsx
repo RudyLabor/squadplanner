@@ -1,5 +1,5 @@
 import { forwardRef, useState, useRef, useEffect, useId, type InputHTMLAttributes, type TextareaHTMLAttributes, type ReactNode } from 'react'
-import { motion, useAnimationControls } from 'framer-motion'
+import { m, useAnimationControls } from 'framer-motion'
 import { Eye, EyeOff, X } from 'lucide-react'
 
 type BaseInputProps = {
@@ -104,7 +104,7 @@ export const Input = forwardRef<HTMLInputElement | HTMLTextAreaElement, InputPro
             {label}
           </label>
         )}
-        <motion.div className="relative" animate={shakeControls}>
+        <m.div className="relative" animate={shakeControls}>
           {hasLeftElement && (
             <div className={`absolute left-4 ${isMultiline ? 'top-3' : 'top-1/2 -translate-y-1/2'} flex items-center gap-1.5 text-text-quaternary`} aria-hidden="true">
               {icon}
@@ -165,7 +165,7 @@ export const Input = forwardRef<HTMLInputElement | HTMLTextAreaElement, InputPro
               )}
             </div>
           )}
-        </motion.div>
+        </m.div>
         <div className="flex items-center justify-between gap-2">
           <div>
             {error && (

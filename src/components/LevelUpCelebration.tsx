@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { m, AnimatePresence } from 'framer-motion'
 import { Star, Sparkles, Trophy } from 'lucide-react'
 import { celebrateLevelUp } from '../utils/celebrations'
 import { LEVEL_CONFIG, getLevelInfo } from './XPBar'
@@ -49,7 +49,7 @@ export function LevelUpCelebration({
   return (
     <AnimatePresence>
       {isVisible && (
-        <motion.div
+        <m.div
           className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-sm cursor-pointer"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -61,7 +61,7 @@ export function LevelUpCelebration({
           aria-label={`Niveau ${newLevel} atteint : ${currentLevel.title}`}
         >
           {/* Radial glow background */}
-          <motion.div
+          <m.div
             className="absolute inset-0"
             style={{
               background: `radial-gradient(circle at center, ${currentLevel.color}30 0%, transparent 70%)`
@@ -74,7 +74,7 @@ export function LevelUpCelebration({
           />
 
           {/* Main content container */}
-          <motion.div
+          <m.div
             className="relative flex flex-col items-center"
             initial={{ scale: 0, rotate: -180 }}
             animate={{ scale: 1, rotate: 0 }}
@@ -87,7 +87,7 @@ export function LevelUpCelebration({
           >
             {/* Floating stars background */}
             {[...Array(6)].map((_, i) => (
-              <motion.div
+              <m.div
                 key={i}
                 className="absolute"
                 style={{
@@ -109,11 +109,11 @@ export function LevelUpCelebration({
                   className="w-6 h-6 fill-current"
                   style={{ color: currentLevel.color }}
                 />
-              </motion.div>
+              </m.div>
             ))}
 
             {/* "LEVEL UP" text */}
-            <motion.div
+            <m.div
               className="text-md font-bold uppercase tracking-[0.3em] mb-4"
               style={{ color: currentLevel.color }}
               initial={{ y: -50, opacity: 0 }}
@@ -125,10 +125,10 @@ export function LevelUpCelebration({
                 LEVEL UP
                 <Sparkles className="w-5 h-5" />
               </span>
-            </motion.div>
+            </m.div>
 
             {/* Big level number */}
-            <motion.div
+            <m.div
               className="relative mb-4"
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
@@ -140,7 +140,7 @@ export function LevelUpCelebration({
               }}
             >
               {/* Glow ring */}
-              <motion.div
+              <m.div
                 className="absolute inset-0 rounded-full"
                 style={{
                   boxShadow: `0 0 60px ${currentLevel.color}80, 0 0 100px ${currentLevel.color}50`
@@ -163,7 +163,7 @@ export function LevelUpCelebration({
                   border: `3px solid ${currentLevel.color}`
                 }}
               >
-                <motion.span
+                <m.span
                   className="text-6xl font-extrabold"
                   style={{ color: currentLevel.color }}
                   animate={{
@@ -176,12 +176,12 @@ export function LevelUpCelebration({
                   transition={{ duration: 1, repeat: Infinity }}
                 >
                   {newLevel}
-                </motion.span>
+                </m.span>
               </div>
 
               {/* Trophy icon for high levels */}
               {newLevel >= 5 && (
-                <motion.div
+                <m.div
                   className="absolute -top-4 -right-4 w-10 h-10 rounded-full flex items-center justify-center"
                   style={{
                     backgroundColor: currentLevel.color,
@@ -191,23 +191,23 @@ export function LevelUpCelebration({
                   transition={{ duration: 0.5, repeat: Infinity, repeatDelay: 1 }}
                 >
                   <Trophy className="w-5 h-5 text-white" />
-                </motion.div>
+                </m.div>
               )}
-            </motion.div>
+            </m.div>
 
             {/* New title reveal */}
-            <motion.div
+            <m.div
               className="text-center"
               initial={{ y: 30, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.6 }}
             >
-              <motion.div
+              <m.div
                 className="text-sm text-text-secondary uppercase tracking-wide mb-2"
               >
                 New Rank Achieved
-              </motion.div>
-              <motion.h2
+              </m.div>
+              <m.h2
                 className="text-3xl font-extrabold mb-2"
                 style={{
                   color: currentLevel.color,
@@ -224,10 +224,10 @@ export function LevelUpCelebration({
                 transition={{ duration: 1.5, repeat: Infinity }}
               >
                 {currentLevel.title}
-              </motion.h2>
+              </m.h2>
 
               {/* Subtitle based on level */}
-              <motion.p
+              <m.p
                 className="text-md text-text-tertiary max-w-[250px]"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -241,20 +241,20 @@ export function LevelUpCelebration({
                       ? "You're becoming a force to be reckoned with!"
                       : "Keep climbing the ranks!"
                 }
-              </motion.p>
-            </motion.div>
+              </m.p>
+            </m.div>
 
             {/* Tap to continue hint */}
-            <motion.div
+            <m.div
               className="absolute -bottom-16 text-sm text-text-tertiary"
               initial={{ opacity: 0 }}
               animate={{ opacity: [0, 1, 0] }}
               transition={{ duration: 2, repeat: Infinity, delay: 1.5 }}
             >
               Tap anywhere to continue
-            </motion.div>
-          </motion.div>
-        </motion.div>
+            </m.div>
+          </m.div>
+        </m.div>
       )}
     </AnimatePresence>
   )

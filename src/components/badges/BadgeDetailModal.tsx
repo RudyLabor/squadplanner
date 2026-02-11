@@ -1,4 +1,4 @@
-import { motion, AnimatePresence } from 'framer-motion'
+import { m, AnimatePresence } from 'framer-motion'
 import { BADGE_CONFIGS, formatSeason, type SeasonalBadge } from './badgeConfig'
 
 interface BadgeDetailModalProps {
@@ -11,14 +11,14 @@ export function BadgeDetailModal({ badge, onClose }: BadgeDetailModalProps) {
     <AnimatePresence>
       {badge && (
         <>
-          <motion.div
+          <m.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50"
             onClick={onClose}
           />
-          <motion.div
+          <m.div
             initial={{ opacity: 0, scale: 0.9, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
@@ -30,14 +30,14 @@ export function BadgeDetailModal({ badge, onClose }: BadgeDetailModalProps) {
               const Icon = config.icon
               return (
                 <div className="bg-bg-elevated border border-border-hover rounded-2xl p-6 text-center">
-                  <motion.div
+                  <m.div
                     className="w-24 h-24 mx-auto rounded-2xl flex items-center justify-center mb-4"
                     style={{ backgroundColor: config.bgColor, boxShadow: `0 0 40px ${config.glowColor}` }}
                     animate={{ boxShadow: [`0 0 40px ${config.glowColor}`, `0 0 60px ${config.glowColor}`, `0 0 40px ${config.glowColor}`] }}
                     transition={{ duration: 2, repeat: Infinity }}
                   >
                     <Icon className="w-12 h-12" style={{ color: config.color }} />
-                  </motion.div>
+                  </m.div>
 
                   <h3 className="text-xl font-bold text-text-primary mb-1">{config.label}</h3>
                   <p className="text-text-secondary text-sm mb-4">{config.description}</p>
@@ -61,18 +61,18 @@ export function BadgeDetailModal({ badge, onClose }: BadgeDetailModalProps) {
                     </div>
                   </div>
 
-                  <motion.button
+                  <m.button
                     onClick={onClose}
                     className="mt-6 w-full py-3 rounded-xl bg-border-subtle text-text-primary font-medium hover:bg-overlay-light transition-colors"
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                   >
                     Fermer
-                  </motion.button>
+                  </m.button>
                 </div>
               )
             })()}
-          </motion.div>
+          </m.div>
         </>
       )}
     </AnimatePresence>

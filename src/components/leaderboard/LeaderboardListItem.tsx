@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import { Flame, User, Shield, Zap } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { getOptimizedAvatarUrl } from '../../utils/avatarUrl'
@@ -15,7 +15,7 @@ export function LeaderboardListItem({ entry, isCurrentUser, index }: Leaderboard
 
   return (
     <Link to={`/profile/${entry.user_id}`}>
-      <motion.div
+      <m.div
         initial={{ opacity: 0, x: -20 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.3, delay: 0.6 + index * 0.08, ease: 'easeOut' }}
@@ -61,7 +61,7 @@ export function LeaderboardListItem({ entry, isCurrentUser, index }: Leaderboard
           </div>
         )}
       </div>
-    </motion.div>
+    </m.div>
     </Link>
   )
 }

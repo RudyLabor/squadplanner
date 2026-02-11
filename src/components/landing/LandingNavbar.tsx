@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react'
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import { ArrowRight, Menu, X as CloseIcon } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { SquadPlannerLogo } from '../SquadPlannerLogo'
@@ -93,7 +93,7 @@ export function LandingNavbar({ isLoggedIn }: LandingNavbarProps) {
 
       {/* Mobile menu overlay */}
       {mobileMenuOpen && (
-        <motion.div
+        <m.div
           initial={{ x: '100%' }}
           animate={{ x: 0 }}
           exit={{ x: '100%' }}
@@ -121,7 +121,7 @@ export function LandingNavbar({ isLoggedIn }: LandingNavbarProps) {
               Créer ma squad gratuitement
             </Link>
           </div>
-        </motion.div>
+        </m.div>
       )}
     </>
   )

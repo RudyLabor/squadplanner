@@ -1,5 +1,5 @@
 import { type ReactNode, useState, useRef, useEffect, useCallback, createContext, useContext } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { m, AnimatePresence } from 'framer-motion'
 import { createPortal } from 'react-dom'
 
 interface DropdownMenuProps {
@@ -121,7 +121,7 @@ export function DropdownMenu({ trigger, children, align = 'start', side = 'botto
         createPortal(
           <AnimatePresence>
             {open && (
-              <motion.div
+              <m.div
                 ref={menuRef}
                 initial={{ opacity: 0, scale: 0.95, y: side === 'bottom' ? -4 : 4 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -133,7 +133,7 @@ export function DropdownMenu({ trigger, children, align = 'start', side = 'botto
                 className="min-w-[200px] py-1.5 bg-bg-elevated border border-border-hover rounded-xl shadow-dropdown"
               >
                 <ItemRefCollector itemRefs={itemRefs}>{children}</ItemRefCollector>
-              </motion.div>
+              </m.div>
             )}
           </AnimatePresence>,
           document.body

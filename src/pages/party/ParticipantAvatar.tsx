@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import { MicOff } from 'lucide-react'
 
 export function ParticipantAvatar({
@@ -10,10 +10,10 @@ export function ParticipantAvatar({
   const textSizes = { sm: 'text-sm', md: 'text-lg', lg: 'text-xl' }
 
   return (
-    <motion.div className="flex flex-col items-center gap-2" animate={isSpeaking ? { scale: [1, 1.02, 1] } : {}} transition={{ duration: 0.3, repeat: isSpeaking ? 3 : 0 }}>
+    <m.div className="flex flex-col items-center gap-2" animate={isSpeaking ? { scale: [1, 1.02, 1] } : {}} transition={{ duration: 0.3, repeat: isSpeaking ? 3 : 0 }}>
       <div className="relative">
         {isSpeaking && (
-          <motion.div className={`absolute inset-0 ${sizeClasses[size]} rounded-full bg-success`} animate={{ scale: [1, 1.2, 1], opacity: [0.25, 0, 0.25] }} transition={{ duration: 1, repeat: 2 }} />
+          <m.div className={`absolute inset-0 ${sizeClasses[size]} rounded-full bg-success`} animate={{ scale: [1, 1.2, 1], opacity: [0.25, 0, 0.25] }} transition={{ duration: 1, repeat: 2 }} />
         )}
         <div className={`relative ${sizeClasses[size]} rounded-full flex items-center justify-center ${isSpeaking ? 'bg-success ring-2 ring-success/25 shadow-glow-success' : isLocal ? 'bg-primary' : 'bg-primary/30'} transition-interactive`}>
           <span className={`${textSizes[size]} font-bold text-white`}>{username.charAt(0).toUpperCase()}</span>
@@ -25,6 +25,6 @@ export function ParticipantAvatar({
         </div>
       </div>
       <span className={`text-xs font-medium ${isLocal ? 'text-primary' : 'text-text-secondary'}`}>{isLocal ? 'Toi' : username}</span>
-    </motion.div>
+    </m.div>
   )
 }

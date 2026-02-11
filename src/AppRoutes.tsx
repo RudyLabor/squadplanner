@@ -1,9 +1,7 @@
 import { lazy, Suspense, memo, useState, useEffect } from 'react'
-import { Routes, Route, Navigate, useLocation, useSearchParams } from 'react-router-dom'
-import { AnimatePresence, LayoutGroup, motion } from 'framer-motion'
+import { Routes, Route, Navigate, useSearchParams } from 'react-router-dom'
 import { AppLayout } from './components/layout'
 import { useAuthStore, useSquadsStore } from './hooks'
-import { pageTransitionVariants, pageTransitionConfig } from './components/PageTransition'
 import { ErrorBoundary } from './components/ErrorBoundary'
 
 // Lazy load all pages for code splitting
@@ -86,50 +84,35 @@ export const ProtectedRoute = memo(function ProtectedRoute({
 })
 
 export function AppRoutes() {
-  const location = useLocation()
-
   return (
     <AppLayout>
-      <LayoutGroup>
-      <AnimatePresence mode="popLayout">
-        <motion.div
-          key={location.pathname}
-          initial={pageTransitionVariants.slide.initial}
-          animate={pageTransitionVariants.slide.animate}
-          exit={{ ...pageTransitionVariants.slide.exit, position: 'absolute' as const, top: 0, left: 0, right: 0 }}
-          transition={pageTransitionConfig}
-          className="h-full"
-        >
-          <ErrorBoundary>
-            <Suspense fallback={<PageSkeleton />}>
-              <Routes location={location}>
-                <Route path="/" element={<LandingOrHome />} />
-                <Route path="/home" element={<ProtectedRoute><Home /></ProtectedRoute>} />
-                <Route path="/auth" element={<Auth />} />
-                <Route path="/onboarding" element={<ProtectedRoute skipOnboardingCheck><Onboarding /></ProtectedRoute>} />
-                <Route path="/squads" element={<ProtectedRoute><Squads /></ProtectedRoute>} />
-                <Route path="/squad/:id" element={<ProtectedRoute><SquadDetail /></ProtectedRoute>} />
-                <Route path="/party" element={<ProtectedRoute><Party /></ProtectedRoute>} />
-                <Route path="/sessions" element={<ProtectedRoute><Sessions /></ProtectedRoute>} />
-                <Route path="/session/:id" element={<ProtectedRoute><SessionDetail /></ProtectedRoute>} />
-                <Route path="/messages" element={<ProtectedRoute><Messages /></ProtectedRoute>} />
-                <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
-                <Route path="/call-history" element={<ProtectedRoute><CallHistory /></ProtectedRoute>} />
-                <Route path="/premium" element={<Premium />} />
-                <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
-                <Route path="/help" element={<Help />} />
-                <Route path="/legal" element={<Legal />} />
-                <Route path="/discover" element={<ProtectedRoute><Discover /></ProtectedRoute>} />
-                <Route path="/u/:username" element={<ProtectedRoute><PublicProfile /></ProtectedRoute>} />
-                <Route path="/join/:code" element={<JoinSquad />} />
-                <Route path="/maintenance" element={<Maintenance />} />
-                <Route path="*" element={<NotFound />} />
-              </Routes>
-            </Suspense>
-          </ErrorBoundary>
-        </motion.div>
-      </AnimatePresence>
-      </LayoutGroup>
+      <ErrorBoundary>
+        <Suspense fallback={<PageSkeleton />}>
+          <Routes>
+            <Route path="/" element={<LandingOrHome />} />
+            <Route path="/home" element={<ProtectedRoute><Home /></ProtectedRoute>} />
+            <Route path="/auth" element={<Auth />} />
+            <Route path="/onboarding" element={<ProtectedRoute skipOnboardingCheck><Onboarding /></ProtectedRoute>} />
+            <Route path="/squads" element={<ProtectedRoute><Squads /></ProtectedRoute>} />
+            <Route path="/squad/:id" element={<ProtectedRoute><SquadDetail /></ProtectedRoute>} />
+            <Route path="/party" element={<ProtectedRoute><Party /></ProtectedRoute>} />
+            <Route path="/sessions" element={<ProtectedRoute><Sessions /></ProtectedRoute>} />
+            <Route path="/session/:id" element={<ProtectedRoute><SessionDetail /></ProtectedRoute>} />
+            <Route path="/messages" element={<ProtectedRoute><Messages /></ProtectedRoute>} />
+            <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+            <Route path="/call-history" element={<ProtectedRoute><CallHistory /></ProtectedRoute>} />
+            <Route path="/premium" element={<Premium />} />
+            <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
+            <Route path="/help" element={<Help />} />
+            <Route path="/legal" element={<Legal />} />
+            <Route path="/discover" element={<ProtectedRoute><Discover /></ProtectedRoute>} />
+            <Route path="/u/:username" element={<ProtectedRoute><PublicProfile /></ProtectedRoute>} />
+            <Route path="/join/:code" element={<JoinSquad />} />
+            <Route path="/maintenance" element={<Maintenance />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </Suspense>
+      </ErrorBoundary>
     </AppLayout>
   )
 }

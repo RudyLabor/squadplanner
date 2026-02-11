@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import { Star, Zap } from 'lucide-react'
 import CountUp from 'react-countup'
 import { HelpTooltip } from './ui'
@@ -72,7 +72,7 @@ export function XPBar({ currentXP, level, showTitle = true, compact = false, cla
           aria-valuemax={isMaxLevel ? Math.floor(xpInLevel) : xpNeeded}
           aria-label={`Niveau ${level} - ${currentLevel.title} : ${isMaxLevel ? 'Niveau maximum atteint' : `${Math.floor(xpInLevel)} XP sur ${xpNeeded}`}`}
         >
-          <motion.div
+          <m.div
             className="h-full rounded-full"
             style={{
               background: isMaxLevel
@@ -98,7 +98,7 @@ export function XPBar({ currentXP, level, showTitle = true, compact = false, cla
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-3">
           {/* Level badge with glow */}
-          <motion.div
+          <m.div
             className="relative w-12 h-12 rounded-xl flex items-center justify-center"
             style={{
               backgroundColor: `color-mix(in srgb, ${currentLevel.color} 12%, transparent)`,
@@ -121,20 +121,20 @@ export function XPBar({ currentXP, level, showTitle = true, compact = false, cla
             </span>
             {/* Sparkle effect for high levels */}
             {level >= 7 && (
-              <motion.div
+              <m.div
                 className="absolute -top-1 -right-1"
                 animate={{ rotate: [0, 180, 360], scale: [1, 1.2, 1] }}
                 transition={{ duration: 3, repeat: Infinity }}
               >
                 <Star className="w-4 h-4 fill-current" style={{ color: currentLevel.color }} />
-              </motion.div>
+              </m.div>
             )}
-          </motion.div>
+          </m.div>
 
           {/* Title and XP */}
           <div>
             {showTitle && (
-              <motion.div
+              <m.div
                 className="text-lg font-bold mb-0.5"
                 style={{ color: currentLevel.color }}
                 initial={{ opacity: 0, x: -10 }}
@@ -142,7 +142,7 @@ export function XPBar({ currentXP, level, showTitle = true, compact = false, cla
                 transition={{ delay: 0.2 }}
               >
                 {currentLevel.title}
-              </motion.div>
+              </m.div>
             )}
             <HelpTooltip content="Gagne de l'XP en participant aux sessions, en confirmant ta présence et en étant fiable." position="bottom">
               <div className="flex items-center gap-1.5 text-base text-text-secondary">
@@ -166,7 +166,7 @@ export function XPBar({ currentXP, level, showTitle = true, compact = false, cla
         )}
 
         {isMaxLevel && (
-          <motion.div
+          <m.div
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-full"
             style={{
               backgroundColor: `color-mix(in srgb, ${currentLevel.color} 12%, transparent)`,
@@ -177,7 +177,7 @@ export function XPBar({ currentXP, level, showTitle = true, compact = false, cla
           >
             <Star className="w-4 h-4 fill-current" />
             <span className="text-sm font-bold">MAX LEVEL</span>
-          </motion.div>
+          </m.div>
         )}
       </div>
 
@@ -193,7 +193,7 @@ export function XPBar({ currentXP, level, showTitle = true, compact = false, cla
           aria-label={`Niveau ${level} - ${currentLevel.title} : ${isMaxLevel ? 'Niveau maximum atteint' : `${Math.floor(xpInLevel)} XP sur ${xpNeeded}`}`}
         >
           {/* Animated fill */}
-          <motion.div
+          <m.div
             className="h-full rounded-full relative overflow-hidden"
             style={{
               background: isMaxLevel
@@ -206,7 +206,7 @@ export function XPBar({ currentXP, level, showTitle = true, compact = false, cla
             transition={{ duration: 1.2, ease: 'easeOut' }}
           >
             {/* Shine effect */}
-            <motion.div
+            <m.div
               className="absolute inset-0 w-full"
               style={{
                 background: 'linear-gradient(90deg, transparent 0%, var(--color-overlay-shine) 50%, transparent 100%)',
@@ -214,7 +214,7 @@ export function XPBar({ currentXP, level, showTitle = true, compact = false, cla
               animate={{ x: ['-100%', '200%'] }}
               transition={{ duration: 2, repeat: Infinity, repeatDelay: 1 }}
             />
-          </motion.div>
+          </m.div>
         </div>
 
         {/* XP text below bar */}

@@ -4,7 +4,7 @@
  * Shows clear feedback when the user is offline
  * and when they reconnect.
  */
-import { motion, AnimatePresence } from 'framer-motion'
+import { m, AnimatePresence } from 'framer-motion'
 import { WifiOff, Wifi, X } from 'lucide-react'
 import { useOfflineBanner } from '../hooks/useOffline'
 
@@ -21,7 +21,7 @@ export function OfflineBanner() {
       {/* Offline Banner */}
       <AnimatePresence>
         {showOfflineBanner && (
-          <motion.div
+          <m.div
             initial={{ y: -100, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: -100, opacity: 0 }}
@@ -52,14 +52,14 @@ export function OfflineBanner() {
                 </button>
               </div>
             </div>
-          </motion.div>
+          </m.div>
         )}
       </AnimatePresence>
 
       {/* Reconnected Banner */}
       <AnimatePresence>
         {showReconnectedBanner && (
-          <motion.div
+          <m.div
             initial={{ y: -100, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: -100, opacity: 0 }}
@@ -87,7 +87,7 @@ export function OfflineBanner() {
                 </button>
               </div>
             </div>
-          </motion.div>
+          </m.div>
         )}
       </AnimatePresence>
     </>

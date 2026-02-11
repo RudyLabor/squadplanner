@@ -1,4 +1,4 @@
-import { motion, AnimatePresence } from 'framer-motion'
+import { m, AnimatePresence } from 'framer-motion'
 import { CheckCircle2, AlertCircle } from 'lucide-react'
 
 export function CallToast({ message, isVisible, variant = 'success' }: {
@@ -25,7 +25,7 @@ export function CallToast({ message, isVisible, variant = 'success' }: {
   return (
     <AnimatePresence>
       {isVisible && (
-        <motion.div
+        <m.div
           className="absolute top-4 left-1/2 -translate-x-1/2 z-[110]"
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -35,7 +35,7 @@ export function CallToast({ message, isVisible, variant = 'success' }: {
             <Icon className="w-5 h-5" />
             <span className="text-md font-medium">{message}</span>
           </div>
-        </motion.div>
+        </m.div>
       )}
     </AnimatePresence>
   )

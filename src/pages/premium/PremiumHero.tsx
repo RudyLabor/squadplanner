@@ -1,5 +1,5 @@
 import { useRef, useEffect, useState } from 'react'
-import { motion, useInView } from 'framer-motion'
+import { m, useInView } from 'framer-motion'
 import { Crown, Check, Loader2, Gift } from 'lucide-react'
 import Confetti from '../../components/LazyConfetti'
 import { Button } from '../../components/ui'
@@ -32,9 +32,9 @@ export function PremiumHero({ hasPremium, isLoading, onManageSubscription }: Pre
       )}
       <div ref={heroRef} className="relative overflow-hidden bg-gradient-to-br from-primary/20 via-purple/10 to-bg-elevated dark:from-surface-dark dark:via-bg-surface dark:to-bg-base pt-8 pb-16">
         <div className="absolute inset-0 overflow-hidden">
-          <motion.div className="absolute -top-1/2 -left-1/2 w-full h-full rounded-full bg-gradient-to-r from-primary/10 to-warning/05 blur-3xl"
+          <m.div className="absolute -top-1/2 -left-1/2 w-full h-full rounded-full bg-gradient-to-r from-primary/10 to-warning/05 blur-3xl"
             animate={{ x: [0, 80, 0], y: [0, 40, 0] }} transition={{ duration: 3, repeat: 2, ease: "easeInOut" }} />
-          <motion.div className="absolute -bottom-1/2 -right-1/2 w-full h-full rounded-full bg-gradient-to-l from-purple/10 to-success/05 blur-3xl"
+          <m.div className="absolute -bottom-1/2 -right-1/2 w-full h-full rounded-full bg-gradient-to-l from-purple/10 to-success/05 blur-3xl"
             animate={{ x: [0, -80, 0], y: [0, -40, 0] }} transition={{ duration: 3, repeat: 2, ease: "easeInOut", delay: 0.5 }} />
         </div>
         <div className="relative px-4 md:px-6 max-w-4xl mx-auto">

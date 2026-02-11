@@ -1,5 +1,5 @@
 import { useMemo, useRef, useEffect, useState, useCallback } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { m, AnimatePresence } from 'framer-motion'
 import {
   Phone, PhoneIncoming, PhoneMissed,
   ArrowUpRight, ArrowUp, User, UserPlus, X, Loader2
@@ -130,7 +130,7 @@ export function CallHistoryList({ filteredCalls, filter, callStatus, onCall }: C
 
   if (filteredCalls.length === 0) {
     return (
-      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
+      <m.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
         className="flex flex-col items-center justify-center py-20">
         <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-primary-10 to-transparent flex items-center justify-center mb-5">
           <Phone className="w-10 h-10 text-primary" />
@@ -149,7 +149,7 @@ export function CallHistoryList({ filteredCalls, filter, callStatus, onCall }: C
             <Button variant="secondary"><UserPlus className="w-4 h-4" />Voir mes contacts</Button>
           </Link>
         )}
-      </motion.div>
+      </m.div>
     )
   }
 
@@ -165,7 +165,7 @@ export function CallHistoryList({ filteredCalls, filter, callStatus, onCall }: C
               </div>
               <div className="space-y-2">
                 {group.calls.map((call, index) => (
-                  <motion.div key={call.id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
+                  <m.div key={call.id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, scale: 0.95 }} transition={{ delay: index * 0.03 }}>
                     <Card className="p-4 bg-bg-elevated hover:bg-overlay-light transition-colors" hoverable>
                       <div className="flex items-center gap-3">
@@ -216,7 +216,7 @@ export function CallHistoryList({ filteredCalls, filter, callStatus, onCall }: C
                         </Tooltip>
                       </div>
                     </Card>
-                  </motion.div>
+                  </m.div>
                 ))}
               </div>
             </div>
@@ -227,25 +227,25 @@ export function CallHistoryList({ filteredCalls, filter, callStatus, onCall }: C
       {totalCalls > 0 && (
         <div ref={loadMoreRef} className="flex items-center justify-center py-6">
           {hasMore ? (
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex items-center gap-2 text-text-tertiary">
+            <m.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex items-center gap-2 text-text-tertiary">
               <Loader2 className="w-5 h-5 animate-spin" /><span className="text-sm">Chargement...</span>
-            </motion.div>
+            </m.div>
           ) : (
-            <motion.p initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
-              className="text-sm text-text-tertiary text-center">Tu as vu tous tes appels</motion.p>
+            <m.p initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
+              className="text-sm text-text-tertiary text-center">Tu as vu tous tes appels</m.p>
           )}
         </div>
       )}
 
       <AnimatePresence>
         {showScrollTop && (
-          <motion.button initial={{ opacity: 0, scale: 0.8, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }}
+          <m.button initial={{ opacity: 0, scale: 0.8, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.8, y: 20 }} transition={{ type: 'spring', stiffness: 300, damping: 25 }}
             onClick={scrollToTop}
             className="fixed bottom-24 right-4 z-40 w-11 h-11 rounded-full bg-primary text-white shadow-lg shadow-primary/25 flex items-center justify-center hover:bg-primary-dark hover:scale-105 transition-interactive"
             aria-label="Remonter en haut">
             <ArrowUp className="w-5 h-5" />
-          </motion.button>
+          </m.button>
         )}
       </AnimatePresence>
     </>

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { m, AnimatePresence } from 'framer-motion'
 import { Loader2, Gamepad2, CheckCircle } from 'lucide-react'
 import { Link, useNavigate, useSearchParams, Navigate } from 'react-router-dom'
 import Confetti from '../components/LazyConfetti'
@@ -120,7 +120,7 @@ export default function Auth() {
       <main className="relative z-10 flex-1 flex items-center justify-center px-4 pb-12">
         <div className="w-full max-w-[400px]">
           <AnimatePresence mode="wait">
-            <motion.div key={mode} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
+            <m.div key={mode} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }} transition={{ duration: 0.2 }}>
               <div className="text-center mb-8">
                 <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-primary-10 mb-5">
@@ -159,12 +159,12 @@ export default function Auth() {
                   <div aria-live="polite" aria-atomic="true">
                     <AnimatePresence>
                       {error && (
-                        <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }}
+                        <m.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }}
                           exit={{ opacity: 0, height: 0 }} className="overflow-hidden">
                           <div className="p-3 rounded-xl bg-error-5 border border-error" role="alert">
                             <p className="text-error text-base">{error}</p>
                           </div>
-                        </motion.div>
+                        </m.div>
                       )}
                     </AnimatePresence>
                   </div>
@@ -209,7 +209,7 @@ export default function Auth() {
                   </p>
                 </div>
               )}
-            </motion.div>
+            </m.div>
           </AnimatePresence>
         </div>
       </main>

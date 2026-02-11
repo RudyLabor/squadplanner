@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { m, AnimatePresence } from 'framer-motion'
 import { Users, UserPlus, Calendar, Check, X, ChevronRight } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { Card } from './ui'
@@ -99,7 +99,7 @@ export function OnboardingChecklist({
 
   return (
     <AnimatePresence>
-      <motion.div
+      <m.div
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: -10 }}
@@ -114,13 +114,13 @@ export function OnboardingChecklist({
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center gap-2">
               {allComplete ? (
-                <motion.div
+                <m.div
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
                   className="w-6 h-6 rounded-full bg-success/15 flex items-center justify-center"
                 >
                   <Check className="w-4 h-4 text-success" />
-                </motion.div>
+                </m.div>
               ) : (
                 <div className="w-6 h-6 rounded-full bg-primary/15 flex items-center justify-center">
                   <span className="text-sm font-bold text-primary">{completedCount}/{totalSteps}</span>
@@ -141,7 +141,7 @@ export function OnboardingChecklist({
 
           {/* Progress bar */}
           <div className="h-1.5 bg-overlay-subtle rounded-full mb-4 overflow-hidden">
-            <motion.div
+            <m.div
               className={`h-full rounded-full ${allComplete ? 'bg-success' : 'bg-primary'}`}
               initial={{ width: 0 }}
               animate={{ width: `${progress}%` }}
@@ -203,16 +203,16 @@ export function OnboardingChecklist({
 
           {/* Celebration message when complete */}
           {allComplete && (
-            <motion.p
+            <m.p
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               className="text-base text-success text-center"
             >
               Ta squad t'attend. C'est parti !
-            </motion.p>
+            </m.p>
           )}
         </Card>
-      </motion.div>
+      </m.div>
     </AnimatePresence>
   )
 }

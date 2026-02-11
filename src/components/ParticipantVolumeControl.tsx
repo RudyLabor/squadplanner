@@ -1,5 +1,5 @@
 import { useState, useCallback, useEffect } from 'react'
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import { Volume, Volume1, Volume2, VolumeX } from 'lucide-react'
 import { Tooltip } from './ui/Tooltip'
 
@@ -102,7 +102,7 @@ export function ParticipantVolumeControl({
       <div className="flex items-center gap-2 min-w-[140px]">
         {/* Mute button */}
         <Tooltip content={isMuted ? 'Activer le son' : 'Couper le son'} position="top" delay={300}>
-          <motion.button
+          <m.button
             onClick={handleMuteToggle}
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
@@ -117,7 +117,7 @@ export function ParticipantVolumeControl({
             aria-label={isMuted ? 'Activer le son' : 'Couper le son'}
           >
             <VolumeIcon className="w-3.5 h-3.5" />
-          </motion.button>
+          </m.button>
         </Tooltip>
 
         {/* Compact slider */}
@@ -181,7 +181,7 @@ export function ParticipantVolumeControl({
       <div className="flex items-center gap-3">
         {/* Mute button */}
         <Tooltip content={isMuted ? 'Activer le son' : 'Couper le son'} position="top" delay={300}>
-          <motion.button
+          <m.button
             onClick={handleMuteToggle}
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
@@ -196,7 +196,7 @@ export function ParticipantVolumeControl({
             aria-label={isMuted ? 'Activer le son' : 'Couper le son'}
           >
             <VolumeIcon className="w-4 h-4" />
-          </motion.button>
+          </m.button>
         </Tooltip>
 
         {/* Slider container */}
@@ -204,7 +204,7 @@ export function ParticipantVolumeControl({
           {/* Track background */}
           <div className="h-2 rounded-full bg-overlay-light overflow-hidden">
             {/* Filled track */}
-            <motion.div
+            <m.div
               className="h-full rounded-full"
               initial={false}
               animate={{
@@ -222,7 +222,7 @@ export function ParticipantVolumeControl({
           />
 
           {/* Thumb indicator */}
-          <motion.div
+          <m.div
             className={`
               absolute top-1/2 w-4 h-4 rounded-full
               border-2 border-bg-base shadow-lg pointer-events-none

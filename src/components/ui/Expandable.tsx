@@ -1,5 +1,5 @@
 import { useState, useRef, type ReactNode } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { m, AnimatePresence } from 'framer-motion'
 import { ChevronDown } from 'lucide-react'
 
 interface ExpandableProps {
@@ -43,7 +43,7 @@ export function Expandable({
     <div className={className}>
       <AnimatePresence initial={false} mode="wait">
         {!isExpanded ? (
-          <motion.div
+          <m.div
             key="preview"
             initial={false}
             animate={{ opacity: 1 }}
@@ -64,9 +64,9 @@ export function Expandable({
             >
               {children}
             </div>
-          </motion.div>
+          </m.div>
         ) : (
-          <motion.div
+          <m.div
             key="expanded"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -76,7 +76,7 @@ export function Expandable({
             <div ref={contentRef}>
               {children}
             </div>
-          </motion.div>
+          </m.div>
         )}
       </AnimatePresence>
 
@@ -88,12 +88,12 @@ export function Expandable({
           className="flex items-center gap-1 mt-2 text-sm font-medium text-primary hover:text-primary-hover transition-colors focus-visible:outline-2 focus-visible:outline-primary"
         >
           <span>{isExpanded ? collapseLabel : expandLabel}</span>
-          <motion.div
+          <m.div
             animate={{ rotate: isExpanded ? 180 : 0 }}
             transition={{ duration: 0.2 }}
           >
             <ChevronDown className="w-3.5 h-3.5" />
-          </motion.div>
+          </m.div>
         </button>
       )}
     </div>

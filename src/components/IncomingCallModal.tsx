@@ -1,4 +1,4 @@
-import { motion, AnimatePresence } from 'framer-motion'
+import { m, AnimatePresence } from 'framer-motion'
 import { Phone, PhoneOff } from 'lucide-react'
 import { useVoiceCallStore } from '../hooks/useVoiceCall'
 import { useFocusTrap } from '../hooks/useFocusTrap'
@@ -40,7 +40,7 @@ export function IncomingCallModal() {
 
   return (
     <AnimatePresence>
-      <motion.div
+      <m.div
         ref={focusTrapRef}
         role="dialog"
         aria-modal="true"
@@ -58,7 +58,7 @@ export function IncomingCallModal() {
         {/* Main content */}
         <div className="flex-1 flex flex-col items-center justify-center px-6 relative">
           {/* Avatar with ring animation */}
-          <motion.div
+          <m.div
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ delay: 0.1 }}
@@ -67,7 +67,7 @@ export function IncomingCallModal() {
             {/* Animated rings for ringing state - reduced to 2 rings with limited repeats */}
             {status === 'ringing' && (
               <>
-                <motion.div
+                <m.div
                   className="absolute inset-[-20px] rounded-full border-2 border-success/30"
                   animate={{
                     scale: [1, 1.3, 1.3],
@@ -79,7 +79,7 @@ export function IncomingCallModal() {
                     ease: 'easeOut',
                   }}
                 />
-                <motion.div
+                <m.div
                   className="absolute inset-[-20px] rounded-full border-2 border-success/30"
                   animate={{
                     scale: [1, 1.3, 1.3],
@@ -96,7 +96,7 @@ export function IncomingCallModal() {
             )}
 
             {/* Shake animation for avatar - limited repeats */}
-            <motion.div
+            <m.div
               animate={status === 'ringing' ? {
                 rotate: [-2, 2, -2, 2, 0],
               } : {}}
@@ -118,16 +118,16 @@ export function IncomingCallModal() {
               ) : (
                 <span className="text-4xl font-bold text-primary">{initial}</span>
               )}
-            </motion.div>
+            </m.div>
 
             {/* Phone icon badge */}
             {status === 'ringing' && (
-              <motion.div
+              <m.div
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
                 className="absolute -bottom-2 -right-2 w-10 h-10 rounded-full bg-success flex items-center justify-center shadow-lg shadow-glow-success"
               >
-                <motion.div
+                <m.div
                   animate={{ rotate: [0, 12, -12, 12, -12, 0] }}
                   transition={{
                     duration: 0.5,
@@ -136,13 +136,13 @@ export function IncomingCallModal() {
                   }}
                 >
                   <Phone className="w-5 h-5 text-white" />
-                </motion.div>
-              </motion.div>
+                </m.div>
+              </m.div>
             )}
-          </motion.div>
+          </m.div>
 
           {/* Name */}
-          <motion.h2
+          <m.h2
             id="incoming-call-title"
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
@@ -150,10 +150,10 @@ export function IncomingCallModal() {
             className="text-2xl font-bold text-text-primary mb-2"
           >
             Appel de {caller.username}
-          </motion.h2>
+          </m.h2>
 
           {/* Status */}
-          <motion.p
+          <m.p
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.3 }}
@@ -162,12 +162,12 @@ export function IncomingCallModal() {
             }`}
           >
             {getStatusText()}
-          </motion.p>
+          </m.p>
         </div>
 
         {/* Controls */}
         {status === 'ringing' && (
-          <motion.div
+          <m.div
             initial={{ y: 50, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.4 }}
@@ -198,9 +198,9 @@ export function IncomingCallModal() {
                 <span className="text-base text-text-secondary" aria-hidden="true">Accepter</span>
               </div>
             </div>
-          </motion.div>
+          </m.div>
         )}
-      </motion.div>
+      </m.div>
     </AnimatePresence>
   )
 }

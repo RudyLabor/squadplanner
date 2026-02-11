@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { m, AnimatePresence } from 'framer-motion'
 import { Plus } from 'lucide-react'
 import { supabase } from '../lib/supabase'
 import { useAuthStore } from '../hooks/useAuth'
@@ -194,7 +194,7 @@ export function MessageReactions({
       {/* Existing reactions */}
       <AnimatePresence mode="popLayout">
         {groupedReactions.map(({ emoji, count, hasCurrentUser }) => (
-          <motion.button
+          <m.button
             key={emoji}
             initial={{ opacity: 0, scale: 0 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -215,7 +215,7 @@ export function MessageReactions({
             <span className={`text-xs font-medium ${hasCurrentUser ? 'text-success' : 'text-text-secondary'}`}>
               {count}
             </span>
-          </motion.button>
+          </m.button>
         ))}
       </AnimatePresence>
 
@@ -226,7 +226,7 @@ export function MessageReactions({
         onTouchEnd={handleTouchEnd}
         onTouchCancel={handleTouchEnd}
       >
-        <motion.button
+        <m.button
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           whileHover={{ scale: 1.1 }}
@@ -241,7 +241,7 @@ export function MessageReactions({
           aria-expanded={isPickerOpen}
         >
           <Plus className={`w-4 h-4 ${isPickerOpen ? 'text-success' : 'text-text-secondary'}`} />
-        </motion.button>
+        </m.button>
 
         {/* Reaction picker */}
         <ReactionPicker

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { motion, useMotionValue, useSpring } from 'framer-motion'
+import { m, useMotionValue, useSpring } from 'framer-motion'
 import { useReducedMotion } from '../../hooks/useReducedMotion'
 
 const TRAIL_COUNT = 5
@@ -62,7 +62,7 @@ export function CustomCursor() {
     >
       {/* Trail dots */}
       {trail.map((dot, i) => (
-        <motion.div
+        <m.div
           key={i}
           className="absolute w-1.5 h-1.5 rounded-full bg-primary"
           style={{
@@ -76,7 +76,7 @@ export function CustomCursor() {
         />
       ))}
       {/* Main cursor */}
-      <motion.div
+      <m.div
         className="absolute w-4 h-4 rounded-full border-2 border-primary bg-primary/15"
         style={{
           x: springX,

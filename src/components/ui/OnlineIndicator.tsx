@@ -9,7 +9,7 @@
  * <OnlineIndicator isOnline={false} size="lg" />
  */
 import { memo } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { m, AnimatePresence } from 'framer-motion'
 
 interface OnlineIndicatorProps {
   /** Whether the user is currently online */
@@ -45,7 +45,7 @@ export const OnlineIndicator = memo(function OnlineIndicator({
 }: OnlineIndicatorProps) {
   return (
     <AnimatePresence mode="wait">
-      <motion.span
+      <m.span
         key={isOnline ? 'online' : 'offline'}
         className={`
           ${sizeClasses[size]}
@@ -76,7 +76,7 @@ export const OnlineIndicator = memo(function OnlineIndicator({
         }
       >
         <span className="sr-only">{isOnline ? 'En ligne' : 'Hors ligne'}</span>
-      </motion.span>
+      </m.span>
     </AnimatePresence>
   )
 })

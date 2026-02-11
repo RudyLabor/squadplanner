@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import { Check, X as XIcon } from 'lucide-react'
 import { scrollReveal } from '../../utils/animations'
 import { SquadPlannerLogo } from '../SquadPlannerLogo'
@@ -25,16 +25,16 @@ export function ComparisonSection() {
   return (
     <section aria-label="Comparaison avec Discord" className="px-4 md:px-6 py-10 md:py-14">
       <div className="max-w-4xl mx-auto">
-        <motion.div variants={scrollReveal} initial="hidden" whileInView="visible" viewport={{ once: true }} className="text-center mb-12">
+        <m.div variants={scrollReveal} initial="hidden" whileInView="visible" viewport={{ once: true }} className="text-center mb-12">
           <h2 className="text-xl md:text-2xl font-bold text-text-primary mb-4">
             Plus qu'un Discord pour gamers
           </h2>
           <p className="text-text-tertiary text-lg">
             Discord est fait pour discuter. Squad Planner est fait pour <span className="text-text-primary font-medium">jouer ensemble</span>.
           </p>
-        </motion.div>
+        </m.div>
 
-        <motion.div
+        <m.div
           className="rounded-2xl border border-border-default overflow-hidden"
           variants={scrollReveal}
           initial="hidden"
@@ -115,7 +115,7 @@ export function ComparisonSection() {
               ))}
             </tbody>
           </table>
-        </motion.div>
+        </m.div>
 
         <p className="text-center text-base text-text-quaternary mt-6 max-w-lg mx-auto">
           Discord reste indispensable pour les communautés larges. Squad Planner est conçu spécifiquement pour ta squad de 3 à 10 joueurs.

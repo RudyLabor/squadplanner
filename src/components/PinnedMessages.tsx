@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { m, AnimatePresence } from 'framer-motion'
 import { Pin, ChevronDown, X } from 'lucide-react'
 
 export interface PinnedMessage {
@@ -78,18 +78,18 @@ export function PinnedMessages({
             {pinnedMessages.length} message{pinnedMessages.length > 1 ? 's' : ''} épinglé{pinnedMessages.length > 1 ? 's' : ''}
           </span>
         </div>
-        <motion.div
+        <m.div
           animate={{ rotate: isExpanded ? 180 : 0 }}
           transition={{ duration: 0.2 }}
         >
           <ChevronDown className="w-5 h-5 text-text-tertiary" />
-        </motion.div>
+        </m.div>
       </button>
 
       {/* Expanded list */}
       <AnimatePresence>
         {isExpanded && (
-          <motion.div
+          <m.div
             id="pinned-messages-list"
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: 'auto', opacity: 1 }}
@@ -99,7 +99,7 @@ export function PinnedMessages({
           >
             <div className="px-4 pb-4 space-y-2">
               {pinnedMessages.map((pinned, index) => (
-                <motion.div
+                <m.div
                   key={pinned.pin_id}
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -154,10 +154,10 @@ export function PinnedMessages({
                       <X className="w-4 h-4 text-text-tertiary hover:text-error transition-colors" />
                     </button>
                   )}
-                </motion.div>
+                </m.div>
               ))}
             </div>
-          </motion.div>
+          </m.div>
         )}
       </AnimatePresence>
     </div>

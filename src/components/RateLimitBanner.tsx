@@ -5,7 +5,7 @@
  * Displays a countdown timer and auto-retries when the timer reaches 0.
  */
 import { useState, useEffect, useCallback } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { m, AnimatePresence } from 'framer-motion'
 import { AlertTriangle, X, RefreshCw } from 'lucide-react'
 
 export interface RateLimitBannerProps {
@@ -60,7 +60,7 @@ export function RateLimitBanner({
 
   return (
     <AnimatePresence>
-      <motion.div
+      <m.div
         initial={{ y: -100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         exit={{ y: -100, opacity: 0 }}
@@ -112,7 +112,7 @@ export function RateLimitBanner({
             )}
           </div>
         </div>
-      </motion.div>
+      </m.div>
     </AnimatePresence>
   )
 }

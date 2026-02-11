@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import { scrollRevealLight } from '../../utils/animations'
 
 const staggerContainerVariants = {
@@ -27,16 +27,16 @@ export function ProblemSection() {
   return (
     <section aria-label="Le problème" className="px-4 md:px-6 py-10 md:py-14">
       <div className="max-w-4xl mx-auto">
-        <motion.div variants={scrollRevealLight} initial="hidden" whileInView="visible" viewport={{ once: true }} className="text-center mb-12">
+        <m.div variants={scrollRevealLight} initial="hidden" whileInView="visible" viewport={{ once: true }} className="text-center mb-12">
           <h2 className="text-xl md:text-2xl font-bold text-text-primary mb-4">
             Le problème que tu connais trop bien
           </h2>
           <p className="text-text-tertiary text-lg">
             T'as des amis. T'as Discord. T'as des jeux. Mais vous jouez jamais ensemble.
           </p>
-        </motion.div>
+        </m.div>
 
-        <motion.div
+        <m.div
           className="max-w-lg mx-auto mb-6"
           variants={staggerContainerVariants}
           initial="hidden"
@@ -44,9 +44,9 @@ export function ProblemSection() {
           viewport={{ once: true, amount: 0.1 }}
         >
           {problems.map((item, i) => (
-            <motion.div key={item.text} variants={staggerItemVariants}>
+            <m.div key={item.text} variants={staggerItemVariants}>
               <div className="flex items-center justify-center gap-4 py-3">
-                <motion.span
+                <m.span
                   className="text-2xl shrink-0 w-9 text-center"
                   initial={{ scale: 0.6, rotate: -10 }}
                   whileInView={{ scale: 1, rotate: 0 }}
@@ -54,15 +54,15 @@ export function ProblemSection() {
                   transition={{ duration: 0.4, delay: i * 0.3 + 0.15, type: 'spring', stiffness: 200 }}
                 >
                   {item.emoji}
-                </motion.span>
+                </m.span>
                 <p className="text-text-secondary text-md leading-relaxed">{item.text}</p>
               </div>
               {i < problems.length - 1 && (
-                <motion.div
+                <m.div
                   className="flex justify-center py-1"
                   variants={chevronVariants}
                 >
-                  <motion.svg
+                  <m.svg
                     width="16"
                     height="16"
                     viewBox="0 0 16 16"
@@ -74,14 +74,14 @@ export function ProblemSection() {
                     transition={{ duration: 1.8, repeat: Infinity, delay: i * 0.3, ease: 'easeInOut' }}
                   >
                     <path d="M4 6L8 10L12 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                  </motion.svg>
-                </motion.div>
+                  </m.svg>
+                </m.div>
               )}
-            </motion.div>
+            </m.div>
           ))}
-        </motion.div>
+        </m.div>
 
-        <motion.div
+        <m.div
           variants={scrollRevealLight}
           initial="hidden"
           whileInView="visible"
@@ -90,7 +90,7 @@ export function ProblemSection() {
         >
           <span className="text-xl mr-2">💥</span>
           <span className="text-text-primary font-semibold">Résultat → Plus personne n'organise rien. Ta squad meurt à petit feu.</span>
-        </motion.div>
+        </m.div>
       </div>
     </section>
   )

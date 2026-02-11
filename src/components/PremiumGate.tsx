@@ -1,5 +1,5 @@
 import { useState, type ReactNode } from 'react'
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import { Lock, Zap, Crown } from 'lucide-react'
 import { Button } from './ui'
 import { PremiumUpgradeModal } from './PremiumUpgradeModal'
@@ -107,7 +107,7 @@ export function PremiumGate({
   // Mode lock - carte verrouillee
   return (
     <div className={className}>
-      <motion.button
+      <m.button
         onClick={() => setShowModal(true)}
         aria-label={`Débloquer ${label} - Passe Premium pour débloquer`}
         className="w-full p-4 rounded-xl bg-surface-card border border-border-default hover:border-warning hover:bg-warning-5 transition-interactive text-left"
@@ -129,7 +129,7 @@ export function PremiumGate({
           </div>
           <Zap className="w-5 h-5 text-warning" aria-hidden="true" />
         </div>
-      </motion.button>
+      </m.button>
       <PremiumUpgradeModal
         isOpen={showModal}
         onClose={() => setShowModal(false)}
@@ -170,7 +170,7 @@ export function SquadLimitReached({
   onUpgrade: () => void
 }) {
   return (
-    <motion.div
+    <m.div
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       className="p-4 rounded-xl bg-gradient-to-br from-warning-10 to-transparent border border-warning"
@@ -192,7 +192,7 @@ export function SquadLimitReached({
           </Button>
         </div>
       </div>
-    </motion.div>
+    </m.div>
   )
 }
 

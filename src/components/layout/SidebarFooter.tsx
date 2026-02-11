@@ -1,6 +1,6 @@
 import { memo } from 'react'
 import { Link } from 'react-router-dom'
-import { motion, AnimatePresence } from 'framer-motion'
+import { m, AnimatePresence } from 'framer-motion'
 import { User, Zap } from 'lucide-react'
 import { getOptimizedAvatarUrl } from '../../utils/avatarUrl'
 import { Tooltip } from '../ui/Tooltip'
@@ -23,7 +23,7 @@ export const SidebarFooter = memo(function SidebarFooter({
         {!isExpanded ? (
           <Tooltip content={profile?.username || 'Mon profil'} position="right" delay={300}>
             <Link to="/profile" aria-label="Voir mon profil">
-              <motion.div
+              <m.div
                 className="flex items-center justify-center p-2 rounded-xl hover:bg-surface-card transition-colors duration-300"
                 whileHover={{ x: 0 }}
                 transition={{ duration: 0.25 }}
@@ -41,13 +41,13 @@ export const SidebarFooter = memo(function SidebarFooter({
                     <User className="w-4 h-4 text-purple" />
                   </div>
                 )}
-              </motion.div>
+              </m.div>
             </Link>
           </Tooltip>
         ) : (
           <>
             <Link to="/profile" aria-label="Voir mon profil">
-              <motion.div
+              <m.div
                 className="flex items-center gap-3 p-3 rounded-xl hover:bg-surface-card transition-colors duration-300"
                 whileHover={{ x: 4 }}
                 transition={{ duration: 0.25 }}
@@ -65,7 +65,7 @@ export const SidebarFooter = memo(function SidebarFooter({
                     <User className="w-5 h-5 text-purple" />
                   </div>
                 )}
-                <motion.div
+                <m.div
                   key="profile-text"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
@@ -78,8 +78,8 @@ export const SidebarFooter = memo(function SidebarFooter({
                   <div className="text-sm text-text-tertiary">
                     {profile?.reliability_score || 100}% fiable
                   </div>
-                </motion.div>
-              </motion.div>
+                </m.div>
+              </m.div>
             </Link>
             <StatusSelector
               onOpenCustomStatus={onOpenCustomStatus}
@@ -92,7 +92,7 @@ export const SidebarFooter = memo(function SidebarFooter({
       {/* Premium upsell */}
       <AnimatePresence>
         {isExpanded && (
-          <motion.div
+          <m.div
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
@@ -100,7 +100,7 @@ export const SidebarFooter = memo(function SidebarFooter({
             className="p-4 overflow-hidden"
           >
             <Link to="/premium" aria-label="Passer Premium - Stats avancées, IA coach, qualité audio HD">
-              <motion.div
+              <m.div
                 className="p-4 rounded-xl bg-gradient-to-br from-primary-10 to-purple/3 border border-primary/10 cursor-pointer"
                 whileHover={{ scale: 1.02 }}
                 transition={{ duration: 0.25 }}
@@ -115,9 +115,9 @@ export const SidebarFooter = memo(function SidebarFooter({
                 <span className="text-sm font-semibold text-primary hover:text-purple transition-colors duration-300">
                   Découvrir →
                 </span>
-              </motion.div>
+              </m.div>
             </Link>
-          </motion.div>
+          </m.div>
         )}
       </AnimatePresence>
 
@@ -126,13 +126,13 @@ export const SidebarFooter = memo(function SidebarFooter({
         <div className="p-2 pb-4">
           <Tooltip content="Passer Premium" position="right" delay={300}>
             <Link to="/premium" aria-label="Passer Premium">
-              <motion.div
+              <m.div
                 className="flex items-center justify-center p-2 rounded-xl hover:bg-surface-card transition-colors"
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
               >
                 <Zap className="w-5 h-5 text-warning" />
-              </motion.div>
+              </m.div>
             </Link>
           </Tooltip>
         </div>

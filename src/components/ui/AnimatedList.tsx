@@ -1,5 +1,5 @@
 import { type ReactNode } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { m, AnimatePresence } from 'framer-motion'
 
 interface AnimatedListProps {
   children: ReactNode
@@ -28,7 +28,7 @@ interface AnimatedListItemProps {
 
 export function AnimatedListItem({ children, className }: AnimatedListItemProps) {
   return (
-    <motion.div
+    <m.div
       layout
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
@@ -42,6 +42,6 @@ export function AnimatedListItem({ children, className }: AnimatedListItemProps)
       className={className}
     >
       {children}
-    </motion.div>
+    </m.div>
   )
 }

@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import { Search, ArrowRight } from 'lucide-react'
 
 interface SearchResult {
@@ -74,7 +74,7 @@ export function SearchResultsList({ query, results, groupedResults, selectedInde
                 const globalIdx = flatIndex + idx
                 const Icon = result.icon
                 return (
-                  <motion.button
+                  <m.button
                     key={result.id}
                     onClick={() => onSelect(result)}
                     className={`w-full flex items-center gap-3 px-4 py-3 transition-colors ${
@@ -97,7 +97,7 @@ export function SearchResultsList({ query, results, groupedResults, selectedInde
                       )}
                     </div>
                     {selectedIndex === globalIdx && <ArrowRight className="w-4 h-4 text-primary" />}
-                  </motion.button>
+                  </m.button>
                 )
               })}
             </div>

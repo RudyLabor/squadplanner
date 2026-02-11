@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 
 interface StreakHeatmapProps {
   streakDays: number
@@ -56,7 +56,7 @@ export function StreakHeatmap({ streakDays, flameColors }: StreakHeatmapProps) {
                     ? `color-mix(in srgb, ${flameColors.primary} 25%, transparent)`
                     : 'var(--color-overlay-faint)'
               return (
-                <motion.div
+                <m.div
                   key={`${wi}-${di}`}
                   className={`aspect-square rounded-md ${cell.isToday ? 'ring-2 ring-offset-1 ring-offset-surface-dark' : ''}`}
                   style={{
@@ -80,7 +80,7 @@ export function StreakHeatmap({ streakDays, flameColors }: StreakHeatmapProps) {
           {weeklyStats.map((count, i) => (
             <div key={i} className="flex-1 flex flex-col items-center gap-1">
               <div className="w-full relative h-10 flex items-end">
-                <motion.div
+                <m.div
                   className="w-full rounded-t-md"
                   style={{
                     background: `linear-gradient(to top, ${flameColors.primary}, ${flameColors.secondary})`,

@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect, useCallback, memo } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { m, AnimatePresence } from 'framer-motion'
 
 export interface MentionUser {
   id: string
@@ -170,7 +170,7 @@ export const MentionInput = memo(function MentionInput({
       {/* Mention suggestions dropdown */}
       <AnimatePresence>
         {showSuggestions && filteredMembers.length > 0 && (
-          <motion.div
+          <m.div
             ref={suggestionsRef}
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
@@ -215,7 +215,7 @@ export const MentionInput = memo(function MentionInput({
                 )}
               </button>
             ))}
-          </motion.div>
+          </m.div>
         )}
       </AnimatePresence>
     </div>

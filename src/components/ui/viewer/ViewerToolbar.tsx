@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import { X, ZoomIn, ZoomOut, Download, RotateCw } from 'lucide-react'
 
 interface ViewerToolbarProps {
@@ -13,7 +13,7 @@ interface ViewerToolbarProps {
 
 export function ViewerToolbar({ alt, scale, onZoomIn, onZoomOut, onRotate, onDownload, onClose }: ViewerToolbarProps) {
   return (
-    <motion.div
+    <m.div
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
@@ -40,6 +40,6 @@ export function ViewerToolbar({ alt, scale, onZoomIn, onZoomOut, onRotate, onDow
           <X className="w-5 h-5" />
         </button>
       </div>
-    </motion.div>
+    </m.div>
   )
 }

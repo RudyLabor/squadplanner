@@ -14,6 +14,13 @@ vi.mock('framer-motion', async () => {
         return <circle {...rest} />
       },
     },
+    m: {
+      ...actual.m,
+      circle: (props: any) => {
+        const { initial, animate, transition, ...rest } = props
+        return <circle {...rest} />
+      },
+    },
   }
 })
 

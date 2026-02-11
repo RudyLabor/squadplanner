@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 
 interface TourOverlayProps {
   targetRect: DOMRect | null
@@ -7,7 +7,7 @@ interface TourOverlayProps {
 
 export function TourOverlay({ targetRect, onSkip }: TourOverlayProps) {
   return (
-    <motion.div
+    <m.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
@@ -41,7 +41,7 @@ export function TourOverlay({ targetRect, onSkip }: TourOverlayProps) {
 
       {/* Highlight ring around target */}
       {targetRect && (
-        <motion.div
+        <m.div
           className="absolute border-2 border-primary rounded-xl pointer-events-none"
           animate={{
             boxShadow: ['0 0 0 0 var(--color-primary-20)', '0 0 0 8px transparent', '0 0 0 0 var(--color-primary-20)'],
@@ -55,6 +55,6 @@ export function TourOverlay({ targetRect, onSkip }: TourOverlayProps) {
           }}
         />
       )}
-    </motion.div>
+    </m.div>
   )
 }

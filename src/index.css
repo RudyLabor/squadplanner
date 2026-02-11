@@ -989,7 +989,11 @@ select:focus-visible,
   to { transform: translateX(-20px); opacity: 0; }
 }
 
-/* View Transition animations */
+/* View Transitions API — GPU-accelerated browser-native route transitions */
+@view-transition {
+  navigation: auto;
+}
+
 ::view-transition-old(root) {
   animation: fade-out 150ms ease-out forwards, slide-to-left 150ms ease-out forwards;
 }
@@ -1357,3 +1361,4 @@ textarea,
     background: var(--color-border-default);
   }
 }
+

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { m, AnimatePresence } from 'framer-motion'
 import { Mail, Send, CheckCircle } from 'lucide-react'
 import { Card, Select } from '../../components/ui'
 
@@ -26,7 +26,7 @@ export function HelpContactSection() {
 
       <AnimatePresence mode="wait">
         {contactSent ? (
-          <motion.div
+          <m.div
             key="success"
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -46,9 +46,9 @@ export function HelpContactSection() {
             >
               Envoyer un autre message
             </button>
-          </motion.div>
+          </m.div>
         ) : (
-          <motion.div
+          <m.div
             key="form"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -93,7 +93,7 @@ export function HelpContactSection() {
               <Send className="w-4 h-4" />
               Envoyer le message
             </button>
-          </motion.div>
+          </m.div>
         )}
       </AnimatePresence>
     </Card>

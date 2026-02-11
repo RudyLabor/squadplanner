@@ -74,6 +74,35 @@
 
     <!-- Fonts @font-face + Critical CSS (in critical.css to avoid Vite 7 html-inline-proxy build error) -->
     <link rel="stylesheet" href="/critical.css" fetchpriority="high" />
+
+    <!-- Speculation Rules for predictive navigation -->
+    <script type="speculationrules">
+    {
+      "prerender": [
+        {
+          "where": {
+            "and": [
+              { "href_matches": "/*" },
+              { "not": { "href_matches": "/auth*" } },
+              { "not": { "href_matches": "/api/*" } }
+            ]
+          },
+          "eagerness": "moderate"
+        }
+      ],
+      "prefetch": [
+        {
+          "where": {
+            "and": [
+              { "href_matches": "/*" },
+              { "not": { "selector_matches": "[data-no-prefetch]" } }
+            ]
+          },
+          "eagerness": "moderate"
+        }
+      ]
+    }
+    </script>
   </head>
   <body>
     <!-- Initial loader - hidden by React once mounted -->

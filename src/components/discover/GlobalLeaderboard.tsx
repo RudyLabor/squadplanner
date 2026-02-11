@@ -1,5 +1,5 @@
 import { memo } from 'react'
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import { Trophy, Flame, Shield, Star } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { useGlobalLeaderboardQuery } from '../../hooks/queries'
@@ -66,7 +66,7 @@ const PodiumCard = memo(function PodiumCard({ entry, index }: { entry: GlobalLea
   const style = PODIUM_COLORS[index]
 
   return (
-    <motion.div
+    <m.div
       initial={{ opacity: 0, scale: 0.95 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ delay: index * 0.1 }}
@@ -90,7 +90,7 @@ const PodiumCard = memo(function PodiumCard({ entry, index }: { entry: GlobalLea
           <span className="text-xs text-text-tertiary">Nv.{entry.level}</span>
         </div>
       </Link>
-    </motion.div>
+    </m.div>
   )
 })
 

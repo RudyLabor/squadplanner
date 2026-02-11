@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import { MousePointerClick, Clock, Smile, Target } from 'lucide-react'
 import { scaleReveal } from '../../utils/animations'
 import { AnimatedCounter } from '../ui/AnimatedCounter'
@@ -16,7 +16,7 @@ export function SocialProofSection() {
       <div className="max-w-4xl mx-auto">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6">
           {stats.map((stat) => (
-            <motion.div
+            <m.div
               key={stat.label}
               className="text-center p-4 md:p-6 rounded-2xl bg-bg-elevated border border-border-subtle relative group hover:border-border-hover transition-colors"
               variants={scaleReveal}
@@ -28,7 +28,7 @@ export function SocialProofSection() {
               <stat.icon className="w-5 h-5 md:w-7 md:h-7 mx-auto mb-2" style={{ color: stat.color }} aria-hidden="true" />
               <AnimatedCounter end={stat.end} suffix={stat.suffix} singularSuffix={stat.singularSuffix} separator=" " className="text-xl md:text-3xl font-bold text-text-primary" duration={2.5} decimals={stat.decimals || 0} />
               <div className="text-sm md:text-sm text-text-tertiary mt-1">{stat.label}</div>
-            </motion.div>
+            </m.div>
           ))}
         </div>
       </div>

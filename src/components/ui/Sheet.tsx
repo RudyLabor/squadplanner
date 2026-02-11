@@ -1,6 +1,6 @@
 import { type ReactNode, useEffect, useRef, useCallback, useState } from 'react'
 import {
-  motion,
+  m,
   AnimatePresence,
   useDragControls,
   useMotionValue,
@@ -170,14 +170,14 @@ export function Sheet({
         <div className="fixed inset-0 z-50">
           {/* Overlay */}
           {isBottom ? (
-            <motion.div
+            <m.div
               style={{ opacity: overlayOpacity }}
               className="absolute inset-0 bg-black/60 backdrop-blur-sm"
               onClick={onClose}
               aria-hidden="true"
             />
           ) : (
-            <motion.div
+            <m.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
@@ -190,7 +190,7 @@ export function Sheet({
 
           {/* Sheet panel */}
           {isBottom ? (
-            <motion.div
+            <m.div
               ref={sheetRef}
               initial={{ y: '100%' }}
               animate={{ y: 0 }}
@@ -245,10 +245,10 @@ export function Sheet({
               <div className="flex-1 overflow-y-auto px-5 pb-5 scrollbar-hide">
                 {children}
               </div>
-            </motion.div>
+            </m.div>
           ) : (
             /* Right side panel (desktop) */
-            <motion.div
+            <m.div
               ref={sheetRef}
               initial={{ x: '100%' }}
               animate={{ x: 0 }}
@@ -284,7 +284,7 @@ export function Sheet({
               <div className="flex-1 overflow-y-auto px-6 py-4 scrollbar-hide">
                 {children}
               </div>
-            </motion.div>
+            </m.div>
           )}
         </div>
       )}

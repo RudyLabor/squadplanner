@@ -1,6 +1,7 @@
 import { useEffect, lazy, Suspense, memo, useRef } from 'react'
 import { BrowserRouter, useSearchParams } from 'react-router-dom'
 import { Toaster } from 'sonner'
+import { LazyMotion } from 'framer-motion'
 import { QueryClientProvider } from '@tanstack/react-query'
 import { useAuthStore, subscribeToIncomingCalls, usePushNotificationStore, useVoiceCallStore, useThemeStore } from './hooks'
 import { initSentry } from './lib/sentry'
@@ -142,45 +143,49 @@ const GlobalStateBanners = memo(function GlobalStateBanners() {
   )
 })
 
+const loadFeatures = () => import('framer-motion').then(mod => mod.domMax)
+
 export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <BrowserRouter>
-        <TopLoadingBar />
-        <AppContent />
-        <Suspense fallback={null}>
-          <OfflineBanner />
-          <GlobalStateBanners />
-          <PWAInstallBanner />
-          <NotificationBanner />
-          <CookieConsent />
-          <TourGuide />
-        </Suspense>
-        <Toaster
-          position="top-center"
-          toastOptions={{
-            duration: 4000,
-            style: {
-              background: 'var(--color-bg-surface)',
-              border: '1px solid var(--color-border-default)',
-              color: 'var(--color-text-primary)',
-              fontSize: '14px',
-              borderRadius: '12px',
-              padding: '12px 16px',
-              position: 'relative' as const,
-              overflow: 'hidden',
-            },
-            classNames: {
-              success: 'border-success/20 bg-success/10',
-              error: 'border-error/20 bg-error/10',
-              warning: 'border-warning/20 bg-warning/10',
-              info: 'border-primary/20 bg-primary/10',
-            },
-          }}
-        />
-        <div id="aria-live-polite" aria-live="polite" aria-atomic="true" className="sr-only" />
-        <div id="aria-live-assertive" aria-live="assertive" aria-atomic="true" className="sr-only" />
-      </BrowserRouter>
+      <LazyMotion features={loadFeatures} strict>
+        <BrowserRouter>
+          <TopLoadingBar />
+          <AppContent />
+          <Suspense fallback={null}>
+            <OfflineBanner />
+            <GlobalStateBanners />
+            <PWAInstallBanner />
+            <NotificationBanner />
+            <CookieConsent />
+            <TourGuide />
+          </Suspense>
+          <Toaster
+            position="top-center"
+            toastOptions={{
+              duration: 4000,
+              style: {
+                background: 'var(--color-bg-surface)',
+                border: '1px solid var(--color-border-default)',
+                color: 'var(--color-text-primary)',
+                fontSize: '14px',
+                borderRadius: '12px',
+                padding: '12px 16px',
+                position: 'relative' as const,
+                overflow: 'hidden',
+              },
+              classNames: {
+                success: 'border-success/20 bg-success/10',
+                error: 'border-error/20 bg-error/10',
+                warning: 'border-warning/20 bg-warning/10',
+                info: 'border-primary/20 bg-primary/10',
+              },
+            }}
+          />
+          <div id="aria-live-polite" aria-live="polite" aria-atomic="true" className="sr-only" />
+          <div id="aria-live-assertive" aria-live="assertive" aria-atomic="true" className="sr-only" />
+        </BrowserRouter>
+      </LazyMotion>
     </QueryClientProvider>
   )
 }

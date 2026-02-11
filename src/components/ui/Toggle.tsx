@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import { useId, useCallback, type KeyboardEvent } from 'react'
 import { haptic } from '../../utils/haptics'
 
@@ -67,7 +67,7 @@ export function Toggle({
           ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
         `}
       >
-        <motion.span
+        <m.span
           className={`
             block rounded-full bg-white shadow-sm
             ${config.thumb}

@@ -1,4 +1,4 @@
-import { motion, AnimatePresence, useDragControls, type PanInfo } from 'framer-motion'
+import { m, AnimatePresence, useDragControls, type PanInfo } from 'framer-motion'
 import { type ReactNode, useEffect, useCallback } from 'react'
 import { X } from 'lucide-react'
 import { useFocusTrap } from '../../hooks/useFocusTrap'
@@ -39,7 +39,7 @@ export function Drawer({ isOpen, onClose, children, title, className = '' }: Dra
       {isOpen && (
         <>
           {/* Backdrop */}
-          <motion.div
+          <m.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -50,7 +50,7 @@ export function Drawer({ isOpen, onClose, children, title, className = '' }: Dra
           />
 
           {/* Drawer panel */}
-          <motion.div
+          <m.div
             ref={focusTrapRef}
             initial={{ y: '100%' }}
             animate={{ y: 0 }}
@@ -92,7 +92,7 @@ export function Drawer({ isOpen, onClose, children, title, className = '' }: Dra
             <div className="flex-1 overflow-y-auto px-5 pb-5">
               {children}
             </div>
-          </motion.div>
+          </m.div>
         </>
       )}
     </AnimatePresence>

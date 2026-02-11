@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 
 interface ProgressBarProps {
   value?: number
@@ -61,7 +61,7 @@ export function ProgressBar({
           aria-label={label}
         >
           {Array.from({ length: stepped.steps }, (_, i) => (
-            <motion.div
+            <m.div
               key={i}
               className={`flex-1 ${trackSizes[size]} rounded-full ${
                 i < stepped.current ? fillColors[variant] : 'bg-border-subtle'
@@ -106,7 +106,7 @@ export function ProgressBar({
             }}
           />
         ) : (
-          <motion.div
+          <m.div
             className={`absolute inset-y-0 left-0 rounded-full ${fillColors[variant]} ${animated ? 'animate-pulse-subtle' : ''}`}
             initial={animated ? { width: 0 } : { width: `${percent}%` }}
             animate={{ width: `${percent}%` }}

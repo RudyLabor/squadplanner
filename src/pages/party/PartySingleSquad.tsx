@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import { Mic, Loader2, Zap, Clock, TrendingUp, Users } from 'lucide-react'
 import { Card, Button } from '../../components/ui'
 
@@ -12,11 +12,11 @@ export function PartySingleSquad({ squad, isConnecting, onJoin }: {
     <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
       <Card className="md:col-span-3 p-8 text-center bg-gradient-to-br from-primary/10 via-bg-elevated to-success/5 border-primary shadow-md">
         <div className="relative w-20 h-20 mx-auto mb-5">
-          <motion.div className="absolute inset-0 rounded-2xl bg-primary/20" animate={{ scale: [1, 1.3, 1], opacity: [0.4, 0, 0.4] }} transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }} />
-          <motion.div className="absolute inset-0 rounded-2xl bg-primary/15" animate={{ scale: [1, 1.5, 1], opacity: [0.3, 0, 0.3] }} transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut', delay: 0.4 }} />
-          <motion.div className="relative w-20 h-20 rounded-2xl bg-gradient-to-br from-primary to-purple flex items-center justify-center shadow-lg shadow-primary/15" animate={{ scale: [1, 1.03, 1] }} transition={{ duration: 2, repeat: Infinity }}>
+          <m.div className="absolute inset-0 rounded-2xl bg-primary/20" animate={{ scale: [1, 1.3, 1], opacity: [0.4, 0, 0.4] }} transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }} />
+          <m.div className="absolute inset-0 rounded-2xl bg-primary/15" animate={{ scale: [1, 1.5, 1], opacity: [0.3, 0, 0.3] }} transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut', delay: 0.4 }} />
+          <m.div className="relative w-20 h-20 rounded-2xl bg-gradient-to-br from-primary to-purple flex items-center justify-center shadow-lg shadow-primary/15" animate={{ scale: [1, 1.03, 1] }} transition={{ duration: 2, repeat: Infinity }}>
             <Mic className="w-9 h-9 text-white" />
-          </motion.div>
+          </m.div>
         </div>
         <h3 className="text-lg font-bold text-text-primary mb-2">Pr&ecirc;t &agrave; parler ?</h3>
         <p className="text-md text-text-secondary mb-2">{squad.name}</p>

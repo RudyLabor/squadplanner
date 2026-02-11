@@ -33,11 +33,13 @@ const MIN_VISITS = 3
 const DISMISS_DAYS = 7
 
 function isAlreadyInstalled(): boolean {
+  if (typeof window === 'undefined') return false
   return window.matchMedia('(display-mode: standalone)').matches
     || (navigator as { standalone?: boolean }).standalone === true
 }
 
 function shouldShowBanner(): boolean {
+  if (typeof window === 'undefined') return false
   if (isAlreadyInstalled()) return false
   if (localStorage.getItem(INSTALL_KEY)) return false
 
@@ -74,7 +76,7 @@ export const usePWAInstallStore = create<PWAInstallState>((set, get) => ({
     await deferredPrompt.prompt()
     const { outcome } = await deferredPrompt.userChoice
 
-    if (outcome === 'accepted') {
+    if (outcome === 'accepted' && typeof window !== 'undefined') {
       localStorage.setItem(INSTALL_KEY, 'true')
     }
 
@@ -83,7 +85,7 @@ export const usePWAInstallStore = create<PWAInstallState>((set, get) => ({
   },
 
   dismissBanner: () => {
-    localStorage.setItem(DISMISS_KEY, String(Date.now()))
+    if (typeof window !== 'undefined') localStorage.setItem(DISMISS_KEY, String(Date.now()))
     set({ showBanner: false })
   },
 }))

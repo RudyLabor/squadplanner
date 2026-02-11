@@ -1,8 +1,11 @@
 import type { Config } from "@react-router/dev/config";
+import { vercelPreset } from "@vercel/react-router/vite";
 
-// RSC Framework Mode — prerender and presets are not yet supported.
-// CDN caching via vercel.json compensates for the lost pre-rendering.
 export default {
   appDirectory: "src",
   ssr: true,
+  async prerender() {
+    return ["/", "/auth", "/legal", "/help", "/premium", "/maintenance"];
+  },
+  presets: [vercelPreset()],
 } satisfies Config;

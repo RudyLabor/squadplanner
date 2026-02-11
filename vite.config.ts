@@ -1,7 +1,6 @@
 import { reactRouter } from "@react-router/dev/vite";
 import tailwindcss from "@tailwindcss/vite";
 import { defineConfig } from "vite";
-import { visualizer } from "rollup-plugin-visualizer";
 import { fileURLToPath, URL } from "node:url";
 import { readFileSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
@@ -66,19 +65,25 @@ function reactCompilerPlugin(): import('vite').Plugin {
 }
 
 // https://vite.dev/config/
-export default defineConfig({
+export default defineConfig(async () => {
+  // Dynamic import: only load visualizer when ANALYZE is set (devDependency)
+  const analyzePlugin = process.env.ANALYZE === 'true'
+    ? (await import('rollup-plugin-visualizer')).visualizer({
+        filename: 'dist/bundle-analysis.html',
+        open: true,
+        gzipSize: true,
+        brotliSize: true,
+        template: 'treemap',
+      })
+    : null;
+
+  return {
   plugins: [
     reactCompilerPlugin(),
     reactRouter(),
     tailwindcss(),
     swVersionPlugin(),
-    process.env.ANALYZE === 'true' && visualizer({
-      filename: 'dist/bundle-analysis.html',
-      open: true,
-      gzipSize: true,
-      brotliSize: true,
-      template: 'treemap',
-    }),
+    analyzePlugin,
   ].filter(Boolean),
 
   // Build target flag: set BUILD_TARGET=native for Capacitor builds
@@ -158,4 +163,5 @@ export default defineConfig({
   json: {
     stringify: true,
   },
+};
 });

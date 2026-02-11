@@ -48,10 +48,10 @@ serve(async (req) => {
   try {
     // Check if LiveKit is configured
     if (!LIVEKIT_API_KEY || !LIVEKIT_API_SECRET) {
-      console.warn('LiveKit credentials not configured')
+      console.error('LiveKit credentials not configured. Set LIVEKIT_API_KEY and LIVEKIT_API_SECRET via supabase secrets set')
       return new Response(
-        JSON.stringify({ token: null, error: 'LiveKit not configured' }),
-        { headers: { ...getCorsHeaders(req.headers.get('origin')), 'Content-Type': 'application/json' } }
+        JSON.stringify({ error: 'LiveKit credentials not configured on server' }),
+        { status: 503, headers: { ...getCorsHeaders(req.headers.get('origin')), 'Content-Type': 'application/json' } }
       )
     }
 

@@ -256,6 +256,11 @@ export const useVoiceChatStore = create<VoiceChatState>((set, get) => ({
         }
 
         token = data?.token || null
+
+        if (data?.error) {
+          throw new Error(`Erreur serveur : ${data.error}`)
+        }
+
         if (!import.meta.env.PROD) {
           console.log('[VoiceChat] Token received:', token ? `${token.substring(0, 20)}...` : 'null')
         }
@@ -267,7 +272,7 @@ export const useVoiceChatStore = create<VoiceChatState>((set, get) => ({
       }
 
       if (!token) {
-        throw new Error('Token LiveKit non reçu')
+        throw new Error('Token LiveKit non reçu. Vérifiez la configuration du serveur.')
       }
 
       // Create LiveKit Room

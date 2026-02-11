@@ -480,7 +480,8 @@ async function initializeLiveKitRoom(currentUserId: string, otherUserId: string)
     })
 
     if (error || !data?.token) {
-      throw new Error('Impossible d\'obtenir le token LiveKit')
+      const serverError = data?.error ? ` (${data.error})` : ''
+      throw new Error(`Impossible d'obtenir le token LiveKit${serverError}`)
     }
 
     const token = data.token

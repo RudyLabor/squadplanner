@@ -67,7 +67,7 @@ export function PricingSection() {
             </div>
             <p className="text-base text-text-tertiary mb-5">Pour les squads qui veulent aller plus loin.</p>
             <ul className="space-y-2.5 mb-6">
-              {['Tout le plan Gratuit', 'Coach IA avancé', 'Qualité audio HD', 'Historique illimité', 'Stats avancées', 'Badges exclusifs'].map(f => (
+              {['Tout le plan Gratuit', 'Squads illimitées', 'Coach IA avancé', 'Qualité audio HD', 'Historique illimité', 'Stats avancées', 'Badges exclusifs'].map(f => (
                 <li key={f} className="flex items-center gap-2 text-base text-text-secondary">
                   <Check className="w-4 h-4 text-primary flex-shrink-0" />
                   {f}

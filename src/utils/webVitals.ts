@@ -1,6 +1,6 @@
 /**
  * Core Web Vitals reporting using Google's web-vitals library.
- * Reports LCP, FCP, CLS, TTFB, FID, and INP.
+ * Reports LCP, FCP, CLS, TTFB, and INP (FID removed in web-vitals v5).
  *
  * Uses the official web-vitals library for accurate measurements including:
  * - Back/forward cache (bfcache) handling
@@ -137,9 +137,8 @@ function handleMetric(metric: Metric): void {
 export function reportWebVitals(): void {
   if (typeof window === 'undefined') return;
 
-  import('web-vitals').then(({ onLCP, onFID, onCLS, onINP, onTTFB, onFCP }) => {
+  import('web-vitals').then(({ onLCP, onCLS, onINP, onTTFB, onFCP }) => {
     onLCP(handleMetric);
-    onFID(handleMetric);
     onCLS(handleMetric);
     onINP(handleMetric);
     onTTFB(handleMetric);

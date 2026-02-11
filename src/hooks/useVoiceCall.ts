@@ -208,7 +208,7 @@ export const useVoiceCallStore = create<VoiceCallState>((set, get) => ({
               userId: receiverId,
               title: 'Appel entrant',
               body: `${caller.username} vous appelle`,
-              icon: '/icon-192.png',
+              icon: '/icon-192.svg',
               tag: `incoming-call-${callRecord.id}`,
               data: {
                 type: 'incoming_call',

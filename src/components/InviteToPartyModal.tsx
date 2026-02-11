@@ -110,7 +110,7 @@ export function InviteToPartyModal({
             userId: memberId,
             title: 'Invitation Party',
             body: `Tu es invité à rejoindre la party de ${squadName}`,
-            icon: '/icon-192.png',
+            icon: '/icon-192.svg',
             tag: `party-invite-${squadId}`,
             url: partyLink,
             data: {

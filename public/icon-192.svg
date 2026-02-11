@@ -1,0 +1,15 @@
+<svg width="192" height="192" viewBox="0 0 192 192" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background for maskable safe zone -->
+  <rect width="192" height="192" rx="0" fill="#08090a"/>
+  <!-- Lignes de connexion (carre) -->
+  <path d="M48 48 L144 48 L144 144 L48 144 Z" stroke="#5e6dd2" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity="0.6"/>
+  <!-- Lignes diagonales vers le centre -->
+  <path d="M48 48 L96 96 M144 48 L96 96 M48 144 L96 96 M144 144 L96 96" stroke="#8b93ff" stroke-width="2.5" stroke-linecap="round" opacity="0.5"/>
+  <!-- 4 membres de la squad aux coins -->
+  <circle cx="48" cy="48" r="18" fill="#5e6dd2"/>
+  <circle cx="144" cy="48" r="18" fill="#8b93ff"/>
+  <circle cx="48" cy="144" r="18" fill="#8b93ff"/>
+  <circle cx="144" cy="144" r="18" fill="#4ade80"/>
+  <!-- Hub central (coordination) -->
+  <circle cx="96" cy="96" r="20" fill="#4ade80"/>
+</svg>

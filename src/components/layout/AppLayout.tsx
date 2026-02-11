@@ -6,7 +6,6 @@ import { useLocation } from 'react-router'
 import { m } from 'framer-motion'
 import { useShallow } from 'zustand/react/shallow'
 import { useAuthStore, useSquadsStore, useKeyboardVisible, useUnreadCountStore, useSquadNotificationsStore, useGlobalPresence } from '../../hooks'
-import { useVoiceChatStore } from '../../hooks/useVoiceChat'
 import { useCreateSessionModal } from '../CreateSessionModal'
 import { CustomStatusModal } from '../CustomStatusModal'
 import { DesktopSidebar } from './DesktopSidebar'
@@ -58,15 +57,37 @@ const DesktopContentWrapper = memo(function DesktopContentWrapper({
 export function AppLayout({ children }: AppLayoutProps) {
   const location = useLocation()
 
+  // Determine early if nav is needed (landing, auth, onboarding skip nav entirely)
+  const isAuthPage = location.pathname === '/auth'
+  const isOnboarding = location.pathname === '/onboarding'
+  const isLanding = location.pathname === '/'
+
   // OPTIMIZED: Use shallow selectors to prevent re-renders on unrelated state changes
   const { profile, user } = useAuthStore(useShallow(state => ({
     profile: state.profile,
     user: state.user
   })))
 
+  const isPublicPage = ['/legal', '/help', '/premium'].includes(location.pathname)
+  const shouldHideNav = isAuthPage || isOnboarding || isLanding || (isPublicPage && !user)
+
   useSquadsStore()
 
-  const isInVoiceChat = useVoiceChatStore(state => state.isConnected)
+  // Lazy-load voice chat state to avoid pulling 675-line useVoiceChat module on landing
+  const [isInVoiceChat, setIsInVoiceChat] = useState(false)
+  useEffect(() => {
+    if (shouldHideNav) return
+    let unsub: (() => void) | undefined
+    import('../../hooks/useVoiceChat').then(({ useVoiceChatStore }) => {
+      setIsInVoiceChat(useVoiceChatStore.getState().isConnected)
+      unsub = useVoiceChatStore.subscribe(
+        state => state.isConnected,
+        connected => setIsInVoiceChat(connected)
+      )
+    })
+    return () => { unsub?.() }
+  }, [shouldHideNav])
+
   const isKeyboardVisible = useKeyboardVisible()
 
   // PHASE 3.1: Create session modal
@@ -143,12 +164,6 @@ export function AppLayout({ children }: AppLayoutProps) {
     subscribeSquad()
     return () => { unsubscribeSquad() }
   }, [user, fetchPendingCounts, subscribeSquad, unsubscribeSquad])
-
-  const isAuthPage = location.pathname === '/auth'
-  const isOnboarding = location.pathname === '/onboarding'
-  const isLanding = location.pathname === '/'
-  const isPublicPage = ['/legal', '/help', '/premium'].includes(location.pathname)
-  const shouldHideNav = isAuthPage || isOnboarding || isLanding || (isPublicPage && !user)
 
   const isPartyActive = useMemo(() => location.pathname === '/party', [location.pathname])
   const currentPath = location.pathname

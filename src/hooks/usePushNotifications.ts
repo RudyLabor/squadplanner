@@ -1,6 +1,7 @@
 import { create } from 'zustand'
 import { supabase } from '../lib/supabase'
-import { useVoiceCallStore } from './useVoiceCall'
+// useVoiceCallStore is dynamically imported in CALL_ACTION handler to avoid
+// pulling 758-line useVoiceCall module into the critical path
 
 // Check if running on native platform without static Capacitor import
 // Capacitor injects itself on window in native builds
@@ -349,13 +350,14 @@ export const usePushNotifications = () => {
 }
 
 // Gestionnaire des messages du Service Worker pour les actions d'appel
-function handleServiceWorkerMessage(event: MessageEvent<ServiceWorkerMessage>) {
+async function handleServiceWorkerMessage(event: MessageEvent<ServiceWorkerMessage>) {
   if (!import.meta.env.PROD) {
     console.log('[Push] Message from SW:', event.data)
   }
 
   if (event.data?.type === 'CALL_ACTION') {
     const { action, callId } = event.data
+    const { useVoiceCallStore } = await import('./useVoiceCall')
     const voiceCallStore = useVoiceCallStore.getState()
 
     if (!import.meta.env.PROD) {

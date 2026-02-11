@@ -2,7 +2,8 @@ import { create } from 'zustand'
 import { supabase, initSupabase } from '../lib/supabase'
 import type { User, Session } from '@supabase/supabase-js'
 import type { Profile } from '../types/database'
-import { forceLeaveVoiceParty } from './useVoiceChat'
+// forceLeaveVoiceParty is dynamically imported in signOut() to avoid
+// pulling the 675-line useVoiceChat module into the critical path
 
 /**
  * Update daily streak and award XP for daily login
@@ -275,8 +276,11 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 
   signOut: async () => {
     try {
-      // Leave voice party before signing out
-      await forceLeaveVoiceParty()
+      // Leave voice party before signing out (dynamic import to keep bundle lean)
+      try {
+        const { forceLeaveVoiceParty } = await import('./useVoiceChat')
+        await forceLeaveVoiceParty()
+      } catch { /* voice module may not be loaded */ }
 
       // Clear local state first
       set({ user: null, session: null, profile: null, isLoading: true })

@@ -1,0 +1,13 @@
+<svg width="96" height="96" viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="96" height="96" rx="0" fill="#08090a"/>
+  <!-- Squad / group icon - 3 people silhouettes -->
+  <!-- Center person (front) -->
+  <circle cx="48" cy="34" r="10" fill="#4ade80"/>
+  <path d="M30 68 C30 54 66 54 66 68" stroke="#4ade80" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <!-- Left person (back) -->
+  <circle cx="28" cy="38" r="8" fill="#5e6dd2"/>
+  <path d="M14 66 C14 55 42 55 42 66" stroke="#5e6dd2" stroke-width="2.5" fill="none" stroke-linecap="round" opacity="0.7"/>
+  <!-- Right person (back) -->
+  <circle cx="68" cy="38" r="8" fill="#8b93ff"/>
+  <path d="M54 66 C54 55 82 55 82 66" stroke="#8b93ff" stroke-width="2.5" fill="none" stroke-linecap="round" opacity="0.7"/>
+</svg>

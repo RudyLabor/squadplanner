@@ -19,7 +19,7 @@ const STATIC_ASSETS = [
   '/vite.svg',
   '/critical.css',
   '/manifest.json',
-  '/icon-192.png'
+  '/icon-192.svg'
 ];
 
 // Install event - cache essential assets

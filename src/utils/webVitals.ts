@@ -134,7 +134,7 @@ function startFlushSchedule(): void {
 
 /**
  * Observe Core Web Vitals using PerformanceObserver.
- * Reports LCP, FCP, CLS, and TTFB.
+ * Reports LCP, FCP, CLS, TTFB, FID, and INP.
  */
 export function observeWebVitals(callback: WebVitalCallback) {
   if (typeof window === 'undefined' || !('PerformanceObserver' in window)) return;
@@ -206,6 +206,46 @@ export function observeWebVitals(callback: WebVitalCallback) {
         rating: getRating('TTFB', ttfb),
       });
     }
+  } catch {
+    // Not supported in this browser
+  }
+
+  // FID
+  try {
+    const fidObserver = new PerformanceObserver((list) => {
+      const entries = list.getEntries();
+      const firstEntry = entries[0];
+      if (firstEntry) {
+        const fid = (firstEntry as any).processingStart - firstEntry.startTime;
+        callback({
+          name: 'FID',
+          value: fid,
+          rating: getRating('FID', fid),
+        });
+      }
+    });
+    fidObserver.observe({ type: 'first-input', buffered: true });
+  } catch {
+    // Not supported in this browser
+  }
+
+  // INP
+  try {
+    let maxINP = 0;
+    const inpObserver = new PerformanceObserver((list) => {
+      for (const entry of list.getEntries()) {
+        const duration = (entry as any).duration;
+        if (duration > maxINP) {
+          maxINP = duration;
+          callback({
+            name: 'INP',
+            value: maxINP,
+            rating: getRating('INP', maxINP),
+          });
+        }
+      }
+    });
+    inpObserver.observe({ type: 'event', buffered: true, durationThreshold: 16 });
   } catch {
     // Not supported in this browser
   }

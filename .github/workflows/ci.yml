@@ -98,8 +98,8 @@ jobs:
           find dist/assets -name '*.js' -exec ls -lhS {} + | head -5 | awk '{print $5, $NF}' >> $GITHUB_STEP_SUMMARY
           echo '```' >> $GITHUB_STEP_SUMMARY
 
-          # Budget check: fail if JS > 3500KB (current is ~3300KB, will lower as we optimize)
-          BUDGET_KB=3500
+          # Budget check: fail if JS > 3000KB (Phase 7 target: 1000KB, tightening progressively)
+          BUDGET_KB=3000
           if [ "$JS_SIZE_KB" -gt "$BUDGET_KB" ]; then
             echo "" >> $GITHUB_STEP_SUMMARY
             echo "### BUDGET EXCEEDED" >> $GITHUB_STEP_SUMMARY

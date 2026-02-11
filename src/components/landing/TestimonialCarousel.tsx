@@ -169,7 +169,7 @@ export function TestimonialCarousel() {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
       >
-        Ce que vivent les gamers (et pourquoi on a créé ça)
+        Nos joueurs en parlent mieux que nous
       </m.h2>
       <m.p
         className="text-text-tertiary text-center mb-10"

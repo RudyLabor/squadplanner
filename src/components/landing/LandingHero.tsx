@@ -94,8 +94,8 @@ export function LandingHero({ isLoggedIn, isDesktop, mouseRotateX, mouseRotateY,
             ))}
           </div>
 
-          <div className="flex items-center justify-center gap-2 text-base text-text-quaternary">
-            <span className="inline-block w-2 h-2 rounded-full bg-success animate-pulse" />
+          <div className="inline-flex items-center justify-center gap-2 text-base text-text-quaternary">
+            <span className="shrink-0 w-1.5 h-1.5 rounded-full bg-success animate-pulse" />
             <span>Lancement 2026 — Rejoins les premiers gamers qui testent Squad Planner</span>
           </div>
 

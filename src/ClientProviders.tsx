@@ -27,13 +27,12 @@ export function ClientProviders() {
 
   useEffect(() => {
     setIsClient(true)
-    // Initialize theme on client
     import('./hooks/useTheme').then(({ useThemeStore }) => {
-      const state = useThemeStore.getState()
-      const effectiveTheme = state.mode === 'system'
-        ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
-        : state.mode
+      const { mode } = useThemeStore.getState()
+      const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+      const effectiveTheme = mode === 'system' ? systemTheme : mode
       document.documentElement.setAttribute('data-theme', effectiveTheme)
+      useThemeStore.setState({ effectiveTheme })
     })
   }, [])
 

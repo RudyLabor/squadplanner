@@ -1,8 +1,3 @@
-/**
- * Theme management hook - PHASE 4.4
- * Supports dark/light/system themes with persistence
- */
-
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 
@@ -14,22 +9,18 @@ interface ThemeState {
   effectiveTheme: 'dark' | 'light'
 }
 
-// Get system preference
 function getSystemTheme(): 'dark' | 'light' {
   if (typeof window === 'undefined') return 'dark'
   return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
 }
 
-// Apply theme to document
 function applyTheme(theme: 'dark' | 'light') {
+  if (typeof document === 'undefined') return
   const root = document.documentElement
   root.setAttribute('data-theme', theme)
 
-  // Update meta theme-color for mobile browsers
-  // Read the bg-base token so the meta tag stays in sync with the design system
   const metaThemeColor = document.querySelector('meta[name="theme-color"]')
   if (metaThemeColor) {
-    // We must wait a tick for data-theme to take effect before reading the variable
     requestAnimationFrame(() => {
       const bgBase = getComputedStyle(root).getPropertyValue('--color-bg-base').trim()
       metaThemeColor.setAttribute('content', bgBase || (theme === 'dark' ? '#050506' : '#ffffff'))
@@ -41,7 +32,7 @@ export const useThemeStore = create<ThemeState>()(
   persist(
     (set) => ({
       mode: 'system',
-      effectiveTheme: getSystemTheme(),
+      effectiveTheme: typeof window !== 'undefined' ? getSystemTheme() : 'dark',
 
       setMode: (mode: ThemeMode) => {
         const effectiveTheme = mode === 'system' ? getSystemTheme() : mode
@@ -55,27 +46,24 @@ export const useThemeStore = create<ThemeState>()(
         if (state) {
           const effectiveTheme = state.mode === 'system' ? getSystemTheme() : state.mode
           applyTheme(effectiveTheme)
-          state.effectiveTheme = effectiveTheme
+          useThemeStore.setState({ effectiveTheme })
         }
       },
     }
   )
 )
 
-// Initialize theme on load and listen for system changes
 if (typeof window !== 'undefined') {
-  // Apply initial theme
-  const state = useThemeStore.getState()
-  const effectiveTheme = state.mode === 'system' ? getSystemTheme() : state.mode
-  applyTheme(effectiveTheme)
+  const mql = window.matchMedia('(prefers-color-scheme: dark)')
 
-  // Listen for system preference changes
-  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
-    const state = useThemeStore.getState()
-    if (state.mode === 'system') {
+  const handleSystemChange = (e: MediaQueryListEvent) => {
+    const { mode } = useThemeStore.getState()
+    if (mode === 'system') {
       const newTheme = e.matches ? 'dark' : 'light'
       applyTheme(newTheme)
       useThemeStore.setState({ effectiveTheme: newTheme })
     }
-  })
+  }
+
+  mql.addEventListener('change', handleSystemChange)
 }

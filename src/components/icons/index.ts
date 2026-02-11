@@ -1,0 +1,8 @@
+export type { IconProps } from './types'
+export { d } from './types'
+export * from './navigation'
+export * from './status'
+export * from './media'
+export * from './actions'
+export * from './misc'
+export * from './social'

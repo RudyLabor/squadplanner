@@ -237,7 +237,9 @@ export default function Home({ loaderData }: HomeProps) {
               transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
             >
               <h1 className="text-xl md:text-2xl font-bold text-text-primary truncate mb-1">
-                Salut {profile?.username || 'Gamer'} !
+                {(profile?.username && profile.username.length > 12)
+                  ? 'Salut !'
+                  : `Salut ${profile?.username || 'Gamer'} !`}
               </h1>
               <div className="flex items-center justify-between gap-3">
                 <p className="text-sm text-text-tertiary line-clamp-1 min-w-0">

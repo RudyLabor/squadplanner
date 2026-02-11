@@ -10,11 +10,11 @@ import {
 import { Card, Button } from '../../components/ui'
 
 export function PartySingleSquad({ squad, isConnecting, onJoin }: {
-  squad: { id: string; name: string; game: string; member_count?: number }
+  squad: { id: string; name: string; game: string; member_count?: number; total_members?: number }
   isConnecting: boolean
   onJoin: () => void
 }) {
-  const memberCount = squad.member_count || 1
+  const memberCount = squad.member_count || squad.total_members || 1
   return (
     <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
       <Card className="md:col-span-3 p-8 text-center bg-gradient-to-br from-primary/10 via-bg-elevated to-success/5 border-primary shadow-md">
@@ -59,24 +59,17 @@ export function PartyStatsCard({ squadName }: { squadName: string }) {
           <div><p className="text-sm font-semibold text-text-primary">Party vocale</p><p className="text-xs text-text-tertiary">Statistiques</p></div>
         </div>
         <div className="space-y-3">
-          <div className="flex items-center justify-between"><span className="text-sm text-text-secondary flex items-center gap-2"><Clock className="w-3.5 h-3.5 text-text-tertiary" />Dur&eacute;e moyenne</span><span className="text-sm font-medium text-text-primary">45 min</span></div>
-          <div className="flex items-center justify-between"><span className="text-sm text-text-secondary flex items-center gap-2"><TrendingUp className="w-3.5 h-3.5 text-text-tertiary" />Cette semaine</span><span className="text-sm font-medium text-text-primary">12 parties</span></div>
-          <div className="flex items-center justify-between"><span className="text-sm text-text-secondary flex items-center gap-2"><Users className="w-3.5 h-3.5 text-text-tertiary" />Participants moy.</span><span className="text-sm font-medium text-text-primary">3.2</span></div>
+          <div className="flex items-center justify-between"><span className="text-sm text-text-secondary flex items-center gap-2"><Clock className="w-3.5 h-3.5 text-text-tertiary" />Dur&eacute;e moyenne</span><span className="text-sm font-medium text-text-tertiary italic">--</span></div>
+          <div className="flex items-center justify-between"><span className="text-sm text-text-secondary flex items-center gap-2"><TrendingUp className="w-3.5 h-3.5 text-text-tertiary" />Cette semaine</span><span className="text-sm font-medium text-text-tertiary italic">--</span></div>
+          <div className="flex items-center justify-between"><span className="text-sm text-text-secondary flex items-center gap-2"><Users className="w-3.5 h-3.5 text-text-tertiary" />Participants moy.</span><span className="text-sm font-medium text-text-tertiary italic">--</span></div>
         </div>
+        <p className="text-xs text-text-quaternary mt-3 text-center italic">Bient&ocirc;t disponible</p>
       </Card>
       <Card className="p-4 bg-bg-elevated border-border-default flex-1">
         <p className="text-sm font-semibold text-text-primary mb-3">Historique r&eacute;cent</p>
-        <div className="space-y-2.5">
-          {[
-            { name: squadName, time: 'Hier, 21h30', duration: '1h 12min' },
-            { name: squadName, time: 'Lundi, 19h00', duration: '45min' },
-            { name: squadName, time: 'Dimanche, 15h15', duration: '2h 05min' },
-          ].map((entry, i) => (
-            <div key={i} className="flex items-center justify-between py-1.5 border-b border-border-subtle last:border-0">
-              <div><p className="text-xs font-medium text-text-primary">{entry.name}</p><p className="text-xs text-text-tertiary">{entry.time}</p></div>
-              <span className="text-xs text-text-secondary">{entry.duration}</span>
-            </div>
-          ))}
+        <div className="flex flex-col items-center justify-center py-4">
+          <p className="text-xs text-text-quaternary italic">Aucune party enregistr&eacute;e</p>
+          <p className="text-xs text-text-quaternary mt-1">Lance ta premi&egrave;re party pour voir l'historique ici</p>
         </div>
       </Card>
     </>

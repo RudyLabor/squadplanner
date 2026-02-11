@@ -111,7 +111,7 @@ export function SquadSettings({
       {/* Stats Avancees - Premium */}
       <div className="mb-6">
         <div className="flex items-center gap-2 mb-3">
-          <h2 className="text-base font-semibold text-text-primary uppercase tracking-wide">
+          <h2 className="text-base font-semibold text-text-primary">
             Stats avancées
           </h2>
           {!canAccessAdvancedStats && <PremiumBadge small />}

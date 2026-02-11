@@ -35,7 +35,7 @@ export function SquadMembers({ members, ownerId, memberCount, currentUserId, onI
   return (
     <div className="mb-6">
       <div className="flex items-center justify-between mb-3">
-        <h2 className="text-base font-semibold text-text-primary uppercase tracking-wide">
+        <h2 className="text-base font-semibold text-text-primary">
           Membres ({memberCount})
         </h2>
         <Button size="sm" variant="secondary" onClick={onInviteClick}>

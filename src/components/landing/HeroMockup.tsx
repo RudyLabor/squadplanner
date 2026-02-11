@@ -78,7 +78,7 @@ export function HeroMockup() {
               <div className="flex items-center gap-1">
                 <div className="flex items-end gap-[1px]">
                   {[1, 2, 3, 4].map(i => (
-                    <div key={i} className={`w-[2px] rounded-sm ${i <= 3 ? 'bg-white' : 'bg-text-tertiary'}`} style={{ height: 2 + i * 2 }} />
+                    <div key={i} className={`w-[2px] rounded-sm ${i <= 3 ? 'bg-text-primary' : 'bg-text-tertiary'}`} style={{ height: 2 + i * 2 }} />
                   ))}
                 </div>
                 <div className="w-5 h-2.5 rounded-[2px] border border-text-tertiary ml-1">

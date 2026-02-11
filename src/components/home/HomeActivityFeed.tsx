@@ -247,9 +247,12 @@ export const HomeActivityFeed = memo(function HomeActivityFeed({
 
   return (
     <section aria-label="Activité récente" className="mb-6">
-      <h2 className="text-base font-semibold text-text-primary mb-3">
-        Activité récente
-      </h2>
+      <div className="flex items-center gap-2 mb-3">
+        <h2 className="text-base font-semibold text-text-primary">
+          Activité récente
+        </h2>
+        <span className="text-xs text-text-quaternary italic px-2 py-0.5 rounded-full bg-border-subtle">Aperçu</span>
+      </div>
       <Card className="px-4 py-1 divide-y divide-border-subtle">
         {activities.map((item, index) => (
           <ActivityRow key={item.id} item={item} index={index} />

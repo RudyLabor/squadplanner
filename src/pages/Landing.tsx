@@ -2,7 +2,7 @@
 
 import { m, useScroll, useTransform, useMotionValue, useSpring, useInView } from 'framer-motion'
 import { useRef, useEffect, useState, type ReactNode } from 'react'
-import { useAuthStore } from '../hooks'
+import { useAuthStore } from '../hooks/useAuth'
 import { CustomCursor } from '../components/landing/CustomCursor'
 import { LandingNavbar } from '../components/landing/LandingNavbar'
 import { LandingHero } from '../components/landing/LandingHero'

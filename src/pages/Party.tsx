@@ -144,7 +144,7 @@ export function Party() {
 
               {isConnected && otherSquads.length > 0 && (
                 <div>
-                  <h2 className="text-base font-semibold text-text-primary uppercase tracking-wide mb-3">Autres squads</h2>
+                  <h2 className="text-base font-semibold text-text-primary mb-3">Autres squads</h2>
                   <div className="space-y-3">
                     {otherSquads.map((squad) => (
                       <PartySquadCard key={squad.id} squad={{ id: squad.id, name: squad.name, game: squad.game || 'Jeu', member_count: squad.member_count || 0 }} onJoin={() => handleJoinParty(squad.id)} isConnecting={isConnecting} />

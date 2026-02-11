@@ -1,6 +1,6 @@
 import type { HeadersArgs } from 'react-router'
 import { Navigate, useSearchParams } from 'react-router'
-import { useAuthStore } from '../hooks'
+import { useAuthStore } from '../hooks/useAuth'
 import Landing from '../pages/Landing'
 
 function LoadingSpinner() {

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useCallback, memo, useRef, useEffect } from 'react'
+import { getPlaceholderUrl, getOptimizedSrc } from './imageUtils'
 
 interface OptimizedImageProps {
   src: string | null | undefined
@@ -10,108 +11,14 @@ interface OptimizedImageProps {
   height?: number
   fallback?: React.ReactNode
   priority?: boolean
-  /** WebP version URL (auto-detected from src if not provided) */
   webpSrc?: string
-  /** AVIF version URL (optional) */
   avifSrc?: string
-  /** Show skeleton placeholder while loading */
   showPlaceholder?: boolean
-  /** Placeholder type: 'skeleton' (default), 'blur' (tiny blurred thumbnail), or a custom URL */
   placeholder?: 'skeleton' | 'blur' | (string & {})
-  /** Responsive image srcSet */
   srcSet?: string
-  /** Responsive image sizes hint */
   sizes?: string
 }
 
-/**
- * Generate a tiny placeholder URL for Supabase storage images.
- * Returns a 10px wide, low-quality WebP version for blur-up effect.
- */
-function getPlaceholderUrl(src: string, width: number = 10): string | undefined {
-  if (src.includes('supabase') && src.includes('/storage/')) {
-    try {
-      const url = new URL(src)
-      url.searchParams.set('width', String(width))
-      url.searchParams.set('quality', '20')
-      url.searchParams.set('format', 'webp')
-      return url.toString()
-    } catch {
-      return undefined
-    }
-  }
-  return undefined
-}
-
-// Check format support (cached)
-let webpSupported: boolean | null = null
-let avifSupported: boolean | null = null
-
-function checkWebPSupport(): boolean {
-  if (webpSupported !== null) return webpSupported
-  if (typeof document === 'undefined') return false
-  const canvas = document.createElement('canvas')
-  webpSupported = canvas.toDataURL('image/webp').indexOf('data:image/webp') === 0
-  return webpSupported
-}
-
-function checkAVIFSupport(): boolean {
-  if (avifSupported !== null) return avifSupported
-  if (typeof document === 'undefined') return false
-  const canvas = document.createElement('canvas')
-  avifSupported = canvas.toDataURL('image/avif').indexOf('data:image/avif') === 0
-  return avifSupported
-}
-
-/**
- * Use Vercel Image Optimization API for automatic format negotiation
- * (WebP/AVIF based on Accept header) and CDN-level resizing.
- * Falls back to client-side format detection for non-Vercel environments.
- */
-function getVercelImageUrl(src: string, width?: number, quality: number = 80): string {
-  // Only use Vercel optimization for absolute URLs or local paths
-  // Skip for data URLs, blob URLs, or SVGs
-  if (src.startsWith('data:') || src.startsWith('blob:') || src.endsWith('.svg')) return src
-
-  // Vercel Image Optimization API — handles format negotiation automatically
-  const params = new URLSearchParams()
-  params.set('url', src)
-  if (width) params.set('w', String(width))
-  params.set('q', String(quality))
-  return `/_vercel/image?${params.toString()}`
-}
-
-/**
- * Get optimized image source with Vercel Image Optimization or WebP/AVIF fallback
- */
-function getOptimizedSrc(src: string, width?: number, webpSrc?: string, avifSrc?: string): string {
-  // Explicit sources take priority
-  if (avifSrc && checkAVIFSupport()) return avifSrc
-  if (webpSrc && checkWebPSupport()) return webpSrc
-
-  // Use Vercel Image Optimization when a width is specified
-  if (width) return getVercelImageUrl(src, width)
-
-  // Fallback: auto-convert jpg/png URLs to webp/avif if supported
-  const isConvertible = /\.(jpe?g|png)$/i.test(src)
-  if (!isConvertible) return src
-
-  if (checkAVIFSupport()) return src.replace(/\.(jpe?g|png)$/i, '.avif')
-  if (checkWebPSupport()) return src.replace(/\.(jpe?g|png)$/i, '.webp')
-
-  return src
-}
-
-/**
- * Optimized Image component with:
- * - Native lazy loading with Intersection Observer
- * - WebP/AVIF format support
- * - Fade-in animation on load
- * - Skeleton placeholder
- * - Fallback support
- * - Error handling
- * - Prevents layout shift with explicit dimensions
- */
 export const OptimizedImage = memo(function OptimizedImage({
   src,
   alt,
@@ -132,7 +39,6 @@ export const OptimizedImage = memo(function OptimizedImage({
   const [isInView, setIsInView] = useState(priority)
   const imgRef = useRef<HTMLImageElement>(null)
 
-  // Lazy loading with Intersection Observer for better performance
   useEffect(() => {
     if (priority || !imgRef.current) return
 
@@ -158,18 +64,16 @@ export const OptimizedImage = memo(function OptimizedImage({
     setHasError(true)
   }, [])
 
-  // If no src or error occurred, show fallback
   if (!src || hasError) {
     return <>{fallback}</> || null
   }
 
   const optimizedSrc = isInView ? getOptimizedSrc(src, width, webpSrc, avifSrc) : undefined
 
-  // Determine blur placeholder URL
   const blurSrc = placeholder === 'blur'
     ? getPlaceholderUrl(src)
     : placeholder !== 'skeleton'
-      ? placeholder // custom URL string
+      ? placeholder
       : undefined
 
   return (
@@ -180,7 +84,6 @@ export const OptimizedImage = memo(function OptimizedImage({
         ...(width && height ? { aspectRatio: `${width}/${height}` } : {}),
       }}
     >
-      {/* Skeleton placeholder (default) */}
       {showPlaceholder && !isLoaded && !blurSrc && (
         <div
           className="absolute inset-0 bg-overlay-faint animate-pulse rounded-inherit"
@@ -188,7 +91,6 @@ export const OptimizedImage = memo(function OptimizedImage({
         />
       )}
 
-      {/* Blur-up placeholder */}
       {showPlaceholder && !isLoaded && blurSrc && (
         <img
           src={blurSrc}
@@ -219,9 +121,6 @@ export const OptimizedImage = memo(function OptimizedImage({
   )
 })
 
-/**
- * Avatar component with optimized loading and fallback
- */
 interface AvatarProps {
   src: string | null | undefined
   alt: string
@@ -283,7 +182,6 @@ export const Avatar = memo(function Avatar({
 
   return (
     <div className={`${sizeClass} rounded-full flex-shrink-0 relative overflow-hidden ${className}`}>
-      {/* Blurred tiny placeholder */}
       {placeholderSrc && !isLoaded && (
         <img
           src={placeholderSrc}

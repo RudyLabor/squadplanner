@@ -1,12 +1,19 @@
-import { memo } from 'react'
+import { memo, useState, useCallback } from 'react'
 import { Link } from 'react-router-dom'
-import { m } from 'framer-motion'
+import { m, AnimatePresence } from 'framer-motion'
 import {
   Home,
   Mic,
   MessageCircle,
-  User,
+  Calendar,
   Users,
+  Compass,
+  User,
+  Settings,
+  HelpCircle,
+  Phone,
+  MoreHorizontal,
+  X,
 } from '../icons'
 import { usePrefetch } from '../../hooks/usePrefetch'
 
@@ -18,7 +25,15 @@ const mobileNavLeft = [
 
 const mobileNavRight = [
   { path: '/messages', icon: MessageCircle, label: 'Messages' },
+] as const
+
+const moreMenuItems = [
+  { path: '/sessions', icon: Calendar, label: 'Sessions' },
+  { path: '/discover', icon: Compass, label: 'Découvrir' },
   { path: '/profile', icon: User, label: 'Profil' },
+  { path: '/call-history', icon: Phone, label: 'Appels' },
+  { path: '/settings', icon: Settings, label: 'Paramètres' },
+  { path: '/help', icon: HelpCircle, label: 'Aide' },
 ] as const
 
 // OPTIMIZED: Memoized MobileNavLink
@@ -103,6 +118,89 @@ const PartyButton = memo(function PartyButton({ isActive, hasActiveParty }: { is
   )
 })
 
+// More button with popup menu
+const MoreButton = memo(function MoreButton({ currentPath, onClose }: { currentPath: string; onClose: () => void }) {
+  const [isOpen, setIsOpen] = useState(false)
+  const isMoreActive = moreMenuItems.some(item => currentPath === item.path)
+
+  const handleToggle = useCallback(() => {
+    setIsOpen(prev => !prev)
+  }, [])
+
+  const handleItemClick = useCallback(() => {
+    setIsOpen(false)
+    onClose()
+  }, [onClose])
+
+  return (
+    <div className="relative flex flex-col items-center justify-center min-w-[48px] min-h-[48px] touch-target">
+      <button
+        onClick={handleToggle}
+        className="flex flex-col items-center justify-center"
+        aria-label="Plus de pages"
+        aria-expanded={isOpen}
+      >
+        <div className="relative">
+          {isOpen ? (
+            <X
+              className="w-6 h-6 text-text-primary"
+              strokeWidth={2}
+              aria-hidden="true"
+            />
+          ) : (
+            <MoreHorizontal
+              className={`w-6 h-6 transition-colors ${isMoreActive ? 'text-text-primary' : 'text-text-tertiary'}`}
+              strokeWidth={isMoreActive ? 2 : 1.5}
+              aria-hidden="true"
+            />
+          )}
+        </div>
+        <span className={`text-sm mt-0.5 transition-colors ${isOpen || isMoreActive ? 'text-text-primary' : 'text-text-tertiary'}`}>
+          Plus
+        </span>
+      </button>
+
+      <AnimatePresence>
+        {isOpen && (
+          <>
+            <m.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 z-40"
+              onClick={() => setIsOpen(false)}
+            />
+            <m.div
+              initial={{ opacity: 0, y: 10, scale: 0.95 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 10, scale: 0.95 }}
+              transition={{ duration: 0.15, ease: [0.16, 1, 0.3, 1] }}
+              className="absolute bottom-full right-0 mb-2 w-48 bg-bg-elevated border border-border-subtle rounded-xl shadow-lg z-50 overflow-hidden"
+            >
+              {moreMenuItems.map((item) => {
+                const isActive = currentPath === item.path
+                return (
+                  <Link
+                    key={item.path}
+                    to={item.path}
+                    onClick={handleItemClick}
+                    className={`flex items-center gap-3 px-4 py-3 transition-colors ${
+                      isActive ? 'bg-primary/10 text-primary' : 'text-text-secondary hover:bg-bg-hover'
+                    }`}
+                  >
+                    <item.icon className={`w-5 h-5 ${isActive ? 'text-primary' : 'text-text-tertiary'}`} />
+                    <span className="text-sm font-medium">{item.label}</span>
+                  </Link>
+                )
+              })}
+            </m.div>
+          </>
+        )}
+      </AnimatePresence>
+    </div>
+  )
+})
+
 interface MobileBottomNavProps {
   currentPath: string
   isPartyActive: boolean
@@ -125,7 +223,7 @@ export const MobileBottomNav = memo(function MobileBottomNav({
   return (
     <nav
       aria-label="Navigation mobile"
-      className={`lg:hidden fixed bottom-0 left-0 right-0 bg-bg-base border-t border-surface-card z-50 transition-transform duration-200 ${isKeyboardVisible ? 'translate-y-full' : 'translate-y-0'}`}
+      className={`lg:hidden fixed bottom-0 left-0 right-0 bg-bg-base border-t border-border-subtle z-50 transition-transform duration-200 ${isKeyboardVisible ? 'translate-y-full' : 'translate-y-0'}`}
     >
       <div className="flex items-center justify-around py-2 mobile-nav-padding">
         {mobileNavLeft.map((item) => (
@@ -151,6 +249,7 @@ export const MobileBottomNav = memo(function MobileBottomNav({
             />
           </div>
         ))}
+        <MoreButton currentPath={currentPath} onClose={() => {}} />
       </div>
     </nav>
   )

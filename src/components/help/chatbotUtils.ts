@@ -27,7 +27,7 @@ export const GREETING_MESSAGE: ChatMessage = {
 }
 
 const NO_MATCH_RESPONSE =
-  "Je n'ai pas trouve de reponse precise. Tu peux contacter le support via le formulaire ci-dessus ou reformuler ta question."
+  "Je n'ai pas trouvé de réponse précise. Tu peux contacter le support via le formulaire ci-dessus ou reformuler ta question."
 
 function normalize(str: string): string {
   return str

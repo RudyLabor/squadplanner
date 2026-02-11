@@ -2,74 +2,9 @@
 
 import { useState, useRef, useEffect, useCallback, memo } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
-import {
-  Search,
-  X,
-  Loader2,
-  Sparkles,
-  RefreshCw,
-} from './icons'
-import { supabase } from '../lib/supabase'
-
-/**
- * GifPicker — Phase 3.1
- * Search and select GIFs via Supabase Edge Function proxy (tenor-proxy).
- * API key stays server-side. Mobile-optimized bottom sheet on small screens.
- */
-
-interface GifResult {
-  id: string
-  url: string        // Full GIF URL
-  preview: string    // Tiny preview (thumbnail)
-  width: number
-  height: number
-}
-
-function mapResults(data: any): GifResult[] {
-  return (data.results || []).map((r: any) => ({
-    id: r.id,
-    url: r.media_formats?.gif?.url || r.media_formats?.tinygif?.url || '',
-    preview: r.media_formats?.tinygif?.url || r.media_formats?.gif?.url || '',
-    width: r.media_formats?.tinygif?.dims?.[0] || 200,
-    height: r.media_formats?.tinygif?.dims?.[1] || 150,
-  }))
-}
-
-async function searchGifs(query: string, limit = 20): Promise<GifResult[]> {
-  try {
-    const { data, error } = await supabase.functions.invoke('tenor-proxy', {
-      body: { action: 'search', query, limit }
-    })
-    if (error) throw error
-    return mapResults(data)
-  } catch (err) {
-    console.warn('[GifPicker] Search error:', err)
-    return []
-  }
-}
-
-async function fetchTrendingGifs(limit = 20): Promise<GifResult[]> {
-  try {
-    const { data, error } = await supabase.functions.invoke('tenor-proxy', {
-      body: { action: 'featured', limit }
-    })
-    if (error) throw error
-    return mapResults(data)
-  } catch (err) {
-    console.warn('[GifPicker] Trending error:', err)
-    return []
-  }
-}
-
-// Suggested categories for gaming
-const CATEGORIES = [
-  { label: 'GG', query: 'gg gaming' },
-  { label: 'Rage', query: 'rage gaming' },
-  { label: 'Victoire', query: 'victory celebration gaming' },
-  { label: 'Fail', query: 'epic fail gaming' },
-  { label: 'LOL', query: 'laughing gaming' },
-  { label: 'Sad', query: 'sad gaming' },
-]
+import { Search, X, Loader2, Sparkles, RefreshCw } from './icons'
+import { searchGifs, fetchTrendingGifs, CATEGORIES } from './gifApi'
+import type { GifResult } from './gifApi'
 
 interface GifPickerProps {
   isOpen: boolean
@@ -86,7 +21,6 @@ export const GifPicker = memo(function GifPicker({ isOpen, onSelect, onClose }: 
   const searchRef = useRef<HTMLInputElement>(null)
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
-  // Load trending on open
   useEffect(() => {
     if (!isOpen) {
       setQuery('')
@@ -108,7 +42,6 @@ export const GifPicker = memo(function GifPicker({ isOpen, onSelect, onClose }: 
     setTimeout(() => searchRef.current?.focus(), 200)
   }, [isOpen])
 
-  // Close on Escape key
   useEffect(() => {
     if (!isOpen) return
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -118,7 +51,6 @@ export const GifPicker = memo(function GifPicker({ isOpen, onSelect, onClose }: 
     return () => document.removeEventListener('keydown', handleKeyDown)
   }, [isOpen, onClose])
 
-  // Debounced search
   const handleSearch = useCallback((value: string) => {
     setQuery(value)
     if (debounceRef.current) clearTimeout(debounceRef.current)
@@ -144,7 +76,6 @@ export const GifPicker = memo(function GifPicker({ isOpen, onSelect, onClose }: 
     }, 400)
   }, [])
 
-  // Category quick search
   const handleCategoryClick = useCallback((categoryQuery: string) => {
     setQuery(categoryQuery)
     setIsLoading(true)
@@ -156,7 +87,6 @@ export const GifPicker = memo(function GifPicker({ isOpen, onSelect, onClose }: 
     })
   }, [])
 
-  // Retry loading
   const handleRetry = useCallback(() => {
     setIsLoading(true)
     setHasLoaded(false)
@@ -176,14 +106,12 @@ export const GifPicker = memo(function GifPicker({ isOpen, onSelect, onClose }: 
     <AnimatePresence>
       {isOpen && (
         <>
-          {/* Backdrop */}
           <div
             className="fixed inset-0 z-[60] bg-black/40 sm:bg-transparent"
             onClick={onClose}
             aria-hidden="true"
           />
 
-          {/* Picker — full-width bottom sheet on mobile, positioned popup on desktop */}
           <m.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -191,12 +119,10 @@ export const GifPicker = memo(function GifPicker({ isOpen, onSelect, onClose }: 
             transition={{ type: 'spring', stiffness: 400, damping: 30 }}
             className="fixed inset-x-0 bottom-0 z-[61] sm:absolute sm:inset-x-auto sm:bottom-full sm:mb-2 sm:right-0 sm:w-[360px] bg-surface-dark border border-border-hover sm:rounded-xl rounded-t-2xl shadow-2xl shadow-black/50 overflow-hidden max-h-[70vh] sm:max-h-[420px] flex flex-col"
           >
-            {/* Drag handle (mobile only) */}
             <div className="sm:hidden flex justify-center pt-2 pb-1">
               <div className="w-10 h-1 rounded-full bg-overlay-heavy" />
             </div>
 
-            {/* Header with search */}
             <div className="p-3 border-b border-border-default flex-shrink-0">
               <div className="flex items-center gap-2 mb-2">
                 <Sparkles className="w-4 h-4 text-primary-hover" />
@@ -231,7 +157,6 @@ export const GifPicker = memo(function GifPicker({ isOpen, onSelect, onClose }: 
               </div>
             </div>
 
-            {/* Quick categories */}
             {!hasSearched && (
               <div className="flex gap-1.5 px-3 py-2 border-b border-border-default overflow-x-auto scrollbar-hide flex-shrink-0">
                 {CATEGORIES.map((cat) => (
@@ -246,7 +171,6 @@ export const GifPicker = memo(function GifPicker({ isOpen, onSelect, onClose }: 
               </div>
             )}
 
-            {/* GIF grid */}
             <div className="flex-1 overflow-y-auto p-2 scrollbar-thin scrollbar-thumb-border-hover scrollbar-track-transparent min-h-[200px]">
               {isLoading ? (
                 <div className="flex items-center justify-center h-full min-h-[200px]">
@@ -255,7 +179,7 @@ export const GifPicker = memo(function GifPicker({ isOpen, onSelect, onClose }: 
               ) : gifs.length === 0 ? (
                 <div className="flex flex-col items-center justify-center h-full min-h-[200px] gap-3">
                   {hasSearched ? (
-                    <p className="text-text-tertiary text-sm">Aucun GIF trouvé</p>
+                    <p className="text-text-tertiary text-sm">Aucun GIF trouve</p>
                   ) : hasLoaded ? (
                     <>
                       <p className="text-text-tertiary text-sm text-center px-4">
@@ -266,7 +190,7 @@ export const GifPicker = memo(function GifPicker({ isOpen, onSelect, onClose }: 
                         className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm bg-primary-15 text-primary-hover hover:bg-primary-20 transition-colors"
                       >
                         <RefreshCw className="w-3.5 h-3.5" />
-                        Réessayer
+                        Reessayer
                       </button>
                     </>
                   ) : (

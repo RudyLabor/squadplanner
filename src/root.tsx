@@ -41,9 +41,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <link rel="dns-prefetch" href="https://nxbqiwmfyafgshxzczxo.supabase.co" />
         <link rel="dns-prefetch" href="https://squadplanner-i1mfqcqs.livekit.cloud" />
 
-        {/* Font preloads (self-hosted) */}
+        {/* Font preload - only Inter (main font). Space Grotesk uses font-display:optional */}
         <link rel="preload" href="/fonts/inter-var-latin.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
-        <link rel="preload" href="/fonts/space-grotesk-latin.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
 
         {/* Open Graph / Facebook */}
         <meta property="og:type" content="website" />
@@ -143,13 +142,12 @@ export default function Root() {
 
   useEffect(() => {
     setIsClient(true)
-    // Theme is already applied by the blocking <script> in <head>.
-    // Just ensure the Zustand store syncs with the DOM attribute.
     import('./hooks/useTheme').then(({ useThemeStore }) => {
-      const domTheme = document.documentElement.getAttribute('data-theme') as 'dark' | 'light'
-      if (domTheme) {
-        useThemeStore.setState({ effectiveTheme: domTheme })
-      }
+      const { mode } = useThemeStore.getState()
+      const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+      const effectiveTheme = mode === 'system' ? systemTheme : mode
+      document.documentElement.setAttribute('data-theme', effectiveTheme)
+      useThemeStore.setState({ effectiveTheme })
     })
   }, [])
 
@@ -192,9 +190,16 @@ export default function Root() {
   )
 }
 
-// SSR-safe fallback - renders just the route content without client-side chrome
+// SSR-safe fallback - renders layout structure matching client to prevent CLS
 function SSRFallback() {
-  return <Outlet />
+  return (
+    <div className="h-[100dvh] bg-bg-base flex overflow-hidden">
+      <aside className="hidden lg:flex flex-col w-[72px] bg-bg-elevated border-r border-border-subtle" aria-hidden="true" />
+      <main className="flex-1 overflow-y-auto overflow-x-hidden">
+        <Outlet />
+      </main>
+    </div>
+  )
 }
 
 // Error boundary for the root route

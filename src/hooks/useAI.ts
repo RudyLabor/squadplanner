@@ -1,366 +1,111 @@
 import { create } from 'zustand'
 import { supabase, isSupabaseReady } from '../lib/supabase'
-
-/** Retry helper with exponential backoff (1s, 2s, 4s). Max 3 attempts. */
-async function withBackoff<T>(fn: () => Promise<T>, maxRetries = 3): Promise<T> {
-  let lastError: unknown
-  for (let attempt = 0; attempt < maxRetries; attempt++) {
-    try {
-      return await fn()
-    } catch (err) {
-      lastError = err
-      if (attempt < maxRetries - 1) {
-        await new Promise(r => setTimeout(r, 1000 * Math.pow(2, attempt)))
-      }
-    }
-  }
-  throw lastError
-}
-
-// Types for AI features
-interface SlotSuggestion {
-  day_of_week: number
-  hour: number
-  reliability_score: number
-  session_count: number
-  avg_attendance: number
-  reason: string
-}
-
-interface DecisionDetails {
-  present_count: number
-  absent_count: number
-  maybe_count: number
-  no_response_count: number
-  total_members: number
-  min_players: number
-  response_rate: number
-  time_until_session: number
-}
-
-interface DecisionRecommendation {
-  recommended_action: 'confirm' | 'cancel' | 'reschedule' | 'wait'
-  confidence: number
-  reason: string
-  details: DecisionDetails
-  alternative_slots?: SlotSuggestion[]
-}
-
-interface PlayerReliability {
-  user_id: string
-  username: string
-  avatar_url: string | null
-  reliability_score: number
-  trend: 'improving' | 'stable' | 'declining'
-  stats: {
-    total_sessions: number
-    present_count: number
-    late_count: number
-    noshow_count: number
-    maybe_to_present_rate: number
-  }
-  badges: string[]
-  warning: string | null
-}
-
-interface SquadReliabilityReport {
-  squad_id: string
-  squad_name: string
-  avg_reliability: number
-  total_sessions: number
-  players: PlayerReliability[]
-  insights: string[]
-}
-
-interface CoachTip {
-  id: string
-  type: 'planning' | 'engagement' | 'timing' | 'general'
-  content: string
-  data?: Record<string, unknown>
-}
-
-interface AICoachTip {
-  tip: string
-  tone: 'encouragement' | 'warning' | 'celebration'
-  context?: {
-    reliability_score: number
-    trend: 'improving' | 'stable' | 'declining'
-    days_since_last_session: number
-    recent_noshows: number
-    upcoming_sessions: number
-  }
-}
-
-interface AIInsight {
-  id: string
-  insight_type: string
-  content: Record<string, unknown>
-  is_dismissed: boolean
-  created_at: string
-}
-
-interface AIState {
-  slotSuggestions: SlotSuggestion[]
-  hasSlotHistory: boolean
-  decisionRecommendation: DecisionRecommendation | null
-  reliabilityReport: SquadReliabilityReport | null
-  coachTips: CoachTip[]
-  aiCoachTip: AICoachTip | null
-  aiCoachTipLoading: boolean
-  insights: AIInsight[]
-  isLoading: boolean
-  error: string | null
-
-  // Actions
-  fetchSlotSuggestions: (squadId: string) => Promise<void>
-  fetchDecisionRecommendation: (sessionId: string) => Promise<void>
-  fetchReliabilityReport: (squadId: string) => Promise<void>
-  fetchPlayerReliability: (userId: string) => Promise<PlayerReliability | null>
-  fetchCoachTips: (squadId: string) => Promise<void>
-  fetchAICoachTip: (userId: string, contextType?: 'profile' | 'home') => Promise<AICoachTip | null>
-  fetchInsights: (squadId: string) => Promise<void>
-  dismissInsight: (insightId: string) => Promise<void>
-  getSlotReliability: (squadId: string, dayOfWeek: number, hour: number) => Promise<number>
-  triggerRsvpReminder: (squadId?: string, sessionId?: string) => Promise<{ success: boolean; remindersSent: number }>
-  clearError: () => void
-}
-
-// Day names for display
-const dayNames = ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi']
+import type { AIState, SlotSuggestion, CoachTip, AICoachTip, AIInsight } from './useAITypes'
+import { withBackoff, dayNames } from './useAITypes'
 
 export const useAIStore = create<AIState>((set) => ({
-  slotSuggestions: [],
-  hasSlotHistory: false,
-  decisionRecommendation: null,
-  reliabilityReport: null,
-  coachTips: [],
-  aiCoachTip: null,
-  aiCoachTipLoading: false,
-  insights: [],
-  isLoading: false,
-  error: null,
+  slotSuggestions: [], hasSlotHistory: false, decisionRecommendation: null,
+  reliabilityReport: null, coachTips: [], aiCoachTip: null, aiCoachTipLoading: false,
+  insights: [], isLoading: false, error: null,
 
   clearError: () => set({ error: null }),
 
-  // ===== AI PLANNING - Edge Function =====
   fetchSlotSuggestions: async (squadId: string) => {
     if (!isSupabaseReady()) return
     try {
       set({ isLoading: true, error: null })
-
       const { data, error } = await withBackoff(() =>
-        supabase.functions.invoke('ai-planning', {
-          body: { squad_id: squadId, limit: 5 }
-        })
+        supabase.functions.invoke('ai-planning', { body: { squad_id: squadId, limit: 5 } })
       )
-
-      if (error) {
-        throw new Error(error.message || 'Erreur lors de l\'analyse des créneaux')
-      }
-
+      if (error) throw new Error(error.message || 'Erreur lors de l\'analyse des creneaux')
       if (data?.suggestions) {
-        set({
-          slotSuggestions: data.suggestions,
-          hasSlotHistory: data.has_history || false,
-          isLoading: false
-        })
+        set({ slotSuggestions: data.suggestions, hasSlotHistory: data.has_history || false, isLoading: false })
       } else {
-        // Fallback if no data
-        set({
-          slotSuggestions: [],
-          hasSlotHistory: false,
-          isLoading: false
-        })
+        set({ slotSuggestions: [], hasSlotHistory: false, isLoading: false })
       }
     } catch {
-      // Fallback to default suggestions
       const fallbackSuggestions: SlotSuggestion[] = [
-        { day_of_week: 6, hour: 20, reliability_score: 80, session_count: 0, avg_attendance: 80, reason: `${dayNames[6]} 20h - Créneau populaire le week-end` },
-        { day_of_week: 0, hour: 15, reliability_score: 75, session_count: 0, avg_attendance: 75, reason: `${dayNames[0]} 15h - Après-midi détente` },
-        { day_of_week: 4, hour: 21, reliability_score: 70, session_count: 0, avg_attendance: 70, reason: `${dayNames[4]} 21h - Soirée en semaine` },
+        { day_of_week: 6, hour: 20, reliability_score: 80, session_count: 0, avg_attendance: 80, reason: `${dayNames[6]} 20h - Creneau populaire le week-end` },
+        { day_of_week: 0, hour: 15, reliability_score: 75, session_count: 0, avg_attendance: 75, reason: `${dayNames[0]} 15h - Apres-midi detente` },
+        { day_of_week: 4, hour: 21, reliability_score: 70, session_count: 0, avg_attendance: 70, reason: `${dayNames[4]} 21h - Soiree en semaine` },
       ]
-      set({
-        slotSuggestions: fallbackSuggestions,
-        hasSlotHistory: false,
-        isLoading: false,
-        error: 'Suggestions par défaut (pas assez d\'historique)'
-      })
+      set({ slotSuggestions: fallbackSuggestions, hasSlotHistory: false, isLoading: false, error: 'Suggestions par defaut (pas assez d\'historique)' })
     }
   },
 
-  // ===== AI DECISION - Edge Function =====
   fetchDecisionRecommendation: async (sessionId: string) => {
     if (!isSupabaseReady()) return
     try {
       set({ isLoading: true, error: null })
-
-      const { data, error } = await supabase.functions.invoke('ai-decision', {
-        body: { session_id: sessionId }
-      })
-
-      if (error) {
-        throw new Error(error.message || 'Erreur lors de l\'analyse de décision')
-      }
-
-      if (data?.recommendation) {
-        set({
-          decisionRecommendation: data.recommendation,
-          isLoading: false
-        })
-      } else {
-        set({
-          decisionRecommendation: null,
-          isLoading: false
-        })
-      }
+      const { data, error } = await supabase.functions.invoke('ai-decision', { body: { session_id: sessionId } })
+      if (error) throw new Error(error.message || 'Erreur lors de l\'analyse de decision')
+      set({ decisionRecommendation: data?.recommendation || null, isLoading: false })
     } catch {
-      set({
-        decisionRecommendation: null,
-        isLoading: false,
-        error: 'Impossible d\'obtenir la recommandation'
-      })
+      set({ decisionRecommendation: null, isLoading: false, error: 'Impossible d\'obtenir la recommandation' })
     }
   },
 
-  // ===== AI RELIABILITY - Edge Function (Squad Report) =====
   fetchReliabilityReport: async (squadId: string) => {
     if (!isSupabaseReady()) return
     try {
       set({ isLoading: true, error: null })
-
-      const { data, error } = await supabase.functions.invoke('ai-reliability', {
-        body: { squad_id: squadId }
-      })
-
-      if (error) {
-        throw new Error(error.message || 'Erreur lors de l\'analyse de fiabilité')
-      }
-
-      if (data?.report) {
-        set({
-          reliabilityReport: data.report,
-          isLoading: false
-        })
-      } else {
-        set({
-          reliabilityReport: null,
-          isLoading: false
-        })
-      }
+      const { data, error } = await supabase.functions.invoke('ai-reliability', { body: { squad_id: squadId } })
+      if (error) throw new Error(error.message || 'Erreur lors de l\'analyse de fiabilite')
+      set({ reliabilityReport: data?.report || null, isLoading: false })
     } catch {
-      set({
-        reliabilityReport: null,
-        isLoading: false,
-        error: 'Impossible d\'obtenir le rapport de fiabilité'
-      })
+      set({ reliabilityReport: null, isLoading: false, error: 'Impossible d\'obtenir le rapport de fiabilite' })
     }
   },
 
-  // ===== AI RELIABILITY - Edge Function (Individual Player) =====
-  fetchPlayerReliability: async (userId: string): Promise<PlayerReliability | null> => {
+  fetchPlayerReliability: async (userId: string) => {
     if (!isSupabaseReady()) return null
     try {
-      const { data, error } = await supabase.functions.invoke('ai-reliability', {
-        body: { user_id: userId }
-      })
-
+      const { data, error } = await supabase.functions.invoke('ai-reliability', { body: { user_id: userId } })
       if (error) return null
-
       return data?.player || null
-    } catch {
-      return null
-    }
+    } catch { return null }
   },
 
-  // ===== COACH TIPS - Client-side analysis =====
   fetchCoachTips: async (squadId: string) => {
     if (!isSupabaseReady()) return
     try {
       set({ isLoading: true, error: null })
-
-      // Fetch squad stats with backoff
       const [{ data: squad }, { data: sessions }] = await withBackoff(() =>
         Promise.all([
-          supabase
-            .from('squads')
-            .select('total_sessions, total_members')
-            .eq('id', squadId)
-            .single(),
-          supabase
-            .from('sessions')
-            .select('scheduled_at, status, created_at')
-            .eq('squad_id', squadId)
-            .order('scheduled_at', { ascending: false })
-            .limit(20),
+          supabase.from('squads').select('total_sessions, total_members').eq('id', squadId).single(),
+          supabase.from('sessions').select('scheduled_at, status, created_at').eq('squad_id', squadId)
+            .order('scheduled_at', { ascending: false }).limit(20),
         ])
       )
 
       const tips: CoachTip[] = []
       const completedSessions = sessions?.filter(s => s.status === 'completed') || []
 
-      // Tip 1: Check if they plan ahead
       if (completedSessions.length > 0) {
         const avgLeadTime = completedSessions.reduce((acc, s) => {
-          const scheduled = new Date(s.scheduled_at)
-          const created = new Date(s.created_at)
-          return acc + (scheduled.getTime() - created.getTime()) / (1000 * 60 * 60)
+          return acc + (new Date(s.scheduled_at).getTime() - new Date(s.created_at).getTime()) / (1000 * 60 * 60)
         }, 0) / completedSessions.length
-
         if (avgLeadTime < 48) {
-          tips.push({
-            id: 'plan-ahead',
-            type: 'planning',
-            content: 'Vos sessions ont +40% de présence quand elles sont planifiées 48h à l\'avance.',
-            data: { avgLeadTimeHours: Math.round(avgLeadTime) }
-          })
+          tips.push({ id: 'plan-ahead', type: 'planning', content: 'Vos sessions ont +40% de presence quand elles sont planifiees 48h a l\'avance.', data: { avgLeadTimeHours: Math.round(avgLeadTime) } })
         }
       }
 
-      // Tip 2: Check session frequency
       if (squad && squad.total_sessions < 5) {
-        tips.push({
-          id: 'more-sessions',
-          type: 'engagement',
-          content: 'Les squads qui jouent régulièrement (2+ fois/semaine) ont des membres 3x plus engagés.',
-        })
+        tips.push({ id: 'more-sessions', type: 'engagement', content: 'Les squads qui jouent regulierement (2+ fois/semaine) ont des membres 3x plus engages.' })
       }
 
-      // Tip 3: Time-based insights
-      const eveningSessions = completedSessions.filter(s => {
-        const hour = new Date(s.scheduled_at).getHours()
-        return hour >= 22
-      }).length
-
+      const eveningSessions = completedSessions.filter(s => new Date(s.scheduled_at).getHours() >= 22).length
       if (completedSessions.length > 0 && eveningSessions > completedSessions.length * 0.5) {
-        tips.push({
-          id: 'late-sessions',
-          type: 'timing',
-          content: 'Les sessions après 22h ont +35% de no-show. Essayez des créneaux plus tôt.',
-          data: { eveningRatio: Math.round((eveningSessions / completedSessions.length) * 100) }
-        })
+        tips.push({ id: 'late-sessions', type: 'timing', content: 'Les sessions apres 22h ont +35% de no-show. Essayez des creneaux plus tot.', data: { eveningRatio: Math.round((eveningSessions / completedSessions.length) * 100) } })
       }
 
-      // Tip 4: Weekend vs weekday
-      const weekendSessions = completedSessions.filter(s => {
-        const day = new Date(s.scheduled_at).getDay()
-        return day === 0 || day === 6
-      }).length
-
+      const weekendSessions = completedSessions.filter(s => { const d = new Date(s.scheduled_at).getDay(); return d === 0 || d === 6 }).length
       if (completedSessions.length >= 5 && weekendSessions < completedSessions.length * 0.3) {
-        tips.push({
-          id: 'try-weekends',
-          type: 'timing',
-          content: 'Les sessions du week-end ont généralement +20% de participation.',
-        })
+        tips.push({ id: 'try-weekends', type: 'timing', content: 'Les sessions du week-end ont generalement +20% de participation.' })
       }
 
-      // Default tip if no specific insights
       if (tips.length === 0) {
-        tips.push({
-          id: 'general',
-          type: 'general',
-          content: 'Utilisez le RSVP obligatoire pour augmenter l\'engagement de votre squad.',
-        })
+        tips.push({ id: 'general', type: 'general', content: 'Utilisez le RSVP obligatoire pour augmenter l\'engagement de votre squad.' })
       }
 
       set({ coachTips: tips, isLoading: false })
@@ -369,130 +114,66 @@ export const useAIStore = create<AIState>((set) => ({
     }
   },
 
-  // ===== AI COACH TIP - Edge Function (Personal Coach) =====
   fetchAICoachTip: async (userId: string, contextType: 'profile' | 'home' = 'profile'): Promise<AICoachTip | null> => {
     if (!isSupabaseReady()) return null
+    const fallback: AICoachTip = { tip: 'Pret pour la prochaine session ? Tes potes t\'attendent !', tone: 'encouragement' }
     try {
       set({ aiCoachTipLoading: true })
-
-      const { data, error } = await supabase.functions.invoke('ai-coach', {
-        body: { user_id: userId, context_type: contextType }
-      })
-
-      if (error) {
-        // Return a fallback tip
-        const fallback: AICoachTip = {
-          tip: 'Prêt pour la prochaine session ? Tes potes t\'attendent !',
-          tone: 'encouragement'
-        }
-        set({ aiCoachTip: fallback, aiCoachTipLoading: false })
-        return fallback
-      }
-
-      if (data) {
-        const tip = data as AICoachTip
-        set({ aiCoachTip: tip, aiCoachTipLoading: false })
-        return tip
-      }
-
+      const { data, error } = await supabase.functions.invoke('ai-coach', { body: { user_id: userId, context_type: contextType } })
+      if (error) { set({ aiCoachTip: fallback, aiCoachTipLoading: false }); return fallback }
+      if (data) { const tip = data as AICoachTip; set({ aiCoachTip: tip, aiCoachTipLoading: false }); return tip }
       set({ aiCoachTipLoading: false })
       return null
     } catch {
-      // Return a fallback tip
-      const fallback: AICoachTip = {
-        tip: 'Prêt pour la prochaine session ? Tes potes t\'attendent !',
-        tone: 'encouragement'
-      }
       set({ aiCoachTip: fallback, aiCoachTipLoading: false })
       return fallback
     }
   },
 
-  // ===== AI INSIGHTS from Database =====
   fetchInsights: async (squadId: string) => {
     if (!isSupabaseReady()) return
     try {
-      const { data } = await supabase
-        .from('ai_insights')
-        .select('*')
-        .eq('squad_id', squadId)
-        .eq('is_dismissed', false)
-        .order('created_at', { ascending: false })
-        .limit(10)
-
+      const { data } = await supabase.from('ai_insights').select('*')
+        .eq('squad_id', squadId).eq('is_dismissed', false)
+        .order('created_at', { ascending: false }).limit(10)
       set({ insights: (data || []) as AIInsight[] })
-    } catch {
-      // Silently ignore - insights are not critical
-    }
+    } catch { /* non-critical */ }
   },
 
   dismissInsight: async (insightId: string) => {
     try {
-      await supabase
-        .from('ai_insights')
-        .update({ is_dismissed: true })
-        .eq('id', insightId)
-
-      set(state => ({
-        insights: state.insights.filter(i => i.id !== insightId)
-      }))
-    } catch {
-      // Silently ignore
-    }
+      await supabase.from('ai_insights').update({ is_dismissed: true }).eq('id', insightId)
+      set(state => ({ insights: state.insights.filter(i => i.id !== insightId) }))
+    } catch { /* non-critical */ }
   },
 
-  // ===== SLOT RELIABILITY - Database RPC =====
   getSlotReliability: async (squadId: string, dayOfWeek: number, hour: number) => {
     try {
-      const { data, error } = await supabase.rpc('get_slot_reliability', {
-        p_squad_id: squadId,
-        p_day_of_week: dayOfWeek,
-        p_hour: hour
-      })
-
-      if (error) return 50 // Default fallback
-
+      const { data, error } = await supabase.rpc('get_slot_reliability', { p_squad_id: squadId, p_day_of_week: dayOfWeek, p_hour: hour })
+      if (error) return 50
       return data || 50
-    } catch {
-      return 50
-    }
+    } catch { return 50 }
   },
 
-  // ===== AI RSVP REMINDER - Edge Function =====
   triggerRsvpReminder: async (squadId?: string, sessionId?: string) => {
     try {
       const body: Record<string, string> = {}
       if (squadId) body.squad_id = squadId
       if (sessionId) body.session_id = sessionId
-
-      const { data, error } = await supabase.functions.invoke('ai-rsvp-reminder', {
-        body
-      })
-
+      const { data, error } = await supabase.functions.invoke('ai-rsvp-reminder', { body })
       if (error) return { success: false, remindersSent: 0 }
-
-      return {
-        success: data?.success || false,
-        remindersSent: data?.reminders_sent || 0
-      }
-    } catch {
-      return { success: false, remindersSent: 0 }
-    }
+      return { success: data?.success || false, remindersSent: data?.reminders_sent || 0 }
+    } catch { return { success: false, remindersSent: 0 } }
   },
 }))
 
-// Backward compatibility export for reliabilityInsights
 export const useAI = () => {
   const store = useAIStore()
   return {
     ...store,
-    // Map reliabilityReport.players to old reliabilityInsights format
     reliabilityInsights: store.reliabilityReport?.players.map(p => ({
-      user_id: p.user_id,
-      username: p.username,
-      reliability_score: p.reliability_score,
-      trend: p.trend,
-      warning: p.warning
+      user_id: p.user_id, username: p.username,
+      reliability_score: p.reliability_score, trend: p.trend, warning: p.warning
     })) || []
   }
 }

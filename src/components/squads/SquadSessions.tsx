@@ -257,8 +257,8 @@ export function SquadSessionsList({
 
       {/* Sessions list */}
       <div className="mb-6">
-        <h2 className="text-base font-semibold text-text-primary uppercase tracking-wide mb-3">
-          Sessions a venir
+        <h2 className="text-base font-semibold text-text-primary mb-3">
+          Sessions à venir
         </h2>
         {futureSessions.length > 0 ? (
           <div className="space-y-3 lg:grid lg:grid-cols-2 lg:gap-4 lg:space-y-0">

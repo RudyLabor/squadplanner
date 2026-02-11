@@ -99,7 +99,7 @@ export const DiscoverSquadCard = memo(function DiscoverSquadCard({ squad }: Prop
           <img src={squad.owner_avatar} alt="" className="w-4 h-4 rounded-full" loading="lazy" decoding="async" />
         ) : (
           <div className="w-4 h-4 rounded-full bg-indigo-500/20 flex items-center justify-center">
-            <span className="text-[0.5rem] text-indigo-400 font-bold">{squad.owner_username?.charAt(0).toUpperCase()}</span>
+            <span className="text-2xs text-indigo-400 font-bold">{squad.owner_username?.charAt(0).toUpperCase()}</span>
           </div>
         )}
         <span className="text-sm text-text-tertiary">{`Cr\u00e9\u00e9 par`} {squad.owner_username}</span>

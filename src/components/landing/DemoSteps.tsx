@@ -51,7 +51,7 @@ function DemoNavbar({ active }: { active: string }) {
         return (
           <div key={item.id} className="flex flex-col items-center gap-0.5">
             <Icon className="w-3 h-3" style={{ color: isActive ? 'var(--color-primary)' : 'var(--color-text-tertiary)' }} />
-            <span className={`text-[0.375rem] ${isActive ? 'text-primary font-medium' : 'text-text-tertiary'}`}>{item.label}</span>
+            <span className={`text-2xs ${isActive ? 'text-primary font-medium' : 'text-text-tertiary'}`}>{item.label}</span>
           </div>
         )
       })}

@@ -112,6 +112,48 @@ export function Discover() {
   )
 }
 
+// Featured squads section shown at the top when squads are available
+const FeaturedSection = memo(function FeaturedSection({ squads }: { squads: any[] }) {
+  if (!squads || squads.length < 2) return null
+
+  // Pick top 3 squads by member count as "featured"
+  const featured = [...squads]
+    .sort((a, b) => (b.member_count || 0) - (a.member_count || 0))
+    .slice(0, 3)
+
+  if (featured.length === 0) return null
+
+  return (
+    <section className="mb-6" aria-label="Squads en vedette">
+      <div className="flex items-center gap-2 mb-3">
+        <Sparkles className="w-4 h-4 text-primary" />
+        <h3 className="text-sm font-semibold text-text-primary">En vedette</h3>
+      </div>
+      <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide -mx-1 px-1">
+        {featured.map((squad) => (
+          <div
+            key={squad.id}
+            className="flex-shrink-0 w-64 rounded-xl border border-primary/20 bg-gradient-to-br from-primary/5 to-transparent p-4"
+          >
+            <div className="flex items-start gap-3">
+              <div className="w-11 h-11 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
+                <Gamepad2 className="w-5 h-5 text-primary" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <h4 className="text-sm font-semibold text-text-primary truncate">{squad.name}</h4>
+                <p className="text-xs text-primary font-medium">{squad.game || 'Multi-jeux'}</p>
+                <span className="inline-flex items-center gap-1 text-xs text-text-tertiary mt-1">
+                  <Users className="w-3 h-3" /> {squad.member_count || 0} membres
+                </span>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+  )
+})
+
 const SquadsTab = memo(function SquadsTab({ game, region }: { game: string; region: string }) {
   const { data: squads, isLoading } = useBrowseSquadsQuery(game || undefined, region || undefined)
 
@@ -201,12 +243,15 @@ const SquadsTab = memo(function SquadsTab({ game, region }: { game: string; regi
   }
 
   return (
-    <div className="space-y-2 lg:grid lg:grid-cols-2 xl:grid-cols-3 lg:gap-4 lg:space-y-0">
-      {squads.map(squad => (
-        <DiscoverSquadCard key={squad.id} squad={squad} />
-      ))}
-      {/* Sentinel element for infinite scroll */}
-      <div ref={sentinelRef} aria-hidden="true" />
+    <div>
+      <FeaturedSection squads={squads} />
+      <div className="space-y-2 lg:grid lg:grid-cols-2 xl:grid-cols-3 lg:gap-4 lg:space-y-0">
+        {squads.map(squad => (
+          <DiscoverSquadCard key={squad.id} squad={squad} />
+        ))}
+        {/* Sentinel element for infinite scroll */}
+        <div ref={sentinelRef} aria-hidden="true" />
+      </div>
     </div>
   )
 })

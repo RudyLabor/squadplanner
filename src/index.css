@@ -191,6 +191,8 @@
   /* 8-level fluid scale with clamp() for responsive typography */
 
   /* Body text */
+  --text-2xs: clamp(0.5625rem, 0.53rem + 0.1vw, 0.625rem);
+  --text-2xs--line-height: 1.4;
   --text-xs: clamp(0.6875rem, 0.65rem + 0.1vw, 0.75rem);
   --text-xs--line-height: 1.5;
   --text-sm: clamp(0.75rem, 0.7rem + 0.15vw, 0.8125rem);

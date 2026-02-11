@@ -213,21 +213,24 @@ export default function Squads({ loaderData }: SquadsProps) {
           ) : !showCreate && !showJoin && (
             <m.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}>
               <Card className="p-8 text-center">
-                <m.div className="w-14 h-14 rounded-2xl bg-bg-hover flex items-center justify-center mx-auto mb-4"
+                <m.div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary/10 to-purple/10 flex items-center justify-center mx-auto mb-4"
                   initial={{ scale: 0.8, rotate: -10 }} animate={{ scale: 1, rotate: 0 }}
                   transition={{ delay: 0.1, type: 'spring', stiffness: 300, damping: 25 }}>
-                  <Users className="w-7 h-7 text-text-quaternary" strokeWidth={1.5} />
+                  <Users className="w-8 h-8 text-primary" strokeWidth={1.5} />
                 </m.div>
-                <h3 className="text-lg font-semibold text-text-primary mb-2">Pas encore de squad</h3>
-                <p className="text-md text-text-tertiary mb-6 max-w-[280px] mx-auto">
-                  Lance ta squad pour inviter tes potes, ou rejoins l'action avec un code.
+                <h3 className="text-lg font-semibold text-text-primary mb-2">Crée ta première squad</h3>
+                <p className="text-md text-text-tertiary mb-2 max-w-[300px] mx-auto">
+                  Invite tes potes, planifie des sessions et joue ensemble.
+                </p>
+                <p className="text-sm text-text-quaternary mb-6 max-w-[300px] mx-auto">
+                  Tu as un code d'invitation ? Rejoins directement une squad existante.
                 </p>
                 <div className="flex gap-3 justify-center">
                   <Button variant="secondary" onClick={() => setShowJoin(true)}>
-                    <UserPlus className="w-4 h-4" />Rejoins l'action
+                    <UserPlus className="w-4 h-4" />Rejoindre avec un code
                   </Button>
                   <Button onClick={handleOpenCreate}>
-                    <Plus className="w-4 h-4" />Lance ta squad
+                    <Plus className="w-4 h-4" />Créer une squad
                   </Button>
                 </div>
               </Card>

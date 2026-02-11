@@ -11,6 +11,7 @@ import { useCreateSessionModal } from '../components/CreateSessionModal'
 import { NeedsResponseSection, AllCaughtUp } from './sessions/NeedsResponseSection'
 import { AISlotSuggestions, CoachTipsSection } from './sessions/AISuggestions'
 import { ConfirmedSessions, HowItWorksSection } from './sessions/ConfirmedSessions'
+import { WeekCalendar } from './sessions/WeekCalendar'
 
 interface SessionsProps {
   loaderData?: {
@@ -27,6 +28,7 @@ export function Sessions({ loaderData }: SessionsProps) {
   const openCreateSession = useCreateSessionModal(s => s.open)
 
   const [showConfetti, setShowConfetti] = useState(false)
+  const [weekOffset, setWeekOffset] = useState(0)
   const hasShownCelebration = useRef(false)
   const aiFetchedRef = useRef<Set<string>>(new Set())
 
@@ -96,6 +98,7 @@ export function Sessions({ loaderData }: SessionsProps) {
             </Button>
           </header>
 
+          <WeekCalendar sessions={upcomingSessions} weekOffset={weekOffset} onWeekChange={setWeekOffset} />
           <AllCaughtUp needsResponse={needsResponse.length} confirmed={confirmed.length} />
           <NeedsResponseSection needsResponse={needsResponse} />
           <AISlotSuggestions slotSuggestions={slotSuggestions} />

@@ -61,7 +61,7 @@ export function MessageReplyPreview({
         />
       ) : (
         <div className="w-4 h-4 rounded-full bg-primary/30 flex items-center justify-center flex-shrink-0">
-          <span className="text-[0.5rem] font-medium text-primary">
+          <span className="text-2xs font-medium text-primary">
             {originalMessage.sender_username.charAt(0).toUpperCase()}
           </span>
         </div>

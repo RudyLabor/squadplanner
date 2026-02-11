@@ -143,7 +143,7 @@ export default function Home({ loaderData }: HomeProps) {
           id: session.id, title: session.title, game: session.game,
           scheduled_at: session.scheduled_at, status: session.status,
           squad_id: session.squad_id, squad_name: squad?.name || 'Squad',
-          total_members: squad?.member_count || squad?.total_members || 1,
+          total_members: squad?.member_count ?? squad?.total_members ?? 1,
           rsvp_counts: session.rsvp_counts || { present: 0, absent: 0, maybe: 0 },
           my_rsvp: session.my_rsvp || null,
         }

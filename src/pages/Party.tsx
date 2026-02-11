@@ -131,7 +131,7 @@ export function Party() {
                       <div className="md:col-span-3 space-y-3">
                         <p className="text-sm font-medium text-text-secondary mb-1">Choisis une squad pour lancer la party</p>
                         {squads.map((squad) => (
-                          <PartySquadCard key={squad.id} squad={{ id: squad.id, name: squad.name, game: squad.game || 'Jeu', member_count: squad.member_count || 0 }} onJoin={() => handleJoinParty(squad.id)} isConnecting={isConnecting} />
+                          <PartySquadCard key={squad.id} squad={{ id: squad.id, name: squad.name, game: squad.game || 'Jeu', member_count: squad.member_count ?? 0 }} onJoin={() => handleJoinParty(squad.id)} isConnecting={isConnecting} />
                         ))}
                       </div>
                       <div className="md:col-span-2 hidden md:flex flex-col gap-3">
@@ -147,7 +147,7 @@ export function Party() {
                   <h2 className="text-base font-semibold text-text-primary mb-3">Autres squads</h2>
                   <div className="space-y-3">
                     {otherSquads.map((squad) => (
-                      <PartySquadCard key={squad.id} squad={{ id: squad.id, name: squad.name, game: squad.game || 'Jeu', member_count: squad.member_count || 0 }} onJoin={() => handleJoinParty(squad.id)} isConnecting={isConnecting} />
+                      <PartySquadCard key={squad.id} squad={{ id: squad.id, name: squad.name, game: squad.game || 'Jeu', member_count: squad.member_count ?? 0 }} onJoin={() => handleJoinParty(squad.id)} isConnecting={isConnecting} />
                     ))}
                   </div>
                 </div>

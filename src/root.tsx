@@ -41,7 +41,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <link rel="dns-prefetch" href="https://nxbqiwmfyafgshxzczxo.supabase.co" />
         <link rel="dns-prefetch" href="https://squadplanner-i1mfqcqs.livekit.cloud" />
 
-        {/* Font preload - only Inter (main font). Space Grotesk uses font-display:optional */}
+        {/* Inline @font-face so browser can match preload to font declaration immediately,
+            without waiting for critical.css to parse. Prevents "preloaded but not used" warning. */}
+        <style dangerouslySetInnerHTML={{ __html: `@font-face{font-family:'Inter';font-style:normal;font-weight:100 900;font-display:swap;src:url('/fonts/inter-var-latin.woff2') format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;size-adjust:100%;ascent-override:90%;descent-override:22%;line-gap-override:0%}` }} />
         <link rel="preload" href="/fonts/inter-var-latin.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
 
         {/* Open Graph / Facebook */}
@@ -191,10 +193,12 @@ export default function Root() {
 }
 
 // SSR-safe fallback - renders layout structure matching client to prevent CLS
+// Sidebar width must match DesktopSidebar collapsed width (140px) and
+// DesktopContentWrapper initial marginLeft (140px) to avoid layout shift on hydration.
 function SSRFallback() {
   return (
     <div className="h-[100dvh] bg-bg-base flex overflow-hidden">
-      <aside className="hidden lg:flex flex-col w-[72px] bg-bg-elevated border-r border-border-subtle" aria-hidden="true" />
+      <aside className="hidden lg:block w-[140px] shrink-0 bg-bg-elevated border-r border-border-subtle" aria-hidden="true" />
       <main className="flex-1 overflow-y-auto overflow-x-hidden">
         <Outlet />
       </main>

@@ -78,7 +78,7 @@ export const HomeSquadsSection = memo(function HomeSquadsSection({
                         <div className="text-sm text-text-tertiary">{squad.game}</div>
                       </div>
                       <div className="text-sm text-text-quaternary">
-                        {squad.member_count || squad.total_members || 1} membre{(squad.member_count || squad.total_members || 1) > 1 ? 's' : ''}
+                        {squad.member_count ?? squad.total_members ?? 1} membre{(squad.member_count ?? squad.total_members ?? 1) > 1 ? 's' : ''}
                       </div>
                       <ChevronRight className="w-4 h-4 text-text-quaternary" />
                     </div>

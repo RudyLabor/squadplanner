@@ -21,6 +21,7 @@ async function fetchSquads(): Promise<SquadWithMembers[]> {
         game,
         invite_code,
         owner_id,
+        total_members,
         created_at
       )
     `)
@@ -35,20 +36,10 @@ async function fetchSquads(): Promise<SquadWithMembers[]> {
   const squadsData = memberships.map(m => m.squads as unknown as Squad)
   const uniqueSquads = squadIds.map(id => squadsData.find(s => s.id === id)!).filter(Boolean)
 
-  const { data: memberCounts } = await supabase
-    .from('squad_members')
-    .select('squad_id')
-    .in('squad_id', squadIds)
-
-  const countBySquad: Record<string, number> = {}
-  memberCounts?.forEach(m => {
-    countBySquad[m.squad_id] = (countBySquad[m.squad_id] || 0) + 1
-  })
-
   return uniqueSquads
     .map(squad => ({
       ...squad,
-      member_count: countBySquad[squad.id] || 0
+      member_count: (squad as any).total_members ?? 1
     }))
     .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
 }
@@ -70,7 +61,7 @@ async function fetchSquadById(id: string): Promise<SquadWithMembers | null> {
   return {
     ...squad,
     members: members || [],
-    member_count: members?.length || 0
+    member_count: members?.length ?? 0
   }
 }
 

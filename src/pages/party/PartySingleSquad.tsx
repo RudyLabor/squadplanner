@@ -14,7 +14,7 @@ export function PartySingleSquad({ squad, isConnecting, onJoin }: {
   isConnecting: boolean
   onJoin: () => void
 }) {
-  const memberCount = squad.member_count || squad.total_members || 1
+  const memberCount = squad.member_count ?? squad.total_members ?? 1
   return (
     <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
       <Card className="md:col-span-3 p-8 text-center bg-gradient-to-br from-primary/10 via-bg-elevated to-success/5 border-primary shadow-md">

@@ -127,7 +127,7 @@ export function FeaturesSection() {
                 onClick={() => setActiveFeature(i)}
                 className={`flex items-center gap-2 px-5 py-3 rounded-xl transition-all text-sm font-medium ${
                   activeFeature === i
-                    ? 'text-white shadow-lg'
+                    ? 'shadow-lg'
                     : 'bg-surface-card border border-border-subtle text-text-tertiary hover:text-text-primary hover:border-border-hover'
                 }`}
                 style={activeFeature === i ? {

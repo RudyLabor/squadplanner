@@ -13,6 +13,7 @@ const pageTitles: Record<string, string> = {
   '/premium': 'Premium — Squad Planner',
   '/help': 'Aide & FAQ — Squad Planner',
   '/call-history': 'Historique Appels — Squad Planner',
+  '/discover': 'Découvrir — Squad Planner',
   '/auth': 'Connexion — Squad Planner',
   '/onboarding': 'Bienvenue — Squad Planner',
   '/legal': "Conditions d'utilisation — Squad Planner",

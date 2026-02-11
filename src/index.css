@@ -434,8 +434,9 @@ body,
   font-feature-settings: "cv02", "cv03", "cv04", "cv11";
   text-rendering: optimizeLegibility;
   letter-spacing: -0.011em;
-  /* Smooth theme switching (dark <-> light) */
-  transition: background-color 0.3s ease, color 0.3s ease;
+  /* Smooth theme switching uses color-scheme for instant swap;
+     background-color transition only (color causes CLS/reflow on all text) */
+  transition: background-color 0.3s ease;
 }
 
 /* Premium typography defaults */
@@ -723,8 +724,7 @@ select:focus-visible,
 /* Card interactions - Refined, not dramatic */
 .card-interactive {
   transition: transform 0.35s var(--ease-out),
-              box-shadow 0.35s var(--ease-out),
-              border-color 0.35s var(--ease-out);
+              box-shadow 0.35s var(--ease-out);
 }
 .card-interactive:hover {
   transform: translateY(-1px);
@@ -738,7 +738,7 @@ select:focus-visible,
 
 /* Button states - Professional */
 .btn-premium {
-  transition: all 0.25s var(--ease-out);
+  transition: transform 0.25s var(--ease-out), opacity 0.25s var(--ease-out), box-shadow 0.25s var(--ease-out);
 }
 .btn-premium:hover {
   transform: translateY(-1px);
@@ -1117,7 +1117,7 @@ select:focus-visible,
 
 /* CTA hover glow */
 .cta-hover-glow {
-  transition: all 200ms ease;
+  transition: transform 200ms ease, box-shadow 200ms ease;
 }
 .cta-hover-glow:hover {
   box-shadow: 0 0 30px rgba(99, 102, 241, 0.4);

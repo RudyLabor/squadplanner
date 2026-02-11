@@ -60,7 +60,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     supabase.from('profiles').select('*').eq('id', user.id).single(),
     supabase
       .from('squad_members')
-      .select('squad_id, squads!inner(id, name, game, invite_code, owner_id, created_at)')
+      .select('squad_id, squads!inner(id, name, game, invite_code, owner_id, total_members, created_at)')
       .eq('user_id', user.id),
   ])
 
@@ -68,23 +68,11 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const squads = membershipsResult.data?.map((m: any) => m.squads) || []
   const squadIds = squads.map((s: any) => s.id)
 
-  // Get member counts (fast, critical for display)
-  let squadsWithCounts = squads
-  if (squadIds.length > 0) {
-    const { data: memberCounts } = await supabase
-      .from('squad_members')
-      .select('squad_id')
-      .in('squad_id', squadIds)
-
-    const countBySquad: Record<string, number> = {}
-    memberCounts?.forEach((m: any) => {
-      countBySquad[m.squad_id] = (countBySquad[m.squad_id] || 0) + 1
-    })
-    squadsWithCounts = squads.map((squad: any) => ({
-      ...squad,
-      member_count: countBySquad[squad.id] || 0,
-    }))
-  }
+  // Use total_members from the squads table directly (maintained by DB trigger)
+  const squadsWithCounts = squads.map((squad: any) => ({
+    ...squad,
+    member_count: squad.total_members ?? 1,
+  }))
 
   // Non-critical — NOT awaited → streamed via HTTP streaming (Phase 3.5)
   const upcomingSessions = fetchUpcomingSessions(supabase, squadIds, user.id)

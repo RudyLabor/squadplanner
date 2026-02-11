@@ -2,7 +2,7 @@
 
 import { lazy, Suspense, memo, useEffect, useRef } from 'react'
 import { Outlet, useSearchParams } from 'react-router'
-import { useAuthStore, usePushNotificationStore } from './hooks'
+import { useAuthStore, usePushNotificationStore, initializePushNotifications } from './hooks'
 import { initErrorTracker } from './lib/errorTracker'
 import { useDocumentTitle } from './hooks/useDocumentTitle'
 import { useScrollRestoration } from './hooks/useScrollRestoration'
@@ -52,6 +52,13 @@ export default function ClientShell() {
   useNavigationProgress()
 
   useEffect(() => { initialize() }, [initialize])
+
+  // Initialize push notifications (service worker registration)
+  useEffect(() => {
+    initializePushNotifications().catch(() => {
+      // Silent fail — push notifications are non-critical
+    })
+  }, [])
 
   // Capture PWA install prompt event
   useEffect(() => {

@@ -118,8 +118,23 @@ serve(async (req) => {
       )
     }
 
-    const supabaseUrl = Deno.env.get('SUPABASE_URL')!
-    const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
+    const supabaseUrl = Deno.env.get('SUPABASE_URL')
+    const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')
+
+    if (!supabaseUrl || !supabaseServiceKey) {
+      console.error('Missing SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY env vars')
+      return new Response(
+        JSON.stringify({ error: 'Server configuration error' }),
+        {
+          status: 500,
+          headers: {
+            ...getCorsHeaders(req.headers.get('origin')),
+            'Content-Type': 'application/json',
+          },
+        },
+      )
+    }
+
     const supabase = createClient(supabaseUrl, supabaseServiceKey)
 
     const rows = validMetrics.map((m) => ({
@@ -158,9 +173,10 @@ serve(async (req) => {
       },
     )
   } catch (error) {
-    console.error('Error processing web vitals:', error.message)
+    const message = error instanceof Error ? error.message : 'Unknown error'
+    console.error('Error processing web vitals:', message)
     return new Response(
-      JSON.stringify({ error: error.message }),
+      JSON.stringify({ error: message }),
       {
         status: 500,
         headers: {

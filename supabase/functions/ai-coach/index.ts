@@ -156,9 +156,22 @@ serve(async (req) => {
   }
 
   try {
+    // Validate required environment variables early
+    const supabaseUrl = Deno.env.get('SUPABASE_URL')
+    const supabaseAnonKey = Deno.env.get('SUPABASE_ANON_KEY')
+    const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')
+
+    if (!supabaseUrl || !supabaseAnonKey) {
+      console.error('Missing required env vars: SUPABASE_URL or SUPABASE_ANON_KEY')
+      return new Response(
+        JSON.stringify({ error: 'Service configuration error' }),
+        { status: 503, headers: { ...getCorsHeaders(req.headers.get('origin')), 'Content-Type': 'application/json' } }
+      )
+    }
+
     const supabaseClient = createClient(
-      Deno.env.get('SUPABASE_URL') ?? '',
-      Deno.env.get('SUPABASE_ANON_KEY') ?? '',
+      supabaseUrl,
+      supabaseAnonKey,
       {
         global: {
           headers: { Authorization: req.headers.get('Authorization')! },
@@ -198,15 +211,24 @@ serve(async (req) => {
 
     const { user_id, context_type } = validatedData
 
-    // Use admin client to check premium status
-    const supabaseAdmin = createClient(
-      Deno.env.get('SUPABASE_URL') ?? '',
-      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
-    )
-
     // Check if user is premium (for advanced AI features)
-    const { data: premiumCheck } = await supabaseAdmin.rpc('is_user_premium', { p_user_id: user_id })
-    const isPremium = premiumCheck === true
+    let isPremium = false
+    if (supabaseServiceKey) {
+      const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey)
+      // Wrapped in try-catch: the RPC may not exist in all environments
+      try {
+        const { data: premiumCheck, error: premiumError } = await supabaseAdmin.rpc('is_user_premium', { p_user_id: user_id })
+        if (!premiumError) {
+          isPremium = premiumCheck === true
+        } else {
+          console.warn('is_user_premium RPC failed, defaulting to false:', premiumError.message)
+        }
+      } catch (rpcError) {
+        console.warn('is_user_premium RPC call threw, defaulting to false:', rpcError)
+      }
+    } else {
+      console.warn('SUPABASE_SERVICE_ROLE_KEY missing, skipping premium check')
+    }
 
     // Get user profile
     const { data: profile, error: profileError } = await supabaseClient
@@ -417,7 +439,7 @@ serve(async (req) => {
             expires_at: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString()
           })
       }
-    } else {
+    } else if (cachedInsight) {
       // Use cached response
       aiTip = cachedInsight.content?.tip || null
       aiGenerated = cachedInsight.content?.generated_by === 'claude'
@@ -456,9 +478,15 @@ serve(async (req) => {
     )
   } catch (error) {
     console.error('Error in ai-coach:', error)
+    // Return a safe fallback tip instead of crashing
+    // This ensures the client always gets a usable response
+    const fallbackResponse: CoachTipResponse = {
+      tip: "Pret pour la prochaine session ? Tes potes t'attendent !",
+      tone: 'encouragement',
+    }
     return new Response(
-      JSON.stringify({ error: error.message }),
-      { status: 500, headers: { ...getCorsHeaders(req.headers.get('origin')), 'Content-Type': 'application/json' } }
+      JSON.stringify({ ...fallbackResponse, ai_generated: false, is_premium: false, degraded: true }),
+      { status: 200, headers: { ...getCorsHeaders(req.headers.get('origin')), 'Content-Type': 'application/json' } }
     )
   }
 })

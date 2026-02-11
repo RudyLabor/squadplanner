@@ -1,6 +1,11 @@
 import { useState } from 'react'
 import { m } from 'framer-motion'
-import { Headphones, Calendar, Target, Check } from 'lucide-react'
+import {
+  Headphones,
+  Calendar,
+  Target,
+  Check,
+} from '../icons'
 import { HeadphonesIllustration } from './illustrations/HeadphonesIllustration'
 import { CalendarIllustration } from './illustrations/CalendarIllustration'
 import { ShieldIllustration } from './illustrations/ShieldIllustration'

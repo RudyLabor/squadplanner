@@ -1,7 +1,6 @@
 import { useState, useRef, useEffect, useMemo, useCallback } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
-import { Search, X, Clock } from 'lucide-react'
-
+import { Search, X, Clock } from '../icons'
 // Emoji categories with curated gaming-friendly selections
 const EMOJI_CATEGORIES = {
   recent: { icon: '🕐', label: 'Récents' },

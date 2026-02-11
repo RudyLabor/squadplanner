@@ -1,4 +1,4 @@
-import { Mail, Lock, User } from 'lucide-react'
+import { Mail, Lock, User } from '../../components/icons'
 import { Input } from '../../components/ui'
 import { PasswordStrength } from './AuthHelpers'
 

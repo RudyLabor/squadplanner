@@ -1,6 +1,11 @@
 import { useState } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
-import { HelpCircle, ChevronDown, Search, ArrowLeft } from 'lucide-react'
+import {
+  HelpCircle,
+  ChevronDown,
+  Search,
+  ArrowLeft,
+} from '../components/icons'
 import { useNavigate } from 'react-router-dom'
 import { Card } from '../components/ui'
 import { MobilePageHeader } from '../components/layout/MobilePageHeader'

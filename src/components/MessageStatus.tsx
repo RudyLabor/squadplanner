@@ -1,5 +1,4 @@
-import { Check, CheckCheck } from 'lucide-react'
-
+import { Check, CheckCheck } from './icons'
 interface MessageStatusProps {
   // Pour les messages de squad (read_by est un tableau d'IDs)
   readBy?: string[]

@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
-import { Bell, CheckCheck, X } from 'lucide-react'
+import { Bell, CheckCheck, X } from './icons'
 import { create } from 'zustand'
 import { supabase } from '../lib/supabase'
 import { useAuthStore } from '../hooks'

@@ -1,6 +1,5 @@
 import { m } from 'framer-motion'
-import { Users, UserPlus, ArrowRight } from 'lucide-react'
-
+import { Users, UserPlus, ArrowRight } from '../../components/icons'
 interface OnboardingStepSquadChoiceProps {
   slideVariants: Record<string, unknown>
   isNavigating: boolean

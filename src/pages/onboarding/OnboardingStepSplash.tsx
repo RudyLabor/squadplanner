@@ -1,5 +1,5 @@
 import { m } from 'framer-motion'
-import { ArrowRight } from 'lucide-react'
+import { ArrowRight } from '../../components/icons'
 import { Button } from '../../components/ui'
 import { SquadPlannerIcon } from '../../components/SquadPlannerLogo'
 

@@ -9,8 +9,7 @@ import {
   type PanInfo,
 } from 'framer-motion'
 import { createPortal } from 'react-dom'
-import { X } from 'lucide-react'
-
+import { X } from '../icons'
 /* ---------- Types ---------- */
 
 interface SheetProps {

@@ -1,5 +1,13 @@
-import { Crown, Flame, Star, Zap, Target, Trophy, Award, Sparkles } from 'lucide-react'
-
+import {
+  Crown,
+  Flame,
+  Star,
+  Zap,
+  Target,
+  Trophy,
+  Award,
+  Sparkles,
+} from '../icons'
 export interface BadgeConfig {
   icon: React.ElementType
   color: string

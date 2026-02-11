@@ -49,7 +49,7 @@ export function PrivacyContent() {
             <li><strong className="text-text-primary">LiveKit :</strong> services d'appels vocaux (données vocales en transit uniquement, open source)</li>
             <li><strong className="text-text-primary">Stripe :</strong> traitement des paiements Premium</li>
             <li><strong className="text-text-primary">Anthropic (Claude) :</strong> suggestions IA (données anonymisées)</li>
-            <li><strong className="text-text-primary">Sentry :</strong> monitoring d'erreurs (données techniques uniquement)</li>
+            <li><strong className="text-text-primary">Monitoring d'erreurs :</strong> service interne (données techniques uniquement)</li>
           </ul>
         </LegalSection>
         <LegalSection title="6. Conservation des données">
@@ -78,7 +78,7 @@ export function PrivacyContent() {
           <ul className="list-disc pl-5 space-y-2">
             <li><strong className="text-text-primary">Cookies essentiels :</strong> authentification, préférences de thème (obligatoires)</li>
             <li><strong className="text-text-primary">LocalStorage :</strong> état de l'application, cache des données (fonctionnel)</li>
-            <li><strong className="text-text-primary">Cookies analytics :</strong> Sentry pour le monitoring d'erreurs (consentement requis)</li>
+            <li><strong className="text-text-primary">Cookies analytics :</strong> monitoring d'erreurs anonymisé (consentement requis)</li>
           </ul>
           <p>Aucun cookie publicitaire n'est utilisé. Vous pouvez gérer vos préférences cookies depuis la bannière de consentement ou les paramètres de votre navigateur.</p>
         </LegalSection>

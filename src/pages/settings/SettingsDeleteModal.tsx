@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
-import { AlertTriangle, Loader2 } from 'lucide-react'
+import { AlertTriangle, Loader2 } from '../../components/icons'
 import { supabase } from '../../lib/supabase'
 import { showError } from '../../lib/toast'
 

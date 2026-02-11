@@ -4,7 +4,14 @@
  */
 import { useState, memo, useMemo } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
-import { X, Forward, Search, Users, Check, Loader2 } from 'lucide-react'
+import {
+  X,
+  Forward,
+  Search,
+  Users,
+  Check,
+  Loader2,
+} from './icons'
 import { useSquadsStore } from '../hooks/useSquads'
 import { useMessagesStore } from '../hooks/useMessages'
 

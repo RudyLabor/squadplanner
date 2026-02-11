@@ -1,6 +1,5 @@
 import { m, AnimatePresence } from 'framer-motion'
-import { CheckCircle2, AlertCircle } from 'lucide-react'
-
+import { CheckCircle2, AlertCircle } from '../icons'
 export function CallToast({ message, isVisible, variant = 'success' }: {
   message: string
   isVisible: boolean

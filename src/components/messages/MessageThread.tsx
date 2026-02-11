@@ -1,7 +1,7 @@
 import { useRef, useEffect, useCallback, memo } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
 import { useVirtualizer } from '@tanstack/react-virtual'
-import { ChevronDown } from 'lucide-react'
+import { ChevronDown } from '../icons'
 import { MessageListSkeleton } from '../VirtualizedMessageList'
 import { EmptyState } from '../EmptyState'
 import { TypingIndicator } from '../TypingIndicator'

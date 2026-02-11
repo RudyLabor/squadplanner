@@ -1,5 +1,4 @@
-import { Check } from 'lucide-react'
-
+import { Check } from '../../components/icons'
 type OnboardingStep = 'splash' | 'squad-choice' | 'create-squad' | 'join-squad' | 'permissions' | 'profile' | 'complete'
 
 interface OnboardingProgressProps {

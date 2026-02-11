@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
-import { Plus } from 'lucide-react'
+import { Plus } from './icons'
 import { supabase } from '../lib/supabase'
 import { useAuthStore } from '../hooks/useAuth'
 import { ReactionPicker, REACTION_EMOJIS, type ReactionEmoji } from './ReactionPicker'

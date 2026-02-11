@@ -1,8 +1,17 @@
 import { useMemo } from 'react'
 import {
-  Trash2, LogOut, ChevronRight, UserPlus, Calendar, MessageCircle,
-  BarChart3, Download, Zap, Trophy, Loader2
-} from 'lucide-react'
+  Trash2,
+  LogOut,
+  ChevronRight,
+  UserPlus,
+  Calendar,
+  MessageCircle,
+  BarChart3,
+  Download,
+  Zap,
+  Trophy,
+  Loader2,
+} from '../icons'
 import { useNavigate } from 'react-router-dom'
 import { Button, Card, Drawer } from '../ui'
 import { PremiumGate, PremiumBadge } from '../PremiumGate'

@@ -1,6 +1,5 @@
 import { m } from 'framer-motion'
-import { Loader2 } from 'lucide-react'
-
+import { Loader2 } from '../icons'
 interface LoadingMoreProps {
   text?: string
 }

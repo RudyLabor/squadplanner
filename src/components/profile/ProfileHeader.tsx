@@ -1,6 +1,13 @@
 import { useState, useEffect, useRef } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
-import { User, Edit2, Check, X, Camera, Loader2 } from 'lucide-react'
+import {
+  User,
+  Edit2,
+  Check,
+  X,
+  Camera,
+  Loader2,
+} from '../icons'
 import { useNavigate } from 'react-router-dom'
 import { showSuccess, showError } from '../../lib/toast'
 import { Button, Input, Expandable } from '../ui'

@@ -1,5 +1,5 @@
 import { m } from 'framer-motion'
-import { CheckCircle2, Clock, Star } from 'lucide-react'
+import { CheckCircle2, Clock, Star } from '../../components/icons'
 import { Card } from '../../components/ui'
 import { TESTIMONIALS } from './PremiumData'
 import { TestimonialAvatar } from './TestimonialAvatars'

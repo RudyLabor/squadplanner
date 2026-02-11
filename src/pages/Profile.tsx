@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useMemo } from 'react'
-import { LogOut } from 'lucide-react'
+import { LogOut } from '../components/icons'
 import { ProfileSkeleton } from '../components/ui'
 import { useAuthStore, usePremiumStore } from '../hooks'
 import { useAICoachQuery, useChallengesQuery, useClaimChallengeXPMutation } from '../hooks/queries'

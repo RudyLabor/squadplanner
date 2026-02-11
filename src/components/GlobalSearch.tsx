@@ -1,7 +1,16 @@
 import { useState, useEffect, useRef, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { m, AnimatePresence } from 'framer-motion'
-import { Search, Users, Calendar, MessageCircle, User, X, Clock, Trash2 } from 'lucide-react'
+import {
+  Search,
+  Users,
+  Calendar,
+  MessageCircle,
+  User,
+  X,
+  Clock,
+  Trash2,
+} from './icons'
 import { useSquadsStore, useSessionsStore, useAuthStore } from '../hooks'
 import { supabase } from '../lib/supabase'
 import { SearchResultsList } from './search/SearchResultsList'

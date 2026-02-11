@@ -1,6 +1,6 @@
 import { m, AnimatePresence, useDragControls, type PanInfo } from 'framer-motion'
 import { type ReactNode, useEffect, useCallback } from 'react'
-import { X } from 'lucide-react'
+import { X } from '../icons'
 import { useFocusTrap } from '../../hooks/useFocusTrap'
 
 interface DrawerProps {

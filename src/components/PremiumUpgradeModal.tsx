@@ -1,8 +1,17 @@
 import { useState } from 'react'
 import {
-  Zap, Check, Crown, Sparkles, BarChart3,
-  Mic2, Calendar, Users, Infinity as InfinityIcon, Loader2, X
-} from 'lucide-react'
+  Zap,
+  Check,
+  Crown,
+  Sparkles,
+  BarChart3,
+  Mic2,
+  Calendar,
+  Users,
+  Infinity as InfinityIcon,
+  Loader2,
+  X,
+} from './icons'
 import { Button, ResponsiveModal } from './ui'
 import { useSubscriptionStore } from '../hooks'
 import { PREMIUM_PRICE_MONTHLY, PREMIUM_PRICE_YEARLY } from '../hooks/usePremium'

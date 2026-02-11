@@ -1,5 +1,10 @@
 import { m } from 'framer-motion'
-import { Users, Calendar, MessageCircle, Target } from 'lucide-react'
+import {
+  Users,
+  Calendar,
+  MessageCircle,
+  Target,
+} from '../icons'
 import { AnimatedDemo, demoSteps } from './AnimatedDemo'
 
 const steps = [

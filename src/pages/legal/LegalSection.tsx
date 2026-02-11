@@ -1,6 +1,5 @@
 import { useState } from 'react'
-import { ChevronDown } from 'lucide-react'
-
+import { ChevronDown } from '../../components/icons'
 export function LegalSection({ title, children, defaultOpen = false }: { title: string; children: React.ReactNode; defaultOpen?: boolean }) {
   const [open, setOpen] = useState(defaultOpen)
   const sectionId = title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')

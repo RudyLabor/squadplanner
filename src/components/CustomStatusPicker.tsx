@@ -1,6 +1,6 @@
 import { useState, memo } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
-import { X, Clock } from 'lucide-react'
+import { X, Clock } from './icons'
 import { useCustomStatus, STATUS_PRESETS, STATUS_DURATIONS } from '../hooks/useCustomStatus'
 
 interface CustomStatusPickerProps {

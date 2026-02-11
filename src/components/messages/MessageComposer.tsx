@@ -1,4 +1,4 @@
-import { Send, Loader2, BarChart3 } from 'lucide-react'
+import { Send, Loader2, BarChart3 } from '../icons'
 import { Button } from '../ui'
 import { MentionInput, type MentionUser } from '../MentionInput'
 import { GifPicker } from '../GifPicker'

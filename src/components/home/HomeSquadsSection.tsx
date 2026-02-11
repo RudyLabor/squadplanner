@@ -1,6 +1,6 @@
 import { memo } from 'react'
 import { m } from 'framer-motion'
-import { Users, ChevronRight } from 'lucide-react'
+import { Users, ChevronRight } from '../icons'
 import { Link } from 'react-router-dom'
 import { Card, SquadCardSkeleton } from '../ui'
 import { springTap } from '../../utils/animations'

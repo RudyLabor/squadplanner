@@ -1,6 +1,6 @@
 import { memo } from 'react'
 import { m } from 'framer-motion'
-import { Mic, ChevronRight } from 'lucide-react'
+import { Mic, ChevronRight } from '../icons'
 import { Link } from 'react-router-dom'
 import { Card } from '../ui'
 

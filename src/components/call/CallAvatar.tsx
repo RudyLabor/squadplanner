@@ -1,6 +1,5 @@
 import { m } from 'framer-motion'
-import { Phone } from 'lucide-react'
-
+import { Phone } from '../icons'
 interface CallAvatarProps {
   status: string
   avatarUrl?: string | null

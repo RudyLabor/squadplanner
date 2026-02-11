@@ -1,5 +1,5 @@
 import { m } from 'framer-motion'
-import { Check } from 'lucide-react'
+import { Check } from '../icons'
 import { Link } from 'react-router-dom'
 
 export function PricingSection() {

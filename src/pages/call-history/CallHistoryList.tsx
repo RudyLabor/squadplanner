@@ -1,9 +1,16 @@
 import { useMemo, useRef, useEffect, useState, useCallback } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
 import {
-  Phone, PhoneIncoming, PhoneMissed,
-  ArrowUpRight, ArrowUp, User, UserPlus, X, Loader2
-} from 'lucide-react'
+  Phone,
+  PhoneIncoming,
+  PhoneMissed,
+  ArrowUpRight,
+  ArrowUp,
+  User,
+  UserPlus,
+  X,
+  Loader2,
+} from '../../components/icons'
 import { Link } from 'react-router-dom'
 import { Card, Button } from '../../components/ui'
 import { Tooltip } from '../../components/ui/Tooltip'

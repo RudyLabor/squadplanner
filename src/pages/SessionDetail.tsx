@@ -1,5 +1,13 @@
 import { useState, useEffect } from 'react'
-import { ArrowLeft, CheckCircle2, AlertCircle, XCircle, Clock, Loader2 } from 'lucide-react'
+import {
+  ArrowLeft,
+  CheckCircle2,
+  AlertCircle,
+  XCircle,
+  Clock,
+  Loader2,
+  Sparkles,
+} from '../components/icons'
 import { Link, useParams, useNavigate } from 'react-router-dom'
 import Confetti from '../components/LazyConfetti'
 import { Button, ConfirmDialog } from '../components/ui'
@@ -14,8 +22,6 @@ import {
   CheckinSection, ParticipantsList
 } from './session-detail/SessionDetailSections'
 import { AnimatePresence } from 'framer-motion'
-import { Sparkles } from 'lucide-react'
-
 type RsvpResponse = 'present' | 'absent' | 'maybe'
 
 function CelebrationToast({ message, isVisible, onClose }: { message: string; isVisible: boolean; onClose: () => void }) {

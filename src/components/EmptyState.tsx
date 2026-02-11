@@ -1,9 +1,16 @@
 import { m } from 'framer-motion'
 import {
-  Inbox, Users, Trophy,
-  Search, FolderOpen, UserPlus, CalendarPlus, Send,
-  PartyPopper, Gamepad2
-} from 'lucide-react'
+  Inbox,
+  Users,
+  Trophy,
+  Search,
+  FolderOpen,
+  UserPlus,
+  CalendarPlus,
+  Send,
+  PartyPopper,
+  Gamepad2,
+} from './icons'
 import { Button } from './ui'
 
 type EmptyStateType =

@@ -1,5 +1,10 @@
 import { m } from 'framer-motion'
-import { MousePointerClick, Clock, Smile, Target } from 'lucide-react'
+import {
+  MousePointerClick,
+  Clock,
+  Smile,
+  Target,
+} from '../icons'
 import { scaleReveal } from '../../utils/animations'
 import { AnimatedCounter } from '../ui/AnimatedCounter'
 

@@ -4,7 +4,7 @@
  */
 import { useState, memo, useMemo } from 'react'
 import { m } from 'framer-motion'
-import { BarChart3, Check, Users } from 'lucide-react'
+import { BarChart3, Check, Users } from './icons'
 import { useAuthStore } from '../hooks/useAuth'
 
 export interface PollData {

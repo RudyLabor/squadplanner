@@ -1,6 +1,11 @@
 import { useRef, useEffect } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
-import { X, Sparkles, Send, ChevronRight } from 'lucide-react'
+import {
+  X,
+  Sparkles,
+  Send,
+  ChevronRight,
+} from '../icons'
 import type { ChatMessage } from './chatbotUtils'
 
 interface ChatPanelProps {

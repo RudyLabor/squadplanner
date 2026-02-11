@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
-import { Mail, Send, CheckCircle } from 'lucide-react'
+import { Mail, Send, CheckCircle } from '../../components/icons'
 import { Card, Select } from '../../components/ui'
 
 export function HelpContactSection() {

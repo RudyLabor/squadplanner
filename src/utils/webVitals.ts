@@ -120,6 +120,6 @@ export function reportWebVitals() {
       );
     }
 
-    // In production, Sentry captures web vitals automatically via browserTracingIntegration
+    // In production, web vitals are logged to the error tracker if needed
   });
 }

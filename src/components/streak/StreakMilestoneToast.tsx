@@ -1,5 +1,5 @@
 import { m, AnimatePresence } from 'framer-motion'
-import { Zap } from 'lucide-react'
+import { Zap } from '../icons'
 import Confetti from '../LazyConfetti'
 import { resolveCSSColor } from './streakUtils'
 

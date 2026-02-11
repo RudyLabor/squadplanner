@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
-import { X, UserPlus } from 'lucide-react'
+import { X, UserPlus } from './icons'
 import { supabase } from '../lib/supabase'
 import { Button } from './ui'
 import { useFocusTrap } from '../hooks/useFocusTrap'

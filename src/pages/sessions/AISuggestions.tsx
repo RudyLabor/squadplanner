@@ -1,4 +1,4 @@
-import { Sparkles, TrendingUp } from 'lucide-react'
+import { Sparkles, TrendingUp } from '../../components/icons'
 import { Card } from '../../components/ui'
 import type { SlotSuggestion, CoachTip } from './types'
 import { dayNames } from './types'

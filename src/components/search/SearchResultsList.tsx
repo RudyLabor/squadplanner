@@ -1,6 +1,5 @@
 import { m } from 'framer-motion'
-import { Search, ArrowRight } from 'lucide-react'
-
+import { Search, ArrowRight } from '../icons'
 interface SearchResult {
   id: string
   type: 'squad' | 'session' | 'message' | 'member'

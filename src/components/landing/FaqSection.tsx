@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { m } from 'framer-motion'
-import { ChevronDown } from 'lucide-react'
-
+import { ChevronDown } from '../icons'
 const staggerItemVariants = {
   hidden: { opacity: 0, y: 20 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.5 } }

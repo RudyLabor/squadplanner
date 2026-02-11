@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react'
 import { AnimatePresence } from 'framer-motion'
-import { ArrowLeft } from 'lucide-react'
+import { ArrowLeft } from '../components/icons'
 import { useParams, useNavigate } from 'react-router-dom'
 import Confetti from '../components/LazyConfetti'
 import { Button, SquadDetailSkeleton, CrossfadeTransition, ConfirmDialog } from '../components/ui'

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { m } from 'framer-motion'
-import { Trophy } from 'lucide-react'
+import { Trophy } from './icons'
 import { supabase } from '../lib/supabase'
 import { useAuthStore } from '../hooks'
 import { Tooltip } from './ui/Tooltip'

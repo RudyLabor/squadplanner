@@ -1,5 +1,17 @@
 import { m } from 'framer-motion'
-import { Zap, Check, Target, Gift, Star, Calendar, Trophy, Flame, Clock, Award, Sparkles } from 'lucide-react'
+import {
+  Zap,
+  Check,
+  Target,
+  Gift,
+  Star,
+  Calendar,
+  Trophy,
+  Flame,
+  Clock,
+  Award,
+  Sparkles,
+} from '../icons'
 import { Button, Card } from '../ui'
 import type { Challenge, UserChallenge } from '../Challenges'
 

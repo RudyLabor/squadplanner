@@ -1,6 +1,5 @@
 import { m, AnimatePresence } from 'framer-motion'
-import { X, Reply } from 'lucide-react'
-
+import { X, Reply } from './icons'
 interface ReplyComposerProps {
   replyingTo: {
     id: string

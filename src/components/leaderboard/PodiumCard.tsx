@@ -1,5 +1,11 @@
 import { m } from 'framer-motion'
-import { Crown, Flame, User, Shield, Zap } from 'lucide-react'
+import {
+  Crown,
+  Flame,
+  User,
+  Shield,
+  Zap,
+} from '../icons'
 import { Link } from 'react-router-dom'
 import { Card } from '../ui'
 import { getOptimizedAvatarUrl } from '../../utils/avatarUrl'

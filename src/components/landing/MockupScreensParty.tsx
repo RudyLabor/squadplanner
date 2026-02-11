@@ -1,5 +1,10 @@
 import { m } from 'framer-motion'
-import { Users, Headphones, Mic, MicOff } from 'lucide-react'
+import {
+  Users,
+  Headphones,
+  Mic,
+  MicOff,
+} from '../icons'
 import { mockMembers, MockNavbar } from './MockupShared'
 
 // ─── Screen 3: Voice Party ──────────────────────────────

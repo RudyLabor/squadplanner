@@ -1,7 +1,7 @@
 import { memo } from 'react'
 import { Link } from 'react-router-dom'
 import { m, AnimatePresence } from 'framer-motion'
-import { User, Zap } from 'lucide-react'
+import { User, Zap } from '../icons'
 import { getOptimizedAvatarUrl } from '../../utils/avatarUrl'
 import { Tooltip } from '../ui/Tooltip'
 import { StatusSelector } from '../StatusSelector'

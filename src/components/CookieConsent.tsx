@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
-import { Cookie, Shield, X } from 'lucide-react'
+import { Cookie, Shield, X } from './icons'
 import { Link } from 'react-router-dom'
 
 const COOKIE_CONSENT_KEY = 'sq-cookie-consent'
@@ -90,7 +90,7 @@ export function CookieConsent() {
                         <div className="w-2 h-2 rounded-full bg-primary mt-1.5 shrink-0" />
                         <div>
                           <p className="text-base font-medium text-text-primary">Analytics</p>
-                          <p className="text-sm text-text-tertiary">Sentry pour le monitoring d'erreurs. Données anonymisées.</p>
+                          <p className="text-sm text-text-tertiary">Monitoring d'erreurs anonymisé via notre propre service.</p>
                         </div>
                       </div>
                       <div className="flex items-start gap-3 p-3 rounded-xl bg-surface-card border border-border-subtle">

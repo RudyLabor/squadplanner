@@ -1,5 +1,5 @@
 import { m, AnimatePresence } from 'framer-motion'
-import { Wifi, WifiOff } from 'lucide-react'
+import { Wifi, WifiOff } from './icons'
 import { useNetworkQualityStore, QUALITY_INFO, type NetworkQualityLevel } from '../hooks/useNetworkQuality'
 import { Tooltip } from './ui/Tooltip'
 

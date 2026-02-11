@@ -1,6 +1,6 @@
 import { memo, useRef, useCallback, useMemo } from 'react'
 import { m, useMotionValue, useTransform, type PanInfo } from 'framer-motion'
-import { Reply, Trash2, MoreHorizontal } from 'lucide-react'
+import { Reply, Trash2, MoreHorizontal } from './icons'
 import { useHapticFeedback } from '../hooks/useHapticFeedback'
 import { useReducedMotion } from '../hooks/useReducedMotion'
 import { motion as motionTokens } from '../utils/motionTokens'

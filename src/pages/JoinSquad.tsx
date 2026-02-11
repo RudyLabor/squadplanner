@@ -1,7 +1,13 @@
 import { useEffect, useState } from 'react'
 import { useParams, useNavigate, Link } from 'react-router-dom'
 import { m } from 'framer-motion'
-import { Users, Loader2, CheckCircle2, XCircle, LogIn } from 'lucide-react'
+import {
+  Users,
+  Loader2,
+  CheckCircle2,
+  XCircle,
+  LogIn,
+} from '../components/icons'
 import { Button, Card } from '../components/ui'
 import { useAuthStore } from '../hooks/useAuth'
 import { useSquadsStore } from '../hooks/useSquads'

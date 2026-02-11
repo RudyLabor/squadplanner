@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
-import { Check, Trophy } from 'lucide-react'
+import { Check, Trophy } from '../icons'
 import Confetti from '../LazyConfetti'
 import { Card } from '../ui'
 

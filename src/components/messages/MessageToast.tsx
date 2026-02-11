@@ -1,6 +1,5 @@
 import { m, AnimatePresence } from 'framer-motion'
-import { CheckCircle2, AlertCircle } from 'lucide-react'
-
+import { CheckCircle2, AlertCircle } from '../icons'
 interface MessageToastProps {
   message: string
   isVisible: boolean

@@ -84,13 +84,11 @@ export default defineConfig({
         manualChunks: (id) => {
           const n = id.replace(/\\/g, '/');
           if (n.includes('livekit-client') || n.includes('@livekit')) return 'vendor-livekit';
-          if (n.includes('@sentry')) return 'vendor-sentry';
           if (n.includes('framer-motion')) return 'vendor-motion';
-          if (n.includes('lucide-react')) return 'vendor-icons';
-          if (n.includes('sonner') || n.includes('react-countup')) return 'vendor-ui';
+          if (n.includes('sonner')) return 'vendor-ui';
           if (n.includes('@tanstack')) return 'vendor-query';
           if (n.includes('@supabase')) return 'vendor-supabase';
-          if (n.includes('canvas-confetti') || n.includes('react-confetti')) return 'vendor-confetti';
+          if (n.includes('canvas-confetti')) return 'vendor-confetti';
         },
         chunkFileNames: "assets/[name]-[hash].js",
         assetFileNames: "assets/[name]-[hash].[ext]",
@@ -118,7 +116,6 @@ export default defineConfig({
       "framer-motion",
       "zustand",
       "@supabase/supabase-js",
-      "lucide-react",
     ],
     exclude: [],
   },

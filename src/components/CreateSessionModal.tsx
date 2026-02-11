@@ -5,7 +5,12 @@
  */
 
 import { useState, useEffect } from 'react'
-import { Calendar, Clock, Users, Loader2 } from 'lucide-react'
+import {
+  Calendar,
+  Clock,
+  Users,
+  Loader2,
+} from './icons'
 import { create } from 'zustand'
 import { ResponsiveModal, Select } from './ui'
 import { useSquadsStore, useSessionsStore } from '../hooks'

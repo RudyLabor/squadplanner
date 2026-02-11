@@ -1,6 +1,11 @@
 import { useState } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
-import { Crown, Copy, Check, MessageCircle } from 'lucide-react'
+import {
+  Crown,
+  Copy,
+  Check,
+  MessageCircle,
+} from '../icons'
 import { Link } from 'react-router-dom'
 import { Button } from '../ui'
 import { showSuccess } from '../../lib/toast'

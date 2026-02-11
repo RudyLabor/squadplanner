@@ -1,5 +1,10 @@
 import { m } from 'framer-motion'
-import { Calendar, ChevronRight, PartyPopper, CheckCircle2 } from 'lucide-react'
+import {
+  Calendar,
+  ChevronRight,
+  PartyPopper,
+  CheckCircle2,
+} from '../../components/icons'
 import { Link } from 'react-router-dom'
 import { Card } from '../../components/ui'
 import type { SessionEntry } from './types'

@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react'
 import { m } from 'framer-motion'
-import { ArrowRight, Menu, X as CloseIcon } from 'lucide-react'
+import { ArrowRight, Menu, X as CloseIcon } from '../icons'
 import { Link } from 'react-router-dom'
 import { SquadPlannerLogo } from '../SquadPlannerLogo'
 

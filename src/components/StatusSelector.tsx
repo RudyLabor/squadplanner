@@ -4,7 +4,13 @@
  */
 import { useState, useRef, useEffect, memo } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
-import { Circle, Minus, BellOff, Eye, Gamepad2 } from 'lucide-react'
+import {
+  Circle,
+  Minus,
+  BellOff,
+  Eye,
+  Gamepad2,
+} from './icons'
 import { useUserStatusStore, AVAILABILITY_CONFIG, type AvailabilityStatus } from '../hooks/useUserStatus'
 
 const STATUS_OPTIONS: { value: AvailabilityStatus; icon: React.ElementType }[] = [

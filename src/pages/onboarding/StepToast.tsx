@@ -1,7 +1,6 @@
 import { useEffect } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
-import { Sparkles } from 'lucide-react'
-
+import { Sparkles } from '../../components/icons'
 export function StepToast({ message, isVisible, onClose }: { message: string; isVisible: boolean; onClose: () => void }) {
   useEffect(() => {
     if (isVisible) {

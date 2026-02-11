@@ -1,6 +1,11 @@
 import { useRef, useEffect, useState } from 'react'
 import { m, useInView } from 'framer-motion'
-import { Crown, Check, Loader2, Gift } from 'lucide-react'
+import {
+  Crown,
+  Check,
+  Loader2,
+  Gift,
+} from '../../components/icons'
 import Confetti from '../../components/LazyConfetti'
 import { Button } from '../../components/ui'
 import { MobilePageHeader } from '../../components/layout/MobilePageHeader'

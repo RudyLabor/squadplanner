@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
-import { Loader2, Gamepad2, CheckCircle } from 'lucide-react'
+import { Loader2, Gamepad2, CheckCircle } from '../components/icons'
 import { Link, useNavigate, useSearchParams, Navigate } from 'react-router-dom'
 import Confetti from '../components/LazyConfetti'
 import { Button, Card } from '../components/ui'

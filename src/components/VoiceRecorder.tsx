@@ -1,7 +1,12 @@
 import { useState, useRef, useCallback, useEffect, memo } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
-import { Mic, Square, Send, Trash2, Loader2 } from 'lucide-react'
-
+import {
+  Mic,
+  Square,
+  Send,
+  Trash2,
+  Loader2,
+} from './icons'
 /**
  * VoiceRecorder — Phase 3.1
  * Records voice messages using MediaRecorder API.

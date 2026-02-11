@@ -1,5 +1,13 @@
 import { m } from 'framer-motion'
-import { Calendar, Check, Target, Trophy, Sparkles, TrendingUp, Plus } from 'lucide-react'
+import {
+  Calendar,
+  Check,
+  Target,
+  Trophy,
+  Sparkles,
+  TrendingUp,
+  Plus,
+} from '../icons'
 import { Link } from 'react-router-dom'
 import { Card, ProgressRing, AnimatedCounter, HelpTooltip } from '../ui'
 

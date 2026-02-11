@@ -1,6 +1,5 @@
 import { m, AnimatePresence } from 'framer-motion'
-import { X } from 'lucide-react'
-
+import { X } from '../icons'
 interface ShortcutsHelpModalProps {
   isOpen: boolean
   onClose: () => void

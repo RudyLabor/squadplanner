@@ -1,8 +1,15 @@
 import { m } from 'framer-motion'
 import {
-  Calendar, Clock, Users, Check, X, HelpCircle,
-  CheckCircle2, Loader2, Gamepad2
-} from 'lucide-react'
+  Calendar,
+  Clock,
+  Users,
+  Check,
+  X,
+  HelpCircle,
+  CheckCircle2,
+  Loader2,
+  Gamepad2,
+} from '../../components/icons'
 import { Button, Card, CardContent, Badge } from '../../components/ui'
 
 type RsvpResponse = 'present' | 'absent' | 'maybe'

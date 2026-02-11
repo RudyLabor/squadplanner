@@ -1,7 +1,7 @@
 import { lazy, Suspense, memo, useEffect, useRef } from 'react'
 import { Outlet, useSearchParams } from 'react-router'
 import { useAuthStore, subscribeToIncomingCalls, usePushNotificationStore, useVoiceCallStore } from './hooks'
-import { initSentry } from './lib/sentry'
+import { initErrorTracker } from './lib/errorTracker'
 import { useDocumentTitle } from './hooks/useDocumentTitle'
 import { useScrollRestoration } from './hooks/useScrollRestoration'
 import { useSwipeBack } from './hooks/useSwipeBack'
@@ -63,12 +63,12 @@ export default function ClientShell() {
     return () => window.removeEventListener('beforeinstallprompt', handler)
   }, [])
 
-  // Initialize Sentry when authenticated
-  const sentryInitRef = useRef(false)
+  // Initialize error tracker + prefetch routes when authenticated
+  const trackerInitRef = useRef(false)
   useEffect(() => {
-    if (user && !sentryInitRef.current) {
-      sentryInitRef.current = true
-      initSentry().catch((err) => console.warn('[App] Sentry initialization failed:', err))
+    if (user && !trackerInitRef.current) {
+      trackerInitRef.current = true
+      initErrorTracker()
       import('./utils/routePrefetch').then(({ prefetchProbableRoutes }) => { prefetchProbableRoutes() })
     }
   }, [user])

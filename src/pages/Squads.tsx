@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { m } from 'framer-motion'
-import { Users, Plus, UserPlus } from 'lucide-react'
+import { Users, Plus, UserPlus } from '../components/icons'
 import Confetti from '../components/LazyConfetti'
 import { Button, Card, SquadCardSkeleton } from '../components/ui'
 import { showSuccess } from '../lib/toast'

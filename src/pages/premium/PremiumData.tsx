@@ -1,5 +1,12 @@
-import { Users, Calendar, BarChart3, Sparkles, Mic2, Shield, Crown } from 'lucide-react'
-
+import {
+  Users,
+  Calendar,
+  BarChart3,
+  Sparkles,
+  Mic2,
+  Shield,
+  Crown,
+} from '../../components/icons'
 export const FEATURES = [
   { name: 'Squads', free: '2 max', premium: 'Illimité', icon: Users, highlight: true },
   { name: 'Historique sessions', free: '30 jours', premium: 'Illimité', icon: Calendar, highlight: true },

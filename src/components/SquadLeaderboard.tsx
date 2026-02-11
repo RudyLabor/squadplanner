@@ -1,5 +1,5 @@
 import { m } from 'framer-motion'
-import { Trophy } from 'lucide-react'
+import { Trophy } from './icons'
 import { Card } from './ui'
 import { type LeaderboardEntry } from './leaderboard/leaderboardConfig'
 import { PodiumCard } from './leaderboard/PodiumCard'

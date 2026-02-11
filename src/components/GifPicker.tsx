@@ -1,6 +1,12 @@
 import { useState, useRef, useEffect, useCallback, memo } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
-import { Search, X, Loader2, Sparkles, RefreshCw } from 'lucide-react'
+import {
+  Search,
+  X,
+  Loader2,
+  Sparkles,
+  RefreshCw,
+} from './icons'
 import { supabase } from '../lib/supabase'
 
 /**

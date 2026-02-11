@@ -4,8 +4,13 @@
  */
 import { useState, memo } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
-import { X, Plus, Trash2, BarChart3, Loader2 } from 'lucide-react'
-
+import {
+  X,
+  Plus,
+  Trash2,
+  BarChart3,
+  Loader2,
+} from './icons'
 interface CreatePollModalProps {
   isOpen: boolean
   onClose: () => void

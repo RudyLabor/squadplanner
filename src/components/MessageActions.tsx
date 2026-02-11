@@ -8,9 +8,8 @@ import {
   Reply,
   Copy,
   Check,
-  Forward
-} from 'lucide-react'
-
+  Forward,
+} from './icons'
 export interface MessageActionsProps {
   message: {
     id: string

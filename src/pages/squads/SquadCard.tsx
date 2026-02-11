@@ -1,6 +1,14 @@
 import { memo } from 'react'
 import { m } from 'framer-motion'
-import { Gamepad2, Copy, Check, Crown, Mic, Calendar, ChevronRight } from 'lucide-react'
+import {
+  Gamepad2,
+  Copy,
+  Check,
+  Crown,
+  Mic,
+  Calendar,
+  ChevronRight,
+} from '../../components/icons'
 import { Link } from 'react-router-dom'
 import { Card, CardContent } from '../../components/ui'
 

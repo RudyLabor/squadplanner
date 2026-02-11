@@ -8,7 +8,7 @@ import {
   Flame,
   PartyPopper,
   Activity,
-} from 'lucide-react'
+} from '../icons'
 import { Card } from '../ui'
 
 // --- Types ---

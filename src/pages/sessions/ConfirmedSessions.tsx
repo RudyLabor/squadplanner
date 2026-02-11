@@ -1,5 +1,10 @@
 import { m } from 'framer-motion'
-import { Calendar, Plus, Clock, Users } from 'lucide-react'
+import {
+  Calendar,
+  Plus,
+  Clock,
+  Users,
+} from '../../components/icons'
 import { Link } from 'react-router-dom'
 import { Button, Card, Badge, SessionCardSkeleton, ContentTransition } from '../../components/ui'
 import type { SessionEntry } from './types'

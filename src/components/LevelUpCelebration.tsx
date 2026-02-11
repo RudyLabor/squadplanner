@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
-import { Star, Sparkles, Trophy } from 'lucide-react'
+import { Star, Sparkles, Trophy } from './icons'
 import { celebrateLevelUp } from '../utils/celebrations'
 import { LEVEL_CONFIG, getLevelInfo } from './XPBar'
 

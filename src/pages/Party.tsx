@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from 'react'
 import { m } from 'framer-motion'
-import { Loader2 } from 'lucide-react'
+import { Loader2 } from '../components/icons'
 import Confetti from '../components/LazyConfetti'
 import { useAuthStore, useVoiceChatStore, usePremiumStore, getSavedPartyInfo } from '../hooks'
 import { useSquadsQuery } from '../hooks/queries/useSquadsQuery'

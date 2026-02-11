@@ -1,6 +1,13 @@
 import { useEffect } from 'react'
 import { AnimatePresence, m } from 'framer-motion'
-import { X, CheckCircle2, AlertTriangle, Info, Trophy, RefreshCw } from 'lucide-react'
+import {
+  X,
+  CheckCircle2,
+  AlertTriangle,
+  Info,
+  Trophy,
+  RefreshCw,
+} from './icons'
 import { useNotificationBannerStore, type BannerType } from '../hooks/useNotificationBanner'
 
 const bannerConfig: Record<BannerType, {

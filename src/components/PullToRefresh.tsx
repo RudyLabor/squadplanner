@@ -5,7 +5,7 @@
  * Uses refs to avoid stale closure issues with touch handlers.
  */
 import { useState, useRef, useEffect, type ReactNode } from 'react'
-import { RefreshCw } from 'lucide-react'
+import { RefreshCw } from './icons'
 import { haptic } from '../utils/haptics'
 
 interface PullToRefreshProps {

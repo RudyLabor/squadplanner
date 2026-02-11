@@ -1,7 +1,13 @@
 import { type ReactNode, useState, useRef, useEffect, useCallback, useMemo, useId } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
 import { createPortal } from 'react-dom'
-import { ChevronDown, X, Search, Loader2, Check } from 'lucide-react'
+import {
+  ChevronDown,
+  X,
+  Search,
+  Loader2,
+  Check,
+} from '../icons'
 import { haptic } from '../../utils/haptics'
 
 export interface SelectOption {

@@ -1,5 +1,10 @@
 import { m } from 'framer-motion'
-import { Flame, User, Shield, Zap } from 'lucide-react'
+import {
+  Flame,
+  User,
+  Shield,
+  Zap,
+} from '../icons'
 import { Link } from 'react-router-dom'
 import { getOptimizedAvatarUrl } from '../../utils/avatarUrl'
 import { getLevelColor, type LeaderboardEntry } from './leaderboardConfig'

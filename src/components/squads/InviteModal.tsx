@@ -1,9 +1,15 @@
 import { useState } from 'react'
 import { m } from 'framer-motion'
 import {
-  Copy, Check, X, Search, Share2,
-  UserPlus, Loader2, Users
-} from 'lucide-react'
+  Copy,
+  Check,
+  X,
+  Search,
+  Share2,
+  UserPlus,
+  Loader2,
+  Users,
+} from '../icons'
 import { Button, Input } from '../ui'
 import { supabase } from '../../lib/supabase'
 import { sendMemberJoinedMessage } from '../../lib/systemMessages'

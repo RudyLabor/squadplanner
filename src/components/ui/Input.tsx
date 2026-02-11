@@ -1,7 +1,6 @@
 import { forwardRef, useState, useRef, useEffect, useId, type InputHTMLAttributes, type TextareaHTMLAttributes, type ReactNode } from 'react'
 import { m, useAnimationControls } from 'framer-motion'
-import { Eye, EyeOff, X } from 'lucide-react'
-
+import { Eye, EyeOff, X } from '../icons'
 type BaseInputProps = {
   label?: string
   error?: string

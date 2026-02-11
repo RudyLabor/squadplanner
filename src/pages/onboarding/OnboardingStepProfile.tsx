@@ -1,5 +1,11 @@
 import { m } from 'framer-motion'
-import { ArrowLeft, ArrowRight, Camera, Globe, Loader2 } from 'lucide-react'
+import {
+  ArrowLeft,
+  ArrowRight,
+  Camera,
+  Globe,
+  Loader2,
+} from '../../components/icons'
 import { Button, Card, Input, Select } from '../../components/ui'
 
 interface OnboardingStepProfileProps {

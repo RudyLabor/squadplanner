@@ -1,5 +1,4 @@
-import { Check, Copy } from 'lucide-react'
-
+import { Check, Copy } from '../icons'
 interface CopyLinkButtonProps {
   linkCopied: boolean
   onCopy: () => void

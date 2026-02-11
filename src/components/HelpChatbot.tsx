@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
-import { MessageCircle, X } from 'lucide-react'
+import { MessageCircle, X } from './icons'
 import { type FAQItem, type ChatMessage, QUICK_ACTIONS, GREETING_MESSAGE, findBestMatch, getNoMatchResponse } from './help/chatbotUtils'
 import { ChatPanel } from './help/ChatPanel'
 

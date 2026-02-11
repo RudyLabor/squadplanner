@@ -1,7 +1,12 @@
 import { useState, useMemo, useCallback } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
 import { m } from 'framer-motion'
-import { TrendingUp, Loader2, AlertCircle, Star } from 'lucide-react'
+import {
+  TrendingUp,
+  Loader2,
+  AlertCircle,
+  Star,
+} from '../components/icons'
 import { useNavigate } from 'react-router-dom'
 import Confetti from '../components/LazyConfetti'
 import { PullToRefresh } from '../components/PullToRefresh'

@@ -1,9 +1,14 @@
 import { memo } from 'react'
 import { m } from 'framer-motion'
 import {
-  Calendar, Clock, Users, ChevronRight,
-  CheckCircle2, XCircle, HelpCircle
-} from 'lucide-react'
+  Calendar,
+  Clock,
+  Users,
+  ChevronRight,
+  CheckCircle2,
+  XCircle,
+  HelpCircle,
+} from '../icons'
 import { Link } from 'react-router-dom'
 import { Card, Badge, Tooltip } from '../ui'
 

@@ -6,8 +6,7 @@
  */
 import { useState, useEffect, useCallback } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
-import { AlertTriangle, X, RefreshCw } from 'lucide-react'
-
+import { AlertTriangle, X, RefreshCw } from './icons'
 export interface RateLimitBannerProps {
   retryAfter: number   // seconds until retry is allowed
   onRetry?: () => void

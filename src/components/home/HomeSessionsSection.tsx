@@ -1,6 +1,12 @@
 import { memo } from 'react'
 import { m } from 'framer-motion'
-import { Calendar, Users, CheckCircle2, HelpCircle, XCircle } from 'lucide-react'
+import {
+  Calendar,
+  Users,
+  CheckCircle2,
+  HelpCircle,
+  XCircle,
+} from '../icons'
 import { Link } from 'react-router-dom'
 import { Card, Badge, SessionCardSkeleton, ContentTransition } from '../ui'
 

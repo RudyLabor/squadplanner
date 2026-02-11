@@ -1,6 +1,15 @@
 import { m } from 'framer-motion'
-import { Users, UserPlus, CalendarCheck, Headphones, Home, MessageCircle, User, Mic, Share2 } from 'lucide-react'
-
+import {
+  Users,
+  UserPlus,
+  CalendarCheck,
+  Headphones,
+  Home,
+  MessageCircle,
+  User,
+  Mic,
+  Share2,
+} from '../icons'
 export interface DemoStep {
   id: string
   title: string

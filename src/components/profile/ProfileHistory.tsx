@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom'
-import { Zap, Phone, ChevronRight } from 'lucide-react'
+import { Zap, Phone, ChevronRight } from '../icons'
 import { Card, Button } from '../ui'
 import { PremiumBadge } from '../PremiumGate'
 import { ProfileActivityCard } from './ProfileActivityCard'

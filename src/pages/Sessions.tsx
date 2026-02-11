@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from 'react'
-import { Plus, Loader2 } from 'lucide-react'
+import { Plus, Loader2 } from '../components/icons'
 import Confetti from '../components/LazyConfetti'
 import { Button } from '../components/ui'
 import { useAuthStore, useAIStore } from '../hooks'

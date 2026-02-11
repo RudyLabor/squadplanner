@@ -1,5 +1,5 @@
 import { m } from 'framer-motion'
-import { ArrowRight, Sparkles } from 'lucide-react'
+import { ArrowRight, Sparkles } from '../icons'
 import { Link } from 'react-router-dom'
 import { springTap } from '../../utils/animations'
 

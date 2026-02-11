@@ -1,7 +1,6 @@
 import { useEffect } from 'react'
 import { m } from 'framer-motion'
-import { Sparkles } from 'lucide-react'
-
+import { Sparkles } from '../icons'
 export function SuccessToast({ message, onClose }: { message: string; onClose: () => void }) {
   const isCelebration = message.includes('confirm') || message.includes('\uD83D\uDD25')
 

@@ -1,6 +1,6 @@
 import { m } from 'framer-motion'
-import { Star, Zap } from 'lucide-react'
-import CountUp from 'react-countup'
+import { Star, Zap } from './icons'
+import { AnimatedCounter } from './ui/AnimatedCounter'
 import { HelpTooltip } from './ui'
 
 // Level configuration - French translations
@@ -147,7 +147,7 @@ export function XPBar({ currentXP, level, showTitle = true, compact = false, cla
             <HelpTooltip content="Gagne de l'XP en participant aux sessions, en confirmant ta présence et en étant fiable." position="bottom">
               <div className="flex items-center gap-1.5 text-base text-text-secondary">
                 <Zap className="w-3.5 h-3.5" style={{ color: currentLevel.color }} />
-                <CountUp end={currentXP} duration={1.5} separator="," /> XP
+                <AnimatedCounter end={currentXP} duration={1.5} separator="," /> XP
               </div>
             </HelpTooltip>
           </div>
@@ -220,7 +220,7 @@ export function XPBar({ currentXP, level, showTitle = true, compact = false, cla
         {/* XP text below bar */}
         <div className="flex items-center justify-between mt-2">
           <span className="text-sm text-text-tertiary">
-            <CountUp end={Math.floor(xpInLevel)} duration={1} /> XP
+            <AnimatedCounter end={Math.floor(xpInLevel)} duration={1} /> XP
           </span>
           {!isMaxLevel && (
             <span className="text-sm text-text-tertiary">

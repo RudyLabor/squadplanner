@@ -1,9 +1,20 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
 import {
-  Search, Home, Users, Mic, MessageCircle, User, Calendar,
-  Settings, Zap, X, ArrowRight, Moon, Sun
-} from 'lucide-react'
+  Search,
+  Home,
+  Users,
+  Mic,
+  MessageCircle,
+  User,
+  Calendar,
+  Settings,
+  Zap,
+  X,
+  ArrowRight,
+  Moon,
+  Sun,
+} from './icons'
 import { useSquadsStore, useSessionsStore, useViewTransitionNavigate } from '../hooks'
 import { useThemeStore } from '../hooks/useTheme'
 import { useCreateSessionModal } from './CreateSessionModal'

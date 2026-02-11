@@ -1,6 +1,12 @@
 import { useState, memo, useRef } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
-import { Plus, X, ChevronLeft, ChevronRight, Eye } from 'lucide-react'
+import {
+  Plus,
+  X,
+  ChevronLeft,
+  ChevronRight,
+  Eye,
+} from './icons'
 import { useStories, STORY_BACKGROUNDS } from '../hooks/useStories'
 import { useAuthStore } from '../hooks/useAuth'
 import type { FeedStory } from '../types/database'

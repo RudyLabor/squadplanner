@@ -1,5 +1,5 @@
 import { m } from 'framer-motion'
-import { Moon, Sun, Monitor } from 'lucide-react'
+import { Moon, Sun, Monitor } from '../../components/icons'
 import { SegmentedControl } from '../../components/ui'
 import { useThemeStore, type ThemeMode } from '../../hooks/useTheme'
 

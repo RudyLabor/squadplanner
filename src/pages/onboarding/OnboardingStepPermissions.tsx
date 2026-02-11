@@ -1,5 +1,10 @@
 import { m } from 'framer-motion'
-import { Bell, Mic, ArrowLeft, Check } from 'lucide-react'
+import {
+  Bell,
+  Mic,
+  ArrowLeft,
+  Check,
+} from '../../components/icons'
 import { Button, Card } from '../../components/ui'
 
 interface OnboardingStepPermissionsProps {

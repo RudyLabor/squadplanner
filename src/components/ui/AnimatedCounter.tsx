@@ -1,6 +1,5 @@
-import CountUp from 'react-countup'
 import { useInView } from 'framer-motion'
-import { useRef, useCallback } from 'react'
+import { useRef, useCallback, useState, useEffect } from 'react'
 
 interface AnimatedCounterProps {
   end: number
@@ -12,6 +11,11 @@ interface AnimatedCounterProps {
   decimals?: number
   separator?: string
   className?: string
+}
+
+/** Easing function: easeOutCubic */
+function easeOut(t: number): number {
+  return 1 - Math.pow(1 - t, 3)
 }
 
 export function AnimatedCounter({
@@ -26,9 +30,9 @@ export function AnimatedCounter({
 }: AnimatedCounterProps) {
   const ref = useRef<HTMLSpanElement>(null)
   const isInView = useInView(ref, { once: true, amount: 0.5 })
+  const [displayValue, setDisplayValue] = useState(0)
 
-  // Handle singular/plural and clean intermediate values
-  const formattingFn = useCallback((value: number) => {
+  const format = useCallback((value: number) => {
     const rounded = decimals > 0 ? parseFloat(value.toFixed(decimals)) : Math.round(value)
     const display = decimals > 0 ? rounded.toFixed(decimals) : String(rounded)
     const sep = separator || ''
@@ -36,19 +40,36 @@ export function AnimatedCounter({
     return `${prefix}${sep ? display.replace(/\B(?=(\d{3})+(?!\d))/g, sep) : display}${activeSuffix}`
   }, [prefix, suffix, singularSuffix, decimals, separator])
 
+  useEffect(() => {
+    if (!isInView) return
+
+    const durationMs = duration * 1000
+    let startTime: number | null = null
+    let rafId: number
+
+    const animate = (timestamp: number) => {
+      if (!startTime) startTime = timestamp
+      const elapsed = timestamp - startTime
+      const progress = Math.min(elapsed / durationMs, 1)
+      const easedProgress = easeOut(progress)
+
+      setDisplayValue(easedProgress * end)
+
+      if (progress < 1) {
+        rafId = requestAnimationFrame(animate)
+      } else {
+        setDisplayValue(end)
+      }
+    }
+
+    rafId = requestAnimationFrame(animate)
+
+    return () => cancelAnimationFrame(rafId)
+  }, [isInView, end, duration])
+
   return (
     <span ref={ref} className={className} aria-live="polite" aria-atomic="true">
-      {isInView ? (
-        <CountUp
-          end={end}
-          duration={duration}
-          decimals={decimals}
-          formattingFn={formattingFn}
-          useEasing
-        />
-      ) : (
-        <span>{formattingFn(0)}</span>
-      )}
+      {format(isInView ? displayValue : 0)}
     </span>
   )
 }

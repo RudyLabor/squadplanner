@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Dialog, DialogBody, DialogFooter } from './Dialog'
 import { Sheet } from './Sheet'
-import { AlertTriangle } from 'lucide-react'
+import { AlertTriangle } from '../icons'
 import { Button } from './Button'
 
 interface ConfirmDialogProps {

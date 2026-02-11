@@ -11,10 +11,10 @@ ALTER TABLE profiles ADD COLUMN IF NOT EXISTS status_text TEXT;
 ALTER TABLE profiles ADD COLUMN IF NOT EXISTS status_emoji TEXT;
 ALTER TABLE profiles ADD COLUMN IF NOT EXISTS status_expires_at TIMESTAMPTZ;
 
--- Index pour les statuts actifs
+-- Index pour les statuts actifs (partial index on non-null status)
 CREATE INDEX IF NOT EXISTS idx_profiles_status_active
     ON profiles(id)
-    WHERE status_text IS NOT NULL AND (status_expires_at IS NULL OR status_expires_at > NOW());
+    WHERE status_text IS NOT NULL;
 
 -- RPC pour mettre à jour le statut
 CREATE OR REPLACE FUNCTION update_user_status(
@@ -242,8 +242,8 @@ CREATE TABLE IF NOT EXISTS stories (
 
 CREATE INDEX IF NOT EXISTS idx_stories_user ON stories(user_id);
 CREATE INDEX IF NOT EXISTS idx_stories_squad ON stories(squad_id) WHERE squad_id IS NOT NULL;
-CREATE INDEX IF NOT EXISTS idx_stories_expires ON stories(expires_at) WHERE expires_at > NOW();
-CREATE INDEX IF NOT EXISTS idx_stories_active ON stories(user_id, created_at DESC) WHERE expires_at > NOW();
+CREATE INDEX IF NOT EXISTS idx_stories_expires ON stories(expires_at);
+CREATE INDEX IF NOT EXISTS idx_stories_active ON stories(user_id, created_at DESC);
 
 -- Story views tracking
 CREATE TABLE IF NOT EXISTS story_views (

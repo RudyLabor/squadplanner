@@ -197,7 +197,19 @@ USING (
 -- =============================================================
 -- 3. MOVE pg_trgm EXTENSION TO extensions SCHEMA
 --    Prevents extension exposure via public API (lint 0014)
+--    Must drop dependent indexes first, then recreate them
 -- =============================================================
 
+-- Drop dependent indexes
+DROP INDEX IF EXISTS idx_profiles_username;
+DROP INDEX IF EXISTS idx_messages_content_trgm;
+DROP INDEX IF EXISTS idx_dm_content_trgm;
+
+-- Move extension
 DROP EXTENSION IF EXISTS pg_trgm;
 CREATE EXTENSION IF NOT EXISTS pg_trgm WITH SCHEMA extensions;
+
+-- Recreate indexes (operator class resolves via search_path including extensions)
+CREATE INDEX IF NOT EXISTS idx_profiles_username ON profiles USING gin (username extensions.gin_trgm_ops);
+CREATE INDEX IF NOT EXISTS idx_messages_content_trgm ON messages USING gin (content extensions.gin_trgm_ops);
+CREATE INDEX IF NOT EXISTS idx_dm_content_trgm ON direct_messages USING gin (content extensions.gin_trgm_ops);

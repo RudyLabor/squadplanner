@@ -109,6 +109,12 @@ export const queryKeys = {
     publicProfile: (username: string) => [...queryKeys.discover.all, 'profile', username] as const,
   },
 
+  // Activity Feed
+  activityFeed: {
+    all: ['activity-feed'] as const,
+    list: (squadIds: string[]) => [...['activity-feed'], 'list', ...squadIds] as const,
+  },
+
   // Phase 6: AI Advanced
   aiAdvanced: {
     all: ['ai-advanced'] as const,

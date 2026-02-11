@@ -119,6 +119,7 @@ export default function Home({ loaderData }: HomeProps) {
       queryClient.invalidateQueries({ queryKey: ['squads'] }),
       queryClient.invalidateQueries({ queryKey: ['sessions'] }),
       queryClient.invalidateQueries({ queryKey: ['friends-playing'] }),
+      queryClient.invalidateQueries({ queryKey: ['activity-feed'] }),
     ])
   }, [queryClient])
 
@@ -277,7 +278,7 @@ export default function Home({ loaderData }: HomeProps) {
               <HomeStatsSection squadsCount={squads.length} sessionsThisWeek={sessionsThisWeek} reliabilityScore={reliabilityScore} squadsLoading={squadsLoading} sessionsLoading={sessionsLoading} profile={profile} />
             </m.div>
             <m.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}>
-              <HomeActivityFeed squads={squads} />
+              <HomeActivityFeed squadIds={squads.map(s => s.id)} />
             </m.div>
             <m.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.35, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}>
               <HomeSquadsSection squads={squads} squadsLoading={squadsLoading} />

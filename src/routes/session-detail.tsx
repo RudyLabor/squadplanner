@@ -26,7 +26,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     supabase.from('sessions').select('*').eq('id', sessionId).single(),
     supabase
       .from('session_rsvps')
-      .select('*, profiles(username)')
+      .select('*')
       .eq('session_id', sessionId),
     supabase
       .from('session_checkins')
@@ -35,6 +35,20 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   ])
 
   const rsvps = rsvpsResult.data || []
+
+  // Fetch usernames separately to avoid PostgREST join errors
+  if (rsvps.length) {
+    const userIds = [...new Set(rsvps.map((r: any) => r.user_id))]
+    const { data: profiles } = await supabase
+      .from('profiles')
+      .select('id, username')
+      .in('id', userIds)
+    const profileMap = new Map((profiles || []).map((p: any) => [p.id, p]))
+    rsvps.forEach((r: any) => {
+      r.profiles = profileMap.get(r.user_id) || { username: 'Joueur' }
+    })
+  }
+
   const myRsvp = rsvps.find((r: any) => r.user_id === user.id)?.response || null
 
   const session = sessionResult.data

@@ -105,8 +105,21 @@ export const useSessionsStore = create<SessionsState>((set, get) => ({
 
       const { data: rsvps } = await supabase
         .from('session_rsvps')
-        .select('*, profiles(username)')
+        .select('*')
         .eq('session_id', id)
+
+      // Fetch usernames separately to avoid PostgREST join errors
+      if (rsvps?.length) {
+        const userIds = [...new Set(rsvps.map(r => r.user_id))]
+        const { data: profiles } = await supabase
+          .from('profiles')
+          .select('id, username')
+          .in('id', userIds)
+        const profileMap = new Map((profiles || []).map(p => [p.id, p]))
+        rsvps.forEach((r: any) => {
+          r.profiles = profileMap.get(r.user_id) || { username: 'Joueur' }
+        })
+      }
 
       const { data: checkins } = await supabase
         .from('session_checkins')

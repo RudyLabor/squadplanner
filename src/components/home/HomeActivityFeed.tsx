@@ -1,51 +1,22 @@
 "use client";
 
-import { memo, useMemo } from 'react'
+import { memo } from 'react'
 import { m } from 'framer-motion'
 import {
   CheckCircle2,
   Gamepad2,
-  Trophy,
   UserPlus,
-  Flame,
-  PartyPopper,
   Activity,
 } from '../icons'
 import { Card } from '../ui'
+import { useActivityFeedQuery, getRelativeTime } from '../../hooks/queries/useActivityFeedQuery'
+import type { ActivityItem } from '../../hooks/queries/useActivityFeedQuery'
 
-// --- Types ---
-
-type ActivityType =
-  | 'session_rsvp'
-  | 'session_created'
-  | 'squad_joined'
-  | 'achievement_unlocked'
-  | 'streak_milestone'
-  | 'party_started'
-
-interface ActivityItem {
-  id: string
-  type: ActivityType
-  description: string
-  detail: string
-  relativeTime: string
-  avatarInitial: string
-  avatarColor: string
-}
-
-interface Squad {
-  id: string
-  name: string
-  game?: string
-  member_count?: number
-  total_members?: number
-}
+type ActivityType = ActivityItem['type']
 
 interface HomeActivityFeedProps {
-  squads: Squad[]
+  squadIds: string[]
 }
-
-// --- Helpers ---
 
 const activityConfig: Record<
   ActivityType,
@@ -66,111 +37,7 @@ const activityConfig: Record<
     colorClass: 'text-info',
     bgClass: 'bg-info/15',
   },
-  achievement_unlocked: {
-    icon: Trophy,
-    colorClass: 'text-warning',
-    bgClass: 'bg-warning/15',
-  },
-  streak_milestone: {
-    icon: Flame,
-    colorClass: 'text-error',
-    bgClass: 'bg-error/15',
-  },
-  party_started: {
-    icon: PartyPopper,
-    colorClass: 'text-secondary',
-    bgClass: 'bg-secondary/15',
-  },
 }
-
-const MOCK_NAMES = ['Alex', 'Marie', 'Sami', 'Jade', 'Noah', 'Lina']
-const MOCK_GAMES = ['Apex Legends', 'Valorant', 'Fortnite', 'Rocket League', 'Overwatch 2']
-const AVATAR_COLORS = [
-  'bg-primary/20 text-primary',
-  'bg-success/20 text-success',
-  'bg-warning/20 text-warning',
-  'bg-info/20 text-info',
-  'bg-error/20 text-error',
-  'bg-secondary/20 text-secondary',
-]
-
-function pickRandom<T>(arr: T[], seed: number): T {
-  return arr[Math.abs(seed) % arr.length]
-}
-
-// TODO: Remplacer par de vraies données depuis Supabase (table activity_feed ou logs).
-// Actuellement, ces activités sont générées à partir de noms fictifs pour la démo.
-function generateMockActivities(squads: Squad[]): ActivityItem[] {
-  if (squads.length === 0) return []
-
-  const activities: ActivityItem[] = []
-  let idCounter = 0
-
-  // 1. session_rsvp - someone confirmed for a session
-  const squad1 = pickRandom(squads, 0)
-  const name1 = pickRandom(MOCK_NAMES, 1)
-  activities.push({
-    id: `activity-${idCounter++}`,
-    type: 'session_rsvp',
-    description: `${name1} a confirmé sa présence`,
-    detail: `Session Ranked - ${squad1.name}`,
-    relativeTime: 'il y a 2h',
-    avatarInitial: name1[0],
-    avatarColor: pickRandom(AVATAR_COLORS, 1),
-  })
-
-  // 2. session_created - new session in a squad
-  const squad2 = pickRandom(squads, 2)
-  const game2 = squad2.game || pickRandom(MOCK_GAMES, 3)
-  activities.push({
-    id: `activity-${idCounter++}`,
-    type: 'session_created',
-    description: 'Nouvelle session créée',
-    detail: `${game2} - ${squad2.name}`,
-    relativeTime: 'il y a 3h',
-    avatarInitial: squad2.name[0],
-    avatarColor: pickRandom(AVATAR_COLORS, 2),
-  })
-
-  // 3. achievement_unlocked - user unlocked a badge
-  activities.push({
-    id: `activity-${idCounter++}`,
-    type: 'achievement_unlocked',
-    description: 'Tu as débloqué le badge "Régulier"',
-    detail: '5 sessions confirmées',
-    relativeTime: 'il y a 5h',
-    avatarInitial: 'T',
-    avatarColor: pickRandom(AVATAR_COLORS, 4),
-  })
-
-  // 4. squad_joined - someone joined a squad
-  const squad4 = pickRandom(squads, 4)
-  const name4 = pickRandom(MOCK_NAMES, 5)
-  activities.push({
-    id: `activity-${idCounter++}`,
-    type: 'squad_joined',
-    description: `${name4} a rejoint ta squad`,
-    detail: squad4.name,
-    relativeTime: 'il y a 1j',
-    avatarInitial: name4[0],
-    avatarColor: pickRandom(AVATAR_COLORS, 5),
-  })
-
-  // 5. streak_milestone - streak reached
-  activities.push({
-    id: `activity-${idCounter++}`,
-    type: 'streak_milestone',
-    description: 'Série de 7 jours atteinte !',
-    detail: 'Continue comme ça',
-    relativeTime: 'il y a 2j',
-    avatarInitial: 'T',
-    avatarColor: pickRandom(AVATAR_COLORS, 3),
-  })
-
-  return activities.slice(0, 5)
-}
-
-// --- Component ---
 
 const ActivityRow = memo(function ActivityRow({
   item,
@@ -193,21 +60,18 @@ const ActivityRow = memo(function ActivityRow({
       }}
       className="flex items-center gap-3 py-3"
     >
-      {/* Avatar */}
       <div
         className={`w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 text-sm font-semibold ${item.avatarColor}`}
       >
         {item.avatarInitial}
       </div>
 
-      {/* Icon circle */}
       <div
         className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 ${config.bgClass}`}
       >
         <Icon className={`w-4 h-4 ${config.colorClass}`} />
       </div>
 
-      {/* Text */}
       <div className="min-w-0 flex-1">
         <p className="text-base font-medium text-text-primary truncate">
           {item.description}
@@ -215,18 +79,46 @@ const ActivityRow = memo(function ActivityRow({
         <p className="text-sm text-text-tertiary truncate">{item.detail}</p>
       </div>
 
-      {/* Time */}
       <span className="text-sm text-text-quaternary flex-shrink-0 whitespace-nowrap">
-        {item.relativeTime}
+        {getRelativeTime(item.timestamp)}
       </span>
     </m.div>
   )
 })
 
+function SkeletonRow() {
+  return (
+    <div className="flex items-center gap-3 py-3 animate-pulse">
+      <div className="w-9 h-9 rounded-full bg-border-subtle flex-shrink-0" />
+      <div className="w-8 h-8 rounded-lg bg-border-subtle flex-shrink-0" />
+      <div className="min-w-0 flex-1 space-y-2">
+        <div className="h-4 bg-border-subtle rounded w-3/4" />
+        <div className="h-3 bg-border-subtle rounded w-1/2" />
+      </div>
+      <div className="h-3 bg-border-subtle rounded w-12 flex-shrink-0" />
+    </div>
+  )
+}
+
 export const HomeActivityFeed = memo(function HomeActivityFeed({
-  squads,
+  squadIds,
 }: HomeActivityFeedProps) {
-  const activities = useMemo(() => generateMockActivities(squads), [squads])
+  const { data: activities = [], isLoading } = useActivityFeedQuery(squadIds)
+
+  if (isLoading) {
+    return (
+      <section aria-label="Activité récente" className="mb-6">
+        <h2 className="text-base font-semibold text-text-primary mb-3">
+          Activité récente
+        </h2>
+        <Card className="px-4 py-1 divide-y divide-border-subtle">
+          <SkeletonRow />
+          <SkeletonRow />
+          <SkeletonRow />
+        </Card>
+      </section>
+    )
+  }
 
   if (activities.length === 0) {
     return (
@@ -249,12 +141,9 @@ export const HomeActivityFeed = memo(function HomeActivityFeed({
 
   return (
     <section aria-label="Activité récente" className="mb-6">
-      <div className="flex items-center gap-2 mb-3">
-        <h2 className="text-base font-semibold text-text-primary">
-          Activité récente
-        </h2>
-        <span className="text-xs text-text-quaternary italic px-2 py-0.5 rounded-full bg-border-subtle">Démo</span>
-      </div>
+      <h2 className="text-base font-semibold text-text-primary mb-3">
+        Activité récente
+      </h2>
       <Card className="px-4 py-1 divide-y divide-border-subtle">
         {activities.map((item, index) => (
           <ActivityRow key={item.id} item={item} index={index} />

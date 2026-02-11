@@ -1,3 +1,5 @@
+"use client";
+
 /**
  * PHASE - Tooltip Component
  *
@@ -7,8 +9,7 @@
 import { useState, useRef, useEffect, type ReactNode } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
 import { createPortal } from 'react-dom'
-import { HelpCircle } from 'lucide-react'
-
+import { HelpCircle } from '../icons'
 type TooltipPosition = 'top' | 'bottom' | 'left' | 'right'
 type TooltipVariant = 'default' | 'help'
 

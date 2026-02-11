@@ -1,3 +1,5 @@
+"use client";
+
 import { type ReactNode, useEffect, useRef, useCallback, useState } from 'react'
 import {
   m,
@@ -9,8 +11,7 @@ import {
   type PanInfo,
 } from 'framer-motion'
 import { createPortal } from 'react-dom'
-import { X } from 'lucide-react'
-
+import { X } from '../icons'
 /* ---------- Types ---------- */
 
 interface SheetProps {

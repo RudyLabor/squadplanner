@@ -1,6 +1,5 @@
 import { m } from 'framer-motion'
-import { CornerUpRight } from 'lucide-react'
-
+import { CornerUpRight } from './icons'
 interface MessageReplyPreviewProps {
   originalMessage: {
     id: string

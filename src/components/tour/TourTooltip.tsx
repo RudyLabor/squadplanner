@@ -1,6 +1,5 @@
 import { m, AnimatePresence } from 'framer-motion'
-import { X, ArrowRight, ArrowLeft } from 'lucide-react'
-
+import { X, ArrowRight, ArrowLeft } from '../icons'
 interface TourTooltipProps {
   currentStep: number
   totalSteps: number

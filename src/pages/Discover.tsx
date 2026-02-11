@@ -1,6 +1,14 @@
+"use client";
+
 import { memo } from 'react'
 import { m } from 'framer-motion'
-import { Compass, Plus, Sparkles, Users, Gamepad2 } from 'lucide-react'
+import {
+  Compass,
+  Plus,
+  Sparkles,
+  Users,
+  Gamepad2,
+} from '../components/icons'
 import { Link } from 'react-router-dom'
 import { MobilePageHeader } from '../components/layout/MobilePageHeader'
 import { SegmentedControl, Select, Card, Button } from '../components/ui'
@@ -35,9 +43,9 @@ const GAME_OPTIONS: SelectOption[] = [
 const REGION_OPTIONS: SelectOption[] = [
   { value: 'eu-west', label: 'Europe Ouest' },
   { value: 'eu-east', label: 'Europe Est' },
-  { value: 'na', label: 'Amérique du Nord' },
+  { value: 'na', label: 'Amï¿½rique du Nord' },
   { value: 'asia', label: 'Asie' },
-  { value: 'oce', label: 'Océanie' },
+  { value: 'oce', label: 'Ocï¿½anie' },
 ]
 
 export function Discover() {
@@ -51,14 +59,14 @@ export function Discover() {
       animate={{ opacity: 1 }}
       className="max-w-2xl lg:max-w-4xl xl:max-w-5xl mx-auto px-4 md:px-6 lg:px-8 py-6 pb-24"
     >
-      <MobilePageHeader title="Découvrir" />
+      <MobilePageHeader title="Dï¿½couvrir" />
       {/* Header - hidden on mobile where MobilePageHeader is shown */}
       <div className="hidden lg:flex items-center gap-3 mb-6">
         <div className="w-10 h-10 rounded-xl bg-indigo-500/10 flex items-center justify-center">
           <Compass className="w-5 h-5 text-indigo-400" />
         </div>
         <div>
-          <h1 className="text-lg font-bold text-text-primary">Découvrir</h1>
+          <h1 className="text-lg font-bold text-text-primary">Dï¿½couvrir</h1>
           <p className="text-xs text-text-tertiary">Trouve des squads et joueurs</p>
         </div>
       </div>
@@ -89,7 +97,7 @@ export function Discover() {
             options={REGION_OPTIONS}
             value={region || undefined}
             onChange={(v) => setRegion(v as string)}
-            placeholder="Toutes les régions"
+            placeholder="Toutes les rï¿½gions"
             clearable
             size="sm"
           />
@@ -141,13 +149,13 @@ const SquadsTab = memo(function SquadsTab({ game, region }: { game: string; regi
           >
             <Compass className="w-8 h-8 text-primary" />
           </m.div>
-          <h3 className="text-lg font-bold text-text-primary mb-2">Aucune squad publique trouvée</h3>
-          <p className="text-sm text-text-secondary mb-1">Sois le premier à créer une squad publique !</p>
-          <p className="text-xs text-text-tertiary mb-5">Les leaders peuvent rendre leur squad publique dans les paramètres</p>
+          <h3 className="text-lg font-bold text-text-primary mb-2">Aucune squad publique trouvï¿½e</h3>
+          <p className="text-sm text-text-secondary mb-1">Sois le premier ï¿½ crï¿½er une squad publique !</p>
+          <p className="text-xs text-text-tertiary mb-5">Les leaders peuvent rendre leur squad publique dans les paramï¿½tres</p>
           <Link to="/squads">
             <Button variant="primary" size="sm">
               <Plus className="w-4 h-4" />
-              Créer une squad
+              Crï¿½er une squad
             </Button>
           </Link>
         </m.div>
@@ -160,7 +168,7 @@ const SquadsTab = memo(function SquadsTab({ game, region }: { game: string; regi
           </div>
           <div className="space-y-2 lg:grid lg:grid-cols-3 lg:gap-3 lg:space-y-0">
             {[
-              { name: 'Les Gamers FR', game: 'Valorant', members: 8, desc: 'Squad compétitive Valorant' },
+              { name: 'Les Gamers FR', game: 'Valorant', members: 8, desc: 'Squad compï¿½titive Valorant' },
               { name: 'Rocket Masters', game: 'Rocket League', members: 5, desc: 'Du freestyle au ranked' },
               { name: 'Fortnite Squad', game: 'Fortnite', members: 12, desc: 'Build & chill' },
             ].map((s, i) => (

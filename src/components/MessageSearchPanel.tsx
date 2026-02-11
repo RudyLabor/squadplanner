@@ -1,6 +1,11 @@
 import { memo } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
-import { Search, X, User, Hash } from 'lucide-react'
+import {
+  Search,
+  X,
+  User,
+  Hash,
+} from './icons'
 import { useMessageSearch } from '../hooks/useMessageSearch'
 
 interface MessageSearchPanelProps {

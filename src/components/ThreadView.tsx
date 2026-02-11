@@ -1,6 +1,13 @@
+"use client";
+
 import { useState, useRef, useEffect, memo } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
-import { X, Send, MessageSquare, Loader2 } from 'lucide-react'
+import {
+  X,
+  Send,
+  MessageSquare,
+  Loader2,
+} from './icons'
 import { useThreads, useThreadInfo } from '../hooks/useThreads'
 import { useAuthStore } from '../hooks/useAuth'
 

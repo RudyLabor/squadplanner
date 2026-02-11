@@ -1,5 +1,11 @@
 import { Component, type ReactNode } from 'react'
-import { RefreshCw, AlertTriangle, Home, ArrowLeft, Trash2 } from 'lucide-react'
+import {
+  RefreshCw,
+  AlertTriangle,
+  Home,
+  ArrowLeft,
+  Trash2,
+} from './icons'
 import { captureException } from '../lib/sentry'
 
 interface Props {
@@ -65,7 +71,7 @@ export class ErrorBoundary extends Component<Props, State> {
     // Log error for debugging and send to error tracking
     console.error('[ErrorBoundary] Error caught:', error.message)
 
-    // Send to Sentry (only works in production when configured)
+    // Send to error tracker (only works in production)
     captureException(error, {
       componentStack: errorInfo.componentStack,
       isChunkError: this.state.isChunkError,

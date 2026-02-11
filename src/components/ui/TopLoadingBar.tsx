@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect, useRef, useState } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
 import { useNavigationProgressStore } from '../../hooks/useNavigationProgress'

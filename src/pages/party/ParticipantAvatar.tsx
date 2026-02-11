@@ -1,6 +1,5 @@
 import { m } from 'framer-motion'
-import { MicOff } from 'lucide-react'
-
+import { MicOff } from '../../components/icons'
 export function ParticipantAvatar({
   username, isSpeaking, isMuted, isLocal, size = 'md'
 }: {

@@ -7,7 +7,7 @@ import {
   type ReactNode,
   type KeyboardEvent,
 } from 'react'
-import { ChevronDown } from 'lucide-react'
+import { ChevronDown } from '../icons'
 import { haptic } from '../../utils/haptics'
 
 // --- Context ---

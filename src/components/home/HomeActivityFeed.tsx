@@ -1,3 +1,5 @@
+"use client";
+
 import { memo, useMemo } from 'react'
 import { m } from 'framer-motion'
 import {
@@ -8,7 +10,7 @@ import {
   Flame,
   PartyPopper,
   Activity,
-} from 'lucide-react'
+} from '../icons'
 import { Card } from '../ui'
 
 // --- Types ---

@@ -1,5 +1,10 @@
-import { Home, Users, Mic, MessageCircle, User } from 'lucide-react'
-
+import {
+  Home,
+  Users,
+  Mic,
+  MessageCircle,
+  User,
+} from '../icons'
 // ─── MOCK DATA ─────────────────────────────────────────
 export const mockMembers = [
   { name: 'Max', initial: 'M', color: 'var(--color-primary)', score: 94 },

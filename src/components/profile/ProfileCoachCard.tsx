@@ -1,7 +1,9 @@
+"use client";
+
 import { useState, useEffect, useMemo, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { m, AnimatePresence } from 'framer-motion'
-import { Sparkles, CalendarPlus, BarChart3 } from 'lucide-react'
+import { Sparkles, CalendarPlus, BarChart3 } from '../icons'
 import { Card, Button } from '../ui'
 
 // --- Dynamic Tips Engine ---

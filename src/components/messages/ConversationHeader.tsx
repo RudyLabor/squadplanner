@@ -1,4 +1,10 @@
-import { ArrowLeft, Users, Gamepad2, Search, Phone } from 'lucide-react'
+import {
+  ArrowLeft,
+  Users,
+  Gamepad2,
+  Search,
+  Phone,
+} from '../icons'
 import { m, AnimatePresence } from 'framer-motion'
 import { useVoiceCallStore } from '../../hooks/useVoiceCall'
 

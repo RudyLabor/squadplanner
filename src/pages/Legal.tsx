@@ -1,4 +1,6 @@
-import { ArrowLeft, Shield, FileText } from 'lucide-react'
+"use client";
+
+import { ArrowLeft, Shield, FileText } from '../components/icons'
 import { Link, useSearchParams } from 'react-router-dom'
 import { ScrollProgress } from '../components/ui/ScrollProgress'
 import { SquadPlannerLogo } from '../components/SquadPlannerLogo'

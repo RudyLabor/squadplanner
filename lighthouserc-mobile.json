@@ -40,7 +40,8 @@
         "total-blocking-time": ["warn", { "maxNumericValue": 600 }],
         "speed-index": ["warn", { "maxNumericValue": 4500 }],
         "uses-long-cache-ttl": "off",
-        "offscreen-images": "off"
+        "offscreen-images": "off",
+        "resource-summary:script:size": ["warn", { "maxNumericValue": 500000 }]
       }
     },
     "upload": {

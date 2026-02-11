@@ -1,6 +1,11 @@
 import { memo } from 'react'
 import { m } from 'framer-motion'
-import { Gamepad2, UserPlus, Users, LogIn } from 'lucide-react'
+import {
+  Gamepad2,
+  UserPlus,
+  Users,
+  LogIn,
+} from './icons'
 import { Card } from './ui'
 import { showSuccess } from '../lib/toast'
 import { getOptimizedAvatarUrl } from '../utils/avatarUrl'

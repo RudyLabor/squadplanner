@@ -1,5 +1,5 @@
 import { m, AnimatePresence } from 'framer-motion'
-import { Phone, PhoneOff } from 'lucide-react'
+import { Phone, PhoneOff } from './icons'
 import { useVoiceCallStore } from '../hooks/useVoiceCall'
 import { useFocusTrap } from '../hooks/useFocusTrap'
 import { useRingtone } from '../hooks/useRingtone'

@@ -1,7 +1,13 @@
 import { memo } from 'react'
 import { Link } from 'react-router-dom'
 import { m } from 'framer-motion'
-import { Home, Mic, MessageCircle, User, Users } from 'lucide-react'
+import {
+  Home,
+  Mic,
+  MessageCircle,
+  User,
+  Users,
+} from '../icons'
 import { usePrefetch } from '../../hooks/usePrefetch'
 
 // Mobile nav items (Party sera au centre avec un style special)

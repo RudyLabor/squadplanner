@@ -1,5 +1,10 @@
 import { m, AnimatePresence } from 'framer-motion'
-import { Users, Gamepad2, Link as LinkIcon, Loader2 } from 'lucide-react'
+import {
+  Users,
+  Gamepad2,
+  Link as LinkIcon,
+  Loader2,
+} from '../../components/icons'
 import { Button, Card, CardContent, Input } from '../../components/ui'
 
 interface JoinSquadFormProps {

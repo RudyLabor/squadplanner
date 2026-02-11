@@ -1,6 +1,8 @@
+"use client";
+
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
-import { Play } from 'lucide-react'
+import { Play } from '../icons'
 import { demoSteps, stepComponents } from './DemoSteps'
 
 // ─── HERO PHONE FRAME — animated demo visible above the fold ────────

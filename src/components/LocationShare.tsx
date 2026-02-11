@@ -1,10 +1,11 @@
+"use client";
+
 /**
  * Phase 4.1.4 — Location Share
  * "Je suis la" button + location message display
  */
 import { useState, memo } from 'react'
-import { MapPin, ExternalLink, Loader2 } from 'lucide-react'
-
+import { MapPin, ExternalLink, Loader2 } from './icons'
 interface LocationShareButtonProps {
   onShare: (lat: number, lng: number) => void
   disabled?: boolean

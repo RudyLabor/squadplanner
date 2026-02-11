@@ -1,5 +1,5 @@
 import { m } from 'framer-motion'
-import { Mic, Gamepad2, Loader2 } from 'lucide-react'
+import { Mic, Gamepad2, Loader2 } from '../../components/icons'
 import { Card, Button } from '../../components/ui'
 
 export function PartySquadCard({ squad, onJoin, isConnecting }: {

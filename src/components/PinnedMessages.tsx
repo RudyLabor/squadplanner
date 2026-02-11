@@ -1,7 +1,8 @@
+"use client";
+
 import { useState } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
-import { Pin, ChevronDown, X } from 'lucide-react'
-
+import { Pin, ChevronDown, X } from './icons'
 export interface PinnedMessage {
   pin_id: string
   message_id: string

@@ -1,6 +1,14 @@
+"use client";
+
 import { useState, useEffect, useMemo } from 'react'
 import { m } from 'framer-motion'
-import { Flame, Gift, Sparkles, Check, Zap } from 'lucide-react'
+import {
+  Flame,
+  Gift,
+  Sparkles,
+  Check,
+  Zap,
+} from './icons'
 import { Card } from './ui'
 import { MILESTONES, calculateXPReward, getNextMilestone, getFlameIntensity, getFlameColors } from './streak/streakUtils'
 import { StreakMilestoneToast } from './streak/StreakMilestoneToast'

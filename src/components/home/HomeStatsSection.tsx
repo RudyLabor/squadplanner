@@ -1,5 +1,5 @@
 import { memo } from 'react'
-import { Users, Calendar, TrendingUp } from 'lucide-react'
+import { Users, Calendar, TrendingUp } from '../icons'
 import { m } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import { AnimatedCounter, ContentTransition, SkeletonStatsRow } from '../ui'

@@ -1,6 +1,13 @@
 import { Link } from 'react-router-dom'
 import { m } from 'framer-motion'
-import { Home, Gamepad2, ArrowLeft, Users, MessageCircle, HelpCircle } from 'lucide-react'
+import {
+  Home,
+  Gamepad2,
+  ArrowLeft,
+  Users,
+  MessageCircle,
+  HelpCircle,
+} from '../components/icons'
 import { Button } from '../components/ui'
 
 export function NotFound() {

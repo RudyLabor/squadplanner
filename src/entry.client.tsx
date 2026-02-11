@@ -1,12 +1,8 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import './index.css'
-import App from './App.tsx'
+import { StrictMode, startTransition } from 'react'
+import { hydrateRoot } from 'react-dom/client'
+import { HydratedRouter } from 'react-router/dom'
 import { initializePushNotifications } from './hooks/usePushNotifications'
 import { initFontOptimization } from './utils/fontOptimization'
-
-// Sentry is now lazily initialized ONLY in authenticated routes (see App.tsx)
-// This keeps @sentry/browser out of the landing page bundle
 
 // Detect when web fonts are loaded and add .fonts-loaded class to <html>
 initFontOptimization()
@@ -32,13 +28,16 @@ if ('serviceWorker' in navigator) {
   })
 }
 
-createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-    <App />
-  </StrictMode>,
-)
+startTransition(() => {
+  hydrateRoot(
+    document,
+    <StrictMode>
+      <HydratedRouter />
+    </StrictMode>,
+  )
+})
 
 // Report Web Vitals (non-blocking)
 import('./utils/webVitals').then(({ reportWebVitals }) => {
-  reportWebVitals();
+  reportWebVitals()
 })

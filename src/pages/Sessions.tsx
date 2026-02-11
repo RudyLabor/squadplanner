@@ -1,32 +1,40 @@
+"use client";
+
 import { useEffect, useState, useRef } from 'react'
-import { Plus, Loader2 } from 'lucide-react'
+import { Plus, Loader2 } from '../components/icons'
 import Confetti from '../components/LazyConfetti'
 import { Button } from '../components/ui'
-import { useAuthStore, useSquadsStore, useSessionsStore, useAIStore } from '../hooks'
+import { useAuthStore, useAIStore } from '../hooks'
+import { useSquadsQuery } from '../hooks/queries/useSquadsQuery'
+import { useUpcomingSessionsQuery } from '../hooks/queries/useSessionsQuery'
 import { useCreateSessionModal } from '../components/CreateSessionModal'
 import { NeedsResponseSection, AllCaughtUp } from './sessions/NeedsResponseSection'
 import { AISlotSuggestions, CoachTipsSection } from './sessions/AISuggestions'
 import { ConfirmedSessions, HowItWorksSection } from './sessions/ConfirmedSessions'
 
-export function Sessions() {
+interface SessionsProps {
+  loaderData?: {
+    squads: any[]
+    sessions: any[]
+  }
+}
+
+export function Sessions({ loaderData }: SessionsProps) {
   const { user, isInitialized } = useAuthStore()
-  const { squads, fetchSquads, isLoading: squadsLoading } = useSquadsStore()
-  const { sessions, fetchSessions, isLoading: sessionsLoading } = useSessionsStore()
+  const { data: squads = [], isLoading: squadsLoading } = useSquadsQuery()
+  const { data: sessions = [], isLoading: sessionsLoading } = useUpcomingSessionsQuery(user?.id)
   const { slotSuggestions, coachTips, fetchSlotSuggestions, fetchCoachTips } = useAIStore()
   const openCreateSession = useCreateSessionModal(s => s.open)
 
   const [showConfetti, setShowConfetti] = useState(false)
   const hasShownCelebration = useRef(false)
 
-  useEffect(() => { if (user) fetchSquads() }, [user, fetchSquads])
-
   useEffect(() => {
     squads.forEach(squad => {
-      fetchSessions(squad.id)
       fetchSlotSuggestions(squad.id)
       fetchCoachTips(squad.id)
     })
-  }, [squads, fetchSessions, fetchSlotSuggestions, fetchCoachTips])
+  }, [squads, fetchSlotSuggestions, fetchCoachTips])
 
   const upcomingSessions = sessions
     .filter(s => new Date(s.scheduled_at) > new Date() && s.status !== 'cancelled')
@@ -45,7 +53,8 @@ export function Sessions() {
     }
   }, [needsResponse.length, confirmed.length, sessions.length])
 
-  if (!isInitialized || (squadsLoading && squads.length === 0)) {
+  const hasData = squads.length > 0 || (!squadsLoading && !sessionsLoading)
+  if (!hasData && squadsLoading) {
     return (
       <div className="flex-1 flex items-center justify-center min-h-[50vh]">
         <Loader2 className="w-8 h-8 animate-spin text-primary" />

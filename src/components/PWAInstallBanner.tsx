@@ -7,7 +7,7 @@
  */
 import { memo } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
-import { Download, X } from 'lucide-react'
+import { Download, X } from './icons'
 import { usePWAInstallStore } from '../hooks/usePWAInstall'
 
 export const PWAInstallBanner = memo(function PWAInstallBanner() {

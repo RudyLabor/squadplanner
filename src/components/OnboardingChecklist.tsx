@@ -1,6 +1,15 @@
+"use client";
+
 import { useState, useEffect } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
-import { Users, UserPlus, Calendar, Check, X, ChevronRight } from 'lucide-react'
+import {
+  Users,
+  UserPlus,
+  Calendar,
+  Check,
+  X,
+  ChevronRight,
+} from './icons'
 import { Link } from 'react-router-dom'
 import { Card } from './ui'
 import { showSuccess } from '../lib/toast'

@@ -1,8 +1,11 @@
+"use client";
+
 import { useEffect, useState, useRef } from 'react'
 import { m } from 'framer-motion'
-import { Loader2 } from 'lucide-react'
+import { Loader2 } from '../components/icons'
 import Confetti from '../components/LazyConfetti'
-import { useAuthStore, useSquadsStore, useVoiceChatStore, usePremiumStore, getSavedPartyInfo } from '../hooks'
+import { useAuthStore, useVoiceChatStore, usePremiumStore, getSavedPartyInfo } from '../hooks'
+import { useSquadsQuery } from '../hooks/queries/useSquadsQuery'
 import { QualityChangeToast } from '../components/NetworkQualityIndicator'
 import { ActivePartySection } from './party/PartyActiveSection'
 import { PartySquadCard } from './party/PartySquadCard'
@@ -13,7 +16,7 @@ import { PartySingleSquad, PartyStatsCard } from './party/PartySingleSquad'
 export function Party() {
   const { user, profile } = useAuthStore()
   const { hasPremium } = usePremiumStore()
-  const { squads, fetchSquads, isLoading: squadsLoading } = useSquadsStore()
+  const { data: squads = [], isLoading: squadsLoading } = useSquadsQuery()
   const {
     isConnected, isConnecting, isReconnecting, currentChannel,
     joinChannel, leaveChannel, networkQualityChanged, clearNetworkQualityNotification, remoteUsers
@@ -30,7 +33,7 @@ export function Party() {
   const [showQualityToast, setShowQualityToast] = useState(false)
   const [qualityToastLevel, setQualityToastLevel] = useState<'excellent' | 'good' | 'medium' | 'poor'>('good')
 
-  useEffect(() => { if (user) fetchSquads() }, [user, fetchSquads])
+  // Squads loaded via React Query (cache seeded by SSR loader)
 
   useEffect(() => {
     if (hasAttemptedAutoReconnect.current || isConnected || isConnecting) return

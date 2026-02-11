@@ -1,6 +1,6 @@
 import { memo } from 'react'
 import { m } from 'framer-motion'
-import { Sparkles, ChevronRight } from 'lucide-react'
+import { Sparkles, ChevronRight } from '../icons'
 import { Card, SkeletonAICoach } from '../ui'
 
 interface AICoachTip {

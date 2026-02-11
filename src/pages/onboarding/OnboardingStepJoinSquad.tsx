@@ -1,5 +1,10 @@
 import { m } from 'framer-motion'
-import { UserPlus, ArrowLeft, ArrowRight, Loader2 } from 'lucide-react'
+import {
+  UserPlus,
+  ArrowLeft,
+  ArrowRight,
+  Loader2,
+} from '../../components/icons'
 import { Button, Card, Input } from '../../components/ui'
 
 interface OnboardingStepJoinSquadProps {

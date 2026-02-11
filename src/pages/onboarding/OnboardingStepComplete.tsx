@@ -1,6 +1,14 @@
+"use client";
+
 import { useState } from 'react'
 import { m } from 'framer-motion'
-import { Check, ArrowRight, Users, Gamepad2, Copy } from 'lucide-react'
+import {
+  Check,
+  ArrowRight,
+  Users,
+  Gamepad2,
+  Copy,
+} from '../../components/icons'
 import { Button, Card } from '../../components/ui'
 
 interface OnboardingStepCompleteProps {

@@ -1,6 +1,8 @@
+"use client";
+
 import { useEffect, useState, useRef, useCallback, useMemo } from 'react'
 import { useSearchParams } from 'react-router-dom'
-import { Sparkles } from 'lucide-react'
+import { Sparkles } from '../components/icons'
 import { useMessagesStore } from '../hooks/useMessages'
 import { useDirectMessagesStore } from '../hooks/useDirectMessages'
 import { useAuthStore } from '../hooks/useAuth'

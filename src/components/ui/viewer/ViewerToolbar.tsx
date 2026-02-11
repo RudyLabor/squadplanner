@@ -1,6 +1,11 @@
 import { m } from 'framer-motion'
-import { X, ZoomIn, ZoomOut, Download, RotateCw } from 'lucide-react'
-
+import {
+  X,
+  ZoomIn,
+  ZoomOut,
+  Download,
+  RotateCw,
+} from '../../icons'
 interface ViewerToolbarProps {
   alt: string
   scale: number

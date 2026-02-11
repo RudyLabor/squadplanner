@@ -1,11 +1,18 @@
+"use client";
+
 /**
  * Phase 4.1.2 — Create Poll Modal
  * Create a new poll with question + options
  */
 import { useState, memo } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
-import { X, Plus, Trash2, BarChart3, Loader2 } from 'lucide-react'
-
+import {
+  X,
+  Plus,
+  Trash2,
+  BarChart3,
+  Loader2,
+} from './icons'
 interface CreatePollModalProps {
   isOpen: boolean
   onClose: () => void

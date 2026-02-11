@@ -1,8 +1,14 @@
+"use client";
+
 import { useState } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
 import {
-  Calendar, Plus, Loader2, Mic, MicOff
-} from 'lucide-react'
+  Calendar,
+  Plus,
+  Loader2,
+  Mic,
+  MicOff,
+} from '../icons'
 import { Button, Card, CardContent, Badge, Input, Select } from '../ui'
 import { useAuthStore, useVoiceChatStore, usePremiumStore } from '../../hooks'
 import { SessionCard } from './SessionCard'

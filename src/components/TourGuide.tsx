@@ -1,6 +1,14 @@
+"use client";
+
 import { useState, useEffect, useCallback } from 'react'
 import { useLocation } from 'react-router-dom'
-import { Sparkles, Calendar, Users, MessageCircle, Mic } from 'lucide-react'
+import {
+  Sparkles,
+  Calendar,
+  Users,
+  MessageCircle,
+  Mic,
+} from './icons'
 import { TourOverlay } from './tour/TourOverlay'
 import { TourTooltip } from './tour/TourTooltip'
 

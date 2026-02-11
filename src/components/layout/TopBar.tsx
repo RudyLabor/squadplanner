@@ -1,6 +1,16 @@
+"use client";
+
 import { memo, useCallback, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Search, LayoutGrid, Calendar, Compass, Settings, HelpCircle, Phone } from 'lucide-react'
+import {
+  Search,
+  LayoutGrid,
+  Calendar,
+  Compass,
+  Settings,
+  HelpCircle,
+  Phone,
+} from '../icons'
 import { Breadcrumbs } from './Breadcrumbs'
 import { GlobalSearch } from '../GlobalSearch'
 import { NotificationBell } from '../NotificationCenter'

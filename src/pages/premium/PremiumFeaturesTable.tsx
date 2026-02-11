@@ -1,5 +1,5 @@
 import { m } from 'framer-motion'
-import { Crown, Check, X } from 'lucide-react'
+import { Crown, Check, X } from '../../components/icons'
 import { Card } from '../../components/ui'
 import { FEATURES } from './PremiumData'
 

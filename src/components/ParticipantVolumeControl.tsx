@@ -1,6 +1,13 @@
+"use client";
+
 import { useState, useCallback, useEffect } from 'react'
 import { m } from 'framer-motion'
-import { Volume, Volume1, Volume2, VolumeX } from 'lucide-react'
+import {
+  Volume,
+  Volume1,
+  Volume2,
+  VolumeX,
+} from './icons'
 import { Tooltip } from './ui/Tooltip'
 
 export interface ParticipantVolumeControlProps {

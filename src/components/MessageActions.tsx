@@ -1,3 +1,5 @@
+"use client";
+
 import { useState, useRef, useEffect, useCallback } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
 import {
@@ -8,9 +10,8 @@ import {
   Reply,
   Copy,
   Check,
-  Forward
-} from 'lucide-react'
-
+  Forward,
+} from './icons'
 export interface MessageActionsProps {
   message: {
     id: string

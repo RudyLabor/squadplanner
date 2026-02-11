@@ -1,5 +1,5 @@
 import { m } from 'framer-motion'
-import { Check, X as XIcon } from 'lucide-react'
+import { Check, X as XIcon } from '../icons'
 import { scrollReveal } from '../../utils/animations'
 import { SquadPlannerLogo } from '../SquadPlannerLogo'
 

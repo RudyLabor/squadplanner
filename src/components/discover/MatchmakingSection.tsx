@@ -1,6 +1,15 @@
+"use client";
+
 import { memo, useState } from 'react'
 import { m } from 'framer-motion'
-import { UserPlus, Shield, Star, Gamepad2, MapPin, MessageSquare } from 'lucide-react'
+import {
+  UserPlus,
+  Shield,
+  Star,
+  Gamepad2,
+  MapPin,
+  MessageSquare,
+} from '../icons'
 import { useMatchmakingQuery } from '../../hooks/queries'
 import { useAuthStore } from '../../hooks'
 import { supabase } from '../../lib/supabase'
@@ -30,7 +39,7 @@ export const MatchmakingSection = memo(function MatchmakingSection({ game, regio
       <div className="text-center py-12">
         <UserPlus className="w-10 h-10 text-text-tertiary mx-auto mb-3 opacity-50" />
         <p className="text-sm text-text-tertiary">Aucun joueur disponible</p>
-        <p className="text-xs text-text-tertiary mt-1">Active "Cherche une squad" dans ton profil pour apparaître ici</p>
+        <p className="text-xs text-text-tertiary mt-1">Active "Cherche une squad" dans ton profil pour apparaï¿½tre ici</p>
       </div>
     )
   }
@@ -57,9 +66,9 @@ const PlayerCard = memo(function PlayerCard({ player }: { player: MatchmakingPla
       await supabase.from('direct_messages').insert({
         sender_id: user.id,
         receiver_id: player.user_id,
-        content: `Salut ${player.username} ! Je t'invite à rejoindre ma squad. Intéressé(e) ?`,
+        content: `Salut ${player.username} ! Je t'invite ï¿½ rejoindre ma squad. Intï¿½ressï¿½(e) ?`,
       })
-      showSuccess(`Message envoyé à ${player.username} !`)
+      showSuccess(`Message envoyï¿½ ï¿½ ${player.username} !`)
     } catch {
       showError('Erreur lors de l\'envoi')
     } finally {

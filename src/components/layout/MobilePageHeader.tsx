@@ -1,7 +1,8 @@
+"use client";
+
 import { memo } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { ChevronLeft } from 'lucide-react'
-
+import { ChevronLeft } from '../icons'
 interface MobilePageHeaderProps {
   title: string
   onBack?: () => void

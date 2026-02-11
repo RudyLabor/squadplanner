@@ -1,3 +1,5 @@
+"use client";
+
 /**
  * Chantier 9 - Maintenance Page
  *
@@ -6,7 +8,7 @@
  */
 import { useState, useEffect, useCallback } from 'react'
 import { m } from 'framer-motion'
-import { Wrench, RefreshCw, ExternalLink } from 'lucide-react'
+import { Wrench, RefreshCw, ExternalLink } from '../components/icons'
 import { useSearchParams } from 'react-router-dom'
 
 const AUTO_REFRESH_SECONDS = 30

@@ -1,6 +1,12 @@
 import { memo } from 'react'
 import { m } from 'framer-motion'
-import { Bell, Moon, Volume2, Vibrate, Loader2 } from 'lucide-react'
+import {
+  Bell,
+  Moon,
+  Volume2,
+  Vibrate,
+  Loader2,
+} from './icons'
 import { useNotificationPreferences, NOTIFICATION_CATEGORIES } from '../hooks/useNotificationPreferences'
 
 export const NotificationSettings = memo(function NotificationSettings() {

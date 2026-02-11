@@ -5,7 +5,7 @@
  * and when they reconnect.
  */
 import { m, AnimatePresence } from 'framer-motion'
-import { WifiOff, Wifi, X } from 'lucide-react'
+import { WifiOff, Wifi, X } from './icons'
 import { useOfflineBanner } from '../hooks/useOffline'
 
 export function OfflineBanner() {

@@ -1,23 +1,18 @@
-import { useEffect, lazy, Suspense, memo, useRef } from 'react'
-import { BrowserRouter, useSearchParams } from 'react-router-dom'
-import { Toaster } from 'sonner'
-import { LazyMotion } from 'framer-motion'
-import { QueryClientProvider } from '@tanstack/react-query'
-import { useAuthStore, subscribeToIncomingCalls, usePushNotificationStore, useVoiceCallStore, useThemeStore } from './hooks'
-import { initSentry } from './lib/sentry'
+"use client";
+
+import { lazy, Suspense, memo, useEffect, useRef } from 'react'
+import { Outlet, useSearchParams } from 'react-router'
+import { useAuthStore, subscribeToIncomingCalls, usePushNotificationStore, useVoiceCallStore } from './hooks'
+import { initErrorTracker } from './lib/errorTracker'
 import { useDocumentTitle } from './hooks/useDocumentTitle'
 import { useScrollRestoration } from './hooks/useScrollRestoration'
 import { useSwipeBack } from './hooks/useSwipeBack'
 import { useSessionExpiry } from './hooks/useSessionExpiry'
 import { useRateLimitStore } from './hooks/useRateLimit'
 import { usePWAInstallStore } from './hooks/usePWAInstall'
-import { queryClient } from './lib/queryClient'
 import { useNavigationProgress } from './hooks/useNavigationProgress'
 import { TopLoadingBar } from './components/ui/TopLoadingBar'
-import { AppRoutes } from './AppRoutes'
-
-// Initialize theme on app load
-void useThemeStore.getState()
+import { AppLayout } from './components/layout'
 
 // Lazy load heavy modals (only rendered when user is authenticated)
 const CallModal = lazy(() => import('./components/CallModal').then(m => ({ default: m.CallModal })))
@@ -25,7 +20,7 @@ const IncomingCallModal = lazy(() => import('./components/IncomingCallModal').th
 const CommandPalette = lazy(() => import('./components/CommandPalette').then(m => ({ default: m.CommandPalette })))
 const CreateSessionModal = lazy(() => import('./components/CreateSessionModal').then(m => ({ default: m.CreateSessionModal })))
 
-// Lazy load shell components - these are conditional or deferred, not needed for first paint
+// Lazy load shell components - conditional or deferred
 const OfflineBanner = lazy(() => import('./components/OfflineBanner').then(m => ({ default: m.OfflineBanner })))
 const SessionExpiredModal = lazy(() => import('./components/SessionExpiredModal').then(m => ({ default: m.SessionExpiredModal })))
 const RateLimitBanner = lazy(() => import('./components/RateLimitBanner').then(m => ({ default: m.RateLimitBanner })))
@@ -34,7 +29,20 @@ const NotificationBanner = lazy(() => import('./components/NotificationBanner'))
 const CookieConsent = lazy(() => import('./components/CookieConsent').then(m => ({ default: m.CookieConsent })))
 const TourGuide = lazy(() => import('./components/TourGuide').then(m => ({ default: m.TourGuide })))
 
-function AppContent() {
+// Global state banners
+const GlobalStateBanners = memo(function GlobalStateBanners() {
+  const { showModal, dismissModal } = useSessionExpiry()
+  const { isRateLimited, retryAfter, dismiss: dismissRateLimit, reset: resetRateLimit } = useRateLimitStore()
+
+  return (
+    <>
+      <SessionExpiredModal isOpen={showModal} onReconnect={() => {}} onDismiss={dismissModal} />
+      {isRateLimited && <RateLimitBanner retryAfter={retryAfter} onRetry={resetRateLimit} onDismiss={dismissRateLimit} />}
+    </>
+  )
+})
+
+export default function ClientShell() {
   const { initialize, user } = useAuthStore()
   const [searchParams, setSearchParams] = useSearchParams()
   const { setIncomingCall, status: callStatus } = useVoiceCallStore()
@@ -57,12 +65,12 @@ function AppContent() {
     return () => window.removeEventListener('beforeinstallprompt', handler)
   }, [])
 
-  // Initialize Sentry when authenticated
-  const sentryInitRef = useRef(false)
+  // Initialize error tracker + prefetch routes when authenticated
+  const trackerInitRef = useRef(false)
   useEffect(() => {
-    if (user && !sentryInitRef.current) {
-      sentryInitRef.current = true
-      initSentry().catch((err) => console.warn('[App] Sentry initialization failed:', err))
+    if (user && !trackerInitRef.current) {
+      trackerInitRef.current = true
+      initErrorTracker()
       import('./utils/routePrefetch').then(({ prefetchProbableRoutes }) => { prefetchProbableRoutes() })
     }
   }, [user])
@@ -118,6 +126,7 @@ function AppContent() {
 
   return (
     <>
+      <TopLoadingBar />
       {user && (
         <>
           <Suspense fallback={null}><CallModal /><IncomingCallModal /></Suspense>
@@ -125,67 +134,17 @@ function AppContent() {
           <Suspense fallback={null}><CreateSessionModal /></Suspense>
         </>
       )}
-      <AppRoutes />
+      <AppLayout>
+        <Outlet />
+      </AppLayout>
+      <Suspense fallback={null}>
+        <OfflineBanner />
+        <GlobalStateBanners />
+        <PWAInstallBanner />
+        <NotificationBanner />
+        <CookieConsent />
+        <TourGuide />
+      </Suspense>
     </>
-  )
-}
-
-// Global state banners
-const GlobalStateBanners = memo(function GlobalStateBanners() {
-  const { showModal, dismissModal } = useSessionExpiry()
-  const { isRateLimited, retryAfter, dismiss: dismissRateLimit, reset: resetRateLimit } = useRateLimitStore()
-
-  return (
-    <>
-      <SessionExpiredModal isOpen={showModal} onReconnect={() => {}} onDismiss={dismissModal} />
-      {isRateLimited && <RateLimitBanner retryAfter={retryAfter} onRetry={resetRateLimit} onDismiss={dismissRateLimit} />}
-    </>
-  )
-})
-
-const loadFeatures = () => import('framer-motion').then(mod => mod.domMax)
-
-export default function App() {
-  return (
-    <QueryClientProvider client={queryClient}>
-      <LazyMotion features={loadFeatures} strict>
-        <BrowserRouter>
-          <TopLoadingBar />
-          <AppContent />
-          <Suspense fallback={null}>
-            <OfflineBanner />
-            <GlobalStateBanners />
-            <PWAInstallBanner />
-            <NotificationBanner />
-            <CookieConsent />
-            <TourGuide />
-          </Suspense>
-          <Toaster
-            position="top-center"
-            toastOptions={{
-              duration: 4000,
-              style: {
-                background: 'var(--color-bg-surface)',
-                border: '1px solid var(--color-border-default)',
-                color: 'var(--color-text-primary)',
-                fontSize: '14px',
-                borderRadius: '12px',
-                padding: '12px 16px',
-                position: 'relative' as const,
-                overflow: 'hidden',
-              },
-              classNames: {
-                success: 'border-success/20 bg-success/10',
-                error: 'border-error/20 bg-error/10',
-                warning: 'border-warning/20 bg-warning/10',
-                info: 'border-primary/20 bg-primary/10',
-              },
-            }}
-          />
-          <div id="aria-live-polite" aria-live="polite" aria-atomic="true" className="sr-only" />
-          <div id="aria-live-assertive" aria-live="assertive" aria-atomic="true" className="sr-only" />
-        </BrowserRouter>
-      </LazyMotion>
-    </QueryClientProvider>
   )
 }

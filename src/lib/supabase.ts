@@ -13,13 +13,15 @@ let _client: SupabaseClient | null = null
 let _initPromise: Promise<SupabaseClient> | null = null
 
 /**
- * Initialize the Supabase client (loads @supabase/supabase-js dynamically).
+ * Initialize the Supabase client (loads @supabase/ssr dynamically).
+ * Uses createBrowserClient which stores auth tokens in cookies + localStorage,
+ * enabling server-side loaders to read auth state from request cookies.
  * Must be awaited before the `supabase` proxy is used.
  */
 export function initSupabase(): Promise<SupabaseClient> {
   if (!_initPromise) {
-    _initPromise = import('@supabase/supabase-js').then(({ createClient }) => {
-      _client = createClient(supabaseUrl!, supabaseAnonKey!)
+    _initPromise = import('@supabase/ssr').then(({ createBrowserClient }) => {
+      _client = createBrowserClient(supabaseUrl!, supabaseAnonKey!)
       return _client
     })
   }

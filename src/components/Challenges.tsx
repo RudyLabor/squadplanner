@@ -1,6 +1,8 @@
+"use client";
+
 import { useState } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
-import { Target, Gift } from 'lucide-react'
+import { Target, Gift } from './icons'
 import { ChallengeCard } from './challenges/ChallengeCard'
 
 // Type definitions

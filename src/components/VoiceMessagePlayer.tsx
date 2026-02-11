@@ -1,7 +1,8 @@
+"use client";
+
 import { useState, useRef, memo, useCallback, useEffect } from 'react'
 import { m } from 'framer-motion'
-import { Play, Pause, Mic } from 'lucide-react'
-
+import { Play, Pause, Mic } from './icons'
 interface VoiceMessagePlayerProps {
   voiceUrl?: string | null
   duration?: number | null

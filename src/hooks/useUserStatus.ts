@@ -32,6 +32,7 @@ interface UserStatusState {
 const STORAGE_KEY = 'sq-user-status'
 
 function loadPersistedStatus(): Pick<UserStatusState, 'availability' | 'customStatus' | 'gameStatus'> {
+  if (typeof window === 'undefined') return { availability: 'online', customStatus: null, gameStatus: null }
   try {
     const raw = localStorage.getItem(STORAGE_KEY)
     if (!raw) return { availability: 'online', customStatus: null, gameStatus: null }
@@ -47,6 +48,7 @@ function loadPersistedStatus(): Pick<UserStatusState, 'availability' | 'customSt
 }
 
 function persistStatus(state: Pick<UserStatusState, 'availability' | 'customStatus' | 'gameStatus'>) {
+  if (typeof window === 'undefined') return
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(state))
   } catch { /* ignore */ }

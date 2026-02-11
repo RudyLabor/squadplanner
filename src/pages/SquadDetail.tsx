@@ -1,12 +1,17 @@
+"use client";
+
 import { useState, useEffect, useCallback } from 'react'
 import { AnimatePresence } from 'framer-motion'
-import { ArrowLeft } from 'lucide-react'
+import { ArrowLeft } from '../components/icons'
 import { useParams, useNavigate } from 'react-router-dom'
 import Confetti from '../components/LazyConfetti'
 import { Button, SquadDetailSkeleton, CrossfadeTransition, ConfirmDialog } from '../components/ui'
-import { useAuthStore, useSquadsStore, useSessionsStore, usePremiumStore } from '../hooks'
-import { useSquadLeaderboardQuery } from '../hooks/queries'
-import { showSuccess } from '../lib/toast'
+import { useAuthStore, usePremiumStore } from '../hooks'
+import {
+  useSquadQuery, useSquadSessionsQuery, useSquadLeaderboardQuery,
+  useLeaveSquadMutation, useDeleteSquadMutation,
+  useCreateSessionMutation, useRsvpMutation,
+} from '../hooks/queries'
 import { SquadHeader, InviteModal } from '../components/squads/SquadHeader'
 import { SquadMembers } from '../components/squads/SquadMembers'
 import { PartySection, SquadSessionsList } from '../components/squads/SquadSessions'
@@ -21,40 +26,28 @@ export default function SquadDetail() {
   const [showActionsDrawer, setShowActionsDrawer] = useState(false)
   const [successMessage, setSuccessMessage] = useState<string | null>(null)
   const [showConfetti, setShowConfetti] = useState(false)
-  const [loadTimeout, setLoadTimeout] = useState(false)
   const [showLeaveConfirm, setShowLeaveConfirm] = useState(false)
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
 
   const { user, isInitialized } = useAuthStore()
-  const { currentSquad, fetchSquadById, leaveSquad, deleteSquad, isLoading, setCurrentSquad } = useSquadsStore()
-  const { sessions, fetchSessions, createSession, updateRsvp, isLoading: sessionsLoading } = useSessionsStore()
   const { canAccessFeature, fetchPremiumStatus, isSquadPremium } = usePremiumStore()
 
+  const { data: currentSquad, isLoading: squadLoading } = useSquadQuery(id)
+  const { data: sessions, isLoading: sessionsLoading } = useSquadSessionsQuery(id, user?.id)
   const { data: leaderboard = [], isLoading: leaderboardLoading } = useSquadLeaderboardQuery(id)
 
-  // Reset currentSquad on unmount or id change to avoid stale data
-  useEffect(() => {
-    setCurrentSquad(null)
-    setLoadTimeout(false)
-    return () => setCurrentSquad(null)
-  }, [id, setCurrentSquad])
+  const leaveSquadMutation = useLeaveSquadMutation()
+  const deleteSquadMutation = useDeleteSquadMutation()
+  const createSessionMutation = useCreateSessionMutation()
+  const rsvpMutation = useRsvpMutation()
 
   useEffect(() => {
-    if (isInitialized && !user) {
-      navigate('/auth')
-    } else if (id && user) {
-      fetchSquadById(id)
-      fetchSessions(id)
-      fetchPremiumStatus()
-    }
-  }, [id, user, isInitialized, navigate, fetchSquadById, fetchSessions, fetchPremiumStatus])
+    if (isInitialized && !user) navigate('/auth')
+  }, [user, isInitialized, navigate])
 
-  // Timeout fallback -- 10 seconds max loading
   useEffect(() => {
-    if (!isLoading && currentSquad) return
-    const timer = setTimeout(() => setLoadTimeout(true), 10000)
-    return () => clearTimeout(timer)
-  }, [id, isLoading, currentSquad])
+    if (user?.id) fetchPremiumStatus()
+  }, [user?.id, fetchPremiumStatus])
 
   const handleCreateSession = useCallback(async (data: {
     squad_id: string
@@ -64,22 +57,19 @@ export default function SquadDetail() {
     auto_confirm_threshold: number
     game?: string
   }) => {
-    const result = await createSession(data)
-    if (!result.error) {
+    try {
+      await createSessionMutation.mutateAsync(data)
       setSuccessMessage('Session créée !')
-      if (id) fetchSessions(id)
+      return { session: null, error: null }
+    } catch (error) {
+      return { session: null, error: error as Error }
     }
-    return result
-  }, [createSession, id, fetchSessions])
+  }, [createSessionMutation])
 
   const handleRsvp = useCallback(async (sessionId: string, response: 'present' | 'absent' | 'maybe') => {
     try {
-      const { error } = await updateRsvp(sessionId, response)
-      if (error) return
+      await rsvpMutation.mutateAsync({ sessionId, response })
 
-      if (id) fetchSessions(id)
-
-      // A11Y: Announce RSVP status to screen readers
       const ariaLabels = { present: 'Tu es marqué comme présent', absent: 'Tu es marqué comme absent', maybe: 'Tu es marqué comme peut-être' }
       const ariaRegion = document.getElementById('aria-live-polite')
       if (ariaRegion) ariaRegion.textContent = ariaLabels[response]
@@ -94,7 +84,7 @@ export default function SquadDetail() {
     } catch (err) {
       console.error('RSVP error:', err)
     }
-  }, [id, updateRsvp, fetchSessions])
+  }, [rsvpMutation])
 
   const handleLeaveSquad = () => {
     if (!id) return
@@ -104,8 +94,7 @@ export default function SquadDetail() {
   const confirmLeaveSquad = async () => {
     if (!id) return
     setShowLeaveConfirm(false)
-    await leaveSquad(id)
-    showSuccess('Tu as quitté la squad')
+    await leaveSquadMutation.mutateAsync(id)
     navigate('/squads')
   }
 
@@ -117,33 +106,15 @@ export default function SquadDetail() {
   const confirmDeleteSquad = async () => {
     if (!id) return
     setShowDeleteConfirm(false)
-    await deleteSquad(id)
-    showSuccess('Squad supprimée')
+    await deleteSquadMutation.mutateAsync(id)
     navigate('/squads')
   }
 
   const isOwner = currentSquad?.owner_id === user?.id
+  const isLoading = squadLoading
+  const showSkeleton = isLoading && !currentSquad
 
-  const showSkeleton = !isInitialized || isLoading || (!currentSquad && id && !loadTimeout)
-
-  // Timeout state
-  if (loadTimeout && !currentSquad) {
-    return (
-      <div className="min-h-0 bg-bg-base flex items-center justify-center flex-col gap-4 py-12">
-        <p className="text-text-tertiary">Le chargement prend trop de temps</p>
-        <div className="flex gap-3">
-          <Button variant="primary" onClick={() => { setLoadTimeout(false); if (id) { fetchSquadById(id); fetchSessions(id) } }}>
-            Réessayer
-          </Button>
-          <Button variant="secondary" onClick={() => navigate('/squads')}>
-            Retour aux squads
-          </Button>
-        </div>
-      </div>
-    )
-  }
-
-  // Not found state
+  // Not found state (only after loading is done)
   if (!showSkeleton && !currentSquad) {
     return (
       <div className="min-h-0 bg-bg-base flex items-center justify-center flex-col gap-4 py-12">

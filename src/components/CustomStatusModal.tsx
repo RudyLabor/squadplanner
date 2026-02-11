@@ -1,10 +1,17 @@
+"use client";
+
 /**
  * Phase 4.2.3 + 4.2.4 — Custom Status Modal
  * Set emoji + text + duration + game status
  */
 import { useState, useEffect, memo } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
-import { X, Clock, Gamepad2, Loader2 } from 'lucide-react'
+import {
+  X,
+  Clock,
+  Gamepad2,
+  Loader2,
+} from './icons'
 import { useUserStatusStore } from '../hooks/useUserStatus'
 import { useSquadsStore } from '../hooks/useSquads'
 

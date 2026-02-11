@@ -1,6 +1,13 @@
+"use client";
+
 import { useState, useCallback } from 'react'
 import { Link } from 'react-router-dom'
-import { HelpCircle, FileText, Shield, Mail } from 'lucide-react'
+import {
+  HelpCircle,
+  FileText,
+  Shield,
+  Mail,
+} from '../icons'
 import { SquadPlannerLogo } from '../SquadPlannerLogo'
 
 export function LandingFooter() {

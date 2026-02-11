@@ -1,5 +1,5 @@
 import { m } from 'framer-motion'
-import { Calendar, Headphones, Check } from 'lucide-react'
+import { Calendar, Headphones, Check } from '../icons'
 import { mockMembers, MockNavbar } from './MockupShared'
 import { PartyScreen, ProfileScreen } from './MockupScreensParty'
 

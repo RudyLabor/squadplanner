@@ -1,6 +1,8 @@
+"use client";
+
 import { useState, useEffect, useRef } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
-import { X, Loader2, Pencil } from 'lucide-react'
+import { X, Loader2, Pencil } from './icons'
 import { Button } from './ui'
 import { useFocusTrap } from '../hooks/useFocusTrap'
 

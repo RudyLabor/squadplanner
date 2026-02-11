@@ -6,12 +6,6 @@ vi.mock('framer-motion', () => ({
   useInView: () => false,
 }))
 
-vi.mock('react-countup', () => ({
-  default: ({ end, formattingFn }: { end: number; formattingFn: (v: number) => string }) => (
-    <span>{formattingFn(end)}</span>
-  ),
-}))
-
 describe('AnimatedCounter', () => {
   it('renders without crash', () => {
     const { container } = render(<AnimatedCounter end={42} />)
@@ -32,7 +26,7 @@ describe('AnimatedCounter', () => {
 
   it('displays initial value when not in view', () => {
     render(<AnimatedCounter end={42} prefix="$" suffix="k" />)
-    // When not in view, shows formattingFn(0)
+    // When not in view, shows format(0)
     expect(screen.getByText('$0k')).toBeInTheDocument()
   })
 
@@ -43,7 +37,7 @@ describe('AnimatedCounter', () => {
 
   it('handles singularSuffix for value <= 1', () => {
     render(<AnimatedCounter end={1} suffix=" items" singularSuffix=" item" />)
-    // formattingFn(0) with value 0 <= 1, uses singularSuffix
+    // format(0) with value 0 <= 1, uses singularSuffix
     expect(screen.getByText('0 item')).toBeInTheDocument()
   })
 })

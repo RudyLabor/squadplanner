@@ -1,6 +1,8 @@
+"use client";
+
 import { useState, type ReactNode } from 'react'
 import { m } from 'framer-motion'
-import { Lock, Zap, Crown } from 'lucide-react'
+import { Lock, Zap, Crown } from './icons'
 import { Button } from './ui'
 import { PremiumUpgradeModal } from './PremiumUpgradeModal'
 import { usePremiumStore, type PremiumFeature } from '../hooks/usePremium'

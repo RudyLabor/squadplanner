@@ -1,7 +1,8 @@
+"use client";
+
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { m, AnimatePresence, useInView } from 'framer-motion'
-import { Star, ChevronLeft, ChevronRight } from 'lucide-react'
-
+import { Star, ChevronLeft, ChevronRight } from '../icons'
 interface Testimonial {
   name: string
   squad: string

@@ -1,3 +1,5 @@
+"use client";
+
 import { useRef, useEffect, useCallback, memo } from 'react'
 import { useVirtualizer } from '@tanstack/react-virtual'
 import { AnimatePresence } from 'framer-motion'

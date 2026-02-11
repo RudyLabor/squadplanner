@@ -1,5 +1,5 @@
 import { m } from 'framer-motion'
-import { Check, Loader2, Send } from 'lucide-react'
+import { Check, Loader2, Send } from '../icons'
 import { Button } from '../ui'
 
 interface InviteUserItemProps {

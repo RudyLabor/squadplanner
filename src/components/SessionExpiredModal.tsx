@@ -1,3 +1,5 @@
+"use client";
+
 /**
  * Chantier 9 - Session Expired Modal
  *
@@ -5,7 +7,12 @@
  * Offers reconnection or read-only mode.
  */
 import { m, AnimatePresence } from 'framer-motion'
-import { Clock, Lock, LogIn, Eye } from 'lucide-react'
+import {
+  Clock,
+  Lock,
+  LogIn,
+  Eye,
+} from './icons'
 import { useNavigate } from 'react-router-dom'
 import { useEffect, useRef } from 'react'
 

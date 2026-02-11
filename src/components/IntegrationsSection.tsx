@@ -1,5 +1,14 @@
+"use client";
+
 import { memo, useState } from 'react'
-import { Plug, Calendar, Tv, Gamepad2, MessageSquare, Download } from 'lucide-react'
+import {
+  Plug,
+  Calendar,
+  Tv,
+  Gamepad2,
+  MessageSquare,
+  Download,
+} from './icons'
 import { useAuthStore } from '../hooks'
 import { supabase } from '../lib/supabase'
 import { showSuccess, showError, showInfo } from '../lib/toast'

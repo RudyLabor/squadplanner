@@ -1,7 +1,12 @@
 import { memo } from 'react'
 import {
-  Users, MessageCircle, Phone, Crown, TrendingUp, UserPlus
-} from 'lucide-react'
+  Users,
+  MessageCircle,
+  Phone,
+  Crown,
+  TrendingUp,
+  UserPlus,
+} from '../icons'
 import { useNavigate } from 'react-router-dom'
 import { Button, Card, CardContent } from '../ui'
 import { useVoiceCallStore } from '../../hooks'

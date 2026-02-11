@@ -1,6 +1,8 @@
+"use client";
+
 import { useState } from 'react'
 import { m } from 'framer-motion'
-import { ChevronDown } from 'lucide-react'
+import { ChevronDown } from '../../components/icons'
 import { Card } from '../../components/ui'
 import { FAQ } from './PremiumData'
 

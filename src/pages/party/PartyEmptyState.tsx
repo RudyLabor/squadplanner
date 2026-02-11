@@ -1,5 +1,5 @@
 import { m } from 'framer-motion'
-import { Mic, Users } from 'lucide-react'
+import { Mic, Users } from '../../components/icons'
 import { Link } from 'react-router-dom'
 import { Card, Button } from '../../components/ui'
 

@@ -1,5 +1,17 @@
 import { m } from 'framer-motion'
-import { Check, Gift, ArrowRight, Loader2, Rocket, Sparkles, Shield, Clock, CheckCircle2, Crown, Zap } from 'lucide-react'
+import {
+  Check,
+  Gift,
+  ArrowRight,
+  Loader2,
+  Rocket,
+  Sparkles,
+  Shield,
+  Clock,
+  CheckCircle2,
+  Crown,
+  Zap,
+} from '../../components/icons'
 import { Button, Card } from '../../components/ui'
 import { PREMIUM_PRICE_MONTHLY, PREMIUM_PRICE_YEARLY } from '../../hooks/usePremium'
 

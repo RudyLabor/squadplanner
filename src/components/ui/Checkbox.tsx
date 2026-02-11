@@ -1,3 +1,5 @@
+"use client";
+
 import { m } from 'framer-motion'
 import { useId, useCallback, type KeyboardEvent } from 'react'
 import { haptic } from '../../utils/haptics'

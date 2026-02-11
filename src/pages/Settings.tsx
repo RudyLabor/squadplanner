@@ -1,9 +1,25 @@
+"use client";
+
 import { useState, useEffect, useRef, useCallback } from 'react'
 import {
-  Bell, Volume2, Palette, Shield, Globe, Languages, Database,
-  ChevronRight, Mic, Speaker, Trash2, Download, LogOut,
-  ArrowLeft, Loader2, FileText, ExternalLink
-} from 'lucide-react'
+  Bell,
+  Volume2,
+  Palette,
+  Shield,
+  Globe,
+  Languages,
+  Database,
+  ChevronRight,
+  Mic,
+  Speaker,
+  Trash2,
+  Download,
+  LogOut,
+  ArrowLeft,
+  Loader2,
+  FileText,
+  ExternalLink,
+} from '../components/icons'
 import { useNavigate, Link } from 'react-router-dom'
 import { Card, SegmentedControl, Select } from '../components/ui'
 import { MobilePageHeader } from '../components/layout/MobilePageHeader'

@@ -1,7 +1,14 @@
+"use client";
+
 import { useState, useEffect, useCallback, useRef, type ReactNode } from 'react'
 import { m, AnimatePresence, useMotionValue, useTransform, type PanInfo } from 'framer-motion'
-import { X, CheckCircle, AlertTriangle, AlertCircle, Info } from 'lucide-react'
-
+import {
+  X,
+  CheckCircle,
+  AlertTriangle,
+  AlertCircle,
+  Info,
+} from '../icons'
 // --- Types ---
 export type ToastType = 'success' | 'error' | 'warning' | 'info' | 'default'
 

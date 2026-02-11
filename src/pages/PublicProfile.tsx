@@ -1,7 +1,18 @@
+"use client";
+
 import { useMemo } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { m } from 'framer-motion'
-import { ArrowLeft, Shield, Flame, Star, Calendar, Gamepad2, MapPin, ExternalLink } from 'lucide-react'
+import {
+  ArrowLeft,
+  Shield,
+  Flame,
+  Star,
+  Calendar,
+  Gamepad2,
+  MapPin,
+  ExternalLink,
+} from '../components/icons'
 import { usePublicProfileQuery } from '../hooks/queries'
 
 const TIERS = [

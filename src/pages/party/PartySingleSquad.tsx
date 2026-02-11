@@ -1,5 +1,12 @@
 import { m } from 'framer-motion'
-import { Mic, Loader2, Zap, Clock, TrendingUp, Users } from 'lucide-react'
+import {
+  Mic,
+  Loader2,
+  Zap,
+  Clock,
+  TrendingUp,
+  Users,
+} from '../../components/icons'
 import { Card, Button } from '../../components/ui'
 
 export function PartySingleSquad({ squad, isConnecting, onJoin }: {

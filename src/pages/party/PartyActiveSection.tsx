@@ -1,6 +1,18 @@
+"use client";
+
 import { useEffect, useState } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
-import { Mic, MicOff, PhoneOff, UserPlus, Radio, ShieldCheck, WifiOff, AlertCircle, Loader2 } from 'lucide-react'
+import {
+  Mic,
+  MicOff,
+  PhoneOff,
+  UserPlus,
+  Radio,
+  ShieldCheck,
+  WifiOff,
+  AlertCircle,
+  Loader2,
+} from '../../components/icons'
 import { Link } from 'react-router-dom'
 import { Card } from '../../components/ui'
 import { useVoiceChatStore } from '../../hooks'

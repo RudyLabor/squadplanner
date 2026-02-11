@@ -1,6 +1,11 @@
 import { m } from 'framer-motion'
-import { PhoneOff, Mic, MicOff, Volume2, VolumeX } from 'lucide-react'
-
+import {
+  PhoneOff,
+  Mic,
+  MicOff,
+  Volume2,
+  VolumeX,
+} from '../icons'
 interface CallControlsProps {
   status: string
   isMuted: boolean

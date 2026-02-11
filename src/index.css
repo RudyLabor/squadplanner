@@ -1,5 +1,12 @@
 @import "tailwindcss";
 
+/* CSS @property for animated counters (replaces react-countup) */
+@property --num {
+  syntax: "<integer>";
+  initial-value: 0;
+  inherits: false;
+}
+
 /* Premium Design System - World-Class 2026 */
 @theme {
   /* Backgrounds - Deeper, richer darks */

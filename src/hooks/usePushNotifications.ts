@@ -44,7 +44,7 @@ function urlBase64ToUint8Array(base64String: string): Uint8Array {
     .replace(/-/g, '+')
     .replace(/_/g, '/')
 
-  const rawData = window.atob(base64)
+  const rawData = atob(base64)
   const outputArray = new Uint8Array(rawData.length)
 
   for (let i = 0; i < rawData.length; ++i) {
@@ -60,11 +60,11 @@ function arrayBufferToBase64(buffer: ArrayBuffer): string {
   for (let i = 0; i < bytes.byteLength; i++) {
     binary += String.fromCharCode(bytes[i])
   }
-  return window.btoa(binary)
+  return btoa(binary)
 }
 
 export const usePushNotificationStore = create<PushNotificationState>((set, get) => ({
-  isSupported: 'serviceWorker' in navigator && 'PushManager' in window,
+  isSupported: typeof window !== 'undefined' && 'serviceWorker' in navigator && 'PushManager' in window,
   isServiceWorkerRegistered: false,
   isSubscribed: false,
   isLoading: false,

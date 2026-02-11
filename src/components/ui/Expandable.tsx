@@ -1,7 +1,8 @@
+"use client";
+
 import { useState, useRef, type ReactNode } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
-import { ChevronDown } from 'lucide-react'
-
+import { ChevronDown } from '../icons'
 interface ExpandableProps {
   children: ReactNode
   /** Number of visible lines before truncation (default 3) */

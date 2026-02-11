@@ -1,5 +1,5 @@
 import { memo } from 'react'
-import { Calendar, Download, ExternalLink } from 'lucide-react'
+import { Calendar, Download, ExternalLink } from './icons'
 import { sessionToCalendarEvent, getGoogleCalendarUrl, exportSessionsToICS } from '../utils/calendarExport'
 import { showSuccess, showError, showInfo } from '../lib/toast'
 import type { Session } from '../types/database'

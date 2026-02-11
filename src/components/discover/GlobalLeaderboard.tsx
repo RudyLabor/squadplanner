@@ -1,6 +1,11 @@
 import { memo } from 'react'
 import { m } from 'framer-motion'
-import { Trophy, Flame, Shield, Star } from 'lucide-react'
+import {
+  Trophy,
+  Flame,
+  Shield,
+  Star,
+} from '../icons'
 import { Link } from 'react-router-dom'
 import { useGlobalLeaderboardQuery } from '../../hooks/queries'
 import type { GlobalLeaderboardEntry } from '../../types/database'

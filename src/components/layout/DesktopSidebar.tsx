@@ -1,7 +1,23 @@
+"use client";
+
 import { memo, useCallback } from 'react'
 import { Link } from 'react-router-dom'
 import { m, AnimatePresence } from 'framer-motion'
-import { Home, Users, Mic, MessageCircle, User, Plus, Pin, PinOff, Settings, HelpCircle, Phone, Calendar, Compass } from 'lucide-react'
+import {
+  Home,
+  Users,
+  Mic,
+  MessageCircle,
+  User,
+  Plus,
+  Pin,
+  PinOff,
+  Settings,
+  HelpCircle,
+  Phone,
+  Calendar,
+  Compass,
+} from '../icons'
 import { prefetchRoute } from '../../lib/queryClient'
 import { SquadPlannerLogo } from '../SquadPlannerLogo'
 import { Tooltip } from '../ui/Tooltip'

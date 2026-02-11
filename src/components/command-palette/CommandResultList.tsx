@@ -1,5 +1,4 @@
-import { HelpCircle, ArrowRight } from 'lucide-react'
-
+import { HelpCircle, ArrowRight } from '../icons'
 interface CommandItem {
   id: string
   label: string

@@ -1,5 +1,10 @@
 import { memo } from 'react'
-import { Users, Gamepad2, User, Search } from 'lucide-react'
+import {
+  Users,
+  Gamepad2,
+  User,
+  Search,
+} from '../icons'
 import { ConversationListSkeleton } from '../VirtualizedMessageList'
 import { EmptyState } from '../EmptyState'
 import { formatTime } from './utils'

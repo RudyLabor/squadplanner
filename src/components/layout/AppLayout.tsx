@@ -1,6 +1,6 @@
 import { useEffect, useState, memo, useCallback, useMemo, useRef } from 'react'
 import type { ReactNode } from 'react'
-import { useLocation } from 'react-router-dom'
+import { useLocation } from 'react-router'
 import { m } from 'framer-motion'
 import { useShallow } from 'zustand/react/shallow'
 import { useAuthStore, useSquadsStore, useVoiceChatStore, useKeyboardVisible, useUnreadCountStore, useSquadNotificationsStore, useGlobalPresence } from '../../hooks'
@@ -105,6 +105,7 @@ export function AppLayout({ children }: AppLayoutProps) {
   // Sidebar collapse state
   const [sidebarExpanded, setSidebarExpanded] = useState(false)
   const [sidebarPinned, setSidebarPinned] = useState(() => {
+    if (typeof window === 'undefined') return false
     const saved = localStorage.getItem('sidebar-pinned')
     return saved === 'true'
   })

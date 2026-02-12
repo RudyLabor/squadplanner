@@ -36,17 +36,27 @@ export const useNotificationStore = create<NotificationStore>((set, get) => ({
     try {
       set({ isLoading: true })
       // Fetch recent session RSVPs as notifications
+      // NOTE: avoid nested !inner joins (PostgREST returns 400).
+      // Step 1: fetch rsvps with session info
       const { data: rsvps } = await supabase
         .from('session_rsvps')
-        .select('id, response, updated_at, sessions!inner(title, scheduled_at, squad_id, squads!inner(name))')
+        .select('id, response, updated_at, sessions!inner(title, scheduled_at, squad_id)')
         .neq('user_id', userId)
         .order('updated_at', { ascending: false })
         .limit(20)
 
+      // Step 2: batch-fetch squad names
+      const squadIds = [...new Set((rsvps || []).map((r: any) => r.sessions?.squad_id).filter(Boolean))]
+      const squadMap = new Map<string, string>()
+      if (squadIds.length > 0) {
+        const { data: squads } = await supabase.from('squads').select('id, name').in('id', squadIds)
+        squads?.forEach((s: any) => squadMap.set(s.id, s.name))
+      }
+
       const notifs: AppNotification[] = (rsvps || []).map((r: any) => ({
         id: r.id,
         type: 'rsvp' as const,
-        title: r.sessions?.squads?.name || 'Squad',
+        title: squadMap.get(r.sessions?.squad_id) || 'Squad',
         body: `Nouveau RSVP sur "${r.sessions?.title || 'Session'}"`,
         read: false,
         created_at: r.updated_at,

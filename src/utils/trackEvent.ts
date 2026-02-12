@@ -20,13 +20,9 @@ function flushEvents() {
   const events = [...eventQueue]
   eventQueue.length = 0
 
-  // Send to analytics endpoint (can be replaced with GA4, Plausible, etc.)
-  if (navigator.sendBeacon) {
-    navigator.sendBeacon(
-      '/api/analytics',
-      JSON.stringify({ events })
-    )
-  }
+  // Analytics endpoint not deployed yet — skip beacon to avoid 405 errors.
+  // Re-enable once /api/analytics or a third-party (GA4, Plausible) is set up.
+  void events
 }
 
 function queueEvent(name: string) {

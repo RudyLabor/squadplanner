@@ -15,7 +15,9 @@ import { useQuery } from '@tanstack/react-query'
 import { supabase } from '../../lib/supabase'
 
 // Flag to enable/disable AI Coach globally
-const AI_COACH_ENABLED = true
+// Disabled until the ai-coach Edge Function is deployed on Supabase
+// (currently returns 500, generating unnecessary network errors)
+const AI_COACH_ENABLED = false
 
 export interface AICoachTip {
   tip: string

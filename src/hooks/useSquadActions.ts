@@ -1,6 +1,7 @@
 import { supabase } from '../lib/supabase'
 import type { Squad } from '../types/database'
 import { sendMemberJoinedMessage, sendMemberLeftMessage } from '../lib/systemMessages'
+import { trackChallengeProgress } from '../lib/challengeTracker'
 
 function generateInviteCode(): string {
   const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'
@@ -101,6 +102,16 @@ export async function joinSquadAction(inviteCode: string): Promise<{ error: Erro
       .single()
     if (profile?.username) {
       sendMemberJoinedMessage(squad.id, profile.username).catch(() => {})
+    }
+
+    // Track "invite" challenge for the squad owner (someone joined their squad)
+    const { data: squadData } = await supabase
+      .from('squads')
+      .select('owner_id')
+      .eq('id', squad.id)
+      .single()
+    if (squadData?.owner_id) {
+      trackChallengeProgress(squadData.owner_id, 'invite').catch(() => {})
     }
 
     return { error: null }

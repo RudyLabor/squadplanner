@@ -10,8 +10,9 @@ import { useState, useEffect } from 'react'
 import { Calendar, Clock, Users, Loader2 } from './icons'
 import { create } from 'zustand'
 import { ResponsiveModal, Select } from './ui'
-import { useSquadsStore, useSessionsStore, useHapticFeedback } from '../hooks'
+import { useSquadsStore, useSessionsStore, useHapticFeedback, useAuthStore } from '../hooks'
 import { showSuccess } from '../lib/toast'
+import { trackChallengeProgress } from '../lib/challengeTracker'
 
 // Store for managing the modal state globally
 interface CreateSessionModalStore {
@@ -33,6 +34,7 @@ export function CreateSessionModal() {
   const { squads } = useSquadsStore()
   const { createSession, isLoading } = useSessionsStore()
   const { triggerHaptic } = useHapticFeedback()
+  const { user } = useAuthStore()
 
   // Form state
   const [selectedSquadId, setSelectedSquadId] = useState<string>('')
@@ -98,6 +100,10 @@ export function CreateSessionModal() {
     } else {
       triggerHaptic('success')
       showSuccess('Session créée ! Tes potes vont être notifiés.')
+      // Track challenge progress for session creation
+      if (user?.id) {
+        trackChallengeProgress(user.id, 'create_session').catch(() => {})
+      }
       close()
     }
   }

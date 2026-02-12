@@ -1,5 +1,6 @@
 import { create } from 'zustand'
 import { supabase, isSupabaseReady } from '../lib/supabase'
+import { trackChallengeProgress } from '../lib/challengeTracker'
 import type { RealtimeChannel } from '@supabase/supabase-js'
 import { showError } from '../lib/toast'
 import { optimisticId } from '../utils/optimisticUpdate'
@@ -107,12 +108,18 @@ export const useMessagesStore = create<MessagesState>((set, get) => ({
   },
 
   fetchConversationsFallback: async () => {
-    if (!isSupabaseReady()) return
+    if (!isSupabaseReady()) {
+      set({ conversations: [], isLoading: false })
+      return
+    }
     const {
       data: { session },
     } = await supabase.auth.getSession()
     const user = session?.user
-    if (!user) throw new Error('Not authenticated')
+    if (!user) {
+      set({ conversations: [], isLoading: false })
+      return
+    }
 
     const { data: memberships } = await supabase.from('squad_members').select('squad_id')
     if (!memberships || memberships.length === 0) {
@@ -234,6 +241,8 @@ export const useMessagesStore = create<MessagesState>((set, get) => ({
       const { error } = await supabase.from('messages').insert(messageData)
       if (error) throw error
       set((state) => ({ messages: state.messages.filter((m) => m._optimisticId !== tempId) }))
+      // Track challenge progress for sending messages
+      trackChallengeProgress(user.id, 'messages').catch(() => {})
       return { error: null }
     } catch (error) {
       set((state) => ({

@@ -28,18 +28,49 @@ export const useDirectMessagesStore = create<DirectMessagesState>((set, get) => 
       })
 
       if (error) {
-        const { data: fallbackData, error: fallbackError } = await supabase.rpc(
-          'get_dm_conversations',
-          { user_id: user.id }
-        )
+        console.warn('DM conversations RPC not available, using fallback:', error.message)
+        // Fallback: query direct_messages directly
+        const { data: dmData } = await supabase
+          .from('direct_messages')
+          .select('id, sender_id, receiver_id, content, created_at')
+          .or(`sender_id.eq.${user.id},receiver_id.eq.${user.id}`)
+          .order('created_at', { ascending: false })
+          .limit(100)
 
-        if (fallbackError) {
-          console.warn('DM conversations RPC not available:', fallbackError.message)
-          set({ conversations: [], isLoading: false })
-          return
+        // Group by partner and take latest message
+        const partnerMap = new Map<string, DMConversation>()
+        for (const dm of dmData || []) {
+          const partnerId = dm.sender_id === user.id ? dm.receiver_id : dm.sender_id
+          if (!partnerMap.has(partnerId)) {
+            partnerMap.set(partnerId, {
+              other_user_id: partnerId,
+              other_user_username: 'Utilisateur',
+              other_user_avatar_url: null,
+              last_message_content: dm.content,
+              last_message_at: dm.created_at,
+              last_message_sender_id: dm.sender_id,
+              unread_count: 0,
+            })
+          }
         }
 
-        set({ conversations: fallbackData || [], isLoading: false })
+        // Fetch partner profiles
+        const partnerIds = [...partnerMap.keys()]
+        if (partnerIds.length > 0) {
+          const { data: profiles } = await supabase
+            .from('profiles')
+            .select('id, username, avatar_url')
+            .in('id', partnerIds)
+          for (const p of profiles || []) {
+            const conv = partnerMap.get(p.id)
+            if (conv) {
+              conv.other_user_username = p.username || 'Utilisateur'
+              conv.other_user_avatar_url = p.avatar_url
+            }
+          }
+        }
+
+        set({ conversations: [...partnerMap.values()], isLoading: false })
         return
       }
 

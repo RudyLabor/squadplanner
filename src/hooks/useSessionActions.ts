@@ -1,5 +1,6 @@
 import { supabase, isSupabaseReady } from '../lib/supabase'
 import { sendRsvpMessage, sendSessionConfirmedMessage } from '../lib/systemMessages'
+import { trackChallengeProgress } from '../lib/challengeTracker'
 
 // Trigger haptic feedback if available
 function triggerHaptic(type: 'light' | 'medium' | 'heavy' | 'success' | 'warning' | 'error') {
@@ -89,6 +90,12 @@ export function createSessionActions(get: GetState) {
 
         // Haptic feedback on RSVP confirmation
         triggerHaptic('success')
+
+        // Track challenge progress for RSVP actions
+        if (response === 'present') {
+          trackChallengeProgress(user.id, 'rsvp').catch(() => {})
+          trackChallengeProgress(user.id, 'daily_rsvp').catch(() => {})
+        }
 
         await get().fetchSessionById(sessionId)
         return { error: null }

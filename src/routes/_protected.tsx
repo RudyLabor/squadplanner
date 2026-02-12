@@ -27,10 +27,15 @@ interface ProtectedLoaderData {
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const { supabase, headers, getUser } = createSupabaseServerClient(request)
-  const { data: { user }, error } = await getUser()
+  let { data: { user }, error } = await getUser()
 
   if (error || !user) {
-    throw redirect('/', { headers })
+    // Attempt session refresh before redirecting — handles expired-but-refreshable tokens
+    const { data: { session } } = await supabase.auth.refreshSession()
+    if (!session?.user) {
+      throw redirect('/', { headers })
+    }
+    user = session.user
   }
 
   // Single RPC call: profile + squads with member counts in ONE database round-trip.

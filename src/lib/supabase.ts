@@ -16,7 +16,14 @@ let _client: SupabaseClient<Database> | null = null
 
 function getClient(): SupabaseClient<Database> {
   if (!_client) {
-    _client = createBrowserClient<Database>(supabaseUrl!, supabaseAnonKey!)
+    _client = createBrowserClient<Database>(supabaseUrl!, supabaseAnonKey!, {
+      auth: {
+        autoRefreshToken: true,
+        persistSession: true,
+        detectSessionInUrl: true,
+        flowType: 'pkce',
+      },
+    })
   }
   return _client
 }

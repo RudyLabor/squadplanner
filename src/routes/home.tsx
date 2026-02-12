@@ -78,37 +78,25 @@ async function fetchUpcomingSessions(supabase: SupabaseClient, squadIds: string[
 }
 
 export async function loader({ request }: LoaderFunctionArgs) {
-  const { supabase, headers } = createSupabaseServerClient(request)
-  const { data: { user }, error } = await supabase.auth.getUser()
+  const { supabase, headers, getUser } = createSupabaseServerClient(request)
+  const { data: { user }, error } = await getUser()
 
   if (error || !user) {
     throw redirect('/', { headers })
   }
 
-  // Critical data — awaited (page shell renders immediately)
-  const [profileResult, membershipsResult] = await Promise.all([
-    supabase.from('profiles').select('*').eq('id', user.id).single(),
-    supabase
-      .from('squad_members')
-      .select('squad_id, squads!inner(id, name, game, invite_code, owner_id, total_members, created_at)')
-      .eq('user_id', user.id),
-  ])
+  // Single RPC: profile + squads (same as parent layout, but needed for SSR seed)
+  const { data: rpcResult } = await supabase.rpc('get_layout_data', { p_user_id: user.id })
 
-  const profile = profileResult.data as Profile | null
-  const squads = (membershipsResult.data?.map((m: { squads: SquadSummary }) => m.squads).filter(Boolean) || []) as SquadSummary[]
+  const profile = (rpcResult?.profile as Profile | null) ?? null
+  const squads: SquadWithCount[] = ((rpcResult?.squads as SquadWithCount[]) ?? [])
   const squadIds = squads.map((s) => s.id)
 
-  // Use total_members from the squads table directly (maintained by DB trigger)
-  const squadsWithCounts: SquadWithCount[] = squads.map((squad) => ({
-    ...squad,
-    member_count: squad.total_members ?? 1,
-  }))
-
-  // Non-critical — NOT awaited → streamed via HTTP streaming (Phase 3.5)
+  // Non-critical — NOT awaited → streamed via HTTP streaming
   const upcomingSessions = fetchUpcomingSessions(supabase, squadIds, user.id)
 
   return data(
-    { profile, squads: squadsWithCounts, upcomingSessions },
+    { profile, squads, upcomingSessions },
     { headers }
   )
 }

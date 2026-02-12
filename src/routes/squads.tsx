@@ -34,38 +34,23 @@ export function meta() {
 }
 
 export async function loader({ request }: LoaderFunctionArgs) {
-  const { supabase, headers } = createSupabaseServerClient(request)
-  const { data: { user }, error } = await supabase.auth.getUser()
+  const { supabase, headers, getUser } = createSupabaseServerClient(request)
+  const { data: { user }, error } = await getUser()
 
   if (error || !user) {
     throw redirect('/', { headers })
   }
 
+  // Single query: use total_members (DB trigger-maintained) instead of separate count query
   const { data: memberships } = await supabase
     .from('squad_members')
-    .select('squad_id, squads!inner(id, name, game, invite_code, owner_id, created_at)')
+    .select('squad_id, squads!inner(id, name, game, invite_code, owner_id, total_members, created_at)')
     .eq('user_id', user.id)
 
-  const squads = (memberships?.map((m: { squads: SquadSummary }) => m.squads) || []) as SquadSummary[]
-
-  let squadsWithCounts: SquadWithCount[] = squads.map((s) => ({ ...s, member_count: 0 }))
-  if (squads.length > 0) {
-    const squadIds = squads.map((s) => s.id)
-    const { data: memberCounts } = await supabase
-      .from('squad_members')
-      .select('squad_id')
-      .in('squad_id', squadIds)
-
-    const countBySquad: Record<string, number> = {}
-    memberCounts?.forEach((m: { squad_id: string }) => {
-      countBySquad[m.squad_id] = (countBySquad[m.squad_id] || 0) + 1
-    })
-
-    squadsWithCounts = squads.map((squad) => ({
-      ...squad,
-      member_count: countBySquad[squad.id] || 0,
-    }))
-  }
+  const squadsWithCounts: SquadWithCount[] = (memberships?.map((m: { squads: SquadSummary & { total_members?: number } }) => ({
+    ...m.squads,
+    member_count: m.squads.total_members ?? 1,
+  })) || [])
 
   return data({ squads: squadsWithCounts }, { headers })
 }

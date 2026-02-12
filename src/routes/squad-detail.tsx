@@ -36,8 +36,8 @@ export function meta() {
 }
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
-  const { supabase, headers } = createSupabaseServerClient(request)
-  const { data: { user }, error } = await supabase.auth.getUser()
+  const { supabase, headers, getUser } = createSupabaseServerClient(request)
+  const { data: { user }, error } = await getUser()
 
   if (error || !user) {
     throw redirect('/', { headers })

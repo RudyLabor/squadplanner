@@ -4,16 +4,20 @@ import { createSupabaseServerClient } from '../lib/supabase.server'
 import { ProtectedLayoutClient } from '../components/ProtectedLayoutClient'
 import type { Profile } from '../types/database'
 
-interface SquadSummary {
+// Vercel Edge Runtime — all child routes inherit this config via prototype chain.
+// Moves SSR from Node.js (single region, ~200ms cold start) to Vercel's Edge
+// network (global CDN, ~5ms cold start). TTFB divided by 2-3x.
+export const config = {
+  runtime: 'edge',
+}
+
+interface SquadWithCount {
   id: string
   name: string
   game: string
   invite_code: string
   owner_id: string
   created_at: string
-}
-
-interface SquadWithCount extends SquadSummary {
   member_count: number
 }
 
@@ -24,42 +28,40 @@ interface ProtectedLoaderData {
 }
 
 export async function loader({ request }: LoaderFunctionArgs) {
-  const { supabase, headers } = createSupabaseServerClient(request)
-  const { data: { user }, error } = await supabase.auth.getUser()
+  const { supabase, headers, getUser } = createSupabaseServerClient(request)
+  const { data: { user }, error } = await getUser()
 
   if (error || !user) {
     throw redirect('/', { headers })
   }
 
-  // Fetch profile and squads in parallel
-  const [profileResult, membershipsResult] = await Promise.all([
-    supabase.from('profiles').select('*').eq('id', user.id).single(),
-    supabase
-      .from('squad_members')
-      .select('squad_id, squads!inner(id, name, game, invite_code, owner_id, created_at)')
-      .eq('user_id', user.id),
-  ])
+  // Single RPC call: profile + squads with member counts in ONE database round-trip.
+  // Falls back to parallel queries if RPC is not yet deployed.
+  let profile: Profile | null = null
+  let squads: SquadWithCount[] = []
 
-  const profile = profileResult.data as Profile | null
-  const squads = (membershipsResult.data?.map((m: { squads: SquadSummary }) => m.squads) || []) as SquadSummary[]
+  const { data: rpcResult, error: rpcError } = await supabase.rpc('get_layout_data', {
+    p_user_id: user.id,
+  })
 
-  // Get member counts for all squads
-  let squadsWithCounts: SquadWithCount[] = squads.map((s) => ({ ...s, member_count: 0 }))
-  if (squads.length > 0) {
-    const squadIds = squads.map((s) => s.id)
-    const { data: memberCounts } = await supabase
-      .from('squad_members')
-      .select('squad_id')
-      .in('squad_id', squadIds)
+  if (!rpcError && rpcResult) {
+    profile = rpcResult.profile as Profile | null
+    squads = (rpcResult.squads as SquadWithCount[]) || []
+  } else {
+    // Fallback: parallel queries (used before RPC is deployed)
+    const [profileResult, membershipsResult] = await Promise.all([
+      supabase.from('profiles').select('*').eq('id', user.id).single(),
+      supabase
+        .from('squad_members')
+        .select('squad_id, squads!inner(id, name, game, invite_code, owner_id, total_members, created_at)')
+        .eq('user_id', user.id),
+    ])
 
-    const countBySquad: Record<string, number> = {}
-    memberCounts?.forEach((m: { squad_id: string }) => {
-      countBySquad[m.squad_id] = (countBySquad[m.squad_id] || 0) + 1
-    })
-
-    squadsWithCounts = squads.map((squad) => ({
+    profile = profileResult.data as Profile | null
+    const rawSquads = (membershipsResult.data?.map((m: { squads: any }) => m.squads).filter(Boolean) || [])
+    squads = rawSquads.map((squad: any) => ({
       ...squad,
-      member_count: countBySquad[squad.id] || 0,
+      member_count: squad.total_members ?? 1,
     }))
   }
 
@@ -67,7 +69,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     {
       user: { id: user.id, email: user.email },
       profile,
-      squads: squadsWithCounts,
+      squads,
     },
     { headers }
   )

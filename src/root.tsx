@@ -7,6 +7,7 @@ import {
   ScrollRestoration,
   isRouteErrorResponse,
   useRouteError,
+  useLocation,
 } from 'react-router'
 import { Toaster } from 'sonner'
 import { LazyMotion } from 'framer-motion'
@@ -222,7 +223,21 @@ export default function Root() {
 // SSR-safe fallback - renders layout structure matching client to prevent CLS
 // Sidebar width must match DesktopSidebar collapsed width (140px) and
 // DesktopContentWrapper initial marginLeft (140px) to avoid layout shift on hydration.
+// Public pages (landing, auth, onboarding, etc.) skip the sidebar entirely.
 function SSRFallback() {
+  const { pathname } = useLocation()
+  const isPublicPage = pathname === '/' || pathname === '/auth' || pathname === '/onboarding'
+    || pathname === '/legal' || pathname === '/help' || pathname === '/premium'
+    || pathname === '/maintenance' || pathname.startsWith('/join/')
+
+  if (isPublicPage) {
+    return (
+      <main id="main-content">
+        <Outlet />
+      </main>
+    )
+  }
+
   return (
     <div className="h-[100dvh] bg-bg-base flex overflow-hidden">
       <aside className="hidden lg:block w-[140px] shrink-0 bg-bg-elevated border-r border-border-subtle" aria-hidden="true" />

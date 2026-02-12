@@ -227,7 +227,7 @@ const SessionEmptyState = memo(function SessionEmptyState({ onCreate }: { onCrea
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.3 }}
           >
-            C'est le moment de rassembler ta squad ! Lance une session et organise votre prochaine partie épique.
+            Planifie ta première session avec ta squad !
           </m.p>
         </div>
 

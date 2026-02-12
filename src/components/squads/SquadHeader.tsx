@@ -115,7 +115,7 @@ export function SquadHeader({ squadId, squad, isOwner }: SquadHeaderProps) {
   )
 }
 
-function EditSquadModal({ squadId, initialName, initialGame, onClose }: {
+export function EditSquadModal({ squadId, initialName, initialGame, onClose }: {
   squadId: string; initialName: string; initialGame: string; onClose: () => void
 }) {
   const [name, setName] = useState(initialName)

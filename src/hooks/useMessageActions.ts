@@ -42,28 +42,33 @@ export function createRealtimeSubscription(
       'postgres_changes',
       { event: 'INSERT', schema: 'public', table: 'messages', filter },
       async (payload) => {
-        const newMsg = payload.new as Message
-        const { data: sender } = await supabase
-          .from('profiles')
-          .select('username, avatar_url')
-          .eq('id', newMsg.sender_id)
-          .single()
+        try {
+          const newMsg = payload.new as Message
+          const { data: sender } = await supabase
+            .from('profiles')
+            .select('username, avatar_url')
+            .eq('id', newMsg.sender_id)
+            .single()
 
-        const newMessage: MessageWithSender = { ...newMsg, sender: sender || undefined }
-        const { data: { session } } = await supabase.auth.getSession()
-        const user = session?.user
-        const isOwnMessage = user && newMessage.sender_id === user.id
+          const newMessage: MessageWithSender = { ...newMsg, sender: sender || undefined }
+          const { data: { session } } = await supabase.auth.getSession()
+          const user = session?.user
+          const isOwnMessage = user && newMessage.sender_id === user.id
 
-        if (!isOwnMessage) playNotificationSound()
+          if (!isOwnMessage) playNotificationSound()
 
-        setState(state => ({
-          messages: [
-            ...state.messages.filter(m =>
-              !(m._optimisticId && m.sender_id === newMessage.sender_id && m.content === newMessage.content)
-            ),
-            newMessage,
-          ]
-        }))
+          setState(state => ({
+            messages: [
+              ...state.messages.filter(m =>
+                !(m._optimisticId && m.sender_id === newMessage.sender_id && m.content === newMessage.content)
+              ),
+              newMessage,
+            ]
+          }))
+        } catch (err: any) {
+          if (err?.name === 'AbortError') return
+          console.warn('[Messages] Error in INSERT handler:', err)
+        }
       }
     )
     .on(
@@ -99,30 +104,35 @@ export async function markMessagesAsRead(
   setConversations: (fn: (state: { conversations: Conversation[] }) => Partial<{ conversations: Conversation[] }>) => void
 ) {
   if (!isSupabaseReady()) return
-  const { data: { session } } = await supabase.auth.getSession()
-  const user = session?.user
-  if (!user) return
+  try {
+    const { data: { session } } = await supabase.auth.getSession()
+    const user = session?.user
+    if (!user) return
 
-  const { error } = await supabase.rpc('batch_mark_messages_read', {
-    p_user_id: user.id,
-    p_squad_id: squadId,
-    p_session_id: sessionId || null
-  })
+    const { error } = await supabase.rpc('batch_mark_messages_read', {
+      p_user_id: user.id,
+      p_squad_id: squadId,
+      p_session_id: sessionId || null
+    })
 
-  if (error) {
-    console.warn('batch_mark_messages_read RPC not available, using fallback')
-    await markMessagesAsReadFallback(squadId, sessionId, setConversations)
-    return
+    if (error) {
+      console.warn('batch_mark_messages_read RPC not available, using fallback')
+      await markMessagesAsReadFallback(squadId, sessionId, setConversations)
+      return
+    }
+
+    setConversations(state => ({
+      conversations: state.conversations.map(conv =>
+        conv.squad_id === squadId && conv.session_id === sessionId
+          ? { ...conv, unread_count: 0 }
+          : conv
+      )
+    }))
+    await useUnreadCountStore.getState().fetchCounts()
+  } catch (err: any) {
+    if (err?.name === 'AbortError') return
+    console.warn('[Messages] Error marking as read:', err)
   }
-
-  setConversations(state => ({
-    conversations: state.conversations.map(conv =>
-      conv.squad_id === squadId && conv.session_id === sessionId
-        ? { ...conv, unread_count: 0 }
-        : conv
-    )
-  }))
-  await useUnreadCountStore.getState().fetchCounts()
 }
 
 export async function markMessagesAsReadFallback(
@@ -131,26 +141,31 @@ export async function markMessagesAsReadFallback(
   setConversations: (fn: (state: { conversations: Conversation[] }) => Partial<{ conversations: Conversation[] }>) => void
 ) {
   if (!isSupabaseReady()) return
-  const { data: { session } } = await supabase.auth.getSession()
-  const user = session?.user
-  if (!user) return
+  try {
+    const { data: { session } } = await supabase.auth.getSession()
+    const user = session?.user
+    if (!user) return
 
-  let query = supabase.from('messages').select('id, read_by').eq('squad_id', squadId).not('read_by', 'cs', `{${user.id}}`)
-  if (sessionId) query = query.eq('session_id', sessionId)
-  else query = query.is('session_id', null)
+    let query = supabase.from('messages').select('id, read_by').eq('squad_id', squadId).not('read_by', 'cs', `{${user.id}}`)
+    if (sessionId) query = query.eq('session_id', sessionId)
+    else query = query.is('session_id', null)
 
-  const { data: unreadMessages } = await query
-  for (const msg of unreadMessages || []) {
-    const currentReadBy = msg.read_by || []
-    await supabase.from('messages').update({ read_by: [...currentReadBy, user.id] }).eq('id', msg.id)
+    const { data: unreadMessages } = await query
+    for (const msg of unreadMessages || []) {
+      const currentReadBy = msg.read_by || []
+      await supabase.from('messages').update({ read_by: [...currentReadBy, user.id] }).eq('id', msg.id)
+    }
+
+    setConversations(state => ({
+      conversations: state.conversations.map(conv =>
+        conv.squad_id === squadId && conv.session_id === sessionId
+          ? { ...conv, unread_count: 0 }
+          : conv
+      )
+    }))
+    await useUnreadCountStore.getState().fetchCounts()
+  } catch (err: any) {
+    if (err?.name === 'AbortError') return
+    console.warn('[Messages] Error marking as read (fallback):', err)
   }
-
-  setConversations(state => ({
-    conversations: state.conversations.map(conv =>
-      conv.squad_id === squadId && conv.session_id === sessionId
-        ? { ...conv, unread_count: 0 }
-        : conv
-    )
-  }))
-  await useUnreadCountStore.getState().fetchCounts()
 }

@@ -46,16 +46,14 @@ export function meta() {
 export default function LandingOrHome() {
   const { user, isInitialized } = useAuthStore()
   const [searchParams] = useSearchParams()
-
-  // During SSR, always render Landing (server doesn't know auth state)
-  if (typeof window === 'undefined') return <LandingSSR />
-
   const showPublic = searchParams.get('public') === 'true'
 
-  if (!isInitialized) return <LoadingSpinner />
+  // Before auth is initialized, render the same Landing the server rendered
+  // This prevents React hydration error #418 (SSR/client mismatch)
+  if (!isInitialized) return <LandingSSR />
   if (user && !showPublic) return <Navigate to="/home" replace />
   return (
-    <Suspense fallback={<LoadingSpinner />}>
+    <Suspense fallback={<LandingSSR />}>
       <LandingLazy />
     </Suspense>
   )

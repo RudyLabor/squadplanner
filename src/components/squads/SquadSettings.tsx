@@ -8,6 +8,7 @@ import {
   UserPlus,
   Calendar,
   MessageCircle,
+  Settings,
   BarChart3,
   Download,
   Zap,
@@ -57,6 +58,7 @@ interface SquadSettingsProps {
   onDeleteSquad: () => void
   onInviteClick: () => void
   onCreateSessionClick: () => void
+  onEditSquadClick?: () => void
   // Drawer
   showActionsDrawer: boolean
   onOpenActionsDrawer: () => void
@@ -82,6 +84,7 @@ export function SquadSettings({
   onDeleteSquad,
   onInviteClick,
   onCreateSessionClick,
+  onEditSquadClick,
   showActionsDrawer,
   onOpenActionsDrawer,
   onCloseActionsDrawer,
@@ -271,6 +274,15 @@ export function SquadSettings({
             <MessageCircle className="w-5 h-5 text-success" />
             <span className="text-md text-text-primary">Chat de la squad</span>
           </button>
+          {isOwner && onEditSquadClick && (
+            <button
+              onClick={() => { onEditSquadClick(); onCloseActionsDrawer() }}
+              className="w-full flex items-center gap-3 p-4 rounded-xl bg-surface-card hover:bg-surface-card-hover transition-colors"
+            >
+              <Settings className="w-5 h-5 text-text-secondary" />
+              <span className="text-md text-text-primary">Modifier la squad</span>
+            </button>
+          )}
           <div className="border-t border-border-subtle pt-2 mt-2">
             {isOwner ? (
               <button

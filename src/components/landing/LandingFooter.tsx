@@ -104,7 +104,7 @@ export function LandingFooter() {
         <div className="flex flex-wrap justify-center gap-6 mb-8 text-sm text-text-quaternary">
           <span>+2 000 gamers inscrits</span>
           <span>+5 000 sessions planifiées</span>
-          <span>4.8/5 satisfaction</span>
+          <span>4.9/5 satisfaction</span>
         </div>
 
         {/* Newsletter */}

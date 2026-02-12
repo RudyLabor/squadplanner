@@ -40,7 +40,7 @@ function DemoNavbar({ active }: { active: string }) {
     { icon: Home, label: 'Accueil', id: 'home' },
     { icon: Users, label: 'Squads', id: 'squads' },
     { icon: Mic, label: 'Party', id: 'party' },
-    { icon: MessageCircle, label: 'Chat', id: 'chat' },
+    { icon: MessageCircle, label: 'Messages', id: 'messages' },
     { icon: User, label: 'Profil', id: 'profile' },
   ]
   return (
@@ -94,7 +94,7 @@ function CreateStep() {
         initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}
       >
         <div className="text-xs text-text-quaternary mb-1">Nom de la squad</div>
-        <m.div className="text-sm text-text-primary font-medium" initial={{ width: 0 }} animate={{ width: 'auto' }} transition={{ delay: 0.5, duration: 0.8 }}>
+        <m.div className="text-sm text-text-primary font-medium overflow-hidden whitespace-nowrap" initial={{ width: 0 }} animate={{ width: 'auto' }} transition={{ delay: 0.5, duration: 0.8 }}>
           Les Invaincus
         </m.div>
       </m.div>
@@ -149,7 +149,7 @@ function InviteStep() {
             className="text-xs px-2 py-0.5 rounded-full bg-success/15 text-success font-medium"
             initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 0.5 + i * 0.2, type: 'spring' }}
           >
-            Rejoint
+            A rejoint
           </m.div>
         </m.div>
       ))}
@@ -202,7 +202,7 @@ function RSVPStep() {
       >
         Session confirmée !
       </m.div>
-      <DemoNavbar active="home" />
+      <DemoNavbar active="squads" />
     </div>
   )
 }

@@ -121,6 +121,7 @@ export const HomeActivityFeed = memo(function HomeActivityFeed({
   }
 
   if (activities.length === 0) {
+    const hasSquads = squadIds.length > 0
     return (
       <section aria-label="Activité récente" className="mb-6">
         <h2 className="text-base font-semibold text-text-primary mb-3">
@@ -132,7 +133,9 @@ export const HomeActivityFeed = memo(function HomeActivityFeed({
             Pas encore d'activité
           </p>
           <p className="text-sm text-text-quaternary mt-1">
-            Rejoins une squad pour voir l'activité ici
+            {hasSquads
+              ? 'Participe à des sessions ou envoie des messages pour voir ton activité ici.'
+              : 'Rejoins une squad pour voir l\'activité ici.'}
           </p>
         </Card>
       </section>

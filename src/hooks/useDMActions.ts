@@ -45,10 +45,16 @@ export function createDMActions(set: SetState, get: GetState) {
       if (!isSupabaseReady()) return
       get().unsubscribe()
 
-      const currentSession = supabase.auth.getSession()
-      currentSession.then(({ data: { session } }) => {
+      // Track the subscription attempt to avoid race conditions
+      const subscriptionId = Symbol('dm-subscription')
+      ;(get as any).__pendingSubscription = subscriptionId
+
+      supabase.auth.getSession().then(({ data: { session } }) => {
         const user = session?.user
         if (!user) return
+
+        // Bail out if another subscription was started while we were awaiting
+        if ((get as any).__pendingSubscription !== subscriptionId) return
 
         const channelName = `dm:${[user.id, otherUserId].sort().join(':')}`
 
@@ -65,35 +71,40 @@ export function createDMActions(set: SetState, get: GetState) {
               filter: dmFilter,
             },
             async (payload) => {
-              const newMsg = payload.new as DirectMessage
+              try {
+                const newMsg = payload.new as DirectMessage
 
-              const isRelevant =
-                (newMsg.sender_id === user.id && newMsg.receiver_id === otherUserId) ||
-                (newMsg.sender_id === otherUserId && newMsg.receiver_id === user.id)
+                const isRelevant =
+                  (newMsg.sender_id === user.id && newMsg.receiver_id === otherUserId) ||
+                  (newMsg.sender_id === otherUserId && newMsg.receiver_id === user.id)
 
-              if (!isRelevant) return
+                if (!isRelevant) return
 
-              const { data: sender } = await supabase
-                .from('profiles')
-                .select('username, avatar_url')
-                .eq('id', newMsg.sender_id)
-                .single()
+                const { data: sender } = await supabase
+                  .from('profiles')
+                  .select('username, avatar_url')
+                  .eq('id', newMsg.sender_id)
+                  .single()
 
-              const fullMessage: DirectMessage = {
-                ...newMsg,
-                sender: sender || undefined
-              }
+                const fullMessage: DirectMessage = {
+                  ...newMsg,
+                  sender: sender || undefined
+                }
 
-              if (newMsg.sender_id === otherUserId) {
-                playNotificationSound()
-              }
+                if (newMsg.sender_id === otherUserId) {
+                  playNotificationSound()
+                }
 
-              set(state => ({
-                messages: [...state.messages, fullMessage]
-              }))
+                set(state => ({
+                  messages: [...state.messages, fullMessage]
+                }))
 
-              if (newMsg.sender_id === otherUserId) {
-                get().markAsRead(otherUserId)
+                if (newMsg.sender_id === otherUserId) {
+                  get().markAsRead(otherUserId)
+                }
+              } catch (err: any) {
+                if (err?.name === 'AbortError') return
+                console.warn('[DM] Error in INSERT handler:', err)
               }
             }
           )
@@ -126,6 +137,9 @@ export function createDMActions(set: SetState, get: GetState) {
           .subscribe()
 
         set({ realtimeChannel: channel })
+      }).catch((err: any) => {
+        if (err?.name === 'AbortError') return
+        console.warn('[DM] Error subscribing to messages:', err)
       })
     },
 
@@ -168,7 +182,8 @@ export function createDMActions(set: SetState, get: GetState) {
         }))
 
         await useUnreadCountStore.getState().fetchCounts()
-      } catch (error) {
+      } catch (error: any) {
+        if (error?.name === 'AbortError') return
         console.warn('[DM] Error marking as read:', error)
       }
     },

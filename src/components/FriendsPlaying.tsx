@@ -155,34 +155,26 @@ const FriendCard = memo(function FriendCard({
 // Empty state component with actionable invite button
 function EmptyState() {
   const handleShareInvite = async () => {
-    const inviteText = "Rejoins-moi sur Squad Planner pour organiser nos sessions de jeu !"
-    const inviteUrl = window.location.origin
+    const inviteUrl = 'https://squadplanner.fr/auth?mode=register'
 
-    // Use Web Share API if available
     if (navigator.share) {
       try {
         await navigator.share({
-          title: 'Squad Planner',
-          text: inviteText,
+          title: 'Rejoins-moi sur Squad Planner !',
+          text: 'Viens jouer avec nous sur Squad Planner — le Calendly du gaming',
           url: inviteUrl,
         })
-        showSuccess('Invitation envoyée !')
-      } catch (err) {
-        // User cancelled share dialog — only fallback if not an AbortError
-        if (err instanceof Error && err.name === 'AbortError') return
-        copyToClipboard(inviteUrl)
+        return
+      } catch (err: any) {
+        if (err.name === 'AbortError') return
       }
-    } else {
-      copyToClipboard(inviteUrl)
     }
-  }
 
-  const copyToClipboard = async (text: string) => {
     try {
-      await navigator.clipboard.writeText(text)
-      showSuccess('Code d\'invitation copié ! 📋')
+      await navigator.clipboard.writeText(inviteUrl)
+      showSuccess('Lien d\'invitation copié !')
     } catch {
-      showSuccess('Lien copié ! 📋')
+      // Fallback - do nothing
     }
   }
 

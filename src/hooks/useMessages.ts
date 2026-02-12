@@ -64,7 +64,8 @@ export const useMessagesStore = create<MessagesState>((set, get) => ({
         unread_count: row.unread_count || 0,
       }))
       set({ conversations, isLoading: false })
-    } catch (error) {
+    } catch (error: any) {
+      if (error?.name === 'AbortError') return
       console.warn('[Messages] Error fetching conversations:', error)
       set({ isLoading: false })
     }
@@ -119,7 +120,8 @@ export const useMessagesStore = create<MessagesState>((set, get) => ({
       const { data, error } = await query
       if (error) throw error
       set({ messages: (data || []) as MessageWithSender[], isLoading: false })
-    } catch (error) {
+    } catch (error: any) {
+      if (error?.name === 'AbortError') return
       console.warn('[Messages] Error fetching messages:', error)
       set({ isLoading: false })
     }

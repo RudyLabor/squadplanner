@@ -5,7 +5,6 @@ import { Link } from 'react-router'
 import {
   Search,
   LayoutGrid,
-  Calendar,
   Compass,
   Settings,
   HelpCircle,
@@ -42,11 +41,10 @@ function MobileSearchButton() {
 }
 
 const moreMenuItems = [
-  { path: '/sessions', icon: Calendar, label: 'Sessions' },
   { path: '/discover', icon: Compass, label: 'Découvrir' },
+  { path: '/call-history', icon: Phone, label: 'Appels' },
   { path: '/settings', icon: Settings, label: 'Paramètres' },
   { path: '/help', icon: HelpCircle, label: 'Aide' },
-  { path: '/call-history', icon: Phone, label: 'Historique d\'appels' },
 ] as const
 
 export const TopBar = memo(function TopBar() {

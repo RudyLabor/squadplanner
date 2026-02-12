@@ -2,28 +2,26 @@
  * Chantier 9 - Session Expiry Detection Hook
  *
  * Listens to Supabase auth state changes and detects when the
- * session expires or becomes invalid. Shows a warning toast
- * 5 minutes before expiry when possible.
+ * session expires or becomes invalid. Attempts to refresh the
+ * session before showing the expired modal.
  *
  * Uses dynamic import() for supabase to avoid accessing the proxy
  * before initSupabase() completes (which crashes the app).
  */
 import { useState, useEffect, useCallback, useRef } from 'react'
 
-const EXPIRY_WARNING_MS = 5 * 60 * 1000 // 5 minutes before expiry
+// Only show the modal when the token is truly expired and refresh fails.
+// Supabase's built-in token refresh handles the normal renewal cycle.
+const EXPIRY_BUFFER_MS = 30 * 1000 // 30s buffer before actual expiry to attempt refresh
 
 export function useSessionExpiry() {
   const [isSessionExpired, setIsSessionExpired] = useState(false)
   const [showModal, setShowModal] = useState(false)
-  const warningTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const expiryTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const subscriptionRef = useRef<{ unsubscribe: () => void } | null>(null)
+  const supabaseRef = useRef<typeof import('../lib/supabase') | null>(null)
 
   const clearTimers = useCallback(() => {
-    if (warningTimerRef.current) {
-      clearTimeout(warningTimerRef.current)
-      warningTimerRef.current = null
-    }
     if (expiryTimerRef.current) {
       clearTimeout(expiryTimerRef.current)
       expiryTimerRef.current = null
@@ -34,45 +32,56 @@ export function useSessionExpiry() {
     setShowModal(false)
   }, [])
 
-  const setupExpiryTimers = useCallback((expiresAt: number) => {
+  const setupExpiryTimer = useCallback((expiresAt: number) => {
+    clearTimers()
+
     const expiresAtMs = expiresAt * 1000
     const now = Date.now()
     const timeUntilExpiry = expiresAtMs - now
 
     if (timeUntilExpiry <= 0) {
-      setIsSessionExpired(true)
-      setShowModal(true)
+      // Token already expired — attempt refresh before showing modal
+      supabaseRef.current?.supabase.auth.refreshSession().then(({ data }) => {
+        if (!data.session) {
+          setIsSessionExpired(true)
+          setShowModal(true)
+        }
+        // If refresh succeeded, onAuthStateChange TOKEN_REFRESHED will reset timers
+      }).catch(() => {
+        setIsSessionExpired(true)
+        setShowModal(true)
+      })
       return
     }
 
-    // Warning toast 5 minutes before expiry
-    const timeUntilWarning = timeUntilExpiry - EXPIRY_WARNING_MS
-    if (timeUntilWarning > 0) {
-      warningTimerRef.current = setTimeout(() => {
-        import('../components/ui/Toast').then(({ toast }) => {
-          toast({
-            type: 'warning',
-            title: 'Session bientôt expirée',
-            message: 'Ta session expire dans 5 minutes. Sauvegarde ton travail.',
-            duration: 10000,
-          })
-        }).catch(() => {})
-      }, timeUntilWarning)
-    }
-
-    // Expiry timer
-    expiryTimerRef.current = setTimeout(() => {
-      setIsSessionExpired(true)
-      setShowModal(true)
-    }, timeUntilExpiry)
-  }, [])
+    // Schedule a refresh attempt shortly before expiry
+    const refreshAt = Math.max(timeUntilExpiry - EXPIRY_BUFFER_MS, 0)
+    expiryTimerRef.current = setTimeout(async () => {
+      try {
+        const mod = supabaseRef.current
+        if (!mod) return
+        const { data } = await mod.supabase.auth.refreshSession()
+        if (!data.session) {
+          // Refresh failed — session is truly expired
+          setIsSessionExpired(true)
+          setShowModal(true)
+        }
+        // If refresh succeeded, onAuthStateChange TOKEN_REFRESHED will set up a new timer
+      } catch {
+        setIsSessionExpired(true)
+        setShowModal(true)
+      }
+    }, refreshAt)
+  }, [clearTimers])
 
   useEffect(() => {
     let cancelled = false
 
     // Dynamically import supabase to avoid accessing proxy before initialization
-    import('../lib/supabase').then(({ supabase }) => {
+    import('../lib/supabase').then((mod) => {
       if (cancelled) return
+      supabaseRef.current = mod
+      const { supabase } = mod
 
       try {
         // Listen to auth state changes
@@ -91,7 +100,7 @@ export function useSessionExpiry() {
               setShowModal(false)
 
               if (session?.expires_at) {
-                setupExpiryTimers(session.expires_at)
+                setupExpiryTimer(session.expires_at)
               }
             }
           }
@@ -103,7 +112,7 @@ export function useSessionExpiry() {
         supabase.auth.getSession().then(({ data: { session } }) => {
           if (cancelled || !session) return
           if (session.expires_at) {
-            setupExpiryTimers(session.expires_at)
+            setupExpiryTimer(session.expires_at)
           }
         })
       } catch {
@@ -118,7 +127,7 @@ export function useSessionExpiry() {
       subscriptionRef.current?.unsubscribe()
       clearTimers()
     }
-  }, [clearTimers, setupExpiryTimers])
+  }, [clearTimers, setupExpiryTimer])
 
   return {
     isSessionExpired,

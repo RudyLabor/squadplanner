@@ -169,10 +169,7 @@ export function GlobalSearch() {
   return (
     <>
       <m.button
-        onClick={() => {
-          const event = new KeyboardEvent('keydown', { key: 'k', ctrlKey: !isMac, metaKey: isMac, bubbles: true })
-          window.dispatchEvent(event)
-        }}
+        onClick={() => setIsOpen(true)}
         className="flex items-center gap-2 px-3 py-2 rounded-xl bg-surface-card border border-border-subtle text-text-secondary hover:bg-border-subtle hover:text-text-primary transition-colors"
         whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.98 }}

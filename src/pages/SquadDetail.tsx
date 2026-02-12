@@ -12,7 +12,7 @@ import {
   useLeaveSquadMutation, useDeleteSquadMutation,
   useCreateSessionMutation, useRsvpMutation,
 } from '../hooks/queries'
-import { SquadHeader, InviteModal } from '../components/squads/SquadHeader'
+import { SquadHeader, InviteModal, EditSquadModal } from '../components/squads/SquadHeader'
 import { SquadMembers } from '../components/squads/SquadMembers'
 import { PartySection, SquadSessionsList } from '../components/squads/SquadSessions'
 import { SquadSettings } from '../components/squads/SquadSettings'
@@ -28,6 +28,7 @@ export default function SquadDetail() {
   const [showConfetti, setShowConfetti] = useState(false)
   const [showLeaveConfirm, setShowLeaveConfirm] = useState(false)
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
+  const [showEditModal, setShowEditModal] = useState(false)
 
   const { user, isInitialized } = useAuthStore()
   const { canAccessFeature, fetchPremiumStatus, isSquadPremium } = usePremiumStore()
@@ -189,6 +190,7 @@ export default function SquadDetail() {
             onDeleteSquad={handleDeleteSquad}
             onInviteClick={() => setShowInviteModal(true)}
             onCreateSessionClick={() => {/* handled inside SquadSessionsList */}}
+            onEditSquadClick={() => setShowEditModal(true)}
             showActionsDrawer={showActionsDrawer}
             onOpenActionsDrawer={() => setShowActionsDrawer(true)}
             onCloseActionsDrawer={() => setShowActionsDrawer(false)}
@@ -212,6 +214,17 @@ export default function SquadDetail() {
             squadName={currentSquad.name}
             inviteCode={currentSquad.invite_code || ''}
             existingMemberIds={currentSquad.members?.map((m: { user_id: string }) => m.user_id) || []}
+          />
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {showEditModal && currentSquad && (
+          <EditSquadModal
+            squadId={id || ''}
+            initialName={currentSquad.name}
+            initialGame={currentSquad.game}
+            onClose={() => setShowEditModal(false)}
           />
         )}
       </AnimatePresence>

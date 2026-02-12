@@ -2,6 +2,7 @@ import { create } from 'zustand'
 import { supabase, isSupabaseReady } from '../lib/supabase'
 import type { Session, SessionRsvp, SessionCheckin } from '../types/database'
 import { createSessionActions } from './useSessionActions'
+import { trackChallengeProgress } from '../lib/challengeTracker'
 
 type RsvpResponse = 'present' | 'absent' | 'maybe'
 
@@ -192,6 +193,11 @@ export const useSessionsStore = create<SessionsState>((set, get) => ({
         user_id: user.id,
         response: 'present' as const,
       })
+
+      // Track challenge progress: session creation + auto-RSVP
+      trackChallengeProgress(user.id, 'create_session').catch(() => {})
+      trackChallengeProgress(user.id, 'rsvp').catch(() => {})
+      trackChallengeProgress(user.id, 'daily_rsvp').catch(() => {})
 
       await get().fetchSessions(data.squad_id)
       set({ isLoading: false })

@@ -152,6 +152,8 @@ export function AppLayout({ children }: AppLayoutProps) {
     setSidebarExpanded(false)
   }, [])
   const togglePinned = useCallback(() => setSidebarPinned(p => !p), [])
+  // Cleanup hover timer on unmount
+  useEffect(() => () => { clearTimeout(sidebarHoverTimer.current) }, [])
 
   useEffect(() => {
     localStorage.setItem('sidebar-pinned', String(sidebarPinned))

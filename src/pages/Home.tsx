@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useMemo, useCallback, useSyncExternalStore } from 'react'
+import { useState, useEffect, useMemo, useCallback, useRef, useSyncExternalStore } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
 import { m } from 'framer-motion'
 import {
@@ -157,10 +157,12 @@ export default function Home({ loaderData }: HomeProps) {
   const [showConfetti, setShowConfetti] = useState(false)
   const [successMessage, setSuccessMessage] = useState<string | null>(null)
   const [greeting, setGreeting] = useState('Salut')
+  const rsvpTimers = useRef<ReturnType<typeof setTimeout>[]>([])
 
   useEffect(() => {
     const hour = new Date().getHours()
     setGreeting(hour >= 5 && hour < 18 ? 'Salut' : 'Bonsoir')
+    return () => { rsvpTimers.current.forEach(clearTimeout) }
   }, [])
 
   const upcomingSessions = useMemo<UpcomingSession[]>(() => {
@@ -208,11 +210,11 @@ export default function Home({ loaderData }: HomeProps) {
         haptic.success()
         setShowConfetti(true)
         setSuccessMessage("T'es confirmé ! Ta squad compte sur toi")
-        setTimeout(() => setShowConfetti(false), 4000)
-        setTimeout(() => setSuccessMessage(null), 5000)
+        rsvpTimers.current.push(setTimeout(() => setShowConfetti(false), 4000))
+        rsvpTimers.current.push(setTimeout(() => setSuccessMessage(null), 5000))
       } else {
         setSuccessMessage(response === 'absent' ? 'Absence enregistrée' : 'Réponse enregistrée')
-        setTimeout(() => setSuccessMessage(null), 3000)
+        rsvpTimers.current.push(setTimeout(() => setSuccessMessage(null), 3000))
       }
     } catch (error) {
       haptic.error()

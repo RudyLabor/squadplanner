@@ -12,11 +12,15 @@ initSupabase()
 // Detect when web fonts are loaded and add .fonts-loaded class to <html>
 initFontOptimization()
 
-// Auto-update: reload when a new service worker takes control
+// Auto-update: reload when a NEW service worker replaces an existing one.
+// On first visit, there is no controller yet — skipWaiting + clients.claim
+// fires controllerchange immediately, causing an unwanted page reload.
+// We only reload when a previous controller existed (= SW update after deploy).
 if ('serviceWorker' in navigator) {
+  const hadController = !!navigator.serviceWorker.controller
   let refreshing = false
   navigator.serviceWorker.addEventListener('controllerchange', () => {
-    if (refreshing) return
+    if (!hadController || refreshing) return
     refreshing = true
     window.location.reload()
   })

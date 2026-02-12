@@ -21,7 +21,7 @@ type ButtonProps<C extends ElementType = 'button'> = ButtonBaseProps & {
 } & Omit<ComponentPropsWithRef<C>, keyof ButtonBaseProps | 'as'>
 
 const baseClasses =
-  'inline-flex items-center justify-center gap-2 font-medium rounded-xl transition-interactive disabled:opacity-40 disabled:cursor-not-allowed hover:-translate-y-px active:scale-[0.97]'
+  'inline-flex items-center justify-center gap-2 font-medium rounded-xl cursor-pointer transition-interactive disabled:opacity-40 disabled:cursor-not-allowed hover:-translate-y-px active:scale-[0.97]'
 
 const variantClasses: Record<string, string> = {
   primary: 'bg-primary hover:bg-primary-hover text-white shadow-md shadow-primary/10',

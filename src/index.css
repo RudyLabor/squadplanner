@@ -439,6 +439,30 @@ body,
   transition: background-color 0.3s ease;
 }
 
+/* Cursor pointer for all interactive elements
+   Tailwind Preflight resets button cursor to default.
+   This restores pointer cursor on buttons, summaries,
+   and any element with role="button" or an onClick handler. */
+button,
+[role="button"],
+a[href],
+summary,
+select,
+label[for],
+input[type="checkbox"],
+input[type="radio"],
+input[type="submit"],
+input[type="button"],
+input[type="reset"],
+input[type="file"] {
+  cursor: pointer;
+}
+
+button:disabled,
+[role="button"][aria-disabled="true"] {
+  cursor: not-allowed;
+}
+
 /* Premium typography defaults */
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-display);

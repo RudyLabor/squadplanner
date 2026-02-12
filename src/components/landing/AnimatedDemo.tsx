@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { m, AnimatePresence, useInView } from 'framer-motion'
@@ -21,10 +21,13 @@ export function AnimatedDemo({ currentStep: controlledStep, onStepChange }: Anim
 
   const currentStep = controlledStep ?? internalStep
   const autoAdvanceRef = useRef(false)
-  const setCurrentStep = useCallback((step: number) => {
-    if (onStepChange) onStepChange(step)
-    else setInternalStep(step)
-  }, [onStepChange])
+  const setCurrentStep = useCallback(
+    (step: number) => {
+      if (onStepChange) onStepChange(step)
+      else setInternalStep(step)
+    },
+    [onStepChange]
+  )
 
   // Detect manual step changes (from parent stepper clicks) and pause auto-advance
   const prevStepRef = useRef(currentStep)

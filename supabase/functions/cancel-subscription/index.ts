@@ -17,13 +17,12 @@ const ALLOWED_ORIGINS = [
   'http://localhost:5174',
   'https://squadplanner.fr',
   'https://squadplanner.app',
-  Deno.env.get('SUPABASE_URL') || ''
+  Deno.env.get('SUPABASE_URL') || '',
 ].filter(Boolean)
 
 function getCorsHeaders(origin: string | null) {
-  const allowedOrigin = origin && ALLOWED_ORIGINS.some(allowed => origin === allowed)
-    ? origin
-    : null
+  const allowedOrigin =
+    origin && ALLOWED_ORIGINS.some((allowed) => origin === allowed) ? origin : null
   if (!allowedOrigin) {
     return {
       'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
@@ -57,12 +56,18 @@ serve(async (req) => {
     )
 
     // Get user from auth
-    const { data: { user }, error: authError } = await supabaseClient.auth.getUser()
+    const {
+      data: { user },
+      error: authError,
+    } = await supabaseClient.auth.getUser()
     if (authError || !user) {
-      return new Response(
-        JSON.stringify({ error: 'Unauthorized' }),
-        { status: 401, headers: { ...getCorsHeaders(req.headers.get('origin')), 'Content-Type': 'application/json' } }
-      )
+      return new Response(JSON.stringify({ error: 'Unauthorized' }), {
+        status: 401,
+        headers: {
+          ...getCorsHeaders(req.headers.get('origin')),
+          'Content-Type': 'application/json',
+        },
+      })
     }
 
     // Parse and validate request body
@@ -70,10 +75,13 @@ serve(async (req) => {
     try {
       rawBody = await req.json()
     } catch {
-      return new Response(
-        JSON.stringify({ error: 'Invalid JSON in request body' }),
-        { status: 400, headers: { ...getCorsHeaders(req.headers.get('origin')), 'Content-Type': 'application/json' } }
-      )
+      return new Response(JSON.stringify({ error: 'Invalid JSON in request body' }), {
+        status: 400,
+        headers: {
+          ...getCorsHeaders(req.headers.get('origin')),
+          'Content-Type': 'application/json',
+        },
+      })
     }
 
     let squad_id: string
@@ -81,10 +89,13 @@ serve(async (req) => {
     try {
       squad_id = validateUUID(rawBody.squad_id, 'squad_id')
     } catch (validationError) {
-      return new Response(
-        JSON.stringify({ error: (validationError as Error).message }),
-        { status: 400, headers: { ...getCorsHeaders(req.headers.get('origin')), 'Content-Type': 'application/json' } }
-      )
+      return new Response(JSON.stringify({ error: (validationError as Error).message }), {
+        status: 400,
+        headers: {
+          ...getCorsHeaders(req.headers.get('origin')),
+          'Content-Type': 'application/json',
+        },
+      })
     }
 
     // Verify user is squad owner
@@ -95,10 +106,13 @@ serve(async (req) => {
       .single()
 
     if (!squad || squad.owner_id !== user.id) {
-      return new Response(
-        JSON.stringify({ error: 'Only squad owner can cancel subscription' }),
-        { status: 403, headers: { ...getCorsHeaders(req.headers.get('origin')), 'Content-Type': 'application/json' } }
-      )
+      return new Response(JSON.stringify({ error: 'Only squad owner can cancel subscription' }), {
+        status: 403,
+        headers: {
+          ...getCorsHeaders(req.headers.get('origin')),
+          'Content-Type': 'application/json',
+        },
+      })
     }
 
     // Get subscription
@@ -110,10 +124,13 @@ serve(async (req) => {
       .single()
 
     if (!subscription?.stripe_subscription_id) {
-      return new Response(
-        JSON.stringify({ error: 'No active subscription found' }),
-        { status: 404, headers: { ...getCorsHeaders(req.headers.get('origin')), 'Content-Type': 'application/json' } }
-      )
+      return new Response(JSON.stringify({ error: 'No active subscription found' }), {
+        status: 404,
+        headers: {
+          ...getCorsHeaders(req.headers.get('origin')),
+          'Content-Type': 'application/json',
+        },
+      })
     }
 
     // Cancel subscription at period end (not immediately)
@@ -133,16 +150,23 @@ serve(async (req) => {
     return new Response(
       JSON.stringify({
         success: true,
-        cancel_at: cancelledSub.cancel_at ? new Date(cancelledSub.cancel_at * 1000).toISOString() : null,
+        cancel_at: cancelledSub.cancel_at
+          ? new Date(cancelledSub.cancel_at * 1000).toISOString()
+          : null,
         current_period_end: new Date(cancelledSub.current_period_end * 1000).toISOString(),
       }),
-      { headers: { ...getCorsHeaders(req.headers.get('origin')), 'Content-Type': 'application/json' } }
+      {
+        headers: {
+          ...getCorsHeaders(req.headers.get('origin')),
+          'Content-Type': 'application/json',
+        },
+      }
     )
   } catch (error) {
     console.error('Error cancelling subscription:', error)
-    return new Response(
-      JSON.stringify({ error: error.message }),
-      { status: 500, headers: { ...getCorsHeaders(req.headers.get('origin')), 'Content-Type': 'application/json' } }
-    )
+    return new Response(JSON.stringify({ error: error.message }), {
+      status: 500,
+      headers: { ...getCorsHeaders(req.headers.get('origin')), 'Content-Type': 'application/json' },
+    })
   }
 })

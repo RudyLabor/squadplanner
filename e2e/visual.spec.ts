@@ -7,7 +7,7 @@ import { test, expect } from '@playwright/test'
 
 const TEST_USER = {
   email: 'testowner@squadtest.dev',
-  password: 'TestPassword123!'
+  password: 'TestPassword123!',
 }
 
 async function loginUser(page: import('@playwright/test').Page) {

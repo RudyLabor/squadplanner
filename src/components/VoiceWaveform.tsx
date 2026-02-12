@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 import { useMemo } from 'react'
 import { m } from 'framer-motion'
@@ -25,22 +25,22 @@ const SIZE_CONFIG = {
     barWidth: 3,
     gap: 2,
     minBarHeight: 4,
-    maxBarHeight: 20
+    maxBarHeight: 20,
   },
   md: {
     height: 32,
     barWidth: 4,
     gap: 3,
     minBarHeight: 6,
-    maxBarHeight: 28
+    maxBarHeight: 28,
   },
   lg: {
     height: 48,
     barWidth: 6,
     gap: 4,
     minBarHeight: 8,
-    maxBarHeight: 44
-  }
+    maxBarHeight: 44,
+  },
 }
 
 /**
@@ -55,11 +55,9 @@ export function VoiceWaveform({
   size = 'md',
   color = 'var(--color-logo-green)',
   barCount = 5,
-  className = ''
+  className = '',
 }: VoiceWaveformProps) {
-  const { frequencyData, volumeLevel, isSpeaking } = useAudioAnalyser(
-    isActive ? audioStream : null
-  )
+  const { frequencyData, volumeLevel, isSpeaking } = useAudioAnalyser(isActive ? audioStream : null)
 
   const config = SIZE_CONFIG[size]
 
@@ -113,7 +111,7 @@ export function VoiceWaveform({
       className={`flex items-center justify-center ${className}`}
       style={{
         height: config.height,
-        width: containerWidth
+        width: containerWidth,
       }}
       aria-hidden="true"
     >
@@ -123,7 +121,7 @@ export function VoiceWaveform({
           gap: config.gap,
           height: config.height,
           // Glow effect when speaking
-          filter: glowIntensity > 0 ? `drop-shadow(0 0 ${8 * glowIntensity}px ${color})` : 'none'
+          filter: glowIntensity > 0 ? `drop-shadow(0 0 ${8 * glowIntensity}px ${color})` : 'none',
         }}
       >
         {barHeights.map((height, index) => (
@@ -133,26 +131,27 @@ export function VoiceWaveform({
             style={{
               width: config.barWidth,
               backgroundColor: isActive && isSpeaking ? color : `${color}40`,
-              opacity: isActive ? 1 : 0.4
+              opacity: isActive ? 1 : 0.4,
             }}
             initial={{ height: config.minBarHeight }}
             animate={{
               height,
               // Add subtle glow to individual bars when loud
-              boxShadow: volumeLevel === 'loud' && isActive
-                ? `0 0 ${config.barWidth * 2}px ${color}`
-                : 'none'
+              boxShadow:
+                volumeLevel === 'loud' && isActive
+                  ? `0 0 ${config.barWidth * 2}px ${color}`
+                  : 'none',
             }}
             transition={{
               height: {
                 type: 'spring',
                 stiffness: 300,
                 damping: 20,
-                mass: 0.5
+                mass: 0.5,
               },
               boxShadow: {
-                duration: 0.15
-              }
+                duration: 0.15,
+              },
             }}
           />
         ))}
@@ -170,7 +169,7 @@ export function VoiceWaveformDemo({
   size = 'md',
   color = 'var(--color-logo-green)',
   barCount = 5,
-  className = ''
+  className = '',
 }: Omit<VoiceWaveformProps, 'audioStream'>) {
   const config = SIZE_CONFIG[size]
   const containerWidth = barCount * config.barWidth + (barCount - 1) * config.gap
@@ -180,7 +179,7 @@ export function VoiceWaveformDemo({
       className={`flex items-center justify-center ${className}`}
       style={{
         height: config.height,
-        width: containerWidth
+        width: containerWidth,
       }}
       aria-hidden="true"
     >
@@ -189,35 +188,42 @@ export function VoiceWaveformDemo({
         style={{
           gap: config.gap,
           height: config.height,
-          filter: isActive ? `drop-shadow(0 0 6px ${color})` : 'none'
+          filter: isActive ? `drop-shadow(0 0 6px ${color})` : 'none',
         }}
       >
-        {Array(barCount).fill(0).map((_, index) => (
-          <m.div
-            key={index}
-            className="rounded-full"
-            style={{
-              width: config.barWidth,
-              backgroundColor: isActive ? color : `${color}40`,
-              opacity: isActive ? 1 : 0.4
-            }}
-            animate={isActive ? {
-              height: [
-                config.minBarHeight,
-                config.minBarHeight + Math.random() * (config.maxBarHeight - config.minBarHeight),
-                config.minBarHeight
-              ]
-            } : {
-              height: config.minBarHeight
-            }}
-            transition={{
-              duration: 0.4 + Math.random() * 0.3,
-              repeat: isActive ? Infinity : 0,
-              repeatType: 'reverse',
-              delay: index * 0.08
-            }}
-          />
-        ))}
+        {Array(barCount)
+          .fill(0)
+          .map((_, index) => (
+            <m.div
+              key={index}
+              className="rounded-full"
+              style={{
+                width: config.barWidth,
+                backgroundColor: isActive ? color : `${color}40`,
+                opacity: isActive ? 1 : 0.4,
+              }}
+              animate={
+                isActive
+                  ? {
+                      height: [
+                        config.minBarHeight,
+                        config.minBarHeight +
+                          Math.random() * (config.maxBarHeight - config.minBarHeight),
+                        config.minBarHeight,
+                      ],
+                    }
+                  : {
+                      height: config.minBarHeight,
+                    }
+              }
+              transition={{
+                duration: 0.4 + Math.random() * 0.3,
+                repeat: isActive ? Infinity : 0,
+                repeatType: 'reverse',
+                delay: index * 0.08,
+              }}
+            />
+          ))}
       </div>
     </div>
   )

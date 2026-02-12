@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 import { useState, useCallback, memo, useRef, useEffect } from 'react'
 import { getPlaceholderUrl, getOptimizedSrc } from './imageUtils'
@@ -70,11 +70,12 @@ export const OptimizedImage = memo(function OptimizedImage({
 
   const optimizedSrc = isInView ? getOptimizedSrc(src, width, webpSrc, avifSrc) : undefined
 
-  const blurSrc = placeholder === 'blur'
-    ? getPlaceholderUrl(src)
-    : placeholder !== 'skeleton'
-      ? placeholder
-      : undefined
+  const blurSrc =
+    placeholder === 'blur'
+      ? getPlaceholderUrl(src)
+      : placeholder !== 'skeleton'
+        ? placeholder
+        : undefined
 
   return (
     <div
@@ -168,11 +169,11 @@ export const Avatar = memo(function Avatar({
 
   if (!src || hasError) {
     return (
-      <div className={`${sizeClass} rounded-full bg-purple-10 flex items-center justify-center flex-shrink-0 ${className}`}>
+      <div
+        className={`${sizeClass} rounded-full bg-purple-10 flex items-center justify-center flex-shrink-0 ${className}`}
+      >
         {fallbackIcon || (
-          <span className="text-purple font-medium">
-            {alt?.charAt(0)?.toUpperCase() || '?'}
-          </span>
+          <span className="text-purple font-medium">{alt?.charAt(0)?.toUpperCase() || '?'}</span>
         )}
       </div>
     )
@@ -181,7 +182,9 @@ export const Avatar = memo(function Avatar({
   const placeholderSrc = getPlaceholderUrl(src, 10)
 
   return (
-    <div className={`${sizeClass} rounded-full flex-shrink-0 relative overflow-hidden ${className}`}>
+    <div
+      className={`${sizeClass} rounded-full flex-shrink-0 relative overflow-hidden ${className}`}
+    >
       {placeholderSrc && !isLoaded && (
         <img
           src={placeholderSrc}

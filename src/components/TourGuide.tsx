@@ -1,14 +1,8 @@
-"use client";
+'use client'
 
 import { useState, useEffect, useCallback } from 'react'
 import { useLocation } from 'react-router'
-import {
-  Sparkles,
-  Calendar,
-  Users,
-  MessageCircle,
-  Mic,
-} from './icons'
+import { Sparkles, Calendar, Users, MessageCircle, Mic } from './icons'
 import { TourOverlay } from './tour/TourOverlay'
 import { TourTooltip } from './tour/TourTooltip'
 
@@ -27,35 +21,40 @@ const TOUR_STEPS: TourStepDef[] = [
   {
     target: '[data-tour="squads"]',
     title: 'Tes Squads',
-    description: 'Retrouve toutes tes squads ici. Clique pour voir les membres, le chat et les sessions.',
+    description:
+      'Retrouve toutes tes squads ici. Clique pour voir les membres, le chat et les sessions.',
     icon: Users,
     position: 'right',
   },
   {
     target: '[data-tour="sessions"]',
     title: 'Planifier une session',
-    description: 'Propose un créneau de jeu et invite ta squad. Le système RSVP force tout le monde à répondre.',
+    description:
+      'Propose un créneau de jeu et invite ta squad. Le système RSVP force tout le monde à répondre.',
     icon: Calendar,
     position: 'right',
   },
   {
     target: '[data-tour="messages"]',
     title: 'Chat & Messages',
-    description: 'Chat squad en temps réel + messages directs. Avec réactions emoji, read receipts et recherche.',
+    description:
+      'Chat squad en temps réel + messages directs. Avec réactions emoji, read receipts et recherche.',
     icon: MessageCircle,
     position: 'right',
   },
   {
     target: '[data-tour="party"]',
     title: 'Party vocale',
-    description: 'Lance un salon vocal pour ta squad. Audio adaptatif, reconnexion auto et volume individuel.',
+    description:
+      'Lance un salon vocal pour ta squad. Audio adaptatif, reconnexion auto et volume individuel.',
     icon: Mic,
     position: 'right',
   },
   {
     target: '[data-tour="ai-coach"]',
     title: 'Coach IA',
-    description: 'Ton assistant perso : suggestions de créneaux, aide à la décision, rappels RSVP intelligents.',
+    description:
+      'Ton assistant perso : suggestions de créneaux, aide à la décision, rappels RSVP intelligents.',
     icon: Sparkles,
     position: 'top',
   },
@@ -70,11 +69,17 @@ function getTooltipPosition(rect: DOMRect, position: TourStepDef['position']) {
     case 'right':
       return { top: rect.top + rect.height / 2 - tooltipHeight / 2, left: rect.right + gap }
     case 'left':
-      return { top: rect.top + rect.height / 2 - tooltipHeight / 2, left: rect.left - tooltipWidth - gap }
+      return {
+        top: rect.top + rect.height / 2 - tooltipHeight / 2,
+        left: rect.left - tooltipWidth - gap,
+      }
     case 'bottom':
       return { top: rect.bottom + gap, left: rect.left + rect.width / 2 - tooltipWidth / 2 }
     case 'top':
-      return { top: rect.top - tooltipHeight - gap, left: rect.left + rect.width / 2 - tooltipWidth / 2 }
+      return {
+        top: rect.top - tooltipHeight - gap,
+        left: rect.left + rect.width / 2 - tooltipWidth / 2,
+      }
   }
 }
 
@@ -92,18 +97,24 @@ export function TourGuide() {
     try {
       const completed = localStorage.getItem(TOUR_COMPLETED_KEY)
       if (completed === 'true' || completed === 'shown') return
-    } catch { return }
+    } catch {
+      return
+    }
 
     const timer = setTimeout(() => {
       // Double-check in case another tab completed the tour
       try {
         const completed = localStorage.getItem(TOUR_COMPLETED_KEY)
         if (completed === 'true' || completed === 'shown') return
-      } catch { return }
+      } catch {
+        return
+      }
 
       const firstTarget = document.querySelector(TOUR_STEPS[0].target)
       if (firstTarget) {
-        try { localStorage.setItem(TOUR_COMPLETED_KEY, 'true') } catch {}
+        try {
+          localStorage.setItem(TOUR_COMPLETED_KEY, 'true')
+        } catch {}
         setActive(true)
       }
     }, 3000) // Délai de 3s pour laisser le temps à la page de charger
@@ -135,7 +146,7 @@ export function TourGuide() {
       setTooltipPos(pos)
     } else {
       if (currentStep < TOUR_STEPS.length - 1) {
-        setCurrentStep(prev => prev + 1)
+        setCurrentStep((prev) => prev + 1)
       } else {
         completeTour()
       }
@@ -154,7 +165,7 @@ export function TourGuide() {
 
   const nextStep = () => {
     if (currentStep < TOUR_STEPS.length - 1) {
-      setCurrentStep(prev => prev + 1)
+      setCurrentStep((prev) => prev + 1)
     } else {
       completeTour()
     }
@@ -162,7 +173,7 @@ export function TourGuide() {
 
   const prevStep = () => {
     if (currentStep > 0) {
-      setCurrentStep(prev => prev - 1)
+      setCurrentStep((prev) => prev - 1)
     }
   }
 

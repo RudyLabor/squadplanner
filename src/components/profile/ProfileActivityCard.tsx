@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 import { useMemo } from 'react'
 import { m } from 'framer-motion'
@@ -18,12 +18,23 @@ export function ProfileActivityCard({ streakDays }: ProfileActivityCardProps) {
     { days: 100, xp: 1000, label: '100 jours', emoji: '👑' },
   ]
   const nextMilestone = useMemo(() => {
-    const next = MILESTONES.find(m => m.days > streakDays)
+    const next = MILESTONES.find((m) => m.days > streakDays)
     if (next) {
-      return { ...next, daysRemaining: next.days - streakDays, progress: (streakDays / next.days) * 100 }
+      return {
+        ...next,
+        daysRemaining: next.days - streakDays,
+        progress: (streakDays / next.days) * 100,
+      }
     }
     const nextSeven = Math.ceil((streakDays + 1) / 7) * 7
-    return { days: nextSeven, xp: 50, label: `${nextSeven} jours`, emoji: '⭐', daysRemaining: nextSeven - streakDays, progress: ((streakDays % 7) / 7) * 100 }
+    return {
+      days: nextSeven,
+      xp: 50,
+      label: `${nextSeven} jours`,
+      emoji: '⭐',
+      daysRemaining: nextSeven - streakDays,
+      progress: ((streakDays % 7) / 7) * 100,
+    }
   }, [streakDays])
 
   // Last 7 days
@@ -48,7 +59,9 @@ export function ProfileActivityCard({ streakDays }: ProfileActivityCardProps) {
     <section className="mb-5" aria-label="Activité">
       <div className="flex items-center gap-2 mb-3">
         <Flame className="w-4 h-4 text-warning" />
-        <h3 className="text-base font-semibold text-text-primary uppercase tracking-wide">Activité</h3>
+        <h3 className="text-base font-semibold text-text-primary uppercase tracking-wide">
+          Activité
+        </h3>
       </div>
       <Card className="p-4">
         {/* Streak count */}
@@ -63,7 +76,9 @@ export function ProfileActivityCard({ streakDays }: ProfileActivityCardProps) {
           <div className="flex-1">
             <div className="flex items-baseline gap-2">
               <span className="text-2xl font-bold text-text-primary">{streakDays}</span>
-              <span className="text-sm text-text-tertiary">{streakDays <= 1 ? 'jour' : 'jours'}</span>
+              <span className="text-sm text-text-tertiary">
+                {streakDays <= 1 ? 'jour' : 'jours'}
+              </span>
             </div>
             <p className="text-xs text-text-quaternary">Série en cours</p>
           </div>
@@ -83,8 +98,12 @@ export function ProfileActivityCard({ streakDays }: ProfileActivityCardProps) {
               <span className="text-xs text-text-tertiary">Prochain palier</span>
             </div>
             <div className="flex items-center gap-1.5">
-              <span className="text-xs font-medium text-text-primary">{nextMilestone.emoji} {nextMilestone.label}</span>
-              <span className="text-xs px-1.5 py-0.5 rounded-full bg-success/12 text-success">+{nextMilestone.xp} XP</span>
+              <span className="text-xs font-medium text-text-primary">
+                {nextMilestone.emoji} {nextMilestone.label}
+              </span>
+              <span className="text-xs px-1.5 py-0.5 rounded-full bg-success/12 text-success">
+                +{nextMilestone.xp} XP
+              </span>
             </div>
           </div>
           <div className="relative h-1.5 bg-border-subtle rounded-full overflow-hidden">
@@ -105,9 +124,11 @@ export function ProfileActivityCard({ streakDays }: ProfileActivityCardProps) {
           {last7Days.map((day, i) => (
             <div key={i} className="flex flex-col items-center gap-1">
               <span className="text-xs text-text-quaternary">{day.label}</span>
-              <div className={`w-7 h-7 rounded-lg flex items-center justify-center ${
-                day.isToday ? 'ring-1.5 ring-warning ring-offset-1 ring-offset-bg-base' : ''
-              } ${day.isActive ? 'bg-warning/20' : 'bg-surface-card'}`}>
+              <div
+                className={`w-7 h-7 rounded-lg flex items-center justify-center ${
+                  day.isToday ? 'ring-1.5 ring-warning ring-offset-1 ring-offset-bg-base' : ''
+                } ${day.isActive ? 'bg-warning/20' : 'bg-surface-card'}`}
+              >
                 {day.isActive ? (
                   <div className="w-2.5 h-2.5 rounded-full bg-warning" />
                 ) : (

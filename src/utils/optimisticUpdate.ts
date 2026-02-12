@@ -7,14 +7,11 @@
 import type { QueryClient, QueryKey } from '@tanstack/react-query'
 import { showError } from '../lib/toast'
 
-interface OptimisticMutationConfig<TData, TVariables> {
+interface OptimisticMutationConfig<_TData, TVariables> {
   /** Query keys to cancel and snapshot before the optimistic update */
   queryKeys: QueryKey[] | ((variables: TVariables) => QueryKey[])
   /** Apply the optimistic update to the cache */
-  updateCache: (
-    queryClient: QueryClient,
-    variables: TVariables
-  ) => void
+  updateCache: (queryClient: QueryClient, variables: TVariables) => void
   /** Optional error message (defaults to generic French message) */
   errorMessage?: string | ((error: Error, variables: TVariables) => string)
   /** Query keys to invalidate on success (refetch for consistency) */
@@ -28,11 +25,7 @@ interface OptimisticHandlers<TData, TVariables> {
     variables: TVariables,
     context: { snapshots: Map<string, unknown> } | undefined
   ) => void
-  onSettled: (
-    data: TData | undefined,
-    error: Error | null,
-    variables: TVariables
-  ) => void
+  onSettled: (data: TData | undefined, error: Error | null, variables: TVariables) => void
 }
 
 /**
@@ -70,9 +63,7 @@ export function createOptimisticMutation<TData = unknown, TVariables = unknown>(
       const keys = resolveKeys(config.queryKeys, variables)
 
       // Cancel outgoing refetches for all affected queries
-      await Promise.all(
-        keys.map((key) => queryClient.cancelQueries({ queryKey: key }))
-      )
+      await Promise.all(keys.map((key) => queryClient.cancelQueries({ queryKey: key })))
 
       // Snapshot all affected query data for rollback
       const snapshots = new Map<string, unknown>()
@@ -110,11 +101,7 @@ export function createOptimisticMutation<TData = unknown, TVariables = unknown>(
       showError(message)
     },
 
-    onSettled: (
-      data: TData | undefined,
-      error: Error | null,
-      variables: TVariables
-    ) => {
+    onSettled: (data: TData | undefined, _error: Error | null, variables: TVariables) => {
       // Always refetch to ensure cache is consistent with server
       if (config.invalidateKeys) {
         const keys = resolveKeys(config.invalidateKeys, data, variables)

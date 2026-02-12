@@ -1,6 +1,10 @@
 import { memo } from 'react'
 import { Calendar, Download, ExternalLink } from './icons'
-import { sessionToCalendarEvent, getGoogleCalendarUrl, exportSessionsToICS } from '../utils/calendarExport'
+import {
+  sessionToCalendarEvent,
+  getGoogleCalendarUrl,
+  exportSessionsToICS,
+} from '../utils/calendarExport'
 import { showSuccess, showError, showInfo } from '../lib/toast'
 import type { Session } from '../types/database'
 
@@ -10,14 +14,18 @@ interface Props {
   squadName?: string
 }
 
-export const CalendarSyncCard = memo(function CalendarSyncCard({ sessions, session, squadName }: Props) {
+export const CalendarSyncCard = memo(function CalendarSyncCard({
+  sessions,
+  session,
+  squadName,
+}: Props) {
   const handleGoogleCalendar = () => {
     if (session) {
       const event = sessionToCalendarEvent(session, squadName)
       const url = getGoogleCalendarUrl(event)
       window.open(url, '_blank', 'noopener,noreferrer')
     } else {
-      showInfo('Sélectionne une session pour l\'ajouter à Google Calendar')
+      showInfo("Sélectionne une session pour l'ajouter à Google Calendar")
     }
   }
 
@@ -31,7 +39,7 @@ export const CalendarSyncCard = memo(function CalendarSyncCard({ sessions, sessi
       exportSessionsToICS(toExport, squadName)
       showSuccess('Fichier .ics téléchargé !')
     } catch (err) {
-      showError((err as Error).message || 'Erreur d\'export')
+      showError((err as Error).message || "Erreur d'export")
     }
   }
 

@@ -1,15 +1,8 @@
-"use client";
+'use client'
 
 import { useState, useEffect } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
-import {
-  Crown,
-  Copy,
-  Check,
-  MessageCircle,
-  Settings,
-  X,
-} from '../icons'
+import { Crown, Copy, Check, MessageCircle, Settings, X } from '../icons'
 import { Link } from 'react-router'
 import { Button } from '../ui'
 import { showSuccess } from '../../lib/toast'
@@ -61,11 +54,19 @@ export function SquadHeader({ squadId, squad, isOwner }: SquadHeaderProps) {
           </div>
           <div className="flex items-center gap-1">
             {isOwner && (
-              <Button variant="ghost" size="sm" onClick={() => setShowEditModal(true)} aria-label="Modifier la squad">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setShowEditModal(true)}
+                aria-label="Modifier la squad"
+              >
                 <Settings className="w-4 h-4" aria-hidden="true" />
               </Button>
             )}
-            <Link to={`/messages?squad=${squad.id}`} aria-label="Ouvrir les messages de cette squad">
+            <Link
+              to={`/messages?squad=${squad.id}`}
+              aria-label="Ouvrir les messages de cette squad"
+            >
               <Button variant="ghost" size="sm" aria-label="Ouvrir les messages">
                 <MessageCircle className="w-4 h-4" aria-hidden="true" />
               </Button>
@@ -76,11 +77,22 @@ export function SquadHeader({ squadId, squad, isOwner }: SquadHeaderProps) {
         {/* Code d'invitation */}
         <div className="flex items-center gap-2 p-3 rounded-xl bg-primary-10 border border-primary/20">
           <div className="flex-1">
-            <p className="text-xs text-text-tertiary uppercase tracking-wide mb-0.5">Code d'invitation</p>
+            <p className="text-xs text-text-tertiary uppercase tracking-wide mb-0.5">
+              Code d'invitation
+            </p>
             <p className="text-xl font-bold text-primary tracking-wider">{squad.invite_code}</p>
           </div>
-          <Button variant="primary" size="sm" onClick={handleCopyCode} aria-label="Copier le code d'invitation">
-            {copiedCode ? <Check className="w-4 h-4" aria-hidden="true" /> : <Copy className="w-4 h-4" aria-hidden="true" />}
+          <Button
+            variant="primary"
+            size="sm"
+            onClick={handleCopyCode}
+            aria-label="Copier le code d'invitation"
+          >
+            {copiedCode ? (
+              <Check className="w-4 h-4" aria-hidden="true" />
+            ) : (
+              <Copy className="w-4 h-4" aria-hidden="true" />
+            )}
             {copiedCode ? 'Copié !' : 'Copier'}
           </Button>
         </div>
@@ -115,8 +127,16 @@ export function SquadHeader({ squadId, squad, isOwner }: SquadHeaderProps) {
   )
 }
 
-export function EditSquadModal({ squadId, initialName, initialGame, onClose }: {
-  squadId: string; initialName: string; initialGame: string; onClose: () => void
+export function EditSquadModal({
+  squadId,
+  initialName,
+  initialGame,
+  onClose,
+}: {
+  squadId: string
+  initialName: string
+  initialGame: string
+  onClose: () => void
 }) {
   const [name, setName] = useState(initialName)
   const [game, setGame] = useState(initialGame)
@@ -126,7 +146,10 @@ export function EditSquadModal({ squadId, initialName, initialGame, onClose }: {
   // Escape key to close
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') { e.preventDefault(); onClose() }
+      if (e.key === 'Escape') {
+        e.preventDefault()
+        onClose()
+      }
     }
     document.addEventListener('keydown', handleKey)
     return () => document.removeEventListener('keydown', handleKey)
@@ -135,13 +158,20 @@ export function EditSquadModal({ squadId, initialName, initialGame, onClose }: {
   // Lock body scroll when modal is open
   useEffect(() => {
     document.body.style.overflow = 'hidden'
-    return () => { document.body.style.overflow = '' }
+    return () => {
+      document.body.style.overflow = ''
+    }
   }, [])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!name.trim() || !game.trim()) return
-    await updateMutation.mutateAsync({ squadId, name: name.trim(), game: game.trim(), description: description.trim() || undefined })
+    await updateMutation.mutateAsync({
+      squadId,
+      name: name.trim(),
+      game: game.trim(),
+      description: description.trim() || undefined,
+    })
     onClose()
   }
 
@@ -162,11 +192,17 @@ export function EditSquadModal({ squadId, initialName, initialGame, onClose }: {
         aria-modal="true"
         aria-labelledby="edit-squad-title"
         className="w-full max-w-md rounded-2xl bg-bg-elevated border border-border-subtle p-6"
-        onClick={e => e.stopPropagation()}
+        onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center justify-between mb-5">
-          <h2 id="edit-squad-title" className="text-lg font-bold text-text-primary">Modifier la squad</h2>
-          <button onClick={onClose} className="p-1.5 rounded-lg hover:bg-border-subtle transition-colors" aria-label="Fermer">
+          <h2 id="edit-squad-title" className="text-lg font-bold text-text-primary">
+            Modifier la squad
+          </h2>
+          <button
+            onClick={onClose}
+            className="p-1.5 rounded-lg hover:bg-border-subtle transition-colors"
+            aria-label="Fermer"
+          >
             <X className="w-5 h-5 text-text-tertiary" />
           </button>
         </div>
@@ -177,7 +213,7 @@ export function EditSquadModal({ squadId, initialName, initialGame, onClose }: {
             <input
               type="text"
               value={name}
-              onChange={e => setName(e.target.value)}
+              onChange={(e) => setName(e.target.value)}
               className="w-full h-11 px-4 rounded-xl bg-bg-surface border border-border-default text-md text-text-primary placeholder:text-text-quaternary focus:border-primary focus:outline-none transition-colors"
               required
             />
@@ -187,24 +223,32 @@ export function EditSquadModal({ squadId, initialName, initialGame, onClose }: {
             <input
               type="text"
               value={game}
-              onChange={e => setGame(e.target.value)}
+              onChange={(e) => setGame(e.target.value)}
               className="w-full h-11 px-4 rounded-xl bg-bg-surface border border-border-default text-md text-text-primary placeholder:text-text-quaternary focus:border-primary focus:outline-none transition-colors"
               required
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-text-secondary mb-1.5">Description (optionnel)</label>
+            <label className="block text-sm font-medium text-text-secondary mb-1.5">
+              Description (optionnel)
+            </label>
             <textarea
               value={description}
-              onChange={e => setDescription(e.target.value)}
+              onChange={(e) => setDescription(e.target.value)}
               rows={3}
               placeholder="Décris ta squad..."
               className="w-full px-4 py-3 rounded-xl bg-bg-surface border border-border-default text-md text-text-primary placeholder:text-text-quaternary focus:border-primary focus:outline-none transition-colors resize-none"
             />
           </div>
           <div className="flex gap-3 pt-1">
-            <Button variant="secondary" type="button" onClick={onClose} className="flex-1">Annuler</Button>
-            <Button type="submit" className="flex-1" disabled={updateMutation.isPending || !name.trim() || !game.trim()}>
+            <Button variant="secondary" type="button" onClick={onClose} className="flex-1">
+              Annuler
+            </Button>
+            <Button
+              type="submit"
+              className="flex-1"
+              disabled={updateMutation.isPending || !name.trim() || !game.trim()}
+            >
               {updateMutation.isPending ? 'Enregistrement...' : 'Enregistrer'}
             </Button>
           </div>

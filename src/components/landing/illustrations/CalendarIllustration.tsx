@@ -22,7 +22,11 @@ export function CalendarIllustration({ size = 64, className = '' }: Props) {
       >
         {/* Calendar body */}
         <m.rect
-          x="10" y="16" width="44" height="38" rx="4"
+          x="10"
+          y="16"
+          width="44"
+          height="38"
+          rx="4"
           stroke="currentColor"
           strokeWidth="2"
           variants={draw}
@@ -30,7 +34,10 @@ export function CalendarIllustration({ size = 64, className = '' }: Props) {
         />
         {/* Top bar */}
         <m.line
-          x1="10" y1="26" x2="54" y2="26"
+          x1="10"
+          y1="26"
+          x2="54"
+          y2="26"
           stroke="currentColor"
           strokeWidth="2"
           variants={draw}
@@ -38,7 +45,10 @@ export function CalendarIllustration({ size = 64, className = '' }: Props) {
         />
         {/* Left hook */}
         <m.line
-          x1="22" y1="12" x2="22" y2="20"
+          x1="22"
+          y1="12"
+          x2="22"
+          y2="20"
           stroke="currentColor"
           strokeWidth="2"
           strokeLinecap="round"
@@ -47,7 +57,10 @@ export function CalendarIllustration({ size = 64, className = '' }: Props) {
         />
         {/* Right hook */}
         <m.line
-          x1="42" y1="12" x2="42" y2="20"
+          x1="42"
+          y1="12"
+          x2="42"
+          y2="20"
           stroke="currentColor"
           strokeWidth="2"
           strokeLinecap="round"
@@ -56,9 +69,14 @@ export function CalendarIllustration({ size = 64, className = '' }: Props) {
         />
         {/* Grid dots (date cells) */}
         {[
-          [20, 33], [32, 33], [44, 33],
-          [20, 41], [32, 41], [44, 41],
-          [20, 49], [32, 49],
+          [20, 33],
+          [32, 33],
+          [44, 33],
+          [20, 41],
+          [32, 41],
+          [44, 41],
+          [20, 49],
+          [32, 49],
         ].map(([cx, cy], i) => (
           <m.circle
             key={i}
@@ -74,7 +92,11 @@ export function CalendarIllustration({ size = 64, className = '' }: Props) {
         ))}
         {/* Selected date highlight */}
         <m.rect
-          x="38" y="44" width="12" height="10" rx="3"
+          x="38"
+          y="44"
+          width="12"
+          height="10"
+          rx="3"
           fill="var(--color-primary, #6366f1)"
           fillOpacity="0.2"
           stroke="var(--color-primary, #6366f1)"

@@ -41,42 +41,48 @@ export function usePrefetch({ debounce = 200, userId }: UsePrefetchOptions = {})
    * Create onPointerEnter handler for a route path.
    * Attach to `<Link>` or nav item wrapper.
    */
-  const createPrefetchHandler = useCallback((route: string) => {
-    return () => {
-      // Skip on touch devices
-      if (isTouchDevice()) return
-      // Skip if already prefetched
-      if (prefetchedRoutes.has(route)) return
+  const createPrefetchHandler = useCallback(
+    (route: string) => {
+      return () => {
+        // Skip on touch devices
+        if (isTouchDevice()) return
+        // Skip if already prefetched
+        if (prefetchedRoutes.has(route)) return
 
-      clearTimer()
-      timerRef.current = setTimeout(() => {
-        prefetchedRoutes.add(route)
-        prefetchRoute(route, userId).catch(() => {
-          // Remove from set so it can be retried
-          prefetchedRoutes.delete(route)
-        })
-      }, debounce)
-    }
-  }, [debounce, userId, clearTimer])
+        clearTimer()
+        timerRef.current = setTimeout(() => {
+          prefetchedRoutes.add(route)
+          prefetchRoute(route, userId).catch(() => {
+            // Remove from set so it can be retried
+            prefetchedRoutes.delete(route)
+          })
+        }, debounce)
+      }
+    },
+    [debounce, userId, clearTimer]
+  )
 
   /**
    * Create onPointerEnter handler for a squad detail.
    */
-  const createSquadPrefetchHandler = useCallback((squadId: string) => {
-    return () => {
-      if (isTouchDevice()) return
-      const key = `squad:${squadId}`
-      if (prefetchedRoutes.has(key)) return
+  const createSquadPrefetchHandler = useCallback(
+    (squadId: string) => {
+      return () => {
+        if (isTouchDevice()) return
+        const key = `squad:${squadId}`
+        if (prefetchedRoutes.has(key)) return
 
-      clearTimer()
-      timerRef.current = setTimeout(() => {
-        prefetchedRoutes.add(key)
-        prefetchSquadDetail(squadId).catch(() => {
-          prefetchedRoutes.delete(key)
-        })
-      }, debounce)
-    }
-  }, [debounce, clearTimer])
+        clearTimer()
+        timerRef.current = setTimeout(() => {
+          prefetchedRoutes.add(key)
+          prefetchSquadDetail(squadId).catch(() => {
+            prefetchedRoutes.delete(key)
+          })
+        }, debounce)
+      }
+    },
+    [debounce, clearTimer]
+  )
 
   /**
    * Cancel any pending prefetch (attach to onPointerLeave).

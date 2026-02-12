@@ -56,20 +56,26 @@ export function useSoundEffects() {
   /**
    * Play a sound effect
    */
-  const play = useCallback((name: SoundName, relativeVolume = 1) => {
-    if (enabled) {
-      playSoundMaster(name, relativeVolume)
-    }
-  }, [enabled])
+  const play = useCallback(
+    (name: SoundName, relativeVolume = 1) => {
+      if (enabled) {
+        playSoundMaster(name, relativeVolume)
+      }
+    },
+    [enabled]
+  )
 
   /**
    * Play a sound at a specific volume (ignoring master volume)
    */
-  const playAt = useCallback((name: SoundName, specificVolume: number) => {
-    if (enabled) {
-      playSound(name, specificVolume)
-    }
-  }, [enabled])
+  const playAt = useCallback(
+    (name: SoundName, specificVolume: number) => {
+      if (enabled) {
+        playSound(name, specificVolume)
+      }
+    },
+    [enabled]
+  )
 
   /**
    * Stop a specific sound

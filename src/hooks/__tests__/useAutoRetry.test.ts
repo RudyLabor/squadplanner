@@ -43,8 +43,12 @@ describe('useAutoRetry', () => {
   it('hasExhaustedRetries is true after max retries', () => {
     const retryFn = vi.fn()
     const { result } = renderHook(() => useAutoRetry(retryFn, false, { maxRetries: 2 }))
-    act(() => { result.current.retry() })
-    act(() => { result.current.retry() })
+    act(() => {
+      result.current.retry()
+    })
+    act(() => {
+      result.current.retry()
+    })
     expect(result.current.hasExhaustedRetries).toBe(true)
   })
 

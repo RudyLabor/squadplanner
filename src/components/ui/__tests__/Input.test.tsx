@@ -93,7 +93,7 @@ describe('Input', () => {
   })
 
   it('renders prefix and suffix', () => {
-    render(<Input label="Amount" prefix={<span>$</span>} suffix={<span>USD</span>} />)
+    render(<Input label="Amount" prefix={'$'} suffix={'USD'} />)
     expect(screen.getByText('$')).toBeInTheDocument()
     expect(screen.getByText('USD')).toBeInTheDocument()
   })

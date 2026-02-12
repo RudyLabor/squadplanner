@@ -4,11 +4,7 @@
 
 import { serve } from 'https://deno.land/std@0.177.0/http/server.ts'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.0'
-import {
-  validateUUID,
-  validateNumber,
-  validateOptional,
-} from '../_shared/schemas.ts'
+import { validateUUID, validateNumber, validateOptional } from '../_shared/schemas.ts'
 
 // CORS Security: Only allow specific origins
 const ALLOWED_ORIGINS = [
@@ -16,13 +12,12 @@ const ALLOWED_ORIGINS = [
   'http://localhost:5174',
   'https://squadplanner.fr',
   'https://squadplanner.app',
-  Deno.env.get('SUPABASE_URL') || ''
+  Deno.env.get('SUPABASE_URL') || '',
 ].filter(Boolean)
 
 function getCorsHeaders(origin: string | null) {
-  const allowedOrigin = origin && ALLOWED_ORIGINS.some(allowed => origin === allowed)
-    ? origin
-    : null
+  const allowedOrigin =
+    origin && ALLOWED_ORIGINS.some((allowed) => origin === allowed) ? origin : null
   if (!allowedOrigin) {
     return {
       'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
@@ -55,17 +50,19 @@ async function callClaudeAPI(prompt: string): Promise<string | null> {
       headers: {
         'Content-Type': 'application/json',
         'x-api-key': apiKey,
-        'anthropic-version': '2023-06-01'
+        'anthropic-version': '2023-06-01',
       },
       body: JSON.stringify({
         model: CLAUDE_MODEL,
         max_tokens: 400,
-        messages: [{
-          role: 'user',
-          content: prompt
-        }]
+        messages: [
+          {
+            role: 'user',
+            content: prompt,
+          },
+        ],
       }),
-      signal: controller.signal
+      signal: controller.signal,
     })
 
     clearTimeout(timeoutId)
@@ -95,9 +92,9 @@ async function generateAIPlanningAnalysis(
 ): Promise<string | null> {
   if (topSlots.length === 0) return null
 
-  const slotsDescription = topSlots.map(s =>
-    `${s.day} ${s.hour}h (${s.score}% de presence, ${s.sessions} sessions)`
-  ).join(', ')
+  const slotsDescription = topSlots
+    .map((s) => `${s.day} ${s.hour}h (${s.score}% de presence, ${s.sessions} sessions)`)
+    .join(', ')
 
   const prompt = `Tu es l'assistant IA de Squad Planner, une app pour coordonner des sessions de jeu entre amis.
 Analyse les creneaux horaires les plus fiables pour la squad "${squadName}" et explique brievement pourquoi.
@@ -157,10 +154,13 @@ serve(async (req) => {
     try {
       rawBody = await req.json()
     } catch {
-      return new Response(
-        JSON.stringify({ error: 'Invalid JSON in request body' }),
-        { status: 400, headers: { ...getCorsHeaders(req.headers.get('origin')), 'Content-Type': 'application/json' } }
-      )
+      return new Response(JSON.stringify({ error: 'Invalid JSON in request body' }), {
+        status: 400,
+        headers: {
+          ...getCorsHeaders(req.headers.get('origin')),
+          'Content-Type': 'application/json',
+        },
+      })
     }
 
     let validatedData: {
@@ -171,13 +171,18 @@ serve(async (req) => {
     try {
       validatedData = {
         squad_id: validateUUID(rawBody.squad_id, 'squad_id'),
-        limit: validateOptional(rawBody.limit, (v) => validateNumber(v, 'limit', { min: 1, max: 20 })) || 5,
+        limit:
+          validateOptional(rawBody.limit, (v) => validateNumber(v, 'limit', { min: 1, max: 20 })) ||
+          5,
       }
     } catch (validationError) {
-      return new Response(
-        JSON.stringify({ error: (validationError as Error).message }),
-        { status: 400, headers: { ...getCorsHeaders(req.headers.get('origin')), 'Content-Type': 'application/json' } }
-      )
+      return new Response(JSON.stringify({ error: (validationError as Error).message }), {
+        status: 400,
+        headers: {
+          ...getCorsHeaders(req.headers.get('origin')),
+          'Content-Type': 'application/json',
+        },
+      })
     }
 
     const { squad_id, limit } = validatedData
@@ -185,13 +190,15 @@ serve(async (req) => {
     // Get completed sessions with check-ins
     const { data: sessions, error: sessionsError } = await supabaseClient
       .from('sessions')
-      .select(`
+      .select(
+        `
         id,
         scheduled_at,
         session_checkins (
           status
         )
-      `)
+      `
+      )
       .eq('squad_id', squad_id)
       .eq('status', 'completed')
       .order('scheduled_at', { ascending: false })
@@ -202,13 +209,16 @@ serve(async (req) => {
     }
 
     // Analyze slots
-    const slotStats: Record<string, {
-      present: number
-      late: number
-      noshow: number
-      total: number
-      sessions: number
-    }> = {}
+    const slotStats: Record<
+      string,
+      {
+        present: number
+        late: number
+        noshow: number
+        total: number
+        sessions: number
+      }
+    > = {}
 
     for (const session of sessions || []) {
       const date = new Date(session.scheduled_at)
@@ -260,7 +270,7 @@ serve(async (req) => {
         reliability_score: reliabilityScore,
         session_count: stats.sessions,
         avg_attendance: reliabilityScore,
-        reason
+        reason,
       })
     }
 
@@ -271,18 +281,45 @@ serve(async (req) => {
     // If no history, suggest default good slots
     if (topSuggestions.length === 0) {
       const defaultSlots: SlotAnalysis[] = [
-        { day_of_week: 6, hour: 20, reliability_score: 80, session_count: 0, avg_attendance: 80, reason: 'Samedi 20h - Créneau populaire le week-end' },
-        { day_of_week: 0, hour: 15, reliability_score: 75, session_count: 0, avg_attendance: 75, reason: 'Dimanche 15h - Après-midi détente' },
-        { day_of_week: 5, hour: 21, reliability_score: 70, session_count: 0, avg_attendance: 70, reason: 'Vendredi 21h - Début de week-end' },
+        {
+          day_of_week: 6,
+          hour: 20,
+          reliability_score: 80,
+          session_count: 0,
+          avg_attendance: 80,
+          reason: 'Samedi 20h - Créneau populaire le week-end',
+        },
+        {
+          day_of_week: 0,
+          hour: 15,
+          reliability_score: 75,
+          session_count: 0,
+          avg_attendance: 75,
+          reason: 'Dimanche 15h - Après-midi détente',
+        },
+        {
+          day_of_week: 5,
+          hour: 21,
+          reliability_score: 70,
+          session_count: 0,
+          avg_attendance: 70,
+          reason: 'Vendredi 21h - Début de week-end',
+        },
       ]
       return new Response(
         JSON.stringify({
           suggestions: defaultSlots,
           has_history: false,
-          ai_analysis: 'Pas encore de donnees pour cette squad. Voici des creneaux populaires parmi les gamers !',
-          ai_generated: false
+          ai_analysis:
+            'Pas encore de donnees pour cette squad. Voici des creneaux populaires parmi les gamers !',
+          ai_generated: false,
         }),
-        { headers: { ...getCorsHeaders(req.headers.get('origin')), 'Content-Type': 'application/json' } }
+        {
+          headers: {
+            ...getCorsHeaders(req.headers.get('origin')),
+            'Content-Type': 'application/json',
+          },
+        }
       )
     }
 
@@ -294,11 +331,11 @@ serve(async (req) => {
       .single()
 
     // Generate AI analysis of the slots
-    const topSlotsForAI = topSuggestions.slice(0, 3).map(s => ({
+    const topSlotsForAI = topSuggestions.slice(0, 3).map((s) => ({
       day: dayNames[s.day_of_week],
       hour: s.hour,
       score: s.reliability_score,
-      sessions: s.session_count
+      sessions: s.session_count,
     }))
 
     const aiAnalysis = await generateAIPlanningAnalysis(
@@ -311,16 +348,23 @@ serve(async (req) => {
       JSON.stringify({
         suggestions: topSuggestions,
         has_history: true,
-        ai_analysis: aiAnalysis || `Basé sur ${sessions?.length || 0} sessions, les creneaux ci-dessus sont les plus fiables pour ta squad.`,
-        ai_generated: !!aiAnalysis
+        ai_analysis:
+          aiAnalysis ||
+          `Basé sur ${sessions?.length || 0} sessions, les creneaux ci-dessus sont les plus fiables pour ta squad.`,
+        ai_generated: !!aiAnalysis,
       }),
-      { headers: { ...getCorsHeaders(req.headers.get('origin')), 'Content-Type': 'application/json' } }
+      {
+        headers: {
+          ...getCorsHeaders(req.headers.get('origin')),
+          'Content-Type': 'application/json',
+        },
+      }
     )
   } catch (error) {
     console.error('Error in ai-planning:', error)
-    return new Response(
-      JSON.stringify({ error: error.message }),
-      { status: 500, headers: { ...getCorsHeaders(req.headers.get('origin')), 'Content-Type': 'application/json' } }
-    )
+    return new Response(JSON.stringify({ error: error.message }), {
+      status: 500,
+      headers: { ...getCorsHeaders(req.headers.get('origin')), 'Content-Type': 'application/json' },
+    })
   }
 })

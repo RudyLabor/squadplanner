@@ -50,7 +50,9 @@ export function useThreads(threadId: string | null) {
       // Fallback to direct query
       const { data: fallbackData, error: fallbackError } = await supabase
         .from('messages')
-        .select('id, content, sender_id, created_at, edited_at, reply_to_id, is_system_message, sender:profiles!sender_id(username, avatar_url)')
+        .select(
+          'id, content, sender_id, created_at, edited_at, reply_to_id, is_system_message, sender:profiles!sender_id(username, avatar_url)'
+        )
         .eq('thread_id', threadId)
         .order('created_at', { ascending: true })
         .limit(50)
@@ -61,7 +63,8 @@ export function useThreads(threadId: string | null) {
         id: m.id as string,
         content: m.content as string,
         sender_id: m.sender_id as string,
-        sender_username: (m.sender as Record<string, unknown>)?.username as string || 'Utilisateur',
+        sender_username:
+          ((m.sender as Record<string, unknown>)?.username as string) || 'Utilisateur',
         sender_avatar: (m.sender as Record<string, unknown>)?.avatar_url as string | null,
         created_at: m.created_at as string,
         edited_at: m.edited_at as string | null,
@@ -79,14 +82,18 @@ export function useThreads(threadId: string | null) {
 
     const channel = supabase
       .channel(`thread:${threadId}`)
-      .on('postgres_changes', {
-        event: 'INSERT',
-        schema: 'public',
-        table: 'messages',
-        filter: `thread_id=eq.${threadId}`,
-      }, () => {
-        queryClient.invalidateQueries({ queryKey: ['thread-messages', threadId] })
-      })
+      .on(
+        'postgres_changes',
+        {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'messages',
+          filter: `thread_id=eq.${threadId}`,
+        },
+        () => {
+          queryClient.invalidateQueries({ queryKey: ['thread-messages', threadId] })
+        }
+      )
       .subscribe()
 
     setRealtimeChannel(channel)
@@ -111,28 +118,29 @@ export function useThreads(threadId: string | null) {
 
       if (!parent) throw new Error('Thread parent not found')
 
-      const { error } = await supabase
-        .from('messages')
-        .insert({
-          content: content.trim(),
-          sender_id: user.id,
-          squad_id: parent.squad_id,
-          session_id: parent.session_id,
-          thread_id: threadId,
-          read_by: [user.id],
-        })
+      const { error } = await supabase.from('messages').insert({
+        content: content.trim(),
+        sender_id: user.id,
+        squad_id: parent.squad_id,
+        session_id: parent.session_id,
+        thread_id: threadId,
+        read_by: [user.id],
+      })
 
       if (error) throw error
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['thread-messages', threadId] })
     },
-    onError: () => showError('Erreur lors de l\'envoi'),
+    onError: () => showError("Erreur lors de l'envoi"),
   })
 
-  const sendReply = useCallback((content: string) => {
-    replyMutation.mutate(content)
-  }, [replyMutation])
+  const sendReply = useCallback(
+    (content: string) => {
+      replyMutation.mutate(content)
+    },
+    [replyMutation]
+  )
 
   return {
     messages,
@@ -152,7 +160,9 @@ export function useThreadInfo(messageId: string | undefined) {
 
       const { data, error } = await supabase
         .from('messages')
-        .select('id, content, sender_id, thread_reply_count, thread_last_reply_at, squad_id, sender:profiles!sender_id(username, avatar_url)')
+        .select(
+          'id, content, sender_id, thread_reply_count, thread_last_reply_at, squad_id, sender:profiles!sender_id(username, avatar_url)'
+        )
         .eq('id', messageId)
         .single()
 
@@ -162,8 +172,12 @@ export function useThreadInfo(messageId: string | undefined) {
         id: data.id,
         content: data.content,
         sender_id: data.sender_id,
-        sender_username: (data.sender as Record<string, unknown>)?.username as string || 'Utilisateur',
-        sender_avatar: (data.sender as Record<string, unknown>)?.avatar_url as string | null,
+        sender_username:
+          ((data.sender as unknown as Record<string, unknown>)?.username as string) ||
+          'Utilisateur',
+        sender_avatar: (data.sender as unknown as Record<string, unknown>)?.avatar_url as
+          | string
+          | null,
         thread_reply_count: data.thread_reply_count || 0,
         thread_last_reply_at: data.thread_last_reply_at,
         squad_id: data.squad_id,

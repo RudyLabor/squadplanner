@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 /**
  * Phase 4.1.4 — Location Share
@@ -11,12 +11,15 @@ interface LocationShareButtonProps {
   disabled?: boolean
 }
 
-export const LocationShareButton = memo(function LocationShareButton({ onShare, disabled }: LocationShareButtonProps) {
+export const LocationShareButton = memo(function LocationShareButton({
+  onShare,
+  disabled,
+}: LocationShareButtonProps) {
   const [isLoading, setIsLoading] = useState(false)
 
   const handleShare = async () => {
     if (!('geolocation' in navigator)) {
-      alert('La géolocalisation n\'est pas supportée par ton navigateur.')
+      alert("La géolocalisation n'est pas supportée par ton navigateur.")
       return
     }
 
@@ -35,7 +38,7 @@ export const LocationShareButton = memo(function LocationShareButton({ onShare, 
     } catch (err) {
       const error = err as GeolocationPositionError
       if (error.code === error.PERMISSION_DENIED) {
-        alert('Autorise l\'accès à ta position dans les paramètres du navigateur.')
+        alert("Autorise l'accès à ta position dans les paramètres du navigateur.")
       } else {
         alert('Impossible de récupérer ta position. Réessaie.')
       }
@@ -53,11 +56,7 @@ export const LocationShareButton = memo(function LocationShareButton({ onShare, 
       aria-label="Partager ma position"
       title="Je suis la"
     >
-      {isLoading ? (
-        <Loader2 className="w-5 h-5 animate-spin" />
-      ) : (
-        <MapPin className="w-5 h-5" />
-      )}
+      {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <MapPin className="w-5 h-5" />}
     </button>
   )
 })
@@ -84,19 +83,29 @@ interface LocationMessageProps {
   isOwn?: boolean
 }
 
-export const LocationMessage = memo(function LocationMessage({ lat, lng, isOwn = false }: LocationMessageProps) {
+export const LocationMessage = memo(function LocationMessage({
+  lat,
+  lng,
+  isOwn = false,
+}: LocationMessageProps) {
   const mapsUrl = `https://www.google.com/maps?q=${lat},${lng}`
 
   return (
-    <div className={`rounded-xl overflow-hidden max-w-[280px] ${
-      isOwn ? 'bg-border-hover' : 'bg-primary-10'
-    }`}>
+    <div
+      className={`rounded-xl overflow-hidden max-w-[280px] ${
+        isOwn ? 'bg-border-hover' : 'bg-primary-10'
+      }`}
+    >
       {/* Static map placeholder (Google Maps API key needed for real image) */}
-      <div className={`w-full h-[120px] flex items-center justify-center ${
-        isOwn ? 'bg-border-subtle' : 'bg-primary-5'
-      }`}>
+      <div
+        className={`w-full h-[120px] flex items-center justify-center ${
+          isOwn ? 'bg-border-subtle' : 'bg-primary-5'
+        }`}
+      >
         <div className="text-center">
-          <MapPin className={`w-8 h-8 mx-auto mb-1 ${isOwn ? 'text-text-tertiary' : 'text-primary-hover'}`} />
+          <MapPin
+            className={`w-8 h-8 mx-auto mb-1 ${isOwn ? 'text-text-tertiary' : 'text-primary-hover'}`}
+          />
           <p className={`text-sm ${isOwn ? 'text-text-quaternary' : 'text-text-quaternary'}`}>
             {lat.toFixed(4)}, {lng.toFixed(4)}
           </p>

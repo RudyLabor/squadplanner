@@ -66,16 +66,16 @@ export type Permission =
 
 // Permission matrix: which roles can do what
 const PERMISSIONS: Record<Permission, number> = {
-  create_session: 1,      // everyone
-  delete_session: 3,      // co_leader+
-  invite_member: 1,       // everyone
-  kick_member: 2,         // moderator+
-  promote_member: 3,      // co_leader+
-  pin_message: 2,         // moderator+
-  delete_any_message: 2,  // moderator+
-  manage_squad: 3,        // co_leader+
-  delete_squad: 4,        // leader only
-  mute_member: 2,         // moderator+
+  create_session: 1, // everyone
+  delete_session: 3, // co_leader+
+  invite_member: 1, // everyone
+  kick_member: 2, // moderator+
+  promote_member: 3, // co_leader+
+  pin_message: 2, // moderator+
+  delete_any_message: 2, // moderator+
+  manage_squad: 3, // co_leader+
+  delete_squad: 4, // leader only
+  mute_member: 2, // moderator+
 }
 
 /**
@@ -99,8 +99,7 @@ export function getRoleConfig(role: string): RoleConfig {
  */
 export function getPromotableRoles(myRole: SquadRole): SquadRole[] {
   const myLevel = ROLE_CONFIG[myRole].level
-  return (Object.keys(ROLE_CONFIG) as SquadRole[])
-    .filter(r => ROLE_CONFIG[r].level < myLevel)
+  return (Object.keys(ROLE_CONFIG) as SquadRole[]).filter((r) => ROLE_CONFIG[r].level < myLevel)
 }
 
 /**

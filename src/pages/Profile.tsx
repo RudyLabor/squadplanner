@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 import { useState, useEffect, useRef, useMemo } from 'react'
 import { LogOut } from '../components/icons'
@@ -20,7 +20,8 @@ import { showSuccess, showError } from '../lib/toast'
 type ChallengeWithProgress = Challenge & { userProgress?: UserChallenge }
 
 export function Profile() {
-  const { user, profile, signOut, updateProfile, isLoading, isInitialized, refreshProfile } = useAuthStore()
+  const { user, profile, signOut, updateProfile, isLoading, isInitialized, refreshProfile } =
+    useAuthStore()
   const { hasPremium, canAccessFeature, fetchPremiumStatus } = usePremiumStore()
 
   // React Query hooks
@@ -32,13 +33,15 @@ export function Profile() {
   const challenges: ChallengeWithProgress[] = useMemo(() => {
     const seenIds = new Set<string>()
     return (challengesData?.challenges || [])
-      .filter(challenge => {
+      .filter((challenge) => {
         if (seenIds.has(challenge.id)) return false
         seenIds.add(challenge.id)
         return true
       })
-      .map(challenge => {
-        const userProgress = challengesData?.userChallenges?.find(uc => uc.challenge_id === challenge.id)
+      .map((challenge) => {
+        const userProgress = challengesData?.userChallenges?.find(
+          (uc) => uc.challenge_id === challenge.id
+        )
         return {
           id: challenge.id,
           title: challenge.title,
@@ -47,13 +50,15 @@ export function Profile() {
           type: (challenge.type || 'daily') as 'daily' | 'weekly' | 'seasonal' | 'achievement',
           icon: challenge.icon || 'star',
           requirements: challenge.requirements || { type: 'sessions', count: 1 },
-          userProgress: userProgress ? {
-            challenge_id: userProgress.challenge_id,
-            progress: userProgress.progress,
-            target: userProgress.target || challenge.requirements?.count || 1,
-            completed_at: userProgress.completed_at,
-            xp_claimed: userProgress.xp_claimed
-          } : undefined
+          userProgress: userProgress
+            ? {
+                challenge_id: userProgress.challenge_id,
+                progress: userProgress.progress,
+                target: userProgress.target || challenge.requirements?.count || 1,
+                completed_at: userProgress.completed_at,
+                xp_claimed: userProgress.xp_claimed,
+              }
+            : undefined,
         }
       })
   }, [challengesData])
@@ -88,7 +93,7 @@ export function Profile() {
   const handleClaimXP = async (challengeId: string) => {
     if (!user?.id) return
 
-    const challenge = challenges.find(c => c.id === challengeId)
+    const challenge = challenges.find((c) => c.id === challengeId)
     if (!challenge) return
 
     try {
@@ -150,11 +155,7 @@ export function Profile() {
         {!profileReady ? (
           <div className="mb-5 h-[52px] rounded-xl bg-surface-card animate-pulse" />
         ) : (
-          <XPBar
-            currentXP={profile?.xp || 0}
-            level={profile?.level || 1}
-            className="mb-5"
-          />
+          <XPBar currentXP={profile?.xp || 0} level={profile?.level || 1} className="mb-5" />
         )}
 
         {/* Reliability score + Stats grid */}
@@ -163,10 +164,7 @@ export function Profile() {
         {/* Challenges Section - moved up for visibility */}
         {challenges.length > 0 && (
           <section className="mb-5" aria-label="Défis">
-            <Challenges
-              challenges={challenges}
-              onClaimXP={handleClaimXP}
-            />
+            <Challenges challenges={challenges} onClaimXP={handleClaimXP} />
           </section>
         )}
 

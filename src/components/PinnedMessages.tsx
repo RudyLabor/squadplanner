@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 import { useState } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
@@ -32,7 +32,7 @@ function formatPinnedDate(dateStr: string): string {
   const hours = Math.floor(diff / (1000 * 60 * 60))
   const days = Math.floor(diff / (1000 * 60 * 60 * 24))
 
-  if (minutes < 1) return 'A l\'instant'
+  if (minutes < 1) return "A l'instant"
   if (minutes < 60) return `Il y a ${minutes} min`
   if (hours < 24) return `Il y a ${hours}h`
   if (days === 1) return 'Hier'
@@ -76,13 +76,11 @@ export function PinnedMessages({
             <Pin className="w-4 h-4 text-warning" />
           </div>
           <span className="text-md font-medium text-text-primary">
-            {pinnedMessages.length} message{pinnedMessages.length > 1 ? 's' : ''} épinglé{pinnedMessages.length > 1 ? 's' : ''}
+            {pinnedMessages.length} message{pinnedMessages.length > 1 ? 's' : ''} épinglé
+            {pinnedMessages.length > 1 ? 's' : ''}
           </span>
         </div>
-        <m.div
-          animate={{ rotate: isExpanded ? 180 : 0 }}
-          transition={{ duration: 0.2 }}
-        >
+        <m.div animate={{ rotate: isExpanded ? 180 : 0 }} transition={{ duration: 0.2 }}>
           <ChevronDown className="w-5 h-5 text-text-tertiary" />
         </m.div>
       </button>

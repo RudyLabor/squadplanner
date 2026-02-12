@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 import { useState, useRef, useEffect, useMemo, useCallback } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
@@ -18,45 +18,287 @@ type Category = keyof typeof EMOJI_CATEGORIES
 
 const EMOJIS: Record<Exclude<Category, 'recent'>, string[]> = {
   smileys: [
-    '😀', '😃', '😄', '😁', '😆', '😅', '🤣', '😂', '🙂', '😊',
-    '😇', '🥰', '😍', '🤩', '😘', '😋', '😛', '😜', '🤪', '😝',
-    '🤑', '🤗', '🤭', '🤫', '🤔', '😐', '😑', '😶', '🫡', '😏',
-    '😒', '🙄', '😬', '😮‍💨', '🤥', '😌', '😔', '😪', '🤤', '😴',
-    '😷', '🤒', '🤕', '🤢', '🤮', '🥵', '🥶', '🥴', '😵', '🤯',
-    '🤠', '🥳', '🥸', '😎', '🤓', '🧐', '😤', '😠', '😡', '🤬',
-    '😈', '👿', '💀', '☠️', '💩', '🤡', '👹', '👺', '👻', '👽',
-    '🫠', '🫢', '🫣', '🫤', '🫥', '🫨',
+    '😀',
+    '😃',
+    '😄',
+    '😁',
+    '😆',
+    '😅',
+    '🤣',
+    '😂',
+    '🙂',
+    '😊',
+    '😇',
+    '🥰',
+    '😍',
+    '🤩',
+    '😘',
+    '😋',
+    '😛',
+    '😜',
+    '🤪',
+    '😝',
+    '🤑',
+    '🤗',
+    '🤭',
+    '🤫',
+    '🤔',
+    '😐',
+    '😑',
+    '😶',
+    '🫡',
+    '😏',
+    '😒',
+    '🙄',
+    '😬',
+    '😮‍💨',
+    '🤥',
+    '😌',
+    '😔',
+    '😪',
+    '🤤',
+    '😴',
+    '😷',
+    '🤒',
+    '🤕',
+    '🤢',
+    '🤮',
+    '🥵',
+    '🥶',
+    '🥴',
+    '😵',
+    '🤯',
+    '🤠',
+    '🥳',
+    '🥸',
+    '😎',
+    '🤓',
+    '🧐',
+    '😤',
+    '😠',
+    '😡',
+    '🤬',
+    '😈',
+    '👿',
+    '💀',
+    '☠️',
+    '💩',
+    '🤡',
+    '👹',
+    '👺',
+    '👻',
+    '👽',
+    '🫠',
+    '🫢',
+    '🫣',
+    '🫤',
+    '🫥',
+    '🫨',
   ],
   gaming: [
-    '🎮', '🕹️', '👾', '🎯', '🏆', '🥇', '🥈', '🥉', '🏅', '🎖️',
-    '⚔️', '🗡️', '🛡️', '🏹', '🔫', '💣', '🧨', '🪓', '⚡', '🔥',
-    '💥', '✨', '🌟', '⭐', '🎲', '🃏', '🀄', '🎪', '🎨', '🎭',
-    '🚀', '🛸', '🤖', '🦾', '🧠', '👁️', '💪', '🦸', '🦹', '🧙',
-    '🧝', '🧛', '🧟', '🐉', '🦅', '🐺', '🦊', '🐍', '🦂', '🕷️',
+    '🎮',
+    '🕹️',
+    '👾',
+    '🎯',
+    '🏆',
+    '🥇',
+    '🥈',
+    '🥉',
+    '🏅',
+    '🎖️',
+    '⚔️',
+    '🗡️',
+    '🛡️',
+    '🏹',
+    '🔫',
+    '💣',
+    '🧨',
+    '🪓',
+    '⚡',
+    '🔥',
+    '💥',
+    '✨',
+    '🌟',
+    '⭐',
+    '🎲',
+    '🃏',
+    '🀄',
+    '🎪',
+    '🎨',
+    '🎭',
+    '🚀',
+    '🛸',
+    '🤖',
+    '🦾',
+    '🧠',
+    '👁️',
+    '💪',
+    '🦸',
+    '🦹',
+    '🧙',
+    '🧝',
+    '🧛',
+    '🧟',
+    '🐉',
+    '🦅',
+    '🐺',
+    '🦊',
+    '🐍',
+    '🦂',
+    '🕷️',
   ],
   gestures: [
-    '👍', '👎', '👊', '✊', '🤛', '🤜', '👏', '🙌', '🤝', '🤲',
-    '👐', '✋', '🤚', '🖐️', '🖖', '🫱', '🫲', '🫳', '🫴', '👋',
-    '🤙', '💪', '🦾', '🖕', '✌️', '🤞', '🫰', '🤟', '🤘', '🤏',
-    '👌', '🤌', '👈', '👉', '👆', '👇', '☝️', '🫵',
+    '👍',
+    '👎',
+    '👊',
+    '✊',
+    '🤛',
+    '🤜',
+    '👏',
+    '🙌',
+    '🤝',
+    '🤲',
+    '👐',
+    '✋',
+    '🤚',
+    '🖐️',
+    '🖖',
+    '🫱',
+    '🫲',
+    '🫳',
+    '🫴',
+    '👋',
+    '🤙',
+    '💪',
+    '🦾',
+    '🖕',
+    '✌️',
+    '🤞',
+    '🫰',
+    '🤟',
+    '🤘',
+    '🤏',
+    '👌',
+    '🤌',
+    '👈',
+    '👉',
+    '👆',
+    '👇',
+    '☝️',
+    '🫵',
   ],
   hearts: [
-    '❤️', '🧡', '💛', '💚', '💙', '💜', '🖤', '🤍', '🤎', '💔',
-    '❤️‍🔥', '❤️‍🩹', '❣️', '💕', '💞', '💓', '💗', '💖', '💘', '💝',
-    '💟', '♥️', '🫶',
+    '❤️',
+    '🧡',
+    '💛',
+    '💚',
+    '💙',
+    '💜',
+    '🖤',
+    '🤍',
+    '🤎',
+    '💔',
+    '❤️‍🔥',
+    '❤️‍🩹',
+    '❣️',
+    '💕',
+    '💞',
+    '💓',
+    '💗',
+    '💖',
+    '💘',
+    '💝',
+    '💟',
+    '♥️',
+    '🫶',
   ],
   objects: [
-    '🎵', '🎶', '🎤', '🎧', '🎸', '🥁', '🎹', '🎺', '🎻', '📱',
-    '💻', '🖥️', '⌨️', '🖱️', '💾', '📸', '📹', '🔦', '💡', '🔋',
-    '🪫', '📡', '🔑', '🗝️', '🔒', '🔓', '🏠', '🏢', '🏰', '🌍',
-    '🌈', '☀️', '🌙', '⭐', '🍕', '🍔', '🌮', '🍣', '🍩', '🧋',
-    '🍺', '🍷', '☕', '🧃',
+    '🎵',
+    '🎶',
+    '🎤',
+    '🎧',
+    '🎸',
+    '🥁',
+    '🎹',
+    '🎺',
+    '🎻',
+    '📱',
+    '💻',
+    '🖥️',
+    '⌨️',
+    '🖱️',
+    '💾',
+    '📸',
+    '📹',
+    '🔦',
+    '💡',
+    '🔋',
+    '🪫',
+    '📡',
+    '🔑',
+    '🗝️',
+    '🔒',
+    '🔓',
+    '🏠',
+    '🏢',
+    '🏰',
+    '🌍',
+    '🌈',
+    '☀️',
+    '🌙',
+    '⭐',
+    '🍕',
+    '🍔',
+    '🌮',
+    '🍣',
+    '🍩',
+    '🧋',
+    '🍺',
+    '🍷',
+    '☕',
+    '🧃',
   ],
   symbols: [
-    '✅', '❌', '⭕', '❗', '❓', '‼️', '⁉️', '💯', '🔴', '🟠',
-    '🟡', '🟢', '🔵', '🟣', '⚫', '⚪', '🟤', '🔶', '🔷', '💠',
-    '🔘', '🔳', '🔲', '▪️', '▫️', '◻️', '◼️', '⬛', '⬜', '🏳️',
-    '🏴', '🚩', '♻️', '🔱', '📛', '🔰', '⚠️', '🚫', '🛑', '📌',
+    '✅',
+    '❌',
+    '⭕',
+    '❗',
+    '❓',
+    '‼️',
+    '⁉️',
+    '💯',
+    '🔴',
+    '🟠',
+    '🟡',
+    '🟢',
+    '🔵',
+    '🟣',
+    '⚫',
+    '⚪',
+    '🟤',
+    '🔶',
+    '🔷',
+    '💠',
+    '🔘',
+    '🔳',
+    '🔲',
+    '▪️',
+    '▫️',
+    '◻️',
+    '◼️',
+    '⬛',
+    '⬜',
+    '🏳️',
+    '🏴',
+    '🚩',
+    '♻️',
+    '🔱',
+    '📛',
+    '🔰',
+    '⚠️',
+    '🚫',
+    '🛑',
+    '📌',
   ],
 }
 
@@ -71,7 +313,13 @@ interface EmojiPickerProps {
   align?: 'left' | 'right'
 }
 
-export function EmojiPicker({ isOpen, onSelect, onClose, position = 'bottom', align = 'right' }: EmojiPickerProps) {
+export function EmojiPicker({
+  isOpen,
+  onSelect,
+  onClose,
+  position = 'bottom',
+  align = 'right',
+}: EmojiPickerProps) {
   const [activeCategory, setActiveCategory] = useState<Category>('smileys')
   const [search, setSearch] = useState('')
   const [recentEmojis, setRecentEmojis] = useState<string[]>([])
@@ -84,7 +332,9 @@ export function EmojiPicker({ isOpen, onSelect, onClose, position = 'bottom', al
     try {
       const stored = localStorage.getItem(RECENT_STORAGE_KEY)
       if (stored) setRecentEmojis(JSON.parse(stored))
-    } catch { /* empty */ }
+    } catch {
+      /* empty */
+    }
   }, [isOpen])
 
   // Focus search on open
@@ -99,20 +349,25 @@ export function EmojiPicker({ isOpen, onSelect, onClose, position = 'bottom', al
 
   // Save to recent
   const addToRecent = useCallback((emoji: string) => {
-    setRecentEmojis(prev => {
-      const updated = [emoji, ...prev.filter(e => e !== emoji)].slice(0, MAX_RECENT)
+    setRecentEmojis((prev) => {
+      const updated = [emoji, ...prev.filter((e) => e !== emoji)].slice(0, MAX_RECENT)
       try {
         localStorage.setItem(RECENT_STORAGE_KEY, JSON.stringify(updated))
-      } catch { /* empty */ }
+      } catch {
+        /* empty */
+      }
       return updated
     })
   }, [])
 
-  const handleSelect = useCallback((emoji: string) => {
-    addToRecent(emoji)
-    onSelect(emoji)
-    onClose()
-  }, [addToRecent, onSelect, onClose])
+  const handleSelect = useCallback(
+    (emoji: string) => {
+      addToRecent(emoji)
+      onSelect(emoji)
+      onClose()
+    },
+    [addToRecent, onSelect, onClose]
+  )
 
   // All emojis flat for search
   const allEmojis = useMemo(() => {
@@ -122,7 +377,7 @@ export function EmojiPicker({ isOpen, onSelect, onClose, position = 'bottom', al
   // Filtered emojis based on search
   const displayedEmojis = useMemo(() => {
     if (search) {
-      return allEmojis.filter(e => e.includes(search))
+      return allEmojis.filter((e) => e.includes(search))
     }
     if (activeCategory === 'recent') {
       return recentEmojis
@@ -145,11 +400,7 @@ export function EmojiPicker({ isOpen, onSelect, onClose, position = 'bottom', al
       {isOpen && (
         <>
           {/* Backdrop */}
-          <div
-            className="fixed inset-0 z-[50]"
-            onClick={onClose}
-            aria-hidden="true"
-          />
+          <div className="fixed inset-0 z-[50]" onClick={onClose} aria-hidden="true" />
 
           {/* Picker */}
           <m.div
@@ -198,15 +449,17 @@ export function EmojiPicker({ isOpen, onSelect, onClose, position = 'bottom', al
                       key={cat}
                       onClick={() => setActiveCategory(cat)}
                       className={`flex-1 py-1.5 rounded-md text-center transition-colors relative ${
-                        isActive
-                          ? 'bg-primary/20'
-                          : 'hover:bg-border-default'
+                        isActive ? 'bg-primary/20' : 'hover:bg-border-default'
                       }`}
                       aria-label={info.label}
                       title={info.label}
                     >
                       <span className="text-base">
-                        {isRecent ? <Clock className="w-4 h-4 mx-auto text-text-secondary" /> : info.icon}
+                        {isRecent ? (
+                          <Clock className="w-4 h-4 mx-auto text-text-secondary" />
+                        ) : (
+                          info.icon
+                        )}
                       </span>
                     </button>
                   )
@@ -228,7 +481,7 @@ export function EmojiPicker({ isOpen, onSelect, onClose, position = 'bottom', al
 
               {displayedEmojis.length === 0 ? (
                 <div className="flex items-center justify-center h-full text-text-tertiary text-sm">
-                  {search ? 'Aucun résultat' : 'Pas encore d\'emojis récents'}
+                  {search ? 'Aucun résultat' : "Pas encore d'emojis récents"}
                 </div>
               ) : (
                 <div className="grid grid-cols-8 gap-0.5">
@@ -250,8 +503,7 @@ export function EmojiPicker({ isOpen, onSelect, onClose, position = 'bottom', al
             <div className="px-3 py-1.5 border-t border-border-default text-sm text-text-tertiary">
               {search
                 ? `${displayedEmojis.length} résultat${displayedEmojis.length !== 1 ? 's' : ''}`
-                : EMOJI_CATEGORIES[activeCategory].label
-              }
+                : EMOJI_CATEGORIES[activeCategory].label}
             </div>
           </m.div>
         </>

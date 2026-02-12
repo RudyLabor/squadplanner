@@ -1,17 +1,32 @@
 import { m } from 'framer-motion'
-import {
-  Users,
-  Calendar,
-  MessageCircle,
-  Target,
-} from '../icons'
+import { Users, Calendar, MessageCircle, Target } from '../icons'
 import { AnimatedDemo, demoSteps } from './AnimatedDemo'
 
 const steps = [
-  { step: '1', title: 'Crée ta Squad', description: 'Donne un nom, choisis ton jeu. Ta squad a direct sa party vocale et son chat.', icon: Users },
-  { step: '2', title: 'Invite tes potes', description: 'Partage le code. Ils rejoignent en 10 secondes. Tout le monde au même endroit.', icon: MessageCircle },
-  { step: '3', title: 'Planifie, décide, confirme', description: 'Propose un créneau. Chacun répond OUI ou NON. Plus de "on verra".', icon: Calendar },
-  { step: '4', title: 'Jouez chaque semaine', description: 'Check-in, jouez, répétez. Semaine après semaine, ta squad devient fiable.', icon: Target },
+  {
+    step: '1',
+    title: 'Crée ta Squad',
+    description: 'Donne un nom, choisis ton jeu. Ta squad a direct sa party vocale et son chat.',
+    icon: Users,
+  },
+  {
+    step: '2',
+    title: 'Invite tes potes',
+    description: 'Partage le code. Ils rejoignent en 10 secondes. Tout le monde au même endroit.',
+    icon: MessageCircle,
+  },
+  {
+    step: '3',
+    title: 'Planifie, décide, confirme',
+    description: 'Propose un créneau. Chacun répond OUI ou NON. Plus de "on verra".',
+    icon: Calendar,
+  },
+  {
+    step: '4',
+    title: 'Jouez chaque semaine',
+    description: 'Check-in, jouez, répétez. Semaine après semaine, ta squad devient fiable.',
+    icon: Target,
+  },
 ]
 
 interface HowItWorksSectionProps {
@@ -21,9 +36,18 @@ interface HowItWorksSectionProps {
 
 export function HowItWorksSection({ demoStep, setDemoStep }: HowItWorksSectionProps) {
   return (
-    <section id="how-it-works" aria-label="Comment ça marche" className="px-4 md:px-6 py-12 md:py-16 bg-gradient-to-b from-transparent to-primary/[0.015]">
+    <section
+      id="how-it-works"
+      aria-label="Comment ça marche"
+      className="px-4 md:px-6 py-12 md:py-16 bg-gradient-to-b from-transparent to-primary/[0.015]"
+    >
       <div className="max-w-5xl mx-auto">
-        <m.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-12">
+        <m.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="text-center mb-12"
+        >
           <h2 className="text-xl md:text-2xl font-bold text-text-primary mb-4">
             Comment ça marche
           </h2>
@@ -55,14 +79,20 @@ export function HowItWorksSection({ demoStep, setDemoStep }: HowItWorksSectionPr
                       onClick={() => setDemoStep(i)}
                       className="relative z-10 flex flex-col items-center text-center"
                     >
-                      <div className={`w-10 h-10 rounded-full flex items-center justify-center mb-2 transition-all ${
-                        isActive ? 'bg-primary text-white scale-110' :
-                        isPast ? 'bg-primary/20 text-primary' :
-                        'bg-bg-elevated border border-border-subtle text-text-quaternary'
-                      }`}>
+                      <div
+                        className={`w-10 h-10 rounded-full flex items-center justify-center mb-2 transition-all ${
+                          isActive
+                            ? 'bg-primary text-white scale-110'
+                            : isPast
+                              ? 'bg-primary/20 text-primary'
+                              : 'bg-bg-elevated border border-border-subtle text-text-quaternary'
+                        }`}
+                      >
                         <StepIcon className="w-4 h-4" />
                       </div>
-                      <span className={`text-xs font-medium transition-colors ${isActive ? 'text-text-primary' : 'text-text-tertiary'}`}>
+                      <span
+                        className={`text-xs font-medium transition-colors ${isActive ? 'text-text-primary' : 'text-text-tertiary'}`}
+                      >
                         {step.title}
                       </span>
                     </button>
@@ -89,13 +119,25 @@ export function HowItWorksSection({ demoStep, setDemoStep }: HowItWorksSectionPr
                     initial={false}
                     animate={isActive ? { scale: 1 } : { scale: 1 }}
                   >
-                    <div className={`w-10 h-10 lg:w-12 lg:h-12 rounded-xl flex items-center justify-center shrink-0 transition-all ${
-                      isActive ? '' : 'opacity-50'
-                    }`} style={{ backgroundColor: `${demoSteps[i]?.color || 'var(--color-primary)'}15` }}>
-                      <StepIcon className="w-5 h-5" style={{ color: demoSteps[i]?.color || 'var(--color-primary)' }} />
+                    <div
+                      className={`w-10 h-10 lg:w-12 lg:h-12 rounded-xl flex items-center justify-center shrink-0 transition-all ${
+                        isActive ? '' : 'opacity-50'
+                      }`}
+                      style={{
+                        backgroundColor: `${demoSteps[i]?.color || 'var(--color-primary)'}15`,
+                      }}
+                    >
+                      <StepIcon
+                        className="w-5 h-5"
+                        style={{ color: demoSteps[i]?.color || 'var(--color-primary)' }}
+                      />
                     </div>
                     <div>
-                      <h3 className={`text-md font-semibold transition-colors ${isActive ? 'text-text-primary' : 'text-text-tertiary'}`}>{step.title}</h3>
+                      <h3
+                        className={`text-md font-semibold transition-colors ${isActive ? 'text-text-primary' : 'text-text-tertiary'}`}
+                      >
+                        {step.title}
+                      </h3>
                       {isActive && (
                         <m.p
                           initial={{ opacity: 0, height: 0 }}
@@ -111,7 +153,10 @@ export function HowItWorksSection({ demoStep, setDemoStep }: HowItWorksSectionPr
                         className="hidden lg:block h-0.5 bg-primary rounded-full ml-auto self-center"
                         initial={{ width: 0 }}
                         animate={{ width: 40 }}
-                        transition={{ duration: (demoSteps[i]?.duration || 3000) / 1000, ease: 'linear' }}
+                        transition={{
+                          duration: (demoSteps[i]?.duration || 3000) / 1000,
+                          ease: 'linear',
+                        }}
                         key={`progress-${demoStep}`}
                       />
                     )}

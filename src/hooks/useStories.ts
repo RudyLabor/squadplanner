@@ -49,15 +49,15 @@ export function useStories() {
       return (fallbackData || []).map((s: Record<string, unknown>) => ({
         story_id: s.id as string,
         user_id: s.user_id as string,
-        username: (s.profiles as Record<string, unknown>)?.username as string || 'Utilisateur',
+        username: ((s.profiles as Record<string, unknown>)?.username as string) || 'Utilisateur',
         avatar_url: (s.profiles as Record<string, unknown>)?.avatar_url as string | null,
         content_type: s.content_type as StoryContentType,
         content: s.content as string,
         media_url: s.media_url as string | null,
-        background_color: s.background_color as string || '#5e6dd2',
-        text_color: s.text_color as string || '#ffffff',
+        background_color: (s.background_color as string) || '#5e6dd2',
+        text_color: (s.text_color as string) || '#ffffff',
         metadata: (s.metadata as Record<string, unknown>) || {},
-        view_count: s.view_count as number || 0,
+        view_count: (s.view_count as number) || 0,
         has_viewed: false,
         created_at: s.created_at as string,
         expires_at: s.expires_at as string,
@@ -78,20 +78,22 @@ export function useStories() {
   }, new Map())
 
   // Users with stories (ordered: current user first, then unviewed, then viewed)
-  const storyUsers = Array.from(storiesByUser.entries()).map(([userId, userStories]) => ({
-    userId,
-    username: userStories[0].username,
-    avatarUrl: userStories[0].avatar_url,
-    storyCount: userStories.length,
-    hasUnviewed: userStories.some(s => !s.has_viewed),
-    isOwnStory: userId === user?.id,
-  })).sort((a, b) => {
-    if (a.isOwnStory) return -1
-    if (b.isOwnStory) return 1
-    if (a.hasUnviewed && !b.hasUnviewed) return -1
-    if (!a.hasUnviewed && b.hasUnviewed) return 1
-    return 0
-  })
+  const storyUsers = Array.from(storiesByUser.entries())
+    .map(([userId, userStories]) => ({
+      userId,
+      username: userStories[0].username,
+      avatarUrl: userStories[0].avatar_url,
+      storyCount: userStories.length,
+      hasUnviewed: userStories.some((s) => !s.has_viewed),
+      isOwnStory: userId === user?.id,
+    }))
+    .sort((a, b) => {
+      if (a.isOwnStory) return -1
+      if (b.isOwnStory) return 1
+      if (a.hasUnviewed && !b.hasUnviewed) return -1
+      if (!a.hasUnviewed && b.hasUnviewed) return 1
+      return 0
+    })
 
   // Create story
   const createStoryMutation = useMutation({
@@ -144,10 +146,7 @@ export function useStories() {
   // Delete story
   const deleteStoryMutation = useMutation({
     mutationFn: async (storyId: string) => {
-      const { error } = await supabase
-        .from('stories')
-        .delete()
-        .eq('id', storyId)
+      const { error } = await supabase.from('stories').delete().eq('id', storyId)
 
       if (error) throw error
     },
@@ -158,21 +157,33 @@ export function useStories() {
     onError: () => showError('Erreur lors de la suppression'),
   })
 
-  const createStory = useCallback((params: CreateStoryParams) => {
-    createStoryMutation.mutate(params)
-  }, [createStoryMutation])
+  const createStory = useCallback(
+    (params: CreateStoryParams) => {
+      createStoryMutation.mutate(params)
+    },
+    [createStoryMutation]
+  )
 
-  const viewStory = useCallback((storyId: string) => {
-    viewStoryMutation.mutate(storyId)
-  }, [viewStoryMutation])
+  const viewStory = useCallback(
+    (storyId: string) => {
+      viewStoryMutation.mutate(storyId)
+    },
+    [viewStoryMutation]
+  )
 
-  const deleteStory = useCallback((storyId: string) => {
-    deleteStoryMutation.mutate(storyId)
-  }, [deleteStoryMutation])
+  const deleteStory = useCallback(
+    (storyId: string) => {
+      deleteStoryMutation.mutate(storyId)
+    },
+    [deleteStoryMutation]
+  )
 
-  const getUserStories = useCallback((userId: string) => {
-    return storiesByUser.get(userId) || []
-  }, [storiesByUser])
+  const getUserStories = useCallback(
+    (userId: string) => {
+      return storiesByUser.get(userId) || []
+    },
+    [storiesByUser]
+  )
 
   return {
     stories,

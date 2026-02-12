@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 /**
  * CreateSessionModal - PHASE 3.1
@@ -7,12 +7,7 @@
  */
 
 import { useState, useEffect } from 'react'
-import {
-  Calendar,
-  Clock,
-  Users,
-  Loader2,
-} from './icons'
+import { Calendar, Clock, Users, Loader2 } from './icons'
 import { create } from 'zustand'
 import { ResponsiveModal, Select } from './ui'
 import { useSquadsStore, useSessionsStore, useHapticFeedback } from '../hooks'
@@ -107,7 +102,7 @@ export function CreateSessionModal() {
     }
   }
 
-  const selectedSquad = squads.find(s => s.id === selectedSquadId)
+  const selectedSquad = squads.find((s) => s.id === selectedSquadId)
 
   return (
     <ResponsiveModal open={isOpen} onClose={close} title="Nouvelle session" size="sm">
@@ -116,18 +111,16 @@ export function CreateSessionModal() {
         {/* Squad selector - only if multiple squads */}
         {squads.length > 1 && (
           <div>
-            <label className="block text-base font-medium text-text-secondary mb-1.5">
-              Squad
-            </label>
+            <label className="block text-base font-medium text-text-secondary mb-1.5">Squad</label>
             <Select
-                options={squads.map((squad) => ({
-                  value: squad.id,
-                  label: `${squad.name} (${squad.game})`,
-                }))}
-                value={selectedSquadId}
-                onChange={(val) => setSelectedSquadId(val as string)}
-                placeholder="Sélectionner un squad"
-              />
+              options={squads.map((squad) => ({
+                value: squad.id,
+                label: `${squad.name} (${squad.game})`,
+              }))}
+              value={selectedSquadId}
+              onChange={(val) => setSelectedSquadId(val as string)}
+              placeholder="Sélectionner un squad"
+            />
           </div>
         )}
 
@@ -168,7 +161,12 @@ export function CreateSessionModal() {
               d.setDate(d.getDate() + i)
               const iso = d.toISOString().split('T')[0]
               const isSelected = date === iso
-              const dayLabel = i === 0 ? "Auj." : i === 1 ? "Dem." : d.toLocaleDateString('fr', { weekday: 'short' })
+              const dayLabel =
+                i === 0
+                  ? 'Auj.'
+                  : i === 1
+                    ? 'Dem.'
+                    : d.toLocaleDateString('fr', { weekday: 'short' })
               return (
                 <button
                   key={iso}
@@ -195,7 +193,23 @@ export function CreateSessionModal() {
             Heure
           </label>
           <div className="flex flex-wrap gap-1.5">
-            {['14:00','15:00','16:00','17:00','18:00','18:30','19:00','19:30','20:00','20:30','21:00','21:30','22:00','22:30','23:00'].map(t => (
+            {[
+              '14:00',
+              '15:00',
+              '16:00',
+              '17:00',
+              '18:00',
+              '18:30',
+              '19:00',
+              '19:30',
+              '20:00',
+              '20:30',
+              '21:00',
+              '21:30',
+              '22:00',
+              '22:30',
+              '23:00',
+            ].map((t) => (
               <button
                 key={t}
                 type="button"
@@ -215,9 +229,7 @@ export function CreateSessionModal() {
         {/* Duration & Threshold */}
         <div className="grid grid-cols-2 gap-3">
           <div>
-            <label className="block text-base font-medium text-text-secondary mb-1.5">
-              Durée
-            </label>
+            <label className="block text-base font-medium text-text-secondary mb-1.5">Durée</label>
             <Select
               options={[
                 { value: '60', label: '1 heure' },
@@ -271,11 +283,7 @@ export function CreateSessionModal() {
             disabled={isLoading || !selectedSquadId}
             className="flex-1 px-4 py-3 rounded-xl bg-primary text-white text-md font-semibold hover:bg-primary-hover disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2"
           >
-            {isLoading ? (
-              <Loader2 className="w-4 h-4 animate-spin" />
-            ) : (
-              'Créer la session'
-            )}
+            {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Créer la session'}
           </button>
         </div>
       </form>

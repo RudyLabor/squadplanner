@@ -1,6 +1,15 @@
-"use client";
+'use client'
 
-import { forwardRef, useState, useRef, useEffect, useId, type InputHTMLAttributes, type TextareaHTMLAttributes, type ReactNode } from 'react'
+import {
+  forwardRef,
+  useState,
+  useRef,
+  useEffect,
+  useId,
+  type InputHTMLAttributes,
+  type TextareaHTMLAttributes,
+  type ReactNode,
+} from 'react'
 import { Eye, EyeOff, X } from '../icons'
 type BaseInputProps = {
   label?: string
@@ -16,8 +25,10 @@ type BaseInputProps = {
   charCount?: boolean
 }
 
-type InputFieldProps = BaseInputProps & Omit<InputHTMLAttributes<HTMLInputElement>, 'size'> & { multiline?: false; rows?: never }
-type TextareaFieldProps = BaseInputProps & Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, 'size'> & { multiline: true }
+type InputFieldProps = BaseInputProps &
+  Omit<InputHTMLAttributes<HTMLInputElement>, 'size'> & { multiline?: false; rows?: never }
+type TextareaFieldProps = BaseInputProps &
+  Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, 'size'> & { multiline: true }
 
 type InputProps = InputFieldProps | TextareaFieldProps
 
@@ -86,14 +97,14 @@ export const Input = forwardRef<HTMLInputElement | HTMLTextAreaElement, InputPro
     const hasRightElement = (isPasswordField && showPasswordToggle) || clearable || suffix
     const hasLeftElement = icon || prefix
 
-    const describedBy = [
-      error ? errorId : null,
-      hint ? hintId : null,
-    ].filter(Boolean).join(' ') || undefined
+    const describedBy =
+      [error ? errorId : null, hint ? hintId : null].filter(Boolean).join(' ') || undefined
 
     const currentLength = typeof value === 'string' ? value.length : 0
 
-    const errorClasses = error ? 'border-error/50 focus:border-error focus:ring-error/8 focus:shadow-glow-primary-md' : ''
+    const errorClasses = error
+      ? 'border-error/50 focus:border-error focus:ring-error/8 focus:shadow-glow-primary-md'
+      : ''
     const paddingClasses = `${hasLeftElement ? 'pl-12' : 'pl-4'} ${hasRightElement ? 'pr-12' : 'pr-4'}`
 
     return (
@@ -105,7 +116,10 @@ export const Input = forwardRef<HTMLInputElement | HTMLTextAreaElement, InputPro
         )}
         <div className={`relative ${shaking ? 'animate-shake' : ''}`}>
           {hasLeftElement && (
-            <div className={`absolute left-4 ${isMultiline ? 'top-3' : 'top-1/2 -translate-y-1/2'} flex items-center gap-1.5 text-text-quaternary`} aria-hidden="true">
+            <div
+              className={`absolute left-4 ${isMultiline ? 'top-3' : 'top-1/2 -translate-y-1/2'} flex items-center gap-1.5 text-text-quaternary`}
+              aria-hidden="true"
+            >
               {icon}
               {prefix}
             </div>
@@ -120,7 +134,10 @@ export const Input = forwardRef<HTMLInputElement | HTMLTextAreaElement, InputPro
               aria-invalid={error ? 'true' : undefined}
               aria-describedby={describedBy}
               className={`${sharedClasses} resize-y min-h-[80px] ${textareaSizeClasses[size]} ${paddingClasses} ${errorClasses} ${className}`}
-              {...((() => { const { multiline: _, id: _id, ...rest } = props as any; return rest })())}
+              {...(() => {
+                const { multiline: _, id: _id, ...rest } = props as any
+                return rest
+              })()}
             />
           ) : (
             <input
@@ -132,11 +149,16 @@ export const Input = forwardRef<HTMLInputElement | HTMLTextAreaElement, InputPro
               aria-invalid={error ? 'true' : undefined}
               aria-describedby={describedBy}
               className={`${sharedClasses} ${sizeClasses[size]} ${paddingClasses} ${errorClasses} ${className}`}
-              {...((() => { const { id: _id, ...rest } = props as any; return rest })())}
+              {...(() => {
+                const { id: _id, ...rest } = props as any
+                return rest
+              })()}
             />
           )}
           {hasRightElement && (
-            <div className={`absolute right-4 ${isMultiline ? 'top-3' : 'top-1/2 -translate-y-1/2'} flex items-center gap-1.5`}>
+            <div
+              className={`absolute right-4 ${isMultiline ? 'top-3' : 'top-1/2 -translate-y-1/2'} flex items-center gap-1.5`}
+            >
               {clearable && value && (
                 <button
                   type="button"

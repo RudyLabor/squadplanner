@@ -18,7 +18,7 @@ import { useState, useEffect, useRef } from 'react'
  */
 export function useDelayedLoading(isLoading: boolean, delayMs = 300) {
   const [showSpinner, setShowSpinner] = useState(false)
-  const timerRef = useRef<ReturnType<typeof setTimeout>>()
+  const timerRef = useRef<ReturnType<typeof setTimeout>>(undefined)
 
   useEffect(() => {
     if (isLoading) {

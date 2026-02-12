@@ -5,30 +5,33 @@ import { createSupabaseServerClient } from '../lib/supabase.server'
 import { queryKeys } from '../lib/queryClient'
 import { ClientRouteWrapper } from '../components/ClientRouteWrapper'
 
-const Settings = lazy(() => import('../pages/Settings').then(m => ({ default: m.Settings })))
+const Settings = lazy(() => import('../pages/Settings').then((m) => ({ default: m.Settings })))
 
 export function meta() {
   return [
-    { title: "Paramètres - Squad Planner" },
-    { name: "description", content: "Configure ton compte Squad Planner : notifications, thème, confidentialité et préférences." },
-    { tagName: "link", rel: "canonical", href: "https://squadplanner.fr/settings" },
-    { property: "og:url", content: "https://squadplanner.fr/settings" },
+    { title: 'Paramètres - Squad Planner' },
+    {
+      name: 'description',
+      content:
+        'Configure ton compte Squad Planner : notifications, thème, confidentialité et préférences.',
+    },
+    { tagName: 'link', rel: 'canonical', href: 'https://squadplanner.fr/settings' },
+    { property: 'og:url', content: 'https://squadplanner.fr/settings' },
   ]
 }
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const { supabase, headers, getUser } = createSupabaseServerClient(request)
-  const { data: { user }, error } = await getUser()
+  const {
+    data: { user },
+    error,
+  } = await getUser()
 
   if (error || !user) {
     throw redirect('/', { headers })
   }
 
-  const { data: profile } = await supabase
-    .from('profiles')
-    .select('*')
-    .eq('id', user.id)
-    .single()
+  const { data: profile } = await supabase.from('profiles').select('*').eq('id', user.id).single()
 
   return data({ profile }, { headers })
 }
@@ -45,10 +48,16 @@ interface SettingsLoaderData {
 
 export default function Component({ loaderData }: { loaderData: SettingsLoaderData }) {
   return (
-    <ClientRouteWrapper seeds={[
-      { key: queryKeys.profile.current(), data: loaderData?.profile },
-    ]}>
-      <Suspense fallback={<div className="min-h-[50vh] flex items-center justify-center"><div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin" /></div>}>
+    <ClientRouteWrapper
+      seeds={[{ key: [...queryKeys.profile.current()], data: loaderData?.profile }]}
+    >
+      <Suspense
+        fallback={
+          <div className="min-h-[50vh] flex items-center justify-center">
+            <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+          </div>
+        }
+      >
         <Settings />
       </Suspense>
     </ClientRouteWrapper>

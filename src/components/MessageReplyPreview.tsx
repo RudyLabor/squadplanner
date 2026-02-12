@@ -69,12 +69,8 @@ export function MessageReplyPreview({
 
       {/* Message content */}
       <div className="flex-1 min-w-0">
-        <span className="text-sm font-medium text-primary">
-          {originalMessage.sender_username}
-        </span>
-        <p className="text-sm text-text-secondary truncate leading-tight">
-          {truncatedContent}
-        </p>
+        <span className="text-sm font-medium text-primary">{originalMessage.sender_username}</span>
+        <p className="text-sm text-text-secondary truncate leading-tight">{truncatedContent}</p>
       </div>
     </m.div>
   )

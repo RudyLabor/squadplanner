@@ -30,10 +30,14 @@ export function useSquadChannels(squadId: string | undefined) {
     staleTime: 30_000,
   })
 
-  const defaultChannel = channels.find(c => c.is_default) || channels[0] || null
+  const defaultChannel = channels.find((c) => c.is_default) || channels[0] || null
 
   const createChannelMutation = useMutation({
-    mutationFn: async (params: { name: string; description?: string; channelType?: ChannelType }) => {
+    mutationFn: async (params: {
+      name: string
+      description?: string
+      channelType?: ChannelType
+    }) => {
       if (!squadId || !user?.id) throw new Error('Non connecté')
       const { data, error } = await supabase
         .from('squad_channels')
@@ -56,7 +60,11 @@ export function useSquadChannels(squadId: string | undefined) {
       showSuccess('Canal créé')
     },
     onError: (err: Error) => {
-      showError(err.message.includes('duplicate') ? 'Ce nom de canal existe déjà' : 'Erreur lors de la création')
+      showError(
+        err.message.includes('duplicate')
+          ? 'Ce nom de canal existe déjà'
+          : 'Erreur lors de la création'
+      )
     },
   })
 
@@ -78,13 +86,10 @@ export function useSquadChannels(squadId: string | undefined) {
 
   const deleteChannelMutation = useMutation({
     mutationFn: async (channelId: string) => {
-      const channel = channels.find(c => c.id === channelId)
+      const channel = channels.find((c) => c.id === channelId)
       if (channel?.is_default) throw new Error('Impossible de supprimer le canal par défaut')
 
-      const { error } = await supabase
-        .from('squad_channels')
-        .delete()
-        .eq('id', channelId)
+      const { error } = await supabase.from('squad_channels').delete().eq('id', channelId)
 
       if (error) throw error
     },
@@ -95,17 +100,26 @@ export function useSquadChannels(squadId: string | undefined) {
     onError: (err: Error) => showError(err.message),
   })
 
-  const createChannel = useCallback((name: string, description?: string, channelType?: ChannelType) => {
-    createChannelMutation.mutate({ name, description, channelType })
-  }, [createChannelMutation])
+  const createChannel = useCallback(
+    (name: string, description?: string, channelType?: ChannelType) => {
+      createChannelMutation.mutate({ name, description, channelType })
+    },
+    [createChannelMutation]
+  )
 
-  const updateChannel = useCallback((channelId: string, name?: string, description?: string) => {
-    updateChannelMutation.mutate({ channelId, name, description })
-  }, [updateChannelMutation])
+  const updateChannel = useCallback(
+    (channelId: string, name?: string, description?: string) => {
+      updateChannelMutation.mutate({ channelId, name, description })
+    },
+    [updateChannelMutation]
+  )
 
-  const deleteChannel = useCallback((channelId: string) => {
-    deleteChannelMutation.mutate(channelId)
-  }, [deleteChannelMutation])
+  const deleteChannel = useCallback(
+    (channelId: string) => {
+      deleteChannelMutation.mutate(channelId)
+    },
+    [deleteChannelMutation]
+  )
 
   return {
     channels,

@@ -8,7 +8,7 @@ export const MILESTONES = [
 
 // Calculate XP for any streak day
 export const calculateXPReward = (days: number): number => {
-  const milestone = MILESTONES.find(m => m.days === days)
+  const milestone = MILESTONES.find((m) => m.days === days)
   if (milestone) return milestone.xp
   if (days > 100 && days % 7 === 0) return 50
   return 0
@@ -16,7 +16,7 @@ export const calculateXPReward = (days: number): number => {
 
 // Get next milestone for a given streak
 export const getNextMilestone = (currentStreak: number) => {
-  const nextMajor = MILESTONES.find(m => m.days > currentStreak)
+  const nextMajor = MILESTONES.find((m) => m.days > currentStreak)
 
   if (nextMajor) {
     return {
@@ -52,11 +52,27 @@ export const getFlameIntensity = (streak: number): number => {
 // Get flame color based on intensity
 export const getFlameColors = (intensity: number) => {
   const colors = [
-    { primary: 'var(--color-orange)', secondary: 'var(--color-orange)', glow: 'var(--color-orange-30)' },
-    { primary: 'var(--color-warning)', secondary: 'var(--color-warning)', glow: 'var(--color-warning-30)' },
-    { primary: 'var(--color-error)', secondary: 'var(--color-error)', glow: 'var(--color-error-20)' },
+    {
+      primary: 'var(--color-orange)',
+      secondary: 'var(--color-orange)',
+      glow: 'var(--color-orange-30)',
+    },
+    {
+      primary: 'var(--color-warning)',
+      secondary: 'var(--color-warning)',
+      glow: 'var(--color-warning-30)',
+    },
+    {
+      primary: 'var(--color-error)',
+      secondary: 'var(--color-error)',
+      glow: 'var(--color-error-20)',
+    },
     { primary: 'var(--color-pink)', secondary: 'var(--color-pink)', glow: 'var(--color-pink-30)' },
-    { primary: 'var(--color-purple)', secondary: 'var(--color-purple)', glow: 'var(--color-purple-20)' },
+    {
+      primary: 'var(--color-purple)',
+      secondary: 'var(--color-purple)',
+      glow: 'var(--color-purple-20)',
+    },
   ]
   return colors[Math.min(intensity, colors.length - 1)]
 }

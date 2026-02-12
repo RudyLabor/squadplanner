@@ -24,13 +24,12 @@ const ALLOWED_ORIGINS = [
   'https://squadplanner.app',
   'https://squadplanner.fr',
   'https://www.squadplanner.fr',
-  Deno.env.get('SUPABASE_URL') || ''
+  Deno.env.get('SUPABASE_URL') || '',
 ].filter(Boolean)
 
 function getCorsHeaders(origin: string | null) {
-  const allowedOrigin = origin && ALLOWED_ORIGINS.some(allowed => origin === allowed)
-    ? origin
-    : null
+  const allowedOrigin =
+    origin && ALLOWED_ORIGINS.some((allowed) => origin === allowed) ? origin : null
   if (!allowedOrigin) {
     return {
       'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
@@ -143,14 +142,14 @@ async function importVapidKey(base64Key: string, isPrivate: boolean): Promise<Cr
 async function createVapidJwt(audience: string): Promise<string> {
   const header = {
     typ: 'JWT',
-    alg: 'ES256'
+    alg: 'ES256',
   }
 
   const now = Math.floor(Date.now() / 1000)
   const payload = {
     aud: audience,
     exp: now + 12 * 60 * 60, // 12 hours
-    sub: VAPID_SUBJECT
+    sub: VAPID_SUBJECT,
   }
 
   const headerB64 = uint8ArrayToBase64Url(new TextEncoder().encode(JSON.stringify(header)))
@@ -178,11 +177,9 @@ async function encryptPayload(
   authSecret: string
 ): Promise<{ encrypted: Uint8Array; salt: Uint8Array; publicKey: Uint8Array }> {
   // Generate ephemeral key pair
-  const keyPair = await crypto.subtle.generateKey(
-    { name: 'ECDH', namedCurve: 'P-256' },
-    true,
-    ['deriveBits']
-  )
+  const keyPair = await crypto.subtle.generateKey({ name: 'ECDH', namedCurve: 'P-256' }, true, [
+    'deriveBits',
+  ])
 
   // Import user's public key
   const userPublicKey = await crypto.subtle.importKey(
@@ -221,16 +218,14 @@ async function encryptPayload(
 
   // Create info for key derivation
   const encoder = new TextEncoder()
-  const keyInfo = new Uint8Array([
-    ...encoder.encode('Content-Encoding: aes128gcm\0'),
-  ])
+  const keyInfo = new Uint8Array([...encoder.encode('Content-Encoding: aes128gcm\0')])
 
   const contentEncryptionKey = await crypto.subtle.deriveKey(
     {
       name: 'HKDF',
       hash: 'SHA-256',
       salt: salt,
-      info: keyInfo
+      info: keyInfo,
     },
     prkKey,
     { name: 'AES-GCM', length: 128 },
@@ -239,16 +234,14 @@ async function encryptPayload(
   )
 
   // Create nonce
-  const nonceInfo = new Uint8Array([
-    ...encoder.encode('Content-Encoding: nonce\0'),
-  ])
+  const nonceInfo = new Uint8Array([...encoder.encode('Content-Encoding: nonce\0')])
 
   const nonceBits = await crypto.subtle.deriveBits(
     {
       name: 'HKDF',
       hash: 'SHA-256',
       salt: salt,
-      info: nonceInfo
+      info: nonceInfo,
     },
     prkKey,
     96
@@ -257,7 +250,7 @@ async function encryptPayload(
   // Add padding to payload
   const paddedPayload = new Uint8Array([
     ...new Uint8Array(2), // 2 bytes for padding length
-    ...encoder.encode(payload)
+    ...encoder.encode(payload),
   ])
 
   // Encrypt
@@ -270,7 +263,7 @@ async function encryptPayload(
   return {
     encrypted: new Uint8Array(encrypted),
     salt,
-    publicKey: new Uint8Array(publicKeyRaw)
+    publicKey: new Uint8Array(publicKeyRaw),
   }
 }
 
@@ -288,7 +281,7 @@ interface PushToken {
 // Convert PEM to binary for Firebase JWT
 function pemToBinary(pem: string): ArrayBuffer {
   const lines = pem.split('\n')
-  const base64 = lines.filter(line => !line.includes('-----')).join('')
+  const base64 = lines.filter((line) => !line.includes('-----')).join('')
   const binary = atob(base64)
   const bytes = new Uint8Array(binary.length)
   for (let i = 0; i < binary.length; i++) {
@@ -314,7 +307,7 @@ async function getFirebaseAccessToken(): Promise<string | null> {
       aud: 'https://oauth2.googleapis.com/token',
       iat: now,
       exp: now + 3600,
-      scope: 'https://www.googleapis.com/auth/firebase.messaging'
+      scope: 'https://www.googleapis.com/auth/firebase.messaging',
     }
 
     // Create JWT header and payload
@@ -339,7 +332,9 @@ async function getFirebaseAccessToken(): Promise<string | null> {
     )
 
     const signatureB64 = btoa(String.fromCharCode(...new Uint8Array(signature)))
-      .replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '')
+      .replace(/\+/g, '-')
+      .replace(/\//g, '_')
+      .replace(/=/g, '')
 
     const jwt = `${header}.${body}.${signatureB64}`
 
@@ -347,7 +342,7 @@ async function getFirebaseAccessToken(): Promise<string | null> {
     const tokenResponse = await fetch('https://oauth2.googleapis.com/token', {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: `grant_type=urn:ietf:params:oauth:grant-type:jwt-bearer&assertion=${jwt}`
+      body: `grant_type=urn:ietf:params:oauth:grant-type:jwt-bearer&assertion=${jwt}`,
     })
 
     const tokenData = await tokenResponse.json()
@@ -375,7 +370,7 @@ async function sendFCMNotification(
         token: token,
         notification: {
           title: title,
-          body: body
+          body: body,
         },
         data: data,
         android: {
@@ -383,23 +378,23 @@ async function sendFCMNotification(
           notification: {
             sound: isCall ? 'ringtone' : 'default',
             channel_id: isCall ? 'calls' : 'default',
-            vibrate_timings: isCall ? ['0s', '0.3s', '0.1s', '0.3s', '0.1s', '0.3s'] : undefined
-          }
+            vibrate_timings: isCall ? ['0s', '0.3s', '0.1s', '0.3s', '0.1s', '0.3s'] : undefined,
+          },
         },
         apns: {
           headers: {
-            'apns-priority': '10'
+            'apns-priority': '10',
           },
           payload: {
             aps: {
               sound: isCall ? 'ringtone.caf' : 'default',
               badge: 1,
               'content-available': 1,
-              'interruption-level': isCall ? 'critical' : 'active'
-            }
-          }
-        }
-      }
+              'interruption-level': isCall ? 'critical' : 'active',
+            },
+          },
+        },
+      },
     }
 
     const response = await fetch(
@@ -407,10 +402,10 @@ async function sendFCMNotification(
       {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${accessToken}`,
-          'Content-Type': 'application/json'
+          Authorization: `Bearer ${accessToken}`,
+          'Content-Type': 'application/json',
         },
-        body: JSON.stringify(message)
+        body: JSON.stringify(message),
       }
     )
 
@@ -470,20 +465,20 @@ async function sendPushToSubscription(
       ...recordSize,
       publicKey.length,
       ...publicKey,
-      ...encrypted
+      ...encrypted,
     ])
 
     // Send the request
     const response = await fetch(subscription.endpoint, {
       method: 'POST',
       headers: {
-        'Authorization': `vapid t=${vapidJwt}, k=${uint8ArrayToBase64Url(base64ToUint8Array(VAPID_PUBLIC_KEY))}`,
+        Authorization: `vapid t=${vapidJwt}, k=${uint8ArrayToBase64Url(base64ToUint8Array(VAPID_PUBLIC_KEY))}`,
         'Content-Type': 'application/octet-stream',
         'Content-Encoding': 'aes128gcm',
-        'TTL': '86400', // 24 hours
-        'Urgency': 'high'
+        TTL: '86400', // 24 hours
+        Urgency: 'high',
       },
-      body
+      body,
     })
 
     if (!response.ok) {
@@ -544,22 +539,25 @@ serve(async (req) => {
           },
         }
       )
-      const { data: { user }, error: authError } = await supabaseClient.auth.getUser()
+      const {
+        data: { user },
+        error: authError,
+      } = await supabaseClient.auth.getUser()
       if (authError || !user) {
-        return new Response(
-          JSON.stringify({ error: 'Unauthorized: Invalid token' }),
-          { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-        )
+        return new Response(JSON.stringify({ error: 'Unauthorized: Invalid token' }), {
+          status: 401,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        })
       }
     }
 
     // Validate VAPID keys
     if (!VAPID_PUBLIC_KEY || !VAPID_PRIVATE_KEY) {
       console.error('VAPID keys not configured')
-      return new Response(
-        JSON.stringify({ error: 'Push notifications not configured' }),
-        { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      )
+      return new Response(JSON.stringify({ error: 'Push notifications not configured' }), {
+        status: 500,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      })
     }
 
     // Parse and validate request body
@@ -567,10 +565,10 @@ serve(async (req) => {
     try {
       rawBody = await req.json()
     } catch {
-      return new Response(
-        JSON.stringify({ error: 'Invalid JSON in request body' }),
-        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      )
+      return new Response(JSON.stringify({ error: 'Invalid JSON in request body' }), {
+        status: 400,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      })
     }
 
     // Validate input data
@@ -603,10 +601,10 @@ serve(async (req) => {
         actions: rawBody.actions as PushAction[] | undefined,
       }
     } catch (validationError) {
-      return new Response(
-        JSON.stringify({ error: (validationError as Error).message }),
-        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      )
+      return new Response(JSON.stringify({ error: (validationError as Error).message }), {
+        status: 400,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      })
     }
 
     // Get user IDs to notify
@@ -619,10 +617,10 @@ serve(async (req) => {
     }
 
     if (userIds.length === 0) {
-      return new Response(
-        JSON.stringify({ error: 'userId or userIds required' }),
-        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      )
+      return new Response(JSON.stringify({ error: 'userId or userIds required' }), {
+        status: 400,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      })
     }
 
     // Create Supabase client with service role
@@ -649,7 +647,7 @@ serve(async (req) => {
           success: true,
           sent: 0,
           failed: 0,
-          message: 'No subscriptions found'
+          message: 'No subscriptions found',
         }),
         { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       )
@@ -663,7 +661,7 @@ serve(async (req) => {
       badge: validatedData.badge || '/favicon.svg',
       url: validatedData.url || '/',
       tag: validatedData.tag || 'squadplanner-notification',
-      data: validatedData.data || {}
+      data: validatedData.data || {},
     }
 
     // Ajouter les actions si presentes (pour les appels entrants notamment)
@@ -685,25 +683,26 @@ serve(async (req) => {
 
     // Send to all subscriptions
     const webResults = await Promise.all(
-      subscriptions.map((sub: PushSubscription) =>
-        sendPushToSubscription(sub, notificationPayload)
-      )
+      subscriptions.map((sub: PushSubscription) => sendPushToSubscription(sub, notificationPayload))
     )
 
     // Count successes and failures
-    let webSent = webResults.filter(r => r.success).length
-    let webFailed = webResults.filter(r => !r.success).length
+    const webSent = webResults.filter((r) => r.success).length
+    const webFailed = webResults.filter((r) => !r.success).length
 
     // Clean up expired subscriptions
-    const expiredSubs = subscriptions.filter((sub, index) =>
-      webResults[index].error === 'subscription_expired'
+    const expiredSubs = subscriptions.filter(
+      (sub, index) => webResults[index].error === 'subscription_expired'
     )
 
     if (expiredSubs.length > 0) {
       const { error: deleteError } = await supabaseAdmin
         .from('push_subscriptions')
         .delete()
-        .in('id', expiredSubs.map(s => s.id))
+        .in(
+          'id',
+          expiredSubs.map((s) => s.id)
+        )
 
       if (deleteError) {
         console.error('Failed to delete expired subscriptions:', deleteError)
@@ -735,7 +734,7 @@ serve(async (req) => {
         const fcmData: Record<string, string> = {
           url: String(validatedData.url || '/'),
           tag: String(validatedData.tag || 'squadplanner-notification'),
-          type: String((validatedData.data as Record<string, unknown>)?.type || 'notification')
+          type: String((validatedData.data as Record<string, unknown>)?.type || 'notification'),
         }
 
         // Add other data fields as strings
@@ -758,12 +757,12 @@ serve(async (req) => {
           )
         )
 
-        nativeSent = nativeResults.filter(r => r.success).length
-        nativeFailed = nativeResults.filter(r => !r.success).length
+        nativeSent = nativeResults.filter((r) => r.success).length
+        nativeFailed = nativeResults.filter((r) => !r.success).length
 
         // Collect expired tokens
-        expiredTokens = nativeTokens.filter((token, index) =>
-          nativeResults[index].error === 'token_expired'
+        expiredTokens = nativeTokens.filter(
+          (token, index) => nativeResults[index].error === 'token_expired'
         )
 
         // Clean up expired tokens
@@ -771,7 +770,10 @@ serve(async (req) => {
           const { error: deleteTokenError } = await supabaseAdmin
             .from('push_tokens')
             .delete()
-            .in('id', expiredTokens.map(t => t.id))
+            .in(
+              'id',
+              expiredTokens.map((t) => t.id)
+            )
 
           if (deleteTokenError) {
             console.error('Failed to delete expired tokens:', deleteTokenError)
@@ -788,7 +790,9 @@ serve(async (req) => {
     const totalFailed = webFailed + nativeFailed
     const totalExpired = expiredSubs.length + expiredTokens.length
 
-    console.log(`Push notifications: ${totalSent} sent (${webSent} web, ${nativeSent} native), ${totalFailed} failed`)
+    console.log(
+      `Push notifications: ${totalSent} sent (${webSent} web, ${nativeSent} native), ${totalFailed} failed`
+    )
 
     return new Response(
       JSON.stringify({
@@ -798,16 +802,16 @@ serve(async (req) => {
         expired: totalExpired,
         breakdown: {
           web: { sent: webSent, failed: webFailed, expired: expiredSubs.length },
-          native: { sent: nativeSent, failed: nativeFailed, expired: expiredTokens.length }
-        }
+          native: { sent: nativeSent, failed: nativeFailed, expired: expiredTokens.length },
+        },
       }),
       { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     )
   } catch (error) {
     console.error('Error in send-push:', error)
-    return new Response(
-      JSON.stringify({ error: error.message }),
-      { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-    )
+    return new Response(JSON.stringify({ error: error.message }), {
+      status: 500,
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    })
   }
 })

@@ -1,13 +1,8 @@
-"use client";
+'use client'
 
 import { memo } from 'react'
 import { m } from 'framer-motion'
-import {
-  CheckCircle2,
-  Gamepad2,
-  UserPlus,
-  Activity,
-} from '../icons'
+import { CheckCircle2, Gamepad2, UserPlus, Activity } from '../icons'
 import { Card } from '../ui'
 import { useActivityFeedQuery, getRelativeTime } from '../../hooks/queries/useActivityFeedQuery'
 import type { ActivityItem } from '../../hooks/queries/useActivityFeedQuery'
@@ -73,9 +68,7 @@ const ActivityRow = memo(function ActivityRow({
       </div>
 
       <div className="min-w-0 flex-1">
-        <p className="text-base font-medium text-text-primary truncate">
-          {item.description}
-        </p>
+        <p className="text-base font-medium text-text-primary truncate">{item.description}</p>
         <p className="text-sm text-text-tertiary truncate">{item.detail}</p>
       </div>
 
@@ -108,9 +101,7 @@ export const HomeActivityFeed = memo(function HomeActivityFeed({
   if (isLoading) {
     return (
       <section aria-label="Activité récente" className="mb-6">
-        <h2 className="text-base font-semibold text-text-primary mb-3">
-          Activité récente
-        </h2>
+        <h2 className="text-base font-semibold text-text-primary mb-3">Activité récente</h2>
         <Card className="px-4 py-1 divide-y divide-border-subtle">
           <SkeletonRow />
           <SkeletonRow />
@@ -124,18 +115,14 @@ export const HomeActivityFeed = memo(function HomeActivityFeed({
     const hasSquads = squadIds.length > 0
     return (
       <section aria-label="Activité récente" className="mb-6">
-        <h2 className="text-base font-semibold text-text-primary mb-3">
-          Activité récente
-        </h2>
+        <h2 className="text-base font-semibold text-text-primary mb-3">Activité récente</h2>
         <Card className="p-6 text-center">
           <Activity className="w-8 h-8 text-text-quaternary mx-auto mb-2" />
-          <p className="text-base text-text-tertiary">
-            Pas encore d'activité
-          </p>
+          <p className="text-base text-text-tertiary">Pas encore d'activité</p>
           <p className="text-sm text-text-quaternary mt-1">
             {hasSquads
               ? 'Participe à des sessions ou envoie des messages pour voir ton activité ici.'
-              : 'Rejoins une squad pour voir l\'activité ici.'}
+              : "Rejoins une squad pour voir l'activité ici."}
           </p>
         </Card>
       </section>
@@ -144,9 +131,7 @@ export const HomeActivityFeed = memo(function HomeActivityFeed({
 
   return (
     <section aria-label="Activité récente" className="mb-6">
-      <h2 className="text-base font-semibold text-text-primary mb-3">
-        Activité récente
-      </h2>
+      <h2 className="text-base font-semibold text-text-primary mb-3">Activité récente</h2>
       <Card className="px-4 py-1 divide-y divide-border-subtle">
         {activities.map((item, index) => (
           <ActivityRow key={item.id} item={item} index={index} />

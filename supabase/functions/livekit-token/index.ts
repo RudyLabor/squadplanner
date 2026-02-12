@@ -18,13 +18,12 @@ const ALLOWED_ORIGINS = [
   'https://squadplanner.app',
   'https://www.squadplanner.app',
   'https://www.squadplanner.fr',
-  Deno.env.get('SUPABASE_URL') || ''
+  Deno.env.get('SUPABASE_URL') || '',
 ].filter(Boolean)
 
 function getCorsHeaders(origin: string | null) {
-  const allowedOrigin = origin && ALLOWED_ORIGINS.some(allowed => origin === allowed)
-    ? origin
-    : null
+  const allowedOrigin =
+    origin && ALLOWED_ORIGINS.some((allowed) => origin === allowed) ? origin : null
   if (!allowedOrigin) {
     return {
       'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
@@ -55,20 +54,31 @@ serve(async (req) => {
   try {
     // Check if LiveKit is configured
     if (!LIVEKIT_API_KEY || !LIVEKIT_API_SECRET) {
-      console.error('LiveKit credentials not configured. Set LIVEKIT_API_KEY and LIVEKIT_API_SECRET via supabase secrets set')
+      console.error(
+        'LiveKit credentials not configured. Set LIVEKIT_API_KEY and LIVEKIT_API_SECRET via supabase secrets set'
+      )
       return new Response(
         JSON.stringify({ error: 'LiveKit credentials not configured on server' }),
-        { status: 503, headers: { ...getCorsHeaders(req.headers.get('origin')), 'Content-Type': 'application/json' } }
+        {
+          status: 503,
+          headers: {
+            ...getCorsHeaders(req.headers.get('origin')),
+            'Content-Type': 'application/json',
+          },
+        }
       )
     }
 
     // Verify user authentication
     const authHeader = req.headers.get('Authorization')
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
-      return new Response(
-        JSON.stringify({ error: 'Missing or invalid Authorization header' }),
-        { status: 401, headers: { ...getCorsHeaders(req.headers.get('origin')), 'Content-Type': 'application/json' } }
-      )
+      return new Response(JSON.stringify({ error: 'Missing or invalid Authorization header' }), {
+        status: 401,
+        headers: {
+          ...getCorsHeaders(req.headers.get('origin')),
+          'Content-Type': 'application/json',
+        },
+      })
     }
 
     const supabaseClient = createClient(
@@ -81,12 +91,18 @@ serve(async (req) => {
       }
     )
 
-    const { data: { user }, error: authError } = await supabaseClient.auth.getUser()
+    const {
+      data: { user },
+      error: authError,
+    } = await supabaseClient.auth.getUser()
     if (authError || !user) {
-      return new Response(
-        JSON.stringify({ error: 'Unauthorized: invalid or expired token' }),
-        { status: 401, headers: { ...getCorsHeaders(req.headers.get('origin')), 'Content-Type': 'application/json' } }
-      )
+      return new Response(JSON.stringify({ error: 'Unauthorized: invalid or expired token' }), {
+        status: 401,
+        headers: {
+          ...getCorsHeaders(req.headers.get('origin')),
+          'Content-Type': 'application/json',
+        },
+      })
     }
 
     // Parse request body
@@ -94,26 +110,35 @@ serve(async (req) => {
     try {
       body = await req.json()
     } catch {
-      return new Response(
-        JSON.stringify({ error: 'Invalid JSON in request body' }),
-        { status: 400, headers: { ...getCorsHeaders(req.headers.get('origin')), 'Content-Type': 'application/json' } }
-      )
+      return new Response(JSON.stringify({ error: 'Invalid JSON in request body' }), {
+        status: 400,
+        headers: {
+          ...getCorsHeaders(req.headers.get('origin')),
+          'Content-Type': 'application/json',
+        },
+      })
     }
 
     const { room_name, participant_identity, participant_name } = body
 
     if (!room_name || typeof room_name !== 'string') {
-      return new Response(
-        JSON.stringify({ error: 'room_name is required' }),
-        { status: 400, headers: { ...getCorsHeaders(req.headers.get('origin')), 'Content-Type': 'application/json' } }
-      )
+      return new Response(JSON.stringify({ error: 'room_name is required' }), {
+        status: 400,
+        headers: {
+          ...getCorsHeaders(req.headers.get('origin')),
+          'Content-Type': 'application/json',
+        },
+      })
     }
 
     if (!participant_identity || typeof participant_identity !== 'string') {
-      return new Response(
-        JSON.stringify({ error: 'participant_identity is required' }),
-        { status: 400, headers: { ...getCorsHeaders(req.headers.get('origin')), 'Content-Type': 'application/json' } }
-      )
+      return new Response(JSON.stringify({ error: 'participant_identity is required' }), {
+        status: 400,
+        headers: {
+          ...getCorsHeaders(req.headers.get('origin')),
+          'Content-Type': 'application/json',
+        },
+      })
     }
 
     console.log('Generating LiveKit token for room:', room_name, 'identity:', participant_identity)
@@ -142,13 +167,18 @@ serve(async (req) => {
         room: room_name,
         identity: participant_identity,
       }),
-      { headers: { ...getCorsHeaders(req.headers.get('origin')), 'Content-Type': 'application/json' } }
+      {
+        headers: {
+          ...getCorsHeaders(req.headers.get('origin')),
+          'Content-Type': 'application/json',
+        },
+      }
     )
   } catch (error) {
     console.error('Error generating LiveKit token:', error)
-    return new Response(
-      JSON.stringify({ error: error.message }),
-      { status: 500, headers: { ...getCorsHeaders(req.headers.get('origin')), 'Content-Type': 'application/json' } }
-    )
+    return new Response(JSON.stringify({ error: error.message }), {
+      status: 500,
+      headers: { ...getCorsHeaders(req.headers.get('origin')), 'Content-Type': 'application/json' },
+    })
   }
 })

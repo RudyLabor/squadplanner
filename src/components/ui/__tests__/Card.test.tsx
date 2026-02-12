@@ -81,9 +81,12 @@ describe('Card', () => {
   })
 
   it('does not fire onClick when disabled', async () => {
-    const user = userEvent.setup()
     const onClick = vi.fn()
-    render(<Card disabled onClick={onClick}>Disabled</Card>)
+    render(
+      <Card disabled onClick={onClick}>
+        Disabled
+      </Card>
+    )
     // disabled card has pointer-events-none, but let's check onClick isn't called
     expect(screen.queryByRole('button')).not.toBeInTheDocument()
   })

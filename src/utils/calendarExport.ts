@@ -37,8 +37,10 @@ export function sessionToCalendarEvent(
     session.game ? `Jeu: ${session.game}` : '',
     squadName ? `Squad: ${squadName}` : '',
     `Durée: ${durationMinutes} minutes`,
-    session.status ? `Statut: ${session.status}` : ''
-  ].filter(Boolean).join('\n')
+    session.status ? `Statut: ${session.status}` : '',
+  ]
+    .filter(Boolean)
+    .join('\n')
 
   return {
     id: session.id,
@@ -46,7 +48,7 @@ export function sessionToCalendarEvent(
     description,
     startDate,
     endDate,
-    location: 'Squad Planner'
+    location: 'Squad Planner',
   }
 }
 
@@ -54,18 +56,17 @@ export function sessionToCalendarEvent(
  * Formats a date to ICS format (YYYYMMDDTHHmmssZ)
  */
 function formatICSDate(date: Date): string {
-  return date.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '')
+  return date
+    .toISOString()
+    .replace(/[-:]/g, '')
+    .replace(/\.\d{3}/, '')
 }
 
 /**
  * Escapes special characters for ICS format
  */
 function escapeICS(text: string): string {
-  return text
-    .replace(/\\/g, '\\\\')
-    .replace(/;/g, '\\;')
-    .replace(/,/g, '\\,')
-    .replace(/\n/g, '\\n')
+  return text.replace(/\\/g, '\\\\').replace(/;/g, '\\;').replace(/,/g, '\\,').replace(/\n/g, '\\n')
 }
 
 /**
@@ -79,7 +80,7 @@ function generateICS(events: CalendarEvent[]): string {
     'CALSCALE:GREGORIAN',
     'METHOD:PUBLISH',
     'X-WR-CALNAME:Squad Planner Sessions',
-    'X-WR-TIMEZONE:Europe/Paris'
+    'X-WR-TIMEZONE:Europe/Paris',
   ]
 
   for (const event of events) {
@@ -139,16 +140,17 @@ export function exportSessionsToICS(
   filename?: string
 ): void {
   // Filter out cancelled sessions and only include future/confirmed ones
-  const validSessions = sessions.filter(s =>
-    s.status !== 'cancelled' &&
-    new Date(s.scheduled_at) > new Date(Date.now() - 24 * 60 * 60 * 1000) // Include sessions from last 24h
+  const validSessions = sessions.filter(
+    (s) =>
+      s.status !== 'cancelled' &&
+      new Date(s.scheduled_at) > new Date(Date.now() - 24 * 60 * 60 * 1000) // Include sessions from last 24h
   )
 
   if (validSessions.length === 0) {
     throw new Error('Aucune session à exporter')
   }
 
-  const events = validSessions.map(s => sessionToCalendarEvent(s, squadName))
+  const events = validSessions.map((s) => sessionToCalendarEvent(s, squadName))
   const icsContent = generateICS(events)
 
   const defaultFilename = squadName
@@ -163,14 +165,17 @@ export function exportSessionsToICS(
  */
 export function getGoogleCalendarUrl(event: CalendarEvent): string {
   const formatGoogleDate = (date: Date) =>
-    date.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}Z/, 'Z')
+    date
+      .toISOString()
+      .replace(/[-:]/g, '')
+      .replace(/\.\d{3}Z/, 'Z')
 
   const params = new URLSearchParams({
     action: 'TEMPLATE',
     text: event.title,
     dates: `${formatGoogleDate(event.startDate)}/${formatGoogleDate(event.endDate)}`,
     details: event.description || '',
-    location: event.location || ''
+    location: event.location || '',
   })
 
   return `https://calendar.google.com/calendar/render?${params.toString()}`

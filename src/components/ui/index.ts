@@ -46,7 +46,12 @@ export {
 // Chantier 2 components
 export { Dialog, DialogHeader, DialogBody, DialogFooter } from './Dialog'
 export { ConfirmDialog } from './ConfirmDialog'
-export { DropdownMenu, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuLabel } from './DropdownMenu'
+export {
+  DropdownMenu,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuLabel,
+} from './DropdownMenu'
 export { Select } from './Select'
 export type { SelectOption } from './Select'
 export { Sheet } from './Sheet'

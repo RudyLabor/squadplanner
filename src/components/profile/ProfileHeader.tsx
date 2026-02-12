@@ -1,15 +1,8 @@
-"use client";
+'use client'
 
 import { useState, useEffect, useRef } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
-import {
-  User,
-  Edit2,
-  Check,
-  X,
-  Camera,
-  Loader2,
-} from '../icons'
+import { User, Edit2, Check, X, Camera, Loader2 } from '../icons'
 import { useNavigate } from 'react-router'
 import { showSuccess, showError } from '../../lib/toast'
 import { Button, Input, Expandable } from '../ui'
@@ -19,8 +12,8 @@ interface ProfileHeaderProps {
   user: { id: string; email?: string } | null
   profile: {
     username?: string
-    bio?: string
-    avatar_url?: string
+    bio?: string | null
+    avatar_url?: string | null
   } | null
   isLoading: boolean
   updateProfile: (data: Record<string, unknown>) => Promise<{ error?: unknown }>
@@ -59,7 +52,7 @@ export function ProfileHeader({ user, profile, isLoading, updateProfile }: Profi
         canvas.height = height
         ctx?.drawImage(img, 0, 0, width, height)
         canvas.toBlob(
-          (blob) => blob ? resolve(blob) : reject(new Error('Compression failed')),
+          (blob) => (blob ? resolve(blob) : reject(new Error('Compression failed'))),
           'image/jpeg',
           quality
         )
@@ -92,7 +85,9 @@ export function ProfileHeader({ user, profile, isLoading, updateProfile }: Profi
 
       if (uploadError) throw uploadError
 
-      const { data: { publicUrl } } = supabase.storage.from('avatars').getPublicUrl(fileName)
+      const {
+        data: { publicUrl },
+      } = supabase.storage.from('avatars').getPublicUrl(fileName)
       await updateProfile({ avatar_url: publicUrl })
       setLocalPreviewUrl(null)
       URL.revokeObjectURL(previewUrl)
@@ -121,7 +116,7 @@ export function ProfileHeader({ user, profile, isLoading, updateProfile }: Profi
         <div className="flex flex-col items-center mb-6">
           <div className="relative mb-4">
             <div className="w-24 h-24 rounded-2xl bg-gradient-to-br from-primary to-purple flex items-center justify-center overflow-hidden ring-4 ring-bg-base">
-              {(localPreviewUrl || profile?.avatar_url) ? (
+              {localPreviewUrl || profile?.avatar_url ? (
                 <img
                   src={localPreviewUrl || profile?.avatar_url || undefined}
                   alt="Avatar"
@@ -163,7 +158,9 @@ export function ProfileHeader({ user, profile, isLoading, updateProfile }: Profi
                 exit={{ opacity: 0, scale: 0.95 }}
                 className="w-full max-w-[340px] p-5 rounded-2xl bg-bg-elevated border border-border-default shadow-xl space-y-4"
               >
-                <h3 className="text-md font-semibold text-text-primary text-center">Modifier le profil</h3>
+                <h3 className="text-md font-semibold text-text-primary text-center">
+                  Modifier le profil
+                </h3>
                 <div className="space-y-3">
                   <div>
                     <label className="block text-sm text-text-tertiary mb-1">Pseudo</label>

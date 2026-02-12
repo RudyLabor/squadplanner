@@ -1,30 +1,24 @@
-"use client";
+'use client'
 
 import { memo } from 'react'
 import { Skeleton, SkeletonAvatar } from './ui/Skeleton'
 
-export const MessageSkeleton = memo(({ isOwn, showAvatar }: { isOwn: boolean; showAvatar: boolean }) => (
-  <div
-    className={`flex gap-2 py-1 ${isOwn ? 'flex-row-reverse' : ''}`}
-    aria-hidden="true"
-  >
-    {!isOwn && (
-      <div className={showAvatar ? 'visible' : 'invisible'}>
-        <SkeletonAvatar size="sm" />
-      </div>
-    )}
-    <div className={`flex flex-col ${isOwn ? 'items-end' : 'items-start'}`}>
-      {!isOwn && showAvatar && (
-        <Skeleton className="h-3 w-16 mb-1" rounded="sm" />
+export const MessageSkeleton = memo(
+  ({ isOwn, showAvatar }: { isOwn: boolean; showAvatar: boolean }) => (
+    <div className={`flex gap-2 py-1 ${isOwn ? 'flex-row-reverse' : ''}`} aria-hidden="true">
+      {!isOwn && (
+        <div className={showAvatar ? 'visible' : 'invisible'}>
+          <SkeletonAvatar size="sm" />
+        </div>
       )}
-      <Skeleton
-        className={`h-12 ${isOwn ? 'w-36' : 'w-44'}`}
-        rounded="xl"
-      />
-      <Skeleton className="h-2 w-10 mt-1" rounded="sm" />
+      <div className={`flex flex-col ${isOwn ? 'items-end' : 'items-start'}`}>
+        {!isOwn && showAvatar && <Skeleton className="h-3 w-16 mb-1" rounded="sm" />}
+        <Skeleton className={`h-12 ${isOwn ? 'w-36' : 'w-44'}`} rounded="xl" />
+        <Skeleton className="h-2 w-10 mt-1" rounded="sm" />
+      </div>
     </div>
-  </div>
-))
+  )
+)
 MessageSkeleton.displayName = 'MessageSkeleton'
 
 export function MessageListSkeleton({ count = 8 }: { count?: number }) {
@@ -78,7 +72,13 @@ export const DMConversationSkeleton = memo(function DMConversationSkeleton() {
   )
 })
 
-export function ConversationListSkeleton({ count = 5, type = 'squad' }: { count?: number; type?: 'squad' | 'dm' }) {
+export function ConversationListSkeleton({
+  count = 5,
+  type = 'squad',
+}: {
+  count?: number
+  type?: 'squad' | 'dm'
+}) {
   const SkeletonComponent = type === 'dm' ? DMConversationSkeleton : ConversationSkeleton
 
   return (

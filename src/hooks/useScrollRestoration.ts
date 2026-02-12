@@ -33,9 +33,7 @@ const SESSION_KEY = 'scroll-positions'
  * }
  * ```
  */
-export function useScrollRestoration(
-  scrollContainerRef?: RefObject<HTMLElement | null>
-): void {
+export function useScrollRestoration(scrollContainerRef?: RefObject<HTMLElement | null>): void {
   const { pathname } = useLocation()
   const previousPathRef = useRef<string>(pathname)
   const debounceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)

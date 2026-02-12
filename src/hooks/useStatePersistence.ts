@@ -60,9 +60,7 @@ export function useStatePersistence<T>(
   const namespacedKey = `${NAMESPACE}${key}`
   const isInitialized = useRef(false)
 
-  const [value, setValueInternal] = useState<T>(() =>
-    readFromStorage(namespacedKey, defaultValue)
-  )
+  const [value, setValueInternal] = useState<T>(() => readFromStorage(namespacedKey, defaultValue))
 
   // Write to storage whenever value changes (skip initial mount)
   useEffect(() => {
@@ -73,12 +71,9 @@ export function useStatePersistence<T>(
     writeToStorage(namespacedKey, value)
   }, [namespacedKey, value])
 
-  const setValue = useCallback(
-    (newValue: T | ((prev: T) => T)) => {
-      setValueInternal(newValue)
-    },
-    []
-  )
+  const setValue = useCallback((newValue: T | ((prev: T) => T)) => {
+    setValueInternal(newValue)
+  }, [])
 
   return [value, setValue]
 }

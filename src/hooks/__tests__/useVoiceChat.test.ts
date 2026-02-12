@@ -41,8 +41,7 @@ describe('useVoiceChatStore', () => {
         noiseSuppressionEnabled: false,
         networkQualityChanged: null,
         cleanupNetworkQuality: null,
-        client: null,
-        localAudioTrack: null,
+        room: null,
         reconnectInfo: null,
       })
     })
@@ -145,7 +144,7 @@ describe('useVoiceChatStore', () => {
   describe('setVolume', () => {
     it('does nothing without client', () => {
       act(() => {
-        useVoiceChatStore.setState({ client: null })
+        useVoiceChatStore.setState({ room: null })
       })
 
       // Should not throw
@@ -187,7 +186,7 @@ describe('useVoiceChatStore', () => {
   describe('toggleNoiseSuppression', () => {
     it('does nothing without audio track', async () => {
       act(() => {
-        useVoiceChatStore.setState({ localAudioTrack: null })
+        useVoiceChatStore.setState({ room: null })
       })
 
       await act(async () => {
@@ -209,12 +208,15 @@ describe('getSavedPartyInfo', () => {
   })
 
   it('returns null when party info is expired', () => {
-    localStorage.setItem('squadplanner_active_party', JSON.stringify({
-      channelName: 'channel-1',
-      userId: 'user-1',
-      username: 'Test',
-      timestamp: Date.now() - 10 * 60 * 1000, // 10 minutes ago
-    }))
+    localStorage.setItem(
+      'squadplanner_active_party',
+      JSON.stringify({
+        channelName: 'channel-1',
+        userId: 'user-1',
+        username: 'Test',
+        timestamp: Date.now() - 10 * 60 * 1000, // 10 minutes ago
+      })
+    )
 
     expect(getSavedPartyInfo()).toBeNull()
   })

@@ -1,11 +1,5 @@
 import { Component, type ReactNode } from 'react'
-import {
-  RefreshCw,
-  AlertTriangle,
-  Home,
-  ArrowLeft,
-  Trash2,
-} from './icons'
+import { RefreshCw, AlertTriangle, Home, ArrowLeft, Trash2 } from './icons'
 import { captureException } from '../lib/sentry'
 
 interface Props {
@@ -39,8 +33,8 @@ async function clearCache(): Promise<void> {
     const cacheNames = await caches.keys()
     await Promise.all(
       cacheNames
-        .filter(name => name.startsWith('squadplanner-'))
-        .map(name => caches.delete(name))
+        .filter((name) => name.startsWith('squadplanner-'))
+        .map((name) => caches.delete(name))
     )
 
     // Tell service worker to clear cache too
@@ -63,7 +57,7 @@ export class ErrorBoundary extends Component<Props, State> {
     return {
       hasError: true,
       error,
-      isChunkError: isChunkLoadError(error)
+      isChunkError: isChunkLoadError(error),
     }
   }
 
@@ -84,11 +78,11 @@ export class ErrorBoundary extends Component<Props, State> {
       window.location.reload()
     } else {
       // For other errors, try resetting state first
-      this.setState(prev => ({
+      this.setState((prev) => ({
         hasError: false,
         error: undefined,
         isChunkError: false,
-        retryCount: prev.retryCount + 1
+        retryCount: prev.retryCount + 1,
       }))
     }
   }
@@ -124,16 +118,17 @@ export class ErrorBoundary extends Component<Props, State> {
             </div>
 
             <h2 className="text-lg font-semibold text-text-primary mb-2">
-              {this.state.isChunkError ? 'Mise à jour disponible' : 'Oups, quelque chose s\'est mal passé'}
+              {this.state.isChunkError
+                ? 'Mise à jour disponible'
+                : "Oups, quelque chose s'est mal passé"}
             </h2>
 
             <p className="text-md text-text-secondary mb-6">
               {this.state.isChunkError
-                ? 'Une nouvelle version de l\'app est disponible. Recharge la page pour en profiter.'
+                ? "Une nouvelle version de l'app est disponible. Recharge la page pour en profiter."
                 : hasRetried
-                  ? 'L\'erreur persiste. Essaie de vider le cache ou de retourner à l\'accueil.'
-                  : 'Une erreur inattendue s\'est produite. Essaie de recharger la page.'
-              }
+                  ? "L'erreur persiste. Essaie de vider le cache ou de retourner à l'accueil."
+                  : "Une erreur inattendue s'est produite. Essaie de recharger la page."}
             </p>
 
             {/* Primary action */}
@@ -166,9 +161,24 @@ export class ErrorBoundary extends Component<Props, State> {
 
             {/* Navigation links */}
             <div className="flex flex-wrap gap-2 justify-center mt-3">
-              <a href="/squads" className="px-4 py-2 rounded-lg bg-bg-elevated text-text-secondary text-sm hover:bg-bg-hover transition-colors border border-border-subtle">Squads</a>
-              <a href="/sessions" className="px-4 py-2 rounded-lg bg-bg-elevated text-text-secondary text-sm hover:bg-bg-hover transition-colors border border-border-subtle">Sessions</a>
-              <a href="/messages" className="px-4 py-2 rounded-lg bg-bg-elevated text-text-secondary text-sm hover:bg-bg-hover transition-colors border border-border-subtle">Messages</a>
+              <a
+                href="/squads"
+                className="px-4 py-2 rounded-lg bg-bg-elevated text-text-secondary text-sm hover:bg-bg-hover transition-colors border border-border-subtle"
+              >
+                Squads
+              </a>
+              <a
+                href="/sessions"
+                className="px-4 py-2 rounded-lg bg-bg-elevated text-text-secondary text-sm hover:bg-bg-hover transition-colors border border-border-subtle"
+              >
+                Sessions
+              </a>
+              <a
+                href="/messages"
+                className="px-4 py-2 rounded-lg bg-bg-elevated text-text-secondary text-sm hover:bg-bg-hover transition-colors border border-border-subtle"
+              >
+                Messages
+              </a>
             </div>
 
             {/* Clear cache option (shown after first retry) */}
@@ -186,9 +196,7 @@ export class ErrorBoundary extends Component<Props, State> {
             {!import.meta.env.PROD && this.state.error && (
               <div className="mt-6 p-4 rounded-xl bg-surface-card border border-border-default text-left">
                 <p className="text-sm font-medium text-text-secondary mb-1">Détails techniques :</p>
-                <p className="text-sm font-mono text-error break-all">
-                  {this.state.error.message}
-                </p>
+                <p className="text-sm font-mono text-error break-all">{this.state.error.message}</p>
                 {this.state.error.stack && (
                   <pre className="text-xs font-mono text-text-tertiary mt-2 overflow-auto max-h-32">
                     {this.state.error.stack}

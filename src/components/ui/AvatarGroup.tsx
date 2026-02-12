@@ -39,13 +39,7 @@ const statusColors = {
   dnd: 'bg-error',
 } as const
 
-const bgColors = [
-  'bg-primary',
-  'bg-info',
-  'bg-success',
-  'bg-warning',
-  'bg-error',
-] as const
+const bgColors = ['bg-primary', 'bg-info', 'bg-success', 'bg-warning', 'bg-error'] as const
 
 function getInitialBg(name: string): string {
   let hash = 0
@@ -116,8 +110,12 @@ export function AvatarGroup({
   const overflow = avatars.length - max
 
   return (
-    <div className={`flex items-center ${className}`} role="group" aria-label={`${avatars.length} members`}>
-      <span className="sr-only">{`${avatars.length} members: ${visible.map(a => a.name).join(', ')}${overflow > 0 ? ` and ${overflow} more` : ''}`}</span>
+    <div
+      className={`flex items-center ${className}`}
+      role="group"
+      aria-label={`${avatars.length} members`}
+    >
+      <span className="sr-only">{`${avatars.length} members: ${visible.map((a) => a.name).join(', ')}${overflow > 0 ? ` and ${overflow} more` : ''}`}</span>
       {visible.map((avatar, i) => (
         <SingleAvatar key={`${avatar.name}-${i}`} avatar={avatar} size={size} index={i} />
       ))}

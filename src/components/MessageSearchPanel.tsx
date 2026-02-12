@@ -1,11 +1,6 @@
 import { memo } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
-import {
-  Search,
-  X,
-  User,
-  Hash,
-} from './icons'
+import { Search, X, User, Hash } from './icons'
 import { useMessageSearch } from '../hooks/useMessageSearch'
 
 interface MessageSearchPanelProps {
@@ -17,9 +12,14 @@ interface MessageSearchPanelProps {
 }
 
 export const MessageSearchPanel = memo(function MessageSearchPanel({
-  isOpen, onClose, onNavigateToMessage, onNavigateToDM, squadId,
+  isOpen,
+  onClose,
+  onNavigateToMessage,
+  onNavigateToDM,
+  squadId,
 }: MessageSearchPanelProps) {
-  const { query, setQuery, squadResults, dmResults, totalResults, isLoading, clearSearch } = useMessageSearch({ squadId })
+  const { query, setQuery, squadResults, dmResults, totalResults, isLoading, clearSearch } =
+    useMessageSearch({ squadId })
 
   const formatDate = (dateStr: string) => {
     const d = new Date(dateStr)
@@ -35,9 +35,13 @@ export const MessageSearchPanel = memo(function MessageSearchPanel({
     if (!search.trim()) return text
     const parts = text.split(new RegExp(`(${search.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi'))
     return parts.map((part, i) =>
-      part.toLowerCase() === search.toLowerCase()
-        ? <mark key={i} className="bg-warning/30 text-text-primary rounded-sm px-0.5">{part}</mark>
-        : part
+      part.toLowerCase() === search.toLowerCase() ? (
+        <mark key={i} className="bg-warning/30 text-text-primary rounded-sm px-0.5">
+          {part}
+        </mark>
+      ) : (
+        part
+      )
     )
   }
 
@@ -56,17 +60,23 @@ export const MessageSearchPanel = memo(function MessageSearchPanel({
             <input
               type="text"
               value={query}
-              onChange={e => setQuery(e.target.value)}
+              onChange={(e) => setQuery(e.target.value)}
               placeholder="Rechercher dans les messages..."
               className="flex-1 bg-transparent text-text-primary placeholder-text-quaternary outline-none text-md"
               autoFocus
             />
             {query && (
-              <button onClick={clearSearch} className="p-1 rounded text-text-quaternary hover:text-text-secondary">
+              <button
+                onClick={clearSearch}
+                className="p-1 rounded text-text-quaternary hover:text-text-secondary"
+              >
                 <X className="w-4 h-4" />
               </button>
             )}
-            <button onClick={onClose} className="p-1.5 rounded-lg text-text-tertiary hover:text-text-primary hover:bg-bg-hover transition-colors">
+            <button
+              onClick={onClose}
+              className="p-1.5 rounded-lg text-text-tertiary hover:text-text-primary hover:bg-bg-hover transition-colors"
+            >
               <X className="w-5 h-5" />
             </button>
           </div>
@@ -82,13 +92,17 @@ export const MessageSearchPanel = memo(function MessageSearchPanel({
             {!isLoading && query.trim().length >= 2 && totalResults === 0 && (
               <div className="text-center py-8 px-4">
                 <Search className="w-8 h-8 text-text-quaternary mx-auto mb-2" />
-                <p className="text-sm text-text-tertiary">Aucun résultat pour &laquo;{query}&raquo;</p>
+                <p className="text-sm text-text-tertiary">
+                  Aucun résultat pour &laquo;{query}&raquo;
+                </p>
               </div>
             )}
 
             {query.trim().length < 2 && (
               <div className="text-center py-8 px-4">
-                <p className="text-sm text-text-quaternary">Tape au moins 2 caractères pour chercher</p>
+                <p className="text-sm text-text-quaternary">
+                  Tape au moins 2 caractères pour chercher
+                </p>
               </div>
             )}
 
@@ -100,24 +114,36 @@ export const MessageSearchPanel = memo(function MessageSearchPanel({
                     <Hash className="w-3 h-3" /> Messages de squad ({squadResults.length})
                   </h4>
                 </div>
-                {squadResults.map(result => (
+                {squadResults.map((result) => (
                   <button
                     key={result.message_id}
                     onClick={() => onNavigateToMessage?.(result.message_id, result.squad_id)}
                     className="w-full flex items-start gap-3 px-4 py-3 hover:bg-bg-hover transition-colors text-left"
                   >
                     {result.sender_avatar ? (
-                      <img src={result.sender_avatar} alt="" className="w-8 h-8 rounded-full object-cover flex-shrink-0" />
+                      <img
+                        src={result.sender_avatar}
+                        alt=""
+                        className="w-8 h-8 rounded-full object-cover flex-shrink-0"
+                      />
                     ) : (
                       <div className="w-8 h-8 rounded-full bg-primary-20 flex items-center justify-center flex-shrink-0">
-                        <span className="text-xs font-bold text-primary">{result.sender_username?.charAt(0).toUpperCase()}</span>
+                        <span className="text-xs font-bold text-primary">
+                          {result.sender_username?.charAt(0).toUpperCase()}
+                        </span>
                       </div>
                     )}
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 mb-0.5">
-                        <span className="text-sm font-medium text-text-primary">{result.sender_username}</span>
-                        <span className="text-xs text-text-quaternary">dans {result.squad_name}</span>
-                        <span className="ml-auto text-xs text-text-quaternary flex-shrink-0">{formatDate(result.created_at)}</span>
+                        <span className="text-sm font-medium text-text-primary">
+                          {result.sender_username}
+                        </span>
+                        <span className="text-xs text-text-quaternary">
+                          dans {result.squad_name}
+                        </span>
+                        <span className="ml-auto text-xs text-text-quaternary flex-shrink-0">
+                          {formatDate(result.created_at)}
+                        </span>
                       </div>
                       <p className="text-sm text-text-secondary line-clamp-2">
                         {highlightMatch(result.content, query)}
@@ -136,23 +162,33 @@ export const MessageSearchPanel = memo(function MessageSearchPanel({
                     <User className="w-3 h-3" /> Messages privés ({dmResults.length})
                   </h4>
                 </div>
-                {dmResults.map(result => (
+                {dmResults.map((result) => (
                   <button
                     key={result.message_id}
                     onClick={() => onNavigateToDM?.(result.message_id, result.other_user_id)}
                     className="w-full flex items-start gap-3 px-4 py-3 hover:bg-bg-hover transition-colors text-left"
                   >
                     {result.sender_avatar ? (
-                      <img src={result.sender_avatar} alt="" className="w-8 h-8 rounded-full object-cover flex-shrink-0" />
+                      <img
+                        src={result.sender_avatar}
+                        alt=""
+                        className="w-8 h-8 rounded-full object-cover flex-shrink-0"
+                      />
                     ) : (
                       <div className="w-8 h-8 rounded-full bg-primary-20 flex items-center justify-center flex-shrink-0">
-                        <span className="text-xs font-bold text-primary">{result.sender_username?.charAt(0).toUpperCase()}</span>
+                        <span className="text-xs font-bold text-primary">
+                          {result.sender_username?.charAt(0).toUpperCase()}
+                        </span>
                       </div>
                     )}
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 mb-0.5">
-                        <span className="text-sm font-medium text-text-primary">{result.sender_username}</span>
-                        <span className="ml-auto text-xs text-text-quaternary flex-shrink-0">{formatDate(result.created_at)}</span>
+                        <span className="text-sm font-medium text-text-primary">
+                          {result.sender_username}
+                        </span>
+                        <span className="ml-auto text-xs text-text-quaternary flex-shrink-0">
+                          {formatDate(result.created_at)}
+                        </span>
                       </div>
                       <p className="text-sm text-text-secondary line-clamp-2">
                         {highlightMatch(result.content, query)}
@@ -168,7 +204,8 @@ export const MessageSearchPanel = memo(function MessageSearchPanel({
           {totalResults > 0 && (
             <div className="px-4 py-2 border-t border-border-default bg-bg-surface">
               <p className="text-xs text-text-quaternary text-center">
-                {totalResults} résultat{totalResults !== 1 ? 's' : ''} trouvé{totalResults !== 1 ? 's' : ''}
+                {totalResults} résultat{totalResults !== 1 ? 's' : ''} trouvé
+                {totalResults !== 1 ? 's' : ''}
               </p>
             </div>
           )}

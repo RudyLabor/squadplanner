@@ -46,14 +46,14 @@ describe('useSubscriptionStore', () => {
 
   it('free plan has price 0', () => {
     const { plans } = useSubscriptionStore.getState()
-    const freePlan = plans.find(p => p.id === 'free')
+    const freePlan = plans.find((p) => p.id === 'free')
     expect(freePlan!.price).toBe(0)
   })
 
   it('yearly plan is cheaper per month than monthly', () => {
     const { plans } = useSubscriptionStore.getState()
-    const monthly = plans.find(p => p.id === 'premium_monthly')!
-    const yearly = plans.find(p => p.id === 'premium_yearly')!
+    const monthly = plans.find((p) => p.id === 'premium_monthly')!
+    const yearly = plans.find((p) => p.id === 'premium_yearly')!
     const yearlyPerMonth = yearly.price / 12
     expect(yearlyPerMonth).toBeLessThan(monthly.price)
   })
@@ -115,7 +115,9 @@ describe('useSubscriptionStore', () => {
 
       let result: { url: string | null; error: Error | null } = { url: null, error: null }
       await act(async () => {
-        result = await useSubscriptionStore.getState().createCheckoutSession('squad-1', 'price-monthly')
+        result = await useSubscriptionStore
+          .getState()
+          .createCheckoutSession('squad-1', 'price-monthly')
       })
 
       expect(result.url).toBe('https://checkout.stripe.com/session-123')
@@ -127,7 +129,9 @@ describe('useSubscriptionStore', () => {
 
       let result: { url: string | null; error: Error | null } = { url: null, error: null }
       await act(async () => {
-        result = await useSubscriptionStore.getState().createCheckoutSession('squad-1', 'price-monthly')
+        result = await useSubscriptionStore
+          .getState()
+          .createCheckoutSession('squad-1', 'price-monthly')
       })
 
       expect(result.url).toBeNull()

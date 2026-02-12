@@ -1,17 +1,11 @@
-"use client";
+'use client'
 
 import { memo, useState } from 'react'
 import { m } from 'framer-motion'
-import {
-  Compass,
-  Plus,
-  Sparkles,
-  Users,
-  Gamepad2,
-} from '../components/icons'
+import { Compass, Plus, Sparkles, Users, Gamepad2 } from '../components/icons'
 import { Link } from 'react-router'
 import { MobilePageHeader } from '../components/layout/MobilePageHeader'
-import { SegmentedControl, Select, Card, Button } from '../components/ui'
+import { SegmentedControl, Select, Button } from '../components/ui'
 import type { SelectOption } from '../components/ui'
 import { DiscoverSquadCard } from '../components/discover/DiscoverSquadCard'
 import { GlobalLeaderboard } from '../components/discover/GlobalLeaderboard'
@@ -19,8 +13,6 @@ import { MatchmakingSection } from '../components/discover/MatchmakingSection'
 import { useBrowseSquadsQuery } from '../hooks/queries'
 import { useStatePersistence } from '../hooks/useStatePersistence'
 import { useInfiniteScroll } from '../hooks/useInfiniteScroll'
-import { LoadingMore } from '../components/ui/LoadingMore'
-
 type Tab = 'squads' | 'joueurs' | 'classement'
 
 const TABS: { value: Tab; label: string }[] = [
@@ -73,11 +65,7 @@ export function Discover() {
 
       {/* Tabs */}
       <div className="mb-4">
-        <SegmentedControl
-          value={tab}
-          onChange={setTab}
-          options={TABS}
-        />
+        <SegmentedControl value={tab} onChange={setTab} options={TABS} />
       </div>
 
       {/* Filters */}
@@ -106,8 +94,12 @@ export function Discover() {
 
       {/* Content */}
       {tab === 'squads' && <SquadsTab game={game} region={region} />}
-      {tab === 'joueurs' && <MatchmakingSection game={game || undefined} region={region || undefined} />}
-      {tab === 'classement' && <GlobalLeaderboard game={game || undefined} region={region || undefined} />}
+      {tab === 'joueurs' && (
+        <MatchmakingSection game={game || undefined} region={region || undefined} />
+      )}
+      {tab === 'classement' && (
+        <GlobalLeaderboard game={game || undefined} region={region || undefined} />
+      )}
     </m.div>
   )
 }
@@ -143,7 +135,8 @@ const FeaturedSection = memo(function FeaturedSection({ squads }: { squads: any[
                 <h4 className="text-sm font-semibold text-text-primary truncate">{squad.name}</h4>
                 <p className="text-xs text-primary font-medium">{squad.game || 'Multi-jeux'}</p>
                 <span className="inline-flex items-center gap-1 text-xs text-text-tertiary mt-1">
-                  <Users className="w-3 h-3" /> {Math.max(squad.member_count || 0, 1)} {Math.max(squad.member_count || 0, 1) === 1 ? 'membre' : 'membres'}
+                  <Users className="w-3 h-3" /> {Math.max(squad.member_count || 0, 1)}{' '}
+                  {Math.max(squad.member_count || 0, 1) === 1 ? 'membre' : 'membres'}
                 </span>
               </div>
             </div>
@@ -191,9 +184,15 @@ const SquadsTab = memo(function SquadsTab({ game, region }: { game: string; regi
           >
             <Compass className="w-8 h-8 text-primary" />
           </m.div>
-          <h3 className="text-lg font-bold text-text-primary mb-2">Aucune squad publique trouvée</h3>
-          <p className="text-sm text-text-secondary mb-1">Sois le premier à créer une squad publique !</p>
-          <p className="text-xs text-text-tertiary mb-5">Les leaders peuvent rendre leur squad publique dans les paramètres</p>
+          <h3 className="text-lg font-bold text-text-primary mb-2">
+            Aucune squad publique trouvée
+          </h3>
+          <p className="text-sm text-text-secondary mb-1">
+            Sois le premier à créer une squad publique !
+          </p>
+          <p className="text-xs text-text-tertiary mb-5">
+            Les leaders peuvent rendre leur squad publique dans les paramètres
+          </p>
           <Link to="/squads">
             <Button variant="primary" size="sm">
               <Plus className="w-4 h-4" />
@@ -206,7 +205,9 @@ const SquadsTab = memo(function SquadsTab({ game, region }: { game: string; regi
         <div className="rounded-xl border border-border-subtle bg-surface-card p-5 text-center">
           <Sparkles className="w-5 h-5 text-primary mx-auto mb-2" />
           <p className="text-sm text-text-secondary">Les squads publiques apparaîtront ici.</p>
-          <p className="text-xs text-text-tertiary mt-1">Rends ta squad publique dans les paramètres pour la faire découvrir !</p>
+          <p className="text-xs text-text-tertiary mt-1">
+            Rends ta squad publique dans les paramètres pour la faire découvrir !
+          </p>
         </div>
       </div>
     )
@@ -216,7 +217,7 @@ const SquadsTab = memo(function SquadsTab({ game, region }: { game: string; regi
     <div>
       <FeaturedSection squads={squads} />
       <div className="space-y-2 lg:grid lg:grid-cols-2 xl:grid-cols-3 lg:gap-4 lg:space-y-0">
-        {squads.map(squad => (
+        {squads.map((squad) => (
           <DiscoverSquadCard key={squad.id} squad={squad} />
         ))}
         {/* Sentinel element for infinite scroll */}

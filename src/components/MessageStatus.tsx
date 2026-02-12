@@ -40,11 +40,12 @@ export function MessageStatus({
   // Pour les messages de squad: vérifier read_by
   if (readBy !== undefined) {
     // Compter les lecteurs (exclure l'émetteur)
-    const readersCount = readBy.filter(id => id !== currentUserId).length
+    const readersCount = readBy.filter((id) => id !== currentUserId).length
     // Lu si au moins un autre utilisateur a lu, ou si tous les attendus ont lu
-    const isRead = expectedReaders > 1
-      ? readersCount >= expectedReaders - 1 // -1 car on exclut l'émetteur
-      : readersCount > 0
+    const isRead =
+      expectedReaders > 1
+        ? readersCount >= expectedReaders - 1 // -1 car on exclut l'émetteur
+        : readersCount > 0
 
     return (
       <span className="inline-flex items-center ml-1">

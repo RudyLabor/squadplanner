@@ -1,13 +1,6 @@
 import { memo } from 'react'
 import { m } from 'framer-motion'
-import {
-  Calendar,
-  Users,
-  CheckCircle2,
-  HelpCircle,
-  XCircle,
-  Sparkles,
-} from '../icons'
+import { Calendar, Users, CheckCircle2, HelpCircle, XCircle, Sparkles } from '../icons'
 import { Link } from 'react-router'
 import { Card, Badge, SessionCardSkeleton, ContentTransition } from '../ui'
 import { EmptyStateIllustration } from '../EmptyStateIllustration'
@@ -53,8 +46,15 @@ const NextSessionCard = memo(function NextSessionCard({
     timeLabel = `Dans ${diffDays} jours`
   }
 
-  const timeFormatted = scheduledDate.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })
-  const dateFormatted = scheduledDate.toLocaleDateString('fr-FR', { weekday: 'short', day: 'numeric', month: 'short' })
+  const timeFormatted = scheduledDate.toLocaleTimeString('fr-FR', {
+    hour: '2-digit',
+    minute: '2-digit',
+  })
+  const dateFormatted = scheduledDate.toLocaleDateString('fr-FR', {
+    weekday: 'short',
+    day: 'numeric',
+    month: 'short',
+  })
 
   const hasResponded = session.my_rsvp !== null
   const canRsvp = diffMs > -2 * 60 * 60 * 1000
@@ -81,11 +81,15 @@ const NextSessionCard = memo(function NextSessionCard({
           <div className="flex items-center gap-4 text-base text-text-tertiary mb-3">
             <div className="flex items-center gap-1.5">
               <Calendar className="w-4 h-4" />
-              <span>{dateFormatted} · {timeFormatted}</span>
+              <span>
+                {dateFormatted} · {timeFormatted}
+              </span>
             </div>
             <div className="flex items-center gap-1.5">
               <Users className="w-4 h-4" />
-              <span>{session.rsvp_counts.present}/{session.total_members}</span>
+              <span>
+                {session.rsvp_counts.present}/{session.total_members}
+              </span>
             </div>
           </div>
         </Link>
@@ -154,14 +158,20 @@ const NextSessionCard = memo(function NextSessionCard({
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, ease: 'easeOut' }}
             className={`flex items-center gap-2 text-base mt-2 pt-2 border-t border-border-subtle ${
-              session.my_rsvp === 'present' ? 'text-success' :
-              session.my_rsvp === 'absent' ? 'text-error' : 'text-warning'
+              session.my_rsvp === 'present'
+                ? 'text-success'
+                : session.my_rsvp === 'absent'
+                  ? 'text-error'
+                  : 'text-warning'
             }`}
           >
             <CheckCircle2 className="w-4 h-4" />
             <span>
-              {session.my_rsvp === 'present' ? "T'es chaud, on t'attend !" :
-               session.my_rsvp === 'absent' ? 'Pas dispo cette fois' : 'En mode peut-être...'}
+              {session.my_rsvp === 'present'
+                ? "T'es chaud, on t'attend !"
+                : session.my_rsvp === 'absent'
+                  ? 'Pas dispo cette fois'
+                  : 'En mode peut-être...'}
             </span>
           </m.div>
         )}
@@ -186,12 +196,12 @@ const SessionEmptyState = memo(function SessionEmptyState({ onCreate }: { onCrea
       <m.div
         className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent pointer-events-none"
         animate={{
-          opacity: [0.3, 0.6, 0.3]
+          opacity: [0.3, 0.6, 0.3],
         }}
         transition={{
           duration: 3,
           repeat: Infinity,
-          ease: "easeInOut"
+          ease: 'easeInOut',
         }}
       />
 
@@ -243,10 +253,7 @@ const SessionEmptyState = memo(function SessionEmptyState({ onCreate }: { onCrea
         >
           <Calendar className="w-5 h-5 group-hover:rotate-12 transition-transform" />
           Planifier une session
-          <m.div
-            animate={{ x: [0, 3, 0] }}
-            transition={{ duration: 1.5, repeat: Infinity }}
-          >
+          <m.div animate={{ x: [0, 3, 0] }} transition={{ duration: 1.5, repeat: Infinity }}>
             <Sparkles className="w-4 h-4" />
           </m.div>
         </m.button>
@@ -277,19 +284,17 @@ export const HomeSessionsSection = memo(function HomeSessionsSection({
   return (
     <section aria-label="Prochaine session" className="mb-6">
       <div className="flex items-center justify-between mb-3">
-        <h2 className="text-base font-semibold text-text-primary">
-          Prochaine session
-        </h2>
+        <h2 className="text-base font-semibold text-text-primary">Prochaine session</h2>
         {!sessionsLoading && upcomingSessions.length > 1 && (
-          <Link to="/squads" className="text-sm text-primary font-medium min-h-[44px] flex items-center px-2">
+          <Link
+            to="/squads"
+            className="text-sm text-primary font-medium min-h-[44px] flex items-center px-2"
+          >
             Voir tout ({upcomingSessions.length})
           </Link>
         )}
       </div>
-      <ContentTransition
-        isLoading={sessionsLoading}
-        skeleton={<SessionCardSkeleton />}
-      >
+      <ContentTransition isLoading={sessionsLoading} skeleton={<SessionCardSkeleton />}>
         {nextSession ? (
           <NextSessionCard session={nextSession} onRsvp={onRsvp} isRsvpLoading={isRsvpLoading} />
         ) : onCreateSession ? (

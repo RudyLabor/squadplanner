@@ -7,7 +7,9 @@ import { sendRsvpMessage, sendSessionConfirmedMessage } from '../../lib/systemMe
 import { createOptimisticMutation, optimisticId } from '../../utils/optimisticUpdate'
 import {
   type SessionWithDetails,
-  fetchSessionsBySquad, fetchUpcomingSessions, fetchSessionById,
+  fetchSessionsBySquad,
+  fetchUpcomingSessions,
+  fetchSessionById,
 } from './useSessionFetchers'
 
 export type { SessionWithDetails } from './useSessionFetchers'
@@ -18,7 +20,7 @@ type CheckinStatus = 'present' | 'late' | 'noshow'
 export function useSquadSessionsQuery(squadId: string | undefined, userId?: string) {
   return useQuery({
     queryKey: queryKeys.sessions.list(squadId),
-    queryFn: () => squadId ? fetchSessionsBySquad(squadId, userId) : [],
+    queryFn: () => (squadId ? fetchSessionsBySquad(squadId, userId) : []),
     enabled: !!squadId,
     staleTime: 30 * 1000,
   })
@@ -27,7 +29,7 @@ export function useSquadSessionsQuery(squadId: string | undefined, userId?: stri
 export function useUpcomingSessionsQuery(userId: string | undefined) {
   return useQuery({
     queryKey: queryKeys.sessions.upcoming(),
-    queryFn: () => userId ? fetchUpcomingSessions(userId) : [],
+    queryFn: () => (userId ? fetchUpcomingSessions(userId) : []),
     enabled: !!userId,
     staleTime: 30 * 1000,
   })
@@ -36,15 +38,19 @@ export function useUpcomingSessionsQuery(userId: string | undefined) {
 export function useSessionQuery(sessionId: string | undefined, userId?: string) {
   return useQuery({
     queryKey: queryKeys.sessions.detail(sessionId ?? ''),
-    queryFn: () => sessionId ? fetchSessionById(sessionId, userId) : null,
+    queryFn: () => (sessionId ? fetchSessionById(sessionId, userId) : null),
     enabled: !!sessionId,
     staleTime: 15 * 1000,
   })
 }
 
 type CreateSessionVars = {
-  squad_id: string; title?: string; game?: string
-  scheduled_at: string; duration_minutes?: number; auto_confirm_threshold?: number
+  squad_id: string
+  title?: string
+  game?: string
+  scheduled_at: string
+  duration_minutes?: number
+  auto_confirm_threshold?: number
 }
 
 export function useCreateSessionMutation() {
@@ -53,42 +59,68 @@ export function useCreateSessionMutation() {
     queryKeys: (vars) => [queryKeys.sessions.list(vars.squad_id), queryKeys.sessions.upcoming()],
     updateCache: (qc, vars) => {
       const tempSession: SessionWithDetails = {
-        id: optimisticId(), squad_id: vars.squad_id, title: vars.title || null,
-        game: vars.game || null, scheduled_at: vars.scheduled_at, created_by: '',
-        status: 'proposed', duration_minutes: vars.duration_minutes || 120,
+        id: optimisticId(),
+        squad_id: vars.squad_id,
+        title: vars.title || null,
+        game: vars.game || null,
+        description: null,
+        scheduled_at: vars.scheduled_at,
+        created_by: '',
+        status: 'proposed',
+        duration_minutes: vars.duration_minutes || 120,
+        min_players: 1,
+        max_players: null,
+        rsvp_deadline: null,
         auto_confirm_threshold: vars.auto_confirm_threshold || 3,
-        created_at: new Date().toISOString(), updated_at: new Date().toISOString(),
-        my_rsvp: 'present', rsvp_counts: { present: 1, absent: 0, maybe: 0 },
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        my_rsvp: 'present',
+        rsvp_counts: { present: 1, absent: 0, maybe: 0 },
       }
-      qc.setQueryData<SessionWithDetails[]>(
-        queryKeys.sessions.list(vars.squad_id),
-        (old) => old ? [...old, tempSession] : [tempSession]
+      qc.setQueryData<SessionWithDetails[]>(queryKeys.sessions.list(vars.squad_id), (old) =>
+        old ? [...old, tempSession] : [tempSession]
       )
     },
     errorMessage: 'Erreur lors de la creation de la session',
-    invalidateKeys: (_data, vars) => [queryKeys.sessions.list(vars.squad_id), queryKeys.sessions.upcoming()],
+    invalidateKeys: (_data, vars) => [
+      queryKeys.sessions.list(vars.squad_id),
+      queryKeys.sessions.upcoming(),
+    ],
   })
 
   return useMutation({
     mutationFn: async (data: CreateSessionVars) => {
-      const { data: { user } } = await supabase.auth.getUser()
+      const {
+        data: { user },
+      } = await supabase.auth.getUser()
       if (!user) throw new Error('Not authenticated')
-      const { data: session, error } = await supabase.from('sessions')
+      const { data: session, error } = await supabase
+        .from('sessions')
         .insert({
-          squad_id: data.squad_id, title: data.title, game: data.game,
-          scheduled_at: data.scheduled_at, created_by: user.id, status: 'proposed' as const,
+          squad_id: data.squad_id,
+          title: data.title,
+          game: data.game,
+          scheduled_at: data.scheduled_at,
+          created_by: user.id,
+          status: 'proposed' as const,
           duration_minutes: data.duration_minutes || 120,
           auto_confirm_threshold: data.auto_confirm_threshold || 3,
-        }).select().single()
+        })
+        .select()
+        .single()
       if (error) throw error
       await supabase.from('session_rsvps').insert({
-        session_id: session.id, user_id: user.id, response: 'present' as const,
+        session_id: session.id,
+        user_id: user.id,
+        response: 'present' as const,
       })
       return session
     },
     onMutate: optimistic.onMutate,
     onError: optimistic.onError,
-    onSuccess: () => { showSuccess('Session creee ! Tes potes vont etre notifies.') },
+    onSuccess: () => {
+      showSuccess('Session creee ! Tes potes vont etre notifies.')
+    },
     onSettled: optimistic.onSettled,
   })
 }
@@ -97,22 +129,34 @@ export function useRsvpMutation() {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async ({ sessionId, response }: { sessionId: string; response: RsvpResponse }) => {
-      const { data: { user } } = await supabase.auth.getUser()
+      const {
+        data: { user },
+      } = await supabase.auth.getUser()
       if (!user) throw new Error('Not authenticated')
-      const { data: existing } = await supabase.from('session_rsvps')
-        .select('id').eq('session_id', sessionId).eq('user_id', user.id).single()
+      const { data: existing } = await supabase
+        .from('session_rsvps')
+        .select('id')
+        .eq('session_id', sessionId)
+        .eq('user_id', user.id)
+        .single()
       if (existing) {
-        const { error } = await supabase.from('session_rsvps')
-          .update({ response, responded_at: new Date().toISOString() }).eq('id', existing.id)
+        const { error } = await supabase
+          .from('session_rsvps')
+          .update({ response, responded_at: new Date().toISOString() })
+          .eq('id', existing.id)
         if (error) throw error
       } else {
-        const { error } = await supabase.from('session_rsvps')
-          .insert({ session_id: sessionId, user_id: user.id, response, responded_at: new Date().toISOString() })
+        const { error } = await supabase.from('session_rsvps').insert({
+          session_id: sessionId,
+          user_id: user.id,
+          response,
+          responded_at: new Date().toISOString(),
+        })
         if (error) throw error
       }
       const [{ data: profile }, { data: session }] = await Promise.all([
         supabase.from('profiles').select('username').eq('id', user.id).single(),
-        supabase.from('sessions').select('squad_id, title').eq('id', sessionId).single()
+        supabase.from('sessions').select('squad_id, title').eq('id', sessionId).single(),
       ])
       if (profile?.username && session?.squad_id) {
         sendRsvpMessage(session.squad_id, profile.username, session.title, response).catch(() => {})
@@ -121,18 +165,28 @@ export function useRsvpMutation() {
     },
     onMutate: async ({ sessionId, response }) => {
       await queryClient.cancelQueries({ queryKey: queryKeys.sessions.detail(sessionId) })
-      const previousSession = queryClient.getQueryData<SessionWithDetails>(queryKeys.sessions.detail(sessionId))
+      const previousSession = queryClient.getQueryData<SessionWithDetails>(
+        queryKeys.sessions.detail(sessionId)
+      )
       if (previousSession) {
-        const { data: { user } } = await supabase.auth.getUser()
+        const {
+          data: { user },
+        } = await supabase.auth.getUser()
         if (user) {
           queryClient.setQueryData<SessionWithDetails>(queryKeys.sessions.detail(sessionId), {
-            ...previousSession, my_rsvp: response,
+            ...previousSession,
+            my_rsvp: response,
             rsvp_counts: {
               present: previousSession.rsvp_counts?.present || 0,
               absent: previousSession.rsvp_counts?.absent || 0,
               maybe: previousSession.rsvp_counts?.maybe || 0,
-              ...(previousSession.my_rsvp && { [previousSession.my_rsvp]: (previousSession.rsvp_counts?.[previousSession.my_rsvp] || 1) - 1 }),
-              [response]: (previousSession.rsvp_counts?.[response] || 0) + (previousSession.my_rsvp === response ? 0 : 1),
+              ...(previousSession.my_rsvp && {
+                [previousSession.my_rsvp]:
+                  (previousSession.rsvp_counts?.[previousSession.my_rsvp] || 1) - 1,
+              }),
+              [response]:
+                (previousSession.rsvp_counts?.[response] || 0) +
+                (previousSession.my_rsvp === response ? 0 : 1),
             },
           })
         }
@@ -141,13 +195,17 @@ export function useRsvpMutation() {
     },
     onError: (_err, variables, context) => {
       if (context?.previousSession) {
-        queryClient.setQueryData(queryKeys.sessions.detail(variables.sessionId), context.previousSession)
+        queryClient.setQueryData(
+          queryKeys.sessions.detail(variables.sessionId),
+          context.previousSession
+        )
       }
       showError('Erreur de connexion. Reessaie.')
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: queryKeys.sessions.detail(data.sessionId) })
-      if (data.squadId) queryClient.invalidateQueries({ queryKey: queryKeys.sessions.list(data.squadId) })
+      if (data.squadId)
+        queryClient.invalidateQueries({ queryKey: queryKeys.sessions.list(data.squadId) })
       queryClient.invalidateQueries({ queryKey: queryKeys.sessions.upcoming() })
     },
   })
@@ -157,17 +215,29 @@ export function useCheckinMutation() {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async ({ sessionId, status }: { sessionId: string; status: CheckinStatus }) => {
-      const { data: { user } } = await supabase.auth.getUser()
+      const {
+        data: { user },
+      } = await supabase.auth.getUser()
       if (!user) throw new Error('Not authenticated')
-      const { data: existing } = await supabase.from('session_checkins')
-        .select('id').eq('session_id', sessionId).eq('user_id', user.id).single()
+      const { data: existing } = await supabase
+        .from('session_checkins')
+        .select('id')
+        .eq('session_id', sessionId)
+        .eq('user_id', user.id)
+        .single()
       if (existing) {
-        const { error } = await supabase.from('session_checkins')
-          .update({ status, checked_at: new Date().toISOString() }).eq('id', existing.id)
+        const { error } = await supabase
+          .from('session_checkins')
+          .update({ status, checked_at: new Date().toISOString() })
+          .eq('id', existing.id)
         if (error) throw error
       } else {
-        const { error } = await supabase.from('session_checkins')
-          .insert({ session_id: sessionId, user_id: user.id, status, checked_at: new Date().toISOString() })
+        const { error } = await supabase.from('session_checkins').insert({
+          session_id: sessionId,
+          user_id: user.id,
+          status,
+          checked_at: new Date().toISOString(),
+        })
         if (error) throw error
       }
       return sessionId
@@ -176,7 +246,9 @@ export function useCheckinMutation() {
       queryClient.invalidateQueries({ queryKey: queryKeys.sessions.detail(sessionId) })
       showSuccess('Check-in enregistre !')
     },
-    onError: () => { showError('Erreur lors du check-in') },
+    onError: () => {
+      showError('Erreur lors du check-in')
+    },
   })
 }
 
@@ -184,22 +256,32 @@ export function useConfirmSessionMutation() {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async (sessionId: string) => {
-      const { data: session } = await supabase.from('sessions')
-        .select('squad_id, title, scheduled_at').eq('id', sessionId).single()
-      const { error } = await supabase.from('sessions')
-        .update({ status: 'confirmed' as const }).eq('id', sessionId)
+      const { data: session } = await supabase
+        .from('sessions')
+        .select('squad_id, title, scheduled_at')
+        .eq('id', sessionId)
+        .single()
+      const { error } = await supabase
+        .from('sessions')
+        .update({ status: 'confirmed' as const })
+        .eq('id', sessionId)
       if (error) throw error
       if (session?.squad_id) {
-        sendSessionConfirmedMessage(session.squad_id, session.title, session.scheduled_at).catch(() => {})
+        sendSessionConfirmedMessage(session.squad_id, session.title, session.scheduled_at).catch(
+          () => {}
+        )
       }
       return { sessionId, squadId: session?.squad_id }
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: queryKeys.sessions.detail(data.sessionId) })
-      if (data.squadId) queryClient.invalidateQueries({ queryKey: queryKeys.sessions.list(data.squadId) })
+      if (data.squadId)
+        queryClient.invalidateQueries({ queryKey: queryKeys.sessions.list(data.squadId) })
       showSuccess('Session confirmee !')
     },
-    onError: () => { showError('Erreur lors de la confirmation') },
+    onError: () => {
+      showError('Erreur lors de la confirmation')
+    },
   })
 }
 
@@ -207,19 +289,27 @@ export function useCancelSessionMutation() {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async (sessionId: string) => {
-      const { data: session } = await supabase.from('sessions')
-        .select('squad_id').eq('id', sessionId).single()
-      const { error } = await supabase.from('sessions')
-        .update({ status: 'cancelled' as const }).eq('id', sessionId)
+      const { data: session } = await supabase
+        .from('sessions')
+        .select('squad_id')
+        .eq('id', sessionId)
+        .single()
+      const { error } = await supabase
+        .from('sessions')
+        .update({ status: 'cancelled' as const })
+        .eq('id', sessionId)
       if (error) throw error
       return { sessionId, squadId: session?.squad_id }
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: queryKeys.sessions.detail(data.sessionId) })
-      if (data.squadId) queryClient.invalidateQueries({ queryKey: queryKeys.sessions.list(data.squadId) })
+      if (data.squadId)
+        queryClient.invalidateQueries({ queryKey: queryKeys.sessions.list(data.squadId) })
       queryClient.invalidateQueries({ queryKey: queryKeys.sessions.upcoming() })
       showSuccess('Session annulee')
     },
-    onError: () => { showError('Erreur lors de l\'annulation') },
+    onError: () => {
+      showError("Erreur lors de l'annulation")
+    },
   })
 }

@@ -1,14 +1,8 @@
-"use client";
+'use client'
 
 import { useState } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
-import {
-  Calendar,
-  Plus,
-  Loader2,
-  Mic,
-  MicOff,
-} from '../icons'
+import { Calendar, Plus, Loader2, Mic, MicOff } from '../icons'
 import { Button, Card, CardContent, Badge, Input, Select } from '../ui'
 import { useAuthStore, usePremiumStore } from '../../hooks'
 import { useVoiceChatStore } from '../../hooks/useVoiceChat'
@@ -26,7 +20,16 @@ interface PartySectionProps {
 export function PartySection({ squadId }: PartySectionProps) {
   const { user, profile } = useAuthStore()
   const { hasPremium } = usePremiumStore()
-  const { isConnected, isConnecting, isMuted, remoteUsers, joinChannel, leaveChannel, toggleMute, error } = useVoiceChatStore()
+  const {
+    isConnected,
+    isConnecting,
+    isMuted,
+    remoteUsers,
+    joinChannel,
+    leaveChannel,
+    toggleMute,
+    error,
+  } = useVoiceChatStore()
 
   const handleJoinParty = async () => {
     if (!user || !profile) return
@@ -34,7 +37,7 @@ export function PartySection({ squadId }: PartySectionProps) {
     await joinChannel(channelName, user.id, profile.username || 'Joueur', hasPremium)
   }
 
-  const participantCount = isConnected ? (remoteUsers?.length || 0) + 1 : (remoteUsers?.length || 0)
+  const participantCount = isConnected ? (remoteUsers?.length || 0) + 1 : remoteUsers?.length || 0
 
   return (
     <Card className={`p-4 ${isConnected ? 'border-success/30 bg-success/5' : ''}`}>
@@ -44,7 +47,9 @@ export function PartySection({ squadId }: PartySectionProps) {
           <span className="text-md font-semibold text-text-primary">Party vocale</span>
         </div>
         {participantCount > 0 && !isConnected && (
-          <Badge variant="success">{participantCount} connecté{participantCount > 1 ? 's' : ''}</Badge>
+          <Badge variant="success">
+            {participantCount} connecté{participantCount > 1 ? 's' : ''}
+          </Badge>
         )}
       </div>
 
@@ -56,14 +61,24 @@ export function PartySection({ squadId }: PartySectionProps) {
               <span className="text-base text-text-primary">Toi</span>
             </div>
             {(remoteUsers || []).map((u) => (
-              <div key={String(u.odrop)} className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-surface-card border border-border-hover">
-                <div className={`w-2 h-2 rounded-full ${u.isSpeaking ? 'bg-success' : 'bg-text-tertiary'}`} />
+              <div
+                key={String(u.odrop)}
+                className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-surface-card border border-border-hover"
+              >
+                <div
+                  className={`w-2 h-2 rounded-full ${u.isSpeaking ? 'bg-success' : 'bg-text-tertiary'}`}
+                />
                 <span className="text-base text-text-primary">{u.username}</span>
               </div>
             ))}
           </div>
           <div className="flex gap-2">
-            <Button variant={isMuted ? 'danger' : 'secondary'} size="sm" onClick={toggleMute} className="flex-1">
+            <Button
+              variant={isMuted ? 'danger' : 'secondary'}
+              size="sm"
+              onClick={toggleMute}
+              className="flex-1"
+            >
               {isMuted ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
               {isMuted ? 'Muet' : 'Micro actif'}
             </Button>
@@ -81,7 +96,11 @@ export function PartySection({ squadId }: PartySectionProps) {
             className="w-full"
             variant={participantCount > 0 ? 'primary' : 'secondary'}
           >
-            {isConnecting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Mic className="w-4 h-4" />}
+            {isConnecting ? (
+              <Loader2 className="w-4 h-4 animate-spin" />
+            ) : (
+              <Mic className="w-4 h-4" />
+            )}
             {participantCount > 0 ? 'Rejoindre la party' : 'Lancer une party'}
           </Button>
           {participantCount === 0 && (
@@ -127,7 +146,7 @@ export function SquadSessionsList({
   squadGame,
   onRsvp,
   onCreateSession,
-  sessionsLoading
+  sessionsLoading,
 }: SquadSessionsProps) {
   const [showCreateSession, setShowCreateSession] = useState(false)
   const [sessionTitle, setSessionTitle] = useState('')
@@ -138,7 +157,9 @@ export function SquadSessionsList({
   const [error, setError] = useState<string | null>(null)
 
   const now = new Date()
-  const futureSessions = (sessions || []).filter(s => new Date(s.scheduled_at) >= now || s.status === 'confirmed')
+  const futureSessions = (sessions || []).filter(
+    (s) => new Date(s.scheduled_at) >= now || s.status === 'confirmed'
+  )
 
   const handleCreateSession = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -193,12 +214,26 @@ export function SquadSessionsList({
                     placeholder="Session ranked, Detente, Tryhard..."
                   />
                   <div className="grid grid-cols-2 gap-4">
-                    <Input label="Date" type="date" value={sessionDate} onChange={(e) => setSessionDate(e.target.value)} required />
-                    <Input label="Heure" type="time" value={sessionTime} onChange={(e) => setSessionTime(e.target.value)} required />
+                    <Input
+                      label="Date"
+                      type="date"
+                      value={sessionDate}
+                      onChange={(e) => setSessionDate(e.target.value)}
+                      required
+                    />
+                    <Input
+                      label="Heure"
+                      type="time"
+                      value={sessionTime}
+                      onChange={(e) => setSessionTime(e.target.value)}
+                      required
+                    />
                   </div>
                   <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-base font-medium text-text-secondary mb-1.5">Duree</label>
+                      <label className="block text-base font-medium text-text-secondary mb-1.5">
+                        Duree
+                      </label>
                       <Select
                         options={[
                           { value: '60', label: '1 heure' },
@@ -211,7 +246,9 @@ export function SquadSessionsList({
                       />
                     </div>
                     <div>
-                      <label className="block text-base font-medium text-text-secondary mb-1">Confirmation automatique</label>
+                      <label className="block text-base font-medium text-text-secondary mb-1">
+                        Confirmation automatique
+                      </label>
                       <p className="text-sm text-text-quaternary mb-1.5">
                         La session sera confirmée quand ce nombre de joueurs aura répondu "Présent"
                       </p>
@@ -236,7 +273,13 @@ export function SquadSessionsList({
                     </div>
                   )}
                   <div className="flex gap-2 pt-1">
-                    <Button type="button" variant="ghost" onClick={() => setShowCreateSession(false)}>Annuler</Button>
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      onClick={() => setShowCreateSession(false)}
+                    >
+                      Annuler
+                    </Button>
                     <Button type="submit" disabled={sessionsLoading}>
                       {sessionsLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Créer'}
                     </Button>
@@ -257,9 +300,7 @@ export function SquadSessionsList({
 
       {/* Sessions list */}
       <div className="mb-6">
-        <h2 className="text-base font-semibold text-text-primary mb-3">
-          Sessions à venir
-        </h2>
+        <h2 className="text-base font-semibold text-text-primary mb-3">Sessions à venir</h2>
         {futureSessions.length > 0 ? (
           <div className="space-y-3 lg:grid lg:grid-cols-2 lg:gap-4 lg:space-y-0">
             {futureSessions.map((session) => (
@@ -270,7 +311,9 @@ export function SquadSessionsList({
           <Card className="p-6 text-center">
             <Calendar className="w-10 h-10 mx-auto mb-3 text-text-quaternary" strokeWidth={1} />
             <p className="text-md text-text-tertiary mb-1">Pas encore de session prévue</p>
-            <p className="text-sm text-text-quaternary mb-4">Propose un créneau pour jouer avec ta squad</p>
+            <p className="text-sm text-text-quaternary mb-4">
+              Propose un créneau pour jouer avec ta squad
+            </p>
             <Button type="button" size="sm" onClick={() => setShowCreateSession(true)}>
               <Plus className="w-4 h-4" />
               Planifier une session

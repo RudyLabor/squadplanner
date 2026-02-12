@@ -57,7 +57,9 @@ export const useCallHistoryStore = create<CallHistoryState>((set, get) => ({
     set({ isLoading: true, error: null })
 
     try {
-      const { data: { session } } = await supabase.auth.getSession()
+      const {
+        data: { session },
+      } = await supabase.auth.getSession()
       const user = session?.user
       if (!user) {
         set({ error: 'Utilisateur non connecté', isLoading: false })
@@ -68,7 +70,8 @@ export const useCallHistoryStore = create<CallHistoryState>((set, get) => ({
       // If table doesn't exist, we'll get an error and show empty state
       const { data: callsData, error: dbError } = await supabase
         .from('calls')
-        .select(`
+        .select(
+          `
           id,
           caller_id,
           receiver_id,
@@ -78,7 +81,8 @@ export const useCallHistoryStore = create<CallHistoryState>((set, get) => ({
           ended_at,
           caller:profiles!calls_caller_id_fkey(id, username, avatar_url),
           receiver:profiles!calls_receiver_id_fkey(id, username, avatar_url)
-        `)
+        `
+        )
         .or(`caller_id.eq.${user.id},receiver_id.eq.${user.id}`)
         .order('created_at', { ascending: false })
         .limit(100)
@@ -86,12 +90,16 @@ export const useCallHistoryStore = create<CallHistoryState>((set, get) => ({
       if (dbError) {
         console.warn('[CallHistory] Error fetching:', dbError)
         // If table doesn't exist or relation error, show empty state instead of error
-        if (dbError.code === '42P01' || dbError.code === 'PGRST200' || dbError.message?.includes('relation')) {
+        if (
+          dbError.code === '42P01' ||
+          dbError.code === 'PGRST200' ||
+          dbError.message?.includes('relation')
+        ) {
           // Table doesn't exist - show empty state (feature not yet enabled)
           set({ calls: [], isLoading: false, error: null })
           return
         }
-        set({ error: 'Erreur lors du chargement de l\'historique', isLoading: false })
+        set({ error: "Erreur lors du chargement de l'historique", isLoading: false })
         return
       }
 
@@ -121,7 +129,7 @@ export const useCallHistoryStore = create<CallHistoryState>((set, get) => ({
       set({
         calls: [],
         error: null,
-        isLoading: false
+        isLoading: false,
       })
     }
   },
@@ -135,12 +143,12 @@ export const useCallHistoryStore = create<CallHistoryState>((set, get) => ({
 
     switch (filter) {
       case 'incoming':
-        return calls.filter(c => c.type === 'incoming')
+        return calls.filter((c) => c.type === 'incoming')
       case 'outgoing':
-        return calls.filter(c => c.type === 'outgoing')
+        return calls.filter((c) => c.type === 'outgoing')
       case 'missed':
         // Ne filtrer que les appels manqués (pas les rejets)
-        return calls.filter(c => c.status === 'missed')
+        return calls.filter((c) => c.status === 'missed')
       default:
         return calls
     }
@@ -185,7 +193,7 @@ export function formatRelativeTime(date: Date): string {
     const dayMonth = date.toLocaleDateString('fr-FR', {
       weekday: 'short',
       day: 'numeric',
-      month: 'short'
+      month: 'short',
     })
     return `${dayMonth} ${timeStr}`
   }
@@ -193,7 +201,7 @@ export function formatRelativeTime(date: Date): string {
   // Older - show "3 fév. 13:32"
   const dayMonth = date.toLocaleDateString('fr-FR', {
     day: 'numeric',
-    month: 'short'
+    month: 'short',
   })
   return `${dayMonth} ${timeStr}`
 }

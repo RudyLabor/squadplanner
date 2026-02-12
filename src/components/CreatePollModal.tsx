@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 /**
  * Phase 4.1.2 — Create Poll Modal
@@ -6,20 +6,18 @@
  */
 import { useState, memo } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
-import {
-  X,
-  Plus,
-  Trash2,
-  BarChart3,
-  Loader2,
-} from './icons'
+import { X, Plus, Trash2, BarChart3, Loader2 } from './icons'
 interface CreatePollModalProps {
   isOpen: boolean
   onClose: () => void
   onCreatePoll: (question: string, options: string[]) => void
 }
 
-export const CreatePollModal = memo(function CreatePollModal({ isOpen, onClose, onCreatePoll }: CreatePollModalProps) {
+export const CreatePollModal = memo(function CreatePollModal({
+  isOpen,
+  onClose,
+  onCreatePoll,
+}: CreatePollModalProps) {
   const [question, setQuestion] = useState('')
   const [options, setOptions] = useState(['', ''])
 
@@ -40,13 +38,16 @@ export const CreatePollModal = memo(function CreatePollModal({ isOpen, onClose, 
   }
 
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const isValid = question.trim().length > 0 && options.filter(o => o.trim()).length >= 2
+  const isValid = question.trim().length > 0 && options.filter((o) => o.trim()).length >= 2
 
   const handleSubmit = async () => {
     if (!isValid || isSubmitting) return
     setIsSubmitting(true)
     try {
-      await onCreatePoll(question.trim(), options.filter(o => o.trim()))
+      await onCreatePoll(
+        question.trim(),
+        options.filter((o) => o.trim())
+      )
       // Reset
       setQuestion('')
       setOptions(['', ''])
@@ -87,7 +88,9 @@ export const CreatePollModal = memo(function CreatePollModal({ isOpen, onClose, 
             <div className="flex items-center justify-between px-5 py-4 border-b border-border-default">
               <div className="flex items-center gap-2">
                 <BarChart3 className="w-5 h-5 text-primary-hover" />
-                <h2 id="create-poll-title" className="text-lg font-semibold text-text-primary">Créer un sondage</h2>
+                <h2 id="create-poll-title" className="text-lg font-semibold text-text-primary">
+                  Créer un sondage
+                </h2>
               </div>
               <button
                 onClick={handleClose}
@@ -101,7 +104,9 @@ export const CreatePollModal = memo(function CreatePollModal({ isOpen, onClose, 
             <div className="p-5 space-y-4">
               {/* Question */}
               <div>
-                <label className="text-base text-text-tertiary font-medium mb-2 block">Question</label>
+                <label className="text-base text-text-tertiary font-medium mb-2 block">
+                  Question
+                </label>
                 <input
                   type="text"
                   value={question}
@@ -115,7 +120,9 @@ export const CreatePollModal = memo(function CreatePollModal({ isOpen, onClose, 
 
               {/* Options */}
               <div>
-                <label className="text-base text-text-tertiary font-medium mb-2 block">Options</label>
+                <label className="text-base text-text-tertiary font-medium mb-2 block">
+                  Options
+                </label>
                 <div className="space-y-2">
                   {options.map((option, index) => (
                     <div key={index} className="flex items-center gap-2">
@@ -171,11 +178,7 @@ export const CreatePollModal = memo(function CreatePollModal({ isOpen, onClose, 
                 disabled={!isValid || isSubmitting}
                 className="px-5 py-2.5 rounded-xl text-base font-semibold bg-primary text-white hover:bg-primary-hover transition-colors disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-2"
               >
-                {isSubmitting ? (
-                  <Loader2 className="w-4 h-4 animate-spin" />
-                ) : (
-                  'Créer le sondage'
-                )}
+                {isSubmitting ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Créer le sondage'}
               </button>
             </div>
           </m.div>

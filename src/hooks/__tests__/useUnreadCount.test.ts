@@ -180,7 +180,6 @@ describe('useUnreadCountStore', () => {
       // First call: squad_members
       // Second call: messages (squad unread count)
       // Third call: direct_messages (dm unread count)
-      let fromCallCount = 0
       mockFrom.mockImplementation((table: string) => {
         if (table === 'squad_members') {
           return {

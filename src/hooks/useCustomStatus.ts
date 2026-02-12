@@ -14,14 +14,17 @@ export function useCustomStatus() {
   const { user, profile } = useAuthStore()
   const queryClient = useQueryClient()
 
-  const currentStatus = profile ? {
-    text: profile.status_text as string | null,
-    emoji: profile.status_emoji as string | null,
-    expiresAt: profile.status_expires_at as string | null,
-    isActive: !!(profile.status_text) && (
-      !profile.status_expires_at || new Date(profile.status_expires_at as string) > new Date()
-    ),
-  } : null
+  const currentStatus = profile
+    ? {
+        text: profile.status_text as string | null,
+        emoji: profile.status_emoji as string | null,
+        expiresAt: profile.status_expires_at as string | null,
+        isActive:
+          !!profile.status_text &&
+          (!profile.status_expires_at ||
+            new Date(profile.status_expires_at as string) > new Date()),
+      }
+    : null
 
   const updateStatusMutation = useMutation({
     mutationFn: async ({ statusText, statusEmoji, durationMinutes }: StatusUpdate) => {
@@ -63,9 +66,12 @@ export function useCustomStatus() {
     },
   })
 
-  const setStatus = useCallback((update: StatusUpdate) => {
-    updateStatusMutation.mutate(update)
-  }, [updateStatusMutation])
+  const setStatus = useCallback(
+    (update: StatusUpdate) => {
+      updateStatusMutation.mutate(update)
+    },
+    [updateStatusMutation]
+  )
 
   const clearStatus = useCallback(() => {
     updateStatusMutation.mutate({ statusText: null, statusEmoji: null })

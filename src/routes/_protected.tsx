@@ -27,11 +27,16 @@ interface ProtectedLoaderData {
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const { supabase, headers, getUser } = createSupabaseServerClient(request)
-  let { data: { user }, error } = await getUser()
+  let {
+    data: { user },
+    error,
+  } = await getUser()
 
   if (error || !user) {
     // Attempt session refresh before redirecting — handles expired-but-refreshable tokens
-    const { data: { session } } = await supabase.auth.refreshSession()
+    const {
+      data: { session },
+    } = await supabase.auth.refreshSession()
     if (!session?.user) {
       throw redirect('/', { headers })
     }
@@ -48,20 +53,23 @@ export async function loader({ request }: LoaderFunctionArgs) {
   })
 
   if (!rpcError && rpcResult) {
-    profile = rpcResult.profile as Profile | null
-    squads = (rpcResult.squads as SquadWithCount[]) || []
+    profile = (rpcResult as any).profile as Profile | null
+    squads = ((rpcResult as any).squads as SquadWithCount[]) || []
   } else {
     // Fallback: parallel queries (used before RPC is deployed)
     const [profileResult, membershipsResult] = await Promise.all([
       supabase.from('profiles').select('*').eq('id', user.id).single(),
       supabase
         .from('squad_members')
-        .select('squad_id, squads!inner(id, name, game, invite_code, owner_id, total_members, created_at)')
+        .select(
+          'squad_id, squads!inner(id, name, game, invite_code, owner_id, total_members, created_at)'
+        )
         .eq('user_id', user.id),
     ])
 
     profile = profileResult.data as Profile | null
-    const rawSquads = (membershipsResult.data?.map((m: { squads: any }) => m.squads).filter(Boolean) || [])
+    const rawSquads =
+      (membershipsResult.data as any[])?.map((m: { squads: any }) => m.squads).filter(Boolean) || []
     squads = rawSquads.map((squad: any) => ({
       ...squad,
       member_count: squad.total_members ?? 1,

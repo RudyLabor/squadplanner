@@ -1,9 +1,9 @@
 export interface SessionEntry {
   id: string
-  title?: string
-  game?: string
+  title?: string | null
+  game?: string | null
   scheduled_at: string
-  my_rsvp?: string
+  my_rsvp?: string | null
   rsvp_counts?: { present?: number; maybe?: number; absent?: number }
   status?: string
 }
@@ -23,6 +23,10 @@ export const dayNames = ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Ven
 export function formatDate(dateStr: string) {
   const date = new Date(dateStr)
   return new Intl.DateTimeFormat('fr-FR', {
-    weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit'
+    weekday: 'short',
+    day: 'numeric',
+    month: 'short',
+    hour: '2-digit',
+    minute: '2-digit',
   }).format(date)
 }

@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 import { useEffect, useRef, useState } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
@@ -44,7 +44,9 @@ export function CallModal() {
 
   // Toast de changement de qualite reseau
   const [showQualityToast, setShowQualityToast] = useState(false)
-  const [qualityToastLevel, setQualityToastLevel] = useState<'excellent' | 'good' | 'medium' | 'poor'>('good')
+  const [qualityToastLevel, setQualityToastLevel] = useState<
+    'excellent' | 'good' | 'medium' | 'poor'
+  >('good')
 
   // Detecter la fin de la reconnexion pour afficher un toast
   useEffect(() => {
@@ -129,9 +131,7 @@ export function CallModal() {
             >
               <div className="flex items-center justify-center gap-3">
                 <WifiOff className="w-5 h-5 text-warning animate-pulse" />
-                <p className="text-md font-medium text-warning">
-                  Reconnexion en cours...
-                </p>
+                <p className="text-md font-medium text-warning">Reconnexion en cours...</p>
                 <Loader2 className="w-5 h-5 text-warning animate-spin" />
               </div>
             </m.div>

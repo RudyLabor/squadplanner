@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { m, AnimatePresence, useInView } from 'framer-motion'
@@ -32,15 +32,15 @@ const testimonials: Testimonial[] = [
   {
     name: 'Bêta-testeur #7',
     squad: 'Les Nocturnes',
-    text: "On est passés de « on verra demain » à 3 sessions par semaine. Le score de présence, ça motive.",
+    text: 'On est passés de « on verra demain » à 3 sessions par semaine. Le score de présence, ça motive.',
     avatar: '🔥',
     rating: 5,
     game: 'Apex Legends',
   },
   {
     name: 'Tout gamer, ever',
-    squad: 'N\'importe quel groupe Discord',
-    text: "« Qui est dispo ce week-end ? » *vu par 8, répondu par 2*. Squad Planner règle ça en 30 secondes.",
+    squad: "N'importe quel groupe Discord",
+    text: '« Qui est dispo ce week-end ? » *vu par 8, répondu par 2*. Squad Planner règle ça en 30 secondes.',
     avatar: '😤',
     rating: 5,
     game: 'Fortnite',
@@ -100,7 +100,9 @@ function TestimonialCard({ t }: { t: Testimonial }) {
         ))}
       </div>
       <p className="text-text-secondary text-sm leading-relaxed italic flex-1">
-        {'\u00AB\u00A0'}{t.text}{'\u00A0\u00BB'}
+        {'\u00AB\u00A0'}
+        {t.text}
+        {'\u00A0\u00BB'}
       </p>
     </div>
   )
@@ -139,10 +141,13 @@ export function TestimonialCarousel() {
     setCurrentIndex((prev) => (prev - 1 + totalSlides) % totalSlides)
   }, [totalSlides])
 
-  const goToSlide = useCallback((index: number) => {
-    setDirection(index > currentIndex ? 1 : -1)
-    setCurrentIndex(index)
-  }, [currentIndex])
+  const goToSlide = useCallback(
+    (index: number) => {
+      setDirection(index > currentIndex ? 1 : -1)
+      setCurrentIndex(index)
+    },
+    [currentIndex]
+  )
 
   // Auto-advance
   useEffect(() => {
@@ -223,8 +228,11 @@ export function TestimonialCarousel() {
                 else if (info.offset.x > 80) prev()
               }}
               className={`grid gap-4 ${
-                cardsPerView === 3 ? 'grid-cols-3' :
-                cardsPerView === 2 ? 'grid-cols-2' : 'grid-cols-1'
+                cardsPerView === 3
+                  ? 'grid-cols-3'
+                  : cardsPerView === 2
+                    ? 'grid-cols-2'
+                    : 'grid-cols-1'
               }`}
               role="group"
               aria-roledescription="slide"
@@ -247,11 +255,13 @@ export function TestimonialCarousel() {
               className="min-w-[44px] min-h-[44px] flex items-center justify-center focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#6366f1]"
               aria-label={`Témoignage groupe ${i + 1}`}
             >
-              <span className={`h-2 rounded-full transition-all duration-300 block ${
-                i === currentIndex
-                  ? 'bg-primary w-6'
-                  : 'bg-border-hover w-2 hover:bg-text-quaternary'
-              }`} />
+              <span
+                className={`h-2 rounded-full transition-all duration-300 block ${
+                  i === currentIndex
+                    ? 'bg-primary w-6'
+                    : 'bg-border-hover w-2 hover:bg-text-quaternary'
+                }`}
+              />
             </button>
           ))}
         </div>

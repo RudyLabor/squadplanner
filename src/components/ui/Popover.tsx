@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 import { useState, useRef, useEffect, useCallback, type ReactNode } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
@@ -134,19 +134,47 @@ function getArrowStyle(
   switch (side) {
     case 'top': {
       const arrowX = triggerRect.left + triggerRect.width / 2 - popoverX - half
-      return { ...base, bottom: -half, left: Math.max(8, Math.min(arrowX, 200)), borderRight: '1px solid', borderBottom: '1px solid', borderColor: 'inherit' }
+      return {
+        ...base,
+        bottom: -half,
+        left: Math.max(8, Math.min(arrowX, 200)),
+        borderRight: '1px solid',
+        borderBottom: '1px solid',
+        borderColor: 'inherit',
+      }
     }
     case 'bottom': {
       const arrowX = triggerRect.left + triggerRect.width / 2 - popoverX - half
-      return { ...base, top: -half, left: Math.max(8, Math.min(arrowX, 200)), borderLeft: '1px solid', borderTop: '1px solid', borderColor: 'inherit' }
+      return {
+        ...base,
+        top: -half,
+        left: Math.max(8, Math.min(arrowX, 200)),
+        borderLeft: '1px solid',
+        borderTop: '1px solid',
+        borderColor: 'inherit',
+      }
     }
     case 'left': {
       const arrowY = triggerRect.top + triggerRect.height / 2 - popoverY - half
-      return { ...base, right: -half, top: Math.max(8, Math.min(arrowY, 200)), borderRight: '1px solid', borderTop: '1px solid', borderColor: 'inherit' }
+      return {
+        ...base,
+        right: -half,
+        top: Math.max(8, Math.min(arrowY, 200)),
+        borderRight: '1px solid',
+        borderTop: '1px solid',
+        borderColor: 'inherit',
+      }
     }
     case 'right': {
       const arrowY = triggerRect.top + triggerRect.height / 2 - popoverY - half
-      return { ...base, left: -half, top: Math.max(8, Math.min(arrowY, 200)), borderLeft: '1px solid', borderBottom: '1px solid', borderColor: 'inherit' }
+      return {
+        ...base,
+        left: -half,
+        top: Math.max(8, Math.min(arrowY, 200)),
+        borderLeft: '1px solid',
+        borderBottom: '1px solid',
+        borderColor: 'inherit',
+      }
     }
   }
 }
@@ -199,11 +227,7 @@ export function Popover({
     if (!isOpen) return
     const handleClick = (e: MouseEvent) => {
       const target = e.target as Node
-      if (
-        triggerRef.current?.contains(target) ||
-        popoverRef.current?.contains(target)
-      )
-        return
+      if (triggerRef.current?.contains(target) || popoverRef.current?.contains(target)) return
       setOpen(false)
     }
     document.addEventListener('mousedown', handleClick)

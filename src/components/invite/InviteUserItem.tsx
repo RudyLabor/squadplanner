@@ -46,12 +46,8 @@ export function InviteUserItem({ member, isInvited, isSending, onInvite }: Invit
 
       {/* Name */}
       <div className="flex-1 min-w-0">
-        <p className="text-md font-medium text-text-primary truncate">
-          {member.username}
-        </p>
-        <p className="text-sm text-text-tertiary">
-          {member.is_online ? 'En ligne' : 'Hors ligne'}
-        </p>
+        <p className="text-md font-medium text-text-primary truncate">{member.username}</p>
+        <p className="text-sm text-text-tertiary">{member.is_online ? 'En ligne' : 'Hors ligne'}</p>
       </div>
 
       {/* Invite button */}

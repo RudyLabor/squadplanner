@@ -1,7 +1,11 @@
 // Zod-like validation without external dependency (Deno compatible)
 // Simple runtime validation for Edge Functions
 
-export function validateString(value: unknown, fieldName: string, options?: { minLength?: number, maxLength?: number }): string {
+export function validateString(
+  value: unknown,
+  fieldName: string,
+  options?: { minLength?: number; maxLength?: number }
+): string {
   if (typeof value !== 'string') {
     throw new Error(`${fieldName} must be a string`)
   }
@@ -32,7 +36,11 @@ export function validateUUID(value: unknown, fieldName: string): string {
   return str
 }
 
-export function validateNumber(value: unknown, fieldName: string, options?: { min?: number, max?: number }): number {
+export function validateNumber(
+  value: unknown,
+  fieldName: string,
+  options?: { min?: number; max?: number }
+): number {
   const num = typeof value === 'number' ? value : Number(value)
   if (isNaN(num)) {
     throw new Error(`${fieldName} must be a number`)
@@ -53,7 +61,11 @@ export function validateBoolean(value: unknown, fieldName: string): boolean {
   return value
 }
 
-export function validateArray<T>(value: unknown, fieldName: string, itemValidator?: (item: unknown, index: number) => T): T[] {
+export function validateArray<T>(
+  value: unknown,
+  fieldName: string,
+  itemValidator?: (item: unknown, index: number) => T
+): T[] {
   if (!Array.isArray(value)) {
     throw new Error(`${fieldName} must be an array`)
   }
@@ -70,7 +82,11 @@ export function validateOptional<T>(value: unknown, validator: (v: unknown) => T
   return validator(value)
 }
 
-export function validateEnum<T extends string>(value: unknown, fieldName: string, allowedValues: T[]): T {
+export function validateEnum<T extends string>(
+  value: unknown,
+  fieldName: string,
+  allowedValues: T[]
+): T {
   const str = validateString(value, fieldName)
   if (!allowedValues.includes(str as T)) {
     throw new Error(`${fieldName} must be one of: ${allowedValues.join(', ')}`)

@@ -1,15 +1,8 @@
-"use client";
+'use client'
 
 import { useState, memo } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
-import {
-  Hash,
-  Volume2,
-  Megaphone,
-  Plus,
-  Trash2,
-  X,
-} from './icons'
+import { Hash, Volume2, Megaphone, Plus, Trash2, X } from './icons'
 import { useSquadChannels } from '../hooks/useSquadChannels'
 import type { SquadChannel, ChannelType } from '../types/database'
 
@@ -26,7 +19,12 @@ const CHANNEL_ICONS: Record<ChannelType, typeof Hash> = {
   announcements: Megaphone,
 }
 
-export const ChannelList = memo(function ChannelList({ squadId, activeChannelId, onSelectChannel, isLeader }: ChannelListProps) {
+export const ChannelList = memo(function ChannelList({
+  squadId,
+  activeChannelId,
+  onSelectChannel,
+  isLeader,
+}: ChannelListProps) {
   const { channels, createChannel, deleteChannel, isCreating } = useSquadChannels(squadId)
   const [showCreateForm, setShowCreateForm] = useState(false)
   const [newChannelName, setNewChannelName] = useState('')
@@ -44,7 +42,9 @@ export const ChannelList = memo(function ChannelList({ squadId, activeChannelId,
   return (
     <div className="space-y-1">
       <div className="flex items-center justify-between px-2 mb-1">
-        <h4 className="text-xs font-semibold text-text-quaternary uppercase tracking-wider">Canaux</h4>
+        <h4 className="text-xs font-semibold text-text-quaternary uppercase tracking-wider">
+          Canaux
+        </h4>
         {isLeader && (
           <button
             onClick={() => setShowCreateForm(!showCreateForm)}
@@ -69,15 +69,15 @@ export const ChannelList = memo(function ChannelList({ squadId, activeChannelId,
               <input
                 type="text"
                 value={newChannelName}
-                onChange={e => setNewChannelName(e.target.value)}
+                onChange={(e) => setNewChannelName(e.target.value)}
                 placeholder="nom-du-canal"
                 maxLength={50}
                 className="w-full px-3 py-1.5 bg-bg-base rounded-lg border border-border-default text-sm text-text-primary placeholder-text-quaternary outline-none focus:border-primary transition-colors"
                 autoFocus
-                onKeyDown={e => e.key === 'Enter' && handleCreate()}
+                onKeyDown={(e) => e.key === 'Enter' && handleCreate()}
               />
               <div className="flex items-center gap-2">
-                {(['text', 'voice', 'announcements'] as ChannelType[]).map(type => {
+                {(['text', 'voice', 'announcements'] as ChannelType[]).map((type) => {
                   const Icon = CHANNEL_ICONS[type]
                   return (
                     <button
@@ -109,7 +109,7 @@ export const ChannelList = memo(function ChannelList({ squadId, activeChannelId,
       </AnimatePresence>
 
       {/* Channel list */}
-      {channels.map(channel => {
+      {channels.map((channel) => {
         const Icon = CHANNEL_ICONS[channel.channel_type as ChannelType] || Hash
         const isActive = activeChannelId === channel.id
 
@@ -127,7 +127,10 @@ export const ChannelList = memo(function ChannelList({ squadId, activeChannelId,
             <span className="truncate">{channel.name}</span>
             {isLeader && !channel.is_default && (
               <button
-                onClick={e => { e.stopPropagation(); deleteChannel(channel.id) }}
+                onClick={(e) => {
+                  e.stopPropagation()
+                  deleteChannel(channel.id)
+                }}
                 className="ml-auto p-0.5 rounded opacity-0 group-hover:opacity-100 text-text-quaternary hover:text-error transition-all"
                 aria-label={`Supprimer le canal ${channel.name}`}
               >

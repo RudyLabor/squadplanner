@@ -33,7 +33,7 @@ function idbGet<T>(key: string): Promise<T | undefined> {
         const req = store.get(key)
         req.onsuccess = () => resolve(req.result as T | undefined)
         req.onerror = () => reject(req.error)
-      }),
+      })
   )
 }
 
@@ -46,7 +46,7 @@ function idbSet(key: string, value: unknown): Promise<void> {
         const req = store.put(value, key)
         req.onsuccess = () => resolve()
         req.onerror = () => reject(req.error)
-      }),
+      })
   )
 }
 
@@ -59,13 +59,19 @@ function idbDelete(key: string): Promise<void> {
         const req = store.delete(key)
         req.onsuccess = () => resolve()
         req.onerror = () => reject(req.error)
-      }),
+      })
   )
 }
 
 export interface Persister {
-  persistClient: (client: { timestamp: number; buster: string; clientState: unknown }) => Promise<void>
-  restoreClient: () => Promise<{ timestamp: number; buster: string; clientState: unknown } | undefined>
+  persistClient: (client: {
+    timestamp: number
+    buster: string
+    clientState: unknown
+  }) => Promise<void>
+  restoreClient: () => Promise<
+    { timestamp: number; buster: string; clientState: unknown } | undefined
+  >
   removeClient: () => Promise<void>
 }
 
@@ -80,7 +86,9 @@ export function createIDBPersister(key = 'sq-react-query'): Persister {
     },
     restoreClient: async () => {
       try {
-        const stored = await idbGet<{ timestamp: number; buster: string; clientState: unknown }>(key)
+        const stored = await idbGet<{ timestamp: number; buster: string; clientState: unknown }>(
+          key
+        )
         if (!stored) return undefined
         // Expire stale cache
         if (Date.now() - stored.timestamp > MAX_AGE) {

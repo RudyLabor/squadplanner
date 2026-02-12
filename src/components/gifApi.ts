@@ -21,7 +21,7 @@ function mapResults(data: any): GifResult[] {
 export async function searchGifs(query: string, limit = 20): Promise<GifResult[]> {
   try {
     const { data, error } = await supabase.functions.invoke('tenor-proxy', {
-      body: { action: 'search', query, limit }
+      body: { action: 'search', query, limit },
     })
     if (error) throw error
     return mapResults(data)
@@ -34,7 +34,7 @@ export async function searchGifs(query: string, limit = 20): Promise<GifResult[]
 export async function fetchTrendingGifs(limit = 20): Promise<GifResult[]> {
   try {
     const { data, error } = await supabase.functions.invoke('tenor-proxy', {
-      body: { action: 'featured', limit }
+      body: { action: 'featured', limit },
     })
     if (error) throw error
     return mapResults(data)

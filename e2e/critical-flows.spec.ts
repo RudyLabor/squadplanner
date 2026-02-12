@@ -8,7 +8,7 @@ import { test, expect } from '@playwright/test'
 
 const TEST_USER = {
   email: 'testowner@squadtest.dev',
-  password: 'TestPassword123!'
+  password: 'TestPassword123!',
 }
 
 async function loginUser(page: import('@playwright/test').Page) {
@@ -143,9 +143,10 @@ test.describe('Critical Flow: Keyboard Navigation', () => {
 
     // Tab to email input and fill
     await page.keyboard.press('Tab')
-    const emailFocused = await page.evaluate(() =>
-      document.activeElement?.getAttribute('type') === 'email' ||
-      document.activeElement?.tagName === 'INPUT'
+    const emailFocused = await page.evaluate(
+      () =>
+        document.activeElement?.getAttribute('type') === 'email' ||
+        document.activeElement?.tagName === 'INPUT'
     )
     // Fill email via keyboard
     await page.getByLabel(/Email/i).focus()

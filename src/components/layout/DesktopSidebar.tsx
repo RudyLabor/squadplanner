@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 import { memo, useCallback } from 'react'
 import { Link } from 'react-router'
@@ -38,7 +38,15 @@ export const navItems = [
 const prefetchedRoutes = new Set<string>()
 
 // OPTIMIZED: Memoized NavLink to prevent unnecessary re-renders
-export const NavLink = memo(function NavLink({ path, icon: Icon, label, isActive, badge, collapsed, userId }: {
+export const NavLink = memo(function NavLink({
+  path,
+  icon: Icon,
+  label,
+  isActive,
+  badge,
+  collapsed,
+  userId,
+}: {
   path: string
   icon: React.ElementType
   label: string
@@ -55,13 +63,20 @@ export const NavLink = memo(function NavLink({ path, icon: Icon, label, isActive
   }, [path, userId])
 
   return (
-    <Link to={path} aria-label={label} aria-current={isActive ? 'page' : undefined} onPointerEnter={handlePrefetch} viewTransition>
+    <Link
+      to={path}
+      aria-label={label}
+      aria-current={isActive ? 'page' : undefined}
+      onPointerEnter={handlePrefetch}
+      viewTransition
+    >
       <m.div
         className={`
           relative flex items-center ${collapsed ? 'gap-2 px-2.5' : 'gap-3 px-4'} py-3 rounded-xl transition-interactive
-          ${isActive
-            ? 'bg-primary-10 text-primary'
-            : 'text-text-secondary hover:bg-surface-card hover:text-text-primary'
+          ${
+            isActive
+              ? 'bg-primary-10 text-primary'
+              : 'text-text-secondary hover:bg-surface-card hover:text-text-primary'
           }
         `}
         whileHover={{ x: collapsed ? 0 : 4 }}
@@ -91,7 +106,7 @@ export const NavLink = memo(function NavLink({ path, icon: Icon, label, isActive
           <m.span
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
-            transition={{ type: "spring", stiffness: 500, damping: 30 }}
+            transition={{ type: 'spring', stiffness: 500, damping: 30 }}
             className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-error text-white text-xs font-bold flex items-center justify-center"
           >
             {badge > 9 ? '9+' : badge}
@@ -109,7 +124,11 @@ interface DesktopSidebarProps {
   unreadMessages: number
   pendingRsvpCount: number
   userId?: string
-  profile: { username?: string | null; avatar_url?: string | null; reliability_score?: number | null } | null
+  profile: {
+    username?: string | null
+    avatar_url?: string | null
+    reliability_score?: number | null
+  } | null
   onMouseEnter: () => void
   onMouseLeave: () => void
   onTogglePinned: () => void
@@ -154,8 +173,12 @@ export const DesktopSidebar = memo(function DesktopSidebar({
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.15 }}
               >
-                <div className="text-md font-bold text-text-primary whitespace-nowrap">Squad Planner</div>
-                <div className="text-sm text-text-tertiary whitespace-nowrap">Jouez ensemble, vraiment</div>
+                <div className="text-md font-bold text-text-primary whitespace-nowrap">
+                  Squad Planner
+                </div>
+                <div className="text-sm text-text-tertiary whitespace-nowrap">
+                  Jouez ensemble, vraiment
+                </div>
               </m.div>
             )}
           </AnimatePresence>
@@ -172,7 +195,11 @@ export const DesktopSidebar = memo(function DesktopSidebar({
             transition={{ duration: 0.15 }}
             className="absolute top-4 right-3"
           >
-            <Tooltip content={sidebarPinned ? 'Détacher la sidebar' : 'Épingler la sidebar'} position="bottom" delay={300}>
+            <Tooltip
+              content={sidebarPinned ? 'Détacher la sidebar' : 'Épingler la sidebar'}
+              position="bottom"
+              delay={300}
+            >
               <m.button
                 type="button"
                 onClick={onTogglePinned}
@@ -185,7 +212,11 @@ export const DesktopSidebar = memo(function DesktopSidebar({
                 whileTap={{ scale: 0.9 }}
                 aria-label={sidebarPinned ? 'Détacher la sidebar' : 'Épingler la sidebar'}
               >
-                {sidebarPinned ? <PinOff className="w-4 h-4" aria-hidden="true" /> : <Pin className="w-4 h-4" aria-hidden="true" />}
+                {sidebarPinned ? (
+                  <PinOff className="w-4 h-4" aria-hidden="true" />
+                ) : (
+                  <Pin className="w-4 h-4" aria-hidden="true" />
+                )}
               </m.button>
             </Tooltip>
           </m.div>
@@ -195,18 +226,18 @@ export const DesktopSidebar = memo(function DesktopSidebar({
       {/* Quick action */}
       <div className={isExpanded ? 'p-4' : 'p-2'}>
         {!isExpanded ? (
-            <m.button
-              type="button"
-              onClick={() => onOpenCreateSessionModal()}
-              className="flex items-center justify-center gap-2 w-full h-10 rounded-xl bg-primary text-white text-xs font-semibold"
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              transition={{ duration: 0.25 }}
-              aria-label="Créer une nouvelle session"
-            >
-              <Plus className="w-4 h-4 flex-shrink-0" />
-              <span className="whitespace-nowrap">Nouveau</span>
-            </m.button>
+          <m.button
+            type="button"
+            onClick={() => onOpenCreateSessionModal()}
+            className="flex items-center justify-center gap-2 w-full h-10 rounded-xl bg-primary text-white text-xs font-semibold"
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            transition={{ duration: 0.25 }}
+            aria-label="Créer une nouvelle session"
+          >
+            <Plus className="w-4 h-4 flex-shrink-0" />
+            <span className="whitespace-nowrap">Nouveau</span>
+          </m.button>
         ) : (
           <m.button
             type="button"
@@ -232,7 +263,10 @@ export const DesktopSidebar = memo(function DesktopSidebar({
       </div>
 
       {/* Navigation */}
-      <nav aria-label="Menu principal" className={`flex-1 overflow-y-auto ${isExpanded ? 'px-3' : 'px-2'} py-4 space-y-1`}>
+      <nav
+        aria-label="Menu principal"
+        className={`flex-1 overflow-y-auto ${isExpanded ? 'px-3' : 'px-2'} py-4 space-y-1`}
+      >
         {navItems.map((item) => {
           let badgeCount: number | undefined
           if (item.path === '/messages' && unreadMessages > 0) {
@@ -241,11 +275,16 @@ export const DesktopSidebar = memo(function DesktopSidebar({
             badgeCount = pendingRsvpCount
           }
 
-          const tourId = item.path === '/squads' ? 'squads'
-            : item.path === '/messages' ? 'messages'
-            : item.path === '/party' ? 'party'
-            : item.path === '/home' ? 'sessions'
-            : undefined
+          const tourId =
+            item.path === '/squads'
+              ? 'squads'
+              : item.path === '/messages'
+                ? 'messages'
+                : item.path === '/party'
+                  ? 'party'
+                  : item.path === '/home'
+                    ? 'sessions'
+                    : undefined
 
           return (
             <div key={item.path} data-tour={tourId}>
@@ -265,9 +304,30 @@ export const DesktopSidebar = memo(function DesktopSidebar({
 
       {/* Secondary navigation */}
       <div className={`${isExpanded ? 'px-3' : 'px-2'} pb-2 space-y-0.5`}>
-        <NavLink path="/settings" icon={Settings} label="Paramètres" isActive={currentPath === '/settings'} collapsed={!isExpanded} userId={userId} />
-        <NavLink path="/help" icon={HelpCircle} label="Aide" isActive={currentPath === '/help'} collapsed={!isExpanded} userId={userId} />
-        <NavLink path="/call-history" icon={Phone} label="Appels" isActive={currentPath === '/call-history'} collapsed={!isExpanded} userId={userId} />
+        <NavLink
+          path="/settings"
+          icon={Settings}
+          label="Paramètres"
+          isActive={currentPath === '/settings'}
+          collapsed={!isExpanded}
+          userId={userId}
+        />
+        <NavLink
+          path="/help"
+          icon={HelpCircle}
+          label="Aide"
+          isActive={currentPath === '/help'}
+          collapsed={!isExpanded}
+          userId={userId}
+        />
+        <NavLink
+          path="/call-history"
+          icon={Phone}
+          label="Appels"
+          isActive={currentPath === '/call-history'}
+          collapsed={!isExpanded}
+          userId={userId}
+        />
       </div>
 
       <SidebarFooter

@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 import { useMemo } from 'react'
 import { m } from 'framer-motion'
@@ -22,7 +22,10 @@ export function StreakHeatmap({ streakDays, flameColors }: StreakHeatmapProps) {
       const row: Cell[] = []
       for (let day = 0; day < 7; day++) {
         const daysAgo = (3 - week) * 7 + (normalizedDow - day)
-        if (daysAgo < 0) { row.push({ daysAgo: -1, isActive: false, isToday: false, intensity: 0 }); continue }
+        if (daysAgo < 0) {
+          row.push({ daysAgo: -1, isActive: false, isToday: false, intensity: 0 })
+          continue
+        }
         const isActive = daysAgo < streakDays
         const isToday = daysAgo === 0
         const cellIntensity = !isActive ? 0 : isToday ? 3 : daysAgo <= 2 ? 2 : 1
@@ -41,7 +44,9 @@ export function StreakHeatmap({ streakDays, flameColors }: StreakHeatmapProps) {
         <p className="text-sm text-text-tertiary mb-2 uppercase tracking-wide">28 derniers jours</p>
         <div className="grid grid-cols-7 gap-1 mb-1">
           {dayLabels.map((label, i) => (
-            <span key={i} className="text-xs text-text-tertiary text-center font-medium">{label}</span>
+            <span key={i} className="text-xs text-text-tertiary text-center font-medium">
+              {label}
+            </span>
           ))}
         </div>
         <div className="grid grid-cols-7 gap-1">
@@ -50,13 +55,14 @@ export function StreakHeatmap({ streakDays, flameColors }: StreakHeatmapProps) {
               if (cell.daysAgo < 0) {
                 return <div key={`${wi}-${di}`} className="aspect-square rounded-md" />
               }
-              const bgColor = cell.intensity === 3
-                ? flameColors.primary
-                : cell.intensity === 2
-                  ? `color-mix(in srgb, ${flameColors.primary} 60%, transparent)`
-                  : cell.intensity === 1
-                    ? `color-mix(in srgb, ${flameColors.primary} 25%, transparent)`
-                    : 'var(--color-overlay-faint)'
+              const bgColor =
+                cell.intensity === 3
+                  ? flameColors.primary
+                  : cell.intensity === 2
+                    ? `color-mix(in srgb, ${flameColors.primary} 60%, transparent)`
+                    : cell.intensity === 1
+                      ? `color-mix(in srgb, ${flameColors.primary} 25%, transparent)`
+                      : 'var(--color-overlay-faint)'
               return (
                 <m.div
                   key={`${wi}-${di}`}
@@ -77,7 +83,9 @@ export function StreakHeatmap({ streakDays, flameColors }: StreakHeatmapProps) {
 
       {/* Weekly Activity Bars */}
       <div className="mt-4">
-        <p className="text-sm text-text-tertiary mb-2 uppercase tracking-wide">4 dernières semaines</p>
+        <p className="text-sm text-text-tertiary mb-2 uppercase tracking-wide">
+          4 dernières semaines
+        </p>
         <div className="flex items-end gap-2 h-12">
           {weeklyStats.map((count, i) => (
             <div key={i} className="flex-1 flex flex-col items-center gap-1">
@@ -89,7 +97,9 @@ export function StreakHeatmap({ streakDays, flameColors }: StreakHeatmapProps) {
                     opacity: count === 0 ? 0.15 : 1,
                   }}
                   initial={{ height: 0 }}
-                  animate={{ height: `${Math.max((count / Math.max(...weeklyStats, 1)) * 100, 8)}%` }}
+                  animate={{
+                    height: `${Math.max((count / Math.max(...weeklyStats, 1)) * 100, 8)}%`,
+                  }}
                   transition={{ delay: 0.3 + i * 0.1, duration: 0.5, ease: 'easeOut' }}
                 />
               </div>

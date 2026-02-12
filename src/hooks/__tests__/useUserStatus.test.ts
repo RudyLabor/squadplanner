@@ -14,12 +14,12 @@ describe('useUserStatusStore', () => {
     vi.spyOn(Storage.prototype, 'getItem').mockImplementation(
       (key: string) => localStorageStore[key] ?? null
     )
-    vi.spyOn(Storage.prototype, 'setItem').mockImplementation(
-      (key: string, value: string) => { localStorageStore[key] = value }
-    )
-    vi.spyOn(Storage.prototype, 'removeItem').mockImplementation(
-      (key: string) => { delete localStorageStore[key] }
-    )
+    vi.spyOn(Storage.prototype, 'setItem').mockImplementation((key: string, value: string) => {
+      localStorageStore[key] = value
+    })
+    vi.spyOn(Storage.prototype, 'removeItem').mockImplementation((key: string) => {
+      delete localStorageStore[key]
+    })
   })
 
   afterEach(() => {

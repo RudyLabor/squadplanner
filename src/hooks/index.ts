@@ -11,8 +11,19 @@ export { useSubscriptionStore } from './useSubscription'
 //   import { useVoiceChatStore, ... } from '../hooks/useVoiceChat'
 //   import { useVoiceCallStore, ... } from '../hooks/useVoiceCall'
 export { useNotificationStore, useSessionNotifications } from './useNotifications'
-export { usePushNotificationStore, usePushNotifications, initializePushNotifications } from './usePushNotifications'
-export { usePremiumStore, usePremium, FREE_SQUAD_LIMIT, FREE_HISTORY_DAYS, PREMIUM_PRICE_MONTHLY, PREMIUM_PRICE_YEARLY } from './usePremium'
+export {
+  usePushNotificationStore,
+  usePushNotifications,
+  initializePushNotifications,
+} from './usePushNotifications'
+export {
+  usePremiumStore,
+  usePremium,
+  FREE_SQUAD_LIMIT,
+  FREE_HISTORY_DAYS,
+  PREMIUM_PRICE_MONTHLY,
+  PREMIUM_PRICE_YEARLY,
+} from './usePremium'
 export type { PremiumFeature } from './usePremium'
 export { useCallHistoryStore, formatDuration, formatRelativeTime } from './useCallHistory'
 export type { CallType, CallRecord, CallHistoryItem } from './useCallHistory'
@@ -32,14 +43,22 @@ export { useUnreadCountStore } from './useUnreadCount'
 export { useSquadNotificationsStore, useSquadNotifications } from './useSquadNotifications'
 export { useThemeStore } from './useTheme'
 export type { ThemeMode } from './useTheme'
-export { useViewTransitionNavigate, isViewTransitionSupported, withViewTransition } from './useViewTransition'
+export {
+  useViewTransitionNavigate,
+  isViewTransitionSupported,
+  withViewTransition,
+} from './useViewTransition'
 
 // PHASE 5.4 - Realtime presence
 export { usePresence, useUserOnlineStatus, getOnlineIndicatorClasses } from './usePresence'
 export type { PresenceUser, OnlineIndicatorProps } from './usePresence'
 
 // PHASE 4.2 - Global presence + User status
-export { useGlobalPresence, useGlobalPresenceStore, updatePresenceActivity } from './useGlobalPresence'
+export {
+  useGlobalPresence,
+  useGlobalPresenceStore,
+  updatePresenceActivity,
+} from './useGlobalPresence'
 export type { GlobalPresenceUser } from './useGlobalPresence'
 export { useUserStatusStore, AVAILABILITY_CONFIG } from './useUserStatus'
 export type { AvailabilityStatus, CustomStatus, GameStatus } from './useUserStatus'
@@ -65,7 +84,7 @@ export {
   useSkipLink,
   useAutoFocus,
   useRovingTabindex,
-  useA11yAnnouncements
+  useA11yAnnouncements,
 } from './useFocusManagement'
 
 // Chantier 9 - Auto retry with exponential backoff

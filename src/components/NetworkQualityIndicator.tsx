@@ -1,6 +1,10 @@
 import { m, AnimatePresence } from 'framer-motion'
 import { Wifi, WifiOff } from './icons'
-import { useNetworkQualityStore, QUALITY_INFO, type NetworkQualityLevel } from '../hooks/useNetworkQuality'
+import {
+  useNetworkQualityStore,
+  QUALITY_INFO,
+  type NetworkQualityLevel,
+} from '../hooks/useNetworkQuality'
 import { Tooltip } from './ui/Tooltip'
 
 interface NetworkQualityIndicatorProps {
@@ -88,9 +92,7 @@ export function NetworkQualityIndicator({
         />
         <span className="sr-only">Qualité réseau : {info.label}</span>
         {showLabel && (
-          <span className={`${sizeConfig.textSize} text-text-tertiary`}>
-            {info.label}
-          </span>
+          <span className={`${sizeConfig.textSize} text-text-tertiary`}>{info.label}</span>
         )}
       </div>
     )
@@ -146,10 +148,7 @@ export function NetworkQualityIndicator({
 
       {/* Label texte */}
       {showLabel && (
-        <span
-          className={`${sizeConfig.textSize} font-medium`}
-          style={{ color: info.color }}
-        >
+        <span className={`${sizeConfig.textSize} font-medium`} style={{ color: info.color }}>
           {info.label}
         </span>
       )}
@@ -171,11 +170,7 @@ export function NetworkQualityIndicator({
  * Version compacte avec badge
  * Utile pour afficher dans un header ou une barre d'état
  */
-export function NetworkQualityBadge({
-  className = '',
-}: {
-  className?: string
-}) {
+export function NetworkQualityBadge({ className = '' }: { className?: string }) {
   const { localQuality } = useNetworkQualityStore()
   const info = QUALITY_INFO[localQuality]
 
@@ -191,10 +186,7 @@ export function NetworkQualityBadge({
       animate={{ opacity: 1, scale: 1 }}
     >
       <NetworkQualityIndicator size="sm" showLabel={false} showTooltip={false} />
-      <span
-        className="text-sm font-medium"
-        style={{ color: info.color }}
-      >
+      <span className="text-sm font-medium" style={{ color: info.color }}>
         {info.label}
       </span>
     </m.div>
@@ -210,11 +202,7 @@ interface QualityChangeToastProps {
   onClose: () => void
 }
 
-export function QualityChangeToast({
-  isVisible,
-  newQuality,
-  onClose,
-}: QualityChangeToastProps) {
+export function QualityChangeToast({ isVisible, newQuality, onClose }: QualityChangeToastProps) {
   const info = QUALITY_INFO[newQuality]
   const isImproving = newQuality === 'excellent' || newQuality === 'good'
 
@@ -243,11 +231,7 @@ export function QualityChangeToast({
             {newQuality === 'poor' ? (
               <WifiOff style={{ color: info.color }} className="w-5 h-5" />
             ) : (
-              <NetworkQualityIndicator
-                size="sm"
-                forceQuality={newQuality}
-                showTooltip={false}
-              />
+              <NetworkQualityIndicator size="sm" forceQuality={newQuality} showTooltip={false} />
             )}
 
             {/* Message */}

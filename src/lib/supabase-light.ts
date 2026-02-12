@@ -68,10 +68,7 @@ export interface QueryResult<T> {
  *   order: { column: 'created_at', ascending: false },
  * })
  */
-export async function query<T>(
-  table: string,
-  options: QueryOptions = {},
-): Promise<QueryResult<T>> {
+export async function query<T>(table: string, options: QueryOptions = {}): Promise<QueryResult<T>> {
   const params = new URLSearchParams()
 
   if (options.select) params.set('select', options.select)
@@ -79,7 +76,7 @@ export async function query<T>(
   if (options.order) {
     params.set(
       'order',
-      `${options.order.column}.${options.order.ascending !== false ? 'asc' : 'desc'}`,
+      `${options.order.column}.${options.order.ascending !== false ? 'asc' : 'desc'}`
     )
   }
   if (options.filter) {
@@ -98,14 +95,11 @@ export async function query<T>(
   }
 
   try {
-    const res = await fetch(
-      `${SUPABASE_URL}/rest/v1/${table}?${params}`,
-      { headers },
-    )
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/${table}?${params}`, { headers })
     if (!res.ok) {
       return { data: null, error: { message: res.statusText, status: res.status } }
     }
-    const data = await res.json() as T
+    const data = (await res.json()) as T
     return { data, error: null }
   } catch (err) {
     return {

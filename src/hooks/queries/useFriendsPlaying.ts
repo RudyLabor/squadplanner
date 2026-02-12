@@ -30,7 +30,7 @@ async function fetchFriendsPlaying(userId: string): Promise<FriendPlaying[]> {
   try {
     // Call RPC with p_user_id parameter (matches the fix migration 20260206140001)
     const { data, error } = await supabase.rpc('get_friends_playing', {
-      p_user_id: userId
+      p_user_id: userId,
     })
 
     if (error) {
@@ -53,7 +53,7 @@ async function fetchFriendsPlaying(userId: string): Promise<FriendPlaying[]> {
 export function useFriendsPlayingQuery(userId: string | undefined) {
   return useQuery({
     queryKey: ['friends_playing', userId] as const,
-    queryFn: () => userId ? fetchFriendsPlaying(userId) : [],
+    queryFn: () => (userId ? fetchFriendsPlaying(userId) : []),
     enabled: !!userId,
     staleTime: 30_000, // 30 seconds
     retry: false, // Don't retry if RPC doesn't exist

@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 import { useState, useEffect } from 'react'
 import { Dialog, DialogBody, DialogFooter } from './Dialog'
@@ -41,29 +41,22 @@ export function ConfirmDialog({
   const content = (
     <>
       <div className="flex items-start gap-4">
-        <div className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 ${
-          variant === 'danger' ? 'bg-error-10' : 'bg-warning/10'
-        }`}>
-          <AlertTriangle className={`w-5 h-5 ${
-            variant === 'danger' ? 'text-error' : 'text-warning'
-          }`} />
+        <div
+          className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 ${
+            variant === 'danger' ? 'bg-error-10' : 'bg-warning/10'
+          }`}
+        >
+          <AlertTriangle
+            className={`w-5 h-5 ${variant === 'danger' ? 'text-error' : 'text-warning'}`}
+          />
         </div>
         <p className="text-md text-text-secondary">{description}</p>
       </div>
       <div className="flex items-center justify-end gap-3 mt-6">
-        <Button
-          variant="secondary"
-          onClick={onClose}
-          disabled={isLoading}
-        >
+        <Button variant="secondary" onClick={onClose} disabled={isLoading}>
           {cancelLabel}
         </Button>
-        <Button
-          variant="danger"
-          onClick={onConfirm}
-          disabled={isLoading}
-          aria-label={confirmLabel}
-        >
+        <Button variant="danger" onClick={onConfirm} disabled={isLoading} aria-label={confirmLabel}>
           {confirmLabel}
         </Button>
       </div>
@@ -82,30 +75,23 @@ export function ConfirmDialog({
     <Dialog open={open} onClose={onClose} size="sm" title={title}>
       <DialogBody>
         <div className="flex items-start gap-4">
-          <div className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 ${
-            variant === 'danger' ? 'bg-error-10' : 'bg-warning/10'
-          }`}>
-            <AlertTriangle className={`w-5 h-5 ${
-              variant === 'danger' ? 'text-error' : 'text-warning'
-            }`} />
+          <div
+            className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 ${
+              variant === 'danger' ? 'bg-error-10' : 'bg-warning/10'
+            }`}
+          >
+            <AlertTriangle
+              className={`w-5 h-5 ${variant === 'danger' ? 'text-error' : 'text-warning'}`}
+            />
           </div>
           <p className="text-md text-text-secondary">{description}</p>
         </div>
       </DialogBody>
       <DialogFooter>
-        <Button
-          variant="secondary"
-          onClick={onClose}
-          disabled={isLoading}
-        >
+        <Button variant="secondary" onClick={onClose} disabled={isLoading}>
           {cancelLabel}
         </Button>
-        <Button
-          variant="danger"
-          onClick={onConfirm}
-          disabled={isLoading}
-          aria-label={confirmLabel}
-        >
+        <Button variant="danger" onClick={onConfirm} disabled={isLoading} aria-label={confirmLabel}>
           {confirmLabel}
         </Button>
       </DialogFooter>

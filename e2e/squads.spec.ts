@@ -3,7 +3,7 @@ import { test, expect } from '@playwright/test'
 // Test credentials from GEMINI.md
 const TEST_USER = {
   email: 'testowner@squadtest.dev',
-  password: 'TestPassword123!'
+  password: 'TestPassword123!',
 }
 
 // Test helper to setup authenticated state
@@ -20,7 +20,6 @@ async function loginUser(page: import('@playwright/test').Page) {
 }
 
 test.describe('Squads Page', () => {
-
   test('should display squads page', async ({ page }) => {
     await loginUser(page)
     await page.goto('/squads')
@@ -43,7 +42,7 @@ test.describe('Squads Page', () => {
     await page.goto('/squads')
 
     await page.click('button:has-text("Rejoindre")')
-    await expect(page.getByText("Rejoindre une squad")).toBeVisible()
+    await expect(page.getByText('Rejoindre une squad')).toBeVisible()
     await expect(page.getByPlaceholder(/ABC123/i)).toBeVisible()
   })
 })

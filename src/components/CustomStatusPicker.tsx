@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 import { useState, memo } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
@@ -10,13 +10,16 @@ interface CustomStatusPickerProps {
   onClose: () => void
 }
 
-export const CustomStatusPicker = memo(function CustomStatusPicker({ isOpen, onClose }: CustomStatusPickerProps) {
+export const CustomStatusPicker = memo(function CustomStatusPicker({
+  isOpen,
+  onClose,
+}: CustomStatusPickerProps) {
   const { currentStatus, setStatus, clearStatus, isUpdating } = useCustomStatus()
   const [emoji, setEmoji] = useState(currentStatus?.emoji || '')
   const [text, setText] = useState(currentStatus?.text || '')
   const [duration, setDuration] = useState<number | null>(null)
 
-  const handlePreset = (preset: typeof STATUS_PRESETS[number]) => {
+  const handlePreset = (preset: (typeof STATUS_PRESETS)[number]) => {
     setEmoji(preset.emoji)
     setText(preset.text)
   }
@@ -57,12 +60,16 @@ export const CustomStatusPicker = memo(function CustomStatusPicker({ isOpen, onC
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
             transition={{ type: 'spring', stiffness: 300, damping: 30 }}
             className="w-full max-w-md bg-bg-elevated border border-border-default rounded-2xl shadow-xl overflow-hidden"
-            onClick={e => e.stopPropagation()}
+            onClick={(e) => e.stopPropagation()}
           >
             {/* Header */}
             <div className="flex items-center justify-between px-5 py-4 border-b border-border-default">
               <h3 className="text-lg font-semibold text-text-primary">Définir un statut</h3>
-              <button onClick={onClose} className="p-1.5 rounded-lg text-text-tertiary hover:text-text-primary hover:bg-bg-hover transition-colors" aria-label="Fermer">
+              <button
+                onClick={onClose}
+                className="p-1.5 rounded-lg text-text-tertiary hover:text-text-primary hover:bg-bg-hover transition-colors"
+                aria-label="Fermer"
+              >
                 <X className="w-5 h-5" aria-hidden="true" />
               </button>
             </div>
@@ -80,14 +87,20 @@ export const CustomStatusPicker = memo(function CustomStatusPicker({ isOpen, onC
                 <input
                   type="text"
                   value={text}
-                  onChange={e => setText(e.target.value)}
+                  onChange={(e) => setText(e.target.value)}
                   placeholder="Quel est ton statut ?"
                   maxLength={50}
                   className="flex-1 bg-transparent text-text-primary placeholder-text-quaternary outline-none text-md"
                   autoFocus
                 />
                 {text && (
-                  <button onClick={() => { setText(''); setEmoji('') }} className="p-1 rounded text-text-quaternary hover:text-text-secondary">
+                  <button
+                    onClick={() => {
+                      setText('')
+                      setEmoji('')
+                    }}
+                    className="p-1 rounded text-text-quaternary hover:text-text-secondary"
+                  >
                     <X className="w-4 h-4" />
                   </button>
                 )}
@@ -97,7 +110,7 @@ export const CustomStatusPicker = memo(function CustomStatusPicker({ isOpen, onC
               <div>
                 <p className="text-sm text-text-tertiary mb-2">Suggestions</p>
                 <div className="grid grid-cols-2 gap-2">
-                  {STATUS_PRESETS.map(preset => (
+                  {STATUS_PRESETS.map((preset) => (
                     <button
                       key={preset.text}
                       onClick={() => handlePreset(preset)}
@@ -120,7 +133,7 @@ export const CustomStatusPicker = memo(function CustomStatusPicker({ isOpen, onC
                   <Clock className="w-3.5 h-3.5" /> Durée
                 </p>
                 <div className="flex flex-wrap gap-2">
-                  {STATUS_DURATIONS.map(d => (
+                  {STATUS_DURATIONS.map((d) => (
                     <button
                       key={d.label}
                       onClick={() => setDuration(d.minutes)}
@@ -170,11 +183,21 @@ export const CustomStatusPicker = memo(function CustomStatusPicker({ isOpen, onC
 })
 
 // Inline status badge for profile/sidebar
-export function StatusBadge({ emoji, text, className = '' }: { emoji?: string | null; text?: string | null; className?: string }) {
+export function StatusBadge({
+  emoji,
+  text,
+  className = '',
+}: {
+  emoji?: string | null
+  text?: string | null
+  className?: string
+}) {
   if (!text) return null
 
   return (
-    <span className={`inline-flex items-center gap-1 text-sm text-text-tertiary truncate ${className}`}>
+    <span
+      className={`inline-flex items-center gap-1 text-sm text-text-tertiary truncate ${className}`}
+    >
       {emoji && <span className="text-base">{emoji}</span>}
       <span className="truncate">{text}</span>
     </span>

@@ -1,11 +1,5 @@
 import { m } from 'framer-motion'
-import {
-  PhoneOff,
-  Mic,
-  MicOff,
-  Volume2,
-  VolumeX,
-} from '../icons'
+import { PhoneOff, Mic, MicOff, Volume2, VolumeX } from '../icons'
 interface CallControlsProps {
   status: string
   isMuted: boolean
@@ -15,7 +9,14 @@ interface CallControlsProps {
   endCall: () => void
 }
 
-export function CallControls({ status, isMuted, isSpeakerOn, toggleMute, toggleSpeaker, endCall }: CallControlsProps) {
+export function CallControls({
+  status,
+  isMuted,
+  isSpeakerOn,
+  toggleMute,
+  toggleSpeaker,
+  endCall,
+}: CallControlsProps) {
   return (
     <m.div
       initial={{ y: 50, opacity: 0 }}
@@ -33,9 +34,7 @@ export function CallControls({ status, isMuted, isSpeakerOn, toggleMute, toggleS
             aria-label={isMuted ? 'Réactiver le micro' : 'Couper le micro'}
             aria-pressed={isMuted}
             className={`w-16 h-16 rounded-full flex items-center justify-center transition-colors ${
-              isMuted
-                ? 'bg-border-hover'
-                : 'bg-border-subtle'
+              isMuted ? 'bg-border-hover' : 'bg-border-subtle'
             }`}
           >
             {isMuted ? (
@@ -66,9 +65,7 @@ export function CallControls({ status, isMuted, isSpeakerOn, toggleMute, toggleS
             aria-label={isSpeakerOn ? 'Désactiver le haut-parleur' : 'Activer le haut-parleur'}
             aria-pressed={isSpeakerOn}
             className={`w-16 h-16 rounded-full flex items-center justify-center transition-colors ${
-              !isSpeakerOn
-                ? 'bg-border-hover'
-                : 'bg-border-subtle'
+              !isSpeakerOn ? 'bg-border-hover' : 'bg-border-subtle'
             }`}
           >
             {isSpeakerOn ? (

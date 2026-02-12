@@ -75,28 +75,30 @@ async function fetchChallenges(userId: string): Promise<ChallengesData> {
   if (badgesRes.error) throw badgesRes.error
 
   // Map badges to handle the squads relation (Supabase returns array for relations)
-  const badges: SeasonalBadge[] = (badgesRes.data || []).map((badge: {
-    id: string
-    user_id: string
-    badge_type: string
-    season: string
-    squad_id: string | null
-    awarded_at: string
-    squads: { name: string }[] | { name: string } | null
-  }) => ({
-    id: badge.id,
-    user_id: badge.user_id,
-    badge_type: badge.badge_type,
-    season: badge.season,
-    squad_id: badge.squad_id,
-    awarded_at: badge.awarded_at,
-    // Handle both array and single object relations
-    squads: Array.isArray(badge.squads) ? badge.squads[0] || null : badge.squads,
-  }))
+  const badges: SeasonalBadge[] = (badgesRes.data || []).map(
+    (badge: {
+      id: string
+      user_id: string
+      badge_type: string
+      season: string
+      squad_id: string | null
+      awarded_at: string
+      squads: { name: string }[] | { name: string } | null
+    }) => ({
+      id: badge.id,
+      user_id: badge.user_id,
+      badge_type: badge.badge_type,
+      season: badge.season,
+      squad_id: badge.squad_id,
+      awarded_at: badge.awarded_at,
+      // Handle both array and single object relations
+      squads: Array.isArray(badge.squads) ? badge.squads[0] || null : badge.squads,
+    })
+  )
 
   return {
     challenges: challengesRes.data || [],
-    userChallenges: (userChallengesRes.data || []).map(uc => ({
+    userChallenges: (userChallengesRes.data || []).map((uc) => ({
       challenge_id: uc.challenge_id,
       progress: uc.progress,
       target: uc.target || 1,
@@ -116,7 +118,8 @@ export function useChallengesQuery() {
 
   return useQuery({
     queryKey: ['challenges', user?.id] as const,
-    queryFn: () => user?.id ? fetchChallenges(user.id) : { challenges: [], userChallenges: [], badges: [] },
+    queryFn: () =>
+      user?.id ? fetchChallenges(user.id) : { challenges: [], userChallenges: [], badges: [] },
     enabled: !!user?.id,
     staleTime: 60_000, // 1 minute - challenges don't change often
     gcTime: 5 * 60 * 1000, // 5 minutes
@@ -175,7 +178,9 @@ export function useClaimChallengeXPMutation() {
         if (profile) {
           const newXP = (profile.xp || 0) + challenge.xp_reward
           // Level thresholds: 0, 100, 250, 500, 1000, 2000, 3500, 5500, 8000, 11000, ...
-          const levelThresholds = [0, 100, 250, 500, 1000, 2000, 3500, 5500, 8000, 11000, 15000, 20000]
+          const levelThresholds = [
+            0, 100, 250, 500, 1000, 2000, 3500, 5500, 8000, 11000, 15000, 20000,
+          ]
           let newLevel = 1
           for (let i = levelThresholds.length - 1; i >= 0; i--) {
             if (newXP >= levelThresholds[i]) {
@@ -184,10 +189,7 @@ export function useClaimChallengeXPMutation() {
             }
           }
 
-          await supabase
-            .from('profiles')
-            .update({ xp: newXP, level: newLevel })
-            .eq('id', user.id)
+          await supabase.from('profiles').update({ xp: newXP, level: newLevel }).eq('id', user.id)
         }
       }
 

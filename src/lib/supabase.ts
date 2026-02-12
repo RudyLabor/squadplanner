@@ -1,12 +1,17 @@
 import type { SupabaseClient } from '@supabase/supabase-js'
 import { createBrowserClient } from '@supabase/ssr'
-import type { Database } from '@/types/database'
+
+// TODO: Re-enable strict Database typing after running `npx supabase gen types typescript`
+// import type { Database } from '../types/database'
+type Database = any
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
 
 if (!supabaseUrl || !supabaseAnonKey) {
-  throw new Error('Missing Supabase environment variables. Set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in .env')
+  throw new Error(
+    'Missing Supabase environment variables. Set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in .env'
+  )
 }
 
 // Synchronous singleton — created immediately on module load (client-side only).
@@ -60,13 +65,18 @@ export const supabase: SupabaseClient<Database> = new Proxy({} as SupabaseClient
     if (!_client) {
       // SSR: return safe no-ops so server rendering doesn't crash
       if (prop === 'auth') {
-        return new Proxy({}, {
-          get(__, authProp) {
-            if (authProp === 'getSession') return () => Promise.resolve({ data: { session: null }, error: null })
-            if (authProp === 'onAuthStateChange') return () => ({ data: { subscription: { unsubscribe: () => {} } } })
-            return () => Promise.resolve({ data: null, error: null })
+        return new Proxy(
+          {},
+          {
+            get(__, authProp) {
+              if (authProp === 'getSession')
+                return () => Promise.resolve({ data: { session: null }, error: null })
+              if (authProp === 'onAuthStateChange')
+                return () => ({ data: { subscription: { unsubscribe: () => {} } } })
+              return () => Promise.resolve({ data: null, error: null })
+            },
           }
-        })
+        )
       }
       if (prop === 'from' || prop === 'rpc' || prop === 'functions') {
         return () => {
@@ -91,11 +101,18 @@ export const supabase: SupabaseClient<Database> = new Proxy({} as SupabaseClient
           return builder
         }
       }
-      if (prop === 'channel') return () => ({ on: () => ({ on: () => ({ on: () => ({ subscribe: () => {} }), subscribe: () => {} }), subscribe: () => {} }), subscribe: () => {} })
+      if (prop === 'channel')
+        return () => ({
+          on: () => ({
+            on: () => ({ on: () => ({ subscribe: () => {} }), subscribe: () => {} }),
+            subscribe: () => {},
+          }),
+          subscribe: () => {},
+        })
       if (prop === 'removeChannel') return () => {}
       return undefined
     }
     const value = (_client as any)[prop]
     return typeof value === 'function' ? value.bind(_client) : value
-  }
+  },
 })

@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 import { useMemo } from 'react'
 import {
@@ -114,9 +114,7 @@ export function SquadSettings({
       {/* Stats Avancees - Premium */}
       <div className="mb-6">
         <div className="flex items-center gap-2 mb-3">
-          <h2 className="text-base font-semibold text-text-primary">
-            Stats avancées
-          </h2>
+          <h2 className="text-base font-semibold text-text-primary">Stats avancées</h2>
           {!canAccessAdvancedStats && <PremiumBadge small />}
         </div>
         <PremiumGate feature="advanced_stats" squadId={squadId} fallback="lock">
@@ -150,7 +148,12 @@ export function SquadSettings({
 
       {/* Export Calendrier - Premium */}
       <div className="mb-6">
-        <PremiumGate feature="calendar_export" featureLabel="Export calendrier" squadId={squadId} fallback="lock">
+        <PremiumGate
+          feature="calendar_export"
+          featureLabel="Export calendrier"
+          squadId={squadId}
+          fallback="lock"
+        >
           <Card className="p-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
@@ -168,9 +171,11 @@ export function SquadSettings({
                 onClick={() => {
                   try {
                     exportSessionsToICS(sessions, squadName)
-                    onSuccess('Calendrier exporte ! Importez le fichier .ics dans votre app calendrier.')
+                    onSuccess(
+                      'Calendrier exporte ! Importez le fichier .ics dans votre app calendrier.'
+                    )
                   } catch (error) {
-                    onSuccess(error instanceof Error ? error.message : 'Erreur lors de l\'export')
+                    onSuccess(error instanceof Error ? error.message : "Erreur lors de l'export")
                   }
                 }}
               >
@@ -195,7 +200,9 @@ export function SquadSettings({
                   <h3 className="text-md font-medium text-text-primary">Squad Premium</h3>
                   <PremiumBadge small />
                 </div>
-                <p className="text-sm text-text-quaternary">Audio HD, stats avancées, export calendrier actifs</p>
+                <p className="text-sm text-text-quaternary">
+                  Audio HD, stats avancées, export calendrier actifs
+                </p>
               </div>
             </div>
           </Card>
@@ -254,21 +261,30 @@ export function SquadSettings({
       <Drawer isOpen={showActionsDrawer} onClose={onCloseActionsDrawer} title="Actions">
         <div className="space-y-2">
           <button
-            onClick={() => { onInviteClick(); onCloseActionsDrawer() }}
+            onClick={() => {
+              onInviteClick()
+              onCloseActionsDrawer()
+            }}
             className="w-full flex items-center gap-3 p-4 rounded-xl bg-surface-card hover:bg-surface-card-hover transition-colors"
           >
             <UserPlus className="w-5 h-5 text-primary" />
             <span className="text-md text-text-primary">Inviter des joueurs</span>
           </button>
           <button
-            onClick={() => { onCreateSessionClick(); onCloseActionsDrawer() }}
+            onClick={() => {
+              onCreateSessionClick()
+              onCloseActionsDrawer()
+            }}
             className="w-full flex items-center gap-3 p-4 rounded-xl bg-surface-card hover:bg-surface-card-hover transition-colors"
           >
             <Calendar className="w-5 h-5 text-warning" />
             <span className="text-md text-text-primary">Créer une session</span>
           </button>
           <button
-            onClick={() => { navigate(`/messages?squad=${squadId}`); onCloseActionsDrawer() }}
+            onClick={() => {
+              navigate(`/messages?squad=${squadId}`)
+              onCloseActionsDrawer()
+            }}
             className="w-full flex items-center gap-3 p-4 rounded-xl bg-surface-card hover:bg-surface-card-hover transition-colors"
           >
             <MessageCircle className="w-5 h-5 text-success" />
@@ -276,7 +292,10 @@ export function SquadSettings({
           </button>
           {isOwner && onEditSquadClick && (
             <button
-              onClick={() => { onEditSquadClick(); onCloseActionsDrawer() }}
+              onClick={() => {
+                onEditSquadClick()
+                onCloseActionsDrawer()
+              }}
               className="w-full flex items-center gap-3 p-4 rounded-xl bg-surface-card hover:bg-surface-card-hover transition-colors"
             >
               <Settings className="w-5 h-5 text-text-secondary" />
@@ -286,7 +305,10 @@ export function SquadSettings({
           <div className="border-t border-border-subtle pt-2 mt-2">
             {isOwner ? (
               <button
-                onClick={() => { onDeleteSquad(); onCloseActionsDrawer() }}
+                onClick={() => {
+                  onDeleteSquad()
+                  onCloseActionsDrawer()
+                }}
                 className="w-full flex items-center gap-3 p-4 rounded-xl hover:bg-error/5 transition-colors"
               >
                 <Trash2 className="w-5 h-5 text-error" />
@@ -294,7 +316,10 @@ export function SquadSettings({
               </button>
             ) : (
               <button
-                onClick={() => { onLeaveSquad(); onCloseActionsDrawer() }}
+                onClick={() => {
+                  onLeaveSquad()
+                  onCloseActionsDrawer()
+                }}
                 className="w-full flex items-center gap-3 p-4 rounded-xl hover:bg-error/5 transition-colors"
               >
                 <LogOut className="w-5 h-5 text-error" />

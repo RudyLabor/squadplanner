@@ -5,15 +5,18 @@ import { Onboarding } from '../pages/Onboarding'
 
 export function meta() {
   return [
-    { title: "Bienvenue - Squad Planner" },
-    { tagName: "link", rel: "canonical", href: "https://squadplanner.fr/onboarding" },
-    { property: "og:url", content: "https://squadplanner.fr/onboarding" },
+    { title: 'Bienvenue - Squad Planner' },
+    { tagName: 'link', rel: 'canonical', href: 'https://squadplanner.fr/onboarding' },
+    { property: 'og:url', content: 'https://squadplanner.fr/onboarding' },
   ]
 }
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const { supabase, headers, getUser } = createSupabaseServerClient(request)
-  const { data: { user }, error } = await getUser()
+  const {
+    data: { user },
+    error,
+  } = await getUser()
 
   if (error || !user) {
     throw redirect('/', { headers })

@@ -1,16 +1,8 @@
-"use client";
+'use client'
 
 import { memo, useState } from 'react'
 import { m } from 'framer-motion'
-import {
-  Users,
-  UserPlus,
-  Shield,
-  Star,
-  Gamepad2,
-  MapPin,
-  MessageSquare,
-} from '../icons'
+import { Users, Shield, Star, Gamepad2, MapPin, MessageSquare } from '../icons'
 import { useMatchmakingQuery } from '../../hooks/queries'
 import { useAuthStore } from '../../hooks'
 import { supabase } from '../../lib/supabase'
@@ -45,7 +37,8 @@ export const MatchmakingSection = memo(function MatchmakingSection({ game, regio
           Personne en recherche de squad pour le moment
         </h3>
         <p className="text-md text-text-secondary max-w-sm mx-auto mb-6">
-          Active la recherche de squad dans ton profil pour apparaître ici et être trouvé par d'autres joueurs.
+          Active la recherche de squad dans ton profil pour apparaître ici et être trouvé par
+          d'autres joueurs.
         </p>
         <a
           href="/profile"
@@ -59,7 +52,7 @@ export const MatchmakingSection = memo(function MatchmakingSection({ game, regio
 
   return (
     <div className="space-y-2">
-      {players.map(player => (
+      {players.map((player) => (
         <PlayerCard key={player.user_id} player={player} />
       ))}
     </div>
@@ -83,7 +76,7 @@ const PlayerCard = memo(function PlayerCard({ player }: { player: MatchmakingPla
       })
       showSuccess(`Message envoy\u00e9 \u00e0 ${player.username} !`)
     } catch {
-      showError('Erreur lors de l\'envoi')
+      showError("Erreur lors de l'envoi")
     } finally {
       setInviting(false)
     }
@@ -100,10 +93,18 @@ const PlayerCard = memo(function PlayerCard({ player }: { player: MatchmakingPla
       <div className="flex items-start gap-3">
         {/* Avatar */}
         {player.avatar_url ? (
-          <img src={player.avatar_url} alt="" className="w-10 h-10 rounded-full flex-shrink-0" loading="lazy" decoding="async" />
+          <img
+            src={player.avatar_url}
+            alt=""
+            className="w-10 h-10 rounded-full flex-shrink-0"
+            loading="lazy"
+            decoding="async"
+          />
         ) : (
           <div className="w-10 h-10 rounded-full bg-indigo-500/10 flex items-center justify-center flex-shrink-0">
-            <span className="text-sm font-bold text-indigo-400">{player.username.charAt(0).toUpperCase()}</span>
+            <span className="text-sm font-bold text-indigo-400">
+              {player.username.charAt(0).toUpperCase()}
+            </span>
           </div>
         )}
 
@@ -142,8 +143,11 @@ const PlayerCard = memo(function PlayerCard({ player }: { player: MatchmakingPla
           {/* Preferred games */}
           {player.preferred_games && player.preferred_games.length > 0 && (
             <div className="flex gap-1 mt-1.5 flex-wrap">
-              {player.preferred_games.slice(0, 4).map(g => (
-                <span key={g} className="inline-flex items-center gap-0.5 text-xs px-1.5 py-0.5 rounded bg-overlay-subtle text-text-tertiary">
+              {player.preferred_games.slice(0, 4).map((g) => (
+                <span
+                  key={g}
+                  className="inline-flex items-center gap-0.5 text-xs px-1.5 py-0.5 rounded bg-overlay-subtle text-text-tertiary"
+                >
                   <Gamepad2 className="w-2.5 h-2.5" />
                   {g}
                 </span>

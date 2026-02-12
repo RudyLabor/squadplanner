@@ -1,9 +1,16 @@
-"use client";
+'use client'
 
 import { useEffect, useRef, type ReactNode } from 'react'
 import { m, AnimatePresence, useAnimate } from 'framer-motion'
 import { X } from '../icons'
-export type BadgeVariant = 'default' | 'success' | 'warning' | 'error' | 'info' | 'primary' | 'danger'
+export type BadgeVariant =
+  | 'default'
+  | 'success'
+  | 'warning'
+  | 'error'
+  | 'info'
+  | 'primary'
+  | 'danger'
 
 interface BadgeProps {
   variant?: BadgeVariant
@@ -64,7 +71,11 @@ export function Badge({
 
   useEffect(() => {
     if (count !== undefined && prevCount.current !== undefined && count !== prevCount.current) {
-      animate(scope.current, { scale: [1, 1.2, 1] }, { type: 'spring', stiffness: 400, damping: 15 })
+      animate(
+        scope.current,
+        { scale: [1, 1.2, 1] },
+        { type: 'spring', stiffness: 400, damping: 15 }
+      )
     }
     prevCount.current = count
   }, [count, animate, scope])

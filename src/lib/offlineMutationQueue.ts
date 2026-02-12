@@ -48,7 +48,9 @@ function openDB(): Promise<IDBDatabase> {
 /**
  * Queue a failed mutation for later replay.
  */
-export async function queueMutation(mutation: Omit<OfflineMutation, 'id' | 'timestamp'>): Promise<void> {
+export async function queueMutation(
+  mutation: Omit<OfflineMutation, 'id' | 'timestamp'>
+): Promise<void> {
   try {
     const db = await openDB()
     const entry: OfflineMutation = {

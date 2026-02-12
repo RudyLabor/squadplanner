@@ -3,7 +3,10 @@ import type { Profile } from '../types/database'
 
 const LEVEL_THRESHOLDS = [0, 100, 250, 500, 1000, 2000, 3500, 5500, 8000, 11000, 15000, 20000]
 
-export async function updateDailyStreak(userId: string, profile: Profile | null): Promise<Profile | null> {
+export async function updateDailyStreak(
+  userId: string,
+  profile: Profile | null
+): Promise<Profile | null> {
   if (!profile) return null
 
   const today = new Date().toISOString().split('T')[0]

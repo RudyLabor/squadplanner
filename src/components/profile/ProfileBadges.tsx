@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 import { useState, useEffect, useRef } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
@@ -7,12 +7,54 @@ import Confetti from '../LazyConfetti'
 import { Card } from '../ui'
 
 const ACHIEVEMENTS = [
-  { id: 'first_step', name: 'Premier pas', icon: '', description: '1ère session', threshold: 1, type: 'sessions' },
-  { id: 'team_player', name: "Joueur d'équipe", icon: '', description: '5 sessions', threshold: 5, type: 'sessions' },
-  { id: 'reliable', name: 'Fiable', icon: '', description: '10 check-ins', threshold: 10, type: 'checkins' },
-  { id: 'veteran', name: 'Vétéran', icon: '', description: '20 sessions', threshold: 20, type: 'sessions' },
-  { id: 'perfectionist', name: 'Perfectionniste', icon: '', description: '100% fiabilité', threshold: 100, type: 'score' },
-  { id: 'legend', name: 'Légende', icon: '', description: '50 sessions', threshold: 50, type: 'sessions' },
+  {
+    id: 'first_step',
+    name: 'Premier pas',
+    icon: '',
+    description: '1ère session',
+    threshold: 1,
+    type: 'sessions',
+  },
+  {
+    id: 'team_player',
+    name: "Joueur d'équipe",
+    icon: '',
+    description: '5 sessions',
+    threshold: 5,
+    type: 'sessions',
+  },
+  {
+    id: 'reliable',
+    name: 'Fiable',
+    icon: '',
+    description: '10 check-ins',
+    threshold: 10,
+    type: 'checkins',
+  },
+  {
+    id: 'veteran',
+    name: 'Vétéran',
+    icon: '',
+    description: '20 sessions',
+    threshold: 20,
+    type: 'sessions',
+  },
+  {
+    id: 'perfectionist',
+    name: 'Perfectionniste',
+    icon: '',
+    description: '100% fiabilité',
+    threshold: 100,
+    type: 'score',
+  },
+  {
+    id: 'legend',
+    name: 'Légende',
+    icon: '',
+    description: '50 sessions',
+    threshold: 50,
+    type: 'sessions',
+  },
 ]
 
 interface ProfileBadgesProps {
@@ -23,31 +65,39 @@ interface ProfileBadgesProps {
   } | null
   challengesLoaded: boolean
   challengesData?: { badges?: unknown[] }
-  SeasonalBadgesComponent: React.ComponentType<{ initialBadges?: unknown[] }>
+  SeasonalBadgesComponent: React.ComponentType<any>
 }
 
-export function ProfileBadges({ profile, challengesLoaded, challengesData, SeasonalBadgesComponent }: ProfileBadgesProps) {
+export function ProfileBadges({
+  profile,
+  challengesLoaded,
+  challengesData,
+  SeasonalBadgesComponent,
+}: ProfileBadgesProps) {
   const reliabilityScore = profile?.reliability_score ?? 100
 
-  const unlockedAchievements = ACHIEVEMENTS.filter(a => {
-    const value = a.type === 'sessions'
-      ? (profile?.total_sessions || 0)
-      : a.type === 'checkins'
-        ? (profile?.total_checkins || 0)
-        : reliabilityScore
+  const unlockedAchievements = ACHIEVEMENTS.filter((a) => {
+    const value =
+      a.type === 'sessions'
+        ? profile?.total_sessions || 0
+        : a.type === 'checkins'
+          ? profile?.total_checkins || 0
+          : reliabilityScore
     return value >= a.threshold
   })
 
   // Achievement celebration states
   const [showAchievementConfetti, setShowAchievementConfetti] = useState(false)
-  const [celebratedAchievement, setCelebratedAchievement] = useState<typeof ACHIEVEMENTS[0] | null>(null)
+  const [celebratedAchievement, setCelebratedAchievement] = useState<
+    (typeof ACHIEVEMENTS)[0] | null
+  >(null)
   const previousUnlockedIdsRef = useRef<string[]>([])
 
   useEffect(() => {
-    const currentUnlockedIds = unlockedAchievements.map(a => a.id)
+    const currentUnlockedIds = unlockedAchievements.map((a) => a.id)
     const previousIds = previousUnlockedIdsRef.current
 
-    const newlyUnlocked = unlockedAchievements.filter(a => !previousIds.includes(a.id))
+    const newlyUnlocked = unlockedAchievements.filter((a) => !previousIds.includes(a.id))
 
     if (previousIds.length > 0 && newlyUnlocked.length > 0) {
       const achievement = newlyUnlocked[0]
@@ -73,7 +123,13 @@ export function ProfileBadges({ profile, challengesLoaded, challengesData, Seaso
           recycle={false}
           numberOfPieces={200}
           gravity={0.25}
-          colors={['var(--color-success)', 'var(--color-primary)', 'var(--color-warning)', 'var(--color-purple)', 'var(--color-text-primary)']}
+          colors={[
+            'var(--color-success)',
+            'var(--color-primary)',
+            'var(--color-warning)',
+            'var(--color-purple)',
+            'var(--color-text-primary)',
+          ]}
           style={{ position: 'fixed', top: 0, left: 0, zIndex: 100, pointerEvents: 'none' }}
         />
       )}
@@ -138,11 +194,8 @@ export function ProfileBadges({ profile, challengesLoaded, challengesData, Seaso
         ) : (
           <div className="p-4">
             <div className="flex gap-2">
-              {[1, 2, 3].map(i => (
-                <div
-                  key={i}
-                  className="w-12 h-12 rounded-xl bg-surface-card animate-pulse"
-                />
+              {[1, 2, 3].map((i) => (
+                <div key={i} className="w-12 h-12 rounded-xl bg-surface-card animate-pulse" />
               ))}
             </div>
           </div>
@@ -153,11 +206,13 @@ export function ProfileBadges({ profile, challengesLoaded, challengesData, Seaso
       <Card className="mb-5 p-4 bg-bg-elevated">
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-md font-semibold text-text-primary">Succès</h3>
-          <span className="text-sm text-text-quaternary">{unlockedAchievements.length}/{ACHIEVEMENTS.length}</span>
+          <span className="text-sm text-text-quaternary">
+            {unlockedAchievements.length}/{ACHIEVEMENTS.length}
+          </span>
         </div>
         <div className="grid grid-cols-3 lg:grid-cols-6 gap-3 lg:gap-4">
           {ACHIEVEMENTS.map((achievement, index) => {
-            const isUnlocked = unlockedAchievements.some(a => a.id === achievement.id)
+            const isUnlocked = unlockedAchievements.some((a) => a.id === achievement.id)
             return (
               <m.div
                 key={achievement.id}
@@ -177,18 +232,23 @@ export function ProfileBadges({ profile, challengesLoaded, challengesData, Seaso
                 >
                   {isUnlocked ? achievement.icon : ''}
                 </m.div>
-                <div className={`text-xs font-medium ${isUnlocked ? 'text-text-primary' : 'text-text-quaternary'}`}>
+                <div
+                  className={`text-xs font-medium ${isUnlocked ? 'text-text-primary' : 'text-text-quaternary'}`}
+                >
                   {achievement.name}
                 </div>
-                <div className="text-xs text-text-quaternary">
-                  {achievement.description}
-                </div>
+                <div className="text-xs text-text-quaternary">{achievement.description}</div>
                 {isUnlocked && (
                   <m.div
                     className="absolute -top-1 -right-1 w-5 h-5 bg-success rounded-full flex items-center justify-center"
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
-                    transition={{ type: 'spring', stiffness: 500, damping: 25, delay: index * 0.1 + 0.3 }}
+                    transition={{
+                      type: 'spring',
+                      stiffness: 500,
+                      damping: 25,
+                      delay: index * 0.1 + 0.3,
+                    }}
                   >
                     <Check className="w-3 h-3 text-bg-base" />
                   </m.div>

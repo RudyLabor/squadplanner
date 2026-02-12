@@ -37,15 +37,19 @@ describe('useSwipeBack', () => {
 
     // Touch starts at x=50 (outside the edge zone of 20px)
     act(() => {
-      document.dispatchEvent(new TouchEvent('touchstart', {
-        touches: [{ clientX: 50, clientY: 100 } as Touch],
-      }))
+      document.dispatchEvent(
+        new TouchEvent('touchstart', {
+          touches: [{ clientX: 50, clientY: 100 } as Touch],
+        })
+      )
     })
 
     act(() => {
-      document.dispatchEvent(new TouchEvent('touchmove', {
-        touches: [{ clientX: 150, clientY: 100 } as Touch],
-      }))
+      document.dispatchEvent(
+        new TouchEvent('touchmove', {
+          touches: [{ clientX: 150, clientY: 100 } as Touch],
+        })
+      )
     })
 
     expect(result.current.isSwiping).toBe(false)
@@ -57,16 +61,20 @@ describe('useSwipeBack', () => {
 
     // Touch starts at x=10 (inside edge zone)
     act(() => {
-      document.dispatchEvent(new TouchEvent('touchstart', {
-        touches: [{ clientX: 10, clientY: 100 } as Touch],
-      }))
+      document.dispatchEvent(
+        new TouchEvent('touchstart', {
+          touches: [{ clientX: 10, clientY: 100 } as Touch],
+        })
+      )
     })
 
     // Move right significantly
     act(() => {
-      document.dispatchEvent(new TouchEvent('touchmove', {
-        touches: [{ clientX: 60, clientY: 105 } as Touch],
-      }))
+      document.dispatchEvent(
+        new TouchEvent('touchmove', {
+          touches: [{ clientX: 60, clientY: 105 } as Touch],
+        })
+      )
     })
 
     expect(result.current.isSwiping).toBe(true)
@@ -78,16 +86,20 @@ describe('useSwipeBack', () => {
 
     // Start swipe from edge
     act(() => {
-      document.dispatchEvent(new TouchEvent('touchstart', {
-        touches: [{ clientX: 5, clientY: 100 } as Touch],
-      }))
+      document.dispatchEvent(
+        new TouchEvent('touchstart', {
+          touches: [{ clientX: 5, clientY: 100 } as Touch],
+        })
+      )
     })
 
     // Move slightly (not enough to trigger navigation)
     act(() => {
-      document.dispatchEvent(new TouchEvent('touchmove', {
-        touches: [{ clientX: 30, clientY: 105 } as Touch],
-      }))
+      document.dispatchEvent(
+        new TouchEvent('touchmove', {
+          touches: [{ clientX: 30, clientY: 105 } as Touch],
+        })
+      )
     })
 
     // End touch
@@ -103,15 +115,19 @@ describe('useSwipeBack', () => {
     const { result } = renderHook(() => useSwipeBack({ edgeWidth: 20, threshold: 100 }))
 
     act(() => {
-      document.dispatchEvent(new TouchEvent('touchstart', {
-        touches: [{ clientX: 5, clientY: 100 } as Touch],
-      }))
+      document.dispatchEvent(
+        new TouchEvent('touchstart', {
+          touches: [{ clientX: 5, clientY: 100 } as Touch],
+        })
+      )
     })
 
     act(() => {
-      document.dispatchEvent(new TouchEvent('touchmove', {
-        touches: [{ clientX: 50, clientY: 105 } as Touch],
-      }))
+      document.dispatchEvent(
+        new TouchEvent('touchmove', {
+          touches: [{ clientX: 50, clientY: 105 } as Touch],
+        })
+      )
     })
 
     act(() => {
@@ -128,15 +144,19 @@ describe('useSwipeBack', () => {
     const { result } = renderHook(() => useSwipeBack())
 
     act(() => {
-      document.dispatchEvent(new TouchEvent('touchstart', {
-        touches: [{ clientX: 5, clientY: 100 } as Touch],
-      }))
+      document.dispatchEvent(
+        new TouchEvent('touchstart', {
+          touches: [{ clientX: 5, clientY: 100 } as Touch],
+        })
+      )
     })
 
     act(() => {
-      document.dispatchEvent(new TouchEvent('touchmove', {
-        touches: [{ clientX: 150, clientY: 100 } as Touch],
-      }))
+      document.dispatchEvent(
+        new TouchEvent('touchmove', {
+          touches: [{ clientX: 150, clientY: 100 } as Touch],
+        })
+      )
     })
 
     expect(result.current.isSwiping).toBe(false)
@@ -146,9 +166,11 @@ describe('useSwipeBack', () => {
     const { result } = renderHook(() => useSwipeBack({ enabled: false }))
 
     act(() => {
-      document.dispatchEvent(new TouchEvent('touchstart', {
-        touches: [{ clientX: 5, clientY: 100 } as Touch],
-      }))
+      document.dispatchEvent(
+        new TouchEvent('touchstart', {
+          touches: [{ clientX: 5, clientY: 100 } as Touch],
+        })
+      )
     })
 
     expect(result.current.isSwiping).toBe(false)

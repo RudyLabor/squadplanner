@@ -12,14 +12,22 @@ vi.mock('framer-motion', async () => {
       ...actual.motion,
       div: ({ children, ...props }: any) => {
         const { initial, animate, exit, transition, style: mStyle, ...rest } = props
-        return <div style={mStyle} {...rest}>{children}</div>
+        return (
+          <div style={mStyle} {...rest}>
+            {children}
+          </div>
+        )
       },
     },
     m: {
       ...actual.m,
       div: ({ children, ...props }: any) => {
         const { initial, animate, exit, transition, style: mStyle, ...rest } = props
-        return <div style={mStyle} {...rest}>{children}</div>
+        return (
+          <div style={mStyle} {...rest}>
+            {children}
+          </div>
+        )
       },
     },
   }
@@ -41,7 +49,10 @@ describe('Popover', () => {
         <div>Content</div>
       </Popover>
     )
-    expect(screen.getByText('Open').closest('[aria-haspopup]')).toHaveAttribute('aria-haspopup', 'true')
+    expect(screen.getByText('Open').closest('[aria-haspopup]')).toHaveAttribute(
+      'aria-haspopup',
+      'true'
+    )
   })
 
   it('opens on click', async () => {

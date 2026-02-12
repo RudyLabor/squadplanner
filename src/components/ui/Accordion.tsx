@@ -50,19 +50,10 @@ interface AccordionProps {
   children: ReactNode
 }
 
-export function Accordion({
-  type = 'single',
-  value,
-  onChange,
-  children,
-}: AccordionProps) {
+export function Accordion({ type = 'single', value, onChange, children }: AccordionProps) {
   const baseId = useId()
 
-  const expandedItems: string[] = value
-    ? Array.isArray(value)
-      ? value
-      : [value]
-    : []
+  const expandedItems: string[] = value ? (Array.isArray(value) ? value : [value]) : []
 
   const toggle = useCallback(
     (itemValue: string) => {
@@ -123,7 +114,9 @@ export function AccordionTrigger({ children, className = '' }: AccordionTriggerP
 
   const handleClick = useCallback(() => {
     if (!disabled) {
-      try { haptic.selection() } catch {}
+      try {
+        haptic.selection()
+      } catch {}
       toggle(value)
     }
   }, [disabled, toggle, value])
@@ -198,9 +191,7 @@ export function AccordionContent({ children, className = '' }: AccordionContentP
           transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
           className="overflow-hidden"
         >
-          <div className={`pb-4 text-sm text-text-secondary ${className}`}>
-            {children}
-          </div>
+          <div className={`pb-4 text-sm text-text-secondary ${className}`}>{children}</div>
         </m.div>
       )}
     </AnimatePresence>

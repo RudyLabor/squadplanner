@@ -9,16 +9,23 @@ const Discover = lazy(() => import('../pages/Discover'))
 
 export function meta() {
   return [
-    { title: "Découvrir - Squad Planner" },
-    { name: "description", content: "Découvre de nouvelles squads et joueurs. Trouve des partenaires de jeu qui correspondent à ton style." },
-    { tagName: "link", rel: "canonical", href: "https://squadplanner.fr/discover" },
-    { property: "og:url", content: "https://squadplanner.fr/discover" },
+    { title: 'Découvrir - Squad Planner' },
+    {
+      name: 'description',
+      content:
+        'Découvre de nouvelles squads et joueurs. Trouve des partenaires de jeu qui correspondent à ton style.',
+    },
+    { tagName: 'link', rel: 'canonical', href: 'https://squadplanner.fr/discover' },
+    { property: 'og:url', content: 'https://squadplanner.fr/discover' },
   ]
 }
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const { supabase, headers, getUser } = createSupabaseServerClient(request)
-  const { data: { user }, error } = await getUser()
+  const {
+    data: { user },
+    error,
+  } = await getUser()
 
   if (error || !user) {
     throw redirect('/', { headers })
@@ -44,10 +51,16 @@ interface DiscoverLoaderData {
 
 export default function Component({ loaderData }: { loaderData: DiscoverLoaderData }) {
   return (
-    <ClientRouteWrapper seeds={[
-      { key: queryKeys.discover.publicSquads(), data: loaderData?.publicSquads },
-    ]}>
-      <Suspense fallback={<div className="min-h-[50vh] flex items-center justify-center"><div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin" /></div>}>
+    <ClientRouteWrapper
+      seeds={[{ key: [...queryKeys.discover.publicSquads()], data: loaderData?.publicSquads }]}
+    >
+      <Suspense
+        fallback={
+          <div className="min-h-[50vh] flex items-center justify-center">
+            <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+          </div>
+        }
+      >
         <Discover />
       </Suspense>
     </ClientRouteWrapper>

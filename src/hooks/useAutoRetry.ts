@@ -67,51 +67,57 @@ export function useAutoRetry(
     setIsRetrying(false)
   }, [clearTimers])
 
-  const executeRetry = useCallback(async (attempt: number) => {
-    if (!mountedRef.current) return
-    setIsRetrying(true)
-    setCountdown(0)
-    onRetry?.(attempt)
-    try {
-      await retryFn()
-    } finally {
-      if (mountedRef.current) {
-        setIsRetrying(false)
+  const executeRetry = useCallback(
+    async (attempt: number) => {
+      if (!mountedRef.current) return
+      setIsRetrying(true)
+      setCountdown(0)
+      onRetry?.(attempt)
+      try {
+        await retryFn()
+      } finally {
+        if (mountedRef.current) {
+          setIsRetrying(false)
+        }
       }
-    }
-  }, [retryFn, onRetry])
+    },
+    [retryFn, onRetry]
+  )
 
-  const scheduleRetry = useCallback((attempt: number) => {
-    if (attempt >= maxRetries) {
-      onMaxRetriesReached?.()
-      return
-    }
-
-    const delay = Math.min(baseDelay * Math.pow(backoffMultiplier, attempt), maxDelay)
-    const seconds = Math.ceil(delay / 1000)
-    setCountdown(seconds)
-
-    // Countdown ticker
-    let remaining = seconds
-    countdownRef.current = setInterval(() => {
-      remaining -= 1
-      if (mountedRef.current) {
-        setCountdown(Math.max(0, remaining))
+  const scheduleRetry = useCallback(
+    (attempt: number) => {
+      if (attempt >= maxRetries) {
+        onMaxRetriesReached?.()
+        return
       }
-      if (remaining <= 0 && countdownRef.current) {
-        clearInterval(countdownRef.current)
-        countdownRef.current = null
-      }
-    }, 1000)
 
-    // Actual retry trigger
-    timerRef.current = setTimeout(() => {
-      if (mountedRef.current) {
-        setRetryCount(prev => prev + 1)
-        executeRetry(attempt + 1)
-      }
-    }, delay)
-  }, [maxRetries, baseDelay, backoffMultiplier, maxDelay, onMaxRetriesReached, executeRetry])
+      const delay = Math.min(baseDelay * Math.pow(backoffMultiplier, attempt), maxDelay)
+      const seconds = Math.ceil(delay / 1000)
+      setCountdown(seconds)
+
+      // Countdown ticker
+      let remaining = seconds
+      countdownRef.current = setInterval(() => {
+        remaining -= 1
+        if (mountedRef.current) {
+          setCountdown(Math.max(0, remaining))
+        }
+        if (remaining <= 0 && countdownRef.current) {
+          clearInterval(countdownRef.current)
+          countdownRef.current = null
+        }
+      }, 1000)
+
+      // Actual retry trigger
+      timerRef.current = setTimeout(() => {
+        if (mountedRef.current) {
+          setRetryCount((prev) => prev + 1)
+          executeRetry(attempt + 1)
+        }
+      }, delay)
+    },
+    [maxRetries, baseDelay, backoffMultiplier, maxDelay, onMaxRetriesReached, executeRetry]
+  )
 
   // Manual retry - resets countdown and fires immediately
   const retry = useCallback(() => {

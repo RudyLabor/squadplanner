@@ -1,11 +1,18 @@
-"use client";
+'use client'
 
 import { useEffect, useState, memo, useCallback, useMemo, useRef } from 'react'
 import type { ReactNode } from 'react'
 import { useLocation } from 'react-router'
 import { m } from 'framer-motion'
 import { useShallow } from 'zustand/react/shallow'
-import { useAuthStore, useSquadsStore, useKeyboardVisible, useUnreadCountStore, useSquadNotificationsStore, useGlobalPresence } from '../../hooks'
+import {
+  useAuthStore,
+  useSquadsStore,
+  useKeyboardVisible,
+  useUnreadCountStore,
+  useSquadNotificationsStore,
+  useGlobalPresence,
+} from '../../hooks'
 import { useCreateSessionModal } from '../CreateSessionModal'
 import { CustomStatusModal } from '../CustomStatusModal'
 import { DesktopSidebar } from './DesktopSidebar'
@@ -21,7 +28,7 @@ const DesktopContentWrapper = memo(function DesktopContentWrapper({
   isExpanded,
   isKeyboardVisible,
   locationKey,
-  children
+  children,
 }: {
   isExpanded: boolean
   isKeyboardVisible: boolean
@@ -74,10 +81,12 @@ export function AppLayout({ children }: AppLayoutProps) {
   const isLanding = location.pathname === '/'
 
   // OPTIMIZED: Use shallow selectors to prevent re-renders on unrelated state changes
-  const { profile, user } = useAuthStore(useShallow(state => ({
-    profile: state.profile,
-    user: state.user
-  })))
+  const { profile, user } = useAuthStore(
+    useShallow((state) => ({
+      profile: state.profile,
+      user: state.user,
+    }))
+  )
 
   const isPublicPage = ['/legal', '/help', '/premium'].includes(location.pathname)
   const shouldHideNav = isAuthPage || isOnboarding || isLanding || (isPublicPage && !user)
@@ -91,25 +100,31 @@ export function AppLayout({ children }: AppLayoutProps) {
     let unsub: (() => void) | undefined
     import('../../hooks/useVoiceChat').then(({ useVoiceChatStore }) => {
       setIsInVoiceChat(useVoiceChatStore.getState().isConnected)
-      unsub = useVoiceChatStore.subscribe(
-        state => state.isConnected,
-        connected => setIsInVoiceChat(connected)
+      unsub = useVoiceChatStore.subscribe((state: { isConnected: boolean }) =>
+        setIsInVoiceChat(state.isConnected)
       )
     })
-    return () => { unsub?.() }
+    return () => {
+      unsub?.()
+    }
   }, [shouldHideNav])
 
   const isKeyboardVisible = useKeyboardVisible()
 
   // PHASE 3.1: Create session modal
-  const openCreateSessionModal = useCreateSessionModal(state => state.open)
+  const openCreateSessionModal = useCreateSessionModal((state) => state.open)
 
-  const { totalUnread: unreadMessages, fetchCounts, subscribe, unsubscribe } = useUnreadCountStore(
-    useShallow(state => ({
+  const {
+    totalUnread: unreadMessages,
+    fetchCounts,
+    subscribe,
+    unsubscribe,
+  } = useUnreadCountStore(
+    useShallow((state) => ({
       totalUnread: state.totalUnread,
       fetchCounts: state.fetchCounts,
       subscribe: state.subscribe,
-      unsubscribe: state.unsubscribe
+      unsubscribe: state.unsubscribe,
     }))
   )
 
@@ -117,13 +132,13 @@ export function AppLayout({ children }: AppLayoutProps) {
     pendingRsvpCount,
     fetchPendingCounts,
     subscribe: subscribeSquad,
-    unsubscribe: unsubscribeSquad
+    unsubscribe: unsubscribeSquad,
   } = useSquadNotificationsStore(
-    useShallow(state => ({
+    useShallow((state) => ({
       pendingRsvpCount: state.pendingRsvpCount,
       fetchPendingCounts: state.fetchPendingCounts,
       subscribe: state.subscribe,
-      unsubscribe: state.unsubscribe
+      unsubscribe: state.unsubscribe,
     }))
   )
 
@@ -158,9 +173,14 @@ export function AppLayout({ children }: AppLayoutProps) {
     clearTimeout(sidebarHoverTimer.current)
     setSidebarExpanded(false)
   }, [])
-  const togglePinned = useCallback(() => setSidebarPinned(p => !p), [])
+  const togglePinned = useCallback(() => setSidebarPinned((p) => !p), [])
   // Cleanup hover timer on unmount
-  useEffect(() => () => { clearTimeout(sidebarHoverTimer.current) }, [])
+  useEffect(
+    () => () => {
+      clearTimeout(sidebarHoverTimer.current)
+    },
+    []
+  )
 
   useEffect(() => {
     localStorage.setItem('sidebar-pinned', String(sidebarPinned))
@@ -170,14 +190,18 @@ export function AppLayout({ children }: AppLayoutProps) {
     if (!user) return
     fetchCounts()
     subscribe()
-    return () => { unsubscribe() }
+    return () => {
+      unsubscribe()
+    }
   }, [user, fetchCounts, subscribe, unsubscribe])
 
   useEffect(() => {
     if (!user) return
     fetchPendingCounts()
     subscribeSquad()
-    return () => { unsubscribeSquad() }
+    return () => {
+      unsubscribeSquad()
+    }
   }, [user, fetchPendingCounts, subscribeSquad, unsubscribeSquad])
 
   const isPartyActive = useMemo(() => location.pathname === '/party', [location.pathname])
@@ -208,7 +232,11 @@ export function AppLayout({ children }: AppLayoutProps) {
         onOpenCustomStatus={() => setShowCustomStatusModal(true)}
       />
 
-      <DesktopContentWrapper isExpanded={isExpanded} isKeyboardVisible={isKeyboardVisible} locationKey={currentPath}>
+      <DesktopContentWrapper
+        isExpanded={isExpanded}
+        isKeyboardVisible={isKeyboardVisible}
+        locationKey={currentPath}
+      >
         <TopBar />
         {children}
       </DesktopContentWrapper>

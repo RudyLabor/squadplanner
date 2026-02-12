@@ -25,7 +25,12 @@ const CQ_POOR = 'poor' as const
 const CQ_LOST = 'lost' as const
 
 // Opaque quality value received from LiveKit at runtime (string enum)
-type ConnectionQualityValue = typeof CQ_EXCELLENT | typeof CQ_GOOD | typeof CQ_POOR | typeof CQ_LOST | string
+type ConnectionQualityValue =
+  | typeof CQ_EXCELLENT
+  | typeof CQ_GOOD
+  | typeof CQ_POOR
+  | typeof CQ_LOST
+  | string
 
 // Mapping LiveKit ConnectionQuality -> niveau de qualite
 export function mapLiveKitQualityToLevel(quality: ConnectionQualityValue): NetworkQualityLevel {
@@ -44,12 +49,15 @@ export function mapLiveKitQualityToLevel(quality: ConnectionQualityValue): Netwo
 }
 
 // Informations affichables pour chaque niveau
-export const QUALITY_INFO: Record<NetworkQualityLevel, {
-  label: string
-  color: string
-  bars: number
-  description: string
-}> = {
+export const QUALITY_INFO: Record<
+  NetworkQualityLevel,
+  {
+    label: string
+    color: string
+    bars: number
+    description: string
+  }
+> = {
   excellent: {
     label: 'Excellente',
     color: 'var(--color-success)',
@@ -78,7 +86,7 @@ export const QUALITY_INFO: Record<NetworkQualityLevel, {
     label: 'Inconnue',
     color: 'var(--color-text-tertiary)',
     bars: 0,
-    description: 'Qualite en cours d\'evaluation',
+    description: "Qualite en cours d'evaluation",
   },
 }
 
@@ -100,7 +108,10 @@ interface NetworkQualityState {
   lastQualityChange: number
 
   // Actions - accept plain string values (the LiveKit enum values)
-  updateQuality: (localConnectionQuality: ConnectionQualityValue, remoteConnectionQuality?: ConnectionQualityValue) => NetworkQualityLevel | null
+  updateQuality: (
+    localConnectionQuality: ConnectionQualityValue,
+    remoteConnectionQuality?: ConnectionQualityValue
+  ) => NetworkQualityLevel | null
   resetQuality: () => void
   getStableQuality: () => NetworkQualityLevel
 }
@@ -114,11 +125,16 @@ const QUALITY_HISTORY_SIZE = 5
 // Convert LiveKit ConnectionQuality to numeric score
 function qualityToScore(quality: ConnectionQualityValue): number {
   switch (quality) {
-    case CQ_EXCELLENT: return 1
-    case CQ_GOOD: return 2
-    case CQ_POOR: return 4
-    case CQ_LOST: return 5
-    default: return 0
+    case CQ_EXCELLENT:
+      return 1
+    case CQ_GOOD:
+      return 2
+    case CQ_POOR:
+      return 4
+    case CQ_LOST:
+      return 5
+    default:
+      return 0
   }
 }
 
@@ -131,7 +147,10 @@ export const useNetworkQualityStore = create<NetworkQualityState>((set, get) => 
   qualityHistory: [],
   lastQualityChange: 0,
 
-  updateQuality: (localConnectionQuality: ConnectionQualityValue, remoteConnectionQuality?: ConnectionQualityValue) => {
+  updateQuality: (
+    localConnectionQuality: ConnectionQualityValue,
+    remoteConnectionQuality?: ConnectionQualityValue
+  ) => {
     const state = get()
     const now = Date.now()
 
@@ -144,9 +163,7 @@ export const useNetworkQualityStore = create<NetworkQualityState>((set, get) => 
     // Calculer la moyenne mobile
     const averageScore = newHistory.reduce((a, b) => a + b, 0) / newHistory.length
     const stableQualityLevel = mapLiveKitQualityToLevel(
-      averageScore <= 1.5 ? CQ_EXCELLENT :
-      averageScore <= 2.5 ? CQ_GOOD :
-      CQ_POOR
+      averageScore <= 1.5 ? CQ_EXCELLENT : averageScore <= 2.5 ? CQ_GOOD : CQ_POOR
     )
 
     // Verifier si on peut changer de qualite
@@ -156,13 +173,17 @@ export const useNetworkQualityStore = create<NetworkQualityState>((set, get) => 
     set({
       localQualityScore: uplinkScore,
       remoteQualityScore: downlinkScore,
-      remoteQuality: remoteConnectionQuality ? mapLiveKitQualityToLevel(remoteConnectionQuality) : state.remoteQuality,
+      remoteQuality: remoteConnectionQuality
+        ? mapLiveKitQualityToLevel(remoteConnectionQuality)
+        : state.remoteQuality,
       qualityHistory: newHistory,
-      ...(qualityChanged ? {
-        localQuality: stableQualityLevel,
-        currentAudioProfile: AUDIO_PROFILES[stableQualityLevel],
-        lastQualityChange: now,
-      } : {}),
+      ...(qualityChanged
+        ? {
+            localQuality: stableQualityLevel,
+            currentAudioProfile: AUDIO_PROFILES[stableQualityLevel],
+            lastQualityChange: now,
+          }
+        : {}),
     })
 
     // Retourner le nouveau niveau si change (pour declencher un toast)
@@ -186,9 +207,7 @@ export const useNetworkQualityStore = create<NetworkQualityState>((set, get) => 
     if (state.qualityHistory.length === 0) return 'unknown'
     const average = state.qualityHistory.reduce((a, b) => a + b, 0) / state.qualityHistory.length
     return mapLiveKitQualityToLevel(
-      average <= 1.5 ? CQ_EXCELLENT :
-      average <= 2.5 ? CQ_GOOD :
-      CQ_POOR
+      average <= 1.5 ? CQ_EXCELLENT : average <= 2.5 ? CQ_GOOD : CQ_POOR
     )
   },
 }))
@@ -201,7 +220,7 @@ export const useNetworkQualityStore = create<NetworkQualityState>((set, get) => 
  * level. Callers always pass an actual Room instance obtained via dynamic
  * import so the runtime behaviour is identical.
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+
 export function setupNetworkQualityListener(
   room: any,
   onQualityChange?: (newQuality: NetworkQualityLevel, oldQuality: NetworkQualityLevel) => void
@@ -209,7 +228,10 @@ export function setupNetworkQualityListener(
   // RoomEvent.ConnectionQualityChanged === 'connectionQualityChanged'
   const CONNECTION_QUALITY_CHANGED = 'connectionQualityChanged'
 
-  const handleConnectionQualityChanged = (quality: ConnectionQualityValue, participant: { identity: string; sid: string }) => {
+  const handleConnectionQualityChanged = (
+    quality: ConnectionQualityValue,
+    participant: { identity: string; sid: string }
+  ) => {
     // Only track local participant quality
     if (participant.sid === room.localParticipant?.sid) {
       const previousQuality = useNetworkQualityStore.getState().localQuality
@@ -243,7 +265,7 @@ export async function adjustAudioQuality(
   try {
     console.log(`[NetworkQuality] Ajustement audio vers ${quality}:`, profile)
   } catch (error) {
-    console.warn('[NetworkQuality] Erreur lors de l\'ajustement audio:', error)
+    console.warn("[NetworkQuality] Erreur lors de l'ajustement audio:", error)
   }
 }
 

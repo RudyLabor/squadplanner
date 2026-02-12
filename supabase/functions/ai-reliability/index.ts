@@ -11,13 +11,12 @@ const ALLOWED_ORIGINS = [
   'http://localhost:5174',
   'https://squadplanner.fr',
   'https://squadplanner.app',
-  Deno.env.get('SUPABASE_URL') || ''
+  Deno.env.get('SUPABASE_URL') || '',
 ].filter(Boolean)
 
 function getCorsHeaders(origin: string | null) {
-  const allowedOrigin = origin && ALLOWED_ORIGINS.some(allowed => origin === allowed)
-    ? origin
-    : null
+  const allowedOrigin =
+    origin && ALLOWED_ORIGINS.some((allowed) => origin === allowed) ? origin : null
   if (!allowedOrigin) {
     return {
       'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
@@ -81,10 +80,13 @@ serve(async (req) => {
     try {
       rawBody = await req.json()
     } catch {
-      return new Response(
-        JSON.stringify({ error: 'Invalid JSON in request body' }),
-        { status: 400, headers: { ...getCorsHeaders(req.headers.get('origin')), 'Content-Type': 'application/json' } }
-      )
+      return new Response(JSON.stringify({ error: 'Invalid JSON in request body' }), {
+        status: 400,
+        headers: {
+          ...getCorsHeaders(req.headers.get('origin')),
+          'Content-Type': 'application/json',
+        },
+      })
     }
 
     let validatedData: {
@@ -98,10 +100,13 @@ serve(async (req) => {
         user_id: validateOptional(rawBody.user_id, (v) => validateUUID(v, 'user_id')),
       }
     } catch (validationError) {
-      return new Response(
-        JSON.stringify({ error: (validationError as Error).message }),
-        { status: 400, headers: { ...getCorsHeaders(req.headers.get('origin')), 'Content-Type': 'application/json' } }
-      )
+      return new Response(JSON.stringify({ error: (validationError as Error).message }), {
+        status: 400,
+        headers: {
+          ...getCorsHeaders(req.headers.get('origin')),
+          'Content-Type': 'application/json',
+        },
+      })
     }
 
     const { squad_id, user_id } = validatedData
@@ -115,10 +120,13 @@ serve(async (req) => {
         .single()
 
       if (!profile) {
-        return new Response(
-          JSON.stringify({ error: 'User not found' }),
-          { status: 404, headers: { ...getCorsHeaders(req.headers.get('origin')), 'Content-Type': 'application/json' } }
-        )
+        return new Response(JSON.stringify({ error: 'User not found' }), {
+          status: 404,
+          headers: {
+            ...getCorsHeaders(req.headers.get('origin')),
+            'Content-Type': 'application/json',
+          },
+        })
       }
 
       // Get recent checkins for trend analysis
@@ -135,10 +143,12 @@ serve(async (req) => {
         const recentHalf = recentCheckins.slice(0, 5)
         const olderHalf = recentCheckins.slice(5)
 
-        const recentScore = recentHalf.filter(c => c.status === 'present').length / recentHalf.length
-        const olderScore = olderHalf.length > 0
-          ? olderHalf.filter(c => c.status === 'present').length / olderHalf.length
-          : recentScore
+        const recentScore =
+          recentHalf.filter((c) => c.status === 'present').length / recentHalf.length
+        const olderScore =
+          olderHalf.length > 0
+            ? olderHalf.filter((c) => c.status === 'present').length / olderHalf.length
+            : recentScore
 
         if (recentScore > olderScore + 0.1) trend = 'improving'
         else if (recentScore < olderScore - 0.1) trend = 'declining'
@@ -162,24 +172,29 @@ serve(async (req) => {
           present_count: profile.total_checkins,
           late_count: profile.total_late,
           noshow_count: profile.total_noshow,
-          maybe_to_present_rate: 0 // Would need more complex calculation
+          maybe_to_present_rate: 0, // Would need more complex calculation
         },
         badges,
-        warning: profile.reliability_score < 50 ? 'Score de fiabilité bas' : null
+        warning: profile.reliability_score < 50 ? 'Score de fiabilité bas' : null,
       }
 
-      return new Response(
-        JSON.stringify({ player: playerStats }),
-        { headers: { ...getCorsHeaders(req.headers.get('origin')), 'Content-Type': 'application/json' } }
-      )
+      return new Response(JSON.stringify({ player: playerStats }), {
+        headers: {
+          ...getCorsHeaders(req.headers.get('origin')),
+          'Content-Type': 'application/json',
+        },
+      })
     }
 
     // Squad-wide analysis
     if (!squad_id) {
-      return new Response(
-        JSON.stringify({ error: 'squad_id or user_id is required' }),
-        { status: 400, headers: { ...getCorsHeaders(req.headers.get('origin')), 'Content-Type': 'application/json' } }
-      )
+      return new Response(JSON.stringify({ error: 'squad_id or user_id is required' }), {
+        status: 400,
+        headers: {
+          ...getCorsHeaders(req.headers.get('origin')),
+          'Content-Type': 'application/json',
+        },
+      })
     }
 
     // Get squad info
@@ -190,10 +205,13 @@ serve(async (req) => {
       .single()
 
     if (!squad) {
-      return new Response(
-        JSON.stringify({ error: 'Squad not found' }),
-        { status: 404, headers: { ...getCorsHeaders(req.headers.get('origin')), 'Content-Type': 'application/json' } }
-      )
+      return new Response(JSON.stringify({ error: 'Squad not found' }), {
+        status: 404,
+        headers: {
+          ...getCorsHeaders(req.headers.get('origin')),
+          'Content-Type': 'application/json',
+        },
+      })
     }
 
     // Get all members with profiles
@@ -203,14 +221,17 @@ serve(async (req) => {
       .eq('squad_id', squad_id)
 
     if (!members || members.length === 0) {
-      return new Response(
-        JSON.stringify({ error: 'No members found' }),
-        { status: 404, headers: { ...getCorsHeaders(req.headers.get('origin')), 'Content-Type': 'application/json' } }
-      )
+      return new Response(JSON.stringify({ error: 'No members found' }), {
+        status: 404,
+        headers: {
+          ...getCorsHeaders(req.headers.get('origin')),
+          'Content-Type': 'application/json',
+        },
+      })
     }
 
     // Batch-fetch all recent checkins for all members (fixes N+1 query)
-    const memberUserIds = members.map(m => m.user_id)
+    const memberUserIds = members.map((m) => m.user_id)
     const { data: allCheckins } = await supabaseClient
       .from('session_checkins')
       .select('user_id, status, checked_at')
@@ -250,7 +271,8 @@ serve(async (req) => {
 
       let trend: 'improving' | 'stable' | 'declining' = 'stable'
       if (recentCheckins.length >= 3) {
-        const presentRatio = recentCheckins.filter(c => c.status === 'present').length / recentCheckins.length
+        const presentRatio =
+          recentCheckins.filter((c) => c.status === 'present').length / recentCheckins.length
         if (presentRatio >= 0.8) trend = 'improving'
         else if (presentRatio <= 0.4) trend = 'declining'
       }
@@ -282,10 +304,10 @@ serve(async (req) => {
           present_count: profile.total_checkins,
           late_count: profile.total_late,
           noshow_count: profile.total_noshow,
-          maybe_to_present_rate: 0
+          maybe_to_present_rate: 0,
         },
         badges,
-        warning
+        warning,
       })
 
       totalReliability += profile.reliability_score
@@ -306,12 +328,12 @@ serve(async (req) => {
       insights.push('La fiabilité de la squad pourrait être améliorée.')
     }
 
-    const lowReliabilityCount = players.filter(p => p.reliability_score < 60).length
+    const lowReliabilityCount = players.filter((p) => p.reliability_score < 60).length
     if (lowReliabilityCount > 0) {
       insights.push(`${lowReliabilityCount} membre(s) avec un score faible.`)
     }
 
-    const decliningCount = players.filter(p => p.trend === 'declining').length
+    const decliningCount = players.filter((p) => p.trend === 'declining').length
     if (decliningCount > 0) {
       insights.push(`${decliningCount} membre(s) avec un engagement en baisse.`)
     }
@@ -322,18 +344,17 @@ serve(async (req) => {
       avg_reliability: avgReliability,
       total_sessions: squad.total_sessions,
       players,
-      insights
+      insights,
     }
 
-    return new Response(
-      JSON.stringify({ report }),
-      { headers: { ...getCorsHeaders(req.headers.get('origin')), 'Content-Type': 'application/json' } }
-    )
+    return new Response(JSON.stringify({ report }), {
+      headers: { ...getCorsHeaders(req.headers.get('origin')), 'Content-Type': 'application/json' },
+    })
   } catch (error) {
     console.error('Error in ai-reliability:', error)
-    return new Response(
-      JSON.stringify({ error: error.message }),
-      { status: 500, headers: { ...getCorsHeaders(req.headers.get('origin')), 'Content-Type': 'application/json' } }
-    )
+    return new Response(JSON.stringify({ error: error.message }), {
+      status: 500,
+      headers: { ...getCorsHeaders(req.headers.get('origin')), 'Content-Type': 'application/json' },
+    })
   }
 })

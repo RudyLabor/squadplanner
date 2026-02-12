@@ -15,12 +15,7 @@ interface SkeletonProps {
  * Base Skeleton component with shimmer animation
  * Uses CSS gradient animation for smooth left-to-right shimmer effect
  */
-export function Skeleton({
-  className = '',
-  width,
-  height,
-  rounded = 'md'
-}: SkeletonProps) {
+export function Skeleton({ className = '', width, height, rounded = 'md' }: SkeletonProps) {
   const roundedClasses = {
     none: 'rounded-none',
     sm: 'rounded-sm',
@@ -39,11 +34,7 @@ export function Skeleton({
   }
 
   return (
-    <div
-      className={`${roundedClasses[rounded]} ${className}`}
-      style={style}
-      aria-hidden="true"
-    />
+    <div className={`${roundedClasses[rounded]} ${className}`} style={style} aria-hidden="true" />
   )
 }
 
@@ -70,7 +61,7 @@ export function SkeletonText({
   className = '',
   lineWidth = 'full',
   lastLineWidth = 'lg',
-  gap = 'md'
+  gap = 'md',
 }: SkeletonTextProps) {
   const widthMap = {
     full: 'w-full',
@@ -129,7 +120,11 @@ interface SkeletonButtonProps {
 /**
  * Button-shaped skeleton
  */
-export function SkeletonButton({ size = 'md', width = 'auto', className = '' }: SkeletonButtonProps) {
+export function SkeletonButton({
+  size = 'md',
+  width = 'auto',
+  className = '',
+}: SkeletonButtonProps) {
   const sizeMap = {
     sm: 'h-8',
     md: 'h-10',

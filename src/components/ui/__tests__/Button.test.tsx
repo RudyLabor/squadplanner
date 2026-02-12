@@ -1,4 +1,3 @@
-import React from 'react'
 import { describe, it, expect, vi } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
@@ -11,25 +10,53 @@ vi.mock('framer-motion', async () => {
     AnimatePresence: ({ children }: any) => children,
     motion: {
       ...actual.motion,
-      button: forwardRef(({ children, whileHover, whileTap, transition, initial, animate, exit, ...rest }: any, ref: any) => {
-        return createElement('button', { ...rest, ref }, children)
-      }),
+      button: forwardRef(
+        (
+          { children, whileHover, whileTap, transition, initial, animate, exit, ...rest }: any,
+          ref: any
+        ) => {
+          return createElement('button', { ...rest, ref }, children)
+        }
+      ),
       span: ({ children, initial, animate, exit, transition, ...rest }: any) => {
         return createElement('span', rest, children)
       },
-      div: ({ children, whileHover, whileTap, transition, initial, animate, exit, ...rest }: any) => {
+      div: ({
+        children,
+        whileHover,
+        whileTap,
+        transition,
+        initial,
+        animate,
+        exit,
+        ...rest
+      }: any) => {
         return createElement('div', rest, children)
       },
     },
     m: {
       ...actual.m,
-      button: forwardRef(({ children, whileHover, whileTap, transition, initial, animate, exit, ...rest }: any, ref: any) => {
-        return createElement('button', { ...rest, ref }, children)
-      }),
+      button: forwardRef(
+        (
+          { children, whileHover, whileTap, transition, initial, animate, exit, ...rest }: any,
+          ref: any
+        ) => {
+          return createElement('button', { ...rest, ref }, children)
+        }
+      ),
       span: ({ children, initial, animate, exit, transition, ...rest }: any) => {
         return createElement('span', rest, children)
       },
-      div: ({ children, whileHover, whileTap, transition, initial, animate, exit, ...rest }: any) => {
+      div: ({
+        children,
+        whileHover,
+        whileTap,
+        transition,
+        initial,
+        animate,
+        exit,
+        ...rest
+      }: any) => {
         return createElement('div', rest, children)
       },
     },
@@ -88,7 +115,10 @@ describe('Button', () => {
 
   it('renders left and right icons', () => {
     render(
-      <Button leftIcon={<span data-testid="left-icon" />} rightIcon={<span data-testid="right-icon" />}>
+      <Button
+        leftIcon={<span data-testid="left-icon" />}
+        rightIcon={<span data-testid="right-icon" />}
+      >
         With Icons
       </Button>
     )
@@ -97,7 +127,11 @@ describe('Button', () => {
   })
 
   it('renders loading text when provided', () => {
-    render(<Button isLoading loadingText="Saving...">Save</Button>)
+    render(
+      <Button isLoading loadingText="Saving...">
+        Save
+      </Button>
+    )
     expect(screen.getByText('Saving...')).toBeInTheDocument()
   })
 })

@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 import { type ReactNode, useEffect, useRef, useCallback, useState } from 'react'
 import {
@@ -243,9 +243,7 @@ export function Sheet({
               )}
 
               {/* Content */}
-              <div className="flex-1 overflow-y-auto px-5 pb-5 scrollbar-hide">
-                {children}
-              </div>
+              <div className="flex-1 overflow-y-auto px-5 pb-5 scrollbar-hide">{children}</div>
             </m.div>
           ) : (
             /* Right side panel (desktop) */
@@ -268,9 +266,7 @@ export function Sheet({
                       {title}
                     </h3>
                   )}
-                  {description && (
-                    <p className="mt-1 text-sm text-text-secondary">{description}</p>
-                  )}
+                  {description && <p className="mt-1 text-sm text-text-secondary">{description}</p>}
                 </div>
                 <button
                   onClick={onClose}
@@ -282,9 +278,7 @@ export function Sheet({
               </div>
 
               {/* Content */}
-              <div className="flex-1 overflow-y-auto px-6 py-4 scrollbar-hide">
-                {children}
-              </div>
+              <div className="flex-1 overflow-y-auto px-6 py-4 scrollbar-hide">{children}</div>
             </m.div>
           )}
         </div>

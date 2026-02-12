@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 import { m } from 'framer-motion'
 
@@ -115,7 +115,7 @@ export function TypingIndicator({ text, compact = false }: TypingIndicatorProps)
         transition={{
           duration: 2,
           repeat: Infinity,
-          ease: "easeInOut",
+          ease: 'easeInOut',
         }}
       >
         {text}

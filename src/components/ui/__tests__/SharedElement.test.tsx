@@ -35,7 +35,11 @@ describe('SharedElement', () => {
   })
 
   it('applies className', () => {
-    const { container } = render(<SharedElement id="hero" className="custom">Content</SharedElement>)
+    const { container } = render(
+      <SharedElement id="hero" className="custom">
+        Content
+      </SharedElement>
+    )
     expect(container.firstChild).toHaveClass('custom')
   })
 })

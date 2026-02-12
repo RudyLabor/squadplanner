@@ -56,11 +56,7 @@ export function EmptyState({
         {title}
       </p>
       {description && (
-        <p
-          className={`text-text-tertiary max-w-xs ${
-            isCompact ? 'text-xs mb-3' : 'text-sm mb-4'
-          }`}
-        >
+        <p className={`text-text-tertiary max-w-xs ${isCompact ? 'text-xs mb-3' : 'text-sm mb-4'}`}>
           {description}
         </p>
       )}

@@ -4,11 +4,7 @@
 import { serve } from 'https://deno.land/std@0.177.0/http/server.ts'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.0'
 import Stripe from 'https://esm.sh/stripe@14.10.0?target=deno'
-import {
-  validateString,
-  validateUUID,
-  validateOptional,
-} from '../_shared/schemas.ts'
+import { validateString, validateUUID, validateOptional } from '../_shared/schemas.ts'
 
 const stripe = new Stripe(Deno.env.get('STRIPE_SECRET_KEY') || '', {
   apiVersion: '2023-10-16',
@@ -21,13 +17,12 @@ const ALLOWED_ORIGINS = [
   'http://localhost:5174',
   'https://squadplanner.fr',
   'https://squadplanner.app',
-  Deno.env.get('SUPABASE_URL') || ''
+  Deno.env.get('SUPABASE_URL') || '',
 ].filter(Boolean)
 
 function getCorsHeaders(origin: string | null) {
-  const allowedOrigin = origin && ALLOWED_ORIGINS.some(allowed => origin === allowed)
-    ? origin
-    : null
+  const allowedOrigin =
+    origin && ALLOWED_ORIGINS.some((allowed) => origin === allowed) ? origin : null
   if (!allowedOrigin) {
     return {
       'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
@@ -61,12 +56,18 @@ serve(async (req) => {
     )
 
     // Get user from auth
-    const { data: { user }, error: authError } = await supabaseClient.auth.getUser()
+    const {
+      data: { user },
+      error: authError,
+    } = await supabaseClient.auth.getUser()
     if (authError || !user) {
-      return new Response(
-        JSON.stringify({ error: 'Unauthorized' }),
-        { status: 401, headers: { ...getCorsHeaders(req.headers.get('origin')), 'Content-Type': 'application/json' } }
-      )
+      return new Response(JSON.stringify({ error: 'Unauthorized' }), {
+        status: 401,
+        headers: {
+          ...getCorsHeaders(req.headers.get('origin')),
+          'Content-Type': 'application/json',
+        },
+      })
     }
 
     // Parse and validate request body
@@ -74,10 +75,13 @@ serve(async (req) => {
     try {
       rawBody = await req.json()
     } catch {
-      return new Response(
-        JSON.stringify({ error: 'Invalid JSON in request body' }),
-        { status: 400, headers: { ...getCorsHeaders(req.headers.get('origin')), 'Content-Type': 'application/json' } }
-      )
+      return new Response(JSON.stringify({ error: 'Invalid JSON in request body' }), {
+        status: 400,
+        headers: {
+          ...getCorsHeaders(req.headers.get('origin')),
+          'Content-Type': 'application/json',
+        },
+      })
     }
 
     let validatedData: {
@@ -89,9 +93,10 @@ serve(async (req) => {
 
     try {
       // squad_id is optional - personal subscriptions don't need a squad
-      const squadId = rawBody.squad_id && rawBody.squad_id !== ''
-        ? validateUUID(rawBody.squad_id, 'squad_id')
-        : undefined
+      const squadId =
+        rawBody.squad_id && rawBody.squad_id !== ''
+          ? validateUUID(rawBody.squad_id, 'squad_id')
+          : undefined
 
       validatedData = {
         squad_id: squadId,
@@ -100,10 +105,13 @@ serve(async (req) => {
         cancel_url: validateOptional(rawBody.cancel_url, (v) => validateString(v, 'cancel_url')),
       }
     } catch (validationError) {
-      return new Response(
-        JSON.stringify({ error: (validationError as Error).message }),
-        { status: 400, headers: { ...getCorsHeaders(req.headers.get('origin')), 'Content-Type': 'application/json' } }
-      )
+      return new Response(JSON.stringify({ error: (validationError as Error).message }), {
+        status: 400,
+        headers: {
+          ...getCorsHeaders(req.headers.get('origin')),
+          'Content-Type': 'application/json',
+        },
+      })
     }
 
     const { squad_id, price_id, success_url, cancel_url } = validatedData
@@ -120,10 +128,13 @@ serve(async (req) => {
       squad = data
 
       if (!squad || squad.owner_id !== user.id) {
-        return new Response(
-          JSON.stringify({ error: 'Only squad owner can purchase premium' }),
-          { status: 403, headers: { ...getCorsHeaders(req.headers.get('origin')), 'Content-Type': 'application/json' } }
-        )
+        return new Response(JSON.stringify({ error: 'Only squad owner can purchase premium' }), {
+          status: 403,
+          headers: {
+            ...getCorsHeaders(req.headers.get('origin')),
+            'Content-Type': 'application/json',
+          },
+        })
       }
     }
 
@@ -187,15 +198,14 @@ serve(async (req) => {
       allow_promotion_codes: true,
     })
 
-    return new Response(
-      JSON.stringify({ url: session.url, session_id: session.id }),
-      { headers: { ...getCorsHeaders(req.headers.get('origin')), 'Content-Type': 'application/json' } }
-    )
+    return new Response(JSON.stringify({ url: session.url, session_id: session.id }), {
+      headers: { ...getCorsHeaders(req.headers.get('origin')), 'Content-Type': 'application/json' },
+    })
   } catch (error) {
     console.error('Error creating checkout session:', error)
-    return new Response(
-      JSON.stringify({ error: error.message }),
-      { status: 500, headers: { ...getCorsHeaders(req.headers.get('origin')), 'Content-Type': 'application/json' } }
-    )
+    return new Response(JSON.stringify({ error: error.message }), {
+      status: 500,
+      headers: { ...getCorsHeaders(req.headers.get('origin')), 'Content-Type': 'application/json' },
+    })
   }
 })

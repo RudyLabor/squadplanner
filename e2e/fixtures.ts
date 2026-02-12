@@ -5,7 +5,7 @@ import { createClient } from '@supabase/supabase-js'
 export const TEST_USER = {
   email: 'test@squadplanner.dev',
   password: 'TestPassword123!',
-  username: 'testuser'
+  username: 'testuser',
 }
 
 // Create Supabase client for test setup
@@ -15,8 +15,8 @@ const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || ''
 export const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey, {
   auth: {
     autoRefreshToken: false,
-    persistSession: false
-  }
+    persistSession: false,
+  },
 })
 
 // Extended test with authentication
@@ -36,20 +36,27 @@ export const test = base.extend<{
     await page.click('button[type="submit"]')
 
     // Wait for successful login (redirect to home or stay with user loaded)
-    await page.waitForFunction(() => {
-      return window.location.pathname !== '/auth' ||
-             document.querySelector('[data-testid="user-menu"]') !== null
-    }, { timeout: 10000 }).catch(() => {
-      // If redirect didn't happen, check if we're still on auth with an error
-      console.log('Login may have failed - continuing anyway')
-    })
+    await page
+      .waitForFunction(
+        () => {
+          return (
+            window.location.pathname !== '/auth' ||
+            document.querySelector('[data-testid="user-menu"]') !== null
+          )
+        },
+        { timeout: 10000 }
+      )
+      .catch(() => {
+        // If redirect didn't happen, check if we're still on auth with an error
+        console.log('Login may have failed - continuing anyway')
+      })
 
     // Give the app time to initialize auth state
     await page.waitForTimeout(1000)
 
     // eslint-disable-next-line react-hooks/rules-of-hooks
     await use(page)
-  }
+  },
 })
 
 // Helper function to login via UI

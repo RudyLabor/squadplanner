@@ -13,9 +13,7 @@ interface AnimatedListProps {
 export function AnimatedList({ children, className }: AnimatedListProps) {
   return (
     <div className={className}>
-      <AnimatePresence initial={false}>
-        {children}
-      </AnimatePresence>
+      <AnimatePresence initial={false}>{children}</AnimatePresence>
     </div>
   )
 }

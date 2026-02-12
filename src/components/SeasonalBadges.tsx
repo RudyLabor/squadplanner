@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 import { useState, useEffect } from 'react'
 import { m } from 'framer-motion'
@@ -34,8 +34,13 @@ export function SeasonalBadges({ userId, compact = false, initialBadges }: Seaso
   useEffect(() => {
     if (initialBadges) {
       const formattedBadges = initialBadges.map((b) => ({
-        id: b.id, user_id: b.user_id, badge_type: b.badge_type, season: b.season,
-        squad_id: b.squad_id, awarded_at: b.awarded_at, squad_name: b.squads?.name
+        id: b.id,
+        user_id: b.user_id,
+        badge_type: b.badge_type,
+        season: b.season,
+        squad_id: b.squad_id,
+        awarded_at: b.awarded_at,
+        squad_name: b.squads?.name,
       }))
       setBadges(formattedBadges)
       setLoading(false)
@@ -76,7 +81,9 @@ export function SeasonalBadges({ userId, compact = false, initialBadges }: Seaso
     return (
       <div className={`${compact ? 'p-3' : 'p-4'}`}>
         <div className="flex gap-2">
-          {[1, 2, 3].map(i => <div key={i} className="w-12 h-12 rounded-xl bg-surface-card animate-pulse" />)}
+          {[1, 2, 3].map((i) => (
+            <div key={i} className="w-12 h-12 rounded-xl bg-surface-card animate-pulse" />
+          ))}
         </div>
       </div>
     )
@@ -96,11 +103,14 @@ export function SeasonalBadges({ userId, compact = false, initialBadges }: Seaso
     )
   }
 
-  const badgesBySeason = badges.reduce((acc, badge) => {
-    if (!acc[badge.season]) acc[badge.season] = []
-    acc[badge.season].push(badge)
-    return acc
-  }, {} as Record<string, SeasonalBadge[]>)
+  const badgesBySeason = badges.reduce(
+    (acc, badge) => {
+      if (!acc[badge.season]) acc[badge.season] = []
+      acc[badge.season].push(badge)
+      return acc
+    },
+    {} as Record<string, SeasonalBadge[]>
+  )
 
   return (
     <div className={compact ? 'p-3' : 'p-4'}>
@@ -110,7 +120,12 @@ export function SeasonalBadges({ userId, compact = false, initialBadges }: Seaso
             const config = BADGE_CONFIGS[badge.badge_type] || BADGE_CONFIGS.mvp
             const Icon = config.icon
             return (
-              <Tooltip key={badge.id} content={`${config.label} - ${formatSeason(badge.season)}`} position="top" delay={300}>
+              <Tooltip
+                key={badge.id}
+                content={`${config.label} - ${formatSeason(badge.season)}`}
+                position="top"
+                delay={300}
+              >
                 <m.button
                   onClick={() => setSelectedBadge(badge)}
                   className="relative w-10 h-10 rounded-lg flex items-center justify-center"
@@ -142,12 +157,26 @@ export function SeasonalBadges({ userId, compact = false, initialBadges }: Seaso
                   const config = BADGE_CONFIGS[badge.badge_type] || BADGE_CONFIGS.mvp
                   const Icon = config.icon
                   return (
-                    <m.button key={badge.id} onClick={() => setSelectedBadge(badge)} className="relative group" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.98 }}>
-                      <div className="w-14 h-14 rounded-xl flex items-center justify-center transition-shadow" style={{ backgroundColor: config.bgColor, boxShadow: `0 0 20px ${config.glowColor}` }}>
+                    <m.button
+                      key={badge.id}
+                      onClick={() => setSelectedBadge(badge)}
+                      className="relative group"
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.98 }}
+                    >
+                      <div
+                        className="w-14 h-14 rounded-xl flex items-center justify-center transition-shadow"
+                        style={{
+                          backgroundColor: config.bgColor,
+                          boxShadow: `0 0 20px ${config.glowColor}`,
+                        }}
+                      >
                         <Icon className="w-7 h-7" style={{ color: config.color }} />
                       </div>
                       <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
-                        <div className="px-2 py-1 rounded-lg bg-bg-hover border border-border-hover text-xs text-text-primary whitespace-nowrap">{config.label}</div>
+                        <div className="px-2 py-1 rounded-lg bg-bg-hover border border-border-hover text-xs text-text-primary whitespace-nowrap">
+                          {config.label}
+                        </div>
                       </div>
                     </m.button>
                   )

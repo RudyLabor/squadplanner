@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 import { useState, useEffect } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
@@ -50,7 +50,9 @@ export function CookieConsent() {
                     <Cookie className="w-5 h-5 text-primary" />
                   </div>
                   <div>
-                    <h3 className="text-md font-semibold text-text-primary">Cookies & confidentialité</h3>
+                    <h3 className="text-md font-semibold text-text-primary">
+                      Cookies & confidentialité
+                    </h3>
                     <p className="text-sm text-text-tertiary mt-0.5">Tes données, ton choix</p>
                   </div>
                 </div>
@@ -67,8 +69,8 @@ export function CookieConsent() {
             {/* Content */}
             <div className="p-5">
               <p className="text-base text-text-secondary leading-relaxed mb-4">
-                Squad Planner utilise des cookies essentiels pour fonctionner et des cookies analytics
-                pour améliorer ton expérience. Aucun cookie publicitaire.
+                Squad Planner utilise des cookies essentiels pour fonctionner et des cookies
+                analytics pour améliorer ton expérience. Aucun cookie publicitaire.
               </p>
 
               {/* Details toggle */}
@@ -85,21 +87,27 @@ export function CookieConsent() {
                         <div className="w-2 h-2 rounded-full bg-success mt-1.5 shrink-0" />
                         <div>
                           <p className="text-base font-medium text-text-primary">Essentiels</p>
-                          <p className="text-sm text-text-tertiary">Authentification, thème, état de l'app. Toujours actifs.</p>
+                          <p className="text-sm text-text-tertiary">
+                            Authentification, thème, état de l'app. Toujours actifs.
+                          </p>
                         </div>
                       </div>
                       <div className="flex items-start gap-3 p-3 rounded-xl bg-surface-card border border-border-subtle">
                         <div className="w-2 h-2 rounded-full bg-primary mt-1.5 shrink-0" />
                         <div>
                           <p className="text-base font-medium text-text-primary">Analytics</p>
-                          <p className="text-sm text-text-tertiary">Monitoring d'erreurs anonymisé via notre propre service.</p>
+                          <p className="text-sm text-text-tertiary">
+                            Monitoring d'erreurs anonymisé via notre propre service.
+                          </p>
                         </div>
                       </div>
                       <div className="flex items-start gap-3 p-3 rounded-xl bg-surface-card border border-border-subtle">
                         <div className="w-2 h-2 rounded-full bg-text-tertiary mt-1.5 shrink-0" />
                         <div>
                           <p className="text-base font-medium text-text-primary">Publicitaires</p>
-                          <p className="text-sm text-text-tertiary">Aucun. On ne vend pas tes données.</p>
+                          <p className="text-sm text-text-tertiary">
+                            Aucun. On ne vend pas tes données.
+                          </p>
                         </div>
                       </div>
                     </div>

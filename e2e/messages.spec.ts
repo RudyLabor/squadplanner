@@ -3,7 +3,7 @@ import { test, expect } from '@playwright/test'
 // Test credentials from GEMINI.md
 const TEST_USER = {
   email: 'testowner@squadtest.dev',
-  password: 'TestPassword123!'
+  password: 'TestPassword123!',
 }
 
 async function loginUser(page: import('@playwright/test').Page) {
@@ -110,7 +110,7 @@ test.describe('Empty States', () => {
     const conversationList = page.locator('[class*="conversation"]').first()
 
     // Either we have conversations or an empty state
-    const hasContent = await conversationList.isVisible() || await emptyState.isVisible()
+    const hasContent = (await conversationList.isVisible()) || (await emptyState.isVisible())
     expect(hasContent).toBeTruthy()
   })
 })

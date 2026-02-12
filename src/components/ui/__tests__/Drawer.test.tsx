@@ -12,14 +12,40 @@ vi.mock('framer-motion', async () => {
     motion: {
       ...actual.motion,
       div: ({ children, ...props }: any) => {
-        const { initial, animate, exit, transition, drag, dragControls, dragConstraints, dragElastic, onDragEnd, whileHover, whileTap, ...rest } = props
+        const {
+          initial,
+          animate,
+          exit,
+          transition,
+          drag,
+          dragControls,
+          dragConstraints,
+          dragElastic,
+          onDragEnd,
+          whileHover,
+          whileTap,
+          ...rest
+        } = props
         return <div {...rest}>{children}</div>
       },
     },
     m: {
       ...actual.m,
       div: ({ children, ...props }: any) => {
-        const { initial, animate, exit, transition, drag, dragControls, dragConstraints, dragElastic, onDragEnd, whileHover, whileTap, ...rest } = props
+        const {
+          initial,
+          animate,
+          exit,
+          transition,
+          drag,
+          dragControls,
+          dragConstraints,
+          dragElastic,
+          onDragEnd,
+          whileHover,
+          whileTap,
+          ...rest
+        } = props
         return <div {...rest}>{children}</div>
       },
     },

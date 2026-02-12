@@ -1,10 +1,4 @@
-import {
-  Home,
-  Users,
-  Mic,
-  MessageCircle,
-  User,
-} from '../icons'
+import { Home, Users, Mic, MessageCircle, User } from '../icons'
 // ─── MOCK DATA ─────────────────────────────────────────
 export const mockMembers = [
   { name: 'Max', initial: 'M', color: 'var(--color-primary)', score: 94 },
@@ -25,13 +19,20 @@ export function MockNavbar({ active }: { active: string }) {
   ]
   return (
     <div className="mt-auto px-2 py-2 flex items-center justify-around border-t border-border-subtle">
-      {items.map(item => {
+      {items.map((item) => {
         const Icon = item.icon
         const isActive = item.id === active
         return (
           <div key={item.id} className="flex flex-col items-center gap-0.5">
-            <Icon className="w-[14px] h-[14px]" style={{ color: isActive ? 'var(--color-primary)' : 'var(--color-text-tertiary)' }} />
-            <span className={`text-xs ${isActive ? 'text-primary font-medium' : 'text-text-tertiary'}`}>{item.label}</span>
+            <Icon
+              className="w-[14px] h-[14px]"
+              style={{ color: isActive ? 'var(--color-primary)' : 'var(--color-text-tertiary)' }}
+            />
+            <span
+              className={`text-xs ${isActive ? 'text-primary font-medium' : 'text-text-tertiary'}`}
+            >
+              {item.label}
+            </span>
           </div>
         )
       })}

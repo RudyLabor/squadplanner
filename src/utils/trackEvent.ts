@@ -23,7 +23,7 @@ function flushEvents() {
   eventQueue.length = 0
 
   // Send to PostHog if configured
-  events.forEach(event => {
+  events.forEach((event) => {
     trackAnalyticsEvent(event.name as any, {
       url: event.url,
       referrer: event.referrer,
@@ -55,15 +55,19 @@ export function initTrackingListeners() {
     initAnalytics()
   })
 
-  document.addEventListener('click', (e) => {
-    const target = (e.target as HTMLElement).closest('[data-track]')
-    if (target) {
-      const trackName = target.getAttribute('data-track')
-      if (trackName) {
-        queueEvent(trackName)
+  document.addEventListener(
+    'click',
+    (e) => {
+      const target = (e.target as HTMLElement).closest('[data-track]')
+      if (target) {
+        const trackName = target.getAttribute('data-track')
+        if (trackName) {
+          queueEvent(trackName)
+        }
       }
-    }
-  }, { passive: true })
+    },
+    { passive: true }
+  )
 
   // Flush on page unload
   window.addEventListener('beforeunload', flushEvents)

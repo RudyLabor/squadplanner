@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 import { m } from 'framer-motion'
 import { useId, useCallback, type KeyboardEvent } from 'react'
@@ -33,7 +33,9 @@ export function Toggle({
 
   const handleClick = useCallback(() => {
     if (!disabled) {
-      try { haptic.selection() } catch {}
+      try {
+        haptic.selection()
+      } catch {}
       onChange(!checked)
     }
   }, [disabled, onChange, checked])

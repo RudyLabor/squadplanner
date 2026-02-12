@@ -142,9 +142,7 @@ export function Radio({
         <RadioCircle isSelected={isSelected} />
         <div className="flex flex-col gap-0.5">
           <span className="text-sm font-medium text-text-primary">{label}</span>
-          {description && (
-            <span className="text-xs text-text-tertiary">{description}</span>
-          )}
+          {description && <span className="text-xs text-text-tertiary">{description}</span>}
         </div>
       </button>
     )
@@ -168,9 +166,7 @@ export function Radio({
       <RadioCircle isSelected={isSelected} />
       <div className="flex flex-col gap-0.5">
         <span className="text-sm font-medium text-text-primary">{label}</span>
-        {description && (
-          <span className="text-xs text-text-tertiary">{description}</span>
-        )}
+        {description && <span className="text-xs text-text-tertiary">{description}</span>}
       </div>
     </button>
   )

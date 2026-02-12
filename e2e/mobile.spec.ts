@@ -8,7 +8,7 @@ import { test, expect } from '@playwright/test'
 
 const TEST_USER = {
   email: 'testowner@squadtest.dev',
-  password: 'TestPassword123!'
+  password: 'TestPassword123!',
 }
 
 async function loginUser(page: import('@playwright/test').Page) {
@@ -66,7 +66,11 @@ for (const viewport of mobileViewports) {
       await page.goto('/home')
 
       // Look for bottom/mobile navigation bar
-      const bottomNav = page.locator('nav[class*="bottom"], nav[class*="mobile"], [class*="bottom-nav"], [class*="mobile-nav"], nav').last()
+      const bottomNav = page
+        .locator(
+          'nav[class*="bottom"], nav[class*="mobile"], [class*="bottom-nav"], [class*="mobile-nav"], nav'
+        )
+        .last()
       await expect(bottomNav).toBeVisible()
     })
 
@@ -160,7 +164,9 @@ for (const viewport of mobileViewports) {
 
         // Tap "Sombre" to switch back
         await page.getByText('Sombre').tap()
-        const themeDark = await page.evaluate(() => document.documentElement.getAttribute('data-theme'))
+        const themeDark = await page.evaluate(() =>
+          document.documentElement.getAttribute('data-theme')
+        )
         expect(themeDark).toBe('dark')
       }
     })

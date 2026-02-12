@@ -50,11 +50,21 @@ export function MessageComposer({
   onTyping,
 }: MessageComposerProps) {
   return (
-    <div className={`flex-shrink-0 px-4 py-3 ${embedded ? 'pb-3' : 'pb-6'} border-t border-border-default ${embedded ? '' : 'bg-bg-elevated/80 backdrop-blur-xl'}`}>
+    <div
+      className={`flex-shrink-0 px-4 py-3 ${embedded ? 'pb-3' : 'pb-6'} border-t border-border-default ${embedded ? '' : 'bg-bg-elevated/80 backdrop-blur-xl'}`}
+    >
       <div className={embedded ? '' : 'max-w-4xl lg:max-w-5xl mx-auto'}>
         {/* Reply preview */}
         <ReplyComposer
-          replyingTo={replyingTo ? { id: replyingTo.id, sender_username: replyingTo.sender, content: replyingTo.content } : null}
+          replyingTo={
+            replyingTo
+              ? {
+                  id: replyingTo.id,
+                  sender_username: replyingTo.sender,
+                  content: replyingTo.content,
+                }
+              : null
+          }
           onCancel={onCancelReply}
         />
 
@@ -63,8 +73,14 @@ export function MessageComposer({
             {isSquadChat ? (
               <MentionInput
                 value={newMessage}
-                onChange={(val) => { onMessageChange(val); if (val.trim()) onTyping() }}
-                onSubmit={() => { if (newMessage.trim() && !isSending) onSubmit({ preventDefault: () => {} } as React.FormEvent) }}
+                onChange={(val) => {
+                  onMessageChange(val)
+                  if (val.trim()) onTyping()
+                }}
+                onSubmit={() => {
+                  if (newMessage.trim() && !isSending)
+                    onSubmit({ preventDefault: () => {} } as React.FormEvent)
+                }}
                 placeholder="Message... (@mention)"
                 disabled={isSending}
                 members={mentionMembers}
@@ -120,11 +136,23 @@ export function MessageComposer({
             </div>
 
             {!newMessage.trim() && (
-              <VoiceRecorder onSend={async (blob, dur) => onVoiceSend(blob, dur)} disabled={isSending} />
+              <VoiceRecorder
+                onSend={async (blob, dur) => onVoiceSend(blob, dur)}
+                disabled={isSending}
+              />
             )}
 
-            <Button type="submit" disabled={!newMessage.trim() || isSending} className="w-12 h-12 p-0 rounded-xl" aria-label="Envoyer le message">
-              {isSending ? <Loader2 className="w-5 h-5 animate-spin" aria-hidden="true" /> : <Send className="w-5 h-5" aria-hidden="true" />}
+            <Button
+              type="submit"
+              disabled={!newMessage.trim() || isSending}
+              className="w-12 h-12 p-0 rounded-xl"
+              aria-label="Envoyer le message"
+            >
+              {isSending ? (
+                <Loader2 className="w-5 h-5 animate-spin" aria-hidden="true" />
+              ) : (
+                <Send className="w-5 h-5" aria-hidden="true" />
+              )}
             </Button>
           </div>
         </form>

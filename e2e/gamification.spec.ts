@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test'
 
 const TEST_USER = {
   email: 'testowner@squadtest.dev',
-  password: 'TestPassword123!'
+  password: 'TestPassword123!',
 }
 
 async function loginUser(page: import('@playwright/test').Page) {
@@ -53,7 +53,7 @@ test.describe('Gamification - Streak', () => {
     const streakIndicator = page.locator('[class*="streak"], [data-testid="streak"]').first()
     const fireEmoji = page.getByText(/🔥/)
 
-    const hasStreak = await streakIndicator.isVisible() || await fireEmoji.isVisible()
+    const hasStreak = (await streakIndicator.isVisible()) || (await fireEmoji.isVisible())
     expect(hasStreak).toBeTruthy()
   })
 })

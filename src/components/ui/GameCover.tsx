@@ -1,50 +1,46 @@
-'use client';
+'use client'
 
 /**
  * Composant GameCover - Affiche l'image de couverture d'un jeu
  * Utilise des images statiques pour les jeux populaires avec un fallback gradient
  */
 
-import { useState } from 'react';
+import { useState } from 'react'
 import {
   getGameImageUrl,
   getGameGradient,
   getGameInitial,
   hasGameImage,
-} from '../utils/gameImages';
+} from '../../utils/gameImages'
 
 interface GameCoverProps {
   /** Nom du jeu */
-  gameName: string;
+  gameName: string
   /** Taille du composant */
-  size?: 'sm' | 'md' | 'lg';
+  size?: 'sm' | 'md' | 'lg'
   /** Classes CSS additionnelles */
-  className?: string;
+  className?: string
 }
 
 const SIZE_CLASSES = {
   sm: 'w-16 h-16 text-lg',
   md: 'w-24 h-24 text-2xl',
   lg: 'w-32 h-32 text-3xl',
-};
+}
 
 /**
  * Composant d'image de couverture de jeu avec fallback gradient
  */
-export function GameCover({
-  gameName,
-  size = 'md',
-  className = '',
-}: GameCoverProps) {
-  const [imageLoaded, setImageLoaded] = useState(false);
-  const [imageError, setImageError] = useState(false);
+export function GameCover({ gameName, size = 'md', className = '' }: GameCoverProps) {
+  const [imageLoaded, setImageLoaded] = useState(false)
+  const [imageError, setImageError] = useState(false)
 
-  const imageUrl = getGameImageUrl(gameName);
-  const hasImage = hasGameImage(gameName) && !imageError;
-  const gradient = getGameGradient(gameName);
-  const initial = getGameInitial(gameName);
+  const imageUrl = getGameImageUrl(gameName)
+  const hasImage = hasGameImage(gameName) && !imageError
+  const gradient = getGameGradient(gameName)
+  const initial = getGameInitial(gameName)
 
-  const sizeClass = SIZE_CLASSES[size];
+  const sizeClass = SIZE_CLASSES[size]
 
   return (
     <div
@@ -58,10 +54,7 @@ export function GameCover({
         <>
           {/* Placeholder flou pendant le chargement */}
           {!imageLoaded && (
-            <div
-              className="absolute inset-0 animate-pulse"
-              style={{ background: gradient }}
-            />
+            <div className="absolute inset-0 animate-pulse" style={{ background: gradient }} />
           )}
 
           {/* Image principale */}
@@ -74,8 +67,8 @@ export function GameCover({
             }`}
             onLoad={() => setImageLoaded(true)}
             onError={() => {
-              setImageError(true);
-              setImageLoaded(false);
+              setImageError(true)
+              setImageLoaded(false)
             }}
           />
         </>
@@ -90,12 +83,10 @@ export function GameCover({
 
       {/* Overlay avec le nom du jeu au hover */}
       <div className="absolute inset-0 flex items-center justify-center bg-black/70 opacity-0 transition-opacity duration-200 hover:opacity-100">
-        <span className="px-2 text-center text-xs font-medium text-white">
-          {gameName}
-        </span>
+        <span className="px-2 text-center text-xs font-medium text-white">{gameName}</span>
       </div>
     </div>
-  );
+  )
 }
 
 /**
@@ -105,10 +96,10 @@ export function GameCoverCompact({
   gameName,
   className = '',
 }: {
-  gameName: string;
-  className?: string;
+  gameName: string
+  className?: string
 }) {
-  return <GameCover gameName={gameName} size="sm" className={className} />;
+  return <GameCover gameName={gameName} size="sm" className={className} />
 }
 
 /**
@@ -118,10 +109,10 @@ export function GameCoverLarge({
   gameName,
   className = '',
 }: {
-  gameName: string;
-  className?: string;
+  gameName: string
+  className?: string
 }) {
-  return <GameCover gameName={gameName} size="lg" className={className} />;
+  return <GameCover gameName={gameName} size="lg" className={className} />
 }
 
-export default GameCover;
+export default GameCover

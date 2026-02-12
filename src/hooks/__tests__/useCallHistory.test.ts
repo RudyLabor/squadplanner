@@ -85,10 +85,46 @@ describe('useCallHistoryStore', () => {
 
   describe('getFilteredCalls', () => {
     const mockCalls = [
-      { id: '1', type: 'incoming' as const, status: 'answered' as const, contactId: 'u1', contactName: 'A', contactAvatar: null, durationSeconds: 60, createdAt: new Date() },
-      { id: '2', type: 'outgoing' as const, status: 'missed' as const, contactId: 'u2', contactName: 'B', contactAvatar: null, durationSeconds: null, createdAt: new Date() },
-      { id: '3', type: 'incoming' as const, status: 'missed' as const, contactId: 'u3', contactName: 'C', contactAvatar: null, durationSeconds: null, createdAt: new Date() },
-      { id: '4', type: 'outgoing' as const, status: 'answered' as const, contactId: 'u4', contactName: 'D', contactAvatar: null, durationSeconds: 120, createdAt: new Date() },
+      {
+        id: '1',
+        type: 'incoming' as const,
+        status: 'answered' as const,
+        contactId: 'u1',
+        contactName: 'A',
+        contactAvatar: null,
+        durationSeconds: 60,
+        createdAt: new Date(),
+      },
+      {
+        id: '2',
+        type: 'outgoing' as const,
+        status: 'missed' as const,
+        contactId: 'u2',
+        contactName: 'B',
+        contactAvatar: null,
+        durationSeconds: null,
+        createdAt: new Date(),
+      },
+      {
+        id: '3',
+        type: 'incoming' as const,
+        status: 'missed' as const,
+        contactId: 'u3',
+        contactName: 'C',
+        contactAvatar: null,
+        durationSeconds: null,
+        createdAt: new Date(),
+      },
+      {
+        id: '4',
+        type: 'outgoing' as const,
+        status: 'answered' as const,
+        contactId: 'u4',
+        contactName: 'D',
+        contactAvatar: null,
+        durationSeconds: 120,
+        createdAt: new Date(),
+      },
     ]
 
     beforeEach(() => {
@@ -110,7 +146,7 @@ describe('useCallHistoryStore', () => {
       })
       const filtered = useCallHistoryStore.getState().getFilteredCalls()
       expect(filtered).toHaveLength(2)
-      expect(filtered.every(c => c.type === 'incoming')).toBe(true)
+      expect(filtered.every((c) => c.type === 'incoming')).toBe(true)
     })
 
     it('filters outgoing calls', () => {
@@ -119,7 +155,7 @@ describe('useCallHistoryStore', () => {
       })
       const filtered = useCallHistoryStore.getState().getFilteredCalls()
       expect(filtered).toHaveLength(2)
-      expect(filtered.every(c => c.type === 'outgoing')).toBe(true)
+      expect(filtered.every((c) => c.type === 'outgoing')).toBe(true)
     })
 
     it('filters missed calls', () => {
@@ -128,7 +164,7 @@ describe('useCallHistoryStore', () => {
       })
       const filtered = useCallHistoryStore.getState().getFilteredCalls()
       expect(filtered).toHaveLength(2)
-      expect(filtered.every(c => c.status === 'missed')).toBe(true)
+      expect(filtered.every((c) => c.status === 'missed')).toBe(true)
     })
   })
 
@@ -200,7 +236,7 @@ describe('formatRelativeTime', () => {
   it('shows "Aujourd\'hui" for today', () => {
     const now = new Date()
     const result = formatRelativeTime(now)
-    expect(result).toContain('Aujourd\'hui')
+    expect(result).toContain("Aujourd'hui")
   })
 
   it('shows "Hier" for yesterday', () => {

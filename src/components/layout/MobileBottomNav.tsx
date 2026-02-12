@@ -1,13 +1,7 @@
 import { memo } from 'react'
 import { Link } from 'react-router'
 import { m } from 'framer-motion'
-import {
-  Home,
-  Mic,
-  Users,
-  MessageCircle,
-  User,
-} from '../icons'
+import { Home, Mic, Users, MessageCircle, User } from '../icons'
 import { usePrefetch } from '../../hooks/usePrefetch'
 
 // 5 nav items — matches the mockup layout (Accueil, Squads, Party, Messages, Profil)
@@ -23,7 +17,13 @@ const mobileNavRight = [
 ] as const
 
 // OPTIMIZED: Memoized MobileNavLink
-const MobileNavLink = memo(function MobileNavLink({ path, icon: Icon, label, isActive, badge }: {
+const MobileNavLink = memo(function MobileNavLink({
+  path,
+  icon: Icon,
+  label,
+  isActive,
+  badge,
+}: {
   path: string
   icon: React.ElementType
   label: string
@@ -48,7 +48,7 @@ const MobileNavLink = memo(function MobileNavLink({ path, icon: Icon, label, isA
           <m.span
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
-            transition={{ type: "spring", stiffness: 500, damping: 30 }}
+            transition={{ type: 'spring', stiffness: 500, damping: 30 }}
             className="absolute -top-1.5 -right-2 min-w-[20px] h-[20px] px-1 rounded-full bg-info text-white text-xs font-bold flex items-center justify-center"
             aria-label={`${badge} non lus`}
           >
@@ -56,7 +56,9 @@ const MobileNavLink = memo(function MobileNavLink({ path, icon: Icon, label, isA
           </m.span>
         )}
       </div>
-      <span className={`text-sm mt-0.5 transition-colors ${isActive ? 'text-text-primary' : 'text-text-tertiary'}`}>
+      <span
+        className={`text-sm mt-0.5 transition-colors ${isActive ? 'text-text-primary' : 'text-text-tertiary'}`}
+      >
         {label}
       </span>
     </Link>
@@ -64,7 +66,13 @@ const MobileNavLink = memo(function MobileNavLink({ path, icon: Icon, label, isA
 })
 
 // OPTIMIZED: Memoized Party button
-const PartyButton = memo(function PartyButton({ isActive, hasActiveParty }: { isActive: boolean; hasActiveParty: boolean }) {
+const PartyButton = memo(function PartyButton({
+  isActive,
+  hasActiveParty,
+}: {
+  isActive: boolean
+  hasActiveParty: boolean
+}) {
   return (
     <Link
       to="/party"
@@ -75,11 +83,7 @@ const PartyButton = memo(function PartyButton({ isActive, hasActiveParty }: { is
       <div className="relative">
         <Mic
           className={`w-6 h-6 transition-colors duration-300 ${
-            isActive
-              ? 'text-text-primary'
-              : hasActiveParty
-                ? 'text-success'
-                : 'text-text-tertiary'
+            isActive ? 'text-text-primary' : hasActiveParty ? 'text-success' : 'text-text-tertiary'
           }`}
           strokeWidth={isActive ? 2 : 1.5}
           fill={isActive ? 'currentColor' : 'none'}
@@ -94,9 +98,11 @@ const PartyButton = memo(function PartyButton({ isActive, hasActiveParty }: { is
           />
         )}
       </div>
-      <span className={`text-sm mt-0.5 transition-colors duration-300 ${
-        isActive ? 'text-text-primary' : hasActiveParty ? 'text-success' : 'text-text-tertiary'
-      }`}>
+      <span
+        className={`text-sm mt-0.5 transition-colors duration-300 ${
+          isActive ? 'text-text-primary' : hasActiveParty ? 'text-success' : 'text-text-tertiary'
+        }`}
+      >
         Party
       </span>
     </Link>
@@ -118,7 +124,7 @@ export const MobileBottomNav = memo(function MobileBottomNav({
   isInVoiceChat,
   isKeyboardVisible,
   unreadMessages,
-  pendingRsvpCount,
+  pendingRsvpCount: _pendingRsvpCount,
 }: MobileBottomNavProps) {
   const { createPrefetchHandler, cancelPrefetch } = usePrefetch()
 
@@ -126,10 +132,19 @@ export const MobileBottomNav = memo(function MobileBottomNav({
     <nav
       aria-label="Navigation mobile"
       className={`mobile-bottom-nav fixed bottom-0 left-0 right-0 z-50 bg-bg-base border-t border-border-subtle transition-transform duration-200 ${isKeyboardVisible ? 'translate-y-full' : 'translate-y-0'}`}
-      style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', paddingBottom: 'calc(0.5rem + env(safe-area-inset-bottom, 0))' }}
+      style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(5, 1fr)',
+        paddingBottom: 'calc(0.5rem + env(safe-area-inset-bottom, 0))',
+      }}
     >
       {mobileNavLeft.map((item) => (
-        <div key={item.path} className="flex justify-center py-2" onPointerEnter={createPrefetchHandler(item.path)} onPointerLeave={cancelPrefetch}>
+        <div
+          key={item.path}
+          className="flex justify-center py-2"
+          onPointerEnter={createPrefetchHandler(item.path)}
+          onPointerLeave={cancelPrefetch}
+        >
           <MobileNavLink
             path={item.path}
             icon={item.icon}
@@ -142,7 +157,12 @@ export const MobileBottomNav = memo(function MobileBottomNav({
         <PartyButton isActive={isPartyActive} hasActiveParty={isInVoiceChat} />
       </div>
       {mobileNavRight.map((item) => (
-        <div key={item.path} className="flex justify-center py-2" onPointerEnter={createPrefetchHandler(item.path)} onPointerLeave={cancelPrefetch}>
+        <div
+          key={item.path}
+          className="flex justify-center py-2"
+          onPointerEnter={createPrefetchHandler(item.path)}
+          onPointerLeave={cancelPrefetch}
+        >
           <MobileNavLink
             path={item.path}
             icon={item.icon}

@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 import { useMemo } from 'react'
 import { useParams, Link } from 'react-router'
@@ -83,7 +83,10 @@ export function PublicProfile() {
       className="max-w-lg mx-auto px-4 py-6 pb-24"
     >
       {/* Back button */}
-      <Link to="/discover" className="inline-flex items-center gap-1.5 text-sm text-text-tertiary hover:text-text-primary transition-colors mb-6">
+      <Link
+        to="/discover"
+        className="inline-flex items-center gap-1.5 text-sm text-text-tertiary hover:text-text-primary transition-colors mb-6"
+      >
         <ArrowLeft className="w-4 h-4" />
         Découvrir
       </Link>
@@ -91,10 +94,18 @@ export function PublicProfile() {
       {/* Profile header */}
       <div className="flex flex-col items-center text-center mb-6">
         {profile.avatar_url ? (
-          <img src={profile.avatar_url} alt={`Avatar de ${profile.username}`} className="w-20 h-20 rounded-full border-2 border-border-subtle" loading="lazy" decoding="async" />
+          <img
+            src={profile.avatar_url}
+            alt={`Avatar de ${profile.username}`}
+            className="w-20 h-20 rounded-full border-2 border-border-subtle"
+            loading="lazy"
+            decoding="async"
+          />
         ) : (
           <div className="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center border-2 border-border-subtle">
-            <span className="text-xl font-bold text-primary">{profile.username?.charAt(0).toUpperCase()}</span>
+            <span className="text-xl font-bold text-primary">
+              {profile.username?.charAt(0).toUpperCase()}
+            </span>
           </div>
         )}
 
@@ -103,12 +114,12 @@ export function PublicProfile() {
         {/* Tier badge */}
         <div className="flex items-center gap-1.5 mt-1">
           <span className="text-sm">{tier.icon}</span>
-          <span className="text-xs font-medium" style={{ color: tier.color }}>{tier.name}</span>
+          <span className="text-xs font-medium" style={{ color: tier.color }}>
+            {tier.name}
+          </span>
         </div>
 
-        {profile.bio && (
-          <p className="text-sm text-text-secondary mt-2 max-w-xs">{profile.bio}</p>
-        )}
+        {profile.bio && <p className="text-sm text-text-secondary mt-2 max-w-xs">{profile.bio}</p>}
 
         {/* Region & playstyle */}
         <div className="flex items-center gap-3 mt-2">
@@ -181,7 +192,12 @@ export function PublicProfile() {
           </div>
           <div className="flex gap-1.5 flex-wrap">
             {profile.preferred_games.map((g: string) => (
-              <span key={g} className="text-xs px-2 py-1 rounded-lg bg-overlay-subtle text-text-secondary">{g}</span>
+              <span
+                key={g}
+                className="text-xs px-2 py-1 rounded-lg bg-overlay-subtle text-text-secondary"
+              >
+                {g}
+              </span>
             ))}
           </div>
         </div>
@@ -190,14 +206,28 @@ export function PublicProfile() {
       {/* Member since */}
       <div className="text-center">
         <p className="text-xs text-text-tertiary">
-          Membre depuis {new Date(profile.created_at).toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' })}
+          Membre depuis{' '}
+          {new Date(profile.created_at).toLocaleDateString('fr-FR', {
+            month: 'long',
+            year: 'numeric',
+          })}
         </p>
       </div>
     </m.div>
   )
 }
 
-function StatCard({ icon, label, value, sub }: { icon: React.ReactNode; label: string; value: string; sub: string }) {
+function StatCard({
+  icon,
+  label,
+  value,
+  sub,
+}: {
+  icon: React.ReactNode
+  label: string
+  value: string
+  sub: string
+}) {
   return (
     <div className="rounded-xl border border-border-subtle bg-surface-card p-3">
       <div className="flex items-center gap-1.5 mb-1">

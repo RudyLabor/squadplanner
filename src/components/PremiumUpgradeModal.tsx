@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 import { useState } from 'react'
 import {
@@ -29,40 +29,40 @@ const PREMIUM_FEATURES = [
   {
     icon: InfinityIcon,
     title: 'Squads illimités',
-    description: 'Crée autant de squads que tu veux'
+    description: 'Crée autant de squads que tu veux',
   },
   {
     icon: BarChart3,
     title: 'Stats avancées',
-    description: 'Graphiques, tendances, analyses détaillées'
+    description: 'Graphiques, tendances, analyses détaillées',
   },
   {
     icon: Sparkles,
     title: 'IA Coach avancé',
-    description: 'Conseils personnalisés et prédictions'
+    description: 'Conseils personnalisés et prédictions',
   },
   {
     icon: Mic2,
     title: 'Audio HD',
-    description: 'Qualité audio supérieure en party vocale'
+    description: 'Qualité audio supérieure en party vocale',
   },
   {
     icon: Users,
     title: 'Rôles avancés',
-    description: 'Coach, manager, permissions personnalisées'
+    description: 'Coach, manager, permissions personnalisées',
   },
   {
     icon: Calendar,
     title: 'Export calendrier',
-    description: 'Synchronise tes sessions avec ton agenda'
-  }
+    description: 'Synchronise tes sessions avec ton agenda',
+  },
 ]
 
 export function PremiumUpgradeModal({
   isOpen,
   onClose,
   squadId,
-  feature
+  feature,
 }: PremiumUpgradeModalProps) {
   const [selectedPlan, setSelectedPlan] = useState<'monthly' | 'yearly'>('monthly')
   const [isLoading, setIsLoading] = useState(false)
@@ -75,9 +75,10 @@ export function PremiumUpgradeModal({
     setError(null)
 
     try {
-      const priceId = selectedPlan === 'monthly'
-        ? plans.find(p => p.id === 'premium_monthly')?.stripePriceId
-        : plans.find(p => p.id === 'premium_yearly')?.stripePriceId
+      const priceId =
+        selectedPlan === 'monthly'
+          ? plans.find((p) => p.id === 'premium_monthly')?.stripePriceId
+          : plans.find((p) => p.id === 'premium_yearly')?.stripePriceId
 
       if (!priceId) {
         throw new Error('Plan non trouvé')
@@ -169,10 +170,7 @@ export function PremiumUpgradeModal({
         {/* Features list */}
         <div className="space-y-3">
           {PREMIUM_FEATURES.map((feat, index) => (
-            <div
-              key={index}
-              className="flex items-start gap-3 p-3 rounded-xl bg-surface-card"
-            >
+            <div key={index} className="flex items-start gap-3 p-3 rounded-xl bg-surface-card">
               <div className="w-9 h-9 rounded-lg bg-primary-15 flex items-center justify-center flex-shrink-0">
                 <feat.icon className="w-4 h-4 text-primary" />
               </div>
@@ -205,10 +203,10 @@ export function PremiumUpgradeModal({
           ) : (
             <>
               <Zap className="w-5 h-5" />
-              Passer Premium - {selectedPlan === 'monthly'
+              Passer Premium -{' '}
+              {selectedPlan === 'monthly'
                 ? `${PREMIUM_PRICE_MONTHLY.toFixed(2)}/mois`
-                : `${PREMIUM_PRICE_YEARLY.toFixed(2)}/an`
-              }
+                : `${PREMIUM_PRICE_YEARLY.toFixed(2)}/an`}
             </>
           )}
         </Button>

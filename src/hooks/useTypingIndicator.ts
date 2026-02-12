@@ -70,9 +70,7 @@ export function useTypingIndicator({
   useEffect(() => {
     const interval = setInterval(() => {
       const now = Date.now()
-      setTypingUsers(prev =>
-        prev.filter(user => now - user.timestamp < TYPING_TIMEOUT)
-      )
+      setTypingUsers((prev) => prev.filter((user) => now - user.timestamp < TYPING_TIMEOUT))
     }, 1000)
 
     return () => clearInterval(interval)
@@ -91,15 +89,11 @@ export function useTypingIndicator({
         // Ne pas afficher si c'est l'utilisateur courant
         if (userId === currentUserId) return
 
-        setTypingUsers(prev => {
-          const existing = prev.find(u => u.userId === userId)
+        setTypingUsers((prev) => {
+          const existing = prev.find((u) => u.userId === userId)
           if (existing) {
             // Mettre à jour le timestamp
-            return prev.map(u =>
-              u.userId === userId
-                ? { ...u, timestamp: Date.now() }
-                : u
-            )
+            return prev.map((u) => (u.userId === userId ? { ...u, timestamp: Date.now() } : u))
           }
           // Ajouter le nouvel utilisateur
           return [...prev, { userId, username, timestamp: Date.now() }]
@@ -107,7 +101,7 @@ export function useTypingIndicator({
       })
       .on('broadcast', { event: 'stop_typing' }, (payload) => {
         const { userId } = payload.payload as { userId: string }
-        setTypingUsers(prev => prev.filter(u => u.userId !== userId))
+        setTypingUsers((prev) => prev.filter((u) => u.userId !== userId))
       })
       .subscribe()
 

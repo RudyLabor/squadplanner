@@ -25,15 +25,18 @@ interface SessionDetailLoaderData {
 
 export function meta() {
   return [
-    { title: "Détail Session - Squad Planner" },
-    { tagName: "link", rel: "canonical", href: "https://squadplanner.fr/sessions" },
-    { property: "og:url", content: "https://squadplanner.fr/sessions" },
+    { title: 'Détail Session - Squad Planner' },
+    { tagName: 'link', rel: 'canonical', href: 'https://squadplanner.fr/sessions' },
+    { property: 'og:url', content: 'https://squadplanner.fr/sessions' },
   ]
 }
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const { supabase, headers, getUser } = createSupabaseServerClient(request)
-  const { data: { user }, error } = await getUser()
+  const {
+    data: { user },
+    error,
+  } = await getUser()
 
   if (error || !user) {
     throw redirect('/', { headers })
@@ -43,18 +46,22 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 
   // Fetch session + RSVPs + checkins in parallel
   const [sessionResult, rsvpsResult, checkinsResult] = await Promise.all([
-    supabase.from('sessions').select('*').eq('id', sessionId).single(),
+    supabase
+      .from('sessions')
+      .select('*')
+      .eq('id', sessionId as string)
+      .single(),
     supabase
       .from('session_rsvps')
       .select('*')
-      .eq('session_id', sessionId),
+      .eq('session_id', sessionId as string),
     supabase
       .from('session_checkins')
       .select('*')
-      .eq('session_id', sessionId),
+      .eq('session_id', sessionId as string),
   ])
 
-  const rsvps = (rsvpsResult.data || []) as RsvpWithProfile[]
+  const rsvps = (rsvpsResult.data || []) as unknown as RsvpWithProfile[]
 
   // Fetch usernames separately to avoid PostgREST join errors
   if (rsvps.length) {
@@ -63,7 +70,9 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
       .from('profiles')
       .select('id, username')
       .in('id', userIds)
-    const profileMap = new Map((profiles || []).map((p: { id: string; username: string }) => [p.id, p]))
+    const profileMap = new Map(
+      (profiles || []).map((p: { id: string; username: string }) => [p.id, p])
+    )
     rsvps.forEach((r) => {
       r.profiles = profileMap.get(r.user_id) || { id: r.user_id, username: 'Joueur' }
     })
@@ -73,9 +82,9 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 
   const session: SessionDetailData | null = sessionResult.data
     ? {
-        ...(sessionResult.data as Session),
+        ...(sessionResult.data as unknown as Session),
         rsvps,
-        checkins: (checkinsResult.data || []) as SessionCheckin[],
+        checkins: (checkinsResult.data || []) as unknown as SessionCheckin[],
         my_rsvp: myRsvp,
         rsvp_counts: {
           present: rsvps.filter((r) => r.response === 'present').length,
@@ -94,10 +103,21 @@ export function headers({ loaderHeaders }: { loaderHeaders: Headers }) {
 
 export default function Component({ loaderData }: { loaderData: SessionDetailLoaderData }) {
   return (
-    <ClientRouteWrapper seeds={[
-      { key: queryKeys.sessions.detail(loaderData?.session?.id), data: loaderData?.session },
-    ]}>
-      <Suspense fallback={<div className="min-h-[50vh] flex items-center justify-center"><div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin" /></div>}>
+    <ClientRouteWrapper
+      seeds={[
+        {
+          key: [...queryKeys.sessions.detail(loaderData?.session?.id ?? '')],
+          data: loaderData?.session,
+        },
+      ]}
+    >
+      <Suspense
+        fallback={
+          <div className="min-h-[50vh] flex items-center justify-center">
+            <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+          </div>
+        }
+      >
         <SessionDetail />
       </Suspense>
     </ClientRouteWrapper>

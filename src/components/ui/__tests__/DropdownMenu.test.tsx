@@ -1,7 +1,12 @@
 import { describe, it, expect, vi } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { DropdownMenu, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuLabel } from '../DropdownMenu'
+import {
+  DropdownMenu,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuLabel,
+} from '../DropdownMenu'
 
 vi.mock('framer-motion', async () => {
   const actual = await vi.importActual<typeof import('framer-motion')>('framer-motion')
@@ -41,7 +46,10 @@ describe('DropdownMenu', () => {
         <DropdownMenuItem onSelect={() => {}}>Item</DropdownMenuItem>
       </DropdownMenu>
     )
-    expect(screen.getByText('Open').closest('[aria-haspopup]')).toHaveAttribute('aria-haspopup', 'menu')
+    expect(screen.getByText('Open').closest('[aria-haspopup]')).toHaveAttribute(
+      'aria-haspopup',
+      'menu'
+    )
   })
 
   it('opens menu on click', async () => {

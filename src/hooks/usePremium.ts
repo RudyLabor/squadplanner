@@ -48,7 +48,9 @@ export const usePremiumStore = create<PremiumState>((set, get) => ({
     try {
       set({ isLoading: true })
 
-      const { data: { user } } = await supabase.auth.getUser()
+      const {
+        data: { user },
+      } = await supabase.auth.getUser()
       if (!user) {
         set({ hasPremium: false, premiumSquads: [], userSquadCount: 0, isLoading: false })
         return
@@ -63,7 +65,7 @@ export const usePremiumStore = create<PremiumState>((set, get) => ({
       if (memberError) throw memberError
 
       const userSquadCount = memberships?.length || 0
-      const squadIds = memberships?.map(m => m.squad_id) || []
+      const squadIds = memberships?.map((m) => m.squad_id) || []
 
       // 2. Verifier quels squads sont premium
       let premiumSquads: SquadPremiumStatus[] = []
@@ -77,13 +79,13 @@ export const usePremiumStore = create<PremiumState>((set, get) => ({
 
         if (squadsError) throw squadsError
 
-        premiumSquads = (squads || []).map(s => ({
+        premiumSquads = (squads || []).map((s) => ({
           squadId: s.id,
-          isPremium: s.is_premium || false
+          isPremium: s.is_premium || false,
         }))
 
         // L'user a premium si au moins une de ses squads est premium
-        hasPremium = premiumSquads.some(s => s.isPremium)
+        hasPremium = premiumSquads.some((s) => s.isPremium)
       }
 
       // 3. Verifier aussi les subscriptions actives
@@ -98,7 +100,7 @@ export const usePremiumStore = create<PremiumState>((set, get) => ({
           hasPremium = true
           // Mettre a jour les squads premium avec les subscriptions actives
           for (const sub of subscriptions) {
-            const existing = premiumSquads.find(s => s.squadId === sub.squad_id)
+            const existing = premiumSquads.find((s) => s.squadId === sub.squad_id)
             if (existing) {
               existing.isPremium = true
             } else {
@@ -128,7 +130,7 @@ export const usePremiumStore = create<PremiumState>((set, get) => ({
         hasPremium,
         premiumSquads,
         userSquadCount,
-        isLoading: false
+        isLoading: false,
       })
     } catch (error) {
       console.warn('[Premium] Error fetching status:', error)
@@ -138,7 +140,7 @@ export const usePremiumStore = create<PremiumState>((set, get) => ({
 
   isSquadPremium: (squadId: string) => {
     const { premiumSquads } = get()
-    return premiumSquads.find(s => s.squadId === squadId)?.isPremium || false
+    return premiumSquads.find((s) => s.squadId === squadId)?.isPremium || false
   },
 
   canCreateSquad: () => {
@@ -175,9 +177,9 @@ export const usePremiumStore = create<PremiumState>((set, get) => ({
       hasPremium: false,
       premiumSquads: [],
       userSquadCount: 0,
-      isLoading: false
+      isLoading: false,
     })
-  }
+  },
 }))
 
 // Hook custom pour utilisation simple
@@ -193,6 +195,6 @@ export function usePremium() {
     isSquadPremium: store.isSquadPremium,
     canAccessFeature: store.canAccessFeature,
     fetchPremiumStatus: store.fetchPremiumStatus,
-    reset: store.reset
+    reset: store.reset,
   }
 }

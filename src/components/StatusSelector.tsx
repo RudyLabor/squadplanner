@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 /**
  * Phase 4.2.2 — Status/Availability Selector
@@ -6,14 +6,12 @@
  */
 import { useState, useRef, useEffect, memo } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
+import { Circle, Minus, BellOff, Eye, Gamepad2 } from './icons'
 import {
-  Circle,
-  Minus,
-  BellOff,
-  Eye,
-  Gamepad2,
-} from './icons'
-import { useUserStatusStore, AVAILABILITY_CONFIG, type AvailabilityStatus } from '../hooks/useUserStatus'
+  useUserStatusStore,
+  AVAILABILITY_CONFIG,
+  type AvailabilityStatus,
+} from '../hooks/useUserStatus'
 
 const STATUS_OPTIONS: { value: AvailabilityStatus; icon: React.ElementType }[] = [
   { value: 'online', icon: Circle },
@@ -27,7 +25,10 @@ interface StatusSelectorProps {
   className?: string
 }
 
-export const StatusSelector = memo(function StatusSelector({ onOpenCustomStatus, className = '' }: StatusSelectorProps) {
+export const StatusSelector = memo(function StatusSelector({
+  onOpenCustomStatus,
+  className = '',
+}: StatusSelectorProps) {
   const [isOpen, setIsOpen] = useState(false)
   const menuRef = useRef<HTMLDivElement>(null)
   const { availability, setAvailability, customStatus, gameStatus } = useUserStatusStore()

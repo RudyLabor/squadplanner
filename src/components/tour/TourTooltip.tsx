@@ -40,12 +40,12 @@ export function TourTooltip({
           <m.div
             className="absolute inset-0 bg-gradient-to-br from-primary/8 via-transparent to-success/5 pointer-events-none"
             animate={{
-              opacity: [0.5, 0.7, 0.5]
+              opacity: [0.5, 0.7, 0.5],
             }}
             transition={{
               duration: 3,
               repeat: Infinity,
-              ease: "easeInOut"
+              ease: 'easeInOut',
             }}
           />
 
@@ -55,12 +55,12 @@ export function TourTooltip({
               className="absolute -top-2 -right-2 text-warning"
               animate={{
                 rotate: [0, 10, -10, 0],
-                scale: [1, 1.2, 1]
+                scale: [1, 1.2, 1],
               }}
               transition={{
                 duration: 2,
                 repeat: Infinity,
-                ease: "easeInOut"
+                ease: 'easeInOut',
               }}
             >
               <Sparkles className="w-6 h-6" />
@@ -74,19 +74,21 @@ export function TourTooltip({
                 <m.div
                   className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary/20 to-primary/10 flex items-center justify-center shadow-md"
                   animate={{
-                    scale: [1, 1.05, 1]
+                    scale: [1, 1.05, 1],
                   }}
                   transition={{
                     duration: 2,
                     repeat: Infinity,
-                    ease: "easeInOut"
+                    ease: 'easeInOut',
                   }}
                 >
                   <Icon className="w-6 h-6 text-primary" />
                 </m.div>
                 <div>
                   <h4 className="text-base font-bold text-text-primary">{title}</h4>
-                  <p className="text-sm text-text-tertiary font-medium">{currentStep + 1} / {totalSteps}</p>
+                  <p className="text-sm text-text-tertiary font-medium">
+                    {currentStep + 1} / {totalSteps}
+                  </p>
                 </div>
               </div>
               <button

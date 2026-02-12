@@ -1,10 +1,4 @@
-import {
-  ArrowLeft,
-  Users,
-  Gamepad2,
-  Search,
-  Phone,
-} from '../icons'
+import { ArrowLeft, Users, Gamepad2, Search, Phone } from '../icons'
 import { m, AnimatePresence } from 'framer-motion'
 import { useVoiceCallStore } from '../../hooks/useVoiceCall'
 
@@ -50,19 +44,29 @@ export function ConversationHeader({
 }: ConversationHeaderProps) {
   return (
     <>
-      <div className={`flex-shrink-0 px-4 py-3 border-b border-border-default ${embedded ? '' : 'bg-bg-elevated/80 backdrop-blur-xl sticky top-0 z-10'}`}>
-        <div className={`flex items-center gap-3 ${embedded ? '' : 'max-w-4xl lg:max-w-5xl mx-auto'}`}>
+      <div
+        className={`flex-shrink-0 px-4 py-3 border-b border-border-default ${embedded ? '' : 'bg-bg-elevated/80 backdrop-blur-xl sticky top-0 z-10'}`}
+      >
+        <div
+          className={`flex items-center gap-3 ${embedded ? '' : 'max-w-4xl lg:max-w-5xl mx-auto'}`}
+        >
           {!embedded && (
-            <button onClick={onBack} aria-label="Retour" className="p-2 -ml-2 rounded-xl hover:bg-surface-card-hover transition-colors">
+            <button
+              onClick={onBack}
+              aria-label="Retour"
+              className="p-2 -ml-2 rounded-xl hover:bg-surface-card-hover transition-colors"
+            >
               <ArrowLeft className="w-5 h-5 text-text-tertiary" aria-hidden="true" />
             </button>
           )}
 
           {isSquadChat && squadConv ? (
             <>
-              <div className={`w-11 h-11 rounded-xl flex items-center justify-center ${
-                squadConv.type === 'session' ? 'bg-warning-15' : 'bg-primary-15'
-              }`}>
+              <div
+                className={`w-11 h-11 rounded-xl flex items-center justify-center ${
+                  squadConv.type === 'session' ? 'bg-warning-15' : 'bg-primary-15'
+                }`}
+              >
                 {squadConv.type === 'session' ? (
                   <Gamepad2 className="w-5 h-5 text-warning" />
                 ) : (
@@ -85,7 +89,13 @@ export function ConversationHeader({
             <>
               <div className="w-11 h-11 rounded-full flex items-center justify-center overflow-hidden bg-primary-15">
                 {dmConv.other_user_avatar_url ? (
-                  <img src={dmConv.other_user_avatar_url} alt="" className="w-full h-full object-cover" loading="lazy" decoding="async" />
+                  <img
+                    src={dmConv.other_user_avatar_url}
+                    alt=""
+                    className="w-full h-full object-cover"
+                    loading="lazy"
+                    decoding="async"
+                  />
                 ) : (
                   <span className="text-md font-bold text-primary">
                     {(dmConv.other_user_username || '?').charAt(0).toUpperCase()}
@@ -98,11 +108,13 @@ export function ConversationHeader({
               </div>
               <button
                 onClick={() => {
-                  useVoiceCallStore.getState().startCall(
-                    dmConv.other_user_id,
-                    dmConv.other_user_username,
-                    dmConv.other_user_avatar_url
-                  )
+                  useVoiceCallStore
+                    .getState()
+                    .startCall(
+                      dmConv.other_user_id,
+                      dmConv.other_user_username,
+                      dmConv.other_user_avatar_url
+                    )
                 }}
                 className="p-2.5 rounded-xl bg-success-10 hover:bg-success-20 transition-colors"
                 aria-label={`Appeler ${dmConv.other_user_username}`}

@@ -34,8 +34,10 @@ const DISMISS_DAYS = 7
 
 function isAlreadyInstalled(): boolean {
   if (typeof window === 'undefined') return false
-  return window.matchMedia('(display-mode: standalone)').matches
-    || (navigator as { standalone?: boolean }).standalone === true
+  return (
+    window.matchMedia('(display-mode: standalone)').matches ||
+    (navigator as { standalone?: boolean }).standalone === true
+  )
 }
 
 function shouldShowBanner(): boolean {

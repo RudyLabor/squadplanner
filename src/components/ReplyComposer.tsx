@@ -44,9 +44,7 @@ export function ReplyComposer({ replyingTo, onCancel }: ReplyComposerProps) {
                   {replyingTo.sender_username}
                 </span>
               </div>
-              <p className="text-sm text-text-secondary truncate">
-                {truncatedContent}
-              </p>
+              <p className="text-sm text-text-secondary truncate">{truncatedContent}</p>
             </div>
 
             {/* Cancel button */}

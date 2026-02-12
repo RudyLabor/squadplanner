@@ -28,7 +28,7 @@ export function initFontOptimization(): void {
 
     // Also set up individual font checks for faster feedback
     Promise.all(
-      FONT_FAMILIES.map(family =>
+      FONT_FAMILIES.map((family) =>
         document.fonts.load(`16px "${family}"`).catch(() => {
           // Font load failure is non-critical
         })

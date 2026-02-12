@@ -14,15 +14,25 @@ export interface VoiceChatUser {
 
 export function savePartyToStorage(channelName: string, userId: string, username: string) {
   try {
-    localStorage.setItem(PARTY_STORAGE_KEY, JSON.stringify({
-      channelName, userId, username, timestamp: Date.now()
-    }))
+    localStorage.setItem(
+      PARTY_STORAGE_KEY,
+      JSON.stringify({
+        channelName,
+        userId,
+        username,
+        timestamp: Date.now(),
+      })
+    )
   } catch (e) {
     console.warn('[VoiceChat] Could not save party to storage:', e)
   }
 }
 
-export function getSavedPartyInfo(): { channelName: string; userId: string; username: string } | null {
+export function getSavedPartyInfo(): {
+  channelName: string
+  userId: string
+  username: string
+} | null {
   try {
     const data = localStorage.getItem(PARTY_STORAGE_KEY)
     if (!data) return null
@@ -40,16 +50,22 @@ export function getSavedPartyInfo(): { channelName: string; userId: string; user
 export function clearSavedParty() {
   try {
     localStorage.removeItem(PARTY_STORAGE_KEY)
-  } catch { /* ignore */ }
+  } catch {
+    /* ignore */
+  }
 }
 
 async function cleanupVoicePartyInDb() {
   try {
     await supabase.rpc('leave_voice_party')
-  } catch { /* ignore */ }
+  } catch {
+    /* ignore */
+  }
 }
 
-export async function forceLeaveVoiceParty(storeGetter: () => { isConnected: boolean; leaveChannel: () => Promise<void> }) {
+export async function forceLeaveVoiceParty(
+  storeGetter: () => { isConnected: boolean; leaveChannel: () => Promise<void> }
+) {
   const state = storeGetter()
   if (state.isConnected) {
     await state.leaveChannel()
@@ -61,8 +77,9 @@ export async function forceLeaveVoiceParty(storeGetter: () => { isConnected: boo
 
 let cleanupListenersInitialized = false
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function setupBrowserCloseListeners(storeGetter: () => { isConnected: boolean; room: { disconnect: () => void } | null }) {
+export function setupBrowserCloseListeners(
+  storeGetter: () => { isConnected: boolean; room: { disconnect: () => void } | null }
+) {
   if (cleanupListenersInitialized || typeof window === 'undefined') return
   cleanupListenersInitialized = true
 
@@ -83,13 +100,15 @@ export function setupBrowserCloseListeners(storeGetter: () => { isConnected: boo
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
-                'apikey': supabaseKey,
-                'Authorization': `Bearer ${accessToken}`,
+                apikey: supabaseKey,
+                Authorization: `Bearer ${accessToken}`,
               },
               body: JSON.stringify({}),
               keepalive: true,
             }).catch(() => {})
-          } catch { /* ignore */ }
+          } catch {
+            /* ignore */
+          }
         }
       }
 

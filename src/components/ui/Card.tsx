@@ -8,6 +8,7 @@ interface CardProps {
   disabled?: boolean
   children: ReactNode
   className?: string
+  id?: string
   hoverable?: boolean
   onClick?: () => void
   'aria-label'?: string
@@ -21,6 +22,7 @@ export function Card({
   disabled,
   children,
   className = '',
+  id,
   hoverable = false,
   onClick,
   'aria-label': ariaLabel,
@@ -32,9 +34,10 @@ export function Card({
     ghost: 'bg-transparent border-none',
   }
 
-  const hoverClasses = hoverable && !disabled
-    ? 'hover:bg-surface-card-hover hover:border-border-hover hover:shadow-sm hover:-translate-y-px active:scale-[0.995] cursor-pointer'
-    : ''
+  const hoverClasses =
+    hoverable && !disabled
+      ? 'hover:bg-surface-card-hover hover:border-border-hover hover:shadow-sm hover:-translate-y-px active:scale-[0.995] cursor-pointer'
+      : ''
 
   const disabledClasses = disabled ? 'opacity-50 cursor-not-allowed pointer-events-none' : ''
   const isClickable = !!onClick && !disabled
@@ -48,6 +51,7 @@ export function Card({
 
   return (
     <div
+      id={id}
       className={`
         relative rounded-2xl transition-interactive
         ${variants[variant]}
@@ -57,8 +61,12 @@ export function Card({
       `}
       style={{
         borderColor: selected ? 'var(--color-primary)' : undefined,
-        boxShadow: selected ? '0 0 0 1px color-mix(in srgb, var(--color-primary) 20%, transparent)' : undefined,
-        backgroundColor: selected ? 'color-mix(in srgb, var(--color-primary) 5%, var(--color-surface-card))' : undefined,
+        boxShadow: selected
+          ? '0 0 0 1px color-mix(in srgb, var(--color-primary) 20%, transparent)'
+          : undefined,
+        backgroundColor: selected
+          ? 'color-mix(in srgb, var(--color-primary) 5%, var(--color-surface-card))'
+          : undefined,
       }}
       onClick={isClickable ? onClick : undefined}
       onKeyDown={isClickable ? handleKeyDown : undefined}
@@ -85,11 +93,7 @@ interface CardHeaderProps {
 }
 
 export function CardHeader({ children, className = '' }: CardHeaderProps) {
-  return (
-    <div className={`px-5 py-4 border-b border-border-subtle ${className}`}>
-      {children}
-    </div>
-  )
+  return <div className={`px-5 py-4 border-b border-border-subtle ${className}`}>{children}</div>
 }
 
 interface CardContentProps {
@@ -99,9 +103,5 @@ interface CardContentProps {
 }
 
 export function CardContent({ children, className = '', compact }: CardContentProps) {
-  return (
-    <div className={`${compact ? 'p-3' : 'p-5'} ${className}`}>
-      {children}
-    </div>
-  )
+  return <div className={`${compact ? 'p-3' : 'p-5'} ${className}`}>{children}</div>
 }

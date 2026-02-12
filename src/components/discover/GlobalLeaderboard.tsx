@@ -1,11 +1,6 @@
 import { memo } from 'react'
 import { m } from 'framer-motion'
-import {
-  Trophy,
-  Flame,
-  Shield,
-  Star,
-} from '../icons'
+import { Trophy, Flame, Shield, Star } from '../icons'
 import { Link } from 'react-router'
 import { useGlobalLeaderboardQuery } from '../../hooks/queries'
 import type { GlobalLeaderboardEntry } from '../../types/database'
@@ -22,7 +17,11 @@ interface Props {
   limit?: number
 }
 
-export const GlobalLeaderboard = memo(function GlobalLeaderboard({ game, region, limit = 50 }: Props) {
+export const GlobalLeaderboard = memo(function GlobalLeaderboard({
+  game,
+  region,
+  limit = 50,
+}: Props) {
   const { data: entries, isLoading } = useGlobalLeaderboardQuery(game, region, limit)
 
   if (isLoading) {
@@ -40,7 +39,9 @@ export const GlobalLeaderboard = memo(function GlobalLeaderboard({ game, region,
       <div className="text-center py-12">
         <Trophy className="w-10 h-10 text-text-tertiary mx-auto mb-3" />
         <p className="text-sm text-text-secondary">Pas encore de classement</p>
-        <p className="text-xs text-text-tertiary mt-1">Les joueurs avec 3+ sessions apparaitront ici</p>
+        <p className="text-xs text-text-tertiary mt-1">
+          Les joueurs avec 3+ sessions apparaitront ici
+        </p>
       </div>
     )
   }
@@ -59,7 +60,7 @@ export const GlobalLeaderboard = memo(function GlobalLeaderboard({ game, region,
 
       {/* Rest of leaderboard */}
       <div className="space-y-1">
-        {rest.map(entry => (
+        {rest.map((entry) => (
           <LeaderboardRow key={entry.user_id} entry={entry} />
         ))}
       </div>
@@ -67,7 +68,13 @@ export const GlobalLeaderboard = memo(function GlobalLeaderboard({ game, region,
   )
 })
 
-const PodiumCard = memo(function PodiumCard({ entry, index }: { entry: GlobalLeaderboardEntry; index: number }) {
+const PodiumCard = memo(function PodiumCard({
+  entry,
+  index,
+}: {
+  entry: GlobalLeaderboardEntry
+  index: number
+}) {
   const style = PODIUM_COLORS[index]
 
   return (
@@ -82,10 +89,20 @@ const PodiumCard = memo(function PodiumCard({ entry, index }: { entry: GlobalLea
       >
         <span className="text-lg">{style.icon}</span>
         {entry.avatar_url ? (
-          <img src={entry.avatar_url} alt="" className="w-10 h-10 rounded-full mx-auto mt-1 border-2 border-border-subtle" loading="lazy" decoding="async" />
+          <img
+            src={entry.avatar_url}
+            alt=""
+            className="w-10 h-10 rounded-full mx-auto mt-1 border-2 border-border-subtle"
+            loading="lazy"
+            decoding="async"
+          />
         ) : (
-          <div className={`w-10 h-10 rounded-full mx-auto mt-1 ${style.bg} flex items-center justify-center border-2 border-border-subtle`}>
-            <span className={`text-sm font-bold ${style.text}`}>{entry.username.charAt(0).toUpperCase()}</span>
+          <div
+            className={`w-10 h-10 rounded-full mx-auto mt-1 ${style.bg} flex items-center justify-center border-2 border-border-subtle`}
+          >
+            <span className={`text-sm font-bold ${style.text}`}>
+              {entry.username.charAt(0).toUpperCase()}
+            </span>
           </div>
         )}
         <p className="text-xs font-semibold text-text-primary mt-1.5 truncate">{entry.username}</p>
@@ -108,10 +125,18 @@ const LeaderboardRow = memo(function LeaderboardRow({ entry }: { entry: GlobalLe
       <span className="w-6 text-center text-xs font-bold text-text-secondary">#{entry.rank}</span>
 
       {entry.avatar_url ? (
-        <img src={entry.avatar_url} alt="" className="w-8 h-8 rounded-full" loading="lazy" decoding="async" />
+        <img
+          src={entry.avatar_url}
+          alt=""
+          className="w-8 h-8 rounded-full"
+          loading="lazy"
+          decoding="async"
+        />
       ) : (
         <div className="w-8 h-8 rounded-full bg-indigo-500/10 flex items-center justify-center">
-          <span className="text-xs font-bold text-indigo-400">{entry.username.charAt(0).toUpperCase()}</span>
+          <span className="text-xs font-bold text-indigo-400">
+            {entry.username.charAt(0).toUpperCase()}
+          </span>
         </div>
       )}
 
@@ -126,7 +151,9 @@ const LeaderboardRow = memo(function LeaderboardRow({ entry }: { entry: GlobalLe
       <div className="flex items-center gap-3">
         <div className="flex items-center gap-1">
           <Shield className="w-3 h-3 text-emerald-400" />
-          <span className="text-xs text-text-secondary">{Math.round(entry.reliability_score)}%</span>
+          <span className="text-xs text-text-secondary">
+            {Math.round(entry.reliability_score)}%
+          </span>
         </div>
         {entry.streak_days > 0 && (
           <div className="flex items-center gap-0.5">

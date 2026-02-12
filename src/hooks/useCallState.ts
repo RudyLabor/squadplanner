@@ -1,6 +1,13 @@
 import type { NetworkQualityLevel } from './useNetworkQuality'
 
-export type CallStatus = 'idle' | 'calling' | 'ringing' | 'connected' | 'ended' | 'missed' | 'rejected'
+export type CallStatus =
+  | 'idle'
+  | 'calling'
+  | 'ringing'
+  | 'connected'
+  | 'ended'
+  | 'missed'
+  | 'rejected'
 
 export interface CallUser {
   id: string
@@ -27,7 +34,11 @@ export interface VoiceCallState {
   durationInterval: ReturnType<typeof setInterval> | null
   ringTimeout: ReturnType<typeof setTimeout> | null
 
-  startCall: (receiverId: string, receiverUsername: string, receiverAvatar?: string | null) => Promise<void>
+  startCall: (
+    receiverId: string,
+    receiverUsername: string,
+    receiverAvatar?: string | null
+  ) => Promise<void>
   acceptCall: () => Promise<void>
   rejectCall: () => Promise<void>
   endCall: () => Promise<void>

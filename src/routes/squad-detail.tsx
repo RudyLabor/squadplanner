@@ -29,15 +29,18 @@ interface SquadDetailLoaderData {
 
 export function meta() {
   return [
-    { title: "Détail Squad - Squad Planner" },
-    { tagName: "link", rel: "canonical", href: "https://squadplanner.fr/squads" },
-    { property: "og:url", content: "https://squadplanner.fr/squads" },
+    { title: 'Détail Squad - Squad Planner' },
+    { tagName: 'link', rel: 'canonical', href: 'https://squadplanner.fr/squads' },
+    { property: 'og:url', content: 'https://squadplanner.fr/squads' },
   ]
 }
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const { supabase, headers, getUser } = createSupabaseServerClient(request)
-  const { data: { user }, error } = await getUser()
+  const {
+    data: { user },
+    error,
+  } = await getUser()
 
   if (error || !user) {
     throw redirect('/', { headers })
@@ -47,22 +50,26 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 
   // Fetch squad + members + sessions in parallel
   const [squadResult, membersResult, sessionsResult] = await Promise.all([
-    supabase.from('squads').select('*').eq('id', squadId).single(),
+    supabase
+      .from('squads')
+      .select('*')
+      .eq('id', squadId as string)
+      .single(),
     supabase
       .from('squad_members')
       .select('*, profiles(username, avatar_url, reliability_score)')
-      .eq('squad_id', squadId),
+      .eq('squad_id', squadId as string),
     supabase
       .from('sessions')
       .select('*')
-      .eq('squad_id', squadId)
+      .eq('squad_id', squadId as string)
       .order('scheduled_at', { ascending: true }),
   ])
 
   const squad: SquadWithMembers | null = squadResult.data
     ? {
-        ...(squadResult.data as Squad),
-        members: (membersResult.data || []) as MemberWithProfile[],
+        ...(squadResult.data as unknown as Squad),
+        members: (membersResult.data || []) as unknown as MemberWithProfile[],
         member_count: membersResult.data?.length || 0,
       }
     : null
@@ -70,14 +77,15 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   // Get RSVPs for sessions
   let sessions: SessionWithRsvp[] = []
   if (sessionsResult.data?.length) {
-    const sessionIds = sessionsResult.data.map((s: Session) => s.id)
+    const sessionIds = (sessionsResult.data as unknown as Session[]).map((s: Session) => s.id)
     const { data: allRsvps } = await supabase
       .from('session_rsvps')
       .select('*')
       .in('session_id', sessionIds)
 
-    sessions = sessionsResult.data.map((session: Session) => {
-      const sessionRsvps = (allRsvps as SessionRsvp[] | null)?.filter((r) => r.session_id === session.id) || []
+    sessions = (sessionsResult.data as unknown as Session[]).map((session: Session) => {
+      const sessionRsvps =
+        (allRsvps as SessionRsvp[] | null)?.filter((r) => r.session_id === session.id) || []
       return {
         ...session,
         my_rsvp: sessionRsvps.find((r) => r.user_id === user.id)?.response || null,
@@ -99,11 +107,22 @@ export function headers({ loaderHeaders }: { loaderHeaders: Headers }) {
 
 export default function Component({ loaderData }: { loaderData: SquadDetailLoaderData }) {
   return (
-    <ClientRouteWrapper seeds={[
-      { key: queryKeys.squads.detail(loaderData?.squad?.id), data: loaderData?.squad },
-      { key: queryKeys.sessions.list(loaderData?.squad?.id), data: loaderData?.sessions },
-    ]}>
-      <Suspense fallback={<div className="min-h-[50vh] flex items-center justify-center"><div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin" /></div>}>
+    <ClientRouteWrapper
+      seeds={[
+        { key: [...queryKeys.squads.detail(loaderData?.squad?.id ?? '')], data: loaderData?.squad },
+        {
+          key: [...queryKeys.sessions.list(loaderData?.squad?.id ?? '')],
+          data: loaderData?.sessions,
+        },
+      ]}
+    >
+      <Suspense
+        fallback={
+          <div className="min-h-[50vh] flex items-center justify-center">
+            <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+          </div>
+        }
+      >
         <SquadDetail />
       </Suspense>
     </ClientRouteWrapper>

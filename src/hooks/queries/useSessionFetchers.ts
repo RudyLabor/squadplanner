@@ -11,18 +11,23 @@ export interface SessionWithDetails extends Session {
 }
 
 function computeRsvpCounts(rsvps: SessionRsvp[], userId?: string) {
-  const myRsvp = userId ? rsvps.find(r => r.user_id === userId)?.response as RsvpResponse | undefined : null
+  const myRsvp = userId
+    ? (rsvps.find((r) => r.user_id === userId)?.response as RsvpResponse | undefined)
+    : null
   return {
     my_rsvp: myRsvp || null,
     rsvp_counts: {
-      present: rsvps.filter(r => r.response === 'present').length,
-      absent: rsvps.filter(r => r.response === 'absent').length,
-      maybe: rsvps.filter(r => r.response === 'maybe').length,
+      present: rsvps.filter((r) => r.response === 'present').length,
+      absent: rsvps.filter((r) => r.response === 'absent').length,
+      maybe: rsvps.filter((r) => r.response === 'maybe').length,
     },
   }
 }
 
-export async function fetchSessionsBySquad(squadId: string, userId?: string): Promise<SessionWithDetails[]> {
+export async function fetchSessionsBySquad(
+  squadId: string,
+  userId?: string
+): Promise<SessionWithDetails[]> {
   const { data: sessions, error } = await supabase
     .from('sessions')
     .select('*')
@@ -32,14 +37,14 @@ export async function fetchSessionsBySquad(squadId: string, userId?: string): Pr
   if (error) throw error
   if (!sessions?.length) return []
 
-  const sessionIds = sessions.map(s => s.id)
+  const sessionIds = sessions.map((s) => s.id)
   const { data: allRsvps } = await supabase
     .from('session_rsvps')
     .select('*')
     .in('session_id', sessionIds)
 
-  return sessions.map(session => {
-    const sessionRsvps = allRsvps?.filter(r => r.session_id === session.id) || []
+  return sessions.map((session) => {
+    const sessionRsvps = allRsvps?.filter((r) => r.session_id === session.id) || []
     return { ...session, rsvps: sessionRsvps, ...computeRsvpCounts(sessionRsvps, userId) }
   })
 }
@@ -52,7 +57,7 @@ export async function fetchUpcomingSessions(userId: string): Promise<SessionWith
 
   if (!memberships?.length) return []
 
-  const squadIds = memberships.map(m => m.squad_id)
+  const squadIds = memberships.map((m) => m.squad_id)
   const { data: sessions, error } = await supabase
     .from('sessions')
     .select('*')
@@ -64,19 +69,22 @@ export async function fetchUpcomingSessions(userId: string): Promise<SessionWith
   if (error) throw error
   if (!sessions?.length) return []
 
-  const sessionIds = sessions.map(s => s.id)
+  const sessionIds = sessions.map((s) => s.id)
   const { data: allRsvps } = await supabase
     .from('session_rsvps')
     .select('*')
     .in('session_id', sessionIds)
 
-  return sessions.map(session => {
-    const sessionRsvps = allRsvps?.filter(r => r.session_id === session.id) || []
+  return sessions.map((session) => {
+    const sessionRsvps = allRsvps?.filter((r) => r.session_id === session.id) || []
     return { ...session, rsvps: sessionRsvps, ...computeRsvpCounts(sessionRsvps, userId) }
   })
 }
 
-export async function fetchSessionById(sessionId: string, userId?: string): Promise<SessionWithDetails | null> {
+export async function fetchSessionById(
+  sessionId: string,
+  userId?: string
+): Promise<SessionWithDetails | null> {
   const { data: session, error } = await supabase
     .from('sessions')
     .select('*')
@@ -92,14 +100,16 @@ export async function fetchSessionById(sessionId: string, userId?: string): Prom
 
   // Fetch usernames separately to avoid PostgREST join errors
   if (rsvps?.length) {
-    const userIds = [...new Set(rsvps.map(r => r.user_id))]
+    const userIds = [...new Set(rsvps.map((r) => r.user_id))]
     const { data: profiles } = await supabase
       .from('profiles')
       .select('id, username')
       .in('id', userIds)
-    const profileMap = new Map((profiles || []).map(p => [p.id, p]))
+    const profileMap = new Map((profiles || []).map((p) => [p.id, p]))
     rsvps.forEach((r: SessionRsvp & { profiles?: { username?: string } }) => {
-      (r as SessionRsvp & { profiles: { username: string } }).profiles = profileMap.get(r.user_id) || { username: 'Joueur' }
+      ;(r as SessionRsvp & { profiles: { username: string } }).profiles = profileMap.get(
+        r.user_id
+      ) || { username: 'Joueur' }
     })
   }
 

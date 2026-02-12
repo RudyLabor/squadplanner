@@ -22,7 +22,7 @@ export const QUICK_ACTIONS = [
 export const GREETING_MESSAGE: ChatMessage = {
   id: 'greeting',
   role: 'bot',
-  text: 'Salut ! Je suis l\'assistant Squad Planner. Pose-moi une question sur l\'app !',
+  text: "Salut ! Je suis l'assistant Squad Planner. Pose-moi une question sur l'app !",
   timestamp: Date.now(),
 }
 
@@ -40,7 +40,7 @@ function normalize(str: string): string {
 
 export function findBestMatch(input: string, faqItems: FAQItem[]): string | null {
   const normalizedInput = normalize(input)
-  const inputWords = normalizedInput.split(/\s+/).filter(w => w.length > 2)
+  const inputWords = normalizedInput.split(/\s+/).filter((w) => w.length > 2)
 
   if (inputWords.length === 0) return null
 

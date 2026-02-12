@@ -43,11 +43,11 @@ interface ErrorStateProps {
 interface TypePreset {
   icon: ReactNode
   title: string
-  color: string        // e.g. "error", "warning", "info"
-  bgClass: string      // e.g. "bg-error/10"
-  borderClass: string  // e.g. "border-error/20"
-  textClass: string    // e.g. "text-error"
-  iconBgClass: string  // e.g. "bg-error/20"
+  color: string // e.g. "error", "warning", "info"
+  bgClass: string // e.g. "bg-error/10"
+  borderClass: string // e.g. "border-error/20"
+  textClass: string // e.g. "text-error"
+  iconBgClass: string // e.g. "bg-error/20"
 }
 
 const TYPE_PRESETS: Record<ErrorType, (iconSize: string) => TypePreset> = {
@@ -132,26 +132,44 @@ export function ErrorState({
   const resolvedIcon = icon ?? preset.icon
   const resolvedTitle = title ?? preset.title
 
-  const retryText = retryCountdown && retryCountdown > 0
-    ? `Réessayer dans ${retryCountdown}s`
-    : (retryLabel ?? 'Réessayer')
+  const retryText =
+    retryCountdown && retryCountdown > 0
+      ? `Réessayer dans ${retryCountdown}s`
+      : (retryLabel ?? 'Réessayer')
 
   if (variant === 'banner') {
-    return <BannerVariant
-      preset={preset}
-      icon={resolvedIcon}
-      title={resolvedTitle}
-      message={message}
-      onRetry={onRetry}
-      retryText={retryText}
-      isRetrying={isRetrying}
-      onDismiss={onDismiss}
-      className={className}
-    />
+    return (
+      <BannerVariant
+        preset={preset}
+        icon={resolvedIcon}
+        title={resolvedTitle}
+        message={message}
+        onRetry={onRetry}
+        retryText={retryText}
+        isRetrying={isRetrying}
+        onDismiss={onDismiss}
+        className={className}
+      />
+    )
   }
 
   if (variant === 'inline') {
-    return <InlineVariant
+    return (
+      <InlineVariant
+        preset={preset}
+        icon={resolvedIcon}
+        title={resolvedTitle}
+        message={message}
+        onRetry={onRetry}
+        retryText={retryText}
+        isRetrying={isRetrying}
+        className={className}
+      />
+    )
+  }
+
+  return (
+    <PageVariant
       preset={preset}
       icon={resolvedIcon}
       title={resolvedTitle}
@@ -159,22 +177,11 @@ export function ErrorState({
       onRetry={onRetry}
       retryText={retryText}
       isRetrying={isRetrying}
+      onGoBack={onGoBack}
+      onGoHome={onGoHome}
       className={className}
     />
-  }
-
-  return <PageVariant
-    preset={preset}
-    icon={resolvedIcon}
-    title={resolvedTitle}
-    message={message}
-    onRetry={onRetry}
-    retryText={retryText}
-    isRetrying={isRetrying}
-    onGoBack={onGoBack}
-    onGoHome={onGoHome}
-    className={className}
-  />
+  )
 }
 
 // ---------------------------------------------------------------------------
@@ -222,15 +229,9 @@ function PageVariant({
         <span className={preset.textClass}>{icon}</span>
       </m.div>
 
-      <h2 className="text-xl font-semibold text-text-primary mb-2">
-        {title}
-      </h2>
+      <h2 className="text-xl font-semibold text-text-primary mb-2">{title}</h2>
 
-      {message && (
-        <p className="text-md text-text-secondary mb-6 max-w-sm">
-          {message}
-        </p>
-      )}
+      {message && <p className="text-md text-text-secondary mb-6 max-w-sm">{message}</p>}
 
       {onRetry && (
         <button
@@ -238,10 +239,11 @@ function PageVariant({
           disabled={isRetrying}
           className="w-full max-w-xs inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-primary text-white text-md font-medium hover:bg-primary-hover transition-colors disabled:opacity-60 mb-3"
         >
-          {isRetrying
-            ? <Loader2 className="w-4 h-4 animate-spin" />
-            : <RefreshCw className="w-4 h-4" />
-          }
+          {isRetrying ? (
+            <Loader2 className="w-4 h-4 animate-spin" />
+          ) : (
+            <RefreshCw className="w-4 h-4" />
+          )}
           {retryText}
         </button>
       )}
@@ -304,29 +306,26 @@ function InlineVariant({
       role="alert"
       aria-live="polite"
     >
-      <div className={`w-8 h-8 rounded-lg ${preset.iconBgClass} flex items-center justify-center flex-shrink-0`}>
+      <div
+        className={`w-8 h-8 rounded-lg ${preset.iconBgClass} flex items-center justify-center flex-shrink-0`}
+      >
         <span className={preset.textClass}>{icon}</span>
       </div>
 
       <div className="flex-1 min-w-0">
-        <p className={`text-sm font-medium ${preset.textClass}`}>
-          {title}
-        </p>
-        {message && (
-          <p className={`text-xs ${preset.textClass} opacity-80 mt-0.5`}>
-            {message}
-          </p>
-        )}
+        <p className={`text-sm font-medium ${preset.textClass}`}>{title}</p>
+        {message && <p className={`text-xs ${preset.textClass} opacity-80 mt-0.5`}>{message}</p>}
         {onRetry && (
           <button
             onClick={onRetry}
             disabled={isRetrying}
             className={`mt-2 inline-flex items-center gap-1.5 text-xs font-medium ${preset.textClass} hover:underline disabled:opacity-60`}
           >
-            {isRetrying
-              ? <Loader2 className="w-3 h-3 animate-spin" />
-              : <RefreshCw className="w-3 h-3" />
-            }
+            {isRetrying ? (
+              <Loader2 className="w-3 h-3 animate-spin" />
+            ) : (
+              <RefreshCw className="w-3 h-3" />
+            )}
             {retryText}
           </button>
         )}
@@ -371,21 +370,19 @@ function BannerVariant({
         role="alert"
         aria-live="assertive"
       >
-        <div className={`mx-4 mt-2 p-3 rounded-xl ${preset.bgClass} border ${preset.borderClass} backdrop-blur-md shadow-lg`}>
+        <div
+          className={`mx-4 mt-2 p-3 rounded-xl ${preset.bgClass} border ${preset.borderClass} backdrop-blur-md shadow-lg`}
+        >
           <div className="flex items-center gap-3">
-            <div className={`w-8 h-8 rounded-lg ${preset.iconBgClass} flex items-center justify-center flex-shrink-0`}>
+            <div
+              className={`w-8 h-8 rounded-lg ${preset.iconBgClass} flex items-center justify-center flex-shrink-0`}
+            >
               <span className={preset.textClass}>{icon}</span>
             </div>
 
             <div className="flex-1 min-w-0">
-              <p className={`text-md font-medium ${preset.textClass}`}>
-                {title}
-              </p>
-              {message && (
-                <p className={`text-sm ${preset.textClass} opacity-80`}>
-                  {message}
-                </p>
-              )}
+              <p className={`text-md font-medium ${preset.textClass}`}>{title}</p>
+              {message && <p className={`text-sm ${preset.textClass} opacity-80`}>{message}</p>}
             </div>
 
             {onRetry && (
@@ -394,10 +391,11 @@ function BannerVariant({
                 disabled={isRetrying}
                 className={`px-3 py-1.5 rounded-lg text-xs font-medium ${preset.textClass} ${preset.iconBgClass} hover:opacity-80 transition-opacity disabled:opacity-60 flex items-center gap-1.5`}
               >
-                {isRetrying
-                  ? <Loader2 className="w-3 h-3 animate-spin" />
-                  : <RefreshCw className="w-3 h-3" />
-                }
+                {isRetrying ? (
+                  <Loader2 className="w-3 h-3 animate-spin" />
+                ) : (
+                  <RefreshCw className="w-3 h-3" />
+                )}
                 {retryText}
               </button>
             )}

@@ -42,14 +42,19 @@ export function AuthFormFields({
           <Input
             type="text"
             value={username}
-            onChange={(e) => { setUsername(e.target.value); setFieldErrors(prev => ({ ...prev, username: undefined })) }}
+            onChange={(e) => {
+              setUsername(e.target.value)
+              setFieldErrors((prev) => ({ ...prev, username: undefined }))
+            }}
             placeholder="Ton pseudo de gamer"
             icon={<User className="w-4 h-4" />}
             required
             autoComplete="username"
             className={fieldErrors.username ? 'border-error focus:border-error' : ''}
           />
-          {fieldErrors.username && <p className="text-error text-sm mt-1">{fieldErrors.username}</p>}
+          {fieldErrors.username && (
+            <p className="text-error text-sm mt-1">{fieldErrors.username}</p>
+          )}
         </div>
       )}
 
@@ -58,7 +63,10 @@ export function AuthFormFields({
           <Input
             type="email"
             value={email}
-            onChange={(e) => { setEmail(e.target.value); setFieldErrors(prev => ({ ...prev, email: undefined })) }}
+            onChange={(e) => {
+              setEmail(e.target.value)
+              setFieldErrors((prev) => ({ ...prev, email: undefined }))
+            }}
             placeholder="Email"
             icon={<Mail className="w-4 h-4" />}
             required
@@ -74,7 +82,10 @@ export function AuthFormFields({
         <Input
           type="password"
           value={password}
-          onChange={(e) => { setPassword(e.target.value); setFieldErrors(prev => ({ ...prev, password: undefined })) }}
+          onChange={(e) => {
+            setPassword(e.target.value)
+            setFieldErrors((prev) => ({ ...prev, password: undefined }))
+          }}
           placeholder={mode === 'reset' ? 'Nouveau mot de passe' : 'Mot de passe'}
           icon={<Lock className="w-4 h-4" />}
           showPasswordToggle

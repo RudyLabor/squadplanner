@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 import { type ReactNode, useEffect, useRef, useId } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
@@ -176,10 +176,7 @@ export function Dialog({
                     </h2>
                   )}
                   {description && (
-                    <p
-                      id={descId}
-                      className="mt-1 text-sm text-text-secondary"
-                    >
+                    <p id={descId} className="mt-1 text-sm text-text-secondary">
                       {description}
                     </p>
                   )}
@@ -197,9 +194,7 @@ export function Dialog({
             )}
 
             {/* Content */}
-            <div className="flex-1 overflow-y-auto">
-              {children}
-            </div>
+            <div className="flex-1 overflow-y-auto">{children}</div>
           </m.div>
         </div>
       )}
@@ -209,24 +204,18 @@ export function Dialog({
 }
 
 export function DialogHeader({ children, className = '' }: DialogHeaderProps) {
-  return (
-    <div className={`px-6 pt-6 pb-2 ${className}`}>
-      {children}
-    </div>
-  )
+  return <div className={`px-6 pt-6 pb-2 ${className}`}>{children}</div>
 }
 
 export function DialogBody({ children, className = '' }: DialogBodyProps) {
-  return (
-    <div className={`flex-1 overflow-y-auto px-6 py-4 ${className}`}>
-      {children}
-    </div>
-  )
+  return <div className={`flex-1 overflow-y-auto px-6 py-4 ${className}`}>{children}</div>
 }
 
 export function DialogFooter({ children, className = '' }: DialogFooterProps) {
   return (
-    <div className={`flex items-center justify-end gap-3 px-6 py-4 border-t border-border-subtle ${className}`}>
+    <div
+      className={`flex items-center justify-end gap-3 px-6 py-4 border-t border-border-subtle ${className}`}
+    >
       {children}
     </div>
   )

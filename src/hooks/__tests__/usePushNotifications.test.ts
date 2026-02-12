@@ -149,10 +149,13 @@ describe('usePushNotificationStore', () => {
         await usePushNotificationStore.getState().sendTestNotification()
       })
 
-      expect(mockShowNotification).toHaveBeenCalledWith('Test SquadPlanner', expect.objectContaining({
-        body: expect.any(String),
-        tag: 'test-notification',
-      }))
+      expect(mockShowNotification).toHaveBeenCalledWith(
+        'Test SquadPlanner',
+        expect.objectContaining({
+          body: expect.any(String),
+          tag: 'test-notification',
+        })
+      )
     })
   })
 })

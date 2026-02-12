@@ -16,21 +16,22 @@ const ALLOWED_ORIGINS = [
   'http://localhost:5174',
   'https://squadplanner.fr',
   'https://squadplanner.app',
-  Deno.env.get('SUPABASE_URL') || ''
+  Deno.env.get('SUPABASE_URL') || '',
 ].filter(Boolean)
 
 function getCorsHeaders(origin: string | null) {
-  const allowedOrigin = origin && ALLOWED_ORIGINS.some(allowed => origin === allowed)
-    ? origin
-    : null
+  const allowedOrigin =
+    origin && ALLOWED_ORIGINS.some((allowed) => origin === allowed) ? origin : null
   if (!allowedOrigin) {
     return {
-      'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type, stripe-signature',
+      'Access-Control-Allow-Headers':
+        'authorization, x-client-info, apikey, content-type, stripe-signature',
     }
   }
   return {
     'Access-Control-Allow-Origin': allowedOrigin,
-    'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type, stripe-signature',
+    'Access-Control-Allow-Headers':
+      'authorization, x-client-info, apikey, content-type, stripe-signature',
   }
 }
 
@@ -48,10 +49,10 @@ serve(async (req) => {
   const webhookSecret = Deno.env.get('STRIPE_WEBHOOK_SECRET')
 
   if (!signature || !webhookSecret) {
-    return new Response(
-      JSON.stringify({ error: 'Missing signature or webhook secret' }),
-      { status: 400, headers: { ...getCorsHeaders(req.headers.get('origin')), 'Content-Type': 'application/json' } }
-    )
+    return new Response(JSON.stringify({ error: 'Missing signature or webhook secret' }), {
+      status: 400,
+      headers: { ...getCorsHeaders(req.headers.get('origin')), 'Content-Type': 'application/json' },
+    })
   }
 
   try {
@@ -122,7 +123,9 @@ serve(async (req) => {
             .from('subscriptions')
             .update({
               status: subscription.status,
-              current_period_start: new Date(subscription.current_period_start * 1000).toISOString(),
+              current_period_start: new Date(
+                subscription.current_period_start * 1000
+              ).toISOString(),
               current_period_end: new Date(subscription.current_period_end * 1000).toISOString(),
               cancel_at_period_end: subscription.cancel_at_period_end,
             })
@@ -191,15 +194,14 @@ serve(async (req) => {
         console.log(`Unhandled event type: ${event.type}`)
     }
 
-    return new Response(
-      JSON.stringify({ received: true }),
-      { headers: { ...getCorsHeaders(req.headers.get('origin')), 'Content-Type': 'application/json' } }
-    )
+    return new Response(JSON.stringify({ received: true }), {
+      headers: { ...getCorsHeaders(req.headers.get('origin')), 'Content-Type': 'application/json' },
+    })
   } catch (error) {
     console.error('Webhook error:', error)
-    return new Response(
-      JSON.stringify({ error: error.message }),
-      { status: 400, headers: { ...getCorsHeaders(req.headers.get('origin')), 'Content-Type': 'application/json' } }
-    )
+    return new Response(JSON.stringify({ error: error.message }), {
+      status: 400,
+      headers: { ...getCorsHeaders(req.headers.get('origin')), 'Content-Type': 'application/json' },
+    })
   }
 })

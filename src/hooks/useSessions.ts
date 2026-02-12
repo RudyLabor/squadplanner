@@ -28,7 +28,10 @@ interface SessionsState {
     auto_confirm_threshold?: number
   }) => Promise<{ session: Session | null; error: Error | null }>
   updateRsvp: (sessionId: string, response: RsvpResponse) => Promise<{ error: Error | null }>
-  checkin: (sessionId: string, status: 'present' | 'late' | 'noshow') => Promise<{ error: Error | null }>
+  checkin: (
+    sessionId: string,
+    status: 'present' | 'late' | 'noshow'
+  ) => Promise<{ error: Error | null }>
   cancelSession: (sessionId: string) => Promise<{ error: Error | null }>
   confirmSession: (sessionId: string) => Promise<{ error: Error | null }>
 }
@@ -43,7 +46,9 @@ export const useSessionsStore = create<SessionsState>((set, get) => ({
     try {
       set({ isLoading: true })
 
-      const { data: { session } } = await supabase.auth.getSession()
+      const {
+        data: { session },
+      } = await supabase.auth.getSession()
       const user = session?.user
 
       const { data: sessions, error } = await supabase
@@ -61,12 +66,14 @@ export const useSessionsStore = create<SessionsState>((set, get) => ({
           .select('*')
           .eq('session_id', session.id)
 
-        const my_rsvp = user ? (rsvps?.find(r => r.user_id === user.id)?.response as RsvpResponse | undefined) : null
+        const my_rsvp = user
+          ? (rsvps?.find((r) => r.user_id === user.id)?.response as RsvpResponse | undefined)
+          : null
 
         const rsvp_counts = {
-          present: rsvps?.filter(r => r.response === 'present').length || 0,
-          absent: rsvps?.filter(r => r.response === 'absent').length || 0,
-          maybe: rsvps?.filter(r => r.response === 'maybe').length || 0,
+          present: rsvps?.filter((r) => r.response === 'present').length || 0,
+          absent: rsvps?.filter((r) => r.response === 'absent').length || 0,
+          maybe: rsvps?.filter((r) => r.response === 'maybe').length || 0,
         }
 
         sessionsWithDetails.push({
@@ -78,10 +85,10 @@ export const useSessionsStore = create<SessionsState>((set, get) => ({
       }
 
       set((state) => {
-        const otherSquadSessions = state.sessions.filter(s => s.squad_id !== squadId)
+        const otherSquadSessions = state.sessions.filter((s) => s.squad_id !== squadId)
         return {
           sessions: [...otherSquadSessions, ...sessionsWithDetails],
-          isLoading: false
+          isLoading: false,
         }
       })
     } catch {
@@ -92,7 +99,9 @@ export const useSessionsStore = create<SessionsState>((set, get) => ({
   fetchSessionById: async (id: string) => {
     if (!isSupabaseReady()) return null
     try {
-      const { data: { session: authSession } } = await supabase.auth.getSession()
+      const {
+        data: { session: authSession },
+      } = await supabase.auth.getSession()
       const user = authSession?.user
 
       const { data: sessionData, error } = await supabase
@@ -103,21 +112,20 @@ export const useSessionsStore = create<SessionsState>((set, get) => ({
 
       if (error) throw error
 
-      const { data: rsvps } = await supabase
-        .from('session_rsvps')
-        .select('*')
-        .eq('session_id', id)
+      const { data: rsvps } = await supabase.from('session_rsvps').select('*').eq('session_id', id)
 
       // Fetch usernames separately to avoid PostgREST join errors
       if (rsvps?.length) {
-        const userIds = [...new Set(rsvps.map(r => r.user_id))]
+        const userIds = [...new Set(rsvps.map((r) => r.user_id))]
         const { data: profiles } = await supabase
           .from('profiles')
           .select('id, username')
           .in('id', userIds)
-        const profileMap = new Map((profiles || []).map(p => [p.id, p]))
+        const profileMap = new Map((profiles || []).map((p) => [p.id, p]))
         rsvps.forEach((r: SessionRsvp & { profiles?: { username?: string } }) => {
-          (r as SessionRsvp & { profiles: { username: string } }).profiles = profileMap.get(r.user_id) || { username: 'Joueur' }
+          ;(r as SessionRsvp & { profiles: { username: string } }).profiles = profileMap.get(
+            r.user_id
+          ) || { username: 'Joueur' }
         })
       }
 
@@ -126,12 +134,14 @@ export const useSessionsStore = create<SessionsState>((set, get) => ({
         .select('*')
         .eq('session_id', id)
 
-      const my_rsvp = user ? (rsvps?.find(r => r.user_id === user.id)?.response as RsvpResponse | undefined) : null
+      const my_rsvp = user
+        ? (rsvps?.find((r) => r.user_id === user.id)?.response as RsvpResponse | undefined)
+        : null
 
       const rsvp_counts = {
-        present: rsvps?.filter(r => r.response === 'present').length || 0,
-        absent: rsvps?.filter(r => r.response === 'absent').length || 0,
-        maybe: rsvps?.filter(r => r.response === 'maybe').length || 0,
+        present: rsvps?.filter((r) => r.response === 'present').length || 0,
+        absent: rsvps?.filter((r) => r.response === 'absent').length || 0,
+        maybe: rsvps?.filter((r) => r.response === 'maybe').length || 0,
       }
 
       const sessionWithDetails: SessionWithDetails = {
@@ -154,7 +164,9 @@ export const useSessionsStore = create<SessionsState>((set, get) => ({
     try {
       set({ isLoading: true })
 
-      const { data: { session: authSession2 } } = await supabase.auth.getSession()
+      const {
+        data: { session: authSession2 },
+      } = await supabase.auth.getSession()
       const user = authSession2?.user
       if (!user) throw new Error('Not authenticated')
 
@@ -175,13 +187,11 @@ export const useSessionsStore = create<SessionsState>((set, get) => ({
 
       if (error) throw error
 
-      await supabase
-        .from('session_rsvps')
-        .insert({
-          session_id: newSession.id,
-          user_id: user.id,
-          response: 'present' as const,
-        })
+      await supabase.from('session_rsvps').insert({
+        session_id: newSession.id,
+        user_id: user.id,
+        response: 'present' as const,
+      })
 
       await get().fetchSessions(data.squad_id)
       set({ isLoading: false })

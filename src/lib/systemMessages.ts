@@ -22,9 +22,13 @@ interface SystemMessageOptions {
  * Le sender_id est l'utilisateur courant (pour les permissions RLS)
  * mais is_system_message=true indique que c'est un message système
  */
-export async function sendSystemMessage(options: SystemMessageOptions): Promise<{ error: Error | null }> {
+export async function sendSystemMessage(
+  options: SystemMessageOptions
+): Promise<{ error: Error | null }> {
   try {
-    const { data: { user } } = await supabase.auth.getUser()
+    const {
+      data: { user },
+    } = await supabase.auth.getUser()
     if (!user) {
       console.warn('sendSystemMessage: Not authenticated, skipping')
       return { error: null } // Ne pas bloquer si non connecté
@@ -49,9 +53,7 @@ export async function sendSystemMessage(options: SystemMessageOptions): Promise<
       messageData.session_id = options.sessionId
     }
 
-    const { error } = await supabase
-      .from('messages')
-      .insert(messageData)
+    const { error } = await supabase.from('messages').insert(messageData)
 
     if (error) {
       console.error('Erreur envoi message système:', error)
@@ -71,7 +73,7 @@ export async function sendSystemMessage(options: SystemMessageOptions): Promise<
 export async function sendMemberJoinedMessage(squadId: string, username: string): Promise<void> {
   await sendSystemMessage({
     squadId,
-    content: `${username} a rejoint la squad`
+    content: `${username} a rejoint la squad`,
   })
 }
 
@@ -81,7 +83,7 @@ export async function sendMemberJoinedMessage(squadId: string, username: string)
 export async function sendMemberLeftMessage(squadId: string, username: string): Promise<void> {
   await sendSystemMessage({
     squadId,
-    content: `${username} a quitté la squad`
+    content: `${username} a quitté la squad`,
   })
 }
 
@@ -99,13 +101,13 @@ export async function sendSessionConfirmedMessage(
     day: 'numeric',
     month: 'long',
     hour: '2-digit',
-    minute: '2-digit'
+    minute: '2-digit',
   })
 
   const title = sessionTitle || 'Session'
   await sendSystemMessage({
     squadId,
-    content: `${title} confirmée pour ${formattedDate}`
+    content: `${title} confirmée pour ${formattedDate}`,
   })
 }
 
@@ -121,12 +123,12 @@ export async function sendRsvpMessage(
   const responseText = {
     present: 'Présent',
     absent: 'Absent',
-    maybe: 'Peut-être'
+    maybe: 'Peut-être',
   }[response]
 
   const title = sessionTitle || 'la session'
   await sendSystemMessage({
     squadId,
-    content: `${username} a répondu ${responseText} pour ${title}`
+    content: `${username} a répondu ${responseText} pour ${title}`,
   })
 }

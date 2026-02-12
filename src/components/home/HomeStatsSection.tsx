@@ -19,8 +19,28 @@ function StatsRow({ squadsCount, sessionsThisWeek }: StatsRowProps) {
   const sessionsTrend = getSessionsTrend(sessionsThisWeek)
 
   const stats = [
-    { value: squadsCount, label: 'Squads', mobileLabel: 'Squads', icon: Users, color: 'var(--color-primary)', suffix: '', path: '/squads', trend: null, progress: null },
-    { value: sessionsThisWeek, label: 'Cette semaine', mobileLabel: 'Semaine', icon: Calendar, color: 'var(--color-warning)', suffix: '', path: '/sessions', trend: sessionsTrend, progress: null },
+    {
+      value: squadsCount,
+      label: 'Squads',
+      mobileLabel: 'Squads',
+      icon: Users,
+      color: 'var(--color-primary)',
+      suffix: '',
+      path: '/squads',
+      trend: null,
+      progress: null,
+    },
+    {
+      value: sessionsThisWeek,
+      label: 'Cette semaine',
+      mobileLabel: 'Semaine',
+      icon: Calendar,
+      color: 'var(--color-warning)',
+      suffix: '',
+      path: '/sessions',
+      trend: sessionsTrend,
+      progress: null,
+    },
   ]
 
   return (
@@ -54,7 +74,10 @@ function StatsRow({ squadsCount, sessionsThisWeek }: StatsRowProps) {
                     <AnimatedCounter end={stat.value} duration={1.2} suffix={stat.suffix} />
                   </span>
                   {stat.trend?.icon && (
-                    <stat.trend.icon className="w-3 h-3 sm:w-3.5 sm:h-3.5" style={{ color: stat.trend.color }} />
+                    <stat.trend.icon
+                      className="w-3 h-3 sm:w-3.5 sm:h-3.5"
+                      style={{ color: stat.trend.color }}
+                    />
                   )}
                 </div>
                 <div className="text-2xs sm:text-xs text-text-quaternary uppercase tracking-wider mt-0.5 truncate font-medium">
@@ -97,17 +120,12 @@ export const HomeStatsSection = memo(function HomeStatsSection({
 }: HomeStatsSectionProps) {
   return (
     <section aria-label="Tableau de bord" className="mb-6">
-      <h2 className="text-base font-semibold text-text-primary mb-3">
-        Ton tableau de bord
-      </h2>
+      <h2 className="text-base font-semibold text-text-primary mb-3">Ton tableau de bord</h2>
       <ContentTransition
         isLoading={squadsLoading || sessionsLoading}
         skeleton={<SkeletonStatsRow />}
       >
-        <StatsRow
-          squadsCount={squadsCount}
-          sessionsThisWeek={sessionsThisWeek}
-        />
+        <StatsRow squadsCount={squadsCount} sessionsThisWeek={sessionsThisWeek} />
       </ContentTransition>
     </section>
   )

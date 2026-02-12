@@ -32,7 +32,7 @@ export function useNavigationProgress() {
   const location = useLocation()
   const { start, done } = useNavigationProgressStore()
   const prevPathRef = useRef(location.pathname)
-  const timerRef = useRef<ReturnType<typeof setTimeout>>()
+  const timerRef = useRef<ReturnType<typeof setTimeout>>(undefined)
 
   const finish = useCallback(() => {
     clearTimeout(timerRef.current)

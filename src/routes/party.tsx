@@ -5,7 +5,7 @@ import { createSupabaseServerClient } from '../lib/supabase.server'
 import { queryKeys } from '../lib/queryClient'
 import { ClientRouteWrapper } from '../components/ClientRouteWrapper'
 
-const Party = lazy(() => import('../pages/Party').then(m => ({ default: m.Party })))
+const Party = lazy(() => import('../pages/Party').then((m) => ({ default: m.Party })))
 
 interface PartySquad {
   id: string
@@ -21,16 +21,23 @@ interface PartyLoaderData {
 
 export function meta() {
   return [
-    { title: "Party - Squad Planner" },
-    { name: "description", content: "Rejoins le chat vocal de ta squad. Lance une party pour jouer ensemble en temps réel." },
-    { tagName: "link", rel: "canonical", href: "https://squadplanner.fr/party" },
-    { property: "og:url", content: "https://squadplanner.fr/party" },
+    { title: 'Party - Squad Planner' },
+    {
+      name: 'description',
+      content:
+        'Rejoins le chat vocal de ta squad. Lance une party pour jouer ensemble en temps réel.',
+    },
+    { tagName: 'link', rel: 'canonical', href: 'https://squadplanner.fr/party' },
+    { property: 'og:url', content: 'https://squadplanner.fr/party' },
   ]
 }
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const { supabase, headers, getUser } = createSupabaseServerClient(request)
-  const { data: { user }, error } = await getUser()
+  const {
+    data: { user },
+    error,
+  } = await getUser()
 
   if (error || !user) {
     throw redirect('/', { headers })
@@ -42,7 +49,11 @@ export async function loader({ request }: LoaderFunctionArgs) {
     .select('squad_id, squads!inner(id, name, game, total_members)')
     .eq('user_id', user.id)
 
-  const squads: PartySquad[] = (memberships?.map((m: { squads: { id: string; name: string; game: string; total_members: number } }) => m.squads) || []).map((squad) => ({
+  const squads: PartySquad[] = (
+    (memberships as any[])?.map(
+      (m: { squads: { id: string; name: string; game: string; total_members: number } }) => m.squads
+    ) || []
+  ).map((squad: any) => ({
     ...squad,
     member_count: squad.total_members ?? 1,
   }))
@@ -56,10 +67,14 @@ export function headers({ loaderHeaders }: { loaderHeaders: Headers }) {
 
 export default function Component({ loaderData }: { loaderData: PartyLoaderData }) {
   return (
-    <ClientRouteWrapper seeds={[
-      { key: queryKeys.squads.list(), data: loaderData?.squads },
-    ]}>
-      <Suspense fallback={<div className="min-h-[50vh] flex items-center justify-center"><div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin" /></div>}>
+    <ClientRouteWrapper seeds={[{ key: [...queryKeys.squads.list()], data: loaderData?.squads }]}>
+      <Suspense
+        fallback={
+          <div className="min-h-[50vh] flex items-center justify-center">
+            <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+          </div>
+        }
+      >
         <Party />
       </Suspense>
     </ClientRouteWrapper>

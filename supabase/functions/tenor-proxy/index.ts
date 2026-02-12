@@ -15,13 +15,12 @@ const ALLOWED_ORIGINS = [
   'https://www.squadplanner.fr',
   'https://squadplanner.app',
   'https://www.squadplanner.app',
-  Deno.env.get('SUPABASE_URL') || ''
+  Deno.env.get('SUPABASE_URL') || '',
 ].filter(Boolean)
 
 function getCorsHeaders(origin: string | null) {
-  const allowedOrigin = origin && ALLOWED_ORIGINS.some(allowed => origin === allowed)
-    ? origin
-    : null
+  const allowedOrigin =
+    origin && ALLOWED_ORIGINS.some((allowed) => origin === allowed) ? origin : null
   if (!allowedOrigin) {
     return {
       'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
@@ -52,20 +51,20 @@ serve(async (req) => {
 
   try {
     if (!TENOR_API_KEY) {
-      return new Response(
-        JSON.stringify({ error: 'Tenor API key not configured' }),
-        { status: 500, headers: { ...cors, 'Content-Type': 'application/json' } }
-      )
+      return new Response(JSON.stringify({ error: 'Tenor API key not configured' }), {
+        status: 500,
+        headers: { ...cors, 'Content-Type': 'application/json' },
+      })
     }
 
     let body: { action?: string; query?: string; limit?: number }
     try {
       body = await req.json()
     } catch {
-      return new Response(
-        JSON.stringify({ error: 'Invalid JSON' }),
-        { status: 400, headers: { ...cors, 'Content-Type': 'application/json' } }
-      )
+      return new Response(JSON.stringify({ error: 'Invalid JSON' }), {
+        status: 400,
+        headers: { ...cors, 'Content-Type': 'application/json' },
+      })
     }
 
     const { action = 'featured', query, limit = 20 } = body
@@ -78,10 +77,10 @@ serve(async (req) => {
     }
 
     if (action === 'search' && (!query || typeof query !== 'string')) {
-      return new Response(
-        JSON.stringify({ error: 'query is required for search action' }),
-        { status: 400, headers: { ...cors, 'Content-Type': 'application/json' } }
-      )
+      return new Response(JSON.stringify({ error: 'query is required for search action' }), {
+        status: 400,
+        headers: { ...cors, 'Content-Type': 'application/json' },
+      })
     }
 
     // Build Tenor URL — media_filter with commas must NOT be URL-encoded
@@ -103,15 +102,18 @@ serve(async (req) => {
 
     const data = await tenorRes.json()
 
-    return new Response(
-      JSON.stringify(data),
-      { headers: { ...cors, 'Content-Type': 'application/json', 'Cache-Control': 'public, max-age=300' } }
-    )
+    return new Response(JSON.stringify(data), {
+      headers: {
+        ...cors,
+        'Content-Type': 'application/json',
+        'Cache-Control': 'public, max-age=300',
+      },
+    })
   } catch (error) {
     console.error('Tenor proxy error:', error)
-    return new Response(
-      JSON.stringify({ error: error.message }),
-      { status: 500, headers: { ...cors, 'Content-Type': 'application/json' } }
-    )
+    return new Response(JSON.stringify({ error: error.message }), {
+      status: 500,
+      headers: { ...cors, 'Content-Type': 'application/json' },
+    })
   }
 })

@@ -6,9 +6,12 @@ interface CommandItem {
   description?: string
   icon: React.ElementType
   action: () => void
-  category: 'navigation' | 'squads' | 'sessions' | 'actions'
+  category: 'navigation' | 'squads' | 'sessions' | 'actions' | 'players'
   children?: CommandItem[]
-  preview?: { type: 'squad' | 'session' | 'navigation' | 'action'; data?: Record<string, unknown> }
+  preview?: {
+    type: 'squad' | 'session' | 'navigation' | 'action' | 'player'
+    data?: Record<string, unknown>
+  }
 }
 
 interface CommandPreviewPanelProps {
@@ -35,7 +38,8 @@ export function CommandPreviewPanel({ command }: CommandPreviewPanelProps) {
           </div>
           {preview.data && typeof (preview.data as { game?: string }).game === 'string' && (
             <div className="text-xs text-text-tertiary mb-2">
-              Jeu : <span className="text-text-secondary">{(preview.data as { game: string }).game}</span>
+              Jeu :{' '}
+              <span className="text-text-secondary">{(preview.data as { game: string }).game}</span>
             </div>
           )}
           {command.description && (
@@ -43,9 +47,14 @@ export function CommandPreviewPanel({ command }: CommandPreviewPanelProps) {
           )}
           {command.children && command.children.length > 0 && (
             <div className="mt-3 pt-3 border-t border-border-default">
-              <div className="text-xs text-text-tertiary uppercase tracking-wider mb-2">Actions</div>
-              {command.children.map(child => (
-                <div key={child.id} className="text-xs text-text-tertiary flex items-center gap-1.5 mb-1">
+              <div className="text-xs text-text-tertiary uppercase tracking-wider mb-2">
+                Actions
+              </div>
+              {command.children.map((child) => (
+                <div
+                  key={child.id}
+                  className="text-xs text-text-tertiary flex items-center gap-1.5 mb-1"
+                >
                   <child.icon className="w-3 h-3" />
                   {child.label}
                 </div>

@@ -1,23 +1,19 @@
-"use client";
+'use client'
 
 import { useEffect } from 'react'
 import { AnimatePresence, m } from 'framer-motion'
-import {
-  X,
-  CheckCircle2,
-  AlertTriangle,
-  Info,
-  Trophy,
-  RefreshCw,
-} from './icons'
+import { X, CheckCircle2, AlertTriangle, Info, Trophy, RefreshCw } from './icons'
 import { useNotificationBannerStore, type BannerType } from '../hooks/useNotificationBanner'
 
-const bannerConfig: Record<BannerType, {
-  bg: string
-  border: string
-  icon: typeof Info
-  iconColor: string
-}> = {
+const bannerConfig: Record<
+  BannerType,
+  {
+    bg: string
+    border: string
+    icon: typeof Info
+    iconColor: string
+  }
+> = {
   info: {
     bg: 'bg-primary/10',
     border: 'border-primary/20',
@@ -75,11 +71,18 @@ export default function NotificationBanner() {
           transition={{ type: 'spring', stiffness: 300, damping: 30 }}
           className={`fixed top-0 left-0 right-0 z-[9998] px-4 pt-[env(safe-area-inset-top,0px)]`}
         >
-          <div className={`max-w-xl mx-auto mt-3 px-4 py-3 rounded-xl border backdrop-blur-sm ${bannerConfig[activeBanner.type].bg} ${bannerConfig[activeBanner.type].border}`}>
+          <div
+            className={`max-w-xl mx-auto mt-3 px-4 py-3 rounded-xl border backdrop-blur-sm ${bannerConfig[activeBanner.type].bg} ${bannerConfig[activeBanner.type].border}`}
+          >
             <div className="flex items-start gap-3">
               {(() => {
                 const Icon = activeBanner.icon || bannerConfig[activeBanner.type].icon
-                return <Icon className="w-5 h-5 shrink-0 mt-0.5" style={{ color: bannerConfig[activeBanner.type].iconColor }} />
+                return (
+                  <Icon
+                    className="w-5 h-5 shrink-0 mt-0.5"
+                    style={{ color: bannerConfig[activeBanner.type].iconColor }}
+                  />
+                )
               })()}
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-medium text-text-primary">{activeBanner.title}</p>

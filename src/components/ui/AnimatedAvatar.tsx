@@ -1,7 +1,15 @@
 import { m } from 'framer-motion'
 import { memo } from 'react'
 
-export type AvatarStatus = 'online' | 'in-party' | 'in-session' | 'in-call' | 'busy' | 'dnd' | 'away' | 'offline'
+export type AvatarStatus =
+  | 'online'
+  | 'in-party'
+  | 'in-session'
+  | 'in-call'
+  | 'busy'
+  | 'dnd'
+  | 'away'
+  | 'offline'
 type AvatarSize = 'sm' | 'md' | 'lg' | 'xl'
 
 interface AnimatedAvatarProps {
@@ -14,7 +22,10 @@ interface AnimatedAvatarProps {
   layoutId?: string
 }
 
-const sizeConfig: Record<AvatarSize, { container: number; ring: number; strokeWidth: number; dotSize: string }> = {
+const sizeConfig: Record<
+  AvatarSize,
+  { container: number; ring: number; strokeWidth: number; dotSize: string }
+> = {
   sm: { container: 32, ring: 36, strokeWidth: 2, dotSize: 'w-2 h-2' },
   md: { container: 40, ring: 44, strokeWidth: 2.5, dotSize: 'w-2.5 h-2.5' },
   lg: { container: 48, ring: 52, strokeWidth: 3, dotSize: 'w-3 h-3' },
@@ -35,7 +46,7 @@ const statusColors: Record<AvatarStatus, string> = {
 function getInitials(name: string): string {
   return name
     .split(' ')
-    .map(w => w[0])
+    .map((w) => w[0])
     .join('')
     .toUpperCase()
     .slice(0, 2)
@@ -52,7 +63,8 @@ export const AnimatedAvatar = memo(function AnimatedAvatar({
 }: AnimatedAvatarProps) {
   const config = sizeConfig[size]
   const color = statusColors[status]
-  const isActive = status === 'online' || status === 'in-party' || status === 'in-session' || status === 'in-call'
+  const isActive =
+    status === 'online' || status === 'in-party' || status === 'in-session' || status === 'in-call'
   const circumference = Math.PI * (config.ring - config.strokeWidth)
 
   return (
@@ -136,7 +148,9 @@ export const AnimatedAvatar = memo(function AnimatedAvatar({
           aria-hidden="true"
         />
       )}
-      <span className="sr-only">{alt} ({status})</span>
+      <span className="sr-only">
+        {alt} ({status})
+      </span>
     </m.div>
   )
 })

@@ -13,15 +13,47 @@ vi.mock('framer-motion', async () => {
     motion: {
       ...actual.motion,
       div: ({ children, ...props }: any) => {
-        const { layoutId, transition, initial, animate: a, exit, drag, dragConstraints, dragElastic, onDragEnd, style: mStyle, ...rest } = props
-        return <div style={mStyle} {...rest}>{children}</div>
+        const {
+          layoutId,
+          transition,
+          initial,
+          animate: a,
+          exit,
+          drag,
+          dragConstraints,
+          dragElastic,
+          onDragEnd,
+          style: mStyle,
+          ...rest
+        } = props
+        return (
+          <div style={mStyle} {...rest}>
+            {children}
+          </div>
+        )
       },
     },
     m: {
       ...actual.m,
       div: ({ children, ...props }: any) => {
-        const { layoutId, transition, initial, animate: a, exit, drag, dragConstraints, dragElastic, onDragEnd, style: mStyle, ...rest } = props
-        return <div style={mStyle} {...rest}>{children}</div>
+        const {
+          layoutId,
+          transition,
+          initial,
+          animate: a,
+          exit,
+          drag,
+          dragConstraints,
+          dragElastic,
+          onDragEnd,
+          style: mStyle,
+          ...rest
+        } = props
+        return (
+          <div style={mStyle} {...rest}>
+            {children}
+          </div>
+        )
       },
     },
   }
@@ -66,8 +98,14 @@ describe('Tabs', () => {
         </TabsList>
       </Tabs>
     )
-    expect(screen.getByText('Tab 1').closest('[role="tab"]')).toHaveAttribute('aria-selected', 'false')
-    expect(screen.getByText('Tab 2').closest('[role="tab"]')).toHaveAttribute('aria-selected', 'true')
+    expect(screen.getByText('Tab 1').closest('[role="tab"]')).toHaveAttribute(
+      'aria-selected',
+      'false'
+    )
+    expect(screen.getByText('Tab 2').closest('[role="tab"]')).toHaveAttribute(
+      'aria-selected',
+      'true'
+    )
   })
 
   it('calls onChange on tab click', async () => {
@@ -92,7 +130,9 @@ describe('Tabs', () => {
       <Tabs value="tab1" onChange={onChange}>
         <TabsList>
           <Tab value="tab1">Tab 1</Tab>
-          <Tab value="tab2" disabled>Tab 2</Tab>
+          <Tab value="tab2" disabled>
+            Tab 2
+          </Tab>
         </TabsList>
       </Tabs>
     )

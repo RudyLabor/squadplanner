@@ -87,10 +87,9 @@ describe('useRingtone', () => {
   })
 
   it('starts playing when shouldPlay becomes true', () => {
-    const { rerender } = renderHook(
-      ({ shouldPlay }) => useRingtone(shouldPlay),
-      { initialProps: { shouldPlay: false } }
-    )
+    const { rerender } = renderHook(({ shouldPlay }) => useRingtone(shouldPlay), {
+      initialProps: { shouldPlay: false },
+    })
 
     // Rerender with shouldPlay=true
     rerender({ shouldPlay: true })
@@ -101,10 +100,9 @@ describe('useRingtone', () => {
   })
 
   it('stops playing when shouldPlay becomes false', () => {
-    const { rerender } = renderHook(
-      ({ shouldPlay }) => useRingtone(shouldPlay),
-      { initialProps: { shouldPlay: true } }
-    )
+    const { rerender } = renderHook(({ shouldPlay }) => useRingtone(shouldPlay), {
+      initialProps: { shouldPlay: true },
+    })
 
     // Start playing
     expect(mockAudioContextInstance.createOscillator).toHaveBeenCalled()

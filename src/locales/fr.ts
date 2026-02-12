@@ -74,7 +74,7 @@ export const fr = {
   // Temps
   time: {
     now: 'Maintenant',
-    today: 'Aujourd\'hui',
+    today: "Aujourd'hui",
     yesterday: 'Hier',
     tomorrow: 'Demain',
     thisWeek: 'Cette semaine',
@@ -94,7 +94,7 @@ export const fr = {
     unauthorized: 'Non autorisé',
     notFound: 'Introuvable',
     validation: 'Données invalides',
-    timeout: 'Délai d\'attente dépassé',
+    timeout: "Délai d'attente dépassé",
     offline: 'Vous êtes hors ligne',
     serverError: 'Erreur serveur',
   },
@@ -118,7 +118,7 @@ export const fr = {
     newMessage: 'Nouveau message',
     newMember: 'Nouveau membre',
     squadInvite: 'Invitation à une squad',
-    friendRequest: 'Demande d\'ami',
+    friendRequest: "Demande d'ami",
   },
 
   // Sessions
@@ -178,7 +178,7 @@ export const fr = {
       messages: 'Messages',
       messagesDesc: 'Nouveaux messages de ta squad',
       party: 'Party vocale',
-      partyDesc: 'Quand quelqu\'un rejoint la party',
+      partyDesc: "Quand quelqu'un rejoint la party",
       reminders: 'Rappels automatiques',
       remindersDesc: '30 min avant chaque session',
     },
@@ -192,7 +192,7 @@ export const fr = {
     appearance: {
       title: 'Apparence',
       theme: 'Thème',
-      themeDesc: 'Adapte l\'apparence de l\'app',
+      themeDesc: "Adapte l'apparence de l'app",
       dark: 'Sombre',
       light: 'Clair',
       auto: 'Auto',
@@ -225,11 +225,11 @@ export const fr = {
     },
     legal: {
       title: 'Légal',
-      terms: 'Conditions d\'utilisation',
+      terms: "Conditions d'utilisation",
       termsDesc: 'CGU de Squad Planner',
       privacy: 'Politique de confidentialité',
       privacyDesc: 'RGPD & protection des données',
-      landing: 'Page d\'accueil publique',
+      landing: "Page d'accueil publique",
       landingDesc: 'Voir la landing page',
     },
     signOut: 'Se déconnecter',
@@ -254,7 +254,7 @@ export const fr = {
   // Auth
   auth: {
     signIn: 'Se connecter',
-    signUp: 'S\'inscrire',
+    signUp: "S'inscrire",
     signOut: 'Se déconnecter',
     email: 'Email',
     password: 'Mot de passe',
@@ -265,4 +265,9 @@ export const fr = {
   },
 } as const
 
-export type TranslationKeys = typeof fr
+/** Structure des traductions avec valeurs string (pas de littéraux stricts) */
+type DeepStringify<T> = {
+  [K in keyof T]: T[K] extends string ? string : DeepStringify<T[K]>
+}
+
+export type TranslationKeys = DeepStringify<typeof fr>

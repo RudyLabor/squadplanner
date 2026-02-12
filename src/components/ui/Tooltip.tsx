@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 /**
  * PHASE - Tooltip Component
@@ -121,22 +121,23 @@ export function Tooltip({
     }
   }
 
-  const triggerContent = variant === 'help' ? (
-    <span className="inline-flex items-center gap-1">
-      {children}
-      <button
-        type="button"
-        aria-label="Aide"
-        className="inline-flex items-center justify-center rounded-full text-text-tertiary hover:text-text-secondary hover:bg-surface-card transition-colors focus-visible:outline-2 focus-visible:outline-primary"
-        style={{ width: helpIconSize + 6, height: helpIconSize + 6 }}
-        tabIndex={0}
-      >
-        <HelpCircle style={{ width: helpIconSize, height: helpIconSize }} />
-      </button>
-    </span>
-  ) : (
-    children
-  )
+  const triggerContent =
+    variant === 'help' ? (
+      <span className="inline-flex items-center gap-1">
+        {children}
+        <button
+          type="button"
+          aria-label="Aide"
+          className="inline-flex items-center justify-center rounded-full text-text-tertiary hover:text-text-secondary hover:bg-surface-card transition-colors focus-visible:outline-2 focus-visible:outline-primary"
+          style={{ width: helpIconSize + 6, height: helpIconSize + 6 }}
+          tabIndex={0}
+        >
+          <HelpCircle style={{ width: helpIconSize, height: helpIconSize }} />
+        </button>
+      </span>
+    ) : (
+      children
+    )
 
   return (
     <>
@@ -223,11 +224,7 @@ export function Tooltip({
  * Accessible tooltip for keyboard users
  * Shows tooltip content in a visually hidden span for screen readers
  */
-export function TooltipTrigger({
-  content,
-  children,
-  ...props
-}: TooltipProps) {
+export function TooltipTrigger({ content, children, ...props }: TooltipProps) {
   return (
     <Tooltip content={content} {...props}>
       <span className="relative">

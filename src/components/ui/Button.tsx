@@ -69,9 +69,16 @@ function ButtonInner<C extends ElementType = 'button'>(
   const cls = `${baseClasses} ${variantClasses[variant]} ${sc} ${wc} ${className}`
 
   const shouldHaptic = variant === 'primary' || variant === 'danger'
-  const originalOnClick = (props as Record<string, unknown>).onClick as ((...args: unknown[]) => void) | undefined
+  const originalOnClick = (props as Record<string, unknown>).onClick as
+    | ((...args: unknown[]) => void)
+    | undefined
   const handleClick = shouldHaptic
-    ? (...args: unknown[]) => { try { haptic.light() } catch {} originalOnClick?.(...args) }
+    ? (...args: unknown[]) => {
+        try {
+          haptic.light()
+        } catch {}
+        originalOnClick?.(...args)
+      }
     : originalOnClick
 
   const content = (
@@ -89,15 +96,38 @@ function ButtonInner<C extends ElementType = 'button'>(
           &#10003;
         </m.span>
       ) : isLoading ? (
-        <m.span key="loading" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="inline-flex items-center gap-2">
-          <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" aria-hidden="true" />
+        <m.span
+          key="loading"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="inline-flex items-center gap-2"
+        >
+          <div
+            className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin"
+            aria-hidden="true"
+          />
           {loadingText && <span>{loadingText}</span>}
         </m.span>
       ) : (
-        <m.span key="content" initial={false} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="inline-flex items-center gap-2">
-          {leftIcon && <span className="shrink-0" aria-hidden="true">{leftIcon}</span>}
+        <m.span
+          key="content"
+          initial={false}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="inline-flex items-center gap-2"
+        >
+          {leftIcon && (
+            <span className="shrink-0" aria-hidden="true">
+              {leftIcon}
+            </span>
+          )}
           {children}
-          {rightIcon && <span className="shrink-0" aria-hidden="true">{rightIcon}</span>}
+          {rightIcon && (
+            <span className="shrink-0" aria-hidden="true">
+              {rightIcon}
+            </span>
+          )}
         </m.span>
       )}
     </AnimatePresence>
@@ -107,7 +137,13 @@ function ButtonInner<C extends ElementType = 'button'>(
   if (as && as !== 'button') {
     const Component = as as ElementType
     return (
-      <Component ref={ref} className={cls} aria-busy={isLoading || undefined} {...props} onClick={handleClick}>
+      <Component
+        ref={ref}
+        className={cls}
+        aria-busy={isLoading || undefined}
+        {...props}
+        onClick={handleClick}
+      >
         {content}
       </Component>
     )
@@ -129,8 +165,9 @@ function ButtonInner<C extends ElementType = 'button'>(
   )
 }
 
-export const Button = forwardRef(ButtonInner as any) as <C extends ElementType = 'button'>(
+export const Button = forwardRef(ButtonInner as any) as unknown as <
+  C extends ElementType = 'button',
+>(
   props: ButtonProps<C> & { ref?: React.Ref<HTMLButtonElement> }
 ) => React.ReactElement
-
-(Button as any).displayName = 'Button'
+;(Button as any).displayName = 'Button'

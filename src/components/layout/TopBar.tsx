@@ -1,15 +1,8 @@
-"use client";
+'use client'
 
 import { memo, useCallback, useState } from 'react'
 import { Link } from 'react-router'
-import {
-  Search,
-  LayoutGrid,
-  Compass,
-  Settings,
-  HelpCircle,
-  Phone,
-} from '../icons'
+import { Search, LayoutGrid, Compass, Settings, HelpCircle, Phone } from '../icons'
 import { Breadcrumbs } from './Breadcrumbs'
 import { GlobalSearch } from '../GlobalSearch'
 import { NotificationBell } from '../NotificationCenter'
@@ -79,9 +72,14 @@ export const TopBar = memo(function TopBar() {
       </header>
 
       {/* More menu sheet */}
-      <Sheet open={showMoreMenu} onClose={() => setShowMoreMenu(false)} title="Navigation" side="bottom">
+      <Sheet
+        open={showMoreMenu}
+        onClose={() => setShowMoreMenu(false)}
+        title="Navigation"
+        side="bottom"
+      >
         <nav className="grid grid-cols-3 gap-4 py-2">
-          {moreMenuItems.map(item => (
+          {moreMenuItems.map((item) => (
             <Link
               key={item.path}
               to={item.path}

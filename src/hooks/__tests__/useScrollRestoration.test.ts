@@ -1,7 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { renderHook } from '@testing-library/react'
-import React from 'react'
-
 // Track the current mock pathname
 let mockPathname = '/home'
 
@@ -52,10 +50,7 @@ describe('useScrollRestoration', () => {
     const { unmount } = renderHook(() => useScrollRestoration())
     unmount()
 
-    expect(removeEventListenerSpy).toHaveBeenCalledWith(
-      'scroll',
-      expect.any(Function)
-    )
+    expect(removeEventListenerSpy).toHaveBeenCalledWith('scroll', expect.any(Function))
   })
 
   it('stores scroll positions in sessionStorage', () => {

@@ -69,7 +69,9 @@ function PartyCTA() {
               </m.div>
               <div className="flex-1">
                 <div className="text-md font-medium text-text-primary">Lance la party vocale !</div>
-                <div className="text-sm text-text-tertiary">Retrouve ta squad en un clic, vocal toujours ouvert</div>
+                <div className="text-sm text-text-tertiary">
+                  Retrouve ta squad en un clic, vocal toujours ouvert
+                </div>
               </div>
               <ChevronRight className="w-5 h-5 text-text-quaternary" />
             </div>

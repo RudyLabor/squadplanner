@@ -1,10 +1,4 @@
-export type Json =
-  | string
-  | number
-  | boolean
-  | null
-  | { [key: string]: Json | undefined }
-  | Json[]
+export type Json = string | number | boolean | null | { [key: string]: Json | undefined } | Json[]
 
 // Enum types
 export type SquadRole = 'leader' | 'co_leader' | 'member'
@@ -595,7 +589,12 @@ export interface Database {
       }
       // Phase 7: Custom Status
       update_user_status: {
-        Args: { p_user_id: string; p_status_emoji: string; p_status_text: string; p_duration_minutes?: number }
+        Args: {
+          p_user_id: string
+          p_status_emoji: string
+          p_status_text: string
+          p_duration_minutes?: number
+        }
         Returns: void
       }
       cleanup_expired_statuses: {
@@ -619,11 +618,23 @@ export interface Database {
       }
       // Phase 7: Search
       search_messages: {
-        Args: { p_user_id: string; p_query: string; p_squad_id?: string; p_limit?: number; p_offset?: number }
+        Args: {
+          p_user_id: string
+          p_query: string
+          p_squad_id?: string
+          p_limit?: number
+          p_offset?: number
+        }
         Returns: MessageSearchResult[]
       }
       search_direct_messages: {
-        Args: { p_user_id: string; p_query: string; p_other_user_id?: string; p_limit?: number; p_offset?: number }
+        Args: {
+          p_user_id: string
+          p_query: string
+          p_other_user_id?: string
+          p_limit?: number
+          p_offset?: number
+        }
         Returns: DMSearchResult[]
       }
       // Phase 7: Reactions

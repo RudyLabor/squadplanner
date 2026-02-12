@@ -12,13 +12,17 @@ function generateInviteCode(): string {
 }
 
 async function ensureProfileExists(userId: string, email?: string) {
-  const { data: existingProfile } = await supabase.from('profiles').select('id').eq('id', userId).single()
+  const { data: existingProfile } = await supabase
+    .from('profiles')
+    .select('id')
+    .eq('id', userId)
+    .single()
   if (!existingProfile) {
     const { error: profileError } = await supabase.from('profiles').insert({
       id: userId,
       username: email?.split('@')[0] || 'User',
       created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString()
+      updated_at: new Date().toISOString(),
     })
     if (profileError) {
       console.warn('[Squads] Profile creation error:', profileError)
@@ -27,20 +31,31 @@ async function ensureProfileExists(userId: string, email?: string) {
   }
 }
 
-export async function createSquadAction({ name, game }: { name: string; game: string }): Promise<{ squad: Squad | null; error: Error | null }> {
+export async function createSquadAction({
+  name,
+  game,
+}: {
+  name: string
+  game: string
+}): Promise<{ squad: Squad | null; error: Error | null }> {
   try {
-    const { data: { user } } = await supabase.auth.getUser()
+    const {
+      data: { user },
+    } = await supabase.auth.getUser()
     if (!user) throw new Error('Not authenticated')
 
     await ensureProfileExists(user.id, user.email)
 
     const inviteCode = generateInviteCode()
-    const { data: squad, error: squadError } = await supabase.from('squads')
+    const { data: squad, error: squadError } = await supabase
+      .from('squads')
       .insert({ name, game, owner_id: user.id, invite_code: inviteCode })
-      .select().single()
+      .select()
+      .single()
     if (squadError) throw squadError
 
-    const { error: memberError } = await supabase.from('squad_members')
+    const { error: memberError } = await supabase
+      .from('squad_members')
       .insert({ squad_id: squad.id, user_id: user.id, role: 'leader' as const })
     if (memberError) throw memberError
 
@@ -52,24 +67,38 @@ export async function createSquadAction({ name, game }: { name: string; game: st
 
 export async function joinSquadAction(inviteCode: string): Promise<{ error: Error | null }> {
   try {
-    const { data: { user } } = await supabase.auth.getUser()
+    const {
+      data: { user },
+    } = await supabase.auth.getUser()
     if (!user) throw new Error('Not authenticated')
 
     await ensureProfileExists(user.id, user.email)
 
-    const { data: squad, error: findError } = await supabase.from('squads')
-      .select('id').eq('invite_code', inviteCode.toUpperCase()).single()
-    if (findError || !squad) throw new Error('Code d\'invitation invalide')
+    const { data: squad, error: findError } = await supabase
+      .from('squads')
+      .select('id')
+      .eq('invite_code', inviteCode.toUpperCase())
+      .single()
+    if (findError || !squad) throw new Error("Code d'invitation invalide")
 
-    const { data: existing } = await supabase.from('squad_members')
-      .select('id').eq('squad_id', squad.id).eq('user_id', user.id).single()
+    const { data: existing } = await supabase
+      .from('squad_members')
+      .select('id')
+      .eq('squad_id', squad.id)
+      .eq('user_id', user.id)
+      .single()
     if (existing) throw new Error('Tu fais déjà partie de cette squad')
 
-    const { error: joinError } = await supabase.from('squad_members')
+    const { error: joinError } = await supabase
+      .from('squad_members')
       .insert({ squad_id: squad.id, user_id: user.id, role: 'member' as const })
     if (joinError) throw joinError
 
-    const { data: profile } = await supabase.from('profiles').select('username').eq('id', user.id).single()
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('username')
+      .eq('id', user.id)
+      .single()
     if (profile?.username) {
       sendMemberJoinedMessage(squad.id, profile.username).catch(() => {})
     }
@@ -82,15 +111,25 @@ export async function joinSquadAction(inviteCode: string): Promise<{ error: Erro
 
 export async function leaveSquadAction(squadId: string): Promise<{ error: Error | null }> {
   try {
-    const { data: { user } } = await supabase.auth.getUser()
+    const {
+      data: { user },
+    } = await supabase.auth.getUser()
     if (!user) throw new Error('Not authenticated')
 
-    const { data: profile } = await supabase.from('profiles').select('username').eq('id', user.id).single()
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('username')
+      .eq('id', user.id)
+      .single()
     if (profile?.username) {
       await sendMemberLeftMessage(squadId, profile.username)
     }
 
-    const { error } = await supabase.from('squad_members').delete().eq('squad_id', squadId).eq('user_id', user.id)
+    const { error } = await supabase
+      .from('squad_members')
+      .delete()
+      .eq('squad_id', squadId)
+      .eq('user_id', user.id)
     if (error) throw error
 
     return { error: null }

@@ -7,16 +7,12 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { supabase } from '../../lib/supabase'
 import type { Profile } from '../../types/database'
-import { showSuccess, showError } from '../../lib/toast'
+import { showSuccess } from '../../lib/toast'
 import { createOptimisticMutation } from '../../utils/optimisticUpdate'
 
 // Fetch profile by user ID
 async function fetchProfile(userId: string): Promise<Profile | null> {
-  const { data, error } = await supabase
-    .from('profiles')
-    .select('*')
-    .eq('id', userId)
-    .single()
+  const { data, error } = await supabase.from('profiles').select('*').eq('id', userId).single()
 
   if (error) {
     if (error.code === 'PGRST116') return null // Not found
@@ -27,7 +23,9 @@ async function fetchProfile(userId: string): Promise<Profile | null> {
 
 // Fetch current user's profile
 async function fetchCurrentProfile(): Promise<Profile | null> {
-  const { data: { user } } = await supabase.auth.getUser()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
   if (!user) return null
 
   return fetchProfile(user.id)
@@ -40,7 +38,7 @@ async function fetchCurrentProfile(): Promise<Profile | null> {
 export function useProfileQuery(userId: string | undefined) {
   return useQuery({
     queryKey: ['profile', userId] as const,
-    queryFn: () => userId ? fetchProfile(userId) : null,
+    queryFn: () => (userId ? fetchProfile(userId) : null),
     enabled: !!userId,
     staleTime: 30_000,
   })
@@ -81,7 +79,9 @@ export function useUpdateProfileMutation() {
 
   return useMutation({
     mutationFn: async (updates: Partial<Profile>) => {
-      const { data: { user } } = await supabase.auth.getUser()
+      const {
+        data: { user },
+      } = await supabase.auth.getUser()
       if (!user) throw new Error('Not authenticated')
 
       const { error } = await supabase

@@ -43,7 +43,12 @@ export function useAdaptiveLoading(): {
   const [tier, setTier] = useState<QualityTier>(getTier)
 
   useEffect(() => {
-    const nav = navigator as Navigator & { connection?: ConnectionInfo & { addEventListener?: (type: string, fn: () => void) => void; removeEventListener?: (type: string, fn: () => void) => void } }
+    const nav = navigator as Navigator & {
+      connection?: ConnectionInfo & {
+        addEventListener?: (type: string, fn: () => void) => void
+        removeEventListener?: (type: string, fn: () => void) => void
+      }
+    }
     const conn = nav.connection
 
     if (!conn?.addEventListener) return

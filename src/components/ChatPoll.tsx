@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 /**
  * Phase 4.1.2 — Chat Poll Display + Voting
@@ -44,7 +44,12 @@ interface ChatPollProps {
   isOwn?: boolean
 }
 
-export const ChatPoll = memo(function ChatPoll({ pollData, messageId, onVote, isOwn = false }: ChatPollProps) {
+export const ChatPoll = memo(function ChatPoll({
+  pollData,
+  messageId,
+  onVote,
+  isOwn = false,
+}: ChatPollProps) {
   const { user } = useAuthStore()
   const userId = user?.id
   const [votingIndex, setVotingIndex] = useState<number | null>(null)
@@ -73,15 +78,17 @@ export const ChatPoll = memo(function ChatPoll({ pollData, messageId, onVote, is
   }
 
   return (
-    <div className={`w-full max-w-[320px] rounded-xl overflow-hidden ${
-      isOwn
-        ? 'bg-border-hover'
-        : 'bg-primary-10 border border-primary'
-    }`}>
+    <div
+      className={`w-full max-w-[320px] rounded-xl overflow-hidden ${
+        isOwn ? 'bg-border-hover' : 'bg-primary-10 border border-primary'
+      }`}
+    >
       {/* Header */}
       <div className="px-4 pt-3 pb-2 flex items-center gap-2">
         <BarChart3 className={`w-4 h-4 ${isOwn ? 'text-text-secondary' : 'text-primary-hover'}`} />
-        <span className={`text-base font-semibold ${isOwn ? 'text-text-primary' : 'text-text-primary'}`}>
+        <span
+          className={`text-base font-semibold ${isOwn ? 'text-text-primary' : 'text-text-primary'}`}
+        >
           Sondage
         </span>
       </div>
@@ -109,9 +116,7 @@ export const ChatPoll = memo(function ChatPoll({ pollData, messageId, onVote, is
               onClick={() => handleVote(index)}
               disabled={hasVoted || pollData.closed}
               className={`w-full relative rounded-lg overflow-hidden transition-colors ${
-                hasVoted
-                  ? 'cursor-default'
-                  : 'hover:bg-border-subtle cursor-pointer'
+                hasVoted ? 'cursor-default' : 'hover:bg-border-subtle cursor-pointer'
               }`}
             >
               {/* Background bar */}
@@ -121,23 +126,23 @@ export const ChatPoll = memo(function ChatPoll({ pollData, messageId, onVote, is
                   animate={{ width: `${percentage}%` }}
                   transition={{ duration: 0.5, ease: 'easeOut' }}
                   className={`absolute inset-0 rounded-lg ${
-                    isMyVote
-                      ? 'bg-primary-20'
-                      : 'bg-border-subtle'
+                    isMyVote ? 'bg-primary-20' : 'bg-border-subtle'
                   }`}
                 />
               )}
 
               <div className="relative flex items-center justify-between px-3 py-2.5">
                 <div className="flex items-center gap-2">
-                  {isMyVote && (
-                    <Check className="w-3.5 h-3.5 text-primary-hover" />
-                  )}
-                  <span className={`text-base ${
-                    isOwn
-                      ? 'text-text-primary'
-                      : isMyVote ? 'text-primary-hover font-medium' : 'text-text-secondary'
-                  }`}>
+                  {isMyVote && <Check className="w-3.5 h-3.5 text-primary-hover" />}
+                  <span
+                    className={`text-base ${
+                      isOwn
+                        ? 'text-text-primary'
+                        : isMyVote
+                          ? 'text-primary-hover font-medium'
+                          : 'text-text-secondary'
+                    }`}
+                  >
                     {option}
                   </span>
                   {isVoting && (
@@ -145,9 +150,11 @@ export const ChatPoll = memo(function ChatPoll({ pollData, messageId, onVote, is
                   )}
                 </div>
                 {hasVoted && (
-                  <span className={`text-sm font-medium ${
-                    isOwn ? 'text-text-tertiary' : 'text-text-quaternary'
-                  }`}>
+                  <span
+                    className={`text-sm font-medium ${
+                      isOwn ? 'text-text-tertiary' : 'text-text-quaternary'
+                    }`}
+                  >
                     {percentage}%
                   </span>
                 )}
@@ -158,9 +165,11 @@ export const ChatPoll = memo(function ChatPoll({ pollData, messageId, onVote, is
       </div>
 
       {/* Footer */}
-      <div className={`px-4 py-2 border-t flex items-center gap-1.5 ${
-        isOwn ? 'border-border-default' : 'border-border-default'
-      }`}>
+      <div
+        className={`px-4 py-2 border-t flex items-center gap-1.5 ${
+          isOwn ? 'border-border-default' : 'border-border-default'
+        }`}
+      >
         <Users className={`w-3 h-3 ${isOwn ? 'text-text-quaternary' : 'text-text-quaternary'}`} />
         <span className={`text-sm ${isOwn ? 'text-text-quaternary' : 'text-text-quaternary'}`}>
           {totalVotes} vote{totalVotes !== 1 ? 's' : ''}

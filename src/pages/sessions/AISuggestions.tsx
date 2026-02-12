@@ -8,7 +8,10 @@ interface AISlotSuggestionsProps {
   hasSlotHistory?: boolean
 }
 
-export function AISlotSuggestions({ slotSuggestions, hasSlotHistory = false }: AISlotSuggestionsProps) {
+export function AISlotSuggestions({
+  slotSuggestions,
+  hasSlotHistory = false,
+}: AISlotSuggestionsProps) {
   if (slotSuggestions.length === 0) return null
   return (
     <section className="mb-6" aria-label="Suggestions de créneaux IA">
@@ -18,17 +21,29 @@ export function AISlotSuggestions({ slotSuggestions, hasSlotHistory = false }: A
             <Sparkles className="w-5 h-5 text-purple" />
           </div>
           <div className="flex-1">
-            <h3 className="text-md font-semibold text-text-primary mb-2">Meilleurs créneaux suggérés</h3>
+            <h3 className="text-md font-semibold text-text-primary mb-2">
+              Meilleurs créneaux suggérés
+            </h3>
             {!hasSlotHistory && (
-              <p className="text-sm text-text-tertiary mb-2">Suggestions basées sur les habitudes de ta squad. Plus tu joues, plus elles seront précises.</p>
+              <p className="text-sm text-text-tertiary mb-2">
+                Suggestions basées sur les habitudes de ta squad. Plus tu joues, plus elles seront
+                précises.
+              </p>
             )}
             <div className="space-y-2">
               {slotSuggestions.slice(0, 3).map((slot, index) => (
-                <div key={index} className="flex items-center justify-between p-2 rounded-lg bg-overlay-medium">
-                  <span className="text-base text-text-secondary">{dayNames[slot.day_of_week]} {slot.hour}h</span>
+                <div
+                  key={index}
+                  className="flex items-center justify-between p-2 rounded-lg bg-overlay-medium"
+                >
+                  <span className="text-base text-text-secondary">
+                    {dayNames[slot.day_of_week]} {slot.hour}h
+                  </span>
                   <div className="flex items-center gap-2">
                     <TrendingUp className="w-3.5 h-3.5 text-success" />
-                    <span className="text-sm font-medium text-success">{slot.reliability_score}%</span>
+                    <span className="text-sm font-medium text-success">
+                      {slot.reliability_score}%
+                    </span>
                   </div>
                 </div>
               ))}

@@ -10,7 +10,10 @@ import type { User } from '@supabase/supabase-js'
 
 // Fetch current auth user
 async function fetchAuthUser(): Promise<User | null> {
-  const { data: { user }, error } = await supabase.auth.getUser()
+  const {
+    data: { user },
+    error,
+  } = await supabase.auth.getUser()
   if (error) {
     console.warn('Auth error:', error.message)
     return null

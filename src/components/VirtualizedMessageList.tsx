@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 import { useRef, useEffect, useCallback, memo } from 'react'
 import { useVirtualizer } from '@tanstack/react-virtual'
@@ -6,7 +6,12 @@ import { AnimatePresence } from 'framer-motion'
 import { LoadingMore } from './ui/LoadingMore'
 import { MessageListSkeleton } from './MessageSkeletons'
 
-export { MessageListSkeleton, ConversationSkeleton, DMConversationSkeleton, ConversationListSkeleton } from './MessageSkeletons'
+export {
+  MessageListSkeleton,
+  ConversationSkeleton,
+  DMConversationSkeleton,
+  ConversationListSkeleton,
+} from './MessageSkeletons'
 
 interface Message {
   id: string
@@ -47,23 +52,26 @@ export const VirtualizedMessageList = memo(function VirtualizedMessageList({
   const isAutoScrollingRef = useRef(true)
   const lastMessageCountRef = useRef(messages.length)
 
-  const estimateSize = useCallback((index: number) => {
-    const message = messages[index]
-    if (!message) return 80
+  const estimateSize = useCallback(
+    (index: number) => {
+      const message = messages[index]
+      if (!message) return 80
 
-    if (message.is_system_message) return 60
+      if (message.is_system_message) return 60
 
-    const contentLength = message.content.length
-    const hasReply = !!message.reply_to_id
-    const hasReactions = isSquadChat
+      const contentLength = message.content.length
+      const hasReply = !!message.reply_to_id
+      const hasReactions = isSquadChat
 
-    let baseHeight = 70
-    baseHeight += Math.ceil(contentLength / 50) * 20
-    if (hasReply) baseHeight += 40
-    if (hasReactions) baseHeight += 24
+      let baseHeight = 70
+      baseHeight += Math.ceil(contentLength / 50) * 20
+      if (hasReply) baseHeight += 40
+      if (hasReactions) baseHeight += 24
 
-    return Math.min(baseHeight, 300)
-  }, [messages, isSquadChat])
+      return Math.min(baseHeight, 300)
+    },
+    [messages, isSquadChat]
+  )
 
   const virtualizer = useVirtualizer({
     count: messages.length,
@@ -155,9 +163,7 @@ export const VirtualizedMessageList = memo(function VirtualizedMessageList({
         })}
       </div>
 
-      <AnimatePresence>
-        {typingIndicator}
-      </AnimatePresence>
+      <AnimatePresence>{typingIndicator}</AnimatePresence>
 
       <div id="messages-end" />
     </div>

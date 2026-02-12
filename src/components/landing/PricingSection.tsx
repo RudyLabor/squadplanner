@@ -6,7 +6,12 @@ export function PricingSection() {
   return (
     <section id="pricing" aria-label="Tarifs" className="px-4 md:px-6 py-10 md:py-14">
       <div className="max-w-4xl mx-auto">
-        <m.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-12">
+        <m.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="text-center mb-12"
+        >
           <h2 className="text-xl md:text-2xl font-bold text-text-primary mb-4">
             Tarifs simples, sans surprise
           </h2>
@@ -29,9 +34,18 @@ export function PricingSection() {
               <span className="text-3xl font-bold text-text-primary">0€</span>
               <span className="text-text-quaternary text-sm">/mois</span>
             </div>
-            <p className="text-base text-text-tertiary mb-5">Tout ce qu'il faut pour jouer avec ta squad.</p>
+            <p className="text-base text-text-tertiary mb-5">
+              Tout ce qu'il faut pour jouer avec ta squad.
+            </p>
             <ul className="space-y-2.5 mb-6">
-              {['2 squads gratuites', 'Sessions avec RSVP', 'Chat de squad', 'Score de fiabilité', 'Party vocale', 'Notifications push'].map(f => (
+              {[
+                '2 squads gratuites',
+                'Sessions avec RSVP',
+                'Chat de squad',
+                'Score de fiabilité',
+                'Party vocale',
+                'Notifications push',
+              ].map((f) => (
                 <li key={f} className="flex items-center gap-2 text-base text-text-secondary">
                   <Check className="w-4 h-4 text-success flex-shrink-0" />
                   {f}
@@ -65,9 +79,19 @@ export function PricingSection() {
               <span className="text-3xl font-bold text-text-primary">4,99€</span>
               <span className="text-text-quaternary text-sm">/mois</span>
             </div>
-            <p className="text-base text-text-tertiary mb-5">Pour les squads qui veulent aller plus loin.</p>
+            <p className="text-base text-text-tertiary mb-5">
+              Pour les squads qui veulent aller plus loin.
+            </p>
             <ul className="space-y-2.5 mb-6">
-              {['Tout le plan Gratuit', 'Squads illimitées', 'Coach IA avancé', 'Qualité audio HD', 'Historique illimité', 'Stats avancées', 'Badges exclusifs'].map(f => (
+              {[
+                'Tout le plan Gratuit',
+                'Squads illimitées',
+                'Coach IA avancé',
+                'Qualité audio HD',
+                'Historique illimité',
+                'Stats avancées',
+                'Badges exclusifs',
+              ].map((f) => (
                 <li key={f} className="flex items-center gap-2 text-base text-text-secondary">
                   <Check className="w-4 h-4 text-primary flex-shrink-0" />
                   {f}
@@ -89,19 +113,47 @@ export function PricingSection() {
         {/* Trust badges */}
         <div className="flex flex-wrap items-center justify-center gap-4 mt-8 text-sm text-text-quaternary">
           <span className="flex items-center gap-1.5">
-            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
+              />
+            </svg>
             Données hébergées en France
           </span>
           <span className="flex items-center gap-1.5">
-            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+              />
+            </svg>
             Chiffrement SSL
           </span>
           <span className="flex items-center gap-1.5">
-            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
             Conforme RGPD
           </span>
           <span className="flex items-center gap-1.5">
-            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" /></svg>
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"
+              />
+            </svg>
             Paiement sécurisé Stripe
           </span>
         </div>

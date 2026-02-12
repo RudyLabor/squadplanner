@@ -5,7 +5,10 @@ let audioContext: AudioContext | null = null
 
 function getAudioContext(): AudioContext {
   if (!audioContext) {
-    audioContext = new (window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext)()
+    audioContext = new (
+      window.AudioContext ||
+      (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext
+    )()
   }
   return audioContext
 }
@@ -46,7 +49,7 @@ export function useRingtone(shouldPlay: boolean): UseRingtoneReturn {
 
   const stopRingtone = useCallback(() => {
     // Stop all oscillators
-    oscillatorsRef.current.forEach(osc => {
+    oscillatorsRef.current.forEach((osc) => {
       try {
         osc.stop()
         osc.disconnect()
@@ -98,11 +101,11 @@ export function useRingtone(shouldPlay: boolean): UseRingtoneReturn {
         oscillatorsRef.current = oscillators
 
         // Start oscillators
-        oscillators.forEach(osc => osc.start())
+        oscillators.forEach((osc) => osc.start())
 
         // Stop after 1 second (ring duration)
         timeoutRef.current = setTimeout(() => {
-          oscillators.forEach(osc => {
+          oscillators.forEach((osc) => {
             try {
               osc.stop()
               osc.disconnect()
@@ -132,7 +135,6 @@ export function useRingtone(shouldPlay: boolean): UseRingtoneReturn {
         }
         vibratePattern()
       }
-
     } catch (error) {
       console.warn('[Ringtone] Error playing ringtone:', error)
       isPlayingRef.current = false
@@ -155,7 +157,7 @@ export function useRingtone(shouldPlay: boolean): UseRingtoneReturn {
   return {
     play: playRingtone,
     stop: stopRingtone,
-    isPlaying: isPlayingRef.current
+    isPlaying: isPlayingRef.current,
   }
 }
 

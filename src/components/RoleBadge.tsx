@@ -19,15 +19,17 @@ interface RoleBadgeProps {
  * Displays a member's role with color coding.
  * Only shows for non-member roles (leader, co_leader, moderator).
  */
-export const RoleBadge = memo(function RoleBadge({ role, size = 'sm', showIcon = true }: RoleBadgeProps) {
+export const RoleBadge = memo(function RoleBadge({
+  role,
+  size = 'sm',
+  showIcon = true,
+}: RoleBadgeProps) {
   if (role === 'member') return null
 
   const config = getRoleConfig(role)
   const description = ROLE_DESCRIPTIONS[role]
 
-  const sizeClasses = size === 'sm'
-    ? 'text-xs px-1.5 py-0.5 gap-0.5'
-    : 'text-sm px-2 py-0.5 gap-1'
+  const sizeClasses = size === 'sm' ? 'text-xs px-1.5 py-0.5 gap-0.5' : 'text-sm px-2 py-0.5 gap-1'
 
   const badge = (
     <span

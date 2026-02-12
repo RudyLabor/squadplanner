@@ -1,19 +1,11 @@
-"use client";
+'use client'
 
 import { memo, useState, useMemo } from 'react'
 import { Link } from 'react-router'
 import { m } from 'framer-motion'
-import {
-  Users,
-  Star,
-  Copy,
-  Check,
-  Gamepad2,
-  Eye,
-} from '../icons'
+import { Users, Star, Copy, Check, Gamepad2, Eye } from '../icons'
 import type { PublicSquadResult } from '../../types/database'
 import { showSuccess, showError } from '../../lib/toast'
-import { useAuthStore } from '../../hooks/useAuth'
 import { useSquadsStore } from '../../hooks/useSquads'
 
 interface Props {
@@ -22,9 +14,8 @@ interface Props {
 
 export const DiscoverSquadCard = memo(function DiscoverSquadCard({ squad }: Props) {
   const [copied, setCopied] = useState(false)
-  const { user } = useAuthStore()
   const { squads: mySquads } = useSquadsStore()
-  const isMember = useMemo(() => mySquads.some(s => s.id === squad.id), [mySquads, squad.id])
+  const isMember = useMemo(() => mySquads.some((s) => s.id === squad.id), [mySquads, squad.id])
 
   const handleCopyCode = async () => {
     try {
@@ -38,8 +29,12 @@ export const DiscoverSquadCard = memo(function DiscoverSquadCard({ squad }: Prop
   }
 
   // Guard against NaN/undefined for reliability — owner always counts as 1 member minimum
-  const reliability = Number.isFinite(squad.avg_reliability) && squad.avg_reliability > 0 ? Math.round(squad.avg_reliability) : null
-  const memberCount = Number.isFinite(squad.member_count) && squad.member_count > 0 ? squad.member_count : 1
+  const reliability =
+    Number.isFinite(squad.avg_reliability) && squad.avg_reliability > 0
+      ? Math.round(squad.avg_reliability)
+      : null
+  const memberCount =
+    Number.isFinite(squad.member_count) && squad.member_count > 0 ? squad.member_count : 1
 
   return (
     <m.div
@@ -100,8 +95,11 @@ export const DiscoverSquadCard = memo(function DiscoverSquadCard({ squad }: Prop
       {/* Tags */}
       {squad.tags && squad.tags.length > 0 && (
         <div className="flex gap-1 mb-2 flex-wrap">
-          {squad.tags.map(tag => (
-            <span key={tag} className="text-xs px-1.5 py-0.5 rounded bg-overlay-subtle text-text-tertiary">
+          {squad.tags.map((tag) => (
+            <span
+              key={tag}
+              className="text-xs px-1.5 py-0.5 rounded bg-overlay-subtle text-text-tertiary"
+            >
               {tag}
             </span>
           ))}
@@ -111,13 +109,23 @@ export const DiscoverSquadCard = memo(function DiscoverSquadCard({ squad }: Prop
       {/* Owner */}
       <div className="pt-2 border-t border-border-subtle flex items-center gap-2">
         {squad.owner_avatar ? (
-          <img src={squad.owner_avatar} alt="" className="w-4 h-4 rounded-full" loading="lazy" decoding="async" />
+          <img
+            src={squad.owner_avatar}
+            alt=""
+            className="w-4 h-4 rounded-full"
+            loading="lazy"
+            decoding="async"
+          />
         ) : (
           <div className="w-4 h-4 rounded-full bg-indigo-500/20 flex items-center justify-center">
-            <span className="text-2xs text-indigo-400 font-bold">{(squad.owner_username || '?').charAt(0).toUpperCase()}</span>
+            <span className="text-2xs text-indigo-400 font-bold">
+              {(squad.owner_username || '?').charAt(0).toUpperCase()}
+            </span>
           </div>
         )}
-        <span className="text-sm text-text-tertiary">{`Créé par`} {squad.owner_username || 'un joueur'}</span>
+        <span className="text-sm text-text-tertiary">
+          {`Créé par`} {squad.owner_username || 'un joueur'}
+        </span>
       </div>
     </m.div>
   )

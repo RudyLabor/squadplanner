@@ -12,17 +12,17 @@ export function createDMActions(set: SetState, get: GetState) {
     sendMessage: async (content: string, receiverId: string) => {
       if (!isSupabaseReady()) return { error: new Error('Supabase not ready') }
       try {
-        const { data: { session } } = await supabase.auth.getSession()
+        const {
+          data: { session },
+        } = await supabase.auth.getSession()
         const user = session?.user
         if (!user) throw new Error('Not authenticated')
 
-        const { error } = await supabase
-          .from('direct_messages')
-          .insert({
-            content: content.trim(),
-            sender_id: user.id,
-            receiver_id: receiverId,
-          })
+        const { error } = await supabase.from('direct_messages').insert({
+          content: content.trim(),
+          sender_id: user.id,
+          receiver_id: receiverId,
+        })
 
         if (error) throw error
         return { error: null }
@@ -49,98 +49,99 @@ export function createDMActions(set: SetState, get: GetState) {
       const subscriptionId = Symbol('dm-subscription')
       ;(get as any).__pendingSubscription = subscriptionId
 
-      supabase.auth.getSession().then(({ data: { session } }) => {
-        const user = session?.user
-        if (!user) return
+      supabase.auth
+        .getSession()
+        .then(({ data: { session } }) => {
+          const user = session?.user
+          if (!user) return
 
-        // Bail out if another subscription was started while we were awaiting
-        if ((get as any).__pendingSubscription !== subscriptionId) return
+          // Bail out if another subscription was started while we were awaiting
+          if ((get as any).__pendingSubscription !== subscriptionId) return
 
-        const channelName = `dm:${[user.id, otherUserId].sort().join(':')}`
+          const channelName = `dm:${[user.id, otherUserId].sort().join(':')}`
 
-        const dmFilter = `or(and(sender_id.eq.${user.id},receiver_id.eq.${otherUserId}),and(sender_id.eq.${otherUserId},receiver_id.eq.${user.id}))`
+          const dmFilter = `or(and(sender_id.eq.${user.id},receiver_id.eq.${otherUserId}),and(sender_id.eq.${otherUserId},receiver_id.eq.${user.id}))`
 
-        const channel = supabase
-          .channel(channelName)
-          .on(
-            'postgres_changes',
-            {
-              event: 'INSERT',
-              schema: 'public',
-              table: 'direct_messages',
-              filter: dmFilter,
-            },
-            async (payload) => {
-              try {
-                const newMsg = payload.new as DirectMessage
+          const channel = supabase
+            .channel(channelName)
+            .on(
+              'postgres_changes',
+              {
+                event: 'INSERT',
+                schema: 'public',
+                table: 'direct_messages',
+                filter: dmFilter,
+              },
+              async (payload) => {
+                try {
+                  const newMsg = payload.new as DirectMessage
+
+                  const isRelevant =
+                    (newMsg.sender_id === user.id && newMsg.receiver_id === otherUserId) ||
+                    (newMsg.sender_id === otherUserId && newMsg.receiver_id === user.id)
+
+                  if (!isRelevant) return
+
+                  const { data: sender } = await supabase
+                    .from('profiles')
+                    .select('username, avatar_url')
+                    .eq('id', newMsg.sender_id)
+                    .single()
+
+                  const fullMessage: DirectMessage = {
+                    ...newMsg,
+                    sender: sender || undefined,
+                  }
+
+                  if (newMsg.sender_id === otherUserId) {
+                    playNotificationSound()
+                  }
+
+                  set((state) => ({
+                    messages: [...state.messages, fullMessage],
+                  }))
+
+                  if (newMsg.sender_id === otherUserId) {
+                    get().markAsRead(otherUserId)
+                  }
+                } catch (err: any) {
+                  if (err?.name === 'AbortError') return
+                  console.warn('[DM] Error in INSERT handler:', err)
+                }
+              }
+            )
+            .on(
+              'postgres_changes',
+              {
+                event: 'UPDATE',
+                schema: 'public',
+                table: 'direct_messages',
+                filter: dmFilter,
+              },
+              (payload) => {
+                const updatedMsg = payload.new as DirectMessage
 
                 const isRelevant =
-                  (newMsg.sender_id === user.id && newMsg.receiver_id === otherUserId) ||
-                  (newMsg.sender_id === otherUserId && newMsg.receiver_id === user.id)
+                  (updatedMsg.sender_id === user.id && updatedMsg.receiver_id === otherUserId) ||
+                  (updatedMsg.sender_id === otherUserId && updatedMsg.receiver_id === user.id)
 
                 if (!isRelevant) return
 
-                const { data: sender } = await supabase
-                  .from('profiles')
-                  .select('username, avatar_url')
-                  .eq('id', newMsg.sender_id)
-                  .single()
-
-                const fullMessage: DirectMessage = {
-                  ...newMsg,
-                  sender: sender || undefined
-                }
-
-                if (newMsg.sender_id === otherUserId) {
-                  playNotificationSound()
-                }
-
-                set(state => ({
-                  messages: [...state.messages, fullMessage]
+                set((state) => ({
+                  messages: state.messages.map((msg) =>
+                    msg.id === updatedMsg.id ? { ...msg, read_at: updatedMsg.read_at } : msg
+                  ),
                 }))
-
-                if (newMsg.sender_id === otherUserId) {
-                  get().markAsRead(otherUserId)
-                }
-              } catch (err: any) {
-                if (err?.name === 'AbortError') return
-                console.warn('[DM] Error in INSERT handler:', err)
               }
-            }
-          )
-          .on(
-            'postgres_changes',
-            {
-              event: 'UPDATE',
-              schema: 'public',
-              table: 'direct_messages',
-              filter: dmFilter,
-            },
-            (payload) => {
-              const updatedMsg = payload.new as DirectMessage
+            )
+            .subscribe()
 
-              const isRelevant =
-                (updatedMsg.sender_id === user.id && updatedMsg.receiver_id === otherUserId) ||
-                (updatedMsg.sender_id === otherUserId && updatedMsg.receiver_id === user.id)
-
-              if (!isRelevant) return
-
-              set(state => ({
-                messages: state.messages.map(msg =>
-                  msg.id === updatedMsg.id
-                    ? { ...msg, read_at: updatedMsg.read_at }
-                    : msg
-                )
-              }))
-            }
-          )
-          .subscribe()
-
-        set({ realtimeChannel: channel })
-      }).catch((err: any) => {
-        if (err?.name === 'AbortError') return
-        console.warn('[DM] Error subscribing to messages:', err)
-      })
+          set({ realtimeChannel: channel })
+        })
+        .catch((err: any) => {
+          if (err?.name === 'AbortError') return
+          console.warn('[DM] Error subscribing to messages:', err)
+        })
     },
 
     unsubscribe: () => {
@@ -154,13 +155,15 @@ export function createDMActions(set: SetState, get: GetState) {
     markAsRead: async (otherUserId: string) => {
       if (!isSupabaseReady()) return
       try {
-        const { data: { session } } = await supabase.auth.getSession()
+        const {
+          data: { session },
+        } = await supabase.auth.getSession()
         const user = session?.user
         if (!user) return
 
         const { error } = await supabase.rpc('batch_mark_dms_read', {
           p_user_id: user.id,
-          p_other_user_id: otherUserId
+          p_other_user_id: otherUserId,
         })
 
         if (error) {
@@ -172,13 +175,13 @@ export function createDMActions(set: SetState, get: GetState) {
             .is('read_at', null)
         }
 
-        set(state => ({
-          conversations: state.conversations.map(conv => {
+        set((state) => ({
+          conversations: state.conversations.map((conv) => {
             if (conv.other_user_id === otherUserId) {
               return { ...conv, unread_count: 0 }
             }
             return conv
-          })
+          }),
         }))
 
         await useUnreadCountStore.getState().fetchCounts()
@@ -191,12 +194,14 @@ export function createDMActions(set: SetState, get: GetState) {
     startConversation: async (userId: string) => {
       if (!isSupabaseReady()) return null
       try {
-        const { data: { session } } = await supabase.auth.getSession()
+        const {
+          data: { session },
+        } = await supabase.auth.getSession()
         const user = session?.user
         if (!user) throw new Error('Not authenticated')
 
         const { conversations } = get()
-        const existing = conversations.find(c => c.other_user_id === userId)
+        const existing = conversations.find((c) => c.other_user_id === userId)
         if (existing) return existing
 
         const { data: profile, error } = await supabase
@@ -217,8 +222,8 @@ export function createDMActions(set: SetState, get: GetState) {
           unread_count: 0,
         }
 
-        set(state => ({
-          conversations: [newConv, ...state.conversations]
+        set((state) => ({
+          conversations: [newConv, ...state.conversations],
         }))
 
         return newConv

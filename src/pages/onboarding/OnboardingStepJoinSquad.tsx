@@ -1,14 +1,9 @@
-import { m } from 'framer-motion'
-import {
-  UserPlus,
-  ArrowLeft,
-  ArrowRight,
-  Loader2,
-} from '../../components/icons'
+import { m, type Variants } from 'framer-motion'
+import { UserPlus, ArrowLeft, ArrowRight, Loader2 } from '../../components/icons'
 import { Button, Card, Input } from '../../components/ui'
 
 interface OnboardingStepJoinSquadProps {
-  slideVariants: Record<string, unknown>
+  slideVariants: Variants
   inviteCode: string
   error: string | null
   isLoading: boolean
@@ -18,17 +13,16 @@ interface OnboardingStepJoinSquadProps {
 }
 
 export function OnboardingStepJoinSquad({
-  slideVariants, inviteCode, error, isLoading,
-  onInviteCodeChange, onJoinSquad, onBack
+  slideVariants,
+  inviteCode,
+  error,
+  isLoading,
+  onInviteCodeChange,
+  onJoinSquad,
+  onBack,
 }: OnboardingStepJoinSquadProps) {
   return (
-    <m.div
-      key="join-squad"
-      variants={slideVariants}
-      initial="enter"
-      animate="center"
-      exit="exit"
-    >
+    <m.div key="join-squad" variants={slideVariants} initial="enter" animate="center" exit="exit">
       <button
         onClick={onBack}
         className="flex items-center gap-2 text-text-secondary hover:text-text-primary transition-colors mb-6"
@@ -41,12 +35,8 @@ export function OnboardingStepJoinSquad({
         <div className="w-16 h-16 rounded-2xl bg-success-10 flex items-center justify-center mx-auto mb-4">
           <UserPlus className="w-8 h-8 text-success" />
         </div>
-        <h2 className="text-xl font-bold text-text-primary mb-2">
-          Rejoins une squad
-        </h2>
-        <p className="text-text-secondary">
-          Entre le code que ton ami t'a donn&eacute;
-        </p>
+        <h2 className="text-xl font-bold text-text-primary mb-2">Rejoins une squad</h2>
+        <p className="text-text-secondary">Entre le code que ton ami t'a donn&eacute;</p>
       </div>
 
       <Card>
@@ -68,11 +58,7 @@ export function OnboardingStepJoinSquad({
             </div>
           )}
 
-          <Button
-            onClick={onJoinSquad}
-            disabled={isLoading}
-            className="w-full h-12"
-          >
+          <Button onClick={onJoinSquad} disabled={isLoading} className="w-full h-12">
             {isLoading ? (
               <>
                 <Loader2 className="w-5 h-5 animate-spin mr-2" />

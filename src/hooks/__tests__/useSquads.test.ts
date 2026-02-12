@@ -117,7 +117,9 @@ describe('useSquadsStore', () => {
 
       let result: { squad: any; error: Error | null } = { squad: null, error: null }
       await act(async () => {
-        result = await useSquadsStore.getState().createSquad({ name: 'New Squad', game: 'Valorant' })
+        result = await useSquadsStore
+          .getState()
+          .createSquad({ name: 'New Squad', game: 'Valorant' })
       })
 
       expect(result.error).toBeNull()

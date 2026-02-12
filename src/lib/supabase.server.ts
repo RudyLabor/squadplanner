@@ -1,5 +1,7 @@
 import { createServerClient, parseCookieHeader, serializeCookieHeader } from '@supabase/ssr'
-import type { Database } from '@/types/database'
+// TODO: Re-enable strict Database typing after running `npx supabase gen types typescript`
+// import type { Database } from '../types/database'
+type Database = any
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
@@ -26,7 +28,10 @@ export function createSupabaseServerClient(request: Request) {
   const supabase = createServerClient<Database>(supabaseUrl!, supabaseAnonKey!, {
     cookies: {
       getAll() {
-        return parseCookieHeader(request.headers.get('Cookie') ?? '')
+        return parseCookieHeader(request.headers.get('Cookie') ?? '') as {
+          name: string
+          value: string
+        }[]
       },
       setAll(cookiesToSet) {
         cookiesToSet.forEach(({ name, value, options }) =>

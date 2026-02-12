@@ -37,7 +37,7 @@ export function SegmentedControl<T extends string>({
       className={`inline-flex bg-bg-surface border border-border-subtle rounded-xl ${containerPadding[size]}`}
       role="tablist"
     >
-      {options.map(option => {
+      {options.map((option) => {
         const isActive = value === option.value
         const Icon = option.icon
 

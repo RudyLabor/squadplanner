@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 import { memo, useRef, useCallback, useMemo } from 'react'
 import { m, useMotionValue, useTransform, type PanInfo } from 'framer-motion'
@@ -57,10 +57,13 @@ const SwipeableMessage = memo(function SwipeableMessage({
   const x = useMotionValue(0)
 
   // Compute drag constraints based on enabled directions
-  const dragConstraints = useMemo(() => ({
-    left: enableSwipeLeft ? -MAX_DRAG : 0,
-    right: enableSwipeRight ? MAX_DRAG : 0,
-  }), [enableSwipeLeft, enableSwipeRight])
+  const dragConstraints = useMemo(
+    () => ({
+      left: enableSwipeLeft ? -MAX_DRAG : 0,
+      right: enableSwipeRight ? MAX_DRAG : 0,
+    }),
+    [enableSwipeLeft, enableSwipeRight]
+  )
 
   // Opacity for left action indicator (reply) - visible when dragging left
   const leftIndicatorOpacity = useTransform(x, [-MAX_DRAG, -SWIPE_THRESHOLD, 0], [1, 0.7, 0])
@@ -70,35 +73,41 @@ const SwipeableMessage = memo(function SwipeableMessage({
   const rightIndicatorOpacity = useTransform(x, [0, SWIPE_THRESHOLD, MAX_DRAG], [0, 0.7, 1])
   const rightIndicatorScale = useTransform(x, [0, SWIPE_THRESHOLD, MAX_DRAG], [0.5, 0.8, 1])
 
-  const handleDrag = useCallback((_: unknown, info: PanInfo) => {
-    const offset = info.offset.x
+  const handleDrag = useCallback(
+    (_: unknown, info: PanInfo) => {
+      const offset = info.offset.x
 
-    // Fire haptic once when crossing threshold
-    if (!hapticFiredRef.current) {
-      if (enableSwipeLeft && offset < -SWIPE_THRESHOLD) {
-        triggerHaptic('selection')
-        hapticFiredRef.current = true
-      } else if (enableSwipeRight && offset > SWIPE_THRESHOLD) {
-        triggerHaptic('selection')
-        hapticFiredRef.current = true
+      // Fire haptic once when crossing threshold
+      if (!hapticFiredRef.current) {
+        if (enableSwipeLeft && offset < -SWIPE_THRESHOLD) {
+          triggerHaptic('selection')
+          hapticFiredRef.current = true
+        } else if (enableSwipeRight && offset > SWIPE_THRESHOLD) {
+          triggerHaptic('selection')
+          hapticFiredRef.current = true
+        }
       }
-    }
-  }, [enableSwipeLeft, enableSwipeRight, triggerHaptic])
+    },
+    [enableSwipeLeft, enableSwipeRight, triggerHaptic]
+  )
 
-  const handleDragEnd = useCallback((_: unknown, info: PanInfo) => {
-    const offset = info.offset.x
+  const handleDragEnd = useCallback(
+    (_: unknown, info: PanInfo) => {
+      const offset = info.offset.x
 
-    if (enableSwipeLeft && offset < -SWIPE_THRESHOLD && onReply) {
-      triggerHaptic('light')
-      onReply()
-    } else if (enableSwipeRight && offset > SWIPE_THRESHOLD && onActions) {
-      triggerHaptic('light')
-      onActions()
-    }
+      if (enableSwipeLeft && offset < -SWIPE_THRESHOLD && onReply) {
+        triggerHaptic('light')
+        onReply()
+      } else if (enableSwipeRight && offset > SWIPE_THRESHOLD && onActions) {
+        triggerHaptic('light')
+        onActions()
+      }
 
-    // Reset haptic guard for next gesture
-    hapticFiredRef.current = false
-  }, [enableSwipeLeft, enableSwipeRight, onReply, onActions, triggerHaptic])
+      // Reset haptic guard for next gesture
+      hapticFiredRef.current = false
+    },
+    [enableSwipeLeft, enableSwipeRight, onReply, onActions, triggerHaptic]
+  )
 
   const handleDragStart = useCallback(() => {
     hapticFiredRef.current = false

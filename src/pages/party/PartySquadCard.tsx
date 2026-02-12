@@ -2,7 +2,11 @@ import { m } from 'framer-motion'
 import { Mic, Gamepad2, Loader2 } from '../../components/icons'
 import { Card, Button } from '../../components/ui'
 
-export function PartySquadCard({ squad, onJoin, isConnecting }: {
+export function PartySquadCard({
+  squad,
+  onJoin,
+  isConnecting,
+}: {
   squad: { id: string; name: string; game: string; member_count: number }
   onJoin: () => void
   isConnecting: boolean
@@ -16,10 +20,24 @@ export function PartySquadCard({ squad, onJoin, isConnecting }: {
           </div>
           <div className="flex-1 min-w-0">
             <h3 className="text-md font-semibold text-text-primary truncate">{squad.name}</h3>
-            <p className="text-sm text-text-secondary">{squad.game} · {squad.member_count} membre{squad.member_count > 1 ? 's' : ''}</p>
+            <p className="text-sm text-text-secondary">
+              {squad.game} · {squad.member_count} membre{squad.member_count > 1 ? 's' : ''}
+            </p>
           </div>
-          <Button size="sm" variant="primary" onClick={onJoin} disabled={isConnecting} className="shadow-md shadow-primary/10">
-            {isConnecting ? <Loader2 className="w-4 h-4 animate-spin" /> : <><Mic className="w-4 h-4" /> Rejoindre</>}
+          <Button
+            size="sm"
+            variant="primary"
+            onClick={onJoin}
+            disabled={isConnecting}
+            className="shadow-md shadow-primary/10"
+          >
+            {isConnecting ? (
+              <Loader2 className="w-4 h-4 animate-spin" />
+            ) : (
+              <>
+                <Mic className="w-4 h-4" /> Rejoindre
+              </>
+            )}
           </Button>
         </div>
       </Card>

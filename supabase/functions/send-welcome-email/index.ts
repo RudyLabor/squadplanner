@@ -20,7 +20,8 @@ const ALLOWED_ORIGINS = [
 ].filter(Boolean)
 
 function getCorsHeaders(origin: string | null) {
-  const matchedOrigin = origin && ALLOWED_ORIGINS.some(allowed => origin === allowed) ? origin : null
+  const matchedOrigin =
+    origin && ALLOWED_ORIGINS.some((allowed) => origin === allowed) ? origin : null
   return {
     'Access-Control-Allow-Origin': matchedOrigin || ALLOWED_ORIGINS[0],
     'Access-Control-Allow-Methods': 'POST, OPTIONS',
@@ -207,7 +208,9 @@ serve(async (req) => {
         throw new Error('User profile not found')
       }
 
-      const { data: authUser, error: authError } = await supabase.auth.admin.getUserById(body.userId)
+      const { data: authUser, error: authError } = await supabase.auth.admin.getUserById(
+        body.userId
+      )
 
       if (authError || !authUser?.user?.email) {
         throw new Error('User email not found')
@@ -227,7 +230,7 @@ serve(async (req) => {
       const emailResponse = await fetch('https://api.resend.com/emails', {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${RESEND_API_KEY}`,
+          Authorization: `Bearer ${RESEND_API_KEY}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
@@ -247,10 +250,10 @@ serve(async (req) => {
       const result = await emailResponse.json()
       console.log('[send-welcome-email] Email sent successfully:', result.id)
 
-      return new Response(
-        JSON.stringify({ success: true, emailId: result.id }),
-        { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      )
+      return new Response(JSON.stringify({ success: true, emailId: result.id }), {
+        status: 200,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      })
     } else {
       // No API key - log the email content for development
       console.log('[send-welcome-email] No RESEND_API_KEY configured. Would send email to:', email)
@@ -268,9 +271,9 @@ serve(async (req) => {
     }
   } catch (error) {
     console.error('[send-welcome-email] Error:', error)
-    return new Response(
-      JSON.stringify({ error: error.message || 'Internal server error' }),
-      { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-    )
+    return new Response(JSON.stringify({ error: error.message || 'Internal server error' }), {
+      status: 500,
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    })
   }
 })

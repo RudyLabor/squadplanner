@@ -9,10 +9,7 @@ import { Skeleton, SkeletonText, SkeletonAvatar, SkeletonButton } from './Skelet
  */
 export function SkeletonSessionCard() {
   return (
-    <div
-      className="p-4 rounded-xl bg-bg-elevated border border-border-subtle"
-      aria-hidden="true"
-    >
+    <div className="p-4 rounded-xl bg-bg-elevated border border-border-subtle" aria-hidden="true">
       {/* Header with game icon and info */}
       <div className="flex items-center gap-3 mb-3">
         <Skeleton className="w-10 h-10" rounded="lg" />
@@ -49,10 +46,7 @@ export const SessionCardSkeleton = SkeletonSessionCard
  */
 export function SkeletonSquadCard() {
   return (
-    <div
-      className="p-4 rounded-xl bg-bg-elevated border border-border-subtle"
-      aria-hidden="true"
-    >
+    <div className="p-4 rounded-xl bg-bg-elevated border border-border-subtle" aria-hidden="true">
       <div className="flex items-center gap-3 mb-3">
         <Skeleton className="w-12 h-12" rounded="xl" />
         <div className="flex-1">
@@ -83,17 +77,11 @@ export const SquadCardSkeleton = SkeletonSquadCard
  */
 export function SkeletonMessageBubble({ isOwn = false }: { isOwn?: boolean }) {
   return (
-    <div
-      className={`flex gap-2 ${isOwn ? 'flex-row-reverse' : ''}`}
-      aria-hidden="true"
-    >
+    <div className={`flex gap-2 ${isOwn ? 'flex-row-reverse' : ''}`} aria-hidden="true">
       {!isOwn && <SkeletonAvatar size="sm" />}
       <div className={`max-w-[70%] ${isOwn ? 'items-end' : 'items-start'}`}>
         {!isOwn && <Skeleton className="h-3 w-20 mb-1" rounded="sm" />}
-        <Skeleton
-          className={`h-16 w-48 ${isOwn ? 'bg-primary/20' : ''}`}
-          rounded="xl"
-        />
+        <Skeleton className={`h-16 w-48 ${isOwn ? 'bg-primary/20' : ''}`} rounded="xl" />
         <Skeleton className="h-2 w-12 mt-1" rounded="sm" />
       </div>
     </div>

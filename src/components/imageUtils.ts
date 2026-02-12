@@ -42,7 +42,12 @@ export function getVercelImageUrl(src: string, width?: number, quality: number =
   return `/_vercel/image?${params.toString()}`
 }
 
-export function getOptimizedSrc(src: string, width?: number, webpSrc?: string, avifSrc?: string): string {
+export function getOptimizedSrc(
+  src: string,
+  width?: number,
+  webpSrc?: string,
+  avifSrc?: string
+): string {
   if (avifSrc && checkAVIFSupport()) return avifSrc
   if (webpSrc && checkWebPSupport()) return webpSrc
 

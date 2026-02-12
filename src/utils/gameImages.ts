@@ -4,7 +4,7 @@
  */
 
 // Cache en mémoire pour éviter les recherches répétées
-const imageCache = new Map<string, string>();
+const imageCache = new Map<string, string>()
 
 // Mapping statique des jeux populaires vers leurs images de couverture
 // URLs provenant de sources publiques (Wikipedia, Steam, sites officiels)
@@ -18,10 +18,8 @@ const GAME_IMAGES: Record<string, string> = {
     'https://media.contentapi.ea.com/content/dam/apex-legends/images/2019/01/apex-featured-image-16x9.jpg.adapt.crop191x100.1200w.jpg',
   'counter-strike':
     'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/730/header.jpg',
-  'cs:go':
-    'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/730/header.jpg',
-  'cs2':
-    'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/730/header.jpg',
+  'cs:go': 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/730/header.jpg',
+  cs2: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/730/header.jpg',
   overwatch:
     'https://images.blz-contentstack.com/v3/assets/blt2477dcaf4ebd440c/blt6ffc0c5e37b07bcd/62f28cd87058e60932fc4aff/OW_MenuArt_Tracer_4K_PNG.png',
   'overwatch 2':
@@ -34,15 +32,13 @@ const GAME_IMAGES: Record<string, string> = {
   // MOBA / Strategy
   'league of legends':
     'https://images.contentstack.io/v3/assets/blt187521ff0727be24/bltad3c18c0b5ef7574/60ee0e87e7d6fc0f2ef6f82e/lol-logo-rendered-hi-res.png',
-  'dota 2':
-    'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/570/header.jpg',
+  'dota 2': 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/570/header.jpg',
 
   // Sports
   fifa: 'https://media.contentapi.ea.com/content/dam/ea/fifa/fifa-23/common/featured-tiles/fifa-23-featured-tile-16x9.jpg.adapt.crop191x100.1200w.jpg',
   'fc 24':
     'https://media.contentapi.ea.com/content/dam/ea/fifa/fc-24/common/featured-tiles/fc-24-featured-tile-16x9.jpg.adapt.crop191x100.1200w.jpg',
-  'nba 2k':
-    'https://cdn2.steamgriddb.com/grid/8e9c6f1f14d0f4c8a1e1c9e5c9a0c1a1.png',
+  'nba 2k': 'https://cdn2.steamgriddb.com/grid/8e9c6f1f14d0f4c8a1e1c9e5c9a0c1a1.png',
   'rocket league':
     'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/252950/header.jpg',
 
@@ -57,12 +53,9 @@ const GAME_IMAGES: Record<string, string> = {
   rust: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/252490/header.jpg',
 
   // Autres jeux populaires
-  destiny:
-    'https://www.bungie.net/7/ca/destiny/bgs/new_light/hero_desktop.jpg',
-  'destiny 2':
-    'https://www.bungie.net/7/ca/destiny/bgs/new_light/hero_desktop.jpg',
-  forza:
-    'https://compass-ssl.xbox.com/assets/56/39/56398597-4913-4663-9faf-5a62c48df7d5.jpg',
+  destiny: 'https://www.bungie.net/7/ca/destiny/bgs/new_light/hero_desktop.jpg',
+  'destiny 2': 'https://www.bungie.net/7/ca/destiny/bgs/new_light/hero_desktop.jpg',
+  forza: 'https://compass-ssl.xbox.com/assets/56/39/56398597-4913-4663-9faf-5a62c48df7d5.jpg',
   halo: 'https://www.halowaypoint.com/images/halo-infinite/logos/halo-infinite-logo.png',
   pubg: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/578080/header.jpg',
   'rainbow six':
@@ -70,7 +63,7 @@ const GAME_IMAGES: Record<string, string> = {
   'world of warcraft':
     'https://bnetcmsus-a.akamaihd.net/cms/template_resource/FWLOR72GM5S01509666988943.jpg',
   wow: 'https://bnetcmsus-a.akamaihd.net/cms/template_resource/FWLOR72GM5S01509666988943.jpg',
-};
+}
 
 // Couleurs de gradient pour les fallbacks basées sur la première lettre
 const GRADIENT_COLORS: Record<string, [string, string]> = {
@@ -100,7 +93,7 @@ const GRADIENT_COLORS: Record<string, [string, string]> = {
   x: ['#a8edea', '#fed6e3'],
   y: ['#fbc2eb', '#a6c1ee'],
   z: ['#fdcbf1', '#e6dee9'],
-};
+}
 
 /**
  * Normalise le nom d'un jeu pour la recherche
@@ -110,15 +103,15 @@ function normalizeGameName(gameName: string): string {
     .toLowerCase()
     .trim()
     .replace(/[^a-z0-9\s]/g, '')
-    .replace(/\s+/g, ' ');
+    .replace(/\s+/g, ' ')
 }
 
 /**
  * Génère une couleur de gradient basée sur la première lettre du jeu
  */
 function getGradientForGame(gameName: string): [string, string] {
-  const firstLetter = gameName.charAt(0).toLowerCase();
-  return GRADIENT_COLORS[firstLetter] || ['#667eea', '#764ba2'];
+  const firstLetter = gameName.charAt(0).toLowerCase()
+  return GRADIENT_COLORS[firstLetter] || ['#667eea', '#764ba2']
 }
 
 /**
@@ -127,26 +120,26 @@ function getGradientForGame(gameName: string): [string, string] {
  * @returns URL de l'image ou une chaîne vide pour utiliser le fallback gradient
  */
 export function getGameImageUrl(gameName: string): string {
-  if (!gameName) return '';
+  if (!gameName) return ''
 
   // Vérifier le cache
   if (imageCache.has(gameName)) {
-    return imageCache.get(gameName)!;
+    return imageCache.get(gameName)!
   }
 
-  const normalized = normalizeGameName(gameName);
+  const normalized = normalizeGameName(gameName)
 
   // Rechercher dans le mapping statique
   for (const [key, url] of Object.entries(GAME_IMAGES)) {
     if (normalized.includes(key) || key.includes(normalized)) {
-      imageCache.set(gameName, url);
-      return url;
+      imageCache.set(gameName, url)
+      return url
     }
   }
 
   // Pas d'image trouvée, retourner une chaîne vide pour utiliser le fallback
-  imageCache.set(gameName, '');
-  return '';
+  imageCache.set(gameName, '')
+  return ''
 }
 
 /**
@@ -155,8 +148,8 @@ export function getGameImageUrl(gameName: string): string {
  * @returns CSS gradient string
  */
 export function getGameGradient(gameName: string): string {
-  const [color1, color2] = getGradientForGame(gameName);
-  return `linear-gradient(135deg, ${color1} 0%, ${color2} 100%)`;
+  const [color1, color2] = getGradientForGame(gameName)
+  return `linear-gradient(135deg, ${color1} 0%, ${color2} 100%)`
 }
 
 /**
@@ -165,7 +158,7 @@ export function getGameGradient(gameName: string): string {
  * @returns Première lettre en majuscule
  */
 export function getGameInitial(gameName: string): string {
-  return gameName.charAt(0).toUpperCase();
+  return gameName.charAt(0).toUpperCase()
 }
 
 /**
@@ -174,5 +167,5 @@ export function getGameInitial(gameName: string): string {
  * @returns true si une image est disponible
  */
 export function hasGameImage(gameName: string): boolean {
-  return getGameImageUrl(gameName) !== '';
+  return getGameImageUrl(gameName) !== ''
 }

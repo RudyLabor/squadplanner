@@ -67,7 +67,14 @@ describe('useAIStore', () => {
   describe('fetchSlotSuggestions', () => {
     it('sets suggestions on success', async () => {
       const mockSuggestions = [
-        { day_of_week: 6, hour: 20, reliability_score: 80, session_count: 5, avg_attendance: 85, reason: 'Popular slot' },
+        {
+          day_of_week: 6,
+          hour: 20,
+          reliability_score: 80,
+          session_count: 5,
+          avg_attendance: 85,
+          reason: 'Popular slot',
+        },
       ]
       mockFunctionsInvoke.mockResolvedValue({
         data: { suggestions: mockSuggestions, has_history: true },
@@ -252,8 +259,20 @@ describe('useAIStore', () => {
   describe('fetchInsights', () => {
     it('sets insights from database', async () => {
       const mockInsights = [
-        { id: 'ins-1', insight_type: 'attendance', content: { message: 'Good' }, is_dismissed: false, created_at: '2025-01-01' },
-        { id: 'ins-2', insight_type: 'timing', content: { message: 'Try earlier' }, is_dismissed: false, created_at: '2025-01-02' },
+        {
+          id: 'ins-1',
+          insight_type: 'attendance',
+          content: { message: 'Good' },
+          is_dismissed: false,
+          created_at: '2025-01-01',
+        },
+        {
+          id: 'ins-2',
+          insight_type: 'timing',
+          content: { message: 'Try earlier' },
+          is_dismissed: false,
+          created_at: '2025-01-02',
+        },
       ]
 
       mockFrom.mockReturnValue({
@@ -283,8 +302,20 @@ describe('useAIStore', () => {
       act(() => {
         useAIStore.setState({
           insights: [
-            { id: 'ins-1', insight_type: 'attendance', content: {}, is_dismissed: false, created_at: '2025-01-01' },
-            { id: 'ins-2', insight_type: 'timing', content: {}, is_dismissed: false, created_at: '2025-01-02' },
+            {
+              id: 'ins-1',
+              insight_type: 'attendance',
+              content: {},
+              is_dismissed: false,
+              created_at: '2025-01-01',
+            },
+            {
+              id: 'ins-2',
+              insight_type: 'timing',
+              content: {},
+              is_dismissed: false,
+              created_at: '2025-01-02',
+            },
           ],
         })
       })
@@ -411,11 +442,11 @@ describe('useAIStore', () => {
       })
 
       expect(result).toEqual({
-        tip: 'Pr\u00eat pour la prochaine session ? Tes potes t\'attendent !',
+        tip: "Pr\u00eat pour la prochaine session ? Tes potes t'attendent !",
         tone: 'encouragement',
       })
       expect(useAIStore.getState().aiCoachTip).toEqual({
-        tip: 'Pr\u00eat pour la prochaine session ? Tes potes t\'attendent !',
+        tip: "Pr\u00eat pour la prochaine session ? Tes potes t'attendent !",
         tone: 'encouragement',
       })
       expect(useAIStore.getState().aiCoachTipLoading).toBe(false)

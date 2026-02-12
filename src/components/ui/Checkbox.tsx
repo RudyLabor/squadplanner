@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 import { m } from 'framer-motion'
 import { useId, useCallback, type KeyboardEvent } from 'react'
@@ -36,7 +36,9 @@ export function Checkbox({
 
   const handleClick = useCallback(() => {
     if (!disabled) {
-      try { haptic.light() } catch {}
+      try {
+        haptic.light()
+      } catch {}
       onChange(!isChecked)
     }
   }, [disabled, onChange, isChecked])
@@ -51,7 +53,7 @@ export function Checkbox({
     [disabled, onChange, isChecked]
   )
 
-  const ariaChecked = isIndeterminate ? 'mixed' as const : isChecked
+  const ariaChecked = isIndeterminate ? ('mixed' as const) : isChecked
 
   return (
     <div className="flex items-start gap-3">

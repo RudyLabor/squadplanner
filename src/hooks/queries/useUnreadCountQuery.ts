@@ -36,7 +36,7 @@ async function fetchUnreadCounts(userId: string, squadIds: string[]): Promise<Un
       .from('direct_messages')
       .select('id', { count: 'exact', head: true })
       .eq('receiver_id', userId)
-      .is('read_at', null)
+      .is('read_at', null),
   ])
 
   const squadUnread = squadCountResult.count || 0
@@ -45,7 +45,7 @@ async function fetchUnreadCounts(userId: string, squadIds: string[]): Promise<Un
   return {
     squadUnread,
     dmUnread,
-    totalUnread: squadUnread + dmUnread
+    totalUnread: squadUnread + dmUnread,
   }
 }
 
@@ -56,7 +56,10 @@ async function fetchUnreadCounts(userId: string, squadIds: string[]): Promise<Un
 export function useUnreadCountQuery(userId: string | undefined, squadIds: string[]) {
   return useQuery({
     queryKey: ['messages', 'unread', userId] as const,
-    queryFn: () => userId ? fetchUnreadCounts(userId, squadIds) : { squadUnread: 0, dmUnread: 0, totalUnread: 0 },
+    queryFn: () =>
+      userId
+        ? fetchUnreadCounts(userId, squadIds)
+        : { squadUnread: 0, dmUnread: 0, totalUnread: 0 },
     enabled: !!userId && squadIds.length > 0,
     staleTime: 30_000,
     // Unread counts are updated via Realtime subscriptions in the app,

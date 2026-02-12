@@ -43,11 +43,7 @@ export {
 } from './useSquadMembers'
 
 // User Profile
-export {
-  useProfileQuery,
-  useCurrentProfileQuery,
-  useUpdateProfileMutation,
-} from './useUserProfile'
+export { useProfileQuery, useCurrentProfileQuery, useUpdateProfileMutation } from './useUserProfile'
 
 // Subscriptions
 export {
@@ -86,10 +82,7 @@ export {
 } from './useChallenges'
 
 // Squad Leaderboard
-export {
-  useSquadLeaderboardQuery,
-  type LeaderboardEntry,
-} from './useSquadLeaderboard'
+export { useSquadLeaderboardQuery, type LeaderboardEntry } from './useSquadLeaderboard'
 
 // Phase 6: Social Discovery
 export {
@@ -100,11 +93,7 @@ export {
 } from './useDiscoverQueries'
 
 // Activity Feed
-export {
-  useActivityFeedQuery,
-  getRelativeTime,
-  type ActivityItem,
-} from './useActivityFeedQuery'
+export { useActivityFeedQuery, getRelativeTime, type ActivityItem } from './useActivityFeedQuery'
 
 // Re-export query client and keys
 export { queryClient, queryKeys } from '../../lib/queryClient'

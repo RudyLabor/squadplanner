@@ -36,7 +36,9 @@ export function ShortcutsHelpModal({ isOpen, onClose, shortcutKey }: ShortcutsHe
               </div>
               <div className="p-5 space-y-4">
                 <div>
-                  <h3 className="text-sm font-semibold text-text-tertiary uppercase tracking-wider mb-2">Navigation</h3>
+                  <h3 className="text-sm font-semibold text-text-tertiary uppercase tracking-wider mb-2">
+                    Navigation
+                  </h3>
                   <div className="space-y-2">
                     {[
                       { key: 'H', action: 'Accueil' },
@@ -48,13 +50,17 @@ export function ShortcutsHelpModal({ isOpen, onClose, shortcutKey }: ShortcutsHe
                     ].map(({ key, action }) => (
                       <div key={key} className="flex items-center justify-between">
                         <span className="text-base text-text-secondary">{action}</span>
-                        <kbd className="px-2 py-1 rounded bg-border-subtle text-sm font-mono text-text-primary">{key}</kbd>
+                        <kbd className="px-2 py-1 rounded bg-border-subtle text-sm font-mono text-text-primary">
+                          {key}
+                        </kbd>
                       </div>
                     ))}
                   </div>
                 </div>
                 <div>
-                  <h3 className="text-sm font-semibold text-text-tertiary uppercase tracking-wider mb-2">Global</h3>
+                  <h3 className="text-sm font-semibold text-text-tertiary uppercase tracking-wider mb-2">
+                    Global
+                  </h3>
                   <div className="space-y-2">
                     {[
                       { key: `${shortcutKey} K`, action: 'Palette de commandes' },
@@ -63,7 +69,9 @@ export function ShortcutsHelpModal({ isOpen, onClose, shortcutKey }: ShortcutsHe
                     ].map(({ key, action }) => (
                       <div key={key} className="flex items-center justify-between">
                         <span className="text-base text-text-secondary">{action}</span>
-                        <kbd className="px-2 py-1 rounded bg-border-subtle text-sm font-mono text-text-primary">{key}</kbd>
+                        <kbd className="px-2 py-1 rounded bg-border-subtle text-sm font-mono text-text-primary">
+                          {key}
+                        </kbd>
                       </div>
                     ))}
                   </div>

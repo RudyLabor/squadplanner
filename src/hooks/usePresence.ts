@@ -58,15 +58,18 @@ export function usePresence({
   const currentPageRef = useRef<string>('home')
 
   // Track presence state
-  const trackPresence = useCallback(async (channel: RealtimeChannel) => {
-    await channel.track({
-      userId,
-      username,
-      avatar_url: avatarUrl,
-      online_at: new Date().toISOString(),
-      current_page: currentPageRef.current,
-    })
-  }, [userId, username, avatarUrl])
+  const trackPresence = useCallback(
+    async (channel: RealtimeChannel) => {
+      await channel.track({
+        userId,
+        username,
+        avatar_url: avatarUrl,
+        online_at: new Date().toISOString(),
+        current_page: currentPageRef.current,
+      })
+    },
+    [userId, username, avatarUrl]
+  )
 
   // Subscribe to squad presence channel
   useEffect(() => {
@@ -145,12 +148,15 @@ export function usePresence({
   }, [squadId, userId, trackPresence])
 
   // Update current page
-  const setCurrentPage = useCallback((page: string) => {
-    currentPageRef.current = page
-    if (channelRef.current) {
-      trackPresence(channelRef.current)
-    }
-  }, [trackPresence])
+  const setCurrentPage = useCallback(
+    (page: string) => {
+      currentPageRef.current = page
+      if (channelRef.current) {
+        trackPresence(channelRef.current)
+      }
+    },
+    [trackPresence]
+  )
 
   // Check if user is online
   const isUserOnline = useCallback(

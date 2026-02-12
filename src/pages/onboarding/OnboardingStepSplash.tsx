@@ -1,16 +1,21 @@
-import { m } from 'framer-motion'
+import { m, type Variants } from 'framer-motion'
 import { ArrowRight } from '../../components/icons'
 import { Button } from '../../components/ui'
 import { SquadPlannerIcon } from '../../components/SquadPlannerLogo'
 
 interface OnboardingStepSplashProps {
-  slideVariants: Record<string, unknown>
+  slideVariants: Variants
   isNavigating: boolean
   onStart: () => void
   onSkip: () => void
 }
 
-export function OnboardingStepSplash({ slideVariants, isNavigating, onStart, onSkip }: OnboardingStepSplashProps) {
+export function OnboardingStepSplash({
+  slideVariants,
+  isNavigating,
+  onStart,
+  onSkip,
+}: OnboardingStepSplashProps) {
   return (
     <m.div
       key="splash"
@@ -37,7 +42,8 @@ export function OnboardingStepSplash({ slideVariants, isNavigating, onStart, onS
         transition={{ delay: 0.2 }}
         className="text-2xl md:text-3xl font-bold text-text-primary mb-4 leading-tight"
       >
-        Arr&ecirc;tez de dire<br />
+        Arr&ecirc;tez de dire
+        <br />
         <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-purple">
           "on verra"
         </span>

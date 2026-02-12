@@ -6,7 +6,11 @@
 import { useQuery } from '@tanstack/react-query'
 import { supabase } from '../../lib/supabase'
 import { queryKeys } from '../../lib/queryClient'
-import type { PublicSquadResult, GlobalLeaderboardEntry, MatchmakingPlayer } from '../../types/database'
+import type {
+  PublicSquadResult,
+  GlobalLeaderboardEntry,
+  MatchmakingPlayer,
+} from '../../types/database'
 
 // --- Browse Public Squads ---
 
@@ -27,7 +31,7 @@ async function fetchPublicSquads(game?: string, region?: string): Promise<Public
 
   // Filter out test/debug squads
   const TEST_PATTERNS = /\b(test|debug|audit)\b/i
-  return squads.filter(s => !TEST_PATTERNS.test(s.name))
+  return squads.filter((s) => !TEST_PATTERNS.test(s.name))
 }
 
 export function useBrowseSquadsQuery(game?: string, region?: string) {
@@ -41,7 +45,11 @@ export function useBrowseSquadsQuery(game?: string, region?: string) {
 
 // --- Global Leaderboard ---
 
-async function fetchGlobalLeaderboard(game?: string, region?: string, limit = 50): Promise<GlobalLeaderboardEntry[]> {
+async function fetchGlobalLeaderboard(
+  game?: string,
+  region?: string,
+  limit = 50
+): Promise<GlobalLeaderboardEntry[]> {
   const { data, error } = await supabase.rpc('get_global_leaderboard', {
     p_game: game || null,
     p_region: region || null,
@@ -67,7 +75,10 @@ export function useGlobalLeaderboardQuery(game?: string, region?: string, limit 
 
 // --- Matchmaking: Find Players ---
 
-async function fetchMatchmakingPlayers(game?: string, region?: string): Promise<MatchmakingPlayer[]> {
+async function fetchMatchmakingPlayers(
+  game?: string,
+  region?: string
+): Promise<MatchmakingPlayer[]> {
   const { data, error } = await supabase.rpc('find_players_for_squad', {
     p_game: game || null,
     p_region: region || null,
@@ -96,7 +107,9 @@ export function useMatchmakingQuery(game?: string, region?: string) {
 async function fetchPublicProfile(username: string) {
   const { data, error } = await supabase
     .from('profiles')
-    .select('id, username, avatar_url, bio, reliability_score, total_sessions, total_checkins, total_noshow, total_late, xp, level, streak_days, region, preferred_games, playstyle, twitch_username, discord_username, created_at')
+    .select(
+      'id, username, avatar_url, bio, reliability_score, total_sessions, total_checkins, total_noshow, total_late, xp, level, streak_days, region, preferred_games, playstyle, twitch_username, discord_username, created_at'
+    )
     .eq('username', username)
     .single()
 
@@ -110,7 +123,7 @@ async function fetchPublicProfile(username: string) {
 export function usePublicProfileQuery(username: string | undefined) {
   return useQuery({
     queryKey: queryKeys.discover.publicProfile(username || ''),
-    queryFn: () => username ? fetchPublicProfile(username) : null,
+    queryFn: () => (username ? fetchPublicProfile(username) : null),
     enabled: !!username,
     staleTime: 60_000,
     retry: false,

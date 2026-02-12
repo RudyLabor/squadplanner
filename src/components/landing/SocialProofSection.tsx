@@ -1,17 +1,41 @@
 import { m } from 'framer-motion'
-import {
-  MousePointerClick,
-  Clock,
-  Smile,
-  Target,
-} from '../icons'
+import { MousePointerClick, Clock, Smile, Target } from '../icons'
 import { AnimatedCounter } from '../ui/AnimatedCounter'
 
 const stats = [
-  { end: 1, suffix: ' clic', singularSuffix: ' clic' as string | undefined, label: 'pour confirmer ta présence', icon: MousePointerClick, color: 'var(--color-secondary)' },
-  { end: 1, suffix: ' min/sem', singularSuffix: undefined as string | undefined, label: 'pour organiser toutes tes sessions', icon: Clock, color: 'var(--color-primary)' },
-  { end: 0, suffix: '', singularSuffix: undefined as string | undefined, label: 'prise de tête pour planifier', icon: Smile, color: 'var(--color-gold)' },
-  { end: 4.9, suffix: '★', singularSuffix: undefined as string | undefined, label: 'satisfaction beta testeurs', icon: Target, color: 'var(--color-success)', decimals: 1 },
+  {
+    end: 1,
+    suffix: ' clic',
+    singularSuffix: ' clic' as string | undefined,
+    label: 'pour confirmer ta présence',
+    icon: MousePointerClick,
+    color: 'var(--color-secondary)',
+  },
+  {
+    end: 1,
+    suffix: ' min/sem',
+    singularSuffix: undefined as string | undefined,
+    label: 'pour organiser toutes tes sessions',
+    icon: Clock,
+    color: 'var(--color-primary)',
+  },
+  {
+    end: 0,
+    suffix: '',
+    singularSuffix: undefined as string | undefined,
+    label: 'prise de tête pour planifier',
+    icon: Smile,
+    color: 'var(--color-gold)',
+  },
+  {
+    end: 4.9,
+    suffix: '★',
+    singularSuffix: undefined as string | undefined,
+    label: 'satisfaction beta testeurs',
+    icon: Target,
+    color: 'var(--color-success)',
+    decimals: 1,
+  },
 ]
 
 const cardVariants = {
@@ -19,7 +43,11 @@ const cardVariants = {
   visible: (i: number) => ({
     opacity: 1,
     y: 0,
-    transition: { delay: i * 0.1, duration: 0.5, ease: [0.16, 1, 0.3, 1] },
+    transition: {
+      delay: i * 0.1,
+      duration: 0.5,
+      ease: [0.16, 1, 0.3, 1] as [number, number, number, number],
+    },
   }),
 }
 
@@ -39,8 +67,20 @@ export function SocialProofSection() {
               viewport={{ once: true, amount: 0.3 }}
             >
               <span className="absolute top-3 right-3 w-2 h-2 rounded-full bg-success animate-pulse" />
-              <stat.icon className="w-5 h-5 md:w-7 md:h-7 mx-auto mb-2" style={{ color: stat.color }} aria-hidden="true" />
-              <AnimatedCounter end={stat.end} suffix={stat.suffix} singularSuffix={stat.singularSuffix} separator=" " className="text-xl md:text-3xl font-bold text-text-primary" duration={2.5} decimals={stat.decimals || 0} />
+              <stat.icon
+                className="w-5 h-5 md:w-7 md:h-7 mx-auto mb-2"
+                style={{ color: stat.color }}
+                aria-hidden="true"
+              />
+              <AnimatedCounter
+                end={stat.end}
+                suffix={stat.suffix}
+                singularSuffix={stat.singularSuffix}
+                separator=" "
+                className="text-xl md:text-3xl font-bold text-text-primary"
+                duration={2.5}
+                decimals={stat.decimals || 0}
+              />
               <div className="text-sm md:text-sm text-text-tertiary mt-1">{stat.label}</div>
             </m.div>
           ))}

@@ -65,7 +65,9 @@ describe('SegmentedControl', () => {
   })
 
   it('renders icons when provided', () => {
-    const FakeIcon = ({ className }: { className?: string }) => <span className={className} data-testid="icon" />
+    const FakeIcon = ({ className }: { className?: string }) => (
+      <span className={className} data-testid="icon" />
+    )
     const optionsWithIcon = [{ value: 'a', label: 'A', icon: FakeIcon }]
     render(<SegmentedControl options={optionsWithIcon} value="a" onChange={() => {}} />)
     expect(screen.getByTestId('icon')).toBeInTheDocument()

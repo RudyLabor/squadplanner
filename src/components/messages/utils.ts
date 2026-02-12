@@ -31,7 +31,7 @@ export function formatDateSeparator(dateStr: string) {
     const yesterday = new Date(now)
     yesterday.setDate(yesterday.getDate() - 1)
 
-    if (date.toDateString() === now.toDateString()) return 'Aujourd\'hui'
+    if (date.toDateString() === now.toDateString()) return "Aujourd'hui"
     if (date.toDateString() === yesterday.toDateString()) return 'Hier'
     return date.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' })
   } catch {

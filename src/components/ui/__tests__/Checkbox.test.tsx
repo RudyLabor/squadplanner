@@ -87,7 +87,9 @@ describe('Checkbox', () => {
   })
 
   it('renders description', () => {
-    render(<Checkbox checked={false} onChange={() => {}} label="Check" description="Some help text" />)
+    render(
+      <Checkbox checked={false} onChange={() => {}} label="Check" description="Some help text" />
+    )
     expect(screen.getByText('Some help text')).toBeInTheDocument()
   })
 

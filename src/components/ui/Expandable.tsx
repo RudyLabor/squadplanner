@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 import { useState, useRef, type ReactNode } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
@@ -74,9 +74,7 @@ export function Expandable({
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
           >
-            <div ref={contentRef}>
-              {children}
-            </div>
+            <div ref={contentRef}>{children}</div>
           </m.div>
         )}
       </AnimatePresence>
@@ -89,10 +87,7 @@ export function Expandable({
           className="flex items-center gap-1 mt-2 text-sm font-medium text-primary hover:text-primary-hover transition-colors focus-visible:outline-2 focus-visible:outline-primary"
         >
           <span>{isExpanded ? collapseLabel : expandLabel}</span>
-          <m.div
-            animate={{ rotate: isExpanded ? 180 : 0 }}
-            transition={{ duration: 0.2 }}
-          >
+          <m.div animate={{ rotate: isExpanded ? 180 : 0 }} transition={{ duration: 0.2 }}>
             <ChevronDown className="w-3.5 h-3.5" />
           </m.div>
         </button>

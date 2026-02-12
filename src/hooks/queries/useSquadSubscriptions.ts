@@ -56,7 +56,7 @@ async function fetchUserSubscriptions(squadIds: string[]): Promise<Subscription[
 export function useSquadSubscriptionQuery(squadId: string | undefined) {
   return useQuery({
     queryKey: ['subscriptions', squadId] as const,
-    queryFn: () => squadId ? fetchSquadSubscription(squadId) : null,
+    queryFn: () => (squadId ? fetchSquadSubscription(squadId) : null),
     enabled: !!squadId,
     staleTime: 60_000, // 1 minute - subscriptions don't change often
   })

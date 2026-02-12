@@ -42,11 +42,7 @@ interface UseSwipeBackReturn {
  * ```
  */
 export function useSwipeBack(options?: UseSwipeBackOptions): UseSwipeBackReturn {
-  const {
-    edgeWidth = 20,
-    threshold = 100,
-    enabled = true,
-  } = options ?? {}
+  const { edgeWidth = 20, threshold = 100, enabled = true } = options ?? {}
 
   const navigate = useNavigate()
   const prefersReducedMotion = useReducedMotion()
@@ -87,8 +83,7 @@ export function useSwipeBack(options?: UseSwipeBackOptions): UseSwipeBackReturn 
         overlayRef.current = overlay
       }
       const opacity = Math.min(progress * 0.6, 0.4)
-      overlayRef.current.style.background =
-        `linear-gradient(to right, var(--color-primary) 0%, transparent 100%)`
+      overlayRef.current.style.background = `linear-gradient(to right, var(--color-primary) 0%, transparent 100%)`
       overlayRef.current.style.opacity = String(opacity)
       overlayRef.current.style.width = `${Math.min(progress * 60, 40)}px`
     } else if (overlayRef.current) {

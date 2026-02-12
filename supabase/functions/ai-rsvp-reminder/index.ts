@@ -13,21 +13,22 @@ const ALLOWED_ORIGINS = [
   'http://localhost:5174',
   'https://squadplanner.fr',
   'https://squadplanner.app',
-  Deno.env.get('SUPABASE_URL') || ''
+  Deno.env.get('SUPABASE_URL') || '',
 ].filter(Boolean)
 
 function getCorsHeaders(origin: string | null) {
-  const allowedOrigin = origin && ALLOWED_ORIGINS.some(allowed => origin === allowed)
-    ? origin
-    : null
+  const allowedOrigin =
+    origin && ALLOWED_ORIGINS.some((allowed) => origin === allowed) ? origin : null
   if (!allowedOrigin) {
     return {
-      'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type, x-cron-secret',
+      'Access-Control-Allow-Headers':
+        'authorization, x-client-info, apikey, content-type, x-cron-secret',
     }
   }
   return {
     'Access-Control-Allow-Origin': allowedOrigin,
-    'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type, x-cron-secret',
+    'Access-Control-Allow-Headers':
+      'authorization, x-client-info, apikey, content-type, x-cron-secret',
   }
 }
 
@@ -81,17 +82,19 @@ async function callClaudeAPI(prompt: string): Promise<string | null> {
       headers: {
         'Content-Type': 'application/json',
         'x-api-key': apiKey,
-        'anthropic-version': '2023-06-01'
+        'anthropic-version': '2023-06-01',
       },
       body: JSON.stringify({
         model: CLAUDE_MODEL,
         max_tokens: 200,
-        messages: [{
-          role: 'user',
-          content: prompt
-        }]
+        messages: [
+          {
+            role: 'user',
+            content: prompt,
+          },
+        ],
       }),
-      signal: controller.signal
+      signal: controller.signal,
     })
 
     clearTimeout(timeoutId)
@@ -134,11 +137,11 @@ async function generateAIReminderMessage(
     month: 'long',
     hour: '2-digit',
     minute: '2-digit',
-    timeZone: 'Europe/Paris'
+    timeZone: 'Europe/Paris',
   })
 
   // Créer les mentions @username
-  const mentions = nonResponders.map(name => `@${name}`).join(', ')
+  const mentions = nonResponders.map((name) => `@${name}`).join(', ')
 
   // Templates de messages variés pour éviter la répétition (fallback)
   const templates = [
@@ -207,8 +210,8 @@ Réponds UNIQUEMENT avec le message, sans guillemets ni explications.`
             generationConfig: {
               temperature: 0.8,
               maxOutputTokens: 150,
-            }
-          })
+            },
+          }),
         }
       )
 
@@ -232,20 +235,24 @@ Réponds UNIQUEMENT avec le message, sans guillemets ni explications.`
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${openaiKey}`
+          Authorization: `Bearer ${openaiKey}`,
         },
         body: JSON.stringify({
           model: 'gpt-3.5-turbo',
-          messages: [{
-            role: 'system',
-            content: 'Tu es l\'assistant IA de Squad Planner, une app de gaming. Génère des messages de relance courts et fun en français.'
-          }, {
-            role: 'user',
-            content: `Génère un message de relance (max 200 caractères) pour rappeler à ${mentions} de répondre à la session "${sessionTitle || gameName}" de ${sessionTime} pour la squad ${squadName}. Sois amical, utilise le tutoiement, avec 1-2 emojis. Réponds uniquement avec le message.`
-          }],
+          messages: [
+            {
+              role: 'system',
+              content:
+                "Tu es l'assistant IA de Squad Planner, une app de gaming. Génère des messages de relance courts et fun en français.",
+            },
+            {
+              role: 'user',
+              content: `Génère un message de relance (max 200 caractères) pour rappeler à ${mentions} de répondre à la session "${sessionTitle || gameName}" de ${sessionTime} pour la squad ${squadName}. Sois amical, utilise le tutoiement, avec 1-2 emojis. Réponds uniquement avec le message.`,
+            },
+          ],
           max_tokens: 100,
-          temperature: 0.8
-        })
+          temperature: 0.8,
+        }),
       })
 
       if (response.ok) {
@@ -319,10 +326,10 @@ serve(async (req) => {
         targetSquadId = validatedData.squad_id || null
         targetSessionId = validatedData.session_id || null
       } catch (validationError) {
-        return new Response(
-          JSON.stringify({ error: (validationError as Error).message }),
-          { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-        )
+        return new Response(JSON.stringify({ error: (validationError as Error).message }), {
+          status: 400,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        })
       }
     } catch {
       // No body, process all
@@ -331,7 +338,8 @@ serve(async (req) => {
     // Find sessions in the next 24 hours that are pending or confirmed
     let sessionsQuery = supabaseAdmin
       .from('sessions')
-      .select(`
+      .select(
+        `
         id,
         title,
         game,
@@ -343,7 +351,8 @@ serve(async (req) => {
           name,
           owner_id
         )
-      `)
+      `
+      )
       .in('status', ['pending', 'proposed', 'confirmed'])
       .gte('scheduled_at', now.toISOString())
       .lte('scheduled_at', in24Hours.toISOString())
@@ -368,7 +377,7 @@ serve(async (req) => {
           success: true,
           message: 'Aucune session dans les 24h',
           sessions_processed: 0,
-          reminders_sent: 0
+          reminders_sent: 0,
         }),
         { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       )
@@ -407,7 +416,7 @@ serve(async (req) => {
           squad_name: squadName,
           non_responders: [],
           reminder_sent: false,
-          skipped_reason: 'Rappel deja envoye aujourd\'hui'
+          skipped_reason: "Rappel deja envoye aujourd'hui",
         })
         continue
       }
@@ -415,14 +424,16 @@ serve(async (req) => {
       // Get all squad members
       const { data: members } = await supabaseAdmin
         .from('squad_members')
-        .select(`
+        .select(
+          `
           user_id,
           profiles (
             id,
             username,
             avatar_url
           )
-        `)
+        `
+        )
         .eq('squad_id', squadId)
 
       if (!members || members.length === 0) {
@@ -432,7 +443,7 @@ serve(async (req) => {
           squad_name: squadName,
           non_responders: [],
           reminder_sent: false,
-          skipped_reason: 'Aucun membre dans la squad'
+          skipped_reason: 'Aucun membre dans la squad',
         })
         continue
       }
@@ -447,9 +458,9 @@ serve(async (req) => {
 
       // Find non-responders
       const nonResponders = (members as SquadMember[])
-        .filter(m => !respondedUserIds.has(m.user_id))
-        .map(m => m.profiles?.username || 'Joueur')
-        .filter(name => name !== 'Joueur') // Exclude users without username
+        .filter((m) => !respondedUserIds.has(m.user_id))
+        .map((m) => m.profiles?.username || 'Joueur')
+        .filter((name) => name !== 'Joueur') // Exclude users without username
 
       if (nonResponders.length === 0) {
         results.push({
@@ -458,7 +469,7 @@ serve(async (req) => {
           squad_name: squadName,
           non_responders: [],
           reminder_sent: false,
-          skipped_reason: 'Tout le monde a repondu'
+          skipped_reason: 'Tout le monde a repondu',
         })
         continue
       }
@@ -478,17 +489,15 @@ serve(async (req) => {
       const senderId = session.squads?.owner_id || session.created_by
 
       // Insert the reminder as a system message in the squad chat
-      const { error: messageError } = await supabaseAdmin
-        .from('messages')
-        .insert({
-          squad_id: squadId,
-          session_id: session.id,
-          sender_id: senderId,
-          content: reminderMessage,
-          is_system_message: true,
-          is_ai_suggestion: true,
-          read_by: []
-        })
+      const { error: messageError } = await supabaseAdmin.from('messages').insert({
+        squad_id: squadId,
+        session_id: session.id,
+        sender_id: senderId,
+        content: reminderMessage,
+        is_system_message: true,
+        is_ai_suggestion: true,
+        read_by: [],
+      })
 
       if (messageError) {
         console.error('Error inserting reminder message:', messageError)
@@ -498,54 +507,50 @@ serve(async (req) => {
           squad_name: squadName,
           non_responders: nonResponders,
           reminder_sent: false,
-          skipped_reason: `Erreur d'insertion: ${messageError.message}`
+          skipped_reason: `Erreur d'insertion: ${messageError.message}`,
         })
         continue
       }
 
       // Track that we sent a reminder (anti-spam)
-      await supabaseAdmin
-        .from('ai_insights')
-        .insert({
-          squad_id: squadId,
-          session_id: session.id,
-          insight_type: 'rsvp_reminder',
-          content: {
-            non_responders: nonResponders,
-            message_sent: reminderMessage,
-            sent_at: now.toISOString(),
-            generated_by: ai_generated ? 'claude' : 'template'
-          },
-          is_dismissed: false,
-          expires_at: new Date(Date.now() + 48 * 60 * 60 * 1000).toISOString() // Expire in 48h
-        })
+      await supabaseAdmin.from('ai_insights').insert({
+        squad_id: squadId,
+        session_id: session.id,
+        insight_type: 'rsvp_reminder',
+        content: {
+          non_responders: nonResponders,
+          message_sent: reminderMessage,
+          sent_at: now.toISOString(),
+          generated_by: ai_generated ? 'claude' : 'template',
+        },
+        is_dismissed: false,
+        expires_at: new Date(Date.now() + 48 * 60 * 60 * 1000).toISOString(), // Expire in 48h
+      })
 
       // Optionally send push notifications to non-responders
-      const nonResponderMembers = (members as SquadMember[])
-        .filter(m => !respondedUserIds.has(m.user_id))
+      const nonResponderMembers = (members as SquadMember[]).filter(
+        (m) => !respondedUserIds.has(m.user_id)
+      )
 
       for (const member of nonResponderMembers) {
         try {
           const sessionTime = new Date(session.scheduled_at)
           const hoursUntil = Math.round((sessionTime.getTime() - now.getTime()) / (1000 * 60 * 60))
 
-          await fetch(
-            `${Deno.env.get('SUPABASE_URL')}/functions/v1/send-push`,
-            {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')}`
-              },
-              body: JSON.stringify({
-                userId: member.user_id,
-                title: `${squadName} attend ta reponse !`,
-                body: `Session ${session.title || session.game || ''} dans ${hoursUntil}h - Confirme ta presence`,
-                url: `/squads/${squadId}`,
-                tag: `rsvp-reminder-${session.id}`
-              })
-            }
-          )
+          await fetch(`${Deno.env.get('SUPABASE_URL')}/functions/v1/send-push`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')}`,
+            },
+            body: JSON.stringify({
+              userId: member.user_id,
+              title: `${squadName} attend ta reponse !`,
+              body: `Session ${session.title || session.game || ''} dans ${hoursUntil}h - Confirme ta presence`,
+              url: `/squads/${squadId}`,
+              tag: `rsvp-reminder-${session.id}`,
+            }),
+          })
         } catch (pushError) {
           console.error(`Push notification error for user ${member.user_id}:`, pushError)
         }
@@ -556,28 +561,30 @@ serve(async (req) => {
         session_title: session.title || session.game || 'Session',
         squad_name: squadName,
         non_responders: nonResponders,
-        reminder_sent: true
+        reminder_sent: true,
       })
     }
 
-    const remindersSent = results.filter(r => r.reminder_sent).length
+    const remindersSent = results.filter((r) => r.reminder_sent).length
 
-    console.log(`AI RSVP Reminder: Processed ${sessions.length} sessions, sent ${remindersSent} reminders`)
+    console.log(
+      `AI RSVP Reminder: Processed ${sessions.length} sessions, sent ${remindersSent} reminders`
+    )
 
     return new Response(
       JSON.stringify({
         success: true,
         sessions_processed: sessions.length,
         reminders_sent: remindersSent,
-        results
+        results,
       }),
       { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     )
   } catch (error) {
     console.error('Error in ai-rsvp-reminder:', error)
-    return new Response(
-      JSON.stringify({ error: error.message }),
-      { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-    )
+    return new Response(JSON.stringify({ error: error.message }), {
+      status: 500,
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    })
   }
 })

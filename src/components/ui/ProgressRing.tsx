@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 import { m, useInView } from 'framer-motion'
 import { useRef } from 'react'
@@ -68,7 +68,7 @@ export function ProgressRing({
             fill="none"
             stroke={color}
             strokeWidth={strokeWidth}
-            strokeLinecap={isFull ? "butt" : "round"}
+            strokeLinecap={isFull ? 'butt' : 'round'}
             strokeDasharray={circumference}
             initial={{ strokeDashoffset: circumference }}
             animate={isInView ? { strokeDashoffset: offset } : { strokeDashoffset: circumference }}
@@ -83,9 +83,7 @@ export function ProgressRing({
           </div>
         )}
       </div>
-      {label && (
-        <span className="text-text-tertiary text-sm font-medium">{label}</span>
-      )}
+      {label && <span className="text-text-tertiary text-sm font-medium">{label}</span>}
     </div>
   )
 }

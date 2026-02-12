@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 import { useEffect, useState, useRef } from 'react'
 import { Plus, Loader2 } from '../components/icons'
@@ -20,12 +20,13 @@ interface SessionsProps {
   }
 }
 
-export function Sessions({ loaderData }: SessionsProps) {
+export function Sessions({ loaderData: _loaderData }: SessionsProps) {
   const { user, isInitialized } = useAuthStore()
   const { data: squads = [], isLoading: squadsLoading } = useSquadsQuery()
   const { data: sessions = [], isLoading: sessionsLoading } = useUpcomingSessionsQuery(user?.id)
-  const { slotSuggestions, hasSlotHistory, coachTips, fetchSlotSuggestions, fetchCoachTips } = useAIStore()
-  const openCreateSession = useCreateSessionModal(s => s.open)
+  const { slotSuggestions, hasSlotHistory, coachTips, fetchSlotSuggestions, fetchCoachTips } =
+    useAIStore()
+  const openCreateSession = useCreateSessionModal((s) => s.open)
 
   const [showConfetti, setShowConfetti] = useState(false)
   const [weekOffset, setWeekOffset] = useState(0)
@@ -33,11 +34,14 @@ export function Sessions({ loaderData }: SessionsProps) {
   const aiFetchedRef = useRef<Set<string>>(new Set())
 
   // Stable dep: stringified squad IDs (the squads array changes reference every render)
-  const squadIds = squads.map(s => s.id).sort().join(',')
+  const squadIds = squads
+    .map((s) => s.id)
+    .sort()
+    .join(',')
 
   useEffect(() => {
     if (!squadIds || !isInitialized) return
-    squads.forEach(squad => {
+    squads.forEach((squad) => {
       // Only fetch once per squad — prevents infinite re-fetch loop
       if (aiFetchedRef.current.has(squad.id)) return
       aiFetchedRef.current.add(squad.id)
@@ -47,14 +51,19 @@ export function Sessions({ loaderData }: SessionsProps) {
   }, [squadIds, isInitialized]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const upcomingSessions = sessions
-    .filter(s => new Date(s.scheduled_at) > new Date() && s.status !== 'cancelled')
+    .filter((s) => new Date(s.scheduled_at) > new Date() && s.status !== 'cancelled')
     .sort((a, b) => new Date(a.scheduled_at).getTime() - new Date(b.scheduled_at).getTime())
 
-  const needsResponse = upcomingSessions.filter(s => !s.my_rsvp)
-  const confirmed = upcomingSessions.filter(s => s.my_rsvp === 'present')
+  const needsResponse = upcomingSessions.filter((s) => !s.my_rsvp)
+  const confirmed = upcomingSessions.filter((s) => s.my_rsvp === 'present')
 
   useEffect(() => {
-    if (needsResponse.length === 0 && confirmed.length > 0 && !hasShownCelebration.current && sessions.length > 0) {
+    if (
+      needsResponse.length === 0 &&
+      confirmed.length > 0 &&
+      !hasShownCelebration.current &&
+      sessions.length > 0
+    ) {
       hasShownCelebration.current = true
       queueMicrotask(() => {
         setShowConfetti(true)
@@ -75,9 +84,15 @@ export function Sessions({ loaderData }: SessionsProps) {
   return (
     <main className="min-h-0 bg-bg-base pb-6" aria-label="Sessions">
       {showConfetti && typeof window !== 'undefined' && (
-        <Confetti width={window.innerWidth} height={window.innerHeight} recycle={false} numberOfPieces={80} gravity={0.25}
+        <Confetti
+          width={window.innerWidth}
+          height={window.innerHeight}
+          recycle={false}
+          numberOfPieces={80}
+          gravity={0.25}
           colors={['#6366f1', '#34d399', '#fbbf24', '#a78bfa']}
-          style={{ position: 'fixed', top: 0, left: 0, zIndex: 100, pointerEvents: 'none' }} />
+          style={{ position: 'fixed', top: 0, left: 0, zIndex: 100, pointerEvents: 'none' }}
+        />
       )}
 
       <div className="px-4 md:px-6 lg:px-8 py-6 max-w-2xl lg:max-w-4xl xl:max-w-6xl mx-auto">
@@ -93,12 +108,17 @@ export function Sessions({ loaderData }: SessionsProps) {
                     : 'Aucune session planifiée pour le moment'}
               </p>
             </div>
-            <Button size="sm" onClick={openCreateSession}>
-              <Plus className="w-4 h-4" />Créer
+            <Button size="sm" onClick={() => openCreateSession()}>
+              <Plus className="w-4 h-4" />
+              Créer
             </Button>
           </header>
 
-          <WeekCalendar sessions={upcomingSessions} weekOffset={weekOffset} onWeekChange={setWeekOffset} />
+          <WeekCalendar
+            sessions={upcomingSessions}
+            weekOffset={weekOffset}
+            onWeekChange={setWeekOffset}
+          />
           <AllCaughtUp needsResponse={needsResponse.length} confirmed={confirmed.length} />
           <NeedsResponseSection needsResponse={needsResponse} />
           <AISlotSuggestions slotSuggestions={slotSuggestions} hasSlotHistory={hasSlotHistory} />

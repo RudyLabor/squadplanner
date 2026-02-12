@@ -24,19 +24,21 @@ export const useOfflineStore = create<OfflineState>((set) => ({
   wasOffline: false,
   lastOnlineAt: null,
 
-  setOnline: () => set({
-    isOnline: true,
-    isOffline: false,
-    wasOffline: false,
-    lastOnlineAt: new Date(),
-  }),
+  setOnline: () =>
+    set({
+      isOnline: true,
+      isOffline: false,
+      wasOffline: false,
+      lastOnlineAt: new Date(),
+    }),
 
-  setOffline: () => set((state) => ({
-    isOnline: false,
-    isOffline: true,
-    wasOffline: true,
-    lastOnlineAt: state.lastOnlineAt,
-  })),
+  setOffline: () =>
+    set((state) => ({
+      isOnline: false,
+      isOffline: true,
+      wasOffline: true,
+      lastOnlineAt: state.lastOnlineAt,
+    })),
 
   resetWasOffline: () => set({ wasOffline: false }),
 }))

@@ -3,7 +3,7 @@ import { forwardRef } from 'react'
 
 // Available emoji reactions
 export const REACTION_EMOJIS = ['👍', '❤️', '😂', '😮', '😢', '🔥'] as const
-export type ReactionEmoji = typeof REACTION_EMOJIS[number]
+export type ReactionEmoji = (typeof REACTION_EMOJIS)[number]
 
 interface ReactionPickerProps {
   /** Whether the picker is visible */
@@ -63,7 +63,7 @@ export const ReactionPicker = forwardRef<HTMLDivElement, ReactionPickerProps>(
                 type: 'spring',
                 stiffness: 400,
                 damping: 25,
-                duration: 0.2
+                duration: 0.2,
               }}
               className={`absolute z-50 ${positionClasses[position]} ${alignClasses[align]}`}
             >
@@ -77,11 +77,11 @@ export const ReactionPicker = forwardRef<HTMLDivElement, ReactionPickerProps>(
                       delay: index * 0.03,
                       type: 'spring',
                       stiffness: 500,
-                      damping: 25
+                      damping: 25,
                     }}
                     whileHover={{
                       scale: 1.3,
-                      transition: { duration: 0.15 }
+                      transition: { duration: 0.15 },
                     }}
                     whileTap={{ scale: 0.9 }}
                     onClick={(e) => {

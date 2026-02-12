@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 import { useInView } from 'framer-motion'
 import { useRef, useCallback, useState, useEffect } from 'react'
@@ -34,13 +34,16 @@ export function AnimatedCounter({
   const isInView = useInView(ref, { once: true, amount: 0.1 })
   const [displayValue, setDisplayValue] = useState(0)
 
-  const format = useCallback((value: number) => {
-    const rounded = decimals > 0 ? parseFloat(value.toFixed(decimals)) : Math.round(value)
-    const display = decimals > 0 ? rounded.toFixed(decimals) : String(rounded)
-    const sep = separator || ''
-    const activeSuffix = singularSuffix && rounded <= 1 ? singularSuffix : suffix
-    return `${prefix}${sep ? display.replace(/\B(?=(\d{3})+(?!\d))/g, sep) : display}${activeSuffix}`
-  }, [prefix, suffix, singularSuffix, decimals, separator])
+  const format = useCallback(
+    (value: number) => {
+      const rounded = decimals > 0 ? parseFloat(value.toFixed(decimals)) : Math.round(value)
+      const display = decimals > 0 ? rounded.toFixed(decimals) : String(rounded)
+      const sep = separator || ''
+      const activeSuffix = singularSuffix && rounded <= 1 ? singularSuffix : suffix
+      return `${prefix}${sep ? display.replace(/\B(?=(\d{3})+(?!\d))/g, sep) : display}${activeSuffix}`
+    },
+    [prefix, suffix, singularSuffix, decimals, separator]
+  )
 
   useEffect(() => {
     if (!isInView) return

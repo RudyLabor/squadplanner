@@ -1,15 +1,9 @@
-import { m } from 'framer-motion'
-import {
-  ArrowLeft,
-  ArrowRight,
-  Camera,
-  Globe,
-  Loader2,
-} from '../../components/icons'
+import { m, type Variants } from 'framer-motion'
+import { ArrowLeft, ArrowRight, Camera, Globe, Loader2 } from '../../components/icons'
 import { Button, Card, Input, Select } from '../../components/ui'
 
 interface OnboardingStepProfileProps {
-  slideVariants: Record<string, unknown>
+  slideVariants: Variants
   username: string
   timezone: string
   avatarUrl: string | null
@@ -23,17 +17,20 @@ interface OnboardingStepProfileProps {
 }
 
 export function OnboardingStepProfile({
-  slideVariants, username, timezone, avatarUrl, uploadingAvatar, isLoading,
-  onUsernameChange, onTimezoneChange, onAvatarUpload, onSave, onBack
+  slideVariants,
+  username,
+  timezone,
+  avatarUrl,
+  uploadingAvatar,
+  isLoading,
+  onUsernameChange,
+  onTimezoneChange,
+  onAvatarUpload,
+  onSave,
+  onBack,
 }: OnboardingStepProfileProps) {
   return (
-    <m.div
-      key="profile"
-      variants={slideVariants}
-      initial="enter"
-      animate="center"
-      exit="exit"
-    >
+    <m.div key="profile" variants={slideVariants} initial="enter" animate="center" exit="exit">
       <button
         onClick={onBack}
         className="flex items-center gap-2 text-text-secondary hover:text-text-primary transition-colors mb-6"
@@ -43,12 +40,8 @@ export function OnboardingStepProfile({
       </button>
 
       <div className="text-center mb-8">
-        <h2 className="text-xl font-bold text-text-primary mb-2">
-          C'est toi ?
-        </h2>
-        <p className="text-text-secondary">
-          Tes potes te reconna&icirc;tront
-        </p>
+        <h2 className="text-xl font-bold text-text-primary mb-2">C'est toi ?</h2>
+        <p className="text-text-secondary">Tes potes te reconna&icirc;tront</p>
       </div>
 
       <Card>
@@ -123,15 +116,12 @@ export function OnboardingStepProfile({
               searchable
             />
             <p className="text-sm text-text-tertiary mt-1.5">
-              D&eacute;tect&eacute; automatiquement : {Intl.DateTimeFormat().resolvedOptions().timeZone}
+              D&eacute;tect&eacute; automatiquement :{' '}
+              {Intl.DateTimeFormat().resolvedOptions().timeZone}
             </p>
           </div>
 
-          <Button
-            onClick={onSave}
-            disabled={isLoading || !username.trim()}
-            className="w-full h-12"
-          >
+          <Button onClick={onSave} disabled={isLoading || !username.trim()} className="w-full h-12">
             {isLoading ? (
               <>
                 <Loader2 className="w-5 h-5 animate-spin mr-2" />

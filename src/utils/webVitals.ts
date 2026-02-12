@@ -12,78 +12,78 @@
  *         or when the page becomes hidden (visibilitychange)
  */
 
-import type { Metric } from 'web-vitals';
+import type { Metric } from 'web-vitals'
 
 interface WebVitalPayload {
-  name: string;
-  value: number;
-  rating: 'good' | 'needs-improvement' | 'poor';
-  url: string;
-  timestamp: string;
-  userAgent: string;
-  connectionType: string | undefined;
+  name: string
+  value: number
+  rating: 'good' | 'needs-improvement' | 'poor'
+  url: string
+  timestamp: string
+  userAgent: string
+  connectionType: string | undefined
 }
 
 // ---------------------------------------------------------------------------
 // Production analytics buffer
 // ---------------------------------------------------------------------------
 
-const FLUSH_INTERVAL = 10_000; // 10 seconds
-const MAX_BUFFER_SIZE = 50;
-const MAX_RETRY_COUNT = 3;
+const FLUSH_INTERVAL = 10_000 // 10 seconds
+const MAX_BUFFER_SIZE = 50
+const MAX_RETRY_COUNT = 3
 
-let metricsBuffer: WebVitalPayload[] = [];
-let flushTimer: ReturnType<typeof setInterval> | null = null;
-let visibilityListenerAdded = false;
-let consecutiveFailures = 0;
+let metricsBuffer: WebVitalPayload[] = []
+let flushTimer: ReturnType<typeof setInterval> | null = null
+let visibilityListenerAdded = false
+let consecutiveFailures = 0
 // Web-vitals edge function is deployed on Supabase.
-let endpointDisabled = false;
+let endpointDisabled = false
 
 function getEndpointUrl(): string {
-  if (endpointDisabled) return '';
+  if (endpointDisabled) return ''
   const supabaseUrl =
     typeof import.meta !== 'undefined'
       ? (import.meta.env?.VITE_SUPABASE_URL as string | undefined)
-      : undefined;
-  if (!supabaseUrl) return '';
-  return `${supabaseUrl}/functions/v1/web-vitals`;
+      : undefined
+  if (!supabaseUrl) return ''
+  return `${supabaseUrl}/functions/v1/web-vitals`
 }
 
 function getConnectionType(): string | undefined {
-  if (typeof navigator === 'undefined') return undefined;
-  const conn = (navigator as any).connection;
-  return conn?.effectiveType as string | undefined;
+  if (typeof navigator === 'undefined') return undefined
+  const conn = (navigator as any).connection
+  return conn?.effectiveType as string | undefined
 }
 
 function flushMetrics(): void {
-  if (metricsBuffer.length === 0) return;
+  if (metricsBuffer.length === 0) return
   if (endpointDisabled) {
-    metricsBuffer = [];
-    return;
+    metricsBuffer = []
+    return
   }
 
-  const endpoint = getEndpointUrl();
-  if (!endpoint) return;
+  const endpoint = getEndpointUrl()
+  if (!endpoint) return
 
-  const payload = metricsBuffer.splice(0, MAX_BUFFER_SIZE);
+  const payload = metricsBuffer.splice(0, MAX_BUFFER_SIZE)
 
   // Prefer sendBeacon (no console network error) over fetch
   if (typeof navigator !== 'undefined' && navigator.sendBeacon) {
     try {
       const blob = new Blob([JSON.stringify({ metrics: payload })], {
         type: 'application/json',
-      });
-      const sent = navigator.sendBeacon(endpoint, blob);
+      })
+      const sent = navigator.sendBeacon(endpoint, blob)
       if (sent) {
-        consecutiveFailures = 0;
-        return;
+        consecutiveFailures = 0
+        return
       }
     } catch {
       // sendBeacon failed, fall through silently
     }
   }
 
-  if (typeof fetch === 'undefined') return;
+  if (typeof fetch === 'undefined') return
 
   try {
     fetch(endpoint, {
@@ -92,20 +92,22 @@ function flushMetrics(): void {
       body: JSON.stringify({ metrics: payload }),
       keepalive: true,
     }).then(
-      () => { consecutiveFailures = 0; },
       () => {
-        consecutiveFailures++;
+        consecutiveFailures = 0
+      },
+      () => {
+        consecutiveFailures++
         if (consecutiveFailures >= MAX_RETRY_COUNT) {
-          endpointDisabled = true;
-          metricsBuffer = [];
+          endpointDisabled = true
+          metricsBuffer = []
         }
       }
-    );
+    )
   } catch {
-    consecutiveFailures++;
+    consecutiveFailures++
     if (consecutiveFailures >= MAX_RETRY_COUNT) {
-      endpointDisabled = true;
-      metricsBuffer = [];
+      endpointDisabled = true
+      metricsBuffer = []
     }
   }
 }
@@ -119,29 +121,29 @@ function enqueueMetric(metric: Metric): void {
     timestamp: new Date().toISOString(),
     userAgent: typeof navigator !== 'undefined' ? navigator.userAgent : '',
     connectionType: getConnectionType(),
-  };
+  }
 
-  metricsBuffer.push(entry);
+  metricsBuffer.push(entry)
 
   if (metricsBuffer.length >= MAX_BUFFER_SIZE) {
-    flushMetrics();
+    flushMetrics()
   }
 }
 
 function startFlushSchedule(): void {
-  if (flushTimer !== null) return;
+  if (flushTimer !== null) return
 
   // Periodic flush every 10s
-  flushTimer = setInterval(flushMetrics, FLUSH_INTERVAL);
+  flushTimer = setInterval(flushMetrics, FLUSH_INTERVAL)
 
   // Flush when the user navigates away or hides the tab
   if (!visibilityListenerAdded && typeof document !== 'undefined') {
-    visibilityListenerAdded = true;
+    visibilityListenerAdded = true
     document.addEventListener('visibilitychange', () => {
       if (document.visibilityState === 'hidden') {
-        flushMetrics();
+        flushMetrics()
       }
-    });
+    })
   }
 }
 
@@ -151,26 +153,33 @@ function startFlushSchedule(): void {
 
 function handleMetric(metric: Metric): void {
   if (import.meta.env.DEV) {
-    const color = metric.rating === 'good' ? '#0cce6b' : metric.rating === 'needs-improvement' ? '#ffa400' : '#ff4e42';
+    const color =
+      metric.rating === 'good'
+        ? '#0cce6b'
+        : metric.rating === 'needs-improvement'
+          ? '#ffa400'
+          : '#ff4e42'
     console.log(
       `%c[WebVital] ${metric.name}: ${metric.value.toFixed(metric.name === 'CLS' ? 3 : 0)}ms (${metric.rating})`,
-      `color: ${color}; font-weight: bold;`,
-    );
-    return;
+      `color: ${color}; font-weight: bold;`
+    )
+    return
   }
 
-  enqueueMetric(metric);
+  enqueueMetric(metric)
 
   // Report poor Core Web Vitals to error tracker for visibility
   if (metric.rating === 'poor') {
-    import('../lib/errorTracker').then(({ captureMessage }) => {
-      captureMessage(
-        `Poor Core Web Vital: ${metric.name} = ${metric.value.toFixed(metric.name === 'CLS' ? 3 : 0)}${metric.name === 'CLS' ? '' : 'ms'}`,
-        'warning'
-      );
-    }).catch(() => {
-      // Silently fail — error tracker is optional
-    });
+    import('../lib/errorTracker')
+      .then(({ captureMessage }) => {
+        captureMessage(
+          `Poor Core Web Vital: ${metric.name} = ${metric.value.toFixed(metric.name === 'CLS' ? 3 : 0)}${metric.name === 'CLS' ? '' : 'ms'}`,
+          'warning'
+        )
+      })
+      .catch(() => {
+        // Silently fail — error tracker is optional
+      })
   }
 }
 
@@ -183,18 +192,18 @@ function handleMetric(metric: Metric): void {
  * In dev: logs to console. In prod: buffers and sends to edge function.
  */
 export function reportWebVitals(): void {
-  if (typeof window === 'undefined') return;
+  if (typeof window === 'undefined') return
 
   import('web-vitals').then(({ onLCP, onCLS, onINP, onTTFB, onFCP }) => {
-    onLCP(handleMetric);
-    onCLS(handleMetric);
-    onINP(handleMetric);
-    onTTFB(handleMetric);
-    onFCP(handleMetric);
-  });
+    onLCP(handleMetric)
+    onCLS(handleMetric)
+    onINP(handleMetric)
+    onTTFB(handleMetric)
+    onFCP(handleMetric)
+  })
 
   // Start the flush schedule only in production
   if (!import.meta.env.DEV) {
-    startFlushSchedule();
+    startFlushSchedule()
   }
 }

@@ -1,18 +1,13 @@
 import { memo } from 'react'
 import { m } from 'framer-motion'
-import {
-  Calendar,
-  Clock,
-  Users,
-  ChevronRight,
-  CheckCircle2,
-  XCircle,
-  HelpCircle,
-} from '../icons'
+import { Calendar, Clock, Users, ChevronRight, CheckCircle2, XCircle, HelpCircle } from '../icons'
 import { Link } from 'react-router'
 import { Card, Badge, Tooltip } from '../ui'
 
-export const SessionCard = memo(function SessionCard({ session, onRsvp }: {
+export const SessionCard = memo(function SessionCard({
+  session,
+  onRsvp,
+}: {
   session: {
     id: string
     title?: string | null
@@ -42,7 +37,8 @@ export const SessionCard = memo(function SessionCard({ session, onRsvp }: {
   } else if (isTomorrow) {
     timeLabel = `Demain ${date.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}`
   } else {
-    timeLabel = date.toLocaleDateString('fr-FR', { weekday: 'short', day: 'numeric', month: 'short' }) +
+    timeLabel =
+      date.toLocaleDateString('fr-FR', { weekday: 'short', day: 'numeric', month: 'short' }) +
       ` \u00B7 ${date.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}`
   }
 
@@ -57,12 +53,19 @@ export const SessionCard = memo(function SessionCard({ session, onRsvp }: {
   const canRsvp = !isPast && session.status !== 'cancelled'
 
   return (
-    <Card className={`p-4 transition-interactive hover:shadow-glow-primary-sm ${isToday && !isPast ? 'border-warning/30 hover:shadow-glow-warning-sm' : ''}`}>
+    <Card
+      className={`p-4 transition-interactive hover:shadow-glow-primary-sm ${isToday && !isPast ? 'border-warning/30 hover:shadow-glow-warning-sm' : ''}`}
+    >
       <div className="flex items-start gap-4">
-        <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${
-          isToday && !isPast ? 'bg-warning/15' : 'bg-primary/15'
-        }`}>
-          <Calendar className={`w-6 h-6 ${isToday && !isPast ? 'text-warning' : 'text-primary'}`} strokeWidth={1.5} />
+        <div
+          className={`w-12 h-12 rounded-xl flex items-center justify-center ${
+            isToday && !isPast ? 'bg-warning/15' : 'bg-primary/15'
+          }`}
+        >
+          <Calendar
+            className={`w-6 h-6 ${isToday && !isPast ? 'text-warning' : 'text-primary'}`}
+            strokeWidth={1.5}
+          />
         </div>
 
         <div className="flex-1 min-w-0">
@@ -73,9 +76,11 @@ export const SessionCard = memo(function SessionCard({ session, onRsvp }: {
             {statusBadge && (
               <Tooltip
                 content={
-                  statusBadge.label === 'Confirmée' ? 'Assez de joueurs ont confirmé leur présence.'
-                  : statusBadge.label === 'Annulée' ? 'Cette session a été annulée par l\'organisateur.'
-                  : 'Cette session est terminée.'
+                  statusBadge.label === 'Confirmée'
+                    ? 'Assez de joueurs ont confirmé leur présence.'
+                    : statusBadge.label === 'Annulée'
+                      ? "Cette session a été annulée par l'organisateur."
+                      : 'Cette session est terminée.'
                 }
                 position="top"
                 delay={200}
@@ -92,7 +97,8 @@ export const SessionCard = memo(function SessionCard({ session, onRsvp }: {
             </span>
             <span className="flex items-center gap-1">
               <Users className="w-3.5 h-3.5" />
-              {session.rsvp_counts?.present || 0} present{(session.rsvp_counts?.present || 0) > 1 ? 's' : ''}
+              {session.rsvp_counts?.present || 0} present
+              {(session.rsvp_counts?.present || 0) > 1 ? 's' : ''}
             </span>
           </div>
 
@@ -101,7 +107,10 @@ export const SessionCard = memo(function SessionCard({ session, onRsvp }: {
               <m.button
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                onClick={(e) => { e.preventDefault(); onRsvp(session.id, 'present') }}
+                onClick={(e) => {
+                  e.preventDefault()
+                  onRsvp(session.id, 'present')
+                }}
                 aria-label="Marquer comme present"
                 aria-pressed={session.my_rsvp === 'present'}
                 className={`flex items-center gap-1.5 px-4 py-2.5 min-h-[44px] rounded-lg text-base font-medium transition-interactive ${
@@ -116,7 +125,10 @@ export const SessionCard = memo(function SessionCard({ session, onRsvp }: {
               <m.button
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                onClick={(e) => { e.preventDefault(); onRsvp(session.id, 'maybe') }}
+                onClick={(e) => {
+                  e.preventDefault()
+                  onRsvp(session.id, 'maybe')
+                }}
                 aria-label="Marquer comme peut-etre"
                 aria-pressed={session.my_rsvp === 'maybe'}
                 className={`flex items-center gap-1.5 px-4 py-2.5 min-h-[44px] rounded-lg text-base font-medium transition-interactive ${
@@ -131,7 +143,10 @@ export const SessionCard = memo(function SessionCard({ session, onRsvp }: {
               <m.button
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                onClick={(e) => { e.preventDefault(); onRsvp(session.id, 'absent') }}
+                onClick={(e) => {
+                  e.preventDefault()
+                  onRsvp(session.id, 'absent')
+                }}
                 aria-label="Marquer comme absent"
                 aria-pressed={session.my_rsvp === 'absent'}
                 className={`flex items-center gap-1.5 px-4 py-2.5 min-h-[44px] rounded-lg text-base font-medium transition-interactive ${

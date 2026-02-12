@@ -9,7 +9,17 @@ vi.mock('framer-motion', async () => {
     motion: {
       ...actual.motion,
       div: ({ children, ...props }: any) => {
-        const { whileHover, whileTap, transition, initial, animate, exit, layout, layoutId, ...rest } = props
+        const {
+          whileHover,
+          whileTap,
+          transition,
+          initial,
+          animate,
+          exit,
+          layout,
+          layoutId,
+          ...rest
+        } = props
         return <div {...rest}>{children}</div>
       },
       circle: (props: any) => <circle {...props} />,
@@ -17,7 +27,17 @@ vi.mock('framer-motion', async () => {
     m: {
       ...actual.m,
       div: ({ children, ...props }: any) => {
-        const { whileHover, whileTap, transition, initial, animate, exit, layout, layoutId, ...rest } = props
+        const {
+          whileHover,
+          whileTap,
+          transition,
+          initial,
+          animate,
+          exit,
+          layout,
+          layoutId,
+          ...rest
+        } = props
         return <div {...rest}>{children}</div>
       },
       circle: (props: any) => <circle {...props} />,

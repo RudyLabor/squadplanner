@@ -1,14 +1,8 @@
-"use client";
+'use client'
 
 import { useState } from 'react'
 import { m } from 'framer-motion'
-import {
-  Check,
-  ArrowRight,
-  Users,
-  Gamepad2,
-  Copy,
-} from '../../components/icons'
+import { Check, ArrowRight, Users, Gamepad2, Copy } from '../../components/icons'
 import { Button, Card } from '../../components/ui'
 
 interface OnboardingStepCompleteProps {
@@ -22,8 +16,13 @@ interface OnboardingStepCompleteProps {
 }
 
 export function OnboardingStepComplete({
-  createdSquadId, createdSquadName, createdSquadCode,
-  squadGame, squadsLength, firstSquadName, onComplete
+  createdSquadId,
+  createdSquadName,
+  createdSquadCode,
+  squadGame,
+  squadsLength,
+  firstSquadName,
+  onComplete,
 }: OnboardingStepCompleteProps) {
   const [codeCopied, setCodeCopied] = useState(false)
 
@@ -44,24 +43,30 @@ export function OnboardingStepComplete({
               y: -20,
               x: (i - 4) * 60,
               opacity: 1,
-              rotate: 0
+              rotate: 0,
             }}
             animate={{
               y: 500,
               opacity: 0,
-              rotate: (i % 2 === 0 ? 1 : -1) * 180
+              rotate: (i % 2 === 0 ? 1 : -1) * 180,
             }}
             transition={{
               duration: 2 + (i % 3) * 0.5,
               delay: i * 0.08,
-              ease: "easeOut"
+              ease: 'easeOut',
             }}
             className="absolute top-0 left-1/2"
             style={{
               width: 8 + (i % 3) * 4,
               height: 8 + (i % 3) * 4,
-              backgroundColor: ['var(--color-primary)', 'var(--color-success)', 'var(--color-warning)', 'var(--color-error)', 'var(--color-purple)'][i % 5],
-              borderRadius: i % 2 === 0 ? '50%' : '2px'
+              backgroundColor: [
+                'var(--color-primary)',
+                'var(--color-success)',
+                'var(--color-warning)',
+                'var(--color-error)',
+                'var(--color-purple)',
+              ][i % 5],
+              borderRadius: i % 2 === 0 ? '50%' : '2px',
             }}
           />
         ))}
@@ -81,11 +86,10 @@ export function OnboardingStepComplete({
       </h2>
       <p className="text-text-secondary mb-6">
         {createdSquadId
-          ? "Invite tes potes et propose une premi\u00e8re session"
+          ? 'Invite tes potes et propose une premi\u00e8re session'
           : squadsLength > 0
             ? `Tu as rejoint ${firstSquadName} !`
-            : "Tu peux maintenant explorer ou cr\u00e9er ta squad"
-        }
+            : 'Tu peux maintenant explorer ou cr\u00e9er ta squad'}
       </p>
 
       {/* Squad recap card */}
@@ -115,7 +119,9 @@ export function OnboardingStepComplete({
                   </div>
                   <div>
                     <p className="text-sm text-text-tertiary">Jeu</p>
-                    <p className="text-md font-semibold text-text-primary">{squadGame || 'Non d\u00e9fini'}</p>
+                    <p className="text-md font-semibold text-text-primary">
+                      {squadGame || 'Non d\u00e9fini'}
+                    </p>
                   </div>
                 </div>
               )}
@@ -152,7 +158,7 @@ export function OnboardingStepComplete({
       )}
 
       <Button onClick={onComplete} className="w-full h-14 text-lg">
-        {createdSquadId || squadsLength > 0 ? "Voir ma squad" : "Explorer"}
+        {createdSquadId || squadsLength > 0 ? 'Voir ma squad' : 'Explorer'}
         <ArrowRight className="w-5 h-5 ml-2" />
       </Button>
     </m.div>

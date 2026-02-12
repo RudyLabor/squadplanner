@@ -1,14 +1,7 @@
-"use client";
+'use client'
 
 import { memo, useState } from 'react'
-import {
-  Plug,
-  Calendar,
-  Tv,
-  Gamepad2,
-  MessageSquare,
-  Download,
-} from './icons'
+import { Plug, Calendar, Tv, Gamepad2, MessageSquare, Download } from './icons'
 import { useAuthStore } from '../hooks'
 import { supabase } from '../lib/supabase'
 import { showSuccess, showError, showInfo } from '../lib/toast'
@@ -32,10 +25,7 @@ export const IntegrationsSection = memo(function IntegrationsSection() {
         return
       }
 
-      const { error } = await supabase
-        .from('profiles')
-        .update(updates)
-        .eq('id', user.id)
+      const { error } = await supabase.from('profiles').update(updates).eq('id', user.id)
 
       if (error) throw error
       showSuccess('Profil mis à jour !')
@@ -156,7 +146,9 @@ function IntegrationRow({
         <div className="flex items-center gap-2">
           <span className="text-sm font-medium text-text-primary">{name}</span>
           {status === 'coming' && (
-            <span className="text-xs px-1.5 py-0.5 rounded-full bg-overlay-subtle text-text-tertiary font-medium">Bientot</span>
+            <span className="text-xs px-1.5 py-0.5 rounded-full bg-overlay-subtle text-text-tertiary font-medium">
+              Bientot
+            </span>
           )}
         </div>
         <p className="text-xs text-text-tertiary mt-0.5">{description}</p>

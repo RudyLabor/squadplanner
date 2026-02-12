@@ -28,7 +28,10 @@ interface SubscriptionState {
 
   // Actions
   fetchSubscription: (squadId: string) => Promise<void>
-  createCheckoutSession: (squadId: string, priceId: string) => Promise<{ url: string | null; error: Error | null }>
+  createCheckoutSession: (
+    squadId: string,
+    priceId: string
+  ) => Promise<{ url: string | null; error: Error | null }>
   createPortalSession: () => Promise<{ url: string | null; error: Error | null }>
   cancelSubscription: (squadId: string) => Promise<{ error: Error | null }>
 }
@@ -45,13 +48,8 @@ const PLANS: PricingPlan[] = [
     name: 'Gratuit',
     price: 0,
     interval: 'month',
-    features: [
-      '2 squads maximum',
-      'Planning basique',
-      'Rappels simples',
-      'Chat limité'
-    ],
-    stripePriceId: ''
+    features: ['2 squads maximum', 'Planning basique', 'Rappels simples', 'Chat limité'],
+    stripePriceId: '',
   },
   {
     id: 'premium_monthly',
@@ -65,22 +63,18 @@ const PLANS: PricingPlan[] = [
       'Historique illimité',
       'Export calendrier',
       'Audio HD Party',
-      'Support prioritaire'
+      'Support prioritaire',
     ],
-    stripePriceId: STRIPE_PRICE_MONTHLY
+    stripePriceId: STRIPE_PRICE_MONTHLY,
   },
   {
     id: 'premium_yearly',
     name: 'Premium Annuel',
     price: 47.88, // 3.99€/mois × 12 = 47.88€ (~2 mois offerts vs 59.88€)
     interval: 'year',
-    features: [
-      'Tout le Premium',
-      '2 mois gratuits',
-      'Accès anticipé aux nouveautés'
-    ],
-    stripePriceId: STRIPE_PRICE_YEARLY
-  }
+    features: ['Tout le Premium', '2 mois gratuits', 'Accès anticipé aux nouveautés'],
+    stripePriceId: STRIPE_PRICE_YEARLY,
+  },
 ]
 
 export const useSubscriptionStore = create<SubscriptionState>((set) => ({
@@ -113,7 +107,9 @@ export const useSubscriptionStore = create<SubscriptionState>((set) => ({
 
   createCheckoutSession: async (squadId: string, priceId: string) => {
     try {
-      const { data: { user } } = await supabase.auth.getUser()
+      const {
+        data: { user },
+      } = await supabase.auth.getUser()
       if (!user) throw new Error('Not authenticated')
 
       // Call Edge Function to create checkout session
@@ -123,7 +119,7 @@ export const useSubscriptionStore = create<SubscriptionState>((set) => ({
           price_id: priceId,
           success_url: `${window.location.origin}/squads/${squadId}?checkout=success`,
           cancel_url: `${window.location.origin}/squads/${squadId}?checkout=cancelled`,
-        }
+        },
       })
 
       if (error) throw error
@@ -136,7 +132,9 @@ export const useSubscriptionStore = create<SubscriptionState>((set) => ({
 
   createPortalSession: async () => {
     try {
-      const { data: { user } } = await supabase.auth.getUser()
+      const {
+        data: { user },
+      } = await supabase.auth.getUser()
       if (!user) throw new Error('Not authenticated')
 
       // Get user's stripe customer ID
@@ -155,7 +153,7 @@ export const useSubscriptionStore = create<SubscriptionState>((set) => ({
         body: {
           customer_id: profile.stripe_customer_id,
           return_url: `${window.location.origin}/profile`,
-        }
+        },
       })
 
       if (error) throw error
@@ -170,7 +168,7 @@ export const useSubscriptionStore = create<SubscriptionState>((set) => ({
     try {
       // Call Edge Function to cancel subscription
       const { error } = await supabase.functions.invoke('cancel-subscription', {
-        body: { squad_id: squadId }
+        body: { squad_id: squadId },
       })
 
       if (error) throw error

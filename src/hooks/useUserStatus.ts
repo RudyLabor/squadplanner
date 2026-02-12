@@ -31,8 +31,12 @@ interface UserStatusState {
 
 const STORAGE_KEY = 'sq-user-status'
 
-function loadPersistedStatus(): Pick<UserStatusState, 'availability' | 'customStatus' | 'gameStatus'> {
-  if (typeof window === 'undefined') return { availability: 'online', customStatus: null, gameStatus: null }
+function loadPersistedStatus(): Pick<
+  UserStatusState,
+  'availability' | 'customStatus' | 'gameStatus'
+> {
+  if (typeof window === 'undefined')
+    return { availability: 'online', customStatus: null, gameStatus: null }
   try {
     const raw = localStorage.getItem(STORAGE_KEY)
     if (!raw) return { availability: 'online', customStatus: null, gameStatus: null }
@@ -47,11 +51,15 @@ function loadPersistedStatus(): Pick<UserStatusState, 'availability' | 'customSt
   }
 }
 
-function persistStatus(state: Pick<UserStatusState, 'availability' | 'customStatus' | 'gameStatus'>) {
+function persistStatus(
+  state: Pick<UserStatusState, 'availability' | 'customStatus' | 'gameStatus'>
+) {
   if (typeof window === 'undefined') return
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(state))
-  } catch { /* ignore */ }
+  } catch {
+    /* ignore */
+  }
 }
 
 export const useUserStatusStore = create<UserStatusState>((set, get) => {
@@ -101,7 +109,10 @@ export const useUserStatusStore = create<UserStatusState>((set, get) => {
   }
 })
 
-export const AVAILABILITY_CONFIG: Record<AvailabilityStatus, { label: string; color: string; dotClass: string }> = {
+export const AVAILABILITY_CONFIG: Record<
+  AvailabilityStatus,
+  { label: string; color: string; dotClass: string }
+> = {
   online: { label: 'En ligne', color: 'var(--color-success)', dotClass: 'bg-emerald-400' },
   busy: { label: 'Occupe', color: 'var(--color-warning)', dotClass: 'bg-amber-400' },
   dnd: { label: 'Ne pas deranger', color: 'var(--color-error)', dotClass: 'bg-red-400' },

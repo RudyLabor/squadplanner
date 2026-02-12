@@ -34,10 +34,13 @@ export function useHashNavigation() {
     }
   }, [location.hash, scrollToHash])
 
-  const navigateToSection = useCallback((sectionId: string) => {
-    window.history.replaceState(null, '', `#${sectionId}`)
-    scrollToHash(`#${sectionId}`)
-  }, [scrollToHash])
+  const navigateToSection = useCallback(
+    (sectionId: string) => {
+      window.history.replaceState(null, '', `#${sectionId}`)
+      scrollToHash(`#${sectionId}`)
+    },
+    [scrollToHash]
+  )
 
   return { navigateToSection, currentHash: location.hash.replace('#', '') }
 }

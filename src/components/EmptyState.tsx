@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 import { m } from 'framer-motion'
 import {
@@ -36,77 +36,80 @@ interface EmptyStateProps {
   icon?: React.ReactNode
 }
 
-const EMPTY_STATE_CONFIG: Record<EmptyStateType, {
-  icon: React.ReactNode
-  title: string
-  message: string
-  color: string
-  defaultActionLabel?: string
-}> = {
+const EMPTY_STATE_CONFIG: Record<
+  EmptyStateType,
+  {
+    icon: React.ReactNode
+    title: string
+    message: string
+    color: string
+    defaultActionLabel?: string
+  }
+> = {
   no_squads: {
     icon: <Users className="w-12 h-12" />,
-    title: "Pas encore de squad",
-    message: "Crée ta première squad et invite tes potes à jouer !",
+    title: 'Pas encore de squad',
+    message: 'Crée ta première squad et invite tes potes à jouer !',
     color: 'var(--color-purple)',
-    defaultActionLabel: 'Créer ma squad'
+    defaultActionLabel: 'Créer ma squad',
   },
   no_sessions: {
     icon: <CalendarPlus className="w-12 h-12" />,
-    title: "Aucune session prévue",
+    title: 'Aucune session prévue',
     message: "Ta squad t'attend ! Planifie une session et fini les « on verra ».",
     color: 'var(--color-info)',
-    defaultActionLabel: 'Planifier maintenant'
+    defaultActionLabel: 'Planifier maintenant',
   },
   no_messages: {
     icon: <Send className="w-12 h-12" />,
-    title: "Pas encore de messages",
-    message: "Envoie le premier message à ta squad pour lancer la conversation !",
-    color: 'var(--color-success)'
+    title: 'Pas encore de messages',
+    message: 'Envoie le premier message à ta squad pour lancer la conversation !',
+    color: 'var(--color-success)',
   },
   no_friends: {
     icon: <UserPlus className="w-12 h-12" />,
-    title: "Aucun pote en ligne",
+    title: 'Aucun pote en ligne',
     message: "Personne n'est connecté pour le moment. Invite tes amis à rejoindre Squad Planner !",
     color: 'var(--color-warning)',
-    defaultActionLabel: 'Invite tes amis'
+    defaultActionLabel: 'Invite tes amis',
   },
   no_achievements: {
     icon: <Trophy className="w-12 h-12" />,
-    title: "Pas encore de succès",
-    message: "Participe à des sessions et relève des défis pour débloquer tes premiers badges !",
+    title: 'Pas encore de succès',
+    message: 'Participe à des sessions et relève des défis pour débloquer tes premiers badges !',
     color: 'var(--color-warning)',
-    defaultActionLabel: 'Voir les sessions'
+    defaultActionLabel: 'Voir les sessions',
   },
   no_challenges: {
     icon: <Gamepad2 className="w-12 h-12" />,
-    title: "Aucun défi disponible",
-    message: "Les défis se renouvellent chaque jour. Reviens demain pour de nouvelles missions !",
-    color: 'var(--color-error)'
+    title: 'Aucun défi disponible',
+    message: 'Les défis se renouvellent chaque jour. Reviens demain pour de nouvelles missions !',
+    color: 'var(--color-error)',
   },
   no_notifications: {
     icon: <PartyPopper className="w-12 h-12" />,
-    title: "Tout est lu !",
-    message: "Aucune notification en attente. Profites-en pour planifier ta prochaine session.",
-    color: 'var(--color-primary)'
+    title: 'Tout est lu !',
+    message: 'Aucune notification en attente. Profites-en pour planifier ta prochaine session.',
+    color: 'var(--color-primary)',
   },
   no_search_results: {
     icon: <Search className="w-12 h-12" />,
-    title: "Aucun résultat",
+    title: 'Aucun résultat',
     message: "Essaie avec d'autres mots-clés ou vérifie l'orthographe.",
-    color: 'var(--color-purple)'
+    color: 'var(--color-purple)',
   },
   empty_folder: {
     icon: <FolderOpen className="w-12 h-12" />,
-    title: "Dossier vide",
+    title: 'Dossier vide',
     message: "Il n'y a rien ici pour le moment",
-    color: 'var(--color-text-tertiary)'
+    color: 'var(--color-text-tertiary)',
   },
   generic: {
     icon: <Inbox className="w-12 h-12" />,
-    title: "Rien à afficher",
+    title: 'Rien à afficher',
     message: "Il n'y a rien ici pour le moment",
-    color: 'var(--color-text-tertiary)'
-  }
+    color: 'var(--color-text-tertiary)',
+  },
 }
 
 export function EmptyState({
@@ -115,7 +118,7 @@ export function EmptyState({
   message,
   actionLabel,
   onAction,
-  icon
+  icon,
 }: EmptyStateProps) {
   const config = EMPTY_STATE_CONFIG[type]
 
@@ -139,12 +142,12 @@ export function EmptyState({
           style={{ backgroundColor: config.color }}
           animate={{
             scale: [1, 1.2, 1],
-            opacity: [0.2, 0.4, 0.2]
+            opacity: [0.2, 0.4, 0.2],
           }}
           transition={{
             duration: 3,
             repeat: Infinity,
-            ease: 'easeInOut'
+            ease: 'easeInOut',
           }}
         />
 
@@ -153,15 +156,15 @@ export function EmptyState({
           className="relative w-24 h-24 rounded-2xl flex items-center justify-center"
           style={{
             backgroundColor: `${config.color}15`,
-            color: config.color
+            color: config.color,
           }}
           animate={{
-            y: [0, -8, 0]
+            y: [0, -8, 0],
           }}
           transition={{
             duration: 2.5,
             repeat: Infinity,
-            ease: 'easeInOut'
+            ease: 'easeInOut',
           }}
         >
           {icon || config.icon}
@@ -202,12 +205,12 @@ export function EmptyState({
             style={{ backgroundColor: config.color }}
             animate={{
               opacity: [0.3, 0.6, 0.3],
-              scale: [1, 1.05, 1]
+              scale: [1, 1.05, 1],
             }}
             transition={{
               duration: 2,
               repeat: Infinity,
-              ease: 'easeInOut'
+              ease: 'easeInOut',
             }}
           />
 
@@ -216,7 +219,7 @@ export function EmptyState({
             className="relative"
             style={{
               backgroundColor: config.color,
-              color: 'var(--color-text-primary)'
+              color: 'var(--color-text-primary)',
             }}
           >
             {actionLabel || config.defaultActionLabel}

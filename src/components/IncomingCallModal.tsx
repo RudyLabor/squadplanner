@@ -5,12 +5,7 @@ import { useFocusTrap } from '../hooks/useFocusTrap'
 import { useRingtone } from '../hooks/useRingtone'
 
 export function IncomingCallModal() {
-  const {
-    status,
-    caller,
-    acceptCall,
-    rejectCall,
-  } = useVoiceCallStore()
+  const { status, caller, acceptCall, rejectCall } = useVoiceCallStore()
 
   // Only show for incoming calls (ringing state)
   const shouldShow = status === 'ringing' || status === 'missed' || status === 'rejected'
@@ -97,9 +92,13 @@ export function IncomingCallModal() {
 
             {/* Shake animation for avatar - limited repeats */}
             <m.div
-              animate={status === 'ringing' ? {
-                rotate: [-2, 2, -2, 2, 0],
-              } : {}}
+              animate={
+                status === 'ringing'
+                  ? {
+                      rotate: [-2, 2, -2, 2, 0],
+                    }
+                  : {}
+              }
               transition={{
                 duration: 0.5,
                 repeat: status === 'ringing' ? 3 : 0,
@@ -157,9 +156,7 @@ export function IncomingCallModal() {
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.3 }}
-            className={`text-base ${
-              status === 'ringing' ? 'text-success' : 'text-text-secondary'
-            }`}
+            className={`text-base ${status === 'ringing' ? 'text-success' : 'text-text-secondary'}`}
           >
             {getStatusText()}
           </m.p>
@@ -183,7 +180,9 @@ export function IncomingCallModal() {
                 >
                   <PhoneOff className="w-8 h-8 text-white" aria-hidden="true" />
                 </button>
-                <span className="text-base text-text-secondary" aria-hidden="true">Refuser</span>
+                <span className="text-base text-text-secondary" aria-hidden="true">
+                  Refuser
+                </span>
               </div>
 
               {/* Accept button */}
@@ -195,7 +194,9 @@ export function IncomingCallModal() {
                 >
                   <Phone className="w-8 h-8 text-white" aria-hidden="true" />
                 </button>
-                <span className="text-base text-text-secondary" aria-hidden="true">Accepter</span>
+                <span className="text-base text-text-secondary" aria-hidden="true">
+                  Accepter
+                </span>
               </div>
             </div>
           </m.div>

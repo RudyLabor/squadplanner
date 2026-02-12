@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 import { useMemo } from 'react'
 import { m } from 'framer-motion'
@@ -16,7 +16,20 @@ interface WeekCalendarProps {
 }
 
 const DAYS_FR = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim']
-const MONTHS_FR = ['jan', 'fév', 'mar', 'avr', 'mai', 'juin', 'juil', 'août', 'sep', 'oct', 'nov', 'déc']
+const MONTHS_FR = [
+  'jan',
+  'fév',
+  'mar',
+  'avr',
+  'mai',
+  'juin',
+  'juil',
+  'août',
+  'sep',
+  'oct',
+  'nov',
+  'déc',
+]
 
 function getWeekDays(offset: number): Date[] {
   const now = new Date()
@@ -34,7 +47,11 @@ function getWeekDays(offset: number): Date[] {
 }
 
 function isSameDay(a: Date, b: Date): boolean {
-  return a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate()
+  return (
+    a.getFullYear() === b.getFullYear() &&
+    a.getMonth() === b.getMonth() &&
+    a.getDate() === b.getDate()
+  )
 }
 
 export function WeekCalendar({ sessions, weekOffset = 0, onWeekChange }: WeekCalendarProps) {
@@ -105,12 +122,16 @@ export function WeekCalendar({ sessions, weekOffset = 0, onWeekChange }: WeekCal
                     : 'border-transparent'
               } ${isPast ? 'opacity-50' : ''}`}
             >
-              <span className={`text-xs font-medium mb-1 ${isToday ? 'text-primary' : 'text-text-tertiary'}`}>
+              <span
+                className={`text-xs font-medium mb-1 ${isToday ? 'text-primary' : 'text-text-tertiary'}`}
+              >
                 {DAYS_FR[i]}
               </span>
-              <span className={`text-lg font-bold leading-none mb-1 ${
-                isToday ? 'text-primary' : 'text-text-primary'
-              }`}>
+              <span
+                className={`text-lg font-bold leading-none mb-1 ${
+                  isToday ? 'text-primary' : 'text-text-primary'
+                }`}
+              >
                 {day.getDate()}
               </span>
               <div className="flex gap-0.5 mt-0.5 min-h-[8px]">
@@ -130,7 +151,9 @@ export function WeekCalendar({ sessions, weekOffset = 0, onWeekChange }: WeekCal
                   />
                 ))}
                 {daySessions.length > 3 && (
-                  <span className="text-xs text-text-quaternary leading-none">+{daySessions.length - 3}</span>
+                  <span className="text-xs text-text-quaternary leading-none">
+                    +{daySessions.length - 3}
+                  </span>
                 )}
               </div>
             </m.div>

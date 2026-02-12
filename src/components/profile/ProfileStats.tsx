@@ -1,23 +1,50 @@
 import { m } from 'framer-motion'
-import {
-  Calendar,
-  Check,
-  Target,
-  Trophy,
-  Sparkles,
-  TrendingUp,
-  Plus,
-} from '../icons'
+import { Calendar, Check, Target, Trophy, Sparkles, TrendingUp, Plus } from '../icons'
 import { Link } from 'react-router'
 import { Card, ProgressRing, AnimatedCounter, HelpTooltip } from '../ui'
 
 // Système de tiers basé sur le score de fiabilité
 const TIERS = [
-  { name: 'Débutant', color: 'var(--color-text-secondary)', bgColor: 'var(--color-overlay-light)', icon: '', minScore: 0, glow: false },
-  { name: 'Confirmé', color: 'var(--color-primary)', bgColor: 'var(--color-primary-15)', icon: '', minScore: 50, glow: false },
-  { name: 'Expert', color: 'var(--color-success)', bgColor: 'var(--color-success-15)', icon: '', minScore: 70, glow: false },
-  { name: 'Master', color: 'var(--color-purple)', bgColor: 'var(--color-purple-15)', icon: '', minScore: 85, glow: true },
-  { name: 'Légende', color: 'var(--color-warning)', bgColor: 'var(--color-warning-15)', icon: '', minScore: 95, glow: true },
+  {
+    name: 'Débutant',
+    color: 'var(--color-text-secondary)',
+    bgColor: 'var(--color-overlay-light)',
+    icon: '',
+    minScore: 0,
+    glow: false,
+  },
+  {
+    name: 'Confirmé',
+    color: 'var(--color-primary)',
+    bgColor: 'var(--color-primary-15)',
+    icon: '',
+    minScore: 50,
+    glow: false,
+  },
+  {
+    name: 'Expert',
+    color: 'var(--color-success)',
+    bgColor: 'var(--color-success-15)',
+    icon: '',
+    minScore: 70,
+    glow: false,
+  },
+  {
+    name: 'Master',
+    color: 'var(--color-purple)',
+    bgColor: 'var(--color-purple-15)',
+    icon: '',
+    minScore: 85,
+    glow: true,
+  },
+  {
+    name: 'Légende',
+    color: 'var(--color-warning)',
+    bgColor: 'var(--color-warning-15)',
+    icon: '',
+    minScore: 95,
+    glow: true,
+  },
 ]
 
 const getTier = (score: number) => {
@@ -48,10 +75,34 @@ export function ProfileStats({ profile, profileReady }: ProfileStatsProps) {
   const hasNoActivity = totalSessions === 0 && totalCheckins === 0
 
   const stats = [
-    { icon: Calendar, label: 'Sessions', value: totalSessions, color: 'var(--color-warning)', bgColor: 'var(--color-warning-15)' },
-    { icon: Check, label: 'Check-ins', value: totalCheckins, color: 'var(--color-success)', bgColor: 'var(--color-success-15)' },
-    { icon: Target, label: 'Niveau', value: profile?.level ?? 1, color: 'var(--color-primary)', bgColor: 'var(--color-primary-15)' },
-    { icon: Trophy, label: 'XP', value: profile?.xp ?? 0, color: 'var(--color-purple)', bgColor: 'var(--color-purple-15)' },
+    {
+      icon: Calendar,
+      label: 'Sessions',
+      value: totalSessions,
+      color: 'var(--color-warning)',
+      bgColor: 'var(--color-warning-15)',
+    },
+    {
+      icon: Check,
+      label: 'Check-ins',
+      value: totalCheckins,
+      color: 'var(--color-success)',
+      bgColor: 'var(--color-success-15)',
+    },
+    {
+      icon: Target,
+      label: 'Niveau',
+      value: profile?.level ?? 1,
+      color: 'var(--color-primary)',
+      bgColor: 'var(--color-primary-15)',
+    },
+    {
+      icon: Trophy,
+      label: 'XP',
+      value: profile?.xp ?? 0,
+      color: 'var(--color-purple)',
+      bgColor: 'var(--color-purple-15)',
+    },
   ]
 
   return (
@@ -71,11 +122,13 @@ export function ProfileStats({ profile, profileReady }: ProfileStatsProps) {
           </div>
         </Card>
       ) : (
-        <Card className={`mb-5 overflow-hidden bg-bg-elevated ${tier.glow ? 'ring-1 ring-warning/30 ring-offset-1 ring-offset-bg-base' : ''}`}>
+        <Card
+          className={`mb-5 overflow-hidden bg-bg-elevated ${tier.glow ? 'ring-1 ring-warning/30 ring-offset-1 ring-offset-bg-base' : ''}`}
+        >
           <div
             className="h-1.5"
             style={{
-              background: `linear-gradient(to right, ${reliabilityColor} ${reliabilityScore}%, var(--color-overlay-light) ${reliabilityScore}%)`
+              background: `linear-gradient(to right, ${reliabilityColor} ${reliabilityScore}%, var(--color-overlay-light) ${reliabilityScore}%)`,
             }}
           />
           <div className="p-5">
@@ -103,7 +156,10 @@ export function ProfileStats({ profile, profileReady }: ProfileStatsProps) {
                     <span>{tier.name}</span>
                   </m.span>
                 </div>
-                <HelpTooltip content="Ton score de fiabilité mesure ta régularité aux sessions. Plus tu confirmes et te présentes, plus il monte." position="bottom">
+                <HelpTooltip
+                  content="Ton score de fiabilité mesure ta régularité aux sessions. Plus tu confirmes et te présentes, plus il monte."
+                  position="bottom"
+                >
                   <p className="text-base text-text-quaternary">Score de fiabilité</p>
                 </HelpTooltip>
 
@@ -111,7 +167,10 @@ export function ProfileStats({ profile, profileReady }: ProfileStatsProps) {
                   <div className="mt-3">
                     <div className="flex items-center justify-between text-sm mb-1.5">
                       <span className="text-text-tertiary">
-                        Prochain : <span style={{ color: tier.nextTier.color }}>{tier.nextTier.icon} {tier.nextTier.name}</span>
+                        Prochain :{' '}
+                        <span style={{ color: tier.nextTier.color }}>
+                          {tier.nextTier.icon} {tier.nextTier.name}
+                        </span>
                       </span>
                       <span className="text-text-quaternary">
                         {tier.nextTier.minScore - reliabilityScore}% restants
@@ -121,13 +180,13 @@ export function ProfileStats({ profile, profileReady }: ProfileStatsProps) {
                       <m.div
                         className="absolute h-full rounded-full"
                         style={{
-                          background: `linear-gradient(90deg, ${reliabilityColor}, ${tier.nextTier.color})`
+                          background: `linear-gradient(90deg, ${reliabilityColor}, ${tier.nextTier.color})`,
                         }}
                         initial={{ width: 0 }}
                         animate={{
-                          width: `${((reliabilityScore - tier.minScore) / (tier.nextTier.minScore - tier.minScore)) * 100}%`
+                          width: `${((reliabilityScore - tier.minScore) / (tier.nextTier.minScore - tier.minScore)) * 100}%`,
                         }}
-                        transition={{ duration: 1.2, ease: "easeOut", delay: 0.5 }}
+                        transition={{ duration: 1.2, ease: 'easeOut', delay: 0.5 }}
                       />
                     </div>
                   </div>
@@ -161,8 +220,11 @@ export function ProfileStats({ profile, profileReady }: ProfileStatsProps) {
 
       {/* Stats Grid */}
       {!profileReady ? (
-        <section className="grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-4 mb-5" aria-label="Statistiques">
-          {[1, 2, 3, 4].map(i => (
+        <section
+          className="grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-4 mb-5"
+          aria-label="Statistiques"
+        >
+          {[1, 2, 3, 4].map((i) => (
             <Card key={i} className="p-4 bg-bg-elevated">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-xl bg-surface-card animate-pulse" />
@@ -176,8 +238,11 @@ export function ProfileStats({ profile, profileReady }: ProfileStatsProps) {
         </section>
       ) : (
         <>
-          <section className="grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-4 mb-5" aria-label="Statistiques">
-            {stats.map(stat => (
+          <section
+            className="grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-4 mb-5"
+            aria-label="Statistiques"
+          >
+            {stats.map((stat) => (
               <Card key={stat.label} className="p-4 bg-bg-elevated">
                 <div className="flex items-center gap-3">
                   <div
@@ -203,8 +268,13 @@ export function ProfileStats({ profile, profileReady }: ProfileStatsProps) {
                   <Plus className="w-5 h-5 text-primary" />
                 </div>
                 <div className="text-left">
-                  <p className="text-md font-medium text-text-primary">Planifie ta première session !</p>
-                  <Link to="/squads" className="text-base text-primary hover:text-primary-hover font-medium transition-colors">
+                  <p className="text-md font-medium text-text-primary">
+                    Planifie ta première session !
+                  </p>
+                  <Link
+                    to="/squads"
+                    className="text-base text-primary hover:text-primary-hover font-medium transition-colors"
+                  >
                     Créer une session
                   </Link>
                 </div>

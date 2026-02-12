@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 import { useState, useRef, useEffect, memo } from 'react'
 import { useAdaptiveLoading } from '../../hooks/useAdaptiveLoading'
@@ -47,9 +47,9 @@ export const AdaptiveImage = memo(function AdaptiveImage({
   const resolvedSrc = eager
     ? src
     : tier === 'low'
-      ? (srcLow || placeholder || src)
+      ? srcLow || placeholder || src
       : tier === 'medium'
-        ? (srcMedium || src)
+        ? srcMedium || src
         : src
 
   // Skip placeholder on low tier when no real low-quality source
@@ -72,10 +72,7 @@ export const AdaptiveImage = memo(function AdaptiveImage({
     'data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 1 1%27%3E%3Crect fill=%27%23141518%27 width=%271%27 height=%271%27/%3E%3C/svg%3E'
 
   return (
-    <div
-      className={`relative overflow-hidden ${className}`}
-      style={{ width, height }}
-    >
+    <div className={`relative overflow-hidden ${className}`} style={{ width, height }}>
       {/* Placeholder / blur-up background */}
       {placeholder && !loaded && (
         <img
@@ -89,17 +86,14 @@ export const AdaptiveImage = memo(function AdaptiveImage({
 
       {/* Fallback background when no placeholder */}
       {!placeholder && !loaded && (
-        <div
-          className="absolute inset-0 bg-bg-hover"
-          aria-hidden="true"
-        />
+        <div className="absolute inset-0 bg-bg-hover" aria-hidden="true" />
       )}
 
       {/* Actual image */}
       {!showPlaceholderOnly && (
         <img
           ref={imgRef}
-          src={error ? (placeholder || defaultPlaceholder) : resolvedSrc}
+          src={error ? placeholder || defaultPlaceholder : resolvedSrc}
           alt={alt}
           width={width}
           height={height}
@@ -116,9 +110,7 @@ export const AdaptiveImage = memo(function AdaptiveImage({
       {/* Low-tier overlay hint */}
       {showPlaceholderOnly && (
         <div className="absolute inset-0 flex items-center justify-center bg-bg-hover/80">
-          <span className="text-xs text-text-tertiary">
-            Connexion lente
-          </span>
+          <span className="text-xs text-text-tertiary">Connexion lente</span>
         </div>
       )}
     </div>

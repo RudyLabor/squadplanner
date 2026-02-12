@@ -23,21 +23,38 @@ interface AuthState {
 let _authSubscription: { unsubscribe: () => void } | null = null
 
 export const useAuthStore = create<AuthState>((set, get) => ({
-  user: null, profile: null, session: null, isLoading: true, isInitialized: false,
+  user: null,
+  profile: null,
+  session: null,
+  isLoading: true,
+  isInitialized: false,
 
   initialize: async () => {
     try {
       await initSupabase()
-      const { data: { session }, error: sessionError } = await supabase.auth.getSession()
+      const {
+        data: { session },
+        error: sessionError,
+      } = await supabase.auth.getSession()
       if (sessionError) {
         // Invalid or expired refresh token — clear local session and continue as logged-out
         console.warn('Auth session error (invalid/expired token):', sessionError.message)
         await supabase.auth.signOut({ scope: 'local' }).catch(() => {})
         set({ user: null, session: null, profile: null, isLoading: false, isInitialized: true })
       } else if (session?.user) {
-        const { data: profile } = await supabase.from('profiles').select('*').eq('id', session.user.id).single()
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('*')
+          .eq('id', session.user.id)
+          .single()
         const updatedProfile = await updateDailyStreak(session.user.id, profile)
-        set({ user: session.user, session, profile: updatedProfile, isLoading: false, isInitialized: true })
+        set({
+          user: session.user,
+          session,
+          profile: updatedProfile,
+          isLoading: false,
+          isInitialized: true,
+        })
       } else {
         set({ isLoading: false, isInitialized: true })
       }
@@ -45,9 +62,15 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       // Clean up previous subscription if initialize is called again
       _authSubscription?.unsubscribe()
 
-      const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+      const {
+        data: { subscription },
+      } = supabase.auth.onAuthStateChange(async (event, session) => {
         if (event === 'SIGNED_IN' && session?.user) {
-          const { data: profile } = await supabase.from('profiles').select('*').eq('id', session.user.id).single()
+          const { data: profile } = await supabase
+            .from('profiles')
+            .select('*')
+            .eq('id', session.user.id)
+            .single()
           const updatedProfile = await updateDailyStreak(session.user.id, profile)
           set({ user: session.user, session, profile: updatedProfile })
         } else if (event === 'SIGNED_OUT') {
@@ -65,22 +88,33 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     try {
       set({ isLoading: true })
       const { data, error: authError } = await supabase.auth.signUp({
-        email, password, options: { data: { username } }
+        email,
+        password,
+        options: { data: { username } },
       })
       if (authError) throw authError
       if (!data.user) throw new Error('No user returned')
 
-      await new Promise(resolve => setTimeout(resolve, 500))
+      await new Promise((resolve) => setTimeout(resolve, 500))
 
       const { data: existingProfile, error: profileError } = await supabase
-        .from('profiles').select('*').eq('id', data.user.id).single()
+        .from('profiles')
+        .select('*')
+        .eq('id', data.user.id)
+        .single()
 
       let profile = existingProfile
       if (profileError || !profile) {
         const { data: newProfile, error: createError } = await supabase
           .from('profiles')
-          .insert({ id: data.user.id, username, created_at: new Date().toISOString(), updated_at: new Date().toISOString() })
-          .select().single()
+          .insert({
+            id: data.user.id,
+            username,
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString(),
+          })
+          .select()
+          .single()
         if (createError) throw new Error('Impossible de creer le profil. Veuillez reessayer.')
         profile = newProfile
       }
@@ -100,7 +134,11 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       set({ isLoading: true })
       const { data, error } = await supabase.auth.signInWithPassword({ email, password })
       if (error) throw error
-      const { data: profile } = await supabase.from('profiles').select('*').eq('id', data.user.id).single()
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', data.user.id)
+        .single()
       set({ user: data.user, session: data.session, profile, isLoading: false })
       return { error: null }
     } catch (error) {
@@ -113,7 +151,8 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     try {
       set({ isLoading: true })
       const { error } = await supabase.auth.signInWithOAuth({
-        provider: 'google', options: { redirectTo: `${window.location.origin}/` }
+        provider: 'google',
+        options: { redirectTo: `${window.location.origin}/` },
       })
       if (error) throw error
       return { error: null }
@@ -128,24 +167,28 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       try {
         const { forceLeaveVoiceParty } = await import('./useVoiceChat')
         await forceLeaveVoiceParty()
-      } catch { /* voice module may not be loaded */ }
+      } catch {
+        /* voice module may not be loaded */
+      }
       // Reset squads store to prevent stale data on next sign-in
       try {
         const { useSquadsStore } = await import('./useSquads')
         useSquadsStore.getState().reset()
-      } catch { /* squads module may not be loaded */ }
+      } catch {
+        /* squads module may not be loaded */
+      }
       set({ user: null, session: null, profile: null, isLoading: true })
       const { error } = await supabase.auth.signOut({ scope: 'global' })
       if (error) console.warn('Sign out error:', error)
 
-      const keysToRemove = Object.keys(localStorage).filter(key =>
-        key.startsWith('sb-') || key.includes('supabase') || key.includes('auth-token')
+      const keysToRemove = Object.keys(localStorage).filter(
+        (key) => key.startsWith('sb-') || key.includes('supabase') || key.includes('auth-token')
       )
-      keysToRemove.forEach(key => localStorage.removeItem(key))
-      const sessionKeysToRemove = Object.keys(sessionStorage).filter(key =>
-        key.startsWith('sb-') || key.includes('supabase')
+      keysToRemove.forEach((key) => localStorage.removeItem(key))
+      const sessionKeysToRemove = Object.keys(sessionStorage).filter(
+        (key) => key.startsWith('sb-') || key.includes('supabase')
       )
-      sessionKeysToRemove.forEach(key => sessionStorage.removeItem(key))
+      sessionKeysToRemove.forEach((key) => sessionStorage.removeItem(key))
 
       set({ isLoading: false })
       window.location.href = '/'
@@ -162,10 +205,16 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       if (!user) throw new Error('Not authenticated')
       const { error } = await supabase.from('profiles').update(updates).eq('id', user.id)
       if (error) throw error
-      const { data: profile } = await supabase.from('profiles').select('*').eq('id', user.id).single()
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', user.id)
+        .single()
       set({ profile })
       return { error: null }
-    } catch (error) { return { error: error as Error } }
+    } catch (error) {
+      return { error: error as Error }
+    }
   },
 
   refreshProfile: async () => {

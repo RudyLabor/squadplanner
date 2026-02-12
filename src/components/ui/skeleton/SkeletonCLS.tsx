@@ -1,4 +1,4 @@
-import { Skeleton, SkeletonAvatar } from './SkeletonBase'
+import { Skeleton } from './SkeletonBase'
 
 // =============================================================================
 // CLS-PREVENTION SKELETONS (Fixed dimensions to prevent layout shift)
@@ -49,7 +49,10 @@ export function SkeletonFriendsPlaying() {
       </div>
       <div className="flex gap-3 overflow-hidden">
         {[1, 2, 3].map((i) => (
-          <div key={i} className="flex-shrink-0 w-[200px] p-4 rounded-xl bg-bg-hover border border-border-subtle">
+          <div
+            key={i}
+            className="flex-shrink-0 w-[200px] p-4 rounded-xl bg-bg-hover border border-border-subtle"
+          >
             <div className="flex items-center gap-3 mb-3">
               <Skeleton className="w-12 h-12" rounded="full" />
               <div className="flex-1">
@@ -92,7 +95,10 @@ export function SkeletonStatsRow() {
  */
 export function SkeletonStreakCounter() {
   return (
-    <div className="min-h-[200px] p-4 rounded-xl bg-bg-hover border border-border-subtle" aria-hidden="true">
+    <div
+      className="min-h-[200px] p-4 rounded-xl bg-bg-hover border border-border-subtle"
+      aria-hidden="true"
+    >
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
           <Skeleton className="w-5 h-5" rounded="md" />

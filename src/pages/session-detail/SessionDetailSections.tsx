@@ -57,7 +57,9 @@ interface RsvpCountsProps {
 export function RsvpCounts({ present, maybe, absent }: RsvpCountsProps) {
   return (
     <div className="mb-8">
-      <h2 className="text-xs font-medium text-text-tertiary/35 uppercase tracking-[0.05em] mb-4">Réponses</h2>
+      <h2 className="text-xs font-medium text-text-tertiary/35 uppercase tracking-[0.05em] mb-4">
+        Réponses
+      </h2>
       <div className="grid grid-cols-3 gap-3 lg:gap-4">
         <Card className="p-4 lg:p-5 text-center">
           <Check className="w-5 h-5 mx-auto mb-2 text-success" />
@@ -88,30 +90,54 @@ interface RsvpButtonsProps {
 export function RsvpButtons({ myRsvp, rsvpLoading, onRsvp }: RsvpButtonsProps) {
   return (
     <div className="mb-8">
-      <h2 className="text-xs font-medium text-text-tertiary/35 uppercase tracking-[0.05em] mb-4">Ta réponse</h2>
+      <h2 className="text-xs font-medium text-text-tertiary/35 uppercase tracking-[0.05em] mb-4">
+        Ta réponse
+      </h2>
       <Card>
         <CardContent className="p-4">
           <div className="flex gap-2">
             <m.div className="flex-1" whileTap={{ scale: 0.97 }}>
-              <Button variant={myRsvp === 'present' ? 'primary' : 'secondary'}
+              <Button
+                variant={myRsvp === 'present' ? 'primary' : 'secondary'}
                 className={`w-full ${myRsvp === 'present' ? 'shadow-glow-success ring-2 ring-success/15' : ''}`}
-                onClick={() => onRsvp('present')} disabled={rsvpLoading !== null}>
-                {rsvpLoading === 'present' ? <Loader2 className="w-4 h-4 animate-spin" /> : <Check className="w-4 h-4" />}
+                onClick={() => onRsvp('present')}
+                disabled={rsvpLoading !== null}
+              >
+                {rsvpLoading === 'present' ? (
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                ) : (
+                  <Check className="w-4 h-4" />
+                )}
                 Présent
               </Button>
             </m.div>
             <m.div className="flex-1" whileTap={{ scale: 0.97 }}>
-              <Button variant={myRsvp === 'maybe' ? 'primary' : 'secondary'}
+              <Button
+                variant={myRsvp === 'maybe' ? 'primary' : 'secondary'}
                 className={`w-full ${myRsvp === 'maybe' ? 'shadow-glow-warning ring-2 ring-warning/15' : ''}`}
-                onClick={() => onRsvp('maybe')} disabled={rsvpLoading !== null}>
-                {rsvpLoading === 'maybe' ? <Loader2 className="w-5 h-5 animate-spin" /> : <HelpCircle className="w-4 h-4" />}
+                onClick={() => onRsvp('maybe')}
+                disabled={rsvpLoading !== null}
+              >
+                {rsvpLoading === 'maybe' ? (
+                  <Loader2 className="w-5 h-5 animate-spin" />
+                ) : (
+                  <HelpCircle className="w-4 h-4" />
+                )}
                 Peut-être
               </Button>
             </m.div>
             <m.div className="flex-1" whileTap={{ scale: 0.97 }}>
-              <Button variant={myRsvp === 'absent' ? 'danger' : 'secondary'} className="w-full"
-                onClick={() => onRsvp('absent')} disabled={rsvpLoading !== null}>
-                {rsvpLoading === 'absent' ? <Loader2 className="w-4 h-4 animate-spin" /> : <X className="w-4 h-4" />}
+              <Button
+                variant={myRsvp === 'absent' ? 'danger' : 'secondary'}
+                className="w-full"
+                onClick={() => onRsvp('absent')}
+                disabled={rsvpLoading !== null}
+              >
+                {rsvpLoading === 'absent' ? (
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                ) : (
+                  <X className="w-4 h-4" />
+                )}
                 Absent
               </Button>
             </m.div>
@@ -131,8 +157,11 @@ export function CheckinSection({ checkinLoading, onCheckin }: CheckinSectionProp
   return (
     <div className="mb-8">
       <Card className="p-6 text-center bg-gradient-to-b from-success/[0.075] to-transparent border-success/15 relative overflow-hidden">
-        <m.div className="absolute inset-0 bg-success/[0.025]"
-          animate={{ opacity: [0.3, 0.5, 0.3] }} transition={{ duration: 2, repeat: 3 }} />
+        <m.div
+          className="absolute inset-0 bg-success/[0.025]"
+          animate={{ opacity: [0.3, 0.5, 0.3] }}
+          transition={{ duration: 2, repeat: 3 }}
+        />
         <div className="relative">
           <m.div animate={{ scale: [1, 1.05, 1] }} transition={{ duration: 1.5, repeat: 3 }}>
             <Gamepad2 className="w-14 h-14 mx-auto mb-4 text-success" />
@@ -140,9 +169,16 @@ export function CheckinSection({ checkinLoading, onCheckin }: CheckinSectionProp
           <h3 className="text-lg font-bold text-text-primary mb-2">🎮 C'est l'heure du game !</h3>
           <p className="text-text-secondary mb-5">Ta squad t'attend. Confirme que t'es là !</p>
           <m.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-            <Button onClick={onCheckin} disabled={checkinLoading}
-              className="h-12 px-8 bg-success hover:bg-success text-bg-base font-semibold shadow-glow-success">
-              {checkinLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <CheckCircle2 className="w-5 h-5" />}
+            <Button
+              onClick={onCheckin}
+              disabled={checkinLoading}
+              className="h-12 px-8 bg-success hover:bg-success text-bg-base font-semibold shadow-glow-success"
+            >
+              {checkinLoading ? (
+                <Loader2 className="w-5 h-5 animate-spin" />
+              ) : (
+                <CheckCircle2 className="w-5 h-5" />
+              )}
               Je suis là !
             </Button>
           </m.div>
@@ -164,11 +200,13 @@ interface ParticipantsListProps {
 export function ParticipantsList({ rsvps, checkins }: ParticipantsListProps) {
   return (
     <div className="mb-8">
-      <h2 className="text-xs font-medium text-text-tertiary/35 uppercase tracking-[0.05em] mb-4">Participants</h2>
+      <h2 className="text-xs font-medium text-text-tertiary/35 uppercase tracking-[0.05em] mb-4">
+        Participants
+      </h2>
       <Card>
         <CardContent className="p-4 space-y-3">
           {rsvps?.map((rsvp) => {
-            const hasCheckedin = checkins?.some(c => c.user_id === rsvp.user_id)
+            const hasCheckedin = checkins?.some((c) => c.user_id === rsvp.user_id)
             return (
               <div key={rsvp.user_id} className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-full bg-purple/[0.075] flex items-center justify-center">
@@ -181,8 +219,20 @@ export function ParticipantsList({ rsvps, checkins }: ParticipantsListProps) {
                 </div>
                 <div className="flex items-center gap-2">
                   {hasCheckedin && <Badge variant="success">Check-in ✓</Badge>}
-                  <Badge variant={rsvp.response === 'present' ? 'success' : rsvp.response === 'maybe' ? 'warning' : 'danger'}>
-                    {rsvp.response === 'present' ? 'Présent' : rsvp.response === 'maybe' ? 'Peut-être' : 'Absent'}
+                  <Badge
+                    variant={
+                      rsvp.response === 'present'
+                        ? 'success'
+                        : rsvp.response === 'maybe'
+                          ? 'warning'
+                          : 'danger'
+                    }
+                  >
+                    {rsvp.response === 'present'
+                      ? 'Présent'
+                      : rsvp.response === 'maybe'
+                        ? 'Peut-être'
+                        : 'Absent'}
                   </Badge>
                 </div>
               </div>

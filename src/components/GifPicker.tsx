@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 import { useState, useRef, useEffect, useCallback, memo } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
@@ -57,7 +57,7 @@ export const GifPicker = memo(function GifPicker({ isOpen, onSelect, onClose }: 
 
     if (!value.trim()) {
       setIsLoading(true)
-      fetchTrendingGifs().then(results => {
+      fetchTrendingGifs().then((results) => {
         setGifs(results)
         setIsLoading(false)
         setHasLoaded(true)
@@ -80,7 +80,7 @@ export const GifPicker = memo(function GifPicker({ isOpen, onSelect, onClose }: 
     setQuery(categoryQuery)
     setIsLoading(true)
     setHasSearched(true)
-    searchGifs(categoryQuery).then(results => {
+    searchGifs(categoryQuery).then((results) => {
       setGifs(results)
       setIsLoading(false)
       setHasLoaded(true)
@@ -90,17 +90,20 @@ export const GifPicker = memo(function GifPicker({ isOpen, onSelect, onClose }: 
   const handleRetry = useCallback(() => {
     setIsLoading(true)
     setHasLoaded(false)
-    fetchTrendingGifs().then(results => {
+    fetchTrendingGifs().then((results) => {
       setGifs(results)
       setIsLoading(false)
       setHasLoaded(true)
     })
   }, [])
 
-  const handleGifSelect = useCallback((gif: GifResult) => {
-    onSelect(gif.url)
-    onClose()
-  }, [onSelect, onClose])
+  const handleGifSelect = useCallback(
+    (gif: GifResult) => {
+      onSelect(gif.url)
+      onClose()
+    },
+    [onSelect, onClose]
+  )
 
   return (
     <AnimatePresence>

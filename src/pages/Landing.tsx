@@ -1,6 +1,6 @@
-"use client";
+'use client'
 
-import { m, useScroll, useTransform, useMotionValue, useSpring, useInView } from 'framer-motion'
+import { useScroll, useTransform, useMotionValue, useSpring, useInView } from 'framer-motion'
 import { useRef, useEffect, useState, type ReactNode } from 'react'
 import { useAuthStore } from '../hooks/useAuth'
 import { CustomCursor } from '../components/landing/CustomCursor'
@@ -22,7 +22,15 @@ import { ArrowRight } from '../components/icons'
 import { Link } from 'react-router'
 
 // ─── LAZY SECTION (PERF 6 — reduces initial DOM from ~946 to ~400 elements) ──
-function LazySection({ children, className, minHeight = 200 }: { children: ReactNode; className?: string; minHeight?: number }) {
+function LazySection({
+  children,
+  className,
+  minHeight = 200,
+}: {
+  children: ReactNode
+  className?: string
+  minHeight?: number
+}) {
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true, margin: '200px 0px' })
   return (
@@ -55,8 +63,8 @@ export default function Landing() {
     setIsDesktop(!isCoarse)
     if (isCoarse) return
     const handleMouseMove = (e: MouseEvent) => {
-      mouseX.set((e.clientX / window.innerWidth) - 0.5)
-      mouseY.set((e.clientY / window.innerHeight) - 0.5)
+      mouseX.set(e.clientX / window.innerWidth - 0.5)
+      mouseY.set(e.clientY / window.innerHeight - 0.5)
     }
     window.addEventListener('mousemove', handleMouseMove)
     return () => window.removeEventListener('mousemove', handleMouseMove)
@@ -65,7 +73,9 @@ export default function Landing() {
   const isLoggedIn = !!user
 
   return (
-    <div className={`min-h-screen bg-bg-base landing-page landing-noise ${isDesktop ? 'landing-custom-cursor' : ''}`}>
+    <div
+      className={`min-h-screen bg-bg-base landing-page landing-noise ${isDesktop ? 'landing-custom-cursor' : ''}`}
+    >
       <CustomCursor />
 
       <a
@@ -93,30 +103,48 @@ export default function Landing() {
       <div className="section-divider" />
       {/* CTA intermédiaire */}
       <div className="text-center py-8 px-4">
-        <Link to="/auth?mode=register&redirect=onboarding" className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-primary/10 text-primary font-medium hover:bg-primary/20 transition-colors border border-primary/20" data-track="mid_cta_click">
+        <Link
+          to="/auth?mode=register&redirect=onboarding"
+          className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-primary/10 text-primary font-medium hover:bg-primary/20 transition-colors border border-primary/20"
+          data-track="mid_cta_click"
+        >
           Fini les excuses — Créer ma squad
           <ArrowRight className="w-4 h-4" />
         </Link>
       </div>
       <HowItWorksSection demoStep={demoStep} setDemoStep={setDemoStep} />
       <div className="section-divider" />
-      <LazySection minHeight={400}><FeaturesSection /></LazySection>
+      <LazySection minHeight={400}>
+        <FeaturesSection />
+      </LazySection>
       <div className="section-divider" />
-      <LazySection minHeight={300}><ReliabilitySection /></LazySection>
+      <LazySection minHeight={300}>
+        <ReliabilitySection />
+      </LazySection>
       <div className="section-divider" />
-      <LazySection minHeight={400}><ComparisonSection /></LazySection>
+      <LazySection minHeight={400}>
+        <ComparisonSection />
+      </LazySection>
       <div className="section-divider" />
       <LazySection minHeight={300}>
         <section id="testimonials" aria-label="Témoignages" className="px-4 md:px-6 py-10 md:py-16">
-          <div className="max-w-5xl mx-auto"><TestimonialCarousel /></div>
+          <div className="max-w-5xl mx-auto">
+            <TestimonialCarousel />
+          </div>
         </section>
       </LazySection>
       <div className="section-divider" />
-      <LazySection minHeight={400}><PricingSection /></LazySection>
+      <LazySection minHeight={400}>
+        <PricingSection />
+      </LazySection>
       <div className="section-divider" />
-      <LazySection minHeight={300}><FaqSection /></LazySection>
+      <LazySection minHeight={300}>
+        <FaqSection />
+      </LazySection>
       <div className="section-divider" />
-      <LazySection minHeight={300}><CtaSection /></LazySection>
+      <LazySection minHeight={300}>
+        <CtaSection />
+      </LazySection>
       <MobileStickyCTA />
       <LandingFooter />
     </div>

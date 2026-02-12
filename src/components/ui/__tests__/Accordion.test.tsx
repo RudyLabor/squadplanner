@@ -23,8 +23,18 @@ vi.mock('framer-motion', async () => {
 
 function stripMotionProps(props: Record<string, unknown>) {
   const clean = { ...props }
-  const motionKeys = ['initial', 'animate', 'exit', 'transition', 'whileHover', 'whileTap', 'layout', 'layoutId', 'variants']
-  motionKeys.forEach(k => delete clean[k])
+  const motionKeys = [
+    'initial',
+    'animate',
+    'exit',
+    'transition',
+    'whileHover',
+    'whileTap',
+    'layout',
+    'layoutId',
+    'variants',
+  ]
+  motionKeys.forEach((k) => delete clean[k])
   return clean
 }
 
@@ -32,7 +42,13 @@ vi.mock('../../../utils/haptics', () => ({
   haptic: { selection: vi.fn(), light: vi.fn(), medium: vi.fn() },
 }))
 
-function renderAccordion(props: { type?: 'single' | 'multiple'; value?: string | string[]; onChange?: (v: any) => void } = {}) {
+function renderAccordion(
+  props: {
+    type?: 'single' | 'multiple'
+    value?: string | string[]
+    onChange?: (v: any) => void
+  } = {}
+) {
   const onChange = props.onChange ?? vi.fn()
   return render(
     <Accordion type={props.type} value={props.value ?? ''} onChange={onChange}>

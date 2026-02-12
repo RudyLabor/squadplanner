@@ -22,18 +22,20 @@ interface Logger {
  * @param namespace - A prefix for all log messages (e.g., '[VoiceCall]', '[Auth]')
  */
 export function createLogger(namespace: string): Logger {
-  const createLogFn = (level: LogLevel) => (...args: unknown[]) => {
-    // Always allow errors in production for debugging critical issues
-    if (level === 'error') {
-      console[level](namespace, ...args)
-      return
-    }
+  const createLogFn =
+    (level: LogLevel) =>
+    (...args: unknown[]) => {
+      // Always allow errors in production for debugging critical issues
+      if (level === 'error') {
+        console[level](namespace, ...args)
+        return
+      }
 
-    // Only log non-errors in development
-    if (isDev) {
-      console[level](namespace, ...args)
+      // Only log non-errors in development
+      if (isDev) {
+        console[level](namespace, ...args)
+      }
     }
-  }
 
   return {
     log: createLogFn('log'),

@@ -1,12 +1,5 @@
 import { memo } from 'react'
-import {
-  Users,
-  MessageCircle,
-  Phone,
-  Crown,
-  TrendingUp,
-  UserPlus,
-} from '../icons'
+import { Users, MessageCircle, Phone, Crown, TrendingUp, UserPlus } from '../icons'
 import { useNavigate } from 'react-router'
 import { Button, Card, CardContent } from '../ui'
 import { useVoiceCallStore } from '../../hooks/useVoiceCall'
@@ -31,13 +24,17 @@ interface SquadMembersProps {
   onInviteClick: () => void
 }
 
-export function SquadMembers({ members, ownerId, memberCount, currentUserId, onInviteClick }: SquadMembersProps) {
+export function SquadMembers({
+  members,
+  ownerId,
+  memberCount,
+  currentUserId,
+  onInviteClick,
+}: SquadMembersProps) {
   return (
     <div className="mb-6">
       <div className="flex items-center justify-between mb-3">
-        <h2 className="text-base font-semibold text-text-primary">
-          Membres ({memberCount})
-        </h2>
+        <h2 className="text-base font-semibold text-text-primary">Membres ({memberCount})</h2>
         <Button size="sm" variant="secondary" onClick={onInviteClick}>
           <UserPlus className="w-4 h-4" />
           Inviter
@@ -59,7 +56,11 @@ export function SquadMembers({ members, ownerId, memberCount, currentUserId, onI
   )
 }
 
-const MemberCard = memo(function MemberCard({ member, isOwner, currentUserId }: {
+const MemberCard = memo(function MemberCard({
+  member,
+  isOwner,
+  currentUserId,
+}: {
   member: Member
   isOwner: boolean
   currentUserId?: string
@@ -103,8 +104,14 @@ const MemberCard = memo(function MemberCard({ member, isOwner, currentUserId }: 
           {isOwner && <Crown className="w-4 h-4 text-warning" />}
         </div>
         <div className="flex items-center gap-1 text-sm">
-          <TrendingUp className={`w-3 h-3 ${reliability >= 80 ? 'text-success' : reliability >= 60 ? 'text-warning' : 'text-error'}`} />
-          <span className={reliability >= 80 ? 'text-success' : reliability >= 60 ? 'text-warning' : 'text-error'}>
+          <TrendingUp
+            className={`w-3 h-3 ${reliability >= 80 ? 'text-success' : reliability >= 60 ? 'text-warning' : 'text-error'}`}
+          />
+          <span
+            className={
+              reliability >= 80 ? 'text-success' : reliability >= 60 ? 'text-warning' : 'text-error'
+            }
+          >
             {reliability}%
           </span>
           <span className="text-text-quaternary">fiable</span>

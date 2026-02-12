@@ -91,7 +91,9 @@ describe('useMessagesStore', () => {
     })
 
     it('fetches messages for a session', async () => {
-      const mockMessages = [{ id: '1', content: 'Session msg', squad_id: 'squad-1', session_id: 'session-1' }]
+      const mockMessages = [
+        { id: '1', content: 'Session msg', squad_id: 'squad-1', session_id: 'session-1' },
+      ]
 
       mockFrom.mockReturnValue({
         select: vi.fn().mockReturnValue({
@@ -257,9 +259,7 @@ describe('useMessagesStore', () => {
     it('pins a message and updates local state', async () => {
       act(() => {
         useMessagesStore.setState({
-          messages: [
-            { id: 'msg-1', content: 'test', is_pinned: false } as any,
-          ],
+          messages: [{ id: 'msg-1', content: 'test', is_pinned: false } as any],
         })
       })
 

@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 /**
  * Chantier 9 - Rate Limit Banner
@@ -10,18 +10,13 @@ import { useState, useEffect, useCallback } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
 import { AlertTriangle, X, RefreshCw } from './icons'
 export interface RateLimitBannerProps {
-  retryAfter: number   // seconds until retry is allowed
+  retryAfter: number // seconds until retry is allowed
   onRetry?: () => void
   onDismiss?: () => void
   message?: string
 }
 
-export function RateLimitBanner({
-  retryAfter,
-  onRetry,
-  onDismiss,
-  message,
-}: RateLimitBannerProps) {
+export function RateLimitBanner({ retryAfter, onRetry, onDismiss, message }: RateLimitBannerProps) {
   const [secondsLeft, setSecondsLeft] = useState(retryAfter)
   const [timerDone, setTimerDone] = useState(false)
 
@@ -79,14 +74,11 @@ export function RateLimitBanner({
 
             {/* Content */}
             <div className="flex-1 min-w-0">
-              <p className="text-md font-medium text-warning">
-                {message || 'Trop de requêtes'}
-              </p>
+              <p className="text-md font-medium text-warning">{message || 'Trop de requêtes'}</p>
               <p className="text-sm text-warning/80">
                 {timerDone
                   ? 'Tu peux réessayer maintenant'
-                  : `Réessai possible dans ${secondsLeft}s`
-                }
+                  : `Réessai possible dans ${secondsLeft}s`}
               </p>
             </div>
 

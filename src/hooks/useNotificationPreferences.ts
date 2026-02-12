@@ -63,7 +63,7 @@ export const NOTIFICATION_CATEGORIES = [
     label: 'Social',
     icon: '🌐',
     settings: [
-      { key: 'friend_request', label: 'Demande d\'ami' },
+      { key: 'friend_request', label: "Demande d'ami" },
       { key: 'friend_online', label: 'Ami en ligne' },
       { key: 'story_from_friend', label: 'Nouvelle story' },
       { key: 'matchmaking_request', label: 'Demande de matchmaking' },
@@ -151,31 +151,51 @@ export function useNotificationPreferences() {
     onError: () => showError('Erreur lors de la sauvegarde'),
   })
 
-  const updatePreference = useCallback((key: string, value: boolean) => {
-    updateMutation.mutate({ [key]: value } as Partial<NotificationPreferences>)
-  }, [updateMutation])
+  const updatePreference = useCallback(
+    (key: string, value: boolean) => {
+      updateMutation.mutate({ [key]: value } as Partial<NotificationPreferences>)
+    },
+    [updateMutation]
+  )
 
-  const updateQuietHours = useCallback((start: string | null, end: string | null) => {
-    updateMutation.mutate({ quiet_hours_start: start, quiet_hours_end: end } as Partial<NotificationPreferences>)
-  }, [updateMutation])
+  const updateQuietHours = useCallback(
+    (start: string | null, end: string | null) => {
+      updateMutation.mutate({
+        quiet_hours_start: start,
+        quiet_hours_end: end,
+      } as Partial<NotificationPreferences>)
+    },
+    [updateMutation]
+  )
 
-  const toggleSound = useCallback((enabled: boolean) => {
-    updateMutation.mutate({ sound_enabled: enabled } as Partial<NotificationPreferences>)
-  }, [updateMutation])
+  const toggleSound = useCallback(
+    (enabled: boolean) => {
+      updateMutation.mutate({ sound_enabled: enabled } as Partial<NotificationPreferences>)
+    },
+    [updateMutation]
+  )
 
-  const toggleVibration = useCallback((enabled: boolean) => {
-    updateMutation.mutate({ vibration_enabled: enabled } as Partial<NotificationPreferences>)
-  }, [updateMutation])
+  const toggleVibration = useCallback(
+    (enabled: boolean) => {
+      updateMutation.mutate({ vibration_enabled: enabled } as Partial<NotificationPreferences>)
+    },
+    [updateMutation]
+  )
 
   // Bulk update: enable/disable entire category
-  const toggleCategory = useCallback((categoryKey: string, enabled: boolean) => {
-    const category = NOTIFICATION_CATEGORIES.find(c => c.key === categoryKey)
-    if (!category) return
+  const toggleCategory = useCallback(
+    (categoryKey: string, enabled: boolean) => {
+      const category = NOTIFICATION_CATEGORIES.find((c) => c.key === categoryKey)
+      if (!category) return
 
-    const updates: Record<string, boolean> = {}
-    category.settings.forEach(s => { updates[s.key] = enabled })
-    updateMutation.mutate(updates as Partial<NotificationPreferences>)
-  }, [updateMutation])
+      const updates: Record<string, boolean> = {}
+      category.settings.forEach((s) => {
+        updates[s.key] = enabled
+      })
+      updateMutation.mutate(updates as Partial<NotificationPreferences>)
+    },
+    [updateMutation]
+  )
 
   return {
     preferences,

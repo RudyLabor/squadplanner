@@ -1,11 +1,6 @@
 import { memo } from 'react'
 import { m } from 'framer-motion'
-import {
-  Gamepad2,
-  UserPlus,
-  Users,
-  LogIn,
-} from './icons'
+import { Gamepad2, UserPlus, Users, LogIn } from './icons'
 import { Card } from './ui'
 import { showSuccess } from '../lib/toast'
 import { getOptimizedAvatarUrl } from '../utils/avatarUrl'
@@ -34,7 +29,7 @@ export interface FriendsPlayingProps {
 const FriendCard = memo(function FriendCard({
   friend,
   onJoin,
-  onInvite
+  onInvite,
 }: {
   friend: FriendPlaying
   onJoin: (squadId: string) => void
@@ -44,10 +39,7 @@ const FriendCard = memo(function FriendCard({
   const isInParty = friend.is_in_voice || friend.party_member_count > 0
 
   return (
-    <m.div
-      whileHover={{ y: -2, scale: 1.02 }}
-      whileTap={{ scale: 0.98 }}
-    >
+    <m.div whileHover={{ y: -2, scale: 1.02 }} whileTap={{ scale: 0.98 }}>
       <Card className="p-4 bg-gradient-to-br from-primary-10 via-transparent to-success-5 hover:from-primary-15 hover:to-success-10 hover:shadow-glow-primary-md transition-interactive">
         <div className="flex flex-col gap-3">
           {/* Avatar with pulse animation */}
@@ -76,13 +68,13 @@ const FriendCard = memo(function FriendCard({
                   boxShadow: [
                     '0 0 0 0 var(--color-success-20)',
                     '0 0 0 6px transparent',
-                    '0 0 0 0 transparent'
-                  ]
+                    '0 0 0 0 transparent',
+                  ],
                 }}
                 transition={{
                   duration: 2,
                   repeat: Infinity,
-                  ease: 'easeInOut'
+                  ease: 'easeInOut',
                 }}
               />
             </div>
@@ -115,9 +107,7 @@ const FriendCard = memo(function FriendCard({
           {isInParty && (
             <div className="flex items-center gap-2 px-2.5 py-1.5 rounded-lg bg-surface-card border border-border-subtle">
               <Users className="w-3.5 h-3.5 text-primary" />
-              <span className="text-sm text-text-secondary truncate">
-                {friend.squad_name}
-              </span>
+              <span className="text-sm text-text-secondary truncate">{friend.squad_name}</span>
               <span className="text-sm text-text-tertiary ml-auto">
                 {friend.party_member_count} {friend.party_member_count > 1 ? 'joueurs' : 'joueur'}
               </span>
@@ -172,7 +162,7 @@ function EmptyState() {
 
     try {
       await navigator.clipboard.writeText(inviteUrl)
-      showSuccess('Lien d\'invitation copié !')
+      showSuccess("Lien d'invitation copié !")
     } catch {
       // Fallback - do nothing
     }
@@ -190,25 +180,25 @@ function EmptyState() {
           className="absolute -top-4 -right-4 w-24 h-24 rounded-full bg-primary/10 blur-2xl"
           animate={{
             scale: [1, 1.2, 1],
-            opacity: [0.3, 0.5, 0.3]
+            opacity: [0.3, 0.5, 0.3],
           }}
           transition={{
             duration: 3,
             repeat: Infinity,
-            ease: "easeInOut"
+            ease: 'easeInOut',
           }}
         />
         <m.div
           className="absolute -bottom-4 -left-4 w-24 h-24 rounded-full bg-success/10 blur-2xl"
           animate={{
             scale: [1, 1.2, 1],
-            opacity: [0.3, 0.5, 0.3]
+            opacity: [0.3, 0.5, 0.3],
           }}
           transition={{
             duration: 3,
             repeat: Infinity,
-            ease: "easeInOut",
-            delay: 1.5
+            ease: 'easeInOut',
+            delay: 1.5,
           }}
         />
 
@@ -217,12 +207,12 @@ function EmptyState() {
             className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary/20 to-success/15 flex items-center justify-center shadow-lg"
             animate={{
               rotate: [0, 5, -5, 0],
-              scale: [1, 1.1, 1]
+              scale: [1, 1.1, 1],
             }}
             transition={{
               duration: 4,
               repeat: Infinity,
-              ease: "easeInOut"
+              ease: 'easeInOut',
             }}
           >
             <UserPlus className="w-8 h-8 text-primary" strokeWidth={2} />
@@ -279,9 +269,7 @@ export function FriendsPlaying({ friends, onJoin, onInvite }: FriendsPlayingProp
           <Gamepad2 className="w-5 h-5 text-success" />
         </m.div>
         En train de jouer
-        <span className="ml-auto text-sm font-normal text-primary">
-          {friends.length} en ligne
-        </span>
+        <span className="ml-auto text-sm font-normal text-primary">{friends.length} en ligne</span>
       </h2>
 
       {/* Single render with responsive layout - horizontal scroll on mobile, grid on desktop */}
@@ -295,11 +283,7 @@ export function FriendsPlaying({ friends, onJoin, onInvite }: FriendsPlayingProp
               transition={{ delay: index * 0.08 }}
               className="flex-shrink-0 w-[200px] md:w-auto"
             >
-              <FriendCard
-                friend={friend}
-                onJoin={onJoin}
-                onInvite={onInvite}
-              />
+              <FriendCard friend={friend} onJoin={onJoin} onInvite={onInvite} />
             </m.div>
           ))}
         </div>

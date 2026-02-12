@@ -1,14 +1,6 @@
 import { memo } from 'react'
 import { m } from 'framer-motion'
-import {
-  Gamepad2,
-  Copy,
-  Check,
-  Crown,
-  Mic,
-  Calendar,
-  ChevronRight,
-} from '../../components/icons'
+import { Gamepad2, Copy, Check, Crown, Mic, Calendar, ChevronRight } from '../../components/icons'
 import { Link } from 'react-router'
 import { Card, CardContent } from '../../components/ui'
 
@@ -19,7 +11,14 @@ export interface SquadNextSession {
   rsvpCount: number
 }
 
-export const SquadCard = memo(function SquadCard({ squad, isOwner, nextSession, hasActiveParty, copiedCode, onCopyCode }: {
+export const SquadCard = memo(function SquadCard({
+  squad,
+  isOwner,
+  nextSession,
+  hasActiveParty,
+  copiedCode,
+  onCopyCode,
+}: {
   squad: {
     id: string
     name: string
@@ -48,7 +47,7 @@ export const SquadCard = memo(function SquadCard({ squad, isOwner, nextSession, 
     if (diffMs < 0) {
       sessionLabel = 'Session en cours'
     } else if (diffHours < 1) {
-      sessionLabel = 'Dans moins d\'1h'
+      sessionLabel = "Dans moins d'1h"
     } else if (diffHours < 24) {
       sessionLabel = `Aujourd'hui ${date.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}`
     } else if (diffDays === 1) {
@@ -66,20 +65,22 @@ export const SquadCard = memo(function SquadCard({ squad, isOwner, nextSession, 
       aria-labelledby={`squad-name-${squad.id}`}
     >
       <Link to={`/squad/${squad.id}`}>
-        <Card className={`cursor-pointer transition-interactive ${
-          hasActiveParty
-            ? 'border-success/30 shadow-glow-success bg-gradient-to-r from-success/5 to-transparent'
-            : 'hover:border-primary/25 hover:shadow-glow-primary-sm'
-        }`}>
+        <Card
+          className={`cursor-pointer transition-interactive ${
+            hasActiveParty
+              ? 'border-success/30 shadow-glow-success bg-gradient-to-r from-success/5 to-transparent'
+              : 'hover:border-primary/25 hover:shadow-glow-primary-sm'
+          }`}
+        >
           <CardContent className="p-4">
             <div className="flex items-start gap-4">
               {/* Icone avec indicateur party */}
               <div className="relative">
-                <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${
-                  hasActiveParty
-                    ? 'bg-success/15'
-                    : 'bg-primary/15'
-                }`}>
+                <div
+                  className={`w-12 h-12 rounded-xl flex items-center justify-center ${
+                    hasActiveParty ? 'bg-success/15' : 'bg-primary/15'
+                  }`}
+                >
                   {hasActiveParty ? (
                     <Mic className="w-6 h-6 text-success" strokeWidth={1.5} />
                   ) : (
@@ -98,10 +99,13 @@ export const SquadCard = memo(function SquadCard({ squad, isOwner, nextSession, 
               {/* Infos squad */}
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 mb-0.5">
-                  <h3 id={`squad-name-${squad.id}`} className="text-md font-semibold text-text-primary truncate">{squad.name}</h3>
-                  {isOwner && (
-                    <Crown className="w-4 h-4 text-warning flex-shrink-0" />
-                  )}
+                  <h3
+                    id={`squad-name-${squad.id}`}
+                    className="text-md font-semibold text-text-primary truncate"
+                  >
+                    {squad.name}
+                  </h3>
+                  {isOwner && <Crown className="w-4 h-4 text-warning flex-shrink-0" />}
                 </div>
                 <p className="text-base text-text-tertiary">
                   {squad.game} · {memberCount} membre{memberCount > 1 ? 's' : ''}

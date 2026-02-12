@@ -86,7 +86,8 @@ export type UserEvent =
 // ---------------------------------------------------------------------------
 
 const POSTHOG_API_KEY = import.meta.env.VITE_POSTHOG_KEY as string | undefined
-const POSTHOG_HOST = import.meta.env.VITE_POSTHOG_HOST as string | undefined || 'https://eu.i.posthog.com'
+const POSTHOG_HOST =
+  (import.meta.env.VITE_POSTHOG_HOST as string | undefined) || 'https://eu.i.posthog.com'
 const FLUSH_INTERVAL = 5000 // 5 seconds
 const MAX_BUFFER_SIZE = 20
 
@@ -146,7 +147,7 @@ async function flushEvents(): Promise<void> {
   const endpoint = `${POSTHOG_HOST}/capture/`
   const payload = {
     api_key: POSTHOG_API_KEY,
-    batch: events.map(event => ({
+    batch: events.map((event) => ({
       ...event,
       distinct_id: currentUserId || 'anonymous',
     })),

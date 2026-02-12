@@ -267,13 +267,7 @@ export function TabsContent({ value, children, className = '' }: TabsContentProp
 
   if (!canSwipe) {
     return (
-      <div
-        id={panelId}
-        role="tabpanel"
-        aria-labelledby={tabId}
-        tabIndex={0}
-        className={className}
-      >
+      <div id={panelId} role="tabpanel" aria-labelledby={tabId} tabIndex={0} className={className}>
         {children}
       </div>
     )

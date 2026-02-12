@@ -69,16 +69,19 @@ export function useGlobalPresence({ userId, username, avatarUrl }: UseGlobalPres
   const { setOnlineUsers, setChannel, setConnected } = useGlobalPresenceStore()
 
   // Build presence payload
-  const getPresencePayload = useCallback((): Omit<GlobalPresenceUser, 'onlineAt'> => ({
-    userId: userId || '',
-    username,
-    avatarUrl,
-    availability,
-    customEmoji: customStatus?.emoji || null,
-    customText: customStatus?.text || null,
-    gameStatus: gameStatus?.game || null,
-    activity: null, // Will be updated by voice/session hooks
-  }), [userId, username, avatarUrl, availability, customStatus, gameStatus])
+  const getPresencePayload = useCallback(
+    (): Omit<GlobalPresenceUser, 'onlineAt'> => ({
+      userId: userId || '',
+      username,
+      avatarUrl,
+      availability,
+      customEmoji: customStatus?.emoji || null,
+      customText: customStatus?.text || null,
+      gameStatus: gameStatus?.game || null,
+      activity: null, // Will be updated by voice/session hooks
+    }),
+    [userId, username, avatarUrl, availability, customStatus, gameStatus]
+  )
 
   // Track presence
   const trackPresence = useCallback(async () => {
@@ -107,7 +110,7 @@ export function useGlobalPresence({ userId, username, avatarUrl }: UseGlobalPres
         const users = new Map<string, GlobalPresenceUser>()
 
         Object.values(state).forEach((presences) => {
-          (presences as unknown as GlobalPresenceUser[]).forEach((p) => {
+          ;(presences as unknown as GlobalPresenceUser[]).forEach((p) => {
             if (p.userId) {
               users.set(p.userId, p)
             }
@@ -152,7 +155,9 @@ export function useGlobalPresence({ userId, username, avatarUrl }: UseGlobalPres
           .from('profiles')
           .update({ last_seen_at: new Date().toISOString() })
           .eq('id', userId)
-      } catch { /* silent */ }
+      } catch {
+        /* silent */
+      }
     }, 60_000)
 
     // Initial last_seen_at update
@@ -182,8 +187,8 @@ export function useGlobalPresence({ userId, username, avatarUrl }: UseGlobalPres
   }, [trackPresence])
 
   return {
-    onlineUsers: useGlobalPresenceStore(s => s.onlineUsers),
-    isConnected: useGlobalPresenceStore(s => s.isConnected),
+    onlineUsers: useGlobalPresenceStore((s) => s.onlineUsers),
+    isConnected: useGlobalPresenceStore((s) => s.isConnected),
   }
 }
 
@@ -207,5 +212,7 @@ export async function updatePresenceActivity(activity: 'party' | 'session' | 'ca
       activity,
       onlineAt: new Date().toISOString(),
     })
-  } catch { /* silent */ }
+  } catch {
+    /* silent */
+  }
 }

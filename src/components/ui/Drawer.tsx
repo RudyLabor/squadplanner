@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 import { m, AnimatePresence, useDragControls, type PanInfo } from 'framer-motion'
 import { type ReactNode, useEffect, useCallback } from 'react'
@@ -91,9 +91,7 @@ export function Drawer({ isOpen, onClose, children, title, className = '' }: Dra
             )}
 
             {/* Content */}
-            <div className="flex-1 overflow-y-auto px-5 pb-5">
-              {children}
-            </div>
+            <div className="flex-1 overflow-y-auto px-5 pb-5">{children}</div>
           </m.div>
         </>
       )}

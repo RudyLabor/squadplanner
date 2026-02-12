@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 import { useState, memo, useRef } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
@@ -6,14 +6,28 @@ import { Plus, X } from './icons'
 import { useStories, STORY_BACKGROUNDS } from '../hooks/useStories'
 import { StoryViewer } from './StoryViewer'
 
-function StoryCircle({ username, avatarUrl, hasUnviewed, isOwnStory, storyCount, onClick }: {
-  username: string; avatarUrl: string | null; hasUnviewed: boolean; isOwnStory: boolean; storyCount: number; onClick: () => void
+function StoryCircle({
+  username,
+  avatarUrl,
+  hasUnviewed,
+  isOwnStory,
+  storyCount,
+  onClick,
+}: {
+  username: string
+  avatarUrl: string | null
+  hasUnviewed: boolean
+  isOwnStory: boolean
+  storyCount: number
+  onClick: () => void
 }) {
   return (
     <button onClick={onClick} className="flex flex-col items-center gap-1 flex-shrink-0 w-16">
-      <div className={`relative w-14 h-14 rounded-full p-0.5 ${
-        hasUnviewed ? 'bg-gradient-to-tr from-primary to-success' : 'bg-border-default'
-      }`}>
+      <div
+        className={`relative w-14 h-14 rounded-full p-0.5 ${
+          hasUnviewed ? 'bg-gradient-to-tr from-primary to-success' : 'bg-border-default'
+        }`}
+      >
         <div className="w-full h-full rounded-full bg-bg-elevated p-0.5">
           {avatarUrl ? (
             <img src={avatarUrl} alt="" className="w-full h-full rounded-full object-cover" />
@@ -41,8 +55,14 @@ function StoryCircle({ username, avatarUrl, hasUnviewed, isOwnStory, storyCount,
   )
 }
 
-function CreateStoryModal({ isOpen, onClose, onSubmit }: {
-  isOpen: boolean; onClose: () => void; onSubmit: (content: string, bg: string) => void
+function CreateStoryModal({
+  isOpen,
+  onClose,
+  onSubmit,
+}: {
+  isOpen: boolean
+  onClose: () => void
+  onSubmit: (content: string, bg: string) => void
 }) {
   const [content, setContent] = useState('')
   const [selectedBg, setSelectedBg] = useState<string>(STORY_BACKGROUNDS[0].color)
@@ -69,7 +89,7 @@ function CreateStoryModal({ isOpen, onClose, onSubmit }: {
             animate={{ scale: 1, y: 0 }}
             exit={{ scale: 0.9, y: 20 }}
             className="w-full max-w-sm rounded-2xl overflow-hidden"
-            onClick={e => e.stopPropagation()}
+            onClick={(e) => e.stopPropagation()}
           >
             <div
               className="h-[300px] flex items-center justify-center px-8 relative"
@@ -77,26 +97,31 @@ function CreateStoryModal({ isOpen, onClose, onSubmit }: {
             >
               <textarea
                 value={content}
-                onChange={e => setContent(e.target.value)}
+                onChange={(e) => setContent(e.target.value)}
                 placeholder="Ecris ta story..."
                 maxLength={200}
                 className="w-full text-xl font-bold text-center text-white bg-transparent placeholder-white/50 outline-none resize-none"
                 rows={4}
                 autoFocus
               />
-              <button onClick={onClose} className="absolute top-3 right-3 p-1.5 rounded-full bg-black/30 text-white">
+              <button
+                onClick={onClose}
+                className="absolute top-3 right-3 p-1.5 rounded-full bg-black/30 text-white"
+              >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
             <div className="bg-bg-elevated p-4 space-y-3">
               <div className="flex items-center gap-2">
-                {STORY_BACKGROUNDS.map(bg => (
+                {STORY_BACKGROUNDS.map((bg) => (
                   <button
                     key={bg.color}
                     onClick={() => setSelectedBg(bg.color)}
                     className={`w-8 h-8 rounded-full transition-transform ${
-                      selectedBg === bg.color ? 'scale-110 ring-2 ring-white ring-offset-2 ring-offset-bg-elevated' : ''
+                      selectedBg === bg.color
+                        ? 'scale-110 ring-2 ring-white ring-offset-2 ring-offset-bg-elevated'
+                        : ''
                     }`}
                     style={{ backgroundColor: bg.color }}
                     aria-label={bg.label}
@@ -139,9 +164,15 @@ export const StoryBar = memo(function StoryBar() {
   return (
     <>
       <div className="mb-4">
-        <div ref={scrollRef} className="flex items-start gap-3 overflow-x-auto scrollbar-hide pb-2 -mx-1 px-1">
-          {!storyUsers.some(u => u.isOwnStory) && (
-            <button onClick={() => setShowCreate(true)} className="flex flex-col items-center gap-1 flex-shrink-0 w-16">
+        <div
+          ref={scrollRef}
+          className="flex items-start gap-3 overflow-x-auto scrollbar-hide pb-2 -mx-1 px-1"
+        >
+          {!storyUsers.some((u) => u.isOwnStory) && (
+            <button
+              onClick={() => setShowCreate(true)}
+              className="flex flex-col items-center gap-1 flex-shrink-0 w-16"
+            >
               <div className="w-14 h-14 rounded-full bg-bg-surface border-2 border-dashed border-border-default flex items-center justify-center">
                 <Plus className="w-6 h-6 text-text-tertiary" />
               </div>
@@ -149,7 +180,7 @@ export const StoryBar = memo(function StoryBar() {
             </button>
           )}
 
-          {storyUsers.map(su => (
+          {storyUsers.map((su) => (
             <StoryCircle
               key={su.userId}
               username={su.username}
@@ -157,7 +188,11 @@ export const StoryBar = memo(function StoryBar() {
               hasUnviewed={su.hasUnviewed}
               isOwnStory={su.isOwnStory}
               storyCount={su.storyCount}
-              onClick={() => su.isOwnStory && su.storyCount === 0 ? setShowCreate(true) : setViewingUserId(su.userId)}
+              onClick={() =>
+                su.isOwnStory && su.storyCount === 0
+                  ? setShowCreate(true)
+                  : setViewingUserId(su.userId)
+              }
             />
           ))}
         </div>

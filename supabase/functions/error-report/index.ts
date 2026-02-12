@@ -21,20 +21,16 @@ const ALLOWED_ORIGINS = [
 
 function getCorsHeaders(origin: string | null) {
   const allowedOrigin =
-    origin && ALLOWED_ORIGINS.some((allowed) => origin === allowed)
-      ? origin
-      : null
+    origin && ALLOWED_ORIGINS.some((allowed) => origin === allowed) ? origin : null
   if (!allowedOrigin) {
     return {
-      'Access-Control-Allow-Headers':
-        'authorization, x-client-info, apikey, content-type',
+      'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
       'Access-Control-Allow-Methods': 'POST, OPTIONS',
     }
   }
   return {
     'Access-Control-Allow-Origin': allowedOrigin,
-    'Access-Control-Allow-Headers':
-      'authorization, x-client-info, apikey, content-type',
+    'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
     'Access-Control-Allow-Methods': 'POST, OPTIONS',
   }
 }
@@ -83,16 +79,13 @@ serve(async (req) => {
     const errors: ErrorReport[] = body.errors
 
     if (!Array.isArray(errors) || errors.length === 0) {
-      return new Response(
-        JSON.stringify({ error: 'errors array is required' }),
-        {
-          status: 400,
-          headers: {
-            ...getCorsHeaders(req.headers.get('origin')),
-            'Content-Type': 'application/json',
-          },
+      return new Response(JSON.stringify({ error: 'errors array is required' }), {
+        status: 400,
+        headers: {
+          ...getCorsHeaders(req.headers.get('origin')),
+          'Content-Type': 'application/json',
         },
-      )
+      })
     }
 
     // Limit batch size to prevent abuse
@@ -120,38 +113,29 @@ serve(async (req) => {
 
     if (error) {
       console.error('Failed to insert error reports:', error.message)
-      return new Response(
-        JSON.stringify({ error: 'Failed to store error reports' }),
-        {
-          status: 500,
-          headers: {
-            ...getCorsHeaders(req.headers.get('origin')),
-            'Content-Type': 'application/json',
-          },
-        },
-      )
-    }
-
-    return new Response(
-      JSON.stringify({ received: batch.length }),
-      {
-        headers: {
-          ...getCorsHeaders(req.headers.get('origin')),
-          'Content-Type': 'application/json',
-        },
-      },
-    )
-  } catch (error) {
-    console.error('Error processing error reports:', error.message)
-    return new Response(
-      JSON.stringify({ error: error.message }),
-      {
+      return new Response(JSON.stringify({ error: 'Failed to store error reports' }), {
         status: 500,
         headers: {
           ...getCorsHeaders(req.headers.get('origin')),
           'Content-Type': 'application/json',
         },
+      })
+    }
+
+    return new Response(JSON.stringify({ received: batch.length }), {
+      headers: {
+        ...getCorsHeaders(req.headers.get('origin')),
+        'Content-Type': 'application/json',
       },
-    )
+    })
+  } catch (error) {
+    console.error('Error processing error reports:', error.message)
+    return new Response(JSON.stringify({ error: error.message }), {
+      status: 500,
+      headers: {
+        ...getCorsHeaders(req.headers.get('origin')),
+        'Content-Type': 'application/json',
+      },
+    })
   }
 })

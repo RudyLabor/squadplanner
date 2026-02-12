@@ -33,7 +33,7 @@ const sizeClasses = {
 const positionClasses = {
   'bottom-right': 'absolute bottom-0 right-0 translate-x-0.5 translate-y-0.5',
   'top-right': 'absolute top-0 right-0 translate-x-0.5 -translate-y-0.5',
-  'inline': 'inline-block ml-1.5',
+  inline: 'inline-block ml-1.5',
 }
 
 export const OnlineIndicator = memo(function OnlineIndicator({
@@ -52,10 +52,7 @@ export const OnlineIndicator = memo(function OnlineIndicator({
           ${positionClasses[position]}
           rounded-full
           border-2 border-bg-base
-          ${isOnline
-            ? 'bg-success shadow-glow-success'
-            : 'bg-text-tertiary'
-          }
+          ${isOnline ? 'bg-success shadow-glow-success' : 'bg-text-tertiary'}
           ${className}
         `.trim()}
         role="status"

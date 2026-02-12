@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 /**
  * Phase 4.1.3 — Forward Message Modal
@@ -6,14 +6,7 @@
  */
 import { useState, memo, useMemo } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
-import {
-  X,
-  Forward,
-  Search,
-  Users,
-  Check,
-  Loader2,
-} from './icons'
+import { X, Forward, Search, Users, Check, Loader2 } from './icons'
 import { useSquadsStore } from '../hooks/useSquads'
 import { useMessagesStore } from '../hooks/useMessages'
 
@@ -37,8 +30,8 @@ export const ForwardMessageModal = memo(function ForwardMessageModal({
   const [isSending, setIsSending] = useState(false)
   const [sent, setSent] = useState(false)
 
-  const filteredSquads = useMemo(() =>
-    squads.filter(s => s.name.toLowerCase().includes(searchQuery.toLowerCase())),
+  const filteredSquads = useMemo(
+    () => squads.filter((s) => s.name.toLowerCase().includes(searchQuery.toLowerCase())),
     [squads, searchQuery]
   )
 
@@ -95,7 +88,9 @@ export const ForwardMessageModal = memo(function ForwardMessageModal({
             <div className="flex items-center justify-between px-5 py-4 border-b border-border-default">
               <div className="flex items-center gap-2">
                 <Forward className="w-5 h-5 text-primary-hover" />
-                <h2 id="forward-message-title" className="text-lg font-semibold text-text-primary">Transférer le message</h2>
+                <h2 id="forward-message-title" className="text-lg font-semibold text-text-primary">
+                  Transférer le message
+                </h2>
               </div>
               <button
                 onClick={handleClose}
@@ -129,13 +124,17 @@ export const ForwardMessageModal = memo(function ForwardMessageModal({
             {/* Squad list */}
             <div className="px-5 py-3 max-h-60 overflow-y-auto space-y-1">
               {filteredSquads.length === 0 ? (
-                <p className="text-base text-text-quaternary text-center py-4">Aucune squad trouvée</p>
+                <p className="text-base text-text-quaternary text-center py-4">
+                  Aucune squad trouvée
+                </p>
               ) : (
                 filteredSquads.map((squad) => (
                   <button
                     key={squad.id}
                     type="button"
-                    onClick={() => setSelectedSquadId(squad.id === selectedSquadId ? null : squad.id)}
+                    onClick={() =>
+                      setSelectedSquadId(squad.id === selectedSquadId ? null : squad.id)
+                    }
                     className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-colors ${
                       selectedSquadId === squad.id
                         ? 'bg-primary-15 border border-primary'
@@ -146,7 +145,9 @@ export const ForwardMessageModal = memo(function ForwardMessageModal({
                       <Users className="w-4 h-4 text-primary-hover" />
                     </div>
                     <div className="flex-1 min-w-0 text-left">
-                      <p className="text-base font-medium text-text-primary truncate">{squad.name}</p>
+                      <p className="text-base font-medium text-text-primary truncate">
+                        {squad.name}
+                      </p>
                       <p className="text-sm text-text-quaternary">{squad.game}</p>
                     </div>
                     {selectedSquadId === squad.id && (

@@ -64,7 +64,9 @@ export function ProgressBar({
               className={`flex-1 ${trackSizes[size]} rounded-full transition-transform duration-300 ${
                 i < stepped.current ? fillColors[variant] : 'bg-border-subtle'
               }`}
-              style={animated ? { transformOrigin: 'left', transitionDelay: `${i * 80}ms` } : undefined}
+              style={
+                animated ? { transformOrigin: 'left', transitionDelay: `${i * 80}ms` } : undefined
+              }
             />
           ))}
         </div>

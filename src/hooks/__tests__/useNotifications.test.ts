@@ -33,17 +33,20 @@ describe('useNotificationStore', () => {
     })
 
     // Mock Notification constructor
-    vi.stubGlobal('Notification', Object.assign(
-      mockNotification.mockImplementation(function (this: any) {
-        this.close = mockNotificationClose
-        this.onclick = null
-        return this
-      }),
-      {
-        permission: 'default',
-        requestPermission: vi.fn(),
-      }
-    ))
+    vi.stubGlobal(
+      'Notification',
+      Object.assign(
+        mockNotification.mockImplementation(function (this: any) {
+          this.close = mockNotificationClose
+          this.onclick = null
+          return this
+        }),
+        {
+          permission: 'default',
+          requestPermission: vi.fn(),
+        }
+      )
+    )
   })
 
   afterEach(() => {
@@ -123,10 +126,13 @@ describe('useNotificationStore', () => {
         useNotificationStore.getState().sendNotification('Test Title', { body: 'Test body' })
       })
 
-      expect(mockNotification).toHaveBeenCalledWith('Test Title', expect.objectContaining({
-        body: 'Test body',
-        icon: '/favicon.ico',
-      }))
+      expect(mockNotification).toHaveBeenCalledWith(
+        'Test Title',
+        expect.objectContaining({
+          body: 'Test body',
+          icon: '/favicon.ico',
+        })
+      )
     })
 
     it('does not send when not supported', () => {

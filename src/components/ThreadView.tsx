@@ -1,13 +1,8 @@
-"use client";
+'use client'
 
 import { useState, useRef, useEffect, memo } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
-import {
-  X,
-  Send,
-  MessageSquare,
-  Loader2,
-} from './icons'
+import { X, Send, MessageSquare, Loader2 } from './icons'
 import { useThreads, useThreadInfo } from '../hooks/useThreads'
 import { useAuthStore } from '../hooks/useAuth'
 
@@ -60,10 +55,14 @@ export const ThreadView = memo(function ThreadView({ threadId, isOpen, onClose }
             <div className="flex-1 min-w-0">
               <h3 className="text-md font-semibold text-text-primary">Thread</h3>
               <p className="text-xs text-text-tertiary">
-                {parentMessage?.thread_reply_count || messages.length} réponse{(parentMessage?.thread_reply_count || messages.length) !== 1 ? 's' : ''}
+                {parentMessage?.thread_reply_count || messages.length} réponse
+                {(parentMessage?.thread_reply_count || messages.length) !== 1 ? 's' : ''}
               </p>
             </div>
-            <button onClick={onClose} className="p-1.5 rounded-lg text-text-tertiary hover:text-text-primary hover:bg-bg-hover transition-colors">
+            <button
+              onClick={onClose}
+              className="p-1.5 rounded-lg text-text-tertiary hover:text-text-primary hover:bg-bg-hover transition-colors"
+            >
               <X className="w-5 h-5" />
             </button>
           </div>
@@ -73,13 +72,19 @@ export const ThreadView = memo(function ThreadView({ threadId, isOpen, onClose }
             <div className="px-4 py-3 border-b border-border-default bg-bg-surface">
               <div className="flex items-center gap-2 mb-1">
                 {parentMessage.sender_avatar ? (
-                  <img src={parentMessage.sender_avatar} alt="" className="w-6 h-6 rounded-full object-cover" />
+                  <img
+                    src={parentMessage.sender_avatar}
+                    alt=""
+                    className="w-6 h-6 rounded-full object-cover"
+                  />
                 ) : (
                   <div className="w-6 h-6 rounded-full bg-primary-20 flex items-center justify-center text-xs font-bold text-primary">
                     {parentMessage.sender_username?.charAt(0).toUpperCase() || '?'}
                   </div>
                 )}
-                <span className="text-sm font-medium text-text-primary">{parentMessage.sender_username}</span>
+                <span className="text-sm font-medium text-text-primary">
+                  {parentMessage.sender_username}
+                </span>
               </div>
               <p className="text-sm text-text-secondary line-clamp-3">{parentMessage.content}</p>
             </div>
@@ -98,7 +103,7 @@ export const ThreadView = memo(function ThreadView({ threadId, isOpen, onClose }
                 <p className="text-xs text-text-quaternary mt-1">Sois le premier à répondre !</p>
               </div>
             ) : (
-              messages.map(msg => {
+              messages.map((msg) => {
                 const isOwn = msg.sender_id === user?.id
                 return (
                   <m.div
@@ -107,11 +112,17 @@ export const ThreadView = memo(function ThreadView({ threadId, isOpen, onClose }
                     animate={{ opacity: 1, y: 0 }}
                     className={`flex ${isOwn ? 'justify-end' : 'justify-start'}`}
                   >
-                    <div className={`flex items-end gap-2 max-w-[85%] ${isOwn ? 'flex-row-reverse' : ''}`}>
+                    <div
+                      className={`flex items-end gap-2 max-w-[85%] ${isOwn ? 'flex-row-reverse' : ''}`}
+                    >
                       {!isOwn && (
                         <div className="flex-shrink-0">
                           {msg.sender_avatar ? (
-                            <img src={msg.sender_avatar} alt="" className="w-6 h-6 rounded-full object-cover" />
+                            <img
+                              src={msg.sender_avatar}
+                              alt=""
+                              className="w-6 h-6 rounded-full object-cover"
+                            />
                           ) : (
                             <div className="w-6 h-6 rounded-full bg-primary-20 flex items-center justify-center text-xs font-bold text-primary">
                               {msg.sender_username?.charAt(0).toUpperCase() || '?'}
@@ -121,13 +132,17 @@ export const ThreadView = memo(function ThreadView({ threadId, isOpen, onClose }
                       )}
                       <div>
                         {!isOwn && (
-                          <span className="text-xs text-text-tertiary mb-0.5 block">{msg.sender_username}</span>
+                          <span className="text-xs text-text-tertiary mb-0.5 block">
+                            {msg.sender_username}
+                          </span>
                         )}
-                        <div className={`px-3 py-2 rounded-xl text-sm ${
-                          isOwn
-                            ? 'bg-primary text-white rounded-br-md'
-                            : 'bg-bg-surface text-text-primary rounded-bl-md'
-                        }`}>
+                        <div
+                          className={`px-3 py-2 rounded-xl text-sm ${
+                            isOwn
+                              ? 'bg-primary text-white rounded-br-md'
+                              : 'bg-bg-surface text-text-primary rounded-bl-md'
+                          }`}
+                        >
                           {msg.content}
                         </div>
                         <span className="text-xs text-text-quaternary mt-0.5 block">
@@ -150,7 +165,7 @@ export const ThreadView = memo(function ThreadView({ threadId, isOpen, onClose }
                 ref={inputRef}
                 type="text"
                 value={newMessage}
-                onChange={e => setNewMessage(e.target.value)}
+                onChange={(e) => setNewMessage(e.target.value)}
                 placeholder="Répondre dans le thread..."
                 className="flex-1 px-4 py-2.5 bg-bg-surface border border-border-default rounded-xl text-sm text-text-primary placeholder-text-quaternary outline-none focus:border-primary transition-colors"
               />
@@ -160,7 +175,11 @@ export const ThreadView = memo(function ThreadView({ threadId, isOpen, onClose }
                 className="p-2.5 rounded-xl bg-primary text-white hover:bg-primary-hover transition-colors disabled:opacity-50"
                 aria-label="Envoyer"
               >
-                {isSending ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
+                {isSending ? (
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                ) : (
+                  <Send className="w-4 h-4" />
+                )}
               </button>
             </div>
           </form>
@@ -171,7 +190,15 @@ export const ThreadView = memo(function ThreadView({ threadId, isOpen, onClose }
 })
 
 // Thread indicator on a message bubble
-export function ThreadIndicator({ replyCount, lastReplyAt, onClick }: { replyCount: number; lastReplyAt?: string | null; onClick: () => void }) {
+export function ThreadIndicator({
+  replyCount,
+  lastReplyAt,
+  onClick,
+}: {
+  replyCount: number
+  lastReplyAt?: string | null
+  onClick: () => void
+}) {
   if (!replyCount || replyCount === 0) return null
 
   const timeAgo = lastReplyAt ? getRelativeTime(lastReplyAt) : ''
@@ -182,7 +209,9 @@ export function ThreadIndicator({ replyCount, lastReplyAt, onClick }: { replyCou
       className="flex items-center gap-1.5 mt-1 px-2 py-1 rounded-lg text-xs text-primary hover:bg-primary-10 transition-colors"
     >
       <MessageSquare className="w-3 h-3" />
-      <span className="font-medium">{replyCount} réponse{replyCount !== 1 ? 's' : ''}</span>
+      <span className="font-medium">
+        {replyCount} réponse{replyCount !== 1 ? 's' : ''}
+      </span>
       {timeAgo && <span className="text-text-quaternary">{timeAgo}</span>}
     </button>
   )
@@ -191,7 +220,7 @@ export function ThreadIndicator({ replyCount, lastReplyAt, onClick }: { replyCou
 function getRelativeTime(dateStr: string): string {
   const diff = Date.now() - new Date(dateStr).getTime()
   const minutes = Math.floor(diff / 60000)
-  if (minutes < 1) return 'à l\'instant'
+  if (minutes < 1) return "à l'instant"
   if (minutes < 60) return `il y a ${minutes}min`
   const hours = Math.floor(minutes / 60)
   if (hours < 24) return `il y a ${hours}h`

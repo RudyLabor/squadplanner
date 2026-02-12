@@ -93,7 +93,9 @@ import { Checkbox } from '../Checkbox'
 
 describe('Checkbox a11y', () => {
   it('renders without violations', async () => {
-    const { container } = render(<Checkbox label="Accept terms" checked={false} onChange={() => {}} />)
+    const { container } = render(
+      <Checkbox label="Accept terms" checked={false} onChange={() => {}} />
+    )
     expect(await axe(container)).toHaveNoViolations()
   })
 })
@@ -128,7 +130,7 @@ describe('Divider a11y', () => {
   })
 
   it('renders with text without violations', async () => {
-    const { container } = render(<Divider text="or" />)
+    const { container } = render(<Divider label="or" />)
     expect(await axe(container)).toHaveNoViolations()
   })
 })
@@ -149,10 +151,7 @@ import { EmptyState } from '../EmptyState'
 describe('EmptyState a11y', () => {
   it('renders without violations', async () => {
     const { container } = render(
-      <EmptyState
-        title="No items"
-        description="You have no items yet"
-      />
+      <EmptyState icon={<span>!</span>} title="No items" description="You have no items yet" />
     )
     expect(await axe(container)).toHaveNoViolations()
   })
@@ -177,7 +176,7 @@ import { AnimatedCounter } from '../AnimatedCounter'
 
 describe('AnimatedCounter a11y', () => {
   it('renders with aria-live without violations', async () => {
-    const { container } = render(<AnimatedCounter value={42} />)
+    const { container } = render(<AnimatedCounter end={42} />)
     expect(await axe(container)).toHaveNoViolations()
   })
 })

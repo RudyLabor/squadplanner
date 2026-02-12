@@ -13,7 +13,7 @@ test.describe('Authentication', () => {
   })
 
   test('should navigate to auth page', async ({ page }) => {
-    await page.click('text=J\'ai déjà un compte')
+    await page.click("text=J'ai déjà un compte")
     await expect(page).toHaveURL(/\/auth/)
     await expect(page.getByRole('heading', { name: /Connexion/i })).toBeVisible()
   })
@@ -28,7 +28,7 @@ test.describe('Authentication', () => {
   test('should switch to register form', async ({ page }) => {
     await page.goto('/auth')
     // The toggle text is "S'inscrire" not "Créer un compte"
-    await page.click('text=S\'inscrire')
+    await page.click("text=S'inscrire")
     await expect(page.getByRole('heading', { name: /Inscription/i })).toBeVisible()
     await expect(page.getByLabel(/Pseudo/i)).toBeVisible()
     await expect(page.getByLabel(/Email/i)).toBeVisible()

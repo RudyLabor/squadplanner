@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 import { useState, useEffect } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
@@ -26,7 +26,7 @@ export function InviteToPartyModal({
   squadName,
   partyLink,
   currentUserId,
-  connectedUserIds
+  connectedUserIds,
 }: InviteToPartyModalProps) {
   const focusTrapRef = useFocusTrap<HTMLDivElement>(isOpen, onClose)
   const [members, setMembers] = useState<SquadMember[]>([])
@@ -44,7 +44,8 @@ export function InviteToPartyModal({
       try {
         const { data, error } = await supabase
           .from('squad_members')
-          .select(`
+          .select(
+            `
             user_id,
             profiles!inner(
               id,
@@ -53,7 +54,8 @@ export function InviteToPartyModal({
               last_seen_at,
               voice_channel_id
             )
-          `)
+          `
+          )
           .eq('squad_id', squadId)
 
         if (error) throw error
@@ -66,11 +68,9 @@ export function InviteToPartyModal({
             is_online: m.profiles.last_seen_at
               ? new Date(m.profiles.last_seen_at) > new Date(Date.now() - 15 * 60 * 1000)
               : false,
-            voice_channel_id: m.profiles.voice_channel_id
+            voice_channel_id: m.profiles.voice_channel_id,
           }))
-          .filter((m: SquadMember) =>
-            m.id !== currentUserId && !connectedUserIds.includes(m.id)
-          )
+          .filter((m: SquadMember) => m.id !== currentUserId && !connectedUserIds.includes(m.id))
 
         setMembers(squadMembers)
       } catch (error) {
@@ -100,8 +100,8 @@ export function InviteToPartyModal({
         data: {
           squad_id: squadId,
           party_link: partyLink,
-          invited_by: currentUserId
-        }
+          invited_by: currentUserId,
+        },
       })
 
       try {
@@ -117,18 +117,18 @@ export function InviteToPartyModal({
               type: 'party_invite',
               squad_id: squadId,
               party_link: partyLink,
-              invited_by: currentUserId
-            }
-          }
+              invited_by: currentUserId,
+            },
+          },
         })
       } catch (pushError) {
         console.warn('[InviteToPartyModal] Push notification failed:', pushError)
       }
 
-      setInvitedMembers(prev => new Set([...prev, memberId]))
+      setInvitedMembers((prev) => new Set([...prev, memberId]))
     } catch (error) {
       console.error('Error sending invite:', error)
-      setInvitedMembers(prev => new Set([...prev, memberId]))
+      setInvitedMembers((prev) => new Set([...prev, memberId]))
     } finally {
       setSendingInvite(null)
     }
@@ -164,7 +164,9 @@ export function InviteToPartyModal({
                 <UserPlus className="w-5 h-5 text-primary" />
               </div>
               <div>
-                <h2 id="invite-party-title" className="text-lg font-semibold text-text-primary">Inviter à la Party</h2>
+                <h2 id="invite-party-title" className="text-lg font-semibold text-text-primary">
+                  Inviter à la Party
+                </h2>
                 <p className="text-sm text-text-secondary">{squadName}</p>
               </div>
             </div>
@@ -192,11 +194,7 @@ export function InviteToPartyModal({
 
           {/* Footer */}
           <div className="p-4 border-t border-border-subtle">
-            <Button
-              variant="ghost"
-              className="w-full"
-              onClick={onClose}
-            >
+            <Button variant="ghost" className="w-full" onClick={onClose}>
               Fermer
             </Button>
           </div>

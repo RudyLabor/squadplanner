@@ -1,14 +1,8 @@
-"use client";
+'use client'
 
 import { useState, useEffect, useCallback, useRef, type ReactNode } from 'react'
 import { m, AnimatePresence, useMotionValue, useTransform, type PanInfo } from 'framer-motion'
-import {
-  X,
-  CheckCircle,
-  AlertTriangle,
-  AlertCircle,
-  Info,
-} from '../icons'
+import { X, CheckCircle, AlertTriangle, AlertCircle, Info } from '../icons'
 // --- Types ---
 export type ToastType = 'success' | 'error' | 'warning' | 'info' | 'default'
 
@@ -34,11 +28,19 @@ let toasts: ToastEntry[] = []
 let listeners: Array<() => void> = []
 let nextId = 0
 
-function emit() { listeners.forEach(fn => fn()) }
+function emit() {
+  listeners.forEach((fn) => fn())
+}
 
 function addToast(data: Omit<ToastData, 'id'>): string {
   const id = `toast-${++nextId}`
-  const entry: ToastEntry = { ...data, id, createdAt: Date.now(), duration: data.duration ?? 4000, dismissible: data.dismissible ?? true }
+  const entry: ToastEntry = {
+    ...data,
+    id,
+    createdAt: Date.now(),
+    duration: data.duration ?? 4000,
+    dismissible: data.dismissible ?? true,
+  }
   toasts = [...toasts, entry]
   // Queue: max 5 visible
   if (toasts.length > 5) toasts = toasts.slice(-5)
@@ -47,7 +49,7 @@ function addToast(data: Omit<ToastData, 'id'>): string {
 }
 
 function removeToast(id: string) {
-  toasts = toasts.filter(t => t.id !== id)
+  toasts = toasts.filter((t) => t.id !== id)
   emit()
 }
 
@@ -68,16 +70,18 @@ export const toast = {
     addToast({ message, type: 'info', duration: 3000, ...opts }),
   show: (message: string, opts?: Partial<Omit<ToastData, 'id' | 'message'>>) =>
     addToast({ message, ...opts }),
-  dismiss: (id?: string) => id ? removeToast(id) : clearAll(),
+  dismiss: (id?: string) => (id ? removeToast(id) : clearAll()),
 }
 
 // --- Hook ---
 function useToasts() {
   const [, setTick] = useState(0)
   useEffect(() => {
-    const listener = () => setTick(t => t + 1)
+    const listener = () => setTick((t) => t + 1)
     listeners.push(listener)
-    return () => { listeners = listeners.filter(l => l !== listener) }
+    return () => {
+      listeners = listeners.filter((l) => l !== listener)
+    }
   }, [])
   return toasts
 }
@@ -85,11 +89,16 @@ function useToasts() {
 // --- Icons (lazy to avoid TDZ in minified builds) ---
 function getTypeIcon(type: ToastType): ReactNode {
   switch (type) {
-    case 'success': return <CheckCircle className="w-5 h-5 text-success" />
-    case 'error': return <AlertCircle className="w-5 h-5 text-error" />
-    case 'warning': return <AlertTriangle className="w-5 h-5 text-warning" />
-    case 'info': return <Info className="w-5 h-5 text-primary" />
-    default: return null
+    case 'success':
+      return <CheckCircle className="w-5 h-5 text-success" />
+    case 'error':
+      return <AlertCircle className="w-5 h-5 text-error" />
+    case 'warning':
+      return <AlertTriangle className="w-5 h-5 text-warning" />
+    case 'info':
+      return <Info className="w-5 h-5 text-primary" />
+    default:
+      return null
   }
 }
 
@@ -164,7 +173,10 @@ function ToastItem({ data, onDismiss }: { data: ToastEntry; onDismiss: (id: stri
           <p className="text-sm text-text-primary">{data.message}</p>
           {data.action && (
             <button
-              onClick={() => { data.action!.onClick(); onDismiss(data.id) }}
+              onClick={() => {
+                data.action!.onClick()
+                onDismiss(data.id)
+              }}
               className="mt-1.5 text-xs font-medium text-primary hover:text-primary-hover transition-colors"
             >
               {data.action.label}
@@ -191,7 +203,10 @@ function ToastItem({ data, onDismiss }: { data: ToastEntry; onDismiss: (id: stri
             className={`h-full ${typeProgressColors[type]}`}
             initial={{ width: '100%' }}
             animate={{ width: paused ? undefined : '0%' }}
-            transition={{ duration: (paused ? remainingRef.current : data.duration) / 1000, ease: 'linear' }}
+            transition={{
+              duration: (paused ? remainingRef.current : data.duration) / 1000,
+              ease: 'linear',
+            }}
           />
         </div>
       )}
@@ -210,7 +225,7 @@ export function ToastContainer() {
       className="fixed top-4 left-1/2 -translate-x-1/2 z-[200] flex flex-col items-center gap-2 w-full max-w-sm px-4 pointer-events-none"
     >
       <AnimatePresence mode="popLayout">
-        {items.map(t => (
+        {items.map((t) => (
           <div key={t.id} className="pointer-events-auto w-full">
             <ToastItem data={t} onDismiss={handleDismiss} />
           </div>

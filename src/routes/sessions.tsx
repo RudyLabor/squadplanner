@@ -6,7 +6,7 @@ import { queryKeys } from '../lib/queryClient'
 import { ClientRouteWrapper } from '../components/ClientRouteWrapper'
 import type { Session, SessionRsvp, RsvpResponse } from '../types/database'
 
-const Sessions = lazy(() => import('../pages/Sessions').then(m => ({ default: m.Sessions })))
+const Sessions = lazy(() => import('../pages/Sessions').then((m) => ({ default: m.Sessions })))
 
 interface SquadSummary {
   id: string
@@ -29,16 +29,23 @@ interface SessionsLoaderData {
 
 export function meta() {
   return [
-    { title: "Sessions - Squad Planner" },
-    { name: "description", content: "Consulte et gère tes sessions de jeu planifiées. Confirme ta présence avec le système RSVP." },
-    { tagName: "link", rel: "canonical", href: "https://squadplanner.fr/sessions" },
-    { property: "og:url", content: "https://squadplanner.fr/sessions" },
+    { title: 'Sessions - Squad Planner' },
+    {
+      name: 'description',
+      content:
+        'Consulte et gère tes sessions de jeu planifiées. Confirme ta présence avec le système RSVP.',
+    },
+    { tagName: 'link', rel: 'canonical', href: 'https://squadplanner.fr/sessions' },
+    { property: 'og:url', content: 'https://squadplanner.fr/sessions' },
   ]
 }
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const { supabase, headers, getUser } = createSupabaseServerClient(request)
-  const { data: { user }, error } = await getUser()
+  const {
+    data: { user },
+    error,
+  } = await getUser()
 
   if (error || !user) {
     throw redirect('/', { headers })
@@ -49,7 +56,8 @@ export async function loader({ request }: LoaderFunctionArgs) {
     .select('squad_id, squads!inner(id, name, game, invite_code, owner_id, created_at)')
     .eq('user_id', user.id)
 
-  const squads = (memberships?.map((m: { squads: SquadSummary }) => m.squads) || []) as SquadSummary[]
+  const squads = ((memberships as any[])?.map((m: { squads: SquadSummary }) => m.squads) ||
+    []) as SquadSummary[]
   const squadIds = squads.map((s) => s.id)
 
   let sessions: SessionWithRsvp[] = []
@@ -61,14 +69,15 @@ export async function loader({ request }: LoaderFunctionArgs) {
       .order('scheduled_at', { ascending: true })
 
     if (sessionsData?.length) {
-      const sessionIds = sessionsData.map((s: Session) => s.id)
+      const sessionIds = (sessionsData as unknown as Session[]).map((s: Session) => s.id)
       const { data: allRsvps } = await supabase
         .from('session_rsvps')
         .select('*')
         .in('session_id', sessionIds)
 
-      sessions = sessionsData.map((session: Session) => {
-        const sessionRsvps = (allRsvps as SessionRsvp[] | null)?.filter((r) => r.session_id === session.id) || []
+      sessions = (sessionsData as unknown as Session[]).map((session: Session) => {
+        const sessionRsvps =
+          (allRsvps as SessionRsvp[] | null)?.filter((r) => r.session_id === session.id) || []
         return {
           ...session,
           my_rsvp: sessionRsvps.find((r) => r.user_id === user.id)?.response || null,
@@ -91,11 +100,19 @@ export function headers({ loaderHeaders }: { loaderHeaders: Headers }) {
 
 export default function Component({ loaderData }: { loaderData: SessionsLoaderData }) {
   return (
-    <ClientRouteWrapper seeds={[
-      { key: queryKeys.squads.list(), data: loaderData?.squads },
-      { key: queryKeys.sessions.upcoming(), data: loaderData?.sessions },
-    ]}>
-      <Suspense fallback={<div className="min-h-[50vh] flex items-center justify-center"><div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin" /></div>}>
+    <ClientRouteWrapper
+      seeds={[
+        { key: [...queryKeys.squads.list()], data: loaderData?.squads },
+        { key: [...queryKeys.sessions.upcoming()], data: loaderData?.sessions },
+      ]}
+    >
+      <Suspense
+        fallback={
+          <div className="min-h-[50vh] flex items-center justify-center">
+            <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+          </div>
+        }
+      >
         <Sessions loaderData={loaderData} />
       </Suspense>
     </ClientRouteWrapper>

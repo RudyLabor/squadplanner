@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 /**
  * Phase 4.2.3 + 4.2.4 — Custom Status Modal
@@ -6,12 +6,7 @@
  */
 import { useState, useEffect, memo } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
-import {
-  X,
-  Clock,
-  Gamepad2,
-  Loader2,
-} from './icons'
+import { X, Clock, Gamepad2, Loader2 } from './icons'
 import { useUserStatusStore } from '../hooks/useUserStatus'
 import { useSquadsStore } from '../hooks/useSquads'
 
@@ -25,10 +20,22 @@ const DURATION_OPTIONS = [
 ]
 
 const POPULAR_GAMES = [
-  'Valorant', 'League of Legends', 'Fortnite', 'Minecraft',
-  'Apex Legends', 'CS2', 'Overwatch 2', 'Rocket League',
-  'GTA V', 'FIFA', 'Call of Duty', 'Genshin Impact',
-  'Roblox', 'Among Us', 'Dead by Daylight', 'Rainbow Six Siege',
+  'Valorant',
+  'League of Legends',
+  'Fortnite',
+  'Minecraft',
+  'Apex Legends',
+  'CS2',
+  'Overwatch 2',
+  'Rocket League',
+  'GTA V',
+  'FIFA',
+  'Call of Duty',
+  'Genshin Impact',
+  'Roblox',
+  'Among Us',
+  'Dead by Daylight',
+  'Rainbow Six Siege',
 ]
 
 interface CustomStatusModalProps {
@@ -36,7 +43,10 @@ interface CustomStatusModalProps {
   onClose: () => void
 }
 
-export const CustomStatusModal = memo(function CustomStatusModal({ isOpen, onClose }: CustomStatusModalProps) {
+export const CustomStatusModal = memo(function CustomStatusModal({
+  isOpen,
+  onClose,
+}: CustomStatusModalProps) {
   const { customStatus, gameStatus, setCustomStatus, setGameStatus } = useUserStatusStore()
   const { squads } = useSquadsStore()
 
@@ -47,10 +57,10 @@ export const CustomStatusModal = memo(function CustomStatusModal({ isOpen, onClo
   const [showGameSuggestions, setShowGameSuggestions] = useState(false)
 
   // Compute game suggestions from squad games + popular
-  const squadGames = squads.map(s => s.game).filter(Boolean)
+  const squadGames = squads.map((s) => s.game).filter(Boolean)
   const allGames = [...new Set([...squadGames, ...POPULAR_GAMES])]
   const filteredGames = gameInput
-    ? allGames.filter(g => g.toLowerCase().includes(gameInput.toLowerCase()))
+    ? allGames.filter((g) => g.toLowerCase().includes(gameInput.toLowerCase()))
     : allGames.slice(0, 8)
 
   // Reset form when opening
@@ -129,7 +139,9 @@ export const CustomStatusModal = memo(function CustomStatusModal({ isOpen, onClo
           >
             {/* Header */}
             <div className="flex items-center justify-between px-5 py-4 border-b border-border-default">
-              <h2 id="custom-status-title" className="text-lg font-semibold text-text-primary">Définir un statut</h2>
+              <h2 id="custom-status-title" className="text-lg font-semibold text-text-primary">
+                Définir un statut
+              </h2>
               <button
                 onClick={onClose}
                 className="p-1.5 rounded-lg hover:bg-border-subtle text-text-tertiary transition-colors"
@@ -142,7 +154,9 @@ export const CustomStatusModal = memo(function CustomStatusModal({ isOpen, onClo
             <div className="p-5 space-y-5">
               {/* Emoji + Text */}
               <div>
-                <label className="text-base text-text-tertiary font-medium mb-2 block">Statut personnalisé</label>
+                <label className="text-base text-text-tertiary font-medium mb-2 block">
+                  Statut personnalisé
+                </label>
                 <div className="flex items-center gap-2">
                   <button
                     type="button"
@@ -170,9 +184,7 @@ export const CustomStatusModal = memo(function CustomStatusModal({ isOpen, onClo
                     type="button"
                     onClick={() => setEmoji(e)}
                     className={`w-9 h-9 rounded-lg flex items-center justify-center text-lg transition-colors ${
-                      emoji === e
-                        ? 'bg-primary-20 ring-1 ring-primary'
-                        : 'hover:bg-border-subtle'
+                      emoji === e ? 'bg-primary-20 ring-1 ring-primary' : 'hover:bg-border-subtle'
                     }`}
                   >
                     {e}
@@ -270,11 +282,7 @@ export const CustomStatusModal = memo(function CustomStatusModal({ isOpen, onClo
                 disabled={isSaving}
                 className="px-5 py-2.5 rounded-xl text-base font-semibold bg-primary text-white hover:bg-primary-hover transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
               >
-                {isSaving ? (
-                  <Loader2 className="w-4 h-4 animate-spin" />
-                ) : (
-                  'Enregistrer'
-                )}
+                {isSaving ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Enregistrer'}
               </button>
             </div>
           </m.div>

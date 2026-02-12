@@ -1,17 +1,8 @@
-"use client";
+'use client'
 
 import { useState, useRef, useEffect, useCallback } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
-import {
-  MoreHorizontal,
-  Pencil,
-  Trash2,
-  Pin,
-  Reply,
-  Copy,
-  Check,
-  Forward,
-} from './icons'
+import { MoreHorizontal, Pencil, Trash2, Pin, Reply, Copy, Check, Forward } from './icons'
 export interface MessageActionsProps {
   message: {
     id: string
@@ -44,7 +35,7 @@ export function MessageActions({
   onDelete,
   onPin,
   onReply,
-  onForward
+  onForward,
 }: MessageActionsProps) {
   const [isOpen, setIsOpen] = useState(false)
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
@@ -253,9 +244,7 @@ export function MessageActions({
               <button
                 onClick={handleDelete}
                 className={`w-full flex items-center gap-3 px-4 py-2.5 text-left text-md transition-colors ${
-                  showDeleteConfirm
-                    ? 'bg-error/15 text-error'
-                    : 'text-error hover:bg-error/10'
+                  showDeleteConfirm ? 'bg-error/15 text-error' : 'text-error hover:bg-error/10'
                 }`}
                 role="menuitem"
               >

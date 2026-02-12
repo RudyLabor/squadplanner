@@ -11,13 +11,12 @@ const ALLOWED_ORIGINS = [
   'http://localhost:5174',
   'https://squadplanner.fr',
   'https://squadplanner.app',
-  Deno.env.get('SUPABASE_URL') || ''
+  Deno.env.get('SUPABASE_URL') || '',
 ].filter(Boolean)
 
 function getCorsHeaders(origin: string | null) {
-  const allowedOrigin = origin && ALLOWED_ORIGINS.some(allowed => origin === allowed)
-    ? origin
-    : null
+  const allowedOrigin =
+    origin && ALLOWED_ORIGINS.some((allowed) => origin === allowed) ? origin : null
   if (!allowedOrigin) {
     return {
       'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
@@ -46,14 +45,14 @@ async function callClaudeAPI(prompt: string): Promise<string | null> {
       headers: {
         'Content-Type': 'application/json',
         'x-api-key': apiKey,
-        'anthropic-version': '2023-06-01'
+        'anthropic-version': '2023-06-01',
       },
       body: JSON.stringify({
         model: CLAUDE_MODEL,
         max_tokens: 400,
-        messages: [{ role: 'user', content: prompt }]
+        messages: [{ role: 'user', content: prompt }],
       }),
-      signal: controller.signal
+      signal: controller.signal,
     })
 
     clearTimeout(timeoutId)
@@ -88,10 +87,13 @@ serve(async (req) => {
     try {
       rawBody = await req.json()
     } catch {
-      return new Response(
-        JSON.stringify({ error: 'Invalid JSON' }),
-        { status: 400, headers: { ...getCorsHeaders(req.headers.get('origin')), 'Content-Type': 'application/json' } }
-      )
+      return new Response(JSON.stringify({ error: 'Invalid JSON' }), {
+        status: 400,
+        headers: {
+          ...getCorsHeaders(req.headers.get('origin')),
+          'Content-Type': 'application/json',
+        },
+      })
     }
 
     const sessionId = validateUUID(rawBody.session_id, 'session_id')
@@ -107,10 +109,12 @@ serve(async (req) => {
       .single()
 
     if (cached?.content) {
-      return new Response(
-        JSON.stringify(cached.content),
-        { headers: { ...getCorsHeaders(req.headers.get('origin')), 'Content-Type': 'application/json' } }
-      )
+      return new Response(JSON.stringify(cached.content), {
+        headers: {
+          ...getCorsHeaders(req.headers.get('origin')),
+          'Content-Type': 'application/json',
+        },
+      })
     }
 
     // Fetch session data
@@ -121,17 +125,23 @@ serve(async (req) => {
       .single()
 
     if (sessionError || !session) {
-      return new Response(
-        JSON.stringify({ error: 'Session not found' }),
-        { status: 404, headers: { ...getCorsHeaders(req.headers.get('origin')), 'Content-Type': 'application/json' } }
-      )
+      return new Response(JSON.stringify({ error: 'Session not found' }), {
+        status: 404,
+        headers: {
+          ...getCorsHeaders(req.headers.get('origin')),
+          'Content-Type': 'application/json',
+        },
+      })
     }
 
     if (session.status !== 'completed') {
-      return new Response(
-        JSON.stringify({ error: 'Session not completed yet' }),
-        { status: 400, headers: { ...getCorsHeaders(req.headers.get('origin')), 'Content-Type': 'application/json' } }
-      )
+      return new Response(JSON.stringify({ error: 'Session not completed yet' }), {
+        status: 400,
+        headers: {
+          ...getCorsHeaders(req.headers.get('origin')),
+          'Content-Type': 'application/json',
+        },
+      })
     }
 
     // Fetch squad name
@@ -153,18 +163,18 @@ serve(async (req) => {
       .select('user_id, response')
       .eq('session_id', sessionId)
 
-    const presentCount = checkins?.filter(c => c.status === 'present').length || 0
-    const lateCount = checkins?.filter(c => c.status === 'late').length || 0
-    const noshowCount = checkins?.filter(c => c.status === 'noshow').length || 0
-    const totalRsvps = rsvps?.filter(r => r.response === 'present').length || 0
+    const presentCount = checkins?.filter((c) => c.status === 'present').length || 0
+    const lateCount = checkins?.filter((c) => c.status === 'late').length || 0
+    const noshowCount = checkins?.filter((c) => c.status === 'noshow').length || 0
+    const totalRsvps = rsvps?.filter((r) => r.response === 'present').length || 0
     const totalCheckins = presentCount + lateCount + noshowCount
-    const attendanceRate = totalCheckins > 0
-      ? Math.round((presentCount + lateCount) / totalCheckins * 100)
-      : 0
+    const attendanceRate =
+      totalCheckins > 0 ? Math.round(((presentCount + lateCount) / totalCheckins) * 100) : 0
 
     // Find MVP (present with 0 minutes late)
     let mvpUsername: string | null = null
-    const presentCheckins = checkins?.filter(c => c.status === 'present' && (c.minutes_late || 0) === 0) || []
+    const presentCheckins =
+      checkins?.filter((c) => c.status === 'present' && (c.minutes_late || 0) === 0) || []
     if (presentCheckins.length > 0) {
       const mvpId = presentCheckins[0].user_id
       const { data: mvpProfile } = await supabaseClient
@@ -214,9 +224,10 @@ Reponds UNIQUEMENT avec le resume, sans guillemets.`
     const aiSummary = await callClaudeAPI(prompt)
 
     // Fallback template
-    const templateSummary = attendanceRate >= 80
-      ? `Belle session ! ${presentCount} joueurs presents sur ${totalRsvps} inscrits (${attendanceRate}% de presence).${lateCount > 0 ? ` ${lateCount} retardataire${lateCount > 1 ? 's' : ''}.` : ''}${mvpUsername ? ` ${mvpUsername} etait pile a l'heure, bravo !` : ''} Continuez comme ca.`
-      : `Session avec ${presentCount} presents sur ${totalRsvps} inscrits (${attendanceRate}% de presence).${noshowCount > 0 ? ` ${noshowCount} absent${noshowCount > 1 ? 's' : ''} non justifie${noshowCount > 1 ? 's' : ''}.` : ''} Pensez a confirmer vos presences plus tot pour mieux organiser.`
+    const templateSummary =
+      attendanceRate >= 80
+        ? `Belle session ! ${presentCount} joueurs presents sur ${totalRsvps} inscrits (${attendanceRate}% de presence).${lateCount > 0 ? ` ${lateCount} retardataire${lateCount > 1 ? 's' : ''}.` : ''}${mvpUsername ? ` ${mvpUsername} etait pile a l'heure, bravo !` : ''} Continuez comme ca.`
+        : `Session avec ${presentCount} presents sur ${totalRsvps} inscrits (${attendanceRate}% de presence).${noshowCount > 0 ? ` ${noshowCount} absent${noshowCount > 1 ? 's' : ''} non justifie${noshowCount > 1 ? 's' : ''}.` : ''} Pensez a confirmer vos presences plus tot pour mieux organiser.`
 
     const result = {
       summary: aiSummary || templateSummary,
@@ -225,25 +236,22 @@ Reponds UNIQUEMENT avec le resume, sans guillemets.`
     }
 
     // Cache in ai_insights
-    await supabaseClient
-      .from('ai_insights')
-      .insert({
-        session_id: sessionId,
-        squad_id: session.squad_id,
-        insight_type: 'session_summary',
-        content: result,
-        expires_at: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(), // 30 days
-      })
+    await supabaseClient.from('ai_insights').insert({
+      session_id: sessionId,
+      squad_id: session.squad_id,
+      insight_type: 'session_summary',
+      content: result,
+      expires_at: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(), // 30 days
+    })
 
-    return new Response(
-      JSON.stringify(result),
-      { headers: { ...getCorsHeaders(req.headers.get('origin')), 'Content-Type': 'application/json' } }
-    )
+    return new Response(JSON.stringify(result), {
+      headers: { ...getCorsHeaders(req.headers.get('origin')), 'Content-Type': 'application/json' },
+    })
   } catch (error) {
     console.error('Error in ai-session-summary:', error)
-    return new Response(
-      JSON.stringify({ error: error.message }),
-      { status: 500, headers: { ...getCorsHeaders(req.headers.get('origin')), 'Content-Type': 'application/json' } }
-    )
+    return new Response(JSON.stringify({ error: error.message }), {
+      status: 500,
+      headers: { ...getCorsHeaders(req.headers.get('origin')), 'Content-Type': 'application/json' },
+    })
   }
 })

@@ -1,8 +1,14 @@
 import { describe, it, expect } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import {
-  Skeleton, SkeletonText, SkeletonAvatar, SkeletonButton, SkeletonCard,
-  SkeletonWrapper, SkeletonSessionCard, SkeletonSquadCard
+  Skeleton,
+  SkeletonText,
+  SkeletonAvatar,
+  SkeletonButton,
+  SkeletonCard,
+  SkeletonWrapper,
+  SkeletonSessionCard,
+  SkeletonSquadCard,
 } from '../Skeleton'
 
 describe('Skeleton', () => {
@@ -72,7 +78,11 @@ describe('SkeletonCard', () => {
   })
 
   it('renders custom children', () => {
-    render(<SkeletonCard><div>Custom</div></SkeletonCard>)
+    render(
+      <SkeletonCard>
+        <div>Custom</div>
+      </SkeletonCard>
+    )
     expect(screen.getByText('Custom')).toBeInTheDocument()
   })
 })

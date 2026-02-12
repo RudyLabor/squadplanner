@@ -55,9 +55,10 @@ export const queryKeys = {
   sessions: {
     all: ['sessions'] as const,
     lists: () => [...queryKeys.sessions.all, 'list'] as const,
-    list: (squadId?: string) => squadId
-      ? [...queryKeys.sessions.lists(), { squadId }] as const
-      : [...queryKeys.sessions.lists()] as const,
+    list: (squadId?: string) =>
+      squadId
+        ? ([...queryKeys.sessions.lists(), { squadId }] as const)
+        : ([...queryKeys.sessions.lists()] as const),
     upcoming: () => [...queryKeys.sessions.all, 'upcoming'] as const,
     details: () => [...queryKeys.sessions.all, 'detail'] as const,
     detail: (id: string) => [...queryKeys.sessions.details(), id] as const,
@@ -103,9 +104,12 @@ export const queryKeys = {
   // Phase 6: Social Discovery
   discover: {
     all: ['discover'] as const,
-    publicSquads: (game?: string, region?: string) => [...queryKeys.discover.all, 'squads', { game, region }] as const,
-    globalLeaderboard: (game?: string, region?: string) => [...queryKeys.discover.all, 'leaderboard', { game, region }] as const,
-    matchmaking: (game?: string, region?: string) => [...queryKeys.discover.all, 'matchmaking', { game, region }] as const,
+    publicSquads: (game?: string, region?: string) =>
+      [...queryKeys.discover.all, 'squads', { game, region }] as const,
+    globalLeaderboard: (game?: string, region?: string) =>
+      [...queryKeys.discover.all, 'leaderboard', { game, region }] as const,
+    matchmaking: (game?: string, region?: string) =>
+      [...queryKeys.discover.all, 'matchmaking', { game, region }] as const,
     publicProfile: (username: string) => [...queryKeys.discover.all, 'profile', username] as const,
   },
 
@@ -118,8 +122,10 @@ export const queryKeys = {
   // Phase 6: AI Advanced
   aiAdvanced: {
     all: ['ai-advanced'] as const,
-    sessionSummary: (sessionId: string) => [...queryKeys.aiAdvanced.all, 'session-summary', sessionId] as const,
-    predictions: (squadId: string) => [...queryKeys.aiAdvanced.all, 'predictions', squadId] as const,
+    sessionSummary: (sessionId: string) =>
+      [...queryKeys.aiAdvanced.all, 'session-summary', sessionId] as const,
+    predictions: (squadId: string) =>
+      [...queryKeys.aiAdvanced.all, 'predictions', squadId] as const,
   },
 }
 
@@ -233,7 +239,7 @@ export async function initQueryPersistence() {
 
     persistQueryClient({
       queryClient,
-      persister,
+      persister: persister as any,
       maxAge: 24 * 60 * 60 * 1000, // 24 hours
       buster: '', // Change to invalidate all persisted caches
       dehydrateOptions: {
@@ -242,7 +248,9 @@ export async function initQueryPersistence() {
           if (query.state.status !== 'success') return false
           // Only persist key data types (squads, sessions, profile, messages)
           const key = query.queryKey[0] as string
-          return ['squads', 'sessions', 'profile', 'messages', 'challenges', 'premium'].includes(key)
+          return ['squads', 'sessions', 'profile', 'messages', 'challenges', 'premium'].includes(
+            key
+          )
         },
       },
     })

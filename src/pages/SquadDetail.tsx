@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 import { useState, useEffect, useCallback } from 'react'
 import { AnimatePresence } from 'framer-motion'
@@ -8,9 +8,13 @@ import Confetti from '../components/LazyConfetti'
 import { Button, SquadDetailSkeleton, CrossfadeTransition, ConfirmDialog } from '../components/ui'
 import { useAuthStore, usePremiumStore } from '../hooks'
 import {
-  useSquadQuery, useSquadSessionsQuery, useSquadLeaderboardQuery,
-  useLeaveSquadMutation, useDeleteSquadMutation,
-  useCreateSessionMutation, useRsvpMutation,
+  useSquadQuery,
+  useSquadSessionsQuery,
+  useSquadLeaderboardQuery,
+  useLeaveSquadMutation,
+  useDeleteSquadMutation,
+  useCreateSessionMutation,
+  useRsvpMutation,
 } from '../hooks/queries'
 import { SquadHeader, InviteModal, EditSquadModal } from '../components/squads/SquadHeader'
 import { SquadMembers } from '../components/squads/SquadMembers'
@@ -50,45 +54,55 @@ export default function SquadDetail() {
     if (user?.id) fetchPremiumStatus()
   }, [user?.id, fetchPremiumStatus])
 
-  const handleCreateSession = useCallback(async (data: {
-    squad_id: string
-    title?: string
-    scheduled_at: string
-    duration_minutes: number
-    auto_confirm_threshold: number
-    game?: string
-  }) => {
-    try {
-      await createSessionMutation.mutateAsync(data)
-      setSuccessMessage('Session créée !')
-      return { session: null, error: null }
-    } catch (error) {
-      return { session: null, error: error as Error }
-    }
-  }, [createSessionMutation])
-
-  const handleRsvp = useCallback(async (sessionId: string, response: 'present' | 'absent' | 'maybe') => {
-    try {
-      await rsvpMutation.mutateAsync({ sessionId, response })
-
-      const ariaLabels = { present: 'Tu es marqué comme présent', absent: 'Tu es marqué comme absent', maybe: 'Tu es marqué comme peut-être' }
-      const ariaRegion = document.getElementById('aria-live-polite')
-      if (ariaRegion) ariaRegion.textContent = ariaLabels[response]
-
-      if (response === 'present') {
-        setShowConfetti(true)
-        setSuccessMessage("T'es confirmé ! \uD83D\uDD25 Ta squad compte sur toi")
-        setTimeout(() => setShowConfetti(false), 4000)
-      } else {
-        setSuccessMessage(response === 'absent' ? 'Absence enregistrée' : 'Réponse enregistrée')
+  const handleCreateSession = useCallback(
+    async (data: {
+      squad_id: string
+      title?: string
+      scheduled_at: string
+      duration_minutes: number
+      auto_confirm_threshold: number
+      game?: string
+    }) => {
+      try {
+        await createSessionMutation.mutateAsync(data)
+        setSuccessMessage('Session créée !')
+        return { session: null, error: null }
+      } catch (error) {
+        return { session: null, error: error as Error }
       }
-    } catch (err) {
-      console.error('RSVP error:', err)
-      setSuccessMessage(null)
-      // Brief error toast via success message slot
-      setSuccessMessage('Erreur lors du RSVP. Réessaye.')
-    }
-  }, [rsvpMutation])
+    },
+    [createSessionMutation]
+  )
+
+  const handleRsvp = useCallback(
+    async (sessionId: string, response: 'present' | 'absent' | 'maybe') => {
+      try {
+        await rsvpMutation.mutateAsync({ sessionId, response })
+
+        const ariaLabels = {
+          present: 'Tu es marqué comme présent',
+          absent: 'Tu es marqué comme absent',
+          maybe: 'Tu es marqué comme peut-être',
+        }
+        const ariaRegion = document.getElementById('aria-live-polite')
+        if (ariaRegion) ariaRegion.textContent = ariaLabels[response]
+
+        if (response === 'present') {
+          setShowConfetti(true)
+          setSuccessMessage("T'es confirmé ! \uD83D\uDD25 Ta squad compte sur toi")
+          setTimeout(() => setShowConfetti(false), 4000)
+        } else {
+          setSuccessMessage(response === 'absent' ? 'Absence enregistrée' : 'Réponse enregistrée')
+        }
+      } catch (err) {
+        console.error('RSVP error:', err)
+        setSuccessMessage(null)
+        // Brief error toast via success message slot
+        setSuccessMessage('Erreur lors du RSVP. Réessaye.')
+      }
+    },
+    [rsvpMutation]
+  )
 
   const handleLeaveSquad = () => {
     if (!id) return
@@ -133,7 +147,14 @@ export default function SquadDetail() {
   return (
     <main className="min-h-0 bg-bg-base pb-6" aria-label="Détail de la squad">
       {showConfetti && typeof window !== 'undefined' && (
-        <Confetti width={window.innerWidth} height={window.innerHeight} recycle={false} numberOfPieces={150} gravity={0.3} colors={['#6366f1', '#34d399', '#fbbf24', '#f7f8f8', '#a78bfa']} />
+        <Confetti
+          width={window.innerWidth}
+          height={window.innerHeight}
+          recycle={false}
+          numberOfPieces={150}
+          gravity={0.3}
+          colors={['#6366f1', '#34d399', '#fbbf24', '#f7f8f8', '#a78bfa']}
+        />
       )}
 
       <div className="px-4 md:px-6 lg:px-8 py-6 max-w-2xl lg:max-w-4xl xl:max-w-6xl mx-auto">
@@ -148,61 +169,65 @@ export default function SquadDetail() {
         </button>
 
         <CrossfadeTransition isLoading={showSkeleton} skeleton={<SquadDetailSkeleton />}>
-        {currentSquad ? (
-        <div>
-          <SquadHeader squadId={id || ''} squad={currentSquad} isOwner={!!isOwner} />
+          {currentSquad ? (
+            <div>
+              <SquadHeader squadId={id || ''} squad={currentSquad} isOwner={!!isOwner} />
 
-          <div className="mb-6">
-            <PartySection squadId={id || ''} />
-          </div>
+              <div className="mb-6">
+                <PartySection squadId={id || ''} />
+              </div>
 
-          <SquadSessionsList
-            sessions={sessions || []}
-            squadId={id || ''}
-            squadGame={currentSquad.game}
-            onRsvp={handleRsvp}
-            onCreateSession={handleCreateSession}
-            sessionsLoading={sessionsLoading}
-          />
+              <SquadSessionsList
+                sessions={sessions || []}
+                squadId={id || ''}
+                squadGame={currentSquad.game}
+                onRsvp={handleRsvp}
+                onCreateSession={handleCreateSession}
+                sessionsLoading={sessionsLoading}
+              />
 
-          <SquadMembers
-            members={currentSquad.members || []}
-            ownerId={currentSquad.owner_id}
-            memberCount={currentSquad.member_count || 0}
-            currentUserId={user?.id}
-            onInviteClick={() => setShowInviteModal(true)}
-          />
+              <SquadMembers
+                members={currentSquad.members || []}
+                ownerId={currentSquad.owner_id}
+                memberCount={currentSquad.member_count || 0}
+                currentUserId={user?.id}
+                onInviteClick={() => setShowInviteModal(true)}
+              />
 
-          <SquadSettings
-            squadId={id || ''}
-            squadName={currentSquad.name}
-            isOwner={!!isOwner}
-            sessionsCount={sessions?.length || 0}
-            memberCount={currentSquad.member_count || 0}
-            avgReliability={currentSquad.avg_reliability_score || 0}
-            canAccessAdvancedStats={canAccessFeature('advanced_stats', id)}
-            leaderboard={leaderboard}
-            leaderboardLoading={leaderboardLoading}
-            currentUserId={user?.id || ''}
-            isSquadPremium={isSquadPremium(id || '')}
-            sessions={sessions || []}
-            onLeaveSquad={handleLeaveSquad}
-            onDeleteSquad={handleDeleteSquad}
-            onInviteClick={() => setShowInviteModal(true)}
-            onCreateSessionClick={() => {/* handled inside SquadSessionsList */}}
-            onEditSquadClick={() => setShowEditModal(true)}
-            showActionsDrawer={showActionsDrawer}
-            onOpenActionsDrawer={() => setShowActionsDrawer(true)}
-            onCloseActionsDrawer={() => setShowActionsDrawer(false)}
-            onSuccess={setSuccessMessage}
-          />
-        </div>
-        ) : null}
+              <SquadSettings
+                squadId={id || ''}
+                squadName={currentSquad.name}
+                isOwner={!!isOwner}
+                sessionsCount={sessions?.length || 0}
+                memberCount={currentSquad.member_count || 0}
+                avgReliability={currentSquad.avg_reliability_score || 0}
+                canAccessAdvancedStats={canAccessFeature('advanced_stats', id)}
+                leaderboard={leaderboard}
+                leaderboardLoading={leaderboardLoading}
+                currentUserId={user?.id || ''}
+                isSquadPremium={isSquadPremium(id || '')}
+                sessions={sessions || []}
+                onLeaveSquad={handleLeaveSquad}
+                onDeleteSquad={handleDeleteSquad}
+                onInviteClick={() => setShowInviteModal(true)}
+                onCreateSessionClick={() => {
+                  /* handled inside SquadSessionsList */
+                }}
+                onEditSquadClick={() => setShowEditModal(true)}
+                showActionsDrawer={showActionsDrawer}
+                onOpenActionsDrawer={() => setShowActionsDrawer(true)}
+                onCloseActionsDrawer={() => setShowActionsDrawer(false)}
+                onSuccess={setSuccessMessage}
+              />
+            </div>
+          ) : null}
         </CrossfadeTransition>
       </div>
 
       <AnimatePresence>
-        {successMessage && <SuccessToast message={successMessage} onClose={() => setSuccessMessage(null)} />}
+        {successMessage && (
+          <SuccessToast message={successMessage} onClose={() => setSuccessMessage(null)} />
+        )}
       </AnimatePresence>
 
       <AnimatePresence>
@@ -213,7 +238,9 @@ export default function SquadDetail() {
             squadId={id || ''}
             squadName={currentSquad.name}
             inviteCode={currentSquad.invite_code || ''}
-            existingMemberIds={currentSquad.members?.map((m: { user_id: string }) => m.user_id) || []}
+            existingMemberIds={
+              currentSquad.members?.map((m: { user_id: string }) => m.user_id) || []
+            }
           />
         )}
       </AnimatePresence>

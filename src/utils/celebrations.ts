@@ -6,8 +6,9 @@
 
 // Respect reduced motion preference
 function prefersReducedMotion(): boolean {
-  return typeof window !== 'undefined' &&
-    window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  return (
+    typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  )
 }
 
 /**
@@ -17,9 +18,7 @@ function prefersReducedMotion(): boolean {
  */
 function cssVar(name: string, fallback: string): string {
   if (typeof document === 'undefined') return fallback
-  const value = getComputedStyle(document.documentElement)
-    .getPropertyValue(name)
-    .trim()
+  const value = getComputedStyle(document.documentElement).getPropertyValue(name).trim()
   return value || fallback
 }
 
@@ -29,8 +28,8 @@ function cssVar(name: string, fallback: string): string {
  * resolve them at call-time via getComputedStyle.
  */
 const TOKEN = {
-  success:      () => cssVar('--color-success', '#34d399'),
-  gold:         () => cssVar('--color-gold', '#f5a623'),
+  success: () => cssVar('--color-success', '#34d399'),
+  gold: () => cssVar('--color-gold', '#f5a623'),
 } as const
 
 // Cached ribbon shape (created on first use)

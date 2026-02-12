@@ -39,7 +39,9 @@ export function useMessageSearch(options: UseMessageSearchOptions = {}) {
         // Fallback: ILIKE search
         let q = supabase
           .from('messages')
-          .select('id, content, sender_id, squad_id, channel_id, created_at, sender:profiles!sender_id(username, avatar_url), squad:squads!squad_id(name)')
+          .select(
+            'id, content, sender_id, squad_id, channel_id, created_at, sender:profiles!sender_id(username, avatar_url), squad:squads!squad_id(name)'
+          )
           .ilike('content', `%${debouncedQuery.trim()}%`)
           .eq('is_system_message', false)
           .order('created_at', { ascending: false })
@@ -57,10 +59,11 @@ export function useMessageSearch(options: UseMessageSearchOptions = {}) {
           message_id: m.id as string,
           content: m.content as string,
           sender_id: m.sender_id as string,
-          sender_username: (m.sender as Record<string, unknown>)?.username as string || 'Utilisateur',
+          sender_username:
+            ((m.sender as Record<string, unknown>)?.username as string) || 'Utilisateur',
           sender_avatar: (m.sender as Record<string, unknown>)?.avatar_url as string | null,
           squad_id: m.squad_id as string,
-          squad_name: (m.squad as Record<string, unknown>)?.name as string || 'Squad',
+          squad_name: ((m.squad as Record<string, unknown>)?.name as string) || 'Squad',
           channel_id: m.channel_id as string | null,
           created_at: m.created_at as string,
           relevance: 1,
@@ -94,7 +97,9 @@ export function useMessageSearch(options: UseMessageSearchOptions = {}) {
         // Fallback
         const { data: fallbackData, error: fallbackError } = await supabase
           .from('direct_messages')
-          .select('id, content, sender_id, receiver_id, created_at, sender:profiles!sender_id(username, avatar_url)')
+          .select(
+            'id, content, sender_id, receiver_id, created_at, sender:profiles!sender_id(username, avatar_url)'
+          )
           .or(`sender_id.eq.${user.id},receiver_id.eq.${user.id}`)
           .ilike('content', `%${debouncedQuery.trim()}%`)
           .order('created_at', { ascending: false })
@@ -106,9 +111,11 @@ export function useMessageSearch(options: UseMessageSearchOptions = {}) {
           message_id: m.id as string,
           content: m.content as string,
           sender_id: m.sender_id as string,
-          sender_username: (m.sender as Record<string, unknown>)?.username as string || 'Utilisateur',
+          sender_username:
+            ((m.sender as Record<string, unknown>)?.username as string) || 'Utilisateur',
           sender_avatar: (m.sender as Record<string, unknown>)?.avatar_url as string | null,
-          other_user_id: m.sender_id === user.id ? m.receiver_id as string : m.sender_id as string,
+          other_user_id:
+            m.sender_id === user.id ? (m.receiver_id as string) : (m.sender_id as string),
           other_username: 'Utilisateur',
           created_at: m.created_at as string,
           relevance: 1,

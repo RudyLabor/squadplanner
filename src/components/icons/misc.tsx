@@ -223,4 +223,3 @@ export const Rocket = (p: IconProps) => (
     <path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5" />
   </svg>
 )
-

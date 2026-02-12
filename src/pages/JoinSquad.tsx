@@ -1,15 +1,9 @@
-"use client";
+'use client'
 
 import { useEffect, useState } from 'react'
 import { useParams, useNavigate, Link } from 'react-router'
 import { m } from 'framer-motion'
-import {
-  Users,
-  Loader2,
-  CheckCircle2,
-  XCircle,
-  LogIn,
-} from '../components/icons'
+import { Users, Loader2, CheckCircle2, XCircle, LogIn } from '../components/icons'
 import { Button, Card } from '../components/ui'
 import { useAuthStore } from '../hooks/useAuth'
 import { useSquadsStore } from '../hooks/useSquads'
@@ -35,7 +29,9 @@ export function JoinSquad() {
   const { user, isInitialized } = useAuthStore()
   const { joinSquad, fetchSquads } = useSquadsStore()
 
-  const [status, setStatus] = useState<'loading' | 'preview' | 'joining' | 'success' | 'error' | 'not-found'>('loading')
+  const [status, setStatus] = useState<
+    'loading' | 'preview' | 'joining' | 'success' | 'error' | 'not-found'
+  >('loading')
   const [squadPreview, setSquadPreview] = useState<SquadPreview | null>(null)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
 
@@ -68,7 +64,7 @@ export function JoinSquad() {
 
         setSquadPreview({
           ...squad,
-          member_count: count || 0
+          member_count: count || 0,
         })
         setStatus('preview')
       } catch {
@@ -125,7 +121,10 @@ export function JoinSquad() {
   // Loading state
   if (!isInitialized || status === 'loading') {
     return (
-      <main className="min-h-screen bg-bg-base flex items-center justify-center p-4" aria-label="Rejoindre une squad">
+      <main
+        className="min-h-screen bg-bg-base flex items-center justify-center p-4"
+        aria-label="Rejoindre une squad"
+      >
         <div className="text-center">
           <Loader2 className="w-8 h-8 text-primary animate-spin mx-auto mb-4" />
           <p className="text-text-secondary">Chargement de l'invitation...</p>
@@ -137,7 +136,10 @@ export function JoinSquad() {
   // Not found
   if (status === 'not-found') {
     return (
-      <main className="min-h-screen bg-bg-base flex items-center justify-center p-4" aria-label="Rejoindre une squad">
+      <main
+        className="min-h-screen bg-bg-base flex items-center justify-center p-4"
+        aria-label="Rejoindre une squad"
+      >
         <m.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -146,12 +148,8 @@ export function JoinSquad() {
           <div className="w-16 h-16 rounded-2xl bg-error/10 flex items-center justify-center mx-auto mb-6">
             <XCircle className="w-8 h-8 text-error" />
           </div>
-          <h1 className="text-lg font-semibold text-text-primary mb-2">
-            Invitation invalide
-          </h1>
-          <p className="text-text-secondary mb-6">
-            Ce code d'invitation n'existe pas ou a expiré.
-          </p>
+          <h1 className="text-lg font-semibold text-text-primary mb-2">Invitation invalide</h1>
+          <p className="text-text-secondary mb-6">Ce code d'invitation n'existe pas ou a expiré.</p>
           <Link to="/">
             <Button>Retour à l'accueil</Button>
           </Link>
@@ -163,7 +161,10 @@ export function JoinSquad() {
   // Success state
   if (status === 'success') {
     return (
-      <main className="min-h-screen bg-bg-base flex items-center justify-center p-4" aria-label="Rejoindre une squad">
+      <main
+        className="min-h-screen bg-bg-base flex items-center justify-center p-4"
+        aria-label="Rejoindre une squad"
+      >
         <m.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -177,12 +178,8 @@ export function JoinSquad() {
           >
             <CheckCircle2 className="w-10 h-10 text-success" />
           </m.div>
-          <h1 className="text-lg font-bold text-text-primary mb-2">
-            Bienvenue dans la squad !
-          </h1>
-          <p className="text-text-secondary">
-            Tu fais maintenant partie de {squadPreview?.name}
-          </p>
+          <h1 className="text-lg font-bold text-text-primary mb-2">Bienvenue dans la squad !</h1>
+          <p className="text-text-secondary">Tu fais maintenant partie de {squadPreview?.name}</p>
         </m.div>
       </main>
     )
@@ -190,7 +187,10 @@ export function JoinSquad() {
 
   // Preview / Join state
   return (
-    <main className="min-h-screen bg-bg-base flex items-center justify-center p-4" aria-label="Rejoindre une squad">
+    <main
+      className="min-h-screen bg-bg-base flex items-center justify-center p-4"
+      aria-label="Rejoindre une squad"
+    >
       <m.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -207,12 +207,8 @@ export function JoinSquad() {
               <Users className="w-8 h-8 text-primary" />
             </m.div>
 
-            <h1 className="text-lg font-semibold text-text-primary mb-1">
-              {squadPreview?.name}
-            </h1>
-            <p className="text-text-secondary text-sm mb-2">
-              {squadPreview?.game}
-            </p>
+            <h1 className="text-lg font-semibold text-text-primary mb-1">{squadPreview?.name}</h1>
+            <p className="text-text-secondary text-sm mb-2">{squadPreview?.game}</p>
             <p className="text-text-tertiary text-xs">
               {squadPreview?.member_count} membre{(squadPreview?.member_count || 0) > 1 ? 's' : ''}
             </p>
@@ -221,11 +217,7 @@ export function JoinSquad() {
           {/* Action */}
           {user ? (
             <div className="space-y-3">
-              <Button
-                onClick={handleJoin}
-                disabled={status === 'joining'}
-                className="w-full"
-              >
+              <Button onClick={handleJoin} disabled={status === 'joining'} className="w-full">
                 {status === 'joining' ? (
                   <>
                     <Loader2 className="w-4 h-4 animate-spin mr-2" />
@@ -237,9 +229,7 @@ export function JoinSquad() {
               </Button>
 
               {status === 'error' && errorMessage && (
-                <p className="text-error text-sm text-center">
-                  {errorMessage}
-                </p>
+                <p className="text-error text-sm text-center">{errorMessage}</p>
               )}
             </div>
           ) : (
@@ -257,7 +247,10 @@ export function JoinSquad() {
 
         {/* Back link */}
         <div className="text-center mt-4">
-          <Link to="/" className="text-text-tertiary text-sm hover:text-text-secondary transition-colors">
+          <Link
+            to="/"
+            className="text-text-tertiary text-sm hover:text-text-secondary transition-colors"
+          >
             Retour à l'accueil
           </Link>
         </div>

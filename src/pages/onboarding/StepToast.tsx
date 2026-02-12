@@ -1,9 +1,17 @@
-"use client";
+'use client'
 
 import { useEffect } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
 import { Sparkles } from '../../components/icons'
-export function StepToast({ message, isVisible, onClose }: { message: string; isVisible: boolean; onClose: () => void }) {
+export function StepToast({
+  message,
+  isVisible,
+  onClose,
+}: {
+  message: string
+  isVisible: boolean
+  onClose: () => void
+}) {
   useEffect(() => {
     if (isVisible) {
       const timer = setTimeout(onClose, 2500)

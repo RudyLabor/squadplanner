@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
@@ -17,7 +17,7 @@ export function HeroMockup() {
     if (isPaused) return
     const timer = setInterval(() => {
       autoAdvanceRef.current = true
-      setCurrentStep(prev => (prev + 1) % screens.length)
+      setCurrentStep((prev) => (prev + 1) % screens.length)
     }, screens[currentStep].duration)
     return () => clearInterval(timer)
   }, [isPaused, currentStep])
@@ -56,7 +56,8 @@ export function HeroMockup() {
       <m.div
         className="absolute -inset-8 rounded-[3rem]"
         style={{
-          background: 'radial-gradient(ellipse at center, var(--color-primary-12) 0%, transparent 70%)',
+          background:
+            'radial-gradient(ellipse at center, var(--color-primary-12) 0%, transparent 70%)',
         }}
         animate={{ opacity: [0.5, 0.8, 0.5] }}
         transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
@@ -77,8 +78,12 @@ export function HeroMockup() {
               <span className="text-xs text-text-secondary font-medium">21:00</span>
               <div className="flex items-center gap-1">
                 <div className="flex items-end gap-[1px]">
-                  {[1, 2, 3, 4].map(i => (
-                    <div key={i} className={`w-[2px] rounded-sm ${i <= 3 ? 'bg-text-primary' : 'bg-text-tertiary'}`} style={{ height: 2 + i * 2 }} />
+                  {[1, 2, 3, 4].map((i) => (
+                    <div
+                      key={i}
+                      className={`w-[2px] rounded-sm ${i <= 3 ? 'bg-text-primary' : 'bg-text-tertiary'}`}
+                      style={{ height: 2 + i * 2 }}
+                    />
                   ))}
                 </div>
                 <div className="w-5 h-2.5 rounded-[2px] border border-text-tertiary ml-1">
@@ -123,7 +128,8 @@ export function HeroMockup() {
                 className="h-1 rounded-full"
                 animate={{
                   width: i === currentStep ? 24 : 6,
-                  backgroundColor: i === currentStep ? 'var(--color-primary)' : 'var(--color-overlay-medium)',
+                  backgroundColor:
+                    i === currentStep ? 'var(--color-primary)' : 'var(--color-overlay-medium)',
                 }}
                 transition={{ duration: 0.3 }}
               />

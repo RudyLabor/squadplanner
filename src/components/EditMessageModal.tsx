@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 import { useState, useEffect, useRef } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
@@ -20,12 +20,7 @@ export interface EditMessageModalProps {
  * - Save/Cancel buttons
  * - Dark theme styling consistent with app design
  */
-export function EditMessageModal({
-  isOpen,
-  message,
-  onSave,
-  onClose
-}: EditMessageModalProps) {
+export function EditMessageModal({ isOpen, message, onSave, onClose }: EditMessageModalProps) {
   const [content, setContent] = useState(message.content)
   const [isSaving, setIsSaving] = useState(false)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
@@ -41,10 +36,7 @@ export function EditMessageModal({
       setTimeout(() => {
         textareaRef.current?.focus()
         // Move cursor to end
-        textareaRef.current?.setSelectionRange(
-          message.content.length,
-          message.content.length
-        )
+        textareaRef.current?.setSelectionRange(message.content.length, message.content.length)
       }, 100)
     }
   }, [isOpen, message.content])
@@ -175,25 +167,11 @@ export function EditMessageModal({
                   {hasChanges ? '(modifié) sera affiché' : 'Aucune modification'}
                 </span>
                 <div className="flex items-center gap-3">
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={onClose}
-                    disabled={isSaving}
-                  >
+                  <Button variant="ghost" size="sm" onClick={onClose} disabled={isSaving}>
                     Annuler
                   </Button>
-                  <Button
-                    variant="primary"
-                    size="sm"
-                    onClick={handleSave}
-                    disabled={!canSave}
-                  >
-                    {isSaving ? (
-                      <Loader2 className="w-4 h-4 animate-spin" />
-                    ) : (
-                      'Sauvegarder'
-                    )}
+                  <Button variant="primary" size="sm" onClick={handleSave} disabled={!canSave}>
+                    {isSaving ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Sauvegarder'}
                   </Button>
                 </div>
               </div>

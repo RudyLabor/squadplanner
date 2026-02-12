@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 import { useEffect, useCallback, useRef } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
@@ -47,7 +47,9 @@ export const useNotificationStore = create<NotificationStore>((set, get) => ({
         .limit(20)
 
       // Step 2: batch-fetch squad names
-      const squadIds = [...new Set((rsvps || []).map((r: any) => r.sessions?.squad_id).filter(Boolean))]
+      const squadIds = [
+        ...new Set((rsvps || []).map((r: any) => r.sessions?.squad_id).filter(Boolean)),
+      ]
       const squadMap = new Map<string, string>()
       if (squadIds.length > 0) {
         const { data: squads } = await supabase.from('squads').select('id, name').in('id', squadIds)
@@ -67,7 +69,7 @@ export const useNotificationStore = create<NotificationStore>((set, get) => ({
 
       set({
         notifications: notifs,
-        unreadCount: notifs.filter(n => !n.read).length,
+        unreadCount: notifs.filter((n) => !n.read).length,
         isLoading: false,
       })
     } catch {
@@ -77,20 +79,21 @@ export const useNotificationStore = create<NotificationStore>((set, get) => ({
 
   markAsRead: (id: string) => {
     const { notifications } = get()
-    const updated = notifications.map(n => n.id === id ? { ...n, read: true } : n)
-    set({ notifications: updated, unreadCount: updated.filter(n => !n.read).length })
+    const updated = notifications.map((n) => (n.id === id ? { ...n, read: true } : n))
+    set({ notifications: updated, unreadCount: updated.filter((n) => !n.read).length })
   },
 
   markAllAsRead: () => {
     const { notifications } = get()
-    set({ notifications: notifications.map(n => ({ ...n, read: true })), unreadCount: 0 })
+    set({ notifications: notifications.map((n) => ({ ...n, read: true })), unreadCount: 0 })
   },
 }))
 
 export function NotificationBell() {
   const panelRef = useRef<HTMLDivElement>(null)
   const { user } = useAuthStore()
-  const { notifications, unreadCount, fetchNotifications, markAsRead, markAllAsRead } = useNotificationStore()
+  const { notifications, unreadCount, fetchNotifications, markAsRead, markAllAsRead } =
+    useNotificationStore()
   const { activeOverlay, toggle, close } = useOverlayStore()
   const isOpen = activeOverlay === 'notifications'
 
@@ -113,7 +116,9 @@ export function NotificationBell() {
   // Close on Escape
   useEffect(() => {
     if (!isOpen) return
-    const handleKey = (e: KeyboardEvent) => { if (e.key === 'Escape') close('notifications') }
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') close('notifications')
+    }
     window.addEventListener('keydown', handleKey)
     return () => window.removeEventListener('keydown', handleKey)
   }, [isOpen, close])
@@ -190,7 +195,7 @@ export function NotificationBell() {
                   <p className="text-base text-text-tertiary">Aucune notification</p>
                 </div>
               ) : (
-                notifications.slice(0, 15).map(notif => (
+                notifications.slice(0, 15).map((notif) => (
                   <button
                     key={notif.id}
                     type="button"
@@ -204,10 +209,14 @@ export function NotificationBell() {
                         <span className="w-2 h-2 rounded-full bg-primary mt-1.5 flex-shrink-0" />
                       )}
                       <div className={`flex-1 min-w-0 ${notif.read ? 'ml-5' : ''}`}>
-                        <p className="text-base font-medium text-text-primary truncate">{notif.title}</p>
+                        <p className="text-base font-medium text-text-primary truncate">
+                          {notif.title}
+                        </p>
                         <p className="text-sm text-text-secondary truncate">{notif.body}</p>
                       </div>
-                      <span className="text-sm text-text-tertiary flex-shrink-0">{formatTime(notif.created_at)}</span>
+                      <span className="text-sm text-text-tertiary flex-shrink-0">
+                        {formatTime(notif.created_at)}
+                      </span>
                     </div>
                   </button>
                 ))

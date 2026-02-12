@@ -62,7 +62,9 @@ describe('useNetworkQualityStore', () => {
   describe('updateQuality', () => {
     it('sets scores and updates history', () => {
       act(() => {
-        useNetworkQualityStore.getState().updateQuality(ConnectionQuality.Good, ConnectionQuality.Excellent)
+        useNetworkQualityStore
+          .getState()
+          .updateQuality(ConnectionQuality.Good, ConnectionQuality.Excellent)
       })
 
       const state = useNetworkQualityStore.getState()
@@ -77,7 +79,9 @@ describe('useNetworkQualityStore', () => {
 
       let result: NetworkQualityLevel | null
       act(() => {
-        result = useNetworkQualityStore.getState().updateQuality(ConnectionQuality.Excellent, ConnectionQuality.Excellent)
+        result = useNetworkQualityStore
+          .getState()
+          .updateQuality(ConnectionQuality.Excellent, ConnectionQuality.Excellent)
       })
 
       const state = useNetworkQualityStore.getState()
@@ -91,7 +95,9 @@ describe('useNetworkQualityStore', () => {
       // First update: set quality to excellent at time 10000
       vi.spyOn(Date, 'now').mockReturnValue(10000)
       act(() => {
-        useNetworkQualityStore.getState().updateQuality(ConnectionQuality.Excellent, ConnectionQuality.Excellent)
+        useNetworkQualityStore
+          .getState()
+          .updateQuality(ConnectionQuality.Excellent, ConnectionQuality.Excellent)
       })
       expect(useNetworkQualityStore.getState().localQuality).toBe('excellent')
 
@@ -99,7 +105,9 @@ describe('useNetworkQualityStore', () => {
       vi.spyOn(Date, 'now').mockReturnValue(12000)
       let result: NetworkQualityLevel | null
       act(() => {
-        result = useNetworkQualityStore.getState().updateQuality(ConnectionQuality.Poor, ConnectionQuality.Poor)
+        result = useNetworkQualityStore
+          .getState()
+          .updateQuality(ConnectionQuality.Poor, ConnectionQuality.Poor)
       })
 
       const state = useNetworkQualityStore.getState()
@@ -112,7 +120,9 @@ describe('useNetworkQualityStore', () => {
       vi.spyOn(Date, 'now').mockReturnValue(10000)
       let result1: NetworkQualityLevel | null
       act(() => {
-        result1 = useNetworkQualityStore.getState().updateQuality(ConnectionQuality.Excellent, ConnectionQuality.Excellent)
+        result1 = useNetworkQualityStore
+          .getState()
+          .updateQuality(ConnectionQuality.Excellent, ConnectionQuality.Excellent)
       })
       expect(result1!).toBe('excellent')
 
@@ -120,7 +130,9 @@ describe('useNetworkQualityStore', () => {
       vi.spyOn(Date, 'now').mockReturnValue(12000)
       let result2: NetworkQualityLevel | null
       act(() => {
-        result2 = useNetworkQualityStore.getState().updateQuality(ConnectionQuality.Poor, ConnectionQuality.Poor)
+        result2 = useNetworkQualityStore
+          .getState()
+          .updateQuality(ConnectionQuality.Poor, ConnectionQuality.Poor)
       })
       expect(result2!).toBeNull()
     })
@@ -146,7 +158,9 @@ describe('useNetworkQualityStore', () => {
     it('resets all state to defaults', () => {
       vi.spyOn(Date, 'now').mockReturnValue(10000)
       act(() => {
-        useNetworkQualityStore.getState().updateQuality(ConnectionQuality.Excellent, ConnectionQuality.Good)
+        useNetworkQualityStore
+          .getState()
+          .updateQuality(ConnectionQuality.Excellent, ConnectionQuality.Good)
       })
 
       act(() => {

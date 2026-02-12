@@ -31,7 +31,11 @@ export function HeadphonesIllustration({ size = 64, className = '' }: Props) {
         />
         {/* Left ear cup */}
         <m.rect
-          x="10" y="34" width="8" height="14" rx="4"
+          x="10"
+          y="34"
+          width="8"
+          height="14"
+          rx="4"
           stroke="currentColor"
           strokeWidth="2"
           variants={draw}
@@ -39,7 +43,11 @@ export function HeadphonesIllustration({ size = 64, className = '' }: Props) {
         />
         {/* Right ear cup */}
         <m.rect
-          x="46" y="34" width="8" height="14" rx="4"
+          x="46"
+          y="34"
+          width="8"
+          height="14"
+          rx="4"
           stroke="currentColor"
           strokeWidth="2"
           variants={draw}
@@ -84,7 +92,9 @@ export function HeadphonesIllustration({ size = 64, className = '' }: Props) {
         />
         {/* Mic tip */}
         <m.circle
-          cx="24" cy="54" r="2"
+          cx="24"
+          cy="54"
+          r="2"
           stroke="var(--color-success, #34d399)"
           strokeWidth="1.5"
           initial={{ scale: 0 }}

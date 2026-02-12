@@ -61,13 +61,14 @@ const IGNORE_PATTERNS = [
 ]
 
 function shouldIgnore(message: string): boolean {
-  return IGNORE_PATTERNS.some(pattern => message.includes(pattern))
+  return IGNORE_PATTERNS.some((pattern) => message.includes(pattern))
 }
 
 function getEndpointUrl(): string {
-  const supabaseUrl = typeof import.meta !== 'undefined'
-    ? (import.meta.env?.VITE_SUPABASE_URL as string | undefined)
-    : undefined
+  const supabaseUrl =
+    typeof import.meta !== 'undefined'
+      ? (import.meta.env?.VITE_SUPABASE_URL as string | undefined)
+      : undefined
   if (!supabaseUrl) return ''
   return `${supabaseUrl}/functions/v1/error-report`
 }
@@ -114,7 +115,7 @@ function createReport(
   message: string,
   stack?: string,
   level: ErrorReport['level'] = 'error',
-  extra?: Record<string, unknown>,
+  extra?: Record<string, unknown>
 ): ErrorReport {
   return {
     message,
@@ -192,14 +193,19 @@ export function initErrorTracker(): void {
   const originalConsoleError = console.error
   console.error = (...args: any[]) => {
     originalConsoleError.apply(console, args)
-    const message = args.map(arg => {
-      if (arg instanceof Error) return arg.message
-      if (typeof arg === 'object') {
-        try { return JSON.stringify(arg) }
-        catch { return String(arg) }
-      }
-      return String(arg)
-    }).join(' ')
+    const message = args
+      .map((arg) => {
+        if (arg instanceof Error) return arg.message
+        if (typeof arg === 'object') {
+          try {
+            return JSON.stringify(arg)
+          } catch {
+            return String(arg)
+          }
+        }
+        return String(arg)
+      })
+      .join(' ')
 
     if (!shouldIgnore(message)) {
       enqueue(createReport(`Console error: ${message}`, undefined, 'error'))
@@ -221,12 +227,12 @@ export function initErrorTracker(): void {
   const originalPushState = history.pushState
   const originalReplaceState = history.replaceState
 
-  history.pushState = function(...args) {
+  history.pushState = function (...args) {
     originalPushState.apply(history, args)
     navigationObserver()
   }
 
-  history.replaceState = function(...args) {
+  history.replaceState = function (...args) {
     originalReplaceState.apply(history, args)
     navigationObserver()
   }
@@ -243,10 +249,7 @@ export function initErrorTracker(): void {
 /**
  * Capture an exception manually (compatible with previous Sentry API)
  */
-export function captureException(
-  error: Error,
-  context?: Record<string, unknown>,
-): void {
+export function captureException(error: Error, context?: Record<string, unknown>): void {
   if (!import.meta.env?.PROD && typeof import.meta !== 'undefined') {
     console.error('[Error]', error.message, context)
     return
@@ -259,7 +262,7 @@ export function captureException(
  */
 export function captureMessage(
   message: string,
-  level: 'info' | 'warning' | 'error' = 'info',
+  level: 'info' | 'warning' | 'error' = 'info'
 ): void {
   enqueue(createReport(message, undefined, level))
 }
@@ -278,7 +281,7 @@ export function setUser(user: { id: string; username?: string } | null): void {
 export function addBreadcrumb(
   message: string,
   category: string = 'manual',
-  level: 'debug' | 'info' | 'warning' | 'error' = 'info',
+  level: 'debug' | 'info' | 'warning' | 'error' = 'info'
 ): void {
   if (typeof window === 'undefined') return
 

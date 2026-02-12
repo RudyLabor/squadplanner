@@ -1,14 +1,9 @@
-import { m } from 'framer-motion'
-import {
-  Users,
-  ArrowLeft,
-  ArrowRight,
-  Loader2,
-} from '../../components/icons'
+import { m, type Variants } from 'framer-motion'
+import { Users, ArrowLeft, ArrowRight, Loader2 } from '../../components/icons'
 import { Button, Card, Input } from '../../components/ui'
 
 interface OnboardingStepCreateSquadProps {
-  slideVariants: Record<string, unknown>
+  slideVariants: Variants
   squadName: string
   squadGame: string
   error: string | null
@@ -20,17 +15,18 @@ interface OnboardingStepCreateSquadProps {
 }
 
 export function OnboardingStepCreateSquad({
-  slideVariants, squadName, squadGame, error, isLoading,
-  onSquadNameChange, onSquadGameChange, onCreateSquad, onBack
+  slideVariants,
+  squadName,
+  squadGame,
+  error,
+  isLoading,
+  onSquadNameChange,
+  onSquadGameChange,
+  onCreateSquad,
+  onBack,
 }: OnboardingStepCreateSquadProps) {
   return (
-    <m.div
-      key="create-squad"
-      variants={slideVariants}
-      initial="enter"
-      animate="center"
-      exit="exit"
-    >
+    <m.div key="create-squad" variants={slideVariants} initial="enter" animate="center" exit="exit">
       <button
         onClick={onBack}
         className="flex items-center gap-2 text-text-secondary hover:text-text-primary transition-colors mb-6"
@@ -43,12 +39,8 @@ export function OnboardingStepCreateSquad({
         <div className="w-16 h-16 rounded-2xl bg-primary-10 flex items-center justify-center mx-auto mb-4">
           <Users className="w-8 h-8 text-primary" />
         </div>
-        <h2 className="text-xl font-bold text-text-primary mb-2">
-          Cr&eacute;e ta squad
-        </h2>
-        <p className="text-text-secondary">
-          Donne-lui un nom et choisis votre jeu principal
-        </p>
+        <h2 className="text-xl font-bold text-text-primary mb-2">Cr&eacute;e ta squad</h2>
+        <p className="text-text-secondary">Donne-lui un nom et choisis votre jeu principal</p>
       </div>
 
       <Card>
@@ -78,11 +70,7 @@ export function OnboardingStepCreateSquad({
             </div>
           )}
 
-          <Button
-            onClick={onCreateSquad}
-            disabled={isLoading}
-            className="w-full h-12"
-          >
+          <Button onClick={onCreateSquad} disabled={isLoading} className="w-full h-12">
             {isLoading ? (
               <>
                 <Loader2 className="w-5 h-5 animate-spin mr-2" />

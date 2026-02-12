@@ -17,7 +17,13 @@ interface InviteUserListProps {
   onInvite: (memberId: string) => void
 }
 
-export function InviteUserList({ members, loading, invitedMembers, sendingInvite, onInvite }: InviteUserListProps) {
+export function InviteUserList({
+  members,
+  loading,
+  invitedMembers,
+  sendingInvite,
+  onInvite,
+}: InviteUserListProps) {
   if (loading) {
     return (
       <div className="flex justify-center py-8">
@@ -29,9 +35,7 @@ export function InviteUserList({ members, loading, invitedMembers, sendingInvite
   if (members.length === 0) {
     return (
       <div className="text-center py-8">
-        <p className="text-md text-text-secondary">
-          Tous les membres sont déjà dans la party !
-        </p>
+        <p className="text-md text-text-secondary">Tous les membres sont déjà dans la party !</p>
       </div>
     )
   }

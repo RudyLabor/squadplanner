@@ -1,13 +1,8 @@
-"use client";
+'use client'
 
 import { useState, useCallback, useEffect } from 'react'
 import { m } from 'framer-motion'
-import {
-  Volume,
-  Volume1,
-  Volume2,
-  VolumeX,
-} from './icons'
+import { Volume, Volume1, Volume2, VolumeX } from './icons'
 import { Tooltip } from './ui/Tooltip'
 
 export interface ParticipantVolumeControlProps {
@@ -63,7 +58,7 @@ export function ParticipantVolumeControl({
   onVolumeChange,
   onMute,
   isMuted = false,
-  compact = false
+  compact = false,
 }: ParticipantVolumeControlProps) {
   const [volume, setVolume] = useState(initialVolume)
   const [isDragging, setIsDragging] = useState(false)
@@ -74,11 +69,14 @@ export function ParticipantVolumeControl({
     setVolume(initialVolume)
   }, [initialVolume])
 
-  const handleVolumeChange = useCallback((newVolume: number) => {
-    const clampedVolume = Math.max(0, Math.min(200, newVolume))
-    setVolume(clampedVolume)
-    onVolumeChange(participantId, clampedVolume)
-  }, [participantId, onVolumeChange])
+  const handleVolumeChange = useCallback(
+    (newVolume: number) => {
+      const clampedVolume = Math.max(0, Math.min(200, newVolume))
+      setVolume(clampedVolume)
+      onVolumeChange(participantId, clampedVolume)
+    },
+    [participantId, onVolumeChange]
+  )
 
   const handleMuteToggle = useCallback(() => {
     if (isMuted) {
@@ -92,9 +90,12 @@ export function ParticipantVolumeControl({
     onMute(participantId, !isMuted)
   }, [isMuted, volume, previousVolume, participantId, onMute, onVolumeChange])
 
-  const handleSliderChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    handleVolumeChange(parseInt(e.target.value, 10))
-  }, [handleVolumeChange])
+  const handleSliderChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      handleVolumeChange(parseInt(e.target.value, 10))
+    },
+    [handleVolumeChange]
+  )
 
   const VolumeIcon = getVolumeIcon(volume, isMuted)
   const trackColor = getTrackGradient(isMuted ? 0 : volume)
@@ -116,9 +117,10 @@ export function ParticipantVolumeControl({
             className={`
               flex-shrink-0 w-7 h-7 rounded-full flex items-center justify-center
               transition-colors duration-150
-              ${isMuted
-                ? 'bg-error/20 text-error'
-                : 'bg-border-default text-text-secondary hover:text-text-primary hover:bg-border-hover'
+              ${
+                isMuted
+                  ? 'bg-error/20 text-error'
+                  : 'bg-border-default text-text-secondary hover:text-text-primary hover:bg-border-hover'
               }
             `}
             aria-label={isMuted ? 'Activer le son' : 'Couper le son'}
@@ -134,7 +136,7 @@ export function ParticipantVolumeControl({
               className="h-full rounded-full transition-transform duration-100"
               style={{
                 width: `${fillPercent}%`,
-                backgroundColor: trackColor
+                backgroundColor: trackColor,
               }}
             />
             {/* 100% marker */}
@@ -159,10 +161,12 @@ export function ParticipantVolumeControl({
         </div>
 
         {/* Volume percentage */}
-        <span className={`
+        <span
+          className={`
           flex-shrink-0 text-sm font-medium min-w-[32px] text-right tabular-nums
           ${isBoosted ? 'text-warning' : isMuted ? 'text-error' : 'text-text-secondary'}
-        `}>
+        `}
+        >
           {displayVolume}%
         </span>
       </div>
@@ -173,13 +177,13 @@ export function ParticipantVolumeControl({
     <div className="flex flex-col gap-2 p-3 rounded-lg bg-surface-card border border-border-default">
       {/* Header row */}
       <div className="flex items-center justify-between">
-        <span className="text-base font-medium text-text-primary truncate">
-          {participantName}
-        </span>
-        <span className={`
+        <span className="text-base font-medium text-text-primary truncate">{participantName}</span>
+        <span
+          className={`
           text-sm font-semibold tabular-nums
           ${isBoosted ? 'text-warning' : isMuted ? 'text-error' : 'text-success'}
-        `}>
+        `}
+        >
           {displayVolume}%
         </span>
       </div>
@@ -195,9 +199,10 @@ export function ParticipantVolumeControl({
             className={`
               flex-shrink-0 w-8 h-8 rounded-lg flex items-center justify-center
               transition-colors duration-150
-              ${isMuted
-                ? 'bg-error/20 text-error'
-                : 'bg-overlay-light text-text-secondary hover:text-text-primary hover:bg-overlay-medium'
+              ${
+                isMuted
+                  ? 'bg-error/20 text-error'
+                  : 'bg-overlay-light text-text-secondary hover:text-text-primary hover:bg-overlay-medium'
               }
             `}
             aria-label={isMuted ? 'Activer le son' : 'Couper le son'}
@@ -216,7 +221,7 @@ export function ParticipantVolumeControl({
               initial={false}
               animate={{
                 width: `${fillPercent}%`,
-                backgroundColor: trackColor
+                backgroundColor: trackColor,
               }}
               transition={{ duration: isDragging ? 0 : 0.1 }}
             />
@@ -238,7 +243,7 @@ export function ParticipantVolumeControl({
             initial={false}
             animate={{
               left: `${fillPercent}%`,
-              scale: isDragging ? 1.2 : 1
+              scale: isDragging ? 1.2 : 1,
             }}
             transition={{ duration: isDragging ? 0 : 0.1 }}
             style={{ transform: 'translate(-50%, -50%)' }}

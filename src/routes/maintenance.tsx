@@ -3,14 +3,12 @@ import Maintenance from '../pages/Maintenance'
 
 export function headers(_args: HeadersArgs) {
   return {
-    "Cache-Control": "public, s-maxage=3600, stale-while-revalidate=86400",
+    'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=86400',
   }
 }
 
 export function meta() {
-  return [
-    { title: "Maintenance - Squad Planner" },
-  ]
+  return [{ title: 'Maintenance - Squad Planner' }]
 }
 
 export default function Component() {

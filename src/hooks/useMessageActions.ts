@@ -26,15 +26,13 @@ export interface Conversation {
 export function createRealtimeSubscription(
   squadId: string,
   sessionId: string | undefined,
-  setState: (fn: (state: { messages: MessageWithSender[] }) => Partial<{ messages: MessageWithSender[] }>) => void,
+  setState: (
+    fn: (state: { messages: MessageWithSender[] }) => Partial<{ messages: MessageWithSender[] }>
+  ) => void
 ): RealtimeChannel {
-  const channelName = sessionId
-    ? `messages:session:${sessionId}`
-    : `messages:squad:${squadId}`
+  const channelName = sessionId ? `messages:session:${sessionId}` : `messages:squad:${squadId}`
 
-  const filter = sessionId
-    ? `session_id=eq.${sessionId}`
-    : `squad_id=eq.${squadId}`
+  const filter = sessionId ? `session_id=eq.${sessionId}` : `squad_id=eq.${squadId}`
 
   return supabase
     .channel(channelName)
@@ -51,19 +49,26 @@ export function createRealtimeSubscription(
             .single()
 
           const newMessage: MessageWithSender = { ...newMsg, sender: sender || undefined }
-          const { data: { session } } = await supabase.auth.getSession()
+          const {
+            data: { session },
+          } = await supabase.auth.getSession()
           const user = session?.user
           const isOwnMessage = user && newMessage.sender_id === user.id
 
           if (!isOwnMessage) playNotificationSound()
 
-          setState(state => ({
+          setState((state) => ({
             messages: [
-              ...state.messages.filter(m =>
-                !(m._optimisticId && m.sender_id === newMessage.sender_id && m.content === newMessage.content)
+              ...state.messages.filter(
+                (m) =>
+                  !(
+                    m._optimisticId &&
+                    m.sender_id === newMessage.sender_id &&
+                    m.content === newMessage.content
+                  )
               ),
               newMessage,
-            ]
+            ],
           }))
         } catch (err: any) {
           if (err?.name === 'AbortError') return
@@ -76,12 +81,18 @@ export function createRealtimeSubscription(
       { event: 'UPDATE', schema: 'public', table: 'messages', filter },
       (payload) => {
         const updatedMsg = payload.new as MessageWithSender
-        setState(state => ({
-          messages: state.messages.map(msg =>
+        setState((state) => ({
+          messages: state.messages.map((msg) =>
             msg.id === updatedMsg.id
-              ? { ...msg, content: updatedMsg.content, read_by: updatedMsg.read_by, edited_at: updatedMsg.edited_at, is_pinned: updatedMsg.is_pinned }
+              ? {
+                  ...msg,
+                  content: updatedMsg.content,
+                  read_by: updatedMsg.read_by,
+                  edited_at: updatedMsg.edited_at,
+                  is_pinned: updatedMsg.is_pinned,
+                }
               : msg
-          )
+          ),
         }))
       }
     )
@@ -90,8 +101,8 @@ export function createRealtimeSubscription(
       { event: 'DELETE', schema: 'public', table: 'messages', filter },
       (payload) => {
         const deletedId = payload.old.id as string
-        setState(state => ({
-          messages: state.messages.filter(msg => msg.id !== deletedId)
+        setState((state) => ({
+          messages: state.messages.filter((msg) => msg.id !== deletedId),
         }))
       }
     )
@@ -101,18 +112,22 @@ export function createRealtimeSubscription(
 export async function markMessagesAsRead(
   squadId: string,
   sessionId: string | undefined,
-  setConversations: (fn: (state: { conversations: Conversation[] }) => Partial<{ conversations: Conversation[] }>) => void
+  setConversations: (
+    fn: (state: { conversations: Conversation[] }) => Partial<{ conversations: Conversation[] }>
+  ) => void
 ) {
   if (!isSupabaseReady()) return
   try {
-    const { data: { session } } = await supabase.auth.getSession()
+    const {
+      data: { session },
+    } = await supabase.auth.getSession()
     const user = session?.user
     if (!user) return
 
     const { error } = await supabase.rpc('batch_mark_messages_read', {
       p_user_id: user.id,
       p_squad_id: squadId,
-      p_session_id: sessionId || null
+      p_session_id: sessionId || null,
     })
 
     if (error) {
@@ -121,12 +136,12 @@ export async function markMessagesAsRead(
       return
     }
 
-    setConversations(state => ({
-      conversations: state.conversations.map(conv =>
+    setConversations((state) => ({
+      conversations: state.conversations.map((conv) =>
         conv.squad_id === squadId && conv.session_id === sessionId
           ? { ...conv, unread_count: 0 }
           : conv
-      )
+      ),
     }))
     await useUnreadCountStore.getState().fetchCounts()
   } catch (err: any) {
@@ -138,30 +153,41 @@ export async function markMessagesAsRead(
 export async function markMessagesAsReadFallback(
   squadId: string,
   sessionId: string | undefined,
-  setConversations: (fn: (state: { conversations: Conversation[] }) => Partial<{ conversations: Conversation[] }>) => void
+  setConversations: (
+    fn: (state: { conversations: Conversation[] }) => Partial<{ conversations: Conversation[] }>
+  ) => void
 ) {
   if (!isSupabaseReady()) return
   try {
-    const { data: { session } } = await supabase.auth.getSession()
+    const {
+      data: { session },
+    } = await supabase.auth.getSession()
     const user = session?.user
     if (!user) return
 
-    let query = supabase.from('messages').select('id, read_by').eq('squad_id', squadId).not('read_by', 'cs', `{${user.id}}`)
+    let query = supabase
+      .from('messages')
+      .select('id, read_by')
+      .eq('squad_id', squadId)
+      .not('read_by', 'cs', `{${user.id}}`)
     if (sessionId) query = query.eq('session_id', sessionId)
     else query = query.is('session_id', null)
 
     const { data: unreadMessages } = await query
     for (const msg of unreadMessages || []) {
       const currentReadBy = msg.read_by || []
-      await supabase.from('messages').update({ read_by: [...currentReadBy, user.id] }).eq('id', msg.id)
+      await supabase
+        .from('messages')
+        .update({ read_by: [...currentReadBy, user.id] })
+        .eq('id', msg.id)
     }
 
-    setConversations(state => ({
-      conversations: state.conversations.map(conv =>
+    setConversations((state) => ({
+      conversations: state.conversations.map((conv) =>
         conv.squad_id === squadId && conv.session_id === sessionId
           ? { ...conv, unread_count: 0 }
           : conv
-      )
+      ),
     }))
     await useUnreadCountStore.getState().fetchCounts()
   } catch (err: any) {

@@ -21,13 +21,19 @@ interface UseAnalyticsReturn {
   /**
    * Track a user event with optional properties
    */
-  track: (event: UserEvent, properties?: Record<string, string | number | boolean | undefined>) => void
+  track: (
+    event: UserEvent,
+    properties?: Record<string, string | number | boolean | undefined>
+  ) => void
 }
 
 export function useAnalytics(): UseAnalyticsReturn {
-  const track = useCallback((event: UserEvent, properties?: Record<string, string | number | boolean | undefined>) => {
-    trackEvent(event, properties)
-  }, [])
+  const track = useCallback(
+    (event: UserEvent, properties?: Record<string, string | number | boolean | undefined>) => {
+      trackEvent(event, properties)
+    },
+    []
+  )
 
   return { track }
 }

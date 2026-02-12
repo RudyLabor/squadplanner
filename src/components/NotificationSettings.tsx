@@ -1,16 +1,21 @@
 import { memo } from 'react'
 import { m } from 'framer-motion'
+import { Bell, Moon, Volume2, Vibrate, Loader2 } from './icons'
 import {
-  Bell,
-  Moon,
-  Volume2,
-  Vibrate,
-  Loader2,
-} from './icons'
-import { useNotificationPreferences, NOTIFICATION_CATEGORIES } from '../hooks/useNotificationPreferences'
+  useNotificationPreferences,
+  NOTIFICATION_CATEGORIES,
+} from '../hooks/useNotificationPreferences'
 
 export const NotificationSettings = memo(function NotificationSettings() {
-  const { preferences, isLoading, updatePreference, updateQuietHours, toggleSound, toggleVibration, toggleCategory } = useNotificationPreferences()
+  const {
+    preferences,
+    isLoading,
+    updatePreference,
+    updateQuietHours,
+    toggleSound,
+    toggleVibration,
+    toggleCategory,
+  } = useNotificationPreferences()
 
   if (isLoading || !preferences) {
     return (
@@ -48,21 +53,27 @@ export const NotificationSettings = memo(function NotificationSettings() {
             <Moon className="w-4 h-4 text-text-tertiary" />
             <div>
               <p className="text-sm text-text-primary">Heures silencieuses</p>
-              <p className="text-xs text-text-quaternary">Pas de notifications pendant cette période</p>
+              <p className="text-xs text-text-quaternary">
+                Pas de notifications pendant cette période
+              </p>
             </div>
           </div>
           <div className="flex items-center gap-2">
             <input
               type="time"
               value={preferences.quiet_hours_start || ''}
-              onChange={e => updateQuietHours(e.target.value || null, preferences.quiet_hours_end)}
+              onChange={(e) =>
+                updateQuietHours(e.target.value || null, preferences.quiet_hours_end)
+              }
               className="px-2 py-1 bg-bg-surface border border-border-default rounded-lg text-sm text-text-primary"
             />
             <span className="text-text-quaternary text-sm">-</span>
             <input
               type="time"
               value={preferences.quiet_hours_end || ''}
-              onChange={e => updateQuietHours(preferences.quiet_hours_start, e.target.value || null)}
+              onChange={(e) =>
+                updateQuietHours(preferences.quiet_hours_start, e.target.value || null)
+              }
               className="px-2 py-1 bg-bg-surface border border-border-default rounded-lg text-sm text-text-primary"
             />
           </div>
@@ -100,11 +111,14 @@ export const NotificationSettings = memo(function NotificationSettings() {
           </div>
 
           <div className="space-y-1 pl-1">
-            {category.settings.map(setting => (
+            {category.settings.map((setting) => (
               <ToggleRow
                 key={setting.key}
                 label={setting.label}
-                checked={(preferences as unknown as Record<string, unknown>)[setting.key] as boolean ?? true}
+                checked={
+                  ((preferences as unknown as Record<string, unknown>)[setting.key] as boolean) ??
+                  true
+                }
                 onChange={(checked) => updatePreference(setting.key, checked)}
               />
             ))}
@@ -116,8 +130,16 @@ export const NotificationSettings = memo(function NotificationSettings() {
 })
 
 // Toggle row component
-function ToggleRow({ label, icon, checked, onChange }: {
-  label: string; icon?: React.ReactNode; checked: boolean; onChange: (checked: boolean) => void
+function ToggleRow({
+  label,
+  icon,
+  checked,
+  onChange,
+}: {
+  label: string
+  icon?: React.ReactNode
+  checked: boolean
+  onChange: (checked: boolean) => void
 }) {
   return (
     <button
@@ -126,10 +148,16 @@ function ToggleRow({ label, icon, checked, onChange }: {
     >
       <div className="flex items-center gap-2.5">
         {icon && <span className="text-text-tertiary">{icon}</span>}
-        <span className="text-sm text-text-secondary group-hover:text-text-primary transition-colors">{label}</span>
+        <span className="text-sm text-text-secondary group-hover:text-text-primary transition-colors">
+          {label}
+        </span>
       </div>
-      <div className={`relative w-10 h-5.5 rounded-full transition-colors ${checked ? 'bg-primary' : 'bg-border-default'}`}>
-        <div className={`absolute top-0.5 w-4.5 h-4.5 rounded-full bg-white shadow transition-transform ${checked ? 'translate-x-5' : 'translate-x-0.5'}`} />
+      <div
+        className={`relative w-10 h-5.5 rounded-full transition-colors ${checked ? 'bg-primary' : 'bg-border-default'}`}
+      >
+        <div
+          className={`absolute top-0.5 w-4.5 h-4.5 rounded-full bg-white shadow transition-transform ${checked ? 'translate-x-5' : 'translate-x-0.5'}`}
+        />
       </div>
     </button>
   )

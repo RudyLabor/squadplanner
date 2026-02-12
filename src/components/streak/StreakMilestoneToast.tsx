@@ -79,8 +79,7 @@ export function StreakMilestoneToast({ showConfetti, milestone }: StreakMileston
                   transition={{ delay: 0.5 }}
                   className="text-base text-white/90 flex items-center gap-1"
                 >
-                  <Zap className="w-3 h-3" />
-                  +{milestone.xp} XP gagnés !
+                  <Zap className="w-3 h-3" />+{milestone.xp} XP gagnés !
                 </m.p>
               </div>
             </div>

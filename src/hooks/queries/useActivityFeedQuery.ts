@@ -78,34 +78,47 @@ async function fetchActivityFeed(squadIds: string[]): Promise<ActivityItem[]> {
 
   // Collect all user IDs and squad IDs to batch-fetch names
   const userIds = new Set<string>()
-  rsvps.forEach(r => userIds.add(r.user_id))
-  joins.forEach(j => userIds.add(j.user_id))
-  sessions.forEach(s => { if (s.created_by) userIds.add(s.created_by) })
+  rsvps.forEach((r) => userIds.add(r.user_id))
+  joins.forEach((j) => userIds.add(j.user_id))
+  sessions.forEach((s) => {
+    if (s.created_by) userIds.add(s.created_by)
+  })
 
   const squadIdsToFetch = new Set<string>()
-  joins.forEach(j => squadIdsToFetch.add(j.squad_id))
-  sessions.forEach(s => squadIdsToFetch.add(s.squad_id))
+  joins.forEach((j) => squadIdsToFetch.add(j.squad_id))
+  sessions.forEach((s) => squadIdsToFetch.add(s.squad_id))
 
   const sessionIdsFromRsvps = new Set<string>()
-  rsvps.forEach(r => { if (r.session_id) sessionIdsFromRsvps.add(r.session_id) })
+  rsvps.forEach((r) => {
+    if (r.session_id) sessionIdsFromRsvps.add(r.session_id)
+  })
 
   const [profilesResult, squadsResult, sessionsForRsvpsResult] = await Promise.all([
     userIds.size > 0
-      ? supabase.from('profiles').select('id, username').in('id', [...userIds])
+      ? supabase
+          .from('profiles')
+          .select('id, username')
+          .in('id', [...userIds])
       : Promise.resolve({ data: [] }),
     squadIdsToFetch.size > 0
-      ? supabase.from('squads').select('id, name').in('id', [...squadIdsToFetch])
+      ? supabase
+          .from('squads')
+          .select('id, name')
+          .in('id', [...squadIdsToFetch])
       : Promise.resolve({ data: [] }),
     sessionIdsFromRsvps.size > 0
-      ? supabase.from('sessions').select('id, title, squad_id').in('id', [...sessionIdsFromRsvps])
+      ? supabase
+          .from('sessions')
+          .select('id, title, squad_id')
+          .in('id', [...sessionIdsFromRsvps])
       : Promise.resolve({ data: [] }),
   ])
 
-  const profileMap = new Map((profilesResult.data || []).map(p => [p.id, p.username || 'Joueur']))
-  const squadMap = new Map((squadsResult.data || []).map(s => [s.id, s.name]))
-  const sessionMap = new Map((sessionsForRsvpsResult.data || []).map(s => [s.id, s]))
+  const profileMap = new Map((profilesResult.data || []).map((p) => [p.id, p.username || 'Joueur']))
+  const squadMap = new Map((squadsResult.data || []).map((s) => [s.id, s.name]))
+  const sessionMap = new Map((sessionsForRsvpsResult.data || []).map((s) => [s.id, s]))
 
-  rsvps.forEach(r => {
+  rsvps.forEach((r) => {
     const username = profileMap.get(r.user_id) || 'Joueur'
     const session = sessionMap.get(r.session_id)
     const squadName = session ? squadMap.get(session.squad_id) || '' : ''
@@ -120,7 +133,7 @@ async function fetchActivityFeed(squadIds: string[]): Promise<ActivityItem[]> {
     })
   })
 
-  joins.forEach(j => {
+  joins.forEach((j) => {
     const username = profileMap.get(j.user_id) || 'Joueur'
     const squadName = squadMap.get(j.squad_id) || 'Squad'
     activities.push({
@@ -134,7 +147,7 @@ async function fetchActivityFeed(squadIds: string[]): Promise<ActivityItem[]> {
     })
   })
 
-  sessions.forEach(s => {
+  sessions.forEach((s) => {
     const username = s.created_by ? profileMap.get(s.created_by) || 'Joueur' : 'Joueur'
     const squadName = squadMap.get(s.squad_id) || 'Squad'
     activities.push({

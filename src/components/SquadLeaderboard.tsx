@@ -65,11 +65,7 @@ export function SquadLeaderboard({ entries, currentUserId }: SquadLeaderboardPro
 
       {/* Empty state */}
       {entries.length === 0 && (
-        <m.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="text-center py-12"
-        >
+        <m.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center py-12">
           <Trophy className="w-12 h-12 text-text-tertiary mx-auto mb-3" />
           <p className="text-md text-text-secondary">Aucun classement disponible</p>
           <p className="text-sm text-text-tertiary">

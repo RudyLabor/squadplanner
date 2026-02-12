@@ -1,10 +1,5 @@
 import { m, AnimatePresence } from 'framer-motion'
-import {
-  Users,
-  Gamepad2,
-  Link as LinkIcon,
-  Loader2,
-} from '../../components/icons'
+import { Users, Gamepad2, Link as LinkIcon, Loader2 } from '../../components/icons'
 import { Button, Card, CardContent, Input } from '../../components/ui'
 
 interface JoinSquadFormProps {
@@ -17,7 +12,15 @@ interface JoinSquadFormProps {
   onCancel: () => void
 }
 
-export function JoinSquadForm({ show, inviteCode, onInviteCodeChange, error, isLoading, onSubmit, onCancel }: JoinSquadFormProps) {
+export function JoinSquadForm({
+  show,
+  inviteCode,
+  onInviteCodeChange,
+  error,
+  isLoading,
+  onSubmit,
+  onCancel,
+}: JoinSquadFormProps) {
   return (
     <AnimatePresence>
       {show && (
@@ -73,7 +76,17 @@ interface CreateSquadFormProps {
   onCancel: () => void
 }
 
-export function CreateSquadForm({ show, name, onNameChange, game, onGameChange, error, isLoading, onSubmit, onCancel }: CreateSquadFormProps) {
+export function CreateSquadForm({
+  show,
+  name,
+  onNameChange,
+  game,
+  onGameChange,
+  error,
+  isLoading,
+  onSubmit,
+  onCancel,
+}: CreateSquadFormProps) {
   return (
     <AnimatePresence>
       {show && (

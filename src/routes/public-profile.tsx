@@ -7,16 +7,23 @@ import PublicProfile from '../pages/PublicProfile'
 
 export function meta() {
   return [
-    { title: "Profil joueur - Squad Planner" },
-    { name: "description", content: "Profil public d'un joueur Squad Planner : statistiques, fiabilité et jeux préférés." },
-    { tagName: "link", rel: "canonical", href: "https://squadplanner.fr/profile" },
-    { property: "og:url", content: "https://squadplanner.fr/profile" },
+    { title: 'Profil joueur - Squad Planner' },
+    {
+      name: 'description',
+      content:
+        "Profil public d'un joueur Squad Planner : statistiques, fiabilité et jeux préférés.",
+    },
+    { tagName: 'link', rel: 'canonical', href: 'https://squadplanner.fr/profile' },
+    { property: 'og:url', content: 'https://squadplanner.fr/profile' },
   ]
 }
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const { supabase, headers, getUser } = createSupabaseServerClient(request)
-  const { data: { user }, error } = await getUser()
+  const {
+    data: { user },
+    error,
+  } = await getUser()
 
   if (error || !user) {
     throw redirect('/', { headers })
@@ -28,7 +35,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   const { data: profile } = await supabase
     .from('profiles')
     .select('*')
-    .eq('username', username)
+    .eq('username', username as string)
     .single()
 
   return data({ profile, username }, { headers })
@@ -47,9 +54,14 @@ interface PublicProfileLoaderData {
 
 export default function Component({ loaderData }: { loaderData: PublicProfileLoaderData }) {
   return (
-    <ClientRouteWrapper seeds={[
-      { key: queryKeys.discover.publicProfile(loaderData?.username), data: loaderData?.profile },
-    ]}>
+    <ClientRouteWrapper
+      seeds={[
+        {
+          key: [...queryKeys.discover.publicProfile(loaderData?.username)],
+          data: loaderData?.profile,
+        },
+      ]}
+    >
       <PublicProfile />
     </ClientRouteWrapper>
   )

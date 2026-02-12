@@ -36,12 +36,8 @@ export function OfflineBanner() {
                   <WifiOff className="w-4 h-4 text-error" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-md font-medium text-error">
-                    Hors ligne
-                  </p>
-                  <p className="text-sm text-error/80">
-                    Vérifie ta connexion internet
-                  </p>
+                  <p className="text-md font-medium text-error">Hors ligne</p>
+                  <p className="text-sm text-error/80">Vérifie ta connexion internet</p>
                 </div>
                 <button
                   onClick={dismissOfflineBanner}
@@ -74,9 +70,7 @@ export function OfflineBanner() {
                   <Wifi className="w-4 h-4 text-success" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-md font-medium text-success">
-                    Connexion rétablie
-                  </p>
+                  <p className="text-md font-medium text-success">Connexion rétablie</p>
                 </div>
                 <button
                   onClick={dismissReconnectedBanner}

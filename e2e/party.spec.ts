@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test'
 
 const TEST_USER = {
   email: 'testowner@squadtest.dev',
-  password: 'TestPassword123!'
+  password: 'TestPassword123!',
 }
 
 async function loginUser(page: import('@playwright/test').Page) {
@@ -32,7 +32,7 @@ test.describe('Party Page', () => {
     const squadCard = page.locator('[class*="squad"], [class*="card"]').first()
     const emptyState = page.getByText(/squad|rejoindre|trouver/i).first()
 
-    const hasContent = await squadCard.isVisible() || await emptyState.isVisible()
+    const hasContent = (await squadCard.isVisible()) || (await emptyState.isVisible())
     expect(hasContent).toBeTruthy()
   })
 

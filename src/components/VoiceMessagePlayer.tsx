@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 import { useState, useRef, memo, useCallback, useEffect } from 'react'
 import { m } from 'framer-motion'
@@ -71,14 +71,17 @@ export const VoiceMessagePlayer = memo(function VoiceMessagePlayer({
     }
   }, [])
 
-  const handleSeek = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
-    if (!audioRef.current || !totalDuration) return
-    const rect = e.currentTarget.getBoundingClientRect()
-    const ratio = (e.clientX - rect.left) / rect.width
-    const time = ratio * totalDuration
-    audioRef.current.currentTime = time
-    setCurrentTime(time)
-  }, [totalDuration])
+  const handleSeek = useCallback(
+    (e: React.MouseEvent<HTMLDivElement>) => {
+      if (!audioRef.current || !totalDuration) return
+      const rect = e.currentTarget.getBoundingClientRect()
+      const ratio = (e.clientX - rect.left) / rect.width
+      const time = ratio * totalDuration
+      audioRef.current.currentTime = time
+      setCurrentTime(time)
+    },
+    [totalDuration]
+  )
 
   useEffect(() => {
     return () => cancelAnimationFrame(animationRef.current)
@@ -149,8 +152,12 @@ export const VoiceMessagePlayer = memo(function VoiceMessagePlayer({
                 key={i}
                 className={`w-[3px] rounded-full transition-colors duration-150 ${
                   isPlayed
-                    ? isOwn ? 'bg-white' : 'bg-primary'
-                    : isOwn ? 'bg-white/30' : 'bg-text-quaternary'
+                    ? isOwn
+                      ? 'bg-white'
+                      : 'bg-primary'
+                    : isOwn
+                      ? 'bg-white/30'
+                      : 'bg-text-quaternary'
                 }`}
                 style={{ height: `${height}%` }}
                 animate={isPlaying && isPlayed ? { scaleY: [1, 1.2, 1] } : {}}

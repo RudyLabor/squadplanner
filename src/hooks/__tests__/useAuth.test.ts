@@ -2,15 +2,23 @@ import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { act } from '@testing-library/react'
 
 const {
-  mockGetSession, mockSignUp, mockSignInWithPassword, mockSignInWithOAuth,
-  mockSignOut, mockOnAuthStateChange, mockFrom, mockInitSupabase,
+  mockGetSession,
+  mockSignUp,
+  mockSignInWithPassword,
+  mockSignInWithOAuth,
+  mockSignOut,
+  mockOnAuthStateChange,
+  mockFrom,
+  mockInitSupabase,
 } = vi.hoisted(() => ({
   mockGetSession: vi.fn(),
   mockSignUp: vi.fn(),
   mockSignInWithPassword: vi.fn(),
   mockSignInWithOAuth: vi.fn(),
   mockSignOut: vi.fn(),
-  mockOnAuthStateChange: vi.fn().mockReturnValue({ data: { subscription: { unsubscribe: vi.fn() } } }),
+  mockOnAuthStateChange: vi
+    .fn()
+    .mockReturnValue({ data: { subscription: { unsubscribe: vi.fn() } } }),
   mockFrom: vi.fn(),
   mockInitSupabase: vi.fn().mockResolvedValue(undefined),
 }))

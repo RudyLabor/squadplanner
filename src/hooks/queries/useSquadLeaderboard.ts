@@ -21,7 +21,7 @@ export interface LeaderboardEntry {
 // Fetch squad leaderboard
 async function fetchSquadLeaderboard(squadId: string): Promise<LeaderboardEntry[]> {
   const { data, error } = await supabase.rpc('get_squad_leaderboard', {
-    p_squad_id: squadId
+    p_squad_id: squadId,
   })
 
   if (error) {
@@ -39,7 +39,7 @@ async function fetchSquadLeaderboard(squadId: string): Promise<LeaderboardEntry[
 export function useSquadLeaderboardQuery(squadId: string | undefined) {
   return useQuery({
     queryKey: ['leaderboard', squadId] as const,
-    queryFn: () => squadId ? fetchSquadLeaderboard(squadId) : [],
+    queryFn: () => (squadId ? fetchSquadLeaderboard(squadId) : []),
     enabled: !!squadId,
     staleTime: 60_000, // 1 minute
     retry: false, // Don't retry if RPC doesn't exist

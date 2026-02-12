@@ -21,10 +21,7 @@
  * // Using size presets
  * getOptimizedAvatarUrl(profile.avatar_url, AVATAR_SIZES.md)
  */
-export function getOptimizedAvatarUrl(
-  url: string | null | undefined,
-  size: number
-): string | null {
+export function getOptimizedAvatarUrl(url: string | null | undefined, size: number): string | null {
   if (!url) return null
 
   // Only optimize Supabase Storage URLs
@@ -39,4 +36,3 @@ export function getOptimizedAvatarUrl(
   const separator = url.includes('?') ? '&' : '?'
   return `${url}${separator}width=${optimizedSize}&height=${optimizedSize}&resize=cover&quality=80&format=webp`
 }
-

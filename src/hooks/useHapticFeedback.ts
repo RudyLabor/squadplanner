@@ -40,11 +40,14 @@ export function useHapticFeedback() {
   /**
    * Trigger haptic feedback if enabled
    */
-  const triggerHaptic = useCallback((type: HapticType) => {
-    if (enabled && supported) {
-      haptic[type]()
-    }
-  }, [enabled, supported])
+  const triggerHaptic = useCallback(
+    (type: HapticType) => {
+      if (enabled && supported) {
+        haptic[type]()
+      }
+    },
+    [enabled, supported]
+  )
 
   /**
    * Toggle haptic feedback on/off

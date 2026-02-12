@@ -31,7 +31,9 @@ export function useAudioAnalyser(stream: MediaStream | null): AudioAnalyserData 
   const analyze = useCallback(() => {
     if (!analyserRef.current) return
 
-    analyserRef.current.getByteFrequencyData(dataArrayRef.current as unknown as Uint8Array<ArrayBuffer>)
+    analyserRef.current.getByteFrequencyData(
+      dataArrayRef.current as unknown as Uint8Array<ArrayBuffer>
+    )
 
     // Calculate average volume
     const sum = dataArrayRef.current.reduce((acc, val) => acc + val, 0)
@@ -79,7 +81,10 @@ export function useAudioAnalyser(stream: MediaStream | null): AudioAnalyserData 
 
     // Create audio context and analyser
     try {
-      const audioContext = new (window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext)()
+      const audioContext = new (
+        window.AudioContext ||
+        (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext
+      )()
       audioContextRef.current = audioContext
 
       const analyser = audioContext.createAnalyser()
@@ -124,7 +129,7 @@ export function useAudioAnalyser(stream: MediaStream | null): AudioAnalyserData 
     averageVolume,
     isActive,
     isSpeaking: volumeLevel !== 'silent',
-    volumeLevel
+    volumeLevel,
   }
 }
 

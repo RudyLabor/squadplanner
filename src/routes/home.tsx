@@ -36,15 +36,23 @@ interface HomeLoaderData {
 
 export function meta() {
   return [
-    { title: "Accueil - Squad Planner" },
-    { name: "description", content: "Tableau de bord Squad Planner : tes squads, sessions à venir et activité récente en un coup d'oeil." },
-    { tagName: "link", rel: "canonical", href: "https://squadplanner.fr/home" },
-    { property: "og:url", content: "https://squadplanner.fr/home" },
+    { title: 'Accueil - Squad Planner' },
+    {
+      name: 'description',
+      content:
+        "Tableau de bord Squad Planner : tes squads, sessions à venir et activité récente en un coup d'oeil.",
+    },
+    { tagName: 'link', rel: 'canonical', href: 'https://squadplanner.fr/home' },
+    { property: 'og:url', content: 'https://squadplanner.fr/home' },
   ]
 }
 
 // Non-critical data fetcher — runs in parallel, streamed to client
-async function fetchUpcomingSessions(supabase: SupabaseClient, squadIds: string[], userId: string): Promise<SessionWithRsvp[]> {
+async function fetchUpcomingSessions(
+  supabase: SupabaseClient,
+  squadIds: string[],
+  userId: string
+): Promise<SessionWithRsvp[]> {
   if (squadIds.length === 0) return []
 
   const { data: sessions } = await supabase
@@ -64,7 +72,8 @@ async function fetchUpcomingSessions(supabase: SupabaseClient, squadIds: string[
     .in('session_id', sessionIds)
 
   return sessions.map((session: Session) => {
-    const sessionRsvps = (allRsvps as SessionRsvp[] | null)?.filter((r) => r.session_id === session.id) || []
+    const sessionRsvps =
+      (allRsvps as SessionRsvp[] | null)?.filter((r) => r.session_id === session.id) || []
     return {
       ...session,
       my_rsvp: sessionRsvps.find((r) => r.user_id === userId)?.response || null,
@@ -79,7 +88,10 @@ async function fetchUpcomingSessions(supabase: SupabaseClient, squadIds: string[
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const { supabase, headers, getUser } = createSupabaseServerClient(request)
-  const { data: { user }, error } = await getUser()
+  const {
+    data: { user },
+    error,
+  } = await getUser()
 
   if (error || !user) {
     throw redirect('/', { headers })
@@ -88,17 +100,14 @@ export async function loader({ request }: LoaderFunctionArgs) {
   // Single RPC: profile + squads (same as parent layout, but needed for SSR seed)
   const { data: rpcResult } = await supabase.rpc('get_layout_data', { p_user_id: user.id })
 
-  const profile = (rpcResult?.profile as Profile | null) ?? null
-  const squads: SquadWithCount[] = ((rpcResult?.squads as SquadWithCount[]) ?? [])
+  const profile = ((rpcResult as any)?.profile as Profile | null) ?? null
+  const squads: SquadWithCount[] = ((rpcResult as any)?.squads as SquadWithCount[]) ?? []
   const squadIds = squads.map((s) => s.id)
 
   // Non-critical — NOT awaited → streamed via HTTP streaming
-  const upcomingSessions = fetchUpcomingSessions(supabase, squadIds, user.id)
+  const upcomingSessions = fetchUpcomingSessions(supabase as any, squadIds, user.id)
 
-  return data(
-    { profile, squads, upcomingSessions },
-    { headers }
-  )
+  return data({ profile, squads, upcomingSessions }, { headers })
 }
 
 export function headers({ loaderHeaders }: { loaderHeaders: Headers }) {
@@ -108,15 +117,14 @@ export function headers({ loaderHeaders }: { loaderHeaders: Headers }) {
 // Streams sessions via Suspense — page shell (profile + squads) renders immediately
 export default function Component({ loaderData }: { loaderData: HomeLoaderData }) {
   return (
-    <ClientRouteWrapper seeds={[
-      { key: queryKeys.squads.list(), data: loaderData?.squads },
-    ]}>
-      <Suspense fallback={
-        <Home loaderData={{ ...loaderData, upcomingSessions: [] }} />
-      }>
-        <Await resolve={loaderData.upcomingSessions} errorElement={<Home loaderData={{ ...loaderData, upcomingSessions: [] }} />}>
+    <ClientRouteWrapper seeds={[{ key: [...queryKeys.squads.list()], data: loaderData?.squads }]}>
+      <Suspense fallback={<Home loaderData={{ ...loaderData, upcomingSessions: [] }} />}>
+        <Await
+          resolve={loaderData.upcomingSessions}
+          errorElement={<Home loaderData={{ ...loaderData, upcomingSessions: [] }} />}
+        >
           {(sessions: SessionWithRsvp[]) => (
-            <DeferredSeed queryKey={queryKeys.sessions.upcoming()} data={sessions}>
+            <DeferredSeed queryKey={[...queryKeys.sessions.upcoming()]} data={sessions}>
               <Home loaderData={{ ...loaderData, upcomingSessions: sessions }} />
             </DeferredSeed>
           )}

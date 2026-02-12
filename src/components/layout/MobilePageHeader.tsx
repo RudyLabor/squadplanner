@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 import { memo } from 'react'
 import { useNavigate } from 'react-router'
@@ -8,7 +8,10 @@ interface MobilePageHeaderProps {
   onBack?: () => void
 }
 
-export const MobilePageHeader = memo(function MobilePageHeader({ title, onBack }: MobilePageHeaderProps) {
+export const MobilePageHeader = memo(function MobilePageHeader({
+  title,
+  onBack,
+}: MobilePageHeaderProps) {
   const navigate = useNavigate()
 
   const handleBack = () => {

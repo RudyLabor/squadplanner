@@ -11,9 +11,9 @@ import { Download, X } from './icons'
 import { usePWAInstallStore } from '../hooks/usePWAInstall'
 
 export const PWAInstallBanner = memo(function PWAInstallBanner() {
-  const showBanner = usePWAInstallStore(state => state.showBanner)
-  const promptInstall = usePWAInstallStore(state => state.promptInstall)
-  const dismissBanner = usePWAInstallStore(state => state.dismissBanner)
+  const showBanner = usePWAInstallStore((state) => state.showBanner)
+  const promptInstall = usePWAInstallStore((state) => state.promptInstall)
+  const dismissBanner = usePWAInstallStore((state) => state.dismissBanner)
 
   return (
     <AnimatePresence>
@@ -34,9 +34,7 @@ export const PWAInstallBanner = memo(function PWAInstallBanner() {
 
             {/* Content */}
             <div className="flex-1 min-w-0">
-              <h3 className="text-md font-semibold text-text-primary">
-                Installer Squad Planner
-              </h3>
+              <h3 className="text-md font-semibold text-text-primary">Installer Squad Planner</h3>
               <p className="text-base text-text-secondary mt-0.5">
                 Accès rapide depuis ton écran d'accueil
               </p>

@@ -8,7 +8,17 @@ vi.mock('framer-motion', async () => {
   const actual = await vi.importActual<typeof import('framer-motion')>('framer-motion')
   const createMockComponent = (tag: string) => {
     const Component = ({ children, ...props }: any) => {
-      const { initial, animate, exit, transition, whileHover, whileTap, layout, layoutId, ...rest } = props
+      const {
+        initial,
+        animate,
+        exit,
+        transition,
+        whileHover,
+        whileTap,
+        layout,
+        layoutId,
+        ...rest
+      } = props
       const Tag = tag as any
       return <Tag {...rest}>{children}</Tag>
     }
@@ -44,17 +54,24 @@ describe('EmptyState', () => {
   })
 
   it('renders description', () => {
-    render(<EmptyState icon={<span>icon</span>} title="No items" description="Create your first item" />, { wrapper: MemoryRouter })
+    render(
+      <EmptyState icon={<span>icon</span>} title="No items" description="Create your first item" />,
+      { wrapper: MemoryRouter }
+    )
     expect(screen.getByText('Create your first item')).toBeInTheDocument()
   })
 
   it('renders icon', () => {
-    render(<EmptyState icon={<span data-testid="icon">icon</span>} title="Empty" />, { wrapper: MemoryRouter })
+    render(<EmptyState icon={<span data-testid="icon">icon</span>} title="Empty" />, {
+      wrapper: MemoryRouter,
+    })
     expect(screen.getByTestId('icon')).toBeInTheDocument()
   })
 
   it('has aria-live polite', () => {
-    const { container } = render(<EmptyState icon={<span>icon</span>} title="Empty" />, { wrapper: MemoryRouter })
+    const { container } = render(<EmptyState icon={<span>icon</span>} title="Empty" />, {
+      wrapper: MemoryRouter,
+    })
     expect(container.querySelector('[aria-live="polite"]')).toBeInTheDocument()
   })
 
@@ -62,7 +79,12 @@ describe('EmptyState', () => {
     const user = userEvent.setup()
     const onAction = vi.fn()
     render(
-      <EmptyState icon={<span>icon</span>} title="Empty" actionLabel="Create" onAction={onAction} />,
+      <EmptyState
+        icon={<span>icon</span>}
+        title="Empty"
+        actionLabel="Create"
+        onAction={onAction}
+      />,
       { wrapper: MemoryRouter }
     )
     await user.click(screen.getByText('Create'))
@@ -81,7 +103,12 @@ describe('EmptyState', () => {
     const user = userEvent.setup()
     const onSecondary = vi.fn()
     render(
-      <EmptyState icon={<span>icon</span>} title="Empty" secondaryActionLabel="Cancel" onSecondaryAction={onSecondary} />,
+      <EmptyState
+        icon={<span>icon</span>}
+        title="Empty"
+        secondaryActionLabel="Cancel"
+        onSecondaryAction={onSecondary}
+      />,
       { wrapper: MemoryRouter }
     )
     await user.click(screen.getByText('Cancel'))

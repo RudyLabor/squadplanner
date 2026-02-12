@@ -1,14 +1,9 @@
-import { m } from 'framer-motion'
-import {
-  Bell,
-  Mic,
-  ArrowLeft,
-  Check,
-} from '../../components/icons'
+import { m, type Variants } from 'framer-motion'
+import { Bell, Mic, ArrowLeft, Check } from '../../components/icons'
 import { Button, Card } from '../../components/ui'
 
 interface OnboardingStepPermissionsProps {
-  slideVariants: Record<string, unknown>
+  slideVariants: Variants
   notifPermission: 'granted' | 'denied' | 'default'
   micPermission: 'granted' | 'denied' | 'prompt'
   isNavigating: boolean
@@ -21,18 +16,19 @@ interface OnboardingStepPermissionsProps {
 }
 
 export function OnboardingStepPermissions({
-  slideVariants, notifPermission, micPermission, isNavigating,
-  onRequestNotifications, onRequestMic, onSkipMic,
-  canProceed, onComplete, onBack
+  slideVariants,
+  notifPermission,
+  micPermission,
+  isNavigating,
+  onRequestNotifications,
+  onRequestMic,
+  onSkipMic,
+  canProceed,
+  onComplete,
+  onBack,
 }: OnboardingStepPermissionsProps) {
   return (
-    <m.div
-      key="permissions"
-      variants={slideVariants}
-      initial="enter"
-      animate="center"
-      exit="exit"
-    >
+    <m.div key="permissions" variants={slideVariants} initial="enter" animate="center" exit="exit">
       <button
         onClick={onBack}
         className="flex items-center gap-2 text-text-secondary hover:text-text-primary transition-colors mb-6"
@@ -42,12 +38,8 @@ export function OnboardingStepPermissions({
       </button>
 
       <div className="text-center mb-8">
-        <h2 className="text-xl font-bold text-text-primary mb-2">
-          Ne rate jamais une session
-        </h2>
-        <p className="text-text-secondary">
-          On te pr&eacute;vient quand ta squad t'attend
-        </p>
+        <h2 className="text-xl font-bold text-text-primary mb-2">Ne rate jamais une session</h2>
+        <p className="text-text-secondary">On te pr&eacute;vient quand ta squad t'attend</p>
       </div>
 
       <div className="space-y-4">
@@ -59,15 +51,14 @@ export function OnboardingStepPermissions({
             </div>
             <div className="flex-1">
               <div className="flex items-center gap-2 mb-1">
-                <h3 className="text-md font-semibold text-text-primary">
-                  Notifications
-                </h3>
+                <h3 className="text-md font-semibold text-text-primary">Notifications</h3>
                 <span className="text-xs px-2 py-0.5 rounded-full bg-warning-10 text-warning font-medium">
                   Recommand&eacute;
                 </span>
               </div>
               <p className="text-base text-text-secondary mb-3">
-                Sois pr&eacute;venu quand une session est cr&eacute;&eacute;e ou quand ta squad t'attend
+                Sois pr&eacute;venu quand une session est cr&eacute;&eacute;e ou quand ta squad
+                t'attend
               </p>
               {notifPermission === 'granted' ? (
                 <div className="flex items-center gap-2 text-success text-md">
@@ -79,11 +70,7 @@ export function OnboardingStepPermissions({
                   Bloqu&eacute;es &mdash; active-les dans les param&egrave;tres de ton navigateur
                 </p>
               ) : (
-                <Button
-                  variant="secondary"
-                  size="sm"
-                  onClick={onRequestNotifications}
-                >
+                <Button variant="secondary" size="sm" onClick={onRequestNotifications}>
                   Activer les notifications
                 </Button>
               )}
@@ -99,9 +86,7 @@ export function OnboardingStepPermissions({
             </div>
             <div className="flex-1">
               <div className="flex items-center gap-2 mb-1">
-                <h3 className="text-md font-semibold text-text-primary">
-                  Microphone
-                </h3>
+                <h3 className="text-md font-semibold text-text-primary">Microphone</h3>
                 <span className="text-xs px-2 py-0.5 rounded-full bg-border-subtle text-text-secondary font-medium">
                   Optionnel
                 </span>
@@ -120,11 +105,7 @@ export function OnboardingStepPermissions({
                 </p>
               ) : (
                 <div className="flex gap-2">
-                  <Button
-                    variant="secondary"
-                    size="sm"
-                    onClick={onRequestMic}
-                  >
+                  <Button variant="secondary" size="sm" onClick={onRequestMic}>
                     Autoriser le micro
                   </Button>
                   <button

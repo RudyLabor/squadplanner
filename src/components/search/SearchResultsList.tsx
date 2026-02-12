@@ -14,14 +14,14 @@ const typeLabels: Record<string, string> = {
   squad: 'Squads',
   session: 'Sessions',
   message: 'Messages',
-  member: 'Membres'
+  member: 'Membres',
 }
 
 const typeColors: Record<string, string> = {
   squad: 'text-purple',
   session: 'text-info',
   message: 'text-success',
-  member: 'text-pink'
+  member: 'text-pink',
 }
 
 interface SearchResultsListProps {
@@ -34,7 +34,15 @@ interface SearchResultsListProps {
   isLoading: boolean
 }
 
-export function SearchResultsList({ query, results, groupedResults, selectedIndex, setSelectedIndex, onSelect, isLoading }: SearchResultsListProps) {
+export function SearchResultsList({
+  query,
+  results,
+  groupedResults,
+  selectedIndex,
+  setSelectedIndex,
+  onSelect,
+  isLoading,
+}: SearchResultsListProps) {
   if (isLoading) {
     return (
       <div className="p-8 text-center">
@@ -66,7 +74,9 @@ export function SearchResultsList({ query, results, groupedResults, selectedInde
           }
           return (
             <div key={type}>
-              <div className={`px-4 py-2 text-xs font-semibold uppercase tracking-wider ${typeColors[type]}`}>
+              <div
+                className={`px-4 py-2 text-xs font-semibold uppercase tracking-wider ${typeColors[type]}`}
+              >
                 {typeLabels[type]}
               </div>
               {items.map((result, idx) => {
@@ -83,9 +93,17 @@ export function SearchResultsList({ query, results, groupedResults, selectedInde
                     whileTap={{ scale: 0.99 }}
                   >
                     {result.avatar ? (
-                      <img src={result.avatar} alt="" className="w-9 h-9 rounded-lg object-cover" loading="lazy" decoding="async" />
+                      <img
+                        src={result.avatar}
+                        alt=""
+                        className="w-9 h-9 rounded-lg object-cover"
+                        loading="lazy"
+                        decoding="async"
+                      />
                     ) : (
-                      <div className={`w-9 h-9 rounded-lg flex items-center justify-center bg-surface-card ${typeColors[result.type]}`}>
+                      <div
+                        className={`w-9 h-9 rounded-lg flex items-center justify-center bg-surface-card ${typeColors[result.type]}`}
+                      >
                         <Icon className="w-4 h-4" />
                       </div>
                     )}

@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 /**
  * Chantier 9 - Session Expired Modal
@@ -7,12 +7,7 @@
  * Offers reconnection or read-only mode.
  */
 import { m, AnimatePresence } from 'framer-motion'
-import {
-  Clock,
-  Lock,
-  LogIn,
-  Eye,
-} from './icons'
+import { Clock, Lock, LogIn, Eye } from './icons'
 import { useNavigate } from 'react-router'
 import { useEffect, useRef } from 'react'
 
@@ -39,7 +34,9 @@ export function SessionExpiredModal({ isOpen, onReconnect, onDismiss }: SessionE
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden'
-      return () => { document.body.style.overflow = '' }
+      return () => {
+        document.body.style.overflow = ''
+      }
     }
   }, [isOpen])
 
@@ -85,18 +82,12 @@ export function SessionExpiredModal({ isOpen, onReconnect, onDismiss }: SessionE
               </div>
 
               {/* Title */}
-              <h2
-                id={titleId}
-                className="text-xl font-semibold text-text-primary mb-2"
-              >
+              <h2 id={titleId} className="text-xl font-semibold text-text-primary mb-2">
                 Session expirée
               </h2>
 
               {/* Description */}
-              <p
-                id={descId}
-                className="text-md text-text-secondary mb-6"
-              >
+              <p id={descId} className="text-md text-text-secondary mb-6">
                 Ta session a expiré. Reconnecte-toi pour continuer.
               </p>
 

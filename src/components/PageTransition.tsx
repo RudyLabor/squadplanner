@@ -34,7 +34,7 @@ const transition = {
 export function PageTransition({
   children,
   variant = 'slide',
-  className = ''
+  className = '',
 }: PageTransitionProps) {
   const selectedVariant = variants[variant]
 

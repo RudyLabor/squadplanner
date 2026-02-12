@@ -47,7 +47,9 @@ describe('EmojiPicker', () => {
     const onSelect = vi.fn()
     render(<EmojiPicker isOpen onSelect={onSelect} onClose={() => {}} />)
     // Find emoji buttons by their aria-label (emojis have aria-label set to the emoji character)
-    const emojiButtons = screen.getAllByRole('button').filter(b => b.getAttribute('aria-label')?.match(/[\u{1F000}-\u{1FFFF}]/u))
+    const emojiButtons = screen
+      .getAllByRole('button')
+      .filter((b) => b.getAttribute('aria-label')?.match(/[\u{1F000}-\u{1FFFF}]/u))
     if (emojiButtons.length > 0) {
       await user.click(emojiButtons[0])
       expect(onSelect).toHaveBeenCalled()

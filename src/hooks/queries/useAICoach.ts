@@ -33,19 +33,22 @@ export interface AICoachTip {
 
 // Default fallback tip
 const FALLBACK_TIP: AICoachTip = {
-  tip: 'Prêt pour la prochaine session ? Tes potes t\'attendent !',
-  tone: 'encouragement'
+  tip: "Prêt pour la prochaine session ? Tes potes t'attendent !",
+  tone: 'encouragement',
 }
 
 // Fetch AI Coach tip from Edge Function
-async function fetchAICoachTip(userId: string, contextType: 'profile' | 'home'): Promise<AICoachTip> {
+async function fetchAICoachTip(
+  userId: string,
+  contextType: 'profile' | 'home'
+): Promise<AICoachTip> {
   if (!AI_COACH_ENABLED) {
     return FALLBACK_TIP
   }
 
   try {
     const { data, error } = await supabase.functions.invoke('ai-coach', {
-      body: { user_id: userId, context_type: contextType }
+      body: { user_id: userId, context_type: contextType },
     })
 
     if (error) {
@@ -53,7 +56,7 @@ async function fetchAICoachTip(userId: string, contextType: 'profile' | 'home'):
       return FALLBACK_TIP
     }
 
-    return data as AICoachTip || FALLBACK_TIP
+    return (data as AICoachTip) || FALLBACK_TIP
   } catch {
     // Silent failure - return fallback
     return FALLBACK_TIP
@@ -66,10 +69,13 @@ async function fetchAICoachTip(userId: string, contextType: 'profile' | 'home'):
  *
  * Uses Infinity staleTime so it only fetches once per session
  */
-export function useAICoachQuery(userId: string | undefined, contextType: 'profile' | 'home' = 'profile') {
+export function useAICoachQuery(
+  userId: string | undefined,
+  contextType: 'profile' | 'home' = 'profile'
+) {
   return useQuery({
     queryKey: ['ai-coach', userId, contextType] as const,
-    queryFn: () => userId ? fetchAICoachTip(userId, contextType) : FALLBACK_TIP,
+    queryFn: () => (userId ? fetchAICoachTip(userId, contextType) : FALLBACK_TIP),
     enabled: !!userId && AI_COACH_ENABLED,
     staleTime: Infinity, // Never refetch - once per session
     gcTime: Infinity, // Keep in cache forever during session
@@ -82,7 +88,10 @@ export function useAICoachQuery(userId: string | undefined, contextType: 'profil
  * This prevents the AI Coach request from blocking initial page load
  * Uses requestIdleCallback with 2s timeout fallback
  */
-export function useAICoachQueryDeferred(userId: string | undefined, contextType: 'profile' | 'home' = 'profile') {
+export function useAICoachQueryDeferred(
+  userId: string | undefined,
+  contextType: 'profile' | 'home' = 'profile'
+) {
   const [shouldFetch, setShouldFetch] = useState(false)
 
   useEffect(() => {
@@ -112,7 +121,7 @@ export function useAICoachQueryDeferred(userId: string | undefined, contextType:
 
   return useQuery({
     queryKey: ['ai-coach', userId, contextType] as const,
-    queryFn: () => userId ? fetchAICoachTip(userId, contextType) : FALLBACK_TIP,
+    queryFn: () => (userId ? fetchAICoachTip(userId, contextType) : FALLBACK_TIP),
     enabled: !!userId && AI_COACH_ENABLED && shouldFetch,
     staleTime: Infinity,
     gcTime: Infinity,

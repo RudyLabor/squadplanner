@@ -99,13 +99,31 @@ export function GamingHeroIllustration({ size = 300, className = '' }: Props) {
         >
           <m.g animate={float(0, 3.2)}>
             {/* Glow ring */}
-            <circle cx="107" cy="95" r="32" fill="var(--color-primary, #6366f1)" fillOpacity="0.08" />
+            <circle
+              cx="107"
+              cy="95"
+              r="32"
+              fill="var(--color-primary, #6366f1)"
+              fillOpacity="0.08"
+            />
             {/* Avatar circle */}
-            <circle cx="107" cy="95" r="26" fill="var(--color-primary, #6366f1)" fillOpacity="0.15" stroke="var(--color-primary, #6366f1)" strokeWidth="2" />
+            <circle
+              cx="107"
+              cy="95"
+              r="26"
+              fill="var(--color-primary, #6366f1)"
+              fillOpacity="0.15"
+              stroke="var(--color-primary, #6366f1)"
+              strokeWidth="2"
+            />
             {/* Head */}
             <circle cx="107" cy="88" r="8" fill="var(--color-primary, #6366f1)" fillOpacity="0.6" />
             {/* Body */}
-            <path d="M95 108 C95 100, 107 96, 107 96 C107 96, 119 100, 119 108" fill="var(--color-primary, #6366f1)" fillOpacity="0.4" />
+            <path
+              d="M95 108 C95 100, 107 96, 107 96 C107 96, 119 100, 119 108"
+              fill="var(--color-primary, #6366f1)"
+              fillOpacity="0.4"
+            />
             {/* Crown (leader icon) */}
             <m.path
               d="M99 78 L103 82 L107 78 L111 82 L115 78 L113 86 L101 86 Z"
@@ -126,10 +144,28 @@ export function GamingHeroIllustration({ size = 300, className = '' }: Props) {
           transition={{ delay: 0.45, type: 'spring', stiffness: 300, damping: 20 }}
         >
           <m.g animate={float(0.4, 3.5)}>
-            <circle cx="193" cy="95" r="32" fill="var(--color-purple, #a855f7)" fillOpacity="0.08" />
-            <circle cx="193" cy="95" r="26" fill="var(--color-purple, #a855f7)" fillOpacity="0.15" stroke="var(--color-purple, #a855f7)" strokeWidth="2" />
+            <circle
+              cx="193"
+              cy="95"
+              r="32"
+              fill="var(--color-purple, #a855f7)"
+              fillOpacity="0.08"
+            />
+            <circle
+              cx="193"
+              cy="95"
+              r="26"
+              fill="var(--color-purple, #a855f7)"
+              fillOpacity="0.15"
+              stroke="var(--color-purple, #a855f7)"
+              strokeWidth="2"
+            />
             <circle cx="193" cy="88" r="8" fill="var(--color-purple, #a855f7)" fillOpacity="0.6" />
-            <path d="M181 108 C181 100, 193 96, 193 96 C193 96, 205 100, 205 108" fill="var(--color-purple, #a855f7)" fillOpacity="0.4" />
+            <path
+              d="M181 108 C181 100, 193 96, 193 96 C193 96, 205 100, 205 108"
+              fill="var(--color-purple, #a855f7)"
+              fillOpacity="0.4"
+            />
             {/* Headphones on this avatar */}
             <path
               d="M183 86 V84 C183 79, 188 75, 193 75 C198 75, 203 79, 203 84 V86"
@@ -138,8 +174,24 @@ export function GamingHeroIllustration({ size = 300, className = '' }: Props) {
               strokeLinecap="round"
               fill="none"
             />
-            <rect x="181" y="85" width="4" height="6" rx="2" fill="var(--color-purple, #a855f7)" fillOpacity="0.6" />
-            <rect x="201" y="85" width="4" height="6" rx="2" fill="var(--color-purple, #a855f7)" fillOpacity="0.6" />
+            <rect
+              x="181"
+              y="85"
+              width="4"
+              height="6"
+              rx="2"
+              fill="var(--color-purple, #a855f7)"
+              fillOpacity="0.6"
+            />
+            <rect
+              x="201"
+              y="85"
+              width="4"
+              height="6"
+              rx="2"
+              fill="var(--color-purple, #a855f7)"
+              fillOpacity="0.6"
+            />
           </m.g>
         </m.g>
 
@@ -151,13 +203,38 @@ export function GamingHeroIllustration({ size = 300, className = '' }: Props) {
           transition={{ delay: 0.6, type: 'spring', stiffness: 300, damping: 20 }}
         >
           <m.g animate={float(0.8, 3)}>
-            <circle cx="210" cy="190" r="32" fill="var(--color-success, #34d399)" fillOpacity="0.08" />
-            <circle cx="210" cy="190" r="26" fill="var(--color-success, #34d399)" fillOpacity="0.15" stroke="var(--color-success, #34d399)" strokeWidth="2" />
-            <circle cx="210" cy="183" r="8" fill="var(--color-success, #34d399)" fillOpacity="0.6" />
-            <path d="M198 203 C198 195, 210 191, 210 191 C210 191, 222 195, 222 203" fill="var(--color-success, #34d399)" fillOpacity="0.4" />
+            <circle
+              cx="210"
+              cy="190"
+              r="32"
+              fill="var(--color-success, #34d399)"
+              fillOpacity="0.08"
+            />
+            <circle
+              cx="210"
+              cy="190"
+              r="26"
+              fill="var(--color-success, #34d399)"
+              fillOpacity="0.15"
+              stroke="var(--color-success, #34d399)"
+              strokeWidth="2"
+            />
+            <circle
+              cx="210"
+              cy="183"
+              r="8"
+              fill="var(--color-success, #34d399)"
+              fillOpacity="0.6"
+            />
+            <path
+              d="M198 203 C198 195, 210 191, 210 191 C210 191, 222 195, 222 203"
+              fill="var(--color-success, #34d399)"
+              fillOpacity="0.4"
+            />
             {/* Online indicator */}
             <m.circle
-              cx="224" cy="178"
+              cx="224"
+              cy="178"
               r="4"
               fill="var(--color-success, #34d399)"
               animate={pulse(0.5)}
@@ -174,9 +251,21 @@ export function GamingHeroIllustration({ size = 300, className = '' }: Props) {
         >
           <m.g animate={float(1.2, 3.3)}>
             <circle cx="90" cy="190" r="32" fill="var(--color-pink, #ec4899)" fillOpacity="0.08" />
-            <circle cx="90" cy="190" r="26" fill="var(--color-pink, #ec4899)" fillOpacity="0.15" stroke="var(--color-pink, #ec4899)" strokeWidth="2" />
+            <circle
+              cx="90"
+              cy="190"
+              r="26"
+              fill="var(--color-pink, #ec4899)"
+              fillOpacity="0.15"
+              stroke="var(--color-pink, #ec4899)"
+              strokeWidth="2"
+            />
             <circle cx="90" cy="183" r="8" fill="var(--color-pink, #ec4899)" fillOpacity="0.6" />
-            <path d="M78 203 C78 195, 90 191, 90 191 C90 191, 102 195, 102 203" fill="var(--color-pink, #ec4899)" fillOpacity="0.4" />
+            <path
+              d="M78 203 C78 195, 90 191, 90 191 C90 191, 102 195, 102 203"
+              fill="var(--color-pink, #ec4899)"
+              fillOpacity="0.4"
+            />
             {/* Star badge */}
             <m.path
               d="M76 178 L78 174 L80 178 L84 179 L80 181 L78 185 L76 181 L72 179 Z"
@@ -198,7 +287,13 @@ export function GamingHeroIllustration({ size = 300, className = '' }: Props) {
         >
           <m.g animate={float(0.2, 4)}>
             {/* Controller body background */}
-            <circle cx="150" cy="148" r="22" fill="var(--color-primary, #6366f1)" fillOpacity="0.12" />
+            <circle
+              cx="150"
+              cy="148"
+              r="22"
+              fill="var(--color-primary, #6366f1)"
+              fillOpacity="0.12"
+            />
             {/* Controller body */}
             <path
               d="M135 144 C135 140, 138 138, 142 138 L158 138 C162 138, 165 140, 165 144 L167 152 C167 156, 164 158, 161 156 L158 154 L142 154 L139 156 C136 158, 133 156, 133 152 Z"
@@ -208,14 +303,52 @@ export function GamingHeroIllustration({ size = 300, className = '' }: Props) {
               strokeWidth="1.5"
             />
             {/* D-pad left */}
-            <rect x="139" y="144" width="7" height="3" rx="1" fill="var(--color-primary, #6366f1)" fillOpacity="0.7" />
-            <rect x="141" y="142" width="3" height="7" rx="1" fill="var(--color-primary, #6366f1)" fillOpacity="0.7" />
+            <rect
+              x="139"
+              y="144"
+              width="7"
+              height="3"
+              rx="1"
+              fill="var(--color-primary, #6366f1)"
+              fillOpacity="0.7"
+            />
+            <rect
+              x="141"
+              y="142"
+              width="3"
+              height="7"
+              rx="1"
+              fill="var(--color-primary, #6366f1)"
+              fillOpacity="0.7"
+            />
             {/* Buttons right */}
-            <circle cx="157" cy="143" r="2" fill="var(--color-success, #34d399)" fillOpacity="0.8" />
+            <circle
+              cx="157"
+              cy="143"
+              r="2"
+              fill="var(--color-success, #34d399)"
+              fillOpacity="0.8"
+            />
             <circle cx="161" cy="146" r="2" fill="var(--color-pink, #ec4899)" fillOpacity="0.8" />
             {/* Analog sticks */}
-            <circle cx="144" cy="150" r="2.5" fill="var(--color-primary, #6366f1)" fillOpacity="0.5" stroke="var(--color-primary, #6366f1)" strokeWidth="0.5" />
-            <circle cx="156" cy="150" r="2.5" fill="var(--color-primary, #6366f1)" fillOpacity="0.5" stroke="var(--color-primary, #6366f1)" strokeWidth="0.5" />
+            <circle
+              cx="144"
+              cy="150"
+              r="2.5"
+              fill="var(--color-primary, #6366f1)"
+              fillOpacity="0.5"
+              stroke="var(--color-primary, #6366f1)"
+              strokeWidth="0.5"
+            />
+            <circle
+              cx="156"
+              cy="150"
+              r="2.5"
+              fill="var(--color-primary, #6366f1)"
+              fillOpacity="0.5"
+              stroke="var(--color-primary, #6366f1)"
+              strokeWidth="0.5"
+            />
           </m.g>
         </m.g>
 
@@ -227,14 +360,57 @@ export function GamingHeroIllustration({ size = 300, className = '' }: Props) {
           transition={{ delay: 0.85, type: 'spring', stiffness: 300, damping: 20 }}
         >
           <m.g animate={float(1.5, 3.8)}>
-            <rect x="134" y="38" width="32" height="26" rx="6" fill="var(--color-primary, #6366f1)" fillOpacity="0.1" stroke="var(--color-primary, #6366f1)" strokeWidth="1" />
-            <line x1="134" y1="48" x2="166" y2="48" stroke="var(--color-primary, #6366f1)" strokeWidth="1" strokeOpacity="0.3" />
+            <rect
+              x="134"
+              y="38"
+              width="32"
+              height="26"
+              rx="6"
+              fill="var(--color-primary, #6366f1)"
+              fillOpacity="0.1"
+              stroke="var(--color-primary, #6366f1)"
+              strokeWidth="1"
+            />
+            <line
+              x1="134"
+              y1="48"
+              x2="166"
+              y2="48"
+              stroke="var(--color-primary, #6366f1)"
+              strokeWidth="1"
+              strokeOpacity="0.3"
+            />
             {/* Clock hands */}
-            <line x1="150" y1="54" x2="150" y2="49" stroke="var(--color-primary, #6366f1)" strokeWidth="1.5" strokeLinecap="round" />
-            <line x1="150" y1="54" x2="155" y2="56" stroke="var(--color-primary, #6366f1)" strokeWidth="1.5" strokeLinecap="round" />
+            <line
+              x1="150"
+              y1="54"
+              x2="150"
+              y2="49"
+              stroke="var(--color-primary, #6366f1)"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+            />
+            <line
+              x1="150"
+              y1="54"
+              x2="155"
+              y2="56"
+              stroke="var(--color-primary, #6366f1)"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+            />
             <circle cx="150" cy="54" r="1" fill="var(--color-primary, #6366f1)" />
             {/* Mini calendar date */}
-            <text x="142" y="45" fill="var(--color-primary, #6366f1)" fontSize="6" fontWeight="bold" fontFamily="system-ui">21H</text>
+            <text
+              x="142"
+              y="45"
+              fill="var(--color-primary, #6366f1)"
+              fontSize="6"
+              fontWeight="bold"
+              fontFamily="system-ui"
+            >
+              21H
+            </text>
           </m.g>
         </m.g>
 
@@ -298,8 +474,27 @@ export function GamingHeroIllustration({ size = 300, className = '' }: Props) {
           viewport={{ once: true }}
           transition={{ delay: 1.2, duration: 0.5, ease: 'easeOut' }}
         >
-          <rect x="118" y="265" width="64" height="22" rx="11" fill="var(--color-primary, #6366f1)" fillOpacity="0.15" stroke="var(--color-primary, #6366f1)" strokeWidth="1" />
-          <text x="150" y="280" textAnchor="middle" fill="var(--color-primary, #6366f1)" fontSize="10" fontWeight="700" fontFamily="system-ui" letterSpacing="2">
+          <rect
+            x="118"
+            y="265"
+            width="64"
+            height="22"
+            rx="11"
+            fill="var(--color-primary, #6366f1)"
+            fillOpacity="0.15"
+            stroke="var(--color-primary, #6366f1)"
+            strokeWidth="1"
+          />
+          <text
+            x="150"
+            y="280"
+            textAnchor="middle"
+            fill="var(--color-primary, #6366f1)"
+            fontSize="10"
+            fontWeight="700"
+            fontFamily="system-ui"
+            letterSpacing="2"
+          >
             SQUAD
           </text>
         </m.g>

@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
@@ -38,7 +38,7 @@ interface MessageReactionsProps {
 export function MessageReactions({
   messageId,
   isOwnMessage = false,
-  onReactionsChange
+  onReactionsChange,
 }: MessageReactionsProps) {
   const { user } = useAuthStore()
   const [reactions, setReactions] = useState<MessageReaction[]>([])
@@ -80,18 +80,18 @@ export function MessageReactions({
           event: '*',
           schema: 'public',
           table: 'message_reactions',
-          filter: `message_id=eq.${messageId}`
+          filter: `message_id=eq.${messageId}`,
         },
         (payload) => {
           if (payload.eventType === 'INSERT') {
-            setReactions(prev => {
+            setReactions((prev) => {
               const newReactions = [...prev, payload.new as MessageReaction]
               onReactionsChange?.(newReactions)
               return newReactions
             })
           } else if (payload.eventType === 'DELETE') {
-            setReactions(prev => {
-              const newReactions = prev.filter(r => r.id !== (payload.old as MessageReaction).id)
+            setReactions((prev) => {
+              const newReactions = prev.filter((r) => r.id !== (payload.old as MessageReaction).id)
               onReactionsChange?.(newReactions)
               return newReactions
             })
@@ -106,60 +106,57 @@ export function MessageReactions({
   }, [messageId, onReactionsChange])
 
   // Group reactions by emoji
-  const groupedReactions: GroupedReaction[] = REACTION_EMOJIS
-    .map(emoji => {
-      const emojiReactions = reactions.filter(r => r.emoji === emoji)
-      return {
-        emoji,
-        count: emojiReactions.length,
-        userIds: emojiReactions.map(r => r.user_id),
-        hasCurrentUser: emojiReactions.some(r => r.user_id === user?.id)
-      }
-    })
-    .filter(g => g.count > 0)
+  const groupedReactions: GroupedReaction[] = REACTION_EMOJIS.map((emoji) => {
+    const emojiReactions = reactions.filter((r) => r.emoji === emoji)
+    return {
+      emoji,
+      count: emojiReactions.length,
+      userIds: emojiReactions.map((r) => r.user_id),
+      hasCurrentUser: emojiReactions.some((r) => r.user_id === user?.id),
+    }
+  }).filter((g) => g.count > 0)
 
   // Toggle reaction (add or remove)
-  const toggleReaction = useCallback(async (emoji: ReactionEmoji) => {
-    if (!user?.id || isLoading) return
+  const toggleReaction = useCallback(
+    async (emoji: ReactionEmoji) => {
+      if (!user?.id || isLoading) return
 
-    setIsLoading(true)
+      setIsLoading(true)
 
-    try {
-      // Check if user already reacted with this emoji
-      const existingReaction = reactions.find(
-        r => r.user_id === user.id && r.emoji === emoji
-      )
+      try {
+        // Check if user already reacted with this emoji
+        const existingReaction = reactions.find((r) => r.user_id === user.id && r.emoji === emoji)
 
-      if (existingReaction) {
-        // Remove reaction
-        const { error } = await supabase
-          .from('message_reactions')
-          .delete()
-          .match({ message_id: messageId, user_id: user.id, emoji })
+        if (existingReaction) {
+          // Remove reaction
+          const { error } = await supabase
+            .from('message_reactions')
+            .delete()
+            .match({ message_id: messageId, user_id: user.id, emoji })
 
-        if (error) {
-          console.error('Error removing reaction:', error)
-        }
-      } else {
-        // Add reaction
-        const { error } = await supabase
-          .from('message_reactions')
-          .insert({
+          if (error) {
+            console.error('Error removing reaction:', error)
+          }
+        } else {
+          // Add reaction
+          const { error } = await supabase.from('message_reactions').insert({
             message_id: messageId,
             user_id: user.id,
-            emoji
+            emoji,
           })
 
-        if (error) {
-          console.error('Error adding reaction:', error)
+          if (error) {
+            console.error('Error adding reaction:', error)
+          }
         }
+      } catch (error) {
+        console.error('Error toggling reaction:', error)
+      } finally {
+        setIsLoading(false)
       }
-    } catch (error) {
-      console.error('Error toggling reaction:', error)
-    } finally {
-      setIsLoading(false)
-    }
-  }, [user?.id, messageId, reactions, isLoading])
+    },
+    [user?.id, messageId, reactions, isLoading]
+  )
 
   // Handle long press for mobile
   const handleTouchStart = useCallback(() => {
@@ -214,7 +211,9 @@ export function MessageReactions({
             aria-label={`R\u00e9action ${emoji}, ${count} ${count === 1 ? 'personne' : 'personnes'}${hasCurrentUser ? ', tu as r\u00e9agi' : ''}`}
           >
             <span className="text-base leading-none">{emoji}</span>
-            <span className={`text-xs font-medium ${hasCurrentUser ? 'text-success' : 'text-text-secondary'}`}>
+            <span
+              className={`text-xs font-medium ${hasCurrentUser ? 'text-success' : 'text-text-secondary'}`}
+            >
               {count}
             </span>
           </m.button>

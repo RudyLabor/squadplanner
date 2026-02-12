@@ -102,8 +102,20 @@ describe('useDirectMessagesStore', () => {
       mockGetSession.mockResolvedValue({ data: { session: { user: mockUser } } })
 
       const mockMessages = [
-        { id: 'dm-1', sender_id: 'user-1', receiver_id: 'user-2', content: 'Hi', created_at: '2026-02-10T10:00:00Z' },
-        { id: 'dm-2', sender_id: 'user-2', receiver_id: 'user-1', content: 'Hey', created_at: '2026-02-10T10:01:00Z' },
+        {
+          id: 'dm-1',
+          sender_id: 'user-1',
+          receiver_id: 'user-2',
+          content: 'Hi',
+          created_at: '2026-02-10T10:00:00Z',
+        },
+        {
+          id: 'dm-2',
+          sender_id: 'user-2',
+          receiver_id: 'user-1',
+          content: 'Hey',
+          created_at: '2026-02-10T10:01:00Z',
+        },
       ]
 
       mockFrom.mockReturnValue({
@@ -262,9 +274,7 @@ describe('useDirectMessagesStore', () => {
 
       act(() => {
         useDirectMessagesStore.setState({
-          conversations: [
-            { other_user_id: 'user-2', unread_count: 5 } as any,
-          ],
+          conversations: [{ other_user_id: 'user-2', unread_count: 5 } as any],
         })
       })
 

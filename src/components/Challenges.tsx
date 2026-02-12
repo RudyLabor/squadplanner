@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 import { useState } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
@@ -35,7 +35,8 @@ export function Challenges({ challenges, onClaimXP }: ChallengesProps) {
   const [activeTab, setActiveTab] = useState<ChallengeType>('all')
   const [claimingId, setClaimingId] = useState<string | null>(null)
 
-  const filteredChallenges = activeTab === 'all' ? challenges : challenges.filter(c => c.type === activeTab)
+  const filteredChallenges =
+    activeTab === 'all' ? challenges : challenges.filter((c) => c.type === activeTab)
 
   const sortedChallenges = [...filteredChallenges].sort((a, b) => {
     const aClaimable = a.userProgress?.completed_at && !a.userProgress?.xp_claimed
@@ -51,17 +52,23 @@ export function Challenges({ challenges, onClaimXP }: ChallengesProps) {
 
   const counts = {
     all: challenges.length,
-    daily: challenges.filter(c => c.type === 'daily').length,
-    weekly: challenges.filter(c => c.type === 'weekly').length,
-    seasonal: challenges.filter(c => c.type === 'seasonal').length,
-    achievement: challenges.filter(c => c.type === 'achievement').length,
+    daily: challenges.filter((c) => c.type === 'daily').length,
+    weekly: challenges.filter((c) => c.type === 'weekly').length,
+    seasonal: challenges.filter((c) => c.type === 'seasonal').length,
+    achievement: challenges.filter((c) => c.type === 'achievement').length,
   }
 
-  const claimableCount = challenges.filter(c => c.userProgress?.completed_at && !c.userProgress?.xp_claimed).length
+  const claimableCount = challenges.filter(
+    (c) => c.userProgress?.completed_at && !c.userProgress?.xp_claimed
+  ).length
 
   const handleClaim = async (challengeId: string) => {
     setClaimingId(challengeId)
-    try { await onClaimXP(challengeId) } finally { setClaimingId(null) }
+    try {
+      await onClaimXP(challengeId)
+    } finally {
+      setClaimingId(null)
+    }
   }
 
   const allTabs: { key: ChallengeType; label: string }[] = [
@@ -72,7 +79,7 @@ export function Challenges({ challenges, onClaimXP }: ChallengesProps) {
     { key: 'achievement', label: 'Succès' },
   ]
 
-  const tabs = allTabs.filter(tab => tab.key === 'all' || counts[tab.key] > 0)
+  const tabs = allTabs.filter((tab) => tab.key === 'all' || counts[tab.key] > 0)
 
   return (
     <div className="space-y-4">
@@ -88,7 +95,11 @@ export function Challenges({ challenges, onClaimXP }: ChallengesProps) {
           </div>
         </div>
         {claimableCount > 0 && (
-          <m.div initial={{ scale: 0 }} animate={{ scale: 1 }} className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-success-15 border border-success">
+          <m.div
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-success-15 border border-success"
+          >
             <Gift className="w-4 h-4 text-success" />
             <span className="text-base font-medium text-success">{claimableCount} à réclamer</span>
           </m.div>
@@ -97,7 +108,7 @@ export function Challenges({ challenges, onClaimXP }: ChallengesProps) {
 
       {/* Tabs */}
       <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
-        {tabs.map(tab => (
+        {tabs.map((tab) => (
           <button
             key={tab.key}
             onClick={() => setActiveTab(tab.key)}
@@ -109,9 +120,15 @@ export function Challenges({ challenges, onClaimXP }: ChallengesProps) {
           >
             {tab.label}
             {counts[tab.key] > 0 && (
-              <span className={`px-1.5 py-0.5 rounded-full text-sm ${
-                activeTab === tab.key ? 'bg-overlay-medium text-text-primary' : 'bg-border-subtle text-text-tertiary'
-              }`}>{counts[tab.key]}</span>
+              <span
+                className={`px-1.5 py-0.5 rounded-full text-sm ${
+                  activeTab === tab.key
+                    ? 'bg-overlay-medium text-text-primary'
+                    : 'bg-border-subtle text-text-tertiary'
+                }`}
+              >
+                {counts[tab.key]}
+              </span>
             )}
           </button>
         ))}
@@ -129,7 +146,13 @@ export function Challenges({ challenges, onClaimXP }: ChallengesProps) {
             </m.div>
           ) : (
             sortedChallenges.map((challenge, index) => (
-              <ChallengeCard key={challenge.id} challenge={challenge} index={index} onClaim={handleClaim} isClaiming={claimingId === challenge.id} />
+              <ChallengeCard
+                key={challenge.id}
+                challenge={challenge}
+                index={index}
+                onClaim={handleClaim}
+                isClaiming={claimingId === challenge.id}
+              />
             ))
           )}
         </AnimatePresence>

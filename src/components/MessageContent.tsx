@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 import { memo, useMemo } from 'react'
 import { isLocationMessage, parseLocationMessage, LocationMessage } from './LocationShare'
@@ -102,9 +102,7 @@ export const MessageContent = memo(function MessageContent({
   if (isLocationMessage(content)) {
     const coords = parseLocationMessage(content)
     if (coords) {
-      return (
-        <LocationMessage lat={coords.lat} lng={coords.lng} isOwn={isOwn} />
-      )
+      return <LocationMessage lat={coords.lat} lng={coords.lng} isOwn={isOwn} />
     }
   }
 
@@ -114,11 +112,11 @@ export const MessageContent = memo(function MessageContent({
     if (pollData) {
       return (
         <ChatPoll
-            pollData={pollData}
-            messageId={messageId || ''}
-            onVote={onPollVote}
-            isOwn={isOwn}
-          />
+          pollData={pollData}
+          messageId={messageId || ''}
+          onVote={onPollVote}
+          isOwn={isOwn}
+        />
       )
     }
   }
@@ -130,7 +128,9 @@ export const MessageContent = memo(function MessageContent({
     const body = lines.slice(1).join('\n')
     return (
       <div className="text-md leading-relaxed whitespace-pre-wrap break-words">
-        <div className={`text-sm italic mb-1 flex items-center gap-1 ${isOwn ? 'text-white/60' : 'text-text-quaternary'}`}>
+        <div
+          className={`text-sm italic mb-1 flex items-center gap-1 ${isOwn ? 'text-white/60' : 'text-text-quaternary'}`}
+        >
           ↩️ {header.replace('↩️ ', '').replace(/\*/g, '')}
         </div>
         <div className={`pl-3 border-l-2 ${isOwn ? 'border-overlay-heavy' : 'border-primary'}`}>
@@ -154,22 +154,32 @@ export const MessageContent = memo(function MessageContent({
             return <span key={i}>{token.value}</span>
 
           case 'bold':
-            return <strong key={i} className="font-semibold">{token.value}</strong>
+            return (
+              <strong key={i} className="font-semibold">
+                {token.value}
+              </strong>
+            )
 
           case 'italic':
-            return <em key={i} className="italic">{token.value}</em>
+            return (
+              <em key={i} className="italic">
+                {token.value}
+              </em>
+            )
 
           case 'strike':
-            return <s key={i} className="line-through opacity-60">{token.value}</s>
+            return (
+              <s key={i} className="line-through opacity-60">
+                {token.value}
+              </s>
+            )
 
           case 'code':
             return (
               <code
                 key={i}
                 className={`px-1.5 py-0.5 rounded text-base font-mono ${
-                  isOwn
-                    ? 'bg-overlay-heavy text-white'
-                    : 'bg-primary-10 text-primary-hover'
+                  isOwn ? 'bg-overlay-heavy text-white' : 'bg-primary-10 text-primary-hover'
                 }`}
               >
                 {token.value}

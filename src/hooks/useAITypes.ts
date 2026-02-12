@@ -6,7 +6,7 @@ export async function withBackoff<T>(fn: () => Promise<T>, maxRetries = 3): Prom
     } catch (err) {
       lastError = err
       if (attempt < maxRetries - 1) {
-        await new Promise(r => setTimeout(r, 1000 * Math.pow(2, attempt)))
+        await new Promise((r) => setTimeout(r, 1000 * Math.pow(2, attempt)))
       }
     }
   }
@@ -114,7 +114,10 @@ export interface AIState {
   fetchInsights: (squadId: string) => Promise<void>
   dismissInsight: (insightId: string) => Promise<void>
   getSlotReliability: (squadId: string, dayOfWeek: number, hour: number) => Promise<number>
-  triggerRsvpReminder: (squadId?: string, sessionId?: string) => Promise<{ success: boolean; remindersSent: number }>
+  triggerRsvpReminder: (
+    squadId?: string,
+    sessionId?: string
+  ) => Promise<{ success: boolean; remindersSent: number }>
   clearError: () => void
 }
 

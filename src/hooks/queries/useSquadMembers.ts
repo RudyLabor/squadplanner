@@ -40,7 +40,7 @@ async function fetchUserSquadIds(userId: string): Promise<string[]> {
     .eq('user_id', userId)
 
   if (error) throw error
-  return data?.map(m => m.squad_id) || []
+  return data?.map((m) => m.squad_id) || []
 }
 
 // Fetch member count for multiple squads
@@ -55,7 +55,7 @@ async function fetchMemberCounts(squadIds: string[]): Promise<Record<string, num
   if (error) throw error
 
   const counts: Record<string, number> = {}
-  data?.forEach(m => {
+  data?.forEach((m) => {
     counts[m.squad_id] = (counts[m.squad_id] || 0) + 1
   })
   return counts
@@ -68,7 +68,7 @@ async function fetchMemberCounts(squadIds: string[]): Promise<Record<string, num
 export function useSquadMembersQuery(squadId: string | undefined) {
   return useQuery({
     queryKey: ['squad_members', squadId] as const,
-    queryFn: () => squadId ? fetchSquadMembers(squadId) : [],
+    queryFn: () => (squadId ? fetchSquadMembers(squadId) : []),
     enabled: !!squadId,
     staleTime: 30_000,
   })
@@ -81,7 +81,7 @@ export function useSquadMembersQuery(squadId: string | undefined) {
 export function useUserSquadIdsQuery(userId: string | undefined) {
   return useQuery({
     queryKey: ['squad_members', 'user', userId] as const,
-    queryFn: () => userId ? fetchUserSquadIds(userId) : [],
+    queryFn: () => (userId ? fetchUserSquadIds(userId) : []),
     enabled: !!userId,
     staleTime: 30_000,
   })

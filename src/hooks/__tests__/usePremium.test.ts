@@ -13,11 +13,7 @@ vi.mock('../../lib/supabase', () => ({
   },
 }))
 
-import {
-  usePremiumStore,
-  FREE_SQUAD_LIMIT,
-  FREE_HISTORY_DAYS,
-} from '../usePremium'
+import { usePremiumStore, FREE_SQUAD_LIMIT, FREE_HISTORY_DAYS } from '../usePremium'
 
 describe('usePremiumStore', () => {
   beforeEach(() => {

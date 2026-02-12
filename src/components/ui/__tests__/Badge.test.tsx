@@ -53,7 +53,11 @@ describe('Badge', () => {
   })
 
   it('renders dot indicator', () => {
-    const { container } = render(<Badge variant="success" dot>Active</Badge>)
+    const { container } = render(
+      <Badge variant="success" dot>
+        Active
+      </Badge>
+    )
     const dot = container.querySelector('[aria-hidden="true"]')
     expect(dot).toBeInTheDocument()
   })
@@ -66,7 +70,11 @@ describe('Badge', () => {
   it('calls onClose when close button is clicked', async () => {
     const user = userEvent.setup()
     const onClose = vi.fn()
-    render(<Badge closable onClose={onClose}>Tag</Badge>)
+    render(
+      <Badge closable onClose={onClose}>
+        Tag
+      </Badge>
+    )
     await user.click(screen.getByLabelText('Remove'))
     expect(onClose).toHaveBeenCalled()
   })

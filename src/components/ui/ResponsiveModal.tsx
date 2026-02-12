@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 import { type ReactNode, useState, useEffect } from 'react'
 import { Dialog } from './Dialog'
@@ -32,7 +32,14 @@ export function ResponsiveModal({
 
   if (isMobile) {
     return (
-      <Sheet open={open} onClose={onClose} title={title} description={description} side="bottom" snapPoints={[70, 95]}>
+      <Sheet
+        open={open}
+        onClose={onClose}
+        title={title}
+        description={description}
+        side="bottom"
+        snapPoints={[70, 95]}
+      >
         {children}
       </Sheet>
     )

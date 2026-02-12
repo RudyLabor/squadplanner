@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 import { useEffect, useState } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
@@ -17,7 +17,7 @@ export function LevelUpCelebration({
   newLevel,
   onComplete,
   autoDismiss = true,
-  dismissDelay = 3000
+  dismissDelay = 3000,
 }: LevelUpCelebrationProps) {
   const [isVisible, setIsVisible] = useState(true)
   const { currentLevel } = getLevelInfo(newLevel)
@@ -66,11 +66,11 @@ export function LevelUpCelebration({
           <m.div
             className="absolute inset-0"
             style={{
-              background: `radial-gradient(circle at center, ${currentLevel.color}30 0%, transparent 70%)`
+              background: `radial-gradient(circle at center, ${currentLevel.color}30 0%, transparent 70%)`,
             }}
             animate={{
               scale: [1, 1.2, 1],
-              opacity: [0.5, 0.8, 0.5]
+              opacity: [0.5, 0.8, 0.5],
             }}
             transition={{ duration: 2, repeat: Infinity }}
           />
@@ -84,7 +84,7 @@ export function LevelUpCelebration({
             transition={{
               type: 'spring',
               stiffness: 200,
-              damping: 15
+              damping: 15,
             }}
           >
             {/* Floating stars background */}
@@ -93,24 +93,21 @@ export function LevelUpCelebration({
                 key={i}
                 className="absolute"
                 style={{
-                  top: `${-30 + (i * 10)}%`,
-                  left: `${10 + (i * 15)}%`,
+                  top: `${-30 + i * 10}%`,
+                  left: `${10 + i * 15}%`,
                 }}
                 animate={{
                   y: [0, -20, 0],
                   rotate: [0, 180, 360],
-                  opacity: [0.3, 0.8, 0.3]
+                  opacity: [0.3, 0.8, 0.3],
                 }}
                 transition={{
                   duration: 2 + i * 0.3,
                   repeat: Infinity,
-                  delay: i * 0.2
+                  delay: i * 0.2,
                 }}
               >
-                <Star
-                  className="w-6 h-6 fill-current"
-                  style={{ color: currentLevel.color }}
-                />
+                <Star className="w-6 h-6 fill-current" style={{ color: currentLevel.color }} />
               </m.div>
             ))}
 
@@ -138,21 +135,21 @@ export function LevelUpCelebration({
                 type: 'spring',
                 stiffness: 300,
                 damping: 20,
-                delay: 0.3
+                delay: 0.3,
               }}
             >
               {/* Glow ring */}
               <m.div
                 className="absolute inset-0 rounded-full"
                 style={{
-                  boxShadow: `0 0 60px ${currentLevel.color}80, 0 0 100px ${currentLevel.color}50`
+                  boxShadow: `0 0 60px ${currentLevel.color}80, 0 0 100px ${currentLevel.color}50`,
                 }}
                 animate={{
                   boxShadow: [
                     `0 0 60px ${currentLevel.color}80, 0 0 100px ${currentLevel.color}50`,
                     `0 0 80px ${currentLevel.color}90, 0 0 120px ${currentLevel.color}60`,
-                    `0 0 60px ${currentLevel.color}80, 0 0 100px ${currentLevel.color}50`
-                  ]
+                    `0 0 60px ${currentLevel.color}80, 0 0 100px ${currentLevel.color}50`,
+                  ],
                 }}
                 transition={{ duration: 1.5, repeat: Infinity }}
               />
@@ -162,7 +159,7 @@ export function LevelUpCelebration({
                 className="w-32 h-32 rounded-full flex items-center justify-center"
                 style={{
                   background: `linear-gradient(135deg, ${currentLevel.color}40, ${currentLevel.color}20)`,
-                  border: `3px solid ${currentLevel.color}`
+                  border: `3px solid ${currentLevel.color}`,
                 }}
               >
                 <m.span
@@ -172,8 +169,8 @@ export function LevelUpCelebration({
                     textShadow: [
                       `0 0 20px ${currentLevel.color}`,
                       `0 0 40px ${currentLevel.color}`,
-                      `0 0 20px ${currentLevel.color}`
-                    ]
+                      `0 0 20px ${currentLevel.color}`,
+                    ],
                   }}
                   transition={{ duration: 1, repeat: Infinity }}
                 >
@@ -187,7 +184,7 @@ export function LevelUpCelebration({
                   className="absolute -top-4 -right-4 w-10 h-10 rounded-full flex items-center justify-center"
                   style={{
                     backgroundColor: currentLevel.color,
-                    boxShadow: `0 0 20px ${currentLevel.color}`
+                    boxShadow: `0 0 20px ${currentLevel.color}`,
                   }}
                   animate={{ rotate: [0, 15, -15, 0] }}
                   transition={{ duration: 0.5, repeat: Infinity, repeatDelay: 1 }}
@@ -204,24 +201,22 @@ export function LevelUpCelebration({
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.6 }}
             >
-              <m.div
-                className="text-sm text-text-secondary uppercase tracking-wide mb-2"
-              >
+              <m.div className="text-sm text-text-secondary uppercase tracking-wide mb-2">
                 Nouveau rang atteint
               </m.div>
               <m.h2
                 className="text-3xl font-extrabold mb-2"
                 style={{
                   color: currentLevel.color,
-                  textShadow: `0 0 30px ${currentLevel.color}60`
+                  textShadow: `0 0 30px ${currentLevel.color}60`,
                 }}
                 animate={{
                   scale: [1, 1.05, 1],
                   textShadow: [
                     `0 0 30px ${currentLevel.color}60`,
                     `0 0 50px ${currentLevel.color}80`,
-                    `0 0 30px ${currentLevel.color}60`
-                  ]
+                    `0 0 30px ${currentLevel.color}60`,
+                  ],
                 }}
                 transition={{ duration: 1.5, repeat: Infinity }}
               >
@@ -236,13 +231,12 @@ export function LevelUpCelebration({
                 transition={{ delay: 0.8 }}
               >
                 {newLevel >= 10
-                  ? "Tu as atteint le sommet absolu !"
+                  ? 'Tu as atteint le sommet absolu !'
                   : newLevel >= 7
-                    ? "Ta légende ne fait que grandir !"
+                    ? 'Ta légende ne fait que grandir !'
                     : newLevel >= 4
-                      ? "Tu deviens une force redoutable !"
-                      : "Continue à gravir les échelons !"
-                }
+                      ? 'Tu deviens une force redoutable !'
+                      : 'Continue à gravir les échelons !'}
               </m.p>
             </m.div>
 

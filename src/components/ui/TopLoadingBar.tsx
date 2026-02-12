@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 import { useEffect, useRef, useState } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
@@ -91,9 +91,10 @@ export function TopLoadingBar() {
               height: '100%',
               width: `${progress}%`,
               background: 'var(--color-primary)',
-              transition: progress === 100
-                ? 'width 200ms ease-out'
-                : 'width 400ms cubic-bezier(0.16, 1, 0.3, 1)',
+              transition:
+                progress === 100
+                  ? 'width 200ms ease-out'
+                  : 'width 400ms cubic-bezier(0.16, 1, 0.3, 1)',
               boxShadow: '0 0 8px var(--color-primary)',
             }}
           />

@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 import { useState, useRef, useEffect, useCallback, memo } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
@@ -42,94 +42,103 @@ export const MentionInput = memo(function MentionInput({
   const ref = externalRef || internalRef
 
   // Filter members by query
-  const filteredMembers = members.filter(m =>
-    m.username.toLowerCase().includes(mentionQuery.toLowerCase())
-  ).slice(0, 6)
+  const filteredMembers = members
+    .filter((m) => m.username.toLowerCase().includes(mentionQuery.toLowerCase()))
+    .slice(0, 6)
 
   // Detect @ trigger while typing
-  const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    const newValue = e.target.value
-    const cursorPos = e.target.selectionStart || 0
+  const handleChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const newValue = e.target.value
+      const cursorPos = e.target.selectionStart || 0
 
-    onChange(newValue)
+      onChange(newValue)
 
-    // Find the last @ before cursor
-    const textBeforeCursor = newValue.slice(0, cursorPos)
-    const lastAtIndex = textBeforeCursor.lastIndexOf('@')
+      // Find the last @ before cursor
+      const textBeforeCursor = newValue.slice(0, cursorPos)
+      const lastAtIndex = textBeforeCursor.lastIndexOf('@')
 
-    if (lastAtIndex >= 0) {
-      // Check if @ is at start or preceded by space
-      const charBefore = lastAtIndex > 0 ? newValue[lastAtIndex - 1] : ' '
-      if (charBefore === ' ' || charBefore === '\n' || lastAtIndex === 0) {
-        const query = textBeforeCursor.slice(lastAtIndex + 1)
-        // Only show suggestions if no space in query (single word)
-        if (!query.includes(' ')) {
-          setMentionQuery(query)
-          setMentionStart(lastAtIndex)
-          setShowSuggestions(true)
-          setSelectedIndex(0)
-          return
+      if (lastAtIndex >= 0) {
+        // Check if @ is at start or preceded by space
+        const charBefore = lastAtIndex > 0 ? newValue[lastAtIndex - 1] : ' '
+        if (charBefore === ' ' || charBefore === '\n' || lastAtIndex === 0) {
+          const query = textBeforeCursor.slice(lastAtIndex + 1)
+          // Only show suggestions if no space in query (single word)
+          if (!query.includes(' ')) {
+            setMentionQuery(query)
+            setMentionStart(lastAtIndex)
+            setShowSuggestions(true)
+            setSelectedIndex(0)
+            return
+          }
         }
       }
-    }
 
-    setShowSuggestions(false)
-  }, [onChange])
+      setShowSuggestions(false)
+    },
+    [onChange]
+  )
 
   // Insert selected mention
-  const insertMention = useCallback((member: MentionUser) => {
-    if (mentionStart < 0) return
+  const insertMention = useCallback(
+    (member: MentionUser) => {
+      if (mentionStart < 0) return
 
-    const before = value.slice(0, mentionStart)
-    const after = value.slice(mentionStart + 1 + mentionQuery.length)
-    const newValue = `${before}@${member.username} ${after}`
+      const before = value.slice(0, mentionStart)
+      const after = value.slice(mentionStart + 1 + mentionQuery.length)
+      const newValue = `${before}@${member.username} ${after}`
 
-    onChange(newValue)
-    setShowSuggestions(false)
-    setMentionQuery('')
-    setMentionStart(-1)
+      onChange(newValue)
+      setShowSuggestions(false)
+      setMentionQuery('')
+      setMentionStart(-1)
 
-    // Focus input and set cursor after mention
-    setTimeout(() => {
-      const input = ref.current
-      if (input) {
-        input.focus()
-        const pos = before.length + member.username.length + 2 // @username + space
-        input.setSelectionRange(pos, pos)
-      }
-    }, 0)
-  }, [value, mentionStart, mentionQuery, onChange, ref])
+      // Focus input and set cursor after mention
+      setTimeout(() => {
+        const input = ref.current
+        if (input) {
+          input.focus()
+          const pos = before.length + member.username.length + 2 // @username + space
+          input.setSelectionRange(pos, pos)
+        }
+      }, 0)
+    },
+    [value, mentionStart, mentionQuery, onChange, ref]
+  )
 
   // Keyboard navigation
-  const handleKeyDown = useCallback((e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (showSuggestions && filteredMembers.length > 0) {
-      switch (e.key) {
-        case 'ArrowDown':
-          e.preventDefault()
-          setSelectedIndex(i => (i + 1) % filteredMembers.length)
-          return
-        case 'ArrowUp':
-          e.preventDefault()
-          setSelectedIndex(i => (i - 1 + filteredMembers.length) % filteredMembers.length)
-          return
-        case 'Tab':
-        case 'Enter':
-          e.preventDefault()
-          insertMention(filteredMembers[selectedIndex])
-          return
-        case 'Escape':
-          e.preventDefault()
-          setShowSuggestions(false)
-          return
+  const handleKeyDown = useCallback(
+    (e: React.KeyboardEvent<HTMLInputElement>) => {
+      if (showSuggestions && filteredMembers.length > 0) {
+        switch (e.key) {
+          case 'ArrowDown':
+            e.preventDefault()
+            setSelectedIndex((i) => (i + 1) % filteredMembers.length)
+            return
+          case 'ArrowUp':
+            e.preventDefault()
+            setSelectedIndex((i) => (i - 1 + filteredMembers.length) % filteredMembers.length)
+            return
+          case 'Tab':
+          case 'Enter':
+            e.preventDefault()
+            insertMention(filteredMembers[selectedIndex])
+            return
+          case 'Escape':
+            e.preventDefault()
+            setShowSuggestions(false)
+            return
+        }
       }
-    }
 
-    // Send on Enter (no Shift)
-    if (e.key === 'Enter' && !e.shiftKey && !showSuggestions) {
-      e.preventDefault()
-      onSubmit()
-    }
-  }, [showSuggestions, filteredMembers, selectedIndex, insertMention, onSubmit])
+      // Send on Enter (no Shift)
+      if (e.key === 'Enter' && !e.shiftKey && !showSuggestions) {
+        e.preventDefault()
+        onSubmit()
+      }
+    },
+    [showSuggestions, filteredMembers, selectedIndex, insertMention, onSubmit]
+  )
 
   // Close suggestions on click outside
   useEffect(() => {
@@ -180,18 +189,14 @@ export const MentionInput = memo(function MentionInput({
             transition={{ type: 'spring', stiffness: 500, damping: 30 }}
             className="absolute bottom-full mb-2 left-0 right-0 max-h-[240px] overflow-y-auto bg-surface-dark border border-border-hover rounded-xl shadow-2xl shadow-black/50 py-1.5 z-50"
           >
-            <p className="px-3 py-1 text-sm text-text-tertiary uppercase tracking-wider">
-              Membres
-            </p>
+            <p className="px-3 py-1 text-sm text-text-tertiary uppercase tracking-wider">Membres</p>
             {filteredMembers.map((member, i) => (
               <button
                 key={member.id}
                 data-suggestion
                 onClick={() => insertMention(member)}
                 className={`w-full flex items-center gap-3 px-3 py-2 text-left transition-colors ${
-                  i === selectedIndex
-                    ? 'bg-primary-15'
-                    : 'hover:bg-border-default'
+                  i === selectedIndex ? 'bg-primary-15' : 'hover:bg-border-default'
                 }`}
               >
                 {member.avatar_url ? (
@@ -207,13 +212,9 @@ export const MentionInput = memo(function MentionInput({
                     {member.username.charAt(0).toUpperCase()}
                   </div>
                 )}
-                <span className="text-base text-text-primary truncate">
-                  {member.username}
-                </span>
+                <span className="text-base text-text-primary truncate">{member.username}</span>
                 {i === selectedIndex && (
-                  <span className="ml-auto text-sm text-text-tertiary font-mono">
-                    Tab
-                  </span>
+                  <span className="ml-auto text-sm text-text-tertiary font-mono">Tab</span>
                 )}
               </button>
             ))}

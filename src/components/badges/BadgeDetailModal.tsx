@@ -32,8 +32,17 @@ export function BadgeDetailModal({ badge, onClose }: BadgeDetailModalProps) {
                 <div className="bg-bg-elevated border border-border-hover rounded-2xl p-6 text-center">
                   <m.div
                     className="w-24 h-24 mx-auto rounded-2xl flex items-center justify-center mb-4"
-                    style={{ backgroundColor: config.bgColor, boxShadow: `0 0 40px ${config.glowColor}` }}
-                    animate={{ boxShadow: [`0 0 40px ${config.glowColor}`, `0 0 60px ${config.glowColor}`, `0 0 40px ${config.glowColor}`] }}
+                    style={{
+                      backgroundColor: config.bgColor,
+                      boxShadow: `0 0 40px ${config.glowColor}`,
+                    }}
+                    animate={{
+                      boxShadow: [
+                        `0 0 40px ${config.glowColor}`,
+                        `0 0 60px ${config.glowColor}`,
+                        `0 0 40px ${config.glowColor}`,
+                      ],
+                    }}
                     transition={{ duration: 2, repeat: Infinity }}
                   >
                     <Icon className="w-12 h-12" style={{ color: config.color }} />
@@ -45,7 +54,9 @@ export function BadgeDetailModal({ badge, onClose }: BadgeDetailModalProps) {
                   <div className="space-y-2 text-sm">
                     <div className="flex justify-between items-center py-2 border-t border-border-subtle">
                       <span className="text-text-tertiary">Saison</span>
-                      <span className="text-text-primary font-medium">{formatSeason(badge.season)}</span>
+                      <span className="text-text-primary font-medium">
+                        {formatSeason(badge.season)}
+                      </span>
                     </div>
                     {badge.squad_name && (
                       <div className="flex justify-between items-center py-2 border-t border-border-subtle">
@@ -56,7 +67,11 @@ export function BadgeDetailModal({ badge, onClose }: BadgeDetailModalProps) {
                     <div className="flex justify-between items-center py-2 border-t border-border-subtle">
                       <span className="text-text-tertiary">Obtenu le</span>
                       <span className="text-text-primary font-medium">
-                        {new Date(badge.awarded_at).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}
+                        {new Date(badge.awarded_at).toLocaleDateString('fr-FR', {
+                          day: 'numeric',
+                          month: 'long',
+                          year: 'numeric',
+                        })}
                       </span>
                     </div>
                   </div>

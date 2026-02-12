@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 import { useEffect, useRef } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
@@ -60,7 +60,7 @@ export function VoiceChat({ sessionId, sessionTitle }: VoiceChatProps) {
 
   const allUsers = [
     ...(localUser ? [{ ...localUser, isLocal: true }] : []),
-    ...remoteUsers.map(u => ({ ...u, isLocal: false })),
+    ...remoteUsers.map((u) => ({ ...u, isLocal: false })),
   ]
 
   return (
@@ -68,7 +68,9 @@ export function VoiceChat({ sessionId, sessionTitle }: VoiceChatProps) {
       {/* Header */}
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
-          <div className={`w-2 h-2 rounded-full ${isConnected ? 'bg-success animate-pulse' : 'bg-overlay-heavy'}`} />
+          <div
+            className={`w-2 h-2 rounded-full ${isConnected ? 'bg-success animate-pulse' : 'bg-overlay-heavy'}`}
+          />
           <span className="text-sm font-medium">
             {isConnected ? 'Vocal connecté' : 'Chat Vocal'}
           </span>
@@ -90,10 +92,7 @@ export function VoiceChat({ sessionId, sessionTitle }: VoiceChatProps) {
             className="mb-4 p-3 bg-danger/10 border border-danger/20 rounded-lg"
           >
             <p className="text-sm text-danger">{error}</p>
-            <button
-              onClick={clearError}
-              className="text-xs text-danger/70 hover:text-danger mt-1"
-            >
+            <button onClick={clearError} className="text-xs text-danger/70 hover:text-danger mt-1">
               Fermer
             </button>
           </m.div>
@@ -106,11 +105,7 @@ export function VoiceChat({ sessionId, sessionTitle }: VoiceChatProps) {
           <p className="text-secondary text-sm mb-4">
             Rejoins le vocal pour parler avec ta squad pendant la session
           </p>
-          <Button
-            onClick={handleJoin}
-            disabled={isConnecting}
-            className="w-full"
-          >
+          <Button onClick={handleJoin} disabled={isConnecting} className="w-full">
             {isConnecting ? (
               <span className="flex items-center gap-2">
                 <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24">
@@ -134,7 +129,12 @@ export function VoiceChat({ sessionId, sessionTitle }: VoiceChatProps) {
             ) : (
               <span className="flex items-center gap-2">
                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"
+                  />
                 </svg>
                 Rejoindre le vocal
               </span>
@@ -159,15 +159,27 @@ export function VoiceChat({ sessionId, sessionTitle }: VoiceChatProps) {
               >
                 {/* Avatar with speaking indicator */}
                 <div className="relative">
-                  <div className={`w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-sm font-medium ${
-                    participant.isSpeaking ? 'ring-2 ring-primary ring-offset-2 ring-offset-elevated' : ''
-                  }`}>
+                  <div
+                    className={`w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-sm font-medium ${
+                      participant.isSpeaking
+                        ? 'ring-2 ring-primary ring-offset-2 ring-offset-elevated'
+                        : ''
+                    }`}
+                  >
                     {participant.username.charAt(0).toUpperCase()}
                   </div>
                   {participant.isMuted && (
                     <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-danger rounded-full flex items-center justify-center">
-                      <svg className="w-2.5 h-2.5 text-white" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M5.05 3.636a1 1 0 010 1.414L7.172 7.172H4a1 1 0 000 2h3.172l-2.122 2.122a1 1 0 101.414 1.414l2.122-2.122V14a1 1 0 102 0v-3.172l2.122 2.122a1 1 0 001.414-1.414L11.828 9.414l2.122-2.122a1 1 0 00-1.414-1.414L10.414 8V4a1 1 0 10-2 0v4.172L6.464 5.05a1 1 0 00-1.414-1.414z" clipRule="evenodd" />
+                      <svg
+                        className="w-2.5 h-2.5 text-white"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M5.05 3.636a1 1 0 010 1.414L7.172 7.172H4a1 1 0 000 2h3.172l-2.122 2.122a1 1 0 101.414 1.414l2.122-2.122V14a1 1 0 102 0v-3.172l2.122 2.122a1 1 0 001.414-1.414L11.828 9.414l2.122-2.122a1 1 0 00-1.414-1.414L10.414 8V4a1 1 0 10-2 0v4.172L6.464 5.05a1 1 0 00-1.414-1.414z"
+                          clipRule="evenodd"
+                        />
                       </svg>
                     </div>
                   )}
@@ -216,14 +228,22 @@ export function VoiceChat({ sessionId, sessionTitle }: VoiceChatProps) {
               {isMuted ? (
                 <span className="flex items-center gap-2">
                   <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M9.383 3.076A1 1 0 0110 4v12a1 1 0 01-1.707.707L4.586 13H2a1 1 0 01-1-1V8a1 1 0 011-1h2.586l3.707-3.707a1 1 0 011.09-.217zM12.293 7.293a1 1 0 011.414 0L15 8.586l1.293-1.293a1 1 0 111.414 1.414L16.414 10l1.293 1.293a1 1 0 01-1.414 1.414L15 11.414l-1.293 1.293a1 1 0 01-1.414-1.414L13.586 10l-1.293-1.293a1 1 0 010-1.414z" clipRule="evenodd" />
+                    <path
+                      fillRule="evenodd"
+                      d="M9.383 3.076A1 1 0 0110 4v12a1 1 0 01-1.707.707L4.586 13H2a1 1 0 01-1-1V8a1 1 0 011-1h2.586l3.707-3.707a1 1 0 011.09-.217zM12.293 7.293a1 1 0 011.414 0L15 8.586l1.293-1.293a1 1 0 111.414 1.414L16.414 10l1.293 1.293a1 1 0 01-1.414 1.414L15 11.414l-1.293 1.293a1 1 0 01-1.414-1.414L13.586 10l-1.293-1.293a1 1 0 010-1.414z"
+                      clipRule="evenodd"
+                    />
                   </svg>
                   Muet
                 </span>
               ) : (
                 <span className="flex items-center gap-2">
                   <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M9.383 3.076A1 1 0 0110 4v12a1 1 0 01-1.707.707L4.586 13H2a1 1 0 01-1-1V8a1 1 0 011-1h2.586l3.707-3.707a1 1 0 011.09-.217zM14.657 2.929a1 1 0 011.414 0A9.972 9.972 0 0119 10a9.972 9.972 0 01-2.929 7.071 1 1 0 01-1.414-1.414A7.971 7.971 0 0017 10c0-2.21-.894-4.208-2.343-5.657a1 1 0 010-1.414zm-2.829 2.828a1 1 0 011.415 0A5.983 5.983 0 0115 10a5.984 5.984 0 01-1.757 4.243 1 1 0 01-1.415-1.415A3.984 3.984 0 0013 10a3.983 3.983 0 00-1.172-2.828 1 1 0 010-1.415z" clipRule="evenodd" />
+                    <path
+                      fillRule="evenodd"
+                      d="M9.383 3.076A1 1 0 0110 4v12a1 1 0 01-1.707.707L4.586 13H2a1 1 0 01-1-1V8a1 1 0 011-1h2.586l3.707-3.707a1 1 0 011.09-.217zM14.657 2.929a1 1 0 011.414 0A9.972 9.972 0 0119 10a9.972 9.972 0 01-2.929 7.071 1 1 0 01-1.414-1.414A7.971 7.971 0 0017 10c0-2.21-.894-4.208-2.343-5.657a1 1 0 010-1.414zm-2.829 2.828a1 1 0 011.415 0A5.983 5.983 0 0115 10a5.984 5.984 0 01-1.757 4.243 1 1 0 01-1.415-1.415A3.984 3.984 0 0013 10a3.983 3.983 0 00-1.172-2.828 1 1 0 010-1.415z"
+                      clipRule="evenodd"
+                    />
                   </svg>
                   Micro
                 </span>
@@ -237,7 +257,12 @@ export function VoiceChat({ sessionId, sessionTitle }: VoiceChatProps) {
               className="text-danger hover:bg-danger/10"
             >
               <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+                />
               </svg>
             </Button>
           </div>
@@ -247,9 +272,7 @@ export function VoiceChat({ sessionId, sessionTitle }: VoiceChatProps) {
       {/* Session info */}
       {sessionTitle && (
         <div className="mt-4 pt-4 border-t border-border-subtle">
-          <p className="text-xs text-secondary text-center">
-            Session: {sessionTitle}
-          </p>
+          <p className="text-xs text-secondary text-center">Session: {sessionTitle}</p>
         </div>
       )}
     </div>

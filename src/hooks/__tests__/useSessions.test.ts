@@ -45,7 +45,12 @@ describe('useSessionsStore', () => {
       mockGetSession.mockResolvedValue({ data: { session: { user: mockUser } } })
 
       const mockSessions = [
-        { id: 'session-1', squad_id: 'squad-1', title: 'Game Night', scheduled_at: '2026-02-15T20:00:00Z' },
+        {
+          id: 'session-1',
+          squad_id: 'squad-1',
+          title: 'Game Night',
+          scheduled_at: '2026-02-15T20:00:00Z',
+        },
       ]
 
       mockFrom.mockImplementation((table: string) => {

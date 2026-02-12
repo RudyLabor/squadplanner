@@ -44,7 +44,11 @@ export function TourOverlay({ targetRect, onSkip }: TourOverlayProps) {
         <m.div
           className="absolute border-2 border-primary rounded-xl pointer-events-none"
           animate={{
-            boxShadow: ['0 0 0 0 var(--color-primary-20)', '0 0 0 8px transparent', '0 0 0 0 var(--color-primary-20)'],
+            boxShadow: [
+              '0 0 0 0 var(--color-primary-20)',
+              '0 0 0 8px transparent',
+              '0 0 0 0 var(--color-primary-20)',
+            ],
           }}
           transition={{ duration: 2, repeat: Infinity }}
           style={{

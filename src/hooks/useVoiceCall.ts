@@ -3,7 +3,11 @@ import { supabase } from '../lib/supabase'
 import { useNetworkQualityStore } from './useNetworkQuality'
 import type { CallUser, VoiceCallState } from './useCallState'
 import { LIVEKIT_URL, RING_TIMEOUT } from './useCallState'
-import { initializeLiveKitRoom, subscribeToIncomingCalls as _subscribeToIncomingCalls, sendCallPushNotification } from './useCallActions'
+import {
+  initializeLiveKitRoom,
+  subscribeToIncomingCalls as _subscribeToIncomingCalls,
+  sendCallPushNotification,
+} from './useCallActions'
 
 export type { CallStatus, CallUser } from './useCallState'
 export { formatCallDuration } from './useCallState'
@@ -64,7 +68,11 @@ export const useVoiceCallStore = create<VoiceCallState>((set, get) => ({
     })
   },
 
-  startCall: async (receiverId: string, receiverUsername: string, receiverAvatar?: string | null) => {
+  startCall: async (
+    receiverId: string,
+    receiverUsername: string,
+    receiverAvatar?: string | null
+  ) => {
     if (!import.meta.env.PROD) {
       console.log('[VoiceCall] startCall called:', { receiverId, receiverUsername, receiverAvatar })
     }
@@ -77,12 +85,14 @@ export const useVoiceCallStore = create<VoiceCallState>((set, get) => ({
     }
     if (!LIVEKIT_URL) {
       console.warn('[VoiceCall] No LiveKit URL configured!')
-      set({ error: 'LiveKit URL non configure. Contactez l\'administrateur.' })
+      set({ error: "LiveKit URL non configure. Contactez l'administrateur." })
       return
     }
 
     try {
-      const { data: { user } } = await supabase.auth.getUser()
+      const {
+        data: { user },
+      } = await supabase.auth.getUser()
       if (!user) {
         set({ error: 'Utilisateur non connecte' })
         return
@@ -141,7 +151,7 @@ export const useVoiceCallStore = create<VoiceCallState>((set, get) => ({
       console.warn('Error starting call:', error)
       set({
         status: 'idle',
-        error: error instanceof Error ? error.message : 'Erreur lors du demarrage de l\'appel',
+        error: error instanceof Error ? error.message : "Erreur lors du demarrage de l'appel",
       })
     }
   },
@@ -175,7 +185,9 @@ export const useVoiceCallStore = create<VoiceCallState>((set, get) => ({
     if (ringTimeout) clearTimeout(ringTimeout)
 
     try {
-      const { data: { user } } = await supabase.auth.getUser()
+      const {
+        data: { user },
+      } = await supabase.auth.getUser()
       if (!user) {
         set({ error: 'Utilisateur non connecte' })
         return
@@ -196,18 +208,15 @@ export const useVoiceCallStore = create<VoiceCallState>((set, get) => ({
       set({ receiver, ringTimeout: null })
 
       if (state.currentCallId) {
-        await supabase
-          .from('calls')
-          .update({ status: 'answered' })
-          .eq('id', state.currentCallId)
+        await supabase.from('calls').update({ status: 'answered' }).eq('id', state.currentCallId)
       }
 
       await initializeLiveKitRoom(user.id, state.caller.id, useVoiceCallStore)
 
       const callStartTime = Date.now()
       const durationInterval = setInterval(() => {
-        set(s => ({
-          callDuration: Math.floor((Date.now() - (s.callStartTime || Date.now())) / 1000)
+        set((s) => ({
+          callDuration: Math.floor((Date.now() - (s.callStartTime || Date.now())) / 1000),
         }))
       }, 1000)
 
@@ -215,7 +224,7 @@ export const useVoiceCallStore = create<VoiceCallState>((set, get) => ({
     } catch (error) {
       console.warn('Error accepting call:', error)
       set({
-        error: error instanceof Error ? error.message : 'Erreur lors de l\'acceptation de l\'appel',
+        error: error instanceof Error ? error.message : "Erreur lors de l'acceptation de l'appel",
       })
     }
   },
@@ -231,10 +240,7 @@ export const useVoiceCallStore = create<VoiceCallState>((set, get) => ({
     if (ringTimeout) clearTimeout(ringTimeout)
 
     if (currentCallId) {
-      await supabase
-        .from('calls')
-        .update({ status: 'rejected' })
-        .eq('id', currentCallId)
+      await supabase.from('calls').update({ status: 'rejected' }).eq('id', currentCallId)
     }
 
     set({ status: 'rejected' })
@@ -285,7 +291,7 @@ export const useVoiceCallStore = create<VoiceCallState>((set, get) => ({
   },
 
   toggleSpeaker: () => {
-    set(state => ({ isSpeakerOn: !state.isSpeakerOn }))
+    set((state) => ({ isSpeakerOn: !state.isSpeakerOn }))
   },
 }))
 

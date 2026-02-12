@@ -22,21 +22,17 @@ const ALLOWED_ORIGINS = [
 
 function getCorsHeaders(origin: string | null) {
   const allowedOrigin =
-    origin && ALLOWED_ORIGINS.some((allowed) => origin === allowed)
-      ? origin
-      : null
+    origin && ALLOWED_ORIGINS.some((allowed) => origin === allowed) ? origin : null
   if (!allowedOrigin) {
     return {
-      'Access-Control-Allow-Headers':
-        'authorization, x-client-info, apikey, content-type',
+      'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
       'Access-Control-Allow-Methods': 'POST, OPTIONS',
       'Access-Control-Allow-Credentials': 'true',
     }
   }
   return {
     'Access-Control-Allow-Origin': allowedOrigin,
-    'Access-Control-Allow-Headers':
-      'authorization, x-client-info, apikey, content-type',
+    'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
     'Access-Control-Allow-Methods': 'POST, OPTIONS',
     'Access-Control-Allow-Credentials': 'true',
   }
@@ -104,7 +100,7 @@ serve(async (req) => {
             ...getCorsHeaders(req.headers.get('origin')),
             'Content-Type': 'application/json',
           },
-        },
+        }
       )
     }
 
@@ -115,16 +111,13 @@ serve(async (req) => {
     const validMetrics = batch.filter(isValidMetric)
 
     if (validMetrics.length === 0) {
-      return new Response(
-        JSON.stringify({ error: 'No valid metrics in batch' }),
-        {
-          status: 400,
-          headers: {
-            ...getCorsHeaders(req.headers.get('origin')),
-            'Content-Type': 'application/json',
-          },
+      return new Response(JSON.stringify({ error: 'No valid metrics in batch' }), {
+        status: 400,
+        headers: {
+          ...getCorsHeaders(req.headers.get('origin')),
+          'Content-Type': 'application/json',
         },
-      )
+      })
     }
 
     const supabaseUrl = Deno.env.get('SUPABASE_URL')
@@ -132,16 +125,13 @@ serve(async (req) => {
 
     if (!supabaseUrl || !supabaseServiceKey) {
       console.error('Missing SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY env vars')
-      return new Response(
-        JSON.stringify({ error: 'Server configuration error' }),
-        {
-          status: 500,
-          headers: {
-            ...getCorsHeaders(req.headers.get('origin')),
-            'Content-Type': 'application/json',
-          },
+      return new Response(JSON.stringify({ error: 'Server configuration error' }), {
+        status: 500,
+        headers: {
+          ...getCorsHeaders(req.headers.get('origin')),
+          'Content-Type': 'application/json',
         },
-      )
+      })
     }
 
     const supabase = createClient(supabaseUrl, supabaseServiceKey)
@@ -160,39 +150,30 @@ serve(async (req) => {
 
     if (error) {
       console.error('Failed to insert web vitals:', error.message)
-      return new Response(
-        JSON.stringify({ error: 'Failed to store web vitals' }),
-        {
-          status: 500,
-          headers: {
-            ...getCorsHeaders(req.headers.get('origin')),
-            'Content-Type': 'application/json',
-          },
-        },
-      )
-    }
-
-    return new Response(
-      JSON.stringify({ received: validMetrics.length }),
-      {
-        headers: {
-          ...getCorsHeaders(req.headers.get('origin')),
-          'Content-Type': 'application/json',
-        },
-      },
-    )
-  } catch (error) {
-    const message = error instanceof Error ? error.message : 'Unknown error'
-    console.error('Error processing web vitals:', message)
-    return new Response(
-      JSON.stringify({ error: message }),
-      {
+      return new Response(JSON.stringify({ error: 'Failed to store web vitals' }), {
         status: 500,
         headers: {
           ...getCorsHeaders(req.headers.get('origin')),
           'Content-Type': 'application/json',
         },
+      })
+    }
+
+    return new Response(JSON.stringify({ received: validMetrics.length }), {
+      headers: {
+        ...getCorsHeaders(req.headers.get('origin')),
+        'Content-Type': 'application/json',
       },
-    )
+    })
+  } catch (error) {
+    const message = error instanceof Error ? error.message : 'Unknown error'
+    console.error('Error processing web vitals:', message)
+    return new Response(JSON.stringify({ error: message }), {
+      status: 500,
+      headers: {
+        ...getCorsHeaders(req.headers.get('origin')),
+        'Content-Type': 'application/json',
+      },
+    })
   }
 })

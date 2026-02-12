@@ -23,7 +23,9 @@ export interface SquadDetails {
 async function fetchSquadDetails(squadId: string): Promise<SquadDetails | null> {
   const { data, error } = await supabase
     .from('squads')
-    .select('id, name, game, invite_code, owner_id, is_premium, created_at, total_sessions, total_members')
+    .select(
+      'id, name, game, invite_code, owner_id, is_premium, created_at, total_sessions, total_members'
+    )
     .eq('id', squadId)
     .single()
 
@@ -38,15 +40,12 @@ async function fetchSquadDetails(squadId: string): Promise<SquadDetails | null> 
 async function fetchSquadsPremiumStatus(squadIds: string[]): Promise<Record<string, boolean>> {
   if (squadIds.length === 0) return {}
 
-  const { data, error } = await supabase
-    .from('squads')
-    .select('id, is_premium')
-    .in('id', squadIds)
+  const { data, error } = await supabase.from('squads').select('id, is_premium').in('id', squadIds)
 
   if (error) throw error
 
   const result: Record<string, boolean> = {}
-  data?.forEach(s => {
+  data?.forEach((s) => {
     result[s.id] = s.is_premium || false
   })
   return result
@@ -59,7 +58,7 @@ async function fetchSquadsPremiumStatus(squadIds: string[]): Promise<Record<stri
 export function useSquadDetailsQuery(squadId: string | undefined) {
   return useQuery({
     queryKey: ['squads', squadId] as const,
-    queryFn: () => squadId ? fetchSquadDetails(squadId) : null,
+    queryFn: () => (squadId ? fetchSquadDetails(squadId) : null),
     enabled: !!squadId,
     staleTime: 30_000,
   })

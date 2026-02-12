@@ -16,7 +16,10 @@ interface NotificationState {
 
 export const useNotificationStore = create<NotificationState>((set, get) => ({
   isSupported: typeof window !== 'undefined' && 'Notification' in window,
-  isPermissionGranted: typeof window !== 'undefined' && 'Notification' in window && Notification.permission === 'granted',
+  isPermissionGranted:
+    typeof window !== 'undefined' &&
+    'Notification' in window &&
+    Notification.permission === 'granted',
   isLoading: false,
   error: null,
 
@@ -41,7 +44,7 @@ export const useNotificationStore = create<NotificationState>((set, get) => ({
       console.warn('[Notifications] Error requesting permission:', error)
       set({
         isLoading: false,
-        error: 'Erreur lors de la demande de permission'
+        error: 'Erreur lors de la demande de permission',
       })
       return false
     }
@@ -118,7 +121,8 @@ export const useNotificationStore = create<NotificationState>((set, get) => ({
   },
 
   unsubscribe: () => {
-    const channel = (window as { _notificationChannel?: ReturnType<typeof supabase.channel> })._notificationChannel
+    const channel = (window as { _notificationChannel?: ReturnType<typeof supabase.channel> })
+      ._notificationChannel
     if (channel) {
       supabase.removeChannel(channel)
     }
@@ -132,8 +136,12 @@ export const useSessionNotifications = () => {
   const notifyRsvpReceived = (username: string, response: string) => {
     if (!isPermissionGranted) return
 
-    const responseText = response === 'present' ? 'sera présent' :
-                        response === 'maybe' ? 'est incertain' : 'sera absent'
+    const responseText =
+      response === 'present'
+        ? 'sera présent'
+        : response === 'maybe'
+          ? 'est incertain'
+          : 'sera absent'
 
     sendNotification('Nouvelle réponse', {
       body: `${username} ${responseText}`,

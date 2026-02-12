@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 import { lazy, Suspense, memo, useEffect, useRef } from 'react'
 import { Outlet, useSearchParams, useLocation } from 'react-router'
@@ -16,29 +16,60 @@ import { TopLoadingBar } from './components/ui/TopLoadingBar'
 import { AppLayout } from './components/layout'
 
 // Lazy load heavy modals (only rendered when user is authenticated)
-const CallModal = lazy(() => import('./components/CallModal').then(m => ({ default: m.CallModal })))
-const IncomingCallModal = lazy(() => import('./components/IncomingCallModal').then(m => ({ default: m.IncomingCallModal })))
-const CommandPalette = lazy(() => import('./components/CommandPalette').then(m => ({ default: m.CommandPalette })))
-const CreateSessionModal = lazy(() => import('./components/CreateSessionModal').then(m => ({ default: m.CreateSessionModal })))
+const CallModal = lazy(() =>
+  import('./components/CallModal').then((m) => ({ default: m.CallModal }))
+)
+const IncomingCallModal = lazy(() =>
+  import('./components/IncomingCallModal').then((m) => ({ default: m.IncomingCallModal }))
+)
+const CommandPalette = lazy(() =>
+  import('./components/CommandPalette').then((m) => ({ default: m.CommandPalette }))
+)
+const CreateSessionModal = lazy(() =>
+  import('./components/CreateSessionModal').then((m) => ({ default: m.CreateSessionModal }))
+)
 
 // Lazy load shell components - conditional or deferred
-const OfflineBanner = lazy(() => import('./components/OfflineBanner').then(m => ({ default: m.OfflineBanner })))
-const SessionExpiredModal = lazy(() => import('./components/SessionExpiredModal').then(m => ({ default: m.SessionExpiredModal })))
-const RateLimitBanner = lazy(() => import('./components/RateLimitBanner').then(m => ({ default: m.RateLimitBanner })))
-const PWAInstallBanner = lazy(() => import('./components/PWAInstallBanner').then(m => ({ default: m.PWAInstallBanner })))
+const OfflineBanner = lazy(() =>
+  import('./components/OfflineBanner').then((m) => ({ default: m.OfflineBanner }))
+)
+const SessionExpiredModal = lazy(() =>
+  import('./components/SessionExpiredModal').then((m) => ({ default: m.SessionExpiredModal }))
+)
+const RateLimitBanner = lazy(() =>
+  import('./components/RateLimitBanner').then((m) => ({ default: m.RateLimitBanner }))
+)
+const PWAInstallBanner = lazy(() =>
+  import('./components/PWAInstallBanner').then((m) => ({ default: m.PWAInstallBanner }))
+)
 const NotificationBanner = lazy(() => import('./components/NotificationBanner'))
-const CookieConsent = lazy(() => import('./components/CookieConsent').then(m => ({ default: m.CookieConsent })))
-const TourGuide = lazy(() => import('./components/TourGuide').then(m => ({ default: m.TourGuide })))
+const CookieConsent = lazy(() =>
+  import('./components/CookieConsent').then((m) => ({ default: m.CookieConsent }))
+)
+const TourGuide = lazy(() =>
+  import('./components/TourGuide').then((m) => ({ default: m.TourGuide }))
+)
 
 // Global state banners
 const GlobalStateBanners = memo(function GlobalStateBanners() {
   const { showModal, dismissModal } = useSessionExpiry()
-  const { isRateLimited, retryAfter, dismiss: dismissRateLimit, reset: resetRateLimit } = useRateLimitStore()
+  const {
+    isRateLimited,
+    retryAfter,
+    dismiss: dismissRateLimit,
+    reset: resetRateLimit,
+  } = useRateLimitStore()
 
   return (
     <>
       <SessionExpiredModal isOpen={showModal} onReconnect={() => {}} onDismiss={dismissModal} />
-      {isRateLimited && <RateLimitBanner retryAfter={retryAfter} onRetry={resetRateLimit} onDismiss={dismissRateLimit} />}
+      {isRateLimited && (
+        <RateLimitBanner
+          retryAfter={retryAfter}
+          onRetry={resetRateLimit}
+          onDismiss={dismissRateLimit}
+        />
+      )}
     </>
   )
 })
@@ -53,7 +84,9 @@ export default function ClientShell() {
   useSwipeBack()
   useNavigationProgress()
 
-  useEffect(() => { initialize() }, [initialize])
+  useEffect(() => {
+    initialize()
+  }, [initialize])
 
   // Track page views on route changes
   useEffect(() => {
@@ -94,17 +127,19 @@ export default function ClientShell() {
 
       // Set user context for error reports
       import('./lib/errorTracker').then(({ setUser }) => {
-        setUser({ id: user.id, username: user.username })
+        setUser({ id: user.id, username: (user as any).username ?? user.user_metadata?.username })
       })
 
-      import('./utils/routePrefetch').then(({ prefetchProbableRoutes }) => { prefetchProbableRoutes() })
+      import('./utils/routePrefetch').then(({ prefetchProbableRoutes }) => {
+        prefetchProbableRoutes()
+      })
 
       // Identify user in analytics
       import('./utils/analytics').then(({ identifyUser }) => {
         identifyUser(user.id, {
-          username: user.username,
+          username: (user as any).username ?? user.user_metadata?.username,
           email: user.email,
-          premium: user.premium,
+          premium: (user as any).premium ?? user.user_metadata?.premium,
           created_at: user.created_at,
         })
       })
@@ -123,14 +158,28 @@ export default function ClientShell() {
           const { status, setIncomingCall } = useVoiceCallStore.getState()
           if (status !== 'idle') return
           const { supabase } = await import('./lib/supabase')
-          const { data: callerProfile } = await supabase.from('profiles').select('username, avatar_url').eq('id', callerId).single()
+          const { data: callerProfile } = await supabase
+            .from('profiles')
+            .select('username, avatar_url')
+            .eq('id', callerId)
+            .single()
           if (callerProfile) {
-            setIncomingCall({ id: callerId, username: callerProfile.username, avatar_url: callerProfile.avatar_url }, incomingCallId)
+            setIncomingCall(
+              {
+                id: callerId,
+                username: callerProfile.username,
+                avatar_url: callerProfile.avatar_url,
+              },
+              incomingCallId
+            )
           }
-        } catch (error) { console.error('[App] Error handling incoming call from URL:', error) }
+        } catch (error) {
+          console.error('[App] Error handling incoming call from URL:', error)
+        }
       }
       handleIncomingCallFromUrl()
-      searchParams.delete('incoming_call'); searchParams.delete('caller_id')
+      searchParams.delete('incoming_call')
+      searchParams.delete('caller_id')
       setSearchParams(searchParams, { replace: true })
     }
   }, [searchParams, setSearchParams, user])
@@ -142,20 +191,28 @@ export default function ClientShell() {
     import('./hooks/useVoiceCall').then(({ subscribeToIncomingCalls }) => {
       unsubscribe = subscribeToIncomingCalls(user.id)
     })
-    return () => { unsubscribe?.() }
+    return () => {
+      unsubscribe?.()
+    }
   }, [user])
 
   // Auto-subscribe to push notifications
   const pushSubscribedRef = useRef(false)
   useEffect(() => {
-    if (!user) { pushSubscribedRef.current = false; return }
+    if (!user) {
+      pushSubscribedRef.current = false
+      return
+    }
     if (pushSubscribedRef.current) return
 
     const timeoutId = setTimeout(async () => {
       try {
         const pushStore = usePushNotificationStore.getState()
         if (!pushStore.isSupported) return
-        if (pushStore.isSubscribed) { pushSubscribedRef.current = true; return }
+        if (pushStore.isSubscribed) {
+          pushSubscribedRef.current = true
+          return
+        }
         const success = await pushStore.subscribeToPush(user.id)
         pushSubscribedRef.current = success
       } catch (err) {
@@ -171,9 +228,16 @@ export default function ClientShell() {
       <TopLoadingBar />
       {user && (
         <>
-          <Suspense fallback={null}><CallModal /><IncomingCallModal /></Suspense>
-          <Suspense fallback={null}><CommandPalette /></Suspense>
-          <Suspense fallback={null}><CreateSessionModal /></Suspense>
+          <Suspense fallback={null}>
+            <CallModal />
+            <IncomingCallModal />
+          </Suspense>
+          <Suspense fallback={null}>
+            <CommandPalette />
+          </Suspense>
+          <Suspense fallback={null}>
+            <CreateSessionModal />
+          </Suspense>
         </>
       )}
       <AppLayout>

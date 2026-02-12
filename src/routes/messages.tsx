@@ -9,16 +9,22 @@ const Messages = lazy(() => import('../pages/Messages'))
 
 export function meta() {
   return [
-    { title: "Messages - Squad Planner" },
-    { name: "description", content: "Discute avec tes coéquipiers en temps réel. Messagerie intégrée pour chaque squad." },
-    { tagName: "link", rel: "canonical", href: "https://squadplanner.fr/messages" },
-    { property: "og:url", content: "https://squadplanner.fr/messages" },
+    { title: 'Messages - Squad Planner' },
+    {
+      name: 'description',
+      content: 'Discute avec tes coéquipiers en temps réel. Messagerie intégrée pour chaque squad.',
+    },
+    { tagName: 'link', rel: 'canonical', href: 'https://squadplanner.fr/messages' },
+    { property: 'og:url', content: 'https://squadplanner.fr/messages' },
   ]
 }
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const { supabase, headers, getUser } = createSupabaseServerClient(request)
-  const { data: { user }, error } = await getUser()
+  const {
+    data: { user },
+    error,
+  } = await getUser()
 
   if (error || !user) {
     throw redirect('/', { headers })
@@ -30,7 +36,10 @@ export async function loader({ request }: LoaderFunctionArgs) {
     .select('squad_id, squads!inner(id, name, game)')
     .eq('user_id', user.id)
 
-  const squads = (memberships?.map((m: { squads: { id: string; name: string; game: string } }) => m.squads) || [])
+  const squads =
+    (memberships as any[])?.map(
+      (m: { squads: { id: string; name: string; game: string } }) => m.squads
+    ) || []
 
   return data({ squads }, { headers })
 }
@@ -45,10 +54,14 @@ interface MessagesLoaderData {
 
 export default function Component({ loaderData }: { loaderData: MessagesLoaderData }) {
   return (
-    <ClientRouteWrapper seeds={[
-      { key: queryKeys.squads.list(), data: loaderData?.squads },
-    ]}>
-      <Suspense fallback={<div className="min-h-[50vh] flex items-center justify-center"><div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin" /></div>}>
+    <ClientRouteWrapper seeds={[{ key: [...queryKeys.squads.list()], data: loaderData?.squads }]}>
+      <Suspense
+        fallback={
+          <div className="min-h-[50vh] flex items-center justify-center">
+            <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+          </div>
+        }
+      >
         <Messages />
       </Suspense>
     </ClientRouteWrapper>

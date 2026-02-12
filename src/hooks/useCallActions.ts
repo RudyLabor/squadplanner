@@ -24,13 +24,13 @@ export async function sendCallPushNotification(
           call_id: callRecordId,
           caller_id: caller.id,
           caller_name: caller.username,
-          caller_avatar: caller.avatar_url
+          caller_avatar: caller.avatar_url,
         },
         actions: [
           { action: 'answer', title: 'Repondre' },
-          { action: 'decline', title: 'Refuser' }
-        ]
-      }
+          { action: 'decline', title: 'Refuser' },
+        ],
+      },
     })
   } catch (pushError) {
     if (!import.meta.env.PROD) console.warn('[VoiceCall] Push notification failed:', pushError)
@@ -71,27 +71,34 @@ export async function initializeLiveKitRoom(
       },
     })
 
-    room.on(RoomEvent.TrackSubscribed, (track: { kind: string; attach: () => HTMLMediaElement }, _publication: unknown, participant: { identity: string }) => {
-      if (track.kind === Track.Kind.Audio) {
-        const element = track.attach()
-        element.id = `call-audio-${participant.identity}`
-        document.body.appendChild(element)
-        const currentState = storeRef.getState()
-        if (currentState.status === 'calling') {
-          const callStartTime = Date.now()
-          const durationInterval = setInterval(() => {
-            storeRef.setState(s => ({
-              callDuration: Math.floor((Date.now() - (s.callStartTime || Date.now())) / 1000)
-            }))
-          }, 1000)
-          storeRef.setState({ status: 'connected', callStartTime, durationInterval })
-          if (currentState.ringTimeout) {
-            clearTimeout(currentState.ringTimeout)
-            storeRef.setState({ ringTimeout: null })
+    room.on(
+      RoomEvent.TrackSubscribed,
+      (
+        track: { kind: string; attach: () => HTMLMediaElement },
+        _publication: unknown,
+        participant: { identity: string }
+      ) => {
+        if (track.kind === Track.Kind.Audio) {
+          const element = track.attach()
+          element.id = `call-audio-${participant.identity}`
+          document.body.appendChild(element)
+          const currentState = storeRef.getState()
+          if (currentState.status === 'calling') {
+            const callStartTime = Date.now()
+            const durationInterval = setInterval(() => {
+              storeRef.setState((s) => ({
+                callDuration: Math.floor((Date.now() - (s.callStartTime || Date.now())) / 1000),
+              }))
+            }, 1000)
+            storeRef.setState({ status: 'connected', callStartTime, durationInterval })
+            if (currentState.ringTimeout) {
+              clearTimeout(currentState.ringTimeout)
+              storeRef.setState({ ringTimeout: null })
+            }
           }
         }
       }
-    })
+    )
 
     room.on(RoomEvent.TrackUnsubscribed, (track: { detach: () => HTMLElement[] }) => {
       track.detach().forEach((el: HTMLElement) => el.remove())
@@ -112,25 +119,31 @@ export async function initializeLiveKitRoom(
       storeRef.setState({ isReconnecting: false, reconnectAttempts: 0, error: null })
     })
 
-    room.on(RoomEvent.Disconnected, (reason: string) => {
+    room.on(RoomEvent.Disconnected, (reason?: any) => {
       const currentState = storeRef.getState()
       if (currentState.status === 'connected' && reason !== 'CLIENT_INITIATED') {
         storeRef.setState({
           isReconnecting: false,
-          error: 'Impossible de se reconnecter. Verifiez votre connexion internet.'
+          error: 'Impossible de se reconnecter. Verifiez votre connexion internet.',
         })
         currentState.endCall()
       }
     })
 
-    room.on(RoomEvent.ConnectionQualityChanged, (quality: typeof ConnectionQuality[keyof typeof ConnectionQuality], participant: { sid: string }) => {
-      if (participant.sid === room.localParticipant?.sid) {
-        const newQuality = useNetworkQualityStore.getState().updateQuality(quality)
-        if (newQuality) {
-          storeRef.setState({ networkQualityChanged: newQuality })
+    room.on(
+      RoomEvent.ConnectionQualityChanged,
+      (
+        quality: (typeof ConnectionQuality)[keyof typeof ConnectionQuality],
+        participant: { sid: string }
+      ) => {
+        if (participant.sid === room.localParticipant?.sid) {
+          const newQuality = useNetworkQualityStore.getState().updateQuality(quality)
+          if (newQuality) {
+            storeRef.setState({ networkQualityChanged: newQuality })
+          }
         }
       }
-    })
+    )
 
     await room.connect(LIVEKIT_URL, data.token)
     await room.localParticipant.setMicrophoneEnabled(true)
@@ -173,7 +186,11 @@ export function subscribeToIncomingCalls(userId: string, storeRef: VoiceCallStor
 
         if (callerProfile) {
           currentState.setIncomingCall(
-            { id: call.caller_id, username: callerProfile.username, avatar_url: callerProfile.avatar_url },
+            {
+              id: call.caller_id,
+              username: callerProfile.username,
+              avatar_url: callerProfile.avatar_url,
+            },
             call.id
           )
         }
@@ -209,5 +226,7 @@ export function subscribeToIncomingCalls(userId: string, storeRef: VoiceCallStor
     )
     .subscribe()
 
-  return () => { supabase.removeChannel(channel) }
+  return () => {
+    supabase.removeChannel(channel)
+  }
 }

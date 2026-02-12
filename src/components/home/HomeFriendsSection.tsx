@@ -19,11 +19,5 @@ export const HomeFriendsSection = memo(function HomeFriendsSection({
     return <SkeletonFriendsPlaying />
   }
 
-  return (
-    <FriendsPlaying
-      friends={friendsPlaying}
-      onJoin={onJoin}
-      onInvite={onInvite}
-    />
-  )
+  return <FriendsPlaying friends={friendsPlaying} onJoin={onJoin} onInvite={onInvite} />
 })

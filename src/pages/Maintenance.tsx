@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 /**
  * Chantier 9 - Maintenance Page
@@ -140,9 +140,8 @@ export default function Maintenance() {
           className="text-sm text-text-tertiary mb-6"
           aria-live="polite"
         >
-          Dernière vérification il y a {secondsSinceCheck}s
-          {' '}&middot;{' '}
-          prochaine dans {timeUntilRefresh}s
+          Dernière vérification il y a {secondsSinceCheck}s &middot; prochaine dans{' '}
+          {timeUntilRefresh}s
         </m.p>
 
         {/* Manual refresh button */}

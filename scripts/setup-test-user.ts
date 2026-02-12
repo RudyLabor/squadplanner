@@ -20,14 +20,14 @@ if (!supabaseUrl || !supabaseServiceKey) {
 const supabase = createClient(supabaseUrl, supabaseServiceKey, {
   auth: {
     autoRefreshToken: false,
-    persistSession: false
-  }
+    persistSession: false,
+  },
 })
 
 const TEST_USER = {
   email: 'test@squadplanner.dev',
   password: 'TestPassword123!',
-  username: 'testuser'
+  username: 'testuser',
 }
 
 async function setupTestUser() {
@@ -35,16 +35,15 @@ async function setupTestUser() {
 
   // Check if user already exists
   const { data: existingUsers } = await supabase.auth.admin.listUsers()
-  const existingUser = existingUsers?.users.find(u => u.email === TEST_USER.email)
+  const existingUser = existingUsers?.users.find((u) => u.email === TEST_USER.email)
 
   if (existingUser) {
     console.log('Test user already exists, updating password...')
 
     // Update the user's password
-    const { error: updateError } = await supabase.auth.admin.updateUserById(
-      existingUser.id,
-      { password: TEST_USER.password }
-    )
+    const { error: updateError } = await supabase.auth.admin.updateUserById(existingUser.id, {
+      password: TEST_USER.password,
+    })
 
     if (updateError) {
       console.error('Error updating user:', updateError.message)
@@ -61,7 +60,7 @@ async function setupTestUser() {
   const { data: authData, error: authError } = await supabase.auth.admin.createUser({
     email: TEST_USER.email,
     password: TEST_USER.password,
-    email_confirm: true // Auto-confirm email
+    email_confirm: true, // Auto-confirm email
   })
 
   if (authError) {
@@ -77,15 +76,13 @@ async function setupTestUser() {
   console.log('Auth user created:', authData.user.id)
 
   // Create the profile
-  const { error: profileError } = await supabase
-    .from('profiles')
-    .insert({
-      id: authData.user.id,
-      username: TEST_USER.username,
-      reliability_score: 100,
-      xp: 0,
-      level: 1
-    })
+  const { error: profileError } = await supabase.from('profiles').insert({
+    id: authData.user.id,
+    username: TEST_USER.username,
+    reliability_score: 100,
+    xp: 0,
+    level: 1,
+  })
 
   if (profileError) {
     console.error('Error creating profile:', profileError.message)
@@ -103,7 +100,7 @@ async function setupTestUser() {
       name: 'Test Squad',
       game: 'Test Game',
       invite_code: 'TEST123',
-      owner_id: authData.user.id
+      owner_id: authData.user.id,
     })
     .select()
     .single()
@@ -114,13 +111,11 @@ async function setupTestUser() {
     console.log('Test squad created:', squad.id)
 
     // Add user as member of the squad
-    await supabase
-      .from('squad_members')
-      .insert({
-        squad_id: squad.id,
-        user_id: authData.user.id,
-        role: 'owner'
-      })
+    await supabase.from('squad_members').insert({
+      squad_id: squad.id,
+      user_id: authData.user.id,
+      role: 'owner',
+    })
   }
 
   console.log('\n✅ Test user setup complete!')

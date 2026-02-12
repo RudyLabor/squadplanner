@@ -26,9 +26,7 @@ export const HomeSquadsSection = memo(function HomeSquadsSection({
     return (
       <section aria-label="Mes squads">
         <div className="flex items-center justify-between mb-3">
-          <h2 className="text-base font-semibold text-text-primary">
-            Mes squads
-          </h2>
+          <h2 className="text-base font-semibold text-text-primary">Mes squads</h2>
         </div>
         <div className="space-y-2 lg:grid lg:grid-cols-2 xl:grid-cols-3 lg:gap-4 lg:space-y-0">
           <SquadCardSkeleton />
@@ -43,9 +41,7 @@ export const HomeSquadsSection = memo(function HomeSquadsSection({
     return (
       <section aria-label="Mes squads">
         <div className="flex items-center justify-between mb-3">
-          <h2 className="text-base font-semibold text-text-primary">
-            Mes squads
-          </h2>
+          <h2 className="text-base font-semibold text-text-primary">Mes squads</h2>
           <Link to="/squads">
             <m.button
               className="text-sm text-primary font-medium flex items-center gap-1 min-w-[44px] min-h-[44px] px-2 justify-center"
@@ -74,11 +70,14 @@ export const HomeSquadsSection = memo(function HomeSquadsSection({
                         <Users className="w-5 h-5 text-primary" />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <div className="text-md font-medium text-text-primary truncate">{squad.name}</div>
+                        <div className="text-md font-medium text-text-primary truncate">
+                          {squad.name}
+                        </div>
                         <div className="text-sm text-text-tertiary">{squad.game}</div>
                       </div>
                       <div className="text-sm text-text-quaternary">
-                        {squad.member_count ?? squad.total_members ?? 1} membre{(squad.member_count ?? squad.total_members ?? 1) > 1 ? 's' : ''}
+                        {squad.member_count ?? squad.total_members ?? 1} membre
+                        {(squad.member_count ?? squad.total_members ?? 1) > 1 ? 's' : ''}
                       </div>
                       <ChevronRight className="w-4 h-4 text-text-quaternary" />
                     </div>
@@ -107,9 +106,7 @@ export const HomeSquadsSection = memo(function HomeSquadsSection({
         >
           <Users className="w-7 h-7 text-primary" strokeWidth={1.5} />
         </m.div>
-        <h3 className="text-lg font-semibold text-text-primary mb-2">
-          Tes potes t'attendent !
-        </h3>
+        <h3 className="text-lg font-semibold text-text-primary mb-2">Tes potes t'attendent !</h3>
         <p className="text-md text-text-tertiary mb-6 max-w-[250px] mx-auto">
           Crée ta squad et finis-en avec les "on verra". Place à l'action !
         </p>

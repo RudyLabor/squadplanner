@@ -1,6 +1,11 @@
 import { toast } from 'sonner'
 import { createElement } from 'react'
-import { AnimatedCheckmark, AnimatedXMark, AnimatedWarning, AnimatedInfo } from '../components/ui/ToastIcons'
+import {
+  AnimatedCheckmark,
+  AnimatedXMark,
+  AnimatedWarning,
+  AnimatedInfo,
+} from '../components/ui/ToastIcons'
 
 /**
  * Standardized toast notifications for Squad Planner
@@ -77,7 +82,7 @@ export const showInfo = (message: string) => {
 }
 
 // Loading toast with promise - for async operations
-export const showLoading = <T,>(
+export const showLoading = <T>(
   promise: Promise<T>,
   messages: {
     loading: string
@@ -110,11 +115,7 @@ export const showWithAction = (
 }
 
 // Toast with undo action
-export const showWithUndo = (
-  message: string,
-  undoAction: () => void,
-  duration = 5000
-) => {
+export const showWithUndo = (message: string, undoAction: () => void, duration = 5000) => {
   toast(message, {
     duration,
     action: {
@@ -126,7 +127,7 @@ export const showWithUndo = (
 }
 
 // Toast with progress tracking for async operations
-export const showProgress = <T,>(
+export const showProgress = <T>(
   message: string,
   promise: Promise<T>,
   messages?: { success?: string; error?: string }

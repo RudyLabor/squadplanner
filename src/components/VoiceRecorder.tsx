@@ -1,14 +1,8 @@
-"use client";
+'use client'
 
 import { useState, useRef, useCallback, useEffect, memo } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
-import {
-  Mic,
-  Square,
-  Send,
-  Trash2,
-  Loader2,
-} from './icons'
+import { Mic, Square, Send, Trash2, Loader2 } from './icons'
 /**
  * VoiceRecorder — Phase 3.1
  * Records voice messages using MediaRecorder API.
@@ -40,7 +34,7 @@ export const VoiceRecorder = memo(function VoiceRecorder({ onSend, disabled }: V
       if (timerRef.current) clearInterval(timerRef.current)
       if (audioUrl) URL.revokeObjectURL(audioUrl)
       if (streamRef.current) {
-        streamRef.current.getTracks().forEach(t => t.stop())
+        streamRef.current.getTracks().forEach((t) => t.stop())
       }
     }
   }, [audioUrl])
@@ -72,7 +66,7 @@ export const VoiceRecorder = memo(function VoiceRecorder({ onSend, disabled }: V
         const blob = new Blob(chunks.current, { type: 'audio/webm' })
         setAudioBlob(blob)
         setAudioUrl(URL.createObjectURL(blob))
-        stream.getTracks().forEach(t => t.stop())
+        stream.getTracks().forEach((t) => t.stop())
         streamRef.current = null
       }
 
@@ -113,7 +107,7 @@ export const VoiceRecorder = memo(function VoiceRecorder({ onSend, disabled }: V
         timerRef.current = null
       }
       if (streamRef.current) {
-        streamRef.current.getTracks().forEach(t => t.stop())
+        streamRef.current.getTracks().forEach((t) => t.stop())
         streamRef.current = null
       }
     }
@@ -152,9 +146,7 @@ export const VoiceRecorder = memo(function VoiceRecorder({ onSend, disabled }: V
     }
 
     const interval = setInterval(() => {
-      setWaveform(prev =>
-        prev.map(() => Math.random() * 20 + 3)
-      )
+      setWaveform((prev) => prev.map(() => Math.random() * 20 + 3))
     }, 100)
 
     return () => clearInterval(interval)
@@ -176,7 +168,7 @@ export const VoiceRecorder = memo(function VoiceRecorder({ onSend, disabled }: V
         )}
 
         {/* Recording / Preview state */}
-        {(isRecording || audioBlob) ? (
+        {isRecording || audioBlob ? (
           <m.div
             key="recording"
             initial={{ opacity: 0, scale: 0.95 }}
@@ -218,7 +210,9 @@ export const VoiceRecorder = memo(function VoiceRecorder({ onSend, disabled }: V
             </div>
 
             {/* Duration */}
-            <span className={`text-base font-mono min-w-[40px] text-center ${isRecording ? 'text-error' : 'text-text-tertiary'}`}>
+            <span
+              className={`text-base font-mono min-w-[40px] text-center ${isRecording ? 'text-error' : 'text-text-tertiary'}`}
+            >
               {formatDuration(duration)}
             </span>
 

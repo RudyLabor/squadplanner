@@ -8,7 +8,7 @@ import AxeBuilder from '@axe-core/playwright'
 
 const TEST_USER = {
   email: 'testowner@squadtest.dev',
-  password: 'TestPassword123!'
+  password: 'TestPassword123!',
 }
 
 async function loginUser(page: import('@playwright/test').Page) {
@@ -216,8 +216,8 @@ test.describe('Color Contrast', () => {
     await page.goto('/')
 
     const heading = page.locator('h1')
-    const color = await heading.evaluate(el => window.getComputedStyle(el).color)
-    const bgColor = await heading.evaluate(el => {
+    const color = await heading.evaluate((el) => window.getComputedStyle(el).color)
+    const bgColor = await heading.evaluate((el) => {
       let current = el as HTMLElement | null
       while (current) {
         const bg = window.getComputedStyle(current).backgroundColor

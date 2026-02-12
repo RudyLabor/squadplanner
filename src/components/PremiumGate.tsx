@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 import { useState, type ReactNode } from 'react'
 import { m } from 'framer-motion'
@@ -30,7 +30,7 @@ const FEATURE_LABELS: Record<PremiumFeature, string> = {
   ai_coach_advanced: 'IA Coach avancé',
   hd_audio: 'Audio HD',
   advanced_roles: 'Rôles avancés',
-  calendar_export: 'Export calendrier'
+  calendar_export: 'Export calendrier',
 }
 
 export function PremiumGate({
@@ -41,7 +41,7 @@ export function PremiumGate({
   fallback = 'lock',
   customFallback,
   showBadgeOnly = false,
-  className = ''
+  className = '',
 }: PremiumGateProps) {
   const [showModal, setShowModal] = useState(false)
   const { canAccessFeature } = usePremiumStore()
@@ -78,9 +78,7 @@ export function PremiumGate({
   if (fallback === 'blur') {
     return (
       <div className={`relative ${className}`}>
-        <div className="blur-sm pointer-events-none select-none opacity-50">
-          {children}
-        </div>
+        <div className="blur-sm pointer-events-none select-none opacity-50">{children}</div>
         <div className="absolute inset-0 flex items-center justify-center bg-overlay-dark-30 rounded-xl">
           <button
             onClick={() => setShowModal(true)}
@@ -88,12 +86,8 @@ export function PremiumGate({
             className="flex flex-col items-center gap-2 p-4 rounded-xl bg-overlay-dark-60 hover:bg-overlay-dark-80 transition-colors"
           >
             <Lock className="w-6 h-6 text-warning" aria-hidden="true" />
-            <span className="text-base font-medium text-white">
-              {label}
-            </span>
-            <span className="text-xs text-text-tertiary">
-              Premium requis
-            </span>
+            <span className="text-base font-medium text-white">{label}</span>
+            <span className="text-xs text-text-tertiary">Premium requis</span>
           </button>
         </div>
         <PremiumUpgradeModal
@@ -125,9 +119,7 @@ export function PremiumGate({
               <span className="text-md font-medium text-text-primary">{label}</span>
               <PremiumBadge small />
             </div>
-            <span className="text-sm text-text-tertiary">
-              Passe Premium pour débloquer
-            </span>
+            <span className="text-sm text-text-tertiary">Passe Premium pour débloquer</span>
           </div>
           <Zap className="w-5 h-5 text-warning" aria-hidden="true" />
         </div>
@@ -165,7 +157,7 @@ export function PremiumBadge({ small = false }: { small?: boolean }) {
 export function SquadLimitReached({
   currentCount,
   maxCount,
-  onUpgrade
+  onUpgrade,
 }: {
   currentCount: number
   maxCount: number
@@ -182,13 +174,15 @@ export function SquadLimitReached({
           <Lock className="w-5 h-5 text-warning" />
         </div>
         <div className="flex-1">
-          <h3 className="text-md font-semibold text-text-primary mb-1">
-            Limite atteinte
-          </h3>
+          <h3 className="text-md font-semibold text-text-primary mb-1">Limite atteinte</h3>
           <p className="text-base text-text-secondary mb-3">
             Tu as {currentCount}/{maxCount} squads. Passe Premium pour en créer plus !
           </p>
-          <Button size="sm" onClick={onUpgrade} className="bg-gradient-to-r from-warning to-warning/80">
+          <Button
+            size="sm"
+            onClick={onUpgrade}
+            className="bg-gradient-to-r from-warning to-warning/80"
+          >
             <Zap className="w-4 h-4" />
             Passer Premium
           </Button>

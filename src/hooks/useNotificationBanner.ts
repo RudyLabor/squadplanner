@@ -35,13 +35,16 @@ export const useNotificationBannerStore = create<NotificationBannerState>((set) 
   showBanner: (banner) => {
     const id = `banner-${++bannerId}`
     set((state) => ({
-      banners: [...state.banners, {
-        ...banner,
-        id,
-        dismissible: banner.dismissible ?? true,
-        persistent: banner.persistent ?? false,
-        duration: banner.duration ?? 8000,
-      }],
+      banners: [
+        ...state.banners,
+        {
+          ...banner,
+          id,
+          dismissible: banner.dismissible ?? true,
+          persistent: banner.persistent ?? false,
+          duration: banner.duration ?? 8000,
+        },
+      ],
     }))
     return id
   },

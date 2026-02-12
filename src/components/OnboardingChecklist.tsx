@@ -1,17 +1,8 @@
-"use client";
+'use client'
 
 import { useState, useEffect } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
-import {
-  Users,
-  UserPlus,
-  Calendar,
-  Check,
-  X,
-  ChevronRight,
-  Sparkles,
-  Star,
-} from './icons'
+import { Users, UserPlus, Calendar, Check, X, ChevronRight, Sparkles, Star } from './icons'
 import { Link } from 'react-router'
 import { Card } from './ui'
 import { showSuccess } from '../lib/toast'
@@ -93,7 +84,7 @@ export function OnboardingChecklist({
       await navigator.clipboard.writeText(inviteUrl)
       setInviteCopied(true)
       localStorage.setItem(INVITE_COPIED_KEY, 'true')
-      showSuccess('Lien d\'invitation copié ! Partage-le à tes potes')
+      showSuccess("Lien d'invitation copié ! Partage-le à tes potes")
     } catch {
       // Fallback: select text in a temp input
       const input = document.createElement('input')
@@ -161,11 +152,13 @@ export function OnboardingChecklist({
           />
         )}
 
-        <Card className={`p-5 border-2 shadow-lg relative overflow-hidden ${
-          allComplete
-            ? 'bg-gradient-to-br from-success/15 via-success/8 to-bg-elevated border-success/30 shadow-glow-success'
-            : 'bg-gradient-to-br from-primary/12 via-primary/6 to-bg-elevated border-primary/25 shadow-glow-primary-sm'
-        }`}>
+        <Card
+          className={`p-5 border-2 shadow-lg relative overflow-hidden ${
+            allComplete
+              ? 'bg-gradient-to-br from-success/15 via-success/8 to-bg-elevated border-success/30 shadow-glow-success'
+              : 'bg-gradient-to-br from-primary/12 via-primary/6 to-bg-elevated border-primary/25 shadow-glow-primary-sm'
+          }`}
+        >
           {/* Animated background sparkles for complete state */}
           {allComplete && (
             <>
@@ -173,7 +166,7 @@ export function OnboardingChecklist({
                 className="absolute top-4 right-4 text-success"
                 animate={{
                   rotate: [0, 10, -10, 0],
-                  scale: [1, 1.1, 1]
+                  scale: [1, 1.1, 1],
                 }}
                 transition={{ duration: 2, repeat: Infinity, repeatDelay: 1 }}
               >
@@ -183,7 +176,7 @@ export function OnboardingChecklist({
                 className="absolute bottom-4 left-4 text-warning"
                 animate={{
                   rotate: [0, -10, 10, 0],
-                  scale: [1, 1.1, 1]
+                  scale: [1, 1.1, 1],
                 }}
                 transition={{ duration: 2, repeat: Infinity, repeatDelay: 0.5 }}
               >
@@ -199,7 +192,7 @@ export function OnboardingChecklist({
                 <m.div
                   initial={{ scale: 0, rotate: -180 }}
                   animate={{ scale: 1, rotate: 0 }}
-                  transition={{ type: "spring", stiffness: 260, damping: 20 }}
+                  transition={{ type: 'spring', stiffness: 260, damping: 20 }}
                   className="w-10 h-10 rounded-full bg-gradient-to-br from-success to-success/70 flex items-center justify-center shadow-glow-success"
                 >
                   <Check className="w-6 h-6 text-white" />
@@ -210,7 +203,9 @@ export function OnboardingChecklist({
                   animate={{ scale: [1, 1.05, 1] }}
                   transition={{ duration: 2, repeat: Infinity }}
                 >
-                  <span className="text-base font-bold text-white">{completedCount}/{totalSteps}</span>
+                  <span className="text-base font-bold text-white">
+                    {completedCount}/{totalSteps}
+                  </span>
                 </m.div>
               )}
               <div>
@@ -231,9 +226,11 @@ export function OnboardingChecklist({
                 </h3>
                 {!allComplete && (
                   <p className="text-sm text-text-tertiary mt-0.5">
-                    {completedCount === 0 ? 'Commençons l\'aventure ensemble' :
-                     completedCount === 1 ? 'Super début ! Continue comme ça' :
-                     'Plus qu\'une étape !'}
+                    {completedCount === 0
+                      ? "Commençons l'aventure ensemble"
+                      : completedCount === 1
+                        ? 'Super début ! Continue comme ça'
+                        : "Plus qu'une étape !"}
                   </p>
                 )}
               </div>
@@ -286,13 +283,13 @@ export function OnboardingChecklist({
                         : 'bg-gradient-to-br from-primary/20 to-primary/10'
                     }`}
                     whileHover={{ scale: 1.05 }}
-                    transition={{ type: "spring", stiffness: 400, damping: 10 }}
+                    transition={{ type: 'spring', stiffness: 400, damping: 10 }}
                   >
                     {step.done ? (
                       <m.div
                         initial={{ scale: 0, rotate: -180 }}
                         animate={{ scale: 1, rotate: 0 }}
-                        transition={{ type: "spring", stiffness: 260, damping: 20 }}
+                        transition={{ type: 'spring', stiffness: 260, damping: 20 }}
                       >
                         <Check className="w-5 h-5 text-white" />
                       </m.div>
@@ -301,19 +298,18 @@ export function OnboardingChecklist({
                     )}
                   </m.div>
                   <div className="flex-1 min-w-0">
-                    <div className={`text-base font-semibold ${
-                      step.done
-                        ? 'text-success'
-                        : 'text-text-primary'
-                    }`}>
+                    <div
+                      className={`text-base font-semibold ${
+                        step.done ? 'text-success' : 'text-text-primary'
+                      }`}
+                    >
                       {step.label}
                     </div>
-                    <div className="text-sm text-text-tertiary">
-                      {step.description}
-                    </div>
+                    <div className="text-sm text-text-tertiary">{step.description}</div>
                   </div>
-                  {!step.done && step.action && (
-                    step.action.type === 'link' ? (
+                  {!step.done &&
+                    step.action &&
+                    (step.action.type === 'link' ? (
                       <Link
                         to={step.action.to}
                         className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-primary text-white font-medium hover:bg-primary-hover transition-colors shadow-sm hover:shadow-md flex-shrink-0"
@@ -329,8 +325,7 @@ export function OnboardingChecklist({
                         Go
                         <ChevronRight className="w-4 h-4" />
                       </button>
-                    )
-                  )}
+                    ))}
                   {step.done && (
                     <m.div
                       initial={{ scale: 0 }}

@@ -41,7 +41,9 @@ export const useSquadNotificationsStore = create<SquadNotificationsState>((set, 
     try {
       set({ isLoading: true })
 
-      const { data: { session } } = await supabase.auth.getSession()
+      const {
+        data: { session },
+      } = await supabase.auth.getSession()
       const user = session?.user
       if (!user) {
         set({ pendingRsvpCount: 0, isLoading: false })
@@ -59,7 +61,7 @@ export const useSquadNotificationsStore = create<SquadNotificationsState>((set, 
         return
       }
 
-      const squadIds = memberships.map(m => m.squad_id)
+      const squadIds = memberships.map((m) => m.squad_id)
 
       // Get proposed/confirmed sessions in user's squads that are in the future
       const { data: sessions } = await supabase
@@ -74,7 +76,7 @@ export const useSquadNotificationsStore = create<SquadNotificationsState>((set, 
         return
       }
 
-      const sessionIds = sessions.map(s => s.id)
+      const sessionIds = sessions.map((s) => s.id)
 
       // Get user's RSVPs for these sessions
       const { data: rsvps } = await supabase
@@ -83,15 +85,15 @@ export const useSquadNotificationsStore = create<SquadNotificationsState>((set, 
         .in('session_id', sessionIds)
         .eq('user_id', user.id)
 
-      const respondedSessionIds = new Set(rsvps?.map(r => r.session_id) || [])
+      const respondedSessionIds = new Set(rsvps?.map((r) => r.session_id) || [])
 
       // Count sessions where user hasn't responded
-      const pendingCount = sessions.filter(s => !respondedSessionIds.has(s.id)).length
+      const pendingCount = sessions.filter((s) => !respondedSessionIds.has(s.id)).length
 
       set({
         pendingRsvpCount: pendingCount,
         isLoading: false,
-        lastFetchedAt: Date.now()
+        lastFetchedAt: Date.now(),
       })
     } catch (error) {
       console.warn('[SquadNotif] Error fetching counts:', error)
@@ -107,22 +109,14 @@ export const useSquadNotificationsStore = create<SquadNotificationsState>((set, 
 
     realtimeChannel = supabase
       .channel('squad-notifications')
-      .on(
-        'postgres_changes',
-        { event: '*', schema: 'public', table: 'sessions' },
-        () => {
-          // Force refresh on session changes
-          state.fetchPendingCounts()
-        }
-      )
-      .on(
-        'postgres_changes',
-        { event: '*', schema: 'public', table: 'session_rsvps' },
-        () => {
-          // Force refresh on RSVP changes
-          state.fetchPendingCounts()
-        }
-      )
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'sessions' }, () => {
+        // Force refresh on session changes
+        state.fetchPendingCounts()
+      })
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'session_rsvps' }, () => {
+        // Force refresh on RSVP changes
+        state.fetchPendingCounts()
+      })
       .subscribe()
   },
 
@@ -138,8 +132,9 @@ export const useSquadNotificationsStore = create<SquadNotificationsState>((set, 
  * Hook to use squad notifications with auto-subscription
  */
 export function useSquadNotifications() {
-  const user = useAuthStore(state => state.user)
-  const { pendingRsvpCount, fetchPendingCounts, subscribe, unsubscribe } = useSquadNotificationsStore()
+  const user = useAuthStore((state) => state.user)
+  const { pendingRsvpCount, fetchPendingCounts, subscribe, unsubscribe } =
+    useSquadNotificationsStore()
 
   useEffect(() => {
     if (!user) return

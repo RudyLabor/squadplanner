@@ -8,7 +8,11 @@ import { StatusSelector } from '../StatusSelector'
 
 interface SidebarFooterProps {
   isExpanded: boolean
-  profile: { username?: string | null; avatar_url?: string | null; reliability_score?: number | null } | null
+  profile: {
+    username?: string | null
+    avatar_url?: string | null
+    reliability_score?: number | null
+  } | null
   onOpenCustomStatus: () => void
 }
 
@@ -81,10 +85,7 @@ export const SidebarFooter = memo(function SidebarFooter({
                 </m.div>
               </m.div>
             </Link>
-            <StatusSelector
-              onOpenCustomStatus={onOpenCustomStatus}
-              className="mt-1 px-1"
-            />
+            <StatusSelector onOpenCustomStatus={onOpenCustomStatus} className="mt-1 px-1" />
           </>
         )}
       </div>
@@ -99,7 +100,11 @@ export const SidebarFooter = memo(function SidebarFooter({
             transition={{ duration: 0.2 }}
             className="p-4 overflow-hidden"
           >
-            <Link to="/premium" viewTransition aria-label="Passer Premium - Stats avancées, IA coach, qualité audio HD">
+            <Link
+              to="/premium"
+              viewTransition
+              aria-label="Passer Premium - Stats avancées, IA coach, qualité audio HD"
+            >
               <m.div
                 className="p-4 rounded-xl bg-gradient-to-br from-primary-10 to-purple/3 border border-primary/10 cursor-pointer"
                 whileHover={{ scale: 1.02 }}

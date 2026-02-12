@@ -7,7 +7,10 @@ const isNativePlatform = !!(globalThis as any).Capacitor?.isNativePlatform?.()
 
 const VAPID_PUBLIC_KEY = import.meta.env.VITE_VAPID_PUBLIC_KEY
 if (!import.meta.env.PROD) {
-  console.log('[Push] VAPID key configured:', VAPID_PUBLIC_KEY ? 'Yes (' + VAPID_PUBLIC_KEY.substring(0, 20) + '...)' : 'NO - MISSING!')
+  console.log(
+    '[Push] VAPID key configured:',
+    VAPID_PUBLIC_KEY ? 'Yes (' + VAPID_PUBLIC_KEY.substring(0, 20) + '...)' : 'NO - MISSING!'
+  )
 }
 
 interface ServiceWorkerMessage {
@@ -49,7 +52,8 @@ function arrayBufferToBase64(buffer: ArrayBuffer): string {
 }
 
 export const usePushNotificationStore = create<PushNotificationState>((set, get) => ({
-  isSupported: typeof window !== 'undefined' && 'serviceWorker' in navigator && 'PushManager' in window,
+  isSupported:
+    typeof window !== 'undefined' && 'serviceWorker' in navigator && 'PushManager' in window,
   isServiceWorkerRegistered: false,
   isSubscribed: false,
   isLoading: false,
@@ -70,15 +74,24 @@ export const usePushNotificationStore = create<PushNotificationState>((set, get)
       return registration
     } catch (error) {
       console.warn('[Push] Service worker registration failed:', error)
-      set({ isLoading: false, error: error instanceof Error ? error.message : 'Failed to register service worker' })
+      set({
+        isLoading: false,
+        error: error instanceof Error ? error.message : 'Failed to register service worker',
+      })
       return null
     }
   },
 
   subscribeToPush: async (userId: string) => {
     const { isSupported, registration } = get()
-    if (!isSupported) { set({ error: 'Push notifications not supported' }); return false }
-    if (!VAPID_PUBLIC_KEY) { set({ error: 'Push notifications not configured (missing VAPID key)' }); return false }
+    if (!isSupported) {
+      set({ error: 'Push notifications not supported' })
+      return false
+    }
+    if (!VAPID_PUBLIC_KEY) {
+      set({ error: 'Push notifications not configured (missing VAPID key)' })
+      return false
+    }
 
     try {
       set({ isLoading: true, error: null })
@@ -100,26 +113,30 @@ export const usePushNotificationStore = create<PushNotificationState>((set, get)
           await existingSubscription.unsubscribe()
           await supabase.from('push_subscriptions').delete().eq('user_id', userId)
         } catch (e) {
-          if (!import.meta.env.PROD) console.warn('[Push] Failed to unsubscribe old subscription:', e)
+          if (!import.meta.env.PROD)
+            console.warn('[Push] Failed to unsubscribe old subscription:', e)
         }
       }
 
       const applicationServerKey = urlBase64ToUint8Array(VAPID_PUBLIC_KEY)
       const subscription = await swRegistration.pushManager.subscribe({
         userVisibleOnly: true,
-        applicationServerKey: applicationServerKey.buffer as ArrayBuffer
+        applicationServerKey: applicationServerKey.buffer as ArrayBuffer,
       })
 
       const p256dh = subscription.getKey('p256dh')
       const auth = subscription.getKey('auth')
       if (!p256dh || !auth) throw new Error('Failed to get subscription keys')
 
-      const { error: dbError } = await supabase.from('push_subscriptions').upsert({
-        user_id: userId,
-        endpoint: subscription.endpoint,
-        p256dh: arrayBufferToBase64(p256dh),
-        auth: arrayBufferToBase64(auth)
-      }, { onConflict: 'user_id,endpoint' })
+      const { error: dbError } = await supabase.from('push_subscriptions').upsert(
+        {
+          user_id: userId,
+          endpoint: subscription.endpoint,
+          p256dh: arrayBufferToBase64(p256dh),
+          auth: arrayBufferToBase64(auth),
+        },
+        { onConflict: 'user_id,endpoint' }
+      )
 
       if (dbError) throw dbError
 
@@ -127,7 +144,10 @@ export const usePushNotificationStore = create<PushNotificationState>((set, get)
       return true
     } catch (error) {
       if (!import.meta.env.PROD) console.warn('[Push] Subscription failed:', error)
-      set({ isLoading: false, error: error instanceof Error ? error.message : 'Failed to subscribe to push notifications' })
+      set({
+        isLoading: false,
+        error: error instanceof Error ? error.message : 'Failed to subscribe to push notifications',
+      })
       return false
     }
   },
@@ -141,7 +161,10 @@ export const usePushNotificationStore = create<PushNotificationState>((set, get)
       set({ isSubscribed: false, subscription: null, isLoading: false })
       return true
     } catch (error) {
-      set({ isLoading: false, error: error instanceof Error ? error.message : 'Failed to unsubscribe' })
+      set({
+        isLoading: false,
+        error: error instanceof Error ? error.message : 'Failed to unsubscribe',
+      })
       return false
     }
   },
@@ -152,13 +175,22 @@ export const usePushNotificationStore = create<PushNotificationState>((set, get)
     try {
       const subscription = await registration.pushManager.getSubscription()
       if (subscription) {
-        const { data, error } = await supabase.from('push_subscriptions')
-          .select('id').eq('user_id', userId).eq('endpoint', subscription.endpoint).single()
-        if (!error && data) { set({ isSubscribed: true, subscription }); return true }
+        const { data, error } = await supabase
+          .from('push_subscriptions')
+          .select('id')
+          .eq('user_id', userId)
+          .eq('endpoint', subscription.endpoint)
+          .single()
+        if (!error && data) {
+          set({ isSubscribed: true, subscription })
+          return true
+        }
       }
       set({ isSubscribed: false, subscription: null })
       return false
-    } catch { return false }
+    } catch {
+      return false
+    }
   },
 
   sendTestNotification: async () => {
@@ -169,19 +201,24 @@ export const usePushNotificationStore = create<PushNotificationState>((set, get)
       icon: '/favicon.svg',
       badge: '/favicon.svg',
       tag: 'test-notification',
-      data: { url: '/' }
+      data: { url: '/' },
     })
-  }
+  },
 }))
 
 export const usePushNotifications = () => {
   const store = usePushNotificationStore()
   return {
-    isSupported: store.isSupported, isRegistered: store.isServiceWorkerRegistered,
-    isSubscribed: store.isSubscribed, isLoading: store.isLoading, error: store.error,
-    register: store.registerServiceWorker, subscribe: store.subscribeToPush,
-    unsubscribe: store.unsubscribeFromPush, checkSubscription: store.checkSubscription,
-    sendTestNotification: store.sendTestNotification
+    isSupported: store.isSupported,
+    isRegistered: store.isServiceWorkerRegistered,
+    isSubscribed: store.isSubscribed,
+    isLoading: store.isLoading,
+    error: store.error,
+    register: store.registerServiceWorker,
+    subscribe: store.subscribeToPush,
+    unsubscribe: store.unsubscribeFromPush,
+    checkSubscription: store.checkSubscription,
+    sendTestNotification: store.sendTestNotification,
   }
 }
 
@@ -199,7 +236,11 @@ async function handleServiceWorkerMessage(event: MessageEvent<ServiceWorkerMessa
       if (voiceCallStore.status === 'ringing' && voiceCallStore.currentCallId === callId) {
         voiceCallStore.rejectCall()
       } else if (callId) {
-        supabase.from('calls').update({ status: 'rejected' }).eq('id', callId).then(() => {})
+        supabase
+          .from('calls')
+          .update({ status: 'rejected' })
+          .eq('id', callId)
+          .then(() => {})
       }
     }
   }
@@ -213,7 +254,9 @@ export async function initializePushNotifications(): Promise<void> {
     const registration = await store.registerServiceWorker()
     if (registration) {
       navigator.serviceWorker.addEventListener('message', handleServiceWorkerMessage)
-      const { data: { session } } = await supabase.auth.getSession()
+      const {
+        data: { session },
+      } = await supabase.auth.getSession()
       if (session?.user) await store.checkSubscription(session.user.id)
     }
   } catch (error) {

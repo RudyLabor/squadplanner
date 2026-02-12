@@ -23,7 +23,7 @@ const routeLabels: Record<string, string> = {
   '/sessions': 'Sessions',
   '/settings': 'Paramètres',
   '/premium': 'Premium',
-  '/call-history': 'Historique d\'appels',
+  '/call-history': "Historique d'appels",
   '/help': 'Aide',
   '/discover': 'Découvrir',
 }
@@ -39,9 +39,7 @@ export function Breadcrumbs() {
   }
 
   // Build breadcrumb trail
-  const items: BreadcrumbItem[] = [
-    { label: 'Accueil', path: '/home' }
-  ]
+  const items: BreadcrumbItem[] = [{ label: 'Accueil', path: '/home' }]
 
   const pathParts = location.pathname.split('/').filter(Boolean)
 
@@ -53,7 +51,7 @@ export function Breadcrumbs() {
     items.push({ label: 'Sessions', path: '/sessions' })
     items.push({ label: currentSession?.title || 'Session' })
   } else if (pathParts[0] === 'call-history') {
-    items.push({ label: 'Historique d\'appels' })
+    items.push({ label: "Historique d'appels" })
   } else if (pathParts[0] === 'settings') {
     items.push({ label: 'Paramètres' })
   } else if (pathParts[0] === 'help') {
@@ -94,7 +92,10 @@ export function Breadcrumbs() {
                   {item.label}
                 </Link>
               ) : (
-                <span className={isLast ? 'text-text-primary font-medium' : 'text-text-secondary'} aria-current={isLast ? 'page' : undefined}>
+                <span
+                  className={isLast ? 'text-text-primary font-medium' : 'text-text-secondary'}
+                  aria-current={isLast ? 'page' : undefined}
+                >
                   {item.label}
                 </span>
               )}

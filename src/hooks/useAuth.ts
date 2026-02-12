@@ -28,8 +28,13 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   initialize: async () => {
     try {
       await initSupabase()
-      const { data: { session } } = await supabase.auth.getSession()
-      if (session?.user) {
+      const { data: { session }, error: sessionError } = await supabase.auth.getSession()
+      if (sessionError) {
+        // Invalid or expired refresh token — clear local session and continue as logged-out
+        console.warn('Auth session error (invalid/expired token):', sessionError.message)
+        await supabase.auth.signOut({ scope: 'local' }).catch(() => {})
+        set({ user: null, session: null, profile: null, isLoading: false, isInitialized: true })
+      } else if (session?.user) {
         const { data: profile } = await supabase.from('profiles').select('*').eq('id', session.user.id).single()
         const updatedProfile = await updateDailyStreak(session.user.id, profile)
         set({ user: session.user, session, profile: updatedProfile, isLoading: false, isInitialized: true })

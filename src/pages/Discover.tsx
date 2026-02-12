@@ -1,6 +1,6 @@
 "use client";
 
-import { memo } from 'react'
+import { memo, useState } from 'react'
 import { m } from 'framer-motion'
 import {
   Compass,
@@ -49,7 +49,7 @@ const REGION_OPTIONS: SelectOption[] = [
 ]
 
 export function Discover() {
-  const [tab, setTab] = useStatePersistence<Tab>('discover_tab', 'squads')
+  const [tab, setTab] = useState<Tab>('squads')
   const [game, setGame] = useStatePersistence('discover_game', '')
   const [region, setRegion] = useStatePersistence('discover_region', '')
 

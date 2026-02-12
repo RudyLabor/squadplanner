@@ -211,7 +211,7 @@ export function MessageReactions({
                 ? 'bg-success-15 border border-success/30 text-success'
                 : 'bg-border-subtle border border-border-hover text-text-secondary hover:bg-border-hover'
             } ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
-            aria-label={`${emoji} reaction, ${count} ${count === 1 ? 'person' : 'people'}${hasCurrentUser ? ', you reacted' : ''}`}
+            aria-label={`R\u00e9action ${emoji}, ${count} ${count === 1 ? 'personne' : 'personnes'}${hasCurrentUser ? ', tu as r\u00e9agi' : ''}`}
           >
             <span className="text-base leading-none">{emoji}</span>
             <span className={`text-xs font-medium ${hasCurrentUser ? 'text-success' : 'text-text-secondary'}`}>
@@ -239,7 +239,7 @@ export function MessageReactions({
               ? 'bg-success-15 border border-success/30'
               : 'bg-border-subtle border border-border-hover opacity-0 group-hover:opacity-100 hover:bg-border-hover'
           } ${isLongPressing ? 'scale-110' : ''}`}
-          aria-label="Add reaction"
+          aria-label="Ajouter une r\u00e9action"
           aria-expanded={isPickerOpen}
         >
           <Plus className={`w-4 h-4 ${isPickerOpen ? 'text-success' : 'text-text-secondary'}`} />

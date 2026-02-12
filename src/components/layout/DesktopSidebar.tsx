@@ -232,7 +232,7 @@ export const DesktopSidebar = memo(function DesktopSidebar({
       </div>
 
       {/* Navigation */}
-      <nav aria-label="Menu principal" className={`flex-1 ${isExpanded ? 'px-3' : 'px-2'} py-4 space-y-1`}>
+      <nav aria-label="Menu principal" className={`flex-1 overflow-y-auto ${isExpanded ? 'px-3' : 'px-2'} py-4 space-y-1`}>
         {navItems.map((item) => {
           let badgeCount: number | undefined
           if (item.path === '/messages' && unreadMessages > 0) {

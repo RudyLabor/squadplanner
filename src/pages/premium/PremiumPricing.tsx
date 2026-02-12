@@ -103,8 +103,8 @@ export function PremiumPricing({ selectedPlan, setSelectedPlan, isLoading, error
           <h3 className="text-xl font-semibold text-text-primary mb-2">Pr&ecirc;t &agrave; passer Premium ?</h3>
           <p className="text-md text-text-secondary mb-2 max-w-md mx-auto">Rejoins les squads qui ont choisi de jouer s&eacute;rieusement ensemble.</p>
           <p className="text-base text-success mb-6 font-medium">Commence par 7 jours d'essai gratuit &mdash; sans carte bancaire</p>
-          <Button onClick={onUpgrade} disabled={isLoading} className="h-12 px-8 bg-gradient-to-r from-warning to-warning/70 text-bg-base font-semibold hover:opacity-90">
-            {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <><Zap className="w-5 h-5" /> Commencer &mdash; {selectedPlan === 'monthly' ? `${PREMIUM_PRICE_MONTHLY.toFixed(2)}\u20AC/mois` : `${(PREMIUM_PRICE_YEARLY / 12).toFixed(2)}\u20AC/mois`}</>}
+          <Button onClick={onStartTrial} disabled={isLoading} className="h-12 px-8 bg-gradient-to-r from-warning to-warning/70 text-bg-base font-semibold hover:opacity-90">
+            {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <><Zap className="w-5 h-5" /> Essai gratuit 7 jours</>}
           </Button>
         </Card>
       </div>

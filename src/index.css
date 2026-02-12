@@ -2012,3 +2012,16 @@ textarea::placeholder {
   }
 }
 
+/* =====================================================
+   PHASE 3 - UI POLISH: Micro-animations on buttons
+   Active press feedback as CSS fallback (Framer Motion
+   handles this on sidebar buttons already).
+   ===================================================== */
+@media (prefers-reduced-motion: no-preference) {
+  button:not(:disabled):active,
+  [role="button"]:not(:disabled):not([aria-disabled="true"]):active {
+    transform: scale(0.97);
+    transition: transform 150ms ease;
+  }
+}
+

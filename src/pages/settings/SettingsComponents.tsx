@@ -5,9 +5,15 @@ import { useThemeStore, type ThemeMode } from '../../hooks/useTheme'
 
 export function Toggle({ enabled, onChange, disabled = false }: { enabled: boolean; onChange: (value: boolean) => void; disabled?: boolean }) {
   return (
-    <button onClick={() => !disabled && onChange(!enabled)} disabled={disabled}
-      className={`relative w-11 h-6 rounded-full transition-colors ${enabled ? 'bg-success' : 'bg-border-hover'} ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}>
+    <button
+      role="switch"
+      aria-checked={enabled}
+      onClick={() => !disabled && onChange(!enabled)}
+      disabled={disabled}
+      className={`relative w-11 h-6 rounded-full transition-colors ${enabled ? 'bg-success' : 'bg-border-hover'} ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
+    >
       <m.div className="absolute top-1 w-4 h-4 bg-bg-base rounded-full shadow-sm" animate={{ left: enabled ? 24 : 4 }} transition={{ type: 'spring', stiffness: 500, damping: 30 }} />
+      <span className="sr-only">{enabled ? 'Activ\u00e9' : 'D\u00e9sactiv\u00e9'}</span>
     </button>
   )
 }

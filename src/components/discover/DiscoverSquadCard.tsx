@@ -1,6 +1,7 @@
 "use client";
 
-import { memo, useState } from 'react'
+import { memo, useState, useMemo } from 'react'
+import { Link } from 'react-router'
 import { m } from 'framer-motion'
 import {
   Users,
@@ -8,9 +9,12 @@ import {
   Copy,
   Check,
   Gamepad2,
+  Eye,
 } from '../icons'
 import type { PublicSquadResult } from '../../types/database'
 import { showSuccess, showError } from '../../lib/toast'
+import { useAuthStore } from '../../hooks/useAuth'
+import { useSquadsStore } from '../../hooks/useSquads'
 
 interface Props {
   squad: PublicSquadResult
@@ -18,6 +22,9 @@ interface Props {
 
 export const DiscoverSquadCard = memo(function DiscoverSquadCard({ squad }: Props) {
   const [copied, setCopied] = useState(false)
+  const { user } = useAuthStore()
+  const { squads: mySquads } = useSquadsStore()
+  const isMember = useMemo(() => mySquads.some(s => s.id === squad.id), [mySquads, squad.id])
 
   const handleCopyCode = async () => {
     try {
@@ -49,13 +56,23 @@ export const DiscoverSquadCard = memo(function DiscoverSquadCard({ squad }: Prop
           <h3 className="text-sm font-semibold text-text-primary truncate">{squad.name}</h3>
           <p className="text-xs text-indigo-400 font-medium">{squad.game}</p>
         </div>
-        <button
-          onClick={handleCopyCode}
-          className="flex-shrink-0 flex items-center gap-1.5 px-3 py-2 min-h-[44px] rounded-lg bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-400 text-xs font-medium transition-colors"
-        >
-          {copied ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
-          {copied ? 'Copié !' : 'Rejoindre'}
-        </button>
+        {isMember ? (
+          <Link
+            to="/squads"
+            className="flex-shrink-0 flex items-center gap-1.5 px-3 py-2 min-h-[44px] rounded-lg bg-success/10 hover:bg-success/20 text-success text-xs font-medium transition-colors"
+          >
+            <Eye className="w-3.5 h-3.5" />
+            Voir
+          </Link>
+        ) : (
+          <button
+            onClick={handleCopyCode}
+            className="flex-shrink-0 flex items-center gap-1.5 px-3 py-2 min-h-[44px] rounded-lg bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-400 text-xs font-medium transition-colors"
+          >
+            {copied ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
+            {copied ? 'Copié !' : 'Rejoindre'}
+          </button>
+        )}
       </div>
 
       {/* Description */}

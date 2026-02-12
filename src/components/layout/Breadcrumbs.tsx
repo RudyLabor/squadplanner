@@ -73,37 +73,39 @@ export function Breadcrumbs() {
 
   return (
     <nav
-      aria-label="Breadcrumb"
+      aria-label="Fil d'Ariane"
       className="desktop-only items-center gap-2 text-base mb-4 px-4 md:px-6 lg:px-8"
     >
-      {items.map((item, index) => {
-        const isLast = index === items.length - 1
+      <ol className="flex items-center gap-2 list-none m-0 p-0">
+        {items.map((item, index) => {
+          const isLast = index === items.length - 1
 
-        return (
-          <div key={index} className="flex items-center gap-2">
-            {index === 0 && (
-              <Home className="w-3.5 h-3.5 text-text-tertiary" />
-            )}
+          return (
+            <li key={index} className="flex items-center gap-2">
+              {index === 0 && (
+                <Home className="w-3.5 h-3.5 text-text-tertiary" aria-hidden="true" />
+              )}
 
-            {item.path && !isLast ? (
-              <Link
-                to={item.path}
-                className="text-text-secondary hover:text-text-primary transition-colors duration-300"
-              >
-                {item.label}
-              </Link>
-            ) : (
-              <span className={isLast ? 'text-text-primary font-medium' : 'text-text-secondary'}>
-                {item.label}
-              </span>
-            )}
+              {item.path && !isLast ? (
+                <Link
+                  to={item.path}
+                  className="text-text-secondary hover:text-text-primary transition-colors duration-300"
+                >
+                  {item.label}
+                </Link>
+              ) : (
+                <span className={isLast ? 'text-text-primary font-medium' : 'text-text-secondary'} aria-current={isLast ? 'page' : undefined}>
+                  {item.label}
+                </span>
+              )}
 
-            {!isLast && (
-              <ChevronRight className="w-3.5 h-3.5 text-text-tertiary" />
-            )}
-          </div>
-        )
-      })}
+              {!isLast && (
+                <ChevronRight className="w-3.5 h-3.5 text-text-tertiary" aria-hidden="true" />
+              )}
+            </li>
+          )
+        })}
+      </ol>
     </nav>
   )
 }

@@ -30,11 +30,15 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <link rel="apple-touch-icon" href="/icon-192.png" />
         <link rel="manifest" href="/manifest.json" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-        <meta name="description" content="Squad Planner — Le Calendly du gaming. Crée ta squad, planifie tes sessions avec RSVP et fiabilité mesurée. Fini les « on verra ». Gratuit." />
+        <meta name="description" content="Squad Planner | Le Calendly du gaming. Crée ta squad, planifie tes sessions avec RSVP et fiabilité mesurée. Fini les « on verra ». Gratuit." />
         <meta name="theme-color" content="#08090a" />
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
         <meta name="apple-mobile-web-app-title" content="Squad Planner" />
+        {/* TODO: Generer les images splash-*.png dans public/ puis decommenter:
+        <link rel="apple-touch-startup-image" href="/splash-1170x2532.png" media="(device-width: 390px) and (device-height: 844px) and (-webkit-device-pixel-ratio: 3)" />
+        <link rel="apple-touch-startup-image" href="/splash-1284x2778.png" media="(device-width: 428px) and (device-height: 926px) and (-webkit-device-pixel-ratio: 3)" />
+        */}
         <meta name="robots" content="index, follow" />
 
         {/* Preconnect for faster resource loading */}
@@ -50,7 +54,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
         {/* Open Graph / Facebook */}
         <meta property="og:type" content="website" />
-        <meta property="og:title" content="Squad Planner - Le Calendly du gaming" />
+        <meta property="og:title" content="Squad Planner | Le Calendly du gaming" />
         <meta property="og:description" content="Crée ta squad, planifie tes sessions avec RSVP et fiabilité mesurée. Fini les « on verra » — ta squad joue pour de vrai. Gratuit, en 30 secondes." />
         <meta property="og:image" content="https://squadplanner.fr/og-image.png" />
         <meta property="og:image:width" content="1200" />
@@ -60,7 +64,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
         {/* Twitter */}
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Squad Planner - Le Calendly du gaming" />
+        <meta name="twitter:title" content="Squad Planner | Le Calendly du gaming" />
         <meta name="twitter:description" content="Crée ta squad, planifie tes sessions avec RSVP et fiabilité mesurée. Fini les « on verra » — ta squad joue pour de vrai. Gratuit, en 30 secondes." />
         <meta name="twitter:image" content="https://squadplanner.fr/og-image.png" />
 
@@ -100,6 +104,80 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 "contactType": "customer support",
                 "availableLanguage": "French"
               }
+            })
+          }}
+        />
+
+        {/* FAQ Structured Data */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "FAQPage",
+              "mainEntity": [
+                {
+                  "@type": "Question",
+                  "name": "C'est quoi Squad Planner ?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Squad Planner est le Calendly du gaming. C'est une application web gratuite qui permet de cr\u00e9er des squads, planifier des sessions de jeu avec RSVP et mesurer la fiabilit\u00e9 de chaque joueur."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "Est-ce que Squad Planner est gratuit ?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Oui, Squad Planner est enti\u00e8rement gratuit. Une version Premium optionnelle offre des fonctionnalit\u00e9s suppl\u00e9mentaires comme les statistiques avanc\u00e9es et la personnalisation."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "Comment fonctionne le syst\u00e8me de fiabilit\u00e9 ?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Chaque joueur a un score de fiabilit\u00e9 bas\u00e9 sur sa participation r\u00e9elle aux sessions. Quand tu dis 'Pr\u00e9sent' et que tu joues, ton score monte. Si tu ne te pr\u00e9sentes pas, il descend."
+                  }
+                }
+              ]
+            })
+          }}
+        />
+
+        {/* BreadcrumbList Structured Data */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "BreadcrumbList",
+              "itemListElement": [
+                {
+                  "@type": "ListItem",
+                  "position": 1,
+                  "name": "Accueil",
+                  "item": "https://squadplanner.fr/"
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 2,
+                  "name": "Premium",
+                  "item": "https://squadplanner.fr/premium"
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 3,
+                  "name": "Aide",
+                  "item": "https://squadplanner.fr/help"
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 4,
+                  "name": "D\u00e9couvrir",
+                  "item": "https://squadplanner.fr/discover"
+                }
+              ]
             })
           }}
         />
@@ -262,36 +340,53 @@ export function ErrorBoundary() {
 
   return (
     <div className="min-h-screen bg-bg-base flex">
-      {/* Sidebar de navigation simplifiée */}
+      {/* Sidebar de navigation — style cohérent avec la 404 */}
       <nav className="hidden lg:flex w-[200px] shrink-0 bg-bg-elevated border-r border-border-subtle flex-col p-4" aria-label="Menu principal">
         <a href="/" className="flex items-center gap-2 mb-8 px-2">
           <img src="/favicon.svg" alt="Squad Planner" className="w-8 h-8" />
           <span className="font-semibold text-text-primary">Squad Planner</span>
         </a>
         <div className="flex flex-col gap-1">
-          <a href="/squads" className="flex items-center gap-3 px-3 py-2 rounded-lg text-text-secondary hover:bg-bg-hover transition-colors text-sm">Mes Squads</a>
-          <a href="/sessions" className="flex items-center gap-3 px-3 py-2 rounded-lg text-text-secondary hover:bg-bg-hover transition-colors text-sm">Sessions</a>
-          <a href="/messages" className="flex items-center gap-3 px-3 py-2 rounded-lg text-text-secondary hover:bg-bg-hover transition-colors text-sm">Messages</a>
-          <a href="/discover" className="flex items-center gap-3 px-3 py-2 rounded-lg text-text-secondary hover:bg-bg-hover transition-colors text-sm">Découvrir</a>
-          <a href="/profile" className="flex items-center gap-3 px-3 py-2 rounded-lg text-text-secondary hover:bg-bg-hover transition-colors text-sm">Profil</a>
+          {[
+            { href: '/home', label: 'Accueil' },
+            { href: '/squads', label: 'Mes Squads' },
+            { href: '/sessions', label: 'Sessions' },
+            { href: '/messages', label: 'Messages' },
+            { href: '/discover', label: 'Découvrir' },
+            { href: '/profile', label: 'Profil' },
+          ].map(item => (
+            <a key={item.href} href={item.href} className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-text-secondary hover:bg-bg-hover hover:text-text-primary transition-colors text-sm">{item.label}</a>
+          ))}
         </div>
-        <div className="mt-auto">
-          <a href="/help" className="flex items-center gap-3 px-3 py-2 rounded-lg text-text-secondary hover:bg-bg-hover transition-colors text-sm">Aide</a>
-          <a href="/settings" className="flex items-center gap-3 px-3 py-2 rounded-lg text-text-secondary hover:bg-bg-hover transition-colors text-sm">Paramètres</a>
+        <div className="mt-auto space-y-0.5">
+          <a href="/help" className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-text-secondary hover:bg-bg-hover hover:text-text-primary transition-colors text-sm">Aide</a>
+          <a href="/settings" className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-text-secondary hover:bg-bg-hover hover:text-text-primary transition-colors text-sm">Paramètres</a>
         </div>
       </nav>
 
-      {/* Contenu d'erreur */}
+      {/* Contenu d'erreur — aligné visuellement avec la page 404 */}
       <div className="flex-1 flex items-center justify-center p-4">
         <div className="max-w-md w-full text-center">
-          <div className="text-6xl mb-6">😵</div>
-          <h1 className="text-2xl font-bold text-text-primary mb-2">
-            {isRoute ? status : 'Quelque chose s\'est mal passé'}
+          {/* Animated error icon — same style as 404 page */}
+          <div className="w-24 h-24 rounded-2xl bg-gradient-to-br from-error/15 to-warning/[0.08] flex items-center justify-center mx-auto mb-6">
+            <svg className="w-12 h-12 text-error" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" /></svg>
+          </div>
+
+          <h1 className="text-4xl font-bold text-text-primary mb-3">
+            {status}
           </h1>
-          <p className="text-md text-text-secondary mb-8">
-            {message}. Tu peux essayer de recharger la page ou revenir à la navigation.
+
+          <p className="text-lg font-semibold text-text-primary mb-2">
+            {status === 503 ? 'Service temporairement indisponible' : status === 500 ? 'Erreur interne du serveur' : message}
           </p>
-          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+
+          <p className="text-md text-text-secondary mb-8">
+            {status === 503
+              ? 'Le serveur est temporairement surchargé. Réessaie dans quelques instants.'
+              : 'Une erreur inattendue est survenue. Tu peux essayer de recharger la page.'}
+          </p>
+
+          <div className="flex flex-col sm:flex-row gap-3 justify-center mb-10">
             <button
               onClick={() => window.location.reload()}
               className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-primary text-white text-md font-medium hover:bg-primary-hover transition-colors"
@@ -299,19 +394,25 @@ export function ErrorBoundary() {
               Recharger la page
             </button>
             <a
-              href="/squads"
+              href="/home"
               className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-overlay-subtle text-text-secondary text-md font-medium hover:bg-overlay-light transition-colors border border-border-subtle"
             >
-              Mes Squads
+              Retour à l'accueil
             </a>
           </div>
-          {/* Navigation mobile */}
-          <div className="lg:hidden mt-6 flex flex-wrap gap-2 justify-center">
-            <a href="/squads" className="px-4 py-2 rounded-lg bg-bg-elevated text-text-secondary text-sm hover:bg-bg-hover transition-colors">Squads</a>
-            <a href="/sessions" className="px-4 py-2 rounded-lg bg-bg-elevated text-text-secondary text-sm hover:bg-bg-hover transition-colors">Sessions</a>
-            <a href="/messages" className="px-4 py-2 rounded-lg bg-bg-elevated text-text-secondary text-sm hover:bg-bg-hover transition-colors">Messages</a>
-            <a href="/discover" className="px-4 py-2 rounded-lg bg-bg-elevated text-text-secondary text-sm hover:bg-bg-hover transition-colors">Découvrir</a>
-            <a href="/help" className="px-4 py-2 rounded-lg bg-bg-elevated text-text-secondary text-sm hover:bg-bg-hover transition-colors">Aide</a>
+
+          {/* Pages populaires — même pattern que la 404 */}
+          <div className="border-t border-border-subtle pt-6">
+            <p className="text-sm text-text-tertiary mb-4">Pages populaires</p>
+            <div className="flex flex-wrap justify-center gap-3">
+              {[
+                { href: '/squads', label: 'Mes squads' },
+                { href: '/messages', label: 'Messages' },
+                { href: '/help', label: 'Aide' },
+              ].map(item => (
+                <a key={item.href} href={item.href} className="flex items-center gap-2 px-4 py-2 rounded-lg bg-bg-elevated border border-border-subtle text-sm text-text-secondary hover:text-text-primary hover:border-border-hover transition-colors">{item.label}</a>
+              ))}
+            </div>
           </div>
         </div>
       </div>

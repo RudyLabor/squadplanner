@@ -197,7 +197,9 @@ export function Dialog({
             )}
 
             {/* Content */}
-            {children}
+            <div className="flex-1 overflow-y-auto">
+              {children}
+            </div>
           </m.div>
         </div>
       )}

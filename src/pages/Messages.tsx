@@ -122,7 +122,7 @@ export function Messages() {
     setActiveTab('squads')
     const existing = squadConversations.find(c => c.squad_id === squadId)
     if (existing) { setActiveSquadConv(existing); setSearchParams({}, { replace: true }) }
-    else { (async () => { await fetchSquadConvs(); const c = squadConversations.find(c => c.squad_id === squadId); if (c) setActiveSquadConv(c); setSearchParams({}, { replace: true }) })() }
+    else { (async () => { await fetchSquadConvs(); const fresh = useMessagesStore.getState().conversations; const c = fresh.find(c => c.squad_id === squadId); if (c) setActiveSquadConv(c); setSearchParams({}, { replace: true }) })() }
   }, [searchParams, squadConversations, isLoadingSquad, setActiveSquadConv, setSearchParams, fetchSquadConvs])
 
   const currentMessages = activeSquadConv ? squadMessages : dmMessages

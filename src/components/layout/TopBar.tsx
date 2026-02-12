@@ -56,7 +56,7 @@ export const TopBar = memo(function TopBar() {
       <header role="banner" className="desktop-only pt-4 px-6 items-center justify-between">
         <Breadcrumbs />
         <div className="flex items-center gap-2">
-          <Tooltip content="Notifications" position="bottom">
+          <Tooltip content="Notifications" position="left">
             <NotificationBell />
           </Tooltip>
           <Tooltip content="Rechercher (Ctrl+K)" position="bottom">

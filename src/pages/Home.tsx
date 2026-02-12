@@ -275,7 +275,7 @@ export default function Home({ loaderData }: HomeProps) {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
             >
-              <h1 className="text-xl md:text-2xl font-bold text-text-primary mb-1">
+              <h1 className="text-lg md:text-xl font-bold text-text-primary mb-1">
                 {greeting}{' '}
                 {profile?.username && (
                   <span className="hidden sm:inline">{profile.username.length > 15 ? profile.username.slice(0, 15) + '\u2026' : profile.username}{' '}</span>

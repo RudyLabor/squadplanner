@@ -119,8 +119,8 @@ export function ProfileScreen() {
       >
         <div className="flex items-center justify-between mb-1.5">
           <div className="flex items-center gap-1.5">
-            <span className="text-xs">\u26A1</span>
-            <span className="text-xs font-semibold text-text-primary">Niveau 4 \u2014 Régulier</span>
+            <span className="text-xs">⚡</span>
+            <span className="text-xs font-semibold text-text-primary">Niveau 4 — Régulier</span>
           </div>
           <span className="text-xs text-primary">340 XP</span>
         </div>

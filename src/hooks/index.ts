@@ -92,3 +92,6 @@ export { useInfiniteScroll } from './useInfiniteScroll'
 export { useAdaptiveLoading } from './useAdaptiveLoading'
 export type { QualityTier } from './useAdaptiveLoading'
 export { usePrefetch } from './usePrefetch'
+
+// Analytics tracking
+export { useAnalytics } from './useAnalytics'

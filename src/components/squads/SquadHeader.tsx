@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
 import {
   Crown,
@@ -123,6 +123,21 @@ function EditSquadModal({ squadId, initialName, initialGame, onClose }: {
   const [description, setDescription] = useState('')
   const updateMutation = useUpdateSquadMutation()
 
+  // Escape key to close
+  useEffect(() => {
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') { e.preventDefault(); onClose() }
+    }
+    document.addEventListener('keydown', handleKey)
+    return () => document.removeEventListener('keydown', handleKey)
+  }, [onClose])
+
+  // Lock body scroll when modal is open
+  useEffect(() => {
+    document.body.style.overflow = 'hidden'
+    return () => { document.body.style.overflow = '' }
+  }, [])
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!name.trim() || !game.trim()) return
@@ -135,19 +150,23 @@ function EditSquadModal({ squadId, initialName, initialGame, onClose }: {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="fixed inset-0 z-[100] bg-black/60 flex items-center justify-center px-4"
+      className="fixed inset-0 z-[100] bg-black/60 backdrop-blur-sm flex items-center justify-center px-4"
       onClick={onClose}
     >
       <m.div
         initial={{ scale: 0.95, y: 10 }}
         animate={{ scale: 1, y: 0 }}
         exit={{ scale: 0.95, y: 10 }}
+        transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="edit-squad-title"
         className="w-full max-w-md rounded-2xl bg-bg-elevated border border-border-subtle p-6"
         onClick={e => e.stopPropagation()}
       >
         <div className="flex items-center justify-between mb-5">
-          <h2 className="text-lg font-bold text-text-primary">Modifier la squad</h2>
-          <button onClick={onClose} className="p-1.5 rounded-lg hover:bg-border-subtle transition-colors">
+          <h2 id="edit-squad-title" className="text-lg font-bold text-text-primary">Modifier la squad</h2>
+          <button onClick={onClose} className="p-1.5 rounded-lg hover:bg-border-subtle transition-colors" aria-label="Fermer">
             <X className="w-5 h-5 text-text-tertiary" />
           </button>
         </div>

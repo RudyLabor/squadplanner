@@ -86,7 +86,9 @@ export function TourGuide() {
   const location = useLocation()
 
   useEffect(() => {
-    if (location.pathname !== '/squads') return
+    // Activer le tour sur /home ou /squads pour les nouveaux utilisateurs
+    if (location.pathname !== '/home' && location.pathname !== '/squads') return
+
     try {
       const completed = localStorage.getItem(TOUR_COMPLETED_KEY)
       if (completed === 'true' || completed === 'shown') return
@@ -104,7 +106,7 @@ export function TourGuide() {
         try { localStorage.setItem(TOUR_COMPLETED_KEY, 'true') } catch {}
         setActive(true)
       }
-    }, 2000)
+    }, 3000) // Délai de 3s pour laisser le temps à la page de charger
 
     return () => clearTimeout(timer)
   }, [location.pathname])

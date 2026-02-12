@@ -6,9 +6,11 @@ import {
   CheckCircle2,
   HelpCircle,
   XCircle,
+  Sparkles,
 } from '../icons'
 import { Link } from 'react-router'
 import { Card, Badge, SessionCardSkeleton, ContentTransition } from '../ui'
+import { EmptyStateIllustration } from '../EmptyStateIllustration'
 
 interface UpcomingSession {
   id: string
@@ -173,17 +175,104 @@ interface HomeSessionsSectionProps {
   sessionsLoading: boolean
   onRsvp: (sessionId: string, response: 'present' | 'absent' | 'maybe') => void
   isRsvpLoading: boolean
+  onCreateSession?: () => void
 }
+
+// Empty state pour encourager la création de session
+const SessionEmptyState = memo(function SessionEmptyState({ onCreate }: { onCreate: () => void }) {
+  return (
+    <Card className="p-8 border-2 border-dashed border-primary/20 bg-gradient-to-br from-primary/8 via-transparent to-success/5 relative overflow-hidden">
+      {/* Animated background gradient */}
+      <m.div
+        className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent pointer-events-none"
+        animate={{
+          opacity: [0.3, 0.6, 0.3]
+        }}
+        transition={{
+          duration: 3,
+          repeat: Infinity,
+          ease: "easeInOut"
+        }}
+      />
+
+      <div className="relative flex flex-col items-center text-center space-y-5">
+        {/* Illustration */}
+        <m.div
+          initial={{ scale: 0.8, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+        >
+          <EmptyStateIllustration type="sessions" className="w-32 h-32" />
+        </m.div>
+
+        {/* Text content */}
+        <div className="space-y-2">
+          <m.h3
+            className="text-xl font-bold text-text-primary flex items-center justify-center gap-2"
+            initial={{ y: 10, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.2 }}
+          >
+            Aucune session prévue
+            <m.span
+              animate={{ rotate: [0, 10, -10, 0] }}
+              transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
+            >
+              🎮
+            </m.span>
+          </m.h3>
+          <m.p
+            className="text-base text-text-tertiary max-w-sm mx-auto"
+            initial={{ y: 10, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.3 }}
+          >
+            C'est le moment de rassembler ta squad ! Lance une session et organise votre prochaine partie épique.
+          </m.p>
+        </div>
+
+        {/* CTA Button */}
+        <m.button
+          whileHover={{ scale: 1.05, y: -2, boxShadow: 'var(--shadow-glow-primary-sm)' }}
+          whileTap={{ scale: 0.95 }}
+          onClick={onCreate}
+          initial={{ y: 10, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.4 }}
+          className="flex items-center gap-2 px-8 py-4 rounded-xl bg-gradient-to-r from-primary to-primary-hover text-white font-bold shadow-lg hover:shadow-xl transition-shadow group"
+        >
+          <Calendar className="w-5 h-5 group-hover:rotate-12 transition-transform" />
+          Créer une session
+          <m.div
+            animate={{ x: [0, 3, 0] }}
+            transition={{ duration: 1.5, repeat: Infinity }}
+          >
+            <Sparkles className="w-4 h-4" />
+          </m.div>
+        </m.button>
+
+        {/* Helper text */}
+        <m.p
+          className="text-sm text-text-tertiary"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.5 }}
+        >
+          Ta squad recevra une notification instantanément
+        </m.p>
+      </div>
+    </Card>
+  )
+})
 
 export const HomeSessionsSection = memo(function HomeSessionsSection({
   upcomingSessions,
   sessionsLoading,
   onRsvp,
   isRsvpLoading,
+  onCreateSession,
 }: HomeSessionsSectionProps) {
   const nextSession = upcomingSessions[0]
-
-  if (!sessionsLoading && !nextSession) return null
 
   return (
     <section aria-label="Prochaine session" className="mb-6">
@@ -201,9 +290,11 @@ export const HomeSessionsSection = memo(function HomeSessionsSection({
         isLoading={sessionsLoading}
         skeleton={<SessionCardSkeleton />}
       >
-        {nextSession && (
+        {nextSession ? (
           <NextSessionCard session={nextSession} onRsvp={onRsvp} isRsvpLoading={isRsvpLoading} />
-        )}
+        ) : onCreateSession ? (
+          <SessionEmptyState onCreate={onCreateSession} />
+        ) : null}
       </ContentTransition>
     </section>
   )

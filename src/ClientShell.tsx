@@ -1,7 +1,7 @@
 "use client";
 
 import { lazy, Suspense, memo, useEffect, useRef } from 'react'
-import { Outlet, useSearchParams } from 'react-router'
+import { Outlet, useSearchParams, useLocation } from 'react-router'
 import { useAuthStore, usePushNotificationStore, initializePushNotifications } from './hooks'
 import { initErrorTracker } from './lib/errorTracker'
 import { useDocumentTitle } from './hooks/useDocumentTitle'
@@ -46,6 +46,7 @@ const GlobalStateBanners = memo(function GlobalStateBanners() {
 export default function ClientShell() {
   const { initialize, user } = useAuthStore()
   const [searchParams, setSearchParams] = useSearchParams()
+  const location = useLocation()
 
   useDocumentTitle()
   useScrollRestoration()
@@ -53,6 +54,13 @@ export default function ClientShell() {
   useNavigationProgress()
 
   useEffect(() => { initialize() }, [initialize])
+
+  // Track page views on route changes
+  useEffect(() => {
+    import('./utils/analytics').then(({ trackPageView }) => {
+      trackPageView(location.pathname + location.search)
+    })
+  }, [location.pathname, location.search])
 
   // Initialize push notifications (service worker registration)
   useEffect(() => {
@@ -77,13 +85,29 @@ export default function ClientShell() {
     return () => window.removeEventListener('beforeinstallprompt', handler)
   }, [])
 
-  // Initialize error tracker + prefetch routes when authenticated
+  // Initialize error tracker + prefetch routes + identify user when authenticated
   const trackerInitRef = useRef(false)
   useEffect(() => {
     if (user && !trackerInitRef.current) {
       trackerInitRef.current = true
       initErrorTracker()
+
+      // Set user context for error reports
+      import('./lib/errorTracker').then(({ setUser }) => {
+        setUser({ id: user.id, username: user.username })
+      })
+
       import('./utils/routePrefetch').then(({ prefetchProbableRoutes }) => { prefetchProbableRoutes() })
+
+      // Identify user in analytics
+      import('./utils/analytics').then(({ identifyUser }) => {
+        identifyUser(user.id, {
+          username: user.username,
+          email: user.email,
+          premium: user.premium,
+          created_at: user.created_at,
+        })
+      })
     }
   }, [user])
 

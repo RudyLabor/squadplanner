@@ -1,8 +1,10 @@
 /**
  * Lightweight analytics event tracking
  * Captures clicks on elements with data-track attribute
- * Events are sent to the web-vitals edge function for aggregation
+ * Now integrated with PostHog analytics system
  */
+
+import { trackEvent as trackAnalyticsEvent } from './analytics'
 
 interface TrackEvent {
   name: string
@@ -20,9 +22,14 @@ function flushEvents() {
   const events = [...eventQueue]
   eventQueue.length = 0
 
-  // Analytics endpoint not deployed yet — skip beacon to avoid 405 errors.
-  // Re-enable once /api/analytics or a third-party (GA4, Plausible) is set up.
-  void events
+  // Send to PostHog if configured
+  events.forEach(event => {
+    trackAnalyticsEvent(event.name as any, {
+      url: event.url,
+      referrer: event.referrer,
+      timestamp: event.timestamp,
+    })
+  })
 }
 
 function queueEvent(name: string) {
@@ -43,6 +50,11 @@ function queueEvent(name: string) {
  * Call once on app mount
  */
 export function initTrackingListeners() {
+  // Initialize analytics system
+  import('./analytics').then(({ initAnalytics }) => {
+    initAnalytics()
+  })
+
   document.addEventListener('click', (e) => {
     const target = (e.target as HTMLElement).closest('[data-track]')
     if (target) {
@@ -56,6 +68,6 @@ export function initTrackingListeners() {
   // Flush on page unload
   window.addEventListener('beforeunload', flushEvents)
 
-  // Track page views
+  // Track initial page view
   queueEvent('page_view')
 }

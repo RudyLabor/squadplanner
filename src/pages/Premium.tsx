@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router'
-import { useAuthStore, useSubscriptionStore, usePremiumStore } from '../hooks'
+import { useAuthStore, useSubscriptionStore, usePremiumStore, useAnalytics } from '../hooks'
 import { showSuccess } from '../lib/toast'
 import { captureException } from '../lib/sentry'
 import { PremiumHero } from './premium/PremiumHero'
@@ -16,13 +16,29 @@ export function Premium() {
   const { user } = useAuthStore()
   const { hasPremium } = usePremiumStore()
   const { createCheckoutSession, createPortalSession, plans } = useSubscriptionStore()
+  const analytics = useAnalytics()
 
   const [selectedPlan, setSelectedPlan] = useState<'monthly' | 'yearly'>('yearly')
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
+  // Track premium page view
+  useEffect(() => {
+    analytics.track('premium_viewed', {
+      already_premium: hasPremium,
+      source: 'direct_navigation'
+    })
+  }, [analytics, hasPremium])
+
   const handleUpgrade = async () => {
     if (!user) { navigate('/auth'); return }
+
+    // Track checkout started
+    analytics.track('premium_checkout_started', {
+      plan: selectedPlan,
+      price: selectedPlan === 'yearly' ? 49.99 : 4.99
+    })
+
     setIsLoading(true); setError(null)
     try {
       const priceId = selectedPlan === 'monthly'

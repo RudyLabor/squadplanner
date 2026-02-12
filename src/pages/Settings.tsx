@@ -29,6 +29,7 @@ import { supabase } from '../lib/supabase'
 import { showSuccess, showError } from '../lib/toast'
 import { Toggle, SectionHeader, SettingRow, ThemeSelector } from './settings/SettingsComponents'
 import { SettingsDeleteModal } from './settings/SettingsDeleteModal'
+import { useLocale, useSetLocale } from '../lib/i18n'
 
 interface NotificationSettings { sessions: boolean; messages: boolean; party: boolean; reminders: boolean }
 interface PrivacySettings { profileVisibility: 'public' | 'friends' | 'private'; showOnlineStatus: boolean }
@@ -44,13 +45,16 @@ export function Settings() {
   const { signOut } = useAuthStore()
   useHashNavigation()
 
+  // i18n
+  const locale = useLocale()
+  const setLocale = useSetLocale()
+
   const [notifications, setNotifications] = useState<NotificationSettings>({ sessions: true, messages: true, party: true, reminders: true })
   const [audioInput, setAudioInput] = useState<string>('default')
   const [audioOutput, setAudioOutput] = useState<string>('default')
   const [audioDevices, setAudioDevices] = useState<MediaDeviceInfo[]>([])
   const [privacy, setPrivacy] = useState<PrivacySettings>({ profileVisibility: 'friends', showOnlineStatus: true })
   const [timezone, setTimezone] = useState<string>(Intl.DateTimeFormat().resolvedOptions().timeZone)
-  const [language, setLanguage] = useState<'fr' | 'en'>('fr')
   const [showDeleteModal, setShowDeleteModal] = useState(false)
   const [isExporting, setIsExporting] = useState(false)
 
@@ -150,7 +154,7 @@ export function Settings() {
             <div><label className="flex items-center gap-2 text-base text-text-tertiary mb-2"><Globe className="w-4 h-4" />Fuseau horaire</label>
               <Select value={timezone} onChange={(v) => { setTimezone(v as string); showSaveToast() }} options={TIMEZONES.map(tz => ({ value: tz.value, label: tz.label }))} searchable placeholder="Choisis un fuseau horaire" /></div>
             <div><label className="flex items-center gap-2 text-base text-text-tertiary mb-2"><Languages className="w-4 h-4" />Langue</label>
-              <SegmentedControl options={[{ value: 'fr' as const, label: 'Français' }, { value: 'en' as const, label: 'English' }]} value={language} onChange={(v: 'fr' | 'en') => { setLanguage(v); showSaveToast() }} layoutId="language-selector" /></div>
+              <SegmentedControl options={[{ value: 'fr' as const, label: 'Français' }, { value: 'en' as const, label: 'English' }]} value={locale} onChange={(v: 'fr' | 'en') => { setLocale(v); showSaveToast() }} layoutId="language-selector" /></div>
           </div>
         </Card>
 

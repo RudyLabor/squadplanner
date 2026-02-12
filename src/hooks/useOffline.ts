@@ -54,11 +54,15 @@ export function useOffline() {
     const handleOnline = () => {
       store.setOnline()
       setConnectionQuality('good')
+      // Haptic feedback on reconnection
+      navigator.vibrate?.([10, 50, 10])
     }
 
     const handleOffline = () => {
       store.setOffline()
       setConnectionQuality('offline')
+      // Haptic feedback on disconnection
+      navigator.vibrate?.([50, 100, 50])
     }
 
     window.addEventListener('online', handleOnline)

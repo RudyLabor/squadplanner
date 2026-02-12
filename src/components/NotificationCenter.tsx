@@ -1,11 +1,12 @@
 "use client";
 
-import { useState, useEffect, useCallback, useRef } from 'react'
+import { useEffect, useCallback, useRef } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
 import { Bell, CheckCheck, X } from './icons'
 import { create } from 'zustand'
 import { supabase } from '../lib/supabase'
 import { useAuthStore } from '../hooks'
+import { useOverlayStore } from '../hooks/useOverlayStore'
 
 interface AppNotification {
   id: string
@@ -87,10 +88,11 @@ export const useNotificationStore = create<NotificationStore>((set, get) => ({
 }))
 
 export function NotificationBell() {
-  const [isOpen, setIsOpen] = useState(false)
   const panelRef = useRef<HTMLDivElement>(null)
   const { user } = useAuthStore()
   const { notifications, unreadCount, fetchNotifications, markAsRead, markAllAsRead } = useNotificationStore()
+  const { activeOverlay, toggle, close } = useOverlayStore()
+  const isOpen = activeOverlay === 'notifications'
 
   useEffect(() => {
     if (user) fetchNotifications(user.id)
@@ -101,20 +103,20 @@ export function NotificationBell() {
     if (!isOpen) return
     const handleClick = (e: MouseEvent) => {
       if (panelRef.current && !panelRef.current.contains(e.target as Node)) {
-        setIsOpen(false)
+        close('notifications')
       }
     }
     document.addEventListener('mousedown', handleClick)
     return () => document.removeEventListener('mousedown', handleClick)
-  }, [isOpen])
+  }, [isOpen, close])
 
   // Close on Escape
   useEffect(() => {
     if (!isOpen) return
-    const handleKey = (e: KeyboardEvent) => { if (e.key === 'Escape') setIsOpen(false) }
+    const handleKey = (e: KeyboardEvent) => { if (e.key === 'Escape') close('notifications') }
     window.addEventListener('keydown', handleKey)
     return () => window.removeEventListener('keydown', handleKey)
-  }, [isOpen])
+  }, [isOpen, close])
 
   const formatTime = useCallback((date: string) => {
     const diff = Date.now() - new Date(date).getTime()
@@ -130,7 +132,7 @@ export function NotificationBell() {
     <div className="relative" ref={panelRef}>
       <button
         type="button"
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={() => toggle('notifications')}
         className="relative p-2 rounded-lg text-text-secondary hover:text-text-primary hover:bg-border-subtle transition-colors"
         aria-label={`Notifications${unreadCount > 0 ? ` (${unreadCount} non lues)` : ''}`}
       >
@@ -171,7 +173,7 @@ export function NotificationBell() {
                 )}
                 <button
                   type="button"
-                  onClick={() => setIsOpen(false)}
+                  onClick={() => close('notifications')}
                   className="text-text-tertiary hover:text-text-primary transition-colors"
                   aria-label="Fermer les notifications"
                 >

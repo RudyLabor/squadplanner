@@ -39,6 +39,13 @@ function getCorsHeaders(origin: string | null) {
   }
 }
 
+interface Breadcrumb {
+  timestamp: string
+  category: string
+  message: string
+  level?: string
+}
+
 interface ErrorReport {
   message: string
   stack?: string
@@ -46,8 +53,11 @@ interface ErrorReport {
   timestamp: string
   userAgent: string
   userId?: string
+  username?: string
   level: string
   extra?: Record<string, unknown>
+  breadcrumbs?: Breadcrumb[]
+  tags?: Record<string, string>
 }
 
 serve(async (req) => {
@@ -99,8 +109,11 @@ serve(async (req) => {
       timestamp: err.timestamp || new Date().toISOString(),
       user_agent: (err.userAgent || '').slice(0, 500),
       user_id: err.userId || null,
+      username: err.username || null,
       level: err.level || 'error',
       extra: err.extra || null,
+      breadcrumbs: err.breadcrumbs || null,
+      tags: err.tags || null,
     }))
 
     const { error } = await supabase.from('error_reports').insert(rows)

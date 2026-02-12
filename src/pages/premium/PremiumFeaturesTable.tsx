@@ -5,7 +5,7 @@ import { FEATURES } from './PremiumData'
 
 export function PremiumFeaturesTable() {
   return (
-    <m.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="mb-16">
+    <m.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }} className="mb-16">
       <h2 className="text-xl font-semibold text-text-primary text-center mb-8">Comparatif des fonctionnalit&eacute;s</h2>
       <Card className="overflow-hidden">
         <div className="grid grid-cols-[1.5fr_1fr_1.2fr] md:grid-cols-3 gap-2 md:gap-4 p-4 bg-overlay-faint border-b border-border-default">
@@ -19,7 +19,7 @@ export function PremiumFeaturesTable() {
         </div>
         <div className="divide-y divide-border-default">
           {FEATURES.map((feature, index) => (
-            <m.div key={feature.name} initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-20px' }} transition={{ delay: index * 0.06, duration: 0.35, ease: 'easeOut' }}
+            <m.div key={feature.name} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: index * 0.06, duration: 0.35, ease: 'easeOut' }}
               className={`grid grid-cols-[1.5fr_1fr_1.2fr] md:grid-cols-3 gap-2 md:gap-4 p-4 items-center ${feature.highlight ? 'bg-primary-5' : ''}`}>
               <div className="flex items-center gap-2 md:gap-3 min-w-0">
                 <feature.icon className="w-4 h-4 text-primary flex-shrink-0" />

@@ -15,7 +15,7 @@ import {
 } from './icons'
 import { create } from 'zustand'
 import { ResponsiveModal, Select } from './ui'
-import { useSquadsStore, useSessionsStore } from '../hooks'
+import { useSquadsStore, useSessionsStore, useHapticFeedback } from '../hooks'
 import { showSuccess } from '../lib/toast'
 
 // Store for managing the modal state globally
@@ -37,6 +37,7 @@ export function CreateSessionModal() {
   const { isOpen, preselectedSquadId, close } = useCreateSessionModal()
   const { squads } = useSquadsStore()
   const { createSession, isLoading } = useSessionsStore()
+  const { triggerHaptic } = useHapticFeedback()
 
   // Form state
   const [selectedSquadId, setSelectedSquadId] = useState<string>('')
@@ -97,8 +98,10 @@ export function CreateSessionModal() {
     })
 
     if (createError) {
+      triggerHaptic('error')
       setError(createError.message)
     } else {
+      triggerHaptic('success')
       showSuccess('Session créée ! Tes potes vont être notifiés.')
       close()
     }

@@ -98,7 +98,7 @@ export function PremiumPricing({ selectedPlan, setSelectedPlan, isLoading, error
       </m.div>
 
       {/* Final CTA */}
-      <m.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center">
+      <m.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5, duration: 0.4 }} className="text-center">
         <Card className="p-8 bg-gradient-to-br from-primary/[0.075] to-warning/5 border-primary">
           <Crown className="w-12 h-12 text-warning mx-auto mb-4" />
           <h3 className="text-xl font-semibold text-text-primary mb-2">Pr&ecirc;t &agrave; passer Premium ?</h3>

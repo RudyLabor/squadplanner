@@ -120,20 +120,30 @@ export default defineConfig(async () => {
     rollupOptions: {
       output: {
         // Manual chunks for vendor caching (React Router handles route splitting)
+        // Strategy: Split vendor-core (448KB) into smaller, independently cacheable chunks
         manualChunks: (id) => {
           const n = id.replace(/\\/g, '/');
           if (!n.includes('node_modules/')) return;
+
           // Heavy libs — cached separately for long-term caching
           if (n.includes('livekit-client') || n.includes('@livekit')) return 'vendor-livekit';
           if (n.includes('@supabase')) return 'vendor-supabase';
           if (n.includes('canvas-confetti')) return 'vendor-confetti';
-          // Core: React + framer-motion + state management in one chunk
-          // to avoid circular dependencies between React and its consumers
-          if (n.includes('/react-dom/') || n.includes('/react-dom@')) return 'vendor-core';
-          if (n.includes('/react/') || n.includes('/react@')) return 'vendor-core';
-          if (n.includes('/scheduler/') || n.includes('/scheduler@')) return 'vendor-core';
-          if (n.includes('framer-motion') || n.includes('motion-dom') || n.includes('motion-utils')) return 'vendor-core';
-          if (n.includes('@tanstack') || n.includes('sonner') || n.includes('zustand') || n.includes('zod')) return 'vendor-core';
+
+          // Split vendor-core into smaller chunks to reduce initial bundle
+          // vendor-react: React runtime (loaded first, ~130KB)
+          if (n.includes('/react-dom/') || n.includes('/react-dom@')) return 'vendor-react';
+          if (n.includes('/react/') || n.includes('/react@')) return 'vendor-react';
+          if (n.includes('/scheduler/') || n.includes('/scheduler@')) return 'vendor-react';
+
+          // vendor-ui: UI library (framer-motion base + LazyMotion runtime, ~80KB)
+          // Note: domMax features are loaded dynamically in root.tsx
+          if (n.includes('framer-motion') || n.includes('motion-dom') || n.includes('motion-utils')) return 'vendor-ui';
+
+          // vendor-state: State management + utilities (~150KB)
+          // Loaded when routes need query/state management
+          if (n.includes('@tanstack')) return 'vendor-state';
+          if (n.includes('sonner') || n.includes('zustand') || n.includes('zod')) return 'vendor-state';
         },
         chunkFileNames: "assets/[name]-[hash].js",
         assetFileNames: "assets/[name]-[hash].[ext]",

@@ -306,7 +306,7 @@ export default function Home({ loaderData }: HomeProps) {
               <HomePartySection activeParty={activeParty} showCTA={!upcomingSessions[0] && squads.length > 0 && !activeParty} />
             </m.div>
             <m.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}>
-              <HomeSessionsSection upcomingSessions={upcomingSessions} sessionsLoading={sessionsLoading} onRsvp={handleRsvp} isRsvpLoading={rsvpMutation.isPending} />
+              <HomeSessionsSection upcomingSessions={upcomingSessions} sessionsLoading={sessionsLoading} onRsvp={handleRsvp} isRsvpLoading={rsvpMutation.isPending} onCreateSession={openCreateSessionModal} />
             </m.div>
             <m.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}>
               <HomeFriendsSection friendsPlaying={friendsPlaying} friendsLoading={friendsLoading} onJoin={handleJoinFriendParty} onInvite={handleInviteFriend} />

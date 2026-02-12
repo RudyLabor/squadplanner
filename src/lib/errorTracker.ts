@@ -3,8 +3,22 @@
  * Replaces @sentry/browser (408 KB) with a lightweight error reporter
  * that batches errors and sends them to a Supabase Edge Function.
  *
+ * Features:
+ * - Global error and unhandled rejection tracking
+ * - Navigation breadcrumbs
+ * - User context
+ * - Environment tags
+ * - Console.error capture
+ *
  * SSR-safe: all browser APIs are guarded with typeof checks.
  */
+
+interface Breadcrumb {
+  timestamp: string
+  category: string
+  message: string
+  level?: 'debug' | 'info' | 'warning' | 'error'
+}
 
 interface ErrorReport {
   message: string
@@ -13,16 +27,22 @@ interface ErrorReport {
   timestamp: string
   userAgent: string
   userId?: string
+  username?: string
   level: 'error' | 'warning' | 'info'
   extra?: Record<string, unknown>
+  breadcrumbs?: Breadcrumb[]
+  tags?: Record<string, string>
 }
 
 const FLUSH_INTERVAL = 5_000
 const MAX_BUFFER_SIZE = 50
+const MAX_BREADCRUMBS = 20
 
 let buffer: ErrorReport[] = []
+let breadcrumbs: Breadcrumb[] = []
 let flushTimer: ReturnType<typeof setInterval> | null = null
 let currentUserId: string | undefined
+let currentUsername: string | undefined
 let initialized = false
 
 // Errors to ignore (same as previous Sentry config)
@@ -52,6 +72,44 @@ function getEndpointUrl(): string {
   return `${supabaseUrl}/functions/v1/error-report`
 }
 
+function getEnvironmentTags(): Record<string, string> {
+  const tags: Record<string, string> = {}
+
+  if (typeof window === 'undefined') return tags
+
+  // Environment
+  tags.env = import.meta.env?.PROD ? 'production' : 'development'
+
+  // Browser info
+  if (typeof navigator !== 'undefined') {
+    const ua = navigator.userAgent.toLowerCase()
+    if (ua.includes('chrome')) tags.browser = 'chrome'
+    else if (ua.includes('firefox')) tags.browser = 'firefox'
+    else if (ua.includes('safari')) tags.browser = 'safari'
+    else if (ua.includes('edge')) tags.browser = 'edge'
+
+    // Device type
+    if (ua.includes('mobile')) tags.device = 'mobile'
+    else if (ua.includes('tablet')) tags.device = 'tablet'
+    else tags.device = 'desktop'
+
+    // Platform
+    if (ua.includes('android')) tags.platform = 'android'
+    else if (ua.includes('iphone') || ua.includes('ipad')) tags.platform = 'ios'
+    else if (ua.includes('windows')) tags.platform = 'windows'
+    else if (ua.includes('mac')) tags.platform = 'macos'
+    else if (ua.includes('linux')) tags.platform = 'linux'
+  }
+
+  // Connection type
+  if ('connection' in navigator) {
+    const conn = (navigator as any).connection
+    if (conn?.effectiveType) tags.connection = conn.effectiveType
+  }
+
+  return tags
+}
+
 function createReport(
   message: string,
   stack?: string,
@@ -65,8 +123,11 @@ function createReport(
     timestamp: new Date().toISOString(),
     userAgent: typeof navigator !== 'undefined' ? navigator.userAgent : '',
     userId: currentUserId,
+    username: currentUsername,
     level,
     extra,
+    breadcrumbs: breadcrumbs.length > 0 ? [...breadcrumbs] : undefined,
+    tags: getEnvironmentTags(),
   }
 }
 
@@ -127,6 +188,49 @@ export function initErrorTracker(): void {
     enqueue(createReport(msg, stack))
   })
 
+  // Capture console.error calls
+  const originalConsoleError = console.error
+  console.error = (...args: any[]) => {
+    originalConsoleError.apply(console, args)
+    const message = args.map(arg => {
+      if (arg instanceof Error) return arg.message
+      if (typeof arg === 'object') {
+        try { return JSON.stringify(arg) }
+        catch { return String(arg) }
+      }
+      return String(arg)
+    }).join(' ')
+
+    if (!shouldIgnore(message)) {
+      enqueue(createReport(`Console error: ${message}`, undefined, 'error'))
+    }
+  }
+
+  // Track navigation for breadcrumbs
+  let lastUrl = window.location.href
+  const navigationObserver = () => {
+    const newUrl = window.location.href
+    if (newUrl !== lastUrl) {
+      addBreadcrumb(`Navigation: ${lastUrl} → ${newUrl}`, 'navigation', 'info')
+      lastUrl = newUrl
+    }
+  }
+
+  // Use multiple methods to catch navigation
+  window.addEventListener('popstate', navigationObserver)
+  const originalPushState = history.pushState
+  const originalReplaceState = history.replaceState
+
+  history.pushState = function(...args) {
+    originalPushState.apply(history, args)
+    navigationObserver()
+  }
+
+  history.replaceState = function(...args) {
+    originalReplaceState.apply(history, args)
+    navigationObserver()
+  }
+
   // Flush on page hide (tab close, navigation)
   document.addEventListener('visibilitychange', () => {
     if (document.visibilityState === 'hidden') flush()
@@ -165,17 +269,30 @@ export function captureMessage(
  */
 export function setUser(user: { id: string; username?: string } | null): void {
   currentUserId = user?.id
+  currentUsername = user?.username
 }
 
 /**
- * Add breadcrumb (no-op in micro tracker — kept for API compatibility)
+ * Add breadcrumb for context in error reports
  */
 export function addBreadcrumb(
-  _message: string,
-  _category?: string,
-  _level?: 'debug' | 'info' | 'warning' | 'error',
+  message: string,
+  category: string = 'manual',
+  level: 'debug' | 'info' | 'warning' | 'error' = 'info',
 ): void {
-  // No-op: breadcrumbs are not supported in micro tracker
+  if (typeof window === 'undefined') return
+
+  breadcrumbs.push({
+    timestamp: new Date().toISOString(),
+    category,
+    message,
+    level,
+  })
+
+  // Keep only the last MAX_BREADCRUMBS
+  if (breadcrumbs.length > MAX_BREADCRUMBS) {
+    breadcrumbs = breadcrumbs.slice(-MAX_BREADCRUMBS)
+  }
 }
 
 /**
@@ -195,5 +312,6 @@ export function destroyErrorTracker(): void {
   }
   flush()
   buffer = []
+  breadcrumbs = []
   initialized = false
 }

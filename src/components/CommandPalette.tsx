@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
+import { useQueryClient } from '@tanstack/react-query'
 import {
   Search,
   Home,
@@ -23,6 +24,9 @@ import { useCreateSessionModal } from './CreateSessionModal'
 import { ShortcutsHelpModal } from './command-palette/ShortcutsHelpModal'
 import { CommandPreviewPanel } from './command-palette/CommandPreviewPanel'
 import { CommandResultList } from './command-palette/CommandResultList'
+import { supabase } from '../lib/supabase'
+import { queryKeys } from '../lib/queryClient'
+import type { SessionWithDetails } from '../hooks/queries/useSessionsQuery'
 
 interface CommandItem {
   id: string
@@ -30,9 +34,15 @@ interface CommandItem {
   description?: string
   icon: React.ElementType
   action: () => void
-  category: 'navigation' | 'squads' | 'sessions' | 'actions'
+  category: 'navigation' | 'squads' | 'sessions' | 'actions' | 'players'
   children?: CommandItem[]
-  preview?: { type: 'squad' | 'session' | 'navigation' | 'action'; data?: Record<string, unknown> }
+  preview?: { type: 'squad' | 'session' | 'navigation' | 'action' | 'player'; data?: Record<string, unknown> }
+}
+
+interface SearchedPlayer {
+  id: string
+  username: string
+  avatar_url: string | null
 }
 
 export function CommandPalette() {
@@ -40,8 +50,10 @@ export function CommandPalette() {
   const [query, setQuery] = useState('')
   const [selectedIndex, setSelectedIndex] = useState(0)
   const [parentStack, setParentStack] = useState<CommandItem[]>([])
+  const [searchedPlayers, setSearchedPlayers] = useState<SearchedPlayer[]>([])
   const inputRef = useRef<HTMLInputElement>(null)
   const navigate = useViewTransitionNavigate()
+  const queryClient = useQueryClient()
 
   const { squads } = useSquadsStore()
   const { sessions } = useSessionsStore()
@@ -61,6 +73,7 @@ export function CommandPalette() {
     setQuery('')
     setSelectedIndex(0)
     setParentStack([])
+    setSearchedPlayers([])
   }, [])
 
   const goBack = useCallback(() => {
@@ -102,7 +115,38 @@ export function CommandPalette() {
     { id: 'toggle-theme', label: 'Changer le thème', description: `Actuel: ${mode === 'system' ? 'Auto' : mode === 'dark' ? 'Sombre' : 'Clair'}`, icon: effectiveTheme === 'dark' ? Moon : Sun, action: () => { toggleTheme(); close() }, category: 'actions' },
   ]
 
-  const squadCommands: CommandItem[] = squads.slice(0, 5).map(squad => ({
+  // Get cached squads from React Query or fallback to Zustand store
+  const cachedSquadsData = queryClient.getQueryData<Array<{ id: string; name: string; game: string | null }>>(queryKeys.squads.list())
+  const availableSquads = cachedSquadsData || squads
+
+  // Get cached upcoming sessions from React Query or fallback to Zustand store
+  const cachedSessionsData = queryClient.getQueryData<SessionWithDetails[]>(queryKeys.sessions.upcoming())
+  const availableSessions = cachedSessionsData || sessions
+
+  // Search through squads based on query
+  const searchSquads = useCallback((searchQuery: string) => {
+    if (!searchQuery) return availableSquads.slice(0, 5)
+    const lowerQuery = searchQuery.toLowerCase()
+    return availableSquads.filter(squad =>
+      squad.name.toLowerCase().includes(lowerQuery) ||
+      (squad.game && squad.game.toLowerCase().includes(lowerQuery))
+    ).slice(0, 5)
+  }, [availableSquads])
+
+  // Search through sessions based on query
+  const searchSessions = useCallback((searchQuery: string) => {
+    if (!searchQuery) return availableSessions.slice(0, 5)
+    const lowerQuery = searchQuery.toLowerCase()
+    return availableSessions.filter(session =>
+      (session.title && session.title.toLowerCase().includes(lowerQuery)) ||
+      (session.game && session.game.toLowerCase().includes(lowerQuery))
+    ).slice(0, 5)
+  }, [availableSessions])
+
+  const squadResults = searchSquads(query)
+  const sessionResults = searchSessions(query)
+
+  const squadCommands: CommandItem[] = squadResults.map(squad => ({
     id: `squad-${squad.id}`, label: squad.name, description: squad.game || 'Squad', icon: Users,
     action: () => { navigate(`/squad/${squad.id}`); close() }, category: 'squads' as const,
     preview: { type: 'squad' as const, data: { name: squad.name, game: squad.game, id: squad.id } },
@@ -113,13 +157,24 @@ export function CommandPalette() {
     ],
   }))
 
-  const sessionCommands: CommandItem[] = sessions.slice(0, 5).map(session => ({
+  const sessionCommands: CommandItem[] = sessionResults.map(session => ({
     id: `session-${session.id}`, label: session.title || 'Session',
     description: new Date(session.scheduled_at).toLocaleDateString('fr-FR'),
     icon: Calendar, action: () => { navigate(`/session/${session.id}`); close() }, category: 'sessions' as const
   }))
 
-  const allCommands = [...navigationCommands, ...actionCommands, ...squadCommands, ...sessionCommands]
+  // Player search results
+  const playerCommands: CommandItem[] = searchedPlayers.map(player => ({
+    id: `player-${player.id}`,
+    label: player.username,
+    description: 'Profil joueur',
+    icon: User,
+    action: () => { navigate(`/profile/${player.id}`); close() },
+    category: 'players' as const,
+    preview: { type: 'player' as const, data: { username: player.username, avatar_url: player.avatar_url, id: player.id } }
+  }))
+
+  const allCommands = [...navigationCommands, ...actionCommands, ...squadCommands, ...sessionCommands, ...playerCommands]
 
   const activeParent = parentStack[parentStack.length - 1]
   const activeCommands = activeParent?.children ?? allCommands
@@ -219,6 +274,32 @@ export function CommandPalette() {
     return () => window.removeEventListener('keydown', handleKeyDown)
   }, [isOpen, showShortcutsHelp, filteredCommands, selectedIndex, close, navigate, toggleTheme, goBack, enterSubCommandWithRecent, query, parentStack, createSessionModalOpen])
 
+  // Debounced player search
+  useEffect(() => {
+    if (!query || query.length < 2) {
+      setSearchedPlayers([])
+      return
+    }
+
+    const timer = setTimeout(async () => {
+      try {
+        const { data, error } = await supabase
+          .from('profiles')
+          .select('id, username, avatar_url')
+          .ilike('username', `%${query}%`)
+          .limit(5)
+
+        if (!error && data) {
+          setSearchedPlayers(data)
+        }
+      } catch (err) {
+        console.warn('[CommandPalette] Player search error:', err)
+      }
+    }, 300)
+
+    return () => clearTimeout(timer)
+  }, [query])
+
   useEffect(() => { if (isOpen && inputRef.current) inputRef.current.focus() }, [isOpen])
   useEffect(() => { setSelectedIndex(0) }, [query])
 
@@ -232,7 +313,7 @@ export function CommandPalette() {
   }, {} as Record<string, CommandItem[]>)
 
   const categoryLabels: Record<string, string> = {
-    recent: 'Récents', navigation: 'Navigation', squads: 'Squads', sessions: 'Sessions', actions: 'Actions'
+    recent: 'Récents', navigation: 'Navigation', squads: 'Squads', sessions: 'Sessions', actions: 'Actions', players: 'Joueurs'
   }
 
   return (

@@ -155,7 +155,7 @@ const FriendCard = memo(function FriendCard({
 // Empty state component with actionable invite button
 function EmptyState() {
   const handleShareInvite = async () => {
-    const inviteText = "Rejoins-moi sur Squad Planner pour organiser nos sessions de jeu ! 🎮"
+    const inviteText = "Rejoins-moi sur Squad Planner pour organiser nos sessions de jeu !"
     const inviteUrl = window.location.origin
 
     // Use Web Share API if available
@@ -166,8 +166,10 @@ function EmptyState() {
           text: inviteText,
           url: inviteUrl,
         })
+        showSuccess('Invitation envoyée !')
       } catch (err) {
-        // User cancelled or error - fallback to clipboard
+        // User cancelled share dialog — only fallback if not an AbortError
+        if (err instanceof Error && err.name === 'AbortError') return
         copyToClipboard(inviteUrl)
       }
     } else {
@@ -190,32 +192,72 @@ function EmptyState() {
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.2 }}
     >
-      <Card className="p-5 bg-gradient-to-br from-primary/5 to-success/5 border-dashed">
-        <div className="flex items-center gap-4">
+      <Card className="p-6 bg-gradient-to-br from-primary/8 via-success/5 to-warning/5 border-2 border-dashed border-primary/20 relative overflow-hidden">
+        {/* Animated background elements */}
+        <m.div
+          className="absolute -top-4 -right-4 w-24 h-24 rounded-full bg-primary/10 blur-2xl"
+          animate={{
+            scale: [1, 1.2, 1],
+            opacity: [0.3, 0.5, 0.3]
+          }}
+          transition={{
+            duration: 3,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
+        />
+        <m.div
+          className="absolute -bottom-4 -left-4 w-24 h-24 rounded-full bg-success/10 blur-2xl"
+          animate={{
+            scale: [1, 1.2, 1],
+            opacity: [0.3, 0.5, 0.3]
+          }}
+          transition={{
+            duration: 3,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: 1.5
+          }}
+        />
+
+        <div className="relative flex flex-col items-center text-center gap-4">
           <m.div
-            className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary/15 to-success/10 flex items-center justify-center flex-shrink-0"
-            animate={{ rotate: [0, 5, -5, 0], scale: [1, 1.05, 1] }}
-            transition={{ duration: 3, repeat: Infinity, repeatDelay: 2 }}
+            className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary/20 to-success/15 flex items-center justify-center shadow-lg"
+            animate={{
+              rotate: [0, 5, -5, 0],
+              scale: [1, 1.1, 1]
+            }}
+            transition={{
+              duration: 4,
+              repeat: Infinity,
+              ease: "easeInOut"
+            }}
           >
-            <UserPlus className="w-6 h-6 text-primary" strokeWidth={1.5} />
+            <UserPlus className="w-8 h-8 text-primary" strokeWidth={2} />
           </m.div>
-          <div className="flex-1 min-w-0">
-            <p className="text-md font-semibold text-text-primary mb-0.5">
-              Invite tes potes sur Squad Planner
+
+          <div>
+            <h3 className="text-lg font-bold text-text-primary mb-1">
+              Personne en ligne ?
+            </h3>
+            <p className="text-base text-text-tertiary max-w-sm mx-auto">
+              Invite tes potes pour jouer ensemble et voir qui est en ligne
             </p>
-            <p className="text-sm text-text-tertiary mb-2">
-              Partage le lien pour jouer ensemble
-            </p>
-            <m.button
-              onClick={handleShareInvite}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-primary/15 text-primary text-sm font-medium hover:bg-primary/25 transition-colors"
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-            >
-              <UserPlus className="w-3.5 h-3.5" />
-              Envoyer une invitation
-            </m.button>
           </div>
+
+          <m.button
+            onClick={handleShareInvite}
+            className="flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-primary to-primary-hover text-white font-semibold shadow-lg hover:shadow-xl transition-shadow"
+            whileHover={{ scale: 1.05, y: -2 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <UserPlus className="w-5 h-5" />
+            Inviter des amis
+          </m.button>
+
+          <p className="text-sm text-text-tertiary">
+            Ou partage ton lien d'invitation depuis les paramètres
+          </p>
         </div>
       </Card>
     </m.div>

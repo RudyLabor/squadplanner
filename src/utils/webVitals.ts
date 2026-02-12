@@ -160,6 +160,18 @@ function handleMetric(metric: Metric): void {
   }
 
   enqueueMetric(metric);
+
+  // Report poor Core Web Vitals to error tracker for visibility
+  if (metric.rating === 'poor') {
+    import('../lib/errorTracker').then(({ captureMessage }) => {
+      captureMessage(
+        `Poor Core Web Vital: ${metric.name} = ${metric.value.toFixed(metric.name === 'CLS' ? 3 : 0)}${metric.name === 'CLS' ? '' : 'ms'}`,
+        'warning'
+      );
+    }).catch(() => {
+      // Silently fail — error tracker is optional
+    });
+  }
 }
 
 // ---------------------------------------------------------------------------

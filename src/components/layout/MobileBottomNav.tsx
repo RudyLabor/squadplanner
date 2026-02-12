@@ -1,10 +1,9 @@
-import { memo, useState, useCallback } from 'react'
+import { memo, useCallback } from 'react'
 import { Link } from 'react-router'
 import { m, AnimatePresence } from 'framer-motion'
 import {
   Home,
   Mic,
-  MessageCircle,
   Calendar,
   Users,
   Compass,
@@ -16,21 +15,21 @@ import {
   X,
 } from '../icons'
 import { usePrefetch } from '../../hooks/usePrefetch'
+import { useOverlayStore } from '../../hooks/useOverlayStore'
 
 // Mobile nav items (Party sera au centre avec un style special)
 const mobileNavLeft = [
   { path: '/home', icon: Home, label: 'Accueil' },
-  { path: '/squads', icon: Users, label: 'Squads' },
+  { path: '/sessions', icon: Calendar, label: 'Sessions' },
 ] as const
 
 const mobileNavRight = [
-  { path: '/messages', icon: MessageCircle, label: 'Messages' },
+  { path: '/squads', icon: Users, label: 'Squads' },
+  { path: '/profile', icon: User, label: 'Profil' },
 ] as const
 
 const moreMenuItems = [
-  { path: '/sessions', icon: Calendar, label: 'Sessions' },
   { path: '/discover', icon: Compass, label: 'Découvrir' },
-  { path: '/profile', icon: User, label: 'Profil' },
   { path: '/call-history', icon: Phone, label: 'Appels' },
   { path: '/settings', icon: Settings, label: 'Paramètres' },
   { path: '/help', icon: HelpCircle, label: 'Aide' },
@@ -118,19 +117,20 @@ const PartyButton = memo(function PartyButton({ isActive, hasActiveParty }: { is
   )
 })
 
-// More button with popup menu
+// More button with popup menu — uses shared overlay store for mutual exclusion with notifications
 const MoreButton = memo(function MoreButton({ currentPath, onClose }: { currentPath: string; onClose: () => void }) {
-  const [isOpen, setIsOpen] = useState(false)
+  const { activeOverlay, toggle, close } = useOverlayStore()
+  const isOpen = activeOverlay === 'more-menu'
   const isMoreActive = moreMenuItems.some(item => currentPath === item.path)
 
   const handleToggle = useCallback(() => {
-    setIsOpen(prev => !prev)
-  }, [])
+    toggle('more-menu')
+  }, [toggle])
 
   const handleItemClick = useCallback(() => {
-    setIsOpen(false)
+    close('more-menu')
     onClose()
-  }, [onClose])
+  }, [close, onClose])
 
   return (
     <div className="relative flex flex-col items-center justify-center min-w-[48px] min-h-[48px] touch-target">
@@ -168,7 +168,7 @@ const MoreButton = memo(function MoreButton({ currentPath, onClose }: { currentP
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               className="fixed inset-0 z-40"
-              onClick={() => setIsOpen(false)}
+              onClick={() => close('more-menu')}
             />
             <m.div
               initial={{ opacity: 0, y: 10, scale: 0.95 }}
@@ -233,7 +233,7 @@ export const MobileBottomNav = memo(function MobileBottomNav({
               icon={item.icon}
               label={item.label}
               isActive={currentPath === item.path}
-              badge={item.path === '/squads' && pendingRsvpCount && pendingRsvpCount > 0 ? pendingRsvpCount : undefined}
+              badge={item.path === '/sessions' && pendingRsvpCount && pendingRsvpCount > 0 ? pendingRsvpCount : undefined}
             />
           </div>
         ))}
@@ -245,7 +245,6 @@ export const MobileBottomNav = memo(function MobileBottomNav({
               icon={item.icon}
               label={item.label}
               isActive={currentPath === item.path}
-              badge={item.path === '/messages' && unreadMessages > 0 ? unreadMessages : undefined}
             />
           </div>
         ))}

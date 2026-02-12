@@ -5,7 +5,7 @@ import { m, AnimatePresence } from 'framer-motion'
 import { Cookie, Shield, X } from './icons'
 import { Link } from 'react-router'
 
-const COOKIE_CONSENT_KEY = 'sq-cookie-consent'
+export const COOKIE_CONSENT_KEY = 'sq-cookie-consent'
 
 export function CookieConsent() {
   const [visible, setVisible] = useState(false)

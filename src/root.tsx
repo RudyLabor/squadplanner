@@ -155,7 +155,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body suppressHydrationWarning>
-        <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:z-[100] focus:top-2 focus:left-2 focus:px-4 focus:py-2 focus:rounded-lg focus:bg-primary focus:text-white focus:text-sm focus:font-medium">
+        <a href="#main-content" className="skip-link">
           Aller au contenu principal
         </a>
         {children}
@@ -191,28 +191,32 @@ export default function Root() {
         ) : (
           <SSRFallback />
         )}
-        <Toaster
-          position="top-center"
-          toastOptions={{
-            duration: 4000,
-            style: {
-              background: 'var(--color-bg-surface)',
-              border: '1px solid var(--color-border-default)',
-              color: 'var(--color-text-primary)',
-              fontSize: '14px',
-              borderRadius: '12px',
-              padding: '12px 16px',
-              position: 'relative' as const,
-              overflow: 'hidden',
-            },
-            classNames: {
-              success: 'border-success/20 bg-success/10',
-              error: 'border-error/20 bg-error/10',
-              warning: 'border-warning/20 bg-warning/10',
-              info: 'border-primary/20 bg-primary/10',
-            },
-          }}
-        />
+        {/* Toaster must be client-only — sonner uses portals that differ between SSR and client,
+            causing React hydration error #418 if rendered during SSR */}
+        {isClient && (
+          <Toaster
+            position="top-center"
+            toastOptions={{
+              duration: 4000,
+              style: {
+                background: 'var(--color-bg-surface)',
+                border: '1px solid var(--color-border-default)',
+                color: 'var(--color-text-primary)',
+                fontSize: '14px',
+                borderRadius: '12px',
+                padding: '12px 16px',
+                position: 'relative' as const,
+                overflow: 'hidden',
+              },
+              classNames: {
+                success: 'border-success/20 bg-success/10',
+                error: 'border-error/20 bg-error/10',
+                warning: 'border-warning/20 bg-warning/10',
+                info: 'border-primary/20 bg-primary/10',
+              },
+            }}
+          />
+        )}
         <div id="aria-live-polite" aria-live="polite" aria-atomic="true" className="sr-only" />
         <div id="aria-live-assertive" aria-live="assertive" aria-atomic="true" className="sr-only" />
       </LazyMotion>
@@ -254,6 +258,19 @@ export function ErrorBoundary() {
   const isRoute = isRouteErrorResponse(error)
   const status = isRoute ? error.status : 500
   const message = isRoute ? error.statusText : 'Une erreur inattendue est survenue'
+
+  // Report error to error tracker in production
+  useEffect(() => {
+    if (!isRoute && error instanceof Error && import.meta.env?.PROD) {
+      import('./lib/errorTracker').then(({ captureException }) => {
+        captureException(error, {
+          errorBoundary: 'RootErrorBoundary',
+          status,
+          url: typeof window !== 'undefined' ? window.location.href : '',
+        })
+      })
+    }
+  }, [error, isRoute, status])
 
   return (
     <div className="min-h-screen bg-bg-base flex">

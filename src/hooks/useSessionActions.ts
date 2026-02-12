@@ -2,6 +2,20 @@ import { supabase, isSupabaseReady } from '../lib/supabase'
 import { sendRsvpMessage, sendSessionConfirmedMessage } from '../lib/systemMessages'
 import type { StoreApi } from 'zustand'
 
+// Trigger haptic feedback if available
+function triggerHaptic(type: 'light' | 'medium' | 'heavy' | 'success' | 'warning' | 'error') {
+  if (typeof navigator !== 'undefined' && 'vibrate' in navigator) {
+    switch (type) {
+      case 'light': navigator.vibrate(10); break
+      case 'medium': navigator.vibrate(25); break
+      case 'heavy': navigator.vibrate(50); break
+      case 'success': navigator.vibrate([10, 50, 10]); break
+      case 'warning':
+      case 'error': navigator.vibrate([50, 100, 50]); break
+    }
+  }
+}
+
 type RsvpResponse = 'present' | 'absent' | 'maybe'
 type CheckinStatus = 'present' | 'late' | 'noshow'
 
@@ -63,6 +77,9 @@ export function createSessionActions(get: GetState) {
             response
           ).catch(() => {})
         }
+
+        // Haptic feedback on RSVP confirmation
+        triggerHaptic('success')
 
         await get().fetchSessionById(sessionId)
         return { error: null }
@@ -155,6 +172,9 @@ export function createSessionActions(get: GetState) {
             session.scheduled_at
           ).catch(() => {})
         }
+
+        // Haptic feedback on session confirmation
+        triggerHaptic('success')
 
         await get().fetchSessionById(sessionId)
         return { error: null }

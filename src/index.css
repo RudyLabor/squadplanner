@@ -1846,6 +1846,20 @@ textarea::placeholder {
    Reduced motion alternatives for all animations
    ===================================================== */
 
+/* =======================================================
+   FRAMER MOTION FALLBACK - Prevent invisible content
+   When LazyMotion features load asynchronously, m.div components
+   with initial={{ opacity: 0 }} get stuck invisible. This CSS
+   forces them visible after a short delay as a safety net.
+   ======================================================= */
+@keyframes fm-force-visible {
+  to { opacity: 1; transform: none; }
+}
+
+[style*="opacity:0"][style*="transform:translate"] {
+  animation: fm-force-visible 0.4s ease-out 0.5s both;
+}
+
 /* Subtle animation that respects reduced motion */
 @keyframes fade-in-gentle {
   from { opacity: 0; }

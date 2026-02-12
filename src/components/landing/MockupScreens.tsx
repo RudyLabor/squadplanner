@@ -46,14 +46,14 @@ export function HomeScreen() {
         </div>
         <div className="flex items-center gap-2">
           <div className="flex -space-x-1.5">
-            {mockMembers.slice(0, 4).map((m, i) => (
+            {mockMembers.slice(0, 4).map((member, i) => (
               <m.div
-                key={m.name}
+                key={member.name}
                 className="w-6 h-6 rounded-full border-[1.5px] border-bg-base flex items-center justify-center text-xs font-bold text-text-primary"
-                style={{ backgroundColor: m.color }}
+                style={{ backgroundColor: member.color }}
                 initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 0.4 + i * 0.08, type: 'spring' }}
               >
-                {m.initial}
+                {member.initial}
               </m.div>
             ))}
           </div>
@@ -147,8 +147,8 @@ export function SquadScreen() {
           </m.span>
         </div>
         <div className="flex items-center gap-2">
-          {mockMembers.slice(0, 2).map((m, i) => (
-            <m.div key={m.name} className="flex items-center gap-1.5" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.4 + i * 0.15 }}>
+          {mockMembers.slice(0, 2).map((member, i) => (
+            <m.div key={member.name} className="flex items-center gap-1.5" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.4 + i * 0.15 }}>
               <div className="relative">
                 {i === 0 && (
                   <m.div
@@ -157,11 +157,11 @@ export function SquadScreen() {
                     transition={{ duration: 1.5, repeat: Infinity }}
                   />
                 )}
-                <div className="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold text-text-primary" style={{ backgroundColor: m.color }}>
-                  {m.initial}
+                <div className="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold text-text-primary" style={{ backgroundColor: member.color }}>
+                  {member.initial}
                 </div>
               </div>
-              <span className="text-xs text-text-secondary">{m.name}</span>
+              <span className="text-xs text-text-secondary">{member.name}</span>
             </m.div>
           ))}
         </div>
@@ -200,13 +200,13 @@ export function SquadScreen() {
 
       <m.div className="mx-4 mt-3" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.7 }}>
         <div className="text-xs font-semibold text-text-secondary uppercase tracking-wider mb-2">Membres (5)</div>
-        {mockMembers.slice(0, 3).map((m) => (
-          <div key={m.name} className="flex items-center gap-2 mb-1.5">
-            <div className="w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold text-text-primary" style={{ backgroundColor: m.color }}>
-              {m.initial}
+        {mockMembers.slice(0, 3).map((member) => (
+          <div key={member.name} className="flex items-center gap-2 mb-1.5">
+            <div className="w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold text-text-primary" style={{ backgroundColor: member.color }}>
+              {member.initial}
             </div>
-            <span className="text-xs text-text-primary flex-1">{m.name}</span>
-            <span className="text-xs text-success">{m.score}%</span>
+            <span className="text-xs text-text-primary flex-1">{member.name}</span>
+            <span className="text-xs text-success">{member.score}%</span>
           </div>
         ))}
       </m.div>

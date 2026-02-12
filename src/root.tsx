@@ -244,7 +244,7 @@ function SSRFallback() {
 
   return (
     <div className="h-[100dvh] bg-bg-base flex overflow-hidden">
-      <aside className="hidden lg:block w-[140px] shrink-0 bg-bg-elevated border-r border-border-subtle" aria-hidden="true" />
+      <aside className="desktop-only w-[140px] shrink-0 bg-bg-elevated border-r border-border-subtle" aria-hidden="true" />
       <main id="main-content" className="flex-1 overflow-y-auto overflow-x-hidden">
         <Outlet />
       </main>

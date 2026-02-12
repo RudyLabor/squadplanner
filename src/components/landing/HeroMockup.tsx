@@ -3,22 +3,22 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
 import { Play } from '../icons'
-import { demoSteps, stepComponents } from './DemoSteps'
+import { screens } from './MockupScreens'
 
-// ─── HERO PHONE FRAME — animated demo visible above the fold ────────
+// ─── HERO PHONE FRAME — cycles through real app screens ────────
 export function HeroMockup() {
   const [currentStep, setCurrentStep] = useState(0)
   const [isPaused, setIsPaused] = useState(false)
   const pauseTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const autoAdvanceRef = useRef(false)
 
-  // Auto-advance through demo steps
+  // Auto-advance through screens
   useEffect(() => {
     if (isPaused) return
     const timer = setInterval(() => {
       autoAdvanceRef.current = true
-      setCurrentStep(prev => (prev + 1) % demoSteps.length)
-    }, demoSteps[currentStep].duration)
+      setCurrentStep(prev => (prev + 1) % screens.length)
+    }, screens[currentStep].duration)
     return () => clearInterval(timer)
   }, [isPaused, currentStep])
 
@@ -29,8 +29,8 @@ export function HeroMockup() {
     pauseTimerRef.current = setTimeout(() => setIsPaused(false), 5000)
   }, [])
 
-  const step = demoSteps[currentStep]
-  const StepComponent = stepComponents[step.id]
+  const screen = screens[currentStep]
+  const ScreenComponent = screen.component
 
   return (
     <div className="relative mx-auto hero-phone-float" style={{ width: 280 }}>
@@ -87,17 +87,17 @@ export function HeroMockup() {
               </div>
             </div>
 
-            {/* Animated demo step content */}
+            {/* Animated screen content */}
             <AnimatePresence mode="wait">
               <m.div
-                key={step.id}
+                key={screen.id}
                 initial={{ opacity: 0, x: 30 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -30 }}
                 transition={{ duration: 0.35, ease: [0.4, 0, 0.2, 1] }}
-                className="h-full pt-6"
+                className="h-full"
               >
-                <StepComponent />
+                <ScreenComponent />
               </m.div>
             </AnimatePresence>
 
@@ -111,13 +111,13 @@ export function HeroMockup() {
       <div className="flex flex-col items-center gap-2 mt-4">
         {/* Dots */}
         <div className="flex items-center justify-center gap-1">
-          {demoSteps.map((s, i) => (
+          {screens.map((s, i) => (
             <button
               key={s.id}
               type="button"
               onClick={() => handleStepClick(i)}
               className="flex items-center justify-center gap-1.5 group min-w-[44px] min-h-[44px]"
-              aria-label={`Étape ${i + 1}: ${s.title}`}
+              aria-label={`${s.label}`}
             >
               <m.div
                 className="h-1 rounded-full"
@@ -133,7 +133,7 @@ export function HeroMockup() {
                   initial={{ opacity: 0, x: -5 }}
                   animate={{ opacity: 1, x: 0 }}
                 >
-                  {s.title}
+                  {s.label}
                 </m.span>
               )}
             </button>
@@ -148,7 +148,7 @@ export function HeroMockup() {
             initial={{ width: '0%' }}
             animate={{ width: '100%' }}
             transition={{
-              duration: demoSteps[currentStep].duration / 1000,
+              duration: screens[currentStep].duration / 1000,
               ease: 'linear',
             }}
           />

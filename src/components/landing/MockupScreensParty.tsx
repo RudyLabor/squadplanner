@@ -26,9 +26,9 @@ export function PartyScreen() {
       </div>
 
       <div className="relative z-10 px-4 mt-2 flex-1">
-        {mockMembers.slice(0, 4).map((m, i) => (
+        {mockMembers.slice(0, 4).map((member, i) => (
           <m.div
-            key={m.name}
+            key={member.name}
             className="flex items-center gap-3 mb-2.5 p-2 rounded-xl bg-white/[0.03] border border-border-subtle"
             initial={{ opacity: 0, x: -15 }} animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.2 + i * 0.1, type: 'spring', stiffness: 300 }}
@@ -42,14 +42,14 @@ export function PartyScreen() {
                 />
               )}
               <div className={`w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold text-text-primary ${i === 0 ? 'ring-1 ring-success/30' : ''}`}
-                style={{ backgroundColor: m.color }}
+                style={{ backgroundColor: member.color }}
               >
-                {m.initial}
+                {member.initial}
               </div>
             </div>
             <div className="flex-1">
-              <div className={`text-xs font-medium ${i === 0 ? 'text-success' : 'text-text-primary'}`}>{m.name}</div>
-              <div className="text-xs text-text-tertiary">{m.score}% fiable</div>
+              <div className={`text-xs font-medium ${i === 0 ? 'text-success' : 'text-text-primary'}`}>{member.name}</div>
+              <div className="text-xs text-text-tertiary">{member.score}% fiable</div>
             </div>
             <div className="flex items-center gap-[2px] mr-1">
               {[0, 1, 2, 3].map((j) => (

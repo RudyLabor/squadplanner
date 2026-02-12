@@ -53,7 +53,7 @@ export const TopBar = memo(function TopBar() {
   return (
     <>
       {/* Desktop top bar */}
-      <header role="banner" className="hidden lg:flex pt-4 px-6 items-center justify-between">
+      <header role="banner" className="desktop-only pt-4 px-6 items-center justify-between">
         <Breadcrumbs />
         <div className="flex items-center gap-2">
           <Tooltip content="Notifications" position="bottom">
@@ -66,7 +66,7 @@ export const TopBar = memo(function TopBar() {
       </header>
 
       {/* Mobile top bar - search + notifications */}
-      <header role="banner" className="lg:hidden flex items-center justify-end gap-2 px-4 pt-3 pb-1">
+      <header role="banner" className="mobile-only items-center justify-end gap-2 px-4 pt-3 pb-1">
         <button
           onClick={() => setShowMoreMenu(true)}
           className="w-10 h-10 rounded-xl bg-surface-card flex items-center justify-center hover:bg-border-hover transition-colors"

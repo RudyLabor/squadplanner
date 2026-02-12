@@ -8,6 +8,7 @@ import { useReducedMotion } from '../../hooks/useReducedMotion'
 /**
  * YouTube / NProgress-style thin loading bar at the very top of the viewport.
  *
+ * - Only appears if navigation takes > 150ms (avoids flash for instant SPA transitions).
  * - Quickly jumps to ~30%, then crawls to ~90%.
  * - Snaps to 100% and fades out when loading completes.
  * - Uses the app's primary accent colour via CSS custom property.
@@ -20,45 +21,57 @@ export function TopLoadingBar() {
   const [visible, setVisible] = useState(false)
   const crawlRef = useRef<ReturnType<typeof setInterval>>(undefined)
   const fadeRef = useRef<ReturnType<typeof setTimeout>>(undefined)
+  const showDelayRef = useRef<ReturnType<typeof setTimeout>>(undefined)
 
   useEffect(() => {
     if (isNavigating) {
-      // Reset and start
+      // Clear any pending timers
       clearInterval(crawlRef.current)
       clearTimeout(fadeRef.current)
-      setProgress(0)
-      setVisible(true)
+      clearTimeout(showDelayRef.current)
 
-      // Quick jump to 30%
-      requestAnimationFrame(() => setProgress(30))
-
-      // Then slowly crawl towards 90%
-      crawlRef.current = setInterval(() => {
-        setProgress((prev) => {
-          if (prev >= 90) {
-            clearInterval(crawlRef.current)
-            return prev
-          }
-          // Slow down as it approaches 90
-          const increment = (90 - prev) * 0.08
-          return Math.min(prev + Math.max(increment, 0.5), 90)
-        })
-      }, 200)
-    } else if (visible) {
-      // Snap to 100% and fade out
-      clearInterval(crawlRef.current)
-      setProgress(100)
-      fadeRef.current = setTimeout(() => {
-        setVisible(false)
+      // Only show the bar if navigation takes > 150ms (avoids flash on instant transitions)
+      showDelayRef.current = setTimeout(() => {
         setProgress(0)
-      }, 400)
+        setVisible(true)
+
+        // Quick jump to 30%
+        requestAnimationFrame(() => setProgress(30))
+
+        // Then slowly crawl towards 90%
+        crawlRef.current = setInterval(() => {
+          setProgress((prev) => {
+            if (prev >= 90) {
+              clearInterval(crawlRef.current)
+              return prev
+            }
+            // Slow down as it approaches 90
+            const increment = (90 - prev) * 0.08
+            return Math.min(prev + Math.max(increment, 0.5), 90)
+          })
+        }, 200)
+      }, 150)
+    } else {
+      // Navigation ended — clean up
+      clearTimeout(showDelayRef.current)
+      clearInterval(crawlRef.current)
+
+      if (visible) {
+        // Snap to 100% and fade out
+        setProgress(100)
+        fadeRef.current = setTimeout(() => {
+          setVisible(false)
+          setProgress(0)
+        }, 300)
+      }
     }
 
     return () => {
       clearInterval(crawlRef.current)
       clearTimeout(fadeRef.current)
+      clearTimeout(showDelayRef.current)
     }
-  }, [isNavigating, visible])
+  }, [isNavigating]) // eslint-disable-line react-hooks/exhaustive-deps -- visible is intentionally excluded to avoid re-triggering
 
   if (reducedMotion) return null
 

@@ -154,12 +154,12 @@ function InviteStep() {
         </m.div>
       ))}
       <m.div
-        className="mt-auto flex items-center gap-2 p-2.5 rounded-xl bg-primary-10 border border-primary"
+        className="mt-auto flex items-center gap-2 p-2.5 rounded-xl bg-primary-10 border border-primary overflow-hidden"
         initial={{ opacity: 0, y: 5 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.3 }}
       >
-        <Share2 className="w-3.5 h-3.5 text-primary" />
-        <span className="text-xs text-text-tertiary flex-1">squadplanner.fr/join/8J9DQR</span>
-        <span className="text-xs text-primary font-medium">Copier</span>
+        <Share2 className="w-3.5 h-3.5 text-primary shrink-0" />
+        <span className="text-xs text-text-tertiary flex-1 truncate">squadplanner.fr/join/8J9DQR</span>
+        <span className="text-xs text-primary font-medium shrink-0">Copier</span>
       </m.div>
       <DemoNavbar active="squads" />
     </div>

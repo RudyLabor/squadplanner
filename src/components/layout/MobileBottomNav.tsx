@@ -46,7 +46,6 @@ const MobileNavLink = memo(function MobileNavLink({ path, icon: Icon, label, isA
   return (
     <Link
       to={path}
-      viewTransition
       className="flex flex-col items-center justify-center min-w-[48px] min-h-[48px] touch-target"
       aria-label={label}
       aria-current={isActive ? 'page' : undefined}
@@ -223,7 +222,7 @@ export const MobileBottomNav = memo(function MobileBottomNav({
   return (
     <nav
       aria-label="Navigation mobile"
-      className={`lg:hidden fixed bottom-0 left-0 right-0 bg-bg-base border-t border-border-subtle z-50 transition-transform duration-200 ${isKeyboardVisible ? 'translate-y-full' : 'translate-y-0'}`}
+      className={`mobile-bottom-nav fixed bottom-0 left-0 right-0 bg-bg-base border-t border-border-subtle z-50 transition-transform duration-200 ${isKeyboardVisible ? 'translate-y-full' : 'translate-y-0'}`}
     >
       <div className="flex items-center justify-around py-2 mobile-nav-padding">
         {mobileNavLeft.map((item) => (

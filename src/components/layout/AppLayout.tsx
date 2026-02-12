@@ -31,10 +31,17 @@ const DesktopContentWrapper = memo(function DesktopContentWrapper({
   const [isDesktop, setIsDesktop] = useState(false)
 
   useEffect(() => {
-    const checkDesktop = () => setIsDesktop(window.innerWidth >= 1024)
+    // Desktop = wide screen + hover-capable (mouse/trackpad).
+    // Touch-only devices (Galaxy Fold unfolded) keep mobile layout.
+    const hoverQuery = window.matchMedia('(hover: hover)')
+    const checkDesktop = () => setIsDesktop(window.innerWidth >= 1024 && hoverQuery.matches)
     checkDesktop()
     window.addEventListener('resize', checkDesktop)
-    return () => window.removeEventListener('resize', checkDesktop)
+    hoverQuery.addEventListener('change', checkDesktop)
+    return () => {
+      window.removeEventListener('resize', checkDesktop)
+      hoverQuery.removeEventListener('change', checkDesktop)
+    }
   }, [])
 
   const marginLeft = isDesktop ? (isExpanded ? 256 : 140) : 0
@@ -43,7 +50,7 @@ const DesktopContentWrapper = memo(function DesktopContentWrapper({
     <main
       id="main-content"
       tabIndex={-1}
-      className={`flex-1 lg:pb-0 overflow-y-auto overflow-x-hidden scrollbar-hide-mobile overscroll-contain ${isKeyboardVisible ? 'pb-0' : 'pb-mobile-nav'}`}
+      className={`flex-1 overflow-y-auto overflow-x-hidden scrollbar-hide-mobile overscroll-contain ${isKeyboardVisible ? 'pb-0' : isDesktop ? 'pb-0' : 'pb-mobile-nav'}`}
     >
       <m.div
         initial={false}

@@ -714,6 +714,44 @@ body {
   }
 }
 
+/* Foldable/tablet touch devices wider than lg breakpoint still need bottom nav padding */
+@media (min-width: 1024px) and (hover: none) and (pointer: coarse) {
+  .pb-mobile-nav {
+    margin-bottom: calc(80px + env(safe-area-inset-bottom, 0));
+  }
+}
+
+/* Mobile bottom nav: visible by default, hidden only on desktop (hover-capable wide screens).
+   Touch-only devices like Galaxy Fold unfolded keep the bottom nav visible. */
+.mobile-bottom-nav {
+  display: flex;
+}
+@media (min-width: 1024px) and (hover: hover) {
+  .mobile-bottom-nav {
+    display: none;
+  }
+}
+
+/* Desktop-only elements: hidden by default, visible only on hover-capable wide screens */
+.desktop-only {
+  display: none;
+}
+@media (min-width: 1024px) and (hover: hover) {
+  .desktop-only {
+    display: flex;
+  }
+}
+
+/* Mobile-only elements: visible by default, hidden on hover-capable wide screens */
+.mobile-only {
+  display: flex;
+}
+@media (min-width: 1024px) and (hover: hover) {
+  .mobile-only {
+    display: none;
+  }
+}
+
 /* =====================================================
    WCAG AA ACCESSIBILITY - Touch Targets & Modal Support
    Minimum touch targets (44x44px) and focus management
@@ -837,7 +875,7 @@ select:focus-visible,
 .sr-only:focus,
 .sr-only:focus-visible {
   position: absolute;
-  top: -40px;
+  top: -100px;
   left: 0;
   background: var(--color-primary);
   color: white;
@@ -1204,10 +1242,11 @@ select:focus-visible,
   to { transform: translateX(-20px); opacity: 0; }
 }
 
-/* View Transitions API — GPU-accelerated browser-native route transitions */
-@view-transition {
-  navigation: auto;
-}
+/* View Transitions API — SPA transitions via React Router viewTransition prop.
+   NOTE: @view-transition { navigation: auto } removed because it causes
+   Chrome to show a native blue progress bar on MPA navigations (initial load,
+   hard refresh) which persisted visually on mobile. SPA transitions are handled
+   by React Router's viewTransition prop + document.startViewTransition(). */
 
 ::view-transition-old(root) {
   animation: fade-out 150ms ease-out forwards, slide-to-left 150ms ease-out forwards;

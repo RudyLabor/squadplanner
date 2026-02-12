@@ -38,6 +38,7 @@ export default function Landing() {
   const { scrollYProgress } = useScroll()
   const heroRotateX = useTransform(scrollYProgress, [0, 0.15], [0, 8])
   const heroRotateY = useTransform(scrollYProgress, [0, 0.1, 0.2], [-2, 0, 2])
+  // Note: scroll-progress bar removed — user reported unwanted blue bar at top
 
   // Mouse tracking for 3D mockup (desktop only)
   const mouseX = useMotionValue(0)
@@ -66,7 +67,6 @@ export default function Landing() {
   return (
     <div className={`min-h-screen bg-bg-base landing-page landing-noise ${isDesktop ? 'landing-custom-cursor' : ''}`}>
       <CustomCursor />
-      <m.div className="scroll-progress" style={{ scaleX: scrollYProgress }} />
 
       <a
         href="#main-content"

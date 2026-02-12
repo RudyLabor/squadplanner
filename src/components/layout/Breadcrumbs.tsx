@@ -74,7 +74,7 @@ export function Breadcrumbs() {
   return (
     <nav
       aria-label="Breadcrumb"
-      className="hidden lg:flex items-center gap-2 text-base mb-4 px-4 md:px-6 lg:px-8"
+      className="desktop-only items-center gap-2 text-base mb-4 px-4 md:px-6 lg:px-8"
     >
       {items.map((item, index) => {
         const isLast = index === items.length - 1

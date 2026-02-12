@@ -20,7 +20,7 @@ export const MobilePageHeader = memo(function MobilePageHeader({ title, onBack }
   }
 
   return (
-    <div className="lg:hidden flex items-center gap-3 px-4 py-3">
+    <div className="mobile-only items-center gap-3 px-4 py-3">
       <button
         onClick={handleBack}
         className="w-10 h-10 rounded-xl flex items-center justify-center hover:bg-bg-hover transition-colors touch-target"

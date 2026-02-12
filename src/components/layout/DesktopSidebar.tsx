@@ -134,7 +134,7 @@ export const DesktopSidebar = memo(function DesktopSidebar({
   return (
     <m.aside
       aria-label="Navigation principale"
-      className="hidden lg:flex flex-col border-r border-surface-card bg-bg-base fixed h-full z-40 overflow-hidden"
+      className="desktop-only flex-col border-r border-surface-card bg-bg-base fixed h-full z-40 overflow-hidden"
       initial={false}
       animate={{ width: isExpanded ? 256 : 140 }}
       transition={{ duration: 0.2, ease: [0.25, 0.1, 0.25, 1] }}

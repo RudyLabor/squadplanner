@@ -13,5 +13,7 @@
 
 | ID | Time | T | Title | Read |
 |----|------|---|-------|------|
+| #3907 | 3:48 PM | 🔵 | Performance Plan Implementation Status - 7 Phases Validated | ~639 |
+| #3883 | 3:43 PM | 🟣 | Lightweight Error Tracking System Replacing Sentry | ~506 |
 | #3731 | 2:41 PM | 🔵 | Supabase Server Client Implementation | ~395 |
 </claude-mem-context>

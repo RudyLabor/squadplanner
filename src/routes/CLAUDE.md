@@ -5,6 +5,7 @@
 
 | ID | Time | T | Title | Read |
 |----|------|---|-------|------|
+| #3899 | 3:46 PM | 🔵 | Home Route SSR Data Loading Strategy | ~467 |
 | #3760 | 2:46 PM | 🔵 | Call History Route Minimal Server Loading | ~224 |
 | #3759 | " | 🔵 | Onboarding Route Minimal Auth Check | ~242 |
 | #3758 | " | 🔵 | Join Squad Route Simple Client-Side Implementation | ~215 |

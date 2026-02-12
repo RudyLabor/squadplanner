@@ -110,7 +110,7 @@ export default function SquadDetail() {
     navigate('/squads')
   }
 
-  const isOwner = currentSquad?.owner_id === user?.id
+  const isOwner = !!(currentSquad?.owner_id && user?.id && currentSquad.owner_id === user.id)
   const isLoading = squadLoading
   const showSkeleton = isLoading && !currentSquad
 

@@ -10,7 +10,7 @@ import {
   useLocation,
 } from 'react-router'
 import { Toaster } from 'sonner'
-import { LazyMotion } from 'framer-motion'
+import { LazyMotion, domMax } from 'framer-motion'
 import { QueryClientProvider } from '@tanstack/react-query'
 import { queryClient } from './lib/queryClient'
 import './index.css'
@@ -18,7 +18,7 @@ import './index.css'
 // Client-only imports (deferred to avoid SSR issues)
 const ClientShell = lazy(() => import('./ClientShell'))
 
-const loadFeatures = () => import('framer-motion').then(mod => mod.domMax)
+const loadFeatures = () => domMax
 
 // Layout component provides the HTML document shell (replaces index.html)
 export function Layout({ children }: { children: React.ReactNode }) {

@@ -125,11 +125,15 @@ export default defineConfig(async () => {
           if (!n.includes('node_modules/')) return;
           // Heavy libs — cached separately for long-term caching
           if (n.includes('livekit-client') || n.includes('@livekit')) return 'vendor-livekit';
-          if (n.includes('framer-motion') || n.includes('motion-dom') || n.includes('motion-utils')) return 'vendor-motion';
           if (n.includes('@supabase')) return 'vendor-supabase';
           if (n.includes('canvas-confetti')) return 'vendor-confetti';
-          // Merge @tanstack + zustand + sonner + zod into one chunk to avoid circular deps
-          if (n.includes('@tanstack') || n.includes('sonner') || n.includes('zustand') || n.includes('zod')) return 'vendor-state';
+          // Core: React + framer-motion + state management in one chunk
+          // to avoid circular dependencies between React and its consumers
+          if (n.includes('/react-dom/') || n.includes('/react-dom@')) return 'vendor-core';
+          if (n.includes('/react/') || n.includes('/react@')) return 'vendor-core';
+          if (n.includes('/scheduler/') || n.includes('/scheduler@')) return 'vendor-core';
+          if (n.includes('framer-motion') || n.includes('motion-dom') || n.includes('motion-utils')) return 'vendor-core';
+          if (n.includes('@tanstack') || n.includes('sonner') || n.includes('zustand') || n.includes('zod')) return 'vendor-core';
         },
         chunkFileNames: "assets/[name]-[hash].js",
         assetFileNames: "assets/[name]-[hash].[ext]",

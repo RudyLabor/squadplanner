@@ -18,7 +18,8 @@ import './index.css'
 // Client-only imports (deferred to avoid SSR issues)
 const ClientShell = lazy(() => import('./ClientShell'))
 
-const loadFeatures = () => domMax
+// Pass domMax directly (not as async loader) to ensure features are available immediately
+// This prevents m.div components from getting stuck at initial={{ opacity: 0 }}
 
 // Layout component provides the HTML document shell (replaces index.html)
 export function Layout({ children }: { children: React.ReactNode }) {
@@ -183,7 +184,7 @@ export default function Root() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <LazyMotion features={loadFeatures} strict>
+      <LazyMotion features={domMax} strict>
         {isClient ? (
           <Suspense fallback={<SSRFallback />}>
             <ClientShell />

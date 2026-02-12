@@ -1,11 +1,10 @@
-import { m } from 'framer-motion'
 import { Crown, Check, X } from '../../components/icons'
 import { Card } from '../../components/ui'
 import { FEATURES } from './PremiumData'
 
 export function PremiumFeaturesTable() {
   return (
-    <m.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }} className="mb-16">
+    <div className="animate-fade-in-up mb-16" style={{ animationDelay: '0.3s' }}>
       <h2 className="text-xl font-semibold text-text-primary text-center mb-8">Comparatif des fonctionnalit&eacute;s</h2>
       <Card className="overflow-hidden">
         <div className="grid grid-cols-[1.5fr_1fr_1.2fr] md:grid-cols-3 gap-2 md:gap-4 p-4 bg-overlay-faint border-b border-border-default">
@@ -19,8 +18,7 @@ export function PremiumFeaturesTable() {
         </div>
         <div className="divide-y divide-border-default">
           {FEATURES.map((feature, index) => (
-            <m.div key={feature.name} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: index * 0.06, duration: 0.35, ease: 'easeOut' }}
-              className={`grid grid-cols-[1.5fr_1fr_1.2fr] md:grid-cols-3 gap-2 md:gap-4 p-4 items-center ${feature.highlight ? 'bg-primary-5' : ''}`}>
+            <div key={feature.name} className={`animate-fade-in-up grid grid-cols-[1.5fr_1fr_1.2fr] md:grid-cols-3 gap-2 md:gap-4 p-4 items-center ${feature.highlight ? 'bg-primary-5' : ''}`} style={{ animationDelay: `${0.3 + index * 0.06}s` }}>
               <div className="flex items-center gap-2 md:gap-3 min-w-0">
                 <feature.icon className="w-4 h-4 text-primary flex-shrink-0" />
                 <span className="text-md text-text-primary break-words">{feature.name}</span>
@@ -39,10 +37,10 @@ export function PremiumFeaturesTable() {
                   <span className="text-base font-medium text-success break-words">{feature.premium}</span>
                 )}
               </div>
-            </m.div>
+            </div>
           ))}
         </div>
       </Card>
-    </m.div>
+    </div>
   )
 }

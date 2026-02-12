@@ -60,17 +60,16 @@ export function ChallengeCard({ challenge, index, onClaim, isClaiming }: Challen
 
           <div className="flex-1 min-w-0">
             <div className="flex items-start justify-between gap-2 mb-1">
-              <div className="flex-1">
-                <div className="flex items-center gap-2 mb-0.5">
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-2 mb-0.5 flex-wrap">
                   <h3 className={`text-md font-semibold ${isClaimed ? 'text-text-tertiary line-through' : 'text-text-primary'}`}>{challenge.title}</h3>
-                  <span className="text-xs font-medium px-1.5 py-0.5 rounded-full uppercase" style={{ backgroundColor: config.bgColor, color: config.color }}>{config.label}</span>
+                  <span className="text-xs font-medium px-1.5 py-0.5 rounded-full uppercase whitespace-nowrap" style={{ backgroundColor: config.bgColor, color: config.color }}>{config.label}</span>
+                  <div className={`flex items-center gap-1 px-2 py-0.5 rounded-lg whitespace-nowrap ${isClaimed ? 'bg-surface-card' : 'bg-warning-15'}`}>
+                    <Zap className={`w-3.5 h-3.5 ${isClaimed ? 'text-text-tertiary' : 'text-warning'}`} />
+                    <span className={`text-sm font-bold ${isClaimed ? 'text-text-tertiary' : 'text-warning'}`}>{challenge.xp_reward} XP</span>
+                  </div>
                 </div>
                 <p className={`text-sm ${isClaimed ? 'text-text-tertiary' : 'text-text-secondary'}`}>{challenge.description}</p>
-              </div>
-
-              <div className={`flex items-center gap-1 px-2 py-1 rounded-lg flex-shrink-0 ${isClaimed ? 'bg-surface-card' : 'bg-warning-15'}`}>
-                <Zap className={`w-3.5 h-3.5 ${isClaimed ? 'text-text-tertiary' : 'text-warning'}`} />
-                <span className={`text-sm font-bold ${isClaimed ? 'text-text-tertiary' : 'text-warning'}`}>{challenge.xp_reward} XP</span>
               </div>
             </div>
 

@@ -61,13 +61,13 @@ function DemoNavbar({ active }: { active: string }) {
 
 export function PhoneFrame({ children }: { children: React.ReactNode }) {
   return (
-    <div className="relative mx-auto w-[260px] md:w-[300px]">
+    <div className="relative mx-auto w-[270px] md:w-[300px]">
       {/* Glow effect behind phone */}
       <div className="absolute -inset-4 bg-primary/10 rounded-[3rem] blur-2xl" />
       <div className="relative bg-bg-elevated rounded-[2rem] p-3 border border-border-hover shadow-2xl ring-1 ring-primary/10">
         {/* Notch */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-24 h-5 bg-bg-elevated rounded-b-xl z-10" />
-        <div className="bg-bg-surface rounded-[1.5rem] overflow-hidden h-[360px] md:h-[400px] relative flex flex-col">
+        <div className="bg-bg-surface rounded-[1.5rem] overflow-hidden h-[440px] md:h-[460px] relative flex flex-col">
           {/* Status bar */}
           <div className="flex items-center justify-between px-6 pt-2 pb-1 text-2xs text-text-tertiary">
             <span>21:00</span>

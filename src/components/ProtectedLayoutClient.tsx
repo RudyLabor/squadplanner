@@ -20,7 +20,8 @@ interface ProtectedLayoutData {
 export function ProtectedLayoutClient({ loaderData }: { loaderData: ProtectedLayoutData }) {
   const { user: clientUser, isInitialized } = useAuthStore()
   const queryClient = useQueryClient()
-  const [onboardingSkipped, setOnboardingSkipped] = useState(false)
+  // null = not yet checked, false = not skipped, true = skipped
+  const [onboardingSkipped, setOnboardingSkipped] = useState<boolean | null>(null)
 
   const seeded = useRef(false)
   if (!seeded.current && loaderData) {
@@ -33,7 +34,7 @@ export function ProtectedLayoutClient({ loaderData }: { loaderData: ProtectedLay
     seeded.current = true
   }
 
-  // Check localStorage for onboarding skip (client-only)
+  // Check localStorage for onboarding skip (client-only, runs after first render)
   useEffect(() => {
     setOnboardingSkipped(localStorage.getItem('sq-onboarding-skipped') === 'true')
   }, [])
@@ -41,8 +42,8 @@ export function ProtectedLayoutClient({ loaderData }: { loaderData: ProtectedLay
   // If we have loader data, the server already authenticated the user.
   // Show content immediately without waiting for client-side auth.
   if (loaderData?.user) {
-    // Still check onboarding redirect (requires client-side localStorage)
-    if (typeof window !== 'undefined' && loaderData.squads.length === 0 && !onboardingSkipped) {
+    // Only redirect to onboarding AFTER localStorage check is complete (not null)
+    if (onboardingSkipped === false && loaderData.squads.length === 0) {
       return <Navigate to="/onboarding" replace />
     }
     return <Outlet />

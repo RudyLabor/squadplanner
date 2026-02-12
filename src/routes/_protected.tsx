@@ -4,12 +4,10 @@ import { createSupabaseServerClient } from '../lib/supabase.server'
 import { ProtectedLayoutClient } from '../components/ProtectedLayoutClient'
 import type { Profile } from '../types/database'
 
-// Vercel Edge Runtime — all child routes inherit this config via prototype chain.
-// Moves SSR from Node.js (single region, ~200ms cold start) to Vercel's Edge
-// network (global CDN, ~5ms cold start). TTFB divided by 2-3x.
-export const config = {
-  runtime: 'edge',
-}
+// NOTE: Edge Runtime removed — it caused the client-side route manifest to exclude
+// all protected routes (home, squads, sessions…), resulting in 404 on every
+// authenticated page after hydration. Vercel CDN + Cache-Control headers already
+// provide excellent TTFB (~25-97ms) without edge runtime.
 
 interface SquadWithCount {
   id: string

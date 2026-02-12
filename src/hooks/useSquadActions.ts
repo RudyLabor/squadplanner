@@ -63,7 +63,7 @@ export async function joinSquadAction(inviteCode: string): Promise<{ error: Erro
 
     const { data: existing } = await supabase.from('squad_members')
       .select('id').eq('squad_id', squad.id).eq('user_id', user.id).single()
-    if (existing) throw new Error('Tu fais deja partie de cette squad')
+    if (existing) throw new Error('Tu fais déjà partie de cette squad')
 
     const { error: joinError } = await supabase.from('squad_members')
       .insert({ squad_id: squad.id, user_id: user.id, role: 'member' as const })

@@ -2,10 +2,10 @@
  * PHASE 1.1 - React Query Configuration
  *
  * QueryClient configuration optimized for Squad Planner:
- * - 30s stale time (data considered fresh for 30s)
- * - 5min cache time (garbage collect after 5min)
- * - Automatic refetch on window focus
- * - Retry with exponential backoff
+ * - 2min stale time (data considered fresh for 2min)
+ * - 10min cache time (garbage collect after 10min)
+ * - No refetch on window focus
+ * - Single retry with exponential backoff
  *
  * Benefits:
  * - Request deduplication (same query key = 1 request)
@@ -18,12 +18,12 @@ import { QueryClient } from '@tanstack/react-query'
 export const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      // Data is fresh for 30 seconds
-      staleTime: 30 * 1000,
-      // Keep in cache for 5 minutes after last use
-      gcTime: 5 * 60 * 1000,
-      // Retry failed requests with exponential backoff
-      retry: 2,
+      // Data is fresh for 2 minutes (most data doesn't change that fast)
+      staleTime: 2 * 60 * 1000,
+      // Keep in cache for 10 minutes after last use
+      gcTime: 10 * 60 * 1000,
+      // Retry failed requests once (faster failure feedback)
+      retry: 1,
       retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 10000),
       // Don't refetch on window focus to reduce network calls
       refetchOnWindowFocus: false,

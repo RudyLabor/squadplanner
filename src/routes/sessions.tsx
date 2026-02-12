@@ -30,6 +30,7 @@ interface SessionsLoaderData {
 export function meta() {
   return [
     { title: "Sessions - Squad Planner" },
+    { name: "description", content: "Consulte et gère tes sessions de jeu planifiées. Confirme ta présence avec le système RSVP." },
     { tagName: "link", rel: "canonical", href: "https://squadplanner.fr/sessions" },
     { property: "og:url", content: "https://squadplanner.fr/sessions" },
   ]

@@ -38,7 +38,7 @@ export const PWAInstallBanner = memo(function PWAInstallBanner() {
                 Installer Squad Planner
               </h3>
               <p className="text-base text-text-secondary mt-0.5">
-                Acces rapide depuis ton ecran d'accueil
+                Accès rapide depuis ton écran d'accueil
               </p>
 
               {/* Actions */}

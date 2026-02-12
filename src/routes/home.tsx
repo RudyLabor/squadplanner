@@ -37,6 +37,7 @@ interface HomeLoaderData {
 export function meta() {
   return [
     { title: "Accueil - Squad Planner" },
+    { name: "description", content: "Tableau de bord Squad Planner : tes squads, sessions à venir et activité récente en un coup d'oeil." },
     { tagName: "link", rel: "canonical", href: "https://squadplanner.fr/home" },
     { property: "og:url", content: "https://squadplanner.fr/home" },
   ]
@@ -94,7 +95,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   ])
 
   const profile = profileResult.data as Profile | null
-  const squads = (membershipsResult.data?.map((m: { squads: SquadSummary }) => m.squads) || []) as SquadSummary[]
+  const squads = (membershipsResult.data?.map((m: { squads: SquadSummary }) => m.squads).filter(Boolean) || []) as SquadSummary[]
   const squadIds = squads.map((s) => s.id)
 
   // Use total_members from the squads table directly (maintained by DB trigger)
@@ -125,7 +126,7 @@ export default function Component({ loaderData }: { loaderData: HomeLoaderData }
       <Suspense fallback={
         <Home loaderData={{ ...loaderData, upcomingSessions: [] }} />
       }>
-        <Await resolve={loaderData.upcomingSessions}>
+        <Await resolve={loaderData.upcomingSessions} errorElement={<Home loaderData={{ ...loaderData, upcomingSessions: [] }} />}>
           {(sessions: SessionWithRsvp[]) => (
             <DeferredSeed queryKey={queryKeys.sessions.upcoming()} data={sessions}>
               <Home loaderData={{ ...loaderData, upcomingSessions: sessions }} />

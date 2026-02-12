@@ -22,6 +22,7 @@ interface PartyLoaderData {
 export function meta() {
   return [
     { title: "Party - Squad Planner" },
+    { name: "description", content: "Rejoins le chat vocal de ta squad. Lance une party pour jouer ensemble en temps réel." },
     { tagName: "link", rel: "canonical", href: "https://squadplanner.fr/party" },
     { property: "og:url", content: "https://squadplanner.fr/party" },
   ]

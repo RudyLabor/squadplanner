@@ -10,6 +10,7 @@ const Settings = lazy(() => import('../pages/Settings').then(m => ({ default: m.
 export function meta() {
   return [
     { title: "Paramètres - Squad Planner" },
+    { name: "description", content: "Configure ton compte Squad Planner : notifications, thème, confidentialité et préférences." },
     { tagName: "link", rel: "canonical", href: "https://squadplanner.fr/settings" },
     { property: "og:url", content: "https://squadplanner.fr/settings" },
   ]

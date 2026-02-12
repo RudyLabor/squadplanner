@@ -1198,6 +1198,18 @@ select:focus-visible,
   overflow: hidden;
 }
 
+/* In-app page transition */
+@keyframes page-in {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-page-in {
+  animation: page-in 0.2s ease-out;
+}
+@media (prefers-reduced-motion: reduce) {
+  .animate-page-in { animation: none; }
+}
+
 /* Page load fade-in */
 @keyframes page-fade-in {
   from { opacity: 0; }

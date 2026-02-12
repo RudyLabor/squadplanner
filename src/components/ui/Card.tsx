@@ -33,7 +33,7 @@ export function Card({
   }
 
   const hoverClasses = hoverable && !disabled
-    ? 'hover:bg-surface-card-hover hover:border-border-hover hover:-translate-y-px active:scale-[0.995] cursor-pointer'
+    ? 'hover:bg-surface-card-hover hover:border-border-hover hover:shadow-sm hover:-translate-y-px active:scale-[0.995] cursor-pointer'
     : ''
 
   const disabledClasses = disabled ? 'opacity-50 cursor-not-allowed pointer-events-none' : ''

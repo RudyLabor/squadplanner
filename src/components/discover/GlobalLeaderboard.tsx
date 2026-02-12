@@ -40,7 +40,7 @@ export const GlobalLeaderboard = memo(function GlobalLeaderboard({ game, region,
       <div className="text-center py-12">
         <Trophy className="w-10 h-10 text-text-tertiary mx-auto mb-3 opacity-50" />
         <p className="text-sm text-text-tertiary">Pas encore de classement</p>
-        <p className="text-xs text-text-tertiary mt-1">Les joueurs avec 3+ sessions apparaitront ici</p>
+        <p className="text-xs text-text-tertiary mt-1">Les joueurs avec 3+ sessions apparaîtront ici</p>
       </div>
     )
   }

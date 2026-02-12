@@ -176,6 +176,7 @@ export function GlobalSearch() {
         className="flex items-center gap-2 px-3 py-2 rounded-xl bg-surface-card border border-border-subtle text-text-secondary hover:bg-border-subtle hover:text-text-primary transition-colors"
         whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.98 }}
+        aria-label="Rechercher"
       >
         <Search className="w-4 h-4" />
         <span className="text-sm hidden sm:inline">Rechercher...</span>

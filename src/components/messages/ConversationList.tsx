@@ -101,7 +101,7 @@ export function ConversationList({ showOnDesktop = false, activeTab, onTabChange
           <Users className="w-4 h-4" />Squads<TabBadge count={squadUnread} />
         </button>
         <button role="tab" aria-selected={activeTab === 'dms'} onClick={() => onTabChange('dms')} className={tabCls(activeTab === 'dms')}>
-          <User className="w-4 h-4" />Prives<TabBadge count={dmUnread} />
+          <User className="w-4 h-4" />Privés<TabBadge count={dmUnread} />
         </button>
       </div>
 

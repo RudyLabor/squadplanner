@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useCallback, useSyncExternalStore } from 'react'
+import { useState, useEffect, useMemo, useCallback, useSyncExternalStore } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
 import { m } from 'framer-motion'
 import {
@@ -149,9 +149,15 @@ export default function Home({ loaderData }: HomeProps) {
 
   const [showConfetti, setShowConfetti] = useState(false)
   const [successMessage, setSuccessMessage] = useState<string | null>(null)
+  const [greeting, setGreeting] = useState('Salut')
+
+  useEffect(() => {
+    const hour = new Date().getHours()
+    setGreeting(hour >= 5 && hour < 12 ? 'Bon matin' : hour < 18 ? 'Bon après-midi' : 'Bonsoir')
+  }, [])
 
   const upcomingSessions = useMemo<UpcomingSession[]>(() => {
-    if (!rawSessions.length || !squads.length) return []
+    if (!rawSessions?.length || !squads?.length) return []
     return rawSessions
       .filter(s => s.status !== 'cancelled')
       .slice(0, 5)
@@ -169,7 +175,7 @@ export default function Home({ loaderData }: HomeProps) {
   }, [rawSessions, squads])
 
   const sessionsThisWeek = useMemo(() => {
-    if (!rawSessions.length) return 0
+    if (!rawSessions?.length) return 0
     const now = new Date()
     const startOfWeek = new Date(now)
     startOfWeek.setDate(now.getDate() - now.getDay())
@@ -255,7 +261,7 @@ export default function Home({ loaderData }: HomeProps) {
               transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
             >
               <h1 className="text-xl md:text-2xl font-bold text-text-primary mb-1">
-                Salut{' '}
+                {greeting}{' '}
                 {profile?.username && (
                   <span className="hidden sm:inline">{profile.username.length > 15 ? profile.username.slice(0, 15) + '\u2026' : profile.username}{' '}</span>
                 )}
@@ -297,7 +303,7 @@ export default function Home({ loaderData }: HomeProps) {
               <HomeFriendsSection friendsPlaying={friendsPlaying} friendsLoading={friendsLoading} onJoin={handleJoinFriendParty} onInvite={handleInviteFriend} />
             </m.div>
             <m.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}>
-              <HomeActivityFeed squadIds={squads.map(s => s.id)} />
+              <HomeActivityFeed squadIds={(squads || []).map(s => s.id)} />
             </m.div>
             <m.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}>
               <HomeSquadsSection squads={squads} squadsLoading={squadsLoading} />

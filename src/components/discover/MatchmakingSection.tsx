@@ -3,6 +3,7 @@
 import { memo, useState } from 'react'
 import { m } from 'framer-motion'
 import {
+  Users,
   UserPlus,
   Shield,
   Star,
@@ -36,10 +37,22 @@ export const MatchmakingSection = memo(function MatchmakingSection({ game, regio
 
   if (!players || players.length === 0) {
     return (
-      <div className="text-center py-12">
-        <UserPlus className="w-10 h-10 text-text-tertiary mx-auto mb-3 opacity-50" />
-        <p className="text-sm text-text-tertiary">Aucun joueur disponible</p>
-        <p className="text-xs text-text-tertiary mt-1">{`Active "Cherche une squad" dans ton profil pour appara\u00eetre ici`}</p>
+      <div className="text-center py-12 px-4">
+        <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center mx-auto mb-4">
+          <Users className="w-8 h-8 text-primary" />
+        </div>
+        <h3 className="text-lg font-semibold text-text-primary mb-2">
+          Personne en recherche de squad pour le moment
+        </h3>
+        <p className="text-md text-text-secondary max-w-sm mx-auto mb-6">
+          Active la recherche de squad dans ton profil pour apparaître ici et être trouvé par d'autres joueurs.
+        </p>
+        <a
+          href="/profile"
+          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary text-white text-md font-medium hover:bg-primary-hover transition-colors"
+        >
+          Activer dans mon profil
+        </a>
       </div>
     )
   }

@@ -10,6 +10,7 @@ const Messages = lazy(() => import('../pages/Messages'))
 export function meta() {
   return [
     { title: "Messages - Squad Planner" },
+    { name: "description", content: "Discute avec tes coéquipiers en temps réel. Messagerie intégrée pour chaque squad." },
     { tagName: "link", rel: "canonical", href: "https://squadplanner.fr/messages" },
     { property: "og:url", content: "https://squadplanner.fr/messages" },
   ]

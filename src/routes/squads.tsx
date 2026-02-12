@@ -27,6 +27,7 @@ interface SquadsLoaderData {
 export function meta() {
   return [
     { title: "Mes Squads - Squad Planner" },
+    { name: "description", content: "Gère tes squads gaming : crée, rejoins et organise tes équipes pour planifier des sessions ensemble." },
     { tagName: "link", rel: "canonical", href: "https://squadplanner.fr/squads" },
     { property: "og:url", content: "https://squadplanner.fr/squads" },
   ]

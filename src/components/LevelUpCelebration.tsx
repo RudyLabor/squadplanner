@@ -207,7 +207,7 @@ export function LevelUpCelebration({
               <m.div
                 className="text-sm text-text-secondary uppercase tracking-wide mb-2"
               >
-                New Rank Achieved
+                Nouveau rang atteint
               </m.div>
               <m.h2
                 className="text-3xl font-extrabold mb-2"
@@ -236,12 +236,12 @@ export function LevelUpCelebration({
                 transition={{ delay: 0.8 }}
               >
                 {newLevel >= 10
-                  ? "You've reached the pinnacle of greatness!"
+                  ? "Tu as atteint le sommet absolu !"
                   : newLevel >= 7
-                    ? "Your legend grows stronger!"
+                    ? "Ta légende ne fait que grandir !"
                     : newLevel >= 4
-                      ? "You're becoming a force to be reckoned with!"
-                      : "Keep climbing the ranks!"
+                      ? "Tu deviens une force redoutable !"
+                      : "Continue à gravir les échelons !"
                 }
               </m.p>
             </m.div>
@@ -253,7 +253,7 @@ export function LevelUpCelebration({
               animate={{ opacity: [0, 1, 0] }}
               transition={{ duration: 2, repeat: Infinity, delay: 1.5 }}
             >
-              Tap anywhere to continue
+              Touche pour continuer
             </m.div>
           </m.div>
         </m.div>

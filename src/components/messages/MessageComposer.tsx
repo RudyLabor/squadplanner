@@ -123,8 +123,8 @@ export function MessageComposer({
               <VoiceRecorder onSend={async (blob, dur) => onVoiceSend(blob, dur)} disabled={isSending} />
             )}
 
-            <Button type="submit" disabled={!newMessage.trim() || isSending} className="w-12 h-12 p-0 rounded-xl">
-              {isSending ? <Loader2 className="w-5 h-5 animate-spin" /> : <Send className="w-5 h-5" />}
+            <Button type="submit" disabled={!newMessage.trim() || isSending} className="w-12 h-12 p-0 rounded-xl" aria-label="Envoyer le message">
+              {isSending ? <Loader2 className="w-5 h-5 animate-spin" aria-hidden="true" /> : <Send className="w-5 h-5" aria-hidden="true" />}
             </Button>
           </div>
         </form>

@@ -7,7 +7,8 @@ import PublicProfile from '../pages/PublicProfile'
 
 export function meta() {
   return [
-    { title: "Profil - Squad Planner" },
+    { title: "Profil joueur - Squad Planner" },
+    { name: "description", content: "Profil public d'un joueur Squad Planner : statistiques, fiabilité et jeux préférés." },
     { tagName: "link", rel: "canonical", href: "https://squadplanner.fr/profile" },
     { property: "og:url", content: "https://squadplanner.fr/profile" },
   ]

@@ -1,4 +1,11 @@
+import type { HeadersArgs } from 'react-router'
 import { JoinSquad } from '../pages/JoinSquad'
+
+export function headers(_args: HeadersArgs) {
+  return {
+    "Cache-Control": "public, max-age=300, s-maxage=3600, stale-while-revalidate=86400",
+  }
+}
 
 export function meta() {
   return [

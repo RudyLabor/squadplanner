@@ -20,10 +20,12 @@ interface AppLayoutProps {
 const DesktopContentWrapper = memo(function DesktopContentWrapper({
   isExpanded,
   isKeyboardVisible,
+  locationKey,
   children
 }: {
   isExpanded: boolean
   isKeyboardVisible: boolean
+  locationKey: string
   children: ReactNode
 }) {
   const [isDesktop, setIsDesktop] = useState(false)
@@ -48,7 +50,9 @@ const DesktopContentWrapper = memo(function DesktopContentWrapper({
         animate={{ marginLeft }}
         transition={{ duration: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
       >
-        {children}
+        <div key={locationKey} className="animate-page-in">
+          {children}
+        </div>
       </m.div>
     </main>
   )
@@ -195,7 +199,7 @@ export function AppLayout({ children }: AppLayoutProps) {
         onOpenCustomStatus={() => setShowCustomStatusModal(true)}
       />
 
-      <DesktopContentWrapper isExpanded={isExpanded} isKeyboardVisible={isKeyboardVisible}>
+      <DesktopContentWrapper isExpanded={isExpanded} isKeyboardVisible={isKeyboardVisible} locationKey={currentPath}>
         <TopBar />
         {children}
       </DesktopContentWrapper>

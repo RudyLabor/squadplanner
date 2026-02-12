@@ -36,7 +36,9 @@ let metricsBuffer: WebVitalPayload[] = [];
 let flushTimer: ReturnType<typeof setInterval> | null = null;
 let visibilityListenerAdded = false;
 let consecutiveFailures = 0;
-let endpointDisabled = false;
+// Disabled until the web-vitals edge function is deployed on Supabase.
+// Re-enable by setting this to `false` once `supabase functions deploy web-vitals` is done.
+let endpointDisabled = true;
 
 function getEndpointUrl(): string {
   if (endpointDisabled) return '';

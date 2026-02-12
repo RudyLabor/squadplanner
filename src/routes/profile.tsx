@@ -10,6 +10,7 @@ const Profile = lazy(() => import('../pages/Profile').then(m => ({ default: m.Pr
 export function meta() {
   return [
     { title: "Mon Profil - Squad Planner" },
+    { name: "description", content: "Consulte ton profil gaming : statistiques, fiabilité, XP et badges. Personnalise ton identité Squad Planner." },
     { tagName: "link", rel: "canonical", href: "https://squadplanner.fr/profile" },
     { property: "og:url", content: "https://squadplanner.fr/profile" },
   ]

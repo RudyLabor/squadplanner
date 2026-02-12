@@ -232,7 +232,7 @@ export function setupNetworkQualityListener(
 }
 
 /**
- * Ajuste les parametres audio selon la qualite
+ * Ajuste les paramètres audio selon la qualité
  */
 export async function adjustAudioQuality(
   _room: unknown,

@@ -205,8 +205,8 @@ const SquadsTab = memo(function SquadsTab({ game, region }: { game: string; regi
         {/* Encouragement to create public squads */}
         <div className="rounded-xl border border-border-subtle bg-surface-card p-5 text-center">
           <Sparkles className="w-5 h-5 text-primary mx-auto mb-2" />
-          <p className="text-sm text-text-secondary">Les squads publiques apparaitront ici.</p>
-          <p className="text-xs text-text-tertiary mt-1">Rends ta squad publique dans les parametres pour la faire decouvrir !</p>
+          <p className="text-sm text-text-secondary">Les squads publiques apparaîtront ici.</p>
+          <p className="text-xs text-text-tertiary mt-1">Rends ta squad publique dans les paramètres pour la faire découvrir !</p>
         </div>
       </div>
     )

@@ -154,16 +154,18 @@ export function NotificationBell() {
                     type="button"
                     onClick={markAllAsRead}
                     className="text-sm text-primary hover:text-purple transition-colors"
+                    aria-label="Tout marquer comme lu"
                   >
-                    <CheckCheck className="w-4 h-4" />
+                    <CheckCheck className="w-4 h-4" aria-hidden="true" />
                   </button>
                 )}
                 <button
                   type="button"
                   onClick={() => setIsOpen(false)}
                   className="text-text-tertiary hover:text-text-primary transition-colors"
+                  aria-label="Fermer les notifications"
                 >
-                  <X className="w-4 h-4" />
+                  <X className="w-4 h-4" aria-hidden="true" />
                 </button>
               </div>
             </div>

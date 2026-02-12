@@ -94,7 +94,7 @@ export class ErrorBoundary extends Component<Props, State> {
   }
 
   handleGoHome = () => {
-    window.location.href = '/home'
+    window.location.href = '/squads'
   }
 
   handleGoBack = () => {
@@ -162,6 +162,13 @@ export class ErrorBoundary extends Component<Props, State> {
                 <Home className="w-4 h-4" />
                 Accueil
               </button>
+            </div>
+
+            {/* Navigation links */}
+            <div className="flex flex-wrap gap-2 justify-center mt-3">
+              <a href="/squads" className="px-4 py-2 rounded-lg bg-bg-elevated text-text-secondary text-sm hover:bg-bg-hover transition-colors border border-border-subtle">Squads</a>
+              <a href="/sessions" className="px-4 py-2 rounded-lg bg-bg-elevated text-text-secondary text-sm hover:bg-bg-hover transition-colors border border-border-subtle">Sessions</a>
+              <a href="/messages" className="px-4 py-2 rounded-lg bg-bg-elevated text-text-secondary text-sm hover:bg-bg-hover transition-colors border border-border-subtle">Messages</a>
             </div>
 
             {/* Clear cache option (shown after first retry) */}

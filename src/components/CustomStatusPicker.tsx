@@ -62,8 +62,8 @@ export const CustomStatusPicker = memo(function CustomStatusPicker({ isOpen, onC
             {/* Header */}
             <div className="flex items-center justify-between px-5 py-4 border-b border-border-default">
               <h3 className="text-lg font-semibold text-text-primary">Définir un statut</h3>
-              <button onClick={onClose} className="p-1.5 rounded-lg text-text-tertiary hover:text-text-primary hover:bg-bg-hover transition-colors">
-                <X className="w-5 h-5" />
+              <button onClick={onClose} className="p-1.5 rounded-lg text-text-tertiary hover:text-text-primary hover:bg-bg-hover transition-colors" aria-label="Fermer">
+                <X className="w-5 h-5" aria-hidden="true" />
               </button>
             </div>
 

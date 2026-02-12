@@ -117,7 +117,7 @@ export function useJoinSquadMutation() {
         .eq('user_id', user.id)
         .single()
 
-      if (existing) throw new Error('Tu fais deja partie de cette squad')
+      if (existing) throw new Error('Tu fais déjà partie de cette squad')
 
       const { error: joinError } = await supabase
         .from('squad_members')

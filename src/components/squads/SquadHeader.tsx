@@ -179,7 +179,7 @@ function EditSquadModal({ squadId, initialName, initialGame, onClose }: {
               value={description}
               onChange={e => setDescription(e.target.value)}
               rows={3}
-              placeholder="Decris ta squad..."
+              placeholder="Décris ta squad..."
               className="w-full px-4 py-3 rounded-xl bg-bg-surface border border-border-default text-md text-text-primary placeholder:text-text-quaternary focus:border-primary focus:outline-none transition-colors resize-none"
             />
           </div>

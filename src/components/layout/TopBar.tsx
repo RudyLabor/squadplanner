@@ -15,6 +15,7 @@ import { Breadcrumbs } from './Breadcrumbs'
 import { GlobalSearch } from '../GlobalSearch'
 import { NotificationBell } from '../NotificationCenter'
 import { Sheet } from '../ui/Sheet'
+import { Tooltip } from '../ui/Tooltip'
 
 function MobileSearchButton() {
   const isMac = typeof navigator !== 'undefined' && navigator.platform.toLowerCase().includes('mac')
@@ -57,8 +58,12 @@ export const TopBar = memo(function TopBar() {
       <header role="banner" className="hidden lg:flex pt-4 px-6 items-center justify-between">
         <Breadcrumbs />
         <div className="flex items-center gap-2">
-          <NotificationBell />
-          <GlobalSearch />
+          <Tooltip content="Notifications" position="bottom">
+            <NotificationBell />
+          </Tooltip>
+          <Tooltip content="Rechercher (Ctrl+K)" position="bottom">
+            <GlobalSearch />
+          </Tooltip>
         </div>
       </header>
 

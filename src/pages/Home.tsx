@@ -160,7 +160,7 @@ export default function Home({ loaderData }: HomeProps) {
 
   useEffect(() => {
     const hour = new Date().getHours()
-    setGreeting(hour >= 5 && hour < 12 ? 'Bon matin' : hour < 18 ? 'Bon après-midi' : 'Bonsoir')
+    setGreeting(hour >= 5 && hour < 18 ? 'Salut' : 'Bonsoir')
   }, [])
 
   const upcomingSessions = useMemo<UpcomingSession[]>(() => {

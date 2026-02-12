@@ -14,23 +14,30 @@ import Confetti from '../components/LazyConfetti'
 import { PullToRefresh } from '../components/PullToRefresh'
 import { Tooltip, CrossfadeTransition, SkeletonHomePage } from '../components/ui'
 import { useAuthStore } from '../hooks'
-// Lazy-load voice chat store to avoid pulling livekit into the main bundle
+// Lazy-load voice chat store to avoid pulling livekit into the main bundle.
+// IMPORTANT: We use getState()/subscribe() instead of calling the zustand hook
+// directly, because calling store() conditionally would violate Rules of Hooks
+// (the hook count changes when the dynamic import resolves, crashing React).
 const voiceChatStorePromise = import('../hooks/useVoiceChat')
 let cachedStore: any = null
 
+const defaultVoiceState = { isConnected: false, currentChannel: null, remoteUsers: [] }
+
 function useVoiceChatStoreLazy() {
-  const store = useSyncExternalStore(
+  const state = useSyncExternalStore(
     (cb) => {
       if (!cachedStore) {
         voiceChatStorePromise.then(mod => { cachedStore = mod.useVoiceChatStore; cb() })
+        return () => {}
       }
-      return () => {}
+      // Once loaded, subscribe to zustand store changes via its subscribe API
+      return cachedStore.subscribe(cb)
     },
-    () => cachedStore,
+    () => cachedStore ? cachedStore.getState() : null,
     () => null,
   )
-  if (!store) return { isConnected: false, currentChannel: null, remoteUsers: [] }
-  return store()
+  if (!state) return defaultVoiceState
+  return state
 }
 import { useSquadsQuery } from '../hooks/queries/useSquadsQuery'
 import { useRsvpMutation, useUpcomingSessionsQuery } from '../hooks/queries/useSessionsQuery'

@@ -40,3 +40,13 @@ startTransition(() => {
 import('./utils/webVitals').then(({ reportWebVitals }) => {
   reportWebVitals()
 })
+
+// Persist React Query cache to IndexedDB for offline access (non-blocking)
+import('./lib/queryClient').then(({ initQueryPersistence }) => {
+  initQueryPersistence()
+})
+
+// Initialize offline mutation queue — replays failed mutations on reconnect
+import('./lib/offlineMutationQueue').then(({ initOfflineMutationSync }) => {
+  initOfflineMutationSync()
+})

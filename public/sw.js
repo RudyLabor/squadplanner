@@ -494,16 +494,55 @@ self.addEventListener('message', function(event) {
   }
 });
 
-// Background sync event (for offline support)
+// Background sync event — replay offline mutations when connectivity returns
 self.addEventListener('sync', function(event) {
-  console.log('[SW] Sync event:', event.tag);
-
-  if (event.tag === 'sync-notifications') {
-    event.waitUntil(
-      // Sync any pending notifications
-      Promise.resolve()
-    );
+  if (event.tag === 'sync-mutations') {
+    event.waitUntil(replayOfflineMutations());
   }
 });
+
+// Replay mutations stored in IndexedDB while offline
+async function replayOfflineMutations() {
+  const DB_NAME = 'sq-offline-mutations';
+  const STORE_NAME = 'mutations';
+
+  try {
+    const db = await new Promise(function(resolve, reject) {
+      const req = indexedDB.open(DB_NAME, 1);
+      req.onsuccess = function() { resolve(req.result); };
+      req.onerror = function() { reject(req.error); };
+    });
+
+    const mutations = await new Promise(function(resolve, reject) {
+      const tx = db.transaction(STORE_NAME, 'readonly');
+      const req = tx.objectStore(STORE_NAME).getAll();
+      req.onsuccess = function() { resolve(req.result || []); };
+      req.onerror = function() { reject(req.error); };
+    });
+
+    for (const mutation of mutations) {
+      try {
+        const response = await fetch(mutation.url, {
+          method: mutation.method,
+          headers: mutation.headers,
+          body: mutation.body,
+        });
+
+        if (response.ok || response.status < 500) {
+          await new Promise(function(resolve) {
+            const tx = db.transaction(STORE_NAME, 'readwrite');
+            tx.objectStore(STORE_NAME).delete(mutation.id);
+            tx.oncomplete = function() { resolve(); };
+            tx.onerror = function() { resolve(); };
+          });
+        }
+      } catch (e) {
+        break; // Network still down
+      }
+    }
+  } catch (e) {
+    // IndexedDB unavailable in SW context
+  }
+}
 
 console.log('[SW] Service worker loaded - version', CACHE_VERSION);

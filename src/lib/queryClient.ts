@@ -215,3 +215,38 @@ export async function prefetchSessionDetail(sessionId: string) {
     staleTime: 15 * 1000,
   })
 }
+
+// ---------------------------------------------------------------------------
+// Offline Persistence
+// ---------------------------------------------------------------------------
+
+/**
+ * Persist React Query cache to IndexedDB for offline access.
+ * Initialized in entry.client.tsx (client-only, not during SSR).
+ */
+export async function initQueryPersistence() {
+  try {
+    const { persistQueryClient } = await import('@tanstack/query-persist-client-core')
+    const { createIDBPersister } = await import('./queryPersister')
+
+    const persister = createIDBPersister()
+
+    persistQueryClient({
+      queryClient,
+      persister,
+      maxAge: 24 * 60 * 60 * 1000, // 24 hours
+      buster: '', // Change to invalidate all persisted caches
+      dehydrateOptions: {
+        shouldDehydrateQuery: (query) => {
+          // Only persist successful queries with data
+          if (query.state.status !== 'success') return false
+          // Only persist key data types (squads, sessions, profile, messages)
+          const key = query.queryKey[0] as string
+          return ['squads', 'sessions', 'profile', 'messages', 'challenges', 'premium'].includes(key)
+        },
+      },
+    })
+  } catch {
+    // IndexedDB or persistence module unavailable — app works fine without it
+  }
+}

@@ -125,34 +125,33 @@ export const MobileBottomNav = memo(function MobileBottomNav({
   return (
     <nav
       aria-label="Navigation mobile"
-      className={`mobile-bottom-nav fixed bottom-0 left-0 right-0 bg-bg-base border-t border-border-subtle z-50 transition-transform duration-200 ${isKeyboardVisible ? 'translate-y-full' : 'translate-y-0'}`}
+      className={`mobile-bottom-nav fixed bottom-0 left-0 right-0 z-50 bg-bg-base border-t border-border-subtle transition-transform duration-200 ${isKeyboardVisible ? 'translate-y-full' : 'translate-y-0'}`}
+      style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', paddingBottom: 'calc(0.5rem + env(safe-area-inset-bottom, 0))' }}
     >
-      <div className="flex items-center py-2 mobile-nav-padding">
-        {mobileNavLeft.map((item) => (
-          <div key={item.path} className="flex-1 flex justify-center" onPointerEnter={createPrefetchHandler(item.path)} onPointerLeave={cancelPrefetch}>
-            <MobileNavLink
-              path={item.path}
-              icon={item.icon}
-              label={item.label}
-              isActive={currentPath === item.path}
-            />
-          </div>
-        ))}
-        <div className="flex-1 flex justify-center">
-          <PartyButton isActive={isPartyActive} hasActiveParty={isInVoiceChat} />
+      {mobileNavLeft.map((item) => (
+        <div key={item.path} className="flex justify-center py-2" onPointerEnter={createPrefetchHandler(item.path)} onPointerLeave={cancelPrefetch}>
+          <MobileNavLink
+            path={item.path}
+            icon={item.icon}
+            label={item.label}
+            isActive={currentPath === item.path}
+          />
         </div>
-        {mobileNavRight.map((item) => (
-          <div key={item.path} className="flex-1 flex justify-center" onPointerEnter={createPrefetchHandler(item.path)} onPointerLeave={cancelPrefetch}>
-            <MobileNavLink
-              path={item.path}
-              icon={item.icon}
-              label={item.label}
-              isActive={currentPath === item.path}
-              badge={item.path === '/messages' && unreadMessages > 0 ? unreadMessages : undefined}
-            />
-          </div>
-        ))}
+      ))}
+      <div className="flex justify-center py-2">
+        <PartyButton isActive={isPartyActive} hasActiveParty={isInVoiceChat} />
       </div>
+      {mobileNavRight.map((item) => (
+        <div key={item.path} className="flex justify-center py-2" onPointerEnter={createPrefetchHandler(item.path)} onPointerLeave={cancelPrefetch}>
+          <MobileNavLink
+            path={item.path}
+            icon={item.icon}
+            label={item.label}
+            isActive={currentPath === item.path}
+            badge={item.path === '/messages' && unreadMessages > 0 ? unreadMessages : undefined}
+          />
+        </div>
+      ))}
     </nav>
   )
 })

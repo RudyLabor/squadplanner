@@ -181,7 +181,7 @@ export function Messages() {
   const isLoading = activeTab === 'squads' ? isLoadingSquad : isLoadingDM
   const getMessageDate = useCallback((d: string) => new Date(d).toDateString(), [])
   const chatName = isSquadChat ? activeSquadConv?.name : activeDMConv?.other_user_username
-  const chatSubtitle = isSquadChat ? (activeSquadConv?.type === 'squad' ? 'Chat de squad' : 'Chat de session') : 'Message prive'
+  const chatSubtitle = isSquadChat ? (activeSquadConv?.type === 'squad' ? 'Chat de squad' : 'Chat de session') : 'Message privé'
 
   const pinnedMessages: PinnedMessage[] = useMemo(() => {
     if (!isSquadChat) return []
@@ -192,7 +192,17 @@ export function Messages() {
   const handleTabChange = useCallback((tab: 'squads' | 'dms') => { setActiveTab(tab); if (tab === 'squads') setActiveDMConv(null); else setActiveSquadConv(null); setNewMessage(''); setReplyingTo(null) }, [setActiveDMConv, setActiveSquadConv])
   const handleSelectSquadConv = useCallback((conv: typeof squadConversations[0]) => { if (activeSquadConv?.id !== conv.id) setActiveDMConv(null); setActiveSquadConv(conv) }, [activeSquadConv?.id, setActiveDMConv, setActiveSquadConv])
   const messageSearchCount = messageSearchQuery ? messages.filter(m => (m.content || '').toLowerCase().includes(messageSearchQuery.toLowerCase())).length : 0
-  const handleGifSelect = useCallback((url: string) => { setNewMessage(url); setShowGifPicker(false); setTimeout(() => handleSendMessage({ preventDefault: () => {} } as React.FormEvent), 50) }, [])
+  const handleGifSelect = useCallback(async (url: string) => {
+    setShowGifPicker(false)
+    if (!url.trim()) return
+    setIsSending(true)
+    const ok = activeSquadConv
+      ? await sendSquadMessage(url, activeSquadConv.squad_id, activeSquadConv.session_id)
+      : activeDMConv
+        ? await sendDMMessage(url, activeDMConv.other_user_id)
+        : null
+    setIsSending(false)
+  }, [activeSquadConv, activeDMConv, sendSquadMessage, sendDMMessage])
 
   // Shared props
   const convListProps = { activeTab, onTabChange: handleTabChange, searchQuery, onSearchChange: setSearchQuery, isLoading, squadConversations, dmConversations, filteredSquadConvs, filteredDMConvs, activeSquadConvId: activeSquadConv?.id, isDesktop, squadUnread, dmUnread, totalUnread: squadUnread + dmUnread, onSelectSquadConv: handleSelectSquadConv, onSelectDMConv: setActiveDMConv } as const

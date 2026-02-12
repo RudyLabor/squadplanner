@@ -219,6 +219,8 @@ export default function Home({ loaderData }: HomeProps) {
     } catch (error) {
       haptic.error()
       console.error('RSVP error:', error)
+      setSuccessMessage('Erreur : ta réponse n\'a pas pu être enregistrée')
+      rsvpTimers.current.push(setTimeout(() => setSuccessMessage(null), 4000))
     }
   }
 

@@ -70,7 +70,7 @@ export function PublicProfile() {
       <div className="max-w-lg mx-auto px-4 py-6 pb-24 text-center">
         <p className="text-text-tertiary mt-12">Profil introuvable</p>
         <Link to="/discover" className="text-primary text-sm mt-2 inline-block hover:underline">
-          Retour a la decouverte
+          Retour à la découverte
         </Link>
       </div>
     )
@@ -91,7 +91,7 @@ export function PublicProfile() {
       {/* Profile header */}
       <div className="flex flex-col items-center text-center mb-6">
         {profile.avatar_url ? (
-          <img src={profile.avatar_url} alt="" className="w-20 h-20 rounded-full border-2 border-border-subtle" loading="lazy" decoding="async" />
+          <img src={profile.avatar_url} alt={`Avatar de ${profile.username}`} className="w-20 h-20 rounded-full border-2 border-border-subtle" loading="lazy" decoding="async" />
         ) : (
           <div className="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center border-2 border-border-subtle">
             <span className="text-xl font-bold text-primary">{profile.username?.charAt(0).toUpperCase()}</span>
@@ -168,7 +168,7 @@ export function PublicProfile() {
           icon={<Flame className="w-4 h-4 text-warning" />}
           label="Streak"
           value={`${profile.streak_days ?? 0} jours`}
-          sub="Connexion consecutive"
+          sub="Connexions consécutives"
         />
       </div>
 
@@ -177,7 +177,7 @@ export function PublicProfile() {
         <div className="rounded-xl border border-border-subtle bg-surface-card p-4 mb-4">
           <div className="flex items-center gap-2 mb-2">
             <Gamepad2 className="w-4 h-4 text-primary" />
-            <h3 className="text-sm font-semibold text-text-primary">Jeux preferes</h3>
+            <h3 className="text-sm font-semibold text-text-primary">Jeux préférés</h3>
           </div>
           <div className="flex gap-1.5 flex-wrap">
             {profile.preferred_games.map((g: string) => (

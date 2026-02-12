@@ -83,6 +83,9 @@ export default function SquadDetail() {
       }
     } catch (err) {
       console.error('RSVP error:', err)
+      setSuccessMessage(null)
+      // Brief error toast via success message slot
+      setSuccessMessage('Erreur lors du RSVP. Réessaye.')
     }
   }, [rsvpMutation])
 

@@ -49,14 +49,27 @@ export function Settings() {
   const locale = useLocale()
   const setLocale = useSetLocale()
 
-  const [notifications, setNotifications] = useState<NotificationSettings>({ sessions: true, messages: true, party: true, reminders: true })
-  const [audioInput, setAudioInput] = useState<string>('default')
-  const [audioOutput, setAudioOutput] = useState<string>('default')
+  const [notifications, setNotifications] = useState<NotificationSettings>(() => {
+    try { const saved = localStorage.getItem('sq-notification-settings'); return saved ? JSON.parse(saved) : { sessions: true, messages: true, party: true, reminders: true } }
+    catch { return { sessions: true, messages: true, party: true, reminders: true } }
+  })
+  const [audioInput, setAudioInput] = useState<string>(() => localStorage.getItem('sq-audio-input') || 'default')
+  const [audioOutput, setAudioOutput] = useState<string>(() => localStorage.getItem('sq-audio-output') || 'default')
   const [audioDevices, setAudioDevices] = useState<MediaDeviceInfo[]>([])
-  const [privacy, setPrivacy] = useState<PrivacySettings>({ profileVisibility: 'friends', showOnlineStatus: true })
-  const [timezone, setTimezone] = useState<string>(Intl.DateTimeFormat().resolvedOptions().timeZone)
+  const [privacy, setPrivacy] = useState<PrivacySettings>(() => {
+    try { const saved = localStorage.getItem('sq-privacy-settings'); return saved ? JSON.parse(saved) : { profileVisibility: 'friends', showOnlineStatus: true } }
+    catch { return { profileVisibility: 'friends', showOnlineStatus: true } }
+  })
+  const [timezone, setTimezone] = useState<string>(() => localStorage.getItem('sq-timezone') || Intl.DateTimeFormat().resolvedOptions().timeZone)
   const [showDeleteModal, setShowDeleteModal] = useState(false)
   const [isExporting, setIsExporting] = useState(false)
+
+  // Persist settings to localStorage on change
+  useEffect(() => { localStorage.setItem('sq-notification-settings', JSON.stringify(notifications)) }, [notifications])
+  useEffect(() => { localStorage.setItem('sq-privacy-settings', JSON.stringify(privacy)) }, [privacy])
+  useEffect(() => { localStorage.setItem('sq-timezone', timezone) }, [timezone])
+  useEffect(() => { localStorage.setItem('sq-audio-input', audioInput) }, [audioInput])
+  useEffect(() => { localStorage.setItem('sq-audio-output', audioOutput) }, [audioOutput])
 
   const hasMounted = useRef(false)
   const saveToastTimeout = useRef<ReturnType<typeof setTimeout>>(undefined)

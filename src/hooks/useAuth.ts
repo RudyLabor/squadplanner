@@ -124,6 +124,11 @@ export const useAuthStore = create<AuthState>((set, get) => ({
         const { forceLeaveVoiceParty } = await import('./useVoiceChat')
         await forceLeaveVoiceParty()
       } catch { /* voice module may not be loaded */ }
+      // Reset squads store to prevent stale data on next sign-in
+      try {
+        const { useSquadsStore } = await import('./useSquads')
+        useSquadsStore.getState().reset()
+      } catch { /* squads module may not be loaded */ }
       set({ user: null, session: null, profile: null, isLoading: true })
       const { error } = await supabase.auth.signOut({ scope: 'global' })
       if (error) console.warn('Sign out error:', error)

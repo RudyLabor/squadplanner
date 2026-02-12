@@ -81,7 +81,7 @@ export function JoinSquad() {
 
   // Handle join
   const handleJoin = async () => {
-    if (!code || !user) return
+    if (!code || !user || status === 'joining') return
 
     setStatus('joining')
 

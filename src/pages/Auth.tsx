@@ -92,7 +92,13 @@ export default function Auth() {
       else {
         const redirectUrl = sessionStorage.getItem('redirectAfterAuth')
         if (redirectUrl) { sessionStorage.removeItem('redirectAfterAuth'); navigate(redirectUrl) }
-        else { await fetchSquads(); const { squads } = useSquadsStore.getState(); navigate(squads.length === 0 ? '/onboarding' : '/home') }
+        else {
+          // Force fresh fetch (bypass cache) — stale data after sign-out/sign-in could
+          // incorrectly send users with existing squads to onboarding.
+          await fetchSquads(true)
+          const { squads } = useSquadsStore.getState()
+          navigate(squads.length === 0 ? '/onboarding' : '/home')
+        }
       }
     } else {
       const { error } = await signUp(email, password, username)

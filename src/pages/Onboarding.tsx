@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { AnimatePresence } from 'framer-motion'
+import { useNavigate } from 'react-router'
 import Confetti from '../components/LazyConfetti'
 import { useAuthStore } from '../hooks'
 import { useSquadsStore } from '../hooks/useSquads'
@@ -21,12 +22,15 @@ type OnboardingStep = 'splash' | 'squad-choice' | 'create-squad' | 'join-squad' 
 export function Onboarding() {
   const { user, profile, refreshProfile } = useAuthStore()
   const { createSquad, joinSquad, fetchSquads, squads } = useSquadsStore()
+  const navigate = useNavigate()
 
+  // If the user already has squads (e.g. navigated here by mistake), redirect.
+  // The server loader also checks this, but this handles client-side state updates.
   useEffect(() => {
     if (squads.length > 0) {
-      window.location.href = '/home'
+      navigate('/home', { replace: true })
     }
-  }, [squads])
+  }, [squads, navigate])
 
   const [step, setStep] = useState<OnboardingStep>('squad-choice')
   const [isLoading, setIsLoading] = useState(false)
@@ -167,11 +171,11 @@ export function Onboarding() {
   }
 
   const handleComplete = async () => {
-    if (createdSquadId) { window.location.href = `/squad/${createdSquadId}`; return }
-    await fetchSquads()
+    if (createdSquadId) { navigate(`/squad/${createdSquadId}`, { replace: true }); return }
+    await fetchSquads(true)
     const freshSquads = useSquadsStore.getState().squads
-    if (freshSquads.length > 0) { window.location.href = `/squad/${freshSquads[0].id}` }
-    else { window.location.href = '/squads' }
+    if (freshSquads.length > 0) { navigate(`/squad/${freshSquads[0].id}`, { replace: true }) }
+    else { navigate('/squads', { replace: true }) }
   }
 
   const goBack = useCallback(() => {

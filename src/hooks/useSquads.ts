@@ -20,6 +20,7 @@ interface SquadsState {
   leaveSquad: (squadId: string) => Promise<{ error: Error | null }>
   deleteSquad: (squadId: string) => Promise<{ error: Error | null }>
   setCurrentSquad: (squad: SquadWithMembers | null) => void
+  reset: () => void
 }
 
 const CACHE_DURATION = 30 * 1000
@@ -122,4 +123,9 @@ export const useSquadsStore = create<SquadsState>((set, get) => ({
   },
 
   setCurrentSquad: (squad) => set({ currentSquad: squad }),
+
+  reset: () => {
+    inFlightFetchSquads = null
+    set({ squads: [], currentSquad: null, isLoading: false, lastFetchedAt: null })
+  },
 }))

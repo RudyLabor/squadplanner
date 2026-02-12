@@ -77,8 +77,13 @@ export function Party() {
     if (!user || !profile) return
     const channelName = `squad-${squadId}`
     const squad = squads.find(s => s.id === squadId)
-    const success = await joinChannel(channelName, user.id, profile.username || 'Joueur', hasPremium)
-    if (success) { setToastMessage(`Tu as rejoint la party ${squad?.name || ''}`); setToastVariant('success'); setShowToast(true) }
+    try {
+      const success = await joinChannel(channelName, user.id, profile.username || 'Joueur', hasPremium)
+      if (success) { setToastMessage(`Tu as rejoint la party ${squad?.name || ''}`); setToastVariant('success'); setShowToast(true) }
+      else { setToastMessage('Impossible de rejoindre la party'); setToastVariant('error'); setShowToast(true) }
+    } catch {
+      setToastMessage('Erreur de connexion à la party'); setToastVariant('error'); setShowToast(true)
+    }
   }
 
   const handleLeaveParty = async () => { try { await leaveChannel() } catch (err) { console.error('[Party] Error leaving:', err) } }

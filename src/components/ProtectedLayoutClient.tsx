@@ -42,7 +42,15 @@ export function ProtectedLayoutClient({ loaderData }: { loaderData: ProtectedLay
   // If we have loader data, the server already authenticated the user.
   // Show content immediately without waiting for client-side auth.
   if (loaderData?.user) {
-    // Only redirect to onboarding AFTER localStorage check is complete (not null)
+    // Wait for localStorage check before deciding (null = not yet checked)
+    if (onboardingSkipped === null) {
+      return (
+        <div className="min-h-screen bg-bg-base flex items-center justify-center">
+          <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+        </div>
+      )
+    }
+    // Only redirect to onboarding if user explicitly hasn't skipped AND has no squads
     if (onboardingSkipped === false && loaderData.squads.length === 0) {
       return <Navigate to="/onboarding" replace />
     }

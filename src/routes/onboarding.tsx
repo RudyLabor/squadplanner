@@ -19,6 +19,16 @@ export async function loader({ request }: LoaderFunctionArgs) {
     throw redirect('/', { headers })
   }
 
+  // If the user already has squads, skip onboarding entirely
+  const { count } = await supabase
+    .from('squad_members')
+    .select('id', { count: 'exact', head: true })
+    .eq('user_id', user.id)
+
+  if (count && count > 0) {
+    throw redirect('/home', { headers })
+  }
+
   return data({ userId: user.id }, { headers })
 }
 

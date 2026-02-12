@@ -45,7 +45,7 @@ export function Premium() {
         ? plans.find(p => p.id === 'premium_monthly')?.stripePriceId
         : plans.find(p => p.id === 'premium_yearly')?.stripePriceId
       if (!priceId) throw new Error('Plan non trouvé')
-      const { url, error } = await createCheckoutSession(undefined as unknown as string, priceId)
+      const { url, error } = await createCheckoutSession(user.id, priceId)
       if (error) throw error
       if (url) window.location.href = url
     } catch (err) {

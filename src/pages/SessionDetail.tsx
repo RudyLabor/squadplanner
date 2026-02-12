@@ -80,13 +80,27 @@ export default function SessionDetail() {
   const handleCheckin = async () => {
     if (!id) return
     setCheckinLoading(true)
-    await checkinMutation.mutateAsync({ sessionId: id, status: 'present' })
-    setCheckinLoading(false)
-    setShowConfetti(true); setToastMessage('\uD83C\uDFAE Check-in validé ! Bon game !'); setShowToast(true)
-    setTimeout(() => setShowConfetti(false), 4000)
+    try {
+      await checkinMutation.mutateAsync({ sessionId: id, status: 'present' })
+      setShowConfetti(true); setToastMessage('\uD83C\uDFAE Check-in validé ! Bon game !'); setShowToast(true)
+      setTimeout(() => setShowConfetti(false), 4000)
+    } catch {
+      setToastMessage('Erreur lors du check-in, réessaie'); setShowToast(true)
+    } finally {
+      setCheckinLoading(false)
+    }
   }
 
-  const confirmCancelSession = async () => { if (!id) return; setShowCancelConfirm(false); await cancelSessionMutation.mutateAsync(id) }
+  const confirmCancelSession = async () => {
+    if (!id) return
+    try {
+      await cancelSessionMutation.mutateAsync(id)
+      setShowCancelConfirm(false)
+    } catch {
+      setShowCancelConfirm(false)
+      setToastMessage('Erreur lors de l\'annulation'); setShowToast(true)
+    }
+  }
   const handleConfirm = async () => { if (!id) return; await confirmSessionMutation.mutateAsync(id) }
 
   const formatDate = (dateStr: string) => {

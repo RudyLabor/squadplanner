@@ -120,17 +120,20 @@ export default defineConfig(async () => {
     rollupOptions: {
       output: {
         // Manual chunks for vendor caching (React Router handles route splitting)
-        // Strategy: Split vendor-core (448KB) into smaller, independently cacheable chunks
+        // Strategy: Split vendor-core into smaller, independently cacheable chunks.
+        // Each chunk is an isolated lib with no circular deps to app code.
         manualChunks: (id) => {
           const n = id.replace(/\\/g, '/');
           if (!n.includes('node_modules/')) return;
 
-          // Only split clearly independent heavy libs for long-term caching.
-          // React, framer-motion, sonner, zustand, @tanstack etc. are left to
-          // Rollup's automatic chunking to avoid circular-dependency TDZ errors.
+          // Heavy independent libs — isolated for long-term caching
           if (n.includes('livekit-client') || n.includes('@livekit')) return 'vendor-livekit';
           if (n.includes('@supabase')) return 'vendor-supabase';
           if (n.includes('canvas-confetti')) return 'vendor-confetti';
+          if (n.includes('framer-motion')) return 'vendor-motion';
+          if (n.includes('@tanstack/react-query')) return 'vendor-query';
+          if (n.includes('sonner')) return 'vendor-sonner';
+          if (n.includes('zustand')) return 'vendor-zustand';
         },
         chunkFileNames: "assets/[name]-[hash].js",
         assetFileNames: "assets/[name]-[hash].[ext]",

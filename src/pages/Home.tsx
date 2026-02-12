@@ -161,7 +161,11 @@ export default function Home({ loaderData }: HomeProps) {
 
   useEffect(() => {
     const hour = new Date().getHours()
-    setGreeting(hour >= 5 && hour < 18 ? 'Salut' : 'Bonsoir')
+    const g = hour >= 5 && hour < 18 ? 'Salut' : 'Bonsoir'
+    setGreeting(g)
+    // UI #1: Sync document title with dynamic greeting
+    const username = profile?.username || user?.user_metadata?.username || ''
+    document.title = username ? `${g} ${username} — Squad Planner` : 'Accueil — Squad Planner'
     return () => { rsvpTimers.current.forEach(clearTimeout) }
   }, [])
 

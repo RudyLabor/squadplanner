@@ -120,7 +120,7 @@ export const SquadCard = memo(function SquadCard({ squad, isOwner, nextSession, 
                       <span>{sessionLabel}</span>
                     </div>
                   ) : (
-                    <div className="flex items-center gap-1.5 text-sm text-text-quaternary">
+                    <div className="flex items-center gap-1.5 text-sm text-text-tertiary">
                       <Calendar className="w-3.5 h-3.5" />
                       <span>Aucune session planifiée</span>
                     </div>

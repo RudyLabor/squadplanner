@@ -33,7 +33,7 @@ export function HeroMockup() {
   const ScreenComponent = screen.component
 
   return (
-    <div className="relative mx-auto hero-phone-float" style={{ width: 280 }}>
+    <div className="relative mx-auto hero-phone-float w-[280px]">
       {/* "Voir la demo" badge */}
       <m.div
         className="flex items-center justify-center gap-1.5 mb-3"
@@ -71,7 +71,7 @@ export function HeroMockup() {
           </div>
 
           {/* Screen */}
-          <div className="bg-bg-base rounded-[2rem] overflow-hidden relative" style={{ height: 480 }}>
+          <div className="bg-bg-base rounded-[2rem] overflow-hidden relative h-[480px]">
             {/* Status bar */}
             <div className="absolute top-0 left-0 right-0 z-10 flex items-center justify-between px-5 pt-1.5 pb-1">
               <span className="text-xs text-text-secondary font-medium">21:00</span>

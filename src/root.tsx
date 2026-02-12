@@ -195,17 +195,8 @@ export default function Root() {
             position="top-center"
             toastOptions={{
               duration: 4000,
-              style: {
-                background: 'var(--color-bg-surface)',
-                border: '1px solid var(--color-border-default)',
-                color: 'var(--color-text-primary)',
-                fontSize: '14px',
-                borderRadius: '12px',
-                padding: '12px 16px',
-                position: 'relative' as const,
-                overflow: 'hidden',
-              },
               classNames: {
+                toast: 'bg-bg-surface border-border-default text-text-primary',
                 success: 'border-success/20 bg-success/10',
                 error: 'border-error/20 bg-error/10',
                 warning: 'border-warning/20 bg-warning/10',

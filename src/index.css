@@ -754,6 +754,18 @@ body {
   }
 }
 
+/* Sonner toast custom styling (PERF #4: replaces inline styles) */
+[data-sonner-toast] {
+  --normal-bg: var(--color-bg-surface);
+  --normal-border: var(--color-border-default);
+  --normal-text: var(--color-text-primary);
+  font-size: 14px;
+  border-radius: 12px;
+  padding: 12px 16px;
+  position: relative;
+  overflow: hidden;
+}
+
 /* =====================================================
    WCAG AA ACCESSIBILITY - Touch Targets & Modal Support
    Minimum touch targets (44x44px) and focus management

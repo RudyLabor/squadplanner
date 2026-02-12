@@ -184,7 +184,7 @@ function EmptyState() {
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.2 }}
     >
-      <Card className="p-6 bg-gradient-to-br from-primary/8 via-success/5 to-warning/5 border-2 border-dashed border-primary/20 relative overflow-hidden">
+      <Card className="p-6 bg-gradient-to-br from-primary/8 via-success/5 to-warning/5 border border-border-subtle relative overflow-hidden">
         {/* Animated background elements */}
         <m.div
           className="absolute -top-4 -right-4 w-24 h-24 rounded-full bg-primary/10 blur-2xl"

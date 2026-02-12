@@ -125,25 +125,12 @@ export default defineConfig(async () => {
           const n = id.replace(/\\/g, '/');
           if (!n.includes('node_modules/')) return;
 
-          // Heavy libs — cached separately for long-term caching
+          // Only split clearly independent heavy libs for long-term caching.
+          // React, framer-motion, sonner, zustand, @tanstack etc. are left to
+          // Rollup's automatic chunking to avoid circular-dependency TDZ errors.
           if (n.includes('livekit-client') || n.includes('@livekit')) return 'vendor-livekit';
           if (n.includes('@supabase')) return 'vendor-supabase';
           if (n.includes('canvas-confetti')) return 'vendor-confetti';
-
-          // Split vendor-core into smaller chunks to reduce initial bundle
-          // vendor-react: React runtime (loaded first, ~130KB)
-          if (n.includes('/react-dom/') || n.includes('/react-dom@')) return 'vendor-react';
-          if (n.includes('/react/') || n.includes('/react@')) return 'vendor-react';
-          if (n.includes('/scheduler/') || n.includes('/scheduler@')) return 'vendor-react';
-
-          // vendor-ui: UI library (framer-motion base + LazyMotion runtime, ~80KB)
-          // Note: domMax features are loaded dynamically in root.tsx
-          if (n.includes('framer-motion') || n.includes('motion-dom') || n.includes('motion-utils')) return 'vendor-ui';
-
-          // vendor-state: State management + utilities (~150KB)
-          // Loaded when routes need query/state management
-          if (n.includes('@tanstack')) return 'vendor-state';
-          if (n.includes('sonner') || n.includes('zustand') || n.includes('zod')) return 'vendor-state';
         },
         chunkFileNames: "assets/[name]-[hash].js",
         assetFileNames: "assets/[name]-[hash].[ext]",

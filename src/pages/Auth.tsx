@@ -28,10 +28,11 @@ export default function Auth() {
   const [fieldErrors, setFieldErrors] = useState<FieldErrors>({})
   const [resetEmailSent, setResetEmailSent] = useState(false)
   const [isResetting, setIsResetting] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const [showConfetti, setShowConfetti] = useState(false)
   const [passwordUpdated, setPasswordUpdated] = useState(false)
 
-  const { signIn, signUp, signInWithGoogle, isLoading, user, isInitialized } = useAuthStore()
+  const { signIn, signUp, signInWithGoogle, user, isInitialized } = useAuthStore()
   const { fetchSquads } = useSquadsStore()
   const navigate = useNavigate()
 
@@ -57,8 +58,9 @@ export default function Auth() {
 
   const handleGoogleSignIn = async () => {
     setError(null)
+    setIsSubmitting(true)
     const { error } = await signInWithGoogle()
-    if (error) setError(translateAuthError(error.message))
+    if (error) { setError(translateAuthError(error.message)); setIsSubmitting(false) }
   }
 
   const handleForgotPassword = async () => {
@@ -83,9 +85,10 @@ export default function Auth() {
     else if (password.length < 6) errors.password = 'Le mot de passe doit contenir au moins 6 caractères'
     if (Object.keys(errors).length > 0) { setFieldErrors(errors); return }
 
+    setIsSubmitting(true)
     if (mode === 'login') {
       const { error } = await signIn(email, password)
-      if (error) { setError(translateAuthError(error.message)) }
+      if (error) { setError(translateAuthError(error.message)); setIsSubmitting(false) }
       else {
         const redirectUrl = sessionStorage.getItem('redirectAfterAuth')
         if (redirectUrl) { sessionStorage.removeItem('redirectAfterAuth'); navigate(redirectUrl) }
@@ -93,7 +96,7 @@ export default function Auth() {
       }
     } else {
       const { error } = await signUp(email, password, username)
-      if (error) { setError(translateAuthError(error.message)) }
+      if (error) { setError(translateAuthError(error.message)); setIsSubmitting(false) }
       else { setShowConfetti(true); setTimeout(() => navigate('/onboarding'), 1500) }
     }
   }
@@ -139,7 +142,7 @@ export default function Auth() {
               <Card className="mb-6">
                 <form onSubmit={mode === 'reset' ? handlePasswordUpdate : handleSubmit} noValidate className="p-5 space-y-4">
                   {mode !== 'reset' && (
-                    <AuthGoogleButton onClick={handleGoogleSignIn} disabled={isLoading} />
+                    <AuthGoogleButton onClick={handleGoogleSignIn} disabled={isSubmitting} />
                   )}
 
                   <AuthFormFields
@@ -171,8 +174,8 @@ export default function Auth() {
                     </AnimatePresence>
                   </div>
 
-                  <Button type="submit" className="w-full h-12" disabled={isLoading || isResetting}>
-                    {(isLoading || isResetting) ? <Loader2 className="w-5 h-5 animate-spin" />
+                  <Button type="submit" className="w-full h-12" disabled={isSubmitting || isResetting}>
+                    {(isSubmitting || isResetting) ? <Loader2 className="w-5 h-5 animate-spin" />
                       : mode === 'login' ? 'Se connecter' : mode === 'reset' ? 'Mettre à jour' : 'Créer mon compte'}
                   </Button>
 

@@ -19,8 +19,8 @@
   /* Text - WCAG AA compliant (4.5:1 minimum on #050506) - Audited Feb 2026 */
   --color-text-primary: #fafafa;     /* Ratio: 19.4:1 - Excellent contrast */
   --color-text-secondary: #a1a1a6;   /* Ratio: 6.9:1 - High contrast */
-  --color-text-tertiary: #8a8a8f;    /* Ratio: 5.1:1 - WCAG AA (improved from 4.6:1) */
-  --color-text-quaternary: #9c9ca0;  /* Ratio: 5.2:1 - WCAG AA compliant */
+  --color-text-tertiary: #9CA3AF;    /* Ratio: 8.3:1 - WCAG AAA (improved from #8a8a8f) */
+  --color-text-quaternary: #9CA3AF;  /* Ratio: 8.3:1 - WCAG AAA compliant */
 
   /* Accents - Sophisticated, less saturated */
   --color-primary: #6366f1;
@@ -633,8 +633,10 @@ body {
   }
 }
 
-.animate-pulse-glow {
-  animation: pulse-glow 1.5s ease-in-out infinite;
+@media (prefers-reduced-motion: no-preference) {
+  .animate-pulse-glow {
+    animation: pulse-glow 1.5s ease-in-out infinite;
+  }
 }
 
 /* =====================================================
@@ -950,8 +952,10 @@ select:focus-visible,
   0%, 100% { opacity: 1; }
   50% { opacity: 0.7; }
 }
-.pulse-subtle {
-  animation: subtle-pulse 2s ease-in-out infinite;
+@media (prefers-reduced-motion: no-preference) {
+  .pulse-subtle {
+    animation: subtle-pulse 2s ease-in-out infinite;
+  }
 }
 
 /* Card interactions - Refined, not dramatic */
@@ -1137,8 +1141,10 @@ select:focus-visible,
   0%, 100% { box-shadow: 0 0 20px rgba(74, 222, 128, 0.3); }
   50% { box-shadow: 0 0 40px rgba(74, 222, 128, 0.6); }
 }
-.glow-pulse {
-  animation: glow-pulse 2s ease-in-out infinite;
+@media (prefers-reduced-motion: no-preference) {
+  .glow-pulse {
+    animation: glow-pulse 2s ease-in-out infinite;
+  }
 }
 
 /* Button press effect */
@@ -1415,13 +1421,15 @@ select:focus-visible,
   border: none;
 }
 
-/* CTA idle glow animation */
+/* CTA idle glow animation - decorative, only when user allows motion */
 @keyframes cta-idle-glow {
   0%, 100% { box-shadow: 0 0 20px rgba(99, 102, 241, 0.15); }
   50% { box-shadow: 0 0 35px rgba(99, 102, 241, 0.3); }
 }
-.cta-glow-idle {
-  animation: cta-idle-glow 3s ease-in-out infinite;
+@media (prefers-reduced-motion: no-preference) {
+  .cta-glow-idle {
+    animation: cta-idle-glow 3s ease-in-out infinite;
+  }
 }
 
 /* CTA pulse glow - imposing hero button */
@@ -1429,8 +1437,10 @@ select:focus-visible,
   0%, 100% { box-shadow: 0 0 20px rgba(99, 102, 241, 0.3), 0 0 60px rgba(99, 102, 241, 0.1); }
   50% { box-shadow: 0 0 30px rgba(99, 102, 241, 0.5), 0 0 80px rgba(99, 102, 241, 0.2); }
 }
-.cta-pulse-glow {
-  animation: cta-pulse-glow 2s ease-in-out infinite;
+@media (prefers-reduced-motion: no-preference) {
+  .cta-pulse-glow {
+    animation: cta-pulse-glow 2s ease-in-out infinite;
+  }
 }
 
 /* CTA hover glow */
@@ -1442,7 +1452,7 @@ select:focus-visible,
   transform: scale(1.05);
 }
 
-/* Badge shimmer animation */
+/* Badge shimmer animation - decorative */
 @keyframes badge-shimmer {
   0% { background-position: -200% center; }
   100% { background-position: 200% center; }
@@ -1455,10 +1465,14 @@ select:focus-visible,
     rgba(99, 102, 241, 0.06) 100%
   );
   background-size: 200% 100%;
-  animation: badge-shimmer 3s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .badge-shimmer {
+    animation: badge-shimmer 3s ease-in-out infinite;
+  }
 }
 
-/* Animated text gradient */
+/* Animated text gradient - decorative */
 @keyframes text-gradient-shift {
   0%, 100% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
@@ -1469,16 +1483,22 @@ select:focus-visible,
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  animation: text-gradient-shift 4s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .text-gradient-animated {
+    animation: text-gradient-shift 4s ease-in-out infinite;
+  }
 }
 
-/* Pulsing hero gradient */
+/* Pulsing hero gradient - decorative */
 @keyframes hero-gradient-pulse {
   0%, 100% { opacity: 0.6; transform: scale(1); }
   50% { opacity: 1; transform: scale(1.05); }
 }
-.hero-gradient-pulse {
-  animation: hero-gradient-pulse 8s ease-in-out infinite;
+@media (prefers-reduced-motion: no-preference) {
+  .hero-gradient-pulse {
+    animation: hero-gradient-pulse 8s ease-in-out infinite;
+  }
 }
 
 /* Horizontal stepper progress line */
@@ -1537,13 +1557,15 @@ select:focus-visible,
   z-index: 0;
 }
 
-/* Hero phone mockup floating animation */
+/* Hero phone mockup floating animation - decorative */
 @keyframes hero-phone-float {
   0%, 100% { transform: translateY(0px); }
   50% { transform: translateY(-8px); }
 }
-.hero-phone-float {
-  animation: hero-phone-float 6s ease-in-out infinite;
+@media (prefers-reduced-motion: no-preference) {
+  .hero-phone-float {
+    animation: hero-phone-float 6s ease-in-out infinite;
+  }
 }
 
 /* Reduced motion override for all landing animations */
@@ -1895,7 +1917,11 @@ textarea::placeholder {
   to { opacity: 1; transform: none; }
 }
 
-[style*="opacity:0"][style*="transform:translate"] {
+/* Match both "opacity:0" and "opacity: 0" (framer-motion may include spaces) */
+[style*="opacity:0"][style*="transform:translate"],
+[style*="opacity: 0"][style*="transform:translate"],
+[style*="opacity:0"][style*="transform: translate"],
+[style*="opacity: 0"][style*="transform: translate"] {
   animation: fm-force-visible 0.4s ease-out 0.5s both;
 }
 
@@ -1956,7 +1982,11 @@ textarea::placeholder {
     var(--color-purple)
   );
   background-size: 300% 300%;
-  animation: coach-gradient-border 6s ease infinite;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .coach-ia-card-wrapper {
+    animation: coach-gradient-border 6s ease infinite;
+  }
 }
 
 .coach-ia-card-wrapper > * {

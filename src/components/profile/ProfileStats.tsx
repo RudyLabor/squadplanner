@@ -197,7 +197,7 @@ export function ProfileStats({ profile, profileReady }: ProfileStatsProps) {
             ))}
           </section>
           {hasNoActivity && (
-            <Card className="mb-5 p-4 bg-gradient-to-br from-primary/5 to-transparent border-dashed text-center">
+            <Card className="mb-5 p-4 bg-gradient-to-br from-primary/5 to-transparent border border-border-subtle text-center">
               <div className="flex items-center justify-center gap-3">
                 <div className="w-10 h-10 rounded-xl bg-primary/12 flex items-center justify-center flex-shrink-0">
                   <Plus className="w-5 h-5 text-primary" />

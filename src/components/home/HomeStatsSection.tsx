@@ -1,14 +1,8 @@
 import { memo } from 'react'
-import { Users, Calendar, TrendingUp, ArrowUp, ArrowDown } from '../icons'
+import { Users, Calendar, ArrowUp } from '../icons'
 import { m } from 'framer-motion'
 import { Link } from 'react-router'
 import { AnimatedCounter, ContentTransition, SkeletonStatsRow } from '../ui'
-
-function getReliabilityTrend(score: number): { icon: typeof ArrowUp | null; color: string; label: string } {
-  if (score >= 80) return { icon: ArrowUp, color: 'var(--color-success)', label: 'Excellent' }
-  if (score >= 60) return { icon: null, color: 'var(--color-warning)', label: 'Moyen' }
-  return { icon: ArrowDown, color: 'var(--color-error)', label: 'A ameliorer' }
-}
 
 function getSessionsTrend(count: number): { icon: typeof ArrowUp | null; color: string } {
   if (count >= 3) return { icon: ArrowUp, color: 'var(--color-success)' }
@@ -19,21 +13,18 @@ function getSessionsTrend(count: number): { icon: typeof ArrowUp | null; color: 
 interface StatsRowProps {
   squadsCount: number
   sessionsThisWeek: number
-  reliabilityScore: number
 }
 
-function StatsRow({ squadsCount, sessionsThisWeek, reliabilityScore }: StatsRowProps) {
-  const reliabilityTrend = getReliabilityTrend(reliabilityScore)
+function StatsRow({ squadsCount, sessionsThisWeek }: StatsRowProps) {
   const sessionsTrend = getSessionsTrend(sessionsThisWeek)
 
   const stats = [
     { value: squadsCount, label: 'Squads', mobileLabel: 'Squads', icon: Users, color: 'var(--color-primary)', suffix: '', path: '/squads', trend: null, progress: null },
     { value: sessionsThisWeek, label: 'Cette semaine', mobileLabel: 'Semaine', icon: Calendar, color: 'var(--color-warning)', suffix: '', path: '/sessions', trend: sessionsTrend, progress: null },
-    { value: reliabilityScore, label: 'Fiabilite', mobileLabel: 'Fiabilite', icon: TrendingUp, color: 'var(--color-success)', suffix: '%', path: '/profile', trend: reliabilityTrend, progress: reliabilityScore },
   ]
 
   return (
-    <div className="grid grid-cols-3 gap-2 sm:gap-3">
+    <div className="grid grid-cols-2 gap-2 sm:gap-3">
       {stats.map((stat, index) => (
         <Link key={stat.label} to={stat.path}>
           <m.div
@@ -45,10 +36,9 @@ function StatsRow({ squadsCount, sessionsThisWeek, reliabilityScore }: StatsRowP
               boxShadow: `0 0 20px ${stat.color}25`,
             }}
             whileTap={{ scale: 0.98 }}
-            className="h-auto min-h-[60px] sm:min-h-[68px] px-2 sm:px-4 py-2.5 flex flex-col gap-1.5 rounded-xl sm:rounded-2xl border border-border-hover shadow-sm hover:bg-surface-card-hover cursor-pointer transition-all duration-200"
+            className="h-auto min-h-[60px] sm:min-h-[68px] px-2 sm:px-4 py-2.5 flex flex-col gap-1.5 rounded-xl sm:rounded-2xl border border-border-hover shadow-sm hover:bg-surface-card-hover cursor-pointer transition-interactive"
             style={{
               background: `linear-gradient(to bottom right, ${stat.color}12, transparent)`,
-              transition: 'all 0.2s ease, box-shadow 0.2s ease',
             }}
           >
             <div className="flex items-center gap-2 sm:gap-3">
@@ -94,16 +84,14 @@ function StatsRow({ squadsCount, sessionsThisWeek, reliabilityScore }: StatsRowP
 interface HomeStatsSectionProps {
   squadsCount: number
   sessionsThisWeek: number
-  reliabilityScore: number
   squadsLoading: boolean
   sessionsLoading: boolean
-  profile: { streak_days?: number; streak_last_date?: string | null } | null
+  profile?: { streak_days?: number; streak_last_date?: string | null } | null
 }
 
 export const HomeStatsSection = memo(function HomeStatsSection({
   squadsCount,
   sessionsThisWeek,
-  reliabilityScore,
   squadsLoading,
   sessionsLoading,
 }: HomeStatsSectionProps) {
@@ -119,7 +107,6 @@ export const HomeStatsSection = memo(function HomeStatsSection({
         <StatsRow
           squadsCount={squadsCount}
           sessionsThisWeek={sessionsThisWeek}
-          reliabilityScore={reliabilityScore}
         />
       </ContentTransition>
     </section>

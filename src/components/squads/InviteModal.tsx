@@ -90,11 +90,13 @@ export function InviteModal({
     }
   }
 
+  const shareUrl = `${window.location.origin}/join/${inviteCode}`
+
   const handleShare = async () => {
     const shareData = {
       title: `Rejoins ${squadName} sur Squad Planner !`,
-      text: `Utilise le code ${inviteCode} pour rejoindre ma squad "${squadName}" !`,
-      url: window.location.origin
+      text: `Rejoins ma squad \u00AB\u202F${squadName}\u202F\u00BB sur Squad Planner !`,
+      url: shareUrl
     }
 
     if (navigator.share) {
@@ -144,19 +146,32 @@ export function InviteModal({
         </div>
 
         <div className="p-4 space-y-4">
-          {/* Code d'invitation */}
-          <div className="p-4 rounded-xl bg-primary-10 border border-primary/20">
-            <p className="text-sm text-text-tertiary mb-2">Code d'invitation</p>
-            <div className="flex items-center gap-3">
-              <span className="text-2xl font-bold text-primary tracking-wider flex-1">
-                {inviteCode}
-              </span>
-              <Button size="sm" variant="secondary" onClick={handleCopyCode} aria-label="Copier le code d'invitation">
-                {copied ? <Check className="w-4 h-4 text-success" aria-hidden="true" /> : <Copy className="w-4 h-4" aria-hidden="true" />}
-              </Button>
-              <Button size="sm" variant="primary" onClick={handleShare} aria-label="Partager le code d'invitation">
+          {/* Code d'invitation + lien direct */}
+          <div className="p-4 rounded-xl bg-primary-10 border border-primary/20 space-y-3">
+            <div>
+              <p className="text-sm text-text-tertiary mb-2">Code d'invitation</p>
+              <div className="flex items-center gap-3">
+                <span className="text-2xl font-bold text-primary tracking-wider flex-1">
+                  {inviteCode}
+                </span>
+                <Button size="sm" variant="secondary" onClick={handleCopyCode} aria-label="Copier le code d'invitation">
+                  {copied ? <Check className="w-4 h-4 text-success" aria-hidden="true" /> : <Copy className="w-4 h-4" aria-hidden="true" />}
+                </Button>
+              </div>
+            </div>
+            <div className="flex gap-2">
+              <Button className="flex-1" variant="primary" onClick={handleShare} aria-label="Partager l'invitation">
                 <Share2 className="w-4 h-4" aria-hidden="true" />
                 Partager
+              </Button>
+              <Button variant="secondary" onClick={async () => {
+                await navigator.clipboard.writeText(shareUrl)
+                setCopied(true)
+                showSuccess('Lien copié !')
+                setTimeout(() => setCopied(false), 2000)
+              }} aria-label="Copier le lien">
+                <Copy className="w-4 h-4" aria-hidden="true" />
+                Copier le lien
               </Button>
             </div>
           </div>

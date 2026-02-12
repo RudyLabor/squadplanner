@@ -181,7 +181,7 @@ interface HomeSessionsSectionProps {
 // Empty state pour encourager la création de session
 const SessionEmptyState = memo(function SessionEmptyState({ onCreate }: { onCreate: () => void }) {
   return (
-    <Card className="p-8 border-2 border-dashed border-primary/20 bg-gradient-to-br from-primary/8 via-transparent to-success/5 relative overflow-hidden">
+    <Card className="p-8 border border-border-subtle bg-gradient-to-br from-primary/8 via-transparent to-success/5 relative overflow-hidden">
       {/* Animated background gradient */}
       <m.div
         className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent pointer-events-none"
@@ -213,7 +213,7 @@ const SessionEmptyState = memo(function SessionEmptyState({ onCreate }: { onCrea
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.2 }}
           >
-            Aucune session prévue
+            Ta prochaine session t'attend
             <m.span
               animate={{ rotate: [0, 10, -10, 0] }}
               transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
@@ -227,7 +227,7 @@ const SessionEmptyState = memo(function SessionEmptyState({ onCreate }: { onCrea
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.3 }}
           >
-            Planifie ta première session avec ta squad !
+            Propose un créneau et ta squad reçoit une notif instantanément !
           </m.p>
         </div>
 
@@ -242,7 +242,7 @@ const SessionEmptyState = memo(function SessionEmptyState({ onCreate }: { onCrea
           className="flex items-center gap-2 px-8 py-4 rounded-xl bg-gradient-to-r from-primary to-primary-hover text-white font-bold shadow-lg hover:shadow-xl transition-shadow group"
         >
           <Calendar className="w-5 h-5 group-hover:rotate-12 transition-transform" />
-          Créer une session
+          Planifier une session
           <m.div
             animate={{ x: [0, 3, 0] }}
             transition={{ duration: 1.5, repeat: Infinity }}
@@ -281,7 +281,7 @@ export const HomeSessionsSection = memo(function HomeSessionsSection({
           Prochaine session
         </h2>
         {!sessionsLoading && upcomingSessions.length > 1 && (
-          <Link to="/squads" className="text-sm text-primary font-medium">
+          <Link to="/squads" className="text-sm text-primary font-medium min-h-[44px] flex items-center px-2">
             Voir tout ({upcomingSessions.length})
           </Link>
         )}

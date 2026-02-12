@@ -38,9 +38,9 @@ export const GlobalLeaderboard = memo(function GlobalLeaderboard({ game, region,
   if (!entries || entries.length === 0) {
     return (
       <div className="text-center py-12">
-        <Trophy className="w-10 h-10 text-text-tertiary mx-auto mb-3 opacity-50" />
-        <p className="text-sm text-text-tertiary">Pas encore de classement</p>
-        <p className="text-xs text-text-tertiary mt-1">Les joueurs avec 3+ sessions apparaîtront ici</p>
+        <Trophy className="w-10 h-10 text-text-tertiary mx-auto mb-3" />
+        <p className="text-sm text-text-secondary">Pas encore de classement</p>
+        <p className="text-xs text-text-tertiary mt-1">Les joueurs avec 3+ sessions apparaitront ici</p>
       </div>
     )
   }
@@ -78,7 +78,7 @@ const PodiumCard = memo(function PodiumCard({ entry, index }: { entry: GlobalLea
     >
       <Link
         to={`/u/${entry.username}`}
-        className={`block rounded-xl border ${style.border} ${style.bg} p-3 text-center hover:brightness-110 transition-all`}
+        className={`block rounded-xl border ${style.border} ${style.bg} p-3 text-center hover:brightness-110 transition-interactive`}
       >
         <span className="text-lg">{style.icon}</span>
         {entry.avatar_url ? (
@@ -105,7 +105,7 @@ const LeaderboardRow = memo(function LeaderboardRow({ entry }: { entry: GlobalLe
       to={`/u/${entry.username}`}
       className="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-overlay-faint transition-colors"
     >
-      <span className="w-6 text-center text-xs font-bold text-text-tertiary">#{entry.rank}</span>
+      <span className="w-6 text-center text-xs font-bold text-text-secondary">#{entry.rank}</span>
 
       {entry.avatar_url ? (
         <img src={entry.avatar_url} alt="" className="w-8 h-8 rounded-full" loading="lazy" decoding="async" />
@@ -119,7 +119,7 @@ const LeaderboardRow = memo(function LeaderboardRow({ entry }: { entry: GlobalLe
         <p className="text-sm font-medium text-text-primary truncate">{entry.username}</p>
         <div className="flex items-center gap-2">
           <span className="text-xs text-indigo-400">Nv.{entry.level}</span>
-          <span className="text-xs text-text-tertiary">{entry.xp.toLocaleString()} XP</span>
+          <span className="text-xs text-text-secondary">{entry.xp.toLocaleString()} XP</span>
         </div>
       </div>
 

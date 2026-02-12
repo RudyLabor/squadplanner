@@ -37,7 +37,7 @@ export const HomeAICoachSection = memo(function HomeAICoachSection({
       whileHover={{ scale: 1.01 }}
       whileTap={{ scale: 0.99 }}
     >
-      <Card className={`p-3 h-full flex items-center gap-3 border transition-all duration-200 hover:shadow-glow-primary-md ${
+      <Card className={`p-3 h-full flex items-center gap-3 border transition-interactive hover:shadow-glow-primary-md ${
         aiCoachTip.tone === 'celebration'
           ? 'bg-gradient-to-r from-success/8 to-transparent border-success/15 hover:border-success/30'
           : aiCoachTip.tone === 'warning'

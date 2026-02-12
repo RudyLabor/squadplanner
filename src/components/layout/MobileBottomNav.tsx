@@ -4,21 +4,21 @@ import { m } from 'framer-motion'
 import {
   Home,
   Mic,
-  Calendar,
   Users,
+  MessageCircle,
   User,
 } from '../icons'
 import { usePrefetch } from '../../hooks/usePrefetch'
 
-// 5 nav items — matches the mockup layout (Accueil, Sessions, Party, Squads, Profil)
-// Secondary pages (Discover, Settings, Help, Call History) are accessible via the TopBar grid button.
+// 5 nav items — matches the mockup layout (Accueil, Squads, Party, Messages, Profil)
+// Secondary pages (Discover, Sessions, Settings, Help, Call History) are accessible via the TopBar grid button.
 const mobileNavLeft = [
   { path: '/home', icon: Home, label: 'Accueil' },
-  { path: '/sessions', icon: Calendar, label: 'Sessions' },
+  { path: '/squads', icon: Users, label: 'Squads' },
 ] as const
 
 const mobileNavRight = [
-  { path: '/squads', icon: Users, label: 'Squads' },
+  { path: '/messages', icon: MessageCircle, label: 'Messages' },
   { path: '/profile', icon: User, label: 'Profil' },
 ] as const
 
@@ -135,7 +135,6 @@ export const MobileBottomNav = memo(function MobileBottomNav({
               icon={item.icon}
               label={item.label}
               isActive={currentPath === item.path}
-              badge={item.path === '/sessions' && pendingRsvpCount && pendingRsvpCount > 0 ? pendingRsvpCount : undefined}
             />
           </div>
         ))}
@@ -147,6 +146,7 @@ export const MobileBottomNav = memo(function MobileBottomNav({
               icon={item.icon}
               label={item.label}
               isActive={currentPath === item.path}
+              badge={item.path === '/messages' && unreadMessages > 0 ? unreadMessages : undefined}
             />
           </div>
         ))}

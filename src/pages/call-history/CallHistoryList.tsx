@@ -141,21 +141,25 @@ export function CallHistoryList({ filteredCalls, filter, callStatus, onCall }: C
     return (
       <m.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
         className="flex flex-col items-center justify-center py-20">
-        <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-primary-10 to-transparent flex items-center justify-center mb-5">
+        <m.div
+          className="w-20 h-20 rounded-2xl bg-gradient-to-br from-primary/10 to-success/5 flex items-center justify-center mb-5"
+          animate={{ scale: [1, 1.05, 1] }}
+          transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
+        >
           <Phone className="w-10 h-10 text-primary" />
-        </div>
+        </m.div>
         <h3 className="text-lg font-semibold text-text-primary mb-2">
-          {filter === 'all' ? 'Pas encore d\'appels' : 'Aucun appel ici'}
+          {filter === 'all' ? 'Pr\u00eat \u00e0 appeler ta squad ?' : 'Rien pour le moment'}
         </h3>
-        <p className="text-md text-text-tertiary text-center max-w-[260px] mb-6">
+        <p className="text-md text-text-tertiary text-center max-w-[280px] mb-6">
           {filter === 'all'
-            ? "Appelle un pote pour commencer ! Tes appels apparaîtront ici."
-            : `Aucun appel ${filter === 'incoming' ? 'entrant' : filter === 'outgoing' ? 'sortant' : 'manqué'} pour le moment`
+            ? 'Lance un appel vocal avec tes potes depuis la party !'
+            : `Aucun appel ${filter === 'incoming' ? 'entrant' : filter === 'outgoing' ? 'sortant' : 'manqu\u00e9'} pour le moment`
           }
         </p>
         {filter === 'all' && (
-          <Link to="/messages">
-            <Button variant="secondary"><UserPlus className="w-4 h-4" />Voir mes contacts</Button>
+          <Link to="/party">
+            <Button variant="secondary"><Phone className="w-4 h-4" />Aller en party vocale</Button>
           </Link>
         )}
       </m.div>

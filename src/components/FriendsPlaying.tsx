@@ -230,10 +230,10 @@ function EmptyState() {
 
           <div>
             <h3 className="text-lg font-bold text-text-primary mb-1">
-              Personne en ligne ?
+              Tes potes arrivent bientôt !
             </h3>
             <p className="text-base text-text-tertiary max-w-sm mx-auto">
-              Invite tes potes pour jouer ensemble et voir qui est en ligne
+              Invite ta squad pour voir qui est en ligne et jouer ensemble
             </p>
           </div>
 

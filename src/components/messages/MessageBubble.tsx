@@ -12,10 +12,14 @@ function SystemMessage({ message }: { message: { id: string; content: string; cr
   const c = message.content.toLowerCase()
   const isCelebration = c.includes('confirme') || c.includes('rejoint') || c.includes('bienvenue') || c.includes('present')
   return (
-    <m.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }}
+    <m.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.25, type: 'spring', stiffness: 200, damping: 20 }} className="flex justify-center my-3">
-      <p className={`text-base italic text-center px-4 py-1.5 rounded-full ${isCelebration ? 'bg-gradient-to-r from-primary-15 to-purple-15 text-primary-light border border-primary' : 'text-text-tertiary'}`}>
-        {isCelebration && <span className="mr-1">🎉</span>}— {message.content} —
+      <p className={`text-sm text-center px-4 py-1.5 rounded-full ${
+        isCelebration
+          ? 'bg-surface-card/50 text-primary border border-primary/10'
+          : 'bg-surface-card/50 text-text-tertiary'
+      }`}>
+        {isCelebration && <span className="mr-1">🎉</span>}{message.content}
       </p>
     </m.div>
   )

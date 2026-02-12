@@ -51,7 +51,7 @@ export const DiscoverSquadCard = memo(function DiscoverSquadCard({ squad }: Prop
         </div>
         <button
           onClick={handleCopyCode}
-          className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-400 text-xs font-medium transition-colors"
+          className="flex-shrink-0 flex items-center gap-1.5 px-3 py-2 min-h-[44px] rounded-lg bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-400 text-xs font-medium transition-colors"
         >
           {copied ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
           {copied ? 'Copié !' : 'Rejoindre'}

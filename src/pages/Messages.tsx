@@ -77,6 +77,13 @@ export function Messages() {
     return () => window.removeEventListener('resize', check)
   }, [])
 
+  // BUG #3: Cap skeleton display at 2s max to prevent perceived broken page
+  const [loadingTimedOut, setLoadingTimedOut] = useState(false)
+  useEffect(() => {
+    const timer = setTimeout(() => setLoadingTimedOut(true), 2000)
+    return () => clearTimeout(timer)
+  }, [])
+
   const isSquadChat = !!activeSquadConv
   const messages = isSquadChat ? squadMessages : dmMessages
   const { typingText, handleTyping } = useTypingIndicator({
@@ -239,7 +246,7 @@ export function Messages() {
     </>
   )
 
-  const initialMessagesLoading = isLoadingSquad && isLoadingDM && squadConversations.length === 0
+  const initialMessagesLoading = !loadingTimedOut && isLoadingSquad && isLoadingDM && squadConversations.length === 0
 
   if (!activeSquadConv && !activeDMConv) return (
     <>{toastEl}

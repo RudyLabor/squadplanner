@@ -155,9 +155,6 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body suppressHydrationWarning>
-        <a href="#main-content" className="skip-link">
-          Aller au contenu principal
-        </a>
         {children}
         <ScrollRestoration />
         <Scripts />

@@ -29,7 +29,7 @@ function ActivePartyCard({ squadName, participantCount }: ActiveParty) {
               <div className="text-base text-text-tertiary">Party vocale en cours</div>
             </div>
             <m.div
-              className="px-4 py-2 rounded-lg bg-primary text-white text-md font-medium"
+              className="px-4 py-2 min-h-[44px] flex items-center rounded-lg bg-primary text-white text-md font-medium"
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               transition={{ duration: 0.4, ease: 'easeOut' }}
@@ -58,7 +58,7 @@ function PartyCTA() {
           whileTap={{ scale: 0.99 }}
           transition={{ duration: 0.4, ease: 'easeOut' }}
         >
-          <Card className="p-4 h-full bg-gradient-to-r from-primary/8 to-transparent border-dashed border-primary/20 hover:border-primary/30 hover:shadow-glow-primary-sm transition-interactive">
+          <Card className="p-4 h-full bg-gradient-to-r from-primary/8 to-transparent border border-border-subtle hover:border-primary/30 hover:shadow-glow-primary-sm transition-interactive">
             <div className="flex items-center gap-4">
               <m.div
                 className="w-10 h-10 rounded-lg bg-primary/12 flex items-center justify-center"
@@ -68,8 +68,8 @@ function PartyCTA() {
                 <Mic className="w-5 h-5 text-primary" />
               </m.div>
               <div className="flex-1">
-                <div className="text-md font-medium text-text-primary">Envie de papoter ?</div>
-                <div className="text-sm text-text-tertiary">Lance une party, ta squad est dispo !</div>
+                <div className="text-md font-medium text-text-primary">Lance la party vocale !</div>
+                <div className="text-sm text-text-tertiary">Retrouve ta squad en un clic, vocal toujours ouvert</div>
               </div>
               <ChevronRight className="w-5 h-5 text-text-quaternary" />
             </div>

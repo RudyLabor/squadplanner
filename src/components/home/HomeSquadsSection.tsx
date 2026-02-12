@@ -48,7 +48,7 @@ export const HomeSquadsSection = memo(function HomeSquadsSection({
           </h2>
           <Link to="/squads">
             <m.button
-              className="text-sm text-primary font-medium flex items-center gap-1"
+              className="text-sm text-primary font-medium flex items-center gap-1 min-w-[44px] min-h-[44px] px-2 justify-center"
               whileHover={{ x: 2 }}
               transition={{ duration: 0.4, ease: 'easeOut' }}
             >
@@ -99,7 +99,7 @@ export const HomeSquadsSection = memo(function HomeSquadsSection({
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.2, duration: 0.4, ease: 'easeOut' }}
     >
-      <Card className="p-8 text-center bg-gradient-to-br from-primary/5 to-transparent border-dashed">
+      <Card className="p-8 text-center bg-gradient-to-br from-primary/5 to-transparent border border-border-subtle">
         <m.div
           className="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary/15 to-purple/8 flex items-center justify-center mx-auto mb-4"
           animate={{ rotate: [0, 3, -3, 0] }}

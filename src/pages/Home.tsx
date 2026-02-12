@@ -81,7 +81,7 @@ interface UpcomingSession {
 
 // Badge fiabilité avec glow subtil et tooltip
 function ReliabilityBadge({ score }: { score: number }) {
-  const tooltipText = "Ton score de fiabilité. Il augmente quand tu confirmes ta présence aux sessions."
+  const tooltipText = "Ton score de fiabilit\u00e9 mesure ta r\u00e9gularit\u00e9 \u00e0 confirmer ta pr\u00e9sence aux sessions. Il monte quand tu confirmes (+5%) et baisse quand tu ne r\u00e9ponds pas (-10%). Au-dessus de 95%, tu es consid\u00e9r\u00e9 comme ultra-fiable !"
 
   const getBadgeContent = () => {
     if (score >= 95) {
@@ -262,7 +262,7 @@ export default function Home({ loaderData }: HomeProps) {
         </m.div>
       )}
 
-      <PullToRefresh onRefresh={handleRefresh} className="px-4 md:px-6 lg:px-8 py-6 max-w-2xl lg:max-w-4xl xl:max-w-6xl mx-auto">
+      <PullToRefresh onRefresh={handleRefresh} className="px-4 md:px-6 lg:px-8 py-6 max-w-2xl md:max-w-3xl lg:max-w-4xl xl:max-w-6xl mx-auto">
         <CrossfadeTransition isLoading={homeLoading} skeleton={<SkeletonHomePage />}>
           <div>
             <m.header
@@ -296,7 +296,7 @@ export default function Home({ loaderData }: HomeProps) {
             )}
 
             <m.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.05, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}>
-              <HomeStatsSection squadsCount={squads.length} sessionsThisWeek={sessionsThisWeek} reliabilityScore={reliabilityScore} squadsLoading={squadsLoading} sessionsLoading={sessionsLoading} profile={profile} />
+              <HomeStatsSection squadsCount={squads.length} sessionsThisWeek={sessionsThisWeek} squadsLoading={squadsLoading} sessionsLoading={sessionsLoading} profile={profile} />
             </m.div>
             <m.div
               className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4"

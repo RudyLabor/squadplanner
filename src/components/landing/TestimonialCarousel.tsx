@@ -100,7 +100,7 @@ function TestimonialCard({ t }: { t: Testimonial }) {
         ))}
       </div>
       <p className="text-text-secondary text-sm leading-relaxed italic flex-1">
-        "{t.text}"
+        {'\u00AB\u00A0'}{t.text}{'\u00A0\u00BB'}
       </p>
     </div>
   )

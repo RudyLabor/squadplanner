@@ -1,12 +1,8 @@
 "use client";
 
-import { memo, useMemo, lazy, Suspense } from 'react'
-import { isLocationMessage, parseLocationMessage } from './LocationShare'
-import { isPollMessage, parsePollData } from './ChatPoll'
-
-// Lazy load heavy display components
-const LocationMessageComp = lazy(() => import('./LocationShare').then(m => ({ default: m.LocationMessage })))
-const ChatPollComp = lazy(() => import('./ChatPoll').then(m => ({ default: m.ChatPoll })))
+import { memo, useMemo } from 'react'
+import { isLocationMessage, parseLocationMessage, LocationMessage } from './LocationShare'
+import { isPollMessage, parsePollData, ChatPoll } from './ChatPoll'
 
 /**
  * MessageContent — Phase 3.1 + Phase 4
@@ -107,9 +103,7 @@ export const MessageContent = memo(function MessageContent({
     const coords = parseLocationMessage(content)
     if (coords) {
       return (
-        <Suspense fallback={<span className="text-md text-text-quaternary">Chargement...</span>}>
-          <LocationMessageComp lat={coords.lat} lng={coords.lng} isOwn={isOwn} />
-        </Suspense>
+        <LocationMessage lat={coords.lat} lng={coords.lng} isOwn={isOwn} />
       )
     }
   }
@@ -119,14 +113,12 @@ export const MessageContent = memo(function MessageContent({
     const pollData = parsePollData(content)
     if (pollData) {
       return (
-        <Suspense fallback={<span className="text-md text-text-quaternary">Chargement...</span>}>
-          <ChatPollComp
+        <ChatPoll
             pollData={pollData}
             messageId={messageId || ''}
             onVote={onPollVote}
             isOwn={isOwn}
           />
-        </Suspense>
       )
     }
   }

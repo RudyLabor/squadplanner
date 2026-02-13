@@ -13,6 +13,7 @@ import { usePWAInstallStore } from './hooks/usePWAInstall'
 import { useNavigationProgress } from './hooks/useNavigationProgress'
 import { initTrackingListeners } from './utils/trackEvent'
 import { TopLoadingBar } from './components/ui/TopLoadingBar'
+// import { initializeWebVitalsMonitoring } from './lib/webVitalsMonitoring'
 import { AppLayout } from './components/layout'
 
 // Lazy load heavy modals (only rendered when user is authenticated)
@@ -106,6 +107,13 @@ export default function ClientShell() {
   useEffect(() => {
     initTrackingListeners()
   }, [])
+
+  // Initialize Core Web Vitals monitoring (World-Class performance tracking)
+  // TODO: Fix .ts/.tsx imports issue
+  // useEffect(() => {
+  //   const vitalsCollector = initializeWebVitalsMonitoring()
+  //   return () => vitalsCollector.disconnect()
+  // }, [])
 
   // Capture PWA install prompt event
   useEffect(() => {

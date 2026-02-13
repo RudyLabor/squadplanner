@@ -1,5 +1,4 @@
 import { memo } from 'react'
-import { m } from 'framer-motion'
 import { MessageStatus } from '../MessageStatus'
 import { MessageActions } from '../MessageActions'
 import { MessageReactions } from '../MessageReactions'
@@ -20,12 +19,7 @@ function SystemMessage({
     c.includes('bienvenue') ||
     c.includes('present')
   return (
-    <m.div
-      initial={{ opacity: 0, scale: 0.95 }}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={{ duration: 0.25, type: 'spring', stiffness: 200, damping: 20 }}
-      className="flex justify-center my-3"
-    >
+    <div className="flex justify-center my-3">
       <p
         className={`text-sm text-center px-4 py-1.5 rounded-full ${
           isCelebration
@@ -36,7 +30,7 @@ function SystemMessage({
         {isCelebration && <span className="mr-1">🎉</span>}
         {message.content}
       </p>
-    </m.div>
+    </div>
   )
 }
 
@@ -117,10 +111,7 @@ export const MessageBubble = memo(function MessageBubble({
   }
 
   return (
-    <m.div
-      initial={{ opacity: 0, y: 8 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.15 }}
+    <div
       className={`group flex ${isOwn ? 'justify-end' : 'justify-start'} ${showAvatar ? 'mt-3' : 'mt-0.5'}`}
     >
       <div className={`flex items-end gap-2 max-w-[85%] ${isOwn ? 'flex-row-reverse' : ''}`}>
@@ -196,6 +187,6 @@ export const MessageBubble = memo(function MessageBubble({
           {isSquadChat && <MessageReactions messageId={message.id} isOwnMessage={isOwn} />}
         </div>
       </div>
-    </m.div>
+    </div>
   )
 })

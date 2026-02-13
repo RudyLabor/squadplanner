@@ -281,13 +281,11 @@ export function MessageThread({
       className="flex-1 overflow-y-auto px-4 py-4 relative"
     >
       <div className={embedded ? '' : 'max-w-4xl lg:max-w-5xl mx-auto'}>
-        <AnimatePresence initial={false}>
           {messages.map((msg, i) => (
             <div key={msg.id} id={`message-${msg.id}`} className="transition-interactive">
               {renderMessage(msg, i, messages, props)}
             </div>
           ))}
-        </AnimatePresence>
         <AnimatePresence>{typingText && <TypingIndicator text={typingText} />}</AnimatePresence>
         <div ref={messagesEndRef} />
       </div>

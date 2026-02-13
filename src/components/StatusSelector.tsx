@@ -1,4 +1,3 @@
-'use client'
 
 /**
  * Phase 4.2.2 — Status/Availability Selector

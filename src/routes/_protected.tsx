@@ -1,6 +1,6 @@
 import { redirect, data } from 'react-router'
 import type { LoaderFunctionArgs } from 'react-router'
-import { createSupabaseServerClient } from '../lib/supabase.server'
+import { createMinimalSSRClient } from '../lib/supabase-minimal-ssr'
 import { ProtectedLayoutClient } from '../components/ProtectedLayoutClient'
 import type { Profile } from '../types/database'
 
@@ -26,7 +26,7 @@ interface ProtectedLoaderData {
 }
 
 export async function loader({ request }: LoaderFunctionArgs) {
-  const { supabase, headers, getUser } = createSupabaseServerClient(request)
+  const { supabase, headers, getUser } = createMinimalSSRClient(request)
   let {
     data: { user },
     error,

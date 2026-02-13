@@ -1,4 +1,3 @@
-'use client'
 
 import { memo } from 'react'
 import { useNavigate } from 'react-router'

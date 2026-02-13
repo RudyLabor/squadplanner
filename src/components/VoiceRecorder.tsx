@@ -1,4 +1,3 @@
-'use client'
 
 import { useState, useRef, useCallback, useEffect, memo } from 'react'
 // framer-motion removed to prevent flickering on mobile

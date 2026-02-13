@@ -1,7 +1,7 @@
 import { lazy, Suspense } from 'react'
 import { redirect, data } from 'react-router'
 import type { LoaderFunctionArgs } from 'react-router'
-import { createSupabaseServerClient } from '../lib/supabase.server'
+import { createMinimalSSRClient } from '../lib/supabase-minimal-ssr'
 import { queryKeys } from '../lib/queryClient'
 import { ClientRouteWrapper } from '../components/ClientRouteWrapper'
 import type { Squad, SquadMember, Session, SessionRsvp, RsvpResponse } from '../types/database'
@@ -36,7 +36,7 @@ export function meta() {
 }
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
-  const { supabase, headers, getUser } = createSupabaseServerClient(request)
+  const { supabase, headers, getUser } = createMinimalSSRClient(request)
   const {
     data: { user },
     error,

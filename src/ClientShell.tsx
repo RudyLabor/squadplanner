@@ -1,4 +1,3 @@
-'use client'
 
 import { lazy, Suspense, memo, useEffect, useRef } from 'react'
 import { Outlet, useSearchParams, useLocation } from 'react-router'

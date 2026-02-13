@@ -1,6 +1,6 @@
 import { redirect, data } from 'react-router'
 import type { LoaderFunctionArgs } from 'react-router'
-import { createSupabaseServerClient } from '../lib/supabase.server'
+import { createMinimalSSRClient } from '../lib/supabase-minimal-ssr'
 import { queryKeys } from '../lib/queryClient'
 import { ClientRouteWrapper } from '../components/ClientRouteWrapper'
 import PublicProfile from '../pages/PublicProfile'
@@ -19,7 +19,7 @@ export function meta() {
 }
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
-  const { supabase, headers, getUser } = createSupabaseServerClient(request)
+  const { supabase, headers, getUser } = createMinimalSSRClient(request)
   const {
     data: { user },
     error,

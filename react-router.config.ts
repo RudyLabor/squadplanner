@@ -1,5 +1,14 @@
 import type { Config } from '@react-router/dev/config'
-import { vercelPreset } from '@vercel/react-router/vite'
+
+let presets: Config['presets'] = []
+try {
+  const { vercelPreset } = await import('@vercel/react-router')
+  if (typeof vercelPreset === 'function') {
+    presets = [vercelPreset()]
+  }
+} catch {
+  // vercelPreset not available locally, Vercel handles it at deploy time
+}
 
 export default {
   appDirectory: 'src',
@@ -7,5 +16,5 @@ export default {
   async prerender() {
     return ['/', '/auth', '/legal', '/help', '/premium', '/maintenance']
   },
-  presets: [vercelPreset()],
+  presets,
 } satisfies Config

@@ -1,4 +1,3 @@
-'use client'
 
 import { isRouteErrorResponse, useRouteError } from 'react-router'
 

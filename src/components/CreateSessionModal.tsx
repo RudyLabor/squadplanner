@@ -1,4 +1,3 @@
-'use client'
 
 /**
  * CreateSessionModal - PHASE 3.1

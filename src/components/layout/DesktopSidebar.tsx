@@ -1,4 +1,3 @@
-'use client'
 
 import { memo, useCallback } from 'react'
 import { Link } from 'react-router'

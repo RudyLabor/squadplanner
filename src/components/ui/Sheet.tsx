@@ -1,4 +1,3 @@
-'use client'
 
 import { type ReactNode, useEffect, useRef, useCallback, useState } from 'react'
 import {

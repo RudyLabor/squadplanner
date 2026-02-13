@@ -1,4 +1,3 @@
-'use client'
 
 /**
  * Chantier 12 - Background Sync Indicator

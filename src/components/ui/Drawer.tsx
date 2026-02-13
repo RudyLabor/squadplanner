@@ -1,4 +1,3 @@
-'use client'
 
 import { m, AnimatePresence, useDragControls, type PanInfo } from 'framer-motion'
 import { type ReactNode, useEffect, useCallback } from 'react'

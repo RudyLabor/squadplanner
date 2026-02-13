@@ -1,7 +1,7 @@
 {
   "name": "squad-planner",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.0.1",
   "type": "module",
   "scripts": {
     "dev": "react-router dev",
@@ -40,7 +40,6 @@
     "@react-router/dev": "^7.13.0",
     "@react-router/node": "^7.13.0",
     "@react-router/serve": "^7.13.0",
-    "@rollup/rollup-win32-x64-msvc": "^4.57.1",
     "@supabase/ssr": "^0.8.0",
     "@supabase/supabase-js": "^2.94.0",
     "@tailwindcss/vite": "^4.1.18",

@@ -1,4 +1,3 @@
-'use client'
 
 import { memo, useState, useMemo } from 'react'
 import { Link } from 'react-router'

@@ -1,4 +1,3 @@
-'use client'
 
 import { useState, useRef, useEffect, useCallback } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
@@ -139,16 +138,6 @@ export function MessageActions({
     setIsOpen(false)
   }
 
-  // Debug logging (temporary)
-  if (process.env.NODE_ENV === 'development') {
-    console.log('MessageActions rendered:', {
-      isOwnMessage,
-      isAdmin,
-      hasForward: !!onForward,
-      messageId: message.id
-    })
-  }
-
   return (
     <div
       className="relative inline-flex"
@@ -156,7 +145,7 @@ export function MessageActions({
       onTouchEnd={handleTouchEnd}
       onTouchCancel={handleTouchEnd}
     >
-      {/* Trigger button - always visible for debugging, hover enhanced */}
+      {/* Trigger button - visible on mobile (opacity-60), hover-only on desktop */}
       <button
         ref={buttonRef}
         onClick={() => setIsOpen(!isOpen)}
@@ -177,7 +166,7 @@ export function MessageActions({
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: -5 }}
             transition={{ type: 'spring', stiffness: 400, damping: 25, duration: 0.15 }}
-            className="absolute right-0 top-full mt-1 z-[999] min-w-[180px] py-1.5 bg-surface-dark border-2 border-red-500 rounded-xl shadow-xl shadow-black/40"
+            className="absolute right-0 top-full mt-1 z-50 min-w-[180px] py-1.5 bg-surface-dark border border-border-hover rounded-xl shadow-xl shadow-black/40"
             role="menu"
             aria-orientation="vertical"
           >

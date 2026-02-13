@@ -1,5 +1,3 @@
-'use client'
-
 import { useState, useEffect, useMemo, useCallback, useRef, useSyncExternalStore } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
 import { m } from 'framer-motion'

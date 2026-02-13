@@ -1,4 +1,3 @@
-'use client'
 
 import { useEffect, useState, useRef, useCallback, useMemo } from 'react'
 import { useSearchParams } from 'react-router'

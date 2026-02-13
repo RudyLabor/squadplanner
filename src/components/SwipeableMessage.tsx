@@ -1,4 +1,3 @@
-'use client'
 
 import { memo, useRef, useCallback, useMemo } from 'react'
 import { m, useMotionValue, useTransform, type PanInfo } from 'framer-motion'

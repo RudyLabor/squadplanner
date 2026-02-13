@@ -1,4 +1,3 @@
-'use client'
 
 import { useRef, useEffect, useState } from 'react'
 import { m, useInView } from 'framer-motion'

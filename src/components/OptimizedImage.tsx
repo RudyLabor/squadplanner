@@ -1,4 +1,3 @@
-'use client'
 
 import { useState, useCallback, memo, useRef, useEffect } from 'react'
 import { getPlaceholderUrl, getOptimizedSrc } from './imageUtils'

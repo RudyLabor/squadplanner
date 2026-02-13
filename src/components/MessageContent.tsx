@@ -1,4 +1,3 @@
-'use client'
 
 import { memo, useMemo } from 'react'
 import { isLocationMessage, parseLocationMessage, LocationMessage } from './LocationShare'

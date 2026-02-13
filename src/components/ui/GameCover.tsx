@@ -1,4 +1,3 @@
-'use client'
 
 /**
  * Composant GameCover - Affiche l'image de couverture d'un jeu

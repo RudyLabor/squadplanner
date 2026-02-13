@@ -1,4 +1,3 @@
-'use client'
 
 import { memo, useState } from 'react'
 import { m } from 'framer-motion'

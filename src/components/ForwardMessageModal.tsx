@@ -1,4 +1,3 @@
-'use client'
 
 /**
  * Phase 4.1.3 — Forward Message Modal

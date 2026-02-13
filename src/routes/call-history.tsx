@@ -1,7 +1,7 @@
 import { lazy, Suspense } from 'react'
 import { redirect, data } from 'react-router'
 import type { LoaderFunctionArgs } from 'react-router'
-import { createSupabaseServerClient } from '../lib/supabase.server'
+import { createMinimalSSRClient } from '../lib/supabase-minimal-ssr'
 
 const CallHistory = lazy(() =>
   import('../pages/CallHistory').then((m) => ({ default: m.CallHistory }))
@@ -16,7 +16,7 @@ export function meta() {
 }
 
 export async function loader({ request }: LoaderFunctionArgs) {
-  const { headers, getUser } = createSupabaseServerClient(request)
+  const { headers, getUser } = createMinimalSSRClient(request)
   const {
     data: { user },
     error,

@@ -1,4 +1,3 @@
-'use client'
 
 /**
  * PHASE - Tooltip Component

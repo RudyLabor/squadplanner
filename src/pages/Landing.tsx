@@ -1,4 +1,3 @@
-'use client'
 
 import { useScroll, useTransform, useMotionValue, useSpring, useInView } from 'framer-motion'
 import { useRef, useEffect, useState, type ReactNode } from 'react'

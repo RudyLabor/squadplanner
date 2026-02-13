@@ -1,4 +1,3 @@
-'use client'
 
 import { type ReactNode, useState, useEffect } from 'react'
 import { Dialog } from './Dialog'

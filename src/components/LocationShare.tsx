@@ -1,4 +1,3 @@
-'use client'
 
 /**
  * Phase 4.1.4 — Location Share

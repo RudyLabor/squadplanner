@@ -17,8 +17,8 @@ export const AUDIO_PROFILES: Record<NetworkQualityLevel, AudioProfile> = {
   unknown: { bitrate: 64, sampleRate: 44100 }, // Defaut
 }
 
-// Local mirror of LiveKit ConnectionQuality string enum values
-// so this module never pulls livekit-client at import time.
+// Network quality values (previously mirrored from LiveKit, now standalone)
+// Native WebRTC implementation
 const CQ_EXCELLENT = 'excellent' as const
 const CQ_GOOD = 'good' as const
 const CQ_POOR = 'poor' as const

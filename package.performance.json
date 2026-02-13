@@ -1,0 +1,15 @@
+{
+  "scripts": {
+    "analyze": "npm run build && npx webpack-bundle-analyzer build/client/assets/*.js",
+    "perf:audit": "lighthouse --output=json --output-path=lighthouse-audit.json --chrome-flags=\"--headless\" https://squadplanner.fr",
+    "perf:budget": "node src/scripts/bundle-analysis.js",
+    "perf:monitor": "npm run build && npm run perf:audit && npm run perf:budget"
+  },
+  "devDependencies": {
+    "webpack-bundle-analyzer": "^4.10.1",
+    "lighthouse": "^11.4.0", 
+    "rollup-plugin-visualizer": "^5.12.0",
+    "@sentry/webpack-plugin": "^2.13.0",
+    "workbox-build": "^7.0.0"
+  }
+}

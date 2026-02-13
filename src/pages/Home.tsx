@@ -9,7 +9,7 @@ import Confetti from '../components/LazyConfetti'
 import { PullToRefresh } from '../components/PullToRefresh'
 import { Tooltip, CrossfadeTransition, SkeletonHomePage } from '../components/ui'
 import { useAuthStore } from '../hooks'
-// Lazy-load voice chat store to avoid pulling livekit into the main bundle.
+// Lazy-load voice chat store (now using native WebRTC)
 // IMPORTANT: We use getState()/subscribe() instead of calling the zustand hook
 // directly, because calling store() conditionally would violate Rules of Hooks
 // (the hook count changes when the dynamic import resolves, crashing React).

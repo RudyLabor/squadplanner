@@ -50,7 +50,8 @@ export interface VoiceCallState {
   clearNetworkQualityNotification: () => void
 }
 
-export const LIVEKIT_URL = import.meta.env.VITE_LIVEKIT_URL || ''
+// LIVEKIT REMOVED: Using native WebRTC
+// export const LIVEKIT_URL = import.meta.env.VITE_LIVEKIT_URL || ''
 export const RING_TIMEOUT = 30000
 export const MAX_RECONNECT_ATTEMPTS = 3
 

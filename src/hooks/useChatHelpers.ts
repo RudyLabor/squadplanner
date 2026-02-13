@@ -1,6 +1,7 @@
 import { supabase } from '../lib/supabase'
 
-export const LIVEKIT_URL = import.meta.env.VITE_LIVEKIT_URL || ''
+// LIVEKIT REMOVED: Replaced with native WebRTC
+// export const LIVEKIT_URL = import.meta.env.VITE_LIVEKIT_URL || ''
 export const MAX_RECONNECT_ATTEMPTS = 3
 export const PARTY_STORAGE_KEY = 'squadplanner_active_party'
 

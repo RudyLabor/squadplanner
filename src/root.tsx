@@ -51,7 +51,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
           crossOrigin="anonymous"
         />
         <link rel="dns-prefetch" href="https://nxbqiwmfyafgshxzczxo.supabase.co" />
-        <link rel="dns-prefetch" href="https://squadplanner-i1mfqcqs.livekit.cloud" />
+        {/* LIVEKIT REMOVED: DNS prefetch removed */}
+        {/* <link rel="dns-prefetch" href="https://squadplanner-i1mfqcqs.livekit.cloud" /> */}
 
         {/* Inline @font-face so browser can match preload to font declaration immediately,
             without waiting for critical.css to parse. Prevents "preloaded but not used" warning. */}

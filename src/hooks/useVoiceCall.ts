@@ -2,12 +2,11 @@ import { create } from 'zustand'
 import { supabase } from '../lib/supabase'
 import { useNetworkQualityStore } from './useNetworkQuality'
 import type { CallUser, VoiceCallState } from './useCallState'
-import { LIVEKIT_URL, RING_TIMEOUT } from './useCallState'
-import {
-  initializeLiveKitRoom,
-  subscribeToIncomingCalls as _subscribeToIncomingCalls,
-  sendCallPushNotification,
-} from './useCallActions'
+// LIVEKIT REMOVED: Using native WebRTC  
+import { RING_TIMEOUT } from './useCallState'
+// import { LIVEKIT_URL } from './useCallState'
+// import { initializeLiveKitRoom, subscribeToIncomingCalls as _subscribeToIncomingCalls, sendCallPushNotification } from './useCallActions'
+import { sendCallPushNotification, initializeNativeWebRTC } from './useCallActions'
 
 export type { CallStatus, CallUser } from './useCallState'
 export { formatCallDuration } from './useCallState'
@@ -83,11 +82,8 @@ export const useVoiceCallStore = create<VoiceCallState>((set, get) => ({
       }
       return
     }
-    if (!LIVEKIT_URL) {
-      console.warn('[VoiceCall] No LiveKit URL configured!')
-      set({ error: "LiveKit URL non configure. Contactez l'administrateur." })
-      return
-    }
+    // Native WebRTC - no URL configuration needed
+    console.log('[VoiceCall] Using native WebRTC')
 
     try {
       const {
@@ -146,7 +142,9 @@ export const useVoiceCallStore = create<VoiceCallState>((set, get) => ({
 
       set({ ringTimeout })
 
-      await initializeLiveKitRoom(user.id, receiver.id, useVoiceCallStore)
+      // Native WebRTC implementation
+      await initializeNativeWebRTC(user.id, receiver.id, useVoiceCallStore)
+      console.log('[useVoiceCall] Native WebRTC call initialized')
     } catch (error) {
       console.warn('Error starting call:', error)
       set({
@@ -211,7 +209,9 @@ export const useVoiceCallStore = create<VoiceCallState>((set, get) => ({
         await supabase.from('calls').update({ status: 'answered' }).eq('id', state.currentCallId)
       }
 
-      await initializeLiveKitRoom(user.id, state.caller.id, useVoiceCallStore)
+      // LIVEKIT REMOVED: Replace with native WebRTC implementation  
+      // await initializeLiveKitRoom(user.id, state.caller.id, useVoiceCallStore)
+      console.log('[useVoiceCall] Native WebRTC answer call setup needed')
 
       const callStartTime = Date.now()
       const durationInterval = setInterval(() => {

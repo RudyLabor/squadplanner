@@ -1,7 +1,7 @@
 
 import { useState, useRef, useEffect, useCallback } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
-import { MoreHorizontal, Pencil, Trash2, Pin, Reply, Copy, Check, Forward } from './icons'
+import { MoreHorizontal, Pencil, Trash2, Pin, Reply, Copy, Check, Forward, MessageSquare } from './icons'
 export interface MessageActionsProps {
   message: {
     id: string
@@ -15,6 +15,7 @@ export interface MessageActionsProps {
   onPin: () => void
   onReply: () => void
   onForward?: () => void
+  onThread?: () => void
 }
 
 /**
@@ -35,6 +36,7 @@ export function MessageActions({
   onPin,
   onReply,
   onForward,
+  onThread,
 }: MessageActionsProps) {
   const [isOpen, setIsOpen] = useState(false)
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
@@ -138,6 +140,11 @@ export function MessageActions({
     setIsOpen(false)
   }
 
+  const handleThread = () => {
+    onThread?.()
+    setIsOpen(false)
+  }
+
   return (
     <div
       className="relative inline-flex"
@@ -179,6 +186,18 @@ export function MessageActions({
               <Reply className="w-4 h-4 text-text-secondary" />
               <span>Répondre</span>
             </button>
+
+            {/* Thread */}
+            {onThread && (
+              <button
+                onClick={handleThread}
+                className="w-full flex items-center gap-3 px-4 py-2.5 text-left text-md text-text-primary hover:bg-border-default transition-colors"
+                role="menuitem"
+              >
+                <MessageSquare className="w-4 h-4 text-text-secondary" />
+                <span>Ouvrir le thread</span>
+              </button>
+            )}
 
             {/* Copy */}
             <button

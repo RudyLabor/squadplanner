@@ -50,6 +50,7 @@ interface SharedProps {
   onPinMessage: (id: string, p: boolean) => void
   onReplyMessage: (m: { id: string; content: string; sender: string }) => void
   onForwardMessage: (m: { content: string; sender: string }) => void
+  onThreadMessage?: (id: string) => void
   onPollVote: (id: string, idx: number) => void
   onScrollToMessage: (id: string) => void
   getMessageDate: (d: string) => string
@@ -99,6 +100,7 @@ function renderMessage(
             onPin={props.onPinMessage}
             onReply={props.onReplyMessage}
             onForward={props.onForwardMessage}
+            onThread={props.onThreadMessage}
             onPollVote={props.onPollVote}
             replyToMessage={buildReplyData(msg, all)}
             onScrollToMessage={props.onScrollToMessage}

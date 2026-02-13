@@ -3,7 +3,7 @@
  * Phase 4.1.3 — Forward Message Modal
  * Select a squad to forward a message to
  */
-import { useState, memo, useMemo } from 'react'
+import { useState, useEffect, memo, useMemo } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
 import { X, Forward, Search, Users, Check, Loader2 } from './icons'
 import { useSquadsStore } from '../hooks/useSquads'
@@ -22,9 +22,14 @@ export const ForwardMessageModal = memo(function ForwardMessageModal({
   messageContent,
   senderUsername,
 }: ForwardMessageModalProps) {
-  const { squads } = useSquadsStore()
+  const { squads, fetchSquads } = useSquadsStore()
   const { sendMessage } = useMessagesStore()
   const [searchQuery, setSearchQuery] = useState('')
+
+  // Ensure squads are loaded when modal opens
+  useEffect(() => {
+    if (isOpen && squads.length === 0) fetchSquads()
+  }, [isOpen, squads.length, fetchSquads])
   const [selectedSquadId, setSelectedSquadId] = useState<string | null>(null)
   const [isSending, setIsSending] = useState(false)
   const [sent, setSent] = useState(false)

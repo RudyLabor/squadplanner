@@ -39,7 +39,7 @@
 |------------|--------|-------|--------|
 | Pages principales (desktop) | **12/12 chargent** | 12/12 | ✅ Toutes les pages desktop chargent sans crash |
 | Bugs actifs | **7** | 0 | 🔴 3 CRITIQUE/HAUTE sur messagerie, 1 HAUTE sur mobile |
-| Flux absents (pas de code) | **5** (F34, F35, F37, F39, F40) | 0 | 🔴 Menu actions messages vide |
+| Flux absents (pas de code) | **5** (F34, F35, F37, F39, F40) | **0** | ✅ Tous implementes et testes 13/02 |
 | Erreurs TypeScript | **0** | 0 | ✅ |
 | Build production | **PASS (2.5s)** | PASS | ✅ |
 | Deploy Vercel | OK | OK | ✅ |
@@ -831,13 +831,13 @@ Echelle base 8px : xs (4px) → 3xl (64px)
 | F31 | Voir la liste des conversations | `OK` | Onglets Squads/Prives, recherche, conversation AuditSquad listee ✅ |
 | F32 | Envoyer un message squad | `OK` | Message envoye, affiche avec horodatage "maintenant", statut "Envoye", boutons actions/reaction visibles ✅ |
 | F33 | Envoyer un DM | `OK` | Onglet "Prives" fonctionnel, DM envoye entre AuditPlayer1 et AuditPlayer2 ✅ |
-| F34 | Editer/supprimer un message | `ABSENT` | Bouton "Actions du message" existe (icone ...) et passe a expanded=true au clic, mais **aucun menu ne s'affiche** — les items Modifier/Supprimer n'existent pas dans le DOM |
-| F35 | Epingler un message | `ABSENT` | Meme probleme que F34 — le menu d'actions est vide, pas d'option "Epingler" |
+| F34 | Editer/supprimer un message | `OK` | Menu actions affiche Modifier/Supprimer. EditMessageModal s'ouvre, modifie et sauvegarde. Suppression avec confirmation. Teste 13/02 19h ✅ |
+| F35 | Epingler un message | `OK` | Menu actions affiche "Epingler" (admins). PinnedMessages affiche les messages epingles. Teste 13/02 19h ✅ |
 | F36 | Creer un poll dans le chat | ~~ABSENT~~ `OK` | **FAUX ABSENT** — Bouton "Creer un sondage" visible dans la barre d'actions ✅ |
-| F37 | Mentionner @username | `ABSENT` | Placeholder "@mention" present dans l'input mais taper "@" ne declenche aucun autocomplete/suggestions. Pas de fonctionnalite de mention implementee |
+| F37 | Mentionner @username | `OK` | MentionInput integre dans MessageComposer. Taper "@" affiche autocomplete des membres de la squad. Teste 13/02 19h ✅ |
 | F38 | Rechercher dans les messages | ~~ABSENT~~ `OK` | **FAUX ABSENT** — Bouton "Rechercher dans les messages" visible en haut du chat ✅ |
-| F39 | Forwarder un message | `ABSENT` | Menu d'actions du message vide — pas d'option "Transferer/Forward" |
-| F40 | Voir/repondre en thread | `ABSENT` | Menu d'actions du message vide — pas d'option "Repondre en thread" |
+| F39 | Forwarder un message | `OK` | Menu actions affiche "Transferer". ForwardMessageModal s'ouvre avec preview + recherche squad + envoi. Teste 13/02 19h ✅ |
+| F40 | Voir/repondre en thread | `OK` | Menu actions affiche "Ouvrir le thread". ThreadView sidebar avec message parent, reponses, input. ThreadIndicator sur messages avec reponses. Teste 13/02 19h ✅ |
 
 ### G. Flux Voice Party (5 flux)
 
@@ -1742,7 +1742,7 @@ ETAPE 2 : Tester CHAQUE flux dans le navigateur
 [x] F10-F14 : Dashboard / Home — F10 BUG (erreur API 400), F11 OK (RSVP rapide), F12-F14 OK
 [x] F15-F22 : Squad management — F15 OK, F16 OK (join via code), F17 OK (join via deep link), F18-F20 OK, F21 OK (quitter membétape re), F22 OK (supprimer owner)
 [x] F23-F30 : Sessions — F23-F25 OK, F26 ABSENT, F27 OK, F28 ABSENT (pas de bouton check-in), F29 non teste (seuil), F30 ABSENT
-[x] F31-F40 : Messagerie — F31 OK, F32 OK, F33 OK, F34 ABSENT (menu vide), F35 ABSENT (menu vide), F36 OK, F37 ABSENT (@mention), F38 OK, F39 ABSENT (menu vide), F40 ABSENT (menu vide)
+[x] F31-F40 : Messagerie — F31 OK, F32 OK, F33 OK, F34 OK (edit/delete), F35 OK (pin), F36 OK, F37 OK (@mention), F38 OK, F39 OK (forward), F40 OK (threads)
 [x] F41-F45 : Voice party — Page charge, boutons presents
 [x] F46-F51 : Gamification — F46 OK, F47 BUG (tracking casse), F48-F51 OK
 [x] F52-F56 : Discover / Social — F52-F53 OK, F54 BUG (titre 404, breadcrumb), F55 OK, F56 OK (joueurs)
@@ -1806,7 +1806,7 @@ ETAPE 4 : Re-test complet ✅ TERMINE
 VERIFICATION : 0 flux BUG restants ✅
 ```
 
-### SPRINT CORRECTIF — "Reprise a zero" ✅ ETAPES 1-3 TERMINEES
+### SPRINT CORRECTIF — "Reprise a zero" ✅ ETAPES 1-4 TERMINEES
 
 **Objectif** : Corriger les 7 bugs trouves au re-audit + implementer les 5 flux absents.
 **Contexte** : Re-audit complet le 13 fev 17h30. Toutes les pages desktop chargent (12/12) mais 7 bugs actifs et 5 flux absents.
@@ -1825,17 +1825,18 @@ ETAPE 3 : Corriger les bugs MOYENS — ✅ FAIT
 [x] B32 - Badge "Legende" pour joueur debutant → score effectif = 0 si 0 sessions (ProfileStats, ProfileBadges, Home)
 [x] B33 - Champ message non interactif → fonctionne normalement (focus, saisie, envoi Enter)
 
-ETAPE 4 : Implementer les 5 flux absents (messagerie)
-[ ] F34 - Editer/supprimer message (menu actions)
-[ ] F35 - Epingler un message (menu actions)
-[ ] F37 - Mentionner @username (autocomplete)
-[ ] F39 - Forward message (connecter ForwardMessageModal)
-[ ] F40 - Message threads (creer la vue)
+ETAPE 4 : Implementer les 5 flux absents (messagerie) — ✅ FAIT
+[x] F34 - Editer/supprimer message (menu actions) → EditMessageModal + deleteMessage cables dans MessageActions
+[x] F35 - Epingler un message (menu actions) → pinMessage cable, PinnedMessages affiche les epingles
+[x] F37 - Mentionner @username (autocomplete) → MentionInput integre dans MessageComposer
+[x] F39 - Forward message (connecter ForwardMessageModal) → Modal connecte + fetchSquads auto
+[x] F40 - Message threads (creer la vue) → ThreadView sidebar + ThreadIndicator + bouton "Ouvrir le thread" dans MessageActions
 
 ETAPE 5 : Re-test complet + deploiement
-[ ] Tester CHAQUE flux corrige dans le navigateur (desktop + mobile 375px)
+[x] Tester CHAQUE flux corrige dans le navigateur (desktop) — F34/F35/F37/F39/F40 testes OK 13/02 19h
+[ ] Tester mobile 375px
 [ ] Verifier 0 erreurs console sur chaque page
-[ ] npm run build → PASS
+[x] npm run build → PASS (client 8.48s, server 5.61s)
 [ ] Deployer sur Vercel
 [ ] Smoke test en production
 

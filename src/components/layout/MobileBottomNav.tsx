@@ -131,10 +131,8 @@ export const MobileBottomNav = memo(function MobileBottomNav({
   return (
     <nav
       aria-label="Navigation mobile"
-      className={`mobile-bottom-nav fixed bottom-0 left-0 right-0 z-50 bg-bg-base border-t border-border-subtle transition-transform duration-200 ${isKeyboardVisible ? 'translate-y-full' : 'translate-y-0'}`}
+      className={`mobile-bottom-nav fixed bottom-0 left-0 right-0 z-50 bg-bg-base border-t border-border-subtle transition-transform duration-200 safe-area-pb ${isKeyboardVisible ? 'translate-y-full' : 'translate-y-0'}`}
       style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(5, 1fr)',
         paddingBottom: 'calc(0.5rem + env(safe-area-inset-bottom, 0))',
       }}
     >

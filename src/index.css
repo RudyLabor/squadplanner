@@ -746,14 +746,15 @@ body {
   }
 }
 
-/* Mobile bottom nav: visible by default, hidden only on desktop (hover-capable wide screens).
+/* Mobile bottom nav: grid layout on mobile, hidden on desktop (hover-capable wide screens).
    Touch-only devices like Galaxy Fold unfolded keep the bottom nav visible. */
 .mobile-bottom-nav {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
 }
 @media (min-width: 1024px) and (hover: hover) {
   .mobile-bottom-nav {
-    display: none;
+    display: none !important;
   }
 }
 

@@ -8,6 +8,14 @@ export interface GifResult {
   height: number
 }
 
+// Prevent retry storms: track last error time per action
+let lastErrorTime = 0
+const ERROR_COOLDOWN_MS = 30_000 // 30s cooldown after a failure
+
+function isInCooldown(): boolean {
+  return Date.now() - lastErrorTime < ERROR_COOLDOWN_MS
+}
+
 function mapResults(data: any): GifResult[] {
   return (data.results || []).map((r: any) => ({
     id: r.id,
@@ -19,6 +27,7 @@ function mapResults(data: any): GifResult[] {
 }
 
 export async function searchGifs(query: string, limit = 20): Promise<GifResult[]> {
+  if (isInCooldown()) return []
   try {
     const { data, error } = await supabase.functions.invoke('tenor-proxy', {
       body: { action: 'search', query, limit },
@@ -27,11 +36,13 @@ export async function searchGifs(query: string, limit = 20): Promise<GifResult[]
     return mapResults(data)
   } catch (err) {
     console.warn('[GifPicker] Search error:', err)
+    lastErrorTime = Date.now()
     return []
   }
 }
 
 export async function fetchTrendingGifs(limit = 20): Promise<GifResult[]> {
+  if (isInCooldown()) return []
   try {
     const { data, error } = await supabase.functions.invoke('tenor-proxy', {
       body: { action: 'featured', limit },
@@ -40,6 +51,7 @@ export async function fetchTrendingGifs(limit = 20): Promise<GifResult[]> {
     return mapResults(data)
   } catch (err) {
     console.warn('[GifPicker] Trending error:', err)
+    lastErrorTime = Date.now()
     return []
   }
 }

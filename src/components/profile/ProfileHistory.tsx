@@ -28,7 +28,7 @@ export function ProfileHistory({ profile, hasPremium, aiCoachTip }: ProfileHisto
       {/* IA Coach - Basique (gratuit) */}
       <ProfileCoachCard
         streakDays={streakDays}
-        reliabilityScore={profile?.reliability_score ?? 100}
+        reliabilityScore={profile?.reliability_score ?? 0}
         aiCoachTip={aiCoachTip}
       />
 

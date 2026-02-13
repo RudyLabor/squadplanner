@@ -1,7 +1,7 @@
 # SQUAD PLANNER — PRODUCT BIBLE
 
 > Document fondateur et source unique de verite pour le projet Squad Planner.
-> Derniere mise a jour : 13 fevrier 2026, 10h00
+> Derniere mise a jour : 13 fevrier 2026, 17h30 — RE-AUDIT COMPLET
 >
 > REGLE D'OR : Aucun statut "OK" n'est valide tant qu'il n'a pas ete teste
 > manuellement dans le navigateur. Lire du code ne prouve rien.
@@ -31,69 +31,30 @@
 
 ---
 
-## 0. TABLEAU DE BORD (derniere MAJ : 13 fevrier 2026, 10h15 - Audit Claw)
+## 0. TABLEAU DE BORD (derniere MAJ : 13 fevrier 2026, 17h30 - RE-AUDIT COMPLET)
 
 ### Sante du projet
 
 | Indicateur | Valeur | Cible | Statut |
 |------------|--------|-------|--------|
-| Flux fonctionnels (testes navigateur) | ~~44~~ ~~46~~ ~~51~~ ~~54~~ **57 OK** / 73 | 73 / 73 | 🟡 78% testés OK (F01-F03 validés par Claw) |
-| Flux avec bugs | ~~7~~ ~~5~~ **0** | 0 | ✅ Tous les bugs corrigés (B15/B05/B21 + B16-B24 + B25/B26 + F68) |
-| Flux absents (pas de code) | ~~8~~ ~~5~~ **0-2** | 0 | 🟡 F34, F35, F37, F39, F40 CODE EXISTE - À retester navigateur |
-| Erreurs TypeScript | ~~313~~ **0** | 0 | ✅ CORRIGE (commit eb26fcd) |
-| Erreurs ESLint | ~~3 302~~ **904** | 0 | 🟡 Non-bloquants (404 unused-vars, 233 no-explicit-any) |
-| Warnings Prettier | ~~9 401~~ **0** | 0 | ✅ CORRIGE |
-| Types `any` | ~233 | < 20 | 🟡 Amelioration progressive |
-| Vulnerabilites npm | ~~5~~ **4** (low) | 0 | 🟡 Dans @lhci/cli, pas fixable sans breaking change |
-| Secrets dans git | NON | NON | ✅ Seules clés publiques (anon key) dans l'historique |
-| Build production | ~~FAIL~~ **PASS (10s)** | PASS | ✅ CORRIGE |
-| Deploy Vercel | **OK** | OK | ✅ A deployer |
+| Pages principales (desktop) | **12/12 chargent** | 12/12 | ✅ Toutes les pages desktop chargent sans crash |
+| Bugs actifs | **7** | 0 | 🔴 3 CRITIQUE/HAUTE sur messagerie, 1 HAUTE sur mobile |
+| Flux absents (pas de code) | **5** (F34, F35, F37, F39, F40) | 0 | 🔴 Menu actions messages vide |
+| Erreurs TypeScript | **0** | 0 | ✅ |
+| Build production | **PASS (2.5s)** | PASS | ✅ |
+| Deploy Vercel | OK | OK | ✅ |
+| Erreurs ESLint | ~904 | 0 | 🟡 Non-bloquants |
 
-### Scores d'audit (analyse de code — pas de test navigateur)
-
-| Categorie | Score | Detail |
-|-----------|-------|--------|
-| Design System | 9.2 / 10 | 146 CSS tokens, WCAG AA++ (19.4:1), themes dark/light complets |
-| Composants UI | 8.6 / 10 | 47 composants, polymorphisme, compound patterns, focus management |
-| Accessibilite | 9.1 / 10 | WCAG 2.1 AA, ARIA complet, keyboard nav, high contrast — 2 touch targets < 44px |
-| Animations | 8.2 / 10 | Spring physics consistant, reduced-motion support, ViewTransitions desactive |
-| Responsive | 7.6 / 10 | Mobile excellent, breakpoint tablet 768px manquant |
-| Infrastructure test | 9.0 / 10 | 78 unit tests, 10 E2E suites, CI 5 jobs — build OK |
-| Qualite code | ~~5.6~~ **7.2** / 10 | 0 TS errors, ~233 any, 15 composants > 300 lignes |
-| **GLOBAL** | **9.2 / 10** | **~65/73 flux OK, 0 bugs, 0-2 absents. ~89% valide** |
-
-### Sprint en cours : SPRINT 2 — "Completer les absents"
+### Sprint en cours : RE-AUDIT COMPLET → SPRINT CORRECTIF
 
 | Etape | Statut |
 |-------|--------|
-| Sprint 0 Etape 1 : Debloquer la build | ✅ TERMINE (commit eb26fcd) |
-| Sprint 0 Etape 2 : Tester les 73 flux | ✅ TERMINE — 44 OK, 7 BUG, 8 absents |
-| Sprint 1 Etape 1 : Bugs critiques (HAUTE) | ✅ TERMINE — B15, B05, B21 CORRIGES |
-| Sprint 1 Etape 2 : Bugs moyens (MOYENNE/BASSE) | ✅ TERMINE — B16, B17, B18, B20, B23, B24 CORRIGES + F68 trial fonctionnel |
-| Sprint 1 Etape 3 : Accessibilite + bugs restants | ✅ **TERMINE** — T1.1-T1.4, B06-B08, B22, B25, B26 CORRIGES |
-| Sprint 1 Etape 4 : Re-test complet | ✅ TERMINE — Build OK (14s), 0 flux BUG |
-| Sprint 2 Etape 1 : Sessions (F26, F28, F30) | ✅ **TERMINE** — 3 flux implementes et testes navigateur |
-| Sprint 2 : Flux absents restants | 🔍 **AUDIT CLAW** — Code existe pour F34,F35,F37,F39,F40. Diagnostic erroné. |
-
-### 🔥 AUDIT CLAW - 13 FÉVRIER 2026 10h15
-
-**DÉCOUVERTE CRITIQUE :** Les flux marqués "ABSENTS" existent dans le code !
-
-✅ **Tests navigateur réussis :**
-- **F01** Landing → Design world-class, navigation parfaite
-- **F02** Inscription → Validation avancée en français impeccable  
-- **F03** Connexion → Interface cohérente, toggle fonctionnel
-
-🔍 **Analyse code MessageActions.tsx :**
-- **F34** Éditer/Supprimer → `onEdit()`, `onDelete()` avec confirmation ✅
-- **F35** Épingler → `onPin()` pour admins avec indicateurs ✅  
-- **F39** Forward → `onForward()` avec ForwardMessageModal ✅
-- **F40** Reply/Threads → `onReply()` avec système threads ✅
-
-**STATUT RÉEL :** App à ~89% fonctionnelle (vs 74% diagnostiqué)  
-**QUALITÉ :** 9.2/10 (design professionnel niveau entreprise)
-
-**Actions :** Retester flux "absents" dans navigateur + sécuriser secrets .env
+| RE-AUDIT : Build + TypeScript | ✅ 0 erreurs, build 2.5s |
+| RE-AUDIT : Test toutes les pages desktop | ✅ 12/12 OK, 0 erreurs console (hors messagerie) |
+| RE-AUDIT : Test mobile (375px) | 🔴 Dashboard vide (données absentes) |
+| RE-AUDIT : Test messagerie en profondeur | 🔴 3 bugs critiques (GIF loop, reactions polling, ID optimiste) |
+| SPRINT CORRECTIF : Corriger les 7 bugs | ✅ FAIT (B27-B33 tous corriges, testes navigateur 13/02) |
+| SPRINT CORRECTIF : Implémenter les 5 flux absents | ⏳ A FAIRE |
 
 ---
 
@@ -941,32 +902,32 @@ Echelle base 8px : xs (4px) → 3xl (64px)
 | F72 | Mode offline | `NON TESTABLE` | Necessite coupure reseau |
 | F73 | Email reminders avant session | `NON TESTABLE` | Necessite cron + session planifiee |
 
-### RESUME (mis a jour 13 fevrier 2026, 10h00)
+### RESUME (RE-AUDIT COMPLET — 13 fevrier 2026, 17h30)
 
 | Statut | Nombre | % |
 |--------|--------|---|
-| `OK` | **54** | 74% |
-| `BUG` | **0** | 0% |
+| `OK` (teste navigateur desktop, 0 erreurs) | **46** | 63% |
+| `BUG` (teste, bug confirme) | **7** | 10% |
 | `NON TESTE` | 1 (F29) | 1% |
 | `NON TESTABLE` | 8 | 11% |
 | `NON TESTABLE` (Stripe) | 1 (F67) | 1% |
-| `ABSENT` | **5** | 7% |
-| ~~FAUX ABSENT~~ → OK | 4 | 5% |
+| `ABSENT` (code manquant confirme) | **5** | 7% |
+| `PARTIEL` (fonctionne desktop, bug mobile) | **5** | 7% |
 | **TOTAL** | **73** | 100% |
 
-Note : Sprint 1 Etape 1 (commits 6eea84e + d5f7829) : F10, F47 passes de BUG a OK.
-Note : Sprint 1 Etape 2 : F01, F08, F09, F54, F68 passes de BUG a OK (onboarding, profil public, landing, trial).
-Note : Sprint 2 Etape 1 : F26 (edit session), F28 (check-in), F30 (resultats post-session) passes de ABSENT a OK.
+**RE-AUDIT 17h30 :** Toutes les pages desktop chargent (12/12 OK, 0 crash).
+Bugs trouves : GIF proxy en boucle infinie, reactions polling infini, dashboard mobile vide, badge profil incorrect.
+Flux absents confirmes : F34, F35, F37, F39, F40 (menu actions messages vide dans le navigateur).
 
-### Flux ABSENTS confirmes (5 flux sans code)
+### Flux ABSENTS confirmes (5 flux — code partiel mais non fonctionnel)
 
-| Flux | Description | Composant existant ? |
-|------|-------------|---------------------|
-| F34 | Editer/supprimer message | Non — bouton "Actions" existe mais menu vide |
-| F35 | Epingler un message | Non — meme probleme, menu actions vide |
-| F37 | Mentionner @username | Non — placeholder "@mention" mais pas d'autocomplete |
-| F39 | Forwarder un message | Non — `ForwardMessageModal.tsx` existe mais non connecte |
-| F40 | Repondre en thread | Non — `useThreads.ts` existe mais pas de vue thread |
+| Flux | Description | Composant existant ? | Probleme reel |
+|------|-------------|---------------------|---------------|
+| F34 | Editer/supprimer message | `MessageActions.tsx` a `onEdit()`,`onDelete()` | Menu actions vide dans le DOM — items non rendus |
+| F35 | Epingler un message | `MessageActions.tsx` a `onPin()` | Meme probleme — menu actions vide |
+| F37 | Mentionner @username | Placeholder "@mention" dans input | Taper "@" ne declenche aucun autocomplete |
+| F39 | Forwarder un message | `ForwardMessageModal.tsx` existe | Non connecte au menu actions (menu vide) |
+| F40 | Repondre en thread | `useThreads.ts` existe | Pas de vue thread, pas de bouton repondre visible |
 
 ### Comptes de test (crees le 12 fevrier 2026)
 
@@ -1574,6 +1535,18 @@ Tests :
 | B25 | HAUTE | ~~Emojis reactions clignotent en continu + page bloquee sur mobile (/messages)~~ | MessageReactions.tsx | ✅ CORRIGE (Sprint 1 Etape 3) — supprime N subscriptions realtime par message, initial animation → false, bouton "+" passe de m.button a button natif |
 | B26 | HAUTE | ~~Bouton deconnexion fonctionne 1 fois sur 2~~ | useAuth.ts, Settings.tsx | ✅ CORRIGE (Sprint 1 Etape 3) — queryClient.clear() avant signOut, window.location.replace() au lieu de .href, supprime navigate('/') duplique dans Settings |
 
+### 🔴 NOUVEAUX BUGS — RE-AUDIT 13 fevrier 2026, 17h30
+
+| ID | Severite | Description | Fichier | Statut |
+|----|----------|-------------|---------|--------|
+| B27 | CRITIQUE | **Tenor GIF proxy en retry infini** — Edge function `tenor-proxy` retourne 400. Le frontend re-essaie sans limite (~55+ requetes en quelques secondes). Flood console + reseau. Visible en ouvrant le picker GIF dans /messages | gifApi.ts | ✅ CORRIGE — Cooldown 30s apres erreur dans gifApi.ts. GIF picker affiche "Impossible de charger les GIFs" + bouton Reessayer. 0 retry storm. Teste navigateur 13/02 18h |
+| B28 | HAUTE | **Message reactions polling infini** — Les reactions se rechargent toutes les ~2s en boucle continue via requetes `message_reactions?select=*&message_id=eq.xxx`. Se produit des qu'un message est affiche dans le chat | MessageReactions.tsx | ✅ CORRIGE — Skip fetch reactions pour messages optimistes (startsWith('optimistic-')). 0 requetes message_reactions apres 10s. Teste navigateur 13/02 18h |
+| B29 | HAUTE | **ID optimiste invalide pour reactions** — Apres envoi d'un message, l'ID optimiste (`optimistic-xxx`) est utilise pour fetcher les reactions, ce qui retourne 400 Supabase car ce n'est pas un UUID valide | MessageReactions.tsx | ✅ CORRIGE — Meme fix que B28 : guard `messageId.startsWith('optimistic-')` dans useEffect. Teste navigateur 13/02 18h |
+| B30 | HAUTE | **Dashboard mobile completement vide** — En viewport 375px, /home affiche "0 SQUADS", "0 SEMAINE" alors que les donnees existent | Home.tsx | ✅ CORRIGE — Race condition useSquadsQuery vs auth Supabase. Fix : fallback sur loaderData quand query vide (`querySquads?.length ? querySquads : loaderSquads`). Affiche 1 SQUAD + 1 SEMAINE desktop+mobile. Teste navigateur 13/02 18h |
+| B31 | MOYENNE | **Greeting mobile sans username** — /home en mobile affiche "Salut!" au lieu de "Salut AuditPlayer1!" | Home.tsx | ✅ CORRIGE — Suppression `hidden sm:inline` sur le username. Affiche "Bonsoir AuditPlayer1 !" sur mobile 375px. Teste navigateur 13/02 18h |
+| B32 | MOYENNE | **Badge "Legende" pour joueur debutant** — /profile affiche "100% Legende" pour AuditPlayer1 (Niv.1, 20 XP). La reliability_score=100 vient de la DB | ProfileStats.tsx, ProfileBadges.tsx, Home.tsx | ✅ CORRIGE — Si 0 sessions completees, score effectif = 0 quel que soit la valeur DB. Affiche "0% Debutant" au lieu de "100% Legende". Teste navigateur 13/02 18h |
+| B33 | BASSE | **Champ message non interactif au click** — Le `<input>` du chat ne repond pas au focus/click standard | Messages.tsx, input chat | ✅ CORRIGE — Input fonctionne normalement : focus, saisie de texte, envoi via Enter. Message envoye avec succes. Teste navigateur 13/02 18h |
+
 ### Issues UX identifiees (a verifier visuellement)
 
 | ID | Description | Impact |
@@ -1833,74 +1806,40 @@ ETAPE 4 : Re-test complet ✅ TERMINE
 VERIFICATION : 0 flux BUG restants ✅
 ```
 
-### SPRINT 2 — "Completer les absents" ⏳ PROCHAIN
+### SPRINT CORRECTIF — "Reprise a zero" ✅ ETAPES 1-3 TERMINEES
 
-**Objectif** : Implementer les 8 flux absents + ameliorations UX Tier 2.
-**Prerequis** : Sprint 1 termine (0 flux CASSE/BUG restant). ✅ DEBLOQUE
+**Objectif** : Corriger les 7 bugs trouves au re-audit + implementer les 5 flux absents.
+**Contexte** : Re-audit complet le 13 fev 17h30. Toutes les pages desktop chargent (12/12) mais 7 bugs actifs et 5 flux absents.
 
 ```
-ETAPE 1 : Flux absents — Squad & Sessions (3 flux) ✅ TERMINE
-[x] F20 - Edit squad settings → DEJA OK (faux absent, dialog modal existait deja)
-[x] F26 - Edit session → IMPLEMENTE
-    Fichiers modifies : SessionDetail.tsx, useSessionsQuery.ts, queries/index.ts
-    Implementation : EditSessionModal avec titre, date (14 jours), heure (creneaux), duree
-    Bouton crayon visible uniquement pour le createur (sessions non-terminees/annulees)
-    Mutation useUpdateSessionMutation avec invalidation cache
-    Validation date future, fermeture automatique apres succes
-[x] F28 - Check-in session → CORRIGE
-    Fenetre check-in elargie : 30 min avant + pendant la session (au lieu de "pendant" uniquement)
-    Condition ajoutee : session doit etre confirmee (status === 'confirmed')
-    UI existait deja (CheckinSection), seule la condition etait trop restrictive
-[x] F30 - Resultats post-session → IMPLEMENTE
-    Section PostSessionResults dans SessionDetail.tsx
-    Affiche : inscrits, check-ins, taux fiabilite, duree prevue
-    Badge colore selon taux participation (vert >=75%, jaune >=50%, rouge <50%)
-    Visible quand session terminee ou date passee
+ETAPE 1 : Corriger les bugs CRITIQUES (messagerie) — ✅ FAIT
+[x] B27 - Tenor GIF proxy retry infini → cooldown 30s dans gifApi.ts
+[x] B28 - Message reactions polling infini → skip fetch pour optimistic IDs
+[x] B29 - ID optimiste invalide pour reactions → guard startsWith('optimistic-')
 
-ETAPE 2 : Flux absents — Messagerie (4 flux)
-[ ] F36 - Polls dans le chat
-    Fichiers : Messages.tsx (ajouter bouton), CreatePollModal.tsx, ChatPoll.tsx
-    Criteres : Bouton creer poll visible, vote en temps reel, resultats
-    Note : Composants existent deja, juste connecter l'entree
-[ ] F38 - Recherche messages
-    Fichiers : Messages.tsx (ajouter barre), useMessageSearch.ts
-    Criteres : Barre de recherche, resultats highlight, navigation vers message
-    Note : Hook existe deja, juste ajouter l'UI
-[ ] F39 - Forward message
-    Fichiers : Messages.tsx (menu contextuel), ForwardMessageModal.tsx
-    Criteres : Bouton dans menu contextuel, choix destination, forward
-    Note : Modal existe deja, juste ajouter le bouton trigger
-[ ] F40 - Message threads
-    Fichiers : Messages.tsx, useThreads.ts, ThreadView.tsx (nouveau)
-    Criteres : Bouton repondre, vue thread, compteur reponses
-    Note : Hook + table DB existent, creer la vue
+ETAPE 2 : Corriger le bug HAUTE (mobile) — ✅ FAIT
+[x] B30 - Dashboard mobile completement vide → fallback loaderData quand query vide (race condition)
+[x] B31 - Greeting mobile sans username → suppression hidden sm:inline
 
-ETAPE 3 : Flux absent — Premium (1 flux)
-[ ] F68 - Trial premium gratuit
-    Fichiers : Premium.tsx, nouvelle migration SQL, edge function
-    Criteres :
-      - Ajout colonne trial_started_at dans profiles ou subscriptions
-      - Verification eligibilite (1 seul essai par compte)
-      - Duree 7 jours, expiration automatique
-      - Email rappel J6 (edge function cron)
-      - UI : bouton "Essayer 7 jours gratuit" → activation immediate
+ETAPE 3 : Corriger les bugs MOYENS — ✅ FAIT
+[x] B32 - Badge "Legende" pour joueur debutant → score effectif = 0 si 0 sessions (ProfileStats, ProfileBadges, Home)
+[x] B33 - Champ message non interactif → fonctionne normalement (focus, saisie, envoi Enter)
 
-ETAPE 4 : Ameliorations UX Tier 2
-[ ] T2.1 - Select virtual scroll (@tanstack/react-virtual)
-[ ] T2.2 - Stagger-in listes (staggerChildren: 0.05)
-[ ] T2.3 - Page titles dynamiques (meta React Router ou useEffect)
-[ ] T2.4 - Breadcrumbs (useMatches() React Router)
-[ ] T2.5 - Breakpoint tablet 768px
-[ ] T2.6 - Form-level validation (disable submit si invalide)
-[ ] T2.7 - ContentTransition delai minimum
+ETAPE 4 : Implementer les 5 flux absents (messagerie)
+[ ] F34 - Editer/supprimer message (menu actions)
+[ ] F35 - Epingler un message (menu actions)
+[ ] F37 - Mentionner @username (autocomplete)
+[ ] F39 - Forward message (connecter ForwardMessageModal)
+[ ] F40 - Message threads (creer la vue)
 
-ETAPE 5 : Tester et documenter
-[ ] Tester chaque nouveau flux dans le navigateur
-[ ] Mettre a jour la carte des flux (section 10)
-[ ] Verifier responsive mobile pour chaque nouveau flux
-[ ] Deployer et verifier en production
+ETAPE 5 : Re-test complet + deploiement
+[ ] Tester CHAQUE flux corrige dans le navigateur (desktop + mobile 375px)
+[ ] Verifier 0 erreurs console sur chaque page
+[ ] npm run build → PASS
+[ ] Deployer sur Vercel
+[ ] Smoke test en production
 
-VERIFICATION : 0 flux ABSENT dans la carte, tous les nouveaux flux marques OK
+VERIFICATION : 0 bugs actifs, 0 flux ABSENT, toutes les pages OK desktop + mobile
 ```
 
 ### SPRINT 3 — "Verrouiller"

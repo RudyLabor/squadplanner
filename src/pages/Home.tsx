@@ -147,10 +147,17 @@ export default function Home({ loaderData }: HomeProps) {
     ])
   }, [queryClient])
 
-  const { data: squads = [], isLoading: squadsLoading } = useSquadsQuery()
-  const { data: rawSessions = [], isLoading: sessionsQueryLoading } = useUpcomingSessionsQuery(
-    user?.id
-  )
+  const loaderSquads = Array.isArray(loaderData?.squads) ? loaderData.squads : []
+  const loaderSessions = Array.isArray(loaderData?.upcomingSessions)
+    ? loaderData.upcomingSessions
+    : []
+  const { data: querySquads, isLoading: squadsLoading } = useSquadsQuery()
+  const { data: queryRawSessions, isLoading: sessionsQueryLoading } =
+    useUpcomingSessionsQuery(user?.id)
+  // Use query data when available, fallback to loaderData (avoids race condition
+  // where useSquadsQuery resolves with [] before Supabase auth is ready)
+  const squads = querySquads?.length ? querySquads : loaderSquads
+  const rawSessions = queryRawSessions?.length ? queryRawSessions : loaderSessions
   const rsvpMutation = useRsvpMutation()
   const { data: friendsPlaying = [], isLoading: friendsLoading } = useFriendsPlayingQuery(user?.id)
   const { data: aiCoachTip, isLoading: aiCoachLoading } = useAICoachQueryDeferred(user?.id, 'home')
@@ -264,7 +271,9 @@ export default function Home({ loaderData }: HomeProps) {
     return null
   }
 
-  const reliabilityScore = profile?.reliability_score ?? 100
+  // New player with no sessions → effective score is 0 regardless of DB value
+  const totalSessions = profile?.total_sessions || 0
+  const reliabilityScore = totalSessions === 0 ? 0 : (profile?.reliability_score ?? 0)
   const pendingRsvps = upcomingSessions.filter((s) => !s.my_rsvp).length
 
   const activeParty =
@@ -315,14 +324,10 @@ export default function Home({ loaderData }: HomeProps) {
               transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
             >
               <h1 className="text-lg md:text-xl font-bold text-text-primary mb-1">
-                {greeting}{' '}
-                {profile?.username && (
-                  <span className="hidden sm:inline">
-                    {profile.username.length > 15
-                      ? profile.username.slice(0, 15) + '\u2026'
-                      : profile.username}{' '}
-                  </span>
-                )}
+                {greeting}
+                {profile?.username
+                  ? ` ${profile.username.length > 15 ? profile.username.slice(0, 15) + '\u2026' : profile.username}`
+                  : ''}{' '}
                 !
               </h1>
               <div className="flex items-center justify-between gap-3">

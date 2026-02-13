@@ -165,7 +165,7 @@ export function PublicProfile() {
         <StatCard
           icon={<Shield className="w-4 h-4 text-success" />}
           label="Fiabilité"
-          value={`${Math.round(profile.reliability_score ?? 100)}%`}
+          value={`${Math.round(profile.reliability_score ?? 0)}%`}
           sub={tier.name}
         />
         <StatCard

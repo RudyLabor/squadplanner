@@ -48,8 +48,9 @@ export function MessageReactions({
   const [isLongPressing, setIsLongPressing] = useState(false)
 
   // Fetch reactions once on mount (no realtime subscription per message)
+  // Skip fetch for optimistic IDs (not yet saved in DB)
   useEffect(() => {
-    if (!messageId) return
+    if (!messageId || messageId.startsWith('optimistic-')) return
 
     let cancelled = false
 

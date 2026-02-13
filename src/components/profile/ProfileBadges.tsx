@@ -73,14 +73,18 @@ export function ProfileBadges({
   challengesData,
   SeasonalBadgesComponent,
 }: ProfileBadgesProps) {
-  const reliabilityScore = profile?.reliability_score ?? 100
+  const totalSessions = profile?.total_sessions || 0
+  const totalCheckins = profile?.total_checkins || 0
+  const hasNoActivity = totalSessions === 0 && totalCheckins === 0
+  // New player with no sessions → effective score is 0 regardless of DB value
+  const reliabilityScore = hasNoActivity ? 0 : (profile?.reliability_score ?? 0)
 
   const unlockedAchievements = ACHIEVEMENTS.filter((a) => {
     const value =
       a.type === 'sessions'
-        ? profile?.total_sessions || 0
+        ? totalSessions
         : a.type === 'checkins'
-          ? profile?.total_checkins || 0
+          ? totalCheckins
           : reliabilityScore
     return value >= a.threshold
   })

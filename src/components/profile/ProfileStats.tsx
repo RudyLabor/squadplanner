@@ -66,13 +66,13 @@ interface ProfileStatsProps {
 }
 
 export function ProfileStats({ profile, profileReady }: ProfileStatsProps) {
-  const reliabilityScore = profile?.reliability_score ?? 0
-  const tier = getTier(reliabilityScore)
-  const reliabilityColor = tier.color
-
   const totalSessions = profile?.total_sessions || 0
   const totalCheckins = profile?.total_checkins || 0
   const hasNoActivity = totalSessions === 0 && totalCheckins === 0
+  // New player with no sessions → effective score is 0 regardless of DB value
+  const reliabilityScore = hasNoActivity ? 0 : (profile?.reliability_score ?? 0)
+  const tier = getTier(reliabilityScore)
+  const reliabilityColor = tier.color
 
   const stats = [
     {

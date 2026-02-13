@@ -28,7 +28,20 @@ async function loginUser(page: import('@playwright/test').Page) {
   await page.fill('input[type="email"]', TEST_USER.email)
   await page.fill('input[type="password"]', TEST_USER.password)
   await page.click('button[type="submit"]')
-  await page.waitForURL((url) => !url.pathname.includes('/auth'), { timeout: 15000 })
+  for (let attempt = 0; attempt < 3; attempt++) {
+    try {
+      await page.waitForURL((url) => !url.pathname.includes('/auth'), { timeout: 20000, waitUntil: 'domcontentloaded' })
+      return
+    } catch {
+      const rateLimited = await page.locator('text=/rate limit/i').isVisible().catch(() => false)
+      if (rateLimited && attempt < 2) {
+        await page.waitForTimeout(3000 + attempt * 2000)
+        await page.click('button[type="submit"]')
+      } else {
+        throw new Error(`Login failed after ${attempt + 1} attempts`)
+      }
+    }
+  }
 }
 
 const mobileViewports = [

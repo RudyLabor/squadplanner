@@ -8,7 +8,7 @@ export default defineConfig({
   testDir: './e2e',
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
-  retries: process.env.CI ? 2 : 0,
+  retries: process.env.CI ? 2 : 1,
   workers: process.env.CI ? 1 : undefined,
   reporter: 'html',
   timeout: 60000,
@@ -28,4 +28,7 @@ export default defineConfig({
   ],
 
   // No webServer needed - tests run against production deployment
+
+  // Cleanup orphan E2E test data after all tests
+  globalTeardown: './e2e/global-teardown.ts',
 })

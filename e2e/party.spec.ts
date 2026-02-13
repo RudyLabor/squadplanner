@@ -73,9 +73,17 @@ test.describe('F41 — Page Party affiche les squads du user', () => {
       .isVisible()
       .catch(() => false)
 
-    // Launch button may only appear when a squad is selected
+    // Launch button should appear when user has squads
     if (userSquads.length > 0) {
-      expect(hasLaunchBtn || hasPartyAction || true).toBeTruthy()
+      if (!hasLaunchBtn && !hasPartyAction) {
+        // Pas de bouton de lancement — vérifier au minimum que les squad cards sont rendues
+        const squadCards = await authenticatedPage
+          .locator('[class*="squad"], [class*="card"], [class*="room"]')
+          .count()
+        expect(squadCards).toBeGreaterThanOrEqual(1)
+      } else {
+        expect(hasLaunchBtn || hasPartyAction).toBe(true)
+      }
     }
   })
 })

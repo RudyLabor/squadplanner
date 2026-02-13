@@ -5,6 +5,9 @@ import { test, expect } from './fixtures'
 // Uses shared fixtures: authenticatedPage (logged-in page), db (TestDataHelper)
 // All mutation tests use test-specific squads via db helpers
 //
+// RULES:
+// - NEVER use expect(x || true).toBeTruthy()
+// - Every test MUST have meaningful assertions
 // ============================================================
 
 test.describe('Squads — F15: Créer une squad via UI + vérifier DB', () => {
@@ -66,7 +69,7 @@ test.describe('Squads — F16: Rejoindre via code d\'invitation', () => {
     }
   })
 
-  test('F16: rejoindre une squad via code d\'invitation', async ({ authenticatedPage, db }) => {
+  test('F16: rejoindre une squad via code d\'invitation et vérifier membership en DB', async ({ authenticatedPage, db }) => {
     const page = authenticatedPage
 
     // Créer une squad de test avec un code connu
@@ -93,12 +96,18 @@ test.describe('Squads — F16: Rejoindre via code d\'invitation', () => {
       const submitJoin = page.getByRole('button', { name: /Rejoindre/i }).last()
       await submitJoin.click()
       await page.waitForTimeout(3000)
+
+      // Vérifier la membership en DB
+      const userId = await db.getUserId()
+      const members = await db.getSquadMembers(testSquadId!)
+      const isMember = members.find((m: { user_id: string }) => m.user_id === userId)
+      expect(isMember).toBeTruthy()
     }
   })
 })
 
 test.describe('Squads — F17: Deep link /join/:code', () => {
-  test('F17: naviguer vers /join/:code charge la page', async ({ authenticatedPage, db }) => {
+  test('F17: naviguer vers /join/:code charge la page avec le nom de la squad', async ({ authenticatedPage, db }) => {
     const page = authenticatedPage
 
     // Récupérer un code d'invitation existant depuis la DB
@@ -108,7 +117,8 @@ test.describe('Squads — F17: Deep link /join/:code', () => {
       return
     }
 
-    const inviteCode = squads[0].squads.invite_code
+    const squad = squads[0].squads
+    const inviteCode = squad.invite_code
     await page.goto(`/join/${inviteCode}`)
     await page.waitForLoadState('networkidle')
 
@@ -117,8 +127,23 @@ test.describe('Squads — F17: Deep link /join/:code', () => {
     const pageLoaded =
       url.includes('/join/') ||
       url.includes('/squads/') ||
-      url.includes('/squads')
+      url.includes('/squads') ||
+      url.includes(`/squad/${squad.id}`)
     expect(pageLoaded).toBeTruthy()
+
+    // Verify the page content shows the squad name from DB or the squad page loaded
+    const hasSquadName = await page
+      .getByText(squad.name, { exact: false })
+      .first()
+      .isVisible({ timeout: 5000 })
+      .catch(() => false)
+    const hasJoinPage = await page
+      .getByText(/Rejoindre|Vous êtes déjà membre|Déjà membre/i)
+      .first()
+      .isVisible({ timeout: 5000 })
+      .catch(() => false)
+    const hasSquadPage = url.includes(`/squad/${squad.id}`)
+    expect(hasSquadName || hasJoinPage || hasSquadPage).toBeTruthy()
   })
 })
 
@@ -179,7 +204,7 @@ test.describe('Squads — F19: Détails + membres correspondent à la DB', () =>
       const memberItems = page.locator('[class*="member"], [class*="avatar"]')
       const visibleCount = await memberItems.count()
       // Au minimum, il doit y avoir au moins 1 membre (l'utilisateur lui-même)
-      expect(visibleCount).toBeGreaterThanOrEqual(0)
+      expect(visibleCount).toBeGreaterThanOrEqual(1)
     }
   })
 })
@@ -355,10 +380,9 @@ test.describe('Squads — Extras', () => {
     await page.waitForLoadState('networkidle')
 
     if (dbCount === 0) {
-      // Vérifier l'état vide
+      // Vérifier l'état vide — empty state text MUST be visible
       const emptyState = page.getByText(/Crée ta première squad|Aucune squad/i)
-      const hasEmpty = await emptyState.first().isVisible({ timeout: 5000 }).catch(() => false)
-      expect(hasEmpty || true).toBeTruthy()
+      await expect(emptyState.first()).toBeVisible({ timeout: 5000 })
     } else {
       // Compter les cartes de squads visibles (liens vers /squad/{id} — singulier)
       const squadCards = page.locator('a[href*="/squad/"]')

@@ -61,7 +61,7 @@ export class TestDataHelper {
       .from('squad_members')
       .select('squad_id, role, squads!inner(id, name, game, invite_code, owner_id, total_members, is_public, created_at)')
       .eq('user_id', userId)
-    return (data || []) as Array<{
+    return (data || []) as unknown as Array<{
       squad_id: string
       role: string
       squads: { id: string; name: string; game: string; invite_code: string; owner_id: string; total_members: number; is_public: boolean; created_at: string }
@@ -160,6 +160,63 @@ export class TestDataHelper {
     }
   }
 
+  // --- Session Checkins ---
+  async getSessionCheckins(sessionId: string) {
+    const { data } = await this.admin
+      .from('session_checkins')
+      .select('*')
+      .eq('session_id', sessionId)
+    return data || []
+  }
+
+  // --- Call History ---
+  async getCallHistory(limit = 20) {
+    const userId = await this.getUserId()
+    const { data } = await this.admin
+      .from('calls')
+      .select('*')
+      .eq('user_id', userId)
+      .order('started_at', { ascending: false })
+      .limit(limit)
+    return data || []
+  }
+
+  // --- Leaderboard ---
+  async getLeaderboard(limit = 20) {
+    const { data } = await this.admin
+      .from('profiles')
+      .select('id, username, xp, level, avatar_url')
+      .order('xp', { ascending: false })
+      .limit(limit)
+    return data || []
+  }
+
+  // --- Players looking for squad ---
+  async getPlayersLookingForSquad(limit = 20) {
+    const { data } = await this.admin
+      .from('profiles')
+      .select('id, username, xp, level, avatar_url, preferred_games, region')
+      .eq('looking_for_squad', true)
+      .limit(limit)
+    return data || []
+  }
+
+  // --- DM conversation count (unique partners) ---
+  async getDMConversationCount(): Promise<number> {
+    const userId = await this.getUserId()
+    const { data } = await this.admin
+      .from('direct_messages')
+      .select('sender_id, receiver_id')
+      .or(`sender_id.eq.${userId},receiver_id.eq.${userId}`)
+    if (!data || data.length === 0) return 0
+    const partners = new Set<string>()
+    for (const dm of data) {
+      const partnerId = dm.sender_id === userId ? dm.receiver_id : dm.sender_id
+      partners.add(partnerId)
+    }
+    return partners.size
+  }
+
   // --- Discover ---
   async getPublicSquads(game?: string, region?: string) {
     let query = this.admin.from('squads').select('*').eq('is_public', true).order('total_members', { ascending: false }).limit(20)
@@ -222,7 +279,27 @@ export class TestDataHelper {
     await this.admin.from('squads').delete().eq('id', squadId)
   }
 
-  async createTestSession(squadId: string, overrides: Partial<{ title: string; scheduled_at: string; duration_minutes: number }> = {}) {
+  async createActiveTestSession(squadId: string, overrides: Partial<{ title: string }> = {}) {
+    const userId = await this.getUserId()
+    // Session started 15 min ago, lasts 120 min → currently active
+    const startedAt = new Date(Date.now() - 15 * 60 * 1000).toISOString()
+    const { data, error } = await this.admin
+      .from('sessions')
+      .insert({
+        squad_id: squadId,
+        title: overrides.title || `E2E Test Active Session ${Date.now()}`,
+        scheduled_at: startedAt,
+        duration_minutes: 120,
+        created_by: userId,
+        status: 'confirmed',
+      })
+      .select()
+      .single()
+    if (error) throw new Error(`createActiveTestSession failed: ${error.message}`)
+    return data
+  }
+
+  async createTestSession(squadId: string, overrides: Partial<{ title: string; scheduled_at: string; duration_minutes: number; auto_confirm_threshold: number; status: string }> = {}) {
     const userId = await this.getUserId()
     const { data, error } = await this.admin
       .from('sessions')
@@ -232,11 +309,31 @@ export class TestDataHelper {
         scheduled_at: overrides.scheduled_at || new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
         duration_minutes: overrides.duration_minutes || 120,
         created_by: userId,
-        status: 'proposed',
+        status: overrides.status || 'proposed',
+        ...(overrides.auto_confirm_threshold !== undefined && { auto_confirm_threshold: overrides.auto_confirm_threshold }),
       })
       .select()
       .single()
     if (error) throw new Error(`createTestSession failed: ${error.message}`)
+    return data
+  }
+
+  async createTestRsvp(sessionId: string, userId: string, response: 'present' | 'absent' | 'maybe' = 'present') {
+    const { data, error } = await this.admin
+      .from('session_rsvps')
+      .insert({ session_id: sessionId, user_id: userId, response })
+      .select()
+      .single()
+    if (error) throw new Error(`createTestRsvp failed: ${error.message}`)
+    return data
+  }
+
+  async getSessionById(sessionId: string) {
+    const { data } = await this.admin
+      .from('sessions')
+      .select('*')
+      .eq('id', sessionId)
+      .single()
     return data
   }
 

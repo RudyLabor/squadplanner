@@ -1546,6 +1546,7 @@ Tests :
 | B31 | MOYENNE | **Greeting mobile sans username** — /home en mobile affiche "Salut!" au lieu de "Salut AuditPlayer1!" | Home.tsx | ✅ CORRIGE — Suppression `hidden sm:inline` sur le username. Affiche "Bonsoir AuditPlayer1 !" sur mobile 375px. Teste navigateur 13/02 18h |
 | B32 | MOYENNE | **Badge "Legende" pour joueur debutant** — /profile affiche "100% Legende" pour AuditPlayer1 (Niv.1, 20 XP). La reliability_score=100 vient de la DB | ProfileStats.tsx, ProfileBadges.tsx, Home.tsx | ✅ CORRIGE — Si 0 sessions completees, score effectif = 0 quel que soit la valeur DB. Affiche "0% Debutant" au lieu de "100% Legende". Teste navigateur 13/02 18h |
 | B33 | BASSE | **Champ message non interactif au click** — Le `<input>` du chat ne repond pas au focus/click standard | Messages.tsx, input chat | ✅ CORRIGE — Input fonctionne normalement : focus, saisie de texte, envoi via Enter. Message envoye avec succes. Teste navigateur 13/02 18h |
+| B34 | HAUTE | **Menu actions message invisible sur mobile 375px** — Le menu dropdown (Modifier/Supprimer/Epingler/etc.) est coupe par `overflow-hidden` sur SwipeableMessage + mauvais positionnement (deborde a gauche) | SwipeableMessage.tsx, MessageActions.tsx | ✅ CORRIGE (commit 5eb72f9) — `overflow-hidden` → `overflow-x-hidden overflow-y-visible`, menu `left-0` pour messages propres. 7 options visibles et fonctionnelles. Teste production 13/02 19h30 |
 
 ### Issues UX identifiees (a verifier visuellement)
 
@@ -1806,7 +1807,7 @@ ETAPE 4 : Re-test complet ✅ TERMINE
 VERIFICATION : 0 flux BUG restants ✅
 ```
 
-### SPRINT CORRECTIF — "Reprise a zero" ✅ ETAPES 1-4 TERMINEES
+### SPRINT CORRECTIF — "Reprise a zero" ✅ TERMINE (5/5 ETAPES)
 
 **Objectif** : Corriger les 7 bugs trouves au re-audit + implementer les 5 flux absents.
 **Contexte** : Re-audit complet le 13 fev 17h30. Toutes les pages desktop chargent (12/12) mais 7 bugs actifs et 5 flux absents.
@@ -1832,15 +1833,15 @@ ETAPE 4 : Implementer les 5 flux absents (messagerie) — ✅ FAIT
 [x] F39 - Forward message (connecter ForwardMessageModal) → Modal connecte + fetchSquads auto
 [x] F40 - Message threads (creer la vue) → ThreadView sidebar + ThreadIndicator + bouton "Ouvrir le thread" dans MessageActions
 
-ETAPE 5 : Re-test complet + deploiement
+ETAPE 5 : Re-test complet + deploiement — ✅ FAIT
 [x] Tester CHAQUE flux corrige dans le navigateur (desktop) — F34/F35/F37/F39/F40 testes OK 13/02 19h
-[ ] Tester mobile 375px
-[ ] Verifier 0 erreurs console sur chaque page
-[x] npm run build → PASS (client 8.48s, server 5.61s)
-[ ] Deployer sur Vercel
-[ ] Smoke test en production
+[x] Tester mobile 375px — Toutes les 9 pages testees OK. Bug trouve : menu MessageActions invisible (overflow-hidden + mauvais positionnement). CORRIGE (commit 5eb72f9)
+[x] Verifier 0 erreurs console sur chaque page — 0 erreurs sur les 9 pages (seul warn Chrome notification permission, pas un bug app)
+[x] npm run build → PASS (client 4.39s, server 2.25s)
+[x] Deployer sur Vercel — deploye en 27s, production Ready
+[x] Smoke test en production — Menu MessageActions visible et fonctionnel sur mobile 375px (7 options : Repondre, Thread, Copier, Transferer, Epingler, Modifier, Supprimer)
 
-VERIFICATION : 0 bugs actifs, 0 flux ABSENT, toutes les pages OK desktop + mobile
+VERIFICATION : 0 bugs actifs, 0 flux ABSENT, toutes les pages OK desktop + mobile ✅
 ```
 
 ### SPRINT 3 — "Verrouiller"

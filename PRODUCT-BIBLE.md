@@ -1850,11 +1850,11 @@ VERIFICATION : 0 bugs actifs, 0 flux ABSENT, toutes les pages OK desktop + mobil
 **Prerequis** : Sprint 2 termine (73/73 flux OK).
 
 ```
-ETAPE 1 : Creer les E2E manquants
-[ ] e2e/onboarding.spec.ts (F06-F09)
-[ ] e2e/discover.spec.ts (F52-F56)
-[ ] e2e/settings.spec.ts (F57-F65)
-[ ] e2e/premium.spec.ts (F66-F69)
+ETAPE 1 : Creer les E2E manquants — ✅ FAIT
+[x] e2e/onboarding.spec.ts (F06-F09) — 8 tests (structure onboarding, squad creation/join, profil, permissions, progress bar, responsive)
+[x] e2e/discover.spec.ts (F52-F56) — 10 tests (squads publics, filtres jeu/region, profil public, leaderboard, matchmaking, responsive)
+[x] e2e/settings.spec.ts (F57-F65) — 15 tests (profil, notifications, audio, theme dark/light, timezone, privacy, export GDPR, supprimer compte, deconnexion, responsive)
+[x] e2e/premium.spec.ts (F66-F69) — 10 tests (page premium, pricing, features, FAQ, Stripe CTA, trial, plan toggle, responsive)
 
 ETAPE 2 : Enrichir les E2E existants (couvrir tous les flux)
 [ ] e2e/auth.spec.ts — verifier F01-F05 tous couverts

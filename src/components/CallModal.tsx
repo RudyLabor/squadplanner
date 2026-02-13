@@ -2,8 +2,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
 import { X, WifiOff, Loader2 } from './icons'
-// LAZY LOAD: useVoiceCall sera importé dynamiquement
-// import { useVoiceCallStore, formatCallDuration } from '../hooks/useVoiceCall'
+import { useVoiceCallStore, formatCallDuration } from '../hooks/useVoiceCall'
 import { NetworkQualityIndicator, QualityChangeToast } from './NetworkQualityIndicator'
 import { useNetworkQualityStore } from '../hooks/useNetworkQuality'
 import { useFocusTrap } from '../hooks/useFocusTrap'

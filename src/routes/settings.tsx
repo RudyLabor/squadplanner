@@ -1,6 +1,6 @@
 import { lazy, Suspense } from 'react'
 import { redirect, data } from 'react-router'
-import type { LoaderFunctionArgs } from 'react-router'
+import type { LoaderFunctionArgs, ClientLoaderFunctionArgs } from 'react-router'
 import { createMinimalSSRClient } from '../lib/supabase-minimal-ssr'
 import { queryKeys } from '../lib/queryClient'
 import { ClientRouteWrapper } from '../components/ClientRouteWrapper'
@@ -35,6 +35,15 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
   return data({ profile }, { headers })
 }
+
+export async function clientLoader({ serverLoader }: ClientLoaderFunctionArgs) {
+  const { supabaseMinimal: supabase } = await import('../lib/supabaseMinimal')
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return { profile: null }
+  const { data: profile } = await supabase.from('profiles').select('*').eq('id', user.id).single()
+  return { profile }
+}
+clientLoader.hydrate = true as const
 
 export function headers({ loaderHeaders }: { loaderHeaders: Headers }) {
   return loaderHeaders

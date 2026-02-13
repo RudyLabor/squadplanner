@@ -1,6 +1,6 @@
 import { lazy, Suspense } from 'react'
 import { redirect, data } from 'react-router'
-import type { LoaderFunctionArgs } from 'react-router'
+import type { LoaderFunctionArgs, ClientLoaderFunctionArgs } from 'react-router'
 import { createMinimalSSRClient } from '../lib/supabase-minimal-ssr'
 import { queryKeys } from '../lib/queryClient'
 import { ClientRouteWrapper } from '../components/ClientRouteWrapper'
@@ -64,6 +64,26 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
   return data({ squads: squadsWithCounts }, { headers })
 }
+
+export async function clientLoader({ serverLoader }: ClientLoaderFunctionArgs) {
+  const { supabaseMinimal: supabase } = await import('../lib/supabaseMinimal')
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return { squads: [] }
+
+  const { data: memberships } = await supabase
+    .from('squad_members')
+    .select('squad_id, squads!inner(id, name, game, invite_code, owner_id, total_members, created_at)')
+    .eq('user_id', user.id)
+
+  const squads: SquadWithCount[] =
+    (memberships as any[])?.map((m: any) => ({
+      ...m.squads,
+      member_count: m.squads.total_members ?? 1,
+    })) || []
+
+  return { squads }
+}
+clientLoader.hydrate = true as const
 
 export function headers({ loaderHeaders }: { loaderHeaders: Headers }) {
   return loaderHeaders

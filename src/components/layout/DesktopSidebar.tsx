@@ -261,10 +261,10 @@ export const DesktopSidebar = memo(function DesktopSidebar({
         )}
       </div>
 
-      {/* Navigation */}
+      {/* Navigation — single scrollable area for all nav items */}
       <nav
         aria-label="Menu principal"
-        className={`flex-1 overflow-y-auto ${isExpanded ? 'px-3' : 'px-2'} py-4 space-y-1`}
+        className={`flex-1 min-h-0 overflow-y-auto ${isExpanded ? 'px-3' : 'px-2'} py-4 space-y-1`}
       >
         {navItems.map((item) => {
           let badgeCount: number | undefined
@@ -299,10 +299,11 @@ export const DesktopSidebar = memo(function DesktopSidebar({
             </div>
           )
         })}
-      </nav>
 
-      {/* Secondary navigation */}
-      <div className={`${isExpanded ? 'px-3' : 'px-2'} pb-2 space-y-0.5`}>
+        {/* Separator */}
+        <div className="border-t border-surface-card my-2" />
+
+        {/* Secondary items — inside scrollable area */}
         <NavLink
           path="/settings"
           icon={Settings}
@@ -327,7 +328,7 @@ export const DesktopSidebar = memo(function DesktopSidebar({
           collapsed={!isExpanded}
           userId={userId}
         />
-      </div>
+      </nav>
 
       <SidebarFooter
         isExpanded={isExpanded}

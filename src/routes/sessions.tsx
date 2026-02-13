@@ -1,6 +1,6 @@
 import { lazy, Suspense } from 'react'
 import { redirect, data } from 'react-router'
-import type { LoaderFunctionArgs } from 'react-router'
+import type { LoaderFunctionArgs, ClientLoaderFunctionArgs } from 'react-router'
 import { createMinimalSSRClient } from '../lib/supabase-minimal-ssr'
 import { queryKeys } from '../lib/queryClient'
 import { ClientRouteWrapper } from '../components/ClientRouteWrapper'
@@ -93,6 +93,49 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
   return data({ squads, sessions }, { headers })
 }
+
+export async function clientLoader({ serverLoader }: ClientLoaderFunctionArgs) {
+  const { supabaseMinimal: supabase } = await import('../lib/supabaseMinimal')
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return { squads: [], sessions: [] }
+
+  const { data: memberships } = await supabase
+    .from('squad_members')
+    .select('squad_id, squads!inner(id, name, game, invite_code, owner_id, created_at)')
+    .eq('user_id', user.id)
+
+  const squads = ((memberships as any[])?.map((m: any) => m.squads) || []) as SquadSummary[]
+  const squadIds = squads.map((s) => s.id)
+
+  let sessions: SessionWithRsvp[] = []
+  if (squadIds.length > 0) {
+    const { data: sessionsData } = await supabase
+      .from('sessions').select('*').in('squad_id', squadIds)
+      .order('scheduled_at', { ascending: true })
+
+    if (sessionsData?.length) {
+      const sessionIds = (sessionsData as unknown as Session[]).map((s: Session) => s.id)
+      const { data: allRsvps } = await supabase
+        .from('session_rsvps').select('*').in('session_id', sessionIds)
+
+      sessions = (sessionsData as unknown as Session[]).map((session: Session) => {
+        const sessionRsvps = (allRsvps as SessionRsvp[] | null)?.filter((r) => r.session_id === session.id) || []
+        return {
+          ...session,
+          my_rsvp: sessionRsvps.find((r) => r.user_id === user.id)?.response || null,
+          rsvp_counts: {
+            present: sessionRsvps.filter((r) => r.response === 'present').length,
+            absent: sessionRsvps.filter((r) => r.response === 'absent').length,
+            maybe: sessionRsvps.filter((r) => r.response === 'maybe').length,
+          },
+        }
+      })
+    }
+  }
+
+  return { squads, sessions }
+}
+clientLoader.hydrate = true as const
 
 export function headers({ loaderHeaders }: { loaderHeaders: Headers }) {
   return loaderHeaders

@@ -5,7 +5,7 @@ import { m } from 'framer-motion'
 import { Users, Shield, Star, Gamepad2, MapPin, MessageSquare } from '../icons'
 import { useMatchmakingQuery } from '../../hooks/queries'
 import { useAuthStore } from '../../hooks'
-import { supabase } from '../../lib/supabase'
+import { supabaseMinimal as supabase } from '../../lib/supabaseMinimal'
 import { showSuccess, showError } from '../../lib/toast'
 import type { MatchmakingPlayer } from '../../types/database'
 

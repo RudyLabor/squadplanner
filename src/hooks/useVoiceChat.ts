@@ -2,7 +2,7 @@
 // Plus d'imports LiveKit - Performance gain attendu: -457KB
 
 import { create } from 'zustand'
-import { supabase } from '../lib/supabase'
+import { supabaseMinimal as supabase } from '../lib/supabaseMinimal'
 import { useNativeWebRTC } from '../lib/webrtc-native'
 
 interface VoiceChatUser {

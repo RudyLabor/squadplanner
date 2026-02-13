@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { supabase, isSupabaseReady } from '../lib/supabase'
+import { supabase, isSupabaseReady } from '../lib/supabaseMinimal'
 import type { DirectMessagesState, DMConversation } from './useDMTypes'
 import { createDMActions } from './useDMActions'
 

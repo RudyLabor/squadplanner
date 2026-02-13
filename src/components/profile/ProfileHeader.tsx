@@ -6,7 +6,7 @@ import { User, Edit2, Check, X, Camera, Loader2 } from '../icons'
 import { useNavigate } from 'react-router'
 import { showSuccess, showError } from '../../lib/toast'
 import { Button, Input, Expandable } from '../ui'
-import { supabase } from '../../lib/supabase'
+import { supabaseMinimal as supabase } from '../../lib/supabaseMinimal'
 
 interface ProfileHeaderProps {
   user: { id: string; email?: string } | null

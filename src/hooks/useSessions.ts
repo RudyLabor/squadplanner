@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { supabase, isSupabaseReady } from '../lib/supabase'
+import { supabase, isSupabaseReady } from '../lib/supabaseMinimal'
 import type { Session, SessionRsvp, SessionCheckin } from '../types/database'
 import { createSessionActions } from './useSessionActions'
 import { trackChallengeProgress } from '../lib/challengeTracker'

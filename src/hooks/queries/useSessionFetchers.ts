@@ -1,4 +1,4 @@
-import { supabase } from '../../lib/supabase'
+import { supabaseMinimal as supabase } from '../../lib/supabaseMinimal'
 import type { Session, SessionRsvp, SessionCheckin } from '../../types/database'
 
 type RsvpResponse = 'present' | 'absent' | 'maybe'

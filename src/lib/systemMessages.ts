@@ -1,4 +1,4 @@
-import { supabase } from './supabase'
+import { supabaseMinimal as supabase } from './supabaseMinimal'
 
 /**
  * Service pour l'envoi de messages système dans les chats squad

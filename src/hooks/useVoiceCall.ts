@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { supabase } from '../lib/supabase'
+import { supabaseMinimal as supabase } from '../lib/supabaseMinimal'
 import { useNetworkQualityStore } from './useNetworkQuality'
 import type { CallUser, VoiceCallState } from './useCallState'
 // LIVEKIT REMOVED: Using native WebRTC  

@@ -10,7 +10,7 @@
  * - .from('seasonal_badges').select(...)
  */
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { supabase } from '../../lib/supabase'
+import { supabaseMinimal as supabase } from '../../lib/supabaseMinimal'
 import { useAuthUserQuery } from './useAuthQuery'
 
 // Re-export types from Challenges component for consistency

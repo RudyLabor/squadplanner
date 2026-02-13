@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router'
 import { m, AnimatePresence } from 'framer-motion'
 import { Search, Users, Calendar, MessageCircle, User, X, Clock, Trash2 } from './icons'
 import { useSquadsStore, useSessionsStore, useAuthStore } from '../hooks'
-import { supabase } from '../lib/supabase'
+import { supabaseMinimal as supabase } from '../lib/supabaseMinimal'
 import { SearchResultsList } from './search/SearchResultsList'
 
 interface SearchResult {

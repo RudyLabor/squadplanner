@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { supabase } from '../lib/supabase'
+import { supabaseMinimal as supabase } from '../lib/supabaseMinimal'
 export { registerNativePushNotifications, triggerHaptic, isNative } from './useNativePush'
 import { registerNativePushNotifications } from './useNativePush'
 

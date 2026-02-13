@@ -7,7 +7,7 @@ import { Users, Loader2, CheckCircle2, XCircle, LogIn } from '../components/icon
 import { Button, Card } from '../components/ui'
 import { useAuthStore } from '../hooks/useAuth'
 import { useSquadsStore } from '../hooks/useSquads'
-import { supabase } from '../lib/supabase'
+import { supabaseMinimal as supabase } from '../lib/supabaseMinimal'
 import { showSuccess, showError } from '../lib/toast'
 
 interface SquadPreview {

@@ -5,7 +5,7 @@
  * Query key: ['leaderboard', squadId]
  */
 import { useQuery } from '@tanstack/react-query'
-import { supabase } from '../../lib/supabase'
+import { supabaseMinimal as supabase } from '../../lib/supabaseMinimal'
 
 export interface LeaderboardEntry {
   rank: number

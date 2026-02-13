@@ -1,4 +1,4 @@
-import { supabase } from '../lib/supabase'
+import { supabaseMinimal as supabase } from '../lib/supabaseMinimal'
 
 const isNativePlatform = !!(globalThis as any).Capacitor?.isNativePlatform?.()
 

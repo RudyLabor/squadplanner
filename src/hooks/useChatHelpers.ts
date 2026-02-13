@@ -1,4 +1,4 @@
-import { supabase } from '../lib/supabase'
+import { supabaseMinimal as supabase } from '../lib/supabaseMinimal'
 
 // LIVEKIT REMOVED: Replaced with native WebRTC
 // export const LIVEKIT_URL = import.meta.env.VITE_LIVEKIT_URL || ''

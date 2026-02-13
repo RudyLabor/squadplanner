@@ -5,7 +5,7 @@
  * Query key: ['auth', 'user']
  */
 import { useQuery } from '@tanstack/react-query'
-import { supabase } from '../../lib/supabase'
+import { supabaseMinimal as supabase } from '../../lib/supabaseMinimal'
 import type { User } from '@supabase/supabase-js'
 
 // Fetch current auth user

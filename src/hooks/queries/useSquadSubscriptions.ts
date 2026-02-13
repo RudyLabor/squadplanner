@@ -5,7 +5,7 @@
  * Query key: ['subscriptions', squadId]
  */
 import { useQuery } from '@tanstack/react-query'
-import { supabase } from '../../lib/supabase'
+import { supabaseMinimal as supabase } from '../../lib/supabaseMinimal'
 
 export interface Subscription {
   id: string

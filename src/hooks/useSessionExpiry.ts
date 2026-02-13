@@ -19,7 +19,7 @@ export function useSessionExpiry() {
   const [showModal, setShowModal] = useState(false)
   const expiryTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const subscriptionRef = useRef<{ unsubscribe: () => void } | null>(null)
-  const supabaseRef = useRef<typeof import('../lib/supabase') | null>(null)
+  const supabaseRef = useRef<typeof import('../lib/supabaseMinimal') | null>(null)
 
   const clearTimers = useCallback(() => {
     if (expiryTimerRef.current) {
@@ -84,7 +84,7 @@ export function useSessionExpiry() {
     let cancelled = false
 
     // Dynamically import supabase to avoid accessing proxy before initialization
-    import('../lib/supabase')
+    import('../lib/supabaseMinimal')
       .then((mod) => {
         if (cancelled) return
         supabaseRef.current = mod

@@ -16,7 +16,7 @@ import {
 } from '../hooks/queries/useSquadsQuery'
 import { SquadLimitReached, PremiumBadge } from '../components/PremiumGate'
 import { PremiumUpgradeModal } from '../components/PremiumUpgradeModal'
-import { supabase } from '../lib/supabase'
+import { supabaseMinimal as supabase } from '../lib/supabaseMinimal'
 import { FREE_SQUAD_LIMIT } from '../hooks/usePremium'
 import { SquadCard, type SquadNextSession } from './squads/SquadCard'
 import { JoinSquadForm, CreateSquadForm } from './squads/SquadForms'

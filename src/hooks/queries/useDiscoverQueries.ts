@@ -4,7 +4,7 @@
  * Hooks for browsing public squads, global leaderboard, and matchmaking.
  */
 import { useQuery } from '@tanstack/react-query'
-import { supabase } from '../../lib/supabase'
+import { supabaseMinimal as supabase } from '../../lib/supabaseMinimal'
 import { queryKeys } from '../../lib/queryClient'
 import type {
   PublicSquadResult,

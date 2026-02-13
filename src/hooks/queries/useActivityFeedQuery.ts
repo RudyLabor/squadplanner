@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import { supabase, isSupabaseReady } from '../../lib/supabase'
+import { supabase, isSupabaseReady } from '../../lib/supabaseMinimal'
 import { queryKeys } from '../../lib/queryClient'
 
 export interface ActivityItem {

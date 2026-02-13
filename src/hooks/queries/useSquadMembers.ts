@@ -5,7 +5,7 @@
  * Replaces direct supabase.from('squad_members').select(...) calls.
  */
 import { useQuery } from '@tanstack/react-query'
-import { supabase } from '../../lib/supabase'
+import { supabaseMinimal as supabase } from '../../lib/supabaseMinimal'
 
 export interface SquadMemberWithProfile {
   id: string

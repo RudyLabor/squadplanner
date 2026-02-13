@@ -1,4 +1,4 @@
-import { supabase } from '../lib/supabase'
+import { supabaseMinimal as supabase } from '../lib/supabaseMinimal'
 import type { Squad } from '../types/database'
 import { sendMemberJoinedMessage, sendMemberLeftMessage } from '../lib/systemMessages'
 import { trackChallengeProgress } from '../lib/challengeTracker'

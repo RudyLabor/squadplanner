@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { Plus } from './icons'
-import { supabase } from '../lib/supabase'
+import { supabaseMinimal as supabase } from '../lib/supabaseMinimal'
 import { useAuthStore } from '../hooks/useAuth'
 import { ReactionPicker, REACTION_EMOJIS, type ReactionEmoji } from './ReactionPicker'
 

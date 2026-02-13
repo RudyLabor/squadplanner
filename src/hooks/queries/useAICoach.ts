@@ -12,7 +12,7 @@
  */
 import { useState, useEffect } from 'react'
 import { useQuery } from '@tanstack/react-query'
-import { supabase } from '../../lib/supabase'
+import { supabaseMinimal as supabase } from '../../lib/supabaseMinimal'
 
 // Flag to enable/disable AI Coach globally
 // Disabled until the ai-coach Edge Function is deployed on Supabase

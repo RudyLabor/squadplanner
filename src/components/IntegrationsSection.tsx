@@ -3,7 +3,7 @@
 import { memo, useState } from 'react'
 import { Plug, Calendar, Tv, Gamepad2, MessageSquare, Download } from './icons'
 import { useAuthStore } from '../hooks'
-import { supabase } from '../lib/supabase'
+import { supabaseMinimal as supabase } from '../lib/supabaseMinimal'
 import { showSuccess, showError, showInfo } from '../lib/toast'
 
 export const IntegrationsSection = memo(function IntegrationsSection() {

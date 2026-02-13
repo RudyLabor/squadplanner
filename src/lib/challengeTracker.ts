@@ -1,4 +1,4 @@
-import { supabase, isSupabaseReady } from './supabase'
+import { supabase, isSupabaseReady } from './supabaseMinimal'
 
 /**
  * Track progress for challenges matching a given action type.

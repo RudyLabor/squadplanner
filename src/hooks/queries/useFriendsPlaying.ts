@@ -10,7 +10,7 @@
  * - Or in a voice party (voice_channel_id set)
  */
 import { useQuery } from '@tanstack/react-query'
-import { supabase } from '../../lib/supabase'
+import { supabaseMinimal as supabase } from '../../lib/supabaseMinimal'
 
 export interface FriendPlaying {
   friend_id: string

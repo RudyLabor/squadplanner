@@ -1,4 +1,4 @@
-import { supabase, isSupabaseReady } from '../lib/supabase'
+import { supabase, isSupabaseReady } from '../lib/supabaseMinimal'
 import type { Message } from '../types/database'
 import { playNotificationSound } from './useRingtone'
 import type { RealtimeChannel } from '@supabase/supabase-js'

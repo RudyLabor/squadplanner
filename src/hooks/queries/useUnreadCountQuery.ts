@@ -7,7 +7,7 @@
  * Uses select('id') instead of select('*') to reduce server load.
  */
 import { useQuery } from '@tanstack/react-query'
-import { supabase } from '../../lib/supabase'
+import { supabaseMinimal as supabase } from '../../lib/supabaseMinimal'
 
 interface UnreadCounts {
   squadUnread: number

@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { supabase, isSupabaseReady } from '../lib/supabase'
+import { supabase, isSupabaseReady } from '../lib/supabaseMinimal'
 import { trackChallengeProgress } from '../lib/challengeTracker'
 import type { RealtimeChannel } from '@supabase/supabase-js'
 import { showError } from '../lib/toast'

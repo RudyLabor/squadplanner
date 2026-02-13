@@ -153,7 +153,7 @@ export function Messages() {
       setSearchParams({}, { replace: true })
     } else {
       ;(async () => {
-        const { supabase } = await import('../lib/supabase')
+        const { supabase } = await import('../lib/supabaseMinimal')
         const { data } = await supabase
           .from('profiles')
           .select('id, username, avatar_url')

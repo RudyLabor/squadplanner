@@ -1,4 +1,4 @@
-import { supabase } from '../lib/supabase'
+import { supabaseMinimal as supabase } from '../lib/supabaseMinimal'
 import { useNetworkQualityStore } from './useNetworkQuality'
 import { generateChannelName, MAX_RECONNECT_ATTEMPTS } from './useCallState'
 // LIVEKIT_URL REMOVED - using native WebRTC

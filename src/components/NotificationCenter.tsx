@@ -4,7 +4,7 @@ import { useEffect, useCallback, useRef } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
 import { Bell, CheckCheck, X } from './icons'
 import { create } from 'zustand'
-import { supabase } from '../lib/supabase'
+import { supabaseMinimal as supabase } from '../lib/supabaseMinimal'
 import { useAuthStore } from '../hooks'
 import { useOverlayStore } from '../hooks/useOverlayStore'
 

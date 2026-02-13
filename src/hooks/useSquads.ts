@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { supabase } from '../lib/supabase'
+import { supabaseMinimal as supabase } from '../lib/supabaseMinimal'
 import type { Squad, SquadMember } from '../types/database'
 import { createSquadAction, joinSquadAction, leaveSquadAction } from './useSquadActions'
 

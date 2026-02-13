@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { m } from 'framer-motion'
 import { Trophy } from './icons'
-import { supabase } from '../lib/supabase'
+import { supabaseMinimal as supabase } from '../lib/supabaseMinimal'
 import { useAuthStore } from '../hooks'
 import { Tooltip } from './ui/Tooltip'
 import { BADGE_CONFIGS, formatSeason, type SeasonalBadge } from './badges/badgeConfig'

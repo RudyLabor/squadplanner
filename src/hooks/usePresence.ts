@@ -11,7 +11,7 @@
  * - Optional "last seen" tracking
  */
 import { useState, useEffect, useCallback, useRef } from 'react'
-import { supabase } from '../lib/supabase'
+import { supabaseMinimal as supabase } from '../lib/supabaseMinimal'
 import type { RealtimeChannel } from '@supabase/supabase-js'
 
 export interface PresenceUser {

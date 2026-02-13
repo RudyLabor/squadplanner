@@ -165,7 +165,7 @@ export default function ClientShell() {
           const { useVoiceCallStore } = await import('./hooks/useVoiceCall')
           const { status, setIncomingCall } = useVoiceCallStore.getState()
           if (status !== 'idle') return
-          const { supabase } = await import('./lib/supabase')
+          const { supabase } = await import('./lib/supabaseMinimal')
           const { data: callerProfile } = await supabase
             .from('profiles')
             .select('username, avatar_url')

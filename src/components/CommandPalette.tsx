@@ -24,7 +24,7 @@ import { useCreateSessionModal } from './CreateSessionModal'
 import { ShortcutsHelpModal } from './command-palette/ShortcutsHelpModal'
 import { CommandPreviewPanel } from './command-palette/CommandPreviewPanel'
 import { CommandResultList } from './command-palette/CommandResultList'
-import { supabase } from '../lib/supabase'
+import { supabaseMinimal as supabase } from '../lib/supabaseMinimal'
 import { queryKeys } from '../lib/queryClient'
 import type { SessionWithDetails } from '../hooks/queries/useSessionsQuery'
 

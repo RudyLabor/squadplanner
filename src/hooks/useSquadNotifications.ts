@@ -5,7 +5,7 @@
  */
 import { create } from 'zustand'
 import { useEffect } from 'react'
-import { supabase } from '../lib/supabase'
+import { supabaseMinimal as supabase } from '../lib/supabaseMinimal'
 import { useAuthStore } from './useAuth'
 
 interface SquadNotificationsState {

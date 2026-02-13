@@ -23,7 +23,7 @@ export function LandingFooter() {
       }
       setNewsletterLoading(true)
       try {
-        const { supabase } = await import('../../lib/supabase')
+        const { supabase } = await import('../../lib/supabaseMinimal')
         const { error } = await supabase.from('newsletter').insert({ email: newsletterEmail })
         if (error) throw error
         setNewsletterSuccess(true)

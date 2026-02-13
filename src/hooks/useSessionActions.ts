@@ -1,4 +1,4 @@
-import { supabase, isSupabaseReady } from '../lib/supabase'
+import { supabase, isSupabaseReady } from '../lib/supabaseMinimal'
 import { sendRsvpMessage, sendSessionConfirmedMessage } from '../lib/systemMessages'
 import { trackChallengeProgress } from '../lib/challengeTracker'
 

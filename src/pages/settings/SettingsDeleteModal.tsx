@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
 import { AlertTriangle, Loader2 } from '../../components/icons'
-import { supabase } from '../../lib/supabase'
+import { supabaseMinimal as supabase } from '../../lib/supabaseMinimal'
 import { showError } from '../../lib/toast'
 
 interface SettingsDeleteModalProps {

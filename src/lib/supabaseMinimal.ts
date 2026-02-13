@@ -8,7 +8,7 @@ import type { Database } from '../types/database.types'
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || ''
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || ''
 
-// Client optimisé avec uniquement les features utilisées
+// Client optimisé avec uniquement les features utilisées  
 export const supabaseMinimal = createClient<Database>(supabaseUrl, supabaseAnonKey, {
   auth: {
     // Auth features utilisées
@@ -34,3 +34,20 @@ export const supabaseMinimal = createClient<Database>(supabaseUrl, supabaseAnonK
 
 // Re-export types couramment utilisés
 export type { User, Session } from '@supabase/supabase-js'
+
+// Export aussi comme 'supabase' pour compatibility
+export { supabaseMinimal as supabase }
+
+// Compatibility function pour useAuth
+export function initSupabase() {
+  return Promise.resolve(supabaseMinimal)
+}
+
+// Helper functions pour compatibility
+export function isSupabaseReady(): boolean {
+  return true // Le client minimal est toujours prêt
+}
+
+export function waitForSupabase() {
+  return Promise.resolve(supabaseMinimal)
+}

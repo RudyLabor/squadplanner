@@ -1,4 +1,4 @@
-import { supabase, isSupabaseReady } from '../lib/supabase'
+import { supabase, isSupabaseReady } from '../lib/supabaseMinimal'
 import { useUnreadCountStore } from './useUnreadCount'
 import type { DirectMessage, DMConversation, DirectMessagesState } from './useDMTypes'
 import type { StoreApi } from 'zustand'

@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { supabase, isSupabaseReady } from '../lib/supabase'
+import { supabase, isSupabaseReady } from '../lib/supabaseMinimal'
 import type { AIState, CoachTip, AICoachTip, AIInsight } from './useAITypes'
 import { withBackoff } from './useAITypes'
 

@@ -1,7 +1,7 @@
 import { StrictMode, startTransition } from 'react'
 import { hydrateRoot } from 'react-dom/client'
 import { HydratedRouter } from 'react-router/dom'
-import { initSupabase } from './lib/supabase'
+import { initSupabase } from './lib/supabaseMinimal'
 import { initFontOptimization } from './utils/fontOptimization'
 
 // Initialize Supabase client IMMEDIATELY — before hydration starts.

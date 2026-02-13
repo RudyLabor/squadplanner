@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import { supabase } from '../../lib/supabase'
+import { supabaseMinimal as supabase } from '../../lib/supabaseMinimal'
 import { queryKeys } from '../../lib/queryClient'
 import type { Squad, SquadMember } from '../../types/database'
 

@@ -5,7 +5,7 @@
  * Query key: ['profile', userId]
  */
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { supabase } from '../../lib/supabase'
+import { supabaseMinimal as supabase } from '../../lib/supabaseMinimal'
 import type { Profile } from '../../types/database'
 import { showSuccess } from '../../lib/toast'
 import { createOptimisticMutation } from '../../utils/optimisticUpdate'

@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { supabase, initSupabase } from '../lib/supabase'
+import { supabase, initSupabase } from '../lib/supabaseMinimal'
 import { queryClient } from '../lib/queryClient'
 import type { User, Session } from '@supabase/supabase-js'
 import type { Profile } from '../types/database'

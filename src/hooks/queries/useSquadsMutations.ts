@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { supabase } from '../../lib/supabase'
+import { supabaseMinimal as supabase } from '../../lib/supabaseMinimal'
 import { queryKeys } from '../../lib/queryClient'
 import { showSuccess, showError } from '../../lib/toast'
 import { sendMemberJoinedMessage, sendMemberLeftMessage } from '../../lib/systemMessages'

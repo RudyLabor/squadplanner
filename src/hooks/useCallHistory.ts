@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { supabase } from '../lib/supabase'
+import { supabaseMinimal as supabase } from '../lib/supabaseMinimal'
 
 // Types
 export type CallType = 'all' | 'incoming' | 'outgoing' | 'missed'

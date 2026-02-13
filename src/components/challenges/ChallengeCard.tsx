@@ -76,7 +76,7 @@ export function ChallengeCard({ challenge, index, onClaim, isClaiming }: Challen
   const IconComponent = ICON_MAP[challenge.icon.toLowerCase()] || Target
 
   const progress = challenge.userProgress?.progress ?? 0
-  const target = challenge.userProgress?.target ?? 1
+  const target = challenge.userProgress?.target ?? challenge.requirements?.count ?? 1
   const progressPercent = Math.min((progress / target) * 100, 100)
   const isCompleted = !!challenge.userProgress?.completed_at
   const isClaimed = !!challenge.userProgress?.xp_claimed

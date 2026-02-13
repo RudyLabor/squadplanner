@@ -5,6 +5,7 @@ import type { Session } from '../../types/database'
 import { showSuccess, showError } from '../../lib/toast'
 import { sendRsvpMessage, sendSessionConfirmedMessage } from '../../lib/systemMessages'
 import { createOptimisticMutation, optimisticId } from '../../utils/optimisticUpdate'
+import { trackChallengeProgress } from '../../lib/challengeTracker'
 import {
   type SessionWithDetails,
   fetchSessionsBySquad,
@@ -114,12 +115,17 @@ export function useCreateSessionMutation() {
         user_id: user.id,
         response: 'present' as const,
       })
+      // Track challenge progress: session creation + auto-RSVP
+      trackChallengeProgress(user.id, 'create_session').catch(() => {})
+      trackChallengeProgress(user.id, 'rsvp').catch(() => {})
+      trackChallengeProgress(user.id, 'daily_rsvp').catch(() => {})
       return session
     },
     onMutate: optimistic.onMutate,
     onError: optimistic.onError,
     onSuccess: () => {
       showSuccess('Session creee ! Tes potes vont etre notifies.')
+      queryClient.invalidateQueries({ queryKey: ['challenges'] })
     },
     onSettled: optimistic.onSettled,
   })
@@ -160,6 +166,11 @@ export function useRsvpMutation() {
       ])
       if (profile?.username && session?.squad_id) {
         sendRsvpMessage(session.squad_id, profile.username, session.title, response).catch(() => {})
+      }
+      // Track challenge progress for RSVP actions
+      if (response === 'present') {
+        trackChallengeProgress(user.id, 'rsvp').catch(() => {})
+        trackChallengeProgress(user.id, 'daily_rsvp').catch(() => {})
       }
       return { sessionId, response, userId: user.id, squadId: session?.squad_id }
     },
@@ -207,6 +218,10 @@ export function useRsvpMutation() {
       if (data.squadId)
         queryClient.invalidateQueries({ queryKey: queryKeys.sessions.list(data.squadId) })
       queryClient.invalidateQueries({ queryKey: queryKeys.sessions.upcoming() })
+      // Refresh challenges to show updated progress
+      if (data.response === 'present') {
+        queryClient.invalidateQueries({ queryKey: ['challenges'] })
+      }
     },
   })
 }

@@ -1,13 +1,9 @@
-import { lazy, Suspense } from 'react'
 import type { HeadersArgs } from 'react-router'
 import { Navigate, useSearchParams } from 'react-router'
 import { useAuthStore } from '../hooks/useAuth'
 import { faqs } from '../components/landing/FaqSection'
 
-// SSR: import statically so first paint is complete HTML
-// Client: lazy-load to reduce initial JS bundle
-import LandingSSR from '../pages/Landing'
-const LandingLazy = lazy(() => import('../pages/Landing'))
+import Landing from '../pages/Landing'
 
 export function headers(_args: HeadersArgs) {
   return {
@@ -44,13 +40,11 @@ export default function LandingOrHome() {
   const [searchParams] = useSearchParams()
   const showPublic = searchParams.get('public') === 'true'
 
-  // Before auth is initialized, render the same Landing the server rendered
-  // This prevents React hydration error #418 (SSR/client mismatch)
-  if (!isInitialized) return <LandingSSR />
-  if (user && !showPublic) return <Navigate to="/home" replace />
-  return (
-    <Suspense fallback={<LandingSSR />}>
-      <LandingLazy />
-    </Suspense>
-  )
+  // Redirect authenticated users to home (skip during SSR / before auth init)
+  if (isInitialized && user && !showPublic) return <Navigate to="/home" replace />
+
+  // Always render Landing — same component for SSR, hydration, and client.
+  // Previous Suspense/lazy pattern caused mount→unmount→remount cycles
+  // that broke useInView observers and framer-motion initial animations.
+  return <Landing />
 }

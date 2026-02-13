@@ -1,6 +1,6 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react'
-import { m, AnimatePresence, useInView } from 'framer-motion'
+import { m, AnimatePresence } from 'framer-motion'
 import { demoSteps, stepComponents, PhoneFrame } from './DemoSteps'
 
 // Re-export for consumers
@@ -14,9 +14,25 @@ interface AnimatedDemoProps {
 export function AnimatedDemo({ currentStep: controlledStep, onStepChange }: AnimatedDemoProps) {
   const [internalStep, setInternalStep] = useState(0)
   const [isPaused, setIsPaused] = useState(false)
+  const [hasMounted, setHasMounted] = useState(false)
   const pauseTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const ref = useRef<HTMLDivElement>(null)
-  const isInView = useInView(ref, { once: false, amount: 0.3 })
+  const [isInView, setIsInView] = useState(false)
+
+  // Track first mount for initial={false} on first render
+  useEffect(() => { setHasMounted(true) }, [])
+
+  // Native IntersectionObserver instead of framer-motion's useInView
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+    const observer = new IntersectionObserver(
+      ([entry]) => setIsInView(entry.isIntersecting),
+      { threshold: 0.3 }
+    )
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [])
 
   const currentStep = controlledStep ?? internalStep
   const autoAdvanceRef = useRef(false)
@@ -61,7 +77,7 @@ export function AnimatedDemo({ currentStep: controlledStep, onStepChange }: Anim
         <AnimatePresence mode="wait">
           <m.div
             key={step.id}
-            initial={{ opacity: 0 }}
+            initial={hasMounted ? { opacity: 0 } : false}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}

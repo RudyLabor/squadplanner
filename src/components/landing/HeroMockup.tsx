@@ -8,8 +8,13 @@ import { screens } from './MockupScreens'
 export function HeroMockup() {
   const [currentStep, setCurrentStep] = useState(0)
   const [isPaused, setIsPaused] = useState(false)
+  const [hasMounted, setHasMounted] = useState(false)
   const pauseTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const autoAdvanceRef = useRef(false)
+
+  // Track first mount to skip initial={{ opacity: 0 }} on first render
+  // Prevents empty phone mockup when framer-motion animations haven't started yet
+  useEffect(() => { setHasMounted(true) }, [])
 
   // Auto-advance through screens
   useEffect(() => {
@@ -95,7 +100,7 @@ export function HeroMockup() {
             <AnimatePresence mode="wait">
               <m.div
                 key={screen.id}
-                initial={{ opacity: 0, x: 30 }}
+                initial={hasMounted ? { opacity: 0, x: 30 } : false}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -30 }}
                 transition={{ duration: 0.35, ease: [0.4, 0, 0.2, 1] }}

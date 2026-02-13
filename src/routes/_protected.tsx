@@ -1,5 +1,5 @@
 import { redirect, data } from 'react-router'
-import type { LoaderFunctionArgs } from 'react-router'
+import type { LoaderFunctionArgs, ClientLoaderFunctionArgs } from 'react-router'
 import { createMinimalSSRClient } from '../lib/supabase-minimal-ssr'
 import { ProtectedLayoutClient } from '../components/ProtectedLayoutClient'
 import type { Profile } from '../types/database'
@@ -24,6 +24,58 @@ interface ProtectedLoaderData {
   profile: Profile | null
   squads: SquadWithCount[]
 }
+
+// CLIENT LOADER — handles client-side navigations using localStorage auth.
+// The minimal SSR client doesn't use @supabase/ssr cookies, so the server
+// loader can't authenticate. This clientLoader uses the browser Supabase
+// client (which reads from localStorage) for all client-side route transitions.
+export async function clientLoader({ serverLoader }: ClientLoaderFunctionArgs) {
+  const { supabaseMinimal: supabase } = await import('../lib/supabaseMinimal')
+  const { data: { user }, error } = await supabase.auth.getUser()
+
+  if (error || !user) {
+    throw redirect('/auth')
+  }
+
+  let profile: Profile | null = null
+  let squads: SquadWithCount[] = []
+
+  const { data: rpcResult, error: rpcError } = await supabase.rpc('get_layout_data', {
+    p_user_id: user.id,
+  })
+
+  if (!rpcError && rpcResult) {
+    profile = (rpcResult as any).profile as Profile | null
+    squads = ((rpcResult as any).squads as SquadWithCount[]) || []
+  } else {
+    const [profileResult, membershipsResult] = await Promise.all([
+      supabase.from('profiles').select('*').eq('id', user.id).single(),
+      supabase
+        .from('squad_members')
+        .select(
+          'squad_id, squads!inner(id, name, game, invite_code, owner_id, total_members, created_at)'
+        )
+        .eq('user_id', user.id),
+    ])
+
+    profile = profileResult.data as Profile | null
+    const rawSquads =
+      (membershipsResult.data as any[])?.map((m: { squads: any }) => m.squads).filter(Boolean) || []
+    squads = rawSquads.map((squad: any) => ({
+      ...squad,
+      member_count: squad.total_members ?? 1,
+    }))
+  }
+
+  return {
+    user: { id: user.id, email: user.email },
+    profile,
+    squads,
+  }
+}
+
+// Tell React Router to always use clientLoader on the client (don't call server loader)
+clientLoader.hydrate = true as const
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const { supabase, headers, getUser } = createMinimalSSRClient(request)

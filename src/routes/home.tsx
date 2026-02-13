@@ -94,7 +94,8 @@ export async function loader({ request }: LoaderFunctionArgs) {
   } = await getUser()
 
   if (error || !user) {
-    throw redirect('/', { headers })
+    // Don't redirect — parent _protected clientLoader handles auth on client
+    return data({ profile: null, squads: [], upcomingSessions: [] }, { headers })
   }
 
   // Single RPC: profile + squads (same as parent layout, but needed for SSR seed)

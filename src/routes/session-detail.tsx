@@ -39,7 +39,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   } = await getUser()
 
   if (error || !user) {
-    throw redirect('/', { headers })
+    return data({ session: null, rsvps: [], checkins: [] }, { headers })
   }
 
   const sessionId = params.id!

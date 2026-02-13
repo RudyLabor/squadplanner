@@ -73,7 +73,7 @@ export function ProtectedLayoutClient({ loaderData }: { loaderData: ProtectedLay
     )
   }
 
-  if (!clientUser) return <Navigate to="/" replace />
+  if (!clientUser) return <Navigate to="/auth" replace />
 
   return <Outlet />
 }

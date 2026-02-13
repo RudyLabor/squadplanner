@@ -26,7 +26,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   } = await getUser()
 
   if (error || !user) {
-    throw redirect('/', { headers })
+    return data({ profile: null }, { headers })
   }
 
   const username = params.username!

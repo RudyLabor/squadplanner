@@ -23,7 +23,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   } = await getUser()
 
   if (error || !user) {
-    throw redirect('/', { headers })
+    return data({ userId: null }, { headers })
   }
 
   return data({ userId: user.id }, { headers })

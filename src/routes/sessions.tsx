@@ -48,7 +48,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   } = await getUser()
 
   if (error || !user) {
-    throw redirect('/', { headers })
+    return data({ squads: [], sessions: [] }, { headers })
   }
 
   const { data: memberships } = await supabase

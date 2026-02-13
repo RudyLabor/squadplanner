@@ -90,7 +90,10 @@ export async function loader({ request }: LoaderFunctionArgs) {
       data: { session },
     } = await supabase.auth.refreshSession()
     if (!session?.user) {
-      throw redirect('/auth', { headers })
+      // Don't redirect — clientLoader.hydrate=true ensures the client handles auth.
+      // SSR without cookies (localStorage-based auth) must return empty data,
+      // otherwise a redirect loop occurs: /home→/auth→/home→...
+      return data({ user: null, profile: null, squads: [] }, { headers })
     }
     user = session.user
   }

@@ -45,7 +45,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   } = await getUser()
 
   if (error || !user) {
-    throw redirect('/', { headers })
+    return data({ squads: [] }, { headers })
   }
 
   // Single query: use total_members (DB trigger-maintained) instead of separate count query

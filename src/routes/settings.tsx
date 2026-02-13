@@ -28,7 +28,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   } = await getUser()
 
   if (error || !user) {
-    throw redirect('/', { headers })
+    return data({ profile: null }, { headers })
   }
 
   const { data: profile } = await supabase.from('profiles').select('*').eq('id', user.id).single()

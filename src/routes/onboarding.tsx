@@ -19,7 +19,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   } = await getUser()
 
   if (error || !user) {
-    throw redirect('/', { headers })
+    return data({ userId: null }, { headers })
   }
 
   // If the user already has squads, skip onboarding entirely

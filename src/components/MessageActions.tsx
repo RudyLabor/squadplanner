@@ -16,6 +16,8 @@ export interface MessageActionsProps {
   onReply: () => void
   onForward?: () => void
   onThread?: () => void
+  /** Whether this is the current user's own message (affects menu positioning) */
+  isOwnMessage?: boolean
 }
 
 /**
@@ -37,6 +39,7 @@ export function MessageActions({
   onReply,
   onForward,
   onThread,
+  isOwnMessage: isOwnMessageProp,
 }: MessageActionsProps) {
   const [isOpen, setIsOpen] = useState(false)
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
@@ -173,7 +176,7 @@ export function MessageActions({
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: -5 }}
             transition={{ type: 'spring', stiffness: 400, damping: 25, duration: 0.15 }}
-            className="absolute right-0 top-full mt-1 z-50 min-w-[180px] py-1.5 bg-surface-dark border border-border-hover rounded-xl shadow-xl shadow-black/40"
+            className={`absolute top-full mt-1 z-50 min-w-[180px] py-1.5 bg-surface-dark border border-border-hover rounded-xl shadow-xl shadow-black/40 ${isOwnMessageProp ? 'left-0' : 'right-0'}`}
             role="menu"
             aria-orientation="vertical"
           >

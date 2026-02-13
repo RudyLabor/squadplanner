@@ -133,6 +133,7 @@ export const MessageBubble = memo(function MessageBubble({
     message: { id: message.id, sender_id: message.sender_id || '', content },
     currentUserId,
     isAdmin,
+    isOwnMessage: isOwn,
     onEdit: () => onEdit({ id: message.id, content }),
     onDelete: () => onDelete(message.id),
     onPin: () => onPin(message.id, !message.is_pinned),

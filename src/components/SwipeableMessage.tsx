@@ -118,7 +118,7 @@ const SwipeableMessage = memo(function SwipeableMessage({
   }
 
   return (
-    <div className="relative overflow-hidden">
+    <div className="relative overflow-x-hidden overflow-y-visible">
       {/* Left action indicator (reply) - appears on the RIGHT side when swiping left */}
       {enableSwipeLeft && (
         <m.div

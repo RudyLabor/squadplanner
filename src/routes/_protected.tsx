@@ -38,7 +38,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
       data: { session },
     } = await supabase.auth.refreshSession()
     if (!session?.user) {
-      throw redirect('/', { headers })
+      throw redirect('/auth', { headers })
     }
     user = session.user
   }

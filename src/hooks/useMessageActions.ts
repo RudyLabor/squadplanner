@@ -81,19 +81,36 @@ export function createRealtimeSubscription(
       { event: 'UPDATE', schema: 'public', table: 'messages', filter },
       (payload) => {
         const updatedMsg = payload.new as MessageWithSender
-        setState((state) => ({
-          messages: state.messages.map((msg) =>
-            msg.id === updatedMsg.id
-              ? {
-                  ...msg,
-                  content: updatedMsg.content,
-                  read_by: updatedMsg.read_by,
-                  edited_at: updatedMsg.edited_at,
-                  is_pinned: updatedMsg.is_pinned,
-                }
-              : msg
-          ),
-        }))
+        setState((state) => {
+          const existing = state.messages.find((m) => m.id === updatedMsg.id)
+          if (!existing) return state
+
+          // Skip update if only read_by changed (most common realtime update)
+          // This prevents re-renders that cause emoji reactions to blink
+          const contentChanged = existing.content !== updatedMsg.content
+          const editChanged = existing.edited_at !== updatedMsg.edited_at
+          const pinChanged = existing.is_pinned !== updatedMsg.is_pinned
+          const readByLengthChanged =
+            (existing.read_by?.length ?? 0) !== (updatedMsg.read_by?.length ?? 0)
+
+          if (!contentChanged && !editChanged && !pinChanged && !readByLengthChanged) {
+            return state // No visible change, skip update entirely
+          }
+
+          return {
+            messages: state.messages.map((msg) =>
+              msg.id === updatedMsg.id
+                ? {
+                    ...msg,
+                    content: updatedMsg.content,
+                    read_by: updatedMsg.read_by,
+                    edited_at: updatedMsg.edited_at,
+                    is_pinned: updatedMsg.is_pinned,
+                  }
+                : msg
+            ),
+          }
+        })
       }
     )
     .on(

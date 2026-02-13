@@ -180,7 +180,7 @@ const VirtualizedMessages = memo(function VirtualizedMessages({
                 transform: `translateY(${vr.start}px)`,
               }}
             >
-              <div id={`message-${msg.id}`} className="transition-interactive">
+              <div id={`message-${msg.id}`}>
                 {renderMessage(msg, vr.index, messages, props)}
               </div>
             </div>
@@ -283,7 +283,7 @@ export function MessageThread({
     >
       <div className={embedded ? '' : 'max-w-4xl lg:max-w-5xl mx-auto'}>
           {messages.map((msg, i) => (
-            <div key={msg.id} id={`message-${msg.id}`} className="transition-interactive">
+            <div key={msg.id} id={`message-${msg.id}`}>
               {renderMessage(msg, i, messages, props)}
             </div>
           ))}

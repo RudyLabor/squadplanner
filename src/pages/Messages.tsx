@@ -469,7 +469,11 @@ export function Messages() {
     onSelectDMConv: setActiveDMConv,
   } as const
 
-  const ChatView = ({ embedded = false }: { embedded?: boolean }) => (
+  // IMPORTANT: renderChatView is a render function, NOT a component.
+  // Using an inline component (<ChatView />) would cause React to unmount/remount
+  // the entire tree on every parent re-render (realtime updates), which makes
+  // MessageReactions re-fetch and blink continuously.
+  const renderChatView = (embedded = false) => (
     <div className="flex flex-col h-full bg-bg-base">
       <ConversationHeader
         embedded={embedded}
@@ -596,7 +600,7 @@ export function Messages() {
           </nav>
           <div className="flex-1 min-w-0">
             {activeSquadConv || activeDMConv ? (
-              <ChatView embedded />
+              renderChatView(true)
             ) : (
               <div className="h-full flex items-center justify-center bg-bg-base">
                 <div className="text-center">
@@ -643,7 +647,7 @@ export function Messages() {
       style={{ bottom: 'calc(80px + env(safe-area-inset-bottom, 0px))' }}
     >
       {toastEl}
-      <ChatView />
+      {renderChatView()}
     </div>
   )
 }

@@ -3,7 +3,7 @@ import { renderHook } from '@testing-library/react'
 // Track the current mock pathname
 let mockPathname = '/home'
 
-vi.mock('react-router-dom', () => ({
+vi.mock('react-router', () => ({
   useLocation: () => ({ pathname: mockPathname }),
 }))
 

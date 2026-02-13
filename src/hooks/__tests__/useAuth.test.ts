@@ -10,21 +10,19 @@ const {
   mockOnAuthStateChange,
   mockFrom,
   mockInitSupabase,
-} = vi.hoisted(() => ({
-  mockGetSession: vi.fn(),
-  mockSignUp: vi.fn(),
-  mockSignInWithPassword: vi.fn(),
-  mockSignInWithOAuth: vi.fn(),
-  mockSignOut: vi.fn(),
-  mockOnAuthStateChange: vi
+  mockSupabase,
+} = vi.hoisted(() => {
+  const mockGetSession = vi.fn()
+  const mockSignUp = vi.fn()
+  const mockSignInWithPassword = vi.fn()
+  const mockSignInWithOAuth = vi.fn()
+  const mockSignOut = vi.fn()
+  const mockOnAuthStateChange = vi
     .fn()
-    .mockReturnValue({ data: { subscription: { unsubscribe: vi.fn() } } }),
-  mockFrom: vi.fn(),
-  mockInitSupabase: vi.fn().mockResolvedValue(undefined),
-}))
-
-vi.mock('../../lib/supabase', () => ({
-  supabase: {
+    .mockReturnValue({ data: { subscription: { unsubscribe: vi.fn() } } })
+  const mockFrom = vi.fn()
+  const mockInitSupabase = vi.fn().mockResolvedValue(undefined)
+  const mockSupabase = {
     auth: {
       getSession: mockGetSession,
       signUp: mockSignUp,
@@ -34,8 +32,26 @@ vi.mock('../../lib/supabase', () => ({
       onAuthStateChange: mockOnAuthStateChange,
     },
     from: mockFrom,
-  },
+  }
+  return {
+    mockGetSession,
+    mockSignUp,
+    mockSignInWithPassword,
+    mockSignInWithOAuth,
+    mockSignOut,
+    mockOnAuthStateChange,
+    mockFrom,
+    mockInitSupabase,
+    mockSupabase,
+  }
+})
+
+vi.mock('../../lib/supabaseMinimal', () => ({
+  supabaseMinimal: mockSupabase,
+  supabase: mockSupabase,
   initSupabase: mockInitSupabase,
+  isSupabaseReady: vi.fn().mockReturnValue(true),
+  waitForSupabase: vi.fn().mockResolvedValue(mockSupabase),
 }))
 
 vi.mock('../useVoiceChat', () => ({

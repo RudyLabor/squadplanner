@@ -7,8 +7,8 @@ import AxeBuilder from '@axe-core/playwright'
  */
 
 const TEST_USER = {
-  email: 'testowner@squadtest.dev',
-  password: 'TestPassword123!',
+  email: 'rudylabor@hotmail.fr',
+  password: 'ruudboy92',
 }
 
 async function loginUser(page: import('@playwright/test').Page) {

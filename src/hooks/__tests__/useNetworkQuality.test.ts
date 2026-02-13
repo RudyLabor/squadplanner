@@ -1,8 +1,13 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { act } from '@testing-library/react'
-// LIVEKIT REMOVED: Using mock types for tests
-// import { ConnectionQuality } from 'livekit-client'
-type ConnectionQuality = 'excellent' | 'good' | 'poor' | 'unknown'
+// LIVEKIT REMOVED: Using mock constants for tests (matches source string values)
+const ConnectionQuality = {
+  Excellent: 'excellent',
+  Good: 'good',
+  Poor: 'poor',
+  Lost: 'lost',
+  Unknown: 'unknown',
+} as const
 
 import {
   useNetworkQualityStore,

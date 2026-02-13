@@ -2,8 +2,8 @@ import { test, expect } from '@playwright/test'
 
 // Test credentials from GEMINI.md
 const TEST_USER = {
-  email: 'testowner@squadtest.dev',
-  password: 'TestPassword123!',
+  email: 'rudylabor@hotmail.fr',
+  password: 'ruudboy92',
 }
 
 // Test helper to setup authenticated state

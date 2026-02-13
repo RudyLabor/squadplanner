@@ -3,8 +3,8 @@ import { createClient } from '@supabase/supabase-js'
 
 // Test user credentials
 export const TEST_USER = {
-  email: 'test@squadplanner.dev',
-  password: 'TestPassword123!',
+  email: 'rudylabor@hotmail.fr',
+  password: 'ruudboy92',
   username: 'testuser',
 }
 

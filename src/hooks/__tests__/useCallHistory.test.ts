@@ -1,16 +1,22 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { act } from '@testing-library/react'
 
-const { mockGetSession, mockFrom } = vi.hoisted(() => ({
-  mockGetSession: vi.fn(),
-  mockFrom: vi.fn(),
-}))
-
-vi.mock('../../lib/supabase', () => ({
-  supabase: {
+const { mockGetSession, mockFrom, mockSupabase } = vi.hoisted(() => {
+  const mockGetSession = vi.fn()
+  const mockFrom = vi.fn()
+  const mockSupabase = {
     auth: { getSession: mockGetSession },
     from: mockFrom,
-  },
+  }
+  return { mockGetSession, mockFrom, mockSupabase }
+})
+
+vi.mock('../../lib/supabaseMinimal', () => ({
+  supabaseMinimal: mockSupabase,
+  supabase: mockSupabase,
+  initSupabase: vi.fn().mockResolvedValue(mockSupabase),
+  isSupabaseReady: vi.fn().mockReturnValue(true),
+  waitForSupabase: vi.fn().mockResolvedValue(mockSupabase),
 }))
 
 import { useCallHistoryStore, formatDuration, formatRelativeTime } from '../useCallHistory'

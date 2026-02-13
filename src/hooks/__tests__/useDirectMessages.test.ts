@@ -1,22 +1,33 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { act } from '@testing-library/react'
 
-const { mockGetSession, mockFrom, mockRpc, mockChannel, mockRemoveChannel } = vi.hoisted(() => ({
-  mockGetSession: vi.fn(),
-  mockFrom: vi.fn(),
-  mockRpc: vi.fn(),
-  mockChannel: vi.fn(),
-  mockRemoveChannel: vi.fn(),
-}))
-
-vi.mock('../../lib/supabase', () => ({
-  supabase: {
+const { mockGetSession, mockFrom, mockRpc, mockChannel, mockRemoveChannel, mockSupabase } = vi.hoisted(() => {
+  const mockGetSession = vi.fn()
+  const mockFrom = vi.fn()
+  const mockRpc = vi.fn()
+  const mockChannel = vi.fn().mockReturnValue({
+    on: vi.fn().mockReturnThis(),
+    subscribe: vi.fn().mockReturnThis(),
+    send: vi.fn(),
+    unsubscribe: vi.fn(),
+  })
+  const mockRemoveChannel = vi.fn()
+  const mockSupabase = {
     auth: { getSession: mockGetSession },
     from: mockFrom,
     rpc: mockRpc,
     channel: mockChannel,
     removeChannel: mockRemoveChannel,
-  },
+  }
+  return { mockGetSession, mockFrom, mockRpc, mockChannel, mockRemoveChannel, mockSupabase }
+})
+
+vi.mock('../../lib/supabaseMinimal', () => ({
+  supabaseMinimal: mockSupabase,
+  supabase: mockSupabase,
+  initSupabase: vi.fn().mockResolvedValue(mockSupabase),
+  isSupabaseReady: vi.fn().mockReturnValue(true),
+  waitForSupabase: vi.fn().mockResolvedValue(mockSupabase),
 }))
 
 vi.mock('../useRingtone', () => ({

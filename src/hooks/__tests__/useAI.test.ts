@@ -1,18 +1,24 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { act } from '@testing-library/react'
 
-const { mockFunctionsInvoke, mockFrom, mockRpc } = vi.hoisted(() => ({
-  mockFunctionsInvoke: vi.fn(),
-  mockFrom: vi.fn(),
-  mockRpc: vi.fn(),
-}))
-
-vi.mock('../../lib/supabase', () => ({
-  supabase: {
+const { mockFunctionsInvoke, mockFrom, mockRpc, mockSupabase } = vi.hoisted(() => {
+  const mockFunctionsInvoke = vi.fn()
+  const mockFrom = vi.fn()
+  const mockRpc = vi.fn()
+  const mockSupabase = {
     functions: { invoke: mockFunctionsInvoke },
     from: mockFrom,
     rpc: mockRpc,
-  },
+  }
+  return { mockFunctionsInvoke, mockFrom, mockRpc, mockSupabase }
+})
+
+vi.mock('../../lib/supabaseMinimal', () => ({
+  supabaseMinimal: mockSupabase,
+  supabase: mockSupabase,
+  initSupabase: vi.fn().mockResolvedValue(mockSupabase),
+  isSupabaseReady: vi.fn().mockReturnValue(true),
+  waitForSupabase: vi.fn().mockResolvedValue(mockSupabase),
 }))
 
 import { useAIStore } from '../useAI'
@@ -108,7 +114,7 @@ describe('useAIStore', () => {
       expect(state.slotSuggestions).toHaveLength(0)
       expect(state.hasSlotHistory).toBe(false)
       expect(state.isLoading).toBe(false)
-      expect(state.error).toBe('Pas assez de donnees pour suggerer des creneaux')
+      expect(state.error).toBe('Pas assez de données pour suggérer des créneaux')
     })
   })
 

@@ -1,16 +1,22 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { act } from '@testing-library/react'
 
-const { mockGetUser, mockFrom } = vi.hoisted(() => ({
-  mockGetUser: vi.fn(),
-  mockFrom: vi.fn(),
-}))
-
-vi.mock('../../lib/supabase', () => ({
-  supabase: {
+const { mockGetUser, mockFrom, mockSupabase } = vi.hoisted(() => {
+  const mockGetUser = vi.fn()
+  const mockFrom = vi.fn()
+  const mockSupabase = {
     auth: { getUser: mockGetUser },
     from: mockFrom,
-  },
+  }
+  return { mockGetUser, mockFrom, mockSupabase }
+})
+
+vi.mock('../../lib/supabaseMinimal', () => ({
+  supabaseMinimal: mockSupabase,
+  supabase: mockSupabase,
+  initSupabase: vi.fn().mockResolvedValue(mockSupabase),
+  isSupabaseReady: vi.fn().mockReturnValue(true),
+  waitForSupabase: vi.fn().mockResolvedValue(mockSupabase),
 }))
 
 import { usePremiumStore, FREE_SQUAD_LIMIT, FREE_HISTORY_DAYS } from '../usePremium'

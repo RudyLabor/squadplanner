@@ -1,22 +1,29 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { renderHook, act } from '@testing-library/react'
 
-const { mockGetSession, mockChannel, mockRemoveChannel } = vi.hoisted(() => ({
-  mockGetSession: vi.fn(),
-  mockChannel: vi.fn().mockReturnValue({
+const { mockGetSession, mockChannel, mockRemoveChannel, mockSupabase } = vi.hoisted(() => {
+  const mockGetSession = vi.fn()
+  const mockChannel = vi.fn().mockReturnValue({
     on: vi.fn().mockReturnThis(),
     subscribe: vi.fn().mockReturnThis(),
     send: vi.fn(),
-  }),
-  mockRemoveChannel: vi.fn(),
-}))
-
-vi.mock('../../lib/supabase', () => ({
-  supabase: {
+    unsubscribe: vi.fn(),
+  })
+  const mockRemoveChannel = vi.fn()
+  const mockSupabase = {
     auth: { getSession: mockGetSession },
     channel: mockChannel,
     removeChannel: mockRemoveChannel,
-  },
+  }
+  return { mockGetSession, mockChannel, mockRemoveChannel, mockSupabase }
+})
+
+vi.mock('../../lib/supabaseMinimal', () => ({
+  supabaseMinimal: mockSupabase,
+  supabase: mockSupabase,
+  initSupabase: vi.fn().mockResolvedValue(mockSupabase),
+  isSupabaseReady: vi.fn().mockReturnValue(true),
+  waitForSupabase: vi.fn().mockResolvedValue(mockSupabase),
 }))
 
 import { useTypingIndicator } from '../useTypingIndicator'
@@ -38,6 +45,7 @@ describe('useTypingIndicator', () => {
       on: vi.fn().mockReturnThis(),
       subscribe: vi.fn().mockReturnThis(),
       send: vi.fn(),
+      unsubscribe: vi.fn(),
     })
   })
 

@@ -1,19 +1,26 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { renderHook, act } from '@testing-library/react'
 
-const { mockGetSession, mockOnAuthStateChange, mockUnsubscribe } = vi.hoisted(() => ({
-  mockGetSession: vi.fn(),
-  mockOnAuthStateChange: vi.fn(),
-  mockUnsubscribe: vi.fn(),
-}))
-
-vi.mock('../../lib/supabase', () => ({
-  supabase: {
+const { mockGetSession, mockOnAuthStateChange, mockUnsubscribe, mockSupabase } = vi.hoisted(() => {
+  const mockGetSession = vi.fn()
+  const mockOnAuthStateChange = vi.fn()
+  const mockUnsubscribe = vi.fn()
+  const mockSupabase = {
     auth: {
       getSession: mockGetSession,
       onAuthStateChange: mockOnAuthStateChange,
+      refreshSession: vi.fn().mockResolvedValue({ data: { session: null } }),
     },
-  },
+  }
+  return { mockGetSession, mockOnAuthStateChange, mockUnsubscribe, mockSupabase }
+})
+
+vi.mock('../../lib/supabaseMinimal', () => ({
+  supabaseMinimal: mockSupabase,
+  supabase: mockSupabase,
+  initSupabase: vi.fn().mockResolvedValue(mockSupabase),
+  isSupabaseReady: vi.fn().mockReturnValue(true),
+  waitForSupabase: vi.fn().mockResolvedValue(mockSupabase),
 }))
 
 // Mock the Toast module used in warning timer
@@ -39,7 +46,7 @@ describe('useSessionExpiry', () => {
       data: { session: null },
     })
     // Pre-load the mocked supabase module so dynamic import() in the hook resolves correctly
-    await import('../../lib/supabase')
+    await import('../../lib/supabaseMinimal')
   })
 
   afterEach(() => {
@@ -90,8 +97,13 @@ describe('useSessionExpiry', () => {
     const { result } = renderHook(() => useSessionExpiry())
     await flushDynamicImport()
 
-    act(() => {
+    // setupExpiryTimer calls refreshSession() which is async
+    await act(async () => {
       authCallback('SIGNED_IN', { expires_at: pastExpiresAt })
+      // Flush the refreshSession promise chain
+      await Promise.resolve()
+      await Promise.resolve()
+      await Promise.resolve()
     })
 
     expect(result.current.isSessionExpired).toBe(true)

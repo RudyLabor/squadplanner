@@ -94,6 +94,7 @@ export const useVoiceChatStore = create<VoiceChatState>((set, get) => ({
       if (!data?.token)
         throw new Error('Token LiveKit non recu. Verifiez la configuration du serveur.')
 
+      // Lazy load LiveKit uniquement quand nécessaire - Performance CRITIQUE
       const { Room, RoomEvent, Track, ConnectionQuality } = await import('livekit-client')
       const room = new Room({
         adaptiveStream: true,

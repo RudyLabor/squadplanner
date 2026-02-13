@@ -1,5 +1,8 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { act } from '@testing-library/react'
+// import { ConnectionQuality } from 'livekit-client' 
+// DISABLED in test to avoid bundle bloat - tests are excluded from production
+// Tests can import statically since they don't affect production bundle
 import { ConnectionQuality } from 'livekit-client'
 
 import {

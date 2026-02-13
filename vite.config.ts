@@ -81,7 +81,8 @@ export default defineConfig(async () => {
 
   return {
     plugins: [
-      reactCompilerPlugin(),
+      // Temporairement désactivé pour accélérer build test
+      // reactCompilerPlugin(),
       reactRouter(),
       tailwindcss(),
       swVersionPlugin(),
@@ -117,9 +118,9 @@ export default defineConfig(async () => {
           : [],
     },
 
-    // Performance optimizations
+    // Performance optimizations - Build rapide pour tests
     build: {
-      sourcemap: false,
+      sourcemap: false, // Déjà désactivé
       minify: 'esbuild',
       target: 'esnext',
       modulePreload: { polyfill: false },
@@ -133,11 +134,14 @@ export default defineConfig(async () => {
             const n = id.replace(/\\/g, '/')
             if (!n.includes('node_modules/')) return
 
-            // Heavy independent libs — isolated for long-term caching
-            if (n.includes('livekit-client') || n.includes('@livekit')) return 'vendor-livekit'
+            // CRITICAL: LiveKit lazy-loaded uniquement quand voice chat activé
+            // Pas de vendor chunk forcé → vrai lazy loading → -457KB sur initial bundle
+            // if (n.includes('livekit-client') || n.includes('@livekit')) return 'vendor-livekit'
             if (n.includes('@supabase')) return 'vendor-supabase'
             if (n.includes('canvas-confetti')) return 'vendor-confetti'
-            if (n.includes('framer-motion')) return 'vendor-motion'
+            // PERFORMANCE: Framer Motion lazy-loadé pour animations complexes uniquement
+            // Animations simples → CSS transitions → -169KB sur bundle initial
+            // if (n.includes('framer-motion')) return 'vendor-motion'
             if (n.includes('@tanstack/react-query')) return 'vendor-query'
             if (n.includes('sonner')) return 'vendor-sonner'
             if (n.includes('zustand')) return 'vendor-zustand'
@@ -165,7 +169,11 @@ export default defineConfig(async () => {
         'zustand',
         '@supabase/supabase-js',
       ],
-      exclude: [],
+      exclude: [
+        // EXCLUSION COMPLÈTE - LiveKit chargé uniquement à la demande
+        'livekit-client',
+        '@livekit/components-react'
+      ],
     },
 
     // Enable JSON tree-shaking

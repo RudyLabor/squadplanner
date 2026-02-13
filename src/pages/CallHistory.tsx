@@ -7,7 +7,8 @@ import { useNavigate } from 'react-router'
 import { Card, Button } from '../components/ui'
 import { MobilePageHeader } from '../components/layout/MobilePageHeader'
 import { useCallHistoryStore, type CallType } from '../hooks/useCallHistory'
-import { useVoiceCallStore } from '../hooks/useVoiceCall'
+// LAZY LOAD: useVoiceCall importé uniquement si call button cliqué  
+// import { useVoiceCallStore } from '../hooks/useVoiceCall'
 import { CallHistoryList } from './call-history/CallHistoryList'
 
 function CallToast({
@@ -51,7 +52,8 @@ export function CallHistory() {
   const navigate = useNavigate()
   const { isLoading, error, filter, fetchCallHistory, setFilter, getFilteredCalls } =
     useCallHistoryStore()
-  const { startCall, status: callStatus } = useVoiceCallStore()
+  // LAZY LOAD: useVoiceCall sera importé dans handleCall
+  // const { startCall, status: callStatus } = useVoiceCallStore()
 
   const [showToast, setShowToast] = useState(false)
   const [toastMessage, setToastMessage] = useState('')
@@ -67,6 +69,10 @@ export function CallHistory() {
     contactName: string,
     contactAvatar: string | null
   ) => {
+    // LAZY LOAD: Import voice call uniquement au clic d'appel
+    const { useVoiceCallStore } = await import('../hooks/useVoiceCall')
+    const { startCall, status: callStatus } = useVoiceCallStore.getState()
+    
     if (callStatus !== 'idle') return
     setToastMessage(`📞 Appel vers ${contactName}...`)
     setShowToast(true)

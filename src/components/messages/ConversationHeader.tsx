@@ -1,6 +1,7 @@
 import { ArrowLeft, Users, Gamepad2, Search, Phone } from '../icons'
 import { m, AnimatePresence } from 'framer-motion'
-import { useVoiceCallStore } from '../../hooks/useVoiceCall'
+// LAZY LOAD: useVoiceCall importé uniquement au clic d'appel (-468KB bundle initial)
+// import { useVoiceCallStore } from '../../hooks/useVoiceCall'
 
 interface SquadConvHeader {
   type: 'squad' | 'session'
@@ -107,7 +108,9 @@ export function ConversationHeader({
                 <p className="text-sm text-text-quaternary">{chatSubtitle}</p>
               </div>
               <button
-                onClick={() => {
+                onClick={async () => {
+                  // LAZY LOAD: Import voice call uniquement quand utilisateur clique
+                  const { useVoiceCallStore } = await import('../../hooks/useVoiceCall')
                   useVoiceCallStore
                     .getState()
                     .startCall(

@@ -2,7 +2,8 @@ import { memo } from 'react'
 import { Users, MessageCircle, Phone, Crown, TrendingUp, UserPlus } from '../icons'
 import { useNavigate } from 'react-router'
 import { Button, Card, CardContent } from '../ui'
-import { useVoiceCallStore } from '../../hooks/useVoiceCall'
+// LAZY LOAD: useVoiceCall importé uniquement si call button cliqué
+// import { useVoiceCallStore } from '../../hooks/useVoiceCall'
 
 interface MemberProfile {
   username?: string
@@ -66,13 +67,17 @@ const MemberCard = memo(function MemberCard({
   currentUserId?: string
 }) {
   const navigate = useNavigate()
-  const { startCall } = useVoiceCallStore()
+  // LAZY LOAD: useVoiceCall sera importé dans handleCall
   const reliability = member.profiles?.reliability_score ?? 100
   const isCurrentUser = member.user_id === currentUserId
 
   const handleCall = async (e: React.MouseEvent) => {
     e.stopPropagation()
     if (!member.profiles?.username) return
+    
+    // LAZY LOAD: Import voice call uniquement au clic d'appel
+    const { useVoiceCallStore } = await import('../../hooks/useVoiceCall')
+    const { startCall } = useVoiceCallStore.getState()
     await startCall(member.user_id, member.profiles.username, member.profiles.avatar_url)
   }
 

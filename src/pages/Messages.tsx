@@ -22,6 +22,7 @@ import { ConversationHeader } from '../components/messages/ConversationHeader'
 import { MessageThread } from '../components/messages/MessageThread'
 import { MessageComposer } from '../components/messages/MessageComposer'
 import { MessageToast } from '../components/messages/MessageToast'
+import { ThreadView } from '../components/ThreadView'
 
 export function Messages() {
   const { user } = useAuthStore()
@@ -89,6 +90,7 @@ export function Messages() {
   const [forwardMessage, setForwardMessage] = useState<{ content: string; sender: string } | null>(
     null
   )
+  const [openThreadId, setOpenThreadId] = useState<string | null>(null)
   const [toast, setToast] = useState<{
     message: string
     variant: 'success' | 'error'
@@ -202,9 +204,10 @@ export function Messages() {
   ])
 
   const currentMessages = activeSquadConv ? squadMessages : dmMessages
+  const messageCount = currentMessages.length
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
-  }, [currentMessages])
+  }, [messageCount])
 
   const hasEnteredChatRef = useRef(false)
   useEffect(() => {
@@ -294,6 +297,9 @@ export function Messages() {
   }, [])
   const handleForwardMessage = useCallback((msg: { content: string; sender: string }) => {
     setForwardMessage(msg)
+  }, [])
+  const handleOpenThread = useCallback((messageId: string) => {
+    setOpenThreadId(messageId)
   }, [])
 
   const handleCreatePoll = useCallback(
@@ -519,6 +525,7 @@ export function Messages() {
         onPinMessage={handlePinMessage}
         onReplyMessage={handleReply}
         onForwardMessage={handleForwardMessage}
+        onThreadMessage={isSquadChat ? handleOpenThread : undefined}
         onPollVote={handlePollVote}
         onScrollToMessage={scrollToMessage}
         onScroll={handleScroll}
@@ -562,6 +569,13 @@ export function Messages() {
         messageContent={forwardMessage?.content || ''}
         senderUsername={forwardMessage?.sender || ''}
       />
+      {isSquadChat && (
+        <ThreadView
+          threadId={openThreadId || ''}
+          isOpen={!!openThreadId}
+          onClose={() => setOpenThreadId(null)}
+        />
+      )}
     </div>
   )
 

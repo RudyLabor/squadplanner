@@ -5,6 +5,7 @@ import { MessageReactions } from '../MessageReactions'
 import { MessageReplyPreview } from '../MessageReplyPreview'
 import { MessageContent } from '../MessageContent'
 import { RoleBadge } from '../RoleBadge'
+import { ThreadIndicator } from '../ThreadView'
 import { formatTime } from './utils'
 
 function SystemMessage({
@@ -46,6 +47,8 @@ export interface MessageBubbleMessage {
   reply_to_id?: string | null
   read_by?: string[]
   read_at?: string | null
+  thread_reply_count?: number
+  thread_last_reply_at?: string | null
 }
 
 export interface ReplyToData {
@@ -69,10 +72,36 @@ interface Props {
   onPin: (id: string, pinned: boolean) => void
   onReply: (m: { id: string; content: string; sender: string }) => void
   onForward: (m: { content: string; sender: string }) => void
+  onThread?: (id: string) => void
   onPollVote: (id: string, idx: number) => void
   replyToMessage?: ReplyToData | null
   onScrollToMessage?: (id: string) => void
   senderRole?: string
+}
+
+function propsAreEqual(prev: Props, next: Props) {
+  // Only re-render when visually-relevant fields change
+  // Compare read_by by length to avoid re-renders from same-content new arrays
+  const pm = prev.message
+  const nm = next.message
+  return (
+    pm.id === nm.id &&
+    pm.content === nm.content &&
+    pm.is_pinned === nm.is_pinned &&
+    pm.edited_at === nm.edited_at &&
+    pm.sender_id === nm.sender_id &&
+    pm.reply_to_id === nm.reply_to_id &&
+    pm.thread_reply_count === nm.thread_reply_count &&
+    pm.is_system_message === nm.is_system_message &&
+    (pm.read_by?.length ?? 0) === (nm.read_by?.length ?? 0) &&
+    pm.read_at === nm.read_at &&
+    prev.isOwn === next.isOwn &&
+    prev.showAvatar === next.showAvatar &&
+    prev.showName === next.showName &&
+    prev.isSquadChat === next.isSquadChat &&
+    prev.isAdmin === next.isAdmin &&
+    prev.senderRole === next.senderRole
+  )
 }
 
 export const MessageBubble = memo(function MessageBubble({
@@ -88,6 +117,7 @@ export const MessageBubble = memo(function MessageBubble({
   onPin,
   onReply,
   onForward,
+  onThread,
   onPollVote,
   replyToMessage,
   onScrollToMessage,
@@ -108,6 +138,7 @@ export const MessageBubble = memo(function MessageBubble({
     onPin: () => onPin(message.id, !message.is_pinned),
     onReply: () => onReply({ id: message.id, content, sender }),
     onForward: () => onForward({ content, sender }),
+    onThread: onThread ? () => onThread(message.id) : undefined,
   }
 
   return (
@@ -185,8 +216,15 @@ export const MessageBubble = memo(function MessageBubble({
               ))}
           </span>
           {isSquadChat && <MessageReactions messageId={message.id} isOwnMessage={isOwn} />}
+          {isSquadChat && onThread && (
+            <ThreadIndicator
+              replyCount={message.thread_reply_count || 0}
+              lastReplyAt={message.thread_last_reply_at}
+              onClick={() => onThread(message.id)}
+            />
+          )}
         </div>
       </div>
     </div>
   )
-})
+}, propsAreEqual)

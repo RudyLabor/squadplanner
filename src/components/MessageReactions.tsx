@@ -1,5 +1,5 @@
 
-import { useState, useEffect, useRef, useCallback } from 'react'
+import { useState, useEffect, useRef, useCallback, memo } from 'react'
 import { Plus } from './icons'
 import { supabaseMinimal as supabase } from '../lib/supabaseMinimal'
 import { useAuthStore } from '../hooks/useAuth'
@@ -35,7 +35,7 @@ interface MessageReactionsProps {
  * which caused performance issues on mobile (blinking + page freeze).
  * Reactions now fetch once on mount and update optimistically on toggle.
  */
-export function MessageReactions({
+export const MessageReactions = memo(function MessageReactions({
   messageId,
   isOwnMessage = false,
 }: MessageReactionsProps) {
@@ -239,6 +239,6 @@ export function MessageReactions({
       </div>
     </div>
   )
-}
+})
 
 export default MessageReactions

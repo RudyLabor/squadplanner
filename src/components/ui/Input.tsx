@@ -173,7 +173,7 @@ export const Input = forwardRef<HTMLInputElement | HTMLTextAreaElement, InputPro
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="text-text-quaternary hover:text-text-tertiary transition-colors"
+                  className="text-text-quaternary hover:text-text-tertiary transition-colors touch-target-sm flex items-center justify-center"
                   aria-label={showPassword ? 'Masquer le mot de passe' : 'Afficher le mot de passe'}
                 >
                   {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}

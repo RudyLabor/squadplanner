@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef, useCallback } from 'react'
-import { m, AnimatePresence } from 'framer-motion'
+import { AnimatePresence, m } from 'framer-motion'
 import { Plus } from './icons'
 import { supabase } from '../lib/supabase'
 import { useAuthStore } from '../hooks/useAuth'
@@ -27,18 +27,19 @@ interface MessageReactionsProps {
   messageId: string
   /** Whether the message is from the current user (for positioning) */
   isOwnMessage?: boolean
-  /** Callback when reactions change */
-  onReactionsChange?: (reactions: MessageReaction[]) => void
 }
 
 /**
  * Component showing emoji reactions on a message
  * Supports adding/removing reactions, grouping by emoji, and showing picker
+ *
+ * NOTE: Realtime subscription removed to prevent N channels per N messages
+ * which caused performance issues on mobile (blinking + page freeze).
+ * Reactions now fetch once on mount and update optimistically on toggle.
  */
 export function MessageReactions({
   messageId,
   isOwnMessage = false,
-  onReactionsChange,
 }: MessageReactionsProps) {
   const { user } = useAuthStore()
   const [reactions, setReactions] = useState<MessageReaction[]>([])
@@ -48,9 +49,11 @@ export function MessageReactions({
   const longPressTimeout = useRef<ReturnType<typeof setTimeout> | null>(null)
   const [isLongPressing, setIsLongPressing] = useState(false)
 
-  // Fetch reactions on mount and subscribe to changes
+  // Fetch reactions once on mount (no realtime subscription per message)
   useEffect(() => {
     if (!messageId) return
+
+    let cancelled = false
 
     const fetchReactions = async () => {
       try {
@@ -60,9 +63,8 @@ export function MessageReactions({
           .eq('message_id', messageId)
           .order('created_at', { ascending: true })
 
-        if (!error && data) {
+        if (!error && data && !cancelled) {
           setReactions(data)
-          onReactionsChange?.(data)
         }
       } catch {
         // Table might not exist yet - silently ignore
@@ -71,39 +73,10 @@ export function MessageReactions({
 
     fetchReactions()
 
-    // Subscribe to realtime changes
-    const channel = supabase
-      .channel(`message_reactions:${messageId}`)
-      .on(
-        'postgres_changes',
-        {
-          event: '*',
-          schema: 'public',
-          table: 'message_reactions',
-          filter: `message_id=eq.${messageId}`,
-        },
-        (payload) => {
-          if (payload.eventType === 'INSERT') {
-            setReactions((prev) => {
-              const newReactions = [...prev, payload.new as MessageReaction]
-              onReactionsChange?.(newReactions)
-              return newReactions
-            })
-          } else if (payload.eventType === 'DELETE') {
-            setReactions((prev) => {
-              const newReactions = prev.filter((r) => r.id !== (payload.old as MessageReaction).id)
-              onReactionsChange?.(newReactions)
-              return newReactions
-            })
-          }
-        }
-      )
-      .subscribe()
-
     return () => {
-      supabase.removeChannel(channel)
+      cancelled = true
     }
-  }, [messageId, onReactionsChange])
+  }, [messageId])
 
   // Group reactions by emoji
   const groupedReactions: GroupedReaction[] = REACTION_EMOJIS.map((emoji) => {
@@ -116,41 +89,65 @@ export function MessageReactions({
     }
   }).filter((g) => g.count > 0)
 
-  // Toggle reaction (add or remove)
+  // Toggle reaction (add or remove) with optimistic update
   const toggleReaction = useCallback(
     async (emoji: ReactionEmoji) => {
       if (!user?.id || isLoading) return
 
       setIsLoading(true)
 
-      try {
-        // Check if user already reacted with this emoji
-        const existingReaction = reactions.find((r) => r.user_id === user.id && r.emoji === emoji)
+      const existingReaction = reactions.find((r) => r.user_id === user.id && r.emoji === emoji)
 
+      // Optimistic update
+      if (existingReaction) {
+        setReactions((prev) => prev.filter((r) => r.id !== existingReaction.id))
+      } else {
+        const optimistic: MessageReaction = {
+          id: `temp-${Date.now()}`,
+          message_id: messageId,
+          user_id: user.id,
+          emoji,
+          created_at: new Date().toISOString(),
+        }
+        setReactions((prev) => [...prev, optimistic])
+      }
+
+      try {
         if (existingReaction) {
-          // Remove reaction
           const { error } = await supabase
             .from('message_reactions')
             .delete()
             .match({ message_id: messageId, user_id: user.id, emoji })
 
           if (error) {
-            console.error('Error removing reaction:', error)
+            // Rollback optimistic update
+            setReactions((prev) => [...prev, existingReaction])
           }
         } else {
-          // Add reaction
-          const { error } = await supabase.from('message_reactions').insert({
-            message_id: messageId,
-            user_id: user.id,
-            emoji,
-          })
+          const { data, error } = await supabase
+            .from('message_reactions')
+            .insert({ message_id: messageId, user_id: user.id, emoji })
+            .select()
+            .single()
 
           if (error) {
-            console.error('Error adding reaction:', error)
+            // Rollback optimistic update
+            setReactions((prev) => prev.filter((r) => !r.id.startsWith('temp-')))
+          } else if (data) {
+            // Replace temp with real data
+            setReactions((prev) =>
+              prev.map((r) => (r.id.startsWith('temp-') && r.emoji === emoji ? data : r))
+            )
           }
         }
-      } catch (error) {
-        console.error('Error toggling reaction:', error)
+      } catch {
+        // Refetch on error to get consistent state
+        const { data } = await supabase
+          .from('message_reactions')
+          .select('*')
+          .eq('message_id', messageId)
+          .order('created_at', { ascending: true })
+        if (data) setReactions(data)
       } finally {
         setIsLoading(false)
       }
@@ -190,12 +187,12 @@ export function MessageReactions({
         isOwnMessage ? 'justify-end' : 'justify-start'
       }`}
     >
-      {/* Existing reactions */}
+      {/* Existing reactions — no initial animation to prevent blinking */}
       <AnimatePresence mode="popLayout">
         {groupedReactions.map(({ emoji, count, hasCurrentUser }) => (
           <m.button
             key={emoji}
-            initial={{ opacity: 0, scale: 0 }}
+            initial={false}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0 }}
             transition={{ type: 'spring', stiffness: 500, damping: 25 }}
@@ -203,12 +200,12 @@ export function MessageReactions({
             whileTap={{ scale: 0.9 }}
             onClick={() => toggleReaction(emoji as ReactionEmoji)}
             disabled={isLoading}
-            className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-sm transition-interactive ${
+            className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-sm transition-colors ${
               hasCurrentUser
                 ? 'bg-success-15 border border-success/30 text-success'
                 : 'bg-border-subtle border border-border-hover text-text-secondary hover:bg-border-hover'
             } ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
-            aria-label={`R\u00e9action ${emoji}, ${count} ${count === 1 ? 'personne' : 'personnes'}${hasCurrentUser ? ', tu as r\u00e9agi' : ''}`}
+            aria-label={`Réaction ${emoji}, ${count} ${count === 1 ? 'personne' : 'personnes'}${hasCurrentUser ? ', tu as réagi' : ''}`}
           >
             <span className="text-base leading-none">{emoji}</span>
             <span
@@ -220,29 +217,25 @@ export function MessageReactions({
         ))}
       </AnimatePresence>
 
-      {/* Add reaction button - shown on hover/touch */}
+      {/* Add reaction button — visible on hover (desktop) or always on mobile */}
       <div
         className="relative group"
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
         onTouchCancel={handleTouchEnd}
       >
-        <m.button
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.9 }}
+        <button
           onClick={() => setIsPickerOpen(!isPickerOpen)}
-          className={`w-7 h-7 flex items-center justify-center rounded-full transition-interactive ${
+          className={`w-7 h-7 flex items-center justify-center rounded-full transition-colors ${
             isPickerOpen
               ? 'bg-success-15 border border-success/30'
               : 'bg-border-subtle border border-border-hover opacity-0 group-hover:opacity-100 hover:bg-border-hover'
           } ${isLongPressing ? 'scale-110' : ''}`}
-          aria-label="Ajouter une r\u00e9action"
+          aria-label="Ajouter une réaction"
           aria-expanded={isPickerOpen}
         >
           <Plus className={`w-4 h-4 ${isPickerOpen ? 'text-success' : 'text-text-secondary'}`} />
-        </m.button>
+        </button>
 
         {/* Reaction picker */}
         <ReactionPicker

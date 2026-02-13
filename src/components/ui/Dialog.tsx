@@ -159,7 +159,7 @@ export function Dialog({
             aria-describedby={description ? descId : undefined}
             className={`relative z-10 w-full mx-4 bg-bg-elevated border border-border-default shadow-modal flex flex-col ${
               size === 'fullscreen'
-                ? sizeClasses.fullscreen
+                ? `${sizeClasses.fullscreen} safe-area-pt safe-area-pb`
                 : `${sizeClasses[size]} rounded-2xl max-h-[85vh]`
             }`}
           >

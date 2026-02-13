@@ -136,7 +136,7 @@ export function Settings() {
   const outputDevices = audioDevices.filter((d) => d.kind === 'audiooutput')
   const handleSignOut = async () => {
     await signOut()
-    navigate('/')
+    // signOut() already redirects via window.location.replace('/')
   }
 
   const handleExportData = async () => {

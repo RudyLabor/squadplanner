@@ -66,7 +66,7 @@ interface ProfileStatsProps {
 }
 
 export function ProfileStats({ profile, profileReady }: ProfileStatsProps) {
-  const reliabilityScore = profile?.reliability_score ?? 100
+  const reliabilityScore = profile?.reliability_score ?? 0
   const tier = getTier(reliabilityScore)
   const reliabilityColor = tier.color
 
@@ -92,7 +92,7 @@ export function ProfileStats({ profile, profileReady }: ProfileStatsProps) {
     {
       icon: Target,
       label: 'Niveau',
-      value: profile?.level ?? 1,
+      value: profile?.level || 1,
       color: 'var(--color-primary)',
       bgColor: 'var(--color-primary-15)',
     },

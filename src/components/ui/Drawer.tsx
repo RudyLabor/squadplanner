@@ -19,7 +19,7 @@ export function Drawer({ isOpen, onClose, children, title, className = '' }: Dra
 
   const handleDragEnd = useCallback(
     (_: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
-      if (info.velocity.y > 300 || info.offset.y > 150) {
+      if (info.velocity.y > 300 || info.offset.y > 100) {
         onClose()
       }
     },

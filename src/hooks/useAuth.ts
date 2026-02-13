@@ -1,5 +1,6 @@
 import { create } from 'zustand'
 import { supabase, initSupabase } from '../lib/supabase'
+import { queryClient } from '../lib/queryClient'
 import type { User, Session } from '@supabase/supabase-js'
 import type { Profile } from '../types/database'
 import { updateDailyStreak } from './useAuthStreak'
@@ -164,23 +165,33 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 
   signOut: async () => {
     try {
+      // 1. Clear React Query cache first to prevent stale data restoring the session
+      queryClient.clear()
+
+      // 2. Reset Zustand state immediately
+      set({ user: null, session: null, profile: null, isLoading: true })
+
+      // 3. Leave voice party (non-blocking)
       try {
         const { forceLeaveVoiceParty } = await import('./useVoiceChat')
         await forceLeaveVoiceParty()
       } catch {
         /* voice module may not be loaded */
       }
-      // Reset squads store to prevent stale data on next sign-in
+
+      // 4. Reset squads store
       try {
         const { useSquadsStore } = await import('./useSquads')
         useSquadsStore.getState().reset()
       } catch {
         /* squads module may not be loaded */
       }
-      set({ user: null, session: null, profile: null, isLoading: true })
+
+      // 5. Sign out from Supabase
       const { error } = await supabase.auth.signOut({ scope: 'global' })
       if (error) console.warn('Sign out error:', error)
 
+      // 6. Clear all auth-related storage
       const keysToRemove = Object.keys(localStorage).filter(
         (key) => key.startsWith('sb-') || key.includes('supabase') || key.includes('auth-token')
       )
@@ -190,12 +201,14 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       )
       sessionKeysToRemove.forEach((key) => sessionStorage.removeItem(key))
 
+      // 7. Final state update and redirect
       set({ isLoading: false })
-      window.location.href = '/'
+      window.location.replace('/')
     } catch (error) {
       console.warn('Sign out error:', error)
+      queryClient.clear()
       set({ user: null, session: null, profile: null, isLoading: false })
-      window.location.href = '/'
+      window.location.replace('/')
     }
   },
 

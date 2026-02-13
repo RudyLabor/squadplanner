@@ -128,8 +128,7 @@ export function Tooltip({
         <button
           type="button"
           aria-label="Aide"
-          className="inline-flex items-center justify-center rounded-full text-text-tertiary hover:text-text-secondary hover:bg-surface-card transition-colors focus-visible:outline-2 focus-visible:outline-primary"
-          style={{ width: helpIconSize + 6, height: helpIconSize + 6 }}
+          className="inline-flex items-center justify-center rounded-full text-text-tertiary hover:text-text-secondary hover:bg-surface-card transition-colors focus-visible:outline-2 focus-visible:outline-primary touch-target"
           tabIndex={0}
         >
           <HelpCircle style={{ width: helpIconSize, height: helpIconSize }} />

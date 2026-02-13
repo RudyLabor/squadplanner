@@ -42,39 +42,43 @@ const haptic = {
   },
 }
 
-// Success toasts - for completed actions
+// Success toasts - for completed actions (deduplicated by message)
 export const showSuccess = (message: string) => {
   haptic.success()
   toast.success(message, {
+    id: `success-${message}`,
     duration: 4000,
     icon: createElement(AnimatedCheckmark, { size: 20 }),
     style: { '--toast-duration': '4s' } as React.CSSProperties,
   })
 }
 
-// Error toasts - for API errors, failures
+// Error toasts - for API errors, failures (deduplicated by message)
 export const showError = (message: string) => {
   haptic.error()
   toast.error(message, {
+    id: `error-${message}`,
     duration: 5000,
     icon: createElement(AnimatedXMark, { size: 20 }),
     style: { '--toast-duration': '5s' } as React.CSSProperties,
   })
 }
 
-// Warning toasts - for important notices
+// Warning toasts - for important notices (deduplicated by message)
 export const showWarning = (message: string) => {
   haptic.warning()
   toast.warning(message, {
+    id: `warning-${message}`,
     duration: 4000,
     icon: createElement(AnimatedWarning, { size: 20 }),
     style: { '--toast-duration': '4s' } as React.CSSProperties,
   })
 }
 
-// Info toasts - for general information
+// Info toasts - for general information (deduplicated by message)
 export const showInfo = (message: string) => {
   toast.info(message, {
+    id: `info-${message}`,
     duration: 3000,
     icon: createElement(AnimatedInfo, { size: 20 }),
     style: { '--toast-duration': '3s' } as React.CSSProperties,

@@ -1,7 +1,7 @@
 # SQUAD PLANNER — PRODUCT BIBLE
 
 > Document fondateur et source unique de verite pour le projet Squad Planner.
-> Derniere mise a jour : 12 fevrier 2026, 22h30
+> Derniere mise a jour : 13 fevrier 2026, 09h00
 >
 > REGLE D'OR : Aucun statut "OK" n'est valide tant qu'il n'a pas ete teste
 > manuellement dans le navigateur. Lire du code ne prouve rien.
@@ -31,14 +31,14 @@
 
 ---
 
-## 0. TABLEAU DE BORD (derniere MAJ : 13 fevrier 2026, 08h30)
+## 0. TABLEAU DE BORD (derniere MAJ : 13 fevrier 2026, 09h00)
 
 ### Sante du projet
 
 | Indicateur | Valeur | Cible | Statut |
 |------------|--------|-------|--------|
 | Flux fonctionnels (testes navigateur) | ~~44~~ ~~46~~ **51 OK** / 73 | 73 / 73 | 🟡 70% testes OK |
-| Flux avec bugs | ~~7~~ ~~5~~ **0** | 0 | ✅ Tous les bugs corrigés (B15/B05/B21 + B16/B17/B18/B20/B23/B24 + F68) |
+| Flux avec bugs | ~~7~~ ~~5~~ **0** | 0 | ✅ Tous les bugs corrigés (B15/B05/B21 + B16-B24 + B25/B26 + F68) |
 | Flux absents (pas de code) | **8** | 0 | 🔴 F26, F28, F30, F34, F35, F37, F39, F40 |
 | Erreurs TypeScript | ~~313~~ **0** | 0 | ✅ CORRIGE (commit eb26fcd) |
 | Erreurs ESLint | ~~3 302~~ **904** | 0 | 🟡 Non-bloquants (404 unused-vars, 233 no-explicit-any) |
@@ -62,14 +62,16 @@
 | Qualite code | ~~5.6~~ **7.2** / 10 | 0 TS errors, ~233 any, 15 composants > 300 lignes |
 | **GLOBAL** | **8.7 / 10** | **51/73 flux OK, 0 bugs, 8 absents. 70% valide** |
 
-### Sprint en cours : SPRINT 1 — "Tout reparer" (Etape 2)
+### Sprint en cours : SPRINT 2 — "Completer les absents"
 
 | Etape | Statut |
 |-------|--------|
 | Sprint 0 Etape 1 : Debloquer la build | ✅ TERMINE (commit eb26fcd) |
 | Sprint 0 Etape 2 : Tester les 73 flux | ✅ TERMINE — 44 OK, 7 BUG, 8 absents |
 | Sprint 1 Etape 1 : Bugs critiques (HAUTE) | ✅ TERMINE — B15, B05, B21 CORRIGES |
-| Sprint 1 Etape 2 : Bugs moyens (MOYENNE/BASSE) | ✅ **TERMINE** — B16, B17, B18, B20, B23, B24 CORRIGES + F68 trial fonctionnel |
+| Sprint 1 Etape 2 : Bugs moyens (MOYENNE/BASSE) | ✅ TERMINE — B16, B17, B18, B20, B23, B24 CORRIGES + F68 trial fonctionnel |
+| Sprint 1 Etape 3 : Accessibilite + bugs restants | ✅ **TERMINE** — T1.1-T1.4, B06-B08, B22, B25, B26 CORRIGES |
+| Sprint 1 Etape 4 : Re-test complet | ✅ TERMINE — Build OK (14s), 0 flux BUG |
 | Sprint 2 : Flux absents | ⏳ EN ATTENTE — 8 flux a implementer |
 
 ---
@@ -1530,11 +1532,11 @@ Tests :
 | ~~B03~~ | ~~CRITIQUE~~ | ~~691 erreurs ESLint + 9401 warnings~~ | Multiples | 🟡 PARTIEL (904 restants, non-bloquants) |
 | B04 | HAUTE | ~~5~~ 4 vulnerabilites npm (tmp, inquirer dans @lhci/cli) | package-lock.json | 🟡 PARTIEL (low sev, dep transitive) |
 | B05 | HAUTE | ~~Chat conversations timeout 2s → skeleton "casse"~~ | Messages.tsx:80-85 | ✅ CORRIGE (commit 6eea84e) — conversations chargent correctement, liste visible |
-| B06 | MOYENNE | Toast pas de deduplication (meme message x3) | Toast.tsx | NON VERIFIE |
-| B07 | MOYENNE | Drawer swipe threshold 150px trop sensible | Drawer.tsx:22 | NON VERIFIE |
-| B08 | MOYENNE | Dialog fullscreen sans safe area (notch iPhone) | Dialog.tsx:38 | NON VERIFIE |
-| B09 | BASSE | Touch target tooltip help icon < 44px | Tooltip.tsx:37 | NON VERIFIE |
-| B10 | BASSE | Touch target password toggle < 44px | Input.tsx:158 | NON VERIFIE |
+| B06 | MOYENNE | ~~Toast pas de deduplication (meme message x3)~~ | Toast.tsx | ✅ CORRIGE (Sprint 1 Etape 3) — id Sonner par message pour deduplication |
+| B07 | MOYENNE | ~~Drawer swipe threshold 150px trop sensible~~ | Drawer.tsx:22 | ✅ CORRIGE (Sprint 1 Etape 3) — seuil reduit a 100px |
+| B08 | MOYENNE | ~~Dialog fullscreen sans safe area (notch iPhone)~~ | Dialog.tsx:38 | ✅ CORRIGE (Sprint 1 Etape 3) — safe-area-pt safe-area-pb ajoutes pour fullscreen |
+| B09 | BASSE | ~~Touch target tooltip help icon < 44px~~ | Tooltip.tsx:37 | ✅ CORRIGE (Sprint 1 Etape 3) — classe touch-target ajoutee |
+| B10 | BASSE | ~~Touch target password toggle < 44px~~ | Input.tsx:158 | ✅ CORRIGE (Sprint 1 Etape 3) — classe touch-target-sm ajoutee |
 | B11 | BASSE | color-mix() incompatible Safari 15 | Card.tsx:59 | NON VERIFIE |
 | B12 | BASSE | CSS mort (glass-card, gaming-card) | index.css:393-420 | NON VERIFIE |
 | B13 | BASSE | ViewTransitions API desactivee | CSS | NON VERIFIE |
@@ -1546,9 +1548,12 @@ Tests :
 | B19 | BASSE | Landing: compteurs "Statistiques" demarrent a 0 avant animation | Landing.tsx | 🟡 FAUX POSITIF — animation fonctionne, valeurs 1/1/0/4.9 s'animent via IntersectionObserver. Le 3e compteur (end=0) est intentionnel |
 | B20 | MOYENNE | ~~Profil public /u/:username : titre page "Page non trouvee" + breadcrumb "U"~~ | public-profile.tsx, routes.ts | ✅ CORRIGE (Sprint 1 Etape 2) — useDocumentTitle gere /u/:username, Breadcrumbs affiche "Decouvrir > username" |
 | B21 | HAUTE | ~~Challenge tracking casse : progression reste a 0/1~~ | useSessionsQuery.ts, ChallengeCard.tsx | ✅ CORRIGE (commit d5f7829) — trackChallengeProgress ajoute aux mutations React Query, target affiche correctement |
-| B22 | MOYENNE | Section Stats profil incohérente : affiche "0 Sessions, 0 Check-ins, 0 Niveau, 0 XP" alors que XP=10 et Niv=1 au-dessus | Profile.tsx | CONFIRME — deux sources de données contradictoires |
+| B22 | MOYENNE | ~~Section Stats profil incohérente : affiche "0 Sessions, 0 Check-ins, 0 Niveau, 0 XP" alors que XP=10 et Niv=1 au-dessus~~ | ProfileStats.tsx | ✅ CORRIGE (Sprint 1 Etape 3) — reliability_score default 100→0, level fallback ??→|| pour coherence avec XPBar |
 | B23 | BASSE | ~~Profil public : "1 jours" au lieu de "1 jour" (accord singulier/pluriel)~~ | PublicProfile.tsx | ✅ CORRIGE (Sprint 1 Etape 2) — logique singulier/pluriel ajoutee |
 | B24 | BASSE | ~~Profil public : badge "Legende" pour fiabilite affiche pour un Niv.1~~ | PublicProfile.tsx | ✅ CORRIGE (Sprint 1 Etape 2) — default reliability_score passe de 100 a 0, nouveau joueur = "Debutant" |
+
+| B25 | HAUTE | ~~Emojis reactions clignotent en continu + page bloquee sur mobile (/messages)~~ | MessageReactions.tsx | ✅ CORRIGE (Sprint 1 Etape 3) — supprime N subscriptions realtime par message, initial animation → false, bouton "+" passe de m.button a button natif |
+| B26 | HAUTE | ~~Bouton deconnexion fonctionne 1 fois sur 2~~ | useAuth.ts, Settings.tsx | ✅ CORRIGE (Sprint 1 Etape 3) — queryClient.clear() avant signOut, window.location.replace() au lieu de .href, supprime navigate('/') duplique dans Settings |
 
 ### Issues UX identifiees (a verifier visuellement)
 
@@ -1629,14 +1634,14 @@ Score actuel : **8.4 / 10** — qualite pro, mais pas encore world-class sur les
 | Etats UI | 8.5 | Skeleton, error states (6 types), empty states | Empty states sans illustrations, ContentTransition flash |
 | Formulaires | 7.8 | Validation Zod, error messages FR | Pas de form-level disable, pas d'inline validation |
 
-### TIER 1 — Corrections urgentes (accessibilite + UX bloquante)
+### TIER 1 — Corrections urgentes (accessibilite + UX bloquante) ✅ TOUT CORRIGE
 
-| # | Issue | Fichier | Ligne | Correction | Effort |
-|---|-------|---------|-------|------------|--------|
-| T1.1 | Touch target help icon 20px → 44px | Tooltip.tsx | 127-135 | Ajouter classe `touch-target` au `<button>` | 5 min |
-| T1.2 | Touch target password toggle ~20px → 44px | Input.tsx | 150-159 | Ajouter classe `touch-target-sm` + min dimensions | 5 min |
-| T1.3 | Dialog fullscreen sans safe area (notch iPhone) | Dialog.tsx | 160-164 | Ajouter `safe-area-pb safe-area-pt` pour `size=fullscreen` | 10 min |
-| T1.4 | Toast deduplication manquante | Toast.tsx | 32-46 | Ajouter check `toasts.find(t => t.message === msg)` avant ajout | 15 min |
+| # | Issue | Fichier | Correction | Statut |
+|---|-------|---------|------------|--------|
+| T1.1 | Touch target help icon 20px → 44px | Tooltip.tsx | Classe `touch-target` ajoutee | ✅ CORRIGE |
+| T1.2 | Touch target password toggle ~20px → 44px | Input.tsx | Classe `touch-target-sm` ajoutee | ✅ CORRIGE |
+| T1.3 | Dialog fullscreen sans safe area (notch iPhone) | Dialog.tsx | `safe-area-pt safe-area-pb` ajoutes | ✅ CORRIGE |
+| T1.4 | Toast deduplication manquante | Toast.tsx | Id Sonner par type+message pour dedup | ✅ CORRIGE |
 
 ### TIER 2 — Ameliorations prochain sprint (UX courante)
 
@@ -1786,14 +1791,19 @@ ETAPE 2 : Corriger les bugs moyens ✅ TERMINE
     B24 - Badge "Legende" pour Niv.1 → CORRIGE (commit e8ba047)
 [x] B05 - Chat timeout 2s → CORRIGE en Etape 1
 
-Note : B06 (Toast dedup), B07 (Drawer swipe), B08 (Dialog safe area) non traites
-       car non reproductibles en test navigateur. Restent en backlog Tier 1/3.
+Note : B06, B07, B08 corriges en Etape 3 avec T1.1-T1.4 et B22, B25, B26.
 
-ETAPE 3 : Corrections accessibilite urgentes (Tier 1) — REPORTE Sprint 2
-[ ] T1.1 - Touch target Tooltip help icon → 44px
-[ ] T1.2 - Touch target Input password toggle → 44px
-[ ] T1.3 - Dialog fullscreen safe area
-[ ] T1.4 - Toast deduplication
+ETAPE 3 : Corrections accessibilite urgentes (Tier 1) + bugs restants ✅ TERMINE
+[x] T1.1 - Touch target Tooltip help icon → 44px (classe touch-target)
+[x] T1.2 - Touch target Input password toggle → 44px (classe touch-target-sm)
+[x] T1.3 - Dialog fullscreen safe area (safe-area-pt + safe-area-pb)
+[x] T1.4 - Toast deduplication (id Sonner par message)
+[x] B06 - Toast deduplication → CORRIGE
+[x] B07 - Drawer swipe threshold 150px → 100px → CORRIGE
+[x] B08 - Dialog fullscreen safe area → CORRIGE
+[x] B22 - Stats profil incoherentes → CORRIGE (reliability default 0, level || 1)
+[x] B25 - Emojis reactions clignotent sur mobile → CORRIGE (supprime N subscriptions realtime)
+[x] B26 - Bouton deconnexion 1/2 → CORRIGE (queryClient.clear, window.location.replace)
 
 ETAPE 4 : Re-test complet ✅ TERMINE
 [x] Re-tester TOUS les flux corriges

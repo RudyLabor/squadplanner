@@ -18,14 +18,14 @@ export function MockNavbar({ active }: { active: string }) {
     { icon: User, label: 'Profil', id: 'profile' },
   ]
   return (
-    <div className="mt-auto px-2 py-2 flex items-center justify-around border-t border-border-subtle">
+    <div className="mt-auto px-3 py-2.5 flex items-center justify-around border-t border-border-subtle">
       {items.map((item) => {
         const Icon = item.icon
         const isActive = item.id === active
         return (
           <div key={item.id} className="flex flex-col items-center gap-0.5">
             <Icon
-              className="w-[14px] h-[14px]"
+              className="w-4 h-4"
               style={{ color: isActive ? 'var(--color-primary)' : 'var(--color-text-tertiary)' }}
             />
             <span

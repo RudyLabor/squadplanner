@@ -37,7 +37,7 @@ export function HeroMockup() {
   const ScreenComponent = screen.component
 
   return (
-    <div className="relative mx-auto hero-phone-float w-[280px]">
+    <div className="relative mx-auto hero-phone-float w-[320px]">
       {/* "Voir la demo" badge */}
       <m.div
         className="flex items-center justify-center gap-1.5 mb-3"
@@ -68,17 +68,17 @@ export function HeroMockup() {
       />
 
       {/* Phone body */}
-      <div className="relative bg-gradient-to-b from-overlay-medium to-white/[0.04] rounded-[2.5rem] p-[1px] shadow-2xl shadow-primary/20">
-        <div className="bg-bg-elevated rounded-[2.5rem] p-2.5">
+      <div className="relative bg-gradient-to-b from-overlay-medium to-white/[0.04] rounded-[3rem] p-[1px] shadow-2xl shadow-primary/20">
+        <div className="bg-bg-elevated rounded-[3rem] p-3">
           {/* Notch */}
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-28 h-6 bg-bg-elevated rounded-b-2xl z-20">
-            <div className="absolute top-2 left-1/2 -translate-x-1/2 w-12 h-1 rounded-full bg-white/10" />
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-7 bg-bg-elevated rounded-b-2xl z-20">
+            <div className="absolute top-2.5 left-1/2 -translate-x-1/2 w-14 h-1 rounded-full bg-white/10" />
           </div>
 
           {/* Screen */}
-          <div className="bg-bg-base rounded-[2rem] overflow-hidden relative h-[480px]">
+          <div className="bg-bg-base rounded-[2.5rem] overflow-hidden relative h-[560px]">
             {/* Status bar */}
-            <div className="absolute top-0 left-0 right-0 z-10 flex items-center justify-between px-5 pt-1.5 pb-1">
+            <div className="absolute top-0 left-0 right-0 z-10 flex items-center justify-between px-6 pt-2 pb-1">
               <span className="text-xs text-text-secondary font-medium">21:00</span>
               <div className="flex items-center gap-1">
                 <div className="flex items-end gap-[1px]">
@@ -111,7 +111,7 @@ export function HeroMockup() {
             </AnimatePresence>
 
             {/* Screen reflection */}
-            <div className="absolute inset-0 bg-gradient-to-br from-white/[0.02] via-transparent to-transparent pointer-events-none z-10 rounded-[2rem]" />
+            <div className="absolute inset-0 bg-gradient-to-br from-white/[0.02] via-transparent to-transparent pointer-events-none z-10 rounded-[2.5rem]" />
           </div>
         </div>
       </div>

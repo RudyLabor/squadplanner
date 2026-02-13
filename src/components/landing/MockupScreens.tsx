@@ -11,21 +11,21 @@ export { PartyScreen, ProfileScreen }
 export function HomeScreen() {
   return (
     <div className="h-full flex flex-col bg-bg-base">
-      <div className="px-4 pt-6 pb-3">
+      <div className="px-4 pt-7 pb-4">
         <m.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
         >
-          <div className="text-md font-bold text-text-primary leading-tight">
+          <div className="text-base font-bold text-text-primary leading-tight">
             Salut MaxGamer_94 !
           </div>
-          <div className="text-xs text-text-tertiary mt-0.5">
+          <div className="text-xs text-text-tertiary mt-1">
             T'es carré, toutes tes sessions sont confirmées
           </div>
         </m.div>
         <m.div
-          className="absolute top-5 right-4 flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-success/15 border border-success/20"
+          className="absolute top-6 right-4 flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-success/15 border border-success/20"
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
           transition={{ delay: 0.3, type: 'spring', stiffness: 400 }}
@@ -36,14 +36,14 @@ export function HomeScreen() {
       </div>
 
       <m.div
-        className="mx-4 p-3.5 rounded-xl bg-gradient-to-br from-primary/[0.08] to-primary/[0.02] border border-primary/15"
+        className="mx-4 p-4 rounded-xl bg-gradient-to-br from-primary/[0.08] to-primary/[0.02] border border-primary/15"
         initial={{ opacity: 0, y: 15 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2 }}
       >
-        <div className="flex items-center gap-2 mb-2.5">
-          <div className="w-7 h-7 rounded-lg bg-primary flex items-center justify-center">
-            <Calendar className="w-3.5 h-3.5 text-text-primary" />
+        <div className="flex items-center gap-2.5 mb-3">
+          <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
+            <Calendar className="w-4 h-4 text-text-primary" />
           </div>
           <div className="flex-1">
             <div className="text-sm font-semibold text-text-primary">Ranked du Mardi</div>
@@ -58,12 +58,12 @@ export function HomeScreen() {
             Confirmée
           </m.span>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2.5">
           <div className="flex -space-x-1.5">
             {mockMembers.slice(0, 4).map((member, i) => (
               <m.div
                 key={member.name}
-                className="w-6 h-6 rounded-full border-[1.5px] border-bg-base flex items-center justify-center text-xs font-bold text-text-primary"
+                className="w-7 h-7 rounded-full border-[1.5px] border-bg-base flex items-center justify-center text-xs font-bold text-text-primary"
                 style={{ backgroundColor: member.color }}
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
@@ -87,7 +87,7 @@ export function HomeScreen() {
       </m.div>
 
       <m.div
-        className="grid grid-cols-3 gap-2 mx-4 mt-3"
+        className="grid grid-cols-3 gap-2.5 mx-4 mt-4"
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.5 }}
@@ -99,23 +99,23 @@ export function HomeScreen() {
         ].map((s) => (
           <div
             key={s.label}
-            className="bg-bg-surface rounded-lg p-2.5 text-center border border-border-subtle"
+            className="bg-bg-surface rounded-lg p-3 text-center border border-border-subtle"
           >
-            <div className="text-base font-bold" style={{ color: s.color }}>
+            <div className="text-lg font-bold" style={{ color: s.color }}>
               {s.value}
             </div>
-            <div className="text-xs text-text-tertiary">{s.label}</div>
+            <div className="text-xs text-text-tertiary mt-0.5">{s.label}</div>
           </div>
         ))}
       </m.div>
 
       <m.div
-        className="mx-4 mt-3 p-3 rounded-xl bg-bg-surface border border-border-subtle"
+        className="mx-4 mt-4 p-3.5 rounded-xl bg-bg-surface border border-border-subtle"
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.7 }}
       >
-        <div className="text-xs font-semibold text-text-secondary uppercase tracking-wider mb-2">
+        <div className="text-xs font-semibold text-text-secondary uppercase tracking-wider mb-2.5">
           Ta semaine
         </div>
         <div className="flex items-center justify-between">
@@ -127,7 +127,7 @@ export function HomeScreen() {
           </div>
           <span className="text-xs text-success font-medium">100% présent</span>
         </div>
-        <div className="flex items-center justify-between mt-1.5">
+        <div className="flex items-center justify-between mt-2">
           <div className="flex items-center gap-1.5">
             <div className="w-5 h-5 rounded-md bg-primary/15 flex items-center justify-center">
               <Headphones className="w-3 h-3 text-primary" />

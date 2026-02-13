@@ -6,7 +6,7 @@ import type { CallUser, VoiceCallState } from './useCallState'
 import { RING_TIMEOUT } from './useCallState'
 // import { LIVEKIT_URL } from './useCallState'
 // import { initializeLiveKitRoom, subscribeToIncomingCalls as _subscribeToIncomingCalls, sendCallPushNotification } from './useCallActions'
-import { sendCallPushNotification, initializeNativeWebRTC } from './useCallActions'
+import { sendCallPushNotification, initializeNativeWebRTC, subscribeToIncomingCalls as _subscribeToIncomingCalls } from './useCallActions'
 
 export type { CallStatus, CallUser } from './useCallState'
 export { formatCallDuration } from './useCallState'

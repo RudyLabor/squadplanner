@@ -1,7 +1,6 @@
 'use client'
 
 import { useState, useEffect, useRef, useCallback } from 'react'
-import { AnimatePresence, m } from 'framer-motion'
 import { Plus } from './icons'
 import { supabase } from '../lib/supabase'
 import { useAuthStore } from '../hooks/useAuth'
@@ -187,35 +186,27 @@ export function MessageReactions({
         isOwnMessage ? 'justify-end' : 'justify-start'
       }`}
     >
-      {/* Existing reactions — no initial animation to prevent blinking */}
-      <AnimatePresence mode="popLayout">
-        {groupedReactions.map(({ emoji, count, hasCurrentUser }) => (
-          <m.button
-            key={emoji}
-            initial={false}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0 }}
-            transition={{ type: 'spring', stiffness: 500, damping: 25 }}
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.9 }}
-            onClick={() => toggleReaction(emoji as ReactionEmoji)}
-            disabled={isLoading}
-            className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-sm transition-colors ${
-              hasCurrentUser
-                ? 'bg-success-15 border border-success/30 text-success'
-                : 'bg-border-subtle border border-border-hover text-text-secondary hover:bg-border-hover'
-            } ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
-            aria-label={`Réaction ${emoji}, ${count} ${count === 1 ? 'personne' : 'personnes'}${hasCurrentUser ? ', tu as réagi' : ''}`}
+      {/* Existing reactions — static render to prevent mobile flickering */}
+      {groupedReactions.map(({ emoji, count, hasCurrentUser }) => (
+        <button
+          key={emoji}
+          onClick={() => toggleReaction(emoji as ReactionEmoji)}
+          disabled={isLoading}
+          className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-sm transition-colors active:scale-95 ${
+            hasCurrentUser
+              ? 'bg-success-15 border border-success/30 text-success'
+              : 'bg-border-subtle border border-border-hover text-text-secondary hover:bg-border-hover'
+          } ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+          aria-label={`Réaction ${emoji}, ${count} ${count === 1 ? 'personne' : 'personnes'}${hasCurrentUser ? ', tu as réagi' : ''}`}
+        >
+          <span className="text-base leading-none">{emoji}</span>
+          <span
+            className={`text-xs font-medium ${hasCurrentUser ? 'text-success' : 'text-text-secondary'}`}
           >
-            <span className="text-base leading-none">{emoji}</span>
-            <span
-              className={`text-xs font-medium ${hasCurrentUser ? 'text-success' : 'text-text-secondary'}`}
-            >
-              {count}
-            </span>
-          </m.button>
-        ))}
-      </AnimatePresence>
+            {count}
+          </span>
+        </button>
+      ))}
 
       {/* Add reaction button — visible on hover (desktop) or always on mobile */}
       <div

@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useRef, useCallback, useEffect, memo } from 'react'
-import { m, AnimatePresence } from 'framer-motion'
+// framer-motion removed to prevent flickering on mobile
 import { Mic, Square, Send, Trash2, Loader2 } from './icons'
 /**
  * VoiceRecorder — Phase 3.1
@@ -154,111 +154,94 @@ export const VoiceRecorder = memo(function VoiceRecorder({ onSend, disabled }: V
 
   return (
     <div className="relative">
-      <AnimatePresence mode="wait">
-        {/* Error state */}
-        {error && (
-          <m.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="text-sm text-error mb-1"
-          >
-            {error}
-          </m.p>
-        )}
+      {/* Error state */}
+      {error && (
+        <p className="text-sm text-error mb-1">
+          {error}
+        </p>
+      )}
 
-        {/* Recording / Preview state */}
-        {isRecording || audioBlob ? (
-          <m.div
-            key="recording"
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.95 }}
-            className="flex items-center gap-2 h-12 px-3 bg-bg-surface border border-border-default rounded-xl"
+      {/* Recording / Preview state */}
+      {isRecording || audioBlob ? (
+        <div className="flex items-center gap-2 h-12 px-3 bg-bg-surface border border-border-default rounded-xl">
+          {/* Cancel */}
+          <button
+            type="button"
+            onClick={cancelRecording}
+            className="p-1.5 rounded-lg text-error hover:bg-error/10 transition-colors"
+            aria-label="Annuler"
           >
-            {/* Cancel */}
+            <Trash2 className="w-4 h-4" />
+          </button>
+
+          {/* Waveform / Audio player */}
+          <div className="flex-1 flex items-center gap-1">
+            {isRecording ? (
+              // Live waveform
+              <div className="flex items-center gap-[2px] h-6">
+                {waveform.map((h, i) => (
+                  <div
+                    key={i}
+                    className="w-[3px] rounded-full bg-error transition-all duration-100"
+                    style={{ height: `${h}px` }}
+                  />
+                ))}
+              </div>
+            ) : audioUrl ? (
+              // Playback
+              <audio
+                src={audioUrl}
+                controls
+                className="h-8 w-full max-w-[200px] [&::-webkit-media-controls-panel]:bg-transparent"
+              />
+            ) : null}
+          </div>
+
+          {/* Duration */}
+          <span
+            className={`text-base font-mono min-w-[40px] text-center ${isRecording ? 'text-error' : 'text-text-tertiary'}`}
+          >
+            {formatDuration(duration)}
+          </span>
+
+          {/* Stop or Send */}
+          {isRecording ? (
             <button
               type="button"
-              onClick={cancelRecording}
-              className="p-1.5 rounded-lg text-error hover:bg-error/10 transition-colors"
-              aria-label="Annuler"
+              onClick={stopRecording}
+              className="p-2 rounded-xl bg-error text-white hover:bg-error transition-colors"
+              aria-label="Arrêter"
             >
-              <Trash2 className="w-4 h-4" />
+              <Square className="w-4 h-4" fill="currentColor" />
             </button>
-
-            {/* Waveform / Audio player */}
-            <div className="flex-1 flex items-center gap-1">
-              {isRecording ? (
-                // Live waveform
-                <div className="flex items-center gap-[2px] h-6">
-                  {waveform.map((h, i) => (
-                    <div
-                      key={i}
-                      className="w-[3px] rounded-full bg-error transition-all duration-100"
-                      style={{ height: `${h}px` }}
-                    />
-                  ))}
-                </div>
-              ) : audioUrl ? (
-                // Playback
-                <audio
-                  src={audioUrl}
-                  controls
-                  className="h-8 w-full max-w-[200px] [&::-webkit-media-controls-panel]:bg-transparent"
-                />
-              ) : null}
-            </div>
-
-            {/* Duration */}
-            <span
-              className={`text-base font-mono min-w-[40px] text-center ${isRecording ? 'text-error' : 'text-text-tertiary'}`}
+          ) : (
+            <button
+              type="button"
+              onClick={handleSend}
+              disabled={isSending}
+              className="p-2 rounded-xl bg-primary text-white hover:bg-primary-hover transition-colors disabled:opacity-50"
+              aria-label="Envoyer le message vocal"
             >
-              {formatDuration(duration)}
-            </span>
-
-            {/* Stop or Send */}
-            {isRecording ? (
-              <button
-                type="button"
-                onClick={stopRecording}
-                className="p-2 rounded-xl bg-error text-white hover:bg-error transition-colors"
-                aria-label="Arrêter"
-              >
-                <Square className="w-4 h-4" fill="currentColor" />
-              </button>
-            ) : (
-              <button
-                type="button"
-                onClick={handleSend}
-                disabled={isSending}
-                className="p-2 rounded-xl bg-primary text-white hover:bg-primary-hover transition-colors disabled:opacity-50"
-                aria-label="Envoyer le message vocal"
-              >
-                {isSending ? (
-                  <Loader2 className="w-4 h-4 animate-spin" />
-                ) : (
-                  <Send className="w-4 h-4" />
-                )}
-              </button>
-            )}
-          </m.div>
-        ) : (
-          /* Mic button (idle state) */
-          <m.button
-            key="mic"
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.9 }}
-            type="button"
-            onClick={startRecording}
-            disabled={disabled}
-            className="p-2.5 rounded-xl text-text-secondary hover:text-primary-hover hover:bg-primary-10 transition-colors disabled:opacity-40"
-            aria-label="Message vocal"
-          >
-            <Mic className="w-5 h-5" />
-          </m.button>
-        )}
-      </AnimatePresence>
+              {isSending ? (
+                <Loader2 className="w-4 h-4 animate-spin" />
+              ) : (
+                <Send className="w-4 h-4" />
+              )}
+            </button>
+          )}
+        </div>
+      ) : (
+        /* Mic button (idle state) — no animation to prevent flickering */
+        <button
+          type="button"
+          onClick={startRecording}
+          disabled={disabled}
+          className="p-2.5 rounded-xl text-text-secondary hover:text-primary-hover hover:bg-primary-10 transition-colors disabled:opacity-40"
+          aria-label="Message vocal"
+        >
+          <Mic className="w-5 h-5" />
+        </button>
+      )}
     </div>
   )
 })

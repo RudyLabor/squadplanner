@@ -139,6 +139,16 @@ export function MessageActions({
     setIsOpen(false)
   }
 
+  // Debug logging (temporary)
+  if (process.env.NODE_ENV === 'development') {
+    console.log('MessageActions rendered:', {
+      isOwnMessage,
+      isAdmin,
+      hasForward: !!onForward,
+      messageId: message.id
+    })
+  }
+
   return (
     <div
       className="relative inline-flex"
@@ -146,11 +156,11 @@ export function MessageActions({
       onTouchEnd={handleTouchEnd}
       onTouchCancel={handleTouchEnd}
     >
-      {/* Trigger button - visible on hover (desktop) */}
+      {/* Trigger button - always visible for debugging, hover enhanced */}
       <button
         ref={buttonRef}
         onClick={() => setIsOpen(!isOpen)}
-        className="p-1.5 rounded-lg opacity-0 group-hover:opacity-100 hover:bg-border-hover transition-interactive focus:opacity-100 focus:outline-none focus:ring-2 focus:ring-primary"
+        className="p-1.5 rounded-lg opacity-60 group-hover:opacity-100 hover:bg-border-hover transition-interactive focus:opacity-100 focus:outline-none focus:ring-2 focus:ring-primary sm:opacity-0 sm:group-hover:opacity-100"
         aria-label="Actions du message"
         aria-expanded={isOpen}
         aria-haspopup="menu"
@@ -167,7 +177,7 @@ export function MessageActions({
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: -5 }}
             transition={{ type: 'spring', stiffness: 400, damping: 25, duration: 0.15 }}
-            className="absolute right-0 top-full mt-1 z-50 min-w-[180px] py-1.5 bg-surface-dark border border-border-hover rounded-xl shadow-xl shadow-black/40"
+            className="absolute right-0 top-full mt-1 z-[999] min-w-[180px] py-1.5 bg-surface-dark border-2 border-red-500 rounded-xl shadow-xl shadow-black/40"
             role="menu"
             aria-orientation="vertical"
           >

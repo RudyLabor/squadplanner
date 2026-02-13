@@ -27,6 +27,10 @@ function getTitleForPath(pathname: string): string {
   if (pathname.startsWith('/squad/')) return 'Squad — Squad Planner'
   if (pathname.startsWith('/session/')) return 'Session — Squad Planner'
   if (pathname.startsWith('/join/')) return 'Rejoindre — Squad Planner'
+  if (pathname.startsWith('/u/')) {
+    const username = pathname.split('/')[2]
+    return username ? `${username} — Profil — Squad Planner` : 'Profil joueur — Squad Planner'
+  }
 
   // 404 fallback
   return 'Page non trouvée — Squad Planner'

@@ -3,8 +3,9 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router'
 import { useAuthStore, useSubscriptionStore, usePremiumStore, useAnalytics } from '../hooks'
-import { showSuccess } from '../lib/toast'
+import { showSuccess, showError } from '../lib/toast'
 import { captureException } from '../lib/sentry'
+import { supabase } from '../lib/supabase'
 import { PremiumHero } from './premium/PremiumHero'
 import { PremiumPricing } from './premium/PremiumPricing'
 import { PremiumFeaturesTable } from './premium/PremiumFeaturesTable'
@@ -80,12 +81,57 @@ export function Premium() {
     }
   }
 
-  const handleStartTrial = () => {
+  const handleStartTrial = async () => {
     if (!user) {
       navigate('/auth')
       return
     }
-    showSuccess('Essai gratuit activé ! Profite de 7 jours Premium.')
+
+    if (hasPremium) {
+      showError('Tu as déjà un abonnement Premium actif.')
+      return
+    }
+
+    setIsLoading(true)
+    setError(null)
+    try {
+      // Check if user already used a trial (subscription_expires_at set)
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('subscription_tier, subscription_expires_at')
+        .eq('id', user.id)
+        .single()
+
+      if (profile?.subscription_expires_at) {
+        showError('Tu as déjà utilisé ton essai gratuit.')
+        setIsLoading(false)
+        return
+      }
+
+      // Activate 7-day trial
+      const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString()
+      const { error: updateError } = await supabase
+        .from('profiles')
+        .update({
+          subscription_tier: 'premium',
+          subscription_expires_at: expiresAt,
+          updated_at: new Date().toISOString(),
+        })
+        .eq('id', user.id)
+
+      if (updateError) throw updateError
+
+      // Refresh premium status
+      await usePremiumStore.getState().fetchPremiumStatus()
+      analytics.track('trial_started', { duration_days: 7 })
+      showSuccess('Essai gratuit activé ! Profite de 7 jours Premium.')
+    } catch (err) {
+      const error = err instanceof Error ? err : new Error(String(err))
+      captureException(error, { context: 'start_trial', userId: user.id })
+      setError('Erreur lors de l\'activation de l\'essai gratuit.')
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return (

@@ -4,7 +4,7 @@ import { Link } from 'react-router'
 
 export function PricingSection() {
   return (
-    <section id="pricing" aria-label="Tarifs" className="px-4 md:px-6 py-10 md:py-14">
+    <section aria-label="Tarifs" className="px-4 md:px-6 py-10 md:py-14">
       <div className="max-w-4xl mx-auto">
         <m.div
           initial={{ opacity: 0, y: 20 }}

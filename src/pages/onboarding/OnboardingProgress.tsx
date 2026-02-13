@@ -18,13 +18,16 @@ export function OnboardingProgress({ step }: OnboardingProgressProps) {
   const items = [
     { key: 'squad', label: 'Squad' },
     { key: 'profile', label: 'Profil' },
+    { key: 'permissions', label: 'Permissions' },
   ]
 
   const currentIndex = ['squad-choice', 'create-squad', 'join-squad'].includes(step)
     ? 0
     : step === 'profile'
       ? 1
-      : -1
+      : step === 'permissions'
+        ? 2
+        : -1
 
   return (
     <div className="flex justify-center items-center gap-3 mt-8">

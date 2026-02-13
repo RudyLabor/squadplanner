@@ -36,7 +36,7 @@ export function PublicProfile() {
 
   const tier = useMemo(() => {
     if (!profile) return TIERS[0]
-    return getTier(profile.reliability_score ?? 100)
+    return getTier(profile.reliability_score ?? 0)
   }, [profile])
 
   const attendanceRate = useMemo(() => {
@@ -178,7 +178,7 @@ export function PublicProfile() {
         <StatCard
           icon={<Flame className="w-4 h-4 text-warning" />}
           label="Streak"
-          value={`${profile.streak_days ?? 0} jours`}
+          value={`${profile.streak_days ?? 0} ${(profile.streak_days ?? 0) <= 1 ? 'jour' : 'jours'}`}
           sub="Connexions consécutives"
         />
       </div>

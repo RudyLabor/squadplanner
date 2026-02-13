@@ -260,7 +260,7 @@ export function Onboarding() {
       }
       refreshProfile().catch(() => {})
       setIsLoading(false)
-      setStep('complete')
+      setStep('permissions')
     } catch {
       setIsLoading(false)
       setError('Erreur inattendue')

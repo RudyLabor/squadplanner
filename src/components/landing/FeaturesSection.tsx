@@ -123,7 +123,6 @@ export function FeaturesSection() {
 
   return (
     <section
-      id="features"
       aria-label="Fonctionnalités principales"
       className="px-4 md:px-6 py-10 md:py-14"
     >

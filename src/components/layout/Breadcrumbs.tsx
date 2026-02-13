@@ -58,6 +58,9 @@ export function Breadcrumbs() {
     items.push({ label: 'Aide' })
   } else if (pathParts[0] === 'premium') {
     items.push({ label: 'Premium' })
+  } else if (pathParts[0] === 'u' && pathParts[1]) {
+    items.push({ label: 'Découvrir', path: '/discover' })
+    items.push({ label: decodeURIComponent(pathParts[1]) })
   } else {
     // Simple route - capitalize unknown segments
     const label = routeLabels[location.pathname] || capitalize(pathParts[0])

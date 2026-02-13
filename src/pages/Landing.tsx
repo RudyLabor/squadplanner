@@ -25,16 +25,18 @@ import { Link } from 'react-router'
 function LazySection({
   children,
   className,
+  id,
   minHeight = 200,
 }: {
   children: ReactNode
   className?: string
+  id?: string
   minHeight?: number
 }) {
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true, margin: '200px 0px' })
   return (
-    <div ref={ref} className={className} style={!isInView ? { minHeight } : undefined}>
+    <div ref={ref} id={id} className={className} style={!isInView ? { minHeight } : undefined}>
       {isInView ? children : null}
     </div>
   )
@@ -114,7 +116,7 @@ export default function Landing() {
       </div>
       <HowItWorksSection demoStep={demoStep} setDemoStep={setDemoStep} />
       <div className="section-divider" />
-      <LazySection minHeight={400}>
+      <LazySection id="features" minHeight={400}>
         <FeaturesSection />
       </LazySection>
       <div className="section-divider" />
@@ -126,19 +128,19 @@ export default function Landing() {
         <ComparisonSection />
       </LazySection>
       <div className="section-divider" />
-      <LazySection minHeight={300}>
-        <section id="testimonials" aria-label="Témoignages" className="px-4 md:px-6 py-10 md:py-16">
+      <LazySection id="testimonials" minHeight={300}>
+        <section aria-label="Témoignages" className="px-4 md:px-6 py-10 md:py-16">
           <div className="max-w-5xl mx-auto">
             <TestimonialCarousel />
           </div>
         </section>
       </LazySection>
       <div className="section-divider" />
-      <LazySection minHeight={400}>
+      <LazySection id="pricing" minHeight={400}>
         <PricingSection />
       </LazySection>
       <div className="section-divider" />
-      <LazySection minHeight={300}>
+      <LazySection id="faq" minHeight={300}>
         <FaqSection />
       </LazySection>
       <div className="section-divider" />

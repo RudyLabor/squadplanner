@@ -17,8 +17,15 @@ import './index.css'
 
 // Client-only imports (deferred to avoid SSR issues)
 const ClientShell = lazy(() => import('./ClientShell'))
+const PublicPageEffects = lazy(() => import('./PublicPageEffects'))
 
 const loadFeatures = () => import('framer-motion').then((mod) => mod.domMax)
+
+// Routes that skip the full ClientShell (no sidebar, no heavy hooks)
+const PUBLIC_PATHS = ['/', '/auth', '/onboarding', '/legal', '/help', '/premium', '/maintenance']
+function isPublicPath(pathname: string) {
+  return PUBLIC_PATHS.includes(pathname) || pathname.startsWith('/join/')
+}
 
 // Layout component provides the HTML document shell (replaces index.html)
 export function Layout({ children }: { children: React.ReactNode }) {
@@ -281,8 +288,20 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 // Root component - SSR-safe shell, client-only features deferred
+//
+// PUBLIC PAGES (landing, auth, onboarding…):
+//   <Outlet /> is rendered at a STABLE position in the React tree.
+//   When isClient flips true, only PublicPageEffects is added above —
+//   the <main><Outlet /></main> stays at the same Fragment index so
+//   React never unmounts/remounts the page (no "double refresh").
+//
+// PROTECTED PAGES (home, squads, sessions…):
+//   Full ClientShell with sidebar, nav, modals, etc.
+//   The swap from SSRFallback → ClientShell causes a remount, but that's
+//   acceptable because protected pages require auth and often redirect.
 export default function Root() {
   const [isClient, setIsClient] = useState(false)
+  const { pathname } = useLocation()
 
   useEffect(() => {
     setIsClient(true)
@@ -297,10 +316,25 @@ export default function Root() {
     })
   }, [])
 
+  const isPublic = isPublicPath(pathname)
+
   return (
     <QueryClientProvider client={queryClient}>
       <LazyMotion features={loadFeatures} strict>
-        {isClient ? (
+        {isPublic ? (
+          <>
+            {/* Position 0: client effects (null during SSR/hydration, Suspense after) */}
+            {isClient && (
+              <Suspense fallback={null}>
+                <PublicPageEffects />
+              </Suspense>
+            )}
+            {/* Position 1: STABLE — never unmounts across isClient flip */}
+            <main id="main-content">
+              <Outlet />
+            </main>
+          </>
+        ) : isClient ? (
           <Suspense fallback={<SSRFallback />}>
             <ClientShell />
           </Suspense>
@@ -336,30 +370,11 @@ export default function Root() {
   )
 }
 
-// SSR-safe fallback - renders layout structure matching client to prevent CLS
+// SSR-safe fallback for PROTECTED pages only.
+// Public pages are handled directly in Root (stable Outlet position).
 // Sidebar width must match DesktopSidebar collapsed width (140px) and
 // DesktopContentWrapper initial marginLeft (140px) to avoid layout shift on hydration.
-// Public pages (landing, auth, onboarding, etc.) skip the sidebar entirely.
 function SSRFallback() {
-  const { pathname } = useLocation()
-  const isPublicPage =
-    pathname === '/' ||
-    pathname === '/auth' ||
-    pathname === '/onboarding' ||
-    pathname === '/legal' ||
-    pathname === '/help' ||
-    pathname === '/premium' ||
-    pathname === '/maintenance' ||
-    pathname.startsWith('/join/')
-
-  if (isPublicPage) {
-    return (
-      <main id="main-content">
-        <Outlet />
-      </main>
-    )
-  }
-
   return (
     <div className="h-[100dvh] bg-bg-base flex overflow-hidden">
       <aside

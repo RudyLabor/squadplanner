@@ -300,6 +300,50 @@ export function useConfirmSessionMutation() {
   })
 }
 
+type UpdateSessionVars = {
+  sessionId: string
+  title?: string
+  game?: string
+  scheduled_at?: string
+  duration_minutes?: number
+  auto_confirm_threshold?: number
+}
+
+export function useUpdateSessionMutation() {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: async (data: UpdateSessionVars) => {
+      const updates: Record<string, unknown> = {}
+      if (data.title !== undefined) updates.title = data.title
+      if (data.game !== undefined) updates.game = data.game
+      if (data.scheduled_at !== undefined) updates.scheduled_at = data.scheduled_at
+      if (data.duration_minutes !== undefined) updates.duration_minutes = data.duration_minutes
+      if (data.auto_confirm_threshold !== undefined)
+        updates.auto_confirm_threshold = data.auto_confirm_threshold
+      updates.updated_at = new Date().toISOString()
+
+      const { data: session, error } = await supabase
+        .from('sessions')
+        .update(updates)
+        .eq('id', data.sessionId)
+        .select('id, squad_id')
+        .single()
+      if (error) throw error
+      return { sessionId: data.sessionId, squadId: session.squad_id }
+    },
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: queryKeys.sessions.detail(data.sessionId) })
+      if (data.squadId)
+        queryClient.invalidateQueries({ queryKey: queryKeys.sessions.list(data.squadId) })
+      queryClient.invalidateQueries({ queryKey: queryKeys.sessions.upcoming() })
+      showSuccess('Session modifiée !')
+    },
+    onError: () => {
+      showError('Erreur lors de la modification')
+    },
+  })
+}
+
 export function useCancelSessionMutation() {
   const queryClient = useQueryClient()
   return useMutation({

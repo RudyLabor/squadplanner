@@ -1,7 +1,7 @@
 # SQUAD PLANNER — PRODUCT BIBLE
 
 > Document fondateur et source unique de verite pour le projet Squad Planner.
-> Derniere mise a jour : 13 fevrier 2026, 09h00
+> Derniere mise a jour : 13 fevrier 2026, 10h00
 >
 > REGLE D'OR : Aucun statut "OK" n'est valide tant qu'il n'a pas ete teste
 > manuellement dans le navigateur. Lire du code ne prouve rien.
@@ -31,15 +31,15 @@
 
 ---
 
-## 0. TABLEAU DE BORD (derniere MAJ : 13 fevrier 2026, 09h00)
+## 0. TABLEAU DE BORD (derniere MAJ : 13 fevrier 2026, 10h00)
 
 ### Sante du projet
 
 | Indicateur | Valeur | Cible | Statut |
 |------------|--------|-------|--------|
-| Flux fonctionnels (testes navigateur) | ~~44~~ ~~46~~ **51 OK** / 73 | 73 / 73 | 🟡 70% testes OK |
+| Flux fonctionnels (testes navigateur) | ~~44~~ ~~46~~ ~~51~~ **54 OK** / 73 | 73 / 73 | 🟡 74% testes OK |
 | Flux avec bugs | ~~7~~ ~~5~~ **0** | 0 | ✅ Tous les bugs corrigés (B15/B05/B21 + B16-B24 + B25/B26 + F68) |
-| Flux absents (pas de code) | **8** | 0 | 🔴 F26, F28, F30, F34, F35, F37, F39, F40 |
+| Flux absents (pas de code) | ~~8~~ **5** | 0 | 🔴 F34, F35, F37, F39, F40 |
 | Erreurs TypeScript | ~~313~~ **0** | 0 | ✅ CORRIGE (commit eb26fcd) |
 | Erreurs ESLint | ~~3 302~~ **904** | 0 | 🟡 Non-bloquants (404 unused-vars, 233 no-explicit-any) |
 | Warnings Prettier | ~~9 401~~ **0** | 0 | ✅ CORRIGE |
@@ -60,7 +60,7 @@
 | Responsive | 7.6 / 10 | Mobile excellent, breakpoint tablet 768px manquant |
 | Infrastructure test | 9.0 / 10 | 78 unit tests, 10 E2E suites, CI 5 jobs — build OK |
 | Qualite code | ~~5.6~~ **7.2** / 10 | 0 TS errors, ~233 any, 15 composants > 300 lignes |
-| **GLOBAL** | **8.7 / 10** | **51/73 flux OK, 0 bugs, 8 absents. 70% valide** |
+| **GLOBAL** | **8.8 / 10** | **54/73 flux OK, 0 bugs, 5 absents. 74% valide** |
 
 ### Sprint en cours : SPRINT 2 — "Completer les absents"
 
@@ -72,7 +72,8 @@
 | Sprint 1 Etape 2 : Bugs moyens (MOYENNE/BASSE) | ✅ TERMINE — B16, B17, B18, B20, B23, B24 CORRIGES + F68 trial fonctionnel |
 | Sprint 1 Etape 3 : Accessibilite + bugs restants | ✅ **TERMINE** — T1.1-T1.4, B06-B08, B22, B25, B26 CORRIGES |
 | Sprint 1 Etape 4 : Re-test complet | ✅ TERMINE — Build OK (14s), 0 flux BUG |
-| Sprint 2 : Flux absents | ⏳ EN ATTENTE — 8 flux a implementer |
+| Sprint 2 Etape 1 : Sessions (F26, F28, F30) | ✅ **TERMINE** — 3 flux implementes et testes navigateur |
+| Sprint 2 : Flux absents restants | ⏳ EN COURS — 5 flux a implementer (F34, F35, F37, F39, F40) |
 
 ---
 
@@ -836,11 +837,11 @@ Echelle base 8px : xs (4px) → 3xl (64px)
 | F23 | Creer une session | `OK` | Formulaire titre/date/heure/duree/auto-confirm, session creee ✅ |
 | F24 | Voir les details d'une session | `OK` | Session visible dans la page squad avec titre, date, RSVP ✅ |
 | F25 | RSVP a une session | `OK` | Boutons Present/Peut-etre/Absent visibles, Present selectionne par defaut ✅ |
-| F26 | Modifier une session | `ABSENT` | Pas de bouton modifier visible sur la session |
+| F26 | Modifier une session | `OK` | Bouton crayon visible (owner uniquement, sessions non-terminées/annulées). Dialog modal avec titre, date (14 jours), heure (créneaux), durée. Validation date future. Persistance OK. ✅ IMPLEMENTE (Sprint 2 Etape 1) |
 | F27 | Annuler une session (owner) | `OK` | Dialog "Annuler cette session ?", statut passe a "Annulee", boutons RSVP disparaissent ✅ |
-| F28 | Check-in a une session | `ABSENT` | Bouton "Check-in" inexistant dans l'UI. Session confirmee + dans la fenetre horaire mais aucun bouton visible. Table `session_checkins` existe en DB mais pas d'UI |
+| F28 | Check-in a une session | `OK` | Bouton "Je suis la !" visible 30min avant et pendant la session confirmee. Check-in enregistre en DB (session_checkins). Toast + confetti. Badge "Check-in ✓" sur le participant. ✅ CORRIGE (Sprint 2 Etape 1) — fenetre elargie de "pendant session" a "30min avant + pendant" |
 | F29 | Auto-confirm session | `NON TESTE` | Necessite >= seuil de joueurs "Present". Teste avec 1 joueur et seuil 3 → non declenche (correct). Confirmation manuelle fonctionne ✅ |
-| F30 | Voir resultats post-session | `ABSENT` | Pas de page ni composant |
+| F30 | Voir resultats post-session | `OK` | Section "Resultats de la session" visible apres session terminee/passee. Recapitulatif avec inscrits, check-ins, taux fiabilite. Badge colore selon taux (vert >=75%, jaune >=50%, rouge <50%). ✅ IMPLEMENTE (Sprint 2 Etape 1) |
 
 ### F. Flux Messagerie (10 flux)
 
@@ -920,29 +921,27 @@ Echelle base 8px : xs (4px) → 3xl (64px)
 | F72 | Mode offline | `NON TESTABLE` | Necessite coupure reseau |
 | F73 | Email reminders avant session | `NON TESTABLE` | Necessite cron + session planifiee |
 
-### RESUME (mis a jour 13 fevrier 2026, 08h30)
+### RESUME (mis a jour 13 fevrier 2026, 10h00)
 
 | Statut | Nombre | % |
 |--------|--------|---|
-| `OK` | **51** | 70% |
+| `OK` | **54** | 74% |
 | `BUG` | **0** | 0% |
 | `NON TESTE` | 1 (F29) | 1% |
 | `NON TESTABLE` | 8 | 11% |
 | `NON TESTABLE` (Stripe) | 1 (F67) | 1% |
-| `ABSENT` | **8** | 11% |
+| `ABSENT` | **5** | 7% |
 | ~~FAUX ABSENT~~ → OK | 4 | 5% |
 | **TOTAL** | **73** | 100% |
 
 Note : Sprint 1 Etape 1 (commits 6eea84e + d5f7829) : F10, F47 passes de BUG a OK.
 Note : Sprint 1 Etape 2 : F01, F08, F09, F54, F68 passes de BUG a OK (onboarding, profil public, landing, trial).
+Note : Sprint 2 Etape 1 : F26 (edit session), F28 (check-in), F30 (resultats post-session) passes de ABSENT a OK.
 
-### Flux ABSENTS confirmes (8 flux sans code)
+### Flux ABSENTS confirmes (5 flux sans code)
 
 | Flux | Description | Composant existant ? |
 |------|-------------|---------------------|
-| F26 | Modifier une session | Non — pas de bouton "Modifier" sur session detail |
-| F28 | Check-in a une session | Non — table DB existe mais pas d'UI check-in |
-| F30 | Resultats post-session | Non — pas de page ni composant |
 | F34 | Editer/supprimer message | Non — bouton "Actions" existe mais menu vide |
 | F35 | Epingler un message | Non — meme probleme, menu actions vide |
 | F37 | Mentionner @username | Non — placeholder "@mention" mais pas d'autocomplete |
@@ -1590,9 +1589,9 @@ Note : F20 (Edit squad) etait un faux absent, corrige. F36 (Polls) et F38 (Reche
 
 | # | Flux | Fichiers a modifier | Criteres d'acceptance | Priorite |
 |---|------|---------------------|----------------------|----------|
-| F26 | Edit session | SessionDetail.tsx, queries/ | Owner modifie titre/date/duree, validation date future, persistance | P1 |
-| F28 | Check-in session | SessionDetail.tsx, hooks/ | Bouton "Check-in" visible 30min avant/apres session, enregistre en DB, toast + confetti | P1 |
-| F30 | Resultats post-session | Nouvelle page/section | Stats participation, fiabilite, XP gagnes, AI summary optionnel | P2 |
+| ~~F26~~ | ~~Edit session~~ | SessionDetail.tsx, queries/ | ✅ IMPLEMENTE (Sprint 2 Etape 1) | ~~P1~~ |
+| ~~F28~~ | ~~Check-in session~~ | SessionDetail.tsx | ✅ CORRIGE (Sprint 2 Etape 1) — fenetre 30min avant | ~~P1~~ |
+| ~~F30~~ | ~~Resultats post-session~~ | SessionDetail.tsx (PostSessionResults) | ✅ IMPLEMENTE (Sprint 2 Etape 1) | ~~P2~~ |
 | F34 | Editer/supprimer message | Messages.tsx (menu actions) | Menu contextuel avec Modifier/Supprimer, edition inline, dialog confirmation suppression | P1 |
 | F35 | Epingler message | Messages.tsx (menu actions) | Option "Epingler" dans menu, indicateur visuel, section messages epingles | P2 |
 | F37 | Mentionner @username | Messages.tsx, nouveau hook | Autocomplete "@" avec liste membres squad, highlight dans message, notif au mentionne | P2 |
@@ -1820,19 +1819,23 @@ VERIFICATION : 0 flux BUG restants ✅
 **Prerequis** : Sprint 1 termine (0 flux CASSE/BUG restant). ✅ DEBLOQUE
 
 ```
-ETAPE 1 : Flux absents — Squad & Sessions (3 flux)
-[ ] F20 - Edit squad settings
-    Fichiers : SquadDetail.tsx, queries/
-    Criteres : Owner modifie nom + jeu, toast confirm, donnees persistees
-    Pattern : Dialog avec formulaire, useMutation, invalidateQueries
-[ ] F26 - Edit session
-    Fichiers : SessionDetail.tsx, queries/
-    Criteres : Owner modifie titre/date/duree, validation date future, persistance
-    Pattern : Dialog avec date picker, validation Zod
-[ ] F30 - Resultats post-session
-    Fichiers : Nouveau composant PostSessionResults.tsx
-    Criteres : Stats participation, fiabilite, XP gagnes, optionnel AI summary
-    Pattern : Page ou section dans SessionDetail apres session terminee
+ETAPE 1 : Flux absents — Squad & Sessions (3 flux) ✅ TERMINE
+[x] F20 - Edit squad settings → DEJA OK (faux absent, dialog modal existait deja)
+[x] F26 - Edit session → IMPLEMENTE
+    Fichiers modifies : SessionDetail.tsx, useSessionsQuery.ts, queries/index.ts
+    Implementation : EditSessionModal avec titre, date (14 jours), heure (creneaux), duree
+    Bouton crayon visible uniquement pour le createur (sessions non-terminees/annulees)
+    Mutation useUpdateSessionMutation avec invalidation cache
+    Validation date future, fermeture automatique apres succes
+[x] F28 - Check-in session → CORRIGE
+    Fenetre check-in elargie : 30 min avant + pendant la session (au lieu de "pendant" uniquement)
+    Condition ajoutee : session doit etre confirmee (status === 'confirmed')
+    UI existait deja (CheckinSection), seule la condition etait trop restrictive
+[x] F30 - Resultats post-session → IMPLEMENTE
+    Section PostSessionResults dans SessionDetail.tsx
+    Affiche : inscrits, check-ins, taux fiabilite, duree prevue
+    Badge colore selon taux participation (vert >=75%, jaune >=50%, rouge <50%)
+    Visible quand session terminee ou date passee
 
 ETAPE 2 : Flux absents — Messagerie (4 flux)
 [ ] F36 - Polls dans le chat

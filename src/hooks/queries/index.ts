@@ -27,6 +27,7 @@ export {
   useUpcomingSessionsQuery,
   useSessionQuery,
   useCreateSessionMutation,
+  useUpdateSessionMutation,
   useRsvpMutation,
   useCheckinMutation,
   useConfirmSessionMutation,

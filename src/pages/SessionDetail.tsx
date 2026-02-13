@@ -9,10 +9,17 @@ import {
   Clock,
   Loader2,
   Sparkles,
+  Edit2,
+  X,
+  Calendar,
+  Trophy,
+  Users,
+  TrendingUp,
 } from '../components/icons'
 import { Link, useParams, useNavigate } from 'react-router'
+import { m, AnimatePresence } from 'framer-motion'
 import Confetti from '../components/LazyConfetti'
-import { Button, ConfirmDialog } from '../components/ui'
+import { Button, ConfirmDialog, Card, CardContent, Select, Badge } from '../components/ui'
 import { VoiceChat } from '../components/VoiceChat'
 import { useAuthStore } from '../hooks'
 import {
@@ -21,6 +28,7 @@ import {
   useCheckinMutation,
   useConfirmSessionMutation,
   useCancelSessionMutation,
+  useUpdateSessionMutation,
 } from '../hooks/queries'
 import {
   SessionInfoCards,
@@ -29,7 +37,6 @@ import {
   CheckinSection,
   ParticipantsList,
 } from './session-detail/SessionDetailSections'
-import { AnimatePresence } from 'framer-motion'
 type RsvpResponse = 'present' | 'absent' | 'maybe'
 
 function CelebrationToast({
@@ -72,6 +79,7 @@ export default function SessionDetail() {
   const [toastMessage, setToastMessage] = useState('')
   const [showToast, setShowToast] = useState(false)
   const [showCancelConfirm, setShowCancelConfirm] = useState(false)
+  const [showEditModal, setShowEditModal] = useState(false)
 
   const { user } = useAuthStore()
   const { data: currentSession, isLoading: sessionLoading } = useSessionQuery(id, user?.id)
@@ -144,14 +152,25 @@ export default function SessionDetail() {
     }
   }
 
-  const isSessionTime = () => {
+  const isCheckinWindow = () => {
     if (!currentSession) return false
+    if (currentSession.status !== 'confirmed') return false
     const now = new Date()
+    const sessionStart = new Date(currentSession.scheduled_at)
+    const windowStart = new Date(sessionStart.getTime() - 30 * 60000) // 30 min avant
+    const sessionEnd = new Date(
+      sessionStart.getTime() + (currentSession.duration_minutes || 120) * 60000
+    )
+    return now >= windowStart && now <= sessionEnd
+  }
+
+  const isSessionPast = () => {
+    if (!currentSession) return false
     const sessionStart = new Date(currentSession.scheduled_at)
     const sessionEnd = new Date(
       sessionStart.getTime() + (currentSession.duration_minutes || 120) * 60000
     )
-    return now >= sessionStart && now <= sessionEnd
+    return new Date() > sessionEnd
   }
 
   const hasCheckedIn = () => currentSession?.checkins?.some((c) => c.user_id === user?.id)
@@ -241,6 +260,16 @@ export default function SessionDetail() {
                 </div>
               )}
             </div>
+            {isCreator && currentSession.status !== 'cancelled' && currentSession.status !== 'completed' && (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setShowEditModal(true)}
+                aria-label="Modifier la session"
+              >
+                <Edit2 className="w-4 h-4" aria-hidden="true" />
+              </Button>
+            )}
           </header>
 
           <SessionInfoCards dateInfo={dateInfo} durationMinutes={currentSession.duration_minutes} />
@@ -258,7 +287,7 @@ export default function SessionDetail() {
             />
           )}
 
-          {isSessionTime() && currentSession.my_rsvp === 'present' && !hasCheckedIn() && (
+          {isCheckinWindow() && currentSession.my_rsvp === 'present' && !hasCheckedIn() && (
             <CheckinSection checkinLoading={checkinLoading} onCheckin={handleCheckin} />
           )}
 
@@ -281,6 +310,14 @@ export default function SessionDetail() {
                 sessionTitle={currentSession.title || currentSession.game || 'Session'}
               />
             </div>
+          )}
+
+          {(isSessionPast() || currentSession.status === 'completed') && (
+            <PostSessionResults
+              rsvps={currentSession.rsvps as ParticipantsListProps_rsvps}
+              checkins={currentSession.checkins}
+              durationMinutes={currentSession.duration_minutes}
+            />
           )}
 
           <ParticipantsList
@@ -316,6 +353,18 @@ export default function SessionDetail() {
         confirmLabel="Annuler la session"
         variant="warning"
       />
+
+      <AnimatePresence>
+        {showEditModal && currentSession && (
+          <EditSessionModal
+            sessionId={currentSession.id}
+            initialTitle={currentSession.title || ''}
+            initialScheduledAt={currentSession.scheduled_at}
+            initialDuration={currentSession.duration_minutes || 120}
+            onClose={() => setShowEditModal(false)}
+          />
+        )}
+      </AnimatePresence>
     </main>
   )
 }
@@ -326,3 +375,293 @@ type ParticipantsListProps_rsvps = Array<{
   response: string
   profiles?: { username?: string }
 }>
+
+// --- F26: Edit Session Modal ---
+
+function EditSessionModal({
+  sessionId,
+  initialTitle,
+  initialScheduledAt,
+  initialDuration,
+  onClose,
+}: {
+  sessionId: string
+  initialTitle: string
+  initialScheduledAt: string
+  initialDuration: number
+  onClose: () => void
+}) {
+  const initialDate = new Date(initialScheduledAt)
+  const [title, setTitle] = useState(initialTitle)
+  const [date, setDate] = useState(initialDate.toISOString().split('T')[0])
+  const [time, setTime] = useState(
+    `${String(initialDate.getHours()).padStart(2, '0')}:${String(initialDate.getMinutes()).padStart(2, '0')}`
+  )
+  const [duration, setDuration] = useState(String(initialDuration))
+  const [error, setError] = useState<string | null>(null)
+  const updateMutation = useUpdateSessionMutation()
+
+  useEffect(() => {
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        e.preventDefault()
+        onClose()
+      }
+    }
+    document.addEventListener('keydown', handleKey)
+    return () => document.removeEventListener('keydown', handleKey)
+  }, [onClose])
+
+  useEffect(() => {
+    document.body.style.overflow = 'hidden'
+    return () => {
+      document.body.style.overflow = ''
+    }
+  }, [])
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setError(null)
+
+    if (!date || !time) {
+      setError('Date et heure requises')
+      return
+    }
+
+    const scheduledAt = new Date(`${date}T${time}`)
+    if (scheduledAt < new Date()) {
+      setError('La date doit être dans le futur')
+      return
+    }
+
+    try {
+      await updateMutation.mutateAsync({
+        sessionId,
+        title: title.trim() || undefined,
+        scheduled_at: scheduledAt.toISOString(),
+        duration_minutes: parseInt(duration),
+      })
+      onClose()
+    } catch {
+      setError('Erreur lors de la modification')
+    }
+  }
+
+  return (
+    <m.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="fixed inset-0 z-[100] bg-black/60 backdrop-blur-sm flex items-center justify-center px-4"
+      onClick={onClose}
+    >
+      <m.div
+        initial={{ scale: 0.95, y: 10 }}
+        animate={{ scale: 1, y: 0 }}
+        exit={{ scale: 0.95, y: 10 }}
+        transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="edit-session-title"
+        className="w-full max-w-md rounded-2xl bg-bg-elevated border border-border-subtle p-6"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="flex items-center justify-between mb-5">
+          <h2 id="edit-session-title" className="text-lg font-bold text-text-primary">
+            Modifier la session
+          </h2>
+          <button
+            onClick={onClose}
+            className="p-1.5 rounded-lg hover:bg-border-subtle transition-colors"
+            aria-label="Fermer"
+          >
+            <X className="w-5 h-5 text-text-tertiary" />
+          </button>
+        </div>
+
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-text-secondary mb-1.5">
+              Titre (optionnel)
+            </label>
+            <input
+              type="text"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              placeholder="Session ranked, Détente, Tryhard..."
+              className="w-full h-11 px-4 rounded-xl bg-bg-surface border border-border-default text-md text-text-primary placeholder:text-text-quaternary focus:border-primary focus:outline-none transition-colors"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-text-secondary mb-2">
+              <Calendar className="w-4 h-4 inline mr-1" />
+              Date
+            </label>
+            <div className="flex gap-1.5 overflow-x-auto pb-1 scrollbar-hide">
+              {Array.from({ length: 14 }, (_, i) => {
+                const d = new Date()
+                d.setDate(d.getDate() + i)
+                const iso = d.toISOString().split('T')[0]
+                const isSelected = date === iso
+                const dayLabel =
+                  i === 0
+                    ? 'Auj.'
+                    : i === 1
+                      ? 'Dem.'
+                      : d.toLocaleDateString('fr', { weekday: 'short' })
+                return (
+                  <button
+                    key={iso}
+                    type="button"
+                    onClick={() => setDate(iso)}
+                    className={`flex-shrink-0 w-14 py-2 rounded-xl text-center transition-colors ${
+                      isSelected
+                        ? 'bg-primary text-white'
+                        : 'bg-surface-card text-text-secondary hover:bg-border-hover'
+                    }`}
+                  >
+                    <div className="text-xs opacity-70">{dayLabel}</div>
+                    <div className="text-lg font-semibold leading-tight">{d.getDate()}</div>
+                  </button>
+                )
+              })}
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-text-secondary mb-2">
+              <Clock className="w-4 h-4 inline mr-1" />
+              Heure
+            </label>
+            <div className="flex flex-wrap gap-1.5">
+              {[
+                '14:00', '15:00', '16:00', '17:00', '18:00', '18:30',
+                '19:00', '19:30', '20:00', '20:30', '21:00', '21:30',
+                '22:00', '22:30', '23:00',
+              ].map((t) => (
+                <button
+                  key={t}
+                  type="button"
+                  onClick={() => setTime(t)}
+                  className={`px-3 py-2 rounded-xl text-sm font-medium transition-colors ${
+                    time === t
+                      ? 'bg-primary text-white'
+                      : 'bg-surface-card text-text-secondary hover:bg-border-hover'
+                  }`}
+                >
+                  {t}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-text-secondary mb-1.5">Durée</label>
+            <Select
+              options={[
+                { value: '60', label: '1 heure' },
+                { value: '120', label: '2 heures' },
+                { value: '180', label: '3 heures' },
+                { value: '240', label: '4 heures' },
+              ]}
+              value={duration}
+              onChange={(val) => setDuration(val as string)}
+            />
+          </div>
+
+          {error && (
+            <div className="p-3 rounded-lg bg-error-10 border border-error">
+              <p className="text-error text-base">{error}</p>
+            </div>
+          )}
+
+          <div className="flex gap-3 pt-1">
+            <Button variant="secondary" type="button" onClick={onClose} className="flex-1">
+              Annuler
+            </Button>
+            <Button
+              type="submit"
+              className="flex-1"
+              disabled={updateMutation.isPending}
+            >
+              {updateMutation.isPending ? 'Enregistrement...' : 'Enregistrer'}
+            </Button>
+          </div>
+        </form>
+      </m.div>
+    </m.div>
+  )
+}
+
+// --- F30: Post-Session Results ---
+
+function PostSessionResults({
+  rsvps,
+  checkins,
+  durationMinutes,
+}: {
+  rsvps?: ParticipantsListProps_rsvps
+  checkins?: Array<{ user_id: string; status?: string }>
+  durationMinutes: number
+}) {
+  const totalRsvps = rsvps?.length || 0
+  const presentRsvps = rsvps?.filter((r) => r.response === 'present').length || 0
+  const totalCheckins = checkins?.length || 0
+  const participationRate = presentRsvps > 0 ? Math.round((totalCheckins / presentRsvps) * 100) : 0
+
+  return (
+    <div className="mb-8">
+      <h2 className="text-xs font-medium text-text-tertiary/35 uppercase tracking-[0.05em] mb-4">
+        Résultats de la session
+      </h2>
+      <Card className="overflow-hidden">
+        <div className="p-4 bg-gradient-to-b from-primary/[0.05] to-transparent">
+          <div className="flex items-center gap-2 mb-4">
+            <Trophy className="w-5 h-5 text-warning" />
+            <span className="text-md font-semibold text-text-primary">Récapitulatif</span>
+          </div>
+
+          <div className="grid grid-cols-3 gap-3">
+            <div className="text-center p-3 rounded-xl bg-bg-surface">
+              <Users className="w-5 h-5 mx-auto mb-1 text-primary" />
+              <div className="text-lg font-bold text-text-primary">{totalRsvps}</div>
+              <div className="text-xs text-text-tertiary">Inscrits</div>
+            </div>
+            <div className="text-center p-3 rounded-xl bg-bg-surface">
+              <CheckCircle2 className="w-5 h-5 mx-auto mb-1 text-success" />
+              <div className="text-lg font-bold text-text-primary">{totalCheckins}</div>
+              <div className="text-xs text-text-tertiary">Check-ins</div>
+            </div>
+            <div className="text-center p-3 rounded-xl bg-bg-surface">
+              <TrendingUp className="w-5 h-5 mx-auto mb-1 text-info" />
+              <div className="text-lg font-bold text-text-primary">{participationRate}%</div>
+              <div className="text-xs text-text-tertiary">Fiabilité</div>
+            </div>
+          </div>
+
+          <div className="mt-4 space-y-2">
+            <div className="flex items-center justify-between text-sm">
+              <span className="text-text-secondary">Durée prévue</span>
+              <span className="text-text-primary font-medium">{durationMinutes} min</span>
+            </div>
+            <div className="flex items-center justify-between text-sm">
+              <span className="text-text-secondary">Taux de participation</span>
+              <Badge variant={participationRate >= 75 ? 'success' : participationRate >= 50 ? 'warning' : 'danger'}>
+                {participationRate}%
+              </Badge>
+            </div>
+            {checkins && checkins.length > 0 && (
+              <div className="flex items-center justify-between text-sm">
+                <span className="text-text-secondary">Joueurs présents</span>
+                <span className="text-text-primary font-medium">
+                  {checkins.length} / {presentRsvps}
+                </span>
+              </div>
+            )}
+          </div>
+        </div>
+      </Card>
+    </div>
+  )
+}

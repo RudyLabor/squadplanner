@@ -26,8 +26,6 @@ export const test = base.extend<{
   authenticatedPage: async ({ page }, use) => {
     // Login the test user
     await page.goto('/auth')
-
-    // Wait for form to be ready
     await page.waitForSelector('form')
 
     // Fill login form
@@ -35,19 +33,10 @@ export const test = base.extend<{
     await page.fill('input[type="password"]', TEST_USER.password)
     await page.click('button[type="submit"]')
 
-    // Wait for successful login (redirect to home or stay with user loaded)
+    // Wait for redirect away from auth page (to /home or /onboarding)
     await page
-      .waitForFunction(
-        () => {
-          return (
-            window.location.pathname !== '/auth' ||
-            document.querySelector('[data-testid="user-menu"]') !== null
-          )
-        },
-        { timeout: 10000 }
-      )
+      .waitForURL((url) => !url.pathname.includes('/auth'), { timeout: 15000 })
       .catch(() => {
-        // If redirect didn't happen, check if we're still on auth with an error
         console.log('Login may have failed - continuing anyway')
       })
 
@@ -69,7 +58,7 @@ export async function loginViaUI(page: import('@playwright/test').Page) {
   await page.click('button[type="submit"]')
 
   // Wait for navigation away from auth page
-  await page.waitForURL((url) => !url.pathname.includes('/auth'), { timeout: 10000 })
+  await page.waitForURL((url) => !url.pathname.includes('/auth'), { timeout: 15000 })
 }
 
 // Helper to check if user is authenticated

@@ -2,15 +2,6 @@ import { test, expect } from '@playwright/test'
 
 /**
  * Settings E2E Tests — Flux F57-F65
- * F57: Editer son profil
- * F58: Changer les notifs
- * F59: Changer les devices audio
- * F60: Changer le theme (dark/light)
- * F61: Changer le timezone
- * F62: Changer les settings privacy
- * F63: Exporter ses données (GDPR)
- * F64: Supprimer son compte
- * F65: Se déconnecter
  */
 
 const TEST_USER = {
@@ -18,13 +9,26 @@ const TEST_USER = {
   password: 'ruudboy92',
 }
 
+async function dismissCookieBanner(page: import('@playwright/test').Page) {
+  try {
+    const acceptBtn = page.getByRole('button', { name: /Tout accepter/i })
+    await acceptBtn.waitFor({ state: 'visible', timeout: 3000 })
+    await acceptBtn.click()
+    await page.waitForTimeout(500)
+  } catch {
+    // Cookie banner not present, continue
+  }
+}
+
 async function loginUser(page: import('@playwright/test').Page): Promise<boolean> {
   await page.goto('/auth')
+  await page.waitForSelector('form')
+  await dismissCookieBanner(page)
   await page.fill('input[type="email"]', TEST_USER.email)
   await page.fill('input[type="password"]', TEST_USER.password)
   await page.click('button[type="submit"]')
   try {
-    await page.waitForURL((url) => !url.pathname.includes('/auth'), { timeout: 10000 })
+    await page.waitForURL((url) => !url.pathname.includes('/auth'), { timeout: 15000 })
     return true
   } catch {
     return false
@@ -35,10 +39,11 @@ test.describe('Settings Page - Structure', () => {
   test('should load settings page or redirect to auth', async ({ page }) => {
     const loggedIn = await loginUser(page)
     await page.goto('/settings')
-    await page.waitForTimeout(1000)
+    await page.waitForLoadState('networkidle')
 
     if (loggedIn) {
-      await expect(page.locator('body')).toBeVisible()
+      // Settings heading is "Paramètres"
+      await expect(page.getByText(/Paramètres/i).first()).toBeVisible()
     } else {
       expect(page.url()).toContain('/auth')
     }
@@ -50,9 +55,9 @@ test.describe('F57 - Editer son profil', () => {
     const loggedIn = await loginUser(page)
     if (!loggedIn) { test.skip(); return }
     await page.goto('/profile')
-    await page.waitForTimeout(1000)
+    await page.waitForLoadState('networkidle')
 
-    await expect(page.locator('body')).toBeVisible()
+    await expect(page.locator('main').first()).toBeVisible()
   })
 })
 
@@ -61,13 +66,12 @@ test.describe('F58 - Changer les notifications', () => {
     const loggedIn = await loginUser(page)
     if (!loggedIn) { test.skip(); return }
     await page.goto('/settings')
-    await page.waitForTimeout(1000)
+    await page.waitForLoadState('networkidle')
 
-    const notifSection = page.getByText(/Notification/i).first()
-    const hasNotif = await notifSection.isVisible().catch(() => false)
-    if (hasNotif) {
-      await expect(notifSection).toBeVisible()
-    }
+    const hasNotif =
+      (await page.locator('#notifications').isVisible().catch(() => false)) ||
+      (await page.getByText(/Notification/i).first().isVisible().catch(() => false))
+    expect(hasNotif).toBeTruthy()
   })
 })
 
@@ -76,13 +80,12 @@ test.describe('F59 - Changer les devices audio', () => {
     const loggedIn = await loginUser(page)
     if (!loggedIn) { test.skip(); return }
     await page.goto('/settings')
-    await page.waitForTimeout(1000)
+    await page.waitForLoadState('networkidle')
 
-    const audioSection = page.getByText(/Micro|Audio/i).first()
-    const hasAudio = await audioSection.isVisible().catch(() => false)
-    if (hasAudio) {
-      await expect(audioSection).toBeVisible()
-    }
+    const hasAudio =
+      (await page.locator('#audio').isVisible().catch(() => false)) ||
+      (await page.getByText(/Micro|Audio/i).first().isVisible().catch(() => false))
+    expect(hasAudio).toBeTruthy()
   })
 })
 
@@ -91,12 +94,13 @@ test.describe('F60 - Changer le thème (dark/light)', () => {
     const loggedIn = await loginUser(page)
     if (!loggedIn) { test.skip(); return }
     await page.goto('/settings')
-    await page.waitForTimeout(1000)
+    await page.waitForLoadState('networkidle')
 
-    // Check for any theme-related UI
-    const hasApparence = await page.getByText(/Apparence|Thème/i).first().isVisible().catch(() => false)
-    const hasSombre = await page.getByText('Sombre').first().isVisible().catch(() => false)
-    expect(hasApparence || hasSombre).toBeTruthy()
+    const hasTheme =
+      (await page.locator('#theme').isVisible().catch(() => false)) ||
+      (await page.getByText(/Apparence|Thème/i).first().isVisible().catch(() => false)) ||
+      (await page.getByText('Sombre').first().isVisible().catch(() => false))
+    expect(hasTheme).toBeTruthy()
   })
 })
 
@@ -105,13 +109,12 @@ test.describe('F61 - Changer le timezone', () => {
     const loggedIn = await loginUser(page)
     if (!loggedIn) { test.skip(); return }
     await page.goto('/settings')
-    await page.waitForTimeout(1000)
+    await page.waitForLoadState('networkidle')
 
-    const timezoneElement = page.getByText(/Paris|Fuseau|Timezone/i).first()
-    const hasTimezone = await timezoneElement.isVisible().catch(() => false)
-    if (hasTimezone) {
-      await expect(timezoneElement).toBeVisible()
-    }
+    const hasTimezone =
+      (await page.locator('#region').isVisible().catch(() => false)) ||
+      (await page.getByText(/Paris|Fuseau|Timezone/i).first().isVisible().catch(() => false))
+    expect(hasTimezone).toBeTruthy()
   })
 })
 
@@ -120,13 +123,12 @@ test.describe('F62 - Changer les settings privacy', () => {
     const loggedIn = await loginUser(page)
     if (!loggedIn) { test.skip(); return }
     await page.goto('/settings')
-    await page.waitForTimeout(1000)
+    await page.waitForLoadState('networkidle')
 
-    const privacySection = page.getByText(/Confidentialité|Visibilité/i).first()
-    const hasPrivacy = await privacySection.isVisible().catch(() => false)
-    if (hasPrivacy) {
-      await expect(privacySection).toBeVisible()
-    }
+    const hasPrivacy =
+      (await page.locator('#privacy').isVisible().catch(() => false)) ||
+      (await page.getByText(/Confidentialité|Visibilité/i).first().isVisible().catch(() => false))
+    expect(hasPrivacy).toBeTruthy()
   })
 })
 
@@ -135,13 +137,12 @@ test.describe('F63 - Exporter ses données (GDPR)', () => {
     const loggedIn = await loginUser(page)
     if (!loggedIn) { test.skip(); return }
     await page.goto('/settings')
-    await page.waitForTimeout(1000)
+    await page.waitForLoadState('networkidle')
 
-    const exportBtn = page.getByText(/Exporter/i).first()
-    const hasExport = await exportBtn.isVisible().catch(() => false)
-    if (hasExport) {
-      await expect(exportBtn).toBeVisible()
-    }
+    const hasExport =
+      (await page.locator('#data').isVisible().catch(() => false)) ||
+      (await page.getByText(/Exporter/i).first().isVisible().catch(() => false))
+    expect(hasExport).toBeTruthy()
   })
 })
 
@@ -150,13 +151,12 @@ test.describe('F64 - Supprimer son compte', () => {
     const loggedIn = await loginUser(page)
     if (!loggedIn) { test.skip(); return }
     await page.goto('/settings')
-    await page.waitForTimeout(1000)
+    await page.waitForLoadState('networkidle')
 
-    const deleteBtn = page.getByText(/Supprimer/i).first()
-    const hasDelete = await deleteBtn.isVisible().catch(() => false)
-    if (hasDelete) {
-      await expect(deleteBtn).toBeVisible()
-    }
+    const hasDelete =
+      (await page.locator('#data').isVisible().catch(() => false)) ||
+      (await page.getByText(/Supprimer/i).first().isVisible().catch(() => false))
+    expect(hasDelete).toBeTruthy()
   })
 })
 
@@ -165,20 +165,19 @@ test.describe('F65 - Se déconnecter', () => {
     const loggedIn = await loginUser(page)
     if (!loggedIn) { test.skip(); return }
     await page.goto('/settings')
-    await page.waitForTimeout(1000)
+    await page.waitForLoadState('networkidle')
 
-    const logoutBtn = page.getByText(/déconnecter|Déconnexion/i).first()
-    const hasLogout = await logoutBtn.isVisible().catch(() => false)
-    if (hasLogout) {
-      await expect(logoutBtn).toBeVisible()
-    }
+    const hasLogout =
+      (await page.getByText(/déconnecter|Déconnexion/i).first().isVisible().catch(() => false)) ||
+      (await page.locator('button:has-text("Se déconnecter")').isVisible().catch(() => false))
+    expect(hasLogout).toBeTruthy()
   })
 })
 
 test.describe('Settings - Protected Route', () => {
   test('should require authentication', async ({ page }) => {
     await page.goto('/settings')
-    await page.waitForTimeout(2000)
+    await page.waitForTimeout(3000)
 
     const url = page.url()
     expect(url.includes('/auth') || url.includes('/settings')).toBeTruthy()
@@ -188,9 +187,10 @@ test.describe('Settings - Protected Route', () => {
 test.describe('Settings - Responsive', () => {
   test('should be usable on mobile viewport', async ({ page }) => {
     await page.setViewportSize({ width: 375, height: 667 })
-    await loginUser(page)
+    const loggedIn = await loginUser(page)
+    if (!loggedIn) { test.skip(); return }
     await page.goto('/settings')
-    await page.waitForTimeout(1000)
+    await page.waitForLoadState('networkidle')
 
     await expect(page.locator('body')).toBeVisible()
   })

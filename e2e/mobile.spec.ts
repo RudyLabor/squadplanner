@@ -202,7 +202,7 @@ for (const viewport of mobileViewports) {
       const squads = await db.getUserSquads()
       expect(Array.isArray(squads)).toBe(true)
 
-      const createBtn = page.locator('main').getByRole('button', { name: 'Créer' })
+      const createBtn = page.locator('main').getByRole('button', { name: /Créer/i }).last()
       if (await createBtn.isVisible().catch(() => false)) {
         await createBtn.click()
         await expect(page.getByText('Créer une squad')).toBeVisible()

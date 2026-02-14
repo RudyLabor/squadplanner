@@ -154,6 +154,7 @@ export default defineConfig(async () => {
 
     // Dev server optimizations
     server: {
+      host: true,
       warmup: {
         clientFiles: ['./src/root.tsx', './src/routes/home.tsx', './src/routes/messages.tsx'],
       },

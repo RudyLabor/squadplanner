@@ -18,20 +18,25 @@ test.describe('F71 — Push Notifications', () => {
   test('F71a: Settings page shows notification toggle section', async ({ authenticatedPage }) => {
     await authenticatedPage.goto('/settings')
     await authenticatedPage.waitForLoadState('networkidle')
+    await authenticatedPage.waitForTimeout(1500)
 
-    // Verify notification section exists with toggles
-    const notifSection = authenticatedPage.locator('#notifications')
-      .or(authenticatedPage.getByText(/Notification/i).first())
-    await expect(notifSection).toBeVisible({ timeout: 10000 })
+    // Verify notification section exists — heading "Notifications" (h2) in the card
+    const notifHeading = authenticatedPage.getByRole('heading', { name: /Notifications/i })
+    const notifCard = authenticatedPage.locator('#notifications')
+    const hasHeading = await notifHeading.first().isVisible({ timeout: 10000 }).catch(() => false)
+    const hasCard = await notifCard.isVisible({ timeout: 3000 }).catch(() => false)
+    expect(hasHeading || hasCard).toBe(true)
 
-    // Verify at least one notification toggle is present
+    // Verify at least one notification toggle is present (role="switch" buttons)
     const hasToggle = await authenticatedPage
-      .locator('#notifications input[type="checkbox"], #notifications [role="switch"], [class*="notification"] input[type="checkbox"]')
+      .locator('#notifications [role="switch"], [role="switch"]')
       .first()
       .isVisible()
       .catch(() => false)
+    // Also check for notification-related labels scoped to the settings page main content
     const hasLabel = await authenticatedPage
-      .getByText(/Sessions|Messages|Party|Rappels/i)
+      .locator('main')
+      .getByText(/Sessions|Messages|Party vocale|Rappels automatiques/i)
       .first()
       .isVisible()
       .catch(() => false)

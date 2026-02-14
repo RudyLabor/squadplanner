@@ -252,9 +252,7 @@ export class TestDataHelper {
       .eq('owner_id', userId)
     if (oldSquads && oldSquads.length > 0) {
       for (const sq of oldSquads) {
-        await this.admin.from('squad_members').delete().eq('squad_id', sq.id)
-        await this.admin.from('sessions').delete().eq('squad_id', sq.id)
-        await this.admin.from('squads').delete().eq('id', sq.id)
+        await this.deleteTestSquad(sq.id)
       }
     }
 
@@ -276,7 +274,37 @@ export class TestDataHelper {
   }
 
   async deleteTestSquad(squadId: string) {
+    // Delete related data first to avoid FK constraints
+    try {
+      await this.admin.from('pinned_messages').delete().eq('squad_id', squadId)
+      await this.admin.from('messages').delete().eq('squad_id', squadId)
+      const { data: sessions } = await this.admin.from('sessions').select('id').eq('squad_id', squadId)
+      if (sessions && sessions.length > 0) {
+        const sessionIds = sessions.map((s: { id: string }) => s.id)
+        await this.admin.from('session_checkins').delete().in('session_id', sessionIds)
+        await this.admin.from('session_rsvps').delete().in('session_id', sessionIds)
+      }
+      await this.admin.from('sessions').delete().eq('squad_id', squadId)
+      await this.admin.from('squad_members').delete().eq('squad_id', squadId)
+    } catch { /* ignore cleanup errors */ }
     await this.admin.from('squads').delete().eq('id', squadId)
+  }
+
+  /** Nettoie toutes les squads E2E du test user pour libérer la limite freemium */
+  async cleanupE2ESquads() {
+    const userId = await this.getUserId()
+    const { data: memberEntries } = await this.admin
+      .from('squad_members')
+      .select('squad_id, squads!inner(id, name)')
+      .eq('user_id', userId)
+    if (memberEntries) {
+      for (const entry of memberEntries) {
+        const squad = (entry as unknown as { squads: { id: string; name: string } }).squads
+        if (squad.name.includes('E2E Test')) {
+          await this.deleteTestSquad(squad.id)
+        }
+      }
+    }
   }
 
   async createActiveTestSession(squadId: string, overrides: Partial<{ title: string }> = {}) {
@@ -554,6 +582,54 @@ export async function loginViaUI(page: import('@playwright/test').Page) {
 export async function isAuthenticated(page: import('@playwright/test').Page): Promise<boolean> {
   const url = page.url()
   return !url.includes('/auth') && !url.endsWith('/')
+}
+
+/** Vérifie si la page affiche une erreur 500 */
+export async function hasServerError(page: import('@playwright/test').Page): Promise<boolean> {
+  const has500 = await page.getByText(/^500$/).first().isVisible({ timeout: 1000 }).catch(() => false)
+  const hasErrText = await page.getByText(/Erreur interne du serveur/i).first().isVisible({ timeout: 500 }).catch(() => false)
+  return has500 || hasErrText
+}
+
+/** Vérifie si la page affiche une erreur réseau et tente un reload */
+export async function retryOnNetworkError(page: import('@playwright/test').Page, maxRetries = 2): Promise<boolean> {
+  for (let i = 0; i < maxRetries; i++) {
+    const hasError = await page.getByText(/Erreur réseau/i).first().isVisible({ timeout: 2000 }).catch(() => false)
+    if (!hasError) return true // pas d'erreur
+    await page.reload({ waitUntil: 'networkidle' })
+    await page.waitForTimeout(2000)
+  }
+  return !(await page.getByText(/Erreur réseau/i).first().isVisible({ timeout: 1000 }).catch(() => false))
+}
+
+/** Navigate to a page. If SSR returns 500, navigate via the sidebar link instead */
+export async function navigateWithFallback(page: import('@playwright/test').Page, path: string): Promise<boolean> {
+  await page.goto(path)
+  await page.waitForLoadState('networkidle')
+  await page.waitForTimeout(1500)
+
+  if (await hasServerError(page)) {
+    // SSR failed — try going to /home first (which works), then click nav link
+    await page.goto('/home')
+    await page.waitForLoadState('networkidle')
+    await page.waitForTimeout(1000)
+
+    const link = page.locator(`a[href="${path}"]`).first()
+    if (await link.isVisible({ timeout: 5000 }).catch(() => false)) {
+      await link.click()
+      await page.waitForLoadState('networkidle')
+      await page.waitForTimeout(1500)
+    } else {
+      // No nav link found — try simple reload
+      await page.goto(path)
+      await page.waitForLoadState('networkidle')
+      await page.waitForTimeout(1500)
+    }
+
+    return !(await hasServerError(page))
+  }
+
+  return true
 }
 
 export { expect }

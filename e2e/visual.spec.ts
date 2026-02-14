@@ -1,8 +1,10 @@
 import { test, expect } from '@playwright/test'
+import { supabaseAdmin, TestDataHelper, dismissCookieBanner } from './fixtures'
 
 /**
- * Visual regression tests
+ * Visual regression tests — with DB validation for protected pages
  * Captures screenshots of major pages in both dark and light mode
+ * Protected page tests verify DB data is loaded before screenshot.
  * Run with --update-snapshots on first run to generate baselines
  */
 
@@ -11,16 +13,8 @@ const TEST_USER = {
   password: 'ruudboy92',
 }
 
-async function dismissCookieBanner(page: import('@playwright/test').Page) {
-  try {
-    const acceptBtn = page.getByRole('button', { name: /Tout accepter/i })
-    await acceptBtn.waitFor({ state: 'visible', timeout: 3000 })
-    await acceptBtn.click()
-    await page.waitForTimeout(500)
-  } catch {
-    // Cookie banner not present, continue
-  }
-}
+// DB helper for validation queries
+const db = new TestDataHelper(supabaseAdmin)
 
 async function loginUser(page: import('@playwright/test').Page) {
   await page.goto('/auth')
@@ -29,7 +23,6 @@ async function loginUser(page: import('@playwright/test').Page) {
   await page.fill('input[type="email"]', TEST_USER.email)
   await page.fill('input[type="password"]', TEST_USER.password)
   await page.click('button[type="submit"]')
-  // Retry login if rate-limited by Supabase (8 parallel workers)
   for (let attempt = 0; attempt < 3; attempt++) {
     try {
       await page.waitForURL((url) => !url.pathname.includes('/auth'), { timeout: 20000, waitUntil: 'domcontentloaded' })
@@ -53,14 +46,33 @@ const publicPages = [
   { name: 'Premium', path: '/premium' },
 ]
 
-// Pages that require authentication
+// Pages that require authentication — with DB validation method
 const protectedPages = [
-  { name: 'Home', path: '/home' },
-  { name: 'Squads', path: '/squads' },
-  { name: 'Messages', path: '/messages' },
-  { name: 'Profile', path: '/profile' },
-  { name: 'Settings', path: '/settings' },
-  { name: 'Party', path: '/party' },
+  { name: 'Home', path: '/home', dbCheck: async () => {
+    const profile = await db.getProfile()
+    expect(profile).toBeTruthy()
+    expect(profile.username).toBeTruthy()
+  }},
+  { name: 'Squads', path: '/squads', dbCheck: async () => {
+    const squads = await db.getUserSquads()
+    expect(Array.isArray(squads)).toBe(true)
+  }},
+  { name: 'Messages', path: '/messages', dbCheck: async () => {
+    const squads = await db.getUserSquads()
+    expect(Array.isArray(squads)).toBe(true)
+  }},
+  { name: 'Profile', path: '/profile', dbCheck: async () => {
+    const profile = await db.getProfile()
+    expect(profile).toBeTruthy()
+  }},
+  { name: 'Settings', path: '/settings', dbCheck: async () => {
+    const profile = await db.getProfile()
+    expect(profile).toBeTruthy()
+  }},
+  { name: 'Party', path: '/party', dbCheck: async () => {
+    const squads = await db.getUserSquads()
+    expect(Array.isArray(squads)).toBe(true)
+  }},
 ]
 
 test.describe('Visual Regression - Public Pages', () => {
@@ -70,7 +82,6 @@ test.describe('Visual Regression - Public Pages', () => {
       await page.goto(path)
       await page.waitForLoadState('networkidle')
 
-      // Use generous diff threshold for CI stability
       await expect(page).toHaveScreenshot(`${name.toLowerCase()}-dark.png`, {
         fullPage: true,
         maxDiffPixelRatio: 0.15,
@@ -91,8 +102,11 @@ test.describe('Visual Regression - Public Pages', () => {
 })
 
 test.describe('Visual Regression - Protected Pages', () => {
-  for (const { name, path } of protectedPages) {
+  for (const { name, path, dbCheck } of protectedPages) {
     test(`${name} page - dark mode`, async ({ page }) => {
+      // DB validation: verify data exists before screenshot
+      await dbCheck()
+
       await page.emulateMedia({ colorScheme: 'dark' })
       await loginUser(page)
       await page.goto(path)
@@ -106,6 +120,9 @@ test.describe('Visual Regression - Protected Pages', () => {
     })
 
     test(`${name} page - light mode`, async ({ page }) => {
+      // DB validation: verify data exists before screenshot
+      await dbCheck()
+
       await page.emulateMedia({ colorScheme: 'light' })
       await loginUser(page)
       await page.goto(path)

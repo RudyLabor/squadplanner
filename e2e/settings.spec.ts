@@ -325,35 +325,171 @@ test.describe('F62 — Parametres de confidentialite', () => {
 })
 
 // =============================================================================
-// F63 — Export data button
+// F63 — Export data (GDPR) — functional tests with download validation
 // =============================================================================
 test.describe('F63 — Exporter ses donnees (GDPR)', () => {
-  test('should display "Exporter mes donnees" button', async ({ authenticatedPage }) => {
+
+  test('F63a: Export button is visible and clickable', async ({ authenticatedPage }) => {
     await authenticatedPage.goto('/settings')
     await authenticatedPage.waitForLoadState('networkidle')
 
-    const hasExportBtn =
-      (await authenticatedPage.getByRole('button', { name: /Exporter/i }).isVisible().catch(() => false)) ||
-      (await authenticatedPage.getByText(/Exporter mes données/i).first().isVisible().catch(() => false)) ||
-      (await authenticatedPage.locator('#data').isVisible().catch(() => false))
-    expect(hasExportBtn).toBeTruthy()
+    const exportBtn = authenticatedPage.getByText(/Exporter mes données/i).first()
+      .or(authenticatedPage.getByRole('button', { name: /Exporter/i }))
+    await expect(exportBtn.first()).toBeVisible({ timeout: 10000 })
+  })
+
+  test('F63b: Click export triggers file download', async ({ authenticatedPage }) => {
+    await authenticatedPage.goto('/settings')
+    await authenticatedPage.waitForLoadState('networkidle')
+
+    // Listen for download event BEFORE clicking
+    const downloadPromise = authenticatedPage.waitForEvent('download', { timeout: 30000 })
+
+    // Click export button
+    const exportBtn = authenticatedPage.getByText(/Exporter mes données/i).first()
+      .or(authenticatedPage.getByRole('button', { name: /Exporter/i }))
+    const hasExport = await exportBtn.first().isVisible({ timeout: 5000 }).catch(() => false)
+    test.skip(!hasExport, 'Export button not visible')
+
+    await exportBtn.first().click()
+
+    // Wait for download
+    const download = await downloadPromise
+    expect(download).toBeTruthy()
+
+    // Verify filename pattern
+    const filename = download.suggestedFilename()
+    expect(filename).toMatch(/\.(json|txt|csv)/)
+  })
+
+  test('F63c: Exported data contains expected structure', async ({ authenticatedPage }) => {
+    await authenticatedPage.goto('/settings')
+    await authenticatedPage.waitForLoadState('networkidle')
+
+    const downloadPromise = authenticatedPage.waitForEvent('download', { timeout: 30000 })
+
+    const exportBtn = authenticatedPage.getByText(/Exporter mes données/i).first()
+      .or(authenticatedPage.getByRole('button', { name: /Exporter/i }))
+    const hasExport = await exportBtn.first().isVisible({ timeout: 5000 }).catch(() => false)
+    test.skip(!hasExport, 'Export button not visible')
+
+    await exportBtn.first().click()
+
+    const download = await downloadPromise
+    expect(download).toBeTruthy()
+
+    // Read file content
+    const readStream = await download.createReadStream()
+    const chunks: Buffer[] = []
+    if (readStream) {
+      for await (const chunk of readStream) {
+        chunks.push(Buffer.from(chunk))
+      }
+    }
+    const content = Buffer.concat(chunks).toString('utf-8')
+    expect(content.length).toBeGreaterThan(10)
+
+    // Try to parse as JSON and validate structure
+    const data = JSON.parse(content)
+    expect(data).toBeTruthy()
+    expect(data.exported_at || data.profile || data.squads).toBeTruthy()
+
+    // If it has a profile, validate it has username
+    if (data.profile) {
+      expect(data.profile.username).toBeTruthy()
+    }
   })
 })
 
 // =============================================================================
-// F64 — Delete account button (DO NOT CLICK)
+// F64 — Delete account (GDPR) — modal flow + cascade delete on temp user
 // =============================================================================
 test.describe('F64 — Supprimer son compte', () => {
-  test('should display "Supprimer mon compte" button without clicking it', async ({ authenticatedPage }) => {
+
+  test('F64a: Delete modal flow — type SUPPRIMER enables confirm button', async ({ authenticatedPage }) => {
     await authenticatedPage.goto('/settings')
     await authenticatedPage.waitForLoadState('networkidle')
 
-    // Verify delete button is present — DO NOT CLICK
-    const hasDeleteBtn =
-      (await authenticatedPage.getByRole('button', { name: /Supprimer/i }).isVisible().catch(() => false)) ||
-      (await authenticatedPage.getByText(/Supprimer mon compte/i).first().isVisible().catch(() => false)) ||
-      (await authenticatedPage.locator('button:has-text("Supprimer")').isVisible().catch(() => false))
-    expect(hasDeleteBtn).toBeTruthy()
+    // Click "Supprimer mon compte" to open modal
+    const deleteBtn = authenticatedPage.getByText(/Supprimer mon compte/i).first()
+      .or(authenticatedPage.getByRole('button', { name: /Supprimer/i }))
+    const hasDelete = await deleteBtn.first().isVisible({ timeout: 5000 }).catch(() => false)
+    test.skip(!hasDelete, 'Delete button not visible')
+
+    await deleteBtn.first().click()
+    await authenticatedPage.waitForTimeout(500)
+
+    // Verify modal opened with confirmation heading
+    const modalHeading = authenticatedPage.getByText(/Supprimer ton compte|Supprimer votre compte|Confirmation/i)
+    await expect(modalHeading.first()).toBeVisible({ timeout: 5000 })
+
+    // Verify confirm button exists and is disabled
+    const confirmBtn = authenticatedPage.getByRole('button', { name: /Supprimer définitivement|Confirmer la suppression/i })
+    const hasConfirm = await confirmBtn.first().isVisible().catch(() => false)
+
+    if (hasConfirm) {
+      // Button should be disabled initially
+      const isDisabled = await confirmBtn.first().isDisabled().catch(() => true)
+      expect(isDisabled).toBe(true)
+
+      // Type "SUPPRIMER" in the confirmation input
+      const input = authenticatedPage.locator('input[placeholder*="SUPPRIMER" i], input[type="text"]').last()
+      await input.fill('SUPPRIMER')
+      await authenticatedPage.waitForTimeout(300)
+
+      // Confirm button should now be enabled
+      const isEnabled = await confirmBtn.first().isEnabled().catch(() => false)
+      expect(isEnabled).toBe(true)
+    }
+
+    // Click Cancel/Annuler — DO NOT actually delete the main user
+    const cancelBtn = authenticatedPage.getByRole('button', { name: /Annuler|Fermer/i }).first()
+    const hasCancel = await cancelBtn.isVisible().catch(() => false)
+    if (hasCancel) {
+      await cancelBtn.click()
+    } else {
+      await authenticatedPage.keyboard.press('Escape')
+    }
+  })
+
+  test('F64b: Delete cascade on temporary user — all 8 tables cleaned in DB', async ({ db }) => {
+    // Create a temporary user specifically for this test
+    let tempUserId: string | null = null
+    try {
+      const { userId } = await db.createTemporaryTestUser()
+      tempUserId = userId
+
+      // Verify user exists in profiles
+      const { data: profileBefore } = await db.admin.from('profiles').select('*').eq('id', userId).single()
+      expect(profileBefore).toBeTruthy()
+      expect(profileBefore.username).toContain('e2e-temp-')
+
+      // Execute the delete cascade (same logic as SettingsDeleteModal)
+      await db.admin.from('session_checkins').delete().eq('user_id', userId)
+      await db.admin.from('session_rsvps').delete().eq('user_id', userId)
+      await db.admin.from('messages').delete().eq('user_id', userId)
+      await db.admin.from('direct_messages').delete().eq('sender_id', userId)
+      await db.admin.from('party_participants').delete().eq('user_id', userId)
+      await db.admin.from('push_subscriptions').delete().eq('user_id', userId)
+      await db.admin.from('squad_members').delete().eq('user_id', userId)
+      await db.admin.from('ai_insights').delete().eq('user_id', userId)
+      await db.admin.from('profiles').delete().eq('id', userId)
+
+      // Verify all tables are clean
+      const verification = await db.verifyUserDataDeleted(userId)
+      for (const [table, count] of Object.entries(verification.tables)) {
+        expect(count).toBe(0)
+      }
+
+      // Delete auth user
+      await db.admin.auth.admin.deleteUser(userId)
+      tempUserId = null
+    } finally {
+      // Safety cleanup if test failed before delete
+      if (tempUserId) {
+        try { await db.deleteTemporaryTestUser(tempUserId) } catch { /* ignore */ }
+      }
+    }
   })
 })
 

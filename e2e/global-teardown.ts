@@ -31,5 +31,39 @@ export default async function globalTeardown() {
   const { count: squadCount } = await admin.from('squads').delete({ count: 'exact' }).ilike('name', '%E2E Test%')
   if (squadCount) console.log(`  Deleted ${squadCount} test squads`)
 
+  // Delete temporary E2E test users (created by GDPR delete tests)
+  try {
+    const { data: usersData } = await admin.auth.admin.listUsers()
+    const e2eTempUsers = usersData?.users?.filter((u: { email?: string }) =>
+      u.email?.startsWith('e2e-delete-test-') || u.email?.startsWith('e2e-temp-')
+    ) || []
+    if (e2eTempUsers.length > 0) {
+      for (const user of e2eTempUsers) {
+        const tables = ['session_checkins', 'session_rsvps', 'messages', 'direct_messages',
+          'party_participants', 'push_subscriptions', 'squad_members', 'ai_insights', 'profiles']
+        for (const table of tables) {
+          const col = table === 'profiles' ? 'id' : (table === 'direct_messages' ? 'sender_id' : 'user_id')
+          await admin.from(table).delete().eq(col, user.id)
+        }
+        await admin.auth.admin.deleteUser(user.id)
+      }
+      console.log(`  Deleted ${e2eTempUsers.length} temporary test users`)
+    }
+  } catch (err) {
+    console.log(`  Warning: temp user cleanup failed: ${err}`)
+  }
+
+  // Reset subscription tier to free (in case trial test left it as premium)
+  try {
+    const { data: usersData2 } = await admin.auth.admin.listUsers()
+    const testUser = usersData2?.users?.find((u: { email?: string }) => u.email === 'rudylabor@hotmail.fr')
+    if (testUser) {
+      await admin.from('profiles').update({
+        subscription_tier: 'free',
+        subscription_expires_at: null,
+      }).eq('id', testUser.id)
+    }
+  } catch { /* ignore */ }
+
   console.log('[global-teardown] Done.')
 }

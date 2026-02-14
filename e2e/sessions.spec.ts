@@ -532,6 +532,48 @@ test.describe('Sessions — F30: Resultats post-session', () => {
   })
 })
 
+// =============================================================================
+// F73 — Reminders (notification preferences + ai_insights DB)
+// =============================================================================
+test.describe('Sessions — F73: Rappels et notifications', () => {
+
+  test('F73a: Notification reminder preferences exist in settings', async ({ authenticatedPage }) => {
+    const page = authenticatedPage
+    await page.goto('/settings')
+    await page.waitForLoadState('networkidle')
+
+    // Verify reminder/notification section exists
+    const reminderSection = page.getByText(/Rappels|Notifications|Reminders/i).first()
+    await expect(reminderSection).toBeVisible({ timeout: 10000 })
+
+    // Verify at least one toggle/checkbox for notification preferences
+    const hasToggle = await page
+      .locator('#notifications input[type="checkbox"], #notifications [role="switch"], input[type="checkbox"]')
+      .first()
+      .isVisible()
+      .catch(() => false)
+    const hasLabel = await page
+      .getByText(/Sessions|Messages|Rappels/i)
+      .first()
+      .isVisible()
+      .catch(() => false)
+
+    expect(hasToggle || hasLabel).toBe(true)
+  })
+
+  test('F73b: ai_insights table exists and is queryable in DB', async ({ db }) => {
+    const insights = await db.getAiInsights()
+    // The query must succeed (table exists and is accessible)
+    expect(Array.isArray(insights)).toBe(true)
+
+    // If insights exist, validate their structure
+    if (insights.length > 0) {
+      expect(insights[0].user_id).toBeTruthy()
+      expect(insights[0].created_at).toBeTruthy()
+    }
+  })
+})
+
 test.describe('Sessions — Extras', () => {
   test('F-extra: la page Sessions affiche le heading', async ({ authenticatedPage }) => {
     const page = authenticatedPage

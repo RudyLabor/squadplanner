@@ -28,7 +28,7 @@ export const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey, {
 // 3. TestDataHelper — requêtes DB pour validation E2E
 // ============================================================
 export class TestDataHelper {
-  private admin: SupabaseClient
+  public admin: SupabaseClient
   private _userId: string | null = null
 
   constructor(admin: SupabaseClient) {
@@ -363,6 +363,105 @@ export class TestDataHelper {
     await this.admin.from('messages').delete().ilike('content', '%[E2E]%')
     await this.admin.from('sessions').delete().ilike('title', '%E2E Test%')
     await this.admin.from('squads').delete().ilike('name', '%E2E Test%')
+  }
+
+  // ============================================================
+  // NOUVELLES MÉTHODES — Sprint 100/100
+  // ============================================================
+
+  /** Récupère les champs spécifiques du profil (username, avatar_url, timezone, bio) */
+  async getProfileFields() {
+    const userId = await this.getUserId()
+    const { data } = await this.admin
+      .from('profiles')
+      .select('username, avatar_url, timezone, bio, updated_at')
+      .eq('id', userId)
+      .single()
+    return data
+  }
+
+  /** Crée un user temporaire pour tester la suppression de compte (GDPR F64) */
+  async createTemporaryTestUser(): Promise<{ userId: string; email: string; password: string }> {
+    const email = `e2e-delete-test-${Date.now()}@test.invalid`
+    const password = 'E2ETest123!'
+    const { data, error } = await this.admin.auth.admin.createUser({
+      email,
+      password,
+      email_confirm: true,
+    })
+    if (error) throw new Error(`createTemporaryTestUser failed: ${error.message}`)
+    // Créer un profil minimal
+    await this.admin.from('profiles').insert({
+      id: data.user.id,
+      username: `e2e-temp-${Date.now()}`,
+      timezone: 'Europe/Paris',
+    })
+    return { userId: data.user.id, email, password }
+  }
+
+  /** Vérifie que toutes les données d'un user ont été supprimées de la DB (8 tables) */
+  async verifyUserDataDeleted(userId: string): Promise<{ tables: Record<string, number> }> {
+    const results: Record<string, number> = {}
+    const tables = [
+      { table: 'profiles', column: 'id' },
+      { table: 'squad_members', column: 'user_id' },
+      { table: 'session_rsvps', column: 'user_id' },
+      { table: 'session_checkins', column: 'user_id' },
+      { table: 'messages', column: 'user_id' },
+      { table: 'direct_messages', column: 'sender_id' },
+      { table: 'push_subscriptions', column: 'user_id' },
+      { table: 'ai_insights', column: 'user_id' },
+    ]
+    for (const { table, column } of tables) {
+      const { count } = await this.admin
+        .from(table)
+        .select('*', { count: 'exact', head: true })
+        .eq(column, userId)
+      results[table] = count || 0
+    }
+    return { tables: results }
+  }
+
+  /** Supprime un user temporaire et toutes ses données (cascade sur 9 tables + auth) */
+  async deleteTemporaryTestUser(userId: string): Promise<void> {
+    const tables = ['session_checkins', 'session_rsvps', 'messages', 'direct_messages',
+      'party_participants', 'push_subscriptions', 'squad_members', 'ai_insights', 'profiles']
+    for (const table of tables) {
+      const col = table === 'profiles' ? 'id' : (table === 'direct_messages' ? 'sender_id' : 'user_id')
+      await this.admin.from(table).delete().eq(col, userId)
+    }
+    await this.admin.auth.admin.deleteUser(userId)
+  }
+
+  /** Récupère les push_subscriptions d'un user */
+  async getPushSubscriptions(userId?: string) {
+    const uid = userId || await this.getUserId()
+    const { data } = await this.admin
+      .from('push_subscriptions')
+      .select('*')
+      .eq('user_id', uid)
+    return data || []
+  }
+
+  /** Récupère les ai_insights / reminders d'un user */
+  async getAiInsights(userId?: string) {
+    const uid = userId || await this.getUserId()
+    const { data } = await this.admin
+      .from('ai_insights')
+      .select('*')
+      .eq('user_id', uid)
+      .order('created_at', { ascending: false })
+      .limit(10)
+    return data || []
+  }
+
+  /** Remet le subscription_tier à 'free' après un test trial */
+  async resetTrialStatus() {
+    const userId = await this.getUserId()
+    await this.admin
+      .from('profiles')
+      .update({ subscription_tier: 'free', subscription_expires_at: null })
+      .eq('id', userId)
   }
 }
 

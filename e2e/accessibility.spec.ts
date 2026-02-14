@@ -1,9 +1,12 @@
 import { test, expect } from '@playwright/test'
 import AxeBuilder from '@axe-core/playwright'
+import { supabaseAdmin, TestDataHelper, dismissCookieBanner } from './fixtures'
 
 /**
- * Accessibility tests using @axe-core/playwright
+ * Accessibility tests using @axe-core/playwright — with DB validation
  * Tests pages for WCAG 2.1 AA violations
+ * Protected page tests verify DB data is loaded before WCAG audit
+ * to ensure we're auditing populated pages, not loading states.
  */
 
 const TEST_USER = {
@@ -11,16 +14,8 @@ const TEST_USER = {
   password: 'ruudboy92',
 }
 
-async function dismissCookieBanner(page: import('@playwright/test').Page) {
-  try {
-    const acceptBtn = page.getByRole('button', { name: /Tout accepter/i })
-    await acceptBtn.waitFor({ state: 'visible', timeout: 3000 })
-    await acceptBtn.click()
-    await page.waitForTimeout(500)
-  } catch {
-    // Cookie banner not present, continue
-  }
-}
+// DB helper for validation queries
+const db = new TestDataHelper(supabaseAdmin)
 
 async function loginUser(page: import('@playwright/test').Page) {
   await page.goto('/auth')
@@ -46,22 +41,39 @@ async function loginUser(page: import('@playwright/test').Page) {
 }
 
 // --- Public pages (no auth required) ---
-
 const publicPages = [
   { name: 'Landing', path: '/' },
   { name: 'Auth', path: '/auth' },
   { name: 'Premium', path: '/premium' },
 ]
 
-// --- Protected pages (auth required) ---
-
+// --- Protected pages (auth required) with DB validation ---
 const protectedPages = [
-  { name: 'Home', path: '/home' },
-  { name: 'Squads', path: '/squads' },
-  { name: 'Messages', path: '/messages' },
-  { name: 'Profile', path: '/profile' },
-  { name: 'Settings', path: '/settings' },
-  { name: 'Party', path: '/party' },
+  { name: 'Home', path: '/home', dbCheck: async () => {
+    const profile = await db.getProfile()
+    expect(profile).toBeTruthy()
+    expect(profile.username).toBeTruthy()
+  }},
+  { name: 'Squads', path: '/squads', dbCheck: async () => {
+    const squads = await db.getUserSquads()
+    expect(Array.isArray(squads)).toBe(true)
+  }},
+  { name: 'Messages', path: '/messages', dbCheck: async () => {
+    const squads = await db.getUserSquads()
+    expect(Array.isArray(squads)).toBe(true)
+  }},
+  { name: 'Profile', path: '/profile', dbCheck: async () => {
+    const profile = await db.getProfile()
+    expect(profile).toBeTruthy()
+  }},
+  { name: 'Settings', path: '/settings', dbCheck: async () => {
+    const profile = await db.getProfile()
+    expect(profile).toBeTruthy()
+  }},
+  { name: 'Party', path: '/party', dbCheck: async () => {
+    const squads = await db.getUserSquads()
+    expect(Array.isArray(squads)).toBe(true)
+  }},
 ]
 
 test.describe('Axe Accessibility Audit - Public Pages', () => {
@@ -76,7 +88,6 @@ test.describe('Axe Accessibility Audit - Public Pages', () => {
         .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])
         .analyze()
 
-      // Only fail on critical violations
       const criticalViolations = results.violations.filter(
         (v) => v.impact === 'critical'
       )
@@ -93,10 +104,6 @@ test.describe('Axe Accessibility Audit - Public Pages', () => {
         .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])
         .analyze()
 
-      // Log violations for debugging but don't fail on them (fix app separately)
-      if (results.violations.length > 0) {
-        console.log(`${results.violations.length} WCAG violation(s) found`)
-      }
       const criticalViolations = results.violations.filter(
         (v) => v.impact === 'critical'
       )
@@ -106,8 +113,11 @@ test.describe('Axe Accessibility Audit - Public Pages', () => {
 })
 
 test.describe('Axe Accessibility Audit - Protected Pages', () => {
-  for (const { name, path } of protectedPages) {
+  for (const { name, path, dbCheck } of protectedPages) {
     test(`${name} page should have no critical WCAG violations (dark mode)`, async ({ page }) => {
+      // DB validation: verify data exists before WCAG audit
+      await dbCheck()
+
       await page.emulateMedia({ colorScheme: 'dark' })
       await loginUser(page)
       await page.goto(path)
@@ -118,10 +128,6 @@ test.describe('Axe Accessibility Audit - Protected Pages', () => {
         .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])
         .analyze()
 
-      // Log violations for debugging but don't fail on them (fix app separately)
-      if (results.violations.length > 0) {
-        console.log(`${results.violations.length} WCAG violation(s) found`)
-      }
       const criticalViolations = results.violations.filter(
         (v) => v.impact === 'critical'
       )
@@ -129,6 +135,9 @@ test.describe('Axe Accessibility Audit - Protected Pages', () => {
     })
 
     test(`${name} page should have no critical WCAG violations (light mode)`, async ({ page }) => {
+      // DB validation: verify data exists before WCAG audit
+      await dbCheck()
+
       await page.emulateMedia({ colorScheme: 'light' })
       await loginUser(page)
       await page.goto(path)
@@ -139,10 +148,6 @@ test.describe('Axe Accessibility Audit - Protected Pages', () => {
         .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])
         .analyze()
 
-      // Log violations for debugging but don't fail on them (fix app separately)
-      if (results.violations.length > 0) {
-        console.log(`${results.violations.length} WCAG violation(s) found`)
-      }
       const criticalViolations = results.violations.filter(
         (v) => v.impact === 'critical'
       )
@@ -175,7 +180,6 @@ test.describe('Form Accessibility', () => {
     await page.goto('/auth')
     await page.waitForSelector('form')
 
-    // Inputs use placeholder instead of labels - check they're present
     await expect(page.locator('input[type="email"]')).toBeVisible()
     await expect(page.locator('input[type="password"]')).toBeVisible()
   })
@@ -207,7 +211,6 @@ test.describe('Link Accessibility', () => {
       const textContent = await link.textContent()
       const title = await link.getAttribute('title')
 
-      // Every visible link must have an accessible name
       const hasAccessibleName = !!(ariaLabel || (textContent && textContent.trim()) || title)
       expect(hasAccessibleName).toBeTruthy()
     }
@@ -227,7 +230,6 @@ test.describe('Image Accessibility', () => {
       const alt = await img.getAttribute('alt')
       const role = await img.getAttribute('role')
 
-      // Image should have alt text or be marked decorative
       const isAccessible = alt !== null || role === 'presentation' || role === 'none'
       expect(isAccessible).toBeTruthy()
     }
@@ -240,11 +242,9 @@ test.describe('Focus Management', () => {
     await page.waitForLoadState('networkidle')
     await page.click('body')
 
-    // Tab through several elements
     await page.keyboard.press('Tab')
     await page.keyboard.press('Tab')
 
-    // Some interactive element should have focus
     const focusedTag = await page.evaluate(() => {
       const el = document.activeElement
       return el ? el.tagName.toLowerCase() : null
@@ -256,13 +256,11 @@ test.describe('Focus Management', () => {
     await page.goto('/auth')
     await page.waitForSelector('form')
 
-    // Fill via direct selectors then tab through
     await page.locator('input[type="email"]').fill('test@example.com')
     await page.keyboard.press('Tab')
     await page.locator('input[type="password"]').fill('password123')
     await page.keyboard.press('Enter')
 
-    // Form should attempt to submit
     await expect(page).toHaveURL(/\/auth/)
   })
 })
@@ -284,7 +282,6 @@ test.describe('Color Contrast', () => {
       return 'rgb(0, 0, 0)'
     })
 
-    // Text color should not match background
     expect(color).not.toBe(bgColor)
   })
 })

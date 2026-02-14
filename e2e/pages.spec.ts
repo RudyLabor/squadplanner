@@ -41,7 +41,7 @@ baseTest.describe('Legal — Page has content', () => {
     await page.waitForTimeout(1000)
 
     // The CGU content is loaded by default. Verify there is substantial text on the page.
-    const mainContent = page.locator('main')
+    const mainContent = page.locator('main').last()
     const mainVisible = await mainContent.isVisible().catch(() => false)
     expect(mainVisible).toBe(true)
 
@@ -68,8 +68,8 @@ baseTest.describe('Legal — Accessible structure', () => {
     await dismissCookieBanner(page)
     await page.waitForTimeout(1000)
 
-    // Main landmark must exist
-    const mainLandmark = page.locator('main')
+    // Main landmark must exist (use .last() — page may have an outer #main-content wrapper)
+    const mainLandmark = page.locator('main').last()
     await expect(mainLandmark).toBeVisible()
 
     // Header with back button must exist
@@ -170,8 +170,8 @@ baseTest.describe('Help — Accessible structure', () => {
     await dismissCookieBanner(page)
     await page.waitForTimeout(1000)
 
-    // Main landmark with aria-label must exist
-    const mainLandmark = page.locator('main')
+    // Main landmark with aria-label must exist (use specific selector — page has 2 <main> elements)
+    const mainLandmark = page.locator('main[aria-label]')
     await expect(mainLandmark).toBeVisible()
 
     const ariaLabel = await mainLandmark.getAttribute('aria-label')

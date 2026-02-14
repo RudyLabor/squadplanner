@@ -20,6 +20,12 @@ interface SquadWithCount extends SquadSummary {
   member_count: number
 }
 
+/** Row shape from the squad_members select with squads!inner join */
+interface SquadMembershipRow {
+  squad_id: string
+  squads: SquadSummary & { total_members?: number }
+}
+
 interface SquadsLoaderData {
   squads: SquadWithCount[]
 }
@@ -57,7 +63,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     .eq('user_id', user.id)
 
   const squadsWithCounts: SquadWithCount[] =
-    (memberships as any[])?.map((m: { squads: SquadSummary & { total_members?: number } }) => ({
+    (memberships as SquadMembershipRow[] | null)?.map((m) => ({
       ...m.squads,
       member_count: m.squads.total_members ?? 1,
     })) || []
@@ -76,7 +82,7 @@ export async function clientLoader({ serverLoader }: ClientLoaderFunctionArgs) {
     .eq('user_id', user.id)
 
   const squads: SquadWithCount[] =
-    (memberships as any[])?.map((m: any) => ({
+    (memberships as SquadMembershipRow[] | null)?.map((m) => ({
       ...m.squads,
       member_count: m.squads.total_members ?? 1,
     })) || []

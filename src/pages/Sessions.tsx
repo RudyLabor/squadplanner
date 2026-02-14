@@ -11,11 +11,13 @@ import { NeedsResponseSection, AllCaughtUp } from './sessions/NeedsResponseSecti
 import { AISlotSuggestions, CoachTipsSection } from './sessions/AISuggestions'
 import { ConfirmedSessions, HowItWorksSection } from './sessions/ConfirmedSessions'
 import { WeekCalendar } from './sessions/WeekCalendar'
+import type { SquadWithMembers } from '../hooks/queries/useSquadsQuery'
+import type { SessionWithDetails } from '../hooks/queries/useSessionFetchers'
 
 interface SessionsProps {
   loaderData?: {
-    squads: any[]
-    sessions: any[]
+    squads: SquadWithMembers[]
+    sessions: SessionWithDetails[]
   }
 }
 

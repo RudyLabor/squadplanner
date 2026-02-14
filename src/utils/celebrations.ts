@@ -33,8 +33,8 @@ const TOKEN = {
 } as const
 
 // Cached ribbon shape (created on first use)
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-let ribbonShapeCache: any = null
+type ConfettiShape = import('canvas-confetti').Shape
+let ribbonShapeCache: ConfettiShape | null = null
 
 /**
  * Level Up celebration - 5 phase spectacular

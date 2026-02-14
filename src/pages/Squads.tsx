@@ -19,6 +19,7 @@ import { supabaseMinimal as supabase } from '../lib/supabaseMinimal'
 import { FREE_SQUAD_LIMIT } from '../hooks/usePremium'
 import { SquadCard, type SquadNextSession } from './squads/SquadCard'
 import { JoinSquadForm, CreateSquadForm } from './squads/SquadForms'
+import type { SquadWithMembers } from '../hooks/queries/useSquadsQuery'
 
 const staggerContainerVariants = {
   hidden: { opacity: 0 },
@@ -31,7 +32,7 @@ const staggerItemVariants = {
 
 interface SquadsProps {
   loaderData?: {
-    squads: any[]
+    squads: SquadWithMembers[]
   }
 }
 
@@ -111,8 +112,8 @@ export default function Squads({ loaderData: _loaderData }: SquadsProps) {
       setName('')
       setGame('')
       fetchPremiumStatus()
-    } catch (err: any) {
-      setError(err.message)
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : String(err))
     }
   }
 
@@ -134,8 +135,8 @@ export default function Squads({ loaderData: _loaderData }: SquadsProps) {
       setInviteCode('')
       setShowConfetti(true)
       setTimeout(() => setShowConfetti(false), 4000)
-    } catch (err: any) {
-      setError(err.message)
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : String(err))
     }
   }
 

@@ -70,8 +70,8 @@ export function createRealtimeSubscription(
               newMessage,
             ],
           }))
-        } catch (err: any) {
-          if (err?.name === 'AbortError') return
+        } catch (err: unknown) {
+          if (err instanceof Error && err.name === 'AbortError') return
           console.warn('[Messages] Error in INSERT handler:', err)
         }
       }
@@ -161,8 +161,8 @@ export async function markMessagesAsRead(
       ),
     }))
     await useUnreadCountStore.getState().fetchCounts()
-  } catch (err: any) {
-    if (err?.name === 'AbortError') return
+  } catch (err: unknown) {
+    if (err instanceof Error && err.name === 'AbortError') return
     console.warn('[Messages] Error marking as read:', err)
   }
 }
@@ -207,8 +207,8 @@ export async function markMessagesAsReadFallback(
       ),
     }))
     await useUnreadCountStore.getState().fetchCounts()
-  } catch (err: any) {
-    if (err?.name === 'AbortError') return
+  } catch (err: unknown) {
+    if (err instanceof Error && err.name === 'AbortError') return
     console.warn('[Messages] Error marking as read (fallback):', err)
   }
 }

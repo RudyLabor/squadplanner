@@ -10,6 +10,7 @@ import { DiscoverSquadCard } from '../components/discover/DiscoverSquadCard'
 import { GlobalLeaderboard } from '../components/discover/GlobalLeaderboard'
 import { MatchmakingSection } from '../components/discover/MatchmakingSection'
 import { useBrowseSquadsQuery } from '../hooks/queries'
+import type { PublicSquadResult } from '../types/database'
 import { useStatePersistence } from '../hooks/useStatePersistence'
 import { useInfiniteScroll } from '../hooks/useInfiniteScroll'
 type Tab = 'squads' | 'joueurs' | 'classement'
@@ -104,7 +105,7 @@ export function Discover() {
 }
 
 // Featured squads section shown at the top when squads are available
-const FeaturedSection = memo(function FeaturedSection({ squads }: { squads: any[] }) {
+const FeaturedSection = memo(function FeaturedSection({ squads }: { squads: PublicSquadResult[] }) {
   if (!squads || squads.length < 2) return null
 
   // Pick top 3 squads by member count as "featured"

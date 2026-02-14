@@ -3,6 +3,7 @@ import { createBrowserClient } from '@supabase/ssr'
 
 // TODO: Re-enable strict Database typing after running `npx supabase gen types typescript`
 // import type { Database } from '../types/database'
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 type Database = any
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
@@ -80,7 +81,25 @@ export const supabase: SupabaseClient<Database> = new Proxy({} as SupabaseClient
       }
       if (prop === 'from' || prop === 'rpc' || prop === 'functions') {
         return () => {
-          const builder: any = {
+          interface NoopBuilder {
+            select: () => NoopBuilder
+            insert: () => NoopBuilder
+            update: () => NoopBuilder
+            delete: () => NoopBuilder
+            eq: () => NoopBuilder
+            neq: () => NoopBuilder
+            in: () => NoopBuilder
+            is: () => NoopBuilder
+            not: () => NoopBuilder
+            or: () => NoopBuilder
+            order: () => NoopBuilder
+            limit: () => NoopBuilder
+            single: () => NoopBuilder
+            invoke: () => Promise<{ data: null; error: null }>
+            then: (resolve: (value: { data: null; error: null }) => void) => void
+            catch: () => Promise<{ data: null; error: null }>
+          }
+          const builder: NoopBuilder = {
             select: () => builder,
             insert: () => builder,
             update: () => builder,
@@ -95,7 +114,7 @@ export const supabase: SupabaseClient<Database> = new Proxy({} as SupabaseClient
             limit: () => builder,
             single: () => builder,
             invoke: () => Promise.resolve({ data: null, error: null }),
-            then: (resolve: any) => resolve({ data: null, error: null }),
+            then: (resolve) => resolve({ data: null, error: null }),
             catch: () => Promise.resolve({ data: null, error: null }),
           }
           return builder
@@ -112,7 +131,8 @@ export const supabase: SupabaseClient<Database> = new Proxy({} as SupabaseClient
       if (prop === 'removeChannel') return () => {}
       return undefined
     }
-    const value = (_client as any)[prop]
-    return typeof value === 'function' ? value.bind(_client) : value
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const value = (_client as Record<string | symbol, unknown>)[prop]
+    return typeof value === 'function' ? (value as (...a: unknown[]) => unknown).bind(_client) : value
   },
 })

@@ -79,30 +79,42 @@ export const staggerItem = {
   }
 }
 
+// Animation props type for framer-motion compatible objects
+interface AnimationProps extends Record<string, unknown> {
+  onAnimationStart?: () => void
+}
+
+// Motion variants type
+interface MotionVariants {
+  initial?: Record<string, unknown>
+  animate?: Record<string, unknown>
+  exit?: Record<string, unknown>
+}
+
 // Haptic feedback integration
 export const useHapticMotion = () => {
   const haptic = useHapticFeedback()
-  
-  const withHaptic = (animationProps: any, hapticType: 'light' | 'medium' | 'heavy' = 'light') => {
+
+  const withHaptic = (animationProps: AnimationProps, hapticType: 'light' | 'medium' | 'heavy' = 'light') => {
     return {
       ...animationProps,
       onAnimationStart: () => haptic.trigger(hapticType),
-      ...animationProps.onAnimationStart && { 
+      ...animationProps.onAnimationStart && {
         onAnimationStart: () => {
           haptic.trigger(hapticType)
-          animationProps.onAnimationStart()
+          animationProps.onAnimationStart?.()
         }
       }
     }
   }
-  
+
   return { withHaptic }
 }
 
 // Reduced motion respect
-export const useReducedMotionVariants = (defaultVariants: any) => {
+export const useReducedMotionVariants = (defaultVariants: MotionVariants) => {
   const prefersReducedMotion = useReducedMotion()
-  
+
   if (prefersReducedMotion) {
     return {
       initial: { opacity: 0 },
@@ -110,6 +122,6 @@ export const useReducedMotionVariants = (defaultVariants: any) => {
       exit: { opacity: 0 }
     }
   }
-  
+
   return defaultVariants
 }

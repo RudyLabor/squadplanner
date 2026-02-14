@@ -19,6 +19,29 @@ interface SquadWithCount {
   member_count: number
 }
 
+/** Shape returned by the get_layout_data RPC function */
+interface LayoutRpcResult {
+  profile: Profile | null
+  squads: SquadWithCount[]
+}
+
+/** Raw squad data from the squad_members join query (before transforming total_members -> member_count) */
+interface RawSquadFromMembership {
+  id: string
+  name: string
+  game: string
+  invite_code: string
+  owner_id: string
+  total_members: number
+  created_at: string
+}
+
+/** Row shape from the squad_members select with squads!inner join */
+interface MembershipWithSquad {
+  squad_id: string
+  squads: RawSquadFromMembership
+}
+
 interface ProtectedLoaderData {
   user: { id: string; email: string | undefined }
   profile: Profile | null
@@ -45,8 +68,9 @@ export async function clientLoader({ serverLoader }: ClientLoaderFunctionArgs) {
   })
 
   if (!rpcError && rpcResult) {
-    profile = (rpcResult as any).profile as Profile | null
-    squads = ((rpcResult as any).squads as SquadWithCount[]) || []
+    const rpc = rpcResult as LayoutRpcResult
+    profile = rpc.profile
+    squads = rpc.squads || []
   } else {
     const [profileResult, membershipsResult] = await Promise.all([
       supabase.from('profiles').select('*').eq('id', user.id).single(),
@@ -60,8 +84,8 @@ export async function clientLoader({ serverLoader }: ClientLoaderFunctionArgs) {
 
     profile = profileResult.data as Profile | null
     const rawSquads =
-      (membershipsResult.data as any[])?.map((m: { squads: any }) => m.squads).filter(Boolean) || []
-    squads = rawSquads.map((squad: any) => ({
+      (membershipsResult.data as MembershipWithSquad[] | null)?.map((m) => m.squads).filter(Boolean) || []
+    squads = rawSquads.map((squad) => ({
       ...squad,
       member_count: squad.total_members ?? 1,
     }))
@@ -108,8 +132,9 @@ export async function loader({ request }: LoaderFunctionArgs) {
   })
 
   if (!rpcError && rpcResult) {
-    profile = (rpcResult as any).profile as Profile | null
-    squads = ((rpcResult as any).squads as SquadWithCount[]) || []
+    const rpc = rpcResult as LayoutRpcResult
+    profile = rpc.profile
+    squads = rpc.squads || []
   } else {
     // Fallback: parallel queries (used before RPC is deployed)
     const [profileResult, membershipsResult] = await Promise.all([
@@ -124,8 +149,8 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
     profile = profileResult.data as Profile | null
     const rawSquads =
-      (membershipsResult.data as any[])?.map((m: { squads: any }) => m.squads).filter(Boolean) || []
-    squads = rawSquads.map((squad: any) => ({
+      (membershipsResult.data as MembershipWithSquad[] | null)?.map((m) => m.squads).filter(Boolean) || []
+    squads = rawSquads.map((squad) => ({
       ...squad,
       member_count: squad.total_members ?? 1,
     }))

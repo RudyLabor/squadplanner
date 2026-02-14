@@ -164,7 +164,7 @@ interface Props {
   squadUnread: number
   dmUnread: number
   totalUnread: number
-  onSelectSquadConv: (c: any) => void
+  onSelectSquadConv: (c: SquadConversation) => void
   onSelectDMConv: (c: DMConversation | null) => void
 }
 

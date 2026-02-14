@@ -61,8 +61,14 @@ export function ActivePartySection({
 
   useEffect(() => {
     if (!room) return
-    remoteUsers.forEach((user: any) => {
-      const remoteUser = room.remoteUsers?.find((u: any) => u.uid === user.odrop)
+    interface RemoteRoomUser {
+      uid: string
+      audioTrack?: { setVolume: (v: number) => void }
+    }
+    remoteUsers.forEach((user) => {
+      const remoteUser = (room as { remoteUsers?: RemoteRoomUser[] }).remoteUsers?.find(
+        (u) => u.uid === user.odrop
+      )
       if (remoteUser?.audioTrack) {
         const effectiveVolume = getEffectiveVolume(String(user.odrop))
         remoteUser.audioTrack.setVolume(effectiveVolume)

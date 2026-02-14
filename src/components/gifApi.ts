@@ -16,8 +16,25 @@ function isInCooldown(): boolean {
   return Date.now() - lastErrorTime < ERROR_COOLDOWN_MS
 }
 
-function mapResults(data: any): GifResult[] {
-  return (data.results || []).map((r: any) => ({
+interface TenorMediaFormat {
+  url?: string
+  dims?: number[]
+}
+
+interface TenorResult {
+  id: string
+  media_formats?: {
+    gif?: TenorMediaFormat
+    tinygif?: TenorMediaFormat
+  }
+}
+
+interface TenorResponse {
+  results?: TenorResult[]
+}
+
+function mapResults(data: TenorResponse): GifResult[] {
+  return (data.results || []).map((r) => ({
     id: r.id,
     url: r.media_formats?.gif?.url || r.media_formats?.tinygif?.url || '',
     preview: r.media_formats?.tinygif?.url || r.media_formats?.gif?.url || '',

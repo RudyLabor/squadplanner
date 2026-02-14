@@ -12,6 +12,7 @@ import { useAuthStore } from '../hooks'
 // directly, because calling store() conditionally would violate Rules of Hooks
 // (the hook count changes when the dynamic import resolves, crashing React).
 const voiceChatStorePromise = import('../hooks/useVoiceChat')
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 let cachedStore: any = null
 
 const defaultVoiceState = { isConnected: false, currentChannel: null, remoteUsers: [] }
@@ -51,11 +52,14 @@ import {
   HomePartySection,
   HomeActivityFeed,
 } from '../components/home'
+import type { Profile } from '../types/database'
+import type { SquadWithMembers } from '../hooks/queries/useSquadsQuery'
+import type { SessionWithDetails } from '../hooks/queries/useSessionFetchers'
 
 interface HomeLoaderData {
-  profile: any
-  squads: any[]
-  upcomingSessions: any[]
+  profile: Profile | null
+  squads: SquadWithMembers[]
+  upcomingSessions: SessionWithDetails[]
 }
 
 interface HomeProps {

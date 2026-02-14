@@ -104,7 +104,7 @@ function getEnvironmentTags(): Record<string, string> {
 
   // Connection type
   if ('connection' in navigator) {
-    const conn = (navigator as any).connection
+    const conn = (navigator as unknown as { connection?: { effectiveType?: string } }).connection
     if (conn?.effectiveType) tags.connection = conn.effectiveType
   }
 
@@ -191,7 +191,7 @@ export function initErrorTracker(): void {
 
   // Capture console.error calls
   const originalConsoleError = console.error
-  console.error = (...args: any[]) => {
+  console.error = (...args: unknown[]) => {
     originalConsoleError.apply(console, args)
     const message = args
       .map((arg) => {

@@ -17,6 +17,12 @@ interface SquadSummary {
   created_at: string
 }
 
+/** Row shape from the squad_members select with squads!inner join */
+interface SessionMembershipRow {
+  squad_id: string
+  squads: SquadSummary
+}
+
 interface SessionWithRsvp extends Session {
   my_rsvp: RsvpResponse | null
   rsvp_counts: { present: number; absent: number; maybe: number }
@@ -56,8 +62,8 @@ export async function loader({ request }: LoaderFunctionArgs) {
     .select('squad_id, squads!inner(id, name, game, invite_code, owner_id, created_at)')
     .eq('user_id', user.id)
 
-  const squads = ((memberships as any[])?.map((m: { squads: SquadSummary }) => m.squads) ||
-    []) as SquadSummary[]
+  const squads: SquadSummary[] =
+    (memberships as SessionMembershipRow[] | null)?.map((m) => m.squads) || []
   const squadIds = squads.map((s) => s.id)
 
   let sessions: SessionWithRsvp[] = []
@@ -104,7 +110,8 @@ export async function clientLoader({ serverLoader }: ClientLoaderFunctionArgs) {
     .select('squad_id, squads!inner(id, name, game, invite_code, owner_id, created_at)')
     .eq('user_id', user.id)
 
-  const squads = ((memberships as any[])?.map((m: any) => m.squads) || []) as SquadSummary[]
+  const squads: SquadSummary[] =
+    (memberships as SessionMembershipRow[] | null)?.map((m) => m.squads) || []
   const squadIds = squads.map((s) => s.id)
 
   let sessions: SessionWithRsvp[] = []

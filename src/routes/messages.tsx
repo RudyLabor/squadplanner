@@ -7,6 +7,19 @@ import { ClientRouteWrapper } from '../components/ClientRouteWrapper'
 
 const Messages = lazy(() => import('../pages/Messages'))
 
+/** Squad data shape from the squad_members join for messages */
+interface MessageSquadData {
+  id: string
+  name: string
+  game: string
+}
+
+/** Row shape from the squad_members select with squads!inner join */
+interface MessageMembershipRow {
+  squad_id: string
+  squads: MessageSquadData
+}
+
 export function meta() {
   return [
     { title: 'Messages - Squad Planner' },
@@ -37,9 +50,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     .eq('user_id', user.id)
 
   const squads =
-    (memberships as any[])?.map(
-      (m: { squads: { id: string; name: string; game: string } }) => m.squads
-    ) || []
+    (memberships as MessageMembershipRow[] | null)?.map((m) => m.squads) || []
 
   return data({ squads }, { headers })
 }
@@ -54,7 +65,7 @@ export async function clientLoader({ serverLoader }: ClientLoaderFunctionArgs) {
     .select('squad_id, squads!inner(id, name, game)')
     .eq('user_id', user.id)
 
-  const squads = (memberships as any[])?.map((m: any) => m.squads) || []
+  const squads = (memberships as MessageMembershipRow[] | null)?.map((m) => m.squads) || []
   return { squads }
 }
 clientLoader.hydrate = true as const

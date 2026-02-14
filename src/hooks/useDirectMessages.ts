@@ -96,8 +96,8 @@ export const useDirectMessagesStore = create<DirectMessagesState>((set, get) => 
       )
 
       set({ conversations, isLoading: false })
-    } catch (error: any) {
-      if (error?.name === 'AbortError') return
+    } catch (error: unknown) {
+      if (error instanceof Error && error.name === 'AbortError') return
       console.warn('[DM] Error fetching conversations:', error)
       set({ conversations: [], isLoading: false })
     }
@@ -126,8 +126,8 @@ export const useDirectMessagesStore = create<DirectMessagesState>((set, get) => 
       if (error) throw error
 
       set({ messages: (data || []) as any[], isLoading: false })
-    } catch (error: any) {
-      if (error?.name === 'AbortError') return
+    } catch (error: unknown) {
+      if (error instanceof Error && error.name === 'AbortError') return
       console.warn('[DM] Error fetching messages:', error)
       set({ messages: [], isLoading: false })
     }

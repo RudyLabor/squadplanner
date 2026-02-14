@@ -64,8 +64,13 @@ const translations = {
  * Get a value from a nested object using dot notation
  * Example: get(obj, 'settings.audio.title') returns obj.settings.audio.title
  */
-function getNestedValue(obj: any, path: string): any {
-  return path.split('.').reduce((current, key) => current?.[key], obj)
+function getNestedValue(obj: Record<string, unknown>, path: string): unknown {
+  return path.split('.').reduce<unknown>((current, key) => {
+    if (current && typeof current === 'object' && key in (current as Record<string, unknown>)) {
+      return (current as Record<string, unknown>)[key]
+    }
+    return undefined
+  }, obj)
 }
 
 /**
@@ -86,8 +91,8 @@ function getNestedValue(obj: any, path: string): any {
 export function useT() {
   const locale = useI18nStore((state) => state.locale)
 
-  return function t(key: string, ...args: any[]): string {
-    const dict = translations[locale]
+  return function t(key: string, ...args: unknown[]): string {
+    const dict = translations[locale] as Record<string, unknown>
     const value = getNestedValue(dict, key)
 
     // If value is a function, call it with the arguments
@@ -124,8 +129,8 @@ export function useSetLocale() {
  * Get translation function for server-side rendering or outside React components
  */
 export function getT(locale: Locale) {
-  return function t(key: string, ...args: any[]): string {
-    const dict = translations[locale]
+  return function t(key: string, ...args: unknown[]): string {
+    const dict = translations[locale] as Record<string, unknown>
     const value = getNestedValue(dict, key)
 
     if (typeof value === 'function') {

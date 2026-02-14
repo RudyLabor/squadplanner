@@ -155,8 +155,8 @@ function EmptyState() {
           url: inviteUrl,
         })
         return
-      } catch (err: any) {
-        if (err.name === 'AbortError') return
+      } catch (err: unknown) {
+        if (err instanceof Error && err.name === 'AbortError') return
       }
     }
 

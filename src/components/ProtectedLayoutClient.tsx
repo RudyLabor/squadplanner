@@ -4,11 +4,12 @@ import { Navigate, Outlet } from 'react-router'
 import { useQueryClient } from '@tanstack/react-query'
 import { useAuthStore } from '../hooks'
 import { queryKeys } from '../lib/queryClient'
+import type { Profile, Squad } from '../types/database'
 
 interface ProtectedLayoutData {
   user: { id: string; email: string | undefined }
-  profile: any
-  squads: any[]
+  profile: Profile | null
+  squads: Squad[]
 }
 
 /**

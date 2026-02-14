@@ -59,8 +59,18 @@ export function InviteToPartyModal({
 
         if (error) throw error
 
-        const squadMembers: SquadMember[] = (data || [])
-          .map((m: any) => ({
+        interface SquadMemberRow {
+          user_id: string
+          profiles: {
+            id: string
+            username: string | null
+            avatar_url: string | null
+            last_seen_at: string | null
+            voice_channel_id: string | null
+          }
+        }
+        const squadMembers: SquadMember[] = ((data || []) as SquadMemberRow[])
+          .map((m) => ({
             id: m.profiles.id,
             username: m.profiles.username || 'Joueur',
             avatar_url: m.profiles.avatar_url,

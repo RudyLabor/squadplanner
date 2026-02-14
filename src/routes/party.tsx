@@ -15,6 +15,20 @@ interface PartySquad {
   member_count: number
 }
 
+/** Raw squad data from the squad_members join before transformation */
+interface RawPartySquadData {
+  id: string
+  name: string
+  game: string
+  total_members: number
+}
+
+/** Row shape from the squad_members select with squads!inner join */
+interface PartyMembershipRow {
+  squad_id: string
+  squads: RawPartySquadData
+}
+
 interface PartyLoaderData {
   squads: PartySquad[]
 }
@@ -50,10 +64,8 @@ export async function loader({ request }: LoaderFunctionArgs) {
     .eq('user_id', user.id)
 
   const squads: PartySquad[] = (
-    (memberships as any[])?.map(
-      (m: { squads: { id: string; name: string; game: string; total_members: number } }) => m.squads
-    ) || []
-  ).map((squad: any) => ({
+    (memberships as PartyMembershipRow[] | null)?.map((m) => m.squads) || []
+  ).map((squad) => ({
     ...squad,
     member_count: squad.total_members ?? 1,
   }))
@@ -72,8 +84,8 @@ export async function clientLoader({ serverLoader }: ClientLoaderFunctionArgs) {
     .eq('user_id', user.id)
 
   const squads: PartySquad[] = (
-    (memberships as any[])?.map((m: any) => m.squads) || []
-  ).map((squad: any) => ({ ...squad, member_count: squad.total_members ?? 1 }))
+    (memberships as PartyMembershipRow[] | null)?.map((m) => m.squads) || []
+  ).map((squad) => ({ ...squad, member_count: squad.total_members ?? 1 }))
 
   return { squads }
 }

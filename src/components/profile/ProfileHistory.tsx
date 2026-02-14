@@ -12,7 +12,7 @@ interface ProfileHistoryProps {
     reliability_score?: number
   } | null
   hasPremium: boolean
-  canAccessFeature: (...args: any[]) => boolean
+  canAccessFeature: (...args: unknown[]) => boolean
   aiCoachTip?: { tip?: string; tone?: string } | null
 }
 

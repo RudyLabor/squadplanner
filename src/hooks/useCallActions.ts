@@ -129,7 +129,7 @@ export async function initializeNativeWebRTC(
       storeRef.setState({ isReconnecting: false, reconnectAttempts: 0, error: null })
     })
 
-    room.on(RoomEvent.Disconnected, (reason?: any) => {
+    room.on(RoomEvent.Disconnected, (reason?: string) => {
       const currentState = storeRef.getState()
       if (currentState.status === 'connected' && reason !== 'CLIENT_INITIATED') {
         storeRef.setState({

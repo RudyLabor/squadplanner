@@ -104,8 +104,8 @@ export function createDMActions(set: SetState, get: GetState) {
                   if (newMsg.sender_id === otherUserId) {
                     get().markAsRead(otherUserId)
                   }
-                } catch (err: any) {
-                  if (err?.name === 'AbortError') return
+                } catch (err: unknown) {
+                  if (err instanceof Error && err.name === 'AbortError') return
                   console.warn('[DM] Error in INSERT handler:', err)
                 }
               }
@@ -138,8 +138,8 @@ export function createDMActions(set: SetState, get: GetState) {
 
           set({ realtimeChannel: channel })
         })
-        .catch((err: any) => {
-          if (err?.name === 'AbortError') return
+        .catch((err: unknown) => {
+          if (err instanceof Error && err.name === 'AbortError') return
           console.warn('[DM] Error subscribing to messages:', err)
         })
     },
@@ -185,8 +185,8 @@ export function createDMActions(set: SetState, get: GetState) {
         }))
 
         await useUnreadCountStore.getState().fetchCounts()
-      } catch (error: any) {
-        if (error?.name === 'AbortError') return
+      } catch (error: unknown) {
+        if (error instanceof Error && error.name === 'AbortError') return
         console.warn('[DM] Error marking as read:', error)
       }
     },

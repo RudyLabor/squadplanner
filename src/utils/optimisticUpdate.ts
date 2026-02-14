@@ -49,11 +49,11 @@ export function createOptimisticMutation<TData = unknown, TVariables = unknown>(
   config: OptimisticMutationConfig<TData, TVariables>
 ): OptimisticHandlers<TData, TVariables> {
   const resolveKeys = (
-    keysOrFn: QueryKey[] | ((arg: any, arg2?: any) => QueryKey[]),
+    keysOrFn: QueryKey[] | ((...args: unknown[]) => QueryKey[]),
     ...args: unknown[]
   ): QueryKey[] => {
     if (typeof keysOrFn === 'function') {
-      return (keysOrFn as (...a: unknown[]) => QueryKey[])(...args)
+      return keysOrFn(...args)
     }
     return keysOrFn
   }

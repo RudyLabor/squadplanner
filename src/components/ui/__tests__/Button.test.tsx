@@ -1,67 +1,35 @@
 import { describe, it, expect, vi } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import { createElement } from 'react'
 
-vi.mock('framer-motion', async () => {
-  const actual = await vi.importActual<typeof import('framer-motion')>('framer-motion')
-  const { forwardRef, createElement } = await import('react')
-  return {
-    ...actual,
-    AnimatePresence: ({ children }: any) => children,
-    motion: {
-      ...actual.motion,
-      button: forwardRef(
-        (
-          { children, whileHover, whileTap, transition, initial, animate, exit, ...rest }: any,
-          ref: any
-        ) => {
-          return createElement('button', { ...rest, ref }, children)
-        }
-      ),
-      span: ({ children, initial, animate, exit, transition, ...rest }: any) => {
-        return createElement('span', rest, children)
-      },
-      div: ({
-        children,
-        whileHover,
-        whileTap,
-        transition,
-        initial,
-        animate,
-        exit,
-        ...rest
-      }: any) => {
-        return createElement('div', rest, children)
-      },
-    },
-    m: {
-      ...actual.m,
-      button: forwardRef(
-        (
-          { children, whileHover, whileTap, transition, initial, animate, exit, ...rest }: any,
-          ref: any
-        ) => {
-          return createElement('button', { ...rest, ref }, children)
-        }
-      ),
-      span: ({ children, initial, animate, exit, transition, ...rest }: any) => {
-        return createElement('span', rest, children)
-      },
-      div: ({
-        children,
-        whileHover,
-        whileTap,
-        transition,
-        initial,
-        animate,
-        exit,
-        ...rest
-      }: any) => {
-        return createElement('div', rest, children)
-      },
-    },
-  }
-})
+vi.mock('framer-motion', () => ({
+  AnimatePresence: ({ children }: any) => children,
+  LazyMotion: ({ children }: any) => children,
+  MotionConfig: ({ children }: any) => children,
+  domAnimation: {},
+  domMax: {},
+  useInView: vi.fn().mockReturnValue(true),
+  useScroll: vi.fn().mockReturnValue({ scrollYProgress: { get: () => 0 } }),
+  useTransform: vi.fn().mockReturnValue(0),
+  useMotionValue: vi.fn().mockReturnValue({ get: () => 0, set: vi.fn(), on: vi.fn() }),
+  useSpring: vi.fn().mockReturnValue({ get: () => 0, set: vi.fn() }),
+  useAnimate: vi.fn().mockReturnValue([{ current: null }, vi.fn()]),
+  useAnimation: vi.fn().mockReturnValue({ start: vi.fn(), stop: vi.fn() }),
+  useReducedMotion: vi.fn().mockReturnValue(false),
+  m: new Proxy({}, {
+    get: (_t: any, p: string) =>
+      typeof p === 'string'
+        ? ({ children, ...r }: any) => createElement(p, r, children)
+        : undefined,
+  }),
+  motion: new Proxy({}, {
+    get: (_t: any, p: string) =>
+      typeof p === 'string'
+        ? ({ children, ...r }: any) => createElement(p, r, children)
+        : undefined,
+  }),
+}))
 
 import { Button } from '../Button'
 

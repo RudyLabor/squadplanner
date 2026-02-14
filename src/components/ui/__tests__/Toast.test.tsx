@@ -1,62 +1,35 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen, act } from '@testing-library/react'
 import { toast, ToastContainer } from '../Toast'
+import { createElement } from 'react'
 
-vi.mock('framer-motion', async () => {
-  const actual = await vi.importActual<typeof import('framer-motion')>('framer-motion')
-  return {
-    ...actual,
-    AnimatePresence: ({ children }: { children: React.ReactNode }) => <>{children}</>,
-    useMotionValue: () => ({ get: () => 0, set: vi.fn(), onChange: vi.fn() }),
-    useTransform: () => ({ get: () => 1 }),
-    motion: {
-      ...actual.motion,
-      div: ({ children, ...props }: any) => {
-        const {
-          initial,
-          animate: a,
-          exit,
-          transition,
-          layout,
-          style: mStyle,
-          drag,
-          dragConstraints,
-          dragElastic,
-          onDragEnd,
-          ...rest
-        } = props
-        return (
-          <div style={mStyle} {...rest}>
-            {children}
-          </div>
-        )
-      },
-    },
-    m: {
-      ...actual.m,
-      div: ({ children, ...props }: any) => {
-        const {
-          initial,
-          animate: a,
-          exit,
-          transition,
-          layout,
-          style: mStyle,
-          drag,
-          dragConstraints,
-          dragElastic,
-          onDragEnd,
-          ...rest
-        } = props
-        return (
-          <div style={mStyle} {...rest}>
-            {children}
-          </div>
-        )
-      },
-    },
-  }
-})
+vi.mock('framer-motion', () => ({
+  AnimatePresence: ({ children }: any) => children,
+  LazyMotion: ({ children }: any) => children,
+  MotionConfig: ({ children }: any) => children,
+  domAnimation: {},
+  domMax: {},
+  useInView: vi.fn().mockReturnValue(true),
+  useScroll: vi.fn().mockReturnValue({ scrollYProgress: { get: () => 0 } }),
+  useTransform: vi.fn().mockReturnValue(0),
+  useMotionValue: vi.fn().mockReturnValue({ get: () => 0, set: vi.fn(), on: vi.fn() }),
+  useSpring: vi.fn().mockReturnValue({ get: () => 0, set: vi.fn() }),
+  useAnimate: vi.fn().mockReturnValue([{ current: null }, vi.fn()]),
+  useAnimation: vi.fn().mockReturnValue({ start: vi.fn(), stop: vi.fn() }),
+  useReducedMotion: vi.fn().mockReturnValue(false),
+  m: new Proxy({}, {
+    get: (_t: any, p: string) =>
+      typeof p === 'string'
+        ? ({ children, ...r }: any) => createElement(p, r, children)
+        : undefined,
+  }),
+  motion: new Proxy({}, {
+    get: (_t: any, p: string) =>
+      typeof p === 'string'
+        ? ({ children, ...r }: any) => createElement(p, r, children)
+        : undefined,
+  }),
+}))
 
 describe('toast API', () => {
   beforeEach(() => {

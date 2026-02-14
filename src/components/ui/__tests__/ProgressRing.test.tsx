@@ -1,28 +1,35 @@
 import { describe, it, expect, vi } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import { ProgressRing } from '../ProgressRing'
+import { createElement } from 'react'
 
-vi.mock('framer-motion', async () => {
-  const actual = await vi.importActual<typeof import('framer-motion')>('framer-motion')
-  return {
-    ...actual,
-    useInView: () => true,
-    motion: {
-      ...actual.motion,
-      circle: (props: any) => {
-        const { initial, animate, transition, ...rest } = props
-        return <circle {...rest} />
-      },
-    },
-    m: {
-      ...actual.m,
-      circle: (props: any) => {
-        const { initial, animate, transition, ...rest } = props
-        return <circle {...rest} />
-      },
-    },
-  }
-})
+vi.mock('framer-motion', () => ({
+  AnimatePresence: ({ children }: any) => children,
+  LazyMotion: ({ children }: any) => children,
+  MotionConfig: ({ children }: any) => children,
+  domAnimation: {},
+  domMax: {},
+  useInView: vi.fn().mockReturnValue(true),
+  useScroll: vi.fn().mockReturnValue({ scrollYProgress: { get: () => 0 } }),
+  useTransform: vi.fn().mockReturnValue(0),
+  useMotionValue: vi.fn().mockReturnValue({ get: () => 0, set: vi.fn(), on: vi.fn() }),
+  useSpring: vi.fn().mockReturnValue({ get: () => 0, set: vi.fn() }),
+  useAnimate: vi.fn().mockReturnValue([{ current: null }, vi.fn()]),
+  useAnimation: vi.fn().mockReturnValue({ start: vi.fn(), stop: vi.fn() }),
+  useReducedMotion: vi.fn().mockReturnValue(false),
+  m: new Proxy({}, {
+    get: (_t: any, p: string) =>
+      typeof p === 'string'
+        ? ({ children, ...r }: any) => createElement(p, r, children)
+        : undefined,
+  }),
+  motion: new Proxy({}, {
+    get: (_t: any, p: string) =>
+      typeof p === 'string'
+        ? ({ children, ...r }: any) => createElement(p, r, children)
+        : undefined,
+  }),
+}))
 
 describe('ProgressRing', () => {
   it('renders with role=progressbar', () => {

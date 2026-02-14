@@ -3,45 +3,35 @@ import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { MemoryRouter } from 'react-router'
 import { EmptyState } from '../EmptyState'
+import { createElement } from 'react'
 
-vi.mock('framer-motion', async () => {
-  const actual = await vi.importActual<typeof import('framer-motion')>('framer-motion')
-  const createMockComponent = (tag: string) => {
-    const Component = ({ children, ...props }: any) => {
-      const {
-        initial,
-        animate,
-        exit,
-        transition,
-        whileHover,
-        whileTap,
-        layout,
-        layoutId,
-        ...rest
-      } = props
-      const Tag = tag as any
-      return <Tag {...rest}>{children}</Tag>
-    }
-    Component.displayName = `motion.${tag}`
-    return Component
-  }
-  return {
-    ...actual,
-    AnimatePresence: ({ children }: any) => children,
-    motion: {
-      ...actual.motion,
-      div: createMockComponent('div'),
-      button: createMockComponent('button'),
-      span: createMockComponent('span'),
-    },
-    m: {
-      ...actual.m,
-      div: createMockComponent('div'),
-      button: createMockComponent('button'),
-      span: createMockComponent('span'),
-    },
-  }
-})
+vi.mock('framer-motion', () => ({
+  AnimatePresence: ({ children }: any) => children,
+  LazyMotion: ({ children }: any) => children,
+  MotionConfig: ({ children }: any) => children,
+  domAnimation: {},
+  domMax: {},
+  useInView: vi.fn().mockReturnValue(true),
+  useScroll: vi.fn().mockReturnValue({ scrollYProgress: { get: () => 0 } }),
+  useTransform: vi.fn().mockReturnValue(0),
+  useMotionValue: vi.fn().mockReturnValue({ get: () => 0, set: vi.fn(), on: vi.fn() }),
+  useSpring: vi.fn().mockReturnValue({ get: () => 0, set: vi.fn() }),
+  useAnimate: vi.fn().mockReturnValue([{ current: null }, vi.fn()]),
+  useAnimation: vi.fn().mockReturnValue({ start: vi.fn(), stop: vi.fn() }),
+  useReducedMotion: vi.fn().mockReturnValue(false),
+  m: new Proxy({}, {
+    get: (_t: any, p: string) =>
+      typeof p === 'string'
+        ? ({ children, ...r }: any) => createElement(p, r, children)
+        : undefined,
+  }),
+  motion: new Proxy({}, {
+    get: (_t: any, p: string) =>
+      typeof p === 'string'
+        ? ({ children, ...r }: any) => createElement(p, r, children)
+        : undefined,
+  }),
+}))
 
 vi.mock('../../../utils/haptics', () => ({
   haptic: { light: vi.fn() },

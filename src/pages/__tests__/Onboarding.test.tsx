@@ -17,33 +17,33 @@ vi.mock('react-router', () => ({
 }))
 
 // Mock framer-motion
-vi.mock('framer-motion', async () => {
-  const actual = await vi.importActual<typeof import('framer-motion')>('framer-motion')
-  return {
-    ...actual,
-    AnimatePresence: ({ children }: any) => {
-      // AnimatePresence renders all children; in test just render them
-      if (Array.isArray(children)) return children.filter(Boolean)
-      return children
-    },
-    m: new Proxy({}, {
-      get: (_target, prop) => {
-        if (typeof prop === 'string') {
-          return ({ children, ...rest }: any) => createElement(prop, rest, children)
-        }
-        return undefined
-      },
-    }),
-    motion: new Proxy({}, {
-      get: (_target, prop) => {
-        if (typeof prop === 'string') {
-          return ({ children, ...rest }: any) => createElement(prop, rest, children)
-        }
-        return undefined
-      },
-    }),
-  }
-})
+vi.mock('framer-motion', () => ({
+  AnimatePresence: ({ children }: any) => children,
+  LazyMotion: ({ children }: any) => children,
+  MotionConfig: ({ children }: any) => children,
+  domAnimation: {},
+  domMax: {},
+  useInView: vi.fn().mockReturnValue(true),
+  useScroll: vi.fn().mockReturnValue({ scrollYProgress: { get: () => 0 } }),
+  useTransform: vi.fn().mockReturnValue(0),
+  useMotionValue: vi.fn().mockReturnValue({ get: () => 0, set: vi.fn(), on: vi.fn() }),
+  useSpring: vi.fn().mockReturnValue({ get: () => 0, set: vi.fn() }),
+  useAnimate: vi.fn().mockReturnValue([{ current: null }, vi.fn()]),
+  useAnimation: vi.fn().mockReturnValue({ start: vi.fn(), stop: vi.fn() }),
+  useReducedMotion: vi.fn().mockReturnValue(false),
+  m: new Proxy({}, {
+    get: (_t: any, p: string) =>
+      typeof p === 'string'
+        ? ({ children, ...r }: any) => createElement(p, r, children)
+        : undefined,
+  }),
+  motion: new Proxy({}, {
+    get: (_t: any, p: string) =>
+      typeof p === 'string'
+        ? ({ children, ...r }: any) => createElement(p, r, children)
+        : undefined,
+  }),
+}))
 
 // Mock supabase
 vi.mock('../../lib/supabaseMinimal', () => ({

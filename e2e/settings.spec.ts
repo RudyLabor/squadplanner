@@ -1,469 +1,331 @@
-import { test, expect, dismissCookieBanner, hasServerError } from './fixtures'
-import { test as baseTest } from '@playwright/test'
+import { test, expect, dismissCookieBanner, navigateWithFallback } from './fixtures'
+import { test as baseTest, expect as baseExpect } from '@playwright/test'
 
 /**
- * Settings E2E Tests — F57-F65
- * Tests with functional data validation via TestDataHelper (DB queries)
- * and localStorage verification for client-side settings.
- * Uses shared fixtures: authenticatedPage (logged-in), db (TestDataHelper).
+ * Settings E2E Tests — F57-F65 — STRICT MODE
+ *
+ * REGLE STRICTE : Chaque test DOIT echouer si les donnees DB ne s'affichent pas.
+ * Pas de `.catch(() => false)` sur les assertions.
+ * Pas de fallback sur `<main>` quand une section specifique doit etre visible.
+ * Pas de `test.info().annotations` remplacant de vraies assertions.
+ * Pas de OR conditions qui passent toujours.
+ * Pas de try/catch qui avale les erreurs.
  */
 
 // =============================================================================
 // F57 — Profile edit shows DB data (username, bio, avatar)
 // =============================================================================
 test.describe('F57 — Editer son profil', () => {
-  test('should display username, bio and avatar from DB on profile page', async ({ authenticatedPage, db }) => {
+  test('F57: Profile page displays username from DB', async ({ authenticatedPage, db }) => {
     const profile = await db.getProfile()
+    // STRICT: profile MUST exist for test user
+    expect(profile).toBeTruthy()
+    expect(profile.username).toBeTruthy()
 
     await authenticatedPage.goto('/profile')
     await authenticatedPage.waitForLoadState('networkidle')
 
-    if (profile && profile.username) {
-      // Username from DB should be displayed on the profile page
-      const usernameLocator = authenticatedPage
-        .getByText(profile.username, { exact: false })
-        .first()
-      await expect(usernameLocator).toBeVisible({ timeout: 10000 })
+    // STRICT: username from DB MUST be visible on profile page
+    const usernameLocator = authenticatedPage.getByText(profile.username, { exact: false }).first()
+    await expect(usernameLocator).toBeVisible({ timeout: 15000 })
+  })
+
+  test('F57: Profile page displays bio from DB when set', async ({ authenticatedPage, db }) => {
+    const profile = await db.getProfile()
+    expect(profile).toBeTruthy()
+
+    await authenticatedPage.goto('/profile')
+    await authenticatedPage.waitForLoadState('networkidle')
+
+    if (profile.bio) {
+      // STRICT: bio exists in DB → MUST be visible on the page
+      const bioLocator = authenticatedPage.getByText(profile.bio, { exact: false }).first()
+      await expect(bioLocator).toBeVisible({ timeout: 10000 })
     } else {
-      // No profile username — page should still load
-      await expect(authenticatedPage.locator('main, [class*="profile"]').first()).toBeVisible()
+      // DB has no bio → verify profile page still loaded correctly with username
+      const usernameLocator = authenticatedPage.getByText(profile.username, { exact: false }).first()
+      await expect(usernameLocator).toBeVisible({ timeout: 10000 })
     }
+  })
 
-    // Verify bio text from DB is displayed on the profile page (if bio exists)
-    if (profile && profile.bio) {
-      const bioLocator = authenticatedPage
-        .getByText(profile.bio, { exact: false })
-        .first()
-      await expect(bioLocator).toBeVisible({ timeout: 5000 })
-    }
+  test('F57: Profile page displays avatar when avatar_url is set in DB', async ({ authenticatedPage, db }) => {
+    const profile = await db.getProfile()
+    expect(profile).toBeTruthy()
 
-    // Verify avatar image is present (if avatar_url exists in DB)
-    if (profile && profile.avatar_url) {
+    await authenticatedPage.goto('/profile')
+    await authenticatedPage.waitForLoadState('networkidle')
+
+    if (profile.avatar_url) {
+      // STRICT: avatar_url in DB → an avatar image MUST be visible
       const avatarImg = authenticatedPage.locator(
-        `img[src*="${profile.avatar_url.split('/').pop()}"], img[class*="avatar"], img[alt*="avatar"], img[alt*="${profile.username || ''}"]`
+        `img[src*="${profile.avatar_url.split('/').pop()}"], img[class*="avatar"], img[alt*="avatar"]`
       ).first()
-      const avatarVisible = await avatarImg.isVisible({ timeout: 5000 }).catch(() => false)
-      // Fallback: check for any profile image
-      if (!avatarVisible) {
-        const anyAvatar = authenticatedPage.locator(
-          '[class*="avatar"] img, [class*="profile"] img, img[class*="rounded-full"]'
-        ).first()
-        await expect(anyAvatar).toBeVisible({ timeout: 5000 })
-      } else {
-        await expect(avatarImg).toBeVisible()
-      }
+      // STRICT: no .catch(() => false) — this MUST pass
+      await expect(avatarImg).toBeVisible({ timeout: 10000 })
+    } else {
+      // No avatar_url in DB → verify page loaded with username instead
+      const usernameLocator = authenticatedPage.getByText(profile.username, { exact: false }).first()
+      await expect(usernameLocator).toBeVisible({ timeout: 10000 })
     }
   })
 })
 
 // =============================================================================
-// F58 — Notification settings section (with localStorage validation)
+// F58 — Notification settings section
 // =============================================================================
 test.describe('F58 — Parametres de notifications', () => {
-  test('should display notification toggles matching localStorage values', async ({ authenticatedPage }) => {
-    await authenticatedPage.goto('/settings')
-    await authenticatedPage.waitForLoadState('networkidle')
-    if (await hasServerError(authenticatedPage)) {
-      expect(await authenticatedPage.locator('body').first().isVisible()).toBe(true)
-      return
-    }
+  test('F58: Notification section with 4 toggles is visible', async ({ authenticatedPage }) => {
+    const ok = await navigateWithFallback(authenticatedPage, '/settings')
+    // STRICT: settings page MUST load successfully
+    expect(ok).toBe(true)
 
-    // Verify notification section exists
+    // STRICT: #notifications section MUST be visible (exists in Settings.tsx)
     const notifSection = authenticatedPage.locator('#notifications')
     await expect(notifSection).toBeVisible({ timeout: 10000 })
 
-    // Scope all label searches to #notifications to avoid matching nav links
+    // STRICT: all 4 notification toggle labels MUST be visible within #notifications
     const section = authenticatedPage.locator('#notifications')
+    await expect(section.getByText('Sessions')).toBeVisible({ timeout: 5000 })
+    await expect(section.getByText('Messages')).toBeVisible({ timeout: 5000 })
+    await expect(section.getByText('Party vocale')).toBeVisible({ timeout: 5000 })
+    await expect(section.getByText(/Rappels automatiques/i)).toBeVisible({ timeout: 5000 })
 
-    // Verify at least some toggle labels are present within the section
-    const toggleLabels = section
-      .getByText(/Sessions|Messages|Party vocale|Rappels/i)
-      .first()
-    const toggleInputs = section
-      .locator('[role="switch"]')
-      .first()
-    const hasLabels = await toggleLabels.isVisible().catch(() => false)
-    const hasInputs = await toggleInputs.isVisible().catch(() => false)
-    expect(hasLabels || hasInputs).toBeTruthy()
+    // STRICT: at least 4 toggle switches within the section
+    const switches = section.locator('[role="switch"]')
+    const switchCount = await switches.count()
+    // STRICT: exactly 4 notification toggles
+    expect(switchCount).toBe(4)
+  })
 
-    // Read notification settings from localStorage and verify toggle states match
-    const notifSettings = await authenticatedPage.evaluate(() =>
+  test('F58: Toggling a notification switch updates localStorage', async ({ authenticatedPage }) => {
+    const ok = await navigateWithFallback(authenticatedPage, '/settings')
+    expect(ok).toBe(true)
+
+    const section = authenticatedPage.locator('#notifications')
+    await expect(section).toBeVisible({ timeout: 10000 })
+
+    // Read initial localStorage state
+    const initialSettings = await authenticatedPage.evaluate(() =>
       JSON.parse(localStorage.getItem('sq-notification-settings') || '{}')
     )
 
-    if (Object.keys(notifSettings).length > 0) {
-      // For each known notification key, verify the corresponding toggle state
-      const keys: Array<{ key: string; label: RegExp }> = [
-        { key: 'sessions', label: /Sessions/i },
-        { key: 'messages', label: /Messages/i },
-        { key: 'party', label: /Party vocale|Party|Groupe/i },
-        { key: 'reminders', label: /Rappels|Reminders/i },
-      ]
+    // Click the first toggle (Sessions)
+    const firstToggle = section.locator('[role="switch"]').first()
+    await expect(firstToggle).toBeVisible({ timeout: 5000 })
+    const initialState = await firstToggle.getAttribute('aria-checked')
+    await firstToggle.click()
+    await authenticatedPage.waitForTimeout(500)
 
-      for (const { key, label } of keys) {
-        if (notifSettings[key] !== undefined) {
-          // Find the toggle near the label text — scoped to #notifications
-          const labelEl = section.getByText(label).first()
-          if (await labelEl.isVisible().catch(() => false)) {
-            // Find the nearest switch in the same row container
-            const toggleContainer = labelEl.locator('xpath=ancestor::div[.//*[@role="switch"]]').first()
-            const toggle = toggleContainer.locator('[role="switch"]').first()
-            if (await toggle.isVisible().catch(() => false)) {
-              const ariaChecked = await toggle.getAttribute('aria-checked')
-              const isChecked = ariaChecked === 'true'
-              expect(isChecked).toBe(notifSettings[key])
-            }
-          }
-        }
-      }
-    }
+    // STRICT: toggle state MUST have changed
+    const newState = await firstToggle.getAttribute('aria-checked')
+    expect(newState).not.toBe(initialState)
+
+    // STRICT: localStorage MUST be updated
+    const updatedSettings = await authenticatedPage.evaluate(() =>
+      JSON.parse(localStorage.getItem('sq-notification-settings') || '{}')
+    )
+    // STRICT: the sessions value MUST have flipped
+    expect(updatedSettings.sessions).toBe(newState === 'true')
   })
 })
 
 // =============================================================================
-// F59 — Audio devices section (browser-specific, no DB/localStorage comparison)
+// F59 — Audio devices section
 // =============================================================================
 test.describe('F59 — Peripheriques audio', () => {
-  test('should display audio section with Microphone/Output dropdowns', async ({ authenticatedPage }) => {
-    await authenticatedPage.goto('/settings')
-    await authenticatedPage.waitForLoadState('networkidle')
-    if (await hasServerError(authenticatedPage)) {
-      expect(await authenticatedPage.locator('body').first().isVisible()).toBe(true)
-      return
-    }
+  test('F59: Audio section with Microphone and Sortie audio labels', async ({ authenticatedPage }) => {
+    const ok = await navigateWithFallback(authenticatedPage, '/settings')
+    expect(ok).toBe(true)
 
-    // Verify audio section
+    // STRICT: #audio section MUST be visible
     const audioSection = authenticatedPage.locator('#audio')
     await expect(audioSection).toBeVisible({ timeout: 10000 })
 
-    const section = authenticatedPage.locator('#audio')
+    // STRICT: "Microphone" label MUST be visible in #audio section
+    await expect(audioSection.getByText('Microphone')).toBeVisible({ timeout: 5000 })
 
-    // Verify microphone or output labels within the audio section
-    const hasMicLabel = await section
-      .getByText(/Microphone/i)
-      .first()
-      .isVisible()
-      .catch(() => false)
-    const hasOutputLabel = await section
-      .getByText(/Sortie audio|Sortie|Haut-parleur/i)
-      .first()
-      .isVisible()
-      .catch(() => false)
-    // Audio dropdowns are custom comboboxes, not native <select>
-    const hasCombobox = await section
-      .locator('[role="combobox"]')
-      .first()
-      .isVisible()
-      .catch(() => false)
-    expect(hasMicLabel || hasOutputLabel || hasCombobox).toBeTruthy()
+    // STRICT: "Sortie audio" label MUST be visible in #audio section
+    await expect(audioSection.getByText('Sortie audio')).toBeVisible({ timeout: 5000 })
   })
 })
 
 // =============================================================================
-// F60 — Theme toggle works (strong data-theme assertions)
+// F60 — Theme toggle works
 // =============================================================================
 test.describe('F60 — Changer le theme (dark/light)', () => {
-  test('should toggle theme and verify data-theme attribute on html element', async ({ authenticatedPage }) => {
-    await authenticatedPage.goto('/settings')
-    await authenticatedPage.waitForLoadState('networkidle')
-    if (await hasServerError(authenticatedPage)) {
-      expect(await authenticatedPage.locator('body').first().isVisible()).toBe(true)
-      return
-    }
+  test('F60: Theme selector toggles data-theme between dark and light', async ({ authenticatedPage }) => {
+    const ok = await navigateWithFallback(authenticatedPage, '/settings')
+    expect(ok).toBe(true)
 
-    // The theme section heading is "Apparence" and uses #theme id
+    // STRICT: #theme section MUST be visible
     const themeSection = authenticatedPage.locator('#theme')
     await expect(themeSection).toBeVisible({ timeout: 10000 })
 
-    // Theme options are SegmentedControl tabs (role="tab"), NOT buttons
+    // STRICT: "Sombre" and "Clair" tabs MUST exist (SegmentedControl in ThemeSelector)
     const sombreTab = authenticatedPage.getByRole('tab', { name: /Sombre/i })
     const clairTab = authenticatedPage.getByRole('tab', { name: /Clair/i })
+    await expect(sombreTab).toBeVisible({ timeout: 5000 })
+    await expect(clairTab).toBeVisible({ timeout: 5000 })
 
-    const hasSombre = await sombreTab.isVisible().catch(() => false)
-    const hasClair = await clairTab.isVisible().catch(() => false)
+    // Click "Sombre" → verify dark theme
+    await sombreTab.click()
+    await authenticatedPage.waitForTimeout(500)
+    const themeAfterSombre = await authenticatedPage.evaluate(() =>
+      document.documentElement.getAttribute('data-theme')
+      || document.documentElement.getAttribute('class')
+      || document.documentElement.style.colorScheme
+      || ''
+    )
+    // STRICT: theme attribute MUST contain "dark"
+    expect(themeAfterSombre).toMatch(/dark/i)
 
-    expect(hasSombre || hasClair).toBeTruthy()
-
-    // Click "Sombre" → verify data-theme="dark" on html element
-    if (hasSombre) {
-      await sombreTab.click()
-      await authenticatedPage.waitForTimeout(500)
-
-      const themeAfterSombre = await authenticatedPage.evaluate(() => {
-        return document.documentElement.getAttribute('data-theme')
-          || document.documentElement.getAttribute('class')
-          || document.documentElement.style.colorScheme
-          || ''
-      })
-      expect(themeAfterSombre).toMatch(/dark/i)
-    }
-
-    // Click "Clair" → verify data-theme="light" on html element
-    if (hasClair) {
-      await clairTab.click()
-      await authenticatedPage.waitForTimeout(500)
-
-      const themeAfterClair = await authenticatedPage.evaluate(() => {
-        return document.documentElement.getAttribute('data-theme')
-          || document.documentElement.getAttribute('class')
-          || document.documentElement.style.colorScheme
-          || ''
-      })
-      expect(themeAfterClair).toMatch(/light/i)
-    }
+    // Click "Clair" → verify light theme
+    await clairTab.click()
+    await authenticatedPage.waitForTimeout(500)
+    const themeAfterClair = await authenticatedPage.evaluate(() =>
+      document.documentElement.getAttribute('data-theme')
+      || document.documentElement.getAttribute('class')
+      || document.documentElement.style.colorScheme
+      || ''
+    )
+    // STRICT: theme attribute MUST contain "light"
+    expect(themeAfterClair).toMatch(/light/i)
   })
 })
 
 // =============================================================================
-// F61 — Timezone matches DB and localStorage
+// F61 — Timezone matches DB
 // =============================================================================
-test.describe('F61 — Fuseau horaire correspond a la DB et localStorage', () => {
-  test('should show timezone value matching DB profile and localStorage', async ({ authenticatedPage, db }) => {
+test.describe('F61 — Fuseau horaire correspond a la DB', () => {
+  test('F61: Timezone from DB profile is displayed in the region section', async ({ authenticatedPage, db }) => {
     const profile = await db.getProfile()
+    // STRICT: profile MUST exist
+    expect(profile).toBeTruthy()
 
-    await authenticatedPage.goto('/settings')
-    await authenticatedPage.waitForLoadState('networkidle')
-    if (await hasServerError(authenticatedPage)) {
-      expect(await authenticatedPage.locator('body').first().isVisible()).toBe(true)
-      return
-    }
+    const ok = await navigateWithFallback(authenticatedPage, '/settings')
+    expect(ok).toBe(true)
 
-    // Verify region section exists (heading is "Region")
+    // STRICT: #region section MUST be visible
     const regionSection = authenticatedPage.locator('#region')
     await expect(regionSection).toBeVisible({ timeout: 10000 })
 
-    const section = authenticatedPage.locator('#region')
+    // STRICT: "Fuseau horaire" label MUST be visible
+    await expect(regionSection.getByText('Fuseau horaire')).toBeVisible({ timeout: 5000 })
 
-    // Read localStorage timezone (may not be set yet)
-    const localTz = await authenticatedPage.evaluate(() =>
-      localStorage.getItem('sq-timezone') || ''
-    )
-
-    // If profile has timezone in DB, verify it shows on the settings page
-    // The UI shows "Paris (UTC+1)" for "Europe/Paris", so match city name
-    if (profile && profile.timezone) {
+    if (profile.timezone) {
+      // DB has a timezone → verify the city name appears on the page
+      // TIMEZONES array maps e.g. "Europe/Paris" → "Paris (UTC+1)"
       const tzParts = profile.timezone.split('/')
       const tzCity = tzParts[tzParts.length - 1].replace(/_/g, ' ')
-      // Match city name which may appear as "Paris (UTC+1)" or similar
-      const hasTzMatch = await section
-        .getByText(new RegExp(tzCity, 'i'))
-        .first()
-        .isVisible()
-        .catch(() => false)
-      const hasTzFullMatch = await section
-        .getByText(new RegExp(profile.timezone.replace('/', '\\/'), 'i'))
-        .first()
-        .isVisible()
-        .catch(() => false)
-      // Also check for the combobox containing the city name
-      const hasComboboxMatch = await section
-        .locator('[role="combobox"]')
-        .first()
-        .isVisible()
-        .catch(() => false)
-      expect(hasTzMatch || hasTzFullMatch || hasComboboxMatch).toBeTruthy()
 
-      // Only compare localStorage to DB if localStorage actually has a timezone value
+      // STRICT: the timezone city MUST appear in the region section
+      const hasTzCity = await regionSection.getByText(new RegExp(tzCity, 'i')).first().isVisible({ timeout: 5000 })
+      expect(hasTzCity).toBe(true)
+
+      // STRICT: localStorage timezone MUST match DB timezone after page loads
+      const localTz = await authenticatedPage.evaluate(() => localStorage.getItem('sq-timezone') || '')
       if (localTz && localTz.includes('/')) {
+        // STRICT: if localStorage has a timezone, it MUST match DB
         expect(localTz).toBe(profile.timezone)
       }
-    } else if (localTz) {
-      // No DB timezone but localStorage has one — verify it's displayed
-      const tzParts = localTz.split('/')
-      const tzCity = tzParts[tzParts.length - 1].replace(/_/g, ' ')
-      const hasTzOnPage = await section
-        .getByText(new RegExp(tzCity, 'i'))
-        .first()
-        .isVisible()
-        .catch(() => false)
-      expect(hasTzOnPage).toBeTruthy()
     } else {
-      // Neither DB nor localStorage has timezone — just verify combobox is present
-      const hasCombobox = await section
-        .locator('[role="combobox"]')
-        .first()
-        .isVisible()
-        .catch(() => false)
-      const hasFuseauLabel = await section
-        .getByText(/Fuseau horaire/i)
-        .first()
-        .isVisible()
-        .catch(() => false)
-      expect(hasCombobox || hasFuseauLabel).toBeTruthy()
+      // No timezone in DB → the Select combobox MUST still be present
+      const selectTrigger = regionSection.locator('button[role="combobox"], [class*="select"]').first()
+      await expect(selectTrigger).toBeVisible({ timeout: 5000 })
     }
   })
 })
 
 // =============================================================================
-// F62 — Privacy settings (with localStorage validation)
+// F62 — Privacy settings
 // =============================================================================
 test.describe('F62 — Parametres de confidentialite', () => {
-  test('should display privacy settings matching localStorage values', async ({ authenticatedPage }) => {
-    await authenticatedPage.goto('/settings')
-    await authenticatedPage.waitForLoadState('networkidle')
-    if (await hasServerError(authenticatedPage)) {
-      expect(await authenticatedPage.locator('body').first().isVisible()).toBe(true)
-      return
-    }
+  test('F62: Privacy section displays visibility and online status controls', async ({ authenticatedPage }) => {
+    const ok = await navigateWithFallback(authenticatedPage, '/settings')
+    expect(ok).toBe(true)
 
-    // Privacy section — try #privacy id first, then heading text
+    // STRICT: #privacy section MUST be visible (defined in Settings.tsx)
     const privacySection = authenticatedPage.locator('#privacy')
-    const privacySectionVisible = await privacySection.isVisible({ timeout: 10000 }).catch(() => false)
+    await expect(privacySection).toBeVisible({ timeout: 10000 })
 
-    // If #privacy not found, try to find the heading "Confidentialité" anywhere
-    if (!privacySectionVisible) {
-      const confidentialiteHeading = authenticatedPage.getByText(/Confidentialité/i).first()
-      const headingVisible = await confidentialiteHeading.isVisible({ timeout: 5000 }).catch(() => false)
-      if (!headingVisible) {
-        // Privacy section not found on settings page — verify page loaded
-        expect(await authenticatedPage.locator('body').first().isVisible()).toBe(true)
-        return
-      }
-    }
+    // STRICT: "Visibilite du profil" label MUST be visible
+    await expect(privacySection.getByText(/Visibilité du profil/i)).toBeVisible({ timeout: 5000 })
 
-    // Scope to the section (or whole page if #privacy not found)
-    const section = privacySectionVisible ? authenticatedPage.locator('#privacy') : authenticatedPage
+    // STRICT: "Statut en ligne" label MUST be visible
+    await expect(privacySection.getByText(/Statut en ligne/i)).toBeVisible({ timeout: 5000 })
 
-    // Verify profile visibility label or online status toggle within the section
-    const hasVisibility = await section
-      .getByText(/Visibilité du profil/i)
-      .first()
-      .isVisible()
-      .catch(() => false)
-    const hasOnlineStatus = await section
-      .getByText(/Statut en ligne/i)
-      .first()
-      .isVisible()
-      .catch(() => false)
-    // The visibility dropdown is a custom combobox, online status is a switch
-    const hasCombobox = await section
-      .locator('[role="combobox"]')
-      .first()
-      .isVisible()
-      .catch(() => false)
-    const hasSwitch = await section
-      .locator('[role="switch"]')
-      .first()
-      .isVisible()
-      .catch(() => false)
-    const hasConfidentialiteText = await section
-      .getByText(/Confidentialité/i)
-      .first()
-      .isVisible()
-      .catch(() => false)
-    if (!hasVisibility && !hasOnlineStatus && !hasCombobox && !hasSwitch && !hasConfidentialiteText) {
-      // No privacy UI elements found — verify page loaded
-      expect(await authenticatedPage.locator('body').first().isVisible()).toBe(true)
-      return
-    }
+    // STRICT: online status toggle (role="switch") MUST be present
+    const onlineSwitch = privacySection.locator('[role="switch"]').first()
+    await expect(onlineSwitch).toBeVisible({ timeout: 5000 })
+  })
 
-    // Read privacy settings from localStorage and verify toggle states match
-    const privacySettings = await authenticatedPage.evaluate(() =>
+  test('F62: Toggling online status updates localStorage', async ({ authenticatedPage }) => {
+    const ok = await navigateWithFallback(authenticatedPage, '/settings')
+    expect(ok).toBe(true)
+
+    const privacySection = authenticatedPage.locator('#privacy')
+    await expect(privacySection).toBeVisible({ timeout: 10000 })
+
+    // Get initial privacy localStorage
+    const initialPrivacy = await authenticatedPage.evaluate(() =>
       JSON.parse(localStorage.getItem('sq-privacy-settings') || '{}')
     )
+    const initialOnlineStatus = initialPrivacy.showOnlineStatus ?? true
 
-    if (Object.keys(privacySettings).length > 0) {
-      // Verify profileVisibility setting — uses a custom combobox, not native <select>
-      if (privacySettings.profileVisibility !== undefined) {
-        const visibilityCombobox = section.locator('[role="combobox"]').first()
-        if (await visibilityCombobox.isVisible().catch(() => false)) {
-          // Custom combobox: read displayed text value instead of inputValue
-          const displayedValue = await visibilityCombobox.textContent().catch(() => '')
-          if (displayedValue) {
-            // The displayed value should relate to the stored setting — skip on mismatch
-            const matches = displayedValue.toLowerCase().includes(
-              String(privacySettings.profileVisibility).toLowerCase()
-            )
-            if (!matches) {
-              // UI label doesn't match stored value — labels use display names vs stored keys
-              // "Membres de mes squads" != "friends" — this is expected label vs value mismatch
-              test.info().annotations.push({ type: 'info', description: `Privacy label "${displayedValue}" vs stored "${privacySettings.profileVisibility}"` })
-            }
-          }
-        }
-      }
+    // Click the online status toggle
+    const onlineSwitch = privacySection.locator('[role="switch"]').first()
+    await expect(onlineSwitch).toBeVisible({ timeout: 5000 })
+    await onlineSwitch.click()
+    await authenticatedPage.waitForTimeout(500)
 
-      // Verify showOnlineStatus toggle — uses role="switch" with aria-checked
-      if (privacySettings.showOnlineStatus !== undefined) {
-        const onlineLabel = section.getByText(/Statut en ligne/i).first()
-        if (await onlineLabel.isVisible().catch(() => false)) {
-          const toggleContainer = onlineLabel.locator('xpath=ancestor::div[.//*[@role="switch"]]').first()
-          const toggle = toggleContainer.locator('[role="switch"]').first()
-          if (await toggle.isVisible().catch(() => false)) {
-            const ariaChecked = await toggle.getAttribute('aria-checked')
-            const isChecked = ariaChecked === 'true'
-            if (isChecked !== privacySettings.showOnlineStatus) {
-              // Toggle state doesn't match localStorage — may be due to sync delay
-              test.info().annotations.push({ type: 'info', description: `Online status toggle shows ${isChecked} but localStorage has ${privacySettings.showOnlineStatus}` })
-            }
-          }
-        }
-      }
-    }
+    // STRICT: localStorage MUST now have the opposite value
+    const updatedPrivacy = await authenticatedPage.evaluate(() =>
+      JSON.parse(localStorage.getItem('sq-privacy-settings') || '{}')
+    )
+    expect(updatedPrivacy.showOnlineStatus).toBe(!initialOnlineStatus)
   })
 })
 
 // =============================================================================
-// F63 — Export data (GDPR) — functional tests with download validation
+// F63 — Export data (GDPR)
 // =============================================================================
 test.describe('F63 — Exporter ses donnees (GDPR)', () => {
+  test('F63a: Export button is visible on settings page', async ({ authenticatedPage }) => {
+    const ok = await navigateWithFallback(authenticatedPage, '/settings')
+    expect(ok).toBe(true)
 
-  test('F63a: Export button is visible and clickable', async ({ authenticatedPage }) => {
-    await authenticatedPage.goto('/settings')
-    await authenticatedPage.waitForLoadState('networkidle')
-
-    const exportBtn = authenticatedPage.getByText(/Exporter mes données/i).first()
-      .or(authenticatedPage.getByRole('button', { name: /Exporter/i }))
-    await expect(exportBtn.first()).toBeVisible({ timeout: 10000 })
+    // STRICT: "Exporter mes donnees" button MUST be visible (in #data section)
+    const dataSection = authenticatedPage.locator('#data')
+    await expect(dataSection).toBeVisible({ timeout: 10000 })
+    const exportBtn = dataSection.getByText(/Exporter mes données/i).first()
+    // STRICT: no fallback to <main> — the button MUST exist
+    await expect(exportBtn).toBeVisible({ timeout: 5000 })
   })
 
-  test('F63b: Click export triggers file download', async ({ authenticatedPage }) => {
-    await authenticatedPage.goto('/settings')
-    await authenticatedPage.waitForLoadState('networkidle')
+  test('F63b: Click export triggers JSON file download with valid structure', async ({ authenticatedPage, db }) => {
+    const ok = await navigateWithFallback(authenticatedPage, '/settings')
+    expect(ok).toBe(true)
+
+    const profile = await db.getProfile()
+    expect(profile).toBeTruthy()
 
     // Listen for download event BEFORE clicking
     const downloadPromise = authenticatedPage.waitForEvent('download', { timeout: 30000 })
 
-    // Click export button
+    // STRICT: click the export button — it MUST exist
     const exportBtn = authenticatedPage.getByText(/Exporter mes données/i).first()
-      .or(authenticatedPage.getByRole('button', { name: /Exporter/i }))
-    const hasExport = await exportBtn.first().isVisible({ timeout: 5000 }).catch(() => false)
-    if (!hasExport) {
-      expect(await authenticatedPage.locator('main').first().isVisible()).toBe(true)
-      return
-    }
+    await expect(exportBtn).toBeVisible({ timeout: 5000 })
+    await exportBtn.click()
 
-    await exportBtn.first().click()
-
-    // Wait for download
+    // STRICT: download MUST happen
     const download = await downloadPromise
     expect(download).toBeTruthy()
 
-    // Verify filename pattern
+    // STRICT: filename MUST be .json
     const filename = download.suggestedFilename()
-    expect(filename).toMatch(/\.(json|txt|csv)/)
-  })
+    expect(filename).toMatch(/\.json$/)
 
-  test('F63c: Exported data contains expected structure', async ({ authenticatedPage }) => {
-    await authenticatedPage.goto('/settings')
-    await authenticatedPage.waitForLoadState('networkidle')
-
-    const downloadPromise = authenticatedPage.waitForEvent('download', { timeout: 30000 })
-
-    const exportBtn = authenticatedPage.getByText(/Exporter mes données/i).first()
-      .or(authenticatedPage.getByRole('button', { name: /Exporter/i }))
-    const hasExport = await exportBtn.first().isVisible({ timeout: 5000 }).catch(() => false)
-    if (!hasExport) {
-      expect(await authenticatedPage.locator('main').first().isVisible()).toBe(true)
-      return
-    }
-
-    await exportBtn.first().click()
-
-    const download = await downloadPromise
-    expect(download).toBeTruthy()
-
-    // Read file content
+    // Read and validate exported content
     const readStream = await download.createReadStream()
     const chunks: Buffer[] = []
     if (readStream) {
@@ -472,87 +334,72 @@ test.describe('F63 — Exporter ses donnees (GDPR)', () => {
       }
     }
     const content = Buffer.concat(chunks).toString('utf-8')
+    // STRICT: content MUST be non-empty
     expect(content.length).toBeGreaterThan(10)
 
-    // Try to parse as JSON and validate structure
     const data = JSON.parse(content)
-    expect(data).toBeTruthy()
-    expect(data.exported_at || data.profile || data.squads).toBeTruthy()
-
-    // If it has a profile, validate it has username
-    if (data.profile) {
-      expect(data.profile.username).toBeTruthy()
-    }
+    // STRICT: exported data MUST contain exported_at and profile
+    expect(data.exported_at).toBeTruthy()
+    expect(data.profile).toBeTruthy()
+    // STRICT: exported profile username MUST match DB
+    expect(data.profile.username).toBe(profile.username)
   })
 })
 
 // =============================================================================
-// F64 — Delete account (GDPR) — modal flow + cascade delete on temp user
+// F64 — Delete account (GDPR)
 // =============================================================================
 test.describe('F64 — Supprimer son compte', () => {
-
   test('F64a: Delete modal flow — type SUPPRIMER enables confirm button', async ({ authenticatedPage }) => {
-    await authenticatedPage.goto('/settings')
-    await authenticatedPage.waitForLoadState('networkidle')
+    const ok = await navigateWithFallback(authenticatedPage, '/settings')
+    expect(ok).toBe(true)
 
-    // Click "Supprimer mon compte" to open modal
-    const deleteBtn = authenticatedPage.getByText(/Supprimer mon compte/i).first()
-      .or(authenticatedPage.getByRole('button', { name: /Supprimer/i }))
-    const hasDelete = await deleteBtn.first().isVisible({ timeout: 5000 }).catch(() => false)
-    if (!hasDelete) {
-      expect(await authenticatedPage.locator('main').first().isVisible()).toBe(true)
-      return
-    }
+    // STRICT: "Supprimer mon compte" button MUST be visible in #data section
+    const dataSection = authenticatedPage.locator('#data')
+    await expect(dataSection).toBeVisible({ timeout: 10000 })
+    const deleteBtn = dataSection.getByText(/Supprimer mon compte/i).first()
+    await expect(deleteBtn).toBeVisible({ timeout: 5000 })
 
-    await deleteBtn.first().click()
+    // Open the delete modal
+    await deleteBtn.click()
     await authenticatedPage.waitForTimeout(500)
 
-    // Verify modal opened with confirmation heading
-    const modalHeading = authenticatedPage.getByText(/Supprimer ton compte|Supprimer votre compte|Confirmation/i)
-    await expect(modalHeading.first()).toBeVisible({ timeout: 5000 })
+    // STRICT: modal heading "Supprimer ton compte" MUST be visible
+    const modalHeading = authenticatedPage.getByText('Supprimer ton compte')
+    await expect(modalHeading).toBeVisible({ timeout: 5000 })
 
-    // Verify confirm button exists and is disabled
-    const confirmBtn = authenticatedPage.getByRole('button', { name: /Supprimer définitivement|Confirmer la suppression/i })
-    const hasConfirm = await confirmBtn.first().isVisible().catch(() => false)
+    // STRICT: confirm button "Supprimer definitivement" MUST exist and be disabled
+    const confirmBtn = authenticatedPage.getByRole('button', { name: /Supprimer définitivement/i })
+    await expect(confirmBtn).toBeVisible({ timeout: 5000 })
+    // STRICT: confirm button MUST be disabled initially
+    await expect(confirmBtn).toBeDisabled()
 
-    if (hasConfirm) {
-      // Button should be disabled initially
-      const isDisabled = await confirmBtn.first().isDisabled().catch(() => true)
-      expect(isDisabled).toBe(true)
+    // Type "SUPPRIMER" in the confirmation input
+    const input = authenticatedPage.locator('input[placeholder="SUPPRIMER"]')
+    await expect(input).toBeVisible({ timeout: 3000 })
+    await input.fill('SUPPRIMER')
+    await authenticatedPage.waitForTimeout(300)
 
-      // Type "SUPPRIMER" in the confirmation input
-      const input = authenticatedPage.locator('input[placeholder*="SUPPRIMER" i], input[type="text"]').last()
-      await input.fill('SUPPRIMER')
-      await authenticatedPage.waitForTimeout(300)
+    // STRICT: confirm button MUST now be enabled
+    await expect(confirmBtn).toBeEnabled()
 
-      // Confirm button should now be enabled
-      const isEnabled = await confirmBtn.first().isEnabled().catch(() => false)
-      expect(isEnabled).toBe(true)
-    }
-
-    // Click Cancel/Annuler — DO NOT actually delete the main user
-    const cancelBtn = authenticatedPage.getByRole('button', { name: /Annuler|Fermer/i }).first()
-    const hasCancel = await cancelBtn.isVisible().catch(() => false)
-    if (hasCancel) {
-      await cancelBtn.click()
-    } else {
-      await authenticatedPage.keyboard.press('Escape')
-    }
+    // Cancel — DO NOT actually delete the main test user
+    const cancelBtn = authenticatedPage.getByRole('button', { name: /Annuler/i })
+    await expect(cancelBtn).toBeVisible({ timeout: 3000 })
+    await cancelBtn.click()
   })
 
   test('F64b: Delete cascade on temporary user — all 8 tables cleaned in DB', async ({ db }) => {
     // Create a temporary user specifically for this test
-    let tempUserId: string | null = null
+    const { userId } = await db.createTemporaryTestUser()
     try {
-      const { userId } = await db.createTemporaryTestUser()
-      tempUserId = userId
-
-      // Verify user exists in profiles
+      // STRICT: verify user exists in profiles before deletion
       const { data: profileBefore } = await db.admin.from('profiles').select('*').eq('id', userId).single()
       expect(profileBefore).toBeTruthy()
+      // STRICT: username MUST contain the e2e-temp prefix
       expect(profileBefore.username).toContain('e2e-temp-')
 
-      // Execute the delete cascade (same logic as SettingsDeleteModal)
+      // Execute the delete cascade (mirrors SettingsDeleteModal logic)
       await db.admin.from('session_checkins').delete().eq('user_id', userId)
       await db.admin.from('session_rsvps').delete().eq('user_id', userId)
       await db.admin.from('messages').delete().eq('user_id', userId)
@@ -563,20 +410,19 @@ test.describe('F64 — Supprimer son compte', () => {
       await db.admin.from('ai_insights').delete().eq('user_id', userId)
       await db.admin.from('profiles').delete().eq('id', userId)
 
-      // Verify all tables are clean
+      // STRICT: verify ALL 8 tables are clean in DB
       const verification = await db.verifyUserDataDeleted(userId)
       for (const [table, count] of Object.entries(verification.tables)) {
+        // STRICT: each table MUST have 0 rows for the deleted user
         expect(count).toBe(0)
       }
 
       // Delete auth user
       await db.admin.auth.admin.deleteUser(userId)
-      tempUserId = null
-    } finally {
-      // Safety cleanup if test failed before delete
-      if (tempUserId) {
-        try { await db.deleteTemporaryTestUser(tempUserId) } catch { /* ignore */ }
-      }
+    } catch (error) {
+      // Safety cleanup — but re-throw the error so test fails
+      try { await db.deleteTemporaryTestUser(userId) } catch { /* cleanup */ }
+      throw error
     }
   })
 })
@@ -585,46 +431,26 @@ test.describe('F64 — Supprimer son compte', () => {
 // F65 — Logout works
 // =============================================================================
 test.describe('F65 — Se deconnecter', () => {
-  test('should logout and redirect to auth or landing page', async ({ authenticatedPage }) => {
-    await authenticatedPage.goto('/settings')
-    await authenticatedPage.waitForLoadState('networkidle')
+  test('F65: Logout button is visible and redirects to auth', async ({ authenticatedPage }) => {
+    const ok = await navigateWithFallback(authenticatedPage, '/settings')
+    expect(ok).toBe(true)
 
-    // Find and click logout button
-    const logoutBtn = authenticatedPage
-      .getByRole('button', { name: /Se déconnecter|Déconnexion/i })
-      .or(authenticatedPage.locator('button:has-text("Se déconnecter")'))
-      .or(authenticatedPage.locator('a:has-text("Se déconnecter")'))
+    // STRICT: "Se deconnecter" button MUST be visible on settings page
+    const logoutBtn = authenticatedPage.getByText(/Se déconnecter/i).first()
+    await expect(logoutBtn).toBeVisible({ timeout: 10000 })
 
-    const hasLogout = await logoutBtn.first().isVisible().catch(() => false)
+    await logoutBtn.click()
+    await authenticatedPage.waitForTimeout(3000)
 
-    if (hasLogout) {
-      await logoutBtn.first().click()
-      await authenticatedPage.waitForTimeout(3000)
-
-      // Verify redirect to /auth or landing page (/)
-      const url = authenticatedPage.url()
-      expect(
-        url.includes('/auth') ||
-        url.endsWith('/') ||
-        url.endsWith('.fr') ||
-        url.endsWith('.fr/')
-      ).toBeTruthy()
-    } else {
-      // Logout button not found on /settings — try /profile
-      await authenticatedPage.goto('/profile')
-      await authenticatedPage.waitForLoadState('networkidle')
-
-      const profileLogout = authenticatedPage
-        .getByRole('button', { name: /Se déconnecter|Déconnexion/i })
-        .or(authenticatedPage.locator('button:has-text("Se déconnecter")'))
-      const hasProfileLogout = await profileLogout.first().isVisible().catch(() => false)
-      expect(hasProfileLogout).toBeTruthy()
-    }
+    // STRICT: after logout, URL MUST redirect to /auth or landing (/)
+    const url = authenticatedPage.url()
+    // STRICT: must be on auth page or landing — not on /settings anymore
+    expect(url.includes('/auth') || url.endsWith('/') || url.endsWith('.fr') || url.endsWith('.fr/')).toBe(true)
   })
 })
 
 // =============================================================================
-// Settings protected route
+// Settings protected route — unauthenticated access
 // =============================================================================
 test.describe('Settings — Route protegee', () => {
   baseTest('should redirect to auth when not authenticated', async ({ page }) => {
@@ -633,7 +459,7 @@ test.describe('Settings — Route protegee', () => {
     await page.waitForTimeout(3000)
 
     const url = page.url()
-    // Should redirect to /auth or stay on settings if there is a different protection mechanism
-    expect(url.includes('/auth') || url.includes('/settings')).toBeTruthy()
+    // STRICT: unauthenticated users MUST be redirected to /auth
+    baseExpect(url).toContain('/auth')
   })
 })

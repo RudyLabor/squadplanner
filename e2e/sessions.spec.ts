@@ -1,173 +1,151 @@
-import { test, expect, retryOnNetworkError } from './fixtures'
+import { test, expect } from './fixtures'
+
+/**
+ * Sessions E2E Tests — F23-F30 + extras
+ *
+ * MODE STRICT : Chaque test DOIT echouer si les donnees DB ne s'affichent pas.
+ * Pas de fallback sur "page loaded" quand la DB a des donnees reelles.
+ * Pas de .catch(() => false) sur les assertions.
+ * Pas de test.info().annotations remplacant de vrais asserts.
+ * Pas de early return sans assertion reelle sur la feature testee.
+ * Si la DB a des sessions → l'UI DOIT les afficher → sinon FAIL.
+ */
 
 // ============================================================
-// Sessions E2E Tests — F23-F30 + extras
-// Uses shared fixtures: authenticatedPage (logged-in page), db (TestDataHelper)
-// Sessions are displayed within squad detail pages
-// Mutation tests use test-specific squads/sessions via db helpers
-//
-// RULES:
-// - NEVER use `expect(x || true).toBeTruthy()` — always passes
-// - NEVER use `expect(count).toBeGreaterThanOrEqual(0)` — always passes
-// - Every test MUST have at least one meaningful assertion that can FAIL
-// - When a feature truly cannot be tested, use test.skip(condition, 'reason')
+// F23 — Creer une session via UI + verifier DB
 // ============================================================
 
-test.describe('Sessions — F23: Creer une session via UI + verifier DB', () => {
+test.describe('F23 — Creer une session via UI + verifier DB', () => {
   let testSquadId: string | null = null
   let createdSessionId: string | null = null
 
   test.afterEach(async ({ db }) => {
     if (createdSessionId) {
-      try {
-        await db.deleteTestSession(createdSessionId)
-      } catch {
-        // Session deja supprimee
-      }
+      try { await db.deleteTestSession(createdSessionId) } catch { /* cleanup */ }
       createdSessionId = null
     }
     if (testSquadId) {
-      try {
-        await db.deleteTestSquad(testSquadId)
-      } catch {
-        // Squad deja supprimee
-      }
+      try { await db.deleteTestSquad(testSquadId) } catch { /* cleanup */ }
       testSquadId = null
     }
   })
 
-  test('F23: creer une session et verifier en DB', async ({ authenticatedPage, db }) => {
-    const page = authenticatedPage
-
-    // Creer une squad de test pour isoler le test
+  test('F23: creer une session et verifier en DB', async ({ authenticatedPage: page, db }) => {
+    // 1. Creer une squad de test isolee
     const testSquad = await db.createTestSquad({ name: `E2E Test Squad Session ${Date.now()}` })
     testSquadId = testSquad.id
-    const squadId = testSquad.id
 
-    await page.goto(`/squad/${squadId}`)
+    // STRICT: la squad de test doit exister
+    expect(testSquad.id).toBeTruthy()
+
+    await page.goto(`/squad/${testSquad.id}`)
     await page.waitForLoadState('networkidle')
 
-    // Chercher le bouton de creation de session
+    // 2. Le bouton de creation de session DOIT etre visible (le user est leader)
     const createSessionBtn = page.getByRole('button', { name: /Créer.*session|Nouvelle session|Planifier/i }).first()
-    const createBtnVisible = await createSessionBtn.isVisible({ timeout: 5000 }).catch(() => false)
-
-    if (!createBtnVisible) {
-      // Create session button not found — verify page loaded correctly
-      expect(await page.locator('main').first().isVisible()).toBe(true)
-      return
-    }
+    // STRICT: le bouton de creation DOIT etre visible pour un leader
+    await expect(createSessionBtn).toBeVisible({ timeout: 15000 })
 
     await createSessionBtn.click()
     await page.waitForTimeout(500)
 
-    // Remplir le titre
+    // 3. Remplir le titre
     const titleInput = page.getByPlaceholder(/Session ranked|Détente|Tryhard|titre/i).first()
-    const titleInputVisible = await titleInput.isVisible().catch(() => false)
-    if (titleInputVisible) {
-      await titleInput.fill('E2E Test Session')
-    }
+    // STRICT: le champ titre DOIT etre visible dans le formulaire de creation
+    await expect(titleInput).toBeVisible({ timeout: 10000 })
+    await titleInput.fill('E2E Test Session')
 
-    // Soumettre
+    // 4. Soumettre le formulaire
     const submitBtn = page.getByRole('button', { name: /Créer|Planifier|Enregistrer/i }).last()
-    const submitVisible = await submitBtn.isVisible().catch(() => false)
-    if (!submitVisible) {
-      // Submit button not found in creation dialog — verify dialog opened
-      expect(await page.locator('main').first().isVisible()).toBe(true)
-      return
-    }
-
-    const isEnabled = await submitBtn.isEnabled().catch(() => false)
-    if (!isEnabled) {
-      // Submit button disabled — required fields may be missing
-      expect(await page.locator('main').first().isVisible()).toBe(true)
-      return
-    }
+    // STRICT: le bouton de soumission DOIT etre visible
+    await expect(submitBtn).toBeVisible({ timeout: 10000 })
+    // STRICT: le bouton de soumission DOIT etre actif
+    await expect(submitBtn).toBeEnabled()
 
     await submitBtn.click()
     await page.waitForTimeout(3000)
 
-    // Verifier en DB que la session existe
-    const sessions = await db.getSquadSessions(squadId)
+    // 5. Verifier en DB que la session a ete creee
+    const sessions = await db.getSquadSessions(testSquad.id)
     const newSession = sessions.find((s: { title: string }) => s.title === 'E2E Test Session')
 
+    // STRICT: la session DOIT exister en DB apres soumission
     expect(newSession).toBeTruthy()
+    // STRICT: le titre DOIT correspondre
     expect(newSession.title).toBe('E2E Test Session')
-    expect(newSession.squad_id).toBe(squadId)
+    // STRICT: le squad_id DOIT correspondre
+    expect(newSession.squad_id).toBe(testSquad.id)
+
     createdSessionId = newSession.id
   })
 })
 
-test.describe('Sessions — F24: Detail de session correspond a la DB', () => {
+// ============================================================
+// F24 — Detail de session correspond a la DB
+// ============================================================
+
+test.describe('F24 — Detail de session correspond a la DB', () => {
   let testSquadId: string | null = null
   let testSessionId: string | null = null
 
   test.afterEach(async ({ db }) => {
     if (testSessionId) {
-      try { await db.deleteTestSession(testSessionId) } catch { /* ignore */ }
+      try { await db.deleteTestSession(testSessionId) } catch { /* cleanup */ }
       testSessionId = null
     }
     if (testSquadId) {
-      try { await db.deleteTestSquad(testSquadId) } catch { /* ignore */ }
+      try { await db.deleteTestSquad(testSquadId) } catch { /* cleanup */ }
       testSquadId = null
     }
   })
 
-  test('F24: titre de session affiche correspond a la DB', async ({ authenticatedPage, db }) => {
-    const page = authenticatedPage
-
-    // Creer une squad + session de test pour etre deterministe
+  test('F24: titre de session affiche correspond a la DB', async ({ authenticatedPage: page, db }) => {
+    // 1. Creer une squad + session de test deterministe
     const testSquad = await db.createTestSquad({ name: `E2E Test Squad Detail ${Date.now()}` })
     testSquadId = testSquad.id
     const sessionTitle = `E2E Test Session Detail ${Date.now()}`
     const testSession = await db.createTestSession(testSquad.id, { title: sessionTitle })
     testSessionId = testSession.id
 
-    // Verifier la session en DB
+    // 2. Verifier la session en DB
     const dbSession = await db.getSessionById(testSession.id)
+    // STRICT: la session DOIT exister en DB
     expect(dbSession).toBeTruthy()
+    // STRICT: le titre en DB DOIT correspondre a ce qu'on a cree
     expect(dbSession.title).toBe(sessionTitle)
 
-    // Naviguer vers la page de detail de la session
+    // 3. Naviguer vers la page de detail
     await page.goto(`/session/${testSession.id}`)
     await page.waitForLoadState('networkidle')
-    const pageOk = await retryOnNetworkError(page)
-    if (!pageOk) {
-      // Session detail page shows network error — verify page at least rendered
-      expect(await page.locator('h1').first().isVisible()).toBe(true)
-      return
-    }
 
-    // Le titre de la session doit etre affiche sur la page
+    // 4. Le titre de la session DOIT etre affiche sur la page
     const titleOnPage = page.getByText(sessionTitle).first()
-    const titleVisible = await titleOnPage.isVisible({ timeout: 10000 }).catch(() => false)
-    if (!titleVisible) {
-      // Session title not visible — page may show different layout
-      expect(await page.locator('main').first().isVisible()).toBe(true)
-      return
-    }
-    await expect(titleOnPage).toBeVisible()
+    // STRICT: le titre DB DOIT etre visible dans l'UI — pas de fallback sur main
+    await expect(titleOnPage).toBeVisible({ timeout: 15000 })
   })
 })
 
-test.describe('Sessions — F25: RSVP', () => {
+// ============================================================
+// F25 — RSVP Present / Absent
+// ============================================================
+
+test.describe('F25 — RSVP', () => {
   let testSquadId: string | null = null
   let testSessionId: string | null = null
 
   test.afterEach(async ({ db }) => {
     if (testSessionId) {
-      try { await db.deleteTestSession(testSessionId) } catch { /* ignore */ }
+      try { await db.deleteTestSession(testSessionId) } catch { /* cleanup */ }
       testSessionId = null
     }
     if (testSquadId) {
-      try { await db.deleteTestSquad(testSquadId) } catch { /* ignore */ }
+      try { await db.deleteTestSquad(testSquadId) } catch { /* cleanup */ }
       testSquadId = null
     }
   })
 
-  test('F25a: RSVP "Present" et verifier en DB', async ({ authenticatedPage, db }) => {
-    const page = authenticatedPage
-
-    // Creer une squad et une session de test
+  test('F25a: RSVP "Present" et verifier en DB', async ({ authenticatedPage: page, db }) => {
+    // 1. Creer une squad + session de test
     const testSquad = await db.createTestSquad({ name: `E2E Test Squad RSVP ${Date.now()}` })
     testSquadId = testSquad.id
     const testSession = await db.createTestSession(testSquad.id, {
@@ -175,36 +153,31 @@ test.describe('Sessions — F25: RSVP', () => {
     })
     testSessionId = testSession.id
 
-    // Naviguer vers la page de detail de la session (les boutons RSVP y sont)
+    // 2. Naviguer vers la page de detail de la session
     await page.goto(`/session/${testSession.id}`)
     await page.waitForLoadState('networkidle')
 
-    // Chercher le bouton "Present"
+    // 3. Le bouton "Present" DOIT etre visible
     const presentBtn = page.getByRole('button', { name: /Présent/i }).first()
-    const presentVisible = await presentBtn.isVisible({ timeout: 10000 }).catch(() => false)
-
-    if (!presentVisible) {
-      // Present button not found — session page may not show RSVP buttons
-      expect(await page.locator('main').first().isVisible()).toBe(true)
-      return
-    }
+    // STRICT: le bouton RSVP "Present" DOIT etre visible sur la page de session
+    await expect(presentBtn).toBeVisible({ timeout: 15000 })
 
     await presentBtn.click()
     await page.waitForTimeout(2000)
 
-    // Verifier en DB
+    // 4. Verifier en DB que le RSVP a ete enregistre
     const rsvps = await db.getSessionRsvps(testSession.id)
     const userId = await db.getUserId()
     const userRsvp = rsvps.find((r: { user_id: string }) => r.user_id === userId)
 
+    // STRICT: le RSVP DOIT exister en DB apres le clic
     expect(userRsvp).toBeTruthy()
+    // STRICT: la reponse DOIT etre 'present'
     expect(userRsvp.response).toBe('present')
   })
 
-  test('F25b: RSVP "Absent" et verifier en DB', async ({ authenticatedPage, db }) => {
-    const page = authenticatedPage
-
-    // Creer une squad et une session de test
+  test('F25b: RSVP "Absent" et verifier en DB', async ({ authenticatedPage: page, db }) => {
+    // 1. Creer une squad + session de test
     const testSquad = await db.createTestSquad({ name: `E2E Test Squad RSVP2 ${Date.now()}` })
     testSquadId = testSquad.id
     const testSession = await db.createTestSession(testSquad.id, {
@@ -212,57 +185,51 @@ test.describe('Sessions — F25: RSVP', () => {
     })
     testSessionId = testSession.id
 
+    // 2. Naviguer vers la page de detail de la session
     await page.goto(`/session/${testSession.id}`)
     await page.waitForLoadState('networkidle')
-    const pageOk = await retryOnNetworkError(page)
-    if (!pageOk) {
-      // Session detail page shows network error — verify page at least rendered
-      expect(await page.locator('h1').first().isVisible()).toBe(true)
-      return
-    }
 
-    // Chercher le bouton "Absent"
+    // 3. Le bouton "Absent" DOIT etre visible
     const absentBtn = page.getByRole('button', { name: /Absent/i }).first()
-    const absentVisible = await absentBtn.isVisible({ timeout: 10000 }).catch(() => false)
-
-    if (!absentVisible) {
-      // Absent button not found — session page may not show RSVP buttons
-      expect(await page.locator('main').first().isVisible()).toBe(true)
-      return
-    }
+    // STRICT: le bouton RSVP "Absent" DOIT etre visible sur la page de session
+    await expect(absentBtn).toBeVisible({ timeout: 15000 })
 
     await absentBtn.click()
     await page.waitForTimeout(2000)
 
-    // Verifier en DB
+    // 4. Verifier en DB que le RSVP a ete enregistre
     const rsvps = await db.getSessionRsvps(testSession.id)
     const userId = await db.getUserId()
     const userRsvp = rsvps.find((r: { user_id: string }) => r.user_id === userId)
 
+    // STRICT: le RSVP DOIT exister en DB apres le clic
     expect(userRsvp).toBeTruthy()
+    // STRICT: la reponse DOIT etre 'absent'
     expect(userRsvp.response).toBe('absent')
   })
 })
 
-test.describe('Sessions — F26: Dialog d\'edition de session', () => {
+// ============================================================
+// F26 — Dialog d'edition de session
+// ============================================================
+
+test.describe('F26 — Dialog d\'edition de session', () => {
   let testSquadId: string | null = null
   let testSessionId: string | null = null
 
   test.afterEach(async ({ db }) => {
     if (testSessionId) {
-      try { await db.deleteTestSession(testSessionId) } catch { /* ignore */ }
+      try { await db.deleteTestSession(testSessionId) } catch { /* cleanup */ }
       testSessionId = null
     }
     if (testSquadId) {
-      try { await db.deleteTestSquad(testSquadId) } catch { /* ignore */ }
+      try { await db.deleteTestSquad(testSquadId) } catch { /* cleanup */ }
       testSquadId = null
     }
   })
 
-  test('F26: le dialog d\'edition pre-remplit les valeurs de la DB', async ({ authenticatedPage, db }) => {
-    const page = authenticatedPage
-
-    // Creer une squad et une session de test (le user est leader -> peut editer)
+  test('F26: le dialog d\'edition pre-remplit les valeurs de la DB', async ({ authenticatedPage: page, db }) => {
+    // 1. Creer une squad + session de test (le user est leader -> peut editer)
     const testSquad = await db.createTestSquad({ name: `E2E Test Squad Edit ${Date.now()}` })
     testSquadId = testSquad.id
     const sessionTitle = `E2E Test Session Edit ${Date.now()}`
@@ -272,96 +239,77 @@ test.describe('Sessions — F26: Dialog d\'edition de session', () => {
     })
     testSessionId = testSession.id
 
-    // Recuperer les donnees de la session en DB pour comparaison
+    // 2. Recuperer les donnees de la session en DB pour comparaison
     const dbSession = await db.getSessionById(testSession.id)
+    // STRICT: la session DOIT exister en DB
     expect(dbSession).toBeTruthy()
+    // STRICT: le titre en DB DOIT correspondre
+    expect(dbSession.title).toBe(sessionTitle)
 
-    // Naviguer vers la page de detail de la session
+    // 3. Naviguer vers la page de detail de la session
     await page.goto(`/session/${testSession.id}`)
     await page.waitForLoadState('networkidle')
-    const pageOk = await retryOnNetworkError(page)
-    if (!pageOk) {
-      // Session detail page shows network error — verify page at least rendered
-      expect(await page.locator('h1').first().isVisible()).toBe(true)
-      return
-    }
 
-    // Chercher le bouton d'edition de session
+    // 4. Le bouton d'edition DOIT etre visible (user est leader/createur)
     const editBtn = page.locator('button[aria-label="Modifier la session"], button:has-text("Modifier")').first()
-    const editBtnVisible = await editBtn.isVisible({ timeout: 5000 }).catch(() => false)
-
-    if (!editBtnVisible) {
-      // Edit button not found — user may not be session creator
-      expect(await page.locator('main').first().isVisible()).toBe(true)
-      return
-    }
+    // STRICT: le bouton "Modifier" DOIT etre visible pour le createur de la session
+    await expect(editBtn).toBeVisible({ timeout: 15000 })
 
     await editBtn.click()
     await page.waitForTimeout(500)
 
-    // Verifier le dialog est ouvert
-    const dialogVisible = await page.getByText(/Modifier la session/i).isVisible({ timeout: 5000 }).catch(() => false)
-    if (!dialogVisible) {
-      // Edit dialog did not open — verify page is still functional
-      expect(await page.locator('main').first().isVisible()).toBe(true)
-      return
-    }
+    // 5. Le dialog d'edition DOIT s'ouvrir
+    const dialogHeader = page.getByText(/Modifier la session/i).first()
+    // STRICT: le dialog d'edition DOIT etre ouvert avec le bon header
+    await expect(dialogHeader).toBeVisible({ timeout: 10000 })
 
-    // Verifier que le titre pre-rempli correspond a la DB
+    // 6. Le titre pre-rempli DOIT correspondre a la DB
     const titleInput = page.locator('input[name="title"], input[placeholder*="Session"], input[placeholder*="titre"]').first()
-    const titleInputVisible = await titleInput.isVisible().catch(() => false)
-    if (titleInputVisible) {
-      const titleValue = await titleInput.inputValue()
-      if (titleValue !== dbSession.title) {
-        // Title input doesn't match DB — annotate but don't fail
-        test.info().annotations.push({ type: 'info', description: `Title input shows "${titleValue}" but DB has "${dbSession.title}" — dialog may not pre-fill correctly` })
-      }
-    }
+    // STRICT: le champ titre DOIT etre visible dans le dialog d'edition
+    await expect(titleInput).toBeVisible({ timeout: 10000 })
+    const titleValue = await titleInput.inputValue()
+    // STRICT: la valeur pre-remplie DOIT correspondre au titre en DB
+    expect(titleValue).toBe(dbSession.title)
 
-    // Verifier que la duree correspond a la DB
+    // 7. La duree DOIT etre affichee dans le dialog
     const durationText = page.getByText(new RegExp(`${dbSession.duration_minutes}\\s*min`, 'i')).first()
-    const durationVisible = await durationText.isVisible({ timeout: 3000 }).catch(() => false)
-    if (durationVisible) {
-      await expect(durationText).toBeVisible()
-    }
+    // STRICT: la duree en DB DOIT etre visible dans le dialog d'edition
+    await expect(durationText).toBeVisible({ timeout: 10000 })
 
-    // Boutons Annuler et Enregistrer doivent etre visibles
-    const hasAnnuler = await page.getByRole('button', { name: /Annuler/i }).isVisible({ timeout: 3000 }).catch(() => false)
-    const hasEnregistrer = await page.getByRole('button', { name: /Enregistrer/i }).isVisible({ timeout: 3000 }).catch(() => false)
-    if (!hasAnnuler && !hasEnregistrer) {
-      // Annuler/Enregistrer buttons not found in edit dialog
-      expect(await page.locator('main').first().isVisible()).toBe(true)
-      return
-    }
+    // 8. Les boutons Annuler et Enregistrer DOIVENT etre visibles
+    const annulerBtn = page.getByRole('button', { name: /Annuler/i })
+    const enregistrerBtn = page.getByRole('button', { name: /Enregistrer/i })
+    // STRICT: le bouton "Annuler" DOIT etre present dans le dialog
+    await expect(annulerBtn).toBeVisible({ timeout: 5000 })
+    // STRICT: le bouton "Enregistrer" DOIT etre present dans le dialog
+    await expect(enregistrerBtn).toBeVisible({ timeout: 5000 })
 
-    // Fermer sans sauvegarder
-    if (hasAnnuler) {
-      await page.getByRole('button', { name: /Annuler/i }).click()
-    } else {
-      await page.keyboard.press('Escape')
-    }
+    // 9. Fermer sans sauvegarder
+    await annulerBtn.click()
   })
 })
 
-test.describe('Sessions — F27: Annuler une session + verifier DB', () => {
+// ============================================================
+// F27 — Annuler une session + verifier DB
+// ============================================================
+
+test.describe('F27 — Annuler une session + verifier DB', () => {
   let testSquadId: string | null = null
   let testSessionId: string | null = null
 
   test.afterEach(async ({ db }) => {
     if (testSessionId) {
-      try { await db.deleteTestSession(testSessionId) } catch { /* ignore */ }
+      try { await db.deleteTestSession(testSessionId) } catch { /* cleanup */ }
       testSessionId = null
     }
     if (testSquadId) {
-      try { await db.deleteTestSquad(testSquadId) } catch { /* ignore */ }
+      try { await db.deleteTestSquad(testSquadId) } catch { /* cleanup */ }
       testSquadId = null
     }
   })
 
-  test('F27: annuler une session et verifier le statut en DB', async ({ authenticatedPage, db }) => {
-    const page = authenticatedPage
-
-    // Creer une squad et une session de test
+  test('F27: annuler une session et verifier le statut en DB', async ({ authenticatedPage: page, db }) => {
+    // 1. Creer une squad + session de test
     const testSquad = await db.createTestSquad({ name: `E2E Test Squad Cancel ${Date.now()}` })
     testSquadId = testSquad.id
     const testSession = await db.createTestSession(testSquad.id, {
@@ -369,231 +317,216 @@ test.describe('Sessions — F27: Annuler une session + verifier DB', () => {
     })
     testSessionId = testSession.id
 
+    // Verifier que la session existe et est 'proposed'
+    const sessionBefore = await db.getSessionById(testSession.id)
+    // STRICT: la session DOIT exister en DB avant annulation
+    expect(sessionBefore).toBeTruthy()
+    // STRICT: le statut initial DOIT etre 'proposed'
+    expect(sessionBefore.status).toBe('proposed')
+
+    // 2. Naviguer vers la page de detail de la session
     await page.goto(`/session/${testSession.id}`)
     await page.waitForLoadState('networkidle')
-    const pageOk = await retryOnNetworkError(page)
-    if (!pageOk) {
-      // Session detail page shows network error — verify page at least rendered
-      expect(await page.locator('h1').first().isVisible()).toBe(true)
-      return
-    }
 
-    // Chercher le bouton "Annuler" pour la session
+    // 3. Le bouton "Annuler la session" DOIT etre visible (user est leader)
     const cancelBtn = page.getByRole('button', { name: /Annuler la session|Annuler/i }).first()
-    const cancelVisible = await cancelBtn.isVisible({ timeout: 10000 }).catch(() => false)
-
-    if (!cancelVisible) {
-      // Cancel button not found — user may not be leader or session not displayed
-      expect(await page.locator('main').first().isVisible()).toBe(true)
-      return
-    }
+    // STRICT: le bouton d'annulation DOIT etre visible pour le createur
+    await expect(cancelBtn).toBeVisible({ timeout: 15000 })
 
     await cancelBtn.click()
     await page.waitForTimeout(1000)
 
-    // Confirmer l'annulation si un dialog de confirmation apparait
+    // 4. Gerer le dialog de confirmation s'il apparait
     const confirmDialog = page.locator('dialog, [role="dialog"], [role="alertdialog"]').filter({ hasText: /Annuler cette session/i })
-    if (await confirmDialog.isVisible({ timeout: 5000 }).catch(() => false)) {
-      // Le dialog a 2 boutons : "Annuler" (fermer) et "Annuler la session" (confirmer)
-      const confirmBtn = confirmDialog.getByRole('button', { name: /Annuler la session/i })
+    const hasConfirmDialog = await confirmDialog.isVisible({ timeout: 5000 }).catch(() => false)
+    if (hasConfirmDialog) {
+      const confirmBtn = confirmDialog.getByRole('button', { name: /Annuler la session|Confirmer|Oui/i })
+      // STRICT: le bouton de confirmation DOIT etre dans le dialog
+      await expect(confirmBtn).toBeVisible({ timeout: 5000 })
       await confirmBtn.click()
     } else {
-      // Peut-etre que le bouton initial a déjà annulé directement sans dialog
-      // Ou un autre type de confirmation — essayer le dernier bouton "Annuler"
-      const anyConfirm = page.getByRole('button', { name: /Confirmer|Oui|Annuler la session/i }).last()
-      if (await anyConfirm.isVisible({ timeout: 3000 }).catch(() => false)) {
-        await anyConfirm.click()
+      // Pas de dialog de confirmation — tenter le bouton de confirmation directe
+      const directConfirm = page.getByRole('button', { name: /Confirmer|Oui|Annuler la session/i }).last()
+      const directVisible = await directConfirm.isVisible({ timeout: 3000 }).catch(() => false)
+      if (directVisible) {
+        await directConfirm.click()
       }
+      // Si aucun dialog de confirmation, le clic initial a peut-etre deja annule
     }
 
     await page.waitForTimeout(4000)
 
-    // Verifier en DB que le statut est 'cancelled'
+    // 5. Verifier en DB que le statut est 'cancelled'
     const cancelledSession = await db.getSessionById(testSession.id)
+    // STRICT: la session DOIT toujours exister en DB
     expect(cancelledSession).toBeTruthy()
+    // STRICT: le statut DOIT etre 'cancelled' apres l'annulation
     expect(cancelledSession.status).toBe('cancelled')
   })
 })
 
-test.describe('Sessions — F28: Check-in', () => {
+// ============================================================
+// F28 — Check-in sur une session active
+// ============================================================
+
+test.describe('F28 — Check-in', () => {
   let testSquadId: string | null = null
   let testSessionId: string | null = null
 
   test.afterEach(async ({ db }) => {
     if (testSessionId) {
-      try { await db.deleteTestSession(testSessionId) } catch { /* ignore */ }
+      try { await db.deleteTestSession(testSessionId) } catch { /* cleanup */ }
       testSessionId = null
     }
     if (testSquadId) {
-      try { await db.deleteTestSquad(testSquadId) } catch { /* ignore */ }
+      try { await db.deleteTestSquad(testSquadId) } catch { /* cleanup */ }
       testSquadId = null
     }
   })
 
-  test('F28: check-in sur une session active et verifier en DB', async ({ authenticatedPage, db }) => {
-    const page = authenticatedPage
+  test('F28: check-in sur une session active et verifier en DB', async ({ authenticatedPage: page, db }) => {
     const userId = await db.getUserId()
 
-    // Creer une squad de test
+    // 1. Creer une squad de test
     const testSquad = await db.createTestSquad({ name: `E2E Test Squad Checkin ${Date.now()}` })
     testSquadId = testSquad.id
 
-    // Creer une session active (confirmed, demarree il y a 15 min)
+    // 2. Creer une session active (confirmed, demarree il y a 15 min)
     const testSession = await db.createActiveTestSession(testSquad.id, {
       title: `E2E Test Active Session Checkin ${Date.now()}`,
     })
     testSessionId = testSession.id
 
-    // Creer un RSVP 'present' en DB pour l'utilisateur de test
-    // (le check-in n'est accessible que si le user a RSVP present)
+    // STRICT: la session active DOIT exister en DB
+    const dbSession = await db.getSessionById(testSession.id)
+    expect(dbSession).toBeTruthy()
+    // STRICT: le statut DOIT etre 'confirmed'
+    expect(dbSession.status).toBe('confirmed')
+
+    // 3. Creer un RSVP 'present' en DB pour l'utilisateur de test
     await db.createTestRsvp(testSession.id, userId, 'present')
 
-    // Naviguer vers la page de detail de la session
+    // Verifier que le RSVP existe bien
+    const rsvpsBefore = await db.getSessionRsvps(testSession.id)
+    const myRsvp = rsvpsBefore.find((r: { user_id: string }) => r.user_id === userId)
+    // STRICT: le RSVP 'present' DOIT exister en DB avant le check-in
+    expect(myRsvp).toBeTruthy()
+    expect(myRsvp.response).toBe('present')
+
+    // 4. Naviguer vers la page de detail de la session
     await page.goto(`/session/${testSession.id}`)
     await page.waitForLoadState('networkidle')
 
-    // Chercher le bouton de check-in "Je suis la !"
+    // 5. Le bouton de check-in DOIT etre visible (session active + RSVP present)
     const checkinBtn = page.getByRole('button', { name: /Je suis là|Check-in|Pointer|J'arrive/i }).first()
-    const checkinVisible = await checkinBtn.isVisible({ timeout: 10000 }).catch(() => false)
-
-    if (!checkinVisible) {
-      // Check-in button not found — session may not be in the check-in time window (30 min before/after)
-      expect(await page.locator('main').first().isVisible()).toBe(true)
-      return
-    }
+    // STRICT: le bouton check-in DOIT etre visible pour un user qui a RSVP present sur une session active
+    await expect(checkinBtn).toBeVisible({ timeout: 15000 })
 
     await checkinBtn.click()
     await page.waitForTimeout(3000)
 
-    // Verifier en DB que le check-in a ete enregistre
+    // 6. Verifier en DB que le check-in a ete enregistre
     const checkins = await db.getSessionCheckins(testSession.id)
     const userCheckin = checkins.find((c: { user_id: string }) => c.user_id === userId)
 
+    // STRICT: le check-in DOIT exister en DB apres le clic
     expect(userCheckin).toBeTruthy()
+    // STRICT: le user_id DOIT correspondre
     expect(userCheckin.user_id).toBe(userId)
+    // STRICT: le session_id DOIT correspondre
     expect(userCheckin.session_id).toBe(testSession.id)
   })
 })
 
-test.describe('Sessions — F29: Auto-confirm', () => {
+// ============================================================
+// F29 — Auto-confirm quand le seuil RSVP est atteint
+// ============================================================
+
+test.describe('F29 — Auto-confirm', () => {
   let testSquadId: string | null = null
   let testSessionId: string | null = null
 
   test.afterEach(async ({ db }) => {
     if (testSessionId) {
-      try { await db.deleteTestSession(testSessionId) } catch { /* ignore */ }
+      try { await db.deleteTestSession(testSessionId) } catch { /* cleanup */ }
       testSessionId = null
     }
     if (testSquadId) {
-      try { await db.deleteTestSquad(testSquadId) } catch { /* ignore */ }
+      try { await db.deleteTestSquad(testSquadId) } catch { /* cleanup */ }
       testSquadId = null
     }
   })
 
-  test('F29: session auto-confirmee quand le seuil de RSVP est atteint', async ({ authenticatedPage, db }) => {
-    const page = authenticatedPage
+  test('F29: session auto-confirmee quand le seuil de RSVP est atteint', async ({ authenticatedPage: page, db }) => {
     const userId = await db.getUserId()
 
-    // Creer une squad de test
+    // 1. Creer une squad de test
     const testSquad = await db.createTestSquad({ name: `E2E Test Squad AutoConfirm ${Date.now()}` })
     testSquadId = testSquad.id
 
-    // Creer une session avec auto_confirm_threshold = 2
-    let testSession: { id: string } | null = null
-    try {
-      testSession = await db.createTestSession(testSquad.id, {
-        title: `E2E Test Session AutoConfirm ${Date.now()}`,
-        auto_confirm_threshold: 2,
-        status: 'proposed',
-      })
-    } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : String(err)
-      // Could not create session with auto_confirm_threshold — column may not exist
-      test.info().annotations.push({ type: 'info', description: `Could not create session: ${msg}` })
-      expect(msg).toBeTruthy() // Meaningful: confirms error was captured
-      return
-    }
-    testSessionId = testSession!.id
+    // 2. Creer une session avec auto_confirm_threshold = 1 (seulement 1 RSVP necessaire)
+    // On utilise threshold=1 pour ne pas dependre d'un faux user_id (FK constraint)
+    const testSession = await db.createTestSession(testSquad.id, {
+      title: `E2E Test Session AutoConfirm ${Date.now()}`,
+      auto_confirm_threshold: 1,
+      status: 'proposed',
+    })
+    testSessionId = testSession.id
 
-    // Verifier que la session est bien 'proposed' au depart
-    const sessionBefore = await db.getSessionById(testSession!.id)
+    // STRICT: la session DOIT exister en DB avec le statut 'proposed'
+    const sessionBefore = await db.getSessionById(testSession.id)
     expect(sessionBefore).toBeTruthy()
-    if (sessionBefore.status !== 'proposed') {
-      // Can't test auto-confirm — verify at least the session exists with status
-      test.info().annotations.push({ type: 'info', description: `Session status is '${sessionBefore.status}' instead of 'proposed'` })
-      expect(sessionBefore.status).toBeDefined()
-      return
-    }
+    expect(sessionBefore.status).toBe('proposed')
 
-    // Creer le 1er RSVP 'present' (utilisateur de test)
-    try {
-      await db.createTestRsvp(testSession!.id, userId, 'present')
-    } catch (err: unknown) {
-      // Could not create RSVP — foreign key or constraint issue
-      const msg = err instanceof Error ? err.message : String(err)
-      test.info().annotations.push({ type: 'info', description: `Could not create RSVP: ${msg}` })
-      expect(msg).toBeTruthy()
-      return
-    }
+    // 3. Creer le RSVP 'present' (utilisateur de test) — atteint le threshold de 1
+    await db.createTestRsvp(testSession.id, userId, 'present')
 
-    // Pour le 2e RSVP, on a besoin d'un autre user.
-    // On utilise le owner de la session lui-meme via un fake user_id
-    // Note: on cree un faux RSVP avec un UUID genere pour simuler un 2e joueur
-    const fakeUserId = crypto.randomUUID()
-    try {
-      await db.createTestRsvp(testSession!.id, fakeUserId, 'present')
-    } catch (err: unknown) {
-      // Could not create fake RSVP — foreign key constraint requires real user_id
-      const msg = err instanceof Error ? err.message : String(err)
-      test.info().annotations.push({ type: 'info', description: `Could not create fake RSVP (FK constraint): ${msg}` })
-      expect(msg).toBeTruthy()
-      return
-    }
+    // STRICT: le RSVP DOIT exister en DB
+    const rsvps = await db.getSessionRsvps(testSession.id)
+    const userRsvp = rsvps.find((r: { user_id: string }) => r.user_id === userId)
+    expect(userRsvp).toBeTruthy()
+    expect(userRsvp.response).toBe('present')
 
-    // Attendre un peu pour laisser le trigger/edge function s'executer
-    await page.waitForTimeout(3000)
+    // 4. Attendre pour laisser le trigger/edge function s'executer
+    await page.waitForTimeout(5000)
 
-    // Verifier en DB si le statut a change a 'confirmed'
-    const sessionAfter = await db.getSessionById(testSession!.id)
-
-    // L'auto-confirm depend d'un trigger server-side (DB trigger ou edge function).
-    // Si la feature fonctionne, le statut doit etre 'confirmed'.
-    if (sessionAfter.status === 'proposed') {
-      // Auto-confirm not triggered — the server-side trigger may not be active
-      test.info().annotations.push({ type: 'info', description: 'Auto-confirm not triggered — DB trigger or edge function may not be active for session_rsvps' })
-      expect(sessionAfter.status).toBeDefined()
-      return
-    }
-
+    // 5. Verifier en DB si le statut a change a 'confirmed'
+    const sessionAfter = await db.getSessionById(testSession.id)
+    // STRICT: la session DOIT toujours exister en DB
+    expect(sessionAfter).toBeTruthy()
+    // STRICT: le statut DOIT etre 'confirmed' apres que le threshold est atteint
     expect(sessionAfter.status).toBe('confirmed')
   })
 })
 
-test.describe('Sessions — F30: Resultats post-session', () => {
+// ============================================================
+// F30 — Resultats post-session
+// ============================================================
+
+test.describe('F30 — Resultats post-session', () => {
   let testSquadId: string | null = null
   let testSessionId: string | null = null
 
   test.afterEach(async ({ db }) => {
     if (testSessionId) {
-      try { await db.deleteTestSession(testSessionId) } catch { /* ignore */ }
+      try { await db.deleteTestSession(testSessionId) } catch { /* cleanup */ }
       testSessionId = null
     }
     if (testSquadId) {
-      try { await db.deleteTestSquad(testSquadId) } catch { /* ignore */ }
+      try { await db.deleteTestSquad(testSquadId) } catch { /* cleanup */ }
       testSquadId = null
     }
   })
 
-  test('F30: affiche les resultats avec Inscrits, Check-ins, Fiabilite coherents avec la DB', async ({ authenticatedPage, db }) => {
-    const page = authenticatedPage
+  test('F30: affiche les resultats avec Inscrits, Check-ins, Fiabilite coherents avec la DB', async ({ authenticatedPage: page, db }) => {
     const userId = await db.getUserId()
 
-    // Creer une squad de test
+    // 1. Creer une squad de test
     const testSquad = await db.createTestSquad({ name: `E2E Test Squad PostSession ${Date.now()}` })
     testSquadId = testSquad.id
 
-    // Creer une session terminee (dans le passe, statut confirmed)
-    const pastDate = new Date(Date.now() - 48 * 60 * 60 * 1000).toISOString() // il y a 2 jours
+    // 2. Creer une session terminee (dans le passe, statut confirmed)
+    const pastDate = new Date(Date.now() - 48 * 60 * 60 * 1000).toISOString()
     const testSession = await db.createTestSession(testSquad.id, {
       title: `E2E Test Session PostResults ${Date.now()}`,
       scheduled_at: pastDate,
@@ -602,214 +535,153 @@ test.describe('Sessions — F30: Resultats post-session', () => {
     })
     testSessionId = testSession.id
 
-    // Creer des RSVPs en DB
-    try {
-      await db.createTestRsvp(testSession.id, userId, 'present')
-    } catch (err: unknown) {
-      // Could not create test RSVP — foreign key or permission issue
-      const msg = err instanceof Error ? err.message : String(err)
-      test.info().annotations.push({ type: 'info', description: `Could not create test RSVP: ${msg}` })
-      expect(msg).toBeTruthy()
-      return
-    }
-    // Try creating fake user RSVPs — may fail due to foreign key constraint
-    const fakeUser1 = crypto.randomUUID()
-    const fakeUser2 = crypto.randomUUID()
-    try {
-      await db.createTestRsvp(testSession.id, fakeUser1, 'present')
-      await db.createTestRsvp(testSession.id, fakeUser2, 'absent')
-    } catch {
-      // Foreign key constraint prevents fake user_id — test with only 1 real RSVP
-      test.info().annotations.push({ type: 'info', description: 'Fake user RSVPs could not be created (FK constraint) — testing with real user RSVP only' })
-    }
+    // 3. Creer un RSVP 'present' en DB
+    await db.createTestRsvp(testSession.id, userId, 'present')
 
-    // Recuperer les donnees attendues en DB
+    // 4. Recuperer les donnees attendues en DB
     const rsvps = await db.getSessionRsvps(testSession.id)
-    const presentRsvps = rsvps.filter((r: { response: string }) => r.response === 'present')
     const checkins = await db.getSessionCheckins(testSession.id)
+
+    // STRICT: au moins 1 RSVP DOIT exister en DB (celui qu'on vient de creer)
+    expect(rsvps.length).toBeGreaterThan(0)
 
     const expectedInscrits = rsvps.length
     const expectedCheckins = checkins.length
-    const expectedReliability = presentRsvps.length > 0
-      ? Math.round((expectedCheckins / presentRsvps.length) * 100)
-      : 0
 
-    // Verifier que nos donnees de test sont coherentes (flexible — might have 1 or 3)
-    if (expectedInscrits === 0) {
-      // No RSVPs found in DB — test data setup failed
-      expect(expectedInscrits).toBeGreaterThan(0)
-      return
-    }
-
-    // Naviguer vers la page de detail de la session
+    // 5. Naviguer vers la page de detail de la session
     await page.goto(`/session/${testSession.id}`)
     await page.waitForLoadState('networkidle')
     await page.waitForTimeout(2000)
-    const pageOk = await retryOnNetworkError(page)
-    if (!pageOk) {
-      // Session detail page shows network error — verify page at least rendered
-      expect(await page.locator('main').first().isVisible()).toBe(true)
-      return
-    }
 
-    // Chercher la section "Resultats de la session"
+    // 6. La section "Resultats de la session" DOIT etre visible pour une session terminee
     const resultsSection = page.getByText(/Résultats de la session/i).first()
-    const resultsVisible = await resultsSection.isVisible({ timeout: 10000 }).catch(() => false)
+    // STRICT: la section resultats DOIT etre visible pour une session passee confirmee
+    await expect(resultsSection).toBeVisible({ timeout: 15000 })
 
-    if (!resultsVisible) {
-      // Results section not displayed — page may only show results for explicitly completed sessions
-      // Verify the session page loaded with some content
-      expect(await page.locator('main').first().isVisible()).toBe(true)
-      return
-    }
+    // 7. Les stats cles DOIVENT etre presentes
+    const inscritsLabel = page.getByText(/Inscrits/i).first()
+    // STRICT: le label "Inscrits" DOIT etre visible dans la section resultats
+    await expect(inscritsLabel).toBeVisible({ timeout: 10000 })
 
-    // Verifier les 3 stats cles sont presentes
-    const hasInscrits = await page.getByText(/Inscrits/i).first().isVisible({ timeout: 5000 }).catch(() => false)
-    const hasCheckins = await page.getByText(/Check-ins/i).first().isVisible({ timeout: 3000 }).catch(() => false)
-    const hasFiabilite = await page.getByText(/Fiabilité/i).first().isVisible({ timeout: 3000 }).catch(() => false)
+    const checkinsLabel = page.getByText(/Check-ins/i).first()
+    // STRICT: le label "Check-ins" DOIT etre visible dans la section resultats
+    await expect(checkinsLabel).toBeVisible({ timeout: 10000 })
 
-    if (!hasInscrits && !hasCheckins && !hasFiabilite) {
-      // Post-session stats not visible — section layout may differ
-      expect(await page.locator('main').first().isVisible()).toBe(true)
-      return
-    }
+    const fiabiliteLabel = page.getByText(/Fiabilité/i).first()
+    // STRICT: le label "Fiabilite" DOIT etre visible dans la section resultats
+    await expect(fiabiliteLabel).toBeVisible({ timeout: 10000 })
 
-    // Verifier les valeurs numeriques correspondent a la DB (annotate on mismatch)
-    if (hasInscrits) {
-      const inscritsVisible = await page.getByText(String(expectedInscrits)).isVisible({ timeout: 3000 }).catch(() => false)
-      if (!inscritsVisible) {
-        test.info().annotations.push({ type: 'info', description: `Expected inscrits count ${expectedInscrits} not found on page` })
-      }
-    }
-    if (hasCheckins) {
-      const checkinsVisible = await page.getByText(String(expectedCheckins)).isVisible({ timeout: 3000 }).catch(() => false)
-      if (!checkinsVisible) {
-        test.info().annotations.push({ type: 'info', description: `Expected check-ins count ${expectedCheckins} not found on page` })
-      }
-    }
-    if (hasFiabilite) {
-      const fiabiliteVisible = await page.getByText(`${expectedReliability}%`).isVisible({ timeout: 3000 }).catch(() => false)
-      if (!fiabiliteVisible) {
-        test.info().annotations.push({ type: 'info', description: `Expected fiabilite ${expectedReliability}% not found on page` })
-      }
-    }
+    // 8. Le nombre d'inscrits affiche DOIT correspondre a la DB
+    const inscritsValue = page.getByText(String(expectedInscrits)).first()
+    // STRICT: le nombre d'inscrits (DB) DOIT etre affiche sur la page
+    await expect(inscritsValue).toBeVisible({ timeout: 10000 })
+
+    // 9. Le nombre de check-ins affiche DOIT correspondre a la DB
+    const checkinsValue = page.getByText(String(expectedCheckins)).first()
+    // STRICT: le nombre de check-ins (DB) DOIT etre affiche sur la page
+    await expect(checkinsValue).toBeVisible({ timeout: 10000 })
   })
 })
 
-// =============================================================================
-// F73 — Reminders (notification preferences + ai_insights DB)
-// =============================================================================
-test.describe('Sessions — F73: Rappels et notifications', () => {
+// ============================================================
+// F73 — Rappels et notifications
+// ============================================================
 
-  test('F73a: Notification reminder preferences exist in settings', async ({ authenticatedPage }) => {
-    const page = authenticatedPage
+test.describe('F73 — Rappels et notifications', () => {
+  test('F73a: la page settings affiche la section notifications', async ({ authenticatedPage: page }) => {
     await page.goto('/settings')
     await page.waitForLoadState('networkidle')
 
-    // Verify reminder/notification section exists
+    // STRICT: la section Rappels/Notifications DOIT etre visible dans les settings
     const reminderSection = page.getByText(/Rappels|Notifications|Reminders/i).first()
-    await expect(reminderSection).toBeVisible({ timeout: 10000 })
+    await expect(reminderSection).toBeVisible({ timeout: 15000 })
 
-    // Verify at least one toggle/checkbox for notification preferences
-    const hasToggle = await page
-      .locator('#notifications input[type="checkbox"], #notifications [role="switch"], input[type="checkbox"]')
-      .first()
-      .isVisible()
-      .catch(() => false)
-    const hasLabel = await page
-      .getByText(/Sessions|Messages|Rappels/i)
-      .first()
-      .isVisible()
-      .catch(() => false)
-
-    expect(hasToggle || hasLabel).toBe(true)
+    // STRICT: au moins un toggle/switch de notification DOIT etre present
+    const notifToggle = page.locator('input[type="checkbox"], [role="switch"]').first()
+    await expect(notifToggle).toBeVisible({ timeout: 10000 })
   })
 
-  test('F73b: ai_insights table exists and is queryable in DB', async ({ db }) => {
+  test('F73b: la table ai_insights existe et est requetable en DB', async ({ db }) => {
     const insights = await db.getAiInsights()
-    // The query must succeed (table exists and is accessible)
+    // STRICT: la requete DOIT reussir (la table existe et est accessible)
     expect(Array.isArray(insights)).toBe(true)
 
-    // If insights exist, validate their structure
+    // Si des insights existent, valider leur structure
     if (insights.length > 0) {
+      // STRICT: chaque insight DOIT avoir un user_id
       expect(insights[0].user_id).toBeTruthy()
+      // STRICT: chaque insight DOIT avoir un created_at
       expect(insights[0].created_at).toBeTruthy()
     }
   })
 })
 
-test.describe('Sessions — Extras', () => {
-  test('F-extra: la page Sessions affiche le heading', async ({ authenticatedPage }) => {
-    const page = authenticatedPage
+// ============================================================
+// Extras — Sessions page et squad sessions
+// ============================================================
 
+test.describe('Sessions — Extras', () => {
+  test('F-extra: la page Sessions affiche le heading', async ({ authenticatedPage: page }) => {
     await page.goto('/sessions')
     await page.waitForLoadState('networkidle')
 
-    // Heading "Tes prochaines sessions"
-    await expect(page.getByText(/prochaines sessions/i).first()).toBeVisible({ timeout: 10000 })
+    // STRICT: le heading "prochaines sessions" DOIT etre visible
+    await expect(page.getByText(/prochaines sessions/i).first()).toBeVisible({ timeout: 15000 })
   })
 
-  test('F-extra: le nombre de sessions affiche correspond a la DB', async ({ authenticatedPage, db }) => {
-    const page = authenticatedPage
-
+  test('F-extra: le nombre de sessions affiche correspond a la DB', async ({ authenticatedPage: page, db }) => {
+    // 1. Fetch DB data FIRST
     const sessions = await db.getUserUpcomingSessions()
     const dbCount = sessions.length
 
+    // 2. Navigate to the page
     await page.goto('/sessions')
     await page.waitForLoadState('networkidle')
 
     if (dbCount === 0) {
-      // Verifier l'etat vide — un message "Aucune session" ou similaire doit etre visible
+      // STRICT: DB vide → l'UI DOIT afficher un etat vide explicite
       const emptyState = page.getByText(/Aucune session|pas de session|Rien de prévu/i).first()
-      const emptyVisible = await emptyState.isVisible({ timeout: 5000 }).catch(() => false)
-
-      // Si pas d'etat vide, le heading "prochaines sessions" doit au moins etre la
-      if (!emptyVisible) {
-        await expect(page.getByText(/prochaines sessions/i).first()).toBeVisible()
-      } else {
-        await expect(emptyState).toBeVisible()
-      }
+      // STRICT: quand la DB n'a aucune session, le message d'etat vide DOIT etre visible
+      await expect(emptyState).toBeVisible({ timeout: 15000 })
     } else {
-      // Verifier que la page affiche au moins 1 session quand la DB en a
-      // On verifie simplement que la section sessions est remplie (pas vide)
+      // STRICT: DB a des sessions → le heading DOIT etre visible
       const heading = page.getByText(/prochaines sessions/i).first()
-      await expect(heading).toBeVisible({ timeout: 10000 })
+      await expect(heading).toBeVisible({ timeout: 15000 })
 
-      // On verifie qu'aucun etat vide n'est affiche alors que la DB a des sessions
+      // STRICT: DB a des sessions → l'etat vide NE DOIT PAS etre affiche
       const emptyState = page.getByText(/Aucune session|pas de session|Rien de prévu/i).first()
-      const isEmpty = await emptyState.isVisible({ timeout: 2000 }).catch(() => false)
-      expect(isEmpty).toBe(false)
+      await expect(emptyState).not.toBeVisible({ timeout: 3000 })
     }
   })
 
-  test('F-extra: le nombre de sessions d\'une squad correspond a la DB', async ({ authenticatedPage, db }) => {
-    const page = authenticatedPage
-
+  test('F-extra: le nombre de sessions d\'une squad correspond a la DB', async ({ authenticatedPage: page, db }) => {
+    // 1. Fetch DB data FIRST
     const squads = await db.getUserSquads()
-    if (squads.length === 0) {
-      // No squads found for user — this should not happen for the test user
-      expect(squads.length).toBeGreaterThan(0)
-      return
-    }
+    // STRICT: l'utilisateur de test DOIT avoir au moins une squad
+    expect(squads.length).toBeGreaterThan(0)
 
     const squadId = squads[0].squads.id
+    const squadName = squads[0].squads.name
     const dbSessions = await db.getSquadSessions(squadId)
     const activeSessions = dbSessions.filter((s: { status: string }) => s.status !== 'cancelled')
 
+    // 2. Navigate to the squad page
     await page.goto(`/squad/${squadId}`)
     await page.waitForLoadState('networkidle')
 
-    // La page doit etre chargee
-    await expect(page.locator('main').first()).toBeVisible()
+    // STRICT: la page squad DOIT se charger
+    await expect(page.locator('main').first()).toBeVisible({ timeout: 15000 })
 
-    // Si la squad a des sessions actives, la page doit en afficher au moins une
-    if (activeSessions.length > 0) {
-      // Chercher un indicateur de sessions (titre de section, compteur, ou carte)
+    if (activeSessions.length === 0) {
+      // STRICT: DB vide pour cette squad → la page DOIT afficher le nom de la squad
+      // (meme sans sessions, la squad doit etre identifiable)
+      const squadTitle = page.getByText(new RegExp(squadName, 'i')).first()
+      await expect(squadTitle).toBeVisible({ timeout: 10000 })
+    } else {
+      // STRICT: DB a des sessions actives → la page DOIT mentionner les sessions
       const sessionIndicator = page.getByText(/session|planifi/i).first()
-      const hasSessionIndicator = await sessionIndicator.isVisible({ timeout: 5000 }).catch(() => false)
-
-      // Au minimum, la page squad doit mentionner les sessions
-      expect(hasSessionIndicator).toBe(true)
+      // STRICT: quand la DB a des sessions actives, l'indicateur de session DOIT etre visible
+      await expect(sessionIndicator).toBeVisible({ timeout: 15000 })
     }
   })
 })

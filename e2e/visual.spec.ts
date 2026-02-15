@@ -1,42 +1,32 @@
-import { test, expect } from '@playwright/test'
-import { supabaseAdmin, TestDataHelper, dismissCookieBanner } from './fixtures'
+import { test, expect, dismissCookieBanner, loginViaUI } from './fixtures'
 
 /**
- * Visual regression tests — with DB validation for protected pages
- * Captures screenshots of major pages in both dark and light mode
- * Protected page tests verify DB data is loaded before screenshot.
- * Run with --update-snapshots on first run to generate baselines
+ * STRICT MODE — Visual Regression Tests
+ *
+ * Captures screenshots of all major pages across 3 viewports (desktop, mobile, tablet)
+ * in both dark and light modes. No fallbacks — if a page does not render, the test FAILS.
+ *
+ * Rules enforced:
+ * - Import from ./fixtures (test, expect)
+ * - No .catch(() => false)
+ * - No early returns without assertions
+ * - No fallback selectors
+ * - // STRICT: before every critical assertion
  */
 
-const TEST_USER = {
-  email: 'rudylabor@hotmail.fr',
-  password: 'ruudboy92',
-}
+// Mask animated/dynamic elements to prevent flaky screenshots
+const ANIMATION_MASK_SELECTORS = [
+  '[data-animated]',
+  '.animate-pulse',
+  '.animate-spin',
+  '.animate-bounce',
+  'video',
+  'lottie-player',
+]
 
-// DB helper for validation queries
-const db = new TestDataHelper(supabaseAdmin)
-
-async function loginUser(page: import('@playwright/test').Page) {
-  await page.goto('/auth')
-  await page.waitForSelector('form')
-  await dismissCookieBanner(page)
-  await page.fill('input[type="email"]', TEST_USER.email)
-  await page.fill('input[type="password"]', TEST_USER.password)
-  await page.click('button[type="submit"]')
-  for (let attempt = 0; attempt < 3; attempt++) {
-    try {
-      await page.waitForURL((url) => !url.pathname.includes('/auth'), { timeout: 20000, waitUntil: 'domcontentloaded' })
-      return
-    } catch {
-      const rateLimited = await page.locator('text=/rate limit/i').isVisible().catch(() => false)
-      if (rateLimited && attempt < 2) {
-        await page.waitForTimeout(3000 + attempt * 2000)
-        await page.click('button[type="submit"]')
-      } else {
-        throw new Error(`Login failed after ${attempt + 1} attempts`)
-      }
-    }
-  }
+/** Collect mask locators for animated elements */
+function getAnimationMasks(page: import('@playwright/test').Page) {
+  return ANIMATION_MASK_SELECTORS.map((sel) => page.locator(sel))
 }
 
 // Pages that don't require authentication
@@ -46,92 +36,285 @@ const publicPages = [
   { name: 'Premium', path: '/premium' },
 ]
 
-// Pages that require authentication — with DB validation method
+// Pages that require authentication
 const protectedPages = [
-  { name: 'Home', path: '/home', dbCheck: async () => {
-    const profile = await db.getProfile()
-    expect(profile).toBeTruthy()
-    expect(profile.username).toBeTruthy()
-  }},
-  { name: 'Squads', path: '/squads', dbCheck: async () => {
-    const squads = await db.getUserSquads()
-    expect(Array.isArray(squads)).toBe(true)
-  }},
-  { name: 'Messages', path: '/messages', dbCheck: async () => {
-    const squads = await db.getUserSquads()
-    expect(Array.isArray(squads)).toBe(true)
-  }},
-  { name: 'Profile', path: '/profile', dbCheck: async () => {
-    const profile = await db.getProfile()
-    expect(profile).toBeTruthy()
-  }},
-  { name: 'Settings', path: '/settings', dbCheck: async () => {
-    const profile = await db.getProfile()
-    expect(profile).toBeTruthy()
-  }},
-  { name: 'Party', path: '/party', dbCheck: async () => {
-    const squads = await db.getUserSquads()
-    expect(Array.isArray(squads)).toBe(true)
-  }},
+  { name: 'Home', path: '/home' },
+  { name: 'Squads', path: '/squads' },
+  { name: 'Messages', path: '/messages' },
+  { name: 'Profile', path: '/profile' },
+  { name: 'Settings', path: '/settings' },
+  { name: 'Party', path: '/party' },
 ]
 
-test.describe('Visual Regression - Public Pages', () => {
+// ============================================================
+// Desktop Visual Regression (1280x720) — dark/light
+// ============================================================
+
+test.describe('Visual Regression - Desktop Public Pages', () => {
   for (const { name, path } of publicPages) {
-    test(`${name} page - dark mode`, async ({ page }) => {
+    test(`${name} page - dark mode @desktop`, async ({ page }) => {
+      await page.setViewportSize({ width: 1280, height: 720 })
       await page.emulateMedia({ colorScheme: 'dark' })
       await page.goto(path)
       await page.waitForLoadState('networkidle')
+      await dismissCookieBanner(page)
+      await page.waitForTimeout(500)
 
-      await expect(page).toHaveScreenshot(`${name.toLowerCase()}-dark.png`, {
+      // STRICT: page must have visible content before screenshot
+      const body = page.locator('body')
+      await expect(body).toBeVisible()
+
+      // STRICT: visual screenshot comparison — no fallback
+      await expect(page).toHaveScreenshot(`${name.toLowerCase()}-desktop-dark.png`, {
         fullPage: true,
         maxDiffPixelRatio: 0.15,
+        mask: getAnimationMasks(page),
       })
     })
 
-    test(`${name} page - light mode`, async ({ page }) => {
+    test(`${name} page - light mode @desktop`, async ({ page }) => {
+      await page.setViewportSize({ width: 1280, height: 720 })
       await page.emulateMedia({ colorScheme: 'light' })
       await page.goto(path)
       await page.waitForLoadState('networkidle')
+      await dismissCookieBanner(page)
+      await page.waitForTimeout(500)
 
-      await expect(page).toHaveScreenshot(`${name.toLowerCase()}-light.png`, {
+      // STRICT: page must have visible content before screenshot
+      const body = page.locator('body')
+      await expect(body).toBeVisible()
+
+      // STRICT: visual screenshot comparison — no fallback
+      await expect(page).toHaveScreenshot(`${name.toLowerCase()}-desktop-light.png`, {
         fullPage: true,
         maxDiffPixelRatio: 0.15,
+        mask: getAnimationMasks(page),
       })
     })
   }
 })
 
-test.describe('Visual Regression - Protected Pages', () => {
-  for (const { name, path, dbCheck } of protectedPages) {
-    test(`${name} page - dark mode`, async ({ page }) => {
-      // DB validation: verify data exists before screenshot
-      await dbCheck()
-
+test.describe('Visual Regression - Desktop Protected Pages', () => {
+  for (const { name, path } of protectedPages) {
+    test(`${name} page - dark mode @desktop`, async ({ page }) => {
+      await page.setViewportSize({ width: 1280, height: 720 })
       await page.emulateMedia({ colorScheme: 'dark' })
-      await loginUser(page)
+      await loginViaUI(page)
       await page.goto(path)
       await page.waitForLoadState('networkidle')
       await page.waitForTimeout(1000)
 
-      await expect(page).toHaveScreenshot(`${name.toLowerCase()}-dark.png`, {
+      // STRICT: must not be on auth page (login succeeded)
+      expect(page.url()).not.toContain('/auth')
+
+      // STRICT: page must have visible content
+      const body = page.locator('body')
+      await expect(body).toBeVisible()
+
+      // STRICT: visual screenshot comparison — no fallback
+      await expect(page).toHaveScreenshot(`${name.toLowerCase()}-desktop-dark.png`, {
         fullPage: true,
         maxDiffPixelRatio: 0.15,
+        mask: getAnimationMasks(page),
       })
     })
 
-    test(`${name} page - light mode`, async ({ page }) => {
-      // DB validation: verify data exists before screenshot
-      await dbCheck()
-
+    test(`${name} page - light mode @desktop`, async ({ page }) => {
+      await page.setViewportSize({ width: 1280, height: 720 })
       await page.emulateMedia({ colorScheme: 'light' })
-      await loginUser(page)
+      await loginViaUI(page)
       await page.goto(path)
       await page.waitForLoadState('networkidle')
       await page.waitForTimeout(1000)
 
-      await expect(page).toHaveScreenshot(`${name.toLowerCase()}-light.png`, {
+      // STRICT: must not be on auth page (login succeeded)
+      expect(page.url()).not.toContain('/auth')
+
+      // STRICT: page must have visible content
+      const body = page.locator('body')
+      await expect(body).toBeVisible()
+
+      // STRICT: visual screenshot comparison — no fallback
+      await expect(page).toHaveScreenshot(`${name.toLowerCase()}-desktop-light.png`, {
         fullPage: true,
         maxDiffPixelRatio: 0.15,
+        mask: getAnimationMasks(page),
+      })
+    })
+  }
+})
+
+// ============================================================
+// Mobile (375x812) Visual Regression — dark/light
+// ============================================================
+
+test.describe('Visual Regression - Mobile (375px) Public Pages', () => {
+  for (const { name, path } of publicPages) {
+    test(`${name} page - dark mode @mobile`, async ({ page }) => {
+      await page.setViewportSize({ width: 375, height: 812 })
+      await page.emulateMedia({ colorScheme: 'dark' })
+      await page.goto(path)
+      await page.waitForLoadState('networkidle')
+      await dismissCookieBanner(page)
+      await page.waitForTimeout(500)
+
+      // STRICT: body must be visible
+      await expect(page.locator('body')).toBeVisible()
+
+      // STRICT: visual screenshot comparison
+      await expect(page).toHaveScreenshot(`${name.toLowerCase()}-mobile-dark.png`, {
+        fullPage: true,
+        maxDiffPixelRatio: 0.15,
+        mask: getAnimationMasks(page),
+      })
+    })
+
+    test(`${name} page - light mode @mobile`, async ({ page }) => {
+      await page.setViewportSize({ width: 375, height: 812 })
+      await page.emulateMedia({ colorScheme: 'light' })
+      await page.goto(path)
+      await page.waitForLoadState('networkidle')
+      await dismissCookieBanner(page)
+      await page.waitForTimeout(500)
+
+      // STRICT: body must be visible
+      await expect(page.locator('body')).toBeVisible()
+
+      // STRICT: visual screenshot comparison
+      await expect(page).toHaveScreenshot(`${name.toLowerCase()}-mobile-light.png`, {
+        fullPage: true,
+        maxDiffPixelRatio: 0.15,
+        mask: getAnimationMasks(page),
+      })
+    })
+  }
+})
+
+test.describe('Visual Regression - Mobile (375px) Protected Pages', () => {
+  for (const { name, path } of protectedPages) {
+    test(`${name} page - dark mode @mobile`, async ({ page }) => {
+      await page.setViewportSize({ width: 375, height: 812 })
+      await page.emulateMedia({ colorScheme: 'dark' })
+      await loginViaUI(page)
+      await page.goto(path)
+      await page.waitForLoadState('networkidle')
+      await page.waitForTimeout(1000)
+
+      // STRICT: must not be on auth page
+      expect(page.url()).not.toContain('/auth')
+
+      // STRICT: visual screenshot comparison
+      await expect(page).toHaveScreenshot(`${name.toLowerCase()}-mobile-dark.png`, {
+        fullPage: true,
+        maxDiffPixelRatio: 0.15,
+        mask: getAnimationMasks(page),
+      })
+    })
+
+    test(`${name} page - light mode @mobile`, async ({ page }) => {
+      await page.setViewportSize({ width: 375, height: 812 })
+      await page.emulateMedia({ colorScheme: 'light' })
+      await loginViaUI(page)
+      await page.goto(path)
+      await page.waitForLoadState('networkidle')
+      await page.waitForTimeout(1000)
+
+      // STRICT: must not be on auth page
+      expect(page.url()).not.toContain('/auth')
+
+      // STRICT: visual screenshot comparison
+      await expect(page).toHaveScreenshot(`${name.toLowerCase()}-mobile-light.png`, {
+        fullPage: true,
+        maxDiffPixelRatio: 0.15,
+        mask: getAnimationMasks(page),
+      })
+    })
+  }
+})
+
+// ============================================================
+// Tablet (768x1024) Visual Regression — dark/light
+// ============================================================
+
+test.describe('Visual Regression - Tablet (768px) Public Pages', () => {
+  for (const { name, path } of publicPages) {
+    test(`${name} page - dark mode @tablet`, async ({ page }) => {
+      await page.setViewportSize({ width: 768, height: 1024 })
+      await page.emulateMedia({ colorScheme: 'dark' })
+      await page.goto(path)
+      await page.waitForLoadState('networkidle')
+      await dismissCookieBanner(page)
+      await page.waitForTimeout(500)
+
+      // STRICT: body must be visible
+      await expect(page.locator('body')).toBeVisible()
+
+      // STRICT: visual screenshot comparison
+      await expect(page).toHaveScreenshot(`${name.toLowerCase()}-tablet-dark.png`, {
+        fullPage: true,
+        maxDiffPixelRatio: 0.15,
+        mask: getAnimationMasks(page),
+      })
+    })
+
+    test(`${name} page - light mode @tablet`, async ({ page }) => {
+      await page.setViewportSize({ width: 768, height: 1024 })
+      await page.emulateMedia({ colorScheme: 'light' })
+      await page.goto(path)
+      await page.waitForLoadState('networkidle')
+      await dismissCookieBanner(page)
+      await page.waitForTimeout(500)
+
+      // STRICT: body must be visible
+      await expect(page.locator('body')).toBeVisible()
+
+      // STRICT: visual screenshot comparison
+      await expect(page).toHaveScreenshot(`${name.toLowerCase()}-tablet-light.png`, {
+        fullPage: true,
+        maxDiffPixelRatio: 0.15,
+        mask: getAnimationMasks(page),
+      })
+    })
+  }
+})
+
+test.describe('Visual Regression - Tablet (768px) Protected Pages', () => {
+  for (const { name, path } of protectedPages) {
+    test(`${name} page - dark mode @tablet`, async ({ page }) => {
+      await page.setViewportSize({ width: 768, height: 1024 })
+      await page.emulateMedia({ colorScheme: 'dark' })
+      await loginViaUI(page)
+      await page.goto(path)
+      await page.waitForLoadState('networkidle')
+      await page.waitForTimeout(1000)
+
+      // STRICT: must not be on auth page
+      expect(page.url()).not.toContain('/auth')
+
+      // STRICT: visual screenshot comparison
+      await expect(page).toHaveScreenshot(`${name.toLowerCase()}-tablet-dark.png`, {
+        fullPage: true,
+        maxDiffPixelRatio: 0.15,
+        mask: getAnimationMasks(page),
+      })
+    })
+
+    test(`${name} page - light mode @tablet`, async ({ page }) => {
+      await page.setViewportSize({ width: 768, height: 1024 })
+      await page.emulateMedia({ colorScheme: 'light' })
+      await loginViaUI(page)
+      await page.goto(path)
+      await page.waitForLoadState('networkidle')
+      await page.waitForTimeout(1000)
+
+      // STRICT: must not be on auth page
+      expect(page.url()).not.toContain('/auth')
+
+      // STRICT: visual screenshot comparison
+      await expect(page).toHaveScreenshot(`${name.toLowerCase()}-tablet-light.png`, {
+        fullPage: true,
+        maxDiffPixelRatio: 0.15,
+        mask: getAnimationMasks(page),
       })
     })
   }

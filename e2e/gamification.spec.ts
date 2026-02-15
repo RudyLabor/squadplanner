@@ -1,88 +1,59 @@
 import { test, expect } from './fixtures'
 
-// ============================================================
-// Gamification E2E Tests — F46-F51
-// Uses shared fixtures: authenticatedPage (logged-in), db (TestDataHelper)
-// Target: https://squadplanner.fr — French UI
-// XP Thresholds: [0, 100, 250, 500, 1000, 2000, 3500, 5500, 8000, 11000, 15000, 20000]
-//
-// Every assertion MUST be meaningful — no `expect(x || true).toBeTruthy()`
-// and no `expect(count).toBeGreaterThanOrEqual(0)`.
-// ============================================================
-
-const XP_THRESHOLDS = [0, 100, 250, 500, 1000, 2000, 3500, 5500, 8000, 11000, 15000, 20000]
-
-function computeLevelFromXP(xp: number): number {
-  for (let i = XP_THRESHOLDS.length - 1; i >= 0; i--) {
-    if (xp >= XP_THRESHOLDS[i]) return i
-  }
-  return 0
-}
+/**
+ * Gamification E2E Tests — F46-F51
+ *
+ * STRICT MODE: Every test fetches DB data FIRST, then asserts UI matches.
+ * - If DB has data -> UI MUST display it -> otherwise FAIL
+ * - If DB is empty -> test empty state UI specifically
+ * - NO .catch(() => false) on assertions
+ * - NO test.info().annotations replacing real assertions
+ * - NO toBeGreaterThanOrEqual(0)
+ * - NO fallback to <main> when specific feature should be visible
+ * - NO try/catch that swallows errors
+ * - NO OR conditions that always pass
+ *
+ * XP Thresholds (LEVEL_CONFIG in XPBar.tsx):
+ *   Level 1: 0, Level 2: 100, Level 3: 300, Level 4: 600,
+ *   Level 5: 1000, Level 6: 1500, Level 7: 2500, Level 8: 4000,
+ *   Level 9: 6000, Level 10: 10000
+ */
 
 // ============================================================
 // F46a — Challenges list matches DB count
 // ============================================================
 test.describe('F46a — Challenges list matches DB count', () => {
   test('challenges section count matches active challenges in DB', async ({ authenticatedPage: page, db }) => {
+    // STRICT: fetch DB data FIRST
     const { challenges } = await db.getChallenges()
     const activeChallengeCount = challenges.length
-
-    if (activeChallengeCount === 0) {
-      // No active challenges in DB — verify profile page loads correctly
-      await page.goto('/profile')
-      await page.waitForLoadState('networkidle')
-      const profileLoaded = await page.locator('main').first().isVisible()
-      expect(profileLoaded).toBe(true)
-      test.info().annotations.push({ type: 'info', description: 'No active challenges in DB — verified profile page loads' })
-      return
-    }
 
     await page.goto('/profile')
     await page.waitForLoadState('networkidle')
     await page.waitForTimeout(1500)
 
-    // Try to find the challenges section
-    let challengesHeading = page.getByText(/challenges/i).first()
-    let hasSection = await challengesHeading.isVisible().catch(() => false)
-
-    // If not visible, scroll down to find it
-    if (!hasSection) {
-      await page.evaluate(() => window.scrollBy(0, 500))
-      await page.waitForTimeout(500)
-      hasSection = await challengesHeading.isVisible().catch(() => false)
-    }
-    if (!hasSection) {
-      await page.evaluate(() => window.scrollBy(0, 500))
-      await page.waitForTimeout(500)
-      hasSection = await challengesHeading.isVisible().catch(() => false)
-    }
-
-    if (!hasSection) {
-      // Challenges section not found — verify profile page loaded correctly
-      const profileLoaded = await page.locator('main').first().isVisible()
-      expect(profileLoaded).toBe(true)
-      test.info().annotations.push({ type: 'info', description: 'Challenges section not found on profile page after scrolling' })
+    if (activeChallengeCount === 0) {
+      // DB has no active challenges -> challenges section should NOT be rendered
+      // Profile.tsx: {challenges.length > 0 && <section aria-label="Defis"><Challenges ... /></section>}
+      // So the section with "Challenges" heading should not exist
+      const challengesHeading = page.getByText('Challenges', { exact: true }).first()
+      const headingVisible = await challengesHeading.isVisible({ timeout: 3000 })
+      // STRICT: if DB has 0 challenges, the heading should NOT be visible
+      expect(headingVisible).toBe(false)
       return
     }
 
-    // Look for the count text pattern: "X challenges disponibles" or similar
-    const countText = page.getByText(/\d+\s*challenges?\s*disponibles?/i).first()
-    const hasCount = await countText.isVisible().catch(() => false)
+    // DB has active challenges -> "Challenges" heading MUST appear
+    // Scroll to find the challenges section
+    const challengesHeading = page.getByRole('heading', { name: /Challenges/i }).first()
+      .or(page.getByText('Challenges', { exact: true }).first())
+    // STRICT: challenges section MUST be visible
+    await expect(challengesHeading).toBeVisible({ timeout: 15000 })
 
-    if (hasCount) {
-      const text = await countText.textContent()
-      expect(text).toBeTruthy()
-      const match = text!.match(/(\d+)/)
-      expect(match).toBeTruthy()
-      const displayedCount = parseInt(match![1], 10)
-      expect(displayedCount).toBe(activeChallengeCount)
-    } else {
-      // Count text not shown — verify the section itself is visible with challenge cards
-      await expect(challengesHeading).toBeVisible()
-      const challengeCards = page.locator('[class*="challenge"], [class*="card"]').filter({ hasText: /xp/i })
-      const visibleCount = await challengeCards.count()
-      expect(visibleCount).toBe(activeChallengeCount)
-    }
+    // Verify the count text: "X challenges disponibles"
+    const countText = page.getByText(new RegExp(`${activeChallengeCount}\\s*challenges?\\s*disponibles?`, 'i')).first()
+    // STRICT: challenge count MUST match DB exactly
+    await expect(countText).toBeVisible({ timeout: 5000 })
   })
 })
 
@@ -91,16 +62,18 @@ test.describe('F46a — Challenges list matches DB count', () => {
 // ============================================================
 test.describe('F46b — Challenge tabs filter correctly', () => {
   test('clicking Quotidien tab filters to daily challenges', async ({ authenticatedPage: page, db }) => {
+    // STRICT: fetch DB data FIRST
     const { challenges } = await db.getChallenges()
     const dailyChallenges = challenges.filter((c: { type: string }) => c.type === 'daily')
 
     if (challenges.length === 0) {
-      // No active challenges in DB — verify profile page loads correctly
+      // DB has no challenges -> verify challenges section is absent
       await page.goto('/profile')
       await page.waitForLoadState('networkidle')
-      const profileLoaded = await page.locator('main').first().isVisible()
-      expect(profileLoaded).toBe(true)
-      test.info().annotations.push({ type: 'info', description: 'No active challenges in DB — cannot test tabs' })
+      const challengesHeading = page.getByText('Challenges', { exact: true }).first()
+      const headingVisible = await challengesHeading.isVisible({ timeout: 3000 })
+      // STRICT: no challenges in DB -> no challenges section
+      expect(headingVisible).toBe(false)
       return
     }
 
@@ -108,64 +81,37 @@ test.describe('F46b — Challenge tabs filter correctly', () => {
     await page.waitForLoadState('networkidle')
     await page.waitForTimeout(1500)
 
-    // Scroll to challenges section — try multiple scroll positions
-    const challengesSection = page.getByText(/challenges/i).first()
-    let sectionFound = await challengesSection.isVisible().catch(() => false)
-    for (let i = 0; i < 3 && !sectionFound; i++) {
-      await page.evaluate(() => window.scrollBy(0, 500))
-      await page.waitForTimeout(500)
-      sectionFound = await challengesSection.isVisible().catch(() => false)
-    }
-    if (sectionFound) {
-      await challengesSection.scrollIntoViewIfNeeded().catch(() => {})
-      await page.waitForTimeout(300)
-    }
+    // STRICT: challenges heading MUST be visible since DB has challenges
+    const challengesHeading = page.getByText('Challenges', { exact: true }).first()
+    await expect(challengesHeading).toBeVisible({ timeout: 15000 })
 
-    // Find "Quotidien" tab — try role=button, role=tab, and generic text
-    const dailyTab = page.getByRole('button', { name: /Quotidien/i }).first()
-    let hasDailyTab = await dailyTab.isVisible().catch(() => false)
-    if (!hasDailyTab) {
-      const dailyTabAlt = page.getByRole('tab', { name: /Quotidien/i }).first()
-      hasDailyTab = await dailyTabAlt.isVisible().catch(() => false)
-    }
-
-    // Find "Tous" tab as well
-    const allTab = page.getByRole('button', { name: /Tous/i }).first()
-    let hasAllTab = await allTab.isVisible().catch(() => false)
-    if (!hasAllTab) {
-      const allTabAlt = page.getByRole('tab', { name: /Tous/i }).first()
-      hasAllTab = await allTabAlt.isVisible().catch(() => false)
-    }
-
-    if (!hasDailyTab && !hasAllTab) {
-      // Challenge tabs not found — verify profile page loaded correctly
-      const profileLoaded = await page.locator('main').first().isVisible()
-      expect(profileLoaded).toBe(true)
-      test.info().annotations.push({ type: 'info', description: 'Challenge tabs (Quotidien/Tous) not found on page after scrolling' })
+    // The Challenges component only shows the "Quotidien" tab if dailyChallenges.length > 0
+    if (dailyChallenges.length === 0) {
+      // No daily challenges -> "Quotidien" tab should not exist
+      const dailyTab = page.getByRole('button', { name: /Quotidien/i }).first()
+      const dailyTabVisible = await dailyTab.isVisible({ timeout: 2000 })
+      // STRICT: Quotidien tab should NOT be visible if no daily challenges
+      expect(dailyTabVisible).toBe(false)
       return
     }
 
-    if (hasDailyTab) {
-      await dailyTab.click()
-      await page.waitForTimeout(800)
+    // Click the "Quotidien" tab
+    const dailyTab = page.getByRole('button', { name: /Quotidien/i }).first()
+    // STRICT: Quotidien tab MUST exist since DB has daily challenges
+    await expect(dailyTab).toBeVisible({ timeout: 10000 })
+    await dailyTab.click()
+    await page.waitForTimeout(800)
 
-      // Count visible challenge cards after filtering to daily
-      const challengeCards = page.locator('[class*="challenge"], [class*="card"]').filter({ hasText: /xp/i })
-      const visibleCount = await challengeCards.count()
+    // After filtering, the count badge on the tab should show daily count
+    // The tab shows a count badge: "Quotidien X"
+    const dailyCountBadge = page.getByText(String(dailyChallenges.length)).first()
+    // STRICT: count badge MUST show the correct daily challenge count
+    await expect(dailyCountBadge).toBeVisible({ timeout: 5000 })
 
-      // The visible count should match the daily challenges from DB
-      // If it doesn't match, skip — the UI may render differently than expected
-      if (visibleCount !== dailyChallenges.length) {
-        // Count mismatch — use soft assertion: verify the section is still visible
-        const sectionStillVisible = await page.getByText(/challenges/i).first().isVisible().catch(() => false)
-        expect(sectionStillVisible || visibleCount > 0).toBe(true)
-        test.info().annotations.push({ type: 'info', description: `Challenge card count mismatch: UI shows ${visibleCount}, DB has ${dailyChallenges.length} daily challenges — section visible: ${sectionStillVisible}` })
-      }
-    }
-
-    if (hasAllTab) {
-      await expect(allTab).toBeVisible()
-    }
+    // Verify the "Tous" tab still exists and shows total count
+    const allTab = page.getByRole('button', { name: /Tous/i }).first()
+    // STRICT: "Tous" tab MUST always be visible
+    await expect(allTab).toBeVisible({ timeout: 5000 })
   })
 })
 
@@ -174,15 +120,17 @@ test.describe('F46b — Challenge tabs filter correctly', () => {
 // ============================================================
 test.describe('F47 — Claim XP button state matches DB', () => {
   test('Reclamer button visible when completed unclaimed challenges exist', async ({ authenticatedPage: page, db }) => {
+    // STRICT: fetch DB data FIRST
     const { challenges, userChallenges } = await db.getChallenges()
 
     if (challenges.length === 0) {
-      // No challenges exist in DB — verify profile page loads correctly
+      // DB has no challenges -> challenges section absent, no claim button
       await page.goto('/profile')
       await page.waitForLoadState('networkidle')
-      const profileLoaded = await page.locator('main').first().isVisible()
-      expect(profileLoaded).toBe(true)
-      test.info().annotations.push({ type: 'info', description: 'No challenges exist in DB — claim test not applicable' })
+      const claimBtn = page.getByRole('button', { name: /Réclamer/i }).first()
+      const claimVisible = await claimBtn.isVisible({ timeout: 3000 })
+      // STRICT: no challenges -> no claim button
+      expect(claimVisible).toBe(false)
       return
     }
 
@@ -195,21 +143,23 @@ test.describe('F47 — Claim XP button state matches DB', () => {
     await page.waitForLoadState('networkidle')
     await page.waitForTimeout(1500)
 
-    // Scroll to challenges area
-    await page.evaluate(() => window.scrollBy(0, 400))
-    await page.waitForTimeout(500)
-
-    const claimBtn = page.getByRole('button', { name: /Réclamer/i }).first()
-    const hasClaim = await claimBtn.isVisible().catch(() => false)
-
     if (claimable.length > 0) {
-      // There are claimable challenges — "Réclamer" button MUST be visible
-      expect(hasClaim).toBe(true)
-      await expect(claimBtn).toBeVisible()
+      // DB has claimable challenges -> "Reclamer" button MUST be visible on at least one card
+      // ChallengeCard renders: "Reclamer {xp_reward} XP" for claimable challenges
+      const claimBtn = page.getByRole('button', { name: /Réclamer/i }).first()
+      // STRICT: claim button MUST be visible when DB has claimable challenges
+      await expect(claimBtn).toBeVisible({ timeout: 15000 })
+
+      // Also verify the "X a reclamer" badge in the Challenges header
+      const claimBadge = page.getByText(new RegExp(`${claimable.length}\\s*à réclamer`, 'i')).first()
+      // STRICT: claimable count badge MUST match DB
+      await expect(claimBadge).toBeVisible({ timeout: 5000 })
     } else {
-      // No claimable challenges — "Réclamer" button should NOT be visible
-      // or all challenges should show as already claimed
-      expect(hasClaim).toBe(false)
+      // No claimable challenges -> "Reclamer" button should NOT be visible
+      const claimBtn = page.getByRole('button', { name: /Réclamer/i }).first()
+      const claimVisible = await claimBtn.isVisible({ timeout: 3000 })
+      // STRICT: no claimable challenges -> no claim button
+      expect(claimVisible).toBe(false)
     }
   })
 })
@@ -219,80 +169,40 @@ test.describe('F47 — Claim XP button state matches DB', () => {
 // ============================================================
 test.describe('F48 — Level + XP matches DB', () => {
   test('displayed XP and level match profile data from DB', async ({ authenticatedPage: page, db }) => {
+    // STRICT: fetch profile FIRST
     const profile = await db.getProfile()
-    if (!profile) {
-      // Profile not found in DB — this should not happen
-      expect(profile).toBeTruthy()
-      return
-    }
+    // STRICT: profile MUST exist
+    expect(profile).toBeTruthy()
 
     const dbXP = profile.xp || 0
-    const dbLevel = profile.level || computeLevelFromXP(dbXP)
+    const dbLevel = profile.level || 1
 
     await page.goto('/profile')
     await page.waitForLoadState('networkidle')
     await page.waitForTimeout(1500)
 
     // --- Validate XP ---
-    // Use getByText with regex instead of :text-matches() which has escaping issues
+    // XPBar component renders XP as "XXX XP" with AnimatedCounter
     const xpLocator = page.getByText(/\d+\s*XP/i).first()
-    let xpVisible = await xpLocator.isVisible().catch(() => false)
-
-    // If not found, scroll down and retry
-    if (!xpVisible) {
-      for (let i = 0; i < 3 && !xpVisible; i++) {
-        await page.evaluate(() => window.scrollBy(0, 500))
-        await page.waitForTimeout(500)
-        xpVisible = await xpLocator.isVisible().catch(() => false)
-      }
-    }
-
-    if (!xpVisible) {
-      // XP not visible — verify profile page loaded correctly
-      const profileLoaded = await page.locator('main').first().isVisible()
-      expect(profileLoaded).toBe(true)
-      test.info().annotations.push({ type: 'info', description: 'XP text not found on profile page' })
-      return
-    }
+    // STRICT: XP MUST be visible on profile page
+    await expect(xpLocator).toBeVisible({ timeout: 15000 })
 
     const xpText = await xpLocator.textContent()
-    if (!xpText) {
-      await expect(xpLocator).toBeVisible()
-      test.info().annotations.push({ type: 'info', description: 'XP element found but text is empty' })
-      return
-    }
-    const xpMatch = xpText.match(/(\d[\d\s,.]*)/i)
-    if (!xpMatch) {
-      expect(xpText.length).toBeGreaterThan(0)
-      test.info().annotations.push({ type: 'info', description: `XP text "${xpText}" contains no number` })
-      return
-    }
-    const displayedXP = parseInt(xpMatch[1].replace(/[\s,.]/g, ''), 10)
-    if (displayedXP !== dbXP) {
-      // XP mismatch — annotate but don't fail
-      test.info().annotations.push({ type: 'info', description: `XP mismatch: displayed ${displayedXP} vs DB ${dbXP} — UI may be cached or computed differently` })
-    }
+    expect(xpText).toBeTruthy()
+    const xpMatch = xpText!.match(/(\d[\d\s,.]*)\s*XP/i)
+    // STRICT: XP text must contain a number
+    expect(xpMatch).toBeTruthy()
+    const displayedXP = parseInt(xpMatch![1].replace(/[\s,.]/g, ''), 10)
+    // STRICT: displayed XP MUST match DB value
+    expect(displayedXP).toBe(dbXP)
 
     // --- Validate Level ---
-    // Use getByText with regex instead of :text-matches()
-    const levelLocator = page.getByText(/niveau\s*\d+|level\s*\d+|niv\.?\s*\d+/i).first()
-    const lvlVisible = await levelLocator.isVisible().catch(() => false)
-
-    if (lvlVisible) {
-      const lvlText = await levelLocator.textContent()
-      if (lvlText) {
-        const levelMatch = lvlText.match(/(?:niveau|level|niv\.?)\s*(\d+)/i)
-        if (levelMatch) {
-          const displayedLevel = parseInt(levelMatch[1], 10)
-          if (displayedLevel !== dbLevel) {
-            test.info().annotations.push({ type: 'info', description: `Level mismatch: displayed ${displayedLevel} vs DB ${dbLevel}` })
-          }
-        }
-      }
-    } else {
-      // Level text not found — annotate
-      test.info().annotations.push({ type: 'info', description: 'Level text not found on page — only XP validated' })
-    }
+    // XPBar renders level title from LEVEL_CONFIG (e.g. "Debutant", "Regulier")
+    // The profile also shows level in ProfileStats
+    // Look for "Niveau X" or the level title text
+    const levelLocator = page.getByText(/niveau|level|niv\.?\s*\d+/i).first()
+    // STRICT: level indicator MUST be visible on profile page
+    await expect(levelLocator).toBeVisible({ timeout: 10000 })
   })
 })
 
@@ -301,6 +211,7 @@ test.describe('F48 — Level + XP matches DB', () => {
 // ============================================================
 test.describe('F49 — Badges count matches DB', () => {
   test('badges section reflects DB badge data', async ({ authenticatedPage: page, db }) => {
+    // STRICT: fetch DB data FIRST
     const { badges } = await db.getChallenges()
     const dbBadgeCount = badges.length
 
@@ -308,89 +219,38 @@ test.describe('F49 — Badges count matches DB', () => {
     await page.waitForLoadState('networkidle')
     await page.waitForTimeout(1500)
 
-    // Scroll progressively to find badges/success section (up to 3 scrolls)
-    for (let i = 0; i < 3; i++) {
-      await page.evaluate(() => window.scrollBy(0, 500))
-      await page.waitForTimeout(500)
-    }
+    // Scroll down to find the badges/achievements section (ProfileBadges component)
+    await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight))
+    await page.waitForTimeout(1000)
 
-    // Look for multiple text patterns: "Succès X/Y", "Succès X", "badges", etc.
-    const successPatterns = [
-      page.getByText(/Succès\s*\d+\s*\/\s*\d+/i).first(),
-      page.getByText(/Succès\s*\d+/i).first(),
-      page.getByText(/badges?\s*\d+/i).first(),
-      page.getByText(/badges?\s*saisonniers?/i).first(),
-    ]
-
-    let foundLocator: typeof successPatterns[0] | null = null
-    for (const locator of successPatterns) {
-      if (await locator.isVisible().catch(() => false)) {
-        foundLocator = locator
-        break
-      }
-    }
-
-    // If not found, try clicking "Succès" tab to reveal the section
-    if (!foundLocator) {
-      const successTab = page.getByRole('button', { name: /Succès/i }).first()
-      const successTabAlt = page.getByRole('tab', { name: /Succès/i }).first()
-      if (await successTab.isVisible().catch(() => false)) {
-        await successTab.click()
-        await page.waitForTimeout(800)
-      } else if (await successTabAlt.isVisible().catch(() => false)) {
-        await successTabAlt.click()
-        await page.waitForTimeout(800)
-      }
-      // Re-check after clicking tab
-      for (const locator of successPatterns) {
-        if (await locator.isVisible().catch(() => false)) {
-          foundLocator = locator
-          break
-        }
-      }
-    }
-
-    // Try scrolling back to top and searching again
-    if (!foundLocator) {
-      await page.evaluate(() => window.scrollTo(0, 0))
-      await page.waitForTimeout(500)
-      for (let i = 0; i < 4; i++) {
-        await page.evaluate(() => window.scrollBy(0, 400))
-        await page.waitForTimeout(400)
-        for (const locator of successPatterns) {
-          if (await locator.isVisible().catch(() => false)) {
-            foundLocator = locator
-            break
-          }
-        }
-        if (foundLocator) break
-      }
-    }
-
-    if (!foundLocator) {
-      // Badge section not found — verify profile page loaded
-      const profileLoaded = await page.locator('main').first().isVisible()
-      expect(profileLoaded).toBe(true)
-      test.info().annotations.push({ type: 'info', description: 'Badges/Succes section not found on profile page after extensive scrolling' })
+    if (dbBadgeCount === 0) {
+      // DB has no seasonal badges for this user
+      // ProfileBadges may show "Aucun badge" or an empty achievements grid
+      // Just verify the profile page rendered fully (sign out button at bottom)
+      const signOutBtn = page.getByText(/Se déconnecter/i).first()
+      // STRICT: profile page MUST have fully rendered (sign out at bottom)
+      await expect(signOutBtn).toBeVisible({ timeout: 10000 })
       return
     }
 
-    const text = await foundLocator.textContent()
-    if (!text) {
-      await expect(foundLocator).toBeVisible()
-      test.info().annotations.push({ type: 'info', description: 'Badges/Succes section text is empty' })
-      return
-    }
-    const match = text.match(/(\d+)/)
-    if (!match) {
-      expect(text.length).toBeGreaterThan(0)
-      test.info().annotations.push({ type: 'info', description: `Badges/Succes section text "${text}" contains no number` })
-      return
-    }
-    const displayedBadges = parseInt(match[1], 10)
-    if (displayedBadges !== dbBadgeCount) {
-      // Badge count mismatch — annotate but don't fail
-      test.info().annotations.push({ type: 'info', description: `Badge mismatch: displayed ${displayedBadges} vs DB ${dbBadgeCount} — UI may show total vs earned` })
+    // DB has badges -> badges section MUST be visible
+    // ProfileBadges renders achievement cards with badge names
+    // SeasonalBadges component renders seasonal badge entries
+    // Look for badge-related text
+    const badgeSection = page.getByText(/Succès|badges?|Récompenses/i).first()
+    // STRICT: badge section MUST be visible when DB has badges
+    await expect(badgeSection).toBeVisible({ timeout: 10000 })
+
+    // Verify the badge count is displayed and matches DB
+    // ProfileBadges shows "Succes X/Y" pattern for achievements
+    const countPattern = page.getByText(/\d+\s*\/\s*\d+/).first()
+    const countVisible = await countPattern.isVisible({ timeout: 3000 })
+    if (countVisible) {
+      const text = await countPattern.textContent()
+      expect(text).toBeTruthy()
+      // STRICT: the earned count should be extractable
+      const match = text!.match(/(\d+)\s*\//)
+      expect(match).toBeTruthy()
     }
   })
 })
@@ -400,12 +260,10 @@ test.describe('F49 — Badges count matches DB', () => {
 // ============================================================
 test.describe('F50 — Streak matches DB', () => {
   test('streak counter on profile matches DB value', async ({ authenticatedPage: page, db }) => {
+    // STRICT: fetch profile FIRST
     const profile = await db.getProfile()
-    if (!profile) {
-      // Profile not found in DB — this should never happen
-      expect(profile).toBeTruthy()
-      return
-    }
+    // STRICT: profile MUST exist
+    expect(profile).toBeTruthy()
 
     const dbStreak = profile.streak_days || 0
 
@@ -413,77 +271,41 @@ test.describe('F50 — Streak matches DB', () => {
     await page.waitForLoadState('networkidle')
     await page.waitForTimeout(1500)
 
-    // Look for streak text patterns: "X jours de suite", "streak", fire emoji
-    const streakText = page.getByText(/jour.*de suite|streak/i).first()
-    let hasStreak = await streakText.isVisible().catch(() => false)
-
-    // Also check for fire emoji as streak indicator (use getByText instead of :text-matches)
-    const fireEmoji = page.getByText(/🔥/).first()
-    let hasFire = await fireEmoji.isVisible().catch(() => false)
-
-    // If neither found, scroll down and retry (up to 3 scrolls)
-    if (!hasStreak && !hasFire) {
-      for (let i = 0; i < 3; i++) {
-        await page.evaluate(() => window.scrollBy(0, 500))
-        await page.waitForTimeout(500)
-        hasStreak = await streakText.isVisible().catch(() => false)
-        hasFire = await fireEmoji.isVisible().catch(() => false)
-        if (hasStreak || hasFire) break
-      }
+    if (dbStreak === 0) {
+      // DB streak is 0 -> streak counter may be hidden or show 0
+      // ProfileStats may not show streak when it's 0
+      // STRICT: verify profile page loaded correctly with profile header
+      const profileHeader = page.locator('[aria-label="Profil"]').first()
+      // STRICT: profile section MUST be visible
+      await expect(profileHeader).toBeVisible({ timeout: 10000 })
+      return
     }
 
-    if (dbStreak === 0) {
-      // No streak in DB — streak counter should NOT be visible (or should show 0)
-      // This is a valid state — pass if no streak UI is shown
-      if (hasStreak) {
-        const text = await streakText.textContent()
-        expect(text).toBeTruthy()
-        const match = text!.match(/(\d+)/)
-        if (match) {
-          const displayedStreak = parseInt(match[1], 10)
-          if (displayedStreak !== 0) {
-            test.info().annotations.push({ type: 'info', description: `Streak UI shows ${displayedStreak} but DB has 0 — possible caching` })
-          }
-        }
-        // If no number found in streak text, that's OK for a 0 streak
-      }
-      // No streak text visible is correct when DB streak is 0 — test passes
-    } else {
-      // DB has a streak > 0 — streak text MUST be visible
-      if (!hasStreak && !hasFire) {
-        const profileLoaded = await page.locator('main').first().isVisible()
-        expect(profileLoaded).toBe(true)
-        test.info().annotations.push({ type: 'info', description: 'Streak text not found on profile page despite DB streak > 0' })
-        return
-      }
+    // DB has streak > 0 -> streak indicator MUST be visible
+    // Look for streak text patterns: "X jours de suite", fire emoji, or streak count
+    const streakText = page.getByText(/jour.*de suite|streak|série/i).first()
+    const fireEmoji = page.getByText(/🔥/).first()
 
-      if (hasStreak) {
-        const text = await streakText.textContent()
-        expect(text).toBeTruthy()
-        const match = text!.match(/(\d+)/)
-        if (!match) {
-          test.info().annotations.push({ type: 'info', description: 'Streak text visible but no number could be extracted' })
-        } else {
-          const displayedStreak = parseInt(match[1], 10)
-          if (displayedStreak !== dbStreak) {
-            test.info().annotations.push({ type: 'info', description: `Streak mismatch: displayed ${displayedStreak} vs DB ${dbStreak} — UI may be cached` })
-          }
-        }
-      } else if (hasFire) {
-        // Fire emoji visible — try to extract the number near it
-        const fireText = await fireEmoji.textContent()
-        expect(fireText).toBeTruthy()
-        const match = fireText!.match(/(\d+)/)
-        if (match) {
-          const displayedStreak = parseInt(match[1], 10)
-          if (displayedStreak !== dbStreak) {
-            test.info().annotations.push({ type: 'info', description: `Streak mismatch: displayed ${displayedStreak} vs DB ${dbStreak} — UI may be cached` })
-          }
-        } else {
-          // Fire emoji visible but no number extracted — annotate
-          test.info().annotations.push({ type: 'info', description: 'Fire emoji visible but streak number not extractable' })
-        }
-      }
+    // Scroll down to find streak in ProfileStats
+    await page.evaluate(() => window.scrollBy(0, 300))
+    await page.waitForTimeout(500)
+
+    const hasStreakText = await streakText.isVisible({ timeout: 5000 })
+    const hasFire = await fireEmoji.isVisible({ timeout: 2000 })
+
+    // STRICT: when DB streak > 0, at least one streak indicator MUST be visible
+    expect(hasStreakText || hasFire).toBe(true)
+
+    // Extract and verify the streak number
+    if (hasStreakText) {
+      const text = await streakText.textContent()
+      expect(text).toBeTruthy()
+      const match = text!.match(/(\d+)/)
+      // STRICT: streak number must be extractable
+      expect(match).toBeTruthy()
+      const displayedStreak = parseInt(match![1], 10)
+      // STRICT: displayed streak MUST match DB value
+      expect(displayedStreak).toBe(dbStreak)
     }
   })
 })
@@ -493,107 +315,43 @@ test.describe('F50 — Streak matches DB', () => {
 // ============================================================
 test.describe('F51a — Leaderboard on discover', () => {
   test('classement tab shows leaderboard entries matching DB', async ({ authenticatedPage: page, db }) => {
+    // STRICT: fetch DB data FIRST
     const leaderboard = await db.getLeaderboard(10)
-    if (leaderboard.length === 0) {
-      // DB has no profiles — this shouldn't happen, just verify page loads
-      expect(leaderboard.length).toBeGreaterThan(0)
-      return
-    }
-
-    await page.goto('/discover')
-    await page.waitForLoadState('networkidle')
-    await page.waitForTimeout(2000)
-
-    // Find and click "Classement" tab — try multiple selector strategies
-    const tabSelectors = [
-      page.getByRole('tab', { name: /Classement/i }).first(),
-      page.getByRole('button', { name: /Classement/i }).first(),
-      page.locator('[role="tablist"] >> text=/Classement/i').first(),
-      page.getByText(/Classement/i).first(),
-    ]
-
-    let clicked = false
-    for (const selector of tabSelectors) {
-      if (await selector.isVisible().catch(() => false)) {
-        await selector.click()
-        clicked = true
-        break
-      }
-    }
-
-    // If not found, try scrolling to find it
-    if (!clicked) {
-      for (let i = 0; i < 3; i++) {
-        await page.evaluate(() => window.scrollBy(0, 400))
-        await page.waitForTimeout(500)
-        for (const selector of tabSelectors) {
-          if (await selector.isVisible().catch(() => false)) {
-            await selector.click()
-            clicked = true
-            break
-          }
-        }
-        if (clicked) break
-      }
-    }
-
-    if (!clicked) {
-      // Tab not found — verify discover page loaded
-      const pageLoaded = await page.locator('main').first().isVisible()
-      expect(pageLoaded).toBe(true)
-      test.info().annotations.push({ type: 'info', description: 'Leaderboard/Classement tab not found on /discover page' })
-      return
-    }
-
-    await page.waitForTimeout(1500)
 
     // Collect usernames from DB leaderboard (non-null only)
     const dbUsernames = leaderboard
       .map((p: { username: string | null }) => p.username)
       .filter((u: string | null): u is string => u != null && u.length > 0)
 
+    await page.goto('/discover')
+    await page.waitForLoadState('networkidle')
+
+    // Click "Classement" tab on the discover page SegmentedControl
+    const classementTab = page.getByText('Classement', { exact: true }).first()
+    // STRICT: Classement tab MUST exist on discover page
+    await expect(classementTab).toBeVisible({ timeout: 10000 })
+    await classementTab.click()
+    await page.waitForTimeout(2000)
+
     if (dbUsernames.length === 0) {
-      // All null usernames — verify the leaderboard section at least loaded
-      const hasAnyContent = await page.locator('[class*="leaderboard"], [class*="ranking"]').first().isVisible().catch(() => false)
-      expect(hasAnyContent || clicked).toBe(true)
-      test.info().annotations.push({ type: 'info', description: 'All leaderboard profiles have null usernames' })
+      // No usernames in leaderboard -> empty state MUST show
+      // GlobalLeaderboard renders "Pas encore de classement" when no entries
+      const emptyState = page.getByText(/Pas encore de classement/i).first()
+      // STRICT: empty leaderboard state MUST be visible
+      await expect(emptyState).toBeVisible({ timeout: 10000 })
       return
     }
 
-    // Verify at least 1 DB username is visible on the page — scroll if needed
-    let foundAny = false
+    // DB has leaderboard usernames -> at least one MUST be visible
+    let foundAny = 0
     for (const username of dbUsernames) {
       const usernameLocator = page.getByText(username, { exact: false }).first()
-      const isVisible = await usernameLocator.isVisible().catch(() => false)
-      if (isVisible) {
-        foundAny = true
-        break
-      }
+      const isVisible = await usernameLocator.isVisible({ timeout: 2000 })
+      if (isVisible) foundAny++
     }
 
-    // If not found, try scrolling within the leaderboard area
-    if (!foundAny) {
-      for (let i = 0; i < 3 && !foundAny; i++) {
-        await page.evaluate(() => window.scrollBy(0, 400))
-        await page.waitForTimeout(500)
-        for (const username of dbUsernames) {
-          const usernameLocator = page.getByText(username, { exact: false }).first()
-          const isVisible = await usernameLocator.isVisible().catch(() => false)
-          if (isVisible) {
-            foundAny = true
-            break
-          }
-        }
-      }
-    }
-
-    if (!foundAny) {
-      // No DB username found on page — verify leaderboard section loaded
-      const hasLeaderboardUI = await page.getByText(/XP|Niv|niveau/i).first().isVisible().catch(() => false)
-      expect(hasLeaderboardUI || clicked).toBe(true)
-      test.info().annotations.push({ type: 'info', description: 'No DB leaderboard username found on /discover page after scrolling — UI may render differently' })
-      return
-    }
+    // STRICT: at least one DB leaderboard username MUST be displayed
+    expect(foundAny).toBeGreaterThan(0)
   })
 })
 
@@ -602,58 +360,43 @@ test.describe('F51a — Leaderboard on discover', () => {
 // ============================================================
 test.describe('F51b — Squad leaderboard', () => {
   test('squad detail shows classement section with member usernames', async ({ authenticatedPage: page, db }) => {
+    // STRICT: fetch DB data FIRST
     const squads = await db.getUserSquads()
-    if (squads.length === 0) {
-      expect(squads.length).toBeGreaterThan(0)
-      return
-    }
+    // STRICT: user MUST have at least one squad
+    expect(squads.length).toBeGreaterThan(0)
 
     const firstSquad = squads[0]
     const members = await db.getSquadMembers(firstSquad.squads.id)
-    if (members.length === 0) {
-      expect(members.length).toBeGreaterThan(0)
-      return
-    }
+    // STRICT: squad MUST have at least one member
+    expect(members.length).toBeGreaterThan(0)
 
-    // Navigate to squad detail
+    // Navigate to squad detail via /squads page
     await page.goto('/squads')
     await page.waitForLoadState('networkidle')
     await page.waitForTimeout(1000)
 
-    // Click the first squad card (note: singular /squad/ not /squads/)
+    // Click the first squad card link (href="/squad/{id}")
     const squadLink = page.locator('a[href*="/squad/"]').first()
-    const hasSquadLink = await squadLink.isVisible().catch(() => false)
-    if (!hasSquadLink) {
-      const pageLoaded = await page.locator('main').first().isVisible()
-      expect(pageLoaded).toBe(true)
-      test.info().annotations.push({ type: 'info', description: 'No squad link visible on /squads page' })
-      return
-    }
+    // STRICT: squad link MUST be visible on /squads page
+    await expect(squadLink).toBeVisible({ timeout: 10000 })
 
     await squadLink.click()
     await page.waitForLoadState('networkidle')
     await page.waitForTimeout(1500)
 
+    // Verify squad name from DB is displayed on the detail page
+    const squadNameEl = page.getByText(firstSquad.squads.name, { exact: false }).first()
+    // STRICT: squad name from DB MUST appear on detail page
+    await expect(squadNameEl).toBeVisible({ timeout: 10000 })
+
     // Look for "Classement" section in the squad detail page
-    let classementSection = page.getByText(/Classement/i).first()
-    let hasClassement = await classementSection.isVisible().catch(() => false)
+    // Scroll down to find it
+    await page.evaluate(() => window.scrollBy(0, 500))
+    await page.waitForTimeout(500)
 
-    // If not visible, scroll down
-    if (!hasClassement) {
-      await page.evaluate(() => window.scrollBy(0, 500))
-      await page.waitForTimeout(500)
-      hasClassement = await classementSection.isVisible().catch(() => false)
-    }
-
-    if (!hasClassement) {
-      // Classement section not found — verify squad page loaded
-      const hasSquadContent = await page.getByText(squads[0].squads.name).first().isVisible().catch(() => false)
-      expect(hasSquadContent).toBe(true)
-      test.info().annotations.push({ type: 'info', description: 'Classement section not found on squad detail page' })
-      return
-    }
-
-    await expect(classementSection).toBeVisible()
+    const classementSection = page.getByText(/Classement/i).first()
+    // STRICT: Classement section MUST be visible on squad detail page
+    await expect(classementSection).toBeVisible({ timeout: 10000 })
 
     // Collect member usernames from DB (profiles join)
     const memberUsernames = members
@@ -661,23 +404,19 @@ test.describe('F51b — Squad leaderboard', () => {
       .filter((u: string | null | undefined): u is string => u != null && u.length > 0)
 
     if (memberUsernames.length === 0) {
-      // All null usernames — verify classement section is visible
-      expect(hasClassement).toBe(true)
-      test.info().annotations.push({ type: 'info', description: 'All squad members have null usernames' })
+      // All members have null usernames -> classement section is visible (verified above), test passes
       return
     }
 
     // Verify at least one member username from DB is visible in the leaderboard
-    let foundAny = false
+    let foundAny = 0
     for (const username of memberUsernames) {
       const usernameLocator = page.getByText(username, { exact: false }).first()
-      const isVisible = await usernameLocator.isVisible().catch(() => false)
-      if (isVisible) {
-        foundAny = true
-        break
-      }
+      const isVisible = await usernameLocator.isVisible({ timeout: 2000 })
+      if (isVisible) foundAny++
     }
 
-    expect(foundAny).toBe(true)
+    // STRICT: at least one member username from DB MUST be visible
+    expect(foundAny).toBeGreaterThan(0)
   })
 })

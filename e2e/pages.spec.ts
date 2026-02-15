@@ -1,217 +1,198 @@
-import { test as baseTest, expect } from '@playwright/test'
-import { dismissCookieBanner } from './fixtures'
+import { test, expect, dismissCookieBanner } from './fixtures'
 
-// ============================================================
-// Static Pages E2E Tests — Legal + Help
-// These are public pages that don't require authentication.
-// ============================================================
+/**
+ * Static Pages E2E Tests — Legal + Help (STRICT MODE)
+ *
+ * REGLE STRICTE :
+ * - Pas de .catch(() => false) sur les assertions
+ * - Pas de OR conditions passe-partout
+ * - Chaque element attendu DOIT etre visible → sinon FAIL
+ * - Pas de fallback sur <main> quand un element specifique est requis
+ */
 
 // ============================================================
 // Legal Page Tests
 // ============================================================
-baseTest.describe('Legal — Page loads with correct heading', () => {
-  baseTest('should display Legal page with CGU or Privacy tab heading', async ({ page }) => {
+
+test.describe('Legal — Page loads with correct heading', () => {
+  test('should display Legal page with CGU tab heading visible', async ({ page }) => {
     await page.goto('/legal')
     await page.waitForLoadState('networkidle')
     await dismissCookieBanner(page)
     await page.waitForTimeout(1000)
 
-    // The Legal page has two tabs: "Conditions d'utilisation" and "Politique de confidentialité"
+    // STRICT: The CGU tab button MUST be visible (it's the default active tab)
     const cguTab = page.getByText(/Conditions d'utilisation/i).first()
+    // STRICT: await expect — no .catch(() => false)
+    await expect(cguTab).toBeVisible({ timeout: 10000 })
+
+    // STRICT: The Privacy tab button MUST also be visible (both tabs are always rendered)
     const privacyTab = page.getByText(/Politique de confidentialité/i).first()
+    // STRICT: direct assertion, no OR fallback
+    await expect(privacyTab).toBeVisible({ timeout: 5000 })
 
-    const hasCGU = await cguTab.isVisible().catch(() => false)
-    const hasPrivacy = await privacyTab.isVisible().catch(() => false)
-
-    // At least one of the two legal tab headings must be visible
-    expect(hasCGU || hasPrivacy).toBe(true)
-
-    // The "Squad Planner" branding should be visible in the header
+    // STRICT: "Squad Planner" branding MUST be in the header
     const branding = page.getByText(/Squad Planner/i).first()
-    const hasBranding = await branding.isVisible().catch(() => false)
-    expect(hasBranding).toBe(true)
+    await expect(branding).toBeVisible({ timeout: 5000 })
   })
 })
 
-baseTest.describe('Legal — Page has content', () => {
-  baseTest('should display legal text content (not empty)', async ({ page }) => {
+test.describe('Legal — Page has content', () => {
+  test('should display legal text content with meaningful length', async ({ page }) => {
     await page.goto('/legal')
     await page.waitForLoadState('networkidle')
     await dismissCookieBanner(page)
     await page.waitForTimeout(1000)
 
-    // The CGU content is loaded by default. Verify there is substantial text on the page.
+    // STRICT: <main> with content MUST be visible
     const mainContent = page.locator('main').last()
-    const mainVisible = await mainContent.isVisible().catch(() => false)
-    expect(mainVisible).toBe(true)
+    await expect(mainContent).toBeVisible({ timeout: 10000 })
 
+    // STRICT: Legal content MUST have substantial text (at least 100 chars)
     const mainText = await mainContent.textContent()
     expect(mainText).toBeTruthy()
-    // Legal content must have meaningful length (at least 100 characters of text)
+    // STRICT: meaningful length check — legal pages must have real content
     expect(mainText!.length).toBeGreaterThan(100)
 
-    // Verify paragraph-like content exists (not just buttons/headers)
-    // Look for typical legal terms
-    const hasLegalTerms = await page
-      .getByText(/utilisateur|responsabilité|données|service|droit/i)
-      .first()
-      .isVisible()
-      .catch(() => false)
-    expect(hasLegalTerms).toBe(true)
+    // STRICT: Legal terms MUST be present in the text content
+    const legalTermLocator = page.getByText(/utilisateur|responsabilité|données|service|droit/i).first()
+    // STRICT: no .catch(() => false) — this MUST be visible
+    await expect(legalTermLocator).toBeVisible({ timeout: 5000 })
   })
 })
 
-baseTest.describe('Legal — Accessible structure', () => {
-  baseTest('should have main landmark and tab navigation', async ({ page }) => {
+test.describe('Legal — Accessible structure', () => {
+  test('should have header, back link, and working tab navigation', async ({ page }) => {
     await page.goto('/legal')
     await page.waitForLoadState('networkidle')
     await dismissCookieBanner(page)
     await page.waitForTimeout(1000)
 
-    // Main landmark must exist (use .last() — page may have an outer #main-content wrapper)
+    // STRICT: Main landmark MUST exist
     const mainLandmark = page.locator('main').last()
     await expect(mainLandmark).toBeVisible()
 
-    // Header with back button must exist
-    const header = page.locator('header')
-    const hasHeader = await header.first().isVisible().catch(() => false)
-    expect(hasHeader).toBe(true)
+    // STRICT: Header MUST exist
+    const header = page.locator('header').first()
+    await expect(header).toBeVisible({ timeout: 5000 })
 
-    // The back arrow link to "/" must exist
-    const backLink = page.locator('a[href="/"]')
-    const hasBackLink = await backLink.first().isVisible().catch(() => false)
-    expect(hasBackLink).toBe(true)
+    // STRICT: Back link to "/" MUST exist
+    const backLink = page.locator('a[href="/"]').first()
+    await expect(backLink).toBeVisible({ timeout: 5000 })
 
-    // Tab buttons for CGU / Privacy must be clickable
+    // STRICT: Click CGU tab — content MUST update
     const cguButton = page.getByText(/Conditions d'utilisation/i).first()
+    await expect(cguButton).toBeVisible({ timeout: 5000 })
+    await cguButton.click()
+    await page.waitForTimeout(500)
+    const cguText = await mainLandmark.textContent()
+    // STRICT: after clicking CGU, content must have real text
+    expect(cguText!.length).toBeGreaterThan(50)
+
+    // STRICT: Click Privacy tab — content MUST update
     const privacyButton = page.getByText(/Politique de confidentialité/i).first()
-
-    if (await cguButton.isVisible().catch(() => false)) {
-      await cguButton.click()
-      await page.waitForTimeout(500)
-      // After clicking CGU, legal terms should be visible
-      const mainText = await mainLandmark.textContent()
-      expect(mainText!.length).toBeGreaterThan(50)
-    }
-
-    if (await privacyButton.isVisible().catch(() => false)) {
-      await privacyButton.click()
-      await page.waitForTimeout(500)
-      // After clicking Privacy, privacy-related content should appear
-      const mainText = await mainLandmark.textContent()
-      expect(mainText!.length).toBeGreaterThan(50)
-    }
+    await expect(privacyButton).toBeVisible({ timeout: 5000 })
+    await privacyButton.click()
+    await page.waitForTimeout(500)
+    const privacyText = await mainLandmark.textContent()
+    // STRICT: after clicking Privacy, content must have real text
+    expect(privacyText!.length).toBeGreaterThan(50)
   })
 })
 
 // ============================================================
 // Help Page Tests
 // ============================================================
-baseTest.describe('Help — Page loads with correct heading', () => {
-  baseTest('should display Help page with heading', async ({ page }) => {
+
+test.describe('Help — Page loads with correct heading', () => {
+  test('should display Help page with heading and search input', async ({ authenticatedPage: page }) => {
     await page.goto('/help')
     await page.waitForLoadState('networkidle')
     await dismissCookieBanner(page)
     await page.waitForTimeout(1000)
 
-    // The Help page has aria-label="Aide" on <main> and heading "Aide & FAQ"
-    const mainLandmark = page.locator('main[aria-label*="Aide" i]')
-    const hasMain = await mainLandmark.isVisible().catch(() => false)
+    // STRICT: Main landmark with aria-label "Aide" MUST exist
+    const mainLandmark = page.locator('main[aria-label="Aide"]')
+    await expect(mainLandmark).toBeVisible({ timeout: 10000 })
 
-    const heading = page.getByText(/Aide & FAQ|Aide|Centre d'aide/i).first()
-    const hasHeading = await heading.isVisible().catch(() => false)
-
-    // At least the main landmark or heading must be present
-    expect(hasMain || hasHeading).toBe(true)
-
-    // Verify the search input is visible (key feature of the help page)
+    // STRICT: Search input MUST be visible (key feature of the help page)
     const searchInput = page.locator('input[placeholder*="Rechercher" i]')
-    const hasSearch = await searchInput.isVisible().catch(() => false)
-    expect(hasSearch).toBe(true)
+    // STRICT: no .catch(() => false)
+    await expect(searchInput).toBeVisible({ timeout: 5000 })
   })
 })
 
-baseTest.describe('Help — Page has content sections', () => {
-  baseTest('should display FAQ categories and questions', async ({ page }) => {
+test.describe('Help — Page has content sections', () => {
+  test('should display FAQ categories, category headings, and questions', async ({ authenticatedPage: page }) => {
     await page.goto('/help')
     await page.waitForLoadState('networkidle')
     await dismissCookieBanner(page)
     await page.waitForTimeout(1000)
 
-    // The Help page shows FAQ items grouped by categories
-    // Category filter buttons include "Tout" + each category name
+    // STRICT: "Tout" filter button MUST be visible
     const toutButton = page.getByRole('button', { name: /^Tout$/i }).first()
-    const hasToutButton = await toutButton.isVisible().catch(() => false)
-    expect(hasToutButton).toBe(true)
+    await expect(toutButton).toBeVisible({ timeout: 5000 })
 
-    // There must be at least one FAQ question visible (rendered as clickable buttons inside Card components)
-    const faqQuestions = page.locator('button.w-full').filter({
-      has: page.locator('span'),
-    })
+    // STRICT: At least one FAQ question button MUST exist
+    const faqQuestions = page.locator('button.w-full').filter({ has: page.locator('span') })
     const faqCount = await faqQuestions.count()
+    // STRICT: FAQ count must be > 0 — not >= 0
     expect(faqCount).toBeGreaterThan(0)
 
-    // Verify there are FAQ category headings (h2 elements with category names)
+    // STRICT: At least one category heading (h2) MUST exist
     const categoryHeadings = page.locator('h2')
     const categoryCount = await categoryHeadings.count()
+    // STRICT: category count must be > 0
     expect(categoryCount).toBeGreaterThan(0)
 
-    // Verify a category heading has meaningful text
+    // STRICT: First category heading must have meaningful text
     const firstCategoryText = await categoryHeadings.first().textContent()
     expect(firstCategoryText).toBeTruthy()
+    // STRICT: category name must be a real word (> 2 chars)
     expect(firstCategoryText!.length).toBeGreaterThan(2)
   })
 })
 
-baseTest.describe('Help — Accessible structure', () => {
-  baseTest('should have main landmark, heading, and keyboard-navigable FAQ', async ({ page }) => {
+test.describe('Help — Accessible structure and FAQ interaction', () => {
+  test('should have aria-label, focusable search, clickable FAQ, and footer', async ({ authenticatedPage: page }) => {
     await page.goto('/help')
     await page.waitForLoadState('networkidle')
     await dismissCookieBanner(page)
     await page.waitForTimeout(1000)
 
-    // Main landmark with aria-label must exist (use specific selector — page has 2 <main> elements)
+    // STRICT: Main landmark with aria-label MUST exist and contain "aide"
     const mainLandmark = page.locator('main[aria-label]')
-    await expect(mainLandmark).toBeVisible()
-
+    await expect(mainLandmark).toBeVisible({ timeout: 10000 })
     const ariaLabel = await mainLandmark.getAttribute('aria-label')
     expect(ariaLabel).toBeTruthy()
+    // STRICT: aria-label must contain "aide" (case-insensitive)
     expect(ariaLabel!.toLowerCase()).toContain('aide')
 
-    // Search input must be focusable
+    // STRICT: Search input MUST be focusable
     const searchInput = page.locator('input[placeholder*="Rechercher" i]')
-    if (await searchInput.isVisible().catch(() => false)) {
-      await searchInput.focus()
-      const isFocused = await searchInput.evaluate((el) => document.activeElement === el)
-      expect(isFocused).toBe(true)
-    }
+    await expect(searchInput).toBeVisible({ timeout: 5000 })
+    await searchInput.focus()
+    const isFocused = await searchInput.evaluate((el) => document.activeElement === el)
+    // STRICT: input must actually receive focus
+    expect(isFocused).toBe(true)
 
-    // FAQ items must be clickable — click the first one and verify answer appears
+    // STRICT: Click first FAQ item — answer MUST appear
     const firstFaqButton = page.locator('button.w-full').filter({ has: page.locator('span') }).first()
-    const hasFaq = await firstFaqButton.isVisible().catch(() => false)
+    await expect(firstFaqButton).toBeVisible({ timeout: 5000 })
+    await firstFaqButton.click()
+    await page.waitForTimeout(500)
 
-    if (hasFaq) {
-      await firstFaqButton.click()
-      await page.waitForTimeout(500)
+    // STRICT: After clicking, an answer paragraph with real content MUST appear
+    const answerText = page.locator('p').filter({ hasText: /.{20,}/ })
+    const answerCount = await answerText.count()
+    // STRICT: at least one answer paragraph must be visible
+    expect(answerCount).toBeGreaterThan(0)
 
-      // After clicking, an answer paragraph should become visible
-      const answerText = page.locator('p').filter({ hasText: /.{20,}/ })
-      const answerCount = await answerText.count()
-      expect(answerCount).toBeGreaterThan(0)
-    }
-
-    // Contact section should be present at the bottom
-    const contactSection = page.getByText(/Contact|Nous contacter|support/i).first()
-    // Scroll to bottom to find it
+    // STRICT: Scroll to bottom — "Squad Planner v1.0.0" footer MUST be visible
     await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight))
     await page.waitForTimeout(500)
-    const hasContact = await contactSection.isVisible().catch(() => false)
-
-    // Version text "Squad Planner v1.0.0" should be at the very bottom
     const versionText = page.getByText(/Squad Planner v/i).first()
-    const hasVersion = await versionText.isVisible().catch(() => false)
-
-    // At least contact section or version text must be present at bottom
-    expect(hasContact || hasVersion).toBe(true)
+    // STRICT: version footer MUST be present
+    await expect(versionText).toBeVisible({ timeout: 5000 })
   })
 })

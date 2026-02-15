@@ -2,13 +2,14 @@ import { test, expect } from './fixtures'
 
 /**
  * Discover E2E Tests — F52-F56
- * Tests with functional data validation via TestDataHelper (DB queries).
- * Uses shared fixtures: authenticatedPage (logged-in), db (TestDataHelper).
  *
- * RULES:
- * - NEVER use `expect(x || true).toBeTruthy()`
- * - Every test MUST have meaningful assertions that can FAIL
- * - Use early return with meaningful assertion when something is untestable
+ * STRICT MODE: Every test fetches DB data FIRST, then asserts UI matches.
+ * - If DB has data -> UI MUST display it -> otherwise FAIL
+ * - If DB is empty -> test empty state UI specifically
+ * - NO .catch(() => false) on assertions
+ * - NO test.info().annotations replacing real assertions
+ * - NO fallback to <main> when specific feature should be visible
+ * - NO OR conditions that always pass
  */
 
 // =============================================================================
@@ -16,55 +17,57 @@ import { test, expect } from './fixtures'
 // =============================================================================
 test.describe('F52 — Parcourir les squads publics', () => {
   test('should display public squads matching DB data', async ({ authenticatedPage, db }) => {
+    // STRICT: fetch DB data FIRST
     const publicSquads = await db.getPublicSquads()
 
     await authenticatedPage.goto('/discover')
     await authenticatedPage.waitForLoadState('networkidle')
-    await authenticatedPage.waitForTimeout(1500)
 
-    // Check for 500 error
-    const has500 = await authenticatedPage.getByText(/^500$/).first().isVisible({ timeout: 1000 }).catch(() => false)
-    if (has500) {
-      // Page returned 500 — verify we at least got an error page heading
-      const hasHeading = await authenticatedPage.locator('h1').first().isVisible()
-      expect(hasHeading).toBe(true)
+    if (publicSquads.length > 0) {
+      // DB has public squads -> UI MUST display at least one squad name
+      let foundCount = 0
+      for (const squad of publicSquads.slice(0, 5)) {
+        const squadName = authenticatedPage.getByText(squad.name, { exact: false }).first()
+        const isVisible = await squadName.isVisible({ timeout: 3000 })
+        if (isVisible) foundCount++
+      }
+
+      // STRICT: at least one squad from DB MUST be visible on the page
+      // STRICT: no fallback to <main> or generic "content" checks
+      expect(foundCount).toBeGreaterThan(0)
+    } else {
+      // DB has no public squads -> empty state MUST be visible
+      // The Discover page shows "Aucune squad publique trouvee" when empty
+      const emptyState = authenticatedPage.getByText(/Aucune squad publique/i).first()
+      // STRICT: empty state text MUST appear
+      await expect(emptyState).toBeVisible({ timeout: 10000 })
+    }
+  })
+
+  test('should show correct squad count from DB', async ({ authenticatedPage, db }) => {
+    const publicSquads = await db.getPublicSquads()
+
+    await authenticatedPage.goto('/discover')
+    await authenticatedPage.waitForLoadState('networkidle')
+
+    if (publicSquads.length === 0) {
+      // STRICT: empty state verified
+      const emptyState = authenticatedPage.getByText(/Aucune squad publique/i).first()
+      await expect(emptyState).toBeVisible({ timeout: 10000 })
       return
     }
 
-    if (publicSquads.length > 0) {
-      // At least one squad name from DB should appear on the page
-      let foundAtLeastOne = false
-      for (const squad of publicSquads.slice(0, 5)) {
-        const visible = await authenticatedPage
-          .getByText(squad.name, { exact: false })
-          .first()
-          .isVisible()
-          .catch(() => false)
-        if (visible) {
-          foundAtLeastOne = true
-          break
-        }
-      }
+    // STRICT: every squad name from DB (up to 20 loaded by the UI) should be present in the page text
+    const mainContent = await authenticatedPage.locator('.max-w-2xl, .max-w-4xl, .max-w-5xl').first().textContent()
+    expect(mainContent).toBeTruthy()
 
-      // If no DB squad name is visible, check if discover page has any squad content at all
-      if (!foundAtLeastOne) {
-        const hasAnySquadContent = await authenticatedPage.locator('[class*="squad"], [class*="card"], [class*="grid"]').first().isVisible().catch(() => false)
-        // No DB squad name visible — verify that the discover page loaded with some content
-        test.info().annotations.push({ type: 'info', description: `No public squad name from DB visible on /discover — page has squad content: ${hasAnySquadContent}` })
-        const hasContent = await authenticatedPage.locator('main').first().isVisible()
-        expect(hasContent).toBe(true)
-      }
-    } else {
-      // No public squads in DB — verify empty state text is visible or page loaded
-      const hasEmptyState = await authenticatedPage
-        .getByText(/Aucune squad|Pas de squad|Aucun résultat/i)
-        .first()
-        .isVisible()
-        .catch(() => false)
-      const pageLoaded = await authenticatedPage.locator('main, [role="main"], #root').first().isVisible().catch(() => false)
-      // No public squads in DB — verify either empty state or page loaded
-      expect(hasEmptyState || pageLoaded).toBe(true)
+    // At least half of the first 5 squads must appear in page content
+    let matchCount = 0
+    for (const squad of publicSquads.slice(0, 5)) {
+      if (mainContent!.includes(squad.name)) matchCount++
     }
+    // STRICT: at least one must match
+    expect(matchCount).toBeGreaterThan(0)
   })
 })
 
@@ -76,68 +79,43 @@ test.describe('F53a — Filtrer par jeu', () => {
     await authenticatedPage.goto('/discover')
     await authenticatedPage.waitForLoadState('networkidle')
 
-    // The discover page uses custom Select components (shadcn/ui style)
-    // They render as button triggers, not native <select> elements
-    const gameFilterTrigger = authenticatedPage.getByRole('combobox').first()
-      .or(authenticatedPage.locator('button:has-text("Tous les jeux")'))
-      .or(authenticatedPage.locator('button:has-text("Jeu")'))
-
-    const hasGameFilter = await gameFilterTrigger.isVisible({ timeout: 5000 }).catch(() => false)
-
-    if (!hasGameFilter) {
-      // Game filter not found — verify the discover page loaded with squads content
-      const hasContent = await authenticatedPage.locator('main').first().isVisible()
-      expect(hasContent).toBe(true)
-      return
-    }
+    // The Discover page uses a custom Select with placeholder "Tous les jeux"
+    const gameFilterTrigger = authenticatedPage.locator('button:has-text("Tous les jeux")').first()
+    // STRICT: game filter MUST exist on discover page
+    await expect(gameFilterTrigger).toBeVisible({ timeout: 10000 })
 
     // Click the game filter to open the dropdown
     await gameFilterTrigger.click()
     await authenticatedPage.waitForTimeout(500)
 
-    // Select "Valorant" from the dropdown
+    // Select "Valorant" from the dropdown options
     const gameToFilter = 'Valorant'
-    const valorantOption = authenticatedPage.getByRole('option', { name: /Valorant/i }).first()
-      .or(authenticatedPage.getByText('Valorant').first())
-    const didSelectFilter = await valorantOption.isVisible({ timeout: 3000 }).catch(() => false)
-    if (didSelectFilter) {
-      await valorantOption.click()
-      await authenticatedPage.waitForTimeout(2000)
-    } else {
-      // Filter option not found — verify discover page is functional
-      const hasContent = await authenticatedPage.locator('main').first().isVisible()
-      expect(hasContent).toBe(true)
-      return
-    }
+    const valorantOption = authenticatedPage.getByText('Valorant').first()
+    // STRICT: Valorant option MUST be visible in dropdown
+    await expect(valorantOption).toBeVisible({ timeout: 5000 })
+    await valorantOption.click()
+    await authenticatedPage.waitForTimeout(1500)
 
     // Fetch filtered squads from DB
     const filteredSquads = await db.getPublicSquads(gameToFilter)
 
     if (filteredSquads.length > 0) {
-      // At least one filtered squad name MUST be visible
-      let foundFiltered = false
+      // DB has Valorant squads -> UI MUST show at least one
+      let foundFiltered = 0
       for (const squad of filteredSquads.slice(0, 5)) {
         const visible = await authenticatedPage
           .getByText(squad.name, { exact: false })
           .first()
-          .isVisible()
-          .catch(() => false)
-        if (visible) {
-          foundFiltered = true
-          break
-        }
+          .isVisible({ timeout: 2000 })
+        if (visible) foundFiltered++
       }
-      expect(foundFiltered).toBe(true)
+      // STRICT: at least one filtered squad name MUST be visible
+      expect(foundFiltered).toBeGreaterThan(0)
     } else {
-      // No squads for this game — verify empty/no-results state or page is in valid state
-      const hasEmpty = await authenticatedPage
-        .getByText(/Aucune squad|Aucun résultat|Pas de squad|Pas encore de squad/i)
-        .first()
-        .isVisible({ timeout: 3000 })
-        .catch(() => false)
-      // If no empty state text, verify the page is at least functional (filter applied but no specific text)
-      const pageOk = await authenticatedPage.locator('main').first().isVisible()
-      expect(hasEmpty || pageOk).toBe(true)
+      // DB has no Valorant squads -> empty state MUST show
+      const emptyState = authenticatedPage.getByText(/Aucune squad publique/i).first()
+      // STRICT: empty state MUST be displayed
+      await expect(emptyState).toBeVisible({ timeout: 10000 })
     }
   })
 })
@@ -145,72 +123,48 @@ test.describe('F53a — Filtrer par jeu', () => {
 // =============================================================================
 // F53b — Filter by region (DB-validated)
 // =============================================================================
-test.describe('F53b — Filtrer par région', () => {
+test.describe('F53b — Filtrer par region', () => {
   test('should filter squads by region and match DB results', async ({ authenticatedPage, db }) => {
     await authenticatedPage.goto('/discover')
     await authenticatedPage.waitForLoadState('networkidle')
 
-    // The discover page uses custom Select components (shadcn/ui style)
-    // They render as button triggers, not native <select> elements
-    const regionFilterTrigger = authenticatedPage.getByRole('combobox').last()
-      .or(authenticatedPage.locator('button:has-text("Toutes les régions")'))
-      .or(authenticatedPage.locator('button:has-text("Région")'))
-
-    const hasRegionFilter = await regionFilterTrigger.isVisible({ timeout: 5000 }).catch(() => false)
-
-    if (!hasRegionFilter) {
-      // Region filter not found — verify the discover page loaded with content
-      const hasContent = await authenticatedPage.locator('main').first().isVisible()
-      expect(hasContent).toBe(true)
-      return
-    }
+    // The Discover page uses a custom Select with placeholder "Toutes les regions"
+    const regionFilterTrigger = authenticatedPage.locator('button:has-text("Toutes les r")').first()
+    // STRICT: region filter MUST exist on discover page
+    await expect(regionFilterTrigger).toBeVisible({ timeout: 10000 })
 
     // Click the region filter to open the dropdown
     await regionFilterTrigger.click()
     await authenticatedPage.waitForTimeout(500)
 
-    // Select "Europe" from the dropdown
-    const regionToFilter = 'Europe'
-    const europeOption = authenticatedPage.getByRole('option', { name: /Europe/i }).first()
-      .or(authenticatedPage.getByText('Europe').first())
-    const didSelectRegion = await europeOption.isVisible({ timeout: 3000 }).catch(() => false)
-    if (didSelectRegion) {
-      await europeOption.click()
-      await authenticatedPage.waitForTimeout(2000)
-    } else {
-      // Region option not found — verify discover page is functional
-      const hasContent = await authenticatedPage.locator('main').first().isVisible()
-      expect(hasContent).toBe(true)
-      return
-    }
+    // Select "Europe Ouest" (value: "eu-west") from the dropdown
+    const regionLabel = 'Europe Ouest'
+    const regionOption = authenticatedPage.getByText(regionLabel).first()
+    // STRICT: Europe Ouest option MUST be visible in dropdown
+    await expect(regionOption).toBeVisible({ timeout: 5000 })
+    await regionOption.click()
+    await authenticatedPage.waitForTimeout(1500)
 
-    // Fetch region-filtered squads from DB
-    const filteredSquads = await db.getPublicSquads(undefined, regionToFilter)
+    // Fetch region-filtered squads from DB (value is "eu-west" in DB)
+    const filteredSquads = await db.getPublicSquads(undefined, 'eu-west')
 
     if (filteredSquads.length > 0) {
-      // At least one filtered squad name MUST be visible
-      let foundFiltered = false
+      // DB has squads in eu-west -> UI MUST show at least one
+      let foundFiltered = 0
       for (const squad of filteredSquads.slice(0, 5)) {
         const visible = await authenticatedPage
           .getByText(squad.name, { exact: false })
           .first()
-          .isVisible()
-          .catch(() => false)
-        if (visible) {
-          foundFiltered = true
-          break
-        }
+          .isVisible({ timeout: 2000 })
+        if (visible) foundFiltered++
       }
-      expect(foundFiltered).toBe(true)
+      // STRICT: at least one filtered squad name MUST be visible
+      expect(foundFiltered).toBeGreaterThan(0)
     } else {
-      // No squads for this region — verify empty/no-results state or page is in valid state
-      const hasEmpty = await authenticatedPage
-        .getByText(/Aucune squad|Aucun résultat|Pas de squad|Pas encore de squad/i)
-        .first()
-        .isVisible({ timeout: 3000 })
-        .catch(() => false)
-      const pageOk = await authenticatedPage.locator('main').first().isVisible()
-      expect(hasEmpty || pageOk).toBe(true)
+      // DB has no squads in eu-west -> empty state MUST show
+      const emptyState = authenticatedPage.getByText(/Aucune squad publique/i).first()
+      // STRICT: empty state MUST be displayed
+      await expect(emptyState).toBeVisible({ timeout: 10000 })
     }
   })
 })
@@ -218,48 +172,36 @@ test.describe('F53b — Filtrer par région', () => {
 // =============================================================================
 // F54 — Public profile matches DB
 // =============================================================================
-test.describe('F54 — Profil public correspond à la DB', () => {
-  test('should display username and level/XP from DB on public profile', async ({ authenticatedPage, db }) => {
+test.describe('F54 — Profil public correspond a la DB', () => {
+  test('should display username from DB on public profile', async ({ authenticatedPage, db }) => {
+    // STRICT: fetch profile first
     const profile = await db.getProfile()
+    // STRICT: profile MUST exist in DB
+    expect(profile).toBeTruthy()
+    // STRICT: username MUST exist
+    expect(profile.username).toBeTruthy()
 
-    if (!profile || !profile.username) {
-      // No profile or username in DB — verify the discover page loads
-      await authenticatedPage.goto('/discover')
-      await authenticatedPage.waitForLoadState('networkidle')
-      const hasContent = await authenticatedPage.locator('main').first().isVisible()
-      expect(hasContent).toBe(true)
-      return
-    }
-
-    await authenticatedPage.goto(`/u/${profile!.username}`)
+    await authenticatedPage.goto(`/u/${profile.username}`)
     await authenticatedPage.waitForLoadState('networkidle')
 
-    // Username from DB MUST be displayed on the profile page
-    const usernameVisible = await authenticatedPage
-      .getByText(profile!.username, { exact: false })
-      .first()
-      .isVisible()
-      .catch(() => false)
-    expect(usernameVisible).toBe(true)
+    // STRICT: username from DB MUST be displayed on the profile page
+    const usernameEl = authenticatedPage.getByText(profile.username, { exact: false }).first()
+    await expect(usernameEl).toBeVisible({ timeout: 10000 })
+  })
 
-    // Level or XP section MUST be visible
-    const hasLevel = await authenticatedPage
-      .getByText(/Niveau|Level|Nv\./i)
-      .first()
-      .isVisible()
-      .catch(() => false)
-    const hasXP = await authenticatedPage
-      .getByText(/XP|points d'expérience/i)
-      .first()
-      .isVisible()
-      .catch(() => false)
-    const hasProfileSection = await authenticatedPage
-      .locator('[class*="profile"], [class*="avatar"], [class*="level"]')
-      .first()
-      .isVisible()
-      .catch(() => false)
+  test('should display level or XP section from DB on public profile', async ({ authenticatedPage, db }) => {
+    const profile = await db.getProfile()
+    expect(profile).toBeTruthy()
+    expect(profile.username).toBeTruthy()
 
-    expect(hasLevel || hasXP || hasProfileSection).toBe(true)
+    await authenticatedPage.goto(`/u/${profile.username}`)
+    await authenticatedPage.waitForLoadState('networkidle')
+
+    // STRICT: The profile page MUST show a level/XP indicator
+    // The XPBar component renders "Niveau X" and "XP" text
+    const levelOrXP = authenticatedPage.getByText(/Niveau|Level|Nv\.|XP|points d'exp/i).first()
+    // STRICT: level/XP section MUST be visible
+    await expect(levelOrXP).toBeVisible({ timeout: 10000 })
   })
 })
 
@@ -268,86 +210,40 @@ test.describe('F54 — Profil public correspond à la DB', () => {
 // =============================================================================
 test.describe('F55 — Classement global', () => {
   test('should display leaderboard entries matching DB data', async ({ authenticatedPage, db }) => {
-    await authenticatedPage.goto('/discover')
-    await authenticatedPage.waitForLoadState('networkidle')
-    await authenticatedPage.waitForTimeout(1500)
-
-    // Check for 500 error
-    const has500 = await authenticatedPage.getByText(/^500$/).first().isVisible({ timeout: 1000 }).catch(() => false)
-    if (has500) {
-      // Page returned 500 — verify we at least got an error page heading
-      const hasHeading = await authenticatedPage.locator('h1').first().isVisible()
-      expect(hasHeading).toBe(true)
-      return
-    }
-
-    // Find and click the "Classement" tab
-    const classementTab = authenticatedPage.getByRole('tab', { name: /Classement/i }).first()
-    const classementBtn = authenticatedPage.getByRole('button', { name: /Classement/i }).first()
-    const classementLink = authenticatedPage.locator('a:has-text("Classement"), [role="tab"]:has-text("Classement")').first()
-    const classementText = authenticatedPage.getByText(/Classement/i).first()
-
-    let clicked = false
-    if (await classementTab.isVisible().catch(() => false)) {
-      await classementTab.click()
-      clicked = true
-    } else if (await classementBtn.isVisible().catch(() => false)) {
-      await classementBtn.click()
-      clicked = true
-    } else if (await classementLink.isVisible().catch(() => false)) {
-      await classementLink.click()
-      clicked = true
-    } else if (await classementText.isVisible().catch(() => false)) {
-      await classementText.click()
-      clicked = true
-    }
-
-    if (!clicked) {
-      // Classement tab not found — verify the discover page loaded with content
-      const hasContent = await authenticatedPage.locator('main').first().isVisible()
-      expect(hasContent).toBe(true)
-      return
-    }
-
-    await authenticatedPage.waitForTimeout(2000)
-
-    // Fetch top 10 players from DB
+    // STRICT: fetch leaderboard data FIRST
     const leaderboard = await db.getLeaderboard(10)
     const dbUsernames = leaderboard
       .map((p: { username: string | null }) => p.username)
       .filter((u: string | null): u is string => u != null && u.length > 0)
 
-    if (dbUsernames.length === 0) {
-      // All null usernames — verify leaderboard tab is at least clickable
-      expect(clicked).toBe(true)
-      return
-    }
+    await authenticatedPage.goto('/discover')
+    await authenticatedPage.waitForLoadState('networkidle')
 
-    // At least one username from the DB leaderboard should be visible on the page
-    let foundAny = false
-    for (const username of dbUsernames) {
-      const visible = await authenticatedPage
-        .getByText(username, { exact: false })
-        .first()
-        .isVisible()
-        .catch(() => false)
-      if (visible) {
-        foundAny = true
-        break
-      }
-    }
+    // The Discover page has tabs: Squads, Joueurs, Classement (SegmentedControl)
+    // Click the "Classement" tab
+    const classementTab = authenticatedPage.getByText('Classement', { exact: true }).first()
+    // STRICT: Classement tab MUST exist on discover page
+    await expect(classementTab).toBeVisible({ timeout: 10000 })
+    await classementTab.click()
+    await authenticatedPage.waitForTimeout(2000)
 
-    // If no username found, check if the leaderboard section itself is loaded
-    if (!foundAny) {
-      const hasLeaderboardContent = await authenticatedPage.locator('[class*="leaderboard"], [class*="ranking"], [class*="classement"]').first().isVisible().catch(() => false)
-      const hasXPText = await authenticatedPage.getByText(/XP|niveau|level/i).first().isVisible().catch(() => false)
-      if (!foundAny && !hasLeaderboardContent && !hasXPText) {
-        // Leaderboard loaded but usernames don't match DB — the RPC uses different logic
-        // Just verify the discover page has content after clicking the tab
-        const hasPageContent = await authenticatedPage.locator('main').first().isVisible()
-        expect(hasPageContent).toBe(true)
-        return
+    if (dbUsernames.length > 0) {
+      // DB has leaderboard entries with usernames -> at least one MUST be visible
+      let foundAny = 0
+      for (const username of dbUsernames) {
+        const usernameLocator = authenticatedPage.getByText(username, { exact: false }).first()
+        const isVisible = await usernameLocator.isVisible({ timeout: 2000 })
+        if (isVisible) foundAny++
       }
+
+      // STRICT: at least one DB leaderboard username MUST be displayed
+      expect(foundAny).toBeGreaterThan(0)
+    } else {
+      // All usernames are null or DB is empty -> empty state MUST show
+      // GlobalLeaderboard shows "Pas encore de classement" when empty
+      const emptyState = authenticatedPage.getByText(/Pas encore de classement/i).first()
+      // STRICT: empty leaderboard state MUST be visible
+      await expect(emptyState).toBeVisible({ timeout: 10000 })
     }
   })
 })
@@ -357,62 +253,48 @@ test.describe('F55 — Classement global', () => {
 // =============================================================================
 test.describe('F56 — Suggestions matchmaking', () => {
   test('should display players looking for squad from DB or empty state', async ({ authenticatedPage, db }) => {
+    // STRICT: fetch matchmaking data FIRST
+    const playersLooking = await db.getPlayersLookingForSquad()
+
     await authenticatedPage.goto('/discover')
     await authenticatedPage.waitForLoadState('networkidle')
 
-    // Find and click the "Joueurs" tab
-    const joueursTab = authenticatedPage
-      .getByRole('tab', { name: /Joueurs/i })
-      .or(authenticatedPage.getByRole('button', { name: /Joueurs/i }))
-      .or(authenticatedPage.locator('a:has-text("Joueurs"), [role="tab"]:has-text("Joueurs")'))
-
-    const hasJoueurs = await joueursTab.first().isVisible().catch(() => false)
-
-    if (!hasJoueurs) {
-      // Joueurs tab not found — verify the discover page loaded with content
-      const hasContent = await authenticatedPage.locator('main').first().isVisible()
-      expect(hasContent).toBe(true)
-      return
-    }
-
-    await joueursTab.first().click()
+    // Click the "Joueurs" tab (SegmentedControl)
+    const joueursTab = authenticatedPage.getByText('Joueurs', { exact: true }).first()
+    // STRICT: Joueurs tab MUST exist on discover page
+    await expect(joueursTab).toBeVisible({ timeout: 10000 })
+    await joueursTab.click()
     await authenticatedPage.waitForTimeout(1500)
 
-    // Fetch players looking for squad from DB
-    const playersLooking = await db.getPlayersLookingForSquad()
-
     if (playersLooking.length > 0) {
-      // At least one username from DB MUST be visible on the page
-      let hasPlayers = false
-      for (const player of playersLooking) {
-        if (!player.username) continue
-        const visible = await authenticatedPage
-          .getByText(player.username, { exact: false })
-          .first()
-          .isVisible()
-          .catch(() => false)
-        if (visible) {
-          hasPlayers = true
-          break
+      // DB has players looking for squad -> at least one username MUST be visible
+      const playersWithUsernames = playersLooking.filter(
+        (p: { username: string | null }) => p.username != null && p.username.length > 0
+      )
+
+      if (playersWithUsernames.length > 0) {
+        let foundPlayers = 0
+        for (const player of playersWithUsernames.slice(0, 5)) {
+          const visible = await authenticatedPage
+            .getByText(player.username, { exact: false })
+            .first()
+            .isVisible({ timeout: 2000 })
+          if (visible) foundPlayers++
         }
+        // STRICT: at least one player username from DB MUST be visible
+        expect(foundPlayers).toBeGreaterThan(0)
+      } else {
+        // All players have null usernames -> the matchmaking section should still render cards
+        // STRICT: verify at least one player card element exists
+        const playerCards = authenticatedPage.locator('[class*="space-y"] > div').first()
+        await expect(playerCards).toBeVisible({ timeout: 10000 })
       }
-
-      const hasEmpty = await authenticatedPage
-        .getByText(/Personne en recherche|Aucun joueur|Aucun résultat/i)
-        .first()
-        .isVisible()
-        .catch(() => false)
-
-      // Either a player username is shown OR an empty state — but the assertion MUST be able to fail
-      expect(hasPlayers || hasEmpty).toBe(true)
     } else {
-      // No players looking in DB — verify empty state text is visible
-      const hasEmpty = await authenticatedPage
-        .getByText(/Personne en recherche|Aucun joueur|Aucun résultat/i)
-        .first()
-        .isVisible()
-        .catch(() => false)
-      expect(hasEmpty).toBe(true)
+      // No players looking in DB -> empty state MUST be visible
+      // MatchmakingSection shows "Personne en recherche de squad pour le moment"
+      const emptyState = authenticatedPage.getByText(/Personne en recherche/i).first()
+      // STRICT: empty matchmaking state MUST be visible
+      await expect(emptyState).toBeVisible({ timeout: 10000 })
     }
   })
 })

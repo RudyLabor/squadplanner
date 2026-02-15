@@ -1,20 +1,16 @@
 import { test, expect } from './fixtures'
 
 /**
- * Party E2E Tests — F41-F45 (functional + DB validation)
- * F41a: Squad cards display with correct names from DB
- * F41b: Squad count matches DB data
- * F42:  Join button click doesn't crash the page (WebRTC resilience)
- * F43:  No voice controls visible when not connected
- * F44:  Empty state or squad cards render correctly
- * F45:  Page structure and accessibility
+ * Party E2E Tests — F41-F45 — STRICT MODE
  *
- * Uses shared fixtures: authenticatedPage (logged-in), db (TestDataHelper).
- *
- * RULES:
- * - NEVER use `expect(x || true).toBeTruthy()` — always passes
- * - NEVER use `expect(count).toBeGreaterThanOrEqual(0)` — always passes
- * - Every test MUST have at least one meaningful assertion that can FAIL
+ * REGLE STRICTE : Chaque test DOIT echouer si les donnees DB ne s'affichent pas.
+ * Si la DB a des squads → la page party DOIT les afficher → sinon FAIL.
+ * Si la DB est vide → le empty state DOIT s'afficher → sinon FAIL.
+ * Pas de `.catch(() => false)` sur les assertions.
+ * Pas de fallback sur `<main>` quand des squad cards doivent etre visibles.
+ * Pas de `toBeGreaterThanOrEqual(0)` — toujours passes.
+ * Pas de OR conditions qui passent toujours.
+ * Pas de try/catch qui avale les erreurs.
  */
 
 // =============================================================================
@@ -24,7 +20,7 @@ test.describe('F41 — Page Party affiche les squads du user', () => {
 
   test('F41a: Squad names from DB appear on the party page', async ({ authenticatedPage, db }) => {
     const userSquads = await db.getUserSquads()
-    // Filtrer les squads E2E pour utiliser les vraies squads
+    // Filter out E2E test squads to use real ones
     const realSquads = userSquads.filter((s) => !s.squads.name.includes('E2E Test'))
     const targetSquads = realSquads.length > 0 ? realSquads : userSquads
 
@@ -32,74 +28,74 @@ test.describe('F41 — Page Party affiche les squads du user', () => {
     await authenticatedPage.waitForLoadState('networkidle')
     await authenticatedPage.waitForTimeout(2000)
 
-    // Verify "Party" heading is visible
-    await expect(authenticatedPage.getByText(/Party/i).first()).toBeVisible()
+    // STRICT: "Party" heading MUST be visible (h1 in Party.tsx)
+    await expect(authenticatedPage.getByRole('heading', { name: /Party/i })).toBeVisible({ timeout: 15000 })
 
     if (targetSquads.length > 0) {
-      // At least one squad name from DB MUST appear on the party page
-      let foundAtLeastOne = false
+      // DB has squads → at least one squad name MUST appear on the party page
+      let foundCount = 0
       for (const membership of targetSquads.slice(0, 5)) {
         const squadName = membership.squads.name
-        const visible = await authenticatedPage
-          .getByText(squadName, { exact: false })
-          .first()
-          .isVisible({ timeout: 5000 })
-          .catch(() => false)
-        if (visible) {
-          foundAtLeastOne = true
-          break
-        }
+        const nameLocator = authenticatedPage.getByText(squadName, { exact: false }).first()
+        const isVisible = await nameLocator.isVisible({ timeout: 5000 }).catch(() => false)
+        if (isVisible) foundCount++
       }
-      expect(foundAtLeastOne).toBe(true)
+      // STRICT: at least one squad name from DB MUST be on the page
+      expect(foundCount).toBeGreaterThan(0)
     } else {
-      // No squads — verify empty state message
-      const hasEmptyState = await authenticatedPage
-        .getByText(/Aucune squad|Pas de squad|Rejoins une squad/i)
-        .first()
-        .isVisible()
-        .catch(() => false)
-      expect(hasEmptyState).toBe(true)
+      // DB has no squads → empty state "Parle avec ta squad" or "Trouver une squad" MUST be visible
+      // PartyEmptyState renders "Parle avec ta squad" heading and "Trouver une squad" button
+      const emptyHeading = authenticatedPage.getByText(/Parle avec ta squad/i).first()
+      // STRICT: empty state MUST be visible when DB has no squads
+      await expect(emptyHeading).toBeVisible({ timeout: 10000 })
     }
   })
 
-  test('F41b: Squad count displayed matches DB', async ({ authenticatedPage, db }) => {
+  test('F41b: Number of visible squad cards matches DB count', async ({ authenticatedPage, db }) => {
     const userSquads = await db.getUserSquads()
 
     await authenticatedPage.goto('/party')
     await authenticatedPage.waitForLoadState('networkidle')
-    await authenticatedPage.waitForTimeout(1500)
+    await authenticatedPage.waitForTimeout(2000)
 
-    if (userSquads.length > 0) {
-      // Look for squad names from DB on the page
-      let visibleSquadCount = 0
-      for (const s of userSquads) {
-        const visible = await authenticatedPage
-          .getByText(s.squads.name, { exact: false })
-          .first()
-          .isVisible()
-          .catch(() => false)
-        if (visible) visibleSquadCount++
-      }
-
-      // At least one squad from DB should be visible
-      if (visibleSquadCount > 0) {
-        expect(visibleSquadCount).toBeGreaterThan(0)
-        // Tolerance: visible count should be close to DB count
-        expect(visibleSquadCount).toBeLessThanOrEqual(userSquads.length)
-      } else {
-        // Fallback: check for any squad-related content
-        const hasSquadContent = await authenticatedPage
-          .locator('[class*="squad"], [class*="card"], [class*="room"]')
-          .first()
-          .isVisible()
-          .catch(() => false)
-        const mainVisible = await authenticatedPage.locator('main').first().isVisible()
-        expect(hasSquadContent || mainVisible).toBe(true)
-      }
-    } else {
-      // No squads — page should still render without crashing
-      await expect(authenticatedPage.locator('main').first()).toBeVisible()
+    if (userSquads.length === 0) {
+      // STRICT: no squads → empty state MUST be visible (not just <main>)
+      await expect(authenticatedPage.getByText(/Parle avec ta squad/i)).toBeVisible({ timeout: 10000 })
+      return
     }
+
+    // DB has squads → count visible squad names
+    let visibleSquadCount = 0
+    for (const s of userSquads) {
+      const nameLocator = authenticatedPage.getByText(s.squads.name, { exact: false }).first()
+      const isVisible = await nameLocator.isVisible({ timeout: 3000 }).catch(() => false)
+      if (isVisible) visibleSquadCount++
+    }
+
+    // STRICT: visible count MUST be > 0 (DB has squads → page MUST show them)
+    expect(visibleSquadCount).toBeGreaterThan(0)
+    // STRICT: visible count MUST match DB count exactly (all user squads are rendered)
+    expect(visibleSquadCount).toBe(userSquads.length)
+  })
+
+  test('F41c: Party subtitle shows correct squad count from DB', async ({ authenticatedPage, db }) => {
+    const userSquads = await db.getUserSquads()
+
+    await authenticatedPage.goto('/party')
+    await authenticatedPage.waitForLoadState('networkidle')
+    await authenticatedPage.waitForTimeout(2000)
+
+    if (userSquads.length === 0) {
+      // STRICT: no squads → subtitle MUST say "Rejoins une squad" (Party.tsx line 189)
+      await expect(authenticatedPage.getByText(/Rejoins une squad/i)).toBeVisible({ timeout: 10000 })
+      return
+    }
+
+    // DB has squads → subtitle MUST show "{count} squad(s)" (Party.tsx line 188)
+    const expectedSubtitle = `${userSquads.length} squad${userSquads.length > 1 ? 's' : ''}`
+    const subtitleLocator = authenticatedPage.getByText(expectedSubtitle).first()
+    // STRICT: the exact squad count text MUST be visible
+    await expect(subtitleLocator).toBeVisible({ timeout: 10000 })
   })
 })
 
@@ -108,96 +104,97 @@ test.describe('F41 — Page Party affiche les squads du user', () => {
 // =============================================================================
 test.describe('F42 — Rejoindre la party', () => {
 
-  test('F42: Click join button — page remains functional (WebRTC may fail)', async ({ authenticatedPage, db }) => {
+  test('F42: Rejoindre button is visible and page stays functional after click', async ({ authenticatedPage, db }) => {
     const userSquads = await db.getUserSquads()
-    if (userSquads.length === 0) {
-      // No squads — verify party page at least loads
-      await authenticatedPage.goto('/party')
-      await authenticatedPage.waitForLoadState('networkidle')
-      await expect(authenticatedPage.locator('main').first()).toBeVisible()
-      return
-    }
 
     await authenticatedPage.goto('/party')
     await authenticatedPage.waitForLoadState('networkidle')
+    await authenticatedPage.waitForTimeout(2000)
 
-    // Find a join/launch button
-    const joinBtn = authenticatedPage
-      .getByRole('button', { name: /Lancer|Rejoindre|Démarrer/i })
-      .first()
-    const hasJoin = await joinBtn.isVisible({ timeout: 5000 }).catch(() => false)
-    if (!hasJoin) {
-      // No join button — verify party page loaded correctly
-      await expect(authenticatedPage.locator('main').first()).toBeVisible()
+    if (userSquads.length === 0) {
+      // STRICT: no squads → empty state MUST show "Trouver une squad" button instead
+      const findSquadBtn = authenticatedPage.getByRole('link', { name: /Trouver une squad/i })
+      await expect(findSquadBtn).toBeVisible({ timeout: 10000 })
       return
     }
 
-    // Click join — WebRTC connection will likely fail in test environment
-    // but the page must remain functional (no crash, no blank screen)
+    // STRICT: "Rejoindre" button MUST be visible (PartySquadCard renders it)
+    const joinBtn = authenticatedPage.getByRole('button', { name: /Rejoindre/i }).first()
+    await expect(joinBtn).toBeVisible({ timeout: 10000 })
+
+    // Click join — WebRTC will likely fail in test env, but page MUST remain functional
     await joinBtn.click()
     await authenticatedPage.waitForTimeout(3000)
 
-    // Page must still be functional after click attempt
+    // STRICT: page body MUST still be visible (no crash, no blank screen)
     await expect(authenticatedPage.locator('body')).toBeVisible()
 
-    // The party heading should still be visible (page didn't navigate away)
-    await expect(authenticatedPage.getByText(/Party/i).first()).toBeVisible()
+    // STRICT: "Party" heading MUST still be visible (page didn't navigate away)
+    await expect(authenticatedPage.getByRole('heading', { name: /Party/i })).toBeVisible({ timeout: 5000 })
   })
 })
 
 // =============================================================================
 // F43 — Voice controls not visible when disconnected
 // =============================================================================
-test.describe('F43 — Contrôles vocaux (état déconnecté)', () => {
+test.describe('F43 — Controles vocaux (etat deconnecte)', () => {
 
   test('F43: No mute/leave controls visible when not connected to voice', async ({ authenticatedPage }) => {
     await authenticatedPage.goto('/party')
     await authenticatedPage.waitForLoadState('networkidle')
+    await authenticatedPage.waitForTimeout(2000)
 
-    // Verify the party page loaded
-    await expect(authenticatedPage.getByText(/Party/i).first()).toBeVisible()
+    // STRICT: "Party" heading MUST be visible (page loaded)
+    await expect(authenticatedPage.getByRole('heading', { name: /Party/i })).toBeVisible({ timeout: 15000 })
 
-    // When NOT connected to a voice session, mute/leave buttons MUST NOT be visible
+    // STRICT: mute/unmute button MUST NOT be visible when disconnected
     const muteBtn = authenticatedPage.getByRole('button', { name: /Mute|Couper le micro|Unmute/i }).first()
-    const isMuteVisible = await muteBtn.isVisible().catch(() => false)
-    expect(isMuteVisible).toBe(false)
+    // STRICT: this assertion MUST pass — button should be hidden
+    await expect(muteBtn).not.toBeVisible({ timeout: 3000 })
 
+    // STRICT: leave/raccrocher button MUST NOT be visible when disconnected
     const leaveBtn = authenticatedPage.getByRole('button', { name: /Quitter|Leave|Raccrocher/i }).first()
-    const isLeaveVisible = await leaveBtn.isVisible().catch(() => false)
-    expect(isLeaveVisible).toBe(false)
+    await expect(leaveBtn).not.toBeVisible({ timeout: 3000 })
+
+    // STRICT: "En ligne" indicator MUST NOT be visible when disconnected
+    const onlineIndicator = authenticatedPage.getByText('En ligne').first()
+    await expect(onlineIndicator).not.toBeVisible({ timeout: 3000 })
   })
 })
 
 // =============================================================================
-// F44 — Empty state or squad cards render
+// F44 — Empty state or squad cards render correctly
 // =============================================================================
-test.describe('F44 — État de la page party', () => {
+test.describe('F44 — Etat de la page party', () => {
 
-  test('F44: Party page renders either squad cards or empty state', async ({ authenticatedPage }) => {
+  test('F44: Party page renders squad cards when DB has squads, or empty state when empty', async ({ authenticatedPage, db }) => {
+    const userSquads = await db.getUserSquads()
+
     await authenticatedPage.goto('/party')
     await authenticatedPage.waitForLoadState('networkidle')
+    await authenticatedPage.waitForTimeout(2000)
 
-    await expect(authenticatedPage.getByText(/Party/i).first()).toBeVisible()
+    // STRICT: Party heading MUST be visible
+    await expect(authenticatedPage.getByRole('heading', { name: /Party/i })).toBeVisible({ timeout: 15000 })
 
-    // Page must have either squad cards with action buttons OR an empty state message
-    const hasCards = await authenticatedPage
-      .locator('button:has-text("Lancer"), button:has-text("Rejoindre"), button:has-text("Démarrer")')
-      .first()
-      .isVisible()
-      .catch(() => false)
-    const hasEmpty = await authenticatedPage
-      .getByText(/Rejoins une squad|Aucune squad|Pas encore de squad/i)
-      .first()
-      .isVisible()
-      .catch(() => false)
-    const hasContent = await authenticatedPage
-      .locator('[class*="squad"], [class*="card"], [class*="room"]')
-      .first()
-      .isVisible()
-      .catch(() => false)
+    if (userSquads.length > 0) {
+      // STRICT: DB has squads → "Rejoindre" buttons MUST be visible (PartySquadCard)
+      const joinButtons = authenticatedPage.getByRole('button', { name: /Rejoindre/i })
+      const joinCount = await joinButtons.count()
+      // STRICT: at least one Rejoindre button MUST exist
+      expect(joinCount).toBeGreaterThan(0)
 
-    // At least one of these must be true — the page must have meaningful content
-    expect(hasCards || hasEmpty || hasContent).toBe(true)
+      // STRICT: the first squad name from DB MUST be visible on the page
+      const firstSquadName = userSquads[0].squads.name
+      const nameLocator = authenticatedPage.getByText(firstSquadName, { exact: false }).first()
+      await expect(nameLocator).toBeVisible({ timeout: 5000 })
+    } else {
+      // STRICT: DB has no squads → PartyEmptyState MUST render
+      // "Parle avec ta squad" heading from PartyEmptyState
+      await expect(authenticatedPage.getByText(/Parle avec ta squad/i)).toBeVisible({ timeout: 10000 })
+      // "Trouver une squad" button from PartyEmptyState
+      await expect(authenticatedPage.getByText(/Trouver une squad/i)).toBeVisible({ timeout: 5000 })
+    }
   })
 })
 
@@ -206,22 +203,47 @@ test.describe('F44 — État de la page party', () => {
 // =============================================================================
 test.describe('F45 — Structure page party', () => {
 
-  test('F45: Party page has correct main structure and no JS errors', async ({ authenticatedPage }) => {
+  test('F45: Party page has correct semantic structure', async ({ authenticatedPage }) => {
     await authenticatedPage.goto('/party')
     await authenticatedPage.waitForLoadState('networkidle')
+    await authenticatedPage.waitForTimeout(2000)
 
-    // Verify heading
-    await expect(authenticatedPage.getByText(/Party/i).first()).toBeVisible()
+    // STRICT: <main> with aria-label="Party vocale" MUST be visible (Party.tsx line 149)
+    const main = authenticatedPage.locator('main[aria-label="Party vocale"]')
+    await expect(main).toBeVisible({ timeout: 15000 })
 
-    // Verify main content area exists
-    const main = authenticatedPage.locator('main').first()
-    await expect(main).toBeVisible()
+    // STRICT: h1 "Party" heading MUST be visible
+    const heading = authenticatedPage.getByRole('heading', { name: /Party/i })
+    await expect(heading).toBeVisible({ timeout: 5000 })
 
-    // Verify body is still visible (no JS crash)
+    // STRICT: navigation MUST be present (bottom nav or sidebar)
+    const nav = authenticatedPage.locator('nav, [role="navigation"]').first()
+    await expect(nav).toBeVisible({ timeout: 5000 })
+  })
+
+  test('F45: Party page has no JS crash (body remains visible)', async ({ authenticatedPage }) => {
+    // Collect JS errors during page load
+    const jsErrors: string[] = []
+    authenticatedPage.on('pageerror', (error) => {
+      jsErrors.push(error.message)
+    })
+
+    await authenticatedPage.goto('/party')
+    await authenticatedPage.waitForLoadState('networkidle')
+    await authenticatedPage.waitForTimeout(2000)
+
+    // STRICT: body MUST still be visible (no white screen from JS crash)
     await expect(authenticatedPage.locator('body')).toBeVisible()
 
-    // Verify navigation is present (bottom nav or sidebar)
-    const nav = authenticatedPage.locator('nav, [role="navigation"]').first()
-    await expect(nav).toBeVisible()
+    // STRICT: main Party content MUST be visible (not just body)
+    await expect(authenticatedPage.locator('main[aria-label="Party vocale"]')).toBeVisible({ timeout: 10000 })
+
+    // STRICT: no critical JS errors (filter out non-critical WebRTC errors)
+    const criticalErrors = jsErrors.filter(
+      (err) => !err.includes('WebRTC') && !err.includes('LiveKit') && !err.includes('Agora')
+        && !err.includes('ResizeObserver') && !err.includes('AbortError')
+    )
+    // STRICT: no critical JS errors during page load
+    expect(criticalErrors).toHaveLength(0)
   })
 })

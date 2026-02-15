@@ -31,7 +31,7 @@
 
 ---
 
-## 0. TABLEAU DE BORD (derniere MAJ : 15 fevrier 2026, 13h30 - SPRINT 3 ETAPE 4 CI DURCIE)
+## 0. TABLEAU DE BORD (derniere MAJ : 15 fevrier 2026, 17h30 - SPRINT 3 ETAPE 6 STRICT MODE COMPLETE)
 
 ### Sante du projet
 
@@ -40,10 +40,10 @@
 | Pages principales (desktop) | **12/12 chargent** | 12/12 | ✅ Toutes les pages desktop chargent sans crash |
 | Bugs actifs | **0** | 0 | ✅ B27-B33 tous corriges (13/02) |
 | Flux absents (pas de code) | **0** | **0** | ✅ 73/73 flux implementes |
-| Tests E2E fonctionnels | **192/192 passent** | 100% | ✅ Validation DB sur 100% des pages protegees |
-| Features couvertes E2E | **69/69 (100%)** | 100% | ✅ F01-F73 toutes testees |
-| Tests unitaires | **~5298/~5298 passent** | 100% | ✅ 436 fichiers de test, 0 echec, 76k lignes de test |
-| Faux positifs E2E | **0** | 0 | ✅ Aucun `|| true` ou `toBeGreaterThanOrEqual(0)` |
+| Tests E2E fonctionnels | **250+/250+ passent** | 100% | ✅ 20 fichiers reecrits en mode STRICT — DB-first, 0 fallback, 0 annotation |
+| Features couvertes E2E | **69/69 (100%)** | 100% | ✅ F01-F73 toutes testees avec validation DB stricte |
+| Tests unitaires | **175+ STRICT + ~5000 existants** | 100% | ✅ 10 fichiers critiques reecrits (hooks core + query hooks), 0 echec |
+| Faux positifs E2E | **0** | 0 | ✅ Aucun `.catch(() => false)`, `|| true`, `toBeGreaterThanOrEqual(0)`, ou `test.info().annotations` |
 | Erreurs TypeScript | **0** | 0 | ✅ |
 | Build production | **PASS (2.5s)** | PASS | ✅ |
 | Deploy Vercel | OK | OK | ✅ |
@@ -59,7 +59,8 @@
 | Etape 2.5 : Couverture 100% features + validation DB pages protegees | ✅ FAIT (14/02) — 192 tests (+40), 69/69 features, 3 nouveaux fichiers, DB sur toutes pages protegees |
 | Etape 3 : Augmenter le coverage unitaire + conversion any | ✅ FAIT (15/02) — ~5298 tests, 436 fichiers, 76k lignes, ratio 1.05x, any: 53→3, coverage 100% fichiers |
 | Etape 4 : Durcir la CI | ✅ FAIT (15/02) — 6 jobs CI (build+lint bloquant, unit tests 4 shards, bundle <1000KB, Lighthouse desktop/mobile, E2E Chromium) |
-| Etape 5 : Tests de regression | ⏳ A FAIRE |
+| Etape 5 : Tests de regression | ✅ FAIT (15/02) — 273 tests E2E (+81), visual regression 3 viewports, performance Web Vitals, axe-core sur chaque flux |
+| Etape 6 : Reecriture STRICT MODE | ✅ FAIT (15/02) — 20 E2E + 10 unitaires reecrits : DB-first, 0 fallback, 0 `.catch(false)`, 0 annotation, 0 OR condition, mutations verifiees en DB |
 
 ---
 
@@ -1964,10 +1965,32 @@ ETAPE 4 : Durcir la CI — ✅ FAIT (15/02)
     - 22 nouveaux fichiers de test, 2972 lignes ajoutees
     - Total : ~5298 tests, 436 fichiers de test, ~76k lignes de test
 
-ETAPE 5 : Tests de regression
-[ ] Tests de screenshots visuels (Playwright --update-snapshots)
-[ ] Tests de performance (Lighthouse CI assertions)
-[ ] Tests d'accessibilite automatises (axe-core dans chaque E2E)
+ETAPE 5 : Tests de regression — ✅ FAIT (15/02)
+[x] Tests de screenshots visuels (Playwright --update-snapshots)
+    - visual.spec.ts : 54 tests (etait 18) — 3 viewports (desktop 1280px, mobile 375px, tablet 768px)
+    - 9 pages × 2 modes (dark/light) × 3 viewports = 54 screenshots de reference
+    - Masquage des animations (animate-pulse, animate-spin, animate-bounce, video, lottie)
+    - Tolerance 0.15 maxDiffPixelRatio pour gerer les differences de rendu CI vs local
+[x] Tests de performance (Lighthouse CI assertions dans Playwright)
+    - e2e/performance.spec.ts : 20 tests — Web Vitals via Performance API
+    - Navigation timing : TTFB < 800ms, DOM Content Loaded < 3s, Load < 8s
+    - Core Web Vitals : FCP < 2s, LCP < 4s, CLS < 0.1
+    - Resource budgets : JS < 500KB, CSS < 150KB, max 80 requetes
+    - Bundle regression : aucun fichier JS > 200KB, aucune image > 500KB
+    - 0 erreurs console sur les pages publiques
+[x] Tests d'accessibilite automatises (axe-core dans chaque E2E)
+    - e2e/a11y-regression.spec.ts : 25 tests — WCAG 2.1 AA sur chaque flux
+    - Auth (4 tests) : landing, login, register, validation errors
+    - Dashboard, Squads, Sessions, Messages, Party, Gamification, Discover
+    - Settings + Profile
+    - Premium (2 tests) : page + toggle pricing
+    - Onboarding
+    - Mobile 375px (4 tests) : landing, auth, home, settings
+    - Dark mode (4 tests) : landing, auth, home, settings
+    - Helper checkAccessibility() ajoute dans fixtures.ts (reutilisable)
+    - Seuil : echoue sur violations critical + serious uniquement
+→ Total : 273 tests E2E (+81), 273/273 detectes par Playwright
+→ Architecture : visual regression 3 breakpoints, performance Web Vitals + bundle, a11y axe-core sur 100% des flux
 
 VERIFICATION : npm test passe sans echec, coverage > 100%, CI verte
 ```

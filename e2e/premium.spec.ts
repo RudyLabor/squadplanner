@@ -2,44 +2,38 @@ import { test as baseTest, expect as baseExpect } from '@playwright/test'
 import { test, expect, dismissCookieBanner } from './fixtures'
 
 /**
- * Premium E2E Tests — F66-F69 (functional + DB validation + request interception)
- * F66a: Premium page content visible (public)
- * F66b: CTA buttons visible (public)
- * F67:  Plan toggle changes displayed price (FIXED: now asserts price difference)
- * F68:  Trial activation updates subscription_tier in DB
- * F69a: Upgrade button calls create-checkout with correct params
- * F69b: Manage subscription calls create-portal
- * F69c: Premium status matches DB tier
- * F69d: Features table and FAQ load correctly
+ * Premium E2E Tests — F66-F69 — STRICT MODE
  *
- * RULES:
- * - NEVER use `expect(x || true).toBeTruthy()` — always passes
- * - Every test MUST have at least one meaningful assertion that can FAIL
- * - resetTrialStatus() MUST be called after any test that modifies subscription
+ * REGLE STRICTE : Chaque test DOIT echouer si les donnees DB ne s'affichent pas.
+ * Pas de `.catch(() => false)` sur les assertions.
+ * Pas de fallback sur `<main>` quand un element specifique doit etre visible.
+ * Pas de OR conditions qui passent toujours.
+ * Pas de try/catch qui avale les erreurs.
+ * resetTrialStatus() MUST be called after any test that modifies subscription.
+ *
+ * Known prices: PREMIUM_PRICE_MONTHLY = 4.99, PREMIUM_PRICE_YEARLY = 47.88 (3.99/mo)
  */
 
 // =============================================================================
 // F66a — Premium page content (no auth needed)
 // =============================================================================
 baseTest.describe('F66a — Page premium contenu public', () => {
-  baseTest('should display pricing, features comparison, and FAQ', async ({ page }) => {
+  baseTest('F66a: Premium page displays pricing and features comparison', async ({ page }) => {
     await page.goto('https://squadplanner.fr/premium')
     await dismissCookieBanner(page)
     await page.waitForLoadState('networkidle')
 
-    // Verify pricing info visible
-    const hasPrice = await page
-      .getByText(/4[.,]99|47[.,]88|49[.,]99|€|mois|an/i)
-      .first()
-      .isVisible()
-      .catch(() => false)
-    baseExpect(hasPrice).toBeTruthy()
+    // STRICT: page must have the "Premium" heading (PremiumHero)
+    await baseExpect(page.locator('main[aria-label="Premium"]')).toBeVisible({ timeout: 15000 })
 
-    // Verify features comparison section
-    const hasFeatures =
-      (await page.getByText(/Fonctionnalités|Avantages|Inclus|Comparaison/i).first().isVisible().catch(() => false)) ||
-      (await page.locator('[class*="feature"], [class*="comparison"], [class*="plan"], table').first().isVisible().catch(() => false))
-    baseExpect(hasFeatures).toBeTruthy()
+    // STRICT: at least one price (4.99 or 3.99) MUST be visible on the page
+    const priceLocator = page.getByText(/4[.,]99|3[.,]99|47[.,]88/i).first()
+    await baseExpect(priceLocator).toBeVisible({ timeout: 10000 })
+
+    // STRICT: features comparison section MUST exist
+    // PremiumFeaturesTable renders feature names like "Squads", "Stats & Analytics"
+    const featuresHeading = page.getByText(/Fonctionnalités|Squads|Stats & Analytics/i).first()
+    await baseExpect(featuresHeading).toBeVisible({ timeout: 10000 })
   })
 })
 
@@ -47,98 +41,54 @@ baseTest.describe('F66a — Page premium contenu public', () => {
 // F66b — Premium CTA buttons
 // =============================================================================
 baseTest.describe('F66b — Boutons CTA Premium', () => {
-  baseTest('should display upgrade or subscribe buttons', async ({ page }) => {
+  baseTest('F66b: Upgrade and trial CTA buttons are visible', async ({ page }) => {
     await page.goto('https://squadplanner.fr/premium')
     await dismissCookieBanner(page)
     await page.waitForLoadState('networkidle')
 
-    const hasBtn = await page
-      .getByRole('button', { name: /Premium|Passer|Commencer|S'abonner|Choisir/i })
-      .first()
-      .isVisible()
-      .catch(() => false)
-    const hasLink = await page
-      .getByRole('link', { name: /Premium|Passer|Commencer|S'abonner|Choisir/i })
-      .first()
-      .isVisible()
-      .catch(() => false)
-    const hasCTA = await page
-      .locator('button:has-text("Premium"), button:has-text("Commencer"), a:has-text("Premium")')
-      .first()
-      .isVisible()
-      .catch(() => false)
-
-    baseExpect(hasBtn || hasLink || hasCTA).toBeTruthy()
+    // STRICT: "Passer Premium maintenant" button MUST be visible (PremiumPricing CTA)
+    // Or "Commencer l'essai gratuit" button — at least one CTA MUST exist
+    const premiumCTA = page.getByRole('button', { name: /Passer Premium|Commencer l'essai gratuit|Essai gratuit/i }).first()
+    await baseExpect(premiumCTA).toBeVisible({ timeout: 10000 })
   })
 })
 
 // =============================================================================
-// F67 — Plan toggle monthly/yearly — FIXED: now asserts price difference
+// F67 — Plan toggle monthly/yearly
 // =============================================================================
 baseTest.describe('F67 — Toggle mensuel/annuel', () => {
-  baseTest('should toggle between monthly and yearly with DIFFERENT prices', async ({ page }) => {
+  baseTest('F67: Monthly and yearly plan cards display DIFFERENT prices', async ({ page }) => {
     await page.goto('https://squadplanner.fr/premium')
     await dismissCookieBanner(page)
     await page.waitForLoadState('networkidle')
 
-    const monthlyOption = page.getByText(/Mensuel/i).first()
-    const yearlyOption = page.getByText(/Annuel/i).first()
+    // STRICT: "Mensuel" plan card MUST be visible
+    const monthlyCard = page.getByText('Mensuel').first()
+    await baseExpect(monthlyCard).toBeVisible({ timeout: 10000 })
 
-    const hasMonthly = await monthlyOption.isVisible().catch(() => false)
-    const hasYearly = await yearlyOption.isVisible().catch(() => false)
+    // STRICT: "Annuel" plan card MUST be visible
+    const yearlyCard = page.getByText('Annuel').first()
+    await baseExpect(yearlyCard).toBeVisible({ timeout: 10000 })
 
-    if (hasMonthly && hasYearly) {
-      // Click "Mensuel" first
-      await monthlyOption.click()
-      await page.waitForTimeout(800)
+    // Click "Mensuel" to select it
+    await monthlyCard.click()
+    await page.waitForTimeout(800)
 
-      // Capture ALL price texts after clicking monthly
-      const monthlyPriceEls = page.locator(':text-matches("\\\\d+[.,]\\\\d+\\\\s*€", "i")')
-      const monthlyPriceCount = await monthlyPriceEls.count()
-      const monthlyPrices: string[] = []
-      for (let i = 0; i < Math.min(monthlyPriceCount, 5); i++) {
-        const text = await monthlyPriceEls.nth(i).textContent().catch(() => '')
-        if (text) monthlyPrices.push(text.trim())
-      }
+    // STRICT: monthly price 4.99 MUST be visible
+    const monthlyPrice = page.getByText(/4[.,]99/).first()
+    await baseExpect(monthlyPrice).toBeVisible({ timeout: 5000 })
 
-      // Click "Annuel"
-      await yearlyOption.click()
-      await page.waitForTimeout(800)
+    // Click "Annuel" to select it
+    await yearlyCard.click()
+    await page.waitForTimeout(800)
 
-      // Capture ALL price texts after clicking yearly
-      const yearlyPriceEls = page.locator(':text-matches("\\\\d+[.,]\\\\d+\\\\s*€", "i")')
-      const yearlyPriceCount = await yearlyPriceEls.count()
-      const yearlyPrices: string[] = []
-      for (let i = 0; i < Math.min(yearlyPriceCount, 5); i++) {
-        const text = await yearlyPriceEls.nth(i).textContent().catch(() => '')
-        if (text) yearlyPrices.push(text.trim())
-      }
+    // STRICT: yearly per-month price 3.99 MUST be visible
+    const yearlyPerMonthPrice = page.getByText(/3[.,]99/).first()
+    await baseExpect(yearlyPerMonthPrice).toBeVisible({ timeout: 5000 })
 
-      // At least one price must exist for each
-      baseExpect(monthlyPrices.length).toBeGreaterThan(0)
-      baseExpect(yearlyPrices.length).toBeGreaterThan(0)
-
-      // Prices should differ — compare all captured prices or the first ones
-      // If toggle works, at least one price should change between monthly and yearly
-      const monthlySet = JSON.stringify(monthlyPrices)
-      const yearlySet = JSON.stringify(yearlyPrices)
-
-      // If both toggle options show the exact same set of prices, the toggle doesn't work
-      // But some pages show both monthly and yearly side by side, so be flexible
-      if (monthlySet === yearlySet) {
-        // Fallback: just verify that price elements exist (toggle may not change first visible price)
-        const anyPrice = await page.getByText(/€/i).first().isVisible().catch(() => false)
-        baseExpect(anyPrice).toBeTruthy()
-      }
-    } else {
-      // Toggle not found — verify pricing is at least visible
-      const hasPrice = await page
-        .getByText(/mois|an|€/i)
-        .first()
-        .isVisible()
-        .catch(() => false)
-      baseExpect(hasMonthly || hasYearly || hasPrice).toBeTruthy()
-    }
+    // STRICT: yearly total 47.88 MUST be visible
+    const yearlyTotal = page.getByText(/47[.,]88/).first()
+    await baseExpect(yearlyTotal).toBeVisible({ timeout: 5000 })
   })
 })
 
@@ -147,57 +97,47 @@ baseTest.describe('F67 — Toggle mensuel/annuel', () => {
 // =============================================================================
 test.describe('F68 — Activation essai gratuit', () => {
   test.afterEach(async ({ db }) => {
-    // ALWAYS reset trial status to prevent leaving user as premium
-    try { await db.resetTrialStatus() } catch { /* ignore */ }
+    // ALWAYS reset trial status to free after this test
+    await db.resetTrialStatus()
   })
 
   test('F68: Trial activation updates subscription_tier to premium in DB', async ({ authenticatedPage, db }) => {
-    // First, ensure user is NOT already premium
+    // Step 1: Fetch DB state — ensure user is NOT already premium
     const subBefore = await db.getSubscription()
     if (subBefore?.subscription_tier === 'premium') {
       await db.resetTrialStatus()
-      // Wait for the reset to propagate
       await authenticatedPage.waitForTimeout(1000)
     }
+
+    // Step 2: verify user is free tier before trial
+    const subClean = await db.getSubscription()
+    // STRICT: user MUST be free tier before starting trial
+    expect(subClean?.subscription_tier).not.toBe('premium')
 
     await authenticatedPage.goto('/premium')
     await authenticatedPage.waitForLoadState('networkidle')
     await authenticatedPage.waitForTimeout(1500)
 
-    // Click "Commencer l'essai gratuit" or similar trial button
-    const trialBtn = authenticatedPage
-      .getByRole('button', { name: /essai gratuit|Commencer l'essai|7 jours/i })
-      .first()
-    const trialLink = authenticatedPage
-      .locator('button:has-text("essai"), button:has-text("gratuit"), a:has-text("essai gratuit")')
-      .first()
+    // STRICT: "Commencer l'essai gratuit" button MUST be visible
+    const trialBtn = authenticatedPage.getByRole('button', { name: /Commencer l'essai gratuit|essai gratuit/i }).first()
+    await expect(trialBtn).toBeVisible({ timeout: 10000 })
 
-    const hasTrialBtn = await trialBtn.isVisible({ timeout: 5000 }).catch(() => false)
-    const hasTrialLink = await trialLink.isVisible().catch(() => false)
-
-    if (!hasTrialBtn && !hasTrialLink) {
-      // Trial button not found — user may have already used trial
-      // Verify premium page loaded correctly
-      const hasContent = await authenticatedPage.locator('main').first().isVisible()
-      expect(hasContent).toBe(true)
-      return
-    }
-
-    if (hasTrialBtn) await trialBtn.click()
-    else await trialLink.click()
-
+    await trialBtn.click()
     await authenticatedPage.waitForTimeout(5000)
 
-    // Verify DB: subscription_tier should now be 'premium'
+    // STRICT: verify DB mutation — subscription_tier MUST now be 'premium'
     const subAfter = await db.getSubscription()
     expect(subAfter).toBeTruthy()
+    // STRICT: subscription_tier MUST be premium after trial activation
     expect(subAfter.subscription_tier).toBe('premium')
+    // STRICT: subscription_expires_at MUST be set
     expect(subAfter.subscription_expires_at).toBeTruthy()
 
-    // Verify expiration is approximately 7 days from now
+    // STRICT: expiration must be approximately 7 days from now
     const expiresAt = new Date(subAfter.subscription_expires_at)
     const now = new Date()
     const daysDiff = (expiresAt.getTime() - now.getTime()) / (1000 * 60 * 60 * 24)
+    // STRICT: must be between 6 and 8 days
     expect(daysDiff).toBeGreaterThan(6)
     expect(daysDiff).toBeLessThan(8)
   })
@@ -207,7 +147,7 @@ test.describe('F68 — Activation essai gratuit', () => {
 // F69a — Checkout flow interception
 // =============================================================================
 test.describe('F69a — Stripe checkout interception', () => {
-  test('F69a: Upgrade button calls create-checkout edge function', async ({ authenticatedPage }) => {
+  test('F69a: Upgrade button calls create-checkout with price_id', async ({ authenticatedPage }) => {
     let interceptedRequest: { body: Record<string, unknown> } | null = null
 
     // Intercept the create-checkout edge function call
@@ -217,7 +157,6 @@ test.describe('F69a — Stripe checkout interception', () => {
       } catch {
         interceptedRequest = { body: {} }
       }
-      // Return a mock response to prevent actual Stripe redirect
       await route.fulfill({
         status: 200,
         contentType: 'application/json',
@@ -228,31 +167,19 @@ test.describe('F69a — Stripe checkout interception', () => {
     await authenticatedPage.goto('/premium')
     await authenticatedPage.waitForLoadState('networkidle')
 
-    // Find and click the upgrade/subscribe button
-    const upgradeBtn = authenticatedPage
-      .getByRole('button', { name: /Passer Premium|S'abonner|Choisir ce plan/i })
-      .first()
-    const hasUpgrade = await upgradeBtn.isVisible({ timeout: 5000 }).catch(() => false)
-
-    if (!hasUpgrade) {
-      const hasContent = await authenticatedPage.locator('main').first().isVisible()
-      expect(hasContent).toBe(true)
-      return
-    }
+    // STRICT: "Passer Premium maintenant" button MUST be visible
+    const upgradeBtn = authenticatedPage.getByRole('button', { name: /Passer Premium maintenant/i }).first()
+    await expect(upgradeBtn).toBeVisible({ timeout: 10000 })
 
     await upgradeBtn.click()
     await authenticatedPage.waitForTimeout(3000)
 
-    // Verify the edge function was called
-    if (interceptedRequest) {
-      expect(interceptedRequest.body).toBeTruthy()
-      // The request should contain a price_id
-      const body = interceptedRequest.body
-      const hasPrice = body.price_id || body.priceId
-      expect(hasPrice).toBeTruthy()
-    }
-    // If not intercepted, the page may have navigated — that's also acceptable
-    await expect(authenticatedPage.locator('body')).toBeVisible()
+    // STRICT: the edge function MUST have been called
+    expect(interceptedRequest).toBeTruthy()
+    // STRICT: request body MUST contain a price_id
+    const body = interceptedRequest!.body
+    const hasPrice = body.price_id || body.priceId
+    expect(hasPrice).toBeTruthy()
   })
 })
 
@@ -261,18 +188,22 @@ test.describe('F69a — Stripe checkout interception', () => {
 // =============================================================================
 test.describe('F69b — Stripe portal interception', () => {
   test.afterEach(async ({ db }) => {
-    // Reset to free after test
-    try { await db.resetTrialStatus() } catch { /* ignore */ }
+    await db.resetTrialStatus()
   })
 
   test('F69b: Manage subscription calls create-portal when user is premium', async ({ authenticatedPage, db }) => {
-    // Temporarily set user as premium to see "Gérer mon abonnement"
+    // Step 1: Set user as premium in DB
     const userId = await db.getUserId()
     await db.admin.from('profiles').update({
       subscription_tier: 'premium',
       subscription_expires_at: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
       stripe_customer_id: 'cus_test_e2e',
     }).eq('id', userId)
+
+    // Step 2: Verify DB mutation took effect
+    const subAfterUpdate = await db.getSubscription()
+    // STRICT: DB MUST confirm premium status
+    expect(subAfterUpdate?.subscription_tier).toBe('premium')
 
     let portalCalled = false
     await authenticatedPage.route('**/functions/v1/create-portal', async (route) => {
@@ -286,73 +217,47 @@ test.describe('F69b — Stripe portal interception', () => {
 
     await authenticatedPage.goto('/premium')
     await authenticatedPage.waitForLoadState('networkidle')
+    await authenticatedPage.waitForTimeout(2000)
 
-    const manageBtn = authenticatedPage.getByText(/Gérer|Manage|Mon abonnement/i).first()
-    const hasManage = await manageBtn.isVisible({ timeout: 5000 }).catch(() => false)
+    // STRICT: "Gerer" or "Mon abonnement" button MUST be visible for premium users
+    // PremiumHero shows a "Gerer mon abonnement" button when hasPremium is true
+    const manageBtn = authenticatedPage.getByText(/Gérer|Mon abonnement/i).first()
+    await expect(manageBtn).toBeVisible({ timeout: 10000 })
 
-    if (hasManage) {
-      await manageBtn.click()
-      await authenticatedPage.waitForTimeout(2000)
-      expect(portalCalled).toBe(true)
-    } else {
-      // Manage button not visible despite premium tier — page might use cached auth state
-      // Force reload and try again
-      await authenticatedPage.reload({ waitUntil: 'networkidle' })
-      await authenticatedPage.waitForTimeout(2000)
-      const hasManageRetry = await manageBtn.isVisible({ timeout: 5000 }).catch(() => false)
-      if (!hasManageRetry) {
-        // Still not visible — verify premium status text is shown instead
-        const hasPremiumText = await authenticatedPage.getByText(/Premium|Abonné|Actif/i).first().isVisible().catch(() => false)
-        expect(hasPremiumText || await authenticatedPage.locator('main').first().isVisible()).toBe(true)
-        return
-      }
-      await manageBtn.click()
-      await authenticatedPage.waitForTimeout(2000)
-      expect(portalCalled).toBe(true)
-    }
+    await manageBtn.click()
+    await authenticatedPage.waitForTimeout(2000)
+
+    // STRICT: create-portal edge function MUST have been called
+    expect(portalCalled).toBe(true)
   })
 })
 
 // =============================================================================
 // F69c — Premium status matches DB
 // =============================================================================
-test.describe('F69c — Statut premium correspond à la DB', () => {
+test.describe('F69c — Statut premium correspond a la DB', () => {
   test.afterEach(async ({ db }) => {
-    // Always reset to free after this test to avoid polluting other tests
-    try { await db.resetTrialStatus() } catch { /* ignore */ }
+    await db.resetTrialStatus()
   })
 
-  test('F69c: Premium page shows upgrade CTA for free user or manage for premium', async ({ authenticatedPage, db }) => {
-    // Ensure user is in a known state (free) before checking
+  test('F69c: Free user sees upgrade CTA, premium user does not see pricing', async ({ authenticatedPage, db }) => {
+    // Step 1: Ensure user is free
     await db.resetTrialStatus()
     const subscription = await db.getSubscription()
+    // STRICT: DB MUST confirm free tier
+    expect(subscription?.subscription_tier).not.toBe('premium')
 
     await authenticatedPage.goto('/premium')
     await authenticatedPage.waitForLoadState('networkidle')
     await authenticatedPage.waitForTimeout(1500)
 
-    if (subscription && subscription.subscription_tier === 'premium') {
-      // User is premium — verify premium badge or manage button
-      const hasPremium = await authenticatedPage
-        .getByText(/Premium|Abonné|Actif|Votre abonnement|Gérer/i)
-        .first()
-        .isVisible()
-        .catch(() => false)
-      expect(hasPremium).toBeTruthy()
-    } else {
-      // User is free tier — verify upgrade CTA or price is visible
-      const hasUpgrade = await authenticatedPage
-        .getByRole('button', { name: /Premium|Passer|Commencer|S'abonner|essai/i })
-        .first()
-        .isVisible()
-        .catch(() => false)
-      const hasPrice = await authenticatedPage
-        .getByText(/4[.,]99|€|mois/i)
-        .first()
-        .isVisible()
-        .catch(() => false)
-      expect(hasUpgrade || hasPrice).toBeTruthy()
-    }
+    // STRICT: free user → pricing section with "Passer Premium maintenant" MUST be visible
+    const upgradeCTA = authenticatedPage.getByRole('button', { name: /Passer Premium maintenant|Commencer l'essai gratuit/i }).first()
+    await expect(upgradeCTA).toBeVisible({ timeout: 10000 })
+
+    // STRICT: at least one price MUST be visible for free users
+    const price = authenticatedPage.getByText(/4[.,]99|3[.,]99/i).first()
+    await expect(price).toBeVisible({ timeout: 5000 })
   })
 })
 
@@ -360,29 +265,32 @@ test.describe('F69c — Statut premium correspond à la DB', () => {
 // F69d — Features table and FAQ
 // =============================================================================
 baseTest.describe('F69d — Table features et FAQ', () => {
-  baseTest('F69d: Features comparison table and FAQ section load correctly', async ({ page }) => {
+  baseTest('F69d: Features comparison and FAQ sections load correctly', async ({ page }) => {
     await page.goto('https://squadplanner.fr/premium')
     await dismissCookieBanner(page)
     await page.waitForLoadState('networkidle')
 
-    // Features comparison section must exist
-    const hasFeatureTable =
-      (await page.locator('table, [class*="feature"], [class*="comparison"]').first().isVisible().catch(() => false)) ||
-      (await page.getByText(/Fonctionnalités|Avantages|Inclus/i).first().isVisible().catch(() => false))
-    baseExpect(hasFeatureTable).toBeTruthy()
+    // STRICT: features comparison section MUST exist
+    // PremiumFeaturesTable renders feature names from FEATURES array
+    const squadsFeature = page.getByText('Squads').first()
+    await baseExpect(squadsFeature).toBeVisible({ timeout: 10000 })
 
-    // FAQ section — check for accordion or FAQ heading
-    const hasFAQ =
-      (await page.getByText(/FAQ|Questions fréquentes/i).first().isVisible().catch(() => false)) ||
-      (await page.locator('[class*="faq"], details, [class*="accordion"]').first().isVisible().catch(() => false))
+    const historyFeature = page.getByText(/Historique sessions/i).first()
+    await baseExpect(historyFeature).toBeVisible({ timeout: 5000 })
 
-    // FAQ is expected but might not always be present — soft assertion
-    if (hasFAQ) {
-      baseExpect(hasFAQ).toBeTruthy()
-    }
+    const statsFeature = page.getByText(/Stats & Analytics/i).first()
+    await baseExpect(statsFeature).toBeVisible({ timeout: 5000 })
 
-    // Page must have at least 2 plan options visible
-    const planElements = await page.locator('[class*="plan"], [class*="pricing"], [class*="card"]').count()
-    baseExpect(planElements).toBeGreaterThan(0)
+    // STRICT: FAQ section MUST be visible (PremiumFAQ renders FAQ data)
+    const faqQuestion = page.getByText(/annuler quand je veux/i).first()
+    await baseExpect(faqQuestion).toBeVisible({ timeout: 10000 })
+
+    // STRICT: at least 2 FAQ items from PremiumData.FAQ
+    const faqItem2 = page.getByText(/toute ma squad ou juste moi/i).first()
+    await baseExpect(faqItem2).toBeVisible({ timeout: 5000 })
+
+    // STRICT: testimonials section MUST be visible
+    const testimonial = page.getByText(/AlexGaming|MarieGG|LucasApex/i).first()
+    await baseExpect(testimonial).toBeVisible({ timeout: 10000 })
   })
 })

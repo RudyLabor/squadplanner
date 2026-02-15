@@ -1,7 +1,14 @@
-import { test, expect } from '@playwright/test'
+import { test, expect, dismissCookieBanner } from './fixtures'
 
 /**
- * Auth E2E Tests — F01-F05
+ * Auth E2E Tests — F01-F05 (STRICT MODE)
+ *
+ * REGLE STRICTE : Chaque test DOIT echouer si l'UI ne correspond pas a l'attendu.
+ * - Pas de `.catch(() => false)` sur les assertions
+ * - Pas de OR conditions qui passent toujours
+ * - Pas de fallback sur `<main>` quand un element specifique est attendu
+ * - Pas de `toBeGreaterThanOrEqual(0)`
+ *
  * F01: Landing page + sections
  * F02: Registration form + validation
  * F03: Login form + login error
@@ -9,27 +16,20 @@ import { test, expect } from '@playwright/test'
  * F05: Password reset link + reset flow
  * + Protected routes redirection
  *
- * Ces tests s'exécutent SANS authentification (visiteur anonyme).
+ * Ces tests s'executent SANS authentification (visiteur anonyme).
+ * Le fixture `db` est utilise pour valider les donnees quand pertinent.
  */
-
-async function dismissCookieBanner(page: import('@playwright/test').Page) {
-  try {
-    const btn = page.getByRole('button', { name: /Tout accepter/i })
-    await btn.waitFor({ state: 'visible', timeout: 3000 })
-    await btn.click()
-    await page.waitForTimeout(500)
-  } catch {
-    // Cookie banner not present
-  }
-}
 
 /**
  * Helper: switch to register mode on the /auth page.
- * Clicks the "Créer un compte" toggle and waits for the register heading.
+ * Clicks the "Creer un compte" toggle and waits for the register heading.
  */
 async function switchToRegisterMode(page: import('@playwright/test').Page) {
   const registerToggle = page.getByText(/Créer un compte/i).first()
+  // STRICT: le toggle DOIT etre visible
+  await expect(registerToggle).toBeVisible({ timeout: 10000 })
   await registerToggle.click()
+  // STRICT: le heading d'inscription DOIT apparaitre
   await expect(
     page.getByRole('heading', { name: /Rejoins l'aventure/i })
   ).toBeVisible({ timeout: 10000 })
@@ -44,18 +44,18 @@ test.describe('F01 — Landing Page', () => {
     await page.goto('/')
     await dismissCookieBanner(page)
 
-    // H1 contenant "Transforme"
-    await expect(page.getByRole('heading', { name: /Transforme/i })).toBeVisible()
+    // STRICT: H1 contenant "Transforme" DOIT etre visible
+    await expect(page.getByRole('heading', { name: /Transforme/i })).toBeVisible({ timeout: 10000 })
 
-    // Boutons CTA principaux
+    // STRICT: les deux CTAs principaux DOIVENT etre visibles
     await expect(
       page.getByRole('link', { name: /Se connecter/i }).first()
-    ).toBeVisible()
+    ).toBeVisible({ timeout: 5000 })
     await expect(
       page.getByRole('link', { name: /Créer ma squad/i }).first()
-    ).toBeVisible()
+    ).toBeVisible({ timeout: 5000 })
 
-    // Titre de la page
+    // STRICT: le titre de la page DOIT contenir "Squad Planner"
     await expect(page).toHaveTitle(/Squad Planner/)
   })
 
@@ -63,17 +63,29 @@ test.describe('F01 — Landing Page', () => {
     await page.goto('/')
     await dismissCookieBanner(page)
 
-    // Section Features
-    const featuresSection = page.locator('#features')
-    await expect(featuresSection).toBeAttached()
+    // STRICT: la section Features DOIT exister
+    await expect(page.locator('#features')).toBeAttached({ timeout: 10000 })
 
-    // Section FAQ
+    // STRICT: la section FAQ DOIT exister
     const faqSection = page.locator('#faq, section:has-text("FAQ"), [data-section="faq"]')
-    await expect(faqSection.first()).toBeAttached()
+    await expect(faqSection.first()).toBeAttached({ timeout: 10000 })
 
-    // Section Pricing
+    // STRICT: la section Pricing DOIT exister
     const pricingSection = page.locator('#pricing, section:has-text("Prix"), section:has-text("Tarif"), [data-section="pricing"]')
-    await expect(pricingSection.first()).toBeAttached()
+    await expect(pricingSection.first()).toBeAttached({ timeout: 10000 })
+  })
+
+  test('F01: Landing page has navigation links', async ({ page }) => {
+    await page.goto('/')
+    await dismissCookieBanner(page)
+
+    // STRICT: un header/nav DOIT exister avec des liens
+    const nav = page.locator('header nav, nav').first()
+    await expect(nav).toBeVisible({ timeout: 10000 })
+
+    // STRICT: le lien "Se connecter" DOIT etre dans la nav
+    const loginLink = page.getByRole('link', { name: /Se connecter/i }).first()
+    await expect(loginLink).toBeVisible({ timeout: 5000 })
   })
 })
 
@@ -82,17 +94,20 @@ test.describe('F01 — Landing Page', () => {
 // ============================================================
 
 test.describe('F02 — Registration Form', () => {
-  test('F02: Register form appears with email and password fields', async ({ page }) => {
+  test('F02: Register form appears with email, password, and username fields', async ({ page }) => {
     await page.goto('/auth')
     await page.waitForSelector('form', { timeout: 15000 })
     await dismissCookieBanner(page)
 
-    // Cliquer sur "Créer un compte" pour basculer en mode inscription
     await switchToRegisterMode(page)
 
-    // Champs email et password présents
-    await expect(page.locator('input[type="email"]')).toBeVisible()
-    await expect(page.locator('input[type="password"]')).toBeVisible()
+    // STRICT: les champs email, password et pseudo DOIVENT etre visibles
+    await expect(page.locator('input[type="email"]')).toBeVisible({ timeout: 5000 })
+    await expect(page.locator('input[type="password"]')).toBeVisible({ timeout: 5000 })
+
+    // Le champ pseudo DOIT exister en mode inscription
+    const usernameInput = page.locator('input[placeholder*="pseudo" i], input[autocomplete="username"]').first()
+    await expect(usernameInput).toBeVisible({ timeout: 5000 })
   })
 
   test('F02: Submitting empty register form shows validation errors', async ({ page }) => {
@@ -102,28 +117,27 @@ test.describe('F02 — Registration Form', () => {
 
     await switchToRegisterMode(page)
 
-    // Vérifier que les champs sont vides
+    // STRICT: verifier que les champs sont vides
     await expect(page.locator('input[type="email"]')).toHaveValue('')
     await expect(page.locator('input[type="password"]')).toHaveValue('')
 
     // Soumettre le formulaire vide
     await page.click('button[type="submit"]')
 
-    // Attendre que les messages d'erreur de validation apparaissent
-    // Le code source montre ces messages exacts dans handleSubmit :
-    // - "Le pseudo est requis" (username vide en mode register)
-    // - "L'email est requis" (email vide)
-    // - "Le mot de passe est requis" (password vide)
+    // STRICT: les messages d'erreur DOIVENT apparaitre
     const errorMessages = page.locator('.text-error')
     await expect(errorMessages.first()).toBeVisible({ timeout: 5000 })
 
-    // Au moins 2 erreurs doivent apparaître (pseudo + email ou password)
+    // STRICT: au moins 2 erreurs distinctes (pseudo + email minimum)
     const errorCount = await errorMessages.count()
+    // STRICT: on attend au moins 2, pas >= 0
     expect(errorCount).toBeGreaterThanOrEqual(2)
 
-    // Vérifier les messages spécifiques
+    // STRICT: messages specifiques DOIVENT etre presents dans le body
     const pageContent = await page.textContent('body')
+    // STRICT: le message "Le pseudo est requis" DOIT apparaitre
     expect(pageContent).toContain('Le pseudo est requis')
+    // STRICT: le message "L'email est requis" DOIT apparaitre
     expect(pageContent).toContain("L'email est requis")
   })
 
@@ -138,7 +152,7 @@ test.describe('F02 — Registration Form', () => {
     const usernameInput = page.locator('input[placeholder*="pseudo" i], input[autocomplete="username"]').first()
     await usernameInput.fill('TestUser123')
 
-    // Remplir un email invalide
+    // Remplir un email invalide (pas de dot dans le domaine)
     await page.fill('input[type="email"]', 'not@valid')
 
     // Remplir un mot de passe trop court (< 6 chars)
@@ -147,18 +161,16 @@ test.describe('F02 — Registration Form', () => {
     // Soumettre
     await page.click('button[type="submit"]')
 
-    // Attendre les erreurs de validation
+    // STRICT: les erreurs de validation DOIVENT apparaitre
     const errorMessages = page.locator('.text-error')
     await expect(errorMessages.first()).toBeVisible({ timeout: 5000 })
 
-    // Vérifier les messages d'erreur spécifiques
     const pageContent = await page.textContent('body')
 
-    // Le code source valide avec emailRegex: /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-    // "not@valid" ne matche pas (pas de dot dans le domaine)
+    // STRICT: le message email invalide DOIT etre present
     expect(pageContent).toContain("L'adresse email n'est pas valide")
 
-    // Le mot de passe "ab1" fait 3 chars, < 6
+    // STRICT: le message mot de passe trop court DOIT etre present
     expect(pageContent).toContain('Le mot de passe doit contenir au moins 6 caractères')
   })
 })
@@ -173,22 +185,22 @@ test.describe('F03 — Login Form', () => {
     await page.waitForSelector('form', { timeout: 15000 })
     await dismissCookieBanner(page)
 
-    // Heading login : "T'as manqué à ta squad !"
+    // STRICT: le heading de login DOIT etre visible
     await expect(
       page.getByRole('heading', { name: /manqué à ta squad/i })
-    ).toBeVisible()
+    ).toBeVisible({ timeout: 10000 })
 
-    // Champs de formulaire
-    await expect(page.locator('input[type="email"]')).toBeVisible()
-    await expect(page.locator('input[type="password"]')).toBeVisible()
+    // STRICT: les champs du formulaire DOIVENT etre visibles
+    await expect(page.locator('input[type="email"]')).toBeVisible({ timeout: 5000 })
+    await expect(page.locator('input[type="password"]')).toBeVisible({ timeout: 5000 })
 
-    // Bouton submit
+    // STRICT: le bouton submit DOIT etre visible
     await expect(
       page.getByRole('button', { name: /Se connecter/i })
-    ).toBeVisible()
+    ).toBeVisible({ timeout: 5000 })
   })
 
-  test('F03: Login with invalid credentials stays on /auth', async ({ page }) => {
+  test('F03: Login with invalid credentials shows error and stays on /auth', async ({ page }) => {
     await page.goto('/auth')
     await page.waitForSelector('form', { timeout: 15000 })
     await dismissCookieBanner(page)
@@ -198,11 +210,40 @@ test.describe('F03 — Login Form', () => {
     await page.fill('input[type="password"]', 'WrongPassword999!')
     await page.click('button[type="submit"]')
 
-    // Attendre la réponse du serveur
+    // Attendre la reponse du serveur
     await page.waitForTimeout(3000)
 
-    // L'utilisateur reste sur /auth (pas de redirection)
+    // STRICT: l'utilisateur DOIT rester sur /auth (pas de redirection)
     await expect(page).toHaveURL(/\/auth/)
+
+    // STRICT: un message d'erreur DOIT apparaitre (role="alert" ou .text-error)
+    const errorAlert = page.locator('[role="alert"], .text-error').first()
+    await expect(errorAlert).toBeVisible({ timeout: 5000 })
+  })
+
+  test('F03: Login with real credentials redirects away from /auth', async ({ page, db }) => {
+    // Fetch profile from DB to confirm user exists
+    const profile = await db.getProfile()
+    // STRICT: le profil DOIT exister en DB
+    expect(profile).toBeTruthy()
+    // STRICT: le username DOIT exister
+    expect(profile.username).toBeTruthy()
+
+    await page.goto('/auth')
+    await page.waitForSelector('form', { timeout: 15000 })
+    await dismissCookieBanner(page)
+
+    // Utiliser les credentials du test user
+    await page.fill('input[type="email"]', 'rudylabor@hotmail.fr')
+    await page.fill('input[type="password"]', 'ruudboy92')
+    await page.click('button[type="submit"]')
+
+    // STRICT: l'utilisateur DOIT etre redirige hors de /auth
+    await page.waitForURL((url) => !url.pathname.includes('/auth'), { timeout: 20000, waitUntil: 'domcontentloaded' })
+
+    const url = page.url()
+    // STRICT: l'URL DOIT etre une page protegee, PAS /auth
+    expect(url).not.toContain('/auth')
   })
 })
 
@@ -211,13 +252,18 @@ test.describe('F03 — Login Form', () => {
 // ============================================================
 
 test.describe('F04 — Google OAuth', () => {
-  test('F04: Google login button is visible', async ({ page }) => {
+  test('F04: Google login button is visible with correct text', async ({ page }) => {
     await page.goto('/auth')
     await page.waitForSelector('form', { timeout: 15000 })
     await dismissCookieBanner(page)
 
+    // STRICT: le bouton Google DOIT etre visible
     const googleBtn = page.getByRole('button', { name: /Continuer avec Google/i })
-    await expect(googleBtn).toBeVisible()
+    await expect(googleBtn).toBeVisible({ timeout: 5000 })
+
+    // STRICT: le bouton DOIT contenir le texte "Google"
+    const btnText = await googleBtn.textContent()
+    expect(btnText).toContain('Google')
   })
 
   test('F04a: Google button click initiates OAuth redirect to Supabase', async ({ page }) => {
@@ -226,7 +272,6 @@ test.describe('F04 — Google OAuth', () => {
     // Intercept the OAuth redirect to Supabase auth
     await page.route('**/auth/v1/authorize**', async (route) => {
       oauthRedirectUrl = route.request().url()
-      // Abort to prevent actual Google redirect
       await route.abort()
     })
 
@@ -235,39 +280,42 @@ test.describe('F04 — Google OAuth', () => {
     await dismissCookieBanner(page)
 
     const googleBtn = page.getByRole('button', { name: /Continuer avec Google/i })
-    await expect(googleBtn).toBeVisible()
+    // STRICT: le bouton Google DOIT etre visible
+    await expect(googleBtn).toBeVisible({ timeout: 5000 })
     await googleBtn.click()
     await page.waitForTimeout(3000)
 
-    // Verify OAuth flow was initiated
+    // STRICT: soit l'URL a ete interceptee, soit la page a navigue vers OAuth
+    const url = page.url()
+
     if (oauthRedirectUrl) {
-      // The URL should contain Google as the provider
+      // STRICT: l'URL interceptee DOIT contenir provider=google
       expect(oauthRedirectUrl).toContain('provider=google')
     } else {
-      // Page may have navigated to Google or Supabase OAuth directly
-      const url = page.url()
+      // STRICT: la page DOIT avoir navigue vers Supabase ou Google
       const navigatedToOAuth =
         url.includes('supabase') ||
         url.includes('accounts.google.com') ||
         url.includes('auth/v1')
-      // If stayed on /auth, the button may have triggered a popup instead
-      expect(navigatedToOAuth || url.includes('/auth')).toBe(true)
+      // STRICT: l'un de ces URLs DOIT etre atteint
+      expect(navigatedToOAuth).toBe(true)
     }
   })
 
-  test('F04b: Google button has correct icon and accessibility', async ({ page }) => {
+  test('F04b: Google button has an icon (SVG or image)', async ({ page }) => {
     await page.goto('/auth')
     await page.waitForSelector('form', { timeout: 15000 })
     await dismissCookieBanner(page)
 
-    // Find Google button
     const googleBtn = page.getByRole('button', { name: /Continuer avec Google|Google/i })
-    await expect(googleBtn).toBeVisible()
+    // STRICT: le bouton DOIT etre visible
+    await expect(googleBtn).toBeVisible({ timeout: 5000 })
 
-    // Verify Google SVG icon is present inside the button
-    const hasSvg = await googleBtn.locator('svg').first().isVisible().catch(() => false)
-    const hasImg = await googleBtn.locator('img').first().isVisible().catch(() => false)
-    expect(hasSvg || hasImg).toBe(true)
+    // STRICT: le bouton DOIT contenir un SVG ou une image
+    const svgCount = await googleBtn.locator('svg').count()
+    const imgCount = await googleBtn.locator('img').count()
+    // STRICT: au moins un icone DOIT etre present
+    expect(svgCount + imgCount).toBeGreaterThanOrEqual(1)
   })
 })
 
@@ -276,16 +324,17 @@ test.describe('F04 — Google OAuth', () => {
 // ============================================================
 
 test.describe('F05 — Password Reset', () => {
-  test('F05: Password reset link is visible', async ({ page }) => {
+  test('F05: Password reset link is visible on login form', async ({ page }) => {
     await page.goto('/auth')
     await page.waitForSelector('form', { timeout: 15000 })
     await dismissCookieBanner(page)
 
+    // STRICT: le lien "Mot de passe oublie" DOIT etre visible
     const resetLink = page.getByText(/Mot de passe oublié/i)
-    await expect(resetLink).toBeVisible()
+    await expect(resetLink).toBeVisible({ timeout: 5000 })
   })
 
-  test('F05: Clicking "Mot de passe oublié" without email shows error message', async ({ page }) => {
+  test('F05: Clicking reset without email shows specific error message', async ({ page }) => {
     await page.goto('/auth')
     await page.waitForSelector('form', { timeout: 15000 })
     await dismissCookieBanner(page)
@@ -295,20 +344,20 @@ test.describe('F05 — Password Reset', () => {
     await expect(emailInput).toBeVisible()
     await emailInput.fill('')
 
-    // Cliquer sur "Mot de passe oublié ?"
+    // Cliquer sur "Mot de passe oublie ?"
     const resetLink = page.getByText(/Mot de passe oublié/i)
     await resetLink.click()
 
-    // Le code source affiche: "Entre ton email pour recevoir le lien de réinitialisation"
-    // quand l'email est vide (handleForgotPassword)
+    // STRICT: une alerte DOIT apparaitre
     const errorAlert = page.locator('[role="alert"]')
     await expect(errorAlert).toBeVisible({ timeout: 5000 })
 
+    // STRICT: le message DOIT contenir le texte exact
     const errorText = await errorAlert.textContent()
     expect(errorText).toContain('Entre ton email pour recevoir le lien de réinitialisation')
   })
 
-  test('F05: Clicking "Mot de passe oublié" with email triggers reset flow', async ({ page }) => {
+  test('F05: Clicking reset with valid email triggers feedback', async ({ page }) => {
     await page.goto('/auth')
     await page.waitForSelector('form', { timeout: 15000 })
     await dismissCookieBanner(page)
@@ -316,27 +365,23 @@ test.describe('F05 — Password Reset', () => {
     // Remplir un email valide
     await page.fill('input[type="email"]', 'test-reset-e2e@example.com')
 
-    // Cliquer sur "Mot de passe oublié ?"
+    // Cliquer sur "Mot de passe oublie ?"
     const resetLink = page.getByText(/Mot de passe oublié/i)
     await resetLink.click()
 
-    // Attendre la réponse du serveur
+    // Attendre la reponse du serveur
     await page.waitForTimeout(3000)
 
-    // Deux résultats possibles :
-    // 1. Succès : "Email envoyé ! Vérifie ta boîte mail" (texte dans le composant)
-    // 2. Erreur : un message d'erreur traduit (rate limit, etc.)
-    // Dans les deux cas, un feedback visible doit apparaître
+    // STRICT: le systeme DOIT repondre avec un message visible (succes OU erreur)
+    // Succes = "Email envoye" | Erreur = role="alert" (rate limit etc.)
     const successMessage = page.getByText(/Email envoyé/i)
     const errorAlert = page.locator('[role="alert"]')
-    const loadingText = page.getByText(/Envoi en cours/i)
 
-    const hasSuccess = await successMessage.isVisible().catch(() => false)
-    const hasError = await errorAlert.isVisible().catch(() => false)
-    const hasLoading = await loadingText.isVisible().catch(() => false)
+    const successVisible = await successMessage.isVisible()
+    const errorVisible = await errorAlert.isVisible()
 
-    // Le système doit avoir répondu d'une manière ou d'une autre
-    expect(hasSuccess || hasError || hasLoading).toBe(true)
+    // STRICT: l'un des deux DOIT etre visible — pas de page silencieuse
+    expect(successVisible || errorVisible).toBe(true)
   })
 })
 
@@ -354,9 +399,31 @@ test.describe('Protected Routes — Redirection', () => {
       // Attendre la redirection client-side
       await page.waitForTimeout(4000)
 
-      const url = page.url()
-      // L'utilisateur non-authentifié doit être redirigé vers /auth
-      expect(url).toContain('/auth')
+      // STRICT: l'URL DOIT contenir /auth
+      await expect(page).toHaveURL(/\/auth/)
     })
   }
+})
+
+// ============================================================
+// Auth State — DB Validation
+// ============================================================
+
+test.describe('Auth State — DB Validation', () => {
+  test('Test user exists in DB with valid profile', async ({ db }) => {
+    // STRICT: le user ID DOIT etre resolvable
+    const userId = await db.getUserId()
+    expect(userId).toBeTruthy()
+    expect(typeof userId).toBe('string')
+    // STRICT: le user ID DOIT etre un UUID valide
+    expect(userId).toMatch(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/)
+
+    // STRICT: le profil DOIT exister
+    const profile = await db.getProfile()
+    expect(profile).toBeTruthy()
+
+    // STRICT: le username DOIT etre non-vide
+    expect(profile.username).toBeTruthy()
+    expect(profile.username.length).toBeGreaterThan(0)
+  })
 })

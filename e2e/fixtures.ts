@@ -1,5 +1,6 @@
 import { test as base, expect } from '@playwright/test'
 import { createClient, type SupabaseClient } from '@supabase/supabase-js'
+import AxeBuilder from '@axe-core/playwright'
 import dotenv from 'dotenv'
 import { resolve } from 'path'
 
@@ -630,6 +631,36 @@ export async function navigateWithFallback(page: import('@playwright/test').Page
   }
 
   return true
+}
+
+/**
+ * Accessibility regression helper — runs axe-core WCAG 2.1 AA audit
+ * Returns critical/serious violations. Use in any E2E test to guard against a11y regressions.
+ */
+export async function checkAccessibility(
+  page: import('@playwright/test').Page,
+  options?: { tags?: string[]; excludeSelectors?: string[] }
+) {
+  let builder = new AxeBuilder({ page })
+    .withTags(options?.tags || ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])
+
+  if (options?.excludeSelectors) {
+    for (const selector of options.excludeSelectors) {
+      builder = builder.exclude(selector)
+    }
+  }
+
+  const results = await builder.analyze()
+
+  const seriousViolations = results.violations.filter(
+    (v) => v.impact === 'critical' || v.impact === 'serious'
+  )
+
+  return {
+    violations: seriousViolations,
+    totalViolations: results.violations.length,
+    passes: results.passes.length,
+  }
 }
 
 export { expect }

@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest'
-import { render } from '@testing-library/react'
+import { render, screen } from '@testing-library/react'
 import { createElement } from 'react'
 
 vi.mock('react-router', () => ({
@@ -35,8 +35,34 @@ vi.mock('../../ui/Tooltip', () => ({
 import { TopBar } from '../TopBar'
 
 describe('TopBar', () => {
-  it('renders without crash', () => {
+  // STRICT: verifies TopBar renders desktop header with Breadcrumbs, GlobalSearch, NotificationBell; mobile header with search and grid buttons; navigation links in more menu
+  it('renders desktop and mobile headers with all navigation elements', () => {
     const { container } = render(<TopBar />)
-    expect(container).toBeTruthy()
+
+    // Two header elements rendered (desktop + mobile)
+    const headers = container.querySelectorAll('[role="banner"]')
+    expect(headers.length).toBe(2)
+
+    // Desktop header contains Breadcrumbs
+    expect(screen.getByText('Breadcrumbs')).toBeDefined()
+
+    // GlobalSearch rendered
+    expect(screen.getByText('GlobalSearch')).toBeDefined()
+
+    // NotificationBell rendered (appears in both desktop and mobile)
+    const bells = screen.getAllByText('NotificationBell')
+    expect(bells.length).toBe(2)
+
+    // Mobile search button with aria-label
+    expect(screen.getByLabelText('Rechercher')).toBeDefined()
+
+    // More pages button with aria-label
+    expect(screen.getByLabelText('Plus de pages')).toBeDefined()
+
+    // Desktop header has desktop-only class
+    expect(headers[0].classList.contains('desktop-only')).toBe(true)
+
+    // Mobile header has mobile-only class
+    expect(headers[1].classList.contains('mobile-only')).toBe(true)
   })
 })

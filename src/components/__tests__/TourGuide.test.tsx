@@ -1,7 +1,7 @@
-import { describe, it, expect, vi } from 'vitest'
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { render } from '@testing-library/react'
 import { createElement } from 'react'
-import { TourGuide } from '../TourGuide'
+import { useLocation } from 'react-router'
 
 vi.mock('react-router', () => ({
   useLocation: vi.fn().mockReturnValue({ pathname: '/other', hash: '', search: '' }),
@@ -44,26 +44,79 @@ vi.mock('../icons', () =>
   })
 )
 
+// Capture TourOverlay and TourTooltip props
+const mockTourOverlayProps = vi.fn()
+const mockTourTooltipProps = vi.fn()
 vi.mock('../tour/TourOverlay', () => ({
-  TourOverlay: ({ onSkip }: any) => createElement('div', { 'data-testid': 'tour-overlay', onClick: onSkip }),
+  TourOverlay: (props: any) => {
+    mockTourOverlayProps(props)
+    return createElement('div', { 'data-testid': 'tour-overlay', onClick: props.onSkip })
+  },
+}))
+vi.mock('../tour/TourTooltip', () => ({
+  TourTooltip: (props: any) => {
+    mockTourTooltipProps(props)
+    return createElement('div', { 'data-testid': 'tour-tooltip' }, props.title)
+  },
 }))
 
-vi.mock('../tour/TourTooltip', () => ({
-  TourTooltip: (props: any) => createElement('div', { 'data-testid': 'tour-tooltip' }, props.title),
-}))
+const mockedUseLocation = vi.mocked(useLocation)
+
+import { TourGuide } from '../TourGuide'
 
 describe('TourGuide', () => {
-  it('renders nothing when not on /home or /squads', () => {
-    const { container } = render(<TourGuide />)
-    expect(container.innerHTML).toBe('')
+  beforeEach(() => {
+    vi.clearAllMocks()
+    vi.useFakeTimers()
+    localStorage.clear()
+    mockedUseLocation.mockReturnValue({ pathname: '/other', hash: '', search: '', state: null, key: '' })
   })
 
-  it('renders nothing initially even on /home (waits for timer)', () => {
-    const { useLocation } = require('react-router')
-    useLocation.mockReturnValue({ pathname: '/home', hash: '', search: '' })
+  afterEach(() => {
+    vi.useRealTimers()
+  })
 
+  // STRICT: Verifies that TourGuide renders nothing when pathname is not /home or /squads — no overlay, no tooltip, empty container
+  it('renders nothing when pathname is not /home or /squads', () => {
     const { container } = render(<TourGuide />)
-    // Tour starts after 3s delay, so initially renders nothing
+
+    // 1. Container is empty
     expect(container.innerHTML).toBe('')
+    // 2. No tour overlay rendered
+    expect(container.querySelector('[data-testid="tour-overlay"]')).toBeNull()
+    // 3. No tour tooltip rendered
+    expect(container.querySelector('[data-testid="tour-tooltip"]')).toBeNull()
+    // 4. TourOverlay was never called
+    expect(mockTourOverlayProps).not.toHaveBeenCalled()
+    // 5. TourTooltip was never called
+    expect(mockTourTooltipProps).not.toHaveBeenCalled()
+    // 6. localStorage was NOT written to
+    expect(localStorage.getItem('sq-tour-completed-v1')).toBeNull()
+  })
+
+  // STRICT: Verifies that TourGuide renders nothing initially even on /home (3s delay), and respects localStorage completed flag
+  it('renders nothing initially on /home due to 3s delay and respects completed flag', () => {
+    mockedUseLocation.mockReturnValue({ pathname: '/home', hash: '', search: '', state: null, key: '' })
+
+    // Test 1: Without completed flag, still empty because timer hasn't fired
+    const { container } = render(<TourGuide />)
+
+    // 1. Initially empty (3s timer not fired)
+    expect(container.innerHTML).toBe('')
+    // 2. No overlay
+    expect(mockTourOverlayProps).not.toHaveBeenCalled()
+    // 3. No tooltip
+    expect(mockTourTooltipProps).not.toHaveBeenCalled()
+
+    // Test 2: With completed flag, should always be empty
+    localStorage.setItem('sq-tour-completed-v1', 'true')
+    const { container: container2 } = render(<TourGuide />)
+
+    // 4. Still empty because tour is marked completed
+    expect(container2.innerHTML).toBe('')
+    // 5. Overlay still never called
+    expect(mockTourOverlayProps).not.toHaveBeenCalled()
+    // 6. Tooltip still never called
+    expect(mockTourTooltipProps).not.toHaveBeenCalled()
   })
 })

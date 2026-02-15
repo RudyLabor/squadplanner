@@ -30,50 +30,131 @@ vi.mock('framer-motion', () => ({
   }),
 }))
 
+const useReducedMotionMock = vi.fn().mockReturnValue(false)
 vi.mock('../../../hooks/useReducedMotion', () => ({
-  useReducedMotion: vi.fn().mockReturnValue(false),
+  useReducedMotion: () => useReducedMotionMock(),
 }))
 
 import { CrossfadeTransition } from '../CrossfadeTransition'
 
 describe('CrossfadeTransition', () => {
-  it('renders skeleton when loading', () => {
-    render(
+  // STRICT: loading=true shows skeleton, hides content, aria-busy=true, className applied
+  it('shows skeleton and hides content when loading with correct accessibility', () => {
+    const { container } = render(
       <CrossfadeTransition
         isLoading={true}
-        skeleton={<div>Loading...</div>}
+        skeleton={<div data-testid="skeleton">Loading skeleton</div>}
+        className="crossfade-wrapper"
       >
-        <div>Content</div>
+        <div data-testid="real-content">Real content</div>
       </CrossfadeTransition>
     )
-    expect(screen.getByText('Loading...')).toBeInTheDocument()
-  })
 
-  it('renders content when not loading', () => {
-    render(
-      <CrossfadeTransition
-        isLoading={false}
-        skeleton={<div>Loading...</div>}
-      >
-        <div>Content</div>
-      </CrossfadeTransition>
-    )
-    expect(screen.getByText('Content')).toBeInTheDocument()
-  })
+    // Skeleton visible, content hidden
+    expect(screen.getByTestId('skeleton')).toBeInTheDocument()
+    expect(screen.getByText('Loading skeleton')).toBeInTheDocument()
+    expect(screen.queryByTestId('real-content')).not.toBeInTheDocument()
 
-  it('sets aria-busy correctly', () => {
-    const { container, rerender } = render(
-      <CrossfadeTransition isLoading={true} skeleton={<div>Skel</div>}>
-        <div>Content</div>
-      </CrossfadeTransition>
-    )
+    // aria-busy=true
     expect(container.firstChild).toHaveAttribute('aria-busy', 'true')
 
-    rerender(
-      <CrossfadeTransition isLoading={false} skeleton={<div>Skel</div>}>
-        <div>Content</div>
+    // className applied
+    expect(container.firstChild).toHaveClass('crossfade-wrapper')
+  })
+
+  // STRICT: loading=false shows content, hides skeleton, aria-busy=false
+  it('shows content and hides skeleton when not loading', () => {
+    const { container } = render(
+      <CrossfadeTransition
+        isLoading={false}
+        skeleton={<div data-testid="skeleton">Skeleton</div>}
+        className="loaded-wrapper"
+      >
+        <div data-testid="real-content">Actual data</div>
       </CrossfadeTransition>
     )
+
+    // Content visible, skeleton hidden
+    expect(screen.getByTestId('real-content')).toBeInTheDocument()
+    expect(screen.getByText('Actual data')).toBeInTheDocument()
+    expect(screen.queryByTestId('skeleton')).not.toBeInTheDocument()
+
+    // aria-busy=false
     expect(container.firstChild).toHaveAttribute('aria-busy', 'false')
+
+    // className applied
+    expect(container.firstChild).toHaveClass('loaded-wrapper')
+  })
+
+  // STRICT: transition between loading states swaps content correctly, aria-busy updates
+  it('transitions correctly from loading to loaded state', () => {
+    const { container, rerender } = render(
+      <CrossfadeTransition
+        isLoading={true}
+        skeleton={<div data-testid="skel">Loading...</div>}
+      >
+        <div data-testid="content">Data loaded</div>
+      </CrossfadeTransition>
+    )
+
+    // Initially loading
+    expect(screen.getByTestId('skel')).toBeInTheDocument()
+    expect(screen.queryByTestId('content')).not.toBeInTheDocument()
+    expect(container.firstChild).toHaveAttribute('aria-busy', 'true')
+
+    // Rerender with loading=false
+    rerender(
+      <CrossfadeTransition
+        isLoading={false}
+        skeleton={<div data-testid="skel">Loading...</div>}
+      >
+        <div data-testid="content">Data loaded</div>
+      </CrossfadeTransition>
+    )
+
+    // Now content visible, skeleton hidden
+    expect(screen.getByTestId('content')).toBeInTheDocument()
+    expect(screen.getByText('Data loaded')).toBeInTheDocument()
+    expect(screen.queryByTestId('skel')).not.toBeInTheDocument()
+    expect(container.firstChild).toHaveAttribute('aria-busy', 'false')
+  })
+
+  // STRICT: reduced motion renders instant swap without AnimatePresence, still has aria-busy
+  it('renders instant swap with aria-busy when reduced motion is preferred', () => {
+    useReducedMotionMock.mockReturnValue(true)
+
+    const { container, rerender } = render(
+      <CrossfadeTransition
+        isLoading={true}
+        skeleton={<div data-testid="skel-rm">Skeleton RM</div>}
+        className="rm-wrapper"
+      >
+        <div data-testid="content-rm">Content RM</div>
+      </CrossfadeTransition>
+    )
+
+    // Loading state with reduced motion
+    expect(screen.getByTestId('skel-rm')).toBeInTheDocument()
+    expect(screen.queryByTestId('content-rm')).not.toBeInTheDocument()
+    expect(container.firstChild).toHaveAttribute('aria-busy', 'true')
+    expect(container.firstChild).toHaveClass('rm-wrapper')
+
+    // Transition to loaded
+    rerender(
+      <CrossfadeTransition
+        isLoading={false}
+        skeleton={<div data-testid="skel-rm">Skeleton RM</div>}
+        className="rm-wrapper"
+      >
+        <div data-testid="content-rm">Content RM</div>
+      </CrossfadeTransition>
+    )
+
+    expect(screen.getByTestId('content-rm')).toBeInTheDocument()
+    expect(screen.queryByTestId('skel-rm')).not.toBeInTheDocument()
+    expect(container.firstChild).toHaveAttribute('aria-busy', 'false')
+
+    // Reset mock
+    useReducedMotionMock.mockReturnValue(false)
   })
 })

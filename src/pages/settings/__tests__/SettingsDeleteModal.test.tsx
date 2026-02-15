@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest'
-import { render, screen } from '@testing-library/react'
+import { render, screen, fireEvent } from '@testing-library/react'
 import { createElement } from 'react'
 
 vi.mock('framer-motion', () => ({
@@ -46,19 +46,76 @@ vi.mock('../../../lib/toast', () => ({
 import { SettingsDeleteModal } from '../SettingsDeleteModal'
 
 describe('SettingsDeleteModal', () => {
-  it('renders nothing when closed', () => {
+  // STRICT: verifies closed state — no modal content, no heading, no input, no buttons visible
+  it('renders nothing when isOpen is false', () => {
     const { container } = render(<SettingsDeleteModal isOpen={false} onClose={vi.fn()} />)
-    expect(container.querySelector('h3')).toBeNull()
+
+    // 1. No heading
+    expect(screen.queryByText('Supprimer ton compte')).toBeNull()
+    // 2. No description text
+    expect(screen.queryByText(/irréversible/)).toBeNull()
+    // 3. No input field
+    expect(container.querySelector('input')).toBeNull()
+    // 4. No cancel button
+    expect(screen.queryByText('Annuler')).toBeNull()
+    // 5. No delete button
+    expect(screen.queryByText('Supprimer définitivement')).toBeNull()
+    // 6. Container has no modal overlay
+    expect(container.querySelector('.fixed')).toBeNull()
   })
 
-  it('renders modal when open', () => {
-    render(<SettingsDeleteModal isOpen={true} onClose={vi.fn()} />)
-    expect(screen.getByText('Supprimer ton compte')).toBeTruthy()
+  // STRICT: verifies open state — heading, warning text, input with placeholder, cancel button, disabled delete button, confirmation requirement
+  it('renders modal with heading, warning, input, cancel button, and disabled delete button', () => {
+    const { container } = render(<SettingsDeleteModal isOpen={true} onClose={vi.fn()} />)
+
+    // 1. Heading
+    expect(screen.getByText('Supprimer ton compte')).toBeDefined()
+    // 2. Warning about irreversibility
+    expect(screen.getByText(/irr/)).toBeDefined()
+    // 3. Warning about data deletion
+    expect(screen.getByText(/profil, messages, squads/)).toBeDefined()
+    // 4. Confirmation instruction
+    expect(screen.getByText(/Tape/)).toBeDefined()
+    expect(screen.getByText('SUPPRIMER')).toBeDefined()
+    // 5. Input field with placeholder
+    const input = container.querySelector('input')
+    expect(input).not.toBeNull()
+    expect(input?.placeholder).toBe('SUPPRIMER')
+    // 6. Cancel button
+    expect(screen.getByText('Annuler')).toBeDefined()
+    // 7. Delete button present but disabled
+    const deleteBtn = screen.getByText('Supprimer définitivement').closest('button')
+    expect(deleteBtn).not.toBeNull()
+    expect(deleteBtn?.disabled).toBe(true)
   })
 
-  it('has disabled delete button by default', () => {
-    render(<SettingsDeleteModal isOpen={true} onClose={vi.fn()} />)
-    const deleteBtn = screen.getByText('Supprimer définitivement')
-    expect(deleteBtn.closest('button')?.disabled).toBe(true)
+  // STRICT: verifies delete button enable logic — typing "SUPPRIMER" enables, wrong text keeps disabled, cancel resets
+  it('enables delete button only when typing exact "SUPPRIMER" text and cancel resets form', () => {
+    const onClose = vi.fn()
+    const { container } = render(<SettingsDeleteModal isOpen={true} onClose={onClose} />)
+    const input = container.querySelector('input')!
+    const deleteBtn = screen.getByText('Supprimer définitivement').closest('button')!
+
+    // 1. Initially disabled
+    expect(deleteBtn.disabled).toBe(true)
+
+    // 2. Wrong text keeps disabled
+    fireEvent.change(input, { target: { value: 'supprimer' } })
+    expect(deleteBtn.disabled).toBe(true)
+
+    // 3. Partial text keeps disabled
+    fireEvent.change(input, { target: { value: 'SUPPRIME' } })
+    expect(deleteBtn.disabled).toBe(true)
+
+    // 4. Exact match enables button
+    fireEvent.change(input, { target: { value: 'SUPPRIMER' } })
+    expect(deleteBtn.disabled).toBe(false)
+
+    // 5. Click cancel calls onClose
+    fireEvent.click(screen.getByText('Annuler'))
+    expect(onClose).toHaveBeenCalledTimes(1)
+
+    // 6. Input value updated correctly
+    expect(input.value).toBe('')
   })
 })

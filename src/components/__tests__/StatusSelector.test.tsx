@@ -73,33 +73,100 @@ describe('StatusSelector', () => {
     } as any)
   })
 
-  it('renders current status label', () => {
+  // STRICT: Verifies initial closed state — current status label, aria-label, aria-expanded=false, no dropdown options, button structure
+  it('renders trigger button with correct status label, aria attributes, and closed dropdown', () => {
     render(createElement(StatusSelector))
-    expect(screen.getByText('En ligne')).toBeDefined()
-  })
 
-  it('opens dropdown on click', () => {
-    render(createElement(StatusSelector))
+    // 1. Current status label visible
+    expect(screen.getByText('En ligne')).toBeInTheDocument()
+    // 2. Aria-label includes status
     const trigger = screen.getByLabelText('Statut: En ligne')
-    fireEvent.click(trigger)
-    expect(screen.getByText('Occupé')).toBeDefined()
-    expect(screen.getByText('Ne pas déranger')).toBeDefined()
-    expect(screen.getByText('Invisible')).toBeDefined()
-  })
-
-  it('calls setAvailability when status is selected', () => {
-    render(createElement(StatusSelector))
-    const trigger = screen.getByLabelText('Statut: En ligne')
-    fireEvent.click(trigger)
-    fireEvent.click(screen.getByText('Occupé'))
-    expect(mockSetAvailability).toHaveBeenCalledWith('busy')
-  })
-
-  it('renders with aria-expanded attribute', () => {
-    render(createElement(StatusSelector))
-    const trigger = screen.getByLabelText('Statut: En ligne')
+    expect(trigger).toBeInTheDocument()
+    // 3. aria-expanded is false when closed
     expect(trigger.getAttribute('aria-expanded')).toBe('false')
+    // 4. Button type is "button"
+    expect(trigger.getAttribute('type')).toBe('button')
+    // 5. Dropdown options not visible
+    expect(screen.queryByText('Occupé')).not.toBeInTheDocument()
+    expect(screen.queryByText('Ne pas déranger')).not.toBeInTheDocument()
+    expect(screen.queryByText('Invisible')).not.toBeInTheDocument()
+    // 6. Trigger is a button element
+    expect(trigger.tagName).toBe('BUTTON')
+  })
+
+  // STRICT: Verifies dropdown opening — all 4 status options visible, aria-expanded toggled, correct labels displayed
+  it('opens dropdown with all status options and toggles aria-expanded', () => {
+    render(createElement(StatusSelector))
+
+    const trigger = screen.getByLabelText('Statut: En ligne')
+    // 1. Click to open
     fireEvent.click(trigger)
+    // 2. aria-expanded is now true
     expect(trigger.getAttribute('aria-expanded')).toBe('true')
+    // 3. All 4 status options visible (En ligne appears twice: trigger + dropdown)
+    expect(screen.getAllByText('En ligne').length).toBeGreaterThanOrEqual(2)
+    expect(screen.getByText('Occupé')).toBeInTheDocument()
+    expect(screen.getByText('Ne pas déranger')).toBeInTheDocument()
+    expect(screen.getByText('Invisible')).toBeInTheDocument()
+    // 4. No "Définir un statut" button (onOpenCustomStatus not provided)
+    expect(screen.queryByText('Définir un statut')).not.toBeInTheDocument()
+    // 5. Click again to close
+    fireEvent.click(trigger)
+    // 6. aria-expanded back to false
+    expect(trigger.getAttribute('aria-expanded')).toBe('false')
+  })
+
+  // STRICT: Verifies status selection — clicking an option calls setAvailability with correct value and closes dropdown
+  it('calls setAvailability with correct value on status selection and closes dropdown', () => {
+    render(createElement(StatusSelector))
+
+    const trigger = screen.getByLabelText('Statut: En ligne')
+    fireEvent.click(trigger)
+
+    // 1. Click "Occupé"
+    fireEvent.click(screen.getByText('Occupé'))
+    // 2. setAvailability called with 'busy'
+    expect(mockSetAvailability).toHaveBeenCalledWith('busy')
+    // 3. Called exactly once
+    expect(mockSetAvailability).toHaveBeenCalledTimes(1)
+    // 4. Dropdown closed after selection (aria-expanded = false)
+    expect(trigger.getAttribute('aria-expanded')).toBe('false')
+    // 5. Other options no longer visible (dropdown closed)
+    expect(screen.queryByText('Ne pas déranger')).not.toBeInTheDocument()
+
+    // 6. Open again and select another status
+    fireEvent.click(trigger)
+    fireEvent.click(screen.getByText('Ne pas déranger'))
+    expect(mockSetAvailability).toHaveBeenCalledWith('dnd')
+  })
+
+  // STRICT: Verifies custom status display, game status display, and onOpenCustomStatus callback
+  it('shows custom status, game status, and custom status button when provided', () => {
+    const mockOnOpenCustom = vi.fn()
+    mockedUseUserStatusStore.mockReturnValue({
+      availability: 'online',
+      setAvailability: mockSetAvailability,
+      customStatus: { emoji: '🎯', text: 'Focusing' },
+      gameStatus: { game: 'Valorant' },
+    } as any)
+
+    render(createElement(StatusSelector, { onOpenCustomStatus: mockOnOpenCustom }))
+
+    // 1. Custom status shown in trigger (emoji + text)
+    expect(screen.getByText(/🎯 Focusing/)).toBeInTheDocument()
+    // 2. Open dropdown
+    const trigger = screen.getByLabelText('Statut: En ligne')
+    fireEvent.click(trigger)
+    // 3. Game status visible in dropdown
+    expect(screen.getByText('Valorant')).toBeInTheDocument()
+    // 4. Custom status section in dropdown
+    expect(screen.getByText('Focusing')).toBeInTheDocument()
+    // 5. "Modifier le statut" button visible (since customStatus exists)
+    expect(screen.getByText('Modifier le statut')).toBeInTheDocument()
+    // 6. Click the custom status button
+    fireEvent.click(screen.getByText('Modifier le statut'))
+    expect(mockOnOpenCustom).toHaveBeenCalledTimes(1)
+    // 7. Dropdown closes after clicking custom status button
+    expect(trigger.getAttribute('aria-expanded')).toBe('false')
   })
 })

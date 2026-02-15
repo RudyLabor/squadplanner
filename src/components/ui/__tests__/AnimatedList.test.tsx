@@ -32,32 +32,98 @@ vi.mock('framer-motion', () => ({
 }))
 
 describe('AnimatedList', () => {
-  it('renders children', () => {
-    render(
-      <AnimatedList>
-        <AnimatedListItem>Item 1</AnimatedListItem>
-        <AnimatedListItem>Item 2</AnimatedListItem>
-      </AnimatedList>
-    )
-    expect(screen.getByText('Item 1')).toBeInTheDocument()
-    expect(screen.getByText('Item 2')).toBeInTheDocument()
-  })
-
-  it('applies className to wrapper', () => {
+  // STRICT: renders multiple children, each accessible in DOM, correct order, wrapper has className
+  it('renders multiple items in correct order with className on wrapper', () => {
     const { container } = render(
       <AnimatedList className="my-list">
-        <AnimatedListItem>Item</AnimatedListItem>
+        <AnimatedListItem key="a"><span data-testid="item-a">Alpha</span></AnimatedListItem>
+        <AnimatedListItem key="b"><span data-testid="item-b">Beta</span></AnimatedListItem>
+        <AnimatedListItem key="c"><span data-testid="item-c">Gamma</span></AnimatedListItem>
       </AnimatedList>
     )
+
+    // All items rendered
+    expect(screen.getByText('Alpha')).toBeInTheDocument()
+    expect(screen.getByText('Beta')).toBeInTheDocument()
+    expect(screen.getByText('Gamma')).toBeInTheDocument()
+
+    // Wrapper has className
     expect(container.firstChild).toHaveClass('my-list')
+
+    // Items are in correct DOM order (use testids for precise checks)
+    const itemA = screen.getByTestId('item-a')
+    const itemB = screen.getByTestId('item-b')
+    const itemC = screen.getByTestId('item-c')
+    expect(itemA.textContent).toBe('Alpha')
+    expect(itemB.textContent).toBe('Beta')
+    expect(itemC.textContent).toBe('Gamma')
+
+    // All three are siblings within the wrapper structure
+    expect(itemA.compareDocumentPosition(itemB) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+    expect(itemB.compareDocumentPosition(itemC) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
   })
 
-  it('applies className to list item', () => {
+  // STRICT: AnimatedListItem passes className to wrapper div, children render correctly
+  it('AnimatedListItem applies className and renders children', () => {
     render(
       <AnimatedList>
-        <AnimatedListItem className="my-item">Item</AnimatedListItem>
+        <AnimatedListItem className="custom-item">
+          <span data-testid="inner">Inner content</span>
+        </AnimatedListItem>
       </AnimatedList>
     )
-    expect(screen.getByText('Item').closest('div')).toHaveClass('my-item')
+
+    const inner = screen.getByTestId('inner')
+    expect(inner).toBeInTheDocument()
+    expect(inner.textContent).toBe('Inner content')
+
+    // className applied to the item wrapper
+    const itemWrapper = inner.closest('div')
+    expect(itemWrapper).toHaveClass('custom-item')
+  })
+
+  // STRICT: empty list renders wrapper only, rerender with items works, dynamic add
+  it('handles empty list, single item, and dynamic changes', () => {
+    // Empty list
+    const { container, rerender } = render(
+      <AnimatedList className="empty-list">{null}</AnimatedList>
+    )
+    expect(container.firstChild).toHaveClass('empty-list')
+
+    // Single item
+    rerender(
+      <AnimatedList className="single-list">
+        <AnimatedListItem key="only"><span>Only item</span></AnimatedListItem>
+      </AnimatedList>
+    )
+    expect(screen.getByText('Only item')).toBeInTheDocument()
+    expect(container.firstChild).toHaveClass('single-list')
+
+    // Add more items
+    rerender(
+      <AnimatedList className="multi-list">
+        <AnimatedListItem key="only"><span>Only item</span></AnimatedListItem>
+        <AnimatedListItem key="new"><span>New item</span></AnimatedListItem>
+      </AnimatedList>
+    )
+    expect(screen.getByText('Only item')).toBeInTheDocument()
+    expect(screen.getByText('New item')).toBeInTheDocument()
+    expect(container.firstChild).toHaveClass('multi-list')
+  })
+
+  // STRICT: wrapper without className has no extra class, structure is just div > AnimatePresence > items
+  it('renders without className prop correctly', () => {
+    const { container } = render(
+      <AnimatedList>
+        <AnimatedListItem>Item A</AnimatedListItem>
+      </AnimatedList>
+    )
+
+    expect(screen.getByText('Item A')).toBeInTheDocument()
+    // Wrapper div exists but has no className attribute set
+    const wrapper = container.firstChild as HTMLElement
+    expect(wrapper.tagName).toBe('DIV')
+    // No class set when className is undefined
+    expect(wrapper.className).toBe('')
   })
 })

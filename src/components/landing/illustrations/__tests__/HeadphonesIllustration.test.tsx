@@ -33,8 +33,35 @@ vi.mock('framer-motion', () => ({
 import { HeadphonesIllustration } from '../HeadphonesIllustration'
 
 describe('HeadphonesIllustration', () => {
-  it('renders without crash', () => {
+  // STRICT: verifies SVG renders with correct default size 64, viewBox, themed wrapper, headband path, 2 ear cup rects, sound wave paths, mic boom path, and mic tip circle
+  it('renders complete headphones illustration with all elements', () => {
     const { container } = render(<HeadphonesIllustration />)
-    expect(container.querySelector('svg')).toBeTruthy()
+    const svg = container.querySelector('svg')
+    expect(svg).toBeTruthy()
+    expect(svg!.getAttribute('width')).toBe('64')
+    expect(svg!.getAttribute('height')).toBe('64')
+    expect(svg!.getAttribute('viewBox')).toBe('0 0 64 64')
+    expect(svg!.getAttribute('fill')).toBe('none')
+
+    // Wrapped in illustration-themed div
+    const wrapper = container.firstElementChild
+    expect(wrapper?.classList.contains('illustration-themed')).toBe(true)
+
+    // Headband arc + sound waves + mic boom = at least 4 paths
+    expect(container.querySelectorAll('path').length).toBeGreaterThanOrEqual(4)
+
+    // Left + right ear cup rects
+    expect(container.querySelectorAll('rect').length).toBe(2)
+
+    // Mic tip circle
+    expect(container.querySelectorAll('circle').length).toBe(1)
+
+    // Custom size and className
+    const { container: c2 } = render(<HeadphonesIllustration size={96} className="hp-test" />)
+    const svg2 = c2.querySelector('svg')
+    expect(svg2!.getAttribute('width')).toBe('96')
+    expect(svg2!.getAttribute('height')).toBe('96')
+    expect(c2.firstElementChild?.classList.contains('hp-test')).toBe(true)
+    expect(c2.firstElementChild?.classList.contains('illustration-themed')).toBe(true)
   })
 })

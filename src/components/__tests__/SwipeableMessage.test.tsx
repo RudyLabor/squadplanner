@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import { createElement } from 'react'
+import { useReducedMotion } from '../../hooks/useReducedMotion'
 
 // Mock framer-motion with motion values
 vi.mock('framer-motion', () => ({
@@ -33,9 +34,9 @@ vi.mock('framer-motion', () => ({
 
 // Mock icons
 vi.mock('../icons', () => ({
-  Reply: (props: any) => createElement('svg', props),
-  Trash2: (props: any) => createElement('svg', props),
-  MoreHorizontal: (props: any) => createElement('svg', props),
+  Reply: (props: any) => createElement('svg', { ...props, 'data-testid': 'icon-reply' }),
+  Trash2: (props: any) => createElement('svg', { ...props, 'data-testid': 'icon-trash' }),
+  MoreHorizontal: (props: any) => createElement('svg', { ...props, 'data-testid': 'icon-more' }),
 }))
 
 // Mock hooks
@@ -54,42 +55,123 @@ vi.mock('../../utils/motionTokens', () => ({
   },
 }))
 
+const mockedUseReducedMotion = vi.mocked(useReducedMotion)
+
 import { SwipeableMessage } from '../SwipeableMessage'
 
 describe('SwipeableMessage', () => {
   beforeEach(() => {
     vi.clearAllMocks()
+    mockedUseReducedMotion.mockReturnValue(false)
   })
 
-  it('renders children', () => {
-    render(createElement(SwipeableMessage, {
-      children: createElement('div', {}, 'Message Content'),
+  // STRICT: Verifies default rendering — children shown, swipe indicators present (both directions enabled by default), container structure
+  it('renders children with both swipe indicators by default', () => {
+    const { container } = render(createElement(SwipeableMessage, {
+      onReply: vi.fn(),
+      onActions: vi.fn(),
+      children: createElement('div', { 'data-testid': 'msg' }, 'Hello World'),
     }))
-    expect(screen.getByText('Message Content')).toBeDefined()
+
+    // 1. Children rendered
+    expect(screen.getByText('Hello World')).toBeInTheDocument()
+    // 2. data-testid accessible
+    expect(screen.getByTestId('msg')).toBeInTheDocument()
+    // 3. Reply icon is in the DOM (left swipe indicator)
+    expect(screen.getByTestId('icon-reply')).toBeInTheDocument()
+    // 4. Trash icon is in the DOM (right swipe indicator)
+    expect(screen.getByTestId('icon-trash')).toBeInTheDocument()
+    // 5. More icon is in the DOM (right swipe indicator)
+    expect(screen.getByTestId('icon-more')).toBeInTheDocument()
+    // 6. Container has overflow-x-hidden wrapper
+    expect(container.querySelector('.overflow-x-hidden')).not.toBeNull()
+    // 7. aria-hidden indicators
+    const hiddenEls = container.querySelectorAll('[aria-hidden="true"]')
+    expect(hiddenEls.length).toBeGreaterThanOrEqual(2)
   })
 
-  it('renders children without drag when disabled', () => {
-    render(createElement(SwipeableMessage, {
+  // STRICT: Verifies disabled mode — only children rendered, no swipe indicators, no wrapper div with overflow
+  it('renders only children without swipe UI when disabled', () => {
+    const { container } = render(createElement(SwipeableMessage, {
       disabled: true,
+      onReply: vi.fn(),
+      onActions: vi.fn(),
       children: createElement('div', {}, 'Disabled Message'),
     }))
-    expect(screen.getByText('Disabled Message')).toBeDefined()
+
+    // 1. Children rendered
+    expect(screen.getByText('Disabled Message')).toBeInTheDocument()
+    // 2. No reply icon (swipe UI stripped)
+    expect(screen.queryByTestId('icon-reply')).not.toBeInTheDocument()
+    // 3. No trash icon
+    expect(screen.queryByTestId('icon-trash')).not.toBeInTheDocument()
+    // 4. No more icon
+    expect(screen.queryByTestId('icon-more')).not.toBeInTheDocument()
+    // 5. No overflow-x-hidden wrapper
+    expect(container.querySelector('.overflow-x-hidden')).toBeNull()
+    // 6. No aria-hidden elements (no indicators)
+    expect(container.querySelectorAll('[aria-hidden="true"]').length).toBe(0)
   })
 
-  it('renders children with default settings', () => {
-    render(createElement(SwipeableMessage, {
+  // STRICT: Verifies reduced motion mode — same as disabled, children only, no swipe gesture UI
+  it('renders only children when prefers-reduced-motion is active', () => {
+    mockedUseReducedMotion.mockReturnValue(true)
+
+    const { container } = render(createElement(SwipeableMessage, {
       onReply: vi.fn(),
-      children: createElement('div', {}, 'Normal Message'),
+      onActions: vi.fn(),
+      children: createElement('div', {}, 'Reduced Motion'),
     }))
-    expect(screen.getByText('Normal Message')).toBeDefined()
+
+    // 1. Children rendered
+    expect(screen.getByText('Reduced Motion')).toBeInTheDocument()
+    // 2. No swipe indicators
+    expect(screen.queryByTestId('icon-reply')).not.toBeInTheDocument()
+    expect(screen.queryByTestId('icon-trash')).not.toBeInTheDocument()
+    expect(screen.queryByTestId('icon-more')).not.toBeInTheDocument()
+    // 3. No overflow wrapper
+    expect(container.querySelector('.overflow-x-hidden')).toBeNull()
+    // 4. No aria-hidden elements
+    expect(container.querySelectorAll('[aria-hidden="true"]').length).toBe(0)
+    // 5. Container only contains the child
+    expect(container.textContent).toBe('Reduced Motion')
+    // 6. useReducedMotion was called
+    expect(mockedUseReducedMotion).toHaveBeenCalled()
   })
 
-  it('renders without swipe when both directions are disabled', () => {
+  // STRICT: Verifies selective swipe — disabling one direction hides its indicator but keeps the other
+  it('renders only left indicator when swipeRight is disabled, and vice versa', () => {
+    // Only swipe left enabled
+    const { container, unmount } = render(createElement(SwipeableMessage, {
+      enableSwipeLeft: true,
+      enableSwipeRight: false,
+      onReply: vi.fn(),
+      children: createElement('div', {}, 'Left Only'),
+    }))
+
+    // 1. Reply icon visible (left swipe enabled)
+    expect(screen.getByTestId('icon-reply')).toBeInTheDocument()
+    // 2. Trash icon NOT visible (right swipe disabled)
+    expect(screen.queryByTestId('icon-trash')).not.toBeInTheDocument()
+    // 3. More icon NOT visible (right swipe disabled)
+    expect(screen.queryByTestId('icon-more')).not.toBeInTheDocument()
+    // 4. Container has the swipe wrapper
+    expect(container.querySelector('.overflow-x-hidden')).not.toBeNull()
+
+    unmount()
+
+    // Only swipe right enabled
     render(createElement(SwipeableMessage, {
       enableSwipeLeft: false,
-      enableSwipeRight: false,
-      children: createElement('div', {}, 'No Swipe'),
+      enableSwipeRight: true,
+      onActions: vi.fn(),
+      children: createElement('div', {}, 'Right Only'),
     }))
-    expect(screen.getByText('No Swipe')).toBeDefined()
+
+    // 5. Reply icon NOT visible (left swipe disabled)
+    expect(screen.queryByTestId('icon-reply')).not.toBeInTheDocument()
+    // 6. Trash and More icons visible (right swipe enabled)
+    expect(screen.getByTestId('icon-trash')).toBeInTheDocument()
+    expect(screen.getByTestId('icon-more')).toBeInTheDocument()
   })
 })

@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from 'vitest'
+import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render } from '@testing-library/react'
 import { createElement } from 'react'
 
@@ -42,10 +42,59 @@ vi.mock('../../../hooks/useReducedMotion', () => ({
 }))
 
 import { TopLoadingBar } from '../TopLoadingBar'
+import { useReducedMotion } from '../../../hooks/useReducedMotion'
 
 describe('TopLoadingBar', () => {
-  it('renders without crash', () => {
+  beforeEach(() => {
+    vi.mocked(useReducedMotion).mockReturnValue(false)
+  })
+
+  // STRICT: not navigating renders nothing visible, no fixed bar, no inner progress element
+  it('renders nothing visible when not navigating', () => {
     const { container } = render(<TopLoadingBar />)
+
+    // Bar should not be visible when not navigating
     expect(container).toBeDefined()
+    // The outer wrapper should not contain the loading bar
+    const fixedBar = container.querySelector('.fixed')
+    expect(fixedBar).not.toBeInTheDocument()
+    // No progress bar inner element
+    expect(container.querySelector('[style*="width"]')).not.toBeInTheDocument()
+    // No divs at all when idle
+    const allDivs = container.querySelectorAll('div')
+    expect(allDivs.length).toBe(0)
+  })
+
+  // STRICT: reduced motion returns null, nothing rendered at all
+  it('returns null when reduced motion is preferred', () => {
+    vi.mocked(useReducedMotion).mockReturnValue(true)
+    const { container } = render(<TopLoadingBar />)
+
+    expect(container.innerHTML).toBe('')
+    expect(container.querySelector('.fixed')).not.toBeInTheDocument()
+    expect(container.querySelector('[aria-hidden]')).not.toBeInTheDocument()
+    // Absolutely nothing in the container
+    expect(container.childNodes.length).toBe(0)
+  })
+
+  // STRICT: no extra DOM pollution when idle, zero divs
+  it('produces zero DOM elements when idle', () => {
+    const { container } = render(<TopLoadingBar />)
+
+    expect(container).toBeDefined()
+    // Verify no extra DOM pollution when idle
+    const allDivs = container.querySelectorAll('div')
+    expect(allDivs.length).toBe(0)
+    expect(container.innerHTML).toBe('')
+  })
+
+  // STRICT: component mounts and unmounts cleanly without errors
+  it('mounts and unmounts cleanly without memory leaks', () => {
+    const { unmount, container } = render(<TopLoadingBar />)
+
+    expect(container).toBeDefined()
+    // Unmount should not throw
+    expect(() => unmount()).not.toThrow()
+    expect(container.innerHTML).toBe('')
   })
 })

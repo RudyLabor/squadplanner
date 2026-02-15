@@ -1,5 +1,5 @@
-import { describe, it, expect, vi } from 'vitest'
-import { render, screen } from '@testing-library/react'
+import { describe, it, expect, vi, beforeEach } from 'vitest'
+import { render, screen, fireEvent } from '@testing-library/react'
 import { createElement } from 'react'
 
 vi.mock('framer-motion', () => ({
@@ -31,56 +31,154 @@ vi.mock('framer-motion', () => ({
 }))
 
 vi.mock('../../icons', () => ({
-  AlertTriangle: (props: any) => createElement('span', props, 'alert'),
+  AlertTriangle: (props: any) => createElement('span', { ...props, 'data-testid': 'alert-icon' }, 'alert'),
   X: (props: any) => createElement('span', props, 'x'),
 }))
 
 vi.mock('../Dialog', () => ({
-  Dialog: ({ children, open, title }: any) => open ? createElement('div', { role: 'dialog' }, createElement('h2', null, title), children) : null,
-  DialogBody: ({ children }: any) => createElement('div', null, children),
-  DialogFooter: ({ children }: any) => createElement('div', null, children),
+  Dialog: ({ children, open, title }: any) => open ? createElement('div', { role: 'dialog', 'aria-labelledby': 'dialog-title' }, createElement('h2', { id: 'dialog-title' }, title), children) : null,
+  DialogBody: ({ children }: any) => createElement('div', { 'data-testid': 'dialog-body' }, children),
+  DialogFooter: ({ children }: any) => createElement('div', { 'data-testid': 'dialog-footer' }, children),
 }))
 
 vi.mock('../Sheet', () => ({
-  Sheet: ({ children, open }: any) => open ? createElement('div', null, children) : null,
+  Sheet: ({ children, open, title }: any) => open ? createElement('div', { 'data-testid': 'sheet', role: 'dialog' }, createElement('h2', null, title), children) : null,
 }))
 
 vi.mock('../Button', () => ({
-  Button: ({ children, onClick, ...props }: any) => createElement('button', { onClick, ...props }, children),
+  Button: ({ children, onClick, disabled, ...props }: any) => createElement('button', { onClick, disabled, ...props }, children),
 }))
 
 import { ConfirmDialog } from '../ConfirmDialog'
 
 describe('ConfirmDialog', () => {
-  it('renders without crash when open', () => {
-    // Force desktop mode (innerWidth >= 1024)
-    Object.defineProperty(window, 'innerWidth', { value: 1200, writable: true })
-    render(
-      <ConfirmDialog
-        open={true}
-        onClose={vi.fn()}
-        onConfirm={vi.fn()}
-        title="Confirm Action"
-        description="Are you sure?"
-      />
-    )
-    expect(screen.getByText('Are you sure?')).toBeInTheDocument()
+  beforeEach(() => {
+    Object.defineProperty(window, 'innerWidth', { value: 1200, writable: true, configurable: true })
+    window.dispatchEvent(new Event('resize'))
   })
 
-  it('renders confirm and cancel buttons', () => {
-    Object.defineProperty(window, 'innerWidth', { value: 1200, writable: true })
+  // STRICT: desktop open renders dialog, title, description, default labels, alert icon, confirm has aria-label
+  it('renders complete dialog with all elements on desktop', () => {
+    const onClose = vi.fn()
+    const onConfirm = vi.fn()
+    render(
+      <ConfirmDialog
+        open={true}
+        onClose={onClose}
+        onConfirm={onConfirm}
+        title="Supprimer la session"
+        description="Cette action est irreversible."
+      />
+    )
+
+    // Title and description rendered
+    expect(screen.getByText('Supprimer la session')).toBeInTheDocument()
+    expect(screen.getByText('Cette action est irreversible.')).toBeInTheDocument()
+
+    // Default button labels
+    const confirmBtns = screen.getAllByText('Confirmer')
+    expect(confirmBtns.length).toBeGreaterThan(0)
+    const cancelBtns = screen.getAllByText('Annuler')
+    expect(cancelBtns.length).toBeGreaterThan(0)
+
+    // Dialog role present
+    expect(screen.getByRole('dialog')).toBeInTheDocument()
+
+    // Alert icon rendered
+    const alertIcons = screen.getAllByTestId('alert-icon')
+    expect(alertIcons.length).toBeGreaterThan(0)
+
+    // Confirm button has aria-label
+    const confirmBtn = screen.getAllByLabelText('Confirmer')
+    expect(confirmBtn.length).toBeGreaterThan(0)
+  })
+
+  // STRICT: click handlers fire correctly, cancel calls onClose, confirm calls onConfirm
+  it('fires onClose on cancel click and onConfirm on confirm click', () => {
+    const onClose = vi.fn()
+    const onConfirm = vi.fn()
+    render(
+      <ConfirmDialog
+        open={true}
+        onClose={onClose}
+        onConfirm={onConfirm}
+        title="Test"
+        description="Test desc"
+        confirmLabel="Oui"
+        cancelLabel="Non"
+      />
+    )
+
+    // Custom labels rendered
+    const ouiBtns = screen.getAllByText('Oui')
+    const nonBtns = screen.getAllByText('Non')
+    expect(ouiBtns.length).toBeGreaterThan(0)
+    expect(nonBtns.length).toBeGreaterThan(0)
+
+    // Click cancel
+    fireEvent.click(nonBtns[0])
+    expect(onClose).toHaveBeenCalledTimes(1)
+
+    // Click confirm
+    fireEvent.click(ouiBtns[0])
+    expect(onConfirm).toHaveBeenCalledTimes(1)
+  })
+
+  // STRICT: isLoading disables both buttons
+  it('disables both buttons when isLoading is true', () => {
     render(
       <ConfirmDialog
         open={true}
         onClose={vi.fn()}
         onConfirm={vi.fn()}
-        title="Test"
-        description="Desc"
-        confirmLabel="Yes"
-        cancelLabel="No"
+        title="Loading"
+        description="Please wait"
+        isLoading={true}
       />
     )
-    expect(screen.getAllByText('Yes').length).toBeGreaterThan(0)
-    expect(screen.getAllByText('No').length).toBeGreaterThan(0)
+
+    const buttons = screen.getAllByRole('button')
+    // All buttons should be disabled
+    buttons.forEach((btn) => {
+      expect(btn).toBeDisabled()
+    })
+    expect(buttons.length).toBeGreaterThanOrEqual(2)
+  })
+
+  // STRICT: renders nothing when closed
+  it('renders nothing when open is false', () => {
+    render(
+      <ConfirmDialog
+        open={false}
+        onClose={vi.fn()}
+        onConfirm={vi.fn()}
+        title="Hidden"
+        description="Should not appear"
+      />
+    )
+
+    expect(screen.queryByText('Hidden')).not.toBeInTheDocument()
+    expect(screen.queryByText('Should not appear')).not.toBeInTheDocument()
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+  })
+
+  // STRICT: mobile renders Sheet instead of Dialog
+  it('renders Sheet on mobile (innerWidth < 1024)', () => {
+    Object.defineProperty(window, 'innerWidth', { value: 375, writable: true, configurable: true })
+    window.dispatchEvent(new Event('resize'))
+
+    render(
+      <ConfirmDialog
+        open={true}
+        onClose={vi.fn()}
+        onConfirm={vi.fn()}
+        title="Mobile Dialog"
+        description="Mobile description"
+      />
+    )
+
+    expect(screen.getByTestId('sheet')).toBeInTheDocument()
+    expect(screen.getByText('Mobile Dialog')).toBeInTheDocument()
+    expect(screen.getByText('Mobile description')).toBeInTheDocument()
   })
 })

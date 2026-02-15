@@ -35,7 +35,7 @@ export function TourTooltip({
         style={{ top: tooltipPos.top, left: tooltipPos.left }}
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="bg-bg-surface border-2 border-primary/30 rounded-2xl shadow-2xl shadow-primary/20 overflow-hidden backdrop-blur-sm relative">
+        <div className="bg-bg-surface border-2 border-primary/30 rounded-2xl shadow-2xl shadow-primary/20 backdrop-blur-sm relative">
           {/* Animated gradient background */}
           <m.div
             className="absolute inset-0 bg-gradient-to-br from-primary/8 via-transparent to-success/5 pointer-events-none"

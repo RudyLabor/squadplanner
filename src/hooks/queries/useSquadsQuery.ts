@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { supabaseMinimal as supabase } from '../../lib/supabaseMinimal'
 import { queryKeys } from '../../lib/queryClient'
+import { useAuthStore } from '../useAuth'
 import type { Squad, SquadMember } from '../../types/database'
 
 export {
@@ -68,14 +69,13 @@ async function fetchSquadById(id: string): Promise<SquadWithMembers | null> {
 }
 
 export function useSquadsQuery() {
+  const user = useAuthStore((s) => s.user)
   return useQuery({
     queryKey: queryKeys.squads.list(),
     queryFn: fetchSquads,
     staleTime: 30 * 1000,
-    // Don't refetch when data is already seeded from SSR loader via ClientRouteWrapper.
-    // This prevents the query from firing before the auth JWT is ready on the client,
-    // which would return [] and overwrite the valid SSR data in the cache.
-    refetchOnMount: false,
+    // Guard: don't fetch until auth is ready to avoid RLS returning []
+    enabled: !!user,
   })
 }
 

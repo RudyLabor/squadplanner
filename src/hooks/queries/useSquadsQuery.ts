@@ -72,6 +72,10 @@ export function useSquadsQuery() {
     queryKey: queryKeys.squads.list(),
     queryFn: fetchSquads,
     staleTime: 30 * 1000,
+    // Don't refetch when data is already seeded from SSR loader via ClientRouteWrapper.
+    // This prevents the query from firing before the auth JWT is ready on the client,
+    // which would return [] and overwrite the valid SSR data in the cache.
+    refetchOnMount: false,
   })
 }
 

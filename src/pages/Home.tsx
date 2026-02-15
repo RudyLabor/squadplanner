@@ -158,10 +158,11 @@ export default function Home({ loaderData }: HomeProps) {
   const { data: querySquads, isLoading: squadsLoading } = useSquadsQuery()
   const { data: queryRawSessions, isLoading: sessionsQueryLoading } =
     useUpcomingSessionsQuery(user?.id)
-  // Use query data when available, fallback to loaderData (avoids race condition
-  // where useSquadsQuery resolves with [] before Supabase auth is ready)
-  const squads = querySquads?.length ? querySquads : loaderSquads
-  const rawSessions = queryRawSessions?.length ? queryRawSessions : loaderSessions
+  // Prefer query data when it has actual results, otherwise use loader data.
+  // querySquads can be undefined (not yet fetched) or [] (fetched but empty due to auth race).
+  // Only override loaderData when querySquads has real data (length > 0).
+  const squads = querySquads && querySquads.length > 0 ? querySquads : loaderSquads
+  const rawSessions = queryRawSessions && queryRawSessions.length > 0 ? queryRawSessions : loaderSessions
   const rsvpMutation = useRsvpMutation()
   const { data: friendsPlaying = [], isLoading: friendsLoading } = useFriendsPlayingQuery(user?.id)
   const { data: aiCoachTip, isLoading: aiCoachLoading } = useAICoachQueryDeferred(user?.id, 'home')

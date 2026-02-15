@@ -112,11 +112,16 @@ export async function loader({ request }: LoaderFunctionArgs) {
 }
 
 // CLIENT LOADER — handles client-side navigations using localStorage auth
+// Falls back to SSR data when client auth isn't ready yet (prevents empty dashboard)
 export async function clientLoader({ serverLoader }: ClientLoaderFunctionArgs) {
   const { supabaseMinimal: supabase } = await import('../lib/supabaseMinimal')
   const { data: { user } } = await supabase.auth.getUser()
 
-  if (!user) return { profile: null, squads: [], upcomingSessions: [] }
+  // If client auth isn't ready, fall back to SSR loader data (which uses cookie auth)
+  if (!user) {
+    const serverData = await serverLoader<HomeLoaderData>()
+    return serverData
+  }
 
   const { data: rpcResult } = await supabase.rpc('get_layout_data', { p_user_id: user.id })
   const profile = ((rpcResult as any)?.profile as Profile | null) ?? null

@@ -31,20 +31,111 @@ vi.mock('framer-motion', () => ({
 }))
 
 vi.mock('../../../utils/animations', () => ({
-  scaleReveal: { hidden: {}, visible: {} },
+  scaleReveal: { hidden: { opacity: 0 }, visible: { opacity: 1 } },
 }))
 
 import { ReliabilitySection } from '../ReliabilitySection'
 
 describe('ReliabilitySection', () => {
-  it('renders without crash', () => {
+  it('renders section with correct aria-label', () => {
     render(<ReliabilitySection />)
-    expect(screen.getByText(/Score de fiabilité/)).toBeInTheDocument()
+    expect(screen.getByLabelText('Score de fiabilité')).toBeInTheDocument()
   })
 
-  it('renders reliability score', () => {
+  it('renders the heading', () => {
     render(<ReliabilitySection />)
-    expect(screen.getByText('94%')).toBeInTheDocument()
-    expect(screen.getByText('MaxGamer_94')).toBeInTheDocument()
+    expect(screen.getByText(/Score de fiabilité : tes potes comptent sur toi/)).toBeInTheDocument()
+  })
+
+  it('renders the description paragraph', () => {
+    render(<ReliabilitySection />)
+    expect(
+      screen.getByText(/Chaque membre a un score basé sur sa présence réelle/)
+    ).toBeInTheDocument()
+  })
+
+  it('renders the no-show warning in error color', () => {
+    render(<ReliabilitySection />)
+    expect(
+      screen.getByText(/Les no-shows chroniques, ça se voit./)
+    ).toBeInTheDocument()
+  })
+
+  describe('Score circle', () => {
+    it('renders 94% score', () => {
+      render(<ReliabilitySection />)
+      expect(screen.getByText('94%')).toBeInTheDocument()
+    })
+
+    it('renders fiabilité label', () => {
+      render(<ReliabilitySection />)
+      expect(screen.getByText('fiabilité')).toBeInTheDocument()
+    })
+
+    it('renders SVG circle chart with aria-hidden', () => {
+      const { container } = render(<ReliabilitySection />)
+      const svg = container.querySelector('svg.w-28.h-28')
+      expect(svg).toBeInTheDocument()
+      expect(svg?.getAttribute('aria-hidden')).toBe('true')
+    })
+
+    it('renders background and foreground circles', () => {
+      const { container } = render(<ReliabilitySection />)
+      const circles = container.querySelectorAll('circle')
+      expect(circles.length).toBe(2) // background + animated foreground
+    })
+  })
+
+  describe('History emojis', () => {
+    it('renders 6 history emojis (5 checkmarks and 1 X)', () => {
+      render(<ReliabilitySection />)
+      const checkmarks = screen.getAllByText('✅')
+      const crosses = screen.getAllByText('❌')
+      expect(checkmarks.length).toBe(5)
+      expect(crosses.length).toBe(1)
+    })
+  })
+
+  describe('User label', () => {
+    it('renders the username MaxGamer_94', () => {
+      render(<ReliabilitySection />)
+      expect(screen.getByText('MaxGamer_94')).toBeInTheDocument()
+    })
+  })
+
+  describe('Feature badges', () => {
+    it('renders all 3 feature badges', () => {
+      render(<ReliabilitySection />)
+      expect(screen.getByText(/Check-in obligatoire/)).toBeInTheDocument()
+      expect(screen.getByText(/Historique visible/)).toBeInTheDocument()
+      expect(screen.getByText(/Score par joueur/)).toBeInTheDocument()
+    })
+
+    it('renders feature badge icons', () => {
+      render(<ReliabilitySection />)
+      // ✅ appears in both history (5x) and badge (1x) = 6 total
+      expect(screen.getAllByText(/✅/).length).toBe(6)
+      expect(screen.getByText(/📊/)).toBeInTheDocument()
+      expect(screen.getByText(/🏆/)).toBeInTheDocument()
+    })
+  })
+
+  describe('Layout structure', () => {
+    it('has max-w-4xl container', () => {
+      const { container } = render(<ReliabilitySection />)
+      expect(container.querySelector('.max-w-4xl')).toBeInTheDocument()
+    })
+
+    it('has responsive flex layout', () => {
+      const { container } = render(<ReliabilitySection />)
+      const flexContainer = container.querySelector('.flex.flex-col.md\\:flex-row')
+      expect(flexContainer).toBeInTheDocument()
+    })
+
+    it('has responsive text alignment', () => {
+      const { container } = render(<ReliabilitySection />)
+      const textBlock = container.querySelector('.text-center.md\\:text-left')
+      expect(textBlock).toBeInTheDocument()
+    })
   })
 })

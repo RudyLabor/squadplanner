@@ -49,9 +49,9 @@ export function LandingNavbar({ isLoggedIn }: LandingNavbarProps) {
           className="max-w-5xl mx-auto flex items-center justify-between"
           aria-label="Navigation principale"
         >
-          <Link to="/" className="flex items-center gap-2 shrink-0 min-h-[44px] min-w-[44px]">
+          <Link to="/" className="flex items-center gap-2 shrink-0 min-h-[44px] min-w-[44px]" aria-label="Squad Planner - Accueil">
             <SquadPlannerLogo size={24} />
-            <span className="text-md font-semibold text-text-primary hidden sm:inline">
+            <span className="text-md font-semibold text-text-primary hidden sm:inline" aria-hidden="true">
               Squad Planner
             </span>
           </Link>

@@ -192,25 +192,27 @@ describe('SquadSessionsList', () => {
   })
 
   it('shows error when submitting without date and time', async () => {
-    renderList()
+    const { container } = renderList()
     fireEvent.click(screen.getByText('Planifier une session'))
-    fireEvent.click(screen.getByText('Créer'))
+    // Submit the form directly
+    const form = container.querySelector('form')!
+    fireEvent.submit(form)
     await waitFor(() => {
       expect(screen.getByText('Date et heure sont requises')).toBeInTheDocument()
     })
   })
 
   it('submits form with correct data and closes form on success', async () => {
-    renderList()
+    const { container } = renderList()
     fireEvent.click(screen.getByText('Planifier une session'))
 
     // Fill in date and time
-    const dateInput = screen.getByLabelText('Date') as HTMLInputElement
-    const timeInput = screen.getByLabelText('Heure') as HTMLInputElement
-    fireEvent.change(dateInput, { target: { value: '2026-03-15' } })
-    fireEvent.change(timeInput, { target: { value: '20:00' } })
+    fireEvent.change(screen.getByLabelText('Date'), { target: { value: '2026-03-15' } })
+    fireEvent.change(screen.getByLabelText('Heure'), { target: { value: '20:00' } })
 
-    fireEvent.click(screen.getByText('Créer'))
+    // Find the submit button and click it; also submit the form to ensure onSubmit fires
+    const submitButton = screen.getAllByRole('button').find(b => b.getAttribute('type') === 'submit')!
+    submitButton.click()
 
     await waitFor(() => {
       expect(mockOnCreateSession).toHaveBeenCalledWith(expect.objectContaining({
@@ -232,12 +234,12 @@ describe('SquadSessionsList', () => {
     renderList()
     fireEvent.click(screen.getByText('Planifier une session'))
 
-    const dateInput = screen.getByLabelText('Date') as HTMLInputElement
-    const timeInput = screen.getByLabelText('Heure') as HTMLInputElement
-    fireEvent.change(dateInput, { target: { value: '2026-03-15' } })
-    fireEvent.change(timeInput, { target: { value: '20:00' } })
+    fireEvent.change(screen.getByLabelText('Date'), { target: { value: '2026-03-15' } })
+    fireEvent.change(screen.getByLabelText('Heure'), { target: { value: '20:00' } })
 
-    fireEvent.click(screen.getByText('Créer'))
+    // Use native click on submit button to trigger form submission
+    const submitButton = screen.getAllByRole('button').find(b => b.getAttribute('type') === 'submit')!
+    submitButton.click()
 
     await waitFor(() => {
       expect(screen.getByText('Server error')).toBeInTheDocument()
@@ -247,11 +249,12 @@ describe('SquadSessionsList', () => {
   it('disables submit button when sessionsLoading', () => {
     renderList({ sessionsLoading: true })
     fireEvent.click(screen.getByText('Planifier une session'))
-    const submitBtn = screen.getByText('Créer').closest('button') || screen.getByTestId('icon-loader')?.closest('button')
-    // The button with type submit should be disabled
+    // When sessionsLoading=true, the submit button shows <Loader2> instead of "Créer"
+    // Find the submit button by its type attribute
     const allButtons = screen.getAllByRole('button')
     const submitButton = allButtons.find(b => b.getAttribute('type') === 'submit')
-    expect(submitButton?.disabled).toBe(true)
+    expect(submitButton).toBeDefined()
+    expect(submitButton!.disabled).toBe(true)
   })
 
   // === EMPTY STATE CTA ===

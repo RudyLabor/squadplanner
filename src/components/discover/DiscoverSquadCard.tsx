@@ -43,12 +43,12 @@ export const DiscoverSquadCard = memo(function DiscoverSquadCard({ squad }: Prop
     >
       {/* Header: icon + name + game */}
       <div className="flex items-center gap-3 mb-2">
-        <div className="w-10 h-10 rounded-xl bg-indigo-500/10 flex items-center justify-center flex-shrink-0">
-          <Gamepad2 className="w-5 h-5 text-indigo-400" />
+        <div className="w-10 h-10 rounded-xl bg-primary-10 flex items-center justify-center flex-shrink-0">
+          <Gamepad2 className="w-5 h-5 text-primary" />
         </div>
         <div className="flex-1 min-w-0">
           <h3 className="text-sm font-semibold text-text-primary truncate">{squad.name}</h3>
-          <p className="text-xs text-indigo-400 font-medium">{squad.game}</p>
+          <p className="text-xs text-primary font-medium">{squad.game}</p>
         </div>
         {isMember ? (
           <Link
@@ -61,7 +61,7 @@ export const DiscoverSquadCard = memo(function DiscoverSquadCard({ squad }: Prop
         ) : (
           <button
             onClick={handleCopyCode}
-            className="flex-shrink-0 flex items-center gap-1.5 px-3 py-2 min-h-[44px] rounded-lg bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-400 text-xs font-medium transition-colors"
+            className="flex-shrink-0 flex items-center gap-1.5 px-3 py-2 min-h-[44px] rounded-lg bg-primary-10 hover:bg-primary-20 text-primary text-xs font-medium transition-colors"
           >
             {copied ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
             {copied ? 'Copié !' : 'Rejoindre'}
@@ -116,8 +116,8 @@ export const DiscoverSquadCard = memo(function DiscoverSquadCard({ squad }: Prop
             decoding="async"
           />
         ) : (
-          <div className="w-4 h-4 rounded-full bg-indigo-500/20 flex items-center justify-center">
-            <span className="text-2xs text-indigo-400 font-bold">
+          <div className="w-4 h-4 rounded-full bg-primary-20 flex items-center justify-center">
+            <span className="text-2xs text-primary font-bold">
               {(squad.owner_username || '?').charAt(0).toUpperCase()}
             </span>
           </div>

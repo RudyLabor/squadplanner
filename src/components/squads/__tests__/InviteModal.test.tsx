@@ -246,7 +246,9 @@ describe('InviteModal', () => {
     render(<InviteModal {...defaultProps} />)
     const input = screen.getByPlaceholderText("Nom d'utilisateur...")
     fireEvent.change(input, { target: { value: 'Player' } })
-    fireEvent.keyDown(input, { key: 'Enter' })
+    // Re-query the input after state update to get the element with updated event handlers
+    const updatedInput = screen.getByPlaceholderText("Nom d'utilisateur...")
+    fireEvent.keyDown(updatedInput, { key: 'Enter' })
     await waitFor(() => {
       expect(screen.getByText('Player2')).toBeInTheDocument()
     })
@@ -278,12 +280,13 @@ describe('InviteModal', () => {
 
   it('shows avatar image when user has avatar_url', async () => {
     setupSearchMock([{ id: 'u2', username: 'Player2', avatar_url: 'https://example.com/avatar.jpg' }])
-    render(<InviteModal {...defaultProps} />)
+    const { container } = render(<InviteModal {...defaultProps} />)
     fireEvent.change(screen.getByPlaceholderText("Nom d'utilisateur..."), { target: { value: 'Player' } })
     fireEvent.click(screen.getByText('Chercher'))
     await waitFor(() => {
-      const img = screen.getByRole('img')
-      expect(img.getAttribute('src')).toBe('https://example.com/avatar.jpg')
+      const img = container.querySelector('img')
+      expect(img).not.toBeNull()
+      expect(img!.getAttribute('src')).toBe('https://example.com/avatar.jpg')
     })
   })
 

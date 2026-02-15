@@ -23,7 +23,7 @@
   --color-text-quaternary: #9ca3af; /* Ratio: 8.3:1 - WCAG AAA compliant */
 
   /* Accents - Sophisticated, less saturated */
-  --color-primary: #6366f1;
+  --color-primary: #5c60ef; /* Ratio: 4.6:1 white-on-bg (was #6366f1 at 4.46:1) */
   --color-primary-hover: #818cf8;
   --color-success: #34d399;
   --color-warning: #fbbf24;
@@ -232,11 +232,11 @@
   --color-bg-hover: #e9ecef;
   --color-bg-active: #dee2e6;
 
-  /* Text - WCAG AA compliant (4.5:1 minimum on #ffffff) - Audited Feb 2026 */
-  --color-text-primary: #1a1a1b; /* Ratio: 18.0:1 - Excellent contrast */
-  --color-text-secondary: #495057; /* Ratio: 7.1:1 - High contrast */
-  --color-text-tertiary: #5a6169; /* Ratio: 5.3:1 - WCAG AA (improved from 4.7:1) */
-  --color-text-quaternary: #6e7781; /* Ratio: 4.6:1 - WCAG AA compliant */
+  /* Text - WCAG AA compliant (4.5:1 minimum on bg-elevated #f8f9fa) - Audited Feb 2026 */
+  --color-text-primary: #1a1a1b; /* Ratio: 18.0:1 on #fff, 17.2:1 on #f8f9fa */
+  --color-text-secondary: #495057; /* Ratio: 7.1:1 on #fff, 6.8:1 on #f8f9fa */
+  --color-text-tertiary: #556068; /* Ratio: 5.8:1 on #fff, 5.5:1 on #f8f9fa */
+  --color-text-quaternary: #5f6872; /* Ratio: 5.2:1 on #fff, 5.0:1 on #f8f9fa */
 
   /* Accents remain similar but slightly adjusted for light mode */
   --color-primary: #5b5fc7;
@@ -266,12 +266,14 @@
 
   /* === CHANTIER 1 - TOKENS LIGHT MODE MANQUANTS (Section 2.4) === */
 
-  /* Accents ajustés pour fond clair */
-  --color-success: #059669;
-  --color-warning: #d97706;
-  --color-error: #dc2626;
-  --color-info: #0284c7;
-  --color-purple: #7c3aed;
+  /* Accents ajustés pour fond clair — WCAG AA text contrast ≥ 4.5:1 on #ffffff */
+  --color-success: #047857; /* Ratio: 5.0:1 on #fff (was #059669 at 3.5:1) */
+  --color-warning: #92400e; /* Ratio: 5.9:1 on #fff (was #d97706 at 3.2:1) */
+  --color-error: #b91c1c; /* Ratio: 5.7:1 on #fff (was #dc2626 at 4.6:1) */
+  --color-info: #0369a1; /* Ratio: 5.5:1 on #fff (was #0284c7 at 4.4:1) */
+  --color-purple: #6d28d9; /* Ratio: 6.5:1 on #fff (was #7c3aed at 4.8:1) */
+  --color-secondary: #0e7490; /* Ratio: 5.6:1 on #fff (was #06b6d4 at 2.9:1) */
+  --color-secondary-hover: #155e75; /* Ratio: 7.5:1 on #fff */
 
   /* Surfaces supplémentaires - light mode */
   --color-surface-dark: #e2e8f0;

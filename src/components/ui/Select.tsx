@@ -183,6 +183,7 @@ export function Select({
         aria-haspopup="listbox"
         aria-controls={open ? listboxId : undefined}
         aria-labelledby={label ? labelId : undefined}
+        aria-label={!label ? placeholder : undefined}
         aria-disabled={disabled}
         aria-invalid={!!error}
         onClick={() => !disabled && setOpen((v) => !v)}

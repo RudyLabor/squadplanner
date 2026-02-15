@@ -346,7 +346,7 @@ describe('Auth Page', () => {
       fireEvent.change(screen.getByTestId('email-input'), { target: { value: 'test@test.com' } })
       fireEvent.change(screen.getByTestId('password-input'), { target: { value: 'password123' } })
       await act(async () => {
-        fireEvent.submit(screen.getByRole('form') || document.querySelector('form')!)
+        fireEvent.submit(document.querySelector('form')!)
       })
       expect(mockH.mockSignIn).toHaveBeenCalledWith('test@test.com', 'password123')
     })

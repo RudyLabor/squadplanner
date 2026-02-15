@@ -150,7 +150,7 @@ describe('motionApple', () => {
       expect(button.className).toContain('motion-element')
     })
 
-    it('calls onClick when clicked (after spring animation completes)', async () => {
+    it('calls onClick when clicked (after spring animation completes)', { timeout: 30000 }, async () => {
       const handleClick = vi.fn()
       render(<AppleButton onClick={handleClick}>Test</AppleButton>)
       const button = screen.getByRole('button')

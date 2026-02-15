@@ -371,7 +371,8 @@ describe('routes/home', () => {
   describe('clientLoader', () => {
     it('returns empty data when user is null', async () => {
       mockClientGetUser.mockResolvedValue({ data: { user: null } })
-      const result = await clientLoader({ serverLoader: vi.fn() } as any)
+      const serverData = { profile: null, squads: [], upcomingSessions: [] }
+      const result = await clientLoader({ serverLoader: vi.fn().mockResolvedValue(serverData) } as any)
       expect(result).toEqual({ profile: null, squads: [], upcomingSessions: [] })
     })
 

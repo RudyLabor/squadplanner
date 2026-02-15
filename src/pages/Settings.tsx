@@ -205,6 +205,7 @@ export function Settings() {
           <div className="space-y-1">
             <SettingRow label="Sessions" description="Rappels et confirmations de sessions">
               <Toggle
+                label="Notifications sessions"
                 enabled={notifications.sessions}
                 onChange={(v) => {
                   setNotifications({ ...notifications, sessions: v })
@@ -214,6 +215,7 @@ export function Settings() {
             </SettingRow>
             <SettingRow label="Messages" description="Nouveaux messages de ta squad">
               <Toggle
+                label="Notifications messages"
                 enabled={notifications.messages}
                 onChange={(v) => {
                   setNotifications({ ...notifications, messages: v })
@@ -223,6 +225,7 @@ export function Settings() {
             </SettingRow>
             <SettingRow label="Party vocale" description="Quand quelqu'un rejoint la party">
               <Toggle
+                label="Notifications party vocale"
                 enabled={notifications.party}
                 onChange={(v) => {
                   setNotifications({ ...notifications, party: v })
@@ -232,6 +235,7 @@ export function Settings() {
             </SettingRow>
             <SettingRow label="Rappels automatiques" description="30 min avant chaque session">
               <Toggle
+                label="Rappels automatiques"
                 enabled={notifications.reminders}
                 onChange={(v) => {
                   setNotifications({ ...notifications, reminders: v })
@@ -315,11 +319,13 @@ export function Settings() {
                   { value: 'friends', label: 'Membres de mes squads' },
                   { value: 'private', label: 'Personne' },
                 ]}
+                placeholder="Visibilité du profil"
                 size="sm"
               />
             </SettingRow>
             <SettingRow label="Statut en ligne" description="Montre quand tu es connecté">
               <Toggle
+                label="Statut en ligne"
                 enabled={privacy.showOnlineStatus}
                 onChange={(v) => {
                   setPrivacy({ ...privacy, showOnlineStatus: v })
@@ -401,7 +407,7 @@ export function Settings() {
                 <Trash2 className="w-5 h-5 text-error" />
                 <div className="text-left">
                   <p className="text-md text-error">Supprimer mon compte</p>
-                  <p className="text-sm text-error/60">Action irréversible</p>
+                  <p className="text-sm text-error">Action irréversible</p>
                 </div>
               </div>
               <ChevronRight className="w-5 h-5 text-error/50" />

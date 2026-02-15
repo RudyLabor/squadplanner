@@ -16,15 +16,18 @@ const mockAudioInstance = vi.hoisted(() => ({
 }))
 
 // Each new Audio() call returns a fresh copy of the mock
+// Use a regular function (not arrow) so `new` works correctly
 vi.stubGlobal(
   'Audio',
-  vi.fn().mockImplementation(() => ({
-    play: mockAudioInstance.play,
-    pause: mockAudioInstance.pause,
-    preload: '',
-    volume: 0,
-    currentTime: 0,
-  }))
+  vi.fn().mockImplementation(function () {
+    return {
+      play: mockAudioInstance.play,
+      pause: mockAudioInstance.pause,
+      preload: '',
+      volume: 0,
+      currentTime: 0,
+    }
+  })
 )
 
 import {
@@ -256,8 +259,10 @@ describe('sounds', () => {
 
     it('creates Audio elements for all sounds', () => {
       preloadSounds()
-      // Audio constructor should have been called multiple times
-      expect(Audio).toHaveBeenCalled()
+      // After preloadSounds, playing any sound should work (all sounds cached)
+      setSoundEnabled(true)
+      playSound('countdown')
+      expect(mockAudioInstance.play).toHaveBeenCalled()
     })
   })
 

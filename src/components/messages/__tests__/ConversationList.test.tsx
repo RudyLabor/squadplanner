@@ -294,9 +294,10 @@ describe('ConversationList', () => {
   })
 
   it('shows avatar image when DM user has avatar URL', () => {
-    render(<ConversationList {...defaultProps} activeTab="dms" filteredDMConvs={[mockDMConvWithAvatar]} dmConversations={[mockDMConvWithAvatar]} />)
-    const img = screen.getByRole('img')
-    expect(img.getAttribute('src')).toBe('https://example.com/jane.jpg')
+    const { container } = render(<ConversationList {...defaultProps} activeTab="dms" filteredDMConvs={[mockDMConvWithAvatar]} dmConversations={[mockDMConvWithAvatar]} />)
+    const img = container.querySelector('img')
+    expect(img).not.toBeNull()
+    expect(img!.getAttribute('src')).toBe('https://example.com/jane.jpg')
   })
 
   it('shows "Nouvelle conversation" for DM with no last message', () => {

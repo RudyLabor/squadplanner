@@ -100,8 +100,8 @@ const PlayerCard = memo(function PlayerCard({ player }: { player: MatchmakingPla
             decoding="async"
           />
         ) : (
-          <div className="w-10 h-10 rounded-full bg-indigo-500/10 flex items-center justify-center flex-shrink-0">
-            <span className="text-sm font-bold text-indigo-400">
+          <div className="w-10 h-10 rounded-full bg-primary-10 flex items-center justify-center flex-shrink-0">
+            <span className="text-sm font-bold text-primary">
               {player.username.charAt(0).toUpperCase()}
             </span>
           </div>
@@ -110,7 +110,7 @@ const PlayerCard = memo(function PlayerCard({ player }: { player: MatchmakingPla
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2">
             <h4 className="text-sm font-semibold text-text-primary">{player.username}</h4>
-            <span className="text-xs px-1.5 py-0.5 rounded bg-indigo-500/10 text-indigo-400 font-medium">
+            <span className="text-xs px-1.5 py-0.5 rounded bg-primary-10 text-primary font-medium">
               Nv.{player.level}
             </span>
           </div>
@@ -160,7 +160,7 @@ const PlayerCard = memo(function PlayerCard({ player }: { player: MatchmakingPla
           <button
             onClick={handleInvite}
             disabled={inviting}
-            className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-400 text-xs font-medium transition-colors disabled:opacity-50"
+            className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-primary-10 hover:bg-primary-20 text-primary text-xs font-medium transition-colors disabled:opacity-50"
           >
             <MessageSquare className="w-3.5 h-3.5" />
             {inviting ? '...' : 'Inviter'}

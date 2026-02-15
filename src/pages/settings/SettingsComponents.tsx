@@ -7,15 +7,18 @@ export function Toggle({
   enabled,
   onChange,
   disabled = false,
+  label,
 }: {
   enabled: boolean
   onChange: (value: boolean) => void
   disabled?: boolean
+  label?: string
 }) {
   return (
     <button
       role="switch"
       aria-checked={enabled}
+      aria-label={label}
       onClick={() => !disabled && onChange(!enabled)}
       disabled={disabled}
       className={`relative w-11 h-6 rounded-full transition-colors ${enabled ? 'bg-success' : 'bg-border-hover'} ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}

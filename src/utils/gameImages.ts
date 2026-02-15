@@ -129,9 +129,10 @@ export function getGameImageUrl(gameName: string): string {
 
   const normalized = normalizeGameName(gameName)
 
-  // Rechercher dans le mapping statique
+  // Rechercher dans le mapping statique (normaliser les clés aussi)
   for (const [key, url] of Object.entries(GAME_IMAGES)) {
-    if (normalized.includes(key) || key.includes(normalized)) {
+    const normalizedKey = normalizeGameName(key)
+    if (normalized.includes(normalizedKey) || normalizedKey.includes(normalized)) {
       imageCache.set(gameName, url)
       return url
     }

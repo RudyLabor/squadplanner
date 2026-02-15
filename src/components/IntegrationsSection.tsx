@@ -38,7 +38,7 @@ export const IntegrationsSection = memo(function IntegrationsSection() {
   return (
     <div className="rounded-xl border border-border-subtle bg-surface-card p-5">
       <div className="flex items-center gap-2 mb-4">
-        <Plug className="w-5 h-5 text-indigo-400" />
+        <Plug className="w-5 h-5 text-primary" />
         <h2 className="text-base font-semibold text-text-primary">Integrations</h2>
       </div>
 
@@ -56,7 +56,7 @@ export const IntegrationsSection = memo(function IntegrationsSection() {
                 e.preventDefault()
                 showInfo('Utilise le bouton "Calendrier" sur chaque session pour l\'exporter')
               }}
-              className="text-xs text-indigo-400 hover:text-indigo-300 transition-colors flex items-center gap-1"
+              className="text-xs text-primary hover:text-primary-hover transition-colors flex items-center gap-1"
             >
               <Download className="w-3 h-3" />
               Exporter
@@ -113,7 +113,7 @@ export const IntegrationsSection = memo(function IntegrationsSection() {
           <button
             onClick={handleSaveSocial}
             disabled={saving}
-            className="w-full py-2 rounded-lg bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-400 text-sm font-medium transition-colors disabled:opacity-50"
+            className="w-full py-2 rounded-lg bg-primary-10 hover:bg-primary-20 text-primary text-sm font-medium transition-colors disabled:opacity-50"
           >
             {saving ? 'Sauvegarde...' : 'Sauvegarder les pseudos'}
           </button>

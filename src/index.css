@@ -1972,19 +1972,9 @@ label[for] {
   pointer-events: none;
 }
 
-/* Live region for dynamic content announcements */
-[aria-live='polite'],
-[aria-live='assertive'] {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border-width: 0;
-}
+/* Live regions: only hide the dedicated sr-only announcers in root.tsx.
+   Visible components (AnimatedCounter, Toast, banners) also use aria-live
+   so we must NOT apply sr-only globally to [aria-live]. */
 
 /* =====================================================
    WCAG AA ACCESSIBILITY - Text Utilities & Readability

@@ -118,8 +118,9 @@ test.describe('F42 — Rejoindre la party', () => {
       return
     }
 
-    // STRICT: "Rejoindre" button MUST be visible (PartySquadCard renders it)
-    const joinBtn = authenticatedPage.getByRole('button', { name: /Rejoindre/i }).first()
+    // STRICT: join/launch button MUST be visible
+    // Single squad → "Lancer la party" (PartySingleSquad), Multiple squads → "Rejoindre" (PartySquadCard)
+    const joinBtn = authenticatedPage.getByRole('button', { name: /Rejoindre|Lancer la party/i }).first()
     await expect(joinBtn).toBeVisible({ timeout: 10000 })
 
     // Click join — WebRTC will likely fail in test env, but page MUST remain functional
@@ -178,10 +179,11 @@ test.describe('F44 — Etat de la page party', () => {
     await expect(authenticatedPage.getByRole('heading', { name: /Party/i })).toBeVisible({ timeout: 15000 })
 
     if (userSquads.length > 0) {
-      // STRICT: DB has squads → "Rejoindre" buttons MUST be visible (PartySquadCard)
-      const joinButtons = authenticatedPage.getByRole('button', { name: /Rejoindre/i })
+      // STRICT: DB has squads → join/launch buttons MUST be visible
+      // Single squad → "Lancer la party" (PartySingleSquad), Multiple → "Rejoindre" (PartySquadCard)
+      const joinButtons = authenticatedPage.getByRole('button', { name: /Rejoindre|Lancer la party/i })
       const joinCount = await joinButtons.count()
-      // STRICT: at least one Rejoindre button MUST exist
+      // STRICT: at least one join/launch button MUST exist
       expect(joinCount).toBeGreaterThan(0)
 
       // STRICT: the first squad name from DB MUST be visible on the page

@@ -53,6 +53,7 @@ export function CallHistory() {
     useCallHistoryStore()
   // LAZY LOAD: useVoiceCall sera importé dans handleCall
   // const { startCall, status: callStatus } = useVoiceCallStore()
+  const callStatus = 'idle' as const // Default — real status injected lazily in handleCall
 
   const [showToast, setShowToast] = useState(false)
   const [toastMessage, setToastMessage] = useState('')

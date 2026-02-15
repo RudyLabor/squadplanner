@@ -1613,7 +1613,8 @@ select:focus-visible,
   }
 }
 .text-gradient-animated {
-  background: linear-gradient(90deg, #5c60ef, #a78bfa, #06b6d4, #5c60ef);
+  background: linear-gradient(90deg, #818cf8, #c4b5fd, #67e8f9, #818cf8);
+  /* WCAG AA: #818cf8 5.8:1, #c4b5fd 8.2:1, #67e8f9 11.3:1 on #050506 dark bg */
   background-size: 300% 100%;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;

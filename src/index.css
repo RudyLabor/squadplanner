@@ -40,7 +40,7 @@
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
   --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.3);
   --shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.4);
-  --shadow-glow-primary: 0 0 40px rgba(99, 102, 241, 0.15);
+  --shadow-glow-primary: 0 0 40px rgba(92, 96, 239, 0.15);
 
   /* Fonts - Cross-platform typography with Inter + Space Grotesk display */
   --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
@@ -87,11 +87,11 @@
   /* === CHANTIER 1 - TOKENS MANQUANTS (Section 2.3) === */
 
   /* Accents avec opacité (pour backgrounds colorés) */
-  --color-primary-5: rgba(99, 102, 241, 0.05);
-  --color-primary-10: rgba(99, 102, 241, 0.1);
-  --color-primary-15: rgba(99, 102, 241, 0.15);
-  --color-primary-20: rgba(99, 102, 241, 0.2);
-  --color-primary-30: rgba(99, 102, 241, 0.3);
+  --color-primary-5: rgba(92, 96, 239, 0.05);
+  --color-primary-10: rgba(92, 96, 239, 0.1);
+  --color-primary-15: rgba(92, 96, 239, 0.15);
+  --color-primary-20: rgba(92, 96, 239, 0.2);
+  --color-primary-30: rgba(92, 96, 239, 0.3);
   --color-primary-hover-15: rgba(129, 140, 248, 0.15);
   --color-primary-hover-30: rgba(129, 140, 248, 0.3);
   --color-success-5: rgba(52, 211, 153, 0.05);
@@ -144,9 +144,9 @@
   /* Ombres sémantiques */
   --shadow-glow-success: 0 0 20px rgba(52, 211, 153, 0.15);
   --shadow-glow-success-strong: 0 0 30px rgba(52, 211, 153, 0.3);
-  --shadow-glow-primary-sm: 0 0 10px rgba(99, 102, 241, 0.15);
-  --shadow-glow-primary-md: 0 0 20px rgba(99, 102, 241, 0.2);
-  --shadow-glow-primary-lg: 0 0 40px rgba(99, 102, 241, 0.3);
+  --shadow-glow-primary-sm: 0 0 10px rgba(92, 96, 239, 0.15);
+  --shadow-glow-primary-md: 0 0 20px rgba(92, 96, 239, 0.2);
+  --shadow-glow-primary-lg: 0 0 40px rgba(92, 96, 239, 0.3);
   --shadow-glow-error: 0 0 20px rgba(248, 113, 113, 0.15);
   --shadow-glow-warning: 0 0 20px rgba(251, 191, 36, 0.15);
   --shadow-glow-warning-strong: 0 0 30px rgba(251, 191, 36, 0.3);
@@ -251,7 +251,7 @@
   --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.04);
   --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.06), 0 2px 4px rgba(0, 0, 0, 0.04);
   --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.1), 0 4px 12px rgba(0, 0, 0, 0.05);
-  --shadow-glow-primary: 0 0 40px rgba(99, 102, 241, 0.08);
+  --shadow-glow-primary: 0 0 40px rgba(92, 96, 239, 0.08);
 
   /* Surface tokens - light mode */
   --color-surface-card: rgba(0, 0, 0, 0.02);
@@ -267,12 +267,12 @@
   /* === CHANTIER 1 - TOKENS LIGHT MODE MANQUANTS (Section 2.4) === */
 
   /* Accents ajustés pour fond clair — WCAG AA text contrast ≥ 4.5:1 on #ffffff */
-  --color-success: #047857; /* Ratio: 5.0:1 on #fff (was #059669 at 3.5:1) */
+  --color-success: #046C4E; /* Ratio: 5.8:1 on #fff, 4.7:1 on #e6e6e6 (was #047857 at 4.39:1 on grey) */
   --color-warning: #92400e; /* Ratio: 5.9:1 on #fff (was #d97706 at 3.2:1) */
   --color-error: #b91c1c; /* Ratio: 5.7:1 on #fff (was #dc2626 at 4.6:1) */
   --color-info: #0369a1; /* Ratio: 5.5:1 on #fff (was #0284c7 at 4.4:1) */
   --color-purple: #6d28d9; /* Ratio: 6.5:1 on #fff (was #7c3aed at 4.8:1) */
-  --color-secondary: #0e7490; /* Ratio: 5.6:1 on #fff (was #06b6d4 at 2.9:1) */
+  --color-secondary: #0D6E88; /* Ratio: 5.8:1 on #fff, 4.7:1 on #e2e8f0 (was #0e7490 at 4.34:1 on grey) */
   --color-secondary-hover: #155e75; /* Ratio: 7.5:1 on #fff */
 
   /* Surfaces supplémentaires - light mode */
@@ -289,9 +289,9 @@
   /* Ombres glow en light mode (plus subtiles) */
   --shadow-glow-success: 0 0 20px rgba(5, 150, 105, 0.08);
   --shadow-glow-success-strong: 0 0 30px rgba(5, 150, 105, 0.12);
-  --shadow-glow-primary-sm: 0 0 10px rgba(99, 102, 241, 0.08);
-  --shadow-glow-primary-md: 0 0 20px rgba(99, 102, 241, 0.1);
-  --shadow-glow-primary-lg: 0 0 40px rgba(99, 102, 241, 0.12);
+  --shadow-glow-primary-sm: 0 0 10px rgba(92, 96, 239, 0.08);
+  --shadow-glow-primary-md: 0 0 20px rgba(92, 96, 239, 0.1);
+  --shadow-glow-primary-lg: 0 0 40px rgba(92, 96, 239, 0.12);
   --shadow-glow-error: 0 0 20px rgba(220, 38, 38, 0.08);
   --shadow-glow-warning: 0 0 20px rgba(217, 119, 6, 0.08);
 
@@ -385,7 +385,7 @@
 
 /* Light theme selection color */
 [data-theme='light'] ::selection {
-  background: rgba(99, 102, 241, 0.2);
+  background: rgba(92, 96, 239, 0.2);
   color: #1a1a1b;
 }
 
@@ -509,7 +509,7 @@ textarea:disabled {
 [role='tab']:focus-visible {
   outline: 2px solid var(--color-primary);
   outline-offset: 2px;
-  box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.2);
+  box-shadow: 0 0 0 4px rgba(92, 96, 239, 0.2);
 }
 
 /* Premium typography defaults */
@@ -545,7 +545,7 @@ p {
 
 /* Premium selection */
 ::selection {
-  background: rgba(99, 102, 241, 0.3);
+  background: rgba(92, 96, 239, 0.3);
   color: #fafafa;
 }
 
@@ -874,7 +874,7 @@ select:focus-visible,
 [tabindex]:focus-visible {
   outline: 2px solid var(--color-primary);
   outline-offset: 2px;
-  box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.2);
+  box-shadow: 0 0 0 4px rgba(92, 96, 239, 0.2);
 }
 
 /* Remove default focus styles for mouse users (only show focus-visible for keyboard) */
@@ -970,7 +970,7 @@ select:focus-visible,
   box-shadow: 0 0 30px rgba(52, 211, 153, 0.1);
 }
 .glow-primary {
-  box-shadow: 0 0 30px rgba(99, 102, 241, 0.1);
+  box-shadow: 0 0 30px rgba(92, 96, 239, 0.1);
 }
 .glow-warning {
   box-shadow: 0 0 30px rgba(251, 191, 36, 0.1);
@@ -1388,7 +1388,7 @@ select:focus-visible,
 /* Mesh Gradient - Premium multi-point gradient for hero sections */
 .mesh-gradient-hero {
   background:
-    radial-gradient(at 27% 37%, rgba(99, 102, 241, 0.15) 0px, transparent 50%),
+    radial-gradient(at 27% 37%, rgba(92, 96, 239, 0.15) 0px, transparent 50%),
     radial-gradient(at 97% 21%, rgba(167, 139, 250, 0.12) 0px, transparent 50%),
     radial-gradient(at 52% 99%, rgba(52, 211, 153, 0.08) 0px, transparent 50%),
     radial-gradient(at 10% 29%, rgba(56, 189, 248, 0.06) 0px, transparent 50%);
@@ -1396,7 +1396,7 @@ select:focus-visible,
 
 [data-theme='light'] .mesh-gradient-hero {
   background:
-    radial-gradient(at 27% 37%, rgba(99, 102, 241, 0.08) 0px, transparent 50%),
+    radial-gradient(at 27% 37%, rgba(92, 96, 239, 0.08) 0px, transparent 50%),
     radial-gradient(at 97% 21%, rgba(167, 139, 250, 0.06) 0px, transparent 50%),
     radial-gradient(at 52% 99%, rgba(52, 211, 153, 0.05) 0px, transparent 50%),
     radial-gradient(at 10% 29%, rgba(56, 189, 248, 0.04) 0px, transparent 50%);
@@ -1527,7 +1527,7 @@ select:focus-visible,
 /* Section dividers - gradient lines */
 .section-divider {
   height: 1px;
-  background: linear-gradient(to right, transparent, rgba(99, 102, 241, 0.2), transparent);
+  background: linear-gradient(to right, transparent, rgba(92, 96, 239, 0.2), transparent);
   border: none;
 }
 
@@ -1535,10 +1535,10 @@ select:focus-visible,
 @keyframes cta-idle-glow {
   0%,
   100% {
-    box-shadow: 0 0 20px rgba(99, 102, 241, 0.15);
+    box-shadow: 0 0 20px rgba(92, 96, 239, 0.15);
   }
   50% {
-    box-shadow: 0 0 35px rgba(99, 102, 241, 0.3);
+    box-shadow: 0 0 35px rgba(92, 96, 239, 0.3);
   }
 }
 @media (prefers-reduced-motion: no-preference) {
@@ -1552,13 +1552,13 @@ select:focus-visible,
   0%,
   100% {
     box-shadow:
-      0 0 20px rgba(99, 102, 241, 0.3),
-      0 0 60px rgba(99, 102, 241, 0.1);
+      0 0 20px rgba(92, 96, 239, 0.3),
+      0 0 60px rgba(92, 96, 239, 0.1);
   }
   50% {
     box-shadow:
-      0 0 30px rgba(99, 102, 241, 0.5),
-      0 0 80px rgba(99, 102, 241, 0.2);
+      0 0 30px rgba(92, 96, 239, 0.5),
+      0 0 80px rgba(92, 96, 239, 0.2);
   }
 }
 @media (prefers-reduced-motion: no-preference) {
@@ -1574,7 +1574,7 @@ select:focus-visible,
     box-shadow 200ms ease;
 }
 .cta-hover-glow:hover {
-  box-shadow: 0 0 30px rgba(99, 102, 241, 0.4);
+  box-shadow: 0 0 30px rgba(92, 96, 239, 0.4);
   transform: scale(1.05);
 }
 
@@ -1590,9 +1590,9 @@ select:focus-visible,
 .badge-shimmer {
   background: linear-gradient(
     90deg,
-    rgba(99, 102, 241, 0.06) 0%,
+    rgba(92, 96, 239, 0.06) 0%,
     rgba(167, 139, 250, 0.15) 50%,
-    rgba(99, 102, 241, 0.06) 100%
+    rgba(92, 96, 239, 0.06) 100%
   );
   background-size: 200% 100%;
 }
@@ -1613,7 +1613,7 @@ select:focus-visible,
   }
 }
 .text-gradient-animated {
-  background: linear-gradient(90deg, #6366f1, #a78bfa, #06b6d4, #6366f1);
+  background: linear-gradient(90deg, #5c60ef, #a78bfa, #06b6d4, #5c60ef);
   background-size: 300% 100%;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -2049,12 +2049,12 @@ textarea::placeholder {
 
 /* Selection color with sufficient contrast */
 ::selection {
-  background: rgba(99, 102, 241, 0.3);
+  background: rgba(92, 96, 239, 0.3);
   color: var(--color-text-primary);
 }
 
 [data-theme='light'] ::selection {
-  background: rgba(99, 102, 241, 0.2);
+  background: rgba(92, 96, 239, 0.2);
   color: var(--color-text-primary);
 }
 

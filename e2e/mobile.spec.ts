@@ -113,8 +113,9 @@ for (const viewport of mobileViewports) {
       await authenticatedPage.waitForLoadState('networkidle')
       await authenticatedPage.waitForTimeout(1500)
 
-      // STRICT: le lien messages DOIT etre present dans la nav
-      const messagesLink = authenticatedPage.locator('a[href="/messages"]').first()
+      // STRICT: le lien messages DOIT etre present dans la nav mobile (pas le sidebar desktop)
+      const mobileNav = authenticatedPage.locator('nav[aria-label="Navigation mobile"]')
+      const messagesLink = mobileNav.locator('a[href="/messages"]').first()
       await expect(messagesLink).toBeVisible({ timeout: 10000 })
 
       // STRICT: cliquer sur messages DOIT naviguer vers /messages

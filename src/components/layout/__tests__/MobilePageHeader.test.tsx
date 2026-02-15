@@ -17,11 +17,13 @@ vi.mock('../../icons', () => ({
 import { MobilePageHeader } from '../MobilePageHeader'
 
 describe('MobilePageHeader', () => {
-  // STRICT: verifies title renders as h1 with correct text and styling classes, mobile-only wrapper class
+  // STRICT: verifies title renders as p[role=heading] with correct text and styling classes, mobile-only wrapper class
   it('renders title with correct semantic heading and styling', () => {
     const { container } = render(<MobilePageHeader title="Test Title" />)
     const heading = screen.getByText('Test Title')
-    expect(heading.tagName).toBe('H1')
+    expect(heading.tagName).toBe('P')
+    expect(heading.getAttribute('role')).toBe('heading')
+    expect(heading.getAttribute('aria-level')).toBe('2')
     expect(heading.classList.contains('text-base')).toBe(true)
     expect(heading.classList.contains('font-semibold')).toBe(true)
     expect(heading.classList.contains('truncate')).toBe(true)

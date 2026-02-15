@@ -207,7 +207,7 @@ export function ProfileHeader({ user, profile, isLoading, updateProfile }: Profi
                 <div className="flex items-center gap-2">
                   <button
                     onClick={() => setIsEditing(true)}
-                    className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-primary/12 text-primary text-base font-medium hover:bg-primary/20 transition-colors active:scale-[0.97]"
+                    className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-primary/12 text-primary-hover text-base font-medium hover:bg-primary/20 transition-colors active:scale-[0.97]"
                   >
                     <Edit2 className="w-4 h-4" />
                     Modifier le profil

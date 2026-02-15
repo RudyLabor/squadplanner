@@ -4,7 +4,7 @@
 /* Critical CSS - prevents FOUC */
 :root {
   --color-bg-base: #050506;
-  --color-primary: #6366f1;
+  --color-primary: #5c60ef;
 }
 html, body, #root {
   margin: 0;

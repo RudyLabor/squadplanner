@@ -205,7 +205,7 @@ export function Select({
               return (
                 <span
                   key={val}
-                  className={`inline-flex items-center gap-1 ${cfg.tag} rounded-md bg-primary-10 text-primary border border-primary/15`}
+                  className={`inline-flex items-center gap-1 ${cfg.tag} rounded-md bg-primary-10 text-primary-hover border border-primary/15`}
                 >
                   <span className="truncate max-w-[120px]">{opt?.label ?? val}</span>
                   <button

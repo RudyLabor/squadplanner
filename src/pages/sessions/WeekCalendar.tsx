@@ -122,13 +122,13 @@ export function WeekCalendar({ sessions, weekOffset = 0, onWeekChange }: WeekCal
               } ${isPast ? 'opacity-50' : ''}`}
             >
               <span
-                className={`text-xs font-medium mb-1 ${isToday ? 'text-primary' : 'text-text-tertiary'}`}
+                className={`text-xs font-medium mb-1 ${isToday ? 'text-primary-hover' : 'text-text-tertiary'}`}
               >
                 {DAYS_FR[i]}
               </span>
               <span
                 className={`text-lg font-bold leading-none mb-1 ${
-                  isToday ? 'text-primary' : 'text-text-primary'
+                  isToday ? 'text-primary-hover' : 'text-text-primary'
                 }`}
               >
                 {day.getDate()}

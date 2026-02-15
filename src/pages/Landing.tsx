@@ -106,7 +106,7 @@ export default function Landing() {
       <div className="text-center py-8 px-4">
         <Link
           to="/auth?mode=register&redirect=onboarding"
-          className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-primary/10 text-indigo-300 font-medium hover:bg-primary/20 transition-colors border border-primary/20"
+          className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-primary/10 text-primary-hover font-medium hover:bg-primary/20 transition-colors border border-primary/20"
           data-track="mid_cta_click"
         >
           Fini les excuses — Créer ma squad

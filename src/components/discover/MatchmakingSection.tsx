@@ -110,7 +110,7 @@ const PlayerCard = memo(function PlayerCard({ player }: { player: MatchmakingPla
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2">
             <h4 className="text-sm font-semibold text-text-primary">{player.username}</h4>
-            <span className="text-xs px-1.5 py-0.5 rounded bg-primary-10 text-primary font-medium">
+            <span className="text-xs px-1.5 py-0.5 rounded bg-primary-10 text-primary-hover font-medium">
               Nv.{player.level}
             </span>
           </div>

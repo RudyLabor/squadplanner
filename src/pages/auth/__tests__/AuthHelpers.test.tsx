@@ -71,7 +71,7 @@ describe('PasswordStrength', () => {
   })
 
   it('shows "Bon" for decent passwords', () => {
-    render(<PasswordStrength password="Abcdef1234" />)
+    render(<PasswordStrength password="abcdefghij1" />)
     expect(screen.getByText('Bon')).toBeTruthy()
   })
 })

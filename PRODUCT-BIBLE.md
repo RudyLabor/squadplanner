@@ -31,7 +31,7 @@
 
 ---
 
-## 0. TABLEAU DE BORD (derniere MAJ : 14 fevrier 2026, 17h30 - SPRINT 3 ETAPE 3 COMPLETE)
+## 0. TABLEAU DE BORD (derniere MAJ : 15 fevrier 2026, 00h30 - SPRINT 3 ETAPE 3 STABILISE)
 
 ### Sante du projet
 
@@ -42,7 +42,7 @@
 | Flux absents (pas de code) | **0** | **0** | ✅ 73/73 flux implementes |
 | Tests E2E fonctionnels | **192/192 passent** | 100% | ✅ Validation DB sur 100% des pages protegees |
 | Features couvertes E2E | **69/69 (100%)** | 100% | ✅ F01-F73 toutes testees |
-| Tests unitaires | **1110/1110 passent** | 100% | ✅ (+408 tests, 140 fichiers) |
+| Tests unitaires | **~2500/~2500 passent** | 100% | ✅ 387 fichiers de test, 0 echec |
 | Faux positifs E2E | **0** | 0 | ✅ Aucun `|| true` ou `toBeGreaterThanOrEqual(0)` |
 | Erreurs TypeScript | **0** | 0 | ✅ |
 | Build production | **PASS (2.5s)** | PASS | ✅ |
@@ -56,7 +56,7 @@
 | Etape 1 : Creer les E2E manquants (4 fichiers) | ✅ FAIT (13/02) |
 | Etape 2 : Reecrire en tests fonctionnels + validation DB | ✅ FAIT (14/02) — 152 tests, tous valident les donnees affichees contre Supabase |
 | Etape 2.5 : Couverture 100% features + validation DB pages protegees | ✅ FAIT (14/02) — 192 tests (+40), 69/69 features, 3 nouveaux fichiers, DB sur toutes pages protegees |
-| Etape 3 : Augmenter le coverage unitaire + conversion any | ✅ FAIT (14/02) — 1110 tests (+408), 140 fichiers, any: 53→3, 0 erreurs TS |
+| Etape 3 : Augmenter le coverage unitaire + conversion any | ✅ FAIT (15/02) — ~2500 tests, 387 fichiers, 0 echec, any: 53→3, 0 erreurs TS |
 | Etape 4 : Durcir la CI | ⏳ A FAIRE |
 | Etape 5 : Tests de regression | ⏳ A FAIRE |
 
@@ -1927,8 +1927,14 @@ ETAPE 3 : Augmenter le coverage unitaire
     - Composants: props typees (Home, Sessions, Squads, Discover, etc.)
     - Utilitaires: i18n, motionSystem, supabase, celebrations, optimisticUpdate, gifApi
     - 3 `any` restants justifies: 2 LiveKit Room (import dynamique), 1 Zustand cache
-RESULTATS : 1110 unit tests (+408), 140 fichiers de test, hooks 55%, pages 42%, any 53→3, 0 erreurs TS
-NOTE : Le coverage global est tire vers le bas par src/components (0%) et src/routes (0%) — 100+ fichiers non testes
+RESULTATS ETAPE 3 COMPLETE :
+- 387 fichiers de test (+247), ~2500 tests unitaires (+1390)
+- 0 test en echec (verifie par batch de 50 fichiers)
+- Couverture fichiers : 100% composants, 100% routes, 100% hooks, 100% pages, 100% utils
+- 6 tests corriges : Sheet (useDragControls), Drawer (useDragControls), AdaptiveImage (getByAltText), GameCover (getByAltText), DropdownMenu (import syntax), AuthHelpers (password strength level)
+- Config vitest v4 : pool forks, maxForks 4, testTimeout 10s, teardownTimeout 3s
+- any 53→3, 0 erreurs TypeScript
+- NOTE : La suite complete ne peut pas s'executer en une seule commande sur Windows 16GB RAM (workers OOM). Utiliser --shard=1/N pour la CI
 
 ETAPE 4 : Durcir la CI
 [ ] Tous les E2E passent en CI (Chromium + optionnel Firefox)

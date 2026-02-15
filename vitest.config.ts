@@ -10,6 +10,11 @@ export default defineConfig({
     setupFiles: ['./src/test/setup.ts'],
     include: ['src/**/*.test.{ts,tsx}', 'supabase/functions/**/*.test.ts'],
     css: false,
+    pool: 'forks',
+    maxForks: 4,
+    minForks: 1,
+    testTimeout: 10000,
+    teardownTimeout: 3000,
     coverage: {
       provider: 'v8',
       reporter: ['text', 'text-summary', 'html'],

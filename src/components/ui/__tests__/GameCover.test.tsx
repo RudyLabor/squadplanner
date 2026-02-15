@@ -13,7 +13,7 @@ import { GameCover, GameCoverCompact, GameCoverLarge } from '../GameCover'
 describe('GameCover', () => {
   it('renders without crash', () => {
     render(<GameCover gameName="Valorant" />)
-    expect(screen.getByAlt('Valorant cover')).toBeInTheDocument()
+    expect(screen.getByAltText('Valorant cover')).toBeInTheDocument()
   })
 
   it('shows game name on hover overlay', () => {
@@ -23,11 +23,11 @@ describe('GameCover', () => {
 
   it('renders compact variant', () => {
     render(<GameCoverCompact gameName="Apex" />)
-    expect(screen.getByAlt('Apex cover')).toBeInTheDocument()
+    expect(screen.getByAltText('Apex cover')).toBeInTheDocument()
   })
 
   it('renders large variant', () => {
     render(<GameCoverLarge gameName="Fortnite" />)
-    expect(screen.getByAlt('Fortnite cover')).toBeInTheDocument()
+    expect(screen.getByAltText('Fortnite cover')).toBeInTheDocument()
   })
 })

@@ -10,7 +10,7 @@ import { AdaptiveImage } from '../AdaptiveImage'
 describe('AdaptiveImage', () => {
   it('renders without crash', () => {
     render(<AdaptiveImage src="/test.jpg" alt="test image" />)
-    expect(screen.getByAlt('test image')).toBeInTheDocument()
+    expect(screen.getByAltText('test image')).toBeInTheDocument()
   })
 
   it('renders with placeholder', () => {
@@ -21,7 +21,7 @@ describe('AdaptiveImage', () => {
         placeholder="data:image/svg+xml,placeholder"
       />
     )
-    expect(screen.getByAlt('test image')).toBeInTheDocument()
+    expect(screen.getByAltText('test image')).toBeInTheDocument()
   })
 
   it('applies className', () => {

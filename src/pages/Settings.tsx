@@ -125,7 +125,7 @@ export function Settings() {
         const devices = await navigator.mediaDevices.enumerateDevices()
         setAudioDevices(devices.filter((d) => d.kind === 'audioinput' || d.kind === 'audiooutput'))
       } catch {
-        console.log('Audio permission not granted')
+        if (!import.meta.env.PROD) console.log('Audio permission not granted')
       }
     }
     getDevices()

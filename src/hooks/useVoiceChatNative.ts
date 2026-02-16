@@ -134,7 +134,7 @@ export const useVoiceChatStore = create<VoiceChatState>((set, get) => ({
           }
         })
         
-        console.log(`[VoiceChat] Connected to ${channelName} with WebRTC native`)
+        if (!import.meta.env.PROD) console.log(`[VoiceChat] Connected to ${channelName} with WebRTC native`)
         return true
       } else {
         throw new Error('WebRTC connection failed')
@@ -160,7 +160,7 @@ export const useVoiceChatStore = create<VoiceChatState>((set, get) => ({
       error: null
     })
     clearSavedParty()
-    console.log('[VoiceChat] Left channel')
+    if (!import.meta.env.PROD) console.log('[VoiceChat] Left channel')
   },
 
   toggleMute: async () => {
@@ -176,11 +176,11 @@ export const useVoiceChatStore = create<VoiceChatState>((set, get) => ({
       } : null
     })
     
-    console.log(`[VoiceChat] ${newMutedState ? 'Muted' : 'Unmuted'}`)
+    if (!import.meta.env.PROD) console.log(`[VoiceChat] ${newMutedState ? 'Muted' : 'Unmuted'}`)
   },
 
   setVolume: (volume: number) => {
-    console.log(`[VoiceChat] Volume set to ${volume}`)
+    if (!import.meta.env.PROD) console.log(`[VoiceChat] Volume set to ${volume}`)
   },
 
   setPushToTalk: (enabled: boolean) => {
@@ -204,7 +204,7 @@ export const useVoiceChatStore = create<VoiceChatState>((set, get) => ({
   toggleNoiseSuppression: async () => {
     const newState = !get().noiseSuppressionEnabled
     set({ noiseSuppressionEnabled: newState })
-    console.log(`[VoiceChat] Noise suppression ${newState ? 'enabled' : 'disabled'}`)
+    if (!import.meta.env.PROD) console.log(`[VoiceChat] Noise suppression ${newState ? 'enabled' : 'disabled'}`)
   }
 }))
 

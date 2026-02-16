@@ -83,7 +83,7 @@ export const useVoiceCallStore = create<VoiceCallState>((set, get) => ({
       return
     }
     // Native WebRTC - no URL configuration needed
-    console.log('[VoiceCall] Using native WebRTC')
+    if (!import.meta.env.PROD) console.log('[VoiceCall] Using native WebRTC')
 
     try {
       const {
@@ -144,9 +144,9 @@ export const useVoiceCallStore = create<VoiceCallState>((set, get) => ({
 
       // Native WebRTC implementation
       await initializeNativeWebRTC(user.id, receiver.id, useVoiceCallStore)
-      console.log('[useVoiceCall] Native WebRTC call initialized')
+      if (!import.meta.env.PROD) console.log('[useVoiceCall] Native WebRTC call initialized')
     } catch (error) {
-      console.warn('Error starting call:', error)
+      if (!import.meta.env.PROD) console.warn('Error starting call:', error)
       set({
         status: 'idle',
         error: error instanceof Error ? error.message : "Erreur lors du demarrage de l'appel",
@@ -211,7 +211,7 @@ export const useVoiceCallStore = create<VoiceCallState>((set, get) => ({
 
       // LIVEKIT REMOVED: Replace with native WebRTC implementation  
       // await initializeLiveKitRoom(user.id, state.caller.id, useVoiceCallStore)
-      console.log('[useVoiceCall] Native WebRTC answer call setup needed')
+      if (!import.meta.env.PROD) console.log('[useVoiceCall] Native WebRTC answer call setup needed')
 
       const callStartTime = Date.now()
       const durationInterval = setInterval(() => {

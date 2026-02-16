@@ -158,10 +158,10 @@ export function useNativeVoiceCall() {
       })
       setIsCallActive(true)
       
-      console.log(`[NativeVoiceCall] Starting call with ${userName}`)
+      if (!import.meta.env.PROD) console.log(`[NativeVoiceCall] Starting call with ${userName}`)
       return true
     } catch (error) {
-      console.error('[NativeVoiceCall] Failed to start call:', error)
+      if (!import.meta.env.PROD) console.error('[NativeVoiceCall] Failed to start call:', error)
       return false
     }
   }

@@ -25,9 +25,7 @@ let _realtimeClient: SupabaseClient | null = null
 export async function getRealtimeClient(): Promise<SupabaseClient> {
   if (_realtimeClient) return _realtimeClient
 
-  // TODO: Re-enable when realtime is actually needed
-  throw new Error('Realtime client disabled to reduce bundle size')
-  // const { initSupabase } = await import('./supabase')
-  // _realtimeClient = await initSupabase()
-  // return _realtimeClient
+  const { initSupabase } = await import('./supabase')
+  _realtimeClient = await initSupabase()
+  return _realtimeClient
 }

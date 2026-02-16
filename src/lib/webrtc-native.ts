@@ -56,7 +56,7 @@ export class NativeWebRTC {
       return true
       
     } catch (error) {
-      console.error('[NativeWebRTC] Connection failed:', error)
+      if (!import.meta.env.PROD) console.error('[NativeWebRTC] Connection failed:', error)
       return false
     }
   }
@@ -83,7 +83,7 @@ export class NativeWebRTC {
       
       return true
     } catch (error) {
-      console.error('[NativeWebRTC] Microphone access failed:', error)
+      if (!import.meta.env.PROD) console.error('[NativeWebRTC] Microphone access failed:', error)
       return false
     }
   }
@@ -102,7 +102,7 @@ export class NativeWebRTC {
   
   setVolume(volume: number): void {
     // Implementation via Web Audio API si nécessaire
-    console.log('[NativeWebRTC] Volume set to:', volume)
+    if (!import.meta.env.PROD) console.log('[NativeWebRTC] Volume set to:', volume)
   }
   
   disconnect(): void {
@@ -156,7 +156,7 @@ export class NativeWebRTC {
       
       checkAudioLevel()
     } catch (error) {
-      console.warn('[NativeWebRTC] VAD setup failed:', error)
+      if (!import.meta.env.PROD) console.warn('[NativeWebRTC] VAD setup failed:', error)
     }
   }
   

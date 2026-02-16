@@ -1,11 +1,14 @@
 import { supabaseMinimal as supabase } from '../lib/supabaseMinimal'
 import { useNetworkQualityStore } from './useNetworkQuality'
 import { generateChannelName, MAX_RECONNECT_ATTEMPTS } from './useCallState'
-// LIVEKIT_URL REMOVED - using native WebRTC
+import { NativeWebRTC } from '../lib/webrtc-native'
 import type { CallUser } from './useCallState'
 import type { useVoiceCallStore as VoiceCallStoreType } from './useVoiceCall'
 
 type VoiceCallStore = typeof VoiceCallStoreType
+
+// Singleton WebRTC instance for current call
+let _activeWebRTC: NativeWebRTC | null = null
 
 export async function sendCallPushNotification(
   receiverId: string,
@@ -46,127 +49,82 @@ export async function initializeNativeWebRTC(
   const channelName = generateChannelName(currentUserId, otherUserId)
 
   try {
-    console.log('[useCallActions] Initializing native WebRTC for channel:', channelName)
-    
-    // For now, simulate successful connection to fix the error 500
-    // TODO: Implement real WebRTC connection using src/lib/webrtc-native.ts
-    
-    setTimeout(() => {
-      const currentState = storeRef.getState()
-      if (currentState.status === 'calling') {
-        const callStartTime = Date.now()
-        const durationInterval = setInterval(() => {
-          storeRef.setState((s) => ({
-            callDuration: Math.floor((Date.now() - (s.callStartTime || Date.now())) / 1000),
-          }))
-        }, 1000)
-        storeRef.setState({ status: 'connected', callStartTime, durationInterval })
-        if (currentState.ringTimeout) {
-          clearTimeout(currentState.ringTimeout)
-          storeRef.setState({ ringTimeout: null })
-        }
-      }
-    }, 1000)
-    
-    return Promise.resolve()
+    // Clean up any previous connection
+    if (_activeWebRTC) {
+      _activeWebRTC.disconnect()
+      _activeWebRTC = null
+    }
 
-    const room = new Room({
-      adaptiveStream: true,
-      dynacast: true,
-      reconnectPolicy: {
-        nextRetryDelayInMs: (context: { retryCount: number }) => {
-          if (context.retryCount > MAX_RECONNECT_ATTEMPTS) return null
-          return context.retryCount * 2000
-        },
-      },
+    const webrtc = new NativeWebRTC({
+      iceServers: [
+        { urls: 'stun:stun.l.google.com:19302' },
+        { urls: 'stun:stun1.l.google.com:19302' },
+      ],
     })
 
-    room.on(
-      RoomEvent.TrackSubscribed,
-      (
-        track: { kind: string; attach: () => HTMLMediaElement },
-        _publication: unknown,
-        participant: { identity: string }
-      ) => {
-        if (track.kind === Track.Kind.Audio) {
-          const element = track.attach()
-          element.id = `call-audio-${participant.identity}`
-          document.body.appendChild(element)
-          const currentState = storeRef.getState()
-          if (currentState.status === 'calling') {
-            const callStartTime = Date.now()
-            const durationInterval = setInterval(() => {
-              storeRef.setState((s) => ({
-                callDuration: Math.floor((Date.now() - (s.callStartTime || Date.now())) / 1000),
-              }))
-            }, 1000)
-            storeRef.setState({ status: 'connected', callStartTime, durationInterval })
-            if (currentState.ringTimeout) {
-              clearTimeout(currentState.ringTimeout)
-              storeRef.setState({ ringTimeout: null })
-            }
+    // Wire up connection state changes
+    webrtc.onConnectionStateChange = (state) => {
+      if (state === 'connected') {
+        const currentState = storeRef.getState()
+        if (currentState.status === 'calling') {
+          const callStartTime = Date.now()
+          const durationInterval = setInterval(() => {
+            storeRef.setState((s) => ({
+              callDuration: Math.floor((Date.now() - (s.callStartTime || Date.now())) / 1000),
+            }))
+          }, 1000)
+          storeRef.setState({ status: 'connected', callStartTime, durationInterval })
+          if (currentState.ringTimeout) {
+            clearTimeout(currentState.ringTimeout)
+            storeRef.setState({ ringTimeout: null })
           }
         }
-      }
-    )
-
-    room.on(RoomEvent.TrackUnsubscribed, (track: { detach: () => HTMLElement[] }) => {
-      track.detach().forEach((el: HTMLElement) => el.remove())
-    })
-
-    room.on(RoomEvent.ParticipantDisconnected, () => {
-      const currentState = storeRef.getState()
-      if (currentState.status === 'connected' || currentState.status === 'calling') {
-        currentState.endCall()
-      }
-    })
-
-    room.on(RoomEvent.Reconnecting, () => {
-      storeRef.setState({ isReconnecting: true })
-    })
-
-    room.on(RoomEvent.Reconnected, () => {
-      storeRef.setState({ isReconnecting: false, reconnectAttempts: 0, error: null })
-    })
-
-    room.on(RoomEvent.Disconnected, (reason?: string) => {
-      const currentState = storeRef.getState()
-      if (currentState.status === 'connected' && reason !== 'CLIENT_INITIATED') {
-        storeRef.setState({
-          isReconnecting: false,
-          error: 'Impossible de se reconnecter. Verifiez votre connexion internet.',
-        })
-        currentState.endCall()
-      }
-    })
-
-    room.on(
-      RoomEvent.ConnectionQualityChanged,
-      (
-        quality: (typeof ConnectionQuality)[keyof typeof ConnectionQuality],
-        participant: { sid: string }
-      ) => {
-        if (participant.sid === room.localParticipant?.sid) {
-          const newQuality = useNetworkQualityStore.getState().updateQuality(quality)
-          if (newQuality) {
-            storeRef.setState({ networkQualityChanged: newQuality })
-          }
+      } else if (state === 'disconnected' || state === 'failed') {
+        const currentState = storeRef.getState()
+        if (currentState.status === 'connected') {
+          storeRef.setState({ isReconnecting: true })
+        }
+        if (state === 'failed') {
+          storeRef.setState({
+            isReconnecting: false,
+            error: 'Impossible de se reconnecter. Vérifiez votre connexion internet.',
+          })
+          currentState.endCall()
         }
       }
-    )
+    }
 
-    // LIVEKIT REMOVED: This will be replaced with native WebRTC  
-    // await room.connect(LIVEKIT_URL, data.token)
-    // await room.localParticipant.setMicrophoneEnabled(true)
-    // storeRef.setState({ room })
-    console.log('[useCallActions] Native WebRTC connection needed here')
-    throw new Error('LiveKit removed - native WebRTC implementation needed')
+    // Get signaling token from edge function
+    const { data, error: tokenError } = await supabase.functions.invoke('livekit-token', {
+      body: { room: channelName, identity: currentUserId },
+    })
+
+    if (tokenError || !data?.token) {
+      throw new Error('Impossible d\'obtenir le token de connexion vocale')
+    }
+
+    const connected = await webrtc.connect(data.token, channelName)
+    if (!connected) {
+      throw new Error('Échec de la connexion WebRTC')
+    }
+
+    _activeWebRTC = webrtc
   } catch (error) {
-    console.warn('Error initializing LiveKit room:', error)
+    if (!import.meta.env.PROD) console.warn('[useCallActions] WebRTC error:', error)
+    _activeWebRTC?.disconnect()
+    _activeWebRTC = null
     storeRef.setState({
       error: error instanceof Error ? error.message : 'Erreur de connexion vocale',
     })
     throw error
+  }
+}
+
+/** Disconnect active WebRTC call */
+export function disconnectWebRTC() {
+  if (_activeWebRTC) {
+    _activeWebRTC.disconnect()
+    _activeWebRTC = null
   }
 }
 

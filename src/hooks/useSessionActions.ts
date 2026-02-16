@@ -1,29 +1,11 @@
 import { supabase, isSupabaseReady } from '../lib/supabaseMinimal'
 import { sendRsvpMessage, sendSessionConfirmedMessage } from '../lib/systemMessages'
 import { trackChallengeProgress } from '../lib/challengeTracker'
+import { haptic } from '../utils/haptics'
 
-// Trigger haptic feedback if available
+// Centralized haptic trigger using shared module
 function triggerHaptic(type: 'light' | 'medium' | 'heavy' | 'success' | 'warning' | 'error') {
-  if (typeof navigator !== 'undefined' && 'vibrate' in navigator) {
-    switch (type) {
-      case 'light':
-        navigator.vibrate(10)
-        break
-      case 'medium':
-        navigator.vibrate(25)
-        break
-      case 'heavy':
-        navigator.vibrate(50)
-        break
-      case 'success':
-        navigator.vibrate([10, 50, 10])
-        break
-      case 'warning':
-      case 'error':
-        navigator.vibrate([50, 100, 50])
-        break
-    }
-  }
+  try { haptic[type]() } catch {}
 }
 
 type RsvpResponse = 'present' | 'absent' | 'maybe'

@@ -2,7 +2,7 @@
 import { m } from 'framer-motion'
 
 interface EmptyStateIllustrationProps {
-  type: 'sessions' | 'squads' | 'friends' | 'messages'
+  type: 'sessions' | 'squads' | 'friends' | 'messages' | 'achievements' | 'challenges' | 'notifications' | 'search_results' | 'call_history'
   className?: string
 }
 
@@ -359,6 +359,281 @@ export function EmptyStateIllustration({ type, className = '' }: EmptyStateIllus
                 }}
               />
             ))}
+          </svg>
+        )
+
+      case 'achievements':
+        return (
+          <svg viewBox="0 0 200 200" className={className} style={{ maxWidth: '200px' }}>
+            {/* Trophy */}
+            <m.g
+              initial={{ scale: 0, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ type: 'spring', stiffness: 200, damping: 15 }}
+            >
+              <rect x="80" y="110" width="40" height="30" rx="4" fill="var(--color-warning-20)" />
+              <rect x="70" y="135" width="60" height="8" rx="4" fill="var(--color-warning-30)" />
+              <path
+                d="M 72 60 L 72 95 Q 72 110 100 110 Q 128 110 128 95 L 128 60 Z"
+                fill="var(--color-warning-10)"
+                stroke="var(--color-warning)"
+                strokeWidth="2"
+              />
+              {/* Handles */}
+              <m.path
+                d="M 72 70 Q 55 70 55 85 Q 55 100 72 100"
+                fill="none"
+                stroke="var(--color-warning)"
+                strokeWidth="2"
+                strokeLinecap="round"
+                initial={{ pathLength: 0 }}
+                animate={{ pathLength: 1 }}
+                transition={{ delay: 0.3, duration: 0.5 }}
+              />
+              <m.path
+                d="M 128 70 Q 145 70 145 85 Q 145 100 128 100"
+                fill="none"
+                stroke="var(--color-warning)"
+                strokeWidth="2"
+                strokeLinecap="round"
+                initial={{ pathLength: 0 }}
+                animate={{ pathLength: 1 }}
+                transition={{ delay: 0.3, duration: 0.5 }}
+              />
+            </m.g>
+            {/* Star */}
+            <m.path
+              d="M 100 72 L 104 84 L 117 84 L 107 92 L 110 104 L 100 96 L 90 104 L 93 92 L 83 84 L 96 84 Z"
+              fill="var(--color-warning)"
+              initial={{ scale: 0, rotate: -180 }}
+              animate={{ scale: 1, rotate: 0 }}
+              transition={{ delay: 0.5, type: 'spring', stiffness: 200 }}
+            />
+            {/* Sparkles */}
+            {[
+              { cx: 60, cy: 50, delay: 0.6 },
+              { cx: 140, cy: 50, delay: 0.7 },
+              { cx: 50, cy: 120, delay: 0.8 },
+              { cx: 150, cy: 120, delay: 0.9 },
+            ].map((s, i) => (
+              <m.circle
+                key={i}
+                cx={s.cx}
+                cy={s.cy}
+                r="3"
+                fill="var(--color-warning)"
+                initial={{ scale: 0 }}
+                animate={{ scale: [0, 1.3, 1] }}
+                transition={{ delay: s.delay, duration: 0.4 }}
+              />
+            ))}
+          </svg>
+        )
+
+      case 'challenges':
+        return (
+          <svg viewBox="0 0 200 200" className={className} style={{ maxWidth: '200px' }}>
+            {/* Gamepad body */}
+            <m.rect
+              x="45"
+              y="65"
+              width="110"
+              height="70"
+              rx="20"
+              fill="var(--color-error-10)"
+              stroke="var(--color-error-30)"
+              strokeWidth="2"
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ duration: 0.5 }}
+            />
+            {/* D-pad */}
+            <m.g
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.3 }}
+            >
+              <rect x="68" y="88" width="20" height="8" rx="2" fill="var(--color-error)" />
+              <rect x="74" y="82" width="8" height="20" rx="2" fill="var(--color-error)" />
+            </m.g>
+            {/* Action buttons */}
+            {[
+              { cx: 120, cy: 85, delay: 0.4 },
+              { cx: 132, cy: 97, delay: 0.5 },
+              { cx: 120, cy: 109, delay: 0.6 },
+              { cx: 108, cy: 97, delay: 0.7 },
+            ].map((b, i) => (
+              <m.circle
+                key={i}
+                cx={b.cx}
+                cy={b.cy}
+                r="5"
+                fill={i === 0 ? 'var(--color-success)' : i === 1 ? 'var(--color-error)' : i === 2 ? 'var(--color-info)' : 'var(--color-warning)'}
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{ delay: b.delay, type: 'spring', stiffness: 300 }}
+              />
+            ))}
+            {/* Lightning bolt */}
+            <m.path
+              d="M 100 40 L 92 62 L 102 62 L 96 80 L 112 55 L 102 55 L 108 40 Z"
+              fill="var(--color-warning)"
+              stroke="var(--color-warning)"
+              strokeWidth="1"
+              strokeLinejoin="round"
+              initial={{ y: -20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 0.8, type: 'spring', stiffness: 200 }}
+            />
+          </svg>
+        )
+
+      case 'notifications':
+        return (
+          <svg viewBox="0 0 200 200" className={className} style={{ maxWidth: '200px' }}>
+            {/* Bell */}
+            <m.path
+              d="M 100 45 Q 70 45 70 80 L 70 110 L 60 120 L 140 120 L 130 110 L 130 80 Q 130 45 100 45 Z"
+              fill="var(--color-primary-10)"
+              stroke="var(--color-primary)"
+              strokeWidth="2"
+              initial={{ rotate: 0 }}
+              animate={{ rotate: [0, 5, -5, 3, -3, 0] }}
+              transition={{ delay: 0.3, duration: 0.8, ease: 'easeInOut' }}
+            />
+            {/* Clapper */}
+            <m.ellipse
+              cx="100"
+              cy="128"
+              rx="12"
+              ry="6"
+              fill="var(--color-primary)"
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ delay: 0.5, type: 'spring', stiffness: 200 }}
+            />
+            {/* Check mark */}
+            <m.g
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ delay: 0.8, type: 'spring', stiffness: 200 }}
+            >
+              <circle cx="130" cy="55" r="16" fill="var(--color-success)" />
+              <m.path
+                d="M 122 55 L 128 61 L 138 49"
+                fill="none"
+                stroke="white"
+                strokeWidth="3"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                initial={{ pathLength: 0 }}
+                animate={{ pathLength: 1 }}
+                transition={{ delay: 1, duration: 0.4 }}
+              />
+            </m.g>
+          </svg>
+        )
+
+      case 'search_results':
+        return (
+          <svg viewBox="0 0 200 200" className={className} style={{ maxWidth: '200px' }}>
+            {/* Magnifying glass */}
+            <m.circle
+              cx="90"
+              cy="85"
+              r="35"
+              fill="var(--color-purple-10, var(--color-primary-10))"
+              stroke="var(--color-purple, var(--color-primary))"
+              strokeWidth="3"
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ type: 'spring', stiffness: 200 }}
+            />
+            <m.line
+              x1="115"
+              y1="110"
+              x2="145"
+              y2="140"
+              stroke="var(--color-purple, var(--color-primary))"
+              strokeWidth="4"
+              strokeLinecap="round"
+              initial={{ pathLength: 0 }}
+              animate={{ pathLength: 1 }}
+              transition={{ delay: 0.3, duration: 0.4 }}
+            />
+            {/* Question mark */}
+            <m.text
+              x="90"
+              y="95"
+              textAnchor="middle"
+              fontSize="32"
+              fontWeight="bold"
+              fill="var(--color-purple, var(--color-primary))"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: [0, 1, 0.6, 1] }}
+              transition={{ delay: 0.5, duration: 0.8 }}
+            >
+              ?
+            </m.text>
+          </svg>
+        )
+
+      case 'call_history':
+        return (
+          <svg viewBox="0 0 200 200" className={className} style={{ maxWidth: '200px' }}>
+            {/* Phone icon */}
+            <m.path
+              d="M 70 60 Q 70 50 80 50 L 120 50 Q 130 50 130 60 L 130 140 Q 130 150 120 150 L 80 150 Q 70 150 70 140 Z"
+              fill="var(--color-info-10, var(--color-primary-10))"
+              stroke="var(--color-info, var(--color-primary))"
+              strokeWidth="2"
+              initial={{ y: 20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ duration: 0.5 }}
+            />
+            {/* Screen lines */}
+            {[0, 1, 2].map((i) => (
+              <m.line
+                key={i}
+                x1="82"
+                y1={75 + i * 18}
+                x2="118"
+                y2={75 + i * 18}
+                stroke="var(--color-info-30, var(--color-primary-30))"
+                strokeWidth="2"
+                strokeLinecap="round"
+                initial={{ scaleX: 0 }}
+                animate={{ scaleX: 1 }}
+                transition={{ delay: 0.3 + i * 0.15 }}
+              />
+            ))}
+            {/* Clock overlay */}
+            <m.g
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ delay: 0.6, type: 'spring', stiffness: 200 }}
+            >
+              <circle cx="135" cy="130" r="20" fill="var(--color-bg-base, #1a1a2e)" stroke="var(--color-info, var(--color-primary))" strokeWidth="2" />
+              <circle cx="135" cy="130" r="17" fill="var(--color-info-10, var(--color-primary-10))" />
+              <m.line
+                x1="135" y1="130" x2="135" y2="120"
+                stroke="var(--color-info, var(--color-primary))"
+                strokeWidth="2"
+                strokeLinecap="round"
+                initial={{ pathLength: 0 }}
+                animate={{ pathLength: 1 }}
+                transition={{ delay: 0.8 }}
+              />
+              <m.line
+                x1="135" y1="130" x2="143" y2="133"
+                stroke="var(--color-info, var(--color-primary))"
+                strokeWidth="2"
+                strokeLinecap="round"
+                initial={{ pathLength: 0 }}
+                animate={{ pathLength: 1 }}
+                transition={{ delay: 1 }}
+              />
+            </m.g>
           </svg>
         )
     }

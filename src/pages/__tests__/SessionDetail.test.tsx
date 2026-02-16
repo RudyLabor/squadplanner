@@ -122,6 +122,7 @@ vi.mock('../../hooks', () => ({
     vi.fn(() => ({ user: mockHoisted.mockUser, profile: { id: 'user-1', username: 'TestUser' }, isLoading: false })),
     { getState: vi.fn().mockReturnValue({ user: { id: 'user-1' }, profile: { id: 'user-1', username: 'TestUser' } }) }
   ),
+  useConfetti: vi.fn(() => ({ active: false, fire: vi.fn(), cancel: vi.fn() })),
 }))
 
 // Mock toast

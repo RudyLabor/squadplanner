@@ -96,6 +96,7 @@ vi.mock('../../hooks', () => ({
     fetchSlotSuggestions: mockFetchSlotSuggestions,
     fetchCoachTips: mockFetchCoachTips,
   }),
+  useConfetti: vi.fn(() => ({ active: false, fire: vi.fn(), cancel: vi.fn() })),
 }))
 
 // Mock toast

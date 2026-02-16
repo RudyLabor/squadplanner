@@ -21,7 +21,10 @@ type ButtonProps<C extends ElementType = 'button'> = ButtonBaseProps & {
 } & Omit<ComponentPropsWithRef<C>, keyof ButtonBaseProps | 'as'>
 
 const baseClasses =
-  'inline-flex items-center justify-center gap-2 font-medium rounded-xl cursor-pointer transition-interactive disabled:opacity-40 disabled:cursor-not-allowed hover:-translate-y-px active:scale-[0.97]'
+  'inline-flex items-center justify-center gap-2 font-medium rounded-xl cursor-pointer transition-interactive disabled:opacity-40 disabled:cursor-not-allowed'
+
+// CSS fallback for non-motion rendered elements (as prop)
+const cssMotionClasses = 'hover:-translate-y-px active:scale-[0.97]'
 
 const variantClasses: Record<string, string> = {
   primary: 'bg-primary hover:bg-primary-hover text-white shadow-md shadow-primary/10',
@@ -133,13 +136,13 @@ function ButtonInner<C extends ElementType = 'button'>(
     </AnimatePresence>
   )
 
-  // For non-button elements (a, Link), render the element directly
+  // For non-button elements (a, Link), render with CSS-only motion fallback
   if (as && as !== 'button') {
     const Component = as as ElementType
     return (
       <Component
         ref={ref}
-        className={cls}
+        className={`${cls} ${cssMotionClasses}`}
         aria-busy={isLoading || undefined}
         {...props}
         onClick={handleClick}
@@ -150,18 +153,21 @@ function ButtonInner<C extends ElementType = 'button'>(
   }
 
   return (
-    <button
+    <m.button
       ref={ref}
       type={(props as any).type || 'button'}
       className={cls}
       disabled={isLoading || props.disabled}
       aria-busy={isLoading || undefined}
       aria-label={isLoading && !loadingText && typeof children === 'string' ? children : undefined}
+      whileHover={props.disabled ? undefined : { y: -1 }}
+      whileTap={props.disabled ? undefined : { scale: 0.97 }}
+      transition={{ type: 'spring', stiffness: 400, damping: 17 }}
       {...props}
       onClick={handleClick}
     >
       {content}
-    </button>
+    </m.button>
   )
 }
 

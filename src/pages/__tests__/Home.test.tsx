@@ -105,6 +105,7 @@ vi.mock('../../hooks', () => ({
     vi.fn(() => mockAuthState),
     { getState: vi.fn(() => mockAuthState) }
   ),
+  useConfetti: vi.fn(() => ({ active: false, fire: vi.fn(), cancel: vi.fn() })),
 }))
 
 // ── Mock toast ──

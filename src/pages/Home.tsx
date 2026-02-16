@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router'
 import Confetti from '../components/LazyConfetti'
 import { PullToRefresh } from '../components/PullToRefresh'
 import { Tooltip, CrossfadeTransition, SkeletonHomePage } from '../components/ui'
-import { useAuthStore } from '../hooks'
+import { useAuthStore, useConfetti } from '../hooks'
 // Lazy-load voice chat store (now using native WebRTC)
 // IMPORTANT: We use getState()/subscribe() instead of calling the zustand hook
 // directly, because calling store() conditionally would violate Rules of Hooks
@@ -168,7 +168,7 @@ export default function Home({ loaderData }: HomeProps) {
   const { data: aiCoachTip, isLoading: aiCoachLoading } = useAICoachQueryDeferred(user?.id, 'home')
   const openCreateSessionModal = useCreateSessionModal((state) => state.open)
 
-  const [showConfetti, setShowConfetti] = useState(false)
+  const { active: showConfetti, fire: fireConfetti } = useConfetti(4000)
   const [successMessage, setSuccessMessage] = useState<string | null>(null)
   const [greeting, setGreeting] = useState('Salut')
   const rsvpTimers = useRef<ReturnType<typeof setTimeout>[]>([])
@@ -242,9 +242,8 @@ export default function Home({ loaderData }: HomeProps) {
       await rsvpMutation.mutateAsync({ sessionId, response })
       if (response === 'present') {
         haptic.success()
-        setShowConfetti(true)
+        fireConfetti()
         setSuccessMessage("T'es confirmé ! Ta squad compte sur toi")
-        rsvpTimers.current.push(setTimeout(() => setShowConfetti(false), 4000))
         rsvpTimers.current.push(setTimeout(() => setSuccessMessage(null), 5000))
       } else {
         setSuccessMessage(response === 'absent' ? 'Absence enregistrée' : 'Réponse enregistrée')

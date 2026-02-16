@@ -288,3 +288,183 @@ export function SkeletonSettingsPage() {
     </div>
   )
 }
+
+/**
+ * Session detail page skeleton
+ */
+export function SkeletonSessionDetail() {
+  return (
+    <div className="space-y-6 p-4" aria-hidden="true">
+      {/* Back button + title */}
+      <div className="flex items-center gap-3">
+        <Skeleton className="w-9 h-9" rounded="lg" />
+        <Skeleton className="h-6 w-48" rounded="md" />
+      </div>
+
+      {/* Session info card */}
+      <div className="p-5 rounded-2xl bg-bg-elevated border border-border-subtle space-y-4">
+        <div className="flex items-center gap-3">
+          <Skeleton className="w-12 h-12" rounded="xl" />
+          <div className="flex-1">
+            <Skeleton className="h-5 w-36 mb-2" rounded="sm" />
+            <Skeleton className="h-4 w-28" rounded="sm" />
+          </div>
+          <Skeleton className="h-7 w-20" rounded="full" />
+        </div>
+        <div className="flex gap-4">
+          <Skeleton className="h-4 w-24" rounded="sm" />
+          <Skeleton className="h-4 w-20" rounded="sm" />
+          <Skeleton className="h-4 w-16" rounded="sm" />
+        </div>
+      </div>
+
+      {/* Participants */}
+      <div className="space-y-3">
+        <Skeleton className="h-5 w-28" rounded="sm" />
+        {[1, 2, 3, 4].map((i) => (
+          <div key={i} className="flex items-center gap-3 p-3 rounded-xl bg-bg-elevated">
+            <SkeletonAvatar size="md" />
+            <div className="flex-1">
+              <Skeleton className="h-4 w-24 mb-1" rounded="sm" />
+              <Skeleton className="h-3 w-16" rounded="sm" />
+            </div>
+            <Skeleton className="h-6 w-16" rounded="full" />
+          </div>
+        ))}
+      </div>
+
+      {/* Action buttons */}
+      <div className="flex gap-3">
+        <SkeletonButton className="flex-1" />
+        <SkeletonButton className="flex-1" />
+      </div>
+    </div>
+  )
+}
+
+/**
+ * Party page skeleton
+ */
+export function SkeletonPartyPage() {
+  return (
+    <div className="space-y-6 p-4" aria-hidden="true">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <Skeleton className="h-7 w-32" rounded="md" />
+        <Skeleton className="w-9 h-9" rounded="lg" />
+      </div>
+
+      {/* Active party card */}
+      <div className="p-5 rounded-2xl bg-bg-elevated border border-border-subtle space-y-4">
+        <div className="flex items-center gap-3">
+          <Skeleton className="w-10 h-10" rounded="full" />
+          <div className="flex-1">
+            <Skeleton className="h-5 w-28 mb-1" rounded="sm" />
+            <Skeleton className="h-3 w-20" rounded="sm" />
+          </div>
+        </div>
+
+        {/* Participant grid */}
+        <div className="grid grid-cols-3 gap-3">
+          {[1, 2, 3].map((i) => (
+            <div key={i} className="flex flex-col items-center gap-2 p-3">
+              <SkeletonAvatar size="lg" className="w-14 h-14" />
+              <Skeleton className="h-3 w-16" rounded="sm" />
+            </div>
+          ))}
+        </div>
+
+        {/* Controls */}
+        <div className="flex justify-center gap-4">
+          <Skeleton className="w-12 h-12" rounded="full" />
+          <Skeleton className="w-12 h-12" rounded="full" />
+          <Skeleton className="w-12 h-12" rounded="full" />
+        </div>
+      </div>
+    </div>
+  )
+}
+
+/**
+ * Call history page skeleton
+ */
+export function SkeletonCallHistory() {
+  return (
+    <div className="space-y-4 p-4" aria-hidden="true">
+      {/* Header + filter */}
+      <div className="flex items-center justify-between">
+        <Skeleton className="h-7 w-36" rounded="md" />
+        <div className="flex gap-2">
+          <Skeleton className="h-9 w-20" rounded="lg" />
+          <Skeleton className="h-9 w-20" rounded="lg" />
+        </div>
+      </div>
+
+      {/* Call entries */}
+      {[1, 2, 3, 4, 5].map((i) => (
+        <div key={i} className="flex items-center gap-3 p-4 rounded-xl bg-bg-elevated border border-border-subtle">
+          <SkeletonAvatar size="md" />
+          <div className="flex-1">
+            <Skeleton className="h-4 w-28 mb-1" rounded="sm" />
+            <Skeleton className="h-3 w-36" rounded="sm" />
+          </div>
+          <div className="text-right">
+            <Skeleton className="h-3 w-12 mb-1" rounded="sm" />
+            <Skeleton className="h-3 w-16" rounded="sm" />
+          </div>
+        </div>
+      ))}
+    </div>
+  )
+}
+
+/**
+ * Discover page skeleton
+ */
+export function SkeletonDiscoverPage() {
+  return (
+    <div className="space-y-6 p-4" aria-hidden="true">
+      {/* Search bar */}
+      <Skeleton className="h-11 w-full" rounded="xl" />
+
+      {/* Tabs */}
+      <div className="flex gap-2">
+        <Skeleton className="h-9 w-24" rounded="full" />
+        <Skeleton className="h-9 w-24" rounded="full" />
+        <Skeleton className="h-9 w-24" rounded="full" />
+      </div>
+
+      {/* Leaderboard podium */}
+      <div className="flex items-end justify-center gap-4 py-6">
+        <div className="flex flex-col items-center gap-2">
+          <SkeletonAvatar size="lg" className="w-14 h-14" />
+          <Skeleton className="h-3 w-16" rounded="sm" />
+          <Skeleton className="h-16 w-20" rounded="lg" />
+        </div>
+        <div className="flex flex-col items-center gap-2">
+          <SkeletonAvatar size="lg" className="w-16 h-16" />
+          <Skeleton className="h-3 w-16" rounded="sm" />
+          <Skeleton className="h-24 w-20" rounded="lg" />
+        </div>
+        <div className="flex flex-col items-center gap-2">
+          <SkeletonAvatar size="lg" className="w-14 h-14" />
+          <Skeleton className="h-3 w-16" rounded="sm" />
+          <Skeleton className="h-12 w-20" rounded="lg" />
+        </div>
+      </div>
+
+      {/* List items */}
+      {[1, 2, 3, 4].map((i) => (
+        <div key={i} className="flex items-center gap-3 p-3 rounded-xl bg-bg-elevated">
+          <Skeleton className="w-8 h-8 flex-shrink-0" rounded="md" />
+          <SkeletonAvatar size="sm" />
+          <div className="flex-1">
+            <Skeleton className="h-4 w-24 mb-1" rounded="sm" />
+            <Skeleton className="h-3 w-16" rounded="sm" />
+          </div>
+          <Skeleton className="h-5 w-12" rounded="sm" />
+        </div>
+      ))}
+    </div>
+  )
+}

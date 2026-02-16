@@ -6,7 +6,7 @@ import { Link } from 'react-router'
 import Confetti from '../components/LazyConfetti'
 import { Button, Card, SquadCardSkeleton } from '../components/ui'
 import { showSuccess } from '../lib/toast'
-import { useAuthStore, usePremiumStore } from '../hooks'
+import { useAuthStore, usePremiumStore, useConfetti } from '../hooks'
 import { useVoiceChatStore } from '../hooks/useVoiceChat'
 import {
   useSquadsQuery,
@@ -46,7 +46,7 @@ export default function Squads({ loaderData: _loaderData }: SquadsProps) {
   const [error, setError] = useState<string | null>(null)
   const [copiedCode, setCopiedCode] = useState<string | null>(null)
   const [nextSessions, setNextSessions] = useState<SquadNextSession[]>([])
-  const [showConfetti, setShowConfetti] = useState(false)
+  const { active: showConfetti, fire: fireConfetti } = useConfetti(4000)
 
   const { user } = useAuthStore()
   const { data: squads = [], isLoading } = useSquadsQuery()
@@ -133,8 +133,7 @@ export default function Squads({ loaderData: _loaderData }: SquadsProps) {
       await joinSquadMutation.mutateAsync(inviteCode)
       setShowJoin(false)
       setInviteCode('')
-      setShowConfetti(true)
-      setTimeout(() => setShowConfetti(false), 4000)
+      fireConfetti()
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : String(err))
     }

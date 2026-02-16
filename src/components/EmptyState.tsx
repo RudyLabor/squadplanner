@@ -13,6 +13,7 @@ import {
   Gamepad2,
 } from './icons'
 import { Button } from './ui'
+import { EmptyStateIllustration } from './EmptyStateIllustration'
 
 type EmptyStateType =
   | 'no_squads'
@@ -33,6 +34,18 @@ interface EmptyStateProps {
   actionLabel?: string
   onAction?: () => void
   icon?: React.ReactNode
+}
+
+// Maps preset types to SVG illustration types
+const ILLUSTRATION_MAP: Partial<Record<EmptyStateType, React.ComponentProps<typeof EmptyStateIllustration>['type']>> = {
+  no_squads: 'squads',
+  no_sessions: 'sessions',
+  no_messages: 'messages',
+  no_friends: 'friends',
+  no_achievements: 'achievements',
+  no_challenges: 'challenges',
+  no_notifications: 'notifications',
+  no_search_results: 'search_results',
 }
 
 const EMPTY_STATE_CONFIG: Record<
@@ -120,6 +133,7 @@ export function EmptyState({
   icon,
 }: EmptyStateProps) {
   const config = EMPTY_STATE_CONFIG[type]
+  const illustrationType = ILLUSTRATION_MAP[type]
 
   return (
     <m.div
@@ -128,47 +142,58 @@ export function EmptyState({
       transition={{ duration: 0.4, ease: 'easeOut' }}
       className="flex flex-col items-center justify-center py-12 px-6 text-center"
     >
-      {/* Animated Icon */}
-      <m.div
-        initial={{ scale: 0.8, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        transition={{ delay: 0.1, duration: 0.4, type: 'spring', stiffness: 200 }}
-        className="relative mb-6"
-      >
-        {/* Glow background */}
+      {/* SVG Illustration or animated icon */}
+      {!icon && illustrationType ? (
         <m.div
-          className="absolute inset-0 rounded-full blur-xl opacity-30"
-          style={{ backgroundColor: config.color }}
-          animate={{
-            scale: [1, 1.2, 1],
-            opacity: [0.2, 0.4, 0.2],
-          }}
-          transition={{
-            duration: 3,
-            repeat: Infinity,
-            ease: 'easeInOut',
-          }}
-        />
-
-        {/* Icon container */}
-        <m.div
-          className="relative w-24 h-24 rounded-2xl flex items-center justify-center"
-          style={{
-            backgroundColor: `${config.color}15`,
-            color: config.color,
-          }}
-          animate={{
-            y: [0, -8, 0],
-          }}
-          transition={{
-            duration: 2.5,
-            repeat: Infinity,
-            ease: 'easeInOut',
-          }}
+          initial={{ scale: 0.8, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ delay: 0.1, duration: 0.4, type: 'spring', stiffness: 200 }}
+          className="mb-6"
         >
-          {icon || config.icon}
+          <EmptyStateIllustration type={illustrationType} className="w-48 h-48 mx-auto" />
         </m.div>
-      </m.div>
+      ) : (
+        <m.div
+          initial={{ scale: 0.8, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ delay: 0.1, duration: 0.4, type: 'spring', stiffness: 200 }}
+          className="relative mb-6"
+        >
+          {/* Glow background */}
+          <m.div
+            className="absolute inset-0 rounded-full blur-xl opacity-30"
+            style={{ backgroundColor: config.color }}
+            animate={{
+              scale: [1, 1.2, 1],
+              opacity: [0.2, 0.4, 0.2],
+            }}
+            transition={{
+              duration: 3,
+              repeat: Infinity,
+              ease: 'easeInOut',
+            }}
+          />
+
+          {/* Icon container */}
+          <m.div
+            className="relative w-24 h-24 rounded-2xl flex items-center justify-center"
+            style={{
+              backgroundColor: `${config.color}15`,
+              color: config.color,
+            }}
+            animate={{
+              y: [0, -8, 0],
+            }}
+            transition={{
+              duration: 2.5,
+              repeat: Infinity,
+              ease: 'easeInOut',
+            }}
+          >
+            {icon || config.icon}
+          </m.div>
+        </m.div>
+      )}
 
       {/* Title with staggered animation */}
       <m.h3

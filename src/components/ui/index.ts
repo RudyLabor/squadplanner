@@ -29,6 +29,10 @@ export {
   SkeletonHomePage,
   SkeletonChatPage,
   SkeletonSettingsPage,
+  SkeletonSessionDetail,
+  SkeletonPartyPage,
+  SkeletonCallHistory,
+  SkeletonDiscoverPage,
   // CLS-prevention skeletons (fixed dimensions)
   SkeletonAICoach,
   SkeletonReliabilityBadge,

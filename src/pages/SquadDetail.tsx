@@ -5,7 +5,7 @@ import { ArrowLeft } from '../components/icons'
 import { useParams, useNavigate } from 'react-router'
 import Confetti from '../components/LazyConfetti'
 import { Button, SquadDetailSkeleton, CrossfadeTransition, ConfirmDialog } from '../components/ui'
-import { useAuthStore, usePremiumStore } from '../hooks'
+import { useAuthStore, usePremiumStore, useConfetti } from '../hooks'
 import {
   useSquadQuery,
   useSquadSessionsQuery,
@@ -28,7 +28,7 @@ export default function SquadDetail() {
   const [showInviteModal, setShowInviteModal] = useState(false)
   const [showActionsDrawer, setShowActionsDrawer] = useState(false)
   const [successMessage, setSuccessMessage] = useState<string | null>(null)
-  const [showConfetti, setShowConfetti] = useState(false)
+  const { active: showConfetti, fire: fireConfetti } = useConfetti(4000)
   const [showLeaveConfirm, setShowLeaveConfirm] = useState(false)
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
   const [showEditModal, setShowEditModal] = useState(false)
@@ -87,9 +87,8 @@ export default function SquadDetail() {
         if (ariaRegion) ariaRegion.textContent = ariaLabels[response]
 
         if (response === 'present') {
-          setShowConfetti(true)
+          fireConfetti()
           setSuccessMessage("T'es confirmé ! \uD83D\uDD25 Ta squad compte sur toi")
-          setTimeout(() => setShowConfetti(false), 4000)
         } else {
           setSuccessMessage(response === 'absent' ? 'Absence enregistrée' : 'Réponse enregistrée')
         }

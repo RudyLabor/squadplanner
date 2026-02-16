@@ -3,7 +3,7 @@ import { useEffect, useState, useRef } from 'react'
 import { Plus, Loader2 } from '../components/icons'
 import Confetti from '../components/LazyConfetti'
 import { Button } from '../components/ui'
-import { useAuthStore, useAIStore } from '../hooks'
+import { useAuthStore, useAIStore, useConfetti } from '../hooks'
 import { useSquadsQuery } from '../hooks/queries/useSquadsQuery'
 import { useUpcomingSessionsQuery } from '../hooks/queries/useSessionsQuery'
 import { useCreateSessionModal } from '../components/CreateSessionModal'
@@ -29,7 +29,7 @@ export function Sessions({ loaderData: _loaderData }: SessionsProps) {
     useAIStore()
   const openCreateSession = useCreateSessionModal((s) => s.open)
 
-  const [showConfetti, setShowConfetti] = useState(false)
+  const { active: showConfetti, fire: fireConfetti } = useConfetti()
   const [weekOffset, setWeekOffset] = useState(0)
   const hasShownCelebration = useRef(false)
   const aiFetchedRef = useRef<Set<string>>(new Set())
@@ -67,8 +67,7 @@ export function Sessions({ loaderData: _loaderData }: SessionsProps) {
     ) {
       hasShownCelebration.current = true
       queueMicrotask(() => {
-        setShowConfetti(true)
-        setTimeout(() => setShowConfetti(false), 3500)
+        fireConfetti()
       })
     }
   }, [needsResponse.length, confirmed.length, sessions.length])

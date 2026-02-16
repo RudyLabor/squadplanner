@@ -2001,14 +2001,14 @@ VERIFICATION : npm test passe sans echec, coverage > 100%, CI verte
 **Prerequis** : Sprint 3 termine (CI verte, tous tests passent).
 
 ```
-ETAPE 1 : UX Tier 3 — Micro-interactions + polish
-[ ] T3.1 - Empty states avec illustrations SVG
-[ ] T3.5 - ViewTransitions API reactivee
-[ ] T3.6 - Micro-interactions boutons (whileTap scale)
-[ ] T3.7 - Skeleton shapes adaptees par composant
-[ ] T3.8 - Haptic feedback sur actions cles mobile
-[ ] T3.9 - Confetti pattern unification (hook useConfetti)
-[ ] T3.10 - Extraction composants > 300 lignes
+ETAPE 1 : UX Tier 3 — Micro-interactions + polish ✅ TERMINEE
+[x] T3.1 - Empty states avec illustrations SVG
+[x] T3.5 - ViewTransitions API reactivee
+[x] T3.6 - Micro-interactions boutons (whileTap scale)
+[x] T3.7 - Skeleton shapes adaptees par composant
+[x] T3.8 - Haptic feedback sur actions cles mobile
+[x] T3.9 - Confetti pattern unification (hook useConfetti)
+[x] T3.10 - Extraction composants > 300 lignes
 
 ETAPE 2 : Performance
 [ ] Lighthouse desktop : Perf 98+, A11y 100

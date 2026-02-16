@@ -47,6 +47,7 @@ export {
   isViewTransitionSupported,
   withViewTransition,
 } from './useViewTransition'
+export { useConfetti } from './useConfetti'
 
 // PHASE 5.4 - Realtime presence
 export { usePresence, useUserOnlineStatus, getOnlineIndicatorClasses } from './usePresence'

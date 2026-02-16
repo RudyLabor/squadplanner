@@ -92,6 +92,7 @@ vi.mock('../../hooks', () => ({
     (...args: any[]) => mocks.usePremiumStore(...args),
     { getState: vi.fn().mockReturnValue({ hasPremium: false }) }
   ),
+  useConfetti: vi.fn(() => ({ active: false, fire: vi.fn(), cancel: vi.fn() })),
 }))
 
 // Mock toast

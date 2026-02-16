@@ -37,6 +37,19 @@ vi.mock('../useCallState', () => ({
   MAX_RECONNECT_ATTEMPTS: 3,
 }))
 
+// Mock NativeWebRTC class
+const mockConnect = vi.fn().mockResolvedValue(true)
+const mockDisconnect = vi.fn()
+vi.mock('../../lib/webrtc-native', () => {
+  return {
+    NativeWebRTC: class MockNativeWebRTC {
+      onConnectionStateChange: ((state: string) => void) | null = null
+      connect = mockConnect
+      disconnect = mockDisconnect
+    },
+  }
+})
+
 import { sendCallPushNotification, initializeNativeWebRTC, subscribeToIncomingCalls } from '../useCallActions'
 
 describe('useCallActions', () => {
@@ -87,16 +100,13 @@ describe('useCallActions', () => {
   })
 
   describe('initializeNativeWebRTC', () => {
-    it('resolves without error', async () => {
-      const mockStoreRef = {
-        getState: vi.fn().mockReturnValue({ status: 'calling', ringTimeout: null }),
-        setState: vi.fn(),
-      } as any
-
-      await expect(initializeNativeWebRTC('user-1', 'user-2', mockStoreRef)).resolves.toBeUndefined()
+    beforeEach(() => {
+      mockConnect.mockResolvedValue(true)
+      // Mock edge function returning a valid token
+      mockFunctionsInvoke.mockResolvedValue({ data: { token: 'test-token-123' }, error: null })
     })
 
-    it('updates store status to connected after timeout', async () => {
+    it('connects with NativeWebRTC when token is valid', async () => {
       const mockStoreRef = {
         getState: vi.fn().mockReturnValue({ status: 'calling', ringTimeout: null }),
         setState: vi.fn(),
@@ -104,13 +114,40 @@ describe('useCallActions', () => {
 
       await initializeNativeWebRTC('user-1', 'user-2', mockStoreRef)
 
-      // Advance timer to trigger the setTimeout callback
-      vi.advanceTimersByTime(1000)
+      // Should have called the edge function for a token
+      expect(mockFunctionsInvoke).toHaveBeenCalledWith('livekit-token', {
+        body: { room: 'call_user-1_user-2', identity: 'user-1' },
+      })
+      // Should have called connect with the token
+      expect(mockConnect).toHaveBeenCalledWith('test-token-123', 'call_user-1_user-2')
+    })
 
+    it('throws when token fetch fails', async () => {
+      mockFunctionsInvoke.mockResolvedValue({ data: null, error: new Error('Network') })
+
+      const mockStoreRef = {
+        getState: vi.fn().mockReturnValue({ status: 'calling', ringTimeout: null }),
+        setState: vi.fn(),
+      } as any
+
+      await expect(initializeNativeWebRTC('user-1', 'user-2', mockStoreRef)).rejects.toThrow(
+        'Impossible d\'obtenir le token de connexion vocale'
+      )
       expect(mockStoreRef.setState).toHaveBeenCalledWith(
-        expect.objectContaining({
-          status: 'connected',
-        })
+        expect.objectContaining({ error: expect.any(String) })
+      )
+    })
+
+    it('throws when WebRTC connect fails', async () => {
+      mockConnect.mockResolvedValue(false)
+
+      const mockStoreRef = {
+        getState: vi.fn().mockReturnValue({ status: 'calling', ringTimeout: null }),
+        setState: vi.fn(),
+      } as any
+
+      await expect(initializeNativeWebRTC('user-1', 'user-2', mockStoreRef)).rejects.toThrow(
+        'Échec de la connexion WebRTC'
       )
     })
   })

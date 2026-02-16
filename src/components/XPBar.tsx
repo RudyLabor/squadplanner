@@ -2,7 +2,7 @@ import { m } from 'framer-motion'
 import { Star, Zap } from './icons'
 import { AnimatedCounter } from './ui/AnimatedCounter'
 import { HelpTooltip } from './ui'
-import { colorMix } from '~/utils/colorMix'
+import { colorMix } from '../utils/colorMix'
 
 // Level configuration - French translations
 // Colors use CSS variable references for design system consistency

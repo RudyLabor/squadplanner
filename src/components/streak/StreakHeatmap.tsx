@@ -1,7 +1,7 @@
 
 import { useMemo } from 'react'
 import { m } from 'framer-motion'
-import { colorMix } from '~/utils/colorMix'
+import { colorMix } from '../../utils/colorMix'
 
 interface StreakHeatmapProps {
   streakDays: number

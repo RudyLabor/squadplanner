@@ -1,5 +1,5 @@
 import { type ReactNode, type KeyboardEvent } from 'react'
-import { colorMix, colorMixBlend } from '~/utils/colorMix'
+import { colorMix, colorMixBlend } from '../../utils/colorMix'
 
 interface CardProps {
   variant?: 'default' | 'elevated' | 'outlined' | 'ghost'

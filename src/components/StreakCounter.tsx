@@ -3,7 +3,7 @@ import { useState, useEffect, useMemo } from 'react'
 import { m } from 'framer-motion'
 import { Flame, Gift, Sparkles, Check, Zap } from './icons'
 import { Card } from './ui'
-import { colorMix } from '~/utils/colorMix'
+import { colorMix } from '../utils/colorMix'
 import {
   MILESTONES,
   calculateXPReward,

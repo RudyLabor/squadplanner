@@ -11,12 +11,18 @@ interface AdaptiveImageProps {
   srcLow?: string
   /** Tiny base64 placeholder for blur-up effect */
   placeholder?: string
+  /** AVIF source — best compression, served when browser supports it */
+  srcAvif?: string
+  /** WebP source — good compression fallback before original format */
+  srcWebp?: string
   alt: string
   width?: number
   height?: number
   className?: string
   /** Whether to skip adaptive behavior and always load full quality */
   eager?: boolean
+  /** fetchpriority hint for LCP images */
+  fetchPriority?: 'high' | 'low' | 'auto'
 }
 
 /**
@@ -31,11 +37,14 @@ export const AdaptiveImage = memo(function AdaptiveImage({
   srcMedium,
   srcLow,
   placeholder,
+  srcAvif,
+  srcWebp,
   alt,
   width,
   height,
   className = '',
   eager = false,
+  fetchPriority,
 }: AdaptiveImageProps) {
   const { tier } = useAdaptiveLoading()
   const [loaded, setLoaded] = useState(false)
@@ -88,22 +97,31 @@ export const AdaptiveImage = memo(function AdaptiveImage({
         <div className="absolute inset-0 bg-bg-hover" aria-hidden="true" />
       )}
 
-      {/* Actual image */}
+      {/* Actual image — <picture> for AVIF/WebP with fallback */}
       {!showPlaceholderOnly && (
-        <img
-          ref={imgRef}
-          src={error ? placeholder || defaultPlaceholder : resolvedSrc}
-          alt={alt}
-          width={width}
-          height={height}
-          loading="lazy"
-          decoding="async"
-          onLoad={() => setLoaded(true)}
-          onError={() => setError(true)}
-          className={`w-full h-full object-cover transition-opacity duration-300 ${
-            loaded ? 'opacity-100' : 'opacity-0'
-          }`}
-        />
+        <picture>
+          {!error && srcAvif && (
+            <source srcSet={srcAvif} type="image/avif" />
+          )}
+          {!error && srcWebp && (
+            <source srcSet={srcWebp} type="image/webp" />
+          )}
+          <img
+            ref={imgRef}
+            src={error ? placeholder || defaultPlaceholder : resolvedSrc}
+            alt={alt}
+            width={width}
+            height={height}
+            loading={eager ? 'eager' : 'lazy'}
+            decoding="async"
+            fetchPriority={fetchPriority}
+            onLoad={() => setLoaded(true)}
+            onError={() => setError(true)}
+            className={`w-full h-full object-cover transition-opacity duration-300 ${
+              loaded ? 'opacity-100' : 'opacity-0'
+            }`}
+          />
+        </picture>
       )}
 
       {/* Low-tier overlay hint */}

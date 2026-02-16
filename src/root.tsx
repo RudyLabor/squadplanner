@@ -19,6 +19,7 @@ import './index.css'
 const ClientShell = lazy(() => import('./ClientShell'))
 const PublicPageEffects = lazy(() => import('./PublicPageEffects'))
 
+// domMax required: Drawer, Sheet, Toast, Tabs, SwipeableMessage all use drag gestures
 const loadFeatures = () => import('framer-motion').then((mod) => mod.domMax)
 
 // Routes that skip the full ClientShell (no sidebar, no heavy hooks)

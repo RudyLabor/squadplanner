@@ -134,17 +134,22 @@ export default defineConfig(async () => {
             const n = id.replace(/\\/g, '/')
             if (!n.includes('node_modules/')) return
 
+            // React core — separate chunk for long-term caching (rarely changes)
+            if (n.includes('react-dom/')) return 'vendor-react'
+            if (n.includes('node_modules/react/')) return 'vendor-react'
+            if (n.includes('node_modules/scheduler/')) return 'vendor-react'
+
             // CRITICAL: LiveKit lazy-loaded uniquement quand voice chat activé
             // Pas de vendor chunk forcé → vrai lazy loading → -457KB sur initial bundle
-            // if (n.includes('livekit-client') || n.includes('@livekit')) return 'vendor-livekit'
             if (n.includes('@supabase')) return 'vendor-supabase'
             if (n.includes('canvas-confetti')) return 'vendor-confetti'
             // PERFORMANCE: Framer Motion lazy-loadé pour animations complexes uniquement
             // Animations simples → CSS transitions → -169KB sur bundle initial
-            // if (n.includes('framer-motion')) return 'vendor-motion'
             if (n.includes('@tanstack/react-query')) return 'vendor-query'
             if (n.includes('sonner')) return 'vendor-sonner'
             if (n.includes('zustand')) return 'vendor-zustand'
+            // Radix UI primitives — shared UI foundation, cache separately
+            if (n.includes('@radix-ui/')) return 'vendor-radix'
           },
           chunkFileNames: 'assets/[name]-[hash].js',
           assetFileNames: 'assets/[name]-[hash].[ext]',

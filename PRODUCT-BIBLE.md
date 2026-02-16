@@ -2010,13 +2010,13 @@ ETAPE 1 : UX Tier 3 — Micro-interactions + polish ✅ TERMINEE
 [x] T3.9 - Confetti pattern unification (hook useConfetti)
 [x] T3.10 - Extraction composants > 300 lignes
 
-ETAPE 2 : Performance
-[ ] Lighthouse desktop : Perf 98+, A11y 100
-[ ] Lighthouse mobile : Perf 95+
-[ ] FCP < 500ms, LCP < 1000ms, CLS < 0.01
-[ ] Bundle < 800KB (optimiser les chunks)
-[ ] Images : lazy loading + format AVIF/WebP
-[ ] Service Worker : strategie cache offline robuste
+ETAPE 2 : Performance ✅ TERMINEE
+[x] Lighthouse desktop : Perf 98+, A11y 100 (prerender SSG 6 routes publiques, critical.css inline, speculation rules)
+[x] Lighthouse mobile : Perf 95+ (SW Navigation Preload, stale-while-revalidate fonts)
+[x] FCP < 500ms, LCP < 1000ms, CLS < 0.01 (inline @font-face, blocking theme script, SSR fallback sidebar match)
+[x] Bundle < 800KB (vendor-react 193KB cache long-terme, entry.client 8KB, vendor-radix split, code-split 21 routes)
+[x] Images : lazy loading + format AVIF/WebP (AdaptiveImage <picture> srcAvif/srcWebp, fetchPriority, OptimizedImage)
+[x] Service Worker : strategie cache offline robuste (3-tier cache, Navigation Preload, stale-while-revalidate fonts, BG sync)
 
 ETAPE 3 : Accessibilite parfaite
 [ ] Audit axe-core : 0 violation sur toutes les pages

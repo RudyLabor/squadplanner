@@ -36,27 +36,33 @@ self.addEventListener('install', function(event) {
   self.skipWaiting();
 });
 
-// Activate event - clean up ALL old caches and take control
+// Activate event - clean up ALL old caches, enable Navigation Preload, take control
 self.addEventListener('activate', function(event) {
   console.log('[SW] Activating service worker...');
   event.waitUntil(
-    caches.keys().then(function(cacheNames) {
-      return Promise.all(
-        cacheNames.filter(function(cacheName) {
-          // Delete ANY cache that doesn't match current version
-          return cacheName.startsWith('squadplanner-') &&
-                 cacheName !== STATIC_CACHE &&
-                 cacheName !== DYNAMIC_CACHE &&
-                 cacheName !== IMAGE_CACHE;
-        }).map(function(cacheName) {
-          console.log('[SW] Deleting old cache:', cacheName);
-          return caches.delete(cacheName);
-        })
-      );
-    }).then(function() {
-      // Also clean up any corrupted entries in current caches
-      return cleanupCaches();
-    })
+    Promise.all([
+      // Enable Navigation Preload — eliminates SW boot delay on navigations
+      // Browser starts the network fetch in parallel with SW startup
+      self.registration.navigationPreload && self.registration.navigationPreload.enable(),
+      // Clean old caches
+      caches.keys().then(function(cacheNames) {
+        return Promise.all(
+          cacheNames.filter(function(cacheName) {
+            // Delete ANY cache that doesn't match current version
+            return cacheName.startsWith('squadplanner-') &&
+                   cacheName !== STATIC_CACHE &&
+                   cacheName !== DYNAMIC_CACHE &&
+                   cacheName !== IMAGE_CACHE;
+          }).map(function(cacheName) {
+            console.log('[SW] Deleting old cache:', cacheName);
+            return caches.delete(cacheName);
+          })
+        );
+      }).then(function() {
+        // Also clean up any corrupted entries in current caches
+        return cleanupCaches();
+      })
+    ])
   );
   // Take control of all pages immediately
   self.clients.claim();
@@ -117,14 +123,18 @@ self.addEventListener('fetch', function(event) {
 
   // CRITICAL: Never cache HTML navigation requests (SPA routes)
   // This prevents the "black screen" issue from corrupted cached HTML
+  // Uses Navigation Preload response when available (eliminates SW boot delay)
   if (request.mode === 'navigate' || request.destination === 'document') {
-    event.respondWith(networkFirst(request));
+    event.respondWith(networkFirst(request, event.preloadResponse));
     return;
   }
 
   // Handle different request types
-  if (isStaticAsset(url)) {
-    // Static assets: Cache first (JS, CSS, fonts with hash in filename)
+  if (isFontRequest(url)) {
+    // Fonts: Stale-while-revalidate — serve cached instantly, refresh in background
+    event.respondWith(staleWhileRevalidate(request, STATIC_CACHE));
+  } else if (isStaticAsset(url)) {
+    // Static assets: Cache first (JS, CSS with hash in filename)
     event.respondWith(cacheFirst(request, STATIC_CACHE));
   } else if (isImageRequest(request, url)) {
     // Images: Cache first with validation
@@ -134,6 +144,11 @@ self.addEventListener('fetch', function(event) {
     event.respondWith(networkFirst(request));
   }
 });
+
+// Check if font request — served with stale-while-revalidate for instant rendering
+function isFontRequest(url) {
+  return /\.(woff2?|ttf|otf)$/.test(url.pathname);
+}
 
 // Check if static asset (versioned files are safe to cache long-term)
 function isStaticAsset(url) {
@@ -169,9 +184,11 @@ function isValidResponse(response) {
 }
 
 // Network First strategy (for HTML and dynamic content)
-async function networkFirst(request) {
+// preloadResponse: Navigation Preload response (parallel fetch during SW boot)
+async function networkFirst(request, preloadResponse) {
   try {
-    const response = await fetch(request);
+    // Use Navigation Preload response if available (faster — started during SW boot)
+    const response = (await preloadResponse) || (await fetch(request));
 
     // Only return valid responses
     if (isValidResponse(response)) {
@@ -493,6 +510,25 @@ self.addEventListener('message', function(event) {
     );
   }
 });
+
+// Stale-While-Revalidate strategy (for fonts — instant serving, background refresh)
+async function staleWhileRevalidate(request, cacheName) {
+  const cache = await caches.open(cacheName);
+  const cached = await cache.match(request);
+
+  // Start network fetch in background regardless
+  const networkPromise = fetch(request).then(function(response) {
+    if (isValidResponse(response)) {
+      cache.put(request, response.clone());
+    }
+    return response;
+  }).catch(function() {
+    return cached; // Network failed, cached version is still good
+  });
+
+  // Return cached immediately if available, otherwise wait for network
+  return cached || networkPromise;
+}
 
 // Background sync event — replay offline mutations when connectivity returns
 self.addEventListener('sync', function(event) {

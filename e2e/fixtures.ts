@@ -182,13 +182,22 @@ export class TestDataHelper {
     return data || []
   }
 
-  // --- Leaderboard ---
+  // --- Leaderboard (uses same RPC as the app) ---
   async getLeaderboard(limit = 20) {
-    const { data } = await this.admin
-      .from('profiles')
-      .select('id, username, xp, level, avatar_url')
-      .order('xp', { ascending: false })
-      .limit(limit)
+    const { data, error } = await this.admin.rpc('get_global_leaderboard', {
+      p_game: null,
+      p_region: null,
+      p_limit: limit,
+    })
+    if (error) {
+      // Fallback to direct query if RPC not available
+      const { data: fallback } = await this.admin
+        .from('profiles')
+        .select('id, username, xp, level, avatar_url')
+        .order('xp', { ascending: false })
+        .limit(limit)
+      return fallback || []
+    }
     return data || []
   }
 

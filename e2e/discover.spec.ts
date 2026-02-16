@@ -58,7 +58,7 @@ test.describe('F52 — Parcourir les squads publics', () => {
     }
 
     // STRICT: every squad name from DB (up to 20 loaded by the UI) should be present in the page text
-    const mainContent = await authenticatedPage.locator('.max-w-2xl, .max-w-4xl, .max-w-5xl').first().textContent()
+    const mainContent = await authenticatedPage.locator('main').first().textContent()
     expect(mainContent).toBeTruthy()
 
     // At least half of the first 5 squads must appear in page content
@@ -79,8 +79,8 @@ test.describe('F53a — Filtrer par jeu', () => {
     await authenticatedPage.goto('/discover')
     await authenticatedPage.waitForLoadState('networkidle')
 
-    // The Discover page uses a custom Select with placeholder "Tous les jeux"
-    const gameFilterTrigger = authenticatedPage.locator('button:has-text("Tous les jeux")').first()
+    // The Discover page uses a combobox (custom Select) with label "Tous les jeux"
+    const gameFilterTrigger = authenticatedPage.getByRole('combobox', { name: /Tous les jeux/i }).first()
     // STRICT: game filter MUST exist on discover page
     await expect(gameFilterTrigger).toBeVisible({ timeout: 10000 })
 
@@ -128,8 +128,8 @@ test.describe('F53b — Filtrer par region', () => {
     await authenticatedPage.goto('/discover')
     await authenticatedPage.waitForLoadState('networkidle')
 
-    // The Discover page uses a custom Select with placeholder "Toutes les regions"
-    const regionFilterTrigger = authenticatedPage.locator('button:has-text("Toutes les r")').first()
+    // The Discover page uses a combobox (custom Select) with label "Toutes les régions"
+    const regionFilterTrigger = authenticatedPage.getByRole('combobox', { name: /Toutes les r/i }).first()
     // STRICT: region filter MUST exist on discover page
     await expect(regionFilterTrigger).toBeVisible({ timeout: 10000 })
 

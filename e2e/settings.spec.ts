@@ -85,9 +85,9 @@ test.describe('F58 — Parametres de notifications', () => {
 
     // STRICT: all 4 notification toggle labels MUST be visible within #notifications
     const section = authenticatedPage.locator('#notifications')
-    await expect(section.getByText('Sessions')).toBeVisible({ timeout: 5000 })
-    await expect(section.getByText('Messages')).toBeVisible({ timeout: 5000 })
-    await expect(section.getByText('Party vocale')).toBeVisible({ timeout: 5000 })
+    await expect(section.getByText('Sessions', { exact: true })).toBeVisible({ timeout: 5000 })
+    await expect(section.getByText('Messages', { exact: true })).toBeVisible({ timeout: 5000 })
+    await expect(section.getByText('Party vocale', { exact: true })).toBeVisible({ timeout: 5000 })
     await expect(section.getByText(/Rappels automatiques/i)).toBeVisible({ timeout: 5000 })
 
     // STRICT: at least 4 toggle switches within the section
@@ -142,10 +142,10 @@ test.describe('F59 — Peripheriques audio', () => {
     await expect(audioSection).toBeVisible({ timeout: 10000 })
 
     // STRICT: "Microphone" label MUST be visible in #audio section
-    await expect(audioSection.getByText('Microphone')).toBeVisible({ timeout: 5000 })
+    await expect(audioSection.getByText('Microphone', { exact: true })).toBeVisible({ timeout: 5000 })
 
     // STRICT: "Sortie audio" label MUST be visible in #audio section
-    await expect(audioSection.getByText('Sortie audio')).toBeVisible({ timeout: 5000 })
+    await expect(audioSection.getByText('Sortie audio', { exact: true })).toBeVisible({ timeout: 5000 })
   })
 })
 

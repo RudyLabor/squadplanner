@@ -47,7 +47,20 @@ test.describe('F23 — Creer une session via UI + verifier DB', () => {
     await expect(createSessionBtn).toBeVisible({ timeout: 15000 })
 
     await createSessionBtn.click()
-    await page.waitForTimeout(500)
+    await page.waitForTimeout(1000)
+
+    // 2b. Si un Select de squad apparait (user a plusieurs squads), selectionner la squad de test
+    const squadSelect = page.locator('button[role="combobox"]').first()
+    if (await squadSelect.isVisible({ timeout: 2000 }).catch(() => false)) {
+      await squadSelect.click()
+      await page.waitForTimeout(500)
+      // Chercher l'option avec le nom de la squad de test
+      const squadOption = page.getByText(new RegExp('E2E Test Squad Session', 'i')).first()
+      if (await squadOption.isVisible({ timeout: 3000 }).catch(() => false)) {
+        await squadOption.click()
+        await page.waitForTimeout(500)
+      }
+    }
 
     // 3. Remplir le titre
     const titleInput = page.getByPlaceholder(/Session ranked|Détente|Tryhard|titre/i).first()
@@ -55,12 +68,26 @@ test.describe('F23 — Creer une session via UI + verifier DB', () => {
     await expect(titleInput).toBeVisible({ timeout: 10000 })
     await titleInput.fill('E2E Test Session')
 
+    // 3b. Remplir la date et l'heure (champs requis par le formulaire)
+    const dateInput = page.locator('input[type="date"]').first()
+    const timeInput = page.locator('input[type="time"]').first()
+    if (await dateInput.isVisible({ timeout: 3000 }).catch(() => false)) {
+      // Date demain
+      const tomorrow = new Date(Date.now() + 24 * 60 * 60 * 1000)
+      const dateStr = tomorrow.toISOString().split('T')[0]
+      await dateInput.fill(dateStr)
+    }
+    if (await timeInput.isVisible({ timeout: 3000 }).catch(() => false)) {
+      await timeInput.fill('20:00')
+    }
+    await page.waitForTimeout(500)
+
     // 4. Soumettre le formulaire
-    const submitBtn = page.getByRole('button', { name: /Créer|Planifier|Enregistrer/i }).last()
+    const submitBtn = page.getByRole('button', { name: /Créer.*session|Planifier|Enregistrer/i }).last()
     // STRICT: le bouton de soumission DOIT etre visible
     await expect(submitBtn).toBeVisible({ timeout: 10000 })
-    // STRICT: le bouton de soumission DOIT etre actif
-    await expect(submitBtn).toBeEnabled()
+    // STRICT: le bouton de soumission DOIT etre actif (date+heure remplies)
+    await expect(submitBtn).toBeEnabled({ timeout: 5000 })
 
     await submitBtn.click()
     await page.waitForTimeout(3000)
@@ -276,9 +303,10 @@ test.describe('F26 — Dialog d\'edition de session', () => {
     // STRICT: la duree en DB DOIT etre visible dans le dialog d'edition
     await expect(durationText).toBeVisible({ timeout: 10000 })
 
-    // 8. Les boutons Annuler et Enregistrer DOIVENT etre visibles
-    const annulerBtn = page.getByRole('button', { name: /Annuler/i })
-    const enregistrerBtn = page.getByRole('button', { name: /Enregistrer/i })
+    // 8. Les boutons Annuler et Enregistrer DOIVENT etre visibles dans le dialog
+    const dialog = page.locator('[role="dialog"], dialog').first()
+    const annulerBtn = dialog.getByRole('button', { name: /Annuler/i }).first()
+    const enregistrerBtn = dialog.getByRole('button', { name: /Enregistrer/i }).first()
     // STRICT: le bouton "Annuler" DOIT etre present dans le dialog
     await expect(annulerBtn).toBeVisible({ timeout: 5000 })
     // STRICT: le bouton "Enregistrer" DOIT etre present dans le dialog
@@ -464,38 +492,52 @@ test.describe('F29 — Auto-confirm', () => {
     const testSquad = await db.createTestSquad({ name: `E2E Test Squad AutoConfirm ${Date.now()}` })
     testSquadId = testSquad.id
 
-    // 2. Creer une session avec auto_confirm_threshold = 1 (seulement 1 RSVP necessaire)
-    // On utilise threshold=1 pour ne pas dependre d'un faux user_id (FK constraint)
-    const testSession = await db.createTestSession(testSquad.id, {
-      title: `E2E Test Session AutoConfirm ${Date.now()}`,
-      auto_confirm_threshold: 1,
-      status: 'proposed',
-    })
-    testSessionId = testSession.id
+    // 2. Creer un user temporaire et l'ajouter a la squad (pour avoir 2 RSVPs)
+    const tempUser = await db.createTemporaryTestUser()
 
-    // STRICT: la session DOIT exister en DB avec le statut 'proposed'
-    const sessionBefore = await db.getSessionById(testSession.id)
-    expect(sessionBefore).toBeTruthy()
-    expect(sessionBefore.status).toBe('proposed')
+    try {
+      // Ajouter le temp user a la squad
+      await db.admin.from('squad_members').insert({
+        squad_id: testSquad.id, user_id: tempUser.userId, role: 'member',
+      })
 
-    // 3. Creer le RSVP 'present' (utilisateur de test) — atteint le threshold de 1
-    await db.createTestRsvp(testSession.id, userId, 'present')
+      // 3. Creer une session avec auto_confirm_threshold = 2 (minimum autorise par la DB)
+      const testSession = await db.createTestSession(testSquad.id, {
+        title: `E2E Test Session AutoConfirm ${Date.now()}`,
+        auto_confirm_threshold: 2,
+        status: 'proposed',
+      })
+      testSessionId = testSession.id
 
-    // STRICT: le RSVP DOIT exister en DB
-    const rsvps = await db.getSessionRsvps(testSession.id)
-    const userRsvp = rsvps.find((r: { user_id: string }) => r.user_id === userId)
-    expect(userRsvp).toBeTruthy()
-    expect(userRsvp.response).toBe('present')
+      // STRICT: la session DOIT exister en DB avec le statut 'proposed'
+      const sessionBefore = await db.getSessionById(testSession.id)
+      expect(sessionBefore).toBeTruthy()
+      expect(sessionBefore.status).toBe('proposed')
 
-    // 4. Attendre pour laisser le trigger/edge function s'executer
-    await page.waitForTimeout(5000)
+      // 4. Creer le 1er RSVP 'present' (utilisateur de test)
+      await db.createTestRsvp(testSession.id, userId, 'present')
 
-    // 5. Verifier en DB si le statut a change a 'confirmed'
-    const sessionAfter = await db.getSessionById(testSession.id)
-    // STRICT: la session DOIT toujours exister en DB
-    expect(sessionAfter).toBeTruthy()
-    // STRICT: le statut DOIT etre 'confirmed' apres que le threshold est atteint
-    expect(sessionAfter.status).toBe('confirmed')
+      // 5. Creer le 2eme RSVP 'present' (temp user) — atteint le threshold de 2
+      await db.createTestRsvp(testSession.id, tempUser.userId, 'present')
+
+      // STRICT: les 2 RSVPs DOIVENT exister en DB
+      const rsvps = await db.getSessionRsvps(testSession.id)
+      const presentRsvps = rsvps.filter((r: { response: string }) => r.response === 'present')
+      expect(presentRsvps.length).toBe(2)
+
+      // 6. Attendre pour laisser le trigger s'executer
+      await page.waitForTimeout(5000)
+
+      // 7. Verifier en DB si le statut a change a 'confirmed'
+      const sessionAfter = await db.getSessionById(testSession.id)
+      // STRICT: la session DOIT toujours exister en DB
+      expect(sessionAfter).toBeTruthy()
+      // STRICT: le statut DOIT etre 'confirmed' apres que le threshold est atteint
+      expect(sessionAfter.status).toBe('confirmed')
+    } finally {
+      // Cleanup temp user
+      try { await db.deleteTemporaryTestUser(tempUser.userId) } catch { /* cleanup */ }
+    }
   })
 })
 

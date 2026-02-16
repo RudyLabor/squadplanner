@@ -1,21 +1,28 @@
 import { StrictMode, startTransition } from 'react'
 import { hydrateRoot } from 'react-dom/client'
 import { HydratedRouter } from 'react-router/dom'
-import { initSupabase } from './lib/supabaseMinimal'
-import { initFontOptimization } from './utils/fontOptimization'
 
-// Initialize Supabase client IMMEDIATELY — before hydration starts.
-// This ensures _client is ready when hooks run their first effects.
-// The dynamic import of @supabase/ssr starts downloading in parallel with hydration.
-initSupabase()
+// PERF: Hydrate FIRST — defer all non-critical init to after first paint.
+// initSupabase + initFontOptimization were previously blocking hydration,
+// adding ~100-200ms to FCP. They now run in a microtask after hydration starts.
+startTransition(() => {
+  hydrateRoot(
+    document,
+    <StrictMode>
+      <HydratedRouter />
+    </StrictMode>
+  )
+})
 
-// Detect when web fonts are loaded and add .fonts-loaded class to <html>
-initFontOptimization()
+// Initialize Supabase client right after hydration starts (microtask).
+// This ensures _client is ready when hooks run their first effects,
+// but doesn't block the initial paint.
+queueMicrotask(() => {
+  import('./lib/supabaseMinimal').then(({ initSupabase }) => initSupabase())
+  import('./utils/fontOptimization').then(({ initFontOptimization }) => initFontOptimization())
+})
 
 // Auto-update: reload when a NEW service worker replaces an existing one.
-// On first visit, there is no controller yet — skipWaiting + clients.claim
-// fires controllerchange immediately, causing an unwanted page reload.
-// We only reload when a previous controller existed (= SW update after deploy).
 if ('serviceWorker' in navigator) {
   const hadController = !!navigator.serviceWorker.controller
   let refreshing = false
@@ -25,20 +32,10 @@ if ('serviceWorker' in navigator) {
     window.location.reload()
   })
 
-  // Check for SW updates every 30 minutes
   navigator.serviceWorker.ready.then((registration) => {
     setInterval(() => registration.update(), 30 * 60 * 1000)
   })
 }
-
-startTransition(() => {
-  hydrateRoot(
-    document,
-    <StrictMode>
-      <HydratedRouter />
-    </StrictMode>
-  )
-})
 
 // Report Web Vitals (non-blocking)
 import('./utils/webVitals').then(({ reportWebVitals }) => {

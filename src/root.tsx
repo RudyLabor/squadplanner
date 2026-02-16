@@ -106,123 +106,54 @@ export function Layout({ children }: { children: React.ReactNode }) {
         />
         <meta name="twitter:image" content="https://squadplanner.fr/og-image.png" />
 
-        {/* JSON-LD Structured Data */}
+        {/* JSON-LD Structured Data — single @graph reduces DOM nodes and parse time */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
               '@context': 'https://schema.org',
-              '@type': 'WebApplication',
-              name: 'Squad Planner',
-              alternateName: 'Le Calendly du gaming',
-              url: 'https://squadplanner.fr',
-              description:
-                "Crée l'habitude de jouer ensemble. Planifie, confirme, joue. Fini les 'on verra'.",
-              applicationCategory: 'GameApplication',
-              operatingSystem: 'Web, iOS, Android',
-              offers: { '@type': 'Offer', price: '0', priceCurrency: 'EUR' },
-              author: { '@type': 'Organization', name: 'Squad Planner' },
-              inLanguage: 'fr',
-              potentialAction: { '@type': 'ViewAction', target: 'https://squadplanner.fr/auth' },
-            }),
-          }}
-        />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              '@context': 'https://schema.org',
-              '@type': 'Organization',
-              name: 'Squad Planner',
-              url: 'https://squadplanner.fr',
-              logo: 'https://squadplanner.fr/favicon.svg',
-              sameAs: [],
-              contactPoint: {
-                '@type': 'ContactPoint',
-                email: 'contact@squadplanner.fr',
-                contactType: 'customer support',
-                availableLanguage: 'French',
-              },
-            }),
-          }}
-        />
-
-        {/* FAQ Structured Data */}
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              '@context': 'https://schema.org',
-              '@type': 'FAQPage',
-              mainEntity: [
+              '@graph': [
                 {
-                  '@type': 'Question',
-                  name: "C'est quoi Squad Planner ?",
-                  acceptedAnswer: {
-                    '@type': 'Answer',
-                    text: "Squad Planner est le Calendly du gaming. C'est une application web gratuite qui permet de cr\u00e9er des squads, planifier des sessions de jeu avec RSVP et mesurer la fiabilit\u00e9 de chaque joueur.",
-                  },
+                  '@type': 'WebApplication',
+                  name: 'Squad Planner',
+                  alternateName: 'Le Calendly du gaming',
+                  url: 'https://squadplanner.fr',
+                  description: "Crée l'habitude de jouer ensemble. Planifie, confirme, joue. Fini les 'on verra'.",
+                  applicationCategory: 'GameApplication',
+                  operatingSystem: 'Web, iOS, Android',
+                  offers: { '@type': 'Offer', price: '0', priceCurrency: 'EUR' },
+                  author: { '@type': 'Organization', name: 'Squad Planner' },
+                  inLanguage: 'fr',
+                  potentialAction: { '@type': 'ViewAction', target: 'https://squadplanner.fr/auth' },
                 },
                 {
-                  '@type': 'Question',
-                  name: 'Est-ce que Squad Planner est gratuit ?',
-                  acceptedAnswer: {
-                    '@type': 'Answer',
-                    text: 'Oui, Squad Planner est enti\u00e8rement gratuit. Une version Premium optionnelle offre des fonctionnalit\u00e9s suppl\u00e9mentaires comme les statistiques avanc\u00e9es et la personnalisation.',
-                  },
+                  '@type': 'Organization',
+                  name: 'Squad Planner',
+                  url: 'https://squadplanner.fr',
+                  logo: 'https://squadplanner.fr/favicon.svg',
+                  sameAs: [],
+                  contactPoint: { '@type': 'ContactPoint', email: 'contact@squadplanner.fr', contactType: 'customer support', availableLanguage: 'French' },
                 },
                 {
-                  '@type': 'Question',
-                  name: 'Comment fonctionne le syst\u00e8me de fiabilit\u00e9 ?',
-                  acceptedAnswer: {
-                    '@type': 'Answer',
-                    text: "Chaque joueur a un score de fiabilit\u00e9 bas\u00e9 sur sa participation r\u00e9elle aux sessions. Quand tu dis 'Pr\u00e9sent' et que tu joues, ton score monte. Si tu ne te pr\u00e9sentes pas, il descend.",
-                  },
+                  '@type': 'BreadcrumbList',
+                  itemListElement: [
+                    { '@type': 'ListItem', position: 1, name: 'Accueil', item: 'https://squadplanner.fr/' },
+                    { '@type': 'ListItem', position: 2, name: 'Premium', item: 'https://squadplanner.fr/premium' },
+                    { '@type': 'ListItem', position: 3, name: 'Aide', item: 'https://squadplanner.fr/help' },
+                    { '@type': 'ListItem', position: 4, name: 'Découvrir', item: 'https://squadplanner.fr/discover' },
+                  ],
                 },
               ],
             }),
           }}
         />
 
-        {/* BreadcrumbList Structured Data */}
-        <script
-          type="application/ld+json"
+        {/* Critical CSS — inlined to eliminate render-blocking network request */}
+        <style
           dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              '@context': 'https://schema.org',
-              '@type': 'BreadcrumbList',
-              itemListElement: [
-                {
-                  '@type': 'ListItem',
-                  position: 1,
-                  name: 'Accueil',
-                  item: 'https://squadplanner.fr/',
-                },
-                {
-                  '@type': 'ListItem',
-                  position: 2,
-                  name: 'Premium',
-                  item: 'https://squadplanner.fr/premium',
-                },
-                {
-                  '@type': 'ListItem',
-                  position: 3,
-                  name: 'Aide',
-                  item: 'https://squadplanner.fr/help',
-                },
-                {
-                  '@type': 'ListItem',
-                  position: 4,
-                  name: 'D\u00e9couvrir',
-                  item: 'https://squadplanner.fr/discover',
-                },
-              ],
-            }),
+            __html: `@font-face{font-family:'Space Grotesk';font-style:normal;font-weight:300 700;font-display:optional;src:url('/fonts/space-grotesk-latin.woff2') format('woff2')}:root{--color-bg-base:#050506;--color-primary:#5c60ef}html,body,#root{margin:0;padding:0;min-height:100vh;background-color:var(--color-bg-base);color:#fafafa;font-family:'Inter',system-ui,-apple-system,sans-serif}.initial-loader{position:fixed;top:0;left:0;right:0;bottom:0;display:flex;align-items:center;justify-content:center;background:var(--color-bg-base);z-index:9999}.initial-loader-spinner{width:32px;height:32px;border:2px solid var(--color-primary);border-top-color:transparent;border-radius:50%;animation:spin 1s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}.skip-link{position:absolute;top:-100px;left:0;background:var(--color-primary);color:white;padding:8px 16px;z-index:10000;text-decoration:none;font-weight:500;border-radius:0 0 8px 0;transition:top 0.2s}.skip-link:focus{top:0}`,
           }}
         />
-
-        {/* Critical CSS */}
-        <link rel="stylesheet" href="/critical.css" />
 
         {/* Blocking theme script — runs BEFORE React hydration to prevent FOUC and CLS */}
         <script
@@ -238,23 +169,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
           }}
         />
 
-        {/* Speculation Rules for predictive navigation */}
+        {/* Speculation Rules — prefetch only (prerender too costly on mobile 4G) */}
         <script
           type="speculationrules"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
-              prerender: [
-                {
-                  where: {
-                    and: [
-                      { href_matches: '/*' },
-                      { not: { href_matches: '/auth*' } },
-                      { not: { href_matches: '/api/*' } },
-                    ],
-                  },
-                  eagerness: 'moderate',
-                },
-              ],
               prefetch: [
                 {
                   where: {

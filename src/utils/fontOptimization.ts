@@ -37,9 +37,9 @@ export function initFontOptimization(): void {
       document.documentElement.classList.add('fonts-loaded')
     })
   } else {
-    // Fallback: assume fonts loaded after a short delay
+    // Fallback: assume fonts loaded after a short delay (300ms keeps FCP fast)
     setTimeout(() => {
       document.documentElement.classList.add('fonts-loaded')
-    }, 1000)
+    }, 300)
   }
 }

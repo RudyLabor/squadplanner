@@ -118,9 +118,11 @@ export default defineConfig(async () => {
           : [],
     },
 
-    // Performance optimizations - Build rapide pour tests
+    // Performance optimizations
     build: {
-      sourcemap: false, // Déjà désactivé
+      sourcemap: false,
+      cssCodeSplit: true, // Split CSS per route — reduces critical CSS payload
+      cssMinify: 'esbuild',
       minify: 'esbuild',
       target: 'esnext',
       modulePreload: { polyfill: false },

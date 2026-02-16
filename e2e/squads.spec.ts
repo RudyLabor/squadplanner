@@ -126,7 +126,25 @@ test.describe('Squads STRICT — F16: Rejoindre via code d\'invitation', () => {
     expect(loaded).toBe(true)
     await dismissTourOverlay(page)
 
-    // 3. Click "Rejoindre" button
+    // 3. Dismiss any premium upsell dialog/modal that may appear (user has 2/2 squads)
+    // The modal uses a div.fixed.inset-0.z-50 overlay that intercepts pointer events
+    const modalBackdrop = page.locator('div.fixed.inset-0').filter({ has: page.locator('div[aria-hidden="true"]') })
+    if (await modalBackdrop.first().isVisible({ timeout: 3000 }).catch(() => false)) {
+      // Try clicking the Close/Fermer button first
+      const closeBtn = page.locator('button:has-text("Close"), button:has-text("Fermer")').first()
+      if (await closeBtn.isVisible({ timeout: 1000 }).catch(() => false)) {
+        await closeBtn.click({ force: true })
+        await page.waitForTimeout(500)
+      }
+      // Fallback: press Escape to dismiss any remaining modal
+      await page.keyboard.press('Escape')
+      await page.waitForTimeout(500)
+    }
+    // Extra safety: press Escape in case modal is still present
+    await page.keyboard.press('Escape')
+    await page.waitForTimeout(300)
+
+    // 4. Click "Rejoindre" button
     const joinBtn = page.getByRole('button', { name: /Rejoindre/i }).first()
     // STRICT: the join button MUST be visible on the squads page
     await expect(joinBtn).toBeVisible({ timeout: 10000 })

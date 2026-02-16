@@ -152,7 +152,7 @@ export const MessageBubble = memo(function MessageBubble({
             {message.sender?.avatar_url ? (
               <img
                 src={message.sender.avatar_url}
-                alt=""
+                alt={`Avatar de ${sender}`}
                 className="w-8 h-8 rounded-full object-cover"
                 loading="lazy"
                 decoding="async"

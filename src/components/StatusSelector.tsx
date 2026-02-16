@@ -62,7 +62,7 @@ export const StatusSelector = memo(function StatusSelector({
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-2 px-2 py-1.5 rounded-lg hover:bg-border-subtle transition-colors text-left w-full"
+        className="flex items-center gap-2 px-2.5 py-2.5 min-h-[44px] rounded-lg hover:bg-border-subtle transition-colors text-left w-full"
         aria-label={`Statut: ${currentConfig.label}`}
         aria-expanded={isOpen}
       >
@@ -115,11 +115,12 @@ export const StatusSelector = memo(function StatusSelector({
                       setAvailability(value)
                       setIsOpen(false)
                     }}
-                    className={`w-full flex items-center gap-3 px-3 py-2 text-left transition-colors ${
+                    className={`w-full flex items-center gap-3 px-3 py-2.5 min-h-[44px] text-left transition-colors ${
                       isActive
                         ? 'bg-primary-10 text-text-primary'
                         : 'text-text-secondary hover:bg-border-subtle hover:text-text-primary'
                     }`}
+                    aria-label={`Passer en ${config.label}`}
                   >
                     <Icon className="w-4 h-4" style={{ color: config.color }} strokeWidth={2} />
                     <span className="text-base font-medium">{config.label}</span>
@@ -137,7 +138,8 @@ export const StatusSelector = memo(function StatusSelector({
                     setIsOpen(false)
                     onOpenCustomStatus()
                   }}
-                  className="w-full flex items-center gap-3 px-3 py-2 text-left text-text-secondary hover:bg-border-subtle hover:text-text-primary transition-colors"
+                  className="w-full flex items-center gap-3 px-3 py-2.5 min-h-[44px] text-left text-text-secondary hover:bg-border-subtle hover:text-text-primary transition-colors"
+                  aria-label={customStatus ? 'Modifier le statut personnalisé' : 'Définir un statut personnalisé'}
                 >
                   <span className="text-sm">😊</span>
                   <span className="text-base font-medium">

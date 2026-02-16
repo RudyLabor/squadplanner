@@ -56,7 +56,7 @@ export function LandingNavbar({ isLoggedIn }: LandingNavbarProps) {
             </span>
           </Link>
 
-          <div className="hidden md:flex items-center gap-6">
+          <div className="hidden lg:flex items-center gap-6">
             {navLinks.map((link) =>
               link.isRoute ? (
                 <Link
@@ -78,11 +78,11 @@ export function LandingNavbar({ isLoggedIn }: LandingNavbarProps) {
             )}
           </div>
 
-          <div className="flex items-center gap-2 md:gap-3">
+          <div className="flex items-center gap-2 lg:gap-3">
             {isLoggedIn ? (
               <Link
                 to="/home"
-                className="px-4 py-2 rounded-lg bg-primary text-white text-base md:text-md font-medium hover:bg-primary-hover transition-colors duration-300 inline-flex items-center"
+                className="px-4 py-2 rounded-lg bg-primary text-white text-base lg:text-md font-medium hover:bg-primary-hover transition-colors duration-300 inline-flex items-center"
               >
                 Aller à l'app
               </Link>
@@ -90,13 +90,13 @@ export function LandingNavbar({ isLoggedIn }: LandingNavbarProps) {
               <>
                 <Link
                   to="/auth"
-                  className="hidden md:inline-flex items-center px-3 md:px-4 py-2 text-base md:text-md text-text-secondary hover:text-text-primary border border-border-subtle hover:border-border-hover rounded-lg transition-all"
+                  className="hidden lg:inline-flex items-center px-3 lg:px-4 py-2 text-base lg:text-md text-text-secondary hover:text-text-primary border border-border-subtle hover:border-border-hover rounded-lg transition-all"
                 >
                   Se connecter
                 </Link>
                 <Link
                   to="/auth?mode=register&redirect=onboarding"
-                  className="hidden md:inline-flex items-center px-3 md:px-4 py-2 rounded-lg bg-primary text-white text-base md:text-md font-medium hover:bg-primary-hover transition-colors duration-300"
+                  className="hidden lg:inline-flex items-center px-3 lg:px-4 py-2 rounded-lg bg-primary text-white text-base lg:text-md font-medium hover:bg-primary-hover transition-colors duration-300"
                   data-track="navbar_cta_click"
                 >
                   Créer ma squad
@@ -104,7 +104,7 @@ export function LandingNavbar({ isLoggedIn }: LandingNavbarProps) {
                 </Link>
                 <Link
                   to="/auth?mode=register&redirect=onboarding"
-                  className="md:hidden inline-flex items-center px-3 py-2 rounded-lg bg-primary text-white text-sm font-medium"
+                  className="lg:hidden inline-flex items-center px-3 py-2 rounded-lg bg-primary text-white text-sm font-medium"
                   data-track="navbar_mobile_cta_click"
                 >
                   S'inscrire
@@ -112,7 +112,7 @@ export function LandingNavbar({ isLoggedIn }: LandingNavbarProps) {
                 <button
                   type="button"
                   onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                  className="md:hidden min-w-[44px] min-h-[44px] flex items-center justify-center text-text-secondary hover:text-text-primary"
+                  className="lg:hidden min-w-[44px] min-h-[44px] flex items-center justify-center text-text-secondary hover:text-text-primary"
                   aria-label={mobileMenuOpen ? 'Fermer le menu' : 'Ouvrir le menu'}
                   aria-expanded={mobileMenuOpen}
                 >

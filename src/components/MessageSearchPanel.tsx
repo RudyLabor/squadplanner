@@ -63,12 +63,14 @@ export const MessageSearchPanel = memo(function MessageSearchPanel({
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Rechercher dans les messages..."
               className="flex-1 bg-transparent text-text-primary placeholder-text-quaternary outline-none text-md"
+              aria-label="Rechercher des messages"
               autoFocus
             />
             {query && (
               <button
                 onClick={clearSearch}
                 className="p-1 rounded text-text-quaternary hover:text-text-secondary"
+                aria-label="Effacer la recherche"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -76,6 +78,7 @@ export const MessageSearchPanel = memo(function MessageSearchPanel({
             <button
               onClick={onClose}
               className="p-1.5 rounded-lg text-text-tertiary hover:text-text-primary hover:bg-bg-hover transition-colors"
+              aria-label="Fermer la recherche"
             >
               <X className="w-5 h-5" />
             </button>
@@ -123,7 +126,7 @@ export const MessageSearchPanel = memo(function MessageSearchPanel({
                     {result.sender_avatar ? (
                       <img
                         src={result.sender_avatar}
-                        alt=""
+                        alt={`Avatar de ${result.sender_username || 'utilisateur'}`}
                         className="w-8 h-8 rounded-full object-cover flex-shrink-0"
                       />
                     ) : (
@@ -171,7 +174,7 @@ export const MessageSearchPanel = memo(function MessageSearchPanel({
                     {result.sender_avatar ? (
                       <img
                         src={result.sender_avatar}
-                        alt=""
+                        alt={`Avatar de ${result.sender_username || 'utilisateur'}`}
                         className="w-8 h-8 rounded-full object-cover flex-shrink-0"
                       />
                     ) : (

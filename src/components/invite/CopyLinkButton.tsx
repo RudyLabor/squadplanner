@@ -14,6 +14,7 @@ export function CopyLinkButton({ linkCopied, onCopy }: CopyLinkButtonProps) {
             ? 'bg-success-15 text-success border border-success/20'
             : 'bg-overlay-subtle text-text-secondary hover:bg-overlay-light hover:text-text-primary border border-border-subtle'
         }`}
+        aria-label={linkCopied ? "Lien d'invitation copié" : "Copier le lien d'invitation"}
       >
         {linkCopied ? (
           <>

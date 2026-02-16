@@ -41,8 +41,8 @@ export function OfflineBanner() {
                 </div>
                 <button
                   onClick={dismissOfflineBanner}
-                  className="p-2 rounded-lg hover:bg-overlay-light transition-colors"
-                  aria-label="Fermer"
+                  className="p-2.5 rounded-lg hover:bg-overlay-light transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center"
+                  aria-label="Fermer l'alerte hors ligne"
                 >
                   <X className="w-4 h-4 text-error/60" />
                 </button>
@@ -74,8 +74,8 @@ export function OfflineBanner() {
                 </div>
                 <button
                   onClick={dismissReconnectedBanner}
-                  className="p-2 rounded-lg hover:bg-overlay-light transition-colors"
-                  aria-label="Fermer"
+                  className="p-2.5 rounded-lg hover:bg-overlay-light transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center"
+                  aria-label="Fermer la notification de reconnexion"
                 >
                   <X className="w-4 h-4 text-success/60" />
                 </button>

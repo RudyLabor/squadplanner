@@ -62,8 +62,8 @@ export const PWAInstallBanner = memo(function PWAInstallBanner() {
             <button
               type="button"
               onClick={dismissBanner}
-              className="p-1 rounded-lg text-text-tertiary hover:text-text-secondary hover:bg-border-subtle transition-colors flex-shrink-0"
-              aria-label="Fermer"
+              className="p-2.5 -m-1 rounded-lg text-text-tertiary hover:text-text-secondary hover:bg-border-subtle transition-colors flex-shrink-0"
+              aria-label="Fermer la bannière d'installation"
             >
               <X className="w-4 h-4" />
             </button>

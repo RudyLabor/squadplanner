@@ -101,7 +101,14 @@ export function Help() {
           <Card className="p-8 text-center">
             <HelpCircle className="w-12 h-12 text-text-tertiary mx-auto mb-3" />
             <p className="text-md text-text-primary mb-1">Aucun résultat</p>
-            <p className="text-base text-text-tertiary">Essaie avec d'autres mots-clés</p>
+            <p className="text-base text-text-tertiary mb-4">Essaie avec d'autres mots-clés</p>
+            <button
+              type="button"
+              onClick={() => { setSearchQuery(''); setSelectedCategory(null) }}
+              className="px-4 py-2 rounded-lg bg-primary text-white text-base font-medium hover:bg-primary-hover transition-colors"
+            >
+              Voir toutes les questions
+            </button>
           </Card>
         ) : (
           Object.entries(groupedItems).map(([category, items]) => (

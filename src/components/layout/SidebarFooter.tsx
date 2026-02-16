@@ -28,7 +28,7 @@ export const SidebarFooter = memo(function SidebarFooter({
           <Tooltip content={profile?.username || 'Mon profil'} position="right" delay={300}>
             <Link to="/profile" viewTransition aria-label="Voir mon profil">
               <m.div
-                className="flex items-center justify-center p-2 rounded-xl hover:bg-surface-card transition-colors duration-300"
+                className="flex items-center justify-center min-w-[44px] min-h-[44px] p-2 rounded-xl hover:bg-surface-card transition-colors duration-300"
                 whileHover={{ x: 0 }}
                 transition={{ duration: 0.25 }}
               >
@@ -132,7 +132,7 @@ export const SidebarFooter = memo(function SidebarFooter({
           <Tooltip content="Passer Premium" position="right" delay={300}>
             <Link to="/premium" viewTransition aria-label="Passer Premium">
               <m.div
-                className="flex items-center justify-center p-2 rounded-xl hover:bg-surface-card transition-colors"
+                className="flex items-center justify-center min-w-[44px] min-h-[44px] p-2 rounded-xl hover:bg-surface-card transition-colors"
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
               >

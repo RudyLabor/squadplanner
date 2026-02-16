@@ -239,7 +239,7 @@ export async function initQueryPersistence() {
 
     persistQueryClient({
       queryClient,
-      persister: persister as any,
+      persister: persister as import('@tanstack/query-persist-client-core').Persister,
       maxAge: 24 * 60 * 60 * 1000, // 24 hours
       buster: '', // Change to invalidate all persisted caches
       dehydrateOptions: {

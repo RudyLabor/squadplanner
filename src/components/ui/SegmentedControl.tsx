@@ -36,6 +36,7 @@ export function SegmentedControl<T extends string>({
     <div
       className={`inline-flex bg-bg-surface border border-border-subtle rounded-xl ${containerPadding[size]}`}
       role="tablist"
+      aria-label="Options de navigation"
     >
       {options.map((option) => {
         const isActive = value === option.value

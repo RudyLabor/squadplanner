@@ -66,7 +66,7 @@ export const CustomStatusPicker = memo(function CustomStatusPicker({
               <h3 className="text-lg font-semibold text-text-primary">Définir un statut</h3>
               <button
                 onClick={onClose}
-                className="p-1.5 rounded-lg text-text-tertiary hover:text-text-primary hover:bg-bg-hover transition-colors"
+                className="min-w-[44px] min-h-[44px] flex items-center justify-center rounded-lg text-text-tertiary hover:text-text-primary hover:bg-bg-hover transition-colors"
                 aria-label="Fermer"
               >
                 <X className="w-5 h-5" aria-hidden="true" />
@@ -78,7 +78,7 @@ export const CustomStatusPicker = memo(function CustomStatusPicker({
               <div className="flex items-center gap-3 p-3 bg-bg-surface rounded-xl border border-border-default focus-within:border-primary transition-colors">
                 <button
                   onClick={() => setEmoji(emoji ? '' : '😊')}
-                  className="text-2xl hover:scale-110 transition-transform"
+                  className="min-w-[44px] min-h-[44px] flex items-center justify-center text-2xl hover:scale-110 transition-transform"
                   aria-label="Choisir un emoji"
                 >
                   {emoji || '😊'}
@@ -98,7 +98,8 @@ export const CustomStatusPicker = memo(function CustomStatusPicker({
                       setText('')
                       setEmoji('')
                     }}
-                    className="p-1 rounded text-text-quaternary hover:text-text-secondary"
+                    className="min-w-[44px] min-h-[44px] flex items-center justify-center rounded text-text-quaternary hover:text-text-secondary"
+                    aria-label="Effacer le texte"
                   >
                     <X className="w-4 h-4" />
                   </button>
@@ -113,7 +114,7 @@ export const CustomStatusPicker = memo(function CustomStatusPicker({
                     <button
                       key={preset.text}
                       onClick={() => handlePreset(preset)}
-                      className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-colors ${
+                      className={`flex items-center gap-2 px-3 py-2.5 min-h-[44px] rounded-lg text-sm transition-colors ${
                         text === preset.text
                           ? 'bg-primary-15 border border-primary/30 text-primary'
                           : 'bg-bg-surface border border-border-default text-text-secondary hover:bg-bg-hover'
@@ -136,7 +137,7 @@ export const CustomStatusPicker = memo(function CustomStatusPicker({
                     <button
                       key={d.label}
                       onClick={() => setDuration(d.minutes)}
-                      className={`px-3 py-1.5 rounded-lg text-sm transition-colors ${
+                      className={`px-3 py-2.5 min-h-[44px] flex items-center justify-center rounded-lg text-sm transition-colors ${
                         duration === d.minutes
                           ? 'bg-primary-15 border border-primary/30 text-primary'
                           : 'bg-bg-surface border border-border-default text-text-secondary hover:bg-bg-hover'
@@ -154,7 +155,8 @@ export const CustomStatusPicker = memo(function CustomStatusPicker({
               {currentStatus?.isActive && (
                 <button
                   onClick={handleClear}
-                  className="px-4 py-2 rounded-xl text-sm font-medium text-error hover:bg-error/10 transition-colors"
+                  className="px-4 py-2.5 min-h-[44px] rounded-xl text-sm font-medium text-error hover:bg-error/10 transition-colors"
+                  aria-label="Supprimer le statut personnalisé"
                 >
                   Supprimer le statut
                 </button>
@@ -162,14 +164,14 @@ export const CustomStatusPicker = memo(function CustomStatusPicker({
               <div className="flex-1" />
               <button
                 onClick={onClose}
-                className="px-4 py-2 rounded-xl text-sm font-medium text-text-secondary hover:bg-bg-hover transition-colors"
+                className="px-4 py-2.5 min-h-[44px] rounded-xl text-sm font-medium text-text-secondary hover:bg-bg-hover transition-colors"
               >
                 Annuler
               </button>
               <button
                 onClick={handleSave}
                 disabled={isUpdating}
-                className="px-5 py-2 rounded-xl text-sm font-medium bg-primary text-white hover:bg-primary-hover transition-colors disabled:opacity-50"
+                className="px-5 py-2.5 min-h-[44px] rounded-xl text-sm font-medium bg-primary text-white hover:bg-primary-hover transition-colors disabled:opacity-50"
               >
                 {isUpdating ? 'Enregistrement...' : 'Enregistrer'}
               </button>

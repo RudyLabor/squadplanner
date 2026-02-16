@@ -94,7 +94,7 @@ const PlayerCard = memo(function PlayerCard({ player }: { player: MatchmakingPla
         {player.avatar_url ? (
           <img
             src={player.avatar_url}
-            alt=""
+            alt={`Avatar de ${player.username}`}
             className="w-10 h-10 rounded-full flex-shrink-0"
             loading="lazy"
             decoding="async"

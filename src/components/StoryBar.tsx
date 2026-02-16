@@ -21,7 +21,7 @@ function StoryCircle({
   onClick: () => void
 }) {
   return (
-    <button onClick={onClick} className="flex flex-col items-center gap-1 flex-shrink-0 w-16">
+    <button onClick={onClick} className="flex flex-col items-center gap-1 flex-shrink-0 w-16" aria-label={`Story de ${username}`}>
       <div
         className={`relative w-14 h-14 rounded-full p-0.5 ${
           hasUnviewed ? 'bg-gradient-to-tr from-primary to-success' : 'bg-border-default'
@@ -29,7 +29,7 @@ function StoryCircle({
       >
         <div className="w-full h-full rounded-full bg-bg-elevated p-0.5">
           {avatarUrl ? (
-            <img src={avatarUrl} alt="" className="w-full h-full rounded-full object-cover" />
+            <img src={avatarUrl} alt={`Avatar de ${username}`} className="w-full h-full rounded-full object-cover" />
           ) : (
             <div className="w-full h-full rounded-full bg-primary-20 flex items-center justify-center text-lg font-bold text-primary">
               {username.charAt(0).toUpperCase()}
@@ -89,6 +89,8 @@ function CreateStoryModal({
             exit={{ scale: 0.9, y: 20 }}
             className="w-full max-w-sm rounded-2xl overflow-hidden"
             onClick={(e) => e.stopPropagation()}
+            role="dialog"
+            aria-label="Créer une story"
           >
             <div
               className="h-[300px] flex items-center justify-center px-8 relative"
@@ -106,6 +108,7 @@ function CreateStoryModal({
               <button
                 onClick={onClose}
                 className="absolute top-3 right-3 p-1.5 rounded-full bg-black/30 text-white"
+                aria-label="Fermer"
               >
                 <X className="w-5 h-5" />
               </button>

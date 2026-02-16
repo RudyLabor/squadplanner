@@ -8,7 +8,7 @@ import { useScrollRestoration } from './hooks/useScrollRestoration'
 import { useSwipeBack } from './hooks/useSwipeBack'
 import { useSessionExpiry } from './hooks/useSessionExpiry'
 import { useRateLimitStore } from './hooks/useRateLimit'
-import { usePWAInstallStore } from './hooks/usePWAInstall'
+import { usePWAInstallStore, type BeforeInstallPromptEvent } from './hooks/usePWAInstall'
 import { useNavigationProgress } from './hooks/useNavigationProgress'
 import { initTrackingListeners } from './utils/trackEvent'
 import { TopLoadingBar } from './components/ui/TopLoadingBar'
@@ -114,8 +114,7 @@ export default function ClientShell() {
   useEffect(() => {
     const handler = (e: Event) => {
       e.preventDefault()
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      usePWAInstallStore.getState().setDeferredPrompt(e as any)
+      usePWAInstallStore.getState().setDeferredPrompt(e as BeforeInstallPromptEvent)
     }
     window.addEventListener('beforeinstallprompt', handler)
     return () => window.removeEventListener('beforeinstallprompt', handler)
@@ -130,7 +129,7 @@ export default function ClientShell() {
 
       // Set user context for error reports
       import('./lib/errorTracker').then(({ setUser }) => {
-        setUser({ id: user.id, username: (user as any).username ?? user.user_metadata?.username })
+        setUser({ id: user.id, username: user.user_metadata?.username as string | undefined })
       })
 
       import('./utils/routePrefetch').then(({ prefetchProbableRoutes }) => {
@@ -140,9 +139,9 @@ export default function ClientShell() {
       // Identify user in analytics
       import('./utils/analytics').then(({ identifyUser }) => {
         identifyUser(user.id, {
-          username: (user as any).username ?? user.user_metadata?.username,
+          username: user.user_metadata?.username as string | undefined,
           email: user.email,
-          premium: (user as any).premium ?? user.user_metadata?.premium,
+          premium: user.user_metadata?.premium as boolean | undefined,
           created_at: user.created_at,
         })
       })

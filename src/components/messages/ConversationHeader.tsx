@@ -55,7 +55,7 @@ export function ConversationHeader({
             <button
               onClick={onBack}
               aria-label="Retour"
-              className="p-2 -ml-2 rounded-xl hover:bg-surface-card-hover transition-colors"
+              className="p-2.5 -ml-2 rounded-xl hover:bg-surface-card-hover transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center"
             >
               <ArrowLeft className="w-5 h-5 text-text-tertiary" aria-hidden="true" />
             </button>
@@ -92,7 +92,7 @@ export function ConversationHeader({
                 {dmConv.other_user_avatar_url ? (
                   <img
                     src={dmConv.other_user_avatar_url}
-                    alt=""
+                    alt={dmConv.other_user_username}
                     className="w-full h-full object-cover"
                     loading="lazy"
                     decoding="async"
@@ -140,12 +140,13 @@ export function ConversationHeader({
           >
             <div className="px-4 py-2">
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-quaternary" />
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-quaternary" aria-hidden="true" />
                 <input
                   type="text"
                   value={messageSearchQuery}
                   onChange={(e) => onSearchChange(e.target.value)}
                   placeholder="Rechercher dans les messages..."
+                  aria-label="Rechercher dans les messages"
                   className="w-full h-9 pl-9 pr-3 bg-border-subtle border border-border-default rounded-lg text-base text-text-primary placeholder:text-text-quaternary focus:outline-none focus:border-primary"
                   autoFocus
                 />

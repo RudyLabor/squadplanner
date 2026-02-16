@@ -28,6 +28,11 @@ interface SessionWithRsvp extends Session {
   rsvp_counts: { present: number; absent: number; maybe: number }
 }
 
+interface RpcLayoutData {
+  profile: Profile | null
+  squads: SquadWithCount[]
+}
+
 interface HomeLoaderData {
   profile: Profile | null
   squads: SquadWithCount[]
@@ -101,12 +106,13 @@ export async function loader({ request }: LoaderFunctionArgs) {
   // Single RPC: profile + squads (same as parent layout, but needed for SSR seed)
   const { data: rpcResult } = await supabase.rpc('get_layout_data', { p_user_id: user.id })
 
-  const profile = ((rpcResult as any)?.profile as Profile | null) ?? null
-  const squads: SquadWithCount[] = ((rpcResult as any)?.squads as SquadWithCount[]) ?? []
+  const rpcTyped = rpcResult as RpcLayoutData | null
+  const profile = rpcTyped?.profile ?? null
+  const squads: SquadWithCount[] = rpcTyped?.squads ?? []
   const squadIds = squads.map((s) => s.id)
 
   // Non-critical — NOT awaited → streamed via HTTP streaming
-  const upcomingSessions = fetchUpcomingSessions(supabase as any, squadIds, user.id)
+  const upcomingSessions = fetchUpcomingSessions(supabase, squadIds, user.id)
 
   return data({ profile, squads, upcomingSessions }, { headers })
 }
@@ -124,10 +130,11 @@ export async function clientLoader({ serverLoader }: ClientLoaderFunctionArgs) {
   }
 
   const { data: rpcResult } = await supabase.rpc('get_layout_data', { p_user_id: user.id })
-  const profile = ((rpcResult as any)?.profile as Profile | null) ?? null
-  const squads: SquadWithCount[] = ((rpcResult as any)?.squads as SquadWithCount[]) ?? []
+  const rpcTypedClient = rpcResult as RpcLayoutData | null
+  const profile = rpcTypedClient?.profile ?? null
+  const squads: SquadWithCount[] = rpcTypedClient?.squads ?? []
   const squadIds = squads.map((s) => s.id)
-  const upcomingSessions = await fetchUpcomingSessions(supabase as any, squadIds, user.id)
+  const upcomingSessions = await fetchUpcomingSessions(supabase, squadIds, user.id)
 
   return { profile, squads, upcomingSessions }
 }

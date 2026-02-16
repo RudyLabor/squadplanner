@@ -2025,12 +2025,12 @@ ETAPE 3 : Accessibilite parfaite
 [ ] Touch targets >= 44px partout (audit complet)
 [ ] Reduced-motion : toutes les animations desactivees
 
-ETAPE 4 : Responsive parfait
-[ ] Breakpoint mobile 375px — chaque page verifiee
-[ ] Breakpoint tablet 768px — layout 2 colonnes
-[ ] Breakpoint desktop 1440px — layout 3 colonnes sidebar
-[ ] Safe areas iOS (notch, Dynamic Island, home bar)
-[ ] Orientation paysage sur mobile
+ETAPE 4 : Responsive parfait ✅ TERMINEE
+[x] Breakpoint mobile 375px — audite, px-4 fluide, aucun overflow, 100dvh partout
+[x] Breakpoint tablet 768px — md:grid-cols-2/3/4 sur Home, Party, Premium, Landing, Leaderboard
+[x] Breakpoint desktop 1440px — sidebar 140/256px + content adaptatif, resize listener
+[x] Safe areas iOS (notch, Dynamic Island, home bar) — viewport-fit=cover, safe-area-pt TopBar, env(safe-area-inset-bottom) MobileBottomNav
+[x] Orientation paysage — landscape media query masque bottom nav, supprime padding, 100dvh Messages
 
 ETAPE 5 : Nettoyage final
 [ ] T3.3 - Fallback color-mix() pour Safari 15

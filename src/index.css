@@ -780,6 +780,25 @@ body {
   }
 }
 
+/* =====================================================
+   LANDSCAPE ORIENTATION — compact layout for mobile
+   When landscape + short viewport, hide bottom nav and
+   reduce padding to maximize content area.
+   ===================================================== */
+@media (orientation: landscape) and (max-height: 500px) {
+  .mobile-bottom-nav {
+    display: none !important;
+  }
+  .pb-mobile-nav {
+    margin-bottom: 0;
+  }
+  /* Reduce header/content spacing in landscape */
+  .landscape-compact-y {
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
+  }
+}
+
 /* Sonner toast custom styling (PERF #4: replaces inline styles) */
 [data-sonner-toast] {
   --normal-bg: var(--color-bg-surface);

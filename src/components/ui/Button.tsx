@@ -43,8 +43,8 @@ const sizeClasses: Record<string, string> = {
 }
 
 const iconOnlySizeClasses: Record<string, string> = {
-  xs: 'h-7 w-7 p-0 text-xs',
-  sm: 'h-9 w-9 p-0 text-sm',
+  xs: 'h-9 w-9 p-0 text-xs',   // WCAG 2.5.5: min 36px (visual), 44px hit area via touch-target
+  sm: 'h-11 w-11 p-0 text-sm',  // WCAG 2.5.5: 44px touch target
   md: 'h-11 w-11 p-0 text-sm',
   lg: 'h-12 w-12 p-0 text-base',
 }

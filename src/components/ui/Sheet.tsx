@@ -223,9 +223,9 @@ export function Sheet({
                 <div className="flex items-start justify-between gap-4 px-5 pb-3">
                   <div className="flex-1 min-w-0">
                     {title && (
-                      <h3 className="text-base font-semibold text-text-primary font-display">
+                      <h2 className="text-base font-semibold text-text-primary font-display">
                         {title}
-                      </h3>
+                      </h2>
                     )}
                     {description && (
                       <p className="mt-0.5 text-sm text-text-secondary">{description}</p>
@@ -233,7 +233,7 @@ export function Sheet({
                   </div>
                   <button
                     onClick={onClose}
-                    className="p-2 -mr-2 rounded-lg hover:bg-bg-hover text-text-tertiary hover:text-text-primary transition-colors touch-target-sm"
+                    className="p-2 -mr-2 rounded-lg hover:bg-bg-hover text-text-tertiary hover:text-text-primary transition-colors touch-target"
                     aria-label="Close"
                   >
                     <X className="w-5 h-5" />
@@ -261,15 +261,15 @@ export function Sheet({
               <div className="flex items-start justify-between gap-4 px-6 pt-6 pb-4 border-b border-border-subtle">
                 <div className="flex-1 min-w-0">
                   {title && (
-                    <h3 className="text-lg font-semibold text-text-primary font-display">
+                    <h2 className="text-lg font-semibold text-text-primary font-display">
                       {title}
-                    </h3>
+                    </h2>
                   )}
                   {description && <p className="mt-1 text-sm text-text-secondary">{description}</p>}
                 </div>
                 <button
                   onClick={onClose}
-                  className="p-2 -mr-2 rounded-lg hover:bg-bg-hover text-text-tertiary hover:text-text-primary transition-colors touch-target-sm"
+                  className="p-2 -mr-2 rounded-lg hover:bg-bg-hover text-text-tertiary hover:text-text-primary transition-colors touch-target"
                   aria-label="Close"
                 >
                   <X className="w-5 h-5" />

@@ -78,7 +78,7 @@ export function Drawer({ isOpen, onClose, children, title, className = '' }: Dra
             {/* Header */}
             {title && (
               <div className="flex items-center justify-between px-5 pb-3">
-                <h3 className="text-text-primary font-semibold text-base">{title}</h3>
+                <h2 className="text-text-primary font-semibold text-base">{title}</h2>
                 <button
                   onClick={onClose}
                   className="p-2 rounded-lg hover:bg-bg-hover text-text-tertiary hover:text-text-primary transition-colors touch-target"

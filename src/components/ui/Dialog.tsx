@@ -183,7 +183,7 @@ export function Dialog({
                 {showCloseButton && (
                   <button
                     onClick={onClose}
-                    className="p-2 -mr-2 -mt-1 rounded-lg hover:bg-bg-hover text-text-tertiary hover:text-text-primary transition-colors touch-target-sm"
+                    className="p-2 -mr-2 -mt-1 rounded-lg hover:bg-bg-hover text-text-tertiary hover:text-text-primary transition-colors touch-target"
                     aria-label="Close"
                   >
                     <X className="w-5 h-5" />

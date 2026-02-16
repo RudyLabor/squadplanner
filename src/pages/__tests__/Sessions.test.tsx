@@ -2,7 +2,30 @@ import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import { createElement } from 'react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { Sessions } from '../Sessions'
+
+// Hoisted variables for mock factories
+const {
+  mockFetchSlotSuggestions,
+  mockFetchCoachTips,
+  mockOpenCreateSession,
+  captured,
+  mockSquads,
+  mockSessions,
+} = vi.hoisted(() => ({
+  mockFetchSlotSuggestions: vi.fn(),
+  mockFetchCoachTips: vi.fn(),
+  mockOpenCreateSession: vi.fn(),
+  captured: {
+    needsResponse: null as any,
+    allCaughtUp: null as any,
+    aiSuggestions: null as any,
+    coachTips: null as any,
+    confirmed: null as any,
+    weekCalendar: null as any,
+  },
+  mockSquads: { value: { data: [{ id: 'sq1', name: 'TestSquad' }] as any[], isLoading: false } },
+  mockSessions: { value: { data: [] as any[], isLoading: false } },
+}))
 
 // Mock react-router
 vi.mock('react-router', () => ({
@@ -61,9 +84,6 @@ vi.mock('../../hooks/useAuth', () => ({
   ),
 }))
 
-const mockFetchSlotSuggestions = vi.fn()
-const mockFetchCoachTips = vi.fn()
-
 vi.mock('../../hooks', () => ({
   useAuthStore: Object.assign(
     vi.fn().mockReturnValue({ user: { id: 'user-1' }, profile: { id: 'user-1', username: 'TestUser' }, isLoading: false, isInitialized: true }),
@@ -91,19 +111,15 @@ vi.mock('../../lib/i18n', () => ({
 }))
 
 // Mock query hooks
-let mockSquadsReturn = { data: [{ id: 'sq1', name: 'TestSquad' }] as any[], isLoading: false }
-let mockSessionsReturn = { data: [] as any[], isLoading: false }
-
 vi.mock('../../hooks/queries/useSquadsQuery', () => ({
-  useSquadsQuery: vi.fn(() => mockSquadsReturn),
+  useSquadsQuery: vi.fn(() => mockSquads.value),
 }))
 
 vi.mock('../../hooks/queries/useSessionsQuery', () => ({
-  useUpcomingSessionsQuery: vi.fn(() => mockSessionsReturn),
+  useUpcomingSessionsQuery: vi.fn(() => mockSessions.value),
 }))
 
 // Mock CreateSessionModal
-const mockOpenCreateSession = vi.fn()
 vi.mock('../../components/CreateSessionModal', () => ({
   useCreateSessionModal: vi.fn().mockReturnValue(mockOpenCreateSession),
 }))
@@ -124,45 +140,40 @@ vi.mock('../../components/ui', () => ({
 }))
 
 // Mock sub-components from pages/sessions — capture props
-let capturedNeedsResponseProps: any = null
-let capturedAllCaughtUpProps: any = null
-let capturedAISuggestionsProps: any = null
-let capturedCoachTipsProps: any = null
-let capturedConfirmedProps: any = null
-let capturedWeekCalendarProps: any = null
-
 vi.mock('../sessions/NeedsResponseSection', () => ({
-  NeedsResponseSection: (props: any) => { capturedNeedsResponseProps = props; return createElement('div', { 'data-testid': 'needs-response' }) },
-  AllCaughtUp: (props: any) => { capturedAllCaughtUpProps = props; return createElement('div', { 'data-testid': 'all-caught-up' }) },
+  NeedsResponseSection: (props: any) => { captured.needsResponse = props; return createElement('div', { 'data-testid': 'needs-response' }) },
+  AllCaughtUp: (props: any) => { captured.allCaughtUp = props; return createElement('div', { 'data-testid': 'all-caught-up' }) },
 }))
 
 vi.mock('../sessions/AISuggestions', () => ({
-  AISlotSuggestions: (props: any) => { capturedAISuggestionsProps = props; return createElement('div', { 'data-testid': 'ai-suggestions' }) },
-  CoachTipsSection: (props: any) => { capturedCoachTipsProps = props; return createElement('div', { 'data-testid': 'coach-tips' }) },
+  AISlotSuggestions: (props: any) => { captured.aiSuggestions = props; return createElement('div', { 'data-testid': 'ai-suggestions' }) },
+  CoachTipsSection: (props: any) => { captured.coachTips = props; return createElement('div', { 'data-testid': 'coach-tips' }) },
 }))
 
 vi.mock('../sessions/ConfirmedSessions', () => ({
-  ConfirmedSessions: (props: any) => { capturedConfirmedProps = props; return createElement('div', { 'data-testid': 'confirmed-sessions' }) },
+  ConfirmedSessions: (props: any) => { captured.confirmed = props; return createElement('div', { 'data-testid': 'confirmed-sessions' }) },
   HowItWorksSection: () => createElement('div', { 'data-testid': 'how-it-works' }),
 }))
 
 vi.mock('../sessions/WeekCalendar', () => ({
-  WeekCalendar: (props: any) => { capturedWeekCalendarProps = props; return createElement('div', { 'data-testid': 'week-calendar' }) },
+  WeekCalendar: (props: any) => { captured.weekCalendar = props; return createElement('div', { 'data-testid': 'week-calendar' }) },
 }))
+
+import { Sessions } from '../Sessions'
 
 describe('Sessions Page', () => {
   let queryClient: QueryClient
 
   beforeEach(() => {
     queryClient = new QueryClient({ defaultOptions: { queries: { retry: false } } })
-    mockSquadsReturn = { data: [{ id: 'sq1', name: 'TestSquad' }], isLoading: false }
-    mockSessionsReturn = { data: [], isLoading: false }
-    capturedNeedsResponseProps = null
-    capturedAllCaughtUpProps = null
-    capturedAISuggestionsProps = null
-    capturedCoachTipsProps = null
-    capturedConfirmedProps = null
-    capturedWeekCalendarProps = null
+    mockSquads.value = { data: [{ id: 'sq1', name: 'TestSquad' }], isLoading: false }
+    mockSessions.value = { data: [], isLoading: false }
+    captured.needsResponse = null
+    captured.allCaughtUp = null
+    captured.aiSuggestions = null
+    captured.coachTips = null
+    captured.confirmed = null
+    captured.weekCalendar = null
     mockOpenCreateSession.mockClear()
   })
 
@@ -217,24 +228,24 @@ describe('Sessions Page', () => {
       status: 'scheduled', my_rsvp: null, rsvp_counts: { present: 0 },
     }
 
-    mockSessionsReturn = { data: [futureSession, confirmedSession, cancelledSession, pastSession], isLoading: false }
+    mockSessions.value = { data: [futureSession, confirmedSession, cancelledSession, pastSession], isLoading: false }
 
     renderSessions()
 
     // 1. NeedsResponse receives only future, non-cancelled sessions without RSVP
-    expect(capturedNeedsResponseProps.needsResponse.length).toBe(1)
-    expect(capturedNeedsResponseProps.needsResponse[0].id).toBe('s1')
+    expect(captured.needsResponse.needsResponse.length).toBe(1)
+    expect(captured.needsResponse.needsResponse[0].id).toBe('s1')
     // 2. Confirmed receives only sessions with my_rsvp === 'present'
-    expect(capturedConfirmedProps.confirmed.length).toBe(1)
-    expect(capturedConfirmedProps.confirmed[0].id).toBe('s2')
+    expect(captured.confirmed.confirmed.length).toBe(1)
+    expect(captured.confirmed.confirmed[0].id).toBe('s2')
     // 3. Cancelled and past sessions are excluded from both
-    expect(capturedAllCaughtUpProps.needsResponse).toBe(1)
-    expect(capturedAllCaughtUpProps.confirmed).toBe(1)
+    expect(captured.allCaughtUp.needsResponse).toBe(1)
+    expect(captured.allCaughtUp.confirmed).toBe(1)
     // 4. WeekCalendar receives full upcoming (sorted) list
-    expect(capturedWeekCalendarProps.sessions.length).toBe(2)
+    expect(captured.weekCalendar.sessions.length).toBe(2)
     // 5. Sessions are sorted by scheduled_at ascending (s1 before s2)
-    expect(capturedWeekCalendarProps.sessions[0].id).toBe('s1')
-    expect(capturedWeekCalendarProps.sessions[1].id).toBe('s2')
+    expect(captured.weekCalendar.sessions[0].id).toBe('s1')
+    expect(captured.weekCalendar.sessions[1].id).toBe('s2')
     // 6. Subtitle reflects 1 pending session
     expect(screen.getByText('1 session en attente de ta réponse')).toBeDefined()
   })
@@ -246,7 +257,7 @@ describe('Sessions Page', () => {
     // Case 1: Multiple pending sessions
     const pending1 = { id: 'p1', title: 'P1', game: 'V', scheduled_at: new Date(now.getTime() + 86400000).toISOString(), status: 'scheduled', my_rsvp: null, rsvp_counts: { present: 0 } }
     const pending2 = { id: 'p2', title: 'P2', game: 'V', scheduled_at: new Date(now.getTime() + 172800000).toISOString(), status: 'scheduled', my_rsvp: null, rsvp_counts: { present: 0 } }
-    mockSessionsReturn = { data: [pending1, pending2], isLoading: false }
+    mockSessions.value = { data: [pending1, pending2], isLoading: false }
 
     const { unmount: u1 } = renderSessions()
     // 1. Plural form for multiple pending
@@ -255,7 +266,7 @@ describe('Sessions Page', () => {
 
     // Case 2: All sessions confirmed
     const confirmed1 = { id: 'c1', title: 'C1', game: 'V', scheduled_at: new Date(now.getTime() + 86400000).toISOString(), status: 'scheduled', my_rsvp: 'present', rsvp_counts: { present: 1 } }
-    mockSessionsReturn = { data: [confirmed1], isLoading: false }
+    mockSessions.value = { data: [confirmed1], isLoading: false }
 
     const { unmount: u2 } = renderSessions()
     // 2. Singular confirmed message
@@ -266,7 +277,7 @@ describe('Sessions Page', () => {
 
     // Case 3: Multiple confirmed sessions (plural)
     const confirmed2 = { id: 'c2', title: 'C2', game: 'L', scheduled_at: new Date(now.getTime() + 172800000).toISOString(), status: 'scheduled', my_rsvp: 'present', rsvp_counts: { present: 2 } }
-    mockSessionsReturn = { data: [confirmed1, confirmed2], isLoading: false }
+    mockSessions.value = { data: [confirmed1, confirmed2], isLoading: false }
 
     const { unmount: u3 } = renderSessions()
     // 4. Plural confirmed form with 's' suffix
@@ -274,11 +285,11 @@ describe('Sessions Page', () => {
     u3()
 
     // Case 4: No sessions at all
-    mockSessionsReturn = { data: [], isLoading: false }
+    mockSessions.value = { data: [], isLoading: false }
     renderSessions()
     // 5. Empty state message
     expect(screen.getByText('Aucune session planifiée pour le moment')).toBeDefined()
     // 6. Confirmed sessions passes loading=false
-    expect(capturedConfirmedProps.sessionsLoading).toBe(false)
+    expect(captured.confirmed.sessionsLoading).toBe(false)
   })
 })

@@ -30,6 +30,8 @@ test.describe('A11Y-PUBLIC: Axe WCAG Audit — Public Pages', () => {
       await page.emulateMedia({ colorScheme: 'dark' })
       await page.goto(path)
       await page.waitForLoadState('networkidle')
+      // Wait for CSS custom properties and animations to settle
+      await page.waitForTimeout(500)
 
       const { violations } = await checkAccessibility(page)
 
@@ -41,6 +43,8 @@ test.describe('A11Y-PUBLIC: Axe WCAG Audit — Public Pages', () => {
       await page.emulateMedia({ colorScheme: 'light' })
       await page.goto(path)
       await page.waitForLoadState('networkidle')
+      // Wait for CSS custom properties and animations to settle
+      await page.waitForTimeout(500)
 
       const { violations } = await checkAccessibility(page)
 
@@ -436,6 +440,8 @@ test.describe('A11Y-CONTRAST: Color Contrast', () => {
   test('Landing page: axe-core color-contrast rule has zero violations', async ({ page }) => {
     await page.goto('/')
     await page.waitForLoadState('networkidle')
+    // Wait for CSS custom properties and animations to settle
+    await page.waitForTimeout(500)
 
     const { violations } = await checkAccessibility(page, {
       tags: ['wcag2aa'],

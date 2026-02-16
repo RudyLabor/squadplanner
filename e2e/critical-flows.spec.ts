@@ -104,13 +104,16 @@ test.describe('F10 — Dashboard Data Validation', () => {
     await page.waitForLoadState('networkidle')
     await page.waitForTimeout(2000) // Attendre AnimatedCounter
 
-    // La card "SEMAINE" DOIT etre visible dans le tableau de bord
-    const weekLabel = page.getByText(/semaine/i).first()
+    // La card "Cette semaine" DOIT etre visible dans le tableau de bord
+    // Note: "Semaine" (mobileLabel) a la classe sm:hidden, invisible sur desktop
+    const weekLabel = page.getByText('Cette semaine', { exact: true }).first()
     await expect(weekLabel).toBeVisible({ timeout: 10000 })
 
     // Le nombre affiché doit correspondre a la DB
-    const allText = await page.locator('section[aria-label="Tableau de bord"]').textContent()
-      .catch(() => page.locator('main').first().textContent())
+    const dashboard = page.locator('section[aria-label="Tableau de bord"]')
+    const hasDashboard = await dashboard.count() > 0
+    const container = hasDashboard ? dashboard : page.locator('main').first()
+    const allText = await container.textContent()
     expect(allText).toBeTruthy()
     expect(allText).toContain(String(sessionsThisWeek))
   })

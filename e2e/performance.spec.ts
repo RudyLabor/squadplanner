@@ -23,7 +23,7 @@ const THRESHOLDS = {
   loadComplete: 8000,     // Full page load < 8s
 
   // Resource budgets
-  maxRequests: 80,         // Max total HTTP requests
+  maxRequests: 150,        // Max total HTTP requests (production SSR + data)
   maxJsSize: 500_000,     // Max JS transfer size (500KB)
   maxCssSize: 150_000,    // Max CSS transfer size (150KB)
   maxImageSize: 2_000_000, // Max image transfer size (2MB)

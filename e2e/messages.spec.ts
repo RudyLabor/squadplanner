@@ -692,18 +692,35 @@ test.describe('F39 — Forward message UI', () => {
       await page.waitForLoadState('networkidle')
       await page.waitForTimeout(2000)
 
-      // STRICT: at least one "Actions du message" button MUST be in the conversation
-      // (message bubbles use Tailwind classes, not semantic class names)
+      // The conversation may only have system messages (join notifications, session confirmations)
+      // which don't render MessageActions. Send a real message first via the input field.
+      const messageInput = page.locator('input[placeholder*="Message"], textarea[placeholder*="Message"]').first()
+      await expect(messageInput).toBeVisible({ timeout: 8000 })
+      await messageInput.fill('[E2E] test forward action')
+      // Click send button
+      const sendBtn = page.locator('button[type="submit"], button[aria-label*="Envoyer"]').last()
+      await sendBtn.click()
+      await page.waitForTimeout(2000)
+
+      // Now hover over the sent message to reveal the actions button (sm:opacity-0)
+      const messageBubble = page.locator('.group').filter({
+        has: page.locator('button[aria-label="Actions du message"]')
+      }).first()
       const actionsBtn = page.locator('button[aria-label="Actions du message"]').first()
+
+      const hasBubble = await messageBubble.count() > 0
+      if (hasBubble) {
+        await messageBubble.hover()
+        await page.waitForTimeout(300)
+      }
       await expect(actionsBtn).toBeVisible({ timeout: 8000 })
 
       // Click the actions button to open the menu
-      await actionsBtn.click()
+      await actionsBtn.click({ force: true })
       await page.waitForTimeout(500)
 
       // STRICT: forward option MUST exist in the actions menu
       const forwardOption = page.getByText(/Transférer|Forward/i).first()
-      // STRICT: forward option MUST be visible — this is a required messaging feature
       await expect(forwardOption).toBeVisible({ timeout: 5000 })
     } finally {
       if (createdMsg) {
@@ -753,19 +770,34 @@ test.describe('F40 — Thread view UI', () => {
       // Click conversation by squad name from DB
       const squadName = squads[0].squads.name
       const conversationItem = page.locator('button').filter({ hasText: squadName }).first()
-      // STRICT: conversation card with squad name MUST be visible
       await expect(conversationItem).toBeVisible({ timeout: 8000 })
       await conversationItem.click()
       await page.waitForLoadState('networkidle')
       await page.waitForTimeout(2000)
 
-      // STRICT: at least one "Actions du message" button MUST be in the conversation
-      // (message bubbles use Tailwind classes, not semantic class names)
+      // Send a real message to ensure MessageActions renders (system messages don't have actions)
+      const messageInput = page.locator('input[placeholder*="Message"], textarea[placeholder*="Message"]').first()
+      await expect(messageInput).toBeVisible({ timeout: 8000 })
+      await messageInput.fill('[E2E] test thread action')
+      const sendBtn = page.locator('button[type="submit"], button[aria-label*="Envoyer"]').last()
+      await sendBtn.click()
+      await page.waitForTimeout(2000)
+
+      // Hover over the sent message to reveal actions button
+      const messageBubble = page.locator('.group').filter({
+        has: page.locator('button[aria-label="Actions du message"]')
+      }).first()
       const actionsBtn = page.locator('button[aria-label="Actions du message"]').first()
+
+      const hasBubble = await messageBubble.count() > 0
+      if (hasBubble) {
+        await messageBubble.hover()
+        await page.waitForTimeout(300)
+      }
       await expect(actionsBtn).toBeVisible({ timeout: 8000 })
 
       // Click the actions button to open the menu
-      await actionsBtn.click()
+      await actionsBtn.click({ force: true })
       await page.waitForTimeout(500)
 
       // STRICT: thread option MUST exist in the actions menu

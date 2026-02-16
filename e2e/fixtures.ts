@@ -233,7 +233,9 @@ export class TestDataHelper {
     if (game) query = query.ilike('game', `%${game}%`)
     if (region) query = query.eq('region', region)
     const { data } = await query
-    return data || []
+    // Filter test/debug squads (same as app's useDiscoverQueries)
+    const TEST_PATTERNS = /\b(test|debug|audit|e2e)\b/i
+    return (data || []).filter((s: { name: string }) => !TEST_PATTERNS.test(s.name))
   }
 
   // --- Premium ---

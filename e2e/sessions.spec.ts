@@ -16,7 +16,6 @@ import { test, expect } from './fixtures'
 // ============================================================
 
 test.describe('F23 — Creer une session via UI + verifier DB', () => {
-  let testSquadId: string | null = null
   let createdSessionId: string | null = null
 
   test.afterEach(async ({ db }) => {
@@ -24,84 +23,55 @@ test.describe('F23 — Creer une session via UI + verifier DB', () => {
       try { await db.deleteTestSession(createdSessionId) } catch { /* cleanup */ }
       createdSessionId = null
     }
-    if (testSquadId) {
-      try { await db.deleteTestSquad(testSquadId) } catch { /* cleanup */ }
-      testSquadId = null
-    }
   })
 
   test('F23: creer une session et verifier en DB', async ({ authenticatedPage: page, db }) => {
-    // 1. Creer une squad de test isolee
-    const testSquad = await db.createTestSquad({ name: `E2E Test Squad Session ${Date.now()}` })
-    testSquadId = testSquad.id
+    // 1. Récupérer un squad existant du user
+    const squads = await db.getUserSquads()
+    expect(squads.length).toBeGreaterThan(0)
+    const targetSquad = squads[0].squads
 
-    // STRICT: la squad de test doit exister
-    expect(testSquad.id).toBeTruthy()
-
-    await page.goto(`/squad/${testSquad.id}`)
+    // 2. Naviguer vers la page du squad (formulaire inline de création)
+    await page.goto(`/squad/${targetSquad.id}`)
     await page.waitForLoadState('networkidle')
+    await page.waitForTimeout(2000)
 
-    // 2. Le bouton de creation de session DOIT etre visible (le user est leader)
-    const createSessionBtn = page.getByRole('button', { name: /Créer.*session|Nouvelle session|Planifier/i }).first()
-    // STRICT: le bouton de creation DOIT etre visible pour un leader
-    await expect(createSessionBtn).toBeVisible({ timeout: 15000 })
-
-    await createSessionBtn.click()
+    // 3. Cliquer sur "Planifier une session" pour ouvrir le formulaire inline
+    const planBtn = page.getByRole('button', { name: /Planifier une session/i }).first()
+    await expect(planBtn).toBeVisible({ timeout: 10000 })
+    await planBtn.click()
     await page.waitForTimeout(1000)
 
-    // 2b. Si un Select de squad apparait (user a plusieurs squads), selectionner la squad de test
-    const squadSelect = page.locator('button[role="combobox"]').first()
-    if (await squadSelect.isVisible({ timeout: 2000 }).catch(() => false)) {
-      await squadSelect.click()
-      await page.waitForTimeout(500)
-      // Chercher l'option avec le nom de la squad de test
-      const squadOption = page.getByText(new RegExp('E2E Test Squad Session', 'i')).first()
-      if (await squadOption.isVisible({ timeout: 3000 }).catch(() => false)) {
-        await squadOption.click()
-        await page.waitForTimeout(500)
-      }
-    }
-
-    // 3. Remplir le titre
-    const titleInput = page.getByPlaceholder(/Session ranked|Détente|Tryhard|titre/i).first()
-    // STRICT: le champ titre DOIT etre visible dans le formulaire de creation
+    // 4. Remplir le titre
+    const titleInput = page.getByPlaceholder(/Session ranked|Detente|Tryhard|titre/i).first()
     await expect(titleInput).toBeVisible({ timeout: 10000 })
     await titleInput.fill('E2E Test Session')
 
-    // 3b. Remplir la date et l'heure (champs requis par le formulaire)
+    // 5. Remplir la date (input type=date) — demain
+    const tomorrow = new Date()
+    tomorrow.setDate(tomorrow.getDate() + 1)
+    const tomorrowISO = tomorrow.toISOString().split('T')[0]
     const dateInput = page.locator('input[type="date"]').first()
+    await dateInput.fill(tomorrowISO)
+
+    // 6. Remplir l'heure (input type=time)
     const timeInput = page.locator('input[type="time"]').first()
-    if (await dateInput.isVisible({ timeout: 3000 }).catch(() => false)) {
-      // Date demain
-      const tomorrow = new Date(Date.now() + 24 * 60 * 60 * 1000)
-      const dateStr = tomorrow.toISOString().split('T')[0]
-      await dateInput.fill(dateStr)
-    }
-    if (await timeInput.isVisible({ timeout: 3000 }).catch(() => false)) {
-      await timeInput.fill('20:00')
-    }
-    await page.waitForTimeout(500)
+    await timeInput.fill('20:00')
 
-    // 4. Soumettre le formulaire
-    const submitBtn = page.getByRole('button', { name: /Créer.*session|Planifier|Enregistrer/i }).last()
-    // STRICT: le bouton de soumission DOIT etre visible
-    await expect(submitBtn).toBeVisible({ timeout: 10000 })
-    // STRICT: le bouton de soumission DOIT etre actif (date+heure remplies)
+    // 7. Soumettre le formulaire
+    const submitBtn = page.getByRole('button', { name: /^Créer$/i }).first()
+    await expect(submitBtn).toBeVisible({ timeout: 5000 })
     await expect(submitBtn).toBeEnabled({ timeout: 5000 })
-
     await submitBtn.click()
     await page.waitForTimeout(3000)
 
-    // 5. Verifier en DB que la session a ete creee
-    const sessions = await db.getSquadSessions(testSquad.id)
+    // 8. Vérifier en DB que la session a été créée
+    const sessions = await db.getSquadSessions(targetSquad.id)
     const newSession = sessions.find((s: { title: string }) => s.title === 'E2E Test Session')
 
-    // STRICT: la session DOIT exister en DB apres soumission
     expect(newSession).toBeTruthy()
-    // STRICT: le titre DOIT correspondre
     expect(newSession.title).toBe('E2E Test Session')
-    // STRICT: le squad_id DOIT correspondre
-    expect(newSession.squad_id).toBe(testSquad.id)
+    expect(newSession.squad_id).toBe(targetSquad.id)
 
     createdSessionId = newSession.id
   })

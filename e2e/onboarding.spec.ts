@@ -148,18 +148,17 @@ test.describe('F07 — Join Squad via Code', () => {
       await authenticatedPage.waitForTimeout(1000)
 
       // STRICT: apres le clic, un input code DOIT apparaitre
-      const codeInput = authenticatedPage.locator(
-        'input[placeholder*="code" i], input[placeholder*="invitation" i], input[name*="code" i]'
-      ).first()
+      // The SquadForms component uses placeholder="ABC123" and label="Code d'invitation"
+      const codeInput = authenticatedPage.getByLabel("Code d'invitation").first()
+        .or(authenticatedPage.locator('input[placeholder="ABC123"]').first())
       await expect(codeInput).toBeVisible({ timeout: 5000 })
     } else if (hasJoinLink) {
       await joinLink.click()
       await authenticatedPage.waitForTimeout(1000)
 
       // STRICT: apres le clic, un input code DOIT apparaitre
-      const codeInput = authenticatedPage.locator(
-        'input[placeholder*="code" i], input[placeholder*="invitation" i], input[name*="code" i]'
-      ).first()
+      const codeInput = authenticatedPage.getByLabel("Code d'invitation").first()
+        .or(authenticatedPage.locator('input[placeholder="ABC123"]').first())
       await expect(codeInput).toBeVisible({ timeout: 5000 })
     } else {
       // STRICT: si pas de bouton Rejoindre, la page doit avoir un moyen d'ajouter une squad

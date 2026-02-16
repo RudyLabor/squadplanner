@@ -1,4 +1,5 @@
 import { type ReactNode, type KeyboardEvent } from 'react'
+import { colorMix, colorMixBlend } from '~/utils/colorMix'
 
 interface CardProps {
   variant?: 'default' | 'elevated' | 'outlined' | 'ghost'
@@ -62,10 +63,10 @@ export function Card({
       style={{
         borderColor: selected ? 'var(--color-primary)' : undefined,
         boxShadow: selected
-          ? '0 0 0 1px color-mix(in srgb, var(--color-primary) 20%, transparent)'
+          ? `0 0 0 1px ${colorMix('var(--color-primary)', 20, 'var(--color-primary-20)')}`
           : undefined,
         backgroundColor: selected
-          ? 'color-mix(in srgb, var(--color-primary) 5%, var(--color-surface-card))'
+          ? colorMixBlend('var(--color-primary)', 5, 'var(--color-surface-card)', 'var(--color-surface-card)')
           : undefined,
       }}
       onClick={isClickable ? onClick : undefined}

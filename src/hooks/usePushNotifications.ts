@@ -206,6 +206,11 @@ export const usePushNotificationStore = create<PushNotificationState>((set, get)
   },
 }))
 
+/**
+ * Manages Web Push and native (Capacitor) push notification lifecycle.
+ * Handles VAPID subscription, Service Worker registration, permission prompts,
+ * and persists subscription endpoints to Supabase for server-side delivery.
+ */
 export const usePushNotifications = () => {
   const store = usePushNotificationStore()
   return {

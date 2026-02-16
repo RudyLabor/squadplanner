@@ -10,6 +10,11 @@ interface UseMessageSearchOptions {
   limit?: number
 }
 
+/**
+ * Debounced message search across squad channels and direct messages.
+ * Uses `search_messages` RPC with fallback to ILIKE query when RPC is unavailable.
+ * Returns combined results from both squad messages and DMs.
+ */
 export function useMessageSearch(options: UseMessageSearchOptions = {}) {
   const { user } = useAuthStore()
   const [query, setQuery] = useState('')

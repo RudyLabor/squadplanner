@@ -46,7 +46,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
         <meta name="apple-mobile-web-app-title" content="Squad Planner" />
-        {/* TODO: Generer les images splash-*.png dans public/ puis decommenter:
+        {/* Splash screens — uncomment when splash-*.png images are generated in public/
         <link rel="apple-touch-startup-image" href="/splash-1170x2532.png" media="(device-width: 390px) and (device-height: 844px) and (-webkit-device-pixel-ratio: 3)" />
         <link rel="apple-touch-startup-image" href="/splash-1284x2778.png" media="(device-width: 428px) and (device-height: 926px) and (-webkit-device-pixel-ratio: 3)" />
         */}

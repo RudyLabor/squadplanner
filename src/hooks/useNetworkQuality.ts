@@ -269,7 +269,11 @@ export async function adjustAudioQuality(
   }
 }
 
-// Hook utilitaire pour acceder facilement aux infos de qualite
+/**
+ * Convenience hook for accessing network quality state and derived audio profile.
+ * Quality level is computed from a moving-average history of connection measurements.
+ * Returns current level, label, color, icon, and the recommended audio encoding profile.
+ */
 export function useNetworkQuality() {
   const store = useNetworkQualityStore()
   const qualityInfo = QUALITY_INFO[store.localQuality]

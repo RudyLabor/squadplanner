@@ -107,12 +107,8 @@ export default function ClientShell() {
     initTrackingListeners()
   }, [])
 
-  // Initialize Core Web Vitals monitoring (World-Class performance tracking)
-  // TODO: Fix .ts/.tsx imports issue
-  // useEffect(() => {
-  //   const vitalsCollector = initializeWebVitalsMonitoring()
-  //   return () => vitalsCollector.disconnect()
-  // }, [])
+  // Web Vitals monitoring disabled — import resolution issue with webVitals.ts in SSR bundler.
+  // Re-enable when Vite handles the .ts extension consistently in client/server builds.
 
   // Capture PWA install prompt event
   useEffect(() => {

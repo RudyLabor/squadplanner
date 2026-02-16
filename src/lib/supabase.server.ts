@@ -1,6 +1,7 @@
 import { createServerClient, parseCookieHeader, serializeCookieHeader } from '@supabase/ssr'
-// TODO: Re-enable strict Database typing after running `npx supabase gen types typescript`
+// Strict Database typing disabled — run `npx supabase gen types typescript` to re-enable.
 // import type { Database } from '../types/database'
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 type Database = any
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL

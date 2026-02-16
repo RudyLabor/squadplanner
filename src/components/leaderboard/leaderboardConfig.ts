@@ -31,43 +31,43 @@ export const getLevelColor = (level: number): { color: string; bg15: string; bg2
   }
 }
 
-// Medal colors for podium
+// Medal colors for podium — uses CSS variable opacity variants (Safari 15 compatible, no color-mix())
 export const MEDAL_COLORS = {
   1: {
     primary: 'var(--color-gold)',
     secondary: 'var(--color-warning)',
     glow: 'var(--color-gold-30)',
-    primary10: 'color-mix(in srgb, var(--color-gold) 10%, transparent)',
+    primary10: 'var(--color-gold-10)',
     primary20: 'var(--color-gold-20)',
     primary30: 'var(--color-gold-30)',
-    primary40: 'color-mix(in srgb, var(--color-gold) 40%, transparent)',
-    primary50: 'color-mix(in srgb, var(--color-gold) 50%, transparent)',
-    primary80: 'color-mix(in srgb, var(--color-gold) 80%, transparent)',
-    secondary20: 'color-mix(in srgb, var(--color-warning) 20%, transparent)',
+    primary40: 'var(--color-gold-40)',
+    primary50: 'var(--color-gold-50)',
+    primary80: 'var(--color-gold-80)',
+    secondary20: 'var(--color-warning-20)',
   },
   2: {
     primary: 'var(--color-text-secondary)',
     secondary: 'var(--color-text-quaternary)',
     glow: 'var(--color-overlay-light)',
-    primary10: 'color-mix(in srgb, var(--color-text-secondary) 10%, transparent)',
-    primary20: 'color-mix(in srgb, var(--color-text-secondary) 20%, transparent)',
-    primary30: 'color-mix(in srgb, var(--color-text-secondary) 30%, transparent)',
-    primary40: 'color-mix(in srgb, var(--color-text-secondary) 40%, transparent)',
-    primary50: 'color-mix(in srgb, var(--color-text-secondary) 50%, transparent)',
-    primary80: 'color-mix(in srgb, var(--color-text-secondary) 80%, transparent)',
-    secondary20: 'color-mix(in srgb, var(--color-text-quaternary) 20%, transparent)',
+    primary10: 'var(--color-text-secondary-10)',
+    primary20: 'var(--color-text-secondary-20)',
+    primary30: 'var(--color-text-secondary-30)',
+    primary40: 'var(--color-text-secondary-40)',
+    primary50: 'var(--color-text-secondary-50)',
+    primary80: 'var(--color-text-secondary-80)',
+    secondary20: 'var(--color-text-quaternary-20)',
   },
   3: {
     primary: 'var(--color-orange)',
     secondary: 'var(--color-warning)',
     glow: 'var(--color-orange-30)',
-    primary10: 'color-mix(in srgb, var(--color-orange) 10%, transparent)',
-    primary20: 'color-mix(in srgb, var(--color-orange) 20%, transparent)',
+    primary10: 'var(--color-orange-10)',
+    primary20: 'var(--color-orange-20)',
     primary30: 'var(--color-orange-30)',
-    primary40: 'color-mix(in srgb, var(--color-orange) 40%, transparent)',
-    primary50: 'color-mix(in srgb, var(--color-orange) 50%, transparent)',
-    primary80: 'color-mix(in srgb, var(--color-orange) 80%, transparent)',
-    secondary20: 'color-mix(in srgb, var(--color-warning) 20%, transparent)',
+    primary40: 'var(--color-orange-40)',
+    primary50: 'var(--color-orange-50)',
+    primary80: 'var(--color-orange-80)',
+    secondary20: 'var(--color-warning-20)',
   },
 }
 

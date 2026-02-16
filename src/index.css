@@ -124,12 +124,37 @@
   --color-cyan-15: rgba(34, 211, 238, 0.15);
   --color-cyan-30: rgba(34, 211, 238, 0.3);
   --color-orange: #fb923c;
+  --color-orange-8: rgba(251, 146, 60, 0.08);
+  --color-orange-10: rgba(251, 146, 60, 0.1);
+  --color-orange-12: rgba(251, 146, 60, 0.12);
   --color-orange-15: rgba(251, 146, 60, 0.15);
+  --color-orange-20: rgba(251, 146, 60, 0.2);
+  --color-orange-25: rgba(251, 146, 60, 0.25);
   --color-orange-30: rgba(251, 146, 60, 0.3);
+  --color-orange-40: rgba(251, 146, 60, 0.4);
+  --color-orange-50: rgba(251, 146, 60, 0.5);
+  --color-orange-60: rgba(251, 146, 60, 0.6);
+  --color-orange-80: rgba(251, 146, 60, 0.8);
   --color-gold: #f5a623;
+  --color-gold-8: rgba(245, 166, 35, 0.08);
+  --color-gold-10: rgba(245, 166, 35, 0.1);
+  --color-gold-12: rgba(245, 166, 35, 0.12);
   --color-gold-15: rgba(245, 166, 35, 0.15);
+  --color-gold-19: rgba(245, 166, 35, 0.19);
   --color-gold-20: rgba(245, 166, 35, 0.2);
   --color-gold-30: rgba(245, 166, 35, 0.3);
+  --color-gold-31: rgba(245, 166, 35, 0.31);
+  --color-gold-40: rgba(245, 166, 35, 0.4);
+  --color-gold-50: rgba(245, 166, 35, 0.5);
+  --color-gold-80: rgba(245, 166, 35, 0.8);
+  /* Text color opacity variants (for leaderboard silver medal) */
+  --color-text-secondary-10: rgba(161, 161, 166, 0.1);
+  --color-text-secondary-20: rgba(161, 161, 166, 0.2);
+  --color-text-secondary-30: rgba(161, 161, 166, 0.3);
+  --color-text-secondary-40: rgba(161, 161, 166, 0.4);
+  --color-text-secondary-50: rgba(161, 161, 166, 0.5);
+  --color-text-secondary-80: rgba(161, 161, 166, 0.8);
+  --color-text-quaternary-20: rgba(156, 163, 175, 0.2);
   --color-rose: #f43f5e;
   --color-rose-15: rgba(244, 63, 94, 0.15);
   --color-rose-30: rgba(244, 63, 94, 0.3);
@@ -328,12 +353,37 @@
   --color-cyan-15: rgba(8, 145, 178, 0.15);
   --color-cyan-30: rgba(8, 145, 178, 0.3);
   --color-orange: #ea580c;
+  --color-orange-8: rgba(234, 88, 12, 0.08);
+  --color-orange-10: rgba(234, 88, 12, 0.1);
+  --color-orange-12: rgba(234, 88, 12, 0.12);
   --color-orange-15: rgba(234, 88, 12, 0.15);
+  --color-orange-20: rgba(234, 88, 12, 0.2);
+  --color-orange-25: rgba(234, 88, 12, 0.25);
   --color-orange-30: rgba(234, 88, 12, 0.3);
+  --color-orange-40: rgba(234, 88, 12, 0.4);
+  --color-orange-50: rgba(234, 88, 12, 0.5);
+  --color-orange-60: rgba(234, 88, 12, 0.6);
+  --color-orange-80: rgba(234, 88, 12, 0.8);
   --color-gold: #d97706;
+  --color-gold-8: rgba(217, 119, 6, 0.08);
+  --color-gold-10: rgba(217, 119, 6, 0.1);
+  --color-gold-12: rgba(217, 119, 6, 0.12);
   --color-gold-15: rgba(217, 119, 6, 0.15);
+  --color-gold-19: rgba(217, 119, 6, 0.19);
   --color-gold-20: rgba(217, 119, 6, 0.2);
   --color-gold-30: rgba(217, 119, 6, 0.3);
+  --color-gold-31: rgba(217, 119, 6, 0.31);
+  --color-gold-40: rgba(217, 119, 6, 0.4);
+  --color-gold-50: rgba(217, 119, 6, 0.5);
+  --color-gold-80: rgba(217, 119, 6, 0.8);
+  /* Text color opacity variants (for leaderboard silver medal) */
+  --color-text-secondary-10: rgba(73, 80, 87, 0.1);
+  --color-text-secondary-20: rgba(73, 80, 87, 0.2);
+  --color-text-secondary-30: rgba(73, 80, 87, 0.3);
+  --color-text-secondary-40: rgba(73, 80, 87, 0.4);
+  --color-text-secondary-50: rgba(73, 80, 87, 0.5);
+  --color-text-secondary-80: rgba(73, 80, 87, 0.8);
+  --color-text-quaternary-20: rgba(95, 104, 114, 0.2);
   --color-rose: #e11d48;
   --color-rose-15: rgba(225, 29, 72, 0.15);
   --color-rose-30: rgba(225, 29, 72, 0.3);
@@ -792,11 +842,6 @@ body {
   .pb-mobile-nav {
     margin-bottom: 0;
   }
-  /* Reduce header/content spacing in landscape */
-  .landscape-compact-y {
-    padding-top: 0.25rem;
-    padding-bottom: 0.25rem;
-  }
 }
 
 /* Sonner toast custom styling (PERF #4: replaces inline styles) */
@@ -820,11 +865,6 @@ body {
 .touch-target {
   min-width: 44px;
   min-height: 44px;
-}
-
-.touch-target-sm {
-  min-width: 36px;
-  min-height: 36px;
 }
 
 /* Modal focus trap - prevent focus from leaving modal (WCAG 2.4.3) */
@@ -1004,22 +1044,6 @@ select:focus-visible,
 .hover-lift:hover {
   transform: translateY(-2px);
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
-}
-
-/* Subtle pulse for active states only */
-@keyframes subtle-pulse {
-  0%,
-  100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.7;
-  }
-}
-@media (prefers-reduced-motion: no-preference) {
-  .pulse-subtle {
-    animation: subtle-pulse 2s ease-in-out infinite;
-  }
 }
 
 /* Card interactions - Refined, not dramatic */
@@ -1669,13 +1693,6 @@ select:focus-visible,
   transition: width 0.6s ease-out;
 }
 
-/* Circular progress animation */
-@keyframes circular-progress {
-  from {
-    stroke-dashoffset: 283;
-  }
-}
-
 /* FAQ accordion transition */
 .faq-answer {
   display: grid;
@@ -1907,12 +1924,6 @@ kbd {
   margin-left: auto;
 }
 
-/* Visual indicator for keyboard-only navigation mode */
-body.keyboard-navigation *:focus {
-  outline: 2px solid var(--color-primary);
-  outline-offset: 2px;
-}
-
 /* =====================================================
    WCAG AA ACCESSIBILITY - Form Labels & Error States
    Ensures all inputs have clear labels and error feedback
@@ -2003,19 +2014,6 @@ label[for] {
    Maximum line length, text spacing, zoom support
    ===================================================== */
 
-/* Optimal line length for readability (WCAG 1.4.8) - 80 chars max */
-.prose,
-.readable {
-  max-width: 65ch;
-}
-
-/* Enhanced text spacing for better readability (WCAG 1.4.12) */
-.text-readable {
-  line-height: 1.6;
-  letter-spacing: 0.02em;
-  word-spacing: 0.05em;
-}
-
 /* Ensure text can be zoomed to 200% without loss of content (WCAG 1.4.4) */
 @media (min-width: 1024px) {
   html {
@@ -2044,21 +2042,6 @@ h6 {
    WCAG AA ACCESSIBILITY - Color & Contrast Utilities
    Ensure sufficient contrast for all interactive states
    ===================================================== */
-
-/* Link underline for better identification (WCAG 1.4.1) */
-.prose a,
-.content a {
-  text-decoration: underline;
-  text-underline-offset: 2px;
-  text-decoration-thickness: 1px;
-  text-decoration-color: currentColor;
-  transition: text-decoration-color 0.2s ease;
-}
-
-.prose a:hover,
-.content a:hover {
-  text-decoration-thickness: 2px;
-}
 
 /* Ensure sufficient contrast for placeholder text */
 input::placeholder,

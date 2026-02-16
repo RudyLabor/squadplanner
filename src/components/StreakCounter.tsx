@@ -3,6 +3,7 @@ import { useState, useEffect, useMemo } from 'react'
 import { m } from 'framer-motion'
 import { Flame, Gift, Sparkles, Check, Zap } from './icons'
 import { Card } from './ui'
+import { colorMix } from '~/utils/colorMix'
 import {
   MILESTONES,
   calculateXPReward,
@@ -74,7 +75,7 @@ export function StreakCounter({ streakDays, lastActiveDate, onCheckIn }: StreakC
               <m.div
                 className="w-16 h-16 rounded-2xl flex items-center justify-center relative overflow-hidden"
                 style={{
-                  backgroundColor: `color-mix(in srgb, ${flameColors.primary} 8%, transparent)`,
+                  backgroundColor: colorMix(flameColors.primary, 8),
                 }}
                 animate={intensity >= 1 ? { scale: [1, 1.05, 1] } : {}}
                 transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}

@@ -2,6 +2,7 @@ import { m } from 'framer-motion'
 import { Star, Zap } from './icons'
 import { AnimatedCounter } from './ui/AnimatedCounter'
 import { HelpTooltip } from './ui'
+import { colorMix } from '~/utils/colorMix'
 
 // Level configuration - French translations
 // Colors use CSS variable references for design system consistency
@@ -64,7 +65,7 @@ export function XPBar({
         <div
           className="w-6 h-6 rounded-lg flex items-center justify-center text-xs font-bold"
           style={{
-            backgroundColor: `color-mix(in srgb, ${currentLevel.color} 12%, transparent)`,
+            backgroundColor: colorMix(currentLevel.color, 12),
             color: currentLevel.color,
           }}
         >
@@ -84,7 +85,7 @@ export function XPBar({
               background: isMaxLevel
                 ? `linear-gradient(90deg, ${currentLevel.color}, ${currentLevel.color})`
                 : `linear-gradient(90deg, ${currentLevel.color}, ${nextLevel.color})`,
-              boxShadow: `0 0 10px color-mix(in srgb, ${currentLevel.color} 31%, transparent)`,
+              boxShadow: `0 0 10px ${colorMix(currentLevel.color, 31)}`,
             }}
             initial={{ width: 0 }}
             animate={{ width: `${progress}%` }}
@@ -107,14 +108,14 @@ export function XPBar({
           <m.div
             className="relative w-12 h-12 rounded-xl flex items-center justify-center"
             style={{
-              backgroundColor: `color-mix(in srgb, ${currentLevel.color} 12%, transparent)`,
-              boxShadow: `0 0 20px color-mix(in srgb, ${currentLevel.color} 19%, transparent)`,
+              backgroundColor: colorMix(currentLevel.color, 12),
+              boxShadow: `0 0 20px ${colorMix(currentLevel.color, 19)}`,
             }}
             animate={{
               boxShadow: [
-                `0 0 20px color-mix(in srgb, ${currentLevel.color} 19%, transparent)`,
-                `0 0 30px color-mix(in srgb, ${currentLevel.color} 31%, transparent)`,
-                `0 0 20px color-mix(in srgb, ${currentLevel.color} 19%, transparent)`,
+                `0 0 20px ${colorMix(currentLevel.color, 19)}`,
+                `0 0 30px ${colorMix(currentLevel.color, 31)}`,
+                `0 0 20px ${colorMix(currentLevel.color, 19)}`,
               ],
             }}
             transition={{ duration: 2, repeat: Infinity }}
@@ -175,7 +176,7 @@ export function XPBar({
           <m.div
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-full"
             style={{
-              backgroundColor: `color-mix(in srgb, ${currentLevel.color} 12%, transparent)`,
+              backgroundColor: colorMix(currentLevel.color, 12),
               color: currentLevel.color,
             }}
             animate={{ scale: [1, 1.05, 1] }}
@@ -205,7 +206,7 @@ export function XPBar({
               background: isMaxLevel
                 ? `linear-gradient(90deg, ${currentLevel.color}, ${currentLevel.color})`
                 : `linear-gradient(90deg, ${currentLevel.color}, ${nextLevel.color})`,
-              boxShadow: `0 0 15px color-mix(in srgb, ${currentLevel.color} 31%, transparent), inset 0 1px 0 var(--color-overlay-heavy)`,
+              boxShadow: `0 0 15px ${colorMix(currentLevel.color, 31)}, inset 0 1px 0 var(--color-overlay-heavy)`,
             }}
             initial={{ width: 0 }}
             animate={{ width: `${progress}%` }}

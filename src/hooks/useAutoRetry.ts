@@ -19,6 +19,11 @@ interface UseAutoRetryReturn {
   hasExhaustedRetries: boolean
 }
 
+/**
+ * Manages automatic retry logic with exponential backoff.
+ * Tracks countdown between retries and exposes manual retry/reset controls.
+ * Backs off exponentially: baseDelay × 2^attempt (capped at maxRetries).
+ */
 export function useAutoRetry(
   retryFn: () => void | Promise<void>,
   shouldRetry: boolean,

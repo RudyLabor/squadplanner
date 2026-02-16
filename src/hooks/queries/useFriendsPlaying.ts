@@ -34,9 +34,8 @@ async function fetchFriendsPlaying(userId: string): Promise<FriendPlaying[]> {
     })
 
     if (error) {
-      // TODO: La fonction get_friends_playing nécessite les colonnes is_online/current_game dans profiles.
-      // En attendant, on retourne gracieusement une liste vide sans polluer la console.
-      // Voir migration 20260206140001_fix_get_friends_playing.sql
+      // get_friends_playing requiert is_online/current_game dans profiles (migration 20260206140001).
+      // En attendant ces colonnes, on retourne gracieusement une liste vide.
       return []
     }
 

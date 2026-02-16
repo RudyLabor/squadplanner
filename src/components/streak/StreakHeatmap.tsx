@@ -1,6 +1,7 @@
 
 import { useMemo } from 'react'
 import { m } from 'framer-motion'
+import { colorMix } from '~/utils/colorMix'
 
 interface StreakHeatmapProps {
   streakDays: number
@@ -58,9 +59,9 @@ export function StreakHeatmap({ streakDays, flameColors }: StreakHeatmapProps) {
                 cell.intensity === 3
                   ? flameColors.primary
                   : cell.intensity === 2
-                    ? `color-mix(in srgb, ${flameColors.primary} 60%, transparent)`
+                    ? colorMix(flameColors.primary, 60)
                     : cell.intensity === 1
-                      ? `color-mix(in srgb, ${flameColors.primary} 25%, transparent)`
+                      ? colorMix(flameColors.primary, 25)
                       : 'var(--color-overlay-faint)'
               return (
                 <m.div

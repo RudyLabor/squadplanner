@@ -140,7 +140,7 @@ export function CookieConsent() {
                 </button>
                 <Link
                   to="/legal?tab=privacy"
-                  className="flex items-center gap-1 text-sm text-primary hover:text-purple transition-colors"
+                  className="flex items-center gap-1 text-sm text-text-secondary hover:text-text-primary underline transition-colors"
                 >
                   <Shield className="w-3 h-3" />
                   Politique de confidentialité

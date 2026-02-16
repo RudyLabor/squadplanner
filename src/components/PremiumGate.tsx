@@ -30,6 +30,15 @@ const FEATURE_LABELS: Record<PremiumFeature, string> = {
   hd_audio: 'Audio HD',
   advanced_roles: 'Rôles avancés',
   calendar_export: 'Export calendrier',
+  gifs: 'GIFs',
+  voice_messages: 'Messages vocaux',
+  polls: 'Sondages',
+  recurring_sessions: 'Sessions récurrentes',
+  team_analytics: 'Analytics équipe',
+  priority_matchmaking: 'Matchmaking prioritaire',
+  club_dashboard: 'Dashboard Club',
+  custom_branding: 'Branding personnalisé',
+  api_webhooks: 'API Webhooks',
 }
 
 export function PremiumGate({

@@ -112,5 +112,9 @@ export { useAdaptiveLoading } from './useAdaptiveLoading'
 export type { QualityTier } from './useAdaptiveLoading'
 export { usePrefetch } from './usePrefetch'
 
+// Referral system
+export { useReferralStore, useReferral } from './useReferral'
+export type { ReferralStats, ReferralHistoryItem } from './useReferral'
+
 // Analytics tracking
 export { useAnalytics } from './useAnalytics'

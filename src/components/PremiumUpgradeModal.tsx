@@ -4,18 +4,19 @@ import {
   Zap,
   Check,
   Crown,
-  Sparkles,
-  BarChart3,
-  Mic2,
-  Calendar,
-  Users,
-  Infinity as InfinityIcon,
   Loader2,
   X,
 } from './icons'
 import { Button, ResponsiveModal } from './ui'
 import { useSubscriptionStore } from '../hooks'
-import { PREMIUM_PRICE_MONTHLY, PREMIUM_PRICE_YEARLY } from '../hooks/usePremium'
+import {
+  PREMIUM_PRICE_MONTHLY,
+  PREMIUM_PRICE_YEARLY,
+  SQUAD_LEADER_PRICE_MONTHLY,
+  SQUAD_LEADER_PRICE_YEARLY,
+  FEATURE_MIN_TIER,
+} from '../hooks/usePremium'
+import type { SubscriptionTier } from '../types/database'
 
 interface PremiumUpgradeModalProps {
   isOpen: boolean
@@ -24,38 +25,40 @@ interface PremiumUpgradeModalProps {
   feature?: string
 }
 
-const PREMIUM_FEATURES = [
+const UPGRADE_TIERS = [
   {
-    icon: InfinityIcon,
-    title: 'Squads illimités',
-    description: 'Crée autant de squads que tu veux',
+    tier: 'premium' as SubscriptionTier,
+    name: 'Premium',
+    monthlyPrice: PREMIUM_PRICE_MONTHLY,
+    yearlyPrice: PREMIUM_PRICE_YEARLY,
+    highlights: ['5 squads', 'Sessions illimitées', 'Chat complet', 'Stats avancées', 'IA Coach'],
+    gradient: 'from-primary to-primary/80',
+    borderColor: 'border-primary',
+    bgColor: 'bg-primary/5',
+    popular: false,
   },
   {
-    icon: BarChart3,
-    title: 'Stats avancées',
-    description: 'Graphiques, tendances, analyses détaillées',
-  },
-  {
-    icon: Sparkles,
-    title: 'IA Coach avancé',
-    description: 'Conseils personnalisés et prédictions',
-  },
-  {
-    icon: Mic2,
-    title: 'Audio HD',
-    description: 'Qualité audio supérieure en party vocale',
-  },
-  {
-    icon: Users,
-    title: 'Rôles avancés',
-    description: 'Coach, manager, permissions personnalisées',
-  },
-  {
-    icon: Calendar,
-    title: 'Export calendrier',
-    description: 'Synchronise tes sessions avec ton agenda',
+    tier: 'squad_leader' as SubscriptionTier,
+    name: 'Squad Leader',
+    monthlyPrice: SQUAD_LEADER_PRICE_MONTHLY,
+    yearlyPrice: SQUAD_LEADER_PRICE_YEARLY,
+    highlights: ['Tout Premium', 'Squads illimités', 'Audio HD', 'Dashboard analytics', 'Sessions récurrentes'],
+    gradient: 'from-warning to-warning/80',
+    borderColor: 'border-warning',
+    bgColor: 'bg-warning/5',
+    popular: true,
   },
 ]
+
+// Determine the recommended tier based on the feature being gated
+function getRecommendedTier(feature?: string): SubscriptionTier {
+  if (!feature) return 'premium'
+  for (const [key, tier] of Object.entries(FEATURE_MIN_TIER)) {
+    const label = key.replace(/_/g, ' ').toLowerCase()
+    if (feature.toLowerCase().includes(label)) return tier
+  }
+  return 'premium'
+}
 
 export function PremiumUpgradeModal({
   isOpen,
@@ -63,7 +66,11 @@ export function PremiumUpgradeModal({
   squadId,
   feature,
 }: PremiumUpgradeModalProps) {
-  const [selectedPlan, setSelectedPlan] = useState<'monthly' | 'yearly'>('monthly')
+  const recommended = getRecommendedTier(feature)
+  const [selectedTier, setSelectedTier] = useState<SubscriptionTier>(
+    recommended === 'club' ? 'squad_leader' : recommended
+  )
+  const [isYearly, setIsYearly] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
@@ -74,17 +81,14 @@ export function PremiumUpgradeModal({
     setError(null)
 
     try {
-      const priceId =
-        selectedPlan === 'monthly'
-          ? plans.find((p) => p.id === 'premium_monthly')?.stripePriceId
-          : plans.find((p) => p.id === 'premium_yearly')?.stripePriceId
+      const planId = `${selectedTier}_${isYearly ? 'yearly' : 'monthly'}`
+      const priceId = plans.find((p) => p.id === planId)?.stripePriceId
 
       if (!priceId) {
         throw new Error('Plan non trouvé')
       }
 
-      // Premium subscription is personal, squadId is optional
-      const { url, error } = await createCheckoutSession(squadId || '', priceId)
+      const { url, error } = await createCheckoutSession(priceId, selectedTier, squadId || undefined)
 
       if (error) throw error
       if (url) {
@@ -96,6 +100,11 @@ export function PremiumUpgradeModal({
       setIsLoading(false)
     }
   }
+
+  const activeTier = UPGRADE_TIERS.find((t) => t.tier === selectedTier) || UPGRADE_TIERS[0]
+  const totalLabel = isYearly
+    ? `${activeTier.yearlyPrice.toFixed(2)}€/an`
+    : `${activeTier.monthlyPrice.toFixed(2)}€/mois`
 
   return (
     <ResponsiveModal open={isOpen} onClose={onClose} size="md">
@@ -114,7 +123,7 @@ export function PremiumUpgradeModal({
             <Crown className="w-6 h-6 text-white" />
           </div>
           <div>
-            <h2 className="text-xl font-bold text-white">Passe Premium</h2>
+            <h2 className="text-xl font-bold text-white">Passe au niveau supérieur</h2>
             <p className="text-md text-white/80">Débloquer toutes les features</p>
           </div>
         </div>
@@ -122,62 +131,73 @@ export function PremiumUpgradeModal({
         {feature && (
           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/20 text-white text-base">
             <Zap className="w-4 h-4" />
-            <span>Pour accéder à: {feature}</span>
+            <span>Pour accéder à : {feature}</span>
           </div>
         )}
       </div>
 
       {/* Content */}
       <div className="flex-1 overflow-y-auto p-6">
-        {/* Plan selector */}
-        <div className="grid grid-cols-2 gap-3 mb-6">
-          <button
-            onClick={() => setSelectedPlan('monthly')}
-            className={`p-4 rounded-xl border-2 transition-interactive ${
-              selectedPlan === 'monthly'
-                ? 'border-primary bg-primary-10'
-                : 'border-border-hover hover:border-overlay-medium'
-            }`}
-          >
-            <div className="text-base text-text-secondary mb-1">Mensuel</div>
-            <div className="text-2xl font-bold text-text-primary">
-              {PREMIUM_PRICE_MONTHLY.toFixed(2)}
-              <span className="text-md font-normal text-text-tertiary">/mois</span>
-            </div>
-          </button>
-
-          <button
-            onClick={() => setSelectedPlan('yearly')}
-            className={`p-4 rounded-xl border-2 transition-interactive relative ${
-              selectedPlan === 'yearly'
-                ? 'border-success bg-success-10'
-                : 'border-border-hover hover:border-overlay-medium'
-            }`}
-          >
-            <div className="absolute -top-2 right-2 px-2 py-0.5 rounded-full bg-success text-xs font-bold text-bg-base">
-              -20%
-            </div>
-            <div className="text-base text-text-secondary mb-1">Annuel</div>
-            <div className="text-2xl font-bold text-text-primary">
-              {(PREMIUM_PRICE_YEARLY / 12).toFixed(2)}
-              <span className="text-md font-normal text-text-tertiary">/mois</span>
-            </div>
-            <div className="text-xs text-success">2 mois offerts</div>
-          </button>
+        {/* Tier selector */}
+        <div className="grid grid-cols-2 gap-3 mb-4">
+          {UPGRADE_TIERS.map((t) => (
+            <button
+              key={t.tier}
+              onClick={() => setSelectedTier(t.tier)}
+              className={`p-4 rounded-xl border-2 transition-interactive text-left relative ${
+                selectedTier === t.tier
+                  ? `${t.borderColor} ${t.bgColor}`
+                  : 'border-border-hover hover:border-overlay-medium'
+              }`}
+            >
+              {t.popular && (
+                <div className="absolute -top-2 right-2 px-2 py-0.5 rounded-full bg-warning text-xs font-bold text-bg-base">
+                  POPULAIRE
+                </div>
+              )}
+              <div className="flex items-center gap-1.5 mb-1">
+                {t.popular && <Crown className="w-3.5 h-3.5 text-warning" />}
+                <span className="text-md font-semibold text-text-primary">{t.name}</span>
+              </div>
+              <div className="text-lg font-bold text-text-primary">
+                {(isYearly ? t.yearlyPrice / 12 : t.monthlyPrice).toFixed(2)}€
+                <span className="text-sm font-normal text-text-tertiary">/mois</span>
+              </div>
+            </button>
+          ))}
         </div>
 
-        {/* Features list */}
-        <div className="space-y-3">
-          {PREMIUM_FEATURES.map((feat, index) => (
-            <div key={index} className="flex items-start gap-3 p-3 rounded-xl bg-surface-card">
-              <div className="w-9 h-9 rounded-lg bg-primary-15 flex items-center justify-center flex-shrink-0">
-                <feat.icon className="w-4 h-4 text-primary" />
-              </div>
-              <div>
-                <div className="text-md font-medium text-text-primary">{feat.title}</div>
-                <div className="text-sm text-text-tertiary">{feat.description}</div>
-              </div>
-              <Check className="w-4 h-4 text-success flex-shrink-0 mt-1" />
+        {/* Interval toggle */}
+        <div className="flex justify-center mb-5">
+          <div className="inline-flex items-center gap-2 p-0.5 rounded-lg bg-bg-elevated border border-border-default">
+            <button
+              onClick={() => setIsYearly(false)}
+              className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
+                !isYearly ? 'bg-primary text-white' : 'text-text-tertiary'
+              }`}
+            >
+              Mensuel
+            </button>
+            <button
+              onClick={() => setIsYearly(true)}
+              className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors flex items-center gap-1.5 ${
+                isYearly ? 'bg-success text-white' : 'text-text-tertiary'
+              }`}
+            >
+              Annuel
+              <span className="px-1 py-0.5 rounded text-xs font-bold bg-success/20 text-success">
+                -20%
+              </span>
+            </button>
+          </div>
+        </div>
+
+        {/* Features list for selected tier */}
+        <div className="space-y-2">
+          {activeTier.highlights.map((feat) => (
+            <div key={feat} className="flex items-center gap-3 p-3 rounded-xl bg-surface-card">
+              <Check className={`w-4 h-4 flex-shrink-0 ${activeTier.popular ? 'text-warning' : 'text-success'}`} />
+              <span className="text-md text-text-primary">{feat}</span>
             </div>
           ))}
         </div>
@@ -195,17 +215,16 @@ export function PremiumUpgradeModal({
         <Button
           onClick={handleUpgrade}
           disabled={isLoading}
-          className="w-full h-12 bg-gradient-to-r from-primary to-purple hover:opacity-90"
+          className={`w-full h-12 bg-gradient-to-r ${activeTier.gradient} hover:opacity-90 ${
+            activeTier.popular ? 'text-bg-base' : 'text-white'
+          }`}
         >
           {isLoading ? (
             <Loader2 className="w-5 h-5 animate-spin" />
           ) : (
             <>
-              <Zap className="w-5 h-5" />
-              Passer Premium -{' '}
-              {selectedPlan === 'monthly'
-                ? `${PREMIUM_PRICE_MONTHLY.toFixed(2)}/mois`
-                : `${PREMIUM_PRICE_YEARLY.toFixed(2)}/an`}
+              {activeTier.popular ? <Crown className="w-5 h-5" /> : <Zap className="w-5 h-5" />}
+              Choisir {activeTier.name} — {totalLabel}
             </>
           )}
         </Button>

@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react'
 import { m } from 'framer-motion'
 import {
   Check,
@@ -13,31 +14,152 @@ import {
   Zap,
 } from '../../components/icons'
 import { Button, Card } from '../../components/ui'
-import { PREMIUM_PRICE_MONTHLY, PREMIUM_PRICE_YEARLY } from '../../hooks/usePremium'
+import {
+  PREMIUM_PRICE_MONTHLY,
+  PREMIUM_PRICE_YEARLY,
+  SQUAD_LEADER_PRICE_MONTHLY,
+  SQUAD_LEADER_PRICE_YEARLY,
+  CLUB_PRICE_MONTHLY,
+  CLUB_PRICE_YEARLY,
+} from '../../hooks/usePremium'
+import type { SubscriptionTier } from '../../types/database'
 
 interface PremiumPricingProps {
-  selectedPlan: 'monthly' | 'yearly'
-  setSelectedPlan: (plan: 'monthly' | 'yearly') => void
   isLoading: boolean
   error: string | null
-  onUpgrade: () => void
+  onUpgrade: (tier: SubscriptionTier, interval: 'monthly' | 'yearly') => void
   onStartTrial: () => void
 }
 
+const TIERS = [
+  {
+    tier: 'premium' as SubscriptionTier,
+    name: 'Premium',
+    description: 'Pour les joueurs réguliers.',
+    monthlyPrice: PREMIUM_PRICE_MONTHLY,
+    yearlyPrice: PREMIUM_PRICE_YEARLY,
+    features: [
+      '5 squads',
+      'Sessions illimitées',
+      'Historique 90 jours',
+      'Chat complet (GIF, voice, polls)',
+      'Stats avancées',
+      'IA Coach basique',
+      'Badge Premium violet',
+      'Zéro pub',
+    ],
+    ctaLabel: 'Choisir Premium',
+    gradient: 'from-primary to-primary/80',
+    badgeClass: 'bg-primary/20 text-primary',
+    borderActive: 'border-primary bg-primary/5',
+    popular: false,
+    badge: null,
+  },
+  {
+    tier: 'squad_leader' as SubscriptionTier,
+    name: 'Squad Leader',
+    description: 'Pour les capitaines de squad.',
+    monthlyPrice: SQUAD_LEADER_PRICE_MONTHLY,
+    yearlyPrice: SQUAD_LEADER_PRICE_YEARLY,
+    features: [
+      'Tout Premium inclus',
+      'Squads illimités',
+      'Historique illimité',
+      'Audio HD Party',
+      'IA Coach avancé (tactiques)',
+      'Dashboard analytics équipe',
+      'Rôles avancés (IGL, Coach)',
+      'Export calendrier',
+      'Sessions récurrentes',
+      'Badge Squad Leader doré',
+    ],
+    ctaLabel: 'Choisir Squad Leader',
+    gradient: 'from-warning to-warning/80',
+    badgeClass: 'bg-warning/20 text-warning',
+    borderActive: 'border-warning bg-warning/5',
+    popular: true,
+    badge: 'POPULAIRE',
+  },
+  {
+    tier: 'club' as SubscriptionTier,
+    name: 'Club',
+    description: 'Pour les structures esport.',
+    monthlyPrice: CLUB_PRICE_MONTHLY,
+    yearlyPrice: CLUB_PRICE_YEARLY,
+    features: [
+      'Tout Squad Leader inclus',
+      'Dashboard multi-squads',
+      'Stats cross-squad',
+      'Branding personnalisé',
+      'API webhooks',
+      'Onboarding assisté (30 min)',
+      'Support prioritaire 24h',
+      'Facturation entreprise',
+    ],
+    ctaLabel: 'Contacter',
+    gradient: 'from-primary to-purple',
+    badgeClass: 'bg-primary/20 text-primary',
+    borderActive: 'border-primary bg-primary/5',
+    popular: false,
+    badge: 'B2B',
+  },
+]
+
 export function PremiumPricing({
-  selectedPlan,
-  setSelectedPlan,
   isLoading,
   error,
   onUpgrade,
   onStartTrial,
 }: PremiumPricingProps) {
-  const savings = Math.round(
-    ((PREMIUM_PRICE_MONTHLY * 12 - PREMIUM_PRICE_YEARLY) / (PREMIUM_PRICE_MONTHLY * 12)) * 100
-  )
+  const [isYearly, setIsYearly] = useState(false)
+
+  // Launch promo countdown — expires March 31, 2026
+  const PROMO_END = new Date('2026-03-31T23:59:59').getTime()
+  const [timeLeft, setTimeLeft] = useState('')
+  const [promoActive, setPromoActive] = useState(true)
+
+  useEffect(() => {
+    const tick = () => {
+      const now = Date.now()
+      const diff = PROMO_END - now
+      if (diff <= 0) {
+        setPromoActive(false)
+        return
+      }
+      const d = Math.floor(diff / (1000 * 60 * 60 * 24))
+      const h = Math.floor((diff / (1000 * 60 * 60)) % 24)
+      const min = Math.floor((diff / (1000 * 60)) % 60)
+      setTimeLeft(`${d}j ${h}h ${min}min`)
+    }
+    tick()
+    const id = setInterval(tick, 60_000)
+    return () => clearInterval(id)
+  }, [])
 
   return (
     <>
+      {/* Launch promo banner */}
+      {promoActive && (
+        <div
+          className="animate-fade-in-up mb-6 p-4 rounded-2xl bg-gradient-to-r from-error/10 via-warning/10 to-error/10 border border-error/20 text-center"
+          style={{ animationDelay: '0.1s' }}
+        >
+          <div className="flex items-center justify-center gap-2 mb-1">
+            <Zap className="w-5 h-5 text-error" />
+            <span className="text-md font-bold text-error">
+              Offre de lancement -30%
+            </span>
+            <Zap className="w-5 h-5 text-error" />
+          </div>
+          <p className="text-sm text-text-secondary mb-1">
+            Code <span className="font-mono font-bold text-error">LAUNCH30</span> sur tous les plans
+          </p>
+          <p className="text-xs text-text-tertiary">
+            Expire dans {timeLeft}
+          </p>
+        </div>
+      )}
+
       {/* Free Trial Banner */}
       <div
         className="animate-fade-in-up relative mb-8 overflow-hidden rounded-2xl bg-gradient-to-r from-success/10 to-transparent border border-success/20 p-6 md:p-8"
@@ -98,121 +220,155 @@ export function PremiumPricing({
         </div>
       </div>
 
-      {/* Pricing Cards */}
-      <div
-        className="animate-fade-in-up grid md:grid-cols-2 gap-4 mb-16"
-        style={{ animationDelay: '0.3s' }}
-      >
-        <m.button
-          onClick={() => setSelectedPlan('monthly')}
-          className={`relative p-6 rounded-2xl border-2 text-left transition-interactive ${selectedPlan === 'monthly' ? 'border-primary bg-primary/5 shadow-glow-primary-sm' : 'border-border-hover bg-overlay-faint hover:border-border-hover'}`}
-          whileHover={{ y: -2, scale: 1.02 }}
-          whileTap={{ scale: 0.99 }}
-        >
-          <div className="flex items-center gap-2 mb-2">
-            <span className="text-md text-text-secondary">Mensuel</span>
-            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-success/10 border border-success/20 text-xs font-medium text-success">
-              <Gift className="w-3 h-3" />
-              7j gratuits
+      {/* Toggle mensuel/annuel */}
+      <div className="animate-fade-in-up flex justify-center mb-6" style={{ animationDelay: '0.25s' }}>
+        <div className="inline-flex items-center gap-3 p-1 rounded-xl bg-bg-elevated border border-border-default">
+          <button
+            onClick={() => setIsYearly(false)}
+            className={`px-4 py-2 rounded-lg text-base font-medium transition-colors ${
+              !isYearly
+                ? 'bg-primary text-white shadow-sm'
+                : 'text-text-tertiary hover:text-text-primary'
+            }`}
+          >
+            Mensuel
+          </button>
+          <button
+            onClick={() => setIsYearly(true)}
+            className={`px-4 py-2 rounded-lg text-base font-medium transition-colors flex items-center gap-2 ${
+              isYearly
+                ? 'bg-success text-white shadow-sm'
+                : 'text-text-tertiary hover:text-text-primary'
+            }`}
+          >
+            Annuel
+            <span className="px-1.5 py-0.5 rounded-full bg-success/20 text-success text-xs font-bold">
+              -20%
             </span>
-          </div>
-          <div className="flex items-baseline gap-1 mb-1">
-            <span className="text-2xl font-bold text-text-primary">
-              {PREMIUM_PRICE_MONTHLY.toFixed(2)}&euro;
-            </span>
-            <span className="text-md text-text-tertiary">/mois</span>
-          </div>
-          <p className="text-base text-success mb-1">Commence par 7 jours gratuits</p>
-          <p className="text-base text-text-tertiary">
-            Flexibilit&eacute; maximale, annule quand tu veux
-          </p>
-          {selectedPlan === 'monthly' && (
-            <div className="absolute top-4 right-4 w-6 h-6 rounded-full bg-primary flex items-center justify-center">
-              <Check className="w-4 h-4 text-white" />
-            </div>
-          )}
-        </m.button>
-
-        <m.button
-          onClick={() => setSelectedPlan('yearly')}
-          className={`relative p-6 rounded-2xl border-2 text-left transition-interactive ${selectedPlan === 'yearly' ? 'border-success bg-success/5 shadow-glow-success' : 'border-border-hover bg-overlay-faint hover:border-border-hover'}`}
-          whileHover={{ y: -2, scale: 1.02 }}
-          whileTap={{ scale: 0.99 }}
-        >
-          <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full bg-gradient-to-r from-success to-success text-xs font-bold text-bg-base">
-            MEILLEURE OFFRE
-          </div>
-          <div className="flex items-center gap-2 mb-2">
-            <span className="text-md text-text-secondary">Annuel</span>
-            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-success/10 border border-success/20 text-xs font-medium text-success">
-              <Gift className="w-3 h-3" />
-              7j gratuits
-            </span>
-          </div>
-          <div className="flex items-baseline gap-1 mb-1">
-            <span className="text-2xl font-bold text-text-primary">
-              {(PREMIUM_PRICE_YEARLY / 12).toFixed(2)}&euro;
-            </span>
-            <span className="text-md text-text-tertiary">/mois</span>
-          </div>
-          <div className="flex items-center gap-2 mb-1">
-            <span className="text-base line-through text-text-tertiary">
-              {(PREMIUM_PRICE_MONTHLY * 12).toFixed(2)}&euro;/an
-            </span>
-            <span className="text-base font-semibold text-success">
-              {PREMIUM_PRICE_YEARLY.toFixed(2)}&euro;/an
-            </span>
-          </div>
-          <p className="text-base text-success mb-1">Commence par 7 jours gratuits</p>
-          <p className="text-base text-success">
-            &Eacute;conomise {savings}% &mdash; 2 mois offerts !
-          </p>
-          {selectedPlan === 'yearly' && (
-            <div className="absolute top-4 right-4 w-6 h-6 rounded-full bg-success flex items-center justify-center">
-              <Check className="w-4 h-4 text-white" />
-            </div>
-          )}
-        </m.button>
+          </button>
+        </div>
       </div>
 
-      {/* CTA Button */}
-      <div className="animate-fade-in-up text-center mb-16" style={{ animationDelay: '0.4s' }}>
-        {error && (
-          <div className="mb-4 p-3 rounded-lg bg-error/5 border border-error/10">
-            <p className="text-error text-base">{error}</p>
-          </div>
-        )}
-        <Button
-          onClick={onUpgrade}
-          disabled={isLoading}
-          className="h-14 px-10 text-lg bg-gradient-to-r from-primary via-purple to-primary bg-[length:200%_100%] hover:bg-[position:100%_0] transition-interactive shadow-glow-primary-md animate-pulse-glow"
-        >
-          {isLoading ? (
-            <Loader2 className="w-5 h-5 animate-spin" />
-          ) : (
-            <>
-              <Rocket className="w-5 h-5" /> Passer Premium maintenant{' '}
-              <ArrowRight className="w-5 h-5" />
-            </>
-          )}
-        </Button>
-        <div className="flex flex-wrap items-center justify-center gap-3 mt-3 text-sm text-text-tertiary">
-          <span className="flex items-center gap-1">
-            <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
-              />
-            </svg>
-            Paiement sécurisé
-          </span>
-          <span>·</span>
-          <span>Annulation facile</span>
-          <span>·</span>
-          <span>Satisfait ou remboursé 30j</span>
+      {/* Pricing Cards — 3 tiers */}
+      <div
+        className="animate-fade-in-up grid grid-cols-1 md:grid-cols-3 gap-4 mb-8"
+        style={{ animationDelay: '0.3s' }}
+      >
+        {TIERS.map((t, index) => {
+          const price = isYearly ? t.yearlyPrice / 12 : t.monthlyPrice
+          const yearlyTotal = t.yearlyPrice
+          const savings = Math.round(
+            ((t.monthlyPrice * 12 - t.yearlyPrice) / (t.monthlyPrice * 12)) * 100
+          )
+
+          return (
+            <m.div
+              key={t.tier}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.05 * index }}
+              className={`relative p-5 rounded-2xl overflow-hidden ${
+                t.popular
+                  ? 'border-2 border-warning/40 bg-gradient-to-br from-warning/8 to-transparent'
+                  : 'border border-border-default bg-bg-elevated'
+              }`}
+            >
+              {t.badge && (
+                <div
+                  className={`absolute top-0 right-0 px-3 py-1 text-sm font-bold rounded-bl-xl ${
+                    t.popular
+                      ? 'bg-warning text-bg-base'
+                      : 'bg-primary text-white'
+                  }`}
+                >
+                  {t.badge}
+                </div>
+              )}
+
+              <div className="flex items-center gap-2 mb-1">
+                <h3 className="text-lg font-bold text-text-primary">{t.name}</h3>
+                {t.popular && <Crown className="w-4 h-4 text-warning" />}
+              </div>
+
+              <p className="text-sm text-text-tertiary mb-3">{t.description}</p>
+
+              <div className="flex items-baseline gap-1 mb-1">
+                <span className="text-2xl font-bold text-text-primary">
+                  {price.toFixed(2)}&euro;
+                </span>
+                <span className="text-text-quaternary text-sm">/mois</span>
+              </div>
+
+              {isYearly && (
+                <p className="text-xs text-success mb-3">
+                  {yearlyTotal.toFixed(2)}&euro;/an &middot; &Eacute;conomise {savings}%
+                </p>
+              )}
+
+              <ul className="space-y-2 mb-5">
+                {t.features.map((f) => (
+                  <li key={f} className="flex items-start gap-2 text-sm text-text-secondary">
+                    <Check
+                      className={`w-4 h-4 flex-shrink-0 mt-0.5 ${
+                        t.popular ? 'text-warning' : 'text-success'
+                      }`}
+                    />
+                    {f}
+                  </li>
+                ))}
+              </ul>
+
+              <m.button
+                onClick={() => onUpgrade(t.tier, isYearly ? 'yearly' : 'monthly')}
+                disabled={isLoading}
+                className={`w-full py-2.5 rounded-xl text-base font-semibold transition-colors flex items-center justify-center gap-2 ${
+                  t.popular
+                    ? 'bg-gradient-to-r from-warning to-warning/80 text-bg-base hover:opacity-90'
+                    : t.tier === 'club'
+                      ? 'border border-primary text-primary hover:bg-primary-10'
+                      : 'bg-primary text-white hover:bg-primary-hover shadow-glow-primary-sm'
+                }`}
+                whileHover={{ scale: 1.01 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                {isLoading ? (
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                ) : (
+                  <>
+                    {t.popular && <Crown className="w-4 h-4" />}
+                    {t.ctaLabel}
+                  </>
+                )}
+              </m.button>
+            </m.div>
+          )
+        })}
+      </div>
+
+      {/* Error */}
+      {error && (
+        <div className="mb-4 p-3 rounded-lg bg-error/5 border border-error/10">
+          <p className="text-error text-base">{error}</p>
         </div>
+      )}
+
+      {/* Trust badges */}
+      <div className="animate-fade-in-up flex flex-wrap items-center justify-center gap-3 mb-12 text-sm text-text-tertiary" style={{ animationDelay: '0.4s' }}>
+        <span className="flex items-center gap-1">
+          <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+            />
+          </svg>
+          Paiement sécurisé Stripe
+        </span>
+        <span>·</span>
+        <span>Annulation facile</span>
+        <span>·</span>
+        <span>Satisfait ou remboursé 30j</span>
       </div>
 
       {/* Final CTA */}
@@ -220,7 +376,7 @@ export function PremiumPricing({
         <Card className="p-8 bg-gradient-to-br from-primary/[0.075] to-warning/5 border-primary">
           <Crown className="w-12 h-12 text-warning mx-auto mb-4" />
           <h3 className="text-xl font-semibold text-text-primary mb-2">
-            Pr&ecirc;t &agrave; passer Premium ?
+            Pr&ecirc;t &agrave; passer au niveau sup&eacute;rieur ?
           </h3>
           <p className="text-md text-text-secondary mb-2 max-w-md mx-auto">
             Rejoins les squads qui ont choisi de jouer s&eacute;rieusement ensemble.

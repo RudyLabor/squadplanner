@@ -5,7 +5,7 @@ export type SquadRole = 'leader' | 'co_leader' | 'member'
 export type SessionStatus = 'proposed' | 'confirmed' | 'cancelled' | 'completed'
 export type RsvpResponse = 'present' | 'absent' | 'maybe'
 export type CheckinStatus = 'present' | 'late' | 'noshow'
-export type SubscriptionTier = 'free' | 'premium'
+export type SubscriptionTier = 'free' | 'premium' | 'squad_leader' | 'club'
 export type MessageType = 'text' | 'image' | 'voice' | 'gif' | 'poll' | 'location' | 'file'
 export type ChannelType = 'text' | 'voice' | 'announcements'
 export type StoryContentType = 'text' | 'image' | 'achievement' | 'session_highlight'
@@ -423,7 +423,7 @@ export interface Database {
       subscriptions: {
         Row: {
           id: string
-          squad_id: string
+          squad_id: string | null
           user_id: string
           stripe_subscription_id: string | null
           stripe_price_id: string | null
@@ -436,7 +436,7 @@ export interface Database {
         }
         Insert: {
           id?: string
-          squad_id: string
+          squad_id?: string | null
           user_id: string
           stripe_subscription_id?: string | null
           stripe_price_id?: string | null
@@ -449,7 +449,7 @@ export interface Database {
         }
         Update: {
           id?: string
-          squad_id?: string
+          squad_id?: string | null
           user_id?: string
           stripe_subscription_id?: string | null
           stripe_price_id?: string | null
@@ -497,6 +497,42 @@ export interface Database {
           voice_duration_seconds?: number | null
           message_type?: MessageType
           created_at?: string
+        }
+        Relationships: []
+      }
+      referrals: {
+        Row: {
+          id: string
+          referrer_id: string
+          referred_id: string | null
+          referral_code: string
+          status: 'pending' | 'signed_up' | 'converted'
+          reward_claimed: boolean
+          referrer_reward_type: string | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          referrer_id: string
+          referred_id?: string | null
+          referral_code: string
+          status?: 'pending' | 'signed_up' | 'converted'
+          reward_claimed?: boolean
+          referrer_reward_type?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          referrer_id?: string
+          referred_id?: string | null
+          referral_code?: string
+          status?: 'pending' | 'signed_up' | 'converted'
+          reward_claimed?: boolean
+          referrer_reward_type?: string | null
+          created_at?: string
+          updated_at?: string
         }
         Relationships: []
       }
@@ -637,6 +673,38 @@ export interface Database {
         }
         Returns: DMSearchResult[]
       }
+      // Referral system
+      process_referral_signup: {
+        Args: { p_referral_code: string; p_new_user_id: string }
+        Returns: {
+          success: boolean
+          error?: string
+          referral_id?: string
+          referrer_id?: string
+          referrer_total_referrals?: number
+          rewards?: {
+            referrer_xp: number
+            referrer_premium_days: number
+            referred_premium_days: number
+          }
+        }
+      }
+      get_referral_stats: {
+        Args: { p_user_id: string }
+        Returns: {
+          referral_code: string
+          total_referrals: number
+          signed_up: number
+          converted: number
+          pending: number
+          total_xp_earned: number
+          milestones: {
+            recruiter_3: boolean
+            recruiter_10: boolean
+            recruiter_25: boolean
+          }
+        }
+      }
       // Phase 7: Reactions
       get_message_reactions: {
         Args: { msg_id: string }
@@ -665,6 +733,7 @@ export type AIInsight = Database['public']['Tables']['ai_insights']['Row']
 export type Subscription = Database['public']['Tables']['subscriptions']['Row']
 export type DirectMessage = Database['public']['Tables']['direct_messages']['Row']
 export type MessageReaction = Database['public']['Tables']['message_reactions']['Row']
+export type Referral = Database['public']['Tables']['referrals']['Row']
 
 // Phase 6: RPC result types
 export interface PublicSquadResult {

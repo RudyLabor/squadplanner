@@ -10,15 +10,15 @@ import { PremiumPricing } from './premium/PremiumPricing'
 import { PremiumFeaturesTable } from './premium/PremiumFeaturesTable'
 import { PremiumTestimonials } from './premium/PremiumTestimonials'
 import { PremiumFAQ } from './premium/PremiumFAQ'
+import type { SubscriptionTier } from '../types/database'
 
 export function Premium() {
   const navigate = useNavigate()
   const { user } = useAuthStore()
-  const { hasPremium } = usePremiumStore()
+  const { tier, hasPremium } = usePremiumStore()
   const { createCheckoutSession, createPortalSession, plans } = useSubscriptionStore()
   const analytics = useAnalytics()
 
-  const [selectedPlan, setSelectedPlan] = useState<'monthly' | 'yearly'>('yearly')
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
@@ -26,36 +26,38 @@ export function Premium() {
   useEffect(() => {
     analytics.track('premium_viewed', {
       already_premium: hasPremium,
+      current_tier: tier,
       source: 'direct_navigation',
     })
-  }, [analytics, hasPremium])
+  }, [analytics, hasPremium, tier])
 
-  const handleUpgrade = async () => {
+  const handleUpgrade = async (selectedTier: SubscriptionTier, interval: 'monthly' | 'yearly') => {
     if (!user) {
       navigate('/auth')
       return
     }
 
-    // Track checkout started
+    // Find the matching plan
+    const planId = `${selectedTier}_${interval}`
+    const plan = plans.find((p) => p.id === planId)
+
     analytics.track('premium_checkout_started', {
-      plan: selectedPlan,
-      price: selectedPlan === 'yearly' ? 49.99 : 4.99,
+      tier: selectedTier,
+      interval,
+      price: plan?.price ?? 0,
     })
 
     setIsLoading(true)
     setError(null)
     try {
-      const priceId =
-        selectedPlan === 'monthly'
-          ? plans.find((p) => p.id === 'premium_monthly')?.stripePriceId
-          : plans.find((p) => p.id === 'premium_yearly')?.stripePriceId
+      const priceId = plan?.stripePriceId
       if (!priceId) throw new Error('Plan non trouvé')
-      const { url, error } = await createCheckoutSession(user.id, priceId)
+      const { url, error } = await createCheckoutSession(priceId, selectedTier)
       if (error) throw error
       if (url) window.location.href = url
     } catch (err) {
       const error = err instanceof Error ? err : new Error(String(err))
-      captureException(error, { context: 'stripe_checkout', selectedPlan, userId: user.id })
+      captureException(error, { context: 'stripe_checkout', tier: selectedTier, interval, userId: user.id })
       const errorMessage = error.message
       if (errorMessage.includes('Edge Function') || errorMessage.includes('non-2xx'))
         setError('Une erreur est survenue. Réessaye dans quelques instants.')
@@ -140,11 +142,9 @@ export function Premium() {
         isLoading={isLoading}
         onManageSubscription={handleManageSubscription}
       />
-      <div className="px-4 md:px-6 max-w-4xl mx-auto -mt-8">
+      <div className="px-4 md:px-6 max-w-5xl mx-auto -mt-8">
         {!hasPremium && (
           <PremiumPricing
-            selectedPlan={selectedPlan}
-            setSelectedPlan={setSelectedPlan}
             isLoading={isLoading}
             error={error}
             onUpgrade={handleUpgrade}

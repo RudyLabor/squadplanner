@@ -9,6 +9,7 @@ export default [
   route('premium', './routes/premium.tsx'),
   route('maintenance', './routes/maintenance.tsx'),
   route('join/:code', './routes/join-squad.tsx'),
+  route('s/:id', './routes/session-share.tsx'),
 
   // Protected pages (wrapped in auth-checking layout)
   layout('./routes/_protected.tsx', [
@@ -24,6 +25,7 @@ export default [
     route('u/:username', './routes/public-profile.tsx'),
     route('settings', './routes/settings.tsx'),
     route('call-history', './routes/call-history.tsx'),
+    route('referrals', './routes/referrals.tsx'),
   ]),
 
   // Onboarding (protected but skips onboarding check)

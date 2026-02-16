@@ -87,6 +87,7 @@ serve(async (req) => {
     let validatedData: {
       squad_id?: string
       price_id: string
+      tier?: string
       success_url?: string
       cancel_url?: string
     }
@@ -98,9 +99,13 @@ serve(async (req) => {
           ? validateUUID(rawBody.squad_id, 'squad_id')
           : undefined
 
+      // tier is optional - used to pass subscription tier to webhook metadata
+      const tier = rawBody.tier && typeof rawBody.tier === 'string' ? rawBody.tier : undefined
+
       validatedData = {
         squad_id: squadId,
         price_id: validateString(rawBody.price_id, 'price_id', { minLength: 1, maxLength: 100 }),
+        tier,
         success_url: validateOptional(rawBody.success_url, (v) => validateString(v, 'success_url')),
         cancel_url: validateOptional(rawBody.cancel_url, (v) => validateString(v, 'cancel_url')),
       }
@@ -114,7 +119,7 @@ serve(async (req) => {
       })
     }
 
-    const { squad_id, price_id, success_url, cancel_url } = validatedData
+    const { squad_id, price_id, tier, success_url, cancel_url } = validatedData
 
     // If squad_id provided, verify user is squad owner
     let squad = null
@@ -186,11 +191,13 @@ serve(async (req) => {
       metadata: {
         ...(squad_id && { squad_id }),
         user_id: user.id,
+        ...(tier && { tier }),
       },
       subscription_data: {
         metadata: {
           ...(squad_id && { squad_id }),
           user_id: user.id,
+          ...(tier && { tier }),
         },
       },
       success_url: success_url || defaultSuccessUrl,

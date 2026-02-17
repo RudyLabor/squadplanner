@@ -10,6 +10,7 @@ import { useSessionExpiry } from './hooks/useSessionExpiry'
 import { useRateLimitStore } from './hooks/useRateLimit'
 import { usePWAInstallStore, type BeforeInstallPromptEvent } from './hooks/usePWAInstall'
 import { useNavigationProgress } from './hooks/useNavigationProgress'
+import { useAppResume } from './hooks/useAppResume'
 import { initTrackingListeners } from './utils/trackEvent'
 import { TopLoadingBar } from './components/ui/TopLoadingBar'
 // import { initializeWebVitalsMonitoring } from './lib/webVitalsMonitoring'
@@ -83,6 +84,7 @@ export default function ClientShell() {
   useScrollRestoration()
   useSwipeBack()
   useNavigationProgress()
+  useAppResume()
 
   useEffect(() => {
     initialize()

@@ -118,3 +118,6 @@ export type { ReferralStats, ReferralHistoryItem } from './useReferral'
 
 // Analytics tracking
 export { useAnalytics } from './useAnalytics'
+
+// App resume lifecycle (replaces entry.client.tsx reload mechanisms)
+export { useAppResume } from './useAppResume'

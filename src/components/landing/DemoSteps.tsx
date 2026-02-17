@@ -72,18 +72,18 @@ function DemoNavbar({ active }: { active: string }) {
     { icon: User, label: 'Profil', id: 'profile' },
   ]
   return (
-    <div className="mt-auto px-2 py-1.5 flex items-center justify-around border-t border-border-subtle">
+    <div className="mt-auto px-3 py-2.5 flex items-center justify-around border-t border-border-subtle">
       {items.map((item) => {
         const Icon = item.icon
         const isActive = item.id === active
         return (
           <div key={item.id} className="flex flex-col items-center gap-0.5">
             <Icon
-              className="w-3 h-3"
+              className="w-4 h-4"
               style={{ color: isActive ? 'var(--color-primary)' : 'var(--color-text-tertiary)' }}
             />
             <span
-              className={`text-2xs ${isActive ? 'text-primary font-medium' : 'text-text-tertiary'}`}
+              className={`text-xs ${isActive ? 'text-primary font-medium' : 'text-text-tertiary'}`}
             >
               {item.label}
             </span>
@@ -96,26 +96,42 @@ function DemoNavbar({ active }: { active: string }) {
 
 export function PhoneFrame({ children }: { children: React.ReactNode }) {
   return (
-    <div className="relative mx-auto w-[270px] md:w-[300px]">
+    <div className="relative mx-auto w-[320px]">
       {/* Glow effect behind phone */}
-      <div className="absolute -inset-4 bg-primary/10 rounded-[3rem] blur-2xl" />
-      <div className="relative bg-bg-elevated rounded-[2rem] p-3 border border-border-hover shadow-2xl ring-1 ring-primary/10">
-        {/* Notch */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-24 h-5 bg-bg-elevated rounded-b-xl z-10" />
-        <div className="bg-bg-surface rounded-[1.5rem] overflow-hidden h-[440px] md:h-[460px] relative flex flex-col">
-          {/* Status bar */}
-          <div className="flex items-center justify-between px-6 pt-2 pb-1 text-2xs text-text-tertiary">
-            <span>21:00</span>
-            <div className="flex items-center gap-1">
-              <svg className="w-3 h-3" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3a4.237 4.237 0 00-6 0zm-4-4l2 2a7.074 7.074 0 0110 0l2-2C15.14 9.14 8.87 9.14 5 13z" />
-              </svg>
-              <svg className="w-3 h-3" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z" />
-              </svg>
-            </div>
+      <div
+        className="absolute -inset-8 rounded-[3rem]"
+        style={{
+          background:
+            'radial-gradient(ellipse at center, var(--color-primary-12) 0%, transparent 70%)',
+        }}
+      />
+      <div className="relative bg-gradient-to-b from-overlay-medium to-white/[0.04] rounded-[3rem] p-[1px] shadow-2xl shadow-primary/20">
+        <div className="bg-bg-elevated rounded-[3rem] p-3">
+          {/* Notch */}
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-7 bg-bg-elevated rounded-b-2xl z-20">
+            <div className="absolute top-2.5 left-1/2 -translate-x-1/2 w-14 h-1 rounded-full bg-white/10" />
           </div>
-          {children}
+          <div className="bg-bg-base rounded-[2.5rem] overflow-hidden h-[560px] relative flex flex-col">
+            {/* Status bar */}
+            <div className="absolute top-0 left-0 right-0 z-10 flex items-center justify-between px-6 pt-2 pb-1">
+              <span className="text-xs text-text-secondary font-medium">21:00</span>
+              <div className="flex items-center gap-1">
+                <div className="flex items-end gap-[1px]">
+                  {[1, 2, 3, 4].map((i) => (
+                    <div
+                      key={i}
+                      className={`w-[2px] rounded-sm ${i <= 3 ? 'bg-text-primary' : 'bg-text-tertiary'}`}
+                      style={{ height: 2 + i * 2 }}
+                    />
+                  ))}
+                </div>
+                <div className="w-5 h-2.5 rounded-[2px] border border-text-tertiary ml-1">
+                  <div className="w-3.5 h-1.5 bg-success rounded-[1px] m-[1px]" />
+                </div>
+              </div>
+            </div>
+            {children}
+          </div>
         </div>
       </div>
     </div>
@@ -124,7 +140,7 @@ export function PhoneFrame({ children }: { children: React.ReactNode }) {
 
 function CreateStep() {
   return (
-    <div className="p-5 pt-8 h-full flex flex-col">
+    <div className="p-5 pt-10 pb-6 h-full flex flex-col">
       <m.div
         className="text-xs text-text-tertiary mb-3"
         initial={{ opacity: 0 }}
@@ -190,7 +206,7 @@ function CreateStep() {
 
 function InviteStep() {
   return (
-    <div className="p-5 pt-8 h-full flex flex-col">
+    <div className="p-5 pt-10 pb-6 h-full flex flex-col">
       <m.div
         className="text-xs text-text-tertiary mb-2"
         initial={{ opacity: 0 }}
@@ -250,7 +266,7 @@ function InviteStep() {
 
 function RSVPStep() {
   return (
-    <div className="p-5 pt-8 h-full flex flex-col">
+    <div className="p-5 pt-10 pb-6 h-full flex flex-col">
       <m.div
         className="text-xs text-text-tertiary mb-1"
         initial={{ opacity: 0 }}
@@ -324,7 +340,7 @@ function RSVPStep() {
 
 function PlayStep() {
   return (
-    <div className="p-5 pt-8 h-full flex flex-col">
+    <div className="p-5 pt-10 pb-6 h-full flex flex-col">
       <m.div
         className="text-xs text-success font-medium mb-1"
         initial={{ opacity: 0 }}

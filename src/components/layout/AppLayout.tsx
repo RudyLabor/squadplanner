@@ -110,6 +110,16 @@ export function AppLayout({ children }: AppLayoutProps) {
 
   const isKeyboardVisible = useKeyboardVisible()
 
+  // Force re-render when page is restored from bfcache (mobile back/forward)
+  const [, forceUpdate] = useState(0)
+  useEffect(() => {
+    const handlePageShow = (e: PageTransitionEvent) => {
+      if (e.persisted) forceUpdate((n) => n + 1)
+    }
+    window.addEventListener('pageshow', handlePageShow)
+    return () => window.removeEventListener('pageshow', handlePageShow)
+  }, [])
+
   // PHASE 3.1: Create session modal
   const openCreateSessionModal = useCreateSessionModal((state) => state.open)
 

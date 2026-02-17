@@ -16,20 +16,29 @@ export function useKeyboardVisible(): boolean {
     const viewport = window.visualViewport
     if (!viewport) return
 
-    // Store initial height
-    const initialHeight = viewport.height
+    // Use screen height as stable reference instead of initial viewport height
+    // This avoids stale closures when page is restored from bfcache
+    const getStableHeight = () => window.screen.height
 
     const handleResize = () => {
-      // If viewport height is significantly smaller than initial, keyboard is likely open
-      // Threshold of 150px accounts for small UI changes
-      const heightDiff = initialHeight - viewport.height
-      setIsKeyboardVisible(heightDiff > 150)
+      const heightDiff = getStableHeight() - viewport.height
+      // Keyboard typically takes 30%+ of screen height
+      setIsKeyboardVisible(heightDiff > getStableHeight() * 0.3)
     }
 
     viewport.addEventListener('resize', handleResize)
 
+    // Reset keyboard state when page becomes visible again (bfcache / tab switch)
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'visible') {
+        setIsKeyboardVisible(false)
+      }
+    }
+    document.addEventListener('visibilitychange', handleVisibilityChange)
+
     return () => {
       viewport.removeEventListener('resize', handleResize)
+      document.removeEventListener('visibilitychange', handleVisibilityChange)
     }
   }, [])
 

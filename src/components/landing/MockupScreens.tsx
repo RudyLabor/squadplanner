@@ -13,25 +13,28 @@ export function HomeScreen() {
     <div className="h-full flex flex-col bg-bg-base">
       <div className="px-4 pt-10 pb-4">
         <m.div
+          className="flex items-start justify-between gap-2"
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
         >
-          <div className="text-base font-bold text-text-primary leading-tight">
-            Salut MaxGamer_94 !
+          <div>
+            <div className="text-base font-bold text-text-primary leading-tight">
+              Salut MaxGamer_94 !
+            </div>
+            <div className="text-xs text-text-tertiary mt-1">
+              T'es carré, toutes tes sessions sont confirmées
+            </div>
           </div>
-          <div className="text-xs text-text-tertiary mt-1">
-            T'es carré, toutes tes sessions sont confirmées
-          </div>
-        </m.div>
-        <m.div
-          className="absolute top-10 right-4 flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-success/15 border border-success/20"
-          initial={{ scale: 0 }}
-          animate={{ scale: 1 }}
-          transition={{ delay: 0.3, type: 'spring', stiffness: 400 }}
-        >
-          <span className="text-xs font-bold text-success">100%</span>
-          <span className="text-xs text-success/70">fiable</span>
+          <m.div
+            className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-success/15 border border-success/20 shrink-0"
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            transition={{ delay: 0.3, type: 'spring', stiffness: 400 }}
+          >
+            <span className="text-xs font-bold text-success">100%</span>
+            <span className="text-xs text-success/70">fiable</span>
+          </m.div>
         </m.div>
       </div>
 

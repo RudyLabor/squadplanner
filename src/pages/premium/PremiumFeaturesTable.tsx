@@ -14,23 +14,16 @@ function CellValue({ value }: { value: boolean | string }) {
 
 export function PremiumFeaturesTable() {
   return (
-    <div className="animate-fade-in-up mb-16" style={{ animationDelay: '0.3s' }}>
+    <div className="animate-fade-in-up mb-16 max-w-3xl mx-auto" style={{ animationDelay: '0.3s' }}>
       <h2 className="text-xl font-semibold text-text-primary text-center mb-8">
         Comparatif des fonctionnalit&eacute;s
       </h2>
       <div className="rounded-2xl border border-border-subtle overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="border-collapse" style={{ minWidth: 560, tableLayout: 'fixed', width: '100%' }}>
-            <colgroup>
-              <col style={{ width: 140 }} />
-              <col style={{ width: 105 }} />
-              <col style={{ width: 105 }} />
-              <col style={{ width: 105 }} />
-              <col style={{ width: 105 }} />
-            </colgroup>
+          <table className="w-full border-collapse" style={{ minWidth: 560 }}>
             <thead>
               <tr className="border-b border-border-default">
-                <th className="sticky left-0 z-20 bg-bg-elevated text-left text-xs font-semibold text-text-secondary p-3 shadow-[2px_0_8px_-2px_rgba(0,0,0,0.4)]">
+                <th className="sticky left-0 z-20 bg-bg-elevated text-left text-xs font-semibold text-text-secondary p-3 w-[35%] min-w-[140px] shadow-[2px_0_8px_-2px_rgba(0,0,0,0.4)]">
                   Feature
                 </th>
                 <th className="bg-bg-elevated text-center text-xs font-semibold text-text-secondary p-3">

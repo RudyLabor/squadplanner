@@ -55,19 +55,21 @@ export function PlanBadge({ tier, size = 'sm', className = '' }: PlanBadgeProps)
   // Paid tiers
   if (size === 'sm') {
     return (
-      <div
-        className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full ${config.bg} border ${config.border} ${className}`}
+      <Link
+        to="/premium"
+        className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full ${config.bg} border ${config.border} hover:opacity-80 transition-opacity ${className}`}
       >
         {Icon && <Icon className={`w-3 h-3 ${config.text}`} />}
         <span className={`text-xs font-medium ${config.text}`}>{config.label}</span>
-      </div>
+      </Link>
     )
   }
 
-  // md — card style with manage link
+  // md — card style linking to premium page
   return (
-    <div
-      className={`flex items-center gap-2 p-3 rounded-xl ${config.bg} border ${config.border} ${className}`}
+    <Link
+      to="/premium"
+      className={`flex items-center gap-2 p-3 rounded-xl ${config.bg} border ${config.border} hover:opacity-90 transition-opacity ${className}`}
     >
       <div className={`w-8 h-8 rounded-lg ${config.bg} flex items-center justify-center`}>
         {Icon && <Icon className={`w-4 h-4 ${config.text}`} />}
@@ -76,6 +78,6 @@ export function PlanBadge({ tier, size = 'sm', className = '' }: PlanBadgeProps)
         <div className="text-sm font-medium text-text-primary">Plan {config.label}</div>
       </div>
       <span className={`text-xs font-medium ${config.text} shrink-0`}>Abonnement actif</span>
-    </div>
+    </Link>
   )
 }

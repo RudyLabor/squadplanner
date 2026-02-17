@@ -29,6 +29,26 @@ window.addEventListener('pageshow', (e) => {
   if (e.persisted) window.location.reload()
 })
 
+// Freeze/thaw recovery for mobile browsers.
+// On Android/iOS, switching apps often "freezes" the page without using bfcache,
+// so `pageshow` with `persisted=true` never fires. But React Router's internal
+// listeners become stale after being frozen for a while. We track how long the
+// page was hidden and force a reload if it exceeds a threshold.
+{
+  let hiddenAt = 0
+  const STALE_THRESHOLD_MS = 30_000 // 30 seconds
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'hidden') {
+      hiddenAt = Date.now()
+    } else if (hiddenAt > 0 && Date.now() - hiddenAt > STALE_THRESHOLD_MS) {
+      hiddenAt = 0
+      window.location.reload()
+    } else {
+      hiddenAt = 0
+    }
+  })
+}
+
 // Auto-update: reload when a NEW service worker replaces an existing one.
 if ('serviceWorker' in navigator) {
   const hadController = !!navigator.serviceWorker.controller

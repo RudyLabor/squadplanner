@@ -15,7 +15,10 @@ interface SessionPreview {
   rsvp_count: number
 }
 
-export function meta(_args: MetaArgs) {
+export function meta({ params }: MetaArgs) {
+  const sessionId = params.id || ''
+  const ogImageUrl = `https://nxbqiwmfyafgshxzczxo.supabase.co/functions/v1/og-image?sessionId=${sessionId}`
+
   return [
     { title: 'Session Gaming - Squad Planner' },
     {
@@ -24,6 +27,11 @@ export function meta(_args: MetaArgs) {
     },
     { property: 'og:type', content: 'website' },
     { property: 'og:site_name', content: 'Squad Planner' },
+    { property: 'og:image', content: ogImageUrl },
+    { property: 'og:image:width', content: '1200' },
+    { property: 'og:image:height', content: '630' },
+    { name: 'twitter:card', content: 'summary_large_image' },
+    { name: 'twitter:image', content: ogImageUrl },
   ]
 }
 

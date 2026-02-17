@@ -11,7 +11,7 @@ export { PartyScreen, ProfileScreen }
 export function HomeScreen() {
   return (
     <div className="h-full flex flex-col bg-bg-base">
-      <div className="px-4 pt-7 pb-4">
+      <div className="px-4 pt-10 pb-4">
         <m.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -25,7 +25,7 @@ export function HomeScreen() {
           </div>
         </m.div>
         <m.div
-          className="absolute top-6 right-4 flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-success/15 border border-success/20"
+          className="absolute top-10 right-4 flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-success/15 border border-success/20"
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
           transition={{ delay: 0.3, type: 'spring', stiffness: 400 }}
@@ -153,7 +153,7 @@ export function HomeScreen() {
 export function SquadScreen() {
   return (
     <div className="h-full flex flex-col bg-bg-base">
-      <div className="px-4 pt-5 pb-2">
+      <div className="px-4 pt-10 pb-2">
         <m.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}

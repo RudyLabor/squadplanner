@@ -8,7 +8,7 @@ export function PartyScreen() {
     <div className="h-full flex flex-col bg-bg-base relative">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_40%,var(--color-success-8),transparent_70%)]" />
 
-      <div className="relative z-10 px-4 pt-5 pb-2">
+      <div className="relative z-10 px-4 pt-10 pb-2">
         <m.div
           className="text-xs text-success font-medium"
           initial={{ opacity: 0 }}
@@ -144,7 +144,7 @@ export function PartyScreen() {
 export function ProfileScreen() {
   return (
     <div className="h-full flex flex-col bg-bg-base">
-      <div className="flex flex-col items-center pt-5 pb-3">
+      <div className="flex flex-col items-center pt-10 pb-3">
         <m.div
           className="w-14 h-14 rounded-2xl bg-primary flex items-center justify-center text-xl font-bold text-text-primary mb-2"
           initial={{ scale: 0 }}

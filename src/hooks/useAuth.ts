@@ -4,6 +4,7 @@ import { queryClient } from '../lib/queryClient'
 import type { User, Session } from '@supabase/supabase-js'
 import type { Profile } from '../types/database'
 import { updateDailyStreak } from './useAuthStreak'
+import { usePremiumStore } from './usePremium'
 
 interface AuthState {
   user: User | null
@@ -56,6 +57,8 @@ export const useAuthStore = create<AuthState>((set, get) => ({
           isLoading: false,
           isInitialized: true,
         })
+        // Load premium status immediately so all pages have it
+        usePremiumStore.getState().fetchPremiumStatus()
       } else {
         set({ isLoading: false, isInitialized: true })
       }
@@ -74,8 +77,11 @@ export const useAuthStore = create<AuthState>((set, get) => ({
             .single()
           const updatedProfile = await updateDailyStreak(session.user.id, profile)
           set({ user: session.user, session, profile: updatedProfile })
+          // Refresh premium status on every sign-in
+          usePremiumStore.getState().fetchPremiumStatus()
         } else if (event === 'SIGNED_OUT') {
           set({ user: null, session: null, profile: null })
+          usePremiumStore.getState().reset()
         }
       })
       _authSubscription = subscription

@@ -5,6 +5,8 @@ import { User, Zap } from '../icons'
 import { getOptimizedAvatarUrl } from '../../utils/avatarUrl'
 import { Tooltip } from '../ui/Tooltip'
 import { StatusSelector } from '../StatusSelector'
+import { PlanBadge } from '../PlanBadge'
+import { usePremiumStore } from '../../hooks/usePremium'
 
 interface SidebarFooterProps {
   isExpanded: boolean
@@ -21,6 +23,9 @@ export const SidebarFooter = memo(function SidebarFooter({
   profile,
   onOpenCustomStatus,
 }: SidebarFooterProps) {
+  const { tier } = usePremiumStore()
+  const isPaid = tier !== 'free'
+
   return (
     <footer className="mt-auto">
       <div className={`${isExpanded ? 'p-4' : 'p-2'} border-t border-surface-card`}>
@@ -79,8 +84,11 @@ export const SidebarFooter = memo(function SidebarFooter({
                   <div className="text-md font-medium text-text-primary truncate">
                     {profile?.username || 'Mon profil'}
                   </div>
-                  <div className="text-sm text-text-tertiary">
-                    {profile?.reliability_score || 100}% fiable
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm text-text-tertiary">
+                      {profile?.reliability_score || 100}% fiable
+                    </span>
+                    <PlanBadge tier={tier} size="sm" />
                   </div>
                 </m.div>
               </m.div>
@@ -90,9 +98,9 @@ export const SidebarFooter = memo(function SidebarFooter({
         )}
       </div>
 
-      {/* Premium upsell */}
+      {/* Premium upsell — only for free users */}
       <AnimatePresence>
-        {isExpanded && (
+        {isExpanded && !isPaid && (
           <m.div
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
@@ -126,17 +134,17 @@ export const SidebarFooter = memo(function SidebarFooter({
         )}
       </AnimatePresence>
 
-      {/* Collapsed Premium icon */}
+      {/* Collapsed icon — upsell for free, plan badge for paid */}
       {!isExpanded && (
         <div className="p-2 pb-4">
-          <Tooltip content="Passer Premium" position="right" delay={300}>
-            <Link to="/premium" viewTransition aria-label="Passer Premium">
+          <Tooltip content={isPaid ? `Plan ${tier === 'squad_leader' ? 'Squad Leader' : tier.charAt(0).toUpperCase() + tier.slice(1)}` : 'Passer Premium'} position="right" delay={300}>
+            <Link to="/premium" viewTransition aria-label={isPaid ? 'Mon abonnement' : 'Passer Premium'}>
               <m.div
                 className="flex items-center justify-center min-w-[44px] min-h-[44px] p-2 rounded-xl hover:bg-surface-card transition-colors"
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
               >
-                <Zap className="w-5 h-5 text-warning" />
+                <Zap className={`w-5 h-5 ${isPaid ? 'text-warning' : 'text-text-tertiary'}`} />
               </m.div>
             </Link>
           </Tooltip>

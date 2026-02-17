@@ -52,6 +52,8 @@ import {
   HomePartySection,
   HomeActivityFeed,
 } from '../components/home'
+import { PlanBadge } from '../components/PlanBadge'
+import { usePremium } from '../hooks/usePremium'
 import type { Profile } from '../types/database'
 import type { SquadWithMembers } from '../hooks/queries/useSquadsQuery'
 import type { SessionWithDetails } from '../hooks/queries/useSessionFetchers'
@@ -138,6 +140,7 @@ function ReliabilityBadge({ score }: { score: number }) {
 export default function Home({ loaderData }: HomeProps) {
   const { user, profile: authProfile, isInitialized } = useAuthStore()
   const profile = loaderData?.profile || authProfile
+  const { tier } = usePremium()
   const { isConnected: isInVoiceChat, currentChannel, remoteUsers } = useVoiceChatStoreLazy()
   const navigate = useNavigate()
   const queryClient = useQueryClient()
@@ -342,7 +345,10 @@ export default function Home({ loaderData }: HomeProps) {
                       : "T'es carré, toutes tes sessions sont confirmées"
                     : "Ta squad t'attend, lance une session !"}
                 </p>
-                <ReliabilityBadge score={reliabilityScore} />
+                <div className="flex items-center gap-2 shrink-0">
+                  <PlanBadge tier={tier} size="sm" />
+                  <ReliabilityBadge score={reliabilityScore} />
+                </div>
               </div>
             </m.header>
 

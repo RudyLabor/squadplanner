@@ -342,18 +342,16 @@ export default function Home({ loaderData }: HomeProps) {
                   : ''}{' '}
                 !
               </h1>
-              <div className="flex items-center justify-between gap-3">
-                <p className="text-sm text-text-tertiary line-clamp-1 min-w-0">
-                  {upcomingSessions.length > 0
-                    ? pendingRsvps > 0
-                      ? `${pendingRsvps} session${pendingRsvps > 1 ? 's' : ''} ${pendingRsvps > 1 ? 'attendent' : 'attend'} ta réponse`
-                      : "T'es carré, toutes tes sessions sont confirmées"
-                    : "Ta squad t'attend, lance une session !"}
-                </p>
-                <div className="flex items-center gap-2 shrink-0">
-                  <PlanBadge tier={tier} size="sm" />
-                  <ReliabilityBadge score={reliabilityScore} />
-                </div>
+              <p className="text-sm text-text-tertiary">
+                {upcomingSessions.length > 0
+                  ? pendingRsvps > 0
+                    ? `${pendingRsvps} session${pendingRsvps > 1 ? 's' : ''} ${pendingRsvps > 1 ? 'attendent' : 'attend'} ta réponse`
+                    : "T'es carré, toutes tes sessions sont confirmées"
+                  : "Ta squad t'attend, lance une session !"}
+              </p>
+              <div className="flex items-center gap-2 mt-2">
+                <PlanBadge tier={tier} size="sm" />
+                <ReliabilityBadge score={reliabilityScore} />
               </div>
             </m.header>
 

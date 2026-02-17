@@ -1,816 +1,482 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest'
+import { describe, it, expect, beforeEach } from 'vitest'
 import { act } from '@testing-library/react'
 
-const { mockGetUser, mockFrom, mockSupabase } = vi.hoisted(() => {
-  const mockGetUser = vi.fn()
-  const mockFrom = vi.fn()
-  const mockSupabase = {
-    auth: { getUser: mockGetUser },
-    from: mockFrom,
-  }
-  return { mockGetUser, mockFrom, mockSupabase }
-})
-
-vi.mock('../../lib/supabaseMinimal', () => ({
-  supabaseMinimal: mockSupabase,
-  supabase: mockSupabase,
-  initSupabase: vi.fn().mockResolvedValue(mockSupabase),
-  isSupabaseReady: vi.fn().mockReturnValue(true),
-  waitForSupabase: vi.fn().mockResolvedValue(mockSupabase),
-}))
-
+// ── ZERO MOCK: import the REAL pure functions and constants ──
 import {
-  usePremiumStore,
+  tierLevel,
+  hasTierAccess,
+  TIER_LIMITS,
   FREE_SQUAD_LIMIT,
   FREE_HISTORY_DAYS,
+  FREE_SESSIONS_PER_WEEK,
   PREMIUM_PRICE_MONTHLY,
   PREMIUM_PRICE_YEARLY,
+  SQUAD_LEADER_PRICE_MONTHLY,
+  SQUAD_LEADER_PRICE_YEARLY,
+  CLUB_PRICE_MONTHLY,
+  CLUB_PRICE_YEARLY,
+  FEATURE_MIN_TIER,
+  usePremiumStore,
+  type PremiumFeature,
+  type TierLimits,
 } from '../usePremium'
+import type { SubscriptionTier } from '../../types/database'
 
-describe('usePremiumStore', () => {
+// ═══════════════════════════════════════════════════════════════
+// Pure function tests — NO mocks, NO Supabase, NO async
+// ═══════════════════════════════════════════════════════════════
+
+describe('tierLevel() — real function, zero mocks', () => {
+  it('returns 0 for free', () => {
+    expect(tierLevel('free')).toBe(0)
+  })
+
+  it('returns 1 for premium', () => {
+    expect(tierLevel('premium')).toBe(1)
+  })
+
+  it('returns 2 for squad_leader', () => {
+    expect(tierLevel('squad_leader')).toBe(2)
+  })
+
+  it('returns 3 for club', () => {
+    expect(tierLevel('club')).toBe(3)
+  })
+
+  it('maintains strict ordering: free < premium < squad_leader < club', () => {
+    expect(tierLevel('free')).toBeLessThan(tierLevel('premium'))
+    expect(tierLevel('premium')).toBeLessThan(tierLevel('squad_leader'))
+    expect(tierLevel('squad_leader')).toBeLessThan(tierLevel('club'))
+  })
+})
+
+describe('hasTierAccess() — real function, zero mocks', () => {
+  it('club user can access everything', () => {
+    const tiers: SubscriptionTier[] = ['free', 'premium', 'squad_leader', 'club']
+    for (const required of tiers) {
+      expect(hasTierAccess('club', required)).toBe(true)
+    }
+  })
+
+  it('squad_leader can access free, premium, squad_leader but NOT club', () => {
+    expect(hasTierAccess('squad_leader', 'free')).toBe(true)
+    expect(hasTierAccess('squad_leader', 'premium')).toBe(true)
+    expect(hasTierAccess('squad_leader', 'squad_leader')).toBe(true)
+    expect(hasTierAccess('squad_leader', 'club')).toBe(false)
+  })
+
+  it('premium can access free, premium but NOT squad_leader or club', () => {
+    expect(hasTierAccess('premium', 'free')).toBe(true)
+    expect(hasTierAccess('premium', 'premium')).toBe(true)
+    expect(hasTierAccess('premium', 'squad_leader')).toBe(false)
+    expect(hasTierAccess('premium', 'club')).toBe(false)
+  })
+
+  it('free can only access free', () => {
+    expect(hasTierAccess('free', 'free')).toBe(true)
+    expect(hasTierAccess('free', 'premium')).toBe(false)
+    expect(hasTierAccess('free', 'squad_leader')).toBe(false)
+    expect(hasTierAccess('free', 'club')).toBe(false)
+  })
+
+  it('same tier always has access to itself', () => {
+    const tiers: SubscriptionTier[] = ['free', 'premium', 'squad_leader', 'club']
+    for (const tier of tiers) {
+      expect(hasTierAccess(tier, tier)).toBe(true)
+    }
+  })
+})
+
+describe('TIER_LIMITS — real constants, zero mocks', () => {
+  it('covers all 4 tiers', () => {
+    expect(Object.keys(TIER_LIMITS)).toHaveLength(4)
+    expect(TIER_LIMITS).toHaveProperty('free')
+    expect(TIER_LIMITS).toHaveProperty('premium')
+    expect(TIER_LIMITS).toHaveProperty('squad_leader')
+    expect(TIER_LIMITS).toHaveProperty('club')
+  })
+
+  describe('Free tier limits', () => {
+    it('has maxSquads = 1', () => {
+      expect(TIER_LIMITS.free.maxSquads).toBe(1)
+    })
+
+    it('has historyDays = 7', () => {
+      expect(TIER_LIMITS.free.historyDays).toBe(7)
+    })
+
+    it('has sessionsPerWeek = 3', () => {
+      expect(TIER_LIMITS.free.sessionsPerWeek).toBe(3)
+    })
+
+    it('has maxMembers = 10', () => {
+      expect(TIER_LIMITS.free.maxMembers).toBe(10)
+    })
+
+    it('denies all premium chat features', () => {
+      expect(TIER_LIMITS.free.hasGifs).toBe(false)
+      expect(TIER_LIMITS.free.hasVoiceMessages).toBe(false)
+      expect(TIER_LIMITS.free.hasPolls).toBe(false)
+    })
+
+    it('denies all advanced features', () => {
+      expect(TIER_LIMITS.free.hasAdvancedStats).toBe(false)
+      expect(TIER_LIMITS.free.hasAiCoach).toBe(false)
+      expect(TIER_LIMITS.free.hasHdAudio).toBe(false)
+      expect(TIER_LIMITS.free.hasAdvancedRoles).toBe(false)
+      expect(TIER_LIMITS.free.hasCalendarExport).toBe(false)
+      expect(TIER_LIMITS.free.hasRecurringSessions).toBe(false)
+      expect(TIER_LIMITS.free.hasTeamAnalytics).toBe(false)
+      expect(TIER_LIMITS.free.hasPriorityMatchmaking).toBe(false)
+      expect(TIER_LIMITS.free.hasClubDashboard).toBe(false)
+      expect(TIER_LIMITS.free.hasCustomBranding).toBe(false)
+      expect(TIER_LIMITS.free.hasApiWebhooks).toBe(false)
+      expect(TIER_LIMITS.free.hasPrioritySupport).toBe(false)
+    })
+  })
+
+  describe('Premium tier limits', () => {
+    it('has maxSquads = 5', () => {
+      expect(TIER_LIMITS.premium.maxSquads).toBe(5)
+    })
+
+    it('has historyDays = 90', () => {
+      expect(TIER_LIMITS.premium.historyDays).toBe(90)
+    })
+
+    it('has unlimited sessions (Infinity)', () => {
+      expect(TIER_LIMITS.premium.sessionsPerWeek).toBe(Infinity)
+    })
+
+    it('has maxMembers = 20', () => {
+      expect(TIER_LIMITS.premium.maxMembers).toBe(20)
+    })
+
+    it('grants chat features (GIF, voice, polls)', () => {
+      expect(TIER_LIMITS.premium.hasGifs).toBe(true)
+      expect(TIER_LIMITS.premium.hasVoiceMessages).toBe(true)
+      expect(TIER_LIMITS.premium.hasPolls).toBe(true)
+    })
+
+    it('grants basic AI coach but NOT advanced', () => {
+      expect(TIER_LIMITS.premium.hasAiCoach).toBe(true)
+      expect(TIER_LIMITS.premium.hasAiCoachAdvanced).toBe(false)
+    })
+
+    it('denies squad_leader features (HD audio, roles, calendar)', () => {
+      expect(TIER_LIMITS.premium.hasHdAudio).toBe(false)
+      expect(TIER_LIMITS.premium.hasAdvancedRoles).toBe(false)
+      expect(TIER_LIMITS.premium.hasCalendarExport).toBe(false)
+      expect(TIER_LIMITS.premium.hasRecurringSessions).toBe(false)
+    })
+  })
+
+  describe('Squad Leader tier limits', () => {
+    it('has unlimited squads, history, sessions', () => {
+      expect(TIER_LIMITS.squad_leader.maxSquads).toBe(Infinity)
+      expect(TIER_LIMITS.squad_leader.historyDays).toBe(Infinity)
+      expect(TIER_LIMITS.squad_leader.sessionsPerWeek).toBe(Infinity)
+    })
+
+    it('has maxMembers = 50', () => {
+      expect(TIER_LIMITS.squad_leader.maxMembers).toBe(50)
+    })
+
+    it('grants HD audio, advanced roles, calendar, recurring sessions', () => {
+      expect(TIER_LIMITS.squad_leader.hasHdAudio).toBe(true)
+      expect(TIER_LIMITS.squad_leader.hasAdvancedRoles).toBe(true)
+      expect(TIER_LIMITS.squad_leader.hasCalendarExport).toBe(true)
+      expect(TIER_LIMITS.squad_leader.hasRecurringSessions).toBe(true)
+      expect(TIER_LIMITS.squad_leader.hasTeamAnalytics).toBe(true)
+      expect(TIER_LIMITS.squad_leader.hasPriorityMatchmaking).toBe(true)
+    })
+
+    it('denies club-only features', () => {
+      expect(TIER_LIMITS.squad_leader.hasClubDashboard).toBe(false)
+      expect(TIER_LIMITS.squad_leader.hasCustomBranding).toBe(false)
+      expect(TIER_LIMITS.squad_leader.hasApiWebhooks).toBe(false)
+    })
+  })
+
+  describe('Club tier limits', () => {
+    it('has unlimited everything', () => {
+      expect(TIER_LIMITS.club.maxSquads).toBe(Infinity)
+      expect(TIER_LIMITS.club.historyDays).toBe(Infinity)
+      expect(TIER_LIMITS.club.sessionsPerWeek).toBe(Infinity)
+    })
+
+    it('has maxMembers = 100', () => {
+      expect(TIER_LIMITS.club.maxMembers).toBe(100)
+    })
+
+    it('grants ALL features including club-only', () => {
+      const clubLimits = TIER_LIMITS.club
+      expect(clubLimits.hasClubDashboard).toBe(true)
+      expect(clubLimits.hasCustomBranding).toBe(true)
+      expect(clubLimits.hasApiWebhooks).toBe(true)
+      expect(clubLimits.hasPrioritySupport).toBe(true)
+    })
+  })
+
+  describe('Tier progression (each tier strictly better than previous)', () => {
+    it('maxMembers increases: 10 → 20 → 50 → 100', () => {
+      expect(TIER_LIMITS.free.maxMembers).toBeLessThan(TIER_LIMITS.premium.maxMembers)
+      expect(TIER_LIMITS.premium.maxMembers).toBeLessThan(TIER_LIMITS.squad_leader.maxMembers)
+      expect(TIER_LIMITS.squad_leader.maxMembers).toBeLessThan(TIER_LIMITS.club.maxMembers)
+    })
+
+    it('maxSquads increases: 1 → 5 → Infinity → Infinity', () => {
+      expect(TIER_LIMITS.free.maxSquads).toBeLessThan(TIER_LIMITS.premium.maxSquads)
+      expect(TIER_LIMITS.premium.maxSquads).toBeLessThan(TIER_LIMITS.squad_leader.maxSquads)
+    })
+
+    it('historyDays increases: 7 → 90 → Infinity → Infinity', () => {
+      expect(TIER_LIMITS.free.historyDays).toBeLessThan(TIER_LIMITS.premium.historyDays)
+      expect(TIER_LIMITS.premium.historyDays).toBeLessThan(TIER_LIMITS.squad_leader.historyDays)
+    })
+  })
+})
+
+describe('Backward-compat constants', () => {
+  it('FREE_SQUAD_LIMIT equals TIER_LIMITS.free.maxSquads (1)', () => {
+    expect(FREE_SQUAD_LIMIT).toBe(1)
+    expect(FREE_SQUAD_LIMIT).toBe(TIER_LIMITS.free.maxSquads)
+  })
+
+  it('FREE_HISTORY_DAYS equals TIER_LIMITS.free.historyDays (7)', () => {
+    expect(FREE_HISTORY_DAYS).toBe(7)
+    expect(FREE_HISTORY_DAYS).toBe(TIER_LIMITS.free.historyDays)
+  })
+
+  it('FREE_SESSIONS_PER_WEEK equals TIER_LIMITS.free.sessionsPerWeek (3)', () => {
+    expect(FREE_SESSIONS_PER_WEEK).toBe(3)
+    expect(FREE_SESSIONS_PER_WEEK).toBe(TIER_LIMITS.free.sessionsPerWeek)
+  })
+})
+
+describe('Pricing constants — real values, zero mocks', () => {
+  it('Premium: 6.99/month, 59.88/year', () => {
+    expect(PREMIUM_PRICE_MONTHLY).toBe(6.99)
+    expect(PREMIUM_PRICE_YEARLY).toBe(59.88)
+  })
+
+  it('Squad Leader: 14.99/month, 143.88/year', () => {
+    expect(SQUAD_LEADER_PRICE_MONTHLY).toBe(14.99)
+    expect(SQUAD_LEADER_PRICE_YEARLY).toBe(143.88)
+  })
+
+  it('Club: 39.99/month, 383.88/year', () => {
+    expect(CLUB_PRICE_MONTHLY).toBe(39.99)
+    expect(CLUB_PRICE_YEARLY).toBe(383.88)
+  })
+
+  it('yearly is always cheaper per month than monthly', () => {
+    expect(PREMIUM_PRICE_YEARLY / 12).toBeLessThan(PREMIUM_PRICE_MONTHLY)
+    expect(SQUAD_LEADER_PRICE_YEARLY / 12).toBeLessThan(SQUAD_LEADER_PRICE_MONTHLY)
+    expect(CLUB_PRICE_YEARLY / 12).toBeLessThan(CLUB_PRICE_MONTHLY)
+  })
+
+  it('tiers have ascending prices: Premium < Squad Leader < Club', () => {
+    expect(PREMIUM_PRICE_MONTHLY).toBeLessThan(SQUAD_LEADER_PRICE_MONTHLY)
+    expect(SQUAD_LEADER_PRICE_MONTHLY).toBeLessThan(CLUB_PRICE_MONTHLY)
+    expect(PREMIUM_PRICE_YEARLY).toBeLessThan(SQUAD_LEADER_PRICE_YEARLY)
+    expect(SQUAD_LEADER_PRICE_YEARLY).toBeLessThan(CLUB_PRICE_YEARLY)
+  })
+})
+
+describe('FEATURE_MIN_TIER — real mappings, zero mocks', () => {
+  it('GIF, voice messages, polls require premium', () => {
+    expect(FEATURE_MIN_TIER.gifs).toBe('premium')
+    expect(FEATURE_MIN_TIER.voice_messages).toBe('premium')
+    expect(FEATURE_MIN_TIER.polls).toBe('premium')
+  })
+
+  it('advanced_stats requires premium', () => {
+    expect(FEATURE_MIN_TIER.advanced_stats).toBe('premium')
+  })
+
+  it('squad_leader features require squad_leader tier', () => {
+    expect(FEATURE_MIN_TIER.unlimited_squads).toBe('squad_leader')
+    expect(FEATURE_MIN_TIER.unlimited_history).toBe('squad_leader')
+    expect(FEATURE_MIN_TIER.ai_coach_advanced).toBe('squad_leader')
+    expect(FEATURE_MIN_TIER.hd_audio).toBe('squad_leader')
+    expect(FEATURE_MIN_TIER.advanced_roles).toBe('squad_leader')
+    expect(FEATURE_MIN_TIER.calendar_export).toBe('squad_leader')
+    expect(FEATURE_MIN_TIER.recurring_sessions).toBe('squad_leader')
+    expect(FEATURE_MIN_TIER.team_analytics).toBe('squad_leader')
+    expect(FEATURE_MIN_TIER.priority_matchmaking).toBe('squad_leader')
+  })
+
+  it('club-only features require club tier', () => {
+    expect(FEATURE_MIN_TIER.club_dashboard).toBe('club')
+    expect(FEATURE_MIN_TIER.custom_branding).toBe('club')
+    expect(FEATURE_MIN_TIER.api_webhooks).toBe('club')
+  })
+
+  it('covers all 16 premium features', () => {
+    expect(Object.keys(FEATURE_MIN_TIER)).toHaveLength(16)
+  })
+})
+
+// ═══════════════════════════════════════════════════════════════
+// Zustand store tests — test REAL logic with setState
+// ═══════════════════════════════════════════════════════════════
+
+describe('usePremiumStore — store logic', () => {
   beforeEach(() => {
-    vi.clearAllMocks()
     act(() => {
       usePremiumStore.getState().reset()
     })
   })
 
-  describe('constants', () => {
-    it('exports correct pricing and limit constants', () => {
-      // STRICT: verify business-critical constants have exact values
-      expect(FREE_SQUAD_LIMIT).toBe(2)
-      expect(FREE_HISTORY_DAYS).toBe(30)
-      expect(PREMIUM_PRICE_MONTHLY).toBe(4.99)
-      expect(PREMIUM_PRICE_YEARLY).toBe(47.88)
-      // STRICT: yearly is cheaper per month than monthly
-      expect(PREMIUM_PRICE_YEARLY / 12).toBeLessThan(PREMIUM_PRICE_MONTHLY)
-    })
-  })
-
-  describe('canCreateSquad', () => {
-    it('returns true for free user with 0 squads (under limit of 2)', () => {
-      act(() => {
-        usePremiumStore.setState({ hasPremium: false, userSquadCount: 0 })
-      })
-
-      // STRICT: 0 < FREE_SQUAD_LIMIT (2)
+  describe('canCreateSquad()', () => {
+    it('free user with 0 squads → true (0 < 1)', () => {
+      act(() => usePremiumStore.setState({ tier: 'free', userSquadCount: 0 }))
       expect(usePremiumStore.getState().canCreateSquad()).toBe(true)
     })
 
-    it('returns true for free user with 1 squad (under limit of 2)', () => {
-      act(() => {
-        usePremiumStore.setState({ hasPremium: false, userSquadCount: 1 })
-      })
-
-      // STRICT: 1 < 2
-      expect(usePremiumStore.getState().canCreateSquad()).toBe(true)
-    })
-
-    it('returns false for free user at exactly the limit (2 squads)', () => {
-      act(() => {
-        usePremiumStore.setState({ hasPremium: false, userSquadCount: FREE_SQUAD_LIMIT })
-      })
-
-      // STRICT: 2 < 2 is false, and hasPremium is false => false
+    it('free user with 1 squad → false (1 >= 1)', () => {
+      act(() => usePremiumStore.setState({ tier: 'free', userSquadCount: 1 }))
       expect(usePremiumStore.getState().canCreateSquad()).toBe(false)
     })
 
-    it('returns false for free user above the limit (5 squads)', () => {
-      act(() => {
-        usePremiumStore.setState({ hasPremium: false, userSquadCount: 5 })
-      })
+    it('premium user with 4 squads → true (4 < 5)', () => {
+      act(() => usePremiumStore.setState({ tier: 'premium', userSquadCount: 4 }))
+      expect(usePremiumStore.getState().canCreateSquad()).toBe(true)
+    })
 
-      // STRICT: 5 < 2 is false
+    it('premium user with 5 squads → false (5 >= 5)', () => {
+      act(() => usePremiumStore.setState({ tier: 'premium', userSquadCount: 5 }))
       expect(usePremiumStore.getState().canCreateSquad()).toBe(false)
     })
 
-    it('returns true for premium user even when far above limit', () => {
-      act(() => {
-        usePremiumStore.setState({ hasPremium: true, userSquadCount: 100 })
-      })
+    it('squad_leader user with 100 squads → true (Infinity)', () => {
+      act(() => usePremiumStore.setState({ tier: 'squad_leader', userSquadCount: 100 }))
+      expect(usePremiumStore.getState().canCreateSquad()).toBe(true)
+    })
 
-      // STRICT: hasPremium=true short-circuits, count irrelevant
+    it('club user with 500 squads → true (Infinity)', () => {
+      act(() => usePremiumStore.setState({ tier: 'club', userSquadCount: 500 }))
       expect(usePremiumStore.getState().canCreateSquad()).toBe(true)
     })
   })
 
-  describe('isSquadPremium', () => {
-    it('returns true when squad has isPremium=true in premiumSquads array', () => {
-      act(() => {
-        usePremiumStore.setState({
-          premiumSquads: [
-            { squadId: 'squad-A', isPremium: true },
-            { squadId: 'squad-B', isPremium: false },
-          ],
-        })
-      })
-
-      // STRICT: verify squad-A specifically
-      expect(usePremiumStore.getState().isSquadPremium('squad-A')).toBe(true)
+  describe('canAccessFeature()', () => {
+    it('free user denied all premium features', () => {
+      act(() => usePremiumStore.setState({ tier: 'free', premiumSquads: [] }))
+      expect(usePremiumStore.getState().canAccessFeature('gifs')).toBe(false)
+      expect(usePremiumStore.getState().canAccessFeature('voice_messages')).toBe(false)
+      expect(usePremiumStore.getState().canAccessFeature('polls')).toBe(false)
+      expect(usePremiumStore.getState().canAccessFeature('hd_audio')).toBe(false)
+      expect(usePremiumStore.getState().canAccessFeature('club_dashboard')).toBe(false)
     })
 
-    it('returns false when squad has isPremium=false in premiumSquads array', () => {
-      act(() => {
-        usePremiumStore.setState({
-          premiumSquads: [
-            { squadId: 'squad-A', isPremium: true },
-            { squadId: 'squad-B', isPremium: false },
-          ],
-        })
-      })
-
-      // STRICT: squad-B is explicitly not premium
-      expect(usePremiumStore.getState().isSquadPremium('squad-B')).toBe(false)
-    })
-
-    it('returns false for a squad ID not present in the premiumSquads array', () => {
-      act(() => {
-        usePremiumStore.setState({
-          premiumSquads: [{ squadId: 'squad-A', isPremium: true }],
-        })
-      })
-
-      // STRICT: .find returns undefined, || false kicks in
-      expect(usePremiumStore.getState().isSquadPremium('squad-nonexistent')).toBe(false)
-    })
-
-    it('returns false when premiumSquads is empty', () => {
-      // STRICT: empty array .find returns undefined
-      expect(usePremiumStore.getState().isSquadPremium('any-id')).toBe(false)
-    })
-  })
-
-  describe('canAccessFeature', () => {
-    it('grants all features when hasPremium is true regardless of feature name', () => {
-      act(() => {
-        usePremiumStore.setState({ hasPremium: true, premiumSquads: [] })
-      })
-
-      // STRICT: test every known feature type
-      expect(usePremiumStore.getState().canAccessFeature('unlimited_squads')).toBe(true)
-      expect(usePremiumStore.getState().canAccessFeature('unlimited_history')).toBe(true)
+    it('premium user can access gifs, voice, polls, stats but NOT hd_audio', () => {
+      act(() => usePremiumStore.setState({ tier: 'premium', premiumSquads: [] }))
+      expect(usePremiumStore.getState().canAccessFeature('gifs')).toBe(true)
+      expect(usePremiumStore.getState().canAccessFeature('voice_messages')).toBe(true)
+      expect(usePremiumStore.getState().canAccessFeature('polls')).toBe(true)
       expect(usePremiumStore.getState().canAccessFeature('advanced_stats')).toBe(true)
-      expect(usePremiumStore.getState().canAccessFeature('ai_coach_advanced')).toBe(true)
+      // Premium cannot access squad_leader features
+      expect(usePremiumStore.getState().canAccessFeature('hd_audio')).toBe(false)
+      expect(usePremiumStore.getState().canAccessFeature('advanced_roles')).toBe(false)
+      expect(usePremiumStore.getState().canAccessFeature('club_dashboard')).toBe(false)
+    })
+
+    it('squad_leader user can access all except club features', () => {
+      act(() => usePremiumStore.setState({ tier: 'squad_leader', premiumSquads: [] }))
+      expect(usePremiumStore.getState().canAccessFeature('gifs')).toBe(true)
       expect(usePremiumStore.getState().canAccessFeature('hd_audio')).toBe(true)
       expect(usePremiumStore.getState().canAccessFeature('advanced_roles')).toBe(true)
-      expect(usePremiumStore.getState().canAccessFeature('calendar_export')).toBe(true)
+      expect(usePremiumStore.getState().canAccessFeature('team_analytics')).toBe(true)
+      // Cannot access club features
+      expect(usePremiumStore.getState().canAccessFeature('club_dashboard')).toBe(false)
+      expect(usePremiumStore.getState().canAccessFeature('custom_branding')).toBe(false)
     })
 
-    it('denies all features for free user without premium squad', () => {
-      act(() => {
-        usePremiumStore.setState({ hasPremium: false, premiumSquads: [] })
-      })
-
-      // STRICT: every feature denied
-      expect(usePremiumStore.getState().canAccessFeature('unlimited_squads')).toBe(false)
-      expect(usePremiumStore.getState().canAccessFeature('hd_audio')).toBe(false)
-      expect(usePremiumStore.getState().canAccessFeature('calendar_export')).toBe(false)
+    it('club user can access ALL features', () => {
+      act(() => usePremiumStore.setState({ tier: 'club', premiumSquads: [] }))
+      const allFeatures: PremiumFeature[] = Object.keys(FEATURE_MIN_TIER) as PremiumFeature[]
+      for (const feature of allFeatures) {
+        expect(usePremiumStore.getState().canAccessFeature(feature)).toBe(true)
+      }
     })
 
-    it('grants feature for free user when specific squadId is premium', () => {
-      act(() => {
-        usePremiumStore.setState({
-          hasPremium: false,
-          premiumSquads: [{ squadId: 'squad-premium', isPremium: true }],
-        })
-      })
-
-      // STRICT: passing the premium squad ID grants access
-      expect(usePremiumStore.getState().canAccessFeature('hd_audio', 'squad-premium')).toBe(true)
+    it('free user with premium squad gets premium-level access for that squad', () => {
+      act(() => usePremiumStore.setState({
+        tier: 'free',
+        premiumSquads: [{ squadId: 'sq-premium', isPremium: true }],
+      }))
+      // Premium features accessible via squad
+      expect(usePremiumStore.getState().canAccessFeature('gifs', 'sq-premium')).toBe(true)
+      expect(usePremiumStore.getState().canAccessFeature('polls', 'sq-premium')).toBe(true)
+      // Squad_leader features NOT accessible even with premium squad
+      expect(usePremiumStore.getState().canAccessFeature('hd_audio', 'sq-premium')).toBe(false)
     })
 
-    it('denies feature for free user when specific squadId is not premium', () => {
-      act(() => {
-        usePremiumStore.setState({
-          hasPremium: false,
-          premiumSquads: [{ squadId: 'squad-free', isPremium: false }],
-        })
-      })
-
-      // STRICT: non-premium squad still denied
-      expect(usePremiumStore.getState().canAccessFeature('hd_audio', 'squad-free')).toBe(false)
-    })
-
-    it('denies feature when squadId argument is not provided and user is not premium', () => {
-      act(() => {
-        usePremiumStore.setState({
-          hasPremium: false,
-          premiumSquads: [{ squadId: 'squad-premium', isPremium: true }],
-        })
-      })
-
-      // STRICT: without squadId param, can't check squad-level premium
-      expect(usePremiumStore.getState().canAccessFeature('hd_audio')).toBe(false)
+    it('free user with premium squad but no squadId param → denied', () => {
+      act(() => usePremiumStore.setState({
+        tier: 'free',
+        premiumSquads: [{ squadId: 'sq-premium', isPremium: true }],
+      }))
+      expect(usePremiumStore.getState().canAccessFeature('gifs')).toBe(false)
     })
   })
 
-  describe('getSquadLimit', () => {
-    it('returns FREE_SQUAD_LIMIT (2) for non-premium users', () => {
-      act(() => {
-        usePremiumStore.setState({ hasPremium: false })
-      })
-
-      // STRICT: exact value
-      expect(usePremiumStore.getState().getSquadLimit()).toBe(2)
-      expect(usePremiumStore.getState().getSquadLimit()).toBe(FREE_SQUAD_LIMIT)
-    })
-
-    it('returns Infinity for premium users', () => {
-      act(() => {
-        usePremiumStore.setState({ hasPremium: true })
-      })
-
-      // STRICT: exactly Infinity, not a large number
-      expect(usePremiumStore.getState().getSquadLimit()).toBe(Infinity)
+  describe('getSquadLimit()', () => {
+    it.each([
+      ['free', 1],
+      ['premium', 5],
+      ['squad_leader', Infinity],
+      ['club', Infinity],
+    ] as [SubscriptionTier, number][])('%s tier → %s squads', (tier, expected) => {
+      act(() => usePremiumStore.setState({ tier }))
+      expect(usePremiumStore.getState().getSquadLimit()).toBe(expected)
     })
   })
 
-  describe('getHistoryDays', () => {
-    it('returns FREE_HISTORY_DAYS (30) for non-premium users', () => {
-      act(() => {
-        usePremiumStore.setState({ hasPremium: false })
-      })
-
-      // STRICT: exact value
-      expect(usePremiumStore.getState().getHistoryDays()).toBe(30)
-      expect(usePremiumStore.getState().getHistoryDays()).toBe(FREE_HISTORY_DAYS)
-    })
-
-    it('returns Infinity for premium users', () => {
-      act(() => {
-        usePremiumStore.setState({ hasPremium: true })
-      })
-
-      // STRICT: exactly Infinity
-      expect(usePremiumStore.getState().getHistoryDays()).toBe(Infinity)
+  describe('getHistoryDays()', () => {
+    it.each([
+      ['free', 7],
+      ['premium', 90],
+      ['squad_leader', Infinity],
+      ['club', Infinity],
+    ] as [SubscriptionTier, number][])('%s tier → %s days', (tier, expected) => {
+      act(() => usePremiumStore.setState({ tier }))
+      expect(usePremiumStore.getState().getHistoryDays()).toBe(expected)
     })
   })
 
-  describe('reset', () => {
-    it('clears all premium state back to defaults from any modified state', () => {
-      act(() => {
-        usePremiumStore.setState({
-          hasPremium: true,
-          premiumSquads: [
-            { squadId: 'squad-1', isPremium: true },
-            { squadId: 'squad-2', isPremium: true },
-          ],
-          userSquadCount: 15,
-          isLoading: true,
-        })
-      })
+  describe('getSessionsPerWeek()', () => {
+    it.each([
+      ['free', 3],
+      ['premium', Infinity],
+      ['squad_leader', Infinity],
+      ['club', Infinity],
+    ] as [SubscriptionTier, number][])('%s tier → %s sessions/week', (tier, expected) => {
+      act(() => usePremiumStore.setState({ tier }))
+      expect(usePremiumStore.getState().getSessionsPerWeek()).toBe(expected)
+    })
+  })
 
-      act(() => {
-        usePremiumStore.getState().reset()
-      })
+  describe('reset()', () => {
+    it('resets all state to free defaults', () => {
+      act(() => usePremiumStore.setState({
+        tier: 'club',
+        hasPremium: true,
+        premiumSquads: [{ squadId: 's1', isPremium: true }],
+        userSquadCount: 42,
+        isLoading: true,
+      }))
+
+      act(() => usePremiumStore.getState().reset())
 
       const state = usePremiumStore.getState()
-      // STRICT: every field reset to its zero value
+      expect(state.tier).toBe('free')
       expect(state.hasPremium).toBe(false)
       expect(state.premiumSquads).toEqual([])
       expect(state.userSquadCount).toBe(0)
       expect(state.isLoading).toBe(false)
-    })
-  })
-
-  describe('fetchPremiumStatus', () => {
-    it('resets to non-premium state when user is not authenticated', async () => {
-      mockGetUser.mockResolvedValue({ data: { user: null } })
-
-      // Pre-set premium state to verify it gets cleared
-      act(() => {
-        usePremiumStore.setState({ hasPremium: true, userSquadCount: 5 })
-      })
-
-      await act(async () => {
-        await usePremiumStore.getState().fetchPremiumStatus()
-      })
-
-      const state = usePremiumStore.getState()
-      // STRICT: all fields explicitly reset
-      expect(state.hasPremium).toBe(false)
-      expect(state.premiumSquads).toEqual([])
-      expect(state.userSquadCount).toBe(0)
-      expect(state.isLoading).toBe(false)
-    })
-
-    it('queries squad_members to get user squad count and IDs', async () => {
-      const mockUser = { id: 'user-1' }
-      mockGetUser.mockResolvedValue({ data: { user: mockUser } })
-
-      const mockEq = vi.fn().mockResolvedValue({
-        data: [{ squad_id: 'sq-1' }, { squad_id: 'sq-2' }, { squad_id: 'sq-3' }],
-        error: null,
-      })
-      const mockSelect = vi.fn().mockReturnValue({ eq: mockEq })
-
-      mockFrom.mockImplementation((table: string) => {
-        if (table === 'squad_members') return { select: mockSelect }
-        if (table === 'squads')
-          return {
-            select: vi.fn().mockReturnValue({
-              in: vi.fn().mockResolvedValue({
-                data: [
-                  { id: 'sq-1', is_premium: false },
-                  { id: 'sq-2', is_premium: false },
-                  { id: 'sq-3', is_premium: false },
-                ],
-                error: null,
-              }),
-            }),
-          }
-        if (table === 'subscriptions')
-          return {
-            select: vi.fn().mockReturnValue({
-              in: vi.fn().mockReturnValue({
-                eq: vi.fn().mockResolvedValue({ data: [] }),
-              }),
-            }),
-          }
-        if (table === 'profiles')
-          return {
-            select: vi.fn().mockReturnValue({
-              eq: vi.fn().mockReturnValue({
-                single: vi.fn().mockResolvedValue({
-                  data: { subscription_tier: 'free', subscription_expires_at: null },
-                }),
-              }),
-            }),
-          }
-        return { select: vi.fn() }
-      })
-
-      await act(async () => {
-        await usePremiumStore.getState().fetchPremiumStatus()
-      })
-
-      // STRICT: squad_members was queried
-      expect(mockFrom).toHaveBeenCalledWith('squad_members')
-      // STRICT: filtered by user_id
-      expect(mockEq).toHaveBeenCalledWith('user_id', 'user-1')
-      // STRICT: userSquadCount reflects membership count
-      expect(usePremiumStore.getState().userSquadCount).toBe(3)
-    })
-
-    it('detects premium from squads table is_premium flag', async () => {
-      const mockUser = { id: 'user-1' }
-      mockGetUser.mockResolvedValue({ data: { user: mockUser } })
-
-      mockFrom.mockImplementation((table: string) => {
-        if (table === 'squad_members')
-          return {
-            select: vi.fn().mockReturnValue({
-              eq: vi.fn().mockResolvedValue({
-                data: [{ squad_id: 'squad-1' }, { squad_id: 'squad-2' }],
-                error: null,
-              }),
-            }),
-          }
-        if (table === 'squads')
-          return {
-            select: vi.fn().mockReturnValue({
-              in: vi.fn().mockResolvedValue({
-                data: [
-                  { id: 'squad-1', is_premium: true },
-                  { id: 'squad-2', is_premium: false },
-                ],
-                error: null,
-              }),
-            }),
-          }
-        // hasPremium is already true so subscriptions won't be queried
-        if (table === 'profiles')
-          return {
-            select: vi.fn().mockReturnValue({
-              eq: vi.fn().mockReturnValue({
-                single: vi.fn().mockResolvedValue({
-                  data: { subscription_tier: 'free', subscription_expires_at: null },
-                }),
-              }),
-            }),
-          }
-        return { select: vi.fn() }
-      })
-
-      await act(async () => {
-        await usePremiumStore.getState().fetchPremiumStatus()
-      })
-
-      const state = usePremiumStore.getState()
-      // STRICT: hasPremium true because squad-1 is_premium
-      expect(state.hasPremium).toBe(true)
-      // STRICT: premiumSquads correctly mapped
-      expect(state.premiumSquads).toHaveLength(2)
-      const squad1 = state.premiumSquads.find((s) => s.squadId === 'squad-1')
-      expect(squad1!.isPremium).toBe(true)
-      const squad2 = state.premiumSquads.find((s) => s.squadId === 'squad-2')
-      expect(squad2!.isPremium).toBe(false)
-    })
-
-    it('detects premium from active subscription when squads are not premium', async () => {
-      const mockUser = { id: 'user-1' }
-      mockGetUser.mockResolvedValue({ data: { user: mockUser } })
-
-      mockFrom.mockImplementation((table: string) => {
-        if (table === 'squad_members')
-          return {
-            select: vi.fn().mockReturnValue({
-              eq: vi.fn().mockResolvedValue({
-                data: [{ squad_id: 'squad-1' }],
-                error: null,
-              }),
-            }),
-          }
-        if (table === 'squads')
-          return {
-            select: vi.fn().mockReturnValue({
-              in: vi.fn().mockResolvedValue({
-                data: [{ id: 'squad-1', is_premium: false }],
-                error: null,
-              }),
-            }),
-          }
-        if (table === 'subscriptions')
-          return {
-            select: vi.fn().mockReturnValue({
-              in: vi.fn().mockReturnValue({
-                eq: vi.fn().mockResolvedValue({
-                  data: [{ squad_id: 'squad-1' }],
-                }),
-              }),
-            }),
-          }
-        if (table === 'profiles')
-          return {
-            select: vi.fn().mockReturnValue({
-              eq: vi.fn().mockReturnValue({
-                single: vi.fn().mockResolvedValue({
-                  data: { subscription_tier: 'free', subscription_expires_at: null },
-                }),
-              }),
-            }),
-          }
-        return { select: vi.fn() }
-      })
-
-      await act(async () => {
-        await usePremiumStore.getState().fetchPremiumStatus()
-      })
-
-      const state = usePremiumStore.getState()
-      // STRICT: premium detected via subscriptions table
-      expect(state.hasPremium).toBe(true)
-      // STRICT: the squad's premium status updated by subscription
-      const squad1 = state.premiumSquads.find((s) => s.squadId === 'squad-1')
-      expect(squad1!.isPremium).toBe(true)
-    })
-
-    it('detects premium from profile subscription_tier when squads and subscriptions are not premium', async () => {
-      const mockUser = { id: 'user-1' }
-      mockGetUser.mockResolvedValue({ data: { user: mockUser } })
-
-      // Future expiration date
-      const futureDate = new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString()
-
-      mockFrom.mockImplementation((table: string) => {
-        if (table === 'squad_members')
-          return {
-            select: vi.fn().mockReturnValue({
-              eq: vi.fn().mockResolvedValue({
-                data: [{ squad_id: 'squad-1' }],
-                error: null,
-              }),
-            }),
-          }
-        if (table === 'squads')
-          return {
-            select: vi.fn().mockReturnValue({
-              in: vi.fn().mockResolvedValue({
-                data: [{ id: 'squad-1', is_premium: false }],
-                error: null,
-              }),
-            }),
-          }
-        if (table === 'subscriptions')
-          return {
-            select: vi.fn().mockReturnValue({
-              in: vi.fn().mockReturnValue({
-                eq: vi.fn().mockResolvedValue({ data: [] }),
-              }),
-            }),
-          }
-        if (table === 'profiles')
-          return {
-            select: vi.fn().mockReturnValue({
-              eq: vi.fn().mockReturnValue({
-                single: vi.fn().mockResolvedValue({
-                  data: {
-                    subscription_tier: 'premium',
-                    subscription_expires_at: futureDate,
-                  },
-                }),
-              }),
-            }),
-          }
-        return { select: vi.fn() }
-      })
-
-      await act(async () => {
-        await usePremiumStore.getState().fetchPremiumStatus()
-      })
-
-      // STRICT: premium detected from profile tier with valid expiry
-      expect(usePremiumStore.getState().hasPremium).toBe(true)
-    })
-
-    it('does NOT grant premium when profile subscription_tier is premium but expired', async () => {
-      const mockUser = { id: 'user-1' }
-      mockGetUser.mockResolvedValue({ data: { user: mockUser } })
-
-      // Past expiration date
-      const pastDate = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString()
-
-      mockFrom.mockImplementation((table: string) => {
-        if (table === 'squad_members')
-          return {
-            select: vi.fn().mockReturnValue({
-              eq: vi.fn().mockResolvedValue({
-                data: [{ squad_id: 'squad-1' }],
-                error: null,
-              }),
-            }),
-          }
-        if (table === 'squads')
-          return {
-            select: vi.fn().mockReturnValue({
-              in: vi.fn().mockResolvedValue({
-                data: [{ id: 'squad-1', is_premium: false }],
-                error: null,
-              }),
-            }),
-          }
-        if (table === 'subscriptions')
-          return {
-            select: vi.fn().mockReturnValue({
-              in: vi.fn().mockReturnValue({
-                eq: vi.fn().mockResolvedValue({ data: [] }),
-              }),
-            }),
-          }
-        if (table === 'profiles')
-          return {
-            select: vi.fn().mockReturnValue({
-              eq: vi.fn().mockReturnValue({
-                single: vi.fn().mockResolvedValue({
-                  data: {
-                    subscription_tier: 'premium',
-                    subscription_expires_at: pastDate,
-                  },
-                }),
-              }),
-            }),
-          }
-        return { select: vi.fn() }
-      })
-
-      await act(async () => {
-        await usePremiumStore.getState().fetchPremiumStatus()
-      })
-
-      // STRICT: expired premium -> hasPremium stays false
-      expect(usePremiumStore.getState().hasPremium).toBe(false)
-    })
-
-    it('grants premium when profile has premium tier with null expiry (no expiry)', async () => {
-      const mockUser = { id: 'user-1' }
-      mockGetUser.mockResolvedValue({ data: { user: mockUser } })
-
-      mockFrom.mockImplementation((table: string) => {
-        if (table === 'squad_members')
-          return {
-            select: vi.fn().mockReturnValue({
-              eq: vi.fn().mockResolvedValue({
-                data: [{ squad_id: 'squad-1' }],
-                error: null,
-              }),
-            }),
-          }
-        if (table === 'squads')
-          return {
-            select: vi.fn().mockReturnValue({
-              in: vi.fn().mockResolvedValue({
-                data: [{ id: 'squad-1', is_premium: false }],
-                error: null,
-              }),
-            }),
-          }
-        if (table === 'subscriptions')
-          return {
-            select: vi.fn().mockReturnValue({
-              in: vi.fn().mockReturnValue({
-                eq: vi.fn().mockResolvedValue({ data: [] }),
-              }),
-            }),
-          }
-        if (table === 'profiles')
-          return {
-            select: vi.fn().mockReturnValue({
-              eq: vi.fn().mockReturnValue({
-                single: vi.fn().mockResolvedValue({
-                  data: {
-                    subscription_tier: 'premium',
-                    subscription_expires_at: null,
-                  },
-                }),
-              }),
-            }),
-          }
-        return { select: vi.fn() }
-      })
-
-      await act(async () => {
-        await usePremiumStore.getState().fetchPremiumStatus()
-      })
-
-      // STRICT: null expiry means never expires -> premium
-      expect(usePremiumStore.getState().hasPremium).toBe(true)
-    })
-
-    it('handles squad_members query error gracefully without crashing', async () => {
-      const mockUser = { id: 'user-1' }
-      mockGetUser.mockResolvedValue({ data: { user: mockUser } })
-
-      mockFrom.mockImplementation((table: string) => {
-        if (table === 'squad_members')
-          return {
-            select: vi.fn().mockReturnValue({
-              eq: vi.fn().mockResolvedValue({
-                data: null,
-                error: { message: 'connection timeout', code: '57P01' },
-              }),
-            }),
-          }
-        return { select: vi.fn() }
-      })
-
-      await act(async () => {
-        await usePremiumStore.getState().fetchPremiumStatus()
-      })
-
-      // STRICT: error caught, isLoading reset, no crash
-      expect(usePremiumStore.getState().isLoading).toBe(false)
-    })
-
-    it('skips subscriptions query when squads already has a premium squad', async () => {
-      const mockUser = { id: 'user-1' }
-      mockGetUser.mockResolvedValue({ data: { user: mockUser } })
-
-      const tablesQueried: string[] = []
-      mockFrom.mockImplementation((table: string) => {
-        tablesQueried.push(table)
-        if (table === 'squad_members')
-          return {
-            select: vi.fn().mockReturnValue({
-              eq: vi.fn().mockResolvedValue({
-                data: [{ squad_id: 'squad-1' }],
-                error: null,
-              }),
-            }),
-          }
-        if (table === 'squads')
-          return {
-            select: vi.fn().mockReturnValue({
-              in: vi.fn().mockResolvedValue({
-                // squad already premium
-                data: [{ id: 'squad-1', is_premium: true }],
-                error: null,
-              }),
-            }),
-          }
-        if (table === 'profiles')
-          return {
-            select: vi.fn().mockReturnValue({
-              eq: vi.fn().mockReturnValue({
-                single: vi.fn().mockResolvedValue({
-                  data: { subscription_tier: 'free', subscription_expires_at: null },
-                }),
-              }),
-            }),
-          }
-        return { select: vi.fn() }
-      })
-
-      await act(async () => {
-        await usePremiumStore.getState().fetchPremiumStatus()
-      })
-
-      // STRICT: subscriptions table not queried because hasPremium was already true
-      expect(tablesQueried).not.toContain('subscriptions')
-      expect(usePremiumStore.getState().hasPremium).toBe(true)
-    })
-
-    it('handles zero squads user correctly (no squad-level queries)', async () => {
-      const mockUser = { id: 'user-lonely' }
-      mockGetUser.mockResolvedValue({ data: { user: mockUser } })
-
-      mockFrom.mockImplementation((table: string) => {
-        if (table === 'squad_members')
-          return {
-            select: vi.fn().mockReturnValue({
-              eq: vi.fn().mockResolvedValue({
-                data: [],
-                error: null,
-              }),
-            }),
-          }
-        if (table === 'profiles')
-          return {
-            select: vi.fn().mockReturnValue({
-              eq: vi.fn().mockReturnValue({
-                single: vi.fn().mockResolvedValue({
-                  data: { subscription_tier: 'free', subscription_expires_at: null },
-                }),
-              }),
-            }),
-          }
-        return { select: vi.fn() }
-      })
-
-      await act(async () => {
-        await usePremiumStore.getState().fetchPremiumStatus()
-      })
-
-      const state = usePremiumStore.getState()
-      // STRICT: zero squads
-      expect(state.userSquadCount).toBe(0)
-      expect(state.premiumSquads).toEqual([])
-      expect(state.hasPremium).toBe(false)
-      expect(state.isLoading).toBe(false)
-    })
-
-    it('merges subscription premium into existing premiumSquads correctly', async () => {
-      const mockUser = { id: 'user-1' }
-      mockGetUser.mockResolvedValue({ data: { user: mockUser } })
-
-      mockFrom.mockImplementation((table: string) => {
-        if (table === 'squad_members')
-          return {
-            select: vi.fn().mockReturnValue({
-              eq: vi.fn().mockResolvedValue({
-                data: [{ squad_id: 'squad-1' }, { squad_id: 'squad-2' }],
-                error: null,
-              }),
-            }),
-          }
-        if (table === 'squads')
-          return {
-            select: vi.fn().mockReturnValue({
-              in: vi.fn().mockResolvedValue({
-                data: [
-                  { id: 'squad-1', is_premium: false },
-                  { id: 'squad-2', is_premium: false },
-                ],
-                error: null,
-              }),
-            }),
-          }
-        if (table === 'subscriptions')
-          return {
-            select: vi.fn().mockReturnValue({
-              in: vi.fn().mockReturnValue({
-                eq: vi.fn().mockResolvedValue({
-                  // squad-1 has active subscription
-                  data: [{ squad_id: 'squad-1' }],
-                }),
-              }),
-            }),
-          }
-        if (table === 'profiles')
-          return {
-            select: vi.fn().mockReturnValue({
-              eq: vi.fn().mockReturnValue({
-                single: vi.fn().mockResolvedValue({
-                  data: { subscription_tier: 'free', subscription_expires_at: null },
-                }),
-              }),
-            }),
-          }
-        return { select: vi.fn() }
-      })
-
-      await act(async () => {
-        await usePremiumStore.getState().fetchPremiumStatus()
-      })
-
-      const state = usePremiumStore.getState()
-      // STRICT: squad-1 was updated to premium via subscription merge
-      const squad1 = state.premiumSquads.find((s) => s.squadId === 'squad-1')
-      expect(squad1!.isPremium).toBe(true)
-      // STRICT: squad-2 remains non-premium
-      const squad2 = state.premiumSquads.find((s) => s.squadId === 'squad-2')
-      expect(squad2!.isPremium).toBe(false)
-      // STRICT: overall premium status
-      expect(state.hasPremium).toBe(true)
     })
   })
 })

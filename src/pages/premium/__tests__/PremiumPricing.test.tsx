@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest'
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { render, screen, fireEvent } from '@testing-library/react'
 import { createElement } from 'react'
 
@@ -39,16 +39,18 @@ vi.mock('../../../components/ui', () => ({
 }))
 
 vi.mock('../../../hooks/usePremium', () => ({
-  PREMIUM_PRICE_MONTHLY: 4.99,
-  PREMIUM_PRICE_YEARLY: 47.88,
+  PREMIUM_PRICE_MONTHLY: 6.99,
+  PREMIUM_PRICE_YEARLY: 59.88,
+  SQUAD_LEADER_PRICE_MONTHLY: 14.99,
+  SQUAD_LEADER_PRICE_YEARLY: 143.88,
+  CLUB_PRICE_MONTHLY: 39.99,
+  CLUB_PRICE_YEARLY: 383.88,
 }))
 
 import { PremiumPricing } from '../PremiumPricing'
 
 describe('PremiumPricing', () => {
   const defaultProps = {
-    selectedPlan: 'monthly' as const,
-    setSelectedPlan: vi.fn(),
     isLoading: false,
     error: null,
     onUpgrade: vi.fn(),
@@ -56,7 +58,12 @@ describe('PremiumPricing', () => {
   }
 
   beforeEach(() => {
+    vi.useFakeTimers({ shouldAdvanceTime: true })
     vi.clearAllMocks()
+  })
+
+  afterEach(() => {
+    vi.useRealTimers()
   })
 
   /* ---------------------------------------------------------------- */
@@ -87,110 +94,162 @@ describe('PremiumPricing', () => {
   })
 
   /* ---------------------------------------------------------------- */
-  /*  Plan cards                                                       */
+  /*  Launch promo banner                                              */
   /* ---------------------------------------------------------------- */
-  it('renders monthly plan option with price', () => {
+  it('renders launch promo banner with discount code', () => {
+    render(<PremiumPricing {...defaultProps} />)
+    expect(screen.getByText('Offre de lancement -30%')).toBeDefined()
+    expect(screen.getByText('LAUNCH30')).toBeDefined()
+  })
+
+  /* ---------------------------------------------------------------- */
+  /*  Monthly / Yearly toggle                                          */
+  /* ---------------------------------------------------------------- */
+  it('renders monthly/yearly toggle', () => {
     render(<PremiumPricing {...defaultProps} />)
     expect(screen.getByText('Mensuel')).toBeDefined()
-    // 4.99€
+    expect(screen.getByText(/Annuel/)).toBeDefined()
+  })
+
+  it('renders -20% badge on yearly toggle', () => {
+    render(<PremiumPricing {...defaultProps} />)
+    expect(screen.getByText('-20%')).toBeDefined()
+  })
+
+  /* ---------------------------------------------------------------- */
+  /*  3 Tier cards                                                     */
+  /* ---------------------------------------------------------------- */
+  it('renders all 3 tier names: Premium, Squad Leader, Club', () => {
+    render(<PremiumPricing {...defaultProps} />)
+    expect(screen.getByText('Premium')).toBeDefined()
+    expect(screen.getByText('Squad Leader')).toBeDefined()
+    expect(screen.getByText('Club')).toBeDefined()
+  })
+
+  it('renders tier descriptions', () => {
+    render(<PremiumPricing {...defaultProps} />)
+    expect(screen.getByText('Pour les joueurs réguliers.')).toBeDefined()
+    expect(screen.getByText('Pour les capitaines de squad.')).toBeDefined()
+    expect(screen.getByText('Pour les structures esport.')).toBeDefined()
+  })
+
+  it('renders monthly prices for all 3 tiers', () => {
+    render(<PremiumPricing {...defaultProps} />)
+    expect(screen.getByText(/6\.99/)).toBeDefined()
+    expect(screen.getByText(/14\.99/)).toBeDefined()
+    expect(screen.getByText(/39\.99/)).toBeDefined()
+  })
+
+  it('renders POPULAIRE badge on Squad Leader tier', () => {
+    render(<PremiumPricing {...defaultProps} />)
+    expect(screen.getByText('POPULAIRE')).toBeDefined()
+  })
+
+  it('renders B2B badge on Club tier', () => {
+    render(<PremiumPricing {...defaultProps} />)
+    expect(screen.getByText('B2B')).toBeDefined()
+  })
+
+  it('renders CTA button for each tier', () => {
+    render(<PremiumPricing {...defaultProps} />)
+    expect(screen.getByText('Choisir Premium')).toBeDefined()
+    expect(screen.getByText('Choisir Squad Leader')).toBeDefined()
+    expect(screen.getByText('Contacter')).toBeDefined()
+  })
+
+  /* ---------------------------------------------------------------- */
+  /*  Tier features                                                    */
+  /* ---------------------------------------------------------------- */
+  it('renders Premium tier features', () => {
+    render(<PremiumPricing {...defaultProps} />)
+    expect(screen.getByText('5 squads')).toBeDefined()
+    expect(screen.getByText('Sessions illimitées')).toBeDefined()
+    expect(screen.getByText('Zéro pub')).toBeDefined()
+  })
+
+  it('renders Squad Leader tier features', () => {
+    render(<PremiumPricing {...defaultProps} />)
+    expect(screen.getByText('Tout Premium inclus')).toBeDefined()
+    expect(screen.getByText('Squads illimités')).toBeDefined()
+    expect(screen.getByText('Sessions récurrentes')).toBeDefined()
+  })
+
+  it('renders Club tier features', () => {
+    render(<PremiumPricing {...defaultProps} />)
+    expect(screen.getByText('Tout Squad Leader inclus')).toBeDefined()
+    expect(screen.getByText('Dashboard multi-squads')).toBeDefined()
+    expect(screen.getByText('API webhooks')).toBeDefined()
+  })
+
+  /* ---------------------------------------------------------------- */
+  /*  Yearly toggle and pricing                                        */
+  /* ---------------------------------------------------------------- */
+  it('shows yearly per-month prices after clicking Annuel toggle', () => {
+    render(<PremiumPricing {...defaultProps} />)
+    fireEvent.click(screen.getByText(/Annuel/))
+    // Premium: 59.88/12 = 4.99, Squad Leader: 143.88/12 = 11.99, Club: 383.88/12 = 31.99
     expect(screen.getByText(/4\.99/)).toBeDefined()
+    expect(screen.getByText(/11\.99/)).toBeDefined()
+    expect(screen.getByText(/31\.99/)).toBeDefined()
   })
 
-  it('renders yearly plan option with price per month', () => {
+  it('shows yearly totals and savings percentage in yearly mode', () => {
     render(<PremiumPricing {...defaultProps} />)
-    expect(screen.getByText('Annuel')).toBeDefined()
-    // 47.88/12 = 3.99
-    expect(screen.getByText(/3\.99/)).toBeDefined()
-  })
-
-  it('renders "MEILLEURE OFFRE" label on yearly card', () => {
-    render(<PremiumPricing {...defaultProps} />)
-    expect(screen.getByText('MEILLEURE OFFRE')).toBeDefined()
-  })
-
-  it('renders yearly total and savings', () => {
-    render(<PremiumPricing {...defaultProps} />)
-    // Savings: ((4.99*12 - 47.88) / (4.99*12)) * 100 = ((59.88-47.88)/59.88)*100 = 20%
-    expect(screen.getByText(/20%/)).toBeDefined()
-    // Yearly original price: 59.88€/an
+    fireEvent.click(screen.getByText(/Annuel/))
     expect(screen.getByText(/59\.88/)).toBeDefined()
-    // Yearly discounted: 47.88€/an
-    expect(screen.getByText(/47\.88/)).toBeDefined()
-  })
-
-  it('renders "7j gratuits" badges on both cards', () => {
-    render(<PremiumPricing {...defaultProps} />)
-    const badges = screen.getAllByText('7j gratuits')
-    expect(badges.length).toBe(2)
-  })
-
-  it('renders "Commence par 7 jours gratuits" on both cards', () => {
-    render(<PremiumPricing {...defaultProps} />)
-    const texts = screen.getAllByText('Commence par 7 jours gratuits')
-    expect(texts.length).toBe(2)
+    expect(screen.getByText(/143\.88/)).toBeDefined()
+    expect(screen.getByText(/383\.88/)).toBeDefined()
   })
 
   /* ---------------------------------------------------------------- */
-  /*  Plan selection                                                   */
+  /*  onUpgrade calls                                                  */
   /* ---------------------------------------------------------------- */
-  it('calls setSelectedPlan("monthly") when monthly card is clicked', () => {
-    render(<PremiumPricing {...defaultProps} selectedPlan="yearly" />)
-    fireEvent.click(screen.getByText('Mensuel').closest('button')!)
-    expect(defaultProps.setSelectedPlan).toHaveBeenCalledWith('monthly')
-  })
-
-  it('calls setSelectedPlan("yearly") when yearly card is clicked', () => {
-    render(<PremiumPricing {...defaultProps} selectedPlan="monthly" />)
-    fireEvent.click(screen.getByText('Annuel').closest('button')!)
-    expect(defaultProps.setSelectedPlan).toHaveBeenCalledWith('yearly')
-  })
-
-  it('shows checkmark on monthly card when monthly is selected', () => {
-    const { container } = render(<PremiumPricing {...defaultProps} selectedPlan="monthly" />)
-    // Monthly card has border-primary class and a Check icon
-    const checkIcons = container.querySelectorAll('[data-icon="Check"]')
-    expect(checkIcons.length).toBe(1) // only monthly selected
-  })
-
-  it('shows checkmark on yearly card when yearly is selected', () => {
-    const { container } = render(<PremiumPricing {...defaultProps} selectedPlan="yearly" />)
-    const checkIcons = container.querySelectorAll('[data-icon="Check"]')
-    expect(checkIcons.length).toBe(1) // only yearly selected
-  })
-
-  /* ---------------------------------------------------------------- */
-  /*  CTA button                                                       */
-  /* ---------------------------------------------------------------- */
-  it('renders "Passer Premium maintenant" CTA', () => {
+  it('calls onUpgrade(premium, monthly) when Choisir Premium is clicked', () => {
     render(<PremiumPricing {...defaultProps} />)
-    expect(screen.getByText('Passer Premium maintenant')).toBeDefined()
+    fireEvent.click(screen.getByText('Choisir Premium').closest('button')!)
+    expect(defaultProps.onUpgrade).toHaveBeenCalledWith('premium', 'monthly')
   })
 
-  it('calls onUpgrade when CTA button is clicked', () => {
+  it('calls onUpgrade(squad_leader, yearly) after toggling to yearly', () => {
     render(<PremiumPricing {...defaultProps} />)
-    fireEvent.click(screen.getByText('Passer Premium maintenant').closest('button')!)
-    expect(defaultProps.onUpgrade).toHaveBeenCalledTimes(1)
+    fireEvent.click(screen.getByText(/Annuel/))
+    fireEvent.click(screen.getByText('Choisir Squad Leader').closest('button')!)
+    expect(defaultProps.onUpgrade).toHaveBeenCalledWith('squad_leader', 'yearly')
   })
 
-  it('disables CTA button when isLoading is true', () => {
+  it('calls onUpgrade(club, monthly) when Contacter is clicked', () => {
+    render(<PremiumPricing {...defaultProps} />)
+    fireEvent.click(screen.getByText('Contacter').closest('button')!)
+    expect(defaultProps.onUpgrade).toHaveBeenCalledWith('club', 'monthly')
+  })
+
+  /* ---------------------------------------------------------------- */
+  /*  Loading state                                                    */
+  /* ---------------------------------------------------------------- */
+  it('shows loaders in tier buttons when isLoading is true', () => {
     render(<PremiumPricing {...defaultProps} isLoading={true} />)
-    // When loading, the text "Passer Premium maintenant" is replaced by Loader2
     const loaders = screen.getAllByTestId('loader')
     expect(loaders.length).toBeGreaterThan(0)
   })
 
-  it('shows loader in CTA button when loading', () => {
+  it('hides tier CTA labels when loading', () => {
     render(<PremiumPricing {...defaultProps} isLoading={true} />)
-    expect(screen.queryByText('Passer Premium maintenant')).toBeNull()
-    expect(screen.getAllByTestId('loader').length).toBeGreaterThan(0)
+    expect(screen.queryByText('Choisir Premium')).toBeNull()
+    expect(screen.queryByText('Choisir Squad Leader')).toBeNull()
+    expect(screen.queryByText('Contacter')).toBeNull()
+  })
+
+  it('hides final CTA text when loading', () => {
+    render(<PremiumPricing {...defaultProps} isLoading={true} />)
+    expect(screen.queryByText('Essai gratuit 7 jours')).toBeNull()
   })
 
   /* ---------------------------------------------------------------- */
   /*  Error display                                                    */
   /* ---------------------------------------------------------------- */
   it('does NOT render error when error is null', () => {
-    const { container } = render(<PremiumPricing {...defaultProps} error={null} />)
-    expect(container.querySelector('.text-error')).toBeNull()
+    render(<PremiumPricing {...defaultProps} error={null} />)
+    expect(screen.queryByText('Erreur de paiement')).toBeNull()
   })
 
   it('renders error message when error is provided', () => {
@@ -199,11 +258,11 @@ describe('PremiumPricing', () => {
   })
 
   /* ---------------------------------------------------------------- */
-  /*  Trust badges at bottom of CTA                                    */
+  /*  Trust badges                                                     */
   /* ---------------------------------------------------------------- */
   it('renders payment trust badges', () => {
     render(<PremiumPricing {...defaultProps} />)
-    expect(screen.getByText('Paiement sécurisé')).toBeDefined()
+    expect(screen.getByText('Paiement sécurisé Stripe')).toBeDefined()
     expect(screen.getByText('Annulation facile')).toBeDefined()
     expect(screen.getByText('Satisfait ou remboursé 30j')).toBeDefined()
   })
@@ -213,7 +272,7 @@ describe('PremiumPricing', () => {
   /* ---------------------------------------------------------------- */
   it('renders final CTA card section', () => {
     render(<PremiumPricing {...defaultProps} />)
-    expect(screen.getByText(/Pr.t . passer Premium/)).toBeDefined()
+    expect(screen.getByText(/Pr.t . passer au niveau sup.rieur/)).toBeDefined()
   })
 
   it('calls onStartTrial from final CTA card button', () => {
@@ -222,26 +281,5 @@ describe('PremiumPricing', () => {
     expect(trialButtons.length).toBeGreaterThan(0)
     fireEvent.click(trialButtons[0].closest('button')!)
     expect(defaultProps.onStartTrial).toHaveBeenCalled()
-  })
-
-  it('shows loader in final CTA when loading', () => {
-    render(<PremiumPricing {...defaultProps} isLoading={true} />)
-    expect(screen.queryByText('Essai gratuit 7 jours')).toBeNull()
-  })
-
-  /* ---------------------------------------------------------------- */
-  /*  Monthly flexibility text                                         */
-  /* ---------------------------------------------------------------- */
-  it('renders monthly flexibility description', () => {
-    render(<PremiumPricing {...defaultProps} />)
-    expect(screen.getByText(/Flexibilit. maximale/)).toBeDefined()
-  })
-
-  /* ---------------------------------------------------------------- */
-  /*  Savings text on yearly                                           */
-  /* ---------------------------------------------------------------- */
-  it('renders "2 mois offerts" text on yearly card', () => {
-    render(<PremiumPricing {...defaultProps} />)
-    expect(screen.getByText(/2 mois offerts/)).toBeDefined()
   })
 })

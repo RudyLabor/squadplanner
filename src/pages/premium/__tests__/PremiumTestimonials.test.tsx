@@ -2,7 +2,27 @@ import { describe, it, expect, vi } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import { createElement } from 'react'
 
-vi.mock('../../../components/icons', () => new Proxy({}, { get: (_t: any, p: string) => typeof p === 'string' ? ({ children, ...props }: any) => createElement('span', { ...props, 'data-icon': p }, children) : undefined }))
+vi.mock('../../../components/icons', () => ({
+  Crown: (p: any) => createElement('span', { ...p, 'data-icon': 'Crown' }),
+  Check: (p: any) => createElement('span', { ...p, 'data-icon': 'Check' }),
+  X: (p: any) => createElement('span', { ...p, 'data-icon': 'X' }),
+  Gift: (p: any) => createElement('span', { ...p, 'data-icon': 'Gift' }),
+  ArrowRight: (p: any) => createElement('span', { ...p, 'data-icon': 'ArrowRight' }),
+  Loader2: ({ children, ...p }: any) => createElement('span', { 'data-testid': 'loader', ...p }, children),
+  Rocket: (p: any) => createElement('span', { ...p, 'data-icon': 'Rocket' }),
+  Sparkles: (p: any) => createElement('span', { ...p, 'data-icon': 'Sparkles' }),
+  Shield: (p: any) => createElement('span', { ...p, 'data-icon': 'Shield' }),
+  Clock: (p: any) => createElement('span', { ...p, 'data-icon': 'Clock' }),
+  CheckCircle2: (p: any) => createElement('span', { ...p, 'data-icon': 'CheckCircle2' }),
+  Zap: (p: any) => createElement('span', { ...p, 'data-icon': 'Zap' }),
+  ChevronDown: (p: any) => createElement('span', { ...p, 'data-icon': 'ChevronDown' }),
+  ChevronUp: (p: any) => createElement('span', { ...p, 'data-icon': 'ChevronUp' }),
+  Users: (p: any) => createElement('span', { ...p, 'data-icon': 'Users' }),
+  Calendar: (p: any) => createElement('span', { ...p, 'data-icon': 'Calendar' }),
+  BarChart3: (p: any) => createElement('span', { ...p, 'data-icon': 'BarChart3' }),
+  Mic2: (p: any) => createElement('span', { ...p, 'data-icon': 'Mic2' }),
+  Star: (p: any) => createElement('span', { ...p, 'data-icon': 'Star' }),
+}))
 
 vi.mock('../../../components/ui', () => ({
   Card: ({ children, ...props }: any) => createElement('div', props, children),

@@ -1,10 +1,10 @@
 
 import { useRef, useEffect, useState } from 'react'
 import { m, useInView } from 'framer-motion'
-import { Crown, Check, Loader2, Gift } from '../../components/icons'
+import { Crown, Check, Loader2, Gift, ChevronLeft } from '../../components/icons'
 import Confetti from '../../components/LazyConfetti'
 import { Button } from '../../components/ui'
-import { MobilePageHeader } from '../../components/layout/MobilePageHeader'
+import { useNavigate } from 'react-router'
 
 interface PremiumHeroProps {
   hasPremium: boolean
@@ -13,6 +13,7 @@ interface PremiumHeroProps {
 }
 
 export function PremiumHero({ hasPremium, isLoading, onManageSubscription }: PremiumHeroProps) {
+  const navigate = useNavigate()
   const heroRef = useRef(null)
   const isHeroInView = useInView(heroRef, { once: true })
   const [showConfetti, setShowConfetti] = useState(false)
@@ -28,7 +29,16 @@ export function PremiumHero({ hasPremium, isLoading, onManageSubscription }: Pre
 
   return (
     <>
-      <MobilePageHeader title="Premium" />
+      <div className="flex items-center gap-3 px-4 py-3">
+        <button
+          onClick={() => navigate(-1)}
+          className="w-10 h-10 rounded-xl flex items-center justify-center hover:bg-white/10 transition-colors"
+          aria-label="Retour"
+        >
+          <ChevronLeft className="w-6 h-6 text-text-primary" />
+        </button>
+        <p className="text-base font-semibold text-text-primary">Premium</p>
+      </div>
       {showConfetti && typeof window !== 'undefined' && (
         <Confetti
           width={window.innerWidth}

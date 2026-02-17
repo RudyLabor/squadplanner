@@ -87,7 +87,16 @@ export function Select({
   useEffect(() => {
     if (open && triggerRef.current) {
       const r = triggerRef.current.getBoundingClientRect()
-      setPos({ x: r.left, y: r.bottom + 4, w: r.width })
+      const dropdownHeight = 260 // max-h-60 = 15rem = 240px + padding
+      const spaceBelow = window.innerHeight - r.bottom
+      const spaceAbove = r.top
+
+      // Flip upward if not enough space below but enough above
+      if (spaceBelow < dropdownHeight && spaceAbove > spaceBelow) {
+        setPos({ x: r.left, y: r.top - Math.min(dropdownHeight, spaceAbove) - 4, w: r.width })
+      } else {
+        setPos({ x: r.left, y: r.bottom + 4, w: r.width })
+      }
       requestAnimationFrame(() => searchRef.current?.focus())
     } else {
       setSearch('')

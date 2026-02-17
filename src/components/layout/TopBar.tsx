@@ -1,7 +1,7 @@
 
 import { memo, useCallback, useState } from 'react'
 import { Link } from 'react-router'
-import { Search, LayoutGrid, Compass, Settings, HelpCircle, Phone } from '../icons'
+import { Search, LayoutGrid, Compass, Settings, HelpCircle, Phone, Calendar } from '../icons'
 import { Breadcrumbs } from './Breadcrumbs'
 import { GlobalSearch } from '../GlobalSearch'
 import { NotificationBell } from '../NotificationCenter'
@@ -34,6 +34,7 @@ function MobileSearchButton() {
 
 const moreMenuItems = [
   { path: '/discover', icon: Compass, label: 'Découvrir' },
+  { path: '/sessions', icon: Calendar, label: 'Sessions' },
   { path: '/call-history', icon: Phone, label: 'Appels' },
   { path: '/settings', icon: Settings, label: 'Paramètres' },
   { path: '/help', icon: HelpCircle, label: 'Aide' },

@@ -148,7 +148,7 @@ export function Profile() {
       />
 
       <div className="px-4 md:px-6 lg:px-8 max-w-2xl lg:max-w-4xl xl:max-w-6xl mx-auto">
-        <PlanBadge tier={tier} size="sm" className="mb-4" />
+        <PlanBadge tier={tier} size="md" className="mb-4" />
 
         {/* XP Bar — Uses profile.xp from the profiles table.
             NOTE: Squad-level XP (e.g. squad_members.xp) is computed per-squad and may differ

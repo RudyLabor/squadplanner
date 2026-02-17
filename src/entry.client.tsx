@@ -60,7 +60,18 @@ if ('serviceWorker' in navigator) {
   })
 
   navigator.serviceWorker.ready.then((registration) => {
+    // Check for SW updates every 30 minutes
     setInterval(() => registration.update(), 30 * 60 * 1000)
+
+    // Also check for SW updates when PWA comes back to foreground.
+    // Without this, installed PWAs can run stale code indefinitely because
+    // the browser only checks for SW updates on navigation — and PWAs
+    // restore from memory instead of navigating.
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'visible') {
+        registration.update()
+      }
+    })
   })
 }
 

@@ -1,8 +1,8 @@
 // Service Worker for SquadPlanner - Performance & Push Notifications
 // This runs in the background and handles push events even when the app is closed
 
-// Cache version - UPDATE THIS ON EACH DEPLOYMENT
-const CACHE_VERSION = 'v3';
+// Cache version — auto-bumped: 2026-02-17T13
+const CACHE_VERSION = 'v4';
 const STATIC_CACHE = `squadplanner-static-${CACHE_VERSION}`;
 const DYNAMIC_CACHE = `squadplanner-dynamic-${CACHE_VERSION}`;
 const IMAGE_CACHE = `squadplanner-images-${CACHE_VERSION}`;

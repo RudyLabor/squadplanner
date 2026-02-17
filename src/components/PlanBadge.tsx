@@ -45,9 +45,9 @@ export function PlanBadge({ tier, size = 'sm', className = '' }: PlanBadgeProps)
         </div>
         <div className="flex-1 min-w-0">
           <div className="text-sm font-medium text-text-primary">Plan Free</div>
-          <div className="text-xs text-text-tertiary">Passer Premium pour tout d\u00e9bloquer</div>
+          <div className="text-xs text-text-tertiary">Passer Premium pour tout d{'é'}bloquer</div>
         </div>
-        <span className="text-xs font-medium text-primary shrink-0">\u2192</span>
+        <span className="text-xs font-medium text-primary shrink-0">{'→'}</span>
       </Link>
     )
   }
@@ -74,11 +74,8 @@ export function PlanBadge({ tier, size = 'sm', className = '' }: PlanBadgeProps)
       </div>
       <div className="flex-1 min-w-0">
         <div className="text-sm font-medium text-text-primary">Plan {config.label}</div>
-        <div className="text-xs text-text-tertiary">Abonnement actif</div>
       </div>
-      <Link to="/premium" className={`text-xs font-medium ${config.text} shrink-0 hover:underline`}>
-        G\u00e9rer \u2192
-      </Link>
+      <span className={`text-xs font-medium ${config.text} shrink-0`}>Abonnement actif</span>
     </div>
   )
 }

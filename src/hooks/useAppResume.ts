@@ -1,83 +1,73 @@
-import { useEffect, useRef, useCallback } from 'react'
-import { useRevalidator } from 'react-router'
+import { useEffect, useRef } from 'react'
 
-const REVALIDATE_MS = 5 * 60 * 1000 // 5 minutes
 const STALE_RELOAD_MS = 30 * 60 * 1000 // 30 minutes
 
 /**
  * Handles page resume after bfcache restore, freeze/thaw, or tab switching.
  *
- * Replaces the aggressive window.location.reload() calls that were in
- * entry.client.tsx — those destroyed React's event handlers, creating a
- * "hydration gap" where the navbar was visible but unresponsive.
- *
+ * Keeps it minimal to avoid flooding the network on resume:
  * - Every resume: clears stuck body.style.overflow (Sheet/Dialog safety net)
- * - Resume > 5 min: revalidates React Router loader data (profile, squads, auth)
+ *   and skips any stuck View Transition
  * - Resume > 30 min: forces full reload (stale chunks, expired tokens)
- * - bfcache restore: clears overflow + revalidates
+ *
+ * Does NOT trigger revalidation or data refetching — that would fire 12-16
+ * simultaneous network requests and freeze the UI for 2-4 seconds.
+ * Data refreshes naturally when the user navigates.
  */
 export function useAppResume() {
-  const revalidator = useRevalidator()
   const hiddenAtRef = useRef(0)
 
-  const handleVisibilityChange = useCallback(() => {
-    if (document.visibilityState === 'hidden') {
-      hiddenAtRef.current = Date.now()
-      return
-    }
-
-    // === VISIBLE (resumed) ===
-    const hiddenAt = hiddenAtRef.current
-    hiddenAtRef.current = 0
-
-    // Safety net: clear stuck body overflow from Sheet/Dialog/Drawer.
-    // If a modal was open when the page froze and React's cleanup didn't
-    // run, body scroll would be permanently locked.
-    if (document.body.style.overflow === 'hidden') {
-      document.body.style.overflow = ''
-    }
-
-    if (hiddenAt === 0) return
-    const elapsed = Date.now() - hiddenAt
-
-    // After 30+ minutes: force full reload.
-    // Chunked assets may have been purged by CDN deploy, auth tokens
-    // may be expired beyond refresh.
-    if (elapsed > STALE_RELOAD_MS) {
-      window.location.reload()
-      return
-    }
-
-    // After 5+ minutes: revalidate React Router loaders.
-    // Refreshes layout data (profile, squads, unread counts) without
-    // destroying the React tree. Bypasses shouldRevalidate().
-    if (elapsed > REVALIDATE_MS && revalidator.state === 'idle') {
-      revalidator.revalidate()
-    }
-  }, [revalidator])
-
   useEffect(() => {
-    document.addEventListener('visibilitychange', handleVisibilityChange)
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'hidden') {
+        hiddenAtRef.current = Date.now()
+        return
+      }
 
-    // Handle bfcache restore. The pageshow event with persisted=true fires
-    // when the page is restored from back/forward cache. React state is
-    // fully intact, but data may be stale.
-    const handlePageShow = (e: PageTransitionEvent) => {
-      if (!e.persisted) return
+      // === VISIBLE (resumed) ===
+      const hiddenAt = hiddenAtRef.current
+      hiddenAtRef.current = 0
 
+      // Safety net: clear stuck body overflow from Sheet/Dialog/Drawer.
       if (document.body.style.overflow === 'hidden') {
         document.body.style.overflow = ''
       }
 
-      if (revalidator.state === 'idle') {
-        revalidator.revalidate()
+      // Skip any stuck View Transition that was pending when the page froze.
+      // A stuck transition captures all pointer events via ::view-transition-*
+      // pseudo-elements, making the navbar appear unresponsive.
+      if (document.startViewTransition && (document as any).activeViewTransition) {
+        try {
+          ;(document as any).activeViewTransition.skipTransition()
+        } catch {
+          // Already finished or not supported — ignore
+        }
+      }
+
+      if (hiddenAt === 0) return
+      const elapsed = Date.now() - hiddenAt
+
+      // After 30+ minutes: force full reload.
+      // Chunked assets may have been purged by CDN deploy, auth tokens
+      // may be expired beyond refresh.
+      if (elapsed > STALE_RELOAD_MS) {
+        window.location.reload()
       }
     }
+
+    const handlePageShow = (e: PageTransitionEvent) => {
+      if (!e.persisted) return
+      if (document.body.style.overflow === 'hidden') {
+        document.body.style.overflow = ''
+      }
+    }
+
+    document.addEventListener('visibilitychange', handleVisibilityChange)
     window.addEventListener('pageshow', handlePageShow)
 
     return () => {
       document.removeEventListener('visibilitychange', handleVisibilityChange)
       window.removeEventListener('pageshow', handlePageShow)
     }
-  }, [handleVisibilityChange, revalidator])
+  }, [])
 }

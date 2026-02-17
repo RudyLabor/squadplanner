@@ -33,7 +33,6 @@ const MobileNavLink = memo(function MobileNavLink({
   return (
     <Link
       to={path}
-      viewTransition
       className="flex flex-col items-center justify-center min-w-[48px] min-h-[48px] touch-target"
       aria-label={label}
       aria-current={isActive ? 'page' : undefined}
@@ -77,7 +76,6 @@ const PartyButton = memo(function PartyButton({
   return (
     <Link
       to="/party"
-      viewTransition
       className="flex flex-col items-center justify-center min-w-[48px] min-h-[48px] touch-target"
       aria-label={hasActiveParty ? 'Party vocale - En cours' : 'Party vocale'}
       aria-current={isActive ? 'page' : undefined}

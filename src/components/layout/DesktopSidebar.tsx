@@ -67,7 +67,6 @@ export const NavLink = memo(function NavLink({
       aria-label={label}
       aria-current={isActive ? 'page' : undefined}
       onPointerEnter={handlePrefetch}
-      viewTransition
     >
       <m.div
         className={`

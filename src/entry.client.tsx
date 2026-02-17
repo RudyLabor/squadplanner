@@ -22,6 +22,13 @@ queueMicrotask(() => {
   import('./utils/fontOptimization').then(({ initFontOptimization }) => initFontOptimization())
 })
 
+// bfcache: force reload when page is restored from back/forward cache.
+// React Router's internal state (history listeners, pending navigations) doesn't
+// survive bfcache freezing, causing dead links on mobile after tab-switching.
+window.addEventListener('pageshow', (e) => {
+  if (e.persisted) window.location.reload()
+})
+
 // Auto-update: reload when a NEW service worker replaces an existing one.
 if ('serviceWorker' in navigator) {
   const hadController = !!navigator.serviceWorker.controller

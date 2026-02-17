@@ -53,7 +53,7 @@ import {
   HomeActivityFeed,
 } from '../components/home'
 import { PlanBadge } from '../components/PlanBadge'
-import { usePremium } from '../hooks/usePremium'
+import { usePremium, usePremiumStore } from '../hooks/usePremium'
 import type { Profile } from '../types/database'
 import type { SquadWithMembers } from '../hooks/queries/useSquadsQuery'
 import type { SessionWithDetails } from '../hooks/queries/useSessionFetchers'
@@ -141,6 +141,11 @@ export default function Home({ loaderData }: HomeProps) {
   const { user, profile: authProfile, isInitialized } = useAuthStore()
   const profile = loaderData?.profile || authProfile
   const { tier } = usePremium()
+  const fetchPremiumStatus = usePremiumStore((s) => s.fetchPremiumStatus)
+
+  useEffect(() => {
+    if (user?.id) fetchPremiumStatus()
+  }, [user?.id, fetchPremiumStatus])
   const { isConnected: isInVoiceChat, currentChannel, remoteUsers } = useVoiceChatStoreLazy()
   const navigate = useNavigate()
   const queryClient = useQueryClient()

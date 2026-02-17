@@ -3,43 +3,56 @@ import { FEATURES } from './PremiumData'
 
 function CellValue({ value }: { value: boolean | string }) {
   if (typeof value === 'boolean') {
-    return value ? (
-      <Check className="w-4 h-4 text-success" />
-    ) : (
-      <X className="w-4 h-4 text-text-tertiary" />
+    return (
+      <div className="flex items-center justify-center">
+        {value ? (
+          <Check className="w-4 h-4 text-success" />
+        ) : (
+          <X className="w-4 h-4 text-text-tertiary" />
+        )}
+      </div>
     )
   }
-  return <span className="text-xs font-medium text-success">{value}</span>
+  return (
+    <span className="text-xs font-medium text-success leading-tight">{value}</span>
+  )
 }
 
 export function PremiumFeaturesTable() {
   return (
-    <div className="animate-fade-in-up mb-16 max-w-3xl mx-auto" style={{ animationDelay: '0.3s' }}>
+    <div className="animate-fade-in-up mb-16 max-w-3xl mx-auto px-4 sm:px-0" style={{ animationDelay: '0.3s' }}>
       <h2 className="text-xl font-semibold text-text-primary text-center mb-8">
         Comparatif des fonctionnalit&eacute;s
       </h2>
       <div className="rounded-2xl border border-border-subtle overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="w-full border-collapse" style={{ minWidth: 560 }}>
+          <table className="w-full border-collapse table-fixed" style={{ minWidth: 600 }}>
+            <colgroup>
+              <col className="w-[36%]" />
+              <col className="w-[16%]" />
+              <col className="w-[16%]" />
+              <col className="w-[16%]" />
+              <col className="w-[16%]" />
+            </colgroup>
             <thead>
               <tr className="border-b border-border-default">
-                <th className="sticky left-0 z-20 bg-bg-elevated text-left text-xs font-semibold text-text-secondary p-3 w-[35%] min-w-[140px] shadow-[2px_0_8px_-2px_rgba(0,0,0,0.4)]">
-                  Feature
+                <th className="sticky left-0 z-20 bg-bg-elevated text-left text-xs font-semibold text-text-secondary p-3 shadow-[2px_0_8px_-2px_rgba(0,0,0,0.4)]">
+                  Fonctionnalité
                 </th>
-                <th className="bg-bg-elevated text-center text-xs font-semibold text-text-secondary p-3">
+                <th className="bg-bg-elevated text-center text-xs font-semibold text-text-secondary p-2">
                   Gratuit
                 </th>
-                <th className="bg-bg-elevated text-center p-3">
+                <th className="bg-bg-elevated text-center p-2">
                   <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-primary/20 text-xs font-bold text-primary">
                     Premium
                   </span>
                 </th>
-                <th className="bg-bg-elevated text-center p-3">
+                <th className="bg-bg-elevated text-center p-2">
                   <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-gradient-to-r from-warning to-warning/70 text-xs font-bold text-bg-base">
                     <Crown className="w-2.5 h-2.5" /> Leader
                   </span>
                 </th>
-                <th className="bg-bg-elevated text-center p-3">
+                <th className="bg-bg-elevated text-center p-2">
                   <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-primary text-xs font-bold text-white">
                     Club
                   </span>
@@ -57,19 +70,19 @@ export function PremiumFeaturesTable() {
                     <td className={`sticky left-0 z-10 ${bg} p-3 text-left shadow-[2px_0_8px_-2px_rgba(0,0,0,0.4)]`}>
                       <div className="flex items-center gap-2">
                         <feature.icon className="w-4 h-4 text-primary flex-shrink-0" />
-                        <span className="text-xs text-text-primary">{feature.name}</span>
+                        <span className="text-xs text-text-primary leading-tight">{feature.name}</span>
                       </div>
                     </td>
-                    <td className="p-3 text-center align-middle">
+                    <td className="p-2 text-center align-middle">
                       <CellValue value={feature.free} />
                     </td>
-                    <td className="p-3 text-center align-middle">
+                    <td className="p-2 text-center align-middle">
                       <CellValue value={feature.premium} />
                     </td>
-                    <td className="p-3 text-center align-middle">
+                    <td className="p-2 text-center align-middle">
                       <CellValue value={feature.squadLeader} />
                     </td>
-                    <td className="p-3 text-center align-middle">
+                    <td className="p-2 text-center align-middle">
                       <CellValue value={feature.club} />
                     </td>
                   </tr>

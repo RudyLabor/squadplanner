@@ -51,7 +51,7 @@ export const FEATURES = [
     name: 'IA Coach',
     free: false,
     premium: 'Basique',
-    squadLeader: 'Avancé (tactiques, compositions)',
+    squadLeader: 'Avancé',
     club: 'Avancé',
     icon: Sparkles,
     highlight: true,

@@ -11,9 +11,10 @@ import { Mic, Square, Send, Trash2, Loader2 } from './icons'
 interface VoiceRecorderProps {
   onSend: (audioBlob: Blob, duration: number) => void
   disabled?: boolean
+  onRecordingChange?: (isActive: boolean) => void
 }
 
-export const VoiceRecorder = memo(function VoiceRecorder({ onSend, disabled }: VoiceRecorderProps) {
+export const VoiceRecorder = memo(function VoiceRecorder({ onSend, disabled, onRecordingChange }: VoiceRecorderProps) {
   const [isRecording, setIsRecording] = useState(false)
   const [duration, setDuration] = useState(0)
   const [audioBlob, setAudioBlob] = useState<Blob | null>(null)
@@ -26,6 +27,11 @@ export const VoiceRecorder = memo(function VoiceRecorder({ onSend, disabled }: V
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null)
   const startTimeRef = useRef(0)
   const streamRef = useRef<MediaStream | null>(null)
+
+  // Notify parent of recording state
+  useEffect(() => {
+    onRecordingChange?.(isRecording || !!audioBlob)
+  }, [isRecording, audioBlob, onRecordingChange])
 
   // Cleanup on unmount
   useEffect(() => {

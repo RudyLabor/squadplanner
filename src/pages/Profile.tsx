@@ -5,7 +5,6 @@ import { ProfileSkeleton } from '../components/ui'
 import { useAuthStore, usePremiumStore } from '../hooks'
 import { useAICoachQuery, useChallengesQuery, useClaimChallengeXPMutation } from '../hooks/queries'
 import { PremiumUpgradeModal } from '../components/PremiumUpgradeModal'
-import { PlanBadge } from '../components/PlanBadge'
 import { XPBar } from '../components/XPBar'
 import { LevelUpCelebration } from '../components/LevelUpCelebration'
 import { Challenges } from '../components/Challenges'
@@ -22,7 +21,7 @@ type ChallengeWithProgress = Challenge & { userProgress?: UserChallenge }
 export function Profile() {
   const { user, profile, signOut, updateProfile, isLoading, isInitialized, refreshProfile } =
     useAuthStore()
-  const { tier, hasPremium, canAccessFeature, fetchPremiumStatus } = usePremiumStore()
+  const { hasPremium, canAccessFeature, fetchPremiumStatus } = usePremiumStore()
 
   // React Query hooks
   const { data: aiCoachTip } = useAICoachQuery(user?.id, 'profile')
@@ -148,9 +147,6 @@ export function Profile() {
       />
 
       <div className="px-4 md:px-6 lg:px-8 max-w-2xl lg:max-w-4xl xl:max-w-6xl mx-auto">
-        {/* Plan badge */}
-        <PlanBadge tier={tier} size="md" className="mb-4" />
-
         {/* XP Bar — Uses profile.xp from the profiles table.
             NOTE: Squad-level XP (e.g. squad_members.xp) is computed per-squad and may differ
             from the global profile.xp. If they're out of sync, the server-side trigger

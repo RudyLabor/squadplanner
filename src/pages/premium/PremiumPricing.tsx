@@ -113,8 +113,8 @@ export function PremiumPricing({
 }: PremiumPricingProps) {
   const [isYearly, setIsYearly] = useState(false)
 
-  // Launch promo countdown — expires March 31, 2026
-  const PROMO_END = new Date('2026-03-31T23:59:59').getTime()
+  // Launch promo countdown — expires April 30, 2026
+  const PROMO_END = new Date('2026-04-30T23:59:59').getTime()
   const [timeLeft, setTimeLeft] = useState('')
   const [promoActive, setPromoActive] = useState(true)
 

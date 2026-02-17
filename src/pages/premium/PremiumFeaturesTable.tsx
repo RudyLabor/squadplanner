@@ -30,7 +30,7 @@ export function PremiumFeaturesTable() {
   }, [])
 
   return (
-    <div className="animate-fade-in-up mb-16 max-w-3xl mx-auto px-4 sm:px-0" style={{ animationDelay: '0.3s' }}>
+    <div className="animate-fade-in-up mt-12 mb-16 max-w-3xl mx-auto px-4 sm:px-0" style={{ animationDelay: '0.3s' }}>
       <h2 className="text-xl font-semibold text-text-primary text-center mb-8">
         Comparatif des fonctionnalit&eacute;s
       </h2>

@@ -83,10 +83,10 @@ describe('GifPicker', () => {
     expect(screen.getByText('GIFs')).toBeInTheDocument()
   })
 
-  it('shows "Powered by Tenor" attribution', async () => {
+  it('shows "Powered by GIPHY" attribution', async () => {
     render(<GifPicker {...defaultProps} />)
     await act(() => vi.advanceTimersByTimeAsync(250))
-    expect(screen.getByText('Powered by Tenor')).toBeInTheDocument()
+    expect(screen.getByText('Powered by GIPHY')).toBeInTheDocument()
   })
 
   /* ---------- Search input ---------- */

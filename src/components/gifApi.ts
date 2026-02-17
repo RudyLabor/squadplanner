@@ -16,37 +16,39 @@ function isInCooldown(): boolean {
   return Date.now() - lastErrorTime < ERROR_COOLDOWN_MS
 }
 
-interface TenorMediaFormat {
+interface GiphyImage {
   url?: string
-  dims?: number[]
+  width?: string
+  height?: string
 }
 
-interface TenorResult {
+interface GiphyResult {
   id: string
-  media_formats?: {
-    gif?: TenorMediaFormat
-    tinygif?: TenorMediaFormat
+  images?: {
+    original?: GiphyImage
+    fixed_width_small?: GiphyImage
+    fixed_width?: GiphyImage
   }
 }
 
-interface TenorResponse {
-  results?: TenorResult[]
+interface GiphyResponse {
+  data?: GiphyResult[]
 }
 
-function mapResults(data: TenorResponse): GifResult[] {
-  return (data.results || []).map((r) => ({
+function mapResults(data: GiphyResponse): GifResult[] {
+  return (data.data || []).map((r) => ({
     id: r.id,
-    url: r.media_formats?.gif?.url || r.media_formats?.tinygif?.url || '',
-    preview: r.media_formats?.tinygif?.url || r.media_formats?.gif?.url || '',
-    width: r.media_formats?.tinygif?.dims?.[0] || 200,
-    height: r.media_formats?.tinygif?.dims?.[1] || 150,
+    url: r.images?.original?.url || r.images?.fixed_width?.url || '',
+    preview: r.images?.fixed_width_small?.url || r.images?.fixed_width?.url || '',
+    width: parseInt(r.images?.fixed_width_small?.width || '200', 10),
+    height: parseInt(r.images?.fixed_width_small?.height || '150', 10),
   }))
 }
 
 export async function searchGifs(query: string, limit = 20): Promise<GifResult[]> {
   if (isInCooldown()) return []
   try {
-    const { data, error } = await supabase.functions.invoke('tenor-proxy', {
+    const { data, error } = await supabase.functions.invoke('giphy-proxy', {
       body: { action: 'search', query, limit },
     })
     if (error) throw error
@@ -61,8 +63,8 @@ export async function searchGifs(query: string, limit = 20): Promise<GifResult[]
 export async function fetchTrendingGifs(limit = 20): Promise<GifResult[]> {
   if (isInCooldown()) return []
   try {
-    const { data, error } = await supabase.functions.invoke('tenor-proxy', {
-      body: { action: 'featured', limit },
+    const { data, error } = await supabase.functions.invoke('giphy-proxy', {
+      body: { action: 'trending', limit },
     })
     if (error) throw error
     return mapResults(data)

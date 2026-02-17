@@ -129,7 +129,7 @@ export const GifPicker = memo(function GifPicker({ isOpen, onSelect, onClose }: 
               <div className="flex items-center gap-2 mb-2">
                 <Sparkles className="w-4 h-4 text-primary-hover" />
                 <span className="text-base font-medium text-text-primary">GIFs</span>
-                <span className="text-xs text-text-tertiary ml-auto">Powered by Tenor</span>
+                <span className="text-xs text-text-tertiary ml-auto">Powered by GIPHY</span>
                 <button
                   onClick={onClose}
                   className="p-1 rounded-lg text-text-tertiary hover:text-text-primary hover:bg-border-hover transition-colors sm:hidden"

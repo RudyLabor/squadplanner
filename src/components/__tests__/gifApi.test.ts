@@ -35,12 +35,12 @@ describe('gifApi', () => {
   describe('searchGifs', () => {
     it('returns mapped results on success', async () => {
       const mockData = {
-        results: [
+        data: [
           {
             id: 'gif-1',
-            media_formats: {
-              gif: { url: 'https://example.com/gif.gif', dims: [200, 150] },
-              tinygif: { url: 'https://example.com/tiny.gif', dims: [100, 75] },
+            images: {
+              original: { url: 'https://example.com/gif.gif', width: '200', height: '150' },
+              fixed_width_small: { url: 'https://example.com/small.gif', width: '100', height: '75' },
             },
           },
         ],
@@ -50,7 +50,7 @@ describe('gifApi', () => {
       expect(results).toHaveLength(1)
       expect(results[0].id).toBe('gif-1')
       expect(results[0].url).toBe('https://example.com/gif.gif')
-      expect(results[0].preview).toBe('https://example.com/tiny.gif')
+      expect(results[0].preview).toBe('https://example.com/small.gif')
     })
 
     it('returns empty array on error', async () => {
@@ -65,12 +65,12 @@ describe('gifApi', () => {
       // Note: after the error test above, the module is in cooldown.
       // fetchTrendingGifs will return [] if in cooldown, so we just check it returns an array
       const mockData = {
-        results: [
+        data: [
           {
             id: 'trend-1',
-            media_formats: {
-              gif: { url: 'https://example.com/trend.gif', dims: [300, 200] },
-              tinygif: { url: 'https://example.com/trend-tiny.gif', dims: [150, 100] },
+            images: {
+              original: { url: 'https://example.com/trend.gif', width: '300', height: '200' },
+              fixed_width_small: { url: 'https://example.com/trend-small.gif', width: '150', height: '100' },
             },
           },
         ],

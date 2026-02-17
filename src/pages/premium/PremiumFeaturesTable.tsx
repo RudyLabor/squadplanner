@@ -1,5 +1,5 @@
 import { useRef, useState, useCallback } from 'react'
-import { Crown, Check, X } from '../../components/icons'
+import { Crown, Check, X, ChevronRight } from '../../components/icons'
 import { FEATURES } from './PremiumData'
 
 function CellValue({ value }: { value: boolean | string }) {
@@ -31,9 +31,14 @@ export function PremiumFeaturesTable() {
 
   return (
     <div className="animate-fade-in-up mt-12 mb-16 max-w-3xl mx-auto px-4 sm:px-0" style={{ animationDelay: '0.3s' }}>
-      <h2 className="text-xl font-semibold text-text-primary text-center mb-8">
+      <h2 className="text-xl font-semibold text-text-primary text-center mb-2">
         Comparatif des fonctionnalit&eacute;s
       </h2>
+      {/* Mobile scroll hint */}
+      <p className="text-xs text-text-tertiary text-center mb-6 sm:hidden flex items-center justify-center gap-1">
+        Glisse pour voir tous les plans <ChevronRight className="w-3 h-3" />
+      </p>
+      <div className="hidden sm:block mb-8" />
       <div className="relative rounded-2xl border border-border-subtle overflow-hidden">
         <div
           ref={scrollRef}
@@ -105,11 +110,11 @@ export function PremiumFeaturesTable() {
             </tbody>
           </table>
         </div>
-        {/* Gradient fade — only visible when more columns are hidden to the right */}
+        {/* Gradient fade — wider and more opaque to fully hide partial column */}
         {canScrollRight && (
           <div
-            className="pointer-events-none absolute inset-y-0 right-0 w-8 sm:hidden"
-            style={{ background: 'linear-gradient(to left, rgba(0,0,0,0.85), transparent)' }}
+            className="pointer-events-none absolute inset-y-0 right-0 w-12 sm:hidden"
+            style={{ background: 'linear-gradient(to left, rgb(0,0,0) 20%, transparent)' }}
             aria-hidden="true"
           />
         )}

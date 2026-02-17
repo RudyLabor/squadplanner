@@ -1,3 +1,4 @@
+import { useRef, useState, useCallback } from 'react'
 import { Crown, Check, X } from '../../components/icons'
 import { FEATURES } from './PremiumData'
 
@@ -19,20 +20,33 @@ function CellValue({ value }: { value: boolean | string }) {
 }
 
 export function PremiumFeaturesTable() {
+  const scrollRef = useRef<HTMLDivElement>(null)
+  const [canScrollRight, setCanScrollRight] = useState(true)
+
+  const handleScroll = useCallback(() => {
+    const el = scrollRef.current
+    if (!el) return
+    setCanScrollRight(el.scrollLeft < el.scrollWidth - el.clientWidth - 4)
+  }, [])
+
   return (
     <div className="animate-fade-in-up mb-16 max-w-3xl mx-auto px-4 sm:px-0" style={{ animationDelay: '0.3s' }}>
       <h2 className="text-xl font-semibold text-text-primary text-center mb-8">
         Comparatif des fonctionnalit&eacute;s
       </h2>
-      <div className="rounded-2xl border border-border-subtle overflow-hidden">
-        <div className="overflow-x-auto">
+      <div className="relative rounded-2xl border border-border-subtle overflow-hidden">
+        <div
+          ref={scrollRef}
+          className="overflow-x-auto"
+          onScroll={handleScroll}
+        >
           <table className="w-full border-collapse table-fixed" style={{ minWidth: 600 }}>
             <colgroup>
-              <col className="w-[36%]" />
-              <col className="w-[16%]" />
-              <col className="w-[16%]" />
-              <col className="w-[16%]" />
-              <col className="w-[16%]" />
+              <col style={{ width: 216 }} />
+              <col style={{ width: 96 }} />
+              <col style={{ width: 96 }} />
+              <col style={{ width: 96 }} />
+              <col style={{ width: 96 }} />
             </colgroup>
             <thead>
               <tr className="border-b border-border-default">
@@ -91,6 +105,14 @@ export function PremiumFeaturesTable() {
             </tbody>
           </table>
         </div>
+        {/* Gradient fade — only visible when more columns are hidden to the right */}
+        {canScrollRight && (
+          <div
+            className="pointer-events-none absolute inset-y-0 right-0 w-8 sm:hidden"
+            style={{ background: 'linear-gradient(to left, rgba(0,0,0,0.85), transparent)' }}
+            aria-hidden="true"
+          />
+        )}
       </div>
     </div>
   )

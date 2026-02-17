@@ -20,13 +20,13 @@ export function PremiumFeaturesTable() {
       </h2>
       <div className="rounded-2xl border border-border-subtle overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="w-full border-collapse" style={{ minWidth: 560 }}>
+          <table className="border-collapse" style={{ minWidth: 560, tableLayout: 'fixed', width: '100%' }}>
             <colgroup>
               <col style={{ width: 140 }} />
-              <col />
-              <col />
-              <col />
-              <col />
+              <col style={{ width: 105 }} />
+              <col style={{ width: 105 }} />
+              <col style={{ width: 105 }} />
+              <col style={{ width: 105 }} />
             </colgroup>
             <thead>
               <tr className="border-b border-border-default">

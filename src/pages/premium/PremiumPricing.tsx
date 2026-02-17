@@ -141,7 +141,7 @@ export function PremiumPricing({
       {/* Launch promo banner */}
       {promoActive && (
         <div
-          className="animate-fade-in-up mb-6 p-4 rounded-2xl bg-gradient-to-r from-error/10 via-warning/8 to-error/10 text-center"
+          className="animate-fade-in-up mb-6 p-4 rounded-2xl bg-bg-surface border border-error/15 text-center"
           style={{ animationDelay: '0.1s' }}
         >
           <div className="flex items-center justify-center gap-2 mb-1">

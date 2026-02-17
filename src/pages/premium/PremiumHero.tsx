@@ -1,7 +1,7 @@
 
 import { useRef, useEffect, useState } from 'react'
 import { m, useInView } from 'framer-motion'
-import { Crown, Check, Loader2, Gift, ExternalLink } from '../../components/icons'
+import { Crown, Check, Loader2, Gift } from '../../components/icons'
 import Confetti from '../../components/LazyConfetti'
 import { Button } from '../../components/ui'
 import { MobilePageHeader } from '../../components/layout/MobilePageHeader'
@@ -96,22 +96,18 @@ export function PremiumHero({ hasPremium, isLoading, onManageSubscription }: Pre
                     Tu es d&eacute;j&agrave; Premium !
                   </span>
                 </div>
-                <div className="mt-6">
-                  <Button
-                    variant="primary"
+                <div className="mt-5">
+                  <button
                     onClick={onManageSubscription}
                     disabled={isLoading}
-                    className="!bg-gradient-to-r !from-warning !to-warning/80 hover:!from-warning/90 hover:!to-warning/70 !text-white !font-semibold !px-8 !py-3 !text-base !rounded-xl !shadow-lg hover:!shadow-xl transition-all"
+                    className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-warning to-warning/80 text-white font-semibold text-base shadow-lg hover:shadow-xl hover:from-warning/90 hover:to-warning/70 transition-all disabled:opacity-50"
                   >
                     {isLoading ? (
-                      <Loader2 className="w-5 h-5 animate-spin" />
+                      <Loader2 className="w-4 h-4 animate-spin" />
                     ) : (
-                      <>
-                        <ExternalLink className="w-5 h-5 mr-2" />
-                        Gérer mon abonnement
-                      </>
+                      'Gérer mon abonnement'
                     )}
-                  </Button>
+                  </button>
                 </div>
               </div>
             )}

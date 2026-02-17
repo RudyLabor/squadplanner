@@ -3,8 +3,6 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router'
 import { useAuthStore, useSubscriptionStore, usePremiumStore, useAnalytics } from '../hooks'
 import { showSuccess, showError } from '../lib/toast'
-import { ExternalLink, Loader2, Crown } from '../components/icons'
-import { Button } from '../components/ui'
 import { captureException } from '../lib/sentry'
 import { supabaseMinimal as supabase } from '../lib/supabaseMinimal'
 import { PremiumHero } from './premium/PremiumHero'
@@ -145,36 +143,6 @@ export function Premium() {
         onManageSubscription={handleManageSubscription}
       />
       <div className="px-4 md:px-6 max-w-5xl mx-auto -mt-8">
-        {hasPremium && (
-          <div className="mb-8 p-6 rounded-2xl bg-gradient-to-r from-warning/05 to-warning/02 border border-warning/15">
-            <div className="flex flex-col sm:flex-row items-center gap-4">
-              <div className="flex items-center gap-3 flex-1">
-                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-warning to-warning/60 flex items-center justify-center shadow-sm">
-                  <Crown className="w-5 h-5 text-white" />
-                </div>
-                <div>
-                  <p className="font-semibold text-text-primary">Abonnement actif</p>
-                  <p className="text-sm text-text-secondary">Gère ta facturation, change de plan ou annule à tout moment.</p>
-                </div>
-              </div>
-              <Button
-                variant="primary"
-                onClick={handleManageSubscription}
-                disabled={isLoading}
-                className="!bg-gradient-to-r !from-warning !to-warning/80 hover:!from-warning/90 hover:!to-warning/70 !text-white !font-semibold !px-6 !py-2.5 !rounded-xl whitespace-nowrap"
-              >
-                {isLoading ? (
-                  <Loader2 className="w-4 h-4 animate-spin" />
-                ) : (
-                  <>
-                    <ExternalLink className="w-4 h-4 mr-2" />
-                    Gérer mon abonnement
-                  </>
-                )}
-              </Button>
-            </div>
-          </div>
-        )}
         {!hasPremium && (
           <PremiumPricing
             isLoading={isLoading}

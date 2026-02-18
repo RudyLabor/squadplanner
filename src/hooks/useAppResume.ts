@@ -8,16 +8,17 @@ const STALE_RELOAD_MS = 30 * 60 * 1000 // 30 minutes
  * Safari and Chrome on iOS/Android have a bug where `position: fixed`
  * elements keep their visual position after app-resume but their touch
  * target regions become stale (taps pass through or land on wrong elements).
- * Toggling display forces a full layout recalculation, fixing the hit regions.
+ * Using translateZ(0) forces a GPU repaint without touching display/layout,
+ * which avoids desynchronizing React's Virtual DOM and breaking touch targets.
  */
 function repaintFixedNav() {
   const targets = document.querySelectorAll<HTMLElement>(
     '.mobile-bottom-nav, .desktop-only'
   )
   targets.forEach((el) => {
-    el.style.display = 'none'
+    el.style.transform = 'translateZ(0)'
     void el.offsetHeight // sync reflow
-    el.style.display = ''
+    el.style.transform = ''
   })
 }
 
@@ -53,13 +54,21 @@ export function useAppResume() {
       const hiddenAt = hiddenAtRef.current
       hiddenAtRef.current = 0
 
-      // FIX 1: Dismiss any open Sheet/Dialog/Drawer.
+      // FIX 1: Dismiss any open Sheet/Dialog/Drawer — only if one is actually open.
       // When the user backgrounds the app while a modal is open, its portal
       // overlay (fixed inset-0 z-50) stays in the DOM and blocks all touch
       // events on the navbar. Dispatching Escape triggers the modal's own
       // onClose handler via the keydown listener on document, cleanly
       // unmounting the portal through React state.
-      document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }))
+      // Dispatching Escape unconditionally can corrupt React Router navigation
+      // state, so we only fire it when an overlay is actually present.
+      const hasOpenOverlay =
+        document.body.style.overflow === 'hidden' ||
+        document.querySelector('[role="dialog"]:not([hidden])') ||
+        document.querySelector('[data-state="open"]')
+      if (hasOpenOverlay) {
+        document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }))
+      }
 
       // FIX 2: Clear stuck body overflow from Sheet/Dialog/Drawer.
       if (document.body.style.overflow === 'hidden') {
@@ -78,9 +87,19 @@ export function useAppResume() {
       // FIX 4: Force repaint on fixed nav elements.
       // Must run after a frame so the Escape-triggered React state update
       // (which removes overlays) has time to flush to the DOM.
-      requestAnimationFrame(() => {
-        repaintFixedNav()
-      })
+      // If React Router is mid-navigation, wait for it to finish first —
+      // forcing a repaint during navigation can corrupt the router state.
+      const router = (window as any).__reactRouterDataRouter
+      if (router?.state?.navigation?.state !== 'idle') {
+        const unsub = router.subscribe((state: any) => {
+          if (state.navigation.state === 'idle') {
+            unsub()
+            requestAnimationFrame(() => repaintFixedNav())
+          }
+        })
+      } else {
+        requestAnimationFrame(() => repaintFixedNav())
+      }
 
       if (hiddenAt === 0) return
       const elapsed = Date.now() - hiddenAt
@@ -93,13 +112,30 @@ export function useAppResume() {
 
     const handlePageShow = (e: PageTransitionEvent) => {
       if (!e.persisted) return
-      document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }))
+
+      const hasOpenOverlay =
+        document.body.style.overflow === 'hidden' ||
+        document.querySelector('[role="dialog"]:not([hidden])') ||
+        document.querySelector('[data-state="open"]')
+      if (hasOpenOverlay) {
+        document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }))
+      }
+
       if (document.body.style.overflow === 'hidden') {
         document.body.style.overflow = ''
       }
-      requestAnimationFrame(() => {
-        repaintFixedNav()
-      })
+
+      const router = (window as any).__reactRouterDataRouter
+      if (router?.state?.navigation?.state !== 'idle') {
+        const unsub = router.subscribe((state: any) => {
+          if (state.navigation.state === 'idle') {
+            unsub()
+            requestAnimationFrame(() => repaintFixedNav())
+          }
+        })
+      } else {
+        requestAnimationFrame(() => repaintFixedNav())
+      }
     }
 
     document.addEventListener('visibilitychange', handleVisibilityChange)

@@ -72,7 +72,7 @@ export function Referrals() {
       {/* ─── HERO SECTION (like Premium) ─── */}
       <div
         ref={heroRef}
-        className="relative overflow-hidden bg-gradient-to-br from-success/15 via-primary/8 to-bg-base pt-8 pb-16"
+        className="relative overflow-hidden bg-gradient-to-br from-success/15 via-primary/8 to-bg-base pt-8 pb-20"
       >
         {/* Animated background blobs */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -147,7 +147,7 @@ export function Referrals() {
       </div>
 
       {/* ─── CONTENT ─── */}
-      <div className="mx-auto max-w-2xl md:max-w-3xl px-4 md:px-6 lg:px-8 -mt-8 pb-8 relative z-10">
+      <div className="mx-auto max-w-2xl md:max-w-3xl px-4 md:px-6 lg:px-8 -mt-14 pb-8 relative z-10">
         {isLoading ? (
           <div className="flex items-center justify-center py-16" aria-busy="true">
             <div className="h-8 w-8 animate-spin rounded-full border-2 border-success border-t-transparent" />

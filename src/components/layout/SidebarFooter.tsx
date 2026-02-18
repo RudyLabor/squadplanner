@@ -31,7 +31,7 @@ export const SidebarFooter = memo(function SidebarFooter({
       <div className={`${isExpanded ? 'p-4' : 'p-2'} border-t border-surface-card`}>
         {!isExpanded ? (
           <Tooltip content={profile?.username || 'Mon profil'} position="right" delay={300}>
-            <Link to="/profile" viewTransition aria-label="Voir mon profil">
+            <Link to="/profile" aria-label="Voir mon profil">
               <m.div
                 className="flex items-center justify-center min-w-[44px] min-h-[44px] p-2 rounded-xl hover:bg-surface-card transition-colors duration-300"
                 whileHover={{ x: 0 }}
@@ -55,7 +55,7 @@ export const SidebarFooter = memo(function SidebarFooter({
           </Tooltip>
         ) : (
           <>
-            <Link to="/profile" viewTransition aria-label="Voir mon profil">
+            <Link to="/profile" aria-label="Voir mon profil">
               <m.div
                 className="flex items-center gap-3 p-3 rounded-xl hover:bg-surface-card transition-colors duration-300"
                 whileHover={{ x: 4 }}
@@ -137,7 +137,7 @@ export const SidebarFooter = memo(function SidebarFooter({
       {!isExpanded && (
         <div className="p-2 pb-4">
           <Tooltip content={isPaid ? `Plan ${tier === 'squad_leader' ? 'Squad Leader' : tier.charAt(0).toUpperCase() + tier.slice(1)}` : 'Passer Premium'} position="right" delay={300}>
-            <Link to="/premium" viewTransition aria-label={isPaid ? 'Mon abonnement' : 'Passer Premium'}>
+            <Link to="/premium" aria-label={isPaid ? 'Mon abonnement' : 'Passer Premium'}>
               <m.div
                 className="flex items-center justify-center min-w-[44px] min-h-[44px] p-2 rounded-xl hover:bg-surface-card transition-colors"
                 whileHover={{ scale: 1.1 }}

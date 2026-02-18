@@ -123,6 +123,7 @@ export async function clientLoader({ serverLoader }: ClientLoaderFunctionArgs) {
   const { supabaseMinimal: supabase } = await import('../lib/supabaseMinimal')
   const { withTimeout } = await import('../lib/withTimeout')
   const { data: { user } } = await withTimeout(supabase.auth.getUser(), 5000)
+    .catch(() => ({ data: { user: null as null } }))
 
   // If client auth isn't ready, fall back to SSR loader data (which uses cookie auth)
   if (!user) {

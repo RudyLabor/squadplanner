@@ -55,7 +55,9 @@ interface ProtectedLoaderData {
 export async function clientLoader({ serverLoader }: ClientLoaderFunctionArgs) {
   const { supabaseMinimal: supabase } = await import('../lib/supabaseMinimal')
   const { withTimeout } = await import('../lib/withTimeout')
+  // .catch prevents 500 when navigator.locks deadlock causes TimeoutError
   const { data: { user }, error } = await withTimeout(supabase.auth.getUser(), 5000)
+    .catch((e: unknown) => ({ data: { user: null as null }, error: e as Error }))
 
   if (error || !user) {
     throw redirect('/auth')

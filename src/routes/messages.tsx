@@ -59,6 +59,7 @@ export async function clientLoader({ serverLoader }: ClientLoaderFunctionArgs) {
   const { supabaseMinimal: supabase } = await import('../lib/supabaseMinimal')
   const { withTimeout } = await import('../lib/withTimeout')
   const { data: { user } } = await withTimeout(supabase.auth.getUser(), 5000)
+    .catch(() => ({ data: { user: null as null } }))
   if (!user) return { squads: [] }
 
   const { data: memberships } = await withTimeout(

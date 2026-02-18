@@ -31,10 +31,11 @@ export async function loader({ request }: LoaderFunctionArgs) {
     return data({ squads: [] }, { headers })
   }
 
-  // Fetch public squads for discovery
+  // Fetch only public squads for discovery (with member count)
   const { data: publicSquads } = await supabase
     .from('squads')
-    .select('id, name, game, created_at')
+    .select('id, name, game, total_members, created_at')
+    .eq('is_public', true)
     .order('created_at', { ascending: false })
     .limit(50)
 
@@ -48,7 +49,8 @@ export async function clientLoader({ serverLoader }: ClientLoaderFunctionArgs) {
     .catch(() => ({ data: { user: null as null } })) as any
   if (!user) return { publicSquads: [] }
   const { data: publicSquads } = await withTimeout(
-    supabase.from('squads').select('id, name, game, created_at')
+    supabase.from('squads').select('id, name, game, total_members, created_at')
+      .eq('is_public', true)
       .order('created_at', { ascending: false }).limit(50),
     5000
   ) as any

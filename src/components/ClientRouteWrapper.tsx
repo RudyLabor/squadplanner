@@ -1,5 +1,5 @@
 
-import { useRef, type ReactNode } from 'react'
+import { type ReactNode } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
 
 interface SeedConfig {
@@ -8,9 +8,10 @@ interface SeedConfig {
 }
 
 /**
- * Client boundary wrapper for RSC routes.
- * Seeds React Query cache with server-loaded data on first render.
- * This enables server → client data transfer without useLoaderData hooks.
+ * Client boundary wrapper for routes.
+ * Seeds React Query cache with loader data on every navigation.
+ * setQueryData is cheap and only triggers re-renders if data actually changed,
+ * so it's safe to call on each render to keep cache in sync with loaders.
  */
 export function ClientRouteWrapper({
   children,
@@ -20,13 +21,11 @@ export function ClientRouteWrapper({
   seeds?: SeedConfig[]
 }) {
   const queryClient = useQueryClient()
-  const seeded = useRef(false)
 
-  if (!seeded.current && seeds?.length) {
+  if (seeds?.length) {
     seeds.forEach(({ key, data }) => {
       if (data != null) queryClient.setQueryData(key, data)
     })
-    seeded.current = true
   }
 
   return <>{children}</>

@@ -18,9 +18,14 @@ const ALLOWED_ORIGINS = [
   Deno.env.get('SUPABASE_URL') || '',
 ].filter(Boolean)
 
+// Also allow Vercel preview/production deployments
+const VERCEL_PATTERN = /^https:\/\/[\w-]+\.vercel\.app$/
+
 function getCorsHeaders(origin: string | null) {
   const allowedOrigin =
-    origin && ALLOWED_ORIGINS.some((allowed) => origin === allowed) ? origin : null
+    origin && (ALLOWED_ORIGINS.some((allowed) => origin === allowed) || VERCEL_PATTERN.test(origin))
+      ? origin
+      : null
   if (!allowedOrigin) {
     return {
       'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',

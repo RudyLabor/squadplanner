@@ -23,7 +23,9 @@ export function Referrals() {
       fetchReferralHistory()
       analytics.track('referral_page_viewed' as any)
     }
-  }, [user, fetchReferralStats, fetchReferralHistory, analytics])
+    // Zustand actions are stable refs; analytics.track should fire once per user change
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user])
 
   const handleCopyLink = async () => {
     const success = await copyShareUrl()

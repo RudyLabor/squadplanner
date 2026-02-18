@@ -54,17 +54,6 @@ export default function SquadDetail() {
     if (user?.id) fetchPremiumStatus()
   }, [user?.id, fetchPremiumStatus])
 
-  // Auto-RSVP from push notification deep link (?rsvp=sessionId&response=present|absent)
-  useEffect(() => {
-    const rsvpSessionId = searchParams.get('rsvp')
-    const rsvpResponse = searchParams.get('response') as 'present' | 'absent' | 'maybe' | null
-    if (rsvpSessionId && rsvpResponse && user) {
-      // Clear params immediately to avoid re-triggering
-      setSearchParams({}, { replace: true })
-      handleRsvp(rsvpSessionId, rsvpResponse)
-    }
-  }, [searchParams, user, handleRsvp, setSearchParams])
-
   const handleCreateSession = useCallback(
     async (data: {
       squad_id: string
@@ -113,6 +102,17 @@ export default function SquadDetail() {
     },
     [rsvpMutation]
   )
+
+  // Auto-RSVP from push notification deep link (?rsvp=sessionId&response=present|absent)
+  useEffect(() => {
+    const rsvpSessionId = searchParams.get('rsvp')
+    const rsvpResponse = searchParams.get('response') as 'present' | 'absent' | 'maybe' | null
+    if (rsvpSessionId && rsvpResponse && user) {
+      // Clear params immediately to avoid re-triggering
+      setSearchParams({}, { replace: true })
+      handleRsvp(rsvpSessionId, rsvpResponse)
+    }
+  }, [searchParams, user, handleRsvp, setSearchParams])
 
   const handleLeaveSquad = () => {
     if (!id) return

@@ -12,21 +12,31 @@ const ALLOWED_ORIGINS = [
   'http://localhost:5173',
   'http://localhost:5174',
   'https://squadplanner.fr',
+  'https://www.squadplanner.fr',
   'https://squadplanner.app',
+  'https://www.squadplanner.app',
   Deno.env.get('SUPABASE_URL') || '',
 ].filter(Boolean)
 
+function isAllowedOrigin(origin: string): boolean {
+  if (ALLOWED_ORIGINS.includes(origin)) return true
+  // Allow Vercel preview deployments
+  if (/^https:\/\/squadplanner[a-z0-9-]*\.vercel\.app$/.test(origin)) return true
+  return false
+}
+
 function getCorsHeaders(origin: string | null) {
-  const allowedOrigin =
-    origin && ALLOWED_ORIGINS.some((allowed) => origin === allowed) ? origin : null
+  const allowedOrigin = origin && isAllowedOrigin(origin) ? origin : null
   if (!allowedOrigin) {
     return {
       'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+      'Access-Control-Allow-Methods': 'POST, OPTIONS, HEAD',
     }
   }
   return {
     'Access-Control-Allow-Origin': allowedOrigin,
     'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+    'Access-Control-Allow-Methods': 'POST, OPTIONS, HEAD',
   }
 }
 
@@ -108,6 +118,12 @@ serve(async (req) => {
       return jsonResponse({ error: 'redirect_uri manquant' }, 400, origin)
     }
 
+    // Validate Discord credentials are configured
+    if (!DISCORD_CLIENT_ID || !DISCORD_CLIENT_SECRET) {
+      console.error('Discord credentials missing: CLIENT_ID=', !!DISCORD_CLIENT_ID, 'CLIENT_SECRET=', !!DISCORD_CLIENT_SECRET)
+      return jsonResponse({ error: 'Configuration Discord manquante cote serveur (CLIENT_ID ou SECRET)' }, 500, origin)
+    }
+
     // Exchange code for access token via Discord API
     const tokenResponse = await fetch('https://discord.com/api/v10/oauth2/token', {
       method: 'POST',
@@ -122,9 +138,21 @@ serve(async (req) => {
     })
 
     if (!tokenResponse.ok) {
-      const tokenError = await tokenResponse.text()
-      console.error('Discord token exchange failed:', tokenError)
-      return jsonResponse({ error: 'Code OAuth invalide ou expire' }, 400, origin)
+      const tokenErrorText = await tokenResponse.text()
+      console.error('Discord token exchange failed:', tokenResponse.status, tokenErrorText)
+      // Parse Discord error for more detail
+      let discordError = 'Code OAuth invalide ou expire'
+      try {
+        const parsed = JSON.parse(tokenErrorText)
+        if (parsed.error === 'invalid_grant') {
+          discordError = `Code OAuth invalide (redirect_uri envoye: ${body.redirect_uri})`
+        } else if (parsed.error === 'invalid_client') {
+          discordError = 'Client Discord invalide (CLIENT_ID ou CLIENT_SECRET incorrect)'
+        } else if (parsed.error_description) {
+          discordError = `Discord: ${parsed.error_description}`
+        }
+      } catch { /* text wasn't JSON */ }
+      return jsonResponse({ error: discordError }, 400, origin)
     }
 
     const tokenData = await tokenResponse.json()

@@ -56,10 +56,20 @@ export function DiscordCallback() {
           },
         )
 
-        const data = await response.json()
+        let data: Record<string, unknown>
+        try {
+          data = await response.json()
+        } catch {
+          throw new Error(`Erreur serveur (${response.status}) — réponse non-JSON`)
+        }
 
         if (!response.ok) {
-          throw new Error(data.error || 'Erreur lors de la liaison Discord')
+          throw new Error(
+            (data.error as string) ||
+            (data.message as string) ||
+            (data.msg as string) ||
+            `Erreur serveur (${response.status})`
+          )
         }
 
         // Update local profile state

@@ -1,5 +1,5 @@
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { m } from 'framer-motion'
 import { Users, Plus, UserPlus, Compass } from '../components/icons'
 import { Link } from 'react-router'
@@ -13,6 +13,8 @@ import {
   useCreateSquadMutation,
   useJoinSquadMutation,
 } from '../hooks/queries/useSquadsQuery'
+import { PullToRefresh } from '../components/PullToRefresh'
+import { queryClient } from '../lib/queryClient'
 import { SquadLimitReached, PremiumBadge } from '../components/PremiumGate'
 import { PremiumUpgradeModal } from '../components/PremiumUpgradeModal'
 import { supabaseMinimal as supabase } from '../lib/supabaseMinimal'
@@ -47,6 +49,10 @@ export default function Squads({ loaderData: _loaderData }: SquadsProps) {
   const [copiedCode, setCopiedCode] = useState<string | null>(null)
   const [nextSessions, setNextSessions] = useState<SquadNextSession[]>([])
   const { active: showConfetti, fire: fireConfetti } = useConfetti(4000)
+
+  const handleRefresh = useCallback(async () => {
+    await queryClient.invalidateQueries({ queryKey: ['squads'] })
+  }, [])
 
   const { user } = useAuthStore()
   const { data: squads = [], isLoading } = useSquadsQuery()
@@ -177,6 +183,7 @@ export default function Squads({ loaderData: _loaderData }: SquadsProps) {
   }
 
   return (
+    <PullToRefresh onRefresh={handleRefresh}>
     <main className="min-h-0 bg-bg-base pb-6" aria-label="Squads">
       {showConfetti && typeof window !== 'undefined' && (
         <Confetti
@@ -353,5 +360,6 @@ export default function Squads({ loaderData: _loaderData }: SquadsProps) {
         feature="Squads illimitées"
       />
     </main>
+    </PullToRefresh>
   )
 }

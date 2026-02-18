@@ -1,11 +1,13 @@
 
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useState, useRef, useCallback } from 'react'
 import { Plus, Loader2 } from '../components/icons'
 import Confetti from '../components/LazyConfetti'
 import { Button } from '../components/ui'
+import { PullToRefresh } from '../components/PullToRefresh'
 import { useAuthStore, useAIStore, useConfetti } from '../hooks'
 import { useSquadsQuery } from '../hooks/queries/useSquadsQuery'
 import { useUpcomingSessionsQuery } from '../hooks/queries/useSessionsQuery'
+import { queryClient } from '../lib/queryClient'
 import { useCreateSessionModal } from '../components/CreateSessionModal'
 import { NeedsResponseSection, AllCaughtUp } from './sessions/NeedsResponseSection'
 import { AISlotSuggestions, CoachTipsSection } from './sessions/AISuggestions'
@@ -30,6 +32,13 @@ export function Sessions({ loaderData: _loaderData }: SessionsProps) {
   const openCreateSession = useCreateSessionModal((s) => s.open)
 
   const { active: showConfetti, fire: fireConfetti } = useConfetti()
+
+  const handleRefresh = useCallback(async () => {
+    await Promise.all([
+      queryClient.invalidateQueries({ queryKey: ['squads'] }),
+      queryClient.invalidateQueries({ queryKey: ['sessions'] }),
+    ])
+  }, [])
   const [weekOffset, setWeekOffset] = useState(0)
   const hasShownCelebration = useRef(false)
   const aiFetchedRef = useRef<Set<string>>(new Set())
@@ -82,6 +91,7 @@ export function Sessions({ loaderData: _loaderData }: SessionsProps) {
   }
 
   return (
+    <PullToRefresh onRefresh={handleRefresh}>
     <main className="min-h-0 bg-bg-base pb-6" aria-label="Sessions">
       {showConfetti && typeof window !== 'undefined' && (
         <Confetti
@@ -128,5 +138,6 @@ export function Sessions({ loaderData: _loaderData }: SessionsProps) {
         </div>
       </div>
     </main>
+    </PullToRefresh>
   )
 }

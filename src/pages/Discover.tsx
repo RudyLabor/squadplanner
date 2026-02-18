@@ -1,5 +1,5 @@
 
-import { memo, useState } from 'react'
+import { memo, useState, useCallback } from 'react'
 import { m } from 'framer-motion'
 import { Compass, Plus, Sparkles, Users, Gamepad2 } from '../components/icons'
 import { Link } from 'react-router'
@@ -10,6 +10,8 @@ import { DiscoverSquadCard } from '../components/discover/DiscoverSquadCard'
 import { GlobalLeaderboard } from '../components/discover/GlobalLeaderboard'
 import { MatchmakingSection } from '../components/discover/MatchmakingSection'
 import { useBrowseSquadsQuery } from '../hooks/queries'
+import { PullToRefresh } from '../components/PullToRefresh'
+import { queryClient } from '../lib/queryClient'
 import type { PublicSquadResult } from '../types/database'
 import { useStatePersistence } from '../hooks/useStatePersistence'
 import { useInfiniteScroll } from '../hooks/useInfiniteScroll'
@@ -45,7 +47,12 @@ export function Discover() {
   const [game, setGame] = useStatePersistence('discover_game', '')
   const [region, setRegion] = useStatePersistence('discover_region', '')
 
+  const handleRefresh = useCallback(async () => {
+    await queryClient.invalidateQueries({ queryKey: ['browse-squads'] })
+  }, [])
+
   return (
+    <PullToRefresh onRefresh={handleRefresh}>
     <m.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
@@ -101,6 +108,7 @@ export function Discover() {
         <GlobalLeaderboard game={game || undefined} region={region || undefined} />
       )}
     </m.div>
+    </PullToRefresh>
   )
 }
 

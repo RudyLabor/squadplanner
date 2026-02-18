@@ -158,7 +158,7 @@ export const Input = forwardRef<HTMLInputElement | HTMLTextAreaElement, InputPro
           )}
           {hasRightElement && (
             <div
-              className={`absolute right-4 ${isMultiline ? 'top-3' : 'top-1/2 -translate-y-1/2'} flex items-center gap-1.5`}
+              className={`absolute right-4 z-10 ${isMultiline ? 'top-3' : 'top-1/2 -translate-y-1/2'} flex items-center gap-1.5`}
             >
               {clearable && value && (
                 <button
@@ -174,10 +174,10 @@ export const Input = forwardRef<HTMLInputElement | HTMLTextAreaElement, InputPro
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="text-text-quaternary hover:text-text-tertiary transition-colors touch-target flex items-center justify-center"
+                  className="text-text-quaternary hover:text-text-tertiary transition-colors touch-target flex items-center justify-center min-w-[44px] min-h-[44px] -mr-2 cursor-pointer"
                   aria-label={showPassword ? 'Masquer le mot de passe' : 'Afficher le mot de passe'}
                 >
-                  {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                 </button>
               )}
               {suffix && (

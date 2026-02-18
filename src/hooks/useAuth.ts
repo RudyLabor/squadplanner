@@ -5,6 +5,7 @@ import type { User, Session } from '@supabase/supabase-js'
 import type { Profile } from '../types/database'
 import { updateDailyStreak } from './useAuthStreak'
 import { usePremiumStore } from './usePremium'
+import { showSuccess } from '../lib/toast'
 
 interface AuthState {
   user: User | null
@@ -79,6 +80,11 @@ export const useAuthStore = create<AuthState>((set, get) => ({
           set({ user: session.user, session, profile: updatedProfile })
           // Refresh premium status on every sign-in
           usePremiumStore.getState().fetchPremiumStatus()
+          // Show welcome toast for OAuth sign-in (Google redirect)
+          if (session.user.app_metadata?.provider === 'google') {
+            const isNewUser = profile?.created_at && (Date.now() - new Date(profile.created_at).getTime() < 60000)
+            showSuccess(isNewUser ? 'Compte créé avec succès ! Bienvenue !' : 'Content de te revoir !')
+          }
         } else if (event === 'SIGNED_OUT') {
           set({ user: null, session: null, profile: null })
           usePremiumStore.getState().reset()

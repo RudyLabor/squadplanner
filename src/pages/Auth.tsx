@@ -213,7 +213,7 @@ export default function Auth() {
                   className="p-5 space-y-4"
                 >
                   {mode !== 'reset' && (
-                    <AuthGoogleButton onClick={handleGoogleSignIn} disabled={isSubmitting} />
+                    <AuthGoogleButton onClick={handleGoogleSignIn} disabled={isSubmitting} loading={isSubmitting} />
                   )}
 
                   <AuthFormFields

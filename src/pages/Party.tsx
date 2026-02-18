@@ -1,11 +1,13 @@
 
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useState, useRef, useCallback } from 'react'
 import { m } from 'framer-motion'
 import { Loader2 } from '../components/icons'
 import Confetti from '../components/LazyConfetti'
+import { PullToRefresh } from '../components/PullToRefresh'
 import { useAuthStore, usePremiumStore } from '../hooks'
 import { useVoiceChatStore, getSavedPartyInfo } from '../hooks/useVoiceChat'
 import { useSquadsQuery } from '../hooks/queries/useSquadsQuery'
+import { queryClient } from '../lib/queryClient'
 import { QualityChangeToast } from '../components/NetworkQualityIndicator'
 import { ActivePartySection } from './party/PartyActiveSection'
 import { PartySquadCard } from './party/PartySquadCard'
@@ -42,6 +44,10 @@ export function Party() {
   const [qualityToastLevel, setQualityToastLevel] = useState<
     'excellent' | 'good' | 'medium' | 'poor'
   >('good')
+
+  const handleRefresh = useCallback(async () => {
+    await queryClient.invalidateQueries({ queryKey: ['squads'] })
+  }, [])
 
   // Squads loaded via React Query (cache seeded by SSR loader)
 
@@ -147,6 +153,7 @@ export function Party() {
   const otherSquads = squads.filter((s) => s.id !== activeSquadId)
 
   return (
+    <PullToRefresh onRefresh={handleRefresh}>
     <main className="min-h-0 bg-bg-base pb-6" aria-label="Party vocale">
       {showDuoConfetti && (
         <Confetti
@@ -286,6 +293,7 @@ export function Party() {
         </div>
       </div>
     </main>
+    </PullToRefresh>
   )
 }
 

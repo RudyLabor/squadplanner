@@ -41,9 +41,22 @@ export function PullToRefresh({
     const container = containerRef.current
     if (!container) return
 
+    // Find the closest scrollable parent to check scroll position
+    const getScrollTop = (): number => {
+      let el: HTMLElement | null = container
+      while (el) {
+        if (el.scrollTop > 0) return el.scrollTop
+        if (el === document.documentElement || el === document.body) {
+          return window.scrollY || el.scrollTop
+        }
+        el = el.parentElement
+      }
+      return window.scrollY || 0
+    }
+
     const onTouchStart = (e: TouchEvent) => {
       if (disabled || refreshing.current) return
-      const scrollTop = window.scrollY || document.documentElement.scrollTop
+      const scrollTop = getScrollTop()
       if (scrollTop > 5) return // 5px tolerance
 
       startY.current = e.touches[0].clientY

@@ -6,7 +6,7 @@ import type { CallUser, VoiceCallState } from './useCallState'
 import { RING_TIMEOUT } from './useCallState'
 // import { LIVEKIT_URL } from './useCallState'
 // import { initializeLiveKitRoom, subscribeToIncomingCalls as _subscribeToIncomingCalls, sendCallPushNotification } from './useCallActions'
-import { sendCallPushNotification, initializeNativeWebRTC, subscribeToIncomingCalls as _subscribeToIncomingCalls } from './useCallActions'
+import { sendCallPushNotification, initializeNativeWebRTC, disconnectWebRTC, subscribeToIncomingCalls as _subscribeToIncomingCalls } from './useCallActions'
 
 export type { CallStatus, CallUser } from './useCallState'
 export { formatCallDuration } from './useCallState'
@@ -37,6 +37,7 @@ export const useVoiceCallStore = create<VoiceCallState>((set, get) => ({
     const { durationInterval, ringTimeout, room } = get()
     if (durationInterval) clearInterval(durationInterval)
     if (ringTimeout) clearTimeout(ringTimeout)
+    disconnectWebRTC()
     useNetworkQualityStore.getState().resetQuality()
 
     if (room) {
@@ -209,18 +210,13 @@ export const useVoiceCallStore = create<VoiceCallState>((set, get) => ({
         await supabase.from('calls').update({ status: 'answered' }).eq('id', state.currentCallId)
       }
 
-      // LIVEKIT REMOVED: Replace with native WebRTC implementation  
-      // await initializeLiveKitRoom(user.id, state.caller.id, useVoiceCallStore)
-      if (!import.meta.env.PROD) console.log('[useVoiceCall] Native WebRTC answer call setup needed')
+      // Set status to 'calling' so the WebRTC onConnectionStateChange callback
+      // can properly transition to 'connected' (it checks status === 'calling')
+      set({ status: 'calling', ringTimeout: null })
 
-      const callStartTime = Date.now()
-      const durationInterval = setInterval(() => {
-        set((s) => ({
-          callDuration: Math.floor((Date.now() - (s.callStartTime || Date.now())) / 1000),
-        }))
-      }, 1000)
-
-      set({ status: 'connected', callStartTime, durationInterval })
+      // Connect receiver to the same WebRTC channel as the caller
+      await initializeNativeWebRTC(user.id, state.caller.id, useVoiceCallStore)
+      if (!import.meta.env.PROD) console.log('[useVoiceCall] Native WebRTC answer call connected')
     } catch (error) {
       console.warn('Error accepting call:', error)
       set({
@@ -266,6 +262,9 @@ export const useVoiceCallStore = create<VoiceCallState>((set, get) => ({
       await supabase.from('calls').update(updateData).eq('id', currentCallId)
     }
 
+    // Clean up WebRTC connection
+    disconnectWebRTC()
+
     try {
       if (room) {
         room.remoteParticipants.forEach((participant: { identity: string }) => {
@@ -275,7 +274,7 @@ export const useVoiceCallStore = create<VoiceCallState>((set, get) => ({
         await room.disconnect()
       }
     } catch (error) {
-      console.warn('Error cleaning up LiveKit:', error)
+      console.warn('Error cleaning up call:', error)
     }
 
     set({ status: 'ended' })

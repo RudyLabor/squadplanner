@@ -1,7 +1,8 @@
 
-import { useState, useEffect, useRef, useMemo } from 'react'
+import { useState, useEffect, useRef, useMemo, useCallback } from 'react'
 import { LogOut } from '../components/icons'
 import { ProfileSkeleton } from '../components/ui'
+import { PullToRefresh } from '../components/PullToRefresh'
 import { useAuthStore, usePremiumStore } from '../hooks'
 import { useAICoachQuery, useChallengesQuery, useClaimChallengeXPMutation } from '../hooks/queries'
 import { PremiumUpgradeModal } from '../components/PremiumUpgradeModal'
@@ -23,6 +24,10 @@ export function Profile() {
   const { user, profile, signOut, updateProfile, isLoading, isInitialized, refreshProfile } =
     useAuthStore()
   const { tier, hasPremium, canAccessFeature, fetchPremiumStatus } = usePremiumStore()
+
+  const handleRefresh = useCallback(async () => {
+    await refreshProfile()
+  }, [refreshProfile])
 
   // React Query hooks
   const { data: aiCoachTip } = useAICoachQuery(user?.id, 'profile')
@@ -127,6 +132,7 @@ export function Profile() {
   }
 
   return (
+    <PullToRefresh onRefresh={handleRefresh}>
     <main className="min-h-0 bg-bg-base pb-6" aria-label="Profil">
       {/* Level Up Celebration */}
       {showLevelUp && newLevel && (
@@ -203,5 +209,6 @@ export function Profile() {
         feature="Compte Premium"
       />
     </main>
+    </PullToRefresh>
   )
 }

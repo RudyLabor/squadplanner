@@ -5,8 +5,8 @@ import { createElement } from 'react'
 /* ------------------------------------------------------------------ */
 /*  Hoisted mocks                                                      */
 /* ------------------------------------------------------------------ */
-const mockSearchGifs = vi.hoisted(() => vi.fn().mockResolvedValue([]))
-const mockFetchTrendingGifs = vi.hoisted(() => vi.fn().mockResolvedValue([]))
+const mockSearchGifs = vi.hoisted(() => vi.fn().mockResolvedValue({ results: [], error: null }))
+const mockFetchTrendingGifs = vi.hoisted(() => vi.fn().mockResolvedValue({ results: [], error: null }))
 const mockCategories = vi.hoisted(() => [
   { label: 'GG', query: 'gg gaming' },
   { label: 'Rage', query: 'rage gaming' },
@@ -62,8 +62,8 @@ describe('GifPicker', () => {
   beforeEach(() => {
     vi.clearAllMocks()
     vi.useFakeTimers({ shouldAdvanceTime: true })
-    mockFetchTrendingGifs.mockResolvedValue([])
-    mockSearchGifs.mockResolvedValue([])
+    mockFetchTrendingGifs.mockResolvedValue({ results: [], error: null })
+    mockSearchGifs.mockResolvedValue({ results: [], error: null })
   })
 
   afterEach(() => {
@@ -104,13 +104,11 @@ describe('GifPicker', () => {
     await act(async () => {
       fireEvent.change(input, { target: { value: 'cats' } })
     })
-    // The X button for clearing is rendered when query is truthy
-    // There are multiple X icons, but we just verify query state by checking input value
     expect(input).toHaveValue('cats')
   })
 
   it('calls searchGifs after debounce when typing', async () => {
-    mockSearchGifs.mockResolvedValue(sampleGifs)
+    mockSearchGifs.mockResolvedValue({ results: sampleGifs, error: null })
     render(<GifPicker {...defaultProps} />)
     await act(() => vi.advanceTimersByTimeAsync(250))
 
@@ -118,16 +116,14 @@ describe('GifPicker', () => {
     await act(async () => {
       fireEvent.change(input, { target: { value: 'funny' } })
     })
-    // Before debounce expires, search should not be called
     expect(mockSearchGifs).not.toHaveBeenCalled()
 
-    // After 400ms debounce
     await act(() => vi.advanceTimersByTimeAsync(500))
     expect(mockSearchGifs).toHaveBeenCalledWith('funny')
   })
 
   it('loads trending GIFs when component opens', async () => {
-    mockFetchTrendingGifs.mockResolvedValue(sampleGifs)
+    mockFetchTrendingGifs.mockResolvedValue({ results: sampleGifs, error: null })
     render(<GifPicker {...defaultProps} />)
     await act(() => vi.advanceTimersByTimeAsync(500))
     expect(mockFetchTrendingGifs).toHaveBeenCalledTimes(1)
@@ -143,7 +139,7 @@ describe('GifPicker', () => {
   })
 
   it('hides categories after a search has been made', async () => {
-    mockSearchGifs.mockResolvedValue(sampleGifs)
+    mockSearchGifs.mockResolvedValue({ results: sampleGifs, error: null })
     render(<GifPicker {...defaultProps} />)
     await act(() => vi.advanceTimersByTimeAsync(250))
 
@@ -152,12 +148,11 @@ describe('GifPicker', () => {
       fireEvent.change(input, { target: { value: 'test' } })
     })
     await act(() => vi.advanceTimersByTimeAsync(500))
-    // Categories should be hidden when hasSearched=true
     expect(screen.queryByText('GG')).not.toBeInTheDocument()
   })
 
   it('clicking a category triggers search', async () => {
-    mockSearchGifs.mockResolvedValue(sampleGifs)
+    mockSearchGifs.mockResolvedValue({ results: sampleGifs, error: null })
     render(<GifPicker {...defaultProps} />)
     await act(() => vi.advanceTimersByTimeAsync(250))
 
@@ -170,7 +165,7 @@ describe('GifPicker', () => {
   /* ---------- GIF grid ---------- */
 
   it('renders GIF images when trending returns results', async () => {
-    mockFetchTrendingGifs.mockResolvedValue(sampleGifs)
+    mockFetchTrendingGifs.mockResolvedValue({ results: sampleGifs, error: null })
     render(<GifPicker {...defaultProps} />)
     await act(() => vi.advanceTimersByTimeAsync(500))
     const images = screen.getAllByAltText('GIF')
@@ -179,7 +174,7 @@ describe('GifPicker', () => {
   })
 
   it('calls onSelect + onClose when a GIF is clicked', async () => {
-    mockFetchTrendingGifs.mockResolvedValue(sampleGifs)
+    mockFetchTrendingGifs.mockResolvedValue({ results: sampleGifs, error: null })
     render(<GifPicker {...defaultProps} />)
     await act(() => vi.advanceTimersByTimeAsync(500))
 
@@ -190,8 +185,8 @@ describe('GifPicker', () => {
 
   /* ---------- Empty state ---------- */
 
-  it('shows "Aucun GIF trouve" when search returns empty', async () => {
-    mockSearchGifs.mockResolvedValue([])
+  it('shows "Aucun GIF trouvé" when search returns empty', async () => {
+    mockSearchGifs.mockResolvedValue({ results: [], error: null })
     render(<GifPicker {...defaultProps} />)
     await act(() => vi.advanceTimersByTimeAsync(500))
 
@@ -201,26 +196,32 @@ describe('GifPicker', () => {
     })
     await act(() => vi.advanceTimersByTimeAsync(600))
 
-    expect(screen.getByText('Aucun GIF trouve')).toBeInTheDocument()
+    expect(screen.getByText('Aucun GIF trouvé')).toBeInTheDocument()
   })
 
   it('shows retry button when trending fails (hasLoaded but empty)', async () => {
-    mockFetchTrendingGifs.mockResolvedValue([])
+    mockFetchTrendingGifs.mockResolvedValue({ results: [], error: null })
     render(<GifPicker {...defaultProps} />)
-    // Trending loads and comes back empty → hasLoaded=true, hasSearched=false, gifs=[]
     await act(() => vi.advanceTimersByTimeAsync(250))
     expect(screen.getByText('Impossible de charger les GIFs')).toBeInTheDocument()
-    expect(screen.getByText('Reessayer')).toBeInTheDocument()
+    expect(screen.getByText('Réessayer')).toBeInTheDocument()
+  })
+
+  it('shows error message when trending returns an error', async () => {
+    mockFetchTrendingGifs.mockResolvedValue({ results: [], error: 'GIPHY API key not configured' })
+    render(<GifPicker {...defaultProps} />)
+    await act(() => vi.advanceTimersByTimeAsync(250))
+    expect(screen.getByText('GIPHY API key not configured')).toBeInTheDocument()
   })
 
   it('retries loading trending on retry click', async () => {
-    mockFetchTrendingGifs.mockResolvedValue([])
+    mockFetchTrendingGifs.mockResolvedValue({ results: [], error: null })
     render(<GifPicker {...defaultProps} />)
     await act(() => vi.advanceTimersByTimeAsync(250))
 
-    mockFetchTrendingGifs.mockResolvedValue(sampleGifs)
+    mockFetchTrendingGifs.mockResolvedValue({ results: sampleGifs, error: null })
     await act(async () => {
-      fireEvent.click(screen.getByText('Reessayer'))
+      fireEvent.click(screen.getByText('Réessayer'))
     })
     await act(() => vi.advanceTimersByTimeAsync(100))
     expect(mockFetchTrendingGifs).toHaveBeenCalledTimes(2) // initial + retry
@@ -231,7 +232,6 @@ describe('GifPicker', () => {
   it('closes on backdrop click', async () => {
     render(<GifPicker {...defaultProps} />)
     await act(() => vi.advanceTimersByTimeAsync(250))
-    // The backdrop div has aria-hidden="true"
     const backdrop = document.querySelector('[aria-hidden="true"]')
     if (backdrop) fireEvent.click(backdrop)
     expect(defaultProps.onClose).toHaveBeenCalled()
@@ -263,11 +263,9 @@ describe('GifPicker', () => {
       fireEvent.change(input, { target: { value: 'hello' } })
     })
 
-    // Close
     rerender(<GifPicker {...defaultProps} isOpen={false} />)
     await act(() => vi.advanceTimersByTimeAsync(100))
 
-    // Reopen — should have fresh state
     mockFetchTrendingGifs.mockClear()
     rerender(<GifPicker {...defaultProps} isOpen={true} />)
     await act(() => vi.advanceTimersByTimeAsync(250))
@@ -277,10 +275,8 @@ describe('GifPicker', () => {
   /* ---------- Loading state ---------- */
 
   it('shows trending loading initially', () => {
-    // Don't resolve trending yet
     mockFetchTrendingGifs.mockReturnValue(new Promise(() => {}))
     render(<GifPicker {...defaultProps} />)
-    // During loading, spinner should be visible
     expect(screen.getByTestId('icon-loader')).toBeInTheDocument()
   })
 })

@@ -17,6 +17,7 @@ export const GifPicker = memo(function GifPicker({ isOpen, onSelect, onClose }: 
   const [isLoading, setIsLoading] = useState(false)
   const [hasSearched, setHasSearched] = useState(false)
   const [hasLoaded, setHasLoaded] = useState(false)
+  const [errorMsg, setErrorMsg] = useState<string | null>(null)
   const searchRef = useRef<HTMLInputElement>(null)
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
@@ -31,8 +32,10 @@ export const GifPicker = memo(function GifPicker({ isOpen, onSelect, onClose }: 
 
     const loadTrending = async () => {
       setIsLoading(true)
-      const results = await fetchTrendingGifs()
+      setErrorMsg(null)
+      const { results, error } = await fetchTrendingGifs()
       setGifs(results)
+      if (error) setErrorMsg(error)
       setIsLoading(false)
       setHasLoaded(true)
     }
@@ -56,8 +59,10 @@ export const GifPicker = memo(function GifPicker({ isOpen, onSelect, onClose }: 
 
     if (!value.trim()) {
       setIsLoading(true)
-      fetchTrendingGifs().then((results) => {
+      setErrorMsg(null)
+      fetchTrendingGifs().then(({ results, error }) => {
         setGifs(results)
+        if (error) setErrorMsg(error)
         setIsLoading(false)
         setHasLoaded(true)
       })
@@ -67,9 +72,11 @@ export const GifPicker = memo(function GifPicker({ isOpen, onSelect, onClose }: 
 
     debounceRef.current = setTimeout(async () => {
       setIsLoading(true)
+      setErrorMsg(null)
       setHasSearched(true)
-      const results = await searchGifs(value)
+      const { results, error } = await searchGifs(value)
       setGifs(results)
+      if (error) setErrorMsg(error)
       setIsLoading(false)
       setHasLoaded(true)
     }, 400)
@@ -78,9 +85,11 @@ export const GifPicker = memo(function GifPicker({ isOpen, onSelect, onClose }: 
   const handleCategoryClick = useCallback((categoryQuery: string) => {
     setQuery(categoryQuery)
     setIsLoading(true)
+    setErrorMsg(null)
     setHasSearched(true)
-    searchGifs(categoryQuery).then((results) => {
+    searchGifs(categoryQuery).then(({ results, error }) => {
       setGifs(results)
+      if (error) setErrorMsg(error)
       setIsLoading(false)
       setHasLoaded(true)
     })
@@ -89,8 +98,10 @@ export const GifPicker = memo(function GifPicker({ isOpen, onSelect, onClose }: 
   const handleRetry = useCallback(() => {
     setIsLoading(true)
     setHasLoaded(false)
-    fetchTrendingGifs().then((results) => {
+    setErrorMsg(null)
+    fetchTrendingGifs().then(({ results, error }) => {
       setGifs(results)
+      if (error) setErrorMsg(error)
       setIsLoading(false)
       setHasLoaded(true)
     })
@@ -109,7 +120,7 @@ export const GifPicker = memo(function GifPicker({ isOpen, onSelect, onClose }: 
       {isOpen && (
         <>
           <div
-            className="fixed inset-0 z-[60] bg-black/40 sm:bg-transparent"
+            className="fixed inset-0 z-[80] bg-black/60 sm:bg-transparent"
             onClick={onClose}
             aria-hidden="true"
           />
@@ -119,7 +130,7 @@ export const GifPicker = memo(function GifPicker({ isOpen, onSelect, onClose }: 
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 20 }}
             transition={{ type: 'spring', stiffness: 400, damping: 30 }}
-            className="fixed inset-x-0 bottom-0 z-[61] sm:absolute sm:inset-x-auto sm:bottom-full sm:mb-2 sm:right-0 sm:w-[360px] bg-surface-dark border border-border-hover sm:rounded-xl rounded-t-2xl shadow-2xl shadow-black/50 overflow-hidden max-h-[70vh] sm:max-h-[420px] flex flex-col"
+            className="fixed inset-x-0 bottom-0 z-[81] sm:absolute sm:inset-x-auto sm:bottom-full sm:mb-2 sm:right-0 sm:w-[360px] bg-surface-dark border border-border-hover sm:rounded-xl rounded-t-2xl shadow-2xl shadow-black/50 overflow-hidden max-h-[85vh] sm:max-h-[420px] flex flex-col"
           >
             <div className="sm:hidden flex justify-center pt-2 pb-1">
               <div className="w-10 h-1 rounded-full bg-overlay-heavy" />
@@ -181,18 +192,23 @@ export const GifPicker = memo(function GifPicker({ isOpen, onSelect, onClose }: 
               ) : gifs.length === 0 ? (
                 <div className="flex flex-col items-center justify-center h-full min-h-[200px] gap-3">
                   {hasSearched ? (
-                    <p className="text-text-tertiary text-sm">Aucun GIF trouve</p>
+                    <p className="text-text-tertiary text-sm">Aucun GIF trouvé</p>
                   ) : hasLoaded ? (
                     <>
                       <p className="text-text-tertiary text-sm text-center px-4">
                         Impossible de charger les GIFs
                       </p>
+                      {errorMsg && (
+                        <p className="text-red-400 text-xs text-center px-4 max-w-[280px] break-words">
+                          {errorMsg}
+                        </p>
+                      )}
                       <button
                         onClick={handleRetry}
                         className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm bg-primary-15 text-primary-hover hover:bg-primary-20 transition-colors"
                       >
                         <RefreshCw className="w-3.5 h-3.5" />
-                        Reessayer
+                        Réessayer
                       </button>
                     </>
                   ) : (

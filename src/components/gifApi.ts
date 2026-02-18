@@ -8,6 +8,11 @@ export interface GifResult {
   height: number
 }
 
+export interface GifResponse {
+  results: GifResult[]
+  error: string | null
+}
+
 // Prevent retry storms: track last error time per action
 let lastErrorTime = 0
 const ERROR_COOLDOWN_MS = 30_000 // 30s cooldown after a failure
@@ -33,6 +38,7 @@ interface GiphyResult {
 
 interface GiphyResponse {
   data?: GiphyResult[]
+  error?: string
 }
 
 function mapResults(data: GiphyResponse): GifResult[] {
@@ -45,33 +51,72 @@ function mapResults(data: GiphyResponse): GifResult[] {
   }))
 }
 
-export async function searchGifs(query: string, limit = 20): Promise<GifResult[]> {
-  if (isInCooldown()) return []
+function getErrorMessage(err: unknown): string {
+  if (err instanceof Error) return err.message
+  if (typeof err === 'string') return err
+  if (err && typeof err === 'object' && 'message' in err) return String((err as { message: unknown }).message)
+  return 'Erreur inconnue'
+}
+
+export async function searchGifs(query: string, limit = 20): Promise<GifResponse> {
+  if (isInCooldown()) return { results: [], error: 'Trop de requêtes — réessaie dans quelques secondes' }
   try {
     const { data, error } = await supabase.functions.invoke('giphy-proxy', {
       body: { action: 'search', query, limit },
     })
-    if (error) throw error
-    return mapResults(data)
+    if (error) {
+      // Try to extract detail from FunctionsHttpError
+      let detail = getErrorMessage(error)
+      try {
+        const body = await error.context?.json?.()
+        if (body?.error) detail = body.error
+      } catch { /* ignore */ }
+      console.error('[GifPicker] Search error:', detail, error)
+      lastErrorTime = Date.now()
+      return { results: [], error: detail }
+    }
+    // Check if response body itself has an error field
+    if (data?.error) {
+      console.error('[GifPicker] GIPHY API error:', data.error)
+      lastErrorTime = Date.now()
+      return { results: [], error: data.error }
+    }
+    return { results: mapResults(data), error: null }
   } catch (err) {
-    console.warn('[GifPicker] Search error:', err)
+    const msg = getErrorMessage(err)
+    console.error('[GifPicker] Search error:', msg, err)
     lastErrorTime = Date.now()
-    return []
+    return { results: [], error: msg }
   }
 }
 
-export async function fetchTrendingGifs(limit = 20): Promise<GifResult[]> {
-  if (isInCooldown()) return []
+export async function fetchTrendingGifs(limit = 20): Promise<GifResponse> {
+  if (isInCooldown()) return { results: [], error: 'Trop de requêtes — réessaie dans quelques secondes' }
   try {
     const { data, error } = await supabase.functions.invoke('giphy-proxy', {
       body: { action: 'trending', limit },
     })
-    if (error) throw error
-    return mapResults(data)
+    if (error) {
+      let detail = getErrorMessage(error)
+      try {
+        const body = await error.context?.json?.()
+        if (body?.error) detail = body.error
+      } catch { /* ignore */ }
+      console.error('[GifPicker] Trending error:', detail, error)
+      lastErrorTime = Date.now()
+      return { results: [], error: detail }
+    }
+    if (data?.error) {
+      console.error('[GifPicker] GIPHY API error:', data.error)
+      lastErrorTime = Date.now()
+      return { results: [], error: data.error }
+    }
+    return { results: mapResults(data), error: null }
   } catch (err) {
-    console.warn('[GifPicker] Trending error:', err)
+    const msg = getErrorMessage(err)
+    console.error('[GifPicker] Trending error:', msg, err)
     lastErrorTime = Date.now()
-    return []
+    return { results: [], error: msg }
   }
 }
 

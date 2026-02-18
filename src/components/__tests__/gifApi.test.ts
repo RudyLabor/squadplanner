@@ -46,24 +46,26 @@ describe('gifApi', () => {
         ],
       };
       (supabaseMinimal.functions.invoke as any).mockResolvedValue({ data: mockData, error: null })
-      const results = await searchGifs('funny')
+      const { results, error } = await searchGifs('funny')
       expect(results).toHaveLength(1)
       expect(results[0].id).toBe('gif-1')
       expect(results[0].url).toBe('https://example.com/gif.gif')
       expect(results[0].preview).toBe('https://example.com/small.gif')
+      expect(error).toBeNull()
     })
 
-    it('returns empty array on error', async () => {
+    it('returns empty results with error on failure', async () => {
       (supabaseMinimal.functions.invoke as any).mockResolvedValue({ data: null, error: new Error('fail') })
-      const results = await searchGifs('test')
+      const { results, error } = await searchGifs('test')
       expect(results).toEqual([])
+      expect(error).toBeTruthy()
     })
   })
 
   describe('fetchTrendingGifs', () => {
     it('returns mapped results on success', async () => {
       // Note: after the error test above, the module is in cooldown.
-      // fetchTrendingGifs will return [] if in cooldown, so we just check it returns an array
+      // fetchTrendingGifs will return results with error if in cooldown
       const mockData = {
         data: [
           {
@@ -76,15 +78,16 @@ describe('gifApi', () => {
         ],
       };
       (supabaseMinimal.functions.invoke as any).mockResolvedValue({ data: mockData, error: null })
-      const results = await fetchTrendingGifs()
+      const { results } = await fetchTrendingGifs()
       // May be empty due to cooldown from previous test
       expect(Array.isArray(results)).toBe(true)
     })
 
-    it('returns empty array on error', async () => {
+    it('returns empty results with error on failure', async () => {
       (supabaseMinimal.functions.invoke as any).mockResolvedValue({ data: null, error: new Error('fail') })
-      const results = await fetchTrendingGifs()
+      const { results, error } = await fetchTrendingGifs()
       expect(results).toEqual([])
+      expect(typeof error).toBe('string')
     })
   })
 })

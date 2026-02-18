@@ -60,6 +60,7 @@ export function DiscordCallback() {
             headers: {
               'Content-Type': 'application/json',
               Authorization: `Bearer ${accessToken}`,
+              apikey: import.meta.env.VITE_SUPABASE_ANON_KEY,
             },
             body: JSON.stringify({ code, redirect_uri: redirectUri }),
           },

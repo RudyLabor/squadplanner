@@ -88,6 +88,9 @@ export function Referrals() {
           />
         </div>
 
+        {/* Bottom fade — eliminates the hard edge between hero gradient and bg-bg-base */}
+        <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-b from-transparent to-bg-base pointer-events-none" />
+
         <div className="relative px-4 md:px-6 max-w-4xl mx-auto">
           <div className="text-center">
             {/* Pill badge */}
@@ -160,7 +163,7 @@ export function Referrals() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.25, duration: 0.5, ease }}
             >
-              <Card variant="elevated" className="mb-5 p-5 !border-0 bg-bg-elevated">
+              <Card variant="elevated" className="mb-5 p-5">
                 <div className="flex items-center gap-3 mb-4">
                   <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-success/10">
                     <UserPlus className="h-4 w-4 text-success" />

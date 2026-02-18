@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react'
-import { Send, Loader2, BarChart3 } from '../icons'
+import { Send, Loader2, BarChart3, X } from '../icons'
 import { Button } from '../ui'
 import { MentionInput, type MentionUser } from '../MentionInput'
 import { GifPicker } from '../GifPicker'
@@ -75,18 +75,8 @@ export function MessageComposer({
 
         <form onSubmit={onSubmit}>
           <div className="flex items-center gap-1.5">
-            {/* Voice recorder takes full width when active */}
-            {isVoiceActive ? (
-              <div className="flex-1">
-                <PremiumGate feature="voice_messages" fallback="hide">
-                  <VoiceRecorder
-                    onSend={async (blob, dur) => onVoiceSend(blob, dur)}
-                    disabled={isSending}
-                    onRecordingChange={handleRecordingChange}
-                  />
-                </PremiumGate>
-              </div>
-            ) : (
+            {/* Hide input & action buttons when voice recorder is active */}
+            {!isVoiceActive && (
               <>
                 {isSquadChat ? (
                   <MentionInput
@@ -156,30 +146,35 @@ export function MessageComposer({
                     />
                   </div>
                 </PremiumGate>
-
-                {!newMessage.trim() && (
-                  <PremiumGate feature="voice_messages" fallback="hide">
-                    <VoiceRecorder
-                      onSend={async (blob, dur) => onVoiceSend(blob, dur)}
-                      disabled={isSending}
-                      onRecordingChange={handleRecordingChange}
-                    />
-                  </PremiumGate>
-                )}
-
-                <Button
-                  type="submit"
-                  disabled={!newMessage.trim() || isSending}
-                  className="w-11 h-11 p-0 rounded-xl flex-shrink-0"
-                  aria-label="Envoyer le message"
-                >
-                  {isSending ? (
-                    <Loader2 className="w-5 h-5 animate-spin" aria-hidden="true" />
-                  ) : (
-                    <Send className="w-5 h-5" aria-hidden="true" />
-                  )}
-                </Button>
               </>
+            )}
+
+            {/* Voice recorder — single instance, takes full width when active */}
+            {!newMessage.trim() && (
+              <div className={isVoiceActive ? 'flex-1' : ''}>
+                <PremiumGate feature="voice_messages" fallback="hide">
+                  <VoiceRecorder
+                    onSend={async (blob, dur) => onVoiceSend(blob, dur)}
+                    disabled={isSending}
+                    onRecordingChange={handleRecordingChange}
+                  />
+                </PremiumGate>
+              </div>
+            )}
+
+            {!isVoiceActive && (
+              <Button
+                type="submit"
+                disabled={!newMessage.trim() || isSending}
+                className="w-11 h-11 p-0 rounded-xl flex-shrink-0"
+                aria-label="Envoyer le message"
+              >
+                {isSending ? (
+                  <Loader2 className="w-5 h-5 animate-spin" aria-hidden="true" />
+                ) : (
+                  <Send className="w-5 h-5" aria-hidden="true" />
+                )}
+              </Button>
             )}
           </div>
         </form>

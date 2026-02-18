@@ -5,7 +5,7 @@
  * Opens directly if user has 1 squad, or shows squad selector if multiple
  */
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Calendar, Clock, Users, Loader2 } from './icons'
 import { create } from 'zustand'
 import { ResponsiveModal, Select } from './ui'
@@ -44,26 +44,36 @@ export function CreateSessionModal() {
   const [threshold, setThreshold] = useState('3')
   const [error, setError] = useState<string | null>(null)
 
-  // Reset form when modal opens
+  // Track whether we've done the initial setup for this modal opening
+  const didInitRef = useRef(false)
+
+  // Reset form only when modal first opens (not on every squads change)
   useEffect(() => {
-    if (isOpen) {
+    if (isOpen && !didInitRef.current) {
+      didInitRef.current = true
       setError(null)
       setTitle('')
       setDate('')
       setTime('')
       setDuration('120')
       setThreshold('3')
-
-      // Auto-select squad if only one or preselected
-      if (preselectedSquadId) {
-        setSelectedSquadId(preselectedSquadId)
-      } else if (squads.length === 1) {
-        setSelectedSquadId(squads[0].id)
-      } else {
-        setSelectedSquadId('')
-      }
+      setSelectedSquadId('')
     }
-  }, [isOpen, preselectedSquadId, squads])
+    if (!isOpen) {
+      didInitRef.current = false
+    }
+  }, [isOpen])
+
+  // Auto-select squad when squads load or preselectedSquadId is set,
+  // but only if no squad has been manually selected yet
+  useEffect(() => {
+    if (!isOpen || selectedSquadId) return
+    if (preselectedSquadId) {
+      setSelectedSquadId(preselectedSquadId)
+    } else if (squads.length === 1) {
+      setSelectedSquadId(squads[0].id)
+    }
+  }, [isOpen, preselectedSquadId, squads, selectedSquadId])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -113,6 +123,13 @@ export function CreateSessionModal() {
     <ResponsiveModal open={isOpen} onClose={close} title="Nouvelle session" size="sm">
       {/* Form */}
       <form onSubmit={handleSubmit} className="p-5 space-y-4">
+        {/* No squads warning */}
+        {squads.length === 0 && (
+          <div className="p-3 rounded-lg bg-warning-10 border border-warning">
+            <p className="text-warning text-base">Tu n'as aucun squad. Crée ou rejoins un squad d'abord.</p>
+          </div>
+        )}
+
         {/* Squad selector - only if multiple squads */}
         {squads.length > 1 && (
           <div>

@@ -38,9 +38,10 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
 export async function clientLoader({ serverLoader }: ClientLoaderFunctionArgs) {
   const { supabaseMinimal: supabase } = await import('../lib/supabaseMinimal')
-  const { data: { user } } = await supabase.auth.getUser()
+  const { withTimeout } = await import('../lib/withTimeout')
+  const { data: { user } } = await withTimeout(supabase.auth.getUser(), 5000)
   if (!user) return { profile: null }
-  const { data: profile } = await supabase.from('profiles').select('*').eq('id', user.id).single()
+  const { data: profile } = await withTimeout(supabase.from('profiles').select('*').eq('id', user.id).single(), 5000)
   return { profile }
 }
 clientLoader.hydrate = true as const

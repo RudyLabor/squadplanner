@@ -15,13 +15,21 @@ export const supabaseMinimal = createClient<Database>(supabaseUrl, supabaseAnonK
     autoRefreshToken: true,
     persistSession: true,
     detectSessionInUrl: true,
-    // Prevent navigator.locks deadlock: if lock acquisition takes > 5s, abort.
+    // Prevent navigator.locks deadlock: limit both lock acquisition AND
+    // the work inside the lock. On mobile, the browser can suspend fetch
+    // requests while the app is backgrounded, holding the lock forever.
     lock: typeof navigator !== 'undefined' && navigator.locks
       ? (name: string, acquireTimeout: number, fn: () => Promise<unknown>) => {
+          const timeout = acquireTimeout > 0 ? acquireTimeout : 5000
           return navigator.locks.request(
             name,
-            { signal: AbortSignal.timeout(acquireTimeout > 0 ? acquireTimeout : 5000) },
-            fn
+            { signal: AbortSignal.timeout(timeout) },
+            () => Promise.race([
+              fn(),
+              new Promise<never>((_, reject) =>
+                setTimeout(() => reject(new Error(`Lock work timeout after ${timeout}ms`)), timeout)
+              ),
+            ])
           )
         }
       : undefined,

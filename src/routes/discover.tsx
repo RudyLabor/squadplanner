@@ -43,11 +43,14 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
 export async function clientLoader({ serverLoader }: ClientLoaderFunctionArgs) {
   const { supabaseMinimal: supabase } = await import('../lib/supabaseMinimal')
-  const { data: { user } } = await supabase.auth.getUser()
+  const { withTimeout } = await import('../lib/withTimeout')
+  const { data: { user } } = await withTimeout(supabase.auth.getUser(), 5000)
   if (!user) return { publicSquads: [] }
-  const { data: publicSquads } = await supabase
-    .from('squads').select('id, name, game, created_at')
-    .order('created_at', { ascending: false }).limit(50)
+  const { data: publicSquads } = await withTimeout(
+    supabase.from('squads').select('id, name, game, created_at')
+      .order('created_at', { ascending: false }).limit(50),
+    5000
+  )
   return { publicSquads: publicSquads || [] }
 }
 clientLoader.hydrate = true as const

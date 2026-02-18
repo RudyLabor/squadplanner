@@ -27,6 +27,23 @@ interface NotificationStore {
   markAllAsRead: () => void
 }
 
+const READ_IDS_KEY = 'sp_read_notifs'
+
+function getReadIds(): Set<string> {
+  try {
+    const raw = localStorage.getItem(READ_IDS_KEY)
+    return raw ? new Set(JSON.parse(raw)) : new Set()
+  } catch {
+    return new Set()
+  }
+}
+
+function persistReadIds(ids: Set<string>) {
+  // Keep only the last 200 IDs to avoid localStorage bloat
+  const arr = [...ids].slice(-200)
+  localStorage.setItem(READ_IDS_KEY, JSON.stringify(arr))
+}
+
 export const useNotificationStore = create<NotificationStore>((set, get) => ({
   notifications: [],
   unreadCount: 0,
@@ -35,6 +52,8 @@ export const useNotificationStore = create<NotificationStore>((set, get) => ({
   fetchNotifications: async (userId: string) => {
     try {
       set({ isLoading: true })
+      const readIds = getReadIds()
+
       // Fetch recent session RSVPs as notifications
       // Step 1: fetch rsvps (no joins — PostgREST !inner returns 400)
       const { data: rsvps } = await supabase
@@ -76,7 +95,7 @@ export const useNotificationStore = create<NotificationStore>((set, get) => ({
           type: 'rsvp' as const,
           title: squadMap.get(sess?.squad_id ?? '') || 'Squad',
           body: `Nouveau RSVP sur "${sess?.title || 'Session'}"`,
-          read: false,
+          read: readIds.has(r.id),
           created_at: r.responded_at,
           squad_id: sess?.squad_id,
           session_id: r.session_id,
@@ -95,12 +114,18 @@ export const useNotificationStore = create<NotificationStore>((set, get) => ({
 
   markAsRead: (id: string) => {
     const { notifications } = get()
+    const readIds = getReadIds()
+    readIds.add(id)
+    persistReadIds(readIds)
     const updated = notifications.map((n) => (n.id === id ? { ...n, read: true } : n))
     set({ notifications: updated, unreadCount: updated.filter((n) => !n.read).length })
   },
 
   markAllAsRead: () => {
     const { notifications } = get()
+    const readIds = getReadIds()
+    notifications.forEach((n) => readIds.add(n.id))
+    persistReadIds(readIds)
     set({ notifications: notifications.map((n) => ({ ...n, read: true })), unreadCount: 0 })
   },
 }))

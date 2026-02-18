@@ -1,7 +1,7 @@
 
 import { memo, useCallback, useState } from 'react'
 import { Link } from 'react-router'
-import { Search, LayoutGrid, Compass, Settings, HelpCircle, Phone, Calendar } from '../icons'
+import { Search, LayoutGrid, Settings, HelpCircle, Phone } from '../icons'
 import { Breadcrumbs } from './Breadcrumbs'
 import { GlobalSearch } from '../GlobalSearch'
 import { NotificationBell } from '../NotificationCenter'
@@ -32,12 +32,11 @@ function MobileSearchButton() {
   )
 }
 
+// Secondary items only — same order as desktop sidebar secondary section
 const moreMenuItems = [
-  { path: '/discover', icon: Compass, label: 'Découvrir' },
-  { path: '/sessions', icon: Calendar, label: 'Sessions' },
-  { path: '/call-history', icon: Phone, label: 'Appels' },
   { path: '/settings', icon: Settings, label: 'Paramètres' },
   { path: '/help', icon: HelpCircle, label: 'Aide' },
+  { path: '/call-history', icon: Phone, label: 'Appels' },
 ] as const
 
 export const TopBar = memo(function TopBar() {

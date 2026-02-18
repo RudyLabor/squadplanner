@@ -1,18 +1,19 @@
 import { memo } from 'react'
 import { Link } from 'react-router'
 import { m } from 'framer-motion'
-import { Home, Mic, Users, MessageCircle, User } from '../icons'
+import { Home, Mic, Users, MessageCircle, User, Calendar, Compass } from '../icons'
 import { usePrefetch } from '../../hooks/usePrefetch'
 
-// 5 nav items — matches the mockup layout (Accueil, Squads, Party, Messages, Profil)
-// Secondary pages (Discover, Sessions, Settings, Help, Call History) are accessible via the TopBar grid button.
+// 7 nav items — same order as desktop sidebar
 const mobileNavLeft = [
   { path: '/home', icon: Home, label: 'Accueil' },
   { path: '/squads', icon: Users, label: 'Squads' },
+  { path: '/sessions', icon: Calendar, label: 'Sessions' },
 ] as const
 
 const mobileNavRight = [
   { path: '/messages', icon: MessageCircle, label: 'Messages' },
+  { path: '/discover', icon: Compass, label: 'Découvrir' },
   { path: '/profile', icon: User, label: 'Profil' },
 ] as const
 

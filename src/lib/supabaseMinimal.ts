@@ -53,20 +53,48 @@ export const supabaseMinimal: any = createClient(supabaseUrl, supabaseAnonKey, {
   }
 })
 
-// Reset internal lockAcquired flag on tab resume.
-// When our custom lock's Promise.race times out while the app is backgrounded,
-// the original callback keeps running → lockAcquired stays true forever.
-// On resume, all _acquireLock calls bypass the real lock (re-entrant path),
-// causing getUser() and token refresh to race without coordination.
-// Resetting lockAcquired forces the next auth call to properly acquire the lock.
+// Expose on window for synchronous access from click handlers (MobileBottomNav).
+// Dynamic import() is async and can't fix the deadlock fast enough at click time.
 if (typeof window !== 'undefined') {
-  document.addEventListener('visibilitychange', () => {
-    if (document.visibilityState === 'visible') {
-      const auth = (supabaseMinimal as any).auth
-      if (auth && auth.lockAcquired) {
-        auth.lockAcquired = false
+  ;(window as any).__supabaseMinimal = supabaseMinimal
+}
+
+// Reset internal auth lock state on tab resume.
+// When our custom lock's Promise.race times out while the app is backgrounded,
+// the original callback keeps running → lockAcquired stays true forever,
+// and all subsequent auth calls (getSession, getUser, token refresh) queue up
+// in pendingInLock, creating a deadlock where nothing ever resolves.
+// We must clear BOTH lockAcquired AND pendingInLock to fully recover.
+if (typeof window !== 'undefined') {
+  const resetAuthLock = () => {
+    const auth = (supabaseMinimal as any).auth
+    if (!auth) return
+    if (auth.lockAcquired) {
+      const pendingCount = Array.isArray(auth.pendingInLock) ? auth.pendingInLock.length : 0
+      if (pendingCount > 0) {
+        console.warn(
+          `[supabaseMinimal] Auth lock deadlock: lockAcquired=true, ${pendingCount} pending ops. Releasing.`
+        )
+      }
+      auth.lockAcquired = false
+      // Discard zombie operations stuck behind the dead lock.
+      // Their promises will never resolve, but new calls from React
+      // re-renders will work correctly since the lock is now free.
+      if (Array.isArray(auth.pendingInLock)) {
+        auth.pendingInLock = []
       }
     }
+    // Restart auto-refresh if it was stopped during the deadlock
+    if (auth.autoRefreshTicker === false || auth.autoRefreshTicker == null) {
+      try { auth.startAutoRefresh?.() } catch { /* ignore */ }
+    }
+  }
+
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') resetAuthLock()
+  })
+  window.addEventListener('pageshow', (e) => {
+    if (e.persisted) resetAuthLock()
   })
 }
 

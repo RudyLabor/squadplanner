@@ -90,8 +90,10 @@ export function useAppResume() {
       // the ViewTransition.finished promise never resolves, leaving
       // React Router's internal isTransitioning=true. This makes all
       // <Link> components silently ignore clicks until the state resets.
-      // We give the router 150ms to settle after skipTransition(), then
-      // force-navigate to the current URL (replace) to unstick it.
+      //
+      // The supabaseMinimal visibilitychange handler (registered at module
+      // scope, fires before this one) already clears the auth deadlock.
+      // We wait 300ms so loaders can finish with the now-unblocked getSession().
       const router = (window as any).__reactRouterDataRouter
       if (router) {
         setTimeout(() => {
@@ -105,7 +107,34 @@ export function useAppResume() {
               // Router not available or navigate failed — ignore
             }
           }
-        }, 150)
+        }, 300)
+
+        // FIX 3c: Nuclear fallback — if router is STILL stuck after 2s
+        // (e.g. loader genuinely hung), force-reset navigation state.
+        setTimeout(() => {
+          if (router.state?.navigation?.state !== 'idle') {
+            console.warn('[useAppResume] Router still stuck after 2s, force-resetting navigation state')
+            try {
+              if (typeof router._internalSetStateDoNotUseOrYouWillBreakYourApp === 'function') {
+                router._internalSetStateDoNotUseOrYouWillBreakYourApp({
+                  ...router.state,
+                  navigation: {
+                    state: 'idle',
+                    location: undefined,
+                    formMethod: undefined,
+                    formAction: undefined,
+                    formEncType: undefined,
+                    formData: undefined,
+                    json: undefined,
+                    text: undefined,
+                  },
+                })
+              }
+            } catch {
+              // Internal API not available on this RR version — ignore
+            }
+          }
+        }, 2000)
       }
 
       // FIX 4: Force repaint on fixed nav elements.
@@ -197,7 +226,7 @@ export function useAppResume() {
       }
 
       const router = (window as any).__reactRouterDataRouter
-      // Force-reset stuck router transition state (same as FIX 3b)
+      // Force-reset stuck router transition state (same as FIX 3b + 3c)
       if (router) {
         setTimeout(() => {
           if (router.state?.navigation?.state !== 'idle') {
@@ -210,7 +239,31 @@ export function useAppResume() {
               // ignore
             }
           }
-        }, 150)
+        }, 300)
+
+        setTimeout(() => {
+          if (router.state?.navigation?.state !== 'idle') {
+            try {
+              if (typeof router._internalSetStateDoNotUseOrYouWillBreakYourApp === 'function') {
+                router._internalSetStateDoNotUseOrYouWillBreakYourApp({
+                  ...router.state,
+                  navigation: {
+                    state: 'idle',
+                    location: undefined,
+                    formMethod: undefined,
+                    formAction: undefined,
+                    formEncType: undefined,
+                    formData: undefined,
+                    json: undefined,
+                    text: undefined,
+                  },
+                })
+              }
+            } catch {
+              // ignore
+            }
+          }
+        }, 2000)
       }
 
       if (router?.state?.navigation?.state !== 'idle') {

@@ -18,6 +18,7 @@ import {
   Loader2,
   FileText,
   ExternalLink,
+  Gift,
 } from '../components/icons'
 import { useNavigate, Link } from 'react-router'
 import { Card, SegmentedControl, Select } from '../components/ui'
@@ -412,6 +413,25 @@ export function Settings() {
               </div>
               <ChevronRight className="w-5 h-5 text-error/50" />
             </button>
+          </div>
+        </Card>
+
+        <Card id="referral" className="mb-5 p-5 bg-bg-elevated scroll-mt-6">
+          <SectionHeader icon={Gift} title="Parrainage" />
+          <div className="space-y-3">
+            <Link
+              to="/referrals"
+              className="w-full flex items-center justify-between p-4 rounded-xl bg-surface-card hover:bg-surface-card-hover transition-colors"
+            >
+              <div className="flex items-center gap-3">
+                <Gift className="w-5 h-5 text-primary" />
+                <div className="text-left">
+                  <p className="text-md text-text-primary">Inviter des amis</p>
+                  <p className="text-sm text-text-quaternary">Gagne du Premium gratuit en parrainant</p>
+                </div>
+              </div>
+              <ChevronRight className="w-5 h-5 text-text-quaternary" />
+            </Link>
           </div>
         </Card>
 

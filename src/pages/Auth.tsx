@@ -7,6 +7,7 @@ import Confetti from '../components/LazyConfetti'
 import { Button, Card } from '../components/ui'
 import { SquadPlannerLogo } from '../components/SquadPlannerLogo'
 import { useAuthStore, useSquadsStore } from '../hooks'
+import { useReferralStore } from '../hooks/useReferral'
 import { supabaseMinimal as supabase } from '../lib/supabaseMinimal'
 import { translateAuthError } from './auth/AuthHelpers'
 import { AuthGoogleButton } from './auth/AuthGoogleButton'
@@ -16,8 +17,9 @@ import type { FieldErrors } from './auth/AuthFormFields'
 export default function Auth() {
   const [searchParams] = useSearchParams()
   const urlMode = searchParams.get('mode')
+  const referralCode = searchParams.get('ref')
   const [mode, setMode] = useState<'login' | 'register' | 'reset'>(
-    urlMode === 'register' ? 'register' : urlMode === 'reset' ? 'reset' : 'login'
+    urlMode === 'register' || referralCode ? 'register' : urlMode === 'reset' ? 'reset' : 'login'
   )
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -134,6 +136,14 @@ export default function Auth() {
         setError(translateAuthError(error.message))
         setIsSubmitting(false)
       } else {
+        // Process referral code if present in URL (?ref=CODE)
+        if (referralCode) {
+          try {
+            await useReferralStore.getState().processReferralCode(referralCode)
+          } catch {
+            // Non-blocking — referral failure shouldn't block signup flow
+          }
+        }
         setShowConfetti(true)
         setTimeout(() => navigate('/onboarding'), 1500)
       }

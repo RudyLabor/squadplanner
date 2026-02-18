@@ -1,7 +1,7 @@
 
 import { memo, useCallback, useState } from 'react'
 import { Link } from 'react-router'
-import { Search, LayoutGrid, Compass, User, Settings, HelpCircle, Phone } from '../icons'
+import { Search, LayoutGrid, Compass, User, Settings, HelpCircle, Phone, Gift } from '../icons'
 import { Breadcrumbs } from './Breadcrumbs'
 import { GlobalSearch } from '../GlobalSearch'
 import { NotificationBell } from '../NotificationCenter'
@@ -39,6 +39,7 @@ const moreMenuItems = [
   { path: '/settings', icon: Settings, label: 'Paramètres' },
   { path: '/help', icon: HelpCircle, label: 'Aide' },
   { path: '/call-history', icon: Phone, label: 'Appels' },
+  { path: '/referrals', icon: Gift, label: 'Parrainage' },
 ] as const
 
 export const TopBar = memo(function TopBar() {

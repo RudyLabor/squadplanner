@@ -25,7 +25,7 @@ const loadFeatures = () => import('framer-motion').then((mod) => mod.domMax)
 // Routes that skip the full ClientShell (no sidebar, no heavy hooks)
 const PUBLIC_PATHS = ['/', '/auth', '/onboarding', '/legal', '/help', '/premium', '/maintenance']
 function isPublicPath(pathname: string) {
-  return PUBLIC_PATHS.includes(pathname) || pathname.startsWith('/join/')
+  return PUBLIC_PATHS.includes(pathname) || pathname.startsWith('/join/') || pathname.startsWith('/s/')
 }
 
 // Layout component provides the HTML document shell (replaces index.html)

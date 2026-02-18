@@ -126,39 +126,45 @@ export function MessageComposer({
                 <LocationShareButton onShare={onLocationShare} disabled={isSending} />
 
                 {isSquadChat && (
-                  <button
-                    type="button"
-                    onClick={onShowPollModal}
-                    className="flex p-2.5 rounded-xl text-text-quaternary hover:text-primary-hover hover:bg-primary-10 transition-colors"
-                    aria-label="Créer un sondage"
-                    title="Sondage"
-                  >
-                    <BarChart3 className="w-5 h-5" />
-                  </button>
+                  <PremiumGate feature="polls" fallback="hide">
+                    <button
+                      type="button"
+                      onClick={onShowPollModal}
+                      className="flex p-2.5 rounded-xl text-text-quaternary hover:text-primary-hover hover:bg-primary-10 transition-colors"
+                      aria-label="Créer un sondage"
+                      title="Sondage"
+                    >
+                      <BarChart3 className="w-5 h-5" />
+                    </button>
+                  </PremiumGate>
                 )}
 
-                <div className="relative flex-shrink-0">
-                  <button
-                    type="button"
-                    onClick={onToggleGifPicker}
-                    className="p-2 rounded-xl text-text-secondary hover:text-primary-hover hover:bg-primary-10 transition-colors text-sm font-bold"
-                    aria-label="Envoyer un GIF"
-                  >
-                    GIF
-                  </button>
-                  <GifPicker
-                    isOpen={showGifPicker}
-                    onSelect={onGifSelect}
-                    onClose={() => onToggleGifPicker()}
-                  />
-                </div>
+                <PremiumGate feature="gifs" fallback="hide">
+                  <div className="relative flex-shrink-0">
+                    <button
+                      type="button"
+                      onClick={onToggleGifPicker}
+                      className="p-2 rounded-xl text-text-secondary hover:text-primary-hover hover:bg-primary-10 transition-colors text-sm font-bold"
+                      aria-label="Envoyer un GIF"
+                    >
+                      GIF
+                    </button>
+                    <GifPicker
+                      isOpen={showGifPicker}
+                      onSelect={onGifSelect}
+                      onClose={() => onToggleGifPicker()}
+                    />
+                  </div>
+                </PremiumGate>
 
                 {!newMessage.trim() && (
-                  <VoiceRecorder
-                    onSend={async (blob, dur) => onVoiceSend(blob, dur)}
-                    disabled={isSending}
-                    onRecordingChange={handleRecordingChange}
-                  />
+                  <PremiumGate feature="voice_messages" fallback="hide">
+                    <VoiceRecorder
+                      onSend={async (blob, dur) => onVoiceSend(blob, dur)}
+                      disabled={isSending}
+                      onRecordingChange={handleRecordingChange}
+                    />
+                  </PremiumGate>
                 )}
 
                 <Button

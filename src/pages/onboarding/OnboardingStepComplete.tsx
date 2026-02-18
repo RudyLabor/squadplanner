@@ -1,8 +1,9 @@
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { m } from 'framer-motion'
-import { Check, ArrowRight, Users, Gamepad2, Copy } from '../../components/icons'
+import { Check, ArrowRight, Users, Gamepad2, Copy, Gift } from '../../components/icons'
 import { Button, Card } from '../../components/ui'
+import { useReferralStore } from '../../hooks/useReferral'
 
 interface OnboardingStepCompleteProps {
   createdSquadId: string | null
@@ -24,6 +25,14 @@ export function OnboardingStepComplete({
   onComplete,
 }: OnboardingStepCompleteProps) {
   const [codeCopied, setCodeCopied] = useState(false)
+  const [refCopied, setRefCopied] = useState(false)
+  const { stats, fetchReferralStats, generateShareUrl } = useReferralStore()
+
+  useEffect(() => {
+    fetchReferralStats()
+  }, [fetchReferralStats])
+
+  const referralUrl = stats?.referralCode ? generateShareUrl() : null
 
   return (
     <m.div
@@ -151,6 +160,48 @@ export function OnboardingStepComplete({
                   Partage ce code &agrave; tes amis pour qu'ils rejoignent
                 </p>
               </div>
+            </div>
+          </Card>
+        </m.div>
+      )}
+
+      {/* Referral invite section */}
+      {referralUrl && (
+        <m.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5 }}
+          className="mb-6"
+        >
+          <Card className="p-5 text-left">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="w-10 h-10 rounded-xl bg-warning/10 flex items-center justify-center">
+                <Gift className="w-5 h-5 text-warning" />
+              </div>
+              <div>
+                <p className="text-md font-semibold text-text-primary">Invite tes amis</p>
+                <p className="text-sm text-text-tertiary">Gagne 7 jours Premium par filleul</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-2">
+              <code className="flex-1 px-3 py-2.5 rounded-lg bg-surface-card border border-border-default text-sm text-text-secondary truncate">
+                {referralUrl}
+              </code>
+              <button
+                onClick={() => {
+                  navigator.clipboard.writeText(referralUrl)
+                  setRefCopied(true)
+                  setTimeout(() => setRefCopied(false), 2000)
+                }}
+                className={`p-2.5 rounded-lg transition-interactive ${refCopied ? 'bg-success-10' : 'bg-primary-10 hover:bg-primary-15'}`}
+                aria-label={refCopied ? 'Lien copié' : 'Copier le lien de parrainage'}
+              >
+                {refCopied ? (
+                  <Check className="w-4 h-4 text-success" />
+                ) : (
+                  <Copy className="w-4 h-4 text-primary" />
+                )}
+              </button>
             </div>
           </Card>
         </m.div>

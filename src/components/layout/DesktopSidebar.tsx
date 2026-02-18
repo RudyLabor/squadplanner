@@ -16,6 +16,7 @@ import {
   Phone,
   Calendar,
   Compass,
+  Gift,
 } from '../icons'
 import { prefetchRoute } from '../../lib/queryClient'
 import { SquadPlannerLogo } from '../SquadPlannerLogo'
@@ -324,6 +325,14 @@ export const DesktopSidebar = memo(function DesktopSidebar({
           icon={Phone}
           label="Appels"
           isActive={currentPath === '/call-history' || currentPath.startsWith('/call-history/')}
+          collapsed={!isExpanded}
+          userId={userId}
+        />
+        <NavLink
+          path="/referrals"
+          icon={Gift}
+          label="Parrainage"
+          isActive={currentPath === '/referrals' || currentPath.startsWith('/referrals/')}
           collapsed={!isExpanded}
           userId={userId}
         />

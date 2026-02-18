@@ -14,12 +14,14 @@ import {
   Trophy,
   Users,
   TrendingUp,
+  Share2,
 } from '../components/icons'
 import { Link, useParams, useNavigate } from 'react-router'
 import { m, AnimatePresence } from 'framer-motion'
 import Confetti from '../components/LazyConfetti'
 import { Button, ConfirmDialog, Card, CardContent, Select, Badge } from '../components/ui'
 import { VoiceChat } from '../components/VoiceChat'
+import { ShareButtons } from '../components/ShareButtons'
 import { useAuthStore, useConfetti } from '../hooks'
 import {
   useSessionQuery,
@@ -321,6 +323,21 @@ export default function SessionDetail() {
             rsvps={currentSession.rsvps as ParticipantsListProps_rsvps}
             checkins={currentSession.checkins}
           />
+
+          {/* Share session */}
+          {currentSession.status !== 'cancelled' && id && (
+            <div className="mb-8">
+              <h2 className="text-xs font-medium text-text-tertiary/35 uppercase tracking-[0.05em] mb-4 flex items-center gap-2">
+                <Share2 className="w-3.5 h-3.5" />
+                Partager la session
+              </h2>
+              <ShareButtons
+                url={`${typeof window !== 'undefined' ? window.location.origin : 'https://squadplanner.fr'}/s/${id}`}
+                title={`${currentSession.title || currentSession.game || 'Session'} — Squad Planner`}
+                text={`Rejoins notre session ${currentSession.game ? `de ${currentSession.game}` : ''} sur Squad Planner !`}
+              />
+            </div>
+          )}
 
           {isCreator && currentSession.status === 'proposed' && (
             <div className="space-y-3">

@@ -41,41 +41,37 @@ export function useSessionExpiry() {
       const timeUntilExpiry = expiresAtMs - now
 
       if (timeUntilExpiry <= 0) {
-        // Token already expired — attempt refresh before showing modal
-        supabaseRef.current?.supabase.auth
-          .refreshSession()
-          .then(({ data }) => {
-            if (!data.session) {
-              setIsSessionExpired(true)
-              setShowModal(true)
-            }
-            // If refresh succeeded, onAuthStateChange TOKEN_REFRESHED will reset timers
-          })
-          .catch(() => {
-            setIsSessionExpired(true)
-            setShowModal(true)
-          })
+        // Token already expired — Supabase's autoRefreshToken will attempt
+        // renewal on its own. We only show the modal; if the auto-refresh
+        // succeeds, onAuthStateChange TOKEN_REFRESHED will dismiss it.
+        // DO NOT call refreshSession() manually here — it races with
+        // Supabase's internal refresh and creates a navigator.locks deadlock.
+        setIsSessionExpired(true)
+        setShowModal(true)
         return
       }
 
-      // Schedule a refresh attempt shortly before expiry
-      const refreshAt = Math.max(timeUntilExpiry - EXPIRY_BUFFER_MS, 0)
+      // Schedule expiry detection shortly before the token expires.
+      // Supabase's built-in autoRefreshToken handles the actual renewal;
+      // we only detect expiry and show the modal as a fallback.
+      const detectAt = Math.max(timeUntilExpiry - EXPIRY_BUFFER_MS, 0)
       expiryTimerRef.current = setTimeout(async () => {
         try {
           const mod = supabaseRef.current
           if (!mod) return
-          const { data } = await mod.supabase.auth.refreshSession()
+          // Check current session without triggering a refresh
+          const { data } = await mod.supabase.auth.getSession()
           if (!data.session) {
-            // Refresh failed — session is truly expired
+            // Session is truly gone — auto-refresh didn't save it
             setIsSessionExpired(true)
             setShowModal(true)
           }
-          // If refresh succeeded, onAuthStateChange TOKEN_REFRESHED will set up a new timer
+          // If session exists, autoRefreshToken will handle renewal
         } catch {
           setIsSessionExpired(true)
           setShowModal(true)
         }
-      }, refreshAt)
+      }, detectAt)
     },
     [clearTimers]
   )

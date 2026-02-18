@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react'
 
 const STALE_RELOAD_MS = 30 * 60 * 1000 // 30 minutes
+const LOCK_PROBE_TIMEOUT_MS = 3000 // Time to wait for Supabase to respond before declaring deadlock
 
 /**
  * Force mobile browsers to recalculate hit-test regions for fixed elements.
@@ -99,6 +100,45 @@ export function useAppResume() {
         })
       } else {
         requestAnimationFrame(() => repaintFixedNav())
+      }
+
+      // FIX 5: Detect and recover from navigator.locks deadlock.
+      // Supabase uses navigator.locks('auth-token-...' ) for token refresh.
+      // If a deadlock occurs (e.g. dual refresh race), all Supabase calls
+      // hang forever, blocking React Router loaders and freezing navigation.
+      // We probe by checking if any auth-token lock is held, then testing
+      // if Supabase can actually respond within 3 seconds.
+      if (typeof navigator?.locks?.query === 'function') {
+        setTimeout(async () => {
+          try {
+            const { held } = await navigator.locks.query()
+            const hasAuthLock = held?.some((l) => l.name?.startsWith('auth-token'))
+            if (!hasAuthLock) return // No lock held — all good
+
+            // Lock is held — probe if Supabase can respond
+            const { supabaseMinimal } = await import('../lib/supabaseMinimal')
+            const probe = Promise.race([
+              supabaseMinimal.auth.getUser().then(() => true),
+              new Promise<false>((resolve) =>
+                setTimeout(() => resolve(false), LOCK_PROBE_TIMEOUT_MS)
+              ),
+            ])
+            const ok = await probe
+            if (!ok) {
+              // Deadlock confirmed — steal the lock and force reload
+              console.warn('[useAppResume] navigator.locks deadlock detected, forcing reload')
+              navigator.locks.request(
+                held!.find((l) => l.name?.startsWith('auth-token'))!.name,
+                { steal: true },
+                async () => {
+                  window.location.reload()
+                }
+              )
+            }
+          } catch {
+            // navigator.locks not available or query failed — ignore
+          }
+        }, 1000) // Delay to let normal Supabase auto-refresh settle first
       }
 
       if (hiddenAt === 0) return

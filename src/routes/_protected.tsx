@@ -54,7 +54,8 @@ interface ProtectedLoaderData {
 // client (which reads from localStorage) for all client-side route transitions.
 export async function clientLoader({ serverLoader }: ClientLoaderFunctionArgs) {
   const { supabaseMinimal: supabase } = await import('../lib/supabaseMinimal')
-  const { data: { user }, error } = await supabase.auth.getUser()
+  const { withTimeout } = await import('../lib/withTimeout')
+  const { data: { user }, error } = await withTimeout(supabase.auth.getUser(), 5000)
 
   if (error || !user) {
     throw redirect('/auth')
@@ -63,9 +64,10 @@ export async function clientLoader({ serverLoader }: ClientLoaderFunctionArgs) {
   let profile: Profile | null = null
   let squads: SquadWithCount[] = []
 
-  const { data: rpcResult, error: rpcError } = await supabase.rpc('get_layout_data', {
-    p_user_id: user.id,
-  })
+  const { data: rpcResult, error: rpcError } = await withTimeout(
+    supabase.rpc('get_layout_data', { p_user_id: user.id }),
+    5000
+  )
 
   if (!rpcError && rpcResult) {
     const rpc = rpcResult as LayoutRpcResult
@@ -73,13 +75,16 @@ export async function clientLoader({ serverLoader }: ClientLoaderFunctionArgs) {
     squads = rpc.squads || []
   } else {
     const [profileResult, membershipsResult] = await Promise.all([
-      supabase.from('profiles').select('*').eq('id', user.id).single(),
-      supabase
-        .from('squad_members')
-        .select(
-          'squad_id, squads!inner(id, name, game, invite_code, owner_id, total_members, created_at)'
-        )
-        .eq('user_id', user.id),
+      withTimeout(supabase.from('profiles').select('*').eq('id', user.id).single(), 5000),
+      withTimeout(
+        supabase
+          .from('squad_members')
+          .select(
+            'squad_id, squads!inner(id, name, game, invite_code, owner_id, total_members, created_at)'
+          )
+          .eq('user_id', user.id),
+        5000
+      ),
     ])
 
     profile = profileResult.data as Profile | null

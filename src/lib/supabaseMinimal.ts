@@ -8,13 +8,23 @@ import type { Database } from '../types/database.types'
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || ''
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || ''
 
-// Client optimisé avec uniquement les features utilisées  
+// Client optimisé avec uniquement les features utilisées
 export const supabaseMinimal = createClient<Database>(supabaseUrl, supabaseAnonKey, {
   auth: {
     // Auth features utilisées
     autoRefreshToken: true,
     persistSession: true,
     detectSessionInUrl: true,
+    // Prevent navigator.locks deadlock: if lock acquisition takes > 5s, abort.
+    lock: typeof navigator !== 'undefined' && navigator.locks
+      ? (name: string, acquireTimeout: number, fn: () => Promise<unknown>) => {
+          return navigator.locks.request(
+            name,
+            { signal: AbortSignal.timeout(acquireTimeout > 0 ? acquireTimeout : 5000) },
+            fn
+          )
+        }
+      : undefined,
   },
   
   // Désactive features non utilisées pour réduire bundle

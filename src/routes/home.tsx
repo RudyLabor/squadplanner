@@ -121,7 +121,8 @@ export async function loader({ request }: LoaderFunctionArgs) {
 // Falls back to SSR data when client auth isn't ready yet (prevents empty dashboard)
 export async function clientLoader({ serverLoader }: ClientLoaderFunctionArgs) {
   const { supabaseMinimal: supabase } = await import('../lib/supabaseMinimal')
-  const { data: { user } } = await supabase.auth.getUser()
+  const { withTimeout } = await import('../lib/withTimeout')
+  const { data: { user } } = await withTimeout(supabase.auth.getUser(), 5000)
 
   // If client auth isn't ready, fall back to SSR loader data (which uses cookie auth)
   if (!user) {
@@ -129,7 +130,10 @@ export async function clientLoader({ serverLoader }: ClientLoaderFunctionArgs) {
     return serverData
   }
 
-  const { data: rpcResult } = await supabase.rpc('get_layout_data', { p_user_id: user.id })
+  const { data: rpcResult } = await withTimeout(
+    supabase.rpc('get_layout_data', { p_user_id: user.id }),
+    5000
+  )
   const rpcTypedClient = rpcResult as RpcLayoutData | null
   const profile = rpcTypedClient?.profile ?? null
   const squads: SquadWithCount[] = rpcTypedClient?.squads ?? []

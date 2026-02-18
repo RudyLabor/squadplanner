@@ -28,6 +28,16 @@ function getClient(): SupabaseClient<Database> {
         persistSession: true,
         detectSessionInUrl: true,
         flowType: 'pkce',
+        // Prevent navigator.locks deadlock: if lock acquisition takes > 5s, abort.
+        lock: typeof navigator !== 'undefined' && navigator.locks
+          ? (name: string, acquireTimeout: number, fn: () => Promise<unknown>) => {
+              return navigator.locks.request(
+                name,
+                { signal: AbortSignal.timeout(acquireTimeout > 0 ? acquireTimeout : 5000) },
+                fn
+              )
+            }
+          : undefined,
       },
     })
   }

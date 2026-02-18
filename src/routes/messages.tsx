@@ -57,13 +57,17 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
 export async function clientLoader({ serverLoader }: ClientLoaderFunctionArgs) {
   const { supabaseMinimal: supabase } = await import('../lib/supabaseMinimal')
-  const { data: { user } } = await supabase.auth.getUser()
+  const { withTimeout } = await import('../lib/withTimeout')
+  const { data: { user } } = await withTimeout(supabase.auth.getUser(), 5000)
   if (!user) return { squads: [] }
 
-  const { data: memberships } = await supabase
-    .from('squad_members')
-    .select('squad_id, squads!inner(id, name, game)')
-    .eq('user_id', user.id)
+  const { data: memberships } = await withTimeout(
+    supabase
+      .from('squad_members')
+      .select('squad_id, squads!inner(id, name, game)')
+      .eq('user_id', user.id),
+    5000
+  )
 
   const squads = (memberships as MessageMembershipRow[] | null)?.map((m) => m.squads) || []
   return { squads }

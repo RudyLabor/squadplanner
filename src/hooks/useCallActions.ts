@@ -41,10 +41,15 @@ export async function sendCallPushNotification(
   }
 }
 
+/**
+ * Initialize a native WebRTC peer connection with Supabase Realtime signaling.
+ * @param isOffer true for the caller (creates SDP offer), false for the callee (creates SDP answer)
+ */
 export async function initializeNativeWebRTC(
   currentUserId: string,
   otherUserId: string,
-  storeRef: VoiceCallStore
+  storeRef: VoiceCallStore,
+  isOffer: boolean
 ) {
   const channelName = generateChannelName(currentUserId, otherUserId)
 
@@ -74,6 +79,7 @@ export async function initializeNativeWebRTC(
             }))
           }, 1000)
           storeRef.setState({ status: 'connected', callStartTime, durationInterval })
+          // Clear ring timeout — call is now connected
           if (currentState.ringTimeout) {
             clearTimeout(currentState.ringTimeout)
             storeRef.setState({ ringTimeout: null })
@@ -87,23 +93,25 @@ export async function initializeNativeWebRTC(
         if (state === 'failed') {
           storeRef.setState({
             isReconnecting: false,
-            error: 'Impossible de se reconnecter. Vérifiez votre connexion internet.',
+            error: 'Connexion perdue. Vérifiez votre connexion internet.',
           })
           currentState.endCall()
         }
       }
     }
 
-    // Get signaling token from edge function
-    const { data, error: tokenError } = await supabase.functions.invoke('livekit-token', {
-      body: { room: channelName, identity: currentUserId },
-    })
-
-    if (tokenError || !data?.token) {
-      throw new Error('Impossible d\'obtenir le token de connexion vocale')
+    // When the caller receives the callee's SDP answer, clear the ring timeout
+    // because the callee has accepted and the connection is in progress
+    webrtc.onAnswerReceived = () => {
+      const currentState = storeRef.getState()
+      if (currentState.ringTimeout) {
+        clearTimeout(currentState.ringTimeout)
+        storeRef.setState({ ringTimeout: null })
+      }
     }
 
-    const connected = await webrtc.connect(data.token, channelName)
+    // Connect via Supabase Realtime signaling (no livekit-token needed)
+    const connected = await webrtc.connect(supabase, channelName, isOffer)
     if (!connected) {
       throw new Error('Échec de la connexion WebRTC')
     }
@@ -118,6 +126,14 @@ export async function initializeNativeWebRTC(
     })
     throw error
   }
+}
+
+/** Toggle mute on the active WebRTC call */
+export function toggleWebRTCMute(): boolean {
+  if (_activeWebRTC) {
+    return _activeWebRTC.toggleMute()
+  }
+  return false
 }
 
 /** Disconnect active WebRTC call */
@@ -174,7 +190,7 @@ export function subscribeToIncomingCalls(userId: string, storeRef: VoiceCallStor
         const call = payload.new as { id: string; status: string; ended_at: string | null }
         const currentState = storeRef.getState()
         if (currentState.currentCallId === call.id) {
-          if (call.status === 'rejected' || call.status === 'ended' || call.ended_at) {
+          if (call.status === 'rejected' || call.status === 'ended' || call.status === 'missed' || call.ended_at) {
             currentState.resetCall()
           }
         }

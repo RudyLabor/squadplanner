@@ -13,7 +13,7 @@ interface NativeVoiceChatProps {
 
 export function NativeVoiceChat({ isOpen, onClose, roomName, token, userName }: NativeVoiceChatProps) {
   const {
-    connect,
+    connectLocalOnly,
     disconnect,
     toggleMute,
     isConnected,
@@ -24,9 +24,9 @@ export function NativeVoiceChat({ isOpen, onClose, roomName, token, userName }: 
   const [connectionState, setConnectionState] = useState<'idle' | 'connecting' | 'connected' | 'failed'>('idle')
   
   useEffect(() => {
-    if (isOpen && token && roomName) {
+    if (isOpen && roomName) {
       setConnectionState('connecting')
-      connect(token, roomName)
+      connectLocalOnly()
         .then(success => {
           setConnectionState(success ? 'connected' : 'failed')
         })
@@ -35,7 +35,7 @@ export function NativeVoiceChat({ isOpen, onClose, roomName, token, userName }: 
       disconnect()
       setConnectionState('idle')
     }
-  }, [isOpen, token, roomName, connect, disconnect])
+  }, [isOpen, roomName, connectLocalOnly, disconnect])
   
   const handleEndCall = () => {
     disconnect()

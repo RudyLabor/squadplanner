@@ -90,21 +90,21 @@ describe('NativeWebRTC', () => {
     it('should create RTCPeerConnection with provided ICE servers', async () => {
       const { NativeWebRTC } = await importModule()
       const webrtc = new NativeWebRTC({ iceServers: [{ urls: 'stun:stun.example.com:3478' }] })
-      await webrtc.connect('token', 'room')
+      await webrtc.connectLocalOnly()
       expect(RTCPeerConnection).toHaveBeenCalledWith({ iceServers: [{ urls: 'stun:stun.example.com:3478' }] })
     })
 
     it('should return true on successful connection', async () => {
       const { NativeWebRTC } = await importModule()
       const webrtc = new NativeWebRTC({ iceServers: [{ urls: 'stun:stun.l.google.com:19302' }] })
-      const result = await webrtc.connect('token', 'room')
+      const result = await webrtc.connectLocalOnly()
       expect(result).toBe(true)
     })
 
     it('should assign oniceconnectionstatechange handler', async () => {
       const { NativeWebRTC } = await importModule()
       const webrtc = new NativeWebRTC({ iceServers: [{ urls: 'stun:stun.l.google.com:19302' }] })
-      await webrtc.connect('token', 'room')
+      await webrtc.connectLocalOnly()
       expect(typeof mockPC.oniceconnectionstatechange).toBe('function')
     })
 
@@ -114,7 +114,7 @@ describe('NativeWebRTC', () => {
       const spy = vi.fn()
       webrtc.onConnectionStateChange = spy
 
-      await webrtc.connect('token', 'room')
+      await webrtc.connectLocalOnly()
       mockPC.iceConnectionState = 'connected'
       mockPC.oniceconnectionstatechange()
 
@@ -125,7 +125,7 @@ describe('NativeWebRTC', () => {
     it('should set connected false for disconnected/failed states', async () => {
       const { NativeWebRTC } = await importModule()
       const webrtc = new NativeWebRTC({ iceServers: [{ urls: 'stun:stun.l.google.com:19302' }] })
-      await webrtc.connect('token', 'room')
+      await webrtc.connectLocalOnly()
 
       mockPC.iceConnectionState = 'disconnected'
       mockPC.oniceconnectionstatechange()
@@ -139,14 +139,14 @@ describe('NativeWebRTC', () => {
     it('should assign ontrack handler', async () => {
       const { NativeWebRTC } = await importModule()
       const webrtc = new NativeWebRTC({ iceServers: [{ urls: 'stun:stun.l.google.com:19302' }] })
-      await webrtc.connect('token', 'room')
+      await webrtc.connectLocalOnly()
       expect(typeof mockPC.ontrack).toBe('function')
     })
 
     it('should call getUserMedia for microphone', async () => {
       const { NativeWebRTC } = await importModule()
       const webrtc = new NativeWebRTC({ iceServers: [{ urls: 'stun:stun.l.google.com:19302' }] })
-      await webrtc.connect('token', 'room')
+      await webrtc.connectLocalOnly()
       expect(mockGetUserMedia).toHaveBeenCalledWith({
         audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true },
       })
@@ -156,9 +156,9 @@ describe('NativeWebRTC', () => {
       vi.stubGlobal('RTCPeerConnection', vi.fn(function () { throw new Error('RTC not supported') }))
       const { NativeWebRTC } = await importModule()
       const webrtc = new NativeWebRTC({ iceServers: [{ urls: 'stun:stun.l.google.com:19302' }] })
-      const result = await webrtc.connect('token', 'room')
+      const result = await webrtc.connectLocalOnly()
       expect(result).toBe(false)
-      expect(console.error).toHaveBeenCalledWith('[NativeWebRTC] Connection failed:', expect.any(Error))
+      expect(console.error).toHaveBeenCalledWith('[NativeWebRTC] Local connect failed:', expect.any(Error))
     })
 
     it('should still return true when enableMicrophone fails silently', async () => {
@@ -166,7 +166,7 @@ describe('NativeWebRTC', () => {
       mockGetUserMedia.mockRejectedValue(new Error('Permission denied'))
       const { NativeWebRTC } = await importModule()
       const webrtc = new NativeWebRTC({ iceServers: [{ urls: 'stun:stun.l.google.com:19302' }] })
-      const result = await webrtc.connect('token', 'room')
+      const result = await webrtc.connectLocalOnly()
       // connect returns true because enableMicrophone's error is caught internally
       expect(result).toBe(true)
       expect(console.error).toHaveBeenCalledWith('[NativeWebRTC] Microphone access failed:', expect.any(Error))
@@ -177,7 +177,7 @@ describe('NativeWebRTC', () => {
     it('should request audio with correct constraints', async () => {
       const { NativeWebRTC } = await importModule()
       const webrtc = new NativeWebRTC({ iceServers: [{ urls: 'stun:stun.l.google.com:19302' }] })
-      await webrtc.connect('token', 'room')
+      await webrtc.connectLocalOnly()
       mockGetUserMedia.mockClear()
       const result = await webrtc.enableMicrophone()
       expect(result).toBe(true)
@@ -189,7 +189,7 @@ describe('NativeWebRTC', () => {
     it('should add audio tracks to peer connection', async () => {
       const { NativeWebRTC } = await importModule()
       const webrtc = new NativeWebRTC({ iceServers: [{ urls: 'stun:stun.l.google.com:19302' }] })
-      await webrtc.connect('token', 'room')
+      await webrtc.connectLocalOnly()
       expect(mockPC.addTrack).toHaveBeenCalledWith(mockStream._track, mockStream)
     })
 
@@ -213,7 +213,7 @@ describe('NativeWebRTC', () => {
     it('should toggle audio track enabled/disabled', async () => {
       const { NativeWebRTC } = await importModule()
       const webrtc = new NativeWebRTC({ iceServers: [{ urls: 'stun:stun.l.google.com:19302' }] })
-      await webrtc.connect('token', 'room')
+      await webrtc.connectLocalOnly()
 
       expect(webrtc.muted).toBe(false)
       expect(webrtc.toggleMute()).toBe(true)
@@ -229,24 +229,22 @@ describe('NativeWebRTC', () => {
       mockGetUserMedia.mockResolvedValue({ getTracks: () => [], getAudioTracks: () => [] })
       const { NativeWebRTC } = await importModule()
       const webrtc = new NativeWebRTC({ iceServers: [{ urls: 'stun:stun.l.google.com:19302' }] })
-      await webrtc.connect('token', 'room')
+      await webrtc.connectLocalOnly()
       expect(webrtc.toggleMute()).toBe(false)
     })
   })
 
   describe('setVolume', () => {
-    it('should log volume value', async () => {
+    it('should not throw', async () => {
       const { NativeWebRTC } = await importModule()
       const webrtc = new NativeWebRTC({ iceServers: [] })
-      webrtc.setVolume(0.75)
-      expect(console.log).toHaveBeenCalledWith('[NativeWebRTC] Volume set to:', 0.75)
+      expect(() => webrtc.setVolume(0.75)).not.toThrow()
     })
 
     it('should accept zero', async () => {
       const { NativeWebRTC } = await importModule()
       const webrtc = new NativeWebRTC({ iceServers: [] })
-      webrtc.setVolume(0)
-      expect(console.log).toHaveBeenCalledWith('[NativeWebRTC] Volume set to:', 0)
+      expect(() => webrtc.setVolume(0)).not.toThrow()
     })
   })
 
@@ -254,7 +252,7 @@ describe('NativeWebRTC', () => {
     it('should stop tracks and close peer connection', async () => {
       const { NativeWebRTC } = await importModule()
       const webrtc = new NativeWebRTC({ iceServers: [{ urls: 'stun:stun.l.google.com:19302' }] })
-      await webrtc.connect('token', 'room')
+      await webrtc.connectLocalOnly()
       webrtc.disconnect()
       expect(mockStream._track.stop).toHaveBeenCalled()
       expect(mockPC.close).toHaveBeenCalled()
@@ -263,7 +261,7 @@ describe('NativeWebRTC', () => {
     it('should reset connected and muted', async () => {
       const { NativeWebRTC } = await importModule()
       const webrtc = new NativeWebRTC({ iceServers: [{ urls: 'stun:stun.l.google.com:19302' }] })
-      await webrtc.connect('token', 'room')
+      await webrtc.connectLocalOnly()
       mockPC.iceConnectionState = 'connected'
       mockPC.oniceconnectionstatechange()
       webrtc.toggleMute()
@@ -282,7 +280,7 @@ describe('NativeWebRTC', () => {
     it('should not throw on double disconnect', async () => {
       const { NativeWebRTC } = await importModule()
       const webrtc = new NativeWebRTC({ iceServers: [{ urls: 'stun:stun.l.google.com:19302' }] })
-      await webrtc.connect('token', 'room')
+      await webrtc.connectLocalOnly()
       webrtc.disconnect()
       expect(() => webrtc.disconnect()).not.toThrow()
     })
@@ -293,7 +291,7 @@ describe('NativeWebRTC', () => {
       const { NativeWebRTC } = await importModule()
       const webrtc = new NativeWebRTC({ iceServers: [{ urls: 'stun:stun.l.google.com:19302' }] })
       expect(webrtc.connected).toBe(false)
-      await webrtc.connect('token', 'room')
+      await webrtc.connectLocalOnly()
       mockPC.iceConnectionState = 'connected'
       mockPC.oniceconnectionstatechange()
       expect(webrtc.connected).toBe(true)
@@ -303,7 +301,7 @@ describe('NativeWebRTC', () => {
       const { NativeWebRTC } = await importModule()
       const webrtc = new NativeWebRTC({ iceServers: [{ urls: 'stun:stun.l.google.com:19302' }] })
       expect(webrtc.muted).toBe(false)
-      await webrtc.connect('token', 'room')
+      await webrtc.connectLocalOnly()
       webrtc.toggleMute()
       expect(webrtc.muted).toBe(true)
     })
@@ -313,7 +311,7 @@ describe('NativeWebRTC', () => {
     it('should set up AudioContext for VAD', async () => {
       const { NativeWebRTC } = await importModule()
       const webrtc = new NativeWebRTC({ iceServers: [{ urls: 'stun:stun.l.google.com:19302' }] })
-      await webrtc.connect('token', 'room')
+      await webrtc.connectLocalOnly()
       expect(AudioContext).toHaveBeenCalled()
     })
 
@@ -321,7 +319,7 @@ describe('NativeWebRTC', () => {
       vi.stubGlobal('AudioContext', vi.fn(() => { throw new Error('Not supported') }))
       const { NativeWebRTC } = await importModule()
       const webrtc = new NativeWebRTC({ iceServers: [{ urls: 'stun:stun.l.google.com:19302' }] })
-      const result = await webrtc.connect('token', 'room')
+      const result = await webrtc.connectLocalOnly()
       expect(result).toBe(true)
       expect(console.warn).toHaveBeenCalledWith('[NativeWebRTC] VAD setup failed:', expect.any(Error))
     })
@@ -332,7 +330,7 @@ describe('NativeWebRTC', () => {
       const { NativeWebRTC } = await importModule()
       const webrtc = new NativeWebRTC({ iceServers: [{ urls: 'stun:stun.l.google.com:19302' }] })
       webrtc.onSpeaking = spy
-      await webrtc.connect('token', 'room')
+      await webrtc.connectLocalOnly()
       expect(spy).toHaveBeenCalledWith('local', true)
     })
 
@@ -342,7 +340,7 @@ describe('NativeWebRTC', () => {
       const { NativeWebRTC } = await importModule()
       const webrtc = new NativeWebRTC({ iceServers: [{ urls: 'stun:stun.l.google.com:19302' }] })
       webrtc.onSpeaking = spy
-      await webrtc.connect('token', 'room')
+      await webrtc.connectLocalOnly()
       expect(spy).toHaveBeenCalledWith('local', false)
     })
   })
@@ -353,7 +351,7 @@ describe('NativeWebRTC', () => {
       vi.stubGlobal('Audio', vi.fn(function () { return mockAudio }))
       const { NativeWebRTC } = await importModule()
       const webrtc = new NativeWebRTC({ iceServers: [{ urls: 'stun:stun.l.google.com:19302' }] })
-      await webrtc.connect('token', 'room')
+      await webrtc.connectLocalOnly()
       const remoteStream = createMockMediaStream()
       mockPC.ontrack({ streams: [remoteStream] })
       expect(mockAudio.play).toHaveBeenCalled()
@@ -367,7 +365,7 @@ describe('NativeWebRTC', () => {
       const webrtc = new NativeWebRTC({ iceServers: [{ urls: 'stun:stun.l.google.com:19302' }] })
       const cb = vi.fn()
       webrtc.onConnectionStateChange = cb
-      await webrtc.connect('token', 'room')
+      await webrtc.connectLocalOnly()
       mockPC.iceConnectionState = 'checking'
       mockPC.oniceconnectionstatechange()
       expect(cb).toHaveBeenCalledWith('checking')

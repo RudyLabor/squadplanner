@@ -2,11 +2,8 @@ import { create } from 'zustand'
 import { supabaseMinimal as supabase } from '../lib/supabaseMinimal'
 import { useNetworkQualityStore } from './useNetworkQuality'
 import type { CallUser, VoiceCallState } from './useCallState'
-// LIVEKIT REMOVED: Using native WebRTC  
 import { RING_TIMEOUT } from './useCallState'
-// import { LIVEKIT_URL } from './useCallState'
-// import { initializeLiveKitRoom, subscribeToIncomingCalls as _subscribeToIncomingCalls, sendCallPushNotification } from './useCallActions'
-import { sendCallPushNotification, initializeNativeWebRTC, disconnectWebRTC, subscribeToIncomingCalls as _subscribeToIncomingCalls } from './useCallActions'
+import { sendCallPushNotification, initializeNativeWebRTC, disconnectWebRTC, toggleWebRTCMute, subscribeToIncomingCalls as _subscribeToIncomingCalls } from './useCallActions'
 
 export type { CallStatus, CallUser } from './useCallState'
 export { formatCallDuration } from './useCallState'
@@ -34,19 +31,11 @@ export const useVoiceCallStore = create<VoiceCallState>((set, get) => ({
   clearNetworkQualityNotification: () => set({ networkQualityChanged: null }),
 
   resetCall: () => {
-    const { durationInterval, ringTimeout, room } = get()
+    const { durationInterval, ringTimeout } = get()
     if (durationInterval) clearInterval(durationInterval)
     if (ringTimeout) clearTimeout(ringTimeout)
     disconnectWebRTC()
     useNetworkQualityStore.getState().resetQuality()
-
-    if (room) {
-      room.remoteParticipants.forEach((participant: { identity: string }) => {
-        const audioEl = document.getElementById(`call-audio-${participant.identity}`)
-        if (audioEl) audioEl.remove()
-      })
-      room.disconnect().catch(() => {})
-    }
 
     set({
       status: 'idle',
@@ -83,8 +72,6 @@ export const useVoiceCallStore = create<VoiceCallState>((set, get) => ({
       }
       return
     }
-    // Native WebRTC - no URL configuration needed
-    if (!import.meta.env.PROD) console.log('[VoiceCall] Using native WebRTC')
 
     try {
       const {
@@ -134,6 +121,9 @@ export const useVoiceCallStore = create<VoiceCallState>((set, get) => ({
         error: null,
       })
 
+      // Ring timeout: 30s to wait for the receiver to pick up.
+      // Cleared automatically when the callee's SDP answer arrives (via onAnswerReceived)
+      // or when WebRTC reaches 'connected' state.
       const ringTimeout = setTimeout(() => {
         const currentState = get()
         if (currentState.status === 'calling') {
@@ -143,8 +133,8 @@ export const useVoiceCallStore = create<VoiceCallState>((set, get) => ({
 
       set({ ringTimeout })
 
-      // Native WebRTC implementation
-      await initializeNativeWebRTC(user.id, receiver.id, useVoiceCallStore)
+      // isOffer = true → caller creates SDP offer
+      await initializeNativeWebRTC(user.id, receiver.id, useVoiceCallStore, true)
       if (!import.meta.env.PROD) console.log('[useVoiceCall] Native WebRTC call initialized')
     } catch (error) {
       if (!import.meta.env.PROD) console.warn('Error starting call:', error)
@@ -214,8 +204,8 @@ export const useVoiceCallStore = create<VoiceCallState>((set, get) => ({
       // can properly transition to 'connected' (it checks status === 'calling')
       set({ status: 'calling', ringTimeout: null })
 
-      // Connect receiver to the same WebRTC channel as the caller
-      await initializeNativeWebRTC(user.id, state.caller.id, useVoiceCallStore)
+      // isOffer = false → callee creates SDP answer
+      await initializeNativeWebRTC(user.id, state.caller.id, useVoiceCallStore, false)
       if (!import.meta.env.PROD) console.log('[useVoiceCall] Native WebRTC answer call connected')
     } catch (error) {
       console.warn('Error accepting call:', error)
@@ -245,7 +235,7 @@ export const useVoiceCallStore = create<VoiceCallState>((set, get) => ({
 
   endCall: async () => {
     const state = get()
-    const { room, durationInterval, ringTimeout, currentCallId, callStartTime, status } = state
+    const { durationInterval, ringTimeout, currentCallId, callStartTime, status } = state
 
     if (durationInterval) clearInterval(durationInterval)
     if (ringTimeout) clearTimeout(ringTimeout)
@@ -262,31 +252,16 @@ export const useVoiceCallStore = create<VoiceCallState>((set, get) => ({
       await supabase.from('calls').update(updateData).eq('id', currentCallId)
     }
 
-    // Clean up WebRTC connection
+    // Clean up WebRTC connection + signaling channel
     disconnectWebRTC()
-
-    try {
-      if (room) {
-        room.remoteParticipants.forEach((participant: { identity: string }) => {
-          const audioEl = document.getElementById(`call-audio-${participant.identity}`)
-          if (audioEl) audioEl.remove()
-        })
-        await room.disconnect()
-      }
-    } catch (error) {
-      console.warn('Error cleaning up call:', error)
-    }
 
     set({ status: 'ended' })
     setTimeout(() => get().resetCall(), 2000)
   },
 
   toggleMute: async () => {
-    const { room, isMuted } = get()
-    if (room) {
-      await room.localParticipant.setMicrophoneEnabled(isMuted)
-      set({ isMuted: !isMuted })
-    }
+    const newMuted = toggleWebRTCMute()
+    set({ isMuted: newMuted })
   },
 
   toggleSpeaker: () => {

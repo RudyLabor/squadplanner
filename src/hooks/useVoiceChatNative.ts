@@ -110,17 +110,12 @@ export const useVoiceChatStore = create<VoiceChatState>((set, get) => ({
       set({ isConnecting: true, error: null })
       savePartyToStorage(channelName, userId, username)
 
-      // Simulate token generation (real app would call Supabase function)
-      const mockToken = `token_${userId}_${Date.now()}`
-      
-      // Use native WebRTC instead of LiveKit
+      // Party: local-only connection (mic + VAD, no peer signaling)
       const webrtc = new (await import('../lib/webrtc-native')).NativeWebRTC(WEBRTC_CONFIG)
-      
-      const success = await webrtc.connect(mockToken, channelName)
-      
+
+      const success = await webrtc.connectLocalOnly()
+
       if (success) {
-        await webrtc.enableMicrophone()
-        
         set({
           isConnected: true,
           isConnecting: false,

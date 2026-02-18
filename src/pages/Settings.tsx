@@ -513,7 +513,7 @@ function DiscordSection() {
 
   return (
     <Card id="connected" className="mb-5 p-5 bg-bg-elevated scroll-mt-6">
-      <SectionHeader icon={Plug} title="Comptes connectes" />
+      <SectionHeader icon={Plug} title="Comptes connectés" />
       <div className="space-y-3">
         {isConnected ? (
           <div className="flex items-center justify-between p-4 rounded-xl bg-surface-card">
@@ -523,7 +523,7 @@ function DiscordSection() {
               </div>
               <div>
                 <p className="text-md text-text-primary">{profile?.discord_username}</p>
-                <p className="text-sm text-text-quaternary">Discord connecte</p>
+                <p className="text-sm text-text-quaternary">Discord connecté</p>
               </div>
             </div>
             <button
@@ -534,7 +534,7 @@ function DiscordSection() {
               {isUnlinking ? (
                 <Loader2 className="w-4 h-4 animate-spin" />
               ) : (
-                'Deconnecter'
+                'Déconnecter'
               )}
             </button>
           </div>

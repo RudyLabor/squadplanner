@@ -365,6 +365,7 @@ export default function Home({ loaderData }: HomeProps) {
                   hasSquad={squads.length > 0}
                   hasSession={upcomingSessions.length > 0}
                   onCreateSession={openCreateSessionModal}
+                  userId={user?.id}
                 />
               )}
 

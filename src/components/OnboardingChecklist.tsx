@@ -11,26 +11,33 @@ interface OnboardingChecklistProps {
   hasSquad: boolean
   hasSession: boolean
   onCreateSession: () => void
+  userId?: string
 }
 
-const STORAGE_KEY = 'squadplanner-onboarding-dismissed'
-const INVITE_COPIED_KEY = 'squadplanner-invite-copied'
+const getStorageKey = (userId?: string) =>
+  `squadplanner-onboarding-dismissed${userId ? `-${userId}` : ''}`
+const getInviteKey = (userId?: string) =>
+  `squadplanner-invite-copied${userId ? `-${userId}` : ''}`
 
 export function OnboardingChecklist({
   hasSquad,
   hasSession,
   onCreateSession,
+  userId,
 }: OnboardingChecklistProps) {
   const [dismissed, setDismissed] = useState(false)
   const [inviteCopied, setInviteCopied] = useState(false)
   const [lastCompletedStep, setLastCompletedStep] = useState<string | null>(null)
   const [showStepConfetti, setShowStepConfetti] = useState(false)
 
+  const storageKey = getStorageKey(userId)
+  const inviteKey = getInviteKey(userId)
+
   // Hydrate from localStorage in useEffect to avoid SSR/client mismatch (React #418)
   useEffect(() => {
-    if (localStorage.getItem(STORAGE_KEY) === 'true') setDismissed(true)
-    if (localStorage.getItem(INVITE_COPIED_KEY) === 'true') setInviteCopied(true)
-  }, [])
+    if (localStorage.getItem(storageKey) === 'true') setDismissed(true)
+    if (localStorage.getItem(inviteKey) === 'true') setInviteCopied(true)
+  }, [storageKey, inviteKey])
 
   // Track step completion and trigger confetti
   useEffect(() => {
@@ -64,7 +71,7 @@ export function OnboardingChecklist({
     if (allComplete && !dismissed) {
       const timer = setTimeout(() => {
         setDismissed(true)
-        localStorage.setItem(STORAGE_KEY, 'true')
+        localStorage.setItem(storageKey, 'true')
       }, 4000)
       return () => clearTimeout(timer)
     }
@@ -74,7 +81,7 @@ export function OnboardingChecklist({
 
   const handleDismiss = () => {
     setDismissed(true)
-    localStorage.setItem(STORAGE_KEY, 'true')
+    localStorage.setItem(storageKey, 'true')
   }
 
   const handleCopyInvite = async () => {
@@ -82,7 +89,7 @@ export function OnboardingChecklist({
     try {
       await navigator.clipboard.writeText(inviteUrl)
       setInviteCopied(true)
-      localStorage.setItem(INVITE_COPIED_KEY, 'true')
+      localStorage.setItem(inviteKey, 'true')
       showSuccess("Lien d'invitation copié ! Partage-le à tes potes")
     } catch {
       // Fallback: select text in a temp input
@@ -93,7 +100,7 @@ export function OnboardingChecklist({
       document.execCommand('copy')
       document.body.removeChild(input)
       setInviteCopied(true)
-      localStorage.setItem(INVITE_COPIED_KEY, 'true')
+      localStorage.setItem(inviteKey, 'true')
       showSuccess('Lien copié !')
     }
   }

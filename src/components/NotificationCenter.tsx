@@ -230,26 +230,22 @@ export function NotificationBell() {
 
             {/* List */}
             <div className="overflow-y-auto max-h-72">
-              {notifications.length === 0 ? (
+              {unreadCount === 0 ? (
                 <div className="px-4 py-8 text-center">
                   <Bell className="w-8 h-8 text-text-tertiary mx-auto mb-2" />
                   <p className="text-base text-text-tertiary">Aucune notification</p>
                 </div>
               ) : (
-                notifications.slice(0, 15).map((notif) => (
+                notifications.filter((n) => !n.read).slice(0, 15).map((notif) => (
                   <button
                     key={notif.id}
                     type="button"
                     onClick={() => markAsRead(notif.id)}
-                    className={`w-full text-left px-4 py-3 border-b border-border-subtle hover:bg-surface-card transition-colors ${
-                      !notif.read ? 'bg-primary-5' : ''
-                    }`}
+                    className="w-full text-left px-4 py-3 border-b border-border-subtle hover:bg-surface-card transition-colors bg-primary-5"
                   >
                     <div className="flex items-start gap-3">
-                      {!notif.read && (
-                        <span className="w-2 h-2 rounded-full bg-primary mt-1.5 flex-shrink-0" />
-                      )}
-                      <div className={`flex-1 min-w-0 ${notif.read ? 'ml-5' : ''}`}>
+                      <span className="w-2 h-2 rounded-full bg-primary mt-1.5 flex-shrink-0" />
+                      <div className="flex-1 min-w-0">
                         <p className="text-base font-medium text-text-primary truncate">
                           {notif.title}
                         </p>

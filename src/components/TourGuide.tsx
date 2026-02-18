@@ -4,9 +4,11 @@ import { useLocation } from 'react-router'
 import { Sparkles, Calendar, Users, MessageCircle, Mic } from './icons'
 import { TourOverlay } from './tour/TourOverlay'
 import { TourTooltip } from './tour/TourTooltip'
+import { useAuthStore } from '../hooks'
 
 const TOUR_VERSION = 'v1'
-const TOUR_COMPLETED_KEY = `sq-tour-completed-${TOUR_VERSION}`
+const getTourKey = (userId?: string) =>
+  `sq-tour-completed-${TOUR_VERSION}${userId ? `-${userId}` : ''}`
 
 interface TourStepDef {
   target: string
@@ -88,22 +90,24 @@ export function TourGuide() {
   const [tooltipPos, setTooltipPos] = useState<{ top: number; left: number } | null>(null)
   const [targetRect, setTargetRect] = useState<DOMRect | null>(null)
   const location = useLocation()
+  const { user } = useAuthStore()
+  const tourKey = getTourKey(user?.id)
 
   useEffect(() => {
-    // Activer le tour sur /home ou /squads pour les nouveaux utilisateurs
+    // Only show on /home or /squads, and only for logged-in users
+    if (!user) return
     if (location.pathname !== '/home' && location.pathname !== '/squads') return
 
     try {
-      const completed = localStorage.getItem(TOUR_COMPLETED_KEY)
+      const completed = localStorage.getItem(tourKey)
       if (completed === 'true' || completed === 'shown') return
     } catch {
       return
     }
 
     const timer = setTimeout(() => {
-      // Double-check in case another tab completed the tour
       try {
-        const completed = localStorage.getItem(TOUR_COMPLETED_KEY)
+        const completed = localStorage.getItem(tourKey)
         if (completed === 'true' || completed === 'shown') return
       } catch {
         return
@@ -112,19 +116,19 @@ export function TourGuide() {
       const firstTarget = document.querySelector(TOUR_STEPS[0].target)
       if (firstTarget) {
         try {
-          localStorage.setItem(TOUR_COMPLETED_KEY, 'true')
+          localStorage.setItem(tourKey, 'true')
         } catch {}
         setActive(true)
       }
-    }, 3000) // Délai de 3s pour laisser le temps à la page de charger
+    }, 3000)
 
     return () => clearTimeout(timer)
-  }, [location.pathname])
+  }, [location.pathname, user, tourKey])
 
   const completeTour = useCallback(() => {
-    localStorage.setItem(TOUR_COMPLETED_KEY, 'true')
+    localStorage.setItem(tourKey, 'true')
     setActive(false)
-  }, [])
+  }, [tourKey])
 
   const updatePosition = useCallback(() => {
     if (!active) return

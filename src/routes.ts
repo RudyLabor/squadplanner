@@ -26,6 +26,7 @@ export default [
     route('settings', './routes/settings.tsx'),
     route('call-history', './routes/call-history.tsx'),
     route('referrals', './routes/referrals.tsx'),
+    route('auth/discord/callback', './routes/discord-callback.tsx'),
   ]),
 
   // Onboarding (protected but skips onboarding check)

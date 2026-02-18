@@ -44,6 +44,7 @@ export interface Database {
           playstyle: string | null
           twitch_username: string | null
           discord_username: string | null
+          discord_user_id: string | null
           // Phase 7: Custom Status
           status_text: string | null
           status_emoji: string | null
@@ -77,6 +78,7 @@ export interface Database {
           playstyle?: string | null
           twitch_username?: string | null
           discord_username?: string | null
+          discord_user_id?: string | null
           status_text?: string | null
           status_emoji?: string | null
           status_expires_at?: string | null
@@ -108,6 +110,7 @@ export interface Database {
           playstyle?: string | null
           twitch_username?: string | null
           discord_username?: string | null
+          discord_user_id?: string | null
           status_text?: string | null
           status_emoji?: string | null
           status_expires_at?: string | null

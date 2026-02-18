@@ -20,7 +20,7 @@ export const supabaseMinimal: any = createClient(supabaseUrl, supabaseAnonKey, {
     // requests while the app is backgrounded, holding the lock forever.
     // setTimeout is frozen/throttled in hidden tabs, so we also listen
     // for visibilitychange to release the lock when the user returns.
-    lock: (typeof navigator !== 'undefined' && navigator.locks
+    lock: (typeof navigator !== 'undefined' && navigator.locks && typeof document !== 'undefined'
       ? (name: string, acquireTimeout: number, fn: () => Promise<unknown>) => {
           const timeout = acquireTimeout > 0 ? acquireTimeout : 5000
           return navigator.locks.request(

@@ -123,7 +123,7 @@ export async function clientLoader({ serverLoader }: ClientLoaderFunctionArgs) {
   const { supabaseMinimal: supabase } = await import('../lib/supabaseMinimal')
   const { withTimeout } = await import('../lib/withTimeout')
   const { data: { user } } = await withTimeout(supabase.auth.getUser(), 5000)
-    .catch(() => ({ data: { user: null as null } }))
+    .catch(() => ({ data: { user: null as null } })) as any
 
   // If client auth isn't ready, fall back to SSR loader data (which uses cookie auth)
   if (!user) {
@@ -134,7 +134,7 @@ export async function clientLoader({ serverLoader }: ClientLoaderFunctionArgs) {
   const { data: rpcResult } = await withTimeout(
     supabase.rpc('get_layout_data', { p_user_id: user.id }),
     5000
-  )
+  ) as any
   const rpcTypedClient = rpcResult as RpcLayoutData | null
   const profile = rpcTypedClient?.profile ?? null
   const squads: SquadWithCount[] = rpcTypedClient?.squads ?? []
@@ -153,14 +153,14 @@ export function headers({ loaderHeaders }: { loaderHeaders: Headers }) {
 export default function Component({ loaderData }: { loaderData: HomeLoaderData }) {
   return (
     <ClientRouteWrapper seeds={[{ key: [...queryKeys.squads.list()], data: loaderData?.squads }]}>
-      <Suspense fallback={<Home loaderData={{ ...loaderData, upcomingSessions: [] }} />}>
+      <Suspense fallback={<Home loaderData={{ ...loaderData, upcomingSessions: [] } as any} />}>
         <Await
           resolve={loaderData.upcomingSessions}
-          errorElement={<Home loaderData={{ ...loaderData, upcomingSessions: [] }} />}
+          errorElement={<Home loaderData={{ ...loaderData, upcomingSessions: [] } as any} />}
         >
           {(sessions: SessionWithRsvp[]) => (
             <DeferredSeed queryKey={[...queryKeys.sessions.upcoming()]} data={sessions}>
-              <Home loaderData={{ ...loaderData, upcomingSessions: sessions }} />
+              <Home loaderData={{ ...loaderData, upcomingSessions: sessions } as any} />
             </DeferredSeed>
           )}
         </Await>

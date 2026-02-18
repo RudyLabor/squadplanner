@@ -132,7 +132,7 @@ class WebVitalsCollector {
       userAgent: navigator.userAgent
     }
     
-    this.metrics[name.toLowerCase() as keyof PerformanceMetrics] = vital
+    ;(this.metrics as any)[name.toLowerCase()] = vital
     this.onMetric?.(vital)
     
     // Send to monitoring service immediately (for real-time alerts)

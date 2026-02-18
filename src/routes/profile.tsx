@@ -40,9 +40,9 @@ export async function clientLoader({ serverLoader }: ClientLoaderFunctionArgs) {
   const { supabaseMinimal: supabase } = await import('../lib/supabaseMinimal')
   const { withTimeout } = await import('../lib/withTimeout')
   const { data: { user } } = await withTimeout(supabase.auth.getUser(), 5000)
-    .catch(() => ({ data: { user: null as null } }))
+    .catch(() => ({ data: { user: null as null } })) as any
   if (!user) return { profile: null }
-  const { data: profile } = await withTimeout(supabase.from('profiles').select('*').eq('id', user.id).single(), 5000)
+  const { data: profile } = await withTimeout(supabase.from('profiles').select('*').eq('id', user.id).single(), 5000) as any
   return { profile }
 }
 clientLoader.hydrate = true as const

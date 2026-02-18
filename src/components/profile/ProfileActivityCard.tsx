@@ -38,7 +38,7 @@ export function ProfileActivityCard({ streakDays }: ProfileActivityCardProps) {
 
   // Last 7 days
   const last7Days = useMemo(() => {
-    const days = []
+    const days: { label: string; isActive: boolean; isToday: boolean }[] = []
     const labels = ['L', 'M', 'M', 'J', 'V', 'S', 'D']
     const today = new Date()
     for (let i = 6; i >= 0; i--) {

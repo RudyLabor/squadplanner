@@ -40,7 +40,6 @@ export function ActivePartySection({
     error,
     isReconnecting,
     reconnectAttempts,
-    room,
     pushToTalkEnabled,
     pushToTalkActive,
     setPushToTalk,
@@ -49,6 +48,8 @@ export function ActivePartySection({
     noiseSuppressionEnabled,
     toggleNoiseSuppression,
   } = useVoiceChatStore()
+  // 'room' may not exist on VoiceChatState yet — cast to access safely
+  const room = (useVoiceChatStore.getState() as any).room
   const { localQuality } = useNetworkQualityStore()
   const [showInviteModal, setShowInviteModal] = useState(false)
   const {

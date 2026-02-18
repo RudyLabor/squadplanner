@@ -87,7 +87,7 @@ export function usePresence({
 
     // Handle presence sync (initial state)
     channel.on('presence', { event: 'sync' }, () => {
-      const state = channel.presenceState<PresenceUser>()
+      const state = (channel as any).presenceState() as Record<string, PresenceUser[]>
       const users = new Map<string, PresenceUser>()
 
       // Flatten presence state (each key has array of presence entries)

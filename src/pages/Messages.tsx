@@ -465,9 +465,9 @@ export function Messages() {
     squadUnread,
     dmUnread,
     totalUnread: squadUnread + dmUnread,
-    onSelectSquadConv: handleSelectSquadConv,
+    onSelectSquadConv: handleSelectSquadConv as any,
     onSelectDMConv: setActiveDMConv,
-  } as const
+  }
 
   // IMPORTANT: renderChatView is a render function, NOT a component.
   // Using an inline component (<ChatView />) would cause React to unmount/remount

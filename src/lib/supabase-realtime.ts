@@ -27,5 +27,5 @@ export async function getRealtimeClient(): Promise<SupabaseClient> {
 
   const { initSupabase } = await import('./supabase')
   _realtimeClient = await initSupabase()
-  return _realtimeClient
+  return _realtimeClient!
 }

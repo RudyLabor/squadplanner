@@ -33,7 +33,8 @@ function swVersionPlugin() {
 
 // React Compiler — auto-memoization for client components (Phase 1.3)
 // Only transforms "use client" files for safety with SSR/server components
-function reactCompilerPlugin(): import('vite').Plugin {
+// @ts-ignore unused - temporarily disabled in plugin list
+function _reactCompilerPlugin(): import('vite').Plugin {
   let babel: typeof import('@babel/core')
   return {
     name: 'react-compiler',

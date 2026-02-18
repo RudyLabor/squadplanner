@@ -21,7 +21,7 @@ export function Referrals() {
     if (user) {
       fetchReferralStats()
       fetchReferralHistory()
-      analytics.track('referral_page_viewed')
+      analytics.track('referral_page_viewed' as any)
     }
   }, [user, fetchReferralStats, fetchReferralHistory, analytics])
 
@@ -29,7 +29,7 @@ export function Referrals() {
     const success = await copyShareUrl()
     if (success) {
       setCopied(true)
-      analytics.track('referral_link_copied')
+      analytics.track('referral_link_copied' as any)
       setTimeout(() => setCopied(false), 2000)
     }
   }
@@ -39,7 +39,7 @@ export function Referrals() {
     if (!url) return
     const text = `Rejoins Squad Planner et gagne 7 jours Premium gratuit ! ${url}`
     window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank')
-    analytics.track('referral_shared', { platform: 'whatsapp' })
+    analytics.track('referral_shared' as any, { platform: 'whatsapp' })
   }
 
   const handleShareTwitter = () => {
@@ -47,7 +47,7 @@ export function Referrals() {
     if (!url) return
     const text = `Je planifie mes sessions gaming avec @SquadPlanner ! Rejoins-nous et gagne 7 jours Premium gratuit`
     window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`, '_blank')
-    analytics.track('referral_shared', { platform: 'twitter' })
+    analytics.track('referral_shared' as any, { platform: 'twitter' })
   }
 
   if (!user) {

@@ -3,14 +3,12 @@ import { Skeleton } from './ui'
 
 // HEAVY COMPONENTS - Lazy load obligatoire
 export const LazyMessages = lazy(() => import('../pages/Messages'))
-export const LazyProfile = lazy(() => import('../pages/Profile'))  
+export const LazyProfile = lazy(() => import('../pages/Profile').then(m => ({ default: m.Profile })))  
 export const LazyParty = lazy(() => import('../pages/Party'))
 export const LazySessionDetail = lazy(() => import('../pages/SessionDetail'))
 
 // VENDOR-HEAVY COMPONENTS - LiveKit REMOVED, replaced with native WebRTC
 // export const LazyLiveKitRoom = lazy(() => import('../components/voice/LazyLiveKit').then(m => ({ default: m.LazyLiveKitRoom })))
-export const LazyMotionComponents = lazy(() => import('../components/motion'))
-export const LazyCharts = lazy(() => import('../components/analytics/Charts'))
 
 // Wrapper avec skeleton intelligent
 export function LazyWrapper({ 

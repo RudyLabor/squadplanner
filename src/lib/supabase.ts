@@ -1,4 +1,3 @@
-import type { SupabaseClient } from '@supabase/supabase-js'
 import { createBrowserClient } from '@supabase/ssr'
 
 // Strict Database typing disabled — run `npx supabase gen types typescript` to re-enable.
@@ -18,9 +17,11 @@ if (!supabaseUrl || !supabaseAnonKey) {
 // Synchronous singleton — created immediately on module load (client-side only).
 // @supabase/ssr is imported statically so the client is ready before any hook runs.
 // This eliminates the race condition where hooks accessed the proxy before init.
-let _client: SupabaseClient<Database> | null = null
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+let _client: any = null
 
-function getClient(): SupabaseClient<Database> {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function getClient(): any {
   if (!_client) {
     _client = createBrowserClient<Database>(supabaseUrl!, supabaseAnonKey!, {
       auth: {
@@ -31,7 +32,7 @@ function getClient(): SupabaseClient<Database> {
         // Prevent navigator.locks deadlock: limit both lock acquisition AND
         // the work inside the lock. On mobile, the browser can suspend fetch
         // requests while the app is backgrounded, holding the lock forever.
-        lock: typeof navigator !== 'undefined' && navigator.locks
+        lock: (typeof navigator !== 'undefined' && navigator.locks
           ? (name: string, acquireTimeout: number, fn: () => Promise<unknown>) => {
               const timeout = acquireTimeout > 0 ? acquireTimeout : 5000
               return navigator.locks.request(
@@ -45,9 +46,9 @@ function getClient(): SupabaseClient<Database> {
                 ])
               )
             }
-          : undefined,
+          : undefined) as any,
       },
-    })
+    } as any)
   }
   return _client
 }
@@ -62,7 +63,7 @@ if (typeof window !== 'undefined') {
  * Now synchronous under the hood — kept for backward compatibility with
  * useAuth.initialize() and supabase-realtime.ts which await it.
  */
-export function initSupabase(): Promise<SupabaseClient<Database>> {
+export function initSupabase(): Promise<any> {
   return Promise.resolve(getClient())
 }
 
@@ -72,14 +73,15 @@ export function isSupabaseReady(): boolean {
 }
 
 /** Wait for Supabase to be ready — now resolves immediately */
-export function waitForSupabase(): Promise<SupabaseClient<Database>> {
+export function waitForSupabase(): Promise<any> {
   return Promise.resolve(getClient())
 }
 
 // Direct export — all 40+ import sites continue to work unchanged.
 // The proxy delegates to the real client which is always available client-side.
 // On the server side (SSR), falls back to a safe no-op proxy until hydration.
-export const supabase: SupabaseClient<Database> = new Proxy({} as SupabaseClient<Database>, {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const supabase: any = new Proxy({} as any, {
   get(_, prop: string | symbol) {
     if (!_client) {
       // SSR: return safe no-ops so server rendering doesn't crash

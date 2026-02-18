@@ -124,9 +124,9 @@ export const useSessionsStore = create<SessionsState>((set, get) => ({
           .in('id', userIds)
         const profileMap = new Map((profiles || []).map((p) => [p.id, p]))
         rsvps.forEach((r: SessionRsvp & { profiles?: { username?: string } }) => {
-          ;(r as SessionRsvp & { profiles: { username: string } }).profiles = profileMap.get(
+          ;(r as SessionRsvp & { profiles: { username: string } }).profiles = (profileMap.get(
             r.user_id
-          ) || { username: 'Joueur' }
+          ) || { username: 'Joueur' }) as any
         })
       }
 

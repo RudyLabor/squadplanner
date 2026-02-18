@@ -104,7 +104,7 @@ export async function clientLoader({ serverLoader }: ClientLoaderFunctionArgs) {
   const { supabaseMinimal: supabase } = await import('../lib/supabaseMinimal')
   const { withTimeout } = await import('../lib/withTimeout')
   const { data: { user } } = await withTimeout(supabase.auth.getUser(), 5000)
-    .catch(() => ({ data: { user: null as null } }))
+    .catch(() => ({ data: { user: null as null } })) as any
   if (!user) return { squads: [], sessions: [] }
 
   const { data: memberships } = await withTimeout(
@@ -113,7 +113,7 @@ export async function clientLoader({ serverLoader }: ClientLoaderFunctionArgs) {
       .select('squad_id, squads!inner(id, name, game, invite_code, owner_id, created_at)')
       .eq('user_id', user.id),
     5000
-  )
+  ) as any
 
   const squads: SquadSummary[] =
     (memberships as SessionMembershipRow[] | null)?.map((m) => m.squads) || []
@@ -126,14 +126,14 @@ export async function clientLoader({ serverLoader }: ClientLoaderFunctionArgs) {
         .from('sessions').select('*').in('squad_id', squadIds)
         .order('scheduled_at', { ascending: true }),
       5000
-    )
+    ) as any
 
     if (sessionsData?.length) {
       const sessionIds = (sessionsData as unknown as Session[]).map((s: Session) => s.id)
       const { data: allRsvps } = await withTimeout(
         supabase.from('session_rsvps').select('*').in('session_id', sessionIds),
         5000
-      )
+      ) as any
 
       sessions = (sessionsData as unknown as Session[]).map((session: Session) => {
         const sessionRsvps = (allRsvps as SessionRsvp[] | null)?.filter((r) => r.session_id === session.id) || []
@@ -173,7 +173,7 @@ export default function Component({ loaderData }: { loaderData: SessionsLoaderDa
           </div>
         }
       >
-        <Sessions loaderData={loaderData} />
+        <Sessions loaderData={loaderData as any} />
       </Suspense>
     </ClientRouteWrapper>
   )

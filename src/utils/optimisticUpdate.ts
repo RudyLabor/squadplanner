@@ -60,7 +60,7 @@ export function createOptimisticMutation<TData = unknown, TVariables = unknown>(
 
   return {
     onMutate: async (variables: TVariables) => {
-      const keys = resolveKeys(config.queryKeys, variables)
+      const keys = resolveKeys(config.queryKeys as any, variables as any)
 
       // Cancel outgoing refetches for all affected queries
       await Promise.all(keys.map((key) => queryClient.cancelQueries({ queryKey: key })))
@@ -104,7 +104,7 @@ export function createOptimisticMutation<TData = unknown, TVariables = unknown>(
     onSettled: (data: TData | undefined, _error: Error | null, variables: TVariables) => {
       // Always refetch to ensure cache is consistent with server
       if (config.invalidateKeys) {
-        const keys = resolveKeys(config.invalidateKeys, data, variables)
+        const keys = resolveKeys(config.invalidateKeys as any, data as any, variables as any)
         for (const key of keys) {
           queryClient.invalidateQueries({ queryKey: key })
         }

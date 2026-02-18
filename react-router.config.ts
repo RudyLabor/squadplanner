@@ -2,9 +2,9 @@ import type { Config } from '@react-router/dev/config'
 
 let presets: Config['presets'] = []
 try {
-  const { vercelPreset } = await import('@vercel/react-router')
-  if (typeof vercelPreset === 'function') {
-    presets = [vercelPreset()]
+  const mod = await import('@vercel/react-router') as any
+  if (typeof mod.vercelPreset === 'function') {
+    presets = [mod.vercelPreset()]
   }
 } catch {
   // vercelPreset not available locally, Vercel handles it at deploy time

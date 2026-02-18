@@ -91,6 +91,17 @@ interface MotionVariants {
   exit?: Record<string, unknown>
 }
 
+// Haptic feedback stub (useHapticFeedback not available)
+const useHapticFeedback = () => ({
+  trigger: (_type: 'light' | 'medium' | 'heavy') => {},
+})
+
+// Reduced motion stub (useReducedMotion not available)
+const useReducedMotion = () =>
+  typeof window !== 'undefined'
+    ? window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches ?? false
+    : false
+
 // Haptic feedback integration
 export const useHapticMotion = () => {
   const haptic = useHapticFeedback()

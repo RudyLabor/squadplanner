@@ -57,7 +57,7 @@ export async function clientLoader({ serverLoader }: ClientLoaderFunctionArgs) {
   const { withTimeout } = await import('../lib/withTimeout')
   // .catch prevents 500 when navigator.locks deadlock causes TimeoutError
   const { data: { user }, error } = await withTimeout(supabase.auth.getUser(), 5000)
-    .catch((e: unknown) => ({ data: { user: null as null }, error: e as Error }))
+    .catch((e: unknown) => ({ data: { user: null as null }, error: e as Error })) as any
 
   if (error || !user) {
     throw redirect('/auth')
@@ -69,7 +69,7 @@ export async function clientLoader({ serverLoader }: ClientLoaderFunctionArgs) {
   const { data: rpcResult, error: rpcError } = await withTimeout(
     supabase.rpc('get_layout_data', { p_user_id: user.id }),
     5000
-  )
+  ) as any
 
   if (!rpcError && rpcResult) {
     const rpc = rpcResult as LayoutRpcResult
@@ -87,7 +87,7 @@ export async function clientLoader({ serverLoader }: ClientLoaderFunctionArgs) {
           .eq('user_id', user.id),
         5000
       ),
-    ])
+    ]) as any[]
 
     profile = profileResult.data as Profile | null
     const rawSquads =
@@ -189,5 +189,5 @@ export function headers({ loaderHeaders }: { loaderHeaders: Headers }) {
 }
 
 export default function Component({ loaderData }: { loaderData: ProtectedLoaderData }) {
-  return <ProtectedLayoutClient loaderData={loaderData} />
+  return <ProtectedLayoutClient loaderData={loaderData as any} />
 }

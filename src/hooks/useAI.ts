@@ -23,7 +23,7 @@ export const useAIStore = create<AIState>((set) => ({
       set({ isLoading: true, error: null })
       const { data, error } = await withBackoff(() =>
         supabase.functions.invoke('ai-planning', { body: { squad_id: squadId, limit: 5 } })
-      )
+      ) as any
       if (error) throw new Error(error.message || "Erreur lors de l'analyse des cr\u00e9neaux")
       if (data?.suggestions) {
         set({

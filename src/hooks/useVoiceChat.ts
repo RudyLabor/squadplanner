@@ -212,7 +212,7 @@ export const useVoiceChatStore = create<VoiceChatState>((set, get) => ({
 export { useVoiceChatStore as default }
 
 // Browser close listeners (simplifié)
-export function setupBrowserCloseListeners(): void {
+export function setupBrowserCloseListeners(): (() => void) {
   const handleBeforeUnload = () => {
     const state = useVoiceChatStore.getState()
     if (state.isConnected) {

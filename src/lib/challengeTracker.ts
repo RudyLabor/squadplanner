@@ -39,8 +39,8 @@ export async function trackChallengeProgress(
       .eq('user_id', userId)
       .in('challenge_id', challengeIds)
 
-    const existingMap = new Map(
-      (existing || []).map((uc) => [uc.challenge_id, uc])
+    const existingMap = new Map<string, any>(
+      (existing || []).map((uc: any) => [uc.challenge_id, uc])
     )
 
     // 3. For each matching challenge, upsert progress

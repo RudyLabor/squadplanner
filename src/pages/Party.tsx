@@ -24,10 +24,11 @@ export function Party() {
     currentChannel,
     joinChannel,
     leaveChannel,
-    networkQualityChanged,
-    clearNetworkQualityNotification,
     remoteUsers,
   } = useVoiceChatStore()
+  // These properties may not exist on VoiceChatState yet — cast to access safely
+  const networkQualityChanged = (useVoiceChatStore.getState() as any).networkQualityChanged
+  const clearNetworkQualityNotification = (useVoiceChatStore.getState() as any).clearNetworkQualityNotification
 
   const [toastMessage, setToastMessage] = useState('')
   const [showToast, setShowToast] = useState(false)

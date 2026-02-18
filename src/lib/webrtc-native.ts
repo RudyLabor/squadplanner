@@ -19,14 +19,17 @@ export class NativeWebRTC {
   private remoteStream: MediaStream | null = null
   private isConnected = false
   private isMuted = false
-  
+  private config: WebRTCConfig
+
   // Events
   onConnectionStateChange?: (state: string) => void
   onRemoteUser?: (user: VoiceUser) => void
   onUserLeft?: (userId: string) => void
   onSpeaking?: (userId: string, isSpeaking: boolean) => void
-  
-  constructor(private config: WebRTCConfig) {}
+
+  constructor(config: WebRTCConfig) {
+    this.config = config
+  }
   
   async connect(token: string, roomName: string): Promise<boolean> {
     try {

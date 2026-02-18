@@ -55,13 +55,13 @@ export const useNotificationStore = create<NotificationStore>((set, get) => ({
         .from('sessions')
         .select('id, title, scheduled_at, squad_id')
         .in('id', sessionIds)
-      const sessionMap = new Map(
-        (sessions || []).map((s) => [s.id, s])
+      const sessionMap = new Map<string, any>(
+        (sessions || []).map((s: any) => [s.id, s])
       )
 
       // Step 3: batch-fetch squad names
       const squadIds = [
-        ...new Set((sessions || []).map((s) => s.squad_id).filter(Boolean)),
+        ...new Set((sessions || []).map((s: any) => s.squad_id).filter(Boolean)),
       ]
       const squadMap = new Map<string, string>()
       if (squadIds.length > 0) {

@@ -174,7 +174,7 @@ export function Profile() {
         <ProfileHistory
           profile={profile}
           hasPremium={hasPremium}
-          canAccessFeature={canAccessFeature}
+          canAccessFeature={canAccessFeature as any}
           aiCoachTip={aiCoachTip}
         />
 

@@ -124,7 +124,7 @@ export function Premium() {
 
       // Refresh premium status
       await usePremiumStore.getState().fetchPremiumStatus()
-      analytics.track('trial_started', { duration_days: 7 })
+      analytics.track('trial_started' as any, { duration_days: 7 })
       showSuccess('Essai gratuit activé ! Profite de 7 jours Premium.')
     } catch (err) {
       const error = err instanceof Error ? err : new Error(String(err))

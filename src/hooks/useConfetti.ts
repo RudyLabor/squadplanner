@@ -15,7 +15,7 @@ import { useState, useRef, useCallback, useEffect } from 'react'
  */
 export function useConfetti(defaultDuration = 3500) {
   const [active, setActive] = useState(false)
-  const timerRef = useRef<ReturnType<typeof setTimeout>>()
+  const timerRef = useRef<ReturnType<typeof setTimeout>>(undefined)
 
   const fire = useCallback(
     (duration?: number) => {

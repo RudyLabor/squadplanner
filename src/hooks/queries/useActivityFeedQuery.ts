@@ -114,19 +114,19 @@ async function fetchActivityFeed(squadIds: string[]): Promise<ActivityItem[]> {
       : Promise.resolve({ data: [] }),
   ])
 
-  const profileMap = new Map((profilesResult.data || []).map((p) => [p.id, p.username || 'Joueur']))
-  const squadMap = new Map((squadsResult.data || []).map((s) => [s.id, s.name]))
-  const sessionMap = new Map((sessionsForRsvpsResult.data || []).map((s) => [s.id, s]))
+  const profileMap = new Map((profilesResult.data || []).map((p: any) => [p.id, p.username || 'Joueur']))
+  const squadMap = new Map<string, string>((squadsResult.data || []).map((s: any) => [s.id, s.name]))
+  const sessionMap = new Map((sessionsForRsvpsResult.data || []).map((s: any) => [s.id, s]))
 
   rsvps.forEach((r) => {
     const username = profileMap.get(r.user_id) || 'Joueur'
     const session = sessionMap.get(r.session_id)
-    const squadName = session ? squadMap.get(session.squad_id) || '' : ''
+    const squadName = session ? squadMap.get((session as any).squad_id) || '' : ''
     activities.push({
       id: `rsvp-${r.user_id}-${r.session_id}`,
       type: 'session_rsvp',
       description: `${username} a confirmé sa présence`,
-      detail: session ? `${session.title || 'Session'} - ${squadName}` : 'Session',
+      detail: session ? `${(session as any).title || 'Session'} - ${squadName}` : 'Session',
       timestamp: r.responded_at || new Date().toISOString(),
       avatarInitial: username[0]?.toUpperCase() || 'J',
       avatarColor: pickColor(r.user_id),

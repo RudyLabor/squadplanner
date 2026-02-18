@@ -77,7 +77,7 @@ export function useAppResume() {
       }
 
       // FIX 3: Skip stuck View Transition.
-      if (document.startViewTransition && (document as any).activeViewTransition) {
+      if (typeof document.startViewTransition === 'function' && (document as any).activeViewTransition) {
         try {
           ;(document as any).activeViewTransition.skipTransition()
         } catch {
@@ -128,7 +128,7 @@ export function useAppResume() {
               // Deadlock confirmed — steal the lock and force reload
               console.warn('[useAppResume] navigator.locks deadlock detected, forcing reload')
               navigator.locks.request(
-                held!.find((l) => l.name?.startsWith('auth-token'))!.name,
+                held!.find((l) => l.name?.startsWith('auth-token'))!.name!,
                 { steal: true },
                 async () => {
                   window.location.reload()

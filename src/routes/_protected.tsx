@@ -55,9 +55,28 @@ interface ProtectedLoaderData {
 export async function clientLoader({ serverLoader }: ClientLoaderFunctionArgs) {
   const { supabaseMinimal: supabase } = await import('../lib/supabaseMinimal')
   const { withTimeout } = await import('../lib/withTimeout')
-  // .catch prevents 500 when navigator.locks deadlock causes TimeoutError
-  const { data: { user }, error } = await withTimeout(supabase.auth.getUser(), 5000)
-    .catch((e: unknown) => ({ data: { user: null as null }, error: e as Error })) as any
+
+  // Try getUser with retry — on tab resume the first attempt may fail while
+  // the auth token is still refreshing. A single retry after a short delay
+  // is enough to let the refresh complete.
+  let user: { id: string; email?: string } | null = null
+  let error: Error | null = null
+
+  for (let attempt = 0; attempt < 2; attempt++) {
+    try {
+      const result = await withTimeout(supabase.auth.getUser(), 8000) as any
+      user = result.data?.user ?? null
+      error = result.error ?? null
+      if (user) break
+    } catch (e: unknown) {
+      error = e as Error
+      user = null
+    }
+    // Wait before retry to let token refresh settle
+    if (attempt === 0 && !user) {
+      await new Promise((r) => setTimeout(r, 1000))
+    }
+  }
 
   if (error || !user) {
     throw redirect('/auth')

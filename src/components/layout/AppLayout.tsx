@@ -203,7 +203,7 @@ export function AppLayout({ children }: AppLayoutProps) {
     }
   }, [user, fetchPendingCounts, subscribeSquad, unsubscribeSquad])
 
-  const isPartyActive = useMemo(() => location.pathname === '/party', [location.pathname])
+  const isPartyActive = useMemo(() => location.pathname === '/party' || location.pathname.startsWith('/party/'), [location.pathname])
   const currentPath = location.pathname
 
   if (shouldHideNav) {

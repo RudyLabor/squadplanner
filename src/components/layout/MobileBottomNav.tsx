@@ -146,7 +146,7 @@ export const MobileBottomNav = memo(function MobileBottomNav({
             path={item.path}
             icon={item.icon}
             label={item.label}
-            isActive={currentPath === item.path}
+            isActive={currentPath === item.path || currentPath.startsWith(item.path + '/')}
           />
         </div>
       ))}
@@ -164,7 +164,7 @@ export const MobileBottomNav = memo(function MobileBottomNav({
             path={item.path}
             icon={item.icon}
             label={item.label}
-            isActive={currentPath === item.path}
+            isActive={currentPath === item.path || currentPath.startsWith(item.path + '/')}
             badge={item.path === '/messages' && unreadMessages > 0 ? unreadMessages : undefined}
           />
         </div>

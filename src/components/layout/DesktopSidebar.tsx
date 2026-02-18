@@ -290,7 +290,7 @@ export const DesktopSidebar = memo(function DesktopSidebar({
                 path={item.path}
                 icon={item.icon}
                 label={item.label}
-                isActive={currentPath === item.path}
+                isActive={currentPath === item.path || currentPath.startsWith(item.path + '/')}
                 badge={badgeCount}
                 collapsed={!isExpanded}
                 userId={userId}
@@ -307,7 +307,7 @@ export const DesktopSidebar = memo(function DesktopSidebar({
           path="/settings"
           icon={Settings}
           label="Paramètres"
-          isActive={currentPath === '/settings'}
+          isActive={currentPath === '/settings' || currentPath.startsWith('/settings/')}
           collapsed={!isExpanded}
           userId={userId}
         />
@@ -315,7 +315,7 @@ export const DesktopSidebar = memo(function DesktopSidebar({
           path="/help"
           icon={HelpCircle}
           label="Aide"
-          isActive={currentPath === '/help'}
+          isActive={currentPath === '/help' || currentPath.startsWith('/help/')}
           collapsed={!isExpanded}
           userId={userId}
         />
@@ -323,7 +323,7 @@ export const DesktopSidebar = memo(function DesktopSidebar({
           path="/call-history"
           icon={Phone}
           label="Appels"
-          isActive={currentPath === '/call-history'}
+          isActive={currentPath === '/call-history' || currentPath.startsWith('/call-history/')}
           collapsed={!isExpanded}
           userId={userId}
         />

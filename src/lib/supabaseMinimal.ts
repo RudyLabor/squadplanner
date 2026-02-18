@@ -15,50 +15,19 @@ export const supabaseMinimal: any = createClient(supabaseUrl, supabaseAnonKey, {
     autoRefreshToken: true,
     persistSession: true,
     detectSessionInUrl: true,
-    // Prevent navigator.locks deadlock: limit both lock acquisition AND
-    // the work inside the lock. On mobile, the browser suspends fetch
-    // requests while the app is backgrounded, holding the lock forever.
-    // setTimeout is frozen/throttled in hidden tabs, so we also listen
-    // for visibilitychange to release the lock when the user returns.
-    lock: (typeof navigator !== 'undefined' && navigator.locks && typeof document !== 'undefined'
+    // Prevent navigator.locks deadlock: limit lock acquisition time.
+    // On mobile, the browser suspends fetch requests while the app is
+    // backgrounded, but the lock and token refresh resume normally when
+    // the user returns. We only use AbortSignal.timeout to prevent
+    // infinite waits — no visibilitychange rejection, which was killing
+    // legitimate auth refreshes at exactly the wrong moment (tab resume).
+    lock: (typeof navigator !== 'undefined' && navigator.locks
       ? (name: string, acquireTimeout: number, fn: () => Promise<unknown>) => {
-          const timeout = acquireTimeout > 0 ? acquireTimeout : 5000
+          const timeout = acquireTimeout > 0 ? acquireTimeout : 10000
           return navigator.locks.request(
             name,
             { signal: AbortSignal.timeout(timeout) },
-            () => {
-              const work = fn()
-              let done = false
-
-              const bail = new Promise<never>((_, reject) => {
-                // Standard timeout (may be frozen in hidden tabs)
-                const timer = setTimeout(() => {
-                  if (!done) { done = true; reject(new Error(`Lock work timeout after ${timeout}ms`)) }
-                }, timeout)
-
-                // Release lock when tab resumes — setTimeout can't fire in
-                // background tabs, but visibilitychange fires immediately
-                // when the user returns.
-                const onResume = () => {
-                  if (document.visibilityState === 'visible') {
-                    document.removeEventListener('visibilitychange', onResume)
-                    setTimeout(() => {
-                      if (!done) { done = true; reject(new Error('Lock released on tab resume')) }
-                    }, 500)
-                  }
-                }
-                document.addEventListener('visibilitychange', onResume)
-
-                // Cleanup when work completes normally
-                work.finally(() => {
-                  done = true
-                  clearTimeout(timer)
-                  document.removeEventListener('visibilitychange', onResume)
-                })
-              })
-
-              return Promise.race([work, bail])
-            }
+            () => fn()
           )
         }
       : undefined) as any,

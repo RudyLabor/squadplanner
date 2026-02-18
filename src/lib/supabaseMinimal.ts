@@ -53,6 +53,23 @@ export const supabaseMinimal: any = createClient(supabaseUrl, supabaseAnonKey, {
   }
 })
 
+// Reset internal lockAcquired flag on tab resume.
+// When our custom lock's Promise.race times out while the app is backgrounded,
+// the original callback keeps running → lockAcquired stays true forever.
+// On resume, all _acquireLock calls bypass the real lock (re-entrant path),
+// causing getUser() and token refresh to race without coordination.
+// Resetting lockAcquired forces the next auth call to properly acquire the lock.
+if (typeof window !== 'undefined') {
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') {
+      const auth = (supabaseMinimal as any).auth
+      if (auth && auth.lockAcquired) {
+        auth.lockAcquired = false
+      }
+    }
+  })
+}
+
 // Re-export types couramment utilisés
 export type { User, Session } from '@supabase/supabase-js'
 

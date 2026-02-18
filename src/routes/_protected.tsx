@@ -56,6 +56,14 @@ export async function clientLoader({ serverLoader }: ClientLoaderFunctionArgs) {
   const { supabaseMinimal: supabase } = await import('../lib/supabaseMinimal')
   const { withTimeout } = await import('../lib/withTimeout')
 
+  // Safety: clear stuck lockAcquired flag before auth calls.
+  // If the custom lock's Promise.race timed out while backgrounded, lockAcquired
+  // stays true and all subsequent _acquireLock calls bypass the real lock.
+  const auth = (supabase as any).auth
+  if (auth && auth.lockAcquired) {
+    auth.lockAcquired = false
+  }
+
   // Try getUser with retry — on tab resume the first attempt may fail while
   // the auth token is still refreshing. A single retry after a short delay
   // is enough to let the refresh complete.

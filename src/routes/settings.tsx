@@ -2,7 +2,7 @@ import { lazy, Suspense } from 'react'
 import { redirect, data } from 'react-router'
 import type { LoaderFunctionArgs, ClientLoaderFunctionArgs } from 'react-router'
 import { createMinimalSSRClient } from '../lib/supabase-minimal-ssr'
-import { queryKeys } from '../lib/queryClient'
+import { queryClient, queryKeys } from '../lib/queryClient'
 import { ClientRouteWrapper } from '../components/ClientRouteWrapper'
 
 const Settings = lazy(() => import('../pages/Settings').then((m) => ({ default: m.Settings })))
@@ -37,12 +37,19 @@ export async function loader({ request }: LoaderFunctionArgs) {
 }
 
 export async function clientLoader({ serverLoader }: ClientLoaderFunctionArgs) {
+  // Fast auth — getSession reads local cache, no network call.
+  // Parent _protected loader already validated with getUser().
   const { supabaseMinimal: supabase } = await import('../lib/supabaseMinimal')
+  const { data: { session } } = await supabase.auth.getSession()
+  if (!session?.user) return { profile: null }
+
+  // Reuse profile from React Query cache (seeded by _protected layout)
+  const cached = queryClient.getQueryData(queryKeys.profile.current())
+  if (cached !== undefined) return { profile: cached }
+
+  // Fallback: fetch from Supabase (cold cache / first load)
   const { withTimeout } = await import('../lib/withTimeout')
-  const { data: { user } } = await withTimeout(supabase.auth.getUser(), 5000)
-    .catch(() => ({ data: { user: null as null } })) as any
-  if (!user) return { profile: null }
-  const { data: profile } = await withTimeout(supabase.from('profiles').select('*').eq('id', user.id).single(), 5000) as any
+  const { data: profile } = await withTimeout(supabase.from('profiles').select('*').eq('id', session.user.id).single(), 5000) as any
   return { profile }
 }
 clientLoader.hydrate = true as const

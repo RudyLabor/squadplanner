@@ -2,7 +2,7 @@ import { Suspense } from 'react'
 import { redirect, data, Await } from 'react-router'
 import type { LoaderFunctionArgs, ClientLoaderFunctionArgs } from 'react-router'
 import { createMinimalSSRClient } from '../lib/supabase-minimal-ssr'
-import { queryKeys } from '../lib/queryClient'
+import { queryClient, queryKeys } from '../lib/queryClient'
 import { ClientRouteWrapper } from '../components/ClientRouteWrapper'
 import { DeferredSeed } from '../components/DeferredSeed'
 import Home from '../pages/Home'
@@ -120,26 +120,43 @@ export async function loader({ request }: LoaderFunctionArgs) {
 // CLIENT LOADER — handles client-side navigations using localStorage auth
 // Falls back to SSR data when client auth isn't ready yet (prevents empty dashboard)
 export async function clientLoader({ serverLoader }: ClientLoaderFunctionArgs) {
+  // Fast auth — getSession reads local cache, no network call.
+  // Parent _protected loader already validated with getUser().
   const { supabaseMinimal: supabase } = await import('../lib/supabaseMinimal')
-  const { withTimeout } = await import('../lib/withTimeout')
-  const { data: { user } } = await withTimeout(supabase.auth.getUser(), 5000)
-    .catch(() => ({ data: { user: null as null } })) as any
+  const { data: { session } } = await supabase.auth.getSession()
 
   // If client auth isn't ready, fall back to SSR loader data (which uses cookie auth)
-  if (!user) {
+  if (!session?.user) {
     const serverData = await serverLoader<HomeLoaderData>()
     return serverData
   }
 
-  const { data: rpcResult } = await withTimeout(
-    supabase.rpc('get_layout_data', { p_user_id: user.id }),
-    5000
-  ) as any
-  const rpcTypedClient = rpcResult as RpcLayoutData | null
-  const profile = rpcTypedClient?.profile ?? null
-  const squads: SquadWithCount[] = rpcTypedClient?.squads ?? []
+  const userId = session.user.id
+
+  // Reuse profile + squads from React Query cache (seeded by _protected layout)
+  const cachedProfile = queryClient.getQueryData(queryKeys.profile.current()) as Profile | undefined
+  const cachedSquads = queryClient.getQueryData(queryKeys.squads.list()) as SquadWithCount[] | undefined
+
+  let profile: Profile | null
+  let squads: SquadWithCount[]
+
+  if (cachedProfile !== undefined && cachedSquads !== undefined) {
+    profile = cachedProfile
+    squads = cachedSquads
+  } else {
+    // Fallback: fetch from Supabase (cold cache / first load)
+    const { withTimeout } = await import('../lib/withTimeout')
+    const { data: rpcResult } = await withTimeout(
+      supabase.rpc('get_layout_data', { p_user_id: userId }),
+      5000
+    ) as any
+    const rpcTypedClient = rpcResult as RpcLayoutData | null
+    profile = rpcTypedClient?.profile ?? null
+    squads = rpcTypedClient?.squads ?? []
+  }
+
   const squadIds = squads.map((s) => s.id)
-  const upcomingSessions = await fetchUpcomingSessions(supabase, squadIds, user.id)
+  const upcomingSessions = await fetchUpcomingSessions(supabase, squadIds, userId)
 
   return { profile, squads, upcomingSessions }
 }

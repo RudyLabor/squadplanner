@@ -2,7 +2,7 @@ import { lazy, Suspense } from 'react'
 import { redirect, data } from 'react-router'
 import type { LoaderFunctionArgs, ClientLoaderFunctionArgs } from 'react-router'
 import { createMinimalSSRClient } from '../lib/supabase-minimal-ssr'
-import { queryKeys } from '../lib/queryClient'
+import { queryClient, queryKeys } from '../lib/queryClient'
 import { ClientRouteWrapper } from '../components/ClientRouteWrapper'
 import type { Session, SessionRsvp, RsvpResponse } from '../types/database'
 
@@ -101,26 +101,37 @@ export async function loader({ request }: LoaderFunctionArgs) {
 }
 
 export async function clientLoader({ serverLoader }: ClientLoaderFunctionArgs) {
+  // Fast auth — getSession reads local cache, no network call.
+  // Parent _protected loader already validated with getUser().
   const { supabaseMinimal: supabase } = await import('../lib/supabaseMinimal')
-  const { withTimeout } = await import('../lib/withTimeout')
-  const { data: { user } } = await withTimeout(supabase.auth.getUser(), 5000)
-    .catch(() => ({ data: { user: null as null } })) as any
-  if (!user) return { squads: [], sessions: [] }
+  const { data: { session } } = await supabase.auth.getSession()
+  if (!session?.user) return { squads: [], sessions: [] }
+  const userId = session.user.id
 
-  const { data: memberships } = await withTimeout(
-    supabase
-      .from('squad_members')
-      .select('squad_id, squads!inner(id, name, game, invite_code, owner_id, created_at)')
-      .eq('user_id', user.id),
-    5000
-  ) as any
+  // Reuse squads from React Query cache (seeded by _protected layout)
+  const cached = queryClient.getQueryData(queryKeys.squads.list()) as any[] | undefined
+  let squads: SquadSummary[]
+  if (cached !== undefined) {
+    squads = cached.map((s: any) => ({
+      id: s.id, name: s.name, game: s.game,
+      invite_code: s.invite_code, owner_id: s.owner_id, created_at: s.created_at,
+    }))
+  } else {
+    const { withTimeout } = await import('../lib/withTimeout')
+    const { data: memberships } = await withTimeout(
+      supabase
+        .from('squad_members')
+        .select('squad_id, squads!inner(id, name, game, invite_code, owner_id, created_at)')
+        .eq('user_id', userId),
+      5000
+    ) as any
+    squads = (memberships as SessionMembershipRow[] | null)?.map((m) => m.squads) || []
+  }
 
-  const squads: SquadSummary[] =
-    (memberships as SessionMembershipRow[] | null)?.map((m) => m.squads) || []
   const squadIds = squads.map((s) => s.id)
-
   let sessions: SessionWithRsvp[] = []
   if (squadIds.length > 0) {
+    const { withTimeout } = await import('../lib/withTimeout')
     const { data: sessionsData } = await withTimeout(
       supabase
         .from('sessions').select('*').in('squad_id', squadIds)
@@ -139,7 +150,7 @@ export async function clientLoader({ serverLoader }: ClientLoaderFunctionArgs) {
         const sessionRsvps = (allRsvps as SessionRsvp[] | null)?.filter((r) => r.session_id === session.id) || []
         return {
           ...session,
-          my_rsvp: sessionRsvps.find((r) => r.user_id === user.id)?.response || null,
+          my_rsvp: sessionRsvps.find((r) => r.user_id === userId)?.response || null,
           rsvp_counts: {
             present: sessionRsvps.filter((r) => r.response === 'present').length,
             absent: sessionRsvps.filter((r) => r.response === 'absent').length,

@@ -2,7 +2,7 @@ import { lazy, Suspense } from 'react'
 import { redirect, data } from 'react-router'
 import type { LoaderFunctionArgs, ClientLoaderFunctionArgs } from 'react-router'
 import { createMinimalSSRClient } from '../lib/supabase-minimal-ssr'
-import { queryKeys } from '../lib/queryClient'
+import { queryClient, queryKeys } from '../lib/queryClient'
 import { ClientRouteWrapper } from '../components/ClientRouteWrapper'
 
 const Discover = lazy(() => import('../pages/Discover'))
@@ -43,11 +43,18 @@ export async function loader({ request }: LoaderFunctionArgs) {
 }
 
 export async function clientLoader({ serverLoader }: ClientLoaderFunctionArgs) {
+  // Fast auth — getSession reads local cache, no network call.
+  // Parent _protected loader already validated with getUser().
   const { supabaseMinimal: supabase } = await import('../lib/supabaseMinimal')
+  const { data: { session } } = await supabase.auth.getSession()
+  if (!session?.user) return { publicSquads: [] }
+
+  // Check React Query cache for public squads
+  const cached = queryClient.getQueryData(queryKeys.discover.publicSquads())
+  if (cached !== undefined) return { publicSquads: cached }
+
+  // Fallback: fetch from Supabase (cold cache / first load)
   const { withTimeout } = await import('../lib/withTimeout')
-  const { data: { user } } = await withTimeout(supabase.auth.getUser(), 5000)
-    .catch(() => ({ data: { user: null as null } })) as any
-  if (!user) return { publicSquads: [] }
   const { data: publicSquads } = await withTimeout(
     supabase.from('squads').select('id, name, game, total_members, created_at')
       .eq('is_public', true)

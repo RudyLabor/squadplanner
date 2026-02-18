@@ -2,7 +2,7 @@ import { lazy, Suspense } from 'react'
 import { redirect, data } from 'react-router'
 import type { LoaderFunctionArgs, ClientLoaderFunctionArgs } from 'react-router'
 import { createMinimalSSRClient } from '../lib/supabase-minimal-ssr'
-import { queryKeys } from '../lib/queryClient'
+import { queryClient, queryKeys } from '../lib/queryClient'
 import { ClientRouteWrapper } from '../components/ClientRouteWrapper'
 
 const Squads = lazy(() => import('../pages/Squads'))
@@ -72,17 +72,23 @@ export async function loader({ request }: LoaderFunctionArgs) {
 }
 
 export async function clientLoader({ serverLoader }: ClientLoaderFunctionArgs) {
+  // Fast auth — getSession reads local cache, no network call.
+  // Parent _protected loader already validated with getUser().
   const { supabaseMinimal: supabase } = await import('../lib/supabaseMinimal')
-  const { withTimeout } = await import('../lib/withTimeout')
-  const { data: { user } } = await withTimeout(supabase.auth.getUser(), 5000)
-    .catch(() => ({ data: { user: null as null } })) as any
-  if (!user) return { squads: [] }
+  const { data: { session } } = await supabase.auth.getSession()
+  if (!session?.user) return { squads: [] }
 
+  // Reuse squads from React Query cache (seeded by _protected layout)
+  const cached = queryClient.getQueryData(queryKeys.squads.list())
+  if (cached !== undefined) return { squads: cached as SquadWithCount[] }
+
+  // Fallback: fetch from Supabase (cold cache / first load)
+  const { withTimeout } = await import('../lib/withTimeout')
   const { data: memberships } = await withTimeout(
     supabase
       .from('squad_members')
       .select('squad_id, squads!inner(id, name, game, invite_code, owner_id, total_members, created_at)')
-      .eq('user_id', user.id),
+      .eq('user_id', session.user.id),
     5000
   ) as any
 

@@ -238,7 +238,7 @@ export function Referrals() {
                 <div className="space-y-4">
                   <Step number={1} text="Partage ton lien de parrainage avec tes amis" color="success" />
                   <Step number={2} text="Ton ami s'inscrit via ton lien" color="primary" />
-                  <Step number={3} text="Vous gagnez tous les deux 7 jours Premium + toi +500 XP" color="warning" />
+                  <Step number={3} text="Vous recevez chacun 7 jours Premium gratuit, et toi +500 XP en bonus" color="warning" />
                   <Step number={4} text="Si ton ami passe Premium, tu gagnes 1 mois gratuit" color="success" />
                 </div>
               </Card>

@@ -1,8 +1,9 @@
 import { memo } from 'react'
 import { m } from 'framer-motion'
-import { Calendar, Clock, Users, ChevronRight, CheckCircle2, XCircle, HelpCircle } from '../icons'
+import { Calendar, Clock, Users, ChevronRight, CheckCircle2, XCircle, HelpCircle, ExternalLink } from '../icons'
 import { Link } from 'react-router'
 import { Card, Badge, Tooltip } from '../ui'
+import { generateGoogleCalendarUrl } from '../../lib/notifyOnSession'
 
 export const SessionCard = memo(function SessionCard({
   session,
@@ -14,6 +15,7 @@ export const SessionCard = memo(function SessionCard({
     game?: string | null
     scheduled_at: string
     status: string
+    duration_minutes?: number
     rsvp_counts?: { present: number; absent: number; maybe: number }
     my_rsvp?: 'present' | 'absent' | 'maybe' | null
   }
@@ -103,61 +105,80 @@ export const SessionCard = memo(function SessionCard({
           </div>
 
           {canRsvp && (
-            <div className="flex gap-2">
-              <m.button
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                onClick={(e) => {
-                  e.preventDefault()
-                  onRsvp(session.id, 'present')
-                }}
-                aria-label="Marquer comme present"
-                aria-pressed={session.my_rsvp === 'present'}
-                className={`flex items-center gap-1.5 px-4 py-2.5 min-h-[44px] rounded-lg text-base font-medium transition-interactive ${
-                  session.my_rsvp === 'present'
-                    ? 'bg-success/20 text-success border border-success/30 shadow-glow-success'
-                    : 'bg-surface-card text-text-tertiary hover:bg-success-10 hover:text-success hover:border-success/20 border border-transparent'
-                }`}
-              >
-                <CheckCircle2 className="w-4 h-4" aria-hidden="true" />
-                Present
-              </m.button>
-              <m.button
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                onClick={(e) => {
-                  e.preventDefault()
-                  onRsvp(session.id, 'maybe')
-                }}
-                aria-label="Marquer comme peut-etre"
-                aria-pressed={session.my_rsvp === 'maybe'}
-                className={`flex items-center gap-1.5 px-4 py-2.5 min-h-[44px] rounded-lg text-base font-medium transition-interactive ${
-                  session.my_rsvp === 'maybe'
-                    ? 'bg-warning/20 text-warning border border-warning/30 shadow-glow-warning'
-                    : 'bg-surface-card text-text-tertiary hover:bg-warning-10 hover:text-warning hover:border-warning/20 border border-transparent'
-                }`}
-              >
-                <HelpCircle className="w-4 h-4" aria-hidden="true" />
-                Peut-etre
-              </m.button>
-              <m.button
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                onClick={(e) => {
-                  e.preventDefault()
-                  onRsvp(session.id, 'absent')
-                }}
-                aria-label="Marquer comme absent"
-                aria-pressed={session.my_rsvp === 'absent'}
-                className={`flex items-center gap-1.5 px-4 py-2.5 min-h-[44px] rounded-lg text-base font-medium transition-interactive ${
-                  session.my_rsvp === 'absent'
-                    ? 'bg-error/20 text-error border border-error/30 shadow-glow-error'
-                    : 'bg-surface-card text-text-tertiary hover:bg-error-10 hover:text-error hover:border-error/20 border border-transparent'
-                }`}
-              >
-                <XCircle className="w-4 h-4" aria-hidden="true" />
-                Absent
-              </m.button>
+            <div className="space-y-2">
+              <div className="flex gap-2">
+                <m.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={(e) => {
+                    e.preventDefault()
+                    onRsvp(session.id, 'present')
+                  }}
+                  aria-label="Marquer comme present"
+                  aria-pressed={session.my_rsvp === 'present'}
+                  className={`flex items-center gap-1.5 px-4 py-2.5 min-h-[44px] rounded-lg text-base font-medium transition-interactive ${
+                    session.my_rsvp === 'present'
+                      ? 'bg-success/20 text-success border border-success/30 shadow-glow-success'
+                      : 'bg-surface-card text-text-tertiary hover:bg-success-10 hover:text-success hover:border-success/20 border border-transparent'
+                  }`}
+                >
+                  <CheckCircle2 className="w-4 h-4" aria-hidden="true" />
+                  Present
+                </m.button>
+                <m.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={(e) => {
+                    e.preventDefault()
+                    onRsvp(session.id, 'maybe')
+                  }}
+                  aria-label="Marquer comme peut-etre"
+                  aria-pressed={session.my_rsvp === 'maybe'}
+                  className={`flex items-center gap-1.5 px-4 py-2.5 min-h-[44px] rounded-lg text-base font-medium transition-interactive ${
+                    session.my_rsvp === 'maybe'
+                      ? 'bg-warning/20 text-warning border border-warning/30 shadow-glow-warning'
+                      : 'bg-surface-card text-text-tertiary hover:bg-warning-10 hover:text-warning hover:border-warning/20 border border-transparent'
+                  }`}
+                >
+                  <HelpCircle className="w-4 h-4" aria-hidden="true" />
+                  Peut-etre
+                </m.button>
+                <m.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={(e) => {
+                    e.preventDefault()
+                    onRsvp(session.id, 'absent')
+                  }}
+                  aria-label="Marquer comme absent"
+                  aria-pressed={session.my_rsvp === 'absent'}
+                  className={`flex items-center gap-1.5 px-4 py-2.5 min-h-[44px] rounded-lg text-base font-medium transition-interactive ${
+                    session.my_rsvp === 'absent'
+                      ? 'bg-error/20 text-error border border-error/30 shadow-glow-error'
+                      : 'bg-surface-card text-text-tertiary hover:bg-error-10 hover:text-error hover:border-error/20 border border-transparent'
+                  }`}
+                >
+                  <XCircle className="w-4 h-4" aria-hidden="true" />
+                  Absent
+                </m.button>
+              </div>
+              {session.my_rsvp === 'present' && (
+                <a
+                  href={generateGoogleCalendarUrl({
+                    title: session.title || session.game || 'Session',
+                    scheduledAt: session.scheduled_at,
+                    durationMinutes: session.duration_minutes || 120,
+                    game: session.game || undefined,
+                  })}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={(e) => e.stopPropagation()}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-primary hover:bg-primary-15 transition-colors"
+                >
+                  <ExternalLink className="w-3.5 h-3.5" />
+                  Ajouter au calendrier
+                </a>
+              )}
             </div>
           )}
         </div>

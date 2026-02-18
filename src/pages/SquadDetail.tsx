@@ -2,7 +2,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import { AnimatePresence } from 'framer-motion'
 import { ArrowLeft } from '../components/icons'
-import { useParams, useNavigate } from 'react-router'
+import { useParams, useNavigate, useSearchParams } from 'react-router'
 import Confetti from '../components/LazyConfetti'
 import { Button, SquadDetailSkeleton, CrossfadeTransition, ConfirmDialog } from '../components/ui'
 import { useAuthStore, usePremiumStore, useConfetti } from '../hooks'
@@ -24,6 +24,7 @@ import { SuccessToast } from '../components/squads/SuccessToast'
 export default function SquadDetail() {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
+  const [searchParams, setSearchParams] = useSearchParams()
 
   const [showInviteModal, setShowInviteModal] = useState(false)
   const [showActionsDrawer, setShowActionsDrawer] = useState(false)
@@ -52,6 +53,17 @@ export default function SquadDetail() {
   useEffect(() => {
     if (user?.id) fetchPremiumStatus()
   }, [user?.id, fetchPremiumStatus])
+
+  // Auto-RSVP from push notification deep link (?rsvp=sessionId&response=present|absent)
+  useEffect(() => {
+    const rsvpSessionId = searchParams.get('rsvp')
+    const rsvpResponse = searchParams.get('response') as 'present' | 'absent' | 'maybe' | null
+    if (rsvpSessionId && rsvpResponse && user) {
+      // Clear params immediately to avoid re-triggering
+      setSearchParams({}, { replace: true })
+      handleRsvp(rsvpSessionId, rsvpResponse)
+    }
+  }, [searchParams, user, handleRsvp, setSearchParams])
 
   const handleCreateSession = useCallback(
     async (data: {

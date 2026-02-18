@@ -1,6 +1,21 @@
 import { create } from 'zustand'
 import { supabaseMinimal as supabase } from '../lib/supabaseMinimal'
 
+function getNotificationUrl(type: string, data: Record<string, unknown>): string {
+  switch (type) {
+    case 'party_invite':
+    case 'party_started':
+      return '/party'
+    case 'new_message':
+    case 'new_dm':
+      return '/messages'
+    case 'session_created':
+      return data.squad_id ? `/squad/${data.squad_id}` : '/sessions'
+    default:
+      return '/'
+  }
+}
+
 interface NotificationState {
   isSupported: boolean
   isPermissionGranted: boolean
@@ -78,11 +93,9 @@ export const useNotificationStore = create<NotificationState>((set, get) => ({
     }
   },
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  subscribeToSessionReminders: (_userId: string) => {
-    // Subscribe to session_rsvps changes for this user (userId reserved for future per-user filtering)
-    // When a session is about to start, send a notification
-    const channel = supabase
+  subscribeToSessionReminders: (userId: string) => {
+    // Subscribe to session changes for reminders
+    const sessionChannel = supabase
       .channel('session-reminders')
       .on(
         'postgres_changes',
@@ -100,7 +113,6 @@ export const useNotificationStore = create<NotificationState>((set, get) => ({
             status: string
           }
 
-          // Check if session is starting soon (within 15 minutes)
           const sessionTime = new Date(session.scheduled_at)
           const now = new Date()
           const minutesUntil = (sessionTime.getTime() - now.getTime()) / (1000 * 60)
@@ -116,15 +128,48 @@ export const useNotificationStore = create<NotificationState>((set, get) => ({
       )
       .subscribe()
 
-    // Store channel reference for cleanup
-    ;(window as { _notificationChannel?: typeof channel })._notificationChannel = channel
+    // Subscribe to notifications table inserts for this user (party invites, messages, sessions, etc.)
+    const notifChannel = supabase
+      .channel(`user-notifications-${userId}`)
+      .on(
+        'postgres_changes',
+        {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'notifications',
+          filter: `user_id=eq.${userId}`,
+        },
+        (payload) => {
+          const notif = payload.new as {
+            id: string
+            type: string
+            title: string
+            message: string
+            data: Record<string, unknown>
+          }
+          // Show in-app notification toast for all types
+          get().sendNotification(notif.title, {
+            body: notif.message || '',
+            tag: `notif-${notif.id}`,
+            data: { url: getNotificationUrl(notif.type, notif.data), ...notif.data },
+          })
+        }
+      )
+      .subscribe()
+
+    // Store channel references for cleanup
+    ;(window as { _notificationChannels?: Array<typeof sessionChannel> })._notificationChannels = [
+      sessionChannel,
+      notifChannel,
+    ]
   },
 
   unsubscribe: () => {
-    const channel = (window as { _notificationChannel?: ReturnType<typeof supabase.channel> })
-      ._notificationChannel
-    if (channel) {
-      supabase.removeChannel(channel)
+    const channels = (
+      window as { _notificationChannels?: Array<ReturnType<typeof supabase.channel>> }
+    )._notificationChannels
+    if (channels) {
+      channels.forEach((ch) => supabase.removeChannel(ch))
     }
   },
 }))

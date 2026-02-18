@@ -1,4 +1,5 @@
 import { supabase, isSupabaseReady } from '../lib/supabaseMinimal'
+import { notifyDirectMessage } from '../lib/notifyOnMessage'
 import { useUnreadCountStore } from './useUnreadCount'
 import type { DirectMessage, DMConversation, DirectMessagesState } from './useDMTypes'
 import type { StoreApi } from 'zustand'
@@ -25,6 +26,20 @@ export function createDMActions(set: SetState, get: GetState) {
         })
 
         if (error) throw error
+
+        // Push notification to recipient (fire-and-forget)
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('username')
+          .eq('id', user.id)
+          .single()
+        notifyDirectMessage(
+          receiverId,
+          user.id,
+          profile?.username || 'Joueur',
+          content.trim(),
+        ).catch(() => {})
+
         return { error: null }
       } catch (error) {
         console.warn('[DM] Error sending message:', error)

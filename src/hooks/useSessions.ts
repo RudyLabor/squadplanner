@@ -3,6 +3,7 @@ import { supabase, isSupabaseReady } from '../lib/supabaseMinimal'
 import type { Session, SessionRsvp, SessionCheckin } from '../types/database'
 import { createSessionActions } from './useSessionActions'
 import { trackChallengeProgress } from '../lib/challengeTracker'
+import { notifySessionCreated } from '../lib/notifyOnSession'
 
 type RsvpResponse = 'present' | 'absent' | 'maybe'
 
@@ -198,6 +199,23 @@ export const useSessionsStore = create<SessionsState>((set, get) => ({
       trackChallengeProgress(user.id, 'create_session').catch(() => {})
       trackChallengeProgress(user.id, 'rsvp').catch(() => {})
       trackChallengeProgress(user.id, 'daily_rsvp').catch(() => {})
+
+      // Notify squad members about the new session (fire-and-forget)
+      const { data: creatorProfile } = await supabase
+        .from('profiles')
+        .select('username')
+        .eq('id', user.id)
+        .single()
+      notifySessionCreated({
+        sessionId: newSession.id,
+        squadId: data.squad_id,
+        creatorId: user.id,
+        creatorUsername: creatorProfile?.username || 'Joueur',
+        title: data.title || 'Session',
+        game: data.game,
+        scheduledAt: data.scheduled_at,
+        durationMinutes: data.duration_minutes || 120,
+      }).catch(() => {})
 
       await get().fetchSessions(data.squad_id)
       set({ isLoading: false })

@@ -1,6 +1,7 @@
 import { create } from 'zustand'
 import { supabase, isSupabaseReady } from '../lib/supabaseMinimal'
 import { trackChallengeProgress } from '../lib/challengeTracker'
+import { notifySquadMessage } from '../lib/notifyOnMessage'
 import type { RealtimeChannel } from '@supabase/supabase-js'
 import { showError } from '../lib/toast'
 import { optimisticId } from '../utils/optimisticUpdate'
@@ -243,6 +244,9 @@ export const useMessagesStore = create<MessagesState>((set, get) => ({
       set((state) => ({ messages: state.messages.filter((m) => m._optimisticId !== tempId) }))
       // Track challenge progress for sending messages
       trackChallengeProgress(user.id, 'messages').catch(() => {})
+      // Push notification to other squad members (fire-and-forget)
+      const senderName = optimisticMsg.sender?.username || 'Joueur'
+      notifySquadMessage(squadId, user.id, senderName, content.trim(), sessionId).catch(() => {})
       return { error: null }
     } catch (error) {
       set((state) => ({

@@ -1,5 +1,5 @@
 
-import { useEffect, useState, useRef, useCallback } from 'react'
+import { useEffect, useState, useRef, useCallback, useMemo } from 'react'
 import { m } from 'framer-motion'
 import { Loader2 } from '../components/icons'
 import Confetti from '../components/LazyConfetti'
@@ -7,7 +7,9 @@ import { PullToRefresh } from '../components/PullToRefresh'
 import { useAuthStore, usePremiumStore } from '../hooks'
 import { useVoiceChatStore, getSavedPartyInfo } from '../hooks/useVoiceChat'
 import { useSquadsQuery } from '../hooks/queries/useSquadsQuery'
+import { useActiveSquadParties } from '../hooks/useActiveSquadParties'
 import { queryClient } from '../lib/queryClient'
+import { supabaseMinimal as supabase } from '../lib/supabaseMinimal'
 import { QualityChangeToast } from '../components/NetworkQualityIndicator'
 import { ActivePartySection } from './party/PartyActiveSection'
 import { PartySquadCard } from './party/PartySquadCard'
@@ -19,6 +21,8 @@ export function Party() {
   const { user, profile } = useAuthStore()
   const { hasPremium } = usePremiumStore()
   const { data: squads = [], isLoading: squadsLoading } = useSquadsQuery()
+  const squadIds = useMemo(() => squads.map((s) => s.id), [squads])
+  const { parties: activeParties } = useActiveSquadParties(squadIds)
   const {
     isConnected,
     isConnecting,
@@ -128,6 +132,9 @@ export function Party() {
         setToastMessage(`Tu as rejoint la party ${squad?.name || ''}`)
         setToastVariant('success')
         setShowToast(true)
+
+        // Notify squad members that a party was started/joined
+        notifySquadMembersPartyStarted(squadId, squad?.name || 'Squad', user.id, profile.username || 'Joueur')
       } else {
         setToastMessage('Impossible de rejoindre la party')
         setToastVariant('error')
@@ -145,6 +152,51 @@ export function Party() {
       await leaveChannel()
     } catch (err) {
       console.error('[Party] Error leaving:', err)
+    }
+  }
+
+  // Notify all squad members (except self) when a party starts
+  const notifySquadMembersPartyStarted = async (
+    squadId: string,
+    squadName: string,
+    userId: string,
+    username: string,
+  ) => {
+    try {
+      const { data: members } = await supabase
+        .from('squad_members')
+        .select('user_id')
+        .eq('squad_id', squadId)
+        .neq('user_id', userId)
+      if (!members?.length) return
+
+      const memberIds = members.map((m) => m.user_id)
+
+      // Insert in-app notifications for each member
+      const notifications = memberIds.map((memberId) => ({
+        user_id: memberId,
+        type: 'party_started',
+        title: 'Party lancée !',
+        message: `${username} a lancé une party dans ${squadName}`,
+        data: { squad_id: squadId, party_link: `${window.location.origin}/party`, started_by: userId },
+      }))
+      await supabase.from('notifications').insert(notifications)
+
+      // Send push notifications
+      await supabase.functions.invoke('send-push', {
+        body: {
+          userIds: memberIds,
+          title: 'Party lancée !',
+          body: `${username} a lancé une party dans ${squadName}`,
+          icon: '/icon-192.svg',
+          tag: `party-started-${squadId}`,
+          url: '/party',
+          data: { type: 'party_started', squad_id: squadId },
+          vibrate: [200, 100, 200],
+        },
+      }).catch((err) => console.warn('[Party] Push notify failed:', err))
+    } catch (err) {
+      console.warn('[Party] Failed to notify squad members:', err)
     }
   }
 
@@ -257,6 +309,7 @@ export function Party() {
                             }}
                             onJoin={() => handleJoinParty(squad.id)}
                             isConnecting={isConnecting}
+                            activeParty={activeParties.get(squad.id)}
                           />
                         ))}
                       </div>
@@ -283,6 +336,7 @@ export function Party() {
                         }}
                         onJoin={() => handleJoinParty(squad.id)}
                         isConnecting={isConnecting}
+                        activeParty={activeParties.get(squad.id)}
                       />
                     ))}
                   </div>

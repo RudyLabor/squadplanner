@@ -112,15 +112,20 @@ export const useVoiceChatStore = create<VoiceChatState>((set, get) => ({
 
       // Simulate token generation (real app would call Supabase function)
       const mockToken = `token_${userId}_${Date.now()}`
-      
+
       // Use native WebRTC instead of LiveKit
       const webrtc = new (await import('../lib/webrtc-native')).NativeWebRTC(WEBRTC_CONFIG)
-      
+
       const success = await webrtc.connect(mockToken, channelName)
-      
+
       if (success) {
         await webrtc.enableMicrophone()
-        
+
+        // Persist voice state in Supabase so other squad members can see
+        supabase.rpc('join_voice_party', { p_channel_id: channelName }).catch((err) => {
+          console.warn('[VoiceChat] Failed to persist join in DB:', err)
+        })
+
         set({
           isConnected: true,
           isConnecting: false,
@@ -133,13 +138,13 @@ export const useVoiceChatStore = create<VoiceChatState>((set, get) => ({
             volume: 100
           }
         })
-        
+
         if (!import.meta.env.PROD) console.log(`[VoiceChat] Connected to ${channelName} with WebRTC native`)
         return true
       } else {
         throw new Error('WebRTC connection failed')
       }
-      
+
     } catch (error) {
       console.error('[VoiceChat] Connection failed:', error)
       set({
@@ -151,6 +156,11 @@ export const useVoiceChatStore = create<VoiceChatState>((set, get) => ({
   },
 
   leaveChannel: async () => {
+    // Clear voice state in Supabase
+    supabase.rpc('leave_voice_party').catch((err) => {
+      console.warn('[VoiceChat] Failed to persist leave in DB:', err)
+    })
+
     set({
       isConnected: false,
       isConnecting: false,
@@ -216,12 +226,21 @@ export function setupBrowserCloseListeners(): (() => void) {
   const handleBeforeUnload = () => {
     const state = useVoiceChatStore.getState()
     if (state.isConnected) {
+      // Use sendBeacon for reliable leave on page close
+      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
+      const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY
+      if (supabaseUrl && supabaseKey) {
+        navigator.sendBeacon(
+          `${supabaseUrl}/rest/v1/rpc/leave_voice_party`,
+          new Blob([JSON.stringify({})], { type: 'application/json' })
+        )
+      }
       state.leaveChannel()
     }
   }
 
   window.addEventListener('beforeunload', handleBeforeUnload)
-  
+
   return () => {
     window.removeEventListener('beforeunload', handleBeforeUnload)
   }

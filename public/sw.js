@@ -123,6 +123,62 @@ self.addEventListener('notificationclick', function(event) {
   const notificationData = event.notification.data || {};
   event.notification.close();
 
+  // Session accept/refuse handling
+  if (notificationData.type === 'session_created') {
+    var sessionId = notificationData.session_id;
+    var squadId = notificationData.squad_id;
+
+    if (event.action === 'accept') {
+      var acceptUrl = '/squad/' + squadId + '?rsvp=' + sessionId + '&response=present';
+      event.waitUntil(
+        clients.matchAll({ type: 'window', includeUncontrolled: true }).then(function(clientList) {
+          for (var i = 0; i < clientList.length; i++) {
+            if ('focus' in clientList[i]) {
+              clientList[i].focus();
+              clientList[i].navigate(acceptUrl);
+              return;
+            }
+          }
+          if (clients.openWindow) return clients.openWindow(acceptUrl);
+        })
+      );
+      return;
+    }
+
+    if (event.action === 'decline') {
+      var declineUrl = '/squad/' + squadId + '?rsvp=' + sessionId + '&response=absent';
+      event.waitUntil(
+        clients.matchAll({ type: 'window', includeUncontrolled: true }).then(function(clientList) {
+          for (var j = 0; j < clientList.length; j++) {
+            if ('focus' in clientList[j]) {
+              clientList[j].focus();
+              clientList[j].navigate(declineUrl);
+              return;
+            }
+          }
+          if (clients.openWindow) return clients.openWindow(declineUrl);
+        })
+      );
+      return;
+    }
+
+    // Default click: open squad page
+    var squadUrl = '/squad/' + squadId;
+    event.waitUntil(
+      clients.matchAll({ type: 'window', includeUncontrolled: true }).then(function(clientList) {
+        for (var k = 0; k < clientList.length; k++) {
+          if ('focus' in clientList[k]) {
+            clientList[k].focus();
+            clientList[k].navigate(squadUrl);
+            return;
+          }
+        }
+        if (clients.openWindow) return clients.openWindow(squadUrl);
+      })
+    );
+    return;
+  }
+
   // Incoming call handling
   if (notificationData.type === 'incoming_call') {
     const callId = notificationData.call_id;

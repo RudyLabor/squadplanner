@@ -1,12 +1,15 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router'
-import { m } from 'framer-motion'
+import { m, useInView } from 'framer-motion'
+import { useRef } from 'react'
 import { useAuthStore, useReferralStore, useAnalytics } from '../hooks'
-import { Card, CardContent } from '../components/ui/Card'
+import { Card } from '../components/ui/Card'
 import { Button } from '../components/ui/Button'
 import { Badge } from '../components/ui/Badge'
-import { Gift, UserPlus, Trophy, Crown, Award, Zap, Users, TrendingUp } from '../components/icons'
-import { Copy, Share2, Check } from '../components/icons'
+import {
+  Gift, UserPlus, Trophy, Crown, Award, Zap, Users, TrendingUp,
+  Copy, Share2, Check, Sparkles,
+} from '../components/icons'
 
 const ease = [0.16, 1, 0.3, 1] as const
 
@@ -22,6 +25,8 @@ export function Referrals() {
   const { stats, history, isLoading, fetchReferralStats, fetchReferralHistory, copyShareUrl, generateShareUrl } = useReferralStore()
   const analytics = useAnalytics()
   const [copied, setCopied] = useState(false)
+  const heroRef = useRef(null)
+  const isHeroInView = useInView(heroRef, { once: true })
 
   useEffect(() => {
     if (user) {
@@ -63,40 +68,112 @@ export function Referrals() {
   }
 
   return (
-    <main className="min-h-0 bg-bg-base pb-6" aria-label="Parrainage">
-      <div className="mx-auto max-w-2xl md:max-w-3xl px-4 md:px-6 lg:px-8 py-6">
-        {/* Header */}
-        <m.div
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, ease }}
-          className="mb-6 text-center"
-        >
-          <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/10">
-            <Gift className="h-6 w-6 text-primary" />
-          </div>
-          <h1 className="text-lg md:text-xl font-bold text-text-primary">Parrainage</h1>
-          <p className="mt-1.5 text-sm text-text-tertiary">
-            Invite tes amis et gagnez tous les deux 7 jours Premium gratuit !
-          </p>
-        </m.div>
+    <main className="min-h-0 bg-bg-base" aria-label="Parrainage">
+      {/* ─── HERO SECTION (like Premium) ─── */}
+      <div
+        ref={heroRef}
+        className="relative overflow-hidden bg-gradient-to-br from-success/15 via-primary/8 to-bg-base pt-8 pb-16"
+      >
+        {/* Animated background blobs */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <m.div
+            className="absolute -top-1/2 -left-1/2 w-full h-full rounded-full bg-gradient-to-r from-success/10 to-primary/5 blur-3xl"
+            animate={isHeroInView ? { x: [0, 80, 0], y: [0, 40, 0] } : {}}
+            transition={{ duration: 3, repeat: 2, ease: 'easeInOut' }}
+          />
+          <m.div
+            className="absolute -bottom-1/2 -right-1/2 w-full h-full rounded-full bg-gradient-to-l from-primary/10 to-success/5 blur-3xl"
+            animate={isHeroInView ? { x: [0, -80, 0], y: [0, -40, 0] } : {}}
+            transition={{ duration: 3, repeat: 2, ease: 'easeInOut', delay: 0.5 }}
+          />
+        </div>
 
+        <div className="relative px-4 md:px-6 max-w-4xl mx-auto">
+          <div className="text-center">
+            {/* Pill badge */}
+            <m.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4, ease }}
+              className="flex justify-center mb-6"
+            >
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-success/10 to-success/025 border border-success/15">
+                <Sparkles className="w-4 h-4 text-success" />
+                <span className="text-base font-medium text-success">
+                  7 jours Premium offerts
+                </span>
+              </div>
+            </m.div>
+
+            {/* Icon */}
+            <m.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.1, duration: 0.5, ease }}
+              className="mb-4"
+            >
+              <div
+                className="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-gradient-to-br from-success to-success/60 mb-6"
+                style={{ boxShadow: 'var(--shadow-glow-success-strong)' }}
+              >
+                <Gift className="w-10 h-10 text-white" />
+              </div>
+            </m.div>
+
+            {/* Title with gradient word */}
+            <m.h1
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.15, duration: 0.4, ease }}
+              className="text-lg md:text-xl font-bold text-text-primary mb-4"
+            >
+              Invite tes potes,{' '}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-success to-primary">
+                gagne des rewards
+              </span>
+            </m.h1>
+
+            <m.p
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2, duration: 0.4, ease }}
+              className="text-md md:text-lg text-text-secondary max-w-xl mx-auto"
+            >
+              Partage ton lien, ton ami rejoint la squad et vous gagnez tous les deux
+              7 jours Premium + toi 500 XP.
+            </m.p>
+          </div>
+        </div>
+      </div>
+
+      {/* ─── CONTENT ─── */}
+      <div className="mx-auto max-w-2xl md:max-w-3xl px-4 md:px-6 lg:px-8 -mt-8 pb-8 relative z-10">
         {isLoading ? (
-          <div className="flex items-center justify-center py-12" aria-busy="true">
-            <div className="h-8 w-8 animate-spin rounded-full border-2 border-primary border-t-transparent" />
+          <div className="flex items-center justify-center py-16" aria-busy="true">
+            <div className="h-8 w-8 animate-spin rounded-full border-2 border-success border-t-transparent" />
           </div>
         ) : (
           <>
-            {/* Referral Code Card */}
+            {/* ─── REFERRAL CODE CARD ─── */}
             <m.div
-              initial={{ opacity: 0, y: 12 }}
+              initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.05, duration: 0.4, ease }}
+              transition={{ delay: 0.25, duration: 0.5, ease }}
             >
-              <Card variant="elevated" className="mb-5 p-5">
-                <SectionHeader icon={UserPlus} title="Ton code de parrainage" />
+              <Card variant="elevated" className="mb-5 p-5 border-success/10">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-success/10">
+                    <UserPlus className="h-4 w-4 text-success" />
+                  </div>
+                  <h2 className="text-md font-semibold text-text-primary">Ton code de parrainage</h2>
+                </div>
+
+                {/* Code display */}
                 <div className="flex items-center gap-3">
-                  <div className="flex-1 rounded-xl bg-bg-base px-4 py-3 text-center font-mono text-lg font-bold text-primary border border-border-subtle">
+                  <div
+                    className="flex-1 rounded-xl px-4 py-3.5 text-center font-mono text-lg font-bold text-success border border-success/20"
+                    style={{ background: 'linear-gradient(135deg, var(--color-success-5), transparent)' }}
+                  >
                     {stats?.referralCode || '\u2014'}
                   </div>
                   <Button
@@ -112,129 +189,168 @@ export function Referrals() {
 
                 {/* Share buttons */}
                 <div className="mt-4 flex gap-3">
-                  <Button
-                    variant="secondary"
-                    size="sm"
-                    fullWidth
+                  <button
                     onClick={handleShareWhatsApp}
-                    leftIcon={<Share2 className="h-4 w-4" />}
+                    className="flex flex-1 items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-medium transition-all border border-[#25D366]/20 text-[#25D366] hover:bg-[#25D366]/10 active:scale-[0.98]"
+                    style={{ background: 'linear-gradient(135deg, rgba(37,211,102,0.05), transparent)' }}
                   >
-                    WhatsApp
-                  </Button>
-                  <Button
-                    variant="secondary"
-                    size="sm"
-                    fullWidth
+                    <Share2 className="h-4 w-4" />
+                    <span>WhatsApp</span>
+                  </button>
+                  <button
                     onClick={handleShareTwitter}
-                    leftIcon={<Share2 className="h-4 w-4" />}
+                    className="flex flex-1 items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-medium transition-all border border-[#1DA1F2]/20 text-[#1DA1F2] hover:bg-[#1DA1F2]/10 active:scale-[0.98]"
+                    style={{ background: 'linear-gradient(135deg, rgba(29,161,242,0.05), transparent)' }}
                   >
-                    Twitter / X
-                  </Button>
+                    <Share2 className="h-4 w-4" />
+                    <span>Twitter / X</span>
+                  </button>
                 </div>
               </Card>
             </m.div>
 
-            {/* Stats Grid */}
+            {/* ─── STATS GRID ─── */}
             <m.div
-              initial={{ opacity: 0, y: 12 }}
+              initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1, duration: 0.4, ease }}
+              transition={{ delay: 0.3, duration: 0.5, ease }}
               className="mb-5 grid grid-cols-2 gap-3"
             >
-              <StatCard icon={UserPlus} label="Filleuls inscrits" value={stats?.signedUp || 0} />
-              <StatCard icon={TrendingUp} label="Convertis Premium" value={stats?.converted || 0} />
-              <StatCard icon={Zap} label="XP gagnes" value={stats?.totalXpEarned || 0} />
-              <StatCard icon={Users} label="Total parrainages" value={stats?.totalReferrals || 0} />
+              <StatCard icon={UserPlus} label="Filleuls inscrits" value={stats?.signedUp || 0} color="success" />
+              <StatCard icon={TrendingUp} label="Convertis Premium" value={stats?.converted || 0} color="primary" />
+              <StatCard icon={Zap} label="XP gagnes" value={stats?.totalXpEarned || 0} color="warning" />
+              <StatCard icon={Users} label="Total parrainages" value={stats?.totalReferrals || 0} color="purple" />
             </m.div>
 
-            {/* How it works */}
+            {/* ─── HOW IT WORKS ─── */}
             <m.div
-              initial={{ opacity: 0, y: 12 }}
+              initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.15, duration: 0.4, ease }}
+              transition={{ delay: 0.35, duration: 0.5, ease }}
             >
               <Card variant="default" className="mb-5 p-5">
-                <SectionHeader icon={Gift} title="Comment ca marche" />
-                <div className="space-y-3">
-                  <Step number={1} text="Partage ton lien de parrainage avec tes amis" />
-                  <Step number={2} text="Ton ami s'inscrit via ton lien" />
-                  <Step number={3} text="Vous gagnez tous les deux 7 jours Premium + toi +500 XP" />
-                  <Step number={4} text="Si ton ami passe Premium, tu gagnes 1 mois gratuit" />
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10">
+                    <Sparkles className="h-4 w-4 text-primary" />
+                  </div>
+                  <h2 className="text-md font-semibold text-text-primary">Comment ca marche</h2>
+                </div>
+                <div className="space-y-4">
+                  <Step number={1} text="Partage ton lien de parrainage avec tes amis" color="success" />
+                  <Step number={2} text="Ton ami s'inscrit via ton lien" color="primary" />
+                  <Step number={3} text="Vous gagnez tous les deux 7 jours Premium + toi +500 XP" color="warning" />
+                  <Step number={4} text="Si ton ami passe Premium, tu gagnes 1 mois gratuit" color="success" />
                 </div>
               </Card>
             </m.div>
 
-            {/* Milestones */}
+            {/* ─── MILESTONES ─── */}
             <m.div
-              initial={{ opacity: 0, y: 12 }}
+              initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2, duration: 0.4, ease }}
+              transition={{ delay: 0.4, duration: 0.5, ease }}
             >
               <Card variant="default" className="mb-5 p-5">
-                <SectionHeader icon={Trophy} title="Paliers de recompense" />
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-warning/10">
+                    <Trophy className="h-4 w-4 text-warning" />
+                  </div>
+                  <h2 className="text-md font-semibold text-text-primary">Paliers de recompense</h2>
+                </div>
                 <div className="space-y-3">
-                  {MILESTONES.map((ms) => {
+                  {MILESTONES.map((ms, i) => {
                     const achieved = stats?.milestones[ms.key] || false
                     const current = stats?.totalReferrals || 0
                     const progress = Math.min(current / ms.count, 1)
+                    const iconBgClasses = ['bg-success/10', 'bg-primary/10', 'bg-warning/10'] as const
+                    const iconTextClasses = ['text-success', 'text-primary', 'text-warning'] as const
+                    const barClasses = [
+                      'bg-gradient-to-r from-success to-success/60',
+                      'bg-gradient-to-r from-primary to-primary/60',
+                      'bg-gradient-to-r from-warning to-warning/60',
+                    ] as const
                     return (
-                      <div
+                      <m.div
                         key={ms.key}
+                        initial={{ opacity: 0, x: -10 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: 0.45 + i * 0.08, duration: 0.4, ease }}
                         className={`rounded-xl p-4 transition-interactive ${
                           achieved
-                            ? 'bg-primary/8 border border-primary/20'
-                            : 'bg-bg-base border border-border-subtle'
+                            ? 'border border-success/20'
+                            : 'bg-surface-card border border-border-subtle hover:border-border-hover'
                         }`}
+                        style={achieved ? {
+                          background: 'linear-gradient(135deg, var(--color-success-5), transparent)',
+                          boxShadow: 'var(--shadow-glow-success)',
+                        } : undefined}
                       >
                         <div className="flex items-center gap-3">
-                          <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${
-                            achieved ? 'bg-primary/15' : 'bg-bg-active'
-                          }`}>
-                            <ms.Icon className={`h-5 w-5 ${achieved ? 'text-primary' : 'text-text-quaternary'}`} />
+                          <div
+                            className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl ${
+                              achieved
+                                ? 'bg-gradient-to-br from-success to-success/60'
+                                : iconBgClasses[i]
+                            }`}
+                            style={achieved ? { boxShadow: 'var(--shadow-glow-success)' } : undefined}
+                          >
+                            <ms.Icon className={`h-5 w-5 ${achieved ? 'text-white' : iconTextClasses[i]}`} />
                           </div>
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center justify-between gap-2">
-                              <span className={`text-sm font-semibold ${achieved ? 'text-primary' : 'text-text-primary'}`}>
-                                {ms.label} — {ms.count} filleuls
+                              <span className={`text-sm font-semibold ${achieved ? 'text-success' : 'text-text-primary'}`}>
+                                {ms.label}
                               </span>
-                              {achieved && (
+                              {achieved ? (
                                 <Badge variant="success" size="sm">Debloque</Badge>
+                              ) : (
+                                <span className="text-xs text-text-quaternary font-medium">{current}/{ms.count}</span>
                               )}
                             </div>
                             <p className="text-xs text-text-tertiary mt-0.5">{ms.reward}</p>
                             {!achieved && (
-                              <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-border-subtle">
+                              <div className="mt-2 h-2 overflow-hidden rounded-full bg-border-subtle">
                                 <m.div
-                                  className="h-full rounded-full bg-primary"
+                                  className={`h-full rounded-full ${barClasses[i]}`}
                                   initial={{ width: 0 }}
                                   animate={{ width: `${progress * 100}%` }}
-                                  transition={{ duration: 0.6, ease }}
+                                  transition={{ duration: 0.8, ease, delay: 0.5 + i * 0.1 }}
                                 />
                               </div>
                             )}
                           </div>
                         </div>
-                      </div>
+                      </m.div>
                     )
                   })}
                 </div>
               </Card>
             </m.div>
 
-            {/* Referral History */}
+            {/* ─── REFERRAL HISTORY ─── */}
             {history.length > 0 && (
               <m.div
-                initial={{ opacity: 0, y: 12 }}
+                initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.25, duration: 0.4, ease }}
+                transition={{ delay: 0.5, duration: 0.5, ease }}
               >
                 <Card variant="default" className="p-5">
-                  <SectionHeader icon={Users} title={`Historique (${history.length})`} />
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10">
+                      <Users className="h-4 w-4 text-primary" />
+                    </div>
+                    <h2 className="text-md font-semibold text-text-primary">
+                      Historique ({history.length})
+                    </h2>
+                  </div>
                   <div className="space-y-2">
-                    {history.map((item) => (
-                      <div
+                    {history.map((item, i) => (
+                      <m.div
                         key={item.id}
-                        className="flex items-center justify-between rounded-xl bg-bg-base px-4 py-3 border border-border-subtle"
+                        initial={{ opacity: 0, y: 8 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.55 + i * 0.05, duration: 0.3, ease }}
+                        className="flex items-center justify-between rounded-xl bg-surface-card px-4 py-3 border border-border-subtle hover:border-border-hover transition-interactive"
                       >
                         <div>
                           <p className="text-sm font-medium text-text-primary">
@@ -249,7 +365,7 @@ export function Referrals() {
                           </p>
                         </div>
                         <StatusBadge status={item.status} />
-                      </div>
+                      </m.div>
                     ))}
                   </div>
                 </Card>
@@ -262,46 +378,59 @@ export function Referrals() {
   )
 }
 
-function SectionHeader({ icon: Icon, title }: { icon: React.ElementType; title: string }) {
+/* ─── STAT CARD ─── */
+function StatCard({ icon: Icon, label, value, color }: {
+  icon: React.ElementType
+  label: string
+  value: number
+  color: 'success' | 'primary' | 'warning' | 'purple'
+}) {
+  const colorMap = {
+    success: { bg: 'bg-success/10', text: 'text-success', glow: 'var(--shadow-glow-success)' },
+    primary: { bg: 'bg-primary/10', text: 'text-primary', glow: 'var(--shadow-glow-primary-sm)' },
+    warning: { bg: 'bg-warning/10', text: 'text-warning', glow: 'var(--shadow-glow-warning)' },
+    purple: { bg: 'bg-purple/10', text: 'text-purple', glow: 'var(--shadow-glow-purple)' },
+  }
+  const c = colorMap[color]
+
   return (
-    <div className="flex items-center gap-3 mb-4">
-      <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10">
-        <Icon className="h-4 w-4 text-primary" />
-      </div>
-      <h2 className="text-md font-semibold text-text-primary">{title}</h2>
-    </div>
+    <m.div whileHover={{ y: -2, boxShadow: c.glow }} transition={{ duration: 0.2 }}>
+      <Card variant="default" className="p-4 h-full" hoverable>
+        <div className="flex items-center gap-3">
+          <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${c.bg}`}>
+            <Icon className={`h-5 w-5 ${c.text}`} />
+          </div>
+          <div className="min-w-0">
+            <p className={`text-2xl font-bold tracking-tight leading-none ${c.text}`}>
+              {value.toLocaleString('fr-FR')}
+            </p>
+            <p className="text-xs text-text-tertiary mt-1">{label}</p>
+          </div>
+        </div>
+      </Card>
+    </m.div>
   )
 }
 
-function StatCard({ icon: Icon, label, value }: { icon: React.ElementType; label: string; value: number }) {
-  return (
-    <Card variant="default" className="p-4">
-      <div className="flex items-center gap-3">
-        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary/10">
-          <Icon className="h-4 w-4 text-primary" />
-        </div>
-        <div className="min-w-0">
-          <p className="text-xl font-bold text-text-primary tracking-tight leading-none">
-            {value.toLocaleString('fr-FR')}
-          </p>
-          <p className="text-xs text-text-tertiary mt-1">{label}</p>
-        </div>
-      </div>
-    </Card>
-  )
-}
+/* ─── STEP ─── */
+const stepStyles = {
+  success: 'bg-success/10 text-success',
+  primary: 'bg-primary/10 text-primary',
+  warning: 'bg-warning/10 text-warning',
+} as const
 
-function Step({ number, text }: { number: number; text: string }) {
+function Step({ number, text, color }: { number: number; text: string; color: keyof typeof stepStyles }) {
   return (
     <div className="flex items-start gap-3">
-      <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-primary/10 text-sm font-bold text-primary">
+      <div className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-sm font-bold ${stepStyles[color]}`}>
         {number}
       </div>
-      <p className="text-sm text-text-primary pt-0.5">{text}</p>
+      <p className="text-sm text-text-primary pt-1">{text}</p>
     </div>
   )
 }
 
+/* ─── STATUS BADGE ─── */
 function StatusBadge({ status }: { status: 'pending' | 'signed_up' | 'converted' }) {
   const config = {
     pending: { label: 'En attente', variant: 'warning' as const },

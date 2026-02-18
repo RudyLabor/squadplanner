@@ -16,7 +16,7 @@ const ease = [0.16, 1, 0.3, 1] as const
 const MILESTONES = [
   { key: 'recruiter3' as const, count: 3, label: 'Recruteur', reward: 'Badge "Recruteur"', Icon: Award },
   { key: 'recruiter10' as const, count: 10, label: 'Recruteur Pro', reward: '1 mois Squad Leader gratuit', Icon: Trophy },
-  { key: 'recruiter25' as const, count: 25, label: 'Recruteur L\u00e9gendaire', reward: 'Squad Leader \u00e0 vie', Icon: Crown },
+  { key: 'recruiter25' as const, count: 25, label: 'Recruteur Légendaire', reward: 'Squad Leader à vie', Icon: Crown },
 ] as const
 
 export function Referrals() {
@@ -183,7 +183,7 @@ export function Referrals() {
                     showSuccess={copied}
                     leftIcon={copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
                   >
-                      {copied ? 'Copi\u00e9 !' : 'Copier'}
+                    {copied ? 'Copié !' : 'Copier'}
                   </Button>
                 </div>
 
@@ -218,7 +218,7 @@ export function Referrals() {
             >
               <StatCard icon={UserPlus} label="Filleuls inscrits" value={stats?.signedUp || 0} color="success" />
               <StatCard icon={TrendingUp} label="Convertis Premium" value={stats?.converted || 0} color="primary" />
-              <StatCard icon={Zap} label="XP gagn\u00e9s" value={stats?.totalXpEarned || 0} color="warning" />
+              <StatCard icon={Zap} label="XP gagnés" value={stats?.totalXpEarned || 0} color="warning" />
               <StatCard icon={Users} label="Total parrainages" value={stats?.totalReferrals || 0} color="purple" />
             </m.div>
 
@@ -233,7 +233,7 @@ export function Referrals() {
                   <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10">
                     <Sparkles className="h-4 w-4 text-primary" />
                   </div>
-                  <h2 className="text-md font-semibold text-text-primary">Comment \u00e7a marche</h2>
+                  <h2 className="text-md font-semibold text-text-primary">Comment ça marche</h2>
                 </div>
                 <div className="space-y-4">
                   <Step number={1} text="Partage ton lien de parrainage avec tes amis" color="success" />
@@ -255,7 +255,7 @@ export function Referrals() {
                   <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-warning/10">
                     <Trophy className="h-4 w-4 text-warning" />
                   </div>
-                  <h2 className="text-md font-semibold text-text-primary">Paliers de r\u00e9compense</h2>
+                  <h2 className="text-md font-semibold text-text-primary">Paliers de récompense</h2>
                 </div>
                 <div className="space-y-3">
                   {MILESTONES.map((ms, i) => {
@@ -302,7 +302,7 @@ export function Referrals() {
                                 {ms.label}
                               </span>
                               {achieved ? (
-                                <Badge variant="success" size="sm">D\u00e9bloqu\u00e9</Badge>
+                                <Badge variant="success" size="sm">Débloqué</Badge>
                               ) : (
                                 <span className="text-xs text-text-quaternary font-medium">{current}/{ms.count}</span>
                               )}

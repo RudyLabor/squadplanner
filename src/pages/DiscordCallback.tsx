@@ -32,12 +32,21 @@ export function DiscordCallback() {
 
     async function exchangeCode(code: string) {
       try {
-        const {
-          data: { session },
-        } = await supabase.auth.getSession()
+        // Force-refresh the session — the access_token expires during
+        // the Discord OAuth redirect round-trip (full page navigation)
+        let accessToken: string | undefined
 
-        if (!session) {
-          setError('Tu dois etre connecte')
+        const { data: refreshData } = await supabase.auth.refreshSession()
+        if (refreshData?.session) {
+          accessToken = refreshData.session.access_token
+        } else {
+          // Fallback: cached session might still be valid
+          const { data: fallback } = await supabase.auth.getSession()
+          accessToken = fallback?.session?.access_token
+        }
+
+        if (!accessToken) {
+          setError('Tu dois être connecté')
           setTimeout(() => navigate('/auth', { replace: true }), 2000)
           return
         }
@@ -50,7 +59,7 @@ export function DiscordCallback() {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
-              Authorization: `Bearer ${session.access_token}`,
+              Authorization: `Bearer ${accessToken}`,
             },
             body: JSON.stringify({ code, redirect_uri: redirectUri }),
           },

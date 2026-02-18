@@ -25,7 +25,10 @@ export function ProtectedLayoutClient({ loaderData }: { loaderData: ProtectedLay
 
   const seeded = useRef(false)
   if (!seeded.current && loaderData) {
-    if (loaderData.squads) {
+    // Only seed squads if the loader returned actual data.
+    // Seeding with [] from a failed RPC would poison the cache and prevent
+    // child routes (home, squads) from fetching fresh data.
+    if (loaderData.squads?.length) {
       queryClient.setQueryData(queryKeys.squads.list(), loaderData.squads)
     }
     if (loaderData.profile) {

@@ -19,8 +19,10 @@ export interface SquadWithMembers extends Squad {
   member_count?: number
 }
 
-async function fetchSquads(): Promise<SquadWithMembers[]> {
-  const { data: memberships, error: memberError } = await supabase.from('squad_members').select(`
+async function fetchSquads(userId: string): Promise<SquadWithMembers[]> {
+  const { data: memberships, error: memberError } = await supabase
+    .from('squad_members')
+    .select(`
       squad_id,
       squads!inner (
         id,
@@ -32,6 +34,7 @@ async function fetchSquads(): Promise<SquadWithMembers[]> {
         created_at
       )
     `)
+    .eq('user_id', userId)
 
   if (memberError) throw memberError
 
@@ -72,9 +75,9 @@ export function useSquadsQuery() {
   const user = useAuthStore((s) => s.user)
   return useQuery({
     queryKey: queryKeys.squads.list(),
-    queryFn: fetchSquads,
+    queryFn: () => fetchSquads(user!.id),
     staleTime: 30 * 1000,
-    // Guard: don't fetch until auth is ready to avoid RLS returning []
+    // Guard: don't fetch until auth is ready
     enabled: !!user,
   })
 }

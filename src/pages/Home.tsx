@@ -163,7 +163,8 @@ export default function Home({ loaderData }: HomeProps) {
   const loaderSessions = Array.isArray(loaderData?.upcomingSessions)
     ? loaderData.upcomingSessions
     : []
-  const { data: querySquads, isLoading: squadsLoading } = useSquadsQuery()
+  const { data: querySquads, isLoading: squadsLoadingRaw, isPending: squadsLoadingPending } = useSquadsQuery()
+  const squadsLoading = squadsLoadingRaw || squadsLoadingPending
   const { data: queryRawSessions, isLoading: sessionsQueryLoading } =
     useUpcomingSessionsQuery(user?.id)
   // Prefer query data when it has actual results, otherwise use loader data.

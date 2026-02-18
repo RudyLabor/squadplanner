@@ -25,7 +25,8 @@ interface SessionsProps {
 
 export function Sessions({ loaderData: _loaderData }: SessionsProps) {
   const { user, isInitialized } = useAuthStore()
-  const { data: squads = [], isLoading: squadsLoading } = useSquadsQuery()
+  const { data: squads = [], isLoading: squadsLoadingRaw, isPending: squadsLoadingPending } = useSquadsQuery()
+  const squadsLoading = squadsLoadingRaw || squadsLoadingPending
   const { data: sessions = [], isLoading: sessionsLoading } = useUpcomingSessionsQuery(user?.id)
   const { slotSuggestions, hasSlotHistory, coachTips, fetchSlotSuggestions, fetchCoachTips } =
     useAIStore()

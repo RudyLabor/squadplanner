@@ -20,7 +20,8 @@ import { PartySingleSquad, PartyStatsCard } from './party/PartySingleSquad'
 export function Party() {
   const { user, profile } = useAuthStore()
   const { hasPremium } = usePremiumStore()
-  const { data: squads = [], isLoading: squadsLoading } = useSquadsQuery()
+  const { data: squads = [], isLoading: squadsLoadingRaw, isPending: squadsLoadingPending } = useSquadsQuery()
+  const squadsLoading = squadsLoadingRaw || squadsLoadingPending
   const squadIds = useMemo(() => squads.map((s) => s.id), [squads])
   const { parties: activeParties } = useActiveSquadParties(squadIds)
   const {

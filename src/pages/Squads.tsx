@@ -55,7 +55,7 @@ export default function Squads({ loaderData: _loaderData }: SquadsProps) {
   }, [])
 
   const { user } = useAuthStore()
-  const { data: squads = [], isLoading } = useSquadsQuery()
+  const { data: squads = [], isLoading, isPending } = useSquadsQuery()
   const createSquadMutation = useCreateSquadMutation()
   const joinSquadMutation = useJoinSquadMutation()
   const { isConnected: isInVoiceChat, currentChannel } = useVoiceChatStore()
@@ -156,7 +156,7 @@ export default function Squads({ loaderData: _loaderData }: SquadsProps) {
     return !!(isInVoiceChat && currentChannel?.includes(squadId))
   }
 
-  if (isLoading && squads.length === 0) {
+  if (isPending && squads.length === 0) {
     return (
       <div className="min-h-0 bg-bg-base pb-6">
         <div className="px-4 md:px-6 lg:px-8 py-6 max-w-2xl lg:max-w-4xl xl:max-w-6xl mx-auto">

@@ -1,5 +1,6 @@
 
 import { useState, useRef, useEffect, useCallback, memo } from 'react'
+import { createPortal } from 'react-dom'
 import { m, AnimatePresence } from 'framer-motion'
 import { Search, X, Loader2, Sparkles, RefreshCw } from './icons'
 import { searchGifs, fetchTrendingGifs, CATEGORIES } from './gifApi'
@@ -115,7 +116,7 @@ export const GifPicker = memo(function GifPicker({ isOpen, onSelect, onClose }: 
     [onSelect, onClose]
   )
 
-  return (
+  const portalContent = (
     <AnimatePresence>
       {isOpen && (
         <>
@@ -130,7 +131,7 @@ export const GifPicker = memo(function GifPicker({ isOpen, onSelect, onClose }: 
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 20 }}
             transition={{ type: 'spring', stiffness: 400, damping: 30 }}
-            className="fixed inset-x-0 bottom-0 z-[81] sm:absolute sm:inset-x-auto sm:bottom-full sm:mb-2 sm:right-0 sm:w-[360px] bg-surface-dark border border-border-hover sm:rounded-xl rounded-t-2xl shadow-2xl shadow-black/50 overflow-hidden max-h-[85vh] sm:max-h-[420px] flex flex-col"
+            className="fixed inset-x-0 bottom-0 z-[81] sm:inset-x-auto sm:bottom-4 sm:right-4 sm:w-[360px] bg-surface-dark border border-border-hover sm:rounded-xl rounded-t-2xl shadow-2xl shadow-black/50 overflow-hidden max-h-[85vh] sm:max-h-[420px] flex flex-col"
           >
             <div className="sm:hidden flex justify-center pt-2 pb-1">
               <div className="w-10 h-1 rounded-full bg-overlay-heavy" />
@@ -241,6 +242,8 @@ export const GifPicker = memo(function GifPicker({ isOpen, onSelect, onClose }: 
       )}
     </AnimatePresence>
   )
+
+  return createPortal(portalContent, document.body)
 })
 
 export default GifPicker

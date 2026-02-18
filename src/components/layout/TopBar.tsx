@@ -1,7 +1,7 @@
 
 import { memo, useCallback, useState } from 'react'
 import { Link } from 'react-router'
-import { Search, LayoutGrid, Settings, HelpCircle, Phone } from '../icons'
+import { Search, LayoutGrid, Compass, User, Settings, HelpCircle, Phone } from '../icons'
 import { Breadcrumbs } from './Breadcrumbs'
 import { GlobalSearch } from '../GlobalSearch'
 import { NotificationBell } from '../NotificationCenter'
@@ -32,8 +32,10 @@ function MobileSearchButton() {
   )
 }
 
-// Secondary items only — same order as desktop sidebar secondary section
+// Items not in the bottom nav — same order as desktop sidebar
 const moreMenuItems = [
+  { path: '/discover', icon: Compass, label: 'Découvrir' },
+  { path: '/profile', icon: User, label: 'Profil' },
   { path: '/settings', icon: Settings, label: 'Paramètres' },
   { path: '/help', icon: HelpCircle, label: 'Aide' },
   { path: '/call-history', icon: Phone, label: 'Appels' },

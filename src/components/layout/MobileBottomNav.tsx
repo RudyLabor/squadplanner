@@ -1,10 +1,10 @@
 import { memo } from 'react'
 import { Link } from 'react-router'
 import { m } from 'framer-motion'
-import { Home, Mic, Users, MessageCircle, User, Calendar, Compass } from '../icons'
+import { Home, Mic, Users, MessageCircle, Calendar } from '../icons'
 import { usePrefetch } from '../../hooks/usePrefetch'
 
-// 7 nav items — same order as desktop sidebar
+// 5 nav items — Découvrir & Profil are in the TopBar "More" menu
 const mobileNavLeft = [
   { path: '/home', icon: Home, label: 'Accueil' },
   { path: '/squads', icon: Users, label: 'Squads' },
@@ -13,8 +13,6 @@ const mobileNavLeft = [
 
 const mobileNavRight = [
   { path: '/messages', icon: MessageCircle, label: 'Messages' },
-  { path: '/discover', icon: Compass, label: 'Découvrir' },
-  { path: '/profile', icon: User, label: 'Profil' },
 ] as const
 
 // OPTIMIZED: Memoized MobileNavLink

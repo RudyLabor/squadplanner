@@ -9,8 +9,18 @@ import { isPollMessage, parsePollData, ChatPoll } from './ChatPoll'
  * - @mention highlighting (indigo, clickable)
  * - **bold**, *italic*, ~~strikethrough~~, `inline code`
  * - URL detection → clickable links
+ * - GIF/image URLs → inline images
  * - [Phase 4] Location messages, Polls, Forwarded messages
  */
+
+// GIF URL pattern — detect full-message GIPHY/Tenor image URLs
+const GIF_URL_REGEX = /^https?:\/\/media[0-9]?\.giphy\.com\/media\/.+\.(gif|webp|mp4)/i
+const IMAGE_URL_REGEX = /^https?:\/\/\S+\.(gif|webp|png|jpg|jpeg)(\?[^\s]*)?$/i
+
+function isGifUrl(content: string): boolean {
+  const trimmed = content.trim()
+  return GIF_URL_REGEX.test(trimmed) || (IMAGE_URL_REGEX.test(trimmed) && trimmed.includes('giphy.com'))
+}
 
 // URL regex
 const URL_REGEX = /https?:\/\/[^\s<]+[^<.,:;"')\]\s]/g
@@ -118,6 +128,19 @@ export const MessageContent = memo(function MessageContent({
         />
       )
     }
+  }
+
+  // GIF message — render as inline image
+  if (isGifUrl(content)) {
+    return (
+      <img
+        src={content.trim()}
+        alt="GIF"
+        className="max-w-[260px] max-h-[260px] w-auto h-auto rounded-lg object-contain"
+        loading="lazy"
+        decoding="async"
+      />
+    )
   }
 
   // Forwarded message indicator

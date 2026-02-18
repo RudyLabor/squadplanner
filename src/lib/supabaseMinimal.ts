@@ -27,7 +27,12 @@ export const supabaseMinimal: any = createClient(supabaseUrl, supabaseAnonKey, {
           return navigator.locks.request(
             name,
             { signal: AbortSignal.timeout(timeout) },
-            () => fn()
+            () => Promise.race([
+              fn(),
+              new Promise((_, reject) =>
+                setTimeout(() => reject(new Error(`Lock work timeout after ${timeout}ms`)), timeout)
+              ),
+            ])
           )
         }
       : undefined) as any,

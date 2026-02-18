@@ -234,6 +234,24 @@ export default function Root() {
       document.documentElement.setAttribute('data-theme', effectiveTheme)
       useThemeStore.setState({ effectiveTheme })
     })
+
+    // Steal orphaned auth-token locks when the tab becomes visible again.
+    // Background tabs can hold locks indefinitely if a Supabase token
+    // refresh was frozen mid-flight by the browser's throttling.
+    const cleanupStaleLocks = async () => {
+      if (document.visibilityState !== 'visible') return
+      try {
+        const { held } = await navigator.locks.query()
+        const stuck = held?.find((l: LockInfo) => l.name.includes('auth-token'))
+        if (stuck) {
+          await navigator.locks.request(stuck.name, { steal: true }, () => {})
+        }
+      } catch {
+        // navigator.locks may not be available (e.g. Firefox private browsing)
+      }
+    }
+    document.addEventListener('visibilitychange', cleanupStaleLocks)
+    return () => document.removeEventListener('visibilitychange', cleanupStaleLocks)
   }, [])
 
   const isPublic = isPublicPath(pathname)

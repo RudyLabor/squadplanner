@@ -36,9 +36,18 @@ export function useKeyboardVisible(): boolean {
     }
     document.addEventListener('visibilitychange', handleVisibilityChange)
 
+    // Also reset on bfcache restore (pageshow with persisted=true)
+    const handlePageShow = (e: PageTransitionEvent) => {
+      if (e.persisted) {
+        setIsKeyboardVisible(false)
+      }
+    }
+    window.addEventListener('pageshow', handlePageShow)
+
     return () => {
       viewport.removeEventListener('resize', handleResize)
       document.removeEventListener('visibilitychange', handleVisibilityChange)
+      window.removeEventListener('pageshow', handlePageShow)
     }
   }, [])
 

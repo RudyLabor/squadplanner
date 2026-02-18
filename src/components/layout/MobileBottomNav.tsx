@@ -4,6 +4,34 @@ import { m } from 'framer-motion'
 import { Home, Mic, Users, MessageCircle, Calendar } from '../icons'
 import { usePrefetch } from '../../hooks/usePrefetch'
 
+/**
+ * Force navigation when React Router is stuck in a non-idle state.
+ *
+ * When the user backgrounds the app during a View Transition,
+ * isTransitioning stays true and <Link> silently ignores clicks.
+ * This handler detects the stuck state and forces navigation through
+ * the router's imperative API, first skipping any active View Transition.
+ */
+function handleStuckNavClick(e: React.MouseEvent, path: string) {
+  const router = (window as any).__reactRouterDataRouter
+  if (!router) return
+  if (router.state?.navigation?.state === 'idle') return
+
+  // Router is stuck — force navigation
+  e.preventDefault()
+
+  // Skip any active View Transition first
+  if ((document as any).activeViewTransition) {
+    try {
+      ;(document as any).activeViewTransition.skipTransition()
+    } catch {
+      // ignore
+    }
+  }
+
+  router.navigate(path, { replace: false })
+}
+
 // 5 nav items — Découvrir & Profil are in the TopBar "More" menu
 const mobileNavLeft = [
   { path: '/home', icon: Home, label: 'Accueil' },
@@ -32,6 +60,7 @@ const MobileNavLink = memo(function MobileNavLink({
   return (
     <Link
       to={path}
+      onClick={(e) => handleStuckNavClick(e, path)}
       className="flex flex-col items-center justify-center min-w-[48px] min-h-[48px] touch-target"
       aria-label={label}
       aria-current={isActive ? 'page' : undefined}
@@ -75,6 +104,7 @@ const PartyButton = memo(function PartyButton({
   return (
     <Link
       to="/party"
+      onClick={(e) => handleStuckNavClick(e, '/party')}
       className="flex flex-col items-center justify-center min-w-[48px] min-h-[48px] touch-target"
       aria-label={hasActiveParty ? 'Party vocale - En cours' : 'Party vocale'}
       aria-current={isActive ? 'page' : undefined}

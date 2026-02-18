@@ -85,12 +85,34 @@ export function useAppResume() {
         }
       }
 
+      // FIX 3b: Force-reset stuck React Router transition state.
+      // When the user backgrounds the app during a View Transition,
+      // the ViewTransition.finished promise never resolves, leaving
+      // React Router's internal isTransitioning=true. This makes all
+      // <Link> components silently ignore clicks until the state resets.
+      // We give the router 150ms to settle after skipTransition(), then
+      // force-navigate to the current URL (replace) to unstick it.
+      const router = (window as any).__reactRouterDataRouter
+      if (router) {
+        setTimeout(() => {
+          if (router.state?.navigation?.state !== 'idle') {
+            try {
+              router.navigate(
+                router.state.location.pathname + router.state.location.search,
+                { replace: true }
+              )
+            } catch {
+              // Router not available or navigate failed — ignore
+            }
+          }
+        }, 150)
+      }
+
       // FIX 4: Force repaint on fixed nav elements.
       // Must run after a frame so the Escape-triggered React state update
       // (which removes overlays) has time to flush to the DOM.
       // If React Router is mid-navigation, wait for it to finish first —
       // forcing a repaint during navigation can corrupt the router state.
-      const router = (window as any).__reactRouterDataRouter
       if (router?.state?.navigation?.state !== 'idle') {
         const unsub = router.subscribe((state: any) => {
           if (state.navigation.state === 'idle') {
@@ -165,7 +187,32 @@ export function useAppResume() {
         document.body.style.overflow = ''
       }
 
+      // Skip stuck View Transition on bfcache restore
+      if (typeof document.startViewTransition === 'function' && (document as any).activeViewTransition) {
+        try {
+          ;(document as any).activeViewTransition.skipTransition()
+        } catch {
+          // ignore
+        }
+      }
+
       const router = (window as any).__reactRouterDataRouter
+      // Force-reset stuck router transition state (same as FIX 3b)
+      if (router) {
+        setTimeout(() => {
+          if (router.state?.navigation?.state !== 'idle') {
+            try {
+              router.navigate(
+                router.state.location.pathname + router.state.location.search,
+                { replace: true }
+              )
+            } catch {
+              // ignore
+            }
+          }
+        }, 150)
+      }
+
       if (router?.state?.navigation?.state !== 'idle') {
         const unsub = router.subscribe((state: any) => {
           if (state.navigation.state === 'idle') {

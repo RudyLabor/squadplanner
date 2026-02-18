@@ -803,6 +803,12 @@ body {
 .mobile-bottom-nav {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
+  /* Safety net: ensure nav stays interactive even when View Transitions
+     or stuck overlays set pointer-events:none on ancestors */
+  pointer-events: auto !important;
+}
+.mobile-bottom-nav a {
+  pointer-events: auto !important;
 }
 @media (min-width: 1024px) and (hover: hover) {
   .mobile-bottom-nav {

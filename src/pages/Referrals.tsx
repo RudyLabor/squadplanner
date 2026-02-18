@@ -160,7 +160,7 @@ export function Referrals() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.25, duration: 0.5, ease }}
             >
-              <Card variant="elevated" className="mb-5 p-5 border-success/10">
+              <Card variant="elevated" className="mb-5 p-5 !border-0 bg-bg-elevated">
                 <div className="flex items-center gap-3 mb-4">
                   <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-success/10">
                     <UserPlus className="h-4 w-4 text-success" />

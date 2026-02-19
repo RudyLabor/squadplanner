@@ -1,6 +1,6 @@
 import { memo } from 'react'
 import { m } from 'framer-motion'
-import { Calendar, Clock, Users, ChevronRight, CheckCircle2, XCircle, HelpCircle, ExternalLink } from '../icons'
+import { Calendar, Clock, Users, ChevronRight, ExternalLink } from '../icons'
 import { Link } from 'react-router'
 import { Card, Badge, Tooltip } from '../ui'
 import { generateGoogleCalendarUrl } from '../../lib/notifyOnSession'
@@ -116,13 +116,12 @@ export const SessionCard = memo(function SessionCard({
                   }}
                   aria-label="Marquer comme present"
                   aria-pressed={session.my_rsvp === 'present'}
-                  className={`flex-1 min-w-0 flex items-center justify-center gap-1.5 px-2 py-2.5 min-h-[44px] rounded-lg text-base font-medium transition-interactive ${
+                  className={`flex-1 min-w-0 flex items-center justify-center px-3 py-2.5 min-h-[44px] rounded-lg text-sm font-medium whitespace-nowrap transition-interactive ${
                     session.my_rsvp === 'present'
                       ? 'bg-success/20 text-success border border-success/30 shadow-glow-success'
                       : 'bg-surface-card text-text-tertiary hover:bg-success-10 hover:text-success hover:border-success/20 border border-transparent'
                   }`}
                 >
-                  <CheckCircle2 className="w-4 h-4 shrink-0" aria-hidden="true" />
                   Present
                 </m.button>
                 <m.button
@@ -134,14 +133,13 @@ export const SessionCard = memo(function SessionCard({
                   }}
                   aria-label="Marquer comme peut-etre"
                   aria-pressed={session.my_rsvp === 'maybe'}
-                  className={`flex-1 min-w-0 flex items-center justify-center gap-1.5 px-2 py-2.5 min-h-[44px] rounded-lg text-base font-medium transition-interactive ${
+                  className={`flex-1 min-w-0 flex items-center justify-center px-3 py-2.5 min-h-[44px] rounded-lg text-sm font-medium whitespace-nowrap transition-interactive ${
                     session.my_rsvp === 'maybe'
                       ? 'bg-warning/20 text-warning border border-warning/30 shadow-glow-warning'
                       : 'bg-surface-card text-text-tertiary hover:bg-warning-10 hover:text-warning hover:border-warning/20 border border-transparent'
                   }`}
                 >
-                  <HelpCircle className="w-4 h-4 shrink-0" aria-hidden="true" />
-                  Peut-etre
+                  Peut-être
                 </m.button>
                 <m.button
                   whileHover={{ scale: 1.02 }}
@@ -152,13 +150,12 @@ export const SessionCard = memo(function SessionCard({
                   }}
                   aria-label="Marquer comme absent"
                   aria-pressed={session.my_rsvp === 'absent'}
-                  className={`flex-1 min-w-0 flex items-center justify-center gap-1.5 px-2 py-2.5 min-h-[44px] rounded-lg text-base font-medium transition-interactive ${
+                  className={`flex-1 min-w-0 flex items-center justify-center px-3 py-2.5 min-h-[44px] rounded-lg text-sm font-medium whitespace-nowrap transition-interactive ${
                     session.my_rsvp === 'absent'
                       ? 'bg-error/20 text-error border border-error/30 shadow-glow-error'
                       : 'bg-surface-card text-text-tertiary hover:bg-error-10 hover:text-error hover:border-error/20 border border-transparent'
                   }`}
                 >
-                  <XCircle className="w-4 h-4 shrink-0" aria-hidden="true" />
                   Absent
                 </m.button>
               </div>

@@ -995,4 +995,335 @@ describe('CommandPalette', () => {
       }
     })
   })
+
+  // ---- P1.1 additions ----
+
+  describe('fuzzy search scoring', () => {
+    it('scores exact substring matches higher than fuzzy matches', () => {
+      renderPalette()
+      openPalette()
+      const input = screen.getByPlaceholderText('Rechercher une commande, squad, session...')
+      // 'Accueil' is the label for the home command — an exact substring match
+      fireEvent.change(input, { target: { value: 'Accueil' } })
+      const lastCall = mockCommandResultList.mock.calls[mockCommandResultList.mock.calls.length - 1]
+      if (lastCall) {
+        const filtered = lastCall[0].filteredCommands
+        // Home command should appear first since 'Accueil' is an exact match to its label
+        expect(filtered.length).toBeGreaterThan(0)
+        expect(filtered[0].id).toBe('home')
+      }
+    })
+
+    it('returns zero-score commands excluded from results', () => {
+      renderPalette()
+      openPalette()
+      const input = screen.getByPlaceholderText('Rechercher une commande, squad, session...')
+      fireEvent.change(input, { target: { value: 'zzzzzznotmatch' } })
+      const lastCall = mockCommandResultList.mock.calls[mockCommandResultList.mock.calls.length - 1]
+      if (lastCall) {
+        expect(lastCall[0].filteredCommands.length).toBe(0)
+      }
+    })
+
+    it('matches partial sequences via fuzzy scoring', () => {
+      renderPalette()
+      openPalette()
+      const input = screen.getByPlaceholderText('Rechercher une commande, squad, session...')
+      // 'prm' should fuzzy-match 'Premium' (p-r-m are in order)
+      fireEvent.change(input, { target: { value: 'prm' } })
+      const lastCall = mockCommandResultList.mock.calls[mockCommandResultList.mock.calls.length - 1]
+      if (lastCall) {
+        const filtered = lastCall[0].filteredCommands
+        const hasPremium = filtered.some((c: any) => c.id === 'premium')
+        expect(hasPremium).toBe(true)
+      }
+    })
+
+    it('matches via description (with 0.7 weight)', () => {
+      renderPalette()
+      openPalette()
+      const input = screen.getByPlaceholderText('Rechercher une commande, squad, session...')
+      // 'Retour' is in the description of 'Accueil' ("Retour à la page principale")
+      fireEvent.change(input, { target: { value: 'Retour' } })
+      const lastCall = mockCommandResultList.mock.calls[mockCommandResultList.mock.calls.length - 1]
+      if (lastCall) {
+        const filtered = lastCall[0].filteredCommands
+        const hasHome = filtered.some((c: any) => c.id === 'home')
+        expect(hasHome).toBe(true)
+      }
+    })
+  })
+
+  describe('keyboard navigation (stronger assertions)', () => {
+    it('ArrowDown moves selection from 0 to 1', () => {
+      renderPalette()
+      openPalette()
+      // Initially selectedIndex = 0, first command (home) should be selected
+      let lastCall = mockCommandResultList.mock.calls[mockCommandResultList.mock.calls.length - 1]
+      expect(lastCall[0].selectedIndex).toBe(0)
+
+      fireEvent.keyDown(window, { key: 'ArrowDown' })
+      lastCall = mockCommandResultList.mock.calls[mockCommandResultList.mock.calls.length - 1]
+      expect(lastCall[0].selectedIndex).toBe(1)
+    })
+
+    it('ArrowUp from 0 wraps to last command', () => {
+      renderPalette()
+      openPalette()
+      const callBefore = mockCommandResultList.mock.calls[mockCommandResultList.mock.calls.length - 1]
+      const totalCommands = callBefore[0].filteredCommands.length
+
+      fireEvent.keyDown(window, { key: 'ArrowUp' })
+      const lastCall = mockCommandResultList.mock.calls[mockCommandResultList.mock.calls.length - 1]
+      expect(lastCall[0].selectedIndex).toBe(totalCommands - 1)
+    })
+
+    it('ArrowDown wraps around from last to first', () => {
+      renderPalette()
+      openPalette()
+      const callBefore = mockCommandResultList.mock.calls[mockCommandResultList.mock.calls.length - 1]
+      const totalCommands = callBefore[0].filteredCommands.length
+
+      // Press ArrowDown totalCommands times to wrap back to 0
+      for (let i = 0; i < totalCommands; i++) {
+        fireEvent.keyDown(window, { key: 'ArrowDown' })
+      }
+      const lastCall = mockCommandResultList.mock.calls[mockCommandResultList.mock.calls.length - 1]
+      expect(lastCall[0].selectedIndex).toBe(0)
+    })
+
+    it('Enter on selected command navigates and closes', () => {
+      renderPalette()
+      openPalette()
+      // Move to second command (squads)
+      fireEvent.keyDown(window, { key: 'ArrowDown' })
+      fireEvent.keyDown(window, { key: 'Enter' })
+      expect(mockNavigate).toHaveBeenCalledWith('/squads')
+      // Palette should close
+      expect(
+        screen.queryByPlaceholderText('Rechercher une commande, squad, session...')
+      ).not.toBeInTheDocument()
+    })
+
+    it('selectedIndex resets to 0 when query changes', () => {
+      renderPalette()
+      openPalette()
+      // Move down
+      fireEvent.keyDown(window, { key: 'ArrowDown' })
+      fireEvent.keyDown(window, { key: 'ArrowDown' })
+      // Type query
+      const input = screen.getByPlaceholderText('Rechercher une commande, squad, session...')
+      fireEvent.change(input, { target: { value: 'mes' } })
+      const lastCall = mockCommandResultList.mock.calls[mockCommandResultList.mock.calls.length - 1]
+      expect(lastCall[0].selectedIndex).toBe(0)
+    })
+  })
+
+  describe('recent commands (deeper tests)', () => {
+    it('moves previously recent command to front when selected again', () => {
+      localStorage.setItem('squadplanner:recent-commands', JSON.stringify(['settings', 'profile']))
+      renderPalette()
+      openPalette()
+      // Select 'profile' which is already recent but second
+      fireEvent.click(screen.getByTestId('cmd-profile'))
+      const recent = JSON.parse(localStorage.getItem('squadplanner:recent-commands') || '[]')
+      expect(recent[0]).toBe('profile')
+      // settings should still be in list
+      expect(recent).toContain('settings')
+    })
+
+    it('groups recent commands under "recent" category when no query', () => {
+      localStorage.setItem('squadplanner:recent-commands', JSON.stringify(['home']))
+      renderPalette()
+      openPalette()
+      const lastCall = mockCommandResultList.mock.calls[mockCommandResultList.mock.calls.length - 1]
+      if (lastCall) {
+        const grouped = lastCall[0].groupedCommands
+        expect(grouped.recent).toBeDefined()
+        expect(grouped.recent.some((c: any) => c.id === 'home')).toBe(true)
+      }
+    })
+  })
+
+  describe('breadcrumb navigation for nested commands', () => {
+    it('shows back button with parent label in breadcrumb', () => {
+      mockSquads.current = [{ id: 'sq1', name: 'MySquad', game: 'Fortnite' }]
+      renderPalette()
+      openPalette()
+      const input = screen.getByPlaceholderText('Rechercher une commande, squad, session...')
+      fireEvent.change(input, { target: { value: 'MySquad' } })
+      // Enter sub-command
+      fireEvent.click(screen.getByTestId('cmd-squad-sq1'))
+      // Breadcrumb should show the parent label
+      expect(screen.getByText('MySquad')).toBeInTheDocument()
+    })
+
+    it('Escape goes back from sub-command before closing palette', () => {
+      mockSquads.current = [{ id: 'sq1', name: 'BreadTest', game: null }]
+      renderPalette()
+      openPalette()
+      const input = screen.getByPlaceholderText('Rechercher une commande, squad, session...')
+      fireEvent.change(input, { target: { value: 'BreadTest' } })
+      fireEvent.click(screen.getByTestId('cmd-squad-sq1'))
+      // Now in sub-command, Escape should go back (not close)
+      fireEvent.keyDown(window, { key: 'Escape' })
+      // Palette should still be open since we went back
+      expect(
+        screen.getByPlaceholderText('Rechercher une commande, squad, session...')
+      ).toBeInTheDocument()
+      // Sub-commands should be gone, top-level commands should be visible
+      expect(screen.getByTestId('cmd-home')).toBeInTheDocument()
+    })
+
+    it('Backspace goes back from sub-command when query is empty', () => {
+      mockSquads.current = [{ id: 'sq1', name: 'TestSquad', game: null }]
+      renderPalette()
+      openPalette()
+      const input = screen.getByPlaceholderText('Rechercher une commande, squad, session...')
+      fireEvent.change(input, { target: { value: 'TestSquad' } })
+      fireEvent.click(screen.getByTestId('cmd-squad-sq1'))
+      // Now in sub-command, input should be cleared (re-query after re-render)
+      const inputAfterSub = screen.getByPlaceholderText('Rechercher une commande, squad, session...')
+      expect(inputAfterSub).toHaveValue('')
+      // Press Backspace with empty query to go back
+      fireEvent.keyDown(window, { key: 'Backspace' })
+      // Should be back at top level
+      expect(screen.getByTestId('cmd-home')).toBeInTheDocument()
+    })
+  })
+
+  describe('player search with debounce', () => {
+    it('clears searched players when query becomes shorter than 2 chars', async () => {
+      mockSupabaseFrom.mockReturnValue({
+        select: vi.fn().mockReturnThis(),
+        ilike: vi.fn().mockReturnThis(),
+        limit: vi.fn().mockResolvedValue({
+          data: [{ id: 'p1', username: 'TestPlayer', avatar_url: null }],
+          error: null,
+        }),
+      })
+      renderPalette()
+      openPalette()
+      const input = screen.getByPlaceholderText('Rechercher une commande, squad, session...')
+
+      // Type long enough to trigger search
+      fireEvent.change(input, { target: { value: 'test' } })
+      await act(async () => {
+        vi.advanceTimersByTime(350)
+      })
+
+      // Verify player commands appeared after the search
+      expect(screen.getByTestId('cmd-player-p1')).toBeInTheDocument()
+
+      // Re-query the input element after potential DOM changes from async search
+      const inputAfterSearch = screen.getByPlaceholderText('Rechercher une commande, squad, session...')
+
+      // Now shorten query below 2 chars
+      fireEvent.change(inputAfterSearch, { target: { value: 't' } })
+      // Flush the effect that runs setSearchedPlayers([])
+      await act(async () => {
+        vi.advanceTimersByTime(350)
+      })
+
+      // After the effect clears searchedPlayers, check the last mock call
+      const lastCall = mockCommandResultList.mock.calls[mockCommandResultList.mock.calls.length - 1]
+      const playerCmds = lastCall[0].filteredCommands.filter((c: any) =>
+        c.id.startsWith('player-')
+      )
+      expect(playerCmds.length).toBe(0)
+    })
+
+    it('debounces player search — no call before 300ms', () => {
+      renderPalette()
+      openPalette()
+      const input = screen.getByPlaceholderText('Rechercher une commande, squad, session...')
+      fireEvent.change(input, { target: { value: 'player' } })
+      // Only 200ms — should not have called yet
+      act(() => {
+        vi.advanceTimersByTime(200)
+      })
+      expect(mockSupabaseFrom).not.toHaveBeenCalled()
+    })
+
+    it('shows player results as commands after search completes', async () => {
+      mockSupabaseFrom.mockReturnValue({
+        select: vi.fn().mockReturnThis(),
+        ilike: vi.fn().mockReturnThis(),
+        limit: vi.fn().mockResolvedValue({
+          data: [{ id: 'p1', username: 'GamerPro', avatar_url: 'https://example.com/avatar.png' }],
+          error: null,
+        }),
+      })
+      renderPalette()
+      openPalette()
+      const input = screen.getByPlaceholderText('Rechercher une commande, squad, session...')
+      fireEvent.change(input, { target: { value: 'gamer' } })
+      await act(async () => {
+        vi.advanceTimersByTime(350)
+      })
+      // Player command should now be rendered
+      await waitFor(() => {
+        expect(screen.getByText('GamerPro')).toBeInTheDocument()
+      })
+    })
+
+    it('does not show player results when API returns error', async () => {
+      const consoleSpy = vi.spyOn(console, 'warn').mockImplementation(() => {})
+      mockSupabaseFrom.mockReturnValue({
+        select: vi.fn().mockReturnThis(),
+        ilike: vi.fn().mockReturnThis(),
+        limit: vi.fn().mockResolvedValue({ data: null, error: { message: 'error' } }),
+      })
+      renderPalette()
+      openPalette()
+      const input = screen.getByPlaceholderText('Rechercher une commande, squad, session...')
+      fireEvent.change(input, { target: { value: 'test' } })
+      await act(async () => {
+        vi.advanceTimersByTime(350)
+      })
+      const lastCall = mockCommandResultList.mock.calls[mockCommandResultList.mock.calls.length - 1]
+      if (lastCall) {
+        const playerCmds = lastCall[0].filteredCommands.filter((c: any) =>
+          c.id.startsWith('player-')
+        )
+        expect(playerCmds.length).toBe(0)
+      }
+      consoleSpy.mockRestore()
+    })
+  })
+
+  describe('theme toggle cycles modes (additional)', () => {
+    it('description reflects current mode as Sombre when dark', () => {
+      mockThemeMode.current = 'dark'
+      renderPalette()
+      openPalette()
+      const lastCall = mockCommandResultList.mock.calls[mockCommandResultList.mock.calls.length - 1]
+      if (lastCall) {
+        const themeCmd = lastCall[0].filteredCommands.find((c: any) => c.id === 'toggle-theme')
+        expect(themeCmd?.description).toContain('Sombre')
+      }
+    })
+
+    it('description reflects current mode as Clair when light', () => {
+      mockThemeMode.current = 'light'
+      renderPalette()
+      openPalette()
+      const lastCall = mockCommandResultList.mock.calls[mockCommandResultList.mock.calls.length - 1]
+      if (lastCall) {
+        const themeCmd = lastCall[0].filteredCommands.find((c: any) => c.id === 'toggle-theme')
+        expect(themeCmd?.description).toContain('Clair')
+      }
+    })
+
+    it('description reflects current mode as Auto when system', () => {
+      mockThemeMode.current = 'system'
+      renderPalette()
+      openPalette()
+      const lastCall = mockCommandResultList.mock.calls[mockCommandResultList.mock.calls.length - 1]
+      if (lastCall) {
+        const themeCmd = lastCall[0].filteredCommands.find((c: any) => c.id === 'toggle-theme')
+        expect(themeCmd?.description).toContain('Auto')
+      }
+    })
+  })
 })

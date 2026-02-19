@@ -6,11 +6,12 @@ import { test, expect, navigateWithFallback } from './fixtures'
  * REGLE STRICTE :
  * - Pas de .catch(() => false) sur les assertions
  * - Pas de OR conditions passe-partout
- * - DB fetched FIRST → UI MUST match
- * - Si la DB a des appels → le UI DOIT les afficher → sinon FAIL
- * - Si la DB est vide → le empty state DOIT s'afficher → sinon FAIL
+ * - DB fetched FIRST -> UI MUST match
+ * - Si la DB a des appels -> le UI DOIT les afficher -> sinon FAIL
+ * - Si la DB est vide -> le empty state DOIT s'afficher -> sinon FAIL
  * - Pas de early return sans assertion reelle
  * - Pas de fallback sur <main> quand la feature specifique est requise
+ * - Pas de CSS class checks (bg-primary) — utiliser la validation fonctionnelle
  */
 
 // ============================================================
@@ -40,7 +41,7 @@ test.describe('Call History — Page loads', () => {
 // Test 2 — Call history data matches DB
 // ============================================================
 test.describe('Call History — Data matches DB', () => {
-  test('DB has calls → UI displays call entries; DB empty → UI shows empty state', async ({ authenticatedPage: page, db }) => {
+  test('DB has calls -> UI displays call entries; DB empty -> UI shows empty state', async ({ authenticatedPage: page, db }) => {
     // STRICT: Fetch DB data FIRST
     const calls = await db.getCallHistory(20)
 
@@ -50,7 +51,7 @@ test.describe('Call History — Data matches DB', () => {
     await page.waitForTimeout(1500)
 
     if (calls.length > 0) {
-      // STRICT: DB has calls → UI MUST show at least one call entry card
+      // STRICT: DB has calls -> UI MUST show at least one call entry card
       // Each call entry has a button with aria-label="Appeler {name}"
       const callButtons = page.locator('button[aria-label*="Appeler"]')
       const buttonCount = await callButtons.count()
@@ -66,7 +67,7 @@ test.describe('Call History — Data matches DB', () => {
       const groupLabel = page.getByText(/Aujourd'hui|Hier|Cette semaine|Ce mois|Plus ancien/i).first()
       await expect(groupLabel).toBeVisible({ timeout: 5000 })
     } else {
-      // STRICT: DB has no calls → empty state MUST be shown
+      // STRICT: DB has no calls -> empty state MUST be shown
       // The CallHistoryList empty state shows "Pret a appeler ta squad ?" when filter='all'
       const emptyHeading = page.getByText(/Prêt à appeler ta squad/i).first()
       // STRICT: await expect — direct assertion
@@ -97,13 +98,13 @@ test.describe('Call History — Entry details', () => {
     await page.waitForTimeout(1500)
 
     if (calls.length === 0) {
-      // STRICT: No calls in DB → empty state MUST be visible (not just "any heading")
+      // STRICT: No calls in DB -> empty state MUST be visible (not just "any heading")
       const emptyHeading = page.getByText(/Prêt à appeler ta squad/i).first()
       await expect(emptyHeading).toBeVisible({ timeout: 10000 })
       return
     }
 
-    // STRICT: DB has calls → call type labels MUST be visible
+    // STRICT: DB has calls -> call type labels MUST be visible
     // The component renders "Entrant", "Sortant", "Manque", "Rejete" labels
     const typeLabel = page.getByText(/Entrant|Sortant|Manqué|Rejeté/i).first()
     // STRICT: await expect — no .catch
@@ -130,13 +131,28 @@ test.describe('Call History — Entry details', () => {
 })
 
 // ============================================================
-// Test 4 — Filter tabs are visible and interactive
+// Test 4 — Filter tabs are visible and functionally validated
 // ============================================================
 test.describe('Call History — Filter tabs', () => {
   test('filter buttons Tous/Entrants/Sortants/Manques are visible and functional', async ({ authenticatedPage: page, db }) => {
     // STRICT: Fetch DB first
     const profile = await db.getProfile()
     expect(profile).toBeTruthy()
+
+    // STRICT: Fetch call history from DB for functional validation
+    const userId = await db.getUserId()
+    const { data: rawCalls } = await db.admin
+      .from('calls')
+      .select('id, caller_id, receiver_id, status')
+      .or(`caller_id.eq.${userId},receiver_id.eq.${userId}`)
+      .order('created_at', { ascending: false })
+      .limit(100)
+
+    const allCalls = rawCalls || []
+    // Compute expected counts per filter using the same logic as the app
+    const incomingCalls = allCalls.filter(c => c.receiver_id === userId)
+    const outgoingCalls = allCalls.filter(c => c.caller_id === userId)
+    const missedCalls = allCalls.filter(c => c.status === 'missed')
 
     const pageOk = await navigateWithFallback(page, '/call-history')
     // STRICT: page MUST load
@@ -155,39 +171,74 @@ test.describe('Call History — Filter tabs', () => {
     const manquesBtn = page.getByRole('button', { name: /^Manqués$/i }).first()
     await expect(manquesBtn).toBeVisible({ timeout: 5000 })
 
-    // STRICT: "Tous" button MUST be active by default (has 'bg-primary' class)
-    const tousClasses = await tousBtn.getAttribute('class') || ''
-    // STRICT: Tous is the default active filter
-    expect(tousClasses).toContain('bg-primary')
+    // STRICT: "Tous" is the default filter — verify the initial call count matches DB
+    const callButtonsAll = page.locator('button[aria-label*="Appeler"]')
+    const initialCount = await callButtonsAll.count()
+    if (allCalls.length > 0) {
+      expect(initialCount).toBeGreaterThan(0)
+      expect(initialCount).toBeLessThanOrEqual(allCalls.length)
+    }
 
-    // STRICT: Click "Entrants" — it MUST become active
+    // STRICT: Click "Entrants" — verify results change functionally
     await entrantsBtn.click()
     await page.waitForTimeout(500)
-    const entrantsClasses = await entrantsBtn.getAttribute('class') || ''
-    // STRICT: Entrants button MUST have active styling after click
-    expect(entrantsClasses).toContain('bg-primary')
 
-    // STRICT: "Tous" button MUST no longer be active
-    const tousAfterClick = await tousBtn.getAttribute('class') || ''
-    expect(tousAfterClick).not.toContain('bg-primary')
+    const callButtonsIncoming = page.locator('button[aria-label*="Appeler"]')
+    const incomingCount = await callButtonsIncoming.count()
 
-    // STRICT: Click "Sortants" — it MUST become active
+    if (incomingCalls.length === 0) {
+      // STRICT: no incoming calls in DB -> empty state or 0 entries
+      expect(incomingCount).toBe(0)
+      // STRICT: filtered empty message MUST appear
+      const filteredEmpty = page.getByText(/Rien pour le moment/i).first()
+      await expect(filteredEmpty).toBeVisible({ timeout: 5000 })
+    } else {
+      // STRICT: incoming calls exist -> entries MUST be shown
+      expect(incomingCount).toBeGreaterThan(0)
+      expect(incomingCount).toBeLessThanOrEqual(incomingCalls.length)
+    }
+
+    // STRICT: Click "Sortants" — verify results change functionally
     await sortantsBtn.click()
     await page.waitForTimeout(500)
-    const sortantsClasses = await sortantsBtn.getAttribute('class') || ''
-    expect(sortantsClasses).toContain('bg-primary')
 
-    // STRICT: Click "Manques" — it MUST become active
+    const callButtonsOutgoing = page.locator('button[aria-label*="Appeler"]')
+    const outgoingCount = await callButtonsOutgoing.count()
+
+    if (outgoingCalls.length === 0) {
+      // STRICT: no outgoing calls in DB -> empty state or 0 entries
+      expect(outgoingCount).toBe(0)
+    } else {
+      // STRICT: outgoing calls exist -> entries MUST be shown
+      expect(outgoingCount).toBeGreaterThan(0)
+      expect(outgoingCount).toBeLessThanOrEqual(outgoingCalls.length)
+    }
+
+    // STRICT: Click "Manques" — verify results change functionally
     await manquesBtn.click()
     await page.waitForTimeout(500)
-    const manquesClasses = await manquesBtn.getAttribute('class') || ''
-    expect(manquesClasses).toContain('bg-primary')
 
-    // STRICT: Click "Tous" again — it MUST become active again
+    const callButtonsMissed = page.locator('button[aria-label*="Appeler"]')
+    const missedCount = await callButtonsMissed.count()
+
+    if (missedCalls.length === 0) {
+      // STRICT: no missed calls in DB -> empty state or 0 entries
+      expect(missedCount).toBe(0)
+    } else {
+      // STRICT: missed calls exist -> entries MUST be shown
+      expect(missedCount).toBeGreaterThan(0)
+      expect(missedCount).toBeLessThanOrEqual(missedCalls.length)
+    }
+
+    // STRICT: Click "Tous" again — verify all calls are restored
     await tousBtn.click()
     await page.waitForTimeout(500)
-    const tousRestoredClasses = await tousBtn.getAttribute('class') || ''
-    expect(tousRestoredClasses).toContain('bg-primary')
+
+    const callButtonsRestored = page.locator('button[aria-label*="Appeler"]')
+    const restoredCount = await callButtonsRestored.count()
+
+    // STRICT: after clicking "Tous" again, count must match initial state
+    expect(restoredCount).toBe(initialCount)
   })
 })
 
@@ -209,7 +260,7 @@ test.describe('Call History — Filter empty state', () => {
       const emptyHeading = page.getByText(/Prêt à appeler ta squad/i).first()
       await expect(emptyHeading).toBeVisible({ timeout: 10000 })
 
-      // STRICT: Click "Entrants" filter with no calls → different empty message
+      // STRICT: Click "Entrants" filter with no calls -> different empty message
       const entrantsBtn = page.getByRole('button', { name: /^Entrants$/i }).first()
       await expect(entrantsBtn).toBeVisible({ timeout: 5000 })
       await entrantsBtn.click()
@@ -238,11 +289,11 @@ test.describe('Call History — Filter empty state', () => {
     const missedCount = await missedButtons.count()
 
     if (missedCount === 0) {
-      // STRICT: No missed calls → empty state for "Manques" filter MUST show
+      // STRICT: No missed calls -> empty state for "Manques" filter MUST show
       const filteredEmpty = page.getByText(/Rien pour le moment/i).first()
       await expect(filteredEmpty).toBeVisible({ timeout: 5000 })
     } else {
-      // STRICT: Missed calls exist → entries MUST be visible
+      // STRICT: Missed calls exist -> entries MUST be visible
       expect(missedCount).toBeGreaterThan(0)
       // STRICT: Type label "Manque" MUST be visible
       const missedLabel = page.getByText(/Manqué/i).first()

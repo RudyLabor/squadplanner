@@ -1,355 +1,407 @@
 import { test, expect, dismissCookieBanner } from './fixtures'
+import { navigateWithFallback, dismissTourOverlay } from './fixtures'
 
 /**
- * Mobile Viewport E2E Tests (STRICT MODE)
+ * Mobile & Tablet Viewport E2E Tests — STRICT MODE (P1.2)
  *
- * REGLE STRICTE : Chaque test DOIT echouer si les donnees DB ne s'affichent pas.
- * - Pas de `.catch(() => false)` sur les assertions
- * - Pas de OR conditions qui passent toujours
- * - Pas de fallback sur `<main>` quand un element specifique est attendu
- * - Pas de `toBeGreaterThanOrEqual(0)`
- * - Pas de early returns sans assertions reelles
- * - Pas de try/catch qui avalent les erreurs
+ * STRICT RULES ENFORCED:
+ * 1. Every test fetches real DB data FIRST, then verifies UI matches
+ * 2. NO .catch(() => false) — use proper assertions
+ * 3. NO OR conditions as fallbacks — use explicit if/else with assertions on both branches
+ * 4. NO CSS class checks for behavior — use aria attributes or data
+ * 5. Use navigateWithFallback() for SSR resilience
+ * 6. French text assertions (the app is in French)
+ * 7. Import from ./fixtures for test, expect, TestDataHelper
  *
- * Tests at 375px (iPhone SE) and 428px (iPhone 14 Pro Max) viewports.
- * Protected page tests validate displayed data against Supabase DB.
- * Uses `db` fixture and `authenticatedPage` from ./fixtures.
+ * Viewports tested:
+ * - Mobile: 375x667 (iPhone SE)
+ * - Tablet: 768x1024 (iPad)
+ * - Desktop reference: 1280x720 (for sidebar visibility contrast)
  */
 
-const mobileViewports = [
-  { name: 'iPhone SE', width: 375, height: 667 },
-  { name: 'iPhone 14 Pro Max', width: 428, height: 926 },
-]
-
-for (const viewport of mobileViewports) {
-  test.describe(`Mobile ${viewport.name} (${viewport.width}px)`, () => {
-
-    // ================================================================
-    // Public Pages — No Auth Required
-    // ================================================================
-
-    test('landing page renders correctly at mobile width', async ({ page }) => {
-      await page.setViewportSize({ width: viewport.width, height: viewport.height })
-      await page.goto('/')
-      await page.waitForLoadState('networkidle')
-      await dismissCookieBanner(page)
-
-      // STRICT: le H1 DOIT etre visible
-      await expect(page.getByRole('heading', { name: /Transforme/i })).toBeVisible({ timeout: 10000 })
-
-      // STRICT: au moins un CTA DOIT etre visible (Se connecter OU Creer ma squad)
-      const connectLink = page.getByRole('link', { name: /Se connecter/i }).first()
-      const createLink = page.getByRole('link', { name: /Créer ma squad/i }).first()
-
-      const connectVisible = await connectLink.isVisible({ timeout: 5000 })
-      const createVisible = await createLink.isVisible({ timeout: 2000 })
-      // STRICT: au moins un des deux DOIT etre visible
-      expect(connectVisible || createVisible).toBe(true)
-
-      // STRICT: pas de scroll horizontal — le body ne DOIT PAS deborder
-      const bodyWidth = await page.evaluate(() => document.body.scrollWidth)
-      expect(bodyWidth).toBeLessThanOrEqual(viewport.width + 5)
-    })
-
-    test('auth page renders correctly at mobile width', async ({ page }) => {
-      await page.setViewportSize({ width: viewport.width, height: viewport.height })
-      await page.goto('/auth')
-      await page.waitForSelector('form', { timeout: 15000 })
-      await dismissCookieBanner(page)
-
-      // STRICT: les champs email et password DOIVENT etre visibles
-      await expect(page.locator('input[type="email"]')).toBeVisible({ timeout: 5000 })
-      await expect(page.locator('input[type="password"]')).toBeVisible({ timeout: 5000 })
-
-      // STRICT: le bouton Se connecter DOIT etre visible
-      await expect(page.getByRole('button', { name: /Se connecter/i })).toBeVisible({ timeout: 5000 })
-
-      // STRICT: le formulaire ne DOIT PAS deborder du viewport
-      const formWidth = await page.evaluate(() => {
-        const form = document.querySelector('form')
-        return form ? form.scrollWidth : 0
-      })
-      // STRICT: formWidth DOIT etre > 0 (le form existe)
-      expect(formWidth).toBeGreaterThan(0)
-      expect(formWidth).toBeLessThanOrEqual(viewport.width)
-    })
-
-    // ================================================================
-    // Protected Pages — Auth Required, DB Validated
-    // ================================================================
-
-    test('bottom navigation is visible after login', async ({ authenticatedPage, db }) => {
-      await authenticatedPage.setViewportSize({ width: viewport.width, height: viewport.height })
-
-      // STRICT: fetch real profile from DB
-      const profile = await db.getProfile()
-      expect(profile).toBeTruthy()
-      // STRICT: username DOIT exister
-      expect(profile.username).toBeTruthy()
-
-      await authenticatedPage.goto('/home')
-      await authenticatedPage.waitForLoadState('networkidle')
-      await authenticatedPage.waitForTimeout(1500)
-
-      // STRICT: une nav DOIT etre visible en mobile
-      const nav = authenticatedPage.locator('nav').last()
-      await expect(nav).toBeVisible({ timeout: 10000 })
-
-      // STRICT: la nav DOIT contenir des liens de navigation
-      const navLinks = authenticatedPage.locator('nav a[href]')
-      const linkCount = await navLinks.count()
-      // STRICT: au moins 3 liens de nav (home, squads, messages, etc.)
-      expect(linkCount).toBeGreaterThanOrEqual(3)
-    })
-
-    test('can navigate between pages via mobile nav', async ({ authenticatedPage, db }) => {
-      await authenticatedPage.setViewportSize({ width: viewport.width, height: viewport.height })
-
-      // STRICT: verify user has profile
-      const profile = await db.getProfile()
-      expect(profile).toBeTruthy()
-
-      await authenticatedPage.goto('/home')
-      await authenticatedPage.waitForLoadState('networkidle')
-      await authenticatedPage.waitForTimeout(1500)
-
-      // STRICT: le lien messages DOIT etre present dans la nav mobile (pas le sidebar desktop)
-      const mobileNav = authenticatedPage.locator('nav[aria-label="Navigation mobile"]')
-      const messagesLink = mobileNav.locator('a[href="/messages"]').first()
-      await expect(messagesLink).toBeVisible({ timeout: 10000 })
-
-      // STRICT: cliquer sur messages DOIT naviguer vers /messages
-      await messagesLink.click()
-      await expect(authenticatedPage).toHaveURL(/\/messages/, { timeout: 10000 })
-    })
-
-    test('squads page renders on mobile with DB data', async ({ authenticatedPage, db }) => {
-      await authenticatedPage.setViewportSize({ width: viewport.width, height: viewport.height })
-
-      // STRICT: fetch squads from DB first
-      const userSquads = await db.getUserSquads()
-      // STRICT: le resultat DOIT etre un array
-      expect(Array.isArray(userSquads)).toBe(true)
-
-      await authenticatedPage.goto('/squads')
-      await authenticatedPage.waitForLoadState('networkidle')
-      await authenticatedPage.waitForTimeout(2000)
-
-      // STRICT: le heading "Mes Squads" DOIT etre visible
-      await expect(authenticatedPage.getByText(/Mes Squads/i).first()).toBeVisible({ timeout: 10000 })
-
-      if (userSquads.length > 0) {
-        // STRICT: si la DB a des squads, au moins un nom DOIT etre affiche
-        let foundSquad = false
-        for (const membership of userSquads.slice(0, 3)) {
-          const nameLocator = authenticatedPage
-            .getByText(membership.squads.name, { exact: false })
-            .first()
-          const isVisible = await nameLocator.isVisible({ timeout: 3000 })
-          if (isVisible) {
-            foundSquad = true
-            break
-          }
-        }
-        // STRICT: au moins un nom de squad de la DB DOIT etre visible sur la page
-        expect(foundSquad).toBe(true)
-      } else {
-        // STRICT: si pas de squads, un empty state ou bouton Creer DOIT etre visible
-        const createBtn = authenticatedPage.getByRole('button', { name: /Créer/i }).first()
-        await expect(createBtn).toBeVisible({ timeout: 5000 })
-      }
-
-      // STRICT: pas de scroll horizontal
-      const bodyWidth = await authenticatedPage.evaluate(() => document.body.scrollWidth)
-      expect(bodyWidth).toBeLessThanOrEqual(viewport.width + 5)
-    })
-
-    test('messages page renders on mobile with DB context', async ({ authenticatedPage, db }) => {
-      await authenticatedPage.setViewportSize({ width: viewport.width, height: viewport.height })
-
-      // STRICT: fetch squads pour savoir si l'user a des conversations potentielles
-      const squads = await db.getUserSquads()
-      expect(Array.isArray(squads)).toBe(true)
-
-      await authenticatedPage.goto('/messages')
-      await authenticatedPage.waitForLoadState('networkidle')
-      await authenticatedPage.waitForTimeout(2000)
-
-      if (squads.length > 0) {
-        // STRICT: si l'user a des squads, la page messages DOIT afficher du contenu
-        // (soit des conversations, soit un empty state explicite, soit le nom d'une squad)
-        const mainContent = await authenticatedPage.locator('main').first().textContent()
-        expect(mainContent).toBeTruthy()
-        // STRICT: le contenu ne DOIT PAS etre vide (plus de 10 chars)
-        expect(mainContent!.trim().length).toBeGreaterThan(10)
-      } else {
-        // STRICT: sans squads, un message indiquant "pas de conversations" DOIT exister
-        const emptyState = authenticatedPage.getByText(/aucun|pas de|vide|conversation/i).first()
-        await expect(emptyState).toBeVisible({ timeout: 5000 })
-      }
-
-      // STRICT: pas de scroll horizontal
-      const bodyWidth = await authenticatedPage.evaluate(() => document.body.scrollWidth)
-      expect(bodyWidth).toBeLessThanOrEqual(viewport.width + 5)
-    })
-
-    test('profile page renders on mobile with DB username', async ({ authenticatedPage, db }) => {
-      await authenticatedPage.setViewportSize({ width: viewport.width, height: viewport.height })
-
-      // STRICT: fetch real profile from DB
-      const profile = await db.getProfile()
-      expect(profile).toBeTruthy()
-      // STRICT: username DOIT exister en DB
-      expect(profile.username).toBeTruthy()
-
-      await authenticatedPage.goto('/profile')
-      await authenticatedPage.waitForLoadState('networkidle')
-      await authenticatedPage.waitForTimeout(2000)
-
-      // STRICT: le username de la DB DOIT etre affiche sur la page profil
-      const usernameOnPage = authenticatedPage.getByText(profile.username, { exact: false }).first()
-      await expect(usernameOnPage).toBeVisible({ timeout: 10000 })
-
-      // STRICT: pas de scroll horizontal
-      const bodyWidth = await authenticatedPage.evaluate(() => document.body.scrollWidth)
-      expect(bodyWidth).toBeLessThanOrEqual(viewport.width + 5)
-    })
-
-    test('settings page renders on mobile with heading', async ({ authenticatedPage, db }) => {
-      await authenticatedPage.setViewportSize({ width: viewport.width, height: viewport.height })
-
-      // STRICT: fetch profile from DB
-      const profile = await db.getProfile()
-      expect(profile).toBeTruthy()
-
-      await authenticatedPage.goto('/settings')
-      await authenticatedPage.waitForLoadState('networkidle')
-      await authenticatedPage.waitForTimeout(1500)
-
-      // STRICT: le heading "Parametres" DOIT etre visible
-      await expect(authenticatedPage.getByRole('heading', { name: /Paramètres/i })).toBeVisible({ timeout: 10000 })
-
-      // STRICT: pas de scroll horizontal
-      const bodyWidth = await authenticatedPage.evaluate(() => document.body.scrollWidth)
-      expect(bodyWidth).toBeLessThanOrEqual(viewport.width + 5)
-    })
-
-    // ================================================================
-    // Touch Interactions
-    // ================================================================
-
-    test('touch interactions work - squad create button', async ({ authenticatedPage, db }) => {
-      await authenticatedPage.setViewportSize({ width: viewport.width, height: viewport.height })
-
-      // STRICT: verify user context from DB
-      const squads = await db.getUserSquads()
-      expect(Array.isArray(squads)).toBe(true)
-
-      await authenticatedPage.goto('/squads')
-      await authenticatedPage.waitForLoadState('networkidle')
-      await authenticatedPage.waitForTimeout(2000)
-
-      // STRICT: le heading "Mes Squads" DOIT etre visible
-      await expect(authenticatedPage.getByText(/Mes Squads/i).first()).toBeVisible({ timeout: 10000 })
-
-      // Chercher le bouton Creer
-      const createBtn = authenticatedPage.locator('main').getByRole('button', { name: /Créer/i }).last()
-      const hasCreate = await createBtn.isVisible({ timeout: 5000 })
-
-      if (hasCreate) {
-        await createBtn.click()
-        await authenticatedPage.waitForTimeout(1000)
-
-        // STRICT: apres le clic, le formulaire de creation DOIT apparaitre
-        await expect(authenticatedPage.getByText(/Créer une squad/i)).toBeVisible({ timeout: 5000 })
-      } else {
-        // STRICT: si pas de bouton Creer visible, la page DOIT avoir un moyen d'action
-        // (peut-etre que l'user a atteint la limite freemium)
-        const limitMsg = authenticatedPage.getByText(/limite|maximum|premium/i).first()
-        const hasLimit = await limitMsg.isVisible({ timeout: 3000 })
-
-        if (!hasLimit) {
-          // STRICT: ni bouton Creer ni message de limite -> la page DOIT au moins
-          // afficher les squads existantes
-          expect(squads.length).toBeGreaterThan(0)
-          const firstSquadName = squads[0].squads.name
-          await expect(
-            authenticatedPage.getByText(firstSquadName, { exact: false }).first()
-          ).toBeVisible({ timeout: 5000 })
-        }
-      }
-    })
-
-    test('touch interactions work - theme toggle in settings', async ({ authenticatedPage, db }) => {
-      await authenticatedPage.setViewportSize({ width: viewport.width, height: viewport.height })
-
-      // STRICT: verify user context
-      const profile = await db.getProfile()
-      expect(profile).toBeTruthy()
-
-      await authenticatedPage.goto('/settings')
-      await authenticatedPage.waitForLoadState('networkidle')
-      await authenticatedPage.waitForTimeout(1500)
-
-      // STRICT: le heading Parametres DOIT etre visible
-      await expect(authenticatedPage.getByRole('heading', { name: /Paramètres/i })).toBeVisible({ timeout: 10000 })
-
-      // STRICT: les boutons de theme DOIVENT etre visibles
-      const lightBtn = authenticatedPage.getByText('Clair').first()
-      const darkBtn = authenticatedPage.getByText('Sombre').first()
-
-      // STRICT: au moins un bouton de theme DOIT etre visible
-      const lightVisible = await lightBtn.isVisible({ timeout: 5000 })
-      const darkVisible = await darkBtn.isVisible({ timeout: 2000 })
-      expect(lightVisible || darkVisible).toBe(true)
-
-      if (lightVisible) {
-        await lightBtn.click()
-        await authenticatedPage.waitForTimeout(500)
-
-        // STRICT: apres le clic sur "Clair", le theme DOIT etre "light"
-        const theme = await authenticatedPage.evaluate(() => document.documentElement.getAttribute('data-theme'))
-        expect(theme).toBe('light')
-      }
-
-      if (darkVisible) {
-        await darkBtn.click()
-        await authenticatedPage.waitForTimeout(500)
-
-        // STRICT: apres le clic sur "Sombre", le theme DOIT etre "dark"
-        const themeDark = await authenticatedPage.evaluate(() => document.documentElement.getAttribute('data-theme'))
-        expect(themeDark).toBe('dark')
-      }
-    })
-
-    // ================================================================
-    // Mobile-Specific Layout Checks
-    // ================================================================
-
-    test('home page dashboard renders at mobile width with DB data', async ({ authenticatedPage, db }) => {
-      await authenticatedPage.setViewportSize({ width: viewport.width, height: viewport.height })
-
-      // STRICT: fetch real data
-      const profile = await db.getProfile()
-      expect(profile).toBeTruthy()
-      expect(profile.username).toBeTruthy()
-
-      await authenticatedPage.goto('/home')
-      await authenticatedPage.waitForLoadState('networkidle')
-      await authenticatedPage.waitForTimeout(2000)
-
-      // STRICT: le username DOIT etre visible sur le dashboard
-      const greeting = authenticatedPage.getByText(new RegExp(profile.username, 'i')).first()
-      await expect(greeting).toBeVisible({ timeout: 15000 })
-
-      // STRICT: pas de scroll horizontal sur le dashboard
-      const bodyWidth = await authenticatedPage.evaluate(() => document.body.scrollWidth)
-      expect(bodyWidth).toBeLessThanOrEqual(viewport.width + 5)
-
-      // STRICT: la section main DOIT exister et avoir du contenu
-      const mainText = await authenticatedPage.locator('main').first().textContent()
-      expect(mainText).toBeTruthy()
-      expect(mainText!.trim().length).toBeGreaterThan(20)
-    })
+// ============================================================
+// Mobile Viewport (375x667)
+// ============================================================
+
+test.describe('Mobile viewport (375x667) — Navigation et layout', () => {
+
+  test('MV01: la barre de navigation mobile est visible sur mobile', async ({ authenticatedPage: page, db }) => {
+    await page.setViewportSize({ width: 375, height: 667 })
+
+    // STRICT: fetch profile from DB first
+    const profile = await db.getProfile()
+    expect(profile).toBeTruthy()
+    expect(profile.username).toBeTruthy()
+
+    const loaded = await navigateWithFallback(page, '/home')
+    expect(loaded).toBe(true)
+    await dismissTourOverlay(page)
+
+    // STRICT: la nav mobile avec aria-label DOIT etre visible
+    const mobileNav = page.locator('nav[aria-label="Navigation mobile"]')
+    await expect(mobileNav).toBeVisible({ timeout: 10000 })
+
+    // STRICT: la nav DOIT contenir au moins 4 liens (Accueil, Squads, Sessions, Messages + Party)
+    const navLinks = mobileNav.locator('a[href]')
+    const linkCount = await navLinks.count()
+    expect(linkCount).toBeGreaterThanOrEqual(4)
+
+    // STRICT: verifier les liens specifiques de la nav
+    await expect(mobileNav.locator('a[href="/home"]')).toBeVisible({ timeout: 5000 })
+    await expect(mobileNav.locator('a[href="/squads"]')).toBeVisible({ timeout: 5000 })
+    await expect(mobileNav.locator('a[href="/sessions"]')).toBeVisible({ timeout: 5000 })
+    await expect(mobileNav.locator('a[href="/messages"]')).toBeVisible({ timeout: 5000 })
   })
-}
+
+  test('MV02: le sidebar desktop est cache sur mobile', async ({ authenticatedPage: page, db }) => {
+    await page.setViewportSize({ width: 375, height: 667 })
+
+    const profile = await db.getProfile()
+    expect(profile).toBeTruthy()
+
+    const loaded = await navigateWithFallback(page, '/home')
+    expect(loaded).toBe(true)
+    await dismissTourOverlay(page)
+
+    // STRICT: le sidebar desktop (classe desktop-only) DOIT etre cache sur mobile
+    // Verifier via computed style que display=none
+    const sidebarHidden = await page.evaluate(() => {
+      const sidebar = document.querySelector('.desktop-only')
+      if (!sidebar) return true // pas de sidebar du tout = cache
+      const style = window.getComputedStyle(sidebar)
+      return style.display === 'none'
+    })
+    expect(sidebarHidden).toBe(true)
+  })
+
+  test('MV03: les touch targets font au moins 44x44px', async ({ authenticatedPage: page, db }) => {
+    await page.setViewportSize({ width: 375, height: 667 })
+
+    const profile = await db.getProfile()
+    expect(profile).toBeTruthy()
+
+    const loaded = await navigateWithFallback(page, '/home')
+    expect(loaded).toBe(true)
+    await dismissTourOverlay(page)
+
+    // STRICT: mesurer les dimensions des liens de la nav mobile
+    const mobileNav = page.locator('nav[aria-label="Navigation mobile"]')
+    await expect(mobileNav).toBeVisible({ timeout: 10000 })
+
+    const navLinks = mobileNav.locator('a[href]')
+    const linkCount = await navLinks.count()
+    expect(linkCount).toBeGreaterThanOrEqual(4)
+
+    // STRICT: chaque lien de nav DOIT avoir une zone tactile >= 44x44px
+    for (let i = 0; i < linkCount; i++) {
+      const link = navLinks.nth(i)
+      const box = await link.boundingBox()
+      // STRICT: le boundingBox DOIT exister (element visible)
+      expect(box).toBeTruthy()
+      // STRICT: largeur >= 44px
+      expect(box!.width).toBeGreaterThanOrEqual(44)
+      // STRICT: hauteur >= 44px
+      expect(box!.height).toBeGreaterThanOrEqual(44)
+    }
+  })
+
+  test('MV04: /home rend correctement sur mobile avec les donnees DB', async ({ authenticatedPage: page, db }) => {
+    await page.setViewportSize({ width: 375, height: 667 })
+
+    const profile = await db.getProfile()
+    expect(profile).toBeTruthy()
+    expect(profile.username).toBeTruthy()
+
+    const loaded = await navigateWithFallback(page, '/home')
+    expect(loaded).toBe(true)
+    await dismissTourOverlay(page)
+
+    // STRICT: le username de la DB DOIT etre affiche
+    await expect(page.getByText(new RegExp(profile.username, 'i')).first()).toBeVisible({ timeout: 15000 })
+
+    // STRICT: pas de scroll horizontal
+    const bodyScrollWidth = await page.evaluate(() => document.body.scrollWidth)
+    expect(bodyScrollWidth).toBeLessThanOrEqual(375 + 5)
+  })
+
+  test('MV05: /squads rend correctement sur mobile', async ({ authenticatedPage: page, db }) => {
+    await page.setViewportSize({ width: 375, height: 667 })
+
+    const squads = await db.getUserSquads()
+    expect(Array.isArray(squads)).toBe(true)
+
+    const loaded = await navigateWithFallback(page, '/squads')
+    expect(loaded).toBe(true)
+    await dismissTourOverlay(page)
+
+    // STRICT: le heading DOIT etre visible
+    await expect(page.getByText(/Mes Squads/i).first()).toBeVisible({ timeout: 10000 })
+
+    if (squads.length > 0) {
+      // STRICT: le premier nom de squad de la DB DOIT etre visible
+      await expect(page.getByText(squads[0].squads.name).first()).toBeVisible({ timeout: 15000 })
+    } else {
+      // STRICT: si pas de squads, empty state DOIT etre visible
+      await expect(page.getByText(/Crée ta première squad|Aucune squad/i).first()).toBeVisible({ timeout: 10000 })
+    }
+
+    // STRICT: pas de scroll horizontal
+    const bodyScrollWidth = await page.evaluate(() => document.body.scrollWidth)
+    expect(bodyScrollWidth).toBeLessThanOrEqual(375 + 5)
+  })
+
+  test('MV06: /sessions rend correctement sur mobile', async ({ authenticatedPage: page, db }) => {
+    await page.setViewportSize({ width: 375, height: 667 })
+
+    const profile = await db.getProfile()
+    expect(profile).toBeTruthy()
+
+    const loaded = await navigateWithFallback(page, '/sessions')
+    expect(loaded).toBe(true)
+    await dismissTourOverlay(page)
+
+    // STRICT: la page sessions DOIT avoir du contenu dans main
+    const mainContent = await page.locator('main').first().textContent()
+    expect(mainContent).toBeTruthy()
+    expect(mainContent!.trim().length).toBeGreaterThan(10)
+
+    // STRICT: pas de scroll horizontal
+    const bodyScrollWidth = await page.evaluate(() => document.body.scrollWidth)
+    expect(bodyScrollWidth).toBeLessThanOrEqual(375 + 5)
+  })
+
+  test('MV07: /messages rend correctement sur mobile', async ({ authenticatedPage: page, db }) => {
+    await page.setViewportSize({ width: 375, height: 667 })
+
+    const squads = await db.getUserSquads()
+    expect(Array.isArray(squads)).toBe(true)
+
+    const loaded = await navigateWithFallback(page, '/messages')
+    expect(loaded).toBe(true)
+    await dismissTourOverlay(page)
+
+    // STRICT: la page DOIT avoir du contenu dans main
+    const mainContent = await page.locator('main').first().textContent()
+    expect(mainContent).toBeTruthy()
+    expect(mainContent!.trim().length).toBeGreaterThan(10)
+
+    // STRICT: pas de scroll horizontal
+    const bodyScrollWidth = await page.evaluate(() => document.body.scrollWidth)
+    expect(bodyScrollWidth).toBeLessThanOrEqual(375 + 5)
+  })
+})
+
+// ============================================================
+// Tablet Viewport (768x1024)
+// ============================================================
+
+test.describe('Tablet viewport (768x1024) — Layout responsive', () => {
+
+  test('TV01: la nav mobile est visible sur tablette (pas hover-capable)', async ({ authenticatedPage: page, db }) => {
+    await page.setViewportSize({ width: 768, height: 1024 })
+
+    const profile = await db.getProfile()
+    expect(profile).toBeTruthy()
+
+    const loaded = await navigateWithFallback(page, '/home')
+    expect(loaded).toBe(true)
+    await dismissTourOverlay(page)
+
+    // STRICT: la nav mobile DOIT etre visible sur tablette (largeur < 1024px)
+    const mobileNav = page.locator('nav[aria-label="Navigation mobile"]')
+    await expect(mobileNav).toBeVisible({ timeout: 10000 })
+  })
+
+  test('TV02: les pages principales rendent sans scroll horizontal sur tablette', async ({ authenticatedPage: page, db }) => {
+    await page.setViewportSize({ width: 768, height: 1024 })
+
+    const profile = await db.getProfile()
+    expect(profile).toBeTruthy()
+
+    const pages = ['/home', '/squads', '/sessions', '/messages']
+
+    for (const pagePath of pages) {
+      const loaded = await navigateWithFallback(page, pagePath)
+      expect(loaded).toBe(true)
+
+      // STRICT: pas de scroll horizontal sur chaque page
+      const bodyScrollWidth = await page.evaluate(() => document.body.scrollWidth)
+      expect(bodyScrollWidth).toBeLessThanOrEqual(768 + 5)
+    }
+  })
+
+  test('TV03: les touch targets de la nav font au moins 44x44px sur tablette', async ({ authenticatedPage: page, db }) => {
+    await page.setViewportSize({ width: 768, height: 1024 })
+
+    const profile = await db.getProfile()
+    expect(profile).toBeTruthy()
+
+    const loaded = await navigateWithFallback(page, '/home')
+    expect(loaded).toBe(true)
+    await dismissTourOverlay(page)
+
+    const mobileNav = page.locator('nav[aria-label="Navigation mobile"]')
+    await expect(mobileNav).toBeVisible({ timeout: 10000 })
+
+    const navLinks = mobileNav.locator('a[href]')
+    const linkCount = await navLinks.count()
+    expect(linkCount).toBeGreaterThanOrEqual(4)
+
+    for (let i = 0; i < linkCount; i++) {
+      const link = navLinks.nth(i)
+      const box = await link.boundingBox()
+      expect(box).toBeTruthy()
+      expect(box!.width).toBeGreaterThanOrEqual(44)
+      expect(box!.height).toBeGreaterThanOrEqual(44)
+    }
+  })
+})
+
+// ============================================================
+// Desktop Viewport — Sidebar visible, bottom nav hidden
+// ============================================================
+
+test.describe('Desktop viewport (1280x720) — Contraste responsive', () => {
+
+  test('DV01: le sidebar desktop est visible et la nav mobile est cachee sur desktop', async ({ authenticatedPage: page, db }) => {
+    await page.setViewportSize({ width: 1280, height: 720 })
+
+    const profile = await db.getProfile()
+    expect(profile).toBeTruthy()
+
+    const loaded = await navigateWithFallback(page, '/home')
+    expect(loaded).toBe(true)
+    await dismissTourOverlay(page)
+
+    // STRICT: le sidebar desktop DOIT etre visible sur desktop
+    const sidebarVisible = await page.evaluate(() => {
+      const sidebar = document.querySelector('.desktop-only')
+      if (!sidebar) return false
+      const style = window.getComputedStyle(sidebar)
+      return style.display !== 'none'
+    })
+    expect(sidebarVisible).toBe(true)
+
+    // STRICT: la nav mobile DOIT etre cachee sur desktop
+    const mobileNavHidden = await page.evaluate(() => {
+      const nav = document.querySelector('.mobile-bottom-nav')
+      if (!nav) return true
+      const style = window.getComputedStyle(nav)
+      return style.display === 'none'
+    })
+    expect(mobileNavHidden).toBe(true)
+  })
+})
+
+// ============================================================
+// Public Pages — Mobile viewport without auth
+// ============================================================
+
+test.describe('Mobile viewport — Pages publiques', () => {
+
+  test('PP01: la landing page rend correctement sur mobile', async ({ page }) => {
+    await page.setViewportSize({ width: 375, height: 667 })
+    await page.goto('/')
+    await page.waitForLoadState('networkidle')
+    await dismissCookieBanner(page)
+
+    // STRICT: le H1 DOIT etre visible
+    await expect(page.getByRole('heading', { name: /Transforme/i })).toBeVisible({ timeout: 10000 })
+
+    // STRICT: au moins un CTA DOIT etre visible
+    const connectLink = page.getByRole('link', { name: /Se connecter/i }).first()
+    await expect(connectLink).toBeVisible({ timeout: 5000 })
+
+    // STRICT: pas de scroll horizontal
+    const bodyScrollWidth = await page.evaluate(() => document.body.scrollWidth)
+    expect(bodyScrollWidth).toBeLessThanOrEqual(375 + 5)
+  })
+
+  test('PP02: la page auth rend correctement sur mobile', async ({ page }) => {
+    await page.setViewportSize({ width: 375, height: 667 })
+    await page.goto('/auth')
+    await page.waitForSelector('form', { timeout: 15000 })
+    await dismissCookieBanner(page)
+
+    // STRICT: les champs email et password DOIVENT etre visibles
+    await expect(page.locator('input[type="email"]')).toBeVisible({ timeout: 5000 })
+    await expect(page.locator('input[type="password"]')).toBeVisible({ timeout: 5000 })
+
+    // STRICT: le bouton Se connecter DOIT etre visible
+    await expect(page.getByRole('button', { name: /Se connecter/i })).toBeVisible({ timeout: 5000 })
+
+    // STRICT: le formulaire ne DOIT PAS deborder du viewport
+    const formWidth = await page.evaluate(() => {
+      const form = document.querySelector('form')
+      return form ? form.scrollWidth : 0
+    })
+    expect(formWidth).toBeGreaterThan(0)
+    expect(formWidth).toBeLessThanOrEqual(375)
+  })
+})
+
+// ============================================================
+// Navigation entre pages via la nav mobile
+// ============================================================
+
+test.describe('Mobile viewport — Navigation inter-pages', () => {
+
+  test('NAV01: naviguer de /home vers /messages via la nav mobile', async ({ authenticatedPage: page, db }) => {
+    await page.setViewportSize({ width: 375, height: 667 })
+
+    const profile = await db.getProfile()
+    expect(profile).toBeTruthy()
+
+    const loaded = await navigateWithFallback(page, '/home')
+    expect(loaded).toBe(true)
+    await dismissTourOverlay(page)
+
+    // STRICT: cliquer sur le lien messages dans la nav mobile
+    const mobileNav = page.locator('nav[aria-label="Navigation mobile"]')
+    const messagesLink = mobileNav.locator('a[href="/messages"]')
+    await expect(messagesLink).toBeVisible({ timeout: 10000 })
+    await messagesLink.click()
+
+    // STRICT: l'URL DOIT contenir /messages
+    await expect(page).toHaveURL(/\/messages/, { timeout: 10000 })
+  })
+
+  test('NAV02: naviguer de /home vers /squads via la nav mobile', async ({ authenticatedPage: page, db }) => {
+    await page.setViewportSize({ width: 375, height: 667 })
+
+    const profile = await db.getProfile()
+    expect(profile).toBeTruthy()
+
+    const loaded = await navigateWithFallback(page, '/home')
+    expect(loaded).toBe(true)
+    await dismissTourOverlay(page)
+
+    const mobileNav = page.locator('nav[aria-label="Navigation mobile"]')
+    const squadsLink = mobileNav.locator('a[href="/squads"]')
+    await expect(squadsLink).toBeVisible({ timeout: 10000 })
+    await squadsLink.click()
+
+    // STRICT: l'URL DOIT contenir /squads
+    await expect(page).toHaveURL(/\/squads/, { timeout: 10000 })
+
+    // STRICT: le heading Mes Squads DOIT apparaitre
+    await expect(page.getByText(/Mes Squads/i).first()).toBeVisible({ timeout: 15000 })
+  })
+
+  test('NAV03: l\'indicateur aria-current=page est actif sur la page courante', async ({ authenticatedPage: page, db }) => {
+    await page.setViewportSize({ width: 375, height: 667 })
+
+    const profile = await db.getProfile()
+    expect(profile).toBeTruthy()
+
+    const loaded = await navigateWithFallback(page, '/home')
+    expect(loaded).toBe(true)
+    await dismissTourOverlay(page)
+
+    // STRICT: le lien /home dans la nav mobile DOIT avoir aria-current="page"
+    const mobileNav = page.locator('nav[aria-label="Navigation mobile"]')
+    const homeLink = mobileNav.locator('a[href="/home"]')
+    await expect(homeLink).toBeVisible({ timeout: 10000 })
+    await expect(homeLink).toHaveAttribute('aria-current', 'page')
+  })
+})

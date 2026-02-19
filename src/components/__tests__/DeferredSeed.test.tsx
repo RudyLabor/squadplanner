@@ -115,4 +115,196 @@ describe('DeferredSeed', () => {
     // 6. key-b still has original value
     expect(queryClient.getQueryData(['key-b'])).toEqual({ v: 2 })
   })
+
+  // ---- P1.1 additions ----
+
+  // STRICT: Verifies falsy values that are NOT null/undefined ARE seeded (0, false, empty string)
+  describe('edge cases with falsy values', () => {
+    it('seeds cache when data is 0 (falsy but not null/undefined)', () => {
+      const queryClient = new QueryClient({ defaultOptions: { queries: { retry: false } } })
+      render(
+        <QueryClientProvider client={queryClient}>
+          <DeferredSeed queryKey={['zero-key']} data={0}>
+            <div>Zero data</div>
+          </DeferredSeed>
+        </QueryClientProvider>
+      )
+      // 0 is not null/undefined, so it should be seeded
+      expect(queryClient.getQueryData(['zero-key'])).toBe(0)
+      expect(queryClient.getQueryCache().getAll()).toHaveLength(1)
+      expect(screen.getByText('Zero data')).toBeInTheDocument()
+    })
+
+    it('seeds cache when data is false (falsy but not null/undefined)', () => {
+      const queryClient = new QueryClient({ defaultOptions: { queries: { retry: false } } })
+      render(
+        <QueryClientProvider client={queryClient}>
+          <DeferredSeed queryKey={['false-key']} data={false}>
+            <div>False data</div>
+          </DeferredSeed>
+        </QueryClientProvider>
+      )
+      expect(queryClient.getQueryData(['false-key'])).toBe(false)
+      expect(queryClient.getQueryCache().getAll()).toHaveLength(1)
+      expect(screen.getByText('False data')).toBeInTheDocument()
+    })
+
+    it('seeds cache when data is empty string (falsy but not null/undefined)', () => {
+      const queryClient = new QueryClient({ defaultOptions: { queries: { retry: false } } })
+      render(
+        <QueryClientProvider client={queryClient}>
+          <DeferredSeed queryKey={['empty-str-key']} data="">
+            <div>Empty string data</div>
+          </DeferredSeed>
+        </QueryClientProvider>
+      )
+      expect(queryClient.getQueryData(['empty-str-key'])).toBe('')
+      expect(queryClient.getQueryCache().getAll()).toHaveLength(1)
+      expect(screen.getByText('Empty string data')).toBeInTheDocument()
+    })
+
+    it('seeds cache when data is an empty array', () => {
+      const queryClient = new QueryClient({ defaultOptions: { queries: { retry: false } } })
+      render(
+        <QueryClientProvider client={queryClient}>
+          <DeferredSeed queryKey={['empty-arr-key']} data={[]}>
+            <div>Empty array data</div>
+          </DeferredSeed>
+        </QueryClientProvider>
+      )
+      expect(queryClient.getQueryData(['empty-arr-key'])).toEqual([])
+      expect(queryClient.getQueryCache().getAll()).toHaveLength(1)
+    })
+  })
+
+  // STRICT: Verifies ref guard prevents re-seeding on subsequent renders
+  describe('ref guard (multiple renders do not re-seed)', () => {
+    it('does not re-seed when data changes on subsequent renders', () => {
+      const queryClient = new QueryClient({ defaultOptions: { queries: { retry: false } } })
+      const { rerender } = render(
+        <QueryClientProvider client={queryClient}>
+          <DeferredSeed queryKey={['guard-key']} data={{ original: true }}>
+            <div>Guarded</div>
+          </DeferredSeed>
+        </QueryClientProvider>
+      )
+      expect(queryClient.getQueryData(['guard-key'])).toEqual({ original: true })
+
+      // Re-render with different data — ref guard should block overwrite
+      rerender(
+        <QueryClientProvider client={queryClient}>
+          <DeferredSeed queryKey={['guard-key']} data={{ original: false, changed: true }}>
+            <div>Guarded</div>
+          </DeferredSeed>
+        </QueryClientProvider>
+      )
+      // Still the original data
+      expect(queryClient.getQueryData(['guard-key'])).toEqual({ original: true })
+    })
+
+    it('does not re-seed even after many re-renders', () => {
+      const queryClient = new QueryClient({ defaultOptions: { queries: { retry: false } } })
+      const { rerender } = render(
+        <QueryClientProvider client={queryClient}>
+          <DeferredSeed queryKey={['multi-render']} data="first">
+            <div>Multi</div>
+          </DeferredSeed>
+        </QueryClientProvider>
+      )
+      expect(queryClient.getQueryData(['multi-render'])).toBe('first')
+
+      for (let i = 0; i < 5; i++) {
+        rerender(
+          <QueryClientProvider client={queryClient}>
+            <DeferredSeed queryKey={['multi-render']} data={`attempt-${i}`}>
+              <div>Multi</div>
+            </DeferredSeed>
+          </QueryClientProvider>
+        )
+      }
+      // Still original value
+      expect(queryClient.getQueryData(['multi-render'])).toBe('first')
+    })
+  })
+
+  // STRICT: Verifies cache state via getQueryData
+  describe('cache state verification', () => {
+    it('getQueryData returns exact seeded value for complex nested objects', () => {
+      const queryClient = new QueryClient({ defaultOptions: { queries: { retry: false } } })
+      const complexData = {
+        users: [{ id: '1', name: 'Alice' }, { id: '2', name: 'Bob' }],
+        meta: { page: 1, total: 42 },
+      }
+      render(
+        <QueryClientProvider client={queryClient}>
+          <DeferredSeed queryKey={['complex']} data={complexData}>
+            <div>Complex</div>
+          </DeferredSeed>
+        </QueryClientProvider>
+      )
+      const cached = queryClient.getQueryData(['complex']) as typeof complexData
+      expect(cached).toEqual(complexData)
+      expect(cached.users).toHaveLength(2)
+      expect(cached.meta.total).toBe(42)
+    })
+
+    it('getQueryData returns undefined for a key that was never seeded', () => {
+      const queryClient = new QueryClient({ defaultOptions: { queries: { retry: false } } })
+      render(
+        <QueryClientProvider client={queryClient}>
+          <DeferredSeed queryKey={['seeded']} data="value">
+            <div>Test</div>
+          </DeferredSeed>
+        </QueryClientProvider>
+      )
+      expect(queryClient.getQueryData(['seeded'])).toBe('value')
+      expect(queryClient.getQueryData(['not-seeded'])).toBeUndefined()
+    })
+  })
+
+  // STRICT: Verifies children are rendered unchanged
+  describe('renders children unchanged', () => {
+    it('renders complex children tree without modification', () => {
+      const queryClient = new QueryClient({ defaultOptions: { queries: { retry: false } } })
+      render(
+        <QueryClientProvider client={queryClient}>
+          <DeferredSeed queryKey={['children-test']} data="data">
+            <div data-testid="parent">
+              <span data-testid="child-1">First</span>
+              <span data-testid="child-2">Second</span>
+            </div>
+          </DeferredSeed>
+        </QueryClientProvider>
+      )
+      expect(screen.getByTestId('parent')).toBeInTheDocument()
+      expect(screen.getByTestId('child-1')).toBeInTheDocument()
+      expect(screen.getByTestId('child-2')).toBeInTheDocument()
+      expect(screen.getByText('First')).toBeInTheDocument()
+      expect(screen.getByText('Second')).toBeInTheDocument()
+    })
+
+    it('renders text-only children', () => {
+      const queryClient = new QueryClient({ defaultOptions: { queries: { retry: false } } })
+      const { container } = render(
+        <QueryClientProvider client={queryClient}>
+          <DeferredSeed queryKey={['text-only']} data="data">
+            Just text content
+          </DeferredSeed>
+        </QueryClientProvider>
+      )
+      expect(container.textContent).toContain('Just text content')
+    })
+
+    it('renders null children without error', () => {
+      const queryClient = new QueryClient({ defaultOptions: { queries: { retry: false } } })
+      const { container } = render(
+        <QueryClientProvider client={queryClient}>
+          <DeferredSeed queryKey={['null-children']} data="data">
+            {null}
+          </DeferredSeed>
+        </QueryClientProvider>
+      )
+      expect(container).toBeTruthy()
+    })
+  })
 })

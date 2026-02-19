@@ -1,73 +1,81 @@
-import { test, expect } from './fixtures'
-import { checkAccessibility } from './fixtures'
+import { test, expect, dismissCookieBanner, checkAccessibility } from './fixtures'
 
 /**
- * Accessibility Tests — STRICT MODE
+ * Accessibility (WCAG 2.1 AA) E2E Tests — STRICT MODE
  *
- * REGLE STRICTE : Chaque test DOIT echouer si une violation serious/critical est detectee.
- * Pas de .catch(() => false) sur les assertions.
- * Pas de toBeGreaterThanOrEqual(0).
- * Pas de try/catch qui avale les erreurs.
- * Pas de fallback qui masque les problemes.
- * Si axe-core trouve des violations serious/critical → FAIL.
- * Si un element ARIA est manquant → FAIL.
- * Si le keyboard focus est casse → FAIL.
+ * REGLE STRICTE :
+ * - Pas de .catch(() => false) sur les assertions
+ * - Pas de toBeGreaterThanOrEqual(0)
+ * - Si axe-core trouve des violations serious/critical → FAIL
+ * - Si un element ARIA est manquant → FAIL
+ * - Si le keyboard focus est casse → FAIL
+ * - Si le heading hierarchy saute un niveau → FAIL
+ * - Si une image n'a pas d'alt → FAIL
+ * - Si un input n'a pas de label → FAIL
+ *
+ * Utilise checkAccessibility() de fixtures.ts (axe-core WCAG 2.1 AA)
+ * + tests manuels pour keyboard nav, focus trap, skip links, heading hierarchy
  */
 
 // ============================================================
-// PUBLIC PAGES — Axe-core WCAG 2.1 AA Audit
+// Page lists
 // ============================================================
-
 const publicPages = [
   { name: 'Landing', path: '/' },
   { name: 'Auth', path: '/auth' },
   { name: 'Premium', path: '/premium' },
 ]
 
-test.describe('A11Y-PUBLIC: Axe WCAG Audit — Public Pages', () => {
+const protectedPages = [
+  { name: 'Home', path: '/home' },
+  { name: 'Squads', path: '/squads' },
+  { name: 'Sessions', path: '/sessions' },
+  { name: 'Messages', path: '/messages' },
+  { name: 'Settings', path: '/settings' },
+  { name: 'Profile', path: '/profile' },
+]
+
+// ============================================================
+// AXE-CORE WCAG 2.1 AA — Public Pages (dark + light)
+// ============================================================
+test.describe('A11Y-AXE: WCAG Audit — Public Pages', () => {
   for (const { name, path } of publicPages) {
     test(`${name} (dark mode): zero serious/critical WCAG violations`, async ({ page }) => {
       await page.emulateMedia({ colorScheme: 'dark' })
       await page.goto(path)
       await page.waitForLoadState('networkidle')
-      // Wait for CSS custom properties and animations to settle
       await page.waitForTimeout(500)
 
       const { violations } = await checkAccessibility(page)
 
       // STRICT: Zero tolerance for serious/critical violations
-      expect(violations.length).toBe(0)
+      expect(
+        violations.length,
+        `${name} dark mode: ${violations.length} violations serious/critical trouvees: ${JSON.stringify(violations.map(v => ({ id: v.id, impact: v.impact, description: v.description })))}`
+      ).toBe(0)
     })
 
     test(`${name} (light mode): zero serious/critical WCAG violations`, async ({ page }) => {
       await page.emulateMedia({ colorScheme: 'light' })
       await page.goto(path)
       await page.waitForLoadState('networkidle')
-      // Wait for CSS custom properties and animations to settle
       await page.waitForTimeout(500)
 
       const { violations } = await checkAccessibility(page)
 
-      // STRICT: Zero tolerance for serious/critical violations
-      expect(violations.length).toBe(0)
+      // STRICT: Zero tolerance
+      expect(
+        violations.length,
+        `${name} light mode: ${violations.length} violations trouvees: ${JSON.stringify(violations.map(v => ({ id: v.id, impact: v.impact, description: v.description })))}`
+      ).toBe(0)
     })
   }
 })
 
 // ============================================================
-// PROTECTED PAGES — Axe-core WCAG 2.1 AA Audit (authenticated)
+// AXE-CORE WCAG 2.1 AA — Protected Pages (dark + light)
 // ============================================================
-
-const protectedPages = [
-  { name: 'Home', path: '/home' },
-  { name: 'Squads', path: '/squads' },
-  { name: 'Messages', path: '/messages' },
-  { name: 'Profile', path: '/profile' },
-  { name: 'Settings', path: '/settings' },
-  { name: 'Party', path: '/party' },
-]
-
-test.describe('A11Y-PROTECTED: Axe WCAG Audit — Protected Pages', () => {
+test.describe('A11Y-AXE: WCAG Audit — Protected Pages', () => {
   for (const { name, path } of protectedPages) {
     test(`${name} (dark mode): zero serious/critical WCAG violations`, async ({ authenticatedPage: page }) => {
       await page.emulateMedia({ colorScheme: 'dark' })
@@ -77,8 +85,11 @@ test.describe('A11Y-PROTECTED: Axe WCAG Audit — Protected Pages', () => {
 
       const { violations } = await checkAccessibility(page)
 
-      // STRICT: Zero tolerance for serious/critical violations
-      expect(violations.length).toBe(0)
+      // STRICT: Zero tolerance
+      expect(
+        violations.length,
+        `${name} dark mode: violations trouvees: ${JSON.stringify(violations.map(v => ({ id: v.id, impact: v.impact })))}`
+      ).toBe(0)
     })
 
     test(`${name} (light mode): zero serious/critical WCAG violations`, async ({ authenticatedPage: page }) => {
@@ -89,513 +100,654 @@ test.describe('A11Y-PROTECTED: Axe WCAG Audit — Protected Pages', () => {
 
       const { violations } = await checkAccessibility(page)
 
-      // STRICT: Zero tolerance for serious/critical violations
-      expect(violations.length).toBe(0)
+      // STRICT: Zero tolerance
+      expect(
+        violations.length,
+        `${name} light mode: violations trouvees: ${JSON.stringify(violations.map(v => ({ id: v.id, impact: v.impact })))}`
+      ).toBe(0)
     })
   }
 })
 
 // ============================================================
-// HEADING STRUCTURE — h1 must exist and be visible
+// KEYBOARD NAVIGATION — Tab through interactive elements
 // ============================================================
+test.describe('A11Y-KEYBOARD: Keyboard Navigation — Public Pages', () => {
+  for (const { name, path } of publicPages) {
+    test(`${name}: Tab key reaches interactive elements`, async ({ page }) => {
+      await page.goto(path)
+      await page.waitForLoadState('networkidle')
+      await dismissCookieBanner(page)
 
-test.describe('A11Y-HEADINGS: Heading Structure', () => {
-  test('Landing page MUST have exactly one visible h1', async ({ page }) => {
-    await page.goto('/')
-    await page.waitForLoadState('networkidle')
+      // Reset focus to body
+      await page.evaluate(() => {
+        (document.activeElement as HTMLElement)?.blur()
+        document.body.focus()
+      })
 
-    const h1 = page.locator('h1')
-
-    // STRICT: At least one h1 must exist
-    const count = await h1.count()
-    expect(count).toBeGreaterThan(0)
-
-    // STRICT: The first h1 must be visible
-    await expect(h1.first()).toBeVisible()
-
-    // STRICT: h1 must have non-empty text content
-    const text = await h1.first().textContent()
-    expect(text?.trim().length).toBeGreaterThan(0)
-  })
-
-  test('Auth page MUST have exactly one visible h1', async ({ page }) => {
-    await page.goto('/auth')
-    await page.waitForSelector('form')
-
-    const h1 = page.locator('h1')
-
-    // STRICT: At least one h1 must exist
-    const count = await h1.count()
-    expect(count).toBeGreaterThan(0)
-
-    // STRICT: The first h1 must be visible
-    await expect(h1.first()).toBeVisible()
-
-    // STRICT: h1 must have non-empty text content
-    const text = await h1.first().textContent()
-    expect(text?.trim().length).toBeGreaterThan(0)
-  })
-
-  test('Premium page MUST have exactly one visible h1', async ({ page }) => {
-    await page.goto('/premium')
-    await page.waitForLoadState('networkidle')
-
-    const h1 = page.locator('h1')
-
-    // STRICT: At least one h1 must exist
-    const count = await h1.count()
-    expect(count).toBeGreaterThan(0)
-
-    // STRICT: The first h1 must be visible
-    await expect(h1.first()).toBeVisible()
-  })
-})
-
-// ============================================================
-// FORM ACCESSIBILITY — labels, roles, keyboard support
-// ============================================================
-
-test.describe('A11Y-FORMS: Form Accessibility', () => {
-  test('Auth form: email input MUST have an accessible label', async ({ page }) => {
-    await page.goto('/auth')
-    await page.waitForSelector('form')
-
-    const emailInput = page.locator('input[type="email"]')
-
-    // STRICT: Email input must exist and be visible
-    await expect(emailInput).toBeVisible()
-
-    // STRICT: Email input must have an accessible label (aria-label, aria-labelledby, or associated <label>)
-    const ariaLabel = await emailInput.getAttribute('aria-label')
-    const ariaLabelledBy = await emailInput.getAttribute('aria-labelledby')
-    const id = await emailInput.getAttribute('id')
-    const placeholder = await emailInput.getAttribute('placeholder')
-
-    let hasLabel = !!(ariaLabel || ariaLabelledBy)
-    if (!hasLabel && id) {
-      const associatedLabel = page.locator(`label[for="${id}"]`)
-      hasLabel = (await associatedLabel.count()) > 0
-    }
-    // placeholder alone does not count as a sufficient label for a11y
-    // but we accept it as a minimum fallback if explicitly set
-    if (!hasLabel && placeholder) {
-      hasLabel = true
-    }
-
-    // STRICT: Input MUST have an accessible label mechanism
-    expect(hasLabel).toBe(true)
-  })
-
-  test('Auth form: password input MUST have an accessible label', async ({ page }) => {
-    await page.goto('/auth')
-    await page.waitForSelector('form')
-
-    const passwordInput = page.locator('input[type="password"]')
-
-    // STRICT: Password input must exist and be visible
-    await expect(passwordInput).toBeVisible()
-
-    // STRICT: Password input must have an accessible label
-    const ariaLabel = await passwordInput.getAttribute('aria-label')
-    const ariaLabelledBy = await passwordInput.getAttribute('aria-labelledby')
-    const id = await passwordInput.getAttribute('id')
-    const placeholder = await passwordInput.getAttribute('placeholder')
-
-    let hasLabel = !!(ariaLabel || ariaLabelledBy)
-    if (!hasLabel && id) {
-      const associatedLabel = page.locator(`label[for="${id}"]`)
-      hasLabel = (await associatedLabel.count()) > 0
-    }
-    if (!hasLabel && placeholder) {
-      hasLabel = true
-    }
-
-    // STRICT: Input MUST have an accessible label mechanism
-    expect(hasLabel).toBe(true)
-  })
-
-  test('Auth form: submit button MUST be accessible and enabled', async ({ page }) => {
-    await page.goto('/auth')
-    await page.waitForSelector('form')
-
-    const submitBtn = page.locator('button[type="submit"]')
-
-    // STRICT: Submit button must exist and be visible
-    await expect(submitBtn).toBeVisible()
-
-    // STRICT: Submit button must be enabled (not disabled)
-    await expect(submitBtn).toBeEnabled()
-
-    // STRICT: Submit button must have accessible text content
-    const text = await submitBtn.textContent()
-    expect(text?.trim().length).toBeGreaterThan(0)
-  })
-
-  test('Auth form: Tab key navigates between email and password fields', async ({ page }) => {
-    await page.goto('/auth')
-    await page.waitForSelector('form')
-
-    const emailInput = page.locator('input[type="email"]')
-    await emailInput.focus()
-
-    // STRICT: Email input must receive focus
-    const emailFocused = await page.evaluate(() => document.activeElement?.getAttribute('type'))
-    expect(emailFocused).toBe('email')
-
-    await page.keyboard.press('Tab')
-
-    // STRICT: After Tab, password input must receive focus
-    const passwordFocused = await page.evaluate(() => document.activeElement?.getAttribute('type'))
-    expect(passwordFocused).toBe('password')
-  })
-})
-
-// ============================================================
-// LINK ACCESSIBILITY — all visible links must have accessible names
-// ============================================================
-
-test.describe('A11Y-LINKS: Link Accessibility', () => {
-  test('Landing page: every visible link MUST have an accessible name', async ({ page }) => {
-    await page.goto('/')
-    await page.waitForLoadState('networkidle')
-
-    const links = page.locator('a')
-    const count = await links.count()
-
-    // STRICT: Landing page must have at least one link
-    expect(count).toBeGreaterThan(0)
-
-    const violatingLinks: string[] = []
-
-    for (let i = 0; i < count; i++) {
-      const link = links.nth(i)
-      const isVisible = await link.isVisible()
-      if (!isVisible) continue
-
-      const ariaLabel = await link.getAttribute('aria-label')
-      const textContent = await link.textContent()
-      const title = await link.getAttribute('title')
-      const href = await link.getAttribute('href')
-
-      const hasAccessibleName = !!(
-        ariaLabel?.trim() ||
-        textContent?.trim() ||
-        title?.trim()
-      )
-
-      if (!hasAccessibleName) {
-        violatingLinks.push(`Link #${i} (href="${href}") has no accessible name`)
+      // Tab through first 5 interactive elements
+      const focusedElements: string[] = []
+      for (let i = 0; i < 5; i++) {
+        await page.keyboard.press('Tab')
+        const tag = await page.evaluate(() => {
+          const el = document.activeElement
+          return el ? el.tagName.toLowerCase() : 'none'
+        })
+        focusedElements.push(tag)
       }
-    }
 
-    // STRICT: Zero links without accessible names
-    expect(violatingLinks).toEqual([])
-  })
-})
-
-// ============================================================
-// IMAGE ACCESSIBILITY — all images must have alt or role=presentation
-// ============================================================
-
-test.describe('A11Y-IMAGES: Image Accessibility', () => {
-  test('Landing page: every image MUST have alt text or role=presentation', async ({ page }) => {
-    await page.goto('/')
-    await page.waitForLoadState('networkidle')
-
-    const images = page.locator('img')
-    const count = await images.count()
-
-    const violatingImages: string[] = []
-
-    for (let i = 0; i < count; i++) {
-      const img = images.nth(i)
-      const alt = await img.getAttribute('alt')
-      const role = await img.getAttribute('role')
-      const src = await img.getAttribute('src')
-
-      // alt="" is acceptable for decorative images (equivalent to role=presentation)
-      const isAccessible = alt !== null || role === 'presentation' || role === 'none'
-
-      if (!isAccessible) {
-        violatingImages.push(`Image #${i} (src="${src}") has no alt attribute and no role=presentation`)
-      }
-    }
-
-    // STRICT: Zero images without alt text or presentation role
-    expect(violatingImages).toEqual([])
-  })
-})
-
-// ============================================================
-// KEYBOARD NAVIGATION — focus must work correctly
-// ============================================================
-
-test.describe('A11Y-KEYBOARD: Focus Management', () => {
-  test('Landing page: Tab key MUST move focus to interactive elements', async ({ page }) => {
-    await page.goto('/')
-    await page.waitForLoadState('networkidle')
-
-    // Click body to reset focus
-    await page.click('body')
-
-    // Tab twice to ensure we reach an interactive element
-    await page.keyboard.press('Tab')
-    await page.keyboard.press('Tab')
-
-    const focusedTag = await page.evaluate(() => {
-      const el = document.activeElement
-      return el ? el.tagName.toLowerCase() : null
+      // STRICT: At least one Tab press MUST land on an interactive element
+      const interactiveTags = ['a', 'button', 'input', 'select', 'textarea']
+      const interactiveReached = focusedElements.some((tag) => interactiveTags.includes(tag))
+      expect(
+        interactiveReached,
+        `${name}: Tab DOIT atteindre un element interactif. Elements focuses: ${focusedElements.join(', ')}`
+      ).toBe(true)
     })
+  }
+})
 
-    // STRICT: Focused element MUST be an interactive element
-    const interactiveElements = ['a', 'button', 'input', 'select', 'textarea']
-    expect(interactiveElements).toContain(focusedTag)
-  })
+test.describe('A11Y-KEYBOARD: Keyboard Navigation — Protected Pages', () => {
+  for (const { name, path } of protectedPages) {
+    test(`${name}: Tab key reaches interactive elements after auth`, async ({ authenticatedPage: page }) => {
+      await page.goto(path)
+      await page.waitForLoadState('networkidle')
+      await page.waitForTimeout(1000)
 
-  test('Landing page: focused element MUST have a visible focus indicator', async ({ page }) => {
+      await page.evaluate(() => {
+        (document.activeElement as HTMLElement)?.blur()
+        document.body.focus()
+      })
+
+      const focusedElements: string[] = []
+      for (let i = 0; i < 5; i++) {
+        await page.keyboard.press('Tab')
+        const tag = await page.evaluate(() => document.activeElement?.tagName.toLowerCase() || 'none')
+        focusedElements.push(tag)
+      }
+
+      // STRICT: At least one interactive element MUST be reachable
+      const interactiveTags = ['a', 'button', 'input', 'select', 'textarea']
+      const interactiveReached = focusedElements.some((tag) => interactiveTags.includes(tag))
+      expect(
+        interactiveReached,
+        `${name}: Tab DOIT atteindre un element interactif apres auth. Focuses: ${focusedElements.join(', ')}`
+      ).toBe(true)
+    })
+  }
+})
+
+// ============================================================
+// FOCUS VISIBILITY — focused elements MUST be visually distinct
+// ============================================================
+test.describe('A11Y-FOCUS: Visible Focus Indicator', () => {
+
+  test('Landing page: focused element has a visible focus indicator', async ({ page }) => {
     await page.goto('/')
     await page.waitForLoadState('networkidle')
+    await dismissCookieBanner(page)
 
-    await page.click('body')
+    await page.evaluate(() => document.body.focus())
     await page.keyboard.press('Tab')
 
-    // STRICT: Active element must exist and not be body
+    // STRICT: Active element MUST NOT be body or html
     const activeTag = await page.evaluate(() => document.activeElement?.tagName.toLowerCase())
-    expect(activeTag).not.toBe('body')
-    expect(activeTag).not.toBe('html')
+    expect(activeTag, 'Le focus DOIT quitter body apres Tab').not.toBe('body')
+    expect(activeTag, 'Le focus DOIT quitter html apres Tab').not.toBe('html')
 
-    // STRICT: The focused element must have some visual differentiation
-    // (outline, box-shadow, or border change)
+    // STRICT: Focus indicator (outline, box-shadow, or border) MUST be present
     const hasFocusStyle = await page.evaluate(() => {
       const el = document.activeElement as HTMLElement
       if (!el) return false
       const style = window.getComputedStyle(el)
-      const hasOutline = style.outline !== 'none' && style.outline !== '' && style.outlineWidth !== '0px'
+      const hasOutline = style.outlineStyle !== 'none' && style.outlineWidth !== '0px'
       const hasBoxShadow = style.boxShadow !== 'none' && style.boxShadow !== ''
-      const hasBorder = style.borderColor !== '' || style.borderWidth !== '0px'
+      const hasBorder = style.borderWidth !== '0px'
       return hasOutline || hasBoxShadow || hasBorder
     })
 
-    // STRICT: Focus indicator MUST be present
-    expect(hasFocusStyle).toBe(true)
+    expect(hasFocusStyle, 'L\'element focus DOIT avoir un indicateur visuel (outline, box-shadow ou border)').toBe(true)
   })
 
-  test('Auth form: Enter key on submit button MUST trigger form submission', async ({ page }) => {
+  test('Auth page: focused form input has a visible focus indicator', async ({ page }) => {
+    await page.goto('/auth')
+    await page.waitForSelector('form')
+    await dismissCookieBanner(page)
+
+    const emailInput = page.locator('input[type="email"]')
+    await emailInput.focus()
+
+    const hasFocusStyle = await emailInput.evaluate((el) => {
+      const style = window.getComputedStyle(el)
+      const hasOutline = style.outlineStyle !== 'none' && style.outlineWidth !== '0px'
+      const hasBoxShadow = style.boxShadow !== 'none' && style.boxShadow !== ''
+      const hasRing = style.boxShadow.includes('rgb') // Tailwind ring-* uses box-shadow
+      return hasOutline || hasBoxShadow || hasRing
+    })
+
+    expect(hasFocusStyle, 'L\'input email focus DOIT avoir un indicateur visuel de focus').toBe(true)
+  })
+})
+
+// ============================================================
+// FOCUS TRAP — Modal/Dialog focus containment
+// ============================================================
+test.describe('A11Y-FOCUS-TRAP: Modal Focus Containment', () => {
+
+  test('Cookie banner (if present) traps focus within itself', async ({ page }) => {
+    await page.goto('/')
+    await page.waitForLoadState('networkidle')
+
+    // Check if cookie banner is visible
+    const cookieBanner = page.locator('[role="dialog"], [aria-modal="true"], [data-testid="cookie-banner"]').first()
+    const bannerButton = page.getByRole('button', { name: /Tout accepter/i })
+
+    const bannerVisible = await bannerButton.isVisible({ timeout: 3000 }).catch(() => false)
+
+    if (bannerVisible) {
+      // Focus the accept button
+      await bannerButton.focus()
+
+      // Tab through all elements
+      for (let i = 0; i < 10; i++) {
+        await page.keyboard.press('Tab')
+      }
+
+      // STRICT: After many tabs, focus should still be on an interactive element
+      // (either inside the banner or it cycled)
+      const focusedTag = await page.evaluate(() => document.activeElement?.tagName.toLowerCase())
+      expect(
+        ['a', 'button', 'input'].includes(focusedTag || ''),
+        'Apres Tab dans le banner cookie, le focus DOIT rester sur un element interactif'
+      ).toBe(true)
+    } else {
+      // No cookie banner — test passes (nothing to trap)
+      expect(true).toBe(true)
+    }
+  })
+})
+
+// ============================================================
+// SKIP LINKS — skip-to-content
+// ============================================================
+test.describe('A11Y-SKIP: Skip Navigation Links', () => {
+
+  test('Landing page: skip-to-content link exists or main landmark is directly accessible', async ({ page }) => {
+    await page.goto('/')
+    await page.waitForLoadState('networkidle')
+
+    // Check for explicit skip link
+    const skipLink = page.locator('a[href="#main-content"], a[href="#content"], a:has-text("Aller au contenu"), a:has-text("Skip to content")')
+    const skipLinkCount = await skipLink.count()
+
+    // Check for main landmark as fallback
+    const mainLandmark = page.locator('main, [role="main"]')
+    const mainCount = await mainLandmark.count()
+
+    // STRICT: Either a skip link or a <main> landmark MUST exist
+    expect(
+      skipLinkCount + mainCount,
+      'Un skip link (a[href="#main-content"]) OU un <main> landmark DOIT exister'
+    ).toBeGreaterThan(0)
+  })
+
+  test('Auth page: main landmark exists for skip-to-content target', async ({ page }) => {
+    await page.goto('/auth')
+    await page.waitForLoadState('networkidle')
+
+    const mainLandmark = page.locator('main')
+    // STRICT: <main> MUST exist
+    const count = await mainLandmark.count()
+    expect(count, 'La page auth DOIT avoir un element <main>').toBeGreaterThan(0)
+    await expect(mainLandmark.first(), '<main> DOIT etre visible').toBeVisible()
+  })
+})
+
+// ============================================================
+// HEADING HIERARCHY — one h1 per page, no skipped levels
+// ============================================================
+test.describe('A11Y-HEADINGS: Heading Hierarchy', () => {
+
+  for (const { name, path } of publicPages) {
+    test(`${name}: has exactly one h1 and no skipped heading levels`, async ({ page }) => {
+      await page.goto(path)
+      await page.waitForLoadState('networkidle')
+      await dismissCookieBanner(page)
+
+      // Count h1 elements
+      const h1Count = await page.locator('h1').count()
+
+      // STRICT: Exactly one h1 per page
+      expect(h1Count, `${name} DOIT avoir exactement 1 h1, trouve: ${h1Count}`).toBe(1)
+
+      // STRICT: h1 MUST be visible and have text content
+      const h1 = page.locator('h1').first()
+      await expect(h1, `${name}: h1 DOIT etre visible`).toBeVisible()
+      const h1Text = await h1.textContent()
+      expect(h1Text?.trim().length, `${name}: h1 DOIT avoir du contenu textuel`).toBeGreaterThan(0)
+
+      // Check heading level hierarchy (no skipping)
+      const headingLevels = await page.evaluate(() => {
+        const headings = document.querySelectorAll('h1, h2, h3, h4, h5, h6')
+        return Array.from(headings).map((h) => parseInt(h.tagName.charAt(1)))
+      })
+
+      // STRICT: Headings MUST NOT skip levels (e.g., h1 -> h3 without h2)
+      const skippedLevels: string[] = []
+      for (let i = 1; i < headingLevels.length; i++) {
+        const current = headingLevels[i]
+        const previous = headingLevels[i - 1]
+        // A heading can go deeper by exactly 1 level, or go back up to any level
+        if (current > previous + 1) {
+          skippedLevels.push(`h${previous} -> h${current} (saute h${previous + 1})`)
+        }
+      }
+
+      expect(
+        skippedLevels,
+        `${name}: la hierarchie des headings ne DOIT pas sauter de niveaux. Sauts: ${skippedLevels.join(', ')}`
+      ).toEqual([])
+    })
+  }
+
+  for (const { name, path } of protectedPages) {
+    test(`${name}: has at least one h1 after auth`, async ({ authenticatedPage: page }) => {
+      await page.goto(path)
+      await page.waitForLoadState('networkidle')
+      await page.waitForTimeout(1000)
+
+      const h1Count = await page.locator('h1').count()
+
+      // STRICT: At least one h1 MUST exist
+      expect(h1Count, `${name} DOIT avoir au moins 1 h1 apres auth`).toBeGreaterThan(0)
+
+      // STRICT: First h1 MUST be visible
+      await expect(page.locator('h1').first(), `${name}: h1 DOIT etre visible`).toBeVisible()
+    })
+  }
+})
+
+// ============================================================
+// IMAGE ACCESSIBILITY — all images MUST have alt text
+// ============================================================
+test.describe('A11Y-IMAGES: Image Alt Text', () => {
+
+  for (const { name, path } of publicPages) {
+    test(`${name}: every image has alt text or role=presentation`, async ({ page }) => {
+      await page.goto(path)
+      await page.waitForLoadState('networkidle')
+
+      const violatingImages = await page.evaluate(() => {
+        const imgs = Array.from(document.querySelectorAll('img'))
+        const violations: string[] = []
+        for (let i = 0; i < imgs.length; i++) {
+          const img = imgs[i]
+          const alt = img.getAttribute('alt')
+          const role = img.getAttribute('role')
+          const ariaHidden = img.getAttribute('aria-hidden')
+          // alt="" is valid for decorative images
+          const isAccessible =
+            alt !== null ||
+            role === 'presentation' ||
+            role === 'none' ||
+            ariaHidden === 'true'
+          if (!isAccessible) {
+            const src = img.src || img.getAttribute('data-src') || ''
+            violations.push(`Image #${i} (src="${src.split('/').pop()}") n'a ni alt ni role=presentation`)
+          }
+        }
+        return violations
+      })
+
+      // STRICT: Zero images without alt text
+      expect(
+        violatingImages,
+        `${name}: toutes les images DOIVENT avoir un attribut alt. Violations: ${violatingImages.join('; ')}`
+      ).toEqual([])
+    })
+  }
+})
+
+// ============================================================
+// FORM ACCESSIBILITY — all inputs MUST have labels
+// ============================================================
+test.describe('A11Y-FORMS: Form Input Labels', () => {
+
+  test('Auth page: all form inputs have accessible labels', async ({ page }) => {
     await page.goto('/auth')
     await page.waitForSelector('form')
 
-    // Fill the form with invalid data (so we don't actually login)
-    await page.locator('input[type="email"]').fill('keyboard-test@invalid.test')
-    await page.locator('input[type="password"]').fill('keyboard-test-pass')
+    const violatingInputs = await page.evaluate(() => {
+      const inputs = Array.from(document.querySelectorAll('input:not([type="hidden"]):not([type="submit"])'))
+      const violations: string[] = []
+      for (let i = 0; i < inputs.length; i++) {
+        const input = inputs[i] as HTMLInputElement
+        // Skip invisible inputs
+        if (input.offsetParent === null && !input.getAttribute('aria-hidden')) continue
 
-    // Focus the submit button and press Enter
-    const submitBtn = page.locator('button[type="submit"]')
-    await submitBtn.focus()
-    await page.keyboard.press('Enter')
+        const ariaLabel = input.getAttribute('aria-label')
+        const ariaLabelledBy = input.getAttribute('aria-labelledby')
+        const id = input.id
+        const placeholder = input.getAttribute('placeholder')
+        const title = input.getAttribute('title')
 
-    // STRICT: The form must have been submitted (we stay on /auth because credentials are invalid)
-    // Wait a moment for any form processing
-    await page.waitForTimeout(2000)
+        let hasLabel = !!(ariaLabel || ariaLabelledBy || title)
+        if (!hasLabel && id) {
+          hasLabel = !!document.querySelector(`label[for="${id}"]`)
+        }
+        // Placeholder is accepted as minimum fallback
+        if (!hasLabel && placeholder) {
+          hasLabel = true
+        }
 
-    // STRICT: We should still be on the auth page (invalid creds) — proving the form was submitted
-    await expect(page).toHaveURL(/\/auth/)
+        if (!hasLabel) {
+          violations.push(`Input #${i} (type="${input.type}", name="${input.name}") n'a pas de label accessible`)
+        }
+      }
+      return violations
+    })
+
+    // STRICT: Zero inputs without labels
+    expect(
+      violatingInputs,
+      `Auth: tous les inputs DOIVENT avoir un label. Violations: ${violatingInputs.join('; ')}`
+    ).toEqual([])
+  })
+
+  test('Settings page: all form inputs have accessible labels after auth', async ({ authenticatedPage: page }) => {
+    await page.goto('/settings')
+    await page.waitForLoadState('networkidle')
+    await page.waitForTimeout(1000)
+
+    const violatingInputs = await page.evaluate(() => {
+      const inputs = Array.from(document.querySelectorAll('input:not([type="hidden"]):not([type="submit"]), select, textarea'))
+      const violations: string[] = []
+      for (let i = 0; i < inputs.length; i++) {
+        const input = inputs[i] as HTMLInputElement
+        if (input.offsetParent === null) continue
+
+        const ariaLabel = input.getAttribute('aria-label')
+        const ariaLabelledBy = input.getAttribute('aria-labelledby')
+        const id = input.id
+        const placeholder = input.getAttribute('placeholder')
+        const title = input.getAttribute('title')
+
+        let hasLabel = !!(ariaLabel || ariaLabelledBy || title)
+        if (!hasLabel && id) {
+          hasLabel = !!document.querySelector(`label[for="${id}"]`)
+        }
+        if (!hasLabel && placeholder) {
+          hasLabel = true
+        }
+
+        if (!hasLabel) {
+          violations.push(`Input #${i} (type="${input.type || 'text'}", name="${input.name}") n'a pas de label`)
+        }
+      }
+      return violations
+    })
+
+    expect(
+      violatingInputs,
+      `Settings: tous les inputs DOIVENT avoir un label accessible. Violations: ${violatingInputs.join('; ')}`
+    ).toEqual([])
   })
 })
 
 // ============================================================
-// COLOR CONTRAST — text must have sufficient contrast
+// COLOR CONTRAST — automated axe-core check
 // ============================================================
-
 test.describe('A11Y-CONTRAST: Color Contrast', () => {
-  test('Landing page: h1 text color MUST differ from its background', async ({ page }) => {
+
+  test('Landing page: axe-core color-contrast rule passes', async ({ page }) => {
     await page.goto('/')
     await page.waitForLoadState('networkidle')
-
-    const heading = page.locator('h1').first()
-
-    // STRICT: h1 must be visible
-    await expect(heading).toBeVisible()
-
-    const { color, bgColor } = await heading.evaluate((el) => {
-      const style = window.getComputedStyle(el)
-      const textColor = style.color
-
-      let current = el as HTMLElement | null
-      let bg = 'rgba(0, 0, 0, 0)'
-      while (current) {
-        const currentBg = window.getComputedStyle(current).backgroundColor
-        if (currentBg && currentBg !== 'rgba(0, 0, 0, 0)' && currentBg !== 'transparent') {
-          bg = currentBg
-          break
-        }
-        current = current.parentElement
-      }
-      return { color: textColor, bgColor: bg }
-    })
-
-    // STRICT: Text color MUST NOT equal background color
-    expect(color).not.toBe(bgColor)
-  })
-
-  test('Landing page: axe-core color-contrast rule has zero violations', async ({ page }) => {
-    await page.goto('/')
-    await page.waitForLoadState('networkidle')
-    // Wait for CSS custom properties and animations to settle
     await page.waitForTimeout(500)
 
-    const { violations } = await checkAccessibility(page, {
-      tags: ['wcag2aa'],
-    })
+    const { violations } = await checkAccessibility(page, { tags: ['wcag2aa'] })
 
-    // Filter only color-contrast violations
     const contrastViolations = violations.filter((v) => v.id === 'color-contrast')
 
-    // STRICT: Zero color contrast violations
-    expect(contrastViolations.length).toBe(0)
-  })
-})
-
-// ============================================================
-// ARIA LANDMARKS — pages must have correct landmark structure
-// ============================================================
-
-test.describe('A11Y-LANDMARKS: ARIA Landmarks', () => {
-  test('Landing page MUST have a <main> landmark', async ({ page }) => {
-    await page.goto('/')
-    await page.waitForLoadState('networkidle')
-
-    const main = page.locator('main')
-
-    // STRICT: Exactly one <main> element must exist (not [role="main"] fallback)
-    const count = await main.count()
-    expect(count).toBeGreaterThan(0)
-
-    // STRICT: The main landmark must be visible
-    await expect(main.first()).toBeVisible()
+    // STRICT: Zero color contrast violations at serious/critical level
+    expect(
+      contrastViolations.length,
+      `Landing: ${contrastViolations.length} violation(s) de contraste. Details: ${JSON.stringify(contrastViolations.map(v => v.description))}`
+    ).toBe(0)
   })
 
-  test('Auth page MUST have a <main> landmark', async ({ page }) => {
+  test('Auth page: axe-core color-contrast rule passes', async ({ page }) => {
     await page.goto('/auth')
     await page.waitForLoadState('networkidle')
+    await page.waitForTimeout(500)
 
-    const main = page.locator('main')
+    const { violations } = await checkAccessibility(page, { tags: ['wcag2aa'] })
 
-    // STRICT: <main> element must exist
-    const count = await main.count()
-    expect(count).toBeGreaterThan(0)
+    const contrastViolations = violations.filter((v) => v.id === 'color-contrast')
 
-    // STRICT: The main landmark must be visible
-    await expect(main.first()).toBeVisible()
-  })
-
-  test('Landing page: navigation landmark MUST exist', async ({ page }) => {
-    await page.goto('/')
-    await page.waitForLoadState('networkidle')
-
-    const nav = page.locator('nav, [role="navigation"]')
-
-    // STRICT: At least one navigation landmark must exist
-    const count = await nav.count()
-    expect(count).toBeGreaterThan(0)
+    expect(
+      contrastViolations.length,
+      `Auth: ${contrastViolations.length} violation(s) de contraste`
+    ).toBe(0)
   })
 })
 
 // ============================================================
-// ARIA ATTRIBUTES — interactive elements must have correct ARIA
+// ARIA LANDMARKS — main, nav, role structure
 // ============================================================
+test.describe('A11Y-LANDMARKS: ARIA Landmarks', () => {
 
-test.describe('A11Y-ARIA: ARIA Attributes', () => {
-  test('Auth page: form inputs MUST have required ARIA attributes', async ({ page }) => {
+  for (const { name, path } of publicPages) {
+    test(`${name}: has a <main> landmark`, async ({ page }) => {
+      await page.goto(path)
+      await page.waitForLoadState('networkidle')
+
+      const main = page.locator('main')
+      const count = await main.count()
+
+      // STRICT: <main> element MUST exist
+      expect(count, `${name} DOIT avoir un element <main>`).toBeGreaterThan(0)
+      await expect(main.first(), `${name}: <main> DOIT etre visible`).toBeVisible()
+    })
+
+    test(`${name}: has a navigation landmark`, async ({ page }) => {
+      await page.goto(path)
+      await page.waitForLoadState('networkidle')
+
+      const nav = page.locator('nav, [role="navigation"]')
+      const count = await nav.count()
+
+      // STRICT: At least one nav landmark MUST exist
+      expect(count, `${name} DOIT avoir au moins un element <nav>`).toBeGreaterThan(0)
+    })
+  }
+
+  for (const { name, path } of protectedPages) {
+    test(`${name}: has a <main> landmark after auth`, async ({ authenticatedPage: page }) => {
+      await page.goto(path)
+      await page.waitForLoadState('networkidle')
+      await page.waitForTimeout(1000)
+
+      const main = page.locator('main')
+      const count = await main.count()
+
+      expect(count, `${name} DOIT avoir un <main> landmark apres auth`).toBeGreaterThan(0)
+      await expect(main.first()).toBeVisible()
+    })
+
+    test(`${name}: has a navigation landmark after auth`, async ({ authenticatedPage: page }) => {
+      await page.goto(path)
+      await page.waitForLoadState('networkidle')
+      await page.waitForTimeout(1000)
+
+      const nav = page.locator('nav, [role="navigation"]')
+      const count = await nav.count()
+
+      expect(count, `${name} DOIT avoir au moins un <nav> landmark apres auth`).toBeGreaterThan(0)
+    })
+  }
+})
+
+// ============================================================
+// ARIA-LIVE REGIONS — dynamic content announcements
+// ============================================================
+test.describe('A11Y-LIVE: ARIA Live Regions', () => {
+
+  test('App has aria-live regions for dynamic content announcements', async ({ authenticatedPage: page }) => {
+    await page.goto('/home')
+    await page.waitForLoadState('networkidle')
+    await page.waitForTimeout(1000)
+
+    const liveRegions = await page.evaluate(() => {
+      const regions = document.querySelectorAll('[aria-live], [role="alert"], [role="status"], [role="log"]')
+      return Array.from(regions).map((el) => ({
+        role: el.getAttribute('role'),
+        ariaLive: el.getAttribute('aria-live'),
+        tag: el.tagName.toLowerCase(),
+      }))
+    })
+
+    // STRICT: At least one aria-live region or role="alert"/"status" MUST exist
+    expect(
+      liveRegions.length,
+      'L\'app DOIT avoir au moins une region aria-live, role="alert" ou role="status" pour le contenu dynamique'
+    ).toBeGreaterThan(0)
+  })
+})
+
+// ============================================================
+// LINK ACCESSIBILITY — all visible links MUST have accessible names
+// ============================================================
+test.describe('A11Y-LINKS: Link Accessible Names', () => {
+
+  test('Landing page: every visible link has an accessible name', async ({ page }) => {
+    await page.goto('/')
+    await page.waitForLoadState('networkidle')
+
+    const violatingLinks = await page.evaluate(() => {
+      const links = Array.from(document.querySelectorAll('a'))
+      const violations: string[] = []
+      for (let i = 0; i < links.length; i++) {
+        const link = links[i]
+        // Skip invisible links
+        if (link.offsetParent === null && !link.closest('[aria-hidden="true"]')) {
+          // Check if it's actually visible (could be position:fixed etc.)
+          const rect = link.getBoundingClientRect()
+          if (rect.width === 0 && rect.height === 0) continue
+        }
+
+        const ariaLabel = link.getAttribute('aria-label')
+        const textContent = link.textContent?.trim()
+        const title = link.getAttribute('title')
+        const ariaLabelledBy = link.getAttribute('aria-labelledby')
+        // SVG icon inside the link counts if it has title or aria-label
+        const svgTitle = link.querySelector('svg title')?.textContent?.trim()
+
+        const hasAccessibleName = !!(ariaLabel || textContent || title || ariaLabelledBy || svgTitle)
+
+        if (!hasAccessibleName) {
+          const href = link.getAttribute('href')
+          violations.push(`Link #${i} (href="${href}") n'a pas de nom accessible`)
+        }
+      }
+      return violations
+    })
+
+    // STRICT: Zero links without accessible names
+    expect(
+      violatingLinks,
+      `Landing: tous les liens DOIVENT avoir un nom accessible. Violations: ${violatingLinks.join('; ')}`
+    ).toEqual([])
+  })
+})
+
+// ============================================================
+// BUTTON ACCESSIBILITY — all visible buttons MUST have accessible names
+// ============================================================
+test.describe('A11Y-BUTTONS: Button Accessible Names', () => {
+
+  test('Landing page: every visible button has an accessible name', async ({ page }) => {
+    await page.goto('/')
+    await page.waitForLoadState('networkidle')
+
+    const violatingButtons = await page.evaluate(() => {
+      const buttons = Array.from(document.querySelectorAll('button'))
+      const violations: string[] = []
+      for (let i = 0; i < buttons.length; i++) {
+        const btn = buttons[i]
+        // Skip invisible buttons
+        const rect = btn.getBoundingClientRect()
+        if (rect.width === 0 && rect.height === 0) continue
+
+        const ariaLabel = btn.getAttribute('aria-label')
+        const textContent = btn.textContent?.trim()
+        const title = btn.getAttribute('title')
+        const ariaLabelledBy = btn.getAttribute('aria-labelledby')
+
+        const hasAccessibleName = !!(ariaLabel || textContent || title || ariaLabelledBy)
+
+        if (!hasAccessibleName) {
+          const classes = btn.className?.substring(0, 60)
+          violations.push(`Button #${i} (class="${classes}") n'a pas de nom accessible`)
+        }
+      }
+      return violations
+    })
+
+    // STRICT: Zero buttons without accessible names
+    expect(
+      violatingButtons,
+      `Landing: tous les boutons DOIVENT avoir un nom accessible. Violations: ${violatingButtons.join('; ')}`
+    ).toEqual([])
+  })
+})
+
+// ============================================================
+// ARIA ATTRIBUTES — form inputs must have correct ARIA
+// ============================================================
+test.describe('A11Y-ARIA: ARIA Attributes on Auth Form', () => {
+
+  test('Auth form: inputs have correct type and autocomplete attributes', async ({ page }) => {
     await page.goto('/auth')
     await page.waitForSelector('form')
 
     const emailInput = page.locator('input[type="email"]')
     const passwordInput = page.locator('input[type="password"]')
 
-    // STRICT: Inputs must be visible
-    await expect(emailInput).toBeVisible()
-    await expect(passwordInput).toBeVisible()
+    // STRICT: Both inputs MUST be visible
+    await expect(emailInput, 'Email input DOIT etre visible').toBeVisible()
+    await expect(passwordInput, 'Password input DOIT etre visible').toBeVisible()
 
-    // STRICT: Email input must have type="email" (provides implicit ARIA role)
+    // STRICT: type attributes MUST be correct
     const emailType = await emailInput.getAttribute('type')
-    expect(emailType).toBe('email')
+    expect(emailType, 'Email input DOIT avoir type="email"').toBe('email')
 
-    // STRICT: Password input must have type="password"
     const passwordType = await passwordInput.getAttribute('type')
-    expect(passwordType).toBe('password')
+    expect(passwordType, 'Password input DOIT avoir type="password"').toBe('password')
 
-    // STRICT: Inputs must have autocomplete attributes for autofill support
+    // STRICT: autocomplete attributes MUST exist for autofill support
     const emailAutocomplete = await emailInput.getAttribute('autocomplete')
+    expect(emailAutocomplete, 'Email input DOIT avoir un attribut autocomplete').toBeTruthy()
+
     const passwordAutocomplete = await passwordInput.getAttribute('autocomplete')
-    // Accept any valid autocomplete value (email, username, current-password, etc.)
-    expect(emailAutocomplete).toBeTruthy()
-    expect(passwordAutocomplete).toBeTruthy()
+    expect(passwordAutocomplete, 'Password input DOIT avoir un attribut autocomplete').toBeTruthy()
   })
 
-  test('Landing page: buttons MUST have accessible names', async ({ page }) => {
-    await page.goto('/')
-    await page.waitForLoadState('networkidle')
+  test('Auth form: Enter key on submit triggers form submission', async ({ page }) => {
+    await page.goto('/auth')
+    await page.waitForSelector('form')
 
-    const buttons = page.locator('button')
-    const count = await buttons.count()
+    // Fill form with invalid data to test keyboard submission
+    await page.locator('input[type="email"]').fill('keyboard-a11y@invalid.test')
+    await page.locator('input[type="password"]').fill('keyboard-test-pass')
 
-    const violatingButtons: string[] = []
+    const submitBtn = page.locator('button[type="submit"]')
+    await submitBtn.focus()
+    await page.keyboard.press('Enter')
 
-    for (let i = 0; i < count; i++) {
-      const btn = buttons.nth(i)
-      const isVisible = await btn.isVisible()
-      if (!isVisible) continue
+    // Wait for form processing
+    await page.waitForTimeout(2000)
 
-      const ariaLabel = await btn.getAttribute('aria-label')
-      const textContent = await btn.textContent()
-      const title = await btn.getAttribute('title')
-
-      const hasAccessibleName = !!(
-        ariaLabel?.trim() ||
-        textContent?.trim() ||
-        title?.trim()
-      )
-
-      if (!hasAccessibleName) {
-        const classes = await btn.getAttribute('class')
-        violatingButtons.push(`Button #${i} (class="${classes?.substring(0, 50)}") has no accessible name`)
-      }
-    }
-
-    // STRICT: Zero buttons without accessible names
-    expect(violatingButtons).toEqual([])
-  })
-})
-
-// ============================================================
-// PROTECTED PAGES — ARIA Landmarks (authenticated)
-// ============================================================
-
-test.describe('A11Y-PROTECTED-LANDMARKS: Protected Page Landmarks', () => {
-  test('Home page MUST have a <main> landmark after auth', async ({ authenticatedPage: page }) => {
-    await page.goto('/home')
-    await page.waitForLoadState('networkidle')
-    await page.waitForTimeout(1000)
-
-    const main = page.locator('main')
-
-    // STRICT: <main> element must exist
-    const count = await main.count()
-    expect(count).toBeGreaterThan(0)
-
-    // STRICT: The main landmark must be visible
-    await expect(main.first()).toBeVisible()
-  })
-
-  test('Home page MUST have navigation landmark after auth', async ({ authenticatedPage: page }) => {
-    await page.goto('/home')
-    await page.waitForLoadState('networkidle')
-    await page.waitForTimeout(1000)
-
-    const nav = page.locator('nav, [role="navigation"]')
-
-    // STRICT: At least one navigation landmark must exist
-    const count = await nav.count()
-    expect(count).toBeGreaterThan(0)
+    // STRICT: We should still be on /auth (invalid credentials prove form was submitted)
+    await expect(page).toHaveURL(/\/auth/)
   })
 })

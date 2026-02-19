@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { render, screen } from '@testing-library/react'
+import { render, screen, fireEvent } from '@testing-library/react'
 import { createElement } from 'react'
 
 // Mock react-router
@@ -128,11 +128,16 @@ vi.mock('../NetworkQualityIndicator', () => ({
   QualityChangeToast: () => null,
 }))
 
-// Import useVoiceCallStore to modify return values per-test
-import { useVoiceCallStore } from '../../hooks/useVoiceCall'
+// Import stores to modify return values per-test
+import { useVoiceCallStore, formatCallDuration } from '../../hooks/useVoiceCall'
+import { useNetworkQualityStore } from '../../hooks/useNetworkQuality'
+import { useFocusTrap } from '../../hooks/useFocusTrap'
 import { CallModal } from '../CallModal'
 
 const mockUseVoiceCallStore = vi.mocked(useVoiceCallStore)
+const mockUseNetworkQualityStore = vi.mocked(useNetworkQualityStore)
+const mockFormatCallDuration = vi.mocked(formatCallDuration)
+const mockUseFocusTrap = vi.mocked(useFocusTrap)
 
 describe('CallModal', () => {
   beforeEach(() => {
@@ -291,5 +296,290 @@ describe('CallModal', () => {
     render(<CallModal />)
     const dialog = screen.getByRole('dialog')
     expect(dialog).toHaveAttribute('aria-modal', 'true')
+  })
+
+  // --- P1.1 Audit: renders nothing when no active call ---
+
+  it('renders nothing when status is "ringing" (incoming only)', () => {
+    mockUseVoiceCallStore.mockReturnValue({
+      status: 'ringing',
+      isMuted: false,
+      isSpeakerOn: false,
+      callDuration: 0,
+      caller: null,
+      receiver: null,
+      isIncoming: true,
+      isReconnecting: false,
+      reconnectAttempts: 0,
+      networkQualityChanged: null,
+      toggleMute: vi.fn(),
+      toggleSpeaker: vi.fn(),
+      endCall: vi.fn(),
+      clearNetworkQualityNotification: vi.fn(),
+    } as any)
+    const { container } = render(<CallModal />)
+    // 'ringing' is not in the shouldShow conditions (calling, connected, ended)
+    expect(container.innerHTML).toBe('')
+  })
+
+  // --- P1.1 Audit: status text formatting ---
+
+  it('shows "Appel en cours..." when status is calling', () => {
+    mockUseVoiceCallStore.mockReturnValue({
+      status: 'calling',
+      isMuted: false,
+      isSpeakerOn: false,
+      callDuration: 0,
+      caller: null,
+      receiver: { username: 'Alice', avatar_url: null },
+      isIncoming: false,
+      isReconnecting: false,
+      reconnectAttempts: 0,
+      networkQualityChanged: null,
+      toggleMute: vi.fn(),
+      toggleSpeaker: vi.fn(),
+      endCall: vi.fn(),
+      clearNetworkQualityNotification: vi.fn(),
+    } as any)
+    render(<CallModal />)
+    expect(screen.getByText('Appel en cours...')).toBeInTheDocument()
+  })
+
+  it('shows formatted duration when status is connected', () => {
+    mockFormatCallDuration.mockReturnValue('2:45')
+    mockUseVoiceCallStore.mockReturnValue({
+      status: 'connected',
+      isMuted: false,
+      isSpeakerOn: false,
+      callDuration: 165,
+      caller: null,
+      receiver: { username: 'Alice', avatar_url: null },
+      isIncoming: false,
+      isReconnecting: false,
+      reconnectAttempts: 0,
+      networkQualityChanged: null,
+      toggleMute: vi.fn(),
+      toggleSpeaker: vi.fn(),
+      endCall: vi.fn(),
+      clearNetworkQualityNotification: vi.fn(),
+    } as any)
+    render(<CallModal />)
+    expect(screen.getByText('2:45')).toBeInTheDocument()
+  })
+
+  it('shows "Appel terminé" when status is ended', () => {
+    mockUseVoiceCallStore.mockReturnValue({
+      status: 'ended',
+      isMuted: false,
+      isSpeakerOn: false,
+      callDuration: 60,
+      caller: null,
+      receiver: { username: 'Alice', avatar_url: null },
+      isIncoming: false,
+      isReconnecting: false,
+      reconnectAttempts: 0,
+      networkQualityChanged: null,
+      toggleMute: vi.fn(),
+      toggleSpeaker: vi.fn(),
+      endCall: vi.fn(),
+      clearNetworkQualityNotification: vi.fn(),
+    } as any)
+    render(<CallModal />)
+    expect(screen.getByText('Appel terminé')).toBeInTheDocument()
+  })
+
+  it('shows reconnection text with attempt count', () => {
+    mockUseVoiceCallStore.mockReturnValue({
+      status: 'connected',
+      isMuted: false,
+      isSpeakerOn: false,
+      callDuration: 30,
+      caller: null,
+      receiver: { username: 'Alice', avatar_url: null },
+      isIncoming: false,
+      isReconnecting: true,
+      reconnectAttempts: 2,
+      networkQualityChanged: null,
+      toggleMute: vi.fn(),
+      toggleSpeaker: vi.fn(),
+      endCall: vi.fn(),
+      clearNetworkQualityNotification: vi.fn(),
+    } as any)
+    render(<CallModal />)
+    expect(screen.getByText('Reconnexion... (2/3)')).toBeInTheDocument()
+  })
+
+  // --- P1.1 Audit: reconnection banner ---
+
+  it('shows reconnection banner when isReconnecting is true', () => {
+    mockUseVoiceCallStore.mockReturnValue({
+      status: 'connected',
+      isMuted: false,
+      isSpeakerOn: false,
+      callDuration: 30,
+      caller: null,
+      receiver: { username: 'Alice', avatar_url: null },
+      isIncoming: false,
+      isReconnecting: true,
+      reconnectAttempts: 1,
+      networkQualityChanged: null,
+      toggleMute: vi.fn(),
+      toggleSpeaker: vi.fn(),
+      endCall: vi.fn(),
+      clearNetworkQualityNotification: vi.fn(),
+    } as any)
+    render(<CallModal />)
+    expect(screen.getByText('Reconnexion en cours...')).toBeInTheDocument()
+  })
+
+  // --- P1.1 Audit: close/hangup button ---
+
+  it('shows cancel button when calling and calls endCall on click', () => {
+    const endCallMock = vi.fn()
+    mockUseVoiceCallStore.mockReturnValue({
+      status: 'calling',
+      isMuted: false,
+      isSpeakerOn: false,
+      callDuration: 0,
+      caller: null,
+      receiver: { username: 'Alice', avatar_url: null },
+      isIncoming: false,
+      isReconnecting: false,
+      reconnectAttempts: 0,
+      networkQualityChanged: null,
+      toggleMute: vi.fn(),
+      toggleSpeaker: vi.fn(),
+      endCall: endCallMock,
+      clearNetworkQualityNotification: vi.fn(),
+    } as any)
+    render(<CallModal />)
+    const cancelBtn = screen.getByLabelText("Annuler l'appel")
+    expect(cancelBtn).toBeInTheDocument()
+    fireEvent.click(cancelBtn)
+    expect(endCallMock).toHaveBeenCalledTimes(1)
+  })
+
+  it('does not show cancel button when connected', () => {
+    mockUseVoiceCallStore.mockReturnValue({
+      status: 'connected',
+      isMuted: false,
+      isSpeakerOn: false,
+      callDuration: 30,
+      caller: null,
+      receiver: { username: 'Alice', avatar_url: null },
+      isIncoming: false,
+      isReconnecting: false,
+      reconnectAttempts: 0,
+      networkQualityChanged: null,
+      toggleMute: vi.fn(),
+      toggleSpeaker: vi.fn(),
+      endCall: vi.fn(),
+      clearNetworkQualityNotification: vi.fn(),
+    } as any)
+    render(<CallModal />)
+    expect(screen.queryByLabelText("Annuler l'appel")).not.toBeInTheDocument()
+  })
+
+  // --- P1.1 Audit: focus trap ---
+
+  it('initializes focus trap with shouldShow and endCall', () => {
+    const endCallMock = vi.fn()
+    mockUseVoiceCallStore.mockReturnValue({
+      status: 'calling',
+      isMuted: false,
+      isSpeakerOn: false,
+      callDuration: 0,
+      caller: null,
+      receiver: { username: 'Alice', avatar_url: null },
+      isIncoming: false,
+      isReconnecting: false,
+      reconnectAttempts: 0,
+      networkQualityChanged: null,
+      toggleMute: vi.fn(),
+      toggleSpeaker: vi.fn(),
+      endCall: endCallMock,
+      clearNetworkQualityNotification: vi.fn(),
+    } as any)
+    render(<CallModal />)
+    // useFocusTrap should be called with shouldShow=true and the endCall callback
+    expect(mockUseFocusTrap).toHaveBeenCalledWith(true, endCallMock)
+  })
+
+  it('passes shouldShow=false to focus trap when status is idle', () => {
+    render(<CallModal />)
+    expect(mockUseFocusTrap).toHaveBeenCalledWith(false, expect.any(Function))
+  })
+
+  // --- P1.1 Audit: aria-labelledby ---
+
+  it('has aria-labelledby pointing to call-modal-title', () => {
+    mockUseVoiceCallStore.mockReturnValue({
+      status: 'calling',
+      isMuted: false,
+      isSpeakerOn: false,
+      callDuration: 0,
+      caller: null,
+      receiver: { username: 'Alice', avatar_url: null },
+      isIncoming: false,
+      isReconnecting: false,
+      reconnectAttempts: 0,
+      networkQualityChanged: null,
+      toggleMute: vi.fn(),
+      toggleSpeaker: vi.fn(),
+      endCall: vi.fn(),
+      clearNetworkQualityNotification: vi.fn(),
+    } as any)
+    render(<CallModal />)
+    const dialog = screen.getByRole('dialog')
+    expect(dialog).toHaveAttribute('aria-labelledby', 'call-modal-title')
+  })
+
+  // --- P1.1 Audit: initial character fallback ---
+
+  it('shows first initial of username for incoming call', () => {
+    mockUseVoiceCallStore.mockReturnValue({
+      status: 'connected',
+      isMuted: false,
+      isSpeakerOn: false,
+      callDuration: 10,
+      caller: { username: 'Zara', avatar_url: null },
+      receiver: { username: 'Me', avatar_url: null },
+      isIncoming: true,
+      isReconnecting: false,
+      reconnectAttempts: 0,
+      networkQualityChanged: null,
+      toggleMute: vi.fn(),
+      toggleSpeaker: vi.fn(),
+      endCall: vi.fn(),
+      clearNetworkQualityNotification: vi.fn(),
+    } as any)
+    render(<CallModal />)
+    expect(screen.getByText('Appel avec Zara')).toBeInTheDocument()
+  })
+
+  // --- P1.1 Audit: volume and speaker in controls ---
+
+  it('renders with volume and speaker props passed to controls', () => {
+    mockUseVoiceCallStore.mockReturnValue({
+      status: 'connected',
+      isMuted: false,
+      isSpeakerOn: true,
+      volume: 75,
+      callDuration: 10,
+      caller: null,
+      receiver: { username: 'Bob', avatar_url: null },
+      isIncoming: false,
+      isReconnecting: false,
+      reconnectAttempts: 0,
+      networkQualityChanged: null,
+      toggleMute: vi.fn(),
+      toggleSpeaker: vi.fn(),
+      endCall: vi.fn(),
+      setVolume: vi.fn(),
+      clearNetworkQualityNotification: vi.fn(),
+    } as any)
+    render(<CallModal />)
+    // Controls sub-component should be rendered
+    expect(screen.getByText('controls')).toBeInTheDocument()
   })
 })

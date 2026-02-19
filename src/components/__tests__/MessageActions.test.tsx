@@ -1,5 +1,5 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { render, screen, fireEvent } from '@testing-library/react'
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
+import { render, screen, fireEvent, act, waitFor } from '@testing-library/react'
 import { createElement } from 'react'
 
 vi.mock('react-router', () => ({ useLocation: vi.fn().mockReturnValue({ pathname: '/' }), useNavigate: vi.fn().mockReturnValue(vi.fn()), useParams: vi.fn().mockReturnValue({}), useSearchParams: vi.fn().mockReturnValue([new URLSearchParams(), vi.fn()]), useLoaderData: vi.fn().mockReturnValue({}), Link: ({ children, to, ...props }: any) => createElement('a', { href: to, ...props }, children), NavLink: ({ children, to, ...props }: any) => createElement('a', { href: to, ...props }, children), Outlet: () => null, useMatches: vi.fn().mockReturnValue([]) }))
@@ -221,5 +221,272 @@ describe('MessageActions', () => {
     fireEvent.click(screen.getByLabelText('Actions du message'))
     const items = screen.getAllByRole('menuitem')
     expect(items.length).toBeGreaterThanOrEqual(6) // Reply, Thread, Copy, Forward, Pin, Edit, Delete
+  })
+
+  // ---- P1.1 additions ----
+
+  describe('delete confirmation toggle', () => {
+    it('first click shows confirm text, second click calls onDelete', () => {
+      const onDelete = vi.fn()
+      render(<MessageActions {...defaultProps} onDelete={onDelete} />)
+      fireEvent.click(screen.getByLabelText('Actions du message'))
+      // First click: shows confirmation
+      fireEvent.click(screen.getByText('Supprimer'))
+      expect(screen.getByText('Confirmer la suppression')).toBeInTheDocument()
+      expect(onDelete).not.toHaveBeenCalled()
+      // Second click: actually deletes
+      fireEvent.click(screen.getByText('Confirmer la suppression'))
+      expect(onDelete).toHaveBeenCalledOnce()
+    })
+
+    it('resets delete confirmation when menu closes via click outside', () => {
+      render(
+        <div>
+          <span data-testid="outside">Outside</span>
+          <MessageActions {...defaultProps} />
+        </div>
+      )
+      fireEvent.click(screen.getByLabelText('Actions du message'))
+      fireEvent.click(screen.getByText('Supprimer'))
+      expect(screen.getByText('Confirmer la suppression')).toBeInTheDocument()
+      // Close menu via click outside (which resets showDeleteConfirm)
+      fireEvent.mouseDown(screen.getByTestId('outside'))
+      // Re-open
+      fireEvent.click(screen.getByLabelText('Actions du message'))
+      // Should show 'Supprimer' again, not confirmation
+      expect(screen.getByText('Supprimer')).toBeInTheDocument()
+      expect(screen.queryByText('Confirmer la suppression')).not.toBeInTheDocument()
+    })
+  })
+
+  describe('long-press detection', () => {
+    beforeEach(() => {
+      vi.useFakeTimers({ shouldAdvanceTime: true })
+    })
+
+    afterEach(() => {
+      vi.useRealTimers()
+    })
+
+    it('opens menu after 500ms long press (touchStart)', () => {
+      render(<MessageActions {...defaultProps} />)
+      const container = screen.getByLabelText('Actions du message').closest('div')!
+      fireEvent.touchStart(container)
+      act(() => {
+        vi.advanceTimersByTime(500)
+      })
+      expect(screen.getByRole('menu')).toBeInTheDocument()
+    })
+
+    it('does not open menu if touch ends before 500ms', () => {
+      render(<MessageActions {...defaultProps} />)
+      const container = screen.getByLabelText('Actions du message').closest('div')!
+      fireEvent.touchStart(container)
+      act(() => {
+        vi.advanceTimersByTime(300)
+      })
+      fireEvent.touchEnd(container)
+      act(() => {
+        vi.advanceTimersByTime(300)
+      })
+      // Menu should not have opened since we released before 500ms
+      expect(screen.queryByRole('menu')).not.toBeInTheDocument()
+    })
+
+    it('cancels long press on touchCancel', () => {
+      render(<MessageActions {...defaultProps} />)
+      const container = screen.getByLabelText('Actions du message').closest('div')!
+      fireEvent.touchStart(container)
+      act(() => {
+        vi.advanceTimersByTime(200)
+      })
+      fireEvent.touchCancel(container)
+      act(() => {
+        vi.advanceTimersByTime(500)
+      })
+      expect(screen.queryByRole('menu')).not.toBeInTheDocument()
+    })
+  })
+
+  describe('copy to clipboard', () => {
+    it('copies text to clipboard and shows success feedback', async () => {
+      const writeTextMock = vi.fn().mockResolvedValue(undefined)
+      Object.assign(navigator, {
+        clipboard: { writeText: writeTextMock },
+      })
+
+      render(<MessageActions {...defaultProps} />)
+      fireEvent.click(screen.getByLabelText('Actions du message'))
+      fireEvent.click(screen.getByText('Copier le texte'))
+
+      await waitFor(() => {
+        expect(writeTextMock).toHaveBeenCalledWith('Hello world')
+      })
+      // Should show 'Copié !' feedback
+      await waitFor(() => {
+        expect(screen.getByText('Copié !')).toBeInTheDocument()
+      })
+    })
+
+    it('handles clipboard write failure gracefully', async () => {
+      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
+      Object.assign(navigator, {
+        clipboard: { writeText: vi.fn().mockRejectedValue(new Error('Clipboard error')) },
+      })
+
+      render(<MessageActions {...defaultProps} />)
+      fireEvent.click(screen.getByLabelText('Actions du message'))
+      fireEvent.click(screen.getByText('Copier le texte'))
+
+      await waitFor(() => {
+        expect(consoleSpy).toHaveBeenCalledWith('Failed to copy text')
+      })
+      consoleSpy.mockRestore()
+    })
+  })
+
+  describe('click outside closes menu', () => {
+    it('closes menu when clicking outside menu and button', () => {
+      render(
+        <div>
+          <span data-testid="outside">Outside</span>
+          <MessageActions {...defaultProps} />
+        </div>
+      )
+      fireEvent.click(screen.getByLabelText('Actions du message'))
+      expect(screen.getByRole('menu')).toBeInTheDocument()
+      // Click outside
+      fireEvent.mouseDown(screen.getByTestId('outside'))
+      expect(screen.queryByRole('menu')).not.toBeInTheDocument()
+    })
+
+    it('resets delete confirmation when clicking outside', () => {
+      render(
+        <div>
+          <span data-testid="outside">Outside</span>
+          <MessageActions {...defaultProps} />
+        </div>
+      )
+      fireEvent.click(screen.getByLabelText('Actions du message'))
+      fireEvent.click(screen.getByText('Supprimer'))
+      expect(screen.getByText('Confirmer la suppression')).toBeInTheDocument()
+      // Click outside
+      fireEvent.mouseDown(screen.getByTestId('outside'))
+      expect(screen.queryByRole('menu')).not.toBeInTheDocument()
+      // Re-open — should be reset
+      fireEvent.click(screen.getByLabelText('Actions du message'))
+      expect(screen.getByText('Supprimer')).toBeInTheDocument()
+    })
+  })
+
+  describe('Escape key closes menu', () => {
+    it('closes menu on Escape key press', () => {
+      render(<MessageActions {...defaultProps} />)
+      fireEvent.click(screen.getByLabelText('Actions du message'))
+      expect(screen.getByRole('menu')).toBeInTheDocument()
+      fireEvent.keyDown(document, { key: 'Escape' })
+      expect(screen.queryByRole('menu')).not.toBeInTheDocument()
+    })
+
+    it('resets delete confirmation on Escape', () => {
+      render(<MessageActions {...defaultProps} />)
+      fireEvent.click(screen.getByLabelText('Actions du message'))
+      fireEvent.click(screen.getByText('Supprimer'))
+      expect(screen.getByText('Confirmer la suppression')).toBeInTheDocument()
+      fireEvent.keyDown(document, { key: 'Escape' })
+      // Re-open
+      fireEvent.click(screen.getByLabelText('Actions du message'))
+      expect(screen.getByText('Supprimer')).toBeInTheDocument()
+    })
+
+    it('returns focus to trigger button on Escape', () => {
+      render(<MessageActions {...defaultProps} />)
+      const btn = screen.getByLabelText('Actions du message')
+      fireEvent.click(btn)
+      fireEvent.keyDown(document, { key: 'Escape' })
+      expect(document.activeElement).toBe(btn)
+    })
+  })
+
+  describe('own message vs other message behavior', () => {
+    it('shows Edit and Delete buttons only for own messages', () => {
+      render(<MessageActions {...defaultProps} />)
+      fireEvent.click(screen.getByLabelText('Actions du message'))
+      expect(screen.getByText('Modifier')).toBeInTheDocument()
+      expect(screen.getByText('Supprimer')).toBeInTheDocument()
+    })
+
+    it('does not show Edit or Delete for messages from other users', () => {
+      render(
+        <MessageActions
+          {...defaultProps}
+          message={{ id: 'msg-2', sender_id: 'other-user', content: 'Other message' }}
+        />
+      )
+      fireEvent.click(screen.getByLabelText('Actions du message'))
+      expect(screen.queryByText('Modifier')).not.toBeInTheDocument()
+      expect(screen.queryByText('Supprimer')).not.toBeInTheDocument()
+    })
+
+    it('shows a separator before Edit for own messages', () => {
+      render(<MessageActions {...defaultProps} />)
+      fireEvent.click(screen.getByLabelText('Actions du message'))
+      const separators = screen.getByRole('menu').querySelectorAll('[role="separator"]')
+      expect(separators.length).toBeGreaterThanOrEqual(1)
+    })
+  })
+
+  describe('admin Pin visibility', () => {
+    it('admin can see Pin button', () => {
+      render(<MessageActions {...defaultProps} isAdmin={true} />)
+      fireEvent.click(screen.getByLabelText('Actions du message'))
+      expect(screen.getByText('Épingler')).toBeInTheDocument()
+    })
+
+    it('non-admin cannot see Pin button', () => {
+      render(<MessageActions {...defaultProps} isAdmin={false} />)
+      fireEvent.click(screen.getByLabelText('Actions du message'))
+      expect(screen.queryByText('Épingler')).not.toBeInTheDocument()
+    })
+
+    it('admin on other user message can Pin but not Edit/Delete', () => {
+      render(
+        <MessageActions
+          {...defaultProps}
+          isAdmin={true}
+          message={{ id: 'msg-3', sender_id: 'other-user', content: 'Msg' }}
+        />
+      )
+      fireEvent.click(screen.getByLabelText('Actions du message'))
+      expect(screen.getByText('Épingler')).toBeInTheDocument()
+      expect(screen.queryByText('Modifier')).not.toBeInTheDocument()
+      expect(screen.queryByText('Supprimer')).not.toBeInTheDocument()
+    })
+  })
+
+  describe('forward and thread conditional rendering', () => {
+    it('shows Forward button when onForward is provided', () => {
+      render(<MessageActions {...defaultProps} onForward={vi.fn()} />)
+      fireEvent.click(screen.getByLabelText('Actions du message'))
+      expect(screen.getByText('Transférer')).toBeInTheDocument()
+    })
+
+    it('hides Forward button when onForward is not provided', () => {
+      render(<MessageActions {...defaultProps} />)
+      fireEvent.click(screen.getByLabelText('Actions du message'))
+      expect(screen.queryByText('Transférer')).not.toBeInTheDocument()
+    })
+
+    it('shows Thread button when onThread is provided', () => {
+      render(<MessageActions {...defaultProps} onThread={vi.fn()} />)
+      fireEvent.click(screen.getByLabelText('Actions du message'))
+      expect(screen.getByText('Ouvrir le thread')).toBeInTheDocument()
+    })
+
+    it('hides Thread button when onThread is not provided', () => {
+      render(<MessageActions {...defaultProps} />)
+      fireEvent.click(screen.getByLabelText('Actions du message'))
+      expect(screen.queryByText('Ouvrir le thread')).not.toBeInTheDocument()
+    })
   })
 })

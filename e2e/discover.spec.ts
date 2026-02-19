@@ -29,12 +29,16 @@ test.describe('F52 — Parcourir les squads publics', () => {
     // Utilisation de .or() pour une assertion Playwright native
     await expect(squadCard.or(emptyState)).toBeVisible({ timeout: 5000 })
 
-    const hasSquadCards = await squadCard.isVisible().catch(() => false)
+    // isVisible() returns boolean without throwing — no .catch() needed
+    const hasSquadCards = await squadCard.isVisible()
     if (hasSquadCards) {
       // STRICT: squad cards MUST have visible text content (name, game info)
       const cardText = await authenticatedPage.locator('main').first().textContent()
       expect(cardText).toBeTruthy()
       expect(cardText!.length).toBeGreaterThan(10)
+    } else {
+      // STRICT: empty state must be confirmed visible
+      await expect(emptyState).toBeVisible({ timeout: 3000 })
     }
   })
 

@@ -193,4 +193,15 @@ describe('Integration — Message Content Pipeline', () => {
     expect(ownContainer.textContent).toContain('My message')
     expect(otherContainer.textContent).toContain('Their message')
   })
+
+  it('HTML entities in content render as escaped text not as HTML', () => {
+    // Security: &lt;script&gt; should appear as literal text, not execute
+    const { container } = render(
+      <MessageContent content="&lt;script&gt;alert(1)&lt;/script&gt; safe text" />,
+    )
+    // No actual script tags injected from entity-encoded content
+    expect(container.querySelectorAll('script')).toHaveLength(0)
+    // The text content should be visible (either as entities or decoded text)
+    expect(container.textContent).toBeTruthy()
+  })
 })

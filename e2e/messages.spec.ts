@@ -347,26 +347,21 @@ test.describe('F35 — Pinned messages match DB', () => {
 
     // Verify the chat view is open — look for the message composer or chat content
     const chatArea = page.locator('textarea, [contenteditable="true"], input[placeholder*="message" i]').first()
-    const isChatOpen = await chatArea.isVisible({ timeout: 5000 }).catch(() => false)
 
-    if (!isChatOpen) {
-      // Chat didn't open — skip gracefully
-      test.info().annotations.push({ type: 'skip', description: 'Conversation could not be opened' })
-      return
-    }
+    // STRICT: chat composer MUST be visible — no silent skip
+    await expect(chatArea).toBeVisible({ timeout: 10000 })
 
     if (pinnedMessages.length > 0) {
       // DB has pinned messages → pin indicator MUST exist in UI
       // MessageBubble renders: 📌 Épinglé
       const pinnedSection = page.getByText(/Épinglé|📌/i).first()
-      const hasPinnedSection = await pinnedSection.isVisible({ timeout: 5000 }).catch(() => false)
 
-      // STRICT: at least one pin indicator MUST be visible when DB has pinned messages
-      expect(hasPinnedSection).toBe(true)
+      // STRICT: pin indicator MUST be visible when DB has pinned messages
+      await expect(pinnedSection).toBeVisible({ timeout: 8000 })
     } else {
       // DB has 0 pinned messages → verify conversation loaded correctly
       // The chat composer being visible confirms the conversation is open and functional
-      expect(isChatOpen).toBe(true)
+      await expect(chatArea).toBeVisible({ timeout: 5000 })
     }
   })
 })

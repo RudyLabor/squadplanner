@@ -200,3 +200,4 @@ describe('Skeleton a11y', () => {
     expect(await axe(container)).toHaveNoViolations()
   })
 })
+

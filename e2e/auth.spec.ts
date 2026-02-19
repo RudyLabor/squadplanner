@@ -377,11 +377,9 @@ test.describe('F05 — Password Reset', () => {
     const successMessage = page.getByText(/Email envoyé/i)
     const errorAlert = page.locator('[role="alert"]')
 
-    const successVisible = await successMessage.isVisible()
-    const errorVisible = await errorAlert.isVisible()
-
     // STRICT: l'un des deux DOIT etre visible — pas de page silencieuse
-    expect(successVisible || errorVisible).toBe(true)
+    // Utilisation de .or() pour une assertion Playwright native
+    await expect(successMessage.or(errorAlert)).toBeVisible({ timeout: 5000 })
   })
 })
 

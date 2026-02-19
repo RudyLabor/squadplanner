@@ -47,8 +47,8 @@ describe('SharedElement', () => {
     const wrapper = container.firstChild as HTMLElement
     expect(wrapper).toHaveAttribute('aria-hidden', 'true')
 
-    // className applied
-    expect(wrapper).toHaveClass('shared-hero')
+    // className forwarded to wrapper
+    expect(wrapper.className).toContain('shared-hero')
 
     // layoutId passed through (rendered as attribute by mock)
     expect(wrapper).toHaveAttribute('layoutid', 'hero-image')
@@ -79,9 +79,9 @@ describe('SharedElement', () => {
     expect(sharedElements[0]).toHaveAttribute('layoutid', 'card-1')
     expect(sharedElements[1]).toHaveAttribute('layoutid', 'card-2')
 
-    // Both have the same className
-    expect(sharedElements[0]).toHaveClass('card')
-    expect(sharedElements[1]).toHaveClass('card')
+    // Both share the same className
+    expect((sharedElements[0] as HTMLElement).className).toContain('card')
+    expect((sharedElements[1] as HTMLElement).className).toContain('card')
   })
 
   // STRICT: renders without className, passes extra HTML motion props, wrapper is a div

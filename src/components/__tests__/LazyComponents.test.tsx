@@ -12,10 +12,10 @@ describe('LazyComponents', () => {
   it('can be imported without error', async () => {
     // Test that the module structure is correct by dynamically importing
     // and checking exports exist (catches syntax errors and structure)
-    const mod = await vi.importActual<any>('../LazyComponents').catch(() => null)
-    // If the import fails due to lazy resolution issues in test, that's OK
-    // The important thing is the module is parseable
-    expect(true).toBe(true)
+    const mod = await vi.importActual<any>('../LazyComponents')
+    // Verify the module actually loaded and has expected exports
+    expect(mod).toBeDefined()
+    expect(typeof mod).toBe('object')
   })
 
   it('Suspense wraps lazy content correctly', () => {

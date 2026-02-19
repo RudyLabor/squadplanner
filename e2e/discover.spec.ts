@@ -25,12 +25,11 @@ test.describe('F52 — Parcourir les squads publics', () => {
     const squadCard = authenticatedPage.locator('main').locator('button:has-text("Rejoindre")').first()
     const emptyState = authenticatedPage.getByText('Aucune squad publique trouvée').first()
 
-    const hasSquadCards = await squadCard.isVisible({ timeout: 5000 }).catch(() => false)
-    const hasEmptyState = await emptyState.isVisible({ timeout: 3000 }).catch(() => false)
-
     // STRICT: page MUST show either squad cards or empty state — never blank
-    expect(hasSquadCards || hasEmptyState).toBe(true)
+    // Utilisation de .or() pour une assertion Playwright native
+    await expect(squadCard.or(emptyState)).toBeVisible({ timeout: 5000 })
 
+    const hasSquadCards = await squadCard.isVisible().catch(() => false)
     if (hasSquadCards) {
       // STRICT: squad cards MUST have visible text content (name, game info)
       const cardText = await authenticatedPage.locator('main').first().textContent()
@@ -51,7 +50,12 @@ test.describe('F52 — Parcourir les squads publics', () => {
     // STRICT: the page must show either squad data OR the empty state text
     const hasSquadContent = mainContent!.includes('Rejoindre') || mainContent!.includes('membre')
     const hasEmptyContent = mainContent!.includes('Aucune squad publique')
-    expect(hasSquadContent || hasEmptyContent).toBe(true)
+    if (hasSquadContent) {
+      expect(mainContent).toMatch(/Rejoindre|membre/)
+    } else {
+      // Pas de contenu squad — l'etat vide DOIT etre affiche
+      expect(hasEmptyContent).toBe(true)
+    }
 
     // STRICT: the Discover page always has filters (game + region)
     const gameFilter = authenticatedPage.getByText('Tous les jeux').first()

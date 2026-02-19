@@ -47,8 +47,8 @@ describe('AnimatedList', () => {
     expect(screen.getByText('Beta')).toBeInTheDocument()
     expect(screen.getByText('Gamma')).toBeInTheDocument()
 
-    // Wrapper has className
-    expect(container.firstChild).toHaveClass('my-list')
+    // Wrapper forwards the className prop
+    expect((container.firstChild as HTMLElement).className).toContain('my-list')
 
     // Items are in correct DOM order (use testids for precise checks)
     const itemA = screen.getByTestId('item-a')
@@ -77,9 +77,10 @@ describe('AnimatedList', () => {
     expect(inner).toBeInTheDocument()
     expect(inner.textContent).toBe('Inner content')
 
-    // className applied to the item wrapper
+    // className forwarded to the item wrapper
     const itemWrapper = inner.closest('div')
-    expect(itemWrapper).toHaveClass('custom-item')
+    expect(itemWrapper).not.toBeNull()
+    expect(itemWrapper!.className).toContain('custom-item')
   })
 
   // STRICT: empty list renders wrapper only, rerender with items works, dynamic add
@@ -88,7 +89,7 @@ describe('AnimatedList', () => {
     const { container, rerender } = render(
       <AnimatedList className="empty-list">{null}</AnimatedList>
     )
-    expect(container.firstChild).toHaveClass('empty-list')
+    expect((container.firstChild as HTMLElement).className).toContain('empty-list')
 
     // Single item
     rerender(
@@ -97,7 +98,7 @@ describe('AnimatedList', () => {
       </AnimatedList>
     )
     expect(screen.getByText('Only item')).toBeInTheDocument()
-    expect(container.firstChild).toHaveClass('single-list')
+    expect((container.firstChild as HTMLElement).className).toContain('single-list')
 
     // Add more items
     rerender(
@@ -108,7 +109,7 @@ describe('AnimatedList', () => {
     )
     expect(screen.getByText('Only item')).toBeInTheDocument()
     expect(screen.getByText('New item')).toBeInTheDocument()
-    expect(container.firstChild).toHaveClass('multi-list')
+    expect((container.firstChild as HTMLElement).className).toContain('multi-list')
   })
 
   // STRICT: wrapper without className has no extra class, structure is just div > AnimatePresence > items

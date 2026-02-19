@@ -118,8 +118,15 @@ describe('CardContent', () => {
     expect(screen.getByText('Body')).toBeInTheDocument()
   })
 
-  it('applies compact padding', () => {
-    const { container } = render(<CardContent compact>Compact</CardContent>)
-    expect(container.firstChild).toHaveClass('p-3')
+  it('applies compact padding style', () => {
+    const { container: compactContainer } = render(<CardContent compact>Compact</CardContent>)
+    const { container: normalContainer } = render(<CardContent>Normal</CardContent>)
+    // Compact padding produces a different className than default
+    const compactEl = compactContainer.firstChild as HTMLElement
+    const normalEl = normalContainer.firstChild as HTMLElement
+    expect(compactEl.className).not.toBe(normalEl.className)
+    // Compact has smaller padding token, default has larger one
+    expect(compactEl.className).toContain('p-3')
+    expect(normalEl.className).toContain('p-5')
   })
 })

@@ -17,9 +17,11 @@ describe('Skeleton', () => {
     expect(container.firstChild).toHaveAttribute('aria-hidden', 'true')
   })
 
-  it('applies className', () => {
+  it('forwards className to element', () => {
     const { container } = render(<Skeleton className="h-4 w-32" />)
-    expect(container.firstChild).toHaveClass('h-4', 'w-32')
+    const el = container.firstChild as HTMLElement
+    expect(el.className).toContain('h-4')
+    expect(el.className).toContain('w-32')
   })
 
   it('applies width and height styles', () => {
@@ -32,9 +34,14 @@ describe('Skeleton', () => {
     expect(container.firstChild).toHaveStyle({ width: '50%', height: '2rem' })
   })
 
-  it('applies rounded classes', () => {
-    const { container } = render(<Skeleton rounded="full" />)
-    expect(container.firstChild).toHaveClass('rounded-full')
+  it('applies rounded prop to element', () => {
+    const { container: fullContainer } = render(<Skeleton rounded="full" />)
+    const { container: defaultContainer } = render(<Skeleton />)
+    // rounded="full" produces a different border-radius token than default
+    const fullEl = fullContainer.firstChild as HTMLElement
+    const defaultEl = defaultContainer.firstChild as HTMLElement
+    expect(fullEl.className).not.toBe(defaultEl.className)
+    expect(fullEl.className).toContain('rounded-full')
   })
 })
 

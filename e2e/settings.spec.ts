@@ -443,9 +443,9 @@ test.describe('F65 — Se deconnecter', () => {
     await authenticatedPage.waitForTimeout(3000)
 
     // STRICT: after logout, URL MUST redirect to /auth or landing (/)
-    const url = authenticatedPage.url()
     // STRICT: must be on auth page or landing — not on /settings anymore
-    expect(url.includes('/auth') || url.endsWith('/') || url.endsWith('.fr') || url.endsWith('.fr/')).toBe(true)
+    // Utilisation d'un regex pour verifier toutes les destinations valides
+    await expect(authenticatedPage).toHaveURL(/\/auth|\.fr\/?$|\/$/, { timeout: 5000 })
   })
 })
 

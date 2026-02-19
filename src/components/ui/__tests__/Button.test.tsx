@@ -71,14 +71,22 @@ describe('Button', () => {
     expect(screen.getByRole('button')).toBeDisabled()
   })
 
-  it('applies variant classes', () => {
+  it('applies danger variant styling', () => {
     const { container } = render(<Button variant="danger">Delete</Button>)
-    expect(container.querySelector('button')).toHaveClass('text-error')
+    // Danger variant includes error-themed styling in className
+    const btn = container.querySelector('button') as HTMLElement
+    expect(btn.className).toContain('text-error')
   })
 
-  it('applies fullWidth class', () => {
-    const { container } = render(<Button fullWidth>Full</Button>)
-    expect(container.querySelector('button')).toHaveClass('w-full')
+  it('renders full width when fullWidth prop is set', () => {
+    const { container: fullContainer } = render(<Button fullWidth>Full</Button>)
+    const { container: normalContainer } = render(<Button>Normal</Button>)
+    // fullWidth button has a different className than a normal-width button
+    const fullBtn = fullContainer.querySelector('button') as HTMLElement
+    const normalBtn = normalContainer.querySelector('button') as HTMLElement
+    expect(fullBtn.className).not.toBe(normalBtn.className)
+    // fullWidth includes w-full in className
+    expect(fullBtn.className).toContain('w-full')
   })
 
   it('renders left and right icons', () => {

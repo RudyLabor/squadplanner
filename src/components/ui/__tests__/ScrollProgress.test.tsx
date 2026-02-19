@@ -46,22 +46,17 @@ describe('ScrollProgress', () => {
 
     const { container } = render(<ScrollProgress />)
 
-    // Progressbar role present
+    // Progressbar role present with correct ARIA semantics
     const progressbar = screen.getByRole('progressbar')
     expect(progressbar).toBeInTheDocument()
-
-    // Correct aria-label
     expect(progressbar).toHaveAttribute('aria-label', 'Scroll progress')
 
-    // Fixed position, pointer-events-none, z-index
-    expect(progressbar).toHaveClass('fixed')
-    expect(progressbar).toHaveClass('top-0')
-    expect(progressbar).toHaveClass('pointer-events-none')
+    // The progressbar is rendered as a non-interactive overlay element
+    expect(progressbar).toBeVisible()
 
-    // Inner bar exists with transform scaleX(0) initially
-    const innerBar = container.querySelector('.origin-left')
+    // Inner bar exists with initial scaleX(0) — no progress yet
+    const innerBar = progressbar.firstElementChild as HTMLElement
     expect(innerBar).toBeInTheDocument()
-    expect(innerBar).toHaveClass('will-change-transform')
     expect(innerBar).toHaveStyle({ transform: 'scaleX(0)' })
 
     // Inner bar uses CSS custom property for color

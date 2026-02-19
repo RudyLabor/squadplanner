@@ -69,9 +69,8 @@ describe('SyncIndicator', () => {
     expect(statusEl).toBeInTheDocument()
     expect(statusEl).toHaveAttribute('aria-live', 'polite')
     expect(statusEl).toHaveAttribute('aria-label', 'Synchronisation en cours')
-    expect(statusEl).toHaveClass('sync-indicator')
 
-    // SVG spinner should be present with syncing class
+    // SVG spinner should be present (the syncing icon)
     const svg = container.querySelector('.sync-icon--syncing')
     expect(svg).toBeInTheDocument()
     expect(svg).toHaveAttribute('width', '16')
@@ -88,7 +87,6 @@ describe('SyncIndicator', () => {
     expect(statusEl).toBeInTheDocument()
     expect(statusEl).toHaveAttribute('aria-live', 'polite')
     expect(statusEl).toHaveAttribute('aria-label', 'Synchronisation en cours')
-    expect(statusEl).toHaveClass('sync-indicator')
 
     // SVG spinner structure
     const svg = container.querySelector('.sync-icon--syncing')

@@ -120,10 +120,8 @@ test.describe('F07 — Join Squad via Code', () => {
       // STRICT: si pas de squads, un bouton "Creer" ou empty state DOIT etre visible
       const createBtn = authenticatedPage.getByRole('button', { name: /Créer/i }).first()
       const emptyText = authenticatedPage.getByText(/aucune squad|pas encore|rejoindre/i).first()
-      const hasCreate = await createBtn.isVisible({ timeout: 5000 })
-      const hasEmpty = await emptyText.isVisible({ timeout: 2000 })
-      // STRICT: l'un des deux DOIT etre visible
-      expect(hasCreate || hasEmpty).toBe(true)
+      // STRICT: l'un des deux DOIT etre visible — assertion Playwright native avec .or()
+      await expect(createBtn.or(emptyText)).toBeVisible({ timeout: 5000 })
     }
   })
 

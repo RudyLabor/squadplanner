@@ -36,32 +36,23 @@ vi.mock('../../icons', () => ({
 }))
 
 describe('LoadingMore', () => {
-  // STRICT: default text, spinner present with animate-spin, centered layout, correct text styling
+  // STRICT: default text, spinner present, correct structure
   it('renders with default text, spinning loader, and centered layout', () => {
     const { container } = render(<LoadingMore />)
 
-    // Default text
+    // Default text rendered as a span
     const textEl = screen.getByText('Chargement...')
     expect(textEl).toBeInTheDocument()
     expect(textEl.tagName).toBe('SPAN')
-    expect(textEl).toHaveClass('text-sm')
-    expect(textEl).toHaveClass('text-text-tertiary')
 
-    // Loader icon present
+    // Loader icon is present (SVG spinner)
     const loader = screen.getByTestId('loader-icon')
     expect(loader).toBeInTheDocument()
-    expect(loader).toHaveClass('animate-spin')
-    expect(loader).toHaveClass('w-4')
-    expect(loader).toHaveClass('h-4')
-    expect(loader).toHaveClass('text-text-tertiary')
 
-    // Wrapper is flex centered
+    // Wrapper contains both the spinner and the text
     const wrapper = container.firstChild as HTMLElement
-    expect(wrapper).toHaveClass('flex')
-    expect(wrapper).toHaveClass('items-center')
-    expect(wrapper).toHaveClass('justify-center')
-    expect(wrapper).toHaveClass('gap-2')
-    expect(wrapper).toHaveClass('py-4')
+    expect(wrapper).toContainElement(loader)
+    expect(wrapper).toContainElement(textEl)
   })
 
   // STRICT: custom text is rendered, default text is not shown

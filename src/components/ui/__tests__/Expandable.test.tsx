@@ -48,8 +48,8 @@ describe('Expandable', () => {
     // Children rendered
     expect(screen.getByText('Long content that could be truncated')).toBeInTheDocument()
 
-    // Custom className applied to wrapper
-    expect(container.firstChild).toHaveClass('custom-wrapper')
+    // Custom className forwarded to wrapper
+    expect((container.firstChild as HTMLElement).className).toContain('custom-wrapper')
 
     // Preview container has overflow hidden class
     const overflowDiv = container.querySelector('.overflow-hidden')

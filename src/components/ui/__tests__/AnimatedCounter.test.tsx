@@ -30,9 +30,9 @@ describe('AnimatedCounter', () => {
     expect(screen.getByText('$0k')).toBeInTheDocument()
   })
 
-  it('applies custom className', () => {
+  it('forwards custom className to wrapper element', () => {
     const { container } = render(<AnimatedCounter end={10} className="custom-class" />)
-    expect(container.firstChild).toHaveClass('custom-class')
+    expect((container.firstChild as HTMLElement).className).toContain('custom-class')
   })
 
   it('handles singularSuffix for value <= 1', () => {

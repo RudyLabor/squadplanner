@@ -300,8 +300,14 @@ test.describe('F34 — Edit message + verify DB', () => {
         await page.waitForTimeout(1000)
       }
 
-      // STRICT: either UI toast confirms edit OR DB shows edit
-      expect(hasToast || wasEdited).toBe(true)
+      // STRICT: either UI toast confirms edit OR DB shows edit — branchement explicite
+      if (hasToast) {
+        // UI confirme l'edition via toast
+        await expect(successToast).toBeVisible()
+      } else {
+        // Pas de toast visible — la DB DOIT confirmer l'edition
+        expect(wasEdited).toBe(true)
+      }
     } finally {
       await db.deleteTestMessage(testMsg.id)
     }

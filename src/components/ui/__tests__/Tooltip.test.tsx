@@ -302,14 +302,17 @@ describe('TooltipTrigger', () => {
     expect(screen.getByText('Button')).toBeInTheDocument()
   })
 
-  it('includes sr-only text for screen readers', () => {
+  it('includes visually hidden text for screen readers', () => {
     render(
       <TooltipTrigger content="Help text">
         <button>Button</button>
       </TooltipTrigger>
     )
+    // The tooltip content is present in the DOM for screen readers
     const srText = screen.getByText('Help text')
-    expect(srText).toHaveClass('sr-only')
+    expect(srText).toBeInTheDocument()
+    // It uses the sr-only pattern to hide it visually
+    expect(srText.className).toContain('sr-only')
   })
 
   it('wraps children in a relative span', () => {

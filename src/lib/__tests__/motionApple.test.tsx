@@ -372,8 +372,8 @@ describe('motionApple', () => {
       // Animate from 0 to 0 should complete almost immediately
       flushRAF(500)
 
-      // After enough frames, the spring should have settled
-      await promise.catch(() => {}) // may or may not resolve depending on precision
+      // After enough frames, the spring should have settled — let errors propagate
+      await promise
     })
 
     it('uses smooth preset as default when no spring config provided', () => {

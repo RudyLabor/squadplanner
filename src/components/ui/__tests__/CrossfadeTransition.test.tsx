@@ -58,8 +58,8 @@ describe('CrossfadeTransition', () => {
     // aria-busy=true
     expect(container.firstChild).toHaveAttribute('aria-busy', 'true')
 
-    // className applied
-    expect(container.firstChild).toHaveClass('crossfade-wrapper')
+    // className forwarded to wrapper
+    expect((container.firstChild as HTMLElement).className).toContain('crossfade-wrapper')
   })
 
   // STRICT: loading=false shows content, hides skeleton, aria-busy=false
@@ -82,8 +82,8 @@ describe('CrossfadeTransition', () => {
     // aria-busy=false
     expect(container.firstChild).toHaveAttribute('aria-busy', 'false')
 
-    // className applied
-    expect(container.firstChild).toHaveClass('loaded-wrapper')
+    // className forwarded to wrapper
+    expect((container.firstChild as HTMLElement).className).toContain('loaded-wrapper')
   })
 
   // STRICT: transition between loading states swaps content correctly, aria-busy updates
@@ -137,7 +137,7 @@ describe('CrossfadeTransition', () => {
     expect(screen.getByTestId('skel-rm')).toBeInTheDocument()
     expect(screen.queryByTestId('content-rm')).not.toBeInTheDocument()
     expect(container.firstChild).toHaveAttribute('aria-busy', 'true')
-    expect(container.firstChild).toHaveClass('rm-wrapper')
+    expect((container.firstChild as HTMLElement).className).toContain('rm-wrapper')
 
     // Transition to loaded
     rerender(

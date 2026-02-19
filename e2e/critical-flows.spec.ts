@@ -82,8 +82,13 @@ test.describe('F10 — Dashboard Data Validation', () => {
       }
     }
 
-    // FAIL si ni le compteur ni aucun nom de squad n'est visible
-    expect(hasSquadCount || hasSquadName).toBe(true)
+    // STRICT: au moins l'un des deux doit etre vrai — branchement explicite
+    if (hasSquadCount) {
+      expect(allTextContent).toContain(String(dbSquadCount))
+    } else {
+      // Aucun compteur visible — un nom de squad DOIT etre present
+      expect(hasSquadName).toBe(true)
+    }
   })
 
   test('F10: Dashboard sessions-this-week count is displayed', async ({ authenticatedPage: page, db }) => {

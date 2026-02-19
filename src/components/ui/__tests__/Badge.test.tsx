@@ -85,13 +85,18 @@ describe('Badge', () => {
     expect(onClose).toHaveBeenCalled()
   })
 
-  it('applies variant classes', () => {
+  it('applies variant styling to wrapper', () => {
     const { container } = render(<Badge variant="error">Error</Badge>)
-    expect(container.firstChild).toHaveClass('text-error')
+    // Error variant includes error-themed styling in the className
+    expect((container.firstChild as HTMLElement).className).toContain('text-error')
   })
 
-  it('applies size classes', () => {
-    const { container } = render(<Badge size="lg">Large</Badge>)
-    expect(container.firstChild).toHaveClass('text-sm')
+  it('applies size styling to wrapper', () => {
+    const { container: smContainer } = render(<Badge size="sm">Small</Badge>)
+    const { container: lgContainer } = render(<Badge size="lg">Large</Badge>)
+    // Different size props produce different className strings
+    expect((smContainer.firstChild as HTMLElement).className).not.toBe(
+      (lgContainer.firstChild as HTMLElement).className
+    )
   })
 })

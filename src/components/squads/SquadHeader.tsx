@@ -88,11 +88,13 @@ export function SquadHeader({ squadId, squad, isOwner }: SquadHeaderProps) {
             aria-label="Copier le code d'invitation"
           >
             {copiedCode ? (
-              <Check className="w-4 h-4" aria-hidden="true" />
+              <>
+                <Check className="w-4 h-4" aria-hidden="true" />
+                Copié !
+              </>
             ) : (
-              <Copy className="w-4 h-4" aria-hidden="true" />
+              'Copier'
             )}
-            {copiedCode ? 'Copié !' : 'Copier'}
           </Button>
         </div>
       </m.div>

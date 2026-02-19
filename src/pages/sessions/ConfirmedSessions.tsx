@@ -36,30 +36,32 @@ export function ConfirmedSessions({ confirmed, sessionsLoading }: ConfirmedSessi
                 <Link to={`/session/${session.id}`}>
                   <m.div whileHover={{ y: -2, scale: 1.02 }} whileTap={{ scale: 0.99 }}>
                     <Card className="p-4 transition-interactive hover:shadow-glow-success">
-                      <div className="flex items-center gap-4">
-                        <div className="w-12 h-12 rounded-xl bg-success-10 flex items-center justify-center">
+                      <div className="flex items-center gap-3">
+                        <div className="w-12 h-12 rounded-xl bg-success-10 flex items-center justify-center shrink-0">
                           <Calendar
                             className="w-6 h-6 text-success"
                             strokeWidth={1.5}
                             aria-hidden="true"
                           />
                         </div>
-                        <div className="flex-1">
-                          <h3 className="text-md font-medium text-text-primary">
-                            {session.title || session.game || 'Session'}
-                          </h3>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center justify-between gap-2 mb-0.5">
+                            <h3 className="text-md font-medium text-text-primary truncate">
+                              {session.title || session.game || 'Session'}
+                            </h3>
+                            <Badge variant="success" className="shrink-0">Confirmé</Badge>
+                          </div>
                           <div className="flex items-center gap-3 text-base text-text-secondary">
                             <span className="flex items-center gap-1">
-                              <Clock className="w-3.5 h-3.5" aria-hidden="true" />
+                              <Clock className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
                               {formatDate(session.scheduled_at)}
                             </span>
                             <span className="flex items-center gap-1">
-                              <Users className="w-3.5 h-3.5" aria-hidden="true" />
+                              <Users className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
                               {session.rsvp_counts?.present || 0} présents
                             </span>
                           </div>
                         </div>
-                        <Badge variant="success">Confirmé</Badge>
                       </div>
                     </Card>
                   </m.div>

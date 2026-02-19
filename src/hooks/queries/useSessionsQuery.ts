@@ -213,7 +213,7 @@ export function useRsvpMutation() {
       }
       showError('Erreur de connexion. Reessaie.')
     },
-    onSuccess: (data) => {
+    onSuccess: async (data) => {
       queryClient.invalidateQueries({ queryKey: queryKeys.sessions.detail(data.sessionId) })
       if (data.squadId)
         queryClient.invalidateQueries({ queryKey: queryKeys.sessions.list(data.squadId) })
@@ -221,6 +221,43 @@ export function useRsvpMutation() {
       // Refresh challenges to show updated progress
       if (data.response === 'present') {
         queryClient.invalidateQueries({ queryKey: ['challenges'] })
+      }
+      // Auto-confirm: if RSVP is "present", check if threshold is met
+      if (data.response === 'present') {
+        try {
+          const { data: session } = await supabase
+            .from('sessions')
+            .select('status, auto_confirm_threshold')
+            .eq('id', data.sessionId)
+            .single()
+          if (session && session.status === 'proposed' && session.auto_confirm_threshold) {
+            const { count } = await supabase
+              .from('session_rsvps')
+              .select('id', { count: 'exact', head: true })
+              .eq('session_id', data.sessionId)
+              .eq('response', 'present')
+            if (count !== null && count >= session.auto_confirm_threshold) {
+              await supabase
+                .from('sessions')
+                .update({ status: 'confirmed' as const })
+                .eq('id', data.sessionId)
+              const { data: sessionInfo } = await supabase
+                .from('sessions')
+                .select('squad_id, title, scheduled_at')
+                .eq('id', data.sessionId)
+                .single()
+              if (sessionInfo?.squad_id) {
+                sendSessionConfirmedMessage(sessionInfo.squad_id, sessionInfo.title, sessionInfo.scheduled_at).catch(() => {})
+              }
+              queryClient.invalidateQueries({ queryKey: queryKeys.sessions.detail(data.sessionId) })
+              if (data.squadId)
+                queryClient.invalidateQueries({ queryKey: queryKeys.sessions.list(data.squadId) })
+              showSuccess('Session auto-confirmee ! Le seuil de joueurs est atteint.')
+            }
+          }
+        } catch {
+          // Auto-confirm is best-effort, don't block the RSVP flow
+        }
       }
     },
   })

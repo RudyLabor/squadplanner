@@ -12,6 +12,7 @@ export const useVoiceCallStore = create<VoiceCallState>((set, get) => ({
   status: 'idle',
   isMuted: false,
   isSpeakerOn: true,
+  volume: 100,
   callStartTime: null,
   callDuration: 0,
   error: null,
@@ -41,6 +42,7 @@ export const useVoiceCallStore = create<VoiceCallState>((set, get) => ({
       status: 'idle',
       isMuted: false,
       isSpeakerOn: true,
+      volume: 100,
       callStartTime: null,
       callDuration: 0,
       error: null,
@@ -266,6 +268,11 @@ export const useVoiceCallStore = create<VoiceCallState>((set, get) => ({
 
   toggleSpeaker: () => {
     set((state) => ({ isSpeakerOn: !state.isSpeakerOn }))
+  },
+
+  setVolume: (volume: number) => {
+    const clamped = Math.max(0, Math.min(100, volume))
+    set({ volume: clamped, isSpeakerOn: clamped > 0 })
   },
 }))
 

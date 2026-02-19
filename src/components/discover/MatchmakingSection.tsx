@@ -35,16 +35,35 @@ export const MatchmakingSection = memo(function MatchmakingSection({ game, regio
         <h3 className="text-lg font-semibold text-text-primary mb-2">
           Personne en recherche de squad pour le moment
         </h3>
-        <p className="text-md text-text-secondary max-w-sm mx-auto mb-6">
-          Active la recherche de squad dans ton profil pour apparaître ici et être trouvé par
+        <p className="text-md text-text-secondary max-w-sm mx-auto mb-4">
+          Active la recherche de squad dans ton profil pour appara&icirc;tre ici et &ecirc;tre trouv&eacute; par
           d'autres joueurs.
         </p>
-        <a
-          href="/profile"
-          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary text-white text-md font-medium hover:bg-primary-hover transition-colors"
-        >
-          Activer dans mon profil
-        </a>
+        <div className="flex flex-col items-center gap-3">
+          <a
+            href="/profile"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary text-white text-md font-medium hover:bg-primary-hover transition-colors"
+          >
+            Activer dans mon profil
+          </a>
+          <div className="mt-4 p-4 rounded-xl bg-surface-card border border-border-subtle max-w-sm mx-auto text-left">
+            <h4 className="text-sm font-semibold text-text-primary mb-2">Comment &ccedil;a marche ?</h4>
+            <ul className="space-y-1.5 text-sm text-text-secondary">
+              <li className="flex items-start gap-2">
+                <span className="text-primary font-bold mt-0.5">1.</span>
+                Active &laquo; Recherche de squad &raquo; dans ton profil
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="text-primary font-bold mt-0.5">2.</span>
+                Choisis tes jeux pr&eacute;f&eacute;r&eacute;s et ta r&eacute;gion
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="text-primary font-bold mt-0.5">3.</span>
+                Les autres joueurs pourront te trouver et t'inviter
+              </li>
+            </ul>
+          </div>
+        </div>
       </div>
     )
   }

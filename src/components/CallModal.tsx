@@ -15,6 +15,7 @@ export function CallModal() {
     status,
     isMuted,
     isSpeakerOn,
+    volume,
     callDuration,
     caller,
     receiver,
@@ -24,6 +25,7 @@ export function CallModal() {
     networkQualityChanged,
     toggleMute,
     toggleSpeaker,
+    setVolume,
     endCall,
     clearNetworkQualityNotification,
   } = useVoiceCallStore()
@@ -196,6 +198,8 @@ export function CallModal() {
           toggleMute={toggleMute}
           toggleSpeaker={toggleSpeaker}
           endCall={endCall}
+          volume={volume}
+          onVolumeChange={setVolume}
         />
       </m.div>
     </AnimatePresence>

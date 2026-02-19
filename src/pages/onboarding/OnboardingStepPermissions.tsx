@@ -66,9 +66,14 @@ export function OnboardingStepPermissions({
                   Activ&eacute;es
                 </div>
               ) : notifPermission === 'denied' ? (
-                <p className="text-base text-error">
-                  Bloqu&eacute;es &mdash; active-les dans les param&egrave;tres de ton navigateur
-                </p>
+                <div className="space-y-1.5">
+                  <p className="text-base text-warning font-medium">
+                    Notifications bloqu&eacute;es
+                  </p>
+                  <p className="text-sm text-text-tertiary">
+                    Pour les activer : clique sur l'ic&ocirc;ne cadenas &agrave; gauche de la barre d'adresse, puis autorise les notifications pour ce site.
+                  </p>
+                </div>
               ) : (
                 <Button variant="secondary" size="sm" onClick={onRequestNotifications}>
                   Activer les notifications
@@ -100,9 +105,14 @@ export function OnboardingStepPermissions({
                   Autoris&eacute;
                 </div>
               ) : micPermission === 'denied' ? (
-                <p className="text-base text-text-tertiary">
-                  Tu pourras l'activer plus tard dans les param&egrave;tres
-                </p>
+                <div className="space-y-1.5">
+                  <p className="text-base text-warning font-medium">
+                    Micro bloqu&eacute;
+                  </p>
+                  <p className="text-sm text-text-tertiary">
+                    Pour l'activer : clique sur l'ic&ocirc;ne cadenas &agrave; gauche de la barre d'adresse de ton navigateur, puis autorise le microphone. Tu peux aussi le faire plus tard dans les param&egrave;tres.
+                  </p>
+                </div>
               ) : (
                 <div className="flex gap-2">
                   <Button variant="secondary" size="sm" onClick={onRequestMic}>

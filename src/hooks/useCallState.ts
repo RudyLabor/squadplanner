@@ -19,6 +19,7 @@ export interface VoiceCallState {
   status: CallStatus
   isMuted: boolean
   isSpeakerOn: boolean
+  volume: number
   callStartTime: number | null
   callDuration: number
   error: string | null
@@ -44,6 +45,7 @@ export interface VoiceCallState {
   endCall: () => Promise<void>
   toggleMute: () => Promise<void>
   toggleSpeaker: () => void
+  setVolume: (volume: number) => void
   setIncomingCall: (caller: CallUser, callId: string) => void
   clearError: () => void
   resetCall: () => void

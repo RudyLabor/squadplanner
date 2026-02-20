@@ -24,12 +24,12 @@ const limitations = [
 
 const advantages = [
   {
-    title: 'RSVP qui hold',
+    title: 'RSVP qui tient',
     description: 'Notif push, rappels 1h avant. Les gens viennent vraiment. Point.',
     icon: Check
   },
   {
-    title: 'Built for gaming',
+    title: 'Pensé pour le gaming',
     description: 'Squad Planner ne pense qu\'à ça : tes sessions. Discord = commu. Nous = organisation.',
     icon: Users
   },
@@ -39,13 +39,13 @@ const advantages = [
     icon: Calendar
   },
   {
-    title: 'Analytics qui tue',
+    title: 'Analytics de ouf',
     description: 'Vois qui est fiable. Vois qui flake. Vois les tendances. Joue en data.',
     icon: Sparkles
   },
   {
     title: 'Discord intégré',
-    description: 'Les notifs arrivent dans Discord. L\'organisation se passe chez nous. Best of both worlds.',
+    description: 'Les notifs arrivent dans Discord. L\'organisation se passe chez nous. Le meilleur des deux mondes.',
     icon: Shield
   },
   {
@@ -102,7 +102,7 @@ export default function AlternativeDiscordEvents() {
             viewport={{ once: true }}
             className="text-lg md:text-xl text-text-tertiary mb-10 max-w-2xl mx-auto leading-relaxed"
           >
-            Discord c'est pour parler. Squad Planner c'est pour organiser. 100% gaming. Discord resté branché, mais l'organisation c'est ici.
+            Discord c'est pour parler. Squad Planner c'est pour organiser. 100% gaming. Discord reste branché, mais l'organisation c'est ici.
           </m.p>
 
           {/* CTAs */}
@@ -124,10 +124,10 @@ export default function AlternativeDiscordEvents() {
             </m.div>
             <m.div whileHover={{ scale: 1.02, y: -2 }} {...springTap} className="w-full sm:w-auto">
               <Link
-                to="/discover"
+                to="/auth?mode=register&redirect=onboarding"
                 className="flex items-center gap-2 h-14 px-8 rounded-xl border border-border-hover text-text-secondary hover:text-text-primary hover:border-text-tertiary transition-all w-full sm:w-auto justify-center"
               >
-                Voir comment ça marche
+                Créer mon compte
               </Link>
             </m.div>
           </m.div>

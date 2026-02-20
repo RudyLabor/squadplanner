@@ -27,7 +27,7 @@ export function meta() {
     {
       tagName: 'link',
       rel: 'canonical',
-      href: `${baseUrl}/vs-guilded-vs-squad-planner`
+      href: `${baseUrl}/vs/guilded-vs-squad-planner`
     },
     {
       property: 'og:type',
@@ -43,7 +43,7 @@ export function meta() {
     },
     {
       property: 'og:url',
-      content: `${baseUrl}/vs-guilded-vs-squad-planner`
+      content: `${baseUrl}/vs/guilded-vs-squad-planner`
     },
     {
       property: 'og:image',
@@ -71,7 +71,7 @@ export function meta() {
 export const handle = {
   breadcrumb: () => ({
     label: 'Guilded vs Squad Planner',
-    path: '/vs-guilded-vs-squad-planner'
+    path: '/vs/guilded-vs-squad-planner'
   })
 }
 

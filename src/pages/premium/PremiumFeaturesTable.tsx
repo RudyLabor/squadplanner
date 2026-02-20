@@ -32,7 +32,7 @@ export function PremiumFeaturesTable() {
   return (
     <div className="animate-fade-in-up mt-12 mb-16 max-w-3xl mx-auto px-4 sm:px-0" style={{ animationDelay: '0.3s' }}>
       <h2 className="text-xl font-semibold text-text-primary text-center mb-2">
-        Comparatif des fonctionnalit&eacute;s
+        Comparatif des fonctionnalités
       </h2>
       {/* Mobile scroll hint */}
       <p className="text-xs text-text-tertiary text-center mb-6 sm:hidden flex items-center justify-center gap-1">
@@ -114,7 +114,7 @@ export function PremiumFeaturesTable() {
         {canScrollRight && (
           <div
             className="pointer-events-none absolute inset-y-0 right-0 w-12 sm:hidden"
-            style={{ background: 'linear-gradient(to left, rgb(0,0,0) 20%, transparent)' }}
+            style={{ background: 'linear-gradient(to left, var(--color-bg-base) 20%, transparent)' }}
             aria-hidden="true"
           />
         )}

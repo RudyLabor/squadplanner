@@ -10,7 +10,7 @@ export function PremiumFAQ() {
   return (
     <div className="animate-fade-in-up mb-16" style={{ animationDelay: '0.5s' }}>
       <h2 className="text-xl font-semibold text-text-primary text-center mb-8">
-        Questions fr&eacute;quentes
+        Questions fréquentes
       </h2>
       <div className="space-y-3 max-w-2xl mx-auto">
         {FAQ.map((item, index) => (

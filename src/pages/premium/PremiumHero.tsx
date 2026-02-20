@@ -91,19 +91,19 @@ export function PremiumHero({ hasPremium, isLoading, onManageSubscription }: Pre
               Passe au niveau
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-warning to-warning/70">
                 {' '}
-                sup&eacute;rieur
+                supérieur
               </span>
             </h1>
             <p className="text-md md:text-lg text-text-secondary max-w-xl mx-auto mb-8">
-              D&eacute;bloque tout le potentiel de Squad Planner. Stats avanc&eacute;es, IA coach
-              personnalis&eacute;, audio HD et bien plus.
+              Débloque tout le potentiel de Squad Planner. Stats avancées, IA coach
+              personnalisé, audio HD et bien plus.
             </p>
             {hasPremium && (
               <div className="mb-8">
                 <div className="inline-flex items-center gap-3 px-6 py-3 rounded-xl bg-success/05 border border-success/15">
                   <Check className="w-5 h-5 text-success" />
                   <span className="text-md font-medium text-success">
-                    Tu es d&eacute;j&agrave; Premium !
+                    Tu es déjà Premium !
                   </span>
                 </div>
                 <div className="mt-5">

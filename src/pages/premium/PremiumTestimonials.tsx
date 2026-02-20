@@ -7,10 +7,10 @@ export function PremiumTestimonials() {
   return (
     <div className="animate-fade-in-up mb-16" style={{ animationDelay: '0.4s' }}>
       <h2 className="text-xl font-semibold text-text-primary text-center mb-2">
-        Ils sont pass&eacute;s Premium
+        Ils sont passés Premium
       </h2>
       <p className="text-md text-text-secondary text-center mb-8">
-        Et ils ne reviendraient pas en arri&egrave;re
+        Et ils ne reviendraient pas en arrière
       </p>
       <div className="grid md:grid-cols-3 gap-4">
         {TESTIMONIALS.map((testimonial, index) => (
@@ -40,7 +40,7 @@ export function PremiumTestimonials() {
                   </div>
                 </div>
                 <p className="text-md text-text-secondary leading-relaxed">
-                  &laquo; {testimonial.text} &raquo;
+                  « {testimonial.text} »
                 </p>
                 <div className="flex gap-0.5 mt-3">
                   {[...Array(5)].map((_, i) => (

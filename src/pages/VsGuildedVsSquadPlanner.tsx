@@ -11,7 +11,8 @@ const features = [
   { category: 'Organisation', name: 'Rappels automatiques', guilded: false, squadPlanner: true },
   { category: 'Organisation', name: 'RSVP avec fiabilité', guilded: true, squadPlanner: true },
   { category: 'Communauté', name: 'Groupes/Squads', guilded: true, squadPlanner: true },
-  { category: 'Communauté', name: 'Messages & Chat', guilded: true, squadPlanner: false },
+  { category: 'Communauté', name: 'Messages & Chat', guilded: true, squadPlanner: true },
+  { category: 'Communauté', name: 'Party Vocale', guilded: false, squadPlanner: true },
   { category: 'Communauté', name: 'Profils Gaming', guilded: false, squadPlanner: true },
   { category: 'Fiabilité', name: 'Notifications Push', guilded: false, squadPlanner: true },
   { category: 'Fiabilité', name: 'Historique de présence', guilded: false, squadPlanner: true },
@@ -124,7 +125,7 @@ export default function VsGuildedVsSquadPlanner() {
             </m.div>
             <m.div whileHover={{ scale: 1.02, y: -2 }} {...springTap} className="w-full sm:w-auto">
               <Link
-                to="/alternative-guilded"
+                to="/alternative/guilded"
                 className="flex items-center gap-2 h-14 px-8 rounded-xl border border-border-hover text-text-secondary hover:text-text-primary hover:border-text-tertiary transition-all w-full sm:w-auto justify-center"
               >
                 Alternative à Guilded
@@ -141,10 +142,10 @@ export default function VsGuildedVsSquadPlanner() {
         <div className="max-w-5xl mx-auto">
           <m.div variants={scrollReveal} initial="hidden" whileInView="visible" viewport={{ once: true }} className="text-center mb-12">
             <h2 className="text-xl md:text-2xl font-bold text-text-primary mb-4">
-              Guilded vs Squad Planner : full breakdown
+              Guilded vs Squad Planner : comparaison complète
             </h2>
             <p className="text-text-tertiary text-lg">
-              Tous les détails, zéro bullshit
+              Tous les détails, sans filtre
             </p>
           </m.div>
 
@@ -327,7 +328,7 @@ export default function VsGuildedVsSquadPlanner() {
                   <Check className="w-5 h-5 text-emerald-400 flex-shrink-0 mt-0.5" />
                   <div>
                     <strong className="text-text-primary">T'es venu de Guilded ?</strong>
-                    <p className="text-text-secondary mt-1">Squad Planner c'est ton move. Migration simple, features meilleure.</p>
+                    <p className="text-text-secondary mt-1">Squad Planner c'est ton move. Migration simple, fonctionnalités meilleures.</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">

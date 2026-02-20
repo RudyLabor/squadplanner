@@ -194,7 +194,7 @@ export function PremiumPricing({
             Essaie Premium gratuitement pendant 7 jours
           </p>
           <p className="text-base text-text-tertiary mb-5">
-            Pas de carte bancaire requise. Annule &agrave; tout moment.
+            Pas de carte bancaire requise. Annule à tout moment.
           </p>
           <Button
             onClick={onStartTrial}
@@ -294,14 +294,14 @@ export function PremiumPricing({
 
               <div className="flex items-baseline gap-1 mb-1">
                 <span className="text-2xl font-bold text-text-primary">
-                  {price.toFixed(2)}&euro;
+                  {price.toFixed(2)}€
                 </span>
                 <span className="text-text-quaternary text-sm">/mois</span>
               </div>
 
               {isYearly && (
                 <p className="text-xs text-success mb-3">
-                  {yearlyTotal.toFixed(2)}&euro;/an &middot; &Eacute;conomise {savings}%
+                  {yearlyTotal.toFixed(2)}€/an · Économise {savings}%
                 </p>
               )}
 
@@ -376,13 +376,13 @@ export function PremiumPricing({
         <Card className="p-8 bg-gradient-to-br from-primary/[0.075] to-warning/5 border-primary">
           <Crown className="w-12 h-12 text-warning mx-auto mb-4" />
           <h3 className="text-xl font-semibold text-text-primary mb-2">
-            Pr&ecirc;t &agrave; passer au niveau sup&eacute;rieur ?
+            Prêt à passer au niveau supérieur ?
           </h3>
           <p className="text-md text-text-secondary mb-2 max-w-md mx-auto">
-            Rejoins les squads qui ont choisi de jouer s&eacute;rieusement ensemble.
+            Rejoins les squads qui ont choisi de jouer sérieusement ensemble.
           </p>
           <p className="text-base text-success mb-6 font-medium">
-            Commence par 7 jours d'essai gratuit &mdash; sans carte bancaire
+            Commence par 7 jours d'essai gratuit — sans carte bancaire
           </p>
           <Button
             onClick={onStartTrial}

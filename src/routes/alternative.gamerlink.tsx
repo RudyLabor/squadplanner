@@ -27,7 +27,7 @@ export function meta() {
     {
       tagName: 'link',
       rel: 'canonical',
-      href: `${baseUrl}/alternative-gamerlink`
+      href: `${baseUrl}/alternative/gamerlink`
     },
     {
       property: 'og:type',
@@ -43,7 +43,7 @@ export function meta() {
     },
     {
       property: 'og:url',
-      content: `${baseUrl}/alternative-gamerlink`
+      content: `${baseUrl}/alternative/gamerlink`
     },
     {
       property: 'og:image',
@@ -71,7 +71,7 @@ export function meta() {
 export const handle = {
   breadcrumb: () => ({
     label: 'Alternative GamerLink',
-    path: '/alternative-gamerlink'
+    path: '/alternative/gamerlink'
   })
 }
 

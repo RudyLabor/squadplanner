@@ -484,7 +484,7 @@ ${formData.message}
               },
               {
                 q: 'C\'est obligatoire d\'être un gros streamer ?',
-                a: 'Non ! On recherche aussi des créateurs de contenu plus petit ou des capitaines de communauté motivés. Ce qui compte, c\'est ta passion pour Gaming et ton engagement envers ta communauté.',
+                a: 'Non ! On recherche aussi des créateurs de contenu plus petit ou des capitaines de communauté motivés. Ce qui compte, c\'est ta passion pour le gaming et ton engagement envers ta communauté.',
               },
               {
                 q: 'Quels outils marketing allez-vous me donner ?',

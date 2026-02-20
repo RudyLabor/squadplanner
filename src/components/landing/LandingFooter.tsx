@@ -1,26 +1,20 @@
 
 import { useState, useCallback } from 'react'
 import { Link } from 'react-router'
-import { HelpCircle, FileText, Shield, Mail, Gamepad2, Globe, Trophy } from '../icons'
+import { HelpCircle, FileText, Shield, Mail, Gamepad2, ArrowRight, Crown, Users } from '../icons'
 import { SquadPlannerLogo } from '../SquadPlannerLogo'
 
-const POPULAR_GAMES = [
-  { name: 'Valorant', slug: 'valorant' },
-  { name: 'League of Legends', slug: 'league-of-legends' },
-  { name: 'Fortnite', slug: 'fortnite' },
-  { name: 'CS2', slug: 'cs2' },
-  { name: 'Apex Legends', slug: 'apex-legends' },
-  { name: 'Rocket League', slug: 'rocket-league' },
-  { name: 'Call of Duty', slug: 'call-of-duty' },
-  { name: 'Minecraft', slug: 'minecraft' },
-  { name: 'Overwatch 2', slug: 'overwatch-2' },
-  { name: 'GTA Online', slug: 'gta-online' },
-  { name: 'Destiny 2', slug: 'destiny-2' },
-  { name: 'EA Sports FC', slug: 'fifa' },
+const FOOTER_GAMES = [
+  { name: 'Valorant', slug: 'valorant', icon: '🎯' },
+  { name: 'League of Legends', slug: 'league-of-legends', icon: '⚔️' },
+  { name: 'Fortnite', slug: 'fortnite', icon: '🏗️' },
+  { name: 'CS2', slug: 'cs2', icon: '💣' },
+  { name: 'Apex Legends', slug: 'apex-legends', icon: '🔥' },
+  { name: 'Call of Duty', slug: 'call-of-duty', icon: '🎖️' },
 ]
 
 const linkClass =
-  'inline-block py-1.5 text-md text-text-tertiary hover:text-text-primary transition-colors leading-relaxed'
+  'inline-block py-1.5 text-md text-text-tertiary hover:text-primary transition-colors duration-200 leading-relaxed'
 
 export function LandingFooter() {
   const [newsletterEmail, setNewsletterEmail] = useState('')
@@ -55,18 +49,84 @@ export function LandingFooter() {
   )
 
   return (
-    <footer className="px-4 md:px-6 py-16 border-t border-border-subtle">
-      <div className="max-w-6xl mx-auto">
+    <footer className="relative">
+      {/* ── Gradient separator ── */}
+      <div className="h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent" />
 
-        {/* ── Top grid: 6 columns on desktop ── */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-x-8 gap-y-10 mb-14">
+      {/* ── Zone 1 : Newsletter CTA premium ── */}
+      <div className="bg-gradient-to-b from-primary/[0.04] to-transparent">
+        <div className="max-w-3xl mx-auto px-4 md:px-6 py-12 md:py-16 text-center">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full badge-shimmer border border-primary/20 mb-5">
+            <Users className="w-3.5 h-3.5 text-primary" />
+            <span className="text-sm font-medium text-primary">
+              Rejoins +2 000 gamers
+            </span>
+          </div>
+          <h3 className="text-lg md:text-xl font-bold text-text-primary mb-2">
+            Reste dans la boucle
+          </h3>
+          <p className="text-md text-text-tertiary mb-6 max-w-md mx-auto">
+            Tips, updates, nouveaux jeux supportés. Pas de spam.
+          </p>
+          <form onSubmit={handleNewsletterSubmit} noValidate className="max-w-md mx-auto">
+            <div className="flex gap-2">
+              <div className="flex-1 relative group">
+                <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-text-quaternary group-focus-within:text-primary transition-colors" />
+                <input
+                  type="email"
+                  name="email"
+                  required
+                  placeholder="ton@email.com"
+                  className="w-full pl-10 pr-4 py-3 bg-surface-card/50 backdrop-blur-sm border border-border-subtle rounded-xl text-md text-text-primary placeholder:text-text-quaternary focus:border-primary focus:ring-1 focus:ring-primary/20 focus:outline-none transition-all"
+                  aria-label="Adresse email pour la newsletter"
+                  value={newsletterEmail}
+                  onChange={(e) => {
+                    setNewsletterEmail(e.target.value)
+                    setNewsletterError('')
+                    setNewsletterSuccess(false)
+                  }}
+                />
+              </div>
+              <button
+                type="submit"
+                disabled={newsletterLoading}
+                className="px-5 min-h-[48px] bg-primary text-white text-md font-semibold rounded-xl hover:bg-primary-hover transition-colors shrink-0 disabled:opacity-60 flex items-center gap-2"
+              >
+                {newsletterLoading ? (
+                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                ) : (
+                  <>
+                    S'abonner
+                    <ArrowRight className="w-4 h-4" />
+                  </>
+                )}
+              </button>
+            </div>
+            {newsletterError && (
+              <p role="alert" className="text-error text-sm mt-2">
+                {newsletterError}
+              </p>
+            )}
+            {newsletterSuccess && (
+              <p role="status" className="text-success text-sm mt-2">
+                Merci ! Tu recevras nos updates.
+              </p>
+            )}
+          </form>
+        </div>
+      </div>
+
+      {/* ── Zone 2 : Grille de liens (4 colonnes) ── */}
+      <div className="max-w-6xl mx-auto px-4 md:px-6 py-12 md:py-14">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-x-12 gap-y-10">
 
           {/* Produit */}
           <div>
-            <h3 className="text-base font-semibold text-text-primary mb-3 uppercase tracking-wider">
+            <h3 className="text-sm font-semibold text-text-primary mb-4 uppercase tracking-wider flex items-center gap-1.5">
+              <Crown className="w-3.5 h-3.5 text-primary" aria-hidden="true" />
               Produit
             </h3>
-            <ul className="space-y-0">
+            <ul className="space-y-0.5">
               <li>
                 <Link to="/auth?mode=register&redirect=onboarding" className={linkClass}>
                   Créer ma squad
@@ -78,23 +138,29 @@ export function LandingFooter() {
                 </Link>
               </li>
               <li>
-                <a href="#features" className={linkClass}>
+                <Link to="/#features" className={linkClass}>
                   Fonctionnalités
-                </a>
+                </Link>
+              </li>
+              <li>
+                <Link to="/ambassador" className={linkClass}>
+                  Programme Ambassadeur
+                </Link>
               </li>
             </ul>
           </div>
 
-          {/* Jeux populaires — colonne 1 */}
+          {/* Jeux populaires */}
           <div>
-            <h3 className="text-base font-semibold text-text-primary mb-3 uppercase tracking-wider flex items-center gap-1.5">
-              <Gamepad2 className="w-3.5 h-3.5" aria-hidden="true" />
-              Jeux
+            <h3 className="text-sm font-semibold text-text-primary mb-4 uppercase tracking-wider flex items-center gap-1.5">
+              <Gamepad2 className="w-3.5 h-3.5 text-primary" aria-hidden="true" />
+              Jeux populaires
             </h3>
-            <ul className="space-y-0">
-              {POPULAR_GAMES.slice(0, 6).map((game) => (
+            <ul className="space-y-0.5">
+              {FOOTER_GAMES.map((game) => (
                 <li key={game.slug}>
                   <Link to={`/games/${game.slug}`} className={linkClass}>
+                    <span className="mr-1.5" aria-hidden="true">{game.icon}</span>
                     {game.name}
                   </Link>
                 </li>
@@ -102,30 +168,23 @@ export function LandingFooter() {
             </ul>
           </div>
 
-          {/* Jeux populaires — colonne 2 */}
+          {/* Ressources */}
           <div>
-            <h3 className="text-base font-semibold text-text-primary mb-3 uppercase tracking-wider flex items-center gap-1.5">
-              <Trophy className="w-3.5 h-3.5" aria-hidden="true" />
-              LFG
+            <h3 className="text-sm font-semibold text-text-primary mb-4 uppercase tracking-wider">
+              Ressources
             </h3>
-            <ul className="space-y-0">
-              {POPULAR_GAMES.slice(6).map((game) => (
-                <li key={game.slug}>
-                  <Link to={`/lfg/${game.slug}`} className={linkClass}>
-                    {game.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Alternatives & Comparatifs */}
-          <div>
-            <h3 className="text-base font-semibold text-text-primary mb-3 uppercase tracking-wider flex items-center gap-1.5">
-              <Globe className="w-3.5 h-3.5" aria-hidden="true" />
-              Alternatives
-            </h3>
-            <ul className="space-y-0">
+            <ul className="space-y-0.5">
+              <li>
+                <Link to="/help" className={`${linkClass} inline-flex items-center gap-1.5`}>
+                  <HelpCircle className="w-3.5 h-3.5" aria-hidden="true" />
+                  FAQ
+                </Link>
+              </li>
+              <li>
+                <Link to="/blog" className={linkClass}>
+                  Blog
+                </Link>
+              </li>
               <li>
                 <Link to="/alternative/guilded" className={linkClass}>
                   Alternative à Guilded
@@ -142,44 +201,6 @@ export function LandingFooter() {
                 </Link>
               </li>
               <li>
-                <Link to="/vs/guilded-vs-squad-planner" className={linkClass}>
-                  Guilded vs Squad Planner
-                </Link>
-              </li>
-              <li>
-                <Link to="/blog" className={linkClass}>
-                  Blog
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          {/* Ressources */}
-          <div>
-            <h3 className="text-base font-semibold text-text-primary mb-3 uppercase tracking-wider">
-              Ressources
-            </h3>
-            <ul className="space-y-0">
-              <li>
-                <Link
-                  to="/help"
-                  className="inline-flex items-center gap-1.5 py-1.5 text-md text-text-tertiary hover:text-text-primary transition-colors"
-                >
-                  <HelpCircle className="w-3.5 h-3.5" aria-hidden="true" />
-                  FAQ
-                </Link>
-              </li>
-              <li>
-                <Link to="/blog" className={linkClass}>
-                  Blog
-                </Link>
-              </li>
-              <li>
-                <Link to="/ambassador" className={linkClass}>
-                  Programme Ambassadeur
-                </Link>
-              </li>
-              <li>
                 <a href="mailto:contact@squadplanner.fr" className={linkClass}>
                   Contact
                 </a>
@@ -187,26 +208,20 @@ export function LandingFooter() {
             </ul>
           </div>
 
-          {/* Légal & Communauté */}
+          {/* Légal */}
           <div>
-            <h3 className="text-base font-semibold text-text-primary mb-3 uppercase tracking-wider">
+            <h3 className="text-sm font-semibold text-text-primary mb-4 uppercase tracking-wider">
               Légal
             </h3>
-            <ul className="space-y-0">
+            <ul className="space-y-0.5">
               <li>
-                <Link
-                  to="/legal"
-                  className="inline-flex items-center gap-1.5 py-1.5 text-md text-text-tertiary hover:text-text-primary transition-colors"
-                >
+                <Link to="/legal" className={`${linkClass} inline-flex items-center gap-1.5`}>
                   <FileText className="w-3.5 h-3.5" aria-hidden="true" />
                   CGU
                 </Link>
               </li>
               <li>
-                <Link
-                  to="/legal?tab=privacy"
-                  className="inline-flex items-center gap-1.5 py-1.5 text-md text-text-tertiary hover:text-text-primary transition-colors"
-                >
+                <Link to="/legal?tab=privacy" className={`${linkClass} inline-flex items-center gap-1.5`}>
                   <Shield className="w-3.5 h-3.5" aria-hidden="true" />
                   Confidentialité
                 </Link>
@@ -216,7 +231,7 @@ export function LandingFooter() {
                   href="https://x.com/squadplannerfr"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 py-1.5 text-md text-text-tertiary hover:text-text-primary transition-colors"
+                  className={`${linkClass} inline-flex items-center gap-1.5`}
                 >
                   <svg
                     className="w-3.5 h-3.5"
@@ -229,18 +244,20 @@ export function LandingFooter() {
                   Twitter / X
                 </a>
               </li>
-              <li>
-                <span className="inline-flex items-center gap-1.5 py-1.5 text-md text-text-tertiary">
-                  <span className="w-2 h-2 rounded-full bg-success animate-pulse" />
-                  Accès gratuit
-                </span>
-              </li>
             </ul>
           </div>
         </div>
+      </div>
 
-        {/* ── Trust badges ── */}
-        <div className="flex flex-wrap justify-center gap-4 mb-8">
+      {/* ── Gradient separator ── */}
+      <div className="max-w-6xl mx-auto px-4 md:px-6">
+        <div className="h-px bg-gradient-to-r from-transparent via-border-subtle to-transparent" />
+      </div>
+
+      {/* ── Zone 3 : Bottom bar premium ── */}
+      <div className="max-w-6xl mx-auto px-4 md:px-6 py-8">
+        {/* Trust badges glassmorphiques */}
+        <div className="flex flex-wrap justify-center gap-3 mb-6">
           {[
             { label: 'Hébergé en France', icon: '🇫🇷' },
             { label: 'RGPD compliant', icon: '🛡️' },
@@ -248,76 +265,33 @@ export function LandingFooter() {
           ].map((badge) => (
             <span
               key={badge.label}
-              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-surface-card border border-border-subtle text-sm text-text-tertiary"
+              className="inline-flex items-center gap-2 px-3.5 py-2 rounded-full bg-surface-card/50 backdrop-blur-sm border border-border-subtle text-sm text-text-secondary"
             >
               {badge.icon} {badge.label}
             </span>
           ))}
         </div>
 
-        {/* ── Activity stats ── */}
-        <div className="flex flex-wrap justify-center gap-6 mb-8 text-sm text-text-quaternary">
-          <span>+2 000 gamers inscrits</span>
+        {/* Stats */}
+        <div className="flex flex-wrap justify-center gap-6 mb-8 text-sm text-text-tertiary">
+          <span className="flex items-center gap-1.5">
+            <span className="w-1.5 h-1.5 rounded-full bg-success animate-pulse" />
+            +2 000 gamers inscrits
+          </span>
           <span>+5 000 sessions planifiées</span>
           <span>4.9/5 satisfaction</span>
         </div>
 
-        {/* ── Newsletter ── */}
-        <div className="max-w-md mx-auto mb-10">
-          <form onSubmit={handleNewsletterSubmit} noValidate>
-            <div className="flex gap-2">
-              <div className="flex-1 relative">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-quaternary" />
-                <input
-                  type="email"
-                  name="email"
-                  required
-                  placeholder="Reçois les updates Squad Planner"
-                  className="w-full pl-10 pr-4 py-2.5 bg-bg-elevated border border-border-subtle rounded-lg text-md text-text-primary placeholder:text-text-quaternary focus:border-primary focus:outline-none transition-colors"
-                  aria-label="Adresse email pour la newsletter"
-                  value={newsletterEmail}
-                  onChange={(e) => {
-                    setNewsletterEmail(e.target.value)
-                    setNewsletterError('')
-                    setNewsletterSuccess(false)
-                  }}
-                />
-              </div>
-              <button
-                type="submit"
-                disabled={newsletterLoading}
-                className="px-5 min-h-[44px] bg-primary text-white text-md font-medium rounded-lg hover:bg-primary-hover transition-colors shrink-0 disabled:opacity-60"
-              >
-                {newsletterLoading ? (
-                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                ) : (
-                  "S'abonner"
-                )}
-              </button>
-            </div>
-            {newsletterError && (
-              <p role="alert" className="text-error text-sm mt-1.5">
-                {newsletterError}
-              </p>
-            )}
-            {newsletterSuccess && (
-              <p role="status" className="text-success text-sm mt-1.5">
-                Merci ! Tu recevras nos updates.
-              </p>
-            )}
-          </form>
-        </div>
-
-        {/* ── Bottom bar ── */}
-        <div className="border-t border-border-subtle pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-2">
-            <SquadPlannerLogo size={20} />
+        {/* Logo + copyright */}
+        <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+          <div className="flex items-center gap-2.5">
+            <SquadPlannerLogo size={22} />
             <div>
               <span className="text-md font-semibold text-text-primary">Squad Planner</span>
-              <span className="text-sm text-text-quaternary ml-2">Le Calendly du gaming</span>
+              <span className="text-sm text-text-tertiary ml-2">Le Calendly du gaming</span>
             </div>
           </div>
-          <p className="text-base text-text-quaternary">
+          <p className="text-sm text-text-quaternary">
             © 2026 Squad Planner. Jouez ensemble, pour de vrai.
           </p>
         </div>

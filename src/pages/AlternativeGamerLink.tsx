@@ -6,22 +6,24 @@ import { scrollReveal, scrollRevealLight, springTap } from '../utils/animations'
 
 const comparisonFeatures = [
   { name: 'Trouve des joueurs', squadPlanner: true, gamerLink: true, description: 'Des partenaires de ton niveau' },
-  { name: 'Calendrier des sessions', squadPlanner: true, gamerLink: false, description: 'Crée une fois, on répète' },
-  { name: 'RSVP qui tient', squadPlanner: true, gamerLink: false, description: 'Les gens viennent vraiment' },
-  { name: 'Notifs push immédiates', squadPlanner: true, gamerLink: false, description: 'Zéro l\'oublier' },
-  { name: 'Analytics gaming', squadPlanner: true, gamerLink: false, description: 'Vois qui flake, qui kill' },
-  { name: 'C\'est gratuit', squadPlanner: true, gamerLink: false, description: 'Pas de piège' }
+  { name: 'Calendrier des sessions', squadPlanner: true, gamerLink: false, description: 'Planifie et répète automatiquement' },
+  { name: 'RSVP fiable', squadPlanner: true, gamerLink: false, description: 'Score de fiabilité intégré' },
+  { name: 'Notifs push immédiates', squadPlanner: true, gamerLink: false, description: 'Rappels automatiques' },
+  { name: 'Sessions récurrentes', squadPlanner: true, gamerLink: false, description: 'Crée une fois, ça se répète' },
+  { name: 'Score de fiabilité', squadPlanner: true, gamerLink: false, description: 'Vois qui est régulier' },
+  { name: 'Analytics gaming', squadPlanner: true, gamerLink: false, description: 'Stats de présence et tendances' },
+  { name: 'Gratuit pour l\'essentiel', squadPlanner: true, gamerLink: true, description: 'Les bases sans payer' }
 ]
 
 const advantages = [
   {
-    title: 'Built for gamers',
-    description: 'Squad Planner, c\'est 100% pour toi. Chaque truc qu\'on a, c\'est pour régler un vrai problème de session.',
+    title: 'Conçu pour les gamers',
+    description: 'Squad Planner, c\'est 100% pour toi. Chaque fonctionnalité est là pour régler un vrai problème de session.',
     icon: Sparkles
   },
   {
-    title: 'RSVP qui flake pas',
-    description: 'Notifs push, rappels 1h avant. Les mecs qui disent oui viennent vraiment. Plus de no-shows.',
+    title: 'RSVP qui tient',
+    description: 'Notifs push, rappels 1h avant. Ceux qui disent oui viennent vraiment. Plus de no-shows.',
     icon: Check
   },
   {
@@ -100,10 +102,10 @@ export default function AlternativeGamerLink() {
             </m.div>
             <m.div whileHover={{ scale: 1.02, y: -2 }} {...springTap} className="w-full sm:w-auto">
               <Link
-                to="/discover"
+                to="/auth?mode=register&redirect=onboarding"
                 className="flex items-center gap-2 h-14 px-8 rounded-xl border border-border-hover text-text-secondary hover:text-text-primary hover:border-text-tertiary transition-all w-full sm:w-auto justify-center"
               >
-                Explorer les squads
+                Créer mon compte
               </Link>
             </m.div>
           </m.div>
@@ -120,7 +122,7 @@ export default function AlternativeGamerLink() {
               Squad Planner vs GamerLink : le vrai match
             </h2>
             <p className="text-text-tertiary text-lg">
-              Tous les détails, zéro bullshit
+              Tous les détails, sans filtre
             </p>
           </m.div>
 
@@ -232,10 +234,10 @@ export default function AlternativeGamerLink() {
                 ))}
               </div>
               <h3 className="text-xl md:text-2xl font-bold text-text-primary mb-3">
-                Déjà 10 000+ gamers avant toi
+                Déjà +2 000 gamers avant toi
               </h3>
               <p className="text-text-tertiary mb-8 max-w-2xl">
-                Chaque jour, des squads lancent leurs sessions ici. Zero frais. Zéro prise de tête. Juste du vrai gaming.
+                Chaque jour, des squads lancent leurs sessions ici. Zéro frais. Zéro prise de tête. Juste du vrai gaming.
               </p>
               <m.div whileHover={{ scale: 1.02, y: -2 }} {...springTap}>
                 <Link

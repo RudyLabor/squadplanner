@@ -27,7 +27,7 @@ export function meta() {
     {
       tagName: 'link',
       rel: 'canonical',
-      href: `${baseUrl}/alternative-discord-events`
+      href: `${baseUrl}/alternative/discord-events`
     },
     {
       property: 'og:type',
@@ -43,7 +43,7 @@ export function meta() {
     },
     {
       property: 'og:url',
-      content: `${baseUrl}/alternative-discord-events`
+      content: `${baseUrl}/alternative/discord-events`
     },
     {
       property: 'og:image',
@@ -71,7 +71,7 @@ export function meta() {
 export const handle = {
   breadcrumb: () => ({
     label: 'Alternative Événements Discord',
-    path: '/alternative-discord-events'
+    path: '/alternative/discord-events'
   })
 }
 

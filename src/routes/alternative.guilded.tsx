@@ -27,7 +27,7 @@ export function meta() {
     {
       tagName: 'link',
       rel: 'canonical',
-      href: `${baseUrl}/alternative-guilded`
+      href: `${baseUrl}/alternative/guilded`
     },
     {
       property: 'og:type',
@@ -43,7 +43,7 @@ export function meta() {
     },
     {
       property: 'og:url',
-      content: `${baseUrl}/alternative-guilded`
+      content: `${baseUrl}/alternative/guilded`
     },
     {
       property: 'og:image',
@@ -71,7 +71,7 @@ export function meta() {
 export const handle = {
   breadcrumb: () => ({
     label: 'Alternative Guilded',
-    path: '/alternative-guilded'
+    path: '/alternative/guilded'
   })
 }
 

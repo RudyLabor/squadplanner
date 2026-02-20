@@ -30,7 +30,7 @@ function applyTheme(theme: 'dark' | 'light') {
 
 // Read persisted mode synchronously to avoid theme flash during hydration
 function getPersistedMode(): ThemeMode {
-  if (typeof window === 'undefined') return 'system'
+  if (typeof window === 'undefined') return 'dark'
   try {
     const raw = localStorage.getItem('squadplanner-theme')
     if (raw) {
@@ -38,7 +38,7 @@ function getPersistedMode(): ThemeMode {
       if (parsed?.state?.mode) return parsed.state.mode as ThemeMode
     }
   } catch {}
-  return 'system'
+  return 'dark'
 }
 
 const initialMode = getPersistedMode()

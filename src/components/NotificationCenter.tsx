@@ -54,11 +54,39 @@ export const useNotificationStore = create<NotificationStore>((set, get) => ({
       set({ isLoading: true })
       const readIds = getReadIds()
 
-      // Fetch recent session RSVPs as notifications
-      // Step 1: fetch rsvps (no joins — PostgREST !inner returns 400)
+      // Step 1: fetch the user's squad IDs so we only show relevant notifications
+      const { data: memberships } = await supabase
+        .from('squad_members')
+        .select('squad_id')
+        .eq('user_id', userId)
+
+      const userSquadIds = (memberships || []).map((m) => m.squad_id)
+      if (userSquadIds.length === 0) {
+        set({ notifications: [], unreadCount: 0, isLoading: false })
+        return
+      }
+
+      // Step 2: fetch sessions from user's squads only
+      const { data: sessions } = await supabase
+        .from('sessions')
+        .select('id, title, scheduled_at, squad_id')
+        .in('squad_id', userSquadIds)
+        .order('scheduled_at', { ascending: false })
+        .limit(50)
+
+      if (!sessions || sessions.length === 0) {
+        set({ notifications: [], unreadCount: 0, isLoading: false })
+        return
+      }
+
+      const sessionIds = sessions.map((s) => s.id)
+      const sessionMap = new Map<string, any>(sessions.map((s) => [s.id, s]))
+
+      // Step 3: fetch RSVPs on those sessions (excluding the user's own)
       const { data: rsvps } = await supabase
         .from('session_rsvps')
         .select('id, session_id, response, responded_at')
+        .in('session_id', sessionIds)
         .neq('user_id', userId)
         .order('responded_at', { ascending: false })
         .limit(20)
@@ -68,20 +96,8 @@ export const useNotificationStore = create<NotificationStore>((set, get) => ({
         return
       }
 
-      // Step 2: batch-fetch session details
-      const sessionIds = [...new Set(rsvps.map((r) => r.session_id))]
-      const { data: sessions } = await supabase
-        .from('sessions')
-        .select('id, title, scheduled_at, squad_id')
-        .in('id', sessionIds)
-      const sessionMap = new Map<string, any>(
-        (sessions || []).map((s: any) => [s.id, s])
-      )
-
-      // Step 3: batch-fetch squad names
-      const squadIds = [
-        ...new Set((sessions || []).map((s: any) => s.squad_id).filter(Boolean)),
-      ]
+      // Step 4: batch-fetch squad names
+      const squadIds = [...new Set(sessions.map((s) => s.squad_id).filter(Boolean))]
       const squadMap = new Map<string, string>()
       if (squadIds.length > 0) {
         const { data: squads } = await supabase.from('squads').select('id, name').in('id', squadIds)
@@ -141,7 +157,7 @@ export function NotificationBell() {
   const { activeOverlay, toggle, close } = useOverlayStore()
   const isOpen = activeOverlay === 'notifications'
 
-  // Calculate fixed position from button ref when panel opens
+  // Calculate fixed position from button ref when panel opens + auto-mark as read
   useEffect(() => {
     if (isOpen && buttonRef.current) {
       const rect = buttonRef.current.getBoundingClientRect()
@@ -149,8 +165,12 @@ export function NotificationBell() {
         top: rect.bottom + 8,
         right: Math.max(8, window.innerWidth - rect.right),
       })
+      // Auto-mark all as read when opening the panel (like Instagram/GitHub)
+      if (unreadCount > 0) {
+        markAllAsRead()
+      }
     }
-  }, [isOpen])
+  }, [isOpen, unreadCount, markAllAsRead])
 
   // Fetch once on mount — use user.id (stable string) instead of user object
   // to prevent re-fetching on every navigation
@@ -254,21 +274,23 @@ export function NotificationBell() {
 
             {/* List */}
             <div className="overflow-y-auto max-h-72">
-              {unreadCount === 0 ? (
+              {notifications.length === 0 ? (
                 <div className="px-4 py-8 text-center">
                   <Bell className="w-8 h-8 text-text-tertiary mx-auto mb-2" />
                   <p className="text-base text-text-tertiary">Aucune notification</p>
                 </div>
               ) : (
-                notifications.filter((n) => !n.read).slice(0, 15).map((notif) => (
-                  <button
+                notifications.slice(0, 20).map((notif) => (
+                  <div
                     key={notif.id}
-                    type="button"
-                    onClick={() => markAsRead(notif.id)}
-                    className="w-full text-left px-4 py-3 border-b border-border-subtle hover:bg-surface-card transition-colors bg-primary-5"
+                    className={`w-full text-left px-4 py-3 border-b border-border-subtle transition-colors ${
+                      notif.read ? 'opacity-60' : 'bg-primary/5'
+                    }`}
                   >
                     <div className="flex items-start gap-3">
-                      <span className="w-2 h-2 rounded-full bg-primary mt-1.5 flex-shrink-0" />
+                      {!notif.read && (
+                        <span className="w-2 h-2 rounded-full bg-primary mt-1.5 flex-shrink-0" />
+                      )}
                       <div className="flex-1 min-w-0">
                         <p className="text-base font-medium text-text-primary truncate">
                           {notif.title}
@@ -279,7 +301,7 @@ export function NotificationBell() {
                         {formatTime(notif.created_at)}
                       </span>
                     </div>
-                  </button>
+                  </div>
                 ))
               )}
             </div>

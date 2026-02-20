@@ -3,6 +3,7 @@ import type { HeadersArgs } from 'react-router'
 import { useParams, Link } from 'react-router'
 import { m } from 'framer-motion'
 import { getGameBySlug } from '../data/games'
+import { PublicPageShell } from '../components/PublicPageShell'
 import {
   Calendar,
   Users,
@@ -12,6 +13,24 @@ import {
   ArrowRight,
   Sparkles,
 } from '../components/icons'
+
+// Color mapping for dynamic styling
+const GAME_COLORS: Record<string, string> = {
+  red: '#ef4444',
+  blue: '#3b82f6',
+  purple: '#a855f7',
+  cyan: '#06b6d4',
+  amber: '#f59e0b',
+  emerald: '#10b981',
+  green: '#22c55e',
+  orange: '#f97316',
+  indigo: '#6366f1',
+  lime: '#84cc16',
+}
+
+function getGameColor(color: string): string {
+  return GAME_COLORS[color] || '#6366f1'
+}
 
 export function headers(_args: HeadersArgs) {
   return {
@@ -97,25 +116,28 @@ export function meta({ params }: { params: { game: string } }) {
 
 function GameNotFound() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-bg-base to-surface-card flex flex-col items-center justify-center px-4">
-      <m.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="text-center"
-      >
-        <h1 className="text-4xl font-bold text-text-primary mb-4">Jeu non trouvé</h1>
-        <p className="text-text-secondary mb-8">
-          Ce jeu n\'existe pas ou n\'est pas encore disponible sur Squad Planner.
-        </p>
-        <Link
-          to="/"
-          className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-white rounded-xl hover:bg-primary/90 transition-colors"
+    <PublicPageShell>
+      <div className="flex flex-col items-center justify-center px-4 py-32">
+        <m.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="text-center"
         >
-          Retour à l\'accueil
-          <ArrowRight className="w-5 h-5" />
-        </Link>
-      </m.div>
-    </div>
+          <h1 className="text-4xl font-bold text-text-primary mb-4">Jeu non trouvé</h1>
+          <p className="text-text-secondary mb-8">
+            Ce jeu n\'existe pas ou n\'est pas encore disponible sur Squad Planner.
+          </p>
+          <Link
+            to="/"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-white rounded-xl hover:bg-primary/90 transition-colors"
+          >
+            Retour à l\'accueil
+            <ArrowRight className="w-5 h-5" />
+          </Link>
+        </m.div>
+      </div>
+    </PublicPageShell>
   )
 }
 
@@ -186,20 +208,25 @@ export default function Component() {
   ]
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-bg-base via-surface-card to-bg-base">
+    <PublicPageShell>
       {/* Hero Section */}
       <m.section
         initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
         transition={{ duration: 0.6 }}
-        className={`relative py-20 px-4 sm:px-6 lg:px-8 overflow-hidden bg-gradient-to-b from-bg-${game.color}-15 to-transparent`}
+        className="relative py-20 px-4 sm:px-6 lg:px-8 overflow-hidden"
+        style={{
+          backgroundImage: `linear-gradient(to bottom, ${getGameColor(game.color)}15, transparent)`,
+        }}
       >
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
             <div className="text-6xl mb-4">{game.icon}</div>
             <h1 className="text-5xl sm:text-6xl font-bold text-text-primary mb-6 leading-tight">
               Planifier des sessions{' '}
-              <span className={`text-${game.color}`}>{game.name}</span> avec Squad Planner
+              <span style={{ color: getGameColor(game.color) }}>{game.name}</span> avec
+              Squad Planner
             </h1>
             <p className="text-xl text-text-secondary mb-8 max-w-2xl mx-auto">
               {game.description}
@@ -210,7 +237,8 @@ export default function Component() {
           <div className="grid md:grid-cols-3 gap-6 mb-8">
             <m.div
               initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
               transition={{ delay: 0.1 }}
               className="bg-surface-card border border-border-subtle rounded-2xl p-6"
             >
@@ -219,7 +247,8 @@ export default function Component() {
             </m.div>
             <m.div
               initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
               transition={{ delay: 0.2 }}
               className="bg-surface-card border border-border-subtle rounded-2xl p-6"
             >
@@ -228,7 +257,8 @@ export default function Component() {
             </m.div>
             <m.div
               initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
               transition={{ delay: 0.3 }}
               className="bg-surface-card border border-border-subtle rounded-2xl p-6"
             >
@@ -245,6 +275,9 @@ export default function Component() {
         </div>
       </m.section>
 
+      {/* Section Divider */}
+      <div className="section-divider" />
+
       {/* Features Section */}
       <section className="py-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-6xl mx-auto">
@@ -256,53 +289,75 @@ export default function Component() {
             {/* Feature 1: RSVP Reliability */}
             <m.div
               initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
               transition={{ delay: 0.1 }}
               className="bg-surface-card border border-border-subtle rounded-2xl p-8"
             >
-              <div className={`w-14 h-14 bg-${game.color}/10 rounded-xl flex items-center justify-center mb-6`}>
-                <Shield className={`w-7 h-7 text-${game.color}`} />
+              <div
+                className="w-14 h-14 rounded-xl flex items-center justify-center mb-6"
+                style={{ backgroundColor: `${getGameColor(game.color)}15` }}
+              >
+                <Shield className="w-7 h-7" style={{ color: getGameColor(game.color) }} />
               </div>
               <h3 className="text-xl font-semibold text-text-primary mb-3">RSVP Fiable</h3>
               <p className="text-text-secondary">
-                Nos systèmes de confirmation et de rappels garantissent que votre squad ne vous laissera jamais tomber. Plus de No-Show avec Squad Planner.
+                Nos systèmes de confirmation et de rappels garantissent que votre squad ne vous
+                laissera jamais tomber. Plus de No-Show avec Squad Planner.
               </p>
             </m.div>
 
             {/* Feature 2: Matchmaking */}
             <m.div
               initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
               transition={{ delay: 0.2 }}
               className="bg-surface-card border border-border-subtle rounded-2xl p-8"
             >
-              <div className={`w-14 h-14 bg-${game.color}/10 rounded-xl flex items-center justify-center mb-6`}>
-                <Users className={`w-7 h-7 text-${game.color}`} />
+              <div
+                className="w-14 h-14 rounded-xl flex items-center justify-center mb-6"
+                style={{ backgroundColor: `${getGameColor(game.color)}15` }}
+              >
+                <Users className="w-7 h-7" style={{ color: getGameColor(game.color) }} />
               </div>
-              <h3 className="text-xl font-semibold text-text-primary mb-3">Matchmaking Intelligent</h3>
+              <h3 className="text-xl font-semibold text-text-primary mb-3">
+                Matchmaking Intelligent
+              </h3>
               <p className="text-text-secondary">
-                Trouvez des coéquipiers {game.name} compatibles avec votre niveau et votre style. Notre IA apprend de vos préférences pour de meilleures recommandations.
+                Trouvez des coéquipiers {game.name} compatibles avec votre niveau et votre style.
+                Notre IA apprend de vos préférences pour de meilleures recommandations.
               </p>
             </m.div>
 
             {/* Feature 3: Planning */}
             <m.div
               initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
               transition={{ delay: 0.3 }}
               className="bg-surface-card border border-border-subtle rounded-2xl p-8"
             >
-              <div className={`w-14 h-14 bg-${game.color}/10 rounded-xl flex items-center justify-center mb-6`}>
-                <Calendar className={`w-7 h-7 text-${game.color}`} />
+              <div
+                className="w-14 h-14 rounded-xl flex items-center justify-center mb-6"
+                style={{ backgroundColor: `${getGameColor(game.color)}15` }}
+              >
+                <Calendar className="w-7 h-7" style={{ color: getGameColor(game.color) }} />
               </div>
-              <h3 className="text-xl font-semibold text-text-primary mb-3">Planification Facile</h3>
+              <h3 className="text-xl font-semibold text-text-primary mb-3">
+                Planification Facile
+              </h3>
               <p className="text-text-secondary">
-                Créez une session {game.name} en 30 secondes. Gérez vos événements, invitations et statistiques depuis un seul endroit.
+                Créez une session {game.name} en 30 secondes. Gérez vos événements, invitations
+                et statistiques depuis un seul endroit.
               </p>
             </m.div>
           </div>
         </div>
       </section>
+
+      {/* Section Divider */}
+      <div className="section-divider" />
 
       {/* FAQ Section */}
       <section className="py-20 px-4 sm:px-6 lg:px-8 bg-surface-card/30">
@@ -316,7 +371,8 @@ export default function Component() {
               <m.div
                 key={index}
                 initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
                 transition={{ delay: index * 0.05 }}
               >
                 <GameAccordion
@@ -333,24 +389,34 @@ export default function Component() {
         </div>
       </section>
 
+      {/* Section Divider */}
+      <div className="section-divider" />
+
       {/* CTA Section */}
       <m.section
         initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
         transition={{ delay: 0.4 }}
-        className={`py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-${game.color}/10 to-transparent`}
+        className="relative py-20 px-4 sm:px-6 lg:px-8 overflow-hidden rounded-3xl mx-4 sm:mx-6 lg:mx-8 my-20"
+        style={{
+          background: `radial-gradient(135% 135% at 50% 0%, ${getGameColor(game.color)}20, transparent), linear-gradient(180deg, ${getGameColor(game.color)}10, transparent)`,
+          boxShadow: `0 0 60px ${getGameColor(game.color)}20`,
+        }}
       >
-        <div className="max-w-4xl mx-auto text-center">
+        <div className="max-w-4xl mx-auto text-center relative z-10">
           <h2 className="text-4xl font-bold text-text-primary mb-6">
             Prêt à planifier ta première session {game.name} ?
           </h2>
           <p className="text-text-secondary mb-8 text-lg">
-            Rejoins des milliers de joueurs {game.name} qui utilisent Squad Planner pour organiser leurs sessions.
+            Rejoins des milliers de joueurs {game.name} qui utilisent Squad Planner pour organiser
+            leurs sessions.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
               to="/auth?mode=register&redirect=onboarding"
-              className={`inline-flex items-center justify-center gap-2 px-8 py-4 bg-${game.color} text-white font-semibold rounded-xl hover:bg-${game.color}/90 transition-all transform hover:scale-105`}
+              className="inline-flex items-center justify-center gap-2 px-8 py-4 text-white font-semibold rounded-xl hover:opacity-90 transition-all transform hover:scale-105"
+              style={{ backgroundColor: getGameColor(game.color) }}
             >
               <Sparkles className="w-5 h-5" />
               Créer ma première session {game.name}
@@ -365,6 +431,9 @@ export default function Component() {
           </div>
         </div>
       </m.section>
+
+      {/* Section Divider */}
+      <div className="section-divider" />
 
       {/* Footer CTA */}
       <section className="py-12 px-4 sm:px-6 lg:px-8 border-t border-border-subtle">
@@ -387,6 +456,6 @@ export default function Component() {
           </div>
         </div>
       </section>
-    </div>
+    </PublicPageShell>
   )
 }

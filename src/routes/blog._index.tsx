@@ -3,6 +3,7 @@ import { Link } from 'react-router'
 import { m } from 'framer-motion'
 import { getAllBlogPosts } from '../data/blog-posts'
 import { Calendar, Clock, Hash } from '../components/icons'
+import { PublicPageShell } from '../components/PublicPageShell'
 
 export const headers: HeadersFunction = () => ({
   'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=86400',
@@ -35,11 +36,11 @@ export const meta: MetaFunction = () => [
   },
   {
     property: 'og:url',
-    content: 'https://squadplanner.app/blog',
+    content: 'https://squadplanner.fr/blog',
   },
   {
     rel: 'canonical',
-    href: 'https://squadplanner.app/blog',
+    href: 'https://squadplanner.fr/blog',
   },
 ]
 
@@ -121,14 +122,15 @@ export default function BlogIndex() {
   const posts = getAllBlogPosts()
 
   return (
-    <div className="min-h-screen bg-bg-base">
+    <PublicPageShell>
       {/* Hero Section */}
       <section className="border-b border-border-subtle bg-gradient-to-b from-primary/5 to-transparent px-4 py-12 sm:px-6 lg:px-8 lg:py-20">
         <div className="mx-auto max-w-4xl text-center">
           <m.div
             initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
+            whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
+            viewport={{ once: true, margin: '-100px' }}
           >
             <h1 className="text-4xl font-bold text-text-primary sm:text-5xl">
               Le Blog Squad Planner
@@ -139,6 +141,9 @@ export default function BlogIndex() {
           </m.div>
         </div>
       </section>
+
+      {/* Section Divider */}
+      <div className="h-px bg-gradient-to-r from-transparent via-border-subtle to-transparent" />
 
       {/* Blog Grid */}
       <section className="px-4 py-12 sm:px-6 lg:px-8 lg:py-16">
@@ -151,15 +156,17 @@ export default function BlogIndex() {
             <m.div
               className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3"
               initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
+              whileInView={{ opacity: 1 }}
               transition={{ staggerChildren: 0.1, delayChildren: 0.2 }}
+              viewport={{ once: true, margin: '-100px' }}
             >
               {posts.map((post, index) => (
                 <m.div
                   key={post.slug}
                   initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
+                  whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5 }}
+                  viewport={{ once: true, margin: '-50px' }}
                 >
                   <BlogCard
                     slug={post.slug}
@@ -177,29 +184,39 @@ export default function BlogIndex() {
         </div>
       </section>
 
+      {/* Section Divider */}
+      <div className="h-px bg-gradient-to-r from-transparent via-border-subtle to-transparent" />
+
       {/* CTA Section */}
-      <section className="border-t border-border-subtle bg-surface-card px-4 py-12 sm:px-6 lg:px-8 lg:py-16">
+      <section className="bg-surface-card px-4 py-12 sm:px-6 lg:px-8 lg:py-16">
         <div className="mx-auto max-w-2xl text-center">
-          <h2 className="text-2xl font-bold text-text-primary">Prêt à organiser ta squad?</h2>
-          <p className="mt-4 text-text-secondary">
-            Créez votre première squad dès maintenant et mettez nos astuces en pratique.
-          </p>
-          <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center">
-            <Link
-              to="/squads"
-              className="inline-flex items-center justify-center rounded-xl bg-primary px-6 py-3 font-semibold text-white transition-all duration-200 hover:bg-primary/90 active:scale-95"
-            >
-              Créer une Squad
-            </Link>
-            <Link
-              to="/"
-              className="inline-flex items-center justify-center rounded-xl border border-border-subtle bg-surface-card px-6 py-3 font-semibold text-text-primary transition-all duration-200 hover:bg-bg-base"
-            >
-              En savoir plus
-            </Link>
-          </div>
+          <m.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            viewport={{ once: true, margin: '-100px' }}
+          >
+            <h2 className="text-2xl font-bold text-text-primary">Prêt à organiser ta squad?</h2>
+            <p className="mt-4 text-text-secondary">
+              Créez votre première squad dès maintenant et mettez nos astuces en pratique.
+            </p>
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center">
+              <Link
+                to="/squads"
+                className="inline-flex items-center justify-center rounded-xl bg-primary px-6 py-3 font-semibold text-white transition-all duration-200 hover:bg-primary/90 active:scale-95"
+              >
+                Créer une Squad
+              </Link>
+              <Link
+                to="/"
+                className="inline-flex items-center justify-center rounded-xl border border-border-subtle bg-surface-card px-6 py-3 font-semibold text-text-primary transition-all duration-200 hover:bg-bg-base"
+              >
+                En savoir plus
+              </Link>
+            </div>
+          </m.div>
         </div>
       </section>
-    </div>
+    </PublicPageShell>
   )
 }

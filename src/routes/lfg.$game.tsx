@@ -3,6 +3,7 @@ import { useParams, Link } from 'react-router'
 import { m } from 'framer-motion'
 import { getGameBySlug } from '../data/games'
 import { Users, ArrowRight, Sparkles, Star } from '../components/icons'
+import { PublicPageShell } from '../components/PublicPageShell'
 
 export function headers(_args: HeadersArgs) {
   return {
@@ -40,13 +41,31 @@ export function meta({ params }: { params: { game: string } }) {
   ]
 }
 
+const GAME_COLORS: Record<string, string> = {
+  red: '#ef4444',
+  blue: '#3b82f6',
+  purple: '#a855f7',
+  cyan: '#06b6d4',
+  amber: '#f59e0b',
+  emerald: '#10b981',
+  green: '#22c55e',
+  orange: '#f97316',
+  indigo: '#6366f1',
+  lime: '#84cc16',
+}
+
+function getGameColor(color: string): string {
+  return GAME_COLORS[color] || '#6366f1'
+}
+
 function GameNotFound() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-bg-base to-surface-card flex flex-col items-center justify-center px-4">
+    <PublicPageShell>
       <m.div
         initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="text-center"
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        className="text-center py-20"
       >
         <h1 className="text-4xl font-bold text-text-primary mb-4">Jeu non trouvé</h1>
         <p className="text-text-secondary mb-8">
@@ -60,7 +79,7 @@ function GameNotFound() {
           <ArrowRight className="w-5 h-5" />
         </Link>
       </m.div>
-    </div>
+    </PublicPageShell>
   )
 }
 
@@ -79,21 +98,29 @@ function StepCard({
   delay: number
   color: string
 }) {
+  const gameColor = getGameColor(color)
+
   return (
     <m.div
       initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
       transition={{ delay }}
       className="relative"
     >
       <div className="bg-surface-card border border-border-subtle rounded-2xl p-8 h-full">
         <div className="flex items-start gap-6">
-          <div className={`w-16 h-16 bg-${color}/10 rounded-xl flex items-center justify-center flex-shrink-0`}>
-            <div className={`text-3xl font-bold text-${color}`}>{number}</div>
+          <div
+            className="w-16 h-16 rounded-xl flex items-center justify-center flex-shrink-0"
+            style={{ backgroundColor: `${gameColor}15` }}
+          >
+            <div className="text-3xl font-bold" style={{ color: gameColor }}>
+              {number}
+            </div>
           </div>
           <div className="flex-1">
             <div className="flex items-center gap-3 mb-3">
-              <Icon className={`w-6 h-6 text-${color}`} />
+              <Icon className="w-6 h-6" style={{ color: gameColor }} />
               <h3 className="text-xl font-semibold text-text-primary">{title}</h3>
             </div>
             <p className="text-text-secondary">{description}</p>
@@ -118,7 +145,8 @@ function BenefitCard({
   return (
     <m.div
       initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
       transition={{ delay }}
       className="bg-surface-card border border-border-subtle rounded-xl p-6"
     >
@@ -141,23 +169,27 @@ export default function Component() {
     return <GameNotFound />
   }
 
-  const colorClass = game.color
+  const gameColor = getGameColor(game.color)
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-bg-base via-surface-card to-bg-base">
+    <PublicPageShell>
       {/* Hero Section */}
       <m.section
         initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
         transition={{ duration: 0.6 }}
-        className={`relative py-20 px-4 sm:px-6 lg:px-8 overflow-hidden bg-gradient-to-b from-bg-${colorClass}-15 to-transparent`}
+        className="relative py-20 px-4 sm:px-6 lg:px-8 overflow-hidden"
+        style={{
+          background: `linear-gradient(to bottom, ${gameColor}15, transparent)`,
+        }}
       >
         <div className="max-w-6xl mx-auto">
           <div className="text-center">
             <div className="text-6xl mb-4">{game.icon}</div>
             <h1 className="text-5xl sm:text-6xl font-bold text-text-primary mb-4 leading-tight">
               Chercher des joueurs{' '}
-              <span className={`text-${colorClass}`}>{game.name}</span>
+              <span style={{ color: gameColor }}>{game.name}</span>
             </h1>
             <p className="text-xl text-text-secondary mb-8 max-w-2xl mx-auto">
               Rejoignez une communauté de {game.estimatedPlayers} joueurs {game.name} fiables et organisez vos sessions avec des coéquipiers compatibles.
@@ -167,33 +199,36 @@ export default function Component() {
             <div className="grid sm:grid-cols-3 gap-6 max-w-2xl mx-auto mb-8">
               <m.div
                 initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
+                whileInView={{ opacity: 1 }}
+                viewport={{ once: true }}
                 transition={{ delay: 0.1 }}
                 className="text-center"
               >
-                <div className={`text-4xl font-bold text-${colorClass} mb-2`}>
+                <div className="text-4xl font-bold mb-2" style={{ color: gameColor }}>
                   {game.estimatedPlayers.split('+')[0]}M+
                 </div>
                 <div className="text-text-secondary text-sm">Joueurs actifs</div>
               </m.div>
               <m.div
                 initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
+                whileInView={{ opacity: 1 }}
+                viewport={{ once: true }}
                 transition={{ delay: 0.2 }}
                 className="text-center"
               >
-                <div className={`text-4xl font-bold text-${colorClass} mb-2`}>
+                <div className="text-4xl font-bold mb-2" style={{ color: gameColor }}>
                   24/7
                 </div>
                 <div className="text-text-secondary text-sm">Matchmaking actif</div>
               </m.div>
               <m.div
                 initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
+                whileInView={{ opacity: 1 }}
+                viewport={{ once: true }}
                 transition={{ delay: 0.3 }}
                 className="text-center"
               >
-                <div className={`text-4xl font-bold text-${colorClass} mb-2`}>
+                <div className="text-4xl font-bold mb-2" style={{ color: gameColor }}>
                   100%
                 </div>
                 <div className="text-text-secondary text-sm">Vérifiés</div>
@@ -202,6 +237,8 @@ export default function Component() {
           </div>
         </div>
       </m.section>
+
+      <div className="section-divider" />
 
       {/* How It Works Section */}
       <section className="py-20 px-4 sm:px-6 lg:px-8">
@@ -220,7 +257,7 @@ export default function Component() {
               description={`Créez votre profil Squad Planner et activez la recherche de coéquipiers ${game.name}. Configurez vos préférences : niveau, mode de jeu, plateforme et horaires.`}
               icon={Users}
               delay={0.1}
-              color={colorClass}
+              color={game.color}
             />
             <StepCard
               number={2}
@@ -228,7 +265,7 @@ export default function Component() {
               description={`Indiquez votre rôle préféré, votre niveau de compétitivité et vos disponibilités. Squad Planner utilise ces infos pour vous matcher avec les joueurs les plus compatibles.`}
               icon={Star}
               delay={0.2}
-              color={colorClass}
+              color={game.color}
             />
             <StepCard
               number={3}
@@ -236,11 +273,13 @@ export default function Component() {
               description={`Squad Planner vous recommande des joueurs et des squads ${game.name}. Acceptez les invitations, rejoignez des sessions et construisez votre communauté de confiance.`}
               icon={Sparkles}
               delay={0.3}
-              color={colorClass}
+              color={game.color}
             />
           </div>
         </div>
       </section>
+
+      <div className="section-divider" />
 
       {/* Benefits Section */}
       <section className="py-20 px-4 sm:px-6 lg:px-8 bg-surface-card/30">
@@ -290,6 +329,8 @@ export default function Component() {
         </div>
       </section>
 
+      <div className="section-divider" />
+
       {/* Testimonials Section */}
       <section className="py-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-5xl mx-auto">
@@ -321,7 +362,8 @@ export default function Component() {
               <m.div
                 key={idx}
                 initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
                 transition={{ delay: testimonial.delay }}
                 className="bg-surface-card border border-border-subtle rounded-xl p-6"
               >
@@ -341,18 +383,25 @@ export default function Component() {
         </div>
       </section>
 
+      <div className="section-divider" />
+
       {/* CTA Section */}
       <m.section
         initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
         transition={{ delay: 0.4 }}
-        className={`py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-${colorClass}/10 to-transparent`}
+        className="py-20 px-4 sm:px-6 lg:px-8"
+        style={{
+          background: `linear-gradient(to right, ${gameColor}10, transparent)`,
+        }}
       >
         <div className="max-w-4xl mx-auto">
           <div className="grid md:grid-cols-2 gap-8 items-center">
             <m.div
               initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
               transition={{ delay: 0.2 }}
             >
               <h2 className="text-4xl font-bold text-text-primary mb-6">
@@ -364,7 +413,17 @@ export default function Component() {
               <div className="space-y-3">
                 <Link
                   to="/auth?mode=register&redirect=onboarding"
-                  className={`flex items-center justify-center gap-2 px-8 py-4 bg-${colorClass} text-white font-semibold rounded-xl hover:bg-${colorClass}/90 transition-all transform hover:scale-105 w-full`}
+                  className="flex items-center justify-center gap-2 px-8 py-4 text-white font-semibold rounded-xl transition-all transform hover:scale-105 w-full"
+                  style={{
+                    backgroundColor: gameColor,
+                  }}
+                  onMouseOver={(e) => {
+                    const rgb = gameColor.replace('#', '')
+                    e.currentTarget.style.opacity = '0.9'
+                  }}
+                  onMouseOut={(e) => {
+                    e.currentTarget.style.opacity = '1'
+                  }}
                 >
                   <Sparkles className="w-5 h-5" />
                   Rejoindre maintenant
@@ -382,20 +441,21 @@ export default function Component() {
 
             <m.div
               initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
               transition={{ delay: 0.4 }}
-              className={`bg-surface-card border border-border-subtle rounded-2xl p-8`}
+              className="bg-surface-card border border-border-subtle rounded-2xl p-8"
             >
               <div className="text-center">
                 <div className="text-6xl mb-6">{game.icon}</div>
                 <h3 className="text-2xl font-bold text-text-primary mb-4">
                   Prêt à joueur avec ta squad {game.name} ?
                 </h3>
-                <div className={`bg-${colorClass}/10 rounded-xl p-6 mt-6`}>
+                <div className="rounded-xl p-6 mt-6" style={{ backgroundColor: `${gameColor}15` }}>
                   <p className="text-sm text-text-secondary mb-3">
                     Rejoignez les joueurs {game.name} qui ont trouvé leur squad idéale
                   </p>
-                  <div className={`text-3xl font-bold text-${colorClass}`}>
+                  <div className="text-3xl font-bold" style={{ color: gameColor }}>
                     {game.estimatedPlayers}
                   </div>
                   <p className="text-xs text-text-tertiary mt-2">joueurs actifs</p>
@@ -405,6 +465,8 @@ export default function Component() {
           </div>
         </div>
       </m.section>
+
+      <div className="section-divider" />
 
       {/* FAQ Quick Links */}
       <section className="py-16 px-4 sm:px-6 lg:px-8 border-t border-border-subtle">
@@ -427,13 +489,6 @@ export default function Component() {
           </div>
         </div>
       </section>
-
-      {/* Footer */}
-      <section className="py-8 px-4 sm:px-6 lg:px-8 bg-surface-card/30">
-        <div className="max-w-6xl mx-auto text-center text-text-tertiary text-sm">
-          <p>Squad Planner · Cherche des joueurs {game.name} · Planifie tes sessions · Grimpe avec ta squad</p>
-        </div>
-      </section>
-    </div>
+    </PublicPageShell>
   )
 }

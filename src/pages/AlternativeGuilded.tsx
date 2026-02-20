@@ -1,8 +1,7 @@
-'use client'
-
 import { Link } from 'react-router'
 import { m } from 'framer-motion'
 import { Check, X, ArrowRight, Calendar, Users, Sparkles } from '../components/icons'
+import { PublicPageShell } from '../components/PublicPageShell'
 import { useState } from 'react'
 
 const fadeInUp = {
@@ -74,14 +73,15 @@ export default function AlternativeGuilded() {
   ]
 
   return (
-    <div className="min-h-screen bg-bg-base">
+    <PublicPageShell>
       {/* Hero */}
       <section className="relative py-20 px-4 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent pointer-events-none" />
         <div className="max-w-4xl mx-auto relative">
           <m.div
             initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
             transition={{ duration: 0.8 }}
           >
             <h1 className="text-5xl md:text-6xl font-bold text-text-primary mb-6 leading-tight">
@@ -92,7 +92,8 @@ export default function AlternativeGuilded() {
             </p>
             <m.div
               initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
               transition={{ delay: 0.3, duration: 0.6 }}
               className="flex gap-4 flex-wrap"
             >
@@ -113,6 +114,8 @@ export default function AlternativeGuilded() {
           </m.div>
         </div>
       </section>
+
+      <div className="section-divider" />
 
       {/* Ce que tu aimais sur Guilded */}
       <section className="py-16 px-4">
@@ -176,6 +179,8 @@ export default function AlternativeGuilded() {
         </div>
       </section>
 
+      <div className="section-divider" />
+
       {/* Code Promo */}
       <section className="py-16 px-4">
         <div className="max-w-4xl mx-auto">
@@ -199,6 +204,8 @@ export default function AlternativeGuilded() {
           </m.div>
         </div>
       </section>
+
+      <div className="section-divider" />
 
       {/* FAQ Accordion */}
       <section className="py-16 px-4">
@@ -275,6 +282,8 @@ export default function AlternativeGuilded() {
         </div>
       </section>
 
+      <div className="section-divider" />
+
       {/* Final CTA */}
       <section className="py-20 px-4">
         <div className="max-w-4xl mx-auto text-center">
@@ -300,6 +309,6 @@ export default function AlternativeGuilded() {
           </m.div>
         </div>
       </section>
-    </div>
+    </PublicPageShell>
   )
 }

@@ -102,6 +102,7 @@ export function MessageComposer({
                       value={newMessage}
                       onChange={onInputChange}
                       placeholder="Message..."
+                      aria-label={`Écrire un message à ${chatName}`}
                       className="w-full h-12 px-4 bg-bg-surface border border-border-default rounded-xl text-md text-text-primary placeholder:text-text-quaternary focus:outline-none focus:border-primary transition-colors"
                       autoComplete="off"
                       autoCapitalize="off"

@@ -14,6 +14,7 @@ const pageTitles: Record<string, string> = {
   '/help': 'Aide & FAQ — Squad Planner',
   '/call-history': 'Historique Appels — Squad Planner',
   '/discover': 'Découvrir — Squad Planner',
+  '/referrals': 'Parrainage — Squad Planner',
   '/auth': 'Connexion — Squad Planner',
   '/onboarding': 'Bienvenue — Squad Planner',
   '/legal': "Conditions d'utilisation — Squad Planner",

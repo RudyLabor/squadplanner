@@ -67,6 +67,8 @@ export function Help() {
             placeholder="Rechercher dans l'aide..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
+            id="help-search"
+            aria-label="Rechercher dans l'aide"
             className="w-full h-12 pl-12 pr-4 rounded-xl bg-border-subtle border border-border-hover text-md text-text-primary placeholder-text-tertiary focus:outline-none focus:border-primary transition-colors"
           />
         </div>
@@ -129,6 +131,7 @@ export function Help() {
                       onClick={() =>
                         setOpenIndex(openIndex === item.globalIndex ? null : item.globalIndex)
                       }
+                      aria-expanded={openIndex === item.globalIndex}
                       className="w-full flex items-center justify-between p-4 text-left"
                     >
                       <span className="text-md font-medium text-text-primary pr-4">

@@ -1,7 +1,7 @@
 import { m } from 'framer-motion'
 import { Mic, Users } from '../../components/icons'
 import { Link } from 'react-router'
-import { Card, Button } from '../../components/ui'
+import { Card } from '../../components/ui'
 
 export function PartyEmptyState() {
   return (
@@ -25,14 +25,12 @@ export function PartyEmptyState() {
             <Mic className="w-8 h-8 text-white" strokeWidth={1.5} />
           </m.div>
         </div>
-        <h3 className="text-lg font-bold text-text-primary mb-2">Parle avec ta squad</h3>
+        <h2 className="text-lg font-bold text-text-primary mb-2">Parle avec ta squad</h2>
         <p className="text-md text-text-secondary mb-6 max-w-[280px] mx-auto leading-relaxed">
           Cr&eacute;e ou rejoins une squad pour lancer des parties vocales avec tes potes.
         </p>
-        <Link to="/squads">
-          <Button className="shadow-md shadow-primary/10">
-            <Users className="w-4 h-4" /> Trouver une squad
-          </Button>
+        <Link to="/squads" className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-primary text-white font-medium shadow-md shadow-primary/10 hover:bg-primary-hover transition-colors">
+          <Users className="w-4 h-4" /> Trouver une squad
         </Link>
       </Card>
     </m.div>

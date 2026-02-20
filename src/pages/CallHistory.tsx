@@ -119,10 +119,12 @@ export function CallHistory() {
             </button>
           </div>
 
-          <div className="flex gap-2 overflow-x-auto pb-1 -mx-1 px-1">
+          <div className="flex gap-2 overflow-x-auto pb-1 -mx-1 px-1" role="tablist" aria-label="Filtrer les appels">
             {filterOptions.map((option) => (
               <button
                 key={option.value}
+                role="tab"
+                aria-selected={filter === option.value}
                 onClick={() => setFilter(option.value)}
                 className={`px-4 py-2.5 min-h-[44px] rounded-xl text-base font-medium whitespace-nowrap transition-interactive touch-target ${
                   filter === option.value

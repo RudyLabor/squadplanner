@@ -24,8 +24,9 @@ export function Legal() {
           <Link
             to="/"
             className="w-10 h-10 rounded-xl bg-border-subtle flex items-center justify-center hover:bg-border-hover transition-colors"
+            aria-label="Retour à l'accueil"
           >
-            <ArrowLeft className="w-5 h-5 text-text-secondary" />
+            <ArrowLeft className="w-5 h-5 text-text-secondary" aria-hidden="true" />
           </Link>
           <div className="flex items-center gap-2">
             <SquadPlannerLogo size={24} />
@@ -35,8 +36,10 @@ export function Legal() {
       </header>
 
       <main className="max-w-3xl mx-auto px-4 md:px-6 py-8">
-        <div className="flex gap-2 p-1 rounded-xl bg-surface-card border border-border-default mb-8">
+        <div className="flex gap-2 p-1 rounded-xl bg-surface-card border border-border-default mb-8" role="tablist" aria-label="Documents légaux">
           <button
+            role="tab"
+            aria-selected={activeTab === 'cgu'}
             onClick={() => setActiveTab('cgu')}
             className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-lg text-md font-medium transition-all ${
               activeTab === 'cgu'
@@ -48,6 +51,8 @@ export function Legal() {
             Conditions d'utilisation
           </button>
           <button
+            role="tab"
+            aria-selected={activeTab === 'privacy'}
             onClick={() => setActiveTab('privacy')}
             className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-lg text-md font-medium transition-all ${
               activeTab === 'privacy'

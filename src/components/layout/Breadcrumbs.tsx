@@ -26,6 +26,7 @@ const routeLabels: Record<string, string> = {
   '/call-history': "Historique d'appels",
   '/help': 'Aide',
   '/discover': 'Découvrir',
+  '/referrals': 'Parrainage',
 }
 
 export function Breadcrumbs() {

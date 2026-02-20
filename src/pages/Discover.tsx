@@ -4,7 +4,7 @@ import { m } from 'framer-motion'
 import { Compass, Plus, Sparkles, Users, Gamepad2 } from '../components/icons'
 import { Link } from 'react-router'
 import { MobilePageHeader } from '../components/layout/MobilePageHeader'
-import { SegmentedControl, Select, Button } from '../components/ui'
+import { SegmentedControl, Select } from '../components/ui'
 import type { SelectOption } from '../components/ui'
 import { DiscoverSquadCard } from '../components/discover/DiscoverSquadCard'
 import { GlobalLeaderboard } from '../components/discover/GlobalLeaderboard'
@@ -192,20 +192,18 @@ const SquadsTab = memo(function SquadsTab({ game, region }: { game: string; regi
           >
             <Compass className="w-8 h-8 text-primary" />
           </m.div>
-          <h3 className="text-lg font-bold text-text-primary mb-2">
+          <h2 className="text-lg font-bold text-text-primary mb-2">
             Aucune squad publique trouvée
-          </h3>
+          </h2>
           <p className="text-sm text-text-secondary mb-1">
             Sois le premier à créer une squad publique !
           </p>
           <p className="text-xs text-text-tertiary mb-5">
             Les leaders peuvent rendre leur squad publique dans les paramètres
           </p>
-          <Link to="/squads">
-            <Button variant="primary" size="sm">
-              <Plus className="w-4 h-4" />
-              Créer une squad
-            </Button>
+          <Link to="/squads" className="inline-flex items-center gap-2 px-3 py-2 rounded-xl bg-primary text-white text-sm font-medium hover:bg-primary-hover transition-colors">
+            <Plus className="w-4 h-4" />
+            Créer une squad
           </Link>
         </m.div>
 

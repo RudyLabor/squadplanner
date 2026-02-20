@@ -68,19 +68,33 @@ export function useGlobalPresence({ userId, username, avatarUrl }: UseGlobalPres
   const { availability, customStatus, gameStatus } = useUserStatusStore()
   const { setOnlineUsers, setChannel, setConnected } = useGlobalPresenceStore()
 
-  // Build presence payload
+  // Stabilize references to avoid re-render loops
+  const usernameRef = useRef(username)
+  const avatarUrlRef = useRef(avatarUrl)
+  const availabilityRef = useRef(availability)
+  const customStatusRef = useRef(customStatus)
+  const gameStatusRef = useRef(gameStatus)
+
+  // Update refs on each render (no re-trigger)
+  usernameRef.current = username
+  avatarUrlRef.current = avatarUrl
+  availabilityRef.current = availability
+  customStatusRef.current = customStatus
+  gameStatusRef.current = gameStatus
+
+  // Build presence payload — stable callback, reads from refs
   const getPresencePayload = useCallback(
     (): Omit<GlobalPresenceUser, 'onlineAt'> => ({
       userId: userId || '',
-      username,
-      avatarUrl,
-      availability,
-      customEmoji: customStatus?.emoji || null,
-      customText: customStatus?.text || null,
-      gameStatus: gameStatus?.game || null,
+      username: usernameRef.current,
+      avatarUrl: avatarUrlRef.current,
+      availability: availabilityRef.current,
+      customEmoji: customStatusRef.current?.emoji || null,
+      customText: customStatusRef.current?.text || null,
+      gameStatus: gameStatusRef.current?.game || null,
       activity: null, // Will be updated by voice/session hooks
     }),
-    [userId, username, avatarUrl, availability, customStatus, gameStatus]
+    [userId]
   )
 
   // Track presence
@@ -181,10 +195,20 @@ export function useGlobalPresence({ userId, username, avatarUrl }: UseGlobalPres
     }
   }, [userId]) // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Re-track when status changes
+  // Re-track when user status actually changes (debounced via interval, not on every render)
+  const prevStatusRef = useRef({ availability, customStatus, gameStatus })
   useEffect(() => {
-    trackPresence()
-  }, [trackPresence])
+    const prev = prevStatusRef.current
+    const changed =
+      prev.availability !== availability ||
+      prev.customStatus?.emoji !== customStatus?.emoji ||
+      prev.customStatus?.text !== customStatus?.text ||
+      prev.gameStatus?.game !== gameStatus?.game
+    prevStatusRef.current = { availability, customStatus, gameStatus }
+    if (changed) {
+      trackPresence()
+    }
+  }, [availability, customStatus, gameStatus, trackPresence])
 
   return {
     onlineUsers: useGlobalPresenceStore((s) => s.onlineUsers),

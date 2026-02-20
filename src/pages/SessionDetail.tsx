@@ -59,7 +59,7 @@ function CelebrationToast({
   return (
     <AnimatePresence>
       {isVisible && (
-        <div className="fixed top-4 left-1/2 -translate-x-1/2 z-50">
+        <div className="fixed top-4 left-1/2 -translate-x-1/2 z-50" role="status" aria-live="polite">
           <div className="flex items-center gap-2 px-5 py-3 rounded-xl bg-success text-bg-base font-medium shadow-md">
             <Sparkles className="w-5 h-5" />
             <span>{message}</span>
@@ -420,23 +420,23 @@ function PostSessionResults({
             <span className="text-md font-semibold text-text-primary">Récapitulatif</span>
           </div>
 
-          <div className="grid grid-cols-3 gap-3">
+          <dl className="grid grid-cols-3 gap-3">
             <div className="text-center p-3 rounded-xl bg-bg-surface">
-              <Users className="w-5 h-5 mx-auto mb-1 text-primary" />
-              <div className="text-lg font-bold text-text-primary">{totalRsvps}</div>
-              <div className="text-xs text-text-tertiary">Inscrits</div>
+              <Users className="w-5 h-5 mx-auto mb-1 text-primary" aria-hidden="true" />
+              <dd className="text-lg font-bold text-text-primary">{totalRsvps}</dd>
+              <dt className="text-xs text-text-tertiary">Inscrits</dt>
             </div>
             <div className="text-center p-3 rounded-xl bg-bg-surface">
-              <CheckCircle2 className="w-5 h-5 mx-auto mb-1 text-success" />
-              <div className="text-lg font-bold text-text-primary">{totalCheckins}</div>
-              <div className="text-xs text-text-tertiary">Check-ins</div>
+              <CheckCircle2 className="w-5 h-5 mx-auto mb-1 text-success" aria-hidden="true" />
+              <dd className="text-lg font-bold text-text-primary">{totalCheckins}</dd>
+              <dt className="text-xs text-text-tertiary">Check-ins</dt>
             </div>
             <div className="text-center p-3 rounded-xl bg-bg-surface">
-              <TrendingUp className="w-5 h-5 mx-auto mb-1 text-info" />
-              <div className="text-lg font-bold text-text-primary">{participationRate}%</div>
-              <div className="text-xs text-text-tertiary">Fiabilité</div>
+              <TrendingUp className="w-5 h-5 mx-auto mb-1 text-info" aria-hidden="true" />
+              <dd className="text-lg font-bold text-text-primary">{participationRate}%</dd>
+              <dt className="text-xs text-text-tertiary">Fiabilité</dt>
             </div>
-          </div>
+          </dl>
 
           <div className="mt-4 space-y-2">
             <div className="flex items-center justify-between text-sm">

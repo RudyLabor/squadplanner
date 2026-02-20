@@ -1,5 +1,3 @@
-'use client'
-
 import { useState, useEffect } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
 import { supabaseMinimal as supabase } from '../lib/supabaseMinimal'
@@ -13,7 +11,7 @@ interface WrappedStats {
   reliabilityScore: number
   favoriteSquad: {
     name: string
-    memberCount: number
+    sessionsPlayed: number
   } | null
   userName: string
 }
@@ -38,7 +36,7 @@ export function Wrapped() {
         } = await supabase.auth.getUser()
 
         if (!user) {
-          setError('Veuillez vous connecter pour voir votre Wrapped')
+          setError('Connecte-toi pour voir ton Wrapped')
           setIsLoading(false)
           return
         }
@@ -121,7 +119,7 @@ export function Wrapped() {
           if (topSquad.count > 0) {
             favoriteSquad = {
               name: topSquad.name,
-              memberCount: Math.round(Math.random() * 10 + 3), // Simulated member count
+              sessionsPlayed: topSquad.count,
             }
           }
         }
@@ -460,7 +458,7 @@ export function Wrapped() {
                 transition={{ duration: 0.6, delay: 0.3 }}
                 className="text-lg text-purple-200 mb-8"
               >
-                {Math.round(stats.favoriteSquad.memberCount)} membres
+                {stats.favoriteSquad.sessionsPlayed} session{stats.favoriteSquad.sessionsPlayed > 1 ? 's' : ''} jouée{stats.favoriteSquad.sessionsPlayed > 1 ? 's' : ''}
               </m.p>
             </>
           ) : (

@@ -172,7 +172,7 @@ describe('SquadMembers', () => {
       />
     )
     // No message/call buttons for the current user (user-1)
-    expect(screen.queryByLabelText('Envoyer un message a Player1')).not.toBeInTheDocument()
+    expect(screen.queryByLabelText('Envoyer un message à Player1')).not.toBeInTheDocument()
   })
 
   it('shows action buttons for other users', () => {
@@ -186,7 +186,7 @@ describe('SquadMembers', () => {
       />
     )
     // Action buttons for other members
-    expect(screen.getByLabelText('Envoyer un message a Player2')).toBeInTheDocument()
+    expect(screen.getByLabelText('Envoyer un message à Player2')).toBeInTheDocument()
     expect(screen.getByLabelText('Appeler Player2')).toBeInTheDocument()
   })
 

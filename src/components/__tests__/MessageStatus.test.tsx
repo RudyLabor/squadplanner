@@ -36,12 +36,12 @@ import { MessageStatus } from '../MessageStatus'
 describe('MessageStatus', () => {
   it('renders without crash (default)', () => {
     render(<MessageStatus currentUserId="user-1" />)
-    expect(screen.getByText('Envoye')).toBeInTheDocument()
+    expect(screen.getByText('Envoyé')).toBeInTheDocument()
   })
 
   it('shows default sent status when no readAt or readBy provided', () => {
     const { container } = render(<MessageStatus currentUserId="user-1" />)
-    expect(screen.getByText('Envoye')).toBeInTheDocument()
+    expect(screen.getByText('Envoyé')).toBeInTheDocument()
     expect(container.querySelector('.text-text-tertiary')).toBeInTheDocument()
   })
 

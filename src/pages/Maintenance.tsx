@@ -94,7 +94,7 @@ export default function Maintenance() {
           transition={{ delay: 0.2, duration: 0.3 }}
           className="text-md text-text-secondary mb-4"
         >
-          Nous effectuons une maintenance planifiée. L'application sera de retour très bientôt.
+          On effectue une maintenance planifiée. L'app sera de retour très bientôt.
         </m.p>
 
         {/* ETA */}
@@ -163,7 +163,7 @@ export default function Maintenance() {
           className="flex items-center justify-center gap-4"
         >
           <a
-            href="#"
+            href="https://x.com/squadplannerfr"
             className="inline-flex items-center gap-1.5 text-sm text-text-tertiary hover:text-text-secondary transition-colors"
             rel="noopener noreferrer"
             target="_blank"

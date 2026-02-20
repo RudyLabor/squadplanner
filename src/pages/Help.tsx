@@ -171,7 +171,7 @@ export function Help() {
 
         <HelpContactSection />
 
-        <p className="text-center text-sm text-text-tertiary mt-8">Squad Planner v1.0.0</p>
+        <p className="text-center text-sm text-text-tertiary mt-8">Squad Planner</p>
       </div>
 
       <HelpChatbot faqItems={FAQ_ITEMS} />

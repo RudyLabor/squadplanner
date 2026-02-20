@@ -103,7 +103,7 @@ export function useJoinSquadMutation() {
           created_at: new Date().toISOString(),
           updated_at: new Date().toISOString(),
         })
-        if (profileError) throw new Error('Impossible de creer le profil')
+        if (profileError) throw new Error('Impossible de créer le profil')
       }
 
       const { data: squad, error: findError } = await supabase

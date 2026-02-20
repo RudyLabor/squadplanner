@@ -508,7 +508,7 @@ export function Settings() {
           <LogOut className="w-4 h-4" />
           Se déconnecter
         </button>
-        <p className="text-center text-sm text-text-quaternary mt-6">Squad Planner v1.0.0</p>
+        <p className="text-center text-sm text-text-quaternary mt-6">Squad Planner</p>
       </div>
       <SettingsDeleteModal isOpen={showDeleteModal} onClose={() => setShowDeleteModal(false)} />
     </main>

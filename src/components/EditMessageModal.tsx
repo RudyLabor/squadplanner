@@ -150,7 +150,7 @@ export function EditMessageModal({ isOpen, message, onSave, onClose }: EditMessa
                     value={content}
                     onChange={(e) => setContent(e.target.value)}
                     onKeyDown={handleKeyDown}
-                    placeholder="Tapez votre message..."
+                    placeholder="Tape ton message..."
                     rows={3}
                     className="w-full px-4 py-3 bg-border-subtle border border-border-hover rounded-xl text-md text-text-primary placeholder:text-text-tertiary resize-none focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary-20 focus:shadow-glow-primary-md transition-input min-h-[80px] max-h-[200px]"
                   />

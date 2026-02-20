@@ -67,7 +67,7 @@ describe('Maintenance', () => {
     render(createElement(Maintenance))
     expect(
       screen.getByText(
-        "Nous effectuons une maintenance planifiée. L'application sera de retour très bientôt."
+        "On effectue une maintenance planifiée. L'application sera de retour très bientôt."
       )
     ).toBeTruthy()
   })

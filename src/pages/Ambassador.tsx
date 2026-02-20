@@ -1,5 +1,3 @@
-'use client'
-
 import { useState, useRef, type RefObject } from 'react'
 import { m, useInView } from 'framer-motion'
 import { useAnalytics } from '../hooks'
@@ -198,7 +196,7 @@ ${formData.message}
               {
                 icon: Award,
                 title: 'Badge Ambassadeur exclusif',
-                description: 'Badge visible en avant sur ton profil et tes sessions',
+                description: 'Badge mis en avant sur ton profil et tes sessions',
                 color: 'warning',
               },
               {
@@ -484,7 +482,7 @@ ${formData.message}
               },
               {
                 q: 'C\'est obligatoire d\'être un gros streamer ?',
-                a: 'Non ! On recherche aussi des créateurs de contenu plus petit ou des capitaines de communauté motivés. Ce qui compte, c\'est ta passion pour le gaming et ton engagement envers ta communauté.',
+                a: 'Non ! On recherche aussi des créateurs de contenu plus petits ou des capitaines de communauté motivés. Ce qui compte, c\'est ta passion pour le gaming et ton engagement envers ta communauté.',
               },
               {
                 q: 'Quels outils marketing allez-vous me donner ?',

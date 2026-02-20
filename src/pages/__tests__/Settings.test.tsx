@@ -239,7 +239,7 @@ describe('Settings Page', () => {
 
     it('renders version text', () => {
       renderSettings()
-      expect(screen.getByText('Squad Planner v1.0.0')).toBeTruthy()
+      expect(screen.getByText('Squad Planner')).toBeTruthy()
     })
   })
 

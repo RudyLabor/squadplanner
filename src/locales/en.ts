@@ -235,7 +235,7 @@ export const en: TranslationKeys = {
       landingDesc: 'View the landing page',
     },
     signOut: 'Sign out',
-    version: 'Squad Planner v1.0.0',
+    version: 'Squad Planner',
     saved: 'Settings saved',
   },
 

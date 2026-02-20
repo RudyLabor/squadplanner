@@ -67,7 +67,7 @@ describe('ChatPanel', () => {
 
   it('shows typing indicator when isTyping is true', () => {
     render(<ChatPanel {...baseProps} isTyping={true} />)
-    expect(screen.getByText("En train d'ecrire...")).toBeDefined()
+    expect(screen.getByText("En train d'écrire...")).toBeDefined()
   })
 
   it('shows "En ligne" when not typing', () => {

@@ -233,7 +233,7 @@ export const de = {
       landingDesc: 'Landing Page anzeigen',
     },
     signOut: 'Abmelden',
-    version: 'Squad Planner v1.0.0',
+    version: 'Squad Planner',
     saved: 'Einstellungen gespeichert',
   },
 

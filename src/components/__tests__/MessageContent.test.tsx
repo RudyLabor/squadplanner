@@ -110,7 +110,7 @@ describe('MessageContent', () => {
   })
 
   it('renders forwarded message with indicator', () => {
-    render(<MessageContent content={'↩️ *Transfere de Alice*\nHello forwarded!'} />)
+    render(<MessageContent content={'↩️ *Transféré de Alice*\nHello forwarded!'} />)
     expect(screen.getByText('Hello forwarded!')).toBeInTheDocument()
   })
 

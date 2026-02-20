@@ -42,7 +42,7 @@ const faqs = [
   {
     id: 'data-loss',
     question: 'Mais je perds mes données ?',
-    answer: 'Zero. Squad Planner garde tout : squads, événements, paramètres. Rien ne se perd. T\'es tranquille.'
+    answer: 'Zéro. Squad Planner garde tout : squads, événements, paramètres. Rien ne se perd. T\'es tranquille.'
   },
   {
     id: 'free',
@@ -123,12 +123,12 @@ export default function AlternativeGuilded() {
               </Link>
             </m.div>
             <m.div whileHover={{ scale: 1.02, y: -2 }} {...springTap} className="w-full sm:w-auto">
-              <Link
-                to="/auth?mode=register&redirect=onboarding"
+              <a
+                href="#features"
                 className="flex items-center gap-2 h-14 px-8 rounded-xl border border-border-hover text-text-secondary hover:text-text-primary hover:border-text-tertiary transition-all w-full sm:w-auto justify-center"
               >
-                Créer mon compte
-              </Link>
+                Voir les fonctionnalités
+              </a>
             </m.div>
           </m.div>
         </div>

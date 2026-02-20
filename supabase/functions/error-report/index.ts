@@ -129,8 +129,9 @@ serve(async (req) => {
       },
     })
   } catch (error) {
+    // SEC-7: Don't leak internal error details to clients
     console.error('Error processing error reports:', error.message)
-    return new Response(JSON.stringify({ error: error.message }), {
+    return new Response(JSON.stringify({ error: 'Service unavailable' }), {
       status: 500,
       headers: {
         ...getCorsHeaders(req.headers.get('origin')),

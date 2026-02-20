@@ -71,7 +71,7 @@ export const NavLink = memo(function NavLink({
     >
       <m.div
         className={`
-          relative flex items-center ${collapsed ? 'gap-2 px-2.5' : 'gap-3 px-4'} py-3 rounded-xl transition-interactive
+          relative flex items-center ${collapsed ? 'gap-2 px-2.5' : 'gap-3 px-4'} py-3 min-h-[44px] rounded-xl transition-interactive
           ${
             isActive
               ? 'bg-primary-10 text-primary-hover'

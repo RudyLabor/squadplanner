@@ -45,6 +45,8 @@ export const useMessagesStore = create<MessagesState>((set, get) => ({
   activeConversation: null,
   isLoading: false,
   realtimeChannel: null,
+  // BUG-4: Track current fetch to abort on rapid conversation switching
+  _fetchController: null as AbortController | null,
 
   fetchConversations: async () => {
     if (!isSupabaseReady()) return
@@ -166,23 +168,31 @@ export const useMessagesStore = create<MessagesState>((set, get) => ({
 
   fetchMessages: async (squadId: string, sessionId?: string) => {
     if (!isSupabaseReady()) return
+    // BUG-4: Cancel any in-flight fetch to prevent race conditions on rapid switching
+    const prev = (get() as any)._fetchController
+    if (prev) prev.abort()
+    const controller = new AbortController()
+    set({ isLoading: true, _fetchController: controller } as any)
     try {
-      set({ isLoading: true })
       let query = supabase
         .from('messages')
         .select('*, sender:profiles!sender_id(username, avatar_url)')
         .eq('squad_id', squadId)
         .order('created_at', { ascending: true })
         .limit(100)
+        .abortSignal(controller.signal)
       if (sessionId) query = query.eq('session_id', sessionId)
       else query = query.is('session_id', null)
       const { data, error } = await query
       if (error) throw error
-      set({ messages: (data || []) as MessageWithSender[], isLoading: false })
+      // Only apply results if this fetch wasn't cancelled
+      if (!controller.signal.aborted) {
+        set({ messages: (data || []) as MessageWithSender[], isLoading: false })
+      }
     } catch (error: unknown) {
       if (error instanceof Error && error.name === 'AbortError') return
       console.warn('[Messages] Error fetching messages:', error)
-      set({ isLoading: false })
+      if (!controller.signal.aborted) set({ isLoading: false })
     }
   },
 
@@ -226,8 +236,9 @@ export const useMessagesStore = create<MessagesState>((set, get) => ({
       .select('username, avatar_url')
       .eq('id', user.id)
       .single()
+    // BUG-6: Fallback if profile.username is null
     if (profile)
-      optimisticMsg.sender = { username: profile.username, avatar_url: profile.avatar_url }
+      optimisticMsg.sender = { username: profile.username || 'Utilisateur', avatar_url: profile.avatar_url }
     set((state) => ({ messages: [...state.messages, optimisticMsg] }))
 
     try {

@@ -33,7 +33,7 @@ function StatsRow({ squadsCount, sessionsThisWeek }: StatsRowProps) {
     {
       value: sessionsThisWeek,
       label: 'Cette semaine',
-      mobileLabel: 'Semaine',
+      mobileLabel: 'Cette sem.',
       icon: Calendar,
       color: 'var(--color-warning)',
       suffix: '',

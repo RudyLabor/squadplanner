@@ -624,6 +624,10 @@ export function Messages() {
   const initialMessagesLoading =
     !loadingTimedOut && isLoadingSquad && isLoadingDM && squadConversations.length === 0
 
+  // BUG-7: Show a helpful message when loading takes longer than 2s
+  const showSlowLoadingHint =
+    loadingTimedOut && isLoadingSquad && isLoadingDM && squadConversations.length === 0
+
   if (!activeSquadConv && !activeDMConv)
     return (
       <>
@@ -633,9 +637,16 @@ export function Messages() {
             onRefresh={handleRefresh}
             className="px-4 md:px-6 lg:px-8 py-6 max-w-2xl lg:max-w-4xl xl:max-w-6xl mx-auto"
           >
-            <CrossfadeTransition isLoading={initialMessagesLoading} skeleton={<SkeletonChatPage />}>
-              <ConversationList {...convListProps} />
-            </CrossfadeTransition>
+            {showSlowLoadingHint ? (
+              <div className="text-center py-12">
+                <p className="text-text-tertiary text-md">Le chargement prend plus de temps que prévu...</p>
+                <p className="text-text-quaternary text-sm mt-2">Vérifie ta connexion ou tire vers le bas pour rafraîchir.</p>
+              </div>
+            ) : (
+              <CrossfadeTransition isLoading={initialMessagesLoading} skeleton={<SkeletonChatPage />}>
+                <ConversationList {...convListProps} />
+              </CrossfadeTransition>
+            )}
           </PullToRefresh>
         </main>
       </>

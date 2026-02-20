@@ -68,8 +68,23 @@ serve(async (req) => {
     const cronHeader = req.headers.get('x-cron-secret')
     const serviceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') || ''
 
-    const isValidCron = cronSecret && cronHeader === cronSecret
-    const isValidServiceRole = authHeader && authHeader.replace('Bearer ', '') === serviceRoleKey
+    // SEC-2: Use timing-safe comparison to prevent timing attacks on CRON secret
+    function timingSafeCompare(a: string, b: string): boolean {
+      if (a.length !== b.length) return false
+      const encoder = new TextEncoder()
+      const bufA = encoder.encode(a)
+      const bufB = encoder.encode(b)
+      // crypto.subtle.timingSafeEqual is not available in all Deno versions,
+      // so we use a constant-time comparison loop
+      let result = 0
+      for (let i = 0; i < bufA.length; i++) {
+        result |= bufA[i] ^ bufB[i]
+      }
+      return result === 0
+    }
+
+    const isValidCron = cronSecret && cronHeader && timingSafeCompare(cronHeader, cronSecret)
+    const isValidServiceRole = authHeader && serviceRoleKey && timingSafeCompare(authHeader.replace('Bearer ', ''), serviceRoleKey)
 
     if (!isValidCron && !isValidServiceRole) {
       return new Response(
@@ -272,12 +287,10 @@ serve(async (req) => {
       }
     }
 
-    // Log results
+    // SEC-9: Anonymized logging — only counts, no user details
     console.log(
-      `Processed ${urgentSessions?.length || 0} urgent sessions, ${upcomingSessions?.length || 0} upcoming sessions`
+      `[send-reminders] urgent=${urgentSessions?.length || 0} upcoming=${upcomingSessions?.length || 0} notifs=${notifications.length} push_sent=${pushResults.sent} push_failed=${pushResults.failed}`
     )
-    console.log(`Created ${notifications.length} in-app notifications`)
-    console.log(`Push notifications: ${pushResults.sent} sent, ${pushResults.failed} failed`)
 
     return new Response(
       JSON.stringify({
@@ -296,8 +309,9 @@ serve(async (req) => {
       }
     )
   } catch (error) {
+    // SEC-7: Don't leak internal error details to clients
     console.error('Error sending reminders:', error)
-    return new Response(JSON.stringify({ error: error.message }), {
+    return new Response(JSON.stringify({ error: 'Service unavailable' }), {
       status: 500,
       headers: { ...getCorsHeaders(req.headers.get('origin')), 'Content-Type': 'application/json' },
     })

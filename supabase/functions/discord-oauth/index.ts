@@ -193,7 +193,9 @@ serve(async (req) => {
       )
     }
 
-    // Link Discord to profile
+    // SEC-5: Link Discord to profile with race condition protection
+    // If a UNIQUE constraint on discord_user_id exists in DB, this will fail gracefully
+    // for concurrent requests trying to link the same Discord account
     const { error: updateError } = await supabaseAdmin
       .from('profiles')
       .update({
@@ -204,6 +206,10 @@ serve(async (req) => {
 
     if (updateError) {
       console.error('Profile update error:', updateError)
+      // SEC-5: Check if it's a unique constraint violation (concurrent link)
+      if (updateError.code === '23505' || updateError.message?.includes('unique') || updateError.message?.includes('duplicate')) {
+        return jsonResponse({ error: 'Ce compte Discord vient d\'être lié à un autre profil' }, 409, origin)
+      }
       return jsonResponse({ error: 'Erreur lors de la mise a jour du profil' }, 500, origin)
     }
 

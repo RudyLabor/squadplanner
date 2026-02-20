@@ -136,7 +136,14 @@ export default function SessionDetail() {
   }
   const handleConfirm = async () => {
     if (!id) return
-    await confirmSessionMutation.mutateAsync(id)
+    try {
+      await confirmSessionMutation.mutateAsync(id)
+      setToastMessage('Session confirmée !')
+      setShowToast(true)
+    } catch {
+      setToastMessage('Erreur lors de la confirmation')
+      setShowToast(true)
+    }
   }
 
   const formatDate = (dateStr: string) => {
@@ -313,14 +320,14 @@ export default function SessionDetail() {
 
           {(isSessionPast() || currentSession.status === 'completed') && (
             <PostSessionResults
-              rsvps={currentSession.rsvps as ParticipantsListProps_rsvps}
+              rsvps={(currentSession.rsvps || []) as ParticipantsListProps_rsvps}
               checkins={currentSession.checkins}
               durationMinutes={currentSession.duration_minutes}
             />
           )}
 
           <ParticipantsList
-            rsvps={currentSession.rsvps as ParticipantsListProps_rsvps}
+            rsvps={(currentSession.rsvps || []) as ParticipantsListProps_rsvps}
             checkins={currentSession.checkins}
           />
 

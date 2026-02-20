@@ -179,7 +179,7 @@ const SquadsTab = memo(function SquadsTab({ game, region }: { game: string; regi
   if (!squads || squads.length === 0) {
     return (
       <div className="space-y-6">
-        {/* Engaging empty state */}
+        {/* UX-6: Improved empty state with actionable tips */}
         <m.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -193,13 +193,13 @@ const SquadsTab = memo(function SquadsTab({ game, region }: { game: string; regi
             <Compass className="w-8 h-8 text-primary" />
           </m.div>
           <h2 className="text-lg font-bold text-text-primary mb-2">
-            Aucune squad publique trouvée
+            La communauté se construit !
           </h2>
           <p className="text-sm text-text-secondary mb-1">
-            Sois le premier à créer une squad publique !
+            Les squads publiques apparaîtront ici dès qu'elles seront créées.
           </p>
           <p className="text-xs text-text-tertiary mb-5">
-            Les leaders peuvent rendre leur squad publique dans les paramètres
+            En attendant, crée ta squad et invite tes amis par code d'invitation.
           </p>
           <Link to="/squads" className="inline-flex items-center gap-2 px-3 py-2 rounded-xl bg-primary text-white text-sm font-medium hover:bg-primary-hover transition-colors">
             <Plus className="w-4 h-4" />
@@ -207,13 +207,17 @@ const SquadsTab = memo(function SquadsTab({ game, region }: { game: string; regi
           </Link>
         </m.div>
 
-        {/* Encouragement to create public squads */}
-        <div className="rounded-xl border border-border-subtle bg-surface-card p-5 text-center">
-          <Sparkles className="w-5 h-5 text-primary mx-auto mb-2" />
-          <p className="text-sm text-text-secondary">Les squads publiques apparaîtront ici.</p>
-          <p className="text-xs text-text-tertiary mt-1">
-            Rends ta squad publique dans les paramètres pour la faire découvrir !
-          </p>
+        {/* Tips for squad leaders */}
+        <div className="rounded-xl border border-border-subtle bg-surface-card p-5">
+          <div className="flex items-center gap-2 mb-3">
+            <Sparkles className="w-5 h-5 text-primary" />
+            <span className="text-sm font-semibold text-text-primary">Comment ça marche ?</span>
+          </div>
+          <div className="space-y-2.5 text-sm text-text-secondary">
+            <p>1. <strong className="text-text-primary">Crée ta squad</strong> et invite tes amis via un code ou lien.</p>
+            <p>2. <strong className="text-text-primary">Planifie des sessions</strong> — ta squad vote et tout le monde s'engage.</p>
+            <p>3. <strong className="text-text-primary">Rends-la publique</strong> dans les paramètres pour qu'elle apparaisse ici.</p>
+          </div>
         </div>
       </div>
     )

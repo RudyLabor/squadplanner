@@ -190,9 +190,44 @@ serve(async (req) => {
   }
 
   try {
+    // SEC-3: Require service role key OR authenticated user to prevent spam
+    const authHeader = req.headers.get('Authorization')
+    const isServiceRole = authHeader && SUPABASE_SERVICE_ROLE_KEY &&
+      authHeader.replace('Bearer ', '') === SUPABASE_SERVICE_ROLE_KEY
+
+    let authenticatedUserId: string | null = null
+    if (!isServiceRole) {
+      // Try to authenticate via user JWT
+      const authClient = createClient(SUPABASE_URL, Deno.env.get('SUPABASE_ANON_KEY') ?? '', {
+        global: { headers: { Authorization: authHeader || '' } },
+      })
+      const { data: { user }, error: authError } = await authClient.auth.getUser()
+      if (authError || !user) {
+        return new Response(JSON.stringify({ error: 'Unauthorized' }), {
+          status: 401,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        })
+      }
+      authenticatedUserId = user.id
+    }
+
     const body = await req.json()
     let email: string
     let username: string
+
+    // SEC-3: If not service role, only allow sending to the authenticated user's own email
+    if (!isServiceRole && body.email && !body.userId) {
+      return new Response(JSON.stringify({ error: 'Only service role can send to arbitrary emails' }), {
+        status: 403,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      })
+    }
+    if (!isServiceRole && body.userId && body.userId !== authenticatedUserId) {
+      return new Response(JSON.stringify({ error: 'Cannot send welcome email for another user' }), {
+        status: 403,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      })
+    }
 
     if (body.userId) {
       // Fetch user data from Supabase
@@ -270,8 +305,9 @@ serve(async (req) => {
       )
     }
   } catch (error) {
+    // SEC-7: Don't leak internal error details to clients
     console.error('[send-welcome-email] Error:', error)
-    return new Response(JSON.stringify({ error: error.message || 'Internal server error' }), {
+    return new Response(JSON.stringify({ error: 'Service unavailable' }), {
       status: 500,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     })

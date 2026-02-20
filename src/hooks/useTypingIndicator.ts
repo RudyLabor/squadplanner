@@ -66,12 +66,12 @@ export function useTypingIndicator({
     return `typing:squad:${conversationId}`
   }, [conversationType, conversationId, sessionId, currentUserId])
 
-  // Nettoyer les utilisateurs qui ont arrêté de taper
+  // BUG-11: Reduced cleanup interval from 1000ms to 500ms for faster stale user removal
   useEffect(() => {
     const interval = setInterval(() => {
       const now = Date.now()
       setTypingUsers((prev) => prev.filter((user) => now - user.timestamp < TYPING_TIMEOUT))
-    }, 1000)
+    }, 500)
 
     return () => clearInterval(interval)
   }, [])
@@ -108,6 +108,18 @@ export function useTypingIndicator({
     channelRef.current = channel
 
     return () => {
+      // BUG-5: Send stop_typing on cleanup to prevent ghost "typing..." indicators
+      if (channelRef.current && currentUserId) {
+        channelRef.current.send({
+          type: 'broadcast',
+          event: 'stop_typing',
+          payload: { userId: currentUserId },
+        }).catch(() => { /* best effort */ })
+      }
+      if (typingTimeoutRef.current) {
+        clearTimeout(typingTimeoutRef.current)
+        typingTimeoutRef.current = null
+      }
       if (channelRef.current) {
         supabase.removeChannel(channelRef.current)
         channelRef.current = null

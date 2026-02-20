@@ -84,8 +84,16 @@ serve(async (req) => {
   const signature = req.headers.get('stripe-signature')
   const webhookSecret = Deno.env.get('STRIPE_WEBHOOK_SECRET')
 
-  if (!signature || !webhookSecret) {
-    return new Response(JSON.stringify({ error: 'Missing signature or webhook secret' }), {
+  // SEC-8: Distinguish missing server config (503) from missing client signature (400)
+  if (!webhookSecret) {
+    console.error('[stripe-webhook] STRIPE_WEBHOOK_SECRET is not configured!')
+    return new Response(JSON.stringify({ error: 'Webhook not configured' }), {
+      status: 503,
+      headers: { ...getCorsHeaders(req.headers.get('origin')), 'Content-Type': 'application/json' },
+    })
+  }
+  if (!signature) {
+    return new Response(JSON.stringify({ error: 'Missing stripe-signature header' }), {
       status: 400,
       headers: { ...getCorsHeaders(req.headers.get('origin')), 'Content-Type': 'application/json' },
     })

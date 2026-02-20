@@ -121,6 +121,31 @@ serve(async (req) => {
 
     const { squad_id, price_id, tier, success_url, cancel_url } = validatedData
 
+    // SEC-6: Server-side validation — ensure price_id matches the claimed tier
+    if (tier) {
+      const priceToTier: Record<string, string> = {}
+      const premiumMonthly = Deno.env.get('STRIPE_PRICE_PREMIUM_MONTHLY')
+      const premiumYearly = Deno.env.get('STRIPE_PRICE_PREMIUM_YEARLY')
+      const slMonthly = Deno.env.get('STRIPE_PRICE_SL_MONTHLY')
+      const slYearly = Deno.env.get('STRIPE_PRICE_SL_YEARLY')
+      const clubMonthly = Deno.env.get('STRIPE_PRICE_CLUB_MONTHLY')
+      const clubYearly = Deno.env.get('STRIPE_PRICE_CLUB_YEARLY')
+      if (premiumMonthly) priceToTier[premiumMonthly] = 'premium'
+      if (premiumYearly) priceToTier[premiumYearly] = 'premium'
+      if (slMonthly) priceToTier[slMonthly] = 'squad_leader'
+      if (slYearly) priceToTier[slYearly] = 'squad_leader'
+      if (clubMonthly) priceToTier[clubMonthly] = 'club'
+      if (clubYearly) priceToTier[clubYearly] = 'club'
+
+      const expectedTier = priceToTier[price_id]
+      if (expectedTier && expectedTier !== tier) {
+        return new Response(JSON.stringify({ error: 'price_id does not match the claimed tier' }), {
+          status: 400,
+          headers: { ...getCorsHeaders(req.headers.get('origin')), 'Content-Type': 'application/json' },
+        })
+      }
+    }
+
     // If squad_id provided, verify user is squad owner
     let squad = null
     if (squad_id) {

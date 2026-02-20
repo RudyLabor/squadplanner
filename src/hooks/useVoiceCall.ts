@@ -140,8 +140,10 @@ export const useVoiceCallStore = create<VoiceCallState>((set, get) => ({
       if (!import.meta.env.PROD) console.log('[useVoiceCall] Native WebRTC call initialized')
     } catch (error) {
       if (!import.meta.env.PROD) console.warn('Error starting call:', error)
+      // BUG-9: Reset call properly (clears ringTimeout and durationInterval)
+      // instead of just setting status to idle, which would leave timers active
+      get().resetCall()
       set({
-        status: 'idle',
         error: error instanceof Error ? error.message : "Erreur lors du demarrage de l'appel",
       })
     }

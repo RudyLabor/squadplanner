@@ -189,13 +189,18 @@ export default function ClientShell() {
   }, [searchParams, setSearchParams, user])
 
   // Subscribe to incoming calls — lazy-loads voice call module (426KB) only when user is authenticated
+  // BUG-2: Protect against unmount before lazy import resolves — track mounted state
   useEffect(() => {
     if (!user) return
     let unsubscribe: (() => void) | undefined
+    let isMounted = true
     import('./hooks/useVoiceCall').then(({ subscribeToIncomingCalls }) => {
-      unsubscribe = subscribeToIncomingCalls(user.id)
+      if (isMounted) {
+        unsubscribe = subscribeToIncomingCalls(user.id)
+      }
     })
     return () => {
+      isMounted = false
       unsubscribe?.()
     }
   }, [user])

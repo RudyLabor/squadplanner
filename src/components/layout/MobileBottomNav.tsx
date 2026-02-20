@@ -8,14 +8,13 @@ import { usePrefetch } from '../../hooks/usePrefetch'
  * Force navigation when React Router is stuck in a non-idle state.
  *
  * Root cause: Supabase auth lock deadlocks when the app is backgrounded
- * during a token refresh. lockAcquired stays true, pendingInLock fills up,
- * getSession() hangs forever, route loaders never finish, router stays in
+ * during a token refresh. Route loaders never finish, router stays in
  * "loading" state, and <Link> silently ignores all clicks.
  *
- * This handler:
- * 1. Clears the Supabase auth deadlock (lockAcquired + pendingInLock)
- * 2. Skips any stuck View Transition
- * 3. Forces navigation through the router's imperative API
+ * UX-1: Removed direct mutation of Supabase auth internals (lockAcquired,
+ * pendingInLock) which was fragile and would break if Supabase changes its
+ * internal implementation. Instead, we simply skip stuck View Transitions
+ * and force navigation through the router's imperative API.
  */
 function handleStuckNavClick(e: React.MouseEvent, path: string) {
   const router = (window as any).__reactRouterDataRouter
@@ -24,22 +23,6 @@ function handleStuckNavClick(e: React.MouseEvent, path: string) {
 
   // Router is stuck — force navigation
   e.preventDefault()
-
-  // Fix Supabase auth deadlock so route loaders can actually complete
-  try {
-    // supabaseMinimal is already loaded (imported at app startup)
-    // Access the singleton via the global import cache
-    const supabase = (window as any).__supabaseMinimal
-    const auth = supabase?.auth
-    if (auth?.lockAcquired) {
-      auth.lockAcquired = false
-      if (Array.isArray(auth.pendingInLock)) {
-        auth.pendingInLock = []
-      }
-    }
-  } catch {
-    // ignore
-  }
 
   // Skip any active View Transition
   if ((document as any).activeViewTransition) {

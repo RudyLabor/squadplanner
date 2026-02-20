@@ -1,13 +1,18 @@
+import { useState } from 'react'
 import { m } from 'framer-motion'
 import { MicOff } from '../../components/icons'
+
+// UX-5: Added avatar_url support to show real profile photos instead of just initials
 export function ParticipantAvatar({
   username,
+  avatarUrl,
   isSpeaking,
   isMuted,
   isLocal,
   size = 'md',
 }: {
   username: string
+  avatarUrl?: string | null
   isSpeaking: boolean
   isMuted: boolean
   isLocal?: boolean
@@ -15,6 +20,8 @@ export function ParticipantAvatar({
 }) {
   const sizeClasses = { sm: 'w-12 h-12', md: 'w-16 h-16', lg: 'w-20 h-20' }
   const textSizes = { sm: 'text-sm', md: 'text-lg', lg: 'text-xl' }
+  const [imgError, setImgError] = useState(false)
+  const showImage = avatarUrl && !imgError
 
   return (
     <m.div
@@ -31,13 +38,22 @@ export function ParticipantAvatar({
           />
         )}
         <div
-          className={`relative ${sizeClasses[size]} rounded-full flex items-center justify-center ${isSpeaking ? 'bg-success ring-2 ring-success/25 shadow-glow-success' : isLocal ? 'bg-primary' : 'bg-primary/30'} transition-interactive`}
+          className={`relative ${sizeClasses[size]} rounded-full flex items-center justify-center overflow-hidden ${isSpeaking ? 'bg-success ring-2 ring-success/25 shadow-glow-success' : isLocal ? 'bg-primary' : 'bg-primary/30'} transition-interactive`}
         >
-          <span
-            className={`${textSizes[size]} font-bold ${isSpeaking || isLocal ? 'text-white' : 'text-primary'}`}
-          >
-            {username.charAt(0).toUpperCase()}
-          </span>
+          {showImage ? (
+            <img
+              src={avatarUrl}
+              alt={username}
+              className="w-full h-full object-cover"
+              onError={() => setImgError(true)}
+            />
+          ) : (
+            <span
+              className={`${textSizes[size]} font-bold ${isSpeaking || isLocal ? 'text-white' : 'text-primary'}`}
+            >
+              {username.charAt(0).toUpperCase()}
+            </span>
+          )}
           {isMuted && (
             <div className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-error flex items-center justify-center">
               <MicOff className="w-2.5 h-2.5 text-white" />

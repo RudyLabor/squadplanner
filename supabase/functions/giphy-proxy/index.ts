@@ -42,6 +42,27 @@ function getCorsHeaders(origin: string | null) {
 const GIPHY_API_KEY = Deno.env.get('GIPHY_API_KEY') || ''
 const GIPHY_BASE = 'https://api.giphy.com/v1/gifs'
 
+// SEC-4 + SEC-10: Simple in-memory rate limiter (per IP, 10 req/min)
+const rateLimitMap = new Map<string, { count: number; resetAt: number }>()
+function checkRateLimit(ip: string): boolean {
+  const now = Date.now()
+  const entry = rateLimitMap.get(ip)
+  if (!entry || now > entry.resetAt) {
+    rateLimitMap.set(ip, { count: 1, resetAt: now + 60_000 })
+    return true
+  }
+  if (entry.count >= 10) return false
+  entry.count++
+  return true
+}
+// Clean up stale entries every 5 minutes
+setInterval(() => {
+  const now = Date.now()
+  for (const [ip, entry] of rateLimitMap) {
+    if (now > entry.resetAt) rateLimitMap.delete(ip)
+  }
+}, 300_000)
+
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: getCorsHeaders(req.headers.get('origin')) })
@@ -52,6 +73,15 @@ serve(async (req) => {
   }
 
   const cors = getCorsHeaders(req.headers.get('origin'))
+
+  // SEC-4 + SEC-10: Rate limit by IP
+  const clientIp = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 'unknown'
+  if (!checkRateLimit(clientIp)) {
+    return new Response(JSON.stringify({ error: 'Too many requests' }), {
+      status: 429,
+      headers: { ...cors, 'Content-Type': 'application/json', 'Retry-After': '60' },
+    })
+  }
 
   try {
     if (!GIPHY_API_KEY) {
@@ -96,10 +126,11 @@ serve(async (req) => {
 
     if (!giphyRes.ok) {
       const errorText = await giphyRes.text()
+      // SEC-7: Log details server-side only, return generic error to client
       console.error('GIPHY API error:', giphyRes.status, errorText)
       return new Response(
-        JSON.stringify({ error: `GIPHY API returned ${giphyRes.status}`, details: errorText }),
-        { status: giphyRes.status, headers: { ...cors, 'Content-Type': 'application/json' } }
+        JSON.stringify({ error: 'GIF service unavailable' }),
+        { status: 502, headers: { ...cors, 'Content-Type': 'application/json' } }
       )
     }
 
@@ -113,8 +144,9 @@ serve(async (req) => {
       },
     })
   } catch (error) {
+    // SEC-7: Don't leak internal error details
     console.error('GIPHY proxy error:', error)
-    return new Response(JSON.stringify({ error: error.message }), {
+    return new Response(JSON.stringify({ error: 'Service unavailable' }), {
       status: 500,
       headers: { ...cors, 'Content-Type': 'application/json' },
     })

@@ -4,8 +4,8 @@
 
 import { createClient } from '@supabase/supabase-js'
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || process.env.VITE_SUPABASE_URL
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || process.env.VITE_SUPABASE_ANON_KEY
 
 type UserResult = {
   data: { user: { id: string; email?: string } | null }
@@ -21,13 +21,24 @@ const userCache = new WeakMap<Request, Promise<UserResult>>()
  */
 export function createMinimalSSRClient(request: Request) {
   const headers = new Headers()
-  
+
+  // During prerendering in CI, env vars may not be available.
+  // Return a stub that always returns "no user" to let public pages render.
+  if (!supabaseUrl || !supabaseAnonKey) {
+    const stubUser = () => Promise.resolve({ data: { user: null }, error: null } as UserResult)
+    return {
+      supabase: null as any,
+      headers,
+      getUser: stubUser,
+    }
+  }
+
   // Parse cookies manuellement (sans @supabase/ssr)
   const cookies = parseCookies(request.headers.get('Cookie') || '')
   const accessToken = cookies['sb-access-token'] || cookies['supabase-auth-token']
-  
+
   // Client minimal avec token pré-configuré
-  const supabase = createClient(supabaseUrl!, supabaseAnonKey!, {
+  const supabase = createClient(supabaseUrl, supabaseAnonKey, {
     global: {
       headers: accessToken ? {
         Authorization: `Bearer ${accessToken}`,

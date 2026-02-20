@@ -23,9 +23,20 @@ const PublicPageEffects = lazy(() => import('./PublicPageEffects'))
 const loadFeatures = () => import('framer-motion').then((mod) => mod.domMax)
 
 // Routes that skip the full ClientShell (no sidebar, no heavy hooks)
-const PUBLIC_PATHS = ['/', '/auth', '/onboarding', '/legal', '/help', '/premium', '/maintenance']
+const PUBLIC_PATHS = ['/', '/auth', '/onboarding', '/legal', '/help', '/premium', '/maintenance', '/blog']
 function isPublicPath(pathname: string) {
-  return PUBLIC_PATHS.includes(pathname) || pathname.startsWith('/join/') || pathname.startsWith('/s/')
+  return (
+    PUBLIC_PATHS.includes(pathname) ||
+    pathname.startsWith('/join/') ||
+    pathname.startsWith('/s/') ||
+    pathname.startsWith('/games/') ||
+    pathname.startsWith('/lfg/') ||
+    pathname.startsWith('/alternative/') ||
+    pathname.startsWith('/vs/') ||
+    pathname.startsWith('/blog/') ||
+    pathname.startsWith('/widget/') ||
+    pathname === '/sitemap.xml'
+  )
 }
 
 // Layout component provides the HTML document shell (replaces index.html)

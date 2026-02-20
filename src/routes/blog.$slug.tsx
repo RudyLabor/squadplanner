@@ -53,7 +53,7 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
     },
     {
       property: 'og:url',
-      content: `https://squadplanner.app/blog/${post.slug}`,
+      content: `https://squadplanner.fr/blog/${post.slug}`,
     },
     {
       property: 'article:published_time',
@@ -65,7 +65,7 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
     },
     {
       rel: 'canonical',
-      href: `https://squadplanner.app/blog/${post.slug}`,
+      href: `https://squadplanner.fr/blog/${post.slug}`,
     },
   ]
 }
@@ -76,7 +76,7 @@ function ArticleJsonLd({ post }: { post: BlogPost }) {
     '@type': 'BlogPosting',
     headline: post.title,
     description: post.excerpt,
-    image: `https://squadplanner.app/og-image.png`,
+    image: `https://squadplanner.fr/og-image.png`,
     datePublished: post.date,
     author: {
       '@type': 'Organization',
@@ -86,7 +86,11 @@ function ArticleJsonLd({ post }: { post: BlogPost }) {
   }
 
   return (
-    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+    <script
+      type="application/ld+json"
+      suppressHydrationWarning
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+    />
   )
 }
 
@@ -221,72 +225,17 @@ export default function BlogPost() {
 
         {/* Content */}
         <m.article
-          className="prose prose-invert mx-auto max-w-3xl px-4 py-12 sm:px-6 lg:px-8"
+          className="blog-article mx-auto max-w-3xl px-4 py-12 sm:px-6 lg:px-8"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.4 }}
+          suppressHydrationWarning
         >
-          <style>{`
-            article h2 {
-              margin-top: 2rem;
-              margin-bottom: 1rem;
-              font-size: 1.875rem;
-              font-weight: bold;
-              color: var(--color-text-primary);
-            }
-
-            article h3 {
-              margin-top: 1.5rem;
-              margin-bottom: 0.75rem;
-              font-size: 1.25rem;
-              font-weight: 600;
-              color: var(--color-text-primary);
-            }
-
-            article p {
-              margin-bottom: 1rem;
-              line-height: 1.75;
-              color: var(--color-text-secondary);
-            }
-
-            article ul, article ol {
-              margin-bottom: 1rem;
-              margin-left: 1.5rem;
-              color: var(--color-text-secondary);
-            }
-
-            article li {
-              margin-bottom: 0.5rem;
-              line-height: 1.75;
-            }
-
-            article code {
-              background-color: var(--color-surface-card);
-              border: 1px solid var(--color-border-subtle);
-              border-radius: 0.5rem;
-              padding: 0.25rem 0.5rem;
-              font-family: monospace;
-              font-size: 0.875rem;
-              color: var(--color-text-primary);
-            }
-
-            article strong {
-              font-weight: 600;
-              color: var(--color-text-primary);
-            }
-
-            article a {
-              color: var(--color-primary);
-              text-decoration: underline;
-            }
-
-            article a:hover {
-              color: var(--color-primary);
-              opacity: 0.8;
-            }
-          `}</style>
-
-          <div dangerouslySetInnerHTML={{ __html: post.content }} />
+          <div
+            className="blog-content [&_h2]:mt-8 [&_h2]:mb-4 [&_h2]:text-3xl [&_h2]:font-bold [&_h2]:text-text-primary [&_h3]:mt-6 [&_h3]:mb-3 [&_h3]:text-xl [&_h3]:font-semibold [&_h3]:text-text-primary [&_p]:mb-4 [&_p]:leading-7 [&_p]:text-text-secondary [&_ul]:mb-4 [&_ul]:ml-6 [&_ul]:text-text-secondary [&_ol]:mb-4 [&_ol]:ml-6 [&_ol]:text-text-secondary [&_li]:mb-2 [&_li]:leading-7 [&_strong]:font-semibold [&_strong]:text-text-primary [&_a]:text-primary [&_a]:underline [&_code]:bg-surface-card [&_code]:border [&_code]:border-border-subtle [&_code]:rounded-lg [&_code]:px-2 [&_code]:py-0.5 [&_code]:font-mono [&_code]:text-sm [&_code]:text-text-primary"
+            suppressHydrationWarning
+            dangerouslySetInnerHTML={{ __html: post.content }}
+          />
         </m.article>
 
         {/* Related Posts */}

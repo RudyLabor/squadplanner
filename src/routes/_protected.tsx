@@ -104,14 +104,14 @@ export async function clientLoader({ serverLoader }: ClientLoaderFunctionArgs) {
     squads = rpc.squads || []
   } else {
     const [profileResult, membershipsResult] = await Promise.all([
-      withTimeout(supabase.from('profiles').select('*').eq('id', authedUser.id).single(), 5000),
+      withTimeout(supabase.from('profiles').select('*').eq('id', user.id).single(), 5000),
       withTimeout(
         supabase
           .from('squad_members')
           .select(
             'squad_id, squads!inner(id, name, game, invite_code, owner_id, total_members, created_at)'
           )
-          .eq('user_id', authedUser.id),
+          .eq('user_id', user.id),
         5000
       ),
     ]) as any[]

@@ -77,7 +77,7 @@ async function requestNativeReview(): Promise<boolean> {
     // Tenter d'utiliser le plugin @capawesome/capacitor-app-review
     // ou le plugin @capacitor-community/in-app-review
     // Fallback: utiliser l'API native directement via Capacitor
-    const { AppReview } = await import('@capawesome/capacitor-app-review')
+    const { AppReview } = await import(/* @vite-ignore */ '@capawesome/capacitor-app-review')
     await AppReview.requestReview()
     return true
   } catch {

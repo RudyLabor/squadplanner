@@ -111,7 +111,7 @@ export const useInAppPurchaseStore = create<IAPState>((set, get) => ({
       const productId = getPlatformProductId(productKey)
 
       // Call the Capacitor IAP plugin to initiate purchase
-      const { InAppPurchase2 } = await import('@nicklason/capacitor-iap')
+      const { InAppPurchase2 } = await import(/* @vite-ignore */ '@nicklason/capacitor-iap')
 
       // Register the product
       await InAppPurchase2.initialize()
@@ -168,7 +168,7 @@ export const useInAppPurchaseStore = create<IAPState>((set, get) => ({
     set({ status: 'loading', error: null })
 
     try {
-      const { InAppPurchase2 } = await import('@nicklason/capacitor-iap')
+      const { InAppPurchase2 } = await import(/* @vite-ignore */ '@nicklason/capacitor-iap')
 
       await InAppPurchase2.initialize()
       const restored = await InAppPurchase2.restorePurchases()

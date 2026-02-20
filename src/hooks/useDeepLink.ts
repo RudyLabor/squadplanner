@@ -70,7 +70,7 @@ export function useDeepLink() {
 
     async function setup() {
       try {
-        const { App } = await import('@capacitor/app')
+        const { App } = await import(/* @vite-ignore */ '@capacitor/app')
 
         // Handle URLs that open the app while it's running (warm start)
         const listener = await App.addListener('appUrlOpen', ({ url }) => {

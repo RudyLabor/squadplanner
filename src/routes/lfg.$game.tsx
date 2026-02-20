@@ -210,7 +210,7 @@ export default function Component() {
             viewport={{ once: true }}
             className="text-lg md:text-xl text-text-tertiary mb-10 max-w-2xl mx-auto leading-relaxed"
           >
-            Rejoins {game.estimatedPlayers} joueurs {game.name} vérifiés. Matchmaking intelligent, communauté de confiance, squads complètes
+            Rejoins {game.estimatedPlayers.split(' ')[0]} joueurs {game.name} vérifiés. Matchmaking intelligent, communauté de confiance, squads complètes
             <span className="text-text-primary font-medium">. Gratuit et sans engagement.</span>
           </m.p>
 

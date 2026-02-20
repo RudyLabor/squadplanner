@@ -53,7 +53,7 @@ export function PartySquadCard({
           </div>
           <Button
             size="sm"
-            variant={hasActiveParty ? 'default' : 'primary'}
+            variant={hasActiveParty ? 'secondary' : 'primary'}
             onClick={onJoin}
             disabled={isConnecting}
             className={

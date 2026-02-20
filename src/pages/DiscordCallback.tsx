@@ -88,8 +88,8 @@ export function DiscordCallback() {
           useAuthStore.setState({
             profile: {
               ...profile,
-              discord_user_id: data.discord_user_id,
-              discord_username: data.discord_username,
+              discord_user_id: data.discord_user_id as string | null,
+              discord_username: data.discord_username as string | null,
             },
           })
         }

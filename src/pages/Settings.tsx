@@ -588,7 +588,7 @@ function SoundToggle() {
     })
   }, [])
 
-  return <Toggle enabled={enabled} onToggle={handleToggle} />
+  return <Toggle enabled={enabled} onChange={handleToggle} />
 }
 
 // Haptic toggle — syncs with haptic utils
@@ -600,13 +600,10 @@ function HapticToggle() {
 
   const handleToggle = useCallback((v: boolean) => {
     setEnabled(v)
-    import('../hooks/useHapticFeedback').then(({ default: useHapticFeedback }) => {
-      // Direct localStorage set for immediate effect
-      localStorage.setItem('hapticEnabled', String(v))
-    })
+    localStorage.setItem('hapticEnabled', String(v))
   }, [])
 
-  return <Toggle enabled={enabled} onToggle={handleToggle} />
+  return <Toggle enabled={enabled} onChange={handleToggle} />
 }
 
 export default Settings

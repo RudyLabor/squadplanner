@@ -237,8 +237,8 @@ export default function Root() {
       if (document.visibilityState !== 'visible') return
       try {
         const { held } = await navigator.locks.query()
-        const stuck = held?.find((l: LockInfo) => l.name.includes('auth-token'))
-        if (stuck) {
+        const stuck = held?.find((l: LockInfo) => l.name?.includes('auth-token'))
+        if (stuck?.name) {
           await navigator.locks.request(stuck.name, { steal: true }, () => {})
         }
       } catch {

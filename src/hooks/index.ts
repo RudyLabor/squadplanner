@@ -122,5 +122,4 @@ export { useAnalytics } from './useAnalytics'
 // App resume lifecycle (replaces entry.client.tsx reload mechanisms)
 export { useAppResume } from './useAppResume'
 
-// Deep linking (Capacitor native platforms)
-export { useDeepLink } from './useDeepLink'
+// Deep linking: import directly from './useDeepLink' where needed (native-only, not in barrel)

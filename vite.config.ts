@@ -100,6 +100,7 @@ export default defineConfig(async () => {
       alias: {
         ...(process.env.BUILD_TARGET !== 'native' && {
           '@capacitor/core': fileURLToPath(new URL('./src/stubs/capacitor.ts', import.meta.url)),
+          '@capacitor/app': fileURLToPath(new URL('./src/stubs/capacitor.ts', import.meta.url)),
           '@capacitor/haptics': fileURLToPath(new URL('./src/stubs/capacitor.ts', import.meta.url)),
           '@capacitor/local-notifications': fileURLToPath(
             new URL('./src/stubs/capacitor.ts', import.meta.url)

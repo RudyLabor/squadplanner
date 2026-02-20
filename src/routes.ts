@@ -4,6 +4,7 @@ export default [
   // Public pages (pre-rendered at build time)
   index('./routes/_index.tsx'),
   route('auth', './routes/auth.tsx'),
+  route('login', './routes/login.tsx'), // BUG FIX #3: Redirect /login to /auth
   route('legal', './routes/legal.tsx'),
   route('help', './routes/help.tsx'),
   route('premium', './routes/premium.tsx'),

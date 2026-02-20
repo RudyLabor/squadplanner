@@ -207,11 +207,16 @@ const LEVEL_TITLES = [
   'Ultime',         // 20
 ]
 
-export const useGamificationStore = create<GamificationState>()(
+interface GamificationStateWithHydration extends GamificationState {
+  _isHydrated: boolean
+}
+
+export const useGamificationStore = create<GamificationStateWithHydration>()(
   persist(
     (set, get) => ({
       xp: 0,
       level: 1,
+      _isHydrated: false,
       stats: {
         sessionsCreated: 0,
         sessionsAttended: 0,
@@ -297,6 +302,14 @@ export const useGamificationStore = create<GamificationState>()(
         return LEVEL_TITLES[Math.min(level - 1, LEVEL_TITLES.length - 1)]
       },
     }),
-    { name: 'squadplanner-gamification' }
+    {
+      name: 'squadplanner-gamification',
+      onRehydrateStorage: () => (state, action) => {
+        if (state && action === 'REHYDRATE') {
+          // Mark store as hydrated only after persist middleware rehydrates from localStorage
+          state._isHydrated = true
+        }
+      },
+    }
   )
 )

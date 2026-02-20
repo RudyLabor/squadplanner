@@ -223,13 +223,16 @@ export default function Home({ loaderData }: HomeProps) {
     if (!rawSessions?.length) return 0
     const now = new Date()
     const startOfWeek = new Date(now)
-    startOfWeek.setDate(now.getDate() - now.getDay())
+    // Semaine commence le lundi (convention FR) : getDay() retourne 0=dim, 1=lun...
+    const dayOfWeek = now.getDay()
+    const diffToMonday = dayOfWeek === 0 ? 6 : dayOfWeek - 1
+    startOfWeek.setDate(now.getDate() - diffToMonday)
     startOfWeek.setHours(0, 0, 0, 0)
     const endOfWeek = new Date(startOfWeek)
     endOfWeek.setDate(startOfWeek.getDate() + 7)
     return rawSessions.filter((s) => {
       const date = new Date(s.scheduled_at)
-      return date >= startOfWeek && date < endOfWeek
+      return s.status !== 'cancelled' && date >= startOfWeek && date < endOfWeek
     }).length
   }, [rawSessions])
 

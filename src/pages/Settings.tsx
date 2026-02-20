@@ -297,6 +297,18 @@ export function Settings() {
           </div>
         </Card>
 
+        <Card id="sounds" className="mb-5 p-5 bg-bg-elevated scroll-mt-6">
+          <SectionHeader icon={Volume2} title="Sons & Vibrations" />
+          <div className="space-y-1">
+            <SettingRow label="Sons de l'interface" description="Jouer des sons pour les actions (messages, RSVP, etc.)">
+              <SoundToggle />
+            </SettingRow>
+            <SettingRow label="Vibrations haptiques" description="Retour vibratoire sur les boutons et actions">
+              <HapticToggle />
+            </SettingRow>
+          </div>
+        </Card>
+
         <Card id="theme" className="mb-5 p-5 bg-bg-elevated scroll-mt-6">
           <SectionHeader icon={Palette} title="Apparence" />
           <SettingRow label="Thème" description="Adapte l'apparence de l'app">
@@ -558,6 +570,43 @@ function DiscordSection() {
       </div>
     </Card>
   )
+}
+
+// Sound toggle — syncs with useSoundStore
+function SoundToggle() {
+  const [enabled, setEnabled] = useState(() => {
+    try {
+      const stored = JSON.parse(localStorage.getItem('squadplanner-sounds') || '{}')
+      return stored?.state?.enabled !== false
+    } catch { return true }
+  })
+
+  const handleToggle = useCallback((v: boolean) => {
+    setEnabled(v)
+    import('../hooks/useSound').then(({ useSoundStore }) => {
+      useSoundStore.getState().setEnabled(v)
+    })
+  }, [])
+
+  return <Toggle enabled={enabled} onToggle={handleToggle} />
+}
+
+// Haptic toggle — syncs with haptic utils
+function HapticToggle() {
+  const [enabled, setEnabled] = useState(() => {
+    try { return localStorage.getItem('hapticEnabled') !== 'false' }
+    catch { return true }
+  })
+
+  const handleToggle = useCallback((v: boolean) => {
+    setEnabled(v)
+    import('../hooks/useHapticFeedback').then(({ default: useHapticFeedback }) => {
+      // Direct localStorage set for immediate effect
+      localStorage.setItem('hapticEnabled', String(v))
+    })
+  }, [])
+
+  return <Toggle enabled={enabled} onToggle={handleToggle} />
 }
 
 export default Settings

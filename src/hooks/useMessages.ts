@@ -255,6 +255,31 @@ export const useMessagesStore = create<MessagesState>((set, get) => ({
       set((state) => ({ messages: state.messages.filter((m) => m._optimisticId !== tempId) }))
       // Track challenge progress for sending messages
       trackChallengeProgress(user.id, 'messages').catch(() => {})
+      // Sound feedback: message sent
+      import('./useSound').then(({ useSoundStore }) => {
+        const { enabled, volume } = useSoundStore.getState()
+        if (enabled && volume > 0) {
+          try {
+            const ctx = new AudioContext()
+            const osc = ctx.createOscillator()
+            const gain = ctx.createGain()
+            osc.type = 'sine'
+            osc.frequency.setValueAtTime(880, ctx.currentTime)
+            gain.gain.setValueAtTime(0.15 * volume, ctx.currentTime)
+            gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.1)
+            osc.connect(gain)
+            gain.connect(ctx.destination)
+            osc.start(ctx.currentTime)
+            osc.stop(ctx.currentTime + 0.1)
+          } catch {}
+        }
+      })
+      // Gamification: award XP for sending a message
+      import('../stores/useGamificationStore').then(({ useGamificationStore }) => {
+        const store = useGamificationStore.getState()
+        store.addXP('message.send')
+        store.incrementStat('messagesSent')
+      })
       // Push notification to other squad members (fire-and-forget)
       const senderName = optimisticMsg.sender?.username || 'Joueur'
       notifySquadMessage(squadId, user.id, senderName, content.trim(), sessionId).catch(() => {})

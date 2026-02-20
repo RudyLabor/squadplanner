@@ -1,89 +1,49 @@
-/**
- * PHASE - Offline Banner Component
- *
- * Shows clear feedback when the user is offline
- * and when they reconnect.
- */
 import { m, AnimatePresence } from 'framer-motion'
-import { WifiOff, Wifi, X } from './icons'
 import { useOfflineBanner } from '../hooks/useOffline'
+import { WifiOff, Wifi } from './icons'
 
+/**
+ * Global offline/reconnection banner.
+ * Shows a subtle bar at the top when connection is lost,
+ * and a brief "reconnected" message when it comes back.
+ */
 export function OfflineBanner() {
-  const {
-    showOfflineBanner,
-    showReconnectedBanner,
-    dismissOfflineBanner,
-    dismissReconnectedBanner,
-  } = useOfflineBanner()
+  const { showOfflineBanner, showReconnectedBanner } = useOfflineBanner()
 
   return (
-    <>
-      {/* Offline Banner */}
-      <AnimatePresence>
-        {showOfflineBanner && (
-          <m.div
-            initial={{ y: -100, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            exit={{ y: -100, opacity: 0 }}
-            transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-            className="fixed top-0 left-0 right-0 z-[9999] safe-area-pt"
-            role="alert"
-            aria-live="assertive"
-          >
-            <div className="mx-4 mt-2 p-3 rounded-xl bg-error/15 border border-error/20 backdrop-blur-md shadow-lg">
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-lg bg-error/20 flex items-center justify-center flex-shrink-0">
-                  <WifiOff className="w-4 h-4 text-error" />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-md font-medium text-error">Hors ligne</p>
-                  <p className="text-sm text-error/80">Vérifie ta connexion internet</p>
-                </div>
-                <button
-                  onClick={dismissOfflineBanner}
-                  className="p-2.5 rounded-lg hover:bg-overlay-light transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center"
-                  aria-label="Fermer l'alerte hors ligne"
-                >
-                  <X className="w-4 h-4 text-error/60" />
-                </button>
-              </div>
-            </div>
-          </m.div>
-        )}
-      </AnimatePresence>
-
-      {/* Reconnected Banner */}
-      <AnimatePresence>
-        {showReconnectedBanner && (
-          <m.div
-            initial={{ y: -100, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            exit={{ y: -100, opacity: 0 }}
-            transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-            className="fixed top-0 left-0 right-0 z-[9999] safe-area-pt"
-            role="status"
-            aria-live="polite"
-          >
-            <div className="mx-4 mt-2 p-3 rounded-xl bg-success/15 border border-success/20 backdrop-blur-md shadow-lg">
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-lg bg-success/20 flex items-center justify-center flex-shrink-0">
-                  <Wifi className="w-4 h-4 text-success" />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-md font-medium text-success">Connexion rétablie</p>
-                </div>
-                <button
-                  onClick={dismissReconnectedBanner}
-                  className="p-2.5 rounded-lg hover:bg-overlay-light transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center"
-                  aria-label="Fermer la notification de reconnexion"
-                >
-                  <X className="w-4 h-4 text-success/60" />
-                </button>
-              </div>
-            </div>
-          </m.div>
-        )}
-      </AnimatePresence>
-    </>
+    <AnimatePresence>
+      {showOfflineBanner && (
+        <m.div
+          key="offline"
+          initial={{ height: 0, opacity: 0 }}
+          animate={{ height: 'auto', opacity: 1 }}
+          exit={{ height: 0, opacity: 0 }}
+          transition={{ type: 'spring', stiffness: 500, damping: 35 }}
+          className="overflow-hidden z-50"
+        >
+          <div className="flex items-center justify-center gap-2 px-4 py-2 bg-warning/10 border-b border-warning/20 text-warning text-xs font-medium">
+            <WifiOff className="w-3.5 h-3.5" />
+            <span>Connexion perdue — les modifications seront synchronisées au retour</span>
+          </div>
+        </m.div>
+      )}
+      {showReconnectedBanner && (
+        <m.div
+          key="reconnected"
+          initial={{ height: 0, opacity: 0 }}
+          animate={{ height: 'auto', opacity: 1 }}
+          exit={{ height: 0, opacity: 0 }}
+          transition={{ type: 'spring', stiffness: 500, damping: 35 }}
+          className="overflow-hidden z-50"
+        >
+          <div className="flex items-center justify-center gap-2 px-4 py-2 bg-success/10 border-b border-success/20 text-success text-xs font-medium">
+            <Wifi className="w-3.5 h-3.5" />
+            <span>Connexion rétablie</span>
+          </div>
+        </m.div>
+      )}
+    </AnimatePresence>
   )
 }
+
+export default OfflineBanner

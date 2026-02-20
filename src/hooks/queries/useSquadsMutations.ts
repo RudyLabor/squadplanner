@@ -67,6 +67,12 @@ export function useCreateSquadMutation() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: queryKeys.squads.all })
       showSuccess('Squad créée avec succès !')
+      // Gamification: award XP for creating a squad
+      import('../../stores/useGamificationStore').then(({ useGamificationStore }) => {
+        const store = useGamificationStore.getState()
+        store.addXP('squad.create')
+        store.incrementStat('squadsCreated')
+      })
     },
     onError: (error) => {
       showError(error.message || 'Erreur lors de la création')
@@ -140,6 +146,12 @@ export function useJoinSquadMutation() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: queryKeys.squads.all })
       showSuccess('Tu as rejoint la squad !')
+      // Gamification: award XP for joining a squad
+      import('../../stores/useGamificationStore').then(({ useGamificationStore }) => {
+        const store = useGamificationStore.getState()
+        store.addXP('squad.join')
+        store.incrementStat('squadsJoined')
+      })
     },
     onError: (error) => {
       showError(error.message || 'Impossible de rejoindre la squad')

@@ -126,6 +126,12 @@ export function useCreateSessionMutation() {
     onSuccess: () => {
       showSuccess('Session creee ! Tes potes vont etre notifies.')
       queryClient.invalidateQueries({ queryKey: ['challenges'] })
+      // Gamification: award XP for creating a session
+      import('../../stores/useGamificationStore').then(({ useGamificationStore }) => {
+        const store = useGamificationStore.getState()
+        store.addXP('session.create')
+        store.incrementStat('sessionsCreated')
+      })
     },
     onSettled: optimistic.onSettled,
   })
@@ -221,6 +227,10 @@ export function useRsvpMutation() {
       // Refresh challenges to show updated progress
       if (data.response === 'present') {
         queryClient.invalidateQueries({ queryKey: ['challenges'] })
+        // Gamification: award XP for RSVP
+        import('../../stores/useGamificationStore').then(({ useGamificationStore }) => {
+          useGamificationStore.getState().addXP('session.rsvp')
+        })
       }
       // Auto-confirm: if RSVP is "present", check if threshold is met
       if (data.response === 'present') {

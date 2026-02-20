@@ -50,6 +50,12 @@ const CookieConsent = lazy(() =>
 const TourGuide = lazy(() =>
   import('./components/TourGuide').then((m) => ({ default: m.TourGuide }))
 )
+const LevelUpModal = lazy(() =>
+  import('./components/LevelUpModal').then((m) => ({ default: m.LevelUpModal }))
+)
+const AchievementToast = lazy(() =>
+  import('./components/LevelUpModal').then((m) => ({ default: m.AchievementToast }))
+)
 
 // Global state banners
 const GlobalStateBanners = memo(function GlobalStateBanners() {
@@ -259,6 +265,8 @@ export default function ClientShell() {
         <NotificationBanner />
         <CookieConsent />
         <TourGuide />
+        <LevelUpModal />
+        <AchievementToast />
       </Suspense>
     </>
   )

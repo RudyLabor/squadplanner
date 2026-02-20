@@ -1,4 +1,4 @@
-import { memo } from 'react'
+import { memo, lazy, Suspense } from 'react'
 import { Link } from 'react-router'
 import { m, AnimatePresence } from 'framer-motion'
 import { User, Zap } from '../icons'
@@ -7,6 +7,8 @@ import { Tooltip } from '../ui/Tooltip'
 import { StatusSelector } from '../StatusSelector'
 import { PlanBadge } from '../PlanBadge'
 import { usePremiumStore } from '../../hooks/usePremium'
+
+const XPProgressBar = lazy(() => import('../XPProgressBar'))
 
 interface SidebarFooterProps {
   isExpanded: boolean
@@ -94,6 +96,11 @@ export const SidebarFooter = memo(function SidebarFooter({
               </m.div>
             </Link>
             <StatusSelector onOpenCustomStatus={onOpenCustomStatus} className="mt-1 px-1" />
+            <Suspense fallback={null}>
+              <div className="mt-2 px-1">
+                <XPProgressBar compact />
+              </div>
+            </Suspense>
           </>
         )}
       </div>

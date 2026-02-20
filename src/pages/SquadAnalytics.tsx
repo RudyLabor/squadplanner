@@ -47,12 +47,13 @@ export default function SquadAnalytics() {
             <Link
               to={`/squad/${id}`}
               className="p-2 hover:bg-surface-card rounded-lg transition-colors"
+              aria-label="Retour à la squad"
             >
               <ArrowLeft className="w-6 h-6" />
             </Link>
             <h1 className="text-3xl font-bold">Analytics Squad</h1>
           </div>
-          <p className="text-text-secondary">Découvrez les statistiques détaillées de votre squad</p>
+          <p className="text-text-secondary">Découvre les statistiques détaillées de ta squad</p>
         </m.div>
 
         {/* Grille d'analytics */}
@@ -65,7 +66,7 @@ export default function SquadAnalytics() {
               transition={{ delay: 0.1 }}
               className="bg-surface-card border border-border-subtle rounded-2xl p-6"
             >
-              <h2 className="text-xl font-semibold mb-4">Heatmap de Présence</h2>
+              <h2 className="text-xl font-semibold mb-4">Heatmap de présence</h2>
               <AttendanceHeatmap squadId={id} />
             </m.div>
 
@@ -76,7 +77,7 @@ export default function SquadAnalytics() {
               transition={{ delay: 0.2 }}
               className="bg-surface-card border border-border-subtle rounded-2xl p-6"
             >
-              <h2 className="text-xl font-semibold mb-4">Fiabilité des Membres</h2>
+              <h2 className="text-xl font-semibold mb-4">Fiabilité des membres</h2>
               <MemberReliabilityChart squadId={id} />
             </m.div>
 
@@ -87,7 +88,7 @@ export default function SquadAnalytics() {
               transition={{ delay: 0.3 }}
               className="bg-surface-card border border-border-subtle rounded-2xl p-6"
             >
-              <h2 className="text-xl font-semibold mb-4">Tendance des Sessions</h2>
+              <h2 className="text-xl font-semibold mb-4">Tendance des sessions</h2>
               <SessionTrends squadId={id} />
             </m.div>
 
@@ -98,7 +99,7 @@ export default function SquadAnalytics() {
               transition={{ delay: 0.4 }}
               className="bg-surface-card border border-border-subtle rounded-2xl p-6"
             >
-              <h2 className="text-xl font-semibold mb-4">Meilleurs Créneaux</h2>
+              <h2 className="text-xl font-semibold mb-4">Meilleurs créneaux</h2>
               <BestSlotsCard squadId={id} />
             </m.div>
           </div>

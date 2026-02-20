@@ -12,6 +12,8 @@ const comparisonFeatures = [
   { name: 'Sessions récurrentes', squadPlanner: true, gamerLink: false, description: 'Crée une fois, ça se répète' },
   { name: 'Score de fiabilité', squadPlanner: true, gamerLink: false, description: 'Vois qui est régulier' },
   { name: 'Analytics gaming', squadPlanner: true, gamerLink: false, description: 'Stats de présence et tendances' },
+  { name: 'Chat intégré', squadPlanner: true, gamerLink: false, description: 'Messagerie de squad intégrée' },
+  { name: 'Party vocale', squadPlanner: true, gamerLink: false, description: 'Appels vocaux gaming en un clic' },
   { name: 'Gratuit pour l\'essentiel', squadPlanner: true, gamerLink: true, description: 'Les bases sans payer' }
 ]
 

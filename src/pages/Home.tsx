@@ -195,7 +195,7 @@ export default function Home({ loaderData }: HomeProps) {
     return () => {
       rsvpTimers.current.forEach(clearTimeout)
     }
-  }, [])
+  }, [profile?.username, user?.user_metadata?.username])
 
   const upcomingSessions = useMemo<UpcomingSession[]>(() => {
     if (!rawSessions?.length || !squads?.length) return []
@@ -267,7 +267,7 @@ export default function Home({ loaderData }: HomeProps) {
         }
       } catch (error) {
         haptic.error()
-        console.error('RSVP error:', error)
+        if (!import.meta.env.PROD) console.error('RSVP error:', error)
         setSuccessMessage("Erreur : ta réponse n'a pas pu être enregistrée")
         rsvpTimers.current.push(setTimeout(() => setSuccessMessage(null), 4000))
       }
@@ -307,7 +307,7 @@ export default function Home({ loaderData }: HomeProps) {
       : null
 
   return (
-    <div className="min-h-0 bg-bg-base pb-6 page-enter">
+    <main className="min-h-0 bg-bg-base pb-6 page-enter" aria-label="Accueil">
       {showConfetti && typeof window !== 'undefined' && (
         <Confetti
           width={window.innerWidth}
@@ -461,6 +461,6 @@ export default function Home({ loaderData }: HomeProps) {
           </div>
         </CrossfadeTransition>
       </PullToRefresh>
-    </div>
+    </main>
   )
 }

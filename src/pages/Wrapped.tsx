@@ -86,12 +86,12 @@ export function Wrapped() {
         }
 
         // Use real profile data for streak and reliability
-        const bestStreak = profile?.best_streak || profile?.current_streak || Math.min(Math.ceil(sessionCount / 3) + 2, 20)
+        const bestStreak = profile?.best_streak || profile?.current_streak || 0
 
         // Use real reliability score from profile
         const reliabilityScore = profile?.reliability_score != null
           ? Math.round(profile.reliability_score)
-          : Math.min(Math.round(85 + (sessionCount % 15)), 99)
+          : 0
 
         // Find favorite squad (most attended sessions)
         let favoriteSquad: WrappedStats['favoriteSquad'] = null

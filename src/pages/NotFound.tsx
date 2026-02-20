@@ -37,7 +37,7 @@ export function NotFound() {
 
           {/* Action buttons — always visible */}
           <div className="flex flex-col sm:flex-row gap-3 justify-center mb-10">
-            <Link to="/home">
+            <Link to="/">
               <Button type="button" className="w-full sm:w-auto">
                 <Home className="w-4 h-4" />
                 Retour à l'accueil

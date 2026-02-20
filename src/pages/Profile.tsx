@@ -110,7 +110,7 @@ export function Profile() {
       if (refreshProfile) await refreshProfile()
       showSuccess(`+${xpReward} XP réclamés !`)
     } catch (error) {
-      console.error('Error claiming XP:', error)
+      if (!import.meta.env.PROD) console.error('Error claiming XP:', error)
       showError('Erreur lors de la réclamation des XP')
     }
   }

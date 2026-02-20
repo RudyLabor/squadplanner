@@ -273,7 +273,7 @@ export default function VsGuildedVsSquadPlanner() {
                 </div>
                 <div>
                   <div className="font-semibold text-text-primary mb-2">Premium</div>
-                  <p className="text-text-secondary text-md">5,99 €/mois ou 59,99 €/an</p>
+                  <p className="text-text-secondary text-md">6,99 €/mois ou 59,88 €/an</p>
                   <ul className="text-text-secondary text-sm mt-2 space-y-1 pl-4">
                     <li>• Analytics avancées</li>
                     <li>• Personnalisation squad</li>

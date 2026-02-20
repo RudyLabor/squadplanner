@@ -132,7 +132,7 @@ export function Referrals() {
             >
               Invite tes potes,{' '}
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-success to-primary">
-                gagne des rewards
+                gagne des récompenses
               </span>
             </m.h1>
 

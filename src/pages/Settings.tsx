@@ -191,7 +191,7 @@ export function Settings() {
       <div className="px-4 md:px-6 lg:px-8 py-6 max-w-4xl mx-auto">
         <header className="hidden lg:flex items-center gap-4 mb-8">
           <button
-            onClick={() => navigate(-1)}
+            onClick={() => { if (window.history.length > 1) navigate(-1); else navigate('/home'); }}
             className="w-10 h-10 rounded-xl bg-surface-card flex items-center justify-center hover:bg-border-hover transition-colors"
             aria-label="Retour"
           >
@@ -493,7 +493,7 @@ export function Settings() {
                 <Globe className="w-5 h-5 text-primary" />
                 <div className="text-left">
                   <p className="text-md text-text-primary">Page d'accueil publique</p>
-                  <p className="text-sm text-text-quaternary">Voir la landing page</p>
+                  <p className="text-sm text-text-quaternary">Voir la page d'accueil</p>
                 </div>
               </div>
               <ExternalLink className="w-4 h-4 text-text-quaternary" />

@@ -1,6 +1,6 @@
 import { Link } from 'react-router'
 import { m } from 'framer-motion'
-import { Check, ArrowRight, Calendar, Users, Sparkles, ChevronDown } from '../components/icons'
+import { Check, ArrowRight, Calendar, Users, Sparkles, ChevronDown, MessageCircle, Mic } from '../components/icons'
 import { PublicPageShell } from '../components/PublicPageShell'
 import { scrollReveal, scrollRevealLight, springTap } from '../utils/animations'
 import { useState } from 'react'
@@ -24,6 +24,16 @@ const features = [
   {
     icon: Check,
     name: 'Notifications Temps Réel',
+    hasOnSP: true
+  },
+  {
+    icon: MessageCircle,
+    name: 'Chat intégré',
+    hasOnSP: true
+  },
+  {
+    icon: Mic,
+    name: 'Party vocale',
     hasOnSP: true
   }
 ]

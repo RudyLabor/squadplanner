@@ -96,7 +96,7 @@ export default function SquadDetail() {
           setSuccessMessage(response === 'absent' ? 'Absence enregistrée' : 'Réponse enregistrée')
         }
       } catch (err) {
-        console.error('RSVP error:', err)
+        if (!import.meta.env.PROD) console.error('RSVP error:', err)
         setSuccessMessage(null)
         // Brief error toast via success message slot
         setSuccessMessage('Erreur lors du RSVP. Réessaye.')

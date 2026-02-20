@@ -71,7 +71,7 @@ export function Party() {
               setShowToast(true)
             }
           })
-          .catch((err) => console.error('[Party] Auto-reconnect failed:', err))
+          .catch((err) => { if (!import.meta.env.PROD) console.error('[Party] Auto-reconnect failed:', err) })
       }, 500)
     }
   }, [user, profile, isConnected, isConnecting, joinChannel])
@@ -152,7 +152,7 @@ export function Party() {
     try {
       await leaveChannel()
     } catch (err) {
-      console.error('[Party] Error leaving:', err)
+      if (!import.meta.env.PROD) console.error('[Party] Error leaving:', err)
     }
   }
 
@@ -195,9 +195,9 @@ export function Party() {
           data: { type: 'party_started', squad_id: squadId },
           vibrate: [200, 100, 200],
         },
-      }).catch((err) => console.warn('[Party] Push notify failed:', err))
+      }).catch((err) => { if (!import.meta.env.PROD) console.warn('[Party] Push notify failed:', err) })
     } catch (err) {
-      console.warn('[Party] Failed to notify squad members:', err)
+      if (!import.meta.env.PROD) console.warn('[Party] Failed to notify squad members:', err)
     }
   }
 

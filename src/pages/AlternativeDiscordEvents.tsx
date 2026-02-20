@@ -30,7 +30,7 @@ const advantages = [
   },
   {
     title: 'Pensé pour le gaming',
-    description: 'Squad Planner ne pense qu\'à ça : tes sessions. Discord = commu. Nous = organisation.',
+    description: 'Squad Planner, c\'est l\'orga gaming complète\u00a0: calendrier, RSVP, chat intégré et party vocale. Discord = commu.',
     icon: Users
   },
   {
@@ -102,7 +102,7 @@ export default function AlternativeDiscordEvents() {
             viewport={{ once: true }}
             className="text-lg md:text-xl text-text-tertiary mb-10 max-w-2xl mx-auto leading-relaxed"
           >
-            Discord, c'est pour parler. Squad Planner, c'est pour organiser. 100% gaming. Discord reste branché, mais l'organisation, c'est ici.
+            Discord, c'est la commu. Squad Planner, c'est l'organisation complète avec chat et party vocale intégrés. 100% gaming. Discord reste branché, mais l'organisation, c'est ici.
           </m.p>
 
           {/* CTAs */}
@@ -205,7 +205,7 @@ export default function AlternativeDiscordEvents() {
               6 trucs que Squad Planner te donne
             </h2>
             <p className="text-text-tertiary text-lg">
-              Discord reste ton ami pour parler. Nous on gère l'organisation.
+              Discord reste ton ami pour la commu. Nous on gère l'organisation, le chat et la vocale.
             </p>
           </m.div>
 

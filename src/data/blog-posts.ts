@@ -47,7 +47,7 @@ export const BLOG_POSTS: BlogPost[] = [
       <ul>
         <li>Moins mature que Discord (mais en évolution rapide)</li>
         <li>Communauté plus réduite (mais croissante)</li>
-        <li>Fonctionnalités vocales encore en développement</li>
+        <li>Communauté encore en pleine croissance</li>
       </ul>
 
       <h3>2. Discord - Le géant incontournable</h3>
@@ -86,7 +86,7 @@ export const BLOG_POSTS: BlogPost[] = [
       <p><strong>Inconvénients :</strong></p>
       <ul>
         <li>Pas de chat texte aussi développé que Discord</li>
-        <li>Apprentissage plus stéger pour l'administration</li>
+        <li>Apprentissage plus complexe pour l'administration</li>
         <li>Communauté moins active que Discord</li>
         <li>Pas d'outils intégrés pour l'organisation d'événements</li>
       </ul>
@@ -118,7 +118,7 @@ export const BLOG_POSTS: BlogPost[] = [
       <p><strong>Avantages :</strong></p>
       <ul>
         <li>Entièrement open-source</li>
-        <li>Respect de la vie privée respecté</li>
+        <li>Respect de la vie privée garanti</li>
         <li>Interface familière pour les utilisateurs de Discord</li>
         <li>Gratuit sans limitations</li>
       </ul>
@@ -132,19 +132,19 @@ export const BLOG_POSTS: BlogPost[] = [
         <li>Aucune fonctionnalité gaming native</li>
       </ul>
 
-      <h3>Quel choix faire?</h3>
+      <h3>Quel choix faire\u00a0?</h3>
 
       <p>Ton choix dépend de tes priorités :</p>
       <ul>
-        <li><strong>Tu cherches une organisation d'équipe gaming complète?</strong> → Squad Planner</li>
-        <li><strong>Tu privilégies la communication et la voix ?</strong> → Discord ou TeamSpeak</li>
-        <li><strong>Tu as une équipe compétitive professionnelle?</strong> → Slack + Squad Planner</li>
-        <li><strong>Tu veux respecter ta vie privée?</strong> → Revolt</li>
+        <li><strong>Tu cherches une organisation d'équipe gaming complète\u00a0?</strong> → Squad Planner</li>
+        <li><strong>Tu privilégies la communication et la voix\u00a0?</strong> → Discord ou TeamSpeak</li>
+        <li><strong>Tu as une équipe compétitive professionnelle\u00a0?</strong> → Slack + Squad Planner</li>
+        <li><strong>Tu veux respecter ta vie privée\u00a0?</strong> → Revolt</li>
       </ul>
 
-      <p>En 2026, la meilleure stratégie est souvent d'utiliser <strong>Squad Planner pour l'organisation</strong> et <strong>Discord pour la communication</strong>. Les deux plateformes se complètent parfaitement et offrent la meilleure expérience pour les communautés gaming modernes.</p>
+      <p>En 2026, la meilleure stratégie est souvent d'utiliser <strong>Squad Planner pour l'organisation, le chat et la party vocale gaming</strong> et <strong>Discord pour la communauté élargie</strong>. Les deux plateformes se complètent parfaitement et offrent la meilleure expérience pour les communautés gaming modernes.</p>
 
-      <p>Guilded nous manquera, mais l'écosystème gaming n'a jamais été aussi riche en options. À toi de trouver la combinaison parfaite pour ta squad!</p>
+      <p>Guilded nous manquera, mais l'écosystème gaming n'a jamais été aussi riche en options. À toi de trouver la combinaison parfaite pour ta squad\u00a0!</p>
     </article>`,
   },
   {
@@ -159,7 +159,7 @@ export const BLOG_POSTS: BlogPost[] = [
     content: `<article>
       <h2>Comment organiser un tournoi entre amis en 5 étapes</h2>
 
-      <p>Organiser un tournoi gaming entre amis peut sembler complexe : coordonner les horaires, gérer les brackets, communiquer avec les participants, valider les résultats... Mais avec une bonne méthode et les bons outils, c'est bien plus simple qu'il n'y paraît!</p>
+      <p>Organiser un tournoi gaming entre amis peut sembler complexe : coordonner les horaires, gérer les brackets, communiquer avec les participants, valider les résultats... Mais avec une bonne méthode et les bons outils, c'est bien plus simple qu'il n'y paraît\u00a0!</p>
 
       <p>Dans ce guide complet, je te montrerai comment organiser un tournoi fluide et mémorable en utilisant Squad Planner. Que tu organises ton premier tournoi ou que tu sois déjà expérimenté, tu trouveras des astuces pour améliorer ton approche.</p>
 
@@ -169,12 +169,12 @@ export const BLOG_POSTS: BlogPost[] = [
 
       <p><strong>Questions à te poser :</strong></p>
       <ul>
-        <li><strong>Quel jeu?</strong> Assure-toi que tous tes participants le possèdent et le maîtrisent à peu près au même niveau</li>
-        <li><strong>Format?</strong> 1v1, 2v2, battle royale? Élimination directe ou round-robin?</li>
-        <li><strong>Nombre de participants?</strong> 4-8 pour un premier tournoi, plutôt que 20 qui devient ingérable</li>
-        <li><strong>Dates et horaires?</strong> Prévoir des créneaux pratiques pour tous (notamment les fuseaux horaires différents)</li>
-        <li><strong>Prizes?</strong> Purement symboliques (skins in-game) ou réels (cadeaux Amazon)? C'est optionnel mais ça crée de la motivation</li>
-        <li><strong>Règles spécifiques?</strong> Perks autorisés? Perso limité? Bugs à éviter?</li>
+        <li><strong>Quel jeu\u00a0?</strong> Assure-toi que tous tes participants le possèdent et le maîtrisent à peu près au même niveau</li>
+        <li><strong>Format\u00a0?</strong> 1v1, 2v2, battle royale\u00a0? Élimination directe ou round-robin\u00a0?</li>
+        <li><strong>Nombre de participants\u00a0?</strong> 4-8 pour un premier tournoi, plutôt que 20 qui devient ingérable</li>
+        <li><strong>Dates et horaires\u00a0?</strong> Prévoir des créneaux pratiques pour tous (notamment les fuseaux horaires différents)</li>
+        <li><strong>Lots/récompenses\u00a0?</strong> Purement symboliques (skins in-game) ou réels (cadeaux Amazon)\u00a0? C'est optionnel mais ça crée de la motivation</li>
+        <li><strong>Règles spécifiques\u00a0?</strong> Perks autorisés\u00a0? Perso limité\u00a0? Bugs à éviter\u00a0?</li>
       </ul>
 
       <p>Prends 30 minutes pour documenter tout cela clairement. Cela t'évitera 3 heures de débats le jour J.</p>
@@ -187,7 +187,7 @@ export const BLOG_POSTS: BlogPost[] = [
       <ul>
         <li>Va dans "Squads" et crée une nouvelle squad appelée "[Jeu] - Tournoi 2026" ou quelque chose de mémorable</li>
         <li>Invite tous tes participants. Idéalement, fais-le un mois avant le tournoi pour qu'ils acceptent</li>
-        <li>Mettez un emoji sympathique en cover : 🏆, ⚔️, ou 🎮</li>
+        <li>Mets un emoji sympathique en cover : 🏆, ⚔️, ou 🎮</li>
       </ul>
 
       <p><strong>Crée un événement pour chaque étape :</strong></p>
@@ -211,7 +211,7 @@ export const BLOG_POSTS: BlogPost[] = [
 
       <p><strong>Avant le tournoi :</strong></p>
       <ul>
-        <li>Envoie un message récapitulatif 2 semaines avant : "Hey les gars, tournoi le 1er mars! Confirmez votre présence sur l'événement"</li>
+        <li>Envoie un message récapitulatif 2 semaines avant : "Hey les gars, tournoi le 1er mars\u00a0! Confirme ta présence sur l'événement"</li>
         <li>Relance 1 semaine avant</li>
         <li>Relance 24h avant : c'est crucial pour savoir qui sera là</li>
       </ul>
@@ -237,16 +237,16 @@ export const BLOG_POSTS: BlogPost[] = [
       <p><strong>30 minutes avant :</strong></p>
       <ul>
         <li>Tous les joueurs rejoignent ton Discord ou plateforme vocale</li>
-        <li>Faites un test audio rapide</li>
-        <li>Rappeler les règles: pas d'excuses, pas de recalage</li>
+        <li>Fais un test audio rapide</li>
+        <li>Rappelle les règles\u00a0: pas d'excuses, pas de recalage</li>
       </ul>
 
       <p><strong>Pendant le tournoi :</strong></p>
       <ul>
-        <li>Utilisez un tableau pour tracker les résultats (bracket.gg, AEStournaments, ou même un simple Google Sheets visible)</li>
+        <li>Utilise un tableau pour tracker les résultats (bracket.gg, AEStournaments, ou même un simple Google Sheets visible)</li>
         <li>Après chaque match, le gagnant poste un screenshot du résultat en chat</li>
-        <li>Vous validez et passez au match suivant</li>
-        <li>Gardez le tempo : c'est important que personne n'attende plus de 10 minutes entre ses matchs</li>
+        <li>Tu valides et passes au match suivant</li>
+        <li>Garde le tempo : c'est important que personne n'attende plus de 10 minutes entre ses matchs</li>
       </ul>
 
       <p><strong>Utilise Squad Planner pour :</strong></p>
@@ -262,16 +262,16 @@ export const BLOG_POSTS: BlogPost[] = [
 
       <p><strong>Immédiatement après :</strong></p>
       <ul>
-        <li>Annoncez les top 3 en grande pompe sur Discord / Squad Planner</li>
-        <li>Attribue les "prizes" (skins, rôles Discord, ce que tu avais promis)</li>
-        <li>Posez des screenshots des moments clés dans le chat</li>
+        <li>Annonce les top 3 en grande pompe sur Discord / Squad Planner</li>
+        <li>Attribue les lots/récompenses (skins, rôles Discord, ce que tu avais promis)</li>
+        <li>Poste des screenshots des moments clés dans le chat</li>
       </ul>
 
       <p><strong>Dans les 48h :</strong></p>
       <ul>
-        <li>Publiez un résumé avec les statistiques : "Marc a remporté le tournoi avec un ratio 2-0! Emma a fait une comebacképicalement au Match 3!"</li>
-        <li>Créez un moment mémoriser : élisez le "meilleur joueur du tournoi" (pas juste le vainqueur) comme celui avec le meilleur sportsmanship</li>
-        <li>Annoncez la date du prochain tournoi : entretenir la dynamique</li>
+        <li>Publie un résumé avec les statistiques : "Marc a remporté le tournoi avec un ratio 2-0\u00a0! Emma a fait une comeback épique au Match 3\u00a0!"</li>
+        <li>Crée un moment mémorable : élis le "meilleur joueur du tournoi" (pas juste le vainqueur) comme celui avec le meilleur esprit sportif</li>
+        <li>Annonce la date du prochain tournoi : entretenir la dynamique</li>
       </ul>
 
       <p><strong>Astuces pour ta fiabilité future :</strong></p>
@@ -281,10 +281,10 @@ export const BLOG_POSTS: BlogPost[] = [
         <li>Les gens seront plus vigilants à honorer leurs engagements s'ils savent qu'on suit ça</li>
       </ul>
 
-      <h3>Bonus : Checkoff list du tournoi</h3>
+      <h3>Bonus : Checklist du tournoi</h3>
 
       <ul>
-        <li>☐ Définir le jeu, format, dates, prizes</li>
+        <li>☐ Définir le jeu, format, dates, lots</li>
         <li>☐ Créer la squad Squad Planner</li>
         <li>☐ Inviter les participants (30j avant)</li>
         <li>☐ Créer les événements Squad Planner</li>
@@ -302,9 +302,9 @@ export const BLOG_POSTS: BlogPost[] = [
 
       <p>Organiser un tournoi entre amis n'est pas sorcier. En suivant ces 5 étapes et en utilisant Squad Planner pour coordonner, tu garantis une expérience fluide où tout le monde s'amuse.</p>
 
-      <p>La clé? <strong>Clarté</strong>, <strong>communication</strong>, et <strong>suivi des présences</strong>. C'est exactement ce pour quoi Squad Planner a été conçu.</p>
+      <p>La clé\u00a0? <strong>Clarté</strong>, <strong>communication</strong>, et <strong>suivi des présences</strong>. C'est exactement ce pour quoi Squad Planner a été conçu.</p>
 
-      <p>À toi de jouer, et que les meilleurs gagnent!</p>
+      <p>À toi de jouer, et que les meilleurs gagnent\u00a0!</p>
     </article>`,
   },
   {
@@ -357,13 +357,13 @@ export const BLOG_POSTS: BlogPost[] = [
         <li>"Après cette heure, annuler compte comme un ghost"</li>
       </ul>
 
-      <p>Pourquoi 24h? Parce que ça te laisse du temps pour inviter quelqu'un d'autre en remplacement. Et psychologiquement, c'est "assez strict" pour que les gens réfléchissent deux fois avant de confirmer.</p>
+      <p>Pourquoi 24h\u00a0? Parce que ça te laisse du temps pour inviter quelqu'un d'autre en remplacement. Et psychologiquement, c'est "assez strict" pour que les gens réfléchissent deux fois avant de confirmer.</p>
 
       <p><strong>Communication :</strong></p>
       <p>À chaque session, indique clairement dans la description :</p>
       <code>"Deadline annulation : [DATE/HEURE]. Après cette heure, l'absence affectera ta fiabilité."</code>
 
-      <p>Mettez aussi un rappel 24h avant. Les gens oublient, ce n'est pas par malveillance.</p>
+      <p>Mets aussi un rappel 24h avant. Les gens oublient, ce n'est pas par malveillance.</p>
 
       <h3>Astuce 3 : Rendre publique la liste de présence (ou au moins partagée)</h3>
 
@@ -373,7 +373,7 @@ export const BLOG_POSTS: BlogPost[] = [
       <ul>
         <li>Les gens n'aiment pas être celui qui "gâche" la session</li>
         <li>Si 7 personnes confirmées sont visibles, la 8ème qui veut ghost va hésiter ("tout le monde compte sur moi...")</li>
-        <li>Ça crée une forme léger de "peer pressure" positive</li>
+        <li>Ça crée une forme légère de pression sociale positive</li>
       </ul>
 
       <p><strong>Comment faire avec Squad Planner :</strong></p>
@@ -383,7 +383,7 @@ export const BLOG_POSTS: BlogPost[] = [
         <li>Juste voir "7 personnes ont confirmé" augmente la responsabilité</li>
       </ul>
 
-      <p><strong>Note importante :</strong> Restez bienveillant. Le but n'est pas de faire honte, mais de créer une culture d'engagement.</p>
+      <p><strong>Note importante :</strong> Reste bienveillant. Le but n'est pas de faire honte, mais de créer une culture d'engagement.</p>
 
       <h3>Astuce 4 : Avoir une "file d'attente" de remplaçants</h3>
 
@@ -393,14 +393,14 @@ export const BLOG_POSTS: BlogPost[] = [
       <ul>
         <li>Identifie 3-4 personnes "flexibles" qui peuvent potentiellement t'aider en dernier recours</li>
         <li>Dès qu'un RSVP devient "non" ou que tu as un ghost (24h avant), tu les contactes</li>
-        <li>"Hey, une place s'est libérée pour [Session]... tu peux?"</li>
+        <li>"Hey, une place s'est libérée pour [Session]... tu peux\u00a0?"</li>
       </ul>
 
       <p><strong>Avantages :</strong></p>
       <ul>
         <li>Ça évite d'annuler la session</li>
         <li>Les remplaçants sont motivés (ils comblent un besoin)</li>
-        <li>Tu gardes du morale dans la squad</li>
+        <li>Tu gardes le moral dans la squad</li>
       </ul>
 
       <p>Squad Planner simplifie ça : tu peux voir instantanément qui a dit "oui" et qui a dit "non", et tu contactes tes back-ups via message direct.</p>
@@ -411,9 +411,9 @@ export const BLOG_POSTS: BlogPost[] = [
 
       <p><strong>Changer la narration :</strong></p>
       <ul>
-        <li>Au lieu de "Marc a ghost 2 fois", dis "Clara a 95% de fiabilité, respect!"</li>
-        <li>Donnez un titre/rôle aux gens loyaux : "The Reliable Ones", "Core Crew", etc.</li>
-        <li>Une fois par mois, mettez en avant le joueur avec le meilleur score de fiabilité</li>
+        <li>Au lieu de "Marc a ghost 2 fois", dis "Clara a 95% de fiabilité, respect\u00a0!"</li>
+        <li>Donne un titre/rôle aux gens loyaux : "The Reliable Ones", "Core Crew", etc.</li>
+        <li>Une fois par mois, mets en avant le joueur avec le meilleur score de fiabilité</li>
       </ul>
 
       <p><strong>Idées :</strong></p>
@@ -432,8 +432,8 @@ export const BLOG_POSTS: BlogPost[] = [
       <ul>
         <li><strong>Ne pas être trop strict trop tôt :</strong> Donne un cycle de 2-3 semaines où la règle est en place avant de commencer à pénaliser</li>
         <li><strong>Ne pas pénaliser les circonstances légitimes :</strong> Si quelqu'un a un vrai problème (panne internet, urgence familiale), c'est pas un ghost</li>
-        <li><strong>Ne pas inviter trop de gens :</strong> Plus le groupe est grand, plus le ghosting augmente. Restez à 6-12 personnes régulières</li>
-        <li><strong>Ne pas ignorer les "peut-être" :</strong> Relancez les peut-être 48h avant pour clarifier</li>
+        <li><strong>Ne pas inviter trop de gens :</strong> Plus le groupe est grand, plus le ghosting augmente. Reste à 6-12 personnes régulières</li>
+        <li><strong>Ne pas ignorer les "peut-être" :</strong> Relance les peut-être 48h avant pour clarifier</li>
       </ul>
 
       <h3>Résumé : La recette</h3>
@@ -450,9 +450,9 @@ export const BLOG_POSTS: BlogPost[] = [
 
       <p>Applique ces stratégies et tu verras ton taux de présence passer de 50% à 85%+ en quelques semaines.</p>
 
-      <p>Et le meilleur? Ça crée une squad plus soudée, plus motivée, et plus amusante pour tout le monde.</p>
+      <p>Et le meilleur\u00a0? Ça crée une squad plus soudée, plus motivée, et plus amusante pour tout le monde.</p>
 
-      <p>À tes RSVP!</p>
+      <p>À tes RSVP\u00a0!</p>
     </article>`,
   },
 ]

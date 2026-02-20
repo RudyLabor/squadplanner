@@ -66,7 +66,7 @@ export function LandingFooter() {
             Reste dans la boucle
           </h3>
           <p className="text-md text-text-tertiary mb-6 max-w-md mx-auto">
-            Tips, updates, nouveaux jeux supportés. Pas de spam.
+            Astuces, mises à jour, nouveaux jeux supportés. Pas de spam.
           </p>
           <form onSubmit={handleNewsletterSubmit} noValidate className="max-w-md mx-auto">
             <div className="flex gap-2">
@@ -265,7 +265,7 @@ export function LandingFooter() {
         <div className="flex flex-wrap justify-center gap-3 mb-6">
           {[
             { label: 'Hébergé en France', icon: '🇫🇷' },
-            { label: 'RGPD compliant', icon: '🛡️' },
+            { label: 'Conforme au RGPD', icon: '🛡️' },
             { label: 'Données chiffrées', icon: '🔒' },
           ].map((badge) => (
             <span

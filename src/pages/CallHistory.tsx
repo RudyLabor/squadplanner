@@ -91,7 +91,7 @@ export function CallHistory() {
         <div className="px-4 py-4 max-w-4xl lg:max-w-5xl mx-auto">
           <div className="flex items-center gap-3 mb-4">
             <button
-              onClick={() => navigate(-1)}
+              onClick={() => { if (window.history.length > 1) navigate(-1); else navigate('/home'); }}
               className="hidden lg:flex w-11 h-11 min-w-[44px] min-h-[44px] rounded-xl bg-surface-card items-center justify-center hover:bg-border-default hover:scale-[1.02] transition-interactive touch-target"
               aria-label="Retour"
             >

@@ -299,7 +299,7 @@ export default function SessionDetail() {
 
           {hasCheckedIn() && (
             <div className="mb-8">
-              <div className="p-4 text-center bg-success-10 border border-success/10 rounded-xl">
+              <div className="p-4 text-center bg-success/10 border border-success/10 rounded-xl">
                 <CheckCircle2 className="w-8 h-8 mx-auto mb-2 text-success" />
                 <p className="text-success font-medium">Check-in confirmé !</p>
               </div>

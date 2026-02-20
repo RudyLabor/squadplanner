@@ -175,7 +175,7 @@
         },
         {
           "key": "Content-Security-Policy",
-          "value": "default-src 'self'; script-src 'self' 'unsafe-inline' blob:; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: blob: https://nxbqiwmfyafgshxzczxo.supabase.co https://*.giphy.com; connect-src 'self' https://nxbqiwmfyafgshxzczxo.supabase.co wss://nxbqiwmfyafgshxzczxo.supabase.co https://squadplanner-i1mfqcqs.livekit.cloud wss://squadplanner-i1mfqcqs.livekit.cloud; worker-src 'self' blob:; media-src 'self' blob: https://*.giphy.com; frame-ancestors 'none'; base-uri 'self'; form-action 'self'"
+          "value": "default-src 'self'; script-src 'self' 'unsafe-inline' blob:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https://nxbqiwmfyafgshxzczxo.supabase.co https://*.giphy.com; connect-src 'self' https://nxbqiwmfyafgshxzczxo.supabase.co wss://nxbqiwmfyafgshxzczxo.supabase.co https://squadplanner-i1mfqcqs.livekit.cloud wss://squadplanner-i1mfqcqs.livekit.cloud; worker-src 'self' blob:; media-src 'self' blob: https://*.giphy.com; frame-ancestors 'none'; base-uri 'self'; form-action 'self'"
         }
       ]
     },

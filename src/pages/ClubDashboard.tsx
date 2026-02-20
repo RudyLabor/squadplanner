@@ -198,7 +198,7 @@ export function ClubDashboard() {
       } catch (err) {
         const message = err instanceof Error ? err.message : 'Erreur lors du chargement'
         setError(message)
-        console.error('Error fetching club data:', err)
+        if (!import.meta.env.PROD) console.error('Error fetching club data:', err)
       } finally {
         setLoading(false)
       }
@@ -337,7 +337,7 @@ export function ClubDashboard() {
                   {clubStats.totalMembers}
                 </m.div>
                 <p className="text-xs text-text-tertiary mt-2">
-                  Across {squads.length} squad{squads.length !== 1 ? 's' : ''}
+                  Dans {squads.length} squad{squads.length !== 1 ? 's' : ''}
                 </p>
               </div>
             </CardContent>
@@ -451,7 +451,7 @@ export function ClubDashboard() {
               <div className="flex items-center gap-3">
                 <h2 className="text-xl font-bold text-text-primary">Squads ({squads.length})</h2>
               </div>
-              <Link to="/squads/create">
+              <Link to="/squads">
                 <Button variant="primary" size="sm" className="flex items-center gap-2">
                   <Plus className="w-4 h-4" />
                   <span className="hidden sm:inline">Ajouter squad</span>
@@ -495,7 +495,7 @@ export function ClubDashboard() {
                       : 'Tu n\'as pas encore de squad. Crée-en une !'}
                   </p>
                   {!searchQuery && (
-                    <Link to="/squads/create">
+                    <Link to="/squads">
                       <Button variant="primary" size="sm">
                         Créer ma première squad
                       </Button>
@@ -629,10 +629,11 @@ export function ClubDashboard() {
                       variant="secondary"
                       size="sm"
                       onClick={handleExportPDF}
-                      className="w-full justify-start"
+                      className="w-full justify-start opacity-50"
+                      disabled
                     >
                       <Download className="w-4 h-4 mr-2" />
-                      Exporter PDF
+                      Exporter PDF (bientôt)
                     </Button>
                   </div>
                 </CardContent>
@@ -694,6 +695,7 @@ export function ClubDashboard() {
                     <Button variant="ghost" size="sm" disabled className="opacity-50">
                       Choisir un fichier
                     </Button>
+                    <p className="text-xs text-text-quaternary mt-1">(bientôt disponible)</p>
                   </div>
                 </CardContent>
               </Card>

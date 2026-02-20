@@ -201,6 +201,11 @@ export function LandingFooter() {
                 </Link>
               </li>
               <li>
+                <Link to="/vs/guilded-vs-squad-planner" className={linkClass}>
+                  Guilded vs Squad Planner
+                </Link>
+              </li>
+              <li>
                 <a href="mailto:contact@squadplanner.fr" className={linkClass}>
                   Contact
                 </a>

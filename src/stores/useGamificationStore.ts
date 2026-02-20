@@ -304,9 +304,9 @@ export const useGamificationStore = create<GamificationStateWithHydration>()(
     }),
     {
       name: 'squadplanner-gamification',
-      onRehydrateStorage: () => (state, action) => {
-        if (state && action === 'REHYDRATE') {
-          // Mark store as hydrated only after persist middleware rehydrates from localStorage
+      onRehydrateStorage: () => (state, error) => {
+        if (state && !error) {
+          // Mark store as hydrated after persist middleware rehydrates from localStorage
           state._isHydrated = true
         }
       },

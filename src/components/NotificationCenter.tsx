@@ -1,5 +1,5 @@
 
-import { useEffect, useCallback, useRef } from 'react'
+import { useEffect, useCallback, useRef, useState } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
 import { Bell, CheckCheck, X } from './icons'
 import { create } from 'zustand'
@@ -131,22 +131,43 @@ export const useNotificationStore = create<NotificationStore>((set, get) => ({
 }))
 
 export function NotificationBell() {
+  const containerRef = useRef<HTMLDivElement>(null)
   const panelRef = useRef<HTMLDivElement>(null)
+  const buttonRef = useRef<HTMLButtonElement>(null)
+  const [panelPos, setPanelPos] = useState<{ top: number; right: number } | null>(null)
   const { user } = useAuthStore()
   const { notifications, unreadCount, fetchNotifications, markAsRead, markAllAsRead } =
     useNotificationStore()
   const { activeOverlay, toggle, close } = useOverlayStore()
   const isOpen = activeOverlay === 'notifications'
 
+  // Calculate fixed position from button ref when panel opens
   useEffect(() => {
-    if (user) fetchNotifications(user.id)
-  }, [user, fetchNotifications])
+    if (isOpen && buttonRef.current) {
+      const rect = buttonRef.current.getBoundingClientRect()
+      setPanelPos({
+        top: rect.bottom + 8,
+        right: Math.max(8, window.innerWidth - rect.right),
+      })
+    }
+  }, [isOpen])
 
-  // Close on outside click
+  // Fetch once on mount — use user.id (stable string) instead of user object
+  // to prevent re-fetching on every navigation
+  const userId = user?.id
+  useEffect(() => {
+    if (userId) fetchNotifications(userId)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userId])
+
+  // Close on outside click — check both the button container and the fixed panel
   useEffect(() => {
     if (!isOpen) return
     const handleClick = (e: MouseEvent) => {
-      if (panelRef.current && !panelRef.current.contains(e.target as Node)) {
+      const target = e.target as Node
+      const inContainer = containerRef.current?.contains(target)
+      const inPanel = panelRef.current?.contains(target)
+      if (!inContainer && !inPanel) {
         close('notifications')
       }
     }
@@ -175,8 +196,9 @@ export function NotificationBell() {
   }, [])
 
   return (
-    <div className="relative" ref={panelRef}>
+    <div className="relative" ref={containerRef}>
       <button
+        ref={buttonRef}
         type="button"
         onClick={() => toggle('notifications')}
         className="relative p-2 rounded-lg text-text-secondary hover:text-text-primary hover:bg-border-subtle transition-colors"
@@ -197,11 +219,13 @@ export function NotificationBell() {
       <AnimatePresence>
         {isOpen && (
           <m.div
+            ref={panelRef}
             initial={{ opacity: 0, y: -8, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -8, scale: 0.95 }}
             transition={{ duration: 0.15 }}
-            className="absolute right-0 top-12 w-80 max-h-96 rounded-xl bg-bg-surface border border-border-default shadow-2xl overflow-hidden z-50"
+            style={panelPos ? { top: panelPos.top, right: panelPos.right } : undefined}
+            className="fixed w-80 max-w-[calc(100vw-1rem)] max-h-96 rounded-xl bg-bg-surface border border-border-default shadow-2xl overflow-hidden z-[100]"
           >
             {/* Header */}
             <div className="flex items-center justify-between px-4 py-3 border-b border-border-default">

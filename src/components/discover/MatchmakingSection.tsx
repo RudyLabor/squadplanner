@@ -1,6 +1,7 @@
 
 import { memo, useState } from 'react'
 import { m } from 'framer-motion'
+import { Link } from 'react-router'
 import { Users, Shield, Star, Gamepad2, MapPin, MessageSquare } from '../icons'
 import { useMatchmakingQuery } from '../../hooks/queries'
 import { useAuthStore } from '../../hooks'
@@ -40,12 +41,12 @@ export const MatchmakingSection = memo(function MatchmakingSection({ game, regio
           d'autres joueurs.
         </p>
         <div className="flex flex-col items-center gap-3">
-          <a
-            href="/profile"
+          <Link
+            to="/profile?activate=matchmaking"
             className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary text-white text-md font-medium hover:bg-primary-hover transition-colors"
           >
             Activer dans mon profil
-          </a>
+          </Link>
           <div className="mt-4 p-4 rounded-xl bg-surface-card border border-border-subtle max-w-sm mx-auto text-left">
             <h4 className="text-sm font-semibold text-text-primary mb-2">Comment &ccedil;a marche ?</h4>
             <ul className="space-y-1.5 text-sm text-text-secondary">

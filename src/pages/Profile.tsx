@@ -1,5 +1,6 @@
 
 import { useState, useEffect, useRef, useMemo, useCallback } from 'react'
+import { useSearchParams } from 'react-router'
 import { LogOut } from '../components/icons'
 import { ProfileSkeleton } from '../components/ui'
 import { PullToRefresh } from '../components/PullToRefresh'
@@ -16,6 +17,7 @@ import { ProfileHeader } from '../components/profile/ProfileHeader'
 import { ProfileStats } from '../components/profile/ProfileStats'
 import { ProfileBadges } from '../components/profile/ProfileBadges'
 import { ProfileHistory } from '../components/profile/ProfileHistory'
+import { MatchmakingToggle } from '../components/profile/MatchmakingToggle'
 import { showSuccess, showError } from '../lib/toast'
 
 type ChallengeWithProgress = Challenge & { userProgress?: UserChallenge }
@@ -24,6 +26,8 @@ export function Profile() {
   const { user, profile, signOut, updateProfile, isLoading, isInitialized, refreshProfile } =
     useAuthStore()
   const { tier, hasPremium, canAccessFeature, fetchPremiumStatus } = usePremiumStore()
+  const [searchParams] = useSearchParams()
+  const autoActivateMatchmaking = searchParams.get('activate') === 'matchmaking'
 
   const handleRefresh = useCallback(async () => {
     await refreshProfile()
@@ -165,6 +169,13 @@ export function Profile() {
         ) : (
           <XPBar currentXP={profile?.xp || 0} level={profile?.level || 1} className="mb-5" />
         )}
+
+        {/* Recherche de squad — Matchmaking toggle */}
+        <MatchmakingToggle
+          profile={profile as any}
+          updateProfile={updateProfile}
+          autoActivate={autoActivateMatchmaking}
+        />
 
         {/* Reliability score + Stats grid */}
         <ProfileStats profile={profile} profileReady={profileReady} />

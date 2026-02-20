@@ -175,6 +175,11 @@ export function LandingFooter() {
                 </Link>
               </li>
               <li>
+                <Link to="/ambassador" className={linkClass}>
+                  Programme Ambassadeur
+                </Link>
+              </li>
+              <li>
                 <a href="mailto:contact@squadplanner.fr" className={linkClass}>
                   Contact
                 </a>

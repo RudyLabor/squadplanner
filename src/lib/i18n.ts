@@ -12,8 +12,10 @@
 import { create } from 'zustand'
 import { fr } from '../locales/fr'
 import { en } from '../locales/en'
+import { es } from '../locales/es'
+import { de } from '../locales/de'
 
-export type Locale = 'fr' | 'en'
+export type Locale = 'fr' | 'en' | 'es' | 'de'
 
 interface I18nStore {
   locale: Locale
@@ -29,7 +31,7 @@ const getInitialLocale = (): Locale => {
 
   try {
     const stored = localStorage.getItem(LOCALE_STORAGE_KEY)
-    if (stored === 'en' || stored === 'fr') return stored
+    if (stored === 'en' || stored === 'fr' || stored === 'es' || stored === 'de') return stored
   } catch {
     // localStorage might not be available
   }
@@ -58,6 +60,8 @@ export const useI18nStore = create<I18nStore>((set) => ({
 const translations = {
   fr,
   en,
+  es,
+  de,
 } as const
 
 /**

@@ -45,9 +45,14 @@ export function loader() {
     buildUrl('/blog/squad-ghost-astuces', '0.7', 'monthly'),
   ]
 
+  // Program pages
+  const programPages = [
+    buildUrl('/ambassador', '0.7', 'monthly'),
+  ]
+
   const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${[...staticPages, ...gamePages, ...altPages, ...blogPages].join('\n')}
+${[...staticPages, ...gamePages, ...altPages, ...blogPages, ...programPages].join('\n')}
 </urlset>`
 
   return new Response(sitemap, {

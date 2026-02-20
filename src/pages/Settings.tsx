@@ -380,11 +380,13 @@ export function Settings() {
               </label>
               <SegmentedControl
                 options={[
-                  { value: 'fr' as const, label: 'Français' },
-                  { value: 'en' as const, label: 'English' },
+                  { value: 'fr' as const, label: 'FR' },
+                  { value: 'en' as const, label: 'EN' },
+                  { value: 'es' as const, label: 'ES' },
+                  { value: 'de' as const, label: 'DE' },
                 ]}
                 value={locale}
-                onChange={(v: 'fr' | 'en') => {
+                onChange={(v: 'fr' | 'en' | 'es' | 'de') => {
                   setLocale(v)
                   showSaveToast()
                 }}

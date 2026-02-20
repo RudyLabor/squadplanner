@@ -32,6 +32,9 @@ export default [
   // Embeddable widget (public, iframe-friendly)
   route('widget/:squadId', './routes/widget.$squadId.tsx'),
 
+  // Ambassador program (public, pre-rendered)
+  route('ambassador', './routes/ambassador.tsx'),
+
   // Protected pages (wrapped in auth-checking layout)
   layout('./routes/_protected.tsx', [
     route('home', './routes/home.tsx'),
@@ -48,6 +51,8 @@ export default [
     route('settings', './routes/settings.tsx'),
     route('call-history', './routes/call-history.tsx'),
     route('referrals', './routes/referrals.tsx'),
+    route('club', './routes/club-dashboard.tsx'),
+    route('wrapped', './routes/wrapped.tsx'),
     route('auth/discord/callback', './routes/discord-callback.tsx'),
   ]),
 

@@ -29,6 +29,8 @@ export default {
       '/alternative/gamerlink',
       '/alternative/discord-events',
       '/vs/guilded-vs-squad-planner',
+      // Ambassador program
+      '/ambassador',
       // Blog
       '/blog',
       '/blog/guilded-alternatives-2026',

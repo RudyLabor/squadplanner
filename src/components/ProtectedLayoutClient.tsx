@@ -1,10 +1,12 @@
 
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, lazy, Suspense } from 'react'
 import { Navigate, Outlet } from 'react-router'
 import { useQueryClient } from '@tanstack/react-query'
 import { useAuthStore } from '../hooks'
 import { queryKeys } from '../lib/queryClient'
 import type { Profile, Squad } from '../types/database'
+
+const AnnualPushBanner = lazy(() => import('./AnnualPushBanner').then(m => ({ default: m.AnnualPushBanner })))
 
 interface ProtectedLayoutData {
   user: { id: string; email: string | undefined }
@@ -57,7 +59,7 @@ export function ProtectedLayoutClient({ loaderData }: { loaderData: ProtectedLay
     if (onboardingSkipped === false && loaderData.squads.length === 0) {
       return <Navigate to="/onboarding" replace />
     }
-    return <Outlet />
+    return <ProtectedContent />
   }
 
   // Fallback for client-side navigation without loader data
@@ -79,5 +81,17 @@ export function ProtectedLayoutClient({ loaderData }: { loaderData: ProtectedLay
 
   if (!clientUser) return <Navigate to="/auth" replace />
 
-  return <Outlet />
+  return <ProtectedContent />
+}
+
+/** Wraps Outlet with promotional banners (lazy-loaded, date-gated) */
+function ProtectedContent() {
+  return (
+    <>
+      <Suspense fallback={null}>
+        <AnnualPushBanner />
+      </Suspense>
+      <Outlet />
+    </>
+  )
 }

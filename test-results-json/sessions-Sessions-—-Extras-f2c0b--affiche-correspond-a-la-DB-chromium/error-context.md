@@ -1,0 +1,170 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - link "Aller au contenu principal" [ref=e3] [cursor=pointer]:
+      - /url: "#main-content"
+    - complementary "Navigation principale" [ref=e4]:
+      - img [ref=e7]
+      - button "Créer une nouvelle session" [ref=e16] [cursor=pointer]:
+        - img [ref=e17]
+        - generic [ref=e18]: Nouveau
+      - navigation "Menu principal" [ref=e19]:
+        - link "Accueil" [ref=e21] [cursor=pointer]:
+          - /url: /home
+          - generic [ref=e22]:
+            - img [ref=e23]
+            - generic [ref=e26]: Accueil
+        - link "Squads" [ref=e28] [cursor=pointer]:
+          - /url: /squads
+          - generic [ref=e29]:
+            - img [ref=e30]
+            - generic [ref=e35]: Squads
+            - generic [ref=e36]: "1"
+        - link "Sessions" [ref=e38] [cursor=pointer]:
+          - /url: /sessions
+          - generic [ref=e39]:
+            - img [ref=e40]
+            - generic [ref=e42]: Sessions
+        - link "Party" [ref=e44] [cursor=pointer]:
+          - /url: /party
+          - generic [ref=e45]:
+            - img [ref=e46]
+            - generic [ref=e49]: Party
+        - link "Messages" [ref=e51] [cursor=pointer]:
+          - /url: /messages
+          - generic [ref=e52]:
+            - img [ref=e53]
+            - generic [ref=e55]: Messages
+        - link "Découvrir" [ref=e57] [cursor=pointer]:
+          - /url: /discover
+          - generic [ref=e58]:
+            - img [ref=e59]
+            - generic [ref=e62]: Découvrir
+        - link "Profil" [ref=e64] [cursor=pointer]:
+          - /url: /profile
+          - generic [ref=e65]:
+            - img [ref=e66]
+            - generic [ref=e69]: Profil
+        - link "Paramètres" [ref=e71] [cursor=pointer]:
+          - /url: /settings
+          - generic [ref=e72]:
+            - img [ref=e73]
+            - generic [ref=e76]: Paramètres
+        - link "Aide" [ref=e77] [cursor=pointer]:
+          - /url: /help
+          - generic [ref=e78]:
+            - img [ref=e79]
+            - generic [ref=e82]: Aide
+        - link "Appels" [ref=e83] [cursor=pointer]:
+          - /url: /call-history
+          - generic [ref=e84]:
+            - img [ref=e85]
+            - generic [ref=e87]: Appels
+      - generic [ref=e88]:
+        - link "Voir mon profil" [ref=e91] [cursor=pointer]:
+          - /url: /profile
+          - img "FloydCanShoot" [ref=e93]
+        - link "Passer Premium" [ref=e96] [cursor=pointer]:
+          - /url: /premium
+          - img [ref=e98]
+    - main [ref=e100]:
+      - generic [ref=e102]:
+        - banner [ref=e103]:
+          - navigation "Fil d'Ariane" [ref=e104]:
+            - list [ref=e105]:
+              - listitem [ref=e106]:
+                - img [ref=e107]
+                - link "Accueil" [ref=e110] [cursor=pointer]:
+                  - /url: /home
+                - img [ref=e111]
+              - listitem [ref=e113]:
+                - generic [ref=e114]: Sessions
+          - generic [ref=e115]:
+            - button "Notifications" [ref=e118] [cursor=pointer]:
+              - img [ref=e119]
+            - button "Rechercher" [ref=e123] [cursor=pointer]:
+              - img [ref=e124]
+              - generic [ref=e127]: Rechercher...
+              - generic [ref=e128]:
+                - generic [ref=e129]: Ctrl
+                - text: K
+        - main "Sessions" [ref=e130]:
+          - generic [ref=e132]:
+            - generic [ref=e133]:
+              - generic [ref=e134]:
+                - heading "Tes prochaines sessions" [level=1] [ref=e135]
+                - paragraph [ref=e136]: Aucune session planifiée pour le moment
+              - button "Créer" [ref=e137] [cursor=pointer]:
+                - generic [ref=e138]:
+                  - img [ref=e139]
+                  - text: Créer
+            - region "Calendrier de la semaine" [ref=e140]:
+              - generic [ref=e141]:
+                - heading "Cette semaine" [level=2] [ref=e142]
+                - generic [ref=e143]:
+                  - button "Semaine précédente" [ref=e144] [cursor=pointer]:
+                    - img [ref=e145]
+                  - generic [ref=e147]: 9 - 15 fév 2026
+                  - button "Semaine suivante" [ref=e148] [cursor=pointer]:
+                    - img [ref=e149]
+              - generic [ref=e151]:
+                - generic [ref=e152]:
+                  - generic [ref=e153]: Lun
+                  - generic [ref=e154]: "9"
+                - generic [ref=e155]:
+                  - generic [ref=e156]: Mar
+                  - generic [ref=e157]: "10"
+                - generic [ref=e158]:
+                  - generic [ref=e159]: Mer
+                  - generic [ref=e160]: "11"
+                - generic [ref=e161]:
+                  - generic [ref=e162]: Jeu
+                  - generic [ref=e163]: "12"
+                - generic [ref=e164]:
+                  - generic [ref=e165]: Ven
+                  - generic [ref=e166]: "13"
+                - generic [ref=e167]:
+                  - generic [ref=e168]: Sam
+                  - generic [ref=e169]: "14"
+                - generic [ref=e170]:
+                  - generic [ref=e171]: Dim
+                  - generic [ref=e172]: "15"
+              - generic [ref=e173]:
+                - generic [ref=e176]: En attente
+                - generic [ref=e179]: Confirmée
+                - generic [ref=e182]: Peut-être
+            - region "Sessions confirmées" [ref=e183]:
+              - generic [ref=e184]:
+                - heading "Sessions confirmées" [level=2] [ref=e185]
+                - generic [ref=e186]: "0"
+              - generic [ref=e190]:
+                - img [ref=e192]
+                - heading "Aucune session confirmée" [level=3] [ref=e194]
+                - paragraph [ref=e195]: Réponds "Présent" à une session pour la voir ici.
+                - link "Voir mes squads" [ref=e196] [cursor=pointer]:
+                  - /url: /squads
+                  - button "Voir mes squads" [ref=e197]:
+                    - generic [ref=e198]:
+                      - img [ref=e199]
+                      - text: Voir mes squads
+            - region "Guide des sessions" [ref=e200]:
+              - generic [ref=e201]:
+                - heading "Comment fonctionnent les sessions ?" [level=2] [ref=e202]
+                - list [ref=e203]:
+                  - listitem [ref=e204]:
+                    - generic [ref=e206]: "1"
+                    - generic [ref=e207]: Un membre de ta squad propose un créneau
+                  - listitem [ref=e208]:
+                    - generic [ref=e210]: "2"
+                    - generic [ref=e211]: Tu cliques "Présent", "Absent" ou "Peut-être"
+                  - listitem [ref=e212]:
+                    - generic [ref=e214]: "3"
+                    - generic [ref=e215]: À l'heure, tu fais ton check-in
+                  - listitem [ref=e216]:
+                    - generic [ref=e218]: "4"
+                    - generic [ref=e219]: Ton score de fiabilité augmente !
+  - region "Notifications alt+T" [ref=e220]
+  - generic [ref=e221]: Sessions
+```

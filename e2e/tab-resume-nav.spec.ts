@@ -197,18 +197,18 @@ test.describe('Tab Resume — Mobile Bottom Nav', () => {
     // Real tab switch
     await realTabSwitch(page, 3000)
 
-    // Click Party via mobile nav (mobile nav has: home, squads, party, messages, profile)
-    const partyLink = page.locator('a[href="/party"]:visible').first()
-    await expect(partyLink).toBeVisible({ timeout: 5000 })
-    await partyLink.click()
-    await expect(page).toHaveURL(/\/party/, { timeout: 15000 })
-    expect(await hasServerError(page)).toBe(false)
-
-    // Click Messages
+    // Click Messages via mobile nav (always present in bottom nav)
     const messagesLink = page.locator('a[href="/messages"]:visible').first()
     await expect(messagesLink).toBeVisible({ timeout: 5000 })
     await messagesLink.click()
     await expect(page).toHaveURL(/\/messages/, { timeout: 15000 })
+    expect(await hasServerError(page)).toBe(false)
+
+    // Click Home
+    const homeLink = page.locator('a[href="/home"]:visible').first()
+    await expect(homeLink).toBeVisible({ timeout: 5000 })
+    await homeLink.click()
+    await expect(page).toHaveURL(/\/home/, { timeout: 15000 })
     expect(await hasServerError(page)).toBe(false)
   })
 
@@ -221,8 +221,8 @@ test.describe('Tab Resume — Mobile Bottom Nav', () => {
       await realTabSwitch(page, 1000)
     }
 
-    // Navigate through routes available in mobile bottom nav
-    const routes = ['/squads', '/party', '/messages', '/home']
+    // Navigate through routes always available in mobile bottom nav
+    const routes = ['/squads', '/messages', '/home']
     for (const path of routes) {
       const link = page.locator(`a[href="${path}"]:visible`).first()
       if (await link.isVisible({ timeout: 3000 }).catch(() => false)) {

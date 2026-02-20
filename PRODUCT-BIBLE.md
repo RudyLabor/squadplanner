@@ -968,6 +968,11 @@ Note : Le mot de passe du Compte 1 a ete change de `AuditTest2026!` a `AuditTest
 ---
 
 ## 11. PROCEDURES DE TEST DETAILLEES
+tester sur squadplanner.fr
+
+identifiants app :
+EMAIL : rudylabor@hotmail.fr
+MOT DE PASSE : ruudboy92
 
 ### Comment tester un flux
 
@@ -988,7 +993,7 @@ Pour chaque flux, suivre cette procedure :
 ```
 Page : /
 Etapes :
-  1. Ouvrir http://localhost:5173/
+  1. Ouvrir https://suadplanner.fr/ 
   2. Verifier : hero section avec titre + CTA visible
   3. Scroller : Features section visible avec 3-4 cartes
   4. Scroller : Testimonials section visible

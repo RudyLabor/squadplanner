@@ -1,0 +1,139 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - link "Aller au contenu principal" [ref=e3] [cursor=pointer]:
+      - /url: "#main-content"
+    - complementary "Navigation principale" [ref=e4]:
+      - img [ref=e7]
+      - button "Créer une nouvelle session" [ref=e16] [cursor=pointer]:
+        - img [ref=e17]
+        - generic [ref=e18]: Nouveau
+      - navigation "Menu principal" [ref=e19]:
+        - link "Accueil" [ref=e21] [cursor=pointer]:
+          - /url: /home
+          - generic [ref=e22]:
+            - img [ref=e23]
+            - generic [ref=e26]: Accueil
+        - link "Squads" [ref=e28] [cursor=pointer]:
+          - /url: /squads
+          - generic [ref=e29]:
+            - img [ref=e30]
+            - generic [ref=e35]: Squads
+        - link "Sessions" [ref=e37] [cursor=pointer]:
+          - /url: /sessions
+          - generic [ref=e38]:
+            - img [ref=e39]
+            - generic [ref=e41]: Sessions
+        - link "Party" [ref=e43] [cursor=pointer]:
+          - /url: /party
+          - generic [ref=e44]:
+            - img [ref=e45]
+            - generic [ref=e48]: Party
+        - link "Messages" [ref=e50] [cursor=pointer]:
+          - /url: /messages
+          - generic [ref=e51]:
+            - img [ref=e52]
+            - generic [ref=e54]: Messages
+        - link "Découvrir" [ref=e56] [cursor=pointer]:
+          - /url: /discover
+          - generic [ref=e57]:
+            - img [ref=e58]
+            - generic [ref=e61]: Découvrir
+        - link "Profil" [ref=e63] [cursor=pointer]:
+          - /url: /profile
+          - generic [ref=e64]:
+            - img [ref=e65]
+            - generic [ref=e68]: Profil
+        - link "Paramètres" [ref=e70] [cursor=pointer]:
+          - /url: /settings
+          - generic [ref=e71]:
+            - img [ref=e72]
+            - generic [ref=e75]: Paramètres
+        - link "Aide" [ref=e76] [cursor=pointer]:
+          - /url: /help
+          - generic [ref=e77]:
+            - img [ref=e78]
+            - generic [ref=e81]: Aide
+        - link "Appels" [ref=e82] [cursor=pointer]:
+          - /url: /call-history
+          - generic [ref=e83]:
+            - img [ref=e84]
+            - generic [ref=e86]: Appels
+      - generic [ref=e87]:
+        - link "Voir mon profil" [ref=e90] [cursor=pointer]:
+          - /url: /profile
+          - img "FloydCanShoot" [ref=e92]
+        - link "Passer Premium" [ref=e95] [cursor=pointer]:
+          - /url: /premium
+          - img [ref=e97]
+    - main [ref=e99]:
+      - generic [ref=e101]:
+        - banner [ref=e102]:
+          - navigation "Fil d'Ariane" [ref=e103]:
+            - list [ref=e104]:
+              - listitem [ref=e105]:
+                - img [ref=e106]
+                - link "Accueil" [ref=e109] [cursor=pointer]:
+                  - /url: /home
+                - img [ref=e110]
+              - listitem [ref=e112]:
+                - generic [ref=e113]: Squads
+          - generic [ref=e114]:
+            - button "Notifications" [ref=e117] [cursor=pointer]:
+              - img [ref=e118]
+            - button "Rechercher" [ref=e122] [cursor=pointer]:
+              - img [ref=e123]
+              - generic [ref=e126]: Rechercher...
+              - generic [ref=e127]:
+                - generic [ref=e128]: Ctrl
+                - text: K
+        - main "Squads" [ref=e129]:
+          - generic [ref=e131]:
+            - generic [ref=e132]:
+              - generic [ref=e133]:
+                - heading "Mes Squads" [level=1] [ref=e134]
+                - paragraph [ref=e135]: 1 squad
+              - generic [ref=e136]:
+                - button "Rejoindre" [ref=e137] [cursor=pointer]:
+                  - generic [ref=e138]:
+                    - img [ref=e139]
+                    - generic [ref=e142]: Rejoindre
+                - button "Créer" [ref=e143] [cursor=pointer]:
+                  - generic [ref=e144]:
+                    - img [ref=e145]
+                    - generic [ref=e146]: Créer
+            - list "Liste des squads" [ref=e147]:
+              - listitem [ref=e148]:
+                - article "UTE for LIFE" [ref=e149]:
+                  - link "UTE for LIFE NBA · 1 membre Aucune session planifiée Copier le code d'invitation" [ref=e150] [cursor=pointer]:
+                    - /url: /squad/d3083278-e5a7-40de-b1ee-0601429a2333
+                    - generic [ref=e153]:
+                      - img [ref=e156]
+                      - generic [ref=e158]:
+                        - generic [ref=e159]:
+                          - heading "UTE for LIFE" [level=3] [ref=e160]
+                          - img [ref=e161]
+                        - paragraph [ref=e163]: NBA · 1 membre
+                        - generic [ref=e165]:
+                          - img [ref=e166]
+                          - generic [ref=e168]: Aucune session planifiée
+                      - generic [ref=e169]:
+                        - button "Copier le code d'invitation" [ref=e170]:
+                          - img [ref=e172]
+                        - img [ref=e175]
+            - generic [ref=e179]:
+              - img [ref=e181]
+              - generic [ref=e184]:
+                - heading "Trouve de nouvelles squads" [level=3] [ref=e185]
+                - paragraph [ref=e186]: Explore les squads publiques et rejoins des joueurs qui partagent tes jeux.
+              - link "Découvrir" [ref=e187] [cursor=pointer]:
+                - /url: /discover
+                - button "Découvrir" [ref=e188]:
+                  - generic [ref=e189]:
+                    - img [ref=e190]
+                    - text: Découvrir
+  - region "Notifications alt+T" [ref=e193]
+  - generic [ref=e194]: Mes Squads
+```

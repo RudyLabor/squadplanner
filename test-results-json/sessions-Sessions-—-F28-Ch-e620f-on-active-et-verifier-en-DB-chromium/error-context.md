@@ -1,0 +1,184 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - link "Aller au contenu principal" [ref=e3] [cursor=pointer]:
+      - /url: "#main-content"
+    - complementary "Navigation principale" [ref=e4]:
+      - img [ref=e7]
+      - button "Créer une nouvelle session" [ref=e16] [cursor=pointer]:
+        - img [ref=e17]
+        - generic [ref=e18]: Nouveau
+      - navigation "Menu principal" [ref=e19]:
+        - link "Accueil" [ref=e21] [cursor=pointer]:
+          - /url: /home
+          - generic [ref=e22]:
+            - img [ref=e23]
+            - generic [ref=e26]: Accueil
+        - link "Squads" [ref=e28] [cursor=pointer]:
+          - /url: /squads
+          - generic [ref=e29]:
+            - img [ref=e30]
+            - generic [ref=e35]: Squads
+        - link "Sessions" [ref=e37] [cursor=pointer]:
+          - /url: /sessions
+          - generic [ref=e38]:
+            - img [ref=e39]
+            - generic [ref=e41]: Sessions
+        - link "Party" [ref=e43] [cursor=pointer]:
+          - /url: /party
+          - generic [ref=e44]:
+            - img [ref=e45]
+            - generic [ref=e48]: Party
+        - link "Messages" [ref=e50] [cursor=pointer]:
+          - /url: /messages
+          - generic [ref=e51]:
+            - img [ref=e52]
+            - generic [ref=e54]: Messages
+        - link "Découvrir" [ref=e56] [cursor=pointer]:
+          - /url: /discover
+          - generic [ref=e57]:
+            - img [ref=e58]
+            - generic [ref=e61]: Découvrir
+        - link "Profil" [ref=e63] [cursor=pointer]:
+          - /url: /profile
+          - generic [ref=e64]:
+            - img [ref=e65]
+            - generic [ref=e68]: Profil
+        - link "Paramètres" [ref=e70] [cursor=pointer]:
+          - /url: /settings
+          - generic [ref=e71]:
+            - img [ref=e72]
+            - generic [ref=e75]: Paramètres
+        - link "Aide" [ref=e76] [cursor=pointer]:
+          - /url: /help
+          - generic [ref=e77]:
+            - img [ref=e78]
+            - generic [ref=e81]: Aide
+        - link "Appels" [ref=e82] [cursor=pointer]:
+          - /url: /call-history
+          - generic [ref=e83]:
+            - img [ref=e84]
+            - generic [ref=e86]: Appels
+      - generic [ref=e87]:
+        - link "Voir mon profil" [ref=e90] [cursor=pointer]:
+          - /url: /profile
+          - img "FloydCanShoot" [ref=e92]
+        - link "Passer Premium" [ref=e95] [cursor=pointer]:
+          - /url: /premium
+          - img [ref=e97]
+    - main [ref=e99]:
+      - generic [ref=e101]:
+        - banner [ref=e102]:
+          - navigation "Fil d'Ariane" [ref=e103]:
+            - list [ref=e104]:
+              - listitem [ref=e105]:
+                - img [ref=e106]
+                - link "Accueil" [ref=e109] [cursor=pointer]:
+                  - /url: /home
+                - img [ref=e110]
+              - listitem [ref=e112]:
+                - link "Sessions" [ref=e113] [cursor=pointer]:
+                  - /url: /sessions
+                - img [ref=e114]
+              - listitem [ref=e116]:
+                - generic [ref=e117]: Session
+          - generic [ref=e118]:
+            - button "Notifications" [ref=e121] [cursor=pointer]:
+              - img [ref=e122]
+            - button "Rechercher" [ref=e126] [cursor=pointer]:
+              - img [ref=e127]
+              - generic [ref=e130]: Rechercher...
+              - generic [ref=e131]:
+                - generic [ref=e132]: Ctrl
+                - text: K
+        - main "Détail de session" [ref=e133]:
+          - generic [ref=e135]:
+            - img [ref=e136]
+            - generic [ref=e139]: Erreur lors du check-in, réessaie
+          - generic [ref=e141]:
+            - generic [ref=e142]:
+              - link "Retour à la squad" [ref=e143] [cursor=pointer]:
+                - /url: /squad/91454729-0907-4216-b4fe-67f9feda43d7
+                - img [ref=e144]
+              - generic [ref=e146]:
+                - heading "E2E Test Active Session Checkin 1771035683502" [level=1] [ref=e147]
+                - generic [ref=e148]:
+                  - img [ref=e149]
+                  - generic [ref=e152]: Passée
+              - button "Modifier la session" [ref=e153] [cursor=pointer]:
+                - img [ref=e155]
+            - generic [ref=e158]:
+              - generic [ref=e160]:
+                - img [ref=e162]
+                - generic [ref=e164]:
+                  - generic [ref=e165]: samedi 14 février
+                  - generic [ref=e166]: 03:06
+              - generic [ref=e168]:
+                - img [ref=e170]
+                - generic [ref=e173]:
+                  - generic [ref=e174]: 120 min
+                  - generic [ref=e175]: Durée
+            - generic [ref=e176]:
+              - heading "Réponses" [level=2] [ref=e177]
+              - generic [ref=e178]:
+                - generic [ref=e179]:
+                  - img [ref=e180]
+                  - generic [ref=e182]: "1"
+                  - generic [ref=e183]: Présents
+                - generic [ref=e184]:
+                  - img [ref=e185]
+                  - generic [ref=e188]: "0"
+                  - generic [ref=e189]: Peut-être
+                - generic [ref=e190]:
+                  - img [ref=e191]
+                  - generic [ref=e194]: "0"
+                  - generic [ref=e195]: Absents
+            - generic [ref=e196]:
+              - heading "Ta réponse" [level=2] [ref=e197]
+              - generic [ref=e200]:
+                - button "Présent" [ref=e202] [cursor=pointer]:
+                  - generic [ref=e203]:
+                    - img [ref=e204]
+                    - text: Présent
+                - button "Peut-être" [ref=e207] [cursor=pointer]:
+                  - generic [ref=e208]:
+                    - img [ref=e209]
+                    - text: Peut-être
+                - button "Absent" [ref=e213] [cursor=pointer]:
+                  - generic [ref=e214]:
+                    - img [ref=e215]
+                    - text: Absent
+            - generic [ref=e221]:
+              - img [ref=e223]
+              - heading "🎮 C'est l'heure du game !" [level=3] [ref=e225]
+              - paragraph [ref=e226]: Ta squad t'attend. Confirme que t'es là !
+              - button "Je suis là !" [ref=e228] [cursor=pointer]:
+                - generic [ref=e229]:
+                  - img [ref=e230]
+                  - text: Je suis là !
+            - generic [ref=e233]:
+              - heading "Chat Vocal" [level=2] [ref=e234]
+              - generic [ref=e235]:
+                - generic [ref=e239]: Chat Vocal
+                - generic [ref=e240]:
+                  - paragraph [ref=e241]: Rejoins le vocal pour parler avec ta squad pendant la session
+                  - button "Rejoindre le vocal" [ref=e242] [cursor=pointer]:
+                    - generic [ref=e244]:
+                      - img [ref=e245]
+                      - text: Rejoindre le vocal
+                - paragraph [ref=e248]: "Session: E2E Test Active Session Checkin 1771035683502"
+            - generic [ref=e249]:
+              - heading "Participants" [level=2] [ref=e250]
+              - generic [ref=e253]:
+                - img [ref=e255]
+                - generic [ref=e260]: FloydCanShoot
+                - generic [ref=e262]: Présent
+  - region "Notifications alt+T" [ref=e263]:
+    - list:
+      - listitem [ref=e264]:
+        - img [ref=e266]
+        - generic [ref=e270]: Erreur lors du check-in
+  - generic [ref=e271]: Session
+```

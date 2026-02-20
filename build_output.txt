@@ -1,0 +1,178 @@
+
+> squad-planner@0.0.0 build
+> react-router build
+
+[34m[1/5] analyze client references...[39m
+[36mvite v7.3.1 [32mbuilding rsc environment for production...[36m[39m
+[33m🧪 Using React Router's RSC Framework Mode (experimental)[39m
+transforming...
+[32m✓[39m 367 modules transformed.
+[33mGenerated an empty chunk: "vendor-query".[39m
+[33mGenerated an empty chunk: "vendor-motion".[39m
+rendering chunks...
+[32m✓ built in 1.27s[39m
+[sw-auto-version] SW updated → v-mli3lfud
+[34m[2/5] analyze server references...[39m
+[36mvite v7.3.1 [32mbuilding ssr environment for production...[36m[39m
+transforming...
+[32m✓[39m 583 modules transformed.
+[33mGenerated an empty chunk: "vendor-ui".[39m
+[33mGenerated an empty chunk: "vendor-motion".[39m
+[33mGenerated an empty chunk: "vendor-query".[39m
+rendering chunks...
+[32m✓ built in 961ms[39m
+[sw-auto-version] SW updated → v-mli3lgl3
+[34m[3/5] build rsc environment...[39m
+[36mvite v7.3.1 [32mbuilding rsc environment for production...[36m[39m
+[32m✓[39m 367 modules transformed.
+[2mbuild/server/[22m[35massets/root-C2D0pEAM.css                     [39m[1m[2m174.76 kB[22m[1m[22m
+[2mbuild/server/[22m[36massets/supabase.server-C68WXcfD.js           [39m[1m[2m  0.43 kB[22m[1m[22m
+[2mbuild/server/[22m[36massets/_index-BrJCSlbW.js                    [39m[1m[2m  0.45 kB[22m[1m[22m
+[2mbuild/server/[22m[36massets/vendor-motion-DbMrYmV8.js             [39m[1m[2m  0.75 kB[22m[1m[22m
+[2mbuild/server/[22m[36massets/join-squad-CNovFxnC.js                [39m[1m[2m  0.94 kB[22m[1m[22m
+[2mbuild/server/[22m[36massets/help-BYOPQK6S.js                      [39m[1m[2m  1.04 kB[22m[1m[22m
+[2mbuild/server/[22m[36massets/legal-C96L-TeQ.js                     [39m[1m[2m  1.04 kB[22m[1m[22m
+[2mbuild/server/[22m[36massets/auth-BJ_M4xfb.js                      [39m[1m[2m  1.05 kB[22m[1m[22m
+[2mbuild/server/[22m[36massets/premium-B1PDn8MG.js                   [39m[1m[2m  1.05 kB[22m[1m[22m
+[2mbuild/server/[22m[36massets/maintenance-C57l_Wyp.js               [39m[1m[2m  1.05 kB[22m[1m[22m
+[2mbuild/server/[22m[36massets/onboarding-DzTmxm6u.js                [39m[1m[2m  1.34 kB[22m[1m[22m
+[2mbuild/server/[22m[36massets/call-history-CgHZICaV.js              [39m[1m[2m  1.35 kB[22m[1m[22m
+[2mbuild/server/[22m[36massets/ClientRouteWrapper-Bab6VDo4.js        [39m[1m[2m  1.41 kB[22m[1m[22m
+[2mbuild/server/[22m[36massets/profile-NPW72BMk.js                   [39m[1m[2m  1.58 kB[22m[1m[22m
+[2mbuild/server/[22m[36massets/settings-EWh5lBi0.js                  [39m[1m[2m  1.58 kB[22m[1m[22m
+[2mbuild/server/[22m[36massets/party-ZmIeQpl1.js                     [39m[1m[2m  1.63 kB[22m[1m[22m
+[2mbuild/server/[22m[36massets/messages-D9_e4qiv.js                  [39m[1m[2m  1.64 kB[22m[1m[22m
+[2mbuild/server/[22m[36massets/discover-D2-HQQjm.js                  [39m[1m[2m  1.64 kB[22m[1m[22m
+[2mbuild/server/[22m[36massets/public-profile-DftIufsU.js            [39m[1m[2m  1.64 kB[22m[1m[22m
+[2mbuild/server/[22m[36massets/squads-DUpJi84I.js                    [39m[1m[2m  1.91 kB[22m[1m[22m
+[2mbuild/server/[22m[36massets/_protected-C3qFuY7_.js                [39m[1m[2m  1.94 kB[22m[1m[22m
+[2mbuild/server/[22m[36massets/session-detail-BBtR0J8n.js            [39m[1m[2m  2.04 kB[22m[1m[22m
+[2mbuild/server/[22m[36massets/sessions-Cies-1Ag.js                  [39m[1m[2m  2.28 kB[22m[1m[22m
+[2mbuild/server/[22m[36massets/squad-detail-Cf21QkhW.js              [39m[1m[2m  2.36 kB[22m[1m[22m
+[2mbuild/server/[22m[36massets/home-BHdkhtu_.js                      [39m[1m[2m  2.65 kB[22m[1m[22m
+[2mbuild/server/[22m[36massets/root-CQ1eOxuj.js                      [39m[1m[2m  5.52 kB[22m[1m[22m
+[2mbuild/server/[22m[36massets/jsx-runtime.react-server-FQTS-HaG.js  [39m[1m[2m  6.54 kB[22m[1m[22m
+[2mbuild/server/[22m[36massets/not-found-DAC-4mHN.js                 [39m[1m[2m 11.77 kB[22m[1m[22m
+[2mbuild/server/[22m[36mindex.js                                     [39m[1m[2m 53.71 kB[22m[1m[22m
+[2mbuild/server/[22m[36massets/vendor-query-DwzFxGDb.js              [39m[1m[2m247.12 kB[22m[1m[22m
+[32m✓ built in 1.44s[39m
+[sw-auto-version] SW updated → v-mli3lhp5
+[34m[4/5] build client environment...[39m
+[36mvite v7.3.1 [32mbuilding client environment for production...[36m[39m
+transforming...
+[32m✓[39m 96 modules transformed.
+rendering chunks...
+computing gzip size...
+[2mbuild/client/[22m[35massets/root-C2D0pEAM.css      [39m[1m[2m174.76 kB[22m[1m[22m[2m │ gzip:  25.49 kB[22m
+[2mbuild/client/[22m[36massets/webVitals-rZVt4C1Y.js  [39m[1m[2m  2.09 kB[22m[1m[22m[2m │ gzip:   1.04 kB[22m
+[2mbuild/client/[22m[36massets/router-BqW_v8KT.js     [39m[1m[2m114.07 kB[22m[1m[22m[2m │ gzip:  37.71 kB[22m
+[2mbuild/client/[22m[36massets/react-BzHfXjVe.js      [39m[1m[2m192.90 kB[22m[1m[22m[2m │ gzip:  60.51 kB[22m
+[2mbuild/client/[22m[36massets/index-CiTADJi6.js      [39m[1m[2m450.99 kB[22m[1m[22m[2m │ gzip: 119.00 kB[22m
+[32m✓ built in 1.67s[39m
+[sw-auto-version] SW updated → v-mli3lizr
+[34m[5/5] build ssr environment...[39m
+[36mvite v7.3.1 [32mbuilding ssr environment for production...[36m[39m
+[33m"isbot" is imported from external module "isbot" but never used in "src/entry.ssr.ts".[39m
+[33m"addScaleCorrector", "buildTransform" and "delay" are imported from external module "motion-dom" but never used in "node_modules/framer-motion/dist/es/index.mjs".[39m
+[32m✓[39m 610 modules transformed.
+[33mCircular chunk: vendor-ui -> vendor-query -> vendor-ui. Please adjust the manual chunk logic for these chunks.[39m
+[33m[plugin vite:reporter] 
+(!) C:/Users/RudyL/Documents/Squadplannerlast/src/components/LocationShare.tsx is dynamically imported by C:/Users/RudyL/Documents/Squadplannerlast/src/components/MessageContent.tsx but also statically imported by C:/Users/RudyL/Documents/Squadplannerlast/src/components/MessageContent.tsx, C:/Users/RudyL/Documents/Squadplannerlast/src/components/messages/MessageComposer.tsx, dynamic import will not move module into another chunk.
+[39m
+[33m[plugin vite:reporter] 
+(!) C:/Users/RudyL/Documents/Squadplannerlast/src/components/ChatPoll.tsx is dynamically imported by C:/Users/RudyL/Documents/Squadplannerlast/src/components/MessageContent.tsx but also statically imported by C:/Users/RudyL/Documents/Squadplannerlast/src/components/MessageContent.tsx, dynamic import will not move module into another chunk.
+[39m
+[2mbuild/server/__ssr_build/[22m[36massets/motionTokens-BtPtnuUx.js             [39m[1m[2m  0.13 kB[22m[1m[22m
+[2mbuild/server/__ssr_build/[22m[36massets/Toast-CHrXXNyr.js                    [39m[1m[2m  0.16 kB[22m[1m[22m
+[2mbuild/server/__ssr_build/[22m[36massets/capacitor-B3au9yDt.js                [39m[1m[2m  0.19 kB[22m[1m[22m
+[2mbuild/server/__ssr_build/[22m[36massets/avatarUrl-CyX6GOMC.js                [39m[1m[2m  0.24 kB[22m[1m[22m
+[2mbuild/server/__ssr_build/[22m[36massets/useReducedMotion-CdSfUBJS.js         [39m[1m[2m  0.35 kB[22m[1m[22m
+[2mbuild/server/__ssr_build/[22m[36massets/ClientRouteWrapper-BeHa98Ya.js       [39m[1m[2m  0.41 kB[22m[1m[22m
+[2mbuild/server/__ssr_build/[22m[36massets/supabase-CafnE0qh.js                 [39m[1m[2m  0.44 kB[22m[1m[22m
+[2mbuild/server/__ssr_build/[22m[36massets/ContentTransition-qNVNvC5H.js        [39m[1m[2m  0.45 kB[22m[1m[22m
+[2mbuild/server/__ssr_build/[22m[36massets/routePrefetch-CT0FNjyd.js            [39m[1m[2m  0.53 kB[22m[1m[22m
+[2mbuild/server/__ssr_build/[22m[36massets/ResponsiveModal-Cu3pJ6Mk.js          [39m[1m[2m  0.54 kB[22m[1m[22m
+[2mbuild/server/__ssr_build/[22m[36massets/animations-4OV_XO-U.js               [39m[1m[2m  0.54 kB[22m[1m[22m
+[2mbuild/server/__ssr_build/[22m[36massets/not-found-CH3G6cN8.js                [39m[1m[2m  0.58 kB[22m[1m[22m
+[2mbuild/server/__ssr_build/[22m[36massets/LazyConfetti-Djr1Ks90.js             [39m[1m[2m  0.60 kB[22m[1m[22m
+[2mbuild/server/__ssr_build/[22m[36massets/useHashNavigation-CB4ZWN1k.js        [39m[1m[2m  0.63 kB[22m[1m[22m
+[2mbuild/server/__ssr_build/[22m[36massets/MobilePageHeader-DXAGieFa.js         [39m[1m[2m  0.64 kB[22m[1m[22m
+[2mbuild/server/__ssr_build/[22m[36massets/react-VlLPQD_F.js                    [39m[1m[2m  0.66 kB[22m[1m[22m
+[2mbuild/server/__ssr_build/[22m[36massets/CrossfadeTransition-Bxq1KTcP.js      [39m[1m[2m  0.67 kB[22m[1m[22m
+[2mbuild/server/__ssr_build/[22m[36massets/useStatePersistence-DIs-vwM6.js      [39m[1m[2m  0.72 kB[22m[1m[22m
+[2mbuild/server/__ssr_build/[22m[36massets/useFocusManagement-B8nGW4ne.js       [39m[1m[2m  0.72 kB[22m[1m[22m
+[2mbuild/server/__ssr_build/[22m[36massets/entry.rsc-CjVTXZOV.js                [39m[1m[2m  0.80 kB[22m[1m[22m
+[2mbuild/server/__ssr_build/[22m[36massets/AnimatedCounter-CsY7O8Wg.js          [39m[1m[2m  0.87 kB[22m[1m[22m
+[2mbuild/server/__ssr_build/[22m[36massets/useAICoach-DVZvxB8o.js               [39m[1m[2m  0.90 kB[22m[1m[22m
+[2mbuild/server/__ssr_build/[22m[36massets/SquadPlannerLogo-vfenu-o-.js         [39m[1m[2m  0.94 kB[22m[1m[22m
+[2mbuild/server/__ssr_build/[22m[36massets/SegmentedControl-Cqts-y_C.js         [39m[1m[2m  1.03 kB[22m[1m[22m
+[2mbuild/server/__ssr_build/[22m[36massets/ScrollProgress-DxsDTjLk.js           [39m[1m[2m  1.07 kB[22m[1m[22m
+[2mbuild/server/__ssr_build/[22m[36massets/messages-DO9-VZWf.js                 [39m[1m[2m  1.17 kB[22m[1m[22m
+[2mbuild/server/__ssr_build/[22m[36massets/squads-4Mh3Vufu.js                   [39m[1m[2m  1.24 kB[22m[1m[22m
+[2mbuild/server/__ssr_build/[22m[36massets/sessions-D7TJ2OGo.js                 [39m[1m[2m  1.36 kB[22m[1m[22m
+[2mbuild/server/__ssr_build/[22m[36massets/errorTracker-CXbmaEkd.js             [39m[1m[2m  1.43 kB[22m[1m[22m
+[2mbuild/server/__ssr_build/[22m[36massets/useDiscoverQueries-C8Ho756E.js       [39m[1m[2m  1.46 kB[22m[1m[22m
+[2mbuild/server/__ssr_build/[22m[36massets/home-CS0xLuC7.js                     [39m[1m[2m  1.66 kB[22m[1m[22m
+[2mbuild/server/__ssr_build/[22m[36massets/ConfirmDialog-DkzzrD_I.js            [39m[1m[2m  1.83 kB[22m[1m[22m
+[2mbuild/server/__ssr_build/[22m[36massets/_protected-C8kCsbbl.js               [39m[1m[2m  1.86 kB[22m[1m[22m
+[2mbuild/server/__ssr_build/[22m[36massets/RateLimitBanner-CSBWVhwA.js          [39m[1m[2m  1.97 kB[22m[1m[22m
+[2mbuild/server/__ssr_build/[22m[36massets/useNetworkQuality-DJ6yO_q8.js        [39m[1m[2m  2.10 kB[22m[1m[22m
+[2mbuild/server/__ssr_build/[22m[36massets/PullToRefresh-BuOsh5c8.js            [39m[1m[2m  2.10 kB[22m[1m[22m
+[2mbuild/server/__ssr_build/[22m[36massets/Card-CVE3Lpnf.js                     [39m[1m[2m  2.12 kB[22m[1m[22m
+[2mbuild/server/__ssr_build/[22m[36massets/useCallHistory-B1mf18mT.js           [39m[1m[2m  2.33 kB[22m[1m[22m
+[2mbuild/server/__ssr_build/[22m[36massets/queryClient-D9LFuPXV.js              [39m[1m[2m  2.36 kB[22m[1m[22m
+[2mbuild/server/__ssr_build/[22m[36massets/PWAInstallBanner-uyFBXLX1.js         [39m[1m[2m  2.41 kB[22m[1m[22m
+[2mbuild/server/__ssr_build/[22m[36massets/root-CCpn8tE-.js                     [39m[1m[2m  2.50 kB[22m[1m[22m
+[2mbuild/server/__ssr_build/[22m[36massets/NetworkQualityIndicator-CoosRF99.js  [39m[1m[2m  2.81 kB[22m[1m[22m
+[2mbuild/server/__ssr_build/[22m[36massets/NotificationBanner-BW6nklCj.js       [39m[1m[2m  2.82 kB[22m[1m[22m
+[2mbuild/server/__ssr_build/[22m[36massets/SessionExpiredModal-CMAnwn-h.js      [39m[1m[2m  2.84 kB[22m[1m[22m
+[2mbuild/server/__ssr_build/[22m[36massets/OfflineBanner-DN7YzgY5.js            [39m[1m[2m  2.84 kB[22m[1m[22m
+[2mbuild/server/__ssr_build/[22m[36massets/useTheme-BKgmAost.js                 [39m[1m[2m  3.04 kB[22m[1m[22m
+[2mbuild/server/__ssr_build/[22m[36massets/Tooltip-B0VPBVk2.js                  [39m[1m[2m  3.08 kB[22m[1m[22m
+[2mbuild/server/__ssr_build/[22m[36massets/maintenance-CNZX0k7b.js              [39m[1m[2m  3.82 kB[22m[1m[22m
+[2mbuild/server/__ssr_build/[22m[36massets/IncomingCallModal-D5ZzN0kr.js        [39m[1m[2m  4.48 kB[22m[1m[22m
+[2mbuild/server/__ssr_build/[22m[36massets/useSquadsQuery-lrRUZFOF.js           [39m[1m[2m  4.54 kB[22m[1m[22m
+[2mbuild/server/__ssr_build/[22m[36massets/CookieConsent-DLAAm_Dt.js            [39m[1m[2m  4.67 kB[22m[1m[22m
+[2mbuild/server/__ssr_build/[22m[36massets/index-C2BWk1q3.js                    [39m[1m[2m  4.71 kB[22m[1m[22m
+[2mbuild/server/__ssr_build/[22m[36massets/join-squad-DDi0ppke.js               [39m[1m[2m  5.46 kB[22m[1m[22m
+[2mbuild/server/__ssr_build/[22m[36massets/CreateSessionModal-BwdFJpCZ.js       [39m[1m[2m  5.83 kB[22m[1m[22m
+[2mbuild/server/__ssr_build/[22m[36massets/public-profile-B8hy_jBl.js           [39m[1m[2m  6.27 kB[22m[1m[22m
+[2mbuild/server/__ssr_build/[22m[36massets/TourGuide-qG43j45p.js                [39m[1m[2m  6.31 kB[22m[1m[22m
+[2mbuild/server/__ssr_build/[22m[36massets/CallModal-BjchWNdc.js                [39m[1m[2m  6.69 kB[22m[1m[22m
+[2mbuild/server/__ssr_build/[22m[36massets/Select-CWiJP1jI.js                   [39m[1m[2m  6.70 kB[22m[1m[22m
+[2mbuild/server/__ssr_build/[22m[36massets/Sheet-BW7-JpQ4.js                    [39m[1m[2m  7.32 kB[22m[1m[22m
+[2mbuild/server/__ssr_build/[22m[36massets/useVoiceCall-DJLgCKfk.js             [39m[1m[2m  7.78 kB[22m[1m[22m
+[2mbuild/server/__ssr_build/[22m[36massets/Skeleton-BP0Cn3_5.js                 [39m[1m[2m  8.75 kB[22m[1m[22m
+[2mbuild/server/__ssr_build/[22m[36massets/Badge-P5HjCiDK.js                    [39m[1m[2m  9.08 kB[22m[1m[22m
+[2mbuild/server/__ssr_build/[22m[36massets/PremiumGate-CRmsXIyS.js              [39m[1m[2m  9.12 kB[22m[1m[22m
+[2mbuild/server/__ssr_build/[22m[36massets/AdaptiveImage-ChlrLvcG.js            [39m[1m[2m 10.74 kB[22m[1m[22m
+[2mbuild/server/__ssr_build/[22m[36massets/Sessions-Go5CI2Mw.js                 [39m[1m[2m 11.02 kB[22m[1m[22m
+[2mbuild/server/__ssr_build/[22m[36massets/call-history-CxfKbS7g.js             [39m[1m[2m 11.14 kB[22m[1m[22m
+[2mbuild/server/__ssr_build/[22m[36massets/Squads-D-a2mh5D.js                   [39m[1m[2m 12.35 kB[22m[1m[22m
+[2mbuild/server/__ssr_build/[22m[36massets/auth-B3VBbuXJ.js                     [39m[1m[2m 12.82 kB[22m[1m[22m
+[2mbuild/server/__ssr_build/[22m[36massets/CommandPalette-B5xmLDma.js           [39m[1m[2m 14.27 kB[22m[1m[22m
+[2mbuild/server/__ssr_build/[22m[36massets/dom-export-BDP1pgSj.js               [39m[1m[2m 15.28 kB[22m[1m[22m
+[2mbuild/server/__ssr_build/[22m[36massets/settings-D3DnjuQM.js                 [39m[1m[2m 16.09 kB[22m[1m[22m
+[2mbuild/server/__ssr_build/[22m[36massets/useDirectMessages-ucnMM843.js        [39m[1m[2m 16.42 kB[22m[1m[22m
+[2mbuild/server/__ssr_build/[22m[36massets/discover-VkS-FJWD.js                 [39m[1m[2m 16.55 kB[22m[1m[22m
+[2mbuild/server/__ssr_build/[22m[36massets/legal-B4l_dGC0.js                    [39m[1m[2m 17.23 kB[22m[1m[22m
+[2mbuild/server/__ssr_build/[22m[36massets/session-detail-BAEfzmu_.js           [39m[1m[2m 18.37 kB[22m[1m[22m
+[2mbuild/server/__ssr_build/[22m[36massets/toast-BnSh3Bea.js                    [39m[1m[2m 18.59 kB[22m[1m[22m
+[2mbuild/server/__ssr_build/[22m[36massets/icons-DX9peLMG.js                    [39m[1m[2m 25.68 kB[22m[1m[22m
+[2mbuild/server/__ssr_build/[22m[36massets/onboarding-Ba2UH3O6.js               [39m[1m[2m 25.76 kB[22m[1m[22m
+[2mbuild/server/__ssr_build/[22m[36massets/useNavigationProgress--CteaiVK.js    [39m[1m[2m 27.14 kB[22m[1m[22m
+[2mbuild/server/__ssr_build/[22m[36massets/premium-CZQ7Bdtb.js                  [39m[1m[2m 29.12 kB[22m[1m[22m
+[2mbuild/server/__ssr_build/[22m[36massets/help-2mogc10N.js                     [39m[1m[2m 30.42 kB[22m[1m[22m
+[2mbuild/server/__ssr_build/[22m[36massets/party-C2cIs4HA.js                    [39m[1m[2m 32.95 kB[22m[1m[22m
+[2mbuild/server/__ssr_build/[22m[36massets/Home--BDu-JL7.js                     [39m[1m[2m 36.19 kB[22m[1m[22m
+[2mbuild/server/__ssr_build/[22m[36massets/vendor-query-81dT-Els.js             [39m[1m[2m 38.63 kB[22m[1m[22m
+[2mbuild/server/__ssr_build/[22m[36massets/squad-detail-C1MMlvBz.js             [39m[1m[2m 45.88 kB[22m[1m[22m
+[2mbuild/server/__ssr_build/[22m[36massets/vendor-ui-Ct-23rB0.js                [39m[1m[2m 46.44 kB[22m[1m[22m
+[2mbuild/server/__ssr_build/[22m[36massets/vendor-motion-BIrQJ-cC.js            [39m[1m[2m 50.44 kB[22m[1m[22m
+[2mbuild/server/__ssr_build/[22m[36massets/ClientShell-kgWZzPLC.js              [39m[1m[2m 52.71 kB[22m[1m[22m
+[2mbuild/server/__ssr_build/[22m[36massets/profile-cMvSh9Uw.js                  [39m[1m[2m 60.50 kB[22m[1m[22m
+[2mbuild/server/__ssr_build/[22m[36massets/_index-Cj0SnE2T.js                   [39m[1m[2m 73.56 kB[22m[1m[22m
+[2mbuild/server/__ssr_build/[22m[36massets/Messages-CWUs3uW0.js                 [39m[1m[2m 94.60 kB[22m[1m[22m
+[2mbuild/server/__ssr_build/[22m[36mindex.js                                    [39m[1m[33m800.04 kB[39m[22m
+[32m✓ built in 3.12s[39m
+[sw-auto-version] SW updated → v-mli3llej

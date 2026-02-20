@@ -1,0 +1,160 @@
+[dotenv@17.3.1] injecting env (9) from .env -- tip: ⚙️  suppress all logs with { quiet: true }
+
+Running 329 tests using 1 worker
+
+[dotenv@17.3.1] injecting env (0) from .env -- tip: ⚙️  write to custom object with { processEnv: myObject }
+  ok   1 [chromium] › e2e\a11y-regression.spec.ts:46:3 › A11y Regression - Auth Flow › Landing page accessible after load (4.3s)
+  ok   2 [chromium] › e2e\a11y-regression.spec.ts:55:3 › A11y Regression - Auth Flow › Auth page accessible with login form visible (4.0s)
+  ok   3 [chromium] › e2e\a11y-regression.spec.ts:64:3 › A11y Regression - Auth Flow › Auth page accessible after switching to register mode (4.5s)
+  ok   4 [chromium] › e2e\a11y-regression.spec.ts:79:3 › A11y Regression - Auth Flow › Auth page accessible after validation error (5.1s)
+  ok   5 [chromium] › e2e\a11y-regression.spec.ts:98:3 › A11y Regression - Dashboard › Home page accessible after login (11.8s)
+  ok   6 [chromium] › e2e\a11y-regression.spec.ts:117:3 › A11y Regression - Squads › Squads list page accessible (9.0s)
+  x    7 [chromium] › e2e\a11y-regression.spec.ts:133:3 › A11y Regression - Sessions › Sessions page accessible (9.7s)
+[dotenv@17.3.1] injecting env (0) from .env -- tip: 🛠️  run anywhere with `dotenvx run -- yourcommand`
+  x    8 [chromium] › e2e\a11y-regression.spec.ts:133:3 › A11y Regression - Sessions › Sessions page accessible (retry #1) (9.6s)
+[dotenv@17.3.1] injecting env (0) from .env -- tip: ⚙️  suppress all logs with { quiet: true }
+  x    9 [chromium] › e2e\a11y-regression.spec.ts:133:3 › A11y Regression - Sessions › Sessions page accessible (retry #2) (8.8s)
+[dotenv@17.3.1] injecting env (0) from .env -- tip: 🔐 prevent building .env in docker: https://dotenvx.com/prebuild
+  x   10 [chromium] › e2e\a11y-regression.spec.ts:149:3 › A11y Regression - Messages › Messages page accessible (7.7s)
+[dotenv@17.3.1] injecting env (0) from .env -- tip: ⚙️  override existing env vars with { override: true }
+  x   11 [chromium] › e2e\a11y-regression.spec.ts:149:3 › A11y Regression - Messages › Messages page accessible (retry #1) (9.2s)
+[dotenv@17.3.1] injecting env (0) from .env -- tip: ⚙️  specify custom .env file path with { path: '/custom/path/.env' }
+  x   12 [chromium] › e2e\a11y-regression.spec.ts:149:3 › A11y Regression - Messages › Messages page accessible (retry #2) (8.8s)
+[dotenv@17.3.1] injecting env (0) from .env -- tip: ⚙️  enable debug logging with { debug: true }
+  x   13 [chromium] › e2e\a11y-regression.spec.ts:165:3 › A11y Regression - Party › Party page accessible (9.3s)
+[dotenv@17.3.1] injecting env (0) from .env -- tip: 🔐 prevent committing .env to code: https://dotenvx.com/precommit
+  x   14 [chromium] › e2e\a11y-regression.spec.ts:165:3 › A11y Regression - Party › Party page accessible (retry #1) (10.4s)
+[dotenv@17.3.1] injecting env (0) from .env -- tip: ⚙️  override existing env vars with { override: true }
+  x   15 [chromium] › e2e\a11y-regression.spec.ts:165:3 › A11y Regression - Party › Party page accessible (retry #2) (9.9s)
+[dotenv@17.3.1] injecting env (0) from .env -- tip: ⚙️  enable debug logging with { debug: true }
+  ok  16 [chromium] › e2e\a11y-regression.spec.ts:181:3 › A11y Regression - Gamification › Home page gamification widgets accessible (9.1s)
+  x   17 [chromium] › e2e\a11y-regression.spec.ts:200:3 › A11y Regression - Discover › Discover page accessible (10.0s)
+[dotenv@17.3.1] injecting env (0) from .env -- tip: ⚙️  write to custom object with { processEnv: myObject }
+  x   18 [chromium] › e2e\a11y-regression.spec.ts:200:3 › A11y Regression - Discover › Discover page accessible (retry #1) (9.9s)
+[dotenv@17.3.1] injecting env (0) from .env -- tip: ⚙️  suppress all logs with { quiet: true }
+  x   19 [chromium] › e2e\a11y-regression.spec.ts:200:3 › A11y Regression - Discover › Discover page accessible (retry #2) (9.3s)
+[dotenv@17.3.1] injecting env (0) from .env -- tip: ⚙️  write to custom object with { processEnv: myObject }
+  x   20 [chromium] › e2e\a11y-regression.spec.ts:216:3 › A11y Regression - Settings › Settings page accessible (10.8s)
+[dotenv@17.3.1] injecting env (0) from .env -- tip: 🛡️ auth for agents: https://vestauth.com
+  x   21 [chromium] › e2e\a11y-regression.spec.ts:216:3 › A11y Regression - Settings › Settings page accessible (retry #1) (9.2s)
+[dotenv@17.3.1] injecting env (0) from .env -- tip: ⚙️  override existing env vars with { override: true }
+  x   22 [chromium] › e2e\a11y-regression.spec.ts:216:3 › A11y Regression - Settings › Settings page accessible (retry #2) (10.3s)
+[dotenv@17.3.1] injecting env (0) from .env -- tip: ⚙️  override existing env vars with { override: true }
+  x   23 [chromium] › e2e\a11y-regression.spec.ts:226:3 › A11y Regression - Settings › Profile page accessible (10.9s)
+[dotenv@17.3.1] injecting env (0) from .env -- tip: ⚙️  suppress all logs with { quiet: true }
+  x   24 [chromium] › e2e\a11y-regression.spec.ts:226:3 › A11y Regression - Settings › Profile page accessible (retry #1) (10.9s)
+[dotenv@17.3.1] injecting env (0) from .env -- tip: 🔐 prevent committing .env to code: https://dotenvx.com/precommit
+  x   25 [chromium] › e2e\a11y-regression.spec.ts:226:3 › A11y Regression - Settings › Profile page accessible (retry #2) (10.8s)
+[dotenv@17.3.1] injecting env (0) from .env -- tip: 🔐 encrypt with Dotenvx: https://dotenvx.com
+  x   26 [chromium] › e2e\a11y-regression.spec.ts:242:3 › A11y Regression - Premium › Premium page accessible (4.0s)
+[dotenv@17.3.1] injecting env (0) from .env -- tip: 🛠️  run anywhere with `dotenvx run -- yourcommand`
+  x   27 [chromium] › e2e\a11y-regression.spec.ts:242:3 › A11y Regression - Premium › Premium page accessible (retry #1) (4.6s)
+[dotenv@17.3.1] injecting env (0) from .env -- tip: 🔐 prevent committing .env to code: https://dotenvx.com/precommit
+  x   28 [chromium] › e2e\a11y-regression.spec.ts:242:3 › A11y Regression - Premium › Premium page accessible (retry #2) (4.5s)
+[dotenv@17.3.1] injecting env (0) from .env -- tip: ⚙️  load multiple .env files with { path: ['.env.local', '.env'] }
+  x   29 [chromium] › e2e\a11y-regression.spec.ts:251:3 › A11y Regression - Premium › Premium page accessible after pricing toggle (5.2s)
+[dotenv@17.3.1] injecting env (0) from .env -- tip: ⚙️  enable debug logging with { debug: true }
+  x   30 [chromium] › e2e\a11y-regression.spec.ts:251:3 › A11y Regression - Premium › Premium page accessible after pricing toggle (retry #1) (5.5s)
+[dotenv@17.3.1] injecting env (0) from .env -- tip: 🔐 encrypt with Dotenvx: https://dotenvx.com
+  x   31 [chromium] › e2e\a11y-regression.spec.ts:251:3 › A11y Regression - Premium › Premium page accessible after pricing toggle (retry #2) (5.1s)
+[dotenv@17.3.1] injecting env (0) from .env -- tip: ⚡️ secrets for agents: https://dotenvx.com/as2
+  ok  32 [chromium] › e2e\a11y-regression.spec.ts:272:3 › A11y Regression - Onboarding › Onboarding page accessible (8.7s)
+  x   33 [chromium] › e2e\a11y-regression.spec.ts:288:3 › A11y Regression - Mobile Viewport (375px) › Landing page accessible at 375px (4.4s)
+[dotenv@17.3.1] injecting env (0) from .env -- tip: ⚙️  write to custom object with { processEnv: myObject }
+  x   34 [chromium] › e2e\a11y-regression.spec.ts:288:3 › A11y Regression - Mobile Viewport (375px) › Landing page accessible at 375px (retry #1) (4.3s)
+[dotenv@17.3.1] injecting env (0) from .env -- tip: ⚙️  suppress all logs with { quiet: true }
+  x   35 [chromium] › e2e\a11y-regression.spec.ts:288:3 › A11y Regression - Mobile Viewport (375px) › Landing page accessible at 375px (retry #2) (4.8s)
+[dotenv@17.3.1] injecting env (0) from .env -- tip: 🛠️  run anywhere with `dotenvx run -- yourcommand`
+  ok  36 [chromium] › e2e\a11y-regression.spec.ts:298:3 › A11y Regression - Mobile Viewport (375px) › Auth page accessible at 375px (4.6s)
+  ok  37 [chromium] › e2e\a11y-regression.spec.ts:308:3 › A11y Regression - Mobile Viewport (375px) › Home page accessible at 375px (8.8s)
+  x   38 [chromium] › e2e\a11y-regression.spec.ts:319:3 › A11y Regression - Mobile Viewport (375px) › Settings page accessible at 375px (8.9s)
+[dotenv@17.3.1] injecting env (0) from .env -- tip: ⚙️  enable debug logging with { debug: true }
+  x   39 [chromium] › e2e\a11y-regression.spec.ts:319:3 › A11y Regression - Mobile Viewport (375px) › Settings page accessible at 375px (retry #1) (10.1s)
+[dotenv@17.3.1] injecting env (0) from .env -- tip: 🔐 prevent building .env in docker: https://dotenvx.com/prebuild
+  x   40 [chromium] › e2e\a11y-regression.spec.ts:319:3 › A11y Regression - Mobile Viewport (375px) › Settings page accessible at 375px (retry #2) (8.9s)
+[dotenv@17.3.1] injecting env (0) from .env -- tip: ⚙️  override existing env vars with { override: true }
+  x   41 [chromium] › e2e\a11y-regression.spec.ts:344:5 › A11y Regression - Dark Mode › Landing page accessible in dark mode (5.6s)
+[dotenv@17.3.1] injecting env (0) from .env -- tip: ⚙️  override existing env vars with { override: true }
+  x   42 [chromium] › e2e\a11y-regression.spec.ts:344:5 › A11y Regression - Dark Mode › Landing page accessible in dark mode (retry #1) (5.2s)
+[dotenv@17.3.1] injecting env (0) from .env -- tip: 🛠️  run anywhere with `dotenvx run -- yourcommand`
+  x   43 [chromium] › e2e\a11y-regression.spec.ts:344:5 › A11y Regression - Dark Mode › Landing page accessible in dark mode (retry #2) (4.6s)
+[dotenv@17.3.1] injecting env (0) from .env -- tip: 🛠️  run anywhere with `dotenvx run -- yourcommand`
+  x   44 [chromium] › e2e\a11y-regression.spec.ts:344:5 › A11y Regression - Dark Mode › Auth page accessible in dark mode (4.6s)
+[dotenv@17.3.1] injecting env (0) from .env -- tip: ⚙️  override existing env vars with { override: true }
+  x   45 [chromium] › e2e\a11y-regression.spec.ts:344:5 › A11y Regression - Dark Mode › Auth page accessible in dark mode (retry #1) (4.9s)
+[dotenv@17.3.1] injecting env (0) from .env -- tip: 🛠️  run anywhere with `dotenvx run -- yourcommand`
+  x   46 [chromium] › e2e\a11y-regression.spec.ts:344:5 › A11y Regression - Dark Mode › Auth page accessible in dark mode (retry #2) (4.2s)
+[dotenv@17.3.1] injecting env (0) from .env -- tip: ⚙️  specify custom .env file path with { path: '/custom/path/.env' }
+  x   47 [chromium] › e2e\a11y-regression.spec.ts:344:5 › A11y Regression - Dark Mode › Home page accessible in dark mode (10.0s)
+[dotenv@17.3.1] injecting env (0) from .env -- tip: 🤖 agentic secret storage: https://dotenvx.com/as2
+  x   48 [chromium] › e2e\a11y-regression.spec.ts:344:5 › A11y Regression - Dark Mode › Home page accessible in dark mode (retry #1) (10.3s)
+[dotenv@17.3.1] injecting env (0) from .env -- tip: ⚙️  enable debug logging with { debug: true }
+  x   49 [chromium] › e2e\a11y-regression.spec.ts:344:5 › A11y Regression - Dark Mode › Home page accessible in dark mode (retry #2) (10.1s)
+[dotenv@17.3.1] injecting env (0) from .env -- tip: 🤖 agentic secret storage: https://dotenvx.com/as2
+  x   50 [chromium] › e2e\a11y-regression.spec.ts:344:5 › A11y Regression - Dark Mode › Settings page accessible in dark mode (10.8s)
+[dotenv@17.3.1] injecting env (0) from .env -- tip: 🔐 prevent building .env in docker: https://dotenvx.com/prebuild
+  x   51 [chromium] › e2e\a11y-regression.spec.ts:344:5 › A11y Regression - Dark Mode › Settings page accessible in dark mode (retry #1) (10.2s)
+[dotenv@17.3.1] injecting env (0) from .env -- tip: 🔐 prevent building .env in docker: https://dotenvx.com/prebuild
+  x   52 [chromium] › e2e\a11y-regression.spec.ts:344:5 › A11y Regression - Dark Mode › Settings page accessible in dark mode (retry #2) (9.9s)
+[dotenv@17.3.1] injecting env (0) from .env -- tip: ⚙️  suppress all logs with { quiet: true }
+  x   53 [chromium] › e2e\accessibility.spec.ts:29:5 › A11Y-PUBLIC: Axe WCAG Audit — Public Pages › Landing (dark mode): zero serious/critical WCAG violations (2.0s)
+[dotenv@17.3.1] injecting env (0) from .env -- tip: ⚙️  override existing env vars with { override: true }
+  x   54 [chromium] › e2e\accessibility.spec.ts:29:5 › A11Y-PUBLIC: Axe WCAG Audit — Public Pages › Landing (dark mode): zero serious/critical WCAG violations (retry #1) (2.5s)
+[dotenv@17.3.1] injecting env (0) from .env -- tip: 🔐 prevent committing .env to code: https://dotenvx.com/precommit
+  x   55 [chromium] › e2e\accessibility.spec.ts:29:5 › A11Y-PUBLIC: Axe WCAG Audit — Public Pages › Landing (dark mode): zero serious/critical WCAG violations (retry #2) (2.0s)
+[dotenv@17.3.1] injecting env (0) from .env -- tip: ⚙️  write to custom object with { processEnv: myObject }
+  x   56 [chromium] › e2e\accessibility.spec.ts:40:5 › A11Y-PUBLIC: Axe WCAG Audit — Public Pages › Landing (light mode): zero serious/critical WCAG violations (2.0s)
+[dotenv@17.3.1] injecting env (0) from .env -- tip: ⚙️  specify custom .env file path with { path: '/custom/path/.env' }
+  ok  57 [chromium] › e2e\accessibility.spec.ts:40:5 › A11Y-PUBLIC: Axe WCAG Audit — Public Pages › Landing (light mode): zero serious/critical WCAG violations (retry #1) (2.4s)
+  x   58 [chromium] › e2e\accessibility.spec.ts:29:5 › A11Y-PUBLIC: Axe WCAG Audit — Public Pages › Auth (dark mode): zero serious/critical WCAG violations (1.4s)
+[dotenv@17.3.1] injecting env (0) from .env -- tip: ⚙️  write to custom object with { processEnv: myObject }
+  x   59 [chromium] › e2e\accessibility.spec.ts:29:5 › A11Y-PUBLIC: Axe WCAG Audit — Public Pages › Auth (dark mode): zero serious/critical WCAG violations (retry #1) (1.8s)
+[dotenv@17.3.1] injecting env (0) from .env -- tip: ⚙️  write to custom object with { processEnv: myObject }
+  x   60 [chromium] › e2e\accessibility.spec.ts:29:5 › A11Y-PUBLIC: Axe WCAG Audit — Public Pages › Auth (dark mode): zero serious/critical WCAG violations (retry #2) (1.4s)
+[dotenv@17.3.1] injecting env (0) from .env -- tip: ⚙️  load multiple .env files with { path: ['.env.local', '.env'] }
+  ok  61 [chromium] › e2e\accessibility.spec.ts:40:5 › A11Y-PUBLIC: Axe WCAG Audit — Public Pages › Auth (light mode): zero serious/critical WCAG violations (1.5s)
+  ok  62 [chromium] › e2e\accessibility.spec.ts:29:5 › A11Y-PUBLIC: Axe WCAG Audit — Public Pages › Premium (dark mode): zero serious/critical WCAG violations (2.1s)
+  x   63 [chromium] › e2e\accessibility.spec.ts:40:5 › A11Y-PUBLIC: Axe WCAG Audit — Public Pages › Premium (light mode): zero serious/critical WCAG violations (2.1s)
+[dotenv@17.3.1] injecting env (0) from .env -- tip: 🔐 encrypt with Dotenvx: https://dotenvx.com
+  x   64 [chromium] › e2e\accessibility.spec.ts:40:5 › A11Y-PUBLIC: Axe WCAG Audit — Public Pages › Premium (light mode): zero serious/critical WCAG violations (retry #1) (2.5s)
+[dotenv@17.3.1] injecting env (0) from .env -- tip: ⚙️  override existing env vars with { override: true }
+  x   65 [chromium] › e2e\accessibility.spec.ts:40:5 › A11Y-PUBLIC: Axe WCAG Audit — Public Pages › Premium (light mode): zero serious/critical WCAG violations (retry #2) (2.2s)
+[dotenv@17.3.1] injecting env (0) from .env -- tip: 🔐 prevent committing .env to code: https://dotenvx.com/precommit
+  x   66 [chromium] › e2e\accessibility.spec.ts:68:5 › A11Y-PROTECTED: Axe WCAG Audit — Protected Pages › Home (dark mode): zero serious/critical WCAG violations (11.0s)
+[dotenv@17.3.1] injecting env (0) from .env -- tip: 🔐 prevent committing .env to code: https://dotenvx.com/precommit
+  x   67 [chromium] › e2e\accessibility.spec.ts:68:5 › A11Y-PROTECTED: Axe WCAG Audit — Protected Pages › Home (dark mode): zero serious/critical WCAG violations (retry #1) (11.3s)
+[dotenv@17.3.1] injecting env (0) from .env -- tip: 🔐 encrypt with Dotenvx: https://dotenvx.com
+  x   68 [chromium] › e2e\accessibility.spec.ts:68:5 › A11Y-PROTECTED: Axe WCAG Audit — Protected Pages › Home (dark mode): zero serious/critical WCAG violations (retry #2) (10.2s)
+[dotenv@17.3.1] injecting env (0) from .env -- tip: ⚙️  write to custom object with { processEnv: myObject }
+  ok  69 [chromium] › e2e\accessibility.spec.ts:80:5 › A11Y-PROTECTED: Axe WCAG Audit — Protected Pages › Home (light mode): zero serious/critical WCAG violations (10.8s)
+  x   70 [chromium] › e2e\accessibility.spec.ts:68:5 › A11Y-PROTECTED: Axe WCAG Audit — Protected Pages › Squads (dark mode): zero serious/critical WCAG violations (8.6s)
+[dotenv@17.3.1] injecting env (0) from .env -- tip: 🛠️  run anywhere with `dotenvx run -- yourcommand`
+  x   71 [chromium] › e2e\accessibility.spec.ts:68:5 › A11Y-PROTECTED: Axe WCAG Audit — Protected Pages › Squads (dark mode): zero serious/critical WCAG violations (retry #1) (9.2s)
+[dotenv@17.3.1] injecting env (0) from .env -- tip: 🔐 encrypt with Dotenvx: https://dotenvx.com
+  x   72 [chromium] › e2e\accessibility.spec.ts:68:5 › A11Y-PROTECTED: Axe WCAG Audit — Protected Pages › Squads (dark mode): zero serious/critical WCAG violations (retry #2) (9.2s)
+[dotenv@17.3.1] injecting env (0) from .env -- tip: ⚙️  override existing env vars with { override: true }
+  x   73 [chromium] › e2e\accessibility.spec.ts:80:5 › A11Y-PROTECTED: Axe WCAG Audit — Protected Pages › Squads (light mode): zero serious/critical WCAG violations (8.8s)
+[dotenv@17.3.1] injecting env (0) from .env -- tip: 🛠️  run anywhere with `dotenvx run -- yourcommand`
+  ok  74 [chromium] › e2e\accessibility.spec.ts:80:5 › A11Y-PROTECTED: Axe WCAG Audit — Protected Pages › Squads (light mode): zero serious/critical WCAG violations (retry #1) (9.3s)
+  x   75 [chromium] › e2e\accessibility.spec.ts:68:5 › A11Y-PROTECTED: Axe WCAG Audit — Protected Pages › Messages (dark mode): zero serious/critical WCAG violations (8.6s)
+[dotenv@17.3.1] injecting env (0) from .env -- tip: ⚡️ secrets for agents: https://dotenvx.com/as2
+  x   76 [chromium] › e2e\accessibility.spec.ts:68:5 › A11Y-PROTECTED: Axe WCAG Audit — Protected Pages › Messages (dark mode): zero serious/critical WCAG violations (retry #1) (8.6s)
+[dotenv@17.3.1] injecting env (0) from .env -- tip: ⚙️  override existing env vars with { override: true }
+  x   77 [chromium] › e2e\accessibility.spec.ts:68:5 › A11Y-PROTECTED: Axe WCAG Audit — Protected Pages › Messages (dark mode): zero serious/critical WCAG violations (retry #2) (8.6s)
+[dotenv@17.3.1] injecting env (0) from .env -- tip: ⚡️ secrets for agents: https://dotenvx.com/as2
+  x   78 [chromium] › e2e\accessibility.spec.ts:80:5 › A11Y-PROTECTED: Axe WCAG Audit — Protected Pages › Messages (light mode): zero serious/critical WCAG violations (9.3s)
+[dotenv@17.3.1] injecting env (0) from .env -- tip: ⚙️  specify custom .env file path with { path: '/custom/path/.env' }
+  x   79 [chromium] › e2e\accessibility.spec.ts:80:5 › A11Y-PROTECTED: Axe WCAG Audit — Protected Pages › Messages (light mode): zero serious/critical WCAG violations (retry #1) (8.7s)
+[dotenv@17.3.1] injecting env (0) from .env -- tip: 🤖 agentic secret storage: https://dotenvx.com/as2
+  x   80 [chromium] › e2e\accessibility.spec.ts:80:5 › A11Y-PROTECTED: Axe WCAG Audit — Protected Pages › Messages (light mode): zero serious/critical WCAG violations (retry #2) (9.3s)
+[dotenv@17.3.1] injecting env (0) from .env -- tip: ⚙️  write to custom object with { processEnv: myObject }
+  x   81 [chromium] › e2e\accessibility.spec.ts:68:5 › A11Y-PROTECTED: Axe WCAG Audit — Protected Pages › Profile (dark mode): zero serious/critical WCAG violations (10.8s)
+[dotenv@17.3.1] injecting env (0) from .env -- tip: ⚙️  write to custom object with { processEnv: myObject }
+  x   82 [chromium] › e2e\accessibility.spec.ts:68:5 › A11Y-PROTECTED: Axe WCAG Audit — Protected Pages › Profile (dark mode): zero serious/critical WCAG violations (retry #1) (10.8s)
+[dotenv@17.3.1] injecting env (0) from .env -- tip: ⚙️  load multiple .env files with { path: ['.env.local', '.env'] }
+  x   83 [chromium] › e2e\accessibility.spec.ts:68:5 › A11Y-PROTECTED: Axe WCAG Audit — Protected Pages › Profile (dark mode): zero serious/critical WCAG violations (retry #2) (10.2s)
+[dotenv@17.3.1] injecting env (0) from .env -- tip: 🔐 encrypt with Dotenvx: https://dotenvx.com
+  x   84 [chromium] › e2e\accessibility.spec.ts:80:5 › A11Y-PROTECTED: Axe WCAG Audit — Protected Pages › Profile (light mode): zero serious/critical WCAG violations (10.2s)
+[dotenv@17.3.1] injecting env (0) from .env -- tip: 🔐 encrypt with Dotenvx: https://dotenvx.com
+  x   85 [chromium] › e2e\accessibility.spec.ts:80:5 › A11Y-PROTECTED: Axe WCAG Audit — Protected Pages › Profile (light mode): zero serious/critical WCAG violations (retry #1) (11.3s)
+[dotenv@17.3.1] injecting env (0) from .env -- tip: 🛡️ auth for agents: https://vestauth.com

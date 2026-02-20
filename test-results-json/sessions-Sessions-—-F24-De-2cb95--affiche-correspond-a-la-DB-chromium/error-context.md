@@ -1,0 +1,166 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - link "Aller au contenu principal" [ref=e3] [cursor=pointer]:
+      - /url: "#main-content"
+    - complementary "Navigation principale" [ref=e4]:
+      - img [ref=e7]
+      - button "Créer une nouvelle session" [ref=e16] [cursor=pointer]:
+        - img [ref=e17]
+        - generic [ref=e18]: Nouveau
+      - navigation "Menu principal" [ref=e19]:
+        - link "Accueil" [ref=e21] [cursor=pointer]:
+          - /url: /home
+          - generic [ref=e22]:
+            - img [ref=e23]
+            - generic [ref=e26]: Accueil
+        - link "Squads" [ref=e28] [cursor=pointer]:
+          - /url: /squads
+          - generic [ref=e29]:
+            - img [ref=e30]
+            - generic [ref=e35]: Squads
+        - link "Sessions" [ref=e37] [cursor=pointer]:
+          - /url: /sessions
+          - generic [ref=e38]:
+            - img [ref=e39]
+            - generic [ref=e41]: Sessions
+        - link "Party" [ref=e43] [cursor=pointer]:
+          - /url: /party
+          - generic [ref=e44]:
+            - img [ref=e45]
+            - generic [ref=e48]: Party
+        - link "Messages" [ref=e50] [cursor=pointer]:
+          - /url: /messages
+          - generic [ref=e51]:
+            - img [ref=e52]
+            - generic [ref=e54]: Messages
+        - link "Découvrir" [ref=e56] [cursor=pointer]:
+          - /url: /discover
+          - generic [ref=e57]:
+            - img [ref=e58]
+            - generic [ref=e61]: Découvrir
+        - link "Profil" [ref=e63] [cursor=pointer]:
+          - /url: /profile
+          - generic [ref=e64]:
+            - img [ref=e65]
+            - generic [ref=e68]: Profil
+        - link "Paramètres" [ref=e70] [cursor=pointer]:
+          - /url: /settings
+          - generic [ref=e71]:
+            - img [ref=e72]
+            - generic [ref=e75]: Paramètres
+        - link "Aide" [ref=e76] [cursor=pointer]:
+          - /url: /help
+          - generic [ref=e77]:
+            - img [ref=e78]
+            - generic [ref=e81]: Aide
+        - link "Appels" [ref=e82] [cursor=pointer]:
+          - /url: /call-history
+          - generic [ref=e83]:
+            - img [ref=e84]
+            - generic [ref=e86]: Appels
+      - generic [ref=e87]:
+        - link "Voir mon profil" [ref=e90] [cursor=pointer]:
+          - /url: /profile
+          - img "FloydCanShoot" [ref=e92]
+        - link "Passer Premium" [ref=e95] [cursor=pointer]:
+          - /url: /premium
+          - img [ref=e97]
+    - main [ref=e99]:
+      - generic [ref=e101]:
+        - banner [ref=e102]:
+          - generic [ref=e103]:
+            - button "Notifications" [ref=e106] [cursor=pointer]:
+              - img [ref=e107]
+            - button "Rechercher" [ref=e111] [cursor=pointer]:
+              - img [ref=e112]
+              - generic [ref=e115]: Rechercher...
+              - generic [ref=e116]:
+                - generic [ref=e117]: Ctrl
+                - text: K
+        - generic [ref=e123]:
+          - generic [ref=e124]:
+            - heading "Bonsoir FloydCanShoot !" [level=1] [ref=e125]
+            - generic [ref=e126]:
+              - paragraph [ref=e127]: Ta squad t'attend, lance une session !
+              - generic [ref=e129]:
+                - img [ref=e131]
+                - generic [ref=e133]: 100% fiable
+          - region "Tableau de bord" [ref=e135]:
+            - heading "Ton tableau de bord" [level=2] [ref=e136]
+            - generic [ref=e139]:
+              - link "1 Squads" [ref=e140] [cursor=pointer]:
+                - /url: /squads
+                - generic [ref=e142]:
+                  - img [ref=e144]
+                  - generic [ref=e149]:
+                    - generic "1" [ref=e150]: "0"
+                    - generic [ref=e151]: Squads
+              - link "0 Cette semaine" [ref=e152] [cursor=pointer]:
+                - /url: /sessions
+                - generic [ref=e154]:
+                  - img [ref=e156]
+                  - generic [ref=e158]:
+                    - generic "0" [ref=e159]
+                    - generic [ref=e160]: Cette semaine
+          - link "Lance la party vocale ! Retrouve ta squad en un clic, vocal toujours ouvert" [ref=e163] [cursor=pointer]:
+            - /url: /party
+            - generic [ref=e166]:
+              - img [ref=e168]
+              - generic [ref=e171]:
+                - generic [ref=e172]: Lance la party vocale !
+                - generic [ref=e173]: Retrouve ta squad en un clic, vocal toujours ouvert
+              - img [ref=e174]
+          - region "Prochaine session" [ref=e177]:
+            - heading "Prochaine session" [level=2] [ref=e179]
+            - generic [ref=e183]:
+              - img [ref=e186]
+              - generic [ref=e199]:
+                - heading "Ta prochaine session t'attend 🎮" [level=3] [ref=e200]:
+                  - text: Ta prochaine session t'attend
+                  - generic [ref=e201]: 🎮
+                - paragraph [ref=e202]: Propose un créneau et ta squad reçoit une notif instantanément !
+              - button "Planifier une session" [ref=e203] [cursor=pointer]:
+                - img [ref=e204]
+                - text: Planifier une session
+                - img [ref=e207]
+              - paragraph [ref=e210]: Ta squad recevra une notification instantanément
+          - generic [ref=e217]:
+            - img [ref=e219]
+            - generic [ref=e224]:
+              - heading "Tes potes arrivent bientôt !" [level=3] [ref=e225]
+              - paragraph [ref=e226]: Invite ta squad pour voir qui est en ligne et jouer ensemble
+            - button "Inviter des amis" [ref=e227] [cursor=pointer]:
+              - img [ref=e228]
+              - text: Inviter des amis
+            - paragraph [ref=e231]: Ou partage ton lien d'invitation depuis les paramètres
+          - region "Activité récente" [ref=e233]:
+            - heading "Activité récente" [level=2] [ref=e234]
+            - generic [ref=e235]:
+              - img [ref=e236]
+              - paragraph [ref=e238]: Pas encore d'activité
+              - paragraph [ref=e239]: Participe à des sessions ou envoie des messages pour voir ton activité ici.
+          - region "Mes squads" [ref=e241]:
+            - generic [ref=e242]:
+              - heading "Mes squads" [level=2] [ref=e243]
+              - link "Gérer" [ref=e244] [cursor=pointer]:
+                - /url: /squads
+                - button "Gérer" [ref=e245]:
+                  - text: Gérer
+                  - img [ref=e246]
+            - list [ref=e248]:
+              - listitem [ref=e249]:
+                - link "UTE for LIFE NBA 1 membre" [ref=e250] [cursor=pointer]:
+                  - /url: /squad/d3083278-e5a7-40de-b1ee-0601429a2333
+                  - generic [ref=e253]:
+                    - img [ref=e255]
+                    - generic [ref=e260]:
+                      - generic [ref=e261]: UTE for LIFE
+                      - generic [ref=e262]: NBA
+                    - generic [ref=e263]: 1 membre
+                    - img [ref=e264]
+  - region "Notifications alt+T" [ref=e266]
+  - generic [ref=e267]: Accueil
+```

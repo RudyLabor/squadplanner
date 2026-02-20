@@ -1,0 +1,224 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e1]:
+  - main [ref=e2]:
+    - main "Premium" [ref=e3]:
+      - generic [ref=e9]:
+        - generic [ref=e11]:
+          - img [ref=e12]
+          - generic [ref=e16]: 2 mois offerts sur l'annuel
+        - img [ref=e19]
+        - heading "Passe au niveau supérieur" [level=1] [ref=e21]:
+          - text: Passe au niveau
+          - generic [ref=e22]: supérieur
+        - paragraph [ref=e23]: Débloque tout le potentiel de Squad Planner. Stats avancées, IA coach personnalisé, audio HD et bien plus.
+      - generic [ref=e24]:
+        - generic [ref=e25]:
+          - img [ref=e27]
+          - img [ref=e33]
+          - generic [ref=e38]:
+            - img [ref=e40]
+            - heading "7 jours d'essai gratuit" [level=2] [ref=e44]
+            - paragraph [ref=e45]: Essaie Premium gratuitement pendant 7 jours
+            - paragraph [ref=e46]: Pas de carte bancaire requise. Annule à tout moment.
+            - button "Commencer l'essai gratuit" [active] [ref=e47] [cursor=pointer]:
+              - generic [ref=e48]:
+                - img [ref=e49]
+                - text: Commencer l'essai gratuit
+                - img [ref=e53]
+            - generic [ref=e55]:
+              - generic [ref=e56]:
+                - img [ref=e57]
+                - generic [ref=e59]: Aucun engagement
+              - generic [ref=e60]:
+                - img [ref=e61]
+                - generic [ref=e64]: 7 jours complets
+              - generic [ref=e65]:
+                - img [ref=e66]
+                - generic [ref=e69]: Pas de CB requise
+        - generic [ref=e70]:
+          - button "Mensuel 7j gratuits 4.99€ /mois Commence par 7 jours gratuits Flexibilité maximale, annule quand tu veux" [ref=e71] [cursor=pointer]:
+            - generic [ref=e72]:
+              - generic [ref=e73]: Mensuel
+              - generic [ref=e74]:
+                - img [ref=e75]
+                - text: 7j gratuits
+            - generic [ref=e79]:
+              - generic [ref=e80]: 4.99€
+              - generic [ref=e81]: /mois
+            - paragraph [ref=e82]: Commence par 7 jours gratuits
+            - paragraph [ref=e83]: Flexibilité maximale, annule quand tu veux
+          - button "MEILLEURE OFFRE Annuel 7j gratuits 3.99€ /mois 59.88€/an 47.88€/an Commence par 7 jours gratuits Économise 20% — 2 mois offerts !" [ref=e84] [cursor=pointer]:
+            - generic [ref=e85]: MEILLEURE OFFRE
+            - generic [ref=e86]:
+              - generic [ref=e87]: Annuel
+              - generic [ref=e88]:
+                - img [ref=e89]
+                - text: 7j gratuits
+            - generic [ref=e93]:
+              - generic [ref=e94]: 3.99€
+              - generic [ref=e95]: /mois
+            - generic [ref=e96]:
+              - generic [ref=e97]: 59.88€/an
+              - generic [ref=e98]: 47.88€/an
+            - paragraph [ref=e99]: Commence par 7 jours gratuits
+            - paragraph [ref=e100]: Économise 20% — 2 mois offerts !
+            - img [ref=e102]
+        - generic [ref=e104]:
+          - button "Passer Premium maintenant" [ref=e105] [cursor=pointer]:
+            - generic [ref=e106]:
+              - img [ref=e107]
+              - text: Passer Premium maintenant
+              - img [ref=e112]
+          - generic [ref=e114]:
+            - generic [ref=e115]:
+              - img [ref=e116]
+              - text: Paiement sécurisé
+            - generic [ref=e118]: ·
+            - generic [ref=e119]: Annulation facile
+            - generic [ref=e120]: ·
+            - generic [ref=e121]: Satisfait ou remboursé 30j
+        - generic [ref=e123]:
+          - img [ref=e124]
+          - heading "Prêt à passer Premium ?" [level=3] [ref=e126]
+          - paragraph [ref=e127]: Rejoins les squads qui ont choisi de jouer sérieusement ensemble.
+          - paragraph [ref=e128]: Commence par 7 jours d'essai gratuit — sans carte bancaire
+          - button "Essai gratuit 7 jours" [ref=e129] [cursor=pointer]:
+            - generic [ref=e130]:
+              - img [ref=e131]
+              - text: Essai gratuit 7 jours
+        - generic [ref=e133]:
+          - heading "Comparatif des fonctionnalités" [level=2] [ref=e134]
+          - generic [ref=e135]:
+            - generic [ref=e136]:
+              - generic [ref=e137]: Fonctionnalité
+              - generic [ref=e138]: Gratuit
+              - generic [ref=e140]:
+                - img [ref=e141]
+                - text: PREMIUM
+            - generic [ref=e143]:
+              - generic [ref=e144]:
+                - generic [ref=e145]:
+                  - img [ref=e146]
+                  - generic [ref=e151]: Squads
+                - generic [ref=e152]: 2 max
+                - generic [ref=e153]: Gère tous tes groupes sans limites
+              - generic [ref=e154]:
+                - generic [ref=e155]:
+                  - img [ref=e156]
+                  - generic [ref=e158]: Historique sessions
+                - generic [ref=e159]: 30 jours
+                - generic [ref=e160]: Retrouve n'importe quelle session
+              - generic [ref=e161]:
+                - generic [ref=e162]:
+                  - img [ref=e163]
+                  - generic [ref=e165]: Stats & Analytics
+                - generic [ref=e166]: Basiques
+                - generic [ref=e167]: Prouve qui carry vraiment la squad
+              - generic [ref=e168]:
+                - generic [ref=e169]:
+                  - img [ref=e170]
+                  - generic [ref=e173]: IA Coach
+                - generic [ref=e174]: Conseils simples
+                - generic [ref=e175]: Découvre quand ta squad est la plus clutch
+              - generic [ref=e176]:
+                - generic [ref=e177]:
+                  - img [ref=e178]
+                  - generic [ref=e182]: Qualité audio Party
+                - generic [ref=e183]: Standard
+                - generic [ref=e184]: Élimine les lags audio en ranked
+              - generic [ref=e185]:
+                - generic [ref=e186]:
+                  - img [ref=e187]
+                  - generic [ref=e189]: Rôles squad
+                - generic [ref=e190]: Membre / Admin
+                - generic [ref=e191]: Shotcaller, IGL, Coach...
+              - generic [ref=e192]:
+                - generic [ref=e193]:
+                  - img [ref=e194]
+                  - generic [ref=e196]: Export calendrier
+                - img [ref=e198]
+                - img [ref=e202]
+              - generic [ref=e204]:
+                - generic [ref=e205]:
+                  - img [ref=e206]
+                  - generic [ref=e208]: Badge Premium
+                - img [ref=e210]
+                - img [ref=e214]
+        - generic [ref=e216]:
+          - heading "Ils sont passés Premium" [level=2] [ref=e217]
+          - paragraph [ref=e218]: Et ils ne reviendraient pas en arrière
+          - generic [ref=e219]:
+            - generic [ref=e222]:
+              - generic [ref=e223]:
+                - img "Avatar AlexGaming" [ref=e225]
+                - generic [ref=e248]:
+                  - generic [ref=e249]:
+                    - generic [ref=e250]: AlexGaming
+                    - img [ref=e251]
+                  - generic [ref=e254]: Les Ranked du Soir
+                  - generic [ref=e255]:
+                    - img [ref=e256]
+                    - generic [ref=e259]: Membre depuis 6 mois
+              - paragraph [ref=e260]: « Depuis qu'on est Premium, plus personne oublie les sessions. Le coach IA nous a fait gagner 2 ranks ! »
+              - generic [ref=e261]:
+                - img [ref=e262]
+                - img [ref=e264]
+                - img [ref=e266]
+                - img [ref=e268]
+                - img [ref=e270]
+            - generic [ref=e274]:
+              - generic [ref=e275]:
+                - img "Avatar MarieGG" [ref=e277]
+                - generic [ref=e307]:
+                  - generic [ref=e308]:
+                    - generic [ref=e309]: MarieGG
+                    - img [ref=e310]
+                  - generic [ref=e313]: GG Girls
+                  - generic [ref=e314]:
+                    - img [ref=e315]
+                    - generic [ref=e318]: Membre depuis 4 mois
+              - paragraph [ref=e319]: « L'audio HD fait vraiment la diff en ranked. Et les stats nous aident à voir qui clutch le plus. »
+              - generic [ref=e320]:
+                - img [ref=e321]
+                - img [ref=e323]
+                - img [ref=e325]
+                - img [ref=e327]
+                - img [ref=e329]
+            - generic [ref=e333]:
+              - generic [ref=e334]:
+                - img "Avatar LucasApex" [ref=e336]
+                - generic [ref=e366]:
+                  - generic [ref=e367]:
+                    - generic [ref=e368]: LucasApex
+                    - img [ref=e369]
+                  - generic [ref=e372]: Apex Legends FR
+                  - generic [ref=e373]:
+                    - img [ref=e374]
+                    - generic [ref=e377]: Membre depuis 8 mois
+              - paragraph [ref=e378]: « On gère 5 squads différentes maintenant. Impossible sans Premium ! »
+              - generic [ref=e379]:
+                - img [ref=e380]
+                - img [ref=e382]
+                - img [ref=e384]
+                - img [ref=e386]
+                - img [ref=e388]
+        - generic [ref=e390]:
+          - heading "Questions fréquentes" [level=2] [ref=e391]
+          - generic [ref=e392]:
+            - button "Je peux annuler quand je veux ?" [ref=e395] [cursor=pointer]:
+              - generic [ref=e396]: Je peux annuler quand je veux ?
+              - img [ref=e397]
+            - button "C'est pour toute ma squad ou juste moi ?" [ref=e401] [cursor=pointer]:
+              - generic [ref=e402]: C'est pour toute ma squad ou juste moi ?
+              - img [ref=e403]
+            - button "Y a-t-il une période d'essai ?" [ref=e407] [cursor=pointer]:
+              - generic [ref=e408]: Y a-t-il une période d'essai ?
+              - img [ref=e409]
+  - region "Notifications alt+T" [ref=e411]:
+    - list [ref=e412]:
+      - listitem [ref=e413]:
+        - img [ref=e415]
+        - generic [ref=e419]: Tu as déjà utilisé ton essai gratuit.
+```

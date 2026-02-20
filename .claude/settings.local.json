@@ -16,7 +16,8 @@
       "mcp__chrome-devtools__get_console_message",
       "mcp__chrome-devtools__emulate",
       "Bash(findstr:*)",
-      "Bash(powershell -c \"\\(Get-Item ''node_modules\\\\agora-rtc-sdk-ng\\\\AgoraRTC_N-production.js''\\).Length\")"
+      "Bash(powershell -c \"\\(Get-Item ''node_modules\\\\agora-rtc-sdk-ng\\\\AgoraRTC_N-production.js''\\).Length\")",
+      "Bash(npx playwright test)"
     ]
   }
 }

@@ -1,0 +1,219 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e1]:
+  - generic [ref=e2]:
+    - link "Aller au contenu principal" [ref=e3] [cursor=pointer]:
+      - /url: "#main-content"
+    - complementary "Navigation principale" [ref=e4]:
+      - img [ref=e7]
+      - button "Créer une nouvelle session" [ref=e16] [cursor=pointer]:
+        - img [ref=e17]
+        - generic [ref=e18]: Nouveau
+      - navigation "Menu principal" [ref=e19]:
+        - link "Accueil" [ref=e21] [cursor=pointer]:
+          - /url: /home
+          - generic [ref=e22]:
+            - img [ref=e23]
+            - generic [ref=e26]: Accueil
+        - link "Squads" [ref=e28] [cursor=pointer]:
+          - /url: /squads
+          - generic [ref=e29]:
+            - img [ref=e30]
+            - generic [ref=e35]: Squads
+        - link "Sessions" [ref=e37] [cursor=pointer]:
+          - /url: /sessions
+          - generic [ref=e38]:
+            - img [ref=e39]
+            - generic [ref=e41]: Sessions
+        - link "Party" [ref=e43] [cursor=pointer]:
+          - /url: /party
+          - generic [ref=e44]:
+            - img [ref=e45]
+            - generic [ref=e48]: Party
+        - link "Messages" [ref=e50] [cursor=pointer]:
+          - /url: /messages
+          - generic [ref=e51]:
+            - img [ref=e52]
+            - generic [ref=e54]: Messages
+        - link "Découvrir" [ref=e56] [cursor=pointer]:
+          - /url: /discover
+          - generic [ref=e57]:
+            - img [ref=e58]
+            - generic [ref=e61]: Découvrir
+        - link "Profil" [ref=e63] [cursor=pointer]:
+          - /url: /profile
+          - generic [ref=e64]:
+            - img [ref=e65]
+            - generic [ref=e68]: Profil
+        - link "Paramètres" [ref=e70] [cursor=pointer]:
+          - /url: /settings
+          - generic [ref=e71]:
+            - img [ref=e72]
+            - generic [ref=e75]: Paramètres
+        - link "Aide" [ref=e76] [cursor=pointer]:
+          - /url: /help
+          - generic [ref=e77]:
+            - img [ref=e78]
+            - generic [ref=e81]: Aide
+        - link "Appels" [ref=e82] [cursor=pointer]:
+          - /url: /call-history
+          - generic [ref=e83]:
+            - img [ref=e84]
+            - generic [ref=e86]: Appels
+      - generic [ref=e87]:
+        - link "Voir mon profil" [ref=e90] [cursor=pointer]:
+          - /url: /profile
+          - img "FloydCanShoot" [ref=e92]
+        - link "Passer Premium" [ref=e95] [cursor=pointer]:
+          - /url: /premium
+          - img [ref=e97]
+    - main [ref=e99]:
+      - generic [ref=e101]:
+        - banner [ref=e102]:
+          - navigation "Fil d'Ariane" [ref=e103]:
+            - list [ref=e104]:
+              - listitem [ref=e105]:
+                - img [ref=e106]
+                - link "Accueil" [ref=e109] [cursor=pointer]:
+                  - /url: /home
+                - img [ref=e110]
+              - listitem [ref=e112]:
+                - generic [ref=e113]: Squads
+          - generic [ref=e114]:
+            - button "Notifications" [ref=e117] [cursor=pointer]:
+              - img [ref=e118]
+            - button "Rechercher" [ref=e122] [cursor=pointer]:
+              - img [ref=e123]
+              - generic [ref=e126]: Rechercher...
+              - generic [ref=e127]:
+                - generic [ref=e128]: Ctrl
+                - text: K
+        - main "Squads" [ref=e129]:
+          - generic [ref=e131]:
+            - generic [ref=e132]:
+              - generic [ref=e133]:
+                - heading "Mes Squads" [level=1] [ref=e134]
+                - paragraph [ref=e135]: 1 squad
+              - generic [ref=e136]:
+                - button "Rejoindre" [ref=e137] [cursor=pointer]:
+                  - generic [ref=e138]:
+                    - img [ref=e139]
+                    - generic [ref=e142]: Rejoindre
+                - button "Créer PRO" [ref=e143] [cursor=pointer]:
+                  - generic [ref=e144]:
+                    - img [ref=e145]
+                    - generic [ref=e146]: Créer
+                    - generic [ref=e147]:
+                      - img [ref=e148]
+                      - text: PRO
+            - generic [ref=e152]:
+              - img [ref=e154]
+              - generic [ref=e157]:
+                - heading "Limite atteinte" [level=3] [ref=e158]
+                - paragraph [ref=e159]: Tu as 2/2 squads. Passe Premium pour en créer plus !
+                - button "Passer Premium" [ref=e160] [cursor=pointer]:
+                  - generic [ref=e161]:
+                    - img [ref=e162]
+                    - text: Passer Premium
+            - list "Liste des squads" [ref=e164]:
+              - listitem [ref=e165]:
+                - article "UTE for LIFE" [ref=e166]:
+                  - link "UTE for LIFE NBA · 1 membre Aucune session planifiée Copier le code d'invitation" [ref=e167] [cursor=pointer]:
+                    - /url: /squad/d3083278-e5a7-40de-b1ee-0601429a2333
+                    - generic [ref=e170]:
+                      - img [ref=e173]
+                      - generic [ref=e175]:
+                        - generic [ref=e176]:
+                          - heading "UTE for LIFE" [level=3] [ref=e177]
+                          - img [ref=e178]
+                        - paragraph [ref=e180]: NBA · 1 membre
+                        - generic [ref=e182]:
+                          - img [ref=e183]
+                          - generic [ref=e185]: Aucune session planifiée
+                      - generic [ref=e186]:
+                        - button "Copier le code d'invitation" [ref=e187]:
+                          - img [ref=e189]
+                        - img [ref=e192]
+            - generic [ref=e196]:
+              - img [ref=e198]
+              - generic [ref=e201]:
+                - heading "Trouve de nouvelles squads" [level=3] [ref=e202]
+                - paragraph [ref=e203]: Explore les squads publiques et rejoins des joueurs qui partagent tes jeux.
+              - link "Découvrir" [ref=e204] [cursor=pointer]:
+                - /url: /discover
+                - button "Découvrir" [ref=e205]:
+                  - generic [ref=e206]:
+                    - img [ref=e207]
+                    - text: Découvrir
+  - region "Notifications alt+T" [ref=e210]
+  - generic [ref=e211]: Mes Squads
+  - dialog [ref=e215]:
+    - button "Close" [active] [ref=e217] [cursor=pointer]:
+      - img [ref=e218]
+    - generic [ref=e221]:
+      - generic [ref=e222]:
+        - button "Fermer" [ref=e223] [cursor=pointer]:
+          - img [ref=e224]
+        - generic [ref=e227]:
+          - img [ref=e229]
+          - generic [ref=e231]:
+            - heading "Passe Premium" [level=2] [ref=e232]
+            - paragraph [ref=e233]: Débloquer toutes les features
+        - generic [ref=e234]:
+          - img [ref=e235]
+          - generic [ref=e237]: "Pour accéder à: Squads illimitées"
+      - generic [ref=e238]:
+        - generic [ref=e239]:
+          - button "Mensuel 4.99/mois" [ref=e240] [cursor=pointer]:
+            - generic [ref=e241]: Mensuel
+            - generic [ref=e242]: 4.99/mois
+          - button "-20% Annuel 3.99/mois 2 mois offerts" [ref=e243] [cursor=pointer]:
+            - generic [ref=e244]: "-20%"
+            - generic [ref=e245]: Annuel
+            - generic [ref=e246]: 3.99/mois
+            - generic [ref=e247]: 2 mois offerts
+        - generic [ref=e248]:
+          - generic [ref=e249]:
+            - img [ref=e251]
+            - generic [ref=e253]:
+              - generic [ref=e254]: Squads illimités
+              - generic [ref=e255]: Crée autant de squads que tu veux
+            - img [ref=e256]
+          - generic [ref=e258]:
+            - img [ref=e260]
+            - generic [ref=e262]:
+              - generic [ref=e263]: Stats avancées
+              - generic [ref=e264]: Graphiques, tendances, analyses détaillées
+            - img [ref=e265]
+          - generic [ref=e267]:
+            - img [ref=e269]
+            - generic [ref=e272]:
+              - generic [ref=e273]: IA Coach avancé
+              - generic [ref=e274]: Conseils personnalisés et prédictions
+            - img [ref=e275]
+          - generic [ref=e277]:
+            - img [ref=e279]
+            - generic [ref=e283]:
+              - generic [ref=e284]: Audio HD
+              - generic [ref=e285]: Qualité audio supérieure en party vocale
+            - img [ref=e286]
+          - generic [ref=e288]:
+            - img [ref=e290]
+            - generic [ref=e295]:
+              - generic [ref=e296]: Rôles avancés
+              - generic [ref=e297]: Coach, manager, permissions personnalisées
+            - img [ref=e298]
+          - generic [ref=e300]:
+            - img [ref=e302]
+            - generic [ref=e304]:
+              - generic [ref=e305]: Export calendrier
+              - generic [ref=e306]: Synchronise tes sessions avec ton agenda
+            - img [ref=e307]
+      - generic [ref=e309]:
+        - button "Passer Premium - 4.99/mois" [ref=e310] [cursor=pointer]:
+          - generic [ref=e311]:
+            - img [ref=e312]
+            - text: Passer Premium - 4.99/mois
+        - paragraph [ref=e314]: Annulation possible à tout moment. Satisfait ou remboursé 30 jours.
+```

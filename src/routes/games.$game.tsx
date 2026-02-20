@@ -2,7 +2,7 @@ import { useState } from 'react'
 import type { HeadersArgs } from 'react-router'
 import { useParams, Link } from 'react-router'
 import { m } from 'framer-motion'
-import { getGameBySlug } from '../data/games'
+import { getGameBySlug, GAMES } from '../data/games'
 import { PublicPageShell } from '../components/PublicPageShell'
 import {
   Calendar,
@@ -228,9 +228,28 @@ export default function Component() {
               <span style={{ color: getGameColor(game.color) }}>{game.name}</span> avec
               Squad Planner
             </h1>
-            <p className="text-xl text-text-secondary mb-8 max-w-2xl mx-auto">
+            <p className="text-xl text-text-secondary mb-10 max-w-2xl mx-auto">
               {game.description}
             </p>
+
+            {/* Hero CTAs */}
+            <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
+              <Link
+                to="/auth?mode=register&redirect=onboarding"
+                className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-gradient-to-r from-primary to-purple text-white text-lg font-bold shadow-lg shadow-primary/20 hover:scale-105 transition-transform"
+              >
+                <Sparkles className="w-5 h-5" />
+                Créer ma squad {game.shortName || game.name}
+                <ArrowRight className="w-5 h-5" />
+              </Link>
+              <Link
+                to={`/lfg/${game.slug}`}
+                className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-surface-card border border-border-subtle text-text-primary font-semibold hover:border-border-default transition-colors"
+              >
+                <Users className="w-5 h-5" />
+                Chercher des joueurs
+              </Link>
+            </div>
           </div>
 
           {/* Stats Cards */}
@@ -435,24 +454,26 @@ export default function Component() {
       {/* Section Divider */}
       <div className="section-divider" />
 
-      {/* Footer CTA */}
-      <section className="py-12 px-4 sm:px-6 lg:px-8 border-t border-border-subtle">
+      {/* Other Games Section */}
+      <section className="py-16 px-4 sm:px-6 lg:px-8">
         <div className="max-w-6xl mx-auto">
-          <p className="text-center text-text-tertiary text-sm mb-4">
-            Squad Planner · Organisez vos sessions {game.name} comme des pros
-          </p>
-          <div className="flex justify-center gap-4">
-            <Link to="/" className="text-primary hover:underline text-sm">
-              Accueil
-            </Link>
-            <span className="text-border-subtle">•</span>
-            <Link to="/help" className="text-primary hover:underline text-sm">
-              Aide
-            </Link>
-            <span className="text-border-subtle">•</span>
-            <Link to="/premium" className="text-primary hover:underline text-sm">
-              Premium
-            </Link>
+          <h2 className="text-2xl font-bold text-text-primary text-center mb-8">
+            Découvre aussi sur Squad Planner
+          </h2>
+          <div className="flex flex-wrap justify-center gap-3">
+            {GAMES
+              .filter((g) => g.slug !== game.slug)
+              .slice(0, 8)
+              .map((g) => (
+                <Link
+                  key={g.slug}
+                  to={`/games/${g.slug}`}
+                  className="inline-flex items-center gap-2 px-4 py-2.5 bg-surface-card border border-border-subtle rounded-xl text-text-secondary hover:text-text-primary hover:border-border-default transition-colors text-sm"
+                >
+                  <span>{g.icon}</span>
+                  {g.name}
+                </Link>
+              ))}
           </div>
         </div>
       </section>

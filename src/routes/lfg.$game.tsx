@@ -205,7 +205,7 @@ export default function Component() {
                 className="text-center"
               >
                 <div className="text-4xl font-bold mb-2" style={{ color: gameColor }}>
-                  {game.estimatedPlayers.split('+')[0]}M+
+                  {game.estimatedPlayers.split(' ')[0]}
                 </div>
                 <div className="text-text-secondary text-sm">Joueurs actifs</div>
               </m.div>
@@ -372,7 +372,7 @@ export default function Component() {
                     <Star key={i} className="w-4 h-4 fill-primary text-primary" />
                   ))}
                 </div>
-                <p className="text-text-secondary mb-4 italic">"{testimonial.text}"</p>
+                <p className="text-text-secondary mb-4 italic">{testimonial.text}</p>
                 <div className="border-t border-border-subtle pt-4">
                   <p className="font-semibold text-text-primary">{testimonial.name}</p>
                   <p className="text-sm text-text-tertiary">{testimonial.role}</p>
@@ -449,7 +449,7 @@ export default function Component() {
               <div className="text-center">
                 <div className="text-6xl mb-6">{game.icon}</div>
                 <h3 className="text-2xl font-bold text-text-primary mb-4">
-                  Prêt à joueur avec ta squad {game.name} ?
+                  Prêt à jouer avec ta squad {game.name} ?
                 </h3>
                 <div className="rounded-xl p-6 mt-6" style={{ backgroundColor: `${gameColor}15` }}>
                   <p className="text-sm text-text-secondary mb-3">
@@ -468,24 +468,35 @@ export default function Component() {
 
       <div className="section-divider" />
 
-      {/* FAQ Quick Links */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8 border-t border-border-subtle">
-        <div className="max-w-5xl mx-auto text-center">
-          <p className="text-text-secondary mb-6">
-            Vous avez des questions sur le matchmaking {game.name} ?
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link to="/help" className="text-primary hover:underline font-semibold">
-              Consulter l'aide
-            </Link>
-            <span className="hidden sm:block text-border-subtle">•</span>
-            <Link to="/premium" className="text-primary hover:underline font-semibold">
-              Découvrir Premium
-            </Link>
-            <span className="hidden sm:block text-border-subtle">•</span>
-            <Link to={`/games/${game.slug}`} className="text-primary hover:underline font-semibold">
-              Planifier une session
-            </Link>
+      {/* Other Games LFG */}
+      <section className="py-16 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-6xl mx-auto">
+          <h2 className="text-2xl font-bold text-text-primary text-center mb-8">
+            Trouver des joueurs sur d'autres jeux
+          </h2>
+          <div className="flex flex-wrap justify-center gap-3">
+            {(() => {
+              const otherGames = [
+                { name: 'Valorant', slug: 'valorant', icon: '🎯' },
+                { name: 'League of Legends', slug: 'league-of-legends', icon: '⚔️' },
+                { name: 'Fortnite', slug: 'fortnite', icon: '🏗️' },
+                { name: 'CS2', slug: 'cs2', icon: '💣' },
+                { name: 'Apex Legends', slug: 'apex-legends', icon: '🔥' },
+                { name: 'Rocket League', slug: 'rocket-league', icon: '🚗' },
+                { name: 'Call of Duty', slug: 'call-of-duty', icon: '🎖️' },
+                { name: 'Minecraft', slug: 'minecraft', icon: '⛏️' },
+              ].filter(g => g.slug !== game.slug)
+              return otherGames.map((g) => (
+                <Link
+                  key={g.slug}
+                  to={`/lfg/${g.slug}`}
+                  className="inline-flex items-center gap-2 px-4 py-2.5 bg-surface-card border border-border-subtle rounded-xl text-text-secondary hover:text-text-primary hover:border-border-default transition-colors text-sm"
+                >
+                  <span>{g.icon}</span>
+                  {g.name}
+                </Link>
+              ))
+            })()}
           </div>
         </div>
       </section>

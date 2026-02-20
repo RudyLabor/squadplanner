@@ -12,11 +12,32 @@ export default [
   route('join/:code', './routes/join-squad.tsx'),
   route('s/:id', './routes/session-share.tsx'),
 
+  // SEO: Game pages (pre-rendered)
+  route('games/:game', './routes/games.$game.tsx'),
+  route('lfg/:game', './routes/lfg.$game.tsx'),
+
+  // SEO: Alternative / comparison pages (pre-rendered)
+  route('alternative/guilded', './routes/alternative.guilded.tsx'),
+  route('alternative/gamerlink', './routes/alternative.gamerlink.tsx'),
+  route('alternative/discord-events', './routes/alternative.discord-events.tsx'),
+  route('vs/guilded-vs-squad-planner', './routes/vs.guilded-vs-squad-planner.tsx'),
+
+  // Blog pages (pre-rendered)
+  route('blog', './routes/blog._index.tsx'),
+  route('blog/:slug', './routes/blog.$slug.tsx'),
+
+  // Dynamic sitemap
+  route('sitemap.xml', './routes/sitemap[.]xml.tsx'),
+
+  // Embeddable widget (public, iframe-friendly)
+  route('widget/:squadId', './routes/widget.$squadId.tsx'),
+
   // Protected pages (wrapped in auth-checking layout)
   layout('./routes/_protected.tsx', [
     route('home', './routes/home.tsx'),
     route('squads', './routes/squads.tsx'),
     route('squad/:id', './routes/squad-detail.tsx'),
+    route('squad/:id/analytics', './routes/squad.$id.analytics.tsx'),
     route('sessions', './routes/sessions.tsx'),
     route('session/:id', './routes/session-detail.tsx'),
     route('messages', './routes/messages.tsx'),

@@ -2,7 +2,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import { AnimatePresence } from 'framer-motion'
 import { ArrowLeft } from '../components/icons'
-import { useParams, useNavigate, useSearchParams } from 'react-router'
+import { useParams, useNavigate, useSearchParams, Link } from 'react-router'
 import Confetti from '../components/LazyConfetti'
 import { Button, SquadDetailSkeleton, CrossfadeTransition, ConfirmDialog } from '../components/ui'
 import { useAuthStore, usePremiumStore, useConfetti } from '../hooks'
@@ -16,6 +16,8 @@ import {
   useRsvpMutation,
 } from '../hooks/queries'
 import { SquadHeader, InviteModal, EditSquadModal } from '../components/squads/SquadHeader'
+import { BarChart3 } from '../components/icons'
+import { PremiumGate } from '../components/PremiumGate'
 import { SquadMembers } from '../components/squads/SquadMembers'
 import { PartySection, SquadSessionsList } from '../components/squads/SquadSessions'
 import { SquadSettings } from '../components/squads/SquadSettings'
@@ -203,6 +205,19 @@ export default function SquadDetail() {
                 currentUserId={user?.id}
                 onInviteClick={() => setShowInviteModal(true)}
               />
+
+              {/* Analytics button — gated behind Squad Leader */}
+              <PremiumGate feature="team_analytics" squadId={id} fallback="blur">
+                <div className="mb-4">
+                  <Link
+                    to={`/squad/${id}/analytics`}
+                    className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-primary/10 text-primary text-sm font-medium hover:bg-primary/15 transition-colors border border-primary/20"
+                  >
+                    <BarChart3 className="w-4 h-4" />
+                    Analytics de la squad
+                  </Link>
+                </div>
+              </PremiumGate>
 
               <SquadSettings
                 squadId={id || ''}

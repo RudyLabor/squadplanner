@@ -12,6 +12,8 @@ import { ResponsiveModal, Select } from './ui'
 import { useSquadsStore, useSessionsStore, useHapticFeedback, useAuthStore } from '../hooks'
 import { showSuccess } from '../lib/toast'
 import { trackChallengeProgress } from '../lib/challengeTracker'
+import { RecurringSessionForm } from './RecurringSessionForm'
+import { PremiumGate } from './PremiumGate'
 
 // Store for managing the modal state globally
 interface CreateSessionModalStore {
@@ -37,6 +39,7 @@ export function CreateSessionModal() {
 
   // Form state
   const [selectedSquadId, setSelectedSquadId] = useState<string>('')
+  const [isRecurring, setIsRecurring] = useState(false)
   const [title, setTitle] = useState('')
   const [date, setDate] = useState('')
   const [time, setTime] = useState('')
@@ -58,6 +61,7 @@ export function CreateSessionModal() {
       setDuration('120')
       setThreshold('3')
       setSelectedSquadId('')
+      setIsRecurring(false)
     }
     if (!isOpen) {
       didInitRef.current = false
@@ -157,157 +161,202 @@ export function CreateSessionModal() {
           </div>
         )}
 
-        {/* Title */}
-        <div>
-          <label className="block text-base font-medium text-text-secondary mb-1.5">
-            Titre (optionnel)
-          </label>
-          <input
-            type="text"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            placeholder="Session ranked, Détente, Tryhard..."
-            className="w-full px-4 py-3 rounded-xl bg-surface-card border border-border-hover text-text-primary placeholder-text-tertiary focus:border-primary focus:ring-2 focus:ring-primary/15 transition-input"
-          />
-        </div>
-
-        {/* Date picker — 14 prochains jours */}
-        <div>
-          <label className="block text-base font-medium text-text-secondary mb-2">
-            <Calendar className="w-4 h-4 inline mr-1" />
-            Date
-          </label>
-          <div className="flex gap-1.5 overflow-x-auto pb-1 scrollbar-hide">
-            {Array.from({ length: 14 }, (_, i) => {
-              const d = new Date()
-              d.setDate(d.getDate() + i)
-              const iso = d.toISOString().split('T')[0]
-              const isSelected = date === iso
-              const dayLabel =
-                i === 0
-                  ? 'Auj.'
-                  : i === 1
-                    ? 'Dem.'
-                    : d.toLocaleDateString('fr', { weekday: 'short' })
-              return (
-                <button
-                  key={iso}
-                  type="button"
-                  onClick={() => setDate(iso)}
-                  className={`flex-shrink-0 w-14 py-2 rounded-xl text-center transition-colors ${
-                    isSelected
-                      ? 'bg-primary text-white'
-                      : 'bg-surface-card text-text-secondary hover:bg-border-hover'
-                  }`}
-                >
-                  <div className="text-xs opacity-70">{dayLabel}</div>
-                  <div className="text-lg font-semibold leading-tight">{d.getDate()}</div>
-                </button>
-              )
-            })}
+        {/* Toggle between unique and recurring sessions */}
+        {selectedSquadId && (
+          <div className="flex rounded-lg bg-overlay-subtle p-1 mb-4">
+            <button
+              type="button"
+              onClick={() => setIsRecurring(false)}
+              className={`flex-1 py-1.5 text-sm rounded-md transition-colors ${
+                !isRecurring
+                  ? 'bg-surface-card shadow-sm text-text-primary font-medium'
+                  : 'text-text-tertiary'
+              }`}
+            >
+              Session unique
+            </button>
+            <button
+              type="button"
+              onClick={() => setIsRecurring(true)}
+              className={`flex-1 py-1.5 text-sm rounded-md transition-colors ${
+                isRecurring
+                  ? 'bg-surface-card shadow-sm text-text-primary font-medium'
+                  : 'text-text-tertiary'
+              }`}
+            >
+              Récurrente ✨
+            </button>
           </div>
-        </div>
+        )}
 
-        {/* Time picker — créneaux prédéfinis */}
-        <div>
-          <label className="block text-base font-medium text-text-secondary mb-2">
-            <Clock className="w-4 h-4 inline mr-1" />
-            Heure
-          </label>
-          <div className="flex flex-wrap gap-1.5">
-            {[
-              '14:00',
-              '15:00',
-              '16:00',
-              '17:00',
-              '18:00',
-              '18:30',
-              '19:00',
-              '19:30',
-              '20:00',
-              '20:30',
-              '21:00',
-              '21:30',
-              '22:00',
-              '22:30',
-              '23:00',
-            ].map((t) => (
-              <button
-                key={t}
-                type="button"
-                onClick={() => setTime(t)}
-                className={`px-3 py-2 rounded-xl text-sm font-medium transition-colors ${
-                  time === t
-                    ? 'bg-primary text-white'
-                    : 'bg-surface-card text-text-secondary hover:bg-border-hover'
-                }`}
-              >
-                {t}
-              </button>
-            ))}
-          </div>
-        </div>
+        {/* Conditional rendering based on session type */}
+        {!isRecurring ? (
+          <>
+            {/* UNIQUE SESSION FORM */}
+            {/* Title */}
+            <div>
+              <label className="block text-base font-medium text-text-secondary mb-1.5">
+                Titre (optionnel)
+              </label>
+              <input
+                type="text"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                placeholder="Session ranked, Détente, Tryhard..."
+                className="w-full px-4 py-3 rounded-xl bg-surface-card border border-border-hover text-text-primary placeholder-text-tertiary focus:border-primary focus:ring-2 focus:ring-primary/15 transition-input"
+              />
+            </div>
 
-        {/* Duration & Threshold */}
-        <div className="grid grid-cols-2 gap-3">
-          <div>
-            <label className="block text-base font-medium text-text-secondary mb-1.5">Durée</label>
-            <Select
-              options={[
-                { value: '60', label: '1 heure' },
-                { value: '120', label: '2 heures' },
-                { value: '180', label: '3 heures' },
-                { value: '240', label: '4 heures' },
-              ]}
-              value={duration}
-              onChange={(val) => setDuration(val as string)}
+            {/* Date picker — 14 prochains jours */}
+            <div>
+              <label className="block text-base font-medium text-text-secondary mb-2">
+                <Calendar className="w-4 h-4 inline mr-1" />
+                Date
+              </label>
+              <div className="flex gap-1.5 overflow-x-auto pb-1 scrollbar-hide">
+                {Array.from({ length: 14 }, (_, i) => {
+                  const d = new Date()
+                  d.setDate(d.getDate() + i)
+                  const iso = d.toISOString().split('T')[0]
+                  const isSelected = date === iso
+                  const dayLabel =
+                    i === 0
+                      ? 'Auj.'
+                      : i === 1
+                        ? 'Dem.'
+                        : d.toLocaleDateString('fr', { weekday: 'short' })
+                  return (
+                    <button
+                      key={iso}
+                      type="button"
+                      onClick={() => setDate(iso)}
+                      className={`flex-shrink-0 w-14 py-2 rounded-xl text-center transition-colors ${
+                        isSelected
+                          ? 'bg-primary text-white'
+                          : 'bg-surface-card text-text-secondary hover:bg-border-hover'
+                      }`}
+                    >
+                      <div className="text-xs opacity-70">{dayLabel}</div>
+                      <div className="text-lg font-semibold leading-tight">{d.getDate()}</div>
+                    </button>
+                  )
+                })}
+              </div>
+            </div>
+
+            {/* Time picker — créneaux prédéfinis */}
+            <div>
+              <label className="block text-base font-medium text-text-secondary mb-2">
+                <Clock className="w-4 h-4 inline mr-1" />
+                Heure
+              </label>
+              <div className="flex flex-wrap gap-1.5">
+                {[
+                  '14:00',
+                  '15:00',
+                  '16:00',
+                  '17:00',
+                  '18:00',
+                  '18:30',
+                  '19:00',
+                  '19:30',
+                  '20:00',
+                  '20:30',
+                  '21:00',
+                  '21:30',
+                  '22:00',
+                  '22:30',
+                  '23:00',
+                ].map((t) => (
+                  <button
+                    key={t}
+                    type="button"
+                    onClick={() => setTime(t)}
+                    className={`px-3 py-2 rounded-xl text-sm font-medium transition-colors ${
+                      time === t
+                        ? 'bg-primary text-white'
+                        : 'bg-surface-card text-text-secondary hover:bg-border-hover'
+                    }`}
+                  >
+                    {t}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Duration & Threshold */}
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className="block text-base font-medium text-text-secondary mb-1.5">Durée</label>
+                <Select
+                  options={[
+                    { value: '60', label: '1 heure' },
+                    { value: '120', label: '2 heures' },
+                    { value: '180', label: '3 heures' },
+                    { value: '240', label: '4 heures' },
+                  ]}
+                  value={duration}
+                  onChange={(val) => setDuration(val as string)}
+                />
+              </div>
+              <div>
+                <label className="block text-base font-medium text-text-secondary mb-1">
+                  Confirmation automatique
+                </label>
+                <p className="text-sm text-text-tertiary mb-1.5">
+                  La session sera confirmée quand ce nombre de joueurs aura répondu "Présent"
+                </p>
+                <Select
+                  options={[
+                    { value: '2', label: '2 joueurs' },
+                    { value: '3', label: '3 joueurs' },
+                    { value: '4', label: '4 joueurs' },
+                    { value: '5', label: '5 joueurs' },
+                    { value: '6', label: '6 joueurs' },
+                  ]}
+                  value={threshold}
+                  onChange={(val) => setThreshold(val as string)}
+                />
+              </div>
+            </div>
+          </>
+        ) : (
+          <>
+            {/* RECURRING SESSION FORM */}
+            <RecurringSessionForm
+              squadId={selectedSquadId}
+              onCreated={() => close()}
+              onCancel={() => setIsRecurring(false)}
             />
-          </div>
-          <div>
-            <label className="block text-base font-medium text-text-secondary mb-1">
-              Confirmation automatique
-            </label>
-            <p className="text-sm text-text-tertiary mb-1.5">
-              La session sera confirmée quand ce nombre de joueurs aura répondu "Présent"
-            </p>
-            <Select
-              options={[
-                { value: '2', label: '2 joueurs' },
-                { value: '3', label: '3 joueurs' },
-                { value: '4', label: '4 joueurs' },
-                { value: '5', label: '5 joueurs' },
-                { value: '6', label: '6 joueurs' },
-              ]}
-              value={threshold}
-              onChange={(val) => setThreshold(val as string)}
-            />
-          </div>
-        </div>
+          </>
+        )}
 
-        {/* Error */}
-        {error && (
+        {/* Error - only show for unique sessions */}
+        {!isRecurring && error && (
           <div className="p-3 rounded-lg bg-error-10 border border-error">
             <p className="text-error text-base">{error}</p>
           </div>
         )}
 
-        {/* Actions */}
-        <div className="flex gap-3 pt-2">
-          <button
-            type="button"
-            onClick={close}
-            className="flex-1 px-4 py-3 rounded-xl text-md font-medium text-text-secondary hover:text-text-primary hover:bg-border-subtle transition-colors"
-          >
-            Annuler
-          </button>
-          <button
-            type="submit"
-            disabled={isLoading || !selectedSquadId}
-            className="flex-1 px-4 py-3 rounded-xl bg-primary text-white text-md font-semibold hover:bg-primary-hover disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2"
-          >
-            {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Créer la session'}
-          </button>
-        </div>
+        {/* Actions - only show for unique sessions */}
+        {!isRecurring && (
+          <div className="flex gap-3 pt-2">
+            <button
+              type="button"
+              onClick={close}
+              className="flex-1 px-4 py-3 rounded-xl text-md font-medium text-text-secondary hover:text-text-primary hover:bg-border-subtle transition-colors"
+            >
+              Annuler
+            </button>
+            <button
+              type="submit"
+              disabled={isLoading || !selectedSquadId}
+              className="flex-1 px-4 py-3 rounded-xl bg-primary text-white text-md font-semibold hover:bg-primary-hover disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2"
+            >
+              {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Créer la session'}
+            </button>
+          </div>
+        )}
       </form>
     </ResponsiveModal>
   )

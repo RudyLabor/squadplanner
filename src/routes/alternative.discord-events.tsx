@@ -1,0 +1,90 @@
+import type { HeadersArgs } from 'react-router'
+import { lazy, Suspense } from 'react'
+
+const AlternativeDiscordEvents = lazy(() => import('../pages/AlternativeDiscordEvents'))
+
+export function headers() {
+  return {
+    'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=86400'
+  }
+}
+
+export function meta() {
+  const baseUrl = 'https://squadplanner.fr'
+  return [
+    {
+      title: 'Alternative aux Événements Discord - Squad Planner'
+    },
+    {
+      name: 'description',
+      content:
+        'Les événements Discord ne sont pas assez pour les sessions gaming. Squad Planner offre calendrier, RSVP fiable, notifications et analytics. Gratuit.'
+    },
+    {
+      name: 'keywords',
+      content: 'alternative événements Discord, calendrier gaming, RSVP fiable, organisation sessions gaming, Squad Planner'
+    },
+    {
+      tagName: 'link',
+      rel: 'canonical',
+      href: `${baseUrl}/alternative-discord-events`
+    },
+    {
+      property: 'og:type',
+      content: 'website'
+    },
+    {
+      property: 'og:title',
+      content: 'Alternative aux Événements Discord - Squad Planner'
+    },
+    {
+      property: 'og:description',
+      content: 'Plus qu\'un simple événement Discord. Squad Planner offre une organisation gaming complète avec RSVP fiable, récurrence et analytics.'
+    },
+    {
+      property: 'og:url',
+      content: `${baseUrl}/alternative-discord-events`
+    },
+    {
+      property: 'og:image',
+      content: `${baseUrl}/og-alternative-discord-events.png`
+    },
+    {
+      name: 'twitter:card',
+      content: 'summary_large_image'
+    },
+    {
+      name: 'twitter:title',
+      content: 'Alternative aux Événements Discord'
+    },
+    {
+      name: 'twitter:description',
+      content: 'Discord pour la commu, Squad Planner pour l\'organisation. RSVP fiable, calendrier, notifications push.'
+    },
+    {
+      httpEquiv: 'content-language',
+      content: 'fr'
+    }
+  ]
+}
+
+export const handle = {
+  breadcrumb: () => ({
+    label: 'Alternative Événements Discord',
+    path: '/alternative-discord-events'
+  })
+}
+
+export default function Component() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-[50vh] flex items-center justify-center">
+          <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+        </div>
+      }
+    >
+      <AlternativeDiscordEvents />
+    </Suspense>
+  )
+}

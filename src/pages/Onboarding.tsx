@@ -13,6 +13,7 @@ import { OnboardingStepCreateSquad } from './onboarding/OnboardingStepCreateSqua
 import { OnboardingStepJoinSquad } from './onboarding/OnboardingStepJoinSquad'
 import { OnboardingStepPermissions } from './onboarding/OnboardingStepPermissions'
 import { OnboardingStepProfile } from './onboarding/OnboardingStepProfile'
+import { OnboardingStepInvite } from './onboarding/OnboardingStepInvite'
 import { OnboardingStepComplete } from './onboarding/OnboardingStepComplete'
 import { OnboardingProgress } from './onboarding/OnboardingProgress'
 
@@ -23,6 +24,7 @@ type OnboardingStep =
   | 'join-squad'
   | 'permissions'
   | 'profile'
+  | 'invite'
   | 'complete'
 
 export function Onboarding() {
@@ -379,8 +381,18 @@ export function Onboarding() {
               onRequestMic={requestMicPermission}
               onSkipMic={() => setMicPermission('denied')}
               canProceed={canProceedFromPermissions()}
-              onComplete={() => navigateToStep('complete')}
+              onComplete={() => navigateToStep('invite')}
               onBack={goBack}
+            />
+          )}
+          {step === 'invite' && (
+            <OnboardingStepInvite
+              slideVariants={slideVariants}
+              squadCode={createdSquadCode}
+              squadName={createdSquadName}
+              isNavigating={isNavigating}
+              onComplete={() => navigateToStep('complete')}
+              onSkip={() => navigateToStep('complete')}
             />
           )}
           {step === 'profile' && (

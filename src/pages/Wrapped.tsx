@@ -96,7 +96,7 @@ export function Wrapped() {
           : Math.min(Math.round(85 + (sessionCount % 15)), 99)
 
         // Find favorite squad (most attended sessions)
-        let favoriteSquad = null
+        let favoriteSquad: WrappedStats['favoriteSquad'] = null
         if (rsvps && Array.isArray(rsvps)) {
           const squadCounts: { [key: string]: { name: string; count: number } } = {}
 
@@ -122,7 +122,7 @@ export function Wrapped() {
             favoriteSquad = {
               name: topSquad.name,
               memberCount: Math.round(Math.random() * 10 + 3), // Simulated member count
-            } as WrappedStats['favoriteSquad']
+            }
           }
         }
 

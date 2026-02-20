@@ -125,7 +125,7 @@ function RelatedCard({ post }: { post: BlogPost }) {
 }
 
 export default function BlogPost() {
-  const { post, relatedPosts } = useLoaderData<typeof loader>() as { post: BlogPost; relatedPosts: BlogPost[] }
+  const { post, relatedPosts } = useLoaderData<typeof loader>() as unknown as { post: BlogPost; relatedPosts: BlogPost[] }
 
   const formattedDate = new Date(post.date).toLocaleDateString('fr-FR', {
     year: 'numeric',

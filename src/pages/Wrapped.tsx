@@ -46,7 +46,7 @@ export function Wrapped() {
         // Fetch profile
         const { data: profile, error: profileError } = await supabase
           .from('profiles')
-          .select('full_name, username')
+          .select('username, reliability_score, current_streak, best_streak')
           .eq('id', user.id)
           .single()
 
@@ -81,20 +81,19 @@ export function Wrapped() {
           rsvps.forEach((rsvp: any) => {
             if (rsvp.sessions) {
               attendedSessions.add(rsvp.sessions.id)
-              const startTime = new Date(rsvp.sessions.scheduled_start).getTime()
-              const endTime = new Date(rsvp.sessions.scheduled_end).getTime()
-              const duration = (endTime - startTime) / (1000 * 60 * 60) // Convert to hours
-              totalHours += duration
+              const durationMinutes = rsvp.sessions.duration_minutes || 120
+              totalHours += durationMinutes / 60
             }
           })
         }
 
-        // Calculate best streak (simulated based on number of sessions)
-        const bestStreak = Math.min(Math.ceil(sessionCount / 3) + 2, 20)
+        // Use real profile data for streak and reliability
+        const bestStreak = profile?.best_streak || profile?.current_streak || Math.min(Math.ceil(sessionCount / 3) + 2, 20)
 
-        // Calculate reliability score
-        // Based on RSVPs and attendance (simplified calculation)
-        const reliabilityScore = Math.min(Math.round(85 + (sessionCount % 15)), 99)
+        // Use real reliability score from profile
+        const reliabilityScore = profile?.reliability_score != null
+          ? Math.round(profile.reliability_score)
+          : Math.min(Math.round(85 + (sessionCount % 15)), 99)
 
         // Find favorite squad (most attended sessions)
         let favoriteSquad = null
@@ -133,7 +132,7 @@ export function Wrapped() {
           bestStreak,
           reliabilityScore,
           favoriteSquad,
-          userName: profile?.full_name || profile?.username || 'Gamer',
+          userName: profile?.username || 'Gamer',
         })
       } catch (err) {
         console.error('Error fetching wrapped data:', err)

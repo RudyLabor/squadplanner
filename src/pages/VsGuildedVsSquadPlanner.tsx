@@ -25,7 +25,7 @@ const faqs = [
   {
     id: 'why-not-guilded',
     question: 'Pourquoi pas rester sur Guilded ?',
-    answer: 'Guilded a fermé point final. Squad Planner c\'est taillé pour tes sessions : récurrence, notif push, stats de fiabilité. Guilded c\'était juste une commu. On gère l\'organisation gaming. C\'est plus rapide, plus réactif.'
+    answer: 'Guilded a fermé, point final. Squad Planner, c\'est taillé pour tes sessions : récurrence, notif push, stats de fiabilité. Guilded, c\'était juste une commu. On gère l\'organisation gaming. C\'est plus rapide, plus réactif.'
   },
   {
     id: 'migration-easy',
@@ -35,12 +35,12 @@ const faqs = [
   {
     id: 'premium-worth',
     question: 'C\'est quoi Premium ?',
-    answer: 'Premium c\'est : analytics avancées, custom squads, API. Mais calendrier, RSVP, notif push ? Gratuit. L\'essentiel c\'est free.'
+    answer: 'Premium, c\'est : analytics avancées, custom squads, API. Mais calendrier, RSVP, notif push ? Gratuit. L\'essentiel, c\'est gratuit.'
   },
   {
     id: 'both-platforms',
     question: 'Je peux utiliser Squad Planner ET Discord ?',
-    answer: 'Oui. Discord = pour parler. Squad Planner = pour organiser. Les notif arrivent dans Discord. Tout est branché. Perfect combo.'
+    answer: 'Oui. Discord = pour parler. Squad Planner = pour organiser. Les notifs arrivent dans Discord. Tout est branché. Combo parfait.'
   },
   {
     id: 'other-games',
@@ -231,7 +231,7 @@ export default function VsGuildedVsSquadPlanner() {
                 </div>
                 <div>
                   <div className="font-semibold text-text-primary mb-2">Guilded Premium</div>
-                  <p className="text-text-secondary text-md">9,99 $/mois</p>
+                  <p className="text-text-secondary text-md">9,99 €/mois</p>
                   <p className="text-text-tertiary text-sm mt-1">*(supprimé depuis fermeture)</p>
                 </div>
               </div>
@@ -250,7 +250,7 @@ export default function VsGuildedVsSquadPlanner() {
               className="p-8 md:p-10 rounded-2xl bg-gradient-to-br from-surface-card to-transparent border border-primary/30 relative"
             >
               <div className="absolute -top-3 -right-3 px-3 py-1 bg-primary text-white text-xs font-semibold rounded-full">
-                T'as pas le choix
+                Le choix évident
               </div>
               <h3 className="text-2xl font-bold text-text-primary mb-6">Squad Planner</h3>
               <div className="space-y-4 mb-8">
@@ -273,7 +273,7 @@ export default function VsGuildedVsSquadPlanner() {
                 </div>
                 <div>
                   <div className="font-semibold text-text-primary mb-2">Premium</div>
-                  <p className="text-text-secondary text-md">5,99 $/mois ou 59,99 $/an</p>
+                  <p className="text-text-secondary text-md">5,99 €/mois ou 59,99 €/an</p>
                   <ul className="text-text-secondary text-sm mt-2 space-y-1 pl-4">
                     <li>• Analytics avancées</li>
                     <li>• Personnalisation squad</li>
@@ -321,7 +321,7 @@ export default function VsGuildedVsSquadPlanner() {
               </div>
               <h3 className="text-2xl font-bold text-text-primary mb-4">Le verdict</h3>
               <p className="text-text-secondary mb-6 leading-relaxed text-lg">
-                Guilded a fermé. Squad Planner c'est de l'orga gaming, pas du chat. Ça complète Discord. C'est le choix logique pour tes sessions.
+                Guilded a fermé. Squad Planner, c'est l'orga gaming complète : calendrier, chat, party vocale. Ça complète Discord. C'est le choix logique pour tes sessions.
               </p>
               <div className="space-y-4">
                 <div className="flex items-start gap-3">

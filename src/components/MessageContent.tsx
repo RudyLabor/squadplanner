@@ -144,7 +144,7 @@ export const MessageContent = memo(function MessageContent({
   }
 
   // Forwarded message indicator
-  if (content.startsWith('↩️ *Transfere de ')) {
+  if (content.startsWith('↩️ *Transféré de ')) {
     const lines = content.split('\n')
     const header = lines[0]
     const body = lines.slice(1).join('\n')

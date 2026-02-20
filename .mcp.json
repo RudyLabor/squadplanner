@@ -1,0 +1,35 @@
+{
+  "mcpServers": {
+    "supabase": {
+      "type": "http",
+      "url": "https://mcp.supabase.com"
+    },
+    "vercel": {
+      "type": "http",
+      "url": "https://mcp.vercel.com"
+    },
+    "stripe": {
+      "type": "http",
+      "url": "https://mcp.stripe.com"
+    },
+    "github": {
+      "type": "http",
+      "url": "https://api.githubcopilot.com/mcp/"
+    },
+    "playwright": {
+      "type": "stdio",
+      "command": "/Users/rudylabor/.nvm/versions/node/v20.20.0/bin/npx",
+      "args": ["-y", "@playwright/mcp@latest"]
+    },
+    "context7": {
+      "type": "stdio",
+      "command": "/Users/rudylabor/.nvm/versions/node/v20.20.0/bin/npx",
+      "args": ["-y", "@upstash/context7-mcp@latest"]
+    },
+    "sequential-thinking": {
+      "type": "stdio",
+      "command": "/Users/rudylabor/.nvm/versions/node/v20.20.0/bin/npx",
+      "args": ["-y", "@modelcontextprotocol/server-sequential-thinking"]
+    }
+  }
+}

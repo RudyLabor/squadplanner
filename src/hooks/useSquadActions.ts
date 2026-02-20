@@ -27,7 +27,7 @@ async function ensureProfileExists(userId: string, email?: string) {
     })
     if (profileError) {
       console.warn('[Squads] Profile creation error:', profileError)
-      throw new Error('Impossible de creer le profil. Veuillez reessayer.')
+      throw new Error('Impossible de créer le profil. Réessaie dans quelques instants.')
     }
   }
 }

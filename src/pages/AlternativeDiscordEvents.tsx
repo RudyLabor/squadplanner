@@ -18,7 +18,7 @@ const limitations = [
   {
     title: 'Zéro insight',
     discord: 'Discord: qui a cliqué oui. C\'est tout. T\'as rien d\'autre.',
-    squadPlanner: 'Stats complètes. Taux de présence. Qui est reliable. Qui flake. Tendances.',
+    squadPlanner: 'Stats complètes. Taux de présence. Qui est fiable. Qui flake. Tendances.',
   }
 ]
 
@@ -102,7 +102,7 @@ export default function AlternativeDiscordEvents() {
             viewport={{ once: true }}
             className="text-lg md:text-xl text-text-tertiary mb-10 max-w-2xl mx-auto leading-relaxed"
           >
-            Discord c'est pour parler. Squad Planner c'est pour organiser. 100% gaming. Discord reste branché, mais l'organisation c'est ici.
+            Discord, c'est pour parler. Squad Planner, c'est pour organiser. 100% gaming. Discord reste branché, mais l'organisation, c'est ici.
           </m.p>
 
           {/* CTAs */}

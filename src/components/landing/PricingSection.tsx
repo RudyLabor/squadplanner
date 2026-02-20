@@ -109,7 +109,7 @@ export function PricingSection() {
             Tarifs simples, sans surprise
           </h2>
           <p className="text-text-tertiary text-md max-w-md mx-auto mb-6">
-            Commence gratuitement. Upgrade quand tu veux débloquer tout le potentiel.
+            Commence gratuitement. Passe au niveau supérieur quand tu veux débloquer tout le potentiel.
           </p>
 
           {/* Toggle mensuel/annuel */}

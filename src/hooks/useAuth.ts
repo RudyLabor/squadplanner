@@ -128,11 +128,11 @@ export const useAuthStore = create<AuthState>((set, get) => ({
           })
           .select()
           .single()
-        if (createError) throw new Error('Impossible de creer le profil. Veuillez reessayer.')
+        if (createError) throw new Error('Impossible de créer le profil. Réessaie dans quelques instants.')
         profile = newProfile
       }
 
-      if (!profile) throw new Error('Profil non cree. Veuillez reessayer.')
+      if (!profile) throw new Error('Profil non créé. Réessaie dans quelques instants.')
 
       set({ user: data.user, session: data.session, profile, isLoading: false })
       return { error: null }

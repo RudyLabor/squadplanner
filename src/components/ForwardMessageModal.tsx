@@ -43,7 +43,7 @@ export const ForwardMessageModal = memo(function ForwardMessageModal({
     if (!selectedSquadId || isSending) return
     setIsSending(true)
 
-    const forwardedContent = `↩️ *Transfere de ${senderUsername}:*\n${messageContent}`
+    const forwardedContent = `↩️ *Transféré de ${senderUsername}:*\n${messageContent}`
 
     const { error } = await sendMessage(forwardedContent, selectedSquadId)
 
@@ -180,7 +180,7 @@ export const ForwardMessageModal = memo(function ForwardMessageModal({
                 {sent ? (
                   <>
                     <Check className="w-4 h-4" />
-                    Envoye !
+                    Envoyé !
                   </>
                 ) : isSending ? (
                   <Loader2 className="w-4 h-4 animate-spin" />

@@ -63,7 +63,7 @@ export function ChatPanel({
               Assistant Squad Planner
             </h3>
             <p className="text-xs text-text-tertiary">
-              {isTyping ? "En train d'ecrire..." : 'En ligne'}
+              {isTyping ? "En train d'écrire..." : 'En ligne'}
             </p>
           </div>
           <button

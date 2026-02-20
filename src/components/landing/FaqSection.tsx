@@ -10,7 +10,7 @@ const staggerItemVariants = {
 const faqs = [
   {
     q: 'Squad Planner est-il gratuit ?',
-    a: 'Oui, Squad Planner est 100% gratuit pour commencer. Crée ta squad, invite tes potes, planifie tes sessions — tout est inclus. Des fonctionnalités premium optionnelles seront disponibles pour les squads qui veulent aller plus loin.',
+    a: 'Oui, Squad Planner est 100% gratuit pour commencer. Crée ta squad, invite tes potes, planifie tes sessions — tout est inclus. Des fonctionnalités premium optionnelles sont disponibles pour les squads qui veulent aller plus loin.',
   },
   {
     q: 'Comment inviter mes amis ?',
@@ -30,7 +30,7 @@ const faqs = [
   },
   {
     q: 'Pourquoi pas juste un Google Calendar ou Doodle ?',
-    a: "Parce que Google Calendar, c'est fait pour des meetings de boulot. Squad Planner est conçu pour le gaming : vocal intégré, score de présence, confirmation auto quand assez de joueurs sont dispo.",
+    a: "Parce que Google Calendar, c'est fait pour des réunions de boulot. Squad Planner est conçu pour le gaming : vocal intégré, score de présence, confirmation auto quand assez de joueurs sont dispo.",
   },
   {
     q: "Mes potes vont vraiment l'utiliser ?",
@@ -38,7 +38,7 @@ const faqs = [
   },
   {
     q: "C'est vraiment 100% gratuit ?",
-    a: "Oui. Tout le core est gratuit : squads, sessions, RSVP, chat, vocal. Premium ajoute le coach IA et des stats avancées, mais tu n'en as pas besoin pour jouer.",
+    a: "Oui. Tout le core est gratuit : squads, sessions, RSVP, chat basique, vocal. Premium ajoute le chat complet (GIF, voice, polls), le coach IA et des stats avancées, mais tu n'en as pas besoin pour jouer.",
   },
 ]
 

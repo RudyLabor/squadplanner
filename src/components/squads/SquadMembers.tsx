@@ -128,7 +128,7 @@ const MemberCard = memo(function MemberCard({
           <button
             onClick={handleMessage}
             className="p-2.5 min-w-[44px] min-h-[44px] rounded-lg hover:bg-bg-hover transition-colors flex items-center justify-center"
-            aria-label={`Envoyer un message a ${member.profiles?.username || 'ce joueur'}`}
+            aria-label={`Envoyer un message à ${member.profiles?.username || 'ce joueur'}`}
           >
             <MessageCircle className="w-5 h-5 text-primary" aria-hidden="true" />
           </button>

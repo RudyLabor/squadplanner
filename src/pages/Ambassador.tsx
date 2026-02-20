@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useRef } from 'react'
+import { useState, useRef, type RefObject } from 'react'
 import { m, useInView } from 'framer-motion'
 import { useAnalytics } from '../hooks'
 import { Card } from '../components/ui/Card'
@@ -38,7 +38,7 @@ export function Ambassador() {
   const advantagesRef = useRef(null)
   const stepsRef = useRef(null)
   const profilesRef = useRef(null)
-  const formRef = useRef(null)
+  const formRef = useRef<HTMLDivElement>(null)
   const faqRef = useRef(null)
 
   const isHeroInView = useInView(heroRef, { once: true })

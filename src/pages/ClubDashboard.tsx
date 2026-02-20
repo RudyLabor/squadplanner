@@ -53,7 +53,8 @@ interface TopMember {
 
 export function ClubDashboard() {
   const navigate = useNavigate()
-  const { userId } = useAuthStore()
+  const user = useAuthStore((s) => s.user)
+  const userId = user?.id
   const [squads, setSquads] = useState<Squad[]>([])
   const [clubStats, setClubStats] = useState<ClubStats>({
     totalMembers: 0,

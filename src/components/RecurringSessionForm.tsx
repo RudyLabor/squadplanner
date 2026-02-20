@@ -24,7 +24,7 @@ import { supabaseMinimal as supabase } from '../lib/supabaseMinimal'
 
 interface RecurringSessionFormProps {
   squadId: string
-  squadName: string
+  squadName?: string
   onCreated?: () => void
   onCancel?: () => void
 }

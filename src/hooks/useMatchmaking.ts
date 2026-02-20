@@ -267,7 +267,7 @@ export const useMatchmaking = create<MatchmakingStore>((set, get) => ({
 
       set({
         players: enrichedPlayers,
-        likedPlayerIds,
+        likedPlayerIds: likedPlayerIds as Set<string>,
         isSearching: false,
       })
     } catch (err) {
@@ -410,8 +410,8 @@ export const useMatchmaking = create<MatchmakingStore>((set, get) => ({
         throw new Error('Erreur lors de la récupération des correspondances')
       }
 
-      const receivedLikerIds = new Set(receivedLikes?.map((l) => l.liker_id) || [])
-      const sentLikedIds = new Set(sentLikes?.map((l) => l.liked_id) || [])
+      const receivedLikerIds = new Set<string>((receivedLikes?.map((l: any) => l.liker_id) || []) as string[])
+      const sentLikedIds = new Set<string>((sentLikes?.map((l: any) => l.liked_id) || []) as string[])
 
       // Trouver les matches mutuels
       const mutualMatches = Array.from(sentLikedIds).filter((id) =>

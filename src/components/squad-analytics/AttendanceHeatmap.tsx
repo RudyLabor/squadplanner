@@ -68,7 +68,7 @@ export default function AttendanceHeatmap({ squadId }: { squadId: string }) {
 
         // Construire la matrice heatmap
         const heatmapData: AttendanceData[] = []
-        const sessionMap = new Map(sessions.map(s => [s.id, s]))
+        const sessionMap = new Map<string, { id: string; scheduled_at: string }>(sessions.map((s: any) => [s.id, s]))
         const rsvpMap = new Map<string, number>()
 
         // Compter les présences par session

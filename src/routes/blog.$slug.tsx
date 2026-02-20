@@ -22,7 +22,7 @@ export const loader: LoaderFunction = ({ params }) => {
   return { post, relatedPosts }
 }
 
-export const meta: MetaFunction<typeof loader> = ({ data }) => {
+export const meta: MetaFunction<typeof loader> = ({ data }: { data: any }) => {
   if (!data?.post) {
     return [
       { title: 'Article non trouvé - Squad Planner' },
@@ -125,7 +125,7 @@ function RelatedCard({ post }: { post: BlogPost }) {
 }
 
 export default function BlogPost() {
-  const { post, relatedPosts } = useLoaderData<typeof loader>()
+  const { post, relatedPosts } = useLoaderData<typeof loader>() as { post: BlogPost; relatedPosts: BlogPost[] }
 
   const formattedDate = new Date(post.date).toLocaleDateString('fr-FR', {
     year: 'numeric',

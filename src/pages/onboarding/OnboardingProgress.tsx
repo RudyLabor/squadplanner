@@ -6,6 +6,7 @@ type OnboardingStep =
   | 'join-squad'
   | 'permissions'
   | 'profile'
+  | 'invite'
   | 'complete'
 
 interface OnboardingProgressProps {

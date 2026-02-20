@@ -121,8 +121,8 @@ export function Wrapped() {
           if (topSquad.count > 0) {
             favoriteSquad = {
               name: topSquad.name,
-              memberCount: Math.random() * 10 + 3, // Simulated member count
-            }
+              memberCount: Math.round(Math.random() * 10 + 3), // Simulated member count
+            } as WrappedStats['favoriteSquad']
           }
         }
 
@@ -187,7 +187,7 @@ export function Wrapped() {
   if (isLoading) {
     return (
       <div className="min-h-screen bg-black flex flex-col items-center justify-center">
-        <MobilePageHeader title="Gaming Wrapped 2026" showBack={false} />
+        <MobilePageHeader title="Gaming Wrapped 2026" onBack={() => window.history.back()} />
         <div className="flex items-center justify-center flex-1">
           <m.div
             animate={{ rotate: 360 }}
@@ -202,7 +202,7 @@ export function Wrapped() {
   if (error) {
     return (
       <div className="min-h-screen bg-black flex flex-col items-center justify-center">
-        <MobilePageHeader title="Gaming Wrapped 2026" showBack={false} />
+        <MobilePageHeader title="Gaming Wrapped 2026" onBack={() => window.history.back()} />
         <div className="text-center px-4">
           <p className="text-white text-lg">{error}</p>
         </div>
@@ -213,7 +213,7 @@ export function Wrapped() {
   if (!stats) {
     return (
       <div className="min-h-screen bg-black flex flex-col items-center justify-center">
-        <MobilePageHeader title="Gaming Wrapped 2026" showBack={false} />
+        <MobilePageHeader title="Gaming Wrapped 2026" onBack={() => window.history.back()} />
         <div className="text-center px-4">
           <p className="text-white text-lg">Aucune donnée disponible</p>
         </div>
@@ -503,7 +503,7 @@ export function Wrapped() {
       role="region"
       aria-label="Gaming Wrapped 2026"
     >
-      <MobilePageHeader title="Gaming Wrapped 2026" showBack={false} />
+      <MobilePageHeader title="Gaming Wrapped 2026" onBack={() => window.history.back()} />
 
       {/* Main slide area */}
       <div className={`relative h-screen bg-gradient-to-br ${currentSlideData.bg} flex items-center justify-center px-4 pt-20`}>

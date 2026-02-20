@@ -5,7 +5,7 @@ import { Button } from '../../components/ui'
 import { showSuccess } from '../../lib/toast'
 
 interface OnboardingStepInviteProps {
-  slideVariants: Record<string, unknown>
+  slideVariants: any
   squadCode: string | null
   squadName: string | null
   isNavigating: boolean

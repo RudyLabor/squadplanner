@@ -4,8 +4,8 @@
 import { createClient } from '@supabase/supabase-js'
 
 // Import sélectif pour réduire bundle size
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || process.env.VITE_SUPABASE_URL || 'https://placeholder.supabase.co'
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || process.env.VITE_SUPABASE_ANON_KEY || 'placeholder-key'
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 'https://placeholder.supabase.co'
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || 'placeholder-key'
 
 // Strict Database typing disabled — run `npx supabase gen types typescript` to re-enable.
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

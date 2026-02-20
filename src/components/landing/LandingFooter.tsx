@@ -1,8 +1,26 @@
 
 import { useState, useCallback } from 'react'
 import { Link } from 'react-router'
-import { HelpCircle, FileText, Shield, Mail } from '../icons'
+import { HelpCircle, FileText, Shield, Mail, Gamepad2, Globe, Trophy } from '../icons'
 import { SquadPlannerLogo } from '../SquadPlannerLogo'
+
+const POPULAR_GAMES = [
+  { name: 'Valorant', slug: 'valorant' },
+  { name: 'League of Legends', slug: 'league-of-legends' },
+  { name: 'Fortnite', slug: 'fortnite' },
+  { name: 'CS2', slug: 'cs2' },
+  { name: 'Apex Legends', slug: 'apex-legends' },
+  { name: 'Rocket League', slug: 'rocket-league' },
+  { name: 'Call of Duty', slug: 'call-of-duty' },
+  { name: 'Minecraft', slug: 'minecraft' },
+  { name: 'Overwatch 2', slug: 'overwatch-2' },
+  { name: 'GTA Online', slug: 'gta-online' },
+  { name: 'Destiny 2', slug: 'destiny-2' },
+  { name: 'EA Sports FC', slug: 'fifa' },
+]
+
+const linkClass =
+  'inline-block py-1.5 text-md text-text-tertiary hover:text-text-primary transition-colors leading-relaxed'
 
 export function LandingFooter() {
   const [newsletterEmail, setNewsletterEmail] = useState('')
@@ -38,77 +56,142 @@ export function LandingFooter() {
 
   return (
     <footer className="px-4 md:px-6 py-16 border-t border-border-subtle">
-      <div className="max-w-5xl mx-auto">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-12">
+      <div className="max-w-6xl mx-auto">
+
+        {/* ── Top grid: 6 columns on desktop ── */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-x-8 gap-y-10 mb-14">
+
           {/* Produit */}
           <div>
-            <h3 className="text-base font-semibold text-text-primary mb-4 uppercase tracking-wider">
+            <h3 className="text-base font-semibold text-text-primary mb-3 uppercase tracking-wider">
               Produit
             </h3>
             <ul className="space-y-0">
               <li>
-                <Link
-                  to="/auth?mode=register&redirect=onboarding"
-                  className="inline-block py-2 text-md text-text-tertiary hover:text-text-primary transition-colors min-h-[44px] leading-[28px]"
-                >
+                <Link to="/auth?mode=register&redirect=onboarding" className={linkClass}>
                   Créer ma squad
                 </Link>
               </li>
               <li>
-                <Link
-                  to="/premium"
-                  className="inline-block py-2 text-md text-text-tertiary hover:text-text-primary transition-colors min-h-[44px] leading-[28px]"
-                >
+                <Link to="/premium" className={linkClass}>
                   Premium
                 </Link>
               </li>
               <li>
-                <a
-                  href="#features"
-                  className="inline-block py-2 text-md text-text-tertiary hover:text-text-primary transition-colors min-h-[44px] leading-[28px]"
-                >
+                <a href="#features" className={linkClass}>
                   Fonctionnalités
                 </a>
               </li>
             </ul>
           </div>
 
+          {/* Jeux populaires — colonne 1 */}
+          <div>
+            <h3 className="text-base font-semibold text-text-primary mb-3 uppercase tracking-wider flex items-center gap-1.5">
+              <Gamepad2 className="w-3.5 h-3.5" aria-hidden="true" />
+              Jeux
+            </h3>
+            <ul className="space-y-0">
+              {POPULAR_GAMES.slice(0, 6).map((game) => (
+                <li key={game.slug}>
+                  <Link to={`/games/${game.slug}`} className={linkClass}>
+                    {game.name}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Jeux populaires — colonne 2 */}
+          <div>
+            <h3 className="text-base font-semibold text-text-primary mb-3 uppercase tracking-wider flex items-center gap-1.5">
+              <Trophy className="w-3.5 h-3.5" aria-hidden="true" />
+              LFG
+            </h3>
+            <ul className="space-y-0">
+              {POPULAR_GAMES.slice(6).map((game) => (
+                <li key={game.slug}>
+                  <Link to={`/lfg/${game.slug}`} className={linkClass}>
+                    {game.name}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Alternatives & Comparatifs */}
+          <div>
+            <h3 className="text-base font-semibold text-text-primary mb-3 uppercase tracking-wider flex items-center gap-1.5">
+              <Globe className="w-3.5 h-3.5" aria-hidden="true" />
+              Alternatives
+            </h3>
+            <ul className="space-y-0">
+              <li>
+                <Link to="/alternative/guilded" className={linkClass}>
+                  Alternative à Guilded
+                </Link>
+              </li>
+              <li>
+                <Link to="/alternative/gamerlink" className={linkClass}>
+                  Alternative à GamerLink
+                </Link>
+              </li>
+              <li>
+                <Link to="/alternative/discord-events" className={linkClass}>
+                  Alternative à Discord Events
+                </Link>
+              </li>
+              <li>
+                <Link to="/vs/guilded-vs-squad-planner" className={linkClass}>
+                  Guilded vs Squad Planner
+                </Link>
+              </li>
+              <li>
+                <Link to="/blog" className={linkClass}>
+                  Blog
+                </Link>
+              </li>
+            </ul>
+          </div>
+
           {/* Ressources */}
           <div>
-            <h3 className="text-base font-semibold text-text-primary mb-4 uppercase tracking-wider">
+            <h3 className="text-base font-semibold text-text-primary mb-3 uppercase tracking-wider">
               Ressources
             </h3>
             <ul className="space-y-0">
               <li>
                 <Link
                   to="/help"
-                  className="inline-flex items-center gap-1.5 py-2 text-md text-text-tertiary hover:text-text-primary transition-colors min-h-[44px]"
+                  className="inline-flex items-center gap-1.5 py-1.5 text-md text-text-tertiary hover:text-text-primary transition-colors"
                 >
                   <HelpCircle className="w-3.5 h-3.5" aria-hidden="true" />
                   FAQ
                 </Link>
               </li>
               <li>
-                <a
-                  href="mailto:contact@squadplanner.fr"
-                  className="inline-block py-2 text-md text-text-tertiary hover:text-text-primary transition-colors min-h-[44px] leading-[28px]"
-                >
+                <Link to="/blog" className={linkClass}>
+                  Blog
+                </Link>
+              </li>
+              <li>
+                <a href="mailto:contact@squadplanner.fr" className={linkClass}>
                   Contact
                 </a>
               </li>
             </ul>
           </div>
 
-          {/* Légal */}
+          {/* Légal & Communauté */}
           <div>
-            <h3 className="text-base font-semibold text-text-primary mb-4 uppercase tracking-wider">
+            <h3 className="text-base font-semibold text-text-primary mb-3 uppercase tracking-wider">
               Légal
             </h3>
             <ul className="space-y-0">
               <li>
                 <Link
                   to="/legal"
-                  className="inline-flex items-center gap-1.5 py-2 text-md text-text-tertiary hover:text-text-primary transition-colors min-h-[44px]"
+                  className="inline-flex items-center gap-1.5 py-1.5 text-md text-text-tertiary hover:text-text-primary transition-colors"
                 >
                   <FileText className="w-3.5 h-3.5" aria-hidden="true" />
                   CGU
@@ -117,33 +200,18 @@ export function LandingFooter() {
               <li>
                 <Link
                   to="/legal?tab=privacy"
-                  className="inline-flex items-center gap-1.5 py-2 text-md text-text-tertiary hover:text-text-primary transition-colors min-h-[44px]"
+                  className="inline-flex items-center gap-1.5 py-1.5 text-md text-text-tertiary hover:text-text-primary transition-colors"
                 >
                   <Shield className="w-3.5 h-3.5" aria-hidden="true" />
                   Confidentialité
                 </Link>
-              </li>
-            </ul>
-          </div>
-
-          {/* Communauté */}
-          <div>
-            <h3 className="text-base font-semibold text-text-primary mb-4 uppercase tracking-wider">
-              Communauté
-            </h3>
-            <ul className="space-y-0">
-              <li>
-                <span className="inline-flex items-center gap-1.5 py-2 text-md text-text-tertiary min-h-[44px]">
-                  <span className="w-2 h-2 rounded-full bg-success animate-pulse" />
-                  Accès gratuit
-                </span>
               </li>
               <li>
                 <a
                   href="https://x.com/squadplannerfr"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 py-2 text-md text-text-tertiary hover:text-text-primary transition-colors min-h-[44px]"
+                  className="inline-flex items-center gap-1.5 py-1.5 text-md text-text-tertiary hover:text-text-primary transition-colors"
                 >
                   <svg
                     className="w-3.5 h-3.5"
@@ -157,18 +225,16 @@ export function LandingFooter() {
                 </a>
               </li>
               <li>
-                <a
-                  href="mailto:contact@squadplanner.fr"
-                  className="inline-block py-2 text-md text-text-tertiary hover:text-text-primary transition-colors min-h-[44px] leading-[28px]"
-                >
-                  Nous contacter
-                </a>
+                <span className="inline-flex items-center gap-1.5 py-1.5 text-md text-text-tertiary">
+                  <span className="w-2 h-2 rounded-full bg-success animate-pulse" />
+                  Accès gratuit
+                </span>
               </li>
             </ul>
           </div>
         </div>
 
-        {/* Trust badges */}
+        {/* ── Trust badges ── */}
         <div className="flex flex-wrap justify-center gap-4 mb-8">
           {[
             { label: 'Hébergé en France', icon: '🇫🇷' },
@@ -184,14 +250,14 @@ export function LandingFooter() {
           ))}
         </div>
 
-        {/* Activity stats */}
+        {/* ── Activity stats ── */}
         <div className="flex flex-wrap justify-center gap-6 mb-8 text-sm text-text-quaternary">
           <span>+2 000 gamers inscrits</span>
           <span>+5 000 sessions planifiées</span>
           <span>4.9/5 satisfaction</span>
         </div>
 
-        {/* Newsletter */}
+        {/* ── Newsletter ── */}
         <div className="max-w-md mx-auto mb-10">
           <form onSubmit={handleNewsletterSubmit} noValidate>
             <div className="flex gap-2">
@@ -237,7 +303,7 @@ export function LandingFooter() {
           </form>
         </div>
 
-        {/* Bottom bar */}
+        {/* ── Bottom bar ── */}
         <div className="border-t border-border-subtle pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2">
             <SquadPlannerLogo size={20} />

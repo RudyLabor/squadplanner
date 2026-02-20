@@ -1,46 +1,22 @@
+import { useState } from 'react'
 import type { HeadersArgs } from 'react-router'
 import { useParams, Link } from 'react-router'
 import { m } from 'framer-motion'
-import { getGameBySlug } from '../data/games'
-import { Users, ArrowRight, Sparkles, Star } from '../components/icons'
+import { getGameBySlug, GAMES } from '../data/games'
 import { PublicPageShell } from '../components/PublicPageShell'
+import { scrollReveal, scrollRevealLight, springTap } from '../utils/animations'
+import {
+  Users,
+  ArrowRight,
+  Sparkles,
+  Star,
+  ChevronDown,
+  Target,
+  Shield,
+  Check,
+} from '../components/icons'
 
-export function headers(_args: HeadersArgs) {
-  return {
-    'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=86400',
-  }
-}
-
-export function meta({ params }: { params: { game: string } }) {
-  const game = getGameBySlug(params.game)
-
-  if (!game) {
-    return [
-      { title: 'Jeu non trouvé - Squad Planner' },
-      {
-        name: 'description',
-        content: 'Ce jeu n\'existe pas ou n\'est pas encore disponible sur Squad Planner.',
-      },
-    ]
-  }
-
-  return [
-    { title: `Chercher des joueurs ${game.name} - Squad Planner` },
-    {
-      name: 'description',
-      content: `Trouvez des joueurs ${game.name} fiables et formez une squad complète avec Squad Planner. Matchmaking intelligent et communauté vérifiée.`,
-    },
-    {
-      tagName: 'link',
-      rel: 'canonical',
-      href: `https://squadplanner.fr/lfg/${game.slug}`,
-    },
-    { property: 'og:url', content: `https://squadplanner.fr/lfg/${game.slug}` },
-    { property: 'og:title', content: `Chercher des joueurs ${game.name}` },
-    { property: 'og:description', content: `Trouvez des joueurs ${game.name} et formez votre squad parfaite.` },
-  ]
-}
-
+// ── Color mapping ──────────────────────────────────
 const GAME_COLORS: Record<string, string> = {
   red: '#ef4444',
   blue: '#3b82f6',
@@ -58,321 +34,379 @@ function getGameColor(color: string): string {
   return GAME_COLORS[color] || '#6366f1'
 }
 
+// ── SEO ────────────────────────────────────────────
+export function headers(_args: HeadersArgs) {
+  return {
+    'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=86400',
+  }
+}
+
+export function meta({ params }: { params: { game: string } }) {
+  const game = getGameBySlug(params.game)
+
+  if (!game) {
+    return [
+      { title: 'Jeu non trouvé - Squad Planner' },
+      { name: 'description', content: "Ce jeu n'existe pas ou n'est pas encore disponible." },
+    ]
+  }
+
+  return [
+    { title: `Chercher des joueurs ${game.name} - Squad Planner` },
+    {
+      name: 'description',
+      content: `Trouvez des joueurs ${game.name} fiables et formez une squad complète avec Squad Planner. Matchmaking intelligent et communauté vérifiée.`,
+    },
+    { tagName: 'link', rel: 'canonical', href: `https://squadplanner.fr/lfg/${game.slug}` },
+    { property: 'og:url', content: `https://squadplanner.fr/lfg/${game.slug}` },
+    { property: 'og:title', content: `Chercher des joueurs ${game.name}` },
+    { property: 'og:description', content: `Trouvez des joueurs ${game.name} et formez votre squad idéale.` },
+  ]
+}
+
+// ── Components ─────────────────────────────────────
 function GameNotFound() {
   return (
     <PublicPageShell>
-      <m.div
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        className="text-center py-20"
-      >
-        <h1 className="text-4xl font-bold text-text-primary mb-4">Jeu non trouvé</h1>
-        <p className="text-text-secondary mb-8">
-          Ce jeu n\'existe pas ou n\'est pas encore disponible sur Squad Planner.
-        </p>
-        <Link
-          to="/"
-          className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-white rounded-xl hover:bg-primary/90 transition-colors"
-        >
-          Retour à l\'accueil
-          <ArrowRight className="w-5 h-5" />
-        </Link>
-      </m.div>
+      <div className="flex flex-col items-center justify-center px-4 py-32">
+        <m.div variants={scrollReveal} initial="hidden" whileInView="visible" viewport={{ once: true }} className="text-center">
+          <h1 className="text-4xl font-bold text-text-primary mb-4">Jeu non trouvé</h1>
+          <p className="text-text-secondary mb-8">
+            Ce jeu n'existe pas ou n'est pas encore disponible sur Squad Planner.
+          </p>
+          <Link
+            to="/"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-white rounded-xl hover:bg-primary/90 transition-colors"
+          >
+            Retour à l'accueil
+            <ArrowRight className="w-5 h-5" />
+          </Link>
+        </m.div>
+      </div>
     </PublicPageShell>
   )
 }
 
-function StepCard({
-  number,
-  title,
-  description,
-  icon: Icon,
-  delay,
-  color,
-}: {
-  number: number
-  title: string
-  description: string
-  icon: React.ComponentType<any>
-  delay: number
-  color: string
-}) {
-  const gameColor = getGameColor(color)
+const benefits = [
+  {
+    icon: Shield,
+    title: 'Communauté vérifiée',
+    desc: (name: string) =>
+      `Tous les joueurs ${name} sont vérifiés. Pas de smurf, pas de troll. Jouez en toute confiance.`,
+    details: ['Vérification par email', 'Scores de fiabilité', 'Avertissements en temps réel'],
+  },
+  {
+    icon: Target,
+    title: 'Matchmaking intelligent',
+    desc: (name: string) =>
+      `Trouvez des coéquipiers ${name} compatibles avec votre niveau et votre style.`,
+    details: ['Matching par compétences', 'Préférences personnalisées', 'Historique des joueurs'],
+  },
+  {
+    icon: Users,
+    title: 'Communauté 24/7',
+    desc: (name: string) =>
+      `Trouvez des joueurs ${name} à l'heure qui vous convient. Toujours quelqu'un pour jouer.`,
+    details: ['Matchmaking continu', 'Notifications en temps réel', 'Calendrier des sessions'],
+  },
+]
 
-  return (
-    <m.div
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ delay }}
-      className="relative"
-    >
-      <div className="bg-surface-card border border-border-subtle rounded-2xl p-8 h-full">
-        <div className="flex items-start gap-6">
-          <div
-            className="w-16 h-16 rounded-xl flex items-center justify-center flex-shrink-0"
-            style={{ backgroundColor: `${gameColor}15` }}
-          >
-            <div className="text-3xl font-bold" style={{ color: gameColor }}>
-              {number}
-            </div>
-          </div>
-          <div className="flex-1">
-            <div className="flex items-center gap-3 mb-3">
-              <Icon className="w-6 h-6" style={{ color: gameColor }} />
-              <h3 className="text-xl font-semibold text-text-primary">{title}</h3>
-            </div>
-            <p className="text-text-secondary">{description}</p>
-          </div>
-        </div>
-      </div>
-    </m.div>
-  )
-}
-
-function BenefitCard({
-  title,
-  description,
-  icon: Icon,
-  delay,
-}: {
-  title: string
-  description: string
-  icon: React.ComponentType<any>
-  delay: number
-}) {
-  return (
-    <m.div
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ delay }}
-      className="bg-surface-card border border-border-subtle rounded-xl p-6"
-    >
-      <div className="flex items-start gap-4">
-        <Icon className="w-6 h-6 text-primary flex-shrink-0 mt-1" />
-        <div>
-          <h4 className="font-semibold text-text-primary mb-2">{title}</h4>
-          <p className="text-text-secondary text-sm">{description}</p>
-        </div>
-      </div>
-    </m.div>
-  )
-}
-
+// ── Main component ─────────────────────────────────
 export default function Component() {
   const { game: gameSlug } = useParams()
   const game = gameSlug ? getGameBySlug(gameSlug) : undefined
+  const [openFAQ, setOpenFAQ] = useState<number | null>(null)
 
-  if (!game) {
-    return <GameNotFound />
-  }
+  if (!game) return <GameNotFound />
 
-  const gameColor = getGameColor(game.color)
+  const gc = getGameColor(game.color)
+
+  const faqs = [
+    {
+      q: `Comment trouver des joueurs ${game.name} ?`,
+      a: `Crée un profil Squad Planner, active le matchmaking et configure tes préférences ${game.name}. Notre système te recommande les meilleurs coéquipiers. C'est gratuit et rapide.`,
+    },
+    {
+      q: `Comment fonctionne le matching ${game.name} ?`,
+      a: `Squad Planner analyse ton niveau, tes préférences et ton historique de jeu. L'IA te propose des joueurs ${game.name} compatibles. Plus tu joues, plus le matching s'améliore.`,
+    },
+    {
+      q: `Que signifie "community verified" ?`,
+      a: `Tous nos joueurs sont vérifiés pour éviter les smurf et les troll. Chaque compte a un score de fiabilité basé sur le comportement en squad. Joue en toute confiance.`,
+    },
+    {
+      q: `Comment améliorer mon matching ${game.name} ?`,
+      a: `Plus tu joues avec Squad Planner, mieux le system te connait. Fais des retours sur tes coéquipiers, mets à jour ton profil et participe aux sessions. L'IA apprend de ton expérience.`,
+    },
+  ]
+
+  const steps = [
+    {
+      step: '1',
+      icon: Users,
+      title: 'Crée ton profil',
+      desc: `Inscris-toi sur Squad Planner et renseigne tes infos ${game.name} : niveau, rôle, plateforme, heures préférées.`,
+    },
+    {
+      step: '2',
+      icon: Target,
+      title: 'Active le matchmaking',
+      desc: `Accède aux préférences de matching et configure ta recherche ${game.name}. Notre IA se met en marche.`,
+    },
+    {
+      step: '3',
+      icon: Sparkles,
+      title: 'Reçois des invitations',
+      desc: `Des joueurs ${game.name} compatibles te contactent. Accepte, joue, évalue. Construis ta squad !`,
+    },
+  ]
 
   return (
     <PublicPageShell>
-      {/* Hero Section */}
-      <m.section
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.6 }}
-        className="relative py-20 px-4 sm:px-6 lg:px-8 overflow-hidden"
-        style={{
-          background: `linear-gradient(to bottom, ${gameColor}15, transparent)`,
-        }}
-      >
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center">
-            <div className="text-6xl mb-4">{game.icon}</div>
-            <h1 className="text-5xl sm:text-6xl font-bold text-text-primary mb-4 leading-tight">
-              Chercher des joueurs{' '}
-              <span style={{ color: gameColor }}>{game.name}</span>
-            </h1>
-            <p className="text-xl text-text-secondary mb-8 max-w-2xl mx-auto">
-              Rejoignez une communauté de {game.estimatedPlayers} joueurs {game.name} fiables et organisez vos sessions avec des coéquipiers compatibles.
-            </p>
-
-            {/* Quick Stats */}
-            <div className="grid sm:grid-cols-3 gap-6 max-w-2xl mx-auto mb-8">
-              <m.div
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.1 }}
-                className="text-center"
-              >
-                <div className="text-4xl font-bold mb-2" style={{ color: gameColor }}>
-                  {game.estimatedPlayers.split(' ')[0]}
-                </div>
-                <div className="text-text-secondary text-sm">Joueurs actifs</div>
-              </m.div>
-              <m.div
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.2 }}
-                className="text-center"
-              >
-                <div className="text-4xl font-bold mb-2" style={{ color: gameColor }}>
-                  24/7
-                </div>
-                <div className="text-text-secondary text-sm">Matchmaking actif</div>
-              </m.div>
-              <m.div
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.3 }}
-                className="text-center"
-              >
-                <div className="text-4xl font-bold mb-2" style={{ color: gameColor }}>
-                  100%
-                </div>
-                <div className="text-text-secondary text-sm">Vérifiés</div>
-              </m.div>
+      {/* ── Hero ── */}
+      <section className="relative overflow-hidden noise-overlay">
+        <div
+          className="absolute inset-0"
+          style={{
+            background: `radial-gradient(circle at 50% 0%, ${gc}18 0%, transparent 60%)`,
+            filter: 'blur(40px)',
+          }}
+        />
+        <div className="relative px-4 md:px-6 py-16 md:py-24 max-w-5xl mx-auto text-center">
+          {/* Badge */}
+          <m.div
+            variants={scrollReveal}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+          >
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full badge-shimmer border mb-8" style={{ borderColor: `${gc}25` }}>
+              <span className="text-4xl">{game.icon}</span>
+              <span className="text-base font-medium" style={{ color: gc }}>
+                {game.genre} · {game.players}
+              </span>
             </div>
+          </m.div>
+
+          {/* Title */}
+          <m.h1
+            variants={scrollReveal}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            className="text-3xl md:text-5xl font-extrabold text-text-primary mb-6 leading-tight tracking-tight"
+          >
+            Cherche des joueurs
+            <br />
+            <span className="text-gradient-animated">{game.name}</span>
+            <br />
+            fiables pour ta squad
+          </m.h1>
+
+          <m.p
+            variants={scrollRevealLight}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            className="text-lg md:text-xl text-text-tertiary mb-10 max-w-2xl mx-auto leading-relaxed"
+          >
+            Rejoins {game.estimatedPlayers} joueurs {game.name} vérifiés. Matchmaking intelligent, communauté de confiance, squads complètes
+            <span className="text-text-primary font-medium">. Gratuit et sans engagement.</span>
+          </m.p>
+
+          {/* CTAs */}
+          <m.div
+            variants={scrollRevealLight}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12"
+          >
+            <m.div whileHover={{ scale: 1.02, y: -2 }} {...springTap} className="w-full sm:w-auto">
+              <Link
+                to="/auth?mode=register&redirect=onboarding"
+                className="flex items-center gap-2 h-14 px-8 rounded-xl bg-primary text-white text-lg font-semibold shadow-lg shadow-primary/10 cta-pulse-glow w-full sm:w-auto justify-center"
+              >
+                Rejoindre maintenant
+                <ArrowRight className="w-5 h-5" />
+              </Link>
+            </m.div>
+            <m.div whileHover={{ scale: 1.02, y: -2 }} {...springTap} className="w-full sm:w-auto">
+              <Link
+                to={`/games/${game.slug}`}
+                className="flex items-center gap-2 h-14 px-8 rounded-xl border border-border-hover text-text-secondary hover:text-text-primary hover:border-text-tertiary transition-all w-full sm:w-auto justify-center"
+              >
+                Créer une squad
+              </Link>
+            </m.div>
+          </m.div>
+
+          {/* Quick stats */}
+          <div className="flex items-center justify-center gap-8 md:gap-16">
+            {[
+              { value: game.estimatedPlayers.split(' ')[0], label: 'joueurs vérifiés' },
+              { value: '24/7', label: 'matchmaking actif' },
+              { value: '100%', label: 'gratuit' },
+            ].map((stat) => (
+              <div key={stat.label} className="text-center">
+                <div className="text-xl md:text-2xl font-bold text-text-primary">{stat.value}</div>
+                <div className="text-sm md:text-base text-text-quaternary">{stat.label}</div>
+              </div>
+            ))}
           </div>
         </div>
-      </m.section>
+      </section>
 
       <div className="section-divider" />
 
-      {/* How It Works Section */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8">
+      {/* ── How it works ── */}
+      <section className="px-4 md:px-6 py-12 md:py-16 bg-gradient-to-b from-transparent to-primary/[0.015]">
         <div className="max-w-5xl mx-auto">
-          <h2 className="text-4xl font-bold text-text-primary text-center mb-4">
-            Comment ça marche ?
-          </h2>
-          <p className="text-text-secondary text-center mb-16 max-w-2xl mx-auto">
-            3 étapes simples pour trouver ta squad {game.name} idéale.
-          </p>
+          <m.div variants={scrollReveal} initial="hidden" whileInView="visible" viewport={{ once: true }} className="text-center mb-12">
+            <h2 className="text-xl md:text-2xl font-bold text-text-primary mb-4">
+              Comment ça marche
+            </h2>
+            <p className="text-text-tertiary text-lg">
+              3 étapes pour trouver tes coéquipiers {game.name} idéaux
+            </p>
+          </m.div>
+
+          <div className="grid md:grid-cols-3 gap-6">
+            {steps.map((step, i) => {
+              const StepIcon = step.icon
+              return (
+                <m.div
+                  key={step.step}
+                  variants={scrollRevealLight}
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.1 }}
+                  className="relative"
+                >
+                  <div className="p-6 md:p-8 rounded-2xl bg-gradient-to-br from-surface-card to-transparent border border-border-subtle hover:border-border-hover transition-all group">
+                    <div
+                      className="w-12 h-12 rounded-xl flex items-center justify-center mb-5"
+                      style={{ backgroundColor: `${gc}12` }}
+                    >
+                      <StepIcon className="w-6 h-6" style={{ color: gc }} />
+                    </div>
+                    <div className="text-xs font-bold uppercase tracking-wider mb-2" style={{ color: gc }}>
+                      Étape {step.step}
+                    </div>
+                    <h3 className="text-lg font-bold text-text-primary mb-2">{step.title}</h3>
+                    <p className="text-md text-text-tertiary">{step.desc}</p>
+                  </div>
+                </m.div>
+              )
+            })}
+          </div>
+        </div>
+      </section>
+
+      <div className="section-divider" />
+
+      {/* ── Benefits pillars ── */}
+      <section className="px-4 md:px-6 py-12 md:py-16">
+        <div className="max-w-5xl mx-auto">
+          <m.div variants={scrollReveal} initial="hidden" whileInView="visible" viewport={{ once: true }} className="text-center mb-12">
+            <h2 className="text-xl md:text-2xl font-bold text-text-primary mb-4">
+              Pourquoi chercher des joueurs sur Squad Planner
+            </h2>
+            <p className="text-text-tertiary text-lg">
+              Chaque fonctionnalité résout un problème des gamers {game.name}.
+            </p>
+          </m.div>
 
           <div className="space-y-6">
-            <StepCard
-              number={1}
-              title="Active ta recherche"
-              description={`Créez votre profil Squad Planner et activez la recherche de coéquipiers ${game.name}. Configurez vos préférences : niveau, mode de jeu, plateforme et horaires.`}
-              icon={Users}
-              delay={0.1}
-              color={game.color}
-            />
-            <StepCard
-              number={2}
-              title="Configure tes préférences"
-              description={`Indiquez votre rôle préféré, votre niveau de compétitivité et vos disponibilités. Squad Planner utilise ces infos pour vous matcher avec les joueurs les plus compatibles.`}
-              icon={Star}
-              delay={0.2}
-              color={game.color}
-            />
-            <StepCard
-              number={3}
-              title="Reçois des invitations"
-              description={`Squad Planner vous recommande des joueurs et des squads ${game.name}. Acceptez les invitations, rejoignez des sessions et construisez votre communauté de confiance.`}
-              icon={Sparkles}
-              delay={0.3}
-              color={game.color}
-            />
+            {benefits.map((benefit, i) => {
+              const BenefitIcon = benefit.icon
+              return (
+                <m.div
+                  key={benefit.title}
+                  variants={scrollRevealLight}
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.1 }}
+                  className="p-8 md:p-10 rounded-3xl bg-gradient-to-br from-surface-card/80 to-transparent border border-border-subtle hover:border-border-hover transition-all"
+                >
+                  <div className="flex flex-col md:flex-row gap-6">
+                    <div className="flex-1">
+                      <div className="flex items-center gap-3 mb-4">
+                        <div
+                          className="w-12 h-12 rounded-xl flex items-center justify-center"
+                          style={{ backgroundColor: `${gc}12` }}
+                        >
+                          <BenefitIcon className="w-6 h-6" style={{ color: gc }} />
+                        </div>
+                        <h3 className="text-xl font-bold text-text-primary">{benefit.title}</h3>
+                      </div>
+                      <p className="text-text-tertiary mb-4">{benefit.desc(game.name)}</p>
+                      <ul className="space-y-2">
+                        {benefit.details.map((detail) => (
+                          <li key={detail} className="flex items-center gap-2 text-md text-text-secondary">
+                            <Check className="w-4 h-4 flex-shrink-0" style={{ color: gc }} />
+                            {detail}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+                </m.div>
+              )
+            })}
           </div>
         </div>
       </section>
 
       <div className="section-divider" />
 
-      {/* Benefits Section */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-surface-card/30">
+      {/* ── Testimonials ── */}
+      <section className="px-4 md:px-6 py-10 md:py-14">
         <div className="max-w-5xl mx-auto">
-          <h2 className="text-4xl font-bold text-text-primary text-center mb-16">
-            Avantages de Squad Planner
-          </h2>
-
-          <div className="grid md:grid-cols-2 gap-6">
-            <BenefitCard
-              title="Communauté vérifiée"
-              description={`Tous les joueurs Squad Planner sont vérifiés. Pas de smurf, pas de troll. Jouez avec confiance avec une vraie communauté ${game.name}.`}
-              icon={Users}
-              delay={0.1}
-            />
-            <BenefitCard
-              title="Matchmaking intelligent"
-              description={`Notre IA apprend de vos préférences et de votre historique pour vous proposer les meilleurs coéquipiers ${game.name}.`}
-              icon={Star}
-              delay={0.2}
-            />
-            <BenefitCard
-              title="Planification facile"
-              description={`Planifiez vos sessions ${game.name} en quelques clics. Gestion des RSVP, rappels automatiques et statistiques de squad.`}
-              icon={Users}
-              delay={0.3}
-            />
-            <BenefitCard
-              title="Analyse et progression"
-              description={`Suivez vos performances ${game.name}, les statistiques de votre squad et progressez ensemble avec des données objectives.`}
-              icon={Star}
-              delay={0.4}
-            />
-            <BenefitCard
-              title="Disponible 24/7"
-              description={`Le matchmaking ${game.name} fonctionne toute la journée. Trouvez des joueurs à l'heure qui vous convient.`}
-              icon={Users}
-              delay={0.5}
-            />
-            <BenefitCard
-              title="Support communauté"
-              description={`Accédez à un support prioritaire, des événements communautaires exclusifs et des discussions entre joueurs ${game.name}.`}
-              icon={Star}
-              delay={0.6}
-            />
-          </div>
-        </div>
-      </section>
-
-      <div className="section-divider" />
-
-      {/* Testimonials Section */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-5xl mx-auto">
-          <h2 className="text-4xl font-bold text-text-primary text-center mb-16">
-            Ce que disent les joueurs {game.name}
-          </h2>
+          <m.div variants={scrollReveal} initial="hidden" whileInView="visible" viewport={{ once: true }} className="text-center mb-12">
+            <h2 className="text-xl md:text-2xl font-bold text-text-primary mb-4">
+              Ce que disent les joueurs {game.name}
+            </h2>
+          </m.div>
 
           <div className="grid md:grid-cols-3 gap-6">
             {[
               {
                 name: 'Alex T.',
                 role: `Joueur ${game.name}`,
-                text: `"J'ai enfin trouvé une squad fiable ! Plus besoin de chercher des joueurs désorganisés."`,
+                text: 'J\'ai enfin trouvé une squad fiable ! Plus besoin de chercher des joueurs désorganisés.',
                 delay: 0.1,
               },
               {
                 name: 'Marie L.',
                 role: `Compétitrice ${game.name}`,
-                text: `"Squad Planner m'a aidé à trouver des coéquipiers de mon niveau. Nous progressons ensemble."`,
+                text: 'Squad Planner m\'a aidé à trouver des coéquipiers de mon niveau. Nous progressons ensemble.',
                 delay: 0.2,
               },
               {
                 name: 'Jordan M.',
-                role: `Capitaine de squad`,
-                text: `"Organiser nos sessions est devenu tellement plus facile. Tout le monde arrive à l'heure !"`,
+                role: 'Capitaine de squad',
+                text: 'Organiser nos sessions est devenu tellement plus facile. Tout le monde arrive à l\'heure !',
                 delay: 0.3,
               },
             ].map((testimonial, idx) => (
               <m.div
                 key={idx}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
+                variants={scrollRevealLight}
+                initial="hidden"
+                whileInView="visible"
                 viewport={{ once: true }}
                 transition={{ delay: testimonial.delay }}
-                className="bg-surface-card border border-border-subtle rounded-xl p-6"
+                className="p-6 rounded-2xl bg-gradient-to-br from-surface-card/80 to-transparent border border-border-subtle hover:border-border-hover transition-all"
               >
                 <div className="flex gap-1 mb-4">
                   {[...Array(5)].map((_, i) => (
                     <Star key={i} className="w-4 h-4 fill-primary text-primary" />
                   ))}
                 </div>
-                <p className="text-text-secondary mb-4 italic">{testimonial.text}</p>
+                <p className="text-text-secondary mb-4 italic text-base leading-relaxed">{testimonial.text}</p>
                 <div className="border-t border-border-subtle pt-4">
                   <p className="font-semibold text-text-primary">{testimonial.name}</p>
                   <p className="text-sm text-text-tertiary">{testimonial.role}</p>
@@ -385,118 +419,125 @@ export default function Component() {
 
       <div className="section-divider" />
 
-      {/* CTA Section */}
-      <m.section
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ delay: 0.4 }}
-        className="py-20 px-4 sm:px-6 lg:px-8"
-        style={{
-          background: `linear-gradient(to right, ${gameColor}10, transparent)`,
-        }}
-      >
-        <div className="max-w-4xl mx-auto">
-          <div className="grid md:grid-cols-2 gap-8 items-center">
-            <m.div
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.2 }}
-            >
-              <h2 className="text-4xl font-bold text-text-primary mb-6">
-                Rejoins la communauté {game.name}
-              </h2>
-              <p className="text-text-secondary mb-8 text-lg">
-                Accédez au matchmaking Squad Planner et trouvez vos coéquipiers {game.name} idéaux dès maintenant. C'est gratuit pour commencer.
-              </p>
-              <div className="space-y-3">
-                <Link
-                  to="/auth?mode=register&redirect=onboarding"
-                  className="flex items-center justify-center gap-2 px-8 py-4 text-white font-semibold rounded-xl transition-all transform hover:scale-105 w-full"
-                  style={{
-                    backgroundColor: gameColor,
-                  }}
-                  onMouseOver={(e) => {
-                    const rgb = gameColor.replace('#', '')
-                    e.currentTarget.style.opacity = '0.9'
-                  }}
-                  onMouseOut={(e) => {
-                    e.currentTarget.style.opacity = '1'
-                  }}
-                >
-                  <Sparkles className="w-5 h-5" />
-                  Rejoindre maintenant
-                  <ArrowRight className="w-5 h-5" />
-                </Link>
-                <Link
-                  to="/auth?mode=login&redirect=profile?activate=matchmaking"
-                  className="flex items-center justify-center gap-2 px-8 py-4 bg-surface-card border border-border-subtle text-text-primary font-semibold rounded-xl hover:border-border-default transition-colors w-full"
-                >
-                  Activer le matchmaking
-                  <ArrowRight className="w-5 h-5" />
-                </Link>
-              </div>
-            </m.div>
+      {/* ── FAQ ── */}
+      <section className="px-4 md:px-6 py-10 md:py-14">
+        <div className="max-w-3xl mx-auto">
+          <m.div variants={scrollReveal} initial="hidden" whileInView="visible" viewport={{ once: true }} className="text-center mb-12">
+            <h2 className="text-xl md:text-2xl font-bold text-text-primary mb-4">
+              Questions fréquentes
+            </h2>
+          </m.div>
 
-            <m.div
-              initial={{ opacity: 0, x: 20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.4 }}
-              className="bg-surface-card border border-border-subtle rounded-2xl p-8"
-            >
-              <div className="text-center">
-                <div className="text-6xl mb-6">{game.icon}</div>
-                <h3 className="text-2xl font-bold text-text-primary mb-4">
-                  Prêt à jouer avec ta squad {game.name} ?
-                </h3>
-                <div className="rounded-xl p-6 mt-6" style={{ backgroundColor: `${gameColor}15` }}>
-                  <p className="text-sm text-text-secondary mb-3">
-                    Rejoignez les joueurs {game.name} qui ont trouvé leur squad idéale
-                  </p>
-                  <div className="text-3xl font-bold" style={{ color: gameColor }}>
-                    {game.estimatedPlayers}
+          <div className="space-y-3">
+            {faqs.map((faq, i) => (
+              <m.div
+                key={i}
+                variants={scrollRevealLight}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+                className="border border-border-subtle rounded-xl overflow-hidden"
+              >
+                <button
+                  type="button"
+                  onClick={() => setOpenFAQ(openFAQ === i ? null : i)}
+                  className="w-full flex items-center justify-between p-5 text-left hover:bg-bg-elevated/50 transition-colors"
+                  aria-expanded={openFAQ === i}
+                >
+                  <span className="text-md font-medium text-text-primary pr-4">{faq.q}</span>
+                  <ChevronDown
+                    className={`w-5 h-5 text-text-quaternary shrink-0 transition-transform duration-300 ${openFAQ === i ? 'rotate-180' : ''}`}
+                  />
+                </button>
+                <div className={`faq-answer ${openFAQ === i ? 'open' : ''}`}>
+                  <div>
+                    <p className="px-5 pb-5 text-md text-text-tertiary leading-relaxed">{faq.a}</p>
                   </div>
-                  <p className="text-xs text-text-tertiary mt-2">joueurs actifs</p>
                 </div>
-              </div>
-            </m.div>
+              </m.div>
+            ))}
           </div>
         </div>
-      </m.section>
+      </section>
 
       <div className="section-divider" />
 
-      {/* Other Games LFG */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-6xl mx-auto">
-          <h2 className="text-2xl font-bold text-text-primary text-center mb-8">
-            Trouver des joueurs sur d'autres jeux
-          </h2>
+      {/* ── CTA final ── */}
+      <section className="px-4 md:px-6 py-16">
+        <div className="max-w-2xl mx-auto">
+          <m.div
+            variants={scrollReveal}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            className="relative p-8 md:p-12 rounded-3xl border text-center overflow-hidden"
+            style={{
+              background: `radial-gradient(ellipse at center, ${gc}10 0%, transparent 60%)`,
+              borderColor: `${gc}20`,
+            }}
+          >
+            <m.div
+              className="absolute inset-0"
+              animate={{ scale: [1, 1.05, 1], opacity: [0.3, 0.5, 0.3] }}
+              transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+              style={{ background: `radial-gradient(ellipse at center, ${gc}08 0%, transparent 60%)` }}
+            />
+            <div className="relative z-10">
+              <m.div
+                animate={{ rotate: [0, 5, -5, 0] }}
+                transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
+              >
+                <Sparkles className="w-12 h-12 mx-auto mb-6" style={{ color: gc }} />
+              </m.div>
+              <h2 className="text-xl md:text-3xl font-bold text-text-primary mb-4">
+                Prêt à trouver ta squad {game.shortName || game.name} idéale ?
+              </h2>
+              <p className="text-text-tertiary mb-8 text-lg">
+                Gratuit, sans engagement. Reçois tes premières invitations en 24 heures.
+              </p>
+              <m.div whileHover={{ scale: 1.03, y: -3 }} {...springTap} className="inline-flex">
+                <Link
+                  to="/auth?mode=register&redirect=onboarding"
+                  className="flex items-center gap-2 h-16 px-10 rounded-xl bg-gradient-to-r from-primary to-purple text-white text-xl font-bold mx-auto shadow-lg shadow-primary/20 cta-glow-idle"
+                >
+                  Rejoindre maintenant
+                  <ArrowRight className="w-5 h-5" />
+                </Link>
+              </m.div>
+              <p className="text-base text-text-quaternary mt-4">
+                Gratuit · Pas de carte bancaire · Premières invitations en 24h
+              </p>
+            </div>
+          </m.div>
+        </div>
+      </section>
+
+      <div className="section-divider" />
+
+      {/* ── Other games ── */}
+      <section className="px-4 md:px-6 py-12">
+        <div className="max-w-5xl mx-auto">
+          <m.div variants={scrollRevealLight} initial="hidden" whileInView="visible" viewport={{ once: true }} className="text-center mb-8">
+            <h2 className="text-lg md:text-xl font-bold text-text-primary mb-2">
+              Chercher des joueurs sur d'autres jeux
+            </h2>
+            <p className="text-text-quaternary text-md">
+              Trouve tes coéquipiers sur tous tes jeux favoris
+            </p>
+          </m.div>
           <div className="flex flex-wrap justify-center gap-3">
-            {(() => {
-              const otherGames = [
-                { name: 'Valorant', slug: 'valorant', icon: '🎯' },
-                { name: 'League of Legends', slug: 'league-of-legends', icon: '⚔️' },
-                { name: 'Fortnite', slug: 'fortnite', icon: '🏗️' },
-                { name: 'CS2', slug: 'cs2', icon: '💣' },
-                { name: 'Apex Legends', slug: 'apex-legends', icon: '🔥' },
-                { name: 'Rocket League', slug: 'rocket-league', icon: '🚗' },
-                { name: 'Call of Duty', slug: 'call-of-duty', icon: '🎖️' },
-                { name: 'Minecraft', slug: 'minecraft', icon: '⛏️' },
-              ].filter(g => g.slug !== game.slug)
-              return otherGames.map((g) => (
+            {GAMES.filter((g) => g.slug !== game.slug)
+              .slice(0, 8)
+              .map((g) => (
                 <Link
                   key={g.slug}
                   to={`/lfg/${g.slug}`}
-                  className="inline-flex items-center gap-2 px-4 py-2.5 bg-surface-card border border-border-subtle rounded-xl text-text-secondary hover:text-text-primary hover:border-border-default transition-colors text-sm"
+                  className="inline-flex items-center gap-2 px-4 py-2.5 bg-surface-card border border-border-subtle rounded-xl text-sm text-text-secondary hover:text-text-primary hover:border-border-hover transition-all"
                 >
                   <span>{g.icon}</span>
                   {g.name}
                 </Link>
-              ))
-            })()}
+              ))}
           </div>
         </div>
       </section>

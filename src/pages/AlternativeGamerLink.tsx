@@ -1,86 +1,107 @@
 import { Link } from 'react-router'
 import { m } from 'framer-motion'
-import { Check, X, ArrowRight, Calendar, Users, Sparkles, Star } from '../components/icons'
+import { Check, ArrowRight, Users, Sparkles, Zap } from '../components/icons'
 import { PublicPageShell } from '../components/PublicPageShell'
+import { scrollReveal, scrollRevealLight, springTap } from '../utils/animations'
 
-const fadeInUp = {
-  initial: { opacity: 0, y: 20 },
-  animate: { opacity: 1, y: 0 },
-  transition: { duration: 0.6 }
-}
+const comparisonFeatures = [
+  { name: 'Matchmaking Avancé', squadPlanner: true, gamerLink: true, description: 'Trouver des partenaires compatibles' },
+  { name: 'Calendrier des Sessions', squadPlanner: true, gamerLink: false, description: 'Planifier & récurrence' },
+  { name: 'RSVP Fiable', squadPlanner: true, gamerLink: false, description: 'Confirmations & reminders' },
+  { name: 'Notifications Temps Réel', squadPlanner: true, gamerLink: false, description: 'Alertes instantanées' },
+  { name: 'Analytics Gaming', squadPlanner: true, gamerLink: false, description: 'Statistiques & insights' },
+  { name: 'Gratuit pour l\'essentiel', squadPlanner: true, gamerLink: false, description: 'Sans paiement obligatoire' }
+]
 
-const containerVariants = {
-  animate: {
-    transition: {
-      staggerChildren: 0.08,
-      delayChildren: 0.2
-    }
+const advantages = [
+  {
+    title: 'Conçu pour les Gamers',
+    description: 'Squad Planner est 100% orienté gaming. Chaque fonctionnalité résout un problème réel des sessions.',
+    icon: Sparkles
+  },
+  {
+    title: 'Fiabilité Garantie',
+    description: 'Notifications push et rappels RSVP intégrés. Plus de no-shows. Les sessions se font sans surprise.',
+    icon: Check
+  },
+  {
+    title: 'Équipe Réactive',
+    description: 'Nos développeurs sont des gamers. Nous écoutons et déployons les features rapidement, sans waiting list.',
+    icon: Zap
   }
-}
+]
 
 export default function AlternativeGamerLink() {
-  const comparisonFeatures = [
-    { name: 'Matchmaking Avancé', squadPlanner: true, gamerLink: true, description: 'Trouver des partenaires compatibles' },
-    { name: 'Calendrier des Sessions', squadPlanner: true, gamerLink: false, description: 'Planifier & récurrence' },
-    { name: 'RSVP Fiable', squadPlanner: true, gamerLink: false, description: 'Confirmations & reminders' },
-    { name: 'Notifications Temps Réel', squadPlanner: true, gamerLink: false, description: 'Alertes instantanées' },
-    { name: 'Analytics Gaming', squadPlanner: true, gamerLink: false, description: 'Statistiques & insights' },
-    { name: 'Gratuit pour l\'essentiel', squadPlanner: true, gamerLink: false, description: 'Sans paiement obligatoire' }
-  ]
-
-  const advantages = [
-    {
-      title: 'Conçu pour les Gamers',
-      description: 'Squad Planner est 100% orienté gaming. Chaque fonctionnalité est pensée pour les sessions, compétitions et communautés de joueurs.',
-      icon: Sparkles
-    },
-    {
-      title: 'Fiabilité Garantie',
-      description: 'Les notifications push et les rappels RSVP sont intégrés. Plus d\'excuses pour les no-shows. Les sessions se font sans surprise.',
-      icon: Check
-    },
-    {
-      title: 'Équipe Réactive',
-      description: 'Nos développeurs sont des gamers. Nous écoutons et déployons des features rapidement. Pas de waiting list, juste de la vitesse.',
-      icon: Users
-    }
-  ]
-
   return (
     <PublicPageShell>
       {/* Hero */}
-      <section className="relative py-20 px-4 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent pointer-events-none" />
-        <div className="max-w-4xl mx-auto relative">
+      <section className="relative overflow-hidden noise-overlay">
+        <div
+          className="absolute inset-0"
+          style={{
+            background: 'radial-gradient(circle at 50% 0%, #a855f712 0%, transparent 60%)',
+            filter: 'blur(40px)',
+          }}
+        />
+        <div className="relative px-4 md:px-6 py-16 md:py-24 max-w-5xl mx-auto text-center">
+          {/* Badge */}
           <m.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            variants={scrollReveal}
+            initial="hidden"
+            whileInView="visible"
             viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
           >
-            <h1 className="text-5xl md:text-6xl font-bold text-text-primary mb-6 leading-tight">
-              Une meilleure alternative à GamerLink<span className="text-primary">.</span>
-            </h1>
-            <p className="text-xl text-text-secondary mb-8 max-w-2xl">
-              Plus rapide, plus fiable, plus gaming. Squad Planner est conçu spécifiquement pour les squads et les sessions compétitives.
-            </p>
-            <m.div
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.3, duration: 0.6 }}
-              className="flex gap-4 flex-wrap"
-            >
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full badge-shimmer border border-purple/25 mb-8">
+              <span className="text-base font-medium text-purple">
+                Mieux que GamerLink · Plus rapide & plus gaming
+              </span>
+            </div>
+          </m.div>
+
+          {/* Title */}
+          <m.h1
+            variants={scrollReveal}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            className="text-3xl md:text-5xl font-extrabold text-text-primary mb-6 leading-tight tracking-tight"
+          >
+            Une meilleure alternative
+            <br />
+            à GamerLink<span className="text-gradient-animated">.</span>
+          </m.h1>
+
+          <m.p
+            variants={scrollRevealLight}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            className="text-lg md:text-xl text-text-tertiary mb-10 max-w-2xl mx-auto leading-relaxed"
+          >
+            Plus rapide, plus fiable, plus gaming. Squad Planner est conçu spécifiquement pour les squads et les sessions compétitives, avec tous les outils que tu as.
+          </m.p>
+
+          {/* CTAs */}
+          <m.div
+            variants={scrollRevealLight}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            className="flex flex-col sm:flex-row items-center justify-center gap-4"
+          >
+            <m.div whileHover={{ scale: 1.02, y: -2 }} {...springTap} className="w-full sm:w-auto">
               <Link
-                to="/auth"
-                className="px-8 py-4 bg-primary text-white rounded-xl font-semibold hover:bg-primary/90 transition-colors flex items-center gap-2"
+                to="/auth?mode=register&redirect=onboarding"
+                className="flex items-center gap-2 h-14 px-8 rounded-xl bg-primary text-white text-lg font-semibold shadow-lg shadow-primary/10 cta-pulse-glow w-full sm:w-auto justify-center"
               >
                 Rejoindre Squad Planner
                 <ArrowRight className="w-5 h-5" />
               </Link>
+            </m.div>
+            <m.div whileHover={{ scale: 1.02, y: -2 }} {...springTap} className="w-full sm:w-auto">
               <Link
                 to="/discover"
-                className="px-8 py-4 border border-border-subtle text-text-primary rounded-xl font-semibold hover:bg-surface-card transition-colors"
+                className="flex items-center gap-2 h-14 px-8 rounded-xl border border-border-hover text-text-secondary hover:text-text-primary hover:border-text-tertiary transition-all w-full sm:w-auto justify-center"
               >
                 Explorer les squads
               </Link>
@@ -92,24 +113,22 @@ export default function AlternativeGamerLink() {
       <div className="section-divider" />
 
       {/* Comparison Table */}
-      <section className="py-16 px-4">
+      <section className="px-4 md:px-6 py-12 md:py-16">
         <div className="max-w-5xl mx-auto">
-          <m.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
-          >
-            <h2 className="text-4xl font-bold text-text-primary mb-12 text-center">
+          <m.div variants={scrollReveal} initial="hidden" whileInView="visible" viewport={{ once: true }} className="text-center mb-12">
+            <h2 className="text-xl md:text-2xl font-bold text-text-primary mb-4">
               Comparaison Squad Planner vs GamerLink
             </h2>
+            <p className="text-text-tertiary text-lg">
+              Point par point, fonctionnalité par fonctionnalité
+            </p>
           </m.div>
 
           <m.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            variants={scrollRevealLight}
+            initial="hidden"
+            whileInView="visible"
             viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
             className="overflow-hidden rounded-2xl border border-border-subtle"
           >
             <div className="overflow-x-auto">
@@ -125,7 +144,7 @@ export default function AlternativeGamerLink() {
                   {comparisonFeatures.map((feature, idx) => (
                     <tr
                       key={feature.name}
-                      className={idx % 2 === 0 ? 'bg-bg-base' : 'bg-surface-card'}
+                      className={`${idx % 2 === 0 ? 'bg-bg-base' : 'bg-surface-card'} border-b border-border-subtle last:border-b-0`}
                     >
                       <td className="px-6 py-4">
                         <div className="font-semibold text-text-primary">{feature.name}</div>
@@ -134,16 +153,12 @@ export default function AlternativeGamerLink() {
                       <td className="px-6 py-4 text-center">
                         {feature.squadPlanner ? (
                           <Check className="w-6 h-6 text-emerald-400 mx-auto" />
-                        ) : (
-                          <X className="w-6 h-6 text-red-400 mx-auto" />
-                        )}
+                        ) : null}
                       </td>
                       <td className="px-6 py-4 text-center">
                         {feature.gamerLink ? (
                           <Check className="w-6 h-6 text-emerald-400 mx-auto" />
-                        ) : (
-                          <X className="w-6 h-6 text-red-400 mx-auto" />
-                        )}
+                        ) : null}
                       </td>
                     </tr>
                   ))}
@@ -157,76 +172,81 @@ export default function AlternativeGamerLink() {
       <div className="section-divider" />
 
       {/* Advantages */}
-      <section className="py-16 px-4">
-        <div className="max-w-4xl mx-auto">
-          <m.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
-          >
-            <h2 className="text-4xl font-bold text-text-primary mb-12 text-center">
+      <section className="px-4 md:px-6 py-12 md:py-16 bg-gradient-to-b from-transparent to-primary/[0.015]">
+        <div className="max-w-5xl mx-auto">
+          <m.div variants={scrollReveal} initial="hidden" whileInView="visible" viewport={{ once: true }} className="text-center mb-12">
+            <h2 className="text-xl md:text-2xl font-bold text-text-primary mb-4">
               Pourquoi changer pour Squad Planner ?
             </h2>
+            <p className="text-text-tertiary text-lg">
+              Trois raisons fondamentales qui font la différence
+            </p>
           </m.div>
 
-          <m.div
-            variants={containerVariants}
-            initial="initial"
-            whileInView="animate"
-            viewport={{ once: true }}
-            className="grid md:grid-cols-3 gap-6"
-          >
-            {advantages.map((advantage) => {
+          <div className="grid md:grid-cols-3 gap-6">
+            {advantages.map((advantage, i) => {
               const Icon = advantage.icon
               return (
                 <m.div
                   key={advantage.title}
-                  variants={fadeInUp}
-                  className="p-6 bg-surface-card rounded-2xl border border-border-subtle hover:border-primary/50 transition-colors"
+                  variants={scrollRevealLight}
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.1 }}
+                  className="p-6 md:p-8 rounded-2xl bg-gradient-to-br from-surface-card to-transparent border border-border-subtle hover:border-border-hover transition-all group"
                 >
-                  <div className="p-3 bg-primary/10 rounded-xl w-fit mb-4">
-                    <Icon className="w-6 h-6 text-primary" />
+                  <div
+                    className="w-12 h-12 rounded-xl flex items-center justify-center mb-5"
+                    style={{ backgroundColor: '#a855f712' }}
+                  >
+                    <Icon className="w-6 h-6" style={{ color: '#a855f7' }} />
                   </div>
-                  <h3 className="text-lg font-semibold text-text-primary mb-3">{advantage.title}</h3>
-                  <p className="text-text-secondary text-sm leading-relaxed">{advantage.description}</p>
+                  <h3 className="text-lg font-bold text-text-primary mb-2">{advantage.title}</h3>
+                  <p className="text-md text-text-tertiary">{advantage.description}</p>
                 </m.div>
               )
             })}
-          </m.div>
+          </div>
         </div>
       </section>
 
       <div className="section-divider" />
 
       {/* Trust Section */}
-      <section className="py-16 px-4">
-        <div className="max-w-4xl mx-auto">
+      <section className="px-4 md:px-6 py-12 md:py-16">
+        <div className="max-w-3xl mx-auto">
           <m.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            variants={scrollReveal}
+            initial="hidden"
+            whileInView="visible"
             viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="p-8 bg-surface-card rounded-2xl border border-border-subtle text-center"
+            className="p-8 md:p-10 rounded-3xl bg-gradient-to-br from-surface-card/80 to-transparent border border-border-subtle hover:border-border-hover transition-all"
           >
-            <div className="flex justify-center gap-2 mb-6">
-              {[...Array(5)].map((_, i) => (
-                <Star key={i} className="w-5 h-5 text-primary fill-primary" />
-              ))}
+            <div className="flex flex-col items-center text-center">
+              <div className="flex justify-center gap-2 mb-6">
+                {[...Array(5)].map((_, i) => (
+                  <svg key={i} className="w-6 h-6 text-primary fill-primary" viewBox="0 0 24 24">
+                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                  </svg>
+                ))}
+              </div>
+              <h3 className="text-xl md:text-2xl font-bold text-text-primary mb-3">
+                Rejoins 10 000+ gamers
+              </h3>
+              <p className="text-text-tertiary mb-8 max-w-2xl">
+                Chaque jour, des squads organisent leurs sessions sur Squad Planner. Zéro abonnement obligatoire. Zéro prise de tête. Juste du gaming.
+              </p>
+              <m.div whileHover={{ scale: 1.02, y: -2 }} {...springTap}>
+                <Link
+                  to="/auth?mode=register&redirect=onboarding"
+                  className="inline-flex items-center gap-2 px-8 py-3 bg-primary text-white rounded-xl font-semibold shadow-lg shadow-primary/10 hover:bg-primary/90 transition-colors"
+                >
+                  Commencer gratuitement
+                  <ArrowRight className="w-5 h-5" />
+                </Link>
+              </m.div>
             </div>
-            <h3 className="text-2xl font-bold text-text-primary mb-3">
-              Rejoins 10 000+ gamers
-            </h3>
-            <p className="text-text-secondary mb-6 max-w-2xl mx-auto">
-              Chaque jour, des squads organisent leurs sessions sur Squad Planner. Zéro abonnement obligatoire. Zéro prise de tête. Juste du gaming.
-            </p>
-            <Link
-              to="/auth"
-              className="inline-flex px-8 py-4 bg-primary text-white rounded-xl font-semibold hover:bg-primary/90 transition-colors items-center gap-2"
-            >
-              Commencer gratuitement
-              <ArrowRight className="w-5 h-5" />
-            </Link>
           </m.div>
         </div>
       </section>
@@ -234,27 +254,51 @@ export default function AlternativeGamerLink() {
       <div className="section-divider" />
 
       {/* Final CTA */}
-      <section className="py-20 px-4">
-        <div className="max-w-4xl mx-auto text-center">
+      <section className="px-4 md:px-6 py-16">
+        <div className="max-w-2xl mx-auto">
           <m.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            variants={scrollReveal}
+            initial="hidden"
+            whileInView="visible"
             viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
+            className="relative p-8 md:p-12 rounded-3xl border text-center overflow-hidden"
+            style={{
+              background: 'radial-gradient(ellipse at center, #a855f710 0%, transparent 60%)',
+              borderColor: '#a855f720',
+            }}
           >
-            <h2 className="text-4xl font-bold text-text-primary mb-6">
-              Prêt à passer à Squad Planner ?
-            </h2>
-            <p className="text-xl text-text-secondary mb-8 max-w-2xl mx-auto">
-              Migrer depuis GamerLink prend 5 minutes. Tes squads, tes événements, tout est conservé.
-            </p>
-            <Link
-              to="/auth"
-              className="inline-flex px-8 py-4 bg-primary text-white rounded-xl font-semibold hover:bg-primary/90 transition-colors items-center gap-2"
-            >
-              Rejoins gratuitement
-              <ArrowRight className="w-5 h-5" />
-            </Link>
+            <m.div
+              className="absolute inset-0"
+              animate={{ scale: [1, 1.05, 1], opacity: [0.3, 0.5, 0.3] }}
+              transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+              style={{ background: 'radial-gradient(ellipse at center, #a855f708 0%, transparent 60%)' }}
+            />
+            <div className="relative z-10">
+              <m.div
+                animate={{ rotate: [0, 5, -5, 0] }}
+                transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
+              >
+                <Sparkles className="w-12 h-12 mx-auto mb-6" style={{ color: '#a855f7' }} />
+              </m.div>
+              <h2 className="text-xl md:text-3xl font-bold text-text-primary mb-4">
+                Prêt à passer à Squad Planner ?
+              </h2>
+              <p className="text-text-tertiary mb-8 text-lg">
+                Migrer depuis GamerLink prend 5 minutes. Tes squads, tes événements, tout est conservé.
+              </p>
+              <m.div whileHover={{ scale: 1.03, y: -3 }} {...springTap} className="inline-flex">
+                <Link
+                  to="/auth?mode=register&redirect=onboarding"
+                  className="flex items-center gap-2 h-16 px-10 rounded-xl bg-gradient-to-r from-primary to-purple text-white text-xl font-bold mx-auto shadow-lg shadow-primary/20 cta-glow-idle"
+                >
+                  Rejoins gratuitement
+                  <ArrowRight className="w-5 h-5" />
+                </Link>
+              </m.div>
+              <p className="text-base text-text-quaternary mt-4">
+                Gratuit · Pas de carte bancaire · 5 minutes
+              </p>
+            </div>
           </m.div>
         </div>
       </section>

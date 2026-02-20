@@ -62,6 +62,14 @@ export function Layout({ children }: { children: React.ReactNode }) {
         {/* LIVEKIT REMOVED: DNS prefetch removed */}
         {/* <link rel="dns-prefetch" href="https://squadplanner-i1mfqcqs.livekit.cloud" /> */}
 
+        {/* Google Fonts preconnect for Plus Jakarta Sans (brand display font) */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@700;800&display=swap"
+          rel="stylesheet"
+        />
+
         {/* Inline @font-face so browser can match preload to font declaration immediately,
             without waiting for critical.css to parse. Prevents "preloaded but not used" warning. */}
         <style
@@ -91,6 +99,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
           property="og:description"
           content="Crée ta squad, planifie tes sessions avec RSVP et fiabilité mesurée. Fini les « on verra » — ta squad joue pour de vrai. Gratuit, en 30 secondes."
         />
+        <meta property="og:url" content="https://squadplanner.fr" />
         <meta property="og:image" content="https://squadplanner.fr/og-image.png" />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
@@ -193,6 +202,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body suppressHydrationWarning>
+        <a href="#main-content" className="skip-link">
+          Aller au contenu principal
+        </a>
         {children}
         <ScrollRestoration />
         <Scripts />

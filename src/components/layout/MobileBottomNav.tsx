@@ -1,8 +1,8 @@
 import { memo } from 'react'
 import { Link } from 'react-router'
 import { m } from 'framer-motion'
-import { Home, Mic, Users, MessageCircle, Calendar } from '../icons'
 import { usePrefetch } from '../../hooks/usePrefetch'
+import { NavHome, NavSquads, NavSessions, NavParty, NavMessages } from '../icons/NavIcons'
 
 /**
  * Force navigation when React Router is stuck in a non-idle state.
@@ -38,13 +38,13 @@ function handleStuckNavClick(e: React.MouseEvent, path: string) {
 
 // 5 nav items — Découvrir & Profil are in the TopBar "More" menu
 const mobileNavLeft = [
-  { path: '/home', icon: Home, label: 'Accueil' },
-  { path: '/squads', icon: Users, label: 'Squads' },
-  { path: '/sessions', icon: Calendar, label: 'Sessions' },
+  { path: '/home', icon: NavHome, label: 'Accueil' },
+  { path: '/squads', icon: NavSquads, label: 'Squads' },
+  { path: '/sessions', icon: NavSessions, label: 'Sessions' },
 ] as const
 
 const mobileNavRight = [
-  { path: '/messages', icon: MessageCircle, label: 'Messages' },
+  { path: '/messages', icon: NavMessages, label: 'Messages' },
 ] as const
 
 // OPTIMIZED: Memoized MobileNavLink
@@ -114,12 +114,10 @@ const PartyButton = memo(function PartyButton({
       aria-current={isActive ? 'page' : undefined}
     >
       <div className="relative">
-        <Mic
+        <NavParty
           className={`w-6 h-6 transition-colors duration-300 ${
             isActive ? 'text-text-primary' : hasActiveParty ? 'text-success' : 'text-text-tertiary'
           }`}
-          strokeWidth={isActive ? 2 : 1.5}
-          fill={isActive ? 'currentColor' : 'none'}
           aria-hidden="true"
         />
         {hasActiveParty && (

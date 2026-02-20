@@ -135,6 +135,13 @@ export function InviteToPartyModal({
       }
 
       setInvitedMembers((prev) => new Set([...prev, memberId]))
+
+      // PHASE 5: Gamification - award XP for sending invite
+      import('../stores/useGamificationStore').then(({ useGamificationStore }) => {
+        const store = useGamificationStore.getState()
+        store.addXP('invite.send')
+        store.incrementStat('invitesSent')
+      }).catch(() => {})
     } catch (error) {
       console.error('Error sending invite:', error)
       setInvitedMembers((prev) => new Set([...prev, memberId]))

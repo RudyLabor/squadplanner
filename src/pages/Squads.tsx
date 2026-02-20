@@ -258,7 +258,7 @@ export default function Squads({ loaderData: _loaderData }: SquadsProps) {
           {squads.length > 0 ? (
             <>
               <m.ul
-                className="space-y-3 lg:grid lg:grid-cols-2 xl:grid-cols-3 lg:gap-4 lg:space-y-0 list-none"
+                className="space-y-3 lg:grid lg:grid-cols-2 xl:grid-cols-3 lg:gap-4 lg:space-y-0 list-none stagger-enter"
                 variants={staggerContainerVariants}
                 initial="hidden"
                 animate="visible"

@@ -42,10 +42,10 @@
   --shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.4);
   --shadow-glow-primary: 0 0 40px rgba(92, 96, 239, 0.15);
 
-  /* Fonts - Cross-platform typography with Inter + Space Grotesk display */
+  /* Fonts - Cross-platform typography with Inter + Plus Jakarta Sans display */
   --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
   --font-display:
-    'Space Grotesk', 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+    'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
   --font-mono: 'SF Mono', ui-monospace, monospace;
 
   /* Secondary accent - Cyan electric */
@@ -197,6 +197,12 @@
 
   /* Overlay subtle (white 5%) for lazy-loaded image placeholders */
   --color-overlay-subtle: rgba(255, 255, 255, 0.05);
+
+  /* === BRAND IDENTITY - GRADIENT SIGNATURE === */
+  /* Vibrant electric indigo-to-purple gradient for distinctive gaming identity */
+  --gradient-brand: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #a855f7 100%);
+  --gradient-brand-subtle: linear-gradient(135deg, rgba(99,102,241,0.15) 0%, rgba(139,92,246,0.15) 50%, rgba(168,85,247,0.15) 100%);
+  --gradient-brand-text: linear-gradient(135deg, #818cf8, #c084fc);
 
   /* Shimmer gradient for skeleton loaders */
   --gradient-shimmer: linear-gradient(
@@ -2197,6 +2203,161 @@ textarea::placeholder {
   }
 }
 
+/* ═══ PHASE 2: Global Micro-Interactions ═══ */
+
+/* Card hover lift - applied globally to all cards */
+.card-interactive,
+[class*="bg-surface-card"]:not(input):not(select):not(textarea) {
+  transition: transform 0.2s var(--ease-spring), box-shadow 0.2s var(--ease-out);
+}
+@media (hover: hover) {
+  .card-interactive:hover,
+  [class*="bg-surface-card"]:not(input):not(select):not(textarea):hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-card), 0 4px 12px rgba(0,0,0,0.2);
+  }
+}
+
+/* Tab underline slide animation */
+.tab-indicator {
+  position: absolute;
+  bottom: 0;
+  height: 2px;
+  background: var(--gradient-brand, var(--color-primary));
+  border-radius: 1px;
+  transition: left 0.3s var(--ease-spring), width 0.3s var(--ease-spring);
+}
+
+/* Staggered list entrance */
+@keyframes list-item-enter {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.stagger-enter > * {
+  animation: list-item-enter 0.3s var(--ease-out) both;
+}
+.stagger-enter > *:nth-child(1) { animation-delay: 0ms; }
+.stagger-enter > *:nth-child(2) { animation-delay: 40ms; }
+.stagger-enter > *:nth-child(3) { animation-delay: 80ms; }
+.stagger-enter > *:nth-child(4) { animation-delay: 120ms; }
+.stagger-enter > *:nth-child(5) { animation-delay: 160ms; }
+.stagger-enter > *:nth-child(6) { animation-delay: 200ms; }
+.stagger-enter > *:nth-child(7) { animation-delay: 240ms; }
+.stagger-enter > *:nth-child(8) { animation-delay: 280ms; }
+.stagger-enter > *:nth-child(9) { animation-delay: 320ms; }
+.stagger-enter > *:nth-child(10) { animation-delay: 360ms; }
+.stagger-enter > *:nth-child(n+11) { animation-delay: 400ms; }
+
+/* Notification badge bounce */
+@keyframes badge-enter {
+  0% { transform: scale(0); }
+  50% { transform: scale(1.3); }
+  100% { transform: scale(1); }
+}
+.badge-animate {
+  animation: badge-enter 0.4s var(--ease-spring);
+}
+
+/* Ripple effect on buttons */
+.ripple-effect {
+  position: relative;
+  overflow: hidden;
+}
+.ripple-effect::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at var(--ripple-x, 50%) var(--ripple-y, 50%), rgba(255,255,255,0.15) 0%, transparent 60%);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.ripple-effect:active::after {
+  opacity: 1;
+}
+
+/* Smooth page transitions */
+.page-enter {
+  animation: page-fade-in 0.25s var(--ease-out);
+}
+@keyframes page-fade-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Avatar speaking pulse waves */
+@keyframes speaking-wave {
+  0%, 100% { transform: scale(1); opacity: 0.4; }
+  50% { transform: scale(1.4); opacity: 0; }
+}
+.avatar-speaking::before,
+.avatar-speaking::after {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  border: 2px solid var(--color-success);
+}
+.avatar-speaking::before {
+  animation: speaking-wave 1.5s ease-out infinite;
+}
+.avatar-speaking::after {
+  animation: speaking-wave 1.5s ease-out 0.5s infinite;
+}
+
+/* Toggle switch smooth bounce */
+.toggle-thumb {
+  transition: transform 0.25s var(--ease-spring);
+}
+
+/* Confetti burst animation (pure CSS fallback) */
+@keyframes confetti-fall {
+  0% { transform: translateY(-100vh) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+}
+
+/* Glow pulse on primary actions */
+.glow-pulse {
+  animation: glow-pulse-anim 2s ease-in-out infinite;
+}
+@keyframes glow-pulse-anim {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(99,102,241,0.4); }
+  50% { box-shadow: 0 0 20px 4px rgba(99,102,241,0.2); }
+}
+
+/* RSVP button special animation */
+.rsvp-confirm {
+  position: relative;
+}
+.rsvp-confirm::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: inherit;
+  background: var(--gradient-brand, linear-gradient(135deg, #6366f1, #a855f7));
+  opacity: 0;
+  z-index: -1;
+  transition: opacity 0.3s;
+}
+.rsvp-confirm:hover::before {
+  opacity: 0.3;
+}
+
+/* Reduced motion overrides for all new animations */
+@media (prefers-reduced-motion: reduce) {
+  .stagger-enter > *,
+  .badge-animate,
+  .page-enter,
+  .avatar-speaking::before,
+  .avatar-speaking::after,
+  .glow-pulse {
+    animation: none !important;
+  }
+  .card-interactive:hover,
+  [class*="bg-surface-card"]:hover {
+    transform: none !important;
+  }
+}
+
 /* =====================================================
    GAMIFICATION - Level up & XP animations
    ===================================================== */
@@ -2303,13 +2464,31 @@ textarea::placeholder {
   animation: text-gradient-shift 4s ease infinite;
 }
 
+/* Error shake animation for invalid form fields */
+@keyframes field-shake {
+  0%, 100% { transform: translateX(0); }
+  10%, 50%, 90% { transform: translateX(-4px); }
+  30%, 70% { transform: translateX(4px); }
+}
+
+.field-shake {
+  animation: field-shake 0.4s ease-in-out;
+  border-color: var(--color-error) !important;
+}
+
+/* Focus trap indicator */
+.focus-trap-active {
+  box-shadow: 0 0 0 2px var(--color-primary), 0 0 0 4px rgba(99,102,241,0.2);
+}
+
 @media (prefers-reduced-motion: reduce) {
   .animate-xp-fill,
   .animate-level-up-glow,
   .animate-xp-pop,
   .animate-badge-bounce,
   .sound-wave-bar,
-  .gradient-text-animated {
+  .gradient-text-animated,
+  .field-shake {
     animation: none;
   }
   .card-hover-lift:hover {

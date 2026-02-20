@@ -93,7 +93,7 @@ export function Sessions({ loaderData: _loaderData }: SessionsProps) {
 
   return (
     <PullToRefresh onRefresh={handleRefresh}>
-    <main className="min-h-0 bg-bg-base pb-6" aria-label="Sessions">
+    <main className="min-h-0 bg-bg-base pb-6 page-enter" aria-label="Sessions">
       {showConfetti && typeof window !== 'undefined' && (
         <Confetti
           width={window.innerWidth}

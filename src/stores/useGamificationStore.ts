@@ -44,6 +44,7 @@ export const XP_REWARDS = {
   'streak.week': 50,
   'referral.success': 100,
   'discover.browse': 5,
+  'invite.send': 5,  // PHASE 5: XP for sending party invites
 } as const
 
 export type XPAction = keyof typeof XP_REWARDS
@@ -154,6 +155,7 @@ export interface GamificationStats {
   currentStreak: number
   bestStreak: number
   referrals: number
+  invitesSent: number  // PHASE 5: Track party invites sent
   level: number
 }
 
@@ -222,6 +224,7 @@ export const useGamificationStore = create<GamificationState>()(
         currentStreak: 0,
         bestStreak: 0,
         referrals: 0,
+        invitesSent: 0,
         level: 1,
       },
       unlockedAchievements: [],

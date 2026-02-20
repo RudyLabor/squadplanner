@@ -231,6 +231,11 @@ export function useRsvpMutation() {
         import('../../stores/useGamificationStore').then(({ useGamificationStore }) => {
           useGamificationStore.getState().addXP('session.rsvp')
         })
+        // Celebration confetti for RSVP confirmation
+        import('canvas-confetti').then((mod) => {
+          const confetti = mod.default
+          confetti({ particleCount: 80, spread: 60, origin: { y: 0.7 } })
+        })
       }
       // Auto-confirm: if RSVP is "present", check if threshold is met
       if (data.response === 'present') {

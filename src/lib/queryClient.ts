@@ -18,8 +18,9 @@ import { QueryClient } from '@tanstack/react-query'
 export const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      // Data is fresh for 2 minutes (most data doesn't change that fast)
-      staleTime: 2 * 60 * 1000,
+      // PHASE 4: Optimized stale times for better performance
+      // Default stale time: 30s (not 0) to prevent unnecessary refetches
+      staleTime: 30 * 1000,
       // Keep in cache for 10 minutes after last use
       gcTime: 10 * 60 * 1000,
       // Retry failed requests once (faster failure feedback)
@@ -38,6 +39,19 @@ export const queryClient = new QueryClient({
     },
   },
 })
+
+/**
+ * PHASE 4: Custom stale times for specific query types
+ * Override default times for different data freshness requirements
+ */
+export const staleTimeConfig = {
+  // Profile data: cache for 5 minutes (user info doesn't change frequently)
+  profile: 5 * 60 * 1000,
+  // Message lists: cache for 15 seconds (need relatively fresh data)
+  messages: 15 * 1000,
+  // Default for other queries: 30 seconds
+  default: 30 * 1000,
+} as const
 
 // Query key factory for consistent key management
 export const queryKeys = {

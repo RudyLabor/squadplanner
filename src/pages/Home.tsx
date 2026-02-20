@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, useCallback, useRef, useSyncExternalStore } from 'react'
+import { useState, useEffect, useMemo, useCallback, useRef, useSyncExternalStore, lazy, Suspense } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
 import { m } from 'framer-motion'
 import { TrendingUp, Loader2, AlertCircle, Star } from '../components/icons'
@@ -7,6 +7,9 @@ import Confetti from '../components/LazyConfetti'
 import { PullToRefresh } from '../components/PullToRefresh'
 import { Tooltip, CrossfadeTransition, SkeletonHomePage } from '../components/ui'
 import { useAuthStore, useConfetti } from '../hooks'
+
+// PHASE 5: Lazy load WeeklyLeaderboard to avoid blocking initial render
+const WeeklyLeaderboard = lazy(() => import('../components/WeeklyLeaderboard'))
 // Lazy-load voice chat store (now using native WebRTC)
 // IMPORTANT: We use getState()/subscribe() instead of calling the zustand hook
 // directly, because calling store() conditionally would violate Rules of Hooks
@@ -298,7 +301,7 @@ export default function Home({ loaderData }: HomeProps) {
       : null
 
   return (
-    <div className="min-h-0 bg-bg-base pb-6">
+    <div className="min-h-0 bg-bg-base pb-6 page-enter">
       {showConfetti && typeof window !== 'undefined' && (
         <Confetti
           width={window.innerWidth}
@@ -382,6 +385,18 @@ export default function Home({ loaderData }: HomeProps) {
                 profile={profile}
               />
             </m.div>
+
+            {/* PHASE 5: Weekly Leaderboard with gamification stats */}
+            <m.div
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.08, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+            >
+              <Suspense fallback={null}>
+                <WeeklyLeaderboard />
+              </Suspense>
+            </m.div>
+
             <m.div
               className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4"
               initial={{ opacity: 0, y: 12 }}

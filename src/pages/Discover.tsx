@@ -226,7 +226,7 @@ const SquadsTab = memo(function SquadsTab({ game, region }: { game: string; regi
   return (
     <div>
       <FeaturedSection squads={squads} />
-      <div className="space-y-2 lg:grid lg:grid-cols-2 xl:grid-cols-3 lg:gap-4 lg:space-y-0">
+      <div className="space-y-2 lg:grid lg:grid-cols-2 xl:grid-cols-3 lg:gap-4 lg:space-y-0 stagger-enter">
         {squads.map((squad) => (
           <DiscoverSquadCard key={squad.id} squad={squad} />
         ))}

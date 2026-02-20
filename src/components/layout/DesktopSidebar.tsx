@@ -3,10 +3,6 @@ import { memo, useCallback } from 'react'
 import { Link } from 'react-router'
 import { m, AnimatePresence } from 'framer-motion'
 import {
-  Home,
-  Users,
-  Mic,
-  MessageCircle,
   User,
   Plus,
   Pin,
@@ -14,10 +10,10 @@ import {
   Settings,
   HelpCircle,
   Phone,
-  Calendar,
   Compass,
   Gift,
 } from '../icons'
+import { NavHome, NavSquads, NavSessions, NavParty, NavMessages } from '../icons/NavIcons'
 import { prefetchRoute } from '../../lib/queryClient'
 import { SquadPlannerLogo } from '../SquadPlannerLogo'
 import { Tooltip } from '../ui/Tooltip'
@@ -25,11 +21,11 @@ import { SidebarFooter } from './SidebarFooter'
 
 // Navigation items
 export const navItems = [
-  { path: '/home', icon: Home, label: 'Accueil' },
-  { path: '/squads', icon: Users, label: 'Squads' },
-  { path: '/sessions', icon: Calendar, label: 'Sessions' },
-  { path: '/party', icon: Mic, label: 'Party' },
-  { path: '/messages', icon: MessageCircle, label: 'Messages' },
+  { path: '/home', icon: NavHome, label: 'Accueil' },
+  { path: '/squads', icon: NavSquads, label: 'Squads' },
+  { path: '/sessions', icon: NavSessions, label: 'Sessions' },
+  { path: '/party', icon: NavParty, label: 'Party' },
+  { path: '/messages', icon: NavMessages, label: 'Messages' },
   { path: '/discover', icon: Compass, label: 'Découvrir' },
   { path: '/profile', icon: User, label: 'Profil' },
 ] as const

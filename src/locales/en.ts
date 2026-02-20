@@ -250,7 +250,7 @@ export const en: TranslationKeys = {
       prioritySupport: 'Priority support',
     },
     upgrade: 'Upgrade to Premium',
-    currentPlan: 'Your plan',
+    currentPlan: 'Your current plan',
   },
 
   // Auth

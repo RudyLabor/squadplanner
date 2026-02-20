@@ -5,28 +5,28 @@ import { PublicPageShell } from '../components/PublicPageShell'
 import { scrollReveal, scrollRevealLight, springTap } from '../utils/animations'
 
 const comparisonFeatures = [
-  { name: 'Matchmaking Avancé', squadPlanner: true, gamerLink: true, description: 'Trouver des partenaires compatibles' },
-  { name: 'Calendrier des Sessions', squadPlanner: true, gamerLink: false, description: 'Planifier & récurrence' },
-  { name: 'RSVP Fiable', squadPlanner: true, gamerLink: false, description: 'Confirmations & reminders' },
-  { name: 'Notifications Temps Réel', squadPlanner: true, gamerLink: false, description: 'Alertes instantanées' },
-  { name: 'Analytics Gaming', squadPlanner: true, gamerLink: false, description: 'Statistiques & insights' },
-  { name: 'Gratuit pour l\'essentiel', squadPlanner: true, gamerLink: false, description: 'Sans paiement obligatoire' }
+  { name: 'Trouve des joueurs', squadPlanner: true, gamerLink: true, description: 'Des partenaires de ton niveau' },
+  { name: 'Calendrier des sessions', squadPlanner: true, gamerLink: false, description: 'Crée une fois, on répète' },
+  { name: 'RSVP qui tient', squadPlanner: true, gamerLink: false, description: 'Les gens viennent vraiment' },
+  { name: 'Notifs push immédiates', squadPlanner: true, gamerLink: false, description: 'Zéro l\'oublier' },
+  { name: 'Analytics gaming', squadPlanner: true, gamerLink: false, description: 'Vois qui flake, qui kill' },
+  { name: 'C\'est gratuit', squadPlanner: true, gamerLink: false, description: 'Pas de piège' }
 ]
 
 const advantages = [
   {
-    title: 'Conçu pour les Gamers',
-    description: 'Squad Planner est 100% orienté gaming. Chaque fonctionnalité résout un problème réel des sessions.',
+    title: 'Built for gamers',
+    description: 'Squad Planner, c\'est 100% pour toi. Chaque truc qu\'on a, c\'est pour régler un vrai problème de session.',
     icon: Sparkles
   },
   {
-    title: 'Fiabilité Garantie',
-    description: 'Notifications push et rappels RSVP intégrés. Plus de no-shows. Les sessions se font sans surprise.',
+    title: 'RSVP qui flake pas',
+    description: 'Notifs push, rappels 1h avant. Les mecs qui disent oui viennent vraiment. Plus de no-shows.',
     icon: Check
   },
   {
-    title: 'Équipe Réactive',
-    description: 'Nos développeurs sont des gamers. Nous écoutons et déployons les features rapidement, sans waiting list.',
+    title: 'Une équipe de gamers',
+    description: 'On est des joueurs, comme toi. Tu demandes un truc, on le fait. Pas de file d\'attente, pas de blabla.',
     icon: Zap
   }
 ]
@@ -53,7 +53,7 @@ export default function AlternativeGamerLink() {
           >
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full badge-shimmer border border-purple/25 mb-8">
               <span className="text-base font-medium text-purple">
-                Mieux que GamerLink · Plus rapide & plus gaming
+                Oublie GamerLink · Passe à Squad Planner
               </span>
             </div>
           </m.div>
@@ -66,9 +66,9 @@ export default function AlternativeGamerLink() {
             viewport={{ once: true }}
             className="text-3xl md:text-5xl font-extrabold text-text-primary mb-6 leading-tight tracking-tight"
           >
-            Une meilleure alternative
+            L'alternative à GamerLink
             <br />
-            à GamerLink<span className="text-gradient-animated">.</span>
+            que tu attendais<span className="text-gradient-animated">.</span>
           </m.h1>
 
           <m.p
@@ -78,7 +78,7 @@ export default function AlternativeGamerLink() {
             viewport={{ once: true }}
             className="text-lg md:text-xl text-text-tertiary mb-10 max-w-2xl mx-auto leading-relaxed"
           >
-            Plus rapide, plus fiable, plus gaming. Squad Planner est conçu spécifiquement pour les squads et les sessions compétitives, avec tous les outils que tu as.
+            Plus rapide. Plus fiable. Plus gaming. Squad Planner, c'est conçu pour toi, ta squad, tes sessions. Pas de jargon. Juste l'essentiel.
           </m.p>
 
           {/* CTAs */}
@@ -94,7 +94,7 @@ export default function AlternativeGamerLink() {
                 to="/auth?mode=register&redirect=onboarding"
                 className="flex items-center gap-2 h-14 px-8 rounded-xl bg-primary text-white text-lg font-semibold shadow-lg shadow-primary/10 cta-pulse-glow w-full sm:w-auto justify-center"
               >
-                Rejoindre Squad Planner
+                Essayer maintenant
                 <ArrowRight className="w-5 h-5" />
               </Link>
             </m.div>
@@ -117,10 +117,10 @@ export default function AlternativeGamerLink() {
         <div className="max-w-5xl mx-auto">
           <m.div variants={scrollReveal} initial="hidden" whileInView="visible" viewport={{ once: true }} className="text-center mb-12">
             <h2 className="text-xl md:text-2xl font-bold text-text-primary mb-4">
-              Comparaison Squad Planner vs GamerLink
+              Squad Planner vs GamerLink : le vrai match
             </h2>
             <p className="text-text-tertiary text-lg">
-              Point par point, fonctionnalité par fonctionnalité
+              Tous les détails, zéro bullshit
             </p>
           </m.div>
 
@@ -176,10 +176,10 @@ export default function AlternativeGamerLink() {
         <div className="max-w-5xl mx-auto">
           <m.div variants={scrollReveal} initial="hidden" whileInView="visible" viewport={{ once: true }} className="text-center mb-12">
             <h2 className="text-xl md:text-2xl font-bold text-text-primary mb-4">
-              Pourquoi changer pour Squad Planner ?
+              Pourquoi tu vas te régaler sur Squad Planner
             </h2>
             <p className="text-text-tertiary text-lg">
-              Trois raisons fondamentales qui font la différence
+              Trois raisons qui changent tout
             </p>
           </m.div>
 
@@ -232,17 +232,17 @@ export default function AlternativeGamerLink() {
                 ))}
               </div>
               <h3 className="text-xl md:text-2xl font-bold text-text-primary mb-3">
-                Rejoins 10 000+ gamers
+                Déjà 10 000+ gamers avant toi
               </h3>
               <p className="text-text-tertiary mb-8 max-w-2xl">
-                Chaque jour, des squads organisent leurs sessions sur Squad Planner. Zéro abonnement obligatoire. Zéro prise de tête. Juste du gaming.
+                Chaque jour, des squads lancent leurs sessions ici. Zero frais. Zéro prise de tête. Juste du vrai gaming.
               </p>
               <m.div whileHover={{ scale: 1.02, y: -2 }} {...springTap}>
                 <Link
                   to="/auth?mode=register&redirect=onboarding"
                   className="inline-flex items-center gap-2 px-8 py-3 bg-primary text-white rounded-xl font-semibold shadow-lg shadow-primary/10 hover:bg-primary/90 transition-colors"
                 >
-                  Commencer gratuitement
+                  Créer mon compte
                   <ArrowRight className="w-5 h-5" />
                 </Link>
               </m.div>
@@ -281,17 +281,17 @@ export default function AlternativeGamerLink() {
                 <Sparkles className="w-12 h-12 mx-auto mb-6" style={{ color: '#a855f7' }} />
               </m.div>
               <h2 className="text-xl md:text-3xl font-bold text-text-primary mb-4">
-                Prêt à passer à Squad Planner ?
+                T'as pris ta décision ?
               </h2>
               <p className="text-text-tertiary mb-8 text-lg">
-                Migrer depuis GamerLink prend 5 minutes. Tes squads, tes événements, tout est conservé.
+                Migrer depuis GamerLink, c'est 5 minutes. Tout se conserve. Pas de perte.
               </p>
               <m.div whileHover={{ scale: 1.03, y: -3 }} {...springTap} className="inline-flex">
                 <Link
                   to="/auth?mode=register&redirect=onboarding"
                   className="flex items-center gap-2 h-16 px-10 rounded-xl bg-gradient-to-r from-primary to-purple text-white text-xl font-bold mx-auto shadow-lg shadow-primary/20 cta-glow-idle"
                 >
-                  Rejoins gratuitement
+                  Migrer maintenant
                   <ArrowRight className="w-5 h-5" />
                 </Link>
               </m.div>

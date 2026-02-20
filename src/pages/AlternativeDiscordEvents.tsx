@@ -6,50 +6,50 @@ import { scrollReveal, scrollRevealLight, springTap } from '../utils/animations'
 
 const limitations = [
   {
-    title: 'RSVP Basique',
-    discord: 'Les RSVP Discord sont simples, mais pas fiables. Les joueurs disent oui mais ne viennent pas.',
-    squadPlanner: 'Notifications push, rappels, statistiques de fiabilité. Les joueurs qui flakent sont identifiés.',
+    title: 'Des RSVP qui servent à rien',
+    discord: 'Les gens disent oui sur Discord mais ne viennent pas. Zéro suivi. Zéro rappel.',
+    squadPlanner: 'Notif push, rappels 1h avant, scores de fiabilité. Tu sais qui t\'oublie.',
   },
   {
-    title: 'Récurrence Limitée',
-    discord: 'Un seul événement Discord à la fois. Pas de sessions hebdo automatisées.',
-    squadPlanner: 'Crée des récurrences hebdo, bi-hebdo, mensuelles. Automatisation complète.',
+    title: 'La récurrence ? Oublie.',
+    discord: 'Un événement à la fois. Chaque semaine, tu le refais. Chiant.',
+    squadPlanner: 'Crée une fois, ça répète tout seul. Hebdo, bi-hebdo, mensuel. Set and forget.',
   },
   {
-    title: 'Pas d\'Analytics',
-    discord: 'Discord ne montre que qui a confirmé ou non. Aucune insight sur la participation.',
-    squadPlanner: 'Analytics complets : taux de présence, tendances, statistiques par joueur.',
+    title: 'Zéro insight',
+    discord: 'Discord: qui a cliqué oui. C\'est tout. T\'as rien d\'autre.',
+    squadPlanner: 'Stats complètes. Taux de présence. Qui est reliable. Qui flake. Tendances.',
   }
 ]
 
 const advantages = [
   {
-    title: 'RSVP Fiable',
-    description: 'Notifications push et rappels 1h avant. Ton taux de présence augmente automatiquement.',
+    title: 'RSVP qui hold',
+    description: 'Notif push, rappels 1h avant. Les gens viennent vraiment. Point.',
     icon: Check
   },
   {
-    title: 'Optimisé pour Gaming',
-    description: 'Squad Planner est 100% dédié aux sessions. Discord pour la commu, nous pour organiser.',
+    title: 'Built for gaming',
+    description: 'Squad Planner ne pense qu\'à ça : tes sessions. Discord = commu. Nous = organisation.',
     icon: Users
   },
   {
-    title: 'Récurrence Native',
-    description: 'Sessions hebdomadaires en un clic. Plus de copier-coller chaque semaine.',
+    title: 'Récurrence automatique',
+    description: 'Crée une fois. Ça répète tout seul chaque semaine. Zéro copier-coller.',
     icon: Calendar
   },
   {
-    title: 'Analytics Avancées',
-    description: 'Identifie tes meilleurs joueurs, les plus fiables, les tendances. Décisions data-driven.',
+    title: 'Analytics qui tue',
+    description: 'Vois qui est fiable. Vois qui flake. Vois les tendances. Joue en data.',
     icon: Sparkles
   },
   {
-    title: 'Intégration Discord',
-    description: 'Notifications Discord native, organisation dans Squad Planner. Le meilleur des deux mondes.',
+    title: 'Discord intégré',
+    description: 'Les notifs arrivent dans Discord. L\'organisation se passe chez nous. Best of both worlds.',
     icon: Shield
   },
   {
-    title: 'Plus de Fiabilité',
+    title: 'Fiabilité garantie',
     description: 'Profils, réputation, historique. Les squads sérieuses voient clairement qui flake.',
     icon: Zap
   }
@@ -77,7 +77,7 @@ export default function AlternativeDiscordEvents() {
           >
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full badge-shimmer border border-purple/25 mb-8">
               <span className="text-base font-medium text-purple">
-                Au-delà des événements Discord
+                Discord c'est cool, mais pas pour ça
               </span>
             </div>
           </m.div>
@@ -90,9 +90,9 @@ export default function AlternativeDiscordEvents() {
             viewport={{ once: true }}
             className="text-3xl md:text-5xl font-extrabold text-text-primary mb-6 leading-tight tracking-tight"
           >
-            Plus qu'un simple
+            Oublie les événements Discord
             <br />
-            événement Discord<span className="text-gradient-animated">.</span>
+            Découvre l'organisation gaming<span className="text-gradient-animated">.</span>
           </m.h1>
 
           <m.p
@@ -102,7 +102,7 @@ export default function AlternativeDiscordEvents() {
             viewport={{ once: true }}
             className="text-lg md:text-xl text-text-tertiary mb-10 max-w-2xl mx-auto leading-relaxed"
           >
-            Discord est fait pour la commu, pas pour organiser les sessions. Squad Planner corrige ça. 100% optimisé pour les gamers, avec intégration Discord native.
+            Discord c'est pour parler. Squad Planner c'est pour organiser. 100% gaming. Discord resté branché, mais l'organisation c'est ici.
           </m.p>
 
           {/* CTAs */}
@@ -118,7 +118,7 @@ export default function AlternativeDiscordEvents() {
                 to="/auth?mode=register&redirect=onboarding"
                 className="flex items-center gap-2 h-14 px-8 rounded-xl bg-primary text-white text-lg font-semibold shadow-lg shadow-primary/10 cta-pulse-glow w-full sm:w-auto justify-center"
               >
-                Démarrer gratuitement
+                Essayer gratuitement
                 <ArrowRight className="w-5 h-5" />
               </Link>
             </m.div>
@@ -141,10 +141,10 @@ export default function AlternativeDiscordEvents() {
         <div className="max-w-5xl mx-auto">
           <m.div variants={scrollReveal} initial="hidden" whileInView="visible" viewport={{ once: true }} className="text-center mb-12">
             <h2 className="text-xl md:text-2xl font-bold text-text-primary mb-4">
-              Événements Discord vs Squad Planner
+              Discord vs Squad Planner : comparaison vraie
             </h2>
             <p className="text-text-tertiary text-lg">
-              Chaque domaine montre les différences clés
+              Où Discord perd ses points
             </p>
           </m.div>
 
@@ -176,7 +176,7 @@ export default function AlternativeDiscordEvents() {
                   {/* Squad Planner Version */}
                   <div className="p-6 md:p-8 rounded-2xl bg-gradient-to-br from-surface-card to-transparent border border-emerald-500/20 hover:border-emerald-500/30 transition-all relative">
                     <div className="absolute -top-3 -right-3 px-3 py-1 bg-primary text-white text-xs font-semibold rounded-full">
-                      Mieux
+                      T'aimes mieux
                     </div>
                     <div className="flex items-start gap-3 mb-4">
                       <div className="p-2 bg-emerald-500/10 rounded-lg flex-shrink-0">
@@ -202,10 +202,10 @@ export default function AlternativeDiscordEvents() {
         <div className="max-w-5xl mx-auto">
           <m.div variants={scrollReveal} initial="hidden" whileInView="visible" viewport={{ once: true }} className="text-center mb-12">
             <h2 className="text-xl md:text-2xl font-bold text-text-primary mb-4">
-              Les 6 avantages clés de Squad Planner
+              6 trucs que Squad Planner te donne
             </h2>
             <p className="text-text-tertiary text-lg">
-              Construis sur ce que tu aimes de Discord, mais pour les sessions gaming
+              Discord reste ton ami pour parler. Nous on gère l'organisation.
             </p>
           </m.div>
 
@@ -255,14 +255,14 @@ export default function AlternativeDiscordEvents() {
               </div>
               <div className="flex-1">
                 <h3 className="text-xl font-bold text-text-primary mb-3">
-                  Toujours connecté à Discord
+                  Toujours lié à Discord
                 </h3>
                 <p className="text-text-secondary mb-4 text-md">
-                  Squad Planner s'intègre nativement avec Discord. Reçois les notifications dans Discord, organise dans Squad Planner. Le meilleur des deux mondes, sans complications.
+                  Squad Planner et Discord, ça se parle. Les notifs arrivent dans Discord. L'organisation c'est chez nous. Zero config.
                 </p>
                 <div className="flex items-center gap-2 text-sm text-primary font-semibold">
                   <Check className="w-4 h-4" />
-                  Notifications Discord native · Zéro configuration
+                  Notif Discord direct · Zéro prise de tête
                 </div>
               </div>
             </div>
@@ -277,7 +277,7 @@ export default function AlternativeDiscordEvents() {
         <div className="max-w-3xl mx-auto">
           <m.div variants={scrollReveal} initial="hidden" whileInView="visible" viewport={{ once: true }} className="text-center mb-8">
             <h3 className="text-xl md:text-2xl font-bold text-text-primary mb-4">
-              Cas d'usage typique
+              Ça marche comme ça
             </h3>
           </m.div>
 
@@ -289,7 +289,7 @@ export default function AlternativeDiscordEvents() {
             className="p-8 md:p-10 rounded-3xl bg-gradient-to-br from-surface-card/80 to-transparent border border-border-subtle hover:border-border-hover transition-all"
           >
             <p className="text-text-secondary mb-8 leading-relaxed text-lg">
-              Tu as une squad compétitive qui joue chaque mardi à 21h. Sur Discord, tu crées un événement à chaque fois. Avec Squad Planner, tu crées un événement récurrent une fois, c'est automatisé. Les joueurs reçoivent des notifications push 1h avant. Tu vois qui flake. Tu as des statistiques. C'est ça, une vraie plateforme gaming.
+              T'as une squad qui joue chaque mardi 21h. Sur Discord, tu crées un événement chaque fois. Chiant. Chez nous, tu crées une fois, c'est auto. Les mecs reçoivent une notif 1h avant. Tu vois qui flake. T'as des stats. Boom. Une vraie plateforme gaming.
             </p>
             <m.div whileHover={{ scale: 1.02, y: -2 }} {...springTap}>
               <Link
@@ -334,10 +334,10 @@ export default function AlternativeDiscordEvents() {
                 <Sparkles className="w-12 h-12 mx-auto mb-6" style={{ color: '#a855f7' }} />
               </m.div>
               <h2 className="text-xl md:text-3xl font-bold text-text-primary mb-4">
-                Améliore tes sessions dès aujourd'hui
+                Améliore tes sessions maintenant
               </h2>
               <p className="text-text-tertiary mb-8 text-lg">
-                Gratuit pour l'essentiel. Zéro friction, juste du gaming efficace.
+                Gratuit pour les trucs importants. Zéro prise de tête. Juste du vrai gaming.
               </p>
               <m.div whileHover={{ scale: 1.03, y: -3 }} {...springTap} className="inline-flex">
                 <Link
@@ -346,6 +346,7 @@ export default function AlternativeDiscordEvents() {
                 >
                   Créer mon compte
                   <ArrowRight className="w-5 h-5" />
+
                 </Link>
               </m.div>
               <p className="text-base text-text-quaternary mt-4">

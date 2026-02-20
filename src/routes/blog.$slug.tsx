@@ -309,10 +309,10 @@ export default function BlogPost() {
                 <Sparkles className="w-12 h-12 mx-auto mb-6 text-primary" />
               </m.div>
               <h2 className="text-xl md:text-3xl font-bold text-text-primary mb-4">
-                Prêt à mettre ces astuces en pratique?
+                Envie de tester par toi-même ?
               </h2>
               <p className="text-text-tertiary mb-8 text-lg">
-                Créez votre première squad et rejoignez la communauté Squad Planner.
+                Crée ta squad et mets ces conseils en pratique dès ce soir. C'est gratuit.
               </p>
               <m.div whileHover={{ scale: 1.03, y: -3 }} {...springTap} className="inline-flex">
                 <Link

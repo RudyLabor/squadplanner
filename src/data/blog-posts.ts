@@ -15,7 +15,7 @@ export const BLOG_POSTS: BlogPost[] = [
     slug: 'guilded-alternatives-2026',
     title: 'Guilded a fermé : les 5 meilleures alternatives en 2026',
     excerpt:
-      'Guilded a arrêté ses services en 2024. Découvrez les meilleures alternatives pour organiser votre communauté gaming.',
+      'Guilded a arrêté ses services en 2024. Découvre les meilleures alternatives pour organiser ta communauté gaming.',
     date: '2026-02-15',
     author: 'Squad Planner Team',
     tags: ['alternatives', 'communauté', 'plateforme'],
@@ -26,7 +26,7 @@ export const BLOG_POSTS: BlogPost[] = [
 
       <p>La plateforme Guilded, pendant longtemps considérée comme une excellente alternative à Discord pour les communautés gaming, a cessé ses activités en 2024. Cette fermeture a laissé de nombreuses équipes et guildes en quête d'une solution comparable pour organiser leurs événements, gérer leurs membres et maintenir une communication efficace.</p>
 
-      <p>Si vous aussi vous recherchez la meilleure plateforme pour remplacer Guilded, cet article vous présentera les 5 meilleures alternatives disponibles en 2026, avec leurs avantages et inconvénients respectifs.</p>
+      <p>Si toi aussi tu cherches la meilleure plateforme pour remplacer Guilded, cet article te présentera les 5 meilleures alternatives disponibles en 2026, avec leurs avantages et inconvénients respectifs.</p>
 
       <h3>1. Squad Planner - La solution tout-en-un (⭐ Notre choix)</h3>
 
@@ -39,7 +39,7 @@ export const BLOG_POSTS: BlogPost[] = [
         <li>Gestion des sessions et des squads en temps réel</li>
         <li>Interface épurée et intuitive</li>
         <li>Absence de publicités</li>
-        <li>Calendrier intégré pour visualiser tous vos événements</li>
+        <li>Calendrier intégré pour visualiser tous tes événements</li>
         <li>Support français natif</li>
       </ul>
 
@@ -52,7 +52,7 @@ export const BLOG_POSTS: BlogPost[] = [
 
       <h3>2. Discord - Le géant incontournable</h3>
 
-      <p>Discord reste la plateforme de communication numéro un pour les gamers. Si Guilded vous plaisait principalement pour ses fonctionnalités de communication vocale et textuelle, Discord est votre meilleur choix.</p>
+      <p>Discord reste la plateforme de communication numéro un pour les gamers. Si Guilded te plaisait principalement pour ses fonctionnalités de communication vocale et textuelle, Discord est ton meilleur choix.</p>
 
       <p><strong>Avantages :</strong></p>
       <ul>
@@ -73,7 +73,7 @@ export const BLOG_POSTS: BlogPost[] = [
 
       <h3>3. TeamSpeak - La référence pour la voix</h3>
 
-      <p>TeamSpeak 5 a été complètement repensé pour rivaliser avec les solutions modernes. Si la qualité audio est votre priorité absolue, TeamSpeak mérite considération.</p>
+      <p>TeamSpeak 5 a été complètement repensé pour rivaliser avec les solutions modernes. Si la qualité audio est ta priorité absolue, TeamSpeak mérite considération.</p>
 
       <p><strong>Avantages :</strong></p>
       <ul>
@@ -134,23 +134,23 @@ export const BLOG_POSTS: BlogPost[] = [
 
       <h3>Quel choix faire?</h3>
 
-      <p>Votre choix dépend de vos priorités :</p>
+      <p>Ton choix dépend de tes priorités :</p>
       <ul>
-        <li><strong>Vous cherchez une organisation d'équipe gaming complète?</strong> → Squad Planner</li>
-        <li><strong>Vous prioritize la communication et la voix?</strong> → Discord ou TeamSpeak</li>
-        <li><strong>Vous avez une équipe compétitive professionnelle?</strong> → Slack + Squad Planner</li>
-        <li><strong>Vous voulez respecter votre vie privée?</strong> → Revolt</li>
+        <li><strong>Tu cherches une organisation d'équipe gaming complète?</strong> → Squad Planner</li>
+        <li><strong>Tu privilégies la communication et la voix ?</strong> → Discord ou TeamSpeak</li>
+        <li><strong>Tu as une équipe compétitive professionnelle?</strong> → Slack + Squad Planner</li>
+        <li><strong>Tu veux respecter ta vie privée?</strong> → Revolt</li>
       </ul>
 
       <p>En 2026, la meilleure stratégie est souvent d'utiliser <strong>Squad Planner pour l'organisation</strong> et <strong>Discord pour la communication</strong>. Les deux plateformes se complètent parfaitement et offrent la meilleure expérience pour les communautés gaming modernes.</p>
 
-      <p>Guilded nous manquera, mais l'écosystème gaming n'a jamais été aussi riche en options. À vous de trouver la combinaison parfaite pour votre squad!</p>
+      <p>Guilded nous manquera, mais l'écosystème gaming n'a jamais été aussi riche en options. À toi de trouver la combinaison parfaite pour ta squad!</p>
     </article>`,
   },
   {
     slug: 'organiser-tournoi-entre-amis',
     title: 'Comment organiser un tournoi entre amis en 5 étapes',
-    excerpt: 'Guide complet pour organiser un tournoi gaming fluide et mémorable grâce à Squad Planner.',
+    excerpt: 'Guide complet pour organiser un tournoi gaming fluide et mémorable grâce à Squad Planner. Que tu sois débutant ou expérimenté, tu trouveras tous les conseils pour réussir.',
     date: '2026-02-10',
     author: 'Squad Planner Team',
     tags: ['tournoi', 'organisation', 'guide'],
@@ -161,15 +161,15 @@ export const BLOG_POSTS: BlogPost[] = [
 
       <p>Organiser un tournoi gaming entre amis peut sembler complexe : coordonner les horaires, gérer les brackets, communiquer avec les participants, valider les résultats... Mais avec une bonne méthode et les bons outils, c'est bien plus simple qu'il n'y paraît!</p>
 
-      <p>Dans ce guide complet, je vous montrerai comment organiser un tournoi fluide et mémorable en utilisant Squad Planner. Que vous organisiez votre premier tournoi ou que vous soyez déjà expérimenté, vous trouverez des astuces pour améliorer votre approche.</p>
+      <p>Dans ce guide complet, je te montrerai comment organiser un tournoi fluide et mémorable en utilisant Squad Planner. Que tu organises ton premier tournoi ou que tu sois déjà expérimenté, tu trouveras des astuces pour améliorer ton approche.</p>
 
       <h3>Étape 1 : Définir les paramètres du tournoi</h3>
 
-      <p>Avant de convier vos amis, vous devez établir les fondamentaux. Cette étape est cruciale pour éviter les malentendus plus tard.</p>
+      <p>Avant de convier tes amis, tu dois établir les fondamentaux. Cette étape est cruciale pour éviter les malentendus plus tard.</p>
 
-      <p><strong>Questions à vous poser :</strong></p>
+      <p><strong>Questions à te poser :</strong></p>
       <ul>
-        <li><strong>Quel jeu?</strong> Assurez-vous que tous vos participants le possèdent et le maîtrisent à peu près au même niveau</li>
+        <li><strong>Quel jeu?</strong> Assure-toi que tous tes participants le possèdent et le maîtrisent à peu près au même niveau</li>
         <li><strong>Format?</strong> 1v1, 2v2, battle royale? Élimination directe ou round-robin?</li>
         <li><strong>Nombre de participants?</strong> 4-8 pour un premier tournoi, plutôt que 20 qui devient ingérable</li>
         <li><strong>Dates et horaires?</strong> Prévoir des créneaux pratiques pour tous (notamment les fuseaux horaires différents)</li>
@@ -177,30 +177,30 @@ export const BLOG_POSTS: BlogPost[] = [
         <li><strong>Règles spécifiques?</strong> Perks autorisés? Perso limité? Bugs à éviter?</li>
       </ul>
 
-      <p>Prenez 30 minutes pour documenter tout cela clairement. Cela vous évitera 3 heures de débats le jour J.</p>
+      <p>Prends 30 minutes pour documenter tout cela clairement. Cela t'évitera 3 heures de débats le jour J.</p>
 
       <h3>Étape 2 : Créer la squad et l'événement sur Squad Planner</h3>
 
       <p>Squad Planner rend cette étape triviale. Voici comment procéder :</p>
 
-      <p><strong>Créez d'abord une squad dédiée :</strong></p>
+      <p><strong>Crée d'abord une squad dédiée :</strong></p>
       <ul>
-        <li>Allez dans "Squads" et créez une nouvelle squad appelée "[Jeu] - Tournoi 2026" ou quelque chose de mémorable</li>
-        <li>Invitez tous vos participants. Idéalement, faites-le un mois avant le tournoi pour qu'ils acceptent</li>
+        <li>Va dans "Squads" et crée une nouvelle squad appelée "[Jeu] - Tournoi 2026" ou quelque chose de mémorable</li>
+        <li>Invite tous tes participants. Idéalement, fais-le un mois avant le tournoi pour qu'ils acceptent</li>
         <li>Mettez un emoji sympathique en cover : 🏆, ⚔️, ou 🎮</li>
       </ul>
 
-      <p><strong>Créez un événement pour chaque étape :</strong></p>
+      <p><strong>Crée un événement pour chaque étape :</strong></p>
       <ul>
         <li><strong>Jour 0 (optionnel):</strong> "Warm-up" 2-3 jours avant le tournoi pour que chacun se chauffe</li>
-        <li><strong>Jour 1:</strong> "Tournoi - Demi-finales" (ou votre format)</li>
+        <li><strong>Jour 1:</strong> "Tournoi - Demi-finales" (ou ton format)</li>
         <li><strong>Jour 2:</strong> "Tournoi - Finales" (si multi-jour)</li>
       </ul>
 
-      <p>Pour chaque événement, utilisez la description pour rappeler :</p>
+      <p>Pour chaque événement, utilise la description pour rappeler :</p>
       <ul>
-        <li>L'heure exacte de début (avec votre fuseau horaire)</li>
-        <li>Un lien Discord pour l'audio si vous en avez un</li>
+        <li>L'heure exacte de début (avec ton fuseau horaire)</li>
+        <li>Un lien Discord pour l'audio si tu en as un</li>
         <li>Les règles importantes</li>
         <li>Comment signaler un résultat</li>
       </ul>
@@ -211,32 +211,32 @@ export const BLOG_POSTS: BlogPost[] = [
 
       <p><strong>Avant le tournoi :</strong></p>
       <ul>
-        <li>Envoyez un message récapitulatif 2 semaines avant : "Hey les gars, tournoi le 1er mars! Confirmez votre présence sur l'événement"</li>
-        <li>Relancez 1 semaine avant</li>
-        <li>Relancez 24h avant : c'est crucial pour savoir qui sera là</li>
+        <li>Envoie un message récapitulatif 2 semaines avant : "Hey les gars, tournoi le 1er mars! Confirmez votre présence sur l'événement"</li>
+        <li>Relance 1 semaine avant</li>
+        <li>Relance 24h avant : c'est crucial pour savoir qui sera là</li>
       </ul>
 
-      <p><strong>Utilisez le RSVP de Squad Planner :</strong></p>
+      <p><strong>Utilise le RSVP de Squad Planner :</strong></p>
       <ul>
         <li>Les participants qui cliquent sur "Je viens" sont comptabilisés automatiquement</li>
-        <li>Squad Planner vous avertit en temps réel si quelqu'un valide ou annule sa présence</li>
-        <li>Vous voyez les taux de présence estimée</li>
+        <li>Squad Planner t'avertit en temps réel si quelqu'un valide ou annule sa présence</li>
+        <li>Tu vois les taux de présence estimée</li>
       </ul>
 
-      <p><strong>Gérez les no-shows :</strong></p>
+      <p><strong>Gère les no-shows :</strong></p>
       <ul>
         <li>Si quelqu'un confirme mais n'apparaît pas, Squad Planner marque automatiquement leur fiabilité</li>
-        <li>Pour les futurs tournois, vous saurez qui est fiable et qui ne l'est pas</li>
-        <li>Cela crée une culture d'engagement naturelle dans votre communauté</li>
+        <li>Pour les futurs tournois, tu sauras qui est fiable et qui ne l'est pas</li>
+        <li>Cela crée une culture d'engagement naturelle dans ta communauté</li>
       </ul>
 
       <h3>Étape 4 : Gérer les matchs en temps réel</h3>
 
-      <p>Le jour J, vous devez être organisé. Voici le workflow :</p>
+      <p>Le jour J, tu dois être organisé. Voici le workflow :</p>
 
       <p><strong>30 minutes avant :</strong></p>
       <ul>
-        <li>Tous les joueurs rejoignent votre Discord ou plateforme vocale</li>
+        <li>Tous les joueurs rejoignent ton Discord ou plateforme vocale</li>
         <li>Faites un test audio rapide</li>
         <li>Rappeler les règles: pas d'excuses, pas de recalage</li>
       </ul>
@@ -249,21 +249,21 @@ export const BLOG_POSTS: BlogPost[] = [
         <li>Gardez le tempo : c'est important que personne n'attende plus de 10 minutes entre ses matchs</li>
       </ul>
 
-      <p><strong>Utilisez Squad Planner pour :</strong></p>
+      <p><strong>Utilise Squad Planner pour :</strong></p>
       <ul>
-        <li>Un "rapport de tournoi" que vous posez dans la session principale</li>
+        <li>Un "rapport de tournoi" que tu poses dans la session principale</li>
         <li>Documenter les upsets et les faits marquants</li>
         <li>Laisser les joueurs commenter et réagir après</li>
       </ul>
 
       <h3>Étape 5 : Conclure et célébrer</h3>
 
-      <p>Ne terminez pas abruptement votre tournoi. Créez du momentum pour les futurs.</p>
+      <p>Ne termine pas abruptement ton tournoi. Crée du momentum pour les futurs.</p>
 
       <p><strong>Immédiatement après :</strong></p>
       <ul>
         <li>Annoncez les top 3 en grande pompe sur Discord / Squad Planner</li>
-        <li>Attribuez les "prizes" (skins, rôles Discord, ce que vous aviez promis)</li>
+        <li>Attribue les "prizes" (skins, rôles Discord, ce que tu avais promis)</li>
         <li>Posez des screenshots des moments clés dans le chat</li>
       </ul>
 
@@ -274,10 +274,10 @@ export const BLOG_POSTS: BlogPost[] = [
         <li>Annoncez la date du prochain tournoi : entretenir la dynamique</li>
       </ul>
 
-      <p><strong>Astuces pour la fiabilité future :</strong></p>
+      <p><strong>Astuces pour ta fiabilité future :</strong></p>
       <ul>
         <li>Ceux qui n'ont pas honoré leur RSVP se voient automatiquement dégradés dans Squad Planner</li>
-        <li>Au prochain tournoi, vous pouvez former des poules en évitant les no-shows connus</li>
+        <li>Au prochain tournoi, tu peux former des poules en évitant les no-shows connus</li>
         <li>Les gens seront plus vigilants à honorer leurs engagements s'ils savent qu'on suit ça</li>
       </ul>
 
@@ -300,18 +300,18 @@ export const BLOG_POSTS: BlogPost[] = [
 
       <h3>Conclusion</h3>
 
-      <p>Organiser un tournoi entre amis n'est pas sorcier. En suivant ces 5 étapes et en utilisant Squad Planner pour coordonner, vous garantissez une expérience fluide où tout le monde s'amuse.</p>
+      <p>Organiser un tournoi entre amis n'est pas sorcier. En suivant ces 5 étapes et en utilisant Squad Planner pour coordonner, tu garantis une expérience fluide où tout le monde s'amuse.</p>
 
       <p>La clé? <strong>Clarté</strong>, <strong>communication</strong>, et <strong>suivi des présences</strong>. C'est exactement ce pour quoi Squad Planner a été conçu.</p>
 
-      <p>À vous de jouer, et que les meilleurs gagnent!</p>
+      <p>À toi de jouer, et que les meilleurs gagnent!</p>
     </article>`,
   },
   {
     slug: 'squad-ghost-astuces',
     title: '5 astuces pour que ta squad ne ghost plus jamais',
     excerpt:
-      'Découvrez comment réduire les no-shows et créer une culture d\'engagement dans votre communauté gaming.',
+      'Découvre comment réduire les no-shows et créer une culture d\'engagement dans ta communauté gaming.',
     date: '2026-02-05',
     author: 'Squad Planner Team',
     tags: ['squad', 'engagement', 'astuces'],
@@ -320,11 +320,11 @@ export const BLOG_POSTS: BlogPost[] = [
     content: `<article>
       <h2>5 astuces pour que ta squad ne ghost plus jamais</h2>
 
-      <p>C'est la frustration numéro un des chefs de squad : vous organisez une session, 8 personnes confirment, et le jour J, seules 3 apparaissent. C'est ce qu'on appelle le "ghosting" - et c'est une plaie.</p>
+      <p>C'est la frustration numéro un des chefs de squad : tu organises une session, 8 personnes confirment, et le jour J, seules 3 apparaissent. C'est ce qu'on appelle le "ghosting" - et c'est une plaie.</p>
 
-      <p>Si vous avez déjà vécu ça, vous savez à quel point c'est démotivant de devoir annuler ou jouer en mode dégradé parce que les gens ne respectent pas leurs RSVP.</p>
+      <p>Si tu as déjà vécu ça, tu sais à quel point c'est démotivant de devoir annuler ou jouer en mode dégradé parce que les gens ne respectent pas leurs RSVP.</p>
 
-      <p>Bonne nouvelle : il existe des solutions éprouvées pour pratiquement éliminer le ghosting. Voici mes 5 astuces favorites, et je peux vous assurer qu'elles fonctionnent.</p>
+      <p>Bonne nouvelle : il existe des solutions éprouvées pour pratiquement éliminer le ghosting. Voici mes 5 astuces favorites, et je peux t'assurer qu'elles fonctionnent.</p>
 
       <h3>Astuce 1 : Utiliser un système de scoring de fiabilité</h3>
 
@@ -340,12 +340,12 @@ export const BLOG_POSTS: BlogPost[] = [
 
       <p><strong>C'est ce que fait Squad Planner nativement :</strong></p>
       <ul>
-        <li>Le score de fiabilité s'ajuste automatiquement selon vos absences</li>
+        <li>Le score de fiabilité s'ajuste automatiquement selon tes absences</li>
         <li>Les joueurs voient leur propre score - c'est motivant de le voir augmenter</li>
-        <li>Vous pouvez favoriser les high-reliability players dans vos prochaines sessions</li>
+        <li>Tu peux favoriser les high-reliability players dans tes prochaines sessions</li>
       </ul>
 
-      <p><strong>Impact psychologique :</strong> Les gens ne veulent pas avoir un mauvais score. C'est simple mais ça marche. Dès le moment où quelqu'un réalise que son absence affecte son score publique, ils font plus attention.</p>
+      <p><strong>Impact psychologique :</strong> Les gens ne veulent pas avoir un mauvais score. C'est simple mais ça marche. Dès le moment où quelqu'un réalise que son absence affecte son score public, ils font plus attention.</p>
 
       <h3>Astuce 2 : Mettre une deadline claire pour l'annulation</h3>
 
@@ -353,21 +353,21 @@ export const BLOG_POSTS: BlogPost[] = [
 
       <p><strong>Établir une règle :</strong></p>
       <ul>
-        <li>"Vous pouvez annuler jusqu'à 24h avant la session sans pénalité"</li>
+        <li>"Tu peux annuler jusqu'à 24h avant la session sans pénalité"</li>
         <li>"Après cette heure, annuler compte comme un ghost"</li>
       </ul>
 
-      <p>Pourquoi 24h? Parce que ça vous laisse du temps pour inviter quelqu'un d'autre en remplacement. Et psychologiquement, c'est "assez strict" pour que les gens réfléchissent deux fois avant de confirmer.</p>
+      <p>Pourquoi 24h? Parce que ça te laisse du temps pour inviter quelqu'un d'autre en remplacement. Et psychologiquement, c'est "assez strict" pour que les gens réfléchissent deux fois avant de confirmer.</p>
 
       <p><strong>Communication :</strong></p>
-      <p>À chaque session, indiquez clairement dans la description :</p>
-      <code>"Deadline annulation : [DATE/HEURE]. Après cette heure, l'absence affectera votre fiabilité."</code>
+      <p>À chaque session, indique clairement dans la description :</p>
+      <code>"Deadline annulation : [DATE/HEURE]. Après cette heure, l'absence affectera ta fiabilité."</code>
 
       <p>Mettez aussi un rappel 24h avant. Les gens oublient, ce n'est pas par malveillance.</p>
 
       <h3>Astuce 3 : Rendre publique la liste de présence (ou au moins partagée)</h3>
 
-      <p>C'est simple mais très efficace : si tous les participants voient qui a confirmé, l'effet de groupe joue en votre faveur.</p>
+      <p>C'est simple mais très efficace : si tous les participants voient qui a confirmé, l'effet de groupe joue en ta faveur.</p>
 
       <p><strong>Pourquoi ça marche :</strong></p>
       <ul>
@@ -387,12 +387,12 @@ export const BLOG_POSTS: BlogPost[] = [
 
       <h3>Astuce 4 : Avoir une "file d'attente" de remplaçants</h3>
 
-      <p>Parfois, même avec les meilleures intentions, quelqu'un ne peut vraiment pas venir. Pas de problème si vous avez un backup.</p>
+      <p>Parfois, même avec les meilleures intentions, quelqu'un ne peut vraiment pas venir. Pas de problème si tu as un backup.</p>
 
       <p><strong>Stratégie :</strong></p>
       <ul>
-        <li>Identifiez 3-4 personnes "flexibles" qui peuvent potentiellement vous aider en dernier recours</li>
-        <li>Dès qu'un RSVP devient "non" ou que vous avez un ghost (24h avant), vous les contactez</li>
+        <li>Identifie 3-4 personnes "flexibles" qui peuvent potentiellement t'aider en dernier recours</li>
+        <li>Dès qu'un RSVP devient "non" ou que tu as un ghost (24h avant), tu les contactes</li>
         <li>"Hey, une place s'est libérée pour [Session]... tu peux?"</li>
       </ul>
 
@@ -400,37 +400,37 @@ export const BLOG_POSTS: BlogPost[] = [
       <ul>
         <li>Ça évite d'annuler la session</li>
         <li>Les remplaçants sont motivés (ils comblent un besoin)</li>
-        <li>Vous gardez du morale dans la squad</li>
+        <li>Tu gardes du morale dans la squad</li>
       </ul>
 
-      <p>Squad Planner simplifie ça : vous pouvez voir instantanément qui a dit "oui" et qui a dit "non", et vous contactez vos back-ups via message direct.</p>
+      <p>Squad Planner simplifie ça : tu peux voir instantanément qui a dit "oui" et qui a dit "non", et tu contactes tes back-ups via message direct.</p>
 
       <h3>Astuce 5 : Célébrer la fiabilité et les "perfect attendance"</h3>
 
-      <p>Tout ce que vous mesurez, vous le renforcez. Inversement, mesurer uniquement les absences crée une atmosphère négative.</p>
+      <p>Tout ce que tu mesures, tu le renforces. Inversement, mesurer uniquement les absences crée une atmosphère négative.</p>
 
       <p><strong>Changer la narration :</strong></p>
       <ul>
-        <li>Au lieu de "Marc a ghost 2 fois", dites "Clara a 95% de fiabilité, respect!"</li>
+        <li>Au lieu de "Marc a ghost 2 fois", dis "Clara a 95% de fiabilité, respect!"</li>
         <li>Donnez un titre/rôle aux gens loyaux : "The Reliable Ones", "Core Crew", etc.</li>
         <li>Une fois par mois, mettez en avant le joueur avec le meilleur score de fiabilité</li>
       </ul>
 
       <p><strong>Idées :</strong></p>
       <ul>
-        <li>Créez un classement visible sur votre Discord ou Squad Planner</li>
-        <li>Offrez des petits avantages aux high-reliability : accès à des sessions premium, rôle Discord spécial, etc.</li>
-        <li>Lors de vos tournois, priorisez les joueurs avec high reliability</li>
+        <li>Crée un classement visible sur ton Discord ou Squad Planner</li>
+        <li>Offre des petits avantages aux high-reliability : accès à des sessions premium, rôle Discord spécial, etc.</li>
+        <li>Lors de tes tournois, priorise les joueurs avec high reliability</li>
       </ul>
 
       <p><strong>Impact :</strong> Les gens veulent être reconnus. Valoriser la fiabilité crée une culture où tout le monde veut participer régulièrement.</p>
 
       <h3>Bonus : Pattern à éviter</h3>
 
-      <p>Pendant que vous appliquez ces astuces, attention à :</p>
+      <p>Pendant que tu appliques ces astuces, attention à :</p>
 
       <ul>
-        <li><strong>Ne pas être trop strict trop tôt :</strong> Donnez un cycle de 2-3 semaines où la règle est en place avant de commencer à pénaliser</li>
+        <li><strong>Ne pas être trop strict trop tôt :</strong> Donne un cycle de 2-3 semaines où la règle est en place avant de commencer à pénaliser</li>
         <li><strong>Ne pas pénaliser les circonstances légitimes :</strong> Si quelqu'un a un vrai problème (panne internet, urgence familiale), c'est pas un ghost</li>
         <li><strong>Ne pas inviter trop de gens :</strong> Plus le groupe est grand, plus le ghosting augmente. Restez à 6-12 personnes régulières</li>
         <li><strong>Ne pas ignorer les "peut-être" :</strong> Relancez les peut-être 48h avant pour clarifier</li>
@@ -438,7 +438,7 @@ export const BLOG_POSTS: BlogPost[] = [
 
       <h3>Résumé : La recette</h3>
 
-      <p>En combinant ces 5 astuces, vous obtenez une machine bien huilée :</p>
+      <p>En combinant ces 5 astuces, tu obtiens une machine bien huilée :</p>
 
       <ol>
         <li>Score de fiabilité transparent (Squad Planner fait ça)</li>
@@ -448,11 +448,11 @@ export const BLOG_POSTS: BlogPost[] = [
         <li>Célébration de la fiabilité (positiver la culture)</li>
       </ol>
 
-      <p>Appliquez ces stratégies et vous verrez votre taux de présence passer de 50% à 85%+ en quelques semaines.</p>
+      <p>Applique ces stratégies et tu verras ton taux de présence passer de 50% à 85%+ en quelques semaines.</p>
 
       <p>Et le meilleur? Ça crée une squad plus soudée, plus motivée, et plus amusante pour tout le monde.</p>
 
-      <p>À vos RSVP!</p>
+      <p>À tes RSVP!</p>
     </article>`,
   },
 ]

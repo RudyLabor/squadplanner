@@ -17,7 +17,7 @@ export const meta: MetaFunction = () => [
   {
     name: 'description',
     content:
-      'Découvrez nos guides et astuces pour organiser vos sessions gaming, créer des tournois et gérer votre squad efficacement.',
+      'Guides et astuces pour organiser tes sessions gaming, créer des tournois et faire de ta squad une machine de guerre.',
   },
   {
     name: 'robots',
@@ -171,7 +171,7 @@ export default function BlogIndex() {
             viewport={{ once: true }}
             className="text-lg md:text-xl text-text-tertiary mb-8 max-w-2xl mx-auto leading-relaxed"
           >
-            Astuces éprouvées, guides détaillés et actualités pour organiser ta squad et devenir un champion du gaming.
+            Guides, astuces et retours d'expérience pour organiser ta squad, éviter les no-shows et jouer plus souvent.
           </m.p>
 
           {/* Quick stats */}
@@ -204,7 +204,7 @@ export default function BlogIndex() {
               className="py-16 text-center"
             >
               <p className="text-lg text-text-tertiary">
-                Aucun article pour le moment. Revenez bientôt pour découvrir nos premiers guides!
+                Aucun article pour le moment. Reviens bientôt !
               </p>
             </m.div>
           ) : (
@@ -270,10 +270,10 @@ export default function BlogIndex() {
                 <Sparkles className="w-12 h-12 mx-auto mb-6 text-primary" />
               </m.div>
               <h2 className="text-xl md:text-3xl font-bold text-text-primary mb-4">
-                Prêt à mettre ces astuces en pratique?
+                Envie de passer à l'action ?
               </h2>
               <p className="text-text-tertiary mb-8 text-lg">
-                Créez votre première squad et rejoignez la communauté Squad Planner.
+                Crée ta squad, invite tes potes, et mets ces conseils en pratique dès ce soir.
               </p>
               <m.div whileHover={{ scale: 1.03, y: -3 }} {...springTap} className="inline-flex">
                 <Link

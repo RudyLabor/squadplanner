@@ -126,24 +126,24 @@ function GameNotFound() {
 const features = [
   {
     icon: Shield,
-    title: 'RSVP fiable',
+    title: 'Fini les no-shows',
     desc: (name: string) =>
-      `Confirmation et rappels automatiques. Votre squad ${name} ne vous laissera plus jamais tomber.`,
-    details: ['Rappels 1h et 15min avant', 'Confirmation auto à seuil atteint', 'Score de fiabilité par joueur'],
+      `Chaque joueur répond OUI ou NON. Pas de « peut-être ». Et si quelqu'un ghost ta session ${name}, son score le montre.`,
+    details: ['Rappels automatiques avant chaque session', 'Score de fiabilité visible par tous', 'Confirmation dès qu\'assez de joueurs répondent'],
   },
   {
     icon: Users,
-    title: 'Matchmaking intelligent',
+    title: 'Trouve ta squad idéale',
     desc: (name: string) =>
-      `Trouvez des coéquipiers ${name} compatibles avec votre niveau et votre style de jeu.`,
-    details: ['Matching par niveau & préférences', 'Communauté vérifiée', 'Profils détaillés'],
+      `T'as pas 5 potes dispos en même temps ? Notre matchmaking te connecte avec des joueurs ${name} de ton niveau.`,
+    details: ['Matching par niveau et style de jeu', 'Profils vérifiés, pas de randoms toxiques', 'Historique et avis des coéquipiers'],
   },
   {
     icon: Calendar,
-    title: 'Planning optimisé',
+    title: 'Organise sans prise de tête',
     desc: (name: string) =>
-      `Créez une session ${name} en 30 secondes. Invitations, RSVP et stats au même endroit.`,
-    details: ['Création en 30 secondes', 'Sessions récurrentes', 'Intégration calendrier'],
+      `Propose un créneau ${name}, partage le lien. Tout le monde voit qui vient. Fini le spam Discord.`,
+    details: ['Création de session en quelques clics', 'Sessions récurrentes (chaque mardi soir, etc.)', 'Synchro avec ton calendrier'],
   },
 ]
 
@@ -159,20 +159,20 @@ export default function Component() {
 
   const faqs = [
     {
-      q: `Comment planifier une session ${game.name} ?`,
-      a: `Inscris-toi sur Squad Planner, crée une session ${game.name} en spécifiant le mode de jeu et l'heure. Invite tes amis via un lien. Squad Planner gère les RSVP et envoie un rappel avant le démarrage.`,
+      q: `C'est quoi Squad Planner pour ${game.name} ?`,
+      a: `C'est un outil gratuit pour organiser tes sessions ${game.name} sans galère. Tu crées ta squad, tu proposes un créneau, chacun répond OUI ou NON. Plus besoin de spammer le groupe Discord.`,
     },
     {
-      q: `Comment trouver des joueurs ${game.name} fiables ?`,
-      a: `Active le matchmaking dans ton profil. Notre système te met en contact avec des joueurs ayant le même style de jeu. Les profils vérifiés et scores de fiabilité t'aident à composer une squad de confiance.`,
+      q: `Mes potes doivent s'inscrire pour rejoindre ?`,
+      a: `Non, tu leur envoies un lien et ils rejoignent en 10 secondes. Ils peuvent créer un compte plus tard s'ils veulent. L'idée c'est zéro friction.`,
     },
     {
-      q: `Quels sont les avantages Premium pour ${game.name} ?`,
-      a: `Premium donne accès aux sessions illimitées, stats avancées, personnalisation complète et visibilité accrue dans le matchmaking. Essai gratuit 7 jours.`,
+      q: `C'est vraiment gratuit ?`,
+      a: `Oui. Créer une squad, planifier des sessions, inviter tes potes, tout ça c'est gratuit. Le Premium ajoute des stats avancées et des sessions illimitées, mais tu peux jouer sans payer.`,
     },
     {
-      q: `Comment améliorer ma squad ${game.name} ?`,
-      a: `Utilise les analytics Squad Planner pour identifier les forces et faiblesses de ton équipe. Recrute des joueurs complémentaires via le matchmaking et analyse les sessions passées.`,
+      q: `Comment ça gère les joueurs qui ghostent ?`,
+      a: `Chaque joueur a un score de fiabilité basé sur sa présence réelle. Si quelqu'un dit qu'il vient et ne se connecte pas, son score baisse. Tu sais à qui faire confiance.`,
     },
   ]
 
@@ -181,19 +181,19 @@ export default function Component() {
       step: '1',
       icon: Users,
       title: 'Crée ta squad',
-      desc: `Donne un nom à ta squad ${game.shortName || game.name}. Invite tes potes avec un simple lien.`,
+      desc: `Donne un nom, choisis ${game.shortName || game.name}. Partage le lien, tes potes rejoignent en 10 secondes.`,
     },
     {
       step: '2',
       icon: Calendar,
-      title: 'Planifie une session',
-      desc: `Choisis le mode de jeu, la date et l'heure. Chacun répond OUI ou NON. Plus de "on verra".`,
+      title: 'Propose un créneau',
+      desc: `Vendredi 21h, ranked ${game.shortName || game.name} ? Chacun répond OUI ou NON. Pas de « peut-être ».`,
     },
     {
       step: '3',
       icon: Target,
-      title: 'Jouez ensemble',
-      desc: `Rappels automatiques, check-in, et c'est parti ! Semaine après semaine, ta squad devient fiable.`,
+      title: 'Jouez. Pour de vrai.',
+      desc: `Rappels automatiques, check-in, tout le monde est là. Semaine après semaine, ta squad tient parole.`,
     },
   ]
 
@@ -301,10 +301,10 @@ export default function Component() {
         <div className="max-w-5xl mx-auto">
           <m.div variants={scrollReveal} initial="hidden" whileInView="visible" viewport={{ once: true }} className="text-center mb-12">
             <h2 className="text-xl md:text-2xl font-bold text-text-primary mb-4">
-              Comment ça marche
+              3 étapes. C'est tout.
             </h2>
             <p className="text-text-tertiary text-lg">
-              De la création de squad à la session {game.name} en 30 secondes
+              De zéro à ta première session {game.name} en moins d'une minute
             </p>
           </m.div>
 
@@ -348,10 +348,10 @@ export default function Component() {
         <div className="max-w-5xl mx-auto">
           <m.div variants={scrollReveal} initial="hidden" whileInView="visible" viewport={{ once: true }} className="text-center mb-12">
             <h2 className="text-xl md:text-2xl font-bold text-text-primary mb-4">
-              Pourquoi Squad Planner pour {game.name} ?
+              Ce que Squad Planner change pour {game.name}
             </h2>
             <p className="text-text-tertiary text-lg">
-              Chaque fonctionnalité résout un problème précis des gamers {game.name}.
+              T'as déjà essayé d'organiser une session sur Discord ? Voilà pourquoi on existe.
             </p>
           </m.div>
 
@@ -404,7 +404,7 @@ export default function Component() {
         <div className="max-w-3xl mx-auto">
           <m.div variants={scrollReveal} initial="hidden" whileInView="visible" viewport={{ once: true }} className="text-center mb-12">
             <h2 className="text-xl md:text-2xl font-bold text-text-primary mb-4">
-              Questions fréquentes sur {game.name}
+              Questions fréquentes
             </h2>
           </m.div>
 
@@ -470,10 +470,10 @@ export default function Component() {
                 <Sparkles className="w-12 h-12 mx-auto mb-6" style={{ color: gc }} />
               </m.div>
               <h2 className="text-xl md:text-3xl font-bold text-text-primary mb-4">
-                Prêt à planifier ta première session {game.shortName || game.name} ?
+                Ta squad {game.shortName || game.name} t'attend
               </h2>
               <p className="text-text-tertiary mb-8 text-lg">
-                Gratuit, sans engagement. Lance ta première session en 30 secondes.
+                Crée ta squad, invite tes potes, et jouez ce soir. C'est gratuit.
               </p>
               <m.div whileHover={{ scale: 1.03, y: -3 }} {...springTap} className="inline-flex">
                 <Link
@@ -485,7 +485,7 @@ export default function Component() {
                 </Link>
               </m.div>
               <p className="text-base text-text-quaternary mt-4">
-                Gratuit · Pas de carte bancaire · 30 secondes
+                Gratuit · Pas de carte bancaire · Prêt en 30 secondes
               </p>
             </div>
           </m.div>
@@ -499,10 +499,10 @@ export default function Component() {
         <div className="max-w-5xl mx-auto">
           <m.div variants={scrollRevealLight} initial="hidden" whileInView="visible" viewport={{ once: true }} className="text-center mb-8">
             <h2 className="text-lg md:text-xl font-bold text-text-primary mb-2">
-              Découvre aussi sur Squad Planner
+              Tu joues à autre chose aussi ?
             </h2>
             <p className="text-text-quaternary text-md">
-              Organise tes sessions sur tous tes jeux favoris
+              Squad Planner marche avec tous tes jeux
             </p>
           </m.div>
           <div className="flex flex-wrap justify-center gap-3">

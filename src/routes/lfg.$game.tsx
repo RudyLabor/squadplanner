@@ -90,24 +90,24 @@ function GameNotFound() {
 const benefits = [
   {
     icon: Shield,
-    title: 'Communauté vérifiée',
+    title: 'Zéro toxique, zéro smurf',
     desc: (name: string) =>
-      `Tous les joueurs ${name} sont vérifiés. Pas de smurf, pas de troll. Jouez en toute confiance.`,
-    details: ['Vérification par email', 'Scores de fiabilité', 'Avertissements en temps réel'],
+      `Chaque joueur ${name} est vérifié. Tu vois son score de fiabilité avant de jouer avec. Si quelqu'un est toxique, ça se sait.`,
+    details: ['Profils vérifiés par email', 'Score de fiabilité visible', 'Signalement et modération active'],
   },
   {
     icon: Target,
-    title: 'Matchmaking intelligent',
+    title: 'Des joueurs de ton niveau',
     desc: (name: string) =>
-      `Trouvez des coéquipiers ${name} compatibles avec votre niveau et votre style.`,
-    details: ['Matching par compétences', 'Préférences personnalisées', 'Historique des joueurs'],
+      `Pas envie de carry des débutants ou de te faire écraser ? Notre matching te connecte avec des joueurs ${name} compatibles.`,
+    details: ['Matching par rang et style de jeu', 'Préférences de rôle et plateforme', 'Le matching s\'améliore à chaque session'],
   },
   {
     icon: Users,
-    title: 'Communauté 24/7',
+    title: 'Toujours quelqu\'un pour jouer',
     desc: (name: string) =>
-      `Trouvez des joueurs ${name} à l'heure qui vous convient. Toujours quelqu'un pour jouer.`,
-    details: ['Matchmaking continu', 'Notifications en temps réel', 'Calendrier des sessions'],
+      `Tes potes sont pas dispos ? Trouve des joueurs ${name} actifs maintenant. Matin, soir, weekend — il y a toujours du monde.`,
+    details: ['Joueurs actifs à toute heure', 'Notifications quand un joueur te match', 'Sessions ouvertes à rejoindre'],
   },
 ]
 
@@ -123,20 +123,20 @@ export default function Component() {
 
   const faqs = [
     {
-      q: `Comment trouver des joueurs ${game.name} ?`,
-      a: `Crée un profil Squad Planner, active le matchmaking et configure tes préférences ${game.name}. Notre système te recommande les meilleurs coéquipiers. C'est gratuit et rapide.`,
+      q: `C'est quoi la différence avec un serveur Discord LFG ?`,
+      a: `Sur Discord, tu postes un message et tu pries pour que quelqu'un réponde. Ici, le matchmaking te connecte directement avec des joueurs ${game.name} de ton niveau. Et tu vois leur score de fiabilité avant de jouer.`,
     },
     {
-      q: `Comment fonctionne le matching ${game.name} ?`,
-      a: `Squad Planner analyse ton niveau, tes préférences et ton historique de jeu. L'IA te propose des joueurs ${game.name} compatibles. Plus tu joues, plus le matching s'améliore.`,
+      q: `Comment savoir si un joueur est fiable ?`,
+      a: `Chaque joueur a un score basé sur sa présence réelle aux sessions. S'il dit qu'il vient et ne se connecte pas, son score baisse. Tu sais à qui tu as affaire avant de jouer.`,
     },
     {
-      q: `Que signifie "community verified" ?`,
-      a: `Tous nos joueurs sont vérifiés pour éviter les smurf et les troll. Chaque compte a un score de fiabilité basé sur le comportement en squad. Joue en toute confiance.`,
+      q: `Je peux chercher des joueurs ${game.name} de mon niveau ?`,
+      a: `Oui. Tu configures ton rang, ton rôle préféré, ta plateforme et tes horaires. Le système te propose uniquement des joueurs compatibles. Plus tu joues, plus le matching est précis.`,
     },
     {
-      q: `Comment améliorer mon matching ${game.name} ?`,
-      a: `Plus tu joues avec Squad Planner, mieux le system te connait. Fais des retours sur tes coéquipiers, mets à jour ton profil et participe aux sessions. L'IA apprend de ton expérience.`,
+      q: `C'est gratuit ?`,
+      a: `Oui, la recherche de joueurs et le matchmaking sont gratuits. Le Premium débloque des filtres avancés et plus de visibilité, mais tu peux trouver ta squad sans payer.`,
     },
   ]
 
@@ -144,20 +144,20 @@ export default function Component() {
     {
       step: '1',
       icon: Users,
-      title: 'Crée ton profil',
-      desc: `Inscris-toi sur Squad Planner et renseigne tes infos ${game.name} : niveau, rôle, plateforme, heures préférées.`,
+      title: 'Dis-nous qui tu es',
+      desc: `Ton niveau ${game.name}, ton rôle préféré, ta plateforme, tes horaires. 30 secondes et c'est fait.`,
     },
     {
       step: '2',
       icon: Target,
-      title: 'Active le matchmaking',
-      desc: `Accède aux préférences de matching et configure ta recherche ${game.name}. Notre IA se met en marche.`,
+      title: 'On te trouve des joueurs',
+      desc: `Notre matching analyse tes préférences et te propose des joueurs ${game.name} compatibles. Pas des randoms.`,
     },
     {
       step: '3',
       icon: Sparkles,
-      title: 'Reçois des invitations',
-      desc: `Des joueurs ${game.name} compatibles te contactent. Accepte, joue, évalue. Construis ta squad !`,
+      title: 'Joue et construis ta squad',
+      desc: `Accepte une invitation, joue, évalue. Les bons joueurs restent, les autres disparaissent.`,
     },
   ]
 
@@ -210,8 +210,8 @@ export default function Component() {
             viewport={{ once: true }}
             className="text-lg md:text-xl text-text-tertiary mb-10 max-w-2xl mx-auto leading-relaxed"
           >
-            Rejoins {game.estimatedPlayers.split(' ')[0]} joueurs {game.name} vérifiés. Matchmaking intelligent, communauté de confiance, squads complètes
-            <span className="text-text-primary font-medium">. Gratuit et sans engagement.</span>
+            T'en as marre de jouer avec des randoms qui ragequit au bout de 5 min ? Trouve des joueurs {game.name} fiables, de ton niveau, qui tiennent parole
+            <span className="text-text-primary font-medium">. Gratuit, sans inscription obligatoire.</span>
           </m.p>
 
           {/* CTAs */}
@@ -244,9 +244,9 @@ export default function Component() {
           {/* Quick stats */}
           <div className="flex items-center justify-center gap-8 md:gap-16">
             {[
-              { value: game.estimatedPlayers.split(' ')[0], label: 'joueurs vérifiés' },
-              { value: '24/7', label: 'matchmaking actif' },
-              { value: '100%', label: 'gratuit' },
+              { value: game.estimatedPlayers.split(' ')[0], label: 'joueurs actifs' },
+              { value: '24/7', label: 'toujours du monde' },
+              { value: '0€', label: 'pour commencer' },
             ].map((stat) => (
               <div key={stat.label} className="text-center">
                 <div className="text-xl md:text-2xl font-bold text-text-primary">{stat.value}</div>
@@ -264,10 +264,10 @@ export default function Component() {
         <div className="max-w-5xl mx-auto">
           <m.div variants={scrollReveal} initial="hidden" whileInView="visible" viewport={{ once: true }} className="text-center mb-12">
             <h2 className="text-xl md:text-2xl font-bold text-text-primary mb-4">
-              Comment ça marche
+              Trouve ta squad en 3 étapes
             </h2>
             <p className="text-text-tertiary text-lg">
-              3 étapes pour trouver tes coéquipiers {game.name} idéaux
+              Pas de serveur Discord à rejoindre. Pas de post à écrire. Juste du matching.
             </p>
           </m.div>
 
@@ -311,10 +311,10 @@ export default function Component() {
         <div className="max-w-5xl mx-auto">
           <m.div variants={scrollReveal} initial="hidden" whileInView="visible" viewport={{ once: true }} className="text-center mb-12">
             <h2 className="text-xl md:text-2xl font-bold text-text-primary mb-4">
-              Pourquoi chercher des joueurs sur Squad Planner
+              Pas un LFG de plus. Un vrai outil.
             </h2>
             <p className="text-text-tertiary text-lg">
-              Chaque fonctionnalité résout un problème des gamers {game.name}.
+              La différence ? Ici, on vérifie les joueurs et on mesure la fiabilité.
             </p>
           </m.div>
 
@@ -367,28 +367,28 @@ export default function Component() {
         <div className="max-w-5xl mx-auto">
           <m.div variants={scrollReveal} initial="hidden" whileInView="visible" viewport={{ once: true }} className="text-center mb-12">
             <h2 className="text-xl md:text-2xl font-bold text-text-primary mb-4">
-              Ce que disent les joueurs {game.name}
+              Ils ont trouvé leur squad
             </h2>
           </m.div>
 
           <div className="grid md:grid-cols-3 gap-6">
             {[
               {
-                name: 'Alex T.',
-                role: `Joueur ${game.name}`,
-                text: 'J\'ai enfin trouvé une squad fiable ! Plus besoin de chercher des joueurs désorganisés.',
+                name: 'Alex',
+                role: `${game.name} depuis 2 ans`,
+                text: 'Avant je postais sur r/LFG et je tombais sur des mecs qui quittaient au bout de 2 games. Ici les joueurs ont un score, tu sais à quoi t\'attendre.',
                 delay: 0.1,
               },
               {
-                name: 'Marie L.',
-                role: `Compétitrice ${game.name}`,
-                text: 'Squad Planner m\'a aidé à trouver des coéquipiers de mon niveau. Nous progressons ensemble.',
+                name: 'Sarah',
+                role: `Joueuse ${game.name}`,
+                text: 'J\'avais personne pour jouer ranked. En une semaine j\'ai trouvé 3 joueurs réguliers. On joue ensemble tous les mardis et vendredis maintenant.',
                 delay: 0.2,
               },
               {
-                name: 'Jordan M.',
+                name: 'Théo',
                 role: 'Capitaine de squad',
-                text: 'Organiser nos sessions est devenu tellement plus facile. Tout le monde arrive à l\'heure !',
+                text: 'Le truc qui change tout c\'est le RSVP. Les gens disent OUI ou NON, pas « peut-être ». Du coup quand c\'est l\'heure, tout le monde est là.',
                 delay: 0.3,
               },
             ].map((testimonial, idx) => (
@@ -490,10 +490,10 @@ export default function Component() {
                 <Sparkles className="w-12 h-12 mx-auto mb-6" style={{ color: gc }} />
               </m.div>
               <h2 className="text-xl md:text-3xl font-bold text-text-primary mb-4">
-                Prêt à trouver ta squad {game.shortName || game.name} idéale ?
+                Arrête de jouer solo.
               </h2>
               <p className="text-text-tertiary mb-8 text-lg">
-                Gratuit, sans engagement. Reçois tes premières invitations en 24 heures.
+                Tes futurs coéquipiers {game.shortName || game.name} sont déjà là. Rejoins-les.
               </p>
               <m.div whileHover={{ scale: 1.03, y: -3 }} {...springTap} className="inline-flex">
                 <Link
@@ -505,7 +505,7 @@ export default function Component() {
                 </Link>
               </m.div>
               <p className="text-base text-text-quaternary mt-4">
-                Gratuit · Pas de carte bancaire · Premières invitations en 24h
+                Gratuit · Pas de carte bancaire · Premiers matchs en 24h
               </p>
             </div>
           </m.div>
@@ -519,10 +519,10 @@ export default function Component() {
         <div className="max-w-5xl mx-auto">
           <m.div variants={scrollRevealLight} initial="hidden" whileInView="visible" viewport={{ once: true }} className="text-center mb-8">
             <h2 className="text-lg md:text-xl font-bold text-text-primary mb-2">
-              Chercher des joueurs sur d'autres jeux
+              Tu joues à d'autres jeux ?
             </h2>
             <p className="text-text-quaternary text-md">
-              Trouve tes coéquipiers sur tous tes jeux favoris
+              Le matching marche sur tous ces jeux aussi
             </p>
           </m.div>
           <div className="flex flex-wrap justify-center gap-3">

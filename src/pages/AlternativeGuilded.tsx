@@ -32,22 +32,22 @@ const faqs = [
   {
     id: 'why-closed',
     question: 'Pourquoi Guilded a fermé ?',
-    answer: 'Guilded a annoncé la fermeture de sa plateforme en 2024. Beaucoup de joueurs cherchent maintenant une alternative fiable pour organiser leurs sessions gaming.'
+    answer: 'Guilded a fermé boutique en 2024. Tous les gamers cherchaient un spot où aller. Squad Planner, c\'est là pour ça.'
   },
   {
     id: 'migration',
-    question: 'Comment migrer de Guilded à Squad Planner ?',
-    answer: 'Squad Planner offre un import facile. Partage tes serveurs Guilded, et nous t\'aiderons à importer les informations essentielles. Utilise le code GUILDED30 pour 30% sur ton premier mois.'
+    question: 'Comment passer de Guilded à Squad Planner ?',
+    answer: 'Ultra simple. Partage tes squads Guilded, on importe l\'essentiel. Code GUILDED30 pour 30% sur ton premier mois Premium. Après, t\'as les features gratuites à vie.'
   },
   {
     id: 'data-loss',
-    question: 'Est-ce que mes données seront perdues ?',
-    answer: 'Non. Squad Planner sauvegarde toutes tes squads, événements et paramètres. Tu ne perdras rien en changeant de plateforme.'
+    question: 'Mais je perds mes données ?',
+    answer: 'Zero. Squad Planner garde tout : squads, événements, paramètres. Rien ne se perd. T\'es tranquille.'
   },
   {
     id: 'free',
-    question: 'Squad Planner est vraiment gratuit ?',
-    answer: 'Oui ! Squad Planner est gratuit avec les fonctionnalités essentielles. Une version Premium offre des analyses avancées, mais le calendrier et les RSVP restent gratuits.'
+    question: 'C\'est vraiment gratuit ?',
+    answer: 'Oui. Calendrier illimité, RSVP, notifications. Tout ça gratuit. Premium te donne des analytics avancées si tu veux. Mais l\'essentiel reste gratuit.'
   }
 ]
 
@@ -75,7 +75,7 @@ export default function AlternativeGuilded() {
           >
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full badge-shimmer border border-purple/25 mb-8">
               <span className="text-base font-medium text-purple">
-                Alternative Guilded · Migration facile
+                Guilded a fermé · On t'accueille
               </span>
             </div>
           </m.div>
@@ -88,11 +88,11 @@ export default function AlternativeGuilded() {
             viewport={{ once: true }}
             className="text-3xl md:text-5xl font-extrabold text-text-primary mb-6 leading-tight tracking-tight"
           >
-            Guilded a fermé<span className="text-gradient-animated">.</span>
+            Guilded s'en va<span className="text-gradient-animated">.</span>
             <br />
-            Ta nouvelle maison gaming
+            Ton nouveau spot gaming
             <br />
-            est ici.
+            c'est ici.
           </m.h1>
 
           <m.p
@@ -102,7 +102,7 @@ export default function AlternativeGuilded() {
             viewport={{ once: true }}
             className="text-lg md:text-xl text-text-tertiary mb-10 max-w-2xl mx-auto leading-relaxed"
           >
-            Squad Planner offre tout ce que tu aimais sur Guilded, mais spécialisé pour les sessions gaming. Calendrier, RSVP fiable, notifications. C'est ici qu'on s'organise.
+            Même vibe que Guilded, mais taillé pour tes sessions. Calendrier, RSVP qui tient, notifications push. Organise sans prise de tête.
           </m.p>
 
           {/* CTAs */}
@@ -118,7 +118,7 @@ export default function AlternativeGuilded() {
                 to="/auth?mode=register&redirect=onboarding"
                 className="flex items-center gap-2 h-14 px-8 rounded-xl bg-primary text-white text-lg font-semibold shadow-lg shadow-primary/10 cta-pulse-glow w-full sm:w-auto justify-center"
               >
-                Commencer gratuitement
+                Essayer gratuitement
                 <ArrowRight className="w-5 h-5" />
               </Link>
             </m.div>
@@ -141,10 +141,10 @@ export default function AlternativeGuilded() {
         <div className="max-w-5xl mx-auto">
           <m.div variants={scrollReveal} initial="hidden" whileInView="visible" viewport={{ once: true }} className="text-center mb-12">
             <h2 className="text-xl md:text-2xl font-bold text-text-primary mb-4">
-              Ce que tu aimais sur Guilded, tu l'as ici (et plus)
+              Ce qui marchait sur Guilded, c'est encore meilleur ici
             </h2>
             <p className="text-text-tertiary text-lg">
-              Toutes les fonctionnalités essentielles pour organiser tes sessions gaming.
+              Tout pour organiser tes sessions sans galère.
             </p>
           </m.div>
 
@@ -207,14 +207,14 @@ export default function AlternativeGuilded() {
             />
             <div className="relative z-10">
               <h3 className="text-xl md:text-2xl font-bold text-text-primary mb-2">
-                30% de réduction pour les utilisateurs Guilded
+                30% de réduction pour les migrés de Guilded
               </h3>
-              <p className="text-text-tertiary mb-6">Utilise le code</p>
+              <p className="text-text-tertiary mb-6">Tape ce code</p>
               <div className="inline-block px-8 py-4 bg-purple/10 rounded-xl mb-6 border border-purple/20">
                 <code className="text-2xl md:text-3xl font-bold text-purple">GUILDED30</code>
               </div>
               <p className="text-base text-text-secondary">
-                30% de réduction sur ton premier mois Premium
+                30% sur ton premier mois Premium
               </p>
             </div>
           </m.div>
@@ -294,17 +294,17 @@ export default function AlternativeGuilded() {
                 <Sparkles className="w-12 h-12 mx-auto mb-6" style={{ color: '#a855f7' }} />
               </m.div>
               <h2 className="text-xl md:text-3xl font-bold text-text-primary mb-4">
-                Prêt à rejoindre Squad Planner ?
+                Prêt à changer de maison ?
               </h2>
               <p className="text-text-tertiary mb-8 text-lg">
-                Gratuit pour commencer. Organise ta première session en 30 secondes.
+                C'est gratuit. Crée ta première session en 30 secondes.
               </p>
               <m.div whileHover={{ scale: 1.03, y: -3 }} {...springTap} className="inline-flex">
                 <Link
                   to="/auth?mode=register&redirect=onboarding"
                   className="flex items-center gap-2 h-16 px-10 rounded-xl bg-gradient-to-r from-primary to-purple text-white text-xl font-bold mx-auto shadow-lg shadow-primary/20 cta-glow-idle"
                 >
-                  Commencer gratuitement
+                  Essayer maintenant
                   <ArrowRight className="w-5 h-5" />
                 </Link>
               </m.div>

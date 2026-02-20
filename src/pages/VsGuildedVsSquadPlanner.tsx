@@ -23,33 +23,33 @@ const features = [
 const faqs = [
   {
     id: 'why-not-guilded',
-    question: 'Guilded avait déjà une communauté. Pourquoi Squad Planner ?',
-    answer: 'Guilded était une excellente plateforme de communication. Mais il manquait les outils spécifiques pour les sessions gaming : récurrence, notifications push, statistiques de fiabilité. Squad Planner est léger, rapide, et 100% focalisé sur l\'organisation gaming. Utilise Discord pour l\'ambiance, Squad Planner pour organiser.'
+    question: 'Pourquoi pas rester sur Guilded ?',
+    answer: 'Guilded a fermé point final. Squad Planner c\'est taillé pour tes sessions : récurrence, notif push, stats de fiabilité. Guilded c\'était juste une commu. On gère l\'organisation gaming. C\'est plus rapide, plus réactif.'
   },
   {
     id: 'migration-easy',
-    question: 'Est-ce qu\'on peut importer nos données Guilded ?',
-    answer: 'Squad Planner offre un processus d\'import simplifié. Si tu as tes squads et événements documentés, on peut t\'aider. Contacte notre support pour une migration personnalisée.'
+    question: 'Je peux importer mes données ?',
+    answer: 'Oui. Si t\'as tes squads documentés, on te facilite le move. Support direct pour une migration sans galère.'
   },
   {
     id: 'premium-worth',
-    question: 'C\'est quoi, Squad Planner Premium ?',
-    answer: 'Premium déverrouille : analytics avancées, personnalisation des squads, API pour intégrations personnalisées, et priorité support. Mais le calendrier, les RSVP, et les notifications restent gratuits. C\'est l\'essentiel qui est libre.'
+    question: 'C\'est quoi Premium ?',
+    answer: 'Premium c\'est : analytics avancées, custom squads, API. Mais calendrier, RSVP, notif push ? Gratuit. L\'essentiel c\'est free.'
   },
   {
     id: 'both-platforms',
-    question: 'Peut-on utiliser Squad Planner ET Discord en même temps ?',
-    answer: 'Oui ! Squad Planner s\'intègre avec Discord. Utilise Discord pour l\'ambiance et la commu, Squad Planner pour organiser les sessions. Les notifications viennent dans Discord, mais l\'organisation est centralisée dans Squad Planner.'
+    question: 'Je peux utiliser Squad Planner ET Discord ?',
+    answer: 'Oui. Discord = pour parler. Squad Planner = pour organiser. Les notif arrivent dans Discord. Tout est branché. Perfect combo.'
   },
   {
     id: 'other-games',
-    question: 'Squad Planner fonctionne pour tous les jeux ?',
-    answer: 'Oui ! Que tu joues à Valorant, CS2, Apex, Fortnite, Dota 2, ou n\'importe quel autre jeu, Squad Planner gère tes sessions. C\'est agnostique du jeu, optimisé pour le gaming en général.'
+    question: 'Ça marche pour tous les jeux ?',
+    answer: 'Oui. Valorant, CS2, Apex, Fortnite, Dota 2, les petits jeux obscurs. Squad Planner gère tout. C\'est agnostique du jeu.'
   },
   {
     id: 'data-safety',
-    question: 'Mais Guilded a fermé. Squad Planner fermera aussi ?',
-    answer: 'Squad Planner est 100% viable et rentable. On a une roadmap long terme claire. Mais surtout, on fournit des exports de données à tout moment. Tu garderas toujours tes données. C\'est contractuel.'
+    question: 'Mais Squad Planner fermera aussi un jour ?',
+    answer: 'Squad Planner est viable. On innove, on croît. Mais même si ça arrive (spoiler: ça arrivera pas), tu peux exporter tes données quand tu veux. Zéro piège.'
   }
 ]
 
@@ -77,7 +77,7 @@ export default function VsGuildedVsSquadPlanner() {
           >
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full badge-shimmer border border-purple/25 mb-8">
               <span className="text-base font-medium text-purple">
-                Comparatif complet · Le meilleur remplacement
+                Comparatif honnête · Le meilleur choix en 2026
               </span>
             </div>
           </m.div>
@@ -92,7 +92,7 @@ export default function VsGuildedVsSquadPlanner() {
           >
             Guilded vs Squad Planner<span className="text-gradient-animated">:</span>
             <br />
-            Le comparatif complet
+            le match final
           </m.h1>
 
           <m.p
@@ -102,7 +102,7 @@ export default function VsGuildedVsSquadPlanner() {
             viewport={{ once: true }}
             className="text-lg md:text-xl text-text-tertiary mb-10 max-w-2xl mx-auto leading-relaxed"
           >
-            Guilded a fermé. Squad Planner est l'alternative spécialisée dans l'organisation gaming. Voici comment on se compare point par point.
+            Guilded a fermé. Squad Planner est l'alternative gaming que tu attendais. Tous les détails, tous les chiffres.
           </m.p>
 
           {/* CTAs */}
@@ -118,7 +118,7 @@ export default function VsGuildedVsSquadPlanner() {
                 to="/auth?mode=register&redirect=onboarding"
                 className="flex items-center gap-2 h-14 px-8 rounded-xl bg-primary text-white text-lg font-semibold shadow-lg shadow-primary/10 cta-pulse-glow w-full sm:w-auto justify-center"
               >
-                Migrer de Guilded
+                Commencer maintenant
                 <ArrowRight className="w-5 h-5" />
               </Link>
             </m.div>
@@ -141,10 +141,10 @@ export default function VsGuildedVsSquadPlanner() {
         <div className="max-w-5xl mx-auto">
           <m.div variants={scrollReveal} initial="hidden" whileInView="visible" viewport={{ once: true }} className="text-center mb-12">
             <h2 className="text-xl md:text-2xl font-bold text-text-primary mb-4">
-              Comparaison détaillée des fonctionnalités
+              Guilded vs Squad Planner : full breakdown
             </h2>
             <p className="text-text-tertiary text-lg">
-              12 catégories, 100% transparence
+              Tous les détails, zéro bullshit
             </p>
           </m.div>
 
@@ -206,10 +206,10 @@ export default function VsGuildedVsSquadPlanner() {
         <div className="max-w-5xl mx-auto">
           <m.div variants={scrollReveal} initial="hidden" whileInView="visible" viewport={{ once: true }} className="text-center mb-12">
             <h2 className="text-xl md:text-2xl font-bold text-text-primary mb-4">
-              Tarification : Guilded vs Squad Planner
+              Prix : Guilded vs Squad Planner
             </h2>
             <p className="text-text-tertiary text-lg">
-              Compare les modèles de pricing
+              C'est où que ça coûte
             </p>
           </m.div>
 
@@ -235,7 +235,7 @@ export default function VsGuildedVsSquadPlanner() {
                 </div>
               </div>
               <p className="text-sm text-red-500 font-semibold">
-                Plateforme fermée depuis 2024 · Pas de mises à jour
+                Fermée depuis 2024. Plus rien ne bouge.
               </p>
             </m.div>
 
@@ -249,7 +249,7 @@ export default function VsGuildedVsSquadPlanner() {
               className="p-8 md:p-10 rounded-2xl bg-gradient-to-br from-surface-card to-transparent border border-primary/30 relative"
             >
               <div className="absolute -top-3 -right-3 px-3 py-1 bg-primary text-white text-xs font-semibold rounded-full">
-                Meilleur choix
+                T'as pas le choix
               </div>
               <h3 className="text-2xl font-bold text-text-primary mb-6">Squad Planner</h3>
               <div className="space-y-4 mb-8">
@@ -281,7 +281,7 @@ export default function VsGuildedVsSquadPlanner() {
                 </div>
               </div>
               <p className="text-sm text-emerald-400 font-semibold">
-                ✓ Plateforme active · Roadmap long terme · Viable
+                ✓ Active · On innove · On reste
               </p>
             </m.div>
           </div>
@@ -318,30 +318,30 @@ export default function VsGuildedVsSquadPlanner() {
                   </svg>
                 ))}
               </div>
-              <h3 className="text-2xl font-bold text-text-primary mb-4">Le Verdict</h3>
+              <h3 className="text-2xl font-bold text-text-primary mb-4">Le verdict</h3>
               <p className="text-text-secondary mb-6 leading-relaxed text-lg">
-                Guilded était une excellente plateforme de communication gaming. Mais elle a fermé. Squad Planner est spécialisé dans l'organisation des sessions, pas le chat. C'est complémentaire à Discord (qui gère la commu) et meilleur que toutes les alternatives pour organiser les sessions gaming.
+                Guilded a fermé. Squad Planner c'est de l'orga gaming, pas du chat. Ça complète Discord. C'est le choix logique pour tes sessions.
               </p>
               <div className="space-y-4">
                 <div className="flex items-start gap-3">
                   <Check className="w-5 h-5 text-emerald-400 flex-shrink-0 mt-0.5" />
                   <div>
-                    <strong className="text-text-primary">Pour les utilisateurs Guilded :</strong>
-                    <p className="text-text-secondary mt-1">Squad Planner est le meilleur remplacement. Migration facile, features supérieures.</p>
+                    <strong className="text-text-primary">T'es venu de Guilded ?</strong>
+                    <p className="text-text-secondary mt-1">Squad Planner c'est ton move. Migration simple, features meilleure.</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
                   <Check className="w-5 h-5 text-emerald-400 flex-shrink-0 mt-0.5" />
                   <div>
-                    <strong className="text-text-primary">Pour ceux avec Discord :</strong>
-                    <p className="text-text-secondary mt-1">Ajoute Squad Planner pour l'organisation. Les deux services se complètent parfaitement.</p>
+                    <strong className="text-text-primary">T'utilises Discord ?</strong>
+                    <p className="text-text-secondary mt-1">Ajoute Squad Planner pour l'orga. Les deux se parlent. Parfait ensemble.</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
                   <Check className="w-5 h-5 text-emerald-400 flex-shrink-0 mt-0.5" />
                   <div>
-                    <strong className="text-text-primary">Pour les squads compétitives :</strong>
-                    <p className="text-text-secondary mt-1">Squad Planner offre les stats et la fiabilité que Guilded n'avait pas.</p>
+                    <strong className="text-text-primary">T'es en squad compétitive ?</strong>
+                    <p className="text-text-secondary mt-1">Squad Planner te donne les stats et la fiabilité. Guilded n'avait pas ça.</p>
                   </div>
                 </div>
               </div>
@@ -357,7 +357,7 @@ export default function VsGuildedVsSquadPlanner() {
         <div className="max-w-3xl mx-auto">
           <m.div variants={scrollReveal} initial="hidden" whileInView="visible" viewport={{ once: true }} className="text-center mb-12">
             <h2 className="text-xl md:text-2xl font-bold text-text-primary mb-4">
-              Questions fréquentes
+              Les questions qu'on te pose tout le temps
             </h2>
           </m.div>
 
@@ -423,17 +423,17 @@ export default function VsGuildedVsSquadPlanner() {
                 <Sparkles className="w-12 h-12 mx-auto mb-6" style={{ color: '#a855f7' }} />
               </m.div>
               <h2 className="text-xl md:text-3xl font-bold text-text-primary mb-4">
-                Prêt à migrer vers Squad Planner ?
+                C'est bon, tu viens ?
               </h2>
               <p className="text-text-tertiary mb-8 text-lg">
-                Code GUILDED30 pour 30% sur ton premier mois Premium. Mais le calendrier et les RSVP, c'est gratuit.
+                Code GUILDED30 = 30% sur Premium. Mais calendrier et RSVP c'est gratuit anyway.
               </p>
               <m.div whileHover={{ scale: 1.03, y: -3 }} {...springTap} className="inline-flex">
                 <Link
                   to="/auth?mode=register&redirect=onboarding"
                   className="flex items-center gap-2 h-16 px-10 rounded-xl bg-gradient-to-r from-primary to-purple text-white text-xl font-bold mx-auto shadow-lg shadow-primary/20 cta-glow-idle"
                 >
-                  Commencer maintenant
+                  C'est parti
                   <ArrowRight className="w-5 h-5" />
                 </Link>
               </m.div>

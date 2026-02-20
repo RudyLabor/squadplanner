@@ -3,7 +3,7 @@ import { forwardRef, type ReactNode, type ElementType, type ComponentPropsWithRe
 import { haptic } from '../../utils/haptics'
 
 type ButtonBaseProps = {
-  variant?: 'primary' | 'secondary' | 'ghost' | 'danger' | 'link'
+  variant?: 'primary' | 'secondary' | 'ghost' | 'danger' | 'link' | 'gradient'
   size?: 'xs' | 'sm' | 'md' | 'lg'
   children: ReactNode
   isLoading?: boolean
@@ -33,6 +33,7 @@ const variantClasses: Record<string, string> = {
   ghost: 'bg-transparent hover:bg-bg-hover text-text-secondary hover:text-text-primary',
   danger: 'bg-error/10 border border-error/15 hover:bg-error/15 text-error',
   link: 'bg-transparent text-primary hover:text-primary-hover underline-offset-4 hover:underline p-0 h-auto',
+  gradient: 'btn-gradient',
 }
 
 const sizeClasses: Record<string, string> = {
@@ -160,8 +161,15 @@ function ButtonInner<C extends ElementType = 'button'>(
       disabled={isLoading || props.disabled}
       aria-busy={isLoading || undefined}
       aria-label={isLoading && !loadingText && typeof children === 'string' ? children : undefined}
-      whileHover={props.disabled ? undefined : { y: -1 }}
-      whileTap={props.disabled ? undefined : { scale: 0.97 }}
+      whileHover={
+        props.disabled
+          ? undefined
+          : {
+              y: -1,
+              boxShadow: variant === 'gradient' ? '0 6px 28px rgba(99, 102, 241, 0.4)' : undefined,
+            }
+      }
+      whileTap={props.disabled ? undefined : { scale: 0.96 }}
       transition={{ type: 'spring', stiffness: 400, damping: 17 }}
       {...props}
       onClick={handleClick}

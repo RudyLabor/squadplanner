@@ -69,6 +69,14 @@ export function Layout({ children }: { children: React.ReactNode }) {
           href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@700;800&display=swap"
           rel="stylesheet"
         />
+        {/* Preload Plus Jakarta Sans wght@700 — critical for brand display font */}
+        <link
+          rel="preload"
+          href="https://fonts.gstatic.com/s/plusjakartasans/v8/mFTrWAFUW_290OPSE23HKkjXJV0l8P73nqBRUMEzJGtxnQ0A.woff2"
+          as="font"
+          type="font/woff2"
+          crossOrigin="anonymous"
+        />
 
         {/* Inline @font-face so browser can match preload to font declaration immediately,
             without waiting for critical.css to parse. Prevents "preloaded but not used" warning. */}

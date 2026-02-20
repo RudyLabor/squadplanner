@@ -1,3 +1,4 @@
+import { memo } from 'react'
 import { m } from 'framer-motion'
 import { Calendar, Plus, Clock, Users } from '../../components/icons'
 import { Link } from 'react-router'
@@ -10,7 +11,7 @@ interface ConfirmedSessionsProps {
   sessionsLoading: boolean
 }
 
-export function ConfirmedSessions({ confirmed, sessionsLoading }: ConfirmedSessionsProps) {
+export const ConfirmedSessions = memo(function ConfirmedSessions({ confirmed, sessionsLoading }: ConfirmedSessionsProps) {
   return (
     <section className="mb-8" aria-label="Sessions confirmées">
       <div className="flex items-center justify-between mb-4">
@@ -101,7 +102,7 @@ export function ConfirmedSessions({ confirmed, sessionsLoading }: ConfirmedSessi
       </ContentTransition>
     </section>
   )
-}
+})
 
 export function HowItWorksSection() {
   return (

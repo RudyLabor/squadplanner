@@ -604,6 +604,7 @@ export function CommandPalette() {
                     <button
                       onClick={goBack}
                       className="flex items-center gap-1 text-xs text-primary hover:text-primary/80 shrink-0 mr-1"
+                      aria-label={`Retour à ${parentStack[parentStack.length - 2]?.label || 'la palette de commandes'}`}
                     >
                       <ArrowRight className="w-3 h-3 rotate-180" />
                       {parentStack.map((p, i) => (

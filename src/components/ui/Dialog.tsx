@@ -134,24 +134,29 @@ export function Dialog({
     <AnimatePresence>
       {open && (
         <div className="fixed inset-0 z-50 flex items-center justify-center">
-          {/* Overlay */}
+          {/* Overlay with backdrop blur animation */}
           <m.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2, ease: 'easeOut' }}
-            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+            initial={{ opacity: 0, backdropFilter: 'blur(0px)' }}
+            animate={{ opacity: 1, backdropFilter: 'blur(6px)' }}
+            exit={{ opacity: 0, backdropFilter: 'blur(0px)' }}
+            transition={{ duration: 0.3, ease: 'easeOut' }}
+            className="absolute inset-0 bg-black/60"
             onClick={closeOnOverlayClick ? onClose : undefined}
             aria-hidden="true"
           />
 
-          {/* Dialog panel */}
+          {/* Dialog panel with enhanced spring animation */}
           <m.div
             ref={dialogRef}
-            initial={{ opacity: 0, scale: 0.95 }}
+            initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.95 }}
-            transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
+            exit={{ opacity: 0, scale: 0.9 }}
+            transition={{
+              type: 'spring',
+              stiffness: 300,
+              damping: 25,
+              opacity: { duration: 0.2 }
+            }}
             role="dialog"
             aria-modal="true"
             aria-labelledby={title ? titleId : undefined}

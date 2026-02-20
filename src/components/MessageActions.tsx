@@ -185,6 +185,7 @@ export function MessageActions({
               onClick={handleReply}
               className="w-full flex items-center gap-3 px-4 py-2.5 text-left text-md text-text-primary hover:bg-border-default transition-colors"
               role="menuitem"
+              aria-label="Répondre au message"
             >
               <Reply className="w-4 h-4 text-text-secondary" />
               <span>Répondre</span>
@@ -196,6 +197,7 @@ export function MessageActions({
                 onClick={handleThread}
                 className="w-full flex items-center gap-3 px-4 py-2.5 text-left text-md text-text-primary hover:bg-border-default transition-colors"
                 role="menuitem"
+                aria-label="Ouvrir le thread de ce message"
               >
                 <MessageSquare className="w-4 h-4 text-text-secondary" />
                 <span>Ouvrir le thread</span>
@@ -207,6 +209,7 @@ export function MessageActions({
               onClick={handleCopy}
               className="w-full flex items-center gap-3 px-4 py-2.5 text-left text-md text-text-primary hover:bg-border-default transition-colors"
               role="menuitem"
+              aria-label={copied ? 'Message copié' : 'Copier le texte du message'}
             >
               {copied ? (
                 <>
@@ -227,6 +230,7 @@ export function MessageActions({
                 onClick={handleForward}
                 className="w-full flex items-center gap-3 px-4 py-2.5 text-left text-md text-text-primary hover:bg-border-default transition-colors"
                 role="menuitem"
+                aria-label="Transférer ce message"
               >
                 <Forward className="w-4 h-4 text-text-secondary" />
                 <span>Transférer</span>
@@ -239,6 +243,7 @@ export function MessageActions({
                 onClick={handlePin}
                 className="w-full flex items-center gap-3 px-4 py-2.5 text-left text-md text-text-primary hover:bg-border-default transition-colors"
                 role="menuitem"
+                aria-label="Épingler ce message"
               >
                 <Pin className="w-4 h-4 text-warning" />
                 <span>Épingler</span>
@@ -253,6 +258,7 @@ export function MessageActions({
                   onClick={handleEdit}
                   className="w-full flex items-center gap-3 px-4 py-2.5 text-left text-md text-text-primary hover:bg-border-default transition-colors"
                   role="menuitem"
+                  aria-label="Modifier ce message"
                 >
                   <Pencil className="w-4 h-4 text-primary" />
                   <span>Modifier</span>
@@ -268,6 +274,7 @@ export function MessageActions({
                   showDeleteConfirm ? 'bg-error/15 text-error' : 'text-error hover:bg-error/10'
                 }`}
                 role="menuitem"
+                aria-label={showDeleteConfirm ? 'Confirmer la suppression du message' : 'Supprimer ce message'}
               >
                 <Trash2 className="w-4 h-4" />
                 <span>{showDeleteConfirm ? 'Confirmer la suppression' : 'Supprimer'}</span>

@@ -29,7 +29,7 @@ function StoryCircle({
       >
         <div className="w-full h-full rounded-full bg-bg-elevated p-0.5">
           {avatarUrl ? (
-            <img src={avatarUrl} alt={`Avatar de ${username}`} className="w-full h-full rounded-full object-cover" />
+            <img src={avatarUrl} alt={`Avatar de ${username}`} className="w-full h-full rounded-full object-cover" loading="lazy" decoding="async" />
           ) : (
             <div className="w-full h-full rounded-full bg-primary-20 flex items-center justify-center text-lg font-bold text-primary">
               {username.charAt(0).toUpperCase()}

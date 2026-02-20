@@ -293,6 +293,9 @@ export function ImageViewer({ src, alt = 'Image', isOpen, onClose }: ImageViewer
               src={src}
               alt={alt}
               draggable={false}
+              loading="eager"
+              decoding="async"
+              fetchPriority="high"
               style={{
                 transform: `translate(${position.x}px, ${position.y}px) scale(${scale}) rotate(${rotation}deg)`,
                 transition: isDragging || isTouching ? 'none' : 'transform 0.2s ease-out',

@@ -16,6 +16,22 @@ export function EmptyStateIllustration({ type, className = '' }: EmptyStateIllus
       case 'sessions':
         return (
           <svg viewBox="0 0 200 200" className={className} style={{ maxWidth: '200px' }}>
+            {/* Gradient glow background */}
+            <m.defs>
+              <radialGradient id="sessionGlow" cx="50%" cy="50%" r="60%">
+                <stop offset="0%" stopColor="var(--color-primary)" stopOpacity="0.15" />
+                <stop offset="100%" stopColor="var(--color-primary)" stopOpacity="0" />
+              </radialGradient>
+            </m.defs>
+            <m.circle
+              cx="100"
+              cy="100"
+              r="80"
+              fill="url(#sessionGlow)"
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ duration: 0.6 }}
+            />
             {/* Calendar background */}
             <m.rect
               x="40"
@@ -102,6 +118,22 @@ export function EmptyStateIllustration({ type, className = '' }: EmptyStateIllus
       case 'squads':
         return (
           <svg viewBox="0 0 200 200" className={className} style={{ maxWidth: '200px' }}>
+            {/* Gradient glow background */}
+            <m.defs>
+              <radialGradient id="squadsGlow" cx="50%" cy="50%" r="60%">
+                <stop offset="0%" stopColor="var(--color-primary)" stopOpacity="0.2" />
+                <stop offset="100%" stopColor="var(--color-primary)" stopOpacity="0" />
+              </radialGradient>
+            </m.defs>
+            <m.circle
+              cx="100"
+              cy="100"
+              r="85"
+              fill="url(#squadsGlow)"
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ duration: 0.6 }}
+            />
             {/* Group circle background */}
             <m.circle
               cx="100"
@@ -639,7 +671,11 @@ export function EmptyStateIllustration({ type, className = '' }: EmptyStateIllus
     }
   }
 
-  return <div className={`flex items-center justify-center ${className}`}>{getIllustration()}</div>
+  return (
+    <div className={`flex items-center justify-center illustration-glow ${className}`}>
+      {getIllustration()}
+    </div>
+  )
 }
 
 export default EmptyStateIllustration

@@ -82,6 +82,8 @@ export function StoryViewer({
                 src={story.avatar_url}
                 alt=""
                 className="w-8 h-8 rounded-full object-cover border border-white/30"
+                loading="lazy"
+                decoding="async"
               />
             ) : (
               <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center text-sm font-bold text-white">
@@ -112,6 +114,9 @@ export function StoryViewer({
               src={story.media_url}
               alt=""
               className="max-w-full max-h-full object-contain rounded-lg"
+              loading="eager"
+              decoding="async"
+              fetchPriority="high"
             />
           ) : (
             <p

@@ -2,7 +2,7 @@ import { type ReactNode, type KeyboardEvent } from 'react'
 import { colorMix, colorMixBlend } from '../../utils/colorMix'
 
 interface CardProps {
-  variant?: 'default' | 'elevated' | 'outlined' | 'ghost'
+  variant?: 'default' | 'elevated' | 'outlined' | 'ghost' | 'gradient'
   padding?: 'default' | 'compact' | 'none'
   loading?: boolean
   selected?: boolean
@@ -28,11 +28,18 @@ export function Card({
   onClick,
   'aria-label': ariaLabel,
 }: CardProps) {
+  const paddingClasses: Record<string, string> = {
+    default: 'p-6',
+    compact: 'p-4',
+    none: '',
+  }
+
   const variants: Record<string, string> = {
     default: 'bg-surface-card border border-border-subtle',
-    elevated: 'bg-surface-card border border-border-subtle shadow-lg shadow-black/5',
+    elevated: 'bg-surface-card border border-border-subtle shadow-lg shadow-black/5 transition-shadow hover:shadow-xl hover:shadow-black/10',
     outlined: 'bg-surface-card border-2 border-border-default',
     ghost: 'bg-transparent border-none',
+    gradient: 'card-gradient-border',
   }
 
   const hoverClasses =
@@ -56,6 +63,7 @@ export function Card({
       className={`
         relative rounded-2xl transition-interactive
         ${variants[variant]}
+        ${paddingClasses[_padding]}
         ${hoverClasses}
         ${disabledClasses}
         ${className}

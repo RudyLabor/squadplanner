@@ -117,6 +117,36 @@ const typeProgressColors: Record<ToastType, string> = {
   default: 'bg-text-tertiary',
 }
 
+// Type-specific animation variants
+const getToastAnimationVariants = (type: ToastType) => {
+  switch (type) {
+    case 'success':
+      return {
+        initial: { opacity: 0, x: 400, y: 0 },
+        animate: { opacity: 1, x: 0, y: 0 },
+        exit: { opacity: 0, x: 400, y: 0 }
+      }
+    case 'error':
+      return {
+        initial: { opacity: 0, x: 400, y: 0 },
+        animate: { opacity: 1, x: [0, -2, 2, 0], y: 0 },
+        exit: { opacity: 0, x: 400, y: 0 }
+      }
+    case 'warning':
+      return {
+        initial: { opacity: 0, x: 400, y: 0 },
+        animate: { opacity: 1, x: 0, y: 0 },
+        exit: { opacity: 0, x: 400, y: 0 }
+      }
+    default:
+      return {
+        initial: { opacity: 0, x: 400, y: 0 },
+        animate: { opacity: 1, x: 0, y: 0 },
+        exit: { opacity: 0, x: 400, y: 0 }
+      }
+  }
+}
+
 // --- Single Toast Item ---
 function ToastItem({ data, onDismiss }: { data: ToastEntry; onDismiss: (id: string) => void }) {
   const [paused, setPaused] = useState(false)
@@ -125,6 +155,7 @@ function ToastItem({ data, onDismiss }: { data: ToastEntry; onDismiss: (id: stri
   const x = useMotionValue(0)
   const opacity = useTransform(x, [-150, 0, 150], [0, 1, 0])
   const type = data.type ?? 'default'
+  const animationVariants = getToastAnimationVariants(type)
 
   // Auto-dismiss timer with pause support
   useEffect(() => {
@@ -146,10 +177,14 @@ function ToastItem({ data, onDismiss }: { data: ToastEntry; onDismiss: (id: stri
   return (
     <m.div
       layout
-      initial={{ opacity: 0, y: -40, scale: 0.95 }}
-      animate={{ opacity: 1, y: 0, scale: 1 }}
-      exit={{ opacity: 0, y: -20, scale: 0.95, transition: { duration: 0.15 } }}
-      transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+      initial={animationVariants.initial}
+      animate={animationVariants.animate}
+      exit={animationVariants.exit}
+      transition={
+        type === 'error'
+          ? { type: 'spring', stiffness: 400, damping: 30 }
+          : { type: 'spring', stiffness: 300, damping: 25 }
+      }
       style={{ x, opacity }}
       drag="x"
       dragConstraints={{ left: 0, right: 0 }}

@@ -251,26 +251,29 @@ export default function Home({ loaderData }: HomeProps) {
     [navigate]
   )
 
-  const handleRsvp = async (sessionId: string, response: 'present' | 'absent' | 'maybe') => {
-    haptic.medium()
-    try {
-      await rsvpMutation.mutateAsync({ sessionId, response })
-      if (response === 'present') {
-        haptic.success()
-        fireConfetti()
-        setSuccessMessage("T'es confirmé ! Ta squad compte sur toi")
-        rsvpTimers.current.push(setTimeout(() => setSuccessMessage(null), 5000))
-      } else {
-        setSuccessMessage(response === 'absent' ? 'Absence enregistrée' : 'Réponse enregistrée')
-        rsvpTimers.current.push(setTimeout(() => setSuccessMessage(null), 3000))
+  const handleRsvp = useCallback(
+    async (sessionId: string, response: 'present' | 'absent' | 'maybe') => {
+      haptic.medium()
+      try {
+        await rsvpMutation.mutateAsync({ sessionId, response })
+        if (response === 'present') {
+          haptic.success()
+          fireConfetti()
+          setSuccessMessage("T'es confirmé ! Ta squad compte sur toi")
+          rsvpTimers.current.push(setTimeout(() => setSuccessMessage(null), 5000))
+        } else {
+          setSuccessMessage(response === 'absent' ? 'Absence enregistrée' : 'Réponse enregistrée')
+          rsvpTimers.current.push(setTimeout(() => setSuccessMessage(null), 3000))
+        }
+      } catch (error) {
+        haptic.error()
+        console.error('RSVP error:', error)
+        setSuccessMessage("Erreur : ta réponse n'a pas pu être enregistrée")
+        rsvpTimers.current.push(setTimeout(() => setSuccessMessage(null), 4000))
       }
-    } catch (error) {
-      haptic.error()
-      console.error('RSVP error:', error)
-      setSuccessMessage("Erreur : ta réponse n'a pas pu être enregistrée")
-      rsvpTimers.current.push(setTimeout(() => setSuccessMessage(null), 4000))
-    }
-  }
+    },
+    [rsvpMutation, fireConfetti]
+  )
 
   const hasServerData = !!loaderData?.profile
   const homeLoading = hasServerData

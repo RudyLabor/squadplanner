@@ -190,12 +190,6 @@ export function Layout({ children }: { children: React.ReactNode }) {
         />
 
         <Meta />
-        {/* Dynamic canonical fallback */}
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `(function(){var c=document.querySelector('link[rel="canonical"]');if(!c){c=document.createElement('link');c.rel='canonical';document.head.appendChild(c)}c.href='https://squadplanner.fr'+location.pathname;var o=document.querySelector('meta[property="og:url"]');if(o)o.content=c.href})()`,
-          }}
-        />
         <Links />
       </head>
       <body suppressHydrationWarning>
@@ -225,13 +219,14 @@ export default function Root() {
 
   useEffect(() => {
     setIsClient(true)
+    // Sync Zustand theme store with the data-theme attribute already set by the blocking script.
+    // Do NOT re-set data-theme here — the blocking script in <head> already handled it to avoid FOUC.
     import('./hooks/useTheme').then(({ useThemeStore }) => {
       const { mode } = useThemeStore.getState()
       const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches
         ? 'dark'
         : 'light'
       const effectiveTheme = mode === 'system' ? systemTheme : mode
-      document.documentElement.setAttribute('data-theme', effectiveTheme)
       useThemeStore.setState({ effectiveTheme })
     })
 

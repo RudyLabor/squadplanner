@@ -43,7 +43,9 @@ export function Sheet({
 
   // Motion values for bottom sheet
   const y = useMotionValue(0)
-  const overlayOpacity = useTransform(y, [0, window.innerHeight], [1, 0])
+  // Use a safe fallback for SSR (window may not exist on server)
+  const viewportHeight = typeof window !== 'undefined' ? window.innerHeight : 900
+  const overlayOpacity = useTransform(y, [0, viewportHeight], [1, 0])
 
   // Capture trigger on open
   useEffect(() => {

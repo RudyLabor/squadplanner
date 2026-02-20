@@ -133,7 +133,7 @@ export function Profile() {
 
   return (
     <PullToRefresh onRefresh={handleRefresh}>
-    <main className="min-h-0 bg-bg-base pb-6" aria-label="Profil">
+    <main className="min-h-0 bg-bg-base pb-6 page-enter" aria-label="Profil">
       {/* Level Up Celebration */}
       {showLevelUp && newLevel && (
         <LevelUpCelebration

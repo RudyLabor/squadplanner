@@ -99,7 +99,7 @@ export function RsvpButtons({ myRsvp, rsvpLoading, onRsvp }: RsvpButtonsProps) {
             <m.div className="flex-1" whileTap={{ scale: 0.97 }}>
               <Button
                 variant={myRsvp === 'present' ? 'primary' : 'secondary'}
-                className={`w-full ${myRsvp === 'present' ? 'shadow-glow-success ring-2 ring-success/15' : ''}`}
+                className={`w-full glow-pulse rsvp-confirm ${myRsvp === 'present' ? 'shadow-glow-success ring-2 ring-success/15' : ''}`}
                 onClick={() => onRsvp('present')}
                 disabled={rsvpLoading !== null}
               >

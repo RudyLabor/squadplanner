@@ -184,7 +184,7 @@ export default function Squads({ loaderData: _loaderData }: SquadsProps) {
 
   return (
     <PullToRefresh onRefresh={handleRefresh}>
-    <main className="min-h-0 bg-bg-base pb-6" aria-label="Squads">
+    <main className="min-h-0 bg-bg-base pb-6 page-enter" aria-label="Squads">
       {showConfetti && typeof window !== 'undefined' && (
         <Confetti
           width={window.innerWidth}

@@ -35,7 +35,7 @@ export function ConfirmedSessions({ confirmed, sessionsLoading }: ConfirmedSessi
               <li key={session.id}>
                 <Link to={`/session/${session.id}`}>
                   <m.div whileHover={{ y: -2, scale: 1.02 }} whileTap={{ scale: 0.99 }}>
-                    <Card className="p-4 transition-interactive hover:shadow-glow-success">
+                    <Card className="p-4 transition-interactive hover:shadow-glow-success card-interactive">
                       <div className="flex items-center gap-3">
                         <div className="w-12 h-12 rounded-xl bg-success-10 flex items-center justify-center shrink-0">
                           <Calendar

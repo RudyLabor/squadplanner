@@ -56,6 +56,9 @@ const LevelUpModal = lazy(() =>
 const AchievementToast = lazy(() =>
   import('./components/LevelUpModal').then((m) => ({ default: m.AchievementToast }))
 )
+const RatingPrompt = lazy(() =>
+  import('./components/RatingPrompt').then((m) => ({ default: m.RatingPrompt }))
+)
 
 // Global state banners
 const GlobalStateBanners = memo(function GlobalStateBanners() {
@@ -267,6 +270,7 @@ export default function ClientShell() {
         <TourGuide />
         <LevelUpModal />
         <AchievementToast />
+        <RatingPrompt />
       </Suspense>
     </>
   )

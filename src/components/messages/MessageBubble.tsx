@@ -7,6 +7,7 @@ import { MessageContent } from '../MessageContent'
 import { RoleBadge } from '../RoleBadge'
 import { ThreadIndicator } from '../ThreadView'
 import { formatTime } from './utils'
+import { useSwipeGesture } from '../../hooks/useSwipeGesture'
 
 function SystemMessage({
   message,
@@ -129,6 +130,9 @@ export const MessageBubble = memo(function MessageBubble({
   const initial = message.sender?.username?.charAt(0).toUpperCase() || '?'
   const sender = message.sender?.username || 'Utilisateur'
   const content = message.content || ''
+  const swipeHandlers = useSwipeGesture({
+    onSwipeRight: () => onReply({ id: message.id, content, sender }),
+  })
   const actions = {
     message: { id: message.id, sender_id: message.sender_id || '', content },
     currentUserId,
@@ -144,6 +148,7 @@ export const MessageBubble = memo(function MessageBubble({
 
   return (
     <div
+      {...swipeHandlers}
       className={`group flex ${isOwn ? 'justify-end' : 'justify-start'} ${showAvatar ? 'mt-3' : 'mt-0.5'}`}
     >
       <div className={`flex items-end gap-2 max-w-[85%] ${isOwn ? 'flex-row-reverse' : ''}`}>

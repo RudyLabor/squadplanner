@@ -303,6 +303,9 @@ export function Settings() {
             <SettingRow label="Sons de l'interface" description="Jouer des sons pour les actions (messages, RSVP, etc.)">
               <SoundToggle />
             </SettingRow>
+            <SettingRow label="Mode silencieux" description="Pas de sons entre 23h et 8h">
+              <QuietHoursToggle />
+            </SettingRow>
             <SettingRow label="Vibrations haptiques" description="Retour vibratoire sur les boutons et actions">
               <HapticToggle />
             </SettingRow>
@@ -601,6 +604,25 @@ function HapticToggle() {
   const handleToggle = useCallback((v: boolean) => {
     setEnabled(v)
     localStorage.setItem('hapticEnabled', String(v))
+  }, [])
+
+  return <Toggle enabled={enabled} onChange={handleToggle} />
+}
+
+// Quiet hours toggle — syncs with useQuietHoursStore
+function QuietHoursToggle() {
+  const [enabled, setEnabled] = useState(() => {
+    try {
+      const stored = JSON.parse(localStorage.getItem('squadplanner-quiet-hours') || '{}')
+      return stored?.state?.enabled !== false
+    } catch { return true }
+  })
+
+  const handleToggle = useCallback((v: boolean) => {
+    setEnabled(v)
+    import('../lib/quietHours').then(({ useQuietHoursStore }) => {
+      useQuietHoursStore.getState().setEnabled(v)
+    })
   }, [])
 
   return <Toggle enabled={enabled} onChange={handleToggle} />

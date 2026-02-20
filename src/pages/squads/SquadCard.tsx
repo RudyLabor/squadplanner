@@ -66,7 +66,7 @@ export const SquadCard = memo(function SquadCard({
     >
       <Link to={`/squad/${squad.id}`}>
         <Card
-          className={`cursor-pointer transition-interactive ${
+          className={`cursor-pointer transition-interactive card-interactive ${
             hasActiveParty
               ? 'border-success/30 shadow-glow-success bg-gradient-to-r from-success/5 to-transparent'
               : 'hover:border-primary/25 hover:shadow-glow-primary-sm'

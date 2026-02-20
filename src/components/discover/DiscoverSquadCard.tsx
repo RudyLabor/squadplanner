@@ -39,7 +39,7 @@ export const DiscoverSquadCard = memo(function DiscoverSquadCard({ squad }: Prop
     <m.div
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      className="rounded-xl border border-border-subtle bg-surface-card hover:bg-surface-card-hover transition-colors p-4"
+      className="rounded-xl border border-border-subtle bg-surface-card hover:bg-surface-card-hover transition-colors p-4 card-interactive"
     >
       {/* Header: icon + name + game */}
       <div className="flex items-center gap-3 mb-2">

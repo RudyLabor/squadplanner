@@ -236,6 +236,10 @@ export function useRsvpMutation() {
           const confetti = mod.default
           confetti({ particleCount: 80, spread: 60, origin: { y: 0.7 } })
         })
+        // Announce to screen readers
+        import('../../lib/announce').then(({ announce }) => {
+          announce('Présence confirmée pour la session')
+        })
       }
       // Auto-confirm: if RSVP is "present", check if threshold is met
       if (data.response === 'present') {

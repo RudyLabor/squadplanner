@@ -109,6 +109,20 @@ export function useSound() {
     const { enabled, volume } = useSoundStore.getState()
     if (!enabled || volume === 0) return
 
+    // Respect quiet hours
+    try {
+      const qh = JSON.parse(localStorage.getItem('squadplanner-quiet-hours') || '{}')
+      if (qh?.state?.enabled) {
+        const hour = new Date().getHours()
+        const start = qh.state.startHour ?? 23
+        const end = qh.state.endHour ?? 8
+        const isQuiet = start > end
+          ? (hour >= start || hour < end)
+          : (hour >= start && hour < end)
+        if (isQuiet) return
+      }
+    } catch {}
+
     // Throttle to prevent audio spam
     const throttle = options?.throttleMs ?? 100
     const now = Date.now()

@@ -161,7 +161,7 @@ export function VoiceChat({ sessionId, sessionTitle }: VoiceChatProps) {
                   <div
                     className={`w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-sm font-medium ${
                       participant.isSpeaking
-                        ? 'ring-2 ring-primary ring-offset-2 ring-offset-elevated'
+                        ? 'ring-2 ring-primary ring-offset-2 ring-offset-elevated avatar-speaking'
                         : ''
                     }`}
                   >

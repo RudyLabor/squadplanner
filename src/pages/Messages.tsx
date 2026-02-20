@@ -632,7 +632,7 @@ export function Messages() {
     return (
       <>
         {toastEl}
-        <main className="min-h-0 bg-bg-base pb-6" aria-label="Messages">
+        <main className="min-h-0 bg-bg-base pb-6 page-enter" aria-label="Messages">
           <PullToRefresh
             onRefresh={handleRefresh}
             className="px-4 md:px-6 lg:px-8 py-6 max-w-2xl lg:max-w-4xl xl:max-w-6xl mx-auto"

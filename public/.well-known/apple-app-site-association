@@ -1,0 +1,14 @@
+{
+  "applinks": {
+    "apps": [],
+    "details": [
+      {
+        "appID": "TEAM_ID.fr.squadplanner.app",
+        "paths": ["/join/*", "/s/*", "/squad/*", "/u/*", "/referral/*"]
+      }
+    ]
+  },
+  "webcredentials": {
+    "apps": ["TEAM_ID.fr.squadplanner.app"]
+  }
+}

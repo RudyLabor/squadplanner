@@ -104,14 +104,14 @@ export async function clientLoader({ serverLoader }: ClientLoaderFunctionArgs) {
     squads = rpc.squads || []
   } else {
     const [profileResult, membershipsResult] = await Promise.all([
-      withTimeout(supabase.from('profiles').select('*').eq('id', user.id).single(), 5000),
+      withTimeout(supabase.from('profiles').select('*').eq('id', authedUser.id).single(), 5000),
       withTimeout(
         supabase
           .from('squad_members')
           .select(
             'squad_id, squads!inner(id, name, game, invite_code, owner_id, total_members, created_at)'
           )
-          .eq('user_id', user.id),
+          .eq('user_id', authedUser.id),
         5000
       ),
     ]) as any[]
@@ -156,13 +156,16 @@ export async function loader({ request }: LoaderFunctionArgs) {
     user = session.user
   }
 
+  // TypeScript can't narrow `let` through reassignment — user is guaranteed non-null here
+  const authedUser = user!
+
   // Single RPC call: profile + squads with member counts in ONE database round-trip.
   // Falls back to parallel queries if RPC is not yet deployed.
   let profile: Profile | null = null
   let squads: SquadWithCount[] = []
 
   const { data: rpcResult, error: rpcError } = await supabase.rpc('get_layout_data', {
-    p_user_id: user.id,
+    p_user_id: authedUser.id,
   })
 
   if (!rpcError && rpcResult) {
@@ -172,13 +175,13 @@ export async function loader({ request }: LoaderFunctionArgs) {
   } else {
     // Fallback: parallel queries (used before RPC is deployed)
     const [profileResult, membershipsResult] = await Promise.all([
-      supabase.from('profiles').select('*').eq('id', user.id).single(),
+      supabase.from('profiles').select('*').eq('id', authedUser.id).single(),
       supabase
         .from('squad_members')
         .select(
           'squad_id, squads!inner(id, name, game, invite_code, owner_id, total_members, created_at)'
         )
-        .eq('user_id', user.id),
+        .eq('user_id', authedUser.id),
     ])
 
     profile = profileResult.data as Profile | null
@@ -192,7 +195,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
   return data(
     {
-      user: { id: user.id, email: user.email },
+      user: { id: authedUser.id, email: authedUser.email },
       profile,
       squads,
     },

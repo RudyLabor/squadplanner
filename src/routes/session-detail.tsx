@@ -70,7 +70,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
       .from('profiles')
       .select('id, username')
       .in('id', userIds)
-    const profileMap = new Map(
+    const profileMap = new Map<string, { id: string; username: string }>(
       (profiles || []).map((p: { id: string; username: string }) => [p.id, p])
     )
     rsvps.forEach((r) => {

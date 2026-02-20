@@ -22,6 +22,25 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
 
+            <!-- Deep Links: Universal Links (https://squadplanner.fr) -->
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="https" android:host="squadplanner.fr" android:pathPrefix="/join/" />
+                <data android:scheme="https" android:host="squadplanner.fr" android:pathPrefix="/s/" />
+                <data android:scheme="https" android:host="squadplanner.fr" android:pathPrefix="/squad/" />
+                <data android:scheme="https" android:host="squadplanner.fr" android:pathPrefix="/u/" />
+            </intent-filter>
+
+            <!-- Deep Links: Custom URL scheme (squadplanner://app/*) -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="squadplanner" android:host="app" />
+            </intent-filter>
+
         </activity>
 
         <provider

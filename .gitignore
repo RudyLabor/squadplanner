@@ -34,3 +34,8 @@ build
 
 .vercel
 test-results/
+
+# Android keystore
+*.keystore
+*.jks
+android/keystore/release.keystore

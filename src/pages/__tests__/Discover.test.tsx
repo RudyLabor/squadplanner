@@ -267,8 +267,8 @@ describe('Discover Page', () => {
   it('shows empty state when no squads found', () => {
     mocks.useBrowseSquadsQuery.mockReturnValue({ data: [], isLoading: false })
     renderDiscover()
-    expect(screen.getByText('Aucune squad publique trouvée')).toBeDefined()
-    expect(screen.getByText('Sois le premier à créer une squad publique !')).toBeDefined()
+    expect(screen.getByText('La communauté se construit !')).toBeDefined()
+    expect(screen.getByText(/Les squads publiques apparaîtront ici/)).toBeDefined()
   })
 
   it('shows "Créer une squad" button in empty state', () => {
@@ -280,13 +280,13 @@ describe('Discover Page', () => {
   it('shows encouragement text in empty state', () => {
     mocks.useBrowseSquadsQuery.mockReturnValue({ data: [], isLoading: false })
     renderDiscover()
-    expect(screen.getByText('Les squads publiques apparaîtront ici.')).toBeDefined()
+    expect(screen.getByText(/crée ta squad et invite tes amis/i)).toBeDefined()
   })
 
   it('shows empty state when squads is null', () => {
     mocks.useBrowseSquadsQuery.mockReturnValue({ data: null, isLoading: false })
     renderDiscover()
-    expect(screen.getByText('Aucune squad publique trouvée')).toBeDefined()
+    expect(screen.getByText('La communauté se construit !')).toBeDefined()
   })
 
   /* ---------------------------------------------------------------- */

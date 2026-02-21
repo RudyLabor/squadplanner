@@ -2,6 +2,13 @@ import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen, fireEvent } from '@testing-library/react'
 import { createElement } from 'react'
 
+// Polyfill CSS.supports for jsdom
+if (typeof globalThis.CSS === 'undefined') {
+  (globalThis as any).CSS = { supports: () => false }
+} else if (typeof globalThis.CSS.supports !== 'function') {
+  (globalThis.CSS as any).supports = () => false
+}
+
 // Mock framer-motion
 vi.mock('framer-motion', () => ({
   AnimatePresence: ({ children }: any) => children,
@@ -90,7 +97,7 @@ describe('PWAInstallBanner', () => {
 
   it('calls dismissBanner when close button is clicked', () => {
     render(createElement(PWAInstallBanner))
-    fireEvent.click(screen.getByLabelText('Fermer'))
+    fireEvent.click(screen.getByLabelText("Fermer la bannière d'installation"))
     expect(mockDismissBanner).toHaveBeenCalled()
   })
 

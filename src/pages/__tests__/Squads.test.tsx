@@ -143,7 +143,7 @@ vi.mock('../../hooks/useVoiceChat', () => ({
 
 // Mock query hooks
 vi.mock('../../hooks/queries/useSquadsQuery', () => ({
-  useSquadsQuery: vi.fn(() => ({ data: mockH.mockSquads, isLoading: mockH.mockIsLoading })),
+  useSquadsQuery: vi.fn(() => ({ data: mockH.mockSquads, isLoading: mockH.mockIsLoading, isPending: mockH.mockIsLoading })),
   useCreateSquadMutation: vi.fn(() => ({ mutateAsync: mockH.mockCreateMutateAsync, isPending: mockH.mockCreatePending })),
   useJoinSquadMutation: vi.fn(() => ({ mutateAsync: mockH.mockJoinMutateAsync, isPending: mockH.mockJoinPending })),
 }))

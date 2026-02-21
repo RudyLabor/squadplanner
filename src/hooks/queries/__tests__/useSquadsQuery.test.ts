@@ -75,9 +75,11 @@ describe('useSquadsQuery', () => {
   })
 
   it('renders without error and starts loading', () => {
-    // Mock the squad_members select for fetchSquads
+    // Mock the squad_members select -> eq chain for fetchSquads
     mockFrom.mockReturnValue({
-      select: vi.fn().mockResolvedValue({ data: [], error: null }),
+      select: vi.fn().mockReturnValue({
+        eq: vi.fn().mockResolvedValue({ data: [], error: null }),
+      }),
     })
     const { result } = renderHook(() => useSquadsQuery(), { wrapper: createWrapper() })
     expect(result.current).toBeDefined()
@@ -86,7 +88,9 @@ describe('useSquadsQuery', () => {
 
   it('returns empty array when no memberships', async () => {
     mockFrom.mockReturnValue({
-      select: vi.fn().mockResolvedValue({ data: [], error: null }),
+      select: vi.fn().mockReturnValue({
+        eq: vi.fn().mockResolvedValue({ data: [], error: null }),
+      }),
     })
 
     const { result } = renderHook(() => useSquadsQuery(), { wrapper: createWrapper() })
@@ -96,7 +100,9 @@ describe('useSquadsQuery', () => {
 
   it('returns empty array when memberships is null', async () => {
     mockFrom.mockReturnValue({
-      select: vi.fn().mockResolvedValue({ data: null, error: null }),
+      select: vi.fn().mockReturnValue({
+        eq: vi.fn().mockResolvedValue({ data: null, error: null }),
+      }),
     })
 
     const { result } = renderHook(() => useSquadsQuery(), { wrapper: createWrapper() })
@@ -117,7 +123,9 @@ describe('useSquadsQuery', () => {
     ]
 
     mockFrom.mockReturnValue({
-      select: vi.fn().mockResolvedValue({ data: memberships, error: null }),
+      select: vi.fn().mockReturnValue({
+        eq: vi.fn().mockResolvedValue({ data: memberships, error: null }),
+      }),
     })
 
     const { result } = renderHook(() => useSquadsQuery(), { wrapper: createWrapper() })
@@ -145,7 +153,9 @@ describe('useSquadsQuery', () => {
     ]
 
     mockFrom.mockReturnValue({
-      select: vi.fn().mockResolvedValue({ data: memberships, error: null }),
+      select: vi.fn().mockReturnValue({
+        eq: vi.fn().mockResolvedValue({ data: memberships, error: null }),
+      }),
     })
 
     const { result } = renderHook(() => useSquadsQuery(), { wrapper: createWrapper() })
@@ -157,7 +167,9 @@ describe('useSquadsQuery', () => {
 
   it('handles query error from squad_members', async () => {
     mockFrom.mockReturnValue({
-      select: vi.fn().mockResolvedValue({ data: null, error: { message: 'DB error' } }),
+      select: vi.fn().mockReturnValue({
+        eq: vi.fn().mockResolvedValue({ data: null, error: { message: 'DB error' } }),
+      }),
     })
 
     const { result } = renderHook(() => useSquadsQuery(), { wrapper: createWrapper() })
@@ -174,7 +186,9 @@ describe('useSquadsQuery', () => {
     ]
 
     mockFrom.mockReturnValue({
-      select: vi.fn().mockResolvedValue({ data: memberships, error: null }),
+      select: vi.fn().mockReturnValue({
+        eq: vi.fn().mockResolvedValue({ data: memberships, error: null }),
+      }),
     })
 
     const { result } = renderHook(() => useSquadsQuery(), { wrapper: createWrapper() })
@@ -185,7 +199,9 @@ describe('useSquadsQuery', () => {
 
   it('has error and data properties', () => {
     mockFrom.mockReturnValue({
-      select: vi.fn().mockResolvedValue({ data: [], error: null }),
+      select: vi.fn().mockReturnValue({
+        eq: vi.fn().mockResolvedValue({ data: [], error: null }),
+      }),
     })
     const { result } = renderHook(() => useSquadsQuery(), { wrapper: createWrapper() })
     expect(result.current).toHaveProperty('data')

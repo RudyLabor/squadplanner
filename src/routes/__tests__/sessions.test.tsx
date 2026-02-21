@@ -11,7 +11,7 @@ const mockFrom = vi.hoisted(() => vi.fn())
 const mockCreateMinimalSSRClient = vi.hoisted(() => vi.fn())
 const mockData = vi.hoisted(() => vi.fn((d: any) => d))
 
-const mockClientGetUser = vi.hoisted(() => vi.fn())
+const mockClientGetSession = vi.hoisted(() => vi.fn())
 const mockClientFrom = vi.hoisted(() => vi.fn())
 
 // ---------------------------------------------------------------------------
@@ -63,12 +63,13 @@ vi.mock('../../lib/supabase-minimal-ssr', () => ({
 
 vi.mock('../../lib/supabaseMinimal', () => ({
   supabaseMinimal: {
-    auth: { getUser: mockClientGetUser },
+    auth: { getSession: mockClientGetSession },
     from: mockClientFrom,
   },
 }))
 
 vi.mock('../../lib/queryClient', () => ({
+  queryClient: { getQueryData: vi.fn().mockReturnValue(undefined) },
   queryKeys: {
     squads: { list: () => ['squads', 'list'] },
     sessions: { upcoming: () => ['sessions', 'upcoming'] },
@@ -322,14 +323,14 @@ describe('routes/sessions', () => {
   // =========================================================================
   describe('clientLoader', () => {
     it('returns empty data when user is null', async () => {
-      mockClientGetUser.mockResolvedValue({ data: { user: null } })
+      mockClientGetSession.mockResolvedValue({ data: { session: null } })
       const result = await clientLoader({ serverLoader: vi.fn() } as any)
       expect(result).toEqual({ squads: [], sessions: [] })
     })
 
     it('fetches squads and sessions on client', async () => {
       const user = { id: 'c1', email: 'c@t.com' }
-      mockClientGetUser.mockResolvedValue({ data: { user } })
+      mockClientGetSession.mockResolvedValue({ data: { session: { user } } })
 
       const memberships = [
         { squad_id: 's1', squads: { id: 's1', name: 'CS', game: 'G', invite_code: 'a', owner_id: 'c1', created_at: '2026-01-01' } },
@@ -372,7 +373,7 @@ describe('routes/sessions', () => {
     })
 
     it('returns empty sessions when no squad IDs', async () => {
-      mockClientGetUser.mockResolvedValue({ data: { user: { id: 'c1' } } })
+      mockClientGetSession.mockResolvedValue({ data: { session: { user: { id: 'c1' } } } })
       mockClientFrom.mockImplementation((table: string) => {
         if (table === 'squad_members') {
           return {

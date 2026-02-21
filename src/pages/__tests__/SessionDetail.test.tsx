@@ -162,6 +162,7 @@ vi.mock('../../components/icons', () => ({
   Trophy: (props: any) => createElement('span', props),
   Users: (props: any) => createElement('span', props),
   TrendingUp: (props: any) => createElement('span', props),
+  Share2: (props: any) => createElement('span', props),
 }))
 
 // Mock components
@@ -187,6 +188,15 @@ vi.mock('../../components/ui', () => ({
   ),
   Badge: ({ children, variant, ...props }: any) => createElement('span', { 'data-variant': variant, ...props }, children),
 }))
+
+vi.mock('../../components/ShareButtons', () => ({
+  ShareButtons: (props: any) => createElement('div', { 'data-testid': 'share-buttons' }),
+}))
+
+vi.mock('../session-detail/EditSessionModal', async (importOriginal) => {
+  const actual = await importOriginal() as any
+  return actual
+})
 
 vi.mock('../../components/VoiceChat', () => ({
   VoiceChat: (props: any) => {

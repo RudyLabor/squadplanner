@@ -9,7 +9,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 const mockGetUser = vi.hoisted(() => vi.fn())
 const mockCreateMinimalSSRClient = vi.hoisted(() => vi.fn())
 const mockData = vi.hoisted(() => vi.fn((d: any) => d))
-const mockClientGetUser = vi.hoisted(() => vi.fn())
+const mockClientGetSession = vi.hoisted(() => vi.fn())
 const mockClientFrom = vi.hoisted(() => vi.fn())
 
 // ---------------------------------------------------------------------------
@@ -61,12 +61,15 @@ vi.mock('../../lib/supabase-minimal-ssr', () => ({
 
 vi.mock('../../lib/supabaseMinimal', () => ({
   supabaseMinimal: {
-    auth: { getUser: mockClientGetUser },
+    auth: { getSession: mockClientGetSession },
     from: mockClientFrom,
   },
 }))
 
-vi.mock('../../lib/queryClient', () => ({ queryKeys: { profile: { current: () => ['profile', 'current'] } } }))
+vi.mock('../../lib/queryClient', () => ({
+  queryClient: { getQueryData: vi.fn().mockReturnValue(undefined) },
+  queryKeys: { profile: { current: () => ['profile', 'current'] } },
+}))
 vi.mock('../../components/ClientRouteWrapper', () => ({
   ClientRouteWrapper: ({ children, seeds }: any) =>
     createElement('div', { 'data-testid': 'route-wrapper', 'data-seeds': JSON.stringify(seeds) }, children),
@@ -267,7 +270,7 @@ describe('routes/profile', () => {
   describe('clientLoader', () => {
     // STRICT: verifies clientLoader returns null profile when user is null
     it('returns profile: null when user is null', async () => {
-      mockClientGetUser.mockResolvedValue({ data: { user: null } })
+      mockClientGetSession.mockResolvedValue({ data: { session: null } })
       const result = await clientLoader({ serverLoader: vi.fn() } as any)
 
       // 1 - has profile
@@ -277,7 +280,7 @@ describe('routes/profile', () => {
       expect(result.profile).toBeNull()
 
       // 3 - clientGetUser was called
-      expect(mockClientGetUser).toHaveBeenCalled()
+      expect(mockClientGetSession).toHaveBeenCalled()
 
       // 4 - shape matches
       expect(result).toEqual({ profile: null })
@@ -286,13 +289,14 @@ describe('routes/profile', () => {
       expect(clientLoader.hydrate).toBe(true)
 
       // 6 - clientFrom was NOT called (no user)
+      // clientFrom was NOT called (no user — getSession returned null session)
       expect(mockClientFrom).not.toHaveBeenCalled()
     })
 
     // STRICT: verifies clientLoader fetches profile when user exists
     it('fetches profile on client when user exists', async () => {
       const profileData = { id: 'c1', username: 'player1', xp: 500 }
-      mockClientGetUser.mockResolvedValue({ data: { user: { id: 'c1' } } })
+      mockClientGetSession.mockResolvedValue({ data: { session: { user: { id: 'c1' } } } })
       mockClientFrom.mockImplementation(() => ({
         select: vi.fn().mockReturnValue({
           eq: vi.fn().mockReturnValue({
@@ -316,7 +320,7 @@ describe('routes/profile', () => {
       expect(mockClientFrom).toHaveBeenCalledWith('profiles')
 
       // 5 - clientGetUser was called
-      expect(mockClientGetUser).toHaveBeenCalled()
+      expect(mockClientGetSession).toHaveBeenCalled()
 
       // 6 - profile id matches user id
       expect(result.profile.id).toBe('c1')

@@ -10,7 +10,6 @@ vi.mock('react-router', () => ({
 import { ClientRouteWrapper } from '../ClientRouteWrapper'
 
 describe('ClientRouteWrapper', () => {
-  // STRICT: Verifies children rendering, no query cache pollution when no seeds provided, wrapper is transparent
   it('renders children without seeds and does not modify query cache', () => {
     const queryClient = new QueryClient({ defaultOptions: { queries: { retry: false } } })
 
@@ -36,8 +35,7 @@ describe('ClientRouteWrapper', () => {
     expect(screen.getByTestId('child').tagName).toBe('DIV')
   })
 
-  // STRICT: Verifies seeds are applied to query cache, multiple seeds work, null data is skipped, idempotent seeding
-  it('seeds query cache with provided data, skips null, and is idempotent', () => {
+  it('seeds query cache with provided data and skips null', () => {
     const queryClient = new QueryClient({ defaultOptions: { queries: { retry: false } } })
 
     const seeds = [
@@ -46,7 +44,7 @@ describe('ClientRouteWrapper', () => {
       { key: ['nullKey'], data: null },
     ]
 
-    const { rerender } = render(
+    render(
       <QueryClientProvider client={queryClient}>
         <ClientRouteWrapper seeds={seeds}>
           <div>Seeded Content</div>
@@ -62,15 +60,30 @@ describe('ClientRouteWrapper', () => {
     expect(queryClient.getQueryData(['settings'])).toEqual({ theme: 'dark' })
     // 4. null data was NOT seeded (data != null check)
     expect(queryClient.getQueryData(['nullKey'])).toBeUndefined()
-    // 5. Re-render does not duplicate seeding (seeded ref prevents it)
-    rerender(
+  })
+
+  it('updates query cache when seeds change on re-render', () => {
+    const queryClient = new QueryClient({ defaultOptions: { queries: { retry: false } } })
+
+    const { rerender } = render(
       <QueryClientProvider client={queryClient}>
-        <ClientRouteWrapper seeds={[{ key: ['users'], data: [{ id: 2, name: 'Bob' }] }]}>
-          <div>Seeded Content</div>
+        <ClientRouteWrapper seeds={[{ key: ['users'], data: [{ id: 1, name: 'Alice' }] }]}>
+          <div>Content</div>
         </ClientRouteWrapper>
       </QueryClientProvider>
     )
-    // 6. Data remains from FIRST seed (idempotent — seeded.current is true)
+
     expect(queryClient.getQueryData(['users'])).toEqual([{ id: 1, name: 'Alice' }])
+
+    // Re-render with new seeds — data is updated (no idempotent ref)
+    rerender(
+      <QueryClientProvider client={queryClient}>
+        <ClientRouteWrapper seeds={[{ key: ['users'], data: [{ id: 2, name: 'Bob' }] }]}>
+          <div>Content</div>
+        </ClientRouteWrapper>
+      </QueryClientProvider>
+    )
+
+    expect(queryClient.getQueryData(['users'])).toEqual([{ id: 2, name: 'Bob' }])
   })
 })

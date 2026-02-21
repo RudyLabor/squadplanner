@@ -88,6 +88,10 @@ vi.mock('../useMessageActions', () => ({
   markMessagesAsReadFallback: mockMarkMessagesAsReadFallback,
 }))
 
+vi.mock('../../lib/notifyOnMessage', () => ({
+  notifySquadMessage: vi.fn().mockResolvedValue(undefined),
+}))
+
 import { useMessagesStore } from '../useMessages'
 
 // Helper to build a chain mock for supabase from() queries
@@ -401,7 +405,10 @@ describe('useMessagesStore', () => {
           eq: vi.fn().mockReturnValue({
             order: vi.fn().mockReturnValue({
               limit: vi.fn().mockReturnValue({
-                is: vi.fn().mockResolvedValue({ data: mockMessages, error: null }),
+                abortSignal: vi.fn().mockReturnValue({
+                  is: vi.fn().mockResolvedValue({ data: mockMessages, error: null }),
+                  eq: vi.fn().mockResolvedValue({ data: mockMessages, error: null }),
+                }),
               }),
             }),
           }),
@@ -427,7 +434,10 @@ describe('useMessagesStore', () => {
           eq: vi.fn().mockReturnValue({
             order: vi.fn().mockReturnValue({
               limit: vi.fn().mockReturnValue({
-                eq: vi.fn().mockResolvedValue({ data: mockMessages, error: null }),
+                abortSignal: vi.fn().mockReturnValue({
+                  eq: vi.fn().mockResolvedValue({ data: mockMessages, error: null }),
+                  is: vi.fn().mockResolvedValue({ data: mockMessages, error: null }),
+                }),
               }),
             }),
           }),
@@ -451,7 +461,10 @@ describe('useMessagesStore', () => {
           eq: vi.fn().mockReturnValue({
             order: vi.fn().mockReturnValue({
               limit: vi.fn().mockReturnValue({
-                is: vi.fn().mockResolvedValue({ data: [], error: null }),
+                abortSignal: vi.fn().mockReturnValue({
+                  is: vi.fn().mockResolvedValue({ data: [], error: null }),
+                  eq: vi.fn().mockResolvedValue({ data: [], error: null }),
+                }),
               }),
             }),
           }),
@@ -472,7 +485,10 @@ describe('useMessagesStore', () => {
           eq: vi.fn().mockReturnValue({
             order: vi.fn().mockReturnValue({
               limit: vi.fn().mockReturnValue({
-                is: vi.fn().mockResolvedValue({ data: null, error: new Error('Fetch failed') }),
+                abortSignal: vi.fn().mockReturnValue({
+                  is: vi.fn().mockResolvedValue({ data: null, error: new Error('Fetch failed') }),
+                  eq: vi.fn().mockResolvedValue({ data: null, error: new Error('Fetch failed') }),
+                }),
               }),
             }),
           }),
@@ -496,7 +512,10 @@ describe('useMessagesStore', () => {
           eq: vi.fn().mockReturnValue({
             order: vi.fn().mockReturnValue({
               limit: vi.fn().mockReturnValue({
-                is: vi.fn().mockRejectedValue(abortError),
+                abortSignal: vi.fn().mockReturnValue({
+                  is: vi.fn().mockRejectedValue(abortError),
+                  eq: vi.fn().mockRejectedValue(abortError),
+                }),
               }),
             }),
           }),
@@ -517,7 +536,10 @@ describe('useMessagesStore', () => {
           eq: vi.fn().mockReturnValue({
             order: vi.fn().mockReturnValue({
               limit: vi.fn().mockReturnValue({
-                is: vi.fn().mockResolvedValue({ data: null, error: null }),
+                abortSignal: vi.fn().mockReturnValue({
+                  is: vi.fn().mockResolvedValue({ data: null, error: null }),
+                  eq: vi.fn().mockResolvedValue({ data: null, error: null }),
+                }),
               }),
             }),
           }),
@@ -1213,13 +1235,16 @@ describe('useMessagesStore', () => {
         unread_count: 0,
       }
 
-      // Need to mock supabase for fetchMessages
+      // Need to mock supabase for fetchMessages (with abortSignal in the chain)
       mockFrom.mockReturnValue({
         select: vi.fn().mockReturnValue({
           eq: vi.fn().mockReturnValue({
             order: vi.fn().mockReturnValue({
               limit: vi.fn().mockReturnValue({
-                eq: vi.fn().mockResolvedValue({ data: [], error: null }),
+                abortSignal: vi.fn().mockReturnValue({
+                  eq: vi.fn().mockResolvedValue({ data: [], error: null }),
+                  is: vi.fn().mockResolvedValue({ data: [], error: null }),
+                }),
               }),
             }),
           }),

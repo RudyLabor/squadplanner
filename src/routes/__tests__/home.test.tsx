@@ -12,7 +12,7 @@ const mockFrom = vi.hoisted(() => vi.fn())
 const mockCreateMinimalSSRClient = vi.hoisted(() => vi.fn())
 const mockData = vi.hoisted(() => vi.fn((d: any) => d))
 
-const mockClientGetUser = vi.hoisted(() => vi.fn())
+const mockClientGetSession = vi.hoisted(() => vi.fn())
 const mockClientRpc = vi.hoisted(() => vi.fn())
 const mockClientFrom = vi.hoisted(() => vi.fn())
 
@@ -70,16 +70,18 @@ vi.mock('../../lib/supabase-minimal-ssr', () => ({
 
 vi.mock('../../lib/supabaseMinimal', () => ({
   supabaseMinimal: {
-    auth: { getUser: mockClientGetUser },
+    auth: { getSession: mockClientGetSession },
     rpc: mockClientRpc,
     from: mockClientFrom,
   },
 }))
 
 vi.mock('../../lib/queryClient', () => ({
+  queryClient: { getQueryData: vi.fn().mockReturnValue(undefined) },
   queryKeys: {
     squads: { list: () => ['squads', 'list'] },
     sessions: { upcoming: () => ['sessions', 'upcoming'] },
+    profile: { current: () => ['profile', 'current'] },
   },
 }))
 
@@ -370,7 +372,7 @@ describe('routes/home', () => {
   // =========================================================================
   describe('clientLoader', () => {
     it('returns empty data when user is null', async () => {
-      mockClientGetUser.mockResolvedValue({ data: { user: null } })
+      mockClientGetSession.mockResolvedValue({ data: { session: null } })
       const serverData = { profile: null, squads: [], upcomingSessions: [] }
       const result = await clientLoader({ serverLoader: vi.fn().mockResolvedValue(serverData) } as any)
       expect(result).toEqual({ profile: null, squads: [], upcomingSessions: [] })
@@ -381,7 +383,7 @@ describe('routes/home', () => {
       const profile = { id: 'c1', username: 'cl' }
       const squads = [{ id: 's1', name: 'CS', game: 'G', invite_code: 'a', owner_id: 'c1', total_members: 1, created_at: '2026-01-01', member_count: 1 }]
 
-      mockClientGetUser.mockResolvedValue({ data: { user } })
+      mockClientGetSession.mockResolvedValue({ data: { session: { user } } })
       mockClientRpc.mockResolvedValue({ data: { profile, squads } })
 
       // fetchUpcomingSessions uses from()
@@ -409,7 +411,7 @@ describe('routes/home', () => {
     })
 
     it('defaults profile and squads when RPC returns null', async () => {
-      mockClientGetUser.mockResolvedValue({ data: { user: { id: 'c1' } } })
+      mockClientGetSession.mockResolvedValue({ data: { session: { user: { id: 'c1' } } } })
       mockClientRpc.mockResolvedValue({ data: null })
 
       mockClientFrom.mockImplementation(() => ({

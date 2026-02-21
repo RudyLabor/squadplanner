@@ -42,8 +42,9 @@ interface ParsedRecurrenceRule {
 
 // Parse recurrence rule from format 'weekly:0,2,4:21:00'
 export function parseRecurrenceRule(rule: string): ParsedRecurrenceRule {
+  // Format: 'weekly:0,2,4:21:00' → split gives ['weekly', '0,2,4', '21', '00']
   const parts = rule.split(':')
-  if (parts.length !== 3) {
+  if (parts.length !== 4) {
     throw new Error('Invalid recurrence rule format')
   }
 
@@ -52,9 +53,8 @@ export function parseRecurrenceRule(rule: string): ParsedRecurrenceRule {
     .map((d) => parseInt(d, 10))
     .filter((d) => !isNaN(d) && d >= 0 && d <= 6)
 
-  const timeParts = parts[2].split(':')
-  const hour = parseInt(timeParts[0], 10)
-  const minute = parseInt(timeParts[1], 10)
+  const hour = parseInt(parts[2], 10)
+  const minute = parseInt(parts[3], 10)
 
   if (isNaN(hour) || isNaN(minute) || hour < 0 || hour > 23 || minute < 0 || minute > 59) {
     throw new Error('Invalid time in recurrence rule')

@@ -10,6 +10,8 @@ const {
   mockSendCallPushNotification,
   mockInitializeNativeWebRTC,
   mockSubscribeToIncomingCalls,
+  mockDisconnectWebRTC,
+  mockToggleWebRTCMute,
 } = vi.hoisted(() => {
   const mockGetUser = vi.fn()
   const mockFrom = vi.fn()
@@ -30,6 +32,8 @@ const {
   const mockSendCallPushNotification = vi.fn().mockResolvedValue(undefined)
   const mockInitializeNativeWebRTC = vi.fn().mockResolvedValue(undefined)
   const mockSubscribeToIncomingCalls = vi.fn().mockReturnValue(vi.fn())
+  const mockDisconnectWebRTC = vi.fn()
+  const mockToggleWebRTCMute = vi.fn().mockReturnValue(false)
   return {
     mockGetUser,
     mockFrom,
@@ -38,6 +42,8 @@ const {
     mockSendCallPushNotification,
     mockInitializeNativeWebRTC,
     mockSubscribeToIncomingCalls,
+    mockDisconnectWebRTC,
+    mockToggleWebRTCMute,
   }
 })
 
@@ -68,6 +74,8 @@ vi.mock('../useCallActions', () => ({
   sendCallPushNotification: mockSendCallPushNotification,
   initializeNativeWebRTC: mockInitializeNativeWebRTC,
   subscribeToIncomingCalls: mockSubscribeToIncomingCalls,
+  disconnectWebRTC: mockDisconnectWebRTC,
+  toggleWebRTCMute: mockToggleWebRTCMute,
 }))
 
 import { useVoiceCallStore, formatCallDuration, subscribeToIncomingCalls } from '../useVoiceCall'
@@ -212,39 +220,9 @@ describe('useVoiceCallStore', () => {
       expect(mockResetQuality).toHaveBeenCalled()
     })
 
-    it('disconnects room and removes audio elements if room exists', () => {
-      const mockDisconnect = vi.fn().mockResolvedValue(undefined)
-      const mockAudioEl = { remove: vi.fn() }
-      const mockGetElementById = vi.spyOn(document, 'getElementById').mockReturnValue(mockAudioEl as any)
-      const mockRoom = {
-        remoteParticipants: new Map([
-          ['p1', { identity: 'user-1' }],
-        ]),
-        disconnect: mockDisconnect,
-      }
-      act(() => { useVoiceCallStore.setState({ room: mockRoom }) })
+    it('calls disconnectWebRTC on reset', () => {
       act(() => { useVoiceCallStore.getState().resetCall() })
-
-      expect(mockGetElementById).toHaveBeenCalledWith('call-audio-user-1')
-      expect(mockAudioEl.remove).toHaveBeenCalled()
-      expect(mockDisconnect).toHaveBeenCalled()
-      mockGetElementById.mockRestore()
-    })
-
-    it('handles room with no audio elements gracefully', () => {
-      const mockDisconnect = vi.fn().mockResolvedValue(undefined)
-      const mockGetElementById = vi.spyOn(document, 'getElementById').mockReturnValue(null)
-      const mockRoom = {
-        remoteParticipants: new Map([
-          ['p1', { identity: 'user-x' }],
-        ]),
-        disconnect: mockDisconnect,
-      }
-      act(() => { useVoiceCallStore.setState({ room: mockRoom }) })
-      act(() => { useVoiceCallStore.getState().resetCall() })
-
-      expect(mockDisconnect).toHaveBeenCalled()
-      mockGetElementById.mockRestore()
+      expect(mockDisconnectWebRTC).toHaveBeenCalled()
     })
   })
 
@@ -329,8 +307,8 @@ describe('useVoiceCallStore', () => {
         'call-record-1'
       )
 
-      // WebRTC should have been initialized
-      expect(mockInitializeNativeWebRTC).toHaveBeenCalledWith('user-1', 'recv-1', expect.anything())
+      // WebRTC should have been initialized (currentUserId, otherUserId, storeRef, isOffer=true)
+      expect(mockInitializeNativeWebRTC).toHaveBeenCalledWith('user-1', 'recv-1', expect.anything(), true)
     })
 
     it('uses default username when profile is null', async () => {
@@ -624,14 +602,13 @@ describe('useVoiceCallStore', () => {
       await act(async () => { await useVoiceCallStore.getState().acceptCall() })
 
       const state = useVoiceCallStore.getState()
-      expect(state.status).toBe('connected')
+      // acceptCall sets status to 'calling' (WebRTC onConnectionStateChange callback sets it to 'connected')
+      expect(state.status).toBe('calling')
       expect(state.receiver).toEqual({
         id: 'user-recv',
         username: 'ReceiverName',
         avatar_url: 'recv-avatar.png',
       })
-      expect(state.callStartTime).toBeTruthy()
-      expect(state.durationInterval).not.toBeNull()
       expect(state.ringTimeout).toBeNull()
     })
 
@@ -908,65 +885,28 @@ describe('useVoiceCallStore', () => {
       expect(mockFrom).not.toHaveBeenCalled()
     })
 
-    it('disconnects room and cleans up audio elements', async () => {
-      const mockDisconnect = vi.fn().mockResolvedValue(undefined)
-      const mockAudioEl = { remove: vi.fn() }
-      const mockGetElementById = vi.spyOn(document, 'getElementById').mockReturnValue(mockAudioEl as any)
-      const mockRoom = {
-        remoteParticipants: new Map([
-          ['p1', { identity: 'remote-user' }],
-        ]),
-        disconnect: mockDisconnect,
-      }
-      act(() => { useVoiceCallStore.setState({ room: mockRoom }) })
-
+    it('calls disconnectWebRTC during endCall', async () => {
+      mockDisconnectWebRTC.mockClear()
       await act(async () => { await useVoiceCallStore.getState().endCall() })
-      expect(mockAudioEl.remove).toHaveBeenCalled()
-      expect(mockDisconnect).toHaveBeenCalled()
-      mockGetElementById.mockRestore()
-    })
-
-    it('handles room disconnect error gracefully', async () => {
-      const mockDisconnect = vi.fn().mockRejectedValue(new Error('disconnect fail'))
-      const mockRoom = {
-        remoteParticipants: new Map(),
-        disconnect: mockDisconnect,
-      }
-      act(() => { useVoiceCallStore.setState({ room: mockRoom }) })
-      const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {})
-
-      await act(async () => { await useVoiceCallStore.getState().endCall() })
+      expect(mockDisconnectWebRTC).toHaveBeenCalled()
       expect(useVoiceCallStore.getState().status).toBe('ended')
-      warnSpy.mockRestore()
     })
   })
 
   // ===== toggleMute =====
   describe('toggleMute', () => {
-    it('does nothing when no room exists', async () => {
-      act(() => { useVoiceCallStore.setState({ room: null, isMuted: false }) })
+    it('calls toggleWebRTCMute and sets isMuted to its return value', async () => {
+      mockToggleWebRTCMute.mockReturnValue(true)
       await act(async () => { await useVoiceCallStore.getState().toggleMute() })
-      expect(useVoiceCallStore.getState().isMuted).toBe(false)
-    })
-
-    it('unmutes when muted (toggles)', async () => {
-      const setMicEnabled = vi.fn().mockResolvedValue(undefined)
-      const mockRoom = { localParticipant: { setMicrophoneEnabled: setMicEnabled } }
-      act(() => { useVoiceCallStore.setState({ room: mockRoom, isMuted: true }) })
-
-      await act(async () => { await useVoiceCallStore.getState().toggleMute() })
-      expect(setMicEnabled).toHaveBeenCalledWith(true) // isMuted was true, so enable mic
-      expect(useVoiceCallStore.getState().isMuted).toBe(false)
-    })
-
-    it('mutes when unmuted (toggles)', async () => {
-      const setMicEnabled = vi.fn().mockResolvedValue(undefined)
-      const mockRoom = { localParticipant: { setMicrophoneEnabled: setMicEnabled } }
-      act(() => { useVoiceCallStore.setState({ room: mockRoom, isMuted: false }) })
-
-      await act(async () => { await useVoiceCallStore.getState().toggleMute() })
-      expect(setMicEnabled).toHaveBeenCalledWith(false) // isMuted was false, so disable mic
+      expect(mockToggleWebRTCMute).toHaveBeenCalled()
       expect(useVoiceCallStore.getState().isMuted).toBe(true)
+    })
+
+    it('sets isMuted to false when toggleWebRTCMute returns false', async () => {
+      act(() => { useVoiceCallStore.setState({ isMuted: true }) })
+      mockToggleWebRTCMute.mockReturnValue(false)
+      await act(async () => { await useVoiceCallStore.getState().toggleMute() })
+      expect(useVoiceCallStore.getState().isMuted).toBe(false)
     })
   })
 

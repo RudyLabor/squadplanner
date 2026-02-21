@@ -37,6 +37,10 @@ vi.mock('../useRingtone', () => ({
   playNotificationSound: vi.fn(),
 }))
 
+vi.mock('../../lib/notifyOnMessage', () => ({
+  notifyDirectMessage: vi.fn().mockResolvedValue(undefined),
+}))
+
 import { createDMActions } from '../useDMActions'
 
 describe('createDMActions', () => {
@@ -54,8 +58,21 @@ describe('createDMActions', () => {
     it('successful send with authenticated user', async () => {
       const mockUser = { id: 'user-1' }
       mockGetSession.mockResolvedValue({ data: { session: { user: mockUser } } })
-      mockFrom.mockReturnValue({
-        insert: vi.fn().mockResolvedValue({ error: null }),
+      const mockInsert = vi.fn().mockResolvedValue({ error: null })
+      mockFrom.mockImplementation((table: string) => {
+        if (table === 'direct_messages') {
+          return { insert: mockInsert }
+        }
+        if (table === 'profiles') {
+          return {
+            select: vi.fn().mockReturnValue({
+              eq: vi.fn().mockReturnValue({
+                single: vi.fn().mockResolvedValue({ data: { username: 'User1' } }),
+              }),
+            }),
+          }
+        }
+        return { select: vi.fn() }
       })
 
       const actions = createDMActions(mockSet, mockGet)
@@ -63,7 +80,7 @@ describe('createDMActions', () => {
 
       expect(result).toEqual({ error: null })
       expect(mockFrom).toHaveBeenCalledWith('direct_messages')
-      expect(mockFrom('direct_messages').insert).toHaveBeenCalledWith({
+      expect(mockInsert).toHaveBeenCalledWith({
         content: 'Hello!',
         sender_id: 'user-1',
         receiver_id: 'receiver-1',

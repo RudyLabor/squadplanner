@@ -5,6 +5,7 @@ import { act } from '@testing-library/react'
 const { mockNativeWebRTCInstance, MockNativeWebRTCClass } = vi.hoisted(() => {
   const mockNativeWebRTCInstance = {
     connect: vi.fn().mockResolvedValue(true),
+    connectLocalOnly: vi.fn().mockResolvedValue(true),
     enableMicrophone: vi.fn().mockResolvedValue(undefined),
     disconnect: vi.fn(),
   }
@@ -124,7 +125,7 @@ describe('useVoiceChatStore', () => {
     it('sets isConnecting to true during connection', async () => {
       // Make connect hang to inspect intermediate state
       let resolveConnect: (v: boolean) => void
-      mockNativeWebRTCInstance.connect.mockReturnValue(
+      mockNativeWebRTCInstance.connectLocalOnly.mockReturnValue(
         new Promise<boolean>((resolve) => {
           resolveConnect = resolve
         })
@@ -146,7 +147,7 @@ describe('useVoiceChatStore', () => {
     })
 
     it('sets connected state on successful join', async () => {
-      mockNativeWebRTCInstance.connect.mockResolvedValue(true)
+      mockNativeWebRTCInstance.connectLocalOnly.mockResolvedValue(true)
 
       let result: boolean | undefined
       await act(async () => {
@@ -168,7 +169,7 @@ describe('useVoiceChatStore', () => {
     })
 
     it('saves party info to localStorage on join', async () => {
-      mockNativeWebRTCInstance.connect.mockResolvedValue(true)
+      mockNativeWebRTCInstance.connectLocalOnly.mockResolvedValue(true)
 
       await act(async () => {
         await useVoiceChatStore.getState().joinChannel('ch-1', 'u-1', 'User1')
@@ -181,7 +182,7 @@ describe('useVoiceChatStore', () => {
     })
 
     it('sets error state when connection fails', async () => {
-      mockNativeWebRTCInstance.connect.mockResolvedValue(false)
+      mockNativeWebRTCInstance.connectLocalOnly.mockResolvedValue(false)
 
       let result: boolean | undefined
       await act(async () => {
@@ -196,7 +197,7 @@ describe('useVoiceChatStore', () => {
     })
 
     it('handles exception during connection', async () => {
-      mockNativeWebRTCInstance.connect.mockRejectedValue(new Error('Network error'))
+      mockNativeWebRTCInstance.connectLocalOnly.mockRejectedValue(new Error('Network error'))
 
       let result: boolean | undefined
       await act(async () => {
@@ -208,7 +209,7 @@ describe('useVoiceChatStore', () => {
     })
 
     it('handles non-Error exceptions', async () => {
-      mockNativeWebRTCInstance.connect.mockRejectedValue('string error')
+      mockNativeWebRTCInstance.connectLocalOnly.mockRejectedValue('string error')
 
       let result: boolean | undefined
       await act(async () => {

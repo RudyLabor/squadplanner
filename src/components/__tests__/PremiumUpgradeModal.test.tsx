@@ -38,8 +38,30 @@ vi.mock('../../hooks', () => ({
 
 // Mock premium constants
 vi.mock('../../hooks/usePremium', () => ({
-  PREMIUM_PRICE_MONTHLY: 4.99,
-  PREMIUM_PRICE_YEARLY: 47.88,
+  PREMIUM_PRICE_MONTHLY: 6.99,
+  PREMIUM_PRICE_YEARLY: 59.88,
+  SQUAD_LEADER_PRICE_MONTHLY: 14.99,
+  SQUAD_LEADER_PRICE_YEARLY: 143.88,
+  CLUB_PRICE_MONTHLY: 39.99,
+  CLUB_PRICE_YEARLY: 383.88,
+  FEATURE_MIN_TIER: {
+    gifs: 'premium',
+    voice_messages: 'premium',
+    polls: 'premium',
+    unlimited_squads: 'squad_leader',
+    unlimited_history: 'squad_leader',
+    advanced_stats: 'premium',
+    ai_coach_advanced: 'squad_leader',
+    hd_audio: 'squad_leader',
+    advanced_roles: 'squad_leader',
+    calendar_export: 'squad_leader',
+    recurring_sessions: 'squad_leader',
+    team_analytics: 'squad_leader',
+    priority_matchmaking: 'squad_leader',
+    club_dashboard: 'club',
+    custom_branding: 'club',
+    api_webhooks: 'club',
+  },
 }))
 
 import { PremiumUpgradeModal } from '../PremiumUpgradeModal'
@@ -61,7 +83,7 @@ describe('PremiumUpgradeModal', () => {
 
   it('renders modal when open', () => {
     render(createElement(PremiumUpgradeModal, defaultProps))
-    expect(screen.getByText('Passe Premium')).toBeDefined()
+    expect(screen.getByText('Passe au niveau supérieur')).toBeDefined()
   })
 
   it('displays feature when provided', () => {
@@ -77,9 +99,9 @@ describe('PremiumUpgradeModal', () => {
 
   it('renders premium features list', () => {
     render(createElement(PremiumUpgradeModal, defaultProps))
-    expect(screen.getByText('Squads illimités')).toBeDefined()
+    expect(screen.getByText('5 squads')).toBeDefined()
     expect(screen.getByText('Stats avancées')).toBeDefined()
-    expect(screen.getByText('IA Coach avancé')).toBeDefined()
+    expect(screen.getByText('IA Coach')).toBeDefined()
   })
 
   it('calls onClose when close button clicked', () => {

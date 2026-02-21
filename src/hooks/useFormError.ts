@@ -42,7 +42,7 @@ export function useFormError(options: UseFormErrorOptions = {}) {
       clearError()
     } catch (err) {
       setAttempt((prev) => prev + 1)
-      handleError(err)
+      setError(err instanceof Error ? err : new Error(String(err)))
     } finally {
       setIsRetrying(false)
     }

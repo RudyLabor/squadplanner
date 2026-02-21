@@ -6,7 +6,7 @@ const { mockGetSession, mockChannel, mockRemoveChannel, mockSupabase } = vi.hois
   const mockChannel = vi.fn().mockReturnValue({
     on: vi.fn().mockReturnThis(),
     subscribe: vi.fn().mockReturnThis(),
-    send: vi.fn(),
+    send: vi.fn().mockResolvedValue('ok'),
     unsubscribe: vi.fn(),
   })
   const mockRemoveChannel = vi.fn()
@@ -44,7 +44,7 @@ describe('useTypingIndicator', () => {
     mockChannel.mockReturnValue({
       on: vi.fn().mockReturnThis(),
       subscribe: vi.fn().mockReturnThis(),
-      send: vi.fn(),
+      send: vi.fn().mockResolvedValue('ok'),
       unsubscribe: vi.fn(),
     })
   })

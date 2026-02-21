@@ -1,46 +1,10 @@
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router'
 import { Capacitor } from '@capacitor/core'
+import { parseDeepLinkUrl, isValidDeepLinkPath } from '../lib/deepLinkParsing'
 
-/**
- * Extracts the app-relative path from a deep link URL.
- *
- * Supported formats:
- *   - https://squadplanner.fr/join/abc   -> /join/abc
- *   - squadplanner://app/join/abc        -> /join/abc
- *
- * Returns null if the URL doesn't match a supported deep link route.
- */
-function parseDeepLinkUrl(urlString: string): string | null {
-  try {
-    const url = new URL(urlString)
-
-    // Custom scheme: squadplanner://app/join/abc
-    if (url.protocol === 'squadplanner:') {
-      // url.pathname for custom schemes includes the host, so we need host + pathname
-      // e.g. squadplanner://app/join/abc => host="app", pathname="/join/abc"
-      const path = url.pathname + url.search
-      return path || null
-    }
-
-    // Universal link: https://squadplanner.fr/join/abc
-    if (url.hostname === 'squadplanner.fr') {
-      const path = url.pathname + url.search
-      return path || null
-    }
-
-    return null
-  } catch {
-    return null
-  }
-}
-
-/** Routes that are valid deep link targets. */
-const DEEP_LINK_PREFIXES = ['/join/', '/s/', '/squad/', '/u/', '/referral/']
-
-function isValidDeepLinkPath(path: string): boolean {
-  return DEEP_LINK_PREFIXES.some((prefix) => path.startsWith(prefix))
-}
+// Re-export pure functions for consumers that imported them from here
+export { parseDeepLinkUrl, isValidDeepLinkPath, DEEP_LINK_PREFIXES } from '../lib/deepLinkParsing'
 
 /**
  * Listens for deep link events from Capacitor and navigates to the

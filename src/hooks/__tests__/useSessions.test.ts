@@ -29,6 +29,10 @@ vi.mock('../../lib/challengeTracker', () => ({
   trackChallengeProgress: vi.fn().mockResolvedValue(undefined),
 }))
 
+vi.mock('../../lib/notifyOnSession', () => ({
+  notifySessionCreated: vi.fn().mockResolvedValue(undefined),
+}))
+
 import { useSessionsStore } from '../useSessions'
 
 describe('useSessionsStore', () => {
@@ -284,6 +288,15 @@ describe('useSessionsStore', () => {
             insert: mockRsvpInsert,
             select: vi.fn().mockReturnValue({
               eq: vi.fn().mockResolvedValue({ data: [] }),
+            }),
+          }
+        }
+        if (table === 'profiles') {
+          return {
+            select: vi.fn().mockReturnValue({
+              eq: vi.fn().mockReturnValue({
+                single: vi.fn().mockResolvedValue({ data: { username: 'TestUser' } }),
+              }),
             }),
           }
         }

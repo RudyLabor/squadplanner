@@ -78,6 +78,12 @@ describe('useKeyboardVisible', () => {
     expect(noVVResult.current).toBe(false)
 
     // 4. Test with visualViewport mock
+    // The hook uses window.screen.height as stable reference
+    Object.defineProperty(window.screen, 'height', {
+      value: 800,
+      configurable: true,
+      writable: true,
+    })
     const resizeListeners: Array<() => void> = []
     const mockViewport = {
       height: 800,

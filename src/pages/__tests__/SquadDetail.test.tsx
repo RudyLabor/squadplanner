@@ -121,6 +121,7 @@ vi.mock('../../hooks/queries', () => ({
 // Mock icons
 vi.mock('../../components/icons', () => ({
   ArrowLeft: (props: any) => createElement('span', { ...props, 'data-testid': 'arrow-left' }),
+  BarChart3: (props: any) => createElement('span', { ...props, 'data-testid': 'bar-chart' }),
 }))
 
 // Mock components
@@ -175,6 +176,10 @@ vi.mock('../../components/squads/SquadSessions', () => ({
       createElement('button', { 'data-testid': 'create-session', onClick: () => onCreateSession({ squad_id: 'sq1', scheduled_at: '2026-02-20', duration_minutes: 60, auto_confirm_threshold: 3 }) }, 'Create'),
     )
   },
+}))
+
+vi.mock('../../components/PremiumGate', () => ({
+  PremiumGate: ({ children }: any) => children,
 }))
 
 vi.mock('../../components/squads/SquadSettings', () => ({

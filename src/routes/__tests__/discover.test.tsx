@@ -9,7 +9,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 const mockGetUser = vi.hoisted(() => vi.fn())
 const mockCreateMinimalSSRClient = vi.hoisted(() => vi.fn())
 const mockData = vi.hoisted(() => vi.fn((d: any) => d))
-const mockClientGetUser = vi.hoisted(() => vi.fn())
+const mockClientGetSession = vi.hoisted(() => vi.fn())
 const mockClientFrom = vi.hoisted(() => vi.fn())
 
 // ---------------------------------------------------------------------------
@@ -61,12 +61,15 @@ vi.mock('../../lib/supabase-minimal-ssr', () => ({
 
 vi.mock('../../lib/supabaseMinimal', () => ({
   supabaseMinimal: {
-    auth: { getUser: mockClientGetUser },
+    auth: { getSession: mockClientGetSession },
     from: mockClientFrom,
   },
 }))
 
-vi.mock('../../lib/queryClient', () => ({ queryKeys: { discover: { publicSquads: () => ['discover', 'publicSquads'] } } }))
+vi.mock('../../lib/queryClient', () => ({
+  queryClient: { getQueryData: vi.fn().mockReturnValue(undefined) },
+  queryKeys: { discover: { publicSquads: () => ['discover', 'publicSquads'] } },
+}))
 vi.mock('../../components/ClientRouteWrapper', () => ({
   ClientRouteWrapper: ({ children, seeds }: any) =>
     createElement('div', { 'data-testid': 'route-wrapper', 'data-seeds': JSON.stringify(seeds) }, children),
@@ -104,8 +107,10 @@ function setupSSRMocks(overrides: { user?: any; error?: any; publicSquads?: any 
 
   fromFn.mockImplementation(() => ({
     select: vi.fn().mockReturnValue({
-      order: vi.fn().mockReturnValue({
-        limit: vi.fn().mockResolvedValue({ data: overrides.publicSquads ?? [] }),
+      eq: vi.fn().mockReturnValue({
+        order: vi.fn().mockReturnValue({
+          limit: vi.fn().mockResolvedValue({ data: overrides.publicSquads ?? [] }),
+        }),
       }),
     }),
   }))
@@ -272,7 +277,7 @@ describe('routes/discover', () => {
   describe('clientLoader', () => {
     // STRICT: verifies clientLoader returns empty publicSquads when user is null
     it('returns empty publicSquads when user is null', async () => {
-      mockClientGetUser.mockResolvedValue({ data: { user: null } })
+      mockClientGetSession.mockResolvedValue({ data: { session: null } })
       const result = await clientLoader({ serverLoader: vi.fn() } as any)
 
       // 1 - has publicSquads
@@ -284,8 +289,8 @@ describe('routes/discover', () => {
       // 3 - is an array
       expect(Array.isArray(result.publicSquads)).toBe(true)
 
-      // 4 - clientGetUser was called
-      expect(mockClientGetUser).toHaveBeenCalled()
+      // 4 - clientGetSession was called
+      expect(mockClientGetSession).toHaveBeenCalled()
 
       // 5 - length is 0
       expect(result.publicSquads).toHaveLength(0)
@@ -296,12 +301,14 @@ describe('routes/discover', () => {
 
     // STRICT: verifies clientLoader fetches squads when user exists
     it('fetches public squads on client when user exists', async () => {
-      mockClientGetUser.mockResolvedValue({ data: { user: { id: 'c1' } } })
+      mockClientGetSession.mockResolvedValue({ data: { session: { user: { id: 'c1' } } } })
       mockClientFrom.mockImplementation(() => ({
         select: vi.fn().mockReturnValue({
-          order: vi.fn().mockReturnValue({
-            limit: vi.fn().mockResolvedValue({
-              data: [{ id: 's1', name: 'ClientSquad', game: 'CS', created_at: '2026-01-01' }],
+          eq: vi.fn().mockReturnValue({
+            order: vi.fn().mockReturnValue({
+              limit: vi.fn().mockResolvedValue({
+                data: [{ id: 's1', name: 'ClientSquad', game: 'CS', created_at: '2026-01-01' }],
+              }),
             }),
           }),
         }),
@@ -325,7 +332,7 @@ describe('routes/discover', () => {
       expect(mockClientFrom).toHaveBeenCalledWith('squads')
 
       // 6 - clientGetUser was called
-      expect(mockClientGetUser).toHaveBeenCalled()
+      expect(mockClientGetSession).toHaveBeenCalled()
     })
   })
 

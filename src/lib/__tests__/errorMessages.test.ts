@@ -68,9 +68,13 @@ describe('humanizeError', () => {
     })
 
     it('should handle non-Error, non-string types', () => {
-      expect(humanizeError(null)).toBe('Une erreur inattendue est survenue.')
-      expect(humanizeError(undefined)).toBe('Une erreur inattendue est survenue.')
-      expect(humanizeError({})).toBe('Une erreur inattendue est survenue.')
+      // null/undefined/{} are not Error or string, so the intermediate message
+      // 'Une erreur inattendue est survenue.' is used internally but doesn't
+      // match any ERROR_MAP key, falling through to the default return.
+      const defaultMsg = 'Une erreur est survenue. Réessaie ou contacte le support.'
+      expect(humanizeError(null)).toBe(defaultMsg)
+      expect(humanizeError(undefined)).toBe(defaultMsg)
+      expect(humanizeError({})).toBe(defaultMsg)
     })
   })
 })

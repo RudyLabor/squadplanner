@@ -102,43 +102,21 @@ describe('useCallActions', () => {
   describe('initializeNativeWebRTC', () => {
     beforeEach(() => {
       mockConnect.mockResolvedValue(true)
-      // Mock edge function returning a valid token
-      mockFunctionsInvoke.mockResolvedValue({ data: { token: 'test-token-123' }, error: null })
     })
 
-    it('connects with NativeWebRTC when token is valid', async () => {
+    it('connects with NativeWebRTC via Supabase Realtime signaling', async () => {
       const mockStoreRef = {
         getState: vi.fn().mockReturnValue({ status: 'calling', ringTimeout: null }),
         setState: vi.fn(),
       } as any
 
-      await initializeNativeWebRTC('user-1', 'user-2', mockStoreRef)
+      await initializeNativeWebRTC('user-1', 'user-2', mockStoreRef, true)
 
-      // Should have called the edge function for a token
-      expect(mockFunctionsInvoke).toHaveBeenCalledWith('livekit-token', {
-        body: { room: 'call_user-1_user-2', identity: 'user-1' },
-      })
-      // Should have called connect with the token
-      expect(mockConnect).toHaveBeenCalledWith('test-token-123', 'call_user-1_user-2')
+      // Should have called connect with supabase, channelName, isOffer
+      expect(mockConnect).toHaveBeenCalledWith(mockSupabase, 'call_user-1_user-2', true)
     })
 
-    it('throws when token fetch fails', async () => {
-      mockFunctionsInvoke.mockResolvedValue({ data: null, error: new Error('Network') })
-
-      const mockStoreRef = {
-        getState: vi.fn().mockReturnValue({ status: 'calling', ringTimeout: null }),
-        setState: vi.fn(),
-      } as any
-
-      await expect(initializeNativeWebRTC('user-1', 'user-2', mockStoreRef)).rejects.toThrow(
-        'Impossible d\'obtenir le token de connexion vocale'
-      )
-      expect(mockStoreRef.setState).toHaveBeenCalledWith(
-        expect.objectContaining({ error: expect.any(String) })
-      )
-    })
-
-    it('throws when WebRTC connect fails', async () => {
+    it('throws when WebRTC connect returns false', async () => {
       mockConnect.mockResolvedValue(false)
 
       const mockStoreRef = {
@@ -146,8 +124,24 @@ describe('useCallActions', () => {
         setState: vi.fn(),
       } as any
 
-      await expect(initializeNativeWebRTC('user-1', 'user-2', mockStoreRef)).rejects.toThrow(
+      await expect(initializeNativeWebRTC('user-1', 'user-2', mockStoreRef, true)).rejects.toThrow(
         'Échec de la connexion WebRTC'
+      )
+    })
+
+    it('throws when WebRTC connect throws', async () => {
+      mockConnect.mockRejectedValue(new Error('Connection failed'))
+
+      const mockStoreRef = {
+        getState: vi.fn().mockReturnValue({ status: 'calling', ringTimeout: null }),
+        setState: vi.fn(),
+      } as any
+
+      await expect(initializeNativeWebRTC('user-1', 'user-2', mockStoreRef, false)).rejects.toThrow(
+        'Connection failed'
+      )
+      expect(mockStoreRef.setState).toHaveBeenCalledWith(
+        expect.objectContaining({ error: expect.any(String) })
       )
     })
   })

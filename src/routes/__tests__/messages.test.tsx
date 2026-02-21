@@ -11,7 +11,7 @@ const mockFrom = vi.hoisted(() => vi.fn())
 const mockCreateMinimalSSRClient = vi.hoisted(() => vi.fn())
 const mockData = vi.hoisted(() => vi.fn((d: any) => d))
 
-const mockClientGetUser = vi.hoisted(() => vi.fn())
+const mockClientGetSession = vi.hoisted(() => vi.fn())
 const mockClientFrom = vi.hoisted(() => vi.fn())
 
 // ---------------------------------------------------------------------------
@@ -63,12 +63,13 @@ vi.mock('../../lib/supabase-minimal-ssr', () => ({
 
 vi.mock('../../lib/supabaseMinimal', () => ({
   supabaseMinimal: {
-    auth: { getUser: mockClientGetUser },
+    auth: { getSession: mockClientGetSession },
     from: mockClientFrom,
   },
 }))
 
 vi.mock('../../lib/queryClient', () => ({
+  queryClient: { getQueryData: vi.fn().mockReturnValue(undefined) },
   queryKeys: {
     squads: { list: () => ['squads', 'list'] },
   },
@@ -234,13 +235,13 @@ describe('routes/messages', () => {
   // =========================================================================
   describe('clientLoader', () => {
     it('returns empty squads when user is null', async () => {
-      mockClientGetUser.mockResolvedValue({ data: { user: null } })
+      mockClientGetSession.mockResolvedValue({ data: { session: null } })
       const result = await clientLoader({ serverLoader: vi.fn() } as any)
       expect(result).toEqual({ squads: [] })
     })
 
     it('maps memberships to squads on client', async () => {
-      mockClientGetUser.mockResolvedValue({ data: { user: { id: 'c1' } } })
+      mockClientGetSession.mockResolvedValue({ data: { session: { user: { id: 'c1' } } } })
       mockClientFrom.mockImplementation(() => ({
         select: vi.fn().mockReturnValue({
           eq: vi.fn().mockResolvedValue({
@@ -258,7 +259,7 @@ describe('routes/messages', () => {
     })
 
     it('returns empty squads when memberships is null on client', async () => {
-      mockClientGetUser.mockResolvedValue({ data: { user: { id: 'c1' } } })
+      mockClientGetSession.mockResolvedValue({ data: { session: { user: { id: 'c1' } } } })
       mockClientFrom.mockImplementation(() => ({
         select: vi.fn().mockReturnValue({
           eq: vi.fn().mockResolvedValue({ data: null }),

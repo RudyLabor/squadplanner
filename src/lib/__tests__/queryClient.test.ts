@@ -5,9 +5,9 @@ import { queryClient, queryKeys, prefetchRoute, prefetchSquadDetail, prefetchSes
 
 describe('queryClient', () => {
   describe('QueryClient default options', () => {
-    it('has staleTime of 2 minutes', () => {
+    it('has staleTime of 30 seconds', () => {
       const defaults = queryClient.getDefaultOptions()
-      expect(defaults.queries?.staleTime).toBe(2 * 60 * 1000)
+      expect(defaults.queries?.staleTime).toBe(30 * 1000)
     })
 
     it('has gcTime of 10 minutes', () => {

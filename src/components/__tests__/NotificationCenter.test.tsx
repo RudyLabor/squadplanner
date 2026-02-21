@@ -9,13 +9,19 @@ const mockToggle = vi.hoisted(() => vi.fn())
 const mockClose = vi.hoisted(() => vi.fn())
 const mockActiveOverlay = vi.hoisted(() => ({ value: null as string | null }))
 
-const mockFromChain = vi.hoisted(() => ({
-  select: vi.fn().mockReturnThis(),
-  neq: vi.fn().mockReturnThis(),
-  order: vi.fn().mockReturnThis(),
-  limit: vi.fn().mockResolvedValue({ data: [], error: null }),
-  in: vi.fn().mockResolvedValue({ data: [], error: null }),
-}))
+const mockFromChain = vi.hoisted(() => {
+  const chain: any = {}
+  // All chain methods return the chain, making it both chainable and thenable
+  chain.select = vi.fn().mockReturnValue(chain)
+  chain.eq = vi.fn().mockReturnValue(chain)
+  chain.neq = vi.fn().mockReturnValue(chain)
+  chain.order = vi.fn().mockReturnValue(chain)
+  chain.in = vi.fn().mockReturnValue(chain)
+  chain.limit = vi.fn().mockReturnValue(chain)
+  // Default thenable behavior: resolves to empty data
+  chain.then = vi.fn().mockImplementation((resolve: any) => resolve({ data: [], error: null }))
+  return chain
+})
 
 const mockSupabase = vi.hoisted(() => ({
   from: vi.fn().mockReturnValue(mockFromChain),
@@ -187,7 +193,10 @@ describe('NotificationBell', () => {
 
   /* ---------- Mark all as read ---------- */
 
-  it('shows mark all as read button when there are unread notifications', () => {
+  // The component auto-marks all as read when the panel opens (useEffect),
+  // so the "Tout marquer comme lu" button disappears immediately after render.
+  // We verify the auto-mark behavior instead.
+  it('auto-marks all as read when panel opens with unread notifications', () => {
     mockActiveOverlay.value = 'notifications'
     useNotificationStore.setState({
       notifications: [
@@ -196,7 +205,10 @@ describe('NotificationBell', () => {
       unreadCount: 1,
     })
     render(<NotificationBell />)
-    expect(screen.getByLabelText('Tout marquer comme lu')).toBeInTheDocument()
+    // After opening the panel, useEffect auto-calls markAllAsRead
+    const state = useNotificationStore.getState()
+    expect(state.unreadCount).toBe(0)
+    expect(state.notifications.every((n) => n.read)).toBe(true)
   })
 
   it('does not show mark all as read button when unreadCount is 0', () => {
@@ -206,8 +218,7 @@ describe('NotificationBell', () => {
     expect(screen.queryByLabelText('Tout marquer comme lu')).not.toBeInTheDocument()
   })
 
-  it('marks all notifications as read when clicking mark all', () => {
-    mockActiveOverlay.value = 'notifications'
+  it('marks all notifications via store action', () => {
     useNotificationStore.setState({
       notifications: [
         { id: '1', type: 'rsvp', title: 'A', body: 'a', read: false, created_at: new Date().toISOString() },
@@ -215,8 +226,7 @@ describe('NotificationBell', () => {
       ],
       unreadCount: 2,
     })
-    render(<NotificationBell />)
-    fireEvent.click(screen.getByLabelText('Tout marquer comme lu'))
+    useNotificationStore.getState().markAllAsRead()
     const state = useNotificationStore.getState()
     expect(state.unreadCount).toBe(0)
     expect(state.notifications.every((n) => n.read)).toBe(true)
@@ -302,38 +312,37 @@ describe('NotificationBell', () => {
 
   /* ---------- Slicing to 15 max ---------- */
 
-  it('displays at most 15 notifications', () => {
+  it('displays at most 20 notifications', () => {
     mockActiveOverlay.value = 'notifications'
-    const notifs = Array.from({ length: 20 }, (_, i) => ({
+    const notifs = Array.from({ length: 25 }, (_, i) => ({
       id: String(i),
       type: 'rsvp' as const,
       title: `Squad${i}`,
       body: `Body${i}`,
-      read: false,
+      read: true, // Already read to avoid auto-mark-all-read side effects
       created_at: new Date().toISOString(),
     }))
-    useNotificationStore.setState({ notifications: notifs, unreadCount: 20 })
+    useNotificationStore.setState({ notifications: notifs, unreadCount: 0 })
     render(<NotificationBell />)
-    // Only 15 should be visible
+    // Only 20 should be visible (slice(0, 20))
     expect(screen.getByText('Squad0')).toBeInTheDocument()
-    expect(screen.getByText('Squad14')).toBeInTheDocument()
-    expect(screen.queryByText('Squad15')).not.toBeInTheDocument()
+    expect(screen.getByText('Squad19')).toBeInTheDocument()
+    expect(screen.queryByText('Squad20')).not.toBeInTheDocument()
   })
 
   /* ---------- Unread dot indicator ---------- */
 
-  it('shows unread dot for unread notifications', () => {
-    mockActiveOverlay.value = 'notifications'
+  it('shows unread badge on bell icon when there are unread notifications', () => {
+    // Don't open panel (no mockActiveOverlay) — just check the badge on the bell
     useNotificationStore.setState({
       notifications: [
         { id: '1', type: 'rsvp', title: 'Squad', body: 'Test', read: false, created_at: new Date().toISOString() },
       ],
       unreadCount: 1,
     })
-    const { container } = render(<NotificationBell />)
-    // Unread notification has bg-primary-5 class
-    const notifButton = container.querySelector('.bg-primary-5')
-    expect(notifButton).toBeInTheDocument()
+    render(<NotificationBell />)
+    // The bell button shows unread count badge
+    expect(screen.getByText('1')).toBeInTheDocument()
   })
 
   it('read notifications do not have unread styling', () => {
@@ -355,6 +364,15 @@ describe('NotificationBell', () => {
 /* ------------------------------------------------------------------ */
 describe('useNotificationStore', () => {
   beforeEach(() => {
+    vi.clearAllMocks()
+    // Restore default chainable behavior
+    mockFromChain.select.mockReturnValue(mockFromChain)
+    mockFromChain.eq.mockReturnValue(mockFromChain)
+    mockFromChain.neq.mockReturnValue(mockFromChain)
+    mockFromChain.order.mockReturnValue(mockFromChain)
+    mockFromChain.in.mockReturnValue(mockFromChain)
+    mockFromChain.limit.mockReturnValue(mockFromChain)
+    mockFromChain.then.mockImplementation((resolve: any) => resolve({ data: [], error: null }))
     useNotificationStore.setState({
       notifications: [],
       unreadCount: 0,
@@ -391,8 +409,9 @@ describe('useNotificationStore', () => {
     expect(state.unreadCount).toBe(0)
   })
 
-  it('fetchNotifications sets empty on no rsvps', async () => {
-    mockFromChain.limit.mockResolvedValueOnce({ data: [], error: null })
+  it('fetchNotifications sets empty on no squad memberships', async () => {
+    // Default .then() returns { data: [], error: null } for squad_members query
+    // -> userSquadIds is empty -> returns early with empty notifications
     await useNotificationStore.getState().fetchNotifications('user-1')
     const state = useNotificationStore.getState()
     expect(state.notifications).toEqual([])
@@ -400,38 +419,38 @@ describe('useNotificationStore', () => {
     expect(state.isLoading).toBe(false)
   })
 
-  it('fetchNotifications sets empty on null rsvps', async () => {
-    mockFromChain.limit.mockResolvedValueOnce({ data: null, error: null })
-    await useNotificationStore.getState().fetchNotifications('user-1')
-    const state = useNotificationStore.getState()
-    expect(state.notifications).toEqual([])
-    expect(state.isLoading).toBe(false)
-  })
-
   it('fetchNotifications handles error gracefully', async () => {
-    mockFromChain.limit.mockRejectedValueOnce(new Error('fail'))
+    mockFromChain.then.mockImplementationOnce((_: any, reject: any) => {
+      if (reject) return reject(new Error('fail'))
+      throw new Error('fail')
+    })
     await useNotificationStore.getState().fetchNotifications('user-1')
     const state = useNotificationStore.getState()
     expect(state.isLoading).toBe(false)
   })
 
-  it('fetchNotifications builds notifications from rsvps + sessions + squads', async () => {
-    const rsvps = [
-      { id: 'r1', session_id: 's1', response: 'accepted', responded_at: '2026-01-01T00:00:00Z' },
-    ]
+  it('fetchNotifications builds notifications from memberships + sessions + rsvps + squads', async () => {
+    const memberships = [{ squad_id: 'sq1' }]
     const sessions = [
       { id: 's1', title: 'Session Alpha', scheduled_at: '2026-01-02', squad_id: 'sq1' },
+    ]
+    const rsvps = [
+      { id: 'r1', session_id: 's1', response: 'accepted', responded_at: '2026-01-01T00:00:00Z' },
     ]
     const squads = [
       { id: 'sq1', name: 'Alpha Squad' },
     ]
 
-    // First call: session_rsvps
-    mockFromChain.limit.mockResolvedValueOnce({ data: rsvps, error: null })
-    // Second call: sessions (uses .in)
-    mockFromChain.in.mockResolvedValueOnce({ data: sessions, error: null })
-    // Third call: squads (uses .in)
-    mockFromChain.in.mockResolvedValueOnce({ data: squads, error: null })
+    // Sequence of awaited calls:
+    // 1. squad_members: from().select().eq() -> await chain
+    // 2. sessions: from().select().in().order().limit() -> await chain
+    // 3. session_rsvps: from().select().in().neq().order().limit() -> await chain
+    // 4. squads: from().select().in() -> await chain
+    mockFromChain.then
+      .mockImplementationOnce((resolve: any) => resolve({ data: memberships, error: null }))
+      .mockImplementationOnce((resolve: any) => resolve({ data: sessions, error: null }))
+      .mockImplementationOnce((resolve: any) => resolve({ data: rsvps, error: null }))
+      .mockImplementationOnce((resolve: any) => resolve({ data: squads, error: null }))
 
     await useNotificationStore.getState().fetchNotifications('user-1')
     const state = useNotificationStore.getState()

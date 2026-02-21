@@ -30,6 +30,10 @@ vi.mock('../useRingtone', () => ({
   playNotificationSound: vi.fn(),
 }))
 
+vi.mock('../../lib/notifyOnMessage', () => ({
+  notifyDirectMessage: vi.fn().mockResolvedValue(undefined),
+}))
+
 vi.mock('../useUnreadCount', () => ({
   useUnreadCountStore: {
     getState: () => ({ fetchCounts: vi.fn().mockResolvedValue(undefined) }),
@@ -359,7 +363,21 @@ describe('useDirectMessagesStore', () => {
       mockGetSession.mockResolvedValue({ data: { session: { user: mockUser } } })
 
       const mockInsert = vi.fn().mockResolvedValue({ error: null })
-      mockFrom.mockReturnValue({ insert: mockInsert })
+      mockFrom.mockImplementation((table: string) => {
+        if (table === 'direct_messages') {
+          return { insert: mockInsert }
+        }
+        if (table === 'profiles') {
+          return {
+            select: vi.fn().mockReturnValue({
+              eq: vi.fn().mockReturnValue({
+                single: vi.fn().mockResolvedValue({ data: { username: 'Sender' } }),
+              }),
+            }),
+          }
+        }
+        return { select: vi.fn() }
+      })
 
       let result: { error: Error | null } = { error: null }
       await act(async () => {

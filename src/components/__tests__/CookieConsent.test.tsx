@@ -57,34 +57,34 @@ describe('CookieConsent', () => {
 
   it('shows cookie banner after delay when no consent given', () => {
     render(<CookieConsent />)
-    act(() => { vi.advanceTimersByTime(2000) })
+    act(() => { vi.advanceTimersByTime(3500) })
     expect(screen.getByText('Cookies & confidentialité')).toBeInTheDocument()
   })
 
   it('does not show banner when consent already given', () => {
     localStorage.setItem(COOKIE_CONSENT_KEY, 'accepted')
     render(<CookieConsent />)
-    act(() => { vi.advanceTimersByTime(2000) })
+    act(() => { vi.advanceTimersByTime(3500) })
     expect(screen.queryByText('Cookies & confidentialité')).not.toBeInTheDocument()
   })
 
   it('stores accepted when accept all is clicked', () => {
     render(<CookieConsent />)
-    act(() => { vi.advanceTimersByTime(2000) })
+    act(() => { vi.advanceTimersByTime(3500) })
     fireEvent.click(screen.getByText('Tout accepter'))
     expect(localStorage.getItem(COOKIE_CONSENT_KEY)).toBe('accepted')
   })
 
   it('stores essential when essential only is clicked', () => {
     render(<CookieConsent />)
-    act(() => { vi.advanceTimersByTime(2000) })
+    act(() => { vi.advanceTimersByTime(3500) })
     fireEvent.click(screen.getByText('Essentiels uniquement'))
     expect(localStorage.getItem(COOKIE_CONSENT_KEY)).toBe('essential')
   })
 
   it('renders see details toggle', () => {
     render(<CookieConsent />)
-    act(() => { vi.advanceTimersByTime(2000) })
+    act(() => { vi.advanceTimersByTime(3500) })
     expect(screen.getByText('Voir les détails')).toBeInTheDocument()
   })
 

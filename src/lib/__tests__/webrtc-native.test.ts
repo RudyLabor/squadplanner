@@ -347,7 +347,7 @@ describe('NativeWebRTC', () => {
 
   describe('ontrack handler', () => {
     it('should auto-play remote audio', async () => {
-      const mockAudio = { srcObject: null as any, play: vi.fn() }
+      const mockAudio = { srcObject: null as any, autoplay: false, play: vi.fn().mockResolvedValue(undefined) }
       vi.stubGlobal('Audio', vi.fn(function () { return mockAudio }))
       const { NativeWebRTC } = await importModule()
       const webrtc = new NativeWebRTC({ iceServers: [{ urls: 'stun:stun.l.google.com:19302' }] })

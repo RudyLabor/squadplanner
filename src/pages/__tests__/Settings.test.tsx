@@ -133,6 +133,8 @@ vi.mock('../../components/icons', () => ({
   Loader2: (props: any) => createElement('span', props),
   FileText: (props: any) => createElement('span', props),
   ExternalLink: (props: any) => createElement('span', props),
+  Gift: (props: any) => createElement('span', props),
+  Plug: (props: any) => createElement('span', props),
 }))
 
 // Mock UI components

@@ -88,13 +88,13 @@ test.describe('Blog Index — /blog', () => {
     await expect(page).toHaveTitle(/Blog.*Squad Planner/i)
 
     // STRICT: la meta description DOIT exister et etre non-vide
-    const metaDesc = page.locator('meta[name="description"]')
+    const metaDesc = page.locator('meta[name="description"]').first()
     const descContent = await metaDesc.getAttribute('content')
     expect(descContent).toBeTruthy()
     expect(descContent!.length).toBeGreaterThan(30)
 
     // STRICT: le canonical DOIT pointer vers /blog
-    const canonical = page.locator('link[rel="canonical"]')
+    const canonical = page.locator('link[rel="canonical"]').first()
     const canonicalHref = await canonical.getAttribute('href')
     expect(canonicalHref).toContain('/blog')
   })
@@ -214,13 +214,13 @@ test.describe('Blog Post Detail — /blog/:slug', () => {
     // STRICT: le title DOIT contenir le nom du blog et "Squad Planner"
     await expect(page).toHaveTitle(/Squad Planner/i)
 
-    // STRICT: la meta og:type DOIT etre "article"
-    const ogType = page.locator('meta[property="og:type"]')
+    // STRICT: la meta og:type DOIT etre "article" (last() car le layout injecte aussi un og:type)
+    const ogType = page.locator('meta[property="og:type"]').last()
     const ogTypeContent = await ogType.getAttribute('content')
     expect(ogTypeContent).toBe('article')
 
     // STRICT: le canonical DOIT contenir le slug
-    const canonical = page.locator('link[rel="canonical"]')
+    const canonical = page.locator('link[rel="canonical"]').last()
     const canonicalHref = await canonical.getAttribute('href')
     expect(canonicalHref).toContain(validSlug)
   })

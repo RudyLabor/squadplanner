@@ -184,7 +184,7 @@ test.describe('LFG Page — /lfg/valorant', () => {
     await expect(page).toHaveTitle(/Valorant/i)
 
     // STRICT: la meta description DOIT etre non-vide
-    const metaDesc = page.locator('meta[name="description"]')
+    const metaDesc = page.locator('meta[name="description"]').first()
     const descContent = await metaDesc.getAttribute('content')
     expect(descContent).toBeTruthy()
     expect(descContent!.length).toBeGreaterThan(30)

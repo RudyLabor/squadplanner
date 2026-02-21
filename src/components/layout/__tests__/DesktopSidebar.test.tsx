@@ -33,7 +33,7 @@ vi.mock('../../icons', () => {
   return {
     Home: icon, Users: icon, Mic: icon, MessageCircle: icon,
     User: icon, Plus: icon, Pin: icon, PinOff: icon,
-    Settings: icon, HelpCircle: icon, Phone: icon, Calendar: icon, Compass: icon,
+    Settings: icon, HelpCircle: icon, Phone: icon, Calendar: icon, Compass: icon, Gift: icon,
   }
 })
 

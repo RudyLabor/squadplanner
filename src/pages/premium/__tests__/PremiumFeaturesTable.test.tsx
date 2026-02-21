@@ -2,7 +2,6 @@ import { describe, it, expect, vi } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import { createElement } from 'react'
 
-const iconMock = (p: any) => createElement('span', { ...p, 'data-icon': 'icon' })
 vi.mock('../../../components/icons', () => ({
   Crown: (p: any) => createElement('span', { ...p, 'data-icon': 'Crown' }),
   Check: (p: any) => createElement('span', { ...p, 'data-icon': 'Check' }),
@@ -14,6 +13,7 @@ vi.mock('../../../components/icons', () => ({
   Mic2: (p: any) => createElement('span', { ...p, 'data-icon': 'Mic2' }),
   Shield: (p: any) => createElement('span', { ...p, 'data-icon': 'Shield' }),
   Zap: (p: any) => createElement('span', { ...p, 'data-icon': 'Zap' }),
+  ChevronRight: (p: any) => createElement('span', { ...p, 'data-icon': 'ChevronRight' }),
 }))
 
 vi.mock('../../../components/ui', () => ({

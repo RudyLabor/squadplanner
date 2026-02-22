@@ -47,5 +47,5 @@ find      # ❌ Unix
 - [ ] J'utilise Read/Write/Edit (les outils natifs fonctionnent)
 
 ---
-**Dernière mise à jour :** 13 février 2026 par Claw 🦅
+**Dernière mise à jour :** 22 février 2026
 **But :** Arrêter de répéter les mêmes erreurs basiques.

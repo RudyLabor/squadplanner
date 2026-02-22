@@ -17,7 +17,10 @@
       "mcp__chrome-devtools__emulate",
       "Bash(findstr:*)",
       "Bash(powershell -c \"\\(Get-Item ''node_modules\\\\agora-rtc-sdk-ng\\\\AgoraRTC_N-production.js''\\).Length\")",
-      "Bash(npx playwright test)"
+      "Bash(npx playwright test)",
+      "Bash(CLAUDECODE=\"\" claude mcp list:*)",
+      "mcp__figma__generate_figma_design",
+      "mcp__chrome-devtools__take_snapshot"
     ]
   }
 }

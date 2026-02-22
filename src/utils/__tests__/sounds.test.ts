@@ -203,8 +203,17 @@ describe('sounds', () => {
 
     it('handles all sound names', () => {
       const sounds = [
-        'success', 'error', 'notification', 'levelUp', 'achievement',
-        'click', 'message', 'join', 'leave', 'countdown', 'start',
+        'success',
+        'error',
+        'notification',
+        'levelUp',
+        'achievement',
+        'click',
+        'message',
+        'join',
+        'leave',
+        'countdown',
+        'start',
       ] as const
       for (const name of sounds) {
         expect(() => playSound(name)).not.toThrow()

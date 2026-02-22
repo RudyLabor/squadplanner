@@ -20,28 +20,47 @@ vi.mock('framer-motion', () => ({
   useAnimate: vi.fn().mockReturnValue([{ current: null }, vi.fn()]),
   useAnimation: vi.fn().mockReturnValue({ start: vi.fn(), stop: vi.fn() }),
   useReducedMotion: vi.fn().mockReturnValue(false),
-  m: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
-  motion: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
+  m: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
+  motion: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
 }))
 
-vi.mock('../../../components/icons', () => new Proxy({}, { get: (_t: any, p: string) => typeof p === 'string' ? ({ children, ...props }: any) => createElement('span', props, children) : undefined }))
+vi.mock(
+  '../../../components/icons',
+  () =>
+    new Proxy(
+      {},
+      {
+        get: (_t: any, p: string) =>
+          typeof p === 'string'
+            ? ({ children, ...props }: any) => createElement('span', props, children)
+            : undefined,
+      }
+    )
+)
 
 vi.mock('../../../components/ui', () => ({
   Card: ({ children, ...props }: any) => createElement('div', props, children),
   Button: ({ children, ...props }: any) => createElement('button', props, children),
-  Badge: ({ children, variant, ...props }: any) => createElement('span', { 'data-variant': variant, ...props }, children),
+  Badge: ({ children, variant, ...props }: any) =>
+    createElement('span', { 'data-variant': variant, ...props }, children),
   SessionCardSkeleton: () => createElement('div', { 'data-testid': 'skeleton' }),
-  ContentTransition: ({ children, isLoading, skeleton }: any) => isLoading ? skeleton : children,
+  ContentTransition: ({ children, isLoading, skeleton }: any) => (isLoading ? skeleton : children),
 }))
 
 vi.mock('../types', () => ({
@@ -76,8 +95,20 @@ describe('ConfirmedSessions', () => {
   // STRICT: verifies session cards render — title, date, RSVP count, badge "Confirmé", link to session detail, list structure
   it('renders session cards with title, date, RSVP count, badge, and detail links', () => {
     const sessions = [
-      { id: 's1', title: 'Ranked Soir', game: 'Valorant', scheduled_at: '2026-02-14T21:00:00Z', rsvp_counts: { present: 3 } },
-      { id: 's2', title: '', game: 'LoL', scheduled_at: '2026-02-15T18:00:00Z', rsvp_counts: { present: 0 } },
+      {
+        id: 's1',
+        title: 'Ranked Soir',
+        game: 'Valorant',
+        scheduled_at: '2026-02-14T21:00:00Z',
+        rsvp_counts: { present: 3 },
+      },
+      {
+        id: 's2',
+        title: '',
+        game: 'LoL',
+        scheduled_at: '2026-02-15T18:00:00Z',
+        rsvp_counts: { present: 0 },
+      },
     ]
     const { container } = render(<ConfirmedSessions confirmed={sessions} sessionsLoading={false} />)
 

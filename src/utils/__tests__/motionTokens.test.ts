@@ -70,7 +70,12 @@ describe('motionTokens', () => {
     expect(motion.easing.springSmooth.damping).toBe(20)
 
     // 9. All springs have type 'spring'
-    const springs = [motion.easing.spring, motion.easing.springSnappy, motion.easing.springBouncy, motion.easing.springSmooth]
+    const springs = [
+      motion.easing.spring,
+      motion.easing.springSnappy,
+      motion.easing.springBouncy,
+      motion.easing.springSmooth,
+    ]
     springs.forEach((s) => {
       expect(s.type).toBe('spring')
     })

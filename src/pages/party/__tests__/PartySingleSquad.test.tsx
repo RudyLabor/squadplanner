@@ -16,25 +16,44 @@ vi.mock('framer-motion', () => ({
   useAnimate: vi.fn().mockReturnValue([{ current: null }, vi.fn()]),
   useAnimation: vi.fn().mockReturnValue({ start: vi.fn(), stop: vi.fn() }),
   useReducedMotion: vi.fn().mockReturnValue(false),
-  m: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
-  motion: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
+  m: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
+  motion: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
 }))
 
-vi.mock('../../../components/icons', () => new Proxy({}, { get: (_t: any, p: string) => typeof p === 'string' ? ({ children, ...props }: any) => createElement('span', props, children) : undefined }))
+vi.mock(
+  '../../../components/icons',
+  () =>
+    new Proxy(
+      {},
+      {
+        get: (_t: any, p: string) =>
+          typeof p === 'string'
+            ? ({ children, ...props }: any) => createElement('span', props, children)
+            : undefined,
+      }
+    )
+)
 
 vi.mock('../../../components/ui', () => ({
   Card: ({ children, ...props }: any) => createElement('div', props, children),
-  Button: ({ children, onClick, disabled, ...props }: any) => createElement('button', { onClick, disabled, ...props }, children),
+  Button: ({ children, onClick, disabled, ...props }: any) =>
+    createElement('button', { onClick, disabled, ...props }, children),
 }))
 
 import { PartySingleSquad, PartyStatsCard } from '../PartySingleSquad'
@@ -42,7 +61,13 @@ import { PartySingleSquad, PartyStatsCard } from '../PartySingleSquad'
 describe('PartySingleSquad', () => {
   // STRICT: verifies squad info display — name, game, member count, heading, join button text, member avatars
   it('renders squad info with name, game, member count, heading, and join button', () => {
-    render(<PartySingleSquad squad={{ id: 's1', name: 'Ma Super Squad', game: 'Valorant', member_count: 5 }} isConnecting={false} onJoin={vi.fn()} />)
+    render(
+      <PartySingleSquad
+        squad={{ id: 's1', name: 'Ma Super Squad', game: 'Valorant', member_count: 5 }}
+        isConnecting={false}
+        onJoin={vi.fn()}
+      />
+    )
 
     // 1. Squad name displayed
     expect(screen.getByText('Ma Super Squad')).toBeDefined()
@@ -62,7 +87,13 @@ describe('PartySingleSquad', () => {
   // STRICT: verifies onJoin callback fires when button clicked, button disabled when connecting
   it('calls onJoin when button is clicked and disables button when connecting', () => {
     const onJoin = vi.fn()
-    const { unmount } = render(<PartySingleSquad squad={{ id: 's1', name: 'Test', game: 'Val', member_count: 3 }} isConnecting={false} onJoin={onJoin} />)
+    const { unmount } = render(
+      <PartySingleSquad
+        squad={{ id: 's1', name: 'Test', game: 'Val', member_count: 3 }}
+        isConnecting={false}
+        onJoin={onJoin}
+      />
+    )
 
     // 1. Click join button
     fireEvent.click(screen.getByText('Lancer la party').closest('button')!)
@@ -71,7 +102,13 @@ describe('PartySingleSquad', () => {
     unmount()
 
     // 3. When connecting, button is disabled
-    render(<PartySingleSquad squad={{ id: 's1', name: 'Test', game: 'Val', member_count: 3 }} isConnecting={true} onJoin={vi.fn()} />)
+    render(
+      <PartySingleSquad
+        squad={{ id: 's1', name: 'Test', game: 'Val', member_count: 3 }}
+        isConnecting={true}
+        onJoin={vi.fn()}
+      />
+    )
     const disabledBtn = screen.getByText('Lancer la party').closest('button')
     expect(disabledBtn?.disabled).toBe(true)
     // 4. onJoin not called on disabled button click
@@ -88,22 +125,46 @@ describe('PartySingleSquad', () => {
   // STRICT: verifies member_count fallback to total_members then to 1
   it('falls back member count from member_count to total_members to 1', () => {
     // 1. Uses member_count when available
-    const { unmount: u1 } = render(<PartySingleSquad squad={{ id: 's1', name: 'A', game: 'G', member_count: 7 }} isConnecting={false} onJoin={vi.fn()} />)
+    const { unmount: u1 } = render(
+      <PartySingleSquad
+        squad={{ id: 's1', name: 'A', game: 'G', member_count: 7 }}
+        isConnecting={false}
+        onJoin={vi.fn()}
+      />
+    )
     expect(screen.getByText(/7 membres/)).toBeDefined()
     u1()
 
     // 2. Falls back to total_members when member_count missing
-    const { unmount: u2 } = render(<PartySingleSquad squad={{ id: 's1', name: 'A', game: 'G', total_members: 4 } as any} isConnecting={false} onJoin={vi.fn()} />)
+    const { unmount: u2 } = render(
+      <PartySingleSquad
+        squad={{ id: 's1', name: 'A', game: 'G', total_members: 4 } as any}
+        isConnecting={false}
+        onJoin={vi.fn()}
+      />
+    )
     expect(screen.getByText(/4 membres/)).toBeDefined()
     u2()
 
     // 3. Falls back to 1 when both missing
-    const { unmount: u3 } = render(<PartySingleSquad squad={{ id: 's1', name: 'A', game: 'G' } as any} isConnecting={false} onJoin={vi.fn()} />)
+    const { unmount: u3 } = render(
+      <PartySingleSquad
+        squad={{ id: 's1', name: 'A', game: 'G' } as any}
+        isConnecting={false}
+        onJoin={vi.fn()}
+      />
+    )
     expect(screen.getByText(/1 membre /)).toBeDefined()
     u3()
 
     // 4. Singular "membre" when count is 1
-    render(<PartySingleSquad squad={{ id: 's1', name: 'Solo', game: 'G', member_count: 1 }} isConnecting={false} onJoin={vi.fn()} />)
+    render(
+      <PartySingleSquad
+        squad={{ id: 's1', name: 'Solo', game: 'G', member_count: 1 }}
+        isConnecting={false}
+        onJoin={vi.fn()}
+      />
+    )
     // member_count=1 => "1 membre" (no 's')
     expect(screen.getByText('1 membre dans la squad')).toBeDefined()
     // 5. Plural "membres" when count > 1 is already tested above

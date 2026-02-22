@@ -26,7 +26,8 @@ vi.mock('react-router', () => ({
   useSearchParams: vi.fn().mockReturnValue([new URLSearchParams(), vi.fn()]),
   useLoaderData: vi.fn().mockReturnValue({}),
   Link: ({ children, to, ...props }: any) => createElement('a', { href: to, ...props }, children),
-  NavLink: ({ children, to, ...props }: any) => createElement('a', { href: to, ...props }, children),
+  NavLink: ({ children, to, ...props }: any) =>
+    createElement('a', { href: to, ...props }, children),
   Outlet: () => null,
   useMatches: vi.fn().mockReturnValue([]),
 }))
@@ -46,64 +47,88 @@ vi.mock('framer-motion', () => ({
   useAnimate: vi.fn().mockReturnValue([{ current: null }, vi.fn()]),
   useAnimation: vi.fn().mockReturnValue({ start: vi.fn(), stop: vi.fn() }),
   useReducedMotion: vi.fn().mockReturnValue(false),
-  m: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
-  motion: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
+  m: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
+  motion: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
 }))
 
 // Mock supabase
 vi.mock('../../lib/supabaseMinimal', () => ({
-  supabaseMinimal: { auth: { getSession: vi.fn() }, from: vi.fn(), rpc: vi.fn(), channel: vi.fn().mockReturnValue({ on: vi.fn().mockReturnThis(), subscribe: vi.fn() }), removeChannel: vi.fn() },
-  supabase: { auth: { getSession: vi.fn() }, from: vi.fn(), rpc: vi.fn(), channel: vi.fn().mockReturnValue({ on: vi.fn().mockReturnThis(), subscribe: vi.fn() }), removeChannel: vi.fn() },
+  supabaseMinimal: {
+    auth: { getSession: vi.fn() },
+    from: vi.fn(),
+    rpc: vi.fn(),
+    channel: vi.fn().mockReturnValue({ on: vi.fn().mockReturnThis(), subscribe: vi.fn() }),
+    removeChannel: vi.fn(),
+  },
+  supabase: {
+    auth: { getSession: vi.fn() },
+    from: vi.fn(),
+    rpc: vi.fn(),
+    channel: vi.fn().mockReturnValue({ on: vi.fn().mockReturnThis(), subscribe: vi.fn() }),
+    removeChannel: vi.fn(),
+  },
   isSupabaseReady: vi.fn().mockReturnValue(true),
 }))
 
 // Mock auth store
 vi.mock('../../hooks/useAuth', () => ({
-  useAuthStore: Object.assign(
-    (...args: any[]) => mocks.useAuthStore(...args),
-    { getState: vi.fn().mockReturnValue({ user: { id: 'user-1' }, profile: { id: 'user-1', username: 'TestUser' } }) }
-  ),
+  useAuthStore: Object.assign((...args: any[]) => mocks.useAuthStore(...args), {
+    getState: vi
+      .fn()
+      .mockReturnValue({ user: { id: 'user-1' }, profile: { id: 'user-1', username: 'TestUser' } }),
+  }),
 }))
 
 vi.mock('../../hooks', () => ({
-  useAuthStore: Object.assign(
-    (...args: any[]) => mocks.useAuthStore(...args),
-    { getState: vi.fn().mockReturnValue({ user: { id: 'user-1' }, profile: { id: 'user-1', username: 'TestUser' } }) }
-  ),
-  usePremiumStore: Object.assign(
-    (...args: any[]) => mocks.usePremiumStore(...args),
-    { getState: vi.fn().mockReturnValue({ hasPremium: false }) }
-  ),
+  useAuthStore: Object.assign((...args: any[]) => mocks.useAuthStore(...args), {
+    getState: vi
+      .fn()
+      .mockReturnValue({ user: { id: 'user-1' }, profile: { id: 'user-1', username: 'TestUser' } }),
+  }),
+  usePremiumStore: Object.assign((...args: any[]) => mocks.usePremiumStore(...args), {
+    getState: vi.fn().mockReturnValue({ hasPremium: false }),
+  }),
 }))
 
 // Mock toast
 vi.mock('../../lib/toast', () => ({
-  showSuccess: vi.fn(), showError: vi.fn(), showWarning: vi.fn(), showInfo: vi.fn(),
+  showSuccess: vi.fn(),
+  showError: vi.fn(),
+  showWarning: vi.fn(),
+  showInfo: vi.fn(),
 }))
 
 // Mock i18n
 vi.mock('../../lib/i18n', () => ({
   useT: () => (key: string) => key,
   useLocale: () => 'fr',
-  useI18nStore: Object.assign(vi.fn().mockReturnValue({ locale: 'fr' }), { getState: vi.fn().mockReturnValue({ locale: 'fr' }) }),
+  useI18nStore: Object.assign(vi.fn().mockReturnValue({ locale: 'fr' }), {
+    getState: vi.fn().mockReturnValue({ locale: 'fr' }),
+  }),
 }))
 
 // Mock voice chat
 vi.mock('../../hooks/useVoiceChat', () => ({
-  useVoiceChatStore: Object.assign(
-    (...args: any[]) => mocks.useVoiceChatStore(...args),
-    { getState: vi.fn().mockReturnValue({ isConnected: false }), subscribe: vi.fn().mockReturnValue(() => {}) }
-  ),
+  useVoiceChatStore: Object.assign((...args: any[]) => mocks.useVoiceChatStore(...args), {
+    getState: vi.fn().mockReturnValue({ isConnected: false }),
+    subscribe: vi.fn().mockReturnValue(() => {}),
+  }),
   getSavedPartyInfo: (...args: any[]) => mocks.getSavedPartyInfo(...args),
 }))
 
@@ -119,7 +144,8 @@ vi.mock('../../components/icons', () => ({
 
 // Mock child components with prop capture
 vi.mock('../../components/LazyConfetti', () => ({
-  default: (props: any) => createElement('div', { 'data-testid': 'confetti', 'data-pieces': props.numberOfPieces }),
+  default: (props: any) =>
+    createElement('div', { 'data-testid': 'confetti', 'data-pieces': props.numberOfPieces }),
 }))
 
 vi.mock('../../components/NetworkQualityIndicator', () => ({
@@ -129,24 +155,38 @@ vi.mock('../../components/NetworkQualityIndicator', () => ({
 
 vi.mock('../party/PartyActiveSection', () => ({
   ActivePartySection: ({ squad, onLeave }: any) =>
-    createElement('div', { 'data-testid': 'active-party' },
+    createElement(
+      'div',
+      { 'data-testid': 'active-party' },
       createElement('span', null, squad.name),
-      createElement('button', { 'data-testid': 'leave-btn', onClick: onLeave }, 'Leave'),
+      createElement('button', { 'data-testid': 'leave-btn', onClick: onLeave }, 'Leave')
     ),
 }))
 
 vi.mock('../party/PartySquadCard', () => ({
   PartySquadCard: ({ squad, onJoin, isConnecting }: any) =>
-    createElement('div', { 'data-testid': `party-squad-${squad.id}` },
+    createElement(
+      'div',
+      { 'data-testid': `party-squad-${squad.id}` },
       createElement('span', null, squad.name),
       createElement('span', null, `members:${squad.member_count}`),
-      createElement('button', { 'data-testid': `join-${squad.id}`, onClick: onJoin, disabled: isConnecting }, 'Join'),
+      createElement(
+        'button',
+        { 'data-testid': `join-${squad.id}`, onClick: onJoin, disabled: isConnecting },
+        'Join'
+      )
     ),
 }))
 
 vi.mock('../party/PartyToast', () => ({
   PartyToast: ({ message, isVisible, onClose, variant }: any) =>
-    isVisible ? createElement('div', { 'data-testid': 'party-toast', 'data-variant': variant, onClick: onClose }, message) : null,
+    isVisible
+      ? createElement(
+          'div',
+          { 'data-testid': 'party-toast', 'data-variant': variant, onClick: onClose },
+          message
+        )
+      : null,
 }))
 
 vi.mock('../party/PartyEmptyState', () => ({
@@ -155,11 +195,18 @@ vi.mock('../party/PartyEmptyState', () => ({
 
 vi.mock('../party/PartySingleSquad', () => ({
   PartySingleSquad: ({ squad, isConnecting, onJoin }: any) =>
-    createElement('div', { 'data-testid': 'party-single' },
+    createElement(
+      'div',
+      { 'data-testid': 'party-single' },
       createElement('span', null, squad.name),
-      createElement('button', { 'data-testid': 'join-single', onClick: onJoin, disabled: isConnecting }, 'Join'),
+      createElement(
+        'button',
+        { 'data-testid': 'join-single', onClick: onJoin, disabled: isConnecting },
+        'Join'
+      )
     ),
-  PartyStatsCard: ({ squadName }: any) => createElement('div', { 'data-testid': 'party-stats' }, squadName),
+  PartyStatsCard: ({ squadName }: any) =>
+    createElement('div', { 'data-testid': 'party-stats' }, squadName),
 }))
 
 /* ------------------------------------------------------------------ */
@@ -188,9 +235,16 @@ describe('Party Page', () => {
     queryClient = new QueryClient({ defaultOptions: { queries: { retry: false } } })
 
     // Default mocks
-    mocks.useAuthStore.mockReturnValue({ user: { id: 'user-1' }, profile: { id: 'user-1', username: 'TestUser' }, isLoading: false })
+    mocks.useAuthStore.mockReturnValue({
+      user: { id: 'user-1' },
+      profile: { id: 'user-1', username: 'TestUser' },
+      isLoading: false,
+    })
     mocks.usePremiumStore.mockReturnValue({ hasPremium: false })
-    mocks.useSquadsQuery.mockReturnValue({ data: [{ id: 'sq1', name: 'TestSquad', game: 'Valorant', member_count: 3 }], isLoading: false })
+    mocks.useSquadsQuery.mockReturnValue({
+      data: [{ id: 'sq1', name: 'TestSquad', game: 'Valorant', member_count: 3 }],
+      isLoading: false,
+    })
     mocks.useVoiceChatStore.mockReturnValue(defaultVoiceChatState())
     mocks.getSavedPartyInfo.mockReturnValue(null)
     mocks.joinChannel.mockResolvedValue(true)
@@ -198,11 +252,7 @@ describe('Party Page', () => {
   })
 
   const renderParty = () => {
-    return render(
-      createElement(QueryClientProvider, { client: queryClient },
-        createElement(Party)
-      )
-    )
+    return render(createElement(QueryClientProvider, { client: queryClient }, createElement(Party)))
   }
 
   /* ---------------------------------------------------------------- */
@@ -240,7 +290,9 @@ describe('Party Page', () => {
   /*  Header subtitle logic                                           */
   /* ---------------------------------------------------------------- */
   it('shows "Connecté" subtitle when isConnected is true', () => {
-    mocks.useVoiceChatStore.mockReturnValue(defaultVoiceChatState({ isConnected: true, currentChannel: 'squad-sq1' }))
+    mocks.useVoiceChatStore.mockReturnValue(
+      defaultVoiceChatState({ isConnected: true, currentChannel: 'squad-sq1' })
+    )
     renderParty()
     expect(screen.getByText('Connecté')).toBeDefined()
   })
@@ -276,7 +328,9 @@ describe('Party Page', () => {
   /*  Online badge                                                     */
   /* ---------------------------------------------------------------- */
   it('shows "En ligne" badge when connected', () => {
-    mocks.useVoiceChatStore.mockReturnValue(defaultVoiceChatState({ isConnected: true, currentChannel: 'squad-sq1' }))
+    mocks.useVoiceChatStore.mockReturnValue(
+      defaultVoiceChatState({ isConnected: true, currentChannel: 'squad-sq1' })
+    )
     renderParty()
     expect(screen.getByText('En ligne')).toBeDefined()
   })
@@ -328,13 +382,17 @@ describe('Party Page', () => {
   /*  Connected state: ActivePartySection                             */
   /* ---------------------------------------------------------------- */
   it('renders ActivePartySection when connected with matching squad', () => {
-    mocks.useVoiceChatStore.mockReturnValue(defaultVoiceChatState({ isConnected: true, currentChannel: 'squad-sq1' }))
+    mocks.useVoiceChatStore.mockReturnValue(
+      defaultVoiceChatState({ isConnected: true, currentChannel: 'squad-sq1' })
+    )
     renderParty()
     expect(screen.getByTestId('active-party')).toBeDefined()
   })
 
   it('does NOT render ActivePartySection when connected but squad not found', () => {
-    mocks.useVoiceChatStore.mockReturnValue(defaultVoiceChatState({ isConnected: true, currentChannel: 'squad-unknown' }))
+    mocks.useVoiceChatStore.mockReturnValue(
+      defaultVoiceChatState({ isConnected: true, currentChannel: 'squad-unknown' })
+    )
     renderParty()
     expect(screen.queryByTestId('active-party')).toBeNull()
   })
@@ -350,7 +408,9 @@ describe('Party Page', () => {
       ],
       isLoading: false,
     })
-    mocks.useVoiceChatStore.mockReturnValue(defaultVoiceChatState({ isConnected: true, currentChannel: 'squad-sq1' }))
+    mocks.useVoiceChatStore.mockReturnValue(
+      defaultVoiceChatState({ isConnected: true, currentChannel: 'squad-sq1' })
+    )
     renderParty()
     expect(screen.getByText('Autres squads')).toBeDefined()
     expect(screen.getByTestId('party-squad-sq2')).toBeDefined()
@@ -358,7 +418,9 @@ describe('Party Page', () => {
   })
 
   it('does NOT show "Autres squads" when only one squad and connected', () => {
-    mocks.useVoiceChatStore.mockReturnValue(defaultVoiceChatState({ isConnected: true, currentChannel: 'squad-sq1' }))
+    mocks.useVoiceChatStore.mockReturnValue(
+      defaultVoiceChatState({ isConnected: true, currentChannel: 'squad-sq1' })
+    )
     renderParty()
     expect(screen.queryByText('Autres squads')).toBeNull()
   })
@@ -412,7 +474,11 @@ describe('Party Page', () => {
   })
 
   it('uses "Joueur" as fallback username when profile.username is empty', async () => {
-    mocks.useAuthStore.mockReturnValue({ user: { id: 'user-1' }, profile: { id: 'user-1', username: '' }, isLoading: false })
+    mocks.useAuthStore.mockReturnValue({
+      user: { id: 'user-1' },
+      profile: { id: 'user-1', username: '' },
+      isLoading: false,
+    })
     mocks.joinChannel.mockResolvedValue(true)
     renderParty()
     fireEvent.click(screen.getByTestId('join-single'))
@@ -426,7 +492,9 @@ describe('Party Page', () => {
   /*  handleLeaveParty                                                */
   /* ---------------------------------------------------------------- */
   it('calls leaveChannel on handleLeaveParty', async () => {
-    mocks.useVoiceChatStore.mockReturnValue(defaultVoiceChatState({ isConnected: true, currentChannel: 'squad-sq1' }))
+    mocks.useVoiceChatStore.mockReturnValue(
+      defaultVoiceChatState({ isConnected: true, currentChannel: 'squad-sq1' })
+    )
     renderParty()
     fireEvent.click(screen.getByTestId('leave-btn'))
 
@@ -438,7 +506,9 @@ describe('Party Page', () => {
   it('handles leaveChannel error gracefully', async () => {
     const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
     mocks.leaveChannel.mockRejectedValue(new Error('leave error'))
-    mocks.useVoiceChatStore.mockReturnValue(defaultVoiceChatState({ isConnected: true, currentChannel: 'squad-sq1' }))
+    mocks.useVoiceChatStore.mockReturnValue(
+      defaultVoiceChatState({ isConnected: true, currentChannel: 'squad-sq1' })
+    )
     renderParty()
     fireEvent.click(screen.getByTestId('leave-btn'))
 

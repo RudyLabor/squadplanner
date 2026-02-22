@@ -6,7 +6,9 @@ import { createElement } from 'react'
 /*  Hoisted mocks                                                      */
 /* ------------------------------------------------------------------ */
 const mockSearchGifs = vi.hoisted(() => vi.fn().mockResolvedValue({ results: [], error: null }))
-const mockFetchTrendingGifs = vi.hoisted(() => vi.fn().mockResolvedValue({ results: [], error: null }))
+const mockFetchTrendingGifs = vi.hoisted(() =>
+  vi.fn().mockResolvedValue({ results: [], error: null })
+)
 const mockCategories = vi.hoisted(() => [
   { label: 'GG', query: 'gg gaming' },
   { label: 'Rage', query: 'rage gaming' },
@@ -17,12 +19,15 @@ const mockCategories = vi.hoisted(() => [
 /* ------------------------------------------------------------------ */
 vi.mock('framer-motion', () => ({
   AnimatePresence: ({ children }: any) => children,
-  m: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
+  m: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
 }))
 
 vi.mock('../icons', () => ({
@@ -51,8 +56,20 @@ const defaultProps = {
 }
 
 const sampleGifs = [
-  { id: 'g1', url: 'https://gif.com/1.gif', preview: 'https://gif.com/1-preview.gif', width: 200, height: 150 },
-  { id: 'g2', url: 'https://gif.com/2.gif', preview: 'https://gif.com/2-preview.gif', width: 300, height: 200 },
+  {
+    id: 'g1',
+    url: 'https://gif.com/1.gif',
+    preview: 'https://gif.com/1-preview.gif',
+    width: 200,
+    height: 150,
+  },
+  {
+    id: 'g2',
+    url: 'https://gif.com/2.gif',
+    preview: 'https://gif.com/2-preview.gif',
+    width: 300,
+    height: 200,
+  },
 ]
 
 /* ------------------------------------------------------------------ */

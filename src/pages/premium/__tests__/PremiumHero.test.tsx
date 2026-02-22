@@ -7,7 +7,8 @@ vi.mock('react-router', () => ({
   useNavigate: vi.fn().mockReturnValue(vi.fn()),
   useParams: vi.fn().mockReturnValue({}),
   Link: ({ children, to, ...props }: any) => createElement('a', { href: to, ...props }, children),
-  NavLink: ({ children, to, ...props }: any) => createElement('a', { href: to, ...props }, children),
+  NavLink: ({ children, to, ...props }: any) =>
+    createElement('a', { href: to, ...props }, children),
 }))
 
 vi.mock('framer-motion', () => ({
@@ -24,18 +25,24 @@ vi.mock('framer-motion', () => ({
   useAnimate: vi.fn().mockReturnValue([{ current: null }, vi.fn()]),
   useAnimation: vi.fn().mockReturnValue({ start: vi.fn(), stop: vi.fn() }),
   useReducedMotion: vi.fn().mockReturnValue(false),
-  m: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
-  motion: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
+  m: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
+  motion: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
 }))
 
 vi.mock('../../../components/icons', () => ({
@@ -44,7 +51,8 @@ vi.mock('../../../components/icons', () => ({
   X: (p: any) => createElement('span', { ...p, 'data-icon': 'X' }),
   Gift: (p: any) => createElement('span', { ...p, 'data-icon': 'Gift' }),
   ArrowRight: (p: any) => createElement('span', { ...p, 'data-icon': 'ArrowRight' }),
-  Loader2: ({ children, ...p }: any) => createElement('span', { 'data-testid': 'loader', ...p }, children),
+  Loader2: ({ children, ...p }: any) =>
+    createElement('span', { 'data-testid': 'loader', ...p }, children),
   Rocket: (p: any) => createElement('span', { ...p, 'data-icon': 'Rocket' }),
   Sparkles: (p: any) => createElement('span', { ...p, 'data-icon': 'Sparkles' }),
   Shield: (p: any) => createElement('span', { ...p, 'data-icon': 'Shield' }),
@@ -62,9 +70,9 @@ vi.mock('../../../components/icons', () => ({
   Star: (p: any) => createElement('span', { ...p, 'data-icon': 'Star' }),
 }))
 
-
 vi.mock('../../../components/ui', () => ({
-  Button: ({ children, onClick, disabled, variant, ...props }: any) => createElement('button', { onClick, disabled, 'data-variant': variant, ...props }, children),
+  Button: ({ children, onClick, disabled, variant, ...props }: any) =>
+    createElement('button', { onClick, disabled, 'data-variant': variant, ...props }, children),
 }))
 
 vi.mock('../../../components/LazyConfetti', () => ({
@@ -73,7 +81,8 @@ vi.mock('../../../components/LazyConfetti', () => ({
 }))
 
 vi.mock('../../../components/layout/MobilePageHeader', () => ({
-  MobilePageHeader: ({ title }: any) => createElement('div', { 'data-testid': 'mobile-header' }, title),
+  MobilePageHeader: ({ title }: any) =>
+    createElement('div', { 'data-testid': 'mobile-header' }, title),
 }))
 
 import { PremiumHero } from '../PremiumHero'
@@ -127,7 +136,7 @@ describe('PremiumHero', () => {
     expect(screen.getByText(/Tu es d/)).toBeDefined()
     // 2. A disabled button is present (manage button disabled when loading)
     const buttons = screen.getAllByRole('button')
-    const disabledBtn = buttons.find(b => b.hasAttribute('disabled'))
+    const disabledBtn = buttons.find((b) => b.hasAttribute('disabled'))
     // 3. Button is disabled when loading
     expect(disabledBtn).toBeDefined()
     // 4. Title still rendered

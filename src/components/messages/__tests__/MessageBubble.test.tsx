@@ -18,18 +18,24 @@ vi.mock('framer-motion', () => ({
   useAnimate: vi.fn().mockReturnValue([{ current: null }, vi.fn()]),
   useAnimation: vi.fn().mockReturnValue({ start: vi.fn(), stop: vi.fn() }),
   useReducedMotion: vi.fn().mockReturnValue(false),
-  m: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
-  motion: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
+  m: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
+  motion: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
 }))
 
 // Mock child components
@@ -39,8 +45,7 @@ vi.mock('../../MessageStatus', () => ({
 }))
 
 vi.mock('../../MessageActions', () => ({
-  MessageActions: (props: any) =>
-    createElement('div', { 'data-testid': 'message-actions' }),
+  MessageActions: (props: any) => createElement('div', { 'data-testid': 'message-actions' }),
 }))
 
 vi.mock('../../MessageReactions', () => ({
@@ -59,13 +64,16 @@ vi.mock('../../MessageContent', () => ({
 }))
 
 vi.mock('../../RoleBadge', () => ({
-  RoleBadge: ({ role }: any) =>
-    createElement('span', { 'data-testid': 'role-badge' }, role),
+  RoleBadge: ({ role }: any) => createElement('span', { 'data-testid': 'role-badge' }, role),
 }))
 
 vi.mock('../../ThreadView', () => ({
   ThreadIndicator: ({ replyCount, onClick }: any) =>
-    createElement('button', { 'data-testid': 'thread-indicator', onClick }, `${replyCount} replies`),
+    createElement(
+      'button',
+      { 'data-testid': 'thread-indicator', onClick },
+      `${replyCount} replies`
+    ),
 }))
 
 vi.mock('../utils', () => ({
@@ -103,9 +111,7 @@ describe('MessageBubble', () => {
   })
 
   it('returns null for null message', () => {
-    const { container } = render(
-      <MessageBubble {...defaultProps} message={null as any} />
-    )
+    const { container } = render(<MessageBubble {...defaultProps} message={null as any} />)
     expect(container.innerHTML).toBe('')
   })
 
@@ -161,7 +167,9 @@ describe('MessageBubble', () => {
       ...baseMockMessage,
       sender: { username: 'JohnDoe', avatar_url: 'https://example.com/avatar.jpg' },
     }
-    const { container } = render(<MessageBubble {...defaultProps} message={msgWithAvatar} showAvatar={true} isOwn={false} />)
+    const { container } = render(
+      <MessageBubble {...defaultProps} message={msgWithAvatar} showAvatar={true} isOwn={false} />
+    )
     const img = container.querySelector('img')
     expect(img).toBeInTheDocument()
     expect(img).toHaveAttribute('src', 'https://example.com/avatar.jpg')
@@ -209,16 +217,12 @@ describe('MessageBubble', () => {
       sender_username: 'Alice',
       content: 'Original message',
     }
-    render(
-      <MessageBubble {...defaultProps} replyToMessage={replyTo} />
-    )
+    render(<MessageBubble {...defaultProps} replyToMessage={replyTo} />)
     expect(screen.getByTestId('reply-preview')).toHaveTextContent('Original message')
   })
 
   it('renders role badge when senderRole is provided', () => {
-    render(
-      <MessageBubble {...defaultProps} senderRole="admin" showName={true} isOwn={false} />
-    )
+    render(<MessageBubble {...defaultProps} senderRole="admin" showName={true} isOwn={false} />)
     expect(screen.getByTestId('role-badge')).toHaveTextContent('admin')
   })
 

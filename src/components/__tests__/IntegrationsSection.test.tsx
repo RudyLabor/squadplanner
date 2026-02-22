@@ -3,33 +3,77 @@ import { render, screen } from '@testing-library/react'
 import { createElement } from 'react'
 
 vi.mock('../../lib/supabaseMinimal', () => ({
-  supabaseMinimal: { auth: { getSession: vi.fn().mockResolvedValue({ data: { session: null } }) }, from: vi.fn().mockReturnValue({ select: vi.fn().mockReturnValue({ eq: vi.fn().mockReturnValue({ data: [], error: null }) }), update: vi.fn().mockReturnValue({ eq: vi.fn().mockResolvedValue({ data: null, error: null }) }) }), rpc: vi.fn().mockResolvedValue({ data: null, error: null }), channel: vi.fn().mockReturnValue({ on: vi.fn().mockReturnThis(), subscribe: vi.fn() }), removeChannel: vi.fn() },
-  supabase: { auth: { getSession: vi.fn().mockResolvedValue({ data: { session: null } }) }, from: vi.fn().mockReturnValue({ select: vi.fn().mockReturnValue({ eq: vi.fn().mockReturnValue({ data: [], error: null }) }) }), rpc: vi.fn().mockResolvedValue({ data: null, error: null }), channel: vi.fn().mockReturnValue({ on: vi.fn().mockReturnThis(), subscribe: vi.fn() }), removeChannel: vi.fn() },
+  supabaseMinimal: {
+    auth: { getSession: vi.fn().mockResolvedValue({ data: { session: null } }) },
+    from: vi.fn().mockReturnValue({
+      select: vi.fn().mockReturnValue({ eq: vi.fn().mockReturnValue({ data: [], error: null }) }),
+      update: vi
+        .fn()
+        .mockReturnValue({ eq: vi.fn().mockResolvedValue({ data: null, error: null }) }),
+    }),
+    rpc: vi.fn().mockResolvedValue({ data: null, error: null }),
+    channel: vi.fn().mockReturnValue({ on: vi.fn().mockReturnThis(), subscribe: vi.fn() }),
+    removeChannel: vi.fn(),
+  },
+  supabase: {
+    auth: { getSession: vi.fn().mockResolvedValue({ data: { session: null } }) },
+    from: vi.fn().mockReturnValue({
+      select: vi.fn().mockReturnValue({ eq: vi.fn().mockReturnValue({ data: [], error: null }) }),
+    }),
+    rpc: vi.fn().mockResolvedValue({ data: null, error: null }),
+    channel: vi.fn().mockReturnValue({ on: vi.fn().mockReturnThis(), subscribe: vi.fn() }),
+    removeChannel: vi.fn(),
+  },
   isSupabaseReady: vi.fn().mockReturnValue(true),
 }))
 
 vi.mock('../../hooks/useAuth', () => ({
   useAuthStore: Object.assign(
-    vi.fn().mockReturnValue({ user: { id: 'user-1' }, profile: { id: 'user-1', username: 'TestUser' }, isLoading: false, isInitialized: true }),
-    { getState: vi.fn().mockReturnValue({ user: { id: 'user-1' }, profile: { id: 'user-1', username: 'TestUser' } }) }
+    vi.fn().mockReturnValue({
+      user: { id: 'user-1' },
+      profile: { id: 'user-1', username: 'TestUser' },
+      isLoading: false,
+      isInitialized: true,
+    }),
+    {
+      getState: vi.fn().mockReturnValue({
+        user: { id: 'user-1' },
+        profile: { id: 'user-1', username: 'TestUser' },
+      }),
+    }
   ),
 }))
 
 vi.mock('../../hooks', () => ({
   useAuthStore: Object.assign(
-    vi.fn().mockReturnValue({ user: { id: 'user-1' }, profile: { id: 'user-1', username: 'TestUser' }, isLoading: false, isInitialized: true }),
-    { getState: vi.fn().mockReturnValue({ user: { id: 'user-1' }, profile: { id: 'user-1', username: 'TestUser' } }) }
+    vi.fn().mockReturnValue({
+      user: { id: 'user-1' },
+      profile: { id: 'user-1', username: 'TestUser' },
+      isLoading: false,
+      isInitialized: true,
+    }),
+    {
+      getState: vi.fn().mockReturnValue({
+        user: { id: 'user-1' },
+        profile: { id: 'user-1', username: 'TestUser' },
+      }),
+    }
   ),
 }))
 
 vi.mock('../../lib/toast', () => ({
-  showSuccess: vi.fn(), showError: vi.fn(), showWarning: vi.fn(), showInfo: vi.fn(),
+  showSuccess: vi.fn(),
+  showError: vi.fn(),
+  showWarning: vi.fn(),
+  showInfo: vi.fn(),
 }))
 
 vi.mock('../../lib/i18n', () => ({
   useT: () => (key: string) => key,
   useLocale: () => 'fr',
-  useI18nStore: Object.assign(vi.fn().mockReturnValue({ locale: 'fr' }), { getState: vi.fn().mockReturnValue({ locale: 'fr' }) }),
+  useI18nStore: Object.assign(vi.fn().mockReturnValue({ locale: 'fr' }), {
+    getState: vi.fn().mockReturnValue({ locale: 'fr' }),
+  }),
 }))
 
 import { IntegrationsSection } from '../IntegrationsSection'

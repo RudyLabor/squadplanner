@@ -48,10 +48,7 @@ describe('useParticipantVolumes', () => {
     })
 
     it('returns the stored volume for a known participant', () => {
-      localStorage.setItem(
-        STORAGE_KEY,
-        JSON.stringify({ 'p-1': { volume: 75, muted: false } })
-      )
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({ 'p-1': { volume: 75, muted: false } }))
 
       const { result } = renderHook(() => useParticipantVolumes())
       expect(result.current.getVolume('p-1')).toBe(75)
@@ -166,10 +163,7 @@ describe('useParticipantVolumes', () => {
     })
 
     it('returns true when participant is muted', () => {
-      localStorage.setItem(
-        STORAGE_KEY,
-        JSON.stringify({ 'p-1': { volume: 100, muted: true } })
-      )
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({ 'p-1': { volume: 100, muted: true } }))
 
       const { result } = renderHook(() => useParticipantVolumes())
       expect(result.current.isMuted('p-1')).toBe(true)

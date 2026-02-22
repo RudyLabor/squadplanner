@@ -18,18 +18,24 @@ vi.mock('framer-motion', () => ({
   useAnimate: vi.fn().mockReturnValue([{ current: null }, vi.fn()]),
   useAnimation: vi.fn().mockReturnValue({ start: vi.fn(), stop: vi.fn() }),
   useReducedMotion: vi.fn().mockReturnValue(false),
-  m: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
-  motion: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
+  m: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
+  motion: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
 }))
 
 // Mock useAudioAnalyser
@@ -67,9 +73,7 @@ describe('VoiceWaveform', () => {
   })
 
   it('applies custom className', () => {
-    const { container } = render(
-      <VoiceWaveform isActive={false} className="custom-class" />
-    )
+    const { container } = render(<VoiceWaveform isActive={false} className="custom-class" />)
     expect(container.firstChild).toHaveClass('custom-class')
   })
 
@@ -97,9 +101,7 @@ describe('VoiceWaveform', () => {
   })
 
   it('renders with custom color', () => {
-    const { container } = render(
-      <VoiceWaveform isActive={false} color="red" />
-    )
+    const { container } = render(<VoiceWaveform isActive={false} color="red" />)
     expect(container.firstChild).toBeTruthy()
   })
 
@@ -134,9 +136,7 @@ describe('VoiceWaveformDemo', () => {
   })
 
   it('applies custom className', () => {
-    const { container } = render(
-      <VoiceWaveformDemo isActive={false} className="demo-waveform" />
-    )
+    const { container } = render(<VoiceWaveformDemo isActive={false} className="demo-waveform" />)
     expect(container.firstChild).toHaveClass('demo-waveform')
   })
 })

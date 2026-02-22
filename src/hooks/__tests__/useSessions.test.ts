@@ -56,8 +56,18 @@ describe('useSessionsStore', () => {
       mockGetSession.mockResolvedValue({ data: { session: { user: mockUser } } })
 
       const mockSessions = [
-        { id: 'session-1', squad_id: 'squad-1', title: 'Game Night', scheduled_at: '2026-02-15T20:00:00Z' },
-        { id: 'session-2', squad_id: 'squad-1', title: 'Ranked Grind', scheduled_at: '2026-02-16T20:00:00Z' },
+        {
+          id: 'session-1',
+          squad_id: 'squad-1',
+          title: 'Game Night',
+          scheduled_at: '2026-02-15T20:00:00Z',
+        },
+        {
+          id: 'session-2',
+          squad_id: 'squad-1',
+          title: 'Ranked Grind',
+          scheduled_at: '2026-02-16T20:00:00Z',
+        },
       ]
 
       const mockRsvps1 = [
@@ -66,9 +76,7 @@ describe('useSessionsStore', () => {
         { user_id: 'user-3', response: 'maybe' },
       ]
 
-      const mockRsvps2 = [
-        { user_id: 'user-2', response: 'present' },
-      ]
+      const mockRsvps2 = [{ user_id: 'user-2', response: 'present' }]
 
       let rsvpCallIdx = 0
       mockFrom.mockImplementation((table: string) => {
@@ -111,7 +119,7 @@ describe('useSessionsStore', () => {
       // STRICT: second session has different RSVP data
       expect(sessions[1].title).toBe('Ranked Grind')
       expect(sessions[1].rsvp_counts?.present).toBe(1)
-      expect(sessions[1].my_rsvp).toBeNull()  // user-1 has no RSVP for session 2
+      expect(sessions[1].my_rsvp).toBeNull() // user-1 has no RSVP for session 2
       // STRICT: loading finished
       expect(useSessionsStore.getState().isLoading).toBe(false)
     })
@@ -123,7 +131,13 @@ describe('useSessionsStore', () => {
       act(() => {
         useSessionsStore.setState({
           sessions: [
-            { id: 's1', squad_id: 'squad-1', title: 'Squad 1 Game', rsvp_counts: { present: 0, absent: 0, maybe: 0 }, my_rsvp: null } as any,
+            {
+              id: 's1',
+              squad_id: 'squad-1',
+              title: 'Squad 1 Game',
+              rsvp_counts: { present: 0, absent: 0, maybe: 0 },
+              my_rsvp: null,
+            } as any,
           ],
         })
       })
@@ -160,9 +174,9 @@ describe('useSessionsStore', () => {
       // STRICT: sessions from both squads are present
       expect(sessions).toHaveLength(2)
       // STRICT: squad-1 session was preserved
-      expect(sessions.find(s => s.squad_id === 'squad-1')?.title).toBe('Squad 1 Game')
+      expect(sessions.find((s) => s.squad_id === 'squad-1')?.title).toBe('Squad 1 Game')
       // STRICT: squad-2 session was added
-      expect(sessions.find(s => s.squad_id === 'squad-2')?.title).toBe('Squad 2 Game')
+      expect(sessions.find((s) => s.squad_id === 'squad-2')?.title).toBe('Squad 2 Game')
     })
 
     it('replaces sessions for same squad when re-fetched', async () => {
@@ -171,9 +185,7 @@ describe('useSessionsStore', () => {
       // Pre-populate with old squad-1 sessions
       act(() => {
         useSessionsStore.setState({
-          sessions: [
-            { id: 's1', squad_id: 'squad-1', title: 'Old Session' } as any,
-          ],
+          sessions: [{ id: 's1', squad_id: 'squad-1', title: 'Old Session' } as any],
         })
       })
 
@@ -327,11 +339,13 @@ describe('useSessionsStore', () => {
       expect(insertPayload.status).toBe('proposed')
       expect(insertPayload.squad_id).toBe('squad-1')
       // STRICT: auto-RSVP was created for the creator
-      expect(mockRsvpInsert).toHaveBeenCalledWith(expect.objectContaining({
-        session_id: 'session-new',
-        user_id: 'user-1',
-        response: 'present',
-      }))
+      expect(mockRsvpInsert).toHaveBeenCalledWith(
+        expect.objectContaining({
+          session_id: 'session-new',
+          user_id: 'user-1',
+          response: 'present',
+        })
+      )
       // STRICT: isLoading was reset
       expect(useSessionsStore.getState().isLoading).toBe(false)
     })
@@ -437,7 +451,10 @@ describe('useSessionsStore', () => {
             update: mockUpdate,
             select: vi.fn().mockReturnValue({
               eq: vi.fn().mockReturnValue({
-                single: vi.fn().mockResolvedValue({ data: { id: 'session-1', status: 'cancelled' }, error: null }),
+                single: vi.fn().mockResolvedValue({
+                  data: { id: 'session-1', status: 'cancelled' },
+                  error: null,
+                }),
               }),
             }),
           }
@@ -584,11 +601,13 @@ describe('useSessionsStore', () => {
       // STRICT: no error on success
       expect(result.error).toBeNull()
       // STRICT: insert was called with correct data
-      expect(mockRsvpInsert).toHaveBeenCalledWith(expect.objectContaining({
-        session_id: 'session-1',
-        user_id: 'user-1',
-        response: 'present',
-      }))
+      expect(mockRsvpInsert).toHaveBeenCalledWith(
+        expect.objectContaining({
+          session_id: 'session-1',
+          user_id: 'user-1',
+          response: 'present',
+        })
+      )
     })
 
     it('updates existing RSVP when one already exists', async () => {
@@ -651,9 +670,11 @@ describe('useSessionsStore', () => {
       // STRICT: no error on success
       expect(result.error).toBeNull()
       // STRICT: update was called (not insert) because existing RSVP was found
-      expect(mockRsvpUpdate).toHaveBeenCalledWith(expect.objectContaining({
-        response: 'absent',
-      }))
+      expect(mockRsvpUpdate).toHaveBeenCalledWith(
+        expect.objectContaining({
+          response: 'absent',
+        })
+      )
     })
   })
 
@@ -739,11 +760,13 @@ describe('useSessionsStore', () => {
       // STRICT: no error on success
       expect(result.error).toBeNull()
       // STRICT: insert was called with correct data
-      expect(mockCheckinInsert).toHaveBeenCalledWith(expect.objectContaining({
-        session_id: 'session-1',
-        user_id: 'user-1',
-        status: 'present',
-      }))
+      expect(mockCheckinInsert).toHaveBeenCalledWith(
+        expect.objectContaining({
+          session_id: 'session-1',
+          user_id: 'user-1',
+          status: 'present',
+        })
+      )
     })
 
     it('updates existing checkin when one already exists', async () => {
@@ -803,9 +826,11 @@ describe('useSessionsStore', () => {
       // STRICT: no error on success
       expect(result.error).toBeNull()
       // STRICT: update was called (not insert) with correct status
-      expect(mockCheckinUpdate).toHaveBeenCalledWith(expect.objectContaining({
-        status: 'late',
-      }))
+      expect(mockCheckinUpdate).toHaveBeenCalledWith(
+        expect.objectContaining({
+          status: 'late',
+        })
+      )
     })
   })
 
@@ -825,7 +850,12 @@ describe('useSessionsStore', () => {
             select: vi.fn().mockReturnValue({
               eq: vi.fn().mockReturnValue({
                 single: vi.fn().mockResolvedValue({
-                  data: { id: 'session-1', squad_id: 'squad-1', title: 'Game Night', scheduled_at: '2026-02-15T20:00:00Z' },
+                  data: {
+                    id: 'session-1',
+                    squad_id: 'squad-1',
+                    title: 'Game Night',
+                    scheduled_at: '2026-02-15T20:00:00Z',
+                  },
                   error: null,
                 }),
               }),

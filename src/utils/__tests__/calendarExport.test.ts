@@ -4,7 +4,11 @@
  *         formatICSDate, escapeICS, generateICS, downloadICS (internal)
  */
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
-import { sessionToCalendarEvent, getGoogleCalendarUrl, exportSessionsToICS } from '../calendarExport'
+import {
+  sessionToCalendarEvent,
+  getGoogleCalendarUrl,
+  exportSessionsToICS,
+} from '../calendarExport'
 
 describe('calendarExport', () => {
   // =========================================================================
@@ -34,7 +38,12 @@ describe('calendarExport', () => {
     })
 
     it('should use game as title fallback when no title', () => {
-      const session = { id: '1', scheduled_at: '2026-02-14T18:00:00Z', status: 'confirmed', game: 'Fortnite' }
+      const session = {
+        id: '1',
+        scheduled_at: '2026-02-14T18:00:00Z',
+        status: 'confirmed',
+        game: 'Fortnite',
+      }
       const event = sessionToCalendarEvent(session)
       expect(event.title).toBe('Fortnite')
     })
@@ -53,33 +62,58 @@ describe('calendarExport', () => {
     })
 
     it('should handle 0 duration_minutes by defaulting to 120', () => {
-      const session = { id: '1', scheduled_at: '2026-02-14T18:00:00Z', status: 'confirmed', duration_minutes: 0 }
+      const session = {
+        id: '1',
+        scheduled_at: '2026-02-14T18:00:00Z',
+        status: 'confirmed',
+        duration_minutes: 0,
+      }
       const event = sessionToCalendarEvent(session)
       const diffMs = event.endDate.getTime() - event.startDate.getTime()
       expect(diffMs).toBe(120 * 60 * 1000)
     })
 
     it('should handle short duration (15 minutes)', () => {
-      const session = { id: '1', scheduled_at: '2026-02-14T18:00:00Z', status: 'confirmed', duration_minutes: 15 }
+      const session = {
+        id: '1',
+        scheduled_at: '2026-02-14T18:00:00Z',
+        status: 'confirmed',
+        duration_minutes: 15,
+      }
       const event = sessionToCalendarEvent(session)
       const diffMs = event.endDate.getTime() - event.startDate.getTime()
       expect(diffMs).toBe(15 * 60 * 1000)
     })
 
     it('should handle long duration (480 minutes / 8 hours)', () => {
-      const session = { id: '1', scheduled_at: '2026-02-14T18:00:00Z', status: 'confirmed', duration_minutes: 480 }
+      const session = {
+        id: '1',
+        scheduled_at: '2026-02-14T18:00:00Z',
+        status: 'confirmed',
+        duration_minutes: 480,
+      }
       const event = sessionToCalendarEvent(session)
       expect(event.endDate).toEqual(new Date('2026-02-15T02:00:00Z'))
     })
 
     it('should include game in description when provided', () => {
-      const session = { id: '1', scheduled_at: '2026-02-14T18:00:00Z', status: 'confirmed', game: 'CS2' }
+      const session = {
+        id: '1',
+        scheduled_at: '2026-02-14T18:00:00Z',
+        status: 'confirmed',
+        game: 'CS2',
+      }
       const event = sessionToCalendarEvent(session)
       expect(event.description).toContain('Jeu: CS2')
     })
 
     it('should not include game line in description when game is null', () => {
-      const session = { id: '1', scheduled_at: '2026-02-14T18:00:00Z', status: 'confirmed', game: null }
+      const session = {
+        id: '1',
+        scheduled_at: '2026-02-14T18:00:00Z',
+        status: 'confirmed',
+        game: null,
+      }
       const event = sessionToCalendarEvent(session)
       expect(event.description).not.toContain('Jeu:')
     })
@@ -103,13 +137,24 @@ describe('calendarExport', () => {
     })
 
     it('should handle null title and null game', () => {
-      const session = { id: '1', scheduled_at: '2026-02-14T18:00:00Z', status: 'confirmed', title: null, game: null }
+      const session = {
+        id: '1',
+        scheduled_at: '2026-02-14T18:00:00Z',
+        status: 'confirmed',
+        title: null,
+        game: null,
+      }
       const event = sessionToCalendarEvent(session)
       expect(event.title).toBe('Session gaming')
     })
 
     it('should handle empty string title', () => {
-      const session = { id: '1', scheduled_at: '2026-02-14T18:00:00Z', status: 'confirmed', title: '' }
+      const session = {
+        id: '1',
+        scheduled_at: '2026-02-14T18:00:00Z',
+        status: 'confirmed',
+        title: '',
+      }
       const event = sessionToCalendarEvent(session)
       // Empty string is falsy, should fallback
       expect(event.title).toBe('Session gaming')
@@ -246,9 +291,7 @@ describe('calendarExport', () => {
 
     it('should export valid sessions and trigger download', () => {
       const futureDate = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString()
-      const sessions = [
-        { id: '1', scheduled_at: futureDate, status: 'confirmed', title: 'Test' },
-      ]
+      const sessions = [{ id: '1', scheduled_at: futureDate, status: 'confirmed', title: 'Test' }]
       exportSessionsToICS(sessions)
 
       expect(createObjectURLSpy).toHaveBeenCalled()

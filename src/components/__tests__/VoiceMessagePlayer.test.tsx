@@ -18,18 +18,24 @@ vi.mock('framer-motion', () => ({
   useAnimate: vi.fn().mockReturnValue([{ current: null }, vi.fn()]),
   useAnimation: vi.fn().mockReturnValue({ start: vi.fn(), stop: vi.fn() }),
   useReducedMotion: vi.fn().mockReturnValue(false),
-  m: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
-  motion: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
+  m: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
+  motion: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
 }))
 
 // Mock icons
@@ -41,15 +47,18 @@ vi.mock('../icons', () => ({
 
 // Mock HTMLAudioElement
 beforeEach(() => {
-  vi.stubGlobal('HTMLAudioElement', vi.fn().mockImplementation(() => ({
-    play: vi.fn().mockResolvedValue(undefined),
-    pause: vi.fn(),
-    currentTime: 0,
-    duration: 30,
-    paused: true,
-    addEventListener: vi.fn(),
-    removeEventListener: vi.fn(),
-  })))
+  vi.stubGlobal(
+    'HTMLAudioElement',
+    vi.fn().mockImplementation(() => ({
+      play: vi.fn().mockResolvedValue(undefined),
+      pause: vi.fn(),
+      currentTime: 0,
+      duration: 30,
+      paused: true,
+      addEventListener: vi.fn(),
+      removeEventListener: vi.fn(),
+    }))
+  )
 })
 
 describe('VoiceMessagePlayer', () => {

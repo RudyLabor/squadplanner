@@ -28,7 +28,8 @@ vi.mock('react-router', () => ({
   data: mockData,
   Await: ({ children, resolve }: any) => {
     // Resolve promises synchronously for testing; handle arrays and resolved values
-    if (typeof children === 'function') return children(Array.isArray(resolve) ? resolve : resolve ?? [])
+    if (typeof children === 'function')
+      return children(Array.isArray(resolve) ? resolve : (resolve ?? []))
     return children
   },
   Link: ({ children, to, ...props }: any) => createElement('a', { href: to, ...props }, children),
@@ -50,18 +51,24 @@ vi.mock('framer-motion', () => ({
   useAnimate: vi.fn().mockReturnValue([{ current: null }, vi.fn()]),
   useAnimation: vi.fn().mockReturnValue({ start: vi.fn(), stop: vi.fn() }),
   useReducedMotion: vi.fn().mockReturnValue(false),
-  m: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
-  motion: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
+  m: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
+  motion: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
 }))
 
 vi.mock('../../lib/supabase-minimal-ssr', () => ({
@@ -87,12 +94,20 @@ vi.mock('../../lib/queryClient', () => ({
 
 vi.mock('../../components/ClientRouteWrapper', () => ({
   ClientRouteWrapper: ({ children, seeds }: any) =>
-    createElement('div', { 'data-testid': 'route-wrapper', 'data-seeds': JSON.stringify(seeds) }, children),
+    createElement(
+      'div',
+      { 'data-testid': 'route-wrapper', 'data-seeds': JSON.stringify(seeds) },
+      children
+    ),
 }))
 
 vi.mock('../../components/DeferredSeed', () => ({
   DeferredSeed: ({ children, queryKey, data }: any) =>
-    createElement('div', { 'data-testid': 'deferred-seed', 'data-query-key': JSON.stringify(queryKey) }, children),
+    createElement(
+      'div',
+      { 'data-testid': 'deferred-seed', 'data-query-key': JSON.stringify(queryKey) },
+      children
+    ),
 }))
 
 vi.mock('../../pages/Home', () => ({
@@ -195,7 +210,11 @@ describe('routes/home', () => {
     it('returns canonical link', () => {
       const result = meta()
       const canonical = result.find((m: any) => m.tagName === 'link')
-      expect(canonical).toEqual({ tagName: 'link', rel: 'canonical', href: 'https://squadplanner.fr/home' })
+      expect(canonical).toEqual({
+        tagName: 'link',
+        rel: 'canonical',
+        href: 'https://squadplanner.fr/home',
+      })
     })
 
     it('returns og:url', () => {
@@ -243,7 +262,18 @@ describe('routes/home', () => {
     it('uses RPC data for profile and squads', async () => {
       const user = { id: 'u1', email: 'u@test.com' }
       const profile = { id: 'u1', username: 'tester' }
-      const squads = [{ id: 's1', name: 'Squad', game: 'V', invite_code: 'a', owner_id: 'u1', total_members: 3, created_at: '2026-01-01', member_count: 3 }]
+      const squads = [
+        {
+          id: 's1',
+          name: 'Squad',
+          game: 'V',
+          invite_code: 'a',
+          owner_id: 'u1',
+          total_members: 3,
+          created_at: '2026-01-01',
+          member_count: 3,
+        },
+      ]
 
       setupSSRMocks({
         user,
@@ -284,8 +314,21 @@ describe('routes/home', () => {
     })
 
     it('returns upcomingSessions as a promise (deferred for streaming)', async () => {
-      const squads = [{ id: 's1', name: 'S', game: 'G', invite_code: 'x', owner_id: 'u1', total_members: 1, created_at: '2026-01-01', member_count: 1 }]
-      const sessions = [{ id: 'sess1', squad_id: 's1', title: 'Game', scheduled_at: '2026-02-20T18:00:00Z' }]
+      const squads = [
+        {
+          id: 's1',
+          name: 'S',
+          game: 'G',
+          invite_code: 'x',
+          owner_id: 'u1',
+          total_members: 1,
+          created_at: '2026-01-01',
+          member_count: 1,
+        },
+      ]
+      const sessions = [
+        { id: 'sess1', squad_id: 's1', title: 'Game', scheduled_at: '2026-02-20T18:00:00Z' },
+      ]
       const rsvps = [{ session_id: 'sess1', user_id: 'u1', response: 'present' }]
 
       setupSSRMocks({
@@ -316,7 +359,18 @@ describe('routes/home', () => {
     })
 
     it('handles null sessionsData in fetchUpcomingSessions', async () => {
-      const squads = [{ id: 's1', name: 'S', game: 'G', invite_code: 'x', owner_id: 'u1', total_members: 1, created_at: '2026-01-01', member_count: 1 }]
+      const squads = [
+        {
+          id: 's1',
+          name: 'S',
+          game: 'G',
+          invite_code: 'x',
+          owner_id: 'u1',
+          total_members: 1,
+          created_at: '2026-01-01',
+          member_count: 1,
+        },
+      ]
       setupSSRMocks({
         user: { id: 'u1' },
         rpcResult: { profile: null, squads },
@@ -328,7 +382,18 @@ describe('routes/home', () => {
     })
 
     it('handles empty sessionsData in fetchUpcomingSessions', async () => {
-      const squads = [{ id: 's1', name: 'S', game: 'G', invite_code: 'x', owner_id: 'u1', total_members: 1, created_at: '2026-01-01', member_count: 1 }]
+      const squads = [
+        {
+          id: 's1',
+          name: 'S',
+          game: 'G',
+          invite_code: 'x',
+          owner_id: 'u1',
+          total_members: 1,
+          created_at: '2026-01-01',
+          member_count: 1,
+        },
+      ]
       setupSSRMocks({
         user: { id: 'u1' },
         rpcResult: { profile: null, squads },
@@ -340,7 +405,18 @@ describe('routes/home', () => {
     })
 
     it('computes RSVP counts correctly with multiple sessions', async () => {
-      const squads = [{ id: 's1', name: 'S', game: 'G', invite_code: 'x', owner_id: 'u1', total_members: 2, created_at: '2026-01-01', member_count: 2 }]
+      const squads = [
+        {
+          id: 's1',
+          name: 'S',
+          game: 'G',
+          invite_code: 'x',
+          owner_id: 'u1',
+          total_members: 2,
+          created_at: '2026-01-01',
+          member_count: 2,
+        },
+      ]
       const sessions = [
         { id: 'sess1', squad_id: 's1', title: 'S1', scheduled_at: '2026-02-20T18:00:00Z' },
         { id: 'sess2', squad_id: 's1', title: 'S2', scheduled_at: '2026-02-21T18:00:00Z' },
@@ -374,14 +450,27 @@ describe('routes/home', () => {
     it('returns empty data when user is null', async () => {
       mockClientGetSession.mockResolvedValue({ data: { session: null } })
       const serverData = { profile: null, squads: [], upcomingSessions: [] }
-      const result = await clientLoader({ serverLoader: vi.fn().mockResolvedValue(serverData) } as any)
+      const result = await clientLoader({
+        serverLoader: vi.fn().mockResolvedValue(serverData),
+      } as any)
       expect(result).toEqual({ profile: null, squads: [], upcomingSessions: [] })
     })
 
     it('uses RPC for profile and squads, then fetches sessions', async () => {
       const user = { id: 'c1', email: 'c@t.com' }
       const profile = { id: 'c1', username: 'cl' }
-      const squads = [{ id: 's1', name: 'CS', game: 'G', invite_code: 'a', owner_id: 'c1', total_members: 1, created_at: '2026-01-01', member_count: 1 }]
+      const squads = [
+        {
+          id: 's1',
+          name: 'CS',
+          game: 'G',
+          invite_code: 'a',
+          owner_id: 'c1',
+          total_members: 1,
+          created_at: '2026-01-01',
+          member_count: 1,
+        },
+      ]
 
       mockClientGetSession.mockResolvedValue({ data: { session: { user } } })
       mockClientRpc.mockResolvedValue({ data: { profile, squads } })
@@ -444,7 +533,9 @@ describe('routes/home', () => {
       const qc = makeQC()
       const loaderData = { profile: null, squads: [], upcomingSessions: [] }
       render(
-        createElement(QueryClientProvider, { client: qc },
+        createElement(
+          QueryClientProvider,
+          { client: qc },
           createElement(DefaultExport, { loaderData } as any)
         )
       )
@@ -457,7 +548,9 @@ describe('routes/home', () => {
       const squads = [{ id: 's1', name: 'MySquad' }]
       const loaderData = { profile: null, squads, upcomingSessions: [] }
       render(
-        createElement(QueryClientProvider, { client: qc },
+        createElement(
+          QueryClientProvider,
+          { client: qc },
           createElement(DefaultExport, { loaderData } as any)
         )
       )
@@ -473,7 +566,9 @@ describe('routes/home', () => {
       const sessions = [{ id: 'sess1', title: 'Game Night' }]
       const loaderData = { profile: null, squads: [], upcomingSessions: sessions }
       render(
-        createElement(QueryClientProvider, { client: qc },
+        createElement(
+          QueryClientProvider,
+          { client: qc },
           createElement(DefaultExport, { loaderData } as any)
         )
       )
@@ -488,7 +583,9 @@ describe('routes/home', () => {
       const sessions = [{ id: 'sess1', title: 'Session Alpha' }]
       const loaderData = { profile: null, squads: [], upcomingSessions: sessions }
       render(
-        createElement(QueryClientProvider, { client: qc },
+        createElement(
+          QueryClientProvider,
+          { client: qc },
           createElement(DefaultExport, { loaderData } as any)
         )
       )
@@ -500,7 +597,9 @@ describe('routes/home', () => {
       const qc = makeQC()
       const loaderData = { profile: null, squads: [], upcomingSessions: [] }
       const { container } = render(
-        createElement(QueryClientProvider, { client: qc },
+        createElement(
+          QueryClientProvider,
+          { client: qc },
           createElement(DefaultExport, { loaderData } as any)
         )
       )

@@ -29,7 +29,10 @@ const mockMediaRecorder = {
   removeEventListener: vi.fn(),
 }
 
-vi.stubGlobal('MediaRecorder', vi.fn().mockImplementation(() => mockMediaRecorder))
+vi.stubGlobal(
+  'MediaRecorder',
+  vi.fn().mockImplementation(() => mockMediaRecorder)
+)
 Object.defineProperty(MediaRecorder, 'isTypeSupported', {
   value: vi.fn().mockReturnValue(true),
 })

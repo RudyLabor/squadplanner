@@ -16,25 +16,44 @@ vi.mock('framer-motion', () => ({
   useAnimate: vi.fn().mockReturnValue([{ current: null }, vi.fn()]),
   useAnimation: vi.fn().mockReturnValue({ start: vi.fn(), stop: vi.fn() }),
   useReducedMotion: vi.fn().mockReturnValue(false),
-  m: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
-  motion: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
+  m: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
+  motion: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
 }))
 
-vi.mock('../../../components/icons', () => new Proxy({}, { get: (_t: any, p: string) => typeof p === 'string' ? ({ children, ...props }: any) => createElement('span', props, children) : undefined }))
+vi.mock(
+  '../../../components/icons',
+  () =>
+    new Proxy(
+      {},
+      {
+        get: (_t: any, p: string) =>
+          typeof p === 'string'
+            ? ({ children, ...props }: any) => createElement('span', props, children)
+            : undefined,
+      }
+    )
+)
 
 vi.mock('../../../components/ui', () => ({
   Card: ({ children, ...props }: any) => createElement('div', props, children),
-  Button: ({ children, onClick, disabled, ...props }: any) => createElement('button', { onClick, disabled, ...props }, children),
+  Button: ({ children, onClick, disabled, ...props }: any) =>
+    createElement('button', { onClick, disabled, ...props }, children),
 }))
 
 import { PartySquadCard } from '../PartySquadCard'
@@ -44,7 +63,9 @@ describe('PartySquadCard', () => {
 
   // STRICT: verifies card content — squad name, game, member count with plural, join button, icon, card structure
   it('renders squad card with name, game info, member count, and join button', () => {
-    const { container } = render(<PartySquadCard squad={defaultSquad} onJoin={vi.fn()} isConnecting={false} />)
+    const { container } = render(
+      <PartySquadCard squad={defaultSquad} onJoin={vi.fn()} isConnecting={false} />
+    )
 
     // 1. Squad name rendered
     expect(screen.getByText('Les Ranked')).toBeDefined()
@@ -86,7 +107,8 @@ describe('PartySquadCard', () => {
     render(<PartySquadCard squad={defaultSquad} onJoin={vi.fn()} isConnecting={true} />)
 
     // 1. Button is disabled
-    const btn = screen.getByText('Rejoindre')?.closest('button') ?? document.querySelectorAll('button')[0]
+    const btn =
+      screen.getByText('Rejoindre')?.closest('button') ?? document.querySelectorAll('button')[0]
     expect(btn?.disabled).toBe(true)
     // 2. Squad name still shown
     expect(screen.getByText('Les Ranked')).toBeDefined()

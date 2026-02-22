@@ -33,30 +33,78 @@ const mockHoisted = vi.hoisted(() => {
     mockMutateConfirm,
     mockMutateCancel,
     mockMutateUpdate,
-    get mockSessionData() { return mockSessionData },
-    set mockSessionData(v: any) { mockSessionData = v },
-    get mockSessionLoading() { return mockSessionLoading },
-    set mockSessionLoading(v: boolean) { mockSessionLoading = v },
-    get mockUser() { return mockUser },
-    set mockUser(v: any) { mockUser = v },
-    get mockParams() { return mockParams },
-    set mockParams(v: any) { mockParams = v },
-    get mockUpdatePending() { return mockUpdatePending },
-    set mockUpdatePending(v: boolean) { mockUpdatePending = v },
-    get capturedRsvpButtonsProps() { return capturedRsvpButtonsProps },
-    set capturedRsvpButtonsProps(v: any) { capturedRsvpButtonsProps = v },
-    get capturedCheckinProps() { return capturedCheckinProps },
-    set capturedCheckinProps(v: any) { capturedCheckinProps = v },
-    get capturedSessionInfoProps() { return capturedSessionInfoProps },
-    set capturedSessionInfoProps(v: any) { capturedSessionInfoProps = v },
-    get capturedRsvpCountsProps() { return capturedRsvpCountsProps },
-    set capturedRsvpCountsProps(v: any) { capturedRsvpCountsProps = v },
-    get capturedParticipantsProps() { return capturedParticipantsProps },
-    set capturedParticipantsProps(v: any) { capturedParticipantsProps = v },
-    get capturedConfirmDialogProps() { return capturedConfirmDialogProps },
-    set capturedConfirmDialogProps(v: any) { capturedConfirmDialogProps = v },
-    get capturedVoiceChatProps() { return capturedVoiceChatProps },
-    set capturedVoiceChatProps(v: any) { capturedVoiceChatProps = v },
+    get mockSessionData() {
+      return mockSessionData
+    },
+    set mockSessionData(v: any) {
+      mockSessionData = v
+    },
+    get mockSessionLoading() {
+      return mockSessionLoading
+    },
+    set mockSessionLoading(v: boolean) {
+      mockSessionLoading = v
+    },
+    get mockUser() {
+      return mockUser
+    },
+    set mockUser(v: any) {
+      mockUser = v
+    },
+    get mockParams() {
+      return mockParams
+    },
+    set mockParams(v: any) {
+      mockParams = v
+    },
+    get mockUpdatePending() {
+      return mockUpdatePending
+    },
+    set mockUpdatePending(v: boolean) {
+      mockUpdatePending = v
+    },
+    get capturedRsvpButtonsProps() {
+      return capturedRsvpButtonsProps
+    },
+    set capturedRsvpButtonsProps(v: any) {
+      capturedRsvpButtonsProps = v
+    },
+    get capturedCheckinProps() {
+      return capturedCheckinProps
+    },
+    set capturedCheckinProps(v: any) {
+      capturedCheckinProps = v
+    },
+    get capturedSessionInfoProps() {
+      return capturedSessionInfoProps
+    },
+    set capturedSessionInfoProps(v: any) {
+      capturedSessionInfoProps = v
+    },
+    get capturedRsvpCountsProps() {
+      return capturedRsvpCountsProps
+    },
+    set capturedRsvpCountsProps(v: any) {
+      capturedRsvpCountsProps = v
+    },
+    get capturedParticipantsProps() {
+      return capturedParticipantsProps
+    },
+    set capturedParticipantsProps(v: any) {
+      capturedParticipantsProps = v
+    },
+    get capturedConfirmDialogProps() {
+      return capturedConfirmDialogProps
+    },
+    set capturedConfirmDialogProps(v: any) {
+      capturedConfirmDialogProps = v
+    },
+    get capturedVoiceChatProps() {
+      return capturedVoiceChatProps
+    },
+    set capturedVoiceChatProps(v: any) {
+      capturedVoiceChatProps = v
+    },
   }
 })
 
@@ -68,7 +116,8 @@ vi.mock('react-router', () => ({
   useSearchParams: vi.fn().mockReturnValue([new URLSearchParams(), vi.fn()]),
   useLoaderData: vi.fn().mockReturnValue({}),
   Link: ({ children, to, ...props }: any) => createElement('a', { href: to, ...props }, children),
-  NavLink: ({ children, to, ...props }: any) => createElement('a', { href: to, ...props }, children),
+  NavLink: ({ children, to, ...props }: any) =>
+    createElement('a', { href: to, ...props }, children),
   Outlet: () => null,
   useMatches: vi.fn().mockReturnValue([]),
 }))
@@ -88,63 +137,110 @@ vi.mock('framer-motion', () => ({
   useAnimate: vi.fn().mockReturnValue([{ current: null }, vi.fn()]),
   useAnimation: vi.fn().mockReturnValue({ start: vi.fn(), stop: vi.fn() }),
   useReducedMotion: vi.fn().mockReturnValue(false),
-  m: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
-  motion: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
+  m: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
+  motion: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
 }))
 
 // Mock supabase
 vi.mock('../../lib/supabaseMinimal', () => ({
-  supabaseMinimal: { auth: { getSession: vi.fn() }, from: vi.fn(), rpc: vi.fn(), channel: vi.fn().mockReturnValue({ on: vi.fn().mockReturnThis(), subscribe: vi.fn() }), removeChannel: vi.fn() },
-  supabase: { auth: { getSession: vi.fn() }, from: vi.fn(), rpc: vi.fn(), channel: vi.fn().mockReturnValue({ on: vi.fn().mockReturnThis(), subscribe: vi.fn() }), removeChannel: vi.fn() },
+  supabaseMinimal: {
+    auth: { getSession: vi.fn() },
+    from: vi.fn(),
+    rpc: vi.fn(),
+    channel: vi.fn().mockReturnValue({ on: vi.fn().mockReturnThis(), subscribe: vi.fn() }),
+    removeChannel: vi.fn(),
+  },
+  supabase: {
+    auth: { getSession: vi.fn() },
+    from: vi.fn(),
+    rpc: vi.fn(),
+    channel: vi.fn().mockReturnValue({ on: vi.fn().mockReturnThis(), subscribe: vi.fn() }),
+    removeChannel: vi.fn(),
+  },
   isSupabaseReady: vi.fn().mockReturnValue(true),
 }))
 
 // Mock auth store
 vi.mock('../../hooks/useAuth', () => ({
   useAuthStore: Object.assign(
-    vi.fn(() => ({ user: mockHoisted.mockUser, profile: { id: 'user-1', username: 'TestUser' }, isLoading: false })),
-    { getState: vi.fn().mockReturnValue({ user: { id: 'user-1' }, profile: { id: 'user-1', username: 'TestUser' } }) }
+    vi.fn(() => ({
+      user: mockHoisted.mockUser,
+      profile: { id: 'user-1', username: 'TestUser' },
+      isLoading: false,
+    })),
+    {
+      getState: vi.fn().mockReturnValue({
+        user: { id: 'user-1' },
+        profile: { id: 'user-1', username: 'TestUser' },
+      }),
+    }
   ),
 }))
 
 vi.mock('../../hooks', () => ({
   useAuthStore: Object.assign(
-    vi.fn(() => ({ user: mockHoisted.mockUser, profile: { id: 'user-1', username: 'TestUser' }, isLoading: false })),
-    { getState: vi.fn().mockReturnValue({ user: { id: 'user-1' }, profile: { id: 'user-1', username: 'TestUser' } }) }
+    vi.fn(() => ({
+      user: mockHoisted.mockUser,
+      profile: { id: 'user-1', username: 'TestUser' },
+      isLoading: false,
+    })),
+    {
+      getState: vi.fn().mockReturnValue({
+        user: { id: 'user-1' },
+        profile: { id: 'user-1', username: 'TestUser' },
+      }),
+    }
   ),
   useConfetti: vi.fn(() => ({ active: false, fire: vi.fn(), cancel: vi.fn() })),
 }))
 
 // Mock toast
 vi.mock('../../lib/toast', () => ({
-  showSuccess: vi.fn(), showError: vi.fn(), showWarning: vi.fn(), showInfo: vi.fn(),
+  showSuccess: vi.fn(),
+  showError: vi.fn(),
+  showWarning: vi.fn(),
+  showInfo: vi.fn(),
 }))
 
 // Mock i18n
 vi.mock('../../lib/i18n', () => ({
   useT: () => (key: string) => key,
   useLocale: () => 'fr',
-  useI18nStore: Object.assign(vi.fn().mockReturnValue({ locale: 'fr' }), { getState: vi.fn().mockReturnValue({ locale: 'fr' }) }),
+  useI18nStore: Object.assign(vi.fn().mockReturnValue({ locale: 'fr' }), {
+    getState: vi.fn().mockReturnValue({ locale: 'fr' }),
+  }),
 }))
 
 // Mock query hooks
 vi.mock('../../hooks/queries', () => ({
-  useSessionQuery: vi.fn(() => ({ data: mockHoisted.mockSessionData, isLoading: mockHoisted.mockSessionLoading })),
+  useSessionQuery: vi.fn(() => ({
+    data: mockHoisted.mockSessionData,
+    isLoading: mockHoisted.mockSessionLoading,
+  })),
   useRsvpMutation: vi.fn(() => ({ mutateAsync: mockHoisted.mockMutateRsvp, isPending: false })),
   useCheckinMutation: vi.fn(() => ({ mutateAsync: mockHoisted.mockMutateCheckin })),
   useConfirmSessionMutation: vi.fn(() => ({ mutateAsync: mockHoisted.mockMutateConfirm })),
   useCancelSessionMutation: vi.fn(() => ({ mutateAsync: mockHoisted.mockMutateCancel })),
-  useUpdateSessionMutation: vi.fn(() => ({ mutateAsync: mockHoisted.mockMutateUpdate, isPending: mockHoisted.mockUpdatePending })),
+  useUpdateSessionMutation: vi.fn(() => ({
+    mutateAsync: mockHoisted.mockMutateUpdate,
+    isPending: mockHoisted.mockUpdatePending,
+  })),
 }))
 
 // Mock icons
@@ -167,26 +263,39 @@ vi.mock('../../components/icons', () => ({
 
 // Mock components
 vi.mock('../../components/LazyConfetti', () => ({
-  default: (props: any) => props ? createElement('div', { 'data-testid': 'confetti' }) : null,
+  default: (props: any) => (props ? createElement('div', { 'data-testid': 'confetti' }) : null),
 }))
 
 vi.mock('../../components/ui', () => ({
-  Button: ({ children, onClick, disabled, ...props }: any) => createElement('button', { onClick, disabled, ...props }, children),
+  Button: ({ children, onClick, disabled, ...props }: any) =>
+    createElement('button', { onClick, disabled, ...props }, children),
   ConfirmDialog: (props: any) => {
     mockHoisted.capturedConfirmDialogProps = props
     if (!props.open) return null
-    return createElement('div', { 'data-testid': 'confirm-dialog' },
+    return createElement(
+      'div',
+      { 'data-testid': 'confirm-dialog' },
       createElement('span', null, props.title),
-      createElement('button', { onClick: props.onConfirm, 'data-testid': 'confirm-action' }, props.confirmLabel),
-      createElement('button', { onClick: props.onClose, 'data-testid': 'cancel-action' }, 'Fermer'),
+      createElement(
+        'button',
+        { onClick: props.onConfirm, 'data-testid': 'confirm-action' },
+        props.confirmLabel
+      ),
+      createElement('button', { onClick: props.onClose, 'data-testid': 'cancel-action' }, 'Fermer')
     )
   },
   Card: ({ children, ...props }: any) => createElement('div', props, children),
   CardContent: ({ children, ...props }: any) => createElement('div', props, children),
-  Select: ({ options, value, onChange }: any) => createElement('select', { value, onChange: (e: any) => onChange(e.target.value) },
-    (options || []).map((o: any) => createElement('option', { key: o.value, value: o.value }, o.label))
-  ),
-  Badge: ({ children, variant, ...props }: any) => createElement('span', { 'data-variant': variant, ...props }, children),
+  Select: ({ options, value, onChange }: any) =>
+    createElement(
+      'select',
+      { value, onChange: (e: any) => onChange(e.target.value) },
+      (options || []).map((o: any) =>
+        createElement('option', { key: o.value, value: o.value }, o.label)
+      )
+    ),
+  Badge: ({ children, variant, ...props }: any) =>
+    createElement('span', { 'data-variant': variant, ...props }, children),
 }))
 
 vi.mock('../../components/ShareButtons', () => ({
@@ -194,7 +303,7 @@ vi.mock('../../components/ShareButtons', () => ({
 }))
 
 vi.mock('../session-detail/EditSessionModal', async (importOriginal) => {
-  const actual = await importOriginal() as any
+  const actual = (await importOriginal()) as any
   return actual
 })
 
@@ -213,20 +322,44 @@ vi.mock('../session-detail/SessionDetailSections', () => ({
   },
   RsvpCounts: (props: any) => {
     mockHoisted.capturedRsvpCountsProps = props
-    return createElement('div', { 'data-testid': 'rsvp-counts' }, `${props.present}/${props.maybe}/${props.absent}`)
+    return createElement(
+      'div',
+      { 'data-testid': 'rsvp-counts' },
+      `${props.present}/${props.maybe}/${props.absent}`
+    )
   },
   RsvpButtons: (props: any) => {
     mockHoisted.capturedRsvpButtonsProps = props
-    return createElement('div', { 'data-testid': 'rsvp-buttons' },
-      createElement('button', { onClick: () => props.onRsvp('present'), 'data-testid': 'rsvp-present' }, 'Present'),
-      createElement('button', { onClick: () => props.onRsvp('absent'), 'data-testid': 'rsvp-absent' }, 'Absent'),
-      createElement('button', { onClick: () => props.onRsvp('maybe'), 'data-testid': 'rsvp-maybe' }, 'Maybe'),
+    return createElement(
+      'div',
+      { 'data-testid': 'rsvp-buttons' },
+      createElement(
+        'button',
+        { onClick: () => props.onRsvp('present'), 'data-testid': 'rsvp-present' },
+        'Present'
+      ),
+      createElement(
+        'button',
+        { onClick: () => props.onRsvp('absent'), 'data-testid': 'rsvp-absent' },
+        'Absent'
+      ),
+      createElement(
+        'button',
+        { onClick: () => props.onRsvp('maybe'), 'data-testid': 'rsvp-maybe' },
+        'Maybe'
+      )
     )
   },
   CheckinSection: (props: any) => {
     mockHoisted.capturedCheckinProps = props
-    return createElement('div', { 'data-testid': 'checkin-section' },
-      createElement('button', { onClick: props.onCheckin, 'data-testid': 'checkin-btn' }, 'Check-in')
+    return createElement(
+      'div',
+      { 'data-testid': 'checkin-section' },
+      createElement(
+        'button',
+        { onClick: props.onCheckin, 'data-testid': 'checkin-btn' },
+        'Check-in'
+      )
     )
   },
   ParticipantsList: (props: any) => {
@@ -292,9 +425,7 @@ describe('SessionDetail Page', () => {
 
   const renderPage = () =>
     render(
-      createElement(QueryClientProvider, { client: queryClient },
-        createElement(SessionDetail)
-      )
+      createElement(QueryClientProvider, { client: queryClient }, createElement(SessionDetail))
     )
 
   // =================== LOADING STATE ===================
@@ -326,7 +457,7 @@ describe('SessionDetail Page', () => {
     it('shows a back button that navigates to /home', () => {
       mockHoisted.mockSessionData = null
       renderPage()
-      const btn = screen.getByText('Retour à l\'accueil')
+      const btn = screen.getByText("Retour à l'accueil")
       fireEvent.click(btn)
       expect(mockHoisted.mockNavigate).toHaveBeenCalledWith('/home')
     })
@@ -470,7 +601,10 @@ describe('SessionDetail Page', () => {
       await act(async () => {
         fireEvent.click(screen.getByTestId('rsvp-present'))
       })
-      expect(mockHoisted.mockMutateRsvp).toHaveBeenCalledWith({ sessionId: 'sess1', response: 'present' })
+      expect(mockHoisted.mockMutateRsvp).toHaveBeenCalledWith({
+        sessionId: 'sess1',
+        response: 'present',
+      })
     })
 
     it('calls rsvpMutation with "absent" without confetti', async () => {
@@ -478,7 +612,10 @@ describe('SessionDetail Page', () => {
       await act(async () => {
         fireEvent.click(screen.getByTestId('rsvp-absent'))
       })
-      expect(mockHoisted.mockMutateRsvp).toHaveBeenCalledWith({ sessionId: 'sess1', response: 'absent' })
+      expect(mockHoisted.mockMutateRsvp).toHaveBeenCalledWith({
+        sessionId: 'sess1',
+        response: 'absent',
+      })
     })
 
     it('calls rsvpMutation with "maybe"', async () => {
@@ -486,7 +623,10 @@ describe('SessionDetail Page', () => {
       await act(async () => {
         fireEvent.click(screen.getByTestId('rsvp-maybe'))
       })
-      expect(mockHoisted.mockMutateRsvp).toHaveBeenCalledWith({ sessionId: 'sess1', response: 'maybe' })
+      expect(mockHoisted.mockMutateRsvp).toHaveBeenCalledWith({
+        sessionId: 'sess1',
+        response: 'maybe',
+      })
     })
 
     it('shows error toast when RSVP fails', async () => {
@@ -582,7 +722,10 @@ describe('SessionDetail Page', () => {
       await act(async () => {
         fireEvent.click(screen.getByTestId('checkin-btn'))
       })
-      expect(mockHoisted.mockMutateCheckin).toHaveBeenCalledWith({ sessionId: 'sess1', status: 'present' })
+      expect(mockHoisted.mockMutateCheckin).toHaveBeenCalledWith({
+        sessionId: 'sess1',
+        status: 'present',
+      })
     })
 
     it('shows error toast when checkin fails', async () => {
@@ -704,7 +847,9 @@ describe('SessionDetail Page', () => {
     it('shows initial title in the input', () => {
       renderPage()
       fireEvent.click(screen.getByLabelText('Modifier la session'))
-      const input = screen.getByPlaceholderText('Session ranked, Détente, Tryhard...') as HTMLInputElement
+      const input = screen.getByPlaceholderText(
+        'Session ranked, Détente, Tryhard...'
+      ) as HTMLInputElement
       expect(input.value).toBe('Session Ranked')
     })
 
@@ -782,9 +927,7 @@ describe('SessionDetail Page', () => {
     it('shows post-session results when status is completed', () => {
       mockHoisted.mockSessionData = makeSession({
         status: 'completed',
-        rsvps: [
-          { user_id: 'u1', response: 'present', profiles: { username: 'A' } },
-        ],
+        rsvps: [{ user_id: 'u1', response: 'present', profiles: { username: 'A' } }],
         checkins: [{ user_id: 'u1', status: 'present' }],
       })
       renderPage()
@@ -836,14 +979,14 @@ describe('SessionDetail Page', () => {
     it('applies success badge for rate >= 75%', () => {
       mockHoisted.mockSessionData = makeSession({
         status: 'completed',
-        rsvps: [
-          { user_id: 'u1', response: 'present', profiles: { username: 'A' } },
-        ],
+        rsvps: [{ user_id: 'u1', response: 'present', profiles: { username: 'A' } }],
         checkins: [{ user_id: 'u1', status: 'present' }],
       })
       renderPage()
       // 100% participation
-      const badge = screen.getAllByText('100%').find(el => el.getAttribute('data-variant') === 'success')
+      const badge = screen
+        .getAllByText('100%')
+        .find((el) => el.getAttribute('data-variant') === 'success')
       expect(badge).toBeTruthy()
     })
 
@@ -857,7 +1000,9 @@ describe('SessionDetail Page', () => {
         checkins: [{ user_id: 'u1', status: 'present' }],
       })
       renderPage()
-      const badge = screen.getAllByText('50%').find(el => el.getAttribute('data-variant') === 'warning')
+      const badge = screen
+        .getAllByText('50%')
+        .find((el) => el.getAttribute('data-variant') === 'warning')
       expect(badge).toBeTruthy()
     })
 
@@ -873,7 +1018,9 @@ describe('SessionDetail Page', () => {
       })
       renderPage()
       // 1/3 = 33%
-      const badge = screen.getAllByText('33%').find(el => el.getAttribute('data-variant') === 'danger')
+      const badge = screen
+        .getAllByText('33%')
+        .find((el) => el.getAttribute('data-variant') === 'danger')
       expect(badge).toBeTruthy()
     })
   })

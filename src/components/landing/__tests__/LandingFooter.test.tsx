@@ -24,26 +24,44 @@ vi.mock('framer-motion', () => ({
   useAnimate: vi.fn().mockReturnValue([{ current: null }, vi.fn()]),
   useAnimation: vi.fn().mockReturnValue({ start: vi.fn(), stop: vi.fn() }),
   useReducedMotion: vi.fn().mockReturnValue(false),
-  m: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
-  motion: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
+  m: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
+  motion: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
 }))
 
-vi.mock('../../icons', () => new Proxy({}, {
-  get: (_t, p) => typeof p === 'string' ? (props: any) => createElement('span', { ...props, 'data-testid': `icon-${String(p)}` }, String(p)) : undefined,
-}))
+vi.mock(
+  '../../icons',
+  () =>
+    new Proxy(
+      {},
+      {
+        get: (_t, p) =>
+          typeof p === 'string'
+            ? (props: any) =>
+                createElement('span', { ...props, 'data-testid': `icon-${String(p)}` }, String(p))
+            : undefined,
+      }
+    )
+)
 
 vi.mock('../../SquadPlannerLogo', () => ({
-  SquadPlannerLogo: ({ size }: any) => createElement('span', { 'data-testid': 'logo', 'data-size': size }, 'Logo'),
+  SquadPlannerLogo: ({ size }: any) =>
+    createElement('span', { 'data-testid': 'logo', 'data-size': size }, 'Logo'),
 }))
 
 vi.mock('../../lib/supabaseMinimal', () => ({
@@ -77,7 +95,9 @@ describe('LandingFooter', () => {
 
     it('renders copyright text', () => {
       render(<LandingFooter />)
-      expect(screen.getByText('© 2026 Squad Planner. Jouez ensemble, pour de vrai.')).toBeInTheDocument()
+      expect(
+        screen.getByText('© 2026 Squad Planner. Jouez ensemble, pour de vrai.')
+      ).toBeInTheDocument()
     })
 
     it('renders the SquadPlannerLogo with size 20', () => {
@@ -334,7 +354,9 @@ describe('LandingFooter', () => {
       // Submit successfully
       fireEvent.change(input, { target: { value: 'valid@email.com' } })
       fireEvent.click(submitBtn)
-      expect(await screen.findByRole('status')).toHaveTextContent('Merci ! Tu recevras nos updates.')
+      expect(await screen.findByRole('status')).toHaveTextContent(
+        'Merci ! Tu recevras nos updates.'
+      )
 
       // Type to clear success
       fireEvent.change(input, { target: { value: 'new@email.com' } })
@@ -368,7 +390,9 @@ describe('LandingFooter', () => {
       fireEvent.change(input, { target: { value: 'test@example.com' } })
       fireEvent.click(submitBtn)
 
-      expect(await screen.findByRole('status')).toHaveTextContent('Merci ! Tu recevras nos updates.')
+      expect(await screen.findByRole('status')).toHaveTextContent(
+        'Merci ! Tu recevras nos updates.'
+      )
     })
 
     it('clears email input after successful submission', async () => {
@@ -397,7 +421,9 @@ describe('LandingFooter', () => {
       fireEvent.change(input, { target: { value: 'test@example.com' } })
       fireEvent.click(submitBtn)
 
-      expect(await screen.findByRole('alert')).toHaveTextContent('Une erreur est survenue. Réessaie.')
+      expect(await screen.findByRole('alert')).toHaveTextContent(
+        'Une erreur est survenue. Réessaie.'
+      )
     })
 
     it('shows error message when supabase import throws', async () => {
@@ -409,7 +435,9 @@ describe('LandingFooter', () => {
       fireEvent.change(input, { target: { value: 'test@example.com' } })
       fireEvent.click(submitBtn)
 
-      expect(await screen.findByRole('alert')).toHaveTextContent('Une erreur est survenue. Réessaie.')
+      expect(await screen.findByRole('alert')).toHaveTextContent(
+        'Une erreur est survenue. Réessaie.'
+      )
     })
   })
 
@@ -417,7 +445,12 @@ describe('LandingFooter', () => {
   describe('newsletter loading state', () => {
     it('disables submit button while loading', async () => {
       let resolveInsert: any
-      mockInsert.mockImplementation(() => new Promise(resolve => { resolveInsert = resolve }))
+      mockInsert.mockImplementation(
+        () =>
+          new Promise((resolve) => {
+            resolveInsert = resolve
+          })
+      )
       render(<LandingFooter />)
       const input = screen.getByLabelText('Adresse email pour la newsletter')
       const submitBtn = screen.getByText("S'abonner").closest('button')!
@@ -435,7 +468,12 @@ describe('LandingFooter', () => {
 
     it('shows spinner while loading', async () => {
       let resolveInsert: any
-      mockInsert.mockImplementation(() => new Promise(resolve => { resolveInsert = resolve }))
+      mockInsert.mockImplementation(
+        () =>
+          new Promise((resolve) => {
+            resolveInsert = resolve
+          })
+      )
       render(<LandingFooter />)
       const input = screen.getByLabelText('Adresse email pour la newsletter')
       const submitBtn = screen.getByText("S'abonner").closest('button')!

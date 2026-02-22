@@ -17,18 +17,24 @@ vi.mock('framer-motion', () => ({
   useAnimate: vi.fn().mockReturnValue([{ current: null }, vi.fn()]),
   useAnimation: vi.fn().mockReturnValue({ start: vi.fn(), stop: vi.fn() }),
   useReducedMotion: vi.fn().mockReturnValue(false),
-  m: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
-  motion: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
+  m: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
+  motion: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
 }))
 
 // Mock icons
@@ -51,18 +57,22 @@ describe('ReplyComposer', () => {
   })
 
   it('renders nothing when replyingTo is null', () => {
-    const { container } = render(createElement(ReplyComposer, {
-      replyingTo: null,
-      onCancel: vi.fn(),
-    }))
+    const { container } = render(
+      createElement(ReplyComposer, {
+        replyingTo: null,
+        onCancel: vi.fn(),
+      })
+    )
     expect(container.innerHTML).toBe('')
   })
 
   it('renders reply preview when replyingTo is set', () => {
-    render(createElement(ReplyComposer, {
-      replyingTo: mockReplyingTo,
-      onCancel: vi.fn(),
-    }))
+    render(
+      createElement(ReplyComposer, {
+        replyingTo: mockReplyingTo,
+        onCancel: vi.fn(),
+      })
+    )
     expect(screen.getByText('Alice')).toBeDefined()
     expect(screen.getByText('This is the original message content')).toBeDefined()
   })
@@ -72,29 +82,35 @@ describe('ReplyComposer', () => {
       ...mockReplyingTo,
       content: 'A'.repeat(100),
     }
-    render(createElement(ReplyComposer, {
-      replyingTo: longMessage,
-      onCancel: vi.fn(),
-    }))
+    render(
+      createElement(ReplyComposer, {
+        replyingTo: longMessage,
+        onCancel: vi.fn(),
+      })
+    )
     const truncated = screen.getByText(/\.\.\./)
     expect(truncated).toBeDefined()
   })
 
   it('calls onCancel when cancel button is clicked', () => {
     const onCancel = vi.fn()
-    render(createElement(ReplyComposer, {
-      replyingTo: mockReplyingTo,
-      onCancel,
-    }))
+    render(
+      createElement(ReplyComposer, {
+        replyingTo: mockReplyingTo,
+        onCancel,
+      })
+    )
     fireEvent.click(screen.getByLabelText('Cancel reply'))
     expect(onCancel).toHaveBeenCalled()
   })
 
   it('shows "Replying to" label', () => {
-    render(createElement(ReplyComposer, {
-      replyingTo: mockReplyingTo,
-      onCancel: vi.fn(),
-    }))
+    render(
+      createElement(ReplyComposer, {
+        replyingTo: mockReplyingTo,
+        onCancel: vi.fn(),
+      })
+    )
     expect(screen.getByText('Replying to')).toBeDefined()
   })
 })

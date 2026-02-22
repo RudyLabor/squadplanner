@@ -40,18 +40,24 @@ vi.mock('framer-motion', () => ({
   useAnimate: vi.fn().mockReturnValue([{ current: null }, vi.fn()]),
   useAnimation: vi.fn().mockReturnValue({ start: vi.fn(), stop: vi.fn() }),
   useReducedMotion: vi.fn().mockReturnValue(false),
-  m: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
-  motion: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
+  m: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
+  motion: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
 }))
 
 vi.mock('../../lib/supabase-minimal-ssr', () => ({
@@ -67,7 +73,11 @@ vi.mock('../../lib/queryClient', () => ({
 
 vi.mock('../../components/ClientRouteWrapper', () => ({
   ClientRouteWrapper: ({ children, seeds }: any) =>
-    createElement('div', { 'data-testid': 'route-wrapper', 'data-seeds': JSON.stringify(seeds) }, children),
+    createElement(
+      'div',
+      { 'data-testid': 'route-wrapper', 'data-seeds': JSON.stringify(seeds) },
+      children
+    ),
 }))
 
 vi.mock('../../pages/SquadDetail', () => ({
@@ -170,7 +180,11 @@ describe('routes/squad-detail', () => {
     it('returns canonical link to /squads', () => {
       const result = meta()
       const canonical = result.find((m: any) => m.tagName === 'link')
-      expect(canonical).toEqual({ tagName: 'link', rel: 'canonical', href: 'https://squadplanner.fr/squads' })
+      expect(canonical).toEqual({
+        tagName: 'link',
+        rel: 'canonical',
+        href: 'https://squadplanner.fr/squads',
+      })
     })
 
     it('returns og:url', () => {
@@ -197,21 +211,50 @@ describe('routes/squad-detail', () => {
   describe('loader', () => {
     it('returns null data when getUser returns error', async () => {
       setupSSRMocks({ error: new Error('no session') })
-      const result = await loader({ request: makeRequest(), params: { id: 'squad-123' }, context: {} } as any)
+      const result = await loader({
+        request: makeRequest(),
+        params: { id: 'squad-123' },
+        context: {},
+      } as any)
       expect(result).toEqual({ squad: null, members: [], sessions: [] })
     })
 
     it('returns null data when user is null', async () => {
       setupSSRMocks({ user: null })
-      const result = await loader({ request: makeRequest(), params: { id: 'squad-123' }, context: {} } as any)
+      const result = await loader({
+        request: makeRequest(),
+        params: { id: 'squad-123' },
+        context: {},
+      } as any)
       expect(result).toEqual({ squad: null, members: [], sessions: [] })
     })
 
     it('fetches squad, members, and sessions in parallel', async () => {
-      const squadData = { id: 'squad-123', name: 'My Squad', game: 'Valorant', invite_code: 'abc', owner_id: 'u1', created_at: '2026-01-01' }
+      const squadData = {
+        id: 'squad-123',
+        name: 'My Squad',
+        game: 'Valorant',
+        invite_code: 'abc',
+        owner_id: 'u1',
+        created_at: '2026-01-01',
+      }
       const membersData = [
-        { user_id: 'u1', squad_id: 'squad-123', role: 'owner', profiles: { username: 'Alice', avatar_url: null, reliability_score: 95 } },
-        { user_id: 'u2', squad_id: 'squad-123', role: 'member', profiles: { username: 'Bob', avatar_url: 'http://img.com/bob.png', reliability_score: 80 } },
+        {
+          user_id: 'u1',
+          squad_id: 'squad-123',
+          role: 'owner',
+          profiles: { username: 'Alice', avatar_url: null, reliability_score: 95 },
+        },
+        {
+          user_id: 'u2',
+          squad_id: 'squad-123',
+          role: 'member',
+          profiles: {
+            username: 'Bob',
+            avatar_url: 'http://img.com/bob.png',
+            reliability_score: 80,
+          },
+        },
       ]
 
       setupSSRMocks({
@@ -221,7 +264,11 @@ describe('routes/squad-detail', () => {
         sessionsData: [],
       })
 
-      const result = await loader({ request: makeRequest(), params: { id: 'squad-123' }, context: {} } as any)
+      const result = await loader({
+        request: makeRequest(),
+        params: { id: 'squad-123' },
+        context: {},
+      } as any)
       expect(result.squad).toBeDefined()
       expect(result.squad!.id).toBe('squad-123')
       expect(result.squad!.name).toBe('My Squad')
@@ -237,7 +284,11 @@ describe('routes/squad-detail', () => {
         sessionsData: [],
       })
 
-      const result = await loader({ request: makeRequest(), params: { id: 'nonexistent' }, context: {} } as any)
+      const result = await loader({
+        request: makeRequest(),
+        params: { id: 'nonexistent' },
+        context: {},
+      } as any)
       expect(result.squad).toBeNull()
     })
 
@@ -254,7 +305,11 @@ describe('routes/squad-detail', () => {
         sessionsData: [],
       })
 
-      const result = await loader({ request: makeRequest(), params: { id: 's1' }, context: {} } as any)
+      const result = await loader({
+        request: makeRequest(),
+        params: { id: 's1' },
+        context: {},
+      } as any)
       expect(result.squad!.member_count).toBe(3)
     })
 
@@ -266,7 +321,11 @@ describe('routes/squad-detail', () => {
         sessionsData: [],
       })
 
-      const result = await loader({ request: makeRequest(), params: { id: 's1' }, context: {} } as any)
+      const result = await loader({
+        request: makeRequest(),
+        params: { id: 's1' },
+        context: {},
+      } as any)
       expect(result.squad!.members).toEqual([])
       expect(result.squad!.member_count).toBe(0)
     })
@@ -290,7 +349,11 @@ describe('routes/squad-detail', () => {
         rsvpsData,
       })
 
-      const result = await loader({ request: makeRequest(), params: { id: 's1' }, context: {} } as any)
+      const result = await loader({
+        request: makeRequest(),
+        params: { id: 's1' },
+        context: {},
+      } as any)
       expect(result.sessions).toHaveLength(1)
       expect(result.sessions[0].rsvp_counts).toEqual({ present: 2, absent: 1, maybe: 1 })
       expect(result.sessions[0].my_rsvp).toBe('present')
@@ -300,9 +363,7 @@ describe('routes/squad-detail', () => {
       const sessionsData = [
         { id: 'sess1', squad_id: 's1', title: 'S', scheduled_at: '2026-02-20T18:00:00Z' },
       ]
-      const rsvpsData = [
-        { session_id: 'sess1', user_id: 'other', response: 'present' },
-      ]
+      const rsvpsData = [{ session_id: 'sess1', user_id: 'other', response: 'present' }]
 
       setupSSRMocks({
         user: { id: 'u1' },
@@ -312,7 +373,11 @@ describe('routes/squad-detail', () => {
         rsvpsData,
       })
 
-      const result = await loader({ request: makeRequest(), params: { id: 's1' }, context: {} } as any)
+      const result = await loader({
+        request: makeRequest(),
+        params: { id: 's1' },
+        context: {},
+      } as any)
       expect(result.sessions[0].my_rsvp).toBeNull()
     })
 
@@ -324,7 +389,11 @@ describe('routes/squad-detail', () => {
         sessionsData: [],
       })
 
-      const result = await loader({ request: makeRequest(), params: { id: 's1' }, context: {} } as any)
+      const result = await loader({
+        request: makeRequest(),
+        params: { id: 's1' },
+        context: {},
+      } as any)
       expect(result.sessions).toEqual([])
     })
 
@@ -336,7 +405,11 @@ describe('routes/squad-detail', () => {
         sessionsData: null,
       })
 
-      const result = await loader({ request: makeRequest(), params: { id: 's1' }, context: {} } as any)
+      const result = await loader({
+        request: makeRequest(),
+        params: { id: 's1' },
+        context: {},
+      } as any)
       expect(result.sessions).toEqual([])
     })
 
@@ -352,7 +425,11 @@ describe('routes/squad-detail', () => {
         rsvpsData: null,
       })
 
-      const result = await loader({ request: makeRequest(), params: { id: 's1' }, context: {} } as any)
+      const result = await loader({
+        request: makeRequest(),
+        params: { id: 's1' },
+        context: {},
+      } as any)
       expect(result.sessions[0].rsvp_counts).toEqual({ present: 0, absent: 0, maybe: 0 })
       expect(result.sessions[0].my_rsvp).toBeNull()
     })
@@ -374,7 +451,9 @@ describe('routes/squad-detail', () => {
       const qc = makeQC()
       const loaderData = { squad: null, sessions: [] }
       render(
-        createElement(QueryClientProvider, { client: qc },
+        createElement(
+          QueryClientProvider,
+          { client: qc },
           createElement(DefaultExport, { loaderData } as any)
         )
       )
@@ -388,7 +467,9 @@ describe('routes/squad-detail', () => {
         sessions: [{ id: 'sess1' }],
       }
       render(
-        createElement(QueryClientProvider, { client: qc },
+        createElement(
+          QueryClientProvider,
+          { client: qc },
           createElement(DefaultExport, { loaderData } as any)
         )
       )
@@ -403,7 +484,9 @@ describe('routes/squad-detail', () => {
       const qc = makeQC()
       const loaderData = { squad: null, sessions: [] }
       render(
-        createElement(QueryClientProvider, { client: qc },
+        createElement(
+          QueryClientProvider,
+          { client: qc },
           createElement(DefaultExport, { loaderData } as any)
         )
       )
@@ -420,7 +503,9 @@ describe('routes/squad-detail', () => {
         sessions: [{ id: 'sess1', title: 'Game Night' }],
       }
       const { container } = render(
-        createElement(QueryClientProvider, { client: qc },
+        createElement(
+          QueryClientProvider,
+          { client: qc },
           createElement(DefaultExport, { loaderData } as any)
         )
       )

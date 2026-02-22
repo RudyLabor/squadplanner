@@ -16,23 +16,40 @@ vi.mock('framer-motion', () => ({
   useAnimate: vi.fn().mockReturnValue([{ current: null }, vi.fn()]),
   useAnimation: vi.fn().mockReturnValue({ start: vi.fn(), stop: vi.fn() }),
   useReducedMotion: vi.fn().mockReturnValue(false),
-  m: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
-  motion: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
+  m: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
+  motion: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
 }))
 
-vi.mock('../../icons', () => new Proxy({}, {
-  get: (_t, p) => typeof p === 'string' ? (props: any) => createElement('span', { ...props, 'data-testid': `icon-${String(p)}` }, String(p)) : undefined,
-}))
+vi.mock(
+  '../../icons',
+  () =>
+    new Proxy(
+      {},
+      {
+        get: (_t, p) =>
+          typeof p === 'string'
+            ? (props: any) =>
+                createElement('span', { ...props, 'data-testid': `icon-${String(p)}` }, String(p))
+            : undefined,
+      }
+    )
+)
 
 vi.mock('../MockupShared', () => ({
   mockMembers: [
@@ -41,7 +58,8 @@ vi.mock('../MockupShared', () => ({
     { name: 'Kira', initial: 'K', color: 'yellow', score: 87 },
     { name: 'Jay', initial: 'J', color: 'purple', score: 92 },
   ],
-  MockNavbar: ({ active }: any) => createElement('nav', { 'data-testid': 'mock-navbar', 'data-active': active }, `Nav:${active}`),
+  MockNavbar: ({ active }: any) =>
+    createElement('nav', { 'data-testid': 'mock-navbar', 'data-active': active }, `Nav:${active}`),
 }))
 
 import { PartyScreen, ProfileScreen } from '../MockupScreensParty'

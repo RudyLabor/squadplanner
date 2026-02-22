@@ -6,12 +6,15 @@ import { InviteModal } from '../InviteModal'
 // Mock framer-motion
 vi.mock('framer-motion', () => ({
   AnimatePresence: ({ children }: any) => children,
-  m: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
+  m: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
 }))
 
 // Mock supabase
@@ -226,7 +229,9 @@ describe('InviteModal', () => {
 
   it('enables search button when query length >= 2', () => {
     render(<InviteModal {...defaultProps} />)
-    fireEvent.change(screen.getByPlaceholderText("Nom d'utilisateur..."), { target: { value: 'ab' } })
+    fireEvent.change(screen.getByPlaceholderText("Nom d'utilisateur..."), {
+      target: { value: 'ab' },
+    })
     const searchBtn = screen.getByText('Chercher')
     expect(searchBtn.closest('button')?.disabled).toBe(false)
   })
@@ -234,7 +239,9 @@ describe('InviteModal', () => {
   it('performs search on Chercher click', async () => {
     setupSearchMock([{ id: 'u2', username: 'Player2', avatar_url: null }])
     render(<InviteModal {...defaultProps} />)
-    fireEvent.change(screen.getByPlaceholderText("Nom d'utilisateur..."), { target: { value: 'Player' } })
+    fireEvent.change(screen.getByPlaceholderText("Nom d'utilisateur..."), {
+      target: { value: 'Player' },
+    })
     fireEvent.click(screen.getByText('Chercher'))
     await waitFor(() => {
       expect(screen.getByText('Player2')).toBeInTheDocument()
@@ -260,7 +267,9 @@ describe('InviteModal', () => {
       { id: 'u2', username: 'NewPlayer', avatar_url: null },
     ])
     render(<InviteModal {...defaultProps} existingMemberIds={['user-1']} />)
-    fireEvent.change(screen.getByPlaceholderText("Nom d'utilisateur..."), { target: { value: 'Player' } })
+    fireEvent.change(screen.getByPlaceholderText("Nom d'utilisateur..."), {
+      target: { value: 'Player' },
+    })
     fireEvent.click(screen.getByText('Chercher'))
     await waitFor(() => {
       expect(screen.getByText('NewPlayer')).toBeInTheDocument()
@@ -271,7 +280,9 @@ describe('InviteModal', () => {
   it('shows "Aucun joueur trouve" when search returns empty after filtering', async () => {
     setupSearchMock([])
     render(<InviteModal {...defaultProps} />)
-    fireEvent.change(screen.getByPlaceholderText("Nom d'utilisateur..."), { target: { value: 'Nobody' } })
+    fireEvent.change(screen.getByPlaceholderText("Nom d'utilisateur..."), {
+      target: { value: 'Nobody' },
+    })
     fireEvent.click(screen.getByText('Chercher'))
     await waitFor(() => {
       expect(screen.getByText('Aucun joueur trouve')).toBeInTheDocument()
@@ -279,9 +290,13 @@ describe('InviteModal', () => {
   })
 
   it('shows avatar image when user has avatar_url', async () => {
-    setupSearchMock([{ id: 'u2', username: 'Player2', avatar_url: 'https://example.com/avatar.jpg' }])
+    setupSearchMock([
+      { id: 'u2', username: 'Player2', avatar_url: 'https://example.com/avatar.jpg' },
+    ])
     const { container } = render(<InviteModal {...defaultProps} />)
-    fireEvent.change(screen.getByPlaceholderText("Nom d'utilisateur..."), { target: { value: 'Player' } })
+    fireEvent.change(screen.getByPlaceholderText("Nom d'utilisateur..."), {
+      target: { value: 'Player' },
+    })
     fireEvent.click(screen.getByText('Chercher'))
     await waitFor(() => {
       const img = container.querySelector('img')
@@ -293,7 +308,9 @@ describe('InviteModal', () => {
   it('shows Users icon placeholder when user has no avatar', async () => {
     setupSearchMock([{ id: 'u2', username: 'Player2', avatar_url: null }])
     render(<InviteModal {...defaultProps} />)
-    fireEvent.change(screen.getByPlaceholderText("Nom d'utilisateur..."), { target: { value: 'Player' } })
+    fireEvent.change(screen.getByPlaceholderText("Nom d'utilisateur..."), {
+      target: { value: 'Player' },
+    })
     fireEvent.click(screen.getByText('Chercher'))
     await waitFor(() => {
       expect(screen.getByText('Player2')).toBeInTheDocument()
@@ -305,7 +322,9 @@ describe('InviteModal', () => {
   it('shows "Inviter" button for search results', async () => {
     setupSearchMock([{ id: 'u2', username: 'Player2', avatar_url: null }])
     render(<InviteModal {...defaultProps} />)
-    fireEvent.change(screen.getByPlaceholderText("Nom d'utilisateur..."), { target: { value: 'Player' } })
+    fireEvent.change(screen.getByPlaceholderText("Nom d'utilisateur..."), {
+      target: { value: 'Player' },
+    })
     fireEvent.click(screen.getByText('Chercher'))
     await waitFor(() => {
       expect(screen.getByText('Inviter')).toBeInTheDocument()
@@ -314,7 +333,9 @@ describe('InviteModal', () => {
 
   it('does not search when query is less than 2 characters', () => {
     render(<InviteModal {...defaultProps} />)
-    fireEvent.change(screen.getByPlaceholderText("Nom d'utilisateur..."), { target: { value: 'a' } })
+    fireEvent.change(screen.getByPlaceholderText("Nom d'utilisateur..."), {
+      target: { value: 'a' },
+    })
     fireEvent.click(screen.getByText('Chercher'))
     expect(mockFrom).not.toHaveBeenCalled()
   })

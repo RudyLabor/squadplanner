@@ -16,27 +16,53 @@ vi.mock('framer-motion', () => ({
   useAnimate: vi.fn().mockReturnValue([{ current: null }, vi.fn()]),
   useAnimation: vi.fn().mockReturnValue({ start: vi.fn(), stop: vi.fn() }),
   useReducedMotion: vi.fn().mockReturnValue(false),
-  m: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
-  motion: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
+  m: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
+  motion: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
 }))
 
-vi.mock('../../icons', () => new Proxy({}, {
-  get: (_t, p) => typeof p === 'string' ? (props: any) => createElement('span', { ...props, 'data-testid': `icon-${String(p)}` }, String(p)) : undefined,
-}))
+vi.mock(
+  '../../icons',
+  () =>
+    new Proxy(
+      {},
+      {
+        get: (_t, p) =>
+          typeof p === 'string'
+            ? (props: any) =>
+                createElement('span', { ...props, 'data-testid': `icon-${String(p)}` }, String(p))
+            : undefined,
+      }
+    )
+)
 
-vi.mock('../illustrations/HeadphonesIllustration', () => ({ HeadphonesIllustration: ({ size }: any) => createElement('span', { 'data-testid': 'headphones-illust', 'data-size': size }, 'headphones') }))
-vi.mock('../illustrations/CalendarIllustration', () => ({ CalendarIllustration: ({ size }: any) => createElement('span', { 'data-testid': 'calendar-illust', 'data-size': size }, 'calendar') }))
-vi.mock('../illustrations/ShieldIllustration', () => ({ ShieldIllustration: ({ size }: any) => createElement('span', { 'data-testid': 'shield-illust', 'data-size': size }, 'shield') }))
+vi.mock('../illustrations/HeadphonesIllustration', () => ({
+  HeadphonesIllustration: ({ size }: any) =>
+    createElement('span', { 'data-testid': 'headphones-illust', 'data-size': size }, 'headphones'),
+}))
+vi.mock('../illustrations/CalendarIllustration', () => ({
+  CalendarIllustration: ({ size }: any) =>
+    createElement('span', { 'data-testid': 'calendar-illust', 'data-size': size }, 'calendar'),
+}))
+vi.mock('../illustrations/ShieldIllustration', () => ({
+  ShieldIllustration: ({ size }: any) =>
+    createElement('span', { 'data-testid': 'shield-illust', 'data-size': size }, 'shield'),
+}))
 
 import { FeaturesSection } from '../FeaturesSection'
 
@@ -51,7 +77,9 @@ describe('FeaturesSection', () => {
   it('renders the heading and subtitle', () => {
     render(<FeaturesSection />)
     expect(screen.getByText('Les 3 piliers de Squad Planner')).toBeInTheDocument()
-    expect(screen.getByText('Chacun résout un problème précis. Ensemble, ils font la différence.')).toBeInTheDocument()
+    expect(
+      screen.getByText('Chacun résout un problème précis. Ensemble, ils font la différence.')
+    ).toBeInTheDocument()
   })
 
   it('renders footer text about Discord', () => {
@@ -115,7 +143,9 @@ describe('FeaturesSection', () => {
   it('switches to planning pillar on click and shows correct details', () => {
     render(<FeaturesSection />)
     fireEvent.click(screen.getByText('Planning avec décision'))
-    expect(screen.getByText(/Propose un créneau\. Chaque pote répond OUI ou NON/)).toBeInTheDocument()
+    expect(
+      screen.getByText(/Propose un créneau\. Chaque pote répond OUI ou NON/)
+    ).toBeInTheDocument()
     expect(screen.getByText(/RSVP OUI ou NON/)).toBeInTheDocument()
     expect(screen.getByText('Confirmation auto quand assez de joueurs')).toBeInTheDocument()
     expect(screen.getByText('Rappels avant chaque session')).toBeInTheDocument()
@@ -127,7 +157,9 @@ describe('FeaturesSection', () => {
   it('switches to reliability pillar on click and shows correct details', () => {
     render(<FeaturesSection />)
     fireEvent.click(screen.getByText('Fiabilité mesurée'))
-    expect(screen.getByText(/Chaque membre a un score basé sur sa présence réelle/)).toBeInTheDocument()
+    expect(
+      screen.getByText(/Chaque membre a un score basé sur sa présence réelle/)
+    ).toBeInTheDocument()
     expect(screen.getByText('Check-in obligatoire')).toBeInTheDocument()
     expect(screen.getByText('Historique visible')).toBeInTheDocument()
     expect(screen.getByText('Score par joueur')).toBeInTheDocument()

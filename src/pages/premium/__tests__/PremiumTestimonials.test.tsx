@@ -8,7 +8,8 @@ vi.mock('../../../components/icons', () => ({
   X: (p: any) => createElement('span', { ...p, 'data-icon': 'X' }),
   Gift: (p: any) => createElement('span', { ...p, 'data-icon': 'Gift' }),
   ArrowRight: (p: any) => createElement('span', { ...p, 'data-icon': 'ArrowRight' }),
-  Loader2: ({ children, ...p }: any) => createElement('span', { 'data-testid': 'loader', ...p }, children),
+  Loader2: ({ children, ...p }: any) =>
+    createElement('span', { 'data-testid': 'loader', ...p }, children),
   Rocket: (p: any) => createElement('span', { ...p, 'data-icon': 'Rocket' }),
   Sparkles: (p: any) => createElement('span', { ...p, 'data-icon': 'Sparkles' }),
   Shield: (p: any) => createElement('span', { ...p, 'data-icon': 'Shield' }),
@@ -30,8 +31,20 @@ vi.mock('../../../components/ui', () => ({
 
 vi.mock('../PremiumData', () => ({
   TESTIMONIALS: [
-    { name: 'Alex', squad: 'Les Tryharders', memberSince: '6 mois', text: 'Le coach IA a transformé notre squad !', avatarType: 'alex' },
-    { name: 'Marie', squad: 'GameGirls', memberSince: '3 mois', text: 'Les stats avancées sont incroyables.', avatarType: 'marie' },
+    {
+      name: 'Alex',
+      squad: 'Les Tryharders',
+      memberSince: '6 mois',
+      text: 'Le coach IA a transformé notre squad !',
+      avatarType: 'alex',
+    },
+    {
+      name: 'Marie',
+      squad: 'GameGirls',
+      memberSince: '3 mois',
+      text: 'Les stats avancées sont incroyables.',
+      avatarType: 'marie',
+    },
   ],
 }))
 

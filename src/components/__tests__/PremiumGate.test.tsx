@@ -4,9 +4,9 @@ import { createElement } from 'react'
 
 // Polyfill CSS.supports for jsdom
 if (typeof globalThis.CSS === 'undefined') {
-  (globalThis as any).CSS = { supports: () => false }
+  ;(globalThis as any).CSS = { supports: () => false }
 } else if (typeof globalThis.CSS.supports !== 'function') {
-  (globalThis.CSS as any).supports = () => false
+  ;(globalThis.CSS as any).supports = () => false
 }
 
 // Mock framer-motion
@@ -24,18 +24,24 @@ vi.mock('framer-motion', () => ({
   useAnimate: vi.fn().mockReturnValue([{ current: null }, vi.fn()]),
   useAnimation: vi.fn().mockReturnValue({ start: vi.fn(), stop: vi.fn() }),
   useReducedMotion: vi.fn().mockReturnValue(false),
-  m: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
-  motion: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
+  m: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
+  motion: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
 }))
 
 // Mock icons
@@ -47,12 +53,14 @@ vi.mock('../icons', () => ({
 
 // Mock ui
 vi.mock('../ui', () => ({
-  Button: ({ children, onClick, ...props }: any) => createElement('button', { onClick, ...props }, children),
+  Button: ({ children, onClick, ...props }: any) =>
+    createElement('button', { onClick, ...props }, children),
 }))
 
 // Mock PremiumUpgradeModal
 vi.mock('../PremiumUpgradeModal', () => ({
-  PremiumUpgradeModal: ({ isOpen }: any) => isOpen ? createElement('div', { 'data-testid': 'premium-modal' }, 'Premium Modal') : null,
+  PremiumUpgradeModal: ({ isOpen }: any) =>
+    isOpen ? createElement('div', { 'data-testid': 'premium-modal' }, 'Premium Modal') : null,
 }))
 
 const mockCanAccess = vi.fn().mockReturnValue(false)
@@ -73,57 +81,69 @@ describe('PremiumGate', () => {
 
   it('renders children when user has access', () => {
     mockCanAccess.mockReturnValue(true)
-    render(createElement(PremiumGate, {
-      feature: 'unlimited_squads',
-      children: createElement('div', {}, 'Premium Content'),
-    }))
+    render(
+      createElement(PremiumGate, {
+        feature: 'unlimited_squads',
+        children: createElement('div', {}, 'Premium Content'),
+      })
+    )
     expect(screen.getByText('Premium Content')).toBeDefined()
   })
 
   it('renders lock fallback when user has no access', () => {
-    render(createElement(PremiumGate, {
-      feature: 'unlimited_squads',
-      children: createElement('div', {}, 'Premium Content'),
-    }))
+    render(
+      createElement(PremiumGate, {
+        feature: 'unlimited_squads',
+        children: createElement('div', {}, 'Premium Content'),
+      })
+    )
     expect(screen.getByText('Squads illimitées')).toBeDefined()
     expect(screen.getByText('Passe Premium pour débloquer')).toBeDefined()
   })
 
   it('renders nothing when fallback is hide', () => {
-    const { container } = render(createElement(PremiumGate, {
-      feature: 'unlimited_squads',
-      fallback: 'hide',
-      children: createElement('div', {}, 'Hidden'),
-    }))
+    const { container } = render(
+      createElement(PremiumGate, {
+        feature: 'unlimited_squads',
+        fallback: 'hide',
+        children: createElement('div', {}, 'Hidden'),
+      })
+    )
     expect(container.innerHTML).toBe('')
   })
 
   it('renders custom fallback', () => {
-    render(createElement(PremiumGate, {
-      feature: 'unlimited_squads',
-      fallback: 'custom',
-      customFallback: createElement('div', {}, 'Custom Fallback'),
-      children: createElement('div', {}, 'Content'),
-    }))
+    render(
+      createElement(PremiumGate, {
+        feature: 'unlimited_squads',
+        fallback: 'custom',
+        customFallback: createElement('div', {}, 'Custom Fallback'),
+        children: createElement('div', {}, 'Content'),
+      })
+    )
     expect(screen.getByText('Custom Fallback')).toBeDefined()
   })
 
   it('renders blur fallback', () => {
-    render(createElement(PremiumGate, {
-      feature: 'advanced_stats',
-      fallback: 'blur',
-      children: createElement('div', {}, 'Blurred Content'),
-    }))
+    render(
+      createElement(PremiumGate, {
+        feature: 'advanced_stats',
+        fallback: 'blur',
+        children: createElement('div', {}, 'Blurred Content'),
+      })
+    )
     expect(screen.getByText('Stats avancées')).toBeDefined()
     expect(screen.getByText('Premium requis')).toBeDefined()
   })
 
   it('renders badge only mode', () => {
-    render(createElement(PremiumGate, {
-      feature: 'unlimited_squads',
-      showBadgeOnly: true,
-      children: createElement('div', {}, 'Content with Badge'),
-    }))
+    render(
+      createElement(PremiumGate, {
+        feature: 'unlimited_squads',
+        showBadgeOnly: true,
+        children: createElement('div', {}, 'Content with Badge'),
+      })
+    )
     expect(screen.getByText('Content with Badge')).toBeDefined()
     expect(screen.getByText('PRO')).toBeDefined()
   })
@@ -144,22 +164,26 @@ describe('PremiumBadge', () => {
 describe('SquadLimitReached', () => {
   it('renders limit reached message', () => {
     const onUpgrade = vi.fn()
-    render(createElement(SquadLimitReached, {
-      currentCount: 3,
-      maxCount: 3,
-      onUpgrade,
-    }))
+    render(
+      createElement(SquadLimitReached, {
+        currentCount: 3,
+        maxCount: 3,
+        onUpgrade,
+      })
+    )
     expect(screen.getByText('Limite atteinte')).toBeDefined()
     expect(screen.getByText(/3\/3 squads/)).toBeDefined()
   })
 
   it('calls onUpgrade when button clicked', () => {
     const onUpgrade = vi.fn()
-    render(createElement(SquadLimitReached, {
-      currentCount: 3,
-      maxCount: 3,
-      onUpgrade,
-    }))
+    render(
+      createElement(SquadLimitReached, {
+        currentCount: 3,
+        maxCount: 3,
+        onUpgrade,
+      })
+    )
     const btn = screen.getByText('Passer Premium')
     fireEvent.click(btn)
     expect(onUpgrade).toHaveBeenCalled()

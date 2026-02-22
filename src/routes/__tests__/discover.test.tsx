@@ -41,18 +41,24 @@ vi.mock('framer-motion', () => ({
   useAnimate: vi.fn().mockReturnValue([{ current: null }, vi.fn()]),
   useAnimation: vi.fn().mockReturnValue({ start: vi.fn(), stop: vi.fn() }),
   useReducedMotion: vi.fn().mockReturnValue(false),
-  m: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
-  motion: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
+  m: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
+  motion: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
 }))
 
 vi.mock('../../lib/supabase-minimal-ssr', () => ({
@@ -72,9 +78,15 @@ vi.mock('../../lib/queryClient', () => ({
 }))
 vi.mock('../../components/ClientRouteWrapper', () => ({
   ClientRouteWrapper: ({ children, seeds }: any) =>
-    createElement('div', { 'data-testid': 'route-wrapper', 'data-seeds': JSON.stringify(seeds) }, children),
+    createElement(
+      'div',
+      { 'data-testid': 'route-wrapper', 'data-seeds': JSON.stringify(seeds) },
+      children
+    ),
 }))
-vi.mock('../../pages/Discover', () => ({ default: () => createElement('div', { 'data-testid': 'discover' }, 'Discover') }))
+vi.mock('../../pages/Discover', () => ({
+  default: () => createElement('div', { 'data-testid': 'discover' }, 'Discover'),
+}))
 
 import DefaultExport, { loader, clientLoader, meta, headers } from '../discover'
 
@@ -145,7 +157,11 @@ describe('routes/discover', () => {
 
       // 3 - canonical link
       const canonical = result.find((m: any) => m.tagName === 'link')
-      expect(canonical).toEqual({ tagName: 'link', rel: 'canonical', href: 'https://squadplanner.fr/discover' })
+      expect(canonical).toEqual({
+        tagName: 'link',
+        rel: 'canonical',
+        href: 'https://squadplanner.fr/discover',
+      })
 
       // 4 - og:url
       const ogUrl = result.find((m: any) => m.property === 'og:url')
@@ -345,7 +361,9 @@ describe('routes/discover', () => {
       const qc = makeQC()
       const squads = [{ id: 's1', name: 'TestSquad', game: 'Val', created_at: '2026-01-01' }]
       const { container } = render(
-        createElement(QueryClientProvider, { client: qc },
+        createElement(
+          QueryClientProvider,
+          { client: qc },
           createElement(DefaultExport, { loaderData: { publicSquads: squads } } as any)
         )
       )
@@ -376,7 +394,9 @@ describe('routes/discover', () => {
     it('renders without crashing with empty publicSquads', () => {
       const qc = makeQC()
       const { container } = render(
-        createElement(QueryClientProvider, { client: qc },
+        createElement(
+          QueryClientProvider,
+          { client: qc },
           createElement(DefaultExport, { loaderData: { publicSquads: [] } } as any)
         )
       )

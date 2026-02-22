@@ -22,9 +22,33 @@ vi.mock('../../../components/ui', () => ({
 
 vi.mock('../PremiumData', () => ({
   FEATURES: [
-    { name: 'Squads', free: '2 max', premium: '5', squadLeader: 'Illimité', club: 'Illimité', icon: (p: any) => createElement('span', p), highlight: true },
-    { name: 'Export', free: false, premium: false, squadLeader: true, club: true, icon: (p: any) => createElement('span', p), highlight: false },
-    { name: 'Coach IA', free: false, premium: 'Basique', squadLeader: 'Avancé', club: 'Avancé', icon: (p: any) => createElement('span', p), highlight: false },
+    {
+      name: 'Squads',
+      free: '2 max',
+      premium: '5',
+      squadLeader: 'Illimité',
+      club: 'Illimité',
+      icon: (p: any) => createElement('span', p),
+      highlight: true,
+    },
+    {
+      name: 'Export',
+      free: false,
+      premium: false,
+      squadLeader: true,
+      club: true,
+      icon: (p: any) => createElement('span', p),
+      highlight: false,
+    },
+    {
+      name: 'Coach IA',
+      free: false,
+      premium: 'Basique',
+      squadLeader: 'Avancé',
+      club: 'Avancé',
+      icon: (p: any) => createElement('span', p),
+      highlight: false,
+    },
   ],
 }))
 

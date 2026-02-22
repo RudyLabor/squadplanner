@@ -16,26 +16,48 @@ vi.mock('framer-motion', () => ({
   useAnimate: vi.fn().mockReturnValue([{ current: null }, vi.fn()]),
   useAnimation: vi.fn().mockReturnValue({ start: vi.fn(), stop: vi.fn() }),
   useReducedMotion: vi.fn().mockReturnValue(false),
-  m: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
-  motion: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
+  m: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
+  motion: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
 }))
 
-vi.mock('../../icons', () => new Proxy({}, {
-  get: (_t, p) => typeof p === 'string' ? (props: any) => createElement('span', { ...props, 'data-testid': `icon-${String(p)}` }, String(p)) : undefined,
-}))
+vi.mock(
+  '../../icons',
+  () =>
+    new Proxy(
+      {},
+      {
+        get: (_t, p) =>
+          typeof p === 'string'
+            ? (props: any) =>
+                createElement('span', { ...props, 'data-testid': `icon-${String(p)}` }, String(p))
+            : undefined,
+      }
+    )
+)
 
 vi.mock('../AnimatedDemo', () => ({
-  AnimatedDemo: ({ currentStep, onStepChange }: any) => createElement('div', { 'data-testid': 'animated-demo', 'data-step': currentStep }, 'AnimatedDemo'),
+  AnimatedDemo: ({ currentStep, onStepChange }: any) =>
+    createElement(
+      'div',
+      { 'data-testid': 'animated-demo', 'data-step': currentStep },
+      'AnimatedDemo'
+    ),
   demoSteps: [
     { id: 'create', color: 'var(--color-success)', duration: 3000 },
     { id: 'invite', color: 'var(--color-primary)', duration: 2500 },
@@ -68,7 +90,9 @@ describe('HowItWorksSection', () => {
 
   it('renders subtitle text', () => {
     render(<HowItWorksSection {...defaultProps} />)
-    expect(screen.getByText('De la création de squad à la session de jeu en 30 secondes')).toBeInTheDocument()
+    expect(
+      screen.getByText('De la création de squad à la session de jeu en 30 secondes')
+    ).toBeInTheDocument()
   })
 
   it('renders AnimatedDemo component', () => {
@@ -137,7 +161,7 @@ describe('HowItWorksSection', () => {
     // "Invite tes potes" is step 1 - click its button
     const buttons = screen.getAllByRole('button')
     // Find the button for step 2 (index 1 in detail list)
-    const step2Button = buttons.find(btn => btn.textContent?.includes('Invite tes potes'))
+    const step2Button = buttons.find((btn) => btn.textContent?.includes('Invite tes potes'))
     expect(step2Button).toBeTruthy()
     fireEvent.click(step2Button!)
 
@@ -149,7 +173,9 @@ describe('HowItWorksSection', () => {
     render(<HowItWorksSection demoStep={0} setDemoStep={setDemoStep} />)
 
     const buttons = screen.getAllByRole('button')
-    const step3Button = buttons.find(btn => btn.textContent?.includes('Planifie, décide, confirme'))
+    const step3Button = buttons.find((btn) =>
+      btn.textContent?.includes('Planifie, décide, confirme')
+    )
     fireEvent.click(step3Button!)
 
     expect(setDemoStep).toHaveBeenCalledWith(2)
@@ -160,7 +186,7 @@ describe('HowItWorksSection', () => {
     render(<HowItWorksSection demoStep={0} setDemoStep={setDemoStep} />)
 
     const buttons = screen.getAllByRole('button')
-    const step4Button = buttons.find(btn => btn.textContent?.includes('Jouez chaque semaine'))
+    const step4Button = buttons.find((btn) => btn.textContent?.includes('Jouez chaque semaine'))
     fireEvent.click(step4Button!)
 
     expect(setDemoStep).toHaveBeenCalledWith(3)
@@ -181,9 +207,9 @@ describe('HowItWorksSection', () => {
     render(<HowItWorksSection demoStep={0} setDemoStep={vi.fn()} />)
     // The first step button in the detail area should be active
     const buttons = screen.getAllByRole('button')
-    const activeDetailBtn = buttons.find(btn =>
-      btn.textContent?.includes('Crée ta Squad') &&
-      btn.className.includes('bg-bg-elevated')
+    const activeDetailBtn = buttons.find(
+      (btn) =>
+        btn.textContent?.includes('Crée ta Squad') && btn.className.includes('bg-bg-elevated')
     )
     expect(activeDetailBtn).toBeTruthy()
   })
@@ -191,9 +217,8 @@ describe('HowItWorksSection', () => {
   it('inactive step details have lg:hidden class', () => {
     render(<HowItWorksSection demoStep={0} setDemoStep={vi.fn()} />)
     const buttons = screen.getAllByRole('button')
-    const inactiveBtn = buttons.find(btn =>
-      btn.textContent?.includes('Invite tes potes') &&
-      btn.className.includes('lg:hidden')
+    const inactiveBtn = buttons.find(
+      (btn) => btn.textContent?.includes('Invite tes potes') && btn.className.includes('lg:hidden')
     )
     expect(inactiveBtn).toBeTruthy()
   })
@@ -247,7 +272,7 @@ describe('HowItWorksSection', () => {
     render(<HowItWorksSection demoStep={0} setDemoStep={vi.fn()} />)
     // The active step detail icon should have color from demoSteps[0].color
     const userIcons = screen.getAllByTestId('icon-Users')
-    const detailIcon = userIcons.find(el => el.style.color === 'var(--color-success)')
+    const detailIcon = userIcons.find((el) => el.style.color === 'var(--color-success)')
     expect(detailIcon).toBeTruthy()
   })
 
@@ -257,14 +282,18 @@ describe('HowItWorksSection', () => {
     render(<HowItWorksSection demoStep={0} setDemoStep={vi.fn()} />)
     // Find h3 elements - the active one should have text-text-primary
     const headings = screen.getAllByRole('heading', { level: 3 })
-    const activeH3 = headings.find(h => h.textContent === 'Crée ta Squad' && h.className.includes('text-text-primary'))
+    const activeH3 = headings.find(
+      (h) => h.textContent === 'Crée ta Squad' && h.className.includes('text-text-primary')
+    )
     expect(activeH3).toBeTruthy()
   })
 
   it('inactive step title has text-text-tertiary class', () => {
     render(<HowItWorksSection demoStep={0} setDemoStep={vi.fn()} />)
     const headings = screen.getAllByRole('heading', { level: 3 })
-    const inactiveH3 = headings.find(h => h.textContent === 'Invite tes potes' && h.className.includes('text-text-tertiary'))
+    const inactiveH3 = headings.find(
+      (h) => h.textContent === 'Invite tes potes' && h.className.includes('text-text-tertiary')
+    )
     expect(inactiveH3).toBeTruthy()
   })
 })

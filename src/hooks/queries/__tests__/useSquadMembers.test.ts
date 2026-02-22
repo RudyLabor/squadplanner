@@ -271,10 +271,9 @@ describe('useMemberCountsQuery', () => {
     mockSelect.mockReturnValue({ in: mockIn })
     mockFrom.mockReturnValue({ select: mockSelect })
 
-    const { result } = renderHook(
-      () => useMemberCountsQuery(['squad-1', 'squad-2']),
-      { wrapper: createWrapper() }
-    )
+    const { result } = renderHook(() => useMemberCountsQuery(['squad-1', 'squad-2']), {
+      wrapper: createWrapper(),
+    })
 
     await waitFor(() => expect(result.current.isSuccess).toBe(true))
 
@@ -305,10 +304,9 @@ describe('useMemberCountsQuery', () => {
     mockSelect.mockReturnValue({ in: mockIn })
     mockFrom.mockReturnValue({ select: mockSelect })
 
-    const { result } = renderHook(
-      () => useMemberCountsQuery(['squad-empty']),
-      { wrapper: createWrapper() }
-    )
+    const { result } = renderHook(() => useMemberCountsQuery(['squad-empty']), {
+      wrapper: createWrapper(),
+    })
 
     await waitFor(() => expect(result.current.isSuccess).toBe(true))
 
@@ -324,10 +322,9 @@ describe('useMemberCountsQuery', () => {
     mockSelect.mockReturnValue({ in: mockIn })
     mockFrom.mockReturnValue({ select: mockSelect })
 
-    const { result } = renderHook(
-      () => useMemberCountsQuery(['squad-1']),
-      { wrapper: createWrapper() }
-    )
+    const { result } = renderHook(() => useMemberCountsQuery(['squad-1']), {
+      wrapper: createWrapper(),
+    })
 
     await waitFor(() => expect(result.current.isError).toBe(true))
 

@@ -9,7 +9,8 @@ vi.mock('react-router', () => ({
   useSearchParams: vi.fn().mockReturnValue([new URLSearchParams(), vi.fn()]),
   useLoaderData: vi.fn().mockReturnValue({}),
   Link: ({ children, to, ...props }: any) => createElement('a', { href: to, ...props }, children),
-  NavLink: ({ children, to, ...props }: any) => createElement('a', { href: to, ...props }, children),
+  NavLink: ({ children, to, ...props }: any) =>
+    createElement('a', { href: to, ...props }, children),
   Outlet: () => null,
   useMatches: vi.fn().mockReturnValue([]),
 }))
@@ -28,21 +29,39 @@ vi.mock('framer-motion', () => ({
   useAnimate: vi.fn().mockReturnValue([{ current: null }, vi.fn()]),
   useAnimation: vi.fn().mockReturnValue({ start: vi.fn(), stop: vi.fn() }),
   useReducedMotion: vi.fn().mockReturnValue(false),
-  m: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
-  motion: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
+  m: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
+  motion: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
 }))
 
-vi.mock('../../icons', () => new Proxy({}, { get: (_t, p) => typeof p === 'string' ? (props: any) => createElement('span', { 'data-testid': `icon-${p}`, ...props }) : undefined }))
+vi.mock(
+  '../../icons',
+  () =>
+    new Proxy(
+      {},
+      {
+        get: (_t, p) =>
+          typeof p === 'string'
+            ? (props: any) => createElement('span', { 'data-testid': `icon-${p}`, ...props })
+            : undefined,
+      }
+    )
+)
 vi.mock('../../ui', () => ({
   Button: ({ children, ...props }: any) => createElement('button', props, children),
   Input: (props: any) => createElement('input', props),
@@ -51,9 +70,18 @@ vi.mock('../../ui', () => ({
 vi.mock('../../../lib/toast', () => ({ showSuccess: vi.fn(), showError: vi.fn() }))
 vi.mock('../../../lib/supabaseMinimal', () => ({
   supabaseMinimal: {
-    storage: { from: vi.fn().mockReturnValue({ upload: vi.fn().mockResolvedValue({ error: null }), getPublicUrl: vi.fn().mockReturnValue({ data: { publicUrl: 'url' } }) }) },
+    storage: {
+      from: vi.fn().mockReturnValue({
+        upload: vi.fn().mockResolvedValue({ error: null }),
+        getPublicUrl: vi.fn().mockReturnValue({ data: { publicUrl: 'url' } }),
+      }),
+    },
     auth: { getSession: vi.fn().mockResolvedValue({ data: { session: null } }) },
-    from: vi.fn().mockReturnValue({ select: vi.fn().mockReturnThis(), eq: vi.fn().mockReturnThis(), single: vi.fn().mockResolvedValue({ data: null }) }),
+    from: vi.fn().mockReturnValue({
+      select: vi.fn().mockReturnThis(),
+      eq: vi.fn().mockReturnThis(),
+      single: vi.fn().mockResolvedValue({ data: null }),
+    }),
   },
 }))
 
@@ -77,10 +105,12 @@ describe('ProfileHeader', () => {
   })
 
   it('shows default username when empty', () => {
-    render(createElement(ProfileHeader, {
-      ...defaultProps,
-      profile: { username: '', bio: null, avatar_url: null },
-    }))
+    render(
+      createElement(ProfileHeader, {
+        ...defaultProps,
+        profile: { username: '', bio: null, avatar_url: null },
+      })
+    )
     expect(screen.getByText('Gamer')).toBeDefined()
   })
 
@@ -105,10 +135,12 @@ describe('ProfileHeader', () => {
   })
 
   it('shows default bio when no bio', () => {
-    render(createElement(ProfileHeader, {
-      ...defaultProps,
-      profile: { username: 'Test', bio: null, avatar_url: null },
-    }))
+    render(
+      createElement(ProfileHeader, {
+        ...defaultProps,
+        profile: { username: 'Test', bio: null, avatar_url: null },
+      })
+    )
     expect(screen.getByText('Pas encore de bio')).toBeDefined()
   })
 
@@ -126,10 +158,12 @@ describe('ProfileHeader', () => {
   })
 
   it('renders avatar image when url provided', () => {
-    render(createElement(ProfileHeader, {
-      ...defaultProps,
-      profile: { username: 'Test', bio: null, avatar_url: 'https://example.com/avatar.jpg' },
-    }))
+    render(
+      createElement(ProfileHeader, {
+        ...defaultProps,
+        profile: { username: 'Test', bio: null, avatar_url: 'https://example.com/avatar.jpg' },
+      })
+    )
     expect(screen.getByAlt('Avatar')).toBeDefined()
   })
 })

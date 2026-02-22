@@ -8,12 +8,16 @@ const { mockSupabase, mockFrom, mockRpc } = vi.hoisted(() => {
   const mockFrom = vi.fn()
   const mockRpc = vi.fn().mockResolvedValue({ data: [], error: null })
   const mockGetUser = vi.fn().mockResolvedValue({ data: { user: { id: 'user-1' } } })
-  const mockGetSession = vi.fn().mockResolvedValue({ data: { session: { user: { id: 'user-1' } } } })
+  const mockGetSession = vi
+    .fn()
+    .mockResolvedValue({ data: { session: { user: { id: 'user-1' } } } })
   const mockSupabase = {
     auth: { getSession: mockGetSession, getUser: mockGetUser },
     from: mockFrom,
     rpc: mockRpc,
-    channel: vi.fn().mockReturnValue({ on: vi.fn().mockReturnThis(), subscribe: vi.fn().mockReturnThis() }),
+    channel: vi
+      .fn()
+      .mockReturnValue({ on: vi.fn().mockReturnThis(), subscribe: vi.fn().mockReturnThis() }),
     removeChannel: vi.fn(),
   }
   return { mockSupabase, mockFrom, mockRpc, mockGetSession }
@@ -27,9 +31,12 @@ vi.mock('../../../lib/supabaseMinimal', () => ({
 
 // Auth store mock
 vi.mock('../../useAuth', () => ({
-  useAuthStore: Object.assign(vi.fn().mockReturnValue({ user: { id: 'user-1' }, profile: { id: 'user-1' } }), {
-    getState: vi.fn().mockReturnValue({ user: { id: 'user-1' }, profile: { id: 'user-1' } }),
-  }),
+  useAuthStore: Object.assign(
+    vi.fn().mockReturnValue({ user: { id: 'user-1' }, profile: { id: 'user-1' } }),
+    {
+      getState: vi.fn().mockReturnValue({ user: { id: 'user-1' }, profile: { id: 'user-1' } }),
+    }
+  ),
 }))
 
 // Toast mock
@@ -57,7 +64,9 @@ describe('useSquadLeaderboardQuery', () => {
   // STRICT: Verifies the hook renders, has correct react-query shape, and
   // starts loading when a valid squadId is provided
   it('renders with correct react-query shape and starts loading with valid squadId', () => {
-    const { result } = renderHook(() => useSquadLeaderboardQuery('squad-1'), { wrapper: createWrapper() })
+    const { result } = renderHook(() => useSquadLeaderboardQuery('squad-1'), {
+      wrapper: createWrapper(),
+    })
 
     // 1. result.current is defined
     expect(result.current).toBeDefined()
@@ -83,7 +92,9 @@ describe('useSquadLeaderboardQuery', () => {
 
   // STRICT: Verifies the hook is disabled and stays idle when squadId is undefined
   it('is disabled and idle when squadId is undefined', () => {
-    const { result } = renderHook(() => useSquadLeaderboardQuery(undefined), { wrapper: createWrapper() })
+    const { result } = renderHook(() => useSquadLeaderboardQuery(undefined), {
+      wrapper: createWrapper(),
+    })
 
     // 1. fetchStatus is idle
     expect(result.current.fetchStatus).toBe('idle')
@@ -107,12 +118,32 @@ describe('useSquadLeaderboardQuery', () => {
   // with leaderboard data
   it('calls rpc with correct parameters and resolves with data', async () => {
     const mockLeaderboard = [
-      { rank: 1, user_id: 'user-1', username: 'player1', avatar_url: null, xp: 500, level: 5, reliability_score: 95, streak_days: 10 },
-      { rank: 2, user_id: 'user-2', username: 'player2', avatar_url: 'https://example.com/avatar.png', xp: 400, level: 4, reliability_score: 90, streak_days: 5 },
+      {
+        rank: 1,
+        user_id: 'user-1',
+        username: 'player1',
+        avatar_url: null,
+        xp: 500,
+        level: 5,
+        reliability_score: 95,
+        streak_days: 10,
+      },
+      {
+        rank: 2,
+        user_id: 'user-2',
+        username: 'player2',
+        avatar_url: 'https://example.com/avatar.png',
+        xp: 400,
+        level: 4,
+        reliability_score: 90,
+        streak_days: 5,
+      },
     ]
     mockRpc.mockResolvedValueOnce({ data: mockLeaderboard, error: null })
 
-    const { result } = renderHook(() => useSquadLeaderboardQuery('squad-1'), { wrapper: createWrapper() })
+    const { result } = renderHook(() => useSquadLeaderboardQuery('squad-1'), {
+      wrapper: createWrapper(),
+    })
 
     await waitFor(() => {
       expect(result.current.isLoading).toBe(false)

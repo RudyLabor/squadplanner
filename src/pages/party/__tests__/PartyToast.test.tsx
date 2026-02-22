@@ -16,21 +16,39 @@ vi.mock('framer-motion', () => ({
   useAnimate: vi.fn().mockReturnValue([{ current: null }, vi.fn()]),
   useAnimation: vi.fn().mockReturnValue({ start: vi.fn(), stop: vi.fn() }),
   useReducedMotion: vi.fn().mockReturnValue(false),
-  m: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
-  motion: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
+  m: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
+  motion: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
 }))
 
-vi.mock('../../../components/icons', () => new Proxy({}, { get: (_t: any, p: string) => typeof p === 'string' ? ({ children, ...props }: any) => createElement('span', props, children) : undefined }))
+vi.mock(
+  '../../../components/icons',
+  () =>
+    new Proxy(
+      {},
+      {
+        get: (_t: any, p: string) =>
+          typeof p === 'string'
+            ? ({ children, ...props }: any) => createElement('span', props, children)
+            : undefined,
+      }
+    )
+)
 
 import { PartyToast } from '../PartyToast'
 
@@ -38,7 +56,9 @@ describe('PartyToast', () => {
   // STRICT: verifies hidden state — no message text, empty container, onClose not called, no toast structure
   it('renders nothing when isVisible is false', () => {
     const onClose = vi.fn()
-    const { container } = render(<PartyToast message="Hidden" isVisible={false} onClose={onClose} />)
+    const { container } = render(
+      <PartyToast message="Hidden" isVisible={false} onClose={onClose} />
+    )
 
     // 1. Message text not rendered
     expect(screen.queryByText('Hidden')).toBeNull()
@@ -58,7 +78,9 @@ describe('PartyToast', () => {
   it('shows success toast with message, icon, and auto-dismisses after 3000ms', () => {
     vi.useFakeTimers()
     const onClose = vi.fn()
-    const { container } = render(<PartyToast message="Connecté !" isVisible={true} onClose={onClose} />)
+    const { container } = render(
+      <PartyToast message="Connecté !" isVisible={true} onClose={onClose} />
+    )
 
     // 1. Message displayed
     expect(screen.getByText('Connecté !')).toBeDefined()
@@ -80,7 +102,14 @@ describe('PartyToast', () => {
 
   // STRICT: verifies error variant — message shown, variant styling applied, icon matches variant
   it('renders error variant toast with correct message and variant styling', () => {
-    const { container } = render(<PartyToast message="Erreur de connexion" isVisible={true} onClose={vi.fn()} variant="error" />)
+    const { container } = render(
+      <PartyToast
+        message="Erreur de connexion"
+        isVisible={true}
+        onClose={vi.fn()}
+        variant="error"
+      />
+    )
 
     // 1. Error message shown
     expect(screen.getByText('Erreur de connexion')).toBeDefined()
@@ -99,7 +128,14 @@ describe('PartyToast', () => {
 
   // STRICT: verifies warning variant — different styling, WifiOff icon, and correct background
   it('renders warning variant with correct styling', () => {
-    const { container } = render(<PartyToast message="Connexion instable" isVisible={true} onClose={vi.fn()} variant="warning" />)
+    const { container } = render(
+      <PartyToast
+        message="Connexion instable"
+        isVisible={true}
+        onClose={vi.fn()}
+        variant="warning"
+      />
+    )
 
     // 1. Warning message shown
     expect(screen.getByText('Connexion instable')).toBeDefined()

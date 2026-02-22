@@ -59,9 +59,7 @@ describe('EmptyStateIllustration', () => {
     })
 
     it('applies custom className to wrapper', () => {
-      const { container } = render(
-        <EmptyStateIllustration type="sessions" className="my-custom" />
-      )
+      const { container } = render(<EmptyStateIllustration type="sessions" className="my-custom" />)
       const wrapper = container.firstChild as HTMLElement
       expect(wrapper?.className).toContain('my-custom')
     })
@@ -114,9 +112,7 @@ describe('EmptyStateIllustration', () => {
     })
 
     it('passes className to SVG', () => {
-      const { container } = render(
-        <EmptyStateIllustration type="sessions" className="test-svg" />
-      )
+      const { container } = render(<EmptyStateIllustration type="sessions" className="test-svg" />)
       const svg = container.querySelector('svg')
       expect(svg?.className?.baseVal || svg?.getAttribute('class')).toContain('test-svg')
     })

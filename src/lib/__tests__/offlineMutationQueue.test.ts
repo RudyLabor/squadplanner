@@ -76,7 +76,15 @@ function createMockIDB() {
     }),
   }
 
-  return { mockIndexedDB, mockDB, mockObjectStore, store, resetStore: () => { store = {} } }
+  return {
+    mockIndexedDB,
+    mockDB,
+    mockObjectStore,
+    store,
+    resetStore: () => {
+      store = {}
+    },
+  }
 }
 
 let mockIDB: ReturnType<typeof createMockIDB>
@@ -157,7 +165,11 @@ describe('offlineMutationQueue', () => {
     })
 
     it('should not throw when IndexedDB is unavailable', async () => {
-      vi.stubGlobal('indexedDB', { open: vi.fn(() => { throw new Error('Not supported') }) })
+      vi.stubGlobal('indexedDB', {
+        open: vi.fn(() => {
+          throw new Error('Not supported')
+        }),
+      })
 
       const { queueMutation } = await import('../offlineMutationQueue')
 
@@ -183,7 +195,11 @@ describe('offlineMutationQueue', () => {
     })
 
     it('should return empty array when IndexedDB fails', async () => {
-      vi.stubGlobal('indexedDB', { open: vi.fn(() => { throw new Error('Fail') }) })
+      vi.stubGlobal('indexedDB', {
+        open: vi.fn(() => {
+          throw new Error('Fail')
+        }),
+      })
 
       const { getPendingMutations } = await import('../offlineMutationQueue')
 
@@ -306,8 +322,24 @@ describe('offlineMutationQueue', () => {
 
     it('should stop trying when fetch throws (network down)', async () => {
       const mutations = [
-        { id: 'mut-a', timestamp: 1, url: '/a', method: 'POST', headers: {}, body: null, description: 'A' },
-        { id: 'mut-b', timestamp: 2, url: '/b', method: 'POST', headers: {}, body: null, description: 'B' },
+        {
+          id: 'mut-a',
+          timestamp: 1,
+          url: '/a',
+          method: 'POST',
+          headers: {},
+          body: null,
+          description: 'A',
+        },
+        {
+          id: 'mut-b',
+          timestamp: 2,
+          url: '/b',
+          method: 'POST',
+          headers: {},
+          body: null,
+          description: 'B',
+        },
       ]
 
       mockIDB.mockObjectStore.getAll.mockImplementation(() => {
@@ -341,7 +373,11 @@ describe('offlineMutationQueue', () => {
     })
 
     it('should not throw when IndexedDB is unavailable', async () => {
-      vi.stubGlobal('indexedDB', { open: vi.fn(() => { throw new Error('Fail') }) })
+      vi.stubGlobal('indexedDB', {
+        open: vi.fn(() => {
+          throw new Error('Fail')
+        }),
+      })
 
       const { clearMutationQueue } = await import('../offlineMutationQueue')
 

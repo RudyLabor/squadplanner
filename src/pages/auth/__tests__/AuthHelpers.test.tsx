@@ -16,18 +16,24 @@ vi.mock('framer-motion', () => ({
   useAnimate: vi.fn().mockReturnValue([{ current: null }, vi.fn()]),
   useAnimation: vi.fn().mockReturnValue({ start: vi.fn(), stop: vi.fn() }),
   useReducedMotion: vi.fn().mockReturnValue(false),
-  m: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
-  motion: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
+  m: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
+  motion: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
 }))
 
 import { translateAuthError, PasswordStrength } from '../AuthHelpers'
@@ -42,7 +48,9 @@ describe('translateAuthError', () => {
   })
 
   it('translates "Email not confirmed"', () => {
-    expect(translateAuthError('Email not confirmed')).toBe('Vérifie ton email avant de te connecter')
+    expect(translateAuthError('Email not confirmed')).toBe(
+      'Vérifie ton email avant de te connecter'
+    )
   })
 
   it('returns original message for unknown errors', () => {
@@ -50,7 +58,9 @@ describe('translateAuthError', () => {
   })
 
   it('translates partial matches', () => {
-    expect(translateAuthError('Error: Invalid login credentials please try again')).toBe('Email ou mot de passe incorrect')
+    expect(translateAuthError('Error: Invalid login credentials please try again')).toBe(
+      'Email ou mot de passe incorrect'
+    )
   })
 })
 

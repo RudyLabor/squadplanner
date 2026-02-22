@@ -59,25 +59,33 @@ describe('motionLazy', () => {
     })
 
     it('LazyMotionDiv factory should resolve to motion.div', async () => {
-      const factory = (LazyMotionDiv as unknown as { _factory: () => Promise<{ default: unknown }> })._factory
+      const factory = (
+        LazyMotionDiv as unknown as { _factory: () => Promise<{ default: unknown }> }
+      )._factory
       const result = await factory()
       expect(result).toHaveProperty('default')
     })
 
     it('LazyAnimatePresence factory should resolve to AnimatePresence', async () => {
-      const factory = (LazyAnimatePresence as unknown as { _factory: () => Promise<{ default: unknown }> })._factory
+      const factory = (
+        LazyAnimatePresence as unknown as { _factory: () => Promise<{ default: unknown }> }
+      )._factory
       const result = await factory()
       expect(result).toHaveProperty('default')
     })
 
     it('LazyMotionSpan factory should resolve to motion.span', async () => {
-      const factory = (LazyMotionSpan as unknown as { _factory: () => Promise<{ default: unknown }> })._factory
+      const factory = (
+        LazyMotionSpan as unknown as { _factory: () => Promise<{ default: unknown }> }
+      )._factory
       const result = await factory()
       expect(result).toHaveProperty('default')
     })
 
     it('LazyMotionButton factory should resolve to motion.button', async () => {
-      const factory = (LazyMotionButton as unknown as { _factory: () => Promise<{ default: unknown }> })._factory
+      const factory = (
+        LazyMotionButton as unknown as { _factory: () => Promise<{ default: unknown }> }
+      )._factory
       const result = await factory()
       expect(result).toHaveProperty('default')
     })

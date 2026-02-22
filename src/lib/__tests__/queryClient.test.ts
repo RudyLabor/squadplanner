@@ -1,7 +1,14 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 
 // Must import after mocks are set up
-import { queryClient, queryKeys, prefetchRoute, prefetchSquadDetail, prefetchSessionDetail, initQueryPersistence } from '../queryClient'
+import {
+  queryClient,
+  queryKeys,
+  prefetchRoute,
+  prefetchSquadDetail,
+  prefetchSessionDetail,
+  initQueryPersistence,
+} from '../queryClient'
 
 describe('queryClient', () => {
   describe('QueryClient default options', () => {
@@ -82,7 +89,12 @@ describe('queryClient', () => {
       })
 
       it('squads.members(squadId) appends members to detail', () => {
-        expect(queryKeys.squads.members('squad-1')).toEqual(['squads', 'detail', 'squad-1', 'members'])
+        expect(queryKeys.squads.members('squad-1')).toEqual([
+          'squads',
+          'detail',
+          'squad-1',
+          'members',
+        ])
       })
     })
 
@@ -100,7 +112,11 @@ describe('queryClient', () => {
       })
 
       it('sessions.list(squadId) includes squadId filter', () => {
-        expect(queryKeys.sessions.list('squad-1')).toEqual(['sessions', 'list', { squadId: 'squad-1' }])
+        expect(queryKeys.sessions.list('squad-1')).toEqual([
+          'sessions',
+          'list',
+          { squadId: 'squad-1' },
+        ])
       })
 
       it('sessions.upcoming() appends upcoming', () => {
@@ -116,7 +132,12 @@ describe('queryClient', () => {
       })
 
       it('sessions.rsvps(sessionId) appends rsvps to detail', () => {
-        expect(queryKeys.sessions.rsvps('sess-1')).toEqual(['sessions', 'detail', 'sess-1', 'rsvps'])
+        expect(queryKeys.sessions.rsvps('sess-1')).toEqual([
+          'sessions',
+          'detail',
+          'sess-1',
+          'rsvps',
+        ])
       })
     })
 
@@ -201,31 +222,41 @@ describe('queryClient', () => {
 
       it('discover.publicSquads with both params', () => {
         expect(queryKeys.discover.publicSquads('valorant', 'eu')).toEqual([
-          'discover', 'squads', { game: 'valorant', region: 'eu' }
+          'discover',
+          'squads',
+          { game: 'valorant', region: 'eu' },
         ])
       })
 
       it('discover.publicSquads with no params', () => {
         expect(queryKeys.discover.publicSquads()).toEqual([
-          'discover', 'squads', { game: undefined, region: undefined }
+          'discover',
+          'squads',
+          { game: undefined, region: undefined },
         ])
       })
 
       it('discover.globalLeaderboard with params', () => {
         expect(queryKeys.discover.globalLeaderboard('lol', 'na')).toEqual([
-          'discover', 'leaderboard', { game: 'lol', region: 'na' }
+          'discover',
+          'leaderboard',
+          { game: 'lol', region: 'na' },
         ])
       })
 
       it('discover.matchmaking with params', () => {
         expect(queryKeys.discover.matchmaking('apex', 'asia')).toEqual([
-          'discover', 'matchmaking', { game: 'apex', region: 'asia' }
+          'discover',
+          'matchmaking',
+          { game: 'apex', region: 'asia' },
         ])
       })
 
       it('discover.publicProfile(username)', () => {
         expect(queryKeys.discover.publicProfile('testuser')).toEqual([
-          'discover', 'profile', 'testuser'
+          'discover',
+          'profile',
+          'testuser',
         ])
       })
     })
@@ -237,14 +268,15 @@ describe('queryClient', () => {
 
       it('activityFeed.list spreads squadIds', () => {
         expect(queryKeys.activityFeed.list(['s1', 's2'])).toEqual([
-          'activity-feed', 'list', 's1', 's2'
+          'activity-feed',
+          'list',
+          's1',
+          's2',
         ])
       })
 
       it('activityFeed.list with empty array', () => {
-        expect(queryKeys.activityFeed.list([])).toEqual([
-          'activity-feed', 'list'
-        ])
+        expect(queryKeys.activityFeed.list([])).toEqual(['activity-feed', 'list'])
       })
     })
 
@@ -255,13 +287,17 @@ describe('queryClient', () => {
 
       it('aiAdvanced.sessionSummary(sessionId)', () => {
         expect(queryKeys.aiAdvanced.sessionSummary('sess-1')).toEqual([
-          'ai-advanced', 'session-summary', 'sess-1'
+          'ai-advanced',
+          'session-summary',
+          'sess-1',
         ])
       })
 
       it('aiAdvanced.predictions(squadId)', () => {
         expect(queryKeys.aiAdvanced.predictions('squad-1')).toEqual([
-          'ai-advanced', 'predictions', 'squad-1'
+          'ai-advanced',
+          'predictions',
+          'squad-1',
         ])
       })
     })
@@ -281,14 +317,18 @@ describe('queryClient', () => {
     it('/home with userId prefetches squads and upcoming sessions', async () => {
       await prefetchRoute('/home', 'user-1')
       expect(prefetchSpy).toHaveBeenCalledTimes(2)
-      expect(prefetchSpy).toHaveBeenCalledWith(expect.objectContaining({
-        queryKey: queryKeys.squads.list(),
-        staleTime: 30_000,
-      }))
-      expect(prefetchSpy).toHaveBeenCalledWith(expect.objectContaining({
-        queryKey: queryKeys.sessions.upcoming(),
-        staleTime: 30_000,
-      }))
+      expect(prefetchSpy).toHaveBeenCalledWith(
+        expect.objectContaining({
+          queryKey: queryKeys.squads.list(),
+          staleTime: 30_000,
+        })
+      )
+      expect(prefetchSpy).toHaveBeenCalledWith(
+        expect.objectContaining({
+          queryKey: queryKeys.sessions.upcoming(),
+          staleTime: 30_000,
+        })
+      )
     })
 
     it('/home without userId does NOT prefetch', async () => {
@@ -299,29 +339,37 @@ describe('queryClient', () => {
     it('/squads prefetches squads list', async () => {
       await prefetchRoute('/squads')
       expect(prefetchSpy).toHaveBeenCalledTimes(1)
-      expect(prefetchSpy).toHaveBeenCalledWith(expect.objectContaining({
-        queryKey: queryKeys.squads.list(),
-      }))
+      expect(prefetchSpy).toHaveBeenCalledWith(
+        expect.objectContaining({
+          queryKey: queryKeys.squads.list(),
+        })
+      )
     })
 
     it('/messages prefetches conversations and unread', async () => {
       await prefetchRoute('/messages')
       expect(prefetchSpy).toHaveBeenCalledTimes(2)
-      expect(prefetchSpy).toHaveBeenCalledWith(expect.objectContaining({
-        queryKey: queryKeys.messages.conversations(),
-      }))
-      expect(prefetchSpy).toHaveBeenCalledWith(expect.objectContaining({
-        queryKey: queryKeys.messages.unread(),
-      }))
+      expect(prefetchSpy).toHaveBeenCalledWith(
+        expect.objectContaining({
+          queryKey: queryKeys.messages.conversations(),
+        })
+      )
+      expect(prefetchSpy).toHaveBeenCalledWith(
+        expect.objectContaining({
+          queryKey: queryKeys.messages.unread(),
+        })
+      )
     })
 
     it('/premium prefetches premium status with 60s staleTime', async () => {
       await prefetchRoute('/premium')
       expect(prefetchSpy).toHaveBeenCalledTimes(1)
-      expect(prefetchSpy).toHaveBeenCalledWith(expect.objectContaining({
-        queryKey: queryKeys.premium.status(),
-        staleTime: 60_000,
-      }))
+      expect(prefetchSpy).toHaveBeenCalledWith(
+        expect.objectContaining({
+          queryKey: queryKeys.premium.status(),
+          staleTime: 60_000,
+        })
+      )
     })
 
     it('unknown route does not prefetch anything', async () => {
@@ -344,18 +392,26 @@ describe('queryClient', () => {
     it('prefetches detail, members, sessions, and messages for a squad', async () => {
       await prefetchSquadDetail('squad-42')
       expect(prefetchSpy).toHaveBeenCalledTimes(4)
-      expect(prefetchSpy).toHaveBeenCalledWith(expect.objectContaining({
-        queryKey: queryKeys.squads.detail('squad-42'),
-      }))
-      expect(prefetchSpy).toHaveBeenCalledWith(expect.objectContaining({
-        queryKey: queryKeys.squads.members('squad-42'),
-      }))
-      expect(prefetchSpy).toHaveBeenCalledWith(expect.objectContaining({
-        queryKey: queryKeys.sessions.list('squad-42'),
-      }))
-      expect(prefetchSpy).toHaveBeenCalledWith(expect.objectContaining({
-        queryKey: queryKeys.messages.squad('squad-42'),
-      }))
+      expect(prefetchSpy).toHaveBeenCalledWith(
+        expect.objectContaining({
+          queryKey: queryKeys.squads.detail('squad-42'),
+        })
+      )
+      expect(prefetchSpy).toHaveBeenCalledWith(
+        expect.objectContaining({
+          queryKey: queryKeys.squads.members('squad-42'),
+        })
+      )
+      expect(prefetchSpy).toHaveBeenCalledWith(
+        expect.objectContaining({
+          queryKey: queryKeys.sessions.list('squad-42'),
+        })
+      )
+      expect(prefetchSpy).toHaveBeenCalledWith(
+        expect.objectContaining({
+          queryKey: queryKeys.messages.squad('squad-42'),
+        })
+      )
     })
 
     it('all prefetches use 30s staleTime', async () => {
@@ -380,16 +436,22 @@ describe('queryClient', () => {
     it('prefetches session detail with 15s staleTime', async () => {
       await prefetchSessionDetail('sess-99')
       expect(prefetchSpy).toHaveBeenCalledTimes(1)
-      expect(prefetchSpy).toHaveBeenCalledWith(expect.objectContaining({
-        queryKey: queryKeys.sessions.detail('sess-99'),
-        staleTime: 15_000,
-      }))
+      expect(prefetchSpy).toHaveBeenCalledWith(
+        expect.objectContaining({
+          queryKey: queryKeys.sessions.detail('sess-99'),
+          staleTime: 15_000,
+        })
+      )
     })
   })
 
   describe('initQueryPersistence', () => {
     it('calls persistQueryClient with correct options on success', async () => {
-      const mockPersister = { persistClient: vi.fn(), restoreClient: vi.fn(), removeClient: vi.fn() }
+      const mockPersister = {
+        persistClient: vi.fn(),
+        restoreClient: vi.fn(),
+        removeClient: vi.fn(),
+      }
       const mockPersistQueryClient = vi.fn()
 
       vi.doMock('@tanstack/query-persist-client-core', () => ({
@@ -403,12 +465,14 @@ describe('queryClient', () => {
       const { initQueryPersistence: init } = await import('../queryClient')
       await init()
 
-      expect(mockPersistQueryClient).toHaveBeenCalledWith(expect.objectContaining({
-        queryClient: expect.anything(),
-        persister: mockPersister,
-        maxAge: 24 * 60 * 60 * 1000,
-        buster: '',
-      }))
+      expect(mockPersistQueryClient).toHaveBeenCalledWith(
+        expect.objectContaining({
+          queryClient: expect.anything(),
+          persister: mockPersister,
+          maxAge: 24 * 60 * 60 * 1000,
+          buster: '',
+        })
+      )
 
       vi.doUnmock('@tanstack/query-persist-client-core')
       vi.doUnmock('../queryPersister')
@@ -428,10 +492,16 @@ describe('queryClient', () => {
 
     it('dehydrateOptions.shouldDehydrateQuery filters correctly', async () => {
       let capturedOptions: any = null
-      const mockPersister = { persistClient: vi.fn(), restoreClient: vi.fn(), removeClient: vi.fn() }
+      const mockPersister = {
+        persistClient: vi.fn(),
+        restoreClient: vi.fn(),
+        removeClient: vi.fn(),
+      }
 
       vi.doMock('@tanstack/query-persist-client-core', () => ({
-        persistQueryClient: (opts: any) => { capturedOptions = opts },
+        persistQueryClient: (opts: any) => {
+          capturedOptions = opts
+        },
       }))
       vi.doMock('../queryPersister', () => ({
         createIDBPersister: () => mockPersister,

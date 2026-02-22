@@ -23,18 +23,24 @@ vi.mock('framer-motion', () => ({
   useAnimate: vi.fn().mockReturnValue([{ current: null }, vi.fn()]),
   useAnimation: vi.fn().mockReturnValue({ start: vi.fn(), stop: vi.fn() }),
   useReducedMotion: vi.fn().mockReturnValue(false),
-  m: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
-  motion: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
+  m: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
+  motion: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
 }))
 
 // Mock icons
@@ -61,7 +67,8 @@ vi.mock('../../../lib/toast', () => ({
 
 // Mock InviteModal
 vi.mock('../InviteModal', () => ({
-  InviteModal: ({ isOpen }: any) => (isOpen ? createElement('div', { 'data-testid': 'invite-modal' }, 'InviteModal') : null),
+  InviteModal: ({ isOpen }: any) =>
+    isOpen ? createElement('div', { 'data-testid': 'invite-modal' }, 'InviteModal') : null,
 }))
 
 // Mock useUpdateSquadMutation

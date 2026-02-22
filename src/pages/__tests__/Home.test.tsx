@@ -20,7 +20,8 @@ vi.mock('react-router', () => ({
   useSearchParams: vi.fn().mockReturnValue([new URLSearchParams(), vi.fn()]),
   useLoaderData: vi.fn().mockReturnValue({}),
   Link: ({ children, to, ...props }: any) => createElement('a', { href: to, ...props }, children),
-  NavLink: ({ children, to, ...props }: any) => createElement('a', { href: to, ...props }, children),
+  NavLink: ({ children, to, ...props }: any) =>
+    createElement('a', { href: to, ...props }, children),
   Outlet: () => null,
   useMatches: vi.fn().mockReturnValue([]),
 }))
@@ -40,18 +41,24 @@ vi.mock('framer-motion', () => ({
   useAnimate: vi.fn().mockReturnValue([{ current: null }, vi.fn()]),
   useAnimation: vi.fn().mockReturnValue({ start: vi.fn(), stop: vi.fn() }),
   useReducedMotion: vi.fn().mockReturnValue(false),
-  m: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
-  motion: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
+  m: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
+  motion: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
 }))
 
 // ── Mock supabase (external service) ──
@@ -264,11 +271,7 @@ describe('Home Page', () => {
 
   const renderHome = (props: any = {}) => {
     return render(
-      createElement(
-        QueryClientProvider,
-        { client: queryClient },
-        createElement(Home, props)
-      )
+      createElement(QueryClientProvider, { client: queryClient }, createElement(Home, props))
     )
   }
 
@@ -324,10 +327,7 @@ describe('Home Page', () => {
       const squad = makeSquad()
       mockSquadsReturn = { data: [squad], isLoading: false, isPending: false }
       mockSessionsReturn = {
-        data: [
-          makeSession({ id: 's1', my_rsvp: null }),
-          makeSession({ id: 's2', my_rsvp: null }),
-        ],
+        data: [makeSession({ id: 's1', my_rsvp: null }), makeSession({ id: 's2', my_rsvp: null })],
         isLoading: false,
       }
       renderHome({
@@ -494,76 +494,88 @@ describe('Home Page', () => {
   // ══════════════════════════════════════════════
 
   describe('RSVP interactions', () => {
-    it.todo('clicking "present" triggers mutation + success message — needs RSVP mutation mock aligned with real component', async () => {
-      const user = userEvent.setup()
-      const squad = makeSquad()
-      const session = makeSession()
-      mockSquadsReturn = { data: [squad], isLoading: false, isPending: false }
-      mockSessionsReturn = { data: [session], isLoading: false }
-      renderHome({
-        loaderData: { profile: defaultAuthState.profile, squads: [], upcomingSessions: [] },
-      })
+    it.todo(
+      'clicking "present" triggers mutation + success message — needs RSVP mutation mock aligned with real component',
+      async () => {
+        const user = userEvent.setup()
+        const squad = makeSquad()
+        const session = makeSession()
+        mockSquadsReturn = { data: [squad], isLoading: false, isPending: false }
+        mockSessionsReturn = { data: [session], isLoading: false }
+        renderHome({
+          loaderData: { profile: defaultAuthState.profile, squads: [], upcomingSessions: [] },
+        })
 
-      await user.click(screen.getByRole('button', { name: /Marquer comme présent/ }))
+        await user.click(screen.getByRole('button', { name: /Marquer comme présent/ }))
 
-      expect(mockMutateAsync).toHaveBeenCalledWith({ sessionId: 'ses-1', response: 'present' })
-      await waitFor(() => {
-        expect(screen.getByText("T'es confirmé ! Ta squad compte sur toi")).toBeInTheDocument()
-      })
-    })
+        expect(mockMutateAsync).toHaveBeenCalledWith({ sessionId: 'ses-1', response: 'present' })
+        await waitFor(() => {
+          expect(screen.getByText("T'es confirmé ! Ta squad compte sur toi")).toBeInTheDocument()
+        })
+      }
+    )
 
-    it.todo('clicking "absent" shows "Absence enregistrée" — needs RSVP mutation mock aligned', async () => {
-      const user = userEvent.setup()
-      const squad = makeSquad()
-      const session = makeSession()
-      mockSquadsReturn = { data: [squad], isLoading: false, isPending: false }
-      mockSessionsReturn = { data: [session], isLoading: false }
-      renderHome({
-        loaderData: { profile: defaultAuthState.profile, squads: [], upcomingSessions: [] },
-      })
+    it.todo(
+      'clicking "absent" shows "Absence enregistrée" — needs RSVP mutation mock aligned',
+      async () => {
+        const user = userEvent.setup()
+        const squad = makeSquad()
+        const session = makeSession()
+        mockSquadsReturn = { data: [squad], isLoading: false, isPending: false }
+        mockSessionsReturn = { data: [session], isLoading: false }
+        renderHome({
+          loaderData: { profile: defaultAuthState.profile, squads: [], upcomingSessions: [] },
+        })
 
-      await user.click(screen.getByRole('button', { name: /Marquer comme absent/ }))
+        await user.click(screen.getByRole('button', { name: /Marquer comme absent/ }))
 
-      await waitFor(() => {
-        expect(screen.getByText('Absence enregistrée')).toBeInTheDocument()
-      })
-    })
+        await waitFor(() => {
+          expect(screen.getByText('Absence enregistrée')).toBeInTheDocument()
+        })
+      }
+    )
 
-    it.todo('clicking "maybe" shows "Réponse enregistrée" — needs RSVP mutation mock aligned', async () => {
-      const user = userEvent.setup()
-      const squad = makeSquad()
-      const session = makeSession()
-      mockSquadsReturn = { data: [squad], isLoading: false, isPending: false }
-      mockSessionsReturn = { data: [session], isLoading: false }
-      renderHome({
-        loaderData: { profile: defaultAuthState.profile, squads: [], upcomingSessions: [] },
-      })
+    it.todo(
+      'clicking "maybe" shows "Réponse enregistrée" — needs RSVP mutation mock aligned',
+      async () => {
+        const user = userEvent.setup()
+        const squad = makeSquad()
+        const session = makeSession()
+        mockSquadsReturn = { data: [squad], isLoading: false, isPending: false }
+        mockSessionsReturn = { data: [session], isLoading: false }
+        renderHome({
+          loaderData: { profile: defaultAuthState.profile, squads: [], upcomingSessions: [] },
+        })
 
-      await user.click(screen.getByRole('button', { name: /Marquer comme peut-être/ }))
+        await user.click(screen.getByRole('button', { name: /Marquer comme peut-être/ }))
 
-      await waitFor(() => {
-        expect(screen.getByText('Réponse enregistrée')).toBeInTheDocument()
-      })
-    })
+        await waitFor(() => {
+          expect(screen.getByText('Réponse enregistrée')).toBeInTheDocument()
+        })
+      }
+    )
 
-    it.todo('shows error message and triggers haptic.error on RSVP failure — needs RSVP mutation mock aligned', async () => {
-      mockMutateAsync.mockRejectedValueOnce(new Error('Network error'))
-      const user = userEvent.setup()
-      const squad = makeSquad()
-      const session = makeSession()
-      mockSquadsReturn = { data: [squad], isLoading: false, isPending: false }
-      mockSessionsReturn = { data: [session], isLoading: false }
-      renderHome({
-        loaderData: { profile: defaultAuthState.profile, squads: [], upcomingSessions: [] },
-      })
+    it.todo(
+      'shows error message and triggers haptic.error on RSVP failure — needs RSVP mutation mock aligned',
+      async () => {
+        mockMutateAsync.mockRejectedValueOnce(new Error('Network error'))
+        const user = userEvent.setup()
+        const squad = makeSquad()
+        const session = makeSession()
+        mockSquadsReturn = { data: [squad], isLoading: false, isPending: false }
+        mockSessionsReturn = { data: [session], isLoading: false }
+        renderHome({
+          loaderData: { profile: defaultAuthState.profile, squads: [], upcomingSessions: [] },
+        })
 
-      await user.click(screen.getByRole('button', { name: /Marquer comme présent/ }))
+        await user.click(screen.getByRole('button', { name: /Marquer comme présent/ }))
 
-      expect(mockHaptic.error).toHaveBeenCalled()
-      await waitFor(() => {
-        expect(screen.getByText(/Erreur/)).toBeInTheDocument()
-      })
-    })
+        expect(mockHaptic.error).toHaveBeenCalled()
+        await waitFor(() => {
+          expect(screen.getByText(/Erreur/)).toBeInTheDocument()
+        })
+      }
+    )
   })
 
   // ══════════════════════════════════════════════
@@ -750,20 +762,23 @@ describe('Home Page', () => {
       expect(screen.getByText(/Lance la party vocale/)).toBeInTheDocument()
     })
 
-    it.todo('shows active party card with participant count when in voice chat — needs voice state mock aligned', () => {
-      const squad = makeSquad({ id: 's1', name: 'Legends' })
-      mockSquadsReturn = { data: [squad], isLoading: false, isPending: false }
-      mockVoiceChatState = {
-        isConnected: true,
-        currentChannel: 'party-s1-channel',
-        remoteUsers: [{ id: 'u2' }, { id: 'u3' }],
+    it.todo(
+      'shows active party card with participant count when in voice chat — needs voice state mock aligned',
+      () => {
+        const squad = makeSquad({ id: 's1', name: 'Legends' })
+        mockSquadsReturn = { data: [squad], isLoading: false, isPending: false }
+        mockVoiceChatState = {
+          isConnected: true,
+          currentChannel: 'party-s1-channel',
+          remoteUsers: [{ id: 'u2' }, { id: 'u3' }],
+        }
+        renderHome({
+          loaderData: { profile: defaultAuthState.profile, squads: [], upcomingSessions: [] },
+        })
+        expect(screen.getByText(/3 potes dans Legends/)).toBeInTheDocument()
+        expect(screen.getByText('Rejoindre')).toBeInTheDocument()
       }
-      renderHome({
-        loaderData: { profile: defaultAuthState.profile, squads: [], upcomingSessions: [] },
-      })
-      expect(screen.getByText(/3 potes dans Legends/)).toBeInTheDocument()
-      expect(screen.getByText('Rejoindre')).toBeInTheDocument()
-    })
+    )
   })
 
   // ══════════════════════════════════════════════

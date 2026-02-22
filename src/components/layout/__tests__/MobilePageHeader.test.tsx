@@ -51,7 +51,7 @@ describe('MobilePageHeader', () => {
   // STRICT: verifies custom onBack callback is called when back button is clicked, and default navigate(-1) is NOT called
   it('calls custom onBack when provided', async () => {
     const onBack = vi.fn()
-    const routerMod = await import('react-router') as any
+    const routerMod = (await import('react-router')) as any
     routerMod.__mockNavigate.mockClear()
 
     render(<MobilePageHeader title="Page" onBack={onBack} />)
@@ -63,7 +63,7 @@ describe('MobilePageHeader', () => {
 
   // STRICT: verifies navigate(-1) is called when no onBack prop, and custom onBack is not involved
   it('navigates back via router when no onBack prop', async () => {
-    const routerMod = await import('react-router') as any
+    const routerMod = (await import('react-router')) as any
     routerMod.__mockNavigate.mockClear()
 
     render(<MobilePageHeader title="Page" />)

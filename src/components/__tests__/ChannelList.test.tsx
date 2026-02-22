@@ -9,7 +9,8 @@ vi.mock('react-router', () => ({
   useSearchParams: vi.fn().mockReturnValue([new URLSearchParams(), vi.fn()]),
   useLoaderData: vi.fn().mockReturnValue({}),
   Link: ({ children, to, ...props }: any) => createElement('a', { href: to, ...props }, children),
-  NavLink: ({ children, to, ...props }: any) => createElement('a', { href: to, ...props }, children),
+  NavLink: ({ children, to, ...props }: any) =>
+    createElement('a', { href: to, ...props }, children),
   Outlet: () => null,
   useMatches: vi.fn().mockReturnValue([]),
 }))
@@ -28,34 +29,94 @@ vi.mock('framer-motion', () => ({
   useAnimate: vi.fn().mockReturnValue([{ current: null }, vi.fn()]),
   useAnimation: vi.fn().mockReturnValue({ start: vi.fn(), stop: vi.fn() }),
   useReducedMotion: vi.fn().mockReturnValue(false),
-  m: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
-  motion: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
+  m: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
+  motion: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
 }))
 
 vi.mock('../../lib/supabaseMinimal', () => ({
-  supabaseMinimal: { auth: { getSession: vi.fn() }, from: vi.fn().mockReturnValue({ select: vi.fn().mockReturnThis(), eq: vi.fn().mockReturnThis(), single: vi.fn().mockResolvedValue({ data: null }), insert: vi.fn().mockResolvedValue({ data: null }), update: vi.fn().mockResolvedValue({ data: null }), delete: vi.fn().mockResolvedValue({ data: null }), order: vi.fn().mockReturnThis(), limit: vi.fn().mockReturnThis() }), rpc: vi.fn().mockResolvedValue({ data: null }), channel: vi.fn().mockReturnValue({ on: vi.fn().mockReturnThis(), subscribe: vi.fn() }), removeChannel: vi.fn() },
+  supabaseMinimal: {
+    auth: { getSession: vi.fn() },
+    from: vi.fn().mockReturnValue({
+      select: vi.fn().mockReturnThis(),
+      eq: vi.fn().mockReturnThis(),
+      single: vi.fn().mockResolvedValue({ data: null }),
+      insert: vi.fn().mockResolvedValue({ data: null }),
+      update: vi.fn().mockResolvedValue({ data: null }),
+      delete: vi.fn().mockResolvedValue({ data: null }),
+      order: vi.fn().mockReturnThis(),
+      limit: vi.fn().mockReturnThis(),
+    }),
+    rpc: vi.fn().mockResolvedValue({ data: null }),
+    channel: vi.fn().mockReturnValue({ on: vi.fn().mockReturnThis(), subscribe: vi.fn() }),
+    removeChannel: vi.fn(),
+  },
 }))
 
 vi.mock('../../hooks/useAuth', () => ({
-  useAuthStore: Object.assign(vi.fn().mockReturnValue({ user: { id: 'user-1' }, profile: { id: 'user-1', username: 'TestUser' }, isLoading: false, isInitialized: true }), { getState: vi.fn().mockReturnValue({ user: { id: 'user-1' }, profile: { id: 'user-1', username: 'TestUser' } }) }),
+  useAuthStore: Object.assign(
+    vi.fn().mockReturnValue({
+      user: { id: 'user-1' },
+      profile: { id: 'user-1', username: 'TestUser' },
+      isLoading: false,
+      isInitialized: true,
+    }),
+    {
+      getState: vi.fn().mockReturnValue({
+        user: { id: 'user-1' },
+        profile: { id: 'user-1', username: 'TestUser' },
+      }),
+    }
+  ),
 }))
 vi.mock('../../hooks', () => ({
-  useAuthStore: Object.assign(vi.fn().mockReturnValue({ user: { id: 'user-1' }, profile: { id: 'user-1', username: 'TestUser' }, isLoading: false, isInitialized: true }), { getState: vi.fn().mockReturnValue({ user: { id: 'user-1' }, profile: { id: 'user-1', username: 'TestUser' } }) }),
+  useAuthStore: Object.assign(
+    vi.fn().mockReturnValue({
+      user: { id: 'user-1' },
+      profile: { id: 'user-1', username: 'TestUser' },
+      isLoading: false,
+      isInitialized: true,
+    }),
+    {
+      getState: vi.fn().mockReturnValue({
+        user: { id: 'user-1' },
+        profile: { id: 'user-1', username: 'TestUser' },
+      }),
+    }
+  ),
 }))
 
-vi.mock('../../lib/i18n', () => ({ useT: () => (key: string) => key, useLocale: () => 'fr', useI18nStore: Object.assign(vi.fn().mockReturnValue({ locale: 'fr' }), { getState: vi.fn().mockReturnValue({ locale: 'fr' }) }) }))
-vi.mock('../../lib/toast', () => ({ showSuccess: vi.fn(), showError: vi.fn(), showWarning: vi.fn(), showInfo: vi.fn() }))
-vi.mock('../../utils/haptics', () => ({ haptic: { light: vi.fn(), medium: vi.fn(), success: vi.fn(), error: vi.fn() } }))
+vi.mock('../../lib/i18n', () => ({
+  useT: () => (key: string) => key,
+  useLocale: () => 'fr',
+  useI18nStore: Object.assign(vi.fn().mockReturnValue({ locale: 'fr' }), {
+    getState: vi.fn().mockReturnValue({ locale: 'fr' }),
+  }),
+}))
+vi.mock('../../lib/toast', () => ({
+  showSuccess: vi.fn(),
+  showError: vi.fn(),
+  showWarning: vi.fn(),
+  showInfo: vi.fn(),
+}))
+vi.mock('../../utils/haptics', () => ({
+  haptic: { light: vi.fn(), medium: vi.fn(), success: vi.fn(), error: vi.fn() },
+}))
 
 // Mock useSquadChannels
 const mockCreateChannel = vi.fn()
@@ -103,7 +164,12 @@ describe('ChannelList', () => {
     expect(screen.queryByLabelText(/Supprimer le canal/)).not.toBeInTheDocument()
     // 5. Clicking a channel calls onSelectChannel
     fireEvent.click(screen.getByText('general'))
-    expect(onSelectChannel).toHaveBeenCalledWith({ id: 'ch1', name: 'general', channel_type: 'text', is_default: true })
+    expect(onSelectChannel).toHaveBeenCalledWith({
+      id: 'ch1',
+      name: 'general',
+      channel_type: 'text',
+      is_default: true,
+    })
     // 6. useSquadChannels was called with the correct squadId
     expect(useSquadChannels).toHaveBeenCalledWith('squad-1')
   })
@@ -162,7 +228,12 @@ describe('ChannelList', () => {
     expect(onSelectChannel).not.toHaveBeenCalled()
     // 5. Click on voice-chat text (not delete) calls onSelectChannel
     fireEvent.click(screen.getByText('voice-chat'))
-    expect(onSelectChannel).toHaveBeenCalledWith({ id: 'ch2', name: 'voice-chat', channel_type: 'voice', is_default: false })
+    expect(onSelectChannel).toHaveBeenCalledWith({
+      id: 'ch2',
+      name: 'voice-chat',
+      channel_type: 'voice',
+      is_default: false,
+    })
     // 6. onSelectChannel was called exactly once
     expect(onSelectChannel).toHaveBeenCalledTimes(1)
   })

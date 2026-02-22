@@ -53,9 +53,7 @@ describe('routes configuration', () => {
   })
 
   it('includes protected routes under layout', () => {
-    const protectedLayout = routeConfig.find(
-      (r: any) => r.children && r.children.length > 10
-    )
+    const protectedLayout = routeConfig.find((r: any) => r.children && r.children.length > 10)
     expect(protectedLayout).toBeDefined()
 
     const protectedPaths = getAllPaths(protectedLayout.children)

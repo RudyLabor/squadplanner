@@ -16,25 +16,36 @@ vi.mock('framer-motion', () => ({
   useAnimate: vi.fn().mockReturnValue([{ current: null }, vi.fn()]),
   useAnimation: vi.fn().mockReturnValue({ start: vi.fn(), stop: vi.fn() }),
   useReducedMotion: vi.fn().mockReturnValue(false),
-  m: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
-  motion: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
+  m: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
+  motion: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
 }))
 
 vi.mock('../../hooks/useNetworkQuality', () => ({
   useNetworkQualityStore: vi.fn().mockReturnValue({ localQuality: 'good' }),
   QUALITY_INFO: {
     unknown: { label: 'Inconnu', description: 'Qualite inconnue', color: '#888', bars: 0 },
-    excellent: { label: 'Excellente', description: 'Connexion excellente', color: '#22c55e', bars: 4 },
+    excellent: {
+      label: 'Excellente',
+      description: 'Connexion excellente',
+      color: '#22c55e',
+      bars: 4,
+    },
     good: { label: 'Bonne', description: 'Connexion stable', color: '#4ade80', bars: 3 },
     fair: { label: 'Moyenne', description: 'Connexion acceptable', color: '#facc15', bars: 2 },
     poor: { label: 'Faible', description: 'Connexion instable', color: '#ef4444', bars: 1 },
@@ -45,7 +56,11 @@ vi.mock('../ui/Tooltip', () => ({
   Tooltip: ({ children, content }: any) => createElement('div', { title: content }, children),
 }))
 
-import { NetworkQualityIndicator, NetworkQualityBadge, QualityChangeToast } from '../NetworkQualityIndicator'
+import {
+  NetworkQualityIndicator,
+  NetworkQualityBadge,
+  QualityChangeToast,
+} from '../NetworkQualityIndicator'
 import { useNetworkQualityStore } from '../../hooks/useNetworkQuality'
 
 const mockedUseNetworkQualityStore = vi.mocked(useNetworkQualityStore)

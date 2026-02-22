@@ -4,8 +4,12 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 const mockClient = vi.hoisted(() => {
   const client = {
     auth: {
-      getSession: vi.fn().mockResolvedValue({ data: { session: { user: { id: 'u1' } } }, error: null }),
-      onAuthStateChange: vi.fn().mockReturnValue({ data: { subscription: { unsubscribe: vi.fn() } } }),
+      getSession: vi
+        .fn()
+        .mockResolvedValue({ data: { session: { user: { id: 'u1' } } }, error: null }),
+      onAuthStateChange: vi
+        .fn()
+        .mockReturnValue({ data: { subscription: { unsubscribe: vi.fn() } } }),
       getUser: vi.fn().mockResolvedValue({ data: { user: { id: 'u1' } }, error: null }),
     },
     from: vi.fn().mockReturnValue({
@@ -48,17 +52,13 @@ describe('supabase module', () => {
     it('should throw when VITE_SUPABASE_URL is missing', async () => {
       vi.stubEnv('VITE_SUPABASE_URL', '')
 
-      await expect(import('../supabase')).rejects.toThrow(
-        'Missing Supabase environment variables'
-      )
+      await expect(import('../supabase')).rejects.toThrow('Missing Supabase environment variables')
     })
 
     it('should throw when VITE_SUPABASE_ANON_KEY is missing', async () => {
       vi.stubEnv('VITE_SUPABASE_ANON_KEY', '')
 
-      await expect(import('../supabase')).rejects.toThrow(
-        'Missing Supabase environment variables'
-      )
+      await expect(import('../supabase')).rejects.toThrow('Missing Supabase environment variables')
     })
 
     it('should not throw when both env vars are present', async () => {

@@ -11,7 +11,9 @@ import type { Locale } from '../i18n'
 describe('i18n', () => {
   beforeEach(() => {
     localStorage.clear()
-    act(() => { useI18nStore.setState({ locale: 'fr' }) })
+    act(() => {
+      useI18nStore.setState({ locale: 'fr' })
+    })
   })
 
   // =========================================================================
@@ -32,23 +34,33 @@ describe('i18n', () => {
   // =========================================================================
   describe('setLocale', () => {
     it('changes locale to en', () => {
-      act(() => { useI18nStore.getState().setLocale('en') })
+      act(() => {
+        useI18nStore.getState().setLocale('en')
+      })
       expect(useI18nStore.getState().locale).toBe('en')
     })
 
     it('changes locale back to fr', () => {
-      act(() => { useI18nStore.getState().setLocale('en') })
-      act(() => { useI18nStore.getState().setLocale('fr') })
+      act(() => {
+        useI18nStore.getState().setLocale('en')
+      })
+      act(() => {
+        useI18nStore.getState().setLocale('fr')
+      })
       expect(useI18nStore.getState().locale).toBe('fr')
     })
 
     it('persists locale to localStorage', () => {
-      act(() => { useI18nStore.getState().setLocale('en') })
+      act(() => {
+        useI18nStore.getState().setLocale('en')
+      })
       expect(localStorage.getItem('squad-planner-locale')).toBe('en')
     })
 
     it('persists fr locale to localStorage', () => {
-      act(() => { useI18nStore.getState().setLocale('fr') })
+      act(() => {
+        useI18nStore.getState().setLocale('fr')
+      })
       expect(localStorage.getItem('squad-planner-locale')).toBe('fr')
     })
   })
@@ -200,7 +212,9 @@ describe('i18n', () => {
     it('reads stored locale from localStorage', () => {
       localStorage.setItem('squad-planner-locale', 'en')
       // The store was already created, so we test via setLocale + read
-      act(() => { useI18nStore.getState().setLocale('en') })
+      act(() => {
+        useI18nStore.getState().setLocale('en')
+      })
       expect(useI18nStore.getState().locale).toBe('en')
     })
   })

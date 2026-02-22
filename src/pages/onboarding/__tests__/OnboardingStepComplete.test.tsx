@@ -16,21 +16,39 @@ vi.mock('framer-motion', () => ({
   useAnimate: vi.fn().mockReturnValue([{ current: null }, vi.fn()]),
   useAnimation: vi.fn().mockReturnValue({ start: vi.fn(), stop: vi.fn() }),
   useReducedMotion: vi.fn().mockReturnValue(false),
-  m: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
-  motion: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
+  m: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
+  motion: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
 }))
 
-vi.mock('../../../components/icons', () => new Proxy({}, { get: (_t: any, p: string) => typeof p === 'string' ? ({ children, ...props }: any) => createElement('span', props, children) : undefined }))
+vi.mock(
+  '../../../components/icons',
+  () =>
+    new Proxy(
+      {},
+      {
+        get: (_t: any, p: string) =>
+          typeof p === 'string'
+            ? ({ children, ...props }: any) => createElement('span', props, children)
+            : undefined,
+      }
+    )
+)
 
 vi.mock('../../../components/ui', () => ({
   Button: ({ children, ...props }: any) => createElement('button', props, children),
@@ -66,7 +84,14 @@ describe('OnboardingStepComplete', () => {
   })
 
   it('shows invite code when squad was created', () => {
-    render(<OnboardingStepComplete {...defaultProps} createdSquadId="id-1" createdSquadName="Ma Squad" createdSquadCode="ABC123" />)
+    render(
+      <OnboardingStepComplete
+        {...defaultProps}
+        createdSquadId="id-1"
+        createdSquadName="Ma Squad"
+        createdSquadCode="ABC123"
+      />
+    )
     expect(screen.getByText('ABC123')).toBeTruthy()
   })
 

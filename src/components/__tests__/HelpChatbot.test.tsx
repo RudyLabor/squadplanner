@@ -16,18 +16,24 @@ vi.mock('framer-motion', () => ({
   useAnimate: vi.fn().mockReturnValue([{ current: null }, vi.fn()]),
   useAnimation: vi.fn().mockReturnValue({ start: vi.fn(), stop: vi.fn() }),
   useReducedMotion: vi.fn().mockReturnValue(false),
-  m: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
-  motion: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
+  m: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
+  motion: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
 }))
 
 vi.mock('../help/chatbotUtils', () => ({
@@ -76,7 +82,9 @@ describe('HelpChatbot', () => {
     // 5. The button should NOT have "Fermer le chat" label yet
     expect(screen.queryByLabelText('Fermer le chat')).not.toBeInTheDocument()
     // 6. After 8 seconds, the hint disappears
-    act(() => { vi.advanceTimersByTime(8100) })
+    act(() => {
+      vi.advanceTimersByTime(8100)
+    })
     expect(screen.queryByText("Besoin d'aide ?")).not.toBeInTheDocument()
   })
 

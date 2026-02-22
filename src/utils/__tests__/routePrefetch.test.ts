@@ -22,8 +22,14 @@ describe('routePrefetch', () => {
 
     // Provide requestIdleCallback if jsdom doesn't have it
     if (!window.requestIdleCallback) {
-      (window as any).requestIdleCallback = (cb: IdleRequestCallback, _opts?: IdleRequestOptions) => {
-        return setTimeout(() => cb({ didTimeout: false, timeRemaining: () => 50 } as IdleDeadline), 0) as unknown as number
+      ;(window as any).requestIdleCallback = (
+        cb: IdleRequestCallback,
+        _opts?: IdleRequestOptions
+      ) => {
+        return setTimeout(
+          () => cb({ didTimeout: false, timeRemaining: () => 50 } as IdleDeadline),
+          0
+        ) as unknown as number
       }
       ;(window as any).cancelIdleCallback = (id: number) => clearTimeout(id)
     }
@@ -78,7 +84,6 @@ describe('routePrefetch', () => {
 
   it('should not create preconnect link if VITE_SUPABASE_URL is empty', () => {
     import.meta.env.VITE_SUPABASE_URL = ''
-
     ;(window as any).requestIdleCallback = (cb: IdleRequestCallback) => {
       cb({ didTimeout: false, timeRemaining: () => 50 } as IdleDeadline)
       return 1

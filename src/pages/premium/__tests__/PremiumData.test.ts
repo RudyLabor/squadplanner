@@ -93,7 +93,12 @@ describe('FEATURES — feature comparison table data (4 tiers)', () => {
   })
 
   it('Club-only features: dashboard multi-squads, branding, API, support', () => {
-    const clubOnlyNames = ['Dashboard multi-squads', 'Branding personnalisé', 'API webhooks', 'Support prioritaire 24h']
+    const clubOnlyNames = [
+      'Dashboard multi-squads',
+      'Branding personnalisé',
+      'API webhooks',
+      'Support prioritaire 24h',
+    ]
     for (const name of clubOnlyNames) {
       const feature = FEATURES.find((f) => f.name === name)!
       expect(feature).toBeTruthy()

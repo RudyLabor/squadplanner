@@ -207,9 +207,7 @@ describe('useSubscriptionStore', () => {
       })
 
       await act(async () => {
-        await useSubscriptionStore
-          .getState()
-          .createCheckoutSession('price_abc', 'premium')
+        await useSubscriptionStore.getState().createCheckoutSession('price_abc', 'premium')
       })
 
       const callBody = mockFunctionsInvoke.mock.calls[0][1].body

@@ -9,17 +9,22 @@ vi.mock('react-router', () => ({
 
 function makeMotionProxy() {
   const cache = new Map<string, any>()
-  return new Proxy({}, {
-    get: (_t: any, p: string) => {
-      if (typeof p !== 'string') return undefined
-      if (!cache.has(p)) {
-        const comp = forwardRef(({ children, ...r }: any, ref: any) => createElement(p, { ...r, ref }, children))
-        comp.displayName = `motion.${p}`
-        cache.set(p, comp)
-      }
-      return cache.get(p)
-    },
-  })
+  return new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) => {
+        if (typeof p !== 'string') return undefined
+        if (!cache.has(p)) {
+          const comp = forwardRef(({ children, ...r }: any, ref: any) =>
+            createElement(p, { ...r, ref }, children)
+          )
+          comp.displayName = `motion.${p}`
+          cache.set(p, comp)
+        }
+        return cache.get(p)
+      },
+    }
+  )
 }
 
 vi.mock('framer-motion', () => ({
@@ -31,9 +36,20 @@ vi.mock('framer-motion', () => ({
 vi.mock('../../icons', () => {
   const icon = (props: any) => createElement('span', props)
   return {
-    Home: icon, Users: icon, Mic: icon, MessageCircle: icon,
-    User: icon, Plus: icon, Pin: icon, PinOff: icon,
-    Settings: icon, HelpCircle: icon, Phone: icon, Calendar: icon, Compass: icon, Gift: icon,
+    Home: icon,
+    Users: icon,
+    Mic: icon,
+    MessageCircle: icon,
+    User: icon,
+    Plus: icon,
+    Pin: icon,
+    PinOff: icon,
+    Settings: icon,
+    HelpCircle: icon,
+    Phone: icon,
+    Calendar: icon,
+    Compass: icon,
+    Gift: icon,
   }
 })
 
@@ -195,7 +211,9 @@ describe('DesktopSidebar', () => {
     it('calls onOpenCreateSessionModal when clicked', async () => {
       const user = userEvent.setup()
       const onOpenCreateSessionModal = vi.fn()
-      render(<DesktopSidebar {...defaultProps} onOpenCreateSessionModal={onOpenCreateSessionModal} />)
+      render(
+        <DesktopSidebar {...defaultProps} onOpenCreateSessionModal={onOpenCreateSessionModal} />
+      )
       await user.click(screen.getByLabelText('Créer une nouvelle session'))
       expect(onOpenCreateSessionModal).toHaveBeenCalledTimes(1)
     })
@@ -374,7 +392,7 @@ describe('navItems', () => {
   })
 
   it('includes all expected paths', () => {
-    const paths = navItems.map(i => i.path)
+    const paths = navItems.map((i) => i.path)
     expect(paths).toContain('/home')
     expect(paths).toContain('/squads')
     expect(paths).toContain('/sessions')

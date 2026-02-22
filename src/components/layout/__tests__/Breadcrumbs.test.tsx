@@ -77,16 +77,34 @@ describe('Breadcrumbs', () => {
   // STRICT: verifies Breadcrumbs returns null on /home and / paths (no breadcrumbs needed)
   it('returns null on home page', async () => {
     const routerMod = await import('react-router')
-    vi.mocked(routerMod.useLocation).mockReturnValue({ pathname: '/home', hash: '', search: '', state: null, key: '' })
+    vi.mocked(routerMod.useLocation).mockReturnValue({
+      pathname: '/home',
+      hash: '',
+      search: '',
+      state: null,
+      key: '',
+    })
     const { container } = render(<Breadcrumbs />)
     expect(container.innerHTML).toBe('')
 
     // Also returns null on root path
-    vi.mocked(routerMod.useLocation).mockReturnValue({ pathname: '/', hash: '', search: '', state: null, key: '' })
+    vi.mocked(routerMod.useLocation).mockReturnValue({
+      pathname: '/',
+      hash: '',
+      search: '',
+      state: null,
+      key: '',
+    })
     const { container: c2 } = render(<Breadcrumbs />)
     expect(c2.innerHTML).toBe('')
 
     // Restore for other tests
-    vi.mocked(routerMod.useLocation).mockReturnValue({ pathname: '/squads', hash: '', search: '', state: null, key: '' })
+    vi.mocked(routerMod.useLocation).mockReturnValue({
+      pathname: '/squads',
+      hash: '',
+      search: '',
+      state: null,
+      key: '',
+    })
   })
 })

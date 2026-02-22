@@ -17,18 +17,24 @@ vi.mock('framer-motion', () => ({
   useAnimate: vi.fn().mockReturnValue([{ current: null }, vi.fn()]),
   useAnimation: vi.fn().mockReturnValue({ start: vi.fn(), stop: vi.fn() }),
   useReducedMotion: vi.fn().mockReturnValue(false),
-  m: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
-  motion: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
+  m: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
+  motion: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
 }))
 
 // Mock tanstack virtualizer
@@ -60,7 +66,10 @@ import { useVirtualizer } from '@tanstack/react-virtual'
 const mockUseVirtualizer = vi.mocked(useVirtualizer)
 
 // Helper to generate mock messages
-function generateMessages(count: number, options: Partial<{ contentLength: number; isSystem: boolean; hasReply: boolean }> = {}) {
+function generateMessages(
+  count: number,
+  options: Partial<{ contentLength: number; isSystem: boolean; hasReply: boolean }> = {}
+) {
   return Array.from({ length: count }, (_, i) => ({
     id: `msg-${i}`,
     content: 'x'.repeat(options.contentLength || 20),
@@ -91,10 +100,12 @@ describe('VirtualizedMessageList', () => {
   })
 
   it('renders skeleton when loading with no messages', () => {
-    render(createElement(VirtualizedMessageList, {
-      ...defaultProps,
-      isLoading: true,
-    }))
+    render(
+      createElement(VirtualizedMessageList, {
+        ...defaultProps,
+        isLoading: true,
+      })
+    )
     expect(screen.getByTestId('skeleton')).toBeDefined()
   })
 
@@ -104,18 +115,22 @@ describe('VirtualizedMessageList', () => {
   })
 
   it('renders loading more indicator when isLoadingMore', () => {
-    render(createElement(VirtualizedMessageList, {
-      ...defaultProps,
-      isLoadingMore: true,
-    }))
+    render(
+      createElement(VirtualizedMessageList, {
+        ...defaultProps,
+        isLoadingMore: true,
+      })
+    )
     expect(screen.getByTestId('loading-more')).toBeDefined()
   })
 
   it('renders typing indicator when provided', () => {
-    render(createElement(VirtualizedMessageList, {
-      ...defaultProps,
-      typingIndicator: createElement('div', { 'data-testid': 'typing' }, 'Typing...'),
-    }))
+    render(
+      createElement(VirtualizedMessageList, {
+        ...defaultProps,
+        typingIndicator: createElement('div', { 'data-testid': 'typing' }, 'Typing...'),
+      })
+    )
     expect(screen.getByTestId('typing')).toBeDefined()
   })
 
@@ -128,10 +143,12 @@ describe('VirtualizedMessageList', () => {
 
   it('passes estimateSize function to useVirtualizer', () => {
     const messages = generateMessages(5)
-    render(createElement(VirtualizedMessageList, {
-      ...defaultProps,
-      messages,
-    }))
+    render(
+      createElement(VirtualizedMessageList, {
+        ...defaultProps,
+        messages,
+      })
+    )
     expect(mockUseVirtualizer).toHaveBeenCalled()
     const callArgs = mockUseVirtualizer.mock.calls[0][0]
     expect(callArgs).toHaveProperty('estimateSize')
@@ -139,17 +156,21 @@ describe('VirtualizedMessageList', () => {
   })
 
   it('estimates smaller height for system messages', () => {
-    const systemMsg = [{
-      id: 'sys-1',
-      content: 'User joined',
-      created_at: new Date().toISOString(),
-      sender_id: 'system',
-      is_system_message: true,
-    }]
-    render(createElement(VirtualizedMessageList, {
-      ...defaultProps,
-      messages: systemMsg,
-    }))
+    const systemMsg = [
+      {
+        id: 'sys-1',
+        content: 'User joined',
+        created_at: new Date().toISOString(),
+        sender_id: 'system',
+        is_system_message: true,
+      },
+    ]
+    render(
+      createElement(VirtualizedMessageList, {
+        ...defaultProps,
+        messages: systemMsg,
+      })
+    )
     const callArgs = mockUseVirtualizer.mock.calls[0][0]
     const height = callArgs.estimateSize(0)
     // System messages return 60
@@ -157,16 +178,20 @@ describe('VirtualizedMessageList', () => {
   })
 
   it('estimates larger height for long messages', () => {
-    const longMsg = [{
-      id: 'long-1',
-      content: 'x'.repeat(300),
-      created_at: new Date().toISOString(),
-      sender_id: 'user-1',
-    }]
-    render(createElement(VirtualizedMessageList, {
-      ...defaultProps,
-      messages: longMsg,
-    }))
+    const longMsg = [
+      {
+        id: 'long-1',
+        content: 'x'.repeat(300),
+        created_at: new Date().toISOString(),
+        sender_id: 'user-1',
+      },
+    ]
+    render(
+      createElement(VirtualizedMessageList, {
+        ...defaultProps,
+        messages: longMsg,
+      })
+    )
     const callArgs = mockUseVirtualizer.mock.calls[0][0]
     const height = callArgs.estimateSize(0)
     // Long message should have a higher estimate, capped at 300
@@ -175,36 +200,44 @@ describe('VirtualizedMessageList', () => {
   })
 
   it('estimates extra height for messages with replies', () => {
-    const replyMsg = [{
-      id: 'reply-1',
-      content: 'Short reply',
-      created_at: new Date().toISOString(),
-      sender_id: 'user-1',
-      reply_to_id: 'msg-0',
-    }]
-    const normalMsg = [{
-      id: 'normal-1',
-      content: 'Short reply',
-      created_at: new Date().toISOString(),
-      sender_id: 'user-1',
-      reply_to_id: null,
-    }]
+    const replyMsg = [
+      {
+        id: 'reply-1',
+        content: 'Short reply',
+        created_at: new Date().toISOString(),
+        sender_id: 'user-1',
+        reply_to_id: 'msg-0',
+      },
+    ]
+    const normalMsg = [
+      {
+        id: 'normal-1',
+        content: 'Short reply',
+        created_at: new Date().toISOString(),
+        sender_id: 'user-1',
+        reply_to_id: null,
+      },
+    ]
 
     // Render with reply message
-    const { unmount } = render(createElement(VirtualizedMessageList, {
-      ...defaultProps,
-      messages: replyMsg,
-    }))
+    const { unmount } = render(
+      createElement(VirtualizedMessageList, {
+        ...defaultProps,
+        messages: replyMsg,
+      })
+    )
     const replyHeight = mockUseVirtualizer.mock.calls[0][0].estimateSize(0)
     unmount()
 
     vi.clearAllMocks()
 
     // Render with normal message (same content length)
-    render(createElement(VirtualizedMessageList, {
-      ...defaultProps,
-      messages: normalMsg,
-    }))
+    render(
+      createElement(VirtualizedMessageList, {
+        ...defaultProps,
+        messages: normalMsg,
+      })
+    )
     const normalHeight = mockUseVirtualizer.mock.calls[0][0].estimateSize(0)
 
     // Reply message should be taller due to +40 for reply
@@ -213,10 +246,12 @@ describe('VirtualizedMessageList', () => {
 
   it('returns default 80 for undefined message index', () => {
     const messages = generateMessages(1)
-    render(createElement(VirtualizedMessageList, {
-      ...defaultProps,
-      messages,
-    }))
+    render(
+      createElement(VirtualizedMessageList, {
+        ...defaultProps,
+        messages,
+      })
+    )
     const callArgs = mockUseVirtualizer.mock.calls[0][0]
     // Index out of bounds returns 80
     const height = callArgs.estimateSize(999)
@@ -227,10 +262,12 @@ describe('VirtualizedMessageList', () => {
 
   it('passes correct count to virtualizer with 100+ messages', () => {
     const messages = generateMessages(150)
-    render(createElement(VirtualizedMessageList, {
-      ...defaultProps,
-      messages,
-    }))
+    render(
+      createElement(VirtualizedMessageList, {
+        ...defaultProps,
+        messages,
+      })
+    )
     const callArgs = mockUseVirtualizer.mock.calls[0][0]
     expect(callArgs.count).toBe(150)
   })
@@ -239,10 +276,12 @@ describe('VirtualizedMessageList', () => {
 
   it('attaches onScroll handler to container', () => {
     const onScrollMock = vi.fn()
-    const { container } = render(createElement(VirtualizedMessageList, {
-      ...defaultProps,
-      onScroll: onScrollMock,
-    }))
+    const { container } = render(
+      createElement(VirtualizedMessageList, {
+        ...defaultProps,
+        onScroll: onScrollMock,
+      })
+    )
     const scrollContainer = container.querySelector('.overflow-y-auto')
     expect(scrollContainer).toBeDefined()
     // The onScroll is attached to the div
@@ -259,10 +298,12 @@ describe('VirtualizedMessageList', () => {
 
   it('uses message id as item key', () => {
     const messages = generateMessages(3)
-    render(createElement(VirtualizedMessageList, {
-      ...defaultProps,
-      messages,
-    }))
+    render(
+      createElement(VirtualizedMessageList, {
+        ...defaultProps,
+        messages,
+      })
+    )
     const callArgs = mockUseVirtualizer.mock.calls[0][0]
     expect(callArgs.getItemKey(0)).toBe('msg-0')
     expect(callArgs.getItemKey(1)).toBe('msg-1')
@@ -282,13 +323,17 @@ describe('VirtualizedMessageList', () => {
       measureElement: vi.fn(),
     } as any)
 
-    const renderMessage = vi.fn((msg: any) => createElement('div', { key: msg.id, 'data-testid': `message-${msg.id}` }, msg.content))
+    const renderMessage = vi.fn((msg: any) =>
+      createElement('div', { key: msg.id, 'data-testid': `message-${msg.id}` }, msg.content)
+    )
 
-    render(createElement(VirtualizedMessageList, {
-      ...defaultProps,
-      messages,
-      renderMessage,
-    }))
+    render(
+      createElement(VirtualizedMessageList, {
+        ...defaultProps,
+        messages,
+        renderMessage,
+      })
+    )
 
     // renderMessage should have been called for each virtual item
     expect(renderMessage).toHaveBeenCalledTimes(2)
@@ -299,10 +344,16 @@ describe('VirtualizedMessageList', () => {
   // --- P1.1 Audit: typing indicator placement ---
 
   it('renders typing indicator after the virtual list', () => {
-    const { container } = render(createElement(VirtualizedMessageList, {
-      ...defaultProps,
-      typingIndicator: createElement('div', { 'data-testid': 'typing-indicator' }, 'Someone is typing...'),
-    }))
+    const { container } = render(
+      createElement(VirtualizedMessageList, {
+        ...defaultProps,
+        typingIndicator: createElement(
+          'div',
+          { 'data-testid': 'typing-indicator' },
+          'Someone is typing...'
+        ),
+      })
+    )
     expect(screen.getByTestId('typing-indicator')).toBeDefined()
     expect(screen.getByText('Someone is typing...')).toBeDefined()
   })
@@ -315,18 +366,22 @@ describe('VirtualizedMessageList', () => {
   // --- P1.1 Audit: LoadingMore indicator ---
 
   it('does not show loading-more indicator when isLoadingMore is false', () => {
-    render(createElement(VirtualizedMessageList, {
-      ...defaultProps,
-      isLoadingMore: false,
-    }))
+    render(
+      createElement(VirtualizedMessageList, {
+        ...defaultProps,
+        isLoadingMore: false,
+      })
+    )
     expect(screen.queryByTestId('loading-more')).toBeNull()
   })
 
   it('shows loading-more indicator with correct text', () => {
-    render(createElement(VirtualizedMessageList, {
-      ...defaultProps,
-      isLoadingMore: true,
-    }))
+    render(
+      createElement(VirtualizedMessageList, {
+        ...defaultProps,
+        isLoadingMore: true,
+      })
+    )
     expect(screen.getByText('Chargement des messages...')).toBeDefined()
   })
 
@@ -334,11 +389,13 @@ describe('VirtualizedMessageList', () => {
 
   it('does not show skeleton when loading but messages exist', () => {
     const messages = generateMessages(5)
-    render(createElement(VirtualizedMessageList, {
-      ...defaultProps,
-      messages,
-      isLoading: true,
-    }))
+    render(
+      createElement(VirtualizedMessageList, {
+        ...defaultProps,
+        messages,
+        isLoading: true,
+      })
+    )
     expect(screen.queryByTestId('skeleton')).toBeNull()
   })
 })

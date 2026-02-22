@@ -19,7 +19,13 @@ vi.mock('../../types/database.types', () => ({
   // Provide empty Database type
 }))
 
-import { supabaseMinimal, supabase, initSupabase, isSupabaseReady, waitForSupabase } from '../supabaseMinimal'
+import {
+  supabaseMinimal,
+  supabase,
+  initSupabase,
+  isSupabaseReady,
+  waitForSupabase,
+} from '../supabaseMinimal'
 
 describe('supabaseMinimal', () => {
   describe('client creation', () => {

@@ -29,21 +29,29 @@ vi.mock('framer-motion', () => ({
   useAnimate: vi.fn().mockReturnValue([{ current: null }, vi.fn()]),
   useAnimation: vi.fn().mockReturnValue({ start: vi.fn(), stop: vi.fn() }),
   useReducedMotion: vi.fn().mockReturnValue(false),
-  m: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
-  motion: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
+  m: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
+  motion: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
 }))
 
-vi.mock('../../pages/Legal', () => ({ Legal: () => createElement('div', { 'data-testid': 'legal' }, 'Legal') }))
+vi.mock('../../pages/Legal', () => ({
+  Legal: () => createElement('div', { 'data-testid': 'legal' }, 'Legal'),
+}))
 
 import DefaultExport, { headers, meta } from '../legal'
 
@@ -71,7 +79,11 @@ describe('routes/legal', () => {
 
       // 4 - canonical link
       const canonical = result.find((m: any) => m.tagName === 'link')
-      expect(canonical).toEqual({ tagName: 'link', rel: 'canonical', href: 'https://squadplanner.fr/legal' })
+      expect(canonical).toEqual({
+        tagName: 'link',
+        rel: 'canonical',
+        href: 'https://squadplanner.fr/legal',
+      })
 
       // 5 - og:url
       const ogUrl = result.find((m: any) => m.property === 'og:url')

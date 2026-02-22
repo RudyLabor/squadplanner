@@ -10,7 +10,8 @@ vi.mock('react-router', () => ({
   useSearchParams: vi.fn().mockReturnValue([new URLSearchParams(), vi.fn()]),
   useLoaderData: vi.fn().mockReturnValue({}),
   Link: ({ children, to, ...props }: any) => createElement('a', { href: to, ...props }, children),
-  NavLink: ({ children, to, ...props }: any) => createElement('a', { href: to, ...props }, children),
+  NavLink: ({ children, to, ...props }: any) =>
+    createElement('a', { href: to, ...props }, children),
   Outlet: () => null,
   useMatches: vi.fn().mockReturnValue([]),
 }))
@@ -30,25 +31,40 @@ vi.mock('framer-motion', () => ({
   useAnimate: vi.fn().mockReturnValue([{ current: null }, vi.fn()]),
   useAnimation: vi.fn().mockReturnValue({ start: vi.fn(), stop: vi.fn() }),
   useReducedMotion: vi.fn().mockReturnValue(false),
-  m: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
-  motion: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
+  m: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
+  motion: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
 }))
 
 // Mock hooks
 vi.mock('../../hooks', () => ({
   useAuthStore: Object.assign(
-    vi.fn().mockReturnValue({ user: { id: 'user-1' }, profile: { id: 'user-1', username: 'TestUser' }, isLoading: false }),
-    { getState: vi.fn().mockReturnValue({ user: { id: 'user-1' }, profile: { id: 'user-1', username: 'TestUser' } }) }
+    vi.fn().mockReturnValue({
+      user: { id: 'user-1' },
+      profile: { id: 'user-1', username: 'TestUser' },
+      isLoading: false,
+    }),
+    {
+      getState: vi.fn().mockReturnValue({
+        user: { id: 'user-1' },
+        profile: { id: 'user-1', username: 'TestUser' },
+      }),
+    }
   ),
   useSubscriptionStore: Object.assign(
     vi.fn().mockReturnValue({
@@ -107,12 +123,15 @@ vi.mock('../../lib/supabaseMinimal', () => ({
 // Mock premium sub-components
 vi.mock('../premium/PremiumHero', () => ({
   PremiumHero: ({ hasPremium }: any) =>
-    createElement('div', { 'data-testid': 'premium-hero' }, hasPremium ? 'Premium Active' : 'Go Premium'),
+    createElement(
+      'div',
+      { 'data-testid': 'premium-hero' },
+      hasPremium ? 'Premium Active' : 'Go Premium'
+    ),
 }))
 
 vi.mock('../premium/PremiumPricing', () => ({
-  PremiumPricing: () =>
-    createElement('div', { 'data-testid': 'premium-pricing' }, 'Pricing'),
+  PremiumPricing: () => createElement('div', { 'data-testid': 'premium-pricing' }, 'Pricing'),
 }))
 
 vi.mock('../premium/PremiumFeaturesTable', () => ({
@@ -126,8 +145,7 @@ vi.mock('../premium/PremiumTestimonials', () => ({
 }))
 
 vi.mock('../premium/PremiumFAQ', () => ({
-  PremiumFAQ: () =>
-    createElement('div', { 'data-testid': 'premium-faq' }, 'FAQ'),
+  PremiumFAQ: () => createElement('div', { 'data-testid': 'premium-faq' }, 'FAQ'),
 }))
 
 import { Premium } from '../Premium'

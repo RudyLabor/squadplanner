@@ -40,13 +40,17 @@ describe('useFriendsPlayingQuery', () => {
 
   it('renders without error', () => {
     mockRpc.mockResolvedValue({ data: [], error: null })
-    const { result } = renderHook(() => useFriendsPlayingQuery('user-1'), { wrapper: createWrapper() })
+    const { result } = renderHook(() => useFriendsPlayingQuery('user-1'), {
+      wrapper: createWrapper(),
+    })
     expect(result.current).toBeDefined()
     expect(result.current).toHaveProperty('data')
   })
 
   it('is disabled when userId is undefined', () => {
-    const { result } = renderHook(() => useFriendsPlayingQuery(undefined), { wrapper: createWrapper() })
+    const { result } = renderHook(() => useFriendsPlayingQuery(undefined), {
+      wrapper: createWrapper(),
+    })
     expect(result.current.fetchStatus).toBe('idle')
     expect(result.current.data).toBeUndefined()
   })
@@ -80,7 +84,9 @@ describe('useFriendsPlayingQuery', () => {
     ]
     mockRpc.mockResolvedValue({ data: mockFriends, error: null })
 
-    const { result } = renderHook(() => useFriendsPlayingQuery('user-1'), { wrapper: createWrapper() })
+    const { result } = renderHook(() => useFriendsPlayingQuery('user-1'), {
+      wrapper: createWrapper(),
+    })
     await waitFor(() => expect(result.current.isSuccess).toBe(true))
 
     expect(result.current.data).toHaveLength(2)
@@ -94,7 +100,9 @@ describe('useFriendsPlayingQuery', () => {
   it('returns empty array when RPC returns error (graceful degradation)', async () => {
     mockRpc.mockResolvedValue({ data: null, error: { message: 'Function not found' } })
 
-    const { result } = renderHook(() => useFriendsPlayingQuery('user-1'), { wrapper: createWrapper() })
+    const { result } = renderHook(() => useFriendsPlayingQuery('user-1'), {
+      wrapper: createWrapper(),
+    })
     await waitFor(() => expect(result.current.isSuccess).toBe(true))
 
     expect(result.current.data).toEqual([])
@@ -103,7 +111,9 @@ describe('useFriendsPlayingQuery', () => {
   it('returns empty array when RPC throws (catch block)', async () => {
     mockRpc.mockRejectedValue(new Error('Network error'))
 
-    const { result } = renderHook(() => useFriendsPlayingQuery('user-1'), { wrapper: createWrapper() })
+    const { result } = renderHook(() => useFriendsPlayingQuery('user-1'), {
+      wrapper: createWrapper(),
+    })
     await waitFor(() => expect(result.current.isSuccess).toBe(true))
 
     expect(result.current.data).toEqual([])
@@ -112,14 +122,18 @@ describe('useFriendsPlayingQuery', () => {
   it('returns empty array when RPC returns null data with no error', async () => {
     mockRpc.mockResolvedValue({ data: null, error: null })
 
-    const { result } = renderHook(() => useFriendsPlayingQuery('user-1'), { wrapper: createWrapper() })
+    const { result } = renderHook(() => useFriendsPlayingQuery('user-1'), {
+      wrapper: createWrapper(),
+    })
     await waitFor(() => expect(result.current.isSuccess).toBe(true))
 
     expect(result.current.data).toEqual([])
   })
 
   it('returns empty array for undefined userId (guard in queryFn)', async () => {
-    const { result } = renderHook(() => useFriendsPlayingQuery(undefined), { wrapper: createWrapper() })
+    const { result } = renderHook(() => useFriendsPlayingQuery(undefined), {
+      wrapper: createWrapper(),
+    })
     // Should be idle since enabled: !!userId is false
     expect(result.current.fetchStatus).toBe('idle')
     expect(result.current.data).toBeUndefined()
@@ -129,7 +143,9 @@ describe('useFriendsPlayingQuery', () => {
   it('does not retry on failure (retry: false)', async () => {
     mockRpc.mockResolvedValue({ data: null, error: { message: 'fail' } })
 
-    const { result } = renderHook(() => useFriendsPlayingQuery('user-1'), { wrapper: createWrapper() })
+    const { result } = renderHook(() => useFriendsPlayingQuery('user-1'), {
+      wrapper: createWrapper(),
+    })
     await waitFor(() => expect(result.current.isSuccess).toBe(true))
 
     // RPC should only be called once since retry is false
@@ -138,7 +154,9 @@ describe('useFriendsPlayingQuery', () => {
 
   it('uses correct query key format', () => {
     mockRpc.mockResolvedValue({ data: [], error: null })
-    const { result } = renderHook(() => useFriendsPlayingQuery('user-42'), { wrapper: createWrapper() })
+    const { result } = renderHook(() => useFriendsPlayingQuery('user-42'), {
+      wrapper: createWrapper(),
+    })
     // The query key is ['friends_playing', userId]
     expect(result.current).toBeDefined()
     // Verify the hook was called with the right userId
@@ -148,7 +166,9 @@ describe('useFriendsPlayingQuery', () => {
   it('handles empty array from RPC correctly', async () => {
     mockRpc.mockResolvedValue({ data: [], error: null })
 
-    const { result } = renderHook(() => useFriendsPlayingQuery('user-1'), { wrapper: createWrapper() })
+    const { result } = renderHook(() => useFriendsPlayingQuery('user-1'), {
+      wrapper: createWrapper(),
+    })
     await waitFor(() => expect(result.current.isSuccess).toBe(true))
 
     expect(result.current.data).toEqual([])

@@ -30,7 +30,8 @@ vi.mock('react-router', () => ({
   redirect: mockRedirect,
   data: mockData,
   Link: ({ children, to, ...props }: any) => createElement('a', { href: to, ...props }, children),
-  NavLink: ({ children, to, ...props }: any) => createElement('a', { href: to, ...props }, children),
+  NavLink: ({ children, to, ...props }: any) =>
+    createElement('a', { href: to, ...props }, children),
   Outlet: ({ children }: any) => createElement('div', null, children || 'outlet'),
   useMatches: vi.fn().mockReturnValue([]),
 }))
@@ -49,18 +50,24 @@ vi.mock('framer-motion', () => ({
   useAnimate: vi.fn().mockReturnValue([{ current: null }, vi.fn()]),
   useAnimation: vi.fn().mockReturnValue({ start: vi.fn(), stop: vi.fn() }),
   useReducedMotion: vi.fn().mockReturnValue(false),
-  m: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
-  motion: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
+  m: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
+  motion: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
 }))
 
 vi.mock('../../lib/supabase-minimal-ssr', () => ({
@@ -197,9 +204,7 @@ describe('routes/_protected', () => {
     it('sets default private Cache-Control when loaderHeaders lacks one', () => {
       const loaderHeaders = new Headers()
       const result = headers({ loaderHeaders })
-      expect(result.get('Cache-Control')).toBe(
-        'private, max-age=60, stale-while-revalidate=300'
-      )
+      expect(result.get('Cache-Control')).toBe('private, max-age=60, stale-while-revalidate=300')
     })
 
     it('preserves other headers from loaderHeaders', () => {
@@ -258,7 +263,10 @@ describe('routes/_protected', () => {
         user: null,
         error: new Error('expired'),
         refreshSession: { user: refreshedUser },
-        rpcResult: { profile: { id: 'refreshed-id', username: 'refreshed' }, squads: [{ id: 's1', name: 'Squad' }] },
+        rpcResult: {
+          profile: { id: 'refreshed-id', username: 'refreshed' },
+          squads: [{ id: 's1', name: 'Squad' }],
+        },
       })
 
       const result = await loader({ request: makeRequest(), params: {}, context: {} } as any)
@@ -272,7 +280,17 @@ describe('routes/_protected', () => {
     it('uses RPC data when get_layout_data succeeds', async () => {
       const user = { id: 'u1', email: 'u@test.com' }
       const rpcProfile = { id: 'u1', username: 'rpcUser' }
-      const rpcSquads = [{ id: 's1', name: 'RPC Squad', game: 'Valorant', invite_code: 'abc', owner_id: 'u1', created_at: '2026-01-01', member_count: 3 }]
+      const rpcSquads = [
+        {
+          id: 's1',
+          name: 'RPC Squad',
+          game: 'Valorant',
+          invite_code: 'abc',
+          owner_id: 'u1',
+          created_at: '2026-01-01',
+          member_count: 3,
+        },
+      ]
 
       setupSSRMocks({
         user,
@@ -304,7 +322,15 @@ describe('routes/_protected', () => {
       const membershipsData = [
         {
           squad_id: 's1',
-          squads: { id: 's1', name: 'Fallback Squad', game: 'LoL', invite_code: 'xyz', owner_id: 'u1', total_members: 5, created_at: '2026-01-01' },
+          squads: {
+            id: 's1',
+            name: 'Fallback Squad',
+            game: 'LoL',
+            invite_code: 'xyz',
+            owner_id: 'u1',
+            total_members: 5,
+            created_at: '2026-01-01',
+          },
         },
       ]
 
@@ -321,8 +347,14 @@ describe('routes/_protected', () => {
       expect(result.profile).toEqual(profileData)
       expect(result.squads).toEqual([
         {
-          id: 's1', name: 'Fallback Squad', game: 'LoL', invite_code: 'xyz',
-          owner_id: 'u1', total_members: 5, created_at: '2026-01-01', member_count: 5,
+          id: 's1',
+          name: 'Fallback Squad',
+          game: 'LoL',
+          invite_code: 'xyz',
+          owner_id: 'u1',
+          total_members: 5,
+          created_at: '2026-01-01',
+          member_count: 5,
         },
       ])
     })
@@ -337,7 +369,15 @@ describe('routes/_protected', () => {
         membershipsData: [
           {
             squad_id: 's1',
-            squads: { id: 's1', name: 'Squad', game: 'CS', invite_code: 'abc', owner_id: 'u1', total_members: null, created_at: '2026-01-01' },
+            squads: {
+              id: 's1',
+              name: 'Squad',
+              game: 'CS',
+              invite_code: 'abc',
+              owner_id: 'u1',
+              total_members: null,
+              created_at: '2026-01-01',
+            },
           },
         ],
       })
@@ -384,9 +424,7 @@ describe('routes/_protected', () => {
         throw new Response(null, { status: 302, headers: { Location: path } })
       })
 
-      await expect(
-        clientLoader({ serverLoader: vi.fn() } as any)
-      ).rejects.toThrow()
+      await expect(clientLoader({ serverLoader: vi.fn() } as any)).rejects.toThrow()
       expect(mockRedirect).toHaveBeenCalledWith('/auth')
     })
 
@@ -396,9 +434,7 @@ describe('routes/_protected', () => {
         throw new Response(null, { status: 302, headers: { Location: path } })
       })
 
-      await expect(
-        clientLoader({ serverLoader: vi.fn() } as any)
-      ).rejects.toThrow()
+      await expect(clientLoader({ serverLoader: vi.fn() } as any)).rejects.toThrow()
       expect(mockRedirect).toHaveBeenCalledWith('/auth')
     })
 
@@ -439,7 +475,15 @@ describe('routes/_protected', () => {
             data: [
               {
                 squad_id: 's2',
-                squads: { id: 's2', name: 'Fallback', game: 'CS', invite_code: 'def', owner_id: 'c1', total_members: 3, created_at: '2026-01-01' },
+                squads: {
+                  id: 's2',
+                  name: 'Fallback',
+                  game: 'CS',
+                  invite_code: 'def',
+                  owner_id: 'c1',
+                  total_members: 3,
+                  created_at: '2026-01-01',
+                },
               },
             ],
           }),
@@ -464,12 +508,29 @@ describe('routes/_protected', () => {
 
       mockClientFrom.mockImplementation((table: string) => {
         if (table === 'profiles') {
-          return { select: vi.fn().mockReturnValue({ eq: vi.fn().mockReturnValue({ single: vi.fn().mockResolvedValue({ data: null }) }) }) }
+          return {
+            select: vi.fn().mockReturnValue({
+              eq: vi.fn().mockReturnValue({ single: vi.fn().mockResolvedValue({ data: null }) }),
+            }),
+          }
         }
         return {
           select: vi.fn().mockReturnValue({
             eq: vi.fn().mockResolvedValue({
-              data: [{ squad_id: 's1', squads: { id: 's1', name: 'S', game: 'G', invite_code: 'x', owner_id: 'c1', total_members: null, created_at: '2026-01-01' } }],
+              data: [
+                {
+                  squad_id: 's1',
+                  squads: {
+                    id: 's1',
+                    name: 'S',
+                    game: 'G',
+                    invite_code: 'x',
+                    owner_id: 'c1',
+                    total_members: null,
+                    created_at: '2026-01-01',
+                  },
+                },
+              ],
             }),
           }),
         }

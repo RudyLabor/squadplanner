@@ -120,10 +120,7 @@ describe('challengeTracker', () => {
   })
 
   it('should mark completed immediately if target is 1 and inserting', async () => {
-    setupChallenges(
-      [{ id: 'ch-1', requirements: { type: 'session_join', count: 1 } }],
-      []
-    )
+    setupChallenges([{ id: 'ch-1', requirements: { type: 'session_join', count: 1 } }], [])
 
     await trackChallengeProgress('user-1', 'session_join')
 

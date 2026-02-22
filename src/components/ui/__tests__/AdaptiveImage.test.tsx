@@ -58,9 +58,7 @@ describe('AdaptiveImage', () => {
 
     // High tier
     useAdaptiveLoadingMock.mockReturnValue({ tier: 'high' })
-    render(
-      <AdaptiveImage src="/full.jpg" srcMedium="/med.jpg" srcLow="/low.jpg" alt="high-test" />
-    )
+    render(<AdaptiveImage src="/full.jpg" srcMedium="/med.jpg" srcLow="/low.jpg" alt="high-test" />)
     expect(screen.getByAltText('high-test')).toHaveAttribute('src', '/full.jpg')
   })
 
@@ -68,11 +66,7 @@ describe('AdaptiveImage', () => {
   it('shows placeholder with blur-up effect and hides after load', () => {
     useAdaptiveLoadingMock.mockReturnValue({ tier: 'high' })
     const { container } = render(
-      <AdaptiveImage
-        src="/full.jpg"
-        alt="With placeholder"
-        placeholder="data:image/svg+xml,tiny"
-      />
+      <AdaptiveImage src="/full.jpg" alt="With placeholder" placeholder="data:image/svg+xml,tiny" />
     )
 
     // Placeholder image is present (aria-hidden, blurred)
@@ -115,11 +109,7 @@ describe('AdaptiveImage', () => {
   it('shows slow connection overlay on low tier when only placeholder is available', () => {
     useAdaptiveLoadingMock.mockReturnValue({ tier: 'low' })
     render(
-      <AdaptiveImage
-        src="/full.jpg"
-        alt="Slow connection"
-        placeholder="data:image/svg+xml,tiny"
-      />
+      <AdaptiveImage src="/full.jpg" alt="Slow connection" placeholder="data:image/svg+xml,tiny" />
     )
 
     // "Connexion lente" text shown

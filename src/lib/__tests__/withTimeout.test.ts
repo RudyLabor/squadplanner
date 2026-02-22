@@ -100,7 +100,9 @@ describe('withTimeout', () => {
     })
 
     it('should not swallow non-Error rejections', async () => {
-      await expect(withTimeout(Promise.reject('string rejection'), 5000)).rejects.toBe('string rejection')
+      await expect(withTimeout(Promise.reject('string rejection'), 5000)).rejects.toBe(
+        'string rejection'
+      )
     })
   })
 
@@ -131,7 +133,10 @@ describe('withTimeout', () => {
     })
 
     it('should preserve generic types', async () => {
-      interface User { id: string; name: string }
+      interface User {
+        id: string
+        name: string
+      }
       const user: User = { id: '1', name: 'Alice' }
       const result = await withTimeout(Promise.resolve(user), 1000)
       expect(result.id).toBe('1')

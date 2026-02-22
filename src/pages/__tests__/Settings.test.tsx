@@ -23,11 +23,34 @@ const mockH = vi.hoisted(() => {
   let capturedDeleteModalProps: any = null
 
   return {
-    mockNavigate, mockSignOut, mockShowSuccess, mockShowError, mockSetLocale,
-    get mockLocale() { return mockLocale }, set mockLocale(v: any) { mockLocale = v },
-    mockGetUser, mockSingle, mockEq, mockSelect, mockFrom,
-    get capturedToggleProps() { return capturedToggleProps }, set capturedToggleProps(v: any) { capturedToggleProps = v },
-    get capturedDeleteModalProps() { return capturedDeleteModalProps }, set capturedDeleteModalProps(v: any) { capturedDeleteModalProps = v },
+    mockNavigate,
+    mockSignOut,
+    mockShowSuccess,
+    mockShowError,
+    mockSetLocale,
+    get mockLocale() {
+      return mockLocale
+    },
+    set mockLocale(v: any) {
+      mockLocale = v
+    },
+    mockGetUser,
+    mockSingle,
+    mockEq,
+    mockSelect,
+    mockFrom,
+    get capturedToggleProps() {
+      return capturedToggleProps
+    },
+    set capturedToggleProps(v: any) {
+      capturedToggleProps = v
+    },
+    get capturedDeleteModalProps() {
+      return capturedDeleteModalProps
+    },
+    set capturedDeleteModalProps(v: any) {
+      capturedDeleteModalProps = v
+    },
   }
 })
 
@@ -39,7 +62,8 @@ vi.mock('react-router', () => ({
   useSearchParams: vi.fn().mockReturnValue([new URLSearchParams(), vi.fn()]),
   useLoaderData: vi.fn().mockReturnValue({}),
   Link: ({ children, to, ...props }: any) => createElement('a', { href: to, ...props }, children),
-  NavLink: ({ children, to, ...props }: any) => createElement('a', { href: to, ...props }, children),
+  NavLink: ({ children, to, ...props }: any) =>
+    createElement('a', { href: to, ...props }, children),
   Outlet: () => null,
   useMatches: vi.fn().mockReturnValue([]),
 }))
@@ -49,7 +73,8 @@ vi.mock('framer-motion', () => ({
   AnimatePresence: ({ children }: any) => children,
   LazyMotion: ({ children }: any) => children,
   MotionConfig: ({ children }: any) => children,
-  domAnimation: {}, domMax: {},
+  domAnimation: {},
+  domMax: {},
   useInView: vi.fn().mockReturnValue(true),
   useScroll: vi.fn().mockReturnValue({ scrollYProgress: { get: () => 0 } }),
   useTransform: vi.fn().mockReturnValue(0),
@@ -58,8 +83,24 @@ vi.mock('framer-motion', () => ({
   useAnimate: vi.fn().mockReturnValue([{ current: null }, vi.fn()]),
   useAnimation: vi.fn().mockReturnValue({ start: vi.fn(), stop: vi.fn() }),
   useReducedMotion: vi.fn().mockReturnValue(false),
-  m: new Proxy({}, { get: (_t: any, p: string) => typeof p === 'string' ? ({ children, ...r }: any) => createElement(p, r, children) : undefined }),
-  motion: new Proxy({}, { get: (_t: any, p: string) => typeof p === 'string' ? ({ children, ...r }: any) => createElement(p, r, children) : undefined }),
+  m: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
+  motion: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
 }))
 
 // Mock supabase
@@ -74,22 +115,48 @@ vi.mock('../../lib/supabaseMinimal', () => ({
     channel: vi.fn().mockReturnValue({ on: vi.fn().mockReturnThis(), subscribe: vi.fn() }),
     removeChannel: vi.fn(),
   },
-  supabase: { auth: { getSession: vi.fn() }, from: vi.fn(), rpc: vi.fn(), channel: vi.fn().mockReturnValue({ on: vi.fn().mockReturnThis(), subscribe: vi.fn() }), removeChannel: vi.fn() },
+  supabase: {
+    auth: { getSession: vi.fn() },
+    from: vi.fn(),
+    rpc: vi.fn(),
+    channel: vi.fn().mockReturnValue({ on: vi.fn().mockReturnThis(), subscribe: vi.fn() }),
+    removeChannel: vi.fn(),
+  },
   isSupabaseReady: vi.fn().mockReturnValue(true),
 }))
 
 // Mock auth store
 vi.mock('../../hooks/useAuth', () => ({
   useAuthStore: Object.assign(
-    vi.fn(() => ({ user: { id: 'user-1' }, profile: { id: 'user-1', username: 'TestUser' }, isLoading: false, signOut: mockH.mockSignOut })),
-    { getState: vi.fn().mockReturnValue({ user: { id: 'user-1' }, profile: { id: 'user-1', username: 'TestUser' } }) }
+    vi.fn(() => ({
+      user: { id: 'user-1' },
+      profile: { id: 'user-1', username: 'TestUser' },
+      isLoading: false,
+      signOut: mockH.mockSignOut,
+    })),
+    {
+      getState: vi.fn().mockReturnValue({
+        user: { id: 'user-1' },
+        profile: { id: 'user-1', username: 'TestUser' },
+      }),
+    }
   ),
 }))
 
 vi.mock('../../hooks', () => ({
   useAuthStore: Object.assign(
-    vi.fn(() => ({ user: { id: 'user-1' }, profile: { id: 'user-1', username: 'TestUser' }, isLoading: false, signOut: mockH.mockSignOut })),
-    { getState: vi.fn().mockReturnValue({ user: { id: 'user-1' }, profile: { id: 'user-1', username: 'TestUser' } }) }
+    vi.fn(() => ({
+      user: { id: 'user-1' },
+      profile: { id: 'user-1', username: 'TestUser' },
+      isLoading: false,
+      signOut: mockH.mockSignOut,
+    })),
+    {
+      getState: vi.fn().mockReturnValue({
+        user: { id: 'user-1' },
+        profile: { id: 'user-1', username: 'TestUser' },
+      }),
+    }
   ),
 }))
 
@@ -106,7 +173,9 @@ vi.mock('../../lib/i18n', () => ({
   useT: () => (key: string) => key,
   useLocale: () => mockH.mockLocale,
   useSetLocale: () => mockH.mockSetLocale,
-  useI18nStore: Object.assign(vi.fn().mockReturnValue({ locale: 'fr' }), { getState: vi.fn().mockReturnValue({ locale: 'fr' }) }),
+  useI18nStore: Object.assign(vi.fn().mockReturnValue({ locale: 'fr' }), {
+    getState: vi.fn().mockReturnValue({ locale: 'fr' }),
+  }),
 }))
 
 // Mock hash navigation
@@ -140,16 +209,35 @@ vi.mock('../../components/icons', () => ({
 // Mock UI components
 vi.mock('../../components/ui', () => ({
   Card: ({ children, ...props }: any) => createElement('div', props, children),
-  SegmentedControl: ({ options, value, onChange }: any) => createElement('div', { 'data-testid': 'segmented-control' },
-    options.map((o: any) => createElement('button', { key: o.value, onClick: () => onChange(o.value), 'data-active': o.value === value ? 'true' : undefined }, o.label))
-  ),
-  Select: ({ options, value, onChange, ...props }: any) => createElement('select', { value, onChange: (e: any) => onChange(e.target.value), ...props },
-    (options || []).map((o: any) => createElement('option', { key: o.value, value: o.value }, o.label))
-  ),
+  SegmentedControl: ({ options, value, onChange }: any) =>
+    createElement(
+      'div',
+      { 'data-testid': 'segmented-control' },
+      options.map((o: any) =>
+        createElement(
+          'button',
+          {
+            key: o.value,
+            onClick: () => onChange(o.value),
+            'data-active': o.value === value ? 'true' : undefined,
+          },
+          o.label
+        )
+      )
+    ),
+  Select: ({ options, value, onChange, ...props }: any) =>
+    createElement(
+      'select',
+      { value, onChange: (e: any) => onChange(e.target.value), ...props },
+      (options || []).map((o: any) =>
+        createElement('option', { key: o.value, value: o.value }, o.label)
+      )
+    ),
 }))
 
 vi.mock('../../components/layout/MobilePageHeader', () => ({
-  MobilePageHeader: ({ title }: any) => createElement('div', { 'data-testid': 'mobile-header' }, title),
+  MobilePageHeader: ({ title }: any) =>
+    createElement('div', { 'data-testid': 'mobile-header' }, title),
 }))
 
 // Mock settings sub-components with prop capture
@@ -164,20 +252,32 @@ vi.mock('../settings/SettingsComponents', () => ({
     })
   },
   SectionHeader: ({ title }: any) => createElement('h2', null, title),
-  SettingRow: ({ label, description, children }: any) => createElement('div', { 'data-testid': `setting-${label}` },
-    createElement('span', null, label),
-    description && createElement('span', null, description),
-    children
-  ),
-  ThemeSelector: ({ onSaved }: any) => createElement('div', { 'data-testid': 'theme-selector', onClick: onSaved }),
+  SettingRow: ({ label, description, children }: any) =>
+    createElement(
+      'div',
+      { 'data-testid': `setting-${label}` },
+      createElement('span', null, label),
+      description && createElement('span', null, description),
+      children
+    ),
+  ThemeSelector: ({ onSaved }: any) =>
+    createElement('div', { 'data-testid': 'theme-selector', onClick: onSaved }),
 }))
 
 vi.mock('../settings/SettingsDeleteModal', () => ({
   SettingsDeleteModal: (props: any) => {
     mockH.capturedDeleteModalProps = props
-    return props.isOpen ? createElement('div', { 'data-testid': 'delete-modal' },
-      createElement('button', { onClick: props.onClose, 'data-testid': 'close-delete-modal' }, 'Fermer')
-    ) : null
+    return props.isOpen
+      ? createElement(
+          'div',
+          { 'data-testid': 'delete-modal' },
+          createElement(
+            'button',
+            { onClick: props.onClose, 'data-testid': 'close-delete-modal' },
+            'Fermer'
+          )
+        )
+      : null
   },
 }))
 
@@ -189,7 +289,9 @@ describe('Settings Page', () => {
   beforeEach(() => {
     store = {}
     vi.spyOn(Storage.prototype, 'getItem').mockImplementation((key) => store[key] || null)
-    vi.spyOn(Storage.prototype, 'setItem').mockImplementation((key, value) => { store[key] = value })
+    vi.spyOn(Storage.prototype, 'setItem').mockImplementation((key, value) => {
+      store[key] = value
+    })
 
     Object.defineProperty(navigator, 'mediaDevices', {
       value: {
@@ -256,7 +358,12 @@ describe('Settings Page', () => {
     })
 
     it('loads notification settings from localStorage', () => {
-      store['sq-notification-settings'] = JSON.stringify({ sessions: false, messages: true, party: false, reminders: true })
+      store['sq-notification-settings'] = JSON.stringify({
+        sessions: false,
+        messages: true,
+        party: false,
+        reminders: true,
+      })
       renderSettings()
       // First toggle is sessions, should be false
       expect(mockH.capturedToggleProps[0].enabled).toBe(false)
@@ -296,7 +403,10 @@ describe('Settings Page', () => {
     })
 
     it('loads privacy settings from localStorage', () => {
-      store['sq-privacy-settings'] = JSON.stringify({ profileVisibility: 'private', showOnlineStatus: false })
+      store['sq-privacy-settings'] = JSON.stringify({
+        profileVisibility: 'private',
+        showOnlineStatus: false,
+      })
       renderSettings()
       // showOnlineStatus toggle - it's the 5th toggle (after 4 notification toggles)
       expect(mockH.capturedToggleProps[4].enabled).toBe(false)
@@ -387,7 +497,7 @@ describe('Settings Page', () => {
     it('links to correct legal pages', () => {
       renderSettings()
       const links = document.querySelectorAll('a')
-      const hrefs = Array.from(links).map(l => l.getAttribute('href'))
+      const hrefs = Array.from(links).map((l) => l.getAttribute('href'))
       expect(hrefs).toContain('/legal')
       expect(hrefs).toContain('/legal?tab=privacy')
       expect(hrefs).toContain('/?public=true')

@@ -16,18 +16,24 @@ vi.mock('framer-motion', () => ({
   useAnimate: vi.fn().mockReturnValue([{ current: null }, vi.fn()]),
   useAnimation: vi.fn().mockReturnValue({ start: vi.fn(), stop: vi.fn() }),
   useReducedMotion: vi.fn().mockReturnValue(false),
-  m: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
-  motion: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
+  m: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
+  motion: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
 }))
 
 vi.mock('../../icons', () => ({
@@ -36,9 +42,24 @@ vi.mock('../../icons', () => ({
 
 vi.mock('../MockupScreens', () => ({
   screens: [
-    { id: 'home', component: () => createElement('div', { 'data-testid': 'screen-home' }, 'HomeScreen'), label: 'Accueil', duration: 4000 },
-    { id: 'squad', component: () => createElement('div', { 'data-testid': 'screen-squad' }, 'SquadScreen'), label: 'Squad', duration: 4000 },
-    { id: 'party', component: () => createElement('div', { 'data-testid': 'screen-party' }, 'PartyScreen'), label: 'Party', duration: 3500 },
+    {
+      id: 'home',
+      component: () => createElement('div', { 'data-testid': 'screen-home' }, 'HomeScreen'),
+      label: 'Accueil',
+      duration: 4000,
+    },
+    {
+      id: 'squad',
+      component: () => createElement('div', { 'data-testid': 'screen-squad' }, 'SquadScreen'),
+      label: 'Squad',
+      duration: 4000,
+    },
+    {
+      id: 'party',
+      component: () => createElement('div', { 'data-testid': 'screen-party' }, 'PartyScreen'),
+      label: 'Party',
+      duration: 3500,
+    },
   ],
 }))
 
@@ -154,13 +175,19 @@ describe('HeroMockup', () => {
     expect(screen.getByTestId('screen-squad')).toBeInTheDocument()
 
     // Advance past the screen duration (4000ms) - should NOT auto-advance because paused
-    act(() => { vi.advanceTimersByTime(4500) })
+    act(() => {
+      vi.advanceTimersByTime(4500)
+    })
     expect(screen.getByTestId('screen-squad')).toBeInTheDocument()
 
     // After 5000ms total pause, auto-advance resumes
-    act(() => { vi.advanceTimersByTime(1000) })
+    act(() => {
+      vi.advanceTimersByTime(1000)
+    })
     // After pause resumes, it takes another screen.duration to advance
-    act(() => { vi.advanceTimersByTime(4500) })
+    act(() => {
+      vi.advanceTimersByTime(4500)
+    })
     // Should now have auto-advanced to the next screen (party)
     expect(screen.getByTestId('screen-party')).toBeInTheDocument()
   })
@@ -172,7 +199,9 @@ describe('HeroMockup', () => {
     expect(screen.getByTestId('screen-home')).toBeInTheDocument()
 
     // First screen duration is 4000ms
-    act(() => { vi.advanceTimersByTime(4100) })
+    act(() => {
+      vi.advanceTimersByTime(4100)
+    })
 
     expect(screen.getByTestId('screen-squad')).toBeInTheDocument()
   })
@@ -181,11 +210,15 @@ describe('HeroMockup', () => {
     render(<HeroMockup />)
 
     // Advance past screen 0
-    act(() => { vi.advanceTimersByTime(4100) })
+    act(() => {
+      vi.advanceTimersByTime(4100)
+    })
     expect(screen.getByTestId('screen-squad')).toBeInTheDocument()
 
     // Screen 1 duration is 4000ms
-    act(() => { vi.advanceTimersByTime(4100) })
+    act(() => {
+      vi.advanceTimersByTime(4100)
+    })
     expect(screen.getByTestId('screen-party')).toBeInTheDocument()
   })
 
@@ -193,9 +226,15 @@ describe('HeroMockup', () => {
     render(<HeroMockup />)
 
     // Advance through all 3 screens
-    act(() => { vi.advanceTimersByTime(4100) }) // -> squad
-    act(() => { vi.advanceTimersByTime(4100) }) // -> party
-    act(() => { vi.advanceTimersByTime(3600) }) // -> home (wraps)
+    act(() => {
+      vi.advanceTimersByTime(4100)
+    }) // -> squad
+    act(() => {
+      vi.advanceTimersByTime(4100)
+    }) // -> party
+    act(() => {
+      vi.advanceTimersByTime(3600)
+    }) // -> home (wraps)
 
     expect(screen.getByTestId('screen-home')).toBeInTheDocument()
   })

@@ -9,7 +9,8 @@ vi.mock('react-router', () => ({
   useSearchParams: vi.fn().mockReturnValue([new URLSearchParams(), vi.fn()]),
   useLoaderData: vi.fn().mockReturnValue({}),
   Link: ({ children, to, ...props }: any) => createElement('a', { href: to, ...props }, children),
-  NavLink: ({ children, to, ...props }: any) => createElement('a', { href: to, ...props }, children),
+  NavLink: ({ children, to, ...props }: any) =>
+    createElement('a', { href: to, ...props }, children),
   Outlet: () => null,
   useMatches: vi.fn().mockReturnValue([]),
 }))
@@ -28,28 +29,55 @@ vi.mock('framer-motion', () => ({
   useAnimate: vi.fn().mockReturnValue([{ current: null }, vi.fn()]),
   useAnimation: vi.fn().mockReturnValue({ start: vi.fn(), stop: vi.fn() }),
   useReducedMotion: vi.fn().mockReturnValue(false),
-  m: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
-  motion: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
+  m: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
+  motion: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
 }))
 
 // Mock icons with data-testid including the icon name for trend detection
-vi.mock('../../icons', () => new Proxy({}, { get: (_t, p) => typeof p === 'string' ? (props: any) => createElement('span', { 'data-testid': `icon-${p}`, ...props }) : undefined }))
+vi.mock(
+  '../../icons',
+  () =>
+    new Proxy(
+      {},
+      {
+        get: (_t, p) =>
+          typeof p === 'string'
+            ? (props: any) => createElement('span', { 'data-testid': `icon-${p}`, ...props })
+            : undefined,
+      }
+    )
+)
 
 // Mock ui but expose the props so we can verify what AnimatedCounter receives
 vi.mock('../../ui', () => ({
   AnimatedCounter: ({ end, suffix, duration }: any) =>
-    createElement('span', { 'data-testid': 'counter', 'data-end': end, 'data-suffix': suffix || '', 'data-duration': duration }, `${end}${suffix || ''}`),
-  ContentTransition: ({ children, isLoading, skeleton }: any) => isLoading ? skeleton : children,
+    createElement(
+      'span',
+      {
+        'data-testid': 'counter',
+        'data-end': end,
+        'data-suffix': suffix || '',
+        'data-duration': duration,
+      },
+      `${end}${suffix || ''}`
+    ),
+  ContentTransition: ({ children, isLoading, skeleton }: any) => (isLoading ? skeleton : children),
   SkeletonStatsRow: () => createElement('div', { 'data-testid': 'skeleton-stats' }),
 }))
 
@@ -94,7 +122,13 @@ describe('HomeStatsSection', () => {
   })
 
   it('shows skeleton when both are loading', () => {
-    render(createElement(HomeStatsSection, { ...defaultProps, squadsLoading: true, sessionsLoading: true }))
+    render(
+      createElement(HomeStatsSection, {
+        ...defaultProps,
+        squadsLoading: true,
+        sessionsLoading: true,
+      })
+    )
     expect(screen.getByTestId('skeleton-stats')).toBeDefined()
   })
 
@@ -114,14 +148,18 @@ describe('HomeStatsSection', () => {
   })
 
   it('renders with zero values', () => {
-    render(createElement(HomeStatsSection, { ...defaultProps, squadsCount: 0, sessionsThisWeek: 0 }))
+    render(
+      createElement(HomeStatsSection, { ...defaultProps, squadsCount: 0, sessionsThisWeek: 0 })
+    )
     const counters = screen.getAllByTestId('counter')
     expect(counters[0].textContent).toBe('0')
     expect(counters[1].textContent).toBe('0')
   })
 
   it('renders with large values', () => {
-    render(createElement(HomeStatsSection, { ...defaultProps, squadsCount: 99, sessionsThisWeek: 50 }))
+    render(
+      createElement(HomeStatsSection, { ...defaultProps, squadsCount: 99, sessionsThisWeek: 50 })
+    )
     const counters = screen.getAllByTestId('counter')
     expect(counters[0].textContent).toBe('99')
     expect(counters[1].textContent).toBe('50')
@@ -149,13 +187,13 @@ describe('HomeStatsSection', () => {
   it('links squads stat to /squads', () => {
     render(createElement(HomeStatsSection, defaultProps))
     const links = screen.getAllByRole('link')
-    expect(links.some(l => l.getAttribute('href') === '/squads')).toBe(true)
+    expect(links.some((l) => l.getAttribute('href') === '/squads')).toBe(true)
   })
 
   it('links sessions stat to /sessions', () => {
     render(createElement(HomeStatsSection, defaultProps))
     const links = screen.getAllByRole('link')
-    expect(links.some(l => l.getAttribute('href') === '/sessions')).toBe(true)
+    expect(links.some((l) => l.getAttribute('href') === '/sessions')).toBe(true)
   })
 
   // === TREND ICON (getSessionsTrend) ===

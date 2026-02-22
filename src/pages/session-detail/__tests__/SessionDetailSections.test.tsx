@@ -16,21 +16,39 @@ vi.mock('framer-motion', () => ({
   useAnimate: vi.fn().mockReturnValue([{ current: null }, vi.fn()]),
   useAnimation: vi.fn().mockReturnValue({ start: vi.fn(), stop: vi.fn() }),
   useReducedMotion: vi.fn().mockReturnValue(false),
-  m: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
-  motion: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
+  m: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
+  motion: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
 }))
 
-vi.mock('../../../components/icons', () => new Proxy({}, { get: (_t: any, p: string) => typeof p === 'string' ? ({ children, ...props }: any) => createElement('span', props, children) : undefined }))
+vi.mock(
+  '../../../components/icons',
+  () =>
+    new Proxy(
+      {},
+      {
+        get: (_t: any, p: string) =>
+          typeof p === 'string'
+            ? ({ children, ...props }: any) => createElement('span', props, children)
+            : undefined,
+      }
+    )
+)
 
 vi.mock('../../../components/ui', () => ({
   Button: ({ children, ...props }: any) => createElement('button', props, children),
@@ -39,11 +57,19 @@ vi.mock('../../../components/ui', () => ({
   Badge: ({ children, ...props }: any) => createElement('span', props, children),
 }))
 
-import { SessionInfoCards, RsvpCounts, RsvpButtons, CheckinSection, ParticipantsList } from '../SessionDetailSections'
+import {
+  SessionInfoCards,
+  RsvpCounts,
+  RsvpButtons,
+  CheckinSection,
+  ParticipantsList,
+} from '../SessionDetailSections'
 
 describe('SessionInfoCards', () => {
   it('renders without crashing', () => {
-    const { container } = render(<SessionInfoCards dateInfo={{ day: 'Lundi', time: '21:00' }} durationMinutes={60} />)
+    const { container } = render(
+      <SessionInfoCards dateInfo={{ day: 'Lundi', time: '21:00' }} durationMinutes={60} />
+    )
     expect(container).toBeTruthy()
   })
 

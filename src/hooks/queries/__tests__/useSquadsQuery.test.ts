@@ -7,12 +7,16 @@ import { createElement } from 'react'
 const { mockSupabase, mockFrom } = vi.hoisted(() => {
   const mockFrom = vi.fn()
   const mockGetUser = vi.fn().mockResolvedValue({ data: { user: { id: 'user-1' } } })
-  const mockGetSession = vi.fn().mockResolvedValue({ data: { session: { user: { id: 'user-1' } } } })
+  const mockGetSession = vi
+    .fn()
+    .mockResolvedValue({ data: { session: { user: { id: 'user-1' } } } })
   const mockSupabase = {
     auth: { getSession: mockGetSession, getUser: mockGetUser },
     from: mockFrom,
     rpc: vi.fn().mockResolvedValue({ data: [], error: null }),
-    channel: vi.fn().mockReturnValue({ on: vi.fn().mockReturnThis(), subscribe: vi.fn().mockReturnThis() }),
+    channel: vi
+      .fn()
+      .mockReturnValue({ on: vi.fn().mockReturnThis(), subscribe: vi.fn().mockReturnThis() }),
     removeChannel: vi.fn(),
   }
   return { mockSupabase, mockFrom }
@@ -48,9 +52,12 @@ vi.mock('../useSquadsMutations', () => ({
 
 // Auth store mock
 vi.mock('../../useAuth', () => ({
-  useAuthStore: Object.assign(vi.fn().mockReturnValue({ user: { id: 'user-1' }, profile: { id: 'user-1' } }), {
-    getState: vi.fn().mockReturnValue({ user: { id: 'user-1' }, profile: { id: 'user-1' } }),
-  }),
+  useAuthStore: Object.assign(
+    vi.fn().mockReturnValue({ user: { id: 'user-1' }, profile: { id: 'user-1' } }),
+    {
+      getState: vi.fn().mockReturnValue({ user: { id: 'user-1' }, profile: { id: 'user-1' } }),
+    }
+  ),
 }))
 
 // Toast mock
@@ -114,11 +121,27 @@ describe('useSquadsQuery', () => {
     const memberships = [
       {
         squad_id: 'sq-1',
-        squads: { id: 'sq-1', name: 'Alpha', game: 'Valorant', invite_code: 'ABC', owner_id: 'u1', total_members: 3, created_at: '2026-01-01T00:00:00Z' },
+        squads: {
+          id: 'sq-1',
+          name: 'Alpha',
+          game: 'Valorant',
+          invite_code: 'ABC',
+          owner_id: 'u1',
+          total_members: 3,
+          created_at: '2026-01-01T00:00:00Z',
+        },
       },
       {
         squad_id: 'sq-2',
-        squads: { id: 'sq-2', name: 'Beta', game: 'LoL', invite_code: 'DEF', owner_id: 'u2', total_members: 5, created_at: '2026-02-01T00:00:00Z' },
+        squads: {
+          id: 'sq-2',
+          name: 'Beta',
+          game: 'LoL',
+          invite_code: 'DEF',
+          owner_id: 'u2',
+          total_members: 5,
+          created_at: '2026-02-01T00:00:00Z',
+        },
       },
     ]
 
@@ -144,11 +167,27 @@ describe('useSquadsQuery', () => {
     const memberships = [
       {
         squad_id: 'sq-1',
-        squads: { id: 'sq-1', name: 'Alpha', game: 'V', invite_code: 'A', owner_id: 'u1', total_members: 2, created_at: '2026-01-01T00:00:00Z' },
+        squads: {
+          id: 'sq-1',
+          name: 'Alpha',
+          game: 'V',
+          invite_code: 'A',
+          owner_id: 'u1',
+          total_members: 2,
+          created_at: '2026-01-01T00:00:00Z',
+        },
       },
       {
         squad_id: 'sq-1', // duplicate
-        squads: { id: 'sq-1', name: 'Alpha', game: 'V', invite_code: 'A', owner_id: 'u1', total_members: 2, created_at: '2026-01-01T00:00:00Z' },
+        squads: {
+          id: 'sq-1',
+          name: 'Alpha',
+          game: 'V',
+          invite_code: 'A',
+          owner_id: 'u1',
+          total_members: 2,
+          created_at: '2026-01-01T00:00:00Z',
+        },
       },
     ]
 
@@ -181,7 +220,15 @@ describe('useSquadsQuery', () => {
     const memberships = [
       {
         squad_id: 'sq-1',
-        squads: { id: 'sq-1', name: 'Solo', game: 'V', invite_code: 'A', owner_id: 'u1', total_members: undefined, created_at: '2026-01-01T00:00:00Z' },
+        squads: {
+          id: 'sq-1',
+          name: 'Solo',
+          game: 'V',
+          invite_code: 'A',
+          owner_id: 'u1',
+          total_members: undefined,
+          created_at: '2026-01-01T00:00:00Z',
+        },
       },
     ]
 
@@ -233,13 +280,30 @@ describe('useSquadQuery', () => {
   })
 
   it('fetches squad by id with members', async () => {
-    const squad = { id: 'sq-1', name: 'Alpha', game: 'V', invite_code: 'A', owner_id: 'u1', created_at: '2026-01-01T00:00:00Z' }
+    const squad = {
+      id: 'sq-1',
+      name: 'Alpha',
+      game: 'V',
+      invite_code: 'A',
+      owner_id: 'u1',
+      created_at: '2026-01-01T00:00:00Z',
+    }
     const members = [
-      { id: 'm1', user_id: 'u1', squad_id: 'sq-1', profiles: { username: 'alice', avatar_url: null, reliability_score: 0.9 } },
-      { id: 'm2', user_id: 'u2', squad_id: 'sq-1', profiles: { username: 'bob', avatar_url: 'bob.png', reliability_score: 0.8 } },
+      {
+        id: 'm1',
+        user_id: 'u1',
+        squad_id: 'sq-1',
+        profiles: { username: 'alice', avatar_url: null, reliability_score: 0.9 },
+      },
+      {
+        id: 'm2',
+        user_id: 'u2',
+        squad_id: 'sq-1',
+        profiles: { username: 'bob', avatar_url: 'bob.png', reliability_score: 0.8 },
+      },
     ]
 
-    let callCount = 0
+    const callCount = 0
     mockFrom.mockImplementation((table: string) => {
       if (table === 'squads') {
         return {
@@ -270,7 +334,14 @@ describe('useSquadQuery', () => {
   })
 
   it('handles members being null', async () => {
-    const squad = { id: 'sq-1', name: 'Alpha', game: 'V', invite_code: 'A', owner_id: 'u1', created_at: '2026-01-01T00:00:00Z' }
+    const squad = {
+      id: 'sq-1',
+      name: 'Alpha',
+      game: 'V',
+      invite_code: 'A',
+      owner_id: 'u1',
+      created_at: '2026-01-01T00:00:00Z',
+    }
 
     mockFrom.mockImplementation((table: string) => {
       if (table === 'squads') {

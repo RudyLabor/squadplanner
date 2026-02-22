@@ -232,7 +232,10 @@ describe('DeferredSeed', () => {
     it('getQueryData returns exact seeded value for complex nested objects', () => {
       const queryClient = new QueryClient({ defaultOptions: { queries: { retry: false } } })
       const complexData = {
-        users: [{ id: '1', name: 'Alice' }, { id: '2', name: 'Bob' }],
+        users: [
+          { id: '1', name: 'Alice' },
+          { id: '2', name: 'Bob' },
+        ],
         meta: { page: 1, total: 42 },
       }
       render(

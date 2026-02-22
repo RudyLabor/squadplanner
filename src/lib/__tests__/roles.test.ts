@@ -1,5 +1,11 @@
 import { describe, it, expect } from 'vitest'
-import { ROLE_CONFIG, hasPermission, getRoleConfig, getPromotableRoles, canManageMember } from '../roles'
+import {
+  ROLE_CONFIG,
+  hasPermission,
+  getRoleConfig,
+  getPromotableRoles,
+  canManageMember,
+} from '../roles'
 
 describe('roles', () => {
   it('ROLE_CONFIG has 4 roles', () => {

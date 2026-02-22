@@ -156,7 +156,10 @@ describe('optimisticUpdate', () => {
         qc._setData(['squads', 'detail', '1'], { name: 'Squad 1' })
 
         const handlers = createOptimisticMutation(qc as any, {
-          queryKeys: [['squads', 'list'], ['squads', 'detail', '1']],
+          queryKeys: [
+            ['squads', 'list'],
+            ['squads', 'detail', '1'],
+          ],
           updateCache: vi.fn(),
         })
 
@@ -197,10 +200,7 @@ describe('optimisticUpdate', () => {
         // Now simulate error - should roll back
         handlers.onError(new Error('Network error'), {}, context)
 
-        expect(qc.setQueryData).toHaveBeenCalledWith(
-          ['squads'],
-          [{ id: '1' }]
-        )
+        expect(qc.setQueryData).toHaveBeenCalledWith(['squads'], [{ id: '1' }])
       })
 
       it('shows default error toast', () => {
@@ -316,7 +316,10 @@ describe('optimisticUpdate', () => {
         const handlers = createOptimisticMutation(qc as any, {
           queryKeys: [['squads']],
           updateCache: vi.fn(),
-          invalidateKeys: [['squads', 'list'], ['squads', 'detail']],
+          invalidateKeys: [
+            ['squads', 'list'],
+            ['squads', 'detail'],
+          ],
         })
 
         handlers.onSettled(undefined, null, {})

@@ -12,7 +12,9 @@ const mockSearchParams = vi.hoisted(() => new URLSearchParams())
 // vi.mock declarations
 // ---------------------------------------------------------------------------
 vi.mock('react-router', () => ({
-  useLocation: vi.fn().mockReturnValue({ pathname: '/auth/discord/callback', hash: '', search: '' }),
+  useLocation: vi
+    .fn()
+    .mockReturnValue({ pathname: '/auth/discord/callback', hash: '', search: '' }),
   useNavigate: () => mockNavigate,
   useParams: vi.fn().mockReturnValue({}),
   useSearchParams: () => [mockSearchParams, vi.fn()],
@@ -35,22 +37,29 @@ vi.mock('framer-motion', () => ({
   useAnimate: vi.fn().mockReturnValue([{ current: null }, vi.fn()]),
   useAnimation: vi.fn().mockReturnValue({ start: vi.fn(), stop: vi.fn() }),
   useReducedMotion: vi.fn().mockReturnValue(false),
-  m: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
-  motion: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
+  m: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
+  motion: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
 }))
 
 vi.mock('../../pages/DiscordCallback', () => ({
-  DiscordCallback: () => createElement('div', { 'data-testid': 'discord-callback' }, 'DiscordCallback'),
+  DiscordCallback: () =>
+    createElement('div', { 'data-testid': 'discord-callback' }, 'DiscordCallback'),
 }))
 
 import DefaultExport, { meta } from '../discord-callback'

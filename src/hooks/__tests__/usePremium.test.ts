@@ -403,10 +403,12 @@ describe('usePremiumStore — store logic', () => {
     })
 
     it('free user with premium squad gets premium-level access for that squad', () => {
-      act(() => usePremiumStore.setState({
-        tier: 'free',
-        premiumSquads: [{ squadId: 'sq-premium', isPremium: true }],
-      }))
+      act(() =>
+        usePremiumStore.setState({
+          tier: 'free',
+          premiumSquads: [{ squadId: 'sq-premium', isPremium: true }],
+        })
+      )
       // Premium features accessible via squad
       expect(usePremiumStore.getState().canAccessFeature('gifs', 'sq-premium')).toBe(true)
       expect(usePremiumStore.getState().canAccessFeature('polls', 'sq-premium')).toBe(true)
@@ -415,10 +417,12 @@ describe('usePremiumStore — store logic', () => {
     })
 
     it('free user with premium squad but no squadId param → denied', () => {
-      act(() => usePremiumStore.setState({
-        tier: 'free',
-        premiumSquads: [{ squadId: 'sq-premium', isPremium: true }],
-      }))
+      act(() =>
+        usePremiumStore.setState({
+          tier: 'free',
+          premiumSquads: [{ squadId: 'sq-premium', isPremium: true }],
+        })
+      )
       expect(usePremiumStore.getState().canAccessFeature('gifs')).toBe(false)
     })
   })
@@ -461,13 +465,15 @@ describe('usePremiumStore — store logic', () => {
 
   describe('reset()', () => {
     it('resets all state to free defaults', () => {
-      act(() => usePremiumStore.setState({
-        tier: 'club',
-        hasPremium: true,
-        premiumSquads: [{ squadId: 's1', isPremium: true }],
-        userSquadCount: 42,
-        isLoading: true,
-      }))
+      act(() =>
+        usePremiumStore.setState({
+          tier: 'club',
+          hasPremium: true,
+          premiumSquads: [{ squadId: 's1', isPremium: true }],
+          userSquadCount: 42,
+          isLoading: true,
+        })
+      )
 
       act(() => usePremiumStore.getState().reset())
 

@@ -28,7 +28,11 @@ const mockH = vi.hoisted(() => {
   let activeDMConv: any = null
   let isLoadingSquad = false
   let isLoadingDM = false
-  let mockUser: any = { id: 'user-1', user_metadata: { username: 'TestUser' }, email: 'test@test.com' }
+  let mockUser: any = {
+    id: 'user-1',
+    user_metadata: { username: 'TestUser' },
+    email: 'test@test.com',
+  }
   let mockSearchParams = new URLSearchParams()
   let mockSquadMembers: any[] = []
   let mockActiveTab: 'squads' | 'dms' = 'squads'
@@ -42,29 +46,128 @@ const mockH = vi.hoisted(() => {
   let capturedMessageComposerProps: any = null
 
   return {
-    mockSetSearchParams, mockFetchSquadConvs, mockFetchDMConvs,
-    mockSetActiveSquadConv, mockSetActiveDMConv, mockSendSquadMessage,
-    mockSendDMMessage, mockEditSquadMessage, mockDeleteSquadMessage,
-    mockPinSquadMessage, mockMarkSquadAsRead, mockUnsubscribeSquad,
-    mockUnsubscribeDM, mockHandleTyping,
-    get squadMessages() { return squadMessages }, set squadMessages(v: any) { squadMessages = v },
-    get dmMessages() { return dmMessages }, set dmMessages(v: any) { dmMessages = v },
-    get squadConversations() { return squadConversations }, set squadConversations(v: any) { squadConversations = v },
-    get dmConversations() { return dmConversations }, set dmConversations(v: any) { dmConversations = v },
-    get activeSquadConv() { return activeSquadConv }, set activeSquadConv(v: any) { activeSquadConv = v },
-    get activeDMConv() { return activeDMConv }, set activeDMConv(v: any) { activeDMConv = v },
-    get isLoadingSquad() { return isLoadingSquad }, set isLoadingSquad(v: boolean) { isLoadingSquad = v },
-    get isLoadingDM() { return isLoadingDM }, set isLoadingDM(v: boolean) { isLoadingDM = v },
-    get mockUser() { return mockUser }, set mockUser(v: any) { mockUser = v },
-    get mockSearchParams() { return mockSearchParams }, set mockSearchParams(v: any) { mockSearchParams = v },
-    get mockSquadMembers() { return mockSquadMembers }, set mockSquadMembers(v: any) { mockSquadMembers = v },
-    get mockActiveTab() { return mockActiveTab }, set mockActiveTab(v: any) { mockActiveTab = v },
-    get mockSetActiveTab() { return mockSetActiveTab }, set mockSetActiveTab(v: any) { mockSetActiveTab = v },
-    get mockHasPermission() { return mockHasPermission }, set mockHasPermission(v: boolean) { mockHasPermission = v },
-    get capturedConvListProps() { return capturedConvListProps }, set capturedConvListProps(v: any) { capturedConvListProps = v },
-    get capturedConvHeaderProps() { return capturedConvHeaderProps }, set capturedConvHeaderProps(v: any) { capturedConvHeaderProps = v },
-    get capturedMessageThreadProps() { return capturedMessageThreadProps }, set capturedMessageThreadProps(v: any) { capturedMessageThreadProps = v },
-    get capturedMessageComposerProps() { return capturedMessageComposerProps }, set capturedMessageComposerProps(v: any) { capturedMessageComposerProps = v },
+    mockSetSearchParams,
+    mockFetchSquadConvs,
+    mockFetchDMConvs,
+    mockSetActiveSquadConv,
+    mockSetActiveDMConv,
+    mockSendSquadMessage,
+    mockSendDMMessage,
+    mockEditSquadMessage,
+    mockDeleteSquadMessage,
+    mockPinSquadMessage,
+    mockMarkSquadAsRead,
+    mockUnsubscribeSquad,
+    mockUnsubscribeDM,
+    mockHandleTyping,
+    get squadMessages() {
+      return squadMessages
+    },
+    set squadMessages(v: any) {
+      squadMessages = v
+    },
+    get dmMessages() {
+      return dmMessages
+    },
+    set dmMessages(v: any) {
+      dmMessages = v
+    },
+    get squadConversations() {
+      return squadConversations
+    },
+    set squadConversations(v: any) {
+      squadConversations = v
+    },
+    get dmConversations() {
+      return dmConversations
+    },
+    set dmConversations(v: any) {
+      dmConversations = v
+    },
+    get activeSquadConv() {
+      return activeSquadConv
+    },
+    set activeSquadConv(v: any) {
+      activeSquadConv = v
+    },
+    get activeDMConv() {
+      return activeDMConv
+    },
+    set activeDMConv(v: any) {
+      activeDMConv = v
+    },
+    get isLoadingSquad() {
+      return isLoadingSquad
+    },
+    set isLoadingSquad(v: boolean) {
+      isLoadingSquad = v
+    },
+    get isLoadingDM() {
+      return isLoadingDM
+    },
+    set isLoadingDM(v: boolean) {
+      isLoadingDM = v
+    },
+    get mockUser() {
+      return mockUser
+    },
+    set mockUser(v: any) {
+      mockUser = v
+    },
+    get mockSearchParams() {
+      return mockSearchParams
+    },
+    set mockSearchParams(v: any) {
+      mockSearchParams = v
+    },
+    get mockSquadMembers() {
+      return mockSquadMembers
+    },
+    set mockSquadMembers(v: any) {
+      mockSquadMembers = v
+    },
+    get mockActiveTab() {
+      return mockActiveTab
+    },
+    set mockActiveTab(v: any) {
+      mockActiveTab = v
+    },
+    get mockSetActiveTab() {
+      return mockSetActiveTab
+    },
+    set mockSetActiveTab(v: any) {
+      mockSetActiveTab = v
+    },
+    get mockHasPermission() {
+      return mockHasPermission
+    },
+    set mockHasPermission(v: boolean) {
+      mockHasPermission = v
+    },
+    get capturedConvListProps() {
+      return capturedConvListProps
+    },
+    set capturedConvListProps(v: any) {
+      capturedConvListProps = v
+    },
+    get capturedConvHeaderProps() {
+      return capturedConvHeaderProps
+    },
+    set capturedConvHeaderProps(v: any) {
+      capturedConvHeaderProps = v
+    },
+    get capturedMessageThreadProps() {
+      return capturedMessageThreadProps
+    },
+    set capturedMessageThreadProps(v: any) {
+      capturedMessageThreadProps = v
+    },
+    get capturedMessageComposerProps() {
+      return capturedMessageComposerProps
+    },
+    set capturedMessageComposerProps(v: any) {
+      capturedMessageComposerProps = v
+    },
   }
 })
 
@@ -76,7 +179,8 @@ vi.mock('react-router', () => ({
   useSearchParams: vi.fn(() => [mockH.mockSearchParams, mockH.mockSetSearchParams]),
   useLoaderData: vi.fn().mockReturnValue({}),
   Link: ({ children, to, ...props }: any) => createElement('a', { href: to, ...props }, children),
-  NavLink: ({ children, to, ...props }: any) => createElement('a', { href: to, ...props }, children),
+  NavLink: ({ children, to, ...props }: any) =>
+    createElement('a', { href: to, ...props }, children),
   Outlet: () => null,
   useMatches: vi.fn().mockReturnValue([]),
 }))
@@ -86,7 +190,8 @@ vi.mock('framer-motion', () => ({
   AnimatePresence: ({ children }: any) => children,
   LazyMotion: ({ children }: any) => children,
   MotionConfig: ({ children }: any) => children,
-  domAnimation: {}, domMax: {},
+  domAnimation: {},
+  domMax: {},
   useInView: vi.fn().mockReturnValue(true),
   useScroll: vi.fn().mockReturnValue({ scrollYProgress: { get: () => 0 } }),
   useTransform: vi.fn().mockReturnValue(0),
@@ -95,35 +200,89 @@ vi.mock('framer-motion', () => ({
   useAnimate: vi.fn().mockReturnValue([{ current: null }, vi.fn()]),
   useAnimation: vi.fn().mockReturnValue({ start: vi.fn(), stop: vi.fn() }),
   useReducedMotion: vi.fn().mockReturnValue(false),
-  m: new Proxy({}, { get: (_t: any, p: string) => typeof p === 'string' ? ({ children, ...r }: any) => createElement(p, r, children) : undefined }),
-  motion: new Proxy({}, { get: (_t: any, p: string) => typeof p === 'string' ? ({ children, ...r }: any) => createElement(p, r, children) : undefined }),
+  m: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
+  motion: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
 }))
 
 // Mock supabase
 vi.mock('../../lib/supabaseMinimal', () => ({
-  supabaseMinimal: { auth: { getSession: vi.fn() }, from: vi.fn().mockReturnValue({ select: vi.fn().mockReturnValue({ eq: vi.fn().mockReturnValue({ single: vi.fn().mockResolvedValue({ data: { id: 'dm-user', username: 'DMUser', avatar_url: null } }) }) }) }), rpc: vi.fn(), channel: vi.fn().mockReturnValue({ on: vi.fn().mockReturnThis(), subscribe: vi.fn() }), removeChannel: vi.fn() },
-  supabase: { auth: { getSession: vi.fn() }, from: vi.fn().mockReturnValue({ select: vi.fn().mockReturnValue({ eq: vi.fn().mockReturnValue({ single: vi.fn().mockResolvedValue({ data: null }) }) }) }), rpc: vi.fn(), channel: vi.fn().mockReturnValue({ on: vi.fn().mockReturnThis(), subscribe: vi.fn() }), removeChannel: vi.fn() },
+  supabaseMinimal: {
+    auth: { getSession: vi.fn() },
+    from: vi.fn().mockReturnValue({
+      select: vi.fn().mockReturnValue({
+        eq: vi.fn().mockReturnValue({
+          single: vi.fn().mockResolvedValue({
+            data: { id: 'dm-user', username: 'DMUser', avatar_url: null },
+          }),
+        }),
+      }),
+    }),
+    rpc: vi.fn(),
+    channel: vi.fn().mockReturnValue({ on: vi.fn().mockReturnThis(), subscribe: vi.fn() }),
+    removeChannel: vi.fn(),
+  },
+  supabase: {
+    auth: { getSession: vi.fn() },
+    from: vi.fn().mockReturnValue({
+      select: vi.fn().mockReturnValue({
+        eq: vi.fn().mockReturnValue({ single: vi.fn().mockResolvedValue({ data: null }) }),
+      }),
+    }),
+    rpc: vi.fn(),
+    channel: vi.fn().mockReturnValue({ on: vi.fn().mockReturnThis(), subscribe: vi.fn() }),
+    removeChannel: vi.fn(),
+  },
   isSupabaseReady: vi.fn().mockReturnValue(true),
 }))
 
 // Mock auth store
 vi.mock('../../hooks/useAuth', () => ({
   useAuthStore: Object.assign(
-    vi.fn(() => ({ user: mockH.mockUser, profile: { id: 'user-1', username: 'TestUser' }, isLoading: false })),
-    { getState: vi.fn().mockReturnValue({ user: { id: 'user-1' }, profile: { id: 'user-1', username: 'TestUser' } }) }
+    vi.fn(() => ({
+      user: mockH.mockUser,
+      profile: { id: 'user-1', username: 'TestUser' },
+      isLoading: false,
+    })),
+    {
+      getState: vi.fn().mockReturnValue({
+        user: { id: 'user-1' },
+        profile: { id: 'user-1', username: 'TestUser' },
+      }),
+    }
   ),
 }))
 
 // Mock toast
 vi.mock('../../lib/toast', () => ({
-  showSuccess: vi.fn(), showError: vi.fn(), showWarning: vi.fn(), showInfo: vi.fn(),
+  showSuccess: vi.fn(),
+  showError: vi.fn(),
+  showWarning: vi.fn(),
+  showInfo: vi.fn(),
 }))
 
 // Mock i18n
 vi.mock('../../lib/i18n', () => ({
   useT: () => (key: string) => key,
   useLocale: () => 'fr',
-  useI18nStore: Object.assign(vi.fn().mockReturnValue({ locale: 'fr' }), { getState: vi.fn().mockReturnValue({ locale: 'fr' }) }),
+  useI18nStore: Object.assign(vi.fn().mockReturnValue({ locale: 'fr' }), {
+    getState: vi.fn().mockReturnValue({ locale: 'fr' }),
+  }),
 }))
 
 // Mock Messages store
@@ -191,36 +350,46 @@ vi.mock('../../components/icons', () => ({
 
 // Mock components
 vi.mock('../../components/PinnedMessages', () => ({
-  PinnedMessages: (props: any) => props.pinnedMessages?.length > 0 ? createElement('div', { 'data-testid': 'pinned-messages' }) : null,
+  PinnedMessages: (props: any) =>
+    props.pinnedMessages?.length > 0
+      ? createElement('div', { 'data-testid': 'pinned-messages' })
+      : null,
 }))
 
 vi.mock('../../components/EditMessageModal', () => ({
-  EditMessageModal: ({ isOpen }: any) => isOpen ? createElement('div', { 'data-testid': 'edit-modal' }) : null,
+  EditMessageModal: ({ isOpen }: any) =>
+    isOpen ? createElement('div', { 'data-testid': 'edit-modal' }) : null,
 }))
 
 vi.mock('../../components/CreatePollModal', () => ({
-  CreatePollModal: ({ isOpen }: any) => isOpen ? createElement('div', { 'data-testid': 'poll-modal' }) : null,
+  CreatePollModal: ({ isOpen }: any) =>
+    isOpen ? createElement('div', { 'data-testid': 'poll-modal' }) : null,
 }))
 
 vi.mock('../../components/ForwardMessageModal', () => ({
-  ForwardMessageModal: ({ isOpen }: any) => isOpen ? createElement('div', { 'data-testid': 'forward-modal' }) : null,
+  ForwardMessageModal: ({ isOpen }: any) =>
+    isOpen ? createElement('div', { 'data-testid': 'forward-modal' }) : null,
 }))
 
 vi.mock('../../components/ui', () => ({
-  CrossfadeTransition: ({ children, skeleton, isLoading }: any) => isLoading ? skeleton : children,
+  CrossfadeTransition: ({ children, skeleton, isLoading }: any) =>
+    isLoading ? skeleton : children,
   SkeletonChatPage: () => createElement('div', { 'data-testid': 'skeleton-chat' }),
 }))
 
 vi.mock('../../components/PullToRefresh', () => ({
-  PullToRefresh: ({ children }: any) => createElement('div', { 'data-testid': 'pull-to-refresh' }, children),
+  PullToRefresh: ({ children }: any) =>
+    createElement('div', { 'data-testid': 'pull-to-refresh' }, children),
 }))
 
 vi.mock('../../components/messages/ConversationList', () => ({
   ConversationList: (props: any) => {
     mockH.capturedConvListProps = props
-    return createElement('div', { 'data-testid': 'conversation-list' },
+    return createElement(
+      'div',
+      { 'data-testid': 'conversation-list' },
       createElement('span', null, `tab:${props.activeTab}`),
-      createElement('span', null, `unread:${props.totalUnread}`),
+      createElement('span', null, `unread:${props.totalUnread}`)
     )
   },
 }))
@@ -228,10 +397,12 @@ vi.mock('../../components/messages/ConversationList', () => ({
 vi.mock('../../components/messages/ConversationHeader', () => ({
   ConversationHeader: (props: any) => {
     mockH.capturedConvHeaderProps = props
-    return createElement('div', { 'data-testid': 'conversation-header' },
+    return createElement(
+      'div',
+      { 'data-testid': 'conversation-header' },
       createElement('span', null, props.chatName || ''),
       createElement('span', null, props.chatSubtitle || ''),
-      createElement('button', { onClick: props.onBack, 'data-testid': 'back-btn' }, 'Back'),
+      createElement('button', { onClick: props.onBack, 'data-testid': 'back-btn' }, 'Back')
     )
   },
 }))
@@ -251,11 +422,13 @@ vi.mock('../../components/messages/MessageComposer', () => ({
 }))
 
 vi.mock('../../components/messages/MessageToast', () => ({
-  MessageToast: ({ isVisible, message }: any) => isVisible ? createElement('div', { 'data-testid': 'message-toast' }, message) : null,
+  MessageToast: ({ isVisible, message }: any) =>
+    isVisible ? createElement('div', { 'data-testid': 'message-toast' }, message) : null,
 }))
 
 vi.mock('../../components/ThreadView', () => ({
-  ThreadView: ({ isOpen }: any) => isOpen ? createElement('div', { 'data-testid': 'thread-view' }) : null,
+  ThreadView: ({ isOpen }: any) =>
+    isOpen ? createElement('div', { 'data-testid': 'thread-view' }) : null,
 }))
 
 import { Messages } from '../Messages'
@@ -276,7 +449,11 @@ describe('Messages Page', () => {
     mockH.activeDMConv = null
     mockH.isLoadingSquad = false
     mockH.isLoadingDM = false
-    mockH.mockUser = { id: 'user-1', user_metadata: { username: 'TestUser' }, email: 'test@test.com' }
+    mockH.mockUser = {
+      id: 'user-1',
+      user_metadata: { username: 'TestUser' },
+      email: 'test@test.com',
+    }
     mockH.mockSearchParams = new URLSearchParams()
     mockH.mockSquadMembers = []
     mockH.mockActiveTab = 'squads'
@@ -359,17 +536,13 @@ describe('Messages Page', () => {
         { id: 'c1', squad_id: 'sq1', name: 'Squad 1', unread_count: 3 },
         { id: 'c2', squad_id: 'sq2', name: 'Squad 2', unread_count: 2 },
       ]
-      mockH.dmConversations = [
-        { other_user_id: 'u1', other_user_username: 'A', unread_count: 1 },
-      ]
+      mockH.dmConversations = [{ other_user_id: 'u1', other_user_username: 'A', unread_count: 1 }]
       renderMessages()
       expect(screen.getByText('unread:6')).toBeTruthy()
     })
 
     it('passes squad and DM conversations to list', () => {
-      mockH.squadConversations = [
-        { id: 'c1', squad_id: 'sq1', name: 'SquadA', unread_count: 0 },
-      ]
+      mockH.squadConversations = [{ id: 'c1', squad_id: 'sq1', name: 'SquadA', unread_count: 0 }]
       mockH.dmConversations = [
         { other_user_id: 'u1', other_user_username: 'UserB', unread_count: 0 },
       ]
@@ -398,8 +571,12 @@ describe('Messages Page', () => {
   describe('Mobile: active squad conversation', () => {
     beforeEach(() => {
       mockH.activeSquadConv = {
-        id: 'c1', squad_id: 'sq1', name: 'Alpha Squad',
-        type: 'squad', session_id: null, unread_count: 0,
+        id: 'c1',
+        squad_id: 'sq1',
+        name: 'Alpha Squad',
+        type: 'squad',
+        session_id: null,
+        unread_count: 0,
       }
     })
 
@@ -500,7 +677,12 @@ describe('Messages Page', () => {
 
     it('shows chat view in main area when squad conv is active', () => {
       mockH.activeSquadConv = {
-        id: 'c1', squad_id: 'sq1', name: 'Squad', type: 'squad', session_id: null, unread_count: 0,
+        id: 'c1',
+        squad_id: 'sq1',
+        name: 'Squad',
+        type: 'squad',
+        session_id: null,
+        unread_count: 0,
       }
       renderMessages()
       expect(screen.getByTestId('conversation-header')).toBeTruthy()
@@ -512,7 +694,12 @@ describe('Messages Page', () => {
   describe('Mention members computation', () => {
     it('computes mention members from squad members, excluding current user', () => {
       mockH.activeSquadConv = {
-        id: 'c1', squad_id: 'sq1', name: 'Squad', type: 'squad', session_id: null, unread_count: 0,
+        id: 'c1',
+        squad_id: 'sq1',
+        name: 'Squad',
+        type: 'squad',
+        session_id: null,
+        unread_count: 0,
       }
       mockH.mockSquadMembers = [
         { user_id: 'user-1', role: 'owner', profiles: { username: 'TestUser', avatar_url: null } },
@@ -526,11 +713,14 @@ describe('Messages Page', () => {
 
     it('handles missing profiles in squad members', () => {
       mockH.activeSquadConv = {
-        id: 'c1', squad_id: 'sq1', name: 'Squad', type: 'squad', session_id: null, unread_count: 0,
+        id: 'c1',
+        squad_id: 'sq1',
+        name: 'Squad',
+        type: 'squad',
+        session_id: null,
+        unread_count: 0,
       }
-      mockH.mockSquadMembers = [
-        { user_id: 'user-2', role: 'member', profiles: null },
-      ]
+      mockH.mockSquadMembers = [{ user_id: 'user-2', role: 'member', profiles: null }]
       renderMessages()
       expect(mockH.capturedMessageComposerProps.mentionMembers).toHaveLength(1)
       expect(mockH.capturedMessageComposerProps.mentionMembers[0].username).toBe('Utilisateur')
@@ -541,10 +731,22 @@ describe('Messages Page', () => {
   describe('Pinned messages', () => {
     it('shows pinned messages when squad chat has pinned messages', () => {
       mockH.activeSquadConv = {
-        id: 'c1', squad_id: 'sq1', name: 'Squad', type: 'squad', session_id: null, unread_count: 0,
+        id: 'c1',
+        squad_id: 'sq1',
+        name: 'Squad',
+        type: 'squad',
+        session_id: null,
+        unread_count: 0,
       }
       mockH.squadMessages = [
-        { id: 'm1', content: 'Pinned msg', sender_id: 'user-2', created_at: new Date().toISOString(), is_pinned: true, sender: { username: 'User2' } },
+        {
+          id: 'm1',
+          content: 'Pinned msg',
+          sender_id: 'user-2',
+          created_at: new Date().toISOString(),
+          is_pinned: true,
+          sender: { username: 'User2' },
+        },
       ]
       renderMessages()
       expect(screen.getByTestId('pinned-messages')).toBeTruthy()
@@ -552,12 +754,23 @@ describe('Messages Page', () => {
 
     it('does not show pinned messages in DM mode', () => {
       mockH.activeDMConv = {
-        other_user_id: 'u2', other_user_username: 'Friend',
-        other_user_avatar_url: null, last_message_content: null,
-        last_message_at: null, last_message_sender_id: null, unread_count: 0,
+        other_user_id: 'u2',
+        other_user_username: 'Friend',
+        other_user_avatar_url: null,
+        last_message_content: null,
+        last_message_at: null,
+        last_message_sender_id: null,
+        unread_count: 0,
       }
       mockH.dmMessages = [
-        { id: 'dm1', content: 'test', sender_id: 'u2', created_at: new Date().toISOString(), is_pinned: true, sender: { username: 'Friend' } },
+        {
+          id: 'dm1',
+          content: 'test',
+          sender_id: 'u2',
+          created_at: new Date().toISOString(),
+          is_pinned: true,
+          sender: { username: 'Friend' },
+        },
       ]
       renderMessages()
       expect(screen.queryByTestId('pinned-messages')).toBeNull()
@@ -568,7 +781,12 @@ describe('Messages Page', () => {
   describe('ThreadView visibility', () => {
     it('does not show thread view when no thread is open', () => {
       mockH.activeSquadConv = {
-        id: 'c1', squad_id: 'sq1', name: 'Squad', type: 'squad', session_id: null, unread_count: 0,
+        id: 'c1',
+        squad_id: 'sq1',
+        name: 'Squad',
+        type: 'squad',
+        session_id: null,
+        unread_count: 0,
       }
       renderMessages()
       expect(screen.queryByTestId('thread-view')).toBeNull()
@@ -579,7 +797,12 @@ describe('Messages Page', () => {
   describe('Member roles computation', () => {
     it('builds memberRolesMap from squad members data', () => {
       mockH.activeSquadConv = {
-        id: 'c1', squad_id: 'sq1', name: 'Squad', type: 'squad', session_id: null, unread_count: 0,
+        id: 'c1',
+        squad_id: 'sq1',
+        name: 'Squad',
+        type: 'squad',
+        session_id: null,
+        unread_count: 0,
       }
       mockH.mockSquadMembers = [
         { user_id: 'user-1', role: 'owner', profiles: { username: 'TestUser', avatar_url: null } },
@@ -602,7 +825,12 @@ describe('Messages Page', () => {
 
     it('passes userId to MessageThread', () => {
       mockH.activeSquadConv = {
-        id: 'c1', squad_id: 'sq1', name: 'Squad', type: 'squad', session_id: null, unread_count: 0,
+        id: 'c1',
+        squad_id: 'sq1',
+        name: 'Squad',
+        type: 'squad',
+        session_id: null,
+        unread_count: 0,
       }
       renderMessages()
       expect(mockH.capturedMessageThreadProps.userId).toBe('user-1')
@@ -610,7 +838,12 @@ describe('Messages Page', () => {
 
     it('passes isAdmin based on hasPermission', () => {
       mockH.activeSquadConv = {
-        id: 'c1', squad_id: 'sq1', name: 'Squad', type: 'squad', session_id: null, unread_count: 0,
+        id: 'c1',
+        squad_id: 'sq1',
+        name: 'Squad',
+        type: 'squad',
+        session_id: null,
+        unread_count: 0,
       }
       mockH.mockHasPermission = true
       renderMessages()
@@ -619,7 +852,12 @@ describe('Messages Page', () => {
 
     it('passes isAdmin=false when no permission', () => {
       mockH.activeSquadConv = {
-        id: 'c1', squad_id: 'sq1', name: 'Squad', type: 'squad', session_id: null, unread_count: 0,
+        id: 'c1',
+        squad_id: 'sq1',
+        name: 'Squad',
+        type: 'squad',
+        session_id: null,
+        unread_count: 0,
       }
       mockH.mockHasPermission = false
       renderMessages()

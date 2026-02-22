@@ -4,7 +4,15 @@ import userEvent from '@testing-library/user-event'
 import { createElement } from 'react'
 
 // ── Hoisted mocks ──
-const { mockNavigate, mockSignOut, mockUpdateProfile, mockRefreshProfile, mockClaimXP, mockShowSuccess, mockShowError } = vi.hoisted(() => ({
+const {
+  mockNavigate,
+  mockSignOut,
+  mockUpdateProfile,
+  mockRefreshProfile,
+  mockClaimXP,
+  mockShowSuccess,
+  mockShowError,
+} = vi.hoisted(() => ({
   mockNavigate: vi.fn(),
   mockSignOut: vi.fn().mockResolvedValue(undefined),
   mockUpdateProfile: vi.fn().mockResolvedValue({ error: null }),
@@ -22,7 +30,8 @@ vi.mock('react-router', () => ({
   useSearchParams: vi.fn().mockReturnValue([new URLSearchParams(), vi.fn()]),
   useLoaderData: vi.fn().mockReturnValue({}),
   Link: ({ children, to, ...props }: any) => createElement('a', { href: to, ...props }, children),
-  NavLink: ({ children, to, ...props }: any) => createElement('a', { href: to, ...props }, children),
+  NavLink: ({ children, to, ...props }: any) =>
+    createElement('a', { href: to, ...props }, children),
   Outlet: () => null,
   useMatches: vi.fn().mockReturnValue([]),
 }))
@@ -42,18 +51,24 @@ vi.mock('framer-motion', () => ({
   useAnimate: vi.fn().mockReturnValue([{ current: null }, vi.fn()]),
   useAnimation: vi.fn().mockReturnValue({ start: vi.fn(), stop: vi.fn() }),
   useReducedMotion: vi.fn().mockReturnValue(false),
-  m: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
-  motion: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
+  m: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
+  motion: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
 }))
 
 // ── Mock supabase (required by ProfileHeader for avatar upload) ──
@@ -158,7 +173,8 @@ vi.mock('../../components/PlanBadge', () => ({
 }))
 
 vi.mock('../../components/PremiumGate', () => ({
-  PremiumBadge: ({ small }: any) => createElement('span', { 'data-testid': 'premium-badge' }, 'PRO'),
+  PremiumBadge: ({ small }: any) =>
+    createElement('span', { 'data-testid': 'premium-badge' }, 'PRO'),
 }))
 
 vi.mock('../../components/SeasonalBadges', () => ({
@@ -268,7 +284,12 @@ describe('Profile Page', () => {
     it('shows 0% reliability for brand new player with no activity', () => {
       mockAuthReturn = {
         ...mockAuthReturn,
-        profile: { ...defaultProfile, total_sessions: 0, total_checkins: 0, reliability_score: 100 },
+        profile: {
+          ...defaultProfile,
+          total_sessions: 0,
+          total_checkins: 0,
+          reliability_score: 100,
+        },
       }
       render(createElement(Profile))
       // New player: effective score forced to 0 regardless of DB value

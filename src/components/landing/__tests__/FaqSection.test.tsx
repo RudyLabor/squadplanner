@@ -17,22 +17,29 @@ vi.mock('framer-motion', () => ({
   useAnimate: vi.fn().mockReturnValue([{ current: null }, vi.fn()]),
   useAnimation: vi.fn().mockReturnValue({ start: vi.fn(), stop: vi.fn() }),
   useReducedMotion: vi.fn().mockReturnValue(false),
-  m: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
-  motion: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
+  m: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
+  motion: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
 }))
 
 vi.mock('../../icons', () => ({
-  ChevronDown: (props: any) => createElement('span', { ...props, 'data-testid': 'chevron-icon' }, 'chevron'),
+  ChevronDown: (props: any) =>
+    createElement('span', { ...props, 'data-testid': 'chevron-icon' }, 'chevron'),
 }))
 
 import { FaqSection, faqs } from '../FaqSection'
@@ -212,7 +219,9 @@ describe('FaqSection', () => {
       render(<FaqSection />)
       faqs.forEach((faq) => {
         const words = faq.a.split(' ').slice(0, 3).join(' ')
-        expect(screen.getByText(new RegExp(words.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')))).toBeInTheDocument()
+        expect(
+          screen.getByText(new RegExp(words.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')))
+        ).toBeInTheDocument()
       })
     })
   })

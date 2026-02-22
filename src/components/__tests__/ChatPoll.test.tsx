@@ -26,31 +26,57 @@ vi.mock('framer-motion', () => ({
   useAnimate: vi.fn().mockReturnValue([{ current: null }, vi.fn()]),
   useAnimation: vi.fn().mockReturnValue({ start: vi.fn(), stop: vi.fn() }),
   useReducedMotion: vi.fn().mockReturnValue(false),
-  m: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
-  motion: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
+  m: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
+  motion: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
 }))
 
 vi.mock('../../lib/supabaseMinimal', () => ({
-  supabaseMinimal: { auth: { getSession: vi.fn() }, from: vi.fn().mockReturnValue({ select: vi.fn().mockReturnThis(), eq: vi.fn().mockReturnThis() }) },
+  supabaseMinimal: {
+    auth: { getSession: vi.fn() },
+    from: vi
+      .fn()
+      .mockReturnValue({ select: vi.fn().mockReturnThis(), eq: vi.fn().mockReturnThis() }),
+  },
 }))
 
 vi.mock('../../hooks/useAuth', () => ({
-  useAuthStore: Object.assign(vi.fn().mockReturnValue({ user: { id: 'user-1' }, profile: { id: 'user-1', username: 'TestUser' }, isLoading: false, isInitialized: true }), { getState: vi.fn().mockReturnValue({ user: { id: 'user-1' } }) }),
+  useAuthStore: Object.assign(
+    vi.fn().mockReturnValue({
+      user: { id: 'user-1' },
+      profile: { id: 'user-1', username: 'TestUser' },
+      isLoading: false,
+      isInitialized: true,
+    }),
+    { getState: vi.fn().mockReturnValue({ user: { id: 'user-1' } }) }
+  ),
 }))
 
 vi.mock('../../lib/i18n', () => ({ useT: () => (key: string) => key, useLocale: () => 'fr' }))
-vi.mock('../../lib/toast', () => ({ showSuccess: vi.fn(), showError: vi.fn(), showWarning: vi.fn(), showInfo: vi.fn() }))
-vi.mock('../../utils/haptics', () => ({ haptic: { light: vi.fn(), medium: vi.fn(), success: vi.fn(), error: vi.fn() } }))
+vi.mock('../../lib/toast', () => ({
+  showSuccess: vi.fn(),
+  showError: vi.fn(),
+  showWarning: vi.fn(),
+  showInfo: vi.fn(),
+}))
+vi.mock('../../utils/haptics', () => ({
+  haptic: { light: vi.fn(), medium: vi.fn(), success: vi.fn(), error: vi.fn() },
+}))
 
 import { ChatPoll, isPollMessage, parsePollData } from '../ChatPoll'
 import type { PollData } from '../ChatPoll'
@@ -84,7 +110,9 @@ describe('ChatPoll', () => {
 
 describe('isPollMessage', () => {
   it('returns true for valid poll JSON', () => {
-    expect(isPollMessage(JSON.stringify({ type: 'poll', question: 'test', options: [] }))).toBe(true)
+    expect(isPollMessage(JSON.stringify({ type: 'poll', question: 'test', options: [] }))).toBe(
+      true
+    )
   })
 
   it('returns false for non-poll content', () => {

@@ -38,10 +38,9 @@ describe('useDelayedLoading', () => {
   })
 
   it('showSpinner resets to false when isLoading becomes false before delay', () => {
-    const { result, rerender } = renderHook(
-      ({ isLoading }) => useDelayedLoading(isLoading),
-      { initialProps: { isLoading: true } }
-    )
+    const { result, rerender } = renderHook(({ isLoading }) => useDelayedLoading(isLoading), {
+      initialProps: { isLoading: true },
+    })
 
     // Advance part of the delay
     act(() => {
@@ -76,10 +75,9 @@ describe('useDelayedLoading', () => {
   })
 
   it('showSpinner resets to false when isLoading becomes false after spinner is shown', () => {
-    const { result, rerender } = renderHook(
-      ({ isLoading }) => useDelayedLoading(isLoading),
-      { initialProps: { isLoading: true } }
-    )
+    const { result, rerender } = renderHook(({ isLoading }) => useDelayedLoading(isLoading), {
+      initialProps: { isLoading: true },
+    })
 
     // Let spinner appear
     act(() => {

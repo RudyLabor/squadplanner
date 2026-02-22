@@ -16,28 +16,48 @@ vi.mock('framer-motion', () => ({
   useAnimate: vi.fn().mockReturnValue([{ current: null }, vi.fn()]),
   useAnimation: vi.fn().mockReturnValue({ start: vi.fn(), stop: vi.fn() }),
   useReducedMotion: vi.fn().mockReturnValue(false),
-  m: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
-  motion: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
+  m: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
+  motion: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
 }))
 
-vi.mock('../../../components/icons', () => new Proxy({}, { get: (_t: any, p: string) => typeof p === 'string' ? ({ children, ...props }: any) => createElement('span', props, children) : undefined }))
+vi.mock(
+  '../../../components/icons',
+  () =>
+    new Proxy(
+      {},
+      {
+        get: (_t: any, p: string) =>
+          typeof p === 'string'
+            ? ({ children, ...props }: any) => createElement('span', props, children)
+            : undefined,
+      }
+    )
+)
 
 import { ParticipantAvatar } from '../ParticipantAvatar'
 
 describe('ParticipantAvatar', () => {
   // STRICT: verifies remote user default rendering — first letter uppercase, username shown, size classes, no "Toi" label
   it('renders remote user with first letter initial, username label, and default md size', () => {
-    const { container } = render(<ParticipantAvatar username="RemoteUser" isSpeaking={false} isMuted={false} />)
+    const { container } = render(
+      <ParticipantAvatar username="RemoteUser" isSpeaking={false} isMuted={false} />
+    )
 
     // 1. First letter of username displayed (uppercase)
     expect(screen.getByText('R')).toBeDefined()
@@ -57,7 +77,9 @@ describe('ParticipantAvatar', () => {
 
   // STRICT: verifies local user — "Toi" label, first letter, primary color styling, no full username
   it('renders local user with "Toi" label, initial, and primary color styling', () => {
-    const { container } = render(<ParticipantAvatar username="TestUser" isSpeaking={false} isMuted={false} isLocal />)
+    const { container } = render(
+      <ParticipantAvatar username="TestUser" isSpeaking={false} isMuted={false} isLocal />
+    )
 
     // 1. Shows "Toi" instead of username
     expect(screen.getByText('Toi')).toBeDefined()
@@ -78,7 +100,9 @@ describe('ParticipantAvatar', () => {
 
   // STRICT: verifies muted state — mute icon indicator present, error badge, avatar still renders correctly
   it('shows mute indicator badge when isMuted is true', () => {
-    const { container } = render(<ParticipantAvatar username="MutedUser" isSpeaking={false} isMuted={true} />)
+    const { container } = render(
+      <ParticipantAvatar username="MutedUser" isSpeaking={false} isMuted={true} />
+    )
 
     // 1. First letter rendered
     expect(screen.getByText('M')).toBeDefined()
@@ -98,7 +122,9 @@ describe('ParticipantAvatar', () => {
   // STRICT: verifies size prop affects rendered classes — sm, md, lg size variations
   it('applies correct size classes for sm, md, lg variants', () => {
     // 1. Small size
-    const { container: sm, unmount: u1 } = render(<ParticipantAvatar username="A" isSpeaking={false} isMuted={false} size="sm" />)
+    const { container: sm, unmount: u1 } = render(
+      <ParticipantAvatar username="A" isSpeaking={false} isMuted={false} size="sm" />
+    )
     expect(sm.querySelector('.w-12')).not.toBeNull()
     // 2. Small text size
     const smInitial = screen.getByText('A')
@@ -106,7 +132,9 @@ describe('ParticipantAvatar', () => {
     u1()
 
     // 3. Medium size (default)
-    const { container: md, unmount: u2 } = render(<ParticipantAvatar username="B" isSpeaking={false} isMuted={false} size="md" />)
+    const { container: md, unmount: u2 } = render(
+      <ParticipantAvatar username="B" isSpeaking={false} isMuted={false} size="md" />
+    )
     expect(md.querySelector('.w-16')).not.toBeNull()
     // 4. Medium text size
     const mdInitial = screen.getByText('B')
@@ -114,7 +142,9 @@ describe('ParticipantAvatar', () => {
     u2()
 
     // 5. Large size
-    const { container: lg } = render(<ParticipantAvatar username="C" isSpeaking={false} isMuted={false} size="lg" />)
+    const { container: lg } = render(
+      <ParticipantAvatar username="C" isSpeaking={false} isMuted={false} size="lg" />
+    )
     expect(lg.querySelector('.w-20')).not.toBeNull()
     // 6. Large text size
     const lgInitial = screen.getByText('C')

@@ -381,7 +381,9 @@ describe('useDirectMessagesStore', () => {
 
       let result: { error: Error | null } = { error: null }
       await act(async () => {
-        result = await useDirectMessagesStore.getState().sendMessage('  Hello World  ', 'receiver-2')
+        result = await useDirectMessagesStore
+          .getState()
+          .sendMessage('  Hello World  ', 'receiver-2')
       })
 
       // STRICT: verify table
@@ -486,7 +488,9 @@ describe('useDirectMessagesStore', () => {
       // STRICT: verify fallback update was called on direct_messages table
       expect(mockFrom).toHaveBeenCalledWith('direct_messages')
       // STRICT: verify update sets read_at
-      expect(mockUpdate).toHaveBeenCalledWith(expect.objectContaining({ read_at: expect.any(String) }))
+      expect(mockUpdate).toHaveBeenCalledWith(
+        expect.objectContaining({ read_at: expect.any(String) })
+      )
       // STRICT: filter by sender_id = partner, receiver_id = current user, read_at IS null
       expect(mockEqSender).toHaveBeenCalledWith('sender_id', 'partner-1')
       expect(mockEqReceiver).toHaveBeenCalledWith('receiver_id', 'current-user')
@@ -502,7 +506,9 @@ describe('useDirectMessagesStore', () => {
       mockGetSession.mockResolvedValue({ data: { session: { user: mockUser } } })
 
       const mockSubscribe = vi.fn().mockReturnThis()
-      const mockOn = vi.fn().mockReturnValue({ on: vi.fn().mockReturnValue({ subscribe: mockSubscribe }) })
+      const mockOn = vi
+        .fn()
+        .mockReturnValue({ on: vi.fn().mockReturnValue({ subscribe: mockSubscribe }) })
       mockChannel.mockReturnValue({ on: mockOn })
 
       await act(async () => {

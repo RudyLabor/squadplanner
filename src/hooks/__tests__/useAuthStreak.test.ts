@@ -118,9 +118,7 @@ describe('updateDailyStreak', () => {
 
     const result = await updateDailyStreak('user-1', profile)
     expect(result).toEqual(updatedProfile)
-    expect(chain.update).toHaveBeenCalledWith(
-      expect.objectContaining({ streak_days: 4, xp: 60 })
-    )
+    expect(chain.update).toHaveBeenCalledWith(expect.objectContaining({ streak_days: 4, xp: 60 }))
   })
 
   // ===== STREAK RESET (gap > 1 day) =====
@@ -134,9 +132,7 @@ describe('updateDailyStreak', () => {
     const result = await updateDailyStreak('user-1', profile)
     expect(result).toEqual(updatedProfile)
     // streak resets to 1, xp bonus = 10 (default)
-    expect(chain.update).toHaveBeenCalledWith(
-      expect.objectContaining({ streak_days: 1, xp: 210 })
-    )
+    expect(chain.update).toHaveBeenCalledWith(expect.objectContaining({ streak_days: 1, xp: 210 }))
   })
 
   // ===== STREAK RESET (no previous date) =====
@@ -149,9 +145,7 @@ describe('updateDailyStreak', () => {
 
     const result = await updateDailyStreak('user-1', profile)
     expect(result).toEqual(updatedProfile)
-    expect(chain.update).toHaveBeenCalledWith(
-      expect.objectContaining({ streak_days: 1, xp: 10 })
-    )
+    expect(chain.update).toHaveBeenCalledWith(expect.objectContaining({ streak_days: 1, xp: 10 }))
   })
 
   // ===== XP MILESTONE: 7 days =====
@@ -163,9 +157,7 @@ describe('updateDailyStreak', () => {
     mockFrom.mockReturnValue(chain)
 
     await updateDailyStreak('user-1', profile)
-    expect(chain.update).toHaveBeenCalledWith(
-      expect.objectContaining({ streak_days: 7, xp: 600 })
-    )
+    expect(chain.update).toHaveBeenCalledWith(expect.objectContaining({ streak_days: 7, xp: 600 }))
   })
 
   // ===== XP MILESTONE: 14 days =====
@@ -220,9 +212,7 @@ describe('updateDailyStreak', () => {
     mockFrom.mockReturnValue(chain)
 
     await updateDailyStreak('user-1', profile)
-    expect(chain.update).toHaveBeenCalledWith(
-      expect.objectContaining({ streak_days: 21, xp: 350 })
-    )
+    expect(chain.update).toHaveBeenCalledWith(expect.objectContaining({ streak_days: 21, xp: 350 }))
   })
 
   // ===== DEFAULT XP BONUS (10) =====
@@ -235,53 +225,60 @@ describe('updateDailyStreak', () => {
     mockFrom.mockReturnValue(chain)
 
     await updateDailyStreak('user-1', profile)
-    expect(chain.update).toHaveBeenCalledWith(
-      expect.objectContaining({ streak_days: 4, xp: 110 })
-    )
+    expect(chain.update).toHaveBeenCalledWith(expect.objectContaining({ streak_days: 4, xp: 110 }))
   })
 
   // ===== LEVEL CALCULATION =====
   it('calculates correct level from LEVEL_THRESHOLDS', async () => {
     // XP of 260 (250 + 10 from bonus) should be level 3 (threshold at 250)
     const profile = makeProfile({ streak_last_date: yesterdayStr(), streak_days: 1, xp: 250 })
-    const updatedProfile = makeProfile({ streak_last_date: todayStr(), streak_days: 2, xp: 260, level: 3 })
+    const updatedProfile = makeProfile({
+      streak_last_date: todayStr(),
+      streak_days: 2,
+      xp: 260,
+      level: 3,
+    })
 
     const chain = mockUpdateChain({ data: updatedProfile, error: null })
     mockFrom.mockReturnValue(chain)
 
     await updateDailyStreak('user-1', profile)
     // XP = 250 + 10 = 260 >= 250 (threshold index 2), so level = 3
-    expect(chain.update).toHaveBeenCalledWith(
-      expect.objectContaining({ xp: 260, level: 3 })
-    )
+    expect(chain.update).toHaveBeenCalledWith(expect.objectContaining({ xp: 260, level: 3 }))
   })
 
   it('calculates level 1 for low XP', async () => {
     const profile = makeProfile({ streak_last_date: null, streak_days: 0, xp: 0 })
-    const updatedProfile = makeProfile({ streak_last_date: todayStr(), streak_days: 1, xp: 10, level: 1 })
+    const updatedProfile = makeProfile({
+      streak_last_date: todayStr(),
+      streak_days: 1,
+      xp: 10,
+      level: 1,
+    })
 
     const chain = mockUpdateChain({ data: updatedProfile, error: null })
     mockFrom.mockReturnValue(chain)
 
     await updateDailyStreak('user-1', profile)
     // XP = 0 + 10 = 10 >= 0 (threshold index 0), so level = 1
-    expect(chain.update).toHaveBeenCalledWith(
-      expect.objectContaining({ xp: 10, level: 1 })
-    )
+    expect(chain.update).toHaveBeenCalledWith(expect.objectContaining({ xp: 10, level: 1 }))
   })
 
   it('calculates high level for high XP', async () => {
     // XP = 20000 + 10 = 20010. Threshold[11] = 20000 => level 12
     const profile = makeProfile({ streak_last_date: null, streak_days: 0, xp: 20000 })
-    const updatedProfile = makeProfile({ streak_last_date: todayStr(), streak_days: 1, xp: 20010, level: 12 })
+    const updatedProfile = makeProfile({
+      streak_last_date: todayStr(),
+      streak_days: 1,
+      xp: 20010,
+      level: 12,
+    })
 
     const chain = mockUpdateChain({ data: updatedProfile, error: null })
     mockFrom.mockReturnValue(chain)
 
     await updateDailyStreak('user-1', profile)
-    expect(chain.update).toHaveBeenCalledWith(
-      expect.objectContaining({ xp: 20010, level: 12 })
-    )
+    expect(chain.update).toHaveBeenCalledWith(expect.objectContaining({ xp: 20010, level: 12 }))
   })
 
   // ===== SUPABASE ERROR =====
@@ -324,9 +321,7 @@ describe('updateDailyStreak', () => {
     const result = await updateDailyStreak('user-1', profile)
     expect(result).toEqual(updatedProfile)
     // (null || 0) + 1 = 1 for streak_days
-    expect(chain.update).toHaveBeenCalledWith(
-      expect.objectContaining({ streak_days: 1, xp: 10 })
-    )
+    expect(chain.update).toHaveBeenCalledWith(expect.objectContaining({ streak_days: 1, xp: 10 }))
   })
 
   // ===== TODAY STRING SET CORRECTLY =====

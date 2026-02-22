@@ -1,9 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import type {
-  DirectMessage,
-  DMConversation,
-  DirectMessagesState,
-} from '../useDMTypes'
+import type { DirectMessage, DMConversation, DirectMessagesState } from '../useDMTypes'
 
 describe('useDMTypes', () => {
   // STRICT: Verifies the module can be dynamically imported and exports

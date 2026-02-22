@@ -4,9 +4,9 @@ import { createElement } from 'react'
 
 // Polyfill CSS.supports for jsdom
 if (typeof globalThis.CSS === 'undefined') {
-  (globalThis as any).CSS = { supports: () => false }
+  ;(globalThis as any).CSS = { supports: () => false }
 } else if (typeof globalThis.CSS.supports !== 'function') {
-  (globalThis.CSS as any).supports = () => false
+  ;(globalThis.CSS as any).supports = () => false
 }
 
 // Mock framer-motion
@@ -24,18 +24,24 @@ vi.mock('framer-motion', () => ({
   useAnimate: vi.fn().mockReturnValue([{ current: null }, vi.fn()]),
   useAnimation: vi.fn().mockReturnValue({ start: vi.fn(), stop: vi.fn() }),
   useReducedMotion: vi.fn().mockReturnValue(false),
-  m: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
-  motion: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
+  m: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
+  motion: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
 }))
 
 // Mock icons
@@ -96,11 +102,13 @@ describe('XPBar', () => {
   })
 
   it('applies custom className', () => {
-    const { container } = render(createElement(XPBar, {
-      currentXP: 150,
-      level: 2,
-      className: 'my-xp-bar',
-    }))
+    const { container } = render(
+      createElement(XPBar, {
+        currentXP: 150,
+        level: 2,
+        className: 'my-xp-bar',
+      })
+    )
     expect((container.firstChild as HTMLElement).className).toContain('my-xp-bar')
   })
 })

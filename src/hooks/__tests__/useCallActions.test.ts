@@ -1,6 +1,13 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 
-const { mockGetSession, mockFrom, mockChannel, mockRemoveChannel, mockFunctionsInvoke, mockSupabase } = vi.hoisted(() => {
+const {
+  mockGetSession,
+  mockFrom,
+  mockChannel,
+  mockRemoveChannel,
+  mockFunctionsInvoke,
+  mockSupabase,
+} = vi.hoisted(() => {
   const mockGetSession = vi.fn()
   const mockFrom = vi.fn()
   const mockChannel = vi.fn()
@@ -13,7 +20,14 @@ const { mockGetSession, mockFrom, mockChannel, mockRemoveChannel, mockFunctionsI
     removeChannel: mockRemoveChannel,
     functions: { invoke: mockFunctionsInvoke },
   }
-  return { mockGetSession, mockFrom, mockChannel, mockRemoveChannel, mockFunctionsInvoke, mockSupabase }
+  return {
+    mockGetSession,
+    mockFrom,
+    mockChannel,
+    mockRemoveChannel,
+    mockFunctionsInvoke,
+    mockSupabase,
+  }
 })
 
 vi.mock('../../lib/supabaseMinimal', () => ({
@@ -50,7 +64,11 @@ vi.mock('../../lib/webrtc-native', () => {
   }
 })
 
-import { sendCallPushNotification, initializeNativeWebRTC, subscribeToIncomingCalls } from '../useCallActions'
+import {
+  sendCallPushNotification,
+  initializeNativeWebRTC,
+  subscribeToIncomingCalls,
+} from '../useCallActions'
 
 describe('useCallActions', () => {
   beforeEach(() => {
@@ -64,7 +82,11 @@ describe('useCallActions', () => {
   })
 
   describe('sendCallPushNotification', () => {
-    const caller = { id: 'caller-1', username: 'TestCaller', avatar_url: 'https://example.com/avatar.png' }
+    const caller = {
+      id: 'caller-1',
+      username: 'TestCaller',
+      avatar_url: 'https://example.com/avatar.png',
+    }
 
     it('calls supabase.functions.invoke with correct body', async () => {
       await sendCallPushNotification('receiver-1', caller, 'call-record-1')
@@ -95,7 +117,9 @@ describe('useCallActions', () => {
       mockFunctionsInvoke.mockRejectedValue(new Error('Network error'))
 
       // Should not throw
-      await expect(sendCallPushNotification('receiver-1', caller, 'call-1')).resolves.toBeUndefined()
+      await expect(
+        sendCallPushNotification('receiver-1', caller, 'call-1')
+      ).resolves.toBeUndefined()
     })
   })
 

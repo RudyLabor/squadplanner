@@ -16,18 +16,24 @@ vi.mock('framer-motion', () => ({
   useAnimate: vi.fn().mockReturnValue([{ current: null }, vi.fn()]),
   useAnimation: vi.fn().mockReturnValue({ start: vi.fn(), stop: vi.fn() }),
   useReducedMotion: vi.fn().mockReturnValue(false),
-  m: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, style, ...r }: any) => createElement(p, { ...r, style }, children)
-        : undefined,
-  }),
-  motion: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, style, ...r }: any) => createElement(p, { ...r, style }, children)
-        : undefined,
-  }),
+  m: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, style, ...r }: any) => createElement(p, { ...r, style }, children)
+          : undefined,
+    }
+  ),
+  motion: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, style, ...r }: any) => createElement(p, { ...r, style }, children)
+          : undefined,
+    }
+  ),
 }))
 
 vi.mock('../../../utils/animations', () => ({
@@ -50,7 +56,9 @@ describe('ProblemSection', () => {
   it('renders the subheading', () => {
     render(<ProblemSection />)
     expect(
-      screen.getByText("T'as des amis. T'as Discord. T'as des jeux. Mais vous jouez jamais ensemble.")
+      screen.getByText(
+        "T'as des amis. T'as Discord. T'as des jeux. Mais vous jouez jamais ensemble."
+      )
     ).toBeInTheDocument()
   })
 

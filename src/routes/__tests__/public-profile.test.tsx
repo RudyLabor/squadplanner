@@ -29,32 +29,49 @@ vi.mock('framer-motion', () => ({
   useAnimate: vi.fn().mockReturnValue([{ current: null }, vi.fn()]),
   useAnimation: vi.fn().mockReturnValue({ start: vi.fn(), stop: vi.fn() }),
   useReducedMotion: vi.fn().mockReturnValue(false),
-  m: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
-  motion: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
+  m: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
+  motion: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
 }))
 
 vi.mock('../../lib/supabase-minimal-ssr', () => ({
   createMinimalSSRClient: vi.fn().mockReturnValue({
-    supabase: { auth: { getUser: vi.fn().mockResolvedValue({ data: { user: null } }) }, from: vi.fn().mockReturnValue({ select: vi.fn().mockReturnThis(), eq: vi.fn().mockReturnThis(), single: vi.fn().mockResolvedValue({ data: null }) }) },
+    supabase: {
+      auth: { getUser: vi.fn().mockResolvedValue({ data: { user: null } }) },
+      from: vi.fn().mockReturnValue({
+        select: vi.fn().mockReturnThis(),
+        eq: vi.fn().mockReturnThis(),
+        single: vi.fn().mockResolvedValue({ data: null }),
+      }),
+    },
     headers: new Headers(),
     getUser: vi.fn().mockResolvedValue({ data: { user: null }, error: null }),
   }),
 }))
-vi.mock('../../lib/queryClient', () => ({ queryKeys: { discover: { publicProfile: (u: string) => ['discover', 'publicProfile', u] } } }))
+vi.mock('../../lib/queryClient', () => ({
+  queryKeys: { discover: { publicProfile: (u: string) => ['discover', 'publicProfile', u] } },
+}))
 vi.mock('../../components/ClientRouteWrapper', () => ({
   ClientRouteWrapper: ({ children }: any) => createElement('div', null, children),
 }))
-vi.mock('../../pages/PublicProfile', () => ({ default: () => createElement('div', { 'data-testid': 'public-profile' }, 'PublicProfile') }))
+vi.mock('../../pages/PublicProfile', () => ({
+  default: () => createElement('div', { 'data-testid': 'public-profile' }, 'PublicProfile'),
+}))
 
 import DefaultExport, { loader, meta } from '../public-profile'
 
@@ -63,7 +80,9 @@ describe('routes/public-profile', () => {
     expect(DefaultExport).toBeDefined()
     const qc = new QueryClient({ defaultOptions: { queries: { retry: false } } })
     const { container } = render(
-      createElement(QueryClientProvider, { client: qc },
+      createElement(
+        QueryClientProvider,
+        { client: qc },
         createElement(DefaultExport, { loaderData: { profile: null, username: 'testuser' } } as any)
       )
     )

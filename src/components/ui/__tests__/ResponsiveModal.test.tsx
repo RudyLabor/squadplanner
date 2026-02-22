@@ -16,26 +16,36 @@ vi.mock('framer-motion', () => ({
   useAnimate: vi.fn().mockReturnValue([{ current: null }, vi.fn()]),
   useAnimation: vi.fn().mockReturnValue({ start: vi.fn(), stop: vi.fn() }),
   useReducedMotion: vi.fn().mockReturnValue(false),
-  m: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
-  motion: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
+  m: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
+  motion: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
 }))
 
 vi.mock('../Dialog', () => ({
   Dialog: ({ children, open, title, description, size }: any) =>
     open
-      ? createElement('div', { role: 'dialog', 'data-testid': 'desktop-dialog', 'data-size': size },
+      ? createElement(
+          'div',
+          { role: 'dialog', 'data-testid': 'desktop-dialog', 'data-size': size },
           title ? createElement('h2', null, title) : null,
-          description ? createElement('p', { 'data-testid': 'dialog-description' }, description) : null,
+          description
+            ? createElement('p', { 'data-testid': 'dialog-description' }, description)
+            : null,
           children
         )
       : null,
@@ -44,9 +54,17 @@ vi.mock('../Dialog', () => ({
 vi.mock('../Sheet', () => ({
   Sheet: ({ children, open, title, description, side, snapPoints }: any) =>
     open
-      ? createElement('div', { 'data-testid': 'mobile-sheet', 'data-side': side, 'data-snaps': JSON.stringify(snapPoints) },
+      ? createElement(
+          'div',
+          {
+            'data-testid': 'mobile-sheet',
+            'data-side': side,
+            'data-snaps': JSON.stringify(snapPoints),
+          },
           title ? createElement('h2', null, title) : null,
-          description ? createElement('p', { 'data-testid': 'sheet-description' }, description) : null,
+          description
+            ? createElement('p', { 'data-testid': 'sheet-description' }, description)
+            : null,
           children
         )
       : null,
@@ -64,7 +82,13 @@ describe('ResponsiveModal', () => {
   it('renders Dialog on desktop with all props passed correctly', () => {
     const onClose = vi.fn()
     render(
-      <ResponsiveModal open={true} onClose={onClose} title="Edit Profile" description="Change your settings" size="lg">
+      <ResponsiveModal
+        open={true}
+        onClose={onClose}
+        title="Edit Profile"
+        description="Change your settings"
+        size="lg"
+      >
         <p>Form content here</p>
       </ResponsiveModal>
     )

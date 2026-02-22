@@ -9,17 +9,22 @@ Element.prototype.scrollIntoView = vi.fn()
 
 function makeMotionProxy() {
   const cache = new Map<string, any>()
-  return new Proxy({}, {
-    get: (_t: any, p: string) => {
-      if (typeof p !== 'string') return undefined
-      if (!cache.has(p)) {
-        const comp = forwardRef(({ children, ...r }: any, ref: any) => createElement(p, { ...r, ref }, children))
-        comp.displayName = `motion.${p}`
-        cache.set(p, comp)
-      }
-      return cache.get(p)
-    },
-  })
+  return new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) => {
+        if (typeof p !== 'string') return undefined
+        if (!cache.has(p)) {
+          const comp = forwardRef(({ children, ...r }: any, ref: any) =>
+            createElement(p, { ...r, ref }, children)
+          )
+          comp.displayName = `motion.${p}`
+          cache.set(p, comp)
+        }
+        return cache.get(p)
+      },
+    }
+  )
 }
 
 vi.mock('framer-motion', () => ({
@@ -63,7 +68,11 @@ const optionsWithGroups: SelectOption[] = [
 ]
 
 const optionsWithIcons: SelectOption[] = [
-  { value: 'react', label: 'React', icon: createElement('span', { 'data-testid': 'icon-react' }, 'R') },
+  {
+    value: 'react',
+    label: 'React',
+    icon: createElement('span', { 'data-testid': 'icon-react' }, 'R'),
+  },
   { value: 'vue', label: 'Vue', icon: createElement('span', { 'data-testid': 'icon-vue' }, 'V') },
 ]
 
@@ -226,7 +235,9 @@ describe('Select', () => {
       const user = userEvent.setup()
       render(<Select options={options} value="react" onChange={() => {}} />)
       await user.click(screen.getByRole('combobox'))
-      const reactOption = screen.getAllByRole('option').find(o => o.textContent?.includes('React'))
+      const reactOption = screen
+        .getAllByRole('option')
+        .find((o) => o.textContent?.includes('React'))
       expect(reactOption).toHaveAttribute('aria-selected', 'true')
     })
 
@@ -234,7 +245,9 @@ describe('Select', () => {
       const user = userEvent.setup()
       render(<Select options={options} onChange={() => {}} />)
       await user.click(screen.getByRole('combobox'))
-      const angularOption = screen.getAllByRole('option').find(o => o.textContent?.includes('Angular'))
+      const angularOption = screen
+        .getAllByRole('option')
+        .find((o) => o.textContent?.includes('Angular'))
       expect(angularOption).toHaveAttribute('aria-disabled', 'true')
     })
   })
@@ -269,7 +282,9 @@ describe('Select', () => {
       render(<Select options={options} multiple value={['react', 'vue']} onChange={onChange} />)
       await user.click(screen.getByRole('combobox'))
       // Click on the option element (not the tag) - find by role
-      const reactOption = screen.getAllByRole('option').find(o => o.textContent?.includes('React'))!
+      const reactOption = screen
+        .getAllByRole('option')
+        .find((o) => o.textContent?.includes('React'))!
       await user.click(reactOption)
       expect(onChange).toHaveBeenCalledWith(['vue'])
     })
@@ -548,7 +563,15 @@ describe('Select', () => {
     it('removes last selected tag with Backspace in multi mode', async () => {
       const user = userEvent.setup()
       const onChange = vi.fn()
-      render(<Select options={options} multiple value={['react', 'vue']} onChange={onChange} searchable />)
+      render(
+        <Select
+          options={options}
+          multiple
+          value={['react', 'vue']}
+          onChange={onChange}
+          searchable
+        />
+      )
       await user.click(screen.getByRole('combobox'))
       await user.keyboard('{Backspace}')
       expect(onChange).toHaveBeenCalledWith(['react'])

@@ -14,7 +14,8 @@ vi.mock('react-router', () => ({
   useSearchParams: vi.fn().mockReturnValue([new URLSearchParams(), vi.fn()]),
   useLoaderData: vi.fn().mockReturnValue({}),
   Link: ({ children, to, ...props }: any) => createElement('a', { href: to, ...props }, children),
-  NavLink: ({ children, to, ...props }: any) => createElement('a', { href: to, ...props }, children),
+  NavLink: ({ children, to, ...props }: any) =>
+    createElement('a', { href: to, ...props }, children),
   Outlet: () => null,
   useMatches: vi.fn().mockReturnValue([]),
 }))
@@ -32,23 +33,36 @@ vi.mock('framer-motion', () => ({
   useAnimate: vi.fn().mockReturnValue([{ current: null }, vi.fn()]),
   useAnimation: vi.fn().mockReturnValue({ start: vi.fn(), stop: vi.fn() }),
   useReducedMotion: vi.fn().mockReturnValue(false),
-  m: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
-  motion: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
+  m: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
+  motion: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
 }))
 vi.mock('../../lib/supabaseMinimal', () => ({
   supabaseMinimal: {
-    auth: { getSession: vi.fn().mockResolvedValue({ data: { session: { user: { id: 'user-1' } } } }) },
-    from: vi.fn().mockReturnValue({ select: vi.fn().mockReturnThis(), eq: vi.fn().mockReturnThis(), single: vi.fn().mockResolvedValue({ data: null }), insert: vi.fn().mockResolvedValue({ data: null }) }),
+    auth: {
+      getSession: vi.fn().mockResolvedValue({ data: { session: { user: { id: 'user-1' } } } }),
+    },
+    from: vi.fn().mockReturnValue({
+      select: vi.fn().mockReturnThis(),
+      eq: vi.fn().mockReturnThis(),
+      single: vi.fn().mockResolvedValue({ data: null }),
+      insert: vi.fn().mockResolvedValue({ data: null }),
+    }),
     channel: vi.fn().mockReturnValue({ on: vi.fn().mockReturnThis(), subscribe: vi.fn() }),
     removeChannel: vi.fn(),
   },
@@ -56,25 +70,57 @@ vi.mock('../../lib/supabaseMinimal', () => ({
 }))
 vi.mock('../../hooks/useAuth', () => ({
   useAuthStore: Object.assign(
-    vi.fn().mockReturnValue({ user: { id: 'user-1' }, profile: { id: 'user-1', username: 'TestUser', avatar_url: null }, isLoading: false, isInitialized: true }),
-    { getState: vi.fn().mockReturnValue({ user: { id: 'user-1' }, profile: { id: 'user-1', username: 'TestUser' } }) },
+    vi.fn().mockReturnValue({
+      user: { id: 'user-1' },
+      profile: { id: 'user-1', username: 'TestUser', avatar_url: null },
+      isLoading: false,
+      isInitialized: true,
+    }),
+    {
+      getState: vi.fn().mockReturnValue({
+        user: { id: 'user-1' },
+        profile: { id: 'user-1', username: 'TestUser' },
+      }),
+    }
   ),
 }))
 vi.mock('../../hooks', () => ({
   useAuthStore: Object.assign(
-    vi.fn().mockReturnValue({ user: { id: 'user-1' }, profile: { id: 'user-1', username: 'TestUser', avatar_url: null }, isLoading: false, isInitialized: true }),
-    { getState: vi.fn().mockReturnValue({ user: { id: 'user-1' }, profile: { id: 'user-1', username: 'TestUser' } }) },
+    vi.fn().mockReturnValue({
+      user: { id: 'user-1' },
+      profile: { id: 'user-1', username: 'TestUser', avatar_url: null },
+      isLoading: false,
+      isInitialized: true,
+    }),
+    {
+      getState: vi.fn().mockReturnValue({
+        user: { id: 'user-1' },
+        profile: { id: 'user-1', username: 'TestUser' },
+      }),
+    }
   ),
 }))
 vi.mock('../../lib/i18n', () => ({
   useT: () => (key: string) => key,
   useLocale: () => 'fr',
-  useI18nStore: Object.assign(vi.fn().mockReturnValue({ locale: 'fr' }), { getState: vi.fn().mockReturnValue({ locale: 'fr' }) }),
+  useI18nStore: Object.assign(vi.fn().mockReturnValue({ locale: 'fr' }), {
+    getState: vi.fn().mockReturnValue({ locale: 'fr' }),
+  }),
 }))
 vi.mock('../../lib/toast', () => ({ showSuccess: vi.fn(), showError: vi.fn() }))
-vi.mock('../../utils/haptics', () => ({ haptic: { light: vi.fn(), medium: vi.fn(), success: vi.fn(), error: vi.fn() } }))
-vi.mock('../../components/LocationShare', () => ({ isLocationMessage: vi.fn().mockReturnValue(false), parseLocationMessage: vi.fn(), LocationMessage: () => null }))
-vi.mock('../../components/ChatPoll', () => ({ isPollMessage: vi.fn().mockReturnValue(false), parsePollData: vi.fn(), ChatPoll: () => null }))
+vi.mock('../../utils/haptics', () => ({
+  haptic: { light: vi.fn(), medium: vi.fn(), success: vi.fn(), error: vi.fn() },
+}))
+vi.mock('../../components/LocationShare', () => ({
+  isLocationMessage: vi.fn().mockReturnValue(false),
+  parseLocationMessage: vi.fn(),
+  LocationMessage: () => null,
+}))
+vi.mock('../../components/ChatPoll', () => ({
+  isPollMessage: vi.fn().mockReturnValue(false),
+  parsePollData: vi.fn(),
+  ChatPoll: () => null,
+}))
 
 import { VirtualizedMessageList } from '../../components/VirtualizedMessageList'
 
@@ -103,11 +149,7 @@ describe('VirtualizedMessageList — Load Tests', () => {
     const messages = generateMessages(100)
     const start = performance.now()
     const { container } = render(
-      <VirtualizedMessageList
-        messages={messages}
-        squadId="squad-1"
-        currentUserId="user-1"
-      />,
+      <VirtualizedMessageList messages={messages} squadId="squad-1" currentUserId="user-1" />
     )
     const elapsed = performance.now() - start
     expect(container).toBeTruthy()
@@ -118,11 +160,7 @@ describe('VirtualizedMessageList — Load Tests', () => {
     const messages = generateMessages(1000)
     const start = performance.now()
     const { container } = render(
-      <VirtualizedMessageList
-        messages={messages}
-        squadId="squad-1"
-        currentUserId="user-1"
-      />,
+      <VirtualizedMessageList messages={messages} squadId="squad-1" currentUserId="user-1" />
     )
     const elapsed = performance.now() - start
     expect(container).toBeTruthy()
@@ -133,11 +171,7 @@ describe('VirtualizedMessageList — Load Tests', () => {
     const messages = generateMessages(5000)
     const start = performance.now()
     const { container } = render(
-      <VirtualizedMessageList
-        messages={messages}
-        squadId="squad-1"
-        currentUserId="user-1"
-      />,
+      <VirtualizedMessageList messages={messages} squadId="squad-1" currentUserId="user-1" />
     )
     const elapsed = performance.now() - start
     expect(container).toBeTruthy()
@@ -156,11 +190,7 @@ describe('VirtualizedMessageList — Load Tests', () => {
     const messages = generateMessages(10000)
     const start = performance.now()
     const { container } = render(
-      <VirtualizedMessageList
-        messages={messages}
-        squadId="squad-1"
-        currentUserId="user-1"
-      />,
+      <VirtualizedMessageList messages={messages} squadId="squad-1" currentUserId="user-1" />
     )
     const elapsed = performance.now() - start
     expect(container).toBeTruthy()
@@ -170,27 +200,21 @@ describe('VirtualizedMessageList — Load Tests', () => {
 
   it('handles empty message list gracefully', () => {
     const { container } = render(
-      <VirtualizedMessageList
-        messages={[]}
-        squadId="squad-1"
-        currentUserId="user-1"
-      />,
+      <VirtualizedMessageList messages={[]} squadId="squad-1" currentUserId="user-1" />
     )
     expect(container).toBeTruthy()
   })
 
   it('handles messages with very long content', () => {
-    const messages = [{
-      ...generateMessages(1)[0],
-      content: 'A'.repeat(50000),
-    }]
+    const messages = [
+      {
+        ...generateMessages(1)[0],
+        content: 'A'.repeat(50000),
+      },
+    ]
     const start = performance.now()
     const { container } = render(
-      <VirtualizedMessageList
-        messages={messages}
-        squadId="squad-1"
-        currentUserId="user-1"
-      />,
+      <VirtualizedMessageList messages={messages} squadId="squad-1" currentUserId="user-1" />
     )
     const elapsed = performance.now() - start
     expect(container).toBeTruthy()
@@ -200,11 +224,7 @@ describe('VirtualizedMessageList — Load Tests', () => {
   it('handles rapid message additions (simulates real-time chat)', () => {
     const messages = generateMessages(50)
     const { rerender } = render(
-      <VirtualizedMessageList
-        messages={messages}
-        squadId="squad-1"
-        currentUserId="user-1"
-      />,
+      <VirtualizedMessageList messages={messages} squadId="squad-1" currentUserId="user-1" />
     )
 
     // Simulate 50 rapid message additions
@@ -219,7 +239,7 @@ describe('VirtualizedMessageList — Load Tests', () => {
           messages={updatedMessages}
           squadId="squad-1"
           currentUserId="user-1"
-        />,
+        />
       )
     }
     const elapsed = performance.now() - start

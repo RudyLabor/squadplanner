@@ -4,10 +4,15 @@ import { render, screen, fireEvent } from '@testing-library/react'
 const mockSetLocale = vi.fn()
 
 vi.mock('../../lib/i18n', () => ({
-  useT: () => (key: string, ..._args: any[]) => key,
+  useT:
+    () =>
+    (key: string, ..._args: any[]) =>
+      key,
   useLocale: () => 'fr',
   useSetLocale: () => mockSetLocale,
-  useI18nStore: Object.assign(vi.fn().mockReturnValue({ locale: 'fr' }), { getState: vi.fn().mockReturnValue({ locale: 'fr' }) }),
+  useI18nStore: Object.assign(vi.fn().mockReturnValue({ locale: 'fr' }), {
+    getState: vi.fn().mockReturnValue({ locale: 'fr' }),
+  }),
 }))
 
 import { LanguageDemo } from '../LanguageDemo'

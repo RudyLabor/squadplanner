@@ -20,22 +20,29 @@ vi.mock('framer-motion', () => ({
   useAnimate: vi.fn().mockReturnValue([{ current: null }, vi.fn()]),
   useAnimation: vi.fn().mockReturnValue({ start: vi.fn(), stop: vi.fn() }),
   useReducedMotion: vi.fn().mockReturnValue(false),
-  m: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
-  motion: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
+  m: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
+  motion: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
 }))
 
 vi.mock('../../icons', () => ({
-  ArrowRight: (props: any) => createElement('span', { ...props, 'data-testid': 'icon-arrow' }, 'arrow'),
+  ArrowRight: (props: any) =>
+    createElement('span', { ...props, 'data-testid': 'icon-arrow' }, 'arrow'),
   Menu: (props: any) => createElement('span', { ...props, 'data-testid': 'icon-menu' }, 'menu'),
   X: (props: any) => createElement('span', { ...props, 'data-testid': 'icon-close' }, 'x'),
 }))
@@ -241,7 +248,7 @@ describe('LandingNavbar', () => {
     fireEvent.click(screen.getByLabelText('Ouvrir le menu'))
 
     const connectLinks = screen.getAllByText('Se connecter')
-    connectLinks.forEach(link => {
+    connectLinks.forEach((link) => {
       expect(link.closest('a')?.getAttribute('href')).toBe('/auth')
     })
   })

@@ -304,12 +304,8 @@ describe('queryPersister', () => {
         clientState: { b: true },
       })
 
-      expect(mockStore.get('key-a')).toEqual(
-        expect.objectContaining({ clientState: { a: true } })
-      )
-      expect(mockStore.get('key-b')).toEqual(
-        expect.objectContaining({ clientState: { b: true } })
-      )
+      expect(mockStore.get('key-a')).toEqual(expect.objectContaining({ clientState: { a: true } }))
+      expect(mockStore.get('key-b')).toEqual(expect.objectContaining({ clientState: { b: true } }))
     })
   })
 })

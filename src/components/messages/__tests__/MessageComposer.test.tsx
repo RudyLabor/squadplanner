@@ -52,7 +52,11 @@ vi.mock('../../ReplyComposer', () => ({
     replyingTo
       ? createElement('div', { 'data-testid': 'reply-composer' }, [
           createElement('span', { key: 's' }, replyingTo.sender_username),
-          createElement('button', { key: 'c', onClick: onCancel, 'data-testid': 'cancel-reply' }, 'Cancel'),
+          createElement(
+            'button',
+            { key: 'c', onClick: onCancel, 'data-testid': 'cancel-reply' },
+            'Cancel'
+          ),
         ])
       : null,
 }))
@@ -149,7 +153,9 @@ describe('MessageComposer', () => {
 
   it('calls onShowPollModal when poll button is clicked', () => {
     const onShowPollModal = vi.fn()
-    render(<MessageComposer {...defaultProps} isSquadChat={true} onShowPollModal={onShowPollModal} />)
+    render(
+      <MessageComposer {...defaultProps} isSquadChat={true} onShowPollModal={onShowPollModal} />
+    )
     fireEvent.click(screen.getByLabelText('Créer un sondage'))
     expect(onShowPollModal).toHaveBeenCalledOnce()
   })

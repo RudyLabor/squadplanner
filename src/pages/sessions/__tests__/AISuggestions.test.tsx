@@ -2,7 +2,19 @@ import { describe, it, expect, vi } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import { createElement } from 'react'
 
-vi.mock('../../../components/icons', () => new Proxy({}, { get: (_t: any, p: string) => typeof p === 'string' ? ({ children, ...props }: any) => createElement('span', props, children) : undefined }))
+vi.mock(
+  '../../../components/icons',
+  () =>
+    new Proxy(
+      {},
+      {
+        get: (_t: any, p: string) =>
+          typeof p === 'string'
+            ? ({ children, ...props }: any) => createElement('span', props, children)
+            : undefined,
+      }
+    )
+)
 
 vi.mock('../../../components/ui', () => ({
   Card: ({ children, ...props }: any) => createElement('div', props, children),
@@ -34,9 +46,7 @@ describe('AISlotSuggestions', () => {
 
   // STRICT: verifies single suggestion displays day name, hour, reliability score, section heading, aria label, and hint text
   it('renders a single suggestion with all data points and section structure', () => {
-    const suggestions = [
-      { day_of_week: 3, hour: 21, reliability_score: 85 },
-    ]
+    const suggestions = [{ day_of_week: 3, hour: 21, reliability_score: 85 }]
     const { container } = render(<AISlotSuggestions slotSuggestions={suggestions} />)
 
     // 1. Section heading exists
@@ -111,7 +121,9 @@ describe('CoachTipsSection', () => {
     // 1. Section heading with emoji
     expect(screen.getByText(/Conseil Coach/)).toBeDefined()
     // 2. First tip content displayed
-    expect(screen.getByText('Planifie ta session le mardi soir pour maximiser la participation.')).toBeDefined()
+    expect(
+      screen.getByText('Planifie ta session le mardi soir pour maximiser la participation.')
+    ).toBeDefined()
     // 3. Second tip is NOT displayed (component only shows first)
     expect(screen.queryByText('Ce deuxième conseil ne devrait pas apparaître.')).toBeNull()
     // 4. aria-label on section

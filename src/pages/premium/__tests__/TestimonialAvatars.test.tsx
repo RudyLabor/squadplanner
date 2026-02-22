@@ -112,8 +112,8 @@ describe('TestimonialAvatar', () => {
       const { container } = render(<TestimonialAvatar type="marie" />)
       // Marie has earring circles at cx=13 and cx=35
       const circles = container.querySelectorAll('circle')
-      const earringCircles = Array.from(circles).filter(c =>
-        c.getAttribute('cx') === '13' || c.getAttribute('cx') === '35'
+      const earringCircles = Array.from(circles).filter(
+        (c) => c.getAttribute('cx') === '13' || c.getAttribute('cx') === '35'
       )
       expect(earringCircles.length).toBeGreaterThanOrEqual(2)
     })
@@ -207,17 +207,23 @@ describe('TestimonialAvatar', () => {
       expect(svg.getAttribute('xmlns')).toBe('http://www.w3.org/2000/svg')
     })
 
-    it.each(['alex', 'marie', 'lucas'] as const)('type="%s" has fill="none" on root SVG', (type) => {
-      const { container } = render(<TestimonialAvatar type={type} />)
-      const svg = container.querySelector('svg')!
-      expect(svg.getAttribute('fill')).toBe('none')
-    })
+    it.each(['alex', 'marie', 'lucas'] as const)(
+      'type="%s" has fill="none" on root SVG',
+      (type) => {
+        const { container } = render(<TestimonialAvatar type={type} />)
+        const svg = container.querySelector('svg')!
+        expect(svg.getAttribute('fill')).toBe('none')
+      }
+    )
 
-    it.each(['alex', 'marie', 'lucas'] as const)('type="%s" has path elements for face features', (type) => {
-      const { container } = render(<TestimonialAvatar type={type} />)
-      const paths = container.querySelectorAll('path')
-      expect(paths.length).toBeGreaterThanOrEqual(3)
-    })
+    it.each(['alex', 'marie', 'lucas'] as const)(
+      'type="%s" has path elements for face features',
+      (type) => {
+        const { container } = render(<TestimonialAvatar type={type} />)
+        const paths = container.querySelectorAll('path')
+        expect(paths.length).toBeGreaterThanOrEqual(3)
+      }
+    )
 
     it('each type produces a unique aria-label', () => {
       const { container: c1 } = render(<TestimonialAvatar type="alex" />)
@@ -240,7 +246,7 @@ describe('TestimonialAvatar', () => {
 
       // Get all gradient IDs from defs
       const getIds = (c: HTMLElement) =>
-        Array.from(c.querySelectorAll('linearGradient')).map(el => el.id)
+        Array.from(c.querySelectorAll('linearGradient')).map((el) => el.id)
 
       const alexIds = getIds(c1)
       const marieIds = getIds(c2)

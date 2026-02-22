@@ -17,18 +17,24 @@ vi.mock('framer-motion', () => ({
   useAnimate: vi.fn().mockReturnValue([{ current: null }, vi.fn()]),
   useAnimation: vi.fn().mockReturnValue({ start: vi.fn(), stop: vi.fn() }),
   useReducedMotion: vi.fn().mockReturnValue(false),
-  m: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
-  motion: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
+  m: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
+  motion: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
 }))
 
 describe('ContentTransition', () => {
@@ -37,9 +43,15 @@ describe('ContentTransition', () => {
     const { container } = render(
       <ContentTransition
         isLoading={true}
-        skeleton={<div data-testid="skel"><span>Loading cards...</span></div>}
+        skeleton={
+          <div data-testid="skel">
+            <span>Loading cards...</span>
+          </div>
+        }
       >
-        <div data-testid="content"><span>Actual cards</span></div>
+        <div data-testid="content">
+          <span>Actual cards</span>
+        </div>
       </ContentTransition>
     )
 
@@ -88,10 +100,7 @@ describe('ContentTransition', () => {
   // STRICT: transition from loading to loaded swaps content correctly, aria-busy updates
   it('transitions correctly from loading to loaded state', () => {
     const { container, rerender } = render(
-      <ContentTransition
-        isLoading={true}
-        skeleton={<div data-testid="skel">Skeleton</div>}
-      >
+      <ContentTransition isLoading={true} skeleton={<div data-testid="skel">Skeleton</div>}>
         <div data-testid="content">Real data</div>
       </ContentTransition>
     )
@@ -103,10 +112,7 @@ describe('ContentTransition', () => {
 
     // Transition to loaded
     rerender(
-      <ContentTransition
-        isLoading={false}
-        skeleton={<div data-testid="skel">Skeleton</div>}
-      >
+      <ContentTransition isLoading={false} skeleton={<div data-testid="skel">Skeleton</div>}>
         <div data-testid="content">Real data</div>
       </ContentTransition>
     )
@@ -121,10 +127,7 @@ describe('ContentTransition', () => {
   // STRICT: transition from loaded back to loading (refetch scenario) swaps content correctly
   it('transitions back from loaded to loading on data refetch', () => {
     const { container, rerender } = render(
-      <ContentTransition
-        isLoading={false}
-        skeleton={<div data-testid="skel">Loading...</div>}
-      >
+      <ContentTransition isLoading={false} skeleton={<div data-testid="skel">Loading...</div>}>
         <div data-testid="content">Data v1</div>
       </ContentTransition>
     )
@@ -136,10 +139,7 @@ describe('ContentTransition', () => {
 
     // Back to loading (refetch)
     rerender(
-      <ContentTransition
-        isLoading={true}
-        skeleton={<div data-testid="skel">Loading...</div>}
-      >
+      <ContentTransition isLoading={true} skeleton={<div data-testid="skel">Loading...</div>}>
         <div data-testid="content">Data v1</div>
       </ContentTransition>
     )
@@ -152,10 +152,7 @@ describe('ContentTransition', () => {
 
     // Load again with new data
     rerender(
-      <ContentTransition
-        isLoading={false}
-        skeleton={<div data-testid="skel">Loading...</div>}
-      >
+      <ContentTransition isLoading={false} skeleton={<div data-testid="skel">Loading...</div>}>
         <div data-testid="content">Data v2</div>
       </ContentTransition>
     )

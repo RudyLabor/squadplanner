@@ -11,13 +11,15 @@ describe('getOptimizedAvatarUrl', () => {
   })
 
   it('returns original URL for non-Supabase URLs', () => {
-    expect(getOptimizedAvatarUrl('https://example.com/avatar.png', 40)).toBe('https://example.com/avatar.png')
+    expect(getOptimizedAvatarUrl('https://example.com/avatar.png', 40)).toBe(
+      'https://example.com/avatar.png'
+    )
   })
 
   it('adds transform params for Supabase Storage URLs', () => {
     const url = 'https://nxbqiwmfyafgshxzczxo.supabase.co/storage/v1/avatars/test.png'
     const result = getOptimizedAvatarUrl(url, 40)
-    expect(result).toContain('width=80')  // 2x for retina
+    expect(result).toContain('width=80') // 2x for retina
     expect(result).toContain('height=80')
     expect(result).toContain('format=webp')
   })

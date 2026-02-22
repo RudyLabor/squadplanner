@@ -8,7 +8,8 @@ vi.mock('../../../components/icons', () => ({
   X: (p: any) => createElement('span', { ...p, 'data-icon': 'X' }),
   Gift: (p: any) => createElement('span', { ...p, 'data-icon': 'Gift' }),
   ArrowRight: (p: any) => createElement('span', { ...p, 'data-icon': 'ArrowRight' }),
-  Loader2: ({ children, ...p }: any) => createElement('span', { 'data-testid': 'loader', ...p }, children),
+  Loader2: ({ children, ...p }: any) =>
+    createElement('span', { 'data-testid': 'loader', ...p }, children),
   Rocket: (p: any) => createElement('span', { ...p, 'data-icon': 'Rocket' }),
   Sparkles: (p: any) => createElement('span', { ...p, 'data-icon': 'Sparkles' }),
   Shield: (p: any) => createElement('span', { ...p, 'data-icon': 'Shield' }),
@@ -31,7 +32,7 @@ vi.mock('../../../components/ui', () => ({
 vi.mock('../PremiumData', () => ({
   FAQ: [
     { q: 'Comment annuler mon abonnement ?', a: 'Tu peux annuler depuis les paramètres.' },
-    { q: 'Y a-t-il une période d\'essai ?', a: 'Oui, 7 jours gratuits.' },
+    { q: "Y a-t-il une période d'essai ?", a: 'Oui, 7 jours gratuits.' },
     { q: 'Quels moyens de paiement ?', a: 'Carte bancaire via Stripe.' },
   ],
 }))
@@ -92,7 +93,7 @@ describe('PremiumFAQ', () => {
     const buttons = container.querySelectorAll('button')
     expect(buttons.length).toBe(3)
     // 2. Each button has full-width class
-    buttons.forEach(btn => {
+    buttons.forEach((btn) => {
       expect(btn.className).toContain('w-full')
     })
     // 3. ChevronDown icons present (rendered as spans by mock)

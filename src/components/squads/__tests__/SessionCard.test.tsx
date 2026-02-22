@@ -23,18 +23,24 @@ vi.mock('framer-motion', () => ({
   useAnimate: vi.fn().mockReturnValue([{ current: null }, vi.fn()]),
   useAnimation: vi.fn().mockReturnValue({ start: vi.fn(), stop: vi.fn() }),
   useReducedMotion: vi.fn().mockReturnValue(false),
-  m: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
-  motion: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
+  m: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
+  motion: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
 }))
 
 // Mock icons
@@ -50,8 +56,10 @@ vi.mock('../../icons', () => ({
 
 // Mock UI components
 vi.mock('../../ui', () => ({
-  Card: ({ children, className }: any) => createElement('div', { className, 'data-testid': 'card' }, children),
-  Badge: ({ children, variant }: any) => createElement('span', { 'data-testid': 'badge', 'data-variant': variant }, children),
+  Card: ({ children, className }: any) =>
+    createElement('div', { className, 'data-testid': 'card' }, children),
+  Badge: ({ children, variant }: any) =>
+    createElement('span', { 'data-testid': 'badge', 'data-variant': variant }, children),
   Tooltip: ({ children }: any) => createElement('div', null, children),
 }))
 

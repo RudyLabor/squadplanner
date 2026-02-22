@@ -8,17 +8,22 @@ Element.prototype.scrollIntoView = vi.fn()
 
 function makeMotionProxy() {
   const cache = new Map<string, any>()
-  return new Proxy({}, {
-    get: (_t: any, p: string) => {
-      if (typeof p !== 'string') return undefined
-      if (!cache.has(p)) {
-        const comp = forwardRef(({ children, ...r }: any, ref: any) => createElement(p, { ...r, ref }, children))
-        comp.displayName = `motion.${p}`
-        cache.set(p, comp)
-      }
-      return cache.get(p)
-    },
-  })
+  return new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) => {
+        if (typeof p !== 'string') return undefined
+        if (!cache.has(p)) {
+          const comp = forwardRef(({ children, ...r }: any, ref: any) =>
+            createElement(p, { ...r, ref }, children)
+          )
+          comp.displayName = `motion.${p}`
+          cache.set(p, comp)
+        }
+        return cache.get(p)
+      },
+    }
+  )
 }
 
 vi.mock('framer-motion', () => ({
@@ -181,7 +186,9 @@ describe('Popover', () => {
       expect(screen.getByText('Hover content')).toBeInTheDocument()
 
       fireEvent.mouseLeave(triggerWrapper)
-      act(() => { vi.advanceTimersByTime(200) })
+      act(() => {
+        vi.advanceTimersByTime(200)
+      })
       expect(screen.queryByText('Hover content')).not.toBeInTheDocument()
     })
 
@@ -200,7 +207,9 @@ describe('Popover', () => {
       // Enter popover before timeout
       const popover = screen.getByRole('dialog')
       fireEvent.mouseEnter(popover)
-      act(() => { vi.advanceTimersByTime(200) })
+      act(() => {
+        vi.advanceTimersByTime(200)
+      })
       // Should still be visible
       expect(screen.getByText('Hover content')).toBeInTheDocument()
     })

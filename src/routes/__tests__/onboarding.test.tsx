@@ -39,24 +39,32 @@ vi.mock('framer-motion', () => ({
   useAnimate: vi.fn().mockReturnValue([{ current: null }, vi.fn()]),
   useAnimation: vi.fn().mockReturnValue({ start: vi.fn(), stop: vi.fn() }),
   useReducedMotion: vi.fn().mockReturnValue(false),
-  m: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
-  motion: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
+  m: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
+  motion: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
 }))
 
 vi.mock('../../lib/supabase-minimal-ssr', () => ({
   createMinimalSSRClient: mockCreateMinimalSSRClient,
 }))
-vi.mock('../../pages/Onboarding', () => ({ Onboarding: () => createElement('div', { 'data-testid': 'onboarding' }, 'Onboarding') }))
+vi.mock('../../pages/Onboarding', () => ({
+  Onboarding: () => createElement('div', { 'data-testid': 'onboarding' }, 'Onboarding'),
+}))
 
 import DefaultExport, { loader, meta, headers } from '../onboarding'
 
@@ -117,7 +125,11 @@ describe('routes/onboarding', () => {
 
       // 2 - canonical link
       const canonical = result.find((m: any) => m.tagName === 'link')
-      expect(canonical).toEqual({ tagName: 'link', rel: 'canonical', href: 'https://squadplanner.fr/onboarding' })
+      expect(canonical).toEqual({
+        tagName: 'link',
+        rel: 'canonical',
+        href: 'https://squadplanner.fr/onboarding',
+      })
 
       // 3 - og:url
       const ogUrl = result.find((m: any) => m.property === 'og:url')
@@ -240,7 +252,10 @@ describe('routes/onboarding', () => {
       expect(mockRedirect).toHaveBeenCalledTimes(1)
 
       // 6 - redirect headers were passed
-      expect(mockRedirect).toHaveBeenCalledWith('/home', expect.objectContaining({ headers: expect.any(Headers) }))
+      expect(mockRedirect).toHaveBeenCalledWith(
+        '/home',
+        expect.objectContaining({ headers: expect.any(Headers) })
+      )
     })
   })
 

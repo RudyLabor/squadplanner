@@ -10,24 +10,16 @@ describe('humanizeError', () => {
       expect(humanizeError('Failed to fetch')).toBe(
         'Connexion perdue. On réessaie automatiquement...'
       )
-      expect(humanizeError('NetworkError')).toBe(
-        'Pas de connexion internet. Vérifie ton réseau.'
-      )
+      expect(humanizeError('NetworkError')).toBe('Pas de connexion internet. Vérifie ton réseau.')
     })
 
     it('should map auth errors', () => {
-      expect(humanizeError('JWT expired')).toBe(
-        'Ta session a expiré. Reconnecte-toi.'
-      )
-      expect(humanizeError('Invalid login credentials')).toBe(
-        'Email ou mot de passe incorrect.'
-      )
+      expect(humanizeError('JWT expired')).toBe('Ta session a expiré. Reconnecte-toi.')
+      expect(humanizeError('Invalid login credentials')).toBe('Email ou mot de passe incorrect.')
     })
 
     it('should map database errors', () => {
-      expect(humanizeError('duplicate key value')).toBe(
-        'Cette action a déjà été effectuée.'
-      )
+      expect(humanizeError('duplicate key value')).toBe('Cette action a déjà été effectuée.')
       expect(humanizeError('Row not found')).toBe(
         'Élément introuvable. Il a peut-être été supprimé.'
       )
@@ -36,9 +28,7 @@ describe('humanizeError', () => {
     it('should map HTTP status codes', () => {
       expect(humanizeError('404')).toBe('Page introuvable.')
       expect(humanizeError('500')).toBe('Erreur serveur. On est dessus !')
-      expect(humanizeError('503')).toBe(
-        'Service en maintenance. Reviens dans quelques minutes.'
-      )
+      expect(humanizeError('503')).toBe('Service en maintenance. Reviens dans quelques minutes.')
     })
   })
 
@@ -47,16 +37,12 @@ describe('humanizeError', () => {
       expect(humanizeError('RATE LIMIT EXCEEDED')).toBe(
         'Doucement ! Réessaie dans quelques secondes.'
       )
-      expect(humanizeError('Too Many Requests')).toBe(
-        'Trop de requêtes. Patiente un moment.'
-      )
+      expect(humanizeError('Too Many Requests')).toBe('Trop de requêtes. Patiente un moment.')
     })
 
     it('should work with Error objects', () => {
       const error = new Error('Failed to fetch')
-      expect(humanizeError(error)).toBe(
-        'Connexion perdue. On réessaie automatiquement...'
-      )
+      expect(humanizeError(error)).toBe('Connexion perdue. On réessaie automatiquement...')
     })
   })
 

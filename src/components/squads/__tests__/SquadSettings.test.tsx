@@ -25,18 +25,24 @@ vi.mock('framer-motion', () => ({
   useAnimate: vi.fn().mockReturnValue([{ current: null }, vi.fn()]),
   useAnimation: vi.fn().mockReturnValue({ start: vi.fn(), stop: vi.fn() }),
   useReducedMotion: vi.fn().mockReturnValue(false),
-  m: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
-  motion: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
+  m: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
+  motion: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
 }))
 
 // Mock icons
@@ -62,16 +68,20 @@ vi.mock('../../ui', () => ({
   Card: ({ children, className }: any) =>
     createElement('div', { className, 'data-testid': 'card' }, children),
   Drawer: ({ children, isOpen, onClose, title }: any) =>
-    isOpen ? createElement('div', { 'data-testid': 'drawer' }, [
-      createElement('h3', { key: 'title' }, title),
-      children,
-    ]) : null,
+    isOpen
+      ? createElement('div', { 'data-testid': 'drawer' }, [
+          createElement('h3', { key: 'title' }, title),
+          children,
+        ])
+      : null,
 }))
 
 // Mock PremiumGate
 vi.mock('../../PremiumGate', () => ({
-  PremiumGate: ({ children, feature, fallback }: any) => createElement('div', { 'data-testid': `premium-gate-${feature}` }, children),
-  PremiumBadge: ({ small }: any) => createElement('span', { 'data-testid': 'premium-badge' }, 'Premium'),
+  PremiumGate: ({ children, feature, fallback }: any) =>
+    createElement('div', { 'data-testid': `premium-gate-${feature}` }, children),
+  PremiumBadge: ({ small }: any) =>
+    createElement('span', { 'data-testid': 'premium-badge' }, 'Premium'),
 }))
 
 // Mock SquadLeaderboard - capture props for verification
@@ -80,7 +90,11 @@ vi.mock('../../SquadLeaderboard', () => ({
   SquadLeaderboard: ({ entries, currentUserId }: any) => {
     mockLeaderboardProps.entries = entries
     mockLeaderboardProps.currentUserId = currentUserId
-    return createElement('div', { 'data-testid': 'squad-leaderboard' }, `Leaderboard: ${entries.length} entries`)
+    return createElement(
+      'div',
+      { 'data-testid': 'squad-leaderboard' },
+      `Leaderboard: ${entries.length} entries`
+    )
   },
 }))
 
@@ -189,14 +203,18 @@ describe('SquadSettings', () => {
   })
 
   it('shows error message when export throws', () => {
-    mockExportFn.mockImplementation(() => { throw new Error('Export failed') })
+    mockExportFn.mockImplementation(() => {
+      throw new Error('Export failed')
+    })
     render(<SquadSettings {...defaultProps} />)
     fireEvent.click(screen.getByText('Exporter'))
     expect(defaultProps.onSuccess).toHaveBeenCalledWith('Export failed')
   })
 
   it('shows generic error when export throws non-Error', () => {
-    mockExportFn.mockImplementation(() => { throw 'oops' })
+    mockExportFn.mockImplementation(() => {
+      throw 'oops'
+    })
     render(<SquadSettings {...defaultProps} />)
     fireEvent.click(screen.getByText('Exporter'))
     expect(defaultProps.onSuccess).toHaveBeenCalledWith("Erreur lors de l'export")
@@ -207,7 +225,9 @@ describe('SquadSettings', () => {
   it('shows Squad Premium section when isSquadPremium is true', () => {
     render(<SquadSettings {...defaultProps} isSquadPremium={true} />)
     expect(screen.getByText('Squad Premium')).toBeInTheDocument()
-    expect(screen.getByText('Audio HD, stats avancées, export calendrier actifs')).toBeInTheDocument()
+    expect(
+      screen.getByText('Audio HD, stats avancées, export calendrier actifs')
+    ).toBeInTheDocument()
   })
 
   it('hides Squad Premium section when isSquadPremium is false', () => {
@@ -230,9 +250,12 @@ describe('SquadSettings', () => {
   })
 
   it('transforms leaderboard data: rank, xp, level, reliability_score', () => {
-    render(<SquadSettings {...defaultProps} leaderboard={[
-      { user_id: 'u1', username: 'A', total_present: 10, reliability: 90 },
-    ]} />)
+    render(
+      <SquadSettings
+        {...defaultProps}
+        leaderboard={[{ user_id: 'u1', username: 'A', total_present: 10, reliability: 90 }]}
+      />
+    )
     // Check the transformed props passed to SquadLeaderboard
     expect(mockLeaderboardProps.entries.length).toBe(1)
     expect(mockLeaderboardProps.entries[0].xp).toBe(100) // 10 * 10
@@ -247,18 +270,26 @@ describe('SquadSettings', () => {
   })
 
   it('sorts leaderboard by XP descending', () => {
-    render(<SquadSettings {...defaultProps} leaderboard={[
-      { user_id: 'u1', username: 'Low', total_present: 2 },
-      { user_id: 'u2', username: 'High', total_present: 10 },
-    ]} />)
+    render(
+      <SquadSettings
+        {...defaultProps}
+        leaderboard={[
+          { user_id: 'u1', username: 'Low', total_present: 2 },
+          { user_id: 'u2', username: 'High', total_present: 10 },
+        ]}
+      />
+    )
     expect(mockLeaderboardProps.entries[0].username).toBe('High')
     expect(mockLeaderboardProps.entries[1].username).toBe('Low')
   })
 
   it('uses xp from entry if provided', () => {
-    render(<SquadSettings {...defaultProps} leaderboard={[
-      { user_id: 'u1', username: 'A', xp: 500, total_present: 1 },
-    ]} />)
+    render(
+      <SquadSettings
+        {...defaultProps}
+        leaderboard={[{ user_id: 'u1', username: 'A', xp: 500, total_present: 1 }]}
+      />
+    )
     expect(mockLeaderboardProps.entries[0].xp).toBe(500)
   })
 
@@ -349,7 +380,14 @@ describe('SquadSettings', () => {
   })
 
   it('hides edit squad option in drawer when onEditSquadClick is not provided', () => {
-    render(<SquadSettings {...defaultProps} showActionsDrawer={true} isOwner={true} onEditSquadClick={undefined} />)
+    render(
+      <SquadSettings
+        {...defaultProps}
+        showActionsDrawer={true}
+        isOwner={true}
+        onEditSquadClick={undefined}
+      />
+    )
     expect(screen.queryByText('Modifier la squad')).not.toBeInTheDocument()
   })
 

@@ -34,7 +34,10 @@ describe('imageUtils', () => {
     })
 
     it('uses custom width parameter', () => {
-      const result = getPlaceholderUrl('https://example.supabase.co/storage/v1/bucket/image.jpg', 20)
+      const result = getPlaceholderUrl(
+        'https://example.supabase.co/storage/v1/bucket/image.jpg',
+        20
+      )
       expect(result).toContain('width=20')
     })
   })
@@ -87,13 +90,22 @@ describe('imageUtils', () => {
     it('falls back when avif/webp not supported in test env', () => {
       // In test env, toDataURL returns png, so avif/webp detection returns false
       // and the function falls back to the vercel image path or original
-      const result = getOptimizedSrc('https://example.com/image.jpg', undefined, undefined, 'https://example.com/image.avif')
+      const result = getOptimizedSrc(
+        'https://example.com/image.jpg',
+        undefined,
+        undefined,
+        'https://example.com/image.avif'
+      )
       expect(typeof result).toBe('string')
       expect(result.length).toBeGreaterThan(0)
     })
 
     it('falls back for webpSrc in test env', () => {
-      const result = getOptimizedSrc('https://example.com/image.jpg', undefined, 'https://example.com/image.webp')
+      const result = getOptimizedSrc(
+        'https://example.com/image.jpg',
+        undefined,
+        'https://example.com/image.webp'
+      )
       expect(typeof result).toBe('string')
       expect(result.length).toBeGreaterThan(0)
     })

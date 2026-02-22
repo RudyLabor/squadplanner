@@ -317,9 +317,7 @@ describe('analytics', () => {
 
       trackEvent('squad_joined', { squad_id: 'abc' })
 
-      expect(consoleSpy).toHaveBeenCalledWith(
-        '[Analytics]', 'squad_joined', { squad_id: 'abc' }
-      )
+      expect(consoleSpy).toHaveBeenCalledWith('[Analytics]', 'squad_joined', { squad_id: 'abc' })
     })
 
     it('should track events without optional properties', async () => {
@@ -337,13 +335,31 @@ describe('analytics', () => {
       const { trackEvent } = await freshImport()
 
       const events = [
-        'squad_created', 'squad_joined', 'squad_left',
-        'session_created', 'session_viewed', 'session_joined', 'session_left',
-        'rsvp_viewed', 'rsvp_submitted', 'rsvp_changed',
-        'premium_viewed', 'premium_checkout_started', 'premium_subscribed', 'premium_cancelled',
-        'onboarding_started', 'onboarding_step_completed', 'onboarding_skipped', 'onboarding_finished',
-        'invite_sent', 'message_sent', 'voice_call_started', 'voice_call_ended',
-        'command_palette_opened', 'search_performed', 'notification_clicked',
+        'squad_created',
+        'squad_joined',
+        'squad_left',
+        'session_created',
+        'session_viewed',
+        'session_joined',
+        'session_left',
+        'rsvp_viewed',
+        'rsvp_submitted',
+        'rsvp_changed',
+        'premium_viewed',
+        'premium_checkout_started',
+        'premium_subscribed',
+        'premium_cancelled',
+        'onboarding_started',
+        'onboarding_step_completed',
+        'onboarding_skipped',
+        'onboarding_finished',
+        'invite_sent',
+        'message_sent',
+        'voice_call_started',
+        'voice_call_ended',
+        'command_palette_opened',
+        'search_performed',
+        'notification_clicked',
       ] as const
 
       for (const event of events) {
@@ -518,10 +534,7 @@ describe('analytics', () => {
       flushAnalytics()
       await vi.advanceTimersByTimeAsync(0)
 
-      expect(warnSpy).toHaveBeenCalledWith(
-        '[Analytics] Failed to send events:',
-        expect.any(Error)
-      )
+      expect(warnSpy).toHaveBeenCalledWith('[Analytics] Failed to send events:', expect.any(Error))
     })
 
     it('should silently fail on fetch error in PROD mode', async () => {
@@ -653,9 +666,9 @@ describe('analytics', () => {
 
       identifyUser('user-999', { role: 'admin' })
 
-      expect(consoleSpy).toHaveBeenCalledWith(
-        '[Analytics] User identified:', 'user-999', { role: 'admin' }
-      )
+      expect(consoleSpy).toHaveBeenCalledWith('[Analytics] User identified:', 'user-999', {
+        role: 'admin',
+      })
     })
 
     it('should work without traits', async () => {

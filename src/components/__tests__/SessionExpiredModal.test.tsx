@@ -18,18 +18,24 @@ vi.mock('framer-motion', () => ({
   useAnimate: vi.fn().mockReturnValue([{ current: null }, vi.fn()]),
   useAnimation: vi.fn().mockReturnValue({ start: vi.fn(), stop: vi.fn() }),
   useReducedMotion: vi.fn().mockReturnValue(false),
-  m: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
-  motion: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
+  m: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
+  motion: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
 }))
 
 // Mock icons
@@ -64,7 +70,9 @@ describe('SessionExpiredModal', () => {
   })
 
   it('renders nothing when closed', () => {
-    const { container } = render(createElement(SessionExpiredModal, { ...defaultProps, isOpen: false }))
+    const { container } = render(
+      createElement(SessionExpiredModal, { ...defaultProps, isOpen: false })
+    )
     expect(container.querySelector('[role="alertdialog"]')).toBeNull()
   })
 
@@ -168,7 +176,9 @@ describe('SessionExpiredModal', () => {
     })
 
     it('renders nothing inside AnimatePresence when closed', () => {
-      const { container } = render(createElement(SessionExpiredModal, { ...defaultProps, isOpen: false }))
+      const { container } = render(
+        createElement(SessionExpiredModal, { ...defaultProps, isOpen: false })
+      )
       expect(container.querySelector('[role="alertdialog"]')).toBeNull()
     })
   })

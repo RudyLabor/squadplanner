@@ -17,27 +17,38 @@ vi.mock('framer-motion', () => ({
   useAnimate: vi.fn().mockReturnValue([{ current: null }, vi.fn()]),
   useAnimation: vi.fn().mockReturnValue({ start: vi.fn(), stop: vi.fn() }),
   useReducedMotion: vi.fn().mockReturnValue(false),
-  m: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
-  motion: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
+  m: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
+  motion: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
 }))
 
-vi.mock('../../icons', () =>
-  new Proxy({}, {
-    get: (_t, name) =>
-      typeof name === 'string'
-        ? (props: any) => createElement('svg', { 'data-testid': `icon-${name}`, ...props })
-        : undefined,
-  })
+vi.mock(
+  '../../icons',
+  () =>
+    new Proxy(
+      {},
+      {
+        get: (_t, name) =>
+          typeof name === 'string'
+            ? (props: any) => createElement('svg', { 'data-testid': `icon-${name}`, ...props })
+            : undefined,
+      }
+    )
 )
 
 const MockIcon = (props: any) => createElement('svg', { ...props })
@@ -64,33 +75,25 @@ describe('SearchResultsList', () => {
   })
 
   it('renders no results message when query has no matches', () => {
-    render(
-      <SearchResultsList
-        {...baseProps}
-        query="xyz"
-        results={[]}
-        groupedResults={{}}
-      />
-    )
+    render(<SearchResultsList {...baseProps} query="xyz" results={[]} groupedResults={{}} />)
     expect(screen.getByText(/Aucun résultat pour "xyz"/)).toBeDefined()
   })
 
   it('renders prompt when no query', () => {
-    render(
-      <SearchResultsList
-        {...baseProps}
-        query=""
-        results={[]}
-        groupedResults={{}}
-      />
-    )
+    render(<SearchResultsList {...baseProps} query="" results={[]} groupedResults={{}} />)
     expect(screen.getByText('Commence à taper pour rechercher')).toBeDefined()
   })
 
   it('renders grouped results', () => {
     const results = [
       { id: 'r1', type: 'squad' as const, title: 'Alpha', icon: MockIcon, path: '/squad/1' },
-      { id: 'r2', type: 'session' as const, title: 'Session 1', icon: MockIcon, path: '/session/1' },
+      {
+        id: 'r2',
+        type: 'session' as const,
+        title: 'Session 1',
+        icon: MockIcon,
+        path: '/session/1',
+      },
     ]
     render(
       <SearchResultsList
@@ -129,7 +132,14 @@ describe('SearchResultsList', () => {
 
   it('renders subtitle when present', () => {
     const results = [
-      { id: 'r1', type: 'squad' as const, title: 'Alpha', subtitle: 'Valorant squad', icon: MockIcon, path: '/squad/1' },
+      {
+        id: 'r1',
+        type: 'squad' as const,
+        title: 'Alpha',
+        subtitle: 'Valorant squad',
+        icon: MockIcon,
+        path: '/squad/1',
+      },
     ]
     render(
       <SearchResultsList

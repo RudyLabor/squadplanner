@@ -18,18 +18,24 @@ vi.mock('framer-motion', () => ({
   useAnimate: vi.fn().mockReturnValue([{ current: null }, vi.fn()]),
   useAnimation: vi.fn().mockReturnValue({ start: vi.fn(), stop: vi.fn() }),
   useReducedMotion: vi.fn().mockReturnValue(false),
-  m: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
-  motion: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
+  m: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
+  motion: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
 }))
 
 // Mock UI components
@@ -123,7 +129,13 @@ describe('VoiceChat', () => {
       isConnected: true,
       isConnecting: false,
       isMuted: false,
-      localUser: { odrop: 'user-1', username: 'TestUser', isMuted: false, isSpeaking: false, volume: 100 },
+      localUser: {
+        odrop: 'user-1',
+        username: 'TestUser',
+        isMuted: false,
+        isSpeaking: false,
+        volume: 100,
+      },
       remoteUsers: [],
       error: null,
       joinChannel: mockJoinChannel,
@@ -140,7 +152,13 @@ describe('VoiceChat', () => {
       isConnected: true,
       isConnecting: false,
       isMuted: false,
-      localUser: { odrop: 'user-1', username: 'TestUser', isMuted: false, isSpeaking: false, volume: 100 },
+      localUser: {
+        odrop: 'user-1',
+        username: 'TestUser',
+        isMuted: false,
+        isSpeaking: false,
+        volume: 100,
+      },
       remoteUsers: [
         { odrop: 'user-2', username: 'Player2', isMuted: false, isSpeaking: false, volume: 100 },
         { odrop: 'user-3', username: 'Player3', isMuted: true, isSpeaking: false, volume: 100 },
@@ -160,7 +178,13 @@ describe('VoiceChat', () => {
       isConnected: true,
       isConnecting: false,
       isMuted: false,
-      localUser: { odrop: 'user-1', username: 'TestUser', isMuted: false, isSpeaking: false, volume: 100 },
+      localUser: {
+        odrop: 'user-1',
+        username: 'TestUser',
+        isMuted: false,
+        isSpeaking: false,
+        volume: 100,
+      },
       remoteUsers: [],
       error: null,
       joinChannel: mockJoinChannel,
@@ -179,7 +203,13 @@ describe('VoiceChat', () => {
       isConnected: true,
       isConnecting: false,
       isMuted: false,
-      localUser: { odrop: 'user-1', username: 'TestUser', isMuted: false, isSpeaking: false, volume: 100 },
+      localUser: {
+        odrop: 'user-1',
+        username: 'TestUser',
+        isMuted: false,
+        isSpeaking: false,
+        volume: 100,
+      },
       remoteUsers: [
         { odrop: 'user-2', username: 'GamerPro', isMuted: false, isSpeaking: true, volume: 100 },
       ],
@@ -199,7 +229,13 @@ describe('VoiceChat', () => {
       isConnected: true,
       isConnecting: false,
       isMuted: false,
-      localUser: { odrop: 'user-1', username: 'TestUser', isMuted: false, isSpeaking: false, volume: 100 },
+      localUser: {
+        odrop: 'user-1',
+        username: 'TestUser',
+        isMuted: false,
+        isSpeaking: false,
+        volume: 100,
+      },
       remoteUsers: [],
       error: null,
       joinChannel: mockJoinChannel,
@@ -216,7 +252,13 @@ describe('VoiceChat', () => {
       isConnected: true,
       isConnecting: false,
       isMuted: false,
-      localUser: { odrop: 'user-1', username: 'TestUser', isMuted: false, isSpeaking: false, volume: 100 },
+      localUser: {
+        odrop: 'user-1',
+        username: 'TestUser',
+        isMuted: false,
+        isSpeaking: false,
+        volume: 100,
+      },
       remoteUsers: [
         { odrop: 'user-2', username: 'Alex', isMuted: false, isSpeaking: false, volume: 100 },
       ],
@@ -294,7 +336,13 @@ describe('VoiceChat', () => {
       isConnected: true,
       isConnecting: false,
       isMuted: false,
-      localUser: { odrop: 'user-1', username: 'TestUser', isMuted: false, isSpeaking: false, volume: 100 },
+      localUser: {
+        odrop: 'user-1',
+        username: 'TestUser',
+        isMuted: false,
+        isSpeaking: false,
+        volume: 100,
+      },
       remoteUsers: [],
       error: null,
       joinChannel: mockJoinChannel,
@@ -311,7 +359,13 @@ describe('VoiceChat', () => {
       isConnected: true,
       isConnecting: false,
       isMuted: true,
-      localUser: { odrop: 'user-1', username: 'TestUser', isMuted: true, isSpeaking: false, volume: 100 },
+      localUser: {
+        odrop: 'user-1',
+        username: 'TestUser',
+        isMuted: true,
+        isSpeaking: false,
+        volume: 100,
+      },
       remoteUsers: [],
       error: null,
       joinChannel: mockJoinChannel,
@@ -328,7 +382,13 @@ describe('VoiceChat', () => {
       isConnected: true,
       isConnecting: false,
       isMuted: false,
-      localUser: { odrop: 'user-1', username: 'TestUser', isMuted: false, isSpeaking: false, volume: 100 },
+      localUser: {
+        odrop: 'user-1',
+        username: 'TestUser',
+        isMuted: false,
+        isSpeaking: false,
+        volume: 100,
+      },
       remoteUsers: [],
       error: null,
       joinChannel: mockJoinChannel,
@@ -369,7 +429,13 @@ describe('VoiceChat', () => {
       isConnected: true,
       isConnecting: false,
       isMuted: false,
-      localUser: { odrop: 'user-1', username: 'TestUser', isMuted: false, isSpeaking: false, volume: 100 },
+      localUser: {
+        odrop: 'user-1',
+        username: 'TestUser',
+        isMuted: false,
+        isSpeaking: false,
+        volume: 100,
+      },
       remoteUsers: [],
       error: null,
       joinChannel: mockJoinChannel,
@@ -428,7 +494,13 @@ describe('VoiceChat', () => {
       isConnected: true,
       isConnecting: false,
       isMuted: false,
-      localUser: { odrop: 'user-1', username: 'TestUser', isMuted: false, isSpeaking: false, volume: 100 },
+      localUser: {
+        odrop: 'user-1',
+        username: 'TestUser',
+        isMuted: false,
+        isSpeaking: false,
+        volume: 100,
+      },
       remoteUsers: [],
       error: null,
       joinChannel: mockJoinChannel,

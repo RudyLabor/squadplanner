@@ -28,7 +28,9 @@ vi.mock('../ui', () => ({
 // Mock subscription store
 vi.mock('../../hooks', () => ({
   useSubscriptionStore: vi.fn().mockReturnValue({
-    createCheckoutSession: vi.fn().mockResolvedValue({ url: 'https://checkout.stripe.com/test', error: null }),
+    createCheckoutSession: vi
+      .fn()
+      .mockResolvedValue({ url: 'https://checkout.stripe.com/test', error: null }),
     plans: [
       { id: 'premium_monthly', stripePriceId: 'price_monthly' },
       { id: 'premium_yearly', stripePriceId: 'price_yearly' },
@@ -77,7 +79,9 @@ describe('PremiumUpgradeModal', () => {
   })
 
   it('renders nothing when closed', () => {
-    const { container } = render(createElement(PremiumUpgradeModal, { ...defaultProps, isOpen: false }))
+    const { container } = render(
+      createElement(PremiumUpgradeModal, { ...defaultProps, isOpen: false })
+    )
     expect(container.querySelector('[data-testid="modal"]')).toBeNull()
   })
 

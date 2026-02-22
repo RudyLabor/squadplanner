@@ -16,7 +16,8 @@ vi.mock('react-router', () => ({
   useSearchParams: vi.fn().mockReturnValue([new URLSearchParams(), vi.fn()]),
   useLoaderData: vi.fn().mockReturnValue({}),
   Link: ({ children, to, ...props }: any) => createElement('a', { href: to, ...props }, children),
-  NavLink: ({ children, to, ...props }: any) => createElement('a', { href: to, ...props }, children),
+  NavLink: ({ children, to, ...props }: any) =>
+    createElement('a', { href: to, ...props }, children),
   Outlet: () => null,
   useMatches: vi.fn().mockReturnValue([]),
 }))
@@ -35,28 +36,46 @@ vi.mock('framer-motion', () => ({
   useAnimate: vi.fn().mockReturnValue([{ current: null }, vi.fn()]),
   useAnimation: vi.fn().mockReturnValue({ start: vi.fn(), stop: vi.fn() }),
   useReducedMotion: vi.fn().mockReturnValue(false),
-  m: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
-  motion: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
+  m: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
+  motion: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
 }))
 
 vi.mock('../../lib/supabaseMinimal', () => ({
   supabaseMinimal: {
-    auth: { getSession: vi.fn().mockResolvedValue({ data: { session: { user: { id: 'user-1' } } } }) },
+    auth: {
+      getSession: vi.fn().mockResolvedValue({ data: { session: { user: { id: 'user-1' } } } }),
+    },
     from: vi.fn().mockReturnValue({
       select: vi.fn().mockReturnThis(),
       eq: vi.fn().mockReturnThis(),
       single: vi.fn().mockResolvedValue({ data: null }),
-      insert: vi.fn().mockResolvedValue({ data: [{ id: 'msg-new', content: 'test', sender_id: 'user-1', created_at: new Date().toISOString() }], error: null }),
+      insert: vi.fn().mockResolvedValue({
+        data: [
+          {
+            id: 'msg-new',
+            content: 'test',
+            sender_id: 'user-1',
+            created_at: new Date().toISOString(),
+          },
+        ],
+        error: null,
+      }),
       update: vi.fn().mockResolvedValue({ data: null }),
       delete: vi.fn().mockResolvedValue({ data: null }),
       order: vi.fn().mockReturnThis(),
@@ -71,21 +90,62 @@ vi.mock('../../lib/supabaseMinimal', () => ({
 
 vi.mock('../../hooks/useAuth', () => ({
   useAuthStore: Object.assign(
-    vi.fn().mockReturnValue({ user: { id: 'user-1' }, profile: { id: 'user-1', username: 'TestUser', avatar_url: null }, isLoading: false, isInitialized: true }),
-    { getState: vi.fn().mockReturnValue({ user: { id: 'user-1' }, profile: { id: 'user-1', username: 'TestUser' } }) },
+    vi.fn().mockReturnValue({
+      user: { id: 'user-1' },
+      profile: { id: 'user-1', username: 'TestUser', avatar_url: null },
+      isLoading: false,
+      isInitialized: true,
+    }),
+    {
+      getState: vi.fn().mockReturnValue({
+        user: { id: 'user-1' },
+        profile: { id: 'user-1', username: 'TestUser' },
+      }),
+    }
   ),
 }))
 vi.mock('../../hooks', () => ({
   useAuthStore: Object.assign(
-    vi.fn().mockReturnValue({ user: { id: 'user-1' }, profile: { id: 'user-1', username: 'TestUser', avatar_url: null }, isLoading: false, isInitialized: true }),
-    { getState: vi.fn().mockReturnValue({ user: { id: 'user-1' }, profile: { id: 'user-1', username: 'TestUser' } }) },
+    vi.fn().mockReturnValue({
+      user: { id: 'user-1' },
+      profile: { id: 'user-1', username: 'TestUser', avatar_url: null },
+      isLoading: false,
+      isInitialized: true,
+    }),
+    {
+      getState: vi.fn().mockReturnValue({
+        user: { id: 'user-1' },
+        profile: { id: 'user-1', username: 'TestUser' },
+      }),
+    }
   ),
 }))
-vi.mock('../../lib/i18n', () => ({ useT: () => (key: string) => key, useLocale: () => 'fr', useI18nStore: Object.assign(vi.fn().mockReturnValue({ locale: 'fr' }), { getState: vi.fn().mockReturnValue({ locale: 'fr' }) }) }))
-vi.mock('../../lib/toast', () => ({ showSuccess: vi.fn(), showError: vi.fn(), showWarning: vi.fn(), showInfo: vi.fn() }))
-vi.mock('../../utils/haptics', () => ({ haptic: { light: vi.fn(), medium: vi.fn(), success: vi.fn(), error: vi.fn(), selection: vi.fn() } }))
-vi.mock('../../components/LocationShare', () => ({ isLocationMessage: vi.fn().mockReturnValue(false), parseLocationMessage: vi.fn(), LocationMessage: () => null }))
-vi.mock('../../components/ChatPoll', () => ({ isPollMessage: vi.fn().mockReturnValue(false), parsePollData: vi.fn(), ChatPoll: () => null }))
+vi.mock('../../lib/i18n', () => ({
+  useT: () => (key: string) => key,
+  useLocale: () => 'fr',
+  useI18nStore: Object.assign(vi.fn().mockReturnValue({ locale: 'fr' }), {
+    getState: vi.fn().mockReturnValue({ locale: 'fr' }),
+  }),
+}))
+vi.mock('../../lib/toast', () => ({
+  showSuccess: vi.fn(),
+  showError: vi.fn(),
+  showWarning: vi.fn(),
+  showInfo: vi.fn(),
+}))
+vi.mock('../../utils/haptics', () => ({
+  haptic: { light: vi.fn(), medium: vi.fn(), success: vi.fn(), error: vi.fn(), selection: vi.fn() },
+}))
+vi.mock('../../components/LocationShare', () => ({
+  isLocationMessage: vi.fn().mockReturnValue(false),
+  parseLocationMessage: vi.fn(),
+  LocationMessage: () => null,
+}))
+vi.mock('../../components/ChatPoll', () => ({
+  isPollMessage: vi.fn().mockReturnValue(false),
+  parsePollData: vi.fn(),
+  ChatPoll: () => null,
+}))
 
 import { MessageContent } from '../../components/MessageContent'
 
@@ -95,9 +155,10 @@ import { MessageContent } from '../../components/MessageContent'
 
 describe('Integration — Message Content Pipeline', () => {
   it('renders complex message with multiple formatting types', () => {
-    const complexMessage = '**Hey** @JohnDoe, check out this *link*: https://example.com — it has ~~old info~~ and `new code`'
+    const complexMessage =
+      '**Hey** @JohnDoe, check out this *link*: https://example.com — it has ~~old info~~ and `new code`'
     const { container } = render(
-      <MessageContent content={complexMessage} onMentionClick={vi.fn()} />,
+      <MessageContent content={complexMessage} onMentionClick={vi.fn()} />
     )
 
     // Bold
@@ -118,12 +179,7 @@ describe('Integration — Message Content Pipeline', () => {
   it('mention click triggers callback with correct username', async () => {
     const user = userEvent.setup()
     const onMentionClick = vi.fn()
-    render(
-      <MessageContent
-        content="Hello @PlayerOne"
-        onMentionClick={onMentionClick}
-      />,
-    )
+    render(<MessageContent content="Hello @PlayerOne" onMentionClick={onMentionClick} />)
 
     const mention = screen.getByText('@PlayerOne')
     await user.click(mention)
@@ -137,7 +193,7 @@ describe('Integration — Message Content Pipeline', () => {
       <MessageContent
         content="@Alice and @Bob should join @Charlie"
         onMentionClick={onMentionClick}
-      />,
+      />
     )
 
     await user.click(screen.getByText('@Alice'))
@@ -150,9 +206,7 @@ describe('Integration — Message Content Pipeline', () => {
   })
 
   it('links open in new tab with rel=noopener', () => {
-    const { container } = render(
-      <MessageContent content="Visit https://example.com" />,
-    )
+    const { container } = render(<MessageContent content="Visit https://example.com" />)
     const link = container.querySelector('a')
     expect(link?.getAttribute('target')).toBe('_blank')
     expect(link?.getAttribute('rel')).toContain('noopener')
@@ -160,7 +214,7 @@ describe('Integration — Message Content Pipeline', () => {
 
   it('GIF URLs render as inline images', () => {
     const { container } = render(
-      <MessageContent content="https://media.giphy.com/media/abc123/giphy.gif" />,
+      <MessageContent content="https://media.giphy.com/media/abc123/giphy.gif" />
     )
     const img = container.querySelector('img')
     expect(img).toBeTruthy()
@@ -183,11 +237,9 @@ describe('Integration — Message Content Pipeline', () => {
   })
 
   it('mixed own and other messages render differently', () => {
-    const { container: ownContainer } = render(
-      <MessageContent content="My message" isOwn={true} />,
-    )
+    const { container: ownContainer } = render(<MessageContent content="My message" isOwn={true} />)
     const { container: otherContainer } = render(
-      <MessageContent content="Their message" isOwn={false} />,
+      <MessageContent content="Their message" isOwn={false} />
     )
     // Both should render content
     expect(ownContainer.textContent).toContain('My message')
@@ -197,7 +249,7 @@ describe('Integration — Message Content Pipeline', () => {
   it('HTML entities in content render as escaped text not as HTML', () => {
     // Security: &lt;script&gt; should appear as literal text, not execute
     const { container } = render(
-      <MessageContent content="&lt;script&gt;alert(1)&lt;/script&gt; safe text" />,
+      <MessageContent content="&lt;script&gt;alert(1)&lt;/script&gt; safe text" />
     )
     // No actual script tags injected from entity-encoded content
     expect(container.querySelectorAll('script')).toHaveLength(0)

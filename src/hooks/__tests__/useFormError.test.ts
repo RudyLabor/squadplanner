@@ -59,7 +59,9 @@ describe('useFormError', () => {
     act(() => {
       result.current.handleError(new Error('Some random error'))
     })
-    expect(result.current.humanMessage).toBe('Une erreur est survenue. Réessaie ou contacte le support.')
+    expect(result.current.humanMessage).toBe(
+      'Une erreur est survenue. Réessaie ou contacte le support.'
+    )
   })
 
   it('clearError resets everything', () => {
@@ -136,9 +138,7 @@ describe('useFormError', () => {
 
   it('retry does not execute when maxRetries exceeded', async () => {
     const onMaxRetriesExceeded = vi.fn()
-    const { result } = renderHook(() =>
-      useFormError({ maxRetries: 0, onMaxRetriesExceeded })
-    )
+    const { result } = renderHook(() => useFormError({ maxRetries: 0, onMaxRetriesExceeded }))
 
     const fn = vi.fn()
     await act(async () => {

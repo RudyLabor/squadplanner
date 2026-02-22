@@ -17,18 +17,24 @@ vi.mock('framer-motion', () => ({
   useAnimate: vi.fn().mockReturnValue([{ current: null }, vi.fn()]),
   useAnimation: vi.fn().mockReturnValue({ start: vi.fn(), stop: vi.fn() }),
   useReducedMotion: vi.fn().mockReturnValue(false),
-  m: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
-  motion: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
+  m: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
+  motion: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
 }))
 
 // Mock icons
@@ -68,64 +74,78 @@ describe('ThreadView', () => {
   })
 
   it('renders nothing when closed', () => {
-    const { container } = render(createElement(ThreadView, {
-      threadId: 'thread-1',
-      isOpen: false,
-      onClose: vi.fn(),
-    }))
+    const { container } = render(
+      createElement(ThreadView, {
+        threadId: 'thread-1',
+        isOpen: false,
+        onClose: vi.fn(),
+      })
+    )
     expect(container.innerHTML).toBe('')
   })
 
   it('renders thread panel when open', () => {
-    render(createElement(ThreadView, {
-      threadId: 'thread-1',
-      isOpen: true,
-      onClose: vi.fn(),
-    }))
+    render(
+      createElement(ThreadView, {
+        threadId: 'thread-1',
+        isOpen: true,
+        onClose: vi.fn(),
+      })
+    )
     expect(screen.getByText('Thread')).toBeDefined()
   })
 
   it('shows empty state when no messages', () => {
-    render(createElement(ThreadView, {
-      threadId: 'thread-1',
-      isOpen: true,
-      onClose: vi.fn(),
-    }))
+    render(
+      createElement(ThreadView, {
+        threadId: 'thread-1',
+        isOpen: true,
+        onClose: vi.fn(),
+      })
+    )
     expect(screen.getByText('Aucune réponse')).toBeDefined()
   })
 
   it('renders input field', () => {
-    render(createElement(ThreadView, {
-      threadId: 'thread-1',
-      isOpen: true,
-      onClose: vi.fn(),
-    }))
+    render(
+      createElement(ThreadView, {
+        threadId: 'thread-1',
+        isOpen: true,
+        onClose: vi.fn(),
+      })
+    )
     expect(screen.getByPlaceholderText('Répondre dans le thread...')).toBeDefined()
   })
 })
 
 describe('ThreadIndicator', () => {
   it('renders nothing when replyCount is 0', () => {
-    const { container } = render(createElement(ThreadIndicator, {
-      replyCount: 0,
-      onClick: vi.fn(),
-    }))
+    const { container } = render(
+      createElement(ThreadIndicator, {
+        replyCount: 0,
+        onClick: vi.fn(),
+      })
+    )
     expect(container.innerHTML).toBe('')
   })
 
   it('renders reply count', () => {
-    render(createElement(ThreadIndicator, {
-      replyCount: 5,
-      onClick: vi.fn(),
-    }))
+    render(
+      createElement(ThreadIndicator, {
+        replyCount: 5,
+        onClick: vi.fn(),
+      })
+    )
     expect(screen.getByText('5 réponses')).toBeDefined()
   })
 
   it('uses singular for 1 reply', () => {
-    render(createElement(ThreadIndicator, {
-      replyCount: 1,
-      onClick: vi.fn(),
-    }))
+    render(
+      createElement(ThreadIndicator, {
+        replyCount: 1,
+        onClick: vi.fn(),
+      })
+    )
     expect(screen.getByText('1 réponse')).toBeDefined()
   })
 })

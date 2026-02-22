@@ -25,7 +25,7 @@ function flushRAF(times = 1) {
   for (let i = 0; i < times; i++) {
     const cbs = [...rafCallbacks]
     rafCallbacks = []
-    cbs.forEach(cb => cb(performance.now()))
+    cbs.forEach((cb) => cb(performance.now()))
   }
 }
 
@@ -150,25 +150,29 @@ describe('motionApple', () => {
       expect(button.className).toContain('motion-element')
     })
 
-    it('calls onClick when clicked (after spring animation completes)', { timeout: 30000 }, async () => {
-      const handleClick = vi.fn()
-      render(<AppleButton onClick={handleClick}>Test</AppleButton>)
-      const button = screen.getByRole('button')
-      fireEvent.click(button)
+    it(
+      'calls onClick when clicked (after spring animation completes)',
+      { timeout: 30000 },
+      async () => {
+        const handleClick = vi.fn()
+        render(<AppleButton onClick={handleClick}>Test</AppleButton>)
+        const button = screen.getByRole('button')
+        fireEvent.click(button)
 
-      // The handleClick runs two chained spring animations then calls onClick.
-      // Each animation uses requestAnimationFrame and the promise resolves when the
-      // spring settles. We need to interleave raf flushes with microtask ticks
-      // to allow the await chain to progress between animations.
-      for (let i = 0; i < 600; i++) {
-        flushRAF()
-        // Allow microtasks (Promise.then) to execute between raf frames
-        await new Promise(resolve => setTimeout(resolve, 0))
+        // The handleClick runs two chained spring animations then calls onClick.
+        // Each animation uses requestAnimationFrame and the promise resolves when the
+        // spring settles. We need to interleave raf flushes with microtask ticks
+        // to allow the await chain to progress between animations.
+        for (let i = 0; i < 600; i++) {
+          flushRAF()
+          // Allow microtasks (Promise.then) to execute between raf frames
+          await new Promise((resolve) => setTimeout(resolve, 0))
+        }
+
+        // The onClick is called after both animations resolve
+        expect(handleClick).toHaveBeenCalled()
       }
-
-      // The onClick is called after both animations resolve
-      expect(handleClick).toHaveBeenCalled()
-    })
+    )
 
     it('renders with default gentle variant', () => {
       // Just verifying no error when rendering with default variant

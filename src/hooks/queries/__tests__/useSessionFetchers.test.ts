@@ -17,9 +17,7 @@ const { mockSupabase } = vi.hoisted(() => {
     builder.single = vi.fn().mockImplementation(() => resolve())
 
     // When used as a promise/thenable (for .select('*').eq(...)... without .single())
-    builder.then = vi.fn().mockImplementation((onFulfilled) =>
-      resolve().then(onFulfilled)
-    )
+    builder.then = vi.fn().mockImplementation((onFulfilled) => resolve().then(onFulfilled))
 
     return builder
   }
@@ -206,9 +204,7 @@ describe('useSessionFetchers', () => {
   describe('fetchSessionById', () => {
     it('returns session with rsvps and checkins', async () => {
       const session = { id: 'session-1', title: 'Test Session', squad_id: 'squad-1' }
-      const rsvps = [
-        { session_id: 'session-1', user_id: 'user-1', response: 'present' },
-      ]
+      const rsvps = [{ session_id: 'session-1', user_id: 'user-1', response: 'present' }]
       const profiles = [{ id: 'user-1', username: 'player1' }]
       const checkins = [{ session_id: 'session-1', user_id: 'user-1' }]
 

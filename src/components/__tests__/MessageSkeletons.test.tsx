@@ -2,7 +2,18 @@ import { describe, it, expect, vi } from 'vitest'
 import { render } from '@testing-library/react'
 import { createElement } from 'react'
 
-vi.mock('react-router', () => ({ useLocation: vi.fn().mockReturnValue({ pathname: '/' }), useNavigate: vi.fn().mockReturnValue(vi.fn()), useParams: vi.fn().mockReturnValue({}), useSearchParams: vi.fn().mockReturnValue([new URLSearchParams(), vi.fn()]), useLoaderData: vi.fn().mockReturnValue({}), Link: ({ children, to, ...props }: any) => createElement('a', { href: to, ...props }, children), NavLink: ({ children, to, ...props }: any) => createElement('a', { href: to, ...props }, children), Outlet: () => null, useMatches: vi.fn().mockReturnValue([]) }))
+vi.mock('react-router', () => ({
+  useLocation: vi.fn().mockReturnValue({ pathname: '/' }),
+  useNavigate: vi.fn().mockReturnValue(vi.fn()),
+  useParams: vi.fn().mockReturnValue({}),
+  useSearchParams: vi.fn().mockReturnValue([new URLSearchParams(), vi.fn()]),
+  useLoaderData: vi.fn().mockReturnValue({}),
+  Link: ({ children, to, ...props }: any) => createElement('a', { href: to, ...props }, children),
+  NavLink: ({ children, to, ...props }: any) =>
+    createElement('a', { href: to, ...props }, children),
+  Outlet: () => null,
+  useMatches: vi.fn().mockReturnValue([]),
+}))
 vi.mock('framer-motion', () => ({
   AnimatePresence: ({ children }: any) => children,
   LazyMotion: ({ children }: any) => children,
@@ -17,27 +28,76 @@ vi.mock('framer-motion', () => ({
   useAnimate: vi.fn().mockReturnValue([{ current: null }, vi.fn()]),
   useAnimation: vi.fn().mockReturnValue({ start: vi.fn(), stop: vi.fn() }),
   useReducedMotion: vi.fn().mockReturnValue(false),
-  m: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
-  motion: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
+  m: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
+  motion: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
+}))
+vi.mock('../../lib/supabaseMinimal', () => ({
+  supabaseMinimal: { from: vi.fn().mockReturnValue({ select: vi.fn().mockReturnThis() }) },
+  supabase: { from: vi.fn().mockReturnValue({ select: vi.fn().mockReturnThis() }) },
+  isSupabaseReady: vi.fn().mockReturnValue(true),
+}))
+vi.mock('../../hooks/useAuth', () => ({
+  useAuthStore: Object.assign(
+    vi.fn().mockReturnValue({
+      user: { id: 'user-1' },
+      profile: { id: 'user-1', username: 'TestUser' },
+      isLoading: false,
+      isInitialized: true,
+    }),
+    { getState: vi.fn().mockReturnValue({ user: { id: 'user-1' } }) }
+  ),
+}))
+vi.mock('../../hooks', () => ({
+  useAuthStore: Object.assign(
+    vi.fn().mockReturnValue({
+      user: { id: 'user-1' },
+      profile: { id: 'user-1', username: 'TestUser' },
+      isLoading: false,
+      isInitialized: true,
+    }),
+    { getState: vi.fn().mockReturnValue({ user: { id: 'user-1' } }) }
+  ),
+}))
+vi.mock('../../lib/i18n', () => ({
+  useT: () => (key: string) => key,
+  useLocale: () => 'fr',
+  useI18nStore: Object.assign(vi.fn().mockReturnValue({ locale: 'fr' }), {
+    getState: vi.fn().mockReturnValue({ locale: 'fr' }),
   }),
 }))
-vi.mock('../../lib/supabaseMinimal', () => ({ supabaseMinimal: { from: vi.fn().mockReturnValue({ select: vi.fn().mockReturnThis() }) }, supabase: { from: vi.fn().mockReturnValue({ select: vi.fn().mockReturnThis() }) }, isSupabaseReady: vi.fn().mockReturnValue(true) }))
-vi.mock('../../hooks/useAuth', () => ({ useAuthStore: Object.assign(vi.fn().mockReturnValue({ user: { id: 'user-1' }, profile: { id: 'user-1', username: 'TestUser' }, isLoading: false, isInitialized: true }), { getState: vi.fn().mockReturnValue({ user: { id: 'user-1' } }) }) }))
-vi.mock('../../hooks', () => ({ useAuthStore: Object.assign(vi.fn().mockReturnValue({ user: { id: 'user-1' }, profile: { id: 'user-1', username: 'TestUser' }, isLoading: false, isInitialized: true }), { getState: vi.fn().mockReturnValue({ user: { id: 'user-1' } }) }) }))
-vi.mock('../../lib/i18n', () => ({ useT: () => (key: string) => key, useLocale: () => 'fr', useI18nStore: Object.assign(vi.fn().mockReturnValue({ locale: 'fr' }), { getState: vi.fn().mockReturnValue({ locale: 'fr' }) }) }))
-vi.mock('../../lib/toast', () => ({ showSuccess: vi.fn(), showError: vi.fn(), showWarning: vi.fn(), showInfo: vi.fn() }))
-vi.mock('../../utils/haptics', () => ({ haptic: { light: vi.fn(), medium: vi.fn(), success: vi.fn(), error: vi.fn() } }))
+vi.mock('../../lib/toast', () => ({
+  showSuccess: vi.fn(),
+  showError: vi.fn(),
+  showWarning: vi.fn(),
+  showInfo: vi.fn(),
+}))
+vi.mock('../../utils/haptics', () => ({
+  haptic: { light: vi.fn(), medium: vi.fn(), success: vi.fn(), error: vi.fn() },
+}))
 
-import { MessageSkeleton, MessageListSkeleton, ConversationSkeleton, DMConversationSkeleton, ConversationListSkeleton } from '../MessageSkeletons'
+import {
+  MessageSkeleton,
+  MessageListSkeleton,
+  ConversationSkeleton,
+  DMConversationSkeleton,
+  ConversationListSkeleton,
+} from '../MessageSkeletons'
 
 describe('MessageSkeletons', () => {
   it('MessageSkeleton renders without crash', () => {

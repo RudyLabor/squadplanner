@@ -4,38 +4,56 @@ import { createElement } from 'react'
 
 vi.mock('framer-motion', () => ({
   AnimatePresence: ({ children }: any) => children,
-  m: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
-  motion: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
+  m: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
+  motion: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
 }))
 
 vi.mock('../../../components/icons', () => ({
-  Check: ({ children, ...props }: any) => createElement('span', { 'data-icon': 'Check', ...props }, children),
-  Gift: ({ children, ...props }: any) => createElement('span', { 'data-icon': 'Gift', ...props }, children),
-  ArrowRight: ({ children, ...props }: any) => createElement('span', { 'data-icon': 'ArrowRight', ...props }, children),
-  Loader2: ({ children, ...props }: any) => createElement('span', { 'data-testid': 'loader', ...props }, children),
-  Rocket: ({ children, ...props }: any) => createElement('span', { 'data-icon': 'Rocket', ...props }, children),
-  Sparkles: ({ children, ...props }: any) => createElement('span', { 'data-icon': 'Sparkles', ...props }, children),
-  Shield: ({ children, ...props }: any) => createElement('span', { 'data-icon': 'Shield', ...props }, children),
-  Clock: ({ children, ...props }: any) => createElement('span', { 'data-icon': 'Clock', ...props }, children),
-  CheckCircle2: ({ children, ...props }: any) => createElement('span', { 'data-icon': 'CheckCircle2', ...props }, children),
-  Crown: ({ children, ...props }: any) => createElement('span', { 'data-icon': 'Crown', ...props }, children),
-  Zap: ({ children, ...props }: any) => createElement('span', { 'data-icon': 'Zap', ...props }, children),
+  Check: ({ children, ...props }: any) =>
+    createElement('span', { 'data-icon': 'Check', ...props }, children),
+  Gift: ({ children, ...props }: any) =>
+    createElement('span', { 'data-icon': 'Gift', ...props }, children),
+  ArrowRight: ({ children, ...props }: any) =>
+    createElement('span', { 'data-icon': 'ArrowRight', ...props }, children),
+  Loader2: ({ children, ...props }: any) =>
+    createElement('span', { 'data-testid': 'loader', ...props }, children),
+  Rocket: ({ children, ...props }: any) =>
+    createElement('span', { 'data-icon': 'Rocket', ...props }, children),
+  Sparkles: ({ children, ...props }: any) =>
+    createElement('span', { 'data-icon': 'Sparkles', ...props }, children),
+  Shield: ({ children, ...props }: any) =>
+    createElement('span', { 'data-icon': 'Shield', ...props }, children),
+  Clock: ({ children, ...props }: any) =>
+    createElement('span', { 'data-icon': 'Clock', ...props }, children),
+  CheckCircle2: ({ children, ...props }: any) =>
+    createElement('span', { 'data-icon': 'CheckCircle2', ...props }, children),
+  Crown: ({ children, ...props }: any) =>
+    createElement('span', { 'data-icon': 'Crown', ...props }, children),
+  Zap: ({ children, ...props }: any) =>
+    createElement('span', { 'data-icon': 'Zap', ...props }, children),
 }))
 
 vi.mock('../../../components/ui', () => ({
   Button: ({ children, onClick, disabled, ...props }: any) =>
     createElement('button', { onClick, disabled, ...props }, children),
-  Card: ({ children, ...props }: any) => createElement('div', { 'data-testid': 'card', ...props }, children),
+  Card: ({ children, ...props }: any) =>
+    createElement('div', { 'data-testid': 'card', ...props }, children),
 }))
 
 vi.mock('../../../hooks/usePremium', () => ({

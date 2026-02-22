@@ -221,10 +221,13 @@ describe('toast', () => {
 
       showWithUndo('Removed', undoFn, 10000)
 
-      expect(mockToast).toHaveBeenCalledWith('Removed', expect.objectContaining({
-        duration: 10000,
-        style: { '--toast-duration': '10s' },
-      }))
+      expect(mockToast).toHaveBeenCalledWith(
+        'Removed',
+        expect.objectContaining({
+          duration: 10000,
+          style: { '--toast-duration': '10s' },
+        })
+      )
     })
   })
 

@@ -201,7 +201,13 @@ describe('OnboardingChecklist', () => {
   describe('actions', () => {
     it('calls onCreateSession when session step Go button is clicked', () => {
       const onCreateSession = vi.fn()
-      render(<OnboardingChecklist hasSquad={false} hasSession={false} onCreateSession={onCreateSession} />)
+      render(
+        <OnboardingChecklist
+          hasSquad={false}
+          hasSession={false}
+          onCreateSession={onCreateSession}
+        />
+      )
       // The session step is the 3rd Go button
       const goButtons = screen.getAllByText('Go')
       // Session step Go is the last one (3rd)

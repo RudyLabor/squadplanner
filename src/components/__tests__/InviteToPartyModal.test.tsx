@@ -16,23 +16,43 @@ vi.mock('framer-motion', () => ({
   useAnimate: vi.fn().mockReturnValue([{ current: null }, vi.fn()]),
   useAnimation: vi.fn().mockReturnValue({ start: vi.fn(), stop: vi.fn() }),
   useReducedMotion: vi.fn().mockReturnValue(false),
-  m: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
-  motion: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
+  m: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
+  motion: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
 }))
 
 vi.mock('../../lib/supabaseMinimal', () => ({
-  supabaseMinimal: { auth: { getSession: vi.fn().mockResolvedValue({ data: { session: null } }) }, from: vi.fn().mockReturnValue({ select: vi.fn().mockReturnValue({ eq: vi.fn().mockResolvedValue({ data: [], error: null }) }), insert: vi.fn().mockResolvedValue({ data: null, error: null }) }), functions: { invoke: vi.fn().mockResolvedValue({ data: null, error: null }) }, rpc: vi.fn().mockResolvedValue({ data: null, error: null }), channel: vi.fn().mockReturnValue({ on: vi.fn().mockReturnThis(), subscribe: vi.fn() }), removeChannel: vi.fn() },
-  supabase: { from: vi.fn().mockReturnValue({ select: vi.fn().mockReturnValue({ eq: vi.fn().mockResolvedValue({ data: [], error: null }) }) }) },
+  supabaseMinimal: {
+    auth: { getSession: vi.fn().mockResolvedValue({ data: { session: null } }) },
+    from: vi.fn().mockReturnValue({
+      select: vi.fn().mockReturnValue({ eq: vi.fn().mockResolvedValue({ data: [], error: null }) }),
+      insert: vi.fn().mockResolvedValue({ data: null, error: null }),
+    }),
+    functions: { invoke: vi.fn().mockResolvedValue({ data: null, error: null }) },
+    rpc: vi.fn().mockResolvedValue({ data: null, error: null }),
+    channel: vi.fn().mockReturnValue({ on: vi.fn().mockReturnThis(), subscribe: vi.fn() }),
+    removeChannel: vi.fn(),
+  },
+  supabase: {
+    from: vi.fn().mockReturnValue({
+      select: vi.fn().mockReturnValue({ eq: vi.fn().mockResolvedValue({ data: [], error: null }) }),
+    }),
+  },
   isSupabaseReady: vi.fn().mockReturnValue(true),
 }))
 
@@ -41,7 +61,8 @@ vi.mock('../../hooks/useFocusTrap', () => ({
 }))
 
 vi.mock('../ui', () => ({
-  Button: ({ children, onClick, ...props }: any) => createElement('button', { onClick, ...props }, children),
+  Button: ({ children, onClick, ...props }: any) =>
+    createElement('button', { onClick, ...props }, children),
 }))
 
 vi.mock('../invite/CopyLinkButton', () => ({

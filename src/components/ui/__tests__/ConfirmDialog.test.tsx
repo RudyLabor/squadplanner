@@ -16,37 +16,63 @@ vi.mock('framer-motion', () => ({
   useAnimate: vi.fn().mockReturnValue([{ current: null }, vi.fn()]),
   useAnimation: vi.fn().mockReturnValue({ start: vi.fn(), stop: vi.fn() }),
   useReducedMotion: vi.fn().mockReturnValue(false),
-  m: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
-  motion: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
+  m: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
+  motion: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
 }))
 
 vi.mock('../../icons', () => ({
-  AlertTriangle: (props: any) => createElement('span', { ...props, 'data-testid': 'alert-icon' }, 'alert'),
+  AlertTriangle: (props: any) =>
+    createElement('span', { ...props, 'data-testid': 'alert-icon' }, 'alert'),
   X: (props: any) => createElement('span', props, 'x'),
 }))
 
 vi.mock('../Dialog', () => ({
-  Dialog: ({ children, open, title }: any) => open ? createElement('div', { role: 'dialog', 'aria-labelledby': 'dialog-title' }, createElement('h2', { id: 'dialog-title' }, title), children) : null,
-  DialogBody: ({ children }: any) => createElement('div', { 'data-testid': 'dialog-body' }, children),
-  DialogFooter: ({ children }: any) => createElement('div', { 'data-testid': 'dialog-footer' }, children),
+  Dialog: ({ children, open, title }: any) =>
+    open
+      ? createElement(
+          'div',
+          { role: 'dialog', 'aria-labelledby': 'dialog-title' },
+          createElement('h2', { id: 'dialog-title' }, title),
+          children
+        )
+      : null,
+  DialogBody: ({ children }: any) =>
+    createElement('div', { 'data-testid': 'dialog-body' }, children),
+  DialogFooter: ({ children }: any) =>
+    createElement('div', { 'data-testid': 'dialog-footer' }, children),
 }))
 
 vi.mock('../Sheet', () => ({
-  Sheet: ({ children, open, title }: any) => open ? createElement('div', { 'data-testid': 'sheet', role: 'dialog' }, createElement('h2', null, title), children) : null,
+  Sheet: ({ children, open, title }: any) =>
+    open
+      ? createElement(
+          'div',
+          { 'data-testid': 'sheet', role: 'dialog' },
+          createElement('h2', null, title),
+          children
+        )
+      : null,
 }))
 
 vi.mock('../Button', () => ({
-  Button: ({ children, onClick, disabled, ...props }: any) => createElement('button', { onClick, disabled, ...props }, children),
+  Button: ({ children, onClick, disabled, ...props }: any) =>
+    createElement('button', { onClick, disabled, ...props }, children),
 }))
 
 import { ConfirmDialog } from '../ConfirmDialog'

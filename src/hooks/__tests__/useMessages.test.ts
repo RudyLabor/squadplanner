@@ -115,8 +115,19 @@ function buildQueryChain(resolved: { data: unknown; error: unknown }) {
   const terminalResolve = vi.fn().mockResolvedValue(resolved)
   chain.is.mockReturnValue({ ...chain, then: terminalResolve })
   chain.eq.mockReturnValue({ ...chain, then: terminalResolve })
-  chain.limit.mockReturnValue({ ...chain, then: terminalResolve, is: vi.fn().mockResolvedValue(resolved), eq: vi.fn().mockResolvedValue(resolved) })
-  chain.order.mockReturnValue({ ...chain, limit: vi.fn().mockReturnValue({ is: vi.fn().mockResolvedValue(resolved), eq: vi.fn().mockResolvedValue(resolved) }) })
+  chain.limit.mockReturnValue({
+    ...chain,
+    then: terminalResolve,
+    is: vi.fn().mockResolvedValue(resolved),
+    eq: vi.fn().mockResolvedValue(resolved),
+  })
+  chain.order.mockReturnValue({
+    ...chain,
+    limit: vi.fn().mockReturnValue({
+      is: vi.fn().mockResolvedValue(resolved),
+      eq: vi.fn().mockResolvedValue(resolved),
+    }),
+  })
 
   return chain
 }
@@ -135,7 +146,9 @@ describe('useMessagesStore', () => {
   beforeEach(() => {
     vi.clearAllMocks()
     mockIsSupabaseReady.mockReturnValue(true)
-    act(() => { resetStore() })
+    act(() => {
+      resetStore()
+    })
   })
 
   afterEach(() => {
@@ -334,10 +347,26 @@ describe('useMessagesStore', () => {
       // First call: squad_members.select('squad_id')
       const membershipsResult = { data: [{ squad_id: 'sq-1' }, { squad_id: 'sq-2' }], error: null }
       // Second call: squads.select('id, name').in('id', squadIds)
-      const squadsResult = { data: [{ id: 'sq-1', name: 'Alpha' }, { id: 'sq-2', name: 'Beta' }], error: null }
+      const squadsResult = {
+        data: [
+          { id: 'sq-1', name: 'Alpha' },
+          { id: 'sq-2', name: 'Beta' },
+        ],
+        error: null,
+      }
       // Third/Fourth: messages for each squad
-      const msgAlpha = { id: 'msg-a', content: 'Old msg', created_at: '2026-01-01T00:00:00Z', sender: { username: 'u' } }
-      const msgBeta = { id: 'msg-b', content: 'New msg', created_at: '2026-02-01T00:00:00Z', sender: { username: 'u' } }
+      const msgAlpha = {
+        id: 'msg-a',
+        content: 'Old msg',
+        created_at: '2026-01-01T00:00:00Z',
+        sender: { username: 'u' },
+      }
+      const msgBeta = {
+        id: 'msg-b',
+        content: 'New msg',
+        created_at: '2026-02-01T00:00:00Z',
+        sender: { username: 'u' },
+      }
 
       let callCount = 0
       mockFrom.mockImplementation((table: string) => {
@@ -364,7 +393,9 @@ describe('useMessagesStore', () => {
                       error: null,
                     }),
                   }),
-                  not: vi.fn().mockResolvedValue({ count: callCount % 2 === 0 ? 2 : 0, error: null }),
+                  not: vi
+                    .fn()
+                    .mockResolvedValue({ count: callCount % 2 === 0 ? 2 : 0, error: null }),
                 }),
               }),
             }),
@@ -583,7 +614,9 @@ describe('useMessagesStore', () => {
       const profileChain = {
         select: vi.fn().mockReturnValue({
           eq: vi.fn().mockReturnValue({
-            single: vi.fn().mockResolvedValue({ data: { username: 'testuser', avatar_url: 'avatar.png' } }),
+            single: vi
+              .fn()
+              .mockResolvedValue({ data: { username: 'testuser', avatar_url: 'avatar.png' } }),
           }),
         }),
         insert: vi.fn().mockResolvedValue({ error: null }),
@@ -615,7 +648,9 @@ describe('useMessagesStore', () => {
       mockFrom.mockReturnValue(profileChain)
 
       await act(async () => {
-        await useMessagesStore.getState().sendMessage('Reply msg', 'squad-1', 'session-x', 'reply-to-1')
+        await useMessagesStore
+          .getState()
+          .sendMessage('Reply msg', 'squad-1', 'session-x', 'reply-to-1')
       })
 
       // After success, the optimistic message should have been removed
@@ -629,13 +664,15 @@ describe('useMessagesStore', () => {
       mockGetSession.mockResolvedValue({ data: { session: { user: mockUser } } })
 
       const callResults: any[] = []
-      let callIdx = 0
+      const callIdx = 0
       mockFrom.mockImplementation((table: string) => {
         if (table === 'profiles') {
           return {
             select: vi.fn().mockReturnValue({
               eq: vi.fn().mockReturnValue({
-                single: vi.fn().mockResolvedValue({ data: { username: 'testuser', avatar_url: null } }),
+                single: vi
+                  .fn()
+                  .mockResolvedValue({ data: { username: 'testuser', avatar_url: null } }),
               }),
             }),
           }
@@ -656,7 +693,9 @@ describe('useMessagesStore', () => {
       expect(result.error).toBeTruthy()
       expect(mockShowError).toHaveBeenCalledWith('Message non envoye. Appuie pour reessayer.')
       // The optimistic message should be marked as failed
-      const failedMsg = useMessagesStore.getState().messages.find((m) => m._optimisticId === 'optimistic-123')
+      const failedMsg = useMessagesStore
+        .getState()
+        .messages.find((m) => m._optimisticId === 'optimistic-123')
       expect(failedMsg?._sendFailed).toBe(true)
     })
 
@@ -714,9 +753,7 @@ describe('useMessagesStore', () => {
         await useMessagesStore.getState().sendMessage('  Hello  ', 'squad-1')
       })
 
-      expect(insertMock).toHaveBeenCalledWith(
-        expect.objectContaining({ content: 'Hello' })
-      )
+      expect(insertMock).toHaveBeenCalledWith(expect.objectContaining({ content: 'Hello' }))
     })
 
     it('includes sessionId and replyToId in insert when provided', async () => {
@@ -820,7 +857,9 @@ describe('useMessagesStore', () => {
       })
 
       // The failed message should have been removed
-      const remaining = useMessagesStore.getState().messages.filter((m) => m._optimisticId === 'opt-retry')
+      const remaining = useMessagesStore
+        .getState()
+        .messages.filter((m) => m._optimisticId === 'opt-retry')
       expect(remaining).toHaveLength(0)
     })
 
@@ -846,7 +885,9 @@ describe('useMessagesStore', () => {
       })
 
       // Message should be removed from state
-      expect(useMessagesStore.getState().messages.find((m) => m._optimisticId === 'opt-2')).toBeUndefined()
+      expect(
+        useMessagesStore.getState().messages.find((m) => m._optimisticId === 'opt-2')
+      ).toBeUndefined()
     })
   })
 
@@ -1257,7 +1298,11 @@ describe('useMessagesStore', () => {
 
       expect(useMessagesStore.getState().activeConversation).toEqual(conversation)
       // createRealtimeSubscription should have been called
-      expect(mockCreateRealtimeSubscription).toHaveBeenCalledWith('squad-1', 'sess-1', expect.any(Function))
+      expect(mockCreateRealtimeSubscription).toHaveBeenCalledWith(
+        'squad-1',
+        'sess-1',
+        expect.any(Function)
+      )
     })
 
     it('does not fetch or subscribe when conversation is null', () => {
@@ -1296,7 +1341,11 @@ describe('useMessagesStore', () => {
       act(() => {
         useMessagesStore.getState().subscribeToMessages('squad-1', 'sess-1')
       })
-      expect(mockCreateRealtimeSubscription).toHaveBeenCalledWith('squad-1', 'sess-1', expect.any(Function))
+      expect(mockCreateRealtimeSubscription).toHaveBeenCalledWith(
+        'squad-1',
+        'sess-1',
+        expect.any(Function)
+      )
       expect(useMessagesStore.getState().realtimeChannel).toEqual({ id: 'mock-channel' })
     })
   })
@@ -1343,7 +1392,11 @@ describe('useMessagesStore', () => {
       await act(async () => {
         await useMessagesStore.getState().markAsRead('squad-1')
       })
-      expect(mockMarkMessagesAsRead).toHaveBeenCalledWith('squad-1', undefined, expect.any(Function))
+      expect(mockMarkMessagesAsRead).toHaveBeenCalledWith(
+        'squad-1',
+        undefined,
+        expect.any(Function)
+      )
     })
   })
 
@@ -1353,7 +1406,11 @@ describe('useMessagesStore', () => {
       await act(async () => {
         await useMessagesStore.getState().markAsReadFallback('squad-1', 'sess-1')
       })
-      expect(mockMarkMessagesAsReadFallback).toHaveBeenCalledWith('squad-1', 'sess-1', expect.any(Function))
+      expect(mockMarkMessagesAsReadFallback).toHaveBeenCalledWith(
+        'squad-1',
+        'sess-1',
+        expect.any(Function)
+      )
     })
   })
 })

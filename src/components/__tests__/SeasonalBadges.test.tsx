@@ -17,18 +17,24 @@ vi.mock('framer-motion', () => ({
   useAnimate: vi.fn().mockReturnValue([{ current: null }, vi.fn()]),
   useAnimation: vi.fn().mockReturnValue({ start: vi.fn(), stop: vi.fn() }),
   useReducedMotion: vi.fn().mockReturnValue(false),
-  m: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
-  motion: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
+  m: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
+  motion: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
 }))
 
 // Mock icons
@@ -63,8 +69,20 @@ vi.mock('../ui/Tooltip', () => ({
 const mockFormatSeason = vi.fn().mockImplementation((s: string) => s)
 vi.mock('../badges/badgeConfig', () => ({
   BADGE_CONFIGS: {
-    mvp: { label: 'MVP', icon: (props: any) => createElement('svg', { ...props, 'data-testid': 'badge-icon-mvp' }), color: '#FFD700', bgColor: '#FFF8E1', glowColor: 'rgba(255,215,0,0.3)' },
-    top_scorer: { label: 'Top Scorer', icon: (props: any) => createElement('svg', { ...props, 'data-testid': 'badge-icon-scorer' }), color: '#FF6B6B', bgColor: '#FFE8E8', glowColor: 'rgba(255,107,107,0.3)' },
+    mvp: {
+      label: 'MVP',
+      icon: (props: any) => createElement('svg', { ...props, 'data-testid': 'badge-icon-mvp' }),
+      color: '#FFD700',
+      bgColor: '#FFF8E1',
+      glowColor: 'rgba(255,215,0,0.3)',
+    },
+    top_scorer: {
+      label: 'Top Scorer',
+      icon: (props: any) => createElement('svg', { ...props, 'data-testid': 'badge-icon-scorer' }),
+      color: '#FF6B6B',
+      bgColor: '#FFE8E8',
+      glowColor: 'rgba(255,107,107,0.3)',
+    },
   },
   formatSeason: (...args: any[]) => mockFormatSeason(...args),
 }))

@@ -105,7 +105,9 @@ describe('useVoiceCallStore', () => {
   beforeEach(() => {
     vi.clearAllMocks()
     vi.useFakeTimers()
-    act(() => { resetStore() })
+    act(() => {
+      resetStore()
+    })
   })
 
   afterEach(() => {
@@ -137,13 +139,19 @@ describe('useVoiceCallStore', () => {
   // ===== clearError =====
   describe('clearError', () => {
     it('clears error state', () => {
-      act(() => { useVoiceCallStore.setState({ error: 'Some error' }) })
-      act(() => { useVoiceCallStore.getState().clearError() })
+      act(() => {
+        useVoiceCallStore.setState({ error: 'Some error' })
+      })
+      act(() => {
+        useVoiceCallStore.getState().clearError()
+      })
       expect(useVoiceCallStore.getState().error).toBeNull()
     })
 
     it('does nothing when error is already null', () => {
-      act(() => { useVoiceCallStore.getState().clearError() })
+      act(() => {
+        useVoiceCallStore.getState().clearError()
+      })
       expect(useVoiceCallStore.getState().error).toBeNull()
     })
   })
@@ -151,8 +159,12 @@ describe('useVoiceCallStore', () => {
   // ===== clearNetworkQualityNotification =====
   describe('clearNetworkQualityNotification', () => {
     it('clears network quality notification', () => {
-      act(() => { useVoiceCallStore.setState({ networkQualityChanged: 'poor' as any }) })
-      act(() => { useVoiceCallStore.getState().clearNetworkQualityNotification() })
+      act(() => {
+        useVoiceCallStore.setState({ networkQualityChanged: 'poor' as any })
+      })
+      act(() => {
+        useVoiceCallStore.getState().clearNetworkQualityNotification()
+      })
       expect(useVoiceCallStore.getState().networkQualityChanged).toBeNull()
     })
   })
@@ -178,7 +190,9 @@ describe('useVoiceCallStore', () => {
         })
       })
 
-      act(() => { useVoiceCallStore.getState().resetCall() })
+      act(() => {
+        useVoiceCallStore.getState().resetCall()
+      })
 
       const state = useVoiceCallStore.getState()
       expect(state.status).toBe('idle')
@@ -202,26 +216,38 @@ describe('useVoiceCallStore', () => {
     it('clears durationInterval if set', () => {
       const clearIntervalSpy = vi.spyOn(globalThis, 'clearInterval')
       const intervalId = setInterval(() => {}, 1000)
-      act(() => { useVoiceCallStore.setState({ durationInterval: intervalId }) })
-      act(() => { useVoiceCallStore.getState().resetCall() })
+      act(() => {
+        useVoiceCallStore.setState({ durationInterval: intervalId })
+      })
+      act(() => {
+        useVoiceCallStore.getState().resetCall()
+      })
       expect(clearIntervalSpy).toHaveBeenCalledWith(intervalId)
     })
 
     it('clears ringTimeout if set', () => {
       const clearTimeoutSpy = vi.spyOn(globalThis, 'clearTimeout')
       const timeoutId = setTimeout(() => {}, 5000)
-      act(() => { useVoiceCallStore.setState({ ringTimeout: timeoutId }) })
-      act(() => { useVoiceCallStore.getState().resetCall() })
+      act(() => {
+        useVoiceCallStore.setState({ ringTimeout: timeoutId })
+      })
+      act(() => {
+        useVoiceCallStore.getState().resetCall()
+      })
       expect(clearTimeoutSpy).toHaveBeenCalled()
     })
 
     it('calls resetQuality on network quality store', () => {
-      act(() => { useVoiceCallStore.getState().resetCall() })
+      act(() => {
+        useVoiceCallStore.getState().resetCall()
+      })
       expect(mockResetQuality).toHaveBeenCalled()
     })
 
     it('calls disconnectWebRTC on reset', () => {
-      act(() => { useVoiceCallStore.getState().resetCall() })
+      act(() => {
+        useVoiceCallStore.getState().resetCall()
+      })
       expect(mockDisconnectWebRTC).toHaveBeenCalled()
     })
   })
@@ -229,7 +255,9 @@ describe('useVoiceCallStore', () => {
   // ===== startCall =====
   describe('startCall', () => {
     it('does nothing when status is not idle', async () => {
-      act(() => { useVoiceCallStore.setState({ status: 'connected' }) })
+      act(() => {
+        useVoiceCallStore.setState({ status: 'connected' })
+      })
       await act(async () => {
         await useVoiceCallStore.getState().startCall('user-2', 'User 2')
       })
@@ -308,7 +336,12 @@ describe('useVoiceCallStore', () => {
       )
 
       // WebRTC should have been initialized (currentUserId, otherUserId, storeRef, isOffer=true)
-      expect(mockInitializeNativeWebRTC).toHaveBeenCalledWith('user-1', 'recv-1', expect.anything(), true)
+      expect(mockInitializeNativeWebRTC).toHaveBeenCalledWith(
+        'user-1',
+        'recv-1',
+        expect.anything(),
+        true
+      )
     })
 
     it('uses default username when profile is null', async () => {
@@ -502,7 +535,9 @@ describe('useVoiceCallStore', () => {
   describe('setIncomingCall', () => {
     it('sets incoming call when idle', () => {
       const caller = { id: 'caller-1', username: 'Caller', avatar_url: null }
-      act(() => { useVoiceCallStore.getState().setIncomingCall(caller, 'call-123') })
+      act(() => {
+        useVoiceCallStore.getState().setIncomingCall(caller, 'call-123')
+      })
 
       const state = useVoiceCallStore.getState()
       expect(state.status).toBe('ringing')
@@ -513,34 +548,48 @@ describe('useVoiceCallStore', () => {
     })
 
     it('ignores incoming call when already in a call (connected)', () => {
-      act(() => { useVoiceCallStore.setState({ status: 'connected' }) })
+      act(() => {
+        useVoiceCallStore.setState({ status: 'connected' })
+      })
       const caller = { id: 'caller-2', username: 'Caller2' }
       const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {})
-      act(() => { useVoiceCallStore.getState().setIncomingCall(caller, 'call-456') })
+      act(() => {
+        useVoiceCallStore.getState().setIncomingCall(caller, 'call-456')
+      })
       expect(useVoiceCallStore.getState().status).toBe('connected')
       expect(useVoiceCallStore.getState().caller).toBeNull()
       warnSpy.mockRestore()
     })
 
     it('ignores incoming call when calling', () => {
-      act(() => { useVoiceCallStore.setState({ status: 'calling' }) })
+      act(() => {
+        useVoiceCallStore.setState({ status: 'calling' })
+      })
       const caller = { id: 'c', username: 'C' }
       const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {})
-      act(() => { useVoiceCallStore.getState().setIncomingCall(caller, 'call') })
+      act(() => {
+        useVoiceCallStore.getState().setIncomingCall(caller, 'call')
+      })
       expect(useVoiceCallStore.getState().status).toBe('calling')
       warnSpy.mockRestore()
     })
 
     it('ring timeout sets status to missed after RING_TIMEOUT', () => {
       const caller = { id: 'c1', username: 'C1' }
-      act(() => { useVoiceCallStore.getState().setIncomingCall(caller, 'call-1') })
+      act(() => {
+        useVoiceCallStore.getState().setIncomingCall(caller, 'call-1')
+      })
       expect(useVoiceCallStore.getState().status).toBe('ringing')
 
-      act(() => { vi.advanceTimersByTime(600) }) // > RING_TIMEOUT (500ms)
+      act(() => {
+        vi.advanceTimersByTime(600)
+      }) // > RING_TIMEOUT (500ms)
       expect(useVoiceCallStore.getState().status).toBe('missed')
 
       // After 2 more seconds, resetCall should fire
-      act(() => { vi.advanceTimersByTime(2100) })
+      act(() => {
+        vi.advanceTimersByTime(2100)
+      })
       expect(useVoiceCallStore.getState().status).toBe('idle')
     })
   })
@@ -548,17 +597,25 @@ describe('useVoiceCallStore', () => {
   // ===== acceptCall =====
   describe('acceptCall', () => {
     it('does nothing when not ringing', async () => {
-      act(() => { useVoiceCallStore.setState({ status: 'idle' }) })
+      act(() => {
+        useVoiceCallStore.setState({ status: 'idle' })
+      })
       const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {})
-      await act(async () => { await useVoiceCallStore.getState().acceptCall() })
+      await act(async () => {
+        await useVoiceCallStore.getState().acceptCall()
+      })
       expect(useVoiceCallStore.getState().status).toBe('idle')
       warnSpy.mockRestore()
     })
 
     it('does nothing when ringing but no caller', async () => {
-      act(() => { useVoiceCallStore.setState({ status: 'ringing', caller: null }) })
+      act(() => {
+        useVoiceCallStore.setState({ status: 'ringing', caller: null })
+      })
       const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {})
-      await act(async () => { await useVoiceCallStore.getState().acceptCall() })
+      await act(async () => {
+        await useVoiceCallStore.getState().acceptCall()
+      })
       expect(useVoiceCallStore.getState().status).toBe('ringing')
       warnSpy.mockRestore()
     })
@@ -599,7 +656,9 @@ describe('useVoiceCallStore', () => {
         return { select: vi.fn().mockResolvedValue({ data: null, error: null }) }
       })
 
-      await act(async () => { await useVoiceCallStore.getState().acceptCall() })
+      await act(async () => {
+        await useVoiceCallStore.getState().acceptCall()
+      })
 
       const state = useVoiceCallStore.getState()
       // acceptCall sets status to 'calling' (WebRTC onConnectionStateChange callback sets it to 'connected')
@@ -644,7 +703,9 @@ describe('useVoiceCallStore', () => {
         return {}
       })
 
-      await act(async () => { await useVoiceCallStore.getState().acceptCall() })
+      await act(async () => {
+        await useVoiceCallStore.getState().acceptCall()
+      })
       expect(clearTimeoutSpy).toHaveBeenCalledWith(timeoutId)
     })
 
@@ -657,7 +718,9 @@ describe('useVoiceCallStore', () => {
       })
       mockGetUser.mockResolvedValue({ data: { user: null } })
 
-      await act(async () => { await useVoiceCallStore.getState().acceptCall() })
+      await act(async () => {
+        await useVoiceCallStore.getState().acceptCall()
+      })
       expect(useVoiceCallStore.getState().error).toBe('Utilisateur non connecte')
     })
 
@@ -683,7 +746,9 @@ describe('useVoiceCallStore', () => {
         return {}
       })
 
-      await act(async () => { await useVoiceCallStore.getState().acceptCall() })
+      await act(async () => {
+        await useVoiceCallStore.getState().acceptCall()
+      })
       expect(useVoiceCallStore.getState().receiver?.username).toBe('Utilisateur')
     })
 
@@ -697,7 +762,9 @@ describe('useVoiceCallStore', () => {
       mockGetUser.mockRejectedValue(new Error('Network error'))
       const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {})
 
-      await act(async () => { await useVoiceCallStore.getState().acceptCall() })
+      await act(async () => {
+        await useVoiceCallStore.getState().acceptCall()
+      })
       expect(useVoiceCallStore.getState().error).toBe('Network error')
       warnSpy.mockRestore()
     })
@@ -712,7 +779,9 @@ describe('useVoiceCallStore', () => {
       mockGetUser.mockRejectedValue('some string error')
       const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {})
 
-      await act(async () => { await useVoiceCallStore.getState().acceptCall() })
+      await act(async () => {
+        await useVoiceCallStore.getState().acceptCall()
+      })
       expect(useVoiceCallStore.getState().error).toBe("Erreur lors de l'acceptation de l'appel")
       warnSpy.mockRestore()
     })
@@ -745,7 +814,9 @@ describe('useVoiceCallStore', () => {
         return {}
       })
 
-      await act(async () => { await useVoiceCallStore.getState().acceptCall() })
+      await act(async () => {
+        await useVoiceCallStore.getState().acceptCall()
+      })
       expect(updateMock).toHaveBeenCalledWith({ status: 'answered' })
     })
   })
@@ -753,9 +824,13 @@ describe('useVoiceCallStore', () => {
   // ===== rejectCall =====
   describe('rejectCall', () => {
     it('does nothing when not ringing', async () => {
-      act(() => { useVoiceCallStore.setState({ status: 'idle' }) })
+      act(() => {
+        useVoiceCallStore.setState({ status: 'idle' })
+      })
       const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {})
-      await act(async () => { await useVoiceCallStore.getState().rejectCall() })
+      await act(async () => {
+        await useVoiceCallStore.getState().rejectCall()
+      })
       expect(useVoiceCallStore.getState().status).toBe('idle')
       warnSpy.mockRestore()
     })
@@ -780,12 +855,16 @@ describe('useVoiceCallStore', () => {
         return {}
       })
 
-      await act(async () => { await useVoiceCallStore.getState().rejectCall() })
+      await act(async () => {
+        await useVoiceCallStore.getState().rejectCall()
+      })
       expect(updateMock).toHaveBeenCalledWith({ status: 'rejected' })
       expect(useVoiceCallStore.getState().status).toBe('rejected')
 
       // After 1 second, resetCall fires
-      act(() => { vi.advanceTimersByTime(1100) })
+      act(() => {
+        vi.advanceTimersByTime(1100)
+      })
       expect(useVoiceCallStore.getState().status).toBe('idle')
     })
 
@@ -798,7 +877,9 @@ describe('useVoiceCallStore', () => {
         })
       })
 
-      await act(async () => { await useVoiceCallStore.getState().rejectCall() })
+      await act(async () => {
+        await useVoiceCallStore.getState().rejectCall()
+      })
       expect(mockFrom).not.toHaveBeenCalled()
       expect(useVoiceCallStore.getState().status).toBe('rejected')
     })
@@ -807,11 +888,17 @@ describe('useVoiceCallStore', () => {
   // ===== endCall =====
   describe('endCall', () => {
     it('sets status to ended and triggers resetCall after 2s', async () => {
-      act(() => { useVoiceCallStore.setState({ status: 'idle' }) })
-      await act(async () => { await useVoiceCallStore.getState().endCall() })
+      act(() => {
+        useVoiceCallStore.setState({ status: 'idle' })
+      })
+      await act(async () => {
+        await useVoiceCallStore.getState().endCall()
+      })
       expect(useVoiceCallStore.getState().status).toBe('ended')
 
-      act(() => { vi.advanceTimersByTime(2100) })
+      act(() => {
+        vi.advanceTimersByTime(2100)
+      })
       expect(useVoiceCallStore.getState().status).toBe('idle')
     })
 
@@ -828,7 +915,9 @@ describe('useVoiceCallStore', () => {
         })
       })
 
-      await act(async () => { await useVoiceCallStore.getState().endCall() })
+      await act(async () => {
+        await useVoiceCallStore.getState().endCall()
+      })
       expect(clearIntervalSpy).toHaveBeenCalledWith(intervalId)
       expect(clearTimeoutSpy).toHaveBeenCalledWith(timeoutId)
     })
@@ -848,7 +937,9 @@ describe('useVoiceCallStore', () => {
         })
       })
 
-      await act(async () => { await useVoiceCallStore.getState().endCall() })
+      await act(async () => {
+        await useVoiceCallStore.getState().endCall()
+      })
       expect(updateMock).toHaveBeenCalledWith(
         expect.objectContaining({
           ended_at: expect.any(String),
@@ -870,7 +961,9 @@ describe('useVoiceCallStore', () => {
         })
       })
 
-      await act(async () => { await useVoiceCallStore.getState().endCall() })
+      await act(async () => {
+        await useVoiceCallStore.getState().endCall()
+      })
       expect(updateMock).toHaveBeenCalledWith(
         expect.objectContaining({
           ended_at: expect.any(String),
@@ -880,14 +973,20 @@ describe('useVoiceCallStore', () => {
     })
 
     it('does not update DB when no currentCallId', async () => {
-      act(() => { useVoiceCallStore.setState({ currentCallId: null }) })
-      await act(async () => { await useVoiceCallStore.getState().endCall() })
+      act(() => {
+        useVoiceCallStore.setState({ currentCallId: null })
+      })
+      await act(async () => {
+        await useVoiceCallStore.getState().endCall()
+      })
       expect(mockFrom).not.toHaveBeenCalled()
     })
 
     it('calls disconnectWebRTC during endCall', async () => {
       mockDisconnectWebRTC.mockClear()
-      await act(async () => { await useVoiceCallStore.getState().endCall() })
+      await act(async () => {
+        await useVoiceCallStore.getState().endCall()
+      })
       expect(mockDisconnectWebRTC).toHaveBeenCalled()
       expect(useVoiceCallStore.getState().status).toBe('ended')
     })
@@ -897,15 +996,21 @@ describe('useVoiceCallStore', () => {
   describe('toggleMute', () => {
     it('calls toggleWebRTCMute and sets isMuted to its return value', async () => {
       mockToggleWebRTCMute.mockReturnValue(true)
-      await act(async () => { await useVoiceCallStore.getState().toggleMute() })
+      await act(async () => {
+        await useVoiceCallStore.getState().toggleMute()
+      })
       expect(mockToggleWebRTCMute).toHaveBeenCalled()
       expect(useVoiceCallStore.getState().isMuted).toBe(true)
     })
 
     it('sets isMuted to false when toggleWebRTCMute returns false', async () => {
-      act(() => { useVoiceCallStore.setState({ isMuted: true }) })
+      act(() => {
+        useVoiceCallStore.setState({ isMuted: true })
+      })
       mockToggleWebRTCMute.mockReturnValue(false)
-      await act(async () => { await useVoiceCallStore.getState().toggleMute() })
+      await act(async () => {
+        await useVoiceCallStore.getState().toggleMute()
+      })
       expect(useVoiceCallStore.getState().isMuted).toBe(false)
     })
   })
@@ -914,9 +1019,13 @@ describe('useVoiceCallStore', () => {
   describe('toggleSpeaker', () => {
     it('toggles speaker on/off', () => {
       expect(useVoiceCallStore.getState().isSpeakerOn).toBe(true)
-      act(() => { useVoiceCallStore.getState().toggleSpeaker() })
+      act(() => {
+        useVoiceCallStore.getState().toggleSpeaker()
+      })
       expect(useVoiceCallStore.getState().isSpeakerOn).toBe(false)
-      act(() => { useVoiceCallStore.getState().toggleSpeaker() })
+      act(() => {
+        useVoiceCallStore.getState().toggleSpeaker()
+      })
       expect(useVoiceCallStore.getState().isSpeakerOn).toBe(true)
     })
   })

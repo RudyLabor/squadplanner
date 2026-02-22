@@ -23,18 +23,24 @@ vi.mock('framer-motion', () => ({
   useAnimate: vi.fn().mockReturnValue([{ current: null }, vi.fn()]),
   useAnimation: vi.fn().mockReturnValue({ start: vi.fn(), stop: vi.fn() }),
   useReducedMotion: vi.fn().mockReturnValue(false),
-  m: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
-  motion: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
+  m: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
+  motion: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
 }))
 
 // Mock icons
@@ -61,7 +67,11 @@ const mockMembers = [
   {
     user_id: 'user-1',
     role: 'leader',
-    profiles: { username: 'Player1', avatar_url: 'https://example.com/avatar1.png', reliability_score: 95 },
+    profiles: {
+      username: 'Player1',
+      avatar_url: 'https://example.com/avatar1.png',
+      reliability_score: 95,
+    },
   },
   {
     user_id: 'user-2',
@@ -207,7 +217,13 @@ describe('SquadMembers', () => {
   it('renders fallback icon when no avatar', () => {
     render(
       <SquadMembers
-        members={[{ user_id: 'user-99', role: 'member', profiles: { username: 'NoAvatar', avatar_url: undefined, reliability_score: 80 } }]}
+        members={[
+          {
+            user_id: 'user-99',
+            role: 'member',
+            profiles: { username: 'NoAvatar', avatar_url: undefined, reliability_score: 80 },
+          },
+        ]}
         ownerId="user-1"
         memberCount={1}
         currentUserId="user-1"

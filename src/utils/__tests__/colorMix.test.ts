@@ -27,14 +27,14 @@ describe('colorMix', () => {
     it('works with CSS variables', async () => {
       const { colorMix } = await import('../colorMix')
       expect(colorMix('var(--color-gold)', 80)).toBe(
-        'color-mix(in srgb, var(--color-gold) 80%, transparent)',
+        'color-mix(in srgb, var(--color-gold) 80%, transparent)'
       )
     })
 
     it('ignores fallback when supported', async () => {
       const { colorMix } = await import('../colorMix')
       expect(colorMix('red', 50, 'rgba(255,0,0,0.5)')).toBe(
-        'color-mix(in srgb, red 50%, transparent)',
+        'color-mix(in srgb, red 50%, transparent)'
       )
     })
 
@@ -88,23 +88,19 @@ describe('colorMixBlend', () => {
 
     it('blends two colors at given percentage', async () => {
       const { colorMixBlend } = await import('../colorMix')
-      expect(colorMixBlend('red', 60, 'blue')).toBe(
-        'color-mix(in srgb, red 60%, blue)',
-      )
+      expect(colorMixBlend('red', 60, 'blue')).toBe('color-mix(in srgb, red 60%, blue)')
     })
 
     it('works with CSS variables', async () => {
       const { colorMixBlend } = await import('../colorMix')
       expect(colorMixBlend('var(--primary)', 50, 'var(--secondary)')).toBe(
-        'color-mix(in srgb, var(--primary) 50%, var(--secondary))',
+        'color-mix(in srgb, var(--primary) 50%, var(--secondary))'
       )
     })
 
     it('ignores fallback when supported', async () => {
       const { colorMixBlend } = await import('../colorMix')
-      expect(colorMixBlend('red', 50, 'blue', 'purple')).toBe(
-        'color-mix(in srgb, red 50%, blue)',
-      )
+      expect(colorMixBlend('red', 50, 'blue', 'purple')).toBe('color-mix(in srgb, red 50%, blue)')
     })
   })
 

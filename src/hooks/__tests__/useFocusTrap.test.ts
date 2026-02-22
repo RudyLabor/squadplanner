@@ -68,9 +68,7 @@ describe('useFocusTrap', () => {
     // 4. Since containerRef.current is null, the effect returns early before
     //    adding event listener - so no keydown listener is added
     //    This verifies the guard clause: if (!isActive || !containerRef.current) return
-    const keydownCalls = addEventSpy.mock.calls.filter(
-      ([event]) => event === 'keydown'
-    )
+    const keydownCalls = addEventSpy.mock.calls.filter(([event]) => event === 'keydown')
     expect(keydownCalls.length).toBe(0)
 
     // 5. onEscape has NOT been called (no event dispatched)
@@ -81,9 +79,7 @@ describe('useFocusTrap', () => {
 
     // 7. No keydown listener was added, so removeEventListener for keydown
     //    should also not have been called from the hook
-    const keydownRemoveCalls = removeEventSpy.mock.calls.filter(
-      ([event]) => event === 'keydown'
-    )
+    const keydownRemoveCalls = removeEventSpy.mock.calls.filter(([event]) => event === 'keydown')
     expect(keydownRemoveCalls.length).toBe(0)
 
     // 8. The hook function itself accepts generic type parameter

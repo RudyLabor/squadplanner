@@ -7,12 +7,15 @@ import type { MessageBubbleMessage } from '../MessageBubble'
 // Mock framer-motion
 vi.mock('framer-motion', () => ({
   AnimatePresence: ({ children }: any) => children,
-  m: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
+  m: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
 }))
 
 // Mock icons
@@ -33,7 +36,11 @@ vi.mock('@tanstack/react-virtual', () => ({
 // Mock VirtualizedMessageList
 vi.mock('../../VirtualizedMessageList', () => ({
   MessageListSkeleton: ({ count }: any) =>
-    createElement('div', { 'data-testid': 'message-list-skeleton', 'data-count': count }, `Loading ${count} messages`),
+    createElement(
+      'div',
+      { 'data-testid': 'message-list-skeleton', 'data-count': count },
+      `Loading ${count} messages`
+    ),
 }))
 
 // Mock EmptyState
@@ -54,27 +61,44 @@ vi.mock('../../TypingIndicator', () => ({
 // Mock SwipeableMessage - capture props
 vi.mock('../../SwipeableMessage', () => ({
   SwipeableMessage: ({ children, enableSwipeLeft, enableSwipeRight, disabled }: any) =>
-    createElement('div', {
-      'data-testid': 'swipeable-message',
-      'data-swipe-left': enableSwipeLeft,
-      'data-swipe-right': enableSwipeRight,
-      'data-disabled': disabled,
-    }, children),
+    createElement(
+      'div',
+      {
+        'data-testid': 'swipeable-message',
+        'data-swipe-left': enableSwipeLeft,
+        'data-swipe-right': enableSwipeRight,
+        'data-disabled': disabled,
+      },
+      children
+    ),
 }))
 
 // Mock MessageBubble - capture all important props
 vi.mock('../MessageBubble', () => ({
-  MessageBubble: ({ message, isOwn, showAvatar, showName, isSquadChat, isAdmin, replyToMessage, senderRole }: any) =>
-    createElement('div', {
-      'data-testid': `bubble-${message.id}`,
-      'data-is-own': isOwn,
-      'data-show-avatar': showAvatar,
-      'data-show-name': showName,
-      'data-is-squad': isSquadChat,
-      'data-is-admin': isAdmin,
-      'data-reply-to': replyToMessage?.id || '',
-      'data-sender-role': senderRole || '',
-    }, message.content),
+  MessageBubble: ({
+    message,
+    isOwn,
+    showAvatar,
+    showName,
+    isSquadChat,
+    isAdmin,
+    replyToMessage,
+    senderRole,
+  }: any) =>
+    createElement(
+      'div',
+      {
+        'data-testid': `bubble-${message.id}`,
+        'data-is-own': isOwn,
+        'data-show-avatar': showAvatar,
+        'data-show-name': showName,
+        'data-is-squad': isSquadChat,
+        'data-is-admin': isAdmin,
+        'data-reply-to': replyToMessage?.id || '',
+        'data-sender-role': senderRole || '',
+      },
+      message.content
+    ),
 }))
 
 // Mock utils
@@ -311,7 +335,13 @@ describe('MessageThread', () => {
 
   it('calls onScrollToBottom when scroll button clicked', () => {
     const onScrollToBottom = vi.fn()
-    render(<MessageThread {...defaultProps} showScrollButton={true} onScrollToBottom={onScrollToBottom} />)
+    render(
+      <MessageThread
+        {...defaultProps}
+        showScrollButton={true}
+        onScrollToBottom={onScrollToBottom}
+      />
+    )
     fireEvent.click(screen.getByLabelText('Scroll to bottom'))
     expect(onScrollToBottom).toHaveBeenCalledOnce()
   })
@@ -361,7 +391,13 @@ describe('MessageThread', () => {
     }
     // getMessageDate returns different values for different days
     const getMessageDate = (d: string) => new Date(d).toDateString()
-    render(<MessageThread {...defaultProps} messages={[msg1Day1, msg2Day2]} getMessageDate={getMessageDate} />)
+    render(
+      <MessageThread
+        {...defaultProps}
+        messages={[msg1Day1, msg2Day2]}
+        getMessageDate={getMessageDate}
+      />
+    )
     // Should show "Today" separator (from mock formatDateSeparator)
     expect(screen.getByText('Today')).toBeInTheDocument()
   })
@@ -369,7 +405,9 @@ describe('MessageThread', () => {
   it('does not render date separator for messages on same date', () => {
     // Both messages have same date -> same getMessageDate
     const getMessageDate = () => 'Sat Feb 14 2026'
-    render(<MessageThread {...defaultProps} messages={[msg1, msg2]} getMessageDate={getMessageDate} />)
+    render(
+      <MessageThread {...defaultProps} messages={[msg1, msg2]} getMessageDate={getMessageDate} />
+    )
     // Only one date separator for the first message (where prev is undefined -> '' !== 'Sat...')
     const separators = screen.getAllByText('Today')
     expect(separators.length).toBe(1)

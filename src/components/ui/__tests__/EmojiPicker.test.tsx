@@ -94,9 +94,7 @@ describe('EmojiPicker', () => {
       fireEvent.change(input, { target: { value: 'something' } })
       // The clear button should appear (X icon button)
       const buttons = screen.getAllByRole('button')
-      const clearBtn = buttons.find(
-        (b) => b.querySelector('svg') && b.closest('.relative')
-      )
+      const clearBtn = buttons.find((b) => b.querySelector('svg') && b.closest('.relative'))
       expect(clearBtn).toBeTruthy()
     })
 
@@ -162,9 +160,21 @@ describe('EmojiPicker', () => {
       const input = screen.getByPlaceholderText('Chercher un emoji...')
       fireEvent.change(input, { target: { value: 'test' } })
       // Close the picker
-      rerender(<EmojiPicker isOpen={false} onSelect={defaultProps.onSelect} onClose={defaultProps.onClose} />)
+      rerender(
+        <EmojiPicker
+          isOpen={false}
+          onSelect={defaultProps.onSelect}
+          onClose={defaultProps.onClose}
+        />
+      )
       // Re-open
-      rerender(<EmojiPicker isOpen={true} onSelect={defaultProps.onSelect} onClose={defaultProps.onClose} />)
+      rerender(
+        <EmojiPicker
+          isOpen={true}
+          onSelect={defaultProps.onSelect}
+          onClose={defaultProps.onClose}
+        />
+      )
       expect(screen.getByPlaceholderText('Chercher un emoji...')).toHaveValue('')
     })
   })
@@ -223,9 +233,21 @@ describe('EmojiPicker', () => {
       // Switch to gaming
       fireEvent.click(screen.getByLabelText('Gaming'))
       // Close picker
-      rerender(<EmojiPicker isOpen={false} onSelect={defaultProps.onSelect} onClose={defaultProps.onClose} />)
+      rerender(
+        <EmojiPicker
+          isOpen={false}
+          onSelect={defaultProps.onSelect}
+          onClose={defaultProps.onClose}
+        />
+      )
       // Re-open
-      rerender(<EmojiPicker isOpen={true} onSelect={defaultProps.onSelect} onClose={defaultProps.onClose} />)
+      rerender(
+        <EmojiPicker
+          isOpen={true}
+          onSelect={defaultProps.onSelect}
+          onClose={defaultProps.onClose}
+        />
+      )
       // Should be back on smileys
       const footerTexts = screen.getAllByText('Smileys')
       expect(footerTexts.length).toBeGreaterThanOrEqual(1)
@@ -239,7 +261,10 @@ describe('EmojiPicker', () => {
       // There should be many emoji buttons with aria-labels
       const emojiButtons = screen.getAllByRole('button').filter((b) => {
         const label = b.getAttribute('aria-label')
-        return label && !['Smileys', 'Gaming', 'Gestes', 'Cœurs', 'Objets', 'Symboles', 'Récents'].includes(label)
+        return (
+          label &&
+          !['Smileys', 'Gaming', 'Gestes', 'Cœurs', 'Objets', 'Symboles', 'Récents'].includes(label)
+        )
       })
       expect(emojiButtons.length).toBeGreaterThan(10)
     })

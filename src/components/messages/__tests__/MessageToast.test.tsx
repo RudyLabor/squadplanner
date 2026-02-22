@@ -18,18 +18,24 @@ vi.mock('framer-motion', () => ({
   useAnimate: vi.fn().mockReturnValue([{ current: null }, vi.fn()]),
   useAnimation: vi.fn().mockReturnValue({ start: vi.fn(), stop: vi.fn() }),
   useReducedMotion: vi.fn().mockReturnValue(false),
-  m: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
-  motion: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
+  m: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
+  motion: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
 }))
 
 // Mock icons
@@ -40,9 +46,7 @@ vi.mock('../../icons', () => ({
 
 describe('MessageToast', () => {
   it('renders without crashing', () => {
-    const { container } = render(
-      <MessageToast message="Test" isVisible={true} />
-    )
+    const { container } = render(<MessageToast message="Test" isVisible={true} />)
     expect(container).toBeTruthy()
   })
 
@@ -78,9 +82,7 @@ describe('MessageToast', () => {
   })
 
   it('applies error styles for error variant', () => {
-    const { container } = render(
-      <MessageToast message="Fail" isVisible={true} variant="error" />
-    )
+    const { container } = render(<MessageToast message="Fail" isVisible={true} variant="error" />)
     const inner = container.querySelector('.bg-error')
     expect(inner).toBeInTheDocument()
   })

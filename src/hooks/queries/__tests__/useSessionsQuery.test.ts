@@ -4,15 +4,28 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { createElement } from 'react'
 
 // Supabase mock
-const { mockSupabase, mockFrom, mockGetUser, mockShowSuccess, mockShowError, mockSendRsvpMessage, mockSendSessionConfirmedMessage, mockTrackChallengeProgress } = vi.hoisted(() => {
+const {
+  mockSupabase,
+  mockFrom,
+  mockGetUser,
+  mockShowSuccess,
+  mockShowError,
+  mockSendRsvpMessage,
+  mockSendSessionConfirmedMessage,
+  mockTrackChallengeProgress,
+} = vi.hoisted(() => {
   const mockFrom = vi.fn()
   const mockGetUser = vi.fn().mockResolvedValue({ data: { user: { id: 'user-1' } } })
-  const mockGetSession = vi.fn().mockResolvedValue({ data: { session: { user: { id: 'user-1' } } } })
+  const mockGetSession = vi
+    .fn()
+    .mockResolvedValue({ data: { session: { user: { id: 'user-1' } } } })
   const mockSupabase = {
     auth: { getSession: mockGetSession, getUser: mockGetUser },
     from: mockFrom,
     rpc: vi.fn().mockResolvedValue({ data: [], error: null }),
-    channel: vi.fn().mockReturnValue({ on: vi.fn().mockReturnThis(), subscribe: vi.fn().mockReturnThis() }),
+    channel: vi
+      .fn()
+      .mockReturnValue({ on: vi.fn().mockReturnThis(), subscribe: vi.fn().mockReturnThis() }),
     removeChannel: vi.fn(),
   }
   const mockShowSuccess = vi.fn()
@@ -20,7 +33,16 @@ const { mockSupabase, mockFrom, mockGetUser, mockShowSuccess, mockShowError, moc
   const mockSendRsvpMessage = vi.fn().mockResolvedValue(undefined)
   const mockSendSessionConfirmedMessage = vi.fn().mockResolvedValue(undefined)
   const mockTrackChallengeProgress = vi.fn().mockResolvedValue(undefined)
-  return { mockSupabase, mockFrom, mockGetUser, mockShowSuccess, mockShowError, mockSendRsvpMessage, mockSendSessionConfirmedMessage, mockTrackChallengeProgress }
+  return {
+    mockSupabase,
+    mockFrom,
+    mockGetUser,
+    mockShowSuccess,
+    mockShowError,
+    mockSendRsvpMessage,
+    mockSendSessionConfirmedMessage,
+    mockTrackChallengeProgress,
+  }
 })
 
 vi.mock('../../../lib/supabaseMinimal', () => ({
@@ -34,7 +56,8 @@ vi.mock('../../../lib/queryClient', () => ({
     sessions: {
       all: ['sessions'],
       lists: () => ['sessions', 'list'],
-      list: (squadId?: string) => squadId ? ['sessions', 'list', { squadId }] : ['sessions', 'list'],
+      list: (squadId?: string) =>
+        squadId ? ['sessions', 'list', { squadId }] : ['sessions', 'list'],
       upcoming: () => ['sessions', 'upcoming'],
       details: () => ['sessions', 'detail'],
       detail: (id: string) => ['sessions', 'detail', id],
@@ -61,9 +84,12 @@ vi.mock('../../../lib/challengeTracker', () => ({
 }))
 
 vi.mock('../../useAuth', () => ({
-  useAuthStore: Object.assign(vi.fn().mockReturnValue({ user: { id: 'user-1' }, profile: { id: 'user-1' } }), {
-    getState: vi.fn().mockReturnValue({ user: { id: 'user-1' }, profile: { id: 'user-1' } }),
-  }),
+  useAuthStore: Object.assign(
+    vi.fn().mockReturnValue({ user: { id: 'user-1' }, profile: { id: 'user-1' } }),
+    {
+      getState: vi.fn().mockReturnValue({ user: { id: 'user-1' }, profile: { id: 'user-1' } }),
+    }
+  ),
 }))
 
 vi.mock('../../../lib/toast', () => ({
@@ -72,12 +98,14 @@ vi.mock('../../../lib/toast', () => ({
 }))
 
 // Mock session fetchers (these are the actual fetching functions)
-const { mockFetchSessionsBySquad, mockFetchUpcomingSessions, mockFetchSessionById } = vi.hoisted(() => {
-  const mockFetchSessionsBySquad = vi.fn().mockResolvedValue([])
-  const mockFetchUpcomingSessions = vi.fn().mockResolvedValue([])
-  const mockFetchSessionById = vi.fn().mockResolvedValue(null)
-  return { mockFetchSessionsBySquad, mockFetchUpcomingSessions, mockFetchSessionById }
-})
+const { mockFetchSessionsBySquad, mockFetchUpcomingSessions, mockFetchSessionById } = vi.hoisted(
+  () => {
+    const mockFetchSessionsBySquad = vi.fn().mockResolvedValue([])
+    const mockFetchUpcomingSessions = vi.fn().mockResolvedValue([])
+    const mockFetchSessionById = vi.fn().mockResolvedValue(null)
+    return { mockFetchSessionsBySquad, mockFetchUpcomingSessions, mockFetchSessionById }
+  }
+)
 
 vi.mock('../useSessionFetchers', () => ({
   fetchSessionsBySquad: mockFetchSessionsBySquad,
@@ -113,29 +141,43 @@ describe('useSquadSessionsQuery', () => {
   })
 
   it('renders without error and returns loading state', () => {
-    const { result } = renderHook(() => useSquadSessionsQuery('squad-1'), { wrapper: createWrapper() })
+    const { result } = renderHook(() => useSquadSessionsQuery('squad-1'), {
+      wrapper: createWrapper(),
+    })
     expect(result.current).toBeDefined()
     expect(result.current.isLoading).toBeDefined()
   })
 
   it('is disabled when squadId is undefined', () => {
-    const { result } = renderHook(() => useSquadSessionsQuery(undefined), { wrapper: createWrapper() })
+    const { result } = renderHook(() => useSquadSessionsQuery(undefined), {
+      wrapper: createWrapper(),
+    })
     expect(result.current.fetchStatus).toBe('idle')
     expect(result.current.data).toBeUndefined()
   })
 
   it('returns empty array when queryFn is called with undefined squadId (guard)', async () => {
-    const { result } = renderHook(() => useSquadSessionsQuery(undefined), { wrapper: createWrapper() })
+    const { result } = renderHook(() => useSquadSessionsQuery(undefined), {
+      wrapper: createWrapper(),
+    })
     expect(result.current.fetchStatus).toBe('idle')
   })
 
   it('fetches sessions for a squad with userId', async () => {
     const mockSessions = [
-      { id: 's1', title: 'Game Night', squad_id: 'squad-1', my_rsvp: 'present', rsvp_counts: { present: 1, absent: 0, maybe: 0 } },
+      {
+        id: 's1',
+        title: 'Game Night',
+        squad_id: 'squad-1',
+        my_rsvp: 'present',
+        rsvp_counts: { present: 1, absent: 0, maybe: 0 },
+      },
     ]
     mockFetchSessionsBySquad.mockResolvedValue(mockSessions)
 
-    const { result } = renderHook(() => useSquadSessionsQuery('squad-1', 'user-1'), { wrapper: createWrapper() })
+    const { result } = renderHook(() => useSquadSessionsQuery('squad-1', 'user-1'), {
+      wrapper: createWrapper(),
+    })
     await waitFor(() => expect(result.current.isSuccess).toBe(true))
 
     expect(result.current.data).toEqual(mockSessions)
@@ -145,7 +187,9 @@ describe('useSquadSessionsQuery', () => {
   it('handles fetch error', async () => {
     mockFetchSessionsBySquad.mockRejectedValue(new Error('DB error'))
 
-    const { result } = renderHook(() => useSquadSessionsQuery('squad-1'), { wrapper: createWrapper() })
+    const { result } = renderHook(() => useSquadSessionsQuery('squad-1'), {
+      wrapper: createWrapper(),
+    })
     await waitFor(() => expect(result.current.isError).toBe(true))
 
     expect(result.current.error).toBeTruthy()
@@ -159,12 +203,16 @@ describe('useUpcomingSessionsQuery', () => {
   })
 
   it('renders and returns loading state', () => {
-    const { result } = renderHook(() => useUpcomingSessionsQuery('user-1'), { wrapper: createWrapper() })
+    const { result } = renderHook(() => useUpcomingSessionsQuery('user-1'), {
+      wrapper: createWrapper(),
+    })
     expect(result.current).toBeDefined()
   })
 
   it('is disabled when userId is undefined', () => {
-    const { result } = renderHook(() => useUpcomingSessionsQuery(undefined), { wrapper: createWrapper() })
+    const { result } = renderHook(() => useUpcomingSessionsQuery(undefined), {
+      wrapper: createWrapper(),
+    })
     expect(result.current.fetchStatus).toBe('idle')
   })
 
@@ -172,7 +220,9 @@ describe('useUpcomingSessionsQuery', () => {
     const mockSessions = [{ id: 's2', title: 'Raid', scheduled_at: '2026-03-01T20:00:00Z' }]
     mockFetchUpcomingSessions.mockResolvedValue(mockSessions)
 
-    const { result } = renderHook(() => useUpcomingSessionsQuery('user-1'), { wrapper: createWrapper() })
+    const { result } = renderHook(() => useUpcomingSessionsQuery('user-1'), {
+      wrapper: createWrapper(),
+    })
     await waitFor(() => expect(result.current.isSuccess).toBe(true))
 
     expect(result.current.data).toEqual(mockSessions)
@@ -182,7 +232,9 @@ describe('useUpcomingSessionsQuery', () => {
   it('handles fetch error', async () => {
     mockFetchUpcomingSessions.mockRejectedValue(new Error('Network'))
 
-    const { result } = renderHook(() => useUpcomingSessionsQuery('user-1'), { wrapper: createWrapper() })
+    const { result } = renderHook(() => useUpcomingSessionsQuery('user-1'), {
+      wrapper: createWrapper(),
+    })
     await waitFor(() => expect(result.current.isError).toBe(true))
   })
 })
@@ -205,10 +257,19 @@ describe('useSessionQuery', () => {
   })
 
   it('fetches session by id with userId', async () => {
-    const mockSession = { id: 's1', title: 'Test', rsvps: [], checkins: [], my_rsvp: null, rsvp_counts: { present: 0, absent: 0, maybe: 0 } }
+    const mockSession = {
+      id: 's1',
+      title: 'Test',
+      rsvps: [],
+      checkins: [],
+      my_rsvp: null,
+      rsvp_counts: { present: 0, absent: 0, maybe: 0 },
+    }
     mockFetchSessionById.mockResolvedValue(mockSession)
 
-    const { result } = renderHook(() => useSessionQuery('s1', 'user-1'), { wrapper: createWrapper() })
+    const { result } = renderHook(() => useSessionQuery('s1', 'user-1'), {
+      wrapper: createWrapper(),
+    })
     await waitFor(() => expect(result.current.isSuccess).toBe(true))
 
     expect(result.current.data).toEqual(mockSession)
@@ -301,7 +362,9 @@ describe('useCreateSessionMutation', () => {
         return {
           insert: vi.fn().mockReturnValue({
             select: vi.fn().mockReturnValue({
-              single: vi.fn().mockResolvedValue({ data: null, error: { message: 'Insert failed' } }),
+              single: vi
+                .fn()
+                .mockResolvedValue({ data: null, error: { message: 'Insert failed' } }),
             }),
           }),
         }
@@ -458,9 +521,7 @@ describe('useRsvpMutation', () => {
       await result.current.mutateAsync({ sessionId: 'sess-1', response: 'absent' })
     })
 
-    expect(updateMock).toHaveBeenCalledWith(
-      expect.objectContaining({ response: 'absent' })
-    )
+    expect(updateMock).toHaveBeenCalledWith(expect.objectContaining({ response: 'absent' }))
   })
 
   it('does not track challenge progress for non-present responses', async () => {
@@ -479,10 +540,18 @@ describe('useRsvpMutation', () => {
         }
       }
       if (table === 'profiles') {
-        return { select: vi.fn().mockReturnValue({ eq: vi.fn().mockReturnValue({ single: vi.fn().mockResolvedValue({ data: null }) }) }) }
+        return {
+          select: vi.fn().mockReturnValue({
+            eq: vi.fn().mockReturnValue({ single: vi.fn().mockResolvedValue({ data: null }) }),
+          }),
+        }
       }
       if (table === 'sessions') {
-        return { select: vi.fn().mockReturnValue({ eq: vi.fn().mockReturnValue({ single: vi.fn().mockResolvedValue({ data: null }) }) }) }
+        return {
+          select: vi.fn().mockReturnValue({
+            eq: vi.fn().mockReturnValue({ single: vi.fn().mockResolvedValue({ data: null }) }),
+          }),
+        }
       }
       return {}
     })
@@ -595,9 +664,7 @@ describe('useCheckinMutation', () => {
       await result.current.mutateAsync({ sessionId: 'sess-1', status: 'late' })
     })
 
-    expect(updateMock).toHaveBeenCalledWith(
-      expect.objectContaining({ status: 'late' })
-    )
+    expect(updateMock).toHaveBeenCalledWith(expect.objectContaining({ status: 'late' }))
   })
 
   it('shows error toast on failure', async () => {
@@ -638,7 +705,11 @@ describe('useConfirmSessionMutation', () => {
           select: vi.fn().mockReturnValue({
             eq: vi.fn().mockReturnValue({
               single: vi.fn().mockResolvedValue({
-                data: { squad_id: 'sq-1', title: 'Game Night', scheduled_at: '2026-03-01T20:00:00Z' },
+                data: {
+                  squad_id: 'sq-1',
+                  title: 'Game Night',
+                  scheduled_at: '2026-03-01T20:00:00Z',
+                },
               }),
             }),
           }),
@@ -654,7 +725,11 @@ describe('useConfirmSessionMutation', () => {
     })
 
     expect(updateMock).toHaveBeenCalledWith({ status: 'confirmed' })
-    expect(mockSendSessionConfirmedMessage).toHaveBeenCalledWith('sq-1', 'Game Night', '2026-03-01T20:00:00Z')
+    expect(mockSendSessionConfirmedMessage).toHaveBeenCalledWith(
+      'sq-1',
+      'Game Night',
+      '2026-03-01T20:00:00Z'
+    )
     expect(mockShowSuccess).toHaveBeenCalledWith('Session confirmee !')
   })
 
@@ -729,7 +804,9 @@ describe('useUpdateSessionMutation', () => {
     const updateMock = vi.fn().mockReturnValue({
       eq: vi.fn().mockReturnValue({
         select: vi.fn().mockReturnValue({
-          single: vi.fn().mockResolvedValue({ data: { id: 'sess-1', squad_id: 'sq-1' }, error: null }),
+          single: vi
+            .fn()
+            .mockResolvedValue({ data: { id: 'sess-1', squad_id: 'sq-1' }, error: null }),
         }),
       }),
     })
@@ -764,7 +841,9 @@ describe('useUpdateSessionMutation', () => {
     const updateMock = vi.fn().mockReturnValue({
       eq: vi.fn().mockReturnValue({
         select: vi.fn().mockReturnValue({
-          single: vi.fn().mockResolvedValue({ data: { id: 'sess-1', squad_id: 'sq-1' }, error: null }),
+          single: vi
+            .fn()
+            .mockResolvedValue({ data: { id: 'sess-1', squad_id: 'sq-1' }, error: null }),
         }),
       }),
     })

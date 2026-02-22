@@ -5,8 +5,12 @@ import { createElement } from 'react'
 
 const { mockSupabase, mockFrom } = vi.hoisted(() => {
   const mockFrom = vi.fn()
-  const mockGetSession = vi.fn().mockResolvedValue({ data: { session: { user: { id: 'user-1' } } } })
-  const mockGetUser = vi.fn().mockResolvedValue({ data: { user: { id: 'user-1', email: 'test@test.com' } } })
+  const mockGetSession = vi
+    .fn()
+    .mockResolvedValue({ data: { session: { user: { id: 'user-1' } } } })
+  const mockGetUser = vi
+    .fn()
+    .mockResolvedValue({ data: { user: { id: 'user-1', email: 'test@test.com' } } })
   const mockSupabase = {
     auth: { getSession: mockGetSession, getUser: mockGetUser },
     rpc: vi.fn(),
@@ -26,12 +30,9 @@ vi.mock('../../lib/supabaseMinimal', () => ({
 }))
 
 vi.mock('../useAuth', () => ({
-  useAuthStore: Object.assign(
-    vi.fn().mockReturnValue({ user: { id: 'user-1' }, profile: null }),
-    {
-      getState: vi.fn().mockReturnValue({ user: { id: 'user-1' }, profile: null }),
-    }
-  ),
+  useAuthStore: Object.assign(vi.fn().mockReturnValue({ user: { id: 'user-1' }, profile: null }), {
+    getState: vi.fn().mockReturnValue({ user: { id: 'user-1' }, profile: null }),
+  }),
 }))
 
 vi.mock('../../lib/toast', () => ({

@@ -182,7 +182,9 @@ describe('errorTracker', () => {
       // After destroy, new messages shouldn't have old breadcrumbs
       captureMessage('new error', 'error')
       destroyErrorTracker()
-      const payload = JSON.parse(fetchSpy.mock.calls[fetchSpy.mock.calls.length - 1][1]?.body as string)
+      const payload = JSON.parse(
+        fetchSpy.mock.calls[fetchSpy.mock.calls.length - 1][1]?.body as string
+      )
       expect(payload.errors[0].breadcrumbs).toBeUndefined()
     })
 
@@ -351,7 +353,9 @@ describe('errorTracker', () => {
     })
 
     it('should silently handle fetch errors', () => {
-      fetchSpy.mockImplementation(() => { throw new Error('sync error') })
+      fetchSpy.mockImplementation(() => {
+        throw new Error('sync error')
+      })
       captureMessage('test error', 'error')
       expect(() => destroyErrorTracker()).not.toThrow()
     })
@@ -438,7 +442,7 @@ describe('errorTracker', () => {
       destroyErrorTracker()
       const addListenerSpy = vi.spyOn(window, 'addEventListener')
       initErrorTracker()
-      const errorCalls = addListenerSpy.mock.calls.filter(c => c[0] === 'error')
+      const errorCalls = addListenerSpy.mock.calls.filter((c) => c[0] === 'error')
       expect(errorCalls.length).toBe(0)
       import.meta.env.PROD = true
     })

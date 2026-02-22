@@ -19,10 +19,7 @@ const mockUseAuthStore = vi.hoisted(() =>
 // react-router
 vi.mock('react-router', () => ({
   Outlet: () => createElement('div', { 'data-testid': 'outlet' }, 'Outlet'),
-  useSearchParams: vi.fn().mockReturnValue([
-    new URLSearchParams(),
-    vi.fn(),
-  ]),
+  useSearchParams: vi.fn().mockReturnValue([new URLSearchParams(), vi.fn()]),
   useLocation: vi.fn().mockReturnValue({ pathname: '/', search: '' }),
 }))
 
@@ -245,7 +242,9 @@ describe('ClientShell', () => {
     it('captures beforeinstallprompt event', async () => {
       const mod = await import('../hooks/usePWAInstall')
       const setDeferredPrompt = vi.fn()
-      ;(mod.usePWAInstallStore as unknown as { getState: ReturnType<typeof vi.fn> }).getState.mockReturnValue({ setDeferredPrompt })
+      ;(
+        mod.usePWAInstallStore as unknown as { getState: ReturnType<typeof vi.fn> }
+      ).getState.mockReturnValue({ setDeferredPrompt })
 
       render(<ClientShell />)
 

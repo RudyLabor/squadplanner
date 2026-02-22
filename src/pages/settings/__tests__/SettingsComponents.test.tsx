@@ -16,24 +16,49 @@ vi.mock('framer-motion', () => ({
   useAnimate: vi.fn().mockReturnValue([{ current: null }, vi.fn()]),
   useAnimation: vi.fn().mockReturnValue({ start: vi.fn(), stop: vi.fn() }),
   useReducedMotion: vi.fn().mockReturnValue(false),
-  m: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
-  motion: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
+  m: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
+  motion: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
 }))
 
-vi.mock('../../../components/icons', () => new Proxy({}, { get: (_t: any, p: string) => typeof p === 'string' ? ({ children, ...props }: any) => createElement('span', props, children) : undefined }))
+vi.mock(
+  '../../../components/icons',
+  () =>
+    new Proxy(
+      {},
+      {
+        get: (_t: any, p: string) =>
+          typeof p === 'string'
+            ? ({ children, ...props }: any) => createElement('span', props, children)
+            : undefined,
+      }
+    )
+)
 
 vi.mock('../../../components/ui', () => ({
-  SegmentedControl: ({ options, value, onChange }: any) => createElement('div', { 'data-testid': 'segmented' }, options?.map((o: any) => createElement('button', { key: o.value, onClick: () => onChange(o.value) }, o.label))),
+  SegmentedControl: ({ options, value, onChange }: any) =>
+    createElement(
+      'div',
+      { 'data-testid': 'segmented' },
+      options?.map((o: any) =>
+        createElement('button', { key: o.value, onClick: () => onChange(o.value) }, o.label)
+      )
+    ),
 }))
 
 vi.mock('../../../hooks/useTheme', () => ({
@@ -71,13 +96,21 @@ describe('SectionHeader', () => {
 
 describe('SettingRow', () => {
   it('renders label and children', () => {
-    render(<SettingRow label="Dark mode"><span>toggle</span></SettingRow>)
+    render(
+      <SettingRow label="Dark mode">
+        <span>toggle</span>
+      </SettingRow>
+    )
     expect(screen.getByText('Dark mode')).toBeTruthy()
     expect(screen.getByText('toggle')).toBeTruthy()
   })
 
   it('renders description when provided', () => {
-    render(<SettingRow label="Test" description="A description"><span>child</span></SettingRow>)
+    render(
+      <SettingRow label="Test" description="A description">
+        <span>child</span>
+      </SettingRow>
+    )
     expect(screen.getByText('A description')).toBeTruthy()
   })
 })

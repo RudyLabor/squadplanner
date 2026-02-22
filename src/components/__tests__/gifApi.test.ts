@@ -40,12 +40,16 @@ describe('gifApi', () => {
             id: 'gif-1',
             images: {
               original: { url: 'https://example.com/gif.gif', width: '200', height: '150' },
-              fixed_width_small: { url: 'https://example.com/small.gif', width: '100', height: '75' },
+              fixed_width_small: {
+                url: 'https://example.com/small.gif',
+                width: '100',
+                height: '75',
+              },
             },
           },
         ],
-      };
-      (supabaseMinimal.functions.invoke as any).mockResolvedValue({ data: mockData, error: null })
+      }
+      ;(supabaseMinimal.functions.invoke as any).mockResolvedValue({ data: mockData, error: null })
       const { results, error } = await searchGifs('funny')
       expect(results).toHaveLength(1)
       expect(results[0].id).toBe('gif-1')
@@ -55,7 +59,10 @@ describe('gifApi', () => {
     })
 
     it('returns empty results with error on failure', async () => {
-      (supabaseMinimal.functions.invoke as any).mockResolvedValue({ data: null, error: new Error('fail') })
+      ;(supabaseMinimal.functions.invoke as any).mockResolvedValue({
+        data: null,
+        error: new Error('fail'),
+      })
       const { results, error } = await searchGifs('test')
       expect(results).toEqual([])
       expect(error).toBeTruthy()
@@ -72,19 +79,26 @@ describe('gifApi', () => {
             id: 'trend-1',
             images: {
               original: { url: 'https://example.com/trend.gif', width: '300', height: '200' },
-              fixed_width_small: { url: 'https://example.com/trend-small.gif', width: '150', height: '100' },
+              fixed_width_small: {
+                url: 'https://example.com/trend-small.gif',
+                width: '150',
+                height: '100',
+              },
             },
           },
         ],
-      };
-      (supabaseMinimal.functions.invoke as any).mockResolvedValue({ data: mockData, error: null })
+      }
+      ;(supabaseMinimal.functions.invoke as any).mockResolvedValue({ data: mockData, error: null })
       const { results } = await fetchTrendingGifs()
       // May be empty due to cooldown from previous test
       expect(Array.isArray(results)).toBe(true)
     })
 
     it('returns empty results with error on failure', async () => {
-      (supabaseMinimal.functions.invoke as any).mockResolvedValue({ data: null, error: new Error('fail') })
+      ;(supabaseMinimal.functions.invoke as any).mockResolvedValue({
+        data: null,
+        error: new Error('fail'),
+      })
       const { results, error } = await fetchTrendingGifs()
       expect(results).toEqual([])
       expect(typeof error).toBe('string')

@@ -40,9 +40,7 @@ describe('useSwipeGesture', () => {
     const onSwipeLeft = vi.fn()
     const { result } = renderHook(() => useSwipeGesture({ onSwipeLeft, threshold: 50 }))
 
-    vi.spyOn(Date, 'now')
-      .mockReturnValueOnce(1000)
-      .mockReturnValueOnce(1100)
+    vi.spyOn(Date, 'now').mockReturnValueOnce(1000).mockReturnValueOnce(1100)
 
     result.current.onTouchStart(makeTouchEvent('touchstart', 300, 200))
     result.current.onTouchEnd(makeTouchEvent('touchend', 100, 210)) // deltaX=-200
@@ -54,9 +52,7 @@ describe('useSwipeGesture', () => {
     const onSwipeDown = vi.fn()
     const { result } = renderHook(() => useSwipeGesture({ onSwipeDown, threshold: 50 }))
 
-    vi.spyOn(Date, 'now')
-      .mockReturnValueOnce(1000)
-      .mockReturnValueOnce(1100)
+    vi.spyOn(Date, 'now').mockReturnValueOnce(1000).mockReturnValueOnce(1100)
 
     result.current.onTouchStart(makeTouchEvent('touchstart', 200, 100))
     result.current.onTouchEnd(makeTouchEvent('touchend', 210, 300)) // deltaY=200
@@ -68,9 +64,7 @@ describe('useSwipeGesture', () => {
     const onSwipeUp = vi.fn()
     const { result } = renderHook(() => useSwipeGesture({ onSwipeUp, threshold: 50 }))
 
-    vi.spyOn(Date, 'now')
-      .mockReturnValueOnce(1000)
-      .mockReturnValueOnce(1100)
+    vi.spyOn(Date, 'now').mockReturnValueOnce(1000).mockReturnValueOnce(1100)
 
     result.current.onTouchStart(makeTouchEvent('touchstart', 200, 300))
     result.current.onTouchEnd(makeTouchEvent('touchend', 210, 100)) // deltaY=-200
@@ -82,9 +76,7 @@ describe('useSwipeGesture', () => {
     const onSwipeRight = vi.fn()
     const { result } = renderHook(() => useSwipeGesture({ onSwipeRight, threshold: 50 }))
 
-    vi.spyOn(Date, 'now')
-      .mockReturnValueOnce(1000)
-      .mockReturnValueOnce(1400) // 400ms > 300ms
+    vi.spyOn(Date, 'now').mockReturnValueOnce(1000).mockReturnValueOnce(1400) // 400ms > 300ms
 
     result.current.onTouchStart(makeTouchEvent('touchstart', 100, 200))
     result.current.onTouchEnd(makeTouchEvent('touchend', 300, 200))
@@ -96,9 +88,7 @@ describe('useSwipeGesture', () => {
     const onSwipeRight = vi.fn()
     const { result } = renderHook(() => useSwipeGesture({ onSwipeRight, threshold: 50 }))
 
-    vi.spyOn(Date, 'now')
-      .mockReturnValueOnce(1000)
-      .mockReturnValueOnce(1100)
+    vi.spyOn(Date, 'now').mockReturnValueOnce(1000).mockReturnValueOnce(1100)
 
     result.current.onTouchStart(makeTouchEvent('touchstart', 100, 200))
     result.current.onTouchEnd(makeTouchEvent('touchend', 130, 200)) // deltaX=30 < threshold=50
@@ -113,9 +103,7 @@ describe('useSwipeGesture', () => {
       useSwipeGesture({ onSwipeRight, onSwipeDown, threshold: 50 })
     )
 
-    vi.spyOn(Date, 'now')
-      .mockReturnValueOnce(1000)
-      .mockReturnValueOnce(1100)
+    vi.spyOn(Date, 'now').mockReturnValueOnce(1000).mockReturnValueOnce(1100)
 
     // Equal deltaX and deltaY - horizontal wins because absDeltaX > absDeltaY check
     result.current.onTouchStart(makeTouchEvent('touchstart', 100, 100))
@@ -131,9 +119,7 @@ describe('useSwipeGesture', () => {
     const onSwipeRight = vi.fn()
     const { result } = renderHook(() => useSwipeGesture({ onSwipeRight, threshold: 100 }))
 
-    vi.spyOn(Date, 'now')
-      .mockReturnValueOnce(1000)
-      .mockReturnValueOnce(1100)
+    vi.spyOn(Date, 'now').mockReturnValueOnce(1000).mockReturnValueOnce(1100)
 
     result.current.onTouchStart(makeTouchEvent('touchstart', 100, 200))
     result.current.onTouchEnd(makeTouchEvent('touchend', 180, 200)) // deltaX=80 < threshold=100
@@ -145,9 +131,7 @@ describe('useSwipeGesture', () => {
     const onSwipeRight = vi.fn()
     const { result } = renderHook(() => useSwipeGesture({ onSwipeRight }))
 
-    vi.spyOn(Date, 'now')
-      .mockReturnValueOnce(1000)
-      .mockReturnValueOnce(1100)
+    vi.spyOn(Date, 'now').mockReturnValueOnce(1000).mockReturnValueOnce(1100)
 
     result.current.onTouchStart(makeTouchEvent('touchstart', 100, 200))
     result.current.onTouchEnd(makeTouchEvent('touchend', 160, 200)) // deltaX=60 > default 50

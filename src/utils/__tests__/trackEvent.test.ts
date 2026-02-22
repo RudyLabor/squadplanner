@@ -47,10 +47,7 @@ describe('trackEvent', () => {
   it('should register beforeunload listener on window', () => {
     initTrackingListeners()
 
-    expect(window.addEventListener).toHaveBeenCalledWith(
-      'beforeunload',
-      expect.any(Function)
-    )
+    expect(window.addEventListener).toHaveBeenCalledWith('beforeunload', expect.any(Function))
   })
 
   it('should queue a page_view event on init', () => {
@@ -115,9 +112,7 @@ describe('trackEvent', () => {
 
     // Only the initial page_view, not a new event from this click
     // Actually mockTrackEvent was cleared, so should not be called for the click
-    const clickCalls = mockTrackEvent.mock.calls.filter(
-      (c) => c[0] !== 'page_view'
-    )
+    const clickCalls = mockTrackEvent.mock.calls.filter((c) => c[0] !== 'page_view')
     expect(clickCalls).toHaveLength(0)
 
     document.body.removeChild(el)

@@ -21,12 +21,16 @@ const { mockSupabase, mockFrom, mockRpc } = vi.hoisted(() => {
   })
   const mockRpc = vi.fn().mockResolvedValue({ data: [], error: null })
   const mockGetUser = vi.fn().mockResolvedValue({ data: { user: { id: 'user-1' } } })
-  const mockGetSession = vi.fn().mockResolvedValue({ data: { session: { user: { id: 'user-1' } } } })
+  const mockGetSession = vi
+    .fn()
+    .mockResolvedValue({ data: { session: { user: { id: 'user-1' } } } })
   const mockSupabase = {
     auth: { getSession: mockGetSession, getUser: mockGetUser },
     from: mockFrom,
     rpc: mockRpc,
-    channel: vi.fn().mockReturnValue({ on: vi.fn().mockReturnThis(), subscribe: vi.fn().mockReturnThis() }),
+    channel: vi
+      .fn()
+      .mockReturnValue({ on: vi.fn().mockReturnThis(), subscribe: vi.fn().mockReturnThis() }),
     removeChannel: vi.fn(),
   }
   return { mockSupabase, mockFrom, mockRpc, mockGetSession }
@@ -40,9 +44,12 @@ vi.mock('../../../lib/supabaseMinimal', () => ({
 
 // Auth store mock
 vi.mock('../../useAuth', () => ({
-  useAuthStore: Object.assign(vi.fn().mockReturnValue({ user: { id: 'user-1' }, profile: { id: 'user-1' } }), {
-    getState: vi.fn().mockReturnValue({ user: { id: 'user-1' }, profile: { id: 'user-1' } }),
-  }),
+  useAuthStore: Object.assign(
+    vi.fn().mockReturnValue({ user: { id: 'user-1' }, profile: { id: 'user-1' } }),
+    {
+      getState: vi.fn().mockReturnValue({ user: { id: 'user-1' }, profile: { id: 'user-1' } }),
+    }
+  ),
 }))
 
 // Toast mock
@@ -67,27 +74,37 @@ describe('useUnreadCountQuery', () => {
   })
 
   it('renders without error', () => {
-    const { result } = renderHook(() => useUnreadCountQuery('user-1', ['squad-1']), { wrapper: createWrapper() })
+    const { result } = renderHook(() => useUnreadCountQuery('user-1', ['squad-1']), {
+      wrapper: createWrapper(),
+    })
     expect(result.current).toBeDefined()
   })
 
   it('returns loading state initially', () => {
-    const { result } = renderHook(() => useUnreadCountQuery('user-1', ['squad-1']), { wrapper: createWrapper() })
+    const { result } = renderHook(() => useUnreadCountQuery('user-1', ['squad-1']), {
+      wrapper: createWrapper(),
+    })
     expect(result.current.isLoading).toBeDefined()
   })
 
   it('is disabled when userId is undefined', () => {
-    const { result } = renderHook(() => useUnreadCountQuery(undefined, ['squad-1']), { wrapper: createWrapper() })
+    const { result } = renderHook(() => useUnreadCountQuery(undefined, ['squad-1']), {
+      wrapper: createWrapper(),
+    })
     expect(result.current.fetchStatus).toBe('idle')
   })
 
   it('is disabled when squadIds is empty', () => {
-    const { result } = renderHook(() => useUnreadCountQuery('user-1', []), { wrapper: createWrapper() })
+    const { result } = renderHook(() => useUnreadCountQuery('user-1', []), {
+      wrapper: createWrapper(),
+    })
     expect(result.current.fetchStatus).toBe('idle')
   })
 
   it('has data property', () => {
-    const { result } = renderHook(() => useUnreadCountQuery('user-1', ['squad-1']), { wrapper: createWrapper() })
+    const { result } = renderHook(() => useUnreadCountQuery('user-1', ['squad-1']), {
+      wrapper: createWrapper(),
+    })
     expect(result.current).toHaveProperty('data')
   })
 })

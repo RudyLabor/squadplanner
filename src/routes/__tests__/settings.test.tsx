@@ -41,18 +41,24 @@ vi.mock('framer-motion', () => ({
   useAnimate: vi.fn().mockReturnValue([{ current: null }, vi.fn()]),
   useAnimation: vi.fn().mockReturnValue({ start: vi.fn(), stop: vi.fn() }),
   useReducedMotion: vi.fn().mockReturnValue(false),
-  m: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
-  motion: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
+  m: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
+  motion: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
 }))
 
 vi.mock('../../lib/supabase-minimal-ssr', () => ({
@@ -72,9 +78,15 @@ vi.mock('../../lib/queryClient', () => ({
 }))
 vi.mock('../../components/ClientRouteWrapper', () => ({
   ClientRouteWrapper: ({ children, seeds }: any) =>
-    createElement('div', { 'data-testid': 'route-wrapper', 'data-seeds': JSON.stringify(seeds) }, children),
+    createElement(
+      'div',
+      { 'data-testid': 'route-wrapper', 'data-seeds': JSON.stringify(seeds) },
+      children
+    ),
 }))
-vi.mock('../../pages/Settings', () => ({ Settings: () => createElement('div', { 'data-testid': 'settings' }, 'Settings') }))
+vi.mock('../../pages/Settings', () => ({
+  Settings: () => createElement('div', { 'data-testid': 'settings' }, 'Settings'),
+}))
 
 import DefaultExport, { loader, clientLoader, meta, headers } from '../settings'
 
@@ -143,7 +155,11 @@ describe('routes/settings', () => {
 
       // 3 - canonical link
       const canonical = result.find((m: any) => m.tagName === 'link')
-      expect(canonical).toEqual({ tagName: 'link', rel: 'canonical', href: 'https://squadplanner.fr/settings' })
+      expect(canonical).toEqual({
+        tagName: 'link',
+        rel: 'canonical',
+        href: 'https://squadplanner.fr/settings',
+      })
 
       // 4 - og:url
       const ogUrl = result.find((m: any) => m.property === 'og:url')
@@ -257,7 +273,10 @@ describe('routes/settings', () => {
       expect(mockGetUser).toHaveBeenCalledTimes(1)
 
       // 5 - passes headers to data()
-      expect(mockData).toHaveBeenCalledWith({ profile: null }, expect.objectContaining({ headers: expect.any(Headers) }))
+      expect(mockData).toHaveBeenCalledWith(
+        { profile: null },
+        expect.objectContaining({ headers: expect.any(Headers) })
+      )
 
       // 6 - SSR client created once
       expect(mockCreateMinimalSSRClient).toHaveBeenCalledTimes(1)
@@ -336,7 +355,9 @@ describe('routes/settings', () => {
       const qc = makeQC()
       const profile = { id: 'u1', username: 'tester', theme: 'dark' }
       const { container } = render(
-        createElement(QueryClientProvider, { client: qc },
+        createElement(
+          QueryClientProvider,
+          { client: qc },
           createElement(DefaultExport, { loaderData: { profile } } as any)
         )
       )
@@ -367,7 +388,9 @@ describe('routes/settings', () => {
     it('renders without crashing with null profile', () => {
       const qc = makeQC()
       const { container } = render(
-        createElement(QueryClientProvider, { client: qc },
+        createElement(
+          QueryClientProvider,
+          { client: qc },
           createElement(DefaultExport, { loaderData: { profile: null } } as any)
         )
       )

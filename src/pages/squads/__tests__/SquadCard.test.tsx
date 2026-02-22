@@ -20,21 +20,40 @@ vi.mock('framer-motion', () => ({
   useAnimate: vi.fn().mockReturnValue([{ current: null }, vi.fn()]),
   useAnimation: vi.fn().mockReturnValue({ start: vi.fn(), stop: vi.fn() }),
   useReducedMotion: vi.fn().mockReturnValue(false),
-  m: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
-  motion: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
+  m: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
+  motion: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
 }))
 
-vi.mock('../../../components/icons', () => new Proxy({}, { get: (_t: any, p: string) => typeof p === 'string' ? ({ children, ...props }: any) => createElement('span', { ...props, 'data-icon': p }, children) : undefined }))
+vi.mock(
+  '../../../components/icons',
+  () =>
+    new Proxy(
+      {},
+      {
+        get: (_t: any, p: string) =>
+          typeof p === 'string'
+            ? ({ children, ...props }: any) =>
+                createElement('span', { ...props, 'data-icon': p }, children)
+            : undefined,
+      }
+    )
+)
 
 vi.mock('../../../components/ui', () => ({
   Card: ({ children, ...props }: any) => createElement('div', props, children),
@@ -45,7 +64,13 @@ import { SquadCard } from '../SquadCard'
 
 describe('SquadCard', () => {
   const defaultProps = {
-    squad: { id: 's1', name: 'Les Ranked', game: 'Valorant', invite_code: 'ABC123', member_count: 5 },
+    squad: {
+      id: 's1',
+      name: 'Les Ranked',
+      game: 'Valorant',
+      invite_code: 'ABC123',
+      member_count: 5,
+    },
     isOwner: false,
     hasActiveParty: false,
     copiedCode: null as string | null,
@@ -79,7 +104,9 @@ describe('SquadCard', () => {
   // STRICT: verifies owner badge, active party indicator, and copy code callback
   it('shows owner crown, active party indicator, and triggers onCopyCode', () => {
     const onCopyCode = vi.fn()
-    const { container } = render(<SquadCard {...defaultProps} isOwner={true} hasActiveParty={true} onCopyCode={onCopyCode} />)
+    const { container } = render(
+      <SquadCard {...defaultProps} isOwner={true} hasActiveParty={true} onCopyCode={onCopyCode} />
+    )
 
     // 1. Crown icon shown for owner
     expect(container.querySelector('[data-icon="Crown"]')).not.toBeNull()
@@ -118,17 +145,29 @@ describe('SquadCard', () => {
   // STRICT: verifies member_count fallback and singular form
   it('handles member count fallback and singular form', () => {
     // 1. Single member — singular "membre"
-    const { unmount: u1 } = render(<SquadCard {...defaultProps} squad={{ ...defaultProps.squad, member_count: 1 }} />)
+    const { unmount: u1 } = render(
+      <SquadCard {...defaultProps} squad={{ ...defaultProps.squad, member_count: 1 }} />
+    )
     expect(screen.getByText('Valorant · 1 membre')).toBeDefined()
     u1()
 
     // 2. Falls back to total_members when member_count missing
-    const { unmount: u2 } = render(<SquadCard {...defaultProps} squad={{ ...defaultProps.squad, member_count: undefined, total_members: 3 } as any} />)
+    const { unmount: u2 } = render(
+      <SquadCard
+        {...defaultProps}
+        squad={{ ...defaultProps.squad, member_count: undefined, total_members: 3 } as any}
+      />
+    )
     expect(screen.getByText(/3 membres/)).toBeDefined()
     u2()
 
     // 3. Falls back to 1 when both missing
-    const { unmount: u3 } = render(<SquadCard {...defaultProps} squad={{ ...defaultProps.squad, member_count: undefined } as any} />)
+    const { unmount: u3 } = render(
+      <SquadCard
+        {...defaultProps}
+        squad={{ ...defaultProps.squad, member_count: undefined } as any}
+      />
+    )
     expect(screen.getByText(/1 membre/)).toBeDefined()
     u3()
 

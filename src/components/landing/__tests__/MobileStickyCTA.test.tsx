@@ -21,22 +21,29 @@ vi.mock('framer-motion', () => ({
   useAnimate: vi.fn().mockReturnValue([{ current: null }, vi.fn()]),
   useAnimation: vi.fn().mockReturnValue({ start: vi.fn(), stop: vi.fn() }),
   useReducedMotion: vi.fn().mockReturnValue(false),
-  m: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
-  motion: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
+  m: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
+  motion: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
 }))
 
 vi.mock('../../icons', () => ({
-  ArrowRight: (props: any) => createElement('span', { ...props, 'data-testid': 'arrow-icon' }, 'arrow'),
+  ArrowRight: (props: any) =>
+    createElement('span', { ...props, 'data-testid': 'arrow-icon' }, 'arrow'),
   X: (props: any) => createElement('span', { ...props, 'data-testid': 'x-icon' }, 'x'),
 }))
 
@@ -191,7 +198,9 @@ describe('MobileStickyCTA', () => {
 
       // Make CTA visible first
       simulateScroll(-100, 1200)
-      act(() => { window.dispatchEvent(new Event('scroll')) })
+      act(() => {
+        window.dispatchEvent(new Event('scroll'))
+      })
 
       expect(screen.getByLabelText('Fermer')).toBeInTheDocument()
     })
@@ -202,7 +211,9 @@ describe('MobileStickyCTA', () => {
 
       // Make CTA visible
       simulateScroll(-100, 1200)
-      act(() => { window.dispatchEvent(new Event('scroll')) })
+      act(() => {
+        window.dispatchEvent(new Event('scroll'))
+      })
 
       expect(screen.getByText('Créer ma squad gratuitement')).toBeInTheDocument()
 
@@ -213,7 +224,9 @@ describe('MobileStickyCTA', () => {
       expect(screen.queryByText('Créer ma squad gratuitement')).not.toBeInTheDocument()
 
       // Even after scrolling again, it should stay hidden
-      act(() => { window.dispatchEvent(new Event('scroll')) })
+      act(() => {
+        window.dispatchEvent(new Event('scroll'))
+      })
       expect(screen.queryByText('Créer ma squad gratuitement')).not.toBeInTheDocument()
     })
   })
@@ -223,7 +236,9 @@ describe('MobileStickyCTA', () => {
       render(<MobileStickyCTA />)
 
       simulateScroll(-100, 1200)
-      act(() => { window.dispatchEvent(new Event('scroll')) })
+      act(() => {
+        window.dispatchEvent(new Event('scroll'))
+      })
 
       const link = screen.getByText('Créer ma squad gratuitement').closest('a')
       expect(link).toHaveAttribute('href', '/auth?mode=register&redirect=onboarding')
@@ -233,7 +248,9 @@ describe('MobileStickyCTA', () => {
       render(<MobileStickyCTA />)
 
       simulateScroll(-100, 1200)
-      act(() => { window.dispatchEvent(new Event('scroll')) })
+      act(() => {
+        window.dispatchEvent(new Event('scroll'))
+      })
 
       const link = screen.getByText('Créer ma squad gratuitement').closest('a')
       expect(link).toHaveAttribute('data-track', 'mobile_sticky_cta_click')
@@ -245,7 +262,9 @@ describe('MobileStickyCTA', () => {
       render(<MobileStickyCTA />)
 
       simulateScroll(-100, 1200)
-      act(() => { window.dispatchEvent(new Event('scroll')) })
+      act(() => {
+        window.dispatchEvent(new Event('scroll'))
+      })
 
       expect(screen.getByTestId('arrow-icon')).toBeInTheDocument()
     })
@@ -254,7 +273,9 @@ describe('MobileStickyCTA', () => {
       render(<MobileStickyCTA />)
 
       simulateScroll(-100, 1200)
-      act(() => { window.dispatchEvent(new Event('scroll')) })
+      act(() => {
+        window.dispatchEvent(new Event('scroll'))
+      })
 
       expect(screen.getByTestId('x-icon')).toBeInTheDocument()
     })

@@ -70,6 +70,8 @@ describe('ShareButtons — real component render, zero mocks', () => {
     )
     const whatsappLink = screen.getByText('WhatsApp').closest('a')!
     // URL should be encoded
-    expect(whatsappLink.href).toContain(encodeURIComponent('https://squadplanner.fr/s/test?a=1&b=2'))
+    expect(whatsappLink.href).toContain(
+      encodeURIComponent('https://squadplanner.fr/s/test?a=1&b=2')
+    )
   })
 })

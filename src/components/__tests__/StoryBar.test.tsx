@@ -9,19 +9,24 @@ const mockCreateStory = vi.hoisted(() => vi.fn())
 const mockViewStory = vi.hoisted(() => vi.fn())
 const mockGetUserStories = vi.hoisted(() => vi.fn().mockReturnValue([]))
 const mockUseStories = vi.hoisted(() => vi.fn())
-const mockStoryViewer = vi.hoisted(() => vi.fn(() => createElement('div', { 'data-testid': 'story-viewer' }, 'StoryViewer')))
+const mockStoryViewer = vi.hoisted(() =>
+  vi.fn(() => createElement('div', { 'data-testid': 'story-viewer' }, 'StoryViewer'))
+)
 
 /* ------------------------------------------------------------------ */
 /*  vi.mock calls                                                      */
 /* ------------------------------------------------------------------ */
 vi.mock('framer-motion', () => ({
   AnimatePresence: ({ children }: any) => children,
-  m: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, onClick, ...r }: any) => createElement(p, { ...r, onClick }, children)
-        : undefined,
-  }),
+  m: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, onClick, ...r }: any) => createElement(p, { ...r, onClick }, children)
+          : undefined,
+    }
+  ),
 }))
 
 vi.mock('../icons', () => ({
@@ -74,7 +79,10 @@ const defaultStoryUsers = [
   },
 ]
 
-function setupMock(overrides: Partial<ReturnType<typeof mockUseStories>> = {}, storyUsers = defaultStoryUsers) {
+function setupMock(
+  overrides: Partial<ReturnType<typeof mockUseStories>> = {},
+  storyUsers = defaultStoryUsers
+) {
   mockUseStories.mockReturnValue({
     storyUsers,
     isLoading: false,
@@ -132,7 +140,9 @@ describe('StoryBar', () => {
   it('shows avatar image when avatarUrl is present', () => {
     const { container } = render(<StoryBar />)
     const imgs = container.querySelectorAll('img')
-    const avatarImg = Array.from(imgs).find(i => i.getAttribute('src') === 'https://example.com/avatar.jpg')
+    const avatarImg = Array.from(imgs).find(
+      (i) => i.getAttribute('src') === 'https://example.com/avatar.jpg'
+    )
     expect(avatarImg).toBeTruthy()
   })
 
@@ -160,7 +170,7 @@ describe('StoryBar', () => {
   /* ---------- Create story button (when own story not present) ---------- */
 
   it('shows create story button when own story is NOT in the list', () => {
-    const usersWithoutOwn = defaultStoryUsers.filter(u => !u.isOwnStory)
+    const usersWithoutOwn = defaultStoryUsers.filter((u) => !u.isOwnStory)
     setupMock({}, usersWithoutOwn)
     render(<StoryBar />)
     expect(screen.getByText('Story')).toBeInTheDocument()
@@ -172,7 +182,7 @@ describe('StoryBar', () => {
   })
 
   it('opens create modal when create button is clicked', () => {
-    const usersWithoutOwn = defaultStoryUsers.filter(u => !u.isOwnStory)
+    const usersWithoutOwn = defaultStoryUsers.filter((u) => !u.isOwnStory)
     setupMock({}, usersWithoutOwn)
     render(<StoryBar />)
     fireEvent.click(screen.getByText('Story'))
@@ -182,10 +192,7 @@ describe('StoryBar', () => {
   /* ---------- Click own story with 0 count → create modal ---------- */
 
   it('opens create modal when clicking own story with 0 count', () => {
-    const users = [
-      { ...defaultStoryUsers[0], storyCount: 0 },
-      defaultStoryUsers[1],
-    ]
+    const users = [{ ...defaultStoryUsers[0], storyCount: 0 }, defaultStoryUsers[1]]
     setupMock({}, users)
     render(<StoryBar />)
     fireEvent.click(screen.getByText('Ma story'))
@@ -224,7 +231,7 @@ describe('StoryBar', () => {
   /* ---------- CreateStoryModal ---------- */
 
   it('renders CreateStoryModal with background options', () => {
-    const usersWithoutOwn = defaultStoryUsers.filter(u => !u.isOwnStory)
+    const usersWithoutOwn = defaultStoryUsers.filter((u) => !u.isOwnStory)
     setupMock({}, usersWithoutOwn)
     render(<StoryBar />)
     fireEvent.click(screen.getByText('Story'))
@@ -235,7 +242,7 @@ describe('StoryBar', () => {
   })
 
   it('renders textarea in CreateStoryModal', () => {
-    const usersWithoutOwn = defaultStoryUsers.filter(u => !u.isOwnStory)
+    const usersWithoutOwn = defaultStoryUsers.filter((u) => !u.isOwnStory)
     setupMock({}, usersWithoutOwn)
     render(<StoryBar />)
     fireEvent.click(screen.getByText('Story'))
@@ -243,7 +250,7 @@ describe('StoryBar', () => {
   })
 
   it('submit button is disabled when content is empty', () => {
-    const usersWithoutOwn = defaultStoryUsers.filter(u => !u.isOwnStory)
+    const usersWithoutOwn = defaultStoryUsers.filter((u) => !u.isOwnStory)
     setupMock({}, usersWithoutOwn)
     render(<StoryBar />)
     fireEvent.click(screen.getByText('Story'))
@@ -252,21 +259,25 @@ describe('StoryBar', () => {
   })
 
   it('submit button is enabled when content has text', () => {
-    const usersWithoutOwn = defaultStoryUsers.filter(u => !u.isOwnStory)
+    const usersWithoutOwn = defaultStoryUsers.filter((u) => !u.isOwnStory)
     setupMock({}, usersWithoutOwn)
     render(<StoryBar />)
     fireEvent.click(screen.getByText('Story'))
-    fireEvent.change(screen.getByPlaceholderText('Ecris ta story...'), { target: { value: 'My story' } })
+    fireEvent.change(screen.getByPlaceholderText('Ecris ta story...'), {
+      target: { value: 'My story' },
+    })
     const submitBtn = screen.getByText('Publier la story')
     expect(submitBtn).not.toBeDisabled()
   })
 
   it('calls createStory on submit', () => {
-    const usersWithoutOwn = defaultStoryUsers.filter(u => !u.isOwnStory)
+    const usersWithoutOwn = defaultStoryUsers.filter((u) => !u.isOwnStory)
     setupMock({}, usersWithoutOwn)
     render(<StoryBar />)
     fireEvent.click(screen.getByText('Story'))
-    fireEvent.change(screen.getByPlaceholderText('Ecris ta story...'), { target: { value: 'Hello world' } })
+    fireEvent.change(screen.getByPlaceholderText('Ecris ta story...'), {
+      target: { value: 'Hello world' },
+    })
     fireEvent.click(screen.getByText('Publier la story'))
     expect(mockCreateStory).toHaveBeenCalledWith({
       contentType: 'text',
@@ -276,7 +287,7 @@ describe('StoryBar', () => {
   })
 
   it('does not call createStory when content is only whitespace', () => {
-    const usersWithoutOwn = defaultStoryUsers.filter(u => !u.isOwnStory)
+    const usersWithoutOwn = defaultStoryUsers.filter((u) => !u.isOwnStory)
     setupMock({}, usersWithoutOwn)
     render(<StoryBar />)
     fireEvent.click(screen.getByText('Story'))
@@ -286,12 +297,14 @@ describe('StoryBar', () => {
   })
 
   it('allows selecting a different background color', () => {
-    const usersWithoutOwn = defaultStoryUsers.filter(u => !u.isOwnStory)
+    const usersWithoutOwn = defaultStoryUsers.filter((u) => !u.isOwnStory)
     setupMock({}, usersWithoutOwn)
     render(<StoryBar />)
     fireEvent.click(screen.getByText('Story'))
     fireEvent.click(screen.getByLabelText('Rouge'))
-    fireEvent.change(screen.getByPlaceholderText('Ecris ta story...'), { target: { value: 'Red story' } })
+    fireEvent.change(screen.getByPlaceholderText('Ecris ta story...'), {
+      target: { value: 'Red story' },
+    })
     fireEvent.click(screen.getByText('Publier la story'))
     expect(mockCreateStory).toHaveBeenCalledWith({
       contentType: 'text',
@@ -301,7 +314,7 @@ describe('StoryBar', () => {
   })
 
   it('closes create modal on backdrop click', () => {
-    const usersWithoutOwn = defaultStoryUsers.filter(u => !u.isOwnStory)
+    const usersWithoutOwn = defaultStoryUsers.filter((u) => !u.isOwnStory)
     setupMock({}, usersWithoutOwn)
     render(<StoryBar />)
     fireEvent.click(screen.getByText('Story'))
@@ -313,7 +326,7 @@ describe('StoryBar', () => {
   })
 
   it('closes create modal on X button click', () => {
-    const usersWithoutOwn = defaultStoryUsers.filter(u => !u.isOwnStory)
+    const usersWithoutOwn = defaultStoryUsers.filter((u) => !u.isOwnStory)
     setupMock({}, usersWithoutOwn)
     render(<StoryBar />)
     fireEvent.click(screen.getByText('Story'))

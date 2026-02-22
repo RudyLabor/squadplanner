@@ -9,7 +9,8 @@ vi.mock('react-router', () => ({
   useSearchParams: vi.fn().mockReturnValue([new URLSearchParams(), vi.fn()]),
   useLoaderData: vi.fn().mockReturnValue({}),
   Link: ({ children, to, ...props }: any) => createElement('a', { href: to, ...props }, children),
-  NavLink: ({ children, to, ...props }: any) => createElement('a', { href: to, ...props }, children),
+  NavLink: ({ children, to, ...props }: any) =>
+    createElement('a', { href: to, ...props }, children),
   Outlet: () => null,
   useMatches: vi.fn().mockReturnValue([]),
 }))
@@ -28,18 +29,24 @@ vi.mock('framer-motion', () => ({
   useAnimate: vi.fn().mockReturnValue([{ current: null }, vi.fn()]),
   useAnimation: vi.fn().mockReturnValue({ start: vi.fn(), stop: vi.fn() }),
   useReducedMotion: vi.fn().mockReturnValue(false),
-  m: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
-  motion: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
+  m: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
+  motion: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
 }))
 
 vi.mock('../../ui', () => ({
@@ -47,7 +54,9 @@ vi.mock('../../ui', () => ({
 }))
 vi.mock('../../FriendsPlaying', () => ({
   FriendsPlaying: ({ friends, onJoin, onInvite }: any) =>
-    createElement('div', { 'data-testid': 'friends-playing' },
+    createElement(
+      'div',
+      { 'data-testid': 'friends-playing' },
       friends.map((f: any) => createElement('span', { key: f.id }, f.username))
     ),
 }))
@@ -72,7 +81,9 @@ describe('HomeFriendsSection', () => {
   })
 
   it('shows skeleton when loading', () => {
-    const { getByTestId } = render(createElement(HomeFriendsSection, { ...defaultProps, friendsLoading: true }))
+    const { getByTestId } = render(
+      createElement(HomeFriendsSection, { ...defaultProps, friendsLoading: true })
+    )
     expect(getByTestId('skeleton-friends')).toBeDefined()
   })
 
@@ -86,7 +97,9 @@ describe('HomeFriendsSection', () => {
       { id: 'f1', username: 'Alice', game: 'Valorant', squad_id: 's1' },
       { id: 'f2', username: 'Bob', game: 'CS2', squad_id: 's2' },
     ]
-    const { getByText } = render(createElement(HomeFriendsSection, { ...defaultProps, friendsPlaying: friends }))
+    const { getByText } = render(
+      createElement(HomeFriendsSection, { ...defaultProps, friendsPlaying: friends })
+    )
     expect(getByText('Alice')).toBeDefined()
     expect(getByText('Bob')).toBeDefined()
   })
@@ -98,7 +111,9 @@ describe('HomeFriendsSection', () => {
   })
 
   it('does not render FriendsPlaying when loading', () => {
-    const { queryByTestId } = render(createElement(HomeFriendsSection, { ...defaultProps, friendsLoading: true }))
+    const { queryByTestId } = render(
+      createElement(HomeFriendsSection, { ...defaultProps, friendsLoading: true })
+    )
     expect(queryByTestId('friends-playing')).toBeNull()
   })
 })

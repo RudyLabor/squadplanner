@@ -8,17 +8,22 @@ Element.prototype.scrollIntoView = vi.fn()
 
 function makeMotionProxy() {
   const cache = new Map<string, any>()
-  return new Proxy({}, {
-    get: (_t: any, p: string) => {
-      if (typeof p !== 'string') return undefined
-      if (!cache.has(p)) {
-        const comp = forwardRef(({ children, ...r }: any, ref: any) => createElement(p, { ...r, ref }, children))
-        comp.displayName = `motion.${p}`
-        cache.set(p, comp)
-      }
-      return cache.get(p)
-    },
-  })
+  return new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) => {
+        if (typeof p !== 'string') return undefined
+        if (!cache.has(p)) {
+          const comp = forwardRef(({ children, ...r }: any, ref: any) =>
+            createElement(p, { ...r, ref }, children)
+          )
+          comp.displayName = `motion.${p}`
+          cache.set(p, comp)
+        }
+        return cache.get(p)
+      },
+    }
+  )
 }
 
 vi.mock('framer-motion', () => ({
@@ -41,14 +46,16 @@ vi.mock('framer-motion', () => ({
 
 vi.mock('../viewer/ViewerToolbar', () => ({
   ViewerToolbar: ({ alt, scale, onZoomIn, onZoomOut, onRotate, onDownload, onClose }: any) =>
-    createElement('div', { 'data-testid': 'viewer-toolbar' },
+    createElement(
+      'div',
+      { 'data-testid': 'viewer-toolbar' },
       createElement('span', {}, `${Math.round(scale * 100)}%`),
       createElement('span', {}, alt),
       createElement('button', { onClick: onZoomIn, 'aria-label': 'Zoomer' }),
       createElement('button', { onClick: onZoomOut, 'aria-label': 'Dézoomer' }),
       createElement('button', { onClick: onRotate, 'aria-label': 'Pivoter' }),
       createElement('button', { onClick: onDownload, 'aria-label': 'Télécharger' }),
-      createElement('button', { onClick: onClose, 'aria-label': 'Fermer' }),
+      createElement('button', { onClick: onClose, 'aria-label': 'Fermer' })
     ),
 }))
 
@@ -88,7 +95,9 @@ describe('ImageViewer', () => {
   // =========================================================================
   describe('image rendering', () => {
     it('renders image with correct src', () => {
-      render(<ImageViewer src="https://example.com/photo.jpg" alt="Photo" isOpen onClose={() => {}} />)
+      render(
+        <ImageViewer src="https://example.com/photo.jpg" alt="Photo" isOpen onClose={() => {}} />
+      )
       const img = screen.getByAltText('Photo')
       expect(img).toHaveAttribute('src', 'https://example.com/photo.jpg')
     })
@@ -388,7 +397,14 @@ describe('ImageViewer', () => {
       vi.spyOn(URL, 'createObjectURL').mockReturnValue('blob:test')
       vi.spyOn(URL, 'revokeObjectURL').mockImplementation(() => {})
 
-      render(<ImageViewer src="https://example.com/image.png" alt="Download test" isOpen onClose={() => {}} />)
+      render(
+        <ImageViewer
+          src="https://example.com/image.png"
+          alt="Download test"
+          isOpen
+          onClose={() => {}}
+        />
+      )
       await user.click(screen.getByLabelText('Télécharger'))
 
       await vi.waitFor(() => {

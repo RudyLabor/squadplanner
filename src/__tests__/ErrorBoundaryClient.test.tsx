@@ -63,9 +63,7 @@ describe('ErrorBoundaryClient', () => {
 
       render(<ErrorBoundaryClient />)
 
-      expect(
-        screen.getByText(/Not Found\. Tu peux essayer de recharger/)
-      ).toBeInTheDocument()
+      expect(screen.getByText(/Not Found\. Tu peux essayer de recharger/)).toBeInTheDocument()
     })
   })
 

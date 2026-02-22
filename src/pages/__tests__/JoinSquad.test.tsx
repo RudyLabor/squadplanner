@@ -24,18 +24,24 @@ vi.mock('react-router', () => ({
 
 vi.mock('framer-motion', () => ({
   AnimatePresence: ({ children }: any) => children,
-  m: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
-  motion: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
+  m: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
+  motion: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
 }))
 
 vi.mock('../../components/icons', () => ({
@@ -53,10 +59,9 @@ vi.mock('../../components/ui', () => ({
 }))
 
 vi.mock('../../hooks/useAuth', () => ({
-  useAuthStore: Object.assign(
-    (...args: any[]) => mocks.useAuthStore(...args),
-    { getState: vi.fn().mockReturnValue({ user: null }) }
-  ),
+  useAuthStore: Object.assign((...args: any[]) => mocks.useAuthStore(...args), {
+    getState: vi.fn().mockReturnValue({ user: null }),
+  }),
 }))
 
 vi.mock('../../hooks/useSquads', () => ({
@@ -79,7 +84,10 @@ import { JoinSquad } from '../JoinSquad'
 /* ------------------------------------------------------------------ */
 /*  Helpers                                                            */
 /* ------------------------------------------------------------------ */
-function mockSupabaseSquadFound(squad = { id: 'sq1', name: 'CoolSquad', game: 'Valorant' }, memberCount = 5) {
+function mockSupabaseSquadFound(
+  squad = { id: 'sq1', name: 'CoolSquad', game: 'Valorant' },
+  memberCount = 5
+) {
   mocks.supabaseFrom.mockImplementation((table: string) => {
     if (table === 'squads') {
       return {

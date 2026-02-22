@@ -20,18 +20,24 @@ vi.mock('framer-motion', () => ({
   useAnimate: vi.fn().mockReturnValue([{ current: null }, vi.fn()]),
   useAnimation: vi.fn().mockReturnValue({ start: vi.fn(), stop: vi.fn() }),
   useReducedMotion: vi.fn().mockReturnValue(false),
-  m: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
-  motion: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
+  m: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
+  motion: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
 }))
 
 vi.mock('../../icons', () => ({
@@ -83,7 +89,9 @@ describe('SidebarFooter', () => {
     expect(screen.getByText(/Découvrir/)).toBeInTheDocument()
 
     // Premium link goes to /premium
-    const premiumLink = screen.getByLabelText('Passer Premium - Stats avancées, IA coach, qualité audio HD')
+    const premiumLink = screen.getByLabelText(
+      'Passer Premium - Stats avancées, IA coach, qualité audio HD'
+    )
     expect(premiumLink.closest('a')!.getAttribute('href')).toBe('/premium')
 
     // Footer element wraps content
@@ -126,13 +134,7 @@ describe('SidebarFooter', () => {
   // STRICT: verifies default values when profile fields are null, and avatar image is rendered when avatar_url is provided
   it('handles null profile fields and renders avatar image', () => {
     // Null profile shows defaults
-    render(
-      <SidebarFooter
-        isExpanded={true}
-        profile={null}
-        onOpenCustomStatus={vi.fn()}
-      />
-    )
+    render(<SidebarFooter isExpanded={true} profile={null} onOpenCustomStatus={vi.fn()} />)
     expect(screen.getByText('Mon profil')).toBeInTheDocument()
     expect(screen.getByText('100% fiable')).toBeInTheDocument()
 
@@ -140,7 +142,11 @@ describe('SidebarFooter', () => {
     const { container } = render(
       <SidebarFooter
         isExpanded={true}
-        profile={{ username: 'AvatarUser', avatar_url: 'https://example.com/avatar.png', reliability_score: 88 }}
+        profile={{
+          username: 'AvatarUser',
+          avatar_url: 'https://example.com/avatar.png',
+          reliability_score: 88,
+        }}
         onOpenCustomStatus={vi.fn()}
       />
     )

@@ -6,8 +6,12 @@ import { createElement } from 'react'
 const { mockSupabase, mockRpc, mockFrom } = vi.hoisted(() => {
   const mockRpc = vi.fn()
   const mockFrom = vi.fn()
-  const mockGetSession = vi.fn().mockResolvedValue({ data: { session: { user: { id: 'user-1' } } } })
-  const mockGetUser = vi.fn().mockResolvedValue({ data: { user: { id: 'user-1', email: 'test@test.com' } } })
+  const mockGetSession = vi
+    .fn()
+    .mockResolvedValue({ data: { session: { user: { id: 'user-1' } } } })
+  const mockGetUser = vi
+    .fn()
+    .mockResolvedValue({ data: { user: { id: 'user-1', email: 'test@test.com' } } })
   const mockSupabase = {
     auth: { getSession: mockGetSession, getUser: mockGetUser },
     rpc: mockRpc,

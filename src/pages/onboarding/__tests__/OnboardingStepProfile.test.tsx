@@ -16,27 +16,56 @@ vi.mock('framer-motion', () => ({
   useAnimate: vi.fn().mockReturnValue([{ current: null }, vi.fn()]),
   useAnimation: vi.fn().mockReturnValue({ start: vi.fn(), stop: vi.fn() }),
   useReducedMotion: vi.fn().mockReturnValue(false),
-  m: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
-  motion: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
+  m: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
+  motion: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
 }))
 
-vi.mock('../../../components/icons', () => new Proxy({}, { get: (_t: any, p: string) => typeof p === 'string' ? ({ children, ...props }: any) => createElement('span', props, children) : undefined }))
+vi.mock(
+  '../../../components/icons',
+  () =>
+    new Proxy(
+      {},
+      {
+        get: (_t: any, p: string) =>
+          typeof p === 'string'
+            ? ({ children, ...props }: any) => createElement('span', props, children)
+            : undefined,
+      }
+    )
+)
 
 vi.mock('../../../components/ui', () => ({
   Button: ({ children, ...props }: any) => createElement('button', props, children),
   Card: ({ children, ...props }: any) => createElement('div', props, children),
-  Input: ({ label, ...props }: any) => createElement('div', {}, label ? createElement('label', {}, label) : null, createElement('input', props)),
-  Select: ({ options, ...props }: any) => createElement('select', props, options?.map((o: any) => createElement('option', { key: o.value, value: o.value }, o.label))),
+  Input: ({ label, ...props }: any) =>
+    createElement(
+      'div',
+      {},
+      label ? createElement('label', {}, label) : null,
+      createElement('input', props)
+    ),
+  Select: ({ options, ...props }: any) =>
+    createElement(
+      'select',
+      props,
+      options?.map((o: any) => createElement('option', { key: o.value, value: o.value }, o.label))
+    ),
 }))
 
 import { OnboardingStepProfile } from '../OnboardingStepProfile'

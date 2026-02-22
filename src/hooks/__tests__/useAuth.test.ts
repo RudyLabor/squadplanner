@@ -516,7 +516,10 @@ describe('useAuthStore', () => {
       expect(mockReplace).toHaveBeenCalledWith('/')
 
       // Restore
-      Object.defineProperty(window, 'location', { value: { ...window.location, replace: originalReplace }, writable: true })
+      Object.defineProperty(window, 'location', {
+        value: { ...window.location, replace: originalReplace },
+        writable: true,
+      })
     })
   })
 

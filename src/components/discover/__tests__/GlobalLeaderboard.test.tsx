@@ -21,27 +21,38 @@ vi.mock('framer-motion', () => ({
   useAnimate: vi.fn().mockReturnValue([{ current: null }, vi.fn()]),
   useAnimation: vi.fn().mockReturnValue({ start: vi.fn(), stop: vi.fn() }),
   useReducedMotion: vi.fn().mockReturnValue(false),
-  m: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
-  motion: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
+  m: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
+  motion: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
 }))
 
-vi.mock('../../icons', () =>
-  new Proxy({}, {
-    get: (_t, name) =>
-      typeof name === 'string'
-        ? (props: any) => createElement('svg', { 'data-testid': `icon-${name}`, ...props })
-        : undefined,
-  })
+vi.mock(
+  '../../icons',
+  () =>
+    new Proxy(
+      {},
+      {
+        get: (_t, name) =>
+          typeof name === 'string'
+            ? (props: any) => createElement('svg', { 'data-testid': `icon-${name}`, ...props })
+            : undefined,
+      }
+    )
 )
 
 const mockUseGlobalLeaderboardQuery = vi.fn()
@@ -81,10 +92,46 @@ describe('GlobalLeaderboard', () => {
   // STRICT: verifies podium (top 3) renders as cards with medal icons & links, rest renders as rows with rank/stats
   it('renders leaderboard entries with podium and rows', () => {
     const entries = [
-      { user_id: 'u1', username: 'player1', avatar_url: null, xp: 1000, level: 10, reliability_score: 95, streak_days: 5, rank: 1 },
-      { user_id: 'u2', username: 'player2', avatar_url: 'https://img.test/p2.jpg', xp: 800, level: 8, reliability_score: 90, streak_days: 3, rank: 2 },
-      { user_id: 'u3', username: 'player3', avatar_url: null, xp: 600, level: 6, reliability_score: 85, streak_days: 0, rank: 3 },
-      { user_id: 'u4', username: 'player4', avatar_url: null, xp: 400, level: 4, reliability_score: 80, streak_days: 0, rank: 4 },
+      {
+        user_id: 'u1',
+        username: 'player1',
+        avatar_url: null,
+        xp: 1000,
+        level: 10,
+        reliability_score: 95,
+        streak_days: 5,
+        rank: 1,
+      },
+      {
+        user_id: 'u2',
+        username: 'player2',
+        avatar_url: 'https://img.test/p2.jpg',
+        xp: 800,
+        level: 8,
+        reliability_score: 90,
+        streak_days: 3,
+        rank: 2,
+      },
+      {
+        user_id: 'u3',
+        username: 'player3',
+        avatar_url: null,
+        xp: 600,
+        level: 6,
+        reliability_score: 85,
+        streak_days: 0,
+        rank: 3,
+      },
+      {
+        user_id: 'u4',
+        username: 'player4',
+        avatar_url: null,
+        xp: 400,
+        level: 4,
+        reliability_score: 80,
+        streak_days: 0,
+        rank: 4,
+      },
     ]
     mockUseGlobalLeaderboardQuery.mockReturnValue({ data: entries, isLoading: false })
     const { container } = render(<GlobalLeaderboard />)

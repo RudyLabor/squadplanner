@@ -27,12 +27,9 @@ vi.mock('../../lib/supabaseMinimal', () => ({
 }))
 
 vi.mock('../useAuth', () => ({
-  useAuthStore: Object.assign(
-    vi.fn().mockReturnValue({ user: { id: 'user-1' } }),
-    {
-      getState: vi.fn().mockReturnValue({ user: { id: 'user-1' } }),
-    }
-  ),
+  useAuthStore: Object.assign(vi.fn().mockReturnValue({ user: { id: 'user-1' } }), {
+    getState: vi.fn().mockReturnValue({ user: { id: 'user-1' } }),
+  }),
 }))
 
 import { useMessageSearch } from '../useMessageSearch'
@@ -283,10 +280,9 @@ describe('useMessageSearch', () => {
   it('dm search calls RPC search_direct_messages', async () => {
     mockRpc.mockResolvedValue({ data: [], error: null })
 
-    const { result } = renderHook(
-      () => useMessageSearch({ otherUserId: 'user-2' }),
-      { wrapper: createWrapper() }
-    )
+    const { result } = renderHook(() => useMessageSearch({ otherUserId: 'user-2' }), {
+      wrapper: createWrapper(),
+    })
 
     act(() => {
       result.current.setQuery('hello')

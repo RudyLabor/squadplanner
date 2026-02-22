@@ -7,16 +7,19 @@ const mockObserve = vi.fn()
 const mockDisconnect = vi.fn()
 const mockIntersectionObserver = vi.fn()
 
-vi.stubGlobal('IntersectionObserver', class {
-  constructor(cb: IntersectionObserverCallback, options?: IntersectionObserverInit) {
-    mockIntersectionObserver(cb, options)
-    // Store the callback for later triggering
-    ;(this as any)._callback = cb
+vi.stubGlobal(
+  'IntersectionObserver',
+  class {
+    constructor(cb: IntersectionObserverCallback, options?: IntersectionObserverInit) {
+      mockIntersectionObserver(cb, options)
+      // Store the callback for later triggering
+      ;(this as any)._callback = cb
+    }
+    observe = mockObserve
+    disconnect = mockDisconnect
+    unobserve = vi.fn()
   }
-  observe = mockObserve
-  disconnect = mockDisconnect
-  unobserve = vi.fn()
-})
+)
 
 vi.mock('framer-motion', () => ({
   AnimatePresence: ({ children }: any) => children,
@@ -32,32 +35,60 @@ vi.mock('framer-motion', () => ({
   useAnimate: vi.fn().mockReturnValue([{ current: null }, vi.fn()]),
   useAnimation: vi.fn().mockReturnValue({ start: vi.fn(), stop: vi.fn() }),
   useReducedMotion: vi.fn().mockReturnValue(false),
-  m: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
-  motion: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
+  m: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
+  motion: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
 }))
 
 vi.mock('../DemoSteps', () => ({
   demoSteps: [
-    { id: 'create', title: 'Crée ta Squad', subtitle: 'Test', duration: 3000, icon: () => null, color: 'blue' },
-    { id: 'invite', title: 'Invite', subtitle: 'Test2', duration: 2500, icon: () => null, color: 'green' },
-    { id: 'play', title: 'Joue', subtitle: 'Test3', duration: 2000, icon: () => null, color: 'red' },
+    {
+      id: 'create',
+      title: 'Crée ta Squad',
+      subtitle: 'Test',
+      duration: 3000,
+      icon: () => null,
+      color: 'blue',
+    },
+    {
+      id: 'invite',
+      title: 'Invite',
+      subtitle: 'Test2',
+      duration: 2500,
+      icon: () => null,
+      color: 'green',
+    },
+    {
+      id: 'play',
+      title: 'Joue',
+      subtitle: 'Test3',
+      duration: 2000,
+      icon: () => null,
+      color: 'red',
+    },
   ],
   stepComponents: {
     create: () => createElement('div', { 'data-testid': 'step-create' }, 'CreateStep'),
     invite: () => createElement('div', { 'data-testid': 'step-invite' }, 'InviteStep'),
     play: () => createElement('div', { 'data-testid': 'step-play' }, 'PlayStep'),
   },
-  PhoneFrame: ({ children }: any) => createElement('div', { 'data-testid': 'phone-frame' }, children),
+  PhoneFrame: ({ children }: any) =>
+    createElement('div', { 'data-testid': 'phone-frame' }, children),
 }))
 
 import { AnimatedDemo } from '../AnimatedDemo'
@@ -102,7 +133,9 @@ describe('AnimatedDemo', () => {
       }
 
       // Advance past step 0 duration (3000ms)
-      act(() => { vi.advanceTimersByTime(3100) })
+      act(() => {
+        vi.advanceTimersByTime(3100)
+      })
       expect(screen.getByTestId('step-invite')).toBeInTheDocument()
     })
 
@@ -112,19 +145,27 @@ describe('AnimatedDemo', () => {
       // Trigger in-view
       const observerCallback = mockIntersectionObserver.mock.calls[0]?.[0]
       if (observerCallback) {
-        act(() => { observerCallback([{ isIntersecting: true }]) })
+        act(() => {
+          observerCallback([{ isIntersecting: true }])
+        })
       }
 
       // Step 0 -> 1 (3000ms)
-      act(() => { vi.advanceTimersByTime(3100) })
+      act(() => {
+        vi.advanceTimersByTime(3100)
+      })
       expect(screen.getByTestId('step-invite')).toBeInTheDocument()
 
       // Step 1 -> 2 (2500ms)
-      act(() => { vi.advanceTimersByTime(2600) })
+      act(() => {
+        vi.advanceTimersByTime(2600)
+      })
       expect(screen.getByTestId('step-play')).toBeInTheDocument()
 
       // Step 2 -> 0 (wraps, 2000ms)
-      act(() => { vi.advanceTimersByTime(2100) })
+      act(() => {
+        vi.advanceTimersByTime(2100)
+      })
       expect(screen.getByTestId('step-create')).toBeInTheDocument()
     })
 
@@ -134,10 +175,14 @@ describe('AnimatedDemo', () => {
       // Don't trigger IntersectionObserver (or trigger with isIntersecting=false)
       const observerCallback = mockIntersectionObserver.mock.calls[0]?.[0]
       if (observerCallback) {
-        act(() => { observerCallback([{ isIntersecting: false }]) })
+        act(() => {
+          observerCallback([{ isIntersecting: false }])
+        })
       }
 
-      act(() => { vi.advanceTimersByTime(10000) })
+      act(() => {
+        vi.advanceTimersByTime(10000)
+      })
       // Should still be on step 0
       expect(screen.getByTestId('step-create')).toBeInTheDocument()
     })
@@ -161,11 +206,15 @@ describe('AnimatedDemo', () => {
       // Trigger in-view
       const observerCallback = mockIntersectionObserver.mock.calls[0]?.[0]
       if (observerCallback) {
-        act(() => { observerCallback([{ isIntersecting: true }]) })
+        act(() => {
+          observerCallback([{ isIntersecting: true }])
+        })
       }
 
       // Wait for auto-advance
-      act(() => { vi.advanceTimersByTime(3100) })
+      act(() => {
+        vi.advanceTimersByTime(3100)
+      })
       expect(onStepChange).toHaveBeenCalledWith(1)
     })
   })
@@ -178,7 +227,9 @@ describe('AnimatedDemo', () => {
       // Trigger in-view
       const observerCallback = mockIntersectionObserver.mock.calls[0]?.[0]
       if (observerCallback) {
-        act(() => { observerCallback([{ isIntersecting: true }]) })
+        act(() => {
+          observerCallback([{ isIntersecting: true }])
+        })
       }
 
       // Simulate external step change (parent controls)
@@ -186,14 +237,20 @@ describe('AnimatedDemo', () => {
 
       // Should be paused now - advance less than 5s + step duration
       onStepChange.mockClear()
-      act(() => { vi.advanceTimersByTime(4000) })
+      act(() => {
+        vi.advanceTimersByTime(4000)
+      })
       // onStepChange should not have been called during the pause
       expect(onStepChange).not.toHaveBeenCalled()
 
       // After 5s, auto-advance should resume
-      act(() => { vi.advanceTimersByTime(1100) })
+      act(() => {
+        vi.advanceTimersByTime(1100)
+      })
       // Now let the step duration pass
-      act(() => { vi.advanceTimersByTime(2100) })
+      act(() => {
+        vi.advanceTimersByTime(2100)
+      })
       expect(onStepChange).toHaveBeenCalled()
     })
   })

@@ -32,12 +32,15 @@ const mockSupabase = vi.hoisted(() => ({
 /* ------------------------------------------------------------------ */
 vi.mock('framer-motion', () => ({
   AnimatePresence: ({ children }: any) => children,
-  m: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
+  m: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
 }))
 
 vi.mock('../icons', () => ({
@@ -96,7 +99,14 @@ describe('NotificationBell', () => {
   it('shows unread badge when unreadCount > 0', () => {
     useNotificationStore.setState({
       notifications: [
-        { id: '1', type: 'rsvp', title: 'Squad', body: 'Test', read: false, created_at: new Date().toISOString() },
+        {
+          id: '1',
+          type: 'rsvp',
+          title: 'Squad',
+          body: 'Test',
+          read: false,
+          created_at: new Date().toISOString(),
+        },
       ],
       unreadCount: 3,
     })
@@ -163,8 +173,22 @@ describe('NotificationBell', () => {
     mockActiveOverlay.value = 'notifications'
     useNotificationStore.setState({
       notifications: [
-        { id: '1', type: 'rsvp', title: 'MySquad', body: 'Nouveau RSVP sur "Session A"', read: false, created_at: new Date().toISOString() },
-        { id: '2', type: 'rsvp', title: 'OtherSquad', body: 'Nouveau RSVP sur "Session B"', read: true, created_at: new Date().toISOString() },
+        {
+          id: '1',
+          type: 'rsvp',
+          title: 'MySquad',
+          body: 'Nouveau RSVP sur "Session A"',
+          read: false,
+          created_at: new Date().toISOString(),
+        },
+        {
+          id: '2',
+          type: 'rsvp',
+          title: 'OtherSquad',
+          body: 'Nouveau RSVP sur "Session B"',
+          read: true,
+          created_at: new Date().toISOString(),
+        },
       ],
       unreadCount: 1,
     })
@@ -179,7 +203,14 @@ describe('NotificationBell', () => {
     mockActiveOverlay.value = 'notifications'
     useNotificationStore.setState({
       notifications: [
-        { id: 'n1', type: 'rsvp', title: 'Squad', body: 'Test', read: false, created_at: new Date().toISOString() },
+        {
+          id: 'n1',
+          type: 'rsvp',
+          title: 'Squad',
+          body: 'Test',
+          read: false,
+          created_at: new Date().toISOString(),
+        },
       ],
       unreadCount: 1,
     })
@@ -200,7 +231,14 @@ describe('NotificationBell', () => {
     mockActiveOverlay.value = 'notifications'
     useNotificationStore.setState({
       notifications: [
-        { id: '1', type: 'rsvp', title: 'Squad', body: 'Test', read: false, created_at: new Date().toISOString() },
+        {
+          id: '1',
+          type: 'rsvp',
+          title: 'Squad',
+          body: 'Test',
+          read: false,
+          created_at: new Date().toISOString(),
+        },
       ],
       unreadCount: 1,
     })
@@ -221,8 +259,22 @@ describe('NotificationBell', () => {
   it('marks all notifications via store action', () => {
     useNotificationStore.setState({
       notifications: [
-        { id: '1', type: 'rsvp', title: 'A', body: 'a', read: false, created_at: new Date().toISOString() },
-        { id: '2', type: 'rsvp', title: 'B', body: 'b', read: false, created_at: new Date().toISOString() },
+        {
+          id: '1',
+          type: 'rsvp',
+          title: 'A',
+          body: 'a',
+          read: false,
+          created_at: new Date().toISOString(),
+        },
+        {
+          id: '2',
+          type: 'rsvp',
+          title: 'B',
+          body: 'b',
+          read: false,
+          created_at: new Date().toISOString(),
+        },
       ],
       unreadCount: 2,
     })
@@ -263,7 +315,14 @@ describe('NotificationBell', () => {
     mockActiveOverlay.value = 'notifications'
     useNotificationStore.setState({
       notifications: [
-        { id: '1', type: 'rsvp', title: 'Squad', body: 'Test', read: false, created_at: new Date().toISOString() },
+        {
+          id: '1',
+          type: 'rsvp',
+          title: 'Squad',
+          body: 'Test',
+          read: false,
+          created_at: new Date().toISOString(),
+        },
       ],
       unreadCount: 1,
     })
@@ -276,7 +335,14 @@ describe('NotificationBell', () => {
     const fiveMinAgo = new Date(Date.now() - 5 * 60 * 1000).toISOString()
     useNotificationStore.setState({
       notifications: [
-        { id: '1', type: 'rsvp', title: 'Squad', body: 'Test', read: false, created_at: fiveMinAgo },
+        {
+          id: '1',
+          type: 'rsvp',
+          title: 'Squad',
+          body: 'Test',
+          read: false,
+          created_at: fiveMinAgo,
+        },
       ],
       unreadCount: 1,
     })
@@ -289,7 +355,14 @@ describe('NotificationBell', () => {
     const twoHoursAgo = new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString()
     useNotificationStore.setState({
       notifications: [
-        { id: '1', type: 'rsvp', title: 'Squad', body: 'Test', read: false, created_at: twoHoursAgo },
+        {
+          id: '1',
+          type: 'rsvp',
+          title: 'Squad',
+          body: 'Test',
+          read: false,
+          created_at: twoHoursAgo,
+        },
       ],
       unreadCount: 1,
     })
@@ -302,7 +375,14 @@ describe('NotificationBell', () => {
     const threeDaysAgo = new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString()
     useNotificationStore.setState({
       notifications: [
-        { id: '1', type: 'rsvp', title: 'Squad', body: 'Test', read: false, created_at: threeDaysAgo },
+        {
+          id: '1',
+          type: 'rsvp',
+          title: 'Squad',
+          body: 'Test',
+          read: false,
+          created_at: threeDaysAgo,
+        },
       ],
       unreadCount: 1,
     })
@@ -336,7 +416,14 @@ describe('NotificationBell', () => {
     // Don't open panel (no mockActiveOverlay) — just check the badge on the bell
     useNotificationStore.setState({
       notifications: [
-        { id: '1', type: 'rsvp', title: 'Squad', body: 'Test', read: false, created_at: new Date().toISOString() },
+        {
+          id: '1',
+          type: 'rsvp',
+          title: 'Squad',
+          body: 'Test',
+          read: false,
+          created_at: new Date().toISOString(),
+        },
       ],
       unreadCount: 1,
     })
@@ -349,7 +436,14 @@ describe('NotificationBell', () => {
     mockActiveOverlay.value = 'notifications'
     useNotificationStore.setState({
       notifications: [
-        { id: '1', type: 'rsvp', title: 'Squad', body: 'Test', read: true, created_at: new Date().toISOString() },
+        {
+          id: '1',
+          type: 'rsvp',
+          title: 'Squad',
+          body: 'Test',
+          read: true,
+          created_at: new Date().toISOString(),
+        },
       ],
       unreadCount: 0,
     })
@@ -437,9 +531,7 @@ describe('useNotificationStore', () => {
     const rsvps = [
       { id: 'r1', session_id: 's1', response: 'accepted', responded_at: '2026-01-01T00:00:00Z' },
     ]
-    const squads = [
-      { id: 'sq1', name: 'Alpha Squad' },
-    ]
+    const squads = [{ id: 'sq1', name: 'Alpha Squad' }]
 
     // Sequence of awaited calls:
     // 1. squad_members: from().select().eq() -> await chain

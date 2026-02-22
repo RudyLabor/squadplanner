@@ -10,8 +10,10 @@ vi.mock('react-router', () => ({
 
 // Mock icon components
 vi.mock('../icons', () => ({
-  Zap: ({ className }: any) => createElement('span', { className, 'data-testid': 'icon-zap' }, 'Zap'),
-  Crown: ({ className }: any) => createElement('span', { className, 'data-testid': 'icon-crown' }, 'Crown'),
+  Zap: ({ className }: any) =>
+    createElement('span', { className, 'data-testid': 'icon-zap' }, 'Zap'),
+  Crown: ({ className }: any) =>
+    createElement('span', { className, 'data-testid': 'icon-crown' }, 'Crown'),
 }))
 
 import { PlanBadge } from '../PlanBadge'

@@ -49,7 +49,7 @@ describe('Auth Bypass — Protected Route', () => {
     const { data: dataFn } = await import('react-router')
     expect(dataFn).toHaveBeenCalledWith(
       expect.objectContaining({ user: null, profile: null, squads: [] }),
-      expect.anything(),
+      expect.anything()
     )
   })
 
@@ -61,10 +61,7 @@ describe('Auth Bypass — Protected Route', () => {
     await loader({ request, params: {}, context: {} } as any)
 
     const { data: dataFn } = await import('react-router')
-    expect(dataFn).toHaveBeenCalledWith(
-      expect.objectContaining({ user: null }),
-      expect.anything(),
-    )
+    expect(dataFn).toHaveBeenCalledWith(expect.objectContaining({ user: null }), expect.anything())
   })
 
   it('returns user data when valid session exists', async () => {
@@ -87,7 +84,7 @@ describe('Auth Bypass — Protected Route', () => {
       expect.objectContaining({
         user: expect.objectContaining({ id: 'user-123' }),
       }),
-      expect.anything(),
+      expect.anything()
     )
   })
 })

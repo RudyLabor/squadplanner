@@ -16,30 +16,54 @@ vi.mock('framer-motion', () => ({
   useAnimate: vi.fn().mockReturnValue([{ current: null }, vi.fn()]),
   useAnimation: vi.fn().mockReturnValue({ start: vi.fn(), stop: vi.fn() }),
   useReducedMotion: vi.fn().mockReturnValue(false),
-  m: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, style, ...r }: any) => createElement(p, { ...r, style }, children)
-        : undefined,
-  }),
-  motion: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, style, ...r }: any) => createElement(p, { ...r, style }, children)
-        : undefined,
-  }),
+  m: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, style, ...r }: any) => createElement(p, { ...r, style }, children)
+          : undefined,
+    }
+  ),
+  motion: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, style, ...r }: any) => createElement(p, { ...r, style }, children)
+          : undefined,
+    }
+  ),
 }))
 
 vi.mock('../../icons', () => ({
-  MousePointerClick: (props: any) => createElement('span', { ...props, 'data-testid': 'icon-mousepointerclick' }, 'MousePointerClick'),
+  MousePointerClick: (props: any) =>
+    createElement(
+      'span',
+      { ...props, 'data-testid': 'icon-mousepointerclick' },
+      'MousePointerClick'
+    ),
   Clock: (props: any) => createElement('span', { ...props, 'data-testid': 'icon-clock' }, 'Clock'),
   Smile: (props: any) => createElement('span', { ...props, 'data-testid': 'icon-smile' }, 'Smile'),
-  Target: (props: any) => createElement('span', { ...props, 'data-testid': 'icon-target' }, 'Target'),
+  Target: (props: any) =>
+    createElement('span', { ...props, 'data-testid': 'icon-target' }, 'Target'),
 }))
 
 vi.mock('../../ui/AnimatedCounter', () => ({
-  AnimatedCounter: ({ end, suffix, singularSuffix, separator, className, duration, decimals }: any) =>
-    createElement('span', { className, 'data-testid': 'animated-counter' }, `${end}${suffix || ''}`),
+  AnimatedCounter: ({
+    end,
+    suffix,
+    singularSuffix,
+    separator,
+    className,
+    duration,
+    decimals,
+  }: any) =>
+    createElement(
+      'span',
+      { className, 'data-testid': 'animated-counter' },
+      `${end}${suffix || ''}`
+    ),
 }))
 
 import { SocialProofSection } from '../SocialProofSection'
@@ -93,7 +117,9 @@ describe('SocialProofSection', () => {
 
     it('icons have custom colors via style prop', () => {
       render(<SocialProofSection />)
-      expect(screen.getByTestId('icon-mousepointerclick')).toHaveStyle({ color: 'var(--color-secondary)' })
+      expect(screen.getByTestId('icon-mousepointerclick')).toHaveStyle({
+        color: 'var(--color-secondary)',
+      })
       expect(screen.getByTestId('icon-clock')).toHaveStyle({ color: 'var(--color-primary)' })
       expect(screen.getByTestId('icon-smile')).toHaveStyle({ color: 'var(--color-gold)' })
       expect(screen.getByTestId('icon-target')).toHaveStyle({ color: 'var(--color-success)' })

@@ -22,29 +22,54 @@ vi.mock('framer-motion', () => ({
   useAnimate: vi.fn().mockReturnValue([{ current: null }, vi.fn()]),
   useAnimation: vi.fn().mockReturnValue({ start: vi.fn(), stop: vi.fn() }),
   useReducedMotion: vi.fn().mockReturnValue(false),
-  m: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
-  motion: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
+  m: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
+  motion: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
 }))
 
-vi.mock('../../../components/icons', () => new Proxy({}, { get: (_t: any, p: string) => typeof p === 'string' ? ({ children, ...props }: any) => createElement('span', props, children) : undefined }))
+vi.mock(
+  '../../../components/icons',
+  () =>
+    new Proxy(
+      {},
+      {
+        get: (_t: any, p: string) =>
+          typeof p === 'string'
+            ? ({ children, ...props }: any) => createElement('span', props, children)
+            : undefined,
+      }
+    )
+)
 
 vi.mock('../../../components/ui', () => ({
-  Input: ({ label, ...props }: any) => createElement('div', {}, label ? createElement('label', {}, label) : null, createElement('input', props)),
+  Input: ({ label, ...props }: any) =>
+    createElement(
+      'div',
+      {},
+      label ? createElement('label', {}, label) : null,
+      createElement('input', props)
+    ),
   Button: ({ children, ...props }: any) => createElement('button', props, children),
 }))
 
 vi.mock('../AuthHelpers', () => ({
-  PasswordStrength: ({ password }: any) => createElement('div', { 'data-testid': 'password-strength' }, password),
+  PasswordStrength: ({ password }: any) =>
+    createElement('div', { 'data-testid': 'password-strength' }, password),
 }))
 
 import { AuthFormFields } from '../AuthFormFields'
@@ -71,7 +96,9 @@ describe('AuthFormFields', () => {
 
   it('shows email and password fields in login mode', () => {
     render(<AuthFormFields {...defaultProps} mode="login" />)
-    const inputs = screen.getAllByRole('textbox').concat(document.querySelectorAll('input[type="password"]') as any)
+    const inputs = screen
+      .getAllByRole('textbox')
+      .concat(document.querySelectorAll('input[type="password"]') as any)
     expect(inputs.length).toBeGreaterThan(0)
   })
 

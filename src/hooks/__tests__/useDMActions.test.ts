@@ -1,6 +1,14 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 
-const { mockGetSession, mockFrom, mockChannel, mockRemoveChannel, mockRpc, mockSupabase, mockIsSupabaseReady } = vi.hoisted(() => {
+const {
+  mockGetSession,
+  mockFrom,
+  mockChannel,
+  mockRemoveChannel,
+  mockRpc,
+  mockSupabase,
+  mockIsSupabaseReady,
+} = vi.hoisted(() => {
   const mockGetSession = vi.fn()
   const mockFrom = vi.fn()
   const mockChannel = vi.fn()
@@ -14,7 +22,15 @@ const { mockGetSession, mockFrom, mockChannel, mockRemoveChannel, mockRpc, mockS
     removeChannel: mockRemoveChannel,
     rpc: mockRpc,
   }
-  return { mockGetSession, mockFrom, mockChannel, mockRemoveChannel, mockRpc, mockSupabase, mockIsSupabaseReady }
+  return {
+    mockGetSession,
+    mockFrom,
+    mockChannel,
+    mockRemoveChannel,
+    mockRpc,
+    mockSupabase,
+    mockIsSupabaseReady,
+  }
 })
 
 vi.mock('../../lib/supabaseMinimal', () => ({

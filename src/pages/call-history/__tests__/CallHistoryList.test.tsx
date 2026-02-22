@@ -9,17 +9,22 @@ vi.mock('react-router', () => ({
 
 function makeMotionProxy() {
   const cache = new Map<string, any>()
-  return new Proxy({}, {
-    get: (_t: any, p: string) => {
-      if (typeof p !== 'string') return undefined
-      if (!cache.has(p)) {
-        const comp = forwardRef(({ children, ...r }: any, ref: any) => createElement(p, { ...r, ref }, children))
-        comp.displayName = `motion.${p}`
-        cache.set(p, comp)
-      }
-      return cache.get(p)
-    },
-  })
+  return new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) => {
+        if (typeof p !== 'string') return undefined
+        if (!cache.has(p)) {
+          const comp = forwardRef(({ children, ...r }: any, ref: any) =>
+            createElement(p, { ...r, ref }, children)
+          )
+          comp.displayName = `motion.${p}`
+          cache.set(p, comp)
+        }
+        return cache.get(p)
+      },
+    }
+  )
 }
 
 vi.mock('framer-motion', () => ({
@@ -40,7 +45,19 @@ vi.mock('framer-motion', () => ({
   motion: makeMotionProxy(),
 }))
 
-vi.mock('../../../components/icons', () => new Proxy({}, { get: (_t: any, p: string) => typeof p === 'string' ? ({ children, ...props }: any) => createElement('span', props, children) : undefined }))
+vi.mock(
+  '../../../components/icons',
+  () =>
+    new Proxy(
+      {},
+      {
+        get: (_t: any, p: string) =>
+          typeof p === 'string'
+            ? ({ children, ...props }: any) => createElement('span', props, children)
+            : undefined,
+      }
+    )
+)
 
 vi.mock('../../../components/ui', () => ({
   Card: ({ children, ...props }: any) => createElement('div', props, children),
@@ -59,16 +76,18 @@ vi.mock('../../../hooks/useCallHistory', () => ({
 import { CallHistoryList } from '../CallHistoryList'
 
 // Helper to make calls at specific dates
-function makeCall(overrides: Partial<{
-  id: string
-  type: 'incoming' | 'outgoing'
-  status: string
-  contactId: string
-  contactName: string
-  contactAvatar: string | null
-  durationSeconds: number | null
-  createdAt: Date | string
-}> = {}) {
+function makeCall(
+  overrides: Partial<{
+    id: string
+    type: 'incoming' | 'outgoing'
+    status: string
+    contactId: string
+    contactName: string
+    contactAvatar: string | null
+    durationSeconds: number | null
+    createdAt: Date | string
+  }> = {}
+) {
   const now = new Date()
   return {
     id: overrides.id ?? '1',
@@ -219,7 +238,9 @@ describe('CallHistoryList', () => {
   // =========================================================================
   describe('contact avatar', () => {
     it('renders avatar image when contactAvatar is provided', () => {
-      const calls = [makeCall({ contactAvatar: 'https://example.com/avatar.jpg', contactName: 'Alice' })]
+      const calls = [
+        makeCall({ contactAvatar: 'https://example.com/avatar.jpg', contactName: 'Alice' }),
+      ]
       render(<CallHistoryList {...defaultProps} filteredCalls={calls} />)
       const img = screen.getByAltText('Alice')
       expect(img).toHaveAttribute('src', 'https://example.com/avatar.jpg')
@@ -245,7 +266,9 @@ describe('CallHistoryList', () => {
     it('calls onCall with contact info when call button clicked', async () => {
       const user = userEvent.setup()
       const onCall = vi.fn()
-      const calls = [makeCall({ contactId: 'c1', contactName: 'Alice', contactAvatar: 'avatar.jpg' })]
+      const calls = [
+        makeCall({ contactId: 'c1', contactName: 'Alice', contactAvatar: 'avatar.jpg' }),
+      ]
       render(<CallHistoryList {...defaultProps} filteredCalls={calls} onCall={onCall} />)
       await user.click(screen.getByLabelText('Appeler Alice'))
       expect(onCall).toHaveBeenCalledWith('c1', 'Alice', 'avatar.jpg')

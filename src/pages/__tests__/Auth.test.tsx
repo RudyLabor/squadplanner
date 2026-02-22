@@ -22,14 +22,49 @@ const mockH = vi.hoisted(() => {
   let capturedGoogleBtnProps: any = null
 
   return {
-    mockNavigate, mockSignIn, mockSignUp, mockSignInWithGoogle, mockFetchSquads,
-    mockUpdateUser, mockResetPasswordForEmail,
-    get mockUser() { return mockUser }, set mockUser(v: any) { mockUser = v },
-    get mockIsInitialized() { return mockIsInitialized }, set mockIsInitialized(v: boolean) { mockIsInitialized = v },
-    get mockSquads() { return mockSquads }, set mockSquads(v: any) { mockSquads = v },
-    get mockSearchParams() { return mockSearchParams }, set mockSearchParams(v: any) { mockSearchParams = v },
-    get capturedFormFieldsProps() { return capturedFormFieldsProps }, set capturedFormFieldsProps(v: any) { capturedFormFieldsProps = v },
-    get capturedGoogleBtnProps() { return capturedGoogleBtnProps }, set capturedGoogleBtnProps(v: any) { capturedGoogleBtnProps = v },
+    mockNavigate,
+    mockSignIn,
+    mockSignUp,
+    mockSignInWithGoogle,
+    mockFetchSquads,
+    mockUpdateUser,
+    mockResetPasswordForEmail,
+    get mockUser() {
+      return mockUser
+    },
+    set mockUser(v: any) {
+      mockUser = v
+    },
+    get mockIsInitialized() {
+      return mockIsInitialized
+    },
+    set mockIsInitialized(v: boolean) {
+      mockIsInitialized = v
+    },
+    get mockSquads() {
+      return mockSquads
+    },
+    set mockSquads(v: any) {
+      mockSquads = v
+    },
+    get mockSearchParams() {
+      return mockSearchParams
+    },
+    set mockSearchParams(v: any) {
+      mockSearchParams = v
+    },
+    get capturedFormFieldsProps() {
+      return capturedFormFieldsProps
+    },
+    set capturedFormFieldsProps(v: any) {
+      capturedFormFieldsProps = v
+    },
+    get capturedGoogleBtnProps() {
+      return capturedGoogleBtnProps
+    },
+    set capturedGoogleBtnProps(v: any) {
+      capturedGoogleBtnProps = v
+    },
   }
 })
 
@@ -41,7 +76,8 @@ vi.mock('react-router', () => ({
   useSearchParams: vi.fn(() => [mockH.mockSearchParams]),
   useLoaderData: vi.fn().mockReturnValue({}),
   Link: ({ children, to, ...props }: any) => createElement('a', { href: to, ...props }, children),
-  NavLink: ({ children, to, ...props }: any) => createElement('a', { href: to, ...props }, children),
+  NavLink: ({ children, to, ...props }: any) =>
+    createElement('a', { href: to, ...props }, children),
   Navigate: ({ to }: any) => createElement('div', { 'data-testid': 'navigate', 'data-to': to }),
   Outlet: () => null,
   useMatches: vi.fn().mockReturnValue([]),
@@ -52,7 +88,8 @@ vi.mock('framer-motion', () => ({
   AnimatePresence: ({ children }: any) => children,
   LazyMotion: ({ children }: any) => children,
   MotionConfig: ({ children }: any) => children,
-  domAnimation: {}, domMax: {},
+  domAnimation: {},
+  domMax: {},
   useInView: vi.fn().mockReturnValue(true),
   useScroll: vi.fn().mockReturnValue({ scrollYProgress: { get: () => 0 } }),
   useTransform: vi.fn().mockReturnValue(0),
@@ -61,20 +98,38 @@ vi.mock('framer-motion', () => ({
   useAnimate: vi.fn().mockReturnValue([{ current: null }, vi.fn()]),
   useAnimation: vi.fn().mockReturnValue({ start: vi.fn(), stop: vi.fn() }),
   useReducedMotion: vi.fn().mockReturnValue(false),
-  m: new Proxy({}, { get: (_t: any, p: string) => typeof p === 'string' ? ({ children, ...r }: any) => createElement(p, r, children) : undefined }),
-  motion: new Proxy({}, { get: (_t: any, p: string) => typeof p === 'string' ? ({ children, ...r }: any) => createElement(p, r, children) : undefined }),
+  m: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
+  motion: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
 }))
 
 // Mock icons
 vi.mock('../../components/icons', () => ({
-  Loader2: ({ children, ...props }: any) => createElement('span', { ...props, 'data-testid': 'loader' }, children),
+  Loader2: ({ children, ...props }: any) =>
+    createElement('span', { ...props, 'data-testid': 'loader' }, children),
   Gamepad2: ({ children, ...props }: any) => createElement('span', props, children),
   CheckCircle: ({ children, ...props }: any) => createElement('span', props, children),
 }))
 
 // Mock UI components
 vi.mock('../../components/ui', () => ({
-  Button: ({ children, onClick, disabled, type, ...props }: any) => createElement('button', { onClick, disabled, type, ...props }, children),
+  Button: ({ children, onClick, disabled, type, ...props }: any) =>
+    createElement('button', { onClick, disabled, type, ...props }, children),
   Card: ({ children, ...props }: any) => createElement('div', props, children),
 }))
 
@@ -130,14 +185,20 @@ vi.mock('../auth/AuthHelpers', () => ({
 vi.mock('../auth/AuthGoogleButton', () => ({
   AuthGoogleButton: (props: any) => {
     mockH.capturedGoogleBtnProps = props
-    return createElement('button', { onClick: props.onClick, disabled: props.disabled, 'data-testid': 'google-btn' }, 'Google')
+    return createElement(
+      'button',
+      { onClick: props.onClick, disabled: props.disabled, 'data-testid': 'google-btn' },
+      'Google'
+    )
   },
 }))
 
 vi.mock('../auth/AuthFormFields', () => ({
   AuthFormFields: (props: any) => {
     mockH.capturedFormFieldsProps = props
-    return createElement('div', { 'data-testid': 'auth-form-fields' },
+    return createElement(
+      'div',
+      { 'data-testid': 'auth-form-fields' },
       createElement('span', null, `mode:${props.mode}`),
       // Expose setters for testing
       createElement('input', {
@@ -150,16 +211,18 @@ vi.mock('../auth/AuthFormFields', () => ({
         value: props.password,
         onChange: (e: any) => props.setPassword(e.target.value),
       }),
-      props.mode === 'register' && createElement('input', {
-        'data-testid': 'username-input',
-        value: props.username,
-        onChange: (e: any) => props.setUsername(e.target.value),
-      }),
-      props.mode === 'reset' && createElement('input', {
-        'data-testid': 'confirm-password-input',
-        value: props.confirmPassword,
-        onChange: (e: any) => props.setConfirmPassword(e.target.value),
-      }),
+      props.mode === 'register' &&
+        createElement('input', {
+          'data-testid': 'username-input',
+          value: props.username,
+          onChange: (e: any) => props.setUsername(e.target.value),
+        }),
+      props.mode === 'reset' &&
+        createElement('input', {
+          'data-testid': 'confirm-password-input',
+          value: props.confirmPassword,
+          onChange: (e: any) => props.setConfirmPassword(e.target.value),
+        })
     )
   },
 }))
@@ -324,9 +387,11 @@ describe('Auth Page', () => {
     it('switches from register to login', () => {
       mockH.mockSearchParams = new URLSearchParams('mode=register')
       renderAuth()
-      const switchBtns = screen.getAllByRole('button').filter(b => b.textContent === 'Se connecter')
+      const switchBtns = screen
+        .getAllByRole('button')
+        .filter((b) => b.textContent === 'Se connecter')
       // Find the switch button (not the submit button)
-      const switchBtn = switchBtns.find(b => b.type === 'button')
+      const switchBtn = switchBtns.find((b) => b.type === 'button')
       if (switchBtn) fireEvent.click(switchBtn)
       expect(screen.getByText("T'as manqué à ta squad !")).toBeTruthy()
     })
@@ -495,7 +560,9 @@ describe('Auth Page', () => {
       await act(async () => {
         fireEvent.click(screen.getByText('Mot de passe oublié ?'))
       })
-      expect(screen.getByText('Entre ton email pour recevoir le lien de réinitialisation')).toBeTruthy()
+      expect(
+        screen.getByText('Entre ton email pour recevoir le lien de réinitialisation')
+      ).toBeTruthy()
     })
 
     it('calls resetPasswordForEmail when email is provided', async () => {
@@ -536,7 +603,9 @@ describe('Auth Page', () => {
     it('shows error when passwords do not match', async () => {
       renderAuth()
       fireEvent.change(screen.getByTestId('password-input'), { target: { value: 'password123' } })
-      fireEvent.change(screen.getByTestId('confirm-password-input'), { target: { value: 'different' } })
+      fireEvent.change(screen.getByTestId('confirm-password-input'), {
+        target: { value: 'different' },
+      })
       await act(async () => {
         fireEvent.submit(document.querySelector('form')!)
       })
@@ -546,7 +615,9 @@ describe('Auth Page', () => {
     it('calls updateUser when passwords match and are valid', async () => {
       renderAuth()
       fireEvent.change(screen.getByTestId('password-input'), { target: { value: 'newpassword' } })
-      fireEvent.change(screen.getByTestId('confirm-password-input'), { target: { value: 'newpassword' } })
+      fireEvent.change(screen.getByTestId('confirm-password-input'), {
+        target: { value: 'newpassword' },
+      })
       await act(async () => {
         fireEvent.submit(document.querySelector('form')!)
       })
@@ -556,7 +627,9 @@ describe('Auth Page', () => {
     it('shows success message after password update', async () => {
       renderAuth()
       fireEvent.change(screen.getByTestId('password-input'), { target: { value: 'newpassword' } })
-      fireEvent.change(screen.getByTestId('confirm-password-input'), { target: { value: 'newpassword' } })
+      fireEvent.change(screen.getByTestId('confirm-password-input'), {
+        target: { value: 'newpassword' },
+      })
       await act(async () => {
         fireEvent.submit(document.querySelector('form')!)
       })
@@ -567,7 +640,9 @@ describe('Auth Page', () => {
       mockH.mockUpdateUser.mockResolvedValueOnce({ error: { message: 'Token expired' } })
       renderAuth()
       fireEvent.change(screen.getByTestId('password-input'), { target: { value: 'newpassword' } })
-      fireEvent.change(screen.getByTestId('confirm-password-input'), { target: { value: 'newpassword' } })
+      fireEvent.change(screen.getByTestId('confirm-password-input'), {
+        target: { value: 'newpassword' },
+      })
       await act(async () => {
         fireEvent.submit(document.querySelector('form')!)
       })
@@ -586,7 +661,7 @@ describe('Auth Page', () => {
     it('has correct legal link hrefs', () => {
       renderAuth()
       const links = document.querySelectorAll('a')
-      const hrefs = Array.from(links).map(l => l.getAttribute('href'))
+      const hrefs = Array.from(links).map((l) => l.getAttribute('href'))
       expect(hrefs).toContain('/legal')
       expect(hrefs).toContain('/legal?tab=privacy')
     })

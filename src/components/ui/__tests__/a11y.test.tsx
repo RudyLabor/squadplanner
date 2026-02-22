@@ -116,9 +116,7 @@ import { Toggle } from '../Toggle'
 
 describe('Toggle a11y', () => {
   it('passes axe baseline', async () => {
-    const { container } = render(
-      <Toggle checked={false} onChange={() => {}} label="Dark mode" />
-    )
+    const { container } = render(<Toggle checked={false} onChange={() => {}} label="Dark mode" />)
     expect(await axe(container)).toHaveNoViolations()
   })
 
@@ -128,9 +126,7 @@ describe('Toggle a11y', () => {
   })
 
   it('reflects checked state via aria-checked or role', () => {
-    const { rerender } = render(
-      <Toggle checked={false} onChange={() => {}} label="Dark mode" />
-    )
+    const { rerender } = render(<Toggle checked={false} onChange={() => {}} label="Dark mode" />)
     const toggle = screen.getByRole('switch') || screen.getByRole('checkbox')
     expect(toggle).not.toBeChecked()
 
@@ -249,9 +245,7 @@ import { Slider } from '../Slider'
 
 describe('Slider a11y', () => {
   it('passes axe baseline', async () => {
-    const { container } = render(
-      <Slider value={50} onChange={() => {}} label="Volume" />
-    )
+    const { container } = render(<Slider value={50} onChange={() => {}} label="Volume" />)
     expect(await axe(container)).toHaveNoViolations()
   })
 
@@ -273,22 +267,14 @@ import { EmptyState } from '../EmptyState'
 describe('EmptyState a11y', () => {
   it('passes axe baseline', async () => {
     const { container } = render(
-      <EmptyState
-        icon={<span>!</span>}
-        title="No items"
-        description="You have no items yet"
-      />
+      <EmptyState icon={<span>!</span>} title="No items" description="You have no items yet" />
     )
     expect(await axe(container)).toHaveNoViolations()
   })
 
   it('title and description are visible to screen readers', () => {
     render(
-      <EmptyState
-        icon={<span>!</span>}
-        title="No items"
-        description="You have no items yet"
-      />
+      <EmptyState icon={<span>!</span>} title="No items" description="You have no items yet" />
     )
     expect(screen.getByText('No items')).toBeInTheDocument()
     expect(screen.getByText('You have no items yet')).toBeInTheDocument()
@@ -361,8 +347,8 @@ describe('Skeleton a11y', () => {
     // Skeleton is decorative — should have aria-hidden or role=presentation
     expect(
       skeleton?.getAttribute('aria-hidden') === 'true' ||
-      skeleton?.getAttribute('role') === 'presentation' ||
-      skeleton?.getAttribute('role') === 'status'
+        skeleton?.getAttribute('role') === 'presentation' ||
+        skeleton?.getAttribute('role') === 'status'
     ).toBe(true)
   })
 })

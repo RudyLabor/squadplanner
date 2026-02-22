@@ -42,9 +42,9 @@ describe('useAITypes', () => {
     })
 
     it('throws after max retries', async () => {
-      await expect(
-        withBackoff(() => Promise.reject(new Error('always fails')), 1)
-      ).rejects.toThrow('always fails')
+      await expect(withBackoff(() => Promise.reject(new Error('always fails')), 1)).rejects.toThrow(
+        'always fails'
+      )
     })
   })
 

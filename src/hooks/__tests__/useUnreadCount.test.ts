@@ -1,19 +1,21 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { act } from '@testing-library/react'
 
-const { mockGetSession, mockFrom, mockChannel, mockRemoveChannel, mockSupabase } = vi.hoisted(() => {
-  const mockGetSession = vi.fn()
-  const mockFrom = vi.fn()
-  const mockChannel = vi.fn()
-  const mockRemoveChannel = vi.fn()
-  const mockSupabase = {
-    auth: { getSession: mockGetSession },
-    from: mockFrom,
-    channel: mockChannel,
-    removeChannel: mockRemoveChannel,
+const { mockGetSession, mockFrom, mockChannel, mockRemoveChannel, mockSupabase } = vi.hoisted(
+  () => {
+    const mockGetSession = vi.fn()
+    const mockFrom = vi.fn()
+    const mockChannel = vi.fn()
+    const mockRemoveChannel = vi.fn()
+    const mockSupabase = {
+      auth: { getSession: mockGetSession },
+      from: mockFrom,
+      channel: mockChannel,
+      removeChannel: mockRemoveChannel,
+    }
+    return { mockGetSession, mockFrom, mockChannel, mockRemoveChannel, mockSupabase }
   }
-  return { mockGetSession, mockFrom, mockChannel, mockRemoveChannel, mockSupabase }
-})
+)
 
 vi.mock('../../lib/supabaseMinimal', () => ({
   supabaseMinimal: mockSupabase,

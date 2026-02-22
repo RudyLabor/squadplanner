@@ -10,7 +10,8 @@ vi.mock('react-router', () => ({
   useSearchParams: vi.fn().mockReturnValue([new URLSearchParams(), vi.fn()]),
   useLoaderData: vi.fn().mockReturnValue({}),
   Link: ({ children, to, ...props }: any) => createElement('a', { href: to, ...props }, children),
-  NavLink: ({ children, to, ...props }: any) => createElement('a', { href: to, ...props }, children),
+  NavLink: ({ children, to, ...props }: any) =>
+    createElement('a', { href: to, ...props }, children),
   Outlet: () => null,
   useMatches: vi.fn().mockReturnValue([]),
 }))
@@ -23,22 +24,28 @@ vi.mock('framer-motion', () => ({
   useSpring: vi.fn().mockReturnValue({ get: () => 0 }),
   useInView: vi.fn().mockReturnValue(true),
   AnimatePresence: ({ children }: any) => children,
-  m: new Proxy({}, {
-    get: (_target: any, prop: string) => {
-      if (typeof prop === 'string') {
-        return ({ children, ...rest }: any) => createElement(prop, rest, children)
-      }
-      return undefined
+  m: new Proxy(
+    {},
+    {
+      get: (_target: any, prop: string) => {
+        if (typeof prop === 'string') {
+          return ({ children, ...rest }: any) => createElement(prop, rest, children)
+        }
+        return undefined
+      },
     }
-  }),
-  motion: new Proxy({}, {
-    get: (_target: any, prop: string) => {
-      if (typeof prop === 'string') {
-        return ({ children, ...rest }: any) => createElement(prop, rest, children)
-      }
-      return undefined
+  ),
+  motion: new Proxy(
+    {},
+    {
+      get: (_target: any, prop: string) => {
+        if (typeof prop === 'string') {
+          return ({ children, ...rest }: any) => createElement(prop, rest, children)
+        }
+        return undefined
+      },
     }
-  }),
+  ),
 }))
 
 // Mock auth store

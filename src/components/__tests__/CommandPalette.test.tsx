@@ -33,24 +33,33 @@ const mockSupabaseFrom = vi.hoisted(() =>
 const mockShortcutsHelpModal = vi.hoisted(() => vi.fn(() => null))
 const mockCommandPreviewPanel = vi.hoisted(() => vi.fn(() => null))
 const mockCommandResultList = vi.hoisted(() =>
-  vi.fn(({ filteredCommands, groupedCommands, categoryLabels, selectedIndex, onSelect, query }: any) => {
-    return createElement(
-      'div',
-      { 'data-testid': 'command-result-list' },
-      filteredCommands.map((cmd: any, i: number) =>
-        createElement(
-          'button',
-          {
-            key: cmd.id,
-            'data-testid': `cmd-${cmd.id}`,
-            'data-selected': i === selectedIndex ? 'true' : 'false',
-            onClick: () => onSelect(cmd),
-          },
-          cmd.label
+  vi.fn(
+    ({
+      filteredCommands,
+      groupedCommands,
+      categoryLabels,
+      selectedIndex,
+      onSelect,
+      query,
+    }: any) => {
+      return createElement(
+        'div',
+        { 'data-testid': 'command-result-list' },
+        filteredCommands.map((cmd: any, i: number) =>
+          createElement(
+            'button',
+            {
+              key: cmd.id,
+              'data-testid': `cmd-${cmd.id}`,
+              'data-selected': i === selectedIndex ? 'true' : 'false',
+              onClick: () => onSelect(cmd),
+            },
+            cmd.label
+          )
         )
       )
-    )
-  })
+    }
+  )
 )
 
 vi.mock('react-router', () => ({
@@ -306,9 +315,9 @@ describe('CommandPalette', () => {
     it('closes the palette when backdrop is clicked', () => {
       renderPalette()
       openPalette()
-      const backdrop = screen.getByPlaceholderText(
-        'Rechercher une commande, squad, session...'
-      ).closest('.mx-4')
+      const backdrop = screen
+        .getByPlaceholderText('Rechercher une commande, squad, session...')
+        .closest('.mx-4')
       // The backdrop is the sibling div
       const allDivs = document.querySelectorAll('.fixed.inset-0')
       if (allDivs.length > 0) {
@@ -578,10 +587,7 @@ describe('CommandPalette', () => {
         },
       ]
       // Set session-sess2 as recent so it gets priority in the 10-item limit
-      localStorage.setItem(
-        'squadplanner:recent-commands',
-        JSON.stringify(['session-sess2'])
-      )
+      localStorage.setItem('squadplanner:recent-commands', JSON.stringify(['session-sess2']))
       renderPalette()
       openPalette()
       // With session-sess2 as a recent, it should appear in filteredCommands (no query)
@@ -698,9 +704,7 @@ describe('CommandPalette', () => {
     })
 
     it('filters squads by game', () => {
-      mockSquads.current = [
-        { id: 'sq1', name: 'Alpha Squad', game: 'Valorant' },
-      ]
+      mockSquads.current = [{ id: 'sq1', name: 'Alpha Squad', game: 'Valorant' }]
       renderPalette()
       openPalette()
       const input = screen.getByPlaceholderText('Rechercher une commande, squad, session...')
@@ -970,7 +974,9 @@ describe('CommandPalette', () => {
       fireEvent.change(input, { target: { value: 'SessionItem' } })
       const lastCall = mockCommandResultList.mock.calls[mockCommandResultList.mock.calls.length - 1]
       if (lastCall) {
-        const sessionCmds = lastCall[0].filteredCommands.filter((c: any) => c.id.startsWith('session-'))
+        const sessionCmds = lastCall[0].filteredCommands.filter((c: any) =>
+          c.id.startsWith('session-')
+        )
         expect(sessionCmds.length).toBeLessThanOrEqual(5)
       }
     })
@@ -1070,7 +1076,8 @@ describe('CommandPalette', () => {
     it('ArrowUp from 0 wraps to last command', () => {
       renderPalette()
       openPalette()
-      const callBefore = mockCommandResultList.mock.calls[mockCommandResultList.mock.calls.length - 1]
+      const callBefore =
+        mockCommandResultList.mock.calls[mockCommandResultList.mock.calls.length - 1]
       const totalCommands = callBefore[0].filteredCommands.length
 
       fireEvent.keyDown(window, { key: 'ArrowUp' })
@@ -1081,7 +1088,8 @@ describe('CommandPalette', () => {
     it('ArrowDown wraps around from last to first', () => {
       renderPalette()
       openPalette()
-      const callBefore = mockCommandResultList.mock.calls[mockCommandResultList.mock.calls.length - 1]
+      const callBefore =
+        mockCommandResultList.mock.calls[mockCommandResultList.mock.calls.length - 1]
       const totalCommands = callBefore[0].filteredCommands.length
 
       // Press ArrowDown totalCommands times to wrap back to 0
@@ -1183,7 +1191,9 @@ describe('CommandPalette', () => {
       fireEvent.change(input, { target: { value: 'TestSquad' } })
       fireEvent.click(screen.getByTestId('cmd-squad-sq1'))
       // Now in sub-command, input should be cleared (re-query after re-render)
-      const inputAfterSub = screen.getByPlaceholderText('Rechercher une commande, squad, session...')
+      const inputAfterSub = screen.getByPlaceholderText(
+        'Rechercher une commande, squad, session...'
+      )
       expect(inputAfterSub).toHaveValue('')
       // Press Backspace with empty query to go back
       fireEvent.keyDown(window, { key: 'Backspace' })
@@ -1216,7 +1226,9 @@ describe('CommandPalette', () => {
       expect(screen.getByTestId('cmd-player-p1')).toBeInTheDocument()
 
       // Re-query the input element after potential DOM changes from async search
-      const inputAfterSearch = screen.getByPlaceholderText('Rechercher une commande, squad, session...')
+      const inputAfterSearch = screen.getByPlaceholderText(
+        'Rechercher une commande, squad, session...'
+      )
 
       // Now shorten query below 2 chars
       fireEvent.change(inputAfterSearch, { target: { value: 't' } })
@@ -1227,9 +1239,7 @@ describe('CommandPalette', () => {
 
       // After the effect clears searchedPlayers, check the last mock call
       const lastCall = mockCommandResultList.mock.calls[mockCommandResultList.mock.calls.length - 1]
-      const playerCmds = lastCall[0].filteredCommands.filter((c: any) =>
-        c.id.startsWith('player-')
-      )
+      const playerCmds = lastCall[0].filteredCommands.filter((c: any) => c.id.startsWith('player-'))
       expect(playerCmds.length).toBe(0)
     })
 

@@ -35,7 +35,8 @@ vi.mock('react-router', () => ({
   useSearchParams: vi.fn().mockReturnValue([new URLSearchParams(), vi.fn()]),
   useLoaderData: vi.fn().mockReturnValue({}),
   Link: ({ children, to, ...props }: any) => createElement('a', { href: to, ...props }, children),
-  NavLink: ({ children, to, ...props }: any) => createElement('a', { href: to, ...props }, children),
+  NavLink: ({ children, to, ...props }: any) =>
+    createElement('a', { href: to, ...props }, children),
   Outlet: () => null,
   useMatches: vi.fn().mockReturnValue([]),
 }))
@@ -55,39 +56,77 @@ vi.mock('framer-motion', () => ({
   useAnimate: vi.fn().mockReturnValue([{ current: null }, vi.fn()]),
   useAnimation: vi.fn().mockReturnValue({ start: vi.fn(), stop: vi.fn() }),
   useReducedMotion: vi.fn().mockReturnValue(false),
-  m: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
-  motion: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
+  m: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
+  motion: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
 }))
 
 // Mock supabase
 vi.mock('../../lib/supabaseMinimal', () => ({
-  supabaseMinimal: { auth: { getSession: vi.fn() }, from: vi.fn(), rpc: vi.fn(), channel: vi.fn().mockReturnValue({ on: vi.fn().mockReturnThis(), subscribe: vi.fn() }), removeChannel: vi.fn() },
-  supabase: { auth: { getSession: vi.fn() }, from: vi.fn(), rpc: vi.fn(), channel: vi.fn().mockReturnValue({ on: vi.fn().mockReturnThis(), subscribe: vi.fn() }), removeChannel: vi.fn() },
+  supabaseMinimal: {
+    auth: { getSession: vi.fn() },
+    from: vi.fn(),
+    rpc: vi.fn(),
+    channel: vi.fn().mockReturnValue({ on: vi.fn().mockReturnThis(), subscribe: vi.fn() }),
+    removeChannel: vi.fn(),
+  },
+  supabase: {
+    auth: { getSession: vi.fn() },
+    from: vi.fn(),
+    rpc: vi.fn(),
+    channel: vi.fn().mockReturnValue({ on: vi.fn().mockReturnThis(), subscribe: vi.fn() }),
+    removeChannel: vi.fn(),
+  },
   isSupabaseReady: vi.fn().mockReturnValue(true),
 }))
 
 // Mock auth store
 vi.mock('../../hooks/useAuth', () => ({
   useAuthStore: Object.assign(
-    vi.fn().mockReturnValue({ user: { id: 'user-1' }, profile: { id: 'user-1', username: 'TestUser' }, isLoading: false, isInitialized: true }),
-    { getState: vi.fn().mockReturnValue({ user: { id: 'user-1' }, profile: { id: 'user-1', username: 'TestUser' } }) }
+    vi.fn().mockReturnValue({
+      user: { id: 'user-1' },
+      profile: { id: 'user-1', username: 'TestUser' },
+      isLoading: false,
+      isInitialized: true,
+    }),
+    {
+      getState: vi.fn().mockReturnValue({
+        user: { id: 'user-1' },
+        profile: { id: 'user-1', username: 'TestUser' },
+      }),
+    }
   ),
 }))
 
 vi.mock('../../hooks', () => ({
   useAuthStore: Object.assign(
-    vi.fn().mockReturnValue({ user: { id: 'user-1' }, profile: { id: 'user-1', username: 'TestUser' }, isLoading: false, isInitialized: true }),
-    { getState: vi.fn().mockReturnValue({ user: { id: 'user-1' }, profile: { id: 'user-1', username: 'TestUser' } }) }
+    vi.fn().mockReturnValue({
+      user: { id: 'user-1' },
+      profile: { id: 'user-1', username: 'TestUser' },
+      isLoading: false,
+      isInitialized: true,
+    }),
+    {
+      getState: vi.fn().mockReturnValue({
+        user: { id: 'user-1' },
+        profile: { id: 'user-1', username: 'TestUser' },
+      }),
+    }
   ),
   useAIStore: vi.fn().mockReturnValue({
     slotSuggestions: [],
@@ -101,14 +140,19 @@ vi.mock('../../hooks', () => ({
 
 // Mock toast
 vi.mock('../../lib/toast', () => ({
-  showSuccess: vi.fn(), showError: vi.fn(), showWarning: vi.fn(), showInfo: vi.fn(),
+  showSuccess: vi.fn(),
+  showError: vi.fn(),
+  showWarning: vi.fn(),
+  showInfo: vi.fn(),
 }))
 
 // Mock i18n
 vi.mock('../../lib/i18n', () => ({
   useT: () => (key: string) => key,
   useLocale: () => 'fr',
-  useI18nStore: Object.assign(vi.fn().mockReturnValue({ locale: 'fr' }), { getState: vi.fn().mockReturnValue({ locale: 'fr' }) }),
+  useI18nStore: Object.assign(vi.fn().mockReturnValue({ locale: 'fr' }), {
+    getState: vi.fn().mockReturnValue({ locale: 'fr' }),
+  }),
 }))
 
 // Mock query hooks
@@ -137,27 +181,46 @@ vi.mock('../../components/LazyConfetti', () => ({
 }))
 
 vi.mock('../../components/ui', () => ({
-  Button: ({ children, onClick, ...props }: any) => createElement('button', { onClick, ...props }, children),
+  Button: ({ children, onClick, ...props }: any) =>
+    createElement('button', { onClick, ...props }, children),
 }))
 
 // Mock sub-components from pages/sessions — capture props
 vi.mock('../sessions/NeedsResponseSection', () => ({
-  NeedsResponseSection: (props: any) => { captured.needsResponse = props; return createElement('div', { 'data-testid': 'needs-response' }) },
-  AllCaughtUp: (props: any) => { captured.allCaughtUp = props; return createElement('div', { 'data-testid': 'all-caught-up' }) },
+  NeedsResponseSection: (props: any) => {
+    captured.needsResponse = props
+    return createElement('div', { 'data-testid': 'needs-response' })
+  },
+  AllCaughtUp: (props: any) => {
+    captured.allCaughtUp = props
+    return createElement('div', { 'data-testid': 'all-caught-up' })
+  },
 }))
 
 vi.mock('../sessions/AISuggestions', () => ({
-  AISlotSuggestions: (props: any) => { captured.aiSuggestions = props; return createElement('div', { 'data-testid': 'ai-suggestions' }) },
-  CoachTipsSection: (props: any) => { captured.coachTips = props; return createElement('div', { 'data-testid': 'coach-tips' }) },
+  AISlotSuggestions: (props: any) => {
+    captured.aiSuggestions = props
+    return createElement('div', { 'data-testid': 'ai-suggestions' })
+  },
+  CoachTipsSection: (props: any) => {
+    captured.coachTips = props
+    return createElement('div', { 'data-testid': 'coach-tips' })
+  },
 }))
 
 vi.mock('../sessions/ConfirmedSessions', () => ({
-  ConfirmedSessions: (props: any) => { captured.confirmed = props; return createElement('div', { 'data-testid': 'confirmed-sessions' }) },
+  ConfirmedSessions: (props: any) => {
+    captured.confirmed = props
+    return createElement('div', { 'data-testid': 'confirmed-sessions' })
+  },
   HowItWorksSection: () => createElement('div', { 'data-testid': 'how-it-works' }),
 }))
 
 vi.mock('../sessions/WeekCalendar', () => ({
-  WeekCalendar: (props: any) => { captured.weekCalendar = props; return createElement('div', { 'data-testid': 'week-calendar' }) },
+  WeekCalendar: (props: any) => {
+    captured.weekCalendar = props
+    return createElement('div', { 'data-testid': 'week-calendar' })
+  },
 }))
 
 import { Sessions } from '../Sessions'
@@ -180,9 +243,7 @@ describe('Sessions Page', () => {
 
   const renderSessions = (props = {}) => {
     return render(
-      createElement(QueryClientProvider, { client: queryClient },
-        createElement(Sessions, props)
-      )
+      createElement(QueryClientProvider, { client: queryClient }, createElement(Sessions, props))
     )
   }
 
@@ -213,23 +274,46 @@ describe('Sessions Page', () => {
   it('filters, sorts, and dispatches sessions to correct child components', () => {
     const now = new Date()
     const futureSession = {
-      id: 's1', title: 'Future', game: 'Val', scheduled_at: new Date(now.getTime() + 86400000).toISOString(),
-      status: 'scheduled', my_rsvp: null, rsvp_counts: { present: 1 },
+      id: 's1',
+      title: 'Future',
+      game: 'Val',
+      scheduled_at: new Date(now.getTime() + 86400000).toISOString(),
+      status: 'scheduled',
+      my_rsvp: null,
+      rsvp_counts: { present: 1 },
     }
     const confirmedSession = {
-      id: 's2', title: 'Confirmed', game: 'LoL', scheduled_at: new Date(now.getTime() + 172800000).toISOString(),
-      status: 'scheduled', my_rsvp: 'present', rsvp_counts: { present: 2 },
+      id: 's2',
+      title: 'Confirmed',
+      game: 'LoL',
+      scheduled_at: new Date(now.getTime() + 172800000).toISOString(),
+      status: 'scheduled',
+      my_rsvp: 'present',
+      rsvp_counts: { present: 2 },
     }
     const cancelledSession = {
-      id: 's3', title: 'Cancelled', game: 'CS', scheduled_at: new Date(now.getTime() + 86400000).toISOString(),
-      status: 'cancelled', my_rsvp: null, rsvp_counts: { present: 0 },
+      id: 's3',
+      title: 'Cancelled',
+      game: 'CS',
+      scheduled_at: new Date(now.getTime() + 86400000).toISOString(),
+      status: 'cancelled',
+      my_rsvp: null,
+      rsvp_counts: { present: 0 },
     }
     const pastSession = {
-      id: 's4', title: 'Past', game: 'Apex', scheduled_at: new Date(now.getTime() - 86400000).toISOString(),
-      status: 'scheduled', my_rsvp: null, rsvp_counts: { present: 0 },
+      id: 's4',
+      title: 'Past',
+      game: 'Apex',
+      scheduled_at: new Date(now.getTime() - 86400000).toISOString(),
+      status: 'scheduled',
+      my_rsvp: null,
+      rsvp_counts: { present: 0 },
     }
 
-    mockSessions.value = { data: [futureSession, confirmedSession, cancelledSession, pastSession], isLoading: false }
+    mockSessions.value = {
+      data: [futureSession, confirmedSession, cancelledSession, pastSession],
+      isLoading: false,
+    }
 
     renderSessions()
 
@@ -256,8 +340,24 @@ describe('Sessions Page', () => {
     const now = new Date()
 
     // Case 1: Multiple pending sessions
-    const pending1 = { id: 'p1', title: 'P1', game: 'V', scheduled_at: new Date(now.getTime() + 86400000).toISOString(), status: 'scheduled', my_rsvp: null, rsvp_counts: { present: 0 } }
-    const pending2 = { id: 'p2', title: 'P2', game: 'V', scheduled_at: new Date(now.getTime() + 172800000).toISOString(), status: 'scheduled', my_rsvp: null, rsvp_counts: { present: 0 } }
+    const pending1 = {
+      id: 'p1',
+      title: 'P1',
+      game: 'V',
+      scheduled_at: new Date(now.getTime() + 86400000).toISOString(),
+      status: 'scheduled',
+      my_rsvp: null,
+      rsvp_counts: { present: 0 },
+    }
+    const pending2 = {
+      id: 'p2',
+      title: 'P2',
+      game: 'V',
+      scheduled_at: new Date(now.getTime() + 172800000).toISOString(),
+      status: 'scheduled',
+      my_rsvp: null,
+      rsvp_counts: { present: 0 },
+    }
     mockSessions.value = { data: [pending1, pending2], isLoading: false }
 
     const { unmount: u1 } = renderSessions()
@@ -266,7 +366,15 @@ describe('Sessions Page', () => {
     u1()
 
     // Case 2: All sessions confirmed
-    const confirmed1 = { id: 'c1', title: 'C1', game: 'V', scheduled_at: new Date(now.getTime() + 86400000).toISOString(), status: 'scheduled', my_rsvp: 'present', rsvp_counts: { present: 1 } }
+    const confirmed1 = {
+      id: 'c1',
+      title: 'C1',
+      game: 'V',
+      scheduled_at: new Date(now.getTime() + 86400000).toISOString(),
+      status: 'scheduled',
+      my_rsvp: 'present',
+      rsvp_counts: { present: 1 },
+    }
     mockSessions.value = { data: [confirmed1], isLoading: false }
 
     const { unmount: u2 } = renderSessions()
@@ -277,7 +385,15 @@ describe('Sessions Page', () => {
     u2()
 
     // Case 3: Multiple confirmed sessions (plural)
-    const confirmed2 = { id: 'c2', title: 'C2', game: 'L', scheduled_at: new Date(now.getTime() + 172800000).toISOString(), status: 'scheduled', my_rsvp: 'present', rsvp_counts: { present: 2 } }
+    const confirmed2 = {
+      id: 'c2',
+      title: 'C2',
+      game: 'L',
+      scheduled_at: new Date(now.getTime() + 172800000).toISOString(),
+      status: 'scheduled',
+      my_rsvp: 'present',
+      rsvp_counts: { present: 2 },
+    }
     mockSessions.value = { data: [confirmed1, confirmed2], isLoading: false }
 
     const { unmount: u3 } = renderSessions()

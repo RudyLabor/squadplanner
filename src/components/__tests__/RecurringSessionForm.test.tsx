@@ -9,20 +9,23 @@ import { createElement } from 'react'
 
 // Polyfill CSS.supports for jsdom
 if (typeof globalThis.CSS === 'undefined') {
-  (globalThis as any).CSS = { supports: () => false }
+  ;(globalThis as any).CSS = { supports: () => false }
 } else if (typeof globalThis.CSS.supports !== 'function') {
-  (globalThis.CSS as any).supports = () => false
+  ;(globalThis.CSS as any).supports = () => false
 }
 
 // Mock framer-motion
 vi.mock('framer-motion', () => ({
   AnimatePresence: ({ children }: any) => children,
-  m: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
+  m: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
 }))
 
 // Mock icons
@@ -81,11 +84,7 @@ describe('RecurringSessionForm', () => {
 
   it('renders all form fields', () => {
     render(
-      <RecurringSessionForm
-        squadId={squadId}
-        onCreated={mockOnCreated}
-        onCancel={mockOnCancel}
-      />
+      <RecurringSessionForm squadId={squadId} onCreated={mockOnCreated} onCancel={mockOnCancel} />
     )
 
     // Check title input
@@ -113,11 +112,7 @@ describe('RecurringSessionForm', () => {
 
   it('handles day selection toggle', () => {
     const { container } = render(
-      <RecurringSessionForm
-        squadId={squadId}
-        onCreated={mockOnCreated}
-        onCancel={mockOnCancel}
-      />
+      <RecurringSessionForm squadId={squadId} onCreated={mockOnCreated} onCancel={mockOnCancel} />
     )
 
     // Get all day buttons (7 buttons in the grid)
@@ -137,11 +132,7 @@ describe('RecurringSessionForm', () => {
 
   it('validates that at least one day is selected', async () => {
     render(
-      <RecurringSessionForm
-        squadId={squadId}
-        onCreated={mockOnCreated}
-        onCancel={mockOnCancel}
-      />
+      <RecurringSessionForm squadId={squadId} onCreated={mockOnCreated} onCancel={mockOnCancel} />
     )
 
     // Fill title
@@ -165,11 +156,7 @@ describe('RecurringSessionForm', () => {
 
   it('validates that title is required', async () => {
     render(
-      <RecurringSessionForm
-        squadId={squadId}
-        onCreated={mockOnCreated}
-        onCancel={mockOnCancel}
-      />
+      <RecurringSessionForm squadId={squadId} onCreated={mockOnCreated} onCancel={mockOnCancel} />
     )
 
     // Select a day (enable submit)
@@ -196,11 +183,7 @@ describe('RecurringSessionForm', () => {
 
   it('disables submit button when no days selected', () => {
     render(
-      <RecurringSessionForm
-        squadId={squadId}
-        onCreated={mockOnCreated}
-        onCancel={mockOnCancel}
-      />
+      <RecurringSessionForm squadId={squadId} onCreated={mockOnCreated} onCancel={mockOnCancel} />
     )
 
     const submitButton = screen.getByText(/Créer la récurrence/i) as HTMLButtonElement
@@ -209,11 +192,7 @@ describe('RecurringSessionForm', () => {
 
   it('calls onCancel when cancel button is clicked', () => {
     render(
-      <RecurringSessionForm
-        squadId={squadId}
-        onCreated={mockOnCreated}
-        onCancel={mockOnCancel}
-      />
+      <RecurringSessionForm squadId={squadId} onCreated={mockOnCreated} onCancel={mockOnCancel} />
     )
 
     const cancelButton = screen.getByText(/Annuler/)
@@ -224,11 +203,7 @@ describe('RecurringSessionForm', () => {
 
   it('renders time picker with default values', () => {
     const { container } = render(
-      <RecurringSessionForm
-        squadId={squadId}
-        onCreated={mockOnCreated}
-        onCancel={mockOnCancel}
-      />
+      <RecurringSessionForm squadId={squadId} onCreated={mockOnCreated} onCancel={mockOnCancel} />
     )
 
     // Default hour is 21, minute is 00
@@ -244,11 +219,7 @@ describe('RecurringSessionForm', () => {
 
   it('handles duration selection', () => {
     render(
-      <RecurringSessionForm
-        squadId={squadId}
-        onCreated={mockOnCreated}
-        onCancel={mockOnCancel}
-      />
+      <RecurringSessionForm squadId={squadId} onCreated={mockOnCreated} onCancel={mockOnCancel} />
     )
 
     // Duration options should be available
@@ -267,11 +238,7 @@ describe('RecurringSessionForm', () => {
     } as any)
 
     render(
-      <RecurringSessionForm
-        squadId={squadId}
-        onCreated={mockOnCreated}
-        onCancel={mockOnCancel}
-      />
+      <RecurringSessionForm squadId={squadId} onCreated={mockOnCreated} onCancel={mockOnCancel} />
     )
 
     // Fill title
@@ -310,15 +277,13 @@ describe('RecurringSessionForm', () => {
     } as any)
 
     render(
-      <RecurringSessionForm
-        squadId={squadId}
-        onCreated={mockOnCreated}
-        onCancel={mockOnCancel}
-      />
+      <RecurringSessionForm squadId={squadId} onCreated={mockOnCreated} onCancel={mockOnCancel} />
     )
 
     // Fill form
-    fireEvent.change(screen.getByPlaceholderText(/Ranked Valorant/i), { target: { value: 'Test Session' } })
+    fireEvent.change(screen.getByPlaceholderText(/Ranked Valorant/i), {
+      target: { value: 'Test Session' },
+    })
     fireEvent.click(screen.getByText('Sélectionner un jeu'))
     fireEvent.click(screen.getByText('Valorant'))
     fireEvent.click(screen.getAllByText('L')[0])
@@ -342,15 +307,13 @@ describe('RecurringSessionForm', () => {
     } as any)
 
     render(
-      <RecurringSessionForm
-        squadId={squadId}
-        onCreated={mockOnCreated}
-        onCancel={mockOnCancel}
-      />
+      <RecurringSessionForm squadId={squadId} onCreated={mockOnCreated} onCancel={mockOnCancel} />
     )
 
     // Fill form
-    fireEvent.change(screen.getByPlaceholderText(/Ranked Valorant/i), { target: { value: 'Test Session' } })
+    fireEvent.change(screen.getByPlaceholderText(/Ranked Valorant/i), {
+      target: { value: 'Test Session' },
+    })
     fireEvent.click(screen.getByText('Sélectionner un jeu'))
     fireEvent.click(screen.getByText('Valorant'))
     fireEvent.click(screen.getAllByText('L')[0])
@@ -371,20 +334,21 @@ describe('RecurringSessionForm', () => {
 
     vi.mocked(supabaseMinimal.from).mockReturnValue({
       insert: vi.fn().mockImplementation(
-        () => new Promise((resolve) => { resolveInsert = resolve })
+        () =>
+          new Promise((resolve) => {
+            resolveInsert = resolve
+          })
       ),
     } as any)
 
     render(
-      <RecurringSessionForm
-        squadId={squadId}
-        onCreated={mockOnCreated}
-        onCancel={mockOnCancel}
-      />
+      <RecurringSessionForm squadId={squadId} onCreated={mockOnCreated} onCancel={mockOnCancel} />
     )
 
     // Fill form
-    fireEvent.change(screen.getByPlaceholderText(/Ranked Valorant/i), { target: { value: 'Test Session' } })
+    fireEvent.change(screen.getByPlaceholderText(/Ranked Valorant/i), {
+      target: { value: 'Test Session' },
+    })
     fireEvent.click(screen.getByText('Sélectionner un jeu'))
     fireEvent.click(screen.getByText('Valorant'))
     fireEvent.click(screen.getAllByText('L')[0])

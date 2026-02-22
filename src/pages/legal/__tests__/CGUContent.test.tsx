@@ -2,14 +2,32 @@ import { describe, it, expect, vi } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import { createElement } from 'react'
 
-vi.mock('../../../components/icons', () => new Proxy({}, { get: (_t: any, p: string) => typeof p === 'string' ? ({ children, ...props }: any) => createElement('span', props, children) : undefined }))
+vi.mock(
+  '../../../components/icons',
+  () =>
+    new Proxy(
+      {},
+      {
+        get: (_t: any, p: string) =>
+          typeof p === 'string'
+            ? ({ children, ...props }: any) => createElement('span', props, children)
+            : undefined,
+      }
+    )
+)
 
 vi.mock('../../../components/ui', () => ({
   Card: ({ children, ...props }: any) => createElement('div', props, children),
 }))
 
 vi.mock('../LegalSection', () => ({
-  LegalSection: ({ title, children, defaultOpen }: any) => createElement('div', { 'data-testid': `section-${title}`, 'data-default-open': defaultOpen }, createElement('h3', {}, title), defaultOpen ? children : null),
+  LegalSection: ({ title, children, defaultOpen }: any) =>
+    createElement(
+      'div',
+      { 'data-testid': `section-${title}`, 'data-default-open': defaultOpen },
+      createElement('h3', {}, title),
+      defaultOpen ? children : null
+    ),
 }))
 
 import { CGUContent } from '../CGUContent'
@@ -33,7 +51,7 @@ describe('CGUContent', () => {
     // 6. Card wrapper exists
     expect(container.querySelector('div')).not.toBeNull()
     // 7. Multiple sections rendered
-    expect(screen.getByText("2. Acceptation des conditions")).toBeDefined()
+    expect(screen.getByText('2. Acceptation des conditions')).toBeDefined()
   })
 
   // STRICT: verifies all 10 legal sections are rendered with correct titles
@@ -43,7 +61,7 @@ describe('CGUContent', () => {
     // 1. Section 1
     expect(screen.getByText('1. Objet')).toBeDefined()
     // 2. Section 2
-    expect(screen.getByText("2. Acceptation des conditions")).toBeDefined()
+    expect(screen.getByText('2. Acceptation des conditions')).toBeDefined()
     // 3. Section 3
     expect(screen.getByText('3. Inscription et compte')).toBeDefined()
     // 4. Section 4

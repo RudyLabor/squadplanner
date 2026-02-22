@@ -17,10 +17,7 @@ vi.mock('../../../lib/supabaseMinimal', () => ({
   supabase: mockSupabase,
 }))
 
-import {
-  useSquadSubscriptionQuery,
-  useUserSubscriptionsQuery,
-} from '../useSquadSubscriptions'
+import { useSquadSubscriptionQuery, useUserSubscriptionsQuery } from '../useSquadSubscriptions'
 
 function createWrapper() {
   const queryClient = new QueryClient({
@@ -120,7 +117,9 @@ describe('useSquadSubscriptionQuery', () => {
   })
 
   it('has correct query key shape', () => {
-    mockFrom.mockReturnValue(mockSingleChain({ data: null, error: { code: 'PGRST116', message: '' } }))
+    mockFrom.mockReturnValue(
+      mockSingleChain({ data: null, error: { code: 'PGRST116', message: '' } })
+    )
 
     const { result } = renderHook(() => useSquadSubscriptionQuery('squad-42'), {
       wrapper: createWrapper(),
@@ -172,10 +171,9 @@ describe('useUserSubscriptionsQuery', () => {
 
     mockFrom.mockReturnValue(mockListChain({ data: subscriptions, error: null }))
 
-    const { result } = renderHook(
-      () => useUserSubscriptionsQuery(['squad-1', 'squad-2']),
-      { wrapper: createWrapper() }
-    )
+    const { result } = renderHook(() => useUserSubscriptionsQuery(['squad-1', 'squad-2']), {
+      wrapper: createWrapper(),
+    })
 
     await waitFor(() => expect(result.current.isSuccess).toBe(true))
     expect(result.current.data).toEqual(subscriptions)
@@ -185,24 +183,20 @@ describe('useUserSubscriptionsQuery', () => {
   it('returns empty array when data is null', async () => {
     mockFrom.mockReturnValue(mockListChain({ data: null, error: null }))
 
-    const { result } = renderHook(
-      () => useUserSubscriptionsQuery(['squad-1']),
-      { wrapper: createWrapper() }
-    )
+    const { result } = renderHook(() => useUserSubscriptionsQuery(['squad-1']), {
+      wrapper: createWrapper(),
+    })
 
     await waitFor(() => expect(result.current.isSuccess).toBe(true))
     expect(result.current.data).toEqual([])
   })
 
   it('throws on error', async () => {
-    mockFrom.mockReturnValue(
-      mockListChain({ data: null, error: { message: 'Network error' } })
-    )
+    mockFrom.mockReturnValue(mockListChain({ data: null, error: { message: 'Network error' } }))
 
-    const { result } = renderHook(
-      () => useUserSubscriptionsQuery(['squad-1']),
-      { wrapper: createWrapper() }
-    )
+    const { result } = renderHook(() => useUserSubscriptionsQuery(['squad-1']), {
+      wrapper: createWrapper(),
+    })
 
     await waitFor(() => expect(result.current.isError).toBe(true))
     expect(result.current.error).toBeTruthy()
@@ -211,10 +205,9 @@ describe('useUserSubscriptionsQuery', () => {
   it('calls supabase from subscriptions table', async () => {
     mockFrom.mockReturnValue(mockListChain({ data: [], error: null }))
 
-    const { result } = renderHook(
-      () => useUserSubscriptionsQuery(['squad-1']),
-      { wrapper: createWrapper() }
-    )
+    const { result } = renderHook(() => useUserSubscriptionsQuery(['squad-1']), {
+      wrapper: createWrapper(),
+    })
 
     await waitFor(() => expect(result.current.isSuccess).toBe(true))
     expect(mockFrom).toHaveBeenCalledWith('subscriptions')

@@ -305,7 +305,7 @@ describe('notifySessionCreated', () => {
           type: 'session_created',
           title: 'Nouvelle session !',
         }),
-      ]),
+      ])
     )
   })
 
@@ -322,7 +322,7 @@ describe('notifySessionCreated', () => {
         scheduled_at: '2026-03-15T20:00:00Z',
         game: 'Valorant',
         calendar_url: expect.stringContaining('calendar.google.com'),
-      }),
+      })
     )
   })
 

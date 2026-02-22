@@ -1,9 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import {
-  parseDeepLinkUrl,
-  isValidDeepLinkPath,
-  DEEP_LINK_PREFIXES,
-} from '../deepLinkParsing'
+import { parseDeepLinkUrl, isValidDeepLinkPath, DEEP_LINK_PREFIXES } from '../deepLinkParsing'
 
 describe('parseDeepLinkUrl', () => {
   describe('universal links (https://squadplanner.fr)', () => {
@@ -41,9 +37,7 @@ describe('parseDeepLinkUrl', () => {
     })
 
     it('parses with query string', () => {
-      expect(parseDeepLinkUrl('squadplanner://app/u/player?tab=stats')).toBe(
-        '/u/player?tab=stats'
-      )
+      expect(parseDeepLinkUrl('squadplanner://app/u/player?tab=stats')).toBe('/u/player?tab=stats')
     })
   })
 

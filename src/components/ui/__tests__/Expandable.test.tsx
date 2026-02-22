@@ -16,22 +16,29 @@ vi.mock('framer-motion', () => ({
   useAnimate: vi.fn().mockReturnValue([{ current: null }, vi.fn()]),
   useAnimation: vi.fn().mockReturnValue({ start: vi.fn(), stop: vi.fn() }),
   useReducedMotion: vi.fn().mockReturnValue(false),
-  m: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
-  motion: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
+  m: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
+  motion: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
 }))
 
 vi.mock('../../icons', () => ({
-  ChevronDown: (props: any) => createElement('span', { ...props, 'data-testid': 'chevron-icon' }, 'chevron'),
+  ChevronDown: (props: any) =>
+    createElement('span', { ...props, 'data-testid': 'chevron-icon' }, 'chevron'),
 }))
 
 import { Expandable } from '../Expandable'
@@ -84,10 +91,15 @@ describe('Expandable', () => {
   // STRICT: when needsTruncation is true, button appears with correct aria-expanded and labels toggle
   it('shows toggle button with correct aria-expanded when content overflows', () => {
     // Force the component to think content overflows by mocking scrollHeight
-    const originalDescriptor = Object.getOwnPropertyDescriptor(HTMLElement.prototype, 'scrollHeight')
+    const originalDescriptor = Object.getOwnPropertyDescriptor(
+      HTMLElement.prototype,
+      'scrollHeight'
+    )
     Object.defineProperty(HTMLElement.prototype, 'scrollHeight', {
       configurable: true,
-      get() { return 500 }, // Much taller than maxHeight (3 * 21 = 63)
+      get() {
+        return 500
+      }, // Much taller than maxHeight (3 * 21 = 63)
     })
 
     render(
@@ -126,10 +138,15 @@ describe('Expandable', () => {
 
   // STRICT: custom labels are used when provided
   it('uses custom expand and collapse labels', () => {
-    const originalDescriptor = Object.getOwnPropertyDescriptor(HTMLElement.prototype, 'scrollHeight')
+    const originalDescriptor = Object.getOwnPropertyDescriptor(
+      HTMLElement.prototype,
+      'scrollHeight'
+    )
     Object.defineProperty(HTMLElement.prototype, 'scrollHeight', {
       configurable: true,
-      get() { return 500 },
+      get() {
+        return 500
+      },
     })
 
     render(

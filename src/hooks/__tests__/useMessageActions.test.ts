@@ -1,6 +1,14 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 
-const { mockGetSession, mockFrom, mockChannel, mockRemoveChannel, mockRpc, mockSupabase, mockIsSupabaseReady } = vi.hoisted(() => {
+const {
+  mockGetSession,
+  mockFrom,
+  mockChannel,
+  mockRemoveChannel,
+  mockRpc,
+  mockSupabase,
+  mockIsSupabaseReady,
+} = vi.hoisted(() => {
   const mockGetSession = vi.fn()
   const mockFrom = vi.fn()
   const mockChannel = vi.fn()
@@ -14,7 +22,15 @@ const { mockGetSession, mockFrom, mockChannel, mockRemoveChannel, mockRpc, mockS
     removeChannel: mockRemoveChannel,
     rpc: mockRpc,
   }
-  return { mockGetSession, mockFrom, mockChannel, mockRemoveChannel, mockRpc, mockSupabase, mockIsSupabaseReady }
+  return {
+    mockGetSession,
+    mockFrom,
+    mockChannel,
+    mockRemoveChannel,
+    mockRpc,
+    mockSupabase,
+    mockIsSupabaseReady,
+  }
 })
 
 vi.mock('../../lib/supabaseMinimal', () => ({
@@ -37,7 +53,11 @@ vi.mock('../useUnreadCount', () => ({
   },
 }))
 
-import { createRealtimeSubscription, markMessagesAsRead, markMessagesAsReadFallback } from '../useMessageActions'
+import {
+  createRealtimeSubscription,
+  markMessagesAsRead,
+  markMessagesAsReadFallback,
+} from '../useMessageActions'
 import { playNotificationSound } from '../useRingtone'
 
 describe('useMessageActions', () => {
@@ -199,7 +219,13 @@ describe('useMessageActions', () => {
       const setStateFn = setState.mock.calls[0][0]
       const existingState = {
         messages: [
-          { id: 'msg-1', content: 'Original content', edited_at: null, is_pinned: false, read_by: [] },
+          {
+            id: 'msg-1',
+            content: 'Original content',
+            edited_at: null,
+            is_pinned: false,
+            read_by: [],
+          },
         ],
       }
       const result = setStateFn(existingState)
@@ -236,7 +262,13 @@ describe('useMessageActions', () => {
       const setStateFn = setState.mock.calls[0][0]
       const existingState = {
         messages: [
-          { id: 'msg-1', content: 'Same content', edited_at: null, is_pinned: false, read_by: ['user-1'] },
+          {
+            id: 'msg-1',
+            content: 'Same content',
+            edited_at: null,
+            is_pinned: false,
+            read_by: ['user-1'],
+          },
         ],
       }
       const result = setStateFn(existingState)

@@ -16,18 +16,24 @@ vi.mock('framer-motion', () => ({
   useAnimate: vi.fn().mockReturnValue([{ current: null }, vi.fn()]),
   useAnimation: vi.fn().mockReturnValue({ start: vi.fn(), stop: vi.fn() }),
   useReducedMotion: vi.fn().mockReturnValue(false),
-  m: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
-  motion: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
+  m: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
+  motion: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
 }))
 
 vi.mock('../../icons', () => ({
@@ -36,7 +42,8 @@ vi.mock('../../icons', () => ({
 }))
 
 vi.mock('../../SquadPlannerLogo', () => ({
-  SquadPlannerLogo: ({ size }: any) => createElement('span', { 'data-testid': 'sp-logo', 'data-size': size }, 'Logo'),
+  SquadPlannerLogo: ({ size }: any) =>
+    createElement('span', { 'data-testid': 'sp-logo', 'data-size': size }, 'Logo'),
 }))
 
 vi.mock('../../../utils/animations', () => ({
@@ -75,7 +82,9 @@ describe('ComparisonSection', () => {
 
   it('renders accessible table caption', () => {
     render(<ComparisonSection />)
-    expect(screen.getByText('Comparaison des fonctionnalités entre Discord et Squad Planner')).toBeInTheDocument()
+    expect(
+      screen.getByText('Comparaison des fonctionnalités entre Discord et Squad Planner')
+    ).toBeInTheDocument()
   })
 
   it('renders table column headers', () => {
@@ -88,7 +97,7 @@ describe('ComparisonSection', () => {
     const { container } = render(<ComparisonSection />)
     const svgs = container.querySelectorAll('svg')
     // The DiscordIcon is an inline SVG with fill="#5865F2"
-    const discordSvg = Array.from(svgs).find(svg => svg.getAttribute('fill') === '#5865F2')
+    const discordSvg = Array.from(svgs).find((svg) => svg.getAttribute('fill') === '#5865F2')
     expect(discordSvg).toBeTruthy()
   })
 

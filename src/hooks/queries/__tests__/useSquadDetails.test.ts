@@ -263,10 +263,9 @@ describe('useSquadsPremiumStatusQuery', () => {
     mockSelect.mockReturnValue({ in: mockIn })
     mockFrom.mockReturnValue({ select: mockSelect })
 
-    const { result } = renderHook(
-      () => useSquadsPremiumStatusQuery(['squad-1', 'squad-2']),
-      { wrapper: createWrapper() }
-    )
+    const { result } = renderHook(() => useSquadsPremiumStatusQuery(['squad-1', 'squad-2']), {
+      wrapper: createWrapper(),
+    })
 
     await waitFor(() => expect(result.current.isSuccess).toBe(true))
 

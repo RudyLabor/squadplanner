@@ -43,18 +43,24 @@ vi.mock('framer-motion', () => ({
   useAnimate: vi.fn().mockReturnValue([{ current: null }, vi.fn()]),
   useAnimation: vi.fn().mockReturnValue({ start: vi.fn(), stop: vi.fn() }),
   useReducedMotion: vi.fn().mockReturnValue(false),
-  m: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
-  motion: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
+  m: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
+  motion: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
 }))
 
 vi.mock('../../lib/supabase-minimal-ssr', () => ({
@@ -78,7 +84,11 @@ vi.mock('../../lib/queryClient', () => ({
 
 vi.mock('../../components/ClientRouteWrapper', () => ({
   ClientRouteWrapper: ({ children, seeds }: any) =>
-    createElement('div', { 'data-testid': 'route-wrapper', 'data-seeds': JSON.stringify(seeds) }, children),
+    createElement(
+      'div',
+      { 'data-testid': 'route-wrapper', 'data-seeds': JSON.stringify(seeds) },
+      children
+    ),
 }))
 
 vi.mock('../../pages/Sessions', () => ({
@@ -180,7 +190,11 @@ describe('routes/sessions', () => {
     it('returns canonical link', () => {
       const result = meta()
       const canonical = result.find((m: any) => m.tagName === 'link')
-      expect(canonical).toEqual({ tagName: 'link', rel: 'canonical', href: 'https://squadplanner.fr/sessions' })
+      expect(canonical).toEqual({
+        tagName: 'link',
+        rel: 'canonical',
+        href: 'https://squadplanner.fr/sessions',
+      })
     })
 
     it('returns og:url', () => {
@@ -226,8 +240,28 @@ describe('routes/sessions', () => {
 
     it('returns squads mapped from memberships', async () => {
       const memberships = [
-        { squad_id: 's1', squads: { id: 's1', name: 'Alpha', game: 'Valorant', invite_code: 'aaa', owner_id: 'u1', created_at: '2026-01-01' } },
-        { squad_id: 's2', squads: { id: 's2', name: 'Beta', game: 'LoL', invite_code: 'bbb', owner_id: 'u2', created_at: '2026-01-02' } },
+        {
+          squad_id: 's1',
+          squads: {
+            id: 's1',
+            name: 'Alpha',
+            game: 'Valorant',
+            invite_code: 'aaa',
+            owner_id: 'u1',
+            created_at: '2026-01-01',
+          },
+        },
+        {
+          squad_id: 's2',
+          squads: {
+            id: 's2',
+            name: 'Beta',
+            game: 'LoL',
+            invite_code: 'bbb',
+            owner_id: 'u2',
+            created_at: '2026-01-02',
+          },
+        },
       ]
       setupSSRMocks({ user: { id: 'u1', email: 'u@t.com' }, membershipsData: memberships })
       const result = await loader({ request: makeRequest(), params: {}, context: {} } as any)
@@ -238,7 +272,17 @@ describe('routes/sessions', () => {
 
     it('fetches sessions for squad IDs and computes RSVP counts', async () => {
       const memberships = [
-        { squad_id: 's1', squads: { id: 's1', name: 'Alpha', game: 'V', invite_code: 'a', owner_id: 'u1', created_at: '2026-01-01' } },
+        {
+          squad_id: 's1',
+          squads: {
+            id: 's1',
+            name: 'Alpha',
+            game: 'V',
+            invite_code: 'a',
+            owner_id: 'u1',
+            created_at: '2026-01-01',
+          },
+        },
       ]
       const sessions = [
         { id: 'sess1', squad_id: 's1', title: 'Session 1', scheduled_at: '2026-02-01T18:00:00Z' },
@@ -251,7 +295,12 @@ describe('routes/sessions', () => {
         { session_id: 'sess2', user_id: 'u1', response: 'present' },
       ]
 
-      setupSSRMocks({ user: { id: 'u1' }, membershipsData: memberships, sessionsData: sessions, rsvpsData: rsvps })
+      setupSSRMocks({
+        user: { id: 'u1' },
+        membershipsData: memberships,
+        sessionsData: sessions,
+        rsvpsData: rsvps,
+      })
 
       const result = await loader({ request: makeRequest(), params: {}, context: {} } as any)
       expect(result.sessions).toHaveLength(2)
@@ -267,23 +316,57 @@ describe('routes/sessions', () => {
 
     it('sets my_rsvp to null when user has no RSVP for a session', async () => {
       const memberships = [
-        { squad_id: 's1', squads: { id: 's1', name: 'A', game: 'G', invite_code: 'x', owner_id: 'o', created_at: '2026-01-01' } },
+        {
+          squad_id: 's1',
+          squads: {
+            id: 's1',
+            name: 'A',
+            game: 'G',
+            invite_code: 'x',
+            owner_id: 'o',
+            created_at: '2026-01-01',
+          },
+        },
       ]
-      const sessions = [{ id: 'sess1', squad_id: 's1', title: 'S', scheduled_at: '2026-02-01T18:00:00Z' }]
+      const sessions = [
+        { id: 'sess1', squad_id: 's1', title: 'S', scheduled_at: '2026-02-01T18:00:00Z' },
+      ]
       const rsvps = [{ session_id: 'sess1', user_id: 'other-user', response: 'present' }]
 
-      setupSSRMocks({ user: { id: 'u1' }, membershipsData: memberships, sessionsData: sessions, rsvpsData: rsvps })
+      setupSSRMocks({
+        user: { id: 'u1' },
+        membershipsData: memberships,
+        sessionsData: sessions,
+        rsvpsData: rsvps,
+      })
       const result = await loader({ request: makeRequest(), params: {}, context: {} } as any)
       expect(result.sessions[0].my_rsvp).toBeNull()
     })
 
     it('handles null rsvps data gracefully', async () => {
       const memberships = [
-        { squad_id: 's1', squads: { id: 's1', name: 'A', game: 'G', invite_code: 'x', owner_id: 'o', created_at: '2026-01-01' } },
+        {
+          squad_id: 's1',
+          squads: {
+            id: 's1',
+            name: 'A',
+            game: 'G',
+            invite_code: 'x',
+            owner_id: 'o',
+            created_at: '2026-01-01',
+          },
+        },
       ]
-      const sessions = [{ id: 'sess1', squad_id: 's1', title: 'S', scheduled_at: '2026-02-01T18:00:00Z' }]
+      const sessions = [
+        { id: 'sess1', squad_id: 's1', title: 'S', scheduled_at: '2026-02-01T18:00:00Z' },
+      ]
 
-      setupSSRMocks({ user: { id: 'u1' }, membershipsData: memberships, sessionsData: sessions, rsvpsData: null })
+      setupSSRMocks({
+        user: { id: 'u1' },
+        membershipsData: memberships,
+        sessionsData: sessions,
+        rsvpsData: null,
+      })
       const result = await loader({ request: makeRequest(), params: {}, context: {} } as any)
       expect(result.sessions[0].rsvp_counts).toEqual({ present: 0, absent: 0, maybe: 0 })
       expect(result.sessions[0].my_rsvp).toBeNull()
@@ -291,7 +374,17 @@ describe('routes/sessions', () => {
 
     it('returns empty sessions when sessionsData is empty', async () => {
       const memberships = [
-        { squad_id: 's1', squads: { id: 's1', name: 'A', game: 'G', invite_code: 'x', owner_id: 'o', created_at: '2026-01-01' } },
+        {
+          squad_id: 's1',
+          squads: {
+            id: 's1',
+            name: 'A',
+            game: 'G',
+            invite_code: 'x',
+            owner_id: 'o',
+            created_at: '2026-01-01',
+          },
+        },
       ]
       setupSSRMocks({ user: { id: 'u1' }, membershipsData: memberships, sessionsData: [] })
       const result = await loader({ request: makeRequest(), params: {}, context: {} } as any)
@@ -300,7 +393,17 @@ describe('routes/sessions', () => {
 
     it('returns empty sessions when sessionsData is null', async () => {
       const memberships = [
-        { squad_id: 's1', squads: { id: 's1', name: 'A', game: 'G', invite_code: 'x', owner_id: 'o', created_at: '2026-01-01' } },
+        {
+          squad_id: 's1',
+          squads: {
+            id: 's1',
+            name: 'A',
+            game: 'G',
+            invite_code: 'x',
+            owner_id: 'o',
+            created_at: '2026-01-01',
+          },
+        },
       ]
       setupSSRMocks({ user: { id: 'u1' }, membershipsData: memberships, sessionsData: null })
       const result = await loader({ request: makeRequest(), params: {}, context: {} } as any)
@@ -333,9 +436,21 @@ describe('routes/sessions', () => {
       mockClientGetSession.mockResolvedValue({ data: { session: { user } } })
 
       const memberships = [
-        { squad_id: 's1', squads: { id: 's1', name: 'CS', game: 'G', invite_code: 'a', owner_id: 'c1', created_at: '2026-01-01' } },
+        {
+          squad_id: 's1',
+          squads: {
+            id: 's1',
+            name: 'CS',
+            game: 'G',
+            invite_code: 'a',
+            owner_id: 'c1',
+            created_at: '2026-01-01',
+          },
+        },
       ]
-      const sessions = [{ id: 'sess1', squad_id: 's1', title: 'S', scheduled_at: '2026-02-01T18:00:00Z' }]
+      const sessions = [
+        { id: 'sess1', squad_id: 's1', title: 'S', scheduled_at: '2026-02-01T18:00:00Z' },
+      ]
       const rsvps = [{ session_id: 'sess1', user_id: 'c1', response: 'maybe' }]
 
       mockClientFrom.mockImplementation((table: string) => {
@@ -403,7 +518,9 @@ describe('routes/sessions', () => {
       const qc = makeQC()
       const loaderData = { squads: [{ id: 's1', name: 'A' }], sessions: [] }
       render(
-        createElement(QueryClientProvider, { client: qc },
+        createElement(
+          QueryClientProvider,
+          { client: qc },
           createElement(DefaultExport, { loaderData } as any)
         )
       )
@@ -416,7 +533,9 @@ describe('routes/sessions', () => {
       const qc = makeQC()
       const loaderData = { squads: [{ id: 's1' }], sessions: [{ id: 'sess1' }] }
       render(
-        createElement(QueryClientProvider, { client: qc },
+        createElement(
+          QueryClientProvider,
+          { client: qc },
           createElement(DefaultExport, { loaderData } as any)
         )
       )
@@ -432,7 +551,9 @@ describe('routes/sessions', () => {
       const squads = [{ id: 's1', name: 'TestSquad' }]
       const sessions = [{ id: 'sess1', title: 'Game Night' }]
       render(
-        createElement(QueryClientProvider, { client: qc },
+        createElement(
+          QueryClientProvider,
+          { client: qc },
           createElement(DefaultExport, { loaderData: { squads, sessions } } as any)
         )
       )
@@ -445,7 +566,9 @@ describe('routes/sessions', () => {
     it('renders with empty loaderData without crashing', () => {
       const qc = makeQC()
       const { container } = render(
-        createElement(QueryClientProvider, { client: qc },
+        createElement(
+          QueryClientProvider,
+          { client: qc },
           createElement(DefaultExport, { loaderData: { squads: [], sessions: [] } } as any)
         )
       )

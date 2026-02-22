@@ -16,23 +16,40 @@ vi.mock('framer-motion', () => ({
   useAnimate: vi.fn().mockReturnValue([{ current: null }, vi.fn()]),
   useAnimation: vi.fn().mockReturnValue({ start: vi.fn(), stop: vi.fn() }),
   useReducedMotion: vi.fn().mockReturnValue(false),
-  m: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
-  motion: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
+  m: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
+  motion: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
 }))
 
-vi.mock('../../icons', () => new Proxy({}, {
-  get: (_t, p) => typeof p === 'string' ? (props: any) => createElement('span', { ...props, 'data-testid': `icon-${String(p)}` }, String(p)) : undefined,
-}))
+vi.mock(
+  '../../icons',
+  () =>
+    new Proxy(
+      {},
+      {
+        get: (_t, p) =>
+          typeof p === 'string'
+            ? (props: any) =>
+                createElement('span', { ...props, 'data-testid': `icon-${String(p)}` }, String(p))
+            : undefined,
+      }
+    )
+)
 
 import { demoSteps, stepComponents, PhoneFrame, type DemoStep } from '../DemoSteps'
 
@@ -119,30 +136,50 @@ describe('DemoSteps', () => {
   // ─── PhoneFrame ─────────────────────────────────────
   describe('PhoneFrame', () => {
     it('renders children inside the frame', () => {
-      render(<PhoneFrame><span>Test Child</span></PhoneFrame>)
+      render(
+        <PhoneFrame>
+          <span>Test Child</span>
+        </PhoneFrame>
+      )
       expect(screen.getByText('Test Child')).toBeInTheDocument()
     })
 
     it('renders the status bar with time 21:00', () => {
-      render(<PhoneFrame><span>Content</span></PhoneFrame>)
+      render(
+        <PhoneFrame>
+          <span>Content</span>
+        </PhoneFrame>
+      )
       expect(screen.getByText('21:00')).toBeInTheDocument()
     })
 
     it('renders the notch element', () => {
-      const { container } = render(<PhoneFrame><span>Content</span></PhoneFrame>)
+      const { container } = render(
+        <PhoneFrame>
+          <span>Content</span>
+        </PhoneFrame>
+      )
       // The notch is an absolute div with w-24 h-5
       const notch = container.querySelector('.w-24.h-5')
       expect(notch).toBeInTheDocument()
     })
 
     it('renders the glow effect behind phone', () => {
-      const { container } = render(<PhoneFrame><span>Content</span></PhoneFrame>)
+      const { container } = render(
+        <PhoneFrame>
+          <span>Content</span>
+        </PhoneFrame>
+      )
       const glow = container.querySelector('.blur-2xl')
       expect(glow).toBeInTheDocument()
     })
 
     it('renders SVG icons in the status bar (wifi and battery)', () => {
-      const { container } = render(<PhoneFrame><span>Content</span></PhoneFrame>)
+      const { container } = render(
+        <PhoneFrame>
+          <span>Content</span>
+        </PhoneFrame>
+      )
       const svgs = container.querySelectorAll('svg')
       expect(svgs.length).toBe(2) // wifi + battery
     })

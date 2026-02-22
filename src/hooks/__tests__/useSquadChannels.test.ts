@@ -20,10 +20,9 @@ vi.mock('../../lib/supabaseMinimal', () => ({
 // Auth store mock
 const mockUser = vi.hoisted(() => ({ id: 'user-1', username: 'test' }))
 vi.mock('../useAuth', () => ({
-  useAuthStore: Object.assign(
-    vi.fn().mockReturnValue({ user: mockUser }),
-    { getState: vi.fn().mockReturnValue({ user: mockUser }) }
-  ),
+  useAuthStore: Object.assign(vi.fn().mockReturnValue({ user: mockUser }), {
+    getState: vi.fn().mockReturnValue({ user: mockUser }),
+  }),
 }))
 
 // Toast mock
@@ -49,9 +48,9 @@ function createChain(data: unknown = [], error: unknown = null) {
   chain.update = vi.fn().mockReturnValue(chain)
   chain.delete = vi.fn().mockReturnValue(chain)
   chain.single = vi.fn().mockResolvedValue({ data, error })
-  chain.then = vi.fn().mockImplementation((onFulfilled) =>
-    Promise.resolve({ data, error }).then(onFulfilled)
-  )
+  chain.then = vi
+    .fn()
+    .mockImplementation((onFulfilled) => Promise.resolve({ data, error }).then(onFulfilled))
   return chain
 }
 
@@ -330,9 +329,7 @@ describe('useSquadChannels', () => {
       })
 
       await waitFor(() => {
-        expect(mockShowError).toHaveBeenCalledWith(
-          'Impossible de supprimer le canal par défaut'
-        )
+        expect(mockShowError).toHaveBeenCalledWith('Impossible de supprimer le canal par défaut')
       })
     })
   })

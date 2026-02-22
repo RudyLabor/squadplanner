@@ -20,23 +20,31 @@ vi.mock('framer-motion', () => ({
   useAnimate: vi.fn().mockReturnValue([{ current: null }, vi.fn()]),
   useAnimation: vi.fn().mockReturnValue({ start: vi.fn(), stop: vi.fn() }),
   useReducedMotion: vi.fn().mockReturnValue(false),
-  m: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
-  motion: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
+  m: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
+  motion: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
 }))
 
 vi.mock('../../icons', () => ({
-  ArrowRight: (props: any) => createElement('span', { ...props, 'data-testid': 'icon-arrow' }, 'arrow'),
-  Sparkles: (props: any) => createElement('span', { ...props, 'data-testid': 'icon-sparkles' }, 'sparkles'),
+  ArrowRight: (props: any) =>
+    createElement('span', { ...props, 'data-testid': 'icon-arrow' }, 'arrow'),
+  Sparkles: (props: any) =>
+    createElement('span', { ...props, 'data-testid': 'icon-sparkles' }, 'sparkles'),
 }))
 
 vi.mock('../../../utils/animations', () => ({ springTap: {} }))
@@ -91,8 +99,10 @@ describe('LandingHero', () => {
 
   it('renders description text', () => {
     render(<LandingHero {...defaultProps} />)
-    expect(screen.getByText(/Squad Planner fait que tes sessions ont vraiment lieu/)).toBeInTheDocument()
-    expect(screen.getByText('Ta squad t\'attend.')).toBeInTheDocument()
+    expect(
+      screen.getByText(/Squad Planner fait que tes sessions ont vraiment lieu/)
+    ).toBeInTheDocument()
+    expect(screen.getByText("Ta squad t'attend.")).toBeInTheDocument()
   })
 
   it('renders HeroMockup', () => {

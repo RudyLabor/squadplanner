@@ -96,7 +96,11 @@ describe('SkeletonBase', () => {
     })
 
     it('renders custom children', () => {
-      const { container } = render(<SkeletonCard><div data-testid="custom">Custom</div></SkeletonCard>)
+      const { container } = render(
+        <SkeletonCard>
+          <div data-testid="custom">Custom</div>
+        </SkeletonCard>
+      )
       expect(container.querySelector('[data-testid="custom"]')).toBeTruthy()
     })
   })

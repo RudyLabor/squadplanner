@@ -17,18 +17,24 @@ vi.mock('framer-motion', () => ({
   useAnimate: vi.fn().mockReturnValue([{ current: null }, vi.fn()]),
   useAnimation: vi.fn().mockReturnValue({ start: vi.fn(), stop: vi.fn() }),
   useReducedMotion: vi.fn().mockReturnValue(false),
-  m: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
-  motion: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
+  m: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
+  motion: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
 }))
 
 // Mock icons
@@ -38,7 +44,8 @@ vi.mock('../icons', () => ({
 
 // Mock ui
 vi.mock('../ui', () => ({
-  Card: ({ children, className }: any) => createElement('div', { className, 'data-testid': 'card' }, children),
+  Card: ({ children, className }: any) =>
+    createElement('div', { className, 'data-testid': 'card' }, children),
 }))
 
 // Mock leaderboard sub-components — capture props
@@ -48,7 +55,11 @@ vi.mock('../leaderboard/leaderboardConfig', () => ({}))
 vi.mock('../leaderboard/PodiumCard', () => ({
   PodiumCard: (props: any) => {
     mockPodiumCard(props)
-    return createElement('div', { 'data-testid': `podium-${props.entry.rank}` }, props.entry.username)
+    return createElement(
+      'div',
+      { 'data-testid': `podium-${props.entry.rank}` },
+      props.entry.username
+    )
   },
 }))
 vi.mock('../leaderboard/LeaderboardListItem', () => ({
@@ -121,7 +132,9 @@ describe('SquadLeaderboard', () => {
     // 4. LeaderboardListItem called twice
     expect(mockLeaderboardListItem).toHaveBeenCalledTimes(2)
     // 5. Dave (u4) is current user in list items
-    const daveCall = mockLeaderboardListItem.mock.calls.find((c: any) => c[0].entry.user_id === 'u4')
+    const daveCall = mockLeaderboardListItem.mock.calls.find(
+      (c: any) => c[0].entry.user_id === 'u4'
+    )
     expect(daveCall[0].isCurrentUser).toBe(true)
     // 6. Eve (u5) is NOT current user
     const eveCall = mockLeaderboardListItem.mock.calls.find((c: any) => c[0].entry.user_id === 'u5')

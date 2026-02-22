@@ -1,54 +1,49 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 
 // ── Hoisted mocks ─────────────────────────────────────────────────────
-const {
-  mockSupabase,
-  mockPushNotifications,
-  mockHaptics,
-  mockLocalNotifications,
-  mockCapacitor,
-} = vi.hoisted(() => {
-  const chain: Record<string, ReturnType<typeof vi.fn>> & { then?: unknown } = {}
-  chain.upsert = vi.fn().mockReturnValue(chain)
-  chain.then = (resolve: (v: unknown) => void, reject: (e: unknown) => void) =>
-    Promise.resolve({ data: null, error: null }).then(resolve, reject)
+const { mockSupabase, mockPushNotifications, mockHaptics, mockLocalNotifications, mockCapacitor } =
+  vi.hoisted(() => {
+    const chain: Record<string, ReturnType<typeof vi.fn>> & { then?: unknown } = {}
+    chain.upsert = vi.fn().mockReturnValue(chain)
+    chain.then = (resolve: (v: unknown) => void, reject: (e: unknown) => void) =>
+      Promise.resolve({ data: null, error: null }).then(resolve, reject)
 
-  const mockFrom = vi.fn().mockReturnValue(chain)
-  const mockSupabase = {
-    from: mockFrom,
-    auth: { getUser: vi.fn() },
-  }
+    const mockFrom = vi.fn().mockReturnValue(chain)
+    const mockSupabase = {
+      from: mockFrom,
+      auth: { getUser: vi.fn() },
+    }
 
-  const mockPushNotifications = {
-    checkPermissions: vi.fn().mockResolvedValue({ receive: 'granted' }),
-    requestPermissions: vi.fn().mockResolvedValue({ receive: 'granted' }),
-    addListener: vi.fn().mockResolvedValue(undefined),
-    register: vi.fn().mockResolvedValue(undefined),
-    removeAllListeners: vi.fn().mockResolvedValue(undefined),
-  }
+    const mockPushNotifications = {
+      checkPermissions: vi.fn().mockResolvedValue({ receive: 'granted' }),
+      requestPermissions: vi.fn().mockResolvedValue({ receive: 'granted' }),
+      addListener: vi.fn().mockResolvedValue(undefined),
+      register: vi.fn().mockResolvedValue(undefined),
+      removeAllListeners: vi.fn().mockResolvedValue(undefined),
+    }
 
-  const mockHaptics = {
-    impact: vi.fn().mockResolvedValue(undefined),
-    notification: vi.fn().mockResolvedValue(undefined),
-  }
+    const mockHaptics = {
+      impact: vi.fn().mockResolvedValue(undefined),
+      notification: vi.fn().mockResolvedValue(undefined),
+    }
 
-  const mockLocalNotifications = {
-    schedule: vi.fn().mockResolvedValue(undefined),
-  }
+    const mockLocalNotifications = {
+      schedule: vi.fn().mockResolvedValue(undefined),
+    }
 
-  const mockCapacitor = {
-    getPlatform: vi.fn().mockReturnValue('android'),
-    isNativePlatform: vi.fn().mockReturnValue(true),
-  }
+    const mockCapacitor = {
+      getPlatform: vi.fn().mockReturnValue('android'),
+      isNativePlatform: vi.fn().mockReturnValue(true),
+    }
 
-  return {
-    mockSupabase,
-    mockPushNotifications,
-    mockHaptics,
-    mockLocalNotifications,
-    mockCapacitor,
-  }
-})
+    return {
+      mockSupabase,
+      mockPushNotifications,
+      mockHaptics,
+      mockLocalNotifications,
+      mockCapacitor,
+    }
+  })
 
 vi.mock('../../lib/supabaseMinimal', () => ({
   supabaseMinimal: mockSupabase,

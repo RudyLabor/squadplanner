@@ -2,7 +2,9 @@ import { describe, it, expect, vi } from 'vitest'
 import { render, screen, fireEvent } from '@testing-library/react'
 
 const getGameImageUrlMock = vi.fn().mockReturnValue('/images/valorant.jpg')
-const getGameGradientMock = vi.fn().mockReturnValue('linear-gradient(to bottom right, #ff4655, #0f1923)')
+const getGameGradientMock = vi
+  .fn()
+  .mockReturnValue('linear-gradient(to bottom right, #ff4655, #0f1923)')
 const getGameInitialMock = vi.fn().mockReturnValue('V')
 const hasGameImageMock = vi.fn().mockReturnValue(true)
 

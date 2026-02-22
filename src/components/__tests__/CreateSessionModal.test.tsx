@@ -30,51 +30,99 @@ vi.mock('framer-motion', () => ({
   useAnimate: vi.fn().mockReturnValue([{ current: null }, vi.fn()]),
   useAnimation: vi.fn().mockReturnValue({ start: vi.fn(), stop: vi.fn() }),
   useReducedMotion: vi.fn().mockReturnValue(false),
-  m: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
-  motion: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
+  m: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
+  motion: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
 }))
 
 vi.mock('../../lib/supabaseMinimal', () => ({
-  supabaseMinimal: { auth: { getSession: vi.fn().mockResolvedValue({ data: { session: null } }) }, from: vi.fn().mockReturnValue({ select: vi.fn().mockReturnValue({ eq: vi.fn().mockReturnValue({ data: [], error: null }) }) }), rpc: vi.fn().mockResolvedValue({ data: null, error: null }), channel: vi.fn().mockReturnValue({ on: vi.fn().mockReturnThis(), subscribe: vi.fn() }), removeChannel: vi.fn() },
-  supabase: { auth: { getSession: vi.fn().mockResolvedValue({ data: { session: null } }) }, from: vi.fn().mockReturnValue({ select: vi.fn().mockReturnValue({ eq: vi.fn().mockReturnValue({ data: [], error: null }) }) }), rpc: vi.fn().mockResolvedValue({ data: null, error: null }), channel: vi.fn().mockReturnValue({ on: vi.fn().mockReturnThis(), subscribe: vi.fn() }), removeChannel: vi.fn() },
+  supabaseMinimal: {
+    auth: { getSession: vi.fn().mockResolvedValue({ data: { session: null } }) },
+    from: vi.fn().mockReturnValue({
+      select: vi.fn().mockReturnValue({ eq: vi.fn().mockReturnValue({ data: [], error: null }) }),
+    }),
+    rpc: vi.fn().mockResolvedValue({ data: null, error: null }),
+    channel: vi.fn().mockReturnValue({ on: vi.fn().mockReturnThis(), subscribe: vi.fn() }),
+    removeChannel: vi.fn(),
+  },
+  supabase: {
+    auth: { getSession: vi.fn().mockResolvedValue({ data: { session: null } }) },
+    from: vi.fn().mockReturnValue({
+      select: vi.fn().mockReturnValue({ eq: vi.fn().mockReturnValue({ data: [], error: null }) }),
+    }),
+    rpc: vi.fn().mockResolvedValue({ data: null, error: null }),
+    channel: vi.fn().mockReturnValue({ on: vi.fn().mockReturnThis(), subscribe: vi.fn() }),
+    removeChannel: vi.fn(),
+  },
   isSupabaseReady: vi.fn().mockReturnValue(true),
 }))
 
 vi.mock('../../hooks/useAuth', () => ({
   useAuthStore: Object.assign(
-    vi.fn().mockReturnValue({ user: { id: 'user-1', user_metadata: { username: 'TestUser' } }, profile: { id: 'user-1', username: 'TestUser' }, isLoading: false, isInitialized: true }),
-    { getState: vi.fn().mockReturnValue({ user: { id: 'user-1' }, profile: { id: 'user-1', username: 'TestUser' } }) }
+    vi.fn().mockReturnValue({
+      user: { id: 'user-1', user_metadata: { username: 'TestUser' } },
+      profile: { id: 'user-1', username: 'TestUser' },
+      isLoading: false,
+      isInitialized: true,
+    }),
+    {
+      getState: vi.fn().mockReturnValue({
+        user: { id: 'user-1' },
+        profile: { id: 'user-1', username: 'TestUser' },
+      }),
+    }
   ),
 }))
 
 vi.mock('../../hooks', () => ({
   useAuthStore: Object.assign(
-    vi.fn().mockReturnValue({ user: { id: 'user-1', user_metadata: { username: 'TestUser' } }, profile: { id: 'user-1', username: 'TestUser' }, isLoading: false, isInitialized: true }),
-    { getState: vi.fn().mockReturnValue({ user: { id: 'user-1' }, profile: { id: 'user-1', username: 'TestUser' } }) }
+    vi.fn().mockReturnValue({
+      user: { id: 'user-1', user_metadata: { username: 'TestUser' } },
+      profile: { id: 'user-1', username: 'TestUser' },
+      isLoading: false,
+      isInitialized: true,
+    }),
+    {
+      getState: vi.fn().mockReturnValue({
+        user: { id: 'user-1' },
+        profile: { id: 'user-1', username: 'TestUser' },
+      }),
+    }
   ),
-  useSquadsStore: vi.fn().mockReturnValue({ squads: [{ id: 'sq-1', name: 'TestSquad', game: 'Valorant' }] }),
+  useSquadsStore: vi
+    .fn()
+    .mockReturnValue({ squads: [{ id: 'sq-1', name: 'TestSquad', game: 'Valorant' }] }),
   useSessionsStore: vi.fn().mockReturnValue({ createSession: mockCreateSession, isLoading: false }),
   useHapticFeedback: vi.fn().mockReturnValue({ triggerHaptic: mockTriggerHaptic }),
 }))
 
 vi.mock('../../hooks/useSquads', () => ({
-  useSquadsStore: vi.fn().mockReturnValue({ squads: [{ id: 'sq-1', name: 'TestSquad', game: 'Valorant' }] }),
+  useSquadsStore: vi
+    .fn()
+    .mockReturnValue({ squads: [{ id: 'sq-1', name: 'TestSquad', game: 'Valorant' }] }),
 }))
 
 vi.mock('../../lib/i18n', () => ({
   useT: () => (key: string) => key,
   useLocale: () => 'fr',
-  useI18nStore: Object.assign(vi.fn().mockReturnValue({ locale: 'fr' }), { getState: vi.fn().mockReturnValue({ locale: 'fr' }) }),
+  useI18nStore: Object.assign(vi.fn().mockReturnValue({ locale: 'fr' }), {
+    getState: vi.fn().mockReturnValue({ locale: 'fr' }),
+  }),
 }))
 
 vi.mock('../../lib/toast', () => ({
@@ -93,8 +141,17 @@ vi.mock('../../lib/challengeTracker', () => ({
 }))
 
 vi.mock('../ui', () => ({
-  ResponsiveModal: ({ children, open, title }: any) => open ? createElement('div', { role: 'dialog' }, createElement('h2', null, title), children) : null,
-  Select: ({ options, value, onChange, placeholder }: any) => createElement('select', { value: value || '', onChange: (e: any) => onChange(e.target.value) }, placeholder ? createElement('option', { value: '' }, placeholder) : null, options?.map((o: any) => createElement('option', { key: o.value, value: o.value }, o.label))),
+  ResponsiveModal: ({ children, open, title }: any) =>
+    open
+      ? createElement('div', { role: 'dialog' }, createElement('h2', null, title), children)
+      : null,
+  Select: ({ options, value, onChange, placeholder }: any) =>
+    createElement(
+      'select',
+      { value: value || '', onChange: (e: any) => onChange(e.target.value) },
+      placeholder ? createElement('option', { value: '' }, placeholder) : null,
+      options?.map((o: any) => createElement('option', { key: o.value, value: o.value }, o.label))
+    ),
   Button: ({ children, ...props }: any) => createElement('button', props, children),
   Skeleton: ({ className }: any) => createElement('div', { className }),
 }))
@@ -335,7 +392,9 @@ describe('CreateSessionModal', () => {
       await user.click(screen.getByText('Créer la session'))
 
       await vi.waitFor(() => {
-        expect(mockShowSuccess).toHaveBeenCalledWith('Session créée ! Tes potes vont être notifiés.')
+        expect(mockShowSuccess).toHaveBeenCalledWith(
+          'Session créée ! Tes potes vont être notifiés.'
+        )
       })
       expect(mockTriggerHaptic).toHaveBeenCalledWith('success')
       expect(mockTrackChallenge).toHaveBeenCalledWith('user-1', 'create_session')
@@ -385,7 +444,7 @@ describe('CreateSessionModal', () => {
       render(<CreateSessionModal />)
       // The submit button has disabled={isLoading || !selectedSquadId}
       const submitBtns = screen.getAllByRole('button')
-      const submitBtn = submitBtns.find(b => b.getAttribute('type') === 'submit')
+      const submitBtn = submitBtns.find((b) => b.getAttribute('type') === 'submit')
       expect(submitBtn).toBeDisabled()
     })
   })

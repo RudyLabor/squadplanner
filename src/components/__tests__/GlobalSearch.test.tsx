@@ -32,28 +32,37 @@ const mockSupabaseFrom = vi.hoisted(() =>
   })
 )
 const mockSearchResultsList = vi.hoisted(() =>
-  vi.fn(({ query, results, groupedResults, selectedIndex, setSelectedIndex, onSelect, isLoading }: any) =>
-    createElement(
-      'div',
-      { 'data-testid': 'search-results' },
-      isLoading
-        ? 'Loading...'
-        : results.length > 0
-          ? results.map((r: any, i: number) =>
-              createElement(
-                'button',
-                {
-                  key: r.id,
-                  'data-testid': `result-${r.id}`,
-                  onClick: () => onSelect(r),
-                },
-                r.title
+  vi.fn(
+    ({
+      query,
+      results,
+      groupedResults,
+      selectedIndex,
+      setSelectedIndex,
+      onSelect,
+      isLoading,
+    }: any) =>
+      createElement(
+        'div',
+        { 'data-testid': 'search-results' },
+        isLoading
+          ? 'Loading...'
+          : results.length > 0
+            ? results.map((r: any, i: number) =>
+                createElement(
+                  'button',
+                  {
+                    key: r.id,
+                    'data-testid': `result-${r.id}`,
+                    onClick: () => onSelect(r),
+                  },
+                  r.title
+                )
               )
-            )
-          : query
-            ? 'No results'
-            : 'Empty'
-    )
+            : query
+              ? 'No results'
+              : 'Empty'
+      )
   )
 )
 
@@ -298,8 +307,7 @@ describe('GlobalSearch', () => {
         vi.advanceTimersByTime(200)
       })
       // The SearchResultsList mock should receive results containing the squad
-      const lastCall =
-        mockSearchResultsList.mock.calls[mockSearchResultsList.mock.calls.length - 1]
+      const lastCall = mockSearchResultsList.mock.calls[mockSearchResultsList.mock.calls.length - 1]
       if (lastCall) {
         const results = lastCall[0].results
         expect(results.some((r: any) => r.id === 'sq1')).toBe(true)
@@ -315,8 +323,7 @@ describe('GlobalSearch', () => {
       await act(async () => {
         vi.advanceTimersByTime(200)
       })
-      const lastCall =
-        mockSearchResultsList.mock.calls[mockSearchResultsList.mock.calls.length - 1]
+      const lastCall = mockSearchResultsList.mock.calls[mockSearchResultsList.mock.calls.length - 1]
       if (lastCall) {
         const squad = lastCall[0].results.find((r: any) => r.id === 'sq1')
         expect(squad?.subtitle).toBe('3 membres')
@@ -332,8 +339,7 @@ describe('GlobalSearch', () => {
       await act(async () => {
         vi.advanceTimersByTime(200)
       })
-      const lastCall =
-        mockSearchResultsList.mock.calls[mockSearchResultsList.mock.calls.length - 1]
+      const lastCall = mockSearchResultsList.mock.calls[mockSearchResultsList.mock.calls.length - 1]
       if (lastCall) {
         const squad = lastCall[0].results.find((r: any) => r.id === 'sq1')
         expect(squad?.subtitle).toBe('1 membre')
@@ -342,7 +348,12 @@ describe('GlobalSearch', () => {
 
     it('searches sessions by title', async () => {
       mockSessions.current = [
-        { id: 'sess1', title: 'Ranked Night', game: 'Valorant', scheduled_at: '2026-03-01T20:00:00Z' },
+        {
+          id: 'sess1',
+          title: 'Ranked Night',
+          game: 'Valorant',
+          scheduled_at: '2026-03-01T20:00:00Z',
+        },
       ]
       render(<GlobalSearch />)
       openSearch()
@@ -351,8 +362,7 @@ describe('GlobalSearch', () => {
       await act(async () => {
         vi.advanceTimersByTime(200)
       })
-      const lastCall =
-        mockSearchResultsList.mock.calls[mockSearchResultsList.mock.calls.length - 1]
+      const lastCall = mockSearchResultsList.mock.calls[mockSearchResultsList.mock.calls.length - 1]
       if (lastCall) {
         const results = lastCall[0].results
         expect(results.some((r: any) => r.id === 'sess1')).toBe(true)
@@ -370,8 +380,7 @@ describe('GlobalSearch', () => {
       await act(async () => {
         vi.advanceTimersByTime(200)
       })
-      const lastCall =
-        mockSearchResultsList.mock.calls[mockSearchResultsList.mock.calls.length - 1]
+      const lastCall = mockSearchResultsList.mock.calls[mockSearchResultsList.mock.calls.length - 1]
       if (lastCall) {
         const session = lastCall[0].results.find((r: any) => r.id === 'sess1')
         expect(session?.title).toBe('Valorant')
@@ -386,8 +395,7 @@ describe('GlobalSearch', () => {
       await act(async () => {
         vi.advanceTimersByTime(200)
       })
-      const lastCall =
-        mockSearchResultsList.mock.calls[mockSearchResultsList.mock.calls.length - 1]
+      const lastCall = mockSearchResultsList.mock.calls[mockSearchResultsList.mock.calls.length - 1]
       if (lastCall) {
         expect(lastCall[0].results.length).toBe(0)
       }
@@ -406,8 +414,7 @@ describe('GlobalSearch', () => {
       await act(async () => {
         vi.advanceTimersByTime(200)
       })
-      const lastCall =
-        mockSearchResultsList.mock.calls[mockSearchResultsList.mock.calls.length - 1]
+      const lastCall = mockSearchResultsList.mock.calls[mockSearchResultsList.mock.calls.length - 1]
       if (lastCall) {
         expect(lastCall[0].results.length).toBeLessThanOrEqual(10)
       }
@@ -536,10 +543,7 @@ describe('GlobalSearch', () => {
     })
 
     it('clicking history item sets the query', () => {
-      localStorage.setItem(
-        'squad_planner_search_history',
-        JSON.stringify(['past query'])
-      )
+      localStorage.setItem('squad_planner_search_history', JSON.stringify(['past query']))
       render(<GlobalSearch />)
       openSearch()
       fireEvent.click(screen.getByText('past query'))
@@ -548,20 +552,14 @@ describe('GlobalSearch', () => {
     })
 
     it('shows "Effacer" button to clear history', () => {
-      localStorage.setItem(
-        'squad_planner_search_history',
-        JSON.stringify(['query1'])
-      )
+      localStorage.setItem('squad_planner_search_history', JSON.stringify(['query1']))
       render(<GlobalSearch />)
       openSearch()
       expect(screen.getByLabelText("Effacer l'historique")).toBeInTheDocument()
     })
 
     it('clears history when "Effacer" button is clicked', () => {
-      localStorage.setItem(
-        'squad_planner_search_history',
-        JSON.stringify(['query1', 'query2'])
-      )
+      localStorage.setItem('squad_planner_search_history', JSON.stringify(['query1', 'query2']))
       render(<GlobalSearch />)
       openSearch()
       fireEvent.click(screen.getByLabelText("Effacer l'historique"))
@@ -684,8 +682,7 @@ describe('GlobalSearch', () => {
       await act(async () => {
         vi.advanceTimersByTime(200)
       })
-      const lastCall =
-        mockSearchResultsList.mock.calls[mockSearchResultsList.mock.calls.length - 1]
+      const lastCall = mockSearchResultsList.mock.calls[mockSearchResultsList.mock.calls.length - 1]
       if (lastCall) {
         const grouped = lastCall[0].groupedResults
         expect(grouped).toHaveProperty('squad')

@@ -40,18 +40,24 @@ vi.mock('framer-motion', () => ({
   useAnimate: vi.fn().mockReturnValue([{ current: null }, vi.fn()]),
   useAnimation: vi.fn().mockReturnValue({ start: vi.fn(), stop: vi.fn() }),
   useReducedMotion: vi.fn().mockReturnValue(false),
-  m: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
-  motion: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
+  m: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
+  motion: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
 }))
 
 vi.mock('../../lib/supabase-minimal-ssr', () => ({
@@ -66,7 +72,11 @@ vi.mock('../../lib/queryClient', () => ({
 
 vi.mock('../../components/ClientRouteWrapper', () => ({
   ClientRouteWrapper: ({ children, seeds }: any) =>
-    createElement('div', { 'data-testid': 'route-wrapper', 'data-seeds': JSON.stringify(seeds) }, children),
+    createElement(
+      'div',
+      { 'data-testid': 'route-wrapper', 'data-seeds': JSON.stringify(seeds) },
+      children
+    ),
 }))
 
 vi.mock('../../pages/SessionDetail', () => ({
@@ -167,7 +177,11 @@ describe('routes/session-detail', () => {
     it('returns canonical link to /sessions', () => {
       const result = meta()
       const canonical = result.find((m: any) => m.tagName === 'link')
-      expect(canonical).toEqual({ tagName: 'link', rel: 'canonical', href: 'https://squadplanner.fr/sessions' })
+      expect(canonical).toEqual({
+        tagName: 'link',
+        rel: 'canonical',
+        href: 'https://squadplanner.fr/sessions',
+      })
     })
 
     it('returns og:url', () => {
@@ -194,18 +208,31 @@ describe('routes/session-detail', () => {
   describe('loader', () => {
     it('returns null session when getUser returns error', async () => {
       setupSSRMocks({ error: new Error('no auth') })
-      const result = await loader({ request: makeRequest(), params: { id: 'sess-123' }, context: {} } as any)
+      const result = await loader({
+        request: makeRequest(),
+        params: { id: 'sess-123' },
+        context: {},
+      } as any)
       expect(result).toEqual({ session: null, rsvps: [], checkins: [] })
     })
 
     it('returns null session when user is null', async () => {
       setupSSRMocks({ user: null })
-      const result = await loader({ request: makeRequest(), params: { id: 'sess-123' }, context: {} } as any)
+      const result = await loader({
+        request: makeRequest(),
+        params: { id: 'sess-123' },
+        context: {},
+      } as any)
       expect(result).toEqual({ session: null, rsvps: [], checkins: [] })
     })
 
     it('fetches session, rsvps, and checkins in parallel', async () => {
-      const sessionData = { id: 'sess-123', squad_id: 's1', title: 'Game Night', scheduled_at: '2026-02-20T18:00:00Z' }
+      const sessionData = {
+        id: 'sess-123',
+        squad_id: 's1',
+        title: 'Game Night',
+        scheduled_at: '2026-02-20T18:00:00Z',
+      }
       const rsvpsData = [
         { session_id: 'sess-123', user_id: 'u1', response: 'present' },
         { session_id: 'sess-123', user_id: 'u2', response: 'absent' },
@@ -220,7 +247,11 @@ describe('routes/session-detail', () => {
 
       setupSSRMocks({ user: { id: 'u1' }, sessionData, rsvpsData, checkinsData, profilesData })
 
-      const result = await loader({ request: makeRequest(), params: { id: 'sess-123' }, context: {} } as any)
+      const result = await loader({
+        request: makeRequest(),
+        params: { id: 'sess-123' },
+        context: {},
+      } as any)
       expect(result.session).toBeDefined()
       expect(result.session!.id).toBe('sess-123')
       expect(result.session!.rsvps).toHaveLength(2)
@@ -235,12 +266,21 @@ describe('routes/session-detail', () => {
         checkinsData: [],
       })
 
-      const result = await loader({ request: makeRequest(), params: { id: 'nonexistent' }, context: {} } as any)
+      const result = await loader({
+        request: makeRequest(),
+        params: { id: 'nonexistent' },
+        context: {},
+      } as any)
       expect(result.session).toBeNull()
     })
 
     it('computes RSVP counts correctly', async () => {
-      const sessionData = { id: 'sess-1', squad_id: 's1', title: 'S', scheduled_at: '2026-02-20T18:00:00Z' }
+      const sessionData = {
+        id: 'sess-1',
+        squad_id: 's1',
+        title: 'S',
+        scheduled_at: '2026-02-20T18:00:00Z',
+      }
       const rsvpsData = [
         { session_id: 'sess-1', user_id: 'u1', response: 'present' },
         { session_id: 'sess-1', user_id: 'u2', response: 'present' },
@@ -249,45 +289,76 @@ describe('routes/session-detail', () => {
         { session_id: 'sess-1', user_id: 'u5', response: 'maybe' },
       ]
       const profilesData = [
-        { id: 'u1', username: 'A' }, { id: 'u2', username: 'B' },
-        { id: 'u3', username: 'C' }, { id: 'u4', username: 'D' }, { id: 'u5', username: 'E' },
+        { id: 'u1', username: 'A' },
+        { id: 'u2', username: 'B' },
+        { id: 'u3', username: 'C' },
+        { id: 'u4', username: 'D' },
+        { id: 'u5', username: 'E' },
       ]
 
       setupSSRMocks({ user: { id: 'u1' }, sessionData, rsvpsData, checkinsData: [], profilesData })
 
-      const result = await loader({ request: makeRequest(), params: { id: 'sess-1' }, context: {} } as any)
+      const result = await loader({
+        request: makeRequest(),
+        params: { id: 'sess-1' },
+        context: {},
+      } as any)
       expect(result.session!.rsvp_counts).toEqual({ present: 2, absent: 1, maybe: 2 })
     })
 
     it('sets my_rsvp from current user RSVP', async () => {
-      const sessionData = { id: 'sess-1', squad_id: 's1', title: 'S', scheduled_at: '2026-02-20T18:00:00Z' }
+      const sessionData = {
+        id: 'sess-1',
+        squad_id: 's1',
+        title: 'S',
+        scheduled_at: '2026-02-20T18:00:00Z',
+      }
       const rsvpsData = [
         { session_id: 'sess-1', user_id: 'u1', response: 'maybe' },
         { session_id: 'sess-1', user_id: 'u2', response: 'present' },
       ]
-      const profilesData = [{ id: 'u1', username: 'A' }, { id: 'u2', username: 'B' }]
+      const profilesData = [
+        { id: 'u1', username: 'A' },
+        { id: 'u2', username: 'B' },
+      ]
 
       setupSSRMocks({ user: { id: 'u1' }, sessionData, rsvpsData, checkinsData: [], profilesData })
 
-      const result = await loader({ request: makeRequest(), params: { id: 'sess-1' }, context: {} } as any)
+      const result = await loader({
+        request: makeRequest(),
+        params: { id: 'sess-1' },
+        context: {},
+      } as any)
       expect(result.session!.my_rsvp).toBe('maybe')
     })
 
     it('sets my_rsvp to null when user has not responded', async () => {
-      const sessionData = { id: 'sess-1', squad_id: 's1', title: 'S', scheduled_at: '2026-02-20T18:00:00Z' }
-      const rsvpsData = [
-        { session_id: 'sess-1', user_id: 'other', response: 'present' },
-      ]
+      const sessionData = {
+        id: 'sess-1',
+        squad_id: 's1',
+        title: 'S',
+        scheduled_at: '2026-02-20T18:00:00Z',
+      }
+      const rsvpsData = [{ session_id: 'sess-1', user_id: 'other', response: 'present' }]
       const profilesData = [{ id: 'other', username: 'Other' }]
 
       setupSSRMocks({ user: { id: 'u1' }, sessionData, rsvpsData, checkinsData: [], profilesData })
 
-      const result = await loader({ request: makeRequest(), params: { id: 'sess-1' }, context: {} } as any)
+      const result = await loader({
+        request: makeRequest(),
+        params: { id: 'sess-1' },
+        context: {},
+      } as any)
       expect(result.session!.my_rsvp).toBeNull()
     })
 
     it('attaches profile data to rsvps', async () => {
-      const sessionData = { id: 'sess-1', squad_id: 's1', title: 'S', scheduled_at: '2026-02-20T18:00:00Z' }
+      const sessionData = {
+        id: 'sess-1',
+        squad_id: 's1',
+        title: 'S',
+        scheduled_at: '2026-02-20T18:00:00Z',
+      }
       const rsvpsData = [
         { session_id: 'sess-1', user_id: 'u1', response: 'present' },
         { session_id: 'sess-1', user_id: 'u2', response: 'absent' },
@@ -299,54 +370,103 @@ describe('routes/session-detail', () => {
 
       setupSSRMocks({ user: { id: 'u1' }, sessionData, rsvpsData, checkinsData: [], profilesData })
 
-      const result = await loader({ request: makeRequest(), params: { id: 'sess-1' }, context: {} } as any)
+      const result = await loader({
+        request: makeRequest(),
+        params: { id: 'sess-1' },
+        context: {},
+      } as any)
       expect(result.session!.rsvps[0].profiles).toEqual({ id: 'u1', username: 'Alice' })
       expect(result.session!.rsvps[1].profiles).toEqual({ id: 'u2', username: 'Bob' })
     })
 
     it('defaults profile to fallback when user profile is not found', async () => {
-      const sessionData = { id: 'sess-1', squad_id: 's1', title: 'S', scheduled_at: '2026-02-20T18:00:00Z' }
-      const rsvpsData = [
-        { session_id: 'sess-1', user_id: 'u-unknown', response: 'present' },
-      ]
+      const sessionData = {
+        id: 'sess-1',
+        squad_id: 's1',
+        title: 'S',
+        scheduled_at: '2026-02-20T18:00:00Z',
+      }
+      const rsvpsData = [{ session_id: 'sess-1', user_id: 'u-unknown', response: 'present' }]
 
-      setupSSRMocks({ user: { id: 'u1' }, sessionData, rsvpsData, checkinsData: [], profilesData: [] })
+      setupSSRMocks({
+        user: { id: 'u1' },
+        sessionData,
+        rsvpsData,
+        checkinsData: [],
+        profilesData: [],
+      })
 
-      const result = await loader({ request: makeRequest(), params: { id: 'sess-1' }, context: {} } as any)
+      const result = await loader({
+        request: makeRequest(),
+        params: { id: 'sess-1' },
+        context: {},
+      } as any)
       expect(result.session!.rsvps[0].profiles).toEqual({ id: 'u-unknown', username: 'Joueur' })
     })
 
     it('does not fetch profiles when no rsvps exist', async () => {
-      const sessionData = { id: 'sess-1', squad_id: 's1', title: 'S', scheduled_at: '2026-02-20T18:00:00Z' }
+      const sessionData = {
+        id: 'sess-1',
+        squad_id: 's1',
+        title: 'S',
+        scheduled_at: '2026-02-20T18:00:00Z',
+      }
 
       setupSSRMocks({ user: { id: 'u1' }, sessionData, rsvpsData: [], checkinsData: [] })
 
-      const result = await loader({ request: makeRequest(), params: { id: 'sess-1' }, context: {} } as any)
+      const result = await loader({
+        request: makeRequest(),
+        params: { id: 'sess-1' },
+        context: {},
+      } as any)
       expect(result.session!.rsvps).toEqual([])
       expect(result.session!.rsvp_counts).toEqual({ present: 0, absent: 0, maybe: 0 })
     })
 
     it('handles null rsvps data gracefully', async () => {
-      const sessionData = { id: 'sess-1', squad_id: 's1', title: 'S', scheduled_at: '2026-02-20T18:00:00Z' }
+      const sessionData = {
+        id: 'sess-1',
+        squad_id: 's1',
+        title: 'S',
+        scheduled_at: '2026-02-20T18:00:00Z',
+      }
 
       setupSSRMocks({ user: { id: 'u1' }, sessionData, rsvpsData: null, checkinsData: [] })
 
-      const result = await loader({ request: makeRequest(), params: { id: 'sess-1' }, context: {} } as any)
+      const result = await loader({
+        request: makeRequest(),
+        params: { id: 'sess-1' },
+        context: {},
+      } as any)
       expect(result.session!.rsvps).toEqual([])
       expect(result.session!.rsvp_counts).toEqual({ present: 0, absent: 0, maybe: 0 })
     })
 
     it('handles null checkins data gracefully', async () => {
-      const sessionData = { id: 'sess-1', squad_id: 's1', title: 'S', scheduled_at: '2026-02-20T18:00:00Z' }
+      const sessionData = {
+        id: 'sess-1',
+        squad_id: 's1',
+        title: 'S',
+        scheduled_at: '2026-02-20T18:00:00Z',
+      }
 
       setupSSRMocks({ user: { id: 'u1' }, sessionData, rsvpsData: [], checkinsData: null })
 
-      const result = await loader({ request: makeRequest(), params: { id: 'sess-1' }, context: {} } as any)
+      const result = await loader({
+        request: makeRequest(),
+        params: { id: 'sess-1' },
+        context: {},
+      } as any)
       expect(result.session!.checkins).toEqual([])
     })
 
     it('deduplicates user IDs for profile fetch', async () => {
-      const sessionData = { id: 'sess-1', squad_id: 's1', title: 'S', scheduled_at: '2026-02-20T18:00:00Z' }
+      const sessionData = {
+        id: 'sess-1',
+        squad_id: 's1',
+        title: 'S',
+        scheduled_at: '2026-02-20T18:00:00Z',
+      }
       // Same user_id appearing twice (edge case)
       const rsvpsData = [
         { session_id: 'sess-1', user_id: 'u1', response: 'present' },
@@ -356,7 +476,11 @@ describe('routes/session-detail', () => {
 
       setupSSRMocks({ user: { id: 'u1' }, sessionData, rsvpsData, checkinsData: [], profilesData })
 
-      const result = await loader({ request: makeRequest(), params: { id: 'sess-1' }, context: {} } as any)
+      const result = await loader({
+        request: makeRequest(),
+        params: { id: 'sess-1' },
+        context: {},
+      } as any)
       // Both rsvps should get the same profile
       expect(result.session!.rsvps[0].profiles).toEqual({ id: 'u1', username: 'Alice' })
       expect(result.session!.rsvps[1].profiles).toEqual({ id: 'u1', username: 'Alice' })
@@ -379,7 +503,9 @@ describe('routes/session-detail', () => {
       const qc = makeQC()
       const loaderData = { session: null }
       render(
-        createElement(QueryClientProvider, { client: qc },
+        createElement(
+          QueryClientProvider,
+          { client: qc },
           createElement(DefaultExport, { loaderData } as any)
         )
       )
@@ -390,7 +516,9 @@ describe('routes/session-detail', () => {
       const qc = makeQC()
       const loaderData = { session: { id: 'sess-123', title: 'Game' } }
       render(
-        createElement(QueryClientProvider, { client: qc },
+        createElement(
+          QueryClientProvider,
+          { client: qc },
           createElement(DefaultExport, { loaderData } as any)
         )
       )
@@ -404,7 +532,9 @@ describe('routes/session-detail', () => {
       const qc = makeQC()
       const loaderData = { session: null }
       render(
-        createElement(QueryClientProvider, { client: qc },
+        createElement(
+          QueryClientProvider,
+          { client: qc },
           createElement(DefaultExport, { loaderData } as any)
         )
       )
@@ -416,7 +546,9 @@ describe('routes/session-detail', () => {
     it('renders without crashing', () => {
       const qc = makeQC()
       const { container } = render(
-        createElement(QueryClientProvider, { client: qc },
+        createElement(
+          QueryClientProvider,
+          { client: qc },
           createElement(DefaultExport, { loaderData: { session: null } } as any)
         )
       )

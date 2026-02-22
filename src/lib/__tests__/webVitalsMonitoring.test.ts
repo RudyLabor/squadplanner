@@ -1,14 +1,16 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 
 // Mock import.meta.env before imports
-vi.stubGlobal('import', { meta: { env: { VITE_BUILD_VERSION: '1.0.0', VITE_GIT_BRANCH: 'main', PROD: false } } })
+vi.stubGlobal('import', {
+  meta: { env: { VITE_BUILD_VERSION: '1.0.0', VITE_GIT_BRANCH: 'main', PROD: false } },
+})
 
 // We need to mock PerformanceObserver, fetch, navigator, window globals
 // The module uses them at construction time
 
 const mockObserve = vi.fn()
 const mockDisconnect = vi.fn()
-let observerCallbacks: Map<string, (list: { getEntries: () => any[] }) => void> = new Map()
+const observerCallbacks: Map<string, (list: { getEntries: () => any[] }) => void> = new Map()
 
 class MockPerformanceObserver {
   callback: (list: { getEntries: () => any[] }) => void
@@ -58,9 +60,30 @@ describe('webVitalsMonitoring', () => {
       const budget = new PerformanceBudget()
       const metrics = {
         sessionId: 'test-session',
-        lcp: { name: 'LCP' as const, value: 2000, rating: 'good' as const, timestamp: Date.now(), url: '', userAgent: '' },
-        fcp: { name: 'FCP' as const, value: 1500, rating: 'good' as const, timestamp: Date.now(), url: '', userAgent: '' },
-        cls: { name: 'CLS' as const, value: 0.05, rating: 'good' as const, timestamp: Date.now(), url: '', userAgent: '' },
+        lcp: {
+          name: 'LCP' as const,
+          value: 2000,
+          rating: 'good' as const,
+          timestamp: Date.now(),
+          url: '',
+          userAgent: '',
+        },
+        fcp: {
+          name: 'FCP' as const,
+          value: 1500,
+          rating: 'good' as const,
+          timestamp: Date.now(),
+          url: '',
+          userAgent: '',
+        },
+        cls: {
+          name: 'CLS' as const,
+          value: 0.05,
+          rating: 'good' as const,
+          timestamp: Date.now(),
+          url: '',
+          userAgent: '',
+        },
         timeToInteractive: 2500,
       }
       const result = budget.checkBudget(metrics)
@@ -72,7 +95,14 @@ describe('webVitalsMonitoring', () => {
       const budget = new PerformanceBudget()
       const metrics = {
         sessionId: 'test-session',
-        lcp: { name: 'LCP' as const, value: 3000, rating: 'needs-improvement' as const, timestamp: Date.now(), url: '', userAgent: '' },
+        lcp: {
+          name: 'LCP' as const,
+          value: 3000,
+          rating: 'needs-improvement' as const,
+          timestamp: Date.now(),
+          url: '',
+          userAgent: '',
+        },
       }
       const result = budget.checkBudget(metrics)
       expect(result.passed).toBe(false)
@@ -86,7 +116,14 @@ describe('webVitalsMonitoring', () => {
       const budget = new PerformanceBudget()
       const metrics = {
         sessionId: 'test-session',
-        fcp: { name: 'FCP' as const, value: 2000, rating: 'needs-improvement' as const, timestamp: Date.now(), url: '', userAgent: '' },
+        fcp: {
+          name: 'FCP' as const,
+          value: 2000,
+          rating: 'needs-improvement' as const,
+          timestamp: Date.now(),
+          url: '',
+          userAgent: '',
+        },
       }
       const result = budget.checkBudget(metrics)
       expect(result.passed).toBe(false)
@@ -99,7 +136,14 @@ describe('webVitalsMonitoring', () => {
       const budget = new PerformanceBudget()
       const metrics = {
         sessionId: 'test-session',
-        cls: { name: 'CLS' as const, value: 0.2, rating: 'needs-improvement' as const, timestamp: Date.now(), url: '', userAgent: '' },
+        cls: {
+          name: 'CLS' as const,
+          value: 0.2,
+          rating: 'needs-improvement' as const,
+          timestamp: Date.now(),
+          url: '',
+          userAgent: '',
+        },
       }
       const result = budget.checkBudget(metrics)
       expect(result.passed).toBe(false)
@@ -125,9 +169,30 @@ describe('webVitalsMonitoring', () => {
       const budget = new PerformanceBudget()
       const metrics = {
         sessionId: 'test-session',
-        lcp: { name: 'LCP' as const, value: 5000, rating: 'poor' as const, timestamp: Date.now(), url: '', userAgent: '' },
-        fcp: { name: 'FCP' as const, value: 4000, rating: 'poor' as const, timestamp: Date.now(), url: '', userAgent: '' },
-        cls: { name: 'CLS' as const, value: 0.3, rating: 'poor' as const, timestamp: Date.now(), url: '', userAgent: '' },
+        lcp: {
+          name: 'LCP' as const,
+          value: 5000,
+          rating: 'poor' as const,
+          timestamp: Date.now(),
+          url: '',
+          userAgent: '',
+        },
+        fcp: {
+          name: 'FCP' as const,
+          value: 4000,
+          rating: 'poor' as const,
+          timestamp: Date.now(),
+          url: '',
+          userAgent: '',
+        },
+        cls: {
+          name: 'CLS' as const,
+          value: 0.3,
+          rating: 'poor' as const,
+          timestamp: Date.now(),
+          url: '',
+          userAgent: '',
+        },
         timeToInteractive: 5000,
       }
       const result = budget.checkBudget(metrics)
@@ -147,9 +212,30 @@ describe('webVitalsMonitoring', () => {
       const budget = new PerformanceBudget()
       const metrics = {
         sessionId: 'test-session',
-        lcp: { name: 'LCP' as const, value: 2500, rating: 'good' as const, timestamp: Date.now(), url: '', userAgent: '' },
-        fcp: { name: 'FCP' as const, value: 1800, rating: 'good' as const, timestamp: Date.now(), url: '', userAgent: '' },
-        cls: { name: 'CLS' as const, value: 0.1, rating: 'good' as const, timestamp: Date.now(), url: '', userAgent: '' },
+        lcp: {
+          name: 'LCP' as const,
+          value: 2500,
+          rating: 'good' as const,
+          timestamp: Date.now(),
+          url: '',
+          userAgent: '',
+        },
+        fcp: {
+          name: 'FCP' as const,
+          value: 1800,
+          rating: 'good' as const,
+          timestamp: Date.now(),
+          url: '',
+          userAgent: '',
+        },
+        cls: {
+          name: 'CLS' as const,
+          value: 0.1,
+          rating: 'good' as const,
+          timestamp: Date.now(),
+          url: '',
+          userAgent: '',
+        },
         timeToInteractive: 3000,
       }
       const result = budget.checkBudget(metrics)
@@ -404,9 +490,7 @@ describe('webVitalsMonitoring', () => {
         const clsCallback = observerCallbacks.get('layout-shift')
         if (clsCallback) {
           clsCallback({
-            getEntries: () => [
-              { hadRecentInput: true, value: 0.5 },
-            ],
+            getEntries: () => [{ hadRecentInput: true, value: 0.5 }],
           })
         }
 
@@ -480,11 +564,7 @@ describe('webVitalsMonitoring', () => {
         const lcpCallback = observerCallbacks.get('largest-contentful-paint')
         if (lcpCallback) {
           lcpCallback({
-            getEntries: () => [
-              { startTime: 1000 },
-              { startTime: 1500 },
-              { startTime: 2200 },
-            ],
+            getEntries: () => [{ startTime: 1000 }, { startTime: 1500 }, { startTime: 2200 }],
           })
         }
 
@@ -523,10 +603,13 @@ describe('webVitalsMonitoring', () => {
           lcpCallback({ getEntries: () => [{ startTime: 2000 }] })
         }
 
-        expect(mockFetch).toHaveBeenCalledWith('/api/vitals', expect.objectContaining({
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-        }))
+        expect(mockFetch).toHaveBeenCalledWith(
+          '/api/vitals',
+          expect.objectContaining({
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+          })
+        )
       })
 
       it('logs warning for poor vitals', () => {
@@ -540,12 +623,14 @@ describe('webVitalsMonitoring', () => {
 
         // The class sendToMonitoring logs via console.warn with [PERFORMANCE ALERT] prefix
         // Format: console.warn(`[PERFORMANCE ALERT] ${name}: ${value} (${rating})`)
-        const allWarnCalls = warnSpy.mock.calls.map(c => c[0])
-        const allErrorCalls = errorSpy.mock.calls.map(c => c[0])
+        const allWarnCalls = warnSpy.mock.calls.map((c) => c[0])
+        const allErrorCalls = errorSpy.mock.calls.map((c) => c[0])
         const allLogs = [...allWarnCalls, ...allErrorCalls]
-        expect(allLogs.some((msg: string) =>
-          typeof msg === 'string' && msg.includes('PERFORMANCE ALERT')
-        )).toBe(true)
+        expect(
+          allLogs.some(
+            (msg: string) => typeof msg === 'string' && msg.includes('PERFORMANCE ALERT')
+          )
+        ).toBe(true)
 
         warnSpy.mockRestore()
         errorSpy.mockRestore()

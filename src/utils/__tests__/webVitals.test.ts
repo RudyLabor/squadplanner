@@ -105,10 +105,7 @@ describe('webVitals', () => {
       const handler = mockOnLCP.mock.calls[0]?.[0]
       handler({ name: 'FCP', value: 1800, rating: 'needs-improvement' })
 
-      expect(consoleSpy).toHaveBeenCalledWith(
-        expect.anything(),
-        expect.stringContaining('#ffa400')
-      )
+      expect(consoleSpy).toHaveBeenCalledWith(expect.anything(), expect.stringContaining('#ffa400'))
     })
 
     it('should log poor metric in red', async () => {
@@ -121,10 +118,7 @@ describe('webVitals', () => {
       const handler = mockOnLCP.mock.calls[0]?.[0]
       handler({ name: 'TTFB', value: 5000, rating: 'poor' })
 
-      expect(consoleSpy).toHaveBeenCalledWith(
-        expect.anything(),
-        expect.stringContaining('#ff4e42')
-      )
+      expect(consoleSpy).toHaveBeenCalledWith(expect.anything(), expect.stringContaining('#ff4e42'))
     })
 
     it('should format CLS with 3 decimal places', async () => {
@@ -137,10 +131,7 @@ describe('webVitals', () => {
       const handler = mockOnCLS.mock.calls[0]?.[0]
       handler({ name: 'CLS', value: 0.125, rating: 'good' })
 
-      expect(consoleSpy).toHaveBeenCalledWith(
-        expect.stringContaining('0.125ms'),
-        expect.anything()
-      )
+      expect(consoleSpy).toHaveBeenCalledWith(expect.stringContaining('0.125ms'), expect.anything())
     })
 
     it('should format non-CLS metrics with 0 decimal places', async () => {

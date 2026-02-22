@@ -38,24 +38,32 @@ vi.mock('framer-motion', () => ({
   useAnimate: vi.fn().mockReturnValue([{ current: null }, vi.fn()]),
   useAnimation: vi.fn().mockReturnValue({ start: vi.fn(), stop: vi.fn() }),
   useReducedMotion: vi.fn().mockReturnValue(false),
-  m: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
-  motion: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
+  m: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
+  motion: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
 }))
 
 vi.mock('../../lib/supabase-minimal-ssr', () => ({
   createMinimalSSRClient: mockCreateMinimalSSRClient,
 }))
-vi.mock('../../pages/CallHistory', () => ({ CallHistory: () => createElement('div', { 'data-testid': 'call-history' }, 'CallHistory') }))
+vi.mock('../../pages/CallHistory', () => ({
+  CallHistory: () => createElement('div', { 'data-testid': 'call-history' }, 'CallHistory'),
+}))
 
 import DefaultExport, { loader, meta, headers } from '../call-history'
 
@@ -101,7 +109,11 @@ describe('routes/call-history', () => {
 
       // 2 - canonical link
       const canonical = result.find((m: any) => m.tagName === 'link')
-      expect(canonical).toEqual({ tagName: 'link', rel: 'canonical', href: 'https://squadplanner.fr/call-history' })
+      expect(canonical).toEqual({
+        tagName: 'link',
+        rel: 'canonical',
+        href: 'https://squadplanner.fr/call-history',
+      })
 
       // 3 - og:url
       const ogUrl = result.find((m: any) => m.property === 'og:url')
@@ -208,7 +220,10 @@ describe('routes/call-history', () => {
       expect(result.userId).toBeNull()
 
       // 2 - passes headers to data()
-      expect(mockData).toHaveBeenCalledWith({ userId: null }, expect.objectContaining({ headers: expect.any(Headers) }))
+      expect(mockData).toHaveBeenCalledWith(
+        { userId: null },
+        expect.objectContaining({ headers: expect.any(Headers) })
+      )
 
       // 3 - shape matches
       expect(result).toEqual({ userId: null })

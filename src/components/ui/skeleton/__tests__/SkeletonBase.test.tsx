@@ -1,7 +1,14 @@
 import { describe, it, expect } from 'vitest'
 import { render, screen } from '@testing-library/react'
 
-import { Skeleton, SkeletonText, SkeletonAvatar, SkeletonButton, SkeletonCard, SkeletonWrapper } from '../SkeletonBase'
+import {
+  Skeleton,
+  SkeletonText,
+  SkeletonAvatar,
+  SkeletonButton,
+  SkeletonCard,
+  SkeletonWrapper,
+} from '../SkeletonBase'
 
 describe('SkeletonBase', () => {
   it('Skeleton renders without crash', () => {

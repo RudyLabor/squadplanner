@@ -27,20 +27,88 @@ const mockH = vi.hoisted(() => {
   let capturedPremiumModalProps: any = null
 
   return {
-    mockCreateMutateAsync, mockJoinMutateAsync, mockFetchPremiumStatus, mockCanCreateSquad,
-    get mockSquads() { return mockSquads }, set mockSquads(v: any) { mockSquads = v },
-    get mockIsLoading() { return mockIsLoading }, set mockIsLoading(v: boolean) { mockIsLoading = v },
-    get mockUser() { return mockUser }, set mockUser(v: any) { mockUser = v },
-    get mockHasPremium() { return mockHasPremium }, set mockHasPremium(v: boolean) { mockHasPremium = v },
-    get mockUserSquadCount() { return mockUserSquadCount }, set mockUserSquadCount(v: number) { mockUserSquadCount = v },
-    get mockCreatePending() { return mockCreatePending }, set mockCreatePending(v: boolean) { mockCreatePending = v },
-    get mockJoinPending() { return mockJoinPending }, set mockJoinPending(v: boolean) { mockJoinPending = v },
-    get mockIsInVoiceChat() { return mockIsInVoiceChat }, set mockIsInVoiceChat(v: boolean) { mockIsInVoiceChat = v },
-    get mockCurrentChannel() { return mockCurrentChannel }, set mockCurrentChannel(v: any) { mockCurrentChannel = v },
-    get capturedSquadCardProps() { return capturedSquadCardProps }, set capturedSquadCardProps(v: any) { capturedSquadCardProps = v },
-    get capturedJoinFormProps() { return capturedJoinFormProps }, set capturedJoinFormProps(v: any) { capturedJoinFormProps = v },
-    get capturedCreateFormProps() { return capturedCreateFormProps }, set capturedCreateFormProps(v: any) { capturedCreateFormProps = v },
-    get capturedPremiumModalProps() { return capturedPremiumModalProps }, set capturedPremiumModalProps(v: any) { capturedPremiumModalProps = v },
+    mockCreateMutateAsync,
+    mockJoinMutateAsync,
+    mockFetchPremiumStatus,
+    mockCanCreateSquad,
+    get mockSquads() {
+      return mockSquads
+    },
+    set mockSquads(v: any) {
+      mockSquads = v
+    },
+    get mockIsLoading() {
+      return mockIsLoading
+    },
+    set mockIsLoading(v: boolean) {
+      mockIsLoading = v
+    },
+    get mockUser() {
+      return mockUser
+    },
+    set mockUser(v: any) {
+      mockUser = v
+    },
+    get mockHasPremium() {
+      return mockHasPremium
+    },
+    set mockHasPremium(v: boolean) {
+      mockHasPremium = v
+    },
+    get mockUserSquadCount() {
+      return mockUserSquadCount
+    },
+    set mockUserSquadCount(v: number) {
+      mockUserSquadCount = v
+    },
+    get mockCreatePending() {
+      return mockCreatePending
+    },
+    set mockCreatePending(v: boolean) {
+      mockCreatePending = v
+    },
+    get mockJoinPending() {
+      return mockJoinPending
+    },
+    set mockJoinPending(v: boolean) {
+      mockJoinPending = v
+    },
+    get mockIsInVoiceChat() {
+      return mockIsInVoiceChat
+    },
+    set mockIsInVoiceChat(v: boolean) {
+      mockIsInVoiceChat = v
+    },
+    get mockCurrentChannel() {
+      return mockCurrentChannel
+    },
+    set mockCurrentChannel(v: any) {
+      mockCurrentChannel = v
+    },
+    get capturedSquadCardProps() {
+      return capturedSquadCardProps
+    },
+    set capturedSquadCardProps(v: any) {
+      capturedSquadCardProps = v
+    },
+    get capturedJoinFormProps() {
+      return capturedJoinFormProps
+    },
+    set capturedJoinFormProps(v: any) {
+      capturedJoinFormProps = v
+    },
+    get capturedCreateFormProps() {
+      return capturedCreateFormProps
+    },
+    set capturedCreateFormProps(v: any) {
+      capturedCreateFormProps = v
+    },
+    get capturedPremiumModalProps() {
+      return capturedPremiumModalProps
+    },
+    set capturedPremiumModalProps(v: any) {
+      capturedPremiumModalProps = v
+    },
   }
 })
 
@@ -52,7 +120,8 @@ vi.mock('react-router', () => ({
   useSearchParams: vi.fn().mockReturnValue([new URLSearchParams(), vi.fn()]),
   useLoaderData: vi.fn().mockReturnValue({}),
   Link: ({ children, to, ...props }: any) => createElement('a', { href: to, ...props }, children),
-  NavLink: ({ children, to, ...props }: any) => createElement('a', { href: to, ...props }, children),
+  NavLink: ({ children, to, ...props }: any) =>
+    createElement('a', { href: to, ...props }, children),
   Outlet: () => null,
   useMatches: vi.fn().mockReturnValue([]),
 }))
@@ -62,7 +131,8 @@ vi.mock('framer-motion', () => ({
   AnimatePresence: ({ children }: any) => children,
   LazyMotion: ({ children }: any) => children,
   MotionConfig: ({ children }: any) => children,
-  domAnimation: {}, domMax: {},
+  domAnimation: {},
+  domMax: {},
   useInView: vi.fn().mockReturnValue(true),
   useScroll: vi.fn().mockReturnValue({ scrollYProgress: { get: () => 0 } }),
   useTransform: vi.fn().mockReturnValue(0),
@@ -71,8 +141,24 @@ vi.mock('framer-motion', () => ({
   useAnimate: vi.fn().mockReturnValue([{ current: null }, vi.fn()]),
   useAnimation: vi.fn().mockReturnValue({ start: vi.fn(), stop: vi.fn() }),
   useReducedMotion: vi.fn().mockReturnValue(false),
-  m: new Proxy({}, { get: (_t: any, p: string) => typeof p === 'string' ? ({ children, ...r }: any) => createElement(p, r, children) : undefined }),
-  motion: new Proxy({}, { get: (_t: any, p: string) => typeof p === 'string' ? ({ children, ...r }: any) => createElement(p, r, children) : undefined }),
+  m: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
+  motion: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
 }))
 
 // Mock supabase
@@ -97,21 +183,35 @@ vi.mock('../../lib/supabaseMinimal', () => ({
     channel: vi.fn().mockReturnValue({ on: vi.fn().mockReturnThis(), subscribe: vi.fn() }),
     removeChannel: vi.fn(),
   },
-  supabase: { auth: { getSession: vi.fn() }, from: vi.fn(), rpc: vi.fn(), channel: vi.fn().mockReturnValue({ on: vi.fn().mockReturnThis(), subscribe: vi.fn() }), removeChannel: vi.fn() },
+  supabase: {
+    auth: { getSession: vi.fn() },
+    from: vi.fn(),
+    rpc: vi.fn(),
+    channel: vi.fn().mockReturnValue({ on: vi.fn().mockReturnThis(), subscribe: vi.fn() }),
+    removeChannel: vi.fn(),
+  },
   isSupabaseReady: vi.fn().mockReturnValue(true),
 }))
 
 // Mock auth store
 vi.mock('../../hooks/useAuth', () => ({
   useAuthStore: Object.assign(
-    vi.fn(() => ({ user: mockH.mockUser, profile: { id: 'user-1', username: 'TestUser' }, isLoading: false })),
+    vi.fn(() => ({
+      user: mockH.mockUser,
+      profile: { id: 'user-1', username: 'TestUser' },
+      isLoading: false,
+    })),
     { getState: vi.fn().mockReturnValue({ user: { id: 'user-1' } }) }
   ),
 }))
 
 vi.mock('../../hooks', () => ({
   useAuthStore: Object.assign(
-    vi.fn(() => ({ user: mockH.mockUser, profile: { id: 'user-1', username: 'TestUser' }, isLoading: false })),
+    vi.fn(() => ({
+      user: mockH.mockUser,
+      profile: { id: 'user-1', username: 'TestUser' },
+      isLoading: false,
+    })),
     { getState: vi.fn().mockReturnValue({ user: { id: 'user-1' } }) }
   ),
   usePremiumStore: Object.assign(
@@ -127,25 +227,50 @@ vi.mock('../../hooks', () => ({
 }))
 
 // Mock toast & i18n
-vi.mock('../../lib/toast', () => ({ showSuccess: vi.fn(), showError: vi.fn(), showWarning: vi.fn(), showInfo: vi.fn() }))
+vi.mock('../../lib/toast', () => ({
+  showSuccess: vi.fn(),
+  showError: vi.fn(),
+  showWarning: vi.fn(),
+  showInfo: vi.fn(),
+}))
 vi.mock('../../lib/i18n', () => ({
-  useT: () => (key: string) => key, useLocale: () => 'fr',
-  useI18nStore: Object.assign(vi.fn().mockReturnValue({ locale: 'fr' }), { getState: vi.fn().mockReturnValue({ locale: 'fr' }) }),
+  useT: () => (key: string) => key,
+  useLocale: () => 'fr',
+  useI18nStore: Object.assign(vi.fn().mockReturnValue({ locale: 'fr' }), {
+    getState: vi.fn().mockReturnValue({ locale: 'fr' }),
+  }),
 }))
 
 // Mock voice chat
 vi.mock('../../hooks/useVoiceChat', () => ({
   useVoiceChatStore: Object.assign(
-    vi.fn(() => ({ isConnected: mockH.mockIsInVoiceChat, currentChannel: mockH.mockCurrentChannel, remoteUsers: [] })),
-    { getState: vi.fn().mockReturnValue({ isConnected: false }), subscribe: vi.fn().mockReturnValue(() => {}) }
+    vi.fn(() => ({
+      isConnected: mockH.mockIsInVoiceChat,
+      currentChannel: mockH.mockCurrentChannel,
+      remoteUsers: [],
+    })),
+    {
+      getState: vi.fn().mockReturnValue({ isConnected: false }),
+      subscribe: vi.fn().mockReturnValue(() => {}),
+    }
   ),
 }))
 
 // Mock query hooks
 vi.mock('../../hooks/queries/useSquadsQuery', () => ({
-  useSquadsQuery: vi.fn(() => ({ data: mockH.mockSquads, isLoading: mockH.mockIsLoading, isPending: mockH.mockIsLoading })),
-  useCreateSquadMutation: vi.fn(() => ({ mutateAsync: mockH.mockCreateMutateAsync, isPending: mockH.mockCreatePending })),
-  useJoinSquadMutation: vi.fn(() => ({ mutateAsync: mockH.mockJoinMutateAsync, isPending: mockH.mockJoinPending })),
+  useSquadsQuery: vi.fn(() => ({
+    data: mockH.mockSquads,
+    isLoading: mockH.mockIsLoading,
+    isPending: mockH.mockIsLoading,
+  })),
+  useCreateSquadMutation: vi.fn(() => ({
+    mutateAsync: mockH.mockCreateMutateAsync,
+    isPending: mockH.mockCreatePending,
+  })),
+  useJoinSquadMutation: vi.fn(() => ({
+    mutateAsync: mockH.mockJoinMutateAsync,
+    isPending: mockH.mockJoinPending,
+  })),
 }))
 
 // Mock premium
@@ -166,7 +291,8 @@ vi.mock('../../hooks/usePremium', () => ({
 vi.mock('../../components/LazyConfetti', () => ({ default: () => null }))
 
 vi.mock('../../components/ui', () => ({
-  Button: ({ children, onClick, ...props }: any) => createElement('button', { onClick, ...props }, children),
+  Button: ({ children, onClick, ...props }: any) =>
+    createElement('button', { onClick, ...props }, children),
   Card: ({ children, ...props }: any) => createElement('div', props, children),
   SquadCardSkeleton: () => createElement('div', { 'data-testid': 'skeleton' }),
 }))
@@ -179,9 +305,12 @@ vi.mock('../../components/icons', () => ({
 }))
 
 vi.mock('../../components/PremiumGate', () => ({
-  SquadLimitReached: ({ onUpgrade }: any) => createElement('div', { 'data-testid': 'squad-limit' },
-    createElement('button', { onClick: onUpgrade, 'data-testid': 'upgrade-btn' }, 'Upgrade')
-  ),
+  SquadLimitReached: ({ onUpgrade }: any) =>
+    createElement(
+      'div',
+      { 'data-testid': 'squad-limit' },
+      createElement('button', { onClick: onUpgrade, 'data-testid': 'upgrade-btn' }, 'Upgrade')
+    ),
   PremiumBadge: () => createElement('span', { 'data-testid': 'premium-badge' }, 'PRO'),
 }))
 
@@ -202,17 +331,47 @@ vi.mock('../squads/SquadCard', () => ({
 vi.mock('../squads/SquadForms', () => ({
   JoinSquadForm: (props: any) => {
     mockH.capturedJoinFormProps = props
-    return props.show ? createElement('div', { 'data-testid': 'join-form' },
-      createElement('button', { onClick: (e: any) => props.onSubmit(e || { preventDefault: () => {} }), 'data-testid': 'submit-join' }, 'Submit Join'),
-      createElement('button', { onClick: props.onCancel, 'data-testid': 'cancel-join' }, 'Cancel'),
-    ) : null
+    return props.show
+      ? createElement(
+          'div',
+          { 'data-testid': 'join-form' },
+          createElement(
+            'button',
+            {
+              onClick: (e: any) => props.onSubmit(e || { preventDefault: () => {} }),
+              'data-testid': 'submit-join',
+            },
+            'Submit Join'
+          ),
+          createElement(
+            'button',
+            { onClick: props.onCancel, 'data-testid': 'cancel-join' },
+            'Cancel'
+          )
+        )
+      : null
   },
   CreateSquadForm: (props: any) => {
     mockH.capturedCreateFormProps = props
-    return props.show ? createElement('div', { 'data-testid': 'create-form' },
-      createElement('button', { onClick: (e: any) => props.onSubmit(e || { preventDefault: () => {} }), 'data-testid': 'submit-create' }, 'Submit Create'),
-      createElement('button', { onClick: props.onCancel, 'data-testid': 'cancel-create' }, 'Cancel'),
-    ) : null
+    return props.show
+      ? createElement(
+          'div',
+          { 'data-testid': 'create-form' },
+          createElement(
+            'button',
+            {
+              onClick: (e: any) => props.onSubmit(e || { preventDefault: () => {} }),
+              'data-testid': 'submit-create',
+            },
+            'Submit Create'
+          ),
+          createElement(
+            'button',
+            { onClick: props.onCancel, 'data-testid': 'cancel-create' },
+            'Cancel'
+          )
+        )
+      : null
   },
 }))
 
@@ -256,7 +415,9 @@ describe('Squads Page', () => {
   })
 
   const renderSquads = (props = {}) =>
-    render(createElement(QueryClientProvider, { client: queryClient }, createElement(Squads, props)))
+    render(
+      createElement(QueryClientProvider, { client: queryClient }, createElement(Squads, props))
+    )
 
   // =================== LOADING STATE ===================
   describe('Loading state', () => {
@@ -394,7 +555,7 @@ describe('Squads Page', () => {
       renderSquads()
       // The "Créer" button in header
       const createBtns = screen.getAllByRole('button')
-      const createBtn = createBtns.find(b => b.textContent?.includes('Créer'))
+      const createBtn = createBtns.find((b) => b.textContent?.includes('Créer'))
       if (createBtn) {
         fireEvent.click(createBtn)
         expect(screen.getByTestId('premium-modal')).toBeTruthy()
@@ -408,7 +569,7 @@ describe('Squads Page', () => {
       mockH.mockSquads = [makeSquad()]
       renderSquads()
       const joinBtns = screen.getAllByRole('button')
-      const joinBtn = joinBtns.find(b => b.textContent?.includes('Rejoindre'))
+      const joinBtn = joinBtns.find((b) => b.textContent?.includes('Rejoindre'))
       if (joinBtn) fireEvent.click(joinBtn)
       expect(screen.getByTestId('join-form')).toBeTruthy()
     })
@@ -417,7 +578,7 @@ describe('Squads Page', () => {
       mockH.mockSquads = [makeSquad()]
       renderSquads()
       const joinBtns = screen.getAllByRole('button')
-      const joinBtn = joinBtns.find(b => b.textContent?.includes('Rejoindre'))
+      const joinBtn = joinBtns.find((b) => b.textContent?.includes('Rejoindre'))
       if (joinBtn) fireEvent.click(joinBtn)
       expect(screen.getByTestId('join-form')).toBeTruthy()
       fireEvent.click(screen.getByTestId('cancel-join'))
@@ -431,7 +592,7 @@ describe('Squads Page', () => {
       mockH.mockSquads = [makeSquad()]
       renderSquads()
       const btns = screen.getAllByRole('button')
-      const createBtn = btns.find(b => b.textContent?.includes('Créer'))
+      const createBtn = btns.find((b) => b.textContent?.includes('Créer'))
       if (createBtn) fireEvent.click(createBtn)
       expect(screen.getByTestId('create-form')).toBeTruthy()
     })
@@ -440,7 +601,7 @@ describe('Squads Page', () => {
       mockH.mockSquads = [makeSquad()]
       renderSquads()
       const btns = screen.getAllByRole('button')
-      const createBtn = btns.find(b => b.textContent?.includes('Créer'))
+      const createBtn = btns.find((b) => b.textContent?.includes('Créer'))
       if (createBtn) fireEvent.click(createBtn)
       expect(screen.getByTestId('create-form')).toBeTruthy()
       fireEvent.click(screen.getByTestId('cancel-create'))

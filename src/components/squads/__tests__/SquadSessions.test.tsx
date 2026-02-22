@@ -18,18 +18,24 @@ vi.mock('framer-motion', () => ({
   useAnimate: vi.fn().mockReturnValue([{ current: null }, vi.fn()]),
   useAnimation: vi.fn().mockReturnValue({ start: vi.fn(), stop: vi.fn() }),
   useReducedMotion: vi.fn().mockReturnValue(false),
-  m: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
-  motion: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
+  m: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
+  motion: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
 }))
 
 // Mock icons
@@ -44,20 +50,34 @@ vi.mock('../../icons', () => ({
 // Mock UI components
 vi.mock('../../ui', () => ({
   Button: ({ children, onClick, disabled, type, className, variant, size, ...props }: any) =>
-    createElement('button', { onClick, disabled, type, className, 'data-variant': variant, ...props }, children),
+    createElement(
+      'button',
+      { onClick, disabled, type, className, 'data-variant': variant, ...props },
+      children
+    ),
   Card: ({ children, className }: any) =>
     createElement('div', { className, 'data-testid': 'card' }, children),
-  CardContent: ({ children, className }: any) =>
-    createElement('div', { className }, children),
+  CardContent: ({ children, className }: any) => createElement('div', { className }, children),
   Badge: ({ children, variant }: any) =>
     createElement('span', { 'data-testid': 'badge', 'data-variant': variant }, children),
   Input: ({ label, value, onChange, placeholder, type, required, className }: any) =>
     createElement('div', null, [
       label ? createElement('label', { key: 'label' }, label) : null,
-      createElement('input', { key: 'input', value, onChange, placeholder, type, required, className, 'aria-label': label }),
+      createElement('input', {
+        key: 'input',
+        value,
+        onChange,
+        placeholder,
+        type,
+        required,
+        className,
+        'aria-label': label,
+      }),
     ]),
   Select: ({ options, value, onChange }: any) =>
-    createElement('select', { value, onChange: (e: any) => onChange(e.target.value) },
+    createElement(
+      'select',
+      { value, onChange: (e: any) => onChange(e.target.value) },
       options.map((o: any) => createElement('option', { key: o.value, value: o.value }, o.label))
     ),
 }))
@@ -65,7 +85,11 @@ vi.mock('../../ui', () => ({
 // Mock SessionCard - capture props
 vi.mock('../SessionCard', () => ({
   SessionCard: ({ session, onRsvp }: any) =>
-    createElement('div', { 'data-testid': `session-card-${session.id}` }, session.title || 'Session'),
+    createElement(
+      'div',
+      { 'data-testid': `session-card-${session.id}` },
+      session.title || 'Session'
+    ),
 }))
 
 // Mock hooks for PartySection
@@ -86,7 +110,15 @@ const futureDate = new Date(Date.now() + 48 * 60 * 60 * 1000).toISOString()
 const pastDate = new Date(Date.now() - 48 * 60 * 60 * 1000).toISOString()
 
 const mockSessions = [
-  { id: 'session-1', title: 'Ranked', game: 'Valorant', scheduled_at: futureDate, status: 'pending', rsvp_counts: { present: 2, absent: 0, maybe: 1 }, my_rsvp: null },
+  {
+    id: 'session-1',
+    title: 'Ranked',
+    game: 'Valorant',
+    scheduled_at: futureDate,
+    status: 'pending',
+    rsvp_counts: { present: 2, absent: 0, maybe: 1 },
+    my_rsvp: null,
+  },
 ]
 
 const mockOnRsvp = vi.fn()
@@ -98,17 +130,18 @@ describe('SquadSessionsList', () => {
     mockOnCreateSession.mockResolvedValue({ error: null })
   })
 
-  const renderList = (overrides: any = {}) => render(
-    <SquadSessionsList
-      sessions={mockSessions}
-      squadId="squad-1"
-      squadGame="Valorant"
-      onRsvp={mockOnRsvp}
-      onCreateSession={mockOnCreateSession}
-      sessionsLoading={false}
-      {...overrides}
-    />
-  )
+  const renderList = (overrides: any = {}) =>
+    render(
+      <SquadSessionsList
+        sessions={mockSessions}
+        squadId="squad-1"
+        squadGame="Valorant"
+        onRsvp={mockOnRsvp}
+        onCreateSession={mockOnCreateSession}
+        sessionsLoading={false}
+        {...overrides}
+      />
+    )
 
   // === SESSIONS LIST ===
 
@@ -123,18 +156,22 @@ describe('SquadSessionsList', () => {
   })
 
   it('filters out past sessions that are not confirmed', () => {
-    renderList({ sessions: [
-      { id: 's-past', title: 'Old', scheduled_at: pastDate, status: 'pending' },
-      ...mockSessions,
-    ]})
+    renderList({
+      sessions: [
+        { id: 's-past', title: 'Old', scheduled_at: pastDate, status: 'pending' },
+        ...mockSessions,
+      ],
+    })
     expect(screen.queryByTestId('session-card-s-past')).not.toBeInTheDocument()
     expect(screen.getByTestId('session-card-session-1')).toBeInTheDocument()
   })
 
   it('keeps confirmed sessions even if past', () => {
-    renderList({ sessions: [
-      { id: 's-confirmed', title: 'Confirmed', scheduled_at: pastDate, status: 'confirmed' },
-    ]})
+    renderList({
+      sessions: [
+        { id: 's-confirmed', title: 'Confirmed', scheduled_at: pastDate, status: 'confirmed' },
+      ],
+    })
     expect(screen.getByTestId('session-card-s-confirmed')).toBeInTheDocument()
   })
 
@@ -211,16 +248,20 @@ describe('SquadSessionsList', () => {
     fireEvent.change(screen.getByLabelText('Heure'), { target: { value: '20:00' } })
 
     // Find the submit button and click it; also submit the form to ensure onSubmit fires
-    const submitButton = screen.getAllByRole('button').find(b => b.getAttribute('type') === 'submit')!
+    const submitButton = screen
+      .getAllByRole('button')
+      .find((b) => b.getAttribute('type') === 'submit')!
     submitButton.click()
 
     await waitFor(() => {
-      expect(mockOnCreateSession).toHaveBeenCalledWith(expect.objectContaining({
-        squad_id: 'squad-1',
-        duration_minutes: 120,
-        auto_confirm_threshold: 3,
-        game: 'Valorant',
-      }))
+      expect(mockOnCreateSession).toHaveBeenCalledWith(
+        expect.objectContaining({
+          squad_id: 'squad-1',
+          duration_minutes: 120,
+          auto_confirm_threshold: 3,
+          game: 'Valorant',
+        })
+      )
     })
 
     // Form should close on success
@@ -238,7 +279,9 @@ describe('SquadSessionsList', () => {
     fireEvent.change(screen.getByLabelText('Heure'), { target: { value: '20:00' } })
 
     // Use native click on submit button to trigger form submission
-    const submitButton = screen.getAllByRole('button').find(b => b.getAttribute('type') === 'submit')!
+    const submitButton = screen
+      .getAllByRole('button')
+      .find((b) => b.getAttribute('type') === 'submit')!
     submitButton.click()
 
     await waitFor(() => {
@@ -252,7 +295,7 @@ describe('SquadSessionsList', () => {
     // When sessionsLoading=true, the submit button shows <Loader2> instead of "Créer"
     // Find the submit button by its type attribute
     const allButtons = screen.getAllByRole('button')
-    const submitButton = allButtons.find(b => b.getAttribute('type') === 'submit')
+    const submitButton = allButtons.find((b) => b.getAttribute('type') === 'submit')
     expect(submitButton).toBeDefined()
     expect(submitButton!.disabled).toBe(true)
   })
@@ -323,7 +366,10 @@ describe('PartySection', () => {
       isConnected: false,
       isConnecting: false,
       isMuted: false,
-      remoteUsers: [{ odrop: '1', username: 'P1', isSpeaking: false }, { odrop: '2', username: 'P2', isSpeaking: false }],
+      remoteUsers: [
+        { odrop: '1', username: 'P1', isSpeaking: false },
+        { odrop: '2', username: 'P2', isSpeaking: false },
+      ],
       joinChannel: vi.fn(),
       leaveChannel: vi.fn(),
       toggleMute: vi.fn(),
@@ -485,8 +531,14 @@ describe('PartySection', () => {
     const joinChannel = vi.fn()
     mockUseAuthStore.mockReturnValue({ user: null, profile: null })
     mockUseVoiceChatStore.mockReturnValue({
-      isConnected: false, isConnecting: false, isMuted: false,
-      remoteUsers: [], joinChannel, leaveChannel: vi.fn(), toggleMute: vi.fn(), error: null,
+      isConnected: false,
+      isConnecting: false,
+      isMuted: false,
+      remoteUsers: [],
+      joinChannel,
+      leaveChannel: vi.fn(),
+      toggleMute: vi.fn(),
+      error: null,
     })
     render(<PartySection squadId="squad-1" />)
     fireEvent.click(screen.getByText('Lancer une party'))

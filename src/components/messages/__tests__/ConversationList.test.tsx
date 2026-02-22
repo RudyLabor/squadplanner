@@ -14,7 +14,11 @@ vi.mock('../../icons', () => ({
 // Mock VirtualizedMessageList
 vi.mock('../../VirtualizedMessageList', () => ({
   ConversationListSkeleton: ({ count, type }: any) =>
-    createElement('div', { 'data-testid': 'conversation-list-skeleton', 'data-count': count, 'data-type': type }, `Loading ${count} ${type}`),
+    createElement(
+      'div',
+      { 'data-testid': 'conversation-list-skeleton', 'data-count': count, 'data-type': type },
+      `Loading ${count} ${type}`
+    ),
 }))
 
 // Mock EmptyState
@@ -29,7 +33,7 @@ vi.mock('../../EmptyState', () => ({
 
 // Mock utils
 vi.mock('../utils', () => ({
-  formatTime: (d: string) => d ? '12:00' : '',
+  formatTime: (d: string) => (d ? '12:00' : ''),
 }))
 
 const mockSquadConv: SquadConversation = {
@@ -191,7 +195,9 @@ describe('ConversationList', () => {
   it('calls onSearchChange when typing', () => {
     const onSearchChange = vi.fn()
     render(<ConversationList {...defaultProps} onSearchChange={onSearchChange} />)
-    fireEvent.change(screen.getByLabelText('Rechercher une conversation'), { target: { value: 'test' } })
+    fireEvent.change(screen.getByLabelText('Rechercher une conversation'), {
+      target: { value: 'test' },
+    })
     expect(onSearchChange).toHaveBeenCalledWith('test')
   })
 
@@ -227,7 +233,13 @@ describe('ConversationList', () => {
 
   it('shows "Aucun message" for squad conv without last_message', () => {
     const convNoMsg: SquadConversation = { ...mockSquadConv, last_message: undefined }
-    render(<ConversationList {...defaultProps} squadConversations={[convNoMsg]} filteredSquadConvs={[convNoMsg]} />)
+    render(
+      <ConversationList
+        {...defaultProps}
+        squadConversations={[convNoMsg]}
+        filteredSquadConvs={[convNoMsg]}
+      />
+    )
     expect(screen.getByText('Aucun message')).toBeInTheDocument()
   })
 
@@ -236,13 +248,25 @@ describe('ConversationList', () => {
       ...mockSquadConv,
       last_message: { content: 'test', created_at: '2026-01-01', sender: {} },
     }
-    render(<ConversationList {...defaultProps} squadConversations={[convNoSender]} filteredSquadConvs={[convNoSender]} />)
+    render(
+      <ConversationList
+        {...defaultProps}
+        squadConversations={[convNoSender]}
+        filteredSquadConvs={[convNoSender]}
+      />
+    )
     expect(screen.getByText('Utilisateur:')).toBeInTheDocument()
   })
 
   it('shows "Conversation" fallback when name is empty', () => {
     const convNoName: SquadConversation = { ...mockSquadConv, name: '' }
-    render(<ConversationList {...defaultProps} squadConversations={[convNoName]} filteredSquadConvs={[convNoName]} />)
+    render(
+      <ConversationList
+        {...defaultProps}
+        squadConversations={[convNoName]}
+        filteredSquadConvs={[convNoName]}
+      />
+    )
     expect(screen.getByText('Conversation')).toBeInTheDocument()
   })
 
@@ -262,13 +286,25 @@ describe('ConversationList', () => {
 
   it('shows "9+" for unread count > 9 in conversation card', () => {
     const highUnread: SquadConversation = { ...mockSquadConv, unread_count: 15 }
-    render(<ConversationList {...defaultProps} squadConversations={[highUnread]} filteredSquadConvs={[highUnread]} />)
+    render(
+      <ConversationList
+        {...defaultProps}
+        squadConversations={[highUnread]}
+        filteredSquadConvs={[highUnread]}
+      />
+    )
     expect(screen.getByText('9+')).toBeInTheDocument()
   })
 
   it('does not show unread badge when count is 0', () => {
     const noUnread: SquadConversation = { ...mockSquadConv, unread_count: 0 }
-    render(<ConversationList {...defaultProps} squadConversations={[noUnread]} filteredSquadConvs={[noUnread]} />)
+    render(
+      <ConversationList
+        {...defaultProps}
+        squadConversations={[noUnread]}
+        filteredSquadConvs={[noUnread]}
+      />
+    )
     // No badge with number
     expect(screen.queryByText('0')).not.toBeInTheDocument()
   })
@@ -276,7 +312,13 @@ describe('ConversationList', () => {
   // === SESSION TYPE CONVERSATION ===
 
   it('shows gamepad icon for session type conversations', () => {
-    render(<ConversationList {...defaultProps} filteredSquadConvs={[mockSessionConv]} squadConversations={[mockSessionConv]} />)
+    render(
+      <ConversationList
+        {...defaultProps}
+        filteredSquadConvs={[mockSessionConv]}
+        squadConversations={[mockSessionConv]}
+      />
+    )
     expect(screen.getByTestId('gamepad-icon')).toBeInTheDocument()
   })
 
@@ -294,14 +336,28 @@ describe('ConversationList', () => {
   })
 
   it('shows avatar image when DM user has avatar URL', () => {
-    const { container } = render(<ConversationList {...defaultProps} activeTab="dms" filteredDMConvs={[mockDMConvWithAvatar]} dmConversations={[mockDMConvWithAvatar]} />)
+    const { container } = render(
+      <ConversationList
+        {...defaultProps}
+        activeTab="dms"
+        filteredDMConvs={[mockDMConvWithAvatar]}
+        dmConversations={[mockDMConvWithAvatar]}
+      />
+    )
     const img = container.querySelector('img')
     expect(img).not.toBeNull()
     expect(img!.getAttribute('src')).toBe('https://example.com/jane.jpg')
   })
 
   it('shows "Nouvelle conversation" for DM with no last message', () => {
-    render(<ConversationList {...defaultProps} activeTab="dms" filteredDMConvs={[mockDMConvWithAvatar]} dmConversations={[mockDMConvWithAvatar]} />)
+    render(
+      <ConversationList
+        {...defaultProps}
+        activeTab="dms"
+        filteredDMConvs={[mockDMConvWithAvatar]}
+        dmConversations={[mockDMConvWithAvatar]}
+      />
+    )
     expect(screen.getByText('Nouvelle conversation')).toBeInTheDocument()
   })
 
@@ -326,18 +382,38 @@ describe('ConversationList', () => {
   })
 
   it('shows no search results when filtered is empty but conversations exist', () => {
-    render(<ConversationList {...defaultProps} squadConversations={[mockSquadConv]} filteredSquadConvs={[]} />)
+    render(
+      <ConversationList
+        {...defaultProps}
+        squadConversations={[mockSquadConv]}
+        filteredSquadConvs={[]}
+      />
+    )
     expect(screen.getByText('Aucune squad trouvée')).toBeInTheDocument()
     expect(screen.getByText("Essaie avec d'autres mots-clés")).toBeInTheDocument()
   })
 
   it('shows DM empty state when no DM conversations', () => {
-    render(<ConversationList {...defaultProps} activeTab="dms" dmConversations={[]} filteredDMConvs={[]} />)
+    render(
+      <ConversationList
+        {...defaultProps}
+        activeTab="dms"
+        dmConversations={[]}
+        filteredDMConvs={[]}
+      />
+    )
     expect(screen.getByText('Pas encore de messages privés')).toBeInTheDocument()
   })
 
   it('shows DM no search results state', () => {
-    render(<ConversationList {...defaultProps} activeTab="dms" dmConversations={[mockDMConv]} filteredDMConvs={[]} />)
+    render(
+      <ConversationList
+        {...defaultProps}
+        activeTab="dms"
+        dmConversations={[mockDMConv]}
+        filteredDMConvs={[]}
+      />
+    )
     expect(screen.getByText('Aucun contact trouvé')).toBeInTheDocument()
   })
 
@@ -349,7 +425,7 @@ describe('ConversationList', () => {
     )
     // The active card should have the active class
     const buttons = container.querySelectorAll('button')
-    const activeButton = Array.from(buttons).find(b => b.className.includes('bg-primary'))
+    const activeButton = Array.from(buttons).find((b) => b.className.includes('bg-primary'))
     expect(activeButton).toBeDefined()
   })
 
@@ -358,7 +434,7 @@ describe('ConversationList', () => {
       <ConversationList {...defaultProps} isDesktop={false} activeSquadConvId="squad-1" />
     )
     const buttons = container.querySelectorAll('button')
-    const activeButton = Array.from(buttons).find(b => b.className.includes('bg-primary'))
+    const activeButton = Array.from(buttons).find((b) => b.className.includes('bg-primary'))
     expect(activeButton).toBeUndefined()
   })
 

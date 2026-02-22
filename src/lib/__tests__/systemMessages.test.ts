@@ -104,9 +104,7 @@ describe('systemMessages', () => {
         content: 'Test',
       })
 
-      expect(console.warn).toHaveBeenCalledWith(
-        'sendSystemMessage: Not authenticated, skipping'
-      )
+      expect(console.warn).toHaveBeenCalledWith('sendSystemMessage: Not authenticated, skipping')
     })
 
     it('should return error when insert fails', async () => {
@@ -121,10 +119,7 @@ describe('systemMessages', () => {
       })
 
       expect(result.error).toBeTruthy()
-      expect(console.error).toHaveBeenCalledWith(
-        'Erreur envoi message système:',
-        dbError
-      )
+      expect(console.error).toHaveBeenCalledWith('Erreur envoi message système:', dbError)
     })
 
     it('should catch and return thrown errors', async () => {

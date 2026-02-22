@@ -7,12 +7,15 @@ import { createElement } from 'react'
 /* ------------------------------------------------------------------ */
 vi.mock('framer-motion', () => ({
   AnimatePresence: ({ children }: any) => children,
-  m: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, role, ...r }: any) => createElement(p, { ...r, role }, children)
-        : undefined,
-  }),
+  m: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, role, ...r }: any) => createElement(p, { ...r, role }, children)
+          : undefined,
+    }
+  ),
 }))
 
 vi.mock('../../icons', () => ({

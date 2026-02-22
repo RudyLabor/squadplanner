@@ -20,21 +20,39 @@ vi.mock('framer-motion', () => ({
   useAnimate: vi.fn().mockReturnValue([{ current: null }, vi.fn()]),
   useAnimation: vi.fn().mockReturnValue({ start: vi.fn(), stop: vi.fn() }),
   useReducedMotion: vi.fn().mockReturnValue(false),
-  m: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
-  motion: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
+  m: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
+  motion: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
 }))
 
-vi.mock('../../../components/icons', () => new Proxy({}, { get: (_t: any, p: string) => typeof p === 'string' ? ({ children, ...props }: any) => createElement('span', props, children) : undefined }))
+vi.mock(
+  '../../../components/icons',
+  () =>
+    new Proxy(
+      {},
+      {
+        get: (_t: any, p: string) =>
+          typeof p === 'string'
+            ? ({ children, ...props }: any) => createElement('span', props, children)
+            : undefined,
+      }
+    )
+)
 
 vi.mock('../../../components/ui', () => ({
   Card: ({ children, ...props }: any) => createElement('div', props, children),
@@ -50,9 +68,7 @@ const mockPushToTalkEnd = vi.fn()
 vi.mock('../../../hooks/useVoiceChat', () => ({
   useVoiceChatStore: vi.fn().mockReturnValue({
     localUser: { odrop: 'local-1', username: 'Me', isSpeaking: false, isMuted: false },
-    remoteUsers: [
-      { odrop: 'remote-1', username: 'Player2', isSpeaking: true, isMuted: false },
-    ],
+    remoteUsers: [{ odrop: 'remote-1', username: 'Player2', isSpeaking: true, isMuted: false }],
     isMuted: false,
     toggleMute: mockToggleMute,
     error: null,
@@ -100,7 +116,8 @@ vi.mock('../../../components/InviteToPartyModal', () => ({
 }))
 
 vi.mock('../ParticipantAvatar', () => ({
-  ParticipantAvatar: ({ username, isLocal }: any) => createElement('span', { 'data-testid': `avatar-${username}`, 'data-local': isLocal }, username),
+  ParticipantAvatar: ({ username, isLocal }: any) =>
+    createElement('span', { 'data-testid': `avatar-${username}`, 'data-local': isLocal }, username),
 }))
 
 import { ActivePartySection } from '../PartyActiveSection'

@@ -5,12 +5,7 @@ vi.mock('react-router', () => ({
   useLocation: vi.fn().mockReturnValue({ pathname: '/' }),
 }))
 
-import {
-  useAnnounce,
-  useFocusTrap,
-  useSkipLink,
-  useAutoFocus,
-} from '../useFocusManagement'
+import { useAnnounce, useFocusTrap, useSkipLink, useAutoFocus } from '../useFocusManagement'
 
 describe('useAnnounce', () => {
   beforeEach(() => {

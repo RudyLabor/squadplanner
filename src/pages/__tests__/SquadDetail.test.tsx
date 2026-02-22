@@ -34,7 +34,8 @@ vi.mock('react-router', () => ({
   useSearchParams: vi.fn().mockReturnValue([new URLSearchParams(), vi.fn()]),
   useLoaderData: vi.fn().mockReturnValue({}),
   Link: ({ children, to, ...props }: any) => createElement('a', { href: to, ...props }, children),
-  NavLink: ({ children, to, ...props }: any) => createElement('a', { href: to, ...props }, children),
+  NavLink: ({ children, to, ...props }: any) =>
+    createElement('a', { href: to, ...props }, children),
   Outlet: () => null,
   useMatches: vi.fn().mockReturnValue([]),
 }))
@@ -54,57 +55,81 @@ vi.mock('framer-motion', () => ({
   useAnimate: vi.fn().mockReturnValue([{ current: null }, vi.fn()]),
   useAnimation: vi.fn().mockReturnValue({ start: vi.fn(), stop: vi.fn() }),
   useReducedMotion: vi.fn().mockReturnValue(false),
-  m: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
-  motion: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
+  m: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
+  motion: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
 }))
 
 // Mock supabase
 vi.mock('../../lib/supabaseMinimal', () => ({
-  supabaseMinimal: { auth: { getSession: vi.fn() }, from: vi.fn(), rpc: vi.fn(), channel: vi.fn().mockReturnValue({ on: vi.fn().mockReturnThis(), subscribe: vi.fn() }), removeChannel: vi.fn() },
-  supabase: { auth: { getSession: vi.fn() }, from: vi.fn(), rpc: vi.fn(), channel: vi.fn().mockReturnValue({ on: vi.fn().mockReturnThis(), subscribe: vi.fn() }), removeChannel: vi.fn() },
+  supabaseMinimal: {
+    auth: { getSession: vi.fn() },
+    from: vi.fn(),
+    rpc: vi.fn(),
+    channel: vi.fn().mockReturnValue({ on: vi.fn().mockReturnThis(), subscribe: vi.fn() }),
+    removeChannel: vi.fn(),
+  },
+  supabase: {
+    auth: { getSession: vi.fn() },
+    from: vi.fn(),
+    rpc: vi.fn(),
+    channel: vi.fn().mockReturnValue({ on: vi.fn().mockReturnThis(), subscribe: vi.fn() }),
+    removeChannel: vi.fn(),
+  },
   isSupabaseReady: vi.fn().mockReturnValue(true),
 }))
 
 // Mock auth store
 vi.mock('../../hooks/useAuth', () => ({
-  useAuthStore: Object.assign(
-    (...args: any[]) => mocks.useAuthStore(...args),
-    { getState: vi.fn().mockReturnValue({ user: { id: 'user-1' }, profile: { id: 'user-1', username: 'TestUser' } }) }
-  ),
+  useAuthStore: Object.assign((...args: any[]) => mocks.useAuthStore(...args), {
+    getState: vi
+      .fn()
+      .mockReturnValue({ user: { id: 'user-1' }, profile: { id: 'user-1', username: 'TestUser' } }),
+  }),
 }))
 
 vi.mock('../../hooks', () => ({
-  useAuthStore: Object.assign(
-    (...args: any[]) => mocks.useAuthStore(...args),
-    { getState: vi.fn().mockReturnValue({ user: { id: 'user-1' }, profile: { id: 'user-1', username: 'TestUser' } }) }
-  ),
-  usePremiumStore: Object.assign(
-    (...args: any[]) => mocks.usePremiumStore(...args),
-    { getState: vi.fn().mockReturnValue({ hasPremium: false }) }
-  ),
+  useAuthStore: Object.assign((...args: any[]) => mocks.useAuthStore(...args), {
+    getState: vi
+      .fn()
+      .mockReturnValue({ user: { id: 'user-1' }, profile: { id: 'user-1', username: 'TestUser' } }),
+  }),
+  usePremiumStore: Object.assign((...args: any[]) => mocks.usePremiumStore(...args), {
+    getState: vi.fn().mockReturnValue({ hasPremium: false }),
+  }),
   useConfetti: vi.fn(() => ({ active: false, fire: vi.fn(), cancel: vi.fn() })),
 }))
 
 // Mock toast
 vi.mock('../../lib/toast', () => ({
-  showSuccess: vi.fn(), showError: vi.fn(), showWarning: vi.fn(), showInfo: vi.fn(),
+  showSuccess: vi.fn(),
+  showError: vi.fn(),
+  showWarning: vi.fn(),
+  showInfo: vi.fn(),
 }))
 
 // Mock i18n
 vi.mock('../../lib/i18n', () => ({
   useT: () => (key: string) => key,
   useLocale: () => 'fr',
-  useI18nStore: Object.assign(vi.fn().mockReturnValue({ locale: 'fr' }), { getState: vi.fn().mockReturnValue({ locale: 'fr' }) }),
+  useI18nStore: Object.assign(vi.fn().mockReturnValue({ locale: 'fr' }), {
+    getState: vi.fn().mockReturnValue({ locale: 'fr' }),
+  }),
 }))
 
 // Mock query hooks
@@ -130,37 +155,54 @@ vi.mock('../../components/LazyConfetti', () => ({
 }))
 
 vi.mock('../../components/ui', () => ({
-  Button: ({ children, onClick, ...props }: any) => createElement('button', { onClick, ...props }, children),
+  Button: ({ children, onClick, ...props }: any) =>
+    createElement('button', { onClick, ...props }, children),
   SquadDetailSkeleton: () => createElement('div', { 'data-testid': 'skeleton' }),
-  CrossfadeTransition: ({ children, skeleton, isLoading }: any) => isLoading ? skeleton : children,
+  CrossfadeTransition: ({ children, skeleton, isLoading }: any) =>
+    isLoading ? skeleton : children,
   ConfirmDialog: ({ open, onConfirm, onClose, title, confirmLabel, variant }: any) => {
     if (!open) return null
-    return createElement('div', { 'data-testid': 'confirm-dialog' },
+    return createElement(
+      'div',
+      { 'data-testid': 'confirm-dialog' },
       createElement('span', null, title),
       createElement('button', { 'data-testid': 'confirm-btn', onClick: onConfirm }, confirmLabel),
-      createElement('button', { 'data-testid': 'cancel-btn', onClick: onClose }, 'Cancel'),
+      createElement('button', { 'data-testid': 'cancel-btn', onClick: onClose }, 'Cancel')
     )
   },
 }))
 
 vi.mock('../../components/squads/SquadHeader', () => ({
-  SquadHeader: ({ squad, isOwner }: any) => createElement('div', { 'data-testid': 'squad-header', 'data-owner': isOwner }, squad.name),
+  SquadHeader: ({ squad, isOwner }: any) =>
+    createElement('div', { 'data-testid': 'squad-header', 'data-owner': isOwner }, squad.name),
   InviteModal: ({ isOpen, onClose, squadName }: any) =>
-    isOpen ? createElement('div', { 'data-testid': 'invite-modal' },
-      createElement('span', null, squadName),
-      createElement('button', { 'data-testid': 'close-invite', onClick: onClose }, 'Close'),
-    ) : null,
+    isOpen
+      ? createElement(
+          'div',
+          { 'data-testid': 'invite-modal' },
+          createElement('span', null, squadName),
+          createElement('button', { 'data-testid': 'close-invite', onClick: onClose }, 'Close')
+        )
+      : null,
   EditSquadModal: ({ onClose }: any) =>
-    createElement('div', { 'data-testid': 'edit-modal' },
-      createElement('button', { 'data-testid': 'close-edit', onClick: onClose }, 'Close'),
+    createElement(
+      'div',
+      { 'data-testid': 'edit-modal' },
+      createElement('button', { 'data-testid': 'close-edit', onClick: onClose }, 'Close')
     ),
 }))
 
 vi.mock('../../components/squads/SquadMembers', () => ({
   SquadMembers: ({ onInviteClick, memberCount }: any) => {
     mocks.squadMembersProps = { onInviteClick, memberCount }
-    return createElement('div', { 'data-testid': 'squad-members' },
-      createElement('button', { 'data-testid': 'invite-from-members', onClick: onInviteClick }, 'Invite'),
+    return createElement(
+      'div',
+      { 'data-testid': 'squad-members' },
+      createElement(
+        'button',
+        { 'data-testid': 'invite-from-members', onClick: onInviteClick },
+        'Invite'
+      )
     )
   },
 }))
@@ -169,11 +211,38 @@ vi.mock('../../components/squads/SquadSessions', () => ({
   PartySection: () => createElement('div', { 'data-testid': 'party-section' }),
   SquadSessionsList: ({ onRsvp, onCreateSession, sessionsLoading }: any) => {
     mocks.squadSessionsProps = { onRsvp, onCreateSession, sessionsLoading }
-    return createElement('div', { 'data-testid': 'squad-sessions' },
-      createElement('button', { 'data-testid': 'rsvp-present', onClick: () => onRsvp('sess-1', 'present') }, 'Present'),
-      createElement('button', { 'data-testid': 'rsvp-absent', onClick: () => onRsvp('sess-1', 'absent') }, 'Absent'),
-      createElement('button', { 'data-testid': 'rsvp-maybe', onClick: () => onRsvp('sess-1', 'maybe') }, 'Maybe'),
-      createElement('button', { 'data-testid': 'create-session', onClick: () => onCreateSession({ squad_id: 'sq1', scheduled_at: '2026-02-20', duration_minutes: 60, auto_confirm_threshold: 3 }) }, 'Create'),
+    return createElement(
+      'div',
+      { 'data-testid': 'squad-sessions' },
+      createElement(
+        'button',
+        { 'data-testid': 'rsvp-present', onClick: () => onRsvp('sess-1', 'present') },
+        'Present'
+      ),
+      createElement(
+        'button',
+        { 'data-testid': 'rsvp-absent', onClick: () => onRsvp('sess-1', 'absent') },
+        'Absent'
+      ),
+      createElement(
+        'button',
+        { 'data-testid': 'rsvp-maybe', onClick: () => onRsvp('sess-1', 'maybe') },
+        'Maybe'
+      ),
+      createElement(
+        'button',
+        {
+          'data-testid': 'create-session',
+          onClick: () =>
+            onCreateSession({
+              squad_id: 'sq1',
+              scheduled_at: '2026-02-20',
+              duration_minutes: 60,
+              auto_confirm_threshold: 3,
+            }),
+        },
+        'Create'
+      )
     )
   },
 }))
@@ -185,11 +254,29 @@ vi.mock('../../components/PremiumGate', () => ({
 vi.mock('../../components/squads/SquadSettings', () => ({
   SquadSettings: (props: any) => {
     mocks.squadSettingsProps = props
-    return createElement('div', { 'data-testid': 'squad-settings' },
-      createElement('button', { 'data-testid': 'leave-squad', onClick: props.onLeaveSquad }, 'Leave'),
-      createElement('button', { 'data-testid': 'delete-squad', onClick: props.onDeleteSquad }, 'Delete'),
-      createElement('button', { 'data-testid': 'edit-squad', onClick: props.onEditSquadClick }, 'Edit'),
-      createElement('button', { 'data-testid': 'invite-squad', onClick: props.onInviteClick }, 'Invite'),
+    return createElement(
+      'div',
+      { 'data-testid': 'squad-settings' },
+      createElement(
+        'button',
+        { 'data-testid': 'leave-squad', onClick: props.onLeaveSquad },
+        'Leave'
+      ),
+      createElement(
+        'button',
+        { 'data-testid': 'delete-squad', onClick: props.onDeleteSquad },
+        'Delete'
+      ),
+      createElement(
+        'button',
+        { 'data-testid': 'edit-squad', onClick: props.onEditSquadClick },
+        'Edit'
+      ),
+      createElement(
+        'button',
+        { 'data-testid': 'invite-squad', onClick: props.onInviteClick },
+        'Invite'
+      )
     )
   },
 }))
@@ -221,8 +308,17 @@ describe('SquadDetail Page', () => {
     queryClient = new QueryClient({ defaultOptions: { queries: { retry: false } } })
 
     mocks.useParams.mockReturnValue({ id: 'sq1' })
-    mocks.useAuthStore.mockReturnValue({ user: { id: 'user-1' }, profile: { id: 'user-1', username: 'TestUser' }, isLoading: false, isInitialized: true })
-    mocks.usePremiumStore.mockReturnValue({ canAccessFeature: vi.fn().mockReturnValue(false), fetchPremiumStatus: vi.fn(), isSquadPremium: vi.fn().mockReturnValue(false) })
+    mocks.useAuthStore.mockReturnValue({
+      user: { id: 'user-1' },
+      profile: { id: 'user-1', username: 'TestUser' },
+      isLoading: false,
+      isInitialized: true,
+    })
+    mocks.usePremiumStore.mockReturnValue({
+      canAccessFeature: vi.fn().mockReturnValue(false),
+      fetchPremiumStatus: vi.fn(),
+      isSquadPremium: vi.fn().mockReturnValue(false),
+    })
     mocks.useSquadQuery.mockReturnValue({ data: defaultSquad, isLoading: false })
     mocks.useSquadSessionsQuery.mockReturnValue({ data: [], isLoading: false })
     mocks.useSquadLeaderboardQuery.mockReturnValue({ data: [], isLoading: false })
@@ -237,9 +333,7 @@ describe('SquadDetail Page', () => {
 
   const renderDetail = () => {
     return render(
-      createElement(QueryClientProvider, { client: queryClient },
-        createElement(SquadDetail)
-      )
+      createElement(QueryClientProvider, { client: queryClient }, createElement(SquadDetail))
     )
   }
 
@@ -298,7 +392,12 @@ describe('SquadDetail Page', () => {
   /*  Auth redirect                                                    */
   /* ---------------------------------------------------------------- */
   it('navigates to /auth when initialized but no user', () => {
-    mocks.useAuthStore.mockReturnValue({ user: null, isInitialized: true, profile: null, isLoading: false })
+    mocks.useAuthStore.mockReturnValue({
+      user: null,
+      isInitialized: true,
+      profile: null,
+      isLoading: false,
+    })
     renderDetail()
     expect(mocks.navigate).toHaveBeenCalledWith('/auth')
   })
@@ -330,7 +429,11 @@ describe('SquadDetail Page', () => {
   /* ---------------------------------------------------------------- */
   it('calls fetchPremiumStatus when user exists', () => {
     const fetchPremiumStatus = vi.fn()
-    mocks.usePremiumStore.mockReturnValue({ canAccessFeature: vi.fn().mockReturnValue(false), fetchPremiumStatus, isSquadPremium: vi.fn().mockReturnValue(false) })
+    mocks.usePremiumStore.mockReturnValue({
+      canAccessFeature: vi.fn().mockReturnValue(false),
+      fetchPremiumStatus,
+      isSquadPremium: vi.fn().mockReturnValue(false),
+    })
     renderDetail()
     expect(fetchPremiumStatus).toHaveBeenCalled()
   })
@@ -393,7 +496,10 @@ describe('SquadDetail Page', () => {
     fireEvent.click(screen.getByTestId('rsvp-present'))
 
     await waitFor(() => {
-      expect(mocks.rsvpMutateAsync).toHaveBeenCalledWith({ sessionId: 'sess-1', response: 'present' })
+      expect(mocks.rsvpMutateAsync).toHaveBeenCalledWith({
+        sessionId: 'sess-1',
+        response: 'present',
+      })
     })
     await waitFor(() => {
       expect(screen.getByTestId('success-toast')).toBeDefined()
@@ -406,7 +512,10 @@ describe('SquadDetail Page', () => {
     fireEvent.click(screen.getByTestId('rsvp-absent'))
 
     await waitFor(() => {
-      expect(mocks.rsvpMutateAsync).toHaveBeenCalledWith({ sessionId: 'sess-1', response: 'absent' })
+      expect(mocks.rsvpMutateAsync).toHaveBeenCalledWith({
+        sessionId: 'sess-1',
+        response: 'absent',
+      })
     })
     await waitFor(() => {
       expect(screen.getByTestId('success-toast').textContent).toContain('Absence enregistrée')

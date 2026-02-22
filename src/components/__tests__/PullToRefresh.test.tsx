@@ -21,10 +21,12 @@ describe('PullToRefresh', () => {
 
   // STRICT: Verifies children rendering, container ref setup, default className applied, content structure
   it('renders children correctly with default props and container structure', () => {
-    const { container } = render(createElement(PullToRefresh, {
-      onRefresh: vi.fn().mockResolvedValue(undefined),
-      children: createElement('div', { 'data-testid': 'child' }, 'Pull Content'),
-    }))
+    const { container } = render(
+      createElement(PullToRefresh, {
+        onRefresh: vi.fn().mockResolvedValue(undefined),
+        children: createElement('div', { 'data-testid': 'child' }, 'Pull Content'),
+      })
+    )
 
     // 1. Children are rendered
     expect(screen.getByText('Pull Content')).toBeInTheDocument()
@@ -43,11 +45,13 @@ describe('PullToRefresh', () => {
 
   // STRICT: Verifies custom className prop is applied, disabled prop doesn't break rendering
   it('applies custom className and renders correctly when disabled', () => {
-    const { container } = render(createElement(PullToRefresh, {
-      onRefresh: vi.fn().mockResolvedValue(undefined),
-      className: 'custom-pull-class',
-      children: createElement('div', {}, 'Custom Class'),
-    }))
+    const { container } = render(
+      createElement(PullToRefresh, {
+        onRefresh: vi.fn().mockResolvedValue(undefined),
+        className: 'custom-pull-class',
+        children: createElement('div', {}, 'Custom Class'),
+      })
+    )
 
     // 1. Custom class is present
     const wrapper = container.firstChild as HTMLElement
@@ -60,11 +64,13 @@ describe('PullToRefresh', () => {
     expect(screen.queryByTestId('icon-refresh')).not.toBeInTheDocument()
 
     // Now test disabled prop
-    const { container: disabledContainer } = render(createElement(PullToRefresh, {
-      onRefresh: vi.fn().mockResolvedValue(undefined),
-      disabled: true,
-      children: createElement('div', {}, 'Disabled Content'),
-    }))
+    const { container: disabledContainer } = render(
+      createElement(PullToRefresh, {
+        onRefresh: vi.fn().mockResolvedValue(undefined),
+        disabled: true,
+        children: createElement('div', {}, 'Disabled Content'),
+      })
+    )
 
     // 5. Disabled content still renders
     expect(screen.getByText('Disabled Content')).toBeInTheDocument()
@@ -75,15 +81,19 @@ describe('PullToRefresh', () => {
   // STRICT: Verifies threshold prop, multiple children rendering, onRefresh ref is stored
   it('accepts threshold prop and renders multiple children correctly', () => {
     const onRefresh = vi.fn().mockResolvedValue(undefined)
-    const { container } = render(createElement(PullToRefresh, {
-      onRefresh,
-      threshold: 120,
-      children: createElement('div', {},
-        createElement('span', {}, 'Child 1'),
-        createElement('span', {}, 'Child 2'),
-        createElement('span', {}, 'Child 3'),
-      ),
-    }))
+    const { container } = render(
+      createElement(PullToRefresh, {
+        onRefresh,
+        threshold: 120,
+        children: createElement(
+          'div',
+          {},
+          createElement('span', {}, 'Child 1'),
+          createElement('span', {}, 'Child 2'),
+          createElement('span', {}, 'Child 3')
+        ),
+      })
+    )
 
     // 1. All children render
     expect(screen.getByText('Child 1')).toBeInTheDocument()

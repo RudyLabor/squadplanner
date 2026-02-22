@@ -10,7 +10,8 @@ vi.mock('react-router', () => ({
   useSearchParams: vi.fn().mockReturnValue([new URLSearchParams(), vi.fn()]),
   useLoaderData: vi.fn().mockReturnValue({}),
   Link: ({ children, to, ...props }: any) => createElement('a', { href: to, ...props }, children),
-  NavLink: ({ children, to, ...props }: any) => createElement('a', { href: to, ...props }, children),
+  NavLink: ({ children, to, ...props }: any) =>
+    createElement('a', { href: to, ...props }, children),
   Outlet: () => null,
   useMatches: vi.fn().mockReturnValue([]),
 }))
@@ -30,18 +31,24 @@ vi.mock('framer-motion', () => ({
   useAnimate: vi.fn().mockReturnValue([{ current: null }, vi.fn()]),
   useAnimation: vi.fn().mockReturnValue({ start: vi.fn(), stop: vi.fn() }),
   useReducedMotion: vi.fn().mockReturnValue(false),
-  m: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
-  motion: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
+  m: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
+  motion: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
 }))
 
 // Mock icons
@@ -58,7 +65,8 @@ vi.mock('../../components/ui/ScrollProgress', () => ({
 
 // Mock SquadPlannerLogo
 vi.mock('../../components/SquadPlannerLogo', () => ({
-  SquadPlannerLogo: ({ size }: any) => createElement('span', { 'data-testid': 'logo', style: { width: size } }),
+  SquadPlannerLogo: ({ size }: any) =>
+    createElement('span', { 'data-testid': 'logo', style: { width: size } }),
 }))
 
 // Mock hooks
@@ -79,7 +87,8 @@ vi.mock('../legal/CGUContent', () => ({
 }))
 
 vi.mock('../legal/PrivacyContent', () => ({
-  PrivacyContent: () => createElement('div', { 'data-testid': 'privacy-content' }, 'Privacy Content'),
+  PrivacyContent: () =>
+    createElement('div', { 'data-testid': 'privacy-content' }, 'Privacy Content'),
 }))
 
 import { Legal } from '../Legal'

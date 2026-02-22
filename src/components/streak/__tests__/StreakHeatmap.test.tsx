@@ -17,18 +17,24 @@ vi.mock('framer-motion', () => ({
   useAnimate: vi.fn().mockReturnValue([{ current: null }, vi.fn()]),
   useAnimation: vi.fn().mockReturnValue({ start: vi.fn(), stop: vi.fn() }),
   useReducedMotion: vi.fn().mockReturnValue(false),
-  m: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
-  motion: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
+  m: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
+  motion: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
 }))
 
 describe('StreakHeatmap', () => {
@@ -39,9 +45,7 @@ describe('StreakHeatmap', () => {
   }
 
   it('renders the heatmap grid', () => {
-    const { container } = render(
-      <StreakHeatmap streakDays={10} flameColors={flameColors} />
-    )
+    const { container } = render(<StreakHeatmap streakDays={10} flameColors={flameColors} />)
     // 7 day labels
     expect(screen.getByText('L')).toBeDefined()
     expect(screen.getByText('D')).toBeDefined()
@@ -71,9 +75,7 @@ describe('StreakHeatmap', () => {
   })
 
   it('handles zero streak days', () => {
-    const { container } = render(
-      <StreakHeatmap streakDays={0} flameColors={flameColors} />
-    )
+    const { container } = render(<StreakHeatmap streakDays={0} flameColors={flameColors} />)
     expect(container.querySelector('.aspect-square')).toBeTruthy()
   })
 })

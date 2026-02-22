@@ -373,10 +373,7 @@ describe('useAudioAnalyser', () => {
       const { result } = renderHook(() => useAudioAnalyser(stream))
 
       expect(result.current.isActive).toBe(false)
-      expect(warnSpy).toHaveBeenCalledWith(
-        'Failed to create audio analyser:',
-        expect.any(Error)
-      )
+      expect(warnSpy).toHaveBeenCalledWith('Failed to create audio analyser:', expect.any(Error))
 
       warnSpy.mockRestore()
     })

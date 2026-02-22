@@ -21,13 +21,17 @@ const { mockSupabase, mockFrom, mockRpc, mockIsSupabaseReady } = vi.hoisted(() =
   })
   const mockRpc = vi.fn().mockResolvedValue({ data: [], error: null })
   const mockGetUser = vi.fn().mockResolvedValue({ data: { user: { id: 'user-1' } } })
-  const mockGetSession = vi.fn().mockResolvedValue({ data: { session: { user: { id: 'user-1' } } } })
+  const mockGetSession = vi
+    .fn()
+    .mockResolvedValue({ data: { session: { user: { id: 'user-1' } } } })
   const mockIsSupabaseReady = vi.fn().mockReturnValue(true)
   const mockSupabase = {
     auth: { getSession: mockGetSession, getUser: mockGetUser },
     from: mockFrom,
     rpc: mockRpc,
-    channel: vi.fn().mockReturnValue({ on: vi.fn().mockReturnThis(), subscribe: vi.fn().mockReturnThis() }),
+    channel: vi
+      .fn()
+      .mockReturnValue({ on: vi.fn().mockReturnThis(), subscribe: vi.fn().mockReturnThis() }),
     removeChannel: vi.fn(),
   }
   return { mockSupabase, mockFrom, mockRpc, mockGetSession, mockIsSupabaseReady }
@@ -50,9 +54,12 @@ vi.mock('../../../lib/queryClient', () => ({
 
 // Auth store mock
 vi.mock('../../useAuth', () => ({
-  useAuthStore: Object.assign(vi.fn().mockReturnValue({ user: { id: 'user-1' }, profile: { id: 'user-1' } }), {
-    getState: vi.fn().mockReturnValue({ user: { id: 'user-1' }, profile: { id: 'user-1' } }),
-  }),
+  useAuthStore: Object.assign(
+    vi.fn().mockReturnValue({ user: { id: 'user-1' }, profile: { id: 'user-1' } }),
+    {
+      getState: vi.fn().mockReturnValue({ user: { id: 'user-1' }, profile: { id: 'user-1' } }),
+    }
+  ),
 }))
 
 // Toast mock
@@ -80,7 +87,9 @@ describe('useActivityFeedQuery', () => {
   // STRICT: Verifies the hook renders, returns correct react-query shape,
   // starts in loading state, and transitions to success with data
   it('renders with correct react-query shape and transitions from loading to success', async () => {
-    const { result } = renderHook(() => useActivityFeedQuery(['squad-1']), { wrapper: createWrapper() })
+    const { result } = renderHook(() => useActivityFeedQuery(['squad-1']), {
+      wrapper: createWrapper(),
+    })
 
     // 1. result.current is defined
     expect(result.current).toBeDefined()
@@ -177,7 +186,9 @@ describe('useActivityFeedQuery', () => {
   it('is disabled when supabase is not ready', () => {
     mockIsSupabaseReady.mockReturnValue(false)
 
-    const { result } = renderHook(() => useActivityFeedQuery(['squad-1']), { wrapper: createWrapper() })
+    const { result } = renderHook(() => useActivityFeedQuery(['squad-1']), {
+      wrapper: createWrapper(),
+    })
 
     // 1. fetchStatus is idle (query disabled)
     expect(result.current.fetchStatus).toBe('idle')

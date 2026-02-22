@@ -82,7 +82,7 @@ describe('utils', () => {
       expect(formatDateSeparator('not-a-date')).toBe('')
     })
 
-    it("returns \"Aujourd'hui\" for today", () => {
+    it('returns "Aujourd\'hui" for today', () => {
       expect(formatDateSeparator(now.toISOString())).toBe("Aujourd'hui")
     })
 

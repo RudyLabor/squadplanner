@@ -16,24 +16,32 @@ vi.mock('framer-motion', () => ({
   useAnimate: vi.fn().mockReturnValue([{ current: null }, vi.fn()]),
   useAnimation: vi.fn().mockReturnValue({ start: vi.fn(), stop: vi.fn() }),
   useReducedMotion: vi.fn().mockReturnValue(false),
-  m: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
-  motion: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
+  m: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
+  motion: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
 }))
 
 vi.mock('../../icons', () => ({
   Star: (props: any) => createElement('span', { ...props, 'data-testid': 'icon-star' }, 'star'),
-  ChevronLeft: (props: any) => createElement('span', { ...props, 'data-testid': 'icon-chevron-left' }, 'left'),
-  ChevronRight: (props: any) => createElement('span', { ...props, 'data-testid': 'icon-chevron-right' }, 'right'),
+  ChevronLeft: (props: any) =>
+    createElement('span', { ...props, 'data-testid': 'icon-chevron-left' }, 'left'),
+  ChevronRight: (props: any) =>
+    createElement('span', { ...props, 'data-testid': 'icon-chevron-right' }, 'right'),
 }))
 
 import { TestimonialCarousel } from '../TestimonialCarousel'
@@ -58,7 +66,9 @@ describe('TestimonialCarousel', () => {
 
     it('renders the subtitle', () => {
       render(<TestimonialCarousel />)
-      expect(screen.getByText('Bêta en cours — premiers retours de nos testeurs')).toBeInTheDocument()
+      expect(
+        screen.getByText('Bêta en cours — premiers retours de nos testeurs')
+      ).toBeInTheDocument()
     })
 
     it('has carousel role with aria-label', () => {
@@ -376,8 +386,8 @@ describe('TestimonialCarousel', () => {
       const stars = screen.getAllByTestId('icon-star')
       expect(stars).toHaveLength(5)
       // First 4 should be filled, last one should be unfilled
-      const filledStars = stars.filter(s => s.className.includes('text-warning'))
-      const unfilledStars = stars.filter(s => s.className.includes('text-border-subtle'))
+      const filledStars = stars.filter((s) => s.className.includes('text-warning'))
+      const unfilledStars = stars.filter((s) => s.className.includes('text-border-subtle'))
       expect(filledStars).toHaveLength(4)
       expect(unfilledStars).toHaveLength(1)
     })

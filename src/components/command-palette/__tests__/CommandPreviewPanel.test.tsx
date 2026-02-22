@@ -17,18 +17,24 @@ vi.mock('framer-motion', () => ({
   useAnimate: vi.fn().mockReturnValue([{ current: null }, vi.fn()]),
   useAnimation: vi.fn().mockReturnValue({ start: vi.fn(), stop: vi.fn() }),
   useReducedMotion: vi.fn().mockReturnValue(false),
-  m: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
-  motion: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
+  m: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
+  motion: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
 }))
 
 const MockIcon = (props: any) => createElement('svg', { 'data-testid': 'mock-icon', ...props })
@@ -92,8 +98,20 @@ describe('CommandPreviewPanel', () => {
       category: 'squads' as const,
       preview: { type: 'squad' as const },
       children: [
-        { id: 'child-1', label: 'Open', icon: MockIcon, action: vi.fn(), category: 'squads' as const },
-        { id: 'child-2', label: 'Chat', icon: MockIcon, action: vi.fn(), category: 'squads' as const },
+        {
+          id: 'child-1',
+          label: 'Open',
+          icon: MockIcon,
+          action: vi.fn(),
+          category: 'squads' as const,
+        },
+        {
+          id: 'child-2',
+          label: 'Chat',
+          icon: MockIcon,
+          action: vi.fn(),
+          category: 'squads' as const,
+        },
       ],
     }
     render(<CommandPreviewPanel command={command} />)

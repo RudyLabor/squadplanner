@@ -21,7 +21,9 @@ function ThrowingComponent({ shouldThrow }: { shouldThrow: boolean }) {
 
 // Component that throws a chunk error
 function ChunkErrorComponent() {
-  throw Object.assign(new Error('Failed to fetch dynamically imported module'), { name: 'ChunkLoadError' })
+  throw Object.assign(new Error('Failed to fetch dynamically imported module'), {
+    name: 'ChunkLoadError',
+  })
 }
 
 describe('ErrorBoundary', () => {
@@ -365,6 +367,10 @@ describe('ErrorBoundary', () => {
         <DynamicImportError />
       </ErrorBoundary>
     )
-    expect(screen.getByText("Une nouvelle version de l'app est disponible. Recharge la page pour en profiter.")).toBeInTheDocument()
+    expect(
+      screen.getByText(
+        "Une nouvelle version de l'app est disponible. Recharge la page pour en profiter."
+      )
+    ).toBeInTheDocument()
   })
 })

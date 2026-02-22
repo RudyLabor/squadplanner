@@ -18,18 +18,24 @@ vi.mock('framer-motion', () => ({
   useAnimate: vi.fn().mockReturnValue([{ current: null }, vi.fn()]),
   useAnimation: vi.fn().mockReturnValue({ start: vi.fn(), stop: vi.fn() }),
   useReducedMotion: vi.fn().mockReturnValue(false),
-  m: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
-  motion: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
+  m: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
+  motion: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
 }))
 
 // Mock icons
@@ -40,9 +46,7 @@ vi.mock('../../icons', () => ({
 
 describe('CallToast', () => {
   it('renders without crashing', () => {
-    const { container } = render(
-      <CallToast message="Test message" isVisible={true} />
-    )
+    const { container } = render(<CallToast message="Test message" isVisible={true} />)
     expect(container.firstChild).toBeTruthy()
   })
 
@@ -72,17 +76,13 @@ describe('CallToast', () => {
   })
 
   it('applies success background class for success variant', () => {
-    const { container } = render(
-      <CallToast message="Success" isVisible={true} variant="success" />
-    )
+    const { container } = render(<CallToast message="Success" isVisible={true} variant="success" />)
     const toast = container.querySelector('.bg-success')
     expect(toast).toBeInTheDocument()
   })
 
   it('applies error background class for error variant', () => {
-    const { container } = render(
-      <CallToast message="Error" isVisible={true} variant="error" />
-    )
+    const { container } = render(<CallToast message="Error" isVisible={true} variant="error" />)
     const toast = container.querySelector('.bg-error')
     expect(toast).toBeInTheDocument()
   })

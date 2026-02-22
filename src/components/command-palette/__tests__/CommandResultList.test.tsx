@@ -3,13 +3,18 @@ import { render, screen, fireEvent } from '@testing-library/react'
 import { createElement } from 'react'
 import { CommandResultList } from '../CommandResultList'
 
-vi.mock('../../icons', () =>
-  new Proxy({}, {
-    get: (_t, name) =>
-      typeof name === 'string'
-        ? (props: any) => createElement('svg', { 'data-testid': `icon-${name}`, ...props })
-        : undefined,
-  })
+vi.mock(
+  '../../icons',
+  () =>
+    new Proxy(
+      {},
+      {
+        get: (_t, name) =>
+          typeof name === 'string'
+            ? (props: any) => createElement('svg', { 'data-testid': `icon-${name}`, ...props })
+            : undefined,
+      }
+    )
 )
 
 const MockIcon = (props: any) => createElement('svg', { ...props, 'data-testid': 'mock-icon' })
@@ -56,8 +61,21 @@ describe('CommandResultList', () => {
   // STRICT: Verifies grouped commands — category labels, command labels, descriptions, selected index highlighting
   it('renders grouped commands with correct labels, descriptions, and selection state', () => {
     const commands = [
-      { id: 'c1', label: 'Accueil', description: 'Page principale', icon: MockIcon, action: vi.fn(), category: 'navigation' as const },
-      { id: 'c2', label: 'Squad Alpha', icon: MockIcon, action: vi.fn(), category: 'squads' as const },
+      {
+        id: 'c1',
+        label: 'Accueil',
+        description: 'Page principale',
+        icon: MockIcon,
+        action: vi.fn(),
+        category: 'navigation' as const,
+      },
+      {
+        id: 'c2',
+        label: 'Squad Alpha',
+        icon: MockIcon,
+        action: vi.fn(),
+        category: 'squads' as const,
+      },
     ]
 
     const { container } = render(
@@ -97,7 +115,14 @@ describe('CommandResultList', () => {
     const setSelectedIndex = vi.fn()
     const commands = [
       { id: 'c1', label: 'Home', icon: MockIcon, action: vi.fn(), category: 'navigation' as const },
-      { id: 'c2', label: 'Settings', description: 'App config', icon: MockIcon, action: vi.fn(), category: 'navigation' as const },
+      {
+        id: 'c2',
+        label: 'Settings',
+        description: 'App config',
+        icon: MockIcon,
+        action: vi.fn(),
+        category: 'navigation' as const,
+      },
     ]
 
     render(
@@ -130,10 +155,23 @@ describe('CommandResultList', () => {
   // STRICT: Verifies ArrowRight icon for commands with children, and selected indicator arrow
   it('shows ArrowRight for commands with children and selected indicator', () => {
     const childCommands = [
-      { id: 'sub1', label: 'Sub Item', icon: MockIcon, action: vi.fn(), category: 'navigation' as const },
+      {
+        id: 'sub1',
+        label: 'Sub Item',
+        icon: MockIcon,
+        action: vi.fn(),
+        category: 'navigation' as const,
+      },
     ]
     const commands = [
-      { id: 'c1', label: 'Parent', icon: MockIcon, action: vi.fn(), category: 'navigation' as const, children: childCommands },
+      {
+        id: 'c1',
+        label: 'Parent',
+        icon: MockIcon,
+        action: vi.fn(),
+        category: 'navigation' as const,
+        children: childCommands,
+      },
       { id: 'c2', label: 'Leaf', icon: MockIcon, action: vi.fn(), category: 'navigation' as const },
     ]
 

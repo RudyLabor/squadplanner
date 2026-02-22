@@ -3,13 +3,18 @@ import { render, screen, fireEvent } from '@testing-library/react'
 import { createElement } from 'react'
 import { CopyLinkButton } from '../CopyLinkButton'
 
-vi.mock('../../icons', () =>
-  new Proxy({}, {
-    get: (_t, name) =>
-      typeof name === 'string'
-        ? (props: any) => createElement('svg', { 'data-testid': `icon-${name}`, ...props })
-        : undefined,
-  })
+vi.mock(
+  '../../icons',
+  () =>
+    new Proxy(
+      {},
+      {
+        get: (_t, name) =>
+          typeof name === 'string'
+            ? (props: any) => createElement('svg', { 'data-testid': `icon-${name}`, ...props })
+            : undefined,
+      }
+    )
 )
 
 describe('CopyLinkButton', () => {

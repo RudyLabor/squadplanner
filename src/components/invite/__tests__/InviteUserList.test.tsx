@@ -17,27 +17,38 @@ vi.mock('framer-motion', () => ({
   useAnimate: vi.fn().mockReturnValue([{ current: null }, vi.fn()]),
   useAnimation: vi.fn().mockReturnValue({ start: vi.fn(), stop: vi.fn() }),
   useReducedMotion: vi.fn().mockReturnValue(false),
-  m: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
-  motion: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
+  m: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
+  motion: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
 }))
 
-vi.mock('../../icons', () =>
-  new Proxy({}, {
-    get: (_t, name) =>
-      typeof name === 'string'
-        ? (props: any) => createElement('svg', { 'data-testid': `icon-${name}`, ...props })
-        : undefined,
-  })
+vi.mock(
+  '../../icons',
+  () =>
+    new Proxy(
+      {},
+      {
+        get: (_t, name) =>
+          typeof name === 'string'
+            ? (props: any) => createElement('svg', { 'data-testid': `icon-${name}`, ...props })
+            : undefined,
+      }
+    )
 )
 
 vi.mock('../../ui', () => ({
@@ -47,10 +58,12 @@ vi.mock('../../ui', () => ({
 
 vi.mock('../InviteUserItem', () => ({
   InviteUserItem: ({ member, isInvited, isSending }: any) =>
-    createElement('div', { 'data-testid': `member-${member.id}` },
+    createElement(
+      'div',
+      { 'data-testid': `member-${member.id}` },
       createElement('span', { 'data-testid': `name-${member.id}` }, member.username),
       isInvited && createElement('span', { 'data-testid': `invited-${member.id}` }, 'invited'),
-      isSending && createElement('span', { 'data-testid': `sending-${member.id}` }, 'sending'),
+      isSending && createElement('span', { 'data-testid': `sending-${member.id}` }, 'sending')
     ),
 }))
 

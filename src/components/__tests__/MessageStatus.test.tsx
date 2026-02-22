@@ -2,7 +2,14 @@ import { describe, it, expect, vi } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import { createElement } from 'react'
 
-vi.mock('react-router', () => ({ useLocation: vi.fn().mockReturnValue({ pathname: '/' }), useNavigate: vi.fn().mockReturnValue(vi.fn()), useParams: vi.fn().mockReturnValue({}), Link: ({ children, to, ...props }: any) => createElement('a', { href: to, ...props }, children), Outlet: () => null, useMatches: vi.fn().mockReturnValue([]) }))
+vi.mock('react-router', () => ({
+  useLocation: vi.fn().mockReturnValue({ pathname: '/' }),
+  useNavigate: vi.fn().mockReturnValue(vi.fn()),
+  useParams: vi.fn().mockReturnValue({}),
+  Link: ({ children, to, ...props }: any) => createElement('a', { href: to, ...props }, children),
+  Outlet: () => null,
+  useMatches: vi.fn().mockReturnValue([]),
+}))
 vi.mock('framer-motion', () => ({
   AnimatePresence: ({ children }: any) => children,
   LazyMotion: ({ children }: any) => children,
@@ -17,18 +24,24 @@ vi.mock('framer-motion', () => ({
   useAnimate: vi.fn().mockReturnValue([{ current: null }, vi.fn()]),
   useAnimation: vi.fn().mockReturnValue({ start: vi.fn(), stop: vi.fn() }),
   useReducedMotion: vi.fn().mockReturnValue(false),
-  m: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
-  motion: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
+  m: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
+  motion: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
 }))
 
 import { MessageStatus } from '../MessageStatus'
@@ -56,7 +69,9 @@ describe('MessageStatus', () => {
   })
 
   it('shows read status (blue check) for DM with readAt', () => {
-    const { container } = render(<MessageStatus currentUserId="user-1" readAt="2026-01-01T00:00:00Z" />)
+    const { container } = render(
+      <MessageStatus currentUserId="user-1" readAt="2026-01-01T00:00:00Z" />
+    )
     expect(container.querySelector('.text-primary')).toBeInTheDocument()
   })
 
@@ -87,7 +102,9 @@ describe('MessageStatus', () => {
 
   it('uses expectedReaders for squad read calculation', () => {
     // With expectedReaders=3, need 2 readers (excluding self) to be considered "read"
-    render(<MessageStatus currentUserId="user-1" readBy={['user-1', 'user-2']} expectedReaders={3} />)
+    render(
+      <MessageStatus currentUserId="user-1" readBy={['user-1', 'user-2']} expectedReaders={3} />
+    )
     // Only 1 reader (user-2), need 2 (3-1), so should be "sent"
     expect(screen.getByText('Envoyé')).toBeInTheDocument()
   })

@@ -36,18 +36,24 @@ vi.mock('framer-motion', () => ({
   useAnimate: vi.fn().mockReturnValue([{ current: null }, vi.fn()]),
   useAnimation: vi.fn().mockReturnValue({ start: vi.fn(), stop: vi.fn() }),
   useReducedMotion: vi.fn().mockReturnValue(false),
-  m: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
-  motion: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
+  m: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
+  motion: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
 }))
 
 vi.mock('../../lib/supabaseMinimal', () => ({
@@ -58,7 +64,11 @@ vi.mock('../../lib/supabaseMinimal', () => ({
 
 vi.mock('../../components/ShareButtons', () => ({
   ShareButtons: ({ url, title }: any) =>
-    createElement('div', { 'data-testid': 'share-buttons', 'data-url': url, 'data-title': title }, 'ShareButtons'),
+    createElement(
+      'div',
+      { 'data-testid': 'share-buttons', 'data-url': url, 'data-title': title },
+      'ShareButtons'
+    ),
 }))
 
 import DefaultExport, { meta } from '../session-share'

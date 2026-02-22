@@ -22,20 +22,28 @@ vi.mock('framer-motion', () => ({
   useAnimate: vi.fn().mockReturnValue([{ current: null }, vi.fn()]),
   useAnimation: vi.fn().mockReturnValue({ start: vi.fn(), stop: vi.fn() }),
   useReducedMotion: vi.fn().mockReturnValue(false),
-  m: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
-  motion: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
+  m: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
+  motion: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
 }))
-vi.mock('../../utils/haptics', () => ({ haptic: { light: vi.fn(), selection: vi.fn(), medium: vi.fn() } }))
+vi.mock('../../utils/haptics', () => ({
+  haptic: { light: vi.fn(), selection: vi.fn(), medium: vi.fn() },
+}))
 
 import { Input } from '../../components/ui/Input'
 
@@ -49,7 +57,7 @@ describe('Input Injection Prevention', () => {
     "'; DROP TABLE users; --",
     "1' OR '1'='1",
     "admin'--",
-    "1; SELECT * FROM profiles",
+    '1; SELECT * FROM profiles',
     "' UNION SELECT null, username, password FROM users --",
   ]
 
@@ -78,7 +86,7 @@ describe('Input Injection Prevention', () => {
   // ─── HTML injection in labels ──────────────────────────
   it('does not execute HTML in label prop', () => {
     const { container } = render(
-      <Input label='<img src=x onerror="alert(1)">' value="" onChange={() => {}} />,
+      <Input label='<img src=x onerror="alert(1)">' value="" onChange={() => {}} />
     )
     // No img elements should be created from the label
     expect(container.querySelectorAll('img')).toHaveLength(0)
@@ -88,12 +96,7 @@ describe('Input Injection Prevention', () => {
 
   it('does not execute HTML in error prop', () => {
     const { container } = render(
-      <Input
-        label="Email"
-        error='<script>alert("xss")</script>'
-        value=""
-        onChange={() => {}}
-      />,
+      <Input label="Email" error='<script>alert("xss")</script>' value="" onChange={() => {}} />
     )
     expect(container.querySelectorAll('script')).toHaveLength(0)
     // Error text should be visible as escaped text
@@ -107,7 +110,7 @@ describe('Input Injection Prevention', () => {
         placeholder='"><script>alert(1)</script>'
         value=""
         onChange={() => {}}
-      />,
+      />
     )
     expect(container.querySelectorAll('script')).toHaveLength(0)
   })

@@ -19,35 +19,44 @@ describe('OptimizedImage', () => {
       unobserve: vi.fn(),
       disconnect: vi.fn(),
     }
-    vi.stubGlobal('IntersectionObserver', vi.fn().mockImplementation(() => mockObserver))
+    vi.stubGlobal(
+      'IntersectionObserver',
+      vi.fn().mockImplementation(() => mockObserver)
+    )
   })
 
   it('renders fallback when src is null', () => {
-    render(createElement(OptimizedImage, {
-      src: null,
-      alt: 'test image',
-      fallback: createElement('div', { 'data-testid': 'fallback' }, 'No image'),
-    }))
+    render(
+      createElement(OptimizedImage, {
+        src: null,
+        alt: 'test image',
+        fallback: createElement('div', { 'data-testid': 'fallback' }, 'No image'),
+      })
+    )
     expect(screen.getByTestId('fallback')).toBeDefined()
   })
 
   it('renders with skeleton placeholder by default', () => {
-    render(createElement(OptimizedImage, {
-      src: 'https://example.com/image.jpg',
-      alt: 'test image',
-      priority: true,
-    }))
+    render(
+      createElement(OptimizedImage, {
+        src: 'https://example.com/image.jpg',
+        alt: 'test image',
+        priority: true,
+      })
+    )
     // Priority images show immediately
     const img = screen.getByAltText('test image')
     expect(img).toBeDefined()
   })
 
   it('sets loading to eager for priority images', () => {
-    render(createElement(OptimizedImage, {
-      src: 'https://example.com/image.jpg',
-      alt: 'test priority',
-      priority: true,
-    }))
+    render(
+      createElement(OptimizedImage, {
+        src: 'https://example.com/image.jpg',
+        alt: 'test priority',
+        priority: true,
+      })
+    )
     const img = screen.getByAltText('test priority')
     expect(img.getAttribute('loading')).toBe('eager')
   })

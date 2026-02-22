@@ -20,23 +20,31 @@ vi.mock('framer-motion', () => ({
   useAnimate: vi.fn().mockReturnValue([{ current: null }, vi.fn()]),
   useAnimation: vi.fn().mockReturnValue({ start: vi.fn(), stop: vi.fn() }),
   useReducedMotion: vi.fn().mockReturnValue(false),
-  m: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
-  motion: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
+  m: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
+  motion: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
 }))
 
 vi.mock('../../icons', () => ({
-  ArrowRight: (props: any) => createElement('span', { ...props, 'data-testid': 'arrow-icon' }, 'arrow'),
-  Sparkles: (props: any) => createElement('span', { ...props, 'data-testid': 'sparkles-icon' }, 'sparkles'),
+  ArrowRight: (props: any) =>
+    createElement('span', { ...props, 'data-testid': 'arrow-icon' }, 'arrow'),
+  Sparkles: (props: any) =>
+    createElement('span', { ...props, 'data-testid': 'sparkles-icon' }, 'sparkles'),
 }))
 
 vi.mock('../../../utils/animations', () => ({
@@ -108,9 +116,7 @@ describe('CtaSection', () => {
   describe('Trust indicators', () => {
     it('renders the trust line below CTA', () => {
       render(<CtaSection />)
-      expect(
-        screen.getByText('Gratuit · Pas de carte bancaire · 30 secondes')
-      ).toBeInTheDocument()
+      expect(screen.getByText('Gratuit · Pas de carte bancaire · 30 secondes')).toBeInTheDocument()
     })
   })
 

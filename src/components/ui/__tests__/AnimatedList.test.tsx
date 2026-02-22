@@ -17,18 +17,24 @@ vi.mock('framer-motion', () => ({
   useAnimate: vi.fn().mockReturnValue([{ current: null }, vi.fn()]),
   useAnimation: vi.fn().mockReturnValue({ start: vi.fn(), stop: vi.fn() }),
   useReducedMotion: vi.fn().mockReturnValue(false),
-  m: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
-  motion: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
+  m: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
+  motion: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
 }))
 
 describe('AnimatedList', () => {
@@ -36,9 +42,15 @@ describe('AnimatedList', () => {
   it('renders multiple items in correct order with className on wrapper', () => {
     const { container } = render(
       <AnimatedList className="my-list">
-        <AnimatedListItem key="a"><span data-testid="item-a">Alpha</span></AnimatedListItem>
-        <AnimatedListItem key="b"><span data-testid="item-b">Beta</span></AnimatedListItem>
-        <AnimatedListItem key="c"><span data-testid="item-c">Gamma</span></AnimatedListItem>
+        <AnimatedListItem key="a">
+          <span data-testid="item-a">Alpha</span>
+        </AnimatedListItem>
+        <AnimatedListItem key="b">
+          <span data-testid="item-b">Beta</span>
+        </AnimatedListItem>
+        <AnimatedListItem key="c">
+          <span data-testid="item-c">Gamma</span>
+        </AnimatedListItem>
       </AnimatedList>
     )
 
@@ -94,7 +106,9 @@ describe('AnimatedList', () => {
     // Single item
     rerender(
       <AnimatedList className="single-list">
-        <AnimatedListItem key="only"><span>Only item</span></AnimatedListItem>
+        <AnimatedListItem key="only">
+          <span>Only item</span>
+        </AnimatedListItem>
       </AnimatedList>
     )
     expect(screen.getByText('Only item')).toBeInTheDocument()
@@ -103,8 +117,12 @@ describe('AnimatedList', () => {
     // Add more items
     rerender(
       <AnimatedList className="multi-list">
-        <AnimatedListItem key="only"><span>Only item</span></AnimatedListItem>
-        <AnimatedListItem key="new"><span>New item</span></AnimatedListItem>
+        <AnimatedListItem key="only">
+          <span>Only item</span>
+        </AnimatedListItem>
+        <AnimatedListItem key="new">
+          <span>New item</span>
+        </AnimatedListItem>
       </AnimatedList>
     )
     expect(screen.getByText('Only item')).toBeInTheDocument()

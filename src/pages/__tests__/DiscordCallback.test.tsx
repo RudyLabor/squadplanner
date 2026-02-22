@@ -41,7 +41,9 @@ vi.mock('../../hooks', () => ({
 
 // Mock icons
 vi.mock('../../components/icons', () => ({
-  Loader2: ({ className }: { className: string }) => <div data-testid="loader" className={className} />,
+  Loader2: ({ className }: { className: string }) => (
+    <div data-testid="loader" className={className} />
+  ),
 }))
 
 import { DiscordCallback } from '../DiscordCallback'

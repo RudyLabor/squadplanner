@@ -10,7 +10,8 @@ vi.mock('react-router', () => ({
   useSearchParams: vi.fn().mockReturnValue([new URLSearchParams(), vi.fn()]),
   useLoaderData: vi.fn().mockReturnValue({}),
   Link: ({ children, to, ...props }: any) => createElement('a', { href: to, ...props }, children),
-  NavLink: ({ children, to, ...props }: any) => createElement('a', { href: to, ...props }, children),
+  NavLink: ({ children, to, ...props }: any) =>
+    createElement('a', { href: to, ...props }, children),
   Outlet: () => null,
   useMatches: vi.fn().mockReturnValue([]),
 }))
@@ -29,18 +30,24 @@ vi.mock('framer-motion', () => ({
   useAnimate: vi.fn().mockReturnValue([{ current: null }, vi.fn()]),
   useAnimation: vi.fn().mockReturnValue({ start: vi.fn(), stop: vi.fn() }),
   useReducedMotion: vi.fn().mockReturnValue(false),
-  m: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
-  motion: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
+  m: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
+  motion: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
 }))
 
 const mockUseActivityFeedQuery = vi.fn().mockReturnValue({ data: [], isLoading: false })
@@ -49,9 +56,22 @@ vi.mock('../../../hooks/queries/useActivityFeedQuery', () => ({
   getRelativeTime: vi.fn().mockReturnValue('il y a 5 min'),
 }))
 
-vi.mock('../../icons', () => new Proxy({}, { get: (_t, p) => typeof p === 'string' ? (props: any) => createElement('span', { 'data-testid': `icon-${p}`, ...props }) : undefined }))
+vi.mock(
+  '../../icons',
+  () =>
+    new Proxy(
+      {},
+      {
+        get: (_t, p) =>
+          typeof p === 'string'
+            ? (props: any) => createElement('span', { 'data-testid': `icon-${p}`, ...props })
+            : undefined,
+      }
+    )
+)
 vi.mock('../../ui', () => ({
-  Card: ({ children, ...props }: any) => createElement('div', { 'data-testid': 'card', ...props }, children),
+  Card: ({ children, ...props }: any) =>
+    createElement('div', { 'data-testid': 'card', ...props }, children),
 }))
 
 import { HomeActivityFeed } from '../HomeActivityFeed'
@@ -81,7 +101,11 @@ describe('HomeActivityFeed', () => {
   it('shows different empty message when user has squads', () => {
     renderWithProviders(createElement(HomeActivityFeed, { squadIds: ['squad-1'] }))
     expect(screen.getByText("Pas encore d'activité")).toBeDefined()
-    expect(screen.getByText('Participe à des sessions ou envoie des messages pour voir ton activité ici.')).toBeDefined()
+    expect(
+      screen.getByText(
+        'Participe à des sessions ou envoie des messages pour voir ton activité ici.'
+      )
+    ).toBeDefined()
   })
 
   it('shows loading skeleton when loading', () => {

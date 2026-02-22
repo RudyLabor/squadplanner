@@ -4,7 +4,10 @@ import { render, screen, act } from '@testing-library/react'
 import { ScrollProgress } from '../ScrollProgress'
 
 describe('ScrollProgress', () => {
-  const originalScrollHeight = Object.getOwnPropertyDescriptor(document.documentElement, 'scrollHeight')
+  const originalScrollHeight = Object.getOwnPropertyDescriptor(
+    document.documentElement,
+    'scrollHeight'
+  )
   const originalInnerHeight = Object.getOwnPropertyDescriptor(window, 'innerHeight')
 
   beforeEach(() => {
@@ -29,7 +32,10 @@ describe('ScrollProgress', () => {
 
   // STRICT: short page (< 2x viewport) renders nothing, no progressbar role
   it('renders nothing when page is shorter than 2x viewport', () => {
-    Object.defineProperty(document.documentElement, 'scrollHeight', { value: 800, configurable: true })
+    Object.defineProperty(document.documentElement, 'scrollHeight', {
+      value: 800,
+      configurable: true,
+    })
     Object.defineProperty(window, 'innerHeight', { value: 800, configurable: true })
 
     const { container } = render(<ScrollProgress />)
@@ -41,7 +47,10 @@ describe('ScrollProgress', () => {
 
   // STRICT: tall page (> 2x viewport) shows progressbar with correct ARIA attributes, structure, styles
   it('shows progressbar with correct attributes on tall pages', () => {
-    Object.defineProperty(document.documentElement, 'scrollHeight', { value: 3000, configurable: true })
+    Object.defineProperty(document.documentElement, 'scrollHeight', {
+      value: 3000,
+      configurable: true,
+    })
     Object.defineProperty(window, 'innerHeight', { value: 800, configurable: true })
 
     const { container } = render(<ScrollProgress />)
@@ -65,7 +74,10 @@ describe('ScrollProgress', () => {
 
   // STRICT: cleans up event listeners on unmount without errors
   it('unmounts cleanly without errors', () => {
-    Object.defineProperty(document.documentElement, 'scrollHeight', { value: 3000, configurable: true })
+    Object.defineProperty(document.documentElement, 'scrollHeight', {
+      value: 3000,
+      configurable: true,
+    })
     Object.defineProperty(window, 'innerHeight', { value: 800, configurable: true })
 
     const { unmount } = render(<ScrollProgress />)

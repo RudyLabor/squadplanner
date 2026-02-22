@@ -8,15 +8,21 @@ const { mockSupabase, mockFrom, mockRpc } = vi.hoisted(() => {
   const mockFrom = vi.fn()
   const mockRpc = vi.fn().mockResolvedValue({ data: [], error: null })
   const mockGetUser = vi.fn().mockResolvedValue({ data: { user: { id: 'user-1' } } })
-  const mockGetSession = vi.fn().mockResolvedValue({ data: { session: { user: { id: 'user-1' } } } })
+  const mockGetSession = vi
+    .fn()
+    .mockResolvedValue({ data: { session: { user: { id: 'user-1' } } } })
   const mockSupabase = {
     auth: { getSession: mockGetSession, getUser: mockGetUser },
     from: mockFrom,
     rpc: mockRpc,
     functions: {
-      invoke: vi.fn().mockResolvedValue({ data: { tip: 'Test tip', tone: 'encouragement' }, error: null }),
+      invoke: vi
+        .fn()
+        .mockResolvedValue({ data: { tip: 'Test tip', tone: 'encouragement' }, error: null }),
     },
-    channel: vi.fn().mockReturnValue({ on: vi.fn().mockReturnThis(), subscribe: vi.fn().mockReturnThis() }),
+    channel: vi
+      .fn()
+      .mockReturnValue({ on: vi.fn().mockReturnThis(), subscribe: vi.fn().mockReturnThis() }),
     removeChannel: vi.fn(),
   }
   return { mockSupabase, mockFrom, mockRpc, mockGetSession }
@@ -30,9 +36,12 @@ vi.mock('../../../lib/supabaseMinimal', () => ({
 
 // Auth store mock
 vi.mock('../../useAuth', () => ({
-  useAuthStore: Object.assign(vi.fn().mockReturnValue({ user: { id: 'user-1' }, profile: { id: 'user-1' } }), {
-    getState: vi.fn().mockReturnValue({ user: { id: 'user-1' }, profile: { id: 'user-1' } }),
-  }),
+  useAuthStore: Object.assign(
+    vi.fn().mockReturnValue({ user: { id: 'user-1' }, profile: { id: 'user-1' } }),
+    {
+      getState: vi.fn().mockReturnValue({ user: { id: 'user-1' }, profile: { id: 'user-1' } }),
+    }
+  ),
 }))
 
 // Toast mock
@@ -111,20 +120,18 @@ describe('useAICoachQuery', () => {
   // and the hook remains disabled regardless of context
   it('accepts both profile and home context types and stays disabled', () => {
     // With 'profile' context
-    const { result: profileResult } = renderHook(
-      () => useAICoachQuery('user-1', 'profile'),
-      { wrapper: createWrapper() }
-    )
+    const { result: profileResult } = renderHook(() => useAICoachQuery('user-1', 'profile'), {
+      wrapper: createWrapper(),
+    })
     // 1. fetchStatus is idle for profile context
     expect(profileResult.current.fetchStatus).toBe('idle')
     // 2. data is undefined
     expect(profileResult.current.data).toBeUndefined()
 
     // With 'home' context
-    const { result: homeResult } = renderHook(
-      () => useAICoachQuery('user-1', 'home'),
-      { wrapper: createWrapper() }
-    )
+    const { result: homeResult } = renderHook(() => useAICoachQuery('user-1', 'home'), {
+      wrapper: createWrapper(),
+    })
     // 3. fetchStatus is idle for home context
     expect(homeResult.current.fetchStatus).toBe('idle')
     // 4. data is undefined
@@ -151,10 +158,10 @@ describe('useAICoachQuery', () => {
 
     // 3. AICoachTip type can be used to create a valid tip
     const tip: AICoachTip = {
-      tip: "Pret pour la prochaine session ?",
+      tip: 'Pret pour la prochaine session ?',
       tone: 'encouragement',
     }
-    expect(tip.tip).toBe("Pret pour la prochaine session ?")
+    expect(tip.tip).toBe('Pret pour la prochaine session ?')
     // 4. Tone is correct
     expect(tip.tone).toBe('encouragement')
     // 5. context is optional

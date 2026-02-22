@@ -136,7 +136,7 @@ describe('notifySquadMessage', () => {
     const { notifySquadMessage } = await import('../notifyOnMessage')
 
     await expect(
-      notifySquadMessage('squad-1', 'sender-id', 'Alice', 'Hello'),
+      notifySquadMessage('squad-1', 'sender-id', 'Alice', 'Hello')
     ).resolves.toBeUndefined()
   })
 
@@ -145,7 +145,7 @@ describe('notifySquadMessage', () => {
     const { notifySquadMessage } = await import('../notifyOnMessage')
 
     await expect(
-      notifySquadMessage('squad-1', 'sender-id', 'Alice', 'Hello'),
+      notifySquadMessage('squad-1', 'sender-id', 'Alice', 'Hello')
     ).resolves.toBeUndefined()
   })
 })
@@ -206,16 +206,18 @@ describe('notifyDirectMessage', () => {
     const { notifyDirectMessage } = await import('../notifyOnMessage')
 
     await expect(
-      notifyDirectMessage('receiver-1', 'sender-1', 'Alice', 'Hello'),
+      notifyDirectMessage('receiver-1', 'sender-1', 'Alice', 'Hello')
     ).resolves.toBeUndefined()
   })
 
   it('should not throw when notification insert fails', async () => {
-    mockInsert.mockImplementation(() => { throw new Error('Insert failed') })
+    mockInsert.mockImplementation(() => {
+      throw new Error('Insert failed')
+    })
     const { notifyDirectMessage } = await import('../notifyOnMessage')
 
     await expect(
-      notifyDirectMessage('receiver-1', 'sender-1', 'Alice', 'Hello'),
+      notifyDirectMessage('receiver-1', 'sender-1', 'Alice', 'Hello')
     ).resolves.toBeUndefined()
   })
 })

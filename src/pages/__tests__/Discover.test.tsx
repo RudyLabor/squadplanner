@@ -22,7 +22,8 @@ vi.mock('react-router', () => ({
   useSearchParams: vi.fn().mockReturnValue([new URLSearchParams(), vi.fn()]),
   useLoaderData: vi.fn().mockReturnValue({}),
   Link: ({ children, to, ...props }: any) => createElement('a', { href: to, ...props }, children),
-  NavLink: ({ children, to, ...props }: any) => createElement('a', { href: to, ...props }, children),
+  NavLink: ({ children, to, ...props }: any) =>
+    createElement('a', { href: to, ...props }, children),
   Outlet: () => null,
   useMatches: vi.fn().mockReturnValue([]),
 }))
@@ -42,45 +43,77 @@ vi.mock('framer-motion', () => ({
   useAnimate: vi.fn().mockReturnValue([{ current: null }, vi.fn()]),
   useAnimation: vi.fn().mockReturnValue({ start: vi.fn(), stop: vi.fn() }),
   useReducedMotion: vi.fn().mockReturnValue(false),
-  m: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
-  motion: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
+  m: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
+  motion: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
 }))
 
 // Mock supabase
 vi.mock('../../lib/supabaseMinimal', () => ({
-  supabaseMinimal: { auth: { getSession: vi.fn() }, from: vi.fn(), rpc: vi.fn(), channel: vi.fn().mockReturnValue({ on: vi.fn().mockReturnThis(), subscribe: vi.fn() }), removeChannel: vi.fn() },
-  supabase: { auth: { getSession: vi.fn() }, from: vi.fn(), rpc: vi.fn(), channel: vi.fn().mockReturnValue({ on: vi.fn().mockReturnThis(), subscribe: vi.fn() }), removeChannel: vi.fn() },
+  supabaseMinimal: {
+    auth: { getSession: vi.fn() },
+    from: vi.fn(),
+    rpc: vi.fn(),
+    channel: vi.fn().mockReturnValue({ on: vi.fn().mockReturnThis(), subscribe: vi.fn() }),
+    removeChannel: vi.fn(),
+  },
+  supabase: {
+    auth: { getSession: vi.fn() },
+    from: vi.fn(),
+    rpc: vi.fn(),
+    channel: vi.fn().mockReturnValue({ on: vi.fn().mockReturnThis(), subscribe: vi.fn() }),
+    removeChannel: vi.fn(),
+  },
   isSupabaseReady: vi.fn().mockReturnValue(true),
 }))
 
 // Mock auth store
 vi.mock('../../hooks/useAuth', () => ({
   useAuthStore: Object.assign(
-    vi.fn().mockReturnValue({ user: { id: 'user-1' }, profile: { id: 'user-1', username: 'TestUser' }, isLoading: false }),
-    { getState: vi.fn().mockReturnValue({ user: { id: 'user-1' }, profile: { id: 'user-1', username: 'TestUser' } }) }
+    vi.fn().mockReturnValue({
+      user: { id: 'user-1' },
+      profile: { id: 'user-1', username: 'TestUser' },
+      isLoading: false,
+    }),
+    {
+      getState: vi.fn().mockReturnValue({
+        user: { id: 'user-1' },
+        profile: { id: 'user-1', username: 'TestUser' },
+      }),
+    }
   ),
 }))
 
 // Mock toast
 vi.mock('../../lib/toast', () => ({
-  showSuccess: vi.fn(), showError: vi.fn(), showWarning: vi.fn(), showInfo: vi.fn(),
+  showSuccess: vi.fn(),
+  showError: vi.fn(),
+  showWarning: vi.fn(),
+  showInfo: vi.fn(),
 }))
 
 // Mock i18n
 vi.mock('../../lib/i18n', () => ({
   useT: () => (key: string) => key,
   useLocale: () => 'fr',
-  useI18nStore: Object.assign(vi.fn().mockReturnValue({ locale: 'fr' }), { getState: vi.fn().mockReturnValue({ locale: 'fr' }) }),
+  useI18nStore: Object.assign(vi.fn().mockReturnValue({ locale: 'fr' }), {
+    getState: vi.fn().mockReturnValue({ locale: 'fr' }),
+  }),
 }))
 
 // Mock state persistence - configurable
@@ -110,32 +143,42 @@ vi.mock('../../components/icons', () => ({
 // Mock UI components with interaction support
 vi.mock('../../components/ui', () => ({
   SegmentedControl: ({ options, value, onChange }: any) =>
-    createElement('div', { 'data-testid': 'segmented-control' },
+    createElement(
+      'div',
+      { 'data-testid': 'segmented-control' },
       options.map((o: any) =>
-        createElement('button', {
-          key: o.value,
-          onClick: () => onChange(o.value),
-          'data-testid': `tab-${o.value}`,
-          'data-selected': value === o.value ? 'true' : 'false',
-        }, o.label)
-      ),
+        createElement(
+          'button',
+          {
+            key: o.value,
+            onClick: () => onChange(o.value),
+            'data-testid': `tab-${o.value}`,
+            'data-selected': value === o.value ? 'true' : 'false',
+          },
+          o.label
+        )
+      )
     ),
   Select: ({ options, value, onChange, placeholder, clearable }: any) =>
-    createElement('select', {
-      value: value || '',
-      onChange: (e: any) => onChange(e.target.value),
-      'data-testid': placeholder?.includes('jeux') ? 'game-select' : 'region-select',
-    },
+    createElement(
+      'select',
+      {
+        value: value || '',
+        onChange: (e: any) => onChange(e.target.value),
+        'data-testid': placeholder?.includes('jeux') ? 'game-select' : 'region-select',
+      },
       createElement('option', { value: '' }, placeholder),
       ...(options || []).map((o: any) =>
         createElement('option', { key: o.value, value: o.value }, o.label)
-      ),
+      )
     ),
-  Button: ({ children, onClick, ...props }: any) => createElement('button', { onClick, ...props }, children),
+  Button: ({ children, onClick, ...props }: any) =>
+    createElement('button', { onClick, ...props }, children),
 }))
 
 vi.mock('../../components/layout/MobilePageHeader', () => ({
-  MobilePageHeader: ({ title }: any) => createElement('div', { 'data-testid': 'mobile-header' }, title),
+  MobilePageHeader: ({ title }: any) =>
+    createElement('div', { 'data-testid': 'mobile-header' }, title),
 }))
 
 // Mock discover sub-components
@@ -146,12 +189,20 @@ vi.mock('../../components/discover/DiscoverSquadCard', () => ({
 
 vi.mock('../../components/discover/GlobalLeaderboard', () => ({
   GlobalLeaderboard: ({ game, region }: any) =>
-    createElement('div', { 'data-testid': 'global-leaderboard', 'data-game': game || '', 'data-region': region || '' }),
+    createElement('div', {
+      'data-testid': 'global-leaderboard',
+      'data-game': game || '',
+      'data-region': region || '',
+    }),
 }))
 
 vi.mock('../../components/discover/MatchmakingSection', () => ({
   MatchmakingSection: ({ game, region }: any) =>
-    createElement('div', { 'data-testid': 'matchmaking', 'data-game': game || '', 'data-region': region || '' }),
+    createElement('div', {
+      'data-testid': 'matchmaking',
+      'data-game': game || '',
+      'data-region': region || '',
+    }),
 }))
 
 /* ------------------------------------------------------------------ */
@@ -188,9 +239,7 @@ describe('Discover Page', () => {
 
   const renderDiscover = () => {
     return render(
-      createElement(QueryClientProvider, { client: queryClient },
-        createElement(Discover)
-      )
+      createElement(QueryClientProvider, { client: queryClient }, createElement(Discover))
     )
   }
 

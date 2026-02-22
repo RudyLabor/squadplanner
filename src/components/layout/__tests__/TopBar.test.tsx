@@ -9,7 +9,14 @@ vi.mock('react-router', () => ({
 
 vi.mock('../../icons', () => {
   const icon = (props: any) => createElement('span', props)
-  return { Search: icon, LayoutGrid: icon, Compass: icon, Settings: icon, HelpCircle: icon, Phone: icon }
+  return {
+    Search: icon,
+    LayoutGrid: icon,
+    Compass: icon,
+    Settings: icon,
+    HelpCircle: icon,
+    Phone: icon,
+  }
 })
 
 vi.mock('../Breadcrumbs', () => ({
@@ -25,7 +32,7 @@ vi.mock('../../NotificationCenter', () => ({
 }))
 
 vi.mock('../../ui/Sheet', () => ({
-  Sheet: ({ children, open }: any) => open ? createElement('div', null, children) : null,
+  Sheet: ({ children, open }: any) => (open ? createElement('div', null, children) : null),
 }))
 
 vi.mock('../../ui/Tooltip', () => ({

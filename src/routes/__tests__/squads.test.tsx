@@ -43,18 +43,24 @@ vi.mock('framer-motion', () => ({
   useAnimate: vi.fn().mockReturnValue([{ current: null }, vi.fn()]),
   useAnimation: vi.fn().mockReturnValue({ start: vi.fn(), stop: vi.fn() }),
   useReducedMotion: vi.fn().mockReturnValue(false),
-  m: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
-  motion: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
+  m: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
+  motion: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
 }))
 
 vi.mock('../../lib/supabase-minimal-ssr', () => ({
@@ -77,7 +83,11 @@ vi.mock('../../lib/queryClient', () => ({
 
 vi.mock('../../components/ClientRouteWrapper', () => ({
   ClientRouteWrapper: ({ children, seeds }: any) =>
-    createElement('div', { 'data-testid': 'route-wrapper', 'data-seeds': JSON.stringify(seeds) }, children),
+    createElement(
+      'div',
+      { 'data-testid': 'route-wrapper', 'data-seeds': JSON.stringify(seeds) },
+      children
+    ),
 }))
 
 vi.mock('../../pages/Squads', () => ({
@@ -98,11 +108,7 @@ function makeQC() {
   return new QueryClient({ defaultOptions: { queries: { retry: false } } })
 }
 
-function setupSSRMocks(overrides: {
-  user?: any
-  error?: any
-  membershipsData?: any
-}) {
+function setupSSRMocks(overrides: { user?: any; error?: any; membershipsData?: any }) {
   const supabaseHeaders = new Headers()
   const fromFn = vi.fn()
 
@@ -160,7 +166,11 @@ describe('routes/squads', () => {
     it('returns canonical link', () => {
       const result = meta()
       const canonical = result.find((m: any) => m.tagName === 'link')
-      expect(canonical).toEqual({ tagName: 'link', rel: 'canonical', href: 'https://squadplanner.fr/squads' })
+      expect(canonical).toEqual({
+        tagName: 'link',
+        rel: 'canonical',
+        href: 'https://squadplanner.fr/squads',
+      })
     })
 
     it('returns og:url', () => {
@@ -201,11 +211,27 @@ describe('routes/squads', () => {
       const memberships = [
         {
           squad_id: 's1',
-          squads: { id: 's1', name: 'Alpha', game: 'Valorant', invite_code: 'aaa', owner_id: 'u1', total_members: 5, created_at: '2026-01-01' },
+          squads: {
+            id: 's1',
+            name: 'Alpha',
+            game: 'Valorant',
+            invite_code: 'aaa',
+            owner_id: 'u1',
+            total_members: 5,
+            created_at: '2026-01-01',
+          },
         },
         {
           squad_id: 's2',
-          squads: { id: 's2', name: 'Beta', game: 'LoL', invite_code: 'bbb', owner_id: 'u2', total_members: 3, created_at: '2026-01-02' },
+          squads: {
+            id: 's2',
+            name: 'Beta',
+            game: 'LoL',
+            invite_code: 'bbb',
+            owner_id: 'u2',
+            total_members: 3,
+            created_at: '2026-01-02',
+          },
         },
       ]
       setupSSRMocks({ user: { id: 'u1' }, membershipsData: memberships })
@@ -221,7 +247,14 @@ describe('routes/squads', () => {
       const memberships = [
         {
           squad_id: 's1',
-          squads: { id: 's1', name: 'S', game: 'G', invite_code: 'x', owner_id: 'o', created_at: '2026-01-01' },
+          squads: {
+            id: 's1',
+            name: 'S',
+            game: 'G',
+            invite_code: 'x',
+            owner_id: 'o',
+            created_at: '2026-01-01',
+          },
         },
       ]
       setupSSRMocks({ user: { id: 'u1' }, membershipsData: memberships })
@@ -234,7 +267,15 @@ describe('routes/squads', () => {
       const memberships = [
         {
           squad_id: 's1',
-          squads: { id: 's1', name: 'S', game: 'G', invite_code: 'x', owner_id: 'o', total_members: null, created_at: '2026-01-01' },
+          squads: {
+            id: 's1',
+            name: 'S',
+            game: 'G',
+            invite_code: 'x',
+            owner_id: 'o',
+            total_members: null,
+            created_at: '2026-01-01',
+          },
         },
       ]
       setupSSRMocks({ user: { id: 'u1' }, membershipsData: memberships })
@@ -280,7 +321,18 @@ describe('routes/squads', () => {
         select: vi.fn().mockReturnValue({
           eq: vi.fn().mockResolvedValue({
             data: [
-              { squad_id: 's1', squads: { id: 's1', name: 'CS', game: 'G', invite_code: 'a', owner_id: 'c1', total_members: 4, created_at: '2026-01-01' } },
+              {
+                squad_id: 's1',
+                squads: {
+                  id: 's1',
+                  name: 'CS',
+                  game: 'G',
+                  invite_code: 'a',
+                  owner_id: 'c1',
+                  total_members: 4,
+                  created_at: '2026-01-01',
+                },
+              },
             ],
           }),
         }),
@@ -297,7 +349,18 @@ describe('routes/squads', () => {
         select: vi.fn().mockReturnValue({
           eq: vi.fn().mockResolvedValue({
             data: [
-              { squad_id: 's1', squads: { id: 's1', name: 'S', game: 'G', invite_code: 'x', owner_id: 'c1', total_members: null, created_at: '2026-01-01' } },
+              {
+                squad_id: 's1',
+                squads: {
+                  id: 's1',
+                  name: 'S',
+                  game: 'G',
+                  invite_code: 'x',
+                  owner_id: 'c1',
+                  total_members: null,
+                  created_at: '2026-01-01',
+                },
+              },
             ],
           }),
         }),
@@ -319,7 +382,9 @@ describe('routes/squads', () => {
     it('renders inside ClientRouteWrapper (lazy component)', () => {
       const qc = makeQC()
       render(
-        createElement(QueryClientProvider, { client: qc },
+        createElement(
+          QueryClientProvider,
+          { client: qc },
           createElement(DefaultExport, { loaderData: { squads: [] } } as any)
         )
       )
@@ -330,7 +395,9 @@ describe('routes/squads', () => {
       const qc = makeQC()
       const squads = [{ id: 's1', name: 'Squad1', member_count: 3 }]
       render(
-        createElement(QueryClientProvider, { client: qc },
+        createElement(
+          QueryClientProvider,
+          { client: qc },
           createElement(DefaultExport, { loaderData: { squads } } as any)
         )
       )
@@ -344,7 +411,9 @@ describe('routes/squads', () => {
     it('renders without crashing with empty squads', () => {
       const qc = makeQC()
       const { container } = render(
-        createElement(QueryClientProvider, { client: qc },
+        createElement(
+          QueryClientProvider,
+          { client: qc },
           createElement(DefaultExport, { loaderData: { squads: [] } } as any)
         )
       )

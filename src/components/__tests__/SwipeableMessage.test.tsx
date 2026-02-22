@@ -18,18 +18,24 @@ vi.mock('framer-motion', () => ({
   useAnimate: vi.fn().mockReturnValue([{ current: null }, vi.fn()]),
   useAnimation: vi.fn().mockReturnValue({ start: vi.fn(), stop: vi.fn() }),
   useReducedMotion: vi.fn().mockReturnValue(false),
-  m: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
-  motion: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
+  m: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
+  motion: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
 }))
 
 // Mock icons
@@ -67,11 +73,13 @@ describe('SwipeableMessage', () => {
 
   // STRICT: Verifies default rendering — children shown, swipe indicators present (both directions enabled by default), container structure
   it('renders children with both swipe indicators by default', () => {
-    const { container } = render(createElement(SwipeableMessage, {
-      onReply: vi.fn(),
-      onActions: vi.fn(),
-      children: createElement('div', { 'data-testid': 'msg' }, 'Hello World'),
-    }))
+    const { container } = render(
+      createElement(SwipeableMessage, {
+        onReply: vi.fn(),
+        onActions: vi.fn(),
+        children: createElement('div', { 'data-testid': 'msg' }, 'Hello World'),
+      })
+    )
 
     // 1. Children rendered
     expect(screen.getByText('Hello World')).toBeInTheDocument()
@@ -92,12 +100,14 @@ describe('SwipeableMessage', () => {
 
   // STRICT: Verifies disabled mode — only children rendered, no swipe indicators, no wrapper div with overflow
   it('renders only children without swipe UI when disabled', () => {
-    const { container } = render(createElement(SwipeableMessage, {
-      disabled: true,
-      onReply: vi.fn(),
-      onActions: vi.fn(),
-      children: createElement('div', {}, 'Disabled Message'),
-    }))
+    const { container } = render(
+      createElement(SwipeableMessage, {
+        disabled: true,
+        onReply: vi.fn(),
+        onActions: vi.fn(),
+        children: createElement('div', {}, 'Disabled Message'),
+      })
+    )
 
     // 1. Children rendered
     expect(screen.getByText('Disabled Message')).toBeInTheDocument()
@@ -117,11 +127,13 @@ describe('SwipeableMessage', () => {
   it('renders only children when prefers-reduced-motion is active', () => {
     mockedUseReducedMotion.mockReturnValue(true)
 
-    const { container } = render(createElement(SwipeableMessage, {
-      onReply: vi.fn(),
-      onActions: vi.fn(),
-      children: createElement('div', {}, 'Reduced Motion'),
-    }))
+    const { container } = render(
+      createElement(SwipeableMessage, {
+        onReply: vi.fn(),
+        onActions: vi.fn(),
+        children: createElement('div', {}, 'Reduced Motion'),
+      })
+    )
 
     // 1. Children rendered
     expect(screen.getByText('Reduced Motion')).toBeInTheDocument()
@@ -142,12 +154,14 @@ describe('SwipeableMessage', () => {
   // STRICT: Verifies selective swipe — disabling one direction hides its indicator but keeps the other
   it('renders only left indicator when swipeRight is disabled, and vice versa', () => {
     // Only swipe left enabled
-    const { container, unmount } = render(createElement(SwipeableMessage, {
-      enableSwipeLeft: true,
-      enableSwipeRight: false,
-      onReply: vi.fn(),
-      children: createElement('div', {}, 'Left Only'),
-    }))
+    const { container, unmount } = render(
+      createElement(SwipeableMessage, {
+        enableSwipeLeft: true,
+        enableSwipeRight: false,
+        onReply: vi.fn(),
+        children: createElement('div', {}, 'Left Only'),
+      })
+    )
 
     // 1. Reply icon visible (left swipe enabled)
     expect(screen.getByTestId('icon-reply')).toBeInTheDocument()
@@ -161,12 +175,14 @@ describe('SwipeableMessage', () => {
     unmount()
 
     // Only swipe right enabled
-    render(createElement(SwipeableMessage, {
-      enableSwipeLeft: false,
-      enableSwipeRight: true,
-      onActions: vi.fn(),
-      children: createElement('div', {}, 'Right Only'),
-    }))
+    render(
+      createElement(SwipeableMessage, {
+        enableSwipeLeft: false,
+        enableSwipeRight: true,
+        onActions: vi.fn(),
+        children: createElement('div', {}, 'Right Only'),
+      })
+    )
 
     // 5. Reply icon NOT visible (left swipe disabled)
     expect(screen.queryByTestId('icon-reply')).not.toBeInTheDocument()

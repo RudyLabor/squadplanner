@@ -7,12 +7,15 @@ import { createElement, useState } from 'react'
 /* ------------------------------------------------------------------ */
 vi.mock('framer-motion', () => ({
   AnimatePresence: ({ children }: any) => children,
-  m: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
+  m: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
 }))
 
 // jsdom doesn't implement scrollIntoView
@@ -127,19 +130,25 @@ describe('MentionInput', () => {
 
   it('shows @ suggestions when @ is preceded by space', () => {
     render(<MentionInputWrapper members={members} initialValue="hello " />)
-    fireEvent.change(screen.getByRole('textbox'), { target: { value: 'hello @', selectionStart: 7 } })
+    fireEvent.change(screen.getByRole('textbox'), {
+      target: { value: 'hello @', selectionStart: 7 },
+    })
     expect(screen.getByText('Alice')).toBeInTheDocument()
   })
 
   it('hides suggestions when query contains a space', () => {
     render(<MentionInputWrapper members={members} />)
-    fireEvent.change(screen.getByRole('textbox'), { target: { value: '@Alice rocks', selectionStart: 12 } })
+    fireEvent.change(screen.getByRole('textbox'), {
+      target: { value: '@Alice rocks', selectionStart: 12 },
+    })
     expect(screen.queryByText('Membres')).not.toBeInTheDocument()
   })
 
   it('hides suggestions when @ is mid-word (no space before)', () => {
     render(<MentionInputWrapper members={members} />)
-    fireEvent.change(screen.getByRole('textbox'), { target: { value: 'email@', selectionStart: 6 } })
+    fireEvent.change(screen.getByRole('textbox'), {
+      target: { value: 'email@', selectionStart: 6 },
+    })
     expect(screen.queryByText('Membres')).not.toBeInTheDocument()
   })
 

@@ -28,18 +28,24 @@ vi.mock('framer-motion', () => ({
   useAnimate: vi.fn().mockReturnValue([{ current: null }, vi.fn()]),
   useAnimation: vi.fn().mockReturnValue({ start: vi.fn(), stop: vi.fn() }),
   useReducedMotion: vi.fn().mockReturnValue(false),
-  m: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
-  motion: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
+  m: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
+  motion: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
 }))
 
 vi.mock('react-router', () => ({
@@ -49,7 +55,8 @@ vi.mock('react-router', () => ({
   useSearchParams: vi.fn().mockReturnValue([new URLSearchParams(), vi.fn()]),
   useLoaderData: vi.fn().mockReturnValue({}),
   Link: ({ children, to, ...props }: any) => createElement('a', { href: to, ...props }, children),
-  NavLink: ({ children, to, ...props }: any) => createElement('a', { href: to, ...props }, children),
+  NavLink: ({ children, to, ...props }: any) =>
+    createElement('a', { href: to, ...props }, children),
   Outlet: () => null,
   useMatches: vi.fn().mockReturnValue([]),
 }))
@@ -70,29 +77,31 @@ const mockAuthState: {
 vi.mock('../../hooks/useAuth', () => ({
   useAuthStore: Object.assign(
     vi.fn().mockImplementation(() => mockAuthState),
-    { getState: vi.fn().mockImplementation(() => mockAuthState) },
+    { getState: vi.fn().mockImplementation(() => mockAuthState) }
   ),
 }))
 vi.mock('../../hooks', () => ({
   useAuthStore: Object.assign(
     vi.fn().mockImplementation(() => mockAuthState),
-    { getState: vi.fn().mockImplementation(() => mockAuthState) },
+    { getState: vi.fn().mockImplementation(() => mockAuthState) }
   ),
 }))
 
 vi.mock('../../lib/i18n', () => ({
   useT: () => (k: string) => k,
   useLocale: () => 'fr',
-  useI18nStore: Object.assign(
-    vi.fn().mockReturnValue({ locale: 'fr' }),
-    { getState: vi.fn().mockReturnValue({ locale: 'fr' }) },
-  ),
+  useI18nStore: Object.assign(vi.fn().mockReturnValue({ locale: 'fr' }), {
+    getState: vi.fn().mockReturnValue({ locale: 'fr' }),
+  }),
 }))
 vi.mock('../../utils/haptics', () => ({
   haptic: { light: vi.fn(), selection: vi.fn(), medium: vi.fn(), success: vi.fn(), error: vi.fn() },
 }))
 vi.mock('../../lib/toast', () => ({
-  showSuccess: vi.fn(), showError: vi.fn(), showWarning: vi.fn(), showInfo: vi.fn(),
+  showSuccess: vi.fn(),
+  showError: vi.fn(),
+  showWarning: vi.fn(),
+  showInfo: vi.fn(),
 }))
 
 import { PremiumGate } from '../../components/PremiumGate'
@@ -116,7 +125,7 @@ describe('Auth Bypass Prevention', () => {
     render(
       <PremiumGate>
         <div data-testid="premium-content">PREMIUM SECRET</div>
-      </PremiumGate>,
+      </PremiumGate>
     )
     expect(screen.queryByTestId('premium-content')).toBeNull()
   })
@@ -127,7 +136,7 @@ describe('Auth Bypass Prevention', () => {
     render(
       <PremiumGate>
         <div data-testid="premium-content">PREMIUM SECRET</div>
-      </PremiumGate>,
+      </PremiumGate>
     )
     expect(screen.queryByTestId('premium-content')).toBeNull()
   })
@@ -139,7 +148,7 @@ describe('Auth Bypass Prevention', () => {
     render(
       <PremiumGate>
         <div data-testid="premium-content">PREMIUM SECRET</div>
-      </PremiumGate>,
+      </PremiumGate>
     )
     expect(screen.queryByTestId('premium-content')).toBeNull()
   })
@@ -232,7 +241,7 @@ describe('Auth Bypass Prevention', () => {
     render(
       <PremiumGate>
         <div data-testid="premium-content">PREMIUM SECRET</div>
-      </PremiumGate>,
+      </PremiumGate>
     )
     expect(screen.queryByTestId('premium-content')).toBeNull()
   })

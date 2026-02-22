@@ -19,7 +19,9 @@ describe('LazyComponents', () => {
   })
 
   it('Suspense wraps lazy content correctly', () => {
-    const TestComponent = lazy(() => Promise.resolve({ default: () => createElement('div', null, 'Lazy loaded') }))
+    const TestComponent = lazy(() =>
+      Promise.resolve({ default: () => createElement('div', null, 'Lazy loaded') })
+    )
     render(
       <Suspense fallback={<div>Loading...</div>}>
         <div>Sync content</div>
@@ -30,8 +32,18 @@ describe('LazyComponents', () => {
 
   it('LazyWrapper pattern works with Suspense and fallback', () => {
     // Replicate what LazyWrapper does
-    function TestLazyWrapper({ children, fallback }: { children: React.ReactNode; fallback?: React.ReactNode }) {
-      return createElement(Suspense, { fallback: fallback || createElement('div', { 'data-testid': 'skeleton' }) }, children)
+    function TestLazyWrapper({
+      children,
+      fallback,
+    }: {
+      children: React.ReactNode
+      fallback?: React.ReactNode
+    }) {
+      return createElement(
+        Suspense,
+        { fallback: fallback || createElement('div', { 'data-testid': 'skeleton' }) },
+        children
+      )
     }
 
     render(
@@ -43,8 +55,18 @@ describe('LazyComponents', () => {
   })
 
   it('LazyWrapper pattern works with custom fallback', () => {
-    function TestLazyWrapper({ children, fallback }: { children: React.ReactNode; fallback?: React.ReactNode }) {
-      return createElement(Suspense, { fallback: fallback || createElement('div', null, 'Default loading') }, children)
+    function TestLazyWrapper({
+      children,
+      fallback,
+    }: {
+      children: React.ReactNode
+      fallback?: React.ReactNode
+    }) {
+      return createElement(
+        Suspense,
+        { fallback: fallback || createElement('div', null, 'Default loading') },
+        children
+      )
     }
 
     render(
@@ -56,7 +78,9 @@ describe('LazyComponents', () => {
   })
 
   it('lazy() creates a valid lazy component', () => {
-    const LazyComp = lazy(() => Promise.resolve({ default: () => createElement('div', null, 'Test') }))
+    const LazyComp = lazy(() =>
+      Promise.resolve({ default: () => createElement('div', null, 'Test') })
+    )
     expect(LazyComp).toBeDefined()
     expect(typeof LazyComp).toBe('object')
   })

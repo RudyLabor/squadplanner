@@ -25,7 +25,8 @@ vi.mock('react-router', () => ({
   useLoaderData: vi.fn().mockReturnValue({}),
   Navigate: ({ to }: any) => createElement('div', { 'data-testid': 'navigate', 'data-to': to }),
   Link: ({ children, to, ...props }: any) => createElement('a', { href: to, ...props }, children),
-  NavLink: ({ children, to, ...props }: any) => createElement('a', { href: to, ...props }, children),
+  NavLink: ({ children, to, ...props }: any) =>
+    createElement('a', { href: to, ...props }, children),
   Outlet: ({ children }: any) => createElement('div', null, children || 'outlet'),
   useMatches: vi.fn().mockReturnValue([]),
 }))
@@ -44,18 +45,24 @@ vi.mock('framer-motion', () => ({
   useAnimate: vi.fn().mockReturnValue([{ current: null }, vi.fn()]),
   useAnimation: vi.fn().mockReturnValue({ start: vi.fn(), stop: vi.fn() }),
   useReducedMotion: vi.fn().mockReturnValue(false),
-  m: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
-  motion: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
+  m: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
+  motion: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
 }))
 
 vi.mock('../../hooks/useAuth', () => ({
@@ -64,9 +71,17 @@ vi.mock('../../hooks/useAuth', () => ({
 vi.mock('../../hooks', () => ({
   useAuthStore: mockUseAuthStore,
 }))
-vi.mock('../../lib/i18n', () => ({ useT: () => (k: string) => k, useLocale: () => 'fr', useI18nStore: Object.assign(vi.fn().mockReturnValue({ locale: 'fr' }), { getState: vi.fn().mockReturnValue({ locale: 'fr' }) }) }))
+vi.mock('../../lib/i18n', () => ({
+  useT: () => (k: string) => k,
+  useLocale: () => 'fr',
+  useI18nStore: Object.assign(vi.fn().mockReturnValue({ locale: 'fr' }), {
+    getState: vi.fn().mockReturnValue({ locale: 'fr' }),
+  }),
+}))
 vi.mock('../../components/landing/FaqSection', () => ({ faqs: [{ q: 'Question?', a: 'Answer.' }] }))
-vi.mock('../../pages/Landing', () => ({ default: () => createElement('div', { 'data-testid': 'landing' }, 'Landing') }))
+vi.mock('../../pages/Landing', () => ({
+  default: () => createElement('div', { 'data-testid': 'landing' }, 'Landing'),
+}))
 
 import DefaultExport, { headers, meta } from '../_index'
 
@@ -98,7 +113,11 @@ describe('routes/_index', () => {
 
       // 3 - canonical link
       const canonical = result.find((m: any) => m.tagName === 'link')
-      expect(canonical).toEqual({ tagName: 'link', rel: 'canonical', href: 'https://squadplanner.fr/' })
+      expect(canonical).toEqual({
+        tagName: 'link',
+        rel: 'canonical',
+        href: 'https://squadplanner.fr/',
+      })
 
       // 4 - og:url
       const ogUrl = result.find((m: any) => m.property === 'og:url')

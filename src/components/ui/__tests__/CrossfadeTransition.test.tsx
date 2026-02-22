@@ -16,18 +16,24 @@ vi.mock('framer-motion', () => ({
   useAnimate: vi.fn().mockReturnValue([{ current: null }, vi.fn()]),
   useAnimation: vi.fn().mockReturnValue({ start: vi.fn(), stop: vi.fn() }),
   useReducedMotion: vi.fn().mockReturnValue(false),
-  m: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
-  motion: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
+  m: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
+  motion: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
 }))
 
 const useReducedMotionMock = vi.fn().mockReturnValue(false)
@@ -89,10 +95,7 @@ describe('CrossfadeTransition', () => {
   // STRICT: transition between loading states swaps content correctly, aria-busy updates
   it('transitions correctly from loading to loaded state', () => {
     const { container, rerender } = render(
-      <CrossfadeTransition
-        isLoading={true}
-        skeleton={<div data-testid="skel">Loading...</div>}
-      >
+      <CrossfadeTransition isLoading={true} skeleton={<div data-testid="skel">Loading...</div>}>
         <div data-testid="content">Data loaded</div>
       </CrossfadeTransition>
     )
@@ -104,10 +107,7 @@ describe('CrossfadeTransition', () => {
 
     // Rerender with loading=false
     rerender(
-      <CrossfadeTransition
-        isLoading={false}
-        skeleton={<div data-testid="skel">Loading...</div>}
-      >
+      <CrossfadeTransition isLoading={false} skeleton={<div data-testid="skel">Loading...</div>}>
         <div data-testid="content">Data loaded</div>
       </CrossfadeTransition>
     )

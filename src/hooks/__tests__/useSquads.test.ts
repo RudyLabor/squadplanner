@@ -172,8 +172,28 @@ describe('useSquadsStore', () => {
 
     it('transforms memberships into squads with member counts', async () => {
       const mockMemberships = [
-        { squad_id: 'sq1', squads: { id: 'sq1', name: 'Alpha', game: 'Valorant', invite_code: 'ABC', owner_id: 'u1', created_at: '2026-01-01T00:00:00Z' } },
-        { squad_id: 'sq2', squads: { id: 'sq2', name: 'Beta', game: 'LoL', invite_code: 'DEF', owner_id: 'u2', created_at: '2026-01-15T00:00:00Z' } },
+        {
+          squad_id: 'sq1',
+          squads: {
+            id: 'sq1',
+            name: 'Alpha',
+            game: 'Valorant',
+            invite_code: 'ABC',
+            owner_id: 'u1',
+            created_at: '2026-01-01T00:00:00Z',
+          },
+        },
+        {
+          squad_id: 'sq2',
+          squads: {
+            id: 'sq2',
+            name: 'Beta',
+            game: 'LoL',
+            invite_code: 'DEF',
+            owner_id: 'u2',
+            created_at: '2026-01-15T00:00:00Z',
+          },
+        },
       ]
 
       const mockMemberCounts = [
@@ -212,8 +232,8 @@ describe('useSquadsStore', () => {
       expect(squads[0].name).toBe('Beta')
       expect(squads[1].name).toBe('Alpha')
       // STRICT: member counts were calculated correctly
-      expect(squads[0].member_count).toBe(2)  // sq2 has 2 members
-      expect(squads[1].member_count).toBe(3)  // sq1 has 3 members
+      expect(squads[0].member_count).toBe(2) // sq2 has 2 members
+      expect(squads[1].member_count).toBe(3) // sq1 has 3 members
       // STRICT: lastFetchedAt was updated
       expect(useSquadsStore.getState().lastFetchedAt).not.toBeNull()
       // STRICT: isLoading was set back to false
@@ -255,10 +275,25 @@ describe('useSquadsStore', () => {
 
   describe('fetchSquadById', () => {
     it('fetches squad with members and profile data', async () => {
-      const squadData = { id: 'sq1', name: 'Alpha', game: 'Valorant', invite_code: 'ABC', owner_id: 'u1', created_at: '2026-01-01' }
+      const squadData = {
+        id: 'sq1',
+        name: 'Alpha',
+        game: 'Valorant',
+        invite_code: 'ABC',
+        owner_id: 'u1',
+        created_at: '2026-01-01',
+      }
       const membersData = [
-        { user_id: 'u1', role: 'leader', profiles: { username: 'Captain', avatar_url: null, reliability_score: 95 } },
-        { user_id: 'u2', role: 'member', profiles: { username: 'Rookie', avatar_url: null, reliability_score: 80 } },
+        {
+          user_id: 'u1',
+          role: 'leader',
+          profiles: { username: 'Captain', avatar_url: null, reliability_score: 95 },
+        },
+        {
+          user_id: 'u2',
+          role: 'member',
+          profiles: { username: 'Rookie', avatar_url: null, reliability_score: 80 },
+        },
       ]
 
       mockFrom.mockImplementation((table: string) => {

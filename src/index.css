@@ -1125,17 +1125,6 @@ select:focus-visible,
   opacity: 0.15;
 }
 
-/* Custom cursor on landing page - V3 */
-.landing-custom-cursor,
-.landing-custom-cursor * {
-  cursor: none !important;
-}
-@media (pointer: coarse), (prefers-reduced-motion: reduce) {
-  .landing-custom-cursor,
-  .landing-custom-cursor * {
-    cursor: auto !important;
-  }
-}
 
 /* SVG illustration theme transitions - V3 */
 .illustration-themed svg path,

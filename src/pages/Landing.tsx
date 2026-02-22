@@ -2,7 +2,6 @@
 import { useScroll, useTransform, useMotionValue, useSpring, useInView } from 'framer-motion'
 import { useRef, useEffect, useState, type ReactNode } from 'react'
 import { useAuthStore } from '../hooks/useAuth'
-import { CustomCursor } from '../components/landing/CustomCursor'
 import { LandingNavbar } from '../components/landing/LandingNavbar'
 import { LandingHero } from '../components/landing/LandingHero'
 import { SocialProofSection } from '../components/landing/SocialProofSection'
@@ -75,9 +74,8 @@ export default function Landing() {
 
   return (
     <div
-      className={`min-h-screen bg-bg-base landing-page landing-noise ${isDesktop ? 'landing-custom-cursor' : ''}`}
+      className="min-h-screen bg-bg-base landing-page landing-noise"
     >
-      <CustomCursor />
 
       <a
         href="#main-content"

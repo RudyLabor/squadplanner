@@ -18,7 +18,7 @@ export function premiumRequiredEmbed() {
     .setDescription(
       'Cette commande necessite un abonnement Bot Premium (2,99 EUR/mois).\n\n' +
         "Demande a un admin du serveur d'activer Premium avec `/premium`.\n\n" +
-        `[En savoir plus](${APP_URL}/premium)`,
+        `[En savoir plus](${APP_URL}/premium)`
     )
 }
 
@@ -27,7 +27,7 @@ export function accountNotLinkedEmbed() {
     .setTitle('Compte non lie')
     .setDescription(
       'Lie ton compte avec `/link [ton_username_SP]` pour utiliser cette commande.\n\n' +
-        `Pas encore de compte ? Inscris-toi sur [squadplanner.fr](${APP_URL})`,
+        `Pas encore de compte ? Inscris-toi sur [squadplanner.fr](${APP_URL})`
     )
 }
 

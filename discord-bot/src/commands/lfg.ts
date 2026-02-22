@@ -1,7 +1,4 @@
-import {
-  SlashCommandBuilder,
-  type ChatInputCommandInteraction,
-} from 'discord.js'
+import { SlashCommandBuilder, type ChatInputCommandInteraction } from 'discord.js'
 import { supabaseAdmin } from '../lib/supabase.js'
 import { baseEmbed } from '../lib/embeds.js'
 import type { BotCommand } from '../types.js'
@@ -15,7 +12,7 @@ async function execute(interaction: ChatInputCommandInteraction) {
   const rank = interaction.options.getString('rang')
 
   // Search for players looking for squad, matching the game
-  let query = supabaseAdmin
+  const query = supabaseAdmin
     .from('profiles')
     .select('username, avatar_url, level, reliability_score, preferred_games')
     .eq('looking_for_squad', true)
@@ -25,10 +22,11 @@ async function execute(interaction: ChatInputCommandInteraction) {
   const { data: players } = await query
 
   // Filter by game match (preferred_games is a text array)
-  const filtered = players?.filter((p) => {
-    const games = (p.preferred_games as string[] | null) ?? []
-    return games.some((g) => g.toLowerCase().includes(game))
-  }) ?? []
+  const filtered =
+    players?.filter((p) => {
+      const games = (p.preferred_games as string[] | null) ?? []
+      return games.some((g) => g.toLowerCase().includes(game))
+    }) ?? []
 
   if (!filtered.length) {
     await interaction.editReply({
@@ -37,7 +35,7 @@ async function execute(interaction: ChatInputCommandInteraction) {
           .setTitle(`LFG — ${game}`)
           .setDescription(
             `Aucun joueur disponible pour **${game}** en ce moment.\n\n` +
-              `Active "Cherche squad" sur [ton profil](${APP_URL}/profile) pour apparaitre ici !`,
+              `Active "Cherche squad" sur [ton profil](${APP_URL}/profile) pour apparaitre ici !`
           ),
       ],
     })
@@ -56,7 +54,7 @@ async function execute(interaction: ChatInputCommandInteraction) {
         .setTitle(`LFG — ${game}${rank ? ` (${rank}+)` : ''}`)
         .setDescription(
           `${filtered.length} joueur(s) disponible(s) :\n\n${lines.join('\n')}\n\n` +
-            `Contacte-les sur [squadplanner.fr](${APP_URL}/discover)`,
+            `Contacte-les sur [squadplanner.fr](${APP_URL}/discover)`
         ),
     ],
   })
@@ -66,11 +64,7 @@ export default {
   data: new SlashCommandBuilder()
     .setName('lfg')
     .setDescription('Trouve des joueurs pour une game')
-    .addStringOption((opt) =>
-      opt.setName('jeu').setDescription('Jeu recherche').setRequired(true),
-    )
-    .addStringOption((opt) =>
-      opt.setName('rang').setDescription('Rang minimum (optionnel)'),
-    ),
+    .addStringOption((opt) => opt.setName('jeu').setDescription('Jeu recherche').setRequired(true))
+    .addStringOption((opt) => opt.setName('rang').setDescription('Rang minimum (optionnel)')),
   execute,
 } satisfies BotCommand

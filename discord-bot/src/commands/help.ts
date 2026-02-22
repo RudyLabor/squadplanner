@@ -1,7 +1,4 @@
-import {
-  SlashCommandBuilder,
-  type ChatInputCommandInteraction,
-} from 'discord.js'
+import { SlashCommandBuilder, type ChatInputCommandInteraction } from 'discord.js'
 import { baseEmbed } from '../lib/embeds.js'
 import type { BotCommand } from '../types.js'
 
@@ -12,7 +9,7 @@ async function execute(interaction: ChatInputCommandInteraction) {
     .setTitle('Squad Planner — Aide')
     .setDescription(
       'Organise tes sessions gaming directement depuis Discord !\n\n' +
-        `**[squadplanner.fr](${APP_URL})** — L'app complete pour gerer tes squads.`,
+        `**[squadplanner.fr](${APP_URL})** — L'app complete pour gerer tes squads.`
     )
     .addFields(
       {
@@ -33,8 +30,7 @@ async function execute(interaction: ChatInputCommandInteraction) {
       {
         name: '👥 Squad (gratuit)',
         value:
-          '`/squad info` — Infos de tes squads\n' +
-          '`/squad stats` — Stats des 30 derniers jours',
+          '`/squad info` — Infos de tes squads\n' + '`/squad stats` — Stats des 30 derniers jours',
       },
       {
         name: '🔍 LFG (gratuit)',
@@ -49,7 +45,7 @@ async function execute(interaction: ChatInputCommandInteraction) {
           '`/leaderboard` — Classement des joueurs\n' +
           '`/remind` — Rappels de session\n\n' +
           '`/premium` — Activer Premium sur ce serveur',
-      },
+      }
     )
 
   await interaction.reply({ embeds: [embed] })

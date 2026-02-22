@@ -7,12 +7,8 @@ describe('guildDelete', () => {
 
     guildDelete({ id: 'guild-1', name: 'Left Server' } as never)
 
-    expect(consoleSpy).toHaveBeenCalledWith(
-      expect.stringContaining('Left Server'),
-    )
-    expect(consoleSpy).toHaveBeenCalledWith(
-      expect.stringContaining('guild-1'),
-    )
+    expect(consoleSpy).toHaveBeenCalledWith(expect.stringContaining('Left Server'))
+    expect(consoleSpy).toHaveBeenCalledWith(expect.stringContaining('guild-1'))
     consoleSpy.mockRestore()
   })
 

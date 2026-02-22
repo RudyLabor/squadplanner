@@ -85,10 +85,7 @@ describe('/recurring command', () => {
   })
 
   it('shows no-squad error when user has no squad', async () => {
-    mockSupabaseSequence([
-      { data: { id: 'user-1' } },
-      { data: null },
-    ])
+    mockSupabaseSequence([{ data: { id: 'user-1' } }, { data: null }])
     const interaction = createInteraction({ jeu: 'Valorant', jour: 'mardi', heure: '21h00' })
 
     await recurringCommand.execute(interaction as never)

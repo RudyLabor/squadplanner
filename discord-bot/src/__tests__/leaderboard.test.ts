@@ -64,10 +64,7 @@ describe('/leaderboard command', () => {
   })
 
   it('shows no-squad error for squad scope without squad', async () => {
-    mockSupabaseSequence([
-      { data: { id: 'user-1' } },
-      { data: null },
-    ])
+    mockSupabaseSequence([{ data: { id: 'user-1' } }, { data: null }])
     const interaction = createInteraction('squad')
 
     await leaderboardCommand.execute(interaction as never)

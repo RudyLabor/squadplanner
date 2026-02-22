@@ -1,7 +1,4 @@
-import {
-  SlashCommandBuilder,
-  type ChatInputCommandInteraction,
-} from 'discord.js'
+import { SlashCommandBuilder, type ChatInputCommandInteraction } from 'discord.js'
 import { supabaseAdmin } from '../lib/supabase.js'
 import { baseEmbed, accountNotLinkedEmbed, errorEmbed } from '../lib/embeds.js'
 import type { BotCommand } from '../types.js'
@@ -75,8 +72,8 @@ export default {
           { name: 'Tactique', value: 'tactics' },
           { name: 'Fiabilite', value: 'reliability' },
           { name: 'Progression', value: 'progression' },
-          { name: 'Composition equipe', value: 'team_composition' },
-        ),
+          { name: 'Composition equipe', value: 'team_composition' }
+        )
     ),
   execute,
 } satisfies BotCommand

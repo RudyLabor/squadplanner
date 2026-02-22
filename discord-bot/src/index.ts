@@ -35,29 +35,25 @@ loadEvents(client)
 // Express server for Stripe webhook + health check
 const app = express()
 
-app.post(
-  '/webhook/stripe',
-  express.raw({ type: 'application/json' }),
-  async (req, res) => {
-    const sig = req.headers['stripe-signature'] as string | undefined
-    if (!sig || !process.env.STRIPE_WEBHOOK_SECRET_BOT) {
-      res.status(400).send('Missing signature')
-      return
-    }
-    try {
-      const event = stripe.webhooks.constructEvent(
-        req.body as Buffer,
-        sig,
-        process.env.STRIPE_WEBHOOK_SECRET_BOT,
-      )
-      await handleBotWebhookEvent(event)
-      res.json({ received: true })
-    } catch (err) {
-      console.error('[Webhook Error]', err)
-      res.status(400).send('Webhook error')
-    }
-  },
-)
+app.post('/webhook/stripe', express.raw({ type: 'application/json' }), async (req, res) => {
+  const sig = req.headers['stripe-signature'] as string | undefined
+  if (!sig || !process.env.STRIPE_WEBHOOK_SECRET_BOT) {
+    res.status(400).send('Missing signature')
+    return
+  }
+  try {
+    const event = stripe.webhooks.constructEvent(
+      req.body as Buffer,
+      sig,
+      process.env.STRIPE_WEBHOOK_SECRET_BOT
+    )
+    await handleBotWebhookEvent(event)
+    res.json({ received: true })
+  } catch (err) {
+    console.error('[Webhook Error]', err)
+    res.status(400).send('Webhook error')
+  }
+})
 
 app.get('/health', (_req, res) => {
   res.json({

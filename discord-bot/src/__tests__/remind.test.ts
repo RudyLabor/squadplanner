@@ -74,10 +74,7 @@ describe('/remind command', () => {
   })
 
   it('shows error when session not found', async () => {
-    mockSupabaseSequence([
-      { data: { id: 'user-1', username: 'Rudy' } },
-      { data: [] },
-    ])
+    mockSupabaseSequence([{ data: { id: 'user-1', username: 'Rudy' } }, { data: [] }])
     const interaction = createInteraction({ session: 'notfound', delai: '1h' })
 
     await remindCommand.execute(interaction as never)
@@ -90,13 +87,15 @@ describe('/remind command', () => {
     mockSupabaseSequence([
       { data: { id: 'user-1', username: 'Rudy' } },
       {
-        data: [{
-          id: 'session-1',
-          title: 'Ranked',
-          game: 'Valorant',
-          scheduled_at: pastDate,
-          squad_id: 'squad-1',
-        }],
+        data: [
+          {
+            id: 'session-1',
+            title: 'Ranked',
+            game: 'Valorant',
+            scheduled_at: pastDate,
+            squad_id: 'squad-1',
+          },
+        ],
       },
     ])
     // 24h delay for a session in 10min = reminder in past
@@ -112,13 +111,15 @@ describe('/remind command', () => {
     mockSupabaseSequence([
       { data: { id: 'user-1', username: 'Rudy' } },
       {
-        data: [{
-          id: 'session-1',
-          title: 'Ranked',
-          game: 'Valorant',
-          scheduled_at: futureDate,
-          squad_id: 'squad-1',
-        }],
+        data: [
+          {
+            id: 'session-1',
+            title: 'Ranked',
+            game: 'Valorant',
+            scheduled_at: futureDate,
+            squad_id: 'squad-1',
+          },
+        ],
       },
     ])
     const interaction = createInteraction({ session: 'sess', delai: '1h' })

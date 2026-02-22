@@ -72,9 +72,7 @@ describe('/session command', () => {
 
     await sessionCommand.execute(interaction as never)
 
-    expect(interaction.reply).toHaveBeenCalledWith(
-      expect.objectContaining({ ephemeral: true }),
-    )
+    expect(interaction.reply).toHaveBeenCalledWith(expect.objectContaining({ ephemeral: true }))
   })
 
   describe('create subcommand', () => {
@@ -129,10 +127,7 @@ describe('/session command', () => {
 
   describe('join subcommand', () => {
     it('shows error when session not found', async () => {
-      mockSupabaseSequence([
-        { data: { id: 'user-1', username: 'Test' } },
-        { data: [] },
-      ])
+      mockSupabaseSequence([{ data: { id: 'user-1', username: 'Test' } }, { data: [] }])
       const interaction = createInteraction('join', { id: 'abc12345' })
 
       await sessionCommand.execute(interaction as never)

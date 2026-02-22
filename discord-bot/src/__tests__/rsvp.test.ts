@@ -68,10 +68,7 @@ describe('/rsvp command', () => {
   })
 
   it('shows error when session not found', async () => {
-    mockSupabaseSequence([
-      { data: { id: 'user-1', username: 'Test' } },
-      { data: [] },
-    ])
+    mockSupabaseSequence([{ data: { id: 'user-1', username: 'Test' } }, { data: [] }])
     const interaction = createInteraction({ session: 'notfound', reponse: 'present' })
 
     await rsvpCommand.execute(interaction as never)
@@ -91,7 +88,7 @@ describe('/rsvp command', () => {
 
     expect(interaction.deferReply).toHaveBeenCalled()
     expect(interaction.editReply).toHaveBeenCalledWith(
-      expect.objectContaining({ embeds: expect.any(Array) }),
+      expect.objectContaining({ embeds: expect.any(Array) })
     )
   })
 })

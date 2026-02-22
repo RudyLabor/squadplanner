@@ -67,7 +67,7 @@ describe('createBotCheckoutSession', () => {
       expect.objectContaining({
         name: 'Discord: Test Server',
         metadata: expect.objectContaining({ discord_guild_id: 'guild-123' }),
-      }),
+      })
     )
     expect(url).toBe('https://checkout.stripe.com/test')
   })
@@ -83,7 +83,7 @@ describe('createBotCheckoutSession', () => {
       expect.objectContaining({
         customer: 'cus_existing',
         mode: 'subscription',
-      }),
+      })
     )
   })
 
@@ -120,7 +120,7 @@ describe('handleBotWebhookEvent', () => {
       expect.objectContaining({
         stripe_subscription_id: 'sub_1',
         status: 'premium',
-      }),
+      })
     )
     expect(invalidatePremiumCache).toHaveBeenCalledWith('guild-1')
   })
@@ -151,9 +151,7 @@ describe('handleBotWebhookEvent', () => {
       },
     } as unknown as Stripe.Event)
 
-    expect(chain.update).toHaveBeenCalledWith(
-      expect.objectContaining({ status: 'premium' }),
-    )
+    expect(chain.update).toHaveBeenCalledWith(expect.objectContaining({ status: 'premium' }))
     expect(invalidatePremiumCache).toHaveBeenCalledWith('guild-2')
   })
 
@@ -172,9 +170,7 @@ describe('handleBotWebhookEvent', () => {
       },
     } as unknown as Stripe.Event)
 
-    expect(chain.update).toHaveBeenCalledWith(
-      expect.objectContaining({ status: 'past_due' }),
-    )
+    expect(chain.update).toHaveBeenCalledWith(expect.objectContaining({ status: 'past_due' }))
   })
 
   it('handles customer.subscription.deleted — sets cancelled', async () => {

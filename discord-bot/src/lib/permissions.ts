@@ -18,9 +18,7 @@ export async function checkServerPremium(guildId: string): Promise<boolean> {
 
   let isPremium = false
   if (data?.status === 'premium') {
-    const periodEnd = data.current_period_end
-      ? new Date(data.current_period_end)
-      : null
+    const periodEnd = data.current_period_end ? new Date(data.current_period_end) : null
     isPremium = !periodEnd || periodEnd > new Date()
   }
 

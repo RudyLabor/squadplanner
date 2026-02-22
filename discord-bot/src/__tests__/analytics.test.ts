@@ -65,10 +65,7 @@ describe('/analytics command', () => {
   })
 
   it('shows no-squad error when user has no squad', async () => {
-    mockSupabaseSequence([
-      { data: { id: 'user-1' } },
-      { data: null },
-    ])
+    mockSupabaseSequence([{ data: { id: 'user-1' } }, { data: null }])
     const interaction = createInteraction()
 
     await analyticsCommand.execute(interaction as never)

@@ -54,9 +54,7 @@ describe('/premium command', () => {
     const interaction = createInteraction({ guildId: null, guild: null })
     await premiumCommand.execute(interaction as never)
 
-    expect(interaction.reply).toHaveBeenCalledWith(
-      expect.objectContaining({ ephemeral: true }),
-    )
+    expect(interaction.reply).toHaveBeenCalledWith(expect.objectContaining({ ephemeral: true }))
   })
 
   it('rejects when user is not admin', async () => {
@@ -65,9 +63,7 @@ describe('/premium command', () => {
     })
     await premiumCommand.execute(interaction as never)
 
-    expect(interaction.reply).toHaveBeenCalledWith(
-      expect.objectContaining({ ephemeral: true }),
-    )
+    expect(interaction.reply).toHaveBeenCalledWith(expect.objectContaining({ ephemeral: true }))
   })
 
   it('shows already-premium message when server is premium', async () => {

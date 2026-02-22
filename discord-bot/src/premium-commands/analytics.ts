@@ -1,7 +1,4 @@
-import {
-  SlashCommandBuilder,
-  type ChatInputCommandInteraction,
-} from 'discord.js'
+import { SlashCommandBuilder, type ChatInputCommandInteraction } from 'discord.js'
 import { supabaseAdmin } from '../lib/supabase.js'
 import { baseEmbed, accountNotLinkedEmbed, errorEmbed } from '../lib/embeds.js'
 import type { BotCommand } from '../types.js'
@@ -88,10 +85,7 @@ async function execute(interaction: ChatInputCommandInteraction) {
   const playerAttendance = new Map<string, number>()
   for (const r of rsvps ?? []) {
     if (r.response === 'present') {
-      playerAttendance.set(
-        r.user_id,
-        (playerAttendance.get(r.user_id) ?? 0) + 1,
-      )
+      playerAttendance.set(r.user_id, (playerAttendance.get(r.user_id) ?? 0) + 1)
     }
   }
   const topPlayerIds = [...playerAttendance.entries()]
@@ -130,14 +124,16 @@ async function execute(interaction: ChatInputCommandInteraction) {
 
   // Trend: compare last 30d vs previous 30d
   const sixtyDaysAgo = new Date(Date.now() - 60 * 24 * 60 * 60 * 1000)
-  const prev30 = sessions90d?.filter((s) => {
-    const d = new Date(s.scheduled_at)
-    return d >= sixtyDaysAgo && d < new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)
-  }).length ?? 0
+  const prev30 =
+    sessions90d?.filter((s) => {
+      const d = new Date(s.scheduled_at)
+      return d >= sixtyDaysAgo && d < new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)
+    }).length ?? 0
   const trendIcon = total30 > prev30 ? '📈' : total30 < prev30 ? '📉' : '➡️'
-  const trendText = prev30 > 0
-    ? `${trendIcon} ${total30 > prev30 ? '+' : ''}${total30 - prev30} vs mois precedent`
-    : 'Pas de donnees precedentes'
+  const trendText =
+    prev30 > 0
+      ? `${trendIcon} ${total30 > prev30 ? '+' : ''}${total30 - prev30} vs mois precedent`
+      : 'Pas de donnees precedentes'
 
   await interaction.editReply({
     embeds: [
@@ -152,7 +148,7 @@ async function execute(interaction: ChatInputCommandInteraction) {
           { name: 'Taux de no-show', value: `${noshowRate}%`, inline: true },
           { name: 'Membres', value: `${squad?.total_members ?? '?'}`, inline: true },
           { name: 'Jours les plus actifs', value: topDays || 'N/A', inline: false },
-          { name: 'Top joueurs', value: topPlayersText, inline: false },
+          { name: 'Top joueurs', value: topPlayersText, inline: false }
         ),
     ],
   })

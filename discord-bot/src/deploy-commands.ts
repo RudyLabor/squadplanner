@@ -17,9 +17,7 @@ async function main() {
 
   if (guildId) {
     // Dev mode: guild-specific (instant update)
-    console.log(
-      `Deploying ${commands.length} commands to guild ${guildId}...`,
-    )
+    console.log(`Deploying ${commands.length} commands to guild ${guildId}...`)
     await rest.put(Routes.applicationGuildCommands(clientId, guildId), {
       body: commands,
     })

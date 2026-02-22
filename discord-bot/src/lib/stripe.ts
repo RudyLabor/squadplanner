@@ -13,7 +13,7 @@ const APP_URL = process.env.APP_URL || 'https://squadplanner.fr'
 export async function createBotCheckoutSession(
   guildId: string,
   guildName: string,
-  adminUserId: string | null,
+  adminUserId: string | null
 ): Promise<string | null> {
   const priceId = process.env.STRIPE_PRICE_BOT_PREMIUM_MONTHLY
   if (!priceId) throw new Error('Missing STRIPE_PRICE_BOT_PREMIUM_MONTHLY')
@@ -37,17 +37,15 @@ export async function createBotCheckoutSession(
     })
     customerId = customer.id
 
-    await supabaseAdmin
-      .from('discord_server_subscriptions')
-      .upsert(
-        {
-          discord_guild_id: guildId,
-          guild_name: guildName,
-          stripe_customer_id: customerId,
-          admin_user_id: adminUserId,
-        },
-        { onConflict: 'discord_guild_id' },
-      )
+    await supabaseAdmin.from('discord_server_subscriptions').upsert(
+      {
+        discord_guild_id: guildId,
+        guild_name: guildName,
+        stripe_customer_id: customerId,
+        admin_user_id: adminUserId,
+      },
+      { onConflict: 'discord_guild_id' }
+    )
   }
 
   const session = await stripe.checkout.sessions.create({
@@ -77,9 +75,7 @@ export async function handleBotWebhookEvent(event: Stripe.Event) {
         .update({
           stripe_subscription_id: session.subscription as string,
           status: 'premium',
-          current_period_end: new Date(
-            Date.now() + 30 * 24 * 60 * 60 * 1000,
-          ).toISOString(),
+          current_period_end: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
         })
         .eq('discord_guild_id', guildId)
 
@@ -96,9 +92,7 @@ export async function handleBotWebhookEvent(event: Stripe.Event) {
         .from('discord_server_subscriptions')
         .update({
           status: sub.status === 'active' ? 'premium' : sub.status,
-          current_period_end: new Date(
-            sub.current_period_end * 1000,
-          ).toISOString(),
+          current_period_end: new Date(sub.current_period_end * 1000).toISOString(),
         })
         .eq('discord_guild_id', guildId)
 
@@ -123,9 +117,7 @@ export async function handleBotWebhookEvent(event: Stripe.Event) {
     case 'invoice.payment_failed': {
       const invoice = event.data.object as Stripe.Invoice
       const subId =
-        typeof invoice.subscription === 'string'
-          ? invoice.subscription
-          : invoice.subscription?.id
+        typeof invoice.subscription === 'string' ? invoice.subscription : invoice.subscription?.id
       if (!subId) break
 
       const { data } = await supabaseAdmin

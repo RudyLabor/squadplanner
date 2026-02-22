@@ -23,7 +23,9 @@ async function execute(interaction: ChatInputCommandInteraction) {
   // Check if user has admin permissions
   if (!interaction.memberPermissions?.has(PermissionFlagsBits.Administrator)) {
     await interaction.reply({
-      embeds: [errorEmbed("Seuls les administrateurs du serveur peuvent gerer l'abonnement Premium.")],
+      embeds: [
+        errorEmbed("Seuls les administrateurs du serveur peuvent gerer l'abonnement Premium."),
+      ],
       ephemeral: true,
     })
     return
@@ -50,7 +52,7 @@ async function execute(interaction: ChatInputCommandInteraction) {
         successEmbed(
           'Ce serveur est deja Premium !',
           `Prochain renouvellement : ${endDate}\n\n` +
-            `Gere ton abonnement sur le [portail Stripe](${APP_URL}/premium).`,
+            `Gere ton abonnement sur le [portail Stripe](${APP_URL}/premium).`
         ),
       ],
     })
@@ -68,12 +70,12 @@ async function execute(interaction: ChatInputCommandInteraction) {
     const checkoutUrl = await createBotCheckoutSession(
       interaction.guildId,
       interaction.guild.name,
-      profile?.id ?? null,
+      profile?.id ?? null
     )
 
     if (!checkoutUrl) {
       await interaction.editReply({
-        embeds: [errorEmbed("Impossible de creer le lien de paiement. Reessaie plus tard.")],
+        embeds: [errorEmbed('Impossible de creer le lien de paiement. Reessaie plus tard.')],
       })
       return
     }
@@ -90,14 +92,14 @@ async function execute(interaction: ChatInputCommandInteraction) {
               '• Coach IA (`/coach`)\n' +
               '• Leaderboard (`/leaderboard`)\n' +
               '• Rappels de session (`/remind`)\n\n' +
-              `**[Activer Premium](${checkoutUrl})**`,
+              `**[Activer Premium](${checkoutUrl})**`
           ),
       ],
     })
   } catch (error) {
     console.error('[Premium] Checkout error:', error)
     await interaction.editReply({
-      embeds: [errorEmbed("Erreur lors de la creation du paiement. Reessaie plus tard.")],
+      embeds: [errorEmbed('Erreur lors de la creation du paiement. Reessaie plus tard.')],
     })
   }
 }

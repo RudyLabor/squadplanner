@@ -28,7 +28,7 @@ describe('guildCreate', () => {
         guild_name: 'Test Server',
         status: 'free',
       },
-      { onConflict: 'discord_guild_id' },
+      { onConflict: 'discord_guild_id' }
     )
   })
 
@@ -40,9 +40,7 @@ describe('guildCreate', () => {
 
     await guildCreate({ id: 'g1', name: 'My Server', memberCount: 10 } as never)
 
-    expect(consoleSpy).toHaveBeenCalledWith(
-      expect.stringContaining('My Server'),
-    )
+    expect(consoleSpy).toHaveBeenCalledWith(expect.stringContaining('My Server'))
     consoleSpy.mockRestore()
   })
 })

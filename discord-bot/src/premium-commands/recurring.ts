@@ -1,7 +1,4 @@
-import {
-  SlashCommandBuilder,
-  type ChatInputCommandInteraction,
-} from 'discord.js'
+import { SlashCommandBuilder, type ChatInputCommandInteraction } from 'discord.js'
 import { supabaseAdmin } from '../lib/supabase.js'
 import { baseEmbed, accountNotLinkedEmbed, errorEmbed } from '../lib/embeds.js'
 import type { BotCommand } from '../types.js'
@@ -54,7 +51,11 @@ async function execute(interaction: ChatInputCommandInteraction) {
   const dayOfWeek = DAYS_FR[dayStr]
   if (dayOfWeek === undefined) {
     await interaction.editReply({
-      embeds: [errorEmbed('Jour invalide. Utilise: lundi, mardi, mercredi, jeudi, vendredi, samedi, dimanche')],
+      embeds: [
+        errorEmbed(
+          'Jour invalide. Utilise: lundi, mardi, mercredi, jeudi, vendredi, samedi, dimanche'
+        ),
+      ],
     })
     return
   }
@@ -63,7 +64,7 @@ async function execute(interaction: ChatInputCommandInteraction) {
   const timeParts = timeStr.match(/^(\d{1,2})[h:](\d{2})$/)
   if (!timeParts) {
     await interaction.editReply({
-      embeds: [errorEmbed('Format d\'heure invalide. Utilise: `21h00` ou `21:00`')],
+      embeds: [errorEmbed("Format d'heure invalide. Utilise: `21h00` ou `21:00`")],
     })
     return
   }
@@ -145,7 +146,7 @@ async function execute(interaction: ChatInputCommandInteraction) {
           { name: 'Jour', value: dayStr.charAt(0).toUpperCase() + dayStr.slice(1), inline: true },
           { name: 'Heure', value: timeStr, inline: true },
           { name: 'Premiere', value: `<t:${firstTs}:D>`, inline: true },
-          { name: 'Derniere', value: `<t:${lastTs}:D>`, inline: true },
+          { name: 'Derniere', value: `<t:${lastTs}:D>`, inline: true }
         ),
     ],
   })
@@ -155,9 +156,7 @@ export default {
   data: new SlashCommandBuilder()
     .setName('recurring')
     .setDescription('Cree des sessions recurrentes (Premium)')
-    .addStringOption((opt) =>
-      opt.setName('jeu').setDescription('Jeu').setRequired(true),
-    )
+    .addStringOption((opt) => opt.setName('jeu').setDescription('Jeu').setRequired(true))
     .addStringOption((opt) =>
       opt
         .setName('jour')
@@ -170,17 +169,21 @@ export default {
           { name: 'Jeudi', value: 'jeudi' },
           { name: 'Vendredi', value: 'vendredi' },
           { name: 'Samedi', value: 'samedi' },
-          { name: 'Dimanche', value: 'dimanche' },
-        ),
+          { name: 'Dimanche', value: 'dimanche' }
+        )
     )
     .addStringOption((opt) =>
-      opt.setName('heure').setDescription("Heure (ex: 21h00 ou 21:00)").setRequired(true),
+      opt.setName('heure').setDescription('Heure (ex: 21h00 ou 21:00)').setRequired(true)
     )
     .addIntegerOption((opt) =>
-      opt.setName('semaines').setDescription('Nombre de semaines (defaut: 4, max: 12)').setMinValue(1).setMaxValue(12),
+      opt
+        .setName('semaines')
+        .setDescription('Nombre de semaines (defaut: 4, max: 12)')
+        .setMinValue(1)
+        .setMaxValue(12)
     )
     .addStringOption((opt) =>
-      opt.setName('titre').setDescription('Titre personnalise (optionnel)'),
+      opt.setName('titre').setDescription('Titre personnalise (optionnel)')
     ),
   execute,
 } satisfies BotCommand

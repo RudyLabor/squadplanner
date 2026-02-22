@@ -43,9 +43,7 @@ export function loadCommands(client: Client) {
   }
 
   client.commands = commands
-  console.log(
-    `[Commands] Loaded ${commands.size} commands (${premiumCommands.length} premium)`,
-  )
+  console.log(`[Commands] Loaded ${commands.size} commands (${premiumCommands.length} premium)`)
 }
 
 export function getAllCommandData() {

@@ -29,12 +29,8 @@ describe('ready', () => {
 
     ready(client as never)
 
-    expect(consoleSpy).toHaveBeenCalledWith(
-      expect.stringContaining('SquadBot#1234'),
-    )
-    expect(consoleSpy).toHaveBeenCalledWith(
-      expect.stringContaining('10'),
-    )
+    expect(consoleSpy).toHaveBeenCalledWith(expect.stringContaining('SquadBot#1234'))
+    expect(consoleSpy).toHaveBeenCalledWith(expect.stringContaining('10'))
     consoleSpy.mockRestore()
   })
 })

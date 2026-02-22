@@ -6,9 +6,7 @@ import type { BotCommand } from '../types.js'
 export async function interactionCreate(interaction: Interaction) {
   if (!interaction.isChatInputCommand()) return
 
-  const command = interaction.client.commands.get(
-    interaction.commandName,
-  ) as BotCommand | undefined
+  const command = interaction.client.commands.get(interaction.commandName) as BotCommand | undefined
   if (!command) return
 
   try {

@@ -63,17 +63,12 @@ describe('/squad command', () => {
 
     await squadCommand.execute(interaction as never)
 
-    expect(interaction.reply).toHaveBeenCalledWith(
-      expect.objectContaining({ ephemeral: true }),
-    )
+    expect(interaction.reply).toHaveBeenCalledWith(expect.objectContaining({ ephemeral: true }))
   })
 
   describe('info subcommand', () => {
     it('shows error when user has no squads', async () => {
-      mockSupabaseSequence([
-        { data: { id: 'user-1' } },
-        { data: null },
-      ])
+      mockSupabaseSequence([{ data: { id: 'user-1' } }, { data: null }])
       const interaction = createInteraction('info')
 
       await squadCommand.execute(interaction as never)
@@ -84,10 +79,7 @@ describe('/squad command', () => {
 
   describe('stats subcommand', () => {
     it('shows error when user has no squad', async () => {
-      mockSupabaseSequence([
-        { data: { id: 'user-1' } },
-        { data: null },
-      ])
+      mockSupabaseSequence([{ data: { id: 'user-1' } }, { data: null }])
       const interaction = createInteraction('stats')
 
       await squadCommand.execute(interaction as never)

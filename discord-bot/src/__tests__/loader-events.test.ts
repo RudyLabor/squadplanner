@@ -25,9 +25,7 @@ describe('loadEvents', () => {
     const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
     loadEvents({ once: vi.fn(), on: vi.fn() } as never)
 
-    expect(consoleSpy).toHaveBeenCalledWith(
-      expect.stringContaining('4'),
-    )
+    expect(consoleSpy).toHaveBeenCalledWith(expect.stringContaining('4'))
     consoleSpy.mockRestore()
   })
 })

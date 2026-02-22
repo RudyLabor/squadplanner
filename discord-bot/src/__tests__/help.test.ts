@@ -26,7 +26,7 @@ describe('/help command', () => {
     expect(interaction.reply).toHaveBeenCalledWith(
       expect.objectContaining({
         embeds: expect.arrayContaining([expect.any(Object)]),
-      }),
+      })
     )
   })
 
@@ -38,7 +38,12 @@ describe('/help command', () => {
       setDescription: vi.fn().mockReturnThis(),
       addFields: vi.fn().mockImplementation((...args) => {
         fields.push(...(args as Array<{ name: string; value: string }>))
-        return { data: {}, setTitle: vi.fn().mockReturnThis(), setDescription: vi.fn().mockReturnThis(), addFields: vi.fn().mockReturnThis() }
+        return {
+          data: {},
+          setTitle: vi.fn().mockReturnThis(),
+          setDescription: vi.fn().mockReturnThis(),
+          addFields: vi.fn().mockReturnThis(),
+        }
       }),
       data: {},
     } as never)

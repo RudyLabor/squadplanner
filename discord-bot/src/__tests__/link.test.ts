@@ -50,7 +50,7 @@ describe('/link command', () => {
 
     expect(interaction.deferReply).toHaveBeenCalledWith({ ephemeral: true })
     expect(interaction.editReply).toHaveBeenCalledWith(
-      expect.objectContaining({ embeds: expect.any(Array) }),
+      expect.objectContaining({ embeds: expect.any(Array) })
     )
   })
 

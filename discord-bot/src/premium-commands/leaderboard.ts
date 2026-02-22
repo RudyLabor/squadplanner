@@ -1,7 +1,4 @@
-import {
-  SlashCommandBuilder,
-  type ChatInputCommandInteraction,
-} from 'discord.js'
+import { SlashCommandBuilder, type ChatInputCommandInteraction } from 'discord.js'
 import { supabaseAdmin } from '../lib/supabase.js'
 import { baseEmbed, accountNotLinkedEmbed, errorEmbed } from '../lib/embeds.js'
 import type { BotCommand } from '../types.js'
@@ -101,11 +98,7 @@ async function execute(interaction: ChatInputCommandInteraction) {
     })
 
     await interaction.editReply({
-      embeds: [
-        baseEmbed()
-          .setTitle('🏆 Leaderboard Global')
-          .setDescription(lines.join('\n')),
-      ],
+      embeds: [baseEmbed().setTitle('🏆 Leaderboard Global').setDescription(lines.join('\n'))],
     })
   }
 }
@@ -118,10 +111,7 @@ export default {
       opt
         .setName('scope')
         .setDescription('Classement de la squad ou global')
-        .addChoices(
-          { name: 'Ma Squad', value: 'squad' },
-          { name: 'Global', value: 'global' },
-        ),
+        .addChoices({ name: 'Ma Squad', value: 'squad' }, { name: 'Global', value: 'global' })
     ),
   execute,
 } satisfies BotCommand

@@ -1,7 +1,4 @@
-import {
-  SlashCommandBuilder,
-  type ChatInputCommandInteraction,
-} from 'discord.js'
+import { SlashCommandBuilder, type ChatInputCommandInteraction } from 'discord.js'
 import { supabaseAdmin } from '../lib/supabase.js'
 import { baseEmbed, accountNotLinkedEmbed, errorEmbed } from '../lib/embeds.js'
 import type { BotCommand } from '../types.js'
@@ -28,16 +25,15 @@ async function execute(interaction: ChatInputCommandInteraction) {
   }
 }
 
-async function handleInfo(
-  interaction: ChatInputCommandInteraction,
-  userId: string,
-) {
+async function handleInfo(interaction: ChatInputCommandInteraction, userId: string) {
   await interaction.deferReply()
 
   // Get user's squads with member count
   const { data: memberships } = await supabaseAdmin
     .from('squad_members')
-    .select('squad_id, role, squads(id, name, game, invite_code, is_premium, max_members, total_members)')
+    .select(
+      'squad_id, role, squads(id, name, game, invite_code, is_premium, max_members, total_members)'
+    )
     .eq('user_id', userId)
 
   if (!memberships?.length) {
@@ -66,17 +62,14 @@ async function handleInfo(
         { name: 'Jeu', value: s.game || 'Non defini', inline: true },
         { name: 'Membres', value: `${s.total_members ?? '?'}/${s.max_members}`, inline: true },
         { name: 'Ton role', value: m.role, inline: true },
-        { name: 'Code invite', value: `\`${s.invite_code}\``, inline: true },
+        { name: 'Code invite', value: `\`${s.invite_code}\``, inline: true }
       )
   })
 
   await interaction.editReply({ embeds })
 }
 
-async function handleStats(
-  interaction: ChatInputCommandInteraction,
-  userId: string,
-) {
+async function handleStats(interaction: ChatInputCommandInteraction, userId: string) {
   await interaction.deferReply()
 
   // Get user's first squad for stats
@@ -131,7 +124,7 @@ async function handleStats(
             name: 'Fiabilite moy.',
             value: `${squad?.avg_reliability_score ?? '?'}%`,
             inline: true,
-          },
+          }
         ),
     ],
   })
@@ -141,11 +134,7 @@ export default {
   data: new SlashCommandBuilder()
     .setName('squad')
     .setDescription('Infos et stats de tes squads')
-    .addSubcommand((sub) =>
-      sub.setName('info').setDescription('Affiche tes squads'),
-    )
-    .addSubcommand((sub) =>
-      sub.setName('stats').setDescription('Stats des 30 derniers jours'),
-    ),
+    .addSubcommand((sub) => sub.setName('info').setDescription('Affiche tes squads'))
+    .addSubcommand((sub) => sub.setName('stats').setDescription('Stats des 30 derniers jours')),
   execute,
 } satisfies BotCommand

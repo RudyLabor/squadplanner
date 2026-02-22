@@ -76,15 +76,16 @@ describe('interactionCreate', () => {
     const { interaction } = createMockInteraction({
       commandName: 'analytics',
     })
-    interaction.client.commands.set('analytics', { execute: premiumExecute, premium: true } as never)
+    interaction.client.commands.set('analytics', {
+      execute: premiumExecute,
+      premium: true,
+    } as never)
     vi.mocked(checkServerPremium).mockResolvedValue(false)
 
     await interactionCreate(interaction as never)
 
     expect(checkServerPremium).toHaveBeenCalledWith('guild-1')
-    expect(interaction.reply).toHaveBeenCalledWith(
-      expect.objectContaining({ ephemeral: true }),
-    )
+    expect(interaction.reply).toHaveBeenCalledWith(expect.objectContaining({ ephemeral: true }))
     expect(premiumExecute).not.toHaveBeenCalled()
   })
 
@@ -93,7 +94,10 @@ describe('interactionCreate', () => {
     const { interaction } = createMockInteraction({
       commandName: 'analytics',
     })
-    interaction.client.commands.set('analytics', { execute: premiumExecute, premium: true } as never)
+    interaction.client.commands.set('analytics', {
+      execute: premiumExecute,
+      premium: true,
+    } as never)
     vi.mocked(checkServerPremium).mockResolvedValue(true)
 
     await interactionCreate(interaction as never)
@@ -111,7 +115,7 @@ describe('interactionCreate', () => {
       expect.objectContaining({
         content: expect.stringContaining('erreur'),
         ephemeral: true,
-      }),
+      })
     )
   })
 
@@ -121,9 +125,7 @@ describe('interactionCreate', () => {
 
     await interactionCreate(interaction as never)
 
-    expect(interaction.followUp).toHaveBeenCalledWith(
-      expect.objectContaining({ ephemeral: true }),
-    )
+    expect(interaction.followUp).toHaveBeenCalledWith(expect.objectContaining({ ephemeral: true }))
     expect(interaction.reply).not.toHaveBeenCalled()
   })
 

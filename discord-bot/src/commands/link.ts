@@ -1,7 +1,4 @@
-import {
-  SlashCommandBuilder,
-  type ChatInputCommandInteraction,
-} from 'discord.js'
+import { SlashCommandBuilder, type ChatInputCommandInteraction } from 'discord.js'
 import { supabaseAdmin } from '../lib/supabase.js'
 import { baseEmbed, successEmbed } from '../lib/embeds.js'
 import type { BotCommand } from '../types.js'
@@ -24,7 +21,7 @@ async function execute(interaction: ChatInputCommandInteraction) {
         successEmbed(
           'Compte deja lie',
           `Ton Discord est lie au profil **${existingProfile.username}** sur Squad Planner.\n\n` +
-            `Pour modifier, va dans [Parametres > Comptes connectes](${APP_URL}/settings#connected).`,
+            `Pour modifier, va dans [Parametres > Comptes connectes](${APP_URL}/settings#connected).`
         ),
       ],
     })
@@ -40,7 +37,7 @@ async function execute(interaction: ChatInputCommandInteraction) {
           `Pour lier ton compte Discord a Squad Planner, utilise le bouton **Connecter Discord** dans l'app :\n\n` +
             `**[Ouvrir les Parametres](${APP_URL}/settings#connected)**\n\n` +
             `> Parametres → Comptes connectes → Connecter Discord\n\n` +
-            `C'est securise : tu autorises via Discord OAuth, aucun mot de passe n'est partage.`,
+            `C'est securise : tu autorises via Discord OAuth, aucun mot de passe n'est partage.`
         ),
     ],
   })

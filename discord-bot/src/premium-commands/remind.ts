@@ -1,7 +1,4 @@
-import {
-  SlashCommandBuilder,
-  type ChatInputCommandInteraction,
-} from 'discord.js'
+import { SlashCommandBuilder, type ChatInputCommandInteraction } from 'discord.js'
 import { supabaseAdmin } from '../lib/supabase.js'
 import { baseEmbed, accountNotLinkedEmbed, errorEmbed, successEmbed } from '../lib/embeds.js'
 import type { BotCommand } from '../types.js'
@@ -36,7 +33,7 @@ async function execute(interaction: ChatInputCommandInteraction) {
 
   if (!sessions?.length) {
     await interaction.editReply({
-      embeds: [errorEmbed('Session non trouvee. Verifie l\'ID avec `/session list`.')],
+      embeds: [errorEmbed("Session non trouvee. Verifie l'ID avec `/session list`.")],
     })
     return
   }
@@ -63,7 +60,9 @@ async function execute(interaction: ChatInputCommandInteraction) {
 
   if (reminderTime <= now) {
     await interaction.editReply({
-      embeds: [errorEmbed("Le rappel serait dans le passe. La session est trop proche ou deja passee.")],
+      embeds: [
+        errorEmbed('Le rappel serait dans le passe. La session est trop proche ou deja passee.'),
+      ],
     })
     return
   }
@@ -100,7 +99,7 @@ async function execute(interaction: ChatInputCommandInteraction) {
               `**${session.title}** commence <t:${ts}:R> !\n\n` +
                 `🎮 ${session.game}\n` +
                 `👥 ${count ?? 0} joueur(s) confirme(s)\n\n` +
-                `N'oublie pas de RSVP avec \`/rsvp ${session.id.slice(0, 8)} present\``,
+                `N'oublie pas de RSVP avec \`/rsvp ${session.id.slice(0, 8)} present\``
             )
             .setColor(0xf59e0b),
         ],
@@ -123,7 +122,7 @@ async function execute(interaction: ChatInputCommandInteraction) {
         'Rappel programme !',
         `**${session.title}** (${session.game})\n\n` +
           `📅 Session : <t:${sessionTs}:F>\n` +
-          `⏰ Rappel : <t:${reminderTs}:F> (<t:${reminderTs}:R>)`,
+          `⏰ Rappel : <t:${reminderTs}:F> (<t:${reminderTs}:R>)`
       ),
     ],
   })
@@ -137,7 +136,7 @@ export default {
       opt
         .setName('session')
         .setDescription('ID de la session (8 premiers caracteres)')
-        .setRequired(true),
+        .setRequired(true)
     )
     .addStringOption((opt) =>
       opt
@@ -147,8 +146,8 @@ export default {
         .addChoices(
           { name: '15 minutes avant', value: '15min' },
           { name: '1 heure avant', value: '1h' },
-          { name: '24 heures avant', value: '24h' },
-        ),
+          { name: '24 heures avant', value: '24h' }
+        )
     ),
   execute,
 } satisfies BotCommand

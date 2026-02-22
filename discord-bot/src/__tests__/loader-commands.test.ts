@@ -1,18 +1,42 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 
 // Mock all commands to avoid importing real discord.js builders
-vi.mock('../commands/session.js', () => ({ default: { data: { name: 'session', toJSON: () => ({}) }, execute: vi.fn() } }))
-vi.mock('../commands/rsvp.js', () => ({ default: { data: { name: 'rsvp', toJSON: () => ({}) }, execute: vi.fn() } }))
-vi.mock('../commands/squad.js', () => ({ default: { data: { name: 'squad', toJSON: () => ({}) }, execute: vi.fn() } }))
-vi.mock('../commands/lfg.js', () => ({ default: { data: { name: 'lfg', toJSON: () => ({}) }, execute: vi.fn() } }))
-vi.mock('../commands/link.js', () => ({ default: { data: { name: 'link', toJSON: () => ({}) }, execute: vi.fn() } }))
-vi.mock('../commands/help.js', () => ({ default: { data: { name: 'help', toJSON: () => ({}) }, execute: vi.fn() } }))
-vi.mock('../commands/premium.js', () => ({ default: { data: { name: 'premium', toJSON: () => ({}) }, execute: vi.fn() } }))
-vi.mock('../premium-commands/recurring.js', () => ({ default: { data: { name: 'recurring', toJSON: () => ({}) }, execute: vi.fn() } }))
-vi.mock('../premium-commands/analytics.js', () => ({ default: { data: { name: 'analytics', toJSON: () => ({}) }, execute: vi.fn() } }))
-vi.mock('../premium-commands/coach.js', () => ({ default: { data: { name: 'coach', toJSON: () => ({}) }, execute: vi.fn() } }))
-vi.mock('../premium-commands/leaderboard.js', () => ({ default: { data: { name: 'leaderboard', toJSON: () => ({}) }, execute: vi.fn() } }))
-vi.mock('../premium-commands/remind.js', () => ({ default: { data: { name: 'remind', toJSON: () => ({}) }, execute: vi.fn() } }))
+vi.mock('../commands/session.js', () => ({
+  default: { data: { name: 'session', toJSON: () => ({}) }, execute: vi.fn() },
+}))
+vi.mock('../commands/rsvp.js', () => ({
+  default: { data: { name: 'rsvp', toJSON: () => ({}) }, execute: vi.fn() },
+}))
+vi.mock('../commands/squad.js', () => ({
+  default: { data: { name: 'squad', toJSON: () => ({}) }, execute: vi.fn() },
+}))
+vi.mock('../commands/lfg.js', () => ({
+  default: { data: { name: 'lfg', toJSON: () => ({}) }, execute: vi.fn() },
+}))
+vi.mock('../commands/link.js', () => ({
+  default: { data: { name: 'link', toJSON: () => ({}) }, execute: vi.fn() },
+}))
+vi.mock('../commands/help.js', () => ({
+  default: { data: { name: 'help', toJSON: () => ({}) }, execute: vi.fn() },
+}))
+vi.mock('../commands/premium.js', () => ({
+  default: { data: { name: 'premium', toJSON: () => ({}) }, execute: vi.fn() },
+}))
+vi.mock('../premium-commands/recurring.js', () => ({
+  default: { data: { name: 'recurring', toJSON: () => ({}) }, execute: vi.fn() },
+}))
+vi.mock('../premium-commands/analytics.js', () => ({
+  default: { data: { name: 'analytics', toJSON: () => ({}) }, execute: vi.fn() },
+}))
+vi.mock('../premium-commands/coach.js', () => ({
+  default: { data: { name: 'coach', toJSON: () => ({}) }, execute: vi.fn() },
+}))
+vi.mock('../premium-commands/leaderboard.js', () => ({
+  default: { data: { name: 'leaderboard', toJSON: () => ({}) }, execute: vi.fn() },
+}))
+vi.mock('../premium-commands/remind.js', () => ({
+  default: { data: { name: 'remind', toJSON: () => ({}) }, execute: vi.fn() },
+}))
 
 import { loadCommands, getAllCommandData } from '../commands/loader.js'
 

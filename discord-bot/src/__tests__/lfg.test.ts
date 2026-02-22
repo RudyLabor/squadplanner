@@ -55,8 +55,18 @@ describe('/lfg command', () => {
       order: vi.fn().mockReturnThis(),
       limit: vi.fn().mockResolvedValue({
         data: [
-          { username: 'Player1', preferred_games: ['Valorant', 'CS2'], level: 5, reliability_score: 90 },
-          { username: 'Player2', preferred_games: ['League of Legends'], level: 3, reliability_score: 80 },
+          {
+            username: 'Player1',
+            preferred_games: ['Valorant', 'CS2'],
+            level: 5,
+            reliability_score: 90,
+          },
+          {
+            username: 'Player2',
+            preferred_games: ['League of Legends'],
+            level: 3,
+            reliability_score: 80,
+          },
         ],
       }),
     }

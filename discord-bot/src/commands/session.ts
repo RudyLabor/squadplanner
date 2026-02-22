@@ -1,7 +1,4 @@
-import {
-  SlashCommandBuilder,
-  type ChatInputCommandInteraction,
-} from 'discord.js'
+import { SlashCommandBuilder, type ChatInputCommandInteraction } from 'discord.js'
 import { supabaseAdmin } from '../lib/supabase.js'
 import { baseEmbed, accountNotLinkedEmbed, errorEmbed } from '../lib/embeds.js'
 import type { BotCommand } from '../types.js'
@@ -36,10 +33,7 @@ async function execute(interaction: ChatInputCommandInteraction) {
   }
 }
 
-async function handleCreate(
-  interaction: ChatInputCommandInteraction,
-  userId: string,
-) {
+async function handleCreate(interaction: ChatInputCommandInteraction, userId: string) {
   await interaction.deferReply()
 
   const title = interaction.options.getString('titre', true)
@@ -97,7 +91,7 @@ async function handleCreate(
         embeds: [
           errorEmbed(
             'Limite de 3 sessions/semaine atteinte (tier Free).\n' +
-              `Passe Premium pour des sessions illimitees ! [En savoir plus](${APP_URL}/premium)`,
+              `Passe Premium pour des sessions illimitees ! [En savoir plus](${APP_URL}/premium)`
           ),
         ],
       })
@@ -124,17 +118,14 @@ async function handleCreate(
           { name: 'Jeu', value: game, inline: true },
           { name: 'Date', value: `<t:${ts}:F>`, inline: false },
           { name: 'Duree', value: `${duration} min`, inline: true },
-          { name: 'ID', value: `\`${session.id.slice(0, 8)}\``, inline: true },
+          { name: 'ID', value: `\`${session.id.slice(0, 8)}\``, inline: true }
         )
         .setColor(0x22c55e),
     ],
   })
 }
 
-async function handleList(
-  interaction: ChatInputCommandInteraction,
-  userId: string,
-) {
+async function handleList(interaction: ChatInputCommandInteraction, userId: string) {
   await interaction.deferReply()
 
   // Get user's squads
@@ -163,7 +154,11 @@ async function handleList(
 
   if (!sessions?.length) {
     await interaction.editReply({
-      embeds: [baseEmbed().setTitle('Aucune session a venir').setDescription('Cree-en une avec `/session create` !')],
+      embeds: [
+        baseEmbed()
+          .setTitle('Aucune session a venir')
+          .setDescription('Cree-en une avec `/session create` !'),
+      ],
     })
     return
   }
@@ -185,10 +180,7 @@ async function handleList(
   })
 }
 
-async function handleJoin(
-  interaction: ChatInputCommandInteraction,
-  userId: string,
-) {
+async function handleJoin(interaction: ChatInputCommandInteraction, userId: string) {
   await interaction.deferReply()
 
   const sessionIdPrefix = interaction.options.getString('id', true)
@@ -203,7 +195,7 @@ async function handleJoin(
 
   if (!sessions?.length) {
     await interaction.editReply({
-      embeds: [errorEmbed('Session non trouvee. Verifie l\'ID avec `/session list`.')],
+      embeds: [errorEmbed("Session non trouvee. Verifie l'ID avec `/session list`.")],
     })
     return
   }
@@ -217,7 +209,7 @@ async function handleJoin(
       user_id: userId,
       response: 'present' as const,
     },
-    { onConflict: 'session_id,user_id' },
+    { onConflict: 'session_id,user_id' }
   )
 
   const ts = Math.floor(new Date(session.scheduled_at).getTime() / 1000)
@@ -229,7 +221,7 @@ async function handleJoin(
         .addFields(
           { name: 'Session', value: session.title, inline: true },
           { name: 'Jeu', value: session.game, inline: true },
-          { name: 'Date', value: `<t:${ts}:F>`, inline: false },
+          { name: 'Date', value: `<t:${ts}:F>`, inline: false }
         )
         .setColor(0x22c55e),
     ],
@@ -245,31 +237,30 @@ export default {
         .setName('create')
         .setDescription('Cree une nouvelle session')
         .addStringOption((opt) =>
-          opt.setName('titre').setDescription('Titre de la session').setRequired(true),
+          opt.setName('titre').setDescription('Titre de la session').setRequired(true)
         )
-        .addStringOption((opt) =>
-          opt.setName('jeu').setDescription('Jeu').setRequired(true),
-        )
+        .addStringOption((opt) => opt.setName('jeu').setDescription('Jeu').setRequired(true))
         .addStringOption((opt) =>
           opt
             .setName('date')
             .setDescription('Date et heure (ex: 2026-03-20 21:00)')
-            .setRequired(true),
+            .setRequired(true)
         )
         .addIntegerOption((opt) =>
-          opt.setName('duree').setDescription('Duree en minutes (defaut: 120)'),
-        ),
+          opt.setName('duree').setDescription('Duree en minutes (defaut: 120)')
+        )
     )
-    .addSubcommand((sub) =>
-      sub.setName('list').setDescription('Liste les prochaines sessions'),
-    )
+    .addSubcommand((sub) => sub.setName('list').setDescription('Liste les prochaines sessions'))
     .addSubcommand((sub) =>
       sub
         .setName('join')
         .setDescription('Rejoins une session')
         .addStringOption((opt) =>
-          opt.setName('id').setDescription('ID de la session (8 premiers caracteres)').setRequired(true),
-        ),
+          opt
+            .setName('id')
+            .setDescription('ID de la session (8 premiers caracteres)')
+            .setRequired(true)
+        )
     ),
   execute,
 } satisfies BotCommand

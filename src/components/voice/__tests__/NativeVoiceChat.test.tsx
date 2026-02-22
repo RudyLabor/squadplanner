@@ -18,18 +18,24 @@ vi.mock('framer-motion', () => ({
   useAnimate: vi.fn().mockReturnValue([{ current: null }, vi.fn()]),
   useAnimation: vi.fn().mockReturnValue({ start: vi.fn(), stop: vi.fn() }),
   useReducedMotion: vi.fn().mockReturnValue(false),
-  m: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
-  motion: new Proxy({}, {
-    get: (_t: any, p: string) =>
-      typeof p === 'string'
-        ? ({ children, ...r }: any) => createElement(p, r, children)
-        : undefined,
-  }),
+  m: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
+  motion: new Proxy(
+    {},
+    {
+      get: (_t: any, p: string) =>
+        typeof p === 'string'
+          ? ({ children, ...r }: any) => createElement(p, r, children)
+          : undefined,
+    }
+  ),
 }))
 
 // Mock icons
@@ -42,8 +48,9 @@ vi.mock('../../icons', () => ({
 }))
 
 // Use vi.hoisted to create mock functions that can be referenced in vi.mock
-const { mockConnect, mockDisconnect, mockToggleMute } = vi.hoisted(() => ({
+const { mockConnect, mockConnectLocalOnly, mockDisconnect, mockToggleMute } = vi.hoisted(() => ({
   mockConnect: vi.fn().mockResolvedValue(true),
+  mockConnectLocalOnly: vi.fn().mockResolvedValue(true),
   mockDisconnect: vi.fn(),
   mockToggleMute: vi.fn(),
 }))
@@ -52,6 +59,7 @@ const { mockConnect, mockDisconnect, mockToggleMute } = vi.hoisted(() => ({
 vi.mock('../../../lib/webrtc-native', () => ({
   useNativeWebRTC: vi.fn().mockReturnValue({
     connect: mockConnect,
+    connectLocalOnly: mockConnectLocalOnly,
     disconnect: mockDisconnect,
     toggleMute: mockToggleMute,
     isConnected: false,
@@ -120,8 +128,8 @@ describe('NativeVoiceChat', () => {
     expect(screen.getByTestId('icon-volume')).toBeInTheDocument()
   })
 
-  it('calls connect when opened with valid token and roomName', () => {
+  it('calls connectLocalOnly when opened with valid roomName', () => {
     render(<NativeVoiceChat {...defaultProps} />)
-    expect(mockConnect).toHaveBeenCalledWith('test-token', 'test-room')
+    expect(mockConnectLocalOnly).toHaveBeenCalled()
   })
 })

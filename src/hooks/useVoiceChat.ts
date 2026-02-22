@@ -26,9 +26,14 @@ interface VoiceChatState {
   pushToTalkEnabled: boolean
   pushToTalkActive: boolean
   noiseSuppressionEnabled: boolean
-  
+
   // Actions
-  joinChannel: (channelName: string, userId: string, username: string, isPremium?: boolean) => Promise<boolean>
+  joinChannel: (
+    channelName: string,
+    userId: string,
+    username: string,
+    isPremium?: boolean
+  ) => Promise<boolean>
   leaveChannel: () => Promise<void>
   toggleMute: () => Promise<void>
   setVolume: (volume: number) => void
@@ -41,10 +46,7 @@ interface VoiceChatState {
 
 // Constants (remplace LIVEKIT_URL)
 const WEBRTC_CONFIG = {
-  iceServers: [
-    { urls: 'stun:stun.l.google.com:19302' },
-    { urls: 'stun:stun1.l.google.com:19302' }
-  ]
+  iceServers: [{ urls: 'stun:stun.l.google.com:19302' }, { urls: 'stun:stun1.l.google.com:19302' }],
 }
 
 const MAX_RECONNECT_ATTEMPTS = 3
@@ -53,22 +55,29 @@ const PARTY_STORAGE_KEY = 'squadplanner_active_party'
 // Storage helpers (simplifié, sans LiveKit)
 export function savePartyToStorage(channelName: string, userId: string, username: string) {
   try {
-    localStorage.setItem(PARTY_STORAGE_KEY, JSON.stringify({
-      channelName,
-      userId, 
-      username,
-      timestamp: Date.now()
-    }))
+    localStorage.setItem(
+      PARTY_STORAGE_KEY,
+      JSON.stringify({
+        channelName,
+        userId,
+        username,
+        timestamp: Date.now(),
+      })
+    )
   } catch (e) {
     console.warn('[VoiceChat] Storage failed:', e)
   }
 }
 
-export function getSavedPartyInfo(): { channelName: string; userId: string; username: string } | null {
+export function getSavedPartyInfo(): {
+  channelName: string
+  userId: string
+  username: string
+} | null {
   try {
     const data = localStorage.getItem(PARTY_STORAGE_KEY)
     if (!data) return null
-    
+
     const parsed = JSON.parse(data)
     // Expire after 5 minutes
     if (Date.now() - parsed.timestamp > 5 * 60 * 1000) {
@@ -102,9 +111,17 @@ export const useVoiceChatStore = create<VoiceChatState>((set, get) => ({
 
   clearError: () => set({ error: null }),
 
-  joinChannel: async (channelName: string, userId: string, username: string, _isPremium = false) => {
+  joinChannel: async (
+    channelName: string,
+    userId: string,
+    username: string,
+    _isPremium = false
+  ) => {
     const state = get()
-    if (state.isConnected || state.isConnecting) return false
+    if (state.isConnected || state.isConnecting) {
+      console.warn('[VoiceChat] Already connected or connecting, ignoring join request')
+      return false
+    }
 
     try {
       set({ isConnecting: true, error: null })
@@ -130,22 +147,25 @@ export const useVoiceChatStore = create<VoiceChatState>((set, get) => ({
             username,
             isMuted: false,
             isSpeaking: false,
-            volume: 100
-          }
+            volume: 100,
+          },
         })
 
-        if (!import.meta.env.PROD) console.log(`[VoiceChat] Connected to ${channelName} with WebRTC native`)
+        if (!import.meta.env.PROD)
+          console.log(`[VoiceChat] Connected to ${channelName} with WebRTC native`)
         return true
       } else {
-        throw new Error('WebRTC connection failed')
+        throw new Error('Accès au microphone refusé ou indisponible')
       }
-
     } catch (error) {
       console.error('[VoiceChat] Connection failed:', error)
+      const errorMessage =
+        error instanceof Error ? error.message : 'Erreur de connexion'
       set({
         isConnecting: false,
-        error: error instanceof Error ? error.message : 'Connection failed'
+        error: errorMessage,
       })
+      clearSavedParty()
       return false
     }
   },
@@ -162,7 +182,7 @@ export const useVoiceChatStore = create<VoiceChatState>((set, get) => ({
       currentChannel: null,
       localUser: null,
       remoteUsers: [],
-      error: null
+      error: null,
     })
     clearSavedParty()
     if (!import.meta.env.PROD) console.log('[VoiceChat] Left channel')
@@ -171,16 +191,18 @@ export const useVoiceChatStore = create<VoiceChatState>((set, get) => ({
   toggleMute: async () => {
     const state = get()
     if (!state.isConnected) return
-    
+
     const newMutedState = !state.isMuted
     set({
       isMuted: newMutedState,
-      localUser: state.localUser ? {
-        ...state.localUser,
-        isMuted: newMutedState
-      } : null
+      localUser: state.localUser
+        ? {
+            ...state.localUser,
+            isMuted: newMutedState,
+          }
+        : null,
     })
-    
+
     if (!import.meta.env.PROD) console.log(`[VoiceChat] ${newMutedState ? 'Muted' : 'Unmuted'}`)
   },
 
@@ -209,15 +231,16 @@ export const useVoiceChatStore = create<VoiceChatState>((set, get) => ({
   toggleNoiseSuppression: async () => {
     const newState = !get().noiseSuppressionEnabled
     set({ noiseSuppressionEnabled: newState })
-    if (!import.meta.env.PROD) console.log(`[VoiceChat] Noise suppression ${newState ? 'enabled' : 'disabled'}`)
-  }
+    if (!import.meta.env.PROD)
+      console.log(`[VoiceChat] Noise suppression ${newState ? 'enabled' : 'disabled'}`)
+  },
 }))
 
 // Export pour compatibilité avec l'ancien code
 export { useVoiceChatStore as default }
 
 // Browser close listeners (simplifié)
-export function setupBrowserCloseListeners(): (() => void) {
+export function setupBrowserCloseListeners(): () => void {
   const handleBeforeUnload = () => {
     const state = useVoiceChatStore.getState()
     if (state.isConnected) {

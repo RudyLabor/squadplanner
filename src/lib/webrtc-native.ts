@@ -46,11 +46,7 @@ export class NativeWebRTC {
    * @param channelName  Deterministic channel name shared by both peers
    * @param isOffer  true = caller (creates SDP offer), false = callee (creates SDP answer)
    */
-  async connect(
-    supabase: SupabaseClient,
-    channelName: string,
-    isOffer: boolean
-  ): Promise<boolean> {
+  async connect(supabase: SupabaseClient, channelName: string, isOffer: boolean): Promise<boolean> {
     try {
       this._aborted = false
       this.supabaseClient = supabase
@@ -110,7 +106,7 @@ export class NativeWebRTC {
     return new Promise<void>((resolve, reject) => {
       // 60-second signaling timeout (separate from the 30s ring timeout)
       const timeoutId = setTimeout(() => {
-        if (!this._aborted) reject(new Error('Signaling timeout — le pair n\'a pas répondu'))
+        if (!this._aborted) reject(new Error("Signaling timeout — le pair n'a pas répondu"))
       }, 60_000)
 
       const cleanup = () => {
@@ -238,10 +234,16 @@ export class NativeWebRTC {
         audio.play().catch(() => {})
       }
 
-      await this.enableMicrophone()
+      const micSuccess = await this.enableMicrophone()
+      if (!micSuccess) {
+        console.error('[NativeWebRTC] Microphone required for party — access denied or unavailable')
+        this.disconnect()
+        return false
+      }
       return true
     } catch (error) {
       if (!import.meta.env.PROD) console.error('[NativeWebRTC] Local connect failed:', error)
+      this.disconnect()
       return false
     }
   }
@@ -343,8 +345,12 @@ export class NativeWebRTC {
   }
 
   // Getters
-  get connected(): boolean { return this.isConnected }
-  get muted(): boolean { return this.isMuted }
+  get connected(): boolean {
+    return this.isConnected
+  }
+  get muted(): boolean {
+    return this.isMuted
+  }
 }
 
 // ── React Hook (used by voice chat / party — separate from 1-on-1 calls) ──
@@ -353,22 +359,28 @@ import { useState, useCallback, useEffect } from 'react'
 import { supabaseMinimal as supabase } from './supabaseMinimal'
 
 export function useNativeWebRTC() {
-  const [webrtc] = useState(() => new NativeWebRTC({
-    iceServers: [
-      { urls: 'stun:stun.l.google.com:19302' },
-      { urls: 'stun:stun1.l.google.com:19302' },
-    ],
-  }))
+  const [webrtc] = useState(
+    () =>
+      new NativeWebRTC({
+        iceServers: [
+          { urls: 'stun:stun.l.google.com:19302' },
+          { urls: 'stun:stun1.l.google.com:19302' },
+        ],
+      })
+  )
 
   const [isConnected, setIsConnected] = useState(false)
   const [isMuted, setIsMuted] = useState(false)
   const [remoteUsers, setRemoteUsers] = useState<VoiceUser[]>([])
 
-  const connect = useCallback(async (channelName: string, isOffer: boolean) => {
-    const success = await webrtc.connect(supabase, channelName, isOffer)
-    setIsConnected(success)
-    return success
-  }, [webrtc])
+  const connect = useCallback(
+    async (channelName: string, isOffer: boolean) => {
+      const success = await webrtc.connect(supabase, channelName, isOffer)
+      setIsConnected(success)
+      return success
+    },
+    [webrtc]
+  )
 
   const connectLocalOnly = useCallback(async () => {
     const success = await webrtc.connectLocalOnly()
@@ -399,8 +411,19 @@ export function useNativeWebRTC() {
     webrtc.onUserLeft = (userId) => {
       setRemoteUsers((prev) => prev.filter((u) => u.id !== userId))
     }
-    return () => { webrtc.disconnect() }
+    return () => {
+      webrtc.disconnect()
+    }
   }, [webrtc])
 
-  return { connect, connectLocalOnly, disconnect, toggleMute, setVolume: webrtc.setVolume.bind(webrtc), isConnected, isMuted, remoteUsers }
+  return {
+    connect,
+    connectLocalOnly,
+    disconnect,
+    toggleMute,
+    setVolume: webrtc.setVolume.bind(webrtc),
+    isConnected,
+    isMuted,
+    remoteUsers,
+  }
 }

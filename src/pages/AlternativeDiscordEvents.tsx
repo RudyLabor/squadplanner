@@ -8,7 +8,7 @@ const limitations = [
   {
     title: 'Des RSVP qui servent à rien',
     discord: 'Les gens disent oui sur Discord mais ne viennent pas. Zéro suivi. Zéro rappel.',
-    squadPlanner: 'Notif push, rappels 1h avant, scores de fiabilité. Tu sais qui t\'oublie.',
+    squadPlanner: "Notif push, rappels 1h avant, scores de fiabilité. Tu sais qui t'oublie.",
   },
   {
     title: 'La récurrence ? Oublie.',
@@ -17,42 +17,45 @@ const limitations = [
   },
   {
     title: 'Zéro insight',
-    discord: 'Discord: qui a cliqué oui. C\'est tout. T\'as rien d\'autre.',
+    discord: "Discord: qui a cliqué oui. C'est tout. T'as rien d'autre.",
     squadPlanner: 'Stats complètes. Taux de présence. Qui est fiable. Qui flake. Tendances.',
-  }
+  },
 ]
 
 const advantages = [
   {
     title: 'RSVP qui tient',
     description: 'Notif push, rappels 1h avant. Les gens viennent vraiment. Point.',
-    icon: Check
+    icon: Check,
   },
   {
     title: 'Pensé pour le gaming',
-    description: 'Squad Planner, c\'est l\'orga gaming complète\u00a0: calendrier, RSVP, chat intégré et party vocale. Discord = commu.',
-    icon: Users
+    description:
+      "Squad Planner, c'est l'orga gaming complète\u00a0: calendrier, RSVP, chat intégré et party vocale. Discord = commu.",
+    icon: Users,
   },
   {
     title: 'Récurrence automatique',
     description: 'Crée une fois. Ça répète tout seul chaque semaine. Zéro copier-coller.',
-    icon: Calendar
+    icon: Calendar,
   },
   {
     title: 'Analytics de ouf',
     description: 'Vois qui est fiable. Vois qui flake. Vois les tendances. Joue en data.',
-    icon: Sparkles
+    icon: Sparkles,
   },
   {
     title: 'Discord intégré',
-    description: 'Les notifs arrivent dans Discord. L\'organisation se passe chez nous. Le meilleur des deux mondes.',
-    icon: Shield
+    description:
+      "Les notifs arrivent dans Discord. L'organisation se passe chez nous. Le meilleur des deux mondes.",
+    icon: Shield,
   },
   {
     title: 'Fiabilité garantie',
-    description: 'Profils, réputation, historique. Les squads sérieuses voient clairement qui flake.',
-    icon: Zap
-  }
+    description:
+      'Profils, réputation, historique. Les squads sérieuses voient clairement qui flake.',
+    icon: Zap,
+  },
 ]
 
 export default function AlternativeDiscordEvents() {
@@ -102,7 +105,8 @@ export default function AlternativeDiscordEvents() {
             viewport={{ once: true }}
             className="text-lg md:text-xl text-text-tertiary mb-10 max-w-2xl mx-auto leading-relaxed"
           >
-            Discord, c'est la commu. Squad Planner, c'est l'organisation complète avec chat et party vocale intégrés. 100% gaming. Discord reste branché, mais l'organisation, c'est ici.
+            Discord, c'est la commu. Squad Planner, c'est l'organisation complète avec chat et party
+            vocale intégrés. 100% gaming. Discord reste branché, mais l'organisation, c'est ici.
           </m.p>
 
           {/* CTAs */}
@@ -139,13 +143,17 @@ export default function AlternativeDiscordEvents() {
       {/* Limitations vs Advantages */}
       <section className="px-4 md:px-6 py-12 md:py-16">
         <div className="max-w-5xl mx-auto">
-          <m.div variants={scrollReveal} initial="hidden" whileInView="visible" viewport={{ once: true }} className="text-center mb-12">
+          <m.div
+            variants={scrollReveal}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            className="text-center mb-12"
+          >
             <h2 className="text-xl md:text-2xl font-bold text-text-primary mb-4">
               Discord vs Squad Planner : comparaison vraie
             </h2>
-            <p className="text-text-tertiary text-lg">
-              Où Discord perd ses points
-            </p>
+            <p className="text-text-tertiary text-lg">Où Discord perd ses points</p>
           </m.div>
 
           <div className="space-y-6">
@@ -168,9 +176,7 @@ export default function AlternativeDiscordEvents() {
                       </div>
                       <h3 className="font-semibold text-text-primary">{item.title}</h3>
                     </div>
-                    <p className="text-text-secondary text-md leading-relaxed">
-                      {item.discord}
-                    </p>
+                    <p className="text-text-secondary text-md leading-relaxed">{item.discord}</p>
                   </div>
 
                   {/* Squad Planner Version */}
@@ -200,12 +206,19 @@ export default function AlternativeDiscordEvents() {
       {/* Key Advantages */}
       <section className="px-4 md:px-6 py-12 md:py-16 bg-gradient-to-b from-transparent to-purple/[0.015]">
         <div className="max-w-5xl mx-auto">
-          <m.div variants={scrollReveal} initial="hidden" whileInView="visible" viewport={{ once: true }} className="text-center mb-12">
+          <m.div
+            variants={scrollReveal}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            className="text-center mb-12"
+          >
             <h2 className="text-xl md:text-2xl font-bold text-text-primary mb-4">
               6 trucs que Squad Planner te donne
             </h2>
             <p className="text-text-tertiary text-lg">
-              Discord reste ton ami pour la commu. Nous on gère l'organisation, le chat et la vocale.
+              Discord reste ton ami pour la commu. Nous on gère l'organisation, le chat et la
+              vocale.
             </p>
           </m.div>
 
@@ -254,11 +267,10 @@ export default function AlternativeDiscordEvents() {
                 <Shield className="w-6 h-6 text-primary" />
               </div>
               <div className="flex-1">
-                <h3 className="text-xl font-bold text-text-primary mb-3">
-                  Toujours lié à Discord
-                </h3>
+                <h3 className="text-xl font-bold text-text-primary mb-3">Toujours lié à Discord</h3>
                 <p className="text-text-secondary mb-4 text-md">
-                  Squad Planner et Discord, ça se parle. Les notifs arrivent dans Discord. L'organisation c'est chez nous. Zero config.
+                  Squad Planner et Discord, ça se parle. Les notifs arrivent dans Discord.
+                  L'organisation c'est chez nous. Zero config.
                 </p>
                 <div className="flex items-center gap-2 text-sm text-primary font-semibold">
                   <Check className="w-4 h-4" />
@@ -275,7 +287,13 @@ export default function AlternativeDiscordEvents() {
       {/* Use Case */}
       <section className="px-4 md:px-6 py-12 md:py-16">
         <div className="max-w-3xl mx-auto">
-          <m.div variants={scrollReveal} initial="hidden" whileInView="visible" viewport={{ once: true }} className="text-center mb-8">
+          <m.div
+            variants={scrollReveal}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            className="text-center mb-8"
+          >
             <h3 className="text-xl md:text-2xl font-bold text-text-primary mb-4">
               Ça marche comme ça
             </h3>
@@ -289,7 +307,9 @@ export default function AlternativeDiscordEvents() {
             className="p-8 md:p-10 rounded-3xl bg-gradient-to-br from-surface-card/80 to-transparent border border-border-subtle hover:border-border-hover transition-all"
           >
             <p className="text-text-secondary mb-8 leading-relaxed text-lg">
-              T'as une squad qui joue chaque mardi 21h. Sur Discord, tu crées un événement chaque fois. Chiant. Chez nous, tu crées une fois, c'est auto. Les mecs reçoivent une notif 1h avant. Tu vois qui flake. T'as des stats. Boom. Une vraie plateforme gaming.
+              T'as une squad qui joue chaque mardi 21h. Sur Discord, tu crées un événement chaque
+              fois. Chiant. Chez nous, tu crées une fois, c'est auto. Les mecs reçoivent une notif
+              1h avant. Tu vois qui flake. T'as des stats. Boom. Une vraie plateforme gaming.
             </p>
             <m.div whileHover={{ scale: 1.02, y: -2 }} {...springTap}>
               <Link
@@ -324,7 +344,9 @@ export default function AlternativeDiscordEvents() {
               className="absolute inset-0"
               animate={{ scale: [1, 1.05, 1], opacity: [0.3, 0.5, 0.3] }}
               transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
-              style={{ background: 'radial-gradient(ellipse at center, #a855f708 0%, transparent 60%)' }}
+              style={{
+                background: 'radial-gradient(ellipse at center, #a855f708 0%, transparent 60%)',
+              }}
             />
             <div className="relative z-10">
               <m.div
@@ -346,7 +368,6 @@ export default function AlternativeDiscordEvents() {
                 >
                   Créer mon compte
                   <ArrowRight className="w-5 h-5" />
-
                 </Link>
               </m.div>
               <p className="text-base text-text-quaternary mt-4">

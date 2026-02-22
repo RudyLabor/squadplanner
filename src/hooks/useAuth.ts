@@ -52,7 +52,10 @@ export const useAuthStore = create<AuthState>((set, get) => ({
           .single()
         const updatedProfile = await updateDailyStreak(session.user.id, profile)
         // BUG-10: Await premium status fetch to prevent badge flickering on login
-        await usePremiumStore.getState().fetchPremiumStatus().catch(() => {})
+        await usePremiumStore
+          .getState()
+          .fetchPremiumStatus()
+          .catch(() => {})
         set({
           user: session.user,
           session,
@@ -82,8 +85,11 @@ export const useAuthStore = create<AuthState>((set, get) => ({
           usePremiumStore.getState().fetchPremiumStatus()
           // Show welcome toast for OAuth sign-in (Google redirect)
           if (session.user.app_metadata?.provider === 'google') {
-            const isNewUser = profile?.created_at && (Date.now() - new Date(profile.created_at).getTime() < 60000)
-            showSuccess(isNewUser ? 'Compte créé avec succès ! Bienvenue !' : 'Content de te revoir !')
+            const isNewUser =
+              profile?.created_at && Date.now() - new Date(profile.created_at).getTime() < 60000
+            showSuccess(
+              isNewUser ? 'Compte créé avec succès ! Bienvenue !' : 'Content de te revoir !'
+            )
           }
         } else if (event === 'SIGNED_OUT') {
           set({ user: null, session: null, profile: null })
@@ -128,7 +134,8 @@ export const useAuthStore = create<AuthState>((set, get) => ({
           })
           .select()
           .single()
-        if (createError) throw new Error('Impossible de créer le profil. Réessaie dans quelques instants.')
+        if (createError)
+          throw new Error('Impossible de créer le profil. Réessaie dans quelques instants.')
         profile = newProfile
       }
 

@@ -63,7 +63,7 @@ export function DiscordCallback() {
               apikey: import.meta.env.VITE_SUPABASE_ANON_KEY,
             },
             body: JSON.stringify({ code, redirect_uri: redirectUri }),
-          },
+          }
         )
 
         let data: Record<string, unknown>
@@ -76,9 +76,9 @@ export function DiscordCallback() {
         if (!response.ok) {
           throw new Error(
             (data.error as string) ||
-            (data.message as string) ||
-            (data.msg as string) ||
-            `Erreur serveur (${response.status})`
+              (data.message as string) ||
+              (data.msg as string) ||
+              `Erreur serveur (${response.status})`
           )
         }
 
@@ -113,8 +113,18 @@ export function DiscordCallback() {
         {error ? (
           <>
             <div className="w-12 h-12 mx-auto rounded-full bg-error/10 flex items-center justify-center">
-              <svg className="w-6 h-6 text-error" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              <svg
+                className="w-6 h-6 text-error"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M6 18L18 6M6 6l12 12"
+                />
               </svg>
             </div>
             <p className="text-md text-text-primary">{error}</p>

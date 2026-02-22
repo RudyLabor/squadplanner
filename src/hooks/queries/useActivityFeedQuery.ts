@@ -114,8 +114,12 @@ async function fetchActivityFeed(squadIds: string[]): Promise<ActivityItem[]> {
       : Promise.resolve({ data: [] }),
   ])
 
-  const profileMap = new Map((profilesResult.data || []).map((p: any) => [p.id, p.username || 'Joueur']))
-  const squadMap = new Map<string, string>((squadsResult.data || []).map((s: any) => [s.id, s.name]))
+  const profileMap = new Map(
+    (profilesResult.data || []).map((p: any) => [p.id, p.username || 'Joueur'])
+  )
+  const squadMap = new Map<string, string>(
+    (squadsResult.data || []).map((s: any) => [s.id, s.name])
+  )
   const sessionMap = new Map((sessionsForRsvpsResult.data || []).map((s: any) => [s.id, s]))
 
   rsvps.forEach((r) => {

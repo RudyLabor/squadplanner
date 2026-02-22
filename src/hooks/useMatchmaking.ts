@@ -88,12 +88,19 @@ const LANGUAGE_OPTIONS = [
   { value: 'en', label: 'Anglais' },
   { value: 'es', label: 'Espagnol' },
   { value: 'de', label: 'Allemand' },
-  { value: 'any', label: 'N\'importe quelle langue' },
+  { value: 'any', label: "N'importe quelle langue" },
 ]
 
 // Helper: Compute compatibility score
 export function computeCompatibility(
-  user: { timezone: string; language: string; reliability_score: number; xp_level: number; play_style: string; is_online: boolean },
+  user: {
+    timezone: string
+    language: string
+    reliability_score: number
+    xp_level: number
+    play_style: string
+    is_online: boolean
+  },
   candidate: MatchmakingPlayer
 ): number {
   let score = 0
@@ -163,7 +170,9 @@ export const useMatchmaking = create<MatchmakingStore>((set, get) => ({
     set({ isSearching: true, error: null })
 
     try {
-      const { data: { user } } = await supabase.auth.getUser()
+      const {
+        data: { user },
+      } = await supabase.auth.getUser()
       if (!user) {
         throw new Error('Non authentifié')
       }
@@ -180,10 +189,7 @@ export const useMatchmaking = create<MatchmakingStore>((set, get) => ({
       }
 
       // Construire la requête de recherche
-      let query = supabase
-        .from('profiles')
-        .select('*')
-        .neq('id', user.id) // Exclure soi-même
+      let query = supabase.from('profiles').select('*').neq('id', user.id) // Exclure soi-même
 
       // Filtre par jeu
       if (filters.game) {
@@ -230,37 +236,35 @@ export const useMatchmaking = create<MatchmakingStore>((set, get) => ({
       const likedPlayerIds = new Set(likedData?.map((l) => l.liked_id) || [])
 
       // Calculer les scores de compatibilité
-      const enrichedPlayers: MatchmakingPlayer[] = (candidates || []).map(
-        (candidate) => ({
+      const enrichedPlayers: MatchmakingPlayer[] = (candidates || []).map((candidate) => ({
+        id: candidate.id,
+        username: candidate.username || 'Utilisateur',
+        avatar_url: candidate.avatar_url,
+        games: candidate.games || [],
+        rank: candidate.rank,
+        language: candidate.language || 'fr',
+        timezone: candidate.timezone || 'UTC',
+        play_style: candidate.play_style || 'both',
+        reliability_score: candidate.reliability_score || 0,
+        xp_level: candidate.xp_level || 0,
+        is_online: candidate.is_online || false,
+        compatibility_score: computeCompatibility(currentProfile, {
           id: candidate.id,
-          username: candidate.username || 'Utilisateur',
+          username: candidate.username,
           avatar_url: candidate.avatar_url,
-          games: candidate.games || [],
+          games: candidate.games,
           rank: candidate.rank,
-          language: candidate.language || 'fr',
-          timezone: candidate.timezone || 'UTC',
-          play_style: candidate.play_style || 'both',
-          reliability_score: candidate.reliability_score || 0,
-          xp_level: candidate.xp_level || 0,
-          is_online: candidate.is_online || false,
-          compatibility_score: computeCompatibility(currentProfile, {
-            id: candidate.id,
-            username: candidate.username,
-            avatar_url: candidate.avatar_url,
-            games: candidate.games,
-            rank: candidate.rank,
-            language: candidate.language,
-            timezone: candidate.timezone,
-            play_style: candidate.play_style,
-            reliability_score: candidate.reliability_score,
-            xp_level: candidate.xp_level,
-            is_online: candidate.is_online,
-            compatibility_score: 0,
-            last_active: candidate.last_active,
-          }),
-          last_active: candidate.last_active || new Date().toISOString(),
-        })
-      )
+          language: candidate.language,
+          timezone: candidate.timezone,
+          play_style: candidate.play_style,
+          reliability_score: candidate.reliability_score,
+          xp_level: candidate.xp_level,
+          is_online: candidate.is_online,
+          compatibility_score: 0,
+          last_active: candidate.last_active,
+        }),
+        last_active: candidate.last_active || new Date().toISOString(),
+      }))
 
       // Trier par score de compatibilité (décroissant)
       enrichedPlayers.sort((a, b) => b.compatibility_score - a.compatibility_score)
@@ -285,22 +289,22 @@ export const useMatchmaking = create<MatchmakingStore>((set, get) => ({
     set({ isLoading: true, error: null })
 
     try {
-      const { data: { user } } = await supabase.auth.getUser()
+      const {
+        data: { user },
+      } = await supabase.auth.getUser()
       if (!user) {
         throw new Error('Non authentifié')
       }
 
       // Ajouter le like
-      const { error: likeError } = await supabase
-        .from('matchmaking_likes')
-        .insert({
-          liker_id: user.id,
-          liked_id: playerId,
-          created_at: new Date().toISOString(),
-        })
+      const { error: likeError } = await supabase.from('matchmaking_likes').insert({
+        liker_id: user.id,
+        liked_id: playerId,
+        created_at: new Date().toISOString(),
+      })
 
       if (likeError) {
-        throw new Error('Impossible d\'aimer ce joueur')
+        throw new Error("Impossible d'aimer ce joueur")
       }
 
       // Mettre à jour l'état local
@@ -344,7 +348,9 @@ export const useMatchmaking = create<MatchmakingStore>((set, get) => ({
     set({ isLoading: true, error: null })
 
     try {
-      const { data: { user } } = await supabase.auth.getUser()
+      const {
+        data: { user },
+      } = await supabase.auth.getUser()
       if (!user) {
         throw new Error('Non authentifié')
       }
@@ -385,7 +391,9 @@ export const useMatchmaking = create<MatchmakingStore>((set, get) => ({
     set({ isLoading: true, error: null })
 
     try {
-      const { data: { user } } = await supabase.auth.getUser()
+      const {
+        data: { user },
+      } = await supabase.auth.getUser()
       if (!user) {
         throw new Error('Non authentifié')
       }
@@ -410,13 +418,15 @@ export const useMatchmaking = create<MatchmakingStore>((set, get) => ({
         throw new Error('Erreur lors de la récupération des correspondances')
       }
 
-      const receivedLikerIds = new Set<string>((receivedLikes?.map((l: any) => l.liker_id) || []) as string[])
-      const sentLikedIds = new Set<string>((sentLikes?.map((l: any) => l.liked_id) || []) as string[])
+      const receivedLikerIds = new Set<string>(
+        (receivedLikes?.map((l: any) => l.liker_id) || []) as string[]
+      )
+      const sentLikedIds = new Set<string>(
+        (sentLikes?.map((l: any) => l.liked_id) || []) as string[]
+      )
 
       // Trouver les matches mutuels
-      const mutualMatches = Array.from(sentLikedIds).filter((id) =>
-        receivedLikerIds.has(id)
-      )
+      const mutualMatches = Array.from(sentLikedIds).filter((id) => receivedLikerIds.has(id))
 
       set({
         mutualMatches,

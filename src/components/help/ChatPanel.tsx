@@ -1,4 +1,3 @@
-
 import { useRef, useEffect } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
 import { X, Sparkles, Send, ChevronRight } from '../icons'

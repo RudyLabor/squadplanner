@@ -29,7 +29,10 @@ export function PartyEmptyState() {
         <p className="text-md text-text-secondary mb-6 max-w-[280px] mx-auto leading-relaxed">
           Cr&eacute;e ou rejoins une squad pour lancer des parties vocales avec tes potes.
         </p>
-        <Link to="/squads" className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-primary text-white font-medium shadow-md shadow-primary/10 hover:bg-primary-hover transition-colors">
+        <Link
+          to="/squads"
+          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-primary text-white font-medium shadow-md shadow-primary/10 hover:bg-primary-hover transition-colors"
+        >
           <Users className="w-4 h-4" /> Trouver une squad
         </Link>
       </Card>

@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useRef, useCallback, memo } from 'react'
 import { Plus } from './icons'
 import { supabaseMinimal as supabase } from '../lib/supabaseMinimal'

@@ -5,7 +5,7 @@ const AlternativeGuilded = lazy(() => import('../pages/AlternativeGuilded'))
 
 export function headers() {
   return {
-    'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=86400'
+    'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=86400',
   }
 }
 
@@ -13,66 +13,69 @@ export function meta() {
   const baseUrl = 'https://squadplanner.fr'
   return [
     {
-      title: 'Alternative à Guilded - Squad Planner | Guilded a fermé'
+      title: 'Alternative à Guilded - Squad Planner | Guilded a fermé',
     },
     {
       name: 'description',
       content:
-        'Guilded a fermé. Découvre Squad Planner, la meilleure alternative pour organiser tes sessions gaming. Gratuit, fiable, optimisé pour les gamers.'
+        'Guilded a fermé. Découvre Squad Planner, la meilleure alternative pour organiser tes sessions gaming. Gratuit, fiable, optimisé pour les gamers.',
     },
     {
       name: 'keywords',
-      content: 'Guilded fermeture, alternative Guilded, Squad Planner, calendrier gaming, RSVP gaming'
+      content:
+        'Guilded fermeture, alternative Guilded, Squad Planner, calendrier gaming, RSVP gaming',
     },
     {
       tagName: 'link',
       rel: 'canonical',
-      href: `${baseUrl}/alternative/guilded`
+      href: `${baseUrl}/alternative/guilded`,
     },
     {
       property: 'og:type',
-      content: 'website'
+      content: 'website',
     },
     {
       property: 'og:title',
-      content: 'Alternative à Guilded - Squad Planner'
+      content: 'Alternative à Guilded - Squad Planner',
     },
     {
       property: 'og:description',
-      content: 'Guilded a fermé. Squad Planner offre tout ce que tu aimais sur Guilded, mais en mieux. Gratuit pour organiser tes sessions gaming.'
+      content:
+        'Guilded a fermé. Squad Planner offre tout ce que tu aimais sur Guilded, mais en mieux. Gratuit pour organiser tes sessions gaming.',
     },
     {
       property: 'og:url',
-      content: `${baseUrl}/alternative/guilded`
+      content: `${baseUrl}/alternative/guilded`,
     },
     {
       property: 'og:image',
-      content: `${baseUrl}/og-alternative-guilded.png`
+      content: `${baseUrl}/og-alternative-guilded.png`,
     },
     {
       name: 'twitter:card',
-      content: 'summary_large_image'
+      content: 'summary_large_image',
     },
     {
       name: 'twitter:title',
-      content: 'Alternative à Guilded - Squad Planner'
+      content: 'Alternative à Guilded - Squad Planner',
     },
     {
       name: 'twitter:description',
-      content: 'La plateforme gaming parfaite pour remplacer Guilded. Calendrier, RSVP, notifications. Gratuit.'
+      content:
+        'La plateforme gaming parfaite pour remplacer Guilded. Calendrier, RSVP, notifications. Gratuit.',
     },
     {
       httpEquiv: 'content-language',
-      content: 'fr'
-    }
+      content: 'fr',
+    },
   ]
 }
 
 export const handle = {
   breadcrumb: () => ({
     label: 'Alternative Guilded',
-    path: '/alternative/guilded'
-  })
+    path: '/alternative/guilded',
+  }),
 }
 
 export default function Component() {

@@ -51,7 +51,8 @@ export default function SessionSharePage() {
         // Fetch session with squad name
         const { data, error: fetchError } = await supabase
           .from('sessions')
-          .select(`
+          .select(
+            `
             id,
             title,
             game,
@@ -59,7 +60,8 @@ export default function SessionSharePage() {
             duration_minutes,
             status,
             squad_id
-          `)
+          `
+          )
           .eq('id', id)
           .single()
 
@@ -120,7 +122,9 @@ export default function SessionSharePage() {
     return (
       <div className="flex min-h-screen flex-col items-center justify-center gap-4 bg-bg-base px-4">
         <h1 className="text-xl font-bold text-text-primary">Session introuvable</h1>
-        <p className="text-sm text-text-secondary">Cette session n'existe pas ou a été supprimée.</p>
+        <p className="text-sm text-text-secondary">
+          Cette session n'existe pas ou a été supprimée.
+        </p>
         <button
           onClick={() => navigate('/')}
           className="rounded-xl bg-primary px-6 py-3 text-sm font-semibold text-white"
@@ -159,8 +163,18 @@ export default function SessionSharePage() {
           {/* Date & Time */}
           <div className="mb-4 space-y-2">
             <div className="flex items-center gap-2 text-sm text-text-secondary">
-              <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
+              <svg
+                className="h-4 w-4"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth="2"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5"
+                />
               </svg>
               <span>
                 {sessionDate.toLocaleDateString('fr-FR', {
@@ -172,18 +186,42 @@ export default function SessionSharePage() {
               </span>
             </div>
             <div className="flex items-center gap-2 text-sm text-text-secondary">
-              <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+              <svg
+                className="h-4 w-4"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth="2"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
               </svg>
               <span>
-                {sessionDate.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })} — {session.duration_minutes} min
+                {sessionDate.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })} —{' '}
+                {session.duration_minutes} min
               </span>
             </div>
             <div className="flex items-center gap-2 text-sm text-text-secondary">
-              <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z" />
+              <svg
+                className="h-4 w-4"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth="2"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z"
+                />
               </svg>
-              <span>{session.rsvp_count} joueur{session.rsvp_count > 1 ? 's' : ''} confirmé{session.rsvp_count > 1 ? 's' : ''}</span>
+              <span>
+                {session.rsvp_count} joueur{session.rsvp_count > 1 ? 's' : ''} confirmé
+                {session.rsvp_count > 1 ? 's' : ''}
+              </span>
             </div>
           </div>
 
@@ -214,9 +252,7 @@ export default function SessionSharePage() {
 
         {/* Footer CTA */}
         <div className="mt-6 text-center">
-          <p className="text-sm text-text-secondary">
-            Planifie tes sessions gaming avec ta squad
-          </p>
+          <p className="text-sm text-text-secondary">Planifie tes sessions gaming avec ta squad</p>
           <a
             href="/"
             className="mt-1 inline-block text-sm font-semibold text-primary hover:underline"

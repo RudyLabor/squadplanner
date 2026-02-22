@@ -6,16 +6,7 @@
 
 import { useState } from 'react'
 import { m } from 'framer-motion'
-import {
-  Calendar,
-  Clock,
-  Repeat,
-  Check,
-  X,
-  ChevronDown,
-  Gamepad2,
-  Users,
-} from './icons'
+import { Calendar, Clock, Repeat, Check, X, ChevronDown, Gamepad2, Users } from './icons'
 import { Button } from './ui'
 import { PremiumGate } from './PremiumGate'
 import { showSuccess, showError } from '../lib/toast'
@@ -89,7 +80,13 @@ function computeNextOccurrence(days: number[], hour: number, minute: number): st
 
   // If no future day found today, check if today is in the list and if time has passed
   if (daysUntilNext === 7 && sortedDays.includes(currentDayOfWeek)) {
-    const scheduledTime = new Date(today.getFullYear(), today.getMonth(), today.getDate(), hour, minute)
+    const scheduledTime = new Date(
+      today.getFullYear(),
+      today.getMonth(),
+      today.getDate(),
+      hour,
+      minute
+    )
     if (scheduledTime > now) {
       daysUntilNext = 0
     }
@@ -260,9 +257,7 @@ export function RecurringSessionForm({
 
         {/* Title input */}
         <div>
-          <label className="block text-sm font-semibold text-text-primary mb-2">
-            Titre
-          </label>
+          <label className="block text-sm font-semibold text-text-primary mb-2">Titre</label>
           <input
             type="text"
             value={title}

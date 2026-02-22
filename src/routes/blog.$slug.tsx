@@ -125,7 +125,10 @@ function RelatedCard({ post }: { post: BlogPost }) {
 }
 
 export default function BlogPost() {
-  const { post, relatedPosts } = useLoaderData<typeof loader>() as unknown as { post: BlogPost; relatedPosts: BlogPost[] }
+  const { post, relatedPosts } = useLoaderData<typeof loader>() as unknown as {
+    post: BlogPost
+    relatedPosts: BlogPost[]
+  }
 
   const formattedDate = new Date(post.date).toLocaleDateString('fr-FR', {
     year: 'numeric',
@@ -142,7 +145,8 @@ export default function BlogPost() {
         <div
           className="absolute inset-0"
           style={{
-            background: 'radial-gradient(circle at 50% 0%, var(--color-primary-12) 0%, transparent 60%)',
+            background:
+              'radial-gradient(circle at 50% 0%, var(--color-primary-12) 0%, transparent 60%)',
             filter: 'blur(40px)',
           }}
         />
@@ -291,7 +295,8 @@ export default function BlogPost() {
             viewport={{ once: true }}
             className="relative p-8 md:p-12 rounded-3xl border text-center overflow-hidden"
             style={{
-              background: 'radial-gradient(ellipse at center, var(--color-primary-10) 0%, transparent 60%)',
+              background:
+                'radial-gradient(ellipse at center, var(--color-primary-10) 0%, transparent 60%)',
               borderColor: 'var(--color-primary-20)',
             }}
           >
@@ -299,7 +304,10 @@ export default function BlogPost() {
               className="absolute inset-0"
               animate={{ scale: [1, 1.05, 1], opacity: [0.3, 0.5, 0.3] }}
               transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
-              style={{ background: 'radial-gradient(ellipse at center, var(--color-primary-08) 0%, transparent 60%)' }}
+              style={{
+                background:
+                  'radial-gradient(ellipse at center, var(--color-primary-08) 0%, transparent 60%)',
+              }}
             />
             <div className="relative z-10">
               <m.div

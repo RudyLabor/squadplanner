@@ -1,4 +1,3 @@
-
 /**
  * Phase 4.1.2 — Create Poll Modal
  * Create a new poll with question + options

@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
 import { ArrowRight, X } from '../icons'

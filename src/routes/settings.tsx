@@ -40,7 +40,9 @@ export async function clientLoader({ serverLoader }: ClientLoaderFunctionArgs) {
   // Fast auth — getSession reads local cache, no network call.
   // Parent _protected loader already validated with getUser().
   const { supabaseMinimal: supabase } = await import('../lib/supabaseMinimal')
-  const { data: { session } } = await supabase.auth.getSession()
+  const {
+    data: { session },
+  } = await supabase.auth.getSession()
   if (!session?.user) return { profile: null }
 
   // Reuse profile from React Query cache (seeded by _protected layout)
@@ -49,7 +51,10 @@ export async function clientLoader({ serverLoader }: ClientLoaderFunctionArgs) {
 
   // Fallback: fetch from Supabase (cold cache / first load)
   const { withTimeout } = await import('../lib/withTimeout')
-  const { data: profile } = await withTimeout(supabase.from('profiles').select('*').eq('id', session.user.id).single(), 5000) as any
+  const { data: profile } = (await withTimeout(
+    supabase.from('profiles').select('*').eq('id', session.user.id).single(),
+    5000
+  )) as any
   return { profile }
 }
 clientLoader.hydrate = true as const

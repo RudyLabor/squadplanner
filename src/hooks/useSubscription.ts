@@ -49,8 +49,12 @@ interface SubscriptionState {
 }
 
 // Stripe Price IDs from environment variables
-const STRIPE_PRICE_PREMIUM_MONTHLY = import.meta.env.VITE_STRIPE_PRICE_PREMIUM_MONTHLY || import.meta.env.VITE_STRIPE_PRICE_MONTHLY || ''
-const STRIPE_PRICE_PREMIUM_YEARLY = import.meta.env.VITE_STRIPE_PRICE_PREMIUM_YEARLY || import.meta.env.VITE_STRIPE_PRICE_YEARLY || ''
+const STRIPE_PRICE_PREMIUM_MONTHLY =
+  import.meta.env.VITE_STRIPE_PRICE_PREMIUM_MONTHLY ||
+  import.meta.env.VITE_STRIPE_PRICE_MONTHLY ||
+  ''
+const STRIPE_PRICE_PREMIUM_YEARLY =
+  import.meta.env.VITE_STRIPE_PRICE_PREMIUM_YEARLY || import.meta.env.VITE_STRIPE_PRICE_YEARLY || ''
 const STRIPE_PRICE_SL_MONTHLY = import.meta.env.VITE_STRIPE_PRICE_SL_MONTHLY || ''
 const STRIPE_PRICE_SL_YEARLY = import.meta.env.VITE_STRIPE_PRICE_SL_YEARLY || ''
 const STRIPE_PRICE_CLUB_MONTHLY = import.meta.env.VITE_STRIPE_PRICE_CLUB_MONTHLY || ''
@@ -98,10 +102,7 @@ const PLANS: PricingPlan[] = [
     tier: 'premium',
     price: PREMIUM_PRICE_YEARLY,
     interval: 'year',
-    features: [
-      'Tout le Premium',
-      'Économise 28%',
-    ],
+    features: ['Tout le Premium', 'Économise 28%'],
     stripePriceId: STRIPE_PRICE_PREMIUM_YEARLY,
   },
   {
@@ -132,10 +133,7 @@ const PLANS: PricingPlan[] = [
     price: SQUAD_LEADER_PRICE_YEARLY,
     interval: 'year',
     popular: true,
-    features: [
-      'Tout Squad Leader',
-      'Économise 20%',
-    ],
+    features: ['Tout Squad Leader', 'Économise 20%'],
     stripePriceId: STRIPE_PRICE_SL_YEARLY,
   },
   {
@@ -163,10 +161,7 @@ const PLANS: PricingPlan[] = [
     tier: 'club',
     price: CLUB_PRICE_YEARLY,
     interval: 'year',
-    features: [
-      'Tout le Club',
-      'Économise 20%',
-    ],
+    features: ['Tout le Club', 'Économise 20%'],
     stripePriceId: STRIPE_PRICE_CLUB_YEARLY,
   },
 ]

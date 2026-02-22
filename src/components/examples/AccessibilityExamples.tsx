@@ -14,9 +14,10 @@ import { Tabs, TabsList, Tab, TabsContent } from '../ui/Tabs'
 
 // === EXEMPLE 1: Formulaire avec gestion d'erreurs ===
 export function LoginFormExample() {
-  const { error, humanMessage, handleError, clearError, isRetrying, canRetry, retry } = useFormError({
-    maxRetries: 3,
-  })
+  const { error, humanMessage, handleError, clearError, isRetrying, canRetry, retry } =
+    useFormError({
+      maxRetries: 3,
+    })
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -84,9 +85,7 @@ export function LoginFormExample() {
       </button>
 
       {!canRetry && error && (
-        <p className="text-sm text-error">
-          Trop de tentatives. Réessaie dans quelques minutes.
-        </p>
+        <p className="text-sm text-error">Trop de tentatives. Réessaie dans quelques minutes.</p>
       )}
     </form>
   )
@@ -120,9 +119,7 @@ export function ModalExample() {
           Confirmation
         </h2>
 
-        <p className="text-text-secondary mb-6">
-          Veux-tu vraiment effectuer cette action ?
-        </p>
+        <p className="text-text-secondary mb-6">Veux-tu vraiment effectuer cette action ?</p>
 
         <div className="flex gap-3">
           <button
@@ -183,16 +180,12 @@ export function TabsNavigationExample() {
 
       <TabsContent value="notifications" className="p-4">
         <h2 className="text-lg font-bold mb-3">Notifications</h2>
-        <p className="text-text-secondary">
-          Le focus est annoncé aux lecteurs d'écran.
-        </p>
+        <p className="text-text-secondary">Le focus est annoncé aux lecteurs d'écran.</p>
       </TabsContent>
 
       <TabsContent value="privacy" className="p-4">
         <h2 className="text-lg font-bold mb-3">Confidentialité</h2>
-        <p className="text-text-secondary">
-          Fonctionne avec NVDA, JAWS, VoiceOver et TalkBack.
-        </p>
+        <p className="text-text-secondary">Fonctionne avec NVDA, JAWS, VoiceOver et TalkBack.</p>
       </TabsContent>
     </Tabs>
   )
@@ -240,7 +233,9 @@ export function AnnouncementExample() {
 
 // === EXEMPLE 5: Intégration complète ===
 export function CompleteAccessibilityExample() {
-  const [activeExample, setActiveExample] = useState<'login' | 'modal' | 'tabs' | 'announce'>('login')
+  const [activeExample, setActiveExample] = useState<'login' | 'modal' | 'tabs' | 'announce'>(
+    'login'
+  )
 
   return (
     <div className="space-y-8 p-6 max-w-2xl mx-auto">

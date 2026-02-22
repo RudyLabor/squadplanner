@@ -3,26 +3,26 @@ import { persist } from 'zustand/middleware'
 
 // ── XP thresholds per level ──────────────────────────────────────
 const LEVEL_THRESHOLDS = [
-  0,      // Level 1
-  100,    // Level 2
-  250,    // Level 3
-  500,    // Level 4
-  850,    // Level 5
-  1300,   // Level 6
-  1900,   // Level 7
-  2600,   // Level 8
-  3500,   // Level 9
-  4600,   // Level 10
-  6000,   // Level 11
-  7700,   // Level 12
-  9800,   // Level 13
-  12300,  // Level 14
-  15300,  // Level 15
-  18800,  // Level 16
-  23000,  // Level 17
-  28000,  // Level 18
-  34000,  // Level 19
-  41000,  // Level 20 (max)
+  0, // Level 1
+  100, // Level 2
+  250, // Level 3
+  500, // Level 4
+  850, // Level 5
+  1300, // Level 6
+  1900, // Level 7
+  2600, // Level 8
+  3500, // Level 9
+  4600, // Level 10
+  6000, // Level 11
+  7700, // Level 12
+  9800, // Level 13
+  12300, // Level 14
+  15300, // Level 15
+  18800, // Level 16
+  23000, // Level 17
+  28000, // Level 18
+  34000, // Level 19
+  41000, // Level 20 (max)
 ]
 
 // ── XP rewards per action ────────────────────────────────────────
@@ -44,7 +44,7 @@ export const XP_REWARDS = {
   'streak.week': 50,
   'referral.success': 100,
   'discover.browse': 5,
-  'invite.send': 5,  // PHASE 5: XP for sending party invites
+  'invite.send': 5, // PHASE 5: XP for sending party invites
 } as const
 
 export type XPAction = keyof typeof XP_REWARDS
@@ -155,7 +155,7 @@ export interface GamificationStats {
   currentStreak: number
   bestStreak: number
   referrals: number
-  invitesSent: number  // PHASE 5: Track party invites sent
+  invitesSent: number // PHASE 5: Track party invites sent
   level: number
 }
 
@@ -185,26 +185,26 @@ function computeLevel(xp: number): number {
 }
 
 const LEVEL_TITLES = [
-  'Recrue',         // 1
-  'Soldat',         // 2
-  'Caporal',        // 3
-  'Sergent',        // 4
-  'Lieutenant',     // 5
-  'Capitaine',      // 6
-  'Commandant',     // 7
-  'Colonel',        // 8
-  'Général',        // 9
-  'Maréchal',       // 10
-  'Légende',        // 11
-  'Mythique',       // 12
-  'Immortel',       // 13
-  'Divin',          // 14
-  'Transcendant',   // 15
-  'Cosmique',       // 16
-  'Éternel',        // 17
-  'Absolu',         // 18
-  'Suprême',        // 19
-  'Ultime',         // 20
+  'Recrue', // 1
+  'Soldat', // 2
+  'Caporal', // 3
+  'Sergent', // 4
+  'Lieutenant', // 5
+  'Capitaine', // 6
+  'Commandant', // 7
+  'Colonel', // 8
+  'Général', // 9
+  'Maréchal', // 10
+  'Légende', // 11
+  'Mythique', // 12
+  'Immortel', // 13
+  'Divin', // 14
+  'Transcendant', // 15
+  'Cosmique', // 16
+  'Éternel', // 17
+  'Absolu', // 18
+  'Suprême', // 19
+  'Ultime', // 20
 ]
 
 interface GamificationStateWithHydration extends GamificationState {
@@ -287,7 +287,8 @@ export const useGamificationStore = create<GamificationStateWithHydration>()(
       getProgress: () => {
         const { xp, level } = get()
         const currentThreshold = LEVEL_THRESHOLDS[level - 1] || 0
-        const nextThreshold = LEVEL_THRESHOLDS[level] || LEVEL_THRESHOLDS[LEVEL_THRESHOLDS.length - 1]
+        const nextThreshold =
+          LEVEL_THRESHOLDS[level] || LEVEL_THRESHOLDS[LEVEL_THRESHOLDS.length - 1]
         const current = xp - currentThreshold
         const needed = nextThreshold - currentThreshold
         return {

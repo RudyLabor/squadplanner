@@ -24,10 +24,8 @@ export const supabaseMinimal: any = createClient(supabaseUrl, supabaseAnonKey, {
     lock: (typeof navigator !== 'undefined' && navigator.locks
       ? (name: string, acquireTimeout: number, fn: () => Promise<unknown>) => {
           const timeout = acquireTimeout > 0 ? acquireTimeout : 10000
-          return navigator.locks.request(
-            name,
-            { signal: AbortSignal.timeout(timeout) },
-            () => Promise.race([
+          return navigator.locks.request(name, { signal: AbortSignal.timeout(timeout) }, () =>
+            Promise.race([
               fn(),
               new Promise((_, reject) =>
                 setTimeout(() => reject(new Error(`Lock work timeout after ${timeout}ms`)), timeout)
@@ -37,7 +35,7 @@ export const supabaseMinimal: any = createClient(supabaseUrl, supabaseAnonKey, {
         }
       : undefined) as any,
   },
-  
+
   // Désactive features non utilisées pour réduire bundle
   realtime: {
     // Garde realtime pour messages en temps réel
@@ -45,12 +43,12 @@ export const supabaseMinimal: any = createClient(supabaseUrl, supabaseAnonKey, {
       eventsPerSecond: 10, // Limite rate pour performance
     },
   },
-  
+
   global: {
     headers: {
-      'X-Client-Info': 'squadplanner-web'
-    }
-  }
+      'X-Client-Info': 'squadplanner-web',
+    },
+  },
 })
 
 // Expose on window for synchronous access from click handlers (MobileBottomNav).
@@ -86,7 +84,11 @@ if (typeof window !== 'undefined') {
     }
     // Restart auto-refresh if it was stopped during the deadlock
     if (auth.autoRefreshTicker === false || auth.autoRefreshTicker == null) {
-      try { auth.startAutoRefresh?.() } catch { /* ignore */ }
+      try {
+        auth.startAutoRefresh?.()
+      } catch {
+        /* ignore */
+      }
     }
   }
 

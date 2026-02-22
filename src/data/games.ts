@@ -39,7 +39,7 @@ export const GAMES: GameInfo[] = [
     name: 'League of Legends',
     shortName: 'LoL',
     description:
-      'MOBA légendaire par Riot Games. 5 joueurs s\'affrontent sur la Faille de l\'Invocateur dans des parties stratégiques intenses.',
+      "MOBA légendaire par Riot Games. 5 joueurs s'affrontent sur la Faille de l'Invocateur dans des parties stratégiques intenses.",
     seoDescription:
       'Organise tes sessions League of Legends avec Squad Planner. Planifie tes ranked, trouve des joueurs fiables et monte en rang.',
     genre: 'MOBA',
@@ -85,7 +85,7 @@ export const GAMES: GameInfo[] = [
     name: 'Counter-Strike 2',
     shortName: 'CS2',
     description:
-      'Le FPS compétitif par excellence, développé par Valve. Précision, stratégie et travail d\'équipe sont les clés de la victoire.',
+      "Le FPS compétitif par excellence, développé par Valve. Précision, stratégie et travail d'équipe sont les clés de la victoire.",
     seoDescription:
       'Planifie tes sessions CS2 avec Squad Planner. Organise tes matchs compétitifs, trouve une squad fiable et progresse ensemble.',
     genre: 'FPS Compétitif',
@@ -102,7 +102,7 @@ export const GAMES: GameInfo[] = [
     description:
       'Battle royale par squads de 3 avec des Légendes aux capacités uniques. Gameplay rapide et nerveux par Respawn Entertainment.',
     seoDescription:
-      'Organise tes sessions Apex Legends avec Squad Planner. Trouve des coéquipiers, planifie tes ranked et domine l\'arène.',
+      "Organise tes sessions Apex Legends avec Squad Planner. Trouve des coéquipiers, planifie tes ranked et domine l'arène.",
     genre: 'Battle Royale / FPS',
     players: 'Squads de 3',
     platforms: ['PC', 'PlayStation', 'Xbox'],
@@ -163,7 +163,7 @@ export const GAMES: GameInfo[] = [
     name: 'Overwatch 2',
     shortName: 'OW2',
     description:
-      'Hero shooter 5v5 par Blizzard. Chaque héros a un rôle unique : Tank, DPS ou Support. Travail d\'équipe essentiel.',
+      "Hero shooter 5v5 par Blizzard. Chaque héros a un rôle unique : Tank, DPS ou Support. Travail d'équipe essentiel.",
     seoDescription:
       'Organise tes sessions Overwatch 2 avec Squad Planner. Trouve des joueurs par rôle, planifie tes ranked et grimpe en SR.',
     genre: 'Hero Shooter',
@@ -198,7 +198,7 @@ export const GAMES: GameInfo[] = [
     seoDescription:
       'Organise tes sessions GTA Online avec Squad Planner. Planifie tes braquages, courses et soirées entre amis.',
     genre: 'Action / Monde ouvert',
-    players: 'Jusqu\'à 30 joueurs',
+    players: "Jusqu'à 30 joueurs",
     platforms: ['PC', 'PlayStation', 'Xbox'],
     icon: '🏎️',
     estimatedPlayers: '30M+ joueurs',

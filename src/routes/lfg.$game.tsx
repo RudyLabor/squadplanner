@@ -60,7 +60,10 @@ export function meta({ params }: { params: { game: string } }) {
     { tagName: 'link', rel: 'canonical', href: `https://squadplanner.fr/lfg/${game.slug}` },
     { property: 'og:url', content: `https://squadplanner.fr/lfg/${game.slug}` },
     { property: 'og:title', content: `Chercher des joueurs ${game.name}` },
-    { property: 'og:description', content: `Trouvez des joueurs ${game.name} et formez votre squad idéale.` },
+    {
+      property: 'og:description',
+      content: `Trouvez des joueurs ${game.name} et formez votre squad idéale.`,
+    },
   ]
 }
 
@@ -69,7 +72,13 @@ function GameNotFound() {
   return (
     <PublicPageShell>
       <div className="flex flex-col items-center justify-center px-4 py-32">
-        <m.div variants={scrollReveal} initial="hidden" whileInView="visible" viewport={{ once: true }} className="text-center">
+        <m.div
+          variants={scrollReveal}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          className="text-center"
+        >
           <h1 className="text-4xl font-bold text-text-primary mb-4">Jeu non trouvé</h1>
           <p className="text-text-secondary mb-8">
             Ce jeu n'existe pas ou n'est pas encore disponible sur Squad Planner.
@@ -93,21 +102,33 @@ const benefits = [
     title: 'Zéro toxique, zéro smurf',
     desc: (name: string) =>
       `Chaque joueur ${name} est vérifié. Tu vois son score de fiabilité avant de jouer avec. Si quelqu'un est toxique, ça se sait.`,
-    details: ['Profils vérifiés par email', 'Score de fiabilité visible', 'Signalement et modération active'],
+    details: [
+      'Profils vérifiés par email',
+      'Score de fiabilité visible',
+      'Signalement et modération active',
+    ],
   },
   {
     icon: Target,
     title: 'Des joueurs de ton niveau',
     desc: (name: string) =>
       `Pas envie de carry des débutants ou de te faire écraser ? Notre matching te connecte avec des joueurs ${name} compatibles.`,
-    details: ['Matching par rang et style de jeu', 'Préférences de rôle et plateforme', 'Le matching s\'améliore à chaque session'],
+    details: [
+      'Matching par rang et style de jeu',
+      'Préférences de rôle et plateforme',
+      "Le matching s'améliore à chaque session",
+    ],
   },
   {
     icon: Users,
-    title: 'Toujours quelqu\'un pour jouer',
+    title: "Toujours quelqu'un pour jouer",
     desc: (name: string) =>
       `Tes potes sont pas dispos ? Trouve des joueurs ${name} actifs maintenant. Matin, soir, weekend — il y a toujours du monde.`,
-    details: ['Joueurs actifs à toute heure', 'Notifications quand un joueur te match', 'Sessions ouvertes à rejoindre'],
+    details: [
+      'Joueurs actifs à toute heure',
+      'Notifications quand un joueur te match',
+      'Sessions ouvertes à rejoindre',
+    ],
   },
 ]
 
@@ -180,7 +201,10 @@ export default function Component() {
             whileInView="visible"
             viewport={{ once: true }}
           >
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full badge-shimmer border mb-8" style={{ borderColor: `${gc}25` }}>
+            <div
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full badge-shimmer border mb-8"
+              style={{ borderColor: `${gc}25` }}
+            >
               <span className="text-4xl">{game.icon}</span>
               <span className="text-base font-medium" style={{ color: gc }}>
                 {game.genre} · {game.players}
@@ -210,8 +234,11 @@ export default function Component() {
             viewport={{ once: true }}
             className="text-lg md:text-xl text-text-tertiary mb-10 max-w-2xl mx-auto leading-relaxed"
           >
-            T'en as marre de jouer avec des randoms qui ragequit au bout de 5 min ? Trouve des joueurs {game.name} fiables, de ton niveau, qui tiennent parole
-            <span className="text-text-primary font-medium">. Gratuit, sans inscription obligatoire.</span>
+            T'en as marre de jouer avec des randoms qui ragequit au bout de 5 min ? Trouve des
+            joueurs {game.name} fiables, de ton niveau, qui tiennent parole
+            <span className="text-text-primary font-medium">
+              . Gratuit, sans inscription obligatoire.
+            </span>
           </m.p>
 
           {/* CTAs */}
@@ -262,7 +289,13 @@ export default function Component() {
       {/* ── How it works ── */}
       <section className="px-4 md:px-6 py-12 md:py-16 bg-gradient-to-b from-transparent to-primary/[0.015]">
         <div className="max-w-5xl mx-auto">
-          <m.div variants={scrollReveal} initial="hidden" whileInView="visible" viewport={{ once: true }} className="text-center mb-12">
+          <m.div
+            variants={scrollReveal}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            className="text-center mb-12"
+          >
             <h2 className="text-xl md:text-2xl font-bold text-text-primary mb-4">
               Trouve ta squad en 3 étapes
             </h2>
@@ -291,7 +324,10 @@ export default function Component() {
                     >
                       <StepIcon className="w-6 h-6" style={{ color: gc }} />
                     </div>
-                    <div className="text-xs font-bold uppercase tracking-wider mb-2" style={{ color: gc }}>
+                    <div
+                      className="text-xs font-bold uppercase tracking-wider mb-2"
+                      style={{ color: gc }}
+                    >
                       Étape {step.step}
                     </div>
                     <h3 className="text-lg font-bold text-text-primary mb-2">{step.title}</h3>
@@ -309,7 +345,13 @@ export default function Component() {
       {/* ── Benefits pillars ── */}
       <section className="px-4 md:px-6 py-12 md:py-16">
         <div className="max-w-5xl mx-auto">
-          <m.div variants={scrollReveal} initial="hidden" whileInView="visible" viewport={{ once: true }} className="text-center mb-12">
+          <m.div
+            variants={scrollReveal}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            className="text-center mb-12"
+          >
             <h2 className="text-xl md:text-2xl font-bold text-text-primary mb-4">
               Pas un LFG de plus. Un vrai outil.
             </h2>
@@ -345,7 +387,10 @@ export default function Component() {
                       <p className="text-text-tertiary mb-4">{benefit.desc(game.name)}</p>
                       <ul className="space-y-2">
                         {benefit.details.map((detail) => (
-                          <li key={detail} className="flex items-center gap-2 text-md text-text-secondary">
+                          <li
+                            key={detail}
+                            className="flex items-center gap-2 text-md text-text-secondary"
+                          >
                             <Check className="w-4 h-4 flex-shrink-0" style={{ color: gc }} />
                             {detail}
                           </li>
@@ -365,7 +410,13 @@ export default function Component() {
       {/* ── Testimonials ── */}
       <section className="px-4 md:px-6 py-10 md:py-14">
         <div className="max-w-5xl mx-auto">
-          <m.div variants={scrollReveal} initial="hidden" whileInView="visible" viewport={{ once: true }} className="text-center mb-12">
+          <m.div
+            variants={scrollReveal}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            className="text-center mb-12"
+          >
             <h2 className="text-xl md:text-2xl font-bold text-text-primary mb-4">
               Ils ont trouvé leur squad
             </h2>
@@ -376,19 +427,19 @@ export default function Component() {
               {
                 name: 'Alex',
                 role: `${game.name} depuis 2 ans`,
-                text: 'Avant je postais sur r/LFG et je tombais sur des mecs qui quittaient au bout de 2 games. Ici les joueurs ont un score, tu sais à quoi t\'attendre.',
+                text: "Avant je postais sur r/LFG et je tombais sur des mecs qui quittaient au bout de 2 games. Ici les joueurs ont un score, tu sais à quoi t'attendre.",
                 delay: 0.1,
               },
               {
                 name: 'Sarah',
                 role: `Joueuse ${game.name}`,
-                text: 'J\'avais personne pour jouer ranked. En une semaine j\'ai trouvé 3 joueurs réguliers. On joue ensemble tous les mardis et vendredis maintenant.',
+                text: "J'avais personne pour jouer ranked. En une semaine j'ai trouvé 3 joueurs réguliers. On joue ensemble tous les mardis et vendredis maintenant.",
                 delay: 0.2,
               },
               {
                 name: 'Théo',
                 role: 'Capitaine de squad',
-                text: 'Le truc qui change tout c\'est le RSVP. Les gens disent OUI ou NON, pas « peut-être ». Du coup quand c\'est l\'heure, tout le monde est là.',
+                text: "Le truc qui change tout c'est le RSVP. Les gens disent OUI ou NON, pas « peut-être ». Du coup quand c'est l'heure, tout le monde est là.",
                 delay: 0.3,
               },
             ].map((testimonial, idx) => (
@@ -406,7 +457,9 @@ export default function Component() {
                     <Star key={i} className="w-4 h-4 fill-primary text-primary" />
                   ))}
                 </div>
-                <p className="text-text-secondary mb-4 italic text-base leading-relaxed">{testimonial.text}</p>
+                <p className="text-text-secondary mb-4 italic text-base leading-relaxed">
+                  {testimonial.text}
+                </p>
                 <div className="border-t border-border-subtle pt-4">
                   <p className="font-semibold text-text-primary">{testimonial.name}</p>
                   <p className="text-sm text-text-tertiary">{testimonial.role}</p>
@@ -422,7 +475,13 @@ export default function Component() {
       {/* ── FAQ ── */}
       <section className="px-4 md:px-6 py-10 md:py-14">
         <div className="max-w-3xl mx-auto">
-          <m.div variants={scrollReveal} initial="hidden" whileInView="visible" viewport={{ once: true }} className="text-center mb-12">
+          <m.div
+            variants={scrollReveal}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            className="text-center mb-12"
+          >
             <h2 className="text-xl md:text-2xl font-bold text-text-primary mb-4">
               Questions fréquentes
             </h2>
@@ -480,7 +539,9 @@ export default function Component() {
               className="absolute inset-0"
               animate={{ scale: [1, 1.05, 1], opacity: [0.3, 0.5, 0.3] }}
               transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
-              style={{ background: `radial-gradient(ellipse at center, ${gc}08 0%, transparent 60%)` }}
+              style={{
+                background: `radial-gradient(ellipse at center, ${gc}08 0%, transparent 60%)`,
+              }}
             />
             <div className="relative z-10">
               <m.div
@@ -517,7 +578,13 @@ export default function Component() {
       {/* ── Other games ── */}
       <section className="px-4 md:px-6 py-12">
         <div className="max-w-5xl mx-auto">
-          <m.div variants={scrollRevealLight} initial="hidden" whileInView="visible" viewport={{ once: true }} className="text-center mb-8">
+          <m.div
+            variants={scrollRevealLight}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            className="text-center mb-8"
+          >
             <h2 className="text-lg md:text-xl font-bold text-text-primary mb-2">
               Tu joues à d'autres jeux ?
             </h2>

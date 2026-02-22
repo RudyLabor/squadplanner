@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router'
 import { useAuthStore, useSubscriptionStore, usePremiumStore, useAnalytics } from '../hooks'
@@ -57,7 +56,12 @@ export function Premium() {
       if (url) window.location.href = url
     } catch (err) {
       const error = err instanceof Error ? err : new Error(String(err))
-      captureException(error, { context: 'stripe_checkout', tier: selectedTier, interval, userId: user.id })
+      captureException(error, {
+        context: 'stripe_checkout',
+        tier: selectedTier,
+        interval,
+        userId: user.id,
+      })
       const errorMessage = error.message
       if (errorMessage.includes('Edge Function') || errorMessage.includes('non-2xx'))
         setError('Une erreur est survenue. Réessaye dans quelques instants.')
@@ -129,7 +133,7 @@ export function Premium() {
     } catch (err) {
       const error = err instanceof Error ? err : new Error(String(err))
       captureException(error, { context: 'start_trial', userId: user.id })
-      setError('Erreur lors de l\'activation de l\'essai gratuit.')
+      setError("Erreur lors de l'activation de l'essai gratuit.")
     } finally {
       setIsLoading(false)
     }

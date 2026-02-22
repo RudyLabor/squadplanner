@@ -1,4 +1,3 @@
-
 import { ArrowLeft, Shield, FileText } from '../components/icons'
 import { Link, useSearchParams } from 'react-router'
 import { ScrollProgress } from '../components/ui/ScrollProgress'
@@ -36,7 +35,11 @@ export function Legal() {
       </header>
 
       <main className="max-w-3xl mx-auto px-4 md:px-6 py-8">
-        <div className="flex gap-2 p-1 rounded-xl bg-surface-card border border-border-default mb-8" role="tablist" aria-label="Documents légaux">
+        <div
+          className="flex gap-2 p-1 rounded-xl bg-surface-card border border-border-default mb-8"
+          role="tablist"
+          aria-label="Documents légaux"
+        >
           <button
             role="tab"
             aria-selected={activeTab === 'cgu'}

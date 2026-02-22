@@ -32,9 +32,12 @@ export function useConfetti(defaultDuration = 3500) {
   }, [])
 
   // Cleanup on unmount
-  useEffect(() => () => {
-    if (timerRef.current) clearTimeout(timerRef.current)
-  }, [])
+  useEffect(
+    () => () => {
+      if (timerRef.current) clearTimeout(timerRef.current)
+    },
+    []
+  )
 
   return { active, fire, cancel }
 }

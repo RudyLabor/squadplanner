@@ -19,9 +19,7 @@ export function PublicPageShell({ children, className = '' }: PublicPageShellPro
     <div className={`min-h-screen bg-bg-base landing-page landing-noise ${className}`}>
       <LandingNavbar isLoggedIn={false} />
       {/* pt-16 to offset fixed navbar */}
-      <main className="pt-16">
-        {children}
-      </main>
+      <main className="pt-16">{children}</main>
       <LandingFooter />
     </div>
   )

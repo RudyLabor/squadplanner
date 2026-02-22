@@ -6,58 +6,58 @@ export const motionTokens = {
     bouncy: { type: 'spring', stiffness: 180, damping: 12, mass: 0.8 },
     snappy: { type: 'spring', stiffness: 300, damping: 30, mass: 1.0 },
   },
-  
+
   // Duration tokens
   duration: {
     instant: 0.1,
     fast: 0.15,
     normal: 0.25,
     slow: 0.35,
-    slower: 0.5
+    slower: 0.5,
   },
-  
+
   // Easing curves (fallback when spring not available)
   easing: {
     easeInOut: [0.4, 0.0, 0.2, 1],
     easeOut: [0.0, 0.0, 0.2, 1],
     easeIn: [0.4, 0.0, 1, 1],
-    sharp: [0.4, 0.0, 0.6, 1]
-  }
+    sharp: [0.4, 0.0, 0.6, 1],
+  },
 }
 
 // Variants système pour consistency
 export const fadeVariants = {
   initial: { opacity: 0 },
   animate: { opacity: 1, transition: motionTokens.spring.gentle },
-  exit: { opacity: 0, transition: { duration: motionTokens.duration.fast } }
+  exit: { opacity: 0, transition: { duration: motionTokens.duration.fast } },
 }
 
 export const slideUpVariants = {
   initial: { opacity: 0, y: 20 },
-  animate: { 
-    opacity: 1, 
-    y: 0, 
-    transition: motionTokens.spring.gentle 
+  animate: {
+    opacity: 1,
+    y: 0,
+    transition: motionTokens.spring.gentle,
   },
-  exit: { 
-    opacity: 0, 
-    y: -10, 
-    transition: { duration: motionTokens.duration.fast } 
-  }
+  exit: {
+    opacity: 0,
+    y: -10,
+    transition: { duration: motionTokens.duration.fast },
+  },
 }
 
 export const scaleVariants = {
   initial: { opacity: 0, scale: 0.95 },
-  animate: { 
-    opacity: 1, 
-    scale: 1, 
-    transition: motionTokens.spring.bouncy 
+  animate: {
+    opacity: 1,
+    scale: 1,
+    transition: motionTokens.spring.bouncy,
   },
-  exit: { 
-    opacity: 0, 
-    scale: 0.95, 
-    transition: { duration: motionTokens.duration.fast } 
-  }
+  exit: {
+    opacity: 0,
+    scale: 0.95,
+    transition: { duration: motionTokens.duration.fast },
+  },
 }
 
 // Stagger animations for lists
@@ -65,18 +65,18 @@ export const staggerContainer = {
   animate: {
     transition: {
       staggerChildren: 0.05,
-      delayChildren: 0.1
-    }
-  }
+      delayChildren: 0.1,
+    },
+  },
 }
 
 export const staggerItem = {
   initial: { opacity: 0, y: 20 },
-  animate: { 
-    opacity: 1, 
+  animate: {
+    opacity: 1,
     y: 0,
-    transition: motionTokens.spring.gentle
-  }
+    transition: motionTokens.spring.gentle,
+  },
 }
 
 // Animation props type for framer-motion compatible objects
@@ -99,23 +99,26 @@ const useHapticFeedback = () => ({
 // Reduced motion stub (useReducedMotion not available)
 const useReducedMotion = () =>
   typeof window !== 'undefined'
-    ? window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches ?? false
+    ? (window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches ?? false)
     : false
 
 // Haptic feedback integration
 export const useHapticMotion = () => {
   const haptic = useHapticFeedback()
 
-  const withHaptic = (animationProps: AnimationProps, hapticType: 'light' | 'medium' | 'heavy' = 'light') => {
+  const withHaptic = (
+    animationProps: AnimationProps,
+    hapticType: 'light' | 'medium' | 'heavy' = 'light'
+  ) => {
     return {
       ...animationProps,
       onAnimationStart: () => haptic.trigger(hapticType),
-      ...animationProps.onAnimationStart && {
+      ...(animationProps.onAnimationStart && {
         onAnimationStart: () => {
           haptic.trigger(hapticType)
           animationProps.onAnimationStart?.()
-        }
-      }
+        },
+      }),
     }
   }
 
@@ -130,7 +133,7 @@ export const useReducedMotionVariants = (defaultVariants: MotionVariants) => {
     return {
       initial: { opacity: 0 },
       animate: { opacity: 1 },
-      exit: { opacity: 0 }
+      exit: { opacity: 0 },
     }
   }
 

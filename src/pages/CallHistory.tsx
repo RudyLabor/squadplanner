@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from 'react'
 import { AnimatePresence } from 'framer-motion'
 import { Phone, ArrowLeft, RefreshCw } from '../components/icons'
@@ -6,7 +5,7 @@ import { useNavigate } from 'react-router'
 import { Card, Button } from '../components/ui'
 import { MobilePageHeader } from '../components/layout/MobilePageHeader'
 import { useCallHistoryStore, type CallType } from '../hooks/useCallHistory'
-// LAZY LOAD: useVoiceCall importé uniquement si call button cliqué  
+// LAZY LOAD: useVoiceCall importé uniquement si call button cliqué
 // import { useVoiceCallStore } from '../hooks/useVoiceCall'
 import { CallHistoryList } from './call-history/CallHistoryList'
 
@@ -72,7 +71,7 @@ export function CallHistory() {
     // LAZY LOAD: Import voice call uniquement au clic d'appel
     const { useVoiceCallStore } = await import('../hooks/useVoiceCall')
     const { startCall, status: callStatus } = useVoiceCallStore.getState()
-    
+
     if (callStatus !== 'idle') return
     setToastMessage(`📞 Appel vers ${contactName}...`)
     setShowToast(true)
@@ -91,7 +90,10 @@ export function CallHistory() {
         <div className="px-4 py-4 max-w-4xl lg:max-w-5xl mx-auto">
           <div className="flex items-center gap-3 mb-4">
             <button
-              onClick={() => { if (window.history.length > 1) navigate(-1); else navigate('/home'); }}
+              onClick={() => {
+                if (window.history.length > 1) navigate(-1)
+                else navigate('/home')
+              }}
               className="hidden lg:flex w-11 h-11 min-w-[44px] min-h-[44px] rounded-xl bg-surface-card items-center justify-center hover:bg-border-default hover:scale-[1.02] transition-interactive touch-target"
               aria-label="Retour"
             >
@@ -119,7 +121,11 @@ export function CallHistory() {
             </button>
           </div>
 
-          <div className="flex gap-2 overflow-x-auto pb-1 -mx-1 px-1" role="tablist" aria-label="Filtrer les appels">
+          <div
+            className="flex gap-2 overflow-x-auto pb-1 -mx-1 px-1"
+            role="tablist"
+            aria-label="Filtrer les appels"
+          >
             {filterOptions.map((option) => (
               <button
                 key={option.value}

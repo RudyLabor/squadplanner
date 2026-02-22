@@ -1,4 +1,3 @@
-
 import { useState } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
 import { Calendar, Plus, Loader2, Mic, MicOff } from '../icons'

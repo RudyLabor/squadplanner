@@ -13,9 +13,7 @@ const LOCK_PROBE_TIMEOUT_MS = 3000 // Time to wait for Supabase to respond befor
  * which avoids desynchronizing React's Virtual DOM and breaking touch targets.
  */
 function repaintFixedNav() {
-  const targets = document.querySelectorAll<HTMLElement>(
-    '.mobile-bottom-nav, .desktop-only'
-  )
+  const targets = document.querySelectorAll<HTMLElement>('.mobile-bottom-nav, .desktop-only')
   targets.forEach((el) => {
     el.style.transform = 'translateZ(0)'
     void el.offsetHeight // sync reflow
@@ -77,7 +75,10 @@ export function useAppResume() {
       }
 
       // FIX 3: Skip stuck View Transition.
-      if (typeof document.startViewTransition === 'function' && (document as any).activeViewTransition) {
+      if (
+        typeof document.startViewTransition === 'function' &&
+        (document as any).activeViewTransition
+      ) {
         try {
           ;(document as any).activeViewTransition.skipTransition()
         } catch {
@@ -99,10 +100,9 @@ export function useAppResume() {
         setTimeout(() => {
           if (router.state?.navigation?.state !== 'idle') {
             try {
-              router.navigate(
-                router.state.location.pathname + router.state.location.search,
-                { replace: true }
-              )
+              router.navigate(router.state.location.pathname + router.state.location.search, {
+                replace: true,
+              })
             } catch {
               // Router not available or navigate failed — ignore
             }
@@ -113,7 +113,9 @@ export function useAppResume() {
         // (e.g. loader genuinely hung), force-reset navigation state.
         setTimeout(() => {
           if (router.state?.navigation?.state !== 'idle') {
-            console.warn('[useAppResume] Router still stuck after 2s, force-resetting navigation state')
+            console.warn(
+              '[useAppResume] Router still stuck after 2s, force-resetting navigation state'
+            )
             try {
               if (typeof router._internalSetStateDoNotUseOrYouWillBreakYourApp === 'function') {
                 router._internalSetStateDoNotUseOrYouWillBreakYourApp({
@@ -217,7 +219,10 @@ export function useAppResume() {
       }
 
       // Skip stuck View Transition on bfcache restore
-      if (typeof document.startViewTransition === 'function' && (document as any).activeViewTransition) {
+      if (
+        typeof document.startViewTransition === 'function' &&
+        (document as any).activeViewTransition
+      ) {
         try {
           ;(document as any).activeViewTransition.skipTransition()
         } catch {
@@ -231,10 +236,9 @@ export function useAppResume() {
         setTimeout(() => {
           if (router.state?.navigation?.state !== 'idle') {
             try {
-              router.navigate(
-                router.state.location.pathname + router.state.location.search,
-                { replace: true }
-              )
+              router.navigate(router.state.location.pathname + router.state.location.search, {
+                replace: true,
+              })
             } catch {
               // ignore
             }

@@ -9,7 +9,7 @@ export async function notifySquadMessage(
   senderId: string,
   senderUsername: string,
   content: string,
-  sessionId?: string | null,
+  sessionId?: string | null
 ) {
   try {
     // Get all squad members except sender
@@ -21,11 +21,7 @@ export async function notifySquadMessage(
 
     if (!members?.length) return
 
-    const { data: squad } = await supabase
-      .from('squads')
-      .select('name')
-      .eq('id', squadId)
-      .single()
+    const { data: squad } = await supabase.from('squads').select('name').eq('id', squadId).single()
 
     const squadName = squad?.name || 'Squad'
     const preview = content.length > 80 ? content.slice(0, 80) + '...' : content
@@ -56,7 +52,7 @@ export async function notifyDirectMessage(
   receiverId: string,
   senderId: string,
   senderUsername: string,
-  content: string,
+  content: string
 ) {
   try {
     const preview = content.length > 80 ? content.slice(0, 80) + '...' : content

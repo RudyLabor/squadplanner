@@ -14,9 +14,7 @@ function CellValue({ value }: { value: boolean | string }) {
       </div>
     )
   }
-  return (
-    <span className="text-xs font-medium text-success leading-tight">{value}</span>
-  )
+  return <span className="text-xs font-medium text-success leading-tight">{value}</span>
 }
 
 export function PremiumFeaturesTable() {
@@ -30,7 +28,10 @@ export function PremiumFeaturesTable() {
   }, [])
 
   return (
-    <div className="animate-fade-in-up mt-12 mb-16 max-w-3xl mx-auto px-4 sm:px-0" style={{ animationDelay: '0.3s' }}>
+    <div
+      className="animate-fade-in-up mt-12 mb-16 max-w-3xl mx-auto px-4 sm:px-0"
+      style={{ animationDelay: '0.3s' }}
+    >
       <h2 className="text-xl font-semibold text-text-primary text-center mb-2">
         Comparatif des fonctionnalités
       </h2>
@@ -40,11 +41,7 @@ export function PremiumFeaturesTable() {
       </p>
       <div className="hidden sm:block mb-8" />
       <div className="relative rounded-2xl border border-border-subtle overflow-hidden">
-        <div
-          ref={scrollRef}
-          className="overflow-x-auto"
-          onScroll={handleScroll}
-        >
+        <div ref={scrollRef} className="overflow-x-auto" onScroll={handleScroll}>
           <table className="w-full border-collapse table-fixed" style={{ minWidth: 600 }}>
             <colgroup>
               <col style={{ width: 216 }} />
@@ -86,10 +83,14 @@ export function PremiumFeaturesTable() {
                     key={feature.name}
                     className={`border-b border-border-subtle last:border-b-0 ${bg}`}
                   >
-                    <td className={`sticky left-0 z-10 ${bg} p-3 text-left shadow-[2px_0_8px_-2px_rgba(0,0,0,0.4)]`}>
+                    <td
+                      className={`sticky left-0 z-10 ${bg} p-3 text-left shadow-[2px_0_8px_-2px_rgba(0,0,0,0.4)]`}
+                    >
                       <div className="flex items-center gap-2">
                         <feature.icon className="w-4 h-4 text-primary flex-shrink-0" />
-                        <span className="text-xs text-text-primary leading-tight">{feature.name}</span>
+                        <span className="text-xs text-text-primary leading-tight">
+                          {feature.name}
+                        </span>
                       </div>
                     </td>
                     <td className="p-2 text-center align-middle">
@@ -114,7 +115,9 @@ export function PremiumFeaturesTable() {
         {canScrollRight && (
           <div
             className="pointer-events-none absolute inset-y-0 right-0 w-12 sm:hidden"
-            style={{ background: 'linear-gradient(to left, var(--color-bg-base) 20%, transparent)' }}
+            style={{
+              background: 'linear-gradient(to left, var(--color-bg-base) 20%, transparent)',
+            }}
             aria-hidden="true"
           />
         )}

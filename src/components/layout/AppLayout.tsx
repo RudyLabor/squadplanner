@@ -1,4 +1,3 @@
-
 import { useEffect, useState, memo, useCallback, useMemo, useRef } from 'react'
 import type { ReactNode } from 'react'
 import { useLocation } from 'react-router'
@@ -203,7 +202,10 @@ export function AppLayout({ children }: AppLayoutProps) {
     }
   }, [user, fetchPendingCounts, subscribeSquad, unsubscribeSquad])
 
-  const isPartyActive = useMemo(() => location.pathname === '/party' || location.pathname.startsWith('/party/'), [location.pathname])
+  const isPartyActive = useMemo(
+    () => location.pathname === '/party' || location.pathname.startsWith('/party/'),
+    [location.pathname]
+  )
   const currentPath = location.pathname
 
   if (shouldHideNav) {

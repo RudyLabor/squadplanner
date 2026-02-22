@@ -1,4 +1,3 @@
-
 /**
  * CreateSessionModal - PHASE 3.1
  * Global modal for creating sessions from anywhere in the app
@@ -130,7 +129,9 @@ export function CreateSessionModal() {
         {/* No squads warning */}
         {squads.length === 0 && (
           <div className="p-3 rounded-lg bg-warning-10 border border-warning">
-            <p className="text-warning text-base">Tu n'as aucun squad. Crée ou rejoins un squad d'abord.</p>
+            <p className="text-warning text-base">
+              Tu n'as aucun squad. Crée ou rejoins un squad d'abord.
+            </p>
           </div>
         )}
 
@@ -287,7 +288,9 @@ export function CreateSessionModal() {
             {/* Duration & Threshold */}
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block text-base font-medium text-text-secondary mb-1.5">Durée</label>
+                <label className="block text-base font-medium text-text-secondary mb-1.5">
+                  Durée
+                </label>
                 <Select
                   options={[
                     { value: '60', label: '1 heure' },

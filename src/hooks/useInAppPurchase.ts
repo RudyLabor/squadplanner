@@ -85,7 +85,11 @@ interface IAPState {
 
   // Actions
   purchase: (productKey: IAPProductKey) => Promise<{ success: boolean; error: string | null }>
-  restorePurchases: () => Promise<{ success: boolean; tier: SubscriptionTier | null; error: string | null }>
+  restorePurchases: () => Promise<{
+    success: boolean
+    tier: SubscriptionTier | null
+    error: string | null
+  }>
   reset: () => void
 }
 
@@ -102,7 +106,10 @@ export const useInAppPurchaseStore = create<IAPState>((set, get) => ({
     if (!isNative || !platform) {
       // On web, this hook should not be called directly.
       // useSubscription.ts handles Stripe checkout.
-      return { success: false, error: 'IAP is only available on native platforms. Use Stripe for web.' }
+      return {
+        success: false,
+        error: 'IAP is only available on native platforms. Use Stripe for web.',
+      }
     }
 
     set({ status: 'purchasing', error: null })
@@ -152,7 +159,7 @@ export const useInAppPurchaseStore = create<IAPState>((set, get) => ({
       set({ status: 'purchased', activeTier: tier, error: null })
       return { success: true, error: null }
     } catch (err) {
-      const message = err instanceof Error ? err.message : 'Erreur inconnue lors de l\'achat'
+      const message = err instanceof Error ? err.message : "Erreur inconnue lors de l'achat"
       set({ status: 'error', error: message })
       return { success: false, error: message }
     }
@@ -162,7 +169,11 @@ export const useInAppPurchaseStore = create<IAPState>((set, get) => ({
     const { isNative, platform } = get()
 
     if (!isNative || !platform) {
-      return { success: false, tier: null, error: 'La restauration est uniquement disponible sur mobile.' }
+      return {
+        success: false,
+        tier: null,
+        error: 'La restauration est uniquement disponible sur mobile.',
+      }
     }
 
     set({ status: 'loading', error: null })

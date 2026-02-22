@@ -1,4 +1,3 @@
-
 import { useEffect, useRef, useState } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
 import { X, WifiOff, Loader2 } from './icons'

@@ -35,13 +35,14 @@ function getClient(): any {
         lock: (typeof navigator !== 'undefined' && navigator.locks
           ? (name: string, acquireTimeout: number, fn: () => Promise<unknown>) => {
               const timeout = acquireTimeout > 0 ? acquireTimeout : 5000
-              return navigator.locks.request(
-                name,
-                { signal: AbortSignal.timeout(timeout) },
-                () => Promise.race([
+              return navigator.locks.request(name, { signal: AbortSignal.timeout(timeout) }, () =>
+                Promise.race([
                   fn(),
                   new Promise<never>((_, reject) =>
-                    setTimeout(() => reject(new Error(`Lock work timeout after ${timeout}ms`)), timeout)
+                    setTimeout(
+                      () => reject(new Error(`Lock work timeout after ${timeout}ms`)),
+                      timeout
+                    )
                   ),
                 ])
               )
@@ -151,8 +152,10 @@ export const supabase: any = new Proxy({} as any, {
       if (prop === 'removeChannel') return () => {}
       return undefined
     }
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
     const value = (_client as Record<string | symbol, unknown>)[prop]
-    return typeof value === 'function' ? (value as (...a: unknown[]) => unknown).bind(_client) : value
+    return typeof value === 'function'
+      ? (value as (...a: unknown[]) => unknown).bind(_client)
+      : value
   },
 })

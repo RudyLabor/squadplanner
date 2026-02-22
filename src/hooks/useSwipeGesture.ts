@@ -24,28 +24,31 @@ export function useSwipeGesture(options: SwipeOptions) {
     startTime.current = Date.now()
   }, [])
 
-  const onTouchEnd = useCallback((e: React.TouchEvent) => {
-    const deltaX = e.changedTouches[0].clientX - startX.current
-    const deltaY = e.changedTouches[0].clientY - startY.current
-    const deltaTime = Date.now() - startTime.current
+  const onTouchEnd = useCallback(
+    (e: React.TouchEvent) => {
+      const deltaX = e.changedTouches[0].clientX - startX.current
+      const deltaY = e.changedTouches[0].clientY - startY.current
+      const deltaTime = Date.now() - startTime.current
 
-    // Only count fast swipes (< 300ms)
-    if (deltaTime > 300) return
+      // Only count fast swipes (< 300ms)
+      if (deltaTime > 300) return
 
-    const absDeltaX = Math.abs(deltaX)
-    const absDeltaY = Math.abs(deltaY)
+      const absDeltaX = Math.abs(deltaX)
+      const absDeltaY = Math.abs(deltaY)
 
-    // Horizontal swipe
-    if (absDeltaX > threshold && absDeltaX > absDeltaY) {
-      if (deltaX > 0) options.onSwipeRight?.()
-      else options.onSwipeLeft?.()
-    }
-    // Vertical swipe
-    else if (absDeltaY > threshold && absDeltaY > absDeltaX) {
-      if (deltaY > 0) options.onSwipeDown?.()
-      else options.onSwipeUp?.()
-    }
-  }, [options, threshold])
+      // Horizontal swipe
+      if (absDeltaX > threshold && absDeltaX > absDeltaY) {
+        if (deltaX > 0) options.onSwipeRight?.()
+        else options.onSwipeLeft?.()
+      }
+      // Vertical swipe
+      else if (absDeltaY > threshold && absDeltaY > absDeltaX) {
+        if (deltaY > 0) options.onSwipeDown?.()
+        else options.onSwipeUp?.()
+      }
+    },
+    [options, threshold]
+  )
 
   return { onTouchStart, onTouchEnd }
 }

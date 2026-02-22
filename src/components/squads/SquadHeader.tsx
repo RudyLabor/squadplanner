@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
 import { Crown, Copy, Check, MessageCircle, Settings, X } from '../icons'

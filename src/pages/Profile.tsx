@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useRef, useMemo, useCallback } from 'react'
 import { useSearchParams } from 'react-router'
 import { LogOut } from '../components/icons'
@@ -137,89 +136,89 @@ export function Profile() {
 
   return (
     <PullToRefresh onRefresh={handleRefresh}>
-    <main className="min-h-0 bg-bg-base pb-6 page-enter" aria-label="Profil">
-      {/* Level Up Celebration */}
-      {showLevelUp && newLevel && (
-        <LevelUpCelebration
-          newLevel={newLevel}
-          onComplete={() => {
-            setShowLevelUp(false)
-            setNewLevel(null)
-          }}
+      <main className="min-h-0 bg-bg-base pb-6 page-enter" aria-label="Profil">
+        {/* Level Up Celebration */}
+        {showLevelUp && newLevel && (
+          <LevelUpCelebration
+            newLevel={newLevel}
+            onComplete={() => {
+              setShowLevelUp(false)
+              setNewLevel(null)
+            }}
+          />
+        )}
+
+        {/* Header: Avatar, name, bio, edit */}
+        <ProfileHeader
+          user={user}
+          profile={profile}
+          isLoading={isLoading}
+          updateProfile={updateProfile}
         />
-      )}
 
-      {/* Header: Avatar, name, bio, edit */}
-      <ProfileHeader
-        user={user}
-        profile={profile}
-        isLoading={isLoading}
-        updateProfile={updateProfile}
-      />
+        <div className="px-4 md:px-6 lg:px-8 max-w-2xl lg:max-w-4xl xl:max-w-6xl mx-auto">
+          <PlanBadge tier={tier} size="md" className="mb-4" />
 
-      <div className="px-4 md:px-6 lg:px-8 max-w-2xl lg:max-w-4xl xl:max-w-6xl mx-auto">
-        <PlanBadge tier={tier} size="md" className="mb-4" />
-
-        {/* XP Bar — Uses profile.xp from the profiles table.
+          {/* XP Bar — Uses profile.xp from the profiles table.
             NOTE: Squad-level XP (e.g. squad_members.xp) is computed per-squad and may differ
             from the global profile.xp. If they're out of sync, the server-side trigger
             (on challenge claim / session RSVP) may need to update both. */}
-        {!profileReady ? (
-          <div className="mb-5 h-[52px] rounded-xl bg-surface-card animate-pulse" />
-        ) : (
-          <XPBar currentXP={profile?.xp || 0} level={profile?.level || 1} className="mb-5" />
-        )}
+          {!profileReady ? (
+            <div className="mb-5 h-[52px] rounded-xl bg-surface-card animate-pulse" />
+          ) : (
+            <XPBar currentXP={profile?.xp || 0} level={profile?.level || 1} className="mb-5" />
+          )}
 
-        {/* Recherche de squad — Matchmaking toggle */}
-        <MatchmakingToggle
-          profile={profile as any}
-          updateProfile={updateProfile}
-          autoActivate={autoActivateMatchmaking}
+          {/* Recherche de squad — Matchmaking toggle */}
+          <MatchmakingToggle
+            profile={profile as any}
+            updateProfile={updateProfile}
+            autoActivate={autoActivateMatchmaking}
+          />
+
+          {/* Reliability score + Stats grid */}
+          <ProfileStats profile={profile} profileReady={profileReady} />
+
+          {/* Challenges Section - moved up for visibility */}
+          {challenges.length > 0 && (
+            <section className="mb-5" aria-label="Défis">
+              <Challenges challenges={challenges} onClaimXP={handleClaimXP} />
+            </section>
+          )}
+
+          {/* Activity, AI Coach, Call History, Premium sections */}
+          <ProfileHistory
+            profile={profile}
+            hasPremium={hasPremium}
+            canAccessFeature={canAccessFeature as any}
+            aiCoachTip={aiCoachTip}
+          />
+
+          {/* Badges: Seasonal + Achievements */}
+          <ProfileBadges
+            profile={profile}
+            challengesLoaded={challengesLoaded}
+            challengesData={challengesData}
+            SeasonalBadgesComponent={SeasonalBadges}
+          />
+
+          {/* Sign out */}
+          <button
+            onClick={handleSignOut}
+            className="w-full py-3 text-md text-error hover:text-error/70 transition-colors flex items-center justify-center gap-2"
+          >
+            <LogOut className="w-4 h-4" />
+            Se déconnecter
+          </button>
+        </div>
+
+        {/* Modal Premium */}
+        <PremiumUpgradeModal
+          isOpen={showPremiumModal}
+          onClose={() => setShowPremiumModal(false)}
+          feature="Compte Premium"
         />
-
-        {/* Reliability score + Stats grid */}
-        <ProfileStats profile={profile} profileReady={profileReady} />
-
-        {/* Challenges Section - moved up for visibility */}
-        {challenges.length > 0 && (
-          <section className="mb-5" aria-label="Défis">
-            <Challenges challenges={challenges} onClaimXP={handleClaimXP} />
-          </section>
-        )}
-
-        {/* Activity, AI Coach, Call History, Premium sections */}
-        <ProfileHistory
-          profile={profile}
-          hasPremium={hasPremium}
-          canAccessFeature={canAccessFeature as any}
-          aiCoachTip={aiCoachTip}
-        />
-
-        {/* Badges: Seasonal + Achievements */}
-        <ProfileBadges
-          profile={profile}
-          challengesLoaded={challengesLoaded}
-          challengesData={challengesData}
-          SeasonalBadgesComponent={SeasonalBadges}
-        />
-
-        {/* Sign out */}
-        <button
-          onClick={handleSignOut}
-          className="w-full py-3 text-md text-error hover:text-error/70 transition-colors flex items-center justify-center gap-2"
-        >
-          <LogOut className="w-4 h-4" />
-          Se déconnecter
-        </button>
-      </div>
-
-      {/* Modal Premium */}
-      <PremiumUpgradeModal
-        isOpen={showPremiumModal}
-        onClose={() => setShowPremiumModal(false)}
-        feature="Compte Premium"
-      />
-    </main>
+      </main>
     </PullToRefresh>
   )
 }

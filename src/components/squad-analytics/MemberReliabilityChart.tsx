@@ -41,14 +41,15 @@ export default function MemberReliabilityChart({ squadId }: { squadId: string })
           return
         }
 
-        const membersList = squadMembers
-          ?.map(member => ({
-            id: member.user_id,
-            username: member.profiles?.username || 'Unknown',
-            reliability_score: member.profiles?.reliability_score || 0,
-            avatar_url: member.profiles?.avatar_url || null,
-          }))
-          .sort((a, b) => b.reliability_score - a.reliability_score) || []
+        const membersList =
+          squadMembers
+            ?.map((member) => ({
+              id: member.user_id,
+              username: member.profiles?.username || 'Unknown',
+              reliability_score: member.profiles?.reliability_score || 0,
+              avatar_url: member.profiles?.avatar_url || null,
+            }))
+            .sort((a, b) => b.reliability_score - a.reliability_score) || []
 
         setMembers(membersList)
       } catch (err) {
@@ -136,13 +137,16 @@ export default function MemberReliabilityChart({ squadId }: { squadId: string })
           <div className="bg-surface-card rounded-lg p-3 text-center border border-border-subtle">
             <div className="text-xs text-text-tertiary mb-1">Moyenne</div>
             <div className="text-lg font-bold text-text-primary">
-              {Math.round(members.reduce((sum, m) => sum + m.reliability_score, 0) / members.length)}%
+              {Math.round(
+                members.reduce((sum, m) => sum + m.reliability_score, 0) / members.length
+              )}
+              %
             </div>
           </div>
           <div className="bg-surface-card rounded-lg p-3 text-center border border-border-subtle">
             <div className="text-xs text-text-tertiary mb-1">Meilleur</div>
             <div className="text-lg font-bold text-emerald-600">
-              {Math.max(...members.map(m => m.reliability_score))}%
+              {Math.max(...members.map((m) => m.reliability_score))}%
             </div>
           </div>
           <div className="bg-surface-card rounded-lg p-3 text-center border border-border-subtle">

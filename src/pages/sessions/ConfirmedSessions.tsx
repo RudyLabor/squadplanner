@@ -11,7 +11,10 @@ interface ConfirmedSessionsProps {
   sessionsLoading: boolean
 }
 
-export const ConfirmedSessions = memo(function ConfirmedSessions({ confirmed, sessionsLoading }: ConfirmedSessionsProps) {
+export const ConfirmedSessions = memo(function ConfirmedSessions({
+  confirmed,
+  sessionsLoading,
+}: ConfirmedSessionsProps) {
   return (
     <section className="mb-8" aria-label="Sessions confirmées">
       <div className="flex items-center justify-between mb-4">
@@ -50,7 +53,9 @@ export const ConfirmedSessions = memo(function ConfirmedSessions({ confirmed, se
                             <h3 className="text-md font-medium text-text-primary truncate">
                               {session.title || session.game || 'Session'}
                             </h3>
-                            <Badge variant="success" className="shrink-0">Confirmé</Badge>
+                            <Badge variant="success" className="shrink-0">
+                              Confirmé
+                            </Badge>
                           </div>
                           <div className="flex items-center gap-3 text-base text-text-secondary">
                             <span className="flex items-center gap-1">

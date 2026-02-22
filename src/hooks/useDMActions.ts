@@ -37,7 +37,7 @@ export function createDMActions(set: SetState, get: GetState) {
           receiverId,
           user.id,
           profile?.username || 'Joueur',
-          content.trim(),
+          content.trim()
         ).catch(() => {})
 
         return { error: null }

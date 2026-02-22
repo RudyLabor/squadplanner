@@ -1,4 +1,3 @@
-
 /**
  * Composant GameCover - Affiche l'image de couverture d'un jeu
  * Utilise des images statiques pour les jeux populaires avec un fallback gradient

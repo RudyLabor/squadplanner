@@ -27,26 +27,29 @@ export function useFormError(options: UseFormErrorOptions = {}) {
     setIsRetrying(false)
   }, [])
 
-  const retry = useCallback(async (fn: () => Promise<void>) => {
-    if (attempt >= maxRetries) {
-      onMaxRetriesExceeded?.()
-      return
-    }
+  const retry = useCallback(
+    async (fn: () => Promise<void>) => {
+      if (attempt >= maxRetries) {
+        onMaxRetriesExceeded?.()
+        return
+      }
 
-    setIsRetrying(true)
-    const delay = getRetryDelay(attempt)
+      setIsRetrying(true)
+      const delay = getRetryDelay(attempt)
 
-    try {
-      await new Promise((resolve) => setTimeout(resolve, delay))
-      await fn()
-      clearError()
-    } catch (err) {
-      setAttempt((prev) => prev + 1)
-      setError(err instanceof Error ? err : new Error(String(err)))
-    } finally {
-      setIsRetrying(false)
-    }
-  }, [attempt, maxRetries, onMaxRetriesExceeded, clearError, handleError])
+      try {
+        await new Promise((resolve) => setTimeout(resolve, delay))
+        await fn()
+        clearError()
+      } catch (err) {
+        setAttempt((prev) => prev + 1)
+        setError(err instanceof Error ? err : new Error(String(err)))
+      } finally {
+        setIsRetrying(false)
+      }
+    },
+    [attempt, maxRetries, onMaxRetriesExceeded, clearError, handleError]
+  )
 
   return {
     error,

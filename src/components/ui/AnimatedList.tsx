@@ -69,8 +69,7 @@ export function AnimatedList({
 
   const MotionTag = m[as]
   const prefersReduced =
-    typeof window !== 'undefined' &&
-    window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
+    typeof window !== 'undefined' && window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
 
   const customContainer: Variants = {
     hidden: { opacity: 0 },
@@ -84,17 +83,10 @@ export function AnimatedList({
   }
 
   return (
-    <MotionTag
-      className={className}
-      variants={customContainer}
-      initial="hidden"
-      animate="visible"
-    >
+    <MotionTag className={className} variants={customContainer} initial="hidden" animate="visible">
       {Children.map(children, (child) =>
         child ? (
-          <m.div variants={prefersReduced ? itemVariantsReduced : itemVariants}>
-            {child}
-          </m.div>
+          <m.div variants={prefersReduced ? itemVariantsReduced : itemVariants}>{child}</m.div>
         ) : null
       )}
     </MotionTag>

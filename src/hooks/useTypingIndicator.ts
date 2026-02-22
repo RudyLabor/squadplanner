@@ -110,11 +110,15 @@ export function useTypingIndicator({
     return () => {
       // BUG-5: Send stop_typing on cleanup to prevent ghost "typing..." indicators
       if (channelRef.current && currentUserId) {
-        channelRef.current.send({
-          type: 'broadcast',
-          event: 'stop_typing',
-          payload: { userId: currentUserId },
-        }).catch(() => { /* best effort */ })
+        channelRef.current
+          .send({
+            type: 'broadcast',
+            event: 'stop_typing',
+            payload: { userId: currentUserId },
+          })
+          .catch(() => {
+            /* best effort */
+          })
       }
       if (typingTimeoutRef.current) {
         clearTimeout(typingTimeoutRef.current)

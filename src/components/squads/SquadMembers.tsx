@@ -74,7 +74,7 @@ const MemberCard = memo(function MemberCard({
   const handleCall = async (e: React.MouseEvent) => {
     e.stopPropagation()
     if (!member.profiles?.username) return
-    
+
     // LAZY LOAD: Import voice call uniquement au clic d'appel
     const { useVoiceCallStore } = await import('../../hooks/useVoiceCall')
     const { startCall } = useVoiceCallStore.getState()

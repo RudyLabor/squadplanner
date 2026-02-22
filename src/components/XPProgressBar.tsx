@@ -45,7 +45,9 @@ export function XPProgressBar({ compact = false }: { compact?: boolean }) {
         </div>
         <div className="flex items-center gap-1 text-xs text-text-tertiary">
           <Star className="w-3 h-3 text-primary" />
-          <span>{current}/{needed} XP</span>
+          <span>
+            {current}/{needed} XP
+          </span>
         </div>
       </div>
       <div className="h-2 bg-bg-active rounded-full overflow-hidden">

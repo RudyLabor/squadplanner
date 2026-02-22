@@ -1,4 +1,3 @@
-
 import { useEffect, useState, useRef, useCallback, useMemo } from 'react'
 import { useSearchParams } from 'react-router'
 import { Sparkles } from '../components/icons'
@@ -639,11 +638,18 @@ export function Messages() {
           >
             {showSlowLoadingHint ? (
               <div className="text-center py-12">
-                <p className="text-text-tertiary text-md">Le chargement prend plus de temps que prévu...</p>
-                <p className="text-text-quaternary text-sm mt-2">Vérifie ta connexion ou tire vers le bas pour rafraîchir.</p>
+                <p className="text-text-tertiary text-md">
+                  Le chargement prend plus de temps que prévu...
+                </p>
+                <p className="text-text-quaternary text-sm mt-2">
+                  Vérifie ta connexion ou tire vers le bas pour rafraîchir.
+                </p>
               </div>
             ) : (
-              <CrossfadeTransition isLoading={initialMessagesLoading} skeleton={<SkeletonChatPage />}>
+              <CrossfadeTransition
+                isLoading={initialMessagesLoading}
+                skeleton={<SkeletonChatPage />}
+              >
                 <ConversationList {...convListProps} />
               </CrossfadeTransition>
             )}

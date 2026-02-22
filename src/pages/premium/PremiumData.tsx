@@ -1,4 +1,13 @@
-import { Users, Calendar, BarChart3, Sparkles, Mic2, Shield, Crown, Zap } from '../../components/icons'
+import {
+  Users,
+  Calendar,
+  BarChart3,
+  Sparkles,
+  Mic2,
+  Shield,
+  Crown,
+  Zap,
+} from '../../components/icons'
 
 // Feature comparison for the 4-tier table
 export const FEATURES = [
@@ -188,11 +197,11 @@ export const FAQ = [
   },
   {
     q: "C'est quoi la différence entre Premium et Squad Leader ?",
-    a: "Premium est pour les joueurs réguliers qui veulent plus de squads et de features. Squad Leader est pour les capitaines qui gèrent des équipes — avec dashboard analytics, sessions récurrentes, audio HD et rôles avancés.",
+    a: 'Premium est pour les joueurs réguliers qui veulent plus de squads et de features. Squad Leader est pour les capitaines qui gèrent des équipes — avec dashboard analytics, sessions récurrentes, audio HD et rôles avancés.',
   },
   {
     q: "Le tier Club, c'est pour qui ?",
-    a: "Le Club est conçu pour les structures esport et les organisations qui gèrent plusieurs équipes. Tu as un dashboard multi-squads, du branding personnalisé, des API webhooks et un support prioritaire.",
+    a: 'Le Club est conçu pour les structures esport et les organisations qui gèrent plusieurs équipes. Tu as un dashboard multi-squads, du branding personnalisé, des API webhooks et un support prioritaire.',
   },
   {
     q: "Y a-t-il une période d'essai ?",

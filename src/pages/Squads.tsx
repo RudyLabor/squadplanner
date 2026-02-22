@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useCallback } from 'react'
 import { m } from 'framer-motion'
 import { Users, Plus, UserPlus, Compass } from '../components/icons'
@@ -184,182 +183,182 @@ export default function Squads({ loaderData: _loaderData }: SquadsProps) {
 
   return (
     <PullToRefresh onRefresh={handleRefresh}>
-    <main className="min-h-0 bg-bg-base pb-6 page-enter" aria-label="Squads">
-      {showConfetti && typeof window !== 'undefined' && (
-        <Confetti
-          width={window.innerWidth}
-          height={window.innerHeight}
-          recycle={false}
-          numberOfPieces={100}
-          gravity={0.25}
-          colors={['#6366f1', '#34d399', '#fbbf24', '#a78bfa']}
-          style={{ position: 'fixed', top: 0, left: 0, zIndex: 100, pointerEvents: 'none' }}
-        />
-      )}
-
-      <div className="px-4 md:px-6 lg:px-8 py-6 max-w-2xl lg:max-w-4xl xl:max-w-6xl mx-auto">
-        <div>
-          <header className="flex items-center justify-between mb-6">
-            <div>
-              <h1 className="text-lg font-bold text-text-primary">Mes Squads</h1>
-              <p className="text-base text-text-quaternary">{getSubtitle()}</p>
-            </div>
-            <div className="flex gap-2">
-              <Button variant="secondary" size="sm" onClick={() => setShowJoin(true)}>
-                <UserPlus className="w-4 h-4" />
-                <span className="hidden sm:inline">Rejoindre</span>
-              </Button>
-              <Button size="sm" onClick={handleOpenCreate}>
-                <Plus className="w-4 h-4" />
-                <span className="hidden sm:inline">Créer</span>
-                {!hasPremium && userSquadCount >= FREE_SQUAD_LIMIT && <PremiumBadge small />}
-              </Button>
-            </div>
-          </header>
-
-          {!hasPremium && userSquadCount >= FREE_SQUAD_LIMIT && !showCreate && !showJoin && (
-            <div className="mb-6">
-              <SquadLimitReached
-                currentCount={userSquadCount}
-                maxCount={FREE_SQUAD_LIMIT}
-                onUpgrade={() => setShowPremiumModal(true)}
-              />
-            </div>
-          )}
-
-          <JoinSquadForm
-            show={showJoin}
-            inviteCode={inviteCode}
-            onInviteCodeChange={setInviteCode}
-            error={error}
-            isLoading={joinSquadMutation.isPending}
-            onSubmit={handleJoinSquad}
-            onCancel={() => {
-              setShowJoin(false)
-              setError(null)
-            }}
+      <main className="min-h-0 bg-bg-base pb-6 page-enter" aria-label="Squads">
+        {showConfetti && typeof window !== 'undefined' && (
+          <Confetti
+            width={window.innerWidth}
+            height={window.innerHeight}
+            recycle={false}
+            numberOfPieces={100}
+            gravity={0.25}
+            colors={['#6366f1', '#34d399', '#fbbf24', '#a78bfa']}
+            style={{ position: 'fixed', top: 0, left: 0, zIndex: 100, pointerEvents: 'none' }}
           />
+        )}
 
-          <CreateSquadForm
-            show={showCreate}
-            name={name}
-            onNameChange={setName}
-            game={game}
-            onGameChange={setGame}
-            error={error}
-            isLoading={createSquadMutation.isPending}
-            onSubmit={handleCreateSquad}
-            onCancel={() => {
-              setShowCreate(false)
-              setError(null)
-            }}
-          />
+        <div className="px-4 md:px-6 lg:px-8 py-6 max-w-2xl lg:max-w-4xl xl:max-w-6xl mx-auto">
+          <div>
+            <header className="flex items-center justify-between mb-6">
+              <div>
+                <h1 className="text-lg font-bold text-text-primary">Mes Squads</h1>
+                <p className="text-base text-text-quaternary">{getSubtitle()}</p>
+              </div>
+              <div className="flex gap-2">
+                <Button variant="secondary" size="sm" onClick={() => setShowJoin(true)}>
+                  <UserPlus className="w-4 h-4" />
+                  <span className="hidden sm:inline">Rejoindre</span>
+                </Button>
+                <Button size="sm" onClick={handleOpenCreate}>
+                  <Plus className="w-4 h-4" />
+                  <span className="hidden sm:inline">Créer</span>
+                  {!hasPremium && userSquadCount >= FREE_SQUAD_LIMIT && <PremiumBadge small />}
+                </Button>
+              </div>
+            </header>
 
-          {squads.length > 0 ? (
-            <>
-              <m.ul
-                className="space-y-3 lg:grid lg:grid-cols-2 xl:grid-cols-3 lg:gap-4 lg:space-y-0 list-none stagger-enter"
-                variants={staggerContainerVariants}
-                initial="hidden"
-                animate="visible"
-                aria-label="Liste des squads"
-              >
-                {squads.map((squad) => (
-                  <m.li key={squad.id} variants={staggerItemVariants}>
-                    <SquadCard
-                      squad={squad}
-                      isOwner={squad.owner_id === user?.id}
-                      nextSession={nextSessions.find((s) => s.squadId === squad.id)}
-                      hasActiveParty={getSquadHasActiveParty(squad.id)}
-                      copiedCode={copiedCode}
-                      onCopyCode={copyInviteCode}
-                    />
-                  </m.li>
-                ))}
-              </m.ul>
+            {!hasPremium && userSquadCount >= FREE_SQUAD_LIMIT && !showCreate && !showJoin && (
+              <div className="mb-6">
+                <SquadLimitReached
+                  currentCount={userSquadCount}
+                  maxCount={FREE_SQUAD_LIMIT}
+                  onUpgrade={() => setShowPremiumModal(true)}
+                />
+              </div>
+            )}
 
-              {squads.length < 3 && !showCreate && !showJoin && (
-                <m.div
-                  initial={{ opacity: 0, y: 16 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.2, duration: 0.3 }}
-                  className="mt-6"
+            <JoinSquadForm
+              show={showJoin}
+              inviteCode={inviteCode}
+              onInviteCodeChange={setInviteCode}
+              error={error}
+              isLoading={joinSquadMutation.isPending}
+              onSubmit={handleJoinSquad}
+              onCancel={() => {
+                setShowJoin(false)
+                setError(null)
+              }}
+            />
+
+            <CreateSquadForm
+              show={showCreate}
+              name={name}
+              onNameChange={setName}
+              game={game}
+              onGameChange={setGame}
+              error={error}
+              isLoading={createSquadMutation.isPending}
+              onSubmit={handleCreateSquad}
+              onCancel={() => {
+                setShowCreate(false)
+                setError(null)
+              }}
+            />
+
+            {squads.length > 0 ? (
+              <>
+                <m.ul
+                  className="space-y-3 lg:grid lg:grid-cols-2 xl:grid-cols-3 lg:gap-4 lg:space-y-0 list-none stagger-enter"
+                  variants={staggerContainerVariants}
+                  initial="hidden"
+                  animate="visible"
+                  aria-label="Liste des squads"
                 >
-                  <Card className="p-5">
-                    <div className="flex items-center gap-4">
-                      <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary/10 to-purple/10 flex items-center justify-center flex-shrink-0">
-                        <Compass className="w-6 h-6 text-primary" />
+                  {squads.map((squad) => (
+                    <m.li key={squad.id} variants={staggerItemVariants}>
+                      <SquadCard
+                        squad={squad}
+                        isOwner={squad.owner_id === user?.id}
+                        nextSession={nextSessions.find((s) => s.squadId === squad.id)}
+                        hasActiveParty={getSquadHasActiveParty(squad.id)}
+                        copiedCode={copiedCode}
+                        onCopyCode={copyInviteCode}
+                      />
+                    </m.li>
+                  ))}
+                </m.ul>
+
+                {squads.length < 3 && !showCreate && !showJoin && (
+                  <m.div
+                    initial={{ opacity: 0, y: 16 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.2, duration: 0.3 }}
+                    className="mt-6"
+                  >
+                    <Card className="p-5">
+                      <div className="flex items-center gap-4">
+                        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary/10 to-purple/10 flex items-center justify-center flex-shrink-0">
+                          <Compass className="w-6 h-6 text-primary" />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <h3 className="text-md font-semibold text-text-primary mb-0.5">
+                            Trouve de nouvelles squads
+                          </h3>
+                          <p className="text-sm text-text-tertiary">
+                            Explore les squads publiques et rejoins des joueurs qui partagent tes
+                            jeux.
+                          </p>
+                        </div>
+                        <Link to="/discover" className="flex-shrink-0">
+                          <Button variant="secondary" size="sm">
+                            <Compass className="w-4 h-4" />
+                            Découvrir
+                          </Button>
+                        </Link>
                       </div>
-                      <div className="flex-1 min-w-0">
-                        <h3 className="text-md font-semibold text-text-primary mb-0.5">
-                          Trouve de nouvelles squads
-                        </h3>
-                        <p className="text-sm text-text-tertiary">
-                          Explore les squads publiques et rejoins des joueurs qui partagent tes
-                          jeux.
-                        </p>
-                      </div>
-                      <Link to="/discover" className="flex-shrink-0">
-                        <Button variant="secondary" size="sm">
-                          <Compass className="w-4 h-4" />
-                          Découvrir
-                        </Button>
-                      </Link>
+                    </Card>
+                  </m.div>
+                )}
+              </>
+            ) : (
+              !showCreate &&
+              !showJoin && (
+                <m.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <Card className="p-8 text-center">
+                    <m.div
+                      className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary/10 to-purple/10 flex items-center justify-center mx-auto mb-4"
+                      initial={{ scale: 0.8, rotate: -10 }}
+                      animate={{ scale: 1, rotate: 0 }}
+                      transition={{ delay: 0.1, type: 'spring', stiffness: 300, damping: 25 }}
+                    >
+                      <Users className="w-8 h-8 text-primary" strokeWidth={1.5} />
+                    </m.div>
+                    <h3 className="text-lg font-semibold text-text-primary mb-2">
+                      Crée ta première squad
+                    </h3>
+                    <p className="text-md text-text-tertiary mb-2 max-w-[300px] mx-auto">
+                      Invite tes potes, planifie des sessions et joue ensemble.
+                    </p>
+                    <p className="text-sm text-text-quaternary mb-6 max-w-[300px] mx-auto">
+                      Tu as un code d'invitation ? Rejoins directement une squad existante.
+                    </p>
+                    <div className="flex gap-3 justify-center">
+                      <Button variant="secondary" onClick={() => setShowJoin(true)}>
+                        <UserPlus className="w-4 h-4" />
+                        Rejoindre avec un code
+                      </Button>
+                      <Button onClick={handleOpenCreate}>
+                        <Plus className="w-4 h-4" />
+                        Créer une squad
+                      </Button>
                     </div>
                   </Card>
                 </m.div>
-              )}
-            </>
-          ) : (
-            !showCreate &&
-            !showJoin && (
-              <m.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3 }}
-              >
-                <Card className="p-8 text-center">
-                  <m.div
-                    className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary/10 to-purple/10 flex items-center justify-center mx-auto mb-4"
-                    initial={{ scale: 0.8, rotate: -10 }}
-                    animate={{ scale: 1, rotate: 0 }}
-                    transition={{ delay: 0.1, type: 'spring', stiffness: 300, damping: 25 }}
-                  >
-                    <Users className="w-8 h-8 text-primary" strokeWidth={1.5} />
-                  </m.div>
-                  <h3 className="text-lg font-semibold text-text-primary mb-2">
-                    Crée ta première squad
-                  </h3>
-                  <p className="text-md text-text-tertiary mb-2 max-w-[300px] mx-auto">
-                    Invite tes potes, planifie des sessions et joue ensemble.
-                  </p>
-                  <p className="text-sm text-text-quaternary mb-6 max-w-[300px] mx-auto">
-                    Tu as un code d'invitation ? Rejoins directement une squad existante.
-                  </p>
-                  <div className="flex gap-3 justify-center">
-                    <Button variant="secondary" onClick={() => setShowJoin(true)}>
-                      <UserPlus className="w-4 h-4" />
-                      Rejoindre avec un code
-                    </Button>
-                    <Button onClick={handleOpenCreate}>
-                      <Plus className="w-4 h-4" />
-                      Créer une squad
-                    </Button>
-                  </div>
-                </Card>
-              </m.div>
-            )
-          )}
+              )
+            )}
+          </div>
         </div>
-      </div>
 
-      <PremiumUpgradeModal
-        isOpen={showPremiumModal}
-        onClose={() => setShowPremiumModal(false)}
-        squadId={squads[0]?.id}
-        feature="Squads illimitées"
-      />
-    </main>
+        <PremiumUpgradeModal
+          isOpen={showPremiumModal}
+          onClose={() => setShowPremiumModal(false)}
+          squadId={squads[0]?.id}
+          feature="Squads illimitées"
+        />
+      </main>
     </PullToRefresh>
   )
 }

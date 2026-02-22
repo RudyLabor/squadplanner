@@ -46,7 +46,9 @@ export async function clientLoader({ serverLoader }: ClientLoaderFunctionArgs) {
   // Fast auth — getSession reads local cache, no network call.
   // Parent _protected loader already validated with getUser().
   const { supabaseMinimal: supabase } = await import('../lib/supabaseMinimal')
-  const { data: { session } } = await supabase.auth.getSession()
+  const {
+    data: { session },
+  } = await supabase.auth.getSession()
   if (!session?.user) return { publicSquads: [] }
 
   // Check React Query cache for public squads
@@ -55,12 +57,15 @@ export async function clientLoader({ serverLoader }: ClientLoaderFunctionArgs) {
 
   // Fallback: fetch from Supabase (cold cache / first load)
   const { withTimeout } = await import('../lib/withTimeout')
-  const { data: publicSquads } = await withTimeout(
-    supabase.from('squads').select('id, name, game, total_members, created_at')
+  const { data: publicSquads } = (await withTimeout(
+    supabase
+      .from('squads')
+      .select('id, name, game, total_members, created_at')
       .eq('is_public', true)
-      .order('created_at', { ascending: false }).limit(50),
+      .order('created_at', { ascending: false })
+      .limit(50),
     5000
-  ) as any
+  )) as any
   return { publicSquads: publicSquads || [] }
 }
 clientLoader.hydrate = true as const

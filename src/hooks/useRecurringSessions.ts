@@ -25,10 +25,7 @@ export interface RecurringSessionsStore {
   createRecurringSession: (
     session: Omit<RecurringSession, 'id' | 'created_at'>
   ) => Promise<RecurringSession | null>
-  updateRecurringSession: (
-    id: string,
-    updates: Partial<RecurringSession>
-  ) => Promise<void>
+  updateRecurringSession: (id: string, updates: Partial<RecurringSession>) => Promise<void>
   deleteRecurringSession: (id: string) => Promise<void>
   toggleActive: (id: string) => Promise<void>
 }
@@ -64,11 +61,7 @@ export function parseRecurrenceRule(rule: string): ParsedRecurrenceRule {
 }
 
 // Format recurrence rule to 'weekly:0,2,4:21:00'
-export function formatRecurrenceRule(
-  days: number[],
-  hour: number,
-  minute: number
-): string {
+export function formatRecurrenceRule(days: number[], hour: number, minute: number): string {
   const sortedDays = [...new Set(days)].sort((a, b) => a - b)
   const timeStr = `${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}`
   return `weekly:${sortedDays.join(',')}:${timeStr}`
@@ -89,7 +82,7 @@ export function getNextOccurrence(rule: string): Date {
   }
 
   // Find the next occurrence on one of the specified days (0 = Sunday, 6 = Saturday)
-  let daysToAdd = 0
+  const daysToAdd = 0
   const maxDaysToCheck = 7
 
   for (let i = 0; i < maxDaysToCheck; i++) {
@@ -185,10 +178,7 @@ export const useRecurringSessions = create<RecurringSessionsStore>((set) => ({
     set({ isLoading: true, error: null })
 
     try {
-      const { error } = await supabase
-        .from('recurring_sessions')
-        .update(updates)
-        .eq('id', id)
+      const { error } = await supabase.from('recurring_sessions').update(updates).eq('id', id)
 
       if (error) throw error
 
@@ -211,17 +201,12 @@ export const useRecurringSessions = create<RecurringSessionsStore>((set) => ({
     set({ isLoading: true, error: null })
 
     try {
-      const { error } = await supabase
-        .from('recurring_sessions')
-        .delete()
-        .eq('id', id)
+      const { error } = await supabase.from('recurring_sessions').delete().eq('id', id)
 
       if (error) throw error
 
       set((state) => ({
-        recurringSessions: state.recurringSessions.filter(
-          (session) => session.id !== id
-        ),
+        recurringSessions: state.recurringSessions.filter((session) => session.id !== id),
         isLoading: false,
       }))
     } catch (err) {
@@ -237,9 +222,7 @@ export const useRecurringSessions = create<RecurringSessionsStore>((set) => ({
     set({ isLoading: true, error: null })
 
     try {
-      const session = useRecurringSessions.getState().recurringSessions.find(
-        (s) => s.id === id
-      )
+      const session = useRecurringSessions.getState().recurringSessions.find((s) => s.id === id)
 
       if (!session) throw new Error('Session not found')
 
@@ -252,14 +235,13 @@ export const useRecurringSessions = create<RecurringSessionsStore>((set) => ({
 
       set((state) => ({
         recurringSessions: state.recurringSessions.map((session) =>
-          session.id === id
-            ? { ...session, is_active: !session.is_active }
-            : session
+          session.id === id ? { ...session, is_active: !session.is_active } : session
         ),
         isLoading: false,
       }))
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Failed to toggle recurring session status'
+      const errorMessage =
+        err instanceof Error ? err.message : 'Failed to toggle recurring session status'
       set({
         error: errorMessage,
         isLoading: false,

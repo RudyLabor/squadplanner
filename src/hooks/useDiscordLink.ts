@@ -41,7 +41,7 @@ export function useDiscordLink() {
             apikey: import.meta.env.VITE_SUPABASE_ANON_KEY,
           },
           body: JSON.stringify({ action: 'unlink' }),
-        },
+        }
       )
 
       const data = await response.json()

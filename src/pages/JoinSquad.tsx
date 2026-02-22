@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from 'react'
 import { useParams, useNavigate, Link } from 'react-router'
 import { m } from 'framer-motion'

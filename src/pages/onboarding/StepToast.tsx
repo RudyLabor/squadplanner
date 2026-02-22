@@ -1,4 +1,3 @@
-
 import { useEffect } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
 import { Sparkles } from '../../components/icons'

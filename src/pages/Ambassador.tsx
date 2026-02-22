@@ -5,8 +5,21 @@ import { Card } from '../components/ui/Card'
 import { Button } from '../components/ui/Button'
 import { PublicPageShell } from '../components/PublicPageShell'
 import {
-  Star, Gift, Users, TrendingUp, Trophy, Zap, Crown, ChevronRight, Copy, Check,
-  ExternalLink, Mic, Shield, Gamepad2, Award,
+  Star,
+  Gift,
+  Users,
+  TrendingUp,
+  Trophy,
+  Zap,
+  Crown,
+  ChevronRight,
+  Copy,
+  Check,
+  ExternalLink,
+  Mic,
+  Shield,
+  Gamepad2,
+  Award,
 } from '../components/icons'
 
 const ease = [0.16, 1, 0.3, 1] as const
@@ -50,7 +63,7 @@ export function Ambassador() {
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target
-    setFormData(prev => ({ ...prev, [name]: value }))
+    setFormData((prev) => ({ ...prev, [name]: value }))
   }
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -119,9 +132,7 @@ ${formData.message}
             >
               <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-purple/10 to-purple/5 border border-purple/15">
                 <Crown className="w-4 h-4 text-purple" />
-                <span className="text-base font-medium text-purple">
-                  Programme Ambassadeur
-                </span>
+                <span className="text-base font-medium text-purple">Programme Ambassadeur</span>
               </div>
             </m.div>
 
@@ -160,8 +171,9 @@ ${formData.message}
               transition={{ delay: 0.2, duration: 0.4, ease }}
               className="text-md md:text-lg text-text-secondary max-w-2xl mx-auto"
             >
-              T'es streamer, créateur de contenu ou capitaine de communauté gaming ? On a une offre pour toi.
-              Partage Squad Planner avec ta communauté et gagne des récompenses exclusives.
+              T'es streamer, créateur de contenu ou capitaine de communauté gaming ? On a une offre
+              pour toi. Partage Squad Planner avec ta communauté et gagne des récompenses
+              exclusives.
             </m.p>
           </div>
         </div>
@@ -202,16 +214,33 @@ ${formData.message}
               {
                 icon: TrendingUp,
                 title: 'Mise en avant Discover',
-                description: 'Ton profil mis en avant sur la page Discover pour augmenter ta visibilité',
+                description:
+                  'Ton profil mis en avant sur la page Discover pour augmenter ta visibilité',
                 color: 'purple',
               },
             ].map((item, i) => {
               const Icon = item.icon
               const colorMap = {
-                primary: { bg: 'bg-primary/10', text: 'text-primary', glow: 'var(--shadow-glow-primary-sm)' },
-                success: { bg: 'bg-success/10', text: 'text-success', glow: 'var(--shadow-glow-success)' },
-                warning: { bg: 'bg-warning/10', text: 'text-warning', glow: 'var(--shadow-glow-warning)' },
-                purple: { bg: 'bg-purple/10', text: 'text-purple', glow: 'var(--shadow-glow-purple)' },
+                primary: {
+                  bg: 'bg-primary/10',
+                  text: 'text-primary',
+                  glow: 'var(--shadow-glow-primary-sm)',
+                },
+                success: {
+                  bg: 'bg-success/10',
+                  text: 'text-success',
+                  glow: 'var(--shadow-glow-success)',
+                },
+                warning: {
+                  bg: 'bg-warning/10',
+                  text: 'text-warning',
+                  glow: 'var(--shadow-glow-warning)',
+                },
+                purple: {
+                  bg: 'bg-purple/10',
+                  text: 'text-purple',
+                  glow: 'var(--shadow-glow-purple)',
+                },
               }
               const c = colorMap[item.color as keyof typeof colorMap]
               return (
@@ -223,7 +252,9 @@ ${formData.message}
                   whileHover={{ y: -4, boxShadow: c.glow }}
                 >
                   <Card variant="elevated" className="p-6 h-full">
-                    <div className={`inline-flex items-center justify-center w-12 h-12 rounded-xl ${c.bg} mb-4`}>
+                    <div
+                      className={`inline-flex items-center justify-center w-12 h-12 rounded-xl ${c.bg} mb-4`}
+                    >
                       <Icon className={`w-6 h-6 ${c.text}`} />
                     </div>
                     <h3 className="text-lg font-semibold text-text-primary mb-2">{item.title}</h3>
@@ -257,13 +288,13 @@ ${formData.message}
               {
                 step: 2,
                 title: 'On te contacte',
-                description: 'Appel de 15 min pour te présenter l\'app et répondre à tes questions',
+                description: "Appel de 15 min pour te présenter l'app et répondre à tes questions",
                 icon: Mic,
               },
               {
                 step: 3,
                 title: 'Tu partages',
-                description: 'Ton code promo perso, tes assets marketing, c\'est parti !',
+                description: "Ton code promo perso, tes assets marketing, c'est parti !",
                 icon: TrendingUp,
               },
             ].map((item, i) => {
@@ -305,7 +336,9 @@ ${formData.message}
           className="mb-16"
         >
           <Card variant="elevated" className="p-8">
-            <h2 className="text-2xl font-bold text-text-primary mb-6">Les profils qu'on recherche</h2>
+            <h2 className="text-2xl font-bold text-text-primary mb-6">
+              Les profils qu'on recherche
+            </h2>
             <div className="space-y-4">
               {[
                 'Streamers Twitch/YouTube FR avec 1K-50K viewers',
@@ -343,7 +376,10 @@ ${formData.message}
             <form onSubmit={handleSubmit} className="space-y-5">
               {/* Pseudo */}
               <div>
-                <label htmlFor="pseudo" className="block text-sm font-medium text-text-primary mb-2">
+                <label
+                  htmlFor="pseudo"
+                  className="block text-sm font-medium text-text-primary mb-2"
+                >
                   Pseudo / Nom
                 </label>
                 <input
@@ -360,7 +396,10 @@ ${formData.message}
 
               {/* Platform */}
               <div>
-                <label htmlFor="platform" className="block text-sm font-medium text-text-primary mb-2">
+                <label
+                  htmlFor="platform"
+                  className="block text-sm font-medium text-text-primary mb-2"
+                >
                   Plateforme
                 </label>
                 <select
@@ -398,7 +437,10 @@ ${formData.message}
 
               {/* Followers */}
               <div>
-                <label htmlFor="followers" className="block text-sm font-medium text-text-primary mb-2">
+                <label
+                  htmlFor="followers"
+                  className="block text-sm font-medium text-text-primary mb-2"
+                >
                   Nombre de followers / viewers moyens
                 </label>
                 <input
@@ -415,7 +457,10 @@ ${formData.message}
 
               {/* Message */}
               <div>
-                <label htmlFor="message" className="block text-sm font-medium text-text-primary mb-2">
+                <label
+                  htmlFor="message"
+                  className="block text-sm font-medium text-text-primary mb-2"
+                >
                   Pourquoi Squad Planner ?
                 </label>
                 <textarea
@@ -449,7 +494,8 @@ ${formData.message}
               </Button>
 
               <p className="text-xs text-text-tertiary text-center">
-                En soumettant ce formulaire, tu acceptes que nous te contactions à propos du programme.
+                En soumettant ce formulaire, tu acceptes que nous te contactions à propos du
+                programme.
               </p>
             </form>
           </Card>
@@ -469,20 +515,20 @@ ${formData.message}
           <div className="space-y-4">
             {[
               {
-                q: 'C\'est quoi un ambassadeur Squad Planner ?',
+                q: "C'est quoi un ambassadeur Squad Planner ?",
                 a: 'Un ambassadeur est une personne influente qui représente Squad Planner auprès de sa communauté. Tu reçois des outils marketing, un code promo unique et tu construis ton revenu passif en recommandant Squad Planner à tes followers.',
               },
               {
                 q: 'Comment fonctionne la commission ?',
-                a: 'Tu reçois une commission de 20% pour chaque nouvel utilisateur qui s\'inscrit via ton code promo unique. Si cet utilisateur passe Premium, tu reçois un mois Squad Leader gratuit en plus.',
+                a: "Tu reçois une commission de 20% pour chaque nouvel utilisateur qui s'inscrit via ton code promo unique. Si cet utilisateur passe Premium, tu reçois un mois Squad Leader gratuit en plus.",
               },
               {
                 q: 'Je peux cumuler avec le parrainage normal ?',
-                a: 'Oui ! En tant qu\'ambassadeur, tu gardes accès au programme de parrainage standard (7 jours Premium pour chaque ami). La commission ambassadeur s\'ajoute à cela.',
+                a: "Oui ! En tant qu'ambassadeur, tu gardes accès au programme de parrainage standard (7 jours Premium pour chaque ami). La commission ambassadeur s'ajoute à cela.",
               },
               {
-                q: 'C\'est obligatoire d\'être un gros streamer ?',
-                a: 'Non ! On recherche aussi des créateurs de contenu plus petits ou des capitaines de communauté motivés. Ce qui compte, c\'est ta passion pour le gaming et ton engagement envers ta communauté.',
+                q: "C'est obligatoire d'être un gros streamer ?",
+                a: "Non ! On recherche aussi des créateurs de contenu plus petits ou des capitaines de communauté motivés. Ce qui compte, c'est ta passion pour le gaming et ton engagement envers ta communauté.",
               },
               {
                 q: 'Quels outils marketing allez-vous me donner ?',
@@ -546,7 +592,8 @@ ${formData.message}
             Rejoins le programme et fais grandir ta communauté
           </h2>
           <p className="text-lg text-text-secondary max-w-xl mx-auto mb-6">
-            Deviens ambassadeur Squad Planner et transforme ta passion gaming en opportunité de revenus.
+            Deviens ambassadeur Squad Planner et transforme ta passion gaming en opportunité de
+            revenus.
           </p>
           <Button
             variant="primary"

@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
 import { X, UserPlus } from './icons'
@@ -137,11 +136,13 @@ export function InviteToPartyModal({
       setInvitedMembers((prev) => new Set([...prev, memberId]))
 
       // PHASE 5: Gamification - award XP for sending invite
-      import('../stores/useGamificationStore').then(({ useGamificationStore }) => {
-        const store = useGamificationStore.getState()
-        store.addXP('invite.send')
-        store.incrementStat('invitesSent')
-      }).catch(() => {})
+      import('../stores/useGamificationStore')
+        .then(({ useGamificationStore }) => {
+          const store = useGamificationStore.getState()
+          store.addXP('invite.send')
+          store.incrementStat('invitesSent')
+        })
+        .catch(() => {})
     } catch (error) {
       console.error('Error sending invite:', error)
       setInvitedMembers((prev) => new Set([...prev, memberId]))

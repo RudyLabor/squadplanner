@@ -1,6 +1,15 @@
 import { Link } from 'react-router'
 import { m } from 'framer-motion'
-import { Check, ArrowRight, Calendar, Users, Sparkles, ChevronDown, MessageCircle, Mic } from '../components/icons'
+import {
+  Check,
+  ArrowRight,
+  Calendar,
+  Users,
+  Sparkles,
+  ChevronDown,
+  MessageCircle,
+  Mic,
+} from '../components/icons'
 import { PublicPageShell } from '../components/PublicPageShell'
 import { scrollReveal, scrollRevealLight, springTap } from '../utils/animations'
 import { useState } from 'react'
@@ -9,56 +18,60 @@ const features = [
   {
     icon: Calendar,
     name: 'Calendrier & Événements',
-    hasOnSP: true
+    hasOnSP: true,
   },
   {
     icon: Users,
     name: 'Groupes & Communautés',
-    hasOnSP: true
+    hasOnSP: true,
   },
   {
     icon: Sparkles,
     name: 'RSVP Fiable',
-    hasOnSP: true
+    hasOnSP: true,
   },
   {
     icon: Check,
     name: 'Notifications Temps Réel',
-    hasOnSP: true
+    hasOnSP: true,
   },
   {
     icon: MessageCircle,
     name: 'Chat intégré',
-    hasOnSP: true
+    hasOnSP: true,
   },
   {
     icon: Mic,
     name: 'Party vocale',
-    hasOnSP: true
-  }
+    hasOnSP: true,
+  },
 ]
 
 const faqs = [
   {
     id: 'why-closed',
     question: 'Pourquoi Guilded a fermé ?',
-    answer: 'Guilded a fermé boutique en 2024. Tous les gamers cherchaient un spot où aller. Squad Planner, c\'est là pour ça.'
+    answer:
+      "Guilded a fermé boutique en 2024. Tous les gamers cherchaient un spot où aller. Squad Planner, c'est là pour ça.",
   },
   {
     id: 'migration',
     question: 'Comment passer de Guilded à Squad Planner ?',
-    answer: 'Ultra simple. Partage tes squads Guilded, on importe l\'essentiel. Code GUILDED30 pour 30% sur ton premier mois Premium. Après, t\'as les features gratuites à vie.'
+    answer:
+      "Ultra simple. Partage tes squads Guilded, on importe l'essentiel. Code GUILDED30 pour 30% sur ton premier mois Premium. Après, t'as les features gratuites à vie.",
   },
   {
     id: 'data-loss',
     question: 'Mais je perds mes données ?',
-    answer: 'Zéro. Squad Planner garde tout : squads, événements, paramètres. Rien ne se perd. T\'es tranquille.'
+    answer:
+      "Zéro. Squad Planner garde tout : squads, événements, paramètres. Rien ne se perd. T'es tranquille.",
   },
   {
     id: 'free',
-    question: 'C\'est vraiment gratuit ?',
-    answer: 'Oui. Calendrier illimité, RSVP, notifications. Tout ça gratuit. Premium te donne des analytics avancées si tu veux. Mais l\'essentiel reste gratuit.'
-  }
+    question: "C'est vraiment gratuit ?",
+    answer:
+      "Oui. Calendrier illimité, RSVP, notifications. Tout ça gratuit. Premium te donne des analytics avancées si tu veux. Mais l'essentiel reste gratuit.",
+  },
 ]
 
 export default function AlternativeGuilded() {
@@ -112,7 +125,8 @@ export default function AlternativeGuilded() {
             viewport={{ once: true }}
             className="text-lg md:text-xl text-text-tertiary mb-10 max-w-2xl mx-auto leading-relaxed"
           >
-            Même vibe que Guilded, mais taillé pour tes sessions. Calendrier, RSVP qui tient, notifications push. Organise sans prise de tête.
+            Même vibe que Guilded, mais taillé pour tes sessions. Calendrier, RSVP qui tient,
+            notifications push. Organise sans prise de tête.
           </m.p>
 
           {/* CTAs */}
@@ -149,7 +163,13 @@ export default function AlternativeGuilded() {
       {/* Features */}
       <section className="px-4 md:px-6 py-12 md:py-16">
         <div className="max-w-5xl mx-auto">
-          <m.div variants={scrollReveal} initial="hidden" whileInView="visible" viewport={{ once: true }} className="text-center mb-12">
+          <m.div
+            variants={scrollReveal}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            className="text-center mb-12"
+          >
             <h2 className="text-xl md:text-2xl font-bold text-text-primary mb-4">
               Ce qui marchait sur Guilded, c'est encore meilleur ici
             </h2>
@@ -213,7 +233,9 @@ export default function AlternativeGuilded() {
               className="absolute inset-0"
               animate={{ scale: [1, 1.05, 1], opacity: [0.3, 0.5, 0.3] }}
               transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
-              style={{ background: 'radial-gradient(ellipse at center, #a855f708 0%, transparent 60%)' }}
+              style={{
+                background: 'radial-gradient(ellipse at center, #a855f708 0%, transparent 60%)',
+              }}
             />
             <div className="relative z-10">
               <h3 className="text-xl md:text-2xl font-bold text-text-primary mb-2">
@@ -223,9 +245,7 @@ export default function AlternativeGuilded() {
               <div className="inline-block px-8 py-4 bg-purple/10 rounded-xl mb-6 border border-purple/20">
                 <code className="text-2xl md:text-3xl font-bold text-purple">GUILDED30</code>
               </div>
-              <p className="text-base text-text-secondary">
-                30% sur ton premier mois Premium
-              </p>
+              <p className="text-base text-text-secondary">30% sur ton premier mois Premium</p>
             </div>
           </m.div>
         </div>
@@ -236,7 +256,13 @@ export default function AlternativeGuilded() {
       {/* FAQ */}
       <section className="px-4 md:px-6 py-10 md:py-14">
         <div className="max-w-3xl mx-auto">
-          <m.div variants={scrollReveal} initial="hidden" whileInView="visible" viewport={{ once: true }} className="text-center mb-12">
+          <m.div
+            variants={scrollReveal}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            className="text-center mb-12"
+          >
             <h2 className="text-xl md:text-2xl font-bold text-text-primary mb-4">
               Questions fréquentes
             </h2>
@@ -265,7 +291,9 @@ export default function AlternativeGuilded() {
                 </button>
                 <div className={`faq-answer ${openFAQ === i ? 'open' : ''}`}>
                   <div>
-                    <p className="px-5 pb-5 text-md text-text-tertiary leading-relaxed">{faq.answer}</p>
+                    <p className="px-5 pb-5 text-md text-text-tertiary leading-relaxed">
+                      {faq.answer}
+                    </p>
                   </div>
                 </div>
               </m.div>
@@ -294,7 +322,9 @@ export default function AlternativeGuilded() {
               className="absolute inset-0"
               animate={{ scale: [1, 1.05, 1], opacity: [0.3, 0.5, 0.3] }}
               transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
-              style={{ background: 'radial-gradient(ellipse at center, #a855f708 0%, transparent 60%)' }}
+              style={{
+                background: 'radial-gradient(ellipse at center, #a855f708 0%, transparent 60%)',
+              }}
             />
             <div className="relative z-10">
               <m.div

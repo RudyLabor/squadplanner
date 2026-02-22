@@ -91,7 +91,9 @@ export function ProfileHistory({ profile, hasPremium, aiCoachTip }: ProfileHisto
                 <h3 className="text-md font-medium text-text-primary">Compte Premium</h3>
                 <PremiumBadge small />
               </div>
-              <p className="text-sm text-text-quaternary">Toutes les fonctionnalités sont débloquées</p>
+              <p className="text-sm text-text-quaternary">
+                Toutes les fonctionnalités sont débloquées
+              </p>
             </div>
           </div>
         </Card>

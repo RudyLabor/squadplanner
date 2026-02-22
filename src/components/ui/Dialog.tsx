@@ -1,4 +1,3 @@
-
 import { type ReactNode, useEffect, useRef, useId } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
 import { createPortal } from 'react-dom'
@@ -155,7 +154,7 @@ export function Dialog({
               type: 'spring',
               stiffness: 300,
               damping: 25,
-              opacity: { duration: 0.2 }
+              opacity: { duration: 0.2 },
             }}
             role="dialog"
             aria-modal="true"

@@ -1,4 +1,3 @@
-
 import { useState, useCallback } from 'react'
 import { Link } from 'react-router'
 import { HelpCircle, FileText, Shield, Mail, Gamepad2, ArrowRight, Crown, Users } from '../icons'
@@ -58,9 +57,7 @@ export function LandingFooter() {
         <div className="max-w-3xl mx-auto px-4 md:px-6 py-12 md:py-16 text-center">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full badge-shimmer border border-primary/20 mb-5">
             <Users className="w-3.5 h-3.5 text-primary" />
-            <span className="text-sm font-medium text-primary">
-              Rejoins +2 000 gamers
-            </span>
+            <span className="text-sm font-medium text-primary">Rejoins +2 000 gamers</span>
           </div>
           <h3 className="text-lg md:text-xl font-bold text-text-primary mb-2">
             Reste dans la boucle
@@ -119,7 +116,6 @@ export function LandingFooter() {
       {/* ── Zone 2 : Grille de liens (4 colonnes) ── */}
       <div className="max-w-6xl mx-auto px-4 md:px-6 py-12 md:py-14">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-x-12 gap-y-10">
-
           {/* Produit */}
           <div>
             <h3 className="text-sm font-semibold text-text-primary mb-4 uppercase tracking-wider flex items-center gap-1.5">
@@ -160,7 +156,9 @@ export function LandingFooter() {
               {FOOTER_GAMES.map((game) => (
                 <li key={game.slug}>
                   <Link to={`/games/${game.slug}`} className={linkClass}>
-                    <span className="mr-1.5" aria-hidden="true">{game.icon}</span>
+                    <span className="mr-1.5" aria-hidden="true">
+                      {game.icon}
+                    </span>
                     {game.name}
                   </Link>
                 </li>
@@ -226,7 +224,10 @@ export function LandingFooter() {
                 </Link>
               </li>
               <li>
-                <Link to="/legal?tab=privacy" className={`${linkClass} inline-flex items-center gap-1.5`}>
+                <Link
+                  to="/legal?tab=privacy"
+                  className={`${linkClass} inline-flex items-center gap-1.5`}
+                >
                   <Shield className="w-3.5 h-3.5" aria-hidden="true" />
                   Confidentialité
                 </Link>

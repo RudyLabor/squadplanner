@@ -1,4 +1,3 @@
-
 import { useState } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
 import { Mail, Send, CheckCircle } from '../../components/icons'

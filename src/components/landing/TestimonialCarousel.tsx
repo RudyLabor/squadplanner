@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { m, AnimatePresence, useInView } from 'framer-motion'
 import { Star, ChevronLeft, ChevronRight } from '../icons'

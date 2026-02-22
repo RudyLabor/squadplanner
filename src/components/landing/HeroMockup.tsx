@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
 import { Play } from '../icons'
@@ -14,7 +13,9 @@ export function HeroMockup() {
 
   // Track first mount to skip initial={{ opacity: 0 }} on first render
   // Prevents empty phone mockup when framer-motion animations haven't started yet
-  useEffect(() => { setHasMounted(true) }, [])
+  useEffect(() => {
+    setHasMounted(true)
+  }, [])
 
   // Auto-advance through screens
   useEffect(() => {

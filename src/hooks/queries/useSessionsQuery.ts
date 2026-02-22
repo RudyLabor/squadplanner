@@ -266,7 +266,11 @@ export function useRsvpMutation() {
                 .eq('id', data.sessionId)
                 .single()
               if (sessionInfo?.squad_id) {
-                sendSessionConfirmedMessage(sessionInfo.squad_id, sessionInfo.title, sessionInfo.scheduled_at).catch(() => {})
+                sendSessionConfirmedMessage(
+                  sessionInfo.squad_id,
+                  sessionInfo.title,
+                  sessionInfo.scheduled_at
+                ).catch(() => {})
               }
               queryClient.invalidateQueries({ queryKey: queryKeys.sessions.detail(data.sessionId) })
               if (data.squadId)

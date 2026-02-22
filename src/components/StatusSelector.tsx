@@ -1,4 +1,3 @@
-
 /**
  * Phase 4.2.2 — Status/Availability Selector
  * Dropdown on avatar to select online/busy/dnd/invisible
@@ -139,7 +138,11 @@ export const StatusSelector = memo(function StatusSelector({
                     onOpenCustomStatus()
                   }}
                   className="w-full flex items-center gap-3 px-3 py-2.5 min-h-[44px] text-left text-text-secondary hover:bg-border-subtle hover:text-text-primary transition-colors"
-                  aria-label={customStatus ? 'Modifier le statut personnalisé' : 'Définir un statut personnalisé'}
+                  aria-label={
+                    customStatus
+                      ? 'Modifier le statut personnalisé'
+                      : 'Définir un statut personnalisé'
+                  }
                 >
                   <span className="text-sm">😊</span>
                   <span className="text-base font-medium">

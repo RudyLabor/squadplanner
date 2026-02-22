@@ -1,8 +1,16 @@
-
 import { m } from 'framer-motion'
 
 interface EmptyStateIllustrationProps {
-  type: 'sessions' | 'squads' | 'friends' | 'messages' | 'achievements' | 'challenges' | 'notifications' | 'search_results' | 'call_history'
+  type:
+    | 'sessions'
+    | 'squads'
+    | 'friends'
+    | 'messages'
+    | 'achievements'
+    | 'challenges'
+    | 'notifications'
+    | 'search_results'
+    | 'call_history'
   className?: string
 }
 
@@ -480,11 +488,7 @@ export function EmptyStateIllustration({ type, className = '' }: EmptyStateIllus
               transition={{ duration: 0.5 }}
             />
             {/* D-pad */}
-            <m.g
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.3 }}
-            >
+            <m.g initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }}>
               <rect x="68" y="88" width="20" height="8" rx="2" fill="var(--color-error)" />
               <rect x="74" y="82" width="8" height="20" rx="2" fill="var(--color-error)" />
             </m.g>
@@ -500,7 +504,15 @@ export function EmptyStateIllustration({ type, className = '' }: EmptyStateIllus
                 cx={b.cx}
                 cy={b.cy}
                 r="5"
-                fill={i === 0 ? 'var(--color-success)' : i === 1 ? 'var(--color-error)' : i === 2 ? 'var(--color-info)' : 'var(--color-warning)'}
+                fill={
+                  i === 0
+                    ? 'var(--color-success)'
+                    : i === 1
+                      ? 'var(--color-error)'
+                      : i === 2
+                        ? 'var(--color-info)'
+                        : 'var(--color-warning)'
+                }
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
                 transition={{ delay: b.delay, type: 'spring', stiffness: 300 }}
@@ -645,10 +657,25 @@ export function EmptyStateIllustration({ type, className = '' }: EmptyStateIllus
               animate={{ scale: 1 }}
               transition={{ delay: 0.6, type: 'spring', stiffness: 200 }}
             >
-              <circle cx="135" cy="130" r="20" fill="var(--color-bg-base, #1a1a2e)" stroke="var(--color-info, var(--color-primary))" strokeWidth="2" />
-              <circle cx="135" cy="130" r="17" fill="var(--color-info-10, var(--color-primary-10))" />
+              <circle
+                cx="135"
+                cy="130"
+                r="20"
+                fill="var(--color-bg-base, #1a1a2e)"
+                stroke="var(--color-info, var(--color-primary))"
+                strokeWidth="2"
+              />
+              <circle
+                cx="135"
+                cy="130"
+                r="17"
+                fill="var(--color-info-10, var(--color-primary-10))"
+              />
               <m.line
-                x1="135" y1="130" x2="135" y2="120"
+                x1="135"
+                y1="130"
+                x2="135"
+                y2="120"
                 stroke="var(--color-info, var(--color-primary))"
                 strokeWidth="2"
                 strokeLinecap="round"
@@ -657,7 +684,10 @@ export function EmptyStateIllustration({ type, className = '' }: EmptyStateIllus
                 transition={{ delay: 0.8 }}
               />
               <m.line
-                x1="135" y1="130" x2="143" y2="133"
+                x1="135"
+                y1="130"
+                x2="143"
+                y2="133"
                 stroke="var(--color-info, var(--color-primary))"
                 strokeWidth="2"
                 strokeLinecap="round"

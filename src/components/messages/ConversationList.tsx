@@ -84,7 +84,8 @@ const ConversationCard = memo(function ConversationCard({
                   {c.last_message.sender?.username || 'Utilisateur'}:
                 </span>{' '}
                 {/* UX-4: Show placeholder when content is empty or just the username */}
-                {c.last_message.content && c.last_message.content !== c.last_message.sender?.username
+                {c.last_message.content &&
+                c.last_message.content !== c.last_message.sender?.username
                   ? c.last_message.content
                   : 'Message...'}
               </>

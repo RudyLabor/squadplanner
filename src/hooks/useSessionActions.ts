@@ -5,7 +5,9 @@ import { haptic } from '../utils/haptics'
 
 // Centralized haptic trigger using shared module
 function triggerHaptic(type: 'light' | 'medium' | 'heavy' | 'success' | 'warning' | 'error') {
-  try { haptic[type]() } catch {}
+  try {
+    haptic[type]()
+  } catch {}
 }
 
 type RsvpResponse = 'present' | 'absent' | 'maybe'

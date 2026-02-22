@@ -10,11 +10,11 @@
  */
 
 export interface EmailTemplate {
-  id: string;
-  trigger: string;
-  subject: string | ((vars: Record<string, string>) => string);
-  delay: string;
-  html: (vars: Record<string, string>) => string;
+  id: string
+  trigger: string
+  subject: string | ((vars: Record<string, string>) => string)
+  delay: string
+  html: (vars: Record<string, string>) => string
 }
 
 // ============================================================================
@@ -124,7 +124,7 @@ const welcome: EmailTemplate = {
     </body>
     </html>
   `,
-};
+}
 
 // ============================================================================
 // 2. INVITE FRIENDS EMAIL
@@ -254,7 +254,7 @@ const inviteFriends: EmailTemplate = {
     </body>
     </html>
   `,
-};
+}
 
 // ============================================================================
 // 3. SESSION MISSED EMAIL
@@ -356,7 +356,7 @@ const sessionMissed: EmailTemplate = {
     </body>
     </html>
   `,
-};
+}
 
 // ============================================================================
 // 4. SQUAD PLAYING EMAIL (FOMO)
@@ -487,7 +487,7 @@ const squadPlaying: EmailTemplate = {
     </body>
     </html>
   `,
-};
+}
 
 // ============================================================================
 // 5. TRIAL ENDING EMAIL
@@ -604,7 +604,7 @@ const trialEnding: EmailTemplate = {
     </body>
     </html>
   `,
-};
+}
 
 // ============================================================================
 // 6. TRIAL ENDED EMAIL
@@ -613,7 +613,7 @@ const trialEnding: EmailTemplate = {
 const trialEnded: EmailTemplate = {
   id: 'trial_ended',
   trigger: 'trial_ended',
-  subject: 'Tu as perdu l\'accès à tes stats avancées 📊',
+  subject: "Tu as perdu l'accès à tes stats avancées 📊",
   delay: '1d',
   html: (vars) => `
     <!DOCTYPE html>
@@ -740,7 +740,7 @@ const trialEnded: EmailTemplate = {
     </body>
     </html>
   `,
-};
+}
 
 // ============================================================================
 // 7. MONTHLY DIGEST EMAIL
@@ -920,7 +920,7 @@ const monthlyDigest: EmailTemplate = {
     </body>
     </html>
   `,
-};
+}
 
 // ============================================================================
 // 8. ANNIVERSARY EMAIL
@@ -1073,7 +1073,7 @@ const anniversary: EmailTemplate = {
     </body>
     </html>
   `,
-};
+}
 
 // ============================================================================
 // EXPORTS
@@ -1088,13 +1088,13 @@ export const EMAIL_TEMPLATES: EmailTemplate[] = [
   trialEnded,
   monthlyDigest,
   anniversary,
-];
+]
 
 /**
  * Get a template by ID
  */
 export function getTemplate(id: string): EmailTemplate | undefined {
-  return EMAIL_TEMPLATES.find((template) => template.id === id);
+  return EMAIL_TEMPLATES.find((template) => template.id === id)
 }
 
 /**
@@ -1104,14 +1104,13 @@ export function renderTemplate(
   id: string,
   vars: Record<string, string> = {}
 ): { subject: string; html: string } | null {
-  const template = getTemplate(id);
+  const template = getTemplate(id)
   if (!template) {
-    return null;
+    return null
   }
 
-  const subject =
-    typeof template.subject === 'function' ? template.subject(vars) : template.subject;
-  const html = template.html(vars);
+  const subject = typeof template.subject === 'function' ? template.subject(vars) : template.subject
+  const html = template.html(vars)
 
-  return { subject, html };
+  return { subject, html }
 }

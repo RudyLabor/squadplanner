@@ -238,7 +238,10 @@ export const useMessagesStore = create<MessagesState>((set, get) => ({
       .single()
     // BUG-6: Fallback if profile.username is null
     if (profile)
-      optimisticMsg.sender = { username: profile.username || 'Utilisateur', avatar_url: profile.avatar_url }
+      optimisticMsg.sender = {
+        username: profile.username || 'Utilisateur',
+        avatar_url: profile.avatar_url,
+      }
     set((state) => ({ messages: [...state.messages, optimisticMsg] }))
 
     try {

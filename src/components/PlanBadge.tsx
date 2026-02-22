@@ -6,10 +6,34 @@ const TIER_CONFIG: Record<
   SubscriptionTier,
   { label: string; icon: typeof Zap | null; bg: string; border: string; text: string }
 > = {
-  free: { label: 'Free', icon: null, bg: 'bg-bg-surface', border: 'border-border-subtle', text: 'text-text-tertiary' },
-  premium: { label: 'Premium', icon: Zap, bg: 'bg-warning/10', border: 'border-warning/20', text: 'text-warning' },
-  squad_leader: { label: 'Squad Leader', icon: Crown, bg: 'bg-purple/10', border: 'border-purple/20', text: 'text-purple' },
-  club: { label: 'Club', icon: Crown, bg: 'bg-primary/10', border: 'border-primary/20', text: 'text-primary' },
+  free: {
+    label: 'Free',
+    icon: null,
+    bg: 'bg-bg-surface',
+    border: 'border-border-subtle',
+    text: 'text-text-tertiary',
+  },
+  premium: {
+    label: 'Premium',
+    icon: Zap,
+    bg: 'bg-warning/10',
+    border: 'border-warning/20',
+    text: 'text-warning',
+  },
+  squad_leader: {
+    label: 'Squad Leader',
+    icon: Crown,
+    bg: 'bg-purple/10',
+    border: 'border-purple/20',
+    text: 'text-purple',
+  },
+  club: {
+    label: 'Club',
+    icon: Crown,
+    bg: 'bg-primary/10',
+    border: 'border-primary/20',
+    text: 'text-primary',
+  },
 }
 
 interface PlanBadgeProps {

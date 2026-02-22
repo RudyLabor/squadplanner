@@ -1,4 +1,3 @@
-
 /**
  * Phase 4.1.2 — Chat Poll Display + Voting
  * Renders inline polls in chat messages

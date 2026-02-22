@@ -190,7 +190,12 @@ export function subscribeToIncomingCalls(userId: string, storeRef: VoiceCallStor
         const call = payload.new as { id: string; status: string; ended_at: string | null }
         const currentState = storeRef.getState()
         if (currentState.currentCallId === call.id) {
-          if (call.status === 'rejected' || call.status === 'ended' || call.status === 'missed' || call.ended_at) {
+          if (
+            call.status === 'rejected' ||
+            call.status === 'ended' ||
+            call.status === 'missed' ||
+            call.ended_at
+          ) {
             currentState.resetCall()
           }
         }

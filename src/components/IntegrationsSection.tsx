@@ -1,4 +1,3 @@
-
 import { memo, useState } from 'react'
 import { Plug, Calendar, Tv, Gamepad2, MessageSquare, Download } from './icons'
 import { useAuthStore } from '../hooks'

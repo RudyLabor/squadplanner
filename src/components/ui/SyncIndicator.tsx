@@ -1,4 +1,3 @@
-
 /**
  * Chantier 12 - Background Sync Indicator
  *

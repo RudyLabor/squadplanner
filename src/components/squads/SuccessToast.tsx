@@ -1,4 +1,3 @@
-
 import { useEffect } from 'react'
 import { m } from 'framer-motion'
 import { Sparkles } from '../icons'

@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useCallback } from 'react'
 import { useLocation } from 'react-router'
 import { Sparkles, Calendar, Users, MessageCircle, Mic } from './icons'

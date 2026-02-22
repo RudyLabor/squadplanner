@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useRef } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
 import { User, Edit2, Check, X, Camera, Loader2 } from '../icons'

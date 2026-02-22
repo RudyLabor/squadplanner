@@ -1,7 +1,16 @@
-
 import { useState, useRef, useEffect, useCallback } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
-import { MoreHorizontal, Pencil, Trash2, Pin, Reply, Copy, Check, Forward, MessageSquare } from './icons'
+import {
+  MoreHorizontal,
+  Pencil,
+  Trash2,
+  Pin,
+  Reply,
+  Copy,
+  Check,
+  Forward,
+  MessageSquare,
+} from './icons'
 export interface MessageActionsProps {
   message: {
     id: string
@@ -274,7 +283,9 @@ export function MessageActions({
                   showDeleteConfirm ? 'bg-error/15 text-error' : 'text-error hover:bg-error/10'
                 }`}
                 role="menuitem"
-                aria-label={showDeleteConfirm ? 'Confirmer la suppression du message' : 'Supprimer ce message'}
+                aria-label={
+                  showDeleteConfirm ? 'Confirmer la suppression du message' : 'Supprimer ce message'
+                }
               >
                 <Trash2 className="w-4 h-4" />
                 <span>{showDeleteConfirm ? 'Confirmer la suppression' : 'Supprimer'}</span>

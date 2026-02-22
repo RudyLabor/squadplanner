@@ -1,4 +1,3 @@
-
 import { memo, useState } from 'react'
 import { m } from 'framer-motion'
 import { Link } from 'react-router'
@@ -37,8 +36,8 @@ export const MatchmakingSection = memo(function MatchmakingSection({ game, regio
           Personne en recherche de squad pour le moment
         </h3>
         <p className="text-md text-text-secondary max-w-sm mx-auto mb-4">
-          Active la recherche de squad dans ton profil pour appara&icirc;tre ici et &ecirc;tre trouv&eacute; par
-          d'autres joueurs.
+          Active la recherche de squad dans ton profil pour appara&icirc;tre ici et &ecirc;tre
+          trouv&eacute; par d'autres joueurs.
         </p>
         <div className="flex flex-col items-center gap-3">
           <Link
@@ -48,7 +47,9 @@ export const MatchmakingSection = memo(function MatchmakingSection({ game, regio
             Activer dans mon profil
           </Link>
           <div className="mt-4 p-4 rounded-xl bg-surface-card border border-border-subtle max-w-sm mx-auto text-left">
-            <h4 className="text-sm font-semibold text-text-primary mb-2">Comment &ccedil;a marche ?</h4>
+            <h4 className="text-sm font-semibold text-text-primary mb-2">
+              Comment &ccedil;a marche ?
+            </h4>
             <ul className="space-y-1.5 text-sm text-text-secondary">
               <li className="flex items-start gap-2">
                 <span className="text-primary font-bold mt-0.5">1.</span>

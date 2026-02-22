@@ -72,7 +72,7 @@ export async function clientLoader({ serverLoader }: ClientLoaderFunctionArgs) {
 
   for (let attempt = 0; attempt < 2; attempt++) {
     try {
-      const result = await withTimeout(supabase.auth.getUser(), 8000) as any
+      const result = (await withTimeout(supabase.auth.getUser(), 8000)) as any
       user = result.data?.user ?? null
       error = result.error ?? null
       if (user) break
@@ -93,17 +93,17 @@ export async function clientLoader({ serverLoader }: ClientLoaderFunctionArgs) {
   let profile: Profile | null = null
   let squads: SquadWithCount[] = []
 
-  const { data: rpcResult, error: rpcError } = await withTimeout(
+  const { data: rpcResult, error: rpcError } = (await withTimeout(
     supabase.rpc('get_layout_data', { p_user_id: user.id }),
     5000
-  ) as any
+  )) as any
 
   if (!rpcError && rpcResult) {
     const rpc = rpcResult as LayoutRpcResult
     profile = rpc.profile
     squads = rpc.squads || []
   } else {
-    const [profileResult, membershipsResult] = await Promise.all([
+    const [profileResult, membershipsResult] = (await Promise.all([
       withTimeout(supabase.from('profiles').select('*').eq('id', user.id).single(), 5000),
       withTimeout(
         supabase
@@ -114,11 +114,13 @@ export async function clientLoader({ serverLoader }: ClientLoaderFunctionArgs) {
           .eq('user_id', user.id),
         5000
       ),
-    ]) as any[]
+    ])) as any[]
 
     profile = profileResult.data as Profile | null
     const rawSquads =
-      (membershipsResult.data as MembershipWithSquad[] | null)?.map((m) => m.squads).filter(Boolean) || []
+      (membershipsResult.data as MembershipWithSquad[] | null)
+        ?.map((m) => m.squads)
+        .filter(Boolean) || []
     squads = rawSquads.map((squad) => ({
       ...squad,
       member_count: squad.total_members ?? 1,
@@ -186,7 +188,9 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
     profile = profileResult.data as Profile | null
     const rawSquads =
-      (membershipsResult.data as MembershipWithSquad[] | null)?.map((m) => m.squads).filter(Boolean) || []
+      (membershipsResult.data as MembershipWithSquad[] | null)
+        ?.map((m) => m.squads)
+        .filter(Boolean) || []
     squads = rawSquads.map((squad) => ({
       ...squad,
       member_count: squad.total_members ?? 1,

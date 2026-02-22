@@ -159,7 +159,9 @@ export default function WidgetPage() {
           </div>
 
           {/* Sessions */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '16px' }}>
+          <div
+            style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '16px' }}
+          >
             {sessions.length === 0 ? (
               <div
                 style={{
@@ -207,7 +209,9 @@ export default function WidgetPage() {
                       <span>
                         📅 {day} · {time}
                       </span>
-                      <span>✅ {s.rsvp_count} confirmé{s.rsvp_count !== 1 ? 's' : ''}</span>
+                      <span>
+                        ✅ {s.rsvp_count} confirmé{s.rsvp_count !== 1 ? 's' : ''}
+                      </span>
                     </div>
                   </div>
                 )

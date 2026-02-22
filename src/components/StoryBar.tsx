@@ -1,4 +1,3 @@
-
 import { useState, memo, useRef } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
 import { Plus, X } from './icons'
@@ -21,7 +20,11 @@ function StoryCircle({
   onClick: () => void
 }) {
   return (
-    <button onClick={onClick} className="flex flex-col items-center gap-1 flex-shrink-0 w-16" aria-label={`Story de ${username}`}>
+    <button
+      onClick={onClick}
+      className="flex flex-col items-center gap-1 flex-shrink-0 w-16"
+      aria-label={`Story de ${username}`}
+    >
       <div
         className={`relative w-14 h-14 rounded-full p-0.5 ${
           hasUnviewed ? 'bg-gradient-to-tr from-primary to-success' : 'bg-border-default'
@@ -29,7 +32,13 @@ function StoryCircle({
       >
         <div className="w-full h-full rounded-full bg-bg-elevated p-0.5">
           {avatarUrl ? (
-            <img src={avatarUrl} alt={`Avatar de ${username}`} className="w-full h-full rounded-full object-cover" loading="lazy" decoding="async" />
+            <img
+              src={avatarUrl}
+              alt={`Avatar de ${username}`}
+              className="w-full h-full rounded-full object-cover"
+              loading="lazy"
+              decoding="async"
+            />
           ) : (
             <div className="w-full h-full rounded-full bg-primary-20 flex items-center justify-center text-lg font-bold text-primary">
               {username.charAt(0).toUpperCase()}

@@ -1,4 +1,3 @@
-
 import { useRef, useCallback, useEffect, useState } from 'react'
 
 interface SliderProps {

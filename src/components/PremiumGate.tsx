@@ -1,4 +1,3 @@
-
 import { useState, type ReactNode } from 'react'
 import { m } from 'framer-motion'
 import { Lock, Zap, Crown } from './icons'

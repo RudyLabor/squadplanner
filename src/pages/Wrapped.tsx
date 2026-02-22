@@ -89,9 +89,8 @@ export function Wrapped() {
         const bestStreak = profile?.best_streak || profile?.current_streak || 0
 
         // Use real reliability score from profile
-        const reliabilityScore = profile?.reliability_score != null
-          ? Math.round(profile.reliability_score)
-          : 0
+        const reliabilityScore =
+          profile?.reliability_score != null ? Math.round(profile.reliability_score) : 0
 
         // Find favorite squad (most attended sessions)
         let favoriteSquad: WrappedStats['favoriteSquad'] = null
@@ -375,7 +374,14 @@ export function Wrapped() {
             {/* SVG circle progress */}
             <svg className="w-full h-full transform -rotate-90" viewBox="0 0 200 200">
               {/* Background circle */}
-              <circle cx="100" cy="100" r="95" fill="none" stroke="rgba(34, 197, 94, 0.2)" strokeWidth="8" />
+              <circle
+                cx="100"
+                cy="100"
+                r="95"
+                fill="none"
+                stroke="rgba(34, 197, 94, 0.2)"
+                strokeWidth="8"
+              />
               {/* Progress circle */}
               <m.circle
                 cx="100"
@@ -386,7 +392,9 @@ export function Wrapped() {
                 strokeWidth="8"
                 strokeDasharray={`${2 * Math.PI * 95}`}
                 initial={{ strokeDashoffset: `${2 * Math.PI * 95}` }}
-                animate={{ strokeDashoffset: `${2 * Math.PI * 95 * (1 - stats.reliabilityScore / 100)}` }}
+                animate={{
+                  strokeDashoffset: `${2 * Math.PI * 95 * (1 - stats.reliabilityScore / 100)}`,
+                }}
                 transition={{ duration: 2, ease: 'easeInOut' }}
                 strokeLinecap="round"
               />
@@ -458,7 +466,9 @@ export function Wrapped() {
                 transition={{ duration: 0.6, delay: 0.3 }}
                 className="text-lg text-purple-200 mb-8"
               >
-                {stats.favoriteSquad.sessionsPlayed} session{stats.favoriteSquad.sessionsPlayed > 1 ? 's' : ''} jouée{stats.favoriteSquad.sessionsPlayed > 1 ? 's' : ''}
+                {stats.favoriteSquad.sessionsPlayed} session
+                {stats.favoriteSquad.sessionsPlayed > 1 ? 's' : ''} jouée
+                {stats.favoriteSquad.sessionsPlayed > 1 ? 's' : ''}
               </m.p>
             </>
           ) : (
@@ -504,7 +514,9 @@ export function Wrapped() {
       <MobilePageHeader title="Gaming Wrapped 2026" onBack={() => window.history.back()} />
 
       {/* Main slide area */}
-      <div className={`relative h-screen bg-gradient-to-br ${currentSlideData.bg} flex items-center justify-center px-4 pt-20`}>
+      <div
+        className={`relative h-screen bg-gradient-to-br ${currentSlideData.bg} flex items-center justify-center px-4 pt-20`}
+      >
         {/* Animated background elements */}
         <div className="absolute inset-0 overflow-hidden opacity-30">
           <m.div
@@ -559,7 +571,8 @@ export function Wrapped() {
               initial={{ scale: 0.8 }}
               animate={{
                 scale: index === currentSlide ? 1.2 : 0.8,
-                backgroundColor: index === currentSlide ? 'rgba(255, 255, 255, 1)' : 'rgba(255, 255, 255, 0.4)',
+                backgroundColor:
+                  index === currentSlide ? 'rgba(255, 255, 255, 1)' : 'rgba(255, 255, 255, 0.4)',
               }}
               className="w-3 h-3 rounded-full transition-colors"
               aria-label={`Aller au slide ${index + 1}`}

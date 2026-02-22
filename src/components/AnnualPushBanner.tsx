@@ -74,7 +74,8 @@ export function AnnualPushBanner({ className = '' }: AnnualPushBannerProps) {
 
               {/* Main CTA text */}
               <p className="text-sm sm:text-base text-text-secondary mb-3 leading-relaxed">
-                Passe au plan annuel et économise <span className="text-emerald-400 font-bold">30%</span>
+                Passe au plan annuel et économise{' '}
+                <span className="text-emerald-400 font-bold">30%</span>
               </p>
 
               {/* Price comparison */}
@@ -112,9 +113,7 @@ export function AnnualPushBanner({ className = '' }: AnnualPushBannerProps) {
 
           {/* CTA Button - full width on mobile, inline on desktop */}
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pt-3 border-t border-border-hover">
-            <p className="text-xs text-text-tertiary">
-              Commence bien 2027 avec ta squad! 🚀
-            </p>
+            <p className="text-xs text-text-tertiary">Commence bien 2027 avec ta squad! 🚀</p>
             <a
               href="/premium"
               className="inline-flex items-center justify-center px-4 py-2.5 bg-gradient-to-r from-emerald-500 to-teal-500 text-white rounded-lg font-bold text-sm hover:from-emerald-600 hover:to-teal-600 transition-colors active:scale-95 whitespace-nowrap"

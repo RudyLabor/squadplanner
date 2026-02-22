@@ -164,9 +164,21 @@ export function EditSessionModal({
             </label>
             <div className="flex flex-wrap gap-1.5">
               {[
-                '14:00', '15:00', '16:00', '17:00', '18:00', '18:30',
-                '19:00', '19:30', '20:00', '20:30', '21:00', '21:30',
-                '22:00', '22:30', '23:00',
+                '14:00',
+                '15:00',
+                '16:00',
+                '17:00',
+                '18:00',
+                '18:30',
+                '19:00',
+                '19:30',
+                '20:00',
+                '20:30',
+                '21:00',
+                '21:30',
+                '22:00',
+                '22:30',
+                '23:00',
               ].map((t) => (
                 <button
                   key={t}
@@ -208,11 +220,7 @@ export function EditSessionModal({
             <Button variant="secondary" type="button" onClick={onClose} className="flex-1">
               Annuler
             </Button>
-            <Button
-              type="submit"
-              className="flex-1"
-              disabled={updateMutation.isPending}
-            >
+            <Button type="submit" className="flex-1" disabled={updateMutation.isPending}>
               {updateMutation.isPending ? 'Enregistrement...' : 'Enregistrer'}
             </Button>
           </div>

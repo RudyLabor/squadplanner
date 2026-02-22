@@ -1,4 +1,3 @@
-
 /**
  * Pull to Refresh Component
  *

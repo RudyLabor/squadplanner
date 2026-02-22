@@ -71,7 +71,8 @@ export function OnboardingStepPermissions({
                     Notifications bloqu&eacute;es
                   </p>
                   <p className="text-sm text-text-tertiary">
-                    Pour les activer : clique sur l'ic&ocirc;ne cadenas &agrave; gauche de la barre d'adresse, puis autorise les notifications pour ce site.
+                    Pour les activer : clique sur l'ic&ocirc;ne cadenas &agrave; gauche de la barre
+                    d'adresse, puis autorise les notifications pour ce site.
                   </p>
                 </div>
               ) : (
@@ -106,11 +107,11 @@ export function OnboardingStepPermissions({
                 </div>
               ) : micPermission === 'denied' ? (
                 <div className="space-y-1.5">
-                  <p className="text-base text-warning font-medium">
-                    Micro bloqu&eacute;
-                  </p>
+                  <p className="text-base text-warning font-medium">Micro bloqu&eacute;</p>
                   <p className="text-sm text-text-tertiary">
-                    Pour l'activer : clique sur l'ic&ocirc;ne cadenas &agrave; gauche de la barre d'adresse de ton navigateur, puis autorise le microphone. Tu peux aussi le faire plus tard dans les param&egrave;tres.
+                    Pour l'activer : clique sur l'ic&ocirc;ne cadenas &agrave; gauche de la barre
+                    d'adresse de ton navigateur, puis autorise le microphone. Tu peux aussi le faire
+                    plus tard dans les param&egrave;tres.
                   </p>
                 </div>
               ) : (

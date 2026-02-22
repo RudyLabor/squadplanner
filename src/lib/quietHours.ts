@@ -4,7 +4,7 @@ import { persist } from 'zustand/middleware'
 interface QuietHoursState {
   enabled: boolean
   startHour: number // 0-23
-  endHour: number   // 0-23
+  endHour: number // 0-23
   setEnabled: (v: boolean) => void
   setStartHour: (h: number) => void
   setEndHour: (h: number) => void

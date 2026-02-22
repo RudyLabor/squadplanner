@@ -1,4 +1,3 @@
-
 import { useEffect, useState, useRef, useCallback } from 'react'
 import { Plus, Loader2 } from '../components/icons'
 import Confetti from '../components/LazyConfetti'
@@ -25,7 +24,11 @@ interface SessionsProps {
 
 export function Sessions({ loaderData: _loaderData }: SessionsProps) {
   const { user, isInitialized } = useAuthStore()
-  const { data: squads = [], isLoading: squadsLoadingRaw, isPending: squadsLoadingPending } = useSquadsQuery()
+  const {
+    data: squads = [],
+    isLoading: squadsLoadingRaw,
+    isPending: squadsLoadingPending,
+  } = useSquadsQuery()
   const squadsLoading = squadsLoadingRaw || squadsLoadingPending
   const { data: sessions = [], isLoading: sessionsLoading } = useUpcomingSessionsQuery(user?.id)
   const { slotSuggestions, hasSlotHistory, coachTips, fetchSlotSuggestions, fetchCoachTips } =
@@ -93,52 +96,54 @@ export function Sessions({ loaderData: _loaderData }: SessionsProps) {
 
   return (
     <PullToRefresh onRefresh={handleRefresh}>
-    <main className="min-h-0 bg-bg-base pb-6 page-enter" aria-label="Sessions">
-      {showConfetti && typeof window !== 'undefined' && (
-        <Confetti
-          width={window.innerWidth}
-          height={window.innerHeight}
-          recycle={false}
-          numberOfPieces={80}
-          gravity={0.25}
-          colors={['#6366f1', '#34d399', '#fbbf24', '#a78bfa']}
-          style={{ position: 'fixed', top: 0, left: 0, zIndex: 100, pointerEvents: 'none' }}
-        />
-      )}
-
-      <div className="px-4 md:px-6 lg:px-8 py-6 max-w-2xl lg:max-w-4xl xl:max-w-6xl mx-auto">
-        <div>
-          <header className="flex items-center justify-between mb-8">
-            <div>
-              <h1 className="text-lg font-bold text-text-primary mb-1">Tes prochaines sessions</h1>
-              <p className="text-sm text-text-secondary">
-                {needsResponse.length > 0
-                  ? `${needsResponse.length} session${needsResponse.length > 1 ? 's' : ''} en attente de ta réponse`
-                  : confirmed.length > 0
-                    ? `${confirmed.length} session${confirmed.length > 1 ? 's' : ''} confirmée${confirmed.length > 1 ? 's' : ''} — ta squad compte sur toi !`
-                    : 'Aucune session planifiée pour le moment'}
-              </p>
-            </div>
-            <Button size="sm" onClick={() => openCreateSession()}>
-              <Plus className="w-4 h-4" />
-              Créer
-            </Button>
-          </header>
-
-          <WeekCalendar
-            sessions={upcomingSessions}
-            weekOffset={weekOffset}
-            onWeekChange={setWeekOffset}
+      <main className="min-h-0 bg-bg-base pb-6 page-enter" aria-label="Sessions">
+        {showConfetti && typeof window !== 'undefined' && (
+          <Confetti
+            width={window.innerWidth}
+            height={window.innerHeight}
+            recycle={false}
+            numberOfPieces={80}
+            gravity={0.25}
+            colors={['#6366f1', '#34d399', '#fbbf24', '#a78bfa']}
+            style={{ position: 'fixed', top: 0, left: 0, zIndex: 100, pointerEvents: 'none' }}
           />
-          <AllCaughtUp needsResponse={needsResponse.length} confirmed={confirmed.length} />
-          <NeedsResponseSection needsResponse={needsResponse} />
-          <AISlotSuggestions slotSuggestions={slotSuggestions} hasSlotHistory={hasSlotHistory} />
-          <CoachTipsSection coachTips={coachTips} />
-          <ConfirmedSessions confirmed={confirmed} sessionsLoading={sessionsLoading} />
-          <HowItWorksSection />
+        )}
+
+        <div className="px-4 md:px-6 lg:px-8 py-6 max-w-2xl lg:max-w-4xl xl:max-w-6xl mx-auto">
+          <div>
+            <header className="flex items-center justify-between mb-8">
+              <div>
+                <h1 className="text-lg font-bold text-text-primary mb-1">
+                  Tes prochaines sessions
+                </h1>
+                <p className="text-sm text-text-secondary">
+                  {needsResponse.length > 0
+                    ? `${needsResponse.length} session${needsResponse.length > 1 ? 's' : ''} en attente de ta réponse`
+                    : confirmed.length > 0
+                      ? `${confirmed.length} session${confirmed.length > 1 ? 's' : ''} confirmée${confirmed.length > 1 ? 's' : ''} — ta squad compte sur toi !`
+                      : 'Aucune session planifiée pour le moment'}
+                </p>
+              </div>
+              <Button size="sm" onClick={() => openCreateSession()}>
+                <Plus className="w-4 h-4" />
+                Créer
+              </Button>
+            </header>
+
+            <WeekCalendar
+              sessions={upcomingSessions}
+              weekOffset={weekOffset}
+              onWeekChange={setWeekOffset}
+            />
+            <AllCaughtUp needsResponse={needsResponse.length} confirmed={confirmed.length} />
+            <NeedsResponseSection needsResponse={needsResponse} />
+            <AISlotSuggestions slotSuggestions={slotSuggestions} hasSlotHistory={hasSlotHistory} />
+            <CoachTipsSection coachTips={coachTips} />
+            <ConfirmedSessions confirmed={confirmed} sessionsLoading={sessionsLoading} />
+            <HowItWorksSection />
+          </div>
         </div>
-      </div>
-    </main>
+      </main>
     </PullToRefresh>
   )
 }

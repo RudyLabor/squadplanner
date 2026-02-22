@@ -4,9 +4,7 @@ import type { LoaderFunctionArgs, ClientLoaderFunctionArgs } from 'react-router'
 import { createMinimalSSRClient } from '../lib/supabase-minimal-ssr'
 import { ClientRouteWrapper } from '../components/ClientRouteWrapper'
 
-const Wrapped = lazy(() =>
-  import('../pages/Wrapped').then((m) => ({ default: m.Wrapped }))
-)
+const Wrapped = lazy(() => import('../pages/Wrapped').then((m) => ({ default: m.Wrapped })))
 
 export function meta() {
   return [

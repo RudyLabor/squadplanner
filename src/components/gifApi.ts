@@ -54,12 +54,14 @@ function mapResults(data: GiphyResponse): GifResult[] {
 function getErrorMessage(err: unknown): string {
   if (err instanceof Error) return err.message
   if (typeof err === 'string') return err
-  if (err && typeof err === 'object' && 'message' in err) return String((err as { message: unknown }).message)
+  if (err && typeof err === 'object' && 'message' in err)
+    return String((err as { message: unknown }).message)
   return 'Erreur inconnue'
 }
 
 export async function searchGifs(query: string, limit = 20): Promise<GifResponse> {
-  if (isInCooldown()) return { results: [], error: 'Trop de requêtes — réessaie dans quelques secondes' }
+  if (isInCooldown())
+    return { results: [], error: 'Trop de requêtes — réessaie dans quelques secondes' }
   try {
     const { data, error } = await supabase.functions.invoke('giphy-proxy', {
       body: { action: 'search', query, limit },
@@ -70,7 +72,9 @@ export async function searchGifs(query: string, limit = 20): Promise<GifResponse
       try {
         const body = await error.context?.json?.()
         if (body?.error) detail = body.error
-      } catch { /* ignore */ }
+      } catch {
+        /* ignore */
+      }
       console.error('[GifPicker] Search error:', detail, error)
       lastErrorTime = Date.now()
       return { results: [], error: detail }
@@ -91,7 +95,8 @@ export async function searchGifs(query: string, limit = 20): Promise<GifResponse
 }
 
 export async function fetchTrendingGifs(limit = 20): Promise<GifResponse> {
-  if (isInCooldown()) return { results: [], error: 'Trop de requêtes — réessaie dans quelques secondes' }
+  if (isInCooldown())
+    return { results: [], error: 'Trop de requêtes — réessaie dans quelques secondes' }
   try {
     const { data, error } = await supabase.functions.invoke('giphy-proxy', {
       body: { action: 'trending', limit },
@@ -101,7 +106,9 @@ export async function fetchTrendingGifs(limit = 20): Promise<GifResponse> {
       try {
         const body = await error.context?.json?.()
         if (body?.error) detail = body.error
-      } catch { /* ignore */ }
+      } catch {
+        /* ignore */
+      }
       console.error('[GifPicker] Trending error:', detail, error)
       lastErrorTime = Date.now()
       return { results: [], error: detail }

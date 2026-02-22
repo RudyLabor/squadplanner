@@ -96,9 +96,7 @@ async function requestNativeReview(): Promise<boolean> {
  * - Moins de 3 demandes dans l'année
  * - Le trigger est un événement positif
  */
-export async function requestReviewIfAppropriate(
-  trigger: ReviewTrigger
-): Promise<boolean> {
+export async function requestReviewIfAppropriate(trigger: ReviewTrigger): Promise<boolean> {
   // Vérifier qu'on est sur native
   if (!isNative()) return false
 

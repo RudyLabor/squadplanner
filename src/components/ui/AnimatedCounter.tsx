@@ -1,4 +1,3 @@
-
 import { useRef, useCallback, useState, useEffect } from 'react'
 
 interface AnimatedCounterProps {
@@ -89,7 +88,14 @@ export function AnimatedCounter({
   }, [isInView, end, duration])
 
   return (
-    <span ref={ref} className={className} aria-label={format(end)} role="text" aria-live="polite" aria-atomic="true">
+    <span
+      ref={ref}
+      className={className}
+      aria-label={format(end)}
+      role="text"
+      aria-live="polite"
+      aria-atomic="true"
+    >
       {format(isInView ? displayValue : 0)}
     </span>
   )

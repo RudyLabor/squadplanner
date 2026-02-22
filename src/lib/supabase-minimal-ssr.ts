@@ -12,7 +12,7 @@ type UserResult = {
   error: Error | null
 }
 
-// Cache pour éviter les appels redondants  
+// Cache pour éviter les appels redondants
 const userCache = new WeakMap<Request, Promise<UserResult>>()
 
 /**
@@ -40,9 +40,11 @@ export function createMinimalSSRClient(request: Request) {
   // Client minimal avec token pré-configuré
   const supabase = createClient(supabaseUrl, supabaseAnonKey, {
     global: {
-      headers: accessToken ? {
-        Authorization: `Bearer ${accessToken}`,
-      } : {},
+      headers: accessToken
+        ? {
+            Authorization: `Bearer ${accessToken}`,
+          }
+        : {},
     },
     // DÉSACTIVE tout ce qui n'est pas nécessaire
     auth: {
@@ -55,12 +57,12 @@ export function createMinimalSSRClient(request: Request) {
       },
     },
   })
-  
+
   // Auth check simplifié avec cache
   const getUser = (): Promise<UserResult> => {
     let cached = userCache.get(request)
     if (!cached) {
-      cached = supabase.auth.getUser().then(result => ({
+      cached = supabase.auth.getUser().then((result) => ({
         data: { user: result.data.user },
         error: result.error,
       }))
@@ -68,10 +70,10 @@ export function createMinimalSSRClient(request: Request) {
     }
     return cached
   }
-  
-  return { 
-    supabase, 
-    headers, 
+
+  return {
+    supabase,
+    headers,
     getUser,
   }
 }
@@ -82,14 +84,14 @@ export function createMinimalSSRClient(request: Request) {
 function parseCookies(cookieHeader: string): Record<string, string> {
   const cookies: Record<string, string> = {}
   if (!cookieHeader) return cookies
-  
-  cookieHeader.split(';').forEach(cookie => {
+
+  cookieHeader.split(';').forEach((cookie) => {
     const [name, ...rest] = cookie.trim().split('=')
     if (name && rest.length) {
       cookies[name] = rest.join('=')
     }
   })
-  
+
   return cookies
 }
 

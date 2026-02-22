@@ -19,7 +19,7 @@ export const ApplePresets = {
   // iOS button tap
   gentle: { tension: 300, friction: 20 },
   // macOS window resize
-  smooth: { tension: 280, friction: 25 }, 
+  smooth: { tension: 280, friction: 25 },
   // iOS modal present
   bouncy: { tension: 400, friction: 15 },
   // iOS notification
@@ -38,11 +38,11 @@ class SpringAnimation {
   private onComplete?: () => void
   private animationId?: number
   private isRunning = false
-  
+
   constructor(config: SpringConfig) {
     this.config = { mass: 1, ...config }
   }
-  
+
   start(from: number, to: number, onUpdate?: (value: number) => void, onComplete?: () => void) {
     this.startValue = from
     this.endValue = to
@@ -51,31 +51,31 @@ class SpringAnimation {
     this.onUpdate = onUpdate
     this.onComplete = onComplete
     this.isRunning = true
-    
+
     this.tick()
   }
-  
+
   private tick = () => {
     if (!this.isRunning) return
-    
+
     const { tension, friction, mass = 1 } = this.config
-    
+
     // Spring physics calculation (Hooke's law + damping)
     const displacement = this.currentValue - this.endValue
     const springForce = -tension * displacement
     const dampingForce = -friction * this.velocity
     const acceleration = (springForce + dampingForce) / mass
-    
+
     // Integration (Verlet method for stability)
     const deltaTime = 1 / 60 // 60fps
     this.velocity += acceleration * deltaTime
     this.currentValue += this.velocity * deltaTime
-    
+
     this.onUpdate?.(this.currentValue)
-    
+
     // Check if animation is complete (within threshold + low velocity)
     const isAtRest = Math.abs(displacement) < 0.01 && Math.abs(this.velocity) < 0.01
-    
+
     if (isAtRest) {
       this.currentValue = this.endValue
       this.onUpdate?.(this.endValue)
@@ -85,7 +85,7 @@ class SpringAnimation {
       this.animationId = requestAnimationFrame(this.tick)
     }
   }
-  
+
   stop() {
     this.isRunning = false
     if (this.animationId) {
@@ -96,45 +96,48 @@ class SpringAnimation {
 
 // Hook pour animations Apple-style
 export function useAppleMotion() {
-  const animate = useCallback((
-    element: HTMLElement,
-    property: string,
-    from: number,
-    to: number,
-    config: MotionConfig = {}
-  ): Promise<void> => {
-    return new Promise((resolve) => {
-      const springConfig = config.spring || ApplePresets.smooth
-      const animation = new SpringAnimation(springConfig)
-      
-      const startTime = performance.now()
-      
-      animation.start(
-        from,
-        to,
-        (value) => {
-          // Apply transform with hardware acceleration
-          if (property === 'scale') {
-            element.style.transform = `scale(${value})`
-          } else if (property === 'translateY') {
-            element.style.transform = `translateY(${value}px)`
-          } else if (property === 'opacity') {
-            element.style.opacity = value.toString()
+  const animate = useCallback(
+    (
+      element: HTMLElement,
+      property: string,
+      from: number,
+      to: number,
+      config: MotionConfig = {}
+    ): Promise<void> => {
+      return new Promise((resolve) => {
+        const springConfig = config.spring || ApplePresets.smooth
+        const animation = new SpringAnimation(springConfig)
+
+        const startTime = performance.now()
+
+        animation.start(
+          from,
+          to,
+          (value) => {
+            // Apply transform with hardware acceleration
+            if (property === 'scale') {
+              element.style.transform = `scale(${value})`
+            } else if (property === 'translateY') {
+              element.style.transform = `translateY(${value}px)`
+            } else if (property === 'opacity') {
+              element.style.opacity = value.toString()
+            }
+            // Force hardware layer
+            element.style.willChange = property
+          },
+          () => {
+            element.style.willChange = 'auto'
+            resolve()
           }
-          // Force hardware layer
-          element.style.willChange = property
-        },
-        () => {
-          element.style.willChange = 'auto'
-          resolve()
-        }
-      )
-      
-      // Cleanup on component unmount
-      return () => animation.stop()
-    })
-  }, [])
-  
+        )
+
+        // Cleanup on component unmount
+        return () => animation.stop()
+      })
+    },
+    []
+  )
+
   return { animate }
 }
 
@@ -143,10 +146,11 @@ export const AppleMicroInteractions = {
   // Button press (iOS Safari tabs)
   buttonPress: (element: HTMLElement) => {
     const { animate } = useAppleMotion()
-    animate(element, 'scale', 1, 0.97, { spring: ApplePresets.snappy })
-      .then(() => animate(element, 'scale', 0.97, 1, { spring: ApplePresets.gentle }))
+    animate(element, 'scale', 1, 0.97, { spring: ApplePresets.snappy }).then(() =>
+      animate(element, 'scale', 0.97, 1, { spring: ApplePresets.gentle })
+    )
   },
-  
+
   // Modal present (iOS sheets)
   modalSlideUp: (element: HTMLElement) => {
     const { animate } = useAppleMotion()
@@ -154,19 +158,19 @@ export const AppleMicroInteractions = {
     animate(element, 'translateY', 100, 0, { spring: ApplePresets.smooth })
     animate(element, 'opacity', 0, 1, { spring: ApplePresets.gentle })
   },
-  
+
   // Card flip (iOS Control Center)
   cardFlip: async (element: HTMLElement) => {
     const { animate } = useAppleMotion()
     await animate(element, 'scale', 1, 0.8, { spring: ApplePresets.snappy })
     await animate(element, 'scale', 0.8, 1, { spring: ApplePresets.bouncy })
   },
-  
+
   // Notification bounce (iOS notification)
   notificationBounce: (element: HTMLElement) => {
     const { animate } = useAppleMotion()
     animate(element, 'translateY', -100, 0, { spring: ApplePresets.wobbly })
-  }
+  },
 }
 
 // CSS-in-JS pour motion Apple (plus performant que Framer)
@@ -234,58 +238,63 @@ interface AppleButtonProps {
   className?: string
 }
 
-export function AppleButton({ children, onClick, variant = 'gentle', className = '' }: AppleButtonProps) {
+export function AppleButton({
+  children,
+  onClick,
+  variant = 'gentle',
+  className = '',
+}: AppleButtonProps) {
   const buttonRef = useRef<HTMLButtonElement>(null)
   const { animate } = useAppleMotion()
-  
+
   const handleClick = useCallback(async () => {
     if (buttonRef.current) {
       // Apple-style button feedback
-      await animate(buttonRef.current, 'scale', 1, 0.97, { 
-        spring: ApplePresets.snappy 
+      await animate(buttonRef.current, 'scale', 1, 0.97, {
+        spring: ApplePresets.snappy,
       })
-      await animate(buttonRef.current, 'scale', 0.97, 1, { 
-        spring: ApplePresets[variant] 
+      await animate(buttonRef.current, 'scale', 0.97, 1, {
+        spring: ApplePresets[variant],
       })
     }
     onClick?.()
   }, [animate, onClick, variant])
-  
+
   return (
-    <button
-      ref={buttonRef}
-      onClick={handleClick}
-      className={`motion-element ${className}`}
-    >
+    <button ref={buttonRef} onClick={handleClick} className={`motion-element ${className}`}>
       {children}
     </button>
   )
 }
 
-export function AppleModal({ isOpen, onClose, children }: {
+export function AppleModal({
+  isOpen,
+  onClose,
+  children,
+}: {
   isOpen: boolean
   onClose: () => void
   children: React.ReactNode
 }) {
   const modalRef = useRef<HTMLDivElement>(null)
   const { animate } = useAppleMotion()
-  
+
   useEffect(() => {
     if (!modalRef.current) return
-    
+
     if (isOpen) {
       // Modal appear animation (iOS style)
       modalRef.current.style.opacity = '0'
       modalRef.current.style.transform = 'translateY(100px) scale(0.9)'
-      
+
       animate(modalRef.current, 'translateY', 100, 0, { spring: ApplePresets.smooth })
       animate(modalRef.current, 'scale', 0.9, 1, { spring: ApplePresets.gentle })
       animate(modalRef.current, 'opacity', 0, 1, { spring: ApplePresets.smooth })
     }
   }, [isOpen, animate])
-  
+
   if (!isOpen) return null
-  
+
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50">
       <div

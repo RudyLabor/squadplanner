@@ -1,4 +1,3 @@
-
 import { useRef, useEffect, useCallback, memo } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
 import { useVirtualizer } from '@tanstack/react-virtual'
@@ -180,9 +179,7 @@ const VirtualizedMessages = memo(function VirtualizedMessages({
                 transform: `translateY(${vr.start}px)`,
               }}
             >
-              <div id={`message-${msg.id}`}>
-                {renderMessage(msg, vr.index, messages, props)}
-              </div>
+              <div id={`message-${msg.id}`}>{renderMessage(msg, vr.index, messages, props)}</div>
             </div>
           )
         })}
@@ -282,11 +279,11 @@ export function MessageThread({
       className="flex-1 overflow-y-auto px-4 py-4 relative"
     >
       <div className={embedded ? '' : 'max-w-4xl lg:max-w-5xl mx-auto'}>
-          {messages.map((msg, i) => (
-            <div key={msg.id} id={`message-${msg.id}`}>
-              {renderMessage(msg, i, messages, props)}
-            </div>
-          ))}
+        {messages.map((msg, i) => (
+          <div key={msg.id} id={`message-${msg.id}`}>
+            {renderMessage(msg, i, messages, props)}
+          </div>
+        ))}
         <AnimatePresence>{typingText && <TypingIndicator text={typingText} />}</AnimatePresence>
         <div ref={messagesEndRef} />
       </div>

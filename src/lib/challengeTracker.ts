@@ -10,10 +10,7 @@ import { supabase, isSupabaseReady } from './supabaseMinimal'
  * This is a fire-and-forget helper — errors are logged but never thrown
  * so callers don't need to handle failures.
  */
-export async function trackChallengeProgress(
-  userId: string,
-  actionType: string
-): Promise<void> {
+export async function trackChallengeProgress(userId: string, actionType: string): Promise<void> {
   if (!isSupabaseReady()) return
   try {
     // 1. Find matching active challenges

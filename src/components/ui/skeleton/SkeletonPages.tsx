@@ -402,7 +402,10 @@ export function SkeletonCallHistory() {
 
       {/* Call entries */}
       {[1, 2, 3, 4, 5].map((i) => (
-        <div key={i} className="flex items-center gap-3 p-4 rounded-xl bg-bg-elevated border border-border-subtle">
+        <div
+          key={i}
+          className="flex items-center gap-3 p-4 rounded-xl bg-bg-elevated border border-border-subtle"
+        >
           <SkeletonAvatar size="md" />
           <div className="flex-1">
             <Skeleton className="h-4 w-28 mb-1" rounded="sm" />

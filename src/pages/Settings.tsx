@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useRef, useCallback } from 'react'
 import {
   Bell,
@@ -191,7 +190,10 @@ export function Settings() {
       <div className="px-4 md:px-6 lg:px-8 py-6 max-w-4xl mx-auto">
         <header className="hidden lg:flex items-center gap-4 mb-8">
           <button
-            onClick={() => { if (window.history.length > 1) navigate(-1); else navigate('/home'); }}
+            onClick={() => {
+              if (window.history.length > 1) navigate(-1)
+              else navigate('/home')
+            }}
             className="w-10 h-10 rounded-xl bg-surface-card flex items-center justify-center hover:bg-border-hover transition-colors"
             aria-label="Retour"
           >
@@ -300,13 +302,19 @@ export function Settings() {
         <Card id="sounds" className="mb-5 p-5 bg-bg-elevated scroll-mt-6">
           <SectionHeader icon={Volume2} title="Sons & Vibrations" />
           <div className="space-y-1">
-            <SettingRow label="Sons de l'interface" description="Jouer des sons pour les actions (messages, RSVP, etc.)">
+            <SettingRow
+              label="Sons de l'interface"
+              description="Jouer des sons pour les actions (messages, RSVP, etc.)"
+            >
               <SoundToggle />
             </SettingRow>
             <SettingRow label="Mode silencieux" description="Pas de sons entre 23h et 8h">
               <QuietHoursToggle />
             </SettingRow>
-            <SettingRow label="Vibrations haptiques" description="Retour vibratoire sur les boutons et actions">
+            <SettingRow
+              label="Vibrations haptiques"
+              description="Retour vibratoire sur les boutons et actions"
+            >
               <HapticToggle />
             </SettingRow>
           </div>
@@ -446,7 +454,9 @@ export function Settings() {
                 <Gift className="w-5 h-5 text-primary" />
                 <div className="text-left">
                   <p className="text-md text-text-primary">Inviter des amis</p>
-                  <p className="text-sm text-text-quaternary">Gagne du Premium gratuit en parrainant</p>
+                  <p className="text-sm text-text-quaternary">
+                    Gagne du Premium gratuit en parrainant
+                  </p>
                 </div>
               </div>
               <ChevronRight className="w-5 h-5 text-text-quaternary" />
@@ -535,7 +545,10 @@ function DiscordSection() {
         {isConnected ? (
           <div className="flex items-center justify-between p-4 rounded-xl bg-surface-card">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ backgroundColor: '#5865F2' }}>
+              <div
+                className="w-10 h-10 rounded-lg flex items-center justify-center"
+                style={{ backgroundColor: '#5865F2' }}
+              >
                 <DiscordIcon className="w-5 h-5 text-white" />
               </div>
               <div>
@@ -548,11 +561,7 @@ function DiscordSection() {
               disabled={isUnlinking}
               className="px-3 py-1.5 text-sm text-error hover:text-error-hover transition-colors rounded-lg hover:bg-error-5 disabled:opacity-50"
             >
-              {isUnlinking ? (
-                <Loader2 className="w-4 h-4 animate-spin" />
-              ) : (
-                'Déconnecter'
-              )}
+              {isUnlinking ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Déconnecter'}
             </button>
           </div>
         ) : (
@@ -561,7 +570,10 @@ function DiscordSection() {
             className="w-full flex items-center justify-between p-4 rounded-xl bg-surface-card hover:bg-surface-card-hover transition-colors"
           >
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ backgroundColor: '#5865F2' }}>
+              <div
+                className="w-10 h-10 rounded-lg flex items-center justify-center"
+                style={{ backgroundColor: '#5865F2' }}
+              >
                 <DiscordIcon className="w-5 h-5 text-white" />
               </div>
               <div className="text-left">
@@ -583,7 +595,9 @@ function SoundToggle() {
     try {
       const stored = JSON.parse(localStorage.getItem('squadplanner-sounds') || '{}')
       return stored?.state?.enabled !== false
-    } catch { return true }
+    } catch {
+      return true
+    }
   })
 
   const handleToggle = useCallback((v: boolean) => {
@@ -599,8 +613,11 @@ function SoundToggle() {
 // Haptic toggle — syncs with haptic utils
 function HapticToggle() {
   const [enabled, setEnabled] = useState(() => {
-    try { return localStorage.getItem('hapticEnabled') !== 'false' }
-    catch { return true }
+    try {
+      return localStorage.getItem('hapticEnabled') !== 'false'
+    } catch {
+      return true
+    }
   })
 
   const handleToggle = useCallback((v: boolean) => {
@@ -617,7 +634,9 @@ function QuietHoursToggle() {
     try {
       const stored = JSON.parse(localStorage.getItem('squadplanner-quiet-hours') || '{}')
       return stored?.state?.enabled !== false
-    } catch { return true }
+    } catch {
+      return true
+    }
   })
 
   const handleToggle = useCallback((v: boolean) => {

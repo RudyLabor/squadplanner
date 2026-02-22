@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useCallback, useRef, type ReactNode } from 'react'
 import { m, AnimatePresence, useMotionValue, useTransform, type PanInfo } from 'framer-motion'
 import { X, CheckCircle, AlertTriangle, AlertCircle, Info } from '../icons'
@@ -124,25 +123,25 @@ const getToastAnimationVariants = (type: ToastType) => {
       return {
         initial: { opacity: 0, x: 400, y: 0 },
         animate: { opacity: 1, x: 0, y: 0 },
-        exit: { opacity: 0, x: 400, y: 0 }
+        exit: { opacity: 0, x: 400, y: 0 },
       }
     case 'error':
       return {
         initial: { opacity: 0, x: 400, y: 0 },
         animate: { opacity: 1, x: [0, -2, 2, 0], y: 0 },
-        exit: { opacity: 0, x: 400, y: 0 }
+        exit: { opacity: 0, x: 400, y: 0 },
       }
     case 'warning':
       return {
         initial: { opacity: 0, x: 400, y: 0 },
         animate: { opacity: 1, x: 0, y: 0 },
-        exit: { opacity: 0, x: 400, y: 0 }
+        exit: { opacity: 0, x: 400, y: 0 },
       }
     default:
       return {
         initial: { opacity: 0, x: 400, y: 0 },
         animate: { opacity: 1, x: 0, y: 0 },
-        exit: { opacity: 0, x: 400, y: 0 }
+        exit: { opacity: 0, x: 400, y: 0 },
       }
   }
 }

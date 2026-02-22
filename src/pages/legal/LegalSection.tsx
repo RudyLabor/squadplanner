@@ -1,4 +1,3 @@
-
 import { useState } from 'react'
 import { ChevronDown } from '../../components/icons'
 export function LegalSection({

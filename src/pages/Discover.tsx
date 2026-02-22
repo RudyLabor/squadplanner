@@ -1,4 +1,3 @@
-
 import { memo, useState, useCallback } from 'react'
 import { m } from 'framer-motion'
 import { Compass, Plus, Sparkles, Users, Gamepad2 } from '../components/icons'
@@ -53,61 +52,61 @@ export function Discover() {
 
   return (
     <PullToRefresh onRefresh={handleRefresh}>
-    <m.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      className="max-w-2xl lg:max-w-4xl xl:max-w-5xl mx-auto px-4 md:px-6 lg:px-8 py-6 pb-24 page-enter"
-    >
-      <MobilePageHeader title="Découvrir" />
-      {/* Header - hidden on mobile where MobilePageHeader is shown */}
-      <div className="hidden lg:flex items-center gap-3 mb-6">
-        <div className="w-10 h-10 rounded-xl bg-primary-10 flex items-center justify-center">
-          <Compass className="w-5 h-5 text-primary" />
+      <m.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        className="max-w-2xl lg:max-w-4xl xl:max-w-5xl mx-auto px-4 md:px-6 lg:px-8 py-6 pb-24 page-enter"
+      >
+        <MobilePageHeader title="Découvrir" />
+        {/* Header - hidden on mobile where MobilePageHeader is shown */}
+        <div className="hidden lg:flex items-center gap-3 mb-6">
+          <div className="w-10 h-10 rounded-xl bg-primary-10 flex items-center justify-center">
+            <Compass className="w-5 h-5 text-primary" />
+          </div>
+          <div>
+            <h1 className="text-lg font-bold text-text-primary">Découvrir</h1>
+            <p className="text-xs text-text-tertiary">Trouve des squads et joueurs</p>
+          </div>
         </div>
-        <div>
-          <h1 className="text-lg font-bold text-text-primary">Découvrir</h1>
-          <p className="text-xs text-text-tertiary">Trouve des squads et joueurs</p>
-        </div>
-      </div>
 
-      {/* Tabs */}
-      <div className="mb-4">
-        <SegmentedControl value={tab} onChange={setTab} options={TABS} />
-      </div>
-
-      {/* Filters */}
-      <div className="flex gap-2 mb-5">
-        <div className="flex-1">
-          <Select
-            options={GAME_OPTIONS}
-            value={game || undefined}
-            onChange={(v) => setGame(v as string)}
-            placeholder="Tous les jeux"
-            clearable
-            size="sm"
-          />
+        {/* Tabs */}
+        <div className="mb-4">
+          <SegmentedControl value={tab} onChange={setTab} options={TABS} />
         </div>
-        <div className="flex-1">
-          <Select
-            options={REGION_OPTIONS}
-            value={region || undefined}
-            onChange={(v) => setRegion(v as string)}
-            placeholder="Toutes les régions"
-            clearable
-            size="sm"
-          />
-        </div>
-      </div>
 
-      {/* Content */}
-      {tab === 'squads' && <SquadsTab game={game} region={region} />}
-      {tab === 'joueurs' && (
-        <MatchmakingSection game={game || undefined} region={region || undefined} />
-      )}
-      {tab === 'classement' && (
-        <GlobalLeaderboard game={game || undefined} region={region || undefined} />
-      )}
-    </m.div>
+        {/* Filters */}
+        <div className="flex gap-2 mb-5">
+          <div className="flex-1">
+            <Select
+              options={GAME_OPTIONS}
+              value={game || undefined}
+              onChange={(v) => setGame(v as string)}
+              placeholder="Tous les jeux"
+              clearable
+              size="sm"
+            />
+          </div>
+          <div className="flex-1">
+            <Select
+              options={REGION_OPTIONS}
+              value={region || undefined}
+              onChange={(v) => setRegion(v as string)}
+              placeholder="Toutes les régions"
+              clearable
+              size="sm"
+            />
+          </div>
+        </div>
+
+        {/* Content */}
+        {tab === 'squads' && <SquadsTab game={game} region={region} />}
+        {tab === 'joueurs' && (
+          <MatchmakingSection game={game || undefined} region={region || undefined} />
+        )}
+        {tab === 'classement' && (
+          <GlobalLeaderboard game={game || undefined} region={region || undefined} />
+        )}
+      </m.div>
     </PullToRefresh>
   )
 }
@@ -192,16 +191,17 @@ const SquadsTab = memo(function SquadsTab({ game, region }: { game: string; regi
           >
             <Compass className="w-8 h-8 text-primary" />
           </m.div>
-          <h2 className="text-lg font-bold text-text-primary mb-2">
-            La communauté se construit !
-          </h2>
+          <h2 className="text-lg font-bold text-text-primary mb-2">La communauté se construit !</h2>
           <p className="text-sm text-text-secondary mb-1">
             Les squads publiques apparaîtront ici dès qu'elles seront créées.
           </p>
           <p className="text-xs text-text-tertiary mb-5">
             En attendant, crée ta squad et invite tes amis par code d'invitation.
           </p>
-          <Link to="/squads" className="inline-flex items-center gap-2 px-3 py-2 rounded-xl bg-primary text-white text-sm font-medium hover:bg-primary-hover transition-colors">
+          <Link
+            to="/squads"
+            className="inline-flex items-center gap-2 px-3 py-2 rounded-xl bg-primary text-white text-sm font-medium hover:bg-primary-hover transition-colors"
+          >
             <Plus className="w-4 h-4" />
             Créer une squad
           </Link>
@@ -214,9 +214,18 @@ const SquadsTab = memo(function SquadsTab({ game, region }: { game: string; regi
             <span className="text-sm font-semibold text-text-primary">Comment ça marche ?</span>
           </div>
           <div className="space-y-2.5 text-sm text-text-secondary">
-            <p>1. <strong className="text-text-primary">Crée ta squad</strong> et invite tes amis via un code ou lien.</p>
-            <p>2. <strong className="text-text-primary">Planifie des sessions</strong> — ta squad vote et tout le monde s'engage.</p>
-            <p>3. <strong className="text-text-primary">Rends-la publique</strong> dans les paramètres pour qu'elle apparaisse ici.</p>
+            <p>
+              1. <strong className="text-text-primary">Crée ta squad</strong> et invite tes amis via
+              un code ou lien.
+            </p>
+            <p>
+              2. <strong className="text-text-primary">Planifie des sessions</strong> — ta squad
+              vote et tout le monde s'engage.
+            </p>
+            <p>
+              3. <strong className="text-text-primary">Rends-la publique</strong> dans les
+              paramètres pour qu'elle apparaisse ici.
+            </p>
           </div>
         </div>
       </div>

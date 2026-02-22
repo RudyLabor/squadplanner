@@ -5,34 +5,87 @@ import { PublicPageShell } from '../components/PublicPageShell'
 import { scrollReveal, scrollRevealLight, springTap } from '../utils/animations'
 
 const comparisonFeatures = [
-  { name: 'Trouve des joueurs', squadPlanner: true, gamerLink: true, description: 'Des partenaires de ton niveau' },
-  { name: 'Calendrier des sessions', squadPlanner: true, gamerLink: false, description: 'Planifie et répète automatiquement' },
-  { name: 'RSVP fiable', squadPlanner: true, gamerLink: false, description: 'Score de fiabilité intégré' },
-  { name: 'Notifs push immédiates', squadPlanner: true, gamerLink: false, description: 'Rappels automatiques' },
-  { name: 'Sessions récurrentes', squadPlanner: true, gamerLink: false, description: 'Crée une fois, ça se répète' },
-  { name: 'Score de fiabilité', squadPlanner: true, gamerLink: false, description: 'Vois qui est régulier' },
-  { name: 'Analytics gaming', squadPlanner: true, gamerLink: false, description: 'Stats de présence et tendances' },
-  { name: 'Chat intégré', squadPlanner: true, gamerLink: false, description: 'Messagerie de squad intégrée' },
-  { name: 'Party vocale', squadPlanner: true, gamerLink: false, description: 'Appels vocaux gaming en un clic' },
-  { name: 'Gratuit pour l\'essentiel', squadPlanner: true, gamerLink: true, description: 'Les bases sans payer' }
+  {
+    name: 'Trouve des joueurs',
+    squadPlanner: true,
+    gamerLink: true,
+    description: 'Des partenaires de ton niveau',
+  },
+  {
+    name: 'Calendrier des sessions',
+    squadPlanner: true,
+    gamerLink: false,
+    description: 'Planifie et répète automatiquement',
+  },
+  {
+    name: 'RSVP fiable',
+    squadPlanner: true,
+    gamerLink: false,
+    description: 'Score de fiabilité intégré',
+  },
+  {
+    name: 'Notifs push immédiates',
+    squadPlanner: true,
+    gamerLink: false,
+    description: 'Rappels automatiques',
+  },
+  {
+    name: 'Sessions récurrentes',
+    squadPlanner: true,
+    gamerLink: false,
+    description: 'Crée une fois, ça se répète',
+  },
+  {
+    name: 'Score de fiabilité',
+    squadPlanner: true,
+    gamerLink: false,
+    description: 'Vois qui est régulier',
+  },
+  {
+    name: 'Analytics gaming',
+    squadPlanner: true,
+    gamerLink: false,
+    description: 'Stats de présence et tendances',
+  },
+  {
+    name: 'Chat intégré',
+    squadPlanner: true,
+    gamerLink: false,
+    description: 'Messagerie de squad intégrée',
+  },
+  {
+    name: 'Party vocale',
+    squadPlanner: true,
+    gamerLink: false,
+    description: 'Appels vocaux gaming en un clic',
+  },
+  {
+    name: "Gratuit pour l'essentiel",
+    squadPlanner: true,
+    gamerLink: true,
+    description: 'Les bases sans payer',
+  },
 ]
 
 const advantages = [
   {
     title: 'Conçu pour les gamers',
-    description: 'Squad Planner, c\'est 100% pour toi. Chaque fonctionnalité est là pour régler un vrai problème de session.',
-    icon: Sparkles
+    description:
+      "Squad Planner, c'est 100% pour toi. Chaque fonctionnalité est là pour régler un vrai problème de session.",
+    icon: Sparkles,
   },
   {
     title: 'RSVP qui tient',
-    description: 'Notifs push, rappels 1h avant. Ceux qui disent oui viennent vraiment. Plus de no-shows.',
-    icon: Check
+    description:
+      'Notifs push, rappels 1h avant. Ceux qui disent oui viennent vraiment. Plus de no-shows.',
+    icon: Check,
   },
   {
     title: 'Une équipe de gamers',
-    description: 'On est des joueurs, comme toi. Tu demandes un truc, on le fait. Pas de file d\'attente, pas de blabla.',
-    icon: Zap
-  }
+    description:
+      "On est des joueurs, comme toi. Tu demandes un truc, on le fait. Pas de file d'attente, pas de blabla.",
+    icon: Zap,
+  },
 ]
 
 export default function AlternativeGamerLink() {
@@ -82,7 +135,8 @@ export default function AlternativeGamerLink() {
             viewport={{ once: true }}
             className="text-lg md:text-xl text-text-tertiary mb-10 max-w-2xl mx-auto leading-relaxed"
           >
-            Plus rapide. Plus fiable. Plus gaming. Squad Planner, c'est conçu pour toi, ta squad, tes sessions. Pas de jargon. Juste l'essentiel.
+            Plus rapide. Plus fiable. Plus gaming. Squad Planner, c'est conçu pour toi, ta squad,
+            tes sessions. Pas de jargon. Juste l'essentiel.
           </m.p>
 
           {/* CTAs */}
@@ -119,13 +173,17 @@ export default function AlternativeGamerLink() {
       {/* Comparison Table */}
       <section className="px-4 md:px-6 py-12 md:py-16">
         <div className="max-w-5xl mx-auto">
-          <m.div variants={scrollReveal} initial="hidden" whileInView="visible" viewport={{ once: true }} className="text-center mb-12">
+          <m.div
+            variants={scrollReveal}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            className="text-center mb-12"
+          >
             <h2 className="text-xl md:text-2xl font-bold text-text-primary mb-4">
               Squad Planner vs GamerLink : le vrai match
             </h2>
-            <p className="text-text-tertiary text-lg">
-              Tous les détails, sans filtre
-            </p>
+            <p className="text-text-tertiary text-lg">Tous les détails, sans filtre</p>
           </m.div>
 
           <m.div
@@ -139,9 +197,15 @@ export default function AlternativeGamerLink() {
               <table className="w-full">
                 <thead>
                   <tr className="bg-surface-card border-b border-border-subtle">
-                    <th className="px-6 py-4 text-left font-semibold text-text-primary">Fonctionnalité</th>
-                    <th className="px-6 py-4 text-center font-semibold text-primary">Squad Planner</th>
-                    <th className="px-6 py-4 text-center font-semibold text-text-secondary">GamerLink</th>
+                    <th className="px-6 py-4 text-left font-semibold text-text-primary">
+                      Fonctionnalité
+                    </th>
+                    <th className="px-6 py-4 text-center font-semibold text-primary">
+                      Squad Planner
+                    </th>
+                    <th className="px-6 py-4 text-center font-semibold text-text-secondary">
+                      GamerLink
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
@@ -178,13 +242,17 @@ export default function AlternativeGamerLink() {
       {/* Advantages */}
       <section className="px-4 md:px-6 py-12 md:py-16 bg-gradient-to-b from-transparent to-primary/[0.015]">
         <div className="max-w-5xl mx-auto">
-          <m.div variants={scrollReveal} initial="hidden" whileInView="visible" viewport={{ once: true }} className="text-center mb-12">
+          <m.div
+            variants={scrollReveal}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            className="text-center mb-12"
+          >
             <h2 className="text-xl md:text-2xl font-bold text-text-primary mb-4">
               Pourquoi tu vas te régaler sur Squad Planner
             </h2>
-            <p className="text-text-tertiary text-lg">
-              Trois raisons qui changent tout
-            </p>
+            <p className="text-text-tertiary text-lg">Trois raisons qui changent tout</p>
           </m.div>
 
           <div className="grid md:grid-cols-3 gap-6">
@@ -239,7 +307,8 @@ export default function AlternativeGamerLink() {
                 Déjà +2 000 gamers avant toi
               </h3>
               <p className="text-text-tertiary mb-8 max-w-2xl">
-                Chaque jour, des squads lancent leurs sessions ici. Zéro frais. Zéro prise de tête. Juste du vrai gaming.
+                Chaque jour, des squads lancent leurs sessions ici. Zéro frais. Zéro prise de tête.
+                Juste du vrai gaming.
               </p>
               <m.div whileHover={{ scale: 1.02, y: -2 }} {...springTap}>
                 <Link
@@ -275,7 +344,9 @@ export default function AlternativeGamerLink() {
               className="absolute inset-0"
               animate={{ scale: [1, 1.05, 1], opacity: [0.3, 0.5, 0.3] }}
               transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
-              style={{ background: 'radial-gradient(ellipse at center, #a855f708 0%, transparent 60%)' }}
+              style={{
+                background: 'radial-gradient(ellipse at center, #a855f708 0%, transparent 60%)',
+              }}
             />
             <div className="relative z-10">
               <m.div

@@ -1,4 +1,13 @@
-import { useState, useEffect, useMemo, useCallback, useRef, useSyncExternalStore, lazy, Suspense } from 'react'
+import {
+  useState,
+  useEffect,
+  useMemo,
+  useCallback,
+  useRef,
+  useSyncExternalStore,
+  lazy,
+  Suspense,
+} from 'react'
 import { useQueryClient } from '@tanstack/react-query'
 import { m } from 'framer-motion'
 import { TrendingUp, Loader2, AlertCircle, Star } from '../components/icons'
@@ -166,15 +175,21 @@ export default function Home({ loaderData }: HomeProps) {
   const loaderSessions = Array.isArray(loaderData?.upcomingSessions)
     ? loaderData.upcomingSessions
     : []
-  const { data: querySquads, isLoading: squadsLoadingRaw, isPending: squadsLoadingPending } = useSquadsQuery()
+  const {
+    data: querySquads,
+    isLoading: squadsLoadingRaw,
+    isPending: squadsLoadingPending,
+  } = useSquadsQuery()
   const squadsLoading = squadsLoadingRaw || squadsLoadingPending
-  const { data: queryRawSessions, isLoading: sessionsQueryLoading } =
-    useUpcomingSessionsQuery(user?.id)
+  const { data: queryRawSessions, isLoading: sessionsQueryLoading } = useUpcomingSessionsQuery(
+    user?.id
+  )
   // Prefer query data when it has actual results, otherwise use loader data.
   // querySquads can be undefined (not yet fetched) or [] (fetched but empty due to auth race).
   // Only override loaderData when querySquads has real data (length > 0).
   const squads = querySquads && querySquads.length > 0 ? querySquads : loaderSquads
-  const rawSessions = queryRawSessions && queryRawSessions.length > 0 ? queryRawSessions : loaderSessions
+  const rawSessions =
+    queryRawSessions && queryRawSessions.length > 0 ? queryRawSessions : loaderSessions
   const rsvpMutation = useRsvpMutation()
   const { data: friendsPlaying = [], isLoading: friendsLoading } = useFriendsPlayingQuery(user?.id)
   const { data: aiCoachTip, isLoading: aiCoachLoading } = useAICoachQueryDeferred(user?.id, 'home')

@@ -105,7 +105,13 @@ function GameNotFound() {
   return (
     <PublicPageShell>
       <div className="flex flex-col items-center justify-center px-4 py-32">
-        <m.div variants={scrollReveal} initial="hidden" whileInView="visible" viewport={{ once: true }} className="text-center">
+        <m.div
+          variants={scrollReveal}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          className="text-center"
+        >
           <h1 className="text-4xl font-bold text-text-primary mb-4">Jeu non trouvé</h1>
           <p className="text-text-secondary mb-8">
             Ce jeu n'existe pas ou n'est pas encore disponible sur Squad Planner.
@@ -129,21 +135,33 @@ const features = [
     title: 'Fini les no-shows',
     desc: (name: string) =>
       `Chaque joueur répond OUI ou NON. Pas de « peut-être ». Et si quelqu'un ghost ta session ${name}, son score le montre.`,
-    details: ['Rappels automatiques avant chaque session', 'Score de fiabilité visible par tous', 'Confirmation dès qu\'assez de joueurs répondent'],
+    details: [
+      'Rappels automatiques avant chaque session',
+      'Score de fiabilité visible par tous',
+      "Confirmation dès qu'assez de joueurs répondent",
+    ],
   },
   {
     icon: Users,
     title: 'Trouve ta squad idéale',
     desc: (name: string) =>
       `T'as pas 5 potes dispos en même temps ? Notre matchmaking te connecte avec des joueurs ${name} de ton niveau.`,
-    details: ['Matching par niveau et style de jeu', 'Profils vérifiés, pas de randoms toxiques', 'Historique et avis des coéquipiers'],
+    details: [
+      'Matching par niveau et style de jeu',
+      'Profils vérifiés, pas de randoms toxiques',
+      'Historique et avis des coéquipiers',
+    ],
   },
   {
     icon: Calendar,
     title: 'Organise sans prise de tête',
     desc: (name: string) =>
       `Propose un créneau ${name}, partage le lien. Tout le monde voit qui vient. Fini le spam Discord.`,
-    details: ['Création de session en quelques clics', 'Sessions récurrentes (chaque mardi soir, etc.)', 'Synchro avec ton calendrier'],
+    details: [
+      'Création de session en quelques clics',
+      'Sessions récurrentes (chaque mardi soir, etc.)',
+      'Synchro avec ton calendrier',
+    ],
   },
 ]
 
@@ -216,7 +234,10 @@ export default function Component() {
             whileInView="visible"
             viewport={{ once: true }}
           >
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full badge-shimmer border mb-8" style={{ borderColor: `${gc}25` }}>
+            <div
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full badge-shimmer border mb-8"
+              style={{ borderColor: `${gc}25` }}
+            >
               <span className="text-4xl">{game.icon}</span>
               <span className="text-base font-medium" style={{ color: gc }}>
                 {game.genre} · {game.players}
@@ -299,7 +320,13 @@ export default function Component() {
       {/* ── How it works ── */}
       <section className="px-4 md:px-6 py-12 md:py-16 bg-gradient-to-b from-transparent to-primary/[0.015]">
         <div className="max-w-5xl mx-auto">
-          <m.div variants={scrollReveal} initial="hidden" whileInView="visible" viewport={{ once: true }} className="text-center mb-12">
+          <m.div
+            variants={scrollReveal}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            className="text-center mb-12"
+          >
             <h2 className="text-xl md:text-2xl font-bold text-text-primary mb-4">
               3 étapes. C'est tout.
             </h2>
@@ -328,7 +355,10 @@ export default function Component() {
                     >
                       <StepIcon className="w-6 h-6" style={{ color: gc }} />
                     </div>
-                    <div className="text-xs font-bold uppercase tracking-wider mb-2" style={{ color: gc }}>
+                    <div
+                      className="text-xs font-bold uppercase tracking-wider mb-2"
+                      style={{ color: gc }}
+                    >
                       Étape {step.step}
                     </div>
                     <h3 className="text-lg font-bold text-text-primary mb-2">{step.title}</h3>
@@ -346,7 +376,13 @@ export default function Component() {
       {/* ── Features pillars ── */}
       <section className="px-4 md:px-6 py-12 md:py-16">
         <div className="max-w-5xl mx-auto">
-          <m.div variants={scrollReveal} initial="hidden" whileInView="visible" viewport={{ once: true }} className="text-center mb-12">
+          <m.div
+            variants={scrollReveal}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            className="text-center mb-12"
+          >
             <h2 className="text-xl md:text-2xl font-bold text-text-primary mb-4">
               Ce que Squad Planner change pour {game.name}
             </h2>
@@ -382,7 +418,10 @@ export default function Component() {
                       <p className="text-text-tertiary mb-4">{feat.desc(game.name)}</p>
                       <ul className="space-y-2">
                         {feat.details.map((detail) => (
-                          <li key={detail} className="flex items-center gap-2 text-md text-text-secondary">
+                          <li
+                            key={detail}
+                            className="flex items-center gap-2 text-md text-text-secondary"
+                          >
                             <Check className="w-4 h-4 flex-shrink-0" style={{ color: gc }} />
                             {detail}
                           </li>
@@ -402,7 +441,13 @@ export default function Component() {
       {/* ── FAQ ── */}
       <section className="px-4 md:px-6 py-10 md:py-14">
         <div className="max-w-3xl mx-auto">
-          <m.div variants={scrollReveal} initial="hidden" whileInView="visible" viewport={{ once: true }} className="text-center mb-12">
+          <m.div
+            variants={scrollReveal}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            className="text-center mb-12"
+          >
             <h2 className="text-xl md:text-2xl font-bold text-text-primary mb-4">
               Questions fréquentes
             </h2>
@@ -460,7 +505,9 @@ export default function Component() {
               className="absolute inset-0"
               animate={{ scale: [1, 1.05, 1], opacity: [0.3, 0.5, 0.3] }}
               transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
-              style={{ background: `radial-gradient(ellipse at center, ${gc}08 0%, transparent 60%)` }}
+              style={{
+                background: `radial-gradient(ellipse at center, ${gc}08 0%, transparent 60%)`,
+              }}
             />
             <div className="relative z-10">
               <m.div
@@ -497,13 +544,17 @@ export default function Component() {
       {/* ── Other games ── */}
       <section className="px-4 md:px-6 py-12">
         <div className="max-w-5xl mx-auto">
-          <m.div variants={scrollRevealLight} initial="hidden" whileInView="visible" viewport={{ once: true }} className="text-center mb-8">
+          <m.div
+            variants={scrollRevealLight}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            className="text-center mb-8"
+          >
             <h2 className="text-lg md:text-xl font-bold text-text-primary mb-2">
               Tu joues à autre chose aussi ?
             </h2>
-            <p className="text-text-quaternary text-md">
-              Squad Planner marche avec tous tes jeux
-            </p>
+            <p className="text-text-quaternary text-md">Squad Planner marche avec tous tes jeux</p>
           </m.div>
           <div className="flex flex-wrap justify-center gap-3">
             {GAMES.filter((g) => g.slug !== game.slug)

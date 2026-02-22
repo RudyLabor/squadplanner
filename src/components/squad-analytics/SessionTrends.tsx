@@ -39,11 +39,13 @@ export default function SessionTrends({ squadId }: { squadId: string }) {
         const weeklyCount: Record<number, number> = {}
         const weeklyDates: Record<number, string> = {}
 
-        sessions?.forEach(session => {
+        sessions?.forEach((session) => {
           const sessionDate = new Date(session.scheduled_at)
           const weekStart = new Date(sessionDate)
           weekStart.setDate(sessionDate.getDate() - sessionDate.getDay())
-          const weekNum = Math.floor((sessionDate.getTime() - twelveWeeksAgo.getTime()) / (7 * 24 * 60 * 60 * 1000))
+          const weekNum = Math.floor(
+            (sessionDate.getTime() - twelveWeeksAgo.getTime()) / (7 * 24 * 60 * 60 * 1000)
+          )
 
           weeklyCount[weekNum] = (weeklyCount[weekNum] || 0) + 1
           if (!weeklyDates[weekNum]) {
@@ -162,7 +164,7 @@ export default function SessionTrends({ squadId }: { squadId: string }) {
         <div className="bg-surface-card rounded-lg p-3 text-center border border-border-subtle">
           <div className="text-xs text-text-tertiary mb-1">Pic</div>
           <div className="text-lg font-bold text-primary">
-            {Math.max(...data.map(d => d.count))}
+            {Math.max(...data.map((d) => d.count))}
           </div>
         </div>
       </div>

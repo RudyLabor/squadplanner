@@ -29,7 +29,7 @@ export function useMotionPreload() {
   const preload = () => {
     import('framer-motion')
   }
-  
+
   return { preload }
 }
 
@@ -38,17 +38,17 @@ export const simpleTransitions = {
   fadeIn: 'transition-opacity duration-200 ease-in-out',
   slideUp: 'transition-transform duration-300 ease-out transform translate-y-0',
   scaleIn: 'transition-transform duration-200 ease-out transform scale-100',
-  
+
   // Classes pour remplacer motion basique
   fade: {
     initial: 'opacity-0',
     animate: 'opacity-100',
-    exit: 'opacity-0'
+    exit: 'opacity-0',
   },
-  
+
   slide: {
     initial: 'transform translate-y-4 opacity-0',
     animate: 'transform translate-y-0 opacity-100',
-    exit: 'transform translate-y-4 opacity-0'
-  }
+    exit: 'transform translate-y-4 opacity-0',
+  },
 }

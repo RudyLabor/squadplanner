@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
 import { Users, UserPlus, Calendar, Check, X, ChevronRight, Sparkles, Star } from './icons'
@@ -16,8 +15,7 @@ interface OnboardingChecklistProps {
 
 const getStorageKey = (userId?: string) =>
   `squadplanner-onboarding-dismissed${userId ? `-${userId}` : ''}`
-const getInviteKey = (userId?: string) =>
-  `squadplanner-invite-copied${userId ? `-${userId}` : ''}`
+const getInviteKey = (userId?: string) => `squadplanner-invite-copied${userId ? `-${userId}` : ''}`
 
 export function OnboardingChecklist({
   hasSquad,

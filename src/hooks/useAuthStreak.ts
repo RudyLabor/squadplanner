@@ -51,6 +51,7 @@ export async function updateDailyStreak(
     return profile
   }
 
-  if (!import.meta.env.PROD) console.log(`Daily streak updated: Day ${newStreakDays}, +${xpBonus} XP`)
+  if (!import.meta.env.PROD)
+    console.log(`Daily streak updated: Day ${newStreakDays}, +${xpBonus} XP`)
   return updatedProfile || profile
 }

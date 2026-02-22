@@ -1,4 +1,3 @@
-
 import { useState, useRef, useCallback, useEffect, memo } from 'react'
 // framer-motion removed to prevent flickering on mobile
 import { Mic, Square, Send, Trash2, Loader2 } from './icons'
@@ -14,7 +13,11 @@ interface VoiceRecorderProps {
   onRecordingChange?: (isActive: boolean) => void
 }
 
-export const VoiceRecorder = memo(function VoiceRecorder({ onSend, disabled, onRecordingChange }: VoiceRecorderProps) {
+export const VoiceRecorder = memo(function VoiceRecorder({
+  onSend,
+  disabled,
+  onRecordingChange,
+}: VoiceRecorderProps) {
   const [isRecording, setIsRecording] = useState(false)
   const [duration, setDuration] = useState(0)
   const [audioBlob, setAudioBlob] = useState<Blob | null>(null)
@@ -160,11 +163,7 @@ export const VoiceRecorder = memo(function VoiceRecorder({ onSend, disabled, onR
   return (
     <div className="relative">
       {/* Error state */}
-      {error && (
-        <p className="text-sm text-error mb-1">
-          {error}
-        </p>
-      )}
+      {error && <p className="text-sm text-error mb-1">{error}</p>}
 
       {/* Recording / Preview state */}
       {isRecording || audioBlob ? (

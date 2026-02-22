@@ -1,4 +1,3 @@
-
 import { useEffect, useCallback, useRef, useState } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
 import { Bell, CheckCheck, X } from './icons'

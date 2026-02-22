@@ -1,4 +1,3 @@
-
 import { m } from 'framer-motion'
 import {
   Inbox,
@@ -37,7 +36,9 @@ interface EmptyStateProps {
 }
 
 // Maps preset types to SVG illustration types
-const ILLUSTRATION_MAP: Partial<Record<EmptyStateType, React.ComponentProps<typeof EmptyStateIllustration>['type']>> = {
+const ILLUSTRATION_MAP: Partial<
+  Record<EmptyStateType, React.ComponentProps<typeof EmptyStateIllustration>['type']>
+> = {
   no_squads: 'squads',
   no_sessions: 'sessions',
   no_messages: 'messages',

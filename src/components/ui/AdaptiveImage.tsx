@@ -1,4 +1,3 @@
-
 import { useState, useRef, useEffect, memo } from 'react'
 import { useAdaptiveLoading } from '../../hooks/useAdaptiveLoading'
 
@@ -100,12 +99,8 @@ export const AdaptiveImage = memo(function AdaptiveImage({
       {/* Actual image — <picture> for AVIF/WebP with fallback */}
       {!showPlaceholderOnly && (
         <picture>
-          {!error && srcAvif && (
-            <source srcSet={srcAvif} type="image/avif" />
-          )}
-          {!error && srcWebp && (
-            <source srcSet={srcWebp} type="image/webp" />
-          )}
+          {!error && srcAvif && <source srcSet={srcAvif} type="image/avif" />}
+          {!error && srcWebp && <source srcSet={srcWebp} type="image/webp" />}
           <img
             ref={imgRef}
             src={error ? placeholder || defaultPlaceholder : resolvedSrc}

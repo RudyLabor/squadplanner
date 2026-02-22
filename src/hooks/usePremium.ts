@@ -220,7 +220,13 @@ export const usePremiumStore = create<PremiumState>((set, get) => ({
         data: { user },
       } = await supabase.auth.getUser()
       if (!user) {
-        set({ tier: 'free', hasPremium: false, premiumSquads: [], userSquadCount: 0, isLoading: false })
+        set({
+          tier: 'free',
+          hasPremium: false,
+          premiumSquads: [],
+          userSquadCount: 0,
+          isLoading: false,
+        })
         return
       }
 

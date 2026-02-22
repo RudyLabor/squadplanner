@@ -1,4 +1,3 @@
-
 import { lazy, Suspense, memo, useEffect, useRef } from 'react'
 import { Outlet, useSearchParams, useLocation } from 'react-router'
 import { useAuthStore, usePushNotificationStore, initializePushNotifications } from './hooks'

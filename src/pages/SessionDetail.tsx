@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react'
 import {
   ArrowLeft,
@@ -59,7 +58,11 @@ function CelebrationToast({
   return (
     <AnimatePresence>
       {isVisible && (
-        <div className="fixed top-4 left-1/2 -translate-x-1/2 z-50" role="status" aria-live="polite">
+        <div
+          className="fixed top-4 left-1/2 -translate-x-1/2 z-50"
+          role="status"
+          aria-live="polite"
+        >
           <div className="flex items-center gap-2 px-5 py-3 rounded-xl bg-success text-bg-base font-medium shadow-md">
             <Sparkles className="w-5 h-5" />
             <span>{message}</span>
@@ -266,16 +269,18 @@ export default function SessionDetail() {
                 </div>
               )}
             </div>
-            {isCreator && currentSession.status !== 'cancelled' && currentSession.status !== 'completed' && (
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setShowEditModal(true)}
-                aria-label="Modifier la session"
-              >
-                <Edit2 className="w-4 h-4" aria-hidden="true" />
-              </Button>
-            )}
+            {isCreator &&
+              currentSession.status !== 'cancelled' &&
+              currentSession.status !== 'completed' && (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setShowEditModal(true)}
+                  aria-label="Modifier la session"
+                >
+                  <Edit2 className="w-4 h-4" aria-hidden="true" />
+                </Button>
+              )}
           </header>
 
           <SessionInfoCards dateInfo={dateInfo} durationMinutes={currentSession.duration_minutes} />
@@ -452,7 +457,15 @@ function PostSessionResults({
             </div>
             <div className="flex items-center justify-between text-sm">
               <span className="text-text-secondary">Taux de participation</span>
-              <Badge variant={participationRate >= 75 ? 'success' : participationRate >= 50 ? 'warning' : 'danger'}>
+              <Badge
+                variant={
+                  participationRate >= 75
+                    ? 'success'
+                    : participationRate >= 50
+                      ? 'warning'
+                      : 'danger'
+                }
+              >
                 {participationRate}%
               </Badge>
             </div>

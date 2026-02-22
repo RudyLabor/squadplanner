@@ -150,7 +150,8 @@ export const BLOG_POSTS: BlogPost[] = [
   {
     slug: 'organiser-tournoi-entre-amis',
     title: 'Comment organiser un tournoi entre amis en 5 étapes',
-    excerpt: 'Guide complet pour organiser un tournoi gaming fluide et mémorable grâce à Squad Planner. Que tu sois débutant ou expérimenté, tu trouveras tous les conseils pour réussir.',
+    excerpt:
+      'Guide complet pour organiser un tournoi gaming fluide et mémorable grâce à Squad Planner. Que tu sois débutant ou expérimenté, tu trouveras tous les conseils pour réussir.',
     date: '2026-02-10',
     author: 'Squad Planner Team',
     tags: ['tournoi', 'organisation', 'guide'],
@@ -311,7 +312,7 @@ export const BLOG_POSTS: BlogPost[] = [
     slug: 'squad-ghost-astuces',
     title: '5 astuces pour que ta squad ne ghost plus jamais',
     excerpt:
-      'Découvre comment réduire les no-shows et créer une culture d\'engagement dans ta communauté gaming.',
+      "Découvre comment réduire les no-shows et créer une culture d'engagement dans ta communauté gaming.",
     date: '2026-02-05',
     author: 'Squad Planner Team',
     tags: ['squad', 'engagement', 'astuces'],

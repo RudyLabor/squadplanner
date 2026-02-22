@@ -69,7 +69,9 @@ export async function queueMutation(
     // Request Background Sync if available
     if ('serviceWorker' in navigator && 'SyncManager' in window) {
       const reg = await navigator.serviceWorker.ready
-      await (reg as ServiceWorkerRegistration & { sync: { register(tag: string): Promise<void> } }).sync.register(SYNC_TAG)
+      await (
+        reg as ServiceWorkerRegistration & { sync: { register(tag: string): Promise<void> } }
+      ).sync.register(SYNC_TAG)
     }
   } catch {
     // IndexedDB or Background Sync unavailable — mutation is lost

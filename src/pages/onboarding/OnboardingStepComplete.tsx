@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react'
 import { m } from 'framer-motion'
 import { Check, ArrowRight, Users, Gamepad2, Copy, Gift } from '../../components/icons'

@@ -105,12 +105,7 @@ const TIERS = [
   },
 ]
 
-export function PremiumPricing({
-  isLoading,
-  error,
-  onUpgrade,
-  onStartTrial,
-}: PremiumPricingProps) {
+export function PremiumPricing({ isLoading, error, onUpgrade, onStartTrial }: PremiumPricingProps) {
   const [isYearly, setIsYearly] = useState(false)
 
   // Launch promo countdown — expires April 30, 2026
@@ -146,17 +141,13 @@ export function PremiumPricing({
         >
           <div className="flex items-center justify-center gap-2 mb-1">
             <Zap className="w-5 h-5 text-error" />
-            <span className="text-md font-bold text-error">
-              Offre de lancement -30%
-            </span>
+            <span className="text-md font-bold text-error">Offre de lancement -30%</span>
             <Zap className="w-5 h-5 text-error" />
           </div>
           <p className="text-sm text-text-secondary mb-1">
             Code <span className="font-mono font-bold text-error">LAUNCH30</span> sur tous les plans
           </p>
-          <p className="text-xs text-text-tertiary">
-            Expire dans {timeLeft}
-          </p>
+          <p className="text-xs text-text-tertiary">Expire dans {timeLeft}</p>
         </div>
       )}
 
@@ -221,7 +212,10 @@ export function PremiumPricing({
       </div>
 
       {/* Toggle mensuel/annuel */}
-      <div className="animate-fade-in-up flex justify-center mb-6" style={{ animationDelay: '0.25s' }}>
+      <div
+        className="animate-fade-in-up flex justify-center mb-6"
+        style={{ animationDelay: '0.25s' }}
+      >
         <div className="inline-flex items-center gap-3 p-1 rounded-xl bg-bg-elevated border border-border-default">
           <button
             onClick={() => setIsYearly(false)}
@@ -276,9 +270,7 @@ export function PremiumPricing({
               {t.badge && (
                 <div
                   className={`absolute top-0 right-0 px-3 py-1 text-sm font-bold rounded-bl-xl ${
-                    t.popular
-                      ? 'bg-warning text-bg-base'
-                      : 'bg-primary text-white'
+                    t.popular ? 'bg-warning text-bg-base' : 'bg-primary text-white'
                   }`}
                 >
                   {t.badge}
@@ -293,9 +285,7 @@ export function PremiumPricing({
               <p className="text-sm text-text-tertiary mb-3">{t.description}</p>
 
               <div className="flex items-baseline gap-1 mb-1">
-                <span className="text-2xl font-bold text-text-primary">
-                  {price.toFixed(2)}€
-                </span>
+                <span className="text-2xl font-bold text-text-primary">{price.toFixed(2)}€</span>
                 <span className="text-text-quaternary text-sm">/mois</span>
               </div>
 
@@ -353,7 +343,10 @@ export function PremiumPricing({
       )}
 
       {/* Trust badges */}
-      <div className="animate-fade-in-up flex flex-wrap items-center justify-center gap-3 mb-12 text-sm text-text-tertiary" style={{ animationDelay: '0.4s' }}>
+      <div
+        className="animate-fade-in-up flex flex-wrap items-center justify-center gap-3 mb-12 text-sm text-text-tertiary"
+        style={{ animationDelay: '0.4s' }}
+      >
         <span className="flex items-center gap-1">
           <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path

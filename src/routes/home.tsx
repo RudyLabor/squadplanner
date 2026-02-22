@@ -123,7 +123,9 @@ export async function clientLoader({ serverLoader }: ClientLoaderFunctionArgs) {
   // Fast auth — getSession reads local cache, no network call.
   // Parent _protected loader already validated with getUser().
   const { supabaseMinimal: supabase } = await import('../lib/supabaseMinimal')
-  const { data: { session } } = await supabase.auth.getSession()
+  const {
+    data: { session },
+  } = await supabase.auth.getSession()
 
   // If client auth isn't ready, fall back to SSR loader data (which uses cookie auth)
   if (!session?.user) {
@@ -135,7 +137,9 @@ export async function clientLoader({ serverLoader }: ClientLoaderFunctionArgs) {
 
   // Reuse profile + squads from React Query cache (seeded by _protected layout)
   const cachedProfile = queryClient.getQueryData(queryKeys.profile.current()) as Profile | undefined
-  const cachedSquads = queryClient.getQueryData(queryKeys.squads.list()) as SquadWithCount[] | undefined
+  const cachedSquads = queryClient.getQueryData(queryKeys.squads.list()) as
+    | SquadWithCount[]
+    | undefined
 
   let profile: Profile | null
   let squads: SquadWithCount[]
@@ -146,10 +150,10 @@ export async function clientLoader({ serverLoader }: ClientLoaderFunctionArgs) {
   } else {
     // Fallback: fetch from Supabase (cold cache / first load)
     const { withTimeout } = await import('../lib/withTimeout')
-    const { data: rpcResult } = await withTimeout(
+    const { data: rpcResult } = (await withTimeout(
       supabase.rpc('get_layout_data', { p_user_id: userId }),
       5000
-    ) as any
+    )) as any
     const rpcTypedClient = rpcResult as RpcLayoutData | null
     profile = rpcTypedClient?.profile ?? null
     squads = rpcTypedClient?.squads ?? []

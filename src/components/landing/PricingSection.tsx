@@ -109,7 +109,8 @@ export function PricingSection() {
             Tarifs simples, sans surprise
           </h2>
           <p className="text-text-tertiary text-md max-w-md mx-auto mb-6">
-            Commence gratuitement. Passe au niveau supérieur quand tu veux débloquer tout le potentiel.
+            Commence gratuitement. Passe au niveau supérieur quand tu veux débloquer tout le
+            potentiel.
           </p>
 
           {/* Toggle mensuel/annuel */}
@@ -142,7 +143,8 @@ export function PricingSection() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-3">
           {TIERS.map((tier, index) => {
-            const price = isYearly && tier.monthlyPrice > 0 ? tier.yearlyPrice / 12 : tier.monthlyPrice
+            const price =
+              isYearly && tier.monthlyPrice > 0 ? tier.yearlyPrice / 12 : tier.monthlyPrice
             const yearlyTotal = tier.yearlyPrice
 
             return (
@@ -161,9 +163,7 @@ export function PricingSection() {
                 {tier.badge && (
                   <div
                     className={`absolute top-0 right-0 px-3 py-1 text-sm font-bold rounded-bl-xl ${
-                      tier.popular
-                        ? 'bg-warning text-bg-base'
-                        : 'bg-primary text-white'
+                      tier.popular ? 'bg-warning text-bg-base' : 'bg-primary text-white'
                     }`}
                   >
                     {tier.badge}
@@ -267,9 +267,7 @@ export function PricingSection() {
             </svg>
             Paiement sécurisé Stripe
           </span>
-          <span className="flex items-center gap-1.5">
-            Satisfait ou remboursé 30 jours
-          </span>
+          <span className="flex items-center gap-1.5">Satisfait ou remboursé 30 jours</span>
         </div>
       </div>
     </section>

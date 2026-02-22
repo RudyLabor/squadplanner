@@ -117,7 +117,7 @@ export const SidebarFooter = memo(function SidebarFooter({
           >
             <Link
               to="/premium"
-                            aria-label="Passer Premium - Stats avancées, IA coach, qualité audio HD"
+              aria-label="Passer Premium - Stats avancées, IA coach, qualité audio HD"
             >
               <m.div
                 className="p-4 rounded-xl bg-gradient-to-br from-primary-10 to-purple/3 border border-primary/10 cursor-pointer"
@@ -143,7 +143,15 @@ export const SidebarFooter = memo(function SidebarFooter({
       {/* Collapsed icon — upsell for free, plan badge for paid */}
       {!isExpanded && (
         <div className="p-2 pb-4">
-          <Tooltip content={isPaid ? `Plan ${tier === 'squad_leader' ? 'Squad Leader' : tier.charAt(0).toUpperCase() + tier.slice(1)}` : 'Passer Premium'} position="right" delay={300}>
+          <Tooltip
+            content={
+              isPaid
+                ? `Plan ${tier === 'squad_leader' ? 'Squad Leader' : tier.charAt(0).toUpperCase() + tier.slice(1)}`
+                : 'Passer Premium'
+            }
+            position="right"
+            delay={300}
+          >
             <Link to="/premium" aria-label={isPaid ? 'Mon abonnement' : 'Passer Premium'}>
               <m.div
                 className="flex items-center justify-center min-w-[44px] min-h-[44px] p-2 rounded-xl hover:bg-surface-card transition-colors"

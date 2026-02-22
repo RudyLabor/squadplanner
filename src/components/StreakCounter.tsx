@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useMemo } from 'react'
 import { m } from 'framer-motion'
 import { Flame, Gift, Sparkles, Check, Zap } from './icons'

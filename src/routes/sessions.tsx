@@ -104,7 +104,9 @@ export async function clientLoader({ serverLoader }: ClientLoaderFunctionArgs) {
   // Fast auth — getSession reads local cache, no network call.
   // Parent _protected loader already validated with getUser().
   const { supabaseMinimal: supabase } = await import('../lib/supabaseMinimal')
-  const { data: { session } } = await supabase.auth.getSession()
+  const {
+    data: { session },
+  } = await supabase.auth.getSession()
   if (!session?.user) return { squads: [], sessions: [] }
   const userId = session.user.id
 
@@ -113,18 +115,22 @@ export async function clientLoader({ serverLoader }: ClientLoaderFunctionArgs) {
   let squads: SquadSummary[]
   if (cached !== undefined) {
     squads = cached.map((s: any) => ({
-      id: s.id, name: s.name, game: s.game,
-      invite_code: s.invite_code, owner_id: s.owner_id, created_at: s.created_at,
+      id: s.id,
+      name: s.name,
+      game: s.game,
+      invite_code: s.invite_code,
+      owner_id: s.owner_id,
+      created_at: s.created_at,
     }))
   } else {
     const { withTimeout } = await import('../lib/withTimeout')
-    const { data: memberships } = await withTimeout(
+    const { data: memberships } = (await withTimeout(
       supabase
         .from('squad_members')
         .select('squad_id, squads!inner(id, name, game, invite_code, owner_id, created_at)')
         .eq('user_id', userId),
       5000
-    ) as any
+    )) as any
     squads = (memberships as SessionMembershipRow[] | null)?.map((m) => m.squads) || []
   }
 
@@ -132,22 +138,25 @@ export async function clientLoader({ serverLoader }: ClientLoaderFunctionArgs) {
   let sessions: SessionWithRsvp[] = []
   if (squadIds.length > 0) {
     const { withTimeout } = await import('../lib/withTimeout')
-    const { data: sessionsData } = await withTimeout(
+    const { data: sessionsData } = (await withTimeout(
       supabase
-        .from('sessions').select('*').in('squad_id', squadIds)
+        .from('sessions')
+        .select('*')
+        .in('squad_id', squadIds)
         .order('scheduled_at', { ascending: true }),
       5000
-    ) as any
+    )) as any
 
     if (sessionsData?.length) {
       const sessionIds = (sessionsData as unknown as Session[]).map((s: Session) => s.id)
-      const { data: allRsvps } = await withTimeout(
+      const { data: allRsvps } = (await withTimeout(
         supabase.from('session_rsvps').select('*').in('session_id', sessionIds),
         5000
-      ) as any
+      )) as any
 
       sessions = (sessionsData as unknown as Session[]).map((session: Session) => {
-        const sessionRsvps = (allRsvps as SessionRsvp[] | null)?.filter((r) => r.session_id === session.id) || []
+        const sessionRsvps =
+          (allRsvps as SessionRsvp[] | null)?.filter((r) => r.session_id === session.id) || []
         return {
           ...session,
           my_rsvp: sessionRsvps.find((r) => r.user_id === userId)?.response || null,

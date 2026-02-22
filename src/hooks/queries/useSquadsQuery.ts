@@ -22,7 +22,8 @@ export interface SquadWithMembers extends Squad {
 async function fetchSquads(userId: string): Promise<SquadWithMembers[]> {
   const { data: memberships, error: memberError } = await supabase
     .from('squad_members')
-    .select(`
+    .select(
+      `
       squad_id,
       squads!inner (
         id,
@@ -33,7 +34,8 @@ async function fetchSquads(userId: string): Promise<SquadWithMembers[]> {
         total_members,
         created_at
       )
-    `)
+    `
+    )
     .eq('user_id', userId)
 
   if (memberError) throw memberError

@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from 'react'
 import { m, useMotionValue, useSpring } from 'framer-motion'
 import { useReducedMotion } from '../../hooks/useReducedMotion'

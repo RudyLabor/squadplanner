@@ -1,4 +1,3 @@
-
 import { memo, useCallback, useState } from 'react'
 import { Link } from 'react-router'
 import { Search, LayoutGrid, Compass, User, Settings, HelpCircle, Phone, Gift } from '../icons'
@@ -61,7 +60,10 @@ export const TopBar = memo(function TopBar() {
       </header>
 
       {/* Mobile top bar - search + notifications (safe-area-pt for Dynamic Island / notch) */}
-      <header role="banner" className="mobile-only items-center justify-end gap-2 px-4 pt-3 pb-1 safe-area-pt">
+      <header
+        role="banner"
+        className="mobile-only items-center justify-end gap-2 px-4 pt-3 pb-1 safe-area-pt"
+      >
         <button
           onClick={() => setShowMoreMenu(true)}
           className="w-10 h-10 rounded-xl bg-surface-card flex items-center justify-center hover:bg-border-hover transition-colors"

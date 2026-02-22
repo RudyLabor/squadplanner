@@ -43,9 +43,7 @@ const mobileNavLeft = [
   { path: '/sessions', icon: Calendar, label: 'Sessions' },
 ] as const
 
-const mobileNavRight = [
-  { path: '/messages', icon: MessageCircle, label: 'Messages' },
-] as const
+const mobileNavRight = [{ path: '/messages', icon: MessageCircle, label: 'Messages' }] as const
 
 // OPTIMIZED: Memoized MobileNavLink
 const MobileNavLink = memo(function MobileNavLink({

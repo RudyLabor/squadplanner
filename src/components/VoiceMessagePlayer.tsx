@@ -1,4 +1,3 @@
-
 import { useState, useRef, memo, useCallback, useEffect } from 'react'
 import { m } from 'framer-motion'
 import { Play, Pause, Mic } from './icons'

@@ -6,7 +6,7 @@ import { scrollReveal, scrollRevealLight, springTap } from '../utils/animations'
 import { useState } from 'react'
 
 const features = [
-  { category: 'Organisation', name: 'Calendrier d\'événements', guilded: true, squadPlanner: true },
+  { category: 'Organisation', name: "Calendrier d'événements", guilded: true, squadPlanner: true },
   { category: 'Organisation', name: 'Événements récurrents', guilded: false, squadPlanner: true },
   { category: 'Organisation', name: 'Rappels automatiques', guilded: false, squadPlanner: true },
   { category: 'Organisation', name: 'RSVP avec fiabilité', guilded: true, squadPlanner: true },
@@ -18,40 +18,46 @@ const features = [
   { category: 'Fiabilité', name: 'Historique de présence', guilded: false, squadPlanner: true },
   { category: 'Analytics', name: 'Statistiques RSVP', guilded: false, squadPlanner: true },
   { category: 'Analytics', name: 'Taux de présence', guilded: false, squadPlanner: true },
-  { category: 'Analytics', name: 'Insights par joueur', guilded: false, squadPlanner: true }
+  { category: 'Analytics', name: 'Insights par joueur', guilded: false, squadPlanner: true },
 ]
 
 const faqs = [
   {
     id: 'why-not-guilded',
     question: 'Pourquoi pas rester sur Guilded ?',
-    answer: 'Guilded a fermé, point final. Squad Planner, c\'est taillé pour tes sessions : récurrence, notif push, stats de fiabilité. Guilded, c\'était juste une commu. On gère l\'organisation gaming. C\'est plus rapide, plus réactif.'
+    answer:
+      "Guilded a fermé, point final. Squad Planner, c'est taillé pour tes sessions : récurrence, notif push, stats de fiabilité. Guilded, c'était juste une commu. On gère l'organisation gaming. C'est plus rapide, plus réactif.",
   },
   {
     id: 'migration-easy',
     question: 'Je peux importer mes données ?',
-    answer: 'Oui. Si t\'as tes squads documentés, on te facilite le move. Support direct pour une migration sans galère.'
+    answer:
+      "Oui. Si t'as tes squads documentés, on te facilite le move. Support direct pour une migration sans galère.",
   },
   {
     id: 'premium-worth',
-    question: 'C\'est quoi Premium ?',
-    answer: 'Premium, c\'est : analytics avancées, custom squads, API. Mais calendrier, RSVP, notif push ? Gratuit. L\'essentiel, c\'est gratuit.'
+    question: "C'est quoi Premium ?",
+    answer:
+      "Premium, c'est : analytics avancées, custom squads, API. Mais calendrier, RSVP, notif push ? Gratuit. L'essentiel, c'est gratuit.",
   },
   {
     id: 'both-platforms',
     question: 'Je peux utiliser Squad Planner ET Discord ?',
-    answer: 'Oui. Discord = pour parler. Squad Planner = pour organiser. Les notifs arrivent dans Discord. Tout est branché. Combo parfait.'
+    answer:
+      'Oui. Discord = pour parler. Squad Planner = pour organiser. Les notifs arrivent dans Discord. Tout est branché. Combo parfait.',
   },
   {
     id: 'other-games',
     question: 'Ça marche pour tous les jeux ?',
-    answer: 'Oui. Valorant, CS2, Apex, Fortnite, Dota 2, les petits jeux obscurs. Squad Planner gère tout. C\'est agnostique du jeu.'
+    answer:
+      "Oui. Valorant, CS2, Apex, Fortnite, Dota 2, les petits jeux obscurs. Squad Planner gère tout. C'est agnostique du jeu.",
   },
   {
     id: 'data-safety',
     question: 'Mais Squad Planner fermera aussi un jour ?',
-    answer: 'Squad Planner est viable. On innove, on croît. Mais même si ça arrive (spoiler: ça arrivera pas), tu peux exporter tes données quand tu veux. Zéro piège.'
-  }
+    answer:
+      'Squad Planner est viable. On innove, on croît. Mais même si ça arrive (spoiler: ça arrivera pas), tu peux exporter tes données quand tu veux. Zéro piège.',
+  },
 ]
 
 export default function VsGuildedVsSquadPlanner() {
@@ -103,7 +109,8 @@ export default function VsGuildedVsSquadPlanner() {
             viewport={{ once: true }}
             className="text-lg md:text-xl text-text-tertiary mb-10 max-w-2xl mx-auto leading-relaxed"
           >
-            Guilded a fermé. Squad Planner est l'alternative gaming que tu attendais. Tous les détails, tous les chiffres.
+            Guilded a fermé. Squad Planner est l'alternative gaming que tu attendais. Tous les
+            détails, tous les chiffres.
           </m.p>
 
           {/* CTAs */}
@@ -140,13 +147,17 @@ export default function VsGuildedVsSquadPlanner() {
       {/* Feature Table */}
       <section className="px-4 md:px-6 py-12 md:py-16">
         <div className="max-w-5xl mx-auto">
-          <m.div variants={scrollReveal} initial="hidden" whileInView="visible" viewport={{ once: true }} className="text-center mb-12">
+          <m.div
+            variants={scrollReveal}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            className="text-center mb-12"
+          >
             <h2 className="text-xl md:text-2xl font-bold text-text-primary mb-4">
               Guilded vs Squad Planner : comparaison complète
             </h2>
-            <p className="text-text-tertiary text-lg">
-              Tous les détails, sans filtre
-            </p>
+            <p className="text-text-tertiary text-lg">Tous les détails, sans filtre</p>
           </m.div>
 
           <m.div
@@ -160,9 +171,15 @@ export default function VsGuildedVsSquadPlanner() {
               <table className="w-full">
                 <thead>
                   <tr className="bg-surface-card border-b border-border-subtle">
-                    <th className="px-6 py-4 text-left font-semibold text-text-primary">Fonctionnalité</th>
-                    <th className="px-6 py-4 text-center font-semibold text-text-secondary">Guilded</th>
-                    <th className="px-6 py-4 text-center font-semibold text-primary">Squad Planner</th>
+                    <th className="px-6 py-4 text-left font-semibold text-text-primary">
+                      Fonctionnalité
+                    </th>
+                    <th className="px-6 py-4 text-center font-semibold text-text-secondary">
+                      Guilded
+                    </th>
+                    <th className="px-6 py-4 text-center font-semibold text-primary">
+                      Squad Planner
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
@@ -174,7 +191,9 @@ export default function VsGuildedVsSquadPlanner() {
                       <td className="px-6 py-4">
                         <div className="font-semibold text-text-primary">{feature.name}</div>
                         {feature.category && (
-                          <div className="text-xs text-text-tertiary mt-1 font-medium uppercase tracking-wider">{feature.category}</div>
+                          <div className="text-xs text-text-tertiary mt-1 font-medium uppercase tracking-wider">
+                            {feature.category}
+                          </div>
                         )}
                       </td>
                       <td className="px-6 py-4 text-center">
@@ -205,13 +224,17 @@ export default function VsGuildedVsSquadPlanner() {
       {/* Pricing */}
       <section className="px-4 md:px-6 py-12 md:py-16 bg-gradient-to-b from-transparent to-purple/[0.015]">
         <div className="max-w-5xl mx-auto">
-          <m.div variants={scrollReveal} initial="hidden" whileInView="visible" viewport={{ once: true }} className="text-center mb-12">
+          <m.div
+            variants={scrollReveal}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            className="text-center mb-12"
+          >
             <h2 className="text-xl md:text-2xl font-bold text-text-primary mb-4">
               Prix : Guilded vs Squad Planner
             </h2>
-            <p className="text-text-tertiary text-lg">
-              C'est où que ça coûte
-            </p>
+            <p className="text-text-tertiary text-lg">C'est où que ça coûte</p>
           </m.div>
 
           <div className="grid md:grid-cols-2 gap-6">
@@ -309,7 +332,9 @@ export default function VsGuildedVsSquadPlanner() {
               className="absolute inset-0"
               animate={{ scale: [1, 1.05, 1], opacity: [0.3, 0.5, 0.3] }}
               transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
-              style={{ background: 'radial-gradient(ellipse at center, #a855f708 0%, transparent 60%)' }}
+              style={{
+                background: 'radial-gradient(ellipse at center, #a855f708 0%, transparent 60%)',
+              }}
             />
             <div className="relative z-10">
               <div className="flex gap-1 mb-6">
@@ -321,28 +346,35 @@ export default function VsGuildedVsSquadPlanner() {
               </div>
               <h3 className="text-2xl font-bold text-text-primary mb-4">Le verdict</h3>
               <p className="text-text-secondary mb-6 leading-relaxed text-lg">
-                Guilded a fermé. Squad Planner, c'est l'orga gaming complète : calendrier, chat, party vocale. Ça complète Discord. C'est le choix logique pour tes sessions.
+                Guilded a fermé. Squad Planner, c'est l'orga gaming complète : calendrier, chat,
+                party vocale. Ça complète Discord. C'est le choix logique pour tes sessions.
               </p>
               <div className="space-y-4">
                 <div className="flex items-start gap-3">
                   <Check className="w-5 h-5 text-emerald-400 flex-shrink-0 mt-0.5" />
                   <div>
                     <strong className="text-text-primary">T'es venu de Guilded ?</strong>
-                    <p className="text-text-secondary mt-1">Squad Planner c'est ton move. Migration simple, fonctionnalités meilleures.</p>
+                    <p className="text-text-secondary mt-1">
+                      Squad Planner c'est ton move. Migration simple, fonctionnalités meilleures.
+                    </p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
                   <Check className="w-5 h-5 text-emerald-400 flex-shrink-0 mt-0.5" />
                   <div>
                     <strong className="text-text-primary">T'utilises Discord ?</strong>
-                    <p className="text-text-secondary mt-1">Ajoute Squad Planner pour l'orga. Les deux se parlent. Parfait ensemble.</p>
+                    <p className="text-text-secondary mt-1">
+                      Ajoute Squad Planner pour l'orga. Les deux se parlent. Parfait ensemble.
+                    </p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
                   <Check className="w-5 h-5 text-emerald-400 flex-shrink-0 mt-0.5" />
                   <div>
                     <strong className="text-text-primary">T'es en squad compétitive ?</strong>
-                    <p className="text-text-secondary mt-1">Squad Planner te donne les stats et la fiabilité. Guilded n'avait pas ça.</p>
+                    <p className="text-text-secondary mt-1">
+                      Squad Planner te donne les stats et la fiabilité. Guilded n'avait pas ça.
+                    </p>
                   </div>
                 </div>
               </div>
@@ -356,7 +388,13 @@ export default function VsGuildedVsSquadPlanner() {
       {/* FAQ */}
       <section className="px-4 md:px-6 py-10 md:py-14">
         <div className="max-w-3xl mx-auto">
-          <m.div variants={scrollReveal} initial="hidden" whileInView="visible" viewport={{ once: true }} className="text-center mb-12">
+          <m.div
+            variants={scrollReveal}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            className="text-center mb-12"
+          >
             <h2 className="text-xl md:text-2xl font-bold text-text-primary mb-4">
               Les questions qu'on te pose tout le temps
             </h2>
@@ -385,7 +423,9 @@ export default function VsGuildedVsSquadPlanner() {
                 </button>
                 <div className={`faq-answer ${openFAQ === i ? 'open' : ''}`}>
                   <div>
-                    <p className="px-5 pb-5 text-md text-text-tertiary leading-relaxed">{faq.answer}</p>
+                    <p className="px-5 pb-5 text-md text-text-tertiary leading-relaxed">
+                      {faq.answer}
+                    </p>
                   </div>
                 </div>
               </m.div>
@@ -414,7 +454,9 @@ export default function VsGuildedVsSquadPlanner() {
               className="absolute inset-0"
               animate={{ scale: [1, 1.05, 1], opacity: [0.3, 0.5, 0.3] }}
               transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
-              style={{ background: 'radial-gradient(ellipse at center, #a855f708 0%, transparent 60%)' }}
+              style={{
+                background: 'radial-gradient(ellipse at center, #a855f708 0%, transparent 60%)',
+              }}
             />
             <div className="relative z-10">
               <m.div

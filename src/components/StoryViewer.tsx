@@ -1,4 +1,3 @@
-
 import { useState } from 'react'
 import { m } from 'framer-motion'
 import { X, ChevronLeft, ChevronRight, Eye } from './icons'

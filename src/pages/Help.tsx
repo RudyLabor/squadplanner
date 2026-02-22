@@ -1,4 +1,3 @@
-
 import { useState } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
 import { HelpCircle, ChevronDown, Search, ArrowLeft } from '../components/icons'
@@ -106,7 +105,10 @@ export function Help() {
             <p className="text-base text-text-tertiary mb-4">Essaie avec d'autres mots-clés</p>
             <button
               type="button"
-              onClick={() => { setSearchQuery(''); setSelectedCategory(null) }}
+              onClick={() => {
+                setSearchQuery('')
+                setSelectedCategory(null)
+              }}
               className="px-4 py-2 rounded-lg bg-primary text-white text-base font-medium hover:bg-primary-hover transition-colors"
             >
               Voir toutes les questions

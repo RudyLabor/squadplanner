@@ -51,7 +51,7 @@ export default function AttendanceHeatmap({ squadId }: { squadId: string }) {
           return
         }
 
-        const sessionIds = sessions.map(s => s.id)
+        const sessionIds = sessions.map((s) => s.id)
 
         // Récupérer les RSVPs
         const { data: rsvps, error: rsvpsError } = await supabase
@@ -68,11 +68,13 @@ export default function AttendanceHeatmap({ squadId }: { squadId: string }) {
 
         // Construire la matrice heatmap
         const heatmapData: AttendanceData[] = []
-        const sessionMap = new Map<string, { id: string; scheduled_at: string }>(sessions.map((s: any) => [s.id, s]))
+        const sessionMap = new Map<string, { id: string; scheduled_at: string }>(
+          sessions.map((s: any) => [s.id, s])
+        )
         const rsvpMap = new Map<string, number>()
 
         // Compter les présences par session
-        rsvps?.forEach(rsvp => {
+        rsvps?.forEach((rsvp) => {
           const count = rsvpMap.get(rsvp.session_id) || 0
           rsvpMap.set(rsvp.session_id, count + 1)
         })
@@ -93,7 +95,7 @@ export default function AttendanceHeatmap({ squadId }: { squadId: string }) {
         // Convertir en array pour le rendu
         let maxAttendance = 1
         DAYS_FR.forEach((_, dayIdx) => {
-          HOURS.forEach(hour => {
+          HOURS.forEach((hour) => {
             const key = `${dayIdx}-${hour}`
             const count = attendanceByDayHour[key] || 0
             heatmapData.push({
@@ -141,7 +143,7 @@ export default function AttendanceHeatmap({ squadId }: { squadId: string }) {
           {/* En-têtes des heures */}
           <div className="flex gap-1">
             <div className="w-24" /> {/* Espace pour les labels de jours */}
-            {HOURS.map(hour => (
+            {HOURS.map((hour) => (
               <div key={hour} className="w-12 text-center text-xs text-text-tertiary font-medium">
                 {hour}h
               </div>
@@ -154,8 +156,8 @@ export default function AttendanceHeatmap({ squadId }: { squadId: string }) {
               <div className="w-24 text-sm font-medium text-text-secondary flex items-center">
                 {day}
               </div>
-              {HOURS.map(hour => {
-                const cellData = data.find(d => d.day === dayIdx && d.hour === hour)
+              {HOURS.map((hour) => {
+                const cellData = data.find((d) => d.day === dayIdx && d.hour === hour)
                 const count = cellData?.count || 0
                 const color = getHeatmapColor(count, maxValue)
 

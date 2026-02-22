@@ -7,7 +7,7 @@ export { useAIStore, useAI } from './useAI'
 export { useSubscriptionStore } from './useSubscription'
 // IMPORTANT: Voice chat hooks now use native WebRTC (LiveKit removed)
 // Import directly where needed:
-//   import { useVoiceChatStore, ... } from '../hooks/useVoiceChat'  
+//   import { useVoiceChatStore, ... } from '../hooks/useVoiceChat'
 //   import { useVoiceCallStore, ... } from '../hooks/useVoiceCall'
 export { useNotificationStore, useSessionNotifications } from './useNotifications'
 export {
@@ -26,7 +26,7 @@ export {
 export type { PremiumFeature } from './usePremium'
 export { useCallHistoryStore, formatDuration, formatRelativeTime } from './useCallHistory'
 export type { CallType, CallRecord, CallHistoryItem } from './useCallHistory'
-// useNetworkQuality now uses native WebRTC — import directly where needed:  
+// useNetworkQuality now uses native WebRTC — import directly where needed:
 //   import { useNetworkQualityStore, ... } from '../hooks/useNetworkQuality'
 export type { NetworkQualityLevel, AudioProfile } from './useNetworkQuality'
 export { useFocusTrap } from './useFocusTrap'

@@ -1,4 +1,3 @@
-
 import { useRef, useEffect, useState } from 'react'
 import { m, useInView } from 'framer-motion'
 import { Crown, Check, Loader2, Gift, ChevronLeft } from '../../components/icons'
@@ -95,16 +94,14 @@ export function PremiumHero({ hasPremium, isLoading, onManageSubscription }: Pre
               </span>
             </h1>
             <p className="text-md md:text-lg text-text-secondary max-w-xl mx-auto mb-8">
-              Débloque tout le potentiel de Squad Planner. Stats avancées, IA coach
-              personnalisé, audio HD et bien plus.
+              Débloque tout le potentiel de Squad Planner. Stats avancées, IA coach personnalisé,
+              audio HD et bien plus.
             </p>
             {hasPremium && (
               <div className="mb-8">
                 <div className="inline-flex items-center gap-3 px-6 py-3 rounded-xl bg-success/05 border border-success/15">
                   <Check className="w-5 h-5 text-success" />
-                  <span className="text-md font-medium text-success">
-                    Tu es déjà Premium !
-                  </span>
+                  <span className="text-md font-medium text-success">Tu es déjà Premium !</span>
                 </div>
                 <div className="mt-5">
                   <button

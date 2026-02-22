@@ -25,8 +25,7 @@ export function meta() {
         '@context': 'https://schema.org',
         '@type': 'WebPage',
         name: 'Programme Ambassadeur Squad Planner',
-        description:
-          'Programme ambassadeur pour streamers et créateurs de contenu gaming.',
+        description: 'Programme ambassadeur pour streamers et créateurs de contenu gaming.',
         url: 'https://squadplanner.fr/ambassador',
       },
     },

@@ -5,7 +5,7 @@ const AlternativeGamerLink = lazy(() => import('../pages/AlternativeGamerLink'))
 
 export function headers() {
   return {
-    'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=86400'
+    'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=86400',
   }
 }
 
@@ -13,66 +13,69 @@ export function meta() {
   const baseUrl = 'https://squadplanner.fr'
   return [
     {
-      title: 'Alternative à GamerLink - Squad Planner'
+      title: 'Alternative à GamerLink - Squad Planner',
     },
     {
       name: 'description',
       content:
-        'GamerLink n\'a pas tout ce dont tu as besoin ? Découvre Squad Planner. Meilleure alternative pour trouver des partenaires et organiser tes sessions gaming.'
+        "GamerLink n'a pas tout ce dont tu as besoin ? Découvre Squad Planner. Meilleure alternative pour trouver des partenaires et organiser tes sessions gaming.",
     },
     {
       name: 'keywords',
-      content: 'alternative GamerLink, matchmaking gaming, Squad Planner, calendrier sessions, RSVP gaming fiable'
+      content:
+        'alternative GamerLink, matchmaking gaming, Squad Planner, calendrier sessions, RSVP gaming fiable',
     },
     {
       tagName: 'link',
       rel: 'canonical',
-      href: `${baseUrl}/alternative/gamerlink`
+      href: `${baseUrl}/alternative/gamerlink`,
     },
     {
       property: 'og:type',
-      content: 'website'
+      content: 'website',
     },
     {
       property: 'og:title',
-      content: 'Alternative à GamerLink - Squad Planner'
+      content: 'Alternative à GamerLink - Squad Planner',
     },
     {
       property: 'og:description',
-      content: 'Trouve des partenaires gaming et organise tes sessions avec Squad Planner. Meilleur que GamerLink. Gratuit et simple.'
+      content:
+        'Trouve des partenaires gaming et organise tes sessions avec Squad Planner. Meilleur que GamerLink. Gratuit et simple.',
     },
     {
       property: 'og:url',
-      content: `${baseUrl}/alternative/gamerlink`
+      content: `${baseUrl}/alternative/gamerlink`,
     },
     {
       property: 'og:image',
-      content: `${baseUrl}/og-alternative-gamerlink.png`
+      content: `${baseUrl}/og-alternative-gamerlink.png`,
     },
     {
       name: 'twitter:card',
-      content: 'summary_large_image'
+      content: 'summary_large_image',
     },
     {
       name: 'twitter:title',
-      content: 'Alternative à GamerLink - Squad Planner'
+      content: 'Alternative à GamerLink - Squad Planner',
     },
     {
       name: 'twitter:description',
-      content: 'Comparaison complète : GamerLink vs Squad Planner. Matchmaking + calendrier + RSVP fiable.'
+      content:
+        'Comparaison complète : GamerLink vs Squad Planner. Matchmaking + calendrier + RSVP fiable.',
     },
     {
       httpEquiv: 'content-language',
-      content: 'fr'
-    }
+      content: 'fr',
+    },
   ]
 }
 
 export const handle = {
   breadcrumb: () => ({
     label: 'Alternative GamerLink',
-    path: '/alternative/gamerlink'
-  })
+    path: '/alternative/gamerlink',
+  }),
 }
 
 export default function Component() {

@@ -1,4 +1,3 @@
-
 import { useState, memo } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
 import { Hash, Volume2, Megaphone, Plus, Trash2, X } from './icons'

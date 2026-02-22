@@ -118,7 +118,7 @@ const BlogCard = m.create(
         </div>
       </Link>
     )
-  },
+  }
 )
 
 export default function BlogIndex() {
@@ -131,7 +131,8 @@ export default function BlogIndex() {
         <div
           className="absolute inset-0"
           style={{
-            background: 'radial-gradient(circle at 50% 0%, var(--color-primary-12) 0%, transparent 60%)',
+            background:
+              'radial-gradient(circle at 50% 0%, var(--color-primary-12) 0%, transparent 60%)',
             filter: 'blur(40px)',
           }}
         />
@@ -171,7 +172,8 @@ export default function BlogIndex() {
             viewport={{ once: true }}
             className="text-lg md:text-xl text-text-tertiary mb-8 max-w-2xl mx-auto leading-relaxed"
           >
-            Guides, astuces et retours d'expérience pour organiser ta squad, éviter les no-shows et jouer plus souvent.
+            Guides, astuces et retours d'expérience pour organiser ta squad, éviter les no-shows et
+            jouer plus souvent.
           </m.p>
 
           {/* Quick stats */}
@@ -252,7 +254,8 @@ export default function BlogIndex() {
             viewport={{ once: true }}
             className="relative p-8 md:p-12 rounded-3xl border text-center overflow-hidden"
             style={{
-              background: 'radial-gradient(ellipse at center, var(--color-primary-10) 0%, transparent 60%)',
+              background:
+                'radial-gradient(ellipse at center, var(--color-primary-10) 0%, transparent 60%)',
               borderColor: 'var(--color-primary-20)',
             }}
           >
@@ -260,7 +263,10 @@ export default function BlogIndex() {
               className="absolute inset-0"
               animate={{ scale: [1, 1.05, 1], opacity: [0.3, 0.5, 0.3] }}
               transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
-              style={{ background: 'radial-gradient(ellipse at center, var(--color-primary-08) 0%, transparent 60%)' }}
+              style={{
+                background:
+                  'radial-gradient(ellipse at center, var(--color-primary-08) 0%, transparent 60%)',
+              }}
             />
             <div className="relative z-10">
               <m.div

@@ -1,4 +1,3 @@
-
 /**
  * Chantier 9 - Session Expired Modal
  *

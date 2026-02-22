@@ -1,4 +1,3 @@
-
 import { memo } from 'react'
 import { m } from 'framer-motion'
 import { CheckCircle2, Gamepad2, UserPlus, Activity } from '../icons'

@@ -38,11 +38,7 @@ export default function SquadAnalytics() {
     <div className="min-h-screen bg-bg-base text-text-primary">
       <div className="max-w-6xl mx-auto px-4 py-6 sm:py-8">
         {/* En-tête */}
-        <m.div
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="mb-8"
-        >
+        <m.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
           <div className="flex items-center gap-3 mb-6">
             <Link
               to={`/squad/${id}`}

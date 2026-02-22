@@ -1,4 +1,3 @@
-
 import { memo } from 'react'
 import { useNavigate } from 'react-router'
 import { ChevronLeft } from '../icons'
@@ -30,7 +29,13 @@ export const MobilePageHeader = memo(function MobilePageHeader({
       >
         <ChevronLeft className="w-6 h-6 text-text-secondary" />
       </button>
-      <p className="text-base font-semibold text-text-primary truncate" role="heading" aria-level={2}>{title}</p>
+      <p
+        className="text-base font-semibold text-text-primary truncate"
+        role="heading"
+        aria-level={2}
+      >
+        {title}
+      </p>
     </div>
   )
 })

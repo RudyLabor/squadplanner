@@ -133,8 +133,7 @@ export function ClubDashboard() {
                   statsData.reduce((sum, m) => sum + (m.reliability_score || 0), 0) /
                   statsData.length
                 avgAttendance =
-                  statsData.reduce((sum, m) => sum + (m.attendance_rate || 0), 0) /
-                  statsData.length
+                  statsData.reduce((sum, m) => sum + (m.attendance_rate || 0), 0) / statsData.length
               }
 
               totalReliability += avgReliability
@@ -351,7 +350,9 @@ export function ClubDashboard() {
               </div>
               <div className="relative z-10">
                 <div className="flex items-center justify-between mb-4">
-                  <span className="text-text-tertiary text-sm font-medium">Sessions cette semaine</span>
+                  <span className="text-text-tertiary text-sm font-medium">
+                    Sessions cette semaine
+                  </span>
                   <div className="w-10 h-10 rounded-lg bg-success/10 flex items-center justify-center">
                     <Calendar className="w-5 h-5 text-success" />
                   </div>
@@ -379,7 +380,9 @@ export function ClubDashboard() {
               </div>
               <div className="relative z-10">
                 <div className="flex items-center justify-between mb-4">
-                  <span className="text-text-tertiary text-sm font-medium">Taux présence moyen</span>
+                  <span className="text-text-tertiary text-sm font-medium">
+                    Taux présence moyen
+                  </span>
                   <div className="w-10 h-10 rounded-lg bg-warning/10 flex items-center justify-center">
                     <Clock className="w-5 h-5 text-warning" />
                   </div>
@@ -492,7 +495,7 @@ export function ClubDashboard() {
                   <p className="text-text-tertiary mb-4">
                     {searchQuery
                       ? 'Aucune squad trouvée'
-                      : 'Tu n\'as pas encore de squad. Crée-en une !'}
+                      : "Tu n'as pas encore de squad. Crée-en une !"}
                   </p>
                   {!searchQuery && (
                     <Link to="/squads">
@@ -529,19 +532,27 @@ export function ClubDashboard() {
 
                             <div className="grid grid-cols-4 gap-2 text-xs">
                               <div className="bg-bg-base/50 rounded-lg p-2 text-center">
-                                <div className="font-bold text-text-primary">{squad.member_count}</div>
+                                <div className="font-bold text-text-primary">
+                                  {squad.member_count}
+                                </div>
                                 <div className="text-text-tertiary">Membres</div>
                               </div>
                               <div className="bg-bg-base/50 rounded-lg p-2 text-center">
-                                <div className="font-bold text-text-primary">{squad.session_count}</div>
+                                <div className="font-bold text-text-primary">
+                                  {squad.session_count}
+                                </div>
                                 <div className="text-text-tertiary">Sessions</div>
                               </div>
                               <div className="bg-bg-base/50 rounded-lg p-2 text-center">
-                                <div className="font-bold text-success">{squad.avg_attendance_rate}%</div>
+                                <div className="font-bold text-success">
+                                  {squad.avg_attendance_rate}%
+                                </div>
                                 <div className="text-text-tertiary">Présence</div>
                               </div>
                               <div className="bg-bg-base/50 rounded-lg p-2 text-center">
-                                <div className="font-bold text-info">{squad.avg_reliability_score}%</div>
+                                <div className="font-bold text-info">
+                                  {squad.avg_reliability_score}%
+                                </div>
                                 <div className="text-text-tertiary">Fiabilité</div>
                               </div>
                             </div>
@@ -588,11 +599,15 @@ export function ClubDashboard() {
                             <p className="font-medium text-text-primary text-sm truncate">
                               {member.username}
                             </p>
-                            <p className="text-xs text-text-tertiary truncate">{member.squad_name}</p>
+                            <p className="text-xs text-text-tertiary truncate">
+                              {member.squad_name}
+                            </p>
                           </div>
                           <div className="ml-2 flex items-center gap-1">
                             <Award className="w-4 h-4 text-warning" />
-                            <span className="font-bold text-text-primary">{member.reliability_score}%</span>
+                            <span className="font-bold text-text-primary">
+                              {member.reliability_score}%
+                            </span>
                           </div>
                         </m.div>
                       ))}

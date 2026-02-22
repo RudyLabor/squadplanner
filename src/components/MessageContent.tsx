@@ -1,4 +1,3 @@
-
 import { memo, useMemo } from 'react'
 import { isLocationMessage, parseLocationMessage, LocationMessage } from './LocationShare'
 import { isPollMessage, parsePollData, ChatPoll } from './ChatPoll'
@@ -19,7 +18,9 @@ const IMAGE_URL_REGEX = /^https?:\/\/\S+\.(gif|webp|png|jpg|jpeg)(\?[^\s]*)?$/i
 
 function isGifUrl(content: string): boolean {
   const trimmed = content.trim()
-  return GIF_URL_REGEX.test(trimmed) || (IMAGE_URL_REGEX.test(trimmed) && trimmed.includes('giphy.com'))
+  return (
+    GIF_URL_REGEX.test(trimmed) || (IMAGE_URL_REGEX.test(trimmed) && trimmed.includes('giphy.com'))
+  )
 }
 
 // URL regex

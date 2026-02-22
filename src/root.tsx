@@ -23,7 +23,16 @@ const PublicPageEffects = lazy(() => import('./PublicPageEffects'))
 const loadFeatures = () => import('framer-motion').then((mod) => mod.domMax)
 
 // Routes that skip the full ClientShell (no sidebar, no heavy hooks)
-const PUBLIC_PATHS = ['/', '/auth', '/onboarding', '/legal', '/help', '/premium', '/maintenance', '/blog']
+const PUBLIC_PATHS = [
+  '/',
+  '/auth',
+  '/onboarding',
+  '/legal',
+  '/help',
+  '/premium',
+  '/maintenance',
+  '/blog',
+]
 function isPublicPath(pathname: string) {
   return (
     PUBLIC_PATHS.includes(pathname) ||
@@ -146,13 +155,17 @@ export function Layout({ children }: { children: React.ReactNode }) {
                   name: 'Squad Planner',
                   alternateName: 'Le Calendly du gaming',
                   url: 'https://squadplanner.fr',
-                  description: "Crée l'habitude de jouer ensemble. Planifie, confirme, joue. Fini les 'on verra'.",
+                  description:
+                    "Crée l'habitude de jouer ensemble. Planifie, confirme, joue. Fini les 'on verra'.",
                   applicationCategory: 'GameApplication',
                   operatingSystem: 'Web, iOS, Android',
                   offers: { '@type': 'Offer', price: '0', priceCurrency: 'EUR' },
                   author: { '@type': 'Organization', name: 'Squad Planner' },
                   inLanguage: 'fr',
-                  potentialAction: { '@type': 'ViewAction', target: 'https://squadplanner.fr/auth' },
+                  potentialAction: {
+                    '@type': 'ViewAction',
+                    target: 'https://squadplanner.fr/auth',
+                  },
                 },
                 {
                   '@type': 'Organization',
@@ -160,15 +173,40 @@ export function Layout({ children }: { children: React.ReactNode }) {
                   url: 'https://squadplanner.fr',
                   logo: 'https://squadplanner.fr/favicon.svg',
                   sameAs: [],
-                  contactPoint: { '@type': 'ContactPoint', email: 'contact@squadplanner.fr', contactType: 'customer support', availableLanguage: 'French' },
+                  contactPoint: {
+                    '@type': 'ContactPoint',
+                    email: 'contact@squadplanner.fr',
+                    contactType: 'customer support',
+                    availableLanguage: 'French',
+                  },
                 },
                 {
                   '@type': 'BreadcrumbList',
                   itemListElement: [
-                    { '@type': 'ListItem', position: 1, name: 'Accueil', item: 'https://squadplanner.fr/' },
-                    { '@type': 'ListItem', position: 2, name: 'Premium', item: 'https://squadplanner.fr/premium' },
-                    { '@type': 'ListItem', position: 3, name: 'Aide', item: 'https://squadplanner.fr/help' },
-                    { '@type': 'ListItem', position: 4, name: 'Découvrir', item: 'https://squadplanner.fr/discover' },
+                    {
+                      '@type': 'ListItem',
+                      position: 1,
+                      name: 'Accueil',
+                      item: 'https://squadplanner.fr/',
+                    },
+                    {
+                      '@type': 'ListItem',
+                      position: 2,
+                      name: 'Premium',
+                      item: 'https://squadplanner.fr/premium',
+                    },
+                    {
+                      '@type': 'ListItem',
+                      position: 3,
+                      name: 'Aide',
+                      item: 'https://squadplanner.fr/help',
+                    },
+                    {
+                      '@type': 'ListItem',
+                      position: 4,
+                      name: 'Découvrir',
+                      item: 'https://squadplanner.fr/discover',
+                    },
                   ],
                 },
               ],

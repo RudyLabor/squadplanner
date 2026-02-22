@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useCallback } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
 import { Users, Gamepad2, MapPin, ChevronDown } from '../icons'
@@ -47,7 +46,11 @@ const PLAYSTYLE_OPTIONS: SelectOption[] = [
   { value: 'both', label: 'Les deux' },
 ]
 
-export function MatchmakingToggle({ profile, updateProfile, autoActivate }: MatchmakingToggleProps) {
+export function MatchmakingToggle({
+  profile,
+  updateProfile,
+  autoActivate,
+}: MatchmakingToggleProps) {
   const [isEnabled, setIsEnabled] = useState(profile?.looking_for_squad ?? false)
   const [selectedGames, setSelectedGames] = useState<string[]>(profile?.preferred_games ?? [])
   const [region, setRegion] = useState<string>(profile?.region ?? '')

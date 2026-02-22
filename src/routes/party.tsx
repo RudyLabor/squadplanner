@@ -77,7 +77,9 @@ export async function clientLoader({ serverLoader }: ClientLoaderFunctionArgs) {
   // Fast auth — getSession reads local cache, no network call.
   // Parent _protected loader already validated with getUser().
   const { supabaseMinimal: supabase } = await import('../lib/supabaseMinimal')
-  const { data: { session } } = await supabase.auth.getSession()
+  const {
+    data: { session },
+  } = await supabase.auth.getSession()
   if (!session?.user) return { squads: [] }
 
   // Reuse squads from React Query cache (seeded by _protected layout)
@@ -86,13 +88,13 @@ export async function clientLoader({ serverLoader }: ClientLoaderFunctionArgs) {
 
   // Fallback: fetch from Supabase (cold cache / first load)
   const { withTimeout } = await import('../lib/withTimeout')
-  const { data: memberships } = await withTimeout(
+  const { data: memberships } = (await withTimeout(
     supabase
       .from('squad_members')
       .select('squad_id, squads!inner(id, name, game, total_members)')
       .eq('user_id', session.user.id),
     5000
-  ) as any
+  )) as any
 
   const squads: PartySquad[] = (
     (memberships as PartyMembershipRow[] | null)?.map((m) => m.squads) || []

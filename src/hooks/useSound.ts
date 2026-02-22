@@ -83,15 +83,15 @@ function playChime(frequencies: number[], interval: number, duration: number, vo
 const SOUNDS: Record<SoundName, () => void> = {
   'message-sent': () => playTone(880, 0.1, 'sine', 0.15),
   'message-received': () => playChime([660, 880], 80, 0.15, 0.12),
-  'notification': () => playChime([523, 659, 784], 100, 0.2, 0.15),
+  notification: () => playChime([523, 659, 784], 100, 0.2, 0.15),
   'rsvp-confirm': () => playChime([523, 659, 784, 1047], 80, 0.25, 0.18),
   'call-join': () => playChime([440, 554, 659], 120, 0.3, 0.2),
   'call-leave': () => playChime([659, 554, 440], 120, 0.3, 0.15),
   'level-up': () => playChime([523, 659, 784, 1047, 1319], 100, 0.4, 0.2),
-  'achievement': () => playChime([784, 988, 1175, 1568], 80, 0.3, 0.2),
-  'error': () => playTone(220, 0.3, 'sawtooth', 0.1),
-  'click': () => playTone(1200, 0.05, 'sine', 0.08),
-  'toggle': () => playTone(1000, 0.06, 'triangle', 0.1),
+  achievement: () => playChime([784, 988, 1175, 1568], 80, 0.3, 0.2),
+  error: () => playTone(220, 0.3, 'sawtooth', 0.1),
+  click: () => playTone(1200, 0.05, 'sine', 0.08),
+  toggle: () => playTone(1000, 0.06, 'triangle', 0.1),
 }
 
 /**
@@ -116,9 +116,7 @@ export function useSound() {
         const hour = new Date().getHours()
         const start = qh.state.startHour ?? 23
         const end = qh.state.endHour ?? 8
-        const isQuiet = start > end
-          ? (hour >= start || hour < end)
-          : (hour >= start && hour < end)
+        const isQuiet = start > end ? hour >= start || hour < end : hour >= start && hour < end
         if (isQuiet) return
       }
     } catch {}

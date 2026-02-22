@@ -97,7 +97,9 @@ export function OnboardingStepInvite({
       {inviteLink && (
         <div className="mb-6">
           <div className="flex items-center gap-2 p-3 rounded-xl bg-surface-card border border-border-subtle">
-            <span className="flex-1 text-sm text-text-secondary truncate text-left">{inviteLink}</span>
+            <span className="flex-1 text-sm text-text-secondary truncate text-left">
+              {inviteLink}
+            </span>
             <button
               type="button"
               onClick={handleCopy}
@@ -142,11 +144,7 @@ export function OnboardingStepInvite({
 
       {/* Actions */}
       <div className="flex flex-col gap-2">
-        <Button
-          onClick={onComplete}
-          disabled={isNavigating}
-          className="w-full"
-        >
+        <Button onClick={onComplete} disabled={isNavigating} className="w-full">
           Continuer
           <ArrowRight className="w-4 h-4 ml-1" />
         </Button>

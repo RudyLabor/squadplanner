@@ -36,7 +36,8 @@ export function Card({
 
   const variants: Record<string, string> = {
     default: 'bg-surface-card border border-border-subtle',
-    elevated: 'bg-surface-card border border-border-subtle shadow-lg shadow-black/5 transition-shadow hover:shadow-xl hover:shadow-black/10',
+    elevated:
+      'bg-surface-card border border-border-subtle shadow-lg shadow-black/5 transition-shadow hover:shadow-xl hover:shadow-black/10',
     outlined: 'bg-surface-card border-2 border-border-default',
     ghost: 'bg-transparent border-none',
     gradient: 'card-gradient-border',
@@ -74,7 +75,12 @@ export function Card({
           ? `0 0 0 1px ${colorMix('var(--color-primary)', 20, 'var(--color-primary-20)')}`
           : undefined,
         backgroundColor: selected
-          ? colorMixBlend('var(--color-primary)', 5, 'var(--color-surface-card)', 'var(--color-surface-card)')
+          ? colorMixBlend(
+              'var(--color-primary)',
+              5,
+              'var(--color-surface-card)',
+              'var(--color-surface-card)'
+            )
           : undefined,
       }}
       onClick={isClickable ? onClick : undefined}

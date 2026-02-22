@@ -1,12 +1,5 @@
-
 import { useState } from 'react'
-import {
-  Zap,
-  Check,
-  Crown,
-  Loader2,
-  X,
-} from './icons'
+import { Zap, Check, Crown, Loader2, X } from './icons'
 import { Button, ResponsiveModal } from './ui'
 import { useSubscriptionStore } from '../hooks'
 import {
@@ -42,7 +35,13 @@ const UPGRADE_TIERS = [
     name: 'Squad Leader',
     monthlyPrice: SQUAD_LEADER_PRICE_MONTHLY,
     yearlyPrice: SQUAD_LEADER_PRICE_YEARLY,
-    highlights: ['Tout Premium', 'Squads illimités', 'Audio HD', 'Dashboard analytics', 'Sessions récurrentes'],
+    highlights: [
+      'Tout Premium',
+      'Squads illimités',
+      'Audio HD',
+      'Dashboard analytics',
+      'Sessions récurrentes',
+    ],
     gradient: 'from-warning to-warning/80',
     borderColor: 'border-warning',
     bgColor: 'bg-warning/5',
@@ -88,7 +87,11 @@ export function PremiumUpgradeModal({
         throw new Error('Plan non trouvé')
       }
 
-      const { url, error } = await createCheckoutSession(priceId, selectedTier, squadId || undefined)
+      const { url, error } = await createCheckoutSession(
+        priceId,
+        selectedTier,
+        squadId || undefined
+      )
 
       if (error) throw error
       if (url) {
@@ -196,7 +199,9 @@ export function PremiumUpgradeModal({
         <div className="space-y-2">
           {activeTier.highlights.map((feat) => (
             <div key={feat} className="flex items-center gap-3 p-3 rounded-xl bg-surface-card">
-              <Check className={`w-4 h-4 flex-shrink-0 ${activeTier.popular ? 'text-warning' : 'text-success'}`} />
+              <Check
+                className={`w-4 h-4 flex-shrink-0 ${activeTier.popular ? 'text-warning' : 'text-success'}`}
+              />
               <span className="text-md text-text-primary">{feat}</span>
             </div>
           ))}

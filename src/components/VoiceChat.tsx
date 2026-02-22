@@ -1,4 +1,3 @@
-import { useEffect, useRef } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
 import { useVoiceChatStore } from '../hooks/useVoiceChat'
 import { useAuthStore, usePremiumStore } from '../hooks'
@@ -6,16 +5,18 @@ import { Button } from './ui'
 
 interface VoiceChatProps {
   sessionId: string
+  squadId: string
   sessionTitle?: string
 }
 
-export function VoiceChat({ sessionId, sessionTitle }: VoiceChatProps) {
+export function VoiceChat({ squadId, sessionTitle }: VoiceChatProps) {
   const { user, profile } = useAuthStore()
   const { hasPremium } = usePremiumStore()
   const {
     isConnected,
     isConnecting,
     isMuted,
+    currentChannel,
     localUser,
     remoteUsers,
     error,
@@ -25,30 +26,14 @@ export function VoiceChat({ sessionId, sessionTitle }: VoiceChatProps) {
     clearError,
   } = useVoiceChatStore()
 
-  const channelName = `session-${sessionId}`
+  const channelName = `squad-${squadId}`
 
-  // Store refs to avoid stale closures in cleanup
-  const isConnectedRef = useRef(isConnected)
-  const leaveChannelRef = useRef(leaveChannel)
-
-  // Update refs in effect to avoid updating during render
-  useEffect(() => {
-    isConnectedRef.current = isConnected
-    leaveChannelRef.current = leaveChannel
-  })
-
-  // Clean up on unmount
-  useEffect(() => {
-    return () => {
-      if (isConnectedRef.current) {
-        leaveChannelRef.current()
-      }
-    }
-  }, [])
+  // Check if already connected to this squad's channel
+  const isConnectedToThisChannel = isConnected && currentChannel === channelName
 
   const handleJoin = async () => {
     if (!user || !profile) return
-    // Premium users get HD audio quality (48kHz stereo, 192 Kbps)
+    if (isConnected) return // Already in a voice channel
     await joinChannel(channelName, user.id, profile.username || 'Anonyme', hasPremium)
   }
 
@@ -98,51 +83,51 @@ export function VoiceChat({ sessionId, sessionTitle }: VoiceChatProps) {
       </AnimatePresence>
 
       {/* Not connected state */}
-      {!isConnected && (
+      {!isConnected && !isConnecting && (
         <div className="text-center py-4">
           <p className="text-secondary text-sm mb-4">
             Rejoins le vocal pour parler avec ta squad pendant la session
           </p>
-          <Button onClick={handleJoin} disabled={isConnecting} className="w-full">
-            {isConnecting ? (
-              <span className="flex items-center gap-2">
-                <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24">
-                  <circle
-                    className="opacity-25"
-                    cx="12"
-                    cy="12"
-                    r="10"
-                    stroke="currentColor"
-                    strokeWidth="4"
-                    fill="none"
-                  />
-                  <path
-                    className="opacity-75"
-                    fill="currentColor"
-                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                  />
-                </svg>
-                Connexion...
-              </span>
-            ) : (
-              <span className="flex items-center gap-2">
-                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"
-                  />
-                </svg>
-                Rejoindre le vocal
-              </span>
-            )}
+          <Button onClick={handleJoin} className="w-full">
+            <span className="flex items-center gap-2">
+              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"
+                />
+              </svg>
+              Rejoindre le vocal
+            </span>
           </Button>
         </div>
       )}
 
-      {/* Connected state */}
-      {isConnected && (
+      {/* Connecting state */}
+      {isConnecting && (
+        <div className="text-center py-4">
+          <span className="flex items-center justify-center gap-2 text-sm text-secondary">
+            <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+            </svg>
+            Connexion...
+          </span>
+        </div>
+      )}
+
+      {/* Connected to a different channel */}
+      {isConnected && !isConnectedToThisChannel && (
+        <div className="text-center py-4">
+          <p className="text-secondary text-sm">
+            Tu es déjà connecté à une autre party vocale.
+          </p>
+        </div>
+      )}
+
+      {/* Connected to this channel */}
+      {isConnectedToThisChannel && (
         <>
           {/* Participants */}
           <div className="space-y-2 mb-4">

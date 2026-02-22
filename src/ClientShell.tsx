@@ -28,6 +28,9 @@ const CommandPalette = lazy(() =>
 const CreateSessionModal = lazy(() =>
   import('./components/CreateSessionModal').then((m) => ({ default: m.CreateSessionModal }))
 )
+const VoiceMiniPlayer = lazy(() =>
+  import('./components/VoiceMiniPlayer').then((m) => ({ default: m.VoiceMiniPlayer }))
+)
 
 // Lazy load shell components - conditional or deferred
 const OfflineBanner = lazy(() =>
@@ -254,6 +257,9 @@ export default function ClientShell() {
           </Suspense>
           <Suspense fallback={null}>
             <CreateSessionModal />
+          </Suspense>
+          <Suspense fallback={null}>
+            <VoiceMiniPlayer />
           </Suspense>
         </>
       )}

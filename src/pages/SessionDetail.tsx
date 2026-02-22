@@ -318,6 +318,7 @@ export default function SessionDetail() {
               </h2>
               <VoiceChat
                 sessionId={id}
+                squadId={currentSession.squad_id}
                 sessionTitle={currentSession.title || currentSession.game || 'Session'}
               />
             </div>

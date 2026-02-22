@@ -105,14 +105,11 @@ test.describe('Visual Regression — Cross-Viewport', () => {
         await dismissCookieBanner(page)
         await page.waitForTimeout(500) // Let animations settle
 
-        await expect(page).toHaveScreenshot(
-          `regression-landing-${viewport.name}-${theme}.png`,
-          {
-            maxDiffPixelRatio: 0.01,
-            fullPage: true,
-            mask: getMasks(page),
-          },
-        )
+        await expect(page).toHaveScreenshot(`regression-landing-${viewport.name}-${theme}.png`, {
+          maxDiffPixelRatio: 0.01,
+          fullPage: true,
+          mask: getMasks(page),
+        })
       })
 
       test(`Auth page ${viewport.name} ${theme}`, async ({ page }) => {
@@ -123,14 +120,11 @@ test.describe('Visual Regression — Cross-Viewport', () => {
         await dismissCookieBanner(page)
         await page.waitForTimeout(500)
 
-        await expect(page).toHaveScreenshot(
-          `regression-auth-${viewport.name}-${theme}.png`,
-          {
-            maxDiffPixelRatio: 0.01,
-            fullPage: true,
-            mask: getMasks(page),
-          },
-        )
+        await expect(page).toHaveScreenshot(`regression-auth-${viewport.name}-${theme}.png`, {
+          maxDiffPixelRatio: 0.01,
+          fullPage: true,
+          mask: getMasks(page),
+        })
       })
     }
   }

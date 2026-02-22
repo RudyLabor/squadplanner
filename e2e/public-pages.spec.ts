@@ -53,8 +53,14 @@ test.describe('Ambassador — /ambassador', () => {
     await dismissCookieBanner(page)
 
     // STRICT: un CTA DOIT etre visible
-    const cta = page.getByRole('link', { name: /Devenir|Postuler|Rejoindre|Commencer|Candidater/i }).first()
-      .or(page.getByRole('button', { name: /Devenir|Postuler|Rejoindre|Commencer|Candidater/i }).first())
+    const cta = page
+      .getByRole('link', { name: /Devenir|Postuler|Rejoindre|Commencer|Candidater/i })
+      .first()
+      .or(
+        page
+          .getByRole('button', { name: /Devenir|Postuler|Rejoindre|Commencer|Candidater/i })
+          .first()
+      )
     await expect(cta).toBeVisible({ timeout: 15000 })
   })
 
@@ -79,7 +85,9 @@ test.describe('Maintenance — /maintenance', () => {
     await dismissCookieBanner(page)
 
     // STRICT: un heading ou un message de maintenance DOIT etre visible
-    const maintenanceText = page.getByText(/maintenance|en cours|indisponible|temporairement/i).first()
+    const maintenanceText = page
+      .getByText(/maintenance|en cours|indisponible|temporairement/i)
+      .first()
     await expect(maintenanceText).toBeVisible({ timeout: 15000 })
   })
 
@@ -135,7 +143,7 @@ test.describe('404 Not Found — route inexistante', () => {
     await expect(notFoundText).toBeVisible({ timeout: 15000 })
   })
 
-  test('la page 404 contient un lien de retour a l\'accueil', async ({ page }) => {
+  test("la page 404 contient un lien de retour a l'accueil", async ({ page }) => {
     await page.goto('/page-qui-nexiste-pas')
     await page.waitForLoadState('networkidle')
     await dismissCookieBanner(page)

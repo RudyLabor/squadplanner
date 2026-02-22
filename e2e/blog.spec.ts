@@ -19,7 +19,9 @@ import { test, expect, dismissCookieBanner } from './fixtures'
 // ============================================================
 
 test.describe('Blog Index — /blog', () => {
-  test('affiche le heading principal "Le Blog" avec le sous-titre "Squad Planner"', async ({ page }) => {
+  test('affiche le heading principal "Le Blog" avec le sous-titre "Squad Planner"', async ({
+    page,
+  }) => {
     await page.goto('/blog')
     await page.waitForLoadState('networkidle')
     await dismissCookieBanner(page)
@@ -46,7 +48,9 @@ test.describe('Blog Index — /blog', () => {
     expect(cardCount).toBeGreaterThan(0)
   })
 
-  test('affiche les cartes d\'articles avec titre, extrait, date et temps de lecture', async ({ page }) => {
+  test("affiche les cartes d'articles avec titre, extrait, date et temps de lecture", async ({
+    page,
+  }) => {
     await page.goto('/blog')
     await page.waitForLoadState('networkidle')
     await dismissCookieBanner(page)
@@ -126,7 +130,7 @@ test.describe('Blog Index — /blog', () => {
 test.describe('Blog Post Detail — /blog/:slug', () => {
   const validSlug = 'guilded-alternatives-2026'
 
-  test('affiche le titre de l\'article et les metadonnees', async ({ page }) => {
+  test("affiche le titre de l'article et les metadonnees", async ({ page }) => {
     await page.goto(`/blog/${validSlug}`)
     await page.waitForLoadState('networkidle')
     await dismissCookieBanner(page)
@@ -151,7 +155,7 @@ test.describe('Blog Post Detail — /blog/:slug', () => {
     await expect(author).toBeVisible({ timeout: 5000 })
   })
 
-  test('affiche le contenu de l\'article avec du texte significatif', async ({ page }) => {
+  test("affiche le contenu de l'article avec du texte significatif", async ({ page }) => {
     await page.goto(`/blog/${validSlug}`)
     await page.waitForLoadState('networkidle')
     await dismissCookieBanner(page)
@@ -165,7 +169,7 @@ test.describe('Blog Post Detail — /blog/:slug', () => {
     expect(articleText!.length).toBeGreaterThan(200)
   })
 
-  test('affiche les tags de l\'article', async ({ page }) => {
+  test("affiche les tags de l'article", async ({ page }) => {
     await page.goto(`/blog/${validSlug}`)
     await page.waitForLoadState('networkidle')
     await dismissCookieBanner(page)
@@ -207,7 +211,7 @@ test.describe('Blog Post Detail — /blog/:slug', () => {
     await expect(cta).toBeVisible({ timeout: 10000 })
   })
 
-  test('les meta tags SEO de l\'article sont corrects', async ({ page }) => {
+  test("les meta tags SEO de l'article sont corrects", async ({ page }) => {
     await page.goto(`/blog/${validSlug}`)
     await page.waitForLoadState('networkidle')
 

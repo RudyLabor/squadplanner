@@ -28,10 +28,7 @@ async function assertA11yStrict(page: import('@playwright/test').Page, context: 
     const details = violations
       .map((v) => `  [${v.impact}] ${v.id}: ${v.description} (${v.nodes.length} instances)`)
       .join('\n')
-    expect(
-      violations.length,
-      `A11y violations on ${context}:\n${details}`
-    ).toBe(0)
+    expect(violations.length, `A11y violations on ${context}:\n${details}`).toBe(0)
   }
 
   // STRICT: explicit zero-check even when the if-block above doesn't trigger
@@ -254,7 +251,9 @@ test.describe('A11y Regression - Premium', () => {
     await dismissCookieBanner(page)
 
     // Find and click the pricing toggle — MUST exist (no catch swallowing)
-    const toggle = page.locator('button:has-text("Annuel"), [role="switch"], input[type="checkbox"]').first()
+    const toggle = page
+      .locator('button:has-text("Annuel"), [role="switch"], input[type="checkbox"]')
+      .first()
     await expect(toggle).toBeVisible({ timeout: 5000 })
     await toggle.click()
     await page.waitForTimeout(500)

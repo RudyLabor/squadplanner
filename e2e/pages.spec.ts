@@ -55,7 +55,9 @@ test.describe('Legal — Page has content', () => {
     expect(mainText!.length).toBeGreaterThan(100)
 
     // STRICT: Legal terms MUST be present in the text content
-    const legalTermLocator = page.getByText(/utilisateur|responsabilité|données|service|droit/i).first()
+    const legalTermLocator = page
+      .getByText(/utilisateur|responsabilité|données|service|droit/i)
+      .first()
     // STRICT: no .catch(() => false) — this MUST be visible
     await expect(legalTermLocator).toBeVisible({ timeout: 5000 })
   })
@@ -105,7 +107,9 @@ test.describe('Legal — Accessible structure', () => {
 // ============================================================
 
 test.describe('Help — Page loads with correct heading', () => {
-  test('should display Help page with heading and search input', async ({ authenticatedPage: page }) => {
+  test('should display Help page with heading and search input', async ({
+    authenticatedPage: page,
+  }) => {
     await page.goto('/help')
     await page.waitForLoadState('networkidle')
     await dismissCookieBanner(page)
@@ -123,7 +127,9 @@ test.describe('Help — Page loads with correct heading', () => {
 })
 
 test.describe('Help — Page has content sections', () => {
-  test('should display FAQ categories, category headings, and questions', async ({ authenticatedPage: page }) => {
+  test('should display FAQ categories, category headings, and questions', async ({
+    authenticatedPage: page,
+  }) => {
     await page.goto('/help')
     await page.waitForLoadState('networkidle')
     await dismissCookieBanner(page)
@@ -154,7 +160,9 @@ test.describe('Help — Page has content sections', () => {
 })
 
 test.describe('Help — Accessible structure and FAQ interaction', () => {
-  test('should have aria-label, focusable search, clickable FAQ, and footer', async ({ authenticatedPage: page }) => {
+  test('should have aria-label, focusable search, clickable FAQ, and footer', async ({
+    authenticatedPage: page,
+  }) => {
     await page.goto('/help')
     await page.waitForLoadState('networkidle')
     await dismissCookieBanner(page)
@@ -177,7 +185,10 @@ test.describe('Help — Accessible structure and FAQ interaction', () => {
     expect(isFocused).toBe(true)
 
     // STRICT: Click first FAQ item — answer MUST appear
-    const firstFaqButton = page.locator('button.w-full').filter({ has: page.locator('span') }).first()
+    const firstFaqButton = page
+      .locator('button.w-full')
+      .filter({ has: page.locator('span') })
+      .first()
     await expect(firstFaqButton).toBeVisible({ timeout: 5000 })
     await firstFaqButton.click()
     await page.waitForTimeout(500)

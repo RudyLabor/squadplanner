@@ -23,7 +23,10 @@ import { test, expect } from './fixtures'
 // F46a — Challenges list matches DB count
 // ============================================================
 test.describe('F46a — Challenges list matches DB count', () => {
-  test('challenges section count matches active challenges in DB', async ({ authenticatedPage: page, db }) => {
+  test('challenges section count matches active challenges in DB', async ({
+    authenticatedPage: page,
+    db,
+  }) => {
     // STRICT: fetch DB data FIRST
     const { challenges } = await db.getChallenges()
     const activeChallengeCount = challenges.length
@@ -45,13 +48,17 @@ test.describe('F46a — Challenges list matches DB count', () => {
 
     // DB has active challenges -> "Challenges" heading MUST appear
     // Scroll to find the challenges section
-    const challengesHeading = page.getByRole('heading', { name: /Challenges/i }).first()
+    const challengesHeading = page
+      .getByRole('heading', { name: /Challenges/i })
+      .first()
       .or(page.getByText('Challenges', { exact: true }).first())
     // STRICT: challenges section MUST be visible
     await expect(challengesHeading).toBeVisible({ timeout: 15000 })
 
     // Verify the count text: "X challenges disponibles"
-    const countText = page.getByText(new RegExp(`${activeChallengeCount}\\s*challenges?\\s*disponibles?`, 'i')).first()
+    const countText = page
+      .getByText(new RegExp(`${activeChallengeCount}\\s*challenges?\\s*disponibles?`, 'i'))
+      .first()
     // STRICT: challenge count MUST match DB exactly
     await expect(countText).toBeVisible({ timeout: 5000 })
   })
@@ -61,7 +68,10 @@ test.describe('F46a — Challenges list matches DB count', () => {
 // F46b — Challenge tabs filter correctly
 // ============================================================
 test.describe('F46b — Challenge tabs filter correctly', () => {
-  test('clicking Quotidien tab filters to daily challenges', async ({ authenticatedPage: page, db }) => {
+  test('clicking Quotidien tab filters to daily challenges', async ({
+    authenticatedPage: page,
+    db,
+  }) => {
     // STRICT: fetch DB data FIRST
     const { challenges } = await db.getChallenges()
     const dailyChallenges = challenges.filter((c: { type: string }) => c.type === 'daily')
@@ -119,7 +129,10 @@ test.describe('F46b — Challenge tabs filter correctly', () => {
 // F47 — Claim XP button state matches DB
 // ============================================================
 test.describe('F47 — Claim XP button state matches DB', () => {
-  test('Reclamer button visible when completed unclaimed challenges exist', async ({ authenticatedPage: page, db }) => {
+  test('Reclamer button visible when completed unclaimed challenges exist', async ({
+    authenticatedPage: page,
+    db,
+  }) => {
     // STRICT: fetch DB data FIRST
     const { challenges, userChallenges } = await db.getChallenges()
 
@@ -136,7 +149,8 @@ test.describe('F47 — Claim XP button state matches DB', () => {
 
     // Find challenges that are completed but XP not yet claimed
     const claimable = userChallenges.filter(
-      (uc: { completed_at: string | null; xp_claimed: boolean }) => uc.completed_at != null && !uc.xp_claimed
+      (uc: { completed_at: string | null; xp_claimed: boolean }) =>
+        uc.completed_at != null && !uc.xp_claimed
     )
 
     await page.goto('/profile')
@@ -151,7 +165,9 @@ test.describe('F47 — Claim XP button state matches DB', () => {
       await expect(claimBtn).toBeVisible({ timeout: 15000 })
 
       // Also verify the "X a reclamer" badge in the Challenges header
-      const claimBadge = page.getByText(new RegExp(`${claimable.length}\\s*à réclamer`, 'i')).first()
+      const claimBadge = page
+        .getByText(new RegExp(`${claimable.length}\\s*à réclamer`, 'i'))
+        .first()
       // STRICT: claimable count badge MUST match DB
       await expect(claimBadge).toBeVisible({ timeout: 5000 })
     } else {
@@ -168,7 +184,10 @@ test.describe('F47 — Claim XP button state matches DB', () => {
 // F48 — Level + XP matches DB
 // ============================================================
 test.describe('F48 — Level + XP matches DB', () => {
-  test('displayed XP and level match profile data from DB', async ({ authenticatedPage: page, db }) => {
+  test('displayed XP and level match profile data from DB', async ({
+    authenticatedPage: page,
+    db,
+  }) => {
     // STRICT: fetch profile FIRST
     const profile = await db.getProfile()
     // STRICT: profile MUST exist
@@ -300,7 +319,10 @@ test.describe('F50 — Streak matches DB', () => {
     // Find the streak number near the fire emoji
     // ProfileActivityCard renders: <span>🔥</span> <span>{streakDays}</span> <span>jours</span>
     // Also the coach card may show "série de X jours"
-    const streakNumber = page.locator('text=/\\d+/').filter({ hasText: String(dbStreak) }).first()
+    const streakNumber = page
+      .locator('text=/\\d+/')
+      .filter({ hasText: String(dbStreak) })
+      .first()
     const hasExactStreak = await streakNumber.isVisible({ timeout: 3000 })
 
     if (!hasExactStreak) {
@@ -317,7 +339,10 @@ test.describe('F50 — Streak matches DB', () => {
 // F51a — Leaderboard on discover
 // ============================================================
 test.describe('F51a — Leaderboard on discover', () => {
-  test('classement tab shows leaderboard entries matching DB', async ({ authenticatedPage: page, db }) => {
+  test('classement tab shows leaderboard entries matching DB', async ({
+    authenticatedPage: page,
+    db,
+  }) => {
     // STRICT: fetch DB data FIRST
     const leaderboard = await db.getLeaderboard(10)
 
@@ -362,7 +387,10 @@ test.describe('F51a — Leaderboard on discover', () => {
 // F51b — Squad leaderboard
 // ============================================================
 test.describe('F51b — Squad leaderboard', () => {
-  test('squad detail shows classement section with member usernames', async ({ authenticatedPage: page, db }) => {
+  test('squad detail shows classement section with member usernames', async ({
+    authenticatedPage: page,
+    db,
+  }) => {
     // STRICT: fetch DB data FIRST
     const squads = await db.getUserSquads()
     // STRICT: user MUST have at least one squad

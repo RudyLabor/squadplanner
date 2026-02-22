@@ -18,23 +18,23 @@ import { test, expect, dismissCookieBanner, loginViaUI } from './fixtures'
 // ============================================================
 const THRESHOLDS = {
   // Navigation timing
-  ttfb: 800,              // Time to First Byte < 800ms
-  pageLoad: 3000,         // Full page load < 3s (loadEventEnd - navigationStart)
+  ttfb: 800, // Time to First Byte < 800ms
+  pageLoad: 3000, // Full page load < 3s (loadEventEnd - navigationStart)
   domContentLoaded: 3000, // DOM Content Loaded < 3s
-  loadComplete: 8000,     // Lenient fallback for SSR pages
+  loadComplete: 8000, // Lenient fallback for SSR pages
 
   // Core Web Vitals
-  fcp: 1800,   // First Contentful Paint < 1.8s
-  lcp: 2500,   // Largest Contentful Paint < 2.5s
-  cls: 0.1,    // Cumulative Layout Shift < 0.1
+  fcp: 1800, // First Contentful Paint < 1.8s
+  lcp: 2500, // Largest Contentful Paint < 2.5s
+  cls: 0.1, // Cumulative Layout Shift < 0.1
 
   // Resource budgets
-  maxRequests: 150,         // Max total HTTP requests
-  maxJsSize: 500_000,      // Max JS transfer size (500KB)
-  maxCssSize: 150_000,     // Max CSS transfer size (150KB)
+  maxRequests: 150, // Max total HTTP requests
+  maxJsSize: 500_000, // Max JS transfer size (500KB)
+  maxCssSize: 150_000, // Max CSS transfer size (150KB)
   maxImageSize: 2_000_000, // Max image transfer size (2MB)
-  maxSingleJsFile: 200_000,  // Max single JS file (200KB)
-  maxSingleImage: 500_000,   // Max single image (500KB)
+  maxSingleJsFile: 200_000, // Max single JS file (200KB)
+  maxSingleImage: 500_000, // Max single image (500KB)
 }
 
 // ============================================================
@@ -92,9 +92,14 @@ async function getResourceMetrics(page: import('@playwright/test').Page) {
 
     return {
       totalRequests: resources.length,
-      jsSize, cssSize, imageSize,
-      jsCount, cssCount, imageCount,
-      largeJsFiles, largeImages,
+      jsSize,
+      cssSize,
+      imageSize,
+      jsCount,
+      cssCount,
+      imageCount,
+      largeJsFiles,
+      largeImages,
     }
   })
 }
@@ -137,7 +142,6 @@ async function measureLCP(page: import('@playwright/test').Page): Promise<number
 // Landing Page — Navigation Timing (TTFB, Page Load)
 // ============================================================
 test.describe('Performance - Landing Page Navigation Timing', () => {
-
   test('Landing page TTFB < 800ms', async ({ page }) => {
     await page.goto('/', { waitUntil: 'networkidle' })
     await page.waitForTimeout(500)
@@ -148,7 +152,10 @@ test.describe('Performance - Landing Page Navigation Timing', () => {
     expect(timing, 'Navigation timing DOIT etre disponible sur la landing page').not.toBeNull()
 
     // STRICT: TTFB (responseStart - requestStart) < 800ms
-    expect(timing!.ttfb, `TTFB DOIT etre < ${THRESHOLDS.ttfb}ms, obtenu: ${timing!.ttfb.toFixed(0)}ms`).toBeLessThan(THRESHOLDS.ttfb)
+    expect(
+      timing!.ttfb,
+      `TTFB DOIT etre < ${THRESHOLDS.ttfb}ms, obtenu: ${timing!.ttfb.toFixed(0)}ms`
+    ).toBeLessThan(THRESHOLDS.ttfb)
   })
 
   test('Landing page load time < 3s (loadEventEnd - navigationStart)', async ({ page }) => {
@@ -184,7 +191,6 @@ test.describe('Performance - Landing Page Navigation Timing', () => {
 // Core Web Vitals — FCP, LCP, CLS
 // ============================================================
 test.describe('Performance - Core Web Vitals', () => {
-
   test('Landing page FCP < 1.8s', async ({ page }) => {
     await page.goto('/', { waitUntil: 'load' })
     await page.waitForTimeout(1000)
@@ -195,7 +201,9 @@ test.describe('Performance - Core Web Vitals', () => {
     expect(fcp, 'FCP DOIT etre mesurable (> 0) sur la landing page').toBeGreaterThan(0)
 
     // STRICT: FCP < 1.8s
-    expect(fcp, `FCP DOIT etre < ${THRESHOLDS.fcp}ms, obtenu: ${fcp.toFixed(0)}ms`).toBeLessThan(THRESHOLDS.fcp)
+    expect(fcp, `FCP DOIT etre < ${THRESHOLDS.fcp}ms, obtenu: ${fcp.toFixed(0)}ms`).toBeLessThan(
+      THRESHOLDS.fcp
+    )
   })
 
   test('Auth page FCP < 1.8s', async ({ page }) => {
@@ -208,7 +216,9 @@ test.describe('Performance - Core Web Vitals', () => {
     expect(fcp, 'FCP DOIT etre mesurable sur la page auth').toBeGreaterThan(0)
 
     // STRICT: FCP < 1.8s
-    expect(fcp, `FCP DOIT etre < ${THRESHOLDS.fcp}ms, obtenu: ${fcp.toFixed(0)}ms`).toBeLessThan(THRESHOLDS.fcp)
+    expect(fcp, `FCP DOIT etre < ${THRESHOLDS.fcp}ms, obtenu: ${fcp.toFixed(0)}ms`).toBeLessThan(
+      THRESHOLDS.fcp
+    )
   })
 
   test('Landing page LCP < 2.5s', async ({ page }) => {
@@ -220,7 +230,9 @@ test.describe('Performance - Core Web Vitals', () => {
     expect(lcp, 'LCP DOIT etre mesurable sur la landing page').toBeGreaterThan(0)
 
     // STRICT: LCP < 2.5s
-    expect(lcp, `LCP DOIT etre < ${THRESHOLDS.lcp}ms, obtenu: ${lcp.toFixed(0)}ms`).toBeLessThan(THRESHOLDS.lcp)
+    expect(lcp, `LCP DOIT etre < ${THRESHOLDS.lcp}ms, obtenu: ${lcp.toFixed(0)}ms`).toBeLessThan(
+      THRESHOLDS.lcp
+    )
   })
 
   test('Auth page LCP < 2.5s', async ({ page }) => {
@@ -232,19 +244,23 @@ test.describe('Performance - Core Web Vitals', () => {
     expect(lcp, 'LCP DOIT etre mesurable sur la page auth').toBeGreaterThan(0)
 
     // STRICT: LCP < 2.5s
-    expect(lcp, `LCP DOIT etre < ${THRESHOLDS.lcp}ms, obtenu: ${lcp.toFixed(0)}ms`).toBeLessThan(THRESHOLDS.lcp)
+    expect(lcp, `LCP DOIT etre < ${THRESHOLDS.lcp}ms, obtenu: ${lcp.toFixed(0)}ms`).toBeLessThan(
+      THRESHOLDS.lcp
+    )
   })
 
   test('Landing page CLS < 0.1', async ({ page }) => {
     // Inject CLS observer BEFORE navigation
     await page.addInitScript(() => {
-      (window as unknown as { __cls: number }).__cls = 0;
-      (window as unknown as { __clsEntries: number }).__clsEntries = 0
+      ;(window as unknown as { __cls: number }).__cls = 0
+      ;(window as unknown as { __clsEntries: number }).__clsEntries = 0
       const observer = new PerformanceObserver((list) => {
         for (const entry of list.getEntries()) {
           if (!(entry as unknown as { hadRecentInput: boolean }).hadRecentInput) {
-            (window as unknown as { __cls: number }).__cls += (entry as unknown as { value: number }).value;
-            (window as unknown as { __clsEntries: number }).__clsEntries++
+            ;(window as unknown as { __cls: number }).__cls += (
+              entry as unknown as { value: number }
+            ).value
+            ;(window as unknown as { __clsEntries: number }).__clsEntries++
           }
         }
       })
@@ -268,7 +284,6 @@ test.describe('Performance - Core Web Vitals', () => {
 // Bundle Size — JS, CSS, Image budgets
 // ============================================================
 test.describe('Performance - Bundle Size Budgets', () => {
-
   test('Landing page total JS transfer < 500KB', async ({ page }) => {
     await page.goto('/', { waitUntil: 'networkidle' })
 
@@ -346,7 +361,6 @@ test.describe('Performance - Bundle Size Budgets', () => {
 // Image Optimization — lazy loading
 // ============================================================
 test.describe('Performance - Image Lazy Loading', () => {
-
   test('Below-the-fold images have loading="lazy" on landing page', async ({ page }) => {
     await page.goto('/', { waitUntil: 'networkidle' })
     await dismissCookieBanner(page)
@@ -369,7 +383,7 @@ test.describe('Performance - Image Lazy Loading', () => {
       // STRICT: All below-the-fold images MUST have loading="lazy"
       expect(
         missingLazy,
-        `Toutes les images sous le fold DOIVENT avoir loading="lazy". Manquants: ${JSON.stringify(missingLazy.map(i => i.src.split('/').pop()))}`
+        `Toutes les images sous le fold DOIVENT avoir loading="lazy". Manquants: ${JSON.stringify(missingLazy.map((i) => i.src.split('/').pop()))}`
       ).toEqual([])
     }
   })
@@ -380,7 +394,9 @@ test.describe('Performance - Image Lazy Loading', () => {
     const imageFormats = await page.evaluate(() => {
       const resources = performance.getEntriesByType('resource') as PerformanceResourceTiming[]
       return resources
-        .filter((r) => r.initiatorType === 'img' || /\.(png|jpg|jpeg|webp|avif|svg|gif)/.test(r.name))
+        .filter(
+          (r) => r.initiatorType === 'img' || /\.(png|jpg|jpeg|webp|avif|svg|gif)/.test(r.name)
+        )
         .map((r) => {
           const name = r.name.split('/').pop() || r.name
           const ext = name.split('.').pop()?.toLowerCase() || 'unknown'
@@ -396,7 +412,7 @@ test.describe('Performance - Image Lazy Loading', () => {
     // STRICT: No large legacy format images (should use webp/avif)
     expect(
       legacyLargeImages.length,
-      `Les images > 10KB DOIVENT utiliser des formats modernes (webp/avif). Format legacy: ${JSON.stringify(legacyLargeImages.map(i => `${i.name} (${(i.size / 1024).toFixed(0)}KB)`))}`
+      `Les images > 10KB DOIVENT utiliser des formats modernes (webp/avif). Format legacy: ${JSON.stringify(legacyLargeImages.map((i) => `${i.name} (${(i.size / 1024).toFixed(0)}KB)`))}`
     ).toBe(0)
   })
 })
@@ -405,12 +421,13 @@ test.describe('Performance - Image Lazy Loading', () => {
 // Critical Resource Preloading
 // ============================================================
 test.describe('Performance - Critical Resource Hints', () => {
-
   test('Landing page has preload hints for critical resources', async ({ page }) => {
     await page.goto('/', { waitUntil: 'networkidle' })
 
     const preloadLinks = await page.evaluate(() => {
-      const links = Array.from(document.querySelectorAll('link[rel="preload"], link[rel="modulepreload"]'))
+      const links = Array.from(
+        document.querySelectorAll('link[rel="preload"], link[rel="modulepreload"]')
+      )
       return links.map((link) => ({
         href: link.getAttribute('href') || '',
         as: link.getAttribute('as') || '',
@@ -493,7 +510,6 @@ test.describe('Performance - Protected Pages Load Time', () => {
 // Console Errors — No critical errors on public pages
 // ============================================================
 test.describe('Performance - Console Error Budget', () => {
-
   test('No critical console errors on public pages', async ({ page }) => {
     const errors: string[] = []
     page.on('console', (msg) => {

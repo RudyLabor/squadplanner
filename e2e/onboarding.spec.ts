@@ -25,8 +25,10 @@ import { test, expect, dismissCookieBanner, loginViaUI } from './fixtures'
 // F06 — Onboarding Page
 // =============================================================================
 test.describe('F06 — Onboarding Page', () => {
-
-  test('F06a: Onboarded user visiting /onboarding is redirected or sees completed state', async ({ authenticatedPage, db }) => {
+  test('F06a: Onboarded user visiting /onboarding is redirected or sees completed state', async ({
+    authenticatedPage,
+    db,
+  }) => {
     // STRICT: verify user has a profile in DB (already onboarded)
     const profile = await db.getProfile()
     expect(profile).toBeTruthy()
@@ -46,7 +48,9 @@ test.describe('F06 — Onboarding Page', () => {
 
     if (wasRedirected) {
       // STRICT: redirected URL MUST be a protected page
-      expect(url).toMatch(/\/(home|squads|squad\/|sessions|messages|party|profile|settings|discover)/)
+      expect(url).toMatch(
+        /\/(home|squads|squad\/|sessions|messages|party|profile|settings|discover)/
+      )
     } else {
       // SSR redirect didn't fire — verify the page at least loaded (no 500 error)
       const pageContent = await authenticatedPage.locator('body').innerText()
@@ -80,8 +84,10 @@ test.describe('F06 — Onboarding Page', () => {
 // F07 — Join Squad via Code
 // =============================================================================
 test.describe('F07 — Join Squad via Code', () => {
-
-  test('F07: Authenticated user can access squads page with join functionality', async ({ authenticatedPage, db }) => {
+  test('F07: Authenticated user can access squads page with join functionality', async ({
+    authenticatedPage,
+    db,
+  }) => {
     // STRICT: verify user exists in DB
     const profile = await db.getProfile()
     expect(profile).toBeTruthy()
@@ -125,7 +131,10 @@ test.describe('F07 — Join Squad via Code', () => {
     }
   })
 
-  test('F07: Join squad input exists when clicking Rejoindre', async ({ authenticatedPage, db }) => {
+  test('F07: Join squad input exists when clicking Rejoindre', async ({
+    authenticatedPage,
+    db,
+  }) => {
     // STRICT: verify user exists
     const userId = await db.getUserId()
     expect(userId).toBeTruthy()
@@ -147,7 +156,9 @@ test.describe('F07 — Join Squad via Code', () => {
 
       // STRICT: apres le clic, un input code DOIT apparaitre
       // The SquadForms component uses placeholder="ABC123" and label="Code d'invitation"
-      const codeInput = authenticatedPage.getByLabel("Code d'invitation").first()
+      const codeInput = authenticatedPage
+        .getByLabel("Code d'invitation")
+        .first()
         .or(authenticatedPage.locator('input[placeholder="ABC123"]').first())
       await expect(codeInput).toBeVisible({ timeout: 5000 })
     } else if (hasJoinLink) {
@@ -155,7 +166,9 @@ test.describe('F07 — Join Squad via Code', () => {
       await authenticatedPage.waitForTimeout(1000)
 
       // STRICT: apres le clic, un input code DOIT apparaitre
-      const codeInput = authenticatedPage.getByLabel("Code d'invitation").first()
+      const codeInput = authenticatedPage
+        .getByLabel("Code d'invitation")
+        .first()
         .or(authenticatedPage.locator('input[placeholder="ABC123"]').first())
       await expect(codeInput).toBeVisible({ timeout: 5000 })
     } else {
@@ -171,7 +184,6 @@ test.describe('F07 — Join Squad via Code', () => {
 // F08 — Profile Setup (DB validation)
 // =============================================================================
 test.describe('F08 — Profile Setup', () => {
-
   test('F08: Profile data in DB has username and timezone from onboarding', async ({ db }) => {
     // STRICT: validate that the test user's profile has onboarding-set fields
     const profile = await db.getProfileFields()
@@ -222,8 +234,10 @@ test.describe('F08 — Profile Setup', () => {
 // F09 — Permissions & Completion
 // =============================================================================
 test.describe('F09 — Permissions & Completion', () => {
-
-  test('F09a: Onboarding localStorage flags are set for completed user', async ({ authenticatedPage, db }) => {
+  test('F09a: Onboarding localStorage flags are set for completed user', async ({
+    authenticatedPage,
+    db,
+  }) => {
     // STRICT: verify user is onboarded in DB
     const profile = await db.getProfile()
     expect(profile).toBeTruthy()
@@ -240,7 +254,10 @@ test.describe('F09 — Permissions & Completion', () => {
     expect(tourCompleted).toBe('true')
   })
 
-  test('F09b: Completed user can navigate to all protected pages', async ({ authenticatedPage, db }) => {
+  test('F09b: Completed user can navigate to all protected pages', async ({
+    authenticatedPage,
+    db,
+  }) => {
     // STRICT: verify user is onboarded
     const profile = await db.getProfile()
     expect(profile).toBeTruthy()

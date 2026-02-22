@@ -27,7 +27,10 @@ test.describe('Profile — /profile', () => {
     await expect(page.getByText(profile.username).first()).toBeVisible({ timeout: 15000 })
   })
 
-  test('affiche le niveau et l\'XP correspondant a la DB', async ({ authenticatedPage: page, db }) => {
+  test("affiche le niveau et l'XP correspondant a la DB", async ({
+    authenticatedPage: page,
+    db,
+  }) => {
     const profile = await db.getProfile()
     expect(profile).toBeTruthy()
     const level = Number(profile.level ?? 1)
@@ -48,7 +51,10 @@ test.describe('Profile — /profile', () => {
     expect(hasLevel || hasXP).toBe(true)
   })
 
-  test('affiche le score de fiabilite correspondant a la DB', async ({ authenticatedPage: page, db }) => {
+  test('affiche le score de fiabilite correspondant a la DB', async ({
+    authenticatedPage: page,
+    db,
+  }) => {
     const profile = await db.getProfile()
     expect(profile).toBeTruthy()
     const reliability = Number(profile.reliability_score ?? 0)
@@ -64,7 +70,10 @@ test.describe('Profile — /profile', () => {
     }
   })
 
-  test('affiche la section Challenges avec le nombre correct de la DB', async ({ authenticatedPage: page, db }) => {
+  test('affiche la section Challenges avec le nombre correct de la DB', async ({
+    authenticatedPage: page,
+    db,
+  }) => {
     const challengeData = await db.getChallenges()
     const activeChallenges = challengeData.challenges
 
@@ -79,7 +88,10 @@ test.describe('Profile — /profile', () => {
     }
   })
 
-  test('affiche la section Badges si des badges existent en DB', async ({ authenticatedPage: page, db }) => {
+  test('affiche la section Badges si des badges existent en DB', async ({
+    authenticatedPage: page,
+    db,
+  }) => {
     const challengeData = await db.getChallenges()
     const badges = challengeData.badges
 
@@ -94,7 +106,10 @@ test.describe('Profile — /profile', () => {
     }
   })
 
-  test('affiche le nombre de squads correspondant a la DB', async ({ authenticatedPage: page, db }) => {
+  test('affiche le nombre de squads correspondant a la DB', async ({
+    authenticatedPage: page,
+    db,
+  }) => {
     const squads = await db.getUserSquads()
     const dbSquadCount = squads.length
 
@@ -135,7 +150,10 @@ test.describe('Profile — /profile', () => {
 // ============================================================
 
 test.describe('Public Profile — /u/:username', () => {
-  test('affiche le profil public avec le username exact de la DB', async ({ authenticatedPage: page, db }) => {
+  test('affiche le profil public avec le username exact de la DB', async ({
+    authenticatedPage: page,
+    db,
+  }) => {
     const profile = await db.getProfile()
     expect(profile).toBeTruthy()
     expect(profile.username).toBeTruthy()
@@ -148,7 +166,10 @@ test.describe('Public Profile — /u/:username', () => {
     await expect(page.getByText(profile.username).first()).toBeVisible({ timeout: 15000 })
   })
 
-  test('affiche le niveau du joueur correspondant a la DB', async ({ authenticatedPage: page, db }) => {
+  test('affiche le niveau du joueur correspondant a la DB', async ({
+    authenticatedPage: page,
+    db,
+  }) => {
     const profile = await db.getProfile()
     expect(profile).toBeTruthy()
     const level = Number(profile.level ?? 1)
@@ -158,11 +179,16 @@ test.describe('Public Profile — /u/:username', () => {
     await dismissTourOverlay(page)
 
     // STRICT: le niveau DB DOIT etre affiche sur le profil public
-    const levelText = page.getByText(new RegExp(`Niveau\\s*${level}|Niv\\.?\\s*${level}|Level\\s*${level}`, 'i')).first()
+    const levelText = page
+      .getByText(new RegExp(`Niveau\\s*${level}|Niv\\.?\\s*${level}|Level\\s*${level}`, 'i'))
+      .first()
     await expect(levelText).toBeVisible({ timeout: 15000 })
   })
 
-  test('affiche le score de fiabilite du joueur correspondant a la DB', async ({ authenticatedPage: page, db }) => {
+  test('affiche le score de fiabilite du joueur correspondant a la DB', async ({
+    authenticatedPage: page,
+    db,
+  }) => {
     const profile = await db.getProfile()
     expect(profile).toBeTruthy()
     const reliability = Number(profile.reliability_score ?? 0)
@@ -178,7 +204,9 @@ test.describe('Public Profile — /u/:username', () => {
     }
   })
 
-  test('affiche "Joueur introuvable" pour un username inexistant', async ({ authenticatedPage: page }) => {
+  test('affiche "Joueur introuvable" pour un username inexistant', async ({
+    authenticatedPage: page,
+  }) => {
     await page.goto('/u/utilisateur-qui-nexiste-pas-xyz123')
     await page.waitForLoadState('networkidle')
     await page.waitForTimeout(2000)

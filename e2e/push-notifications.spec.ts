@@ -19,7 +19,6 @@ import { test, expect, dismissCookieBanner } from './fixtures'
 // F71a — Settings Page: Notification UI
 // =============================================================================
 test.describe('F71a — Settings: Notification Section UI', () => {
-
   test('F71a-1: Settings page shows "Notifications" heading', async ({ authenticatedPage, db }) => {
     // STRICT: fetch DB first — confirm user exists
     const profile = await db.getProfile()
@@ -31,38 +30,58 @@ test.describe('F71a — Settings: Notification Section UI', () => {
 
     // STRICT: Notification heading MUST be visible
     const notifHeading = authenticatedPage.getByRole('heading', { name: /Notifications/i }).first()
-    await expect(notifHeading, 'Le heading "Notifications" DOIT etre visible dans Settings').toBeVisible({ timeout: 10000 })
+    await expect(
+      notifHeading,
+      'Le heading "Notifications" DOIT etre visible dans Settings'
+    ).toBeVisible({ timeout: 10000 })
   })
 
-  test('F71a-2: Notification toggles are present (Sessions, Messages, Party vocale, Rappels)', async ({ authenticatedPage }) => {
+  test('F71a-2: Notification toggles are present (Sessions, Messages, Party vocale, Rappels)', async ({
+    authenticatedPage,
+  }) => {
     await authenticatedPage.goto('/settings')
     await authenticatedPage.waitForLoadState('networkidle')
     await authenticatedPage.waitForTimeout(1500)
 
     // STRICT: Find the notifications card/section
     const notifSection = authenticatedPage.locator('#notifications')
-    await expect(notifSection, 'La section #notifications DOIT exister').toBeAttached({ timeout: 10000 })
+    await expect(notifSection, 'La section #notifications DOIT exister').toBeAttached({
+      timeout: 10000,
+    })
 
     // STRICT: At least 4 toggles (Sessions, Messages, Party vocale, Rappels automatiques)
     const toggles = notifSection.locator('[role="switch"]')
     const toggleCount = await toggles.count()
-    expect(toggleCount, 'Il DOIT y avoir au moins 4 toggles de notification').toBeGreaterThanOrEqual(4)
+    expect(
+      toggleCount,
+      'Il DOIT y avoir au moins 4 toggles de notification'
+    ).toBeGreaterThanOrEqual(4)
 
     // STRICT: Specific category labels MUST be visible inside the notification section
     const sessionsLabel = notifSection.getByText(/Sessions/i).first()
-    await expect(sessionsLabel, 'Le label "Sessions" DOIT etre visible').toBeVisible({ timeout: 5000 })
+    await expect(sessionsLabel, 'Le label "Sessions" DOIT etre visible').toBeVisible({
+      timeout: 5000,
+    })
 
     const messagesLabel = notifSection.getByText(/Messages/i).first()
-    await expect(messagesLabel, 'Le label "Messages" DOIT etre visible').toBeVisible({ timeout: 5000 })
+    await expect(messagesLabel, 'Le label "Messages" DOIT etre visible').toBeVisible({
+      timeout: 5000,
+    })
 
     const partyLabel = notifSection.getByText(/Party vocale/i).first()
-    await expect(partyLabel, 'Le label "Party vocale" DOIT etre visible').toBeVisible({ timeout: 5000 })
+    await expect(partyLabel, 'Le label "Party vocale" DOIT etre visible').toBeVisible({
+      timeout: 5000,
+    })
 
     const remindersLabel = notifSection.getByText(/Rappels/i).first()
-    await expect(remindersLabel, 'Le label "Rappels" DOIT etre visible').toBeVisible({ timeout: 5000 })
+    await expect(remindersLabel, 'Le label "Rappels" DOIT etre visible').toBeVisible({
+      timeout: 5000,
+    })
   })
 
-  test('F71a-3: Each toggle has a valid aria-checked state (true or false)', async ({ authenticatedPage }) => {
+  test('F71a-3: Each toggle has a valid aria-checked state (true or false)', async ({
+    authenticatedPage,
+  }) => {
     await authenticatedPage.goto('/settings')
     await authenticatedPage.waitForLoadState('networkidle')
     await authenticatedPage.waitForTimeout(1500)
@@ -88,7 +107,6 @@ test.describe('F71a — Settings: Notification Section UI', () => {
 // F71b — Notification Permission State reflected in UI
 // =============================================================================
 test.describe('F71b — Notification Permission State', () => {
-
   test('F71b-1: Browser Notification API is available', async ({ authenticatedPage }) => {
     await authenticatedPage.goto('/home')
     await authenticatedPage.waitForLoadState('networkidle')
@@ -116,7 +134,9 @@ test.describe('F71b — Notification Permission State', () => {
     ).toContain(permissionState)
   })
 
-  test('F71b-3: Settings page notification section reflects permission state coherently', async ({ authenticatedPage }) => {
+  test('F71b-3: Settings page notification section reflects permission state coherently', async ({
+    authenticatedPage,
+  }) => {
     // First get the browser permission state
     await authenticatedPage.goto('/home')
     await authenticatedPage.waitForLoadState('networkidle')
@@ -131,7 +151,10 @@ test.describe('F71b — Notification Permission State', () => {
 
     // STRICT: The notification section MUST exist regardless of permission state
     const notifSection = authenticatedPage.locator('#notifications')
-    await expect(notifSection, 'La section #notifications DOIT exister meme si permission est denied').toBeAttached({ timeout: 10000 })
+    await expect(
+      notifSection,
+      'La section #notifications DOIT exister meme si permission est denied'
+    ).toBeAttached({ timeout: 10000 })
 
     // STRICT: Toggles MUST be present and interactable
     const toggles = notifSection.locator('[role="switch"]')
@@ -144,7 +167,6 @@ test.describe('F71b — Notification Permission State', () => {
 // F71c — Service Worker & Push Subscription
 // =============================================================================
 test.describe('F71c — Service Worker Registration', () => {
-
   test('F71c-1: Service worker is registered in the browser', async ({ authenticatedPage }) => {
     await authenticatedPage.goto('/home')
     await authenticatedPage.waitForLoadState('networkidle')
@@ -195,7 +217,10 @@ test.describe('F71c — Service Worker Registration', () => {
     })
 
     // STRICT: PushManager DOIT etre disponible
-    expect(pushManagerAvailable, 'PushManager DOIT etre disponible via navigator.serviceWorker.ready').toBe(true)
+    expect(
+      pushManagerAvailable,
+      'PushManager DOIT etre disponible via navigator.serviceWorker.ready'
+    ).toBe(true)
   })
 })
 
@@ -203,7 +228,6 @@ test.describe('F71c — Service Worker Registration', () => {
 // F71d — Push Subscriptions in DB
 // =============================================================================
 test.describe('F71d — Push Subscriptions DB Validation', () => {
-
   test('F71d-1: push_subscriptions table is queryable for test user', async ({ db }) => {
     // STRICT: The query MUST succeed and return an array
     const subs = await db.getPushSubscriptions()
@@ -219,7 +243,10 @@ test.describe('F71d — Push Subscriptions DB Validation', () => {
         // STRICT: endpoint MUST be a valid HTTPS URL
         expect(sub.endpoint, 'endpoint DOIT etre une string').toBeTruthy()
         expect(typeof sub.endpoint, 'endpoint DOIT etre de type string').toBe('string')
-        expect(sub.endpoint.startsWith('https://'), `endpoint DOIT commencer par https://, obtenu: ${sub.endpoint}`).toBe(true)
+        expect(
+          sub.endpoint.startsWith('https://'),
+          `endpoint DOIT commencer par https://, obtenu: ${sub.endpoint}`
+        ).toBe(true)
 
         // STRICT: user_id MUST match the test user
         expect(sub.user_id, 'user_id DOIT correspondre au test user').toBe(userId)
@@ -235,8 +262,9 @@ test.describe('F71d — Push Subscriptions DB Validation', () => {
 // F71e — Toggle Interaction
 // =============================================================================
 test.describe('F71e — Notification Toggle Interaction', () => {
-
-  test('F71e-1: Clicking a notification toggle changes its aria-checked state', async ({ authenticatedPage }) => {
+  test('F71e-1: Clicking a notification toggle changes its aria-checked state', async ({
+    authenticatedPage,
+  }) => {
     await authenticatedPage.goto('/settings')
     await authenticatedPage.waitForLoadState('networkidle')
     await authenticatedPage.waitForTimeout(1500)
@@ -247,7 +275,9 @@ test.describe('F71e — Notification Toggle Interaction', () => {
 
     // STRICT: Read initial state
     const initialChecked = await firstToggle.getAttribute('aria-checked')
-    expect(['true', 'false'], 'aria-checked initial DOIT etre true ou false').toContain(initialChecked)
+    expect(['true', 'false'], 'aria-checked initial DOIT etre true ou false').toContain(
+      initialChecked
+    )
 
     // STRICT: Click the toggle
     await firstToggle.click()
@@ -266,7 +296,9 @@ test.describe('F71e — Notification Toggle Interaction', () => {
     expect(restoredChecked, 'Le toggle DOIT revenir a son etat initial').toBe(initialChecked)
   })
 
-  test('F71e-2: Toggle state persists in localStorage after change', async ({ authenticatedPage }) => {
+  test('F71e-2: Toggle state persists in localStorage after change', async ({
+    authenticatedPage,
+  }) => {
     await authenticatedPage.goto('/settings')
     await authenticatedPage.waitForLoadState('networkidle')
     await authenticatedPage.waitForTimeout(1500)
@@ -283,7 +315,10 @@ test.describe('F71e — Notification Toggle Interaction', () => {
     const savedSettings = await authenticatedPage.evaluate(() => {
       return localStorage.getItem('sq-notification-settings')
     })
-    expect(savedSettings, 'sq-notification-settings DOIT etre sauvegarde dans localStorage').toBeTruthy()
+    expect(
+      savedSettings,
+      'sq-notification-settings DOIT etre sauvegarde dans localStorage'
+    ).toBeTruthy()
 
     // STRICT: The saved value MUST be valid JSON
     const parsed = JSON.parse(savedSettings!)
@@ -299,7 +334,6 @@ test.describe('F71e — Notification Toggle Interaction', () => {
 // F71f — Onboarding Notification Permission Prompt
 // =============================================================================
 test.describe('F71f — Onboarding Permission Prompt', () => {
-
   test('F71f-1: Onboarding step permissions page exists and is navigable', async ({ page }) => {
     // Visit the onboarding permissions step directly (public route)
     await page.goto('/onboarding')
@@ -316,17 +350,20 @@ test.describe('F71f — Onboarding Permission Prompt', () => {
 // F71g — Notification Banner/Toast UI Component
 // =============================================================================
 test.describe('F71g — Notification UI Components', () => {
-
-  test('F71g-1: NotificationCenter icon is present in the top bar after auth', async ({ authenticatedPage }) => {
+  test('F71g-1: NotificationCenter icon is present in the top bar after auth', async ({
+    authenticatedPage,
+  }) => {
     await authenticatedPage.goto('/home')
     await authenticatedPage.waitForLoadState('networkidle')
     await authenticatedPage.waitForTimeout(2000)
 
     // STRICT: The notification bell icon MUST exist in the top bar or header
     // It can be a button with aria-label or a link with bell icon
-    const bellButton = authenticatedPage.locator(
-      'button[aria-label*="Notification" i], button[aria-label*="notification" i], a[aria-label*="Notification" i], [data-testid="notification-bell"]'
-    ).first()
+    const bellButton = authenticatedPage
+      .locator(
+        'button[aria-label*="Notification" i], button[aria-label*="notification" i], a[aria-label*="Notification" i], [data-testid="notification-bell"]'
+      )
+      .first()
     const bellIcon = authenticatedPage.locator('header svg, nav svg').first()
 
     // STRICT: At least the header must have interactive SVG icons
@@ -338,7 +375,9 @@ test.describe('F71g — Notification UI Components', () => {
     ).toBe(true)
   })
 
-  test('F71g-2: Settings page notification section has descriptive text for each category', async ({ authenticatedPage }) => {
+  test('F71g-2: Settings page notification section has descriptive text for each category', async ({
+    authenticatedPage,
+  }) => {
     await authenticatedPage.goto('/settings')
     await authenticatedPage.waitForLoadState('networkidle')
     await authenticatedPage.waitForTimeout(1500)
@@ -347,12 +386,20 @@ test.describe('F71g — Notification UI Components', () => {
 
     // STRICT: Description texts MUST exist alongside toggle labels
     const sessionsDesc = notifSection.getByText(/Rappels et confirmations/i).first()
-    await expect(sessionsDesc, 'La description des notifications sessions DOIT etre visible').toBeVisible({ timeout: 5000 })
+    await expect(
+      sessionsDesc,
+      'La description des notifications sessions DOIT etre visible'
+    ).toBeVisible({ timeout: 5000 })
 
     const messagesDesc = notifSection.getByText(/Nouveaux messages/i).first()
-    await expect(messagesDesc, 'La description des notifications messages DOIT etre visible').toBeVisible({ timeout: 5000 })
+    await expect(
+      messagesDesc,
+      'La description des notifications messages DOIT etre visible'
+    ).toBeVisible({ timeout: 5000 })
 
     const partyDesc = notifSection.getByText(/rejoint la party/i).first()
-    await expect(partyDesc, 'La description des notifications party DOIT etre visible').toBeVisible({ timeout: 5000 })
+    await expect(partyDesc, 'La description des notifications party DOIT etre visible').toBeVisible(
+      { timeout: 5000 }
+    )
   })
 })

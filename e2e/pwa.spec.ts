@@ -25,7 +25,6 @@ import { navigateWithFallback, dismissTourOverlay } from './fixtures'
 // Manifest Validation
 // =============================================================================
 test.describe('PWA — Manifest validation', () => {
-
   test('PWA01: le manifest.json est accessible et retourne un JSON valide', async ({ page }) => {
     const response = await page.goto('https://squadplanner.fr/manifest.json')
 
@@ -154,7 +153,6 @@ test.describe('PWA — Manifest validation', () => {
 // Service Worker
 // =============================================================================
 test.describe('PWA — Service Worker', () => {
-
   test('PWA09: le fichier sw.js est accessible et contient du JavaScript', async ({ page }) => {
     const response = await page.goto('https://squadplanner.fr/sw.js')
 
@@ -210,7 +208,6 @@ test.describe('PWA — Service Worker', () => {
 // Meta Tags (theme-color, apple-touch-icon)
 // =============================================================================
 test.describe('PWA — Meta tags HTML', () => {
-
   test('PWA12: la meta tag theme-color existe dans le DOM', async ({ page }) => {
     await page.goto('https://squadplanner.fr/')
     await page.waitForLoadState('domcontentloaded')
@@ -258,8 +255,10 @@ test.describe('PWA — Meta tags HTML', () => {
 // App Shell — loads after first load even without network
 // =============================================================================
 test.describe('PWA — App Shell offline', () => {
-
-  test('PWA15: l\'app shell se charge meme apres une coupure reseau post-premier-chargement', async ({ authenticatedPage: page, db }) => {
+  test("PWA15: l'app shell se charge meme apres une coupure reseau post-premier-chargement", async ({
+    authenticatedPage: page,
+    db,
+  }) => {
     const profile = await db.getProfile()
     expect(profile).toBeTruthy()
 
@@ -301,8 +300,9 @@ test.describe('PWA — App Shell offline', () => {
 // PWA Install Banner — localStorage keys
 // =============================================================================
 test.describe('PWA — Install banner localStorage', () => {
-
-  test('PWA16: les cles localStorage du PWA install banner fonctionnent correctement', async ({ authenticatedPage: page }) => {
+  test('PWA16: les cles localStorage du PWA install banner fonctionnent correctement', async ({
+    authenticatedPage: page,
+  }) => {
     await page.goto('/home')
     await page.waitForLoadState('networkidle')
     await page.waitForTimeout(1500)
@@ -322,25 +322,21 @@ test.describe('PWA — Install banner localStorage', () => {
     })
 
     // STRICT: le flag dismissed DOIT etre null apres suppression
-    const dismissedAt = await page.evaluate(() =>
-      localStorage.getItem('sq-pwa-dismissed')
-    )
+    const dismissedAt = await page.evaluate(() => localStorage.getItem('sq-pwa-dismissed'))
     expect(dismissedAt).toBeNull()
 
     // STRICT: le flag installed DOIT etre null apres suppression
-    const installedAt = await page.evaluate(() =>
-      localStorage.getItem('sq-pwa-installed')
-    )
+    const installedAt = await page.evaluate(() => localStorage.getItem('sq-pwa-installed'))
     expect(installedAt).toBeNull()
 
     // STRICT: les visites DOIVENT relire '3'
-    const visitsReadback = await page.evaluate(() =>
-      localStorage.getItem('sq-visits')
-    )
+    const visitsReadback = await page.evaluate(() => localStorage.getItem('sq-visits'))
     expect(visitsReadback).toBe('3')
   })
 
-  test('PWA17: le dispatch de beforeinstallprompt ne crash pas l\'app', async ({ authenticatedPage: page }) => {
+  test("PWA17: le dispatch de beforeinstallprompt ne crash pas l'app", async ({
+    authenticatedPage: page,
+  }) => {
     await page.goto('/home')
     await page.waitForLoadState('networkidle')
     await page.waitForTimeout(1500)
@@ -374,18 +370,14 @@ test.describe('PWA — Install banner localStorage', () => {
     }, now)
 
     // STRICT: relire le timestamp — DOIT correspondre
-    const readDismissed = await page.evaluate(() =>
-      localStorage.getItem('sq-pwa-dismissed')
-    )
+    const readDismissed = await page.evaluate(() => localStorage.getItem('sq-pwa-dismissed'))
     expect(readDismissed).toBe(String(now))
 
     // STRICT: effacer et verifier que c'est null
     await page.evaluate(() => {
       localStorage.removeItem('sq-pwa-dismissed')
     })
-    const cleared = await page.evaluate(() =>
-      localStorage.getItem('sq-pwa-dismissed')
-    )
+    const cleared = await page.evaluate(() => localStorage.getItem('sq-pwa-dismissed'))
     expect(cleared).toBeNull()
   })
 })

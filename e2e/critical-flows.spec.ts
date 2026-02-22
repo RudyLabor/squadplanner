@@ -27,7 +27,10 @@ test.describe('F10 — Dashboard Data Validation', () => {
     await expect(greeting).toBeVisible({ timeout: 15000 })
   })
 
-  test('F10: Dashboard shows reliability score when > 0', async ({ authenticatedPage: page, db }) => {
+  test('F10: Dashboard shows reliability score when > 0', async ({
+    authenticatedPage: page,
+    db,
+  }) => {
     const profile = await db.getProfile()
     expect(profile).toBeTruthy()
     const dbScore = Number(profile.reliability_score ?? 0)
@@ -91,7 +94,10 @@ test.describe('F10 — Dashboard Data Validation', () => {
     }
   })
 
-  test('F10: Dashboard sessions-this-week count is displayed', async ({ authenticatedPage: page, db }) => {
+  test('F10: Dashboard sessions-this-week count is displayed', async ({
+    authenticatedPage: page,
+    db,
+  }) => {
     const upcomingSessions = await db.getUserUpcomingSessions()
 
     const now = new Date()
@@ -116,7 +122,7 @@ test.describe('F10 — Dashboard Data Validation', () => {
 
     // Le nombre affiché doit correspondre a la DB
     const dashboard = page.locator('section[aria-label="Tableau de bord"]')
-    const hasDashboard = await dashboard.count() > 0
+    const hasDashboard = (await dashboard.count()) > 0
     const container = hasDashboard ? dashboard : page.locator('main').first()
     const allText = await container.textContent()
     expect(allText).toBeTruthy()
@@ -157,8 +163,15 @@ test.describe('F11 — Quick RSVP', () => {
       let foundSession = false
       for (const session of upcomingSessions.slice(0, 3)) {
         if (!session.title) continue
-        const titleVisible = await page.getByText(new RegExp(session.title.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i')).first().isVisible({ timeout: 2000 }).catch(() => false)
-        if (titleVisible) { foundSession = true; break }
+        const titleVisible = await page
+          .getByText(new RegExp(session.title.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i'))
+          .first()
+          .isVisible({ timeout: 2000 })
+          .catch(() => false)
+        if (titleVisible) {
+          foundSession = true
+          break
+        }
       }
       // Si aucune session visible malgre des sessions en DB, c'est un bug
       // Mais les sessions pourraient ne pas etre dans les 5 prochaines affichees
@@ -172,7 +185,10 @@ test.describe('F11 — Quick RSVP', () => {
     // Verifier le RSVP dans la DB
     const sessionsAfter = await db.getUserUpcomingSessions()
     const userRsvp = sessionsAfter
-      .flatMap((s: { session_rsvps?: Array<{ user_id: string; response?: string }> }) => s.session_rsvps || [])
+      .flatMap(
+        (s: { session_rsvps?: Array<{ user_id: string; response?: string }> }) =>
+          s.session_rsvps || []
+      )
       .find((r: { user_id: string }) => r.user_id === userId)
 
     expect(userRsvp).toBeTruthy()
@@ -185,7 +201,10 @@ test.describe('F11 — Quick RSVP', () => {
 // ============================================================
 
 test.describe('F12 — Upcoming Sessions', () => {
-  test('F12: Upcoming sessions from DB are visible on dashboard', async ({ authenticatedPage: page, db }) => {
+  test('F12: Upcoming sessions from DB are visible on dashboard', async ({
+    authenticatedPage: page,
+    db,
+  }) => {
     const upcomingSessions = await db.getUserUpcomingSessions()
 
     await page.goto('/home')
@@ -221,7 +240,10 @@ test.describe('F12 — Upcoming Sessions', () => {
 // ============================================================
 
 test.describe('F13 — Daily Challenges', () => {
-  test('F13: Challenges data from DB is reflected on profile', async ({ authenticatedPage: page, db }) => {
+  test('F13: Challenges data from DB is reflected on profile', async ({
+    authenticatedPage: page,
+    db,
+  }) => {
     const challengeData = await db.getChallenges()
     const activeChallenges = challengeData.challenges
 
@@ -229,7 +251,9 @@ test.describe('F13 — Daily Challenges', () => {
     await page.waitForLoadState('networkidle')
 
     const challengesSection = page.getByText(/défi|challenge|objectif/i).first()
-    const hasChallengesSection = await challengesSection.isVisible({ timeout: 5000 }).catch(() => false)
+    const hasChallengesSection = await challengesSection
+      .isVisible({ timeout: 5000 })
+      .catch(() => false)
 
     if (activeChallenges.length === 0 && !hasChallengesSection) {
       // Pas de challenges en DB et pas de section — c'est OK

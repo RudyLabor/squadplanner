@@ -48,7 +48,9 @@ baseTest.describe('F66b — Boutons CTA Premium', () => {
 
     // STRICT: "Passer Premium maintenant" button MUST be visible (PremiumPricing CTA)
     // Or "Commencer l'essai gratuit" button — at least one CTA MUST exist
-    const premiumCTA = page.getByRole('button', { name: /Passer Premium|Commencer l'essai gratuit|Essai gratuit/i }).first()
+    const premiumCTA = page
+      .getByRole('button', { name: /Passer Premium|Commencer l'essai gratuit|Essai gratuit/i })
+      .first()
     await baseExpect(premiumCTA).toBeVisible({ timeout: 10000 })
   })
 })
@@ -101,7 +103,10 @@ test.describe('F68 — Activation essai gratuit', () => {
     await db.resetTrialStatus()
   })
 
-  test('F68: Trial activation updates subscription_tier to premium in DB', async ({ authenticatedPage, db }) => {
+  test('F68: Trial activation updates subscription_tier to premium in DB', async ({
+    authenticatedPage,
+    db,
+  }) => {
     // Step 1: Fetch DB state — ensure user is NOT already premium
     const subBefore = await db.getSubscription()
     if (subBefore?.subscription_tier === 'premium') {
@@ -119,7 +124,9 @@ test.describe('F68 — Activation essai gratuit', () => {
     await authenticatedPage.waitForTimeout(1500)
 
     // STRICT: "Commencer l'essai gratuit" button MUST be visible
-    const trialBtn = authenticatedPage.getByRole('button', { name: /Commencer l'essai gratuit|essai gratuit/i }).first()
+    const trialBtn = authenticatedPage
+      .getByRole('button', { name: /Commencer l'essai gratuit|essai gratuit/i })
+      .first()
     await expect(trialBtn).toBeVisible({ timeout: 10000 })
 
     await trialBtn.click()
@@ -147,7 +154,9 @@ test.describe('F68 — Activation essai gratuit', () => {
 // F69a — Checkout flow interception
 // =============================================================================
 test.describe('F69a — Stripe checkout interception', () => {
-  test('F69a: Upgrade button calls create-checkout with price_id', async ({ authenticatedPage }) => {
+  test('F69a: Upgrade button calls create-checkout with price_id', async ({
+    authenticatedPage,
+  }) => {
     let interceptedRequest: { body: Record<string, unknown> } | null = null
 
     // Intercept the create-checkout edge function call
@@ -160,7 +169,10 @@ test.describe('F69a — Stripe checkout interception', () => {
       await route.fulfill({
         status: 200,
         contentType: 'application/json',
-        body: JSON.stringify({ url: 'https://checkout.stripe.com/mock', session_id: 'mock_session' }),
+        body: JSON.stringify({
+          url: 'https://checkout.stripe.com/mock',
+          session_id: 'mock_session',
+        }),
       })
     })
 
@@ -168,7 +180,9 @@ test.describe('F69a — Stripe checkout interception', () => {
     await authenticatedPage.waitForLoadState('networkidle')
 
     // STRICT: "Passer Premium maintenant" button MUST be visible
-    const upgradeBtn = authenticatedPage.getByRole('button', { name: /Passer Premium maintenant/i }).first()
+    const upgradeBtn = authenticatedPage
+      .getByRole('button', { name: /Passer Premium maintenant/i })
+      .first()
     await expect(upgradeBtn).toBeVisible({ timeout: 10000 })
 
     await upgradeBtn.click()
@@ -191,14 +205,20 @@ test.describe('F69b — Stripe portal interception', () => {
     await db.resetTrialStatus()
   })
 
-  test('F69b: Manage subscription calls create-portal when user is premium', async ({ authenticatedPage, db }) => {
+  test('F69b: Manage subscription calls create-portal when user is premium', async ({
+    authenticatedPage,
+    db,
+  }) => {
     // Step 1: Set user as premium in DB
     const userId = await db.getUserId()
-    await db.admin.from('profiles').update({
-      subscription_tier: 'premium',
-      subscription_expires_at: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
-      stripe_customer_id: 'cus_test_e2e',
-    }).eq('id', userId)
+    await db.admin
+      .from('profiles')
+      .update({
+        subscription_tier: 'premium',
+        subscription_expires_at: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
+        stripe_customer_id: 'cus_test_e2e',
+      })
+      .eq('id', userId)
 
     // Step 2: Verify DB mutation took effect
     const subAfterUpdate = await db.getSubscription()
@@ -230,7 +250,9 @@ test.describe('F69b — Stripe portal interception', () => {
         if (store?.getState?.()?.fetchPremiumStatus) {
           await store.getState().fetchPremiumStatus()
         }
-      } catch { /* store not accessible via window */ }
+      } catch {
+        /* store not accessible via window */
+      }
     })
     await authenticatedPage.waitForTimeout(1000)
 
@@ -260,7 +282,8 @@ test.describe('F69b — Stripe portal interception', () => {
       // The manage button visibility depends on client-side cache refresh timing.
       test.info().annotations.push({
         type: 'info',
-        description: 'Premium status not detected by client store — DB update confirmed, client cache stale'
+        description:
+          'Premium status not detected by client store — DB update confirmed, client cache stale',
       })
     }
   })
@@ -274,7 +297,10 @@ test.describe('F69c — Statut premium correspond a la DB', () => {
     await db.resetTrialStatus()
   })
 
-  test('F69c: Free user sees upgrade CTA, premium user does not see pricing', async ({ authenticatedPage, db }) => {
+  test('F69c: Free user sees upgrade CTA, premium user does not see pricing', async ({
+    authenticatedPage,
+    db,
+  }) => {
     // Step 1: Ensure user is free
     await db.resetTrialStatus()
     const subscription = await db.getSubscription()
@@ -286,7 +312,9 @@ test.describe('F69c — Statut premium correspond a la DB', () => {
     await authenticatedPage.waitForTimeout(1500)
 
     // STRICT: free user → pricing section with "Passer Premium maintenant" MUST be visible
-    const upgradeCTA = authenticatedPage.getByRole('button', { name: /Passer Premium maintenant|Commencer l'essai gratuit/i }).first()
+    const upgradeCTA = authenticatedPage
+      .getByRole('button', { name: /Passer Premium maintenant|Commencer l'essai gratuit/i })
+      .first()
     await expect(upgradeCTA).toBeVisible({ timeout: 10000 })
 
     // STRICT: at least one price MUST be visible for free users

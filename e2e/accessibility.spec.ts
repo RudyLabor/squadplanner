@@ -51,7 +51,7 @@ test.describe('A11Y-AXE: WCAG Audit — Public Pages', () => {
       // STRICT: Zero tolerance for serious/critical violations
       expect(
         violations.length,
-        `${name} dark mode: ${violations.length} violations serious/critical trouvees: ${JSON.stringify(violations.map(v => ({ id: v.id, impact: v.impact, description: v.description })))}`
+        `${name} dark mode: ${violations.length} violations serious/critical trouvees: ${JSON.stringify(violations.map((v) => ({ id: v.id, impact: v.impact, description: v.description })))}`
       ).toBe(0)
     })
 
@@ -66,7 +66,7 @@ test.describe('A11Y-AXE: WCAG Audit — Public Pages', () => {
       // STRICT: Zero tolerance
       expect(
         violations.length,
-        `${name} light mode: ${violations.length} violations trouvees: ${JSON.stringify(violations.map(v => ({ id: v.id, impact: v.impact, description: v.description })))}`
+        `${name} light mode: ${violations.length} violations trouvees: ${JSON.stringify(violations.map((v) => ({ id: v.id, impact: v.impact, description: v.description })))}`
       ).toBe(0)
     })
   }
@@ -77,7 +77,9 @@ test.describe('A11Y-AXE: WCAG Audit — Public Pages', () => {
 // ============================================================
 test.describe('A11Y-AXE: WCAG Audit — Protected Pages', () => {
   for (const { name, path } of protectedPages) {
-    test(`${name} (dark mode): zero serious/critical WCAG violations`, async ({ authenticatedPage: page }) => {
+    test(`${name} (dark mode): zero serious/critical WCAG violations`, async ({
+      authenticatedPage: page,
+    }) => {
       await page.emulateMedia({ colorScheme: 'dark' })
       await page.goto(path)
       await page.waitForLoadState('networkidle')
@@ -88,11 +90,13 @@ test.describe('A11Y-AXE: WCAG Audit — Protected Pages', () => {
       // STRICT: Zero tolerance
       expect(
         violations.length,
-        `${name} dark mode: violations trouvees: ${JSON.stringify(violations.map(v => ({ id: v.id, impact: v.impact })))}`
+        `${name} dark mode: violations trouvees: ${JSON.stringify(violations.map((v) => ({ id: v.id, impact: v.impact })))}`
       ).toBe(0)
     })
 
-    test(`${name} (light mode): zero serious/critical WCAG violations`, async ({ authenticatedPage: page }) => {
+    test(`${name} (light mode): zero serious/critical WCAG violations`, async ({
+      authenticatedPage: page,
+    }) => {
       await page.emulateMedia({ colorScheme: 'light' })
       await page.goto(path)
       await page.waitForLoadState('networkidle')
@@ -103,7 +107,7 @@ test.describe('A11Y-AXE: WCAG Audit — Protected Pages', () => {
       // STRICT: Zero tolerance
       expect(
         violations.length,
-        `${name} light mode: violations trouvees: ${JSON.stringify(violations.map(v => ({ id: v.id, impact: v.impact })))}`
+        `${name} light mode: violations trouvees: ${JSON.stringify(violations.map((v) => ({ id: v.id, impact: v.impact })))}`
       ).toBe(0)
     })
   }
@@ -121,7 +125,7 @@ test.describe('A11Y-KEYBOARD: Keyboard Navigation — Public Pages', () => {
 
       // Reset focus to body
       await page.evaluate(() => {
-        (document.activeElement as HTMLElement)?.blur()
+        ;(document.activeElement as HTMLElement)?.blur()
         document.body.focus()
       })
 
@@ -149,20 +153,24 @@ test.describe('A11Y-KEYBOARD: Keyboard Navigation — Public Pages', () => {
 
 test.describe('A11Y-KEYBOARD: Keyboard Navigation — Protected Pages', () => {
   for (const { name, path } of protectedPages) {
-    test(`${name}: Tab key reaches interactive elements after auth`, async ({ authenticatedPage: page }) => {
+    test(`${name}: Tab key reaches interactive elements after auth`, async ({
+      authenticatedPage: page,
+    }) => {
       await page.goto(path)
       await page.waitForLoadState('networkidle')
       await page.waitForTimeout(1000)
 
       await page.evaluate(() => {
-        (document.activeElement as HTMLElement)?.blur()
+        ;(document.activeElement as HTMLElement)?.blur()
         document.body.focus()
       })
 
       const focusedElements: string[] = []
       for (let i = 0; i < 5; i++) {
         await page.keyboard.press('Tab')
-        const tag = await page.evaluate(() => document.activeElement?.tagName.toLowerCase() || 'none')
+        const tag = await page.evaluate(
+          () => document.activeElement?.tagName.toLowerCase() || 'none'
+        )
         focusedElements.push(tag)
       }
 
@@ -181,7 +189,6 @@ test.describe('A11Y-KEYBOARD: Keyboard Navigation — Protected Pages', () => {
 // FOCUS VISIBILITY — focused elements MUST be visually distinct
 // ============================================================
 test.describe('A11Y-FOCUS: Visible Focus Indicator', () => {
-
   test('Landing page: focused element has a visible focus indicator', async ({ page }) => {
     await page.goto('/')
     await page.waitForLoadState('networkidle')
@@ -206,7 +213,10 @@ test.describe('A11Y-FOCUS: Visible Focus Indicator', () => {
       return hasOutline || hasBoxShadow || hasBorder
     })
 
-    expect(hasFocusStyle, 'L\'element focus DOIT avoir un indicateur visuel (outline, box-shadow ou border)').toBe(true)
+    expect(
+      hasFocusStyle,
+      "L'element focus DOIT avoir un indicateur visuel (outline, box-shadow ou border)"
+    ).toBe(true)
   })
 
   test('Auth page: focused form input has a visible focus indicator', async ({ page }) => {
@@ -225,7 +235,7 @@ test.describe('A11Y-FOCUS: Visible Focus Indicator', () => {
       return hasOutline || hasBoxShadow || hasRing
     })
 
-    expect(hasFocusStyle, 'L\'input email focus DOIT avoir un indicateur visuel de focus').toBe(true)
+    expect(hasFocusStyle, "L'input email focus DOIT avoir un indicateur visuel de focus").toBe(true)
   })
 })
 
@@ -233,13 +243,14 @@ test.describe('A11Y-FOCUS: Visible Focus Indicator', () => {
 // FOCUS TRAP — Modal/Dialog focus containment
 // ============================================================
 test.describe('A11Y-FOCUS-TRAP: Modal Focus Containment', () => {
-
   test('Cookie banner (if present) traps focus within itself', async ({ page }) => {
     await page.goto('/')
     await page.waitForLoadState('networkidle')
 
     // Check if cookie banner is visible
-    const cookieBanner = page.locator('[role="dialog"], [aria-modal="true"], [data-testid="cookie-banner"]').first()
+    const cookieBanner = page
+      .locator('[role="dialog"], [aria-modal="true"], [data-testid="cookie-banner"]')
+      .first()
     const bannerButton = page.getByRole('button', { name: /Tout accepter/i })
 
     const bannerVisible = await bannerButton.isVisible({ timeout: 3000 }).catch(() => false)
@@ -271,13 +282,16 @@ test.describe('A11Y-FOCUS-TRAP: Modal Focus Containment', () => {
 // SKIP LINKS — skip-to-content
 // ============================================================
 test.describe('A11Y-SKIP: Skip Navigation Links', () => {
-
-  test('Landing page: skip-to-content link exists or main landmark is directly accessible', async ({ page }) => {
+  test('Landing page: skip-to-content link exists or main landmark is directly accessible', async ({
+    page,
+  }) => {
     await page.goto('/')
     await page.waitForLoadState('networkidle')
 
     // Check for explicit skip link
-    const skipLink = page.locator('a[href="#main-content"], a[href="#content"], a:has-text("Aller au contenu"), a:has-text("Skip to content")')
+    const skipLink = page.locator(
+      'a[href="#main-content"], a[href="#content"], a:has-text("Aller au contenu"), a:has-text("Skip to content")'
+    )
     const skipLinkCount = await skipLink.count()
 
     // Check for main landmark as fallback
@@ -307,7 +321,6 @@ test.describe('A11Y-SKIP: Skip Navigation Links', () => {
 // HEADING HIERARCHY — one h1 per page, no skipped levels
 // ============================================================
 test.describe('A11Y-HEADINGS: Heading Hierarchy', () => {
-
   for (const { name, path } of publicPages) {
     test(`${name}: has exactly one h1 and no skipped heading levels`, async ({ page }) => {
       await page.goto(path)
@@ -371,7 +384,6 @@ test.describe('A11Y-HEADINGS: Heading Hierarchy', () => {
 // IMAGE ACCESSIBILITY — all images MUST have alt text
 // ============================================================
 test.describe('A11Y-IMAGES: Image Alt Text', () => {
-
   for (const { name, path } of publicPages) {
     test(`${name}: every image has alt text or role=presentation`, async ({ page }) => {
       await page.goto(path)
@@ -387,13 +399,12 @@ test.describe('A11Y-IMAGES: Image Alt Text', () => {
           const ariaHidden = img.getAttribute('aria-hidden')
           // alt="" is valid for decorative images
           const isAccessible =
-            alt !== null ||
-            role === 'presentation' ||
-            role === 'none' ||
-            ariaHidden === 'true'
+            alt !== null || role === 'presentation' || role === 'none' || ariaHidden === 'true'
           if (!isAccessible) {
             const src = img.src || img.getAttribute('data-src') || ''
-            violations.push(`Image #${i} (src="${src.split('/').pop()}") n'a ni alt ni role=presentation`)
+            violations.push(
+              `Image #${i} (src="${src.split('/').pop()}") n'a ni alt ni role=presentation`
+            )
           }
         }
         return violations
@@ -412,13 +423,14 @@ test.describe('A11Y-IMAGES: Image Alt Text', () => {
 // FORM ACCESSIBILITY — all inputs MUST have labels
 // ============================================================
 test.describe('A11Y-FORMS: Form Input Labels', () => {
-
   test('Auth page: all form inputs have accessible labels', async ({ page }) => {
     await page.goto('/auth')
     await page.waitForSelector('form')
 
     const violatingInputs = await page.evaluate(() => {
-      const inputs = Array.from(document.querySelectorAll('input:not([type="hidden"]):not([type="submit"])'))
+      const inputs = Array.from(
+        document.querySelectorAll('input:not([type="hidden"]):not([type="submit"])')
+      )
       const violations: string[] = []
       for (let i = 0; i < inputs.length; i++) {
         const input = inputs[i] as HTMLInputElement
@@ -441,7 +453,9 @@ test.describe('A11Y-FORMS: Form Input Labels', () => {
         }
 
         if (!hasLabel) {
-          violations.push(`Input #${i} (type="${input.type}", name="${input.name}") n'a pas de label accessible`)
+          violations.push(
+            `Input #${i} (type="${input.type}", name="${input.name}") n'a pas de label accessible`
+          )
         }
       }
       return violations
@@ -454,13 +468,19 @@ test.describe('A11Y-FORMS: Form Input Labels', () => {
     ).toEqual([])
   })
 
-  test('Settings page: all form inputs have accessible labels after auth', async ({ authenticatedPage: page }) => {
+  test('Settings page: all form inputs have accessible labels after auth', async ({
+    authenticatedPage: page,
+  }) => {
     await page.goto('/settings')
     await page.waitForLoadState('networkidle')
     await page.waitForTimeout(1000)
 
     const violatingInputs = await page.evaluate(() => {
-      const inputs = Array.from(document.querySelectorAll('input:not([type="hidden"]):not([type="submit"]), select, textarea'))
+      const inputs = Array.from(
+        document.querySelectorAll(
+          'input:not([type="hidden"]):not([type="submit"]), select, textarea'
+        )
+      )
       const violations: string[] = []
       for (let i = 0; i < inputs.length; i++) {
         const input = inputs[i] as HTMLInputElement
@@ -481,7 +501,9 @@ test.describe('A11Y-FORMS: Form Input Labels', () => {
         }
 
         if (!hasLabel) {
-          violations.push(`Input #${i} (type="${input.type || 'text'}", name="${input.name}") n'a pas de label`)
+          violations.push(
+            `Input #${i} (type="${input.type || 'text'}", name="${input.name}") n'a pas de label`
+          )
         }
       }
       return violations
@@ -498,7 +520,6 @@ test.describe('A11Y-FORMS: Form Input Labels', () => {
 // COLOR CONTRAST — automated axe-core check
 // ============================================================
 test.describe('A11Y-CONTRAST: Color Contrast', () => {
-
   test('Landing page: axe-core color-contrast rule passes', async ({ page }) => {
     await page.goto('/')
     await page.waitForLoadState('networkidle')
@@ -511,7 +532,7 @@ test.describe('A11Y-CONTRAST: Color Contrast', () => {
     // STRICT: Zero color contrast violations at serious/critical level
     expect(
       contrastViolations.length,
-      `Landing: ${contrastViolations.length} violation(s) de contraste. Details: ${JSON.stringify(contrastViolations.map(v => v.description))}`
+      `Landing: ${contrastViolations.length} violation(s) de contraste. Details: ${JSON.stringify(contrastViolations.map((v) => v.description))}`
     ).toBe(0)
   })
 
@@ -535,7 +556,6 @@ test.describe('A11Y-CONTRAST: Color Contrast', () => {
 // ARIA LANDMARKS — main, nav, role structure
 // ============================================================
 test.describe('A11Y-LANDMARKS: ARIA Landmarks', () => {
-
   for (const { name, path } of publicPages) {
     test(`${name}: has a <main> landmark`, async ({ page }) => {
       await page.goto(path)
@@ -591,14 +611,17 @@ test.describe('A11Y-LANDMARKS: ARIA Landmarks', () => {
 // ARIA-LIVE REGIONS — dynamic content announcements
 // ============================================================
 test.describe('A11Y-LIVE: ARIA Live Regions', () => {
-
-  test('App has aria-live regions for dynamic content announcements', async ({ authenticatedPage: page }) => {
+  test('App has aria-live regions for dynamic content announcements', async ({
+    authenticatedPage: page,
+  }) => {
     await page.goto('/home')
     await page.waitForLoadState('networkidle')
     await page.waitForTimeout(1000)
 
     const liveRegions = await page.evaluate(() => {
-      const regions = document.querySelectorAll('[aria-live], [role="alert"], [role="status"], [role="log"]')
+      const regions = document.querySelectorAll(
+        '[aria-live], [role="alert"], [role="status"], [role="log"]'
+      )
       return Array.from(regions).map((el) => ({
         role: el.getAttribute('role'),
         ariaLive: el.getAttribute('aria-live'),
@@ -618,7 +641,6 @@ test.describe('A11Y-LIVE: ARIA Live Regions', () => {
 // LINK ACCESSIBILITY — all visible links MUST have accessible names
 // ============================================================
 test.describe('A11Y-LINKS: Link Accessible Names', () => {
-
   test('Landing page: every visible link has an accessible name', async ({ page }) => {
     await page.goto('/')
     await page.waitForLoadState('networkidle')
@@ -642,7 +664,13 @@ test.describe('A11Y-LINKS: Link Accessible Names', () => {
         // SVG icon inside the link counts if it has title or aria-label
         const svgTitle = link.querySelector('svg title')?.textContent?.trim()
 
-        const hasAccessibleName = !!(ariaLabel || textContent || title || ariaLabelledBy || svgTitle)
+        const hasAccessibleName = !!(
+          ariaLabel ||
+          textContent ||
+          title ||
+          ariaLabelledBy ||
+          svgTitle
+        )
 
         if (!hasAccessibleName) {
           const href = link.getAttribute('href')
@@ -664,7 +692,6 @@ test.describe('A11Y-LINKS: Link Accessible Names', () => {
 // BUTTON ACCESSIBILITY — all visible buttons MUST have accessible names
 // ============================================================
 test.describe('A11Y-BUTTONS: Button Accessible Names', () => {
-
   test('Landing page: every visible button has an accessible name', async ({ page }) => {
     await page.goto('/')
     await page.waitForLoadState('networkidle')
@@ -705,7 +732,6 @@ test.describe('A11Y-BUTTONS: Button Accessible Names', () => {
 // ARIA ATTRIBUTES — form inputs must have correct ARIA
 // ============================================================
 test.describe('A11Y-ARIA: ARIA Attributes on Auth Form', () => {
-
   test('Auth form: inputs have correct type and autocomplete attributes', async ({ page }) => {
     await page.goto('/auth')
     await page.waitForSelector('form')

@@ -44,7 +44,9 @@ for (const { name, path, needsAuth } of pagesToTest) {
           console.log(`  HTML: ${node.html.substring(0, 200)}`)
           if (node.any && node.any[0]?.data) {
             const d = node.any[0].data as Record<string, unknown>
-            console.log(`  FG: ${d.fgColor}, BG: ${d.bgColor}, Ratio: ${d.contrastRatio}, Expected: ${d.expectedContrastRatio}, FontSize: ${d.fontSize}, FontWeight: ${d.fontWeight}`)
+            console.log(
+              `  FG: ${d.fgColor}, BG: ${d.bgColor}, Ratio: ${d.contrastRatio}, Expected: ${d.expectedContrastRatio}, FontSize: ${d.fontSize}, FontWeight: ${d.fontWeight}`
+            )
           }
         }
       }

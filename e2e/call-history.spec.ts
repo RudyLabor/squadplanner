@@ -41,7 +41,10 @@ test.describe('Call History — Page loads', () => {
 // Test 2 — Call history data matches DB
 // ============================================================
 test.describe('Call History — Data matches DB', () => {
-  test('DB has calls -> UI displays call entries; DB empty -> UI shows empty state', async ({ authenticatedPage: page, db }) => {
+  test('DB has calls -> UI displays call entries; DB empty -> UI shows empty state', async ({
+    authenticatedPage: page,
+    db,
+  }) => {
     // STRICT: Fetch DB data FIRST
     const calls = await db.getCallHistory(20)
 
@@ -64,7 +67,9 @@ test.describe('Call History — Data matches DB', () => {
       await expect(countText).toBeVisible({ timeout: 5000 })
 
       // STRICT: At least one time group label MUST be visible
-      const groupLabel = page.getByText(/Aujourd'hui|Hier|Cette semaine|Ce mois|Plus ancien/i).first()
+      const groupLabel = page
+        .getByText(/Aujourd'hui|Hier|Cette semaine|Ce mois|Plus ancien/i)
+        .first()
       await expect(groupLabel).toBeVisible({ timeout: 5000 })
     } else {
       // STRICT: DB has no calls -> empty state MUST be shown
@@ -88,7 +93,10 @@ test.describe('Call History — Data matches DB', () => {
 // Test 3 — Call entry details match DB (type labels, callback buttons)
 // ============================================================
 test.describe('Call History — Entry details', () => {
-  test('call entries show correct type labels and callback buttons', async ({ authenticatedPage: page, db }) => {
+  test('call entries show correct type labels and callback buttons', async ({
+    authenticatedPage: page,
+    db,
+  }) => {
     // STRICT: Fetch DB data FIRST
     const calls = await db.getCallHistory(10)
 
@@ -134,7 +142,10 @@ test.describe('Call History — Entry details', () => {
 // Test 4 — Filter tabs are visible and functionally validated
 // ============================================================
 test.describe('Call History — Filter tabs', () => {
-  test('filter buttons Tous/Entrants/Sortants/Manques are visible and functional', async ({ authenticatedPage: page, db }) => {
+  test('filter buttons Tous/Entrants/Sortants/Manques are visible and functional', async ({
+    authenticatedPage: page,
+    db,
+  }) => {
     // STRICT: Fetch DB first
     const profile = await db.getProfile()
     expect(profile).toBeTruthy()
@@ -150,9 +161,9 @@ test.describe('Call History — Filter tabs', () => {
 
     const allCalls = rawCalls || []
     // Compute expected counts per filter using the same logic as the app
-    const incomingCalls = allCalls.filter(c => c.receiver_id === userId)
-    const outgoingCalls = allCalls.filter(c => c.caller_id === userId)
-    const missedCalls = allCalls.filter(c => c.status === 'missed')
+    const incomingCalls = allCalls.filter((c) => c.receiver_id === userId)
+    const outgoingCalls = allCalls.filter((c) => c.caller_id === userId)
+    const missedCalls = allCalls.filter((c) => c.status === 'missed')
 
     const pageOk = await navigateWithFallback(page, '/call-history')
     // STRICT: page MUST load
@@ -246,7 +257,10 @@ test.describe('Call History — Filter tabs', () => {
 // Test 5 — Empty state after filtering (if DB has calls of specific types)
 // ============================================================
 test.describe('Call History — Filter empty state', () => {
-  test('filtering to a type with no calls shows correct empty message', async ({ authenticatedPage: page, db }) => {
+  test('filtering to a type with no calls shows correct empty message', async ({
+    authenticatedPage: page,
+    db,
+  }) => {
     // STRICT: Fetch DB data FIRST
     const calls = await db.getCallHistory(20)
 

@@ -22,7 +22,10 @@ test.describe('F52 — Parcourir les squads publics', () => {
     await authenticatedPage.waitForTimeout(2000)
 
     // STRICT: the Squads tab is active by default — check for squad cards OR empty state
-    const squadCard = authenticatedPage.locator('main').locator('button:has-text("Rejoindre")').first()
+    const squadCard = authenticatedPage
+      .locator('main')
+      .locator('button:has-text("Rejoindre")')
+      .first()
     const emptyState = authenticatedPage.getByText('Aucune squad publique trouvée').first()
 
     // STRICT: page MUST show either squad cards or empty state — never blank
@@ -76,7 +79,9 @@ test.describe('F53a — Filtrer par jeu', () => {
     await authenticatedPage.waitForLoadState('networkidle')
 
     // The Discover page uses a combobox (custom Select) with label "Tous les jeux"
-    const gameFilterTrigger = authenticatedPage.getByRole('combobox', { name: /Tous les jeux/i }).first()
+    const gameFilterTrigger = authenticatedPage
+      .getByRole('combobox', { name: /Tous les jeux/i })
+      .first()
     // STRICT: game filter MUST exist on discover page
     await expect(gameFilterTrigger).toBeVisible({ timeout: 10000 })
 
@@ -125,7 +130,9 @@ test.describe('F53b — Filtrer par region', () => {
     await authenticatedPage.waitForLoadState('networkidle')
 
     // The Discover page uses a combobox (custom Select) with label "Toutes les régions"
-    const regionFilterTrigger = authenticatedPage.getByRole('combobox', { name: /Toutes les r/i }).first()
+    const regionFilterTrigger = authenticatedPage
+      .getByRole('combobox', { name: /Toutes les r/i })
+      .first()
     // STRICT: region filter MUST exist on discover page
     await expect(regionFilterTrigger).toBeVisible({ timeout: 10000 })
 
@@ -185,7 +192,10 @@ test.describe('F54 — Profil public correspond a la DB', () => {
     await expect(usernameEl).toBeVisible({ timeout: 10000 })
   })
 
-  test('should display level or XP section from DB on public profile', async ({ authenticatedPage, db }) => {
+  test('should display level or XP section from DB on public profile', async ({
+    authenticatedPage,
+    db,
+  }) => {
     const profile = await db.getProfile()
     expect(profile).toBeTruthy()
     expect(profile.username).toBeTruthy()
@@ -248,7 +258,10 @@ test.describe('F55 — Classement global', () => {
 // F56 — Matchmaking suggestions (DB-validated)
 // =============================================================================
 test.describe('F56 — Suggestions matchmaking', () => {
-  test('should display players looking for squad from DB or empty state', async ({ authenticatedPage, db }) => {
+  test('should display players looking for squad from DB or empty state', async ({
+    authenticatedPage,
+    db,
+  }) => {
     // STRICT: fetch matchmaking data FIRST
     const playersLooking = await db.getPlayersLookingForSquad()
 

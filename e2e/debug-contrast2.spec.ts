@@ -25,7 +25,9 @@ test('DEBUG: Landing dark mode violations', async ({ page }) => {
       console.log(`  HTML: ${node.html.substring(0, 300)}`)
       if (node.any?.[0]?.data) {
         const d = node.any[0].data as Record<string, unknown>
-        console.log(`  FG: ${d.fgColor}, BG: ${d.bgColor}, Ratio: ${d.contrastRatio}, Expected: ${d.expectedContrastRatio}, Size: ${d.fontSize}, Weight: ${d.fontWeight}`)
+        console.log(
+          `  FG: ${d.fgColor}, BG: ${d.bgColor}, Ratio: ${d.contrastRatio}, Expected: ${d.expectedContrastRatio}, Size: ${d.fontSize}, Weight: ${d.fontWeight}`
+        )
       }
     }
   }
@@ -55,7 +57,9 @@ test('DEBUG: Sessions light mode violations', async ({ page }) => {
       console.log(`  HTML: ${node.html.substring(0, 300)}`)
       if (node.any?.[0]?.data) {
         const d = node.any[0].data as Record<string, unknown>
-        console.log(`  FG: ${d.fgColor}, BG: ${d.bgColor}, Ratio: ${d.contrastRatio}, Expected: ${d.expectedContrastRatio}, Size: ${d.fontSize}, Weight: ${d.fontWeight}`)
+        console.log(
+          `  FG: ${d.fgColor}, BG: ${d.bgColor}, Ratio: ${d.contrastRatio}, Expected: ${d.expectedContrastRatio}, Size: ${d.fontSize}, Weight: ${d.fontWeight}`
+        )
       }
     }
   }
@@ -85,7 +89,9 @@ test('DEBUG: Home dark mode violations', async ({ page }) => {
       console.log(`  HTML: ${node.html.substring(0, 300)}`)
       if (node.any?.[0]?.data) {
         const d = node.any[0].data as Record<string, unknown>
-        console.log(`  FG: ${d.fgColor}, BG: ${d.bgColor}, Ratio: ${d.contrastRatio}, Expected: ${d.expectedContrastRatio}, Size: ${d.fontSize}, Weight: ${d.fontWeight}`)
+        console.log(
+          `  FG: ${d.fgColor}, BG: ${d.bgColor}, Ratio: ${d.contrastRatio}, Expected: ${d.expectedContrastRatio}, Size: ${d.fontSize}, Weight: ${d.fontWeight}`
+        )
       }
     }
   }

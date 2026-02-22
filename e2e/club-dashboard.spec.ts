@@ -18,9 +18,13 @@ async function removeOverlays(page: import('@playwright/test').Page) {
     localStorage.setItem('onboarding-completed', 'true')
     localStorage.setItem('guided-tour-done', 'true')
     localStorage.setItem('sp-tour-completed', 'true')
-    document.querySelectorAll('[class*="cookie"], [class*="Cookie"], [id*="cookie"], [id*="consent"]').forEach(el => el.remove())
-    document.querySelectorAll('[class*="tour"], [class*="Tour"], [class*="onboarding"]').forEach(el => el.remove())
-    document.querySelectorAll('div.fixed.inset-0').forEach(el => {
+    document
+      .querySelectorAll('[class*="cookie"], [class*="Cookie"], [id*="cookie"], [id*="consent"]')
+      .forEach((el) => el.remove())
+    document
+      .querySelectorAll('[class*="tour"], [class*="Tour"], [class*="onboarding"]')
+      .forEach((el) => el.remove())
+    document.querySelectorAll('div.fixed.inset-0').forEach((el) => {
       const z = getComputedStyle(el).zIndex
       if (Number(z) >= 50) el.remove()
     })

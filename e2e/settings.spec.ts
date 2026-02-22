@@ -43,12 +43,17 @@ test.describe('F57 — Editer son profil', () => {
       await expect(bioLocator).toBeVisible({ timeout: 10000 })
     } else {
       // DB has no bio → verify profile page still loaded correctly with username
-      const usernameLocator = authenticatedPage.getByText(profile.username, { exact: false }).first()
+      const usernameLocator = authenticatedPage
+        .getByText(profile.username, { exact: false })
+        .first()
       await expect(usernameLocator).toBeVisible({ timeout: 10000 })
     }
   })
 
-  test('F57: Profile page displays avatar when avatar_url is set in DB', async ({ authenticatedPage, db }) => {
+  test('F57: Profile page displays avatar when avatar_url is set in DB', async ({
+    authenticatedPage,
+    db,
+  }) => {
     const profile = await db.getProfile()
     expect(profile).toBeTruthy()
 
@@ -57,14 +62,18 @@ test.describe('F57 — Editer son profil', () => {
 
     if (profile.avatar_url) {
       // STRICT: avatar_url in DB → an avatar image MUST be visible
-      const avatarImg = authenticatedPage.locator(
-        `img[src*="${profile.avatar_url.split('/').pop()}"], img[class*="avatar"], img[alt*="avatar"]`
-      ).first()
+      const avatarImg = authenticatedPage
+        .locator(
+          `img[src*="${profile.avatar_url.split('/').pop()}"], img[class*="avatar"], img[alt*="avatar"]`
+        )
+        .first()
       // STRICT: no .catch(() => false) — this MUST pass
       await expect(avatarImg).toBeVisible({ timeout: 10000 })
     } else {
       // No avatar_url in DB → verify page loaded with username instead
-      const usernameLocator = authenticatedPage.getByText(profile.username, { exact: false }).first()
+      const usernameLocator = authenticatedPage
+        .getByText(profile.username, { exact: false })
+        .first()
       await expect(usernameLocator).toBeVisible({ timeout: 10000 })
     }
   })
@@ -97,7 +106,9 @@ test.describe('F58 — Parametres de notifications', () => {
     expect(switchCount).toBe(4)
   })
 
-  test('F58: Toggling a notification switch updates localStorage', async ({ authenticatedPage }) => {
+  test('F58: Toggling a notification switch updates localStorage', async ({
+    authenticatedPage,
+  }) => {
     const ok = await navigateWithFallback(authenticatedPage, '/settings')
     expect(ok).toBe(true)
 
@@ -133,7 +144,9 @@ test.describe('F58 — Parametres de notifications', () => {
 // F59 — Audio devices section
 // =============================================================================
 test.describe('F59 — Peripheriques audio', () => {
-  test('F59: Audio section with Microphone and Sortie audio labels', async ({ authenticatedPage }) => {
+  test('F59: Audio section with Microphone and Sortie audio labels', async ({
+    authenticatedPage,
+  }) => {
     const ok = await navigateWithFallback(authenticatedPage, '/settings')
     expect(ok).toBe(true)
 
@@ -142,10 +155,14 @@ test.describe('F59 — Peripheriques audio', () => {
     await expect(audioSection).toBeVisible({ timeout: 10000 })
 
     // STRICT: "Microphone" label MUST be visible in #audio section
-    await expect(audioSection.getByText('Microphone', { exact: true })).toBeVisible({ timeout: 5000 })
+    await expect(audioSection.getByText('Microphone', { exact: true })).toBeVisible({
+      timeout: 5000,
+    })
 
     // STRICT: "Sortie audio" label MUST be visible in #audio section
-    await expect(audioSection.getByText('Sortie audio', { exact: true })).toBeVisible({ timeout: 5000 })
+    await expect(audioSection.getByText('Sortie audio', { exact: true })).toBeVisible({
+      timeout: 5000,
+    })
   })
 })
 
@@ -153,7 +170,9 @@ test.describe('F59 — Peripheriques audio', () => {
 // F60 — Theme toggle works
 // =============================================================================
 test.describe('F60 — Changer le theme (dark/light)', () => {
-  test('F60: Theme selector toggles data-theme between dark and light', async ({ authenticatedPage }) => {
+  test('F60: Theme selector toggles data-theme between dark and light', async ({
+    authenticatedPage,
+  }) => {
     const ok = await navigateWithFallback(authenticatedPage, '/settings')
     expect(ok).toBe(true)
 
@@ -170,11 +189,12 @@ test.describe('F60 — Changer le theme (dark/light)', () => {
     // Click "Sombre" → verify dark theme
     await sombreTab.click()
     await authenticatedPage.waitForTimeout(500)
-    const themeAfterSombre = await authenticatedPage.evaluate(() =>
-      document.documentElement.getAttribute('data-theme')
-      || document.documentElement.getAttribute('class')
-      || document.documentElement.style.colorScheme
-      || ''
+    const themeAfterSombre = await authenticatedPage.evaluate(
+      () =>
+        document.documentElement.getAttribute('data-theme') ||
+        document.documentElement.getAttribute('class') ||
+        document.documentElement.style.colorScheme ||
+        ''
     )
     // STRICT: theme attribute MUST contain "dark"
     expect(themeAfterSombre).toMatch(/dark/i)
@@ -182,11 +202,12 @@ test.describe('F60 — Changer le theme (dark/light)', () => {
     // Click "Clair" → verify light theme
     await clairTab.click()
     await authenticatedPage.waitForTimeout(500)
-    const themeAfterClair = await authenticatedPage.evaluate(() =>
-      document.documentElement.getAttribute('data-theme')
-      || document.documentElement.getAttribute('class')
-      || document.documentElement.style.colorScheme
-      || ''
+    const themeAfterClair = await authenticatedPage.evaluate(
+      () =>
+        document.documentElement.getAttribute('data-theme') ||
+        document.documentElement.getAttribute('class') ||
+        document.documentElement.style.colorScheme ||
+        ''
     )
     // STRICT: theme attribute MUST contain "light"
     expect(themeAfterClair).toMatch(/light/i)
@@ -197,7 +218,10 @@ test.describe('F60 — Changer le theme (dark/light)', () => {
 // F61 — Timezone matches DB
 // =============================================================================
 test.describe('F61 — Fuseau horaire correspond a la DB', () => {
-  test('F61: Timezone from DB profile is displayed in the region section', async ({ authenticatedPage, db }) => {
+  test('F61: Timezone from DB profile is displayed in the region section', async ({
+    authenticatedPage,
+    db,
+  }) => {
     const profile = await db.getProfile()
     // STRICT: profile MUST exist
     expect(profile).toBeTruthy()
@@ -219,18 +243,25 @@ test.describe('F61 — Fuseau horaire correspond a la DB', () => {
       const tzCity = tzParts[tzParts.length - 1].replace(/_/g, ' ')
 
       // STRICT: the timezone city MUST appear in the region section
-      const hasTzCity = await regionSection.getByText(new RegExp(tzCity, 'i')).first().isVisible({ timeout: 5000 })
+      const hasTzCity = await regionSection
+        .getByText(new RegExp(tzCity, 'i'))
+        .first()
+        .isVisible({ timeout: 5000 })
       expect(hasTzCity).toBe(true)
 
       // STRICT: localStorage timezone MUST match DB timezone after page loads
-      const localTz = await authenticatedPage.evaluate(() => localStorage.getItem('sq-timezone') || '')
+      const localTz = await authenticatedPage.evaluate(
+        () => localStorage.getItem('sq-timezone') || ''
+      )
       if (localTz && localTz.includes('/')) {
         // STRICT: if localStorage has a timezone, it MUST match DB
         expect(localTz).toBe(profile.timezone)
       }
     } else {
       // No timezone in DB → the Select combobox MUST still be present
-      const selectTrigger = regionSection.locator('button[role="combobox"], [class*="select"]').first()
+      const selectTrigger = regionSection
+        .locator('button[role="combobox"], [class*="select"]')
+        .first()
       await expect(selectTrigger).toBeVisible({ timeout: 5000 })
     }
   })
@@ -240,7 +271,9 @@ test.describe('F61 — Fuseau horaire correspond a la DB', () => {
 // F62 — Privacy settings
 // =============================================================================
 test.describe('F62 — Parametres de confidentialite', () => {
-  test('F62: Privacy section displays visibility and online status controls', async ({ authenticatedPage }) => {
+  test('F62: Privacy section displays visibility and online status controls', async ({
+    authenticatedPage,
+  }) => {
     const ok = await navigateWithFallback(authenticatedPage, '/settings')
     expect(ok).toBe(true)
 
@@ -302,7 +335,10 @@ test.describe('F63 — Exporter ses donnees (GDPR)', () => {
     await expect(exportBtn).toBeVisible({ timeout: 5000 })
   })
 
-  test('F63b: Click export triggers JSON file download with valid structure', async ({ authenticatedPage, db }) => {
+  test('F63b: Click export triggers JSON file download with valid structure', async ({
+    authenticatedPage,
+    db,
+  }) => {
     const ok = await navigateWithFallback(authenticatedPage, '/settings')
     expect(ok).toBe(true)
 
@@ -350,7 +386,9 @@ test.describe('F63 — Exporter ses donnees (GDPR)', () => {
 // F64 — Delete account (GDPR)
 // =============================================================================
 test.describe('F64 — Supprimer son compte', () => {
-  test('F64a: Delete modal flow — type SUPPRIMER enables confirm button', async ({ authenticatedPage }) => {
+  test('F64a: Delete modal flow — type SUPPRIMER enables confirm button', async ({
+    authenticatedPage,
+  }) => {
     const ok = await navigateWithFallback(authenticatedPage, '/settings')
     expect(ok).toBe(true)
 
@@ -394,7 +432,11 @@ test.describe('F64 — Supprimer son compte', () => {
     const { userId } = await db.createTemporaryTestUser()
     try {
       // STRICT: verify user exists in profiles before deletion
-      const { data: profileBefore } = await db.admin.from('profiles').select('*').eq('id', userId).single()
+      const { data: profileBefore } = await db.admin
+        .from('profiles')
+        .select('*')
+        .eq('id', userId)
+        .single()
       expect(profileBefore).toBeTruthy()
       // STRICT: username MUST contain the e2e-temp prefix
       expect(profileBefore.username).toContain('e2e-temp-')
@@ -421,7 +463,11 @@ test.describe('F64 — Supprimer son compte', () => {
       await db.admin.auth.admin.deleteUser(userId)
     } catch (error) {
       // Safety cleanup — but re-throw the error so test fails
-      try { await db.deleteTemporaryTestUser(userId) } catch { /* cleanup */ }
+      try {
+        await db.deleteTemporaryTestUser(userId)
+      } catch {
+        /* cleanup */
+      }
       throw error
     }
   })

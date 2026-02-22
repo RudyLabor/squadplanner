@@ -23,8 +23,10 @@ import { navigateWithFallback, dismissTourOverlay } from './fixtures'
 // Offline Detection — Banner appears when connection is lost
 // =============================================================================
 test.describe('Offline Mode — Detection et indicateur', () => {
-
-  test('OFF01: le banner "Hors ligne" apparait quand la connexion est perdue', async ({ authenticatedPage: page, db }) => {
+  test('OFF01: le banner "Hors ligne" apparait quand la connexion est perdue', async ({
+    authenticatedPage: page,
+    db,
+  }) => {
     // STRICT: fetch profile from DB first to confirm connectivity
     const profile = await db.getProfile()
     expect(profile).toBeTruthy()
@@ -52,7 +54,9 @@ test.describe('Offline Mode — Detection et indicateur', () => {
     await expect(offlineBanner).toBeVisible({ timeout: 5000 })
 
     // STRICT: le texte secondaire DOIT aussi etre present
-    await expect(page.getByText(/Vérifie ta connexion internet/i).first()).toBeVisible({ timeout: 3000 })
+    await expect(page.getByText(/Vérifie ta connexion internet/i).first()).toBeVisible({
+      timeout: 3000,
+    })
 
     // Cleanup
     await page.context().setOffline(false)
@@ -61,7 +65,10 @@ test.describe('Offline Mode — Detection et indicateur', () => {
     })
   })
 
-  test('OFF02: l\'app ne crash pas quand on est offline — le contenu principal reste visible', async ({ authenticatedPage: page, db }) => {
+  test("OFF02: l'app ne crash pas quand on est offline — le contenu principal reste visible", async ({
+    authenticatedPage: page,
+    db,
+  }) => {
     const profile = await db.getProfile()
     expect(profile).toBeTruthy()
 
@@ -96,7 +103,10 @@ test.describe('Offline Mode — Detection et indicateur', () => {
     })
   })
 
-  test('OFF03: le bouton de fermeture du banner offline fonctionne', async ({ authenticatedPage: page, db }) => {
+  test('OFF03: le bouton de fermeture du banner offline fonctionne', async ({
+    authenticatedPage: page,
+    db,
+  }) => {
     const profile = await db.getProfile()
     expect(profile).toBeTruthy()
 
@@ -138,8 +148,10 @@ test.describe('Offline Mode — Detection et indicateur', () => {
 // Reconnection — Banner "Connexion retablie" et recovery
 // =============================================================================
 test.describe('Offline Mode — Reconnexion et recovery', () => {
-
-  test('OFF04: le banner "Connexion retablie" apparait apres reconnexion', async ({ authenticatedPage: page, db }) => {
+  test('OFF04: le banner "Connexion retablie" apparait apres reconnexion', async ({
+    authenticatedPage: page,
+    db,
+  }) => {
     const profile = await db.getProfile()
     expect(profile).toBeTruthy()
 
@@ -166,14 +178,19 @@ test.describe('Offline Mode — Reconnexion et recovery', () => {
     await page.waitForTimeout(2000)
 
     // STRICT: le banner "Connexion retablie" avec role="status" DOIT apparaitre
-    const reconnectedBanner = page.locator('[role="status"]').filter({ hasText: /Connexion rétablie/i })
+    const reconnectedBanner = page
+      .locator('[role="status"]')
+      .filter({ hasText: /Connexion rétablie/i })
     await expect(reconnectedBanner).toBeVisible({ timeout: 5000 })
 
     // STRICT: le banner offline DOIT avoir disparu
     await expect(offlineBanner).not.toBeVisible({ timeout: 3000 })
   })
 
-  test('OFF05: l\'app recupere completement apres offline -> online -> reload', async ({ authenticatedPage: page, db }) => {
+  test("OFF05: l'app recupere completement apres offline -> online -> reload", async ({
+    authenticatedPage: page,
+    db,
+  }) => {
     const profile = await db.getProfile()
     expect(profile).toBeTruthy()
     expect(profile.username).toBeTruthy()
@@ -215,7 +232,10 @@ test.describe('Offline Mode — Reconnexion et recovery', () => {
     expect(mainText).not.toMatch(/^500$/)
   })
 
-  test('OFF06: cycle offline -> online -> offline -> online fonctionne', async ({ authenticatedPage: page, db }) => {
+  test('OFF06: cycle offline -> online -> offline -> online fonctionne', async ({
+    authenticatedPage: page,
+    db,
+  }) => {
     const profile = await db.getProfile()
     expect(profile).toBeTruthy()
 
@@ -264,8 +284,9 @@ test.describe('Offline Mode — Reconnexion et recovery', () => {
 // IndexedDB Offline Mutation Queue
 // =============================================================================
 test.describe('Offline Mode — IndexedDB mutation queue', () => {
-
-  test('OFF07: IndexedDB offline mutation queue est accessible et vide quand online', async ({ authenticatedPage: page }) => {
+  test('OFF07: IndexedDB offline mutation queue est accessible et vide quand online', async ({
+    authenticatedPage: page,
+  }) => {
     await page.goto('/home')
     await page.waitForLoadState('networkidle')
     await page.waitForTimeout(1500)
@@ -324,8 +345,10 @@ test.describe('Offline Mode — IndexedDB mutation queue', () => {
 // Cached data visibility while offline
 // =============================================================================
 test.describe('Offline Mode — Donnees en cache', () => {
-
-  test('OFF08: les donnees deja chargees restent visibles apres passage offline', async ({ authenticatedPage: page, db }) => {
+  test('OFF08: les donnees deja chargees restent visibles apres passage offline', async ({
+    authenticatedPage: page,
+    db,
+  }) => {
     const profile = await db.getProfile()
     expect(profile).toBeTruthy()
     expect(profile.username).toBeTruthy()
@@ -335,7 +358,9 @@ test.describe('Offline Mode — Donnees en cache', () => {
     await dismissTourOverlay(page)
 
     // STRICT: verifier que le username est affiche AVANT de passer offline
-    await expect(page.getByText(new RegExp(profile.username, 'i')).first()).toBeVisible({ timeout: 15000 })
+    await expect(page.getByText(new RegExp(profile.username, 'i')).first()).toBeVisible({
+      timeout: 15000,
+    })
 
     // Passer en mode offline (sans recharger)
     await page.context().setOffline(true)
@@ -343,7 +368,9 @@ test.describe('Offline Mode — Donnees en cache', () => {
     await page.waitForTimeout(2000)
 
     // STRICT: le username DOIT toujours etre visible (donnees en cache cote client)
-    await expect(page.getByText(new RegExp(profile.username, 'i')).first()).toBeVisible({ timeout: 5000 })
+    await expect(page.getByText(new RegExp(profile.username, 'i')).first()).toBeVisible({
+      timeout: 5000,
+    })
 
     // STRICT: la structure de la page DOIT etre intacte
     const mainContent = page.locator('main').first()

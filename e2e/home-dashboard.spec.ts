@@ -26,10 +26,14 @@ async function removeOverlays(page: import('@playwright/test').Page) {
     localStorage.setItem('sp-tour-completed', 'true')
 
     // Supprimer les overlays du DOM
-    document.querySelectorAll('[class*="cookie"], [class*="Cookie"], [id*="cookie"], [id*="consent"]').forEach(el => el.remove())
-    document.querySelectorAll('[class*="tour"], [class*="Tour"], [class*="onboarding"]').forEach(el => el.remove())
+    document
+      .querySelectorAll('[class*="cookie"], [class*="Cookie"], [id*="cookie"], [id*="consent"]')
+      .forEach((el) => el.remove())
+    document
+      .querySelectorAll('[class*="tour"], [class*="Tour"], [class*="onboarding"]')
+      .forEach((el) => el.remove())
     // Supprimer les overlays fixed en z-index eleve
-    document.querySelectorAll('div.fixed.inset-0').forEach(el => {
+    document.querySelectorAll('div.fixed.inset-0').forEach((el) => {
       const z = getComputedStyle(el).zIndex
       if (Number(z) >= 50) el.remove()
     })

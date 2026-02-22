@@ -17,7 +17,6 @@ import { test, expect } from './fixtures'
 // F41 — Party page shows user's squads from DB
 // =============================================================================
 test.describe('F41 — Page Party affiche les squads du user', () => {
-
   test('F41a: Squad names from DB appear on the party page', async ({ authenticatedPage, db }) => {
     const userSquads = await db.getUserSquads()
     // Filter out E2E test squads to use real ones
@@ -29,7 +28,9 @@ test.describe('F41 — Page Party affiche les squads du user', () => {
     await authenticatedPage.waitForTimeout(2000)
 
     // STRICT: "Party" heading MUST be visible (h1 in Party.tsx)
-    await expect(authenticatedPage.getByRole('heading', { name: /Party/i })).toBeVisible({ timeout: 15000 })
+    await expect(authenticatedPage.getByRole('heading', { name: /Party/i })).toBeVisible({
+      timeout: 15000,
+    })
 
     if (targetSquads.length > 0) {
       // DB has squads → at least one squad name MUST appear on the party page
@@ -51,7 +52,10 @@ test.describe('F41 — Page Party affiche les squads du user', () => {
     }
   })
 
-  test('F41b: Number of visible squad cards matches DB count', async ({ authenticatedPage, db }) => {
+  test('F41b: Number of visible squad cards matches DB count', async ({
+    authenticatedPage,
+    db,
+  }) => {
     const userSquads = await db.getUserSquads()
 
     await authenticatedPage.goto('/party')
@@ -60,7 +64,9 @@ test.describe('F41 — Page Party affiche les squads du user', () => {
 
     if (userSquads.length === 0) {
       // STRICT: no squads → empty state MUST be visible (not just <main>)
-      await expect(authenticatedPage.getByText(/Parle avec ta squad/i)).toBeVisible({ timeout: 10000 })
+      await expect(authenticatedPage.getByText(/Parle avec ta squad/i)).toBeVisible({
+        timeout: 10000,
+      })
       return
     }
 
@@ -78,7 +84,10 @@ test.describe('F41 — Page Party affiche les squads du user', () => {
     expect(visibleSquadCount).toBe(userSquads.length)
   })
 
-  test('F41c: Party subtitle shows correct squad count from DB', async ({ authenticatedPage, db }) => {
+  test('F41c: Party subtitle shows correct squad count from DB', async ({
+    authenticatedPage,
+    db,
+  }) => {
     const userSquads = await db.getUserSquads()
 
     await authenticatedPage.goto('/party')
@@ -87,7 +96,9 @@ test.describe('F41 — Page Party affiche les squads du user', () => {
 
     if (userSquads.length === 0) {
       // STRICT: no squads → subtitle MUST say "Rejoins une squad" (Party.tsx line 189)
-      await expect(authenticatedPage.getByText(/Rejoins une squad/i)).toBeVisible({ timeout: 10000 })
+      await expect(authenticatedPage.getByText(/Rejoins une squad/i)).toBeVisible({
+        timeout: 10000,
+      })
       return
     }
 
@@ -103,8 +114,10 @@ test.describe('F41 — Page Party affiche les squads du user', () => {
 // F42 — Join party button (WebRTC resilience test)
 // =============================================================================
 test.describe('F42 — Rejoindre la party', () => {
-
-  test('F42: Rejoindre button is visible and page stays functional after click', async ({ authenticatedPage, db }) => {
+  test('F42: Rejoindre button is visible and page stays functional after click', async ({
+    authenticatedPage,
+    db,
+  }) => {
     const userSquads = await db.getUserSquads()
 
     await authenticatedPage.goto('/party')
@@ -120,7 +133,9 @@ test.describe('F42 — Rejoindre la party', () => {
 
     // STRICT: join/launch button MUST be visible
     // Single squad → "Lancer la party" (PartySingleSquad), Multiple squads → "Rejoindre" (PartySquadCard)
-    const joinBtn = authenticatedPage.getByRole('button', { name: /Rejoindre|Lancer la party/i }).first()
+    const joinBtn = authenticatedPage
+      .getByRole('button', { name: /Rejoindre|Lancer la party/i })
+      .first()
     await expect(joinBtn).toBeVisible({ timeout: 10000 })
 
     // Click join — WebRTC will likely fail in test env, but page MUST remain functional
@@ -131,7 +146,9 @@ test.describe('F42 — Rejoindre la party', () => {
     await expect(authenticatedPage.locator('body')).toBeVisible()
 
     // STRICT: "Party" heading MUST still be visible (page didn't navigate away)
-    await expect(authenticatedPage.getByRole('heading', { name: /Party/i })).toBeVisible({ timeout: 5000 })
+    await expect(authenticatedPage.getByRole('heading', { name: /Party/i })).toBeVisible({
+      timeout: 5000,
+    })
   })
 })
 
@@ -139,22 +156,29 @@ test.describe('F42 — Rejoindre la party', () => {
 // F43 — Voice controls not visible when disconnected
 // =============================================================================
 test.describe('F43 — Controles vocaux (etat deconnecte)', () => {
-
-  test('F43: No mute/leave controls visible when not connected to voice', async ({ authenticatedPage }) => {
+  test('F43: No mute/leave controls visible when not connected to voice', async ({
+    authenticatedPage,
+  }) => {
     await authenticatedPage.goto('/party')
     await authenticatedPage.waitForLoadState('networkidle')
     await authenticatedPage.waitForTimeout(2000)
 
     // STRICT: "Party" heading MUST be visible (page loaded)
-    await expect(authenticatedPage.getByRole('heading', { name: /Party/i })).toBeVisible({ timeout: 15000 })
+    await expect(authenticatedPage.getByRole('heading', { name: /Party/i })).toBeVisible({
+      timeout: 15000,
+    })
 
     // STRICT: mute/unmute button MUST NOT be visible when disconnected
-    const muteBtn = authenticatedPage.getByRole('button', { name: /Mute|Couper le micro|Unmute/i }).first()
+    const muteBtn = authenticatedPage
+      .getByRole('button', { name: /Mute|Couper le micro|Unmute/i })
+      .first()
     // STRICT: this assertion MUST pass — button should be hidden
     await expect(muteBtn).not.toBeVisible({ timeout: 3000 })
 
     // STRICT: leave/raccrocher button MUST NOT be visible when disconnected
-    const leaveBtn = authenticatedPage.getByRole('button', { name: /Quitter|Leave|Raccrocher/i }).first()
+    const leaveBtn = authenticatedPage
+      .getByRole('button', { name: /Quitter|Leave|Raccrocher/i })
+      .first()
     await expect(leaveBtn).not.toBeVisible({ timeout: 3000 })
 
     // STRICT: "En ligne" indicator MUST NOT be visible when disconnected
@@ -167,8 +191,10 @@ test.describe('F43 — Controles vocaux (etat deconnecte)', () => {
 // F44 — Empty state or squad cards render correctly
 // =============================================================================
 test.describe('F44 — Etat de la page party', () => {
-
-  test('F44: Party page renders squad cards when DB has squads, or empty state when empty', async ({ authenticatedPage, db }) => {
+  test('F44: Party page renders squad cards when DB has squads, or empty state when empty', async ({
+    authenticatedPage,
+    db,
+  }) => {
     const userSquads = await db.getUserSquads()
 
     await authenticatedPage.goto('/party')
@@ -176,12 +202,16 @@ test.describe('F44 — Etat de la page party', () => {
     await authenticatedPage.waitForTimeout(2000)
 
     // STRICT: Party heading MUST be visible
-    await expect(authenticatedPage.getByRole('heading', { name: /Party/i })).toBeVisible({ timeout: 15000 })
+    await expect(authenticatedPage.getByRole('heading', { name: /Party/i })).toBeVisible({
+      timeout: 15000,
+    })
 
     if (userSquads.length > 0) {
       // STRICT: DB has squads → join/launch buttons MUST be visible
       // Single squad → "Lancer la party" (PartySingleSquad), Multiple → "Rejoindre" (PartySquadCard)
-      const joinButtons = authenticatedPage.getByRole('button', { name: /Rejoindre|Lancer la party/i })
+      const joinButtons = authenticatedPage.getByRole('button', {
+        name: /Rejoindre|Lancer la party/i,
+      })
       const joinCount = await joinButtons.count()
       // STRICT: at least one join/launch button MUST exist
       expect(joinCount).toBeGreaterThan(0)
@@ -193,7 +223,9 @@ test.describe('F44 — Etat de la page party', () => {
     } else {
       // STRICT: DB has no squads → PartyEmptyState MUST render
       // "Parle avec ta squad" heading from PartyEmptyState
-      await expect(authenticatedPage.getByText(/Parle avec ta squad/i)).toBeVisible({ timeout: 10000 })
+      await expect(authenticatedPage.getByText(/Parle avec ta squad/i)).toBeVisible({
+        timeout: 10000,
+      })
       // "Trouver une squad" button from PartyEmptyState
       await expect(authenticatedPage.getByText(/Trouver une squad/i)).toBeVisible({ timeout: 5000 })
     }
@@ -204,7 +236,6 @@ test.describe('F44 — Etat de la page party', () => {
 // F45 — Page structure and accessibility
 // =============================================================================
 test.describe('F45 — Structure page party', () => {
-
   test('F45: Party page has correct semantic structure', async ({ authenticatedPage }) => {
     await authenticatedPage.goto('/party')
     await authenticatedPage.waitForLoadState('networkidle')
@@ -238,12 +269,18 @@ test.describe('F45 — Structure page party', () => {
     await expect(authenticatedPage.locator('body')).toBeVisible()
 
     // STRICT: main Party content MUST be visible (not just body)
-    await expect(authenticatedPage.locator('main[aria-label="Party vocale"]')).toBeVisible({ timeout: 10000 })
+    await expect(authenticatedPage.locator('main[aria-label="Party vocale"]')).toBeVisible({
+      timeout: 10000,
+    })
 
     // STRICT: no critical JS errors (filter out non-critical WebRTC errors)
     const criticalErrors = jsErrors.filter(
-      (err) => !err.includes('WebRTC') && !err.includes('LiveKit') && !err.includes('Agora')
-        && !err.includes('ResizeObserver') && !err.includes('AbortError')
+      (err) =>
+        !err.includes('WebRTC') &&
+        !err.includes('LiveKit') &&
+        !err.includes('Agora') &&
+        !err.includes('ResizeObserver') &&
+        !err.includes('AbortError')
     )
     // STRICT: no critical JS errors during page load
     expect(criticalErrors).toHaveLength(0)

@@ -19,7 +19,8 @@ export const TEST_USER = {
 
 const supabaseUrl = process.env.VITE_SUPABASE_URL || 'https://nxbqiwmfyafgshxzczxo.supabase.co'
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || 'placeholder'
-const hasServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY && process.env.SUPABASE_SERVICE_ROLE_KEY !== 'placeholder'
+const hasServiceKey =
+  process.env.SUPABASE_SERVICE_ROLE_KEY && process.env.SUPABASE_SERVICE_ROLE_KEY !== 'placeholder'
 
 export const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey, {
   auth: { autoRefreshToken: false, persistSession: false },
@@ -60,12 +61,23 @@ export class TestDataHelper {
     const userId = await this.getUserId()
     const { data } = await this.admin
       .from('squad_members')
-      .select('squad_id, role, squads!inner(id, name, game, invite_code, owner_id, total_members, is_public, created_at)')
+      .select(
+        'squad_id, role, squads!inner(id, name, game, invite_code, owner_id, total_members, is_public, created_at)'
+      )
       .eq('user_id', userId)
     return (data || []) as unknown as Array<{
       squad_id: string
       role: string
-      squads: { id: string; name: string; game: string; invite_code: string; owner_id: string; total_members: number; is_public: boolean; created_at: string }
+      squads: {
+        id: string
+        name: string
+        game: string
+        invite_code: string
+        owner_id: string
+        total_members: number
+        is_public: boolean
+        created_at: string
+      }
     }>
   }
 
@@ -229,7 +241,12 @@ export class TestDataHelper {
 
   // --- Discover ---
   async getPublicSquads(game?: string, region?: string) {
-    let query = this.admin.from('squads').select('*').eq('is_public', true).order('total_members', { ascending: false }).limit(20)
+    let query = this.admin
+      .from('squads')
+      .select('*')
+      .eq('is_public', true)
+      .order('total_members', { ascending: false })
+      .limit(20)
     if (game) query = query.ilike('game', `%${game}%`)
     if (region) query = query.eq('region', region)
     const { data } = await query
@@ -281,7 +298,9 @@ export class TestDataHelper {
       .select()
       .single()
     if (error) throw new Error(`createTestSquad failed: ${error.message}`)
-    await this.admin.from('squad_members').insert({ squad_id: data.id, user_id: userId, role: 'leader' })
+    await this.admin
+      .from('squad_members')
+      .insert({ squad_id: data.id, user_id: userId, role: 'leader' })
     return data
   }
 
@@ -290,7 +309,10 @@ export class TestDataHelper {
     try {
       await this.admin.from('pinned_messages').delete().eq('squad_id', squadId)
       await this.admin.from('messages').delete().eq('squad_id', squadId)
-      const { data: sessions } = await this.admin.from('sessions').select('id').eq('squad_id', squadId)
+      const { data: sessions } = await this.admin
+        .from('sessions')
+        .select('id')
+        .eq('squad_id', squadId)
       if (sessions && sessions.length > 0) {
         const sessionIds = sessions.map((s: { id: string }) => s.id)
         await this.admin.from('session_checkins').delete().in('session_id', sessionIds)
@@ -298,7 +320,9 @@ export class TestDataHelper {
       }
       await this.admin.from('sessions').delete().eq('squad_id', squadId)
       await this.admin.from('squad_members').delete().eq('squad_id', squadId)
-    } catch { /* ignore cleanup errors */ }
+    } catch {
+      /* ignore cleanup errors */
+    }
     await this.admin.from('squads').delete().eq('id', squadId)
   }
 
@@ -339,18 +363,30 @@ export class TestDataHelper {
     return data
   }
 
-  async createTestSession(squadId: string, overrides: Partial<{ title: string; scheduled_at: string; duration_minutes: number; auto_confirm_threshold: number; status: string }> = {}) {
+  async createTestSession(
+    squadId: string,
+    overrides: Partial<{
+      title: string
+      scheduled_at: string
+      duration_minutes: number
+      auto_confirm_threshold: number
+      status: string
+    }> = {}
+  ) {
     const userId = await this.getUserId()
     const { data, error } = await this.admin
       .from('sessions')
       .insert({
         squad_id: squadId,
         title: overrides.title || `E2E Test Session ${Date.now()}`,
-        scheduled_at: overrides.scheduled_at || new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
+        scheduled_at:
+          overrides.scheduled_at || new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
         duration_minutes: overrides.duration_minutes || 120,
         created_by: userId,
         status: overrides.status || 'proposed',
-        ...(overrides.auto_confirm_threshold !== undefined && { auto_confirm_threshold: overrides.auto_confirm_threshold }),
+        ...(overrides.auto_confirm_threshold !== undefined && {
+          auto_confirm_threshold: overrides.auto_confirm_threshold,
+        }),
       })
       .select()
       .single()
@@ -358,7 +394,11 @@ export class TestDataHelper {
     return data
   }
 
-  async createTestRsvp(sessionId: string, userId: string, response: 'present' | 'absent' | 'maybe' = 'present') {
+  async createTestRsvp(
+    sessionId: string,
+    userId: string,
+    response: 'present' | 'absent' | 'maybe' = 'present'
+  ) {
     const { data, error } = await this.admin
       .from('session_rsvps')
       .insert({ session_id: sessionId, user_id: userId, response })
@@ -369,11 +409,7 @@ export class TestDataHelper {
   }
 
   async getSessionById(sessionId: string) {
-    const { data } = await this.admin
-      .from('sessions')
-      .select('*')
-      .eq('id', sessionId)
-      .single()
+    const { data } = await this.admin.from('sessions').select('*').eq('id', sessionId).single()
     return data
   }
 
@@ -464,10 +500,20 @@ export class TestDataHelper {
 
   /** Supprime un user temporaire et toutes ses données (cascade sur 9 tables + auth) */
   async deleteTemporaryTestUser(userId: string): Promise<void> {
-    const tables = ['session_checkins', 'session_rsvps', 'messages', 'direct_messages',
-      'party_participants', 'push_subscriptions', 'squad_members', 'ai_insights', 'profiles']
+    const tables = [
+      'session_checkins',
+      'session_rsvps',
+      'messages',
+      'direct_messages',
+      'party_participants',
+      'push_subscriptions',
+      'squad_members',
+      'ai_insights',
+      'profiles',
+    ]
     for (const table of tables) {
-      const col = table === 'profiles' ? 'id' : (table === 'direct_messages' ? 'sender_id' : 'user_id')
+      const col =
+        table === 'profiles' ? 'id' : table === 'direct_messages' ? 'sender_id' : 'user_id'
       await this.admin.from(table).delete().eq(col, userId)
     }
     await this.admin.auth.admin.deleteUser(userId)
@@ -475,17 +521,14 @@ export class TestDataHelper {
 
   /** Récupère les push_subscriptions d'un user */
   async getPushSubscriptions(userId?: string) {
-    const uid = userId || await this.getUserId()
-    const { data } = await this.admin
-      .from('push_subscriptions')
-      .select('*')
-      .eq('user_id', uid)
+    const uid = userId || (await this.getUserId())
+    const { data } = await this.admin.from('push_subscriptions').select('*').eq('user_id', uid)
     return data || []
   }
 
   /** Récupère les ai_insights / reminders d'un user */
   async getAiInsights(userId?: string) {
-    const uid = userId || await this.getUserId()
+    const uid = userId || (await this.getUserId())
     const { data } = await this.admin
       .from('ai_insights')
       .select('*')
@@ -550,12 +593,19 @@ export async function dismissTourOverlay(page: import('@playwright/test').Page) 
     const tourClose = page.locator(
       'button:has-text("Fermer le guide"), button:has-text("Passer"), button:has-text("Terminer"), button:has-text("Compris"), button[aria-label="Fermer"]'
     )
-    if (await tourClose.first().isVisible({ timeout: 2000 }).catch(() => false)) {
+    if (
+      await tourClose
+        .first()
+        .isVisible({ timeout: 2000 })
+        .catch(() => false)
+    ) {
       await tourClose.first().click()
       await page.waitForTimeout(500)
     }
     // Si le tour persiste après le bouton, cliquer l'overlay lui-même
-    const overlay = page.locator('div.fixed.inset-0[class*="z-"]').filter({ has: page.locator('rect[mask]') })
+    const overlay = page
+      .locator('div.fixed.inset-0[class*="z-"]')
+      .filter({ has: page.locator('rect[mask]') })
     if (await overlay.isVisible({ timeout: 500 }).catch(() => false)) {
       // Presser Escape pour fermer le tour
       await page.keyboard.press('Escape')
@@ -576,11 +626,17 @@ export async function loginViaUI(page: import('@playwright/test').Page) {
 
   for (let attempt = 0; attempt < 3; attempt++) {
     try {
-      await page.waitForURL((url) => !url.pathname.includes('/auth'), { timeout: 20000, waitUntil: 'domcontentloaded' })
+      await page.waitForURL((url) => !url.pathname.includes('/auth'), {
+        timeout: 20000,
+        waitUntil: 'domcontentloaded',
+      })
       await page.waitForTimeout(1000)
       return
     } catch {
-      const rateLimited = await page.locator('text=/rate limit/i').isVisible().catch(() => false)
+      const rateLimited = await page
+        .locator('text=/rate limit/i')
+        .isVisible()
+        .catch(() => false)
       if (rateLimited && attempt < 2) {
         await page.waitForTimeout(3000 + attempt * 2000)
         await page.click('button[type="submit"]')
@@ -598,24 +654,46 @@ export async function isAuthenticated(page: import('@playwright/test').Page): Pr
 
 /** Vérifie si la page affiche une erreur 500 */
 export async function hasServerError(page: import('@playwright/test').Page): Promise<boolean> {
-  const has500 = await page.getByText(/^500$/).first().isVisible({ timeout: 1000 }).catch(() => false)
-  const hasErrText = await page.getByText(/Erreur interne du serveur/i).first().isVisible({ timeout: 500 }).catch(() => false)
+  const has500 = await page
+    .getByText(/^500$/)
+    .first()
+    .isVisible({ timeout: 1000 })
+    .catch(() => false)
+  const hasErrText = await page
+    .getByText(/Erreur interne du serveur/i)
+    .first()
+    .isVisible({ timeout: 500 })
+    .catch(() => false)
   return has500 || hasErrText
 }
 
 /** Vérifie si la page affiche une erreur réseau et tente un reload */
-export async function retryOnNetworkError(page: import('@playwright/test').Page, maxRetries = 2): Promise<boolean> {
+export async function retryOnNetworkError(
+  page: import('@playwright/test').Page,
+  maxRetries = 2
+): Promise<boolean> {
   for (let i = 0; i < maxRetries; i++) {
-    const hasError = await page.getByText(/Erreur réseau/i).first().isVisible({ timeout: 2000 }).catch(() => false)
+    const hasError = await page
+      .getByText(/Erreur réseau/i)
+      .first()
+      .isVisible({ timeout: 2000 })
+      .catch(() => false)
     if (!hasError) return true // pas d'erreur
     await page.reload({ waitUntil: 'networkidle' })
     await page.waitForTimeout(2000)
   }
-  return !(await page.getByText(/Erreur réseau/i).first().isVisible({ timeout: 1000 }).catch(() => false))
+  return !(await page
+    .getByText(/Erreur réseau/i)
+    .first()
+    .isVisible({ timeout: 1000 })
+    .catch(() => false))
 }
 
 /** Navigate to a page. If SSR returns 500, navigate via the sidebar link instead */
-export async function navigateWithFallback(page: import('@playwright/test').Page, path: string): Promise<boolean> {
+export async function navigateWithFallback(
+  page: import('@playwright/test').Page,
+  path: string
+): Promise<boolean> {
   await page.goto(path)
   await page.waitForLoadState('networkidle')
   await page.waitForTimeout(1500)
@@ -652,8 +730,9 @@ export async function checkAccessibility(
   page: import('@playwright/test').Page,
   options?: { tags?: string[]; excludeSelectors?: string[] }
 ) {
-  let builder = new AxeBuilder({ page })
-    .withTags(options?.tags || ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])
+  let builder = new AxeBuilder({ page }).withTags(
+    options?.tags || ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa']
+  )
 
   if (options?.excludeSelectors) {
     for (const selector of options.excludeSelectors) {

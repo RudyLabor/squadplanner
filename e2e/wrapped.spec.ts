@@ -22,7 +22,10 @@ test.describe('Gaming Wrapped — /wrapped', () => {
     expect(mainText!.length).toBeGreaterThan(50)
   })
 
-  test('affiche des donnees coherentes avec le profil DB ou un etat d\'erreur', async ({ authenticatedPage: page, db }) => {
+  test("affiche des donnees coherentes avec le profil DB ou un etat d'erreur", async ({
+    authenticatedPage: page,
+    db,
+  }) => {
     const profile = await db.getProfile()
     expect(profile).toBeTruthy()
 
@@ -42,14 +45,18 @@ test.describe('Gaming Wrapped — /wrapped', () => {
       const hasUsername = mainText!.includes(profile.username)
       const hasLevel = mainText!.includes(String(profile.level ?? 1))
       const hasXP = profile.xp > 0 && mainText!.includes(String(profile.xp))
-      const hasReliability = profile.reliability_score > 0 && mainText!.includes(String(profile.reliability_score))
+      const hasReliability =
+        profile.reliability_score > 0 && mainText!.includes(String(profile.reliability_score))
 
       expect(hasUsername || hasLevel || hasXP || hasReliability).toBe(true)
     }
     // Si erreur de chargement, le test passe — c'est un etat valide de la page
   })
 
-  test('affiche les squads du user si elles existent en DB', async ({ authenticatedPage: page, db }) => {
+  test('affiche les squads du user si elles existent en DB', async ({
+    authenticatedPage: page,
+    db,
+  }) => {
     const squads = await db.getUserSquads()
 
     const loaded = await navigateWithFallback(page, '/wrapped')

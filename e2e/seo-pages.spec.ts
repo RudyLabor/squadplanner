@@ -62,7 +62,10 @@ test.describe('Game Landing Page — /games/valorant', () => {
     await expect(faqHeading).toBeVisible({ timeout: 10000 })
 
     // STRICT: au moins une question FAQ DOIT etre cliquable
-    const faqItem = page.locator('button, details, [role="button"]').filter({ hasText: /\?/ }).first()
+    const faqItem = page
+      .locator('button, details, [role="button"]')
+      .filter({ hasText: /\?/ })
+      .first()
     await expect(faqItem).toBeVisible({ timeout: 10000 })
   })
 
@@ -234,7 +237,9 @@ test.describe('Alternative Guilded — /alternative/guilded', () => {
     await dismissCookieBanner(page)
 
     // STRICT: un CTA principal DOIT etre visible
-    const cta = page.getByRole('link', { name: /Créer|Découvrir|Essayer|Commencer|Squad Planner/i }).first()
+    const cta = page
+      .getByRole('link', { name: /Créer|Découvrir|Essayer|Commencer|Squad Planner/i })
+      .first()
     await expect(cta).toBeVisible({ timeout: 15000 })
   })
 })
@@ -352,7 +357,9 @@ test.describe('VS Comparison — /vs/guilded-vs-squad-planner', () => {
     await page.waitForTimeout(1000)
 
     // STRICT: un CTA DOIT etre visible en bas de page
-    const cta = page.getByRole('link', { name: /Créer|Essayer|Commencer|Découvrir|Squad Planner/i }).first()
+    const cta = page
+      .getByRole('link', { name: /Créer|Essayer|Commencer|Découvrir|Squad Planner/i })
+      .first()
     await expect(cta).toBeVisible({ timeout: 10000 })
   })
 })

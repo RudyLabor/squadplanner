@@ -20,7 +20,11 @@ test.describe('F23 — Creer une session via UI + verifier DB', () => {
 
   test.afterEach(async ({ db }) => {
     if (createdSessionId) {
-      try { await db.deleteTestSession(createdSessionId) } catch { /* cleanup */ }
+      try {
+        await db.deleteTestSession(createdSessionId)
+      } catch {
+        /* cleanup */
+      }
       createdSessionId = null
     }
   })
@@ -87,16 +91,27 @@ test.describe('F24 — Detail de session correspond a la DB', () => {
 
   test.afterEach(async ({ db }) => {
     if (testSessionId) {
-      try { await db.deleteTestSession(testSessionId) } catch { /* cleanup */ }
+      try {
+        await db.deleteTestSession(testSessionId)
+      } catch {
+        /* cleanup */
+      }
       testSessionId = null
     }
     if (testSquadId) {
-      try { await db.deleteTestSquad(testSquadId) } catch { /* cleanup */ }
+      try {
+        await db.deleteTestSquad(testSquadId)
+      } catch {
+        /* cleanup */
+      }
       testSquadId = null
     }
   })
 
-  test('F24: titre de session affiche correspond a la DB', async ({ authenticatedPage: page, db }) => {
+  test('F24: titre de session affiche correspond a la DB', async ({
+    authenticatedPage: page,
+    db,
+  }) => {
     // 1. Creer une squad + session de test deterministe
     const testSquad = await db.createTestSquad({ name: `E2E Test Squad Detail ${Date.now()}` })
     testSquadId = testSquad.id
@@ -132,11 +147,19 @@ test.describe('F25 — RSVP', () => {
 
   test.afterEach(async ({ db }) => {
     if (testSessionId) {
-      try { await db.deleteTestSession(testSessionId) } catch { /* cleanup */ }
+      try {
+        await db.deleteTestSession(testSessionId)
+      } catch {
+        /* cleanup */
+      }
       testSessionId = null
     }
     if (testSquadId) {
-      try { await db.deleteTestSquad(testSquadId) } catch { /* cleanup */ }
+      try {
+        await db.deleteTestSquad(testSquadId)
+      } catch {
+        /* cleanup */
+      }
       testSquadId = null
     }
   })
@@ -210,22 +233,33 @@ test.describe('F25 — RSVP', () => {
 // F26 — Dialog d'edition de session
 // ============================================================
 
-test.describe('F26 — Dialog d\'edition de session', () => {
+test.describe("F26 — Dialog d'edition de session", () => {
   let testSquadId: string | null = null
   let testSessionId: string | null = null
 
   test.afterEach(async ({ db }) => {
     if (testSessionId) {
-      try { await db.deleteTestSession(testSessionId) } catch { /* cleanup */ }
+      try {
+        await db.deleteTestSession(testSessionId)
+      } catch {
+        /* cleanup */
+      }
       testSessionId = null
     }
     if (testSquadId) {
-      try { await db.deleteTestSquad(testSquadId) } catch { /* cleanup */ }
+      try {
+        await db.deleteTestSquad(testSquadId)
+      } catch {
+        /* cleanup */
+      }
       testSquadId = null
     }
   })
 
-  test('F26: le dialog d\'edition pre-remplit les valeurs de la DB', async ({ authenticatedPage: page, db }) => {
+  test("F26: le dialog d'edition pre-remplit les valeurs de la DB", async ({
+    authenticatedPage: page,
+    db,
+  }) => {
     // 1. Creer une squad + session de test (le user est leader -> peut editer)
     const testSquad = await db.createTestSquad({ name: `E2E Test Squad Edit ${Date.now()}` })
     testSquadId = testSquad.id
@@ -248,7 +282,9 @@ test.describe('F26 — Dialog d\'edition de session', () => {
     await page.waitForLoadState('networkidle')
 
     // 4. Le bouton d'edition DOIT etre visible (user est leader/createur)
-    const editBtn = page.locator('button[aria-label="Modifier la session"], button:has-text("Modifier")').first()
+    const editBtn = page
+      .locator('button[aria-label="Modifier la session"], button:has-text("Modifier")')
+      .first()
     // STRICT: le bouton "Modifier" DOIT etre visible pour le createur de la session
     await expect(editBtn).toBeVisible({ timeout: 15000 })
 
@@ -261,7 +297,9 @@ test.describe('F26 — Dialog d\'edition de session', () => {
     await expect(dialogHeader).toBeVisible({ timeout: 10000 })
 
     // 6. Le titre pre-rempli DOIT correspondre a la DB
-    const titleInput = page.locator('input[name="title"], input[placeholder*="Session"], input[placeholder*="titre"]').first()
+    const titleInput = page
+      .locator('input[name="title"], input[placeholder*="Session"], input[placeholder*="titre"]')
+      .first()
     // STRICT: le champ titre DOIT etre visible dans le dialog d'edition
     await expect(titleInput).toBeVisible({ timeout: 10000 })
     const titleValue = await titleInput.inputValue()
@@ -269,7 +307,9 @@ test.describe('F26 — Dialog d\'edition de session', () => {
     expect(titleValue).toBe(dbSession.title)
 
     // 7. La duree DOIT etre affichee dans le dialog
-    const durationText = page.getByText(new RegExp(`${dbSession.duration_minutes}\\s*min`, 'i')).first()
+    const durationText = page
+      .getByText(new RegExp(`${dbSession.duration_minutes}\\s*min`, 'i'))
+      .first()
     // STRICT: la duree en DB DOIT etre visible dans le dialog d'edition
     await expect(durationText).toBeVisible({ timeout: 10000 })
 
@@ -297,16 +337,27 @@ test.describe('F27 — Annuler une session + verifier DB', () => {
 
   test.afterEach(async ({ db }) => {
     if (testSessionId) {
-      try { await db.deleteTestSession(testSessionId) } catch { /* cleanup */ }
+      try {
+        await db.deleteTestSession(testSessionId)
+      } catch {
+        /* cleanup */
+      }
       testSessionId = null
     }
     if (testSquadId) {
-      try { await db.deleteTestSquad(testSquadId) } catch { /* cleanup */ }
+      try {
+        await db.deleteTestSquad(testSquadId)
+      } catch {
+        /* cleanup */
+      }
       testSquadId = null
     }
   })
 
-  test('F27: annuler une session et verifier le statut en DB', async ({ authenticatedPage: page, db }) => {
+  test('F27: annuler une session et verifier le statut en DB', async ({
+    authenticatedPage: page,
+    db,
+  }) => {
     // 1. Creer une squad + session de test
     const testSquad = await db.createTestSquad({ name: `E2E Test Squad Cancel ${Date.now()}` })
     testSquadId = testSquad.id
@@ -335,16 +386,22 @@ test.describe('F27 — Annuler une session + verifier DB', () => {
     await page.waitForTimeout(1000)
 
     // 4. Gerer le dialog de confirmation s'il apparait
-    const confirmDialog = page.locator('dialog, [role="dialog"], [role="alertdialog"]').filter({ hasText: /Annuler cette session/i })
+    const confirmDialog = page
+      .locator('dialog, [role="dialog"], [role="alertdialog"]')
+      .filter({ hasText: /Annuler cette session/i })
     const hasConfirmDialog = await confirmDialog.isVisible({ timeout: 5000 }).catch(() => false)
     if (hasConfirmDialog) {
-      const confirmBtn = confirmDialog.getByRole('button', { name: /Annuler la session|Confirmer|Oui/i })
+      const confirmBtn = confirmDialog.getByRole('button', {
+        name: /Annuler la session|Confirmer|Oui/i,
+      })
       // STRICT: le bouton de confirmation DOIT etre dans le dialog
       await expect(confirmBtn).toBeVisible({ timeout: 5000 })
       await confirmBtn.click()
     } else {
       // Pas de dialog de confirmation — tenter le bouton de confirmation directe
-      const directConfirm = page.getByRole('button', { name: /Confirmer|Oui|Annuler la session/i }).last()
+      const directConfirm = page
+        .getByRole('button', { name: /Confirmer|Oui|Annuler la session/i })
+        .last()
       const directVisible = await directConfirm.isVisible({ timeout: 3000 }).catch(() => false)
       if (directVisible) {
         await directConfirm.click()
@@ -373,16 +430,27 @@ test.describe('F28 — Check-in', () => {
 
   test.afterEach(async ({ db }) => {
     if (testSessionId) {
-      try { await db.deleteTestSession(testSessionId) } catch { /* cleanup */ }
+      try {
+        await db.deleteTestSession(testSessionId)
+      } catch {
+        /* cleanup */
+      }
       testSessionId = null
     }
     if (testSquadId) {
-      try { await db.deleteTestSquad(testSquadId) } catch { /* cleanup */ }
+      try {
+        await db.deleteTestSquad(testSquadId)
+      } catch {
+        /* cleanup */
+      }
       testSquadId = null
     }
   })
 
-  test('F28: check-in sur une session active et verifier en DB', async ({ authenticatedPage: page, db }) => {
+  test('F28: check-in sur une session active et verifier en DB', async ({
+    authenticatedPage: page,
+    db,
+  }) => {
     const userId = await db.getUserId()
 
     // 1. Creer une squad de test
@@ -416,7 +484,9 @@ test.describe('F28 — Check-in', () => {
     await page.waitForLoadState('networkidle')
 
     // 5. Le bouton de check-in DOIT etre visible (session active + RSVP present)
-    const checkinBtn = page.getByRole('button', { name: /Je suis là|Check-in|Pointer|J'arrive/i }).first()
+    const checkinBtn = page
+      .getByRole('button', { name: /Je suis là|Check-in|Pointer|J'arrive/i })
+      .first()
     // STRICT: le bouton check-in DOIT etre visible pour un user qui a RSVP present sur une session active
     await expect(checkinBtn).toBeVisible({ timeout: 15000 })
 
@@ -446,16 +516,27 @@ test.describe('F29 — Auto-confirm', () => {
 
   test.afterEach(async ({ db }) => {
     if (testSessionId) {
-      try { await db.deleteTestSession(testSessionId) } catch { /* cleanup */ }
+      try {
+        await db.deleteTestSession(testSessionId)
+      } catch {
+        /* cleanup */
+      }
       testSessionId = null
     }
     if (testSquadId) {
-      try { await db.deleteTestSquad(testSquadId) } catch { /* cleanup */ }
+      try {
+        await db.deleteTestSquad(testSquadId)
+      } catch {
+        /* cleanup */
+      }
       testSquadId = null
     }
   })
 
-  test('F29: session auto-confirmee quand le seuil de RSVP est atteint', async ({ authenticatedPage: page, db }) => {
+  test('F29: session auto-confirmee quand le seuil de RSVP est atteint', async ({
+    authenticatedPage: page,
+    db,
+  }) => {
     const userId = await db.getUserId()
 
     // 1. Creer une squad de test
@@ -468,7 +549,9 @@ test.describe('F29 — Auto-confirm', () => {
     try {
       // Ajouter le temp user a la squad
       await db.admin.from('squad_members').insert({
-        squad_id: testSquad.id, user_id: tempUser.userId, role: 'member',
+        squad_id: testSquad.id,
+        user_id: tempUser.userId,
+        role: 'member',
       })
 
       // 3. Creer une session avec auto_confirm_threshold = 2 (minimum autorise par la DB)
@@ -506,7 +589,11 @@ test.describe('F29 — Auto-confirm', () => {
       expect(sessionAfter.status).toBe('confirmed')
     } finally {
       // Cleanup temp user
-      try { await db.deleteTemporaryTestUser(tempUser.userId) } catch { /* cleanup */ }
+      try {
+        await db.deleteTemporaryTestUser(tempUser.userId)
+      } catch {
+        /* cleanup */
+      }
     }
   })
 })
@@ -521,16 +608,27 @@ test.describe('F30 — Resultats post-session', () => {
 
   test.afterEach(async ({ db }) => {
     if (testSessionId) {
-      try { await db.deleteTestSession(testSessionId) } catch { /* cleanup */ }
+      try {
+        await db.deleteTestSession(testSessionId)
+      } catch {
+        /* cleanup */
+      }
       testSessionId = null
     }
     if (testSquadId) {
-      try { await db.deleteTestSquad(testSquadId) } catch { /* cleanup */ }
+      try {
+        await db.deleteTestSquad(testSquadId)
+      } catch {
+        /* cleanup */
+      }
       testSquadId = null
     }
   })
 
-  test('F30: affiche les resultats avec Inscrits, Check-ins, Fiabilite coherents avec la DB', async ({ authenticatedPage: page, db }) => {
+  test('F30: affiche les resultats avec Inscrits, Check-ins, Fiabilite coherents avec la DB', async ({
+    authenticatedPage: page,
+    db,
+  }) => {
     const userId = await db.getUserId()
 
     // 1. Creer une squad de test
@@ -600,7 +698,9 @@ test.describe('F30 — Resultats post-session', () => {
 // ============================================================
 
 test.describe('F73 — Rappels et notifications', () => {
-  test('F73a: la page settings affiche la section notifications', async ({ authenticatedPage: page }) => {
+  test('F73a: la page settings affiche la section notifications', async ({
+    authenticatedPage: page,
+  }) => {
     await page.goto('/settings')
     await page.waitForLoadState('networkidle')
 
@@ -641,7 +741,10 @@ test.describe('Sessions — Extras', () => {
     await expect(page.getByText(/prochaines sessions/i).first()).toBeVisible({ timeout: 15000 })
   })
 
-  test('F-extra: le nombre de sessions affiche correspond a la DB', async ({ authenticatedPage: page, db }) => {
+  test('F-extra: le nombre de sessions affiche correspond a la DB', async ({
+    authenticatedPage: page,
+    db,
+  }) => {
     // 1. Fetch DB data FIRST
     const sessions = await db.getUserUpcomingSessions()
     const dbCount = sessions.length
@@ -666,7 +769,10 @@ test.describe('Sessions — Extras', () => {
     }
   })
 
-  test('F-extra: le nombre de sessions d\'une squad correspond a la DB', async ({ authenticatedPage: page, db }) => {
+  test("F-extra: le nombre de sessions d'une squad correspond a la DB", async ({
+    authenticatedPage: page,
+    db,
+  }) => {
     // 1. Fetch DB data FIRST
     const squads = await db.getUserSquads()
     // STRICT: l'utilisateur de test DOIT avoir au moins une squad

@@ -33,12 +33,17 @@ test.describe('Squad Analytics — /squad/:id/analytics', () => {
     await dismissTourOverlay(page)
 
     // STRICT: le heading "Analytics Squad" OU le nom de la squad DOIT etre affiche
-    const heading = page.getByText(/Analytics Squad/i).first()
+    const heading = page
+      .getByText(/Analytics Squad/i)
+      .first()
       .or(page.getByText(squad.name).first())
     await expect(heading).toBeVisible({ timeout: 15000 })
   })
 
-  test('affiche le nombre de membres correspondant a la DB', async ({ authenticatedPage: page, db }) => {
+  test('affiche le nombre de membres correspondant a la DB', async ({
+    authenticatedPage: page,
+    db,
+  }) => {
     const squads = await db.getUserSquads()
     expect(squads.length).toBeGreaterThan(0)
     const squad = squads[0].squads
@@ -68,7 +73,9 @@ test.describe('Squad Analytics — /squad/:id/analytics', () => {
     await dismissTourOverlay(page)
 
     // STRICT: une section fiabilite OU des stats DOIVENT etre visibles
-    const statsContent = page.getByText(/Fiabilité|fiabilité|Reliability|Sessions|Membres|membres/i).first()
+    const statsContent = page
+      .getByText(/Fiabilité|fiabilité|Reliability|Sessions|Membres|membres/i)
+      .first()
     await expect(statsContent).toBeVisible({ timeout: 15000 })
   })
 

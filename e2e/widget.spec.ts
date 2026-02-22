@@ -15,7 +15,11 @@ test.describe('Widget Embed — /widget/:squadId', () => {
 
   test.afterEach(async ({ db }) => {
     if (testSessionId) {
-      try { await db.deleteTestSession(testSessionId) } catch { /* cleanup */ }
+      try {
+        await db.deleteTestSession(testSessionId)
+      } catch {
+        /* cleanup */
+      }
       testSessionId = null
     }
   })
@@ -33,7 +37,10 @@ test.describe('Widget Embed — /widget/:squadId', () => {
     await expect(page.getByText(squad.name).first()).toBeVisible({ timeout: 15000 })
   })
 
-  test('affiche le nombre de membres correspondant a la DB', async ({ authenticatedPage: page, db }) => {
+  test('affiche le nombre de membres correspondant a la DB', async ({
+    authenticatedPage: page,
+    db,
+  }) => {
     const squads = await db.getUserSquads()
     expect(squads.length).toBeGreaterThan(0)
     const squad = squads[0].squads

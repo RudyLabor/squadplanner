@@ -13,7 +13,10 @@ import { test, expect, navigateWithFallback, dismissTourOverlay } from './fixtur
 // ============================================================
 
 test.describe('Squad Detail — Header complet', () => {
-  test('affiche le nom, jeu et compteur membres de la DB', async ({ authenticatedPage: page, db }) => {
+  test('affiche le nom, jeu et compteur membres de la DB', async ({
+    authenticatedPage: page,
+    db,
+  }) => {
     const squads = await db.getUserSquads()
     expect(squads.length).toBeGreaterThan(0)
     const squad = squads[0].squads
@@ -30,7 +33,9 @@ test.describe('Squad Detail — Header complet', () => {
 
     // STRICT: le jeu DB DOIT etre visible (si defini)
     if (squad.game) {
-      await expect(page.getByText(new RegExp(squad.game, 'i')).first()).toBeVisible({ timeout: 10000 })
+      await expect(page.getByText(new RegExp(squad.game, 'i')).first()).toBeVisible({
+        timeout: 10000,
+      })
     }
 
     // STRICT: le compteur de membres DOIT correspondre a la DB
@@ -44,7 +49,10 @@ test.describe('Squad Detail — Header complet', () => {
 // ============================================================
 
 test.describe('Squad Detail — Section Membres', () => {
-  test('la liste des membres affiche les usernames de la DB', async ({ authenticatedPage: page, db }) => {
+  test('la liste des membres affiche les usernames de la DB', async ({
+    authenticatedPage: page,
+    db,
+  }) => {
     const squads = await db.getUserSquads()
     expect(squads.length).toBeGreaterThan(0)
     const squad = squads[0].squads
@@ -57,7 +65,9 @@ test.describe('Squad Detail — Section Membres', () => {
     await dismissTourOverlay(page)
 
     // STRICT: le heading "Membres (N)" DOIT etre visible
-    const membersHeading = page.getByText(new RegExp(`Membres\\s*\\(${members.length}\\)`, 'i')).first()
+    const membersHeading = page
+      .getByText(new RegExp(`Membres\\s*\\(${members.length}\\)`, 'i'))
+      .first()
     await expect(membersHeading).toBeVisible({ timeout: 15000 })
 
     // STRICT: chaque username DB DOIT etre visible dans la section
@@ -69,7 +79,10 @@ test.describe('Squad Detail — Section Membres', () => {
     }
   })
 
-  test('le bouton Inviter ouvre le dialog avec le code de la DB', async ({ authenticatedPage: page, db }) => {
+  test('le bouton Inviter ouvre le dialog avec le code de la DB', async ({
+    authenticatedPage: page,
+    db,
+  }) => {
     const squads = await db.getUserSquads()
     expect(squads.length).toBeGreaterThan(0)
     const squad = squads[0].squads
@@ -98,7 +111,11 @@ test.describe('Squad Detail — Section Sessions', () => {
 
   test.afterEach(async ({ db }) => {
     if (testSessionId) {
-      try { await db.deleteTestSession(testSessionId) } catch { /* cleanup */ }
+      try {
+        await db.deleteTestSession(testSessionId)
+      } catch {
+        /* cleanup */
+      }
       testSessionId = null
     }
   })
@@ -170,6 +187,8 @@ test.describe('Squad Detail — Squad inexistante', () => {
     await expect(page.getByText(/Squad non trouvée/i).first()).toBeVisible({ timeout: 15000 })
 
     // STRICT: le bouton "Retour aux squads" DOIT etre present
-    await expect(page.getByRole('button', { name: /Retour aux squads/i })).toBeVisible({ timeout: 5000 })
+    await expect(page.getByRole('button', { name: /Retour aux squads/i })).toBeVisible({
+      timeout: 5000,
+    })
   })
 })

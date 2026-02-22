@@ -105,7 +105,9 @@ baseTest.describe('Premium page — FAQ', () => {
     await page.waitForLoadState('networkidle')
 
     // STRICT: FAQ questions MUST be visible
-    await baseExpect(page.getByText(/annuler quand je veux/i).first()).toBeVisible({ timeout: 10000 })
+    await baseExpect(page.getByText(/annuler quand je veux/i).first()).toBeVisible({
+      timeout: 10000,
+    })
     await baseExpect(page.getByText(/Squad Leader/i).first()).toBeVisible({ timeout: 5000 })
     await baseExpect(page.getByText(/essai/i).first()).toBeVisible({ timeout: 5000 })
   })
@@ -136,13 +138,17 @@ test.describe('Premium page — CTA buttons (authenticated)', () => {
     await authenticatedPage.waitForTimeout(1500)
 
     // STRICT: at least one CTA button MUST be visible for a paid tier
-    const cta = authenticatedPage.getByRole('button', {
-      name: /Passer Premium|Commencer|Choisir|Essai gratuit/i,
-    }).first()
+    const cta = authenticatedPage
+      .getByRole('button', {
+        name: /Passer Premium|Commencer|Choisir|Essai gratuit/i,
+      })
+      .first()
     await expect(cta).toBeVisible({ timeout: 10000 })
   })
 
-  test('checkout call includes tier metadata when clicking upgrade', async ({ authenticatedPage }) => {
+  test('checkout call includes tier metadata when clicking upgrade', async ({
+    authenticatedPage,
+  }) => {
     let interceptedBody: Record<string, unknown> | null = null
 
     await authenticatedPage.route('**/functions/v1/create-checkout', async (route) => {
@@ -163,9 +169,11 @@ test.describe('Premium page — CTA buttons (authenticated)', () => {
     await authenticatedPage.waitForTimeout(1500)
 
     // Click the first upgrade CTA
-    const upgradeBtn = authenticatedPage.getByRole('button', {
-      name: /Passer Premium|Commencer|Choisir/i,
-    }).first()
+    const upgradeBtn = authenticatedPage
+      .getByRole('button', {
+        name: /Passer Premium|Commencer|Choisir/i,
+      })
+      .first()
 
     const isVisible = await upgradeBtn.isVisible({ timeout: 5000 }).catch(() => false)
     if (isVisible) {

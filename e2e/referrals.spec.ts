@@ -16,7 +16,10 @@ test.describe('Referrals page — authenticated (STRICT)', () => {
   // Increase timeout for auth + API calls
   test.setTimeout(60000)
 
-  test('navigates to /referrals and displays referral dashboard with DB-validated profile', async ({ authenticatedPage, db }) => {
+  test('navigates to /referrals and displays referral dashboard with DB-validated profile', async ({
+    authenticatedPage,
+    db,
+  }) => {
     // STRICT: fetch DB data FIRST — profile must exist
     const profile = await db.getProfile()
     expect(profile).toBeTruthy()
@@ -47,9 +50,9 @@ test.describe('Referrals page — authenticated (STRICT)', () => {
 
     // STRICT: if user has a referral_code in DB, it MUST be displayed on the page
     if (profileWithCode?.referral_code) {
-      await expect(
-        authenticatedPage.getByText(profileWithCode.referral_code).first()
-      ).toBeVisible({ timeout: 10000 })
+      await expect(authenticatedPage.getByText(profileWithCode.referral_code).first()).toBeVisible({
+        timeout: 10000,
+      })
     }
 
     // STRICT: the stats grid MUST be visible (always shown, even with 0 values)
@@ -81,31 +84,30 @@ test.describe('Referrals page — authenticated (STRICT)', () => {
     await dismissTourOverlay(authenticatedPage)
 
     // STRICT: "Ton code de parrainage" heading MUST be visible
-    await expect(
-      authenticatedPage.getByText(/Ton code de parrainage/i).first()
-    ).toBeVisible({ timeout: 15000 })
+    await expect(authenticatedPage.getByText(/Ton code de parrainage/i).first()).toBeVisible({
+      timeout: 15000,
+    })
 
     // STRICT: the Copier button MUST be present in the share section
     const copyBtn = authenticatedPage.getByRole('button', { name: /Copier/i }).first()
     await expect(copyBtn).toBeVisible({ timeout: 10000 })
 
     // STRICT: share buttons for WhatsApp and Twitter MUST be visible
-    await expect(
-      authenticatedPage.getByText(/WhatsApp/i).first()
-    ).toBeVisible({ timeout: 5000 })
-    await expect(
-      authenticatedPage.getByText(/Twitter/i).first()
-    ).toBeVisible({ timeout: 5000 })
+    await expect(authenticatedPage.getByText(/WhatsApp/i).first()).toBeVisible({ timeout: 5000 })
+    await expect(authenticatedPage.getByText(/Twitter/i).first()).toBeVisible({ timeout: 5000 })
 
     // STRICT: if the profile has a referral_code in DB, it MUST appear on the page
     if (profileWithCode?.referral_code) {
-      await expect(
-        authenticatedPage.getByText(profileWithCode.referral_code).first()
-      ).toBeVisible({ timeout: 10000 })
+      await expect(authenticatedPage.getByText(profileWithCode.referral_code).first()).toBeVisible({
+        timeout: 10000,
+      })
     }
   })
 
-  test('displays milestone tracking section with DB-validated progress', async ({ authenticatedPage, db }) => {
+  test('displays milestone tracking section with DB-validated progress', async ({
+    authenticatedPage,
+    db,
+  }) => {
     // STRICT: fetch DB data FIRST
     const profile = await db.getProfile()
     expect(profile).toBeTruthy()
@@ -125,20 +127,20 @@ test.describe('Referrals page — authenticated (STRICT)', () => {
     await dismissTourOverlay(authenticatedPage)
 
     // STRICT: "Paliers de recompense" heading MUST be visible
-    await expect(
-      authenticatedPage.getByText(/Paliers de récompense/i).first()
-    ).toBeVisible({ timeout: 15000 })
+    await expect(authenticatedPage.getByText(/Paliers de récompense/i).first()).toBeVisible({
+      timeout: 15000,
+    })
 
     // STRICT: the three milestone labels MUST be visible
-    await expect(
-      authenticatedPage.getByText(/Recruteur(?! Pro| Légendaire)/i).first()
-    ).toBeVisible({ timeout: 10000 })
-    await expect(
-      authenticatedPage.getByText(/Recruteur Pro/i).first()
-    ).toBeVisible({ timeout: 10000 })
-    await expect(
-      authenticatedPage.getByText(/Recruteur Légendaire/i).first()
-    ).toBeVisible({ timeout: 10000 })
+    await expect(authenticatedPage.getByText(/Recruteur(?! Pro| Légendaire)/i).first()).toBeVisible(
+      { timeout: 10000 }
+    )
+    await expect(authenticatedPage.getByText(/Recruteur Pro/i).first()).toBeVisible({
+      timeout: 10000,
+    })
+    await expect(authenticatedPage.getByText(/Recruteur Légendaire/i).first()).toBeVisible({
+      timeout: 10000,
+    })
 
     // STRICT: validate progress counters against DB
     // Each milestone shows "current/target" (e.g. "0/3", "0/10", "0/25")
@@ -168,8 +170,8 @@ test.describe('Referrals page — authenticated (STRICT)', () => {
       .eq('referrer_id', userId)
 
     const totalReferrals = referrals?.length ?? 0
-    const signedUp = referrals?.filter(r => r.status === 'signed_up').length ?? 0
-    const converted = referrals?.filter(r => r.status === 'converted').length ?? 0
+    const signedUp = referrals?.filter((r) => r.status === 'signed_up').length ?? 0
+    const converted = referrals?.filter((r) => r.status === 'converted').length ?? 0
 
     // STRICT: use navigateWithFallback for SSR resilience
     const loaded = await navigateWithFallback(authenticatedPage, '/referrals')
@@ -177,18 +179,16 @@ test.describe('Referrals page — authenticated (STRICT)', () => {
     await dismissTourOverlay(authenticatedPage)
 
     // STRICT: all four stat labels MUST be visible
-    await expect(
-      authenticatedPage.getByText(/Filleuls inscrits/i).first()
-    ).toBeVisible({ timeout: 15000 })
-    await expect(
-      authenticatedPage.getByText(/Convertis Premium/i).first()
-    ).toBeVisible({ timeout: 10000 })
-    await expect(
-      authenticatedPage.getByText(/XP gagnés/i).first()
-    ).toBeVisible({ timeout: 10000 })
-    await expect(
-      authenticatedPage.getByText(/Total parrainages/i).first()
-    ).toBeVisible({ timeout: 10000 })
+    await expect(authenticatedPage.getByText(/Filleuls inscrits/i).first()).toBeVisible({
+      timeout: 15000,
+    })
+    await expect(authenticatedPage.getByText(/Convertis Premium/i).first()).toBeVisible({
+      timeout: 10000,
+    })
+    await expect(authenticatedPage.getByText(/XP gagnés/i).first()).toBeVisible({ timeout: 10000 })
+    await expect(authenticatedPage.getByText(/Total parrainages/i).first()).toBeVisible({
+      timeout: 10000,
+    })
 
     // STRICT: the stat values MUST be consistent with DB data
     // The stats grid shows: signedUp, converted, totalXpEarned, totalReferrals

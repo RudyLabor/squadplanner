@@ -1,4 +1,11 @@
-import { test, expect, loginViaUI, dismissCookieBanner, dismissTourOverlay, hasServerError } from './fixtures'
+import {
+  test,
+  expect,
+  loginViaUI,
+  dismissCookieBanner,
+  dismissTourOverlay,
+  hasServerError,
+} from './fixtures'
 
 /**
  * Tab Resume — Navigation Resilience E2E Tests
@@ -140,7 +147,9 @@ test.describe('Tab Resume — Desktop Sidebar', () => {
 
   test('SidebarFooter links (Profile, Premium) work after tab switch', async ({ page }) => {
     // Click the profile link in the sidebar footer
-    const profileFooter = page.locator('aside a[href="/profile"], nav ~ a[href="/profile"], footer a[href="/profile"]').first()
+    const profileFooter = page
+      .locator('aside a[href="/profile"], nav ~ a[href="/profile"], footer a[href="/profile"]')
+      .first()
     if (await profileFooter.isVisible({ timeout: 3000 }).catch(() => false)) {
       await profileFooter.click()
       await expect(page).toHaveURL(/\/profile/, { timeout: 10000 })
@@ -168,7 +177,9 @@ test.describe('Tab Resume — Mobile Bottom Nav', () => {
 
   test.beforeEach(async ({ page }) => {
     await loginViaUI(page)
-    await page.evaluate(() => { localStorage.setItem('sq-tour-completed-v1', 'true') })
+    await page.evaluate(() => {
+      localStorage.setItem('sq-tour-completed-v1', 'true')
+    })
     await dismissTourOverlay(page)
     await page.keyboard.press('Escape')
     await page.waitForTimeout(500)
@@ -178,7 +189,11 @@ test.describe('Tab Resume — Mobile Bottom Nav', () => {
 
   test('Mobile bottom nav is visible and functional before tab switch', async ({ page }) => {
     // The mobile bottom nav should be visible (use visible filter to skip hidden desktop nav)
-    const bottomNav = page.locator('nav').filter({ hasText: /Accueil/ }).locator('visible=true').first()
+    const bottomNav = page
+      .locator('nav')
+      .filter({ hasText: /Accueil/ })
+      .locator('visible=true')
+      .first()
     await expect(bottomNav).toBeVisible({ timeout: 5000 })
 
     // Click on a nav item (use visible filter to get the mobile link, not hidden desktop one)
@@ -241,7 +256,9 @@ test.describe('Tab Resume — Mobile Bottom Nav', () => {
 test.describe('Tab Resume — Lock Deadlock Recovery', () => {
   test.beforeEach(async ({ page }) => {
     await loginViaUI(page)
-    await page.evaluate(() => { localStorage.setItem('sq-tour-completed-v1', 'true') })
+    await page.evaluate(() => {
+      localStorage.setItem('sq-tour-completed-v1', 'true')
+    })
     await dismissTourOverlay(page)
     await page.keyboard.press('Escape')
     await page.waitForTimeout(500)
@@ -312,7 +329,9 @@ test.describe('Tab Resume — Lock Deadlock Recovery', () => {
 test.describe('Tab Resume — View Transition Safety', () => {
   test.beforeEach(async ({ page }) => {
     await loginViaUI(page)
-    await page.evaluate(() => { localStorage.setItem('sq-tour-completed-v1', 'true') })
+    await page.evaluate(() => {
+      localStorage.setItem('sq-tour-completed-v1', 'true')
+    })
     await dismissTourOverlay(page)
     await page.keyboard.press('Escape')
     await page.waitForTimeout(500)
@@ -335,8 +354,9 @@ test.describe('Tab Resume — View Transition Safety', () => {
       // Check for body overflow hidden
       const bodyOverflowHidden = document.body.style.overflow === 'hidden'
       // Check for modal overlays
-      const hasOpenOverlay = !!document.querySelector('[data-state="open"]')
-        || !!document.querySelector('[role="dialog"]:not([hidden])')
+      const hasOpenOverlay =
+        !!document.querySelector('[data-state="open"]') ||
+        !!document.querySelector('[role="dialog"]:not([hidden])')
       return { hasActiveVT, bodyOverflowHidden, hasOpenOverlay }
     })
 
@@ -353,7 +373,9 @@ test.describe('Tab Resume — View Transition Safety', () => {
 
   test('body.style.overflow is not stuck on hidden after tab switch', async ({ page }) => {
     // Open a sheet/dialog if possible (e.g., search or notification)
-    const searchBtn = page.locator('button:has-text("Rechercher"), button[aria-label="Rechercher"]').first()
+    const searchBtn = page
+      .locator('button:has-text("Rechercher"), button[aria-label="Rechercher"]')
+      .first()
     if (await searchBtn.isVisible({ timeout: 3000 }).catch(() => false)) {
       await searchBtn.click()
       await page.waitForTimeout(500)
@@ -385,10 +407,14 @@ test.describe('Tab Resume — View Transition Safety', () => {
 // ============================================================
 
 test.describe('Tab Resume — Full Regression Cycle', () => {
-  test('Complete flow: login → navigate → tab switch → navigate ALL routes → no 500', async ({ page }) => {
+  test('Complete flow: login → navigate → tab switch → navigate ALL routes → no 500', async ({
+    page,
+  }) => {
     // Step 1: Login
     await loginViaUI(page)
-    await page.evaluate(() => { localStorage.setItem('sq-tour-completed-v1', 'true') })
+    await page.evaluate(() => {
+      localStorage.setItem('sq-tour-completed-v1', 'true')
+    })
     await dismissTourOverlay(page)
     await page.keyboard.press('Escape')
     await page.waitForTimeout(1000)
@@ -404,8 +430,14 @@ test.describe('Tab Resume — Full Regression Cycle', () => {
 
     // Step 4: Navigate through EVERY protected route
     const routesAfterSwitch = [
-      '/home', '/squads', '/sessions', '/party',
-      '/messages', '/discover', '/profile', '/settings',
+      '/home',
+      '/squads',
+      '/sessions',
+      '/party',
+      '/messages',
+      '/discover',
+      '/profile',
+      '/settings',
     ]
 
     for (const path of routesAfterSwitch) {

@@ -13,7 +13,11 @@ test.describe('Session Share — /s/:id', () => {
 
   test.afterEach(async ({ db }) => {
     if (testSessionId) {
-      try { await db.deleteTestSession(testSessionId) } catch { /* cleanup */ }
+      try {
+        await db.deleteTestSession(testSessionId)
+      } catch {
+        /* cleanup */
+      }
       testSessionId = null
     }
   })
@@ -81,11 +85,18 @@ test.describe('Session Share — /s/:id', () => {
     await page.waitForTimeout(2000)
 
     // STRICT: une date DOIT etre visible (format francais ou numerique)
-    const dateText = page.getByText(/\d{1,2}.*202[4-6]|\d{1,2}\s*(janvier|février|mars|avril|mai|juin|juillet|août|septembre|octobre|novembre|décembre)/i).first()
+    const dateText = page
+      .getByText(
+        /\d{1,2}.*202[4-6]|\d{1,2}\s*(janvier|février|mars|avril|mai|juin|juillet|août|septembre|octobre|novembre|décembre)/i
+      )
+      .first()
     await expect(dateText).toBeVisible({ timeout: 15000 })
   })
 
-  test('affiche le CTA principal pour une session future', async ({ authenticatedPage: page, db }) => {
+  test('affiche le CTA principal pour une session future', async ({
+    authenticatedPage: page,
+    db,
+  }) => {
     const squads = await db.getUserSquads()
     expect(squads.length).toBeGreaterThan(0)
 

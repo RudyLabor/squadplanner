@@ -24,8 +24,10 @@ import { navigateWithFallback, dismissTourOverlay } from './fixtures'
 // ============================================================
 
 test.describe('Mobile viewport (375x667) — Navigation et layout', () => {
-
-  test('MV01: la barre de navigation mobile est visible sur mobile', async ({ authenticatedPage: page, db }) => {
+  test('MV01: la barre de navigation mobile est visible sur mobile', async ({
+    authenticatedPage: page,
+    db,
+  }) => {
     await page.setViewportSize({ width: 375, height: 667 })
 
     // STRICT: fetch profile from DB first
@@ -105,7 +107,10 @@ test.describe('Mobile viewport (375x667) — Navigation et layout', () => {
     }
   })
 
-  test('MV04: /home rend correctement sur mobile avec les donnees DB', async ({ authenticatedPage: page, db }) => {
+  test('MV04: /home rend correctement sur mobile avec les donnees DB', async ({
+    authenticatedPage: page,
+    db,
+  }) => {
     await page.setViewportSize({ width: 375, height: 667 })
 
     const profile = await db.getProfile()
@@ -117,7 +122,9 @@ test.describe('Mobile viewport (375x667) — Navigation et layout', () => {
     await dismissTourOverlay(page)
 
     // STRICT: le username de la DB DOIT etre affiche
-    await expect(page.getByText(new RegExp(profile.username, 'i')).first()).toBeVisible({ timeout: 15000 })
+    await expect(page.getByText(new RegExp(profile.username, 'i')).first()).toBeVisible({
+      timeout: 15000,
+    })
 
     // STRICT: pas de scroll horizontal
     const bodyScrollWidth = await page.evaluate(() => document.body.scrollWidth)
@@ -142,7 +149,9 @@ test.describe('Mobile viewport (375x667) — Navigation et layout', () => {
       await expect(page.getByText(squads[0].squads.name).first()).toBeVisible({ timeout: 15000 })
     } else {
       // STRICT: si pas de squads, empty state DOIT etre visible
-      await expect(page.getByText(/Crée ta première squad|Aucune squad/i).first()).toBeVisible({ timeout: 10000 })
+      await expect(page.getByText(/Crée ta première squad|Aucune squad/i).first()).toBeVisible({
+        timeout: 10000,
+      })
     }
 
     // STRICT: pas de scroll horizontal
@@ -196,8 +205,10 @@ test.describe('Mobile viewport (375x667) — Navigation et layout', () => {
 // ============================================================
 
 test.describe('Tablet viewport (768x1024) — Layout responsive', () => {
-
-  test('TV01: la nav mobile est visible sur tablette (pas hover-capable)', async ({ authenticatedPage: page, db }) => {
+  test('TV01: la nav mobile est visible sur tablette (pas hover-capable)', async ({
+    authenticatedPage: page,
+    db,
+  }) => {
     await page.setViewportSize({ width: 768, height: 1024 })
 
     const profile = await db.getProfile()
@@ -212,7 +223,10 @@ test.describe('Tablet viewport (768x1024) — Layout responsive', () => {
     await expect(mobileNav).toBeVisible({ timeout: 10000 })
   })
 
-  test('TV02: les pages principales rendent sans scroll horizontal sur tablette', async ({ authenticatedPage: page, db }) => {
+  test('TV02: les pages principales rendent sans scroll horizontal sur tablette', async ({
+    authenticatedPage: page,
+    db,
+  }) => {
     await page.setViewportSize({ width: 768, height: 1024 })
 
     const profile = await db.getProfile()
@@ -230,7 +244,10 @@ test.describe('Tablet viewport (768x1024) — Layout responsive', () => {
     }
   })
 
-  test('TV03: les touch targets de la nav font au moins 44x44px sur tablette', async ({ authenticatedPage: page, db }) => {
+  test('TV03: les touch targets de la nav font au moins 44x44px sur tablette', async ({
+    authenticatedPage: page,
+    db,
+  }) => {
     await page.setViewportSize({ width: 768, height: 1024 })
 
     const profile = await db.getProfile()
@@ -262,8 +279,10 @@ test.describe('Tablet viewport (768x1024) — Layout responsive', () => {
 // ============================================================
 
 test.describe('Desktop viewport (1280x720) — Contraste responsive', () => {
-
-  test('DV01: le sidebar desktop est visible et la nav mobile est cachee sur desktop', async ({ authenticatedPage: page, db }) => {
+  test('DV01: le sidebar desktop est visible et la nav mobile est cachee sur desktop', async ({
+    authenticatedPage: page,
+    db,
+  }) => {
     await page.setViewportSize({ width: 1280, height: 720 })
 
     const profile = await db.getProfile()
@@ -298,7 +317,6 @@ test.describe('Desktop viewport (1280x720) — Contraste responsive', () => {
 // ============================================================
 
 test.describe('Mobile viewport — Pages publiques', () => {
-
   test('PP01: la landing page rend correctement sur mobile', async ({ page }) => {
     await page.setViewportSize({ width: 375, height: 667 })
     await page.goto('/')
@@ -345,8 +363,10 @@ test.describe('Mobile viewport — Pages publiques', () => {
 // ============================================================
 
 test.describe('Mobile viewport — Navigation inter-pages', () => {
-
-  test('NAV01: naviguer de /home vers /messages via la nav mobile', async ({ authenticatedPage: page, db }) => {
+  test('NAV01: naviguer de /home vers /messages via la nav mobile', async ({
+    authenticatedPage: page,
+    db,
+  }) => {
     await page.setViewportSize({ width: 375, height: 667 })
 
     const profile = await db.getProfile()
@@ -366,7 +386,10 @@ test.describe('Mobile viewport — Navigation inter-pages', () => {
     await expect(page).toHaveURL(/\/messages/, { timeout: 10000 })
   })
 
-  test('NAV02: naviguer de /home vers /squads via la nav mobile', async ({ authenticatedPage: page, db }) => {
+  test('NAV02: naviguer de /home vers /squads via la nav mobile', async ({
+    authenticatedPage: page,
+    db,
+  }) => {
     await page.setViewportSize({ width: 375, height: 667 })
 
     const profile = await db.getProfile()
@@ -388,7 +411,10 @@ test.describe('Mobile viewport — Navigation inter-pages', () => {
     await expect(page.getByText(/Mes Squads/i).first()).toBeVisible({ timeout: 15000 })
   })
 
-  test('NAV03: l\'indicateur aria-current=page est actif sur la page courante', async ({ authenticatedPage: page, db }) => {
+  test("NAV03: l'indicateur aria-current=page est actif sur la page courante", async ({
+    authenticatedPage: page,
+    db,
+  }) => {
     await page.setViewportSize({ width: 375, height: 667 })
 
     const profile = await db.getProfile()

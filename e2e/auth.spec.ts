@@ -30,9 +30,9 @@ async function switchToRegisterMode(page: import('@playwright/test').Page) {
   await expect(registerToggle).toBeVisible({ timeout: 10000 })
   await registerToggle.click()
   // STRICT: le heading d'inscription DOIT apparaitre
-  await expect(
-    page.getByRole('heading', { name: /Rejoins l'aventure/i })
-  ).toBeVisible({ timeout: 10000 })
+  await expect(page.getByRole('heading', { name: /Rejoins l'aventure/i })).toBeVisible({
+    timeout: 10000,
+  })
 }
 
 // ============================================================
@@ -48,12 +48,12 @@ test.describe('F01 — Landing Page', () => {
     await expect(page.getByRole('heading', { name: /Transforme/i })).toBeVisible({ timeout: 10000 })
 
     // STRICT: les deux CTAs principaux DOIVENT etre visibles
-    await expect(
-      page.getByRole('link', { name: /Se connecter/i }).first()
-    ).toBeVisible({ timeout: 5000 })
-    await expect(
-      page.getByRole('link', { name: /Créer ma squad/i }).first()
-    ).toBeVisible({ timeout: 5000 })
+    await expect(page.getByRole('link', { name: /Se connecter/i }).first()).toBeVisible({
+      timeout: 5000,
+    })
+    await expect(page.getByRole('link', { name: /Créer ma squad/i }).first()).toBeVisible({
+      timeout: 5000,
+    })
 
     // STRICT: le titre de la page DOIT contenir "Squad Planner"
     await expect(page).toHaveTitle(/Squad Planner/)
@@ -71,7 +71,9 @@ test.describe('F01 — Landing Page', () => {
     await expect(faqSection.first()).toBeAttached({ timeout: 10000 })
 
     // STRICT: la section Pricing DOIT exister
-    const pricingSection = page.locator('#pricing, section:has-text("Prix"), section:has-text("Tarif"), [data-section="pricing"]')
+    const pricingSection = page.locator(
+      '#pricing, section:has-text("Prix"), section:has-text("Tarif"), [data-section="pricing"]'
+    )
     await expect(pricingSection.first()).toBeAttached({ timeout: 10000 })
   })
 
@@ -106,7 +108,9 @@ test.describe('F02 — Registration Form', () => {
     await expect(page.locator('input[type="password"]')).toBeVisible({ timeout: 5000 })
 
     // Le champ pseudo DOIT exister en mode inscription
-    const usernameInput = page.locator('input[placeholder*="pseudo" i], input[autocomplete="username"]').first()
+    const usernameInput = page
+      .locator('input[placeholder*="pseudo" i], input[autocomplete="username"]')
+      .first()
     await expect(usernameInput).toBeVisible({ timeout: 5000 })
   })
 
@@ -141,7 +145,9 @@ test.describe('F02 — Registration Form', () => {
     expect(pageContent).toContain("L'email est requis")
   })
 
-  test('F02: Invalid email and short password show specific validation errors', async ({ page }) => {
+  test('F02: Invalid email and short password show specific validation errors', async ({
+    page,
+  }) => {
     await page.goto('/auth')
     await page.waitForSelector('form', { timeout: 15000 })
     await dismissCookieBanner(page)
@@ -149,7 +155,9 @@ test.describe('F02 — Registration Form', () => {
     await switchToRegisterMode(page)
 
     // Remplir un pseudo valide pour isoler les erreurs email/password
-    const usernameInput = page.locator('input[placeholder*="pseudo" i], input[autocomplete="username"]').first()
+    const usernameInput = page
+      .locator('input[placeholder*="pseudo" i], input[autocomplete="username"]')
+      .first()
     await usernameInput.fill('TestUser123')
 
     // Remplir un email invalide (pas de dot dans le domaine)
@@ -186,18 +194,16 @@ test.describe('F03 — Login Form', () => {
     await dismissCookieBanner(page)
 
     // STRICT: le heading de login DOIT etre visible
-    await expect(
-      page.getByRole('heading', { name: /manqué à ta squad/i })
-    ).toBeVisible({ timeout: 10000 })
+    await expect(page.getByRole('heading', { name: /manqué à ta squad/i })).toBeVisible({
+      timeout: 10000,
+    })
 
     // STRICT: les champs du formulaire DOIVENT etre visibles
     await expect(page.locator('input[type="email"]')).toBeVisible({ timeout: 5000 })
     await expect(page.locator('input[type="password"]')).toBeVisible({ timeout: 5000 })
 
     // STRICT: le bouton submit DOIT etre visible
-    await expect(
-      page.getByRole('button', { name: /Se connecter/i })
-    ).toBeVisible({ timeout: 5000 })
+    await expect(page.getByRole('button', { name: /Se connecter/i })).toBeVisible({ timeout: 5000 })
   })
 
   test('F03: Login with invalid credentials shows error and stays on /auth', async ({ page }) => {
@@ -239,7 +245,10 @@ test.describe('F03 — Login Form', () => {
     await page.click('button[type="submit"]')
 
     // STRICT: l'utilisateur DOIT etre redirige hors de /auth
-    await page.waitForURL((url) => !url.pathname.includes('/auth'), { timeout: 20000, waitUntil: 'domcontentloaded' })
+    await page.waitForURL((url) => !url.pathname.includes('/auth'), {
+      timeout: 20000,
+      waitUntil: 'domcontentloaded',
+    })
 
     const url = page.url()
     // STRICT: l'URL DOIT etre une page protegee, PAS /auth
@@ -294,9 +303,7 @@ test.describe('F04 — Google OAuth', () => {
     } else {
       // STRICT: la page DOIT avoir navigue vers Supabase ou Google
       const navigatedToOAuth =
-        url.includes('supabase') ||
-        url.includes('accounts.google.com') ||
-        url.includes('auth/v1')
+        url.includes('supabase') || url.includes('accounts.google.com') || url.includes('auth/v1')
       // STRICT: l'un de ces URLs DOIT etre atteint
       expect(navigatedToOAuth).toBe(true)
     }

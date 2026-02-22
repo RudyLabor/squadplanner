@@ -31,7 +31,10 @@ test.describe('Squads STRICT — F15: Creer une squad via UI', () => {
     }
   })
 
-  test('F15: creer une squad via le formulaire et verifier la persistance en DB', async ({ authenticatedPage: page, db }) => {
+  test('F15: creer une squad via le formulaire et verifier la persistance en DB', async ({
+    authenticatedPage: page,
+    db,
+  }) => {
     const timestamp = Date.now()
     const squadName = `E2E Test Squad ${timestamp}`
     const squadGame = 'Valorant'
@@ -47,7 +50,7 @@ test.describe('Squads STRICT — F15: Creer une squad via UI', () => {
 
     // 3. Check if the user has hit the freemium limit
     const squadsBeforeCreate = await db.getUserSquads()
-    const nonE2ESquads = squadsBeforeCreate.filter(s => !s.squads.name.includes('E2E Test'))
+    const nonE2ESquads = squadsBeforeCreate.filter((s) => !s.squads.name.includes('E2E Test'))
 
     // If user already has 2+ non-E2E squads and is not premium, creation is blocked by design
     // We test that the limit gate is shown
@@ -78,7 +81,7 @@ test.describe('Squads STRICT — F15: Creer une squad via UI', () => {
 
     // 7. Verify in DB that the squad was persisted
     const squadsAfterCreate = await db.getUserSquads()
-    const newSquad = squadsAfterCreate.find(s => s.squads.name === squadName)
+    const newSquad = squadsAfterCreate.find((s) => s.squads.name === squadName)
 
     // STRICT: DB MUST contain the newly created squad
     expect(newSquad).toBeTruthy()
@@ -99,19 +102,24 @@ test.describe('Squads STRICT — F15: Creer une squad via UI', () => {
 // F16 — Join a squad via invite code
 // ============================================================
 
-test.describe('Squads STRICT — F16: Rejoindre via code d\'invitation', () => {
+test.describe("Squads STRICT — F16: Rejoindre via code d'invitation", () => {
   let testSquadId: string | null = null
 
   test.afterEach(async ({ db }) => {
     if (testSquadId) {
       try {
         await db.deleteTestSquad(testSquadId)
-      } catch { /* already cleaned up */ }
+      } catch {
+        /* already cleaned up */
+      }
       testSquadId = null
     }
   })
 
-  test('F16: rejoindre une squad via code et verifier membership en DB', async ({ authenticatedPage: page, db }) => {
+  test('F16: rejoindre une squad via code et verifier membership en DB', async ({
+    authenticatedPage: page,
+    db,
+  }) => {
     // 1. Create a test squad to join
     const testSquad = await db.createTestSquad({ name: `E2E Test Squad Join ${Date.now()}` })
     testSquadId = testSquad.id
@@ -128,8 +136,15 @@ test.describe('Squads STRICT — F16: Rejoindre via code d\'invitation', () => {
 
     // 3. Dismiss any premium upsell dialog/modal that may appear (user has 2/2 squads)
     // The modal uses a div.fixed.inset-0.z-50 overlay that intercepts pointer events
-    const modalBackdrop = page.locator('div.fixed.inset-0').filter({ has: page.locator('div[aria-hidden="true"]') })
-    if (await modalBackdrop.first().isVisible({ timeout: 3000 }).catch(() => false)) {
+    const modalBackdrop = page
+      .locator('div.fixed.inset-0')
+      .filter({ has: page.locator('div[aria-hidden="true"]') })
+    if (
+      await modalBackdrop
+        .first()
+        .isVisible({ timeout: 3000 })
+        .catch(() => false)
+    ) {
       // Try clicking the Close/Fermer button first
       const closeBtn = page.locator('button:has-text("Close"), button:has-text("Fermer")').first()
       if (await closeBtn.isVisible({ timeout: 1000 }).catch(() => false)) {
@@ -186,14 +201,22 @@ test.describe('Squads STRICT — F17: Deep link /join/:code', () => {
     if (testSquadId) {
       try {
         await db.deleteTestSquad(testSquadId)
-      } catch { /* already cleaned up */ }
+      } catch {
+        /* already cleaned up */
+      }
       testSquadId = null
     }
   })
 
-  test('F17: naviguer vers /join/:code affiche le nom de la squad de la DB', async ({ authenticatedPage: page, db }) => {
+  test('F17: naviguer vers /join/:code affiche le nom de la squad de la DB', async ({
+    authenticatedPage: page,
+    db,
+  }) => {
     // 1. Create a test squad with a known invite code
-    const testSquad = await db.createTestSquad({ name: `E2E Test DeepLink ${Date.now()}`, game: 'Fortnite' })
+    const testSquad = await db.createTestSquad({
+      name: `E2E Test DeepLink ${Date.now()}`,
+      game: 'Fortnite',
+    })
     testSquadId = testSquad.id
     const inviteCode = testSquad.invite_code
 
@@ -220,7 +243,9 @@ test.describe('Squads STRICT — F17: Deep link /join/:code', () => {
       await expect(page.getByText('Fortnite').first()).toBeVisible({ timeout: 5000 })
 
       // STRICT: a join or "already member" action MUST be present
-      const joinAction = page.getByText(/Rejoindre la squad|Rejoindre|Vous êtes déjà membre|Déjà membre/i).first()
+      const joinAction = page
+        .getByText(/Rejoindre la squad|Rejoindre|Vous êtes déjà membre|Déjà membre/i)
+        .first()
       await expect(joinAction).toBeVisible({ timeout: 5000 })
     } else if (url.includes('/squad/')) {
       // Already a member — redirected to squad detail
@@ -239,7 +264,9 @@ test.describe('Squads STRICT — F17: Deep link /join/:code', () => {
     await page.waitForTimeout(2000)
 
     // STRICT: an error/not-found message MUST be shown for invalid codes
-    const errorMessage = page.getByText(/Invitation invalide|n'existe pas|expiré|not found/i).first()
+    const errorMessage = page
+      .getByText(/Invitation invalide|n'existe pas|expiré|not found/i)
+      .first()
     await expect(errorMessage).toBeVisible({ timeout: 10000 })
   })
 })
@@ -248,19 +275,24 @@ test.describe('Squads STRICT — F17: Deep link /join/:code', () => {
 // F18 — Invite code displayed matches DB value
 // ============================================================
 
-test.describe('Squads STRICT — F18: Code d\'invitation correspond a la DB', () => {
+test.describe("Squads STRICT — F18: Code d'invitation correspond a la DB", () => {
   let testSquadId: string | null = null
 
   test.afterEach(async ({ db }) => {
     if (testSquadId) {
       try {
         await db.deleteTestSquad(testSquadId)
-      } catch { /* already cleaned up */ }
+      } catch {
+        /* already cleaned up */
+      }
       testSquadId = null
     }
   })
 
-  test('F18: le code d\'invitation affiche sur la page squad correspond exactement a la DB', async ({ authenticatedPage: page, db }) => {
+  test("F18: le code d'invitation affiche sur la page squad correspond exactement a la DB", async ({
+    authenticatedPage: page,
+    db,
+  }) => {
     // 1. Create a test squad with a known invite code
     const testSquad = await db.createTestSquad({ name: `E2E Test InviteCode ${Date.now()}` })
     testSquadId = testSquad.id
@@ -300,14 +332,22 @@ test.describe('Squads STRICT — F19: Details et membres correspondent a la DB',
     if (testSquadId) {
       try {
         await db.deleteTestSquad(testSquadId)
-      } catch { /* already cleaned up */ }
+      } catch {
+        /* already cleaned up */
+      }
       testSquadId = null
     }
   })
 
-  test('F19a: le nom et le jeu de la squad correspondent a la DB', async ({ authenticatedPage: page, db }) => {
+  test('F19a: le nom et le jeu de la squad correspondent a la DB', async ({
+    authenticatedPage: page,
+    db,
+  }) => {
     // 1. Create a test squad
-    const testSquad = await db.createTestSquad({ name: `E2E Test Details ${Date.now()}`, game: 'League of Legends' })
+    const testSquad = await db.createTestSquad({
+      name: `E2E Test Details ${Date.now()}`,
+      game: 'League of Legends',
+    })
     testSquadId = testSquad.id
 
     // 2. Navigate to squad detail
@@ -322,7 +362,10 @@ test.describe('Squads STRICT — F19: Details et membres correspondent a la DB',
     await expect(page.getByText(/League of Legends/i).first()).toBeVisible({ timeout: 10000 })
   })
 
-  test('F19b: le nombre de membres affiche correspond a la DB', async ({ authenticatedPage: page, db }) => {
+  test('F19b: le nombre de membres affiche correspond a la DB', async ({
+    authenticatedPage: page,
+    db,
+  }) => {
     // 1. Create a test squad
     const testSquad = await db.createTestSquad({ name: `E2E Test Members ${Date.now()}` })
     testSquadId = testSquad.id
@@ -345,7 +388,10 @@ test.describe('Squads STRICT — F19: Details et membres correspondent a la DB',
     await expect(page.getByText(memberCountRegex).first()).toBeVisible({ timeout: 15000 })
   })
 
-  test('F19c: les usernames des membres correspondent a la DB', async ({ authenticatedPage: page, db }) => {
+  test('F19c: les usernames des membres correspondent a la DB', async ({
+    authenticatedPage: page,
+    db,
+  }) => {
     // 1. Fetch user squads and pick one with data
     const squads = await db.getUserSquads()
 
@@ -354,7 +400,9 @@ test.describe('Squads STRICT — F19: Details et membres correspondent a la DB',
       const loaded = await navigateWithFallback(page, '/squads')
       expect(loaded).toBe(true)
       // STRICT: empty state text MUST be shown
-      await expect(page.getByText(/Crée ta première squad|Aucune squad/i).first()).toBeVisible({ timeout: 10000 })
+      await expect(page.getByText(/Crée ta première squad|Aucune squad/i).first()).toBeVisible({
+        timeout: 10000,
+      })
       return
     }
 
@@ -374,7 +422,8 @@ test.describe('Squads STRICT — F19: Details et membres correspondent a la DB',
       (m: { profiles?: { username?: string } }) => m.profiles?.username
     )
     if (firstMemberWithUsername) {
-      const username = (firstMemberWithUsername as { profiles: { username: string } }).profiles.username
+      const username = (firstMemberWithUsername as { profiles: { username: string } }).profiles
+        .username
       // STRICT: the member username from DB MUST be visible in the members section
       await expect(page.getByText(username).first()).toBeVisible({ timeout: 15000 })
     }
@@ -385,19 +434,24 @@ test.describe('Squads STRICT — F19: Details et membres correspondent a la DB',
 // F20 — Edit dialog pre-filled with DB values
 // ============================================================
 
-test.describe('Squads STRICT — F20: Dialog d\'edition pre-rempli', () => {
+test.describe("Squads STRICT — F20: Dialog d'edition pre-rempli", () => {
   let testSquadId: string | null = null
 
   test.afterEach(async ({ db }) => {
     if (testSquadId) {
       try {
         await db.deleteTestSquad(testSquadId)
-      } catch { /* already cleaned up */ }
+      } catch {
+        /* already cleaned up */
+      }
       testSquadId = null
     }
   })
 
-  test('F20: les champs du dialog d\'edition correspondent aux valeurs DB', async ({ authenticatedPage: page, db }) => {
+  test("F20: les champs du dialog d'edition correspondent aux valeurs DB", async ({
+    authenticatedPage: page,
+    db,
+  }) => {
     // 1. Create a test squad that the user owns
     const testSquad = await db.createTestSquad({ name: `E2E Test Edit ${Date.now()}`, game: 'CS2' })
     testSquadId = testSquad.id
@@ -444,9 +498,15 @@ test.describe('Squads STRICT — F20: Dialog d\'edition pre-rempli', () => {
     await page.getByRole('button', { name: /Annuler/i }).click()
   })
 
-  test('F20b: modifier le nom d\'une squad et verifier la persistance en DB', async ({ authenticatedPage: page, db }) => {
+  test("F20b: modifier le nom d'une squad et verifier la persistance en DB", async ({
+    authenticatedPage: page,
+    db,
+  }) => {
     // 1. Create a test squad
-    const testSquad = await db.createTestSquad({ name: `E2E Test Rename ${Date.now()}`, game: 'Apex' })
+    const testSquad = await db.createTestSquad({
+      name: `E2E Test Rename ${Date.now()}`,
+      game: 'Apex',
+    })
     testSquadId = testSquad.id
     const newName = `E2E Test Renamed ${Date.now()}`
 
@@ -494,12 +554,17 @@ test.describe('Squads STRICT — F21: Quitter une squad de test', () => {
     if (testSquadId) {
       try {
         await db.deleteTestSquad(testSquadId)
-      } catch { /* already cleaned up */ }
+      } catch {
+        /* already cleaned up */
+      }
       testSquadId = null
     }
   })
 
-  test('F21: quitter une squad et verifier la suppression du membership en DB', async ({ authenticatedPage: page, db }) => {
+  test('F21: quitter une squad et verifier la suppression du membership en DB', async ({
+    authenticatedPage: page,
+    db,
+  }) => {
     // 1. Create a test squad (user will be leader)
     const testSquad = await db.createTestSquad({ name: `E2E Test Squad Leave ${Date.now()}` })
     testSquadId = testSquad.id
@@ -528,7 +593,10 @@ test.describe('Squads STRICT — F21: Quitter une squad de test', () => {
 // ============================================================
 
 test.describe('Squads STRICT — F22: Supprimer une squad de test', () => {
-  test('F22: supprimer une squad et verifier la suppression en DB', async ({ authenticatedPage: page, db }) => {
+  test('F22: supprimer une squad et verifier la suppression en DB', async ({
+    authenticatedPage: page,
+    db,
+  }) => {
     // 1. Create a test squad
     const testSquad = await db.createTestSquad({ name: `E2E Test Squad Delete ${Date.now()}` })
 
@@ -576,7 +644,9 @@ test.describe('Squads STRICT — F22: Supprimer une squad de test', () => {
 // ============================================================
 
 test.describe('Squads STRICT — F23: Page Squads structure de base', () => {
-  test('F23a: la page Squads affiche le heading "Mes Squads"', async ({ authenticatedPage: page }) => {
+  test('F23a: la page Squads affiche le heading "Mes Squads"', async ({
+    authenticatedPage: page,
+  }) => {
     const loaded = await navigateWithFallback(page, '/squads')
     expect(loaded).toBe(true)
     await dismissTourOverlay(page)
@@ -585,7 +655,9 @@ test.describe('Squads STRICT — F23: Page Squads structure de base', () => {
     await expect(page.getByText(/Mes Squads/i).first()).toBeVisible({ timeout: 15000 })
   })
 
-  test('F23b: la page Squads affiche les boutons Creer et Rejoindre', async ({ authenticatedPage: page }) => {
+  test('F23b: la page Squads affiche les boutons Creer et Rejoindre', async ({
+    authenticatedPage: page,
+  }) => {
     const loaded = await navigateWithFallback(page, '/squads')
     expect(loaded).toBe(true)
     await dismissTourOverlay(page)
@@ -605,7 +677,10 @@ test.describe('Squads STRICT — F23: Page Squads structure de base', () => {
 // ============================================================
 
 test.describe('Squads STRICT — F24: Nombre de squads correspond a la DB', () => {
-  test('F24: le nombre de squad cards correspond au nombre en DB', async ({ authenticatedPage: page, db }) => {
+  test('F24: le nombre de squad cards correspond au nombre en DB', async ({
+    authenticatedPage: page,
+    db,
+  }) => {
     // 1. Clean up E2E squads for a reliable count
     await db.cleanupE2ESquads()
 
@@ -620,7 +695,9 @@ test.describe('Squads STRICT — F24: Nombre de squads correspond a la DB', () =
 
     if (dbCount === 0) {
       // STRICT: when DB has 0 squads, empty state MUST be shown
-      await expect(page.getByText(/Crée ta première squad/i).first()).toBeVisible({ timeout: 10000 })
+      await expect(page.getByText(/Crée ta première squad/i).first()).toBeVisible({
+        timeout: 10000,
+      })
       return
     }
 
@@ -633,7 +710,10 @@ test.describe('Squads STRICT — F24: Nombre de squads correspond a la DB', () =
     expect(visibleCount).toBe(dbCount)
   })
 
-  test('F24b: le sous-titre correspond au nombre de squads en DB', async ({ authenticatedPage: page, db }) => {
+  test('F24b: le sous-titre correspond au nombre de squads en DB', async ({
+    authenticatedPage: page,
+    db,
+  }) => {
     // 1. Clean up E2E squads
     await db.cleanupE2ESquads()
 
@@ -648,7 +728,9 @@ test.describe('Squads STRICT — F24: Nombre de squads correspond a la DB', () =
 
     if (dbCount === 0) {
       // STRICT: when 0 squads, subtitle MUST say "Crée ou rejoins ta première squad"
-      await expect(page.getByText(/Crée ou rejoins ta première squad/i).first()).toBeVisible({ timeout: 10000 })
+      await expect(page.getByText(/Crée ou rejoins ta première squad/i).first()).toBeVisible({
+        timeout: 10000,
+      })
       return
     }
 
@@ -669,7 +751,10 @@ test.describe('Squads STRICT — F24: Nombre de squads correspond a la DB', () =
 // ============================================================
 
 test.describe('Squads STRICT — F25: Chaque card affiche les donnees DB', () => {
-  test('F25: chaque nom de squad en DB est visible dans la liste', async ({ authenticatedPage: page, db }) => {
+  test('F25: chaque nom de squad en DB est visible dans la liste', async ({
+    authenticatedPage: page,
+    db,
+  }) => {
     // 1. Clean up
     await db.cleanupE2ESquads()
 
@@ -681,7 +766,9 @@ test.describe('Squads STRICT — F25: Chaque card affiche les donnees DB', () =>
       expect(loaded).toBe(true)
       await dismissTourOverlay(page)
       // STRICT: empty state MUST be shown
-      await expect(page.getByText(/Crée ta première squad/i).first()).toBeVisible({ timeout: 10000 })
+      await expect(page.getByText(/Crée ta première squad/i).first()).toBeVisible({
+        timeout: 10000,
+      })
       return
     }
 
@@ -698,7 +785,10 @@ test.describe('Squads STRICT — F25: Chaque card affiche les donnees DB', () =>
     }
   })
 
-  test('F25b: chaque card affiche le jeu correspondant de la DB', async ({ authenticatedPage: page, db }) => {
+  test('F25b: chaque card affiche le jeu correspondant de la DB', async ({
+    authenticatedPage: page,
+    db,
+  }) => {
     await db.cleanupE2ESquads()
     const squads = await db.getUserSquads()
 
@@ -706,7 +796,9 @@ test.describe('Squads STRICT — F25: Chaque card affiche les donnees DB', () =>
       const loaded = await navigateWithFallback(page, '/squads')
       expect(loaded).toBe(true)
       await dismissTourOverlay(page)
-      await expect(page.getByText(/Crée ta première squad/i).first()).toBeVisible({ timeout: 10000 })
+      await expect(page.getByText(/Crée ta première squad/i).first()).toBeVisible({
+        timeout: 10000,
+      })
       return
     }
 
@@ -736,13 +828,21 @@ test.describe('Squads STRICT — F26: Squad detail page sections', () => {
     if (testSquadId) {
       try {
         await db.deleteTestSquad(testSquadId)
-      } catch { /* already cleaned up */ }
+      } catch {
+        /* already cleaned up */
+      }
       testSquadId = null
     }
   })
 
-  test('F26a: la page detail affiche le header avec nom, jeu, et code', async ({ authenticatedPage: page, db }) => {
-    const testSquad = await db.createTestSquad({ name: `E2E Test Sections ${Date.now()}`, game: 'Valorant' })
+  test('F26a: la page detail affiche le header avec nom, jeu, et code', async ({
+    authenticatedPage: page,
+    db,
+  }) => {
+    const testSquad = await db.createTestSquad({
+      name: `E2E Test Sections ${Date.now()}`,
+      game: 'Valorant',
+    })
     testSquadId = testSquad.id
 
     const loaded = await navigateWithFallback(page, `/squad/${testSquad.id}`)
@@ -759,7 +859,10 @@ test.describe('Squads STRICT — F26: Squad detail page sections', () => {
     await expect(page.getByText(testSquad.invite_code).first()).toBeVisible({ timeout: 10000 })
   })
 
-  test('F26b: la section "Membres" est visible et affiche le compteur', async ({ authenticatedPage: page, db }) => {
+  test('F26b: la section "Membres" est visible et affiche le compteur', async ({
+    authenticatedPage: page,
+    db,
+  }) => {
     const testSquad = await db.createTestSquad({ name: `E2E Test MembersSection ${Date.now()}` })
     testSquadId = testSquad.id
 
@@ -771,7 +874,9 @@ test.describe('Squads STRICT — F26: Squad detail page sections', () => {
     await expect(page.getByText(/Membres\s*\(/i).first()).toBeVisible({ timeout: 15000 })
 
     // STRICT: the "Inviter" button in the members section MUST be visible
-    await expect(page.getByRole('button', { name: /Inviter/i }).first()).toBeVisible({ timeout: 5000 })
+    await expect(page.getByRole('button', { name: /Inviter/i }).first()).toBeVisible({
+      timeout: 5000,
+    })
   })
 
   test('F26c: la section "Stats avancees" est visible', async ({ authenticatedPage: page, db }) => {
@@ -798,12 +903,17 @@ test.describe('Squads STRICT — F27: Actions specifiques au role', () => {
     if (testSquadId) {
       try {
         await db.deleteTestSquad(testSquadId)
-      } catch { /* already cleaned up */ }
+      } catch {
+        /* already cleaned up */
+      }
       testSquadId = null
     }
   })
 
-  test('F27a: le owner voit le bouton "Modifier la squad"', async ({ authenticatedPage: page, db }) => {
+  test('F27a: le owner voit le bouton "Modifier la squad"', async ({
+    authenticatedPage: page,
+    db,
+  }) => {
     const testSquad = await db.createTestSquad({ name: `E2E Test OwnerEdit ${Date.now()}` })
     testSquadId = testSquad.id
 
@@ -816,7 +926,10 @@ test.describe('Squads STRICT — F27: Actions specifiques au role', () => {
     await expect(editBtn).toBeVisible({ timeout: 10000 })
   })
 
-  test('F27b: le owner voit le bouton "Supprimer la squad" sur desktop', async ({ authenticatedPage: page, db }) => {
+  test('F27b: le owner voit le bouton "Supprimer la squad" sur desktop', async ({
+    authenticatedPage: page,
+    db,
+  }) => {
     const testSquad = await db.createTestSquad({ name: `E2E Test OwnerDelete ${Date.now()}` })
     testSquadId = testSquad.id
 
@@ -851,7 +964,10 @@ test.describe('Squads STRICT — F27: Actions specifiques au role', () => {
 // ============================================================
 
 test.describe('Squads STRICT — F28: Navigation de la liste vers le detail', () => {
-  test('F28: cliquer sur une squad card navigue vers /squad/:id', async ({ authenticatedPage: page, db }) => {
+  test('F28: cliquer sur une squad card navigue vers /squad/:id', async ({
+    authenticatedPage: page,
+    db,
+  }) => {
     await db.cleanupE2ESquads()
     const squads = await db.getUserSquads()
 
@@ -860,7 +976,9 @@ test.describe('Squads STRICT — F28: Navigation de la liste vers le detail', ()
       expect(loaded).toBe(true)
       await dismissTourOverlay(page)
       // STRICT: empty state MUST be shown
-      await expect(page.getByText(/Crée ta première squad/i).first()).toBeVisible({ timeout: 10000 })
+      await expect(page.getByText(/Crée ta première squad/i).first()).toBeVisible({
+        timeout: 10000,
+      })
       return
     }
 
@@ -890,7 +1008,10 @@ test.describe('Squads STRICT — F28: Navigation de la liste vers le detail', ()
 // ============================================================
 
 test.describe('Squads STRICT — F29: Etat vide', () => {
-  test('F29: si la DB renvoie 0 squads, l\'UI affiche l\'etat vide complet', async ({ authenticatedPage: page, db }) => {
+  test("F29: si la DB renvoie 0 squads, l'UI affiche l'etat vide complet", async ({
+    authenticatedPage: page,
+    db,
+  }) => {
     const squads = await db.getUserSquads()
 
     if (squads.length > 0) {
@@ -913,8 +1034,12 @@ test.describe('Squads STRICT — F29: Etat vide', () => {
     await expect(page.getByText(/Crée ta première squad/i).first()).toBeVisible({ timeout: 10000 })
 
     // STRICT: the empty state CTA buttons MUST be visible
-    await expect(page.getByRole('button', { name: /Rejoindre avec un code/i })).toBeVisible({ timeout: 5000 })
-    await expect(page.getByRole('button', { name: /Créer une squad/i })).toBeVisible({ timeout: 5000 })
+    await expect(page.getByRole('button', { name: /Rejoindre avec un code/i })).toBeVisible({
+      timeout: 5000,
+    })
+    await expect(page.getByRole('button', { name: /Créer une squad/i })).toBeVisible({
+      timeout: 5000,
+    })
 
     // STRICT: the descriptive text MUST be present
     await expect(page.getByText(/Invite tes potes/i).first()).toBeVisible({ timeout: 5000 })
@@ -926,7 +1051,10 @@ test.describe('Squads STRICT — F29: Etat vide', () => {
 // ============================================================
 
 test.describe('Squads STRICT — F30: Suggestion Decouvrir', () => {
-  test('F30: si l\'utilisateur a < 3 squads, la suggestion Decouvrir est visible', async ({ authenticatedPage: page, db }) => {
+  test("F30: si l'utilisateur a < 3 squads, la suggestion Decouvrir est visible", async ({
+    authenticatedPage: page,
+    db,
+  }) => {
     await db.cleanupE2ESquads()
     const squads = await db.getUserSquads()
     const count = squads.length
@@ -937,13 +1065,17 @@ test.describe('Squads STRICT — F30: Suggestion Decouvrir', () => {
 
     if (count === 0) {
       // STRICT: empty state is shown instead of discover suggestion
-      await expect(page.getByText(/Crée ta première squad/i).first()).toBeVisible({ timeout: 10000 })
+      await expect(page.getByText(/Crée ta première squad/i).first()).toBeVisible({
+        timeout: 10000,
+      })
       return
     }
 
     if (count < 3) {
       // STRICT: the "Trouve de nouvelles squads" discover card MUST be visible
-      await expect(page.getByText(/Trouve de nouvelles squads/i).first()).toBeVisible({ timeout: 15000 })
+      await expect(page.getByText(/Trouve de nouvelles squads/i).first()).toBeVisible({
+        timeout: 15000,
+      })
 
       // STRICT: the "Découvrir" button with link to /discover MUST be present
       await expect(page.getByRole('button', { name: /Découvrir/i })).toBeVisible({ timeout: 5000 })
@@ -968,12 +1100,17 @@ test.describe('Squads STRICT — F31: Lien vers les messages', () => {
     if (testSquadId) {
       try {
         await db.deleteTestSquad(testSquadId)
-      } catch { /* already cleaned up */ }
+      } catch {
+        /* already cleaned up */
+      }
       testSquadId = null
     }
   })
 
-  test('F31: le bouton Messages dans le header squad pointe vers /messages?squad=:id', async ({ authenticatedPage: page, db }) => {
+  test('F31: le bouton Messages dans le header squad pointe vers /messages?squad=:id', async ({
+    authenticatedPage: page,
+    db,
+  }) => {
     const testSquad = await db.createTestSquad({ name: `E2E Test Messages ${Date.now()}` })
     testSquadId = testSquad.id
 
@@ -998,12 +1135,17 @@ test.describe('Squads STRICT — F32: Bouton retour', () => {
     if (testSquadId) {
       try {
         await db.deleteTestSquad(testSquadId)
-      } catch { /* already cleaned up */ }
+      } catch {
+        /* already cleaned up */
+      }
       testSquadId = null
     }
   })
 
-  test('F32: le bouton retour navigue vers /squads sur mobile', async ({ authenticatedPage: page, db }) => {
+  test('F32: le bouton retour navigue vers /squads sur mobile', async ({
+    authenticatedPage: page,
+    db,
+  }) => {
     const testSquad = await db.createTestSquad({ name: `E2E Test Back ${Date.now()}` })
     testSquadId = testSquad.id
 
@@ -1032,7 +1174,9 @@ test.describe('Squads STRICT — F32: Bouton retour', () => {
 // ============================================================
 
 test.describe('Squads STRICT — F33: Squad non trouvee', () => {
-  test('F33: naviguer vers /squad/:invalid-id affiche "Squad non trouvee"', async ({ authenticatedPage: page }) => {
+  test('F33: naviguer vers /squad/:invalid-id affiche "Squad non trouvee"', async ({
+    authenticatedPage: page,
+  }) => {
     await page.goto('/squad/00000000-0000-0000-0000-000000000000')
     await page.waitForLoadState('networkidle')
     await page.waitForTimeout(3000)
@@ -1041,7 +1185,9 @@ test.describe('Squads STRICT — F33: Squad non trouvee', () => {
     await expect(page.getByText(/Squad non trouvée/i).first()).toBeVisible({ timeout: 15000 })
 
     // STRICT: a "Retour aux squads" button MUST be present
-    await expect(page.getByRole('button', { name: /Retour aux squads/i })).toBeVisible({ timeout: 5000 })
+    await expect(page.getByRole('button', { name: /Retour aux squads/i })).toBeVisible({
+      timeout: 5000,
+    })
   })
 })
 
@@ -1049,19 +1195,24 @@ test.describe('Squads STRICT — F33: Squad non trouvee', () => {
 // F34 — Copy invite code button works
 // ============================================================
 
-test.describe('Squads STRICT — F34: Copier le code d\'invitation', () => {
+test.describe("Squads STRICT — F34: Copier le code d'invitation", () => {
   let testSquadId: string | null = null
 
   test.afterEach(async ({ db }) => {
     if (testSquadId) {
       try {
         await db.deleteTestSquad(testSquadId)
-      } catch { /* already cleaned up */ }
+      } catch {
+        /* already cleaned up */
+      }
       testSquadId = null
     }
   })
 
-  test('F34: cliquer sur Copier change l\'icone en "Copie !"', async ({ authenticatedPage: page, db }) => {
+  test('F34: cliquer sur Copier change l\'icone en "Copie !"', async ({
+    authenticatedPage: page,
+    db,
+  }) => {
     const testSquad = await db.createTestSquad({ name: `E2E Test Copy ${Date.now()}` })
     testSquadId = testSquad.id
 
@@ -1095,12 +1246,17 @@ test.describe('Squads STRICT — F35: Drawer actions mobile', () => {
     if (testSquadId) {
       try {
         await db.deleteTestSquad(testSquadId)
-      } catch { /* already cleaned up */ }
+      } catch {
+        /* already cleaned up */
+      }
       testSquadId = null
     }
   })
 
-  test('F35: le bouton "Actions de la squad" ouvre le drawer sur mobile', async ({ authenticatedPage: page, db }) => {
+  test('F35: le bouton "Actions de la squad" ouvre le drawer sur mobile', async ({
+    authenticatedPage: page,
+    db,
+  }) => {
     const testSquad = await db.createTestSquad({ name: `E2E Test Drawer ${Date.now()}` })
     testSquadId = testSquad.id
 
@@ -1119,7 +1275,9 @@ test.describe('Squads STRICT — F35: Drawer actions mobile', () => {
     await page.waitForTimeout(500)
 
     // Close any remaining overlay by clicking its close button
-    const closeBtn = page.locator('button[aria-label="Fermer"], button:has-text("Fermer"), button:has-text("×")').first()
+    const closeBtn = page
+      .locator('button[aria-label="Fermer"], button:has-text("Fermer"), button:has-text("×")')
+      .first()
     if (await closeBtn.isVisible({ timeout: 1000 }).catch(() => false)) {
       await closeBtn.click()
       await page.waitForTimeout(500)
@@ -1143,10 +1301,12 @@ test.describe('Squads STRICT — F35: Drawer actions mobile', () => {
     // Use evaluate to scroll the drawer container
     await page.evaluate(() => {
       // Find the drawer/sheet content and scroll to bottom
-      const sheets = document.querySelectorAll('[class*="sheet"], [class*="drawer"], [role="dialog"]')
-      sheets.forEach(el => el.scrollTop = el.scrollHeight)
+      const sheets = document.querySelectorAll(
+        '[class*="sheet"], [class*="drawer"], [role="dialog"]'
+      )
+      sheets.forEach((el) => (el.scrollTop = el.scrollHeight))
       // Also try scrolling all scrollable containers
-      document.querySelectorAll('[class*="overflow"]').forEach(el => {
+      document.querySelectorAll('[class*="overflow"]').forEach((el) => {
         if (el.scrollHeight > el.clientHeight) el.scrollTop = el.scrollHeight
       })
     })
@@ -1164,7 +1324,10 @@ test.describe('Squads STRICT — F35: Drawer actions mobile', () => {
 // ============================================================
 
 test.describe('Squads STRICT — F36: Lifecycle complet create-verify-delete', () => {
-  test('F36: creer une squad en DB, verifier dans l\'UI, supprimer, verifier la disparition', async ({ authenticatedPage: page, db }) => {
+  test("F36: creer une squad en DB, verifier dans l'UI, supprimer, verifier la disparition", async ({
+    authenticatedPage: page,
+    db,
+  }) => {
     // 1. Create squad directly in DB
     const squadName = `E2E Lifecycle ${Date.now()}`
     const testSquad = await db.createTestSquad({ name: squadName, game: 'Rocket League' })

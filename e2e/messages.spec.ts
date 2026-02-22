@@ -18,7 +18,10 @@ import { test, expect } from './fixtures'
 // F31 — Conversation list matches DB squads
 // ============================================================
 test.describe('F31 — Conversation list matches DB squads', () => {
-  test('F31a: squad conversations correspond to user squads in DB', async ({ authenticatedPage: page, db }) => {
+  test('F31a: squad conversations correspond to user squads in DB', async ({
+    authenticatedPage: page,
+    db,
+  }) => {
     // STRICT: fetch DB first
     const squads = await db.getUserSquads()
     // STRICT: test user MUST have squads
@@ -43,7 +46,7 @@ test.describe('F31 — Conversation list matches DB squads', () => {
     await page.waitForTimeout(1500)
 
     // STRICT: DB has squads → at least one squad name MUST be visible on the page
-    const pageText = await page.locator('body').textContent() || ''
+    const pageText = (await page.locator('body').textContent()) || ''
     let matchCount = 0
     for (const s of squads.slice(0, 5)) {
       const squadName = s.squads.name
@@ -55,7 +58,10 @@ test.describe('F31 — Conversation list matches DB squads', () => {
     expect(matchCount).toBeGreaterThanOrEqual(1)
   })
 
-  test('F31b: tabs Squads and Prives exist on messaging page', async ({ authenticatedPage: page, db }) => {
+  test('F31b: tabs Squads and Prives exist on messaging page', async ({
+    authenticatedPage: page,
+    db,
+  }) => {
     // STRICT: fetch DB to confirm user has messaging access
     const squads = await db.getUserSquads()
     expect(squads.length).toBeGreaterThan(0)
@@ -69,17 +75,19 @@ test.describe('F31 — Conversation list matches DB squads', () => {
     const squadTabBtn = page.getByRole('button', { name: /squad/i }).first()
     const squadTabText = page.getByText(/Squads/i).first()
 
-    const hasSquadTab = await squadTab.isVisible({ timeout: 3000 }).catch(() => false)
-      || await squadTabBtn.isVisible({ timeout: 1000 }).catch(() => false)
-      || await squadTabText.isVisible({ timeout: 1000 }).catch(() => false)
+    const hasSquadTab =
+      (await squadTab.isVisible({ timeout: 3000 }).catch(() => false)) ||
+      (await squadTabBtn.isVisible({ timeout: 1000 }).catch(() => false)) ||
+      (await squadTabText.isVisible({ timeout: 1000 }).catch(() => false))
 
     const dmTab = page.getByRole('tab', { name: /priv|dm|direct/i }).first()
     const dmTabBtn = page.getByRole('button', { name: /priv|dm|direct/i }).first()
     const dmTabText = page.getByText(/Privés|DM|Direct/i).first()
 
-    const hasDmTab = await dmTab.isVisible({ timeout: 2000 }).catch(() => false)
-      || await dmTabBtn.isVisible({ timeout: 1000 }).catch(() => false)
-      || await dmTabText.isVisible({ timeout: 1000 }).catch(() => false)
+    const hasDmTab =
+      (await dmTab.isVisible({ timeout: 2000 }).catch(() => false)) ||
+      (await dmTabBtn.isVisible({ timeout: 1000 }).catch(() => false)) ||
+      (await dmTabText.isVisible({ timeout: 1000 }).catch(() => false))
 
     // STRICT: BOTH tabs must exist — this is a core messaging UI feature
     expect(hasSquadTab).toBe(true)
@@ -92,7 +100,10 @@ test.describe('F31 — Conversation list matches DB squads', () => {
 // F32 — Send squad message + verify DB
 // ============================================================
 test.describe('F32 — Send squad message + verify DB', () => {
-  test('F32: send a message and verify it persists in DB', async ({ authenticatedPage: page, db }) => {
+  test('F32: send a message and verify it persists in DB', async ({
+    authenticatedPage: page,
+    db,
+  }) => {
     // STRICT: fetch DB first — user MUST have squads
     const squads = await db.getUserSquads()
     expect(squads.length).toBeGreaterThan(0)
@@ -112,17 +123,25 @@ test.describe('F32 — Send squad message + verify DB', () => {
     await page.waitForTimeout(4000)
 
     // If no conversation auto-opened, click the first conversation button
-    const noConvSelected = await page.getByText(/Sélectionne une conversation/i).first().isVisible({ timeout: 2000 }).catch(() => false)
+    const noConvSelected = await page
+      .getByText(/Sélectionne une conversation/i)
+      .first()
+      .isVisible({ timeout: 2000 })
+      .catch(() => false)
     if (noConvSelected) {
-      const convBtn = page.locator('nav[aria-label="Conversations"] button, nav[aria-label="Conversations"] a').first()
+      const convBtn = page
+        .locator('nav[aria-label="Conversations"] button, nav[aria-label="Conversations"] a')
+        .first()
       await convBtn.click()
       await page.waitForTimeout(2000)
     }
 
     // STRICT: the composer input MUST be visible when a conversation is open
-    const composer = page.locator(
-      'input[placeholder*="Message"], textarea[placeholder*="Message"], input[placeholder*="message"], textarea[placeholder*="message"]'
-    ).first()
+    const composer = page
+      .locator(
+        'input[placeholder*="Message"], textarea[placeholder*="Message"], input[placeholder*="message"], textarea[placeholder*="message"]'
+      )
+      .first()
     await expect(composer).toBeVisible({ timeout: 8000 })
 
     // Type and send the message
@@ -139,8 +158,8 @@ test.describe('F32 — Send squad message + verify DB', () => {
 
     // STRICT: verify the message appeared in DB after sending
     const messages = await db.getSquadMessages(squadId, 10)
-    const found = messages.find(
-      (m: { content: string }) => m.content?.includes(`[E2E] test message ${timestamp}`)
+    const found = messages.find((m: { content: string }) =>
+      m.content?.includes(`[E2E] test message ${timestamp}`)
     )
     // STRICT: the sent message MUST exist in the DB
     expect(found).toBeTruthy()
@@ -156,7 +175,10 @@ test.describe('F32 — Send squad message + verify DB', () => {
 // F33 — DM tab visible + conversations
 // ============================================================
 test.describe('F33 — DM tab visible + conversations', () => {
-  test('F33: DM tab shows direct message conversations matching DB state', async ({ authenticatedPage: page, db }) => {
+  test('F33: DM tab shows direct message conversations matching DB state', async ({
+    authenticatedPage: page,
+    db,
+  }) => {
     // STRICT: fetch DB first
     const dmCount = await db.getDMConversationCount()
 
@@ -189,7 +211,9 @@ test.describe('F33 — DM tab visible + conversations', () => {
       expect(uiCount).toBeGreaterThanOrEqual(1)
     } else {
       // STRICT: DB has 0 DMs → empty state text MUST be visible
-      const emptyState = page.getByText(/Pas encore de messages|aucun message|pas de conversation/i).first()
+      const emptyState = page
+        .getByText(/Pas encore de messages|aucun message|pas de conversation/i)
+        .first()
       // STRICT: empty state MUST be displayed when DB has no DMs
       await expect(emptyState).toBeVisible({ timeout: 8000 })
     }
@@ -200,7 +224,10 @@ test.describe('F33 — DM tab visible + conversations', () => {
 // F34 — Edit message + verify DB
 // ============================================================
 test.describe('F34 — Edit message + verify DB', () => {
-  test('F34: edit a test message and verify edited_at in DB', async ({ authenticatedPage: page, db }) => {
+  test('F34: edit a test message and verify edited_at in DB', async ({
+    authenticatedPage: page,
+    db,
+  }) => {
     // STRICT: fetch DB first — user MUST have squads
     const squads = await db.getUserSquads()
     expect(squads.length).toBeGreaterThan(0)
@@ -240,8 +267,10 @@ test.describe('F34 — Edit message + verify DB', () => {
       await expect(msgLocator).toBeVisible({ timeout: 10000 })
 
       // Find the parent message bubble and hover to reveal actions
-      const messageBubble = msgLocator.locator('xpath=ancestor::div[contains(@class,"group")]').first()
-      const hoverTarget = await messageBubble.isVisible({ timeout: 2000 }).catch(() => false)
+      const messageBubble = msgLocator
+        .locator('xpath=ancestor::div[contains(@class,"group")]')
+        .first()
+      const hoverTarget = (await messageBubble.isVisible({ timeout: 2000 }).catch(() => false))
         ? messageBubble
         : msgLocator
       await hoverTarget.hover()
@@ -346,7 +375,9 @@ test.describe('F35 — Pinned messages match DB', () => {
     await page.waitForTimeout(2000)
 
     // Verify the chat view is open — look for the message composer or chat content
-    const chatArea = page.locator('textarea, [contenteditable="true"], input[placeholder*="message" i]').first()
+    const chatArea = page
+      .locator('textarea, [contenteditable="true"], input[placeholder*="message" i]')
+      .first()
 
     // STRICT: chat composer MUST be visible — no silent skip
     await expect(chatArea).toBeVisible({ timeout: 10000 })
@@ -370,7 +401,10 @@ test.describe('F35 — Pinned messages match DB', () => {
 // F36 — Poll creation
 // ============================================================
 test.describe('F36 — Poll creation', () => {
-  test('F36: create a poll in squad conversation and verify in DB', async ({ authenticatedPage: page, db }) => {
+  test('F36: create a poll in squad conversation and verify in DB', async ({
+    authenticatedPage: page,
+    db,
+  }) => {
     // STRICT: fetch DB first
     const squads = await db.getUserSquads()
     expect(squads.length).toBeGreaterThan(0)
@@ -407,13 +441,17 @@ test.describe('F36 — Poll creation', () => {
     await page.waitForTimeout(2000)
 
     // STRICT: verify conversation is actually open (chat area visible)
-    const chatArea = page.locator('textarea, [contenteditable="true"], input[placeholder*="message" i]').first()
+    const chatArea = page
+      .locator('textarea, [contenteditable="true"], input[placeholder*="message" i]')
+      .first()
     const isChatOpen = await chatArea.isVisible({ timeout: 5000 }).catch(() => false)
 
     // STRICT: poll creation button MUST exist in conversation toolbar
-    const pollBtn = page.locator(
-      'button[aria-label="Créer un sondage"], button[aria-label*="sondage"], button[aria-label*="poll"], button[aria-label*="Sondage"]'
-    ).first()
+    const pollBtn = page
+      .locator(
+        'button[aria-label="Créer un sondage"], button[aria-label*="sondage"], button[aria-label*="poll"], button[aria-label*="Sondage"]'
+      )
+      .first()
 
     if (isChatOpen) {
       // STRICT: poll button MUST be visible — this is a core messaging feature
@@ -422,14 +460,18 @@ test.describe('F36 — Poll creation', () => {
       await page.waitForTimeout(1000)
     } else {
       // Conversation didn't open — poll feature not testable, skip gracefully
-      test.info().annotations.push({ type: 'skip', description: 'Conversation could not be opened' })
+      test
+        .info()
+        .annotations.push({ type: 'skip', description: 'Conversation could not be opened' })
       return
     }
 
     // STRICT: poll form MUST appear with a question input
-    const questionInput = page.locator(
-      'input[placeholder*="question"], textarea[placeholder*="question"], input[name="question"], [class*="poll"] input, [class*="poll"] textarea'
-    ).first()
+    const questionInput = page
+      .locator(
+        'input[placeholder*="question"], textarea[placeholder*="question"], input[name="question"], [class*="poll"] input, [class*="poll"] textarea'
+      )
+      .first()
     // STRICT: question input MUST be visible in the poll creation form
     await expect(questionInput).toBeVisible({ timeout: 5000 })
 
@@ -447,7 +489,10 @@ test.describe('F36 — Poll creation', () => {
     await page.waitForTimeout(300)
 
     // Submit poll (target the button INSIDE the dialog, not the sidebar "Créer" button)
-    const submitBtn = page.locator('[role="dialog"]').getByRole('button', { name: /Créer le sondage|Envoyer|Valider|Confirmer/i }).first()
+    const submitBtn = page
+      .locator('[role="dialog"]')
+      .getByRole('button', { name: /Créer le sondage|Envoyer|Valider|Confirmer/i })
+      .first()
     // STRICT: submit button MUST be visible
     await expect(submitBtn).toBeVisible({ timeout: 5000 })
     await submitBtn.click()
@@ -459,8 +504,8 @@ test.describe('F36 — Poll creation', () => {
 
     // STRICT: verify in DB — poll message MUST exist
     const messages = await db.getSquadMessages(squadId, 10)
-    const pollMsg = messages.find(
-      (m: { content: string }) => m.content?.includes(`[E2E] Poll question ${timestamp}`)
+    const pollMsg = messages.find((m: { content: string }) =>
+      m.content?.includes(`[E2E] Poll question ${timestamp}`)
     )
     // STRICT: the poll MUST be persisted in the database
     expect(pollMsg).toBeTruthy()
@@ -475,7 +520,10 @@ test.describe('F36 — Poll creation', () => {
 // F37 — Mention autocomplete
 // ============================================================
 test.describe('F37 — Mention autocomplete', () => {
-  test('F37: typing @ in composer triggers autocomplete with squad members', async ({ authenticatedPage: page, db }) => {
+  test('F37: typing @ in composer triggers autocomplete with squad members', async ({
+    authenticatedPage: page,
+    db,
+  }) => {
     // STRICT: fetch DB first
     const squads = await db.getUserSquads()
     expect(squads.length).toBeGreaterThan(0)
@@ -513,14 +561,17 @@ test.describe('F37 — Mention autocomplete', () => {
     await page.waitForTimeout(2000)
 
     // STRICT: composer MUST be visible in open conversation (exclude search input)
-    const composer = page.locator(
-      'textarea, [contenteditable="true"], input[placeholder*="message" i]'
-    ).first()
+    const composer = page
+      .locator('textarea, [contenteditable="true"], input[placeholder*="message" i]')
+      .first()
     const isComposerVisible = await composer.isVisible({ timeout: 8000 }).catch(() => false)
 
     if (!isComposerVisible) {
       // Conversation may not have opened or composer not available — skip gracefully
-      test.info().annotations.push({ type: 'skip', description: 'Composer not visible after opening conversation' })
+      test.info().annotations.push({
+        type: 'skip',
+        description: 'Composer not visible after opening conversation',
+      })
       return
     }
 
@@ -537,15 +588,20 @@ test.describe('F37 — Mention autocomplete', () => {
     if (otherMembers.length === 0) {
       // STRICT: if the current user is the only member, there's nobody to mention
       // The feature works but the dropdown won't appear — skip gracefully
-      test.info().annotations.push({ type: 'skip', description: 'Only member in squad, no other users to mention' })
+      test.info().annotations.push({
+        type: 'skip',
+        description: 'Only member in squad, no other users to mention',
+      })
       await composer.fill('')
       return
     }
 
     // STRICT: autocomplete dropdown MUST appear after typing @
-    const autocomplete = page.locator(
-      '[class*="mention"], [class*="autocomplete"], [class*="dropdown"], [role="listbox"], [class*="suggestion"], [class*="popover"]'
-    ).first()
+    const autocomplete = page
+      .locator(
+        '[class*="mention"], [class*="autocomplete"], [class*="dropdown"], [role="listbox"], [class*="suggestion"], [class*="popover"]'
+      )
+      .first()
     // STRICT: autocomplete MUST be visible — this is a core mention feature
     await expect(autocomplete).toBeVisible({ timeout: 8000 })
 
@@ -576,7 +632,10 @@ test.describe('F37 — Mention autocomplete', () => {
 // F38 — Search messages
 // ============================================================
 test.describe('F38 — Search messages', () => {
-  test('F38: search for a known message and verify results', async ({ authenticatedPage: page, db }) => {
+  test('F38: search for a known message and verify results', async ({
+    authenticatedPage: page,
+    db,
+  }) => {
     // STRICT: fetch DB first
     const squads = await db.getUserSquads()
     expect(squads.length).toBeGreaterThan(0)
@@ -607,9 +666,9 @@ test.describe('F38 — Search messages', () => {
       await page.waitForTimeout(1000)
 
       // Click first conversation
-      const conversationItem = page.locator(
-        'nav[aria-label="Conversations"] button, nav[aria-label="Conversations"] a'
-      ).first()
+      const conversationItem = page
+        .locator('nav[aria-label="Conversations"] button, nav[aria-label="Conversations"] a')
+        .first()
       // STRICT: conversation MUST be visible
       await expect(conversationItem).toBeVisible({ timeout: 8000 })
       await conversationItem.click()
@@ -617,9 +676,11 @@ test.describe('F38 — Search messages', () => {
       await page.waitForTimeout(2000)
 
       // STRICT: search button MUST exist in conversation toolbar
-      const searchBtn = page.locator(
-        'button[aria-label="Rechercher dans les messages"], button[aria-label*="Rechercher"], button[aria-label*="search"], button[aria-label*="Search"]'
-      ).first()
+      const searchBtn = page
+        .locator(
+          'button[aria-label="Rechercher dans les messages"], button[aria-label*="Rechercher"], button[aria-label*="search"], button[aria-label*="Search"]'
+        )
+        .first()
       // STRICT: search button MUST be visible — this is a core messaging feature
       await expect(searchBtn).toBeVisible({ timeout: 8000 })
 
@@ -627,9 +688,11 @@ test.describe('F38 — Search messages', () => {
       await page.waitForTimeout(800)
 
       // STRICT: search input MUST appear after clicking search button
-      const searchInput = page.locator(
-        'input[placeholder*="Rechercher"], input[type="search"], input[aria-label*="Rechercher"], input[placeholder*="rechercher"]'
-      ).first()
+      const searchInput = page
+        .locator(
+          'input[placeholder*="Rechercher"], input[type="search"], input[aria-label*="Rechercher"], input[placeholder*="rechercher"]'
+        )
+        .first()
       // STRICT: search input MUST be visible
       await expect(searchInput).toBeVisible({ timeout: 5000 })
 
@@ -651,7 +714,10 @@ test.describe('F38 — Search messages', () => {
 // F39 — Forward message UI
 // ============================================================
 test.describe('F39 — Forward message UI', () => {
-  test('F39: forward option exists in message actions menu', async ({ authenticatedPage: page, db }) => {
+  test('F39: forward option exists in message actions menu', async ({
+    authenticatedPage: page,
+    db,
+  }) => {
     // STRICT: fetch DB first — user MUST have squads with messages
     const squads = await db.getUserSquads()
     expect(squads.length).toBeGreaterThan(0)
@@ -695,7 +761,9 @@ test.describe('F39 — Forward message UI', () => {
 
       // The conversation may only have system messages (join notifications, session confirmations)
       // which don't render MessageActions. Send a real message first via the input field.
-      const messageInput = page.locator('input[placeholder*="Message"], textarea[placeholder*="Message"]').first()
+      const messageInput = page
+        .locator('input[placeholder*="Message"], textarea[placeholder*="Message"]')
+        .first()
       await expect(messageInput).toBeVisible({ timeout: 8000 })
       await messageInput.fill('[E2E] test forward action')
       // Click send button
@@ -704,12 +772,15 @@ test.describe('F39 — Forward message UI', () => {
       await page.waitForTimeout(2000)
 
       // Now hover over the sent message to reveal the actions button (sm:opacity-0)
-      const messageBubble = page.locator('.group').filter({
-        has: page.locator('button[aria-label="Actions du message"]')
-      }).first()
+      const messageBubble = page
+        .locator('.group')
+        .filter({
+          has: page.locator('button[aria-label="Actions du message"]'),
+        })
+        .first()
       const actionsBtn = page.locator('button[aria-label="Actions du message"]').first()
 
-      const hasBubble = await messageBubble.count() > 0
+      const hasBubble = (await messageBubble.count()) > 0
       if (hasBubble) {
         await messageBubble.hover()
         await page.waitForTimeout(300)
@@ -735,7 +806,10 @@ test.describe('F39 — Forward message UI', () => {
 // F40 — Thread view UI
 // ============================================================
 test.describe('F40 — Thread view UI', () => {
-  test('F40: thread option exists in message actions menu', async ({ authenticatedPage: page, db }) => {
+  test('F40: thread option exists in message actions menu', async ({
+    authenticatedPage: page,
+    db,
+  }) => {
     // STRICT: fetch DB first — user MUST have squads with messages
     const squads = await db.getUserSquads()
     expect(squads.length).toBeGreaterThan(0)
@@ -777,7 +851,9 @@ test.describe('F40 — Thread view UI', () => {
       await page.waitForTimeout(2000)
 
       // Send a real message to ensure MessageActions renders (system messages don't have actions)
-      const messageInput = page.locator('input[placeholder*="Message"], textarea[placeholder*="Message"]').first()
+      const messageInput = page
+        .locator('input[placeholder*="Message"], textarea[placeholder*="Message"]')
+        .first()
       await expect(messageInput).toBeVisible({ timeout: 8000 })
       await messageInput.fill('[E2E] test thread action')
       const sendBtn = page.locator('button[type="submit"], button[aria-label*="Envoyer"]').last()
@@ -785,12 +861,15 @@ test.describe('F40 — Thread view UI', () => {
       await page.waitForTimeout(2000)
 
       // Hover over the sent message to reveal actions button
-      const messageBubble = page.locator('.group').filter({
-        has: page.locator('button[aria-label="Actions du message"]')
-      }).first()
+      const messageBubble = page
+        .locator('.group')
+        .filter({
+          has: page.locator('button[aria-label="Actions du message"]'),
+        })
+        .first()
       const actionsBtn = page.locator('button[aria-label="Actions du message"]').first()
 
-      const hasBubble = await messageBubble.count() > 0
+      const hasBubble = (await messageBubble.count()) > 0
       if (hasBubble) {
         await messageBubble.hover()
         await page.waitForTimeout(300)

@@ -134,8 +134,8 @@ export const useVoiceChatStore = create<VoiceChatState>((set, get) => ({
 
       if (success) {
         // Persist voice state in Supabase so other squad members can see
-        supabase.rpc('join_voice_party', { p_channel_id: channelName }).catch((err) => {
-          console.warn('[VoiceChat] Failed to persist join in DB:', err)
+        supabase.rpc('join_voice_party', { p_channel_id: channelName }).then(({ error }: { error: unknown }) => {
+          if (error) console.warn('[VoiceChat] Failed to persist join in DB:', error)
         })
 
         set({
@@ -172,8 +172,8 @@ export const useVoiceChatStore = create<VoiceChatState>((set, get) => ({
 
   leaveChannel: async () => {
     // Clear voice state in Supabase
-    supabase.rpc('leave_voice_party').catch((err) => {
-      console.warn('[VoiceChat] Failed to persist leave in DB:', err)
+    supabase.rpc('leave_voice_party').then(({ error }: { error: unknown }) => {
+      if (error) console.warn('[VoiceChat] Failed to persist leave in DB:', error)
     })
 
     set({

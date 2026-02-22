@@ -16,7 +16,20 @@ function formatDate(isoDate: string): string {
     const d = new Date(isoDate)
     if (isNaN(d.getTime())) return ''
     const days = ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam']
-    const months = ['jan', 'fev', 'mar', 'avr', 'mai', 'jun', 'jul', 'aou', 'sep', 'oct', 'nov', 'dec']
+    const months = [
+      'jan',
+      'fev',
+      'mar',
+      'avr',
+      'mai',
+      'jun',
+      'jul',
+      'aou',
+      'sep',
+      'oct',
+      'nov',
+      'dec',
+    ]
     return `${days[d.getUTCDay()]} ${d.getUTCDate()} ${months[d.getUTCMonth()]} \u00b7 ${String(d.getUTCHours()).padStart(2, '0')}h${String(d.getUTCMinutes()).padStart(2, '0')}`
   } catch {
     return ''
@@ -99,7 +112,7 @@ describe('og-image: escapeXml', () => {
 
   it('should escape multiple special characters combined', () => {
     expect(escapeXml('<div class="x">&\'test\'</div>')).toBe(
-      '&lt;div class=&quot;x&quot;&gt;&amp;&apos;test&apos;&lt;/div&gt;',
+      '&lt;div class=&quot;x&quot;&gt;&amp;&apos;test&apos;&lt;/div&gt;'
     )
   })
 
@@ -193,10 +206,14 @@ function generateSessionSvg(data: SessionData): string {
   </text>
 
   <!-- Game badge -->
-  ${game ? `<rect x="80" y="120" rx="16" ry="16" width="${Math.min(game.length * 14 + 40, 400)}" height="40" fill="#6c5ce7" opacity="0.15"/>
+  ${
+    game
+      ? `<rect x="80" y="120" rx="16" ry="16" width="${Math.min(game.length * 14 + 40, 400)}" height="40" fill="#6c5ce7" opacity="0.15"/>
   <text x="100" y="147" font-family="system-ui, -apple-system, sans-serif" font-size="18" font-weight="600" fill="#a29bfe">
     ${game}
-  </text>` : ''}
+  </text>`
+      : ''
+  }
 
   <!-- Session title -->
   <text x="80" y="${game ? '230' : '200'}" font-family="system-ui, -apple-system, sans-serif" font-size="52" font-weight="800" fill="#ffffff">

@@ -60,9 +60,9 @@ describe('ai-session-summary: CORS logic', () => {
   })
 
   it('should always include Allow-Headers', () => {
-    expect(
-      getCorsHeaders('https://squadplanner.fr')['Access-Control-Allow-Headers']
-    ).toContain('authorization')
+    expect(getCorsHeaders('https://squadplanner.fr')['Access-Control-Allow-Headers']).toContain(
+      'authorization'
+    )
     expect(getCorsHeaders(null)['Access-Control-Allow-Headers']).toContain('authorization')
   })
 })
@@ -149,9 +149,7 @@ describe('ai-session-summary: Attendance calculations', () => {
 
   it('should return 0% when there are zero checkins', () => {
     const checkins: Checkin[] = []
-    const rsvps: Rsvp[] = [
-      { user_id: 'u1', response: 'present' },
-    ]
+    const rsvps: Rsvp[] = [{ user_id: 'u1', response: 'present' }]
     const result = calculateAttendance(checkins, rsvps)
     expect(result.totalCheckins).toBe(0)
     expect(result.attendanceRate).toBe(0)
@@ -174,9 +172,7 @@ describe('ai-session-summary: Attendance calculations', () => {
   })
 
   it('should only count rsvps with response "present" for totalRsvps', () => {
-    const checkins: Checkin[] = [
-      { user_id: 'u1', status: 'present', minutes_late: 0 },
-    ]
+    const checkins: Checkin[] = [{ user_id: 'u1', status: 'present', minutes_late: 0 }]
     const rsvps: Rsvp[] = [
       { user_id: 'u1', response: 'present' },
       { user_id: 'u2', response: 'absent' },
@@ -228,9 +224,7 @@ describe('ai-session-summary: MVP detection', () => {
   })
 
   it('should NOT return a present checkin that was late', () => {
-    const checkins: Checkin[] = [
-      { user_id: 'u1', status: 'present', minutes_late: 5 },
-    ]
+    const checkins: Checkin[] = [{ user_id: 'u1', status: 'present', minutes_late: 5 }]
     expect(findMvpUserId(checkins)).toBeNull()
   })
 
@@ -253,9 +247,7 @@ describe('ai-session-summary: MVP detection', () => {
   })
 
   it('should treat null minutes_late as 0 (on time)', () => {
-    const checkins: Checkin[] = [
-      { user_id: 'u1', status: 'present', minutes_late: null },
-    ]
+    const checkins: Checkin[] = [{ user_id: 'u1', status: 'present', minutes_late: null }]
     // (null || 0) === 0 -> MVP
     expect(findMvpUserId(checkins)).toBe('u1')
   })

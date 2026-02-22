@@ -232,9 +232,7 @@ function buildHandler(deps: {
                 current_period_start: new Date(
                   subscription.current_period_start * 1000
                 ).toISOString(),
-                current_period_end: new Date(
-                  subscription.current_period_end * 1000
-                ).toISOString(),
+                current_period_end: new Date(subscription.current_period_end * 1000).toISOString(),
                 cancel_at_period_end: subscription.cancel_at_period_end,
               })
               .eq('id', existingSub.id)
@@ -436,7 +434,8 @@ describe('stripe-webhook', () => {
               squad_id: overrides?.squadId !== undefined ? overrides.squadId : SQUAD_ID,
               tier: overrides?.tier !== undefined ? overrides.tier : 'premium',
             },
-            subscription: overrides?.subscription !== undefined ? overrides.subscription : 'sub_123',
+            subscription:
+              overrides?.subscription !== undefined ? overrides.subscription : 'sub_123',
             customer: overrides?.customer ?? 'cus_123',
           },
         },
@@ -471,9 +470,7 @@ describe('stripe-webhook', () => {
 
     it('skips when user_id is missing in metadata', async () => {
       const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
-      mockStripe.webhooks.constructEvent.mockReturnValue(
-        makeCheckoutEvent({ userId: null })
-      )
+      mockStripe.webhooks.constructEvent.mockReturnValue(makeCheckoutEvent({ userId: null }))
 
       const req = new Request('https://edge.fn/stripe-webhook', {
         method: 'POST',
@@ -492,9 +489,7 @@ describe('stripe-webhook', () => {
     })
 
     it('handles personal subscription (no squad_id)', async () => {
-      mockStripe.webhooks.constructEvent.mockReturnValue(
-        makeCheckoutEvent({ squadId: null })
-      )
+      mockStripe.webhooks.constructEvent.mockReturnValue(makeCheckoutEvent({ squadId: null }))
 
       const req = new Request('https://edge.fn/stripe-webhook', {
         method: 'POST',
@@ -508,16 +503,12 @@ describe('stripe-webhook', () => {
       const res = await handler(req)
       expect(res.status).toBe(200)
       // from('squads') should not be called for update when no squad_id
-      const squadCalls = mockSupabase.from.mock.calls.filter(
-        (c: unknown[]) => c[0] === 'squads'
-      )
+      const squadCalls = mockSupabase.from.mock.calls.filter((c: unknown[]) => c[0] === 'squads')
       expect(squadCalls).toHaveLength(0)
     })
 
     it('resolves tier from price_id when tier is not in metadata', async () => {
-      mockStripe.webhooks.constructEvent.mockReturnValue(
-        makeCheckoutEvent({ tier: null })
-      )
+      mockStripe.webhooks.constructEvent.mockReturnValue(makeCheckoutEvent({ tier: null }))
       mockStripe.subscriptions.retrieve.mockResolvedValue({
         items: { data: [{ price: { id: 'price_sl_monthly' } }] },
       })
@@ -537,9 +528,7 @@ describe('stripe-webhook', () => {
     })
 
     it('defaults to premium when price_id is unknown', async () => {
-      mockStripe.webhooks.constructEvent.mockReturnValue(
-        makeCheckoutEvent({ tier: null })
-      )
+      mockStripe.webhooks.constructEvent.mockReturnValue(makeCheckoutEvent({ tier: null }))
       mockStripe.subscriptions.retrieve.mockResolvedValue({
         items: { data: [{ price: { id: 'price_unknown' } }] },
       })
@@ -647,9 +636,7 @@ describe('stripe-webhook', () => {
 
       const res = await handler(req)
       expect(res.status).toBe(200)
-      const squadCalls = mockSupabase.from.mock.calls.filter(
-        (c: unknown[]) => c[0] === 'squads'
-      )
+      const squadCalls = mockSupabase.from.mock.calls.filter((c: unknown[]) => c[0] === 'squads')
       expect(squadCalls).toHaveLength(0)
     })
   })
@@ -729,9 +716,7 @@ describe('stripe-webhook', () => {
 
       const res = await handler(req)
       expect(res.status).toBe(200)
-      const squadCalls = mockSupabase.from.mock.calls.filter(
-        (c: unknown[]) => c[0] === 'squads'
-      )
+      const squadCalls = mockSupabase.from.mock.calls.filter((c: unknown[]) => c[0] === 'squads')
       expect(squadCalls).toHaveLength(0)
     })
   })

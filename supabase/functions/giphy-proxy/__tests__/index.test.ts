@@ -83,7 +83,9 @@ describe('giphy-proxy: CORS logic', () => {
 
   it('should allow Vercel deployment with hyphens in name', () => {
     const headers = getCorsHeaders('https://squad-planner-preview-abc.vercel.app')
-    expect(headers['Access-Control-Allow-Origin']).toBe('https://squad-planner-preview-abc.vercel.app')
+    expect(headers['Access-Control-Allow-Origin']).toBe(
+      'https://squad-planner-preview-abc.vercel.app'
+    )
   })
 
   it('should NOT allow Vercel subdomain with extra path', () => {
@@ -103,13 +105,19 @@ describe('giphy-proxy: CORS logic', () => {
   })
 
   it('should always include Allow-Headers', () => {
-    expect(getCorsHeaders('https://squadplanner.fr')['Access-Control-Allow-Headers']).toContain('authorization')
+    expect(getCorsHeaders('https://squadplanner.fr')['Access-Control-Allow-Headers']).toContain(
+      'authorization'
+    )
     expect(getCorsHeaders(null)['Access-Control-Allow-Headers']).toContain('authorization')
-    expect(getCorsHeaders('https://evil.com')['Access-Control-Allow-Headers']).toContain('authorization')
+    expect(getCorsHeaders('https://evil.com')['Access-Control-Allow-Headers']).toContain(
+      'authorization'
+    )
   })
 
   it('should always include Allow-Methods', () => {
-    expect(getCorsHeaders('https://squadplanner.fr')['Access-Control-Allow-Methods']).toBe('POST, OPTIONS')
+    expect(getCorsHeaders('https://squadplanner.fr')['Access-Control-Allow-Methods']).toBe(
+      'POST, OPTIONS'
+    )
     expect(getCorsHeaders(null)['Access-Control-Allow-Methods']).toBe('POST, OPTIONS')
     expect(getCorsHeaders('https://evil.com')['Access-Control-Allow-Methods']).toBe('POST, OPTIONS')
   })
@@ -208,7 +216,7 @@ function buildGiphyUrl(
   apiKey: string,
   action: string,
   query: string | undefined,
-  limit: number = 20,
+  limit: number = 20
 ): string {
   let url = `${GIPHY_BASE}/${action}?api_key=${encodeURIComponent(apiKey)}&rating=pg-13&lang=fr&limit=${limit}`
   if (action === 'search' && query) {

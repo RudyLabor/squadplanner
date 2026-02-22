@@ -310,9 +310,7 @@ function createMockSupabaseClient(config: SupabaseMockConfig = {}) {
             ...chain,
             is: vi.fn().mockReturnValue({
               ...chain,
-              limit: vi
-                .fn()
-                .mockResolvedValue({ data: config.pendingRsvps ?? [], error: null }),
+              limit: vi.fn().mockResolvedValue({ data: config.pendingRsvps ?? [], error: null }),
             }),
           }),
         }),

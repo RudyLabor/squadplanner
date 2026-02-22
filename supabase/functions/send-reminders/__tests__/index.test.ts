@@ -23,12 +23,14 @@ function getCorsHeaders(origin: string | null) {
     origin && ALLOWED_ORIGINS.some((allowed) => origin === allowed) ? origin : null
   if (!allowedOrigin) {
     return {
-      'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type, x-cron-secret',
+      'Access-Control-Allow-Headers':
+        'authorization, x-client-info, apikey, content-type, x-cron-secret',
     }
   }
   return {
     'Access-Control-Allow-Origin': allowedOrigin,
-    'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type, x-cron-secret',
+    'Access-Control-Allow-Headers':
+      'authorization, x-client-info, apikey, content-type, x-cron-secret',
   }
 }
 
@@ -161,7 +163,7 @@ interface SessionWithRsvps {
 function buildNotificationsFromSessions(
   sessions: SessionWithRsvps[],
   type: 'urgent' | 'upcoming',
-  now: Date,
+  now: Date
 ) {
   const notifications: Array<{
     type: 'urgent' | 'upcoming'

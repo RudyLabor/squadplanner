@@ -128,10 +128,10 @@ serve(async (req) => {
       const errorText = await giphyRes.text()
       // SEC-7: Log details server-side only, return generic error to client
       console.error('GIPHY API error:', giphyRes.status, errorText)
-      return new Response(
-        JSON.stringify({ error: 'GIF service unavailable' }),
-        { status: 502, headers: { ...cors, 'Content-Type': 'application/json' } }
-      )
+      return new Response(JSON.stringify({ error: 'GIF service unavailable' }), {
+        status: 502,
+        headers: { ...cors, 'Content-Type': 'application/json' },
+      })
     }
 
     const data = await giphyRes.json()

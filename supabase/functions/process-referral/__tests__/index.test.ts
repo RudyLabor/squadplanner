@@ -65,8 +65,12 @@ describe('process-referral: CORS logic', () => {
   })
 
   it('should always include Allow-Headers regardless of origin', () => {
-    expect(getCorsHeaders('https://squadplanner.fr')['Access-Control-Allow-Headers']).toContain('authorization')
-    expect(getCorsHeaders('https://evil.com')['Access-Control-Allow-Headers']).toContain('authorization')
+    expect(getCorsHeaders('https://squadplanner.fr')['Access-Control-Allow-Headers']).toContain(
+      'authorization'
+    )
+    expect(getCorsHeaders('https://evil.com')['Access-Control-Allow-Headers']).toContain(
+      'authorization'
+    )
     expect(getCorsHeaders(null)['Access-Control-Allow-Headers']).toContain('authorization')
   })
 })
@@ -125,28 +129,28 @@ describe('process-referral: referral code validation', () => {
   })
 
   it('should reject a code that is too short (< 3 chars)', () => {
-    expect(() =>
-      validateString('AB', 'referral_code', { minLength: 3, maxLength: 30 })
-    ).toThrow('referral_code must be at least 3 characters')
+    expect(() => validateString('AB', 'referral_code', { minLength: 3, maxLength: 30 })).toThrow(
+      'referral_code must be at least 3 characters'
+    )
   })
 
   it('should reject a code that is too long (> 30 chars)', () => {
     const tooLong = 'A'.repeat(31)
-    expect(() =>
-      validateString(tooLong, 'referral_code', { minLength: 3, maxLength: 30 })
-    ).toThrow('referral_code must be at most 30 characters')
+    expect(() => validateString(tooLong, 'referral_code', { minLength: 3, maxLength: 30 })).toThrow(
+      'referral_code must be at most 30 characters'
+    )
   })
 
   it('should reject a non-string value', () => {
-    expect(() =>
-      validateString(12345, 'referral_code', { minLength: 3, maxLength: 30 })
-    ).toThrow('referral_code must be a string')
+    expect(() => validateString(12345, 'referral_code', { minLength: 3, maxLength: 30 })).toThrow(
+      'referral_code must be a string'
+    )
   })
 
   it('should reject null value', () => {
-    expect(() =>
-      validateString(null, 'referral_code', { minLength: 3, maxLength: 30 })
-    ).toThrow('referral_code must be a string')
+    expect(() => validateString(null, 'referral_code', { minLength: 3, maxLength: 30 })).toThrow(
+      'referral_code must be a string'
+    )
   })
 
   it('should reject undefined value', () => {

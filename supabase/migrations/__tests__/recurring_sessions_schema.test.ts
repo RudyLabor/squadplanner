@@ -37,11 +37,7 @@ const FORM_INSERT_COLUMNS = [
 ] as const
 
 describe('recurring_sessions migration schema', () => {
-  const migrationPath = path.resolve(
-    __dirname,
-    '..',
-    '20260220000001_recurring_sessions.sql'
-  )
+  const migrationPath = path.resolve(__dirname, '..', '20260220000001_recurring_sessions.sql')
 
   let migrationSQL: string
 
@@ -57,10 +53,7 @@ describe('recurring_sessions migration schema', () => {
 
   it('defines all columns expected by the frontend interface', () => {
     for (const col of FRONTEND_COLUMNS) {
-      expect(
-        migrationSQL,
-        `Migration should define column "${col}"`
-      ).toContain(col)
+      expect(migrationSQL, `Migration should define column "${col}"`).toContain(col)
     }
   })
 

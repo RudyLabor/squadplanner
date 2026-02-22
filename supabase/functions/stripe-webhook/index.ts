@@ -64,10 +64,14 @@ function getTierFromPriceId(priceId: string): string {
 // Get max_members based on tier
 function getMaxMembers(tier: string): number {
   switch (tier) {
-    case 'club': return 100
-    case 'squad_leader': return 50
-    case 'premium': return 20
-    default: return 10
+    case 'club':
+      return 100
+    case 'squad_leader':
+      return 50
+    case 'premium':
+      return 20
+    default:
+      return 10
   }
 }
 
@@ -164,7 +168,9 @@ serve(async (req) => {
           })
           .eq('id', userId)
 
-        console.log(`Tier "${tier}" activated for user ${userId}${squadId ? ` (squad ${squadId})` : ''}`)
+        console.log(
+          `Tier "${tier}" activated for user ${userId}${squadId ? ` (squad ${squadId})` : ''}`
+        )
         break
       }
 

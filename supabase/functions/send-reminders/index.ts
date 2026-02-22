@@ -84,7 +84,10 @@ serve(async (req) => {
     }
 
     const isValidCron = cronSecret && cronHeader && timingSafeCompare(cronHeader, cronSecret)
-    const isValidServiceRole = authHeader && serviceRoleKey && timingSafeCompare(authHeader.replace('Bearer ', ''), serviceRoleKey)
+    const isValidServiceRole =
+      authHeader &&
+      serviceRoleKey &&
+      timingSafeCompare(authHeader.replace('Bearer ', ''), serviceRoleKey)
 
     if (!isValidCron && !isValidServiceRole) {
       return new Response(

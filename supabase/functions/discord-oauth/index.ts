@@ -71,7 +71,7 @@ serve(async (req) => {
         global: {
           headers: { Authorization: req.headers.get('Authorization')! },
         },
-      },
+      }
     )
 
     const {
@@ -95,7 +95,7 @@ serve(async (req) => {
     if (body.action === 'unlink') {
       const supabaseAdmin = createClient(
         Deno.env.get('SUPABASE_URL') ?? '',
-        Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '',
+        Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
       )
 
       const { error: unlinkError } = await supabaseAdmin
@@ -120,8 +120,17 @@ serve(async (req) => {
 
     // Validate Discord credentials are configured
     if (!DISCORD_CLIENT_ID || !DISCORD_CLIENT_SECRET) {
-      console.error('Discord credentials missing: CLIENT_ID=', !!DISCORD_CLIENT_ID, 'CLIENT_SECRET=', !!DISCORD_CLIENT_SECRET)
-      return jsonResponse({ error: 'Configuration Discord manquante cote serveur (CLIENT_ID ou SECRET)' }, 500, origin)
+      console.error(
+        'Discord credentials missing: CLIENT_ID=',
+        !!DISCORD_CLIENT_ID,
+        'CLIENT_SECRET=',
+        !!DISCORD_CLIENT_SECRET
+      )
+      return jsonResponse(
+        { error: 'Configuration Discord manquante cote serveur (CLIENT_ID ou SECRET)' },
+        500,
+        origin
+      )
     }
 
     // Exchange code for access token via Discord API
@@ -151,7 +160,9 @@ serve(async (req) => {
         } else if (parsed.error_description) {
           discordError = `Discord: ${parsed.error_description}`
         }
-      } catch { /* text wasn't JSON */ }
+      } catch {
+        /* text wasn't JSON */
+      }
       return jsonResponse({ error: discordError }, 400, origin)
     }
 
@@ -173,7 +184,7 @@ serve(async (req) => {
     // Use admin client to bypass RLS
     const supabaseAdmin = createClient(
       Deno.env.get('SUPABASE_URL') ?? '',
-      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '',
+      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
     )
 
     // Check if this Discord account is already linked to another user
@@ -189,7 +200,7 @@ serve(async (req) => {
           error: `Ce compte Discord est deja lie au profil "${existingProfile.username}"`,
         },
         409,
-        origin,
+        origin
       )
     }
 
@@ -207,8 +218,16 @@ serve(async (req) => {
     if (updateError) {
       console.error('Profile update error:', updateError)
       // SEC-5: Check if it's a unique constraint violation (concurrent link)
-      if (updateError.code === '23505' || updateError.message?.includes('unique') || updateError.message?.includes('duplicate')) {
-        return jsonResponse({ error: 'Ce compte Discord vient d\'être lié à un autre profil' }, 409, origin)
+      if (
+        updateError.code === '23505' ||
+        updateError.message?.includes('unique') ||
+        updateError.message?.includes('duplicate')
+      ) {
+        return jsonResponse(
+          { error: "Ce compte Discord vient d'être lié à un autre profil" },
+          409,
+          origin
+        )
       }
       return jsonResponse({ error: 'Erreur lors de la mise a jour du profil' }, 500, origin)
     }
@@ -220,7 +239,7 @@ serve(async (req) => {
         discord_user_id: discordUserId,
       },
       200,
-      origin,
+      origin
     )
   } catch (error) {
     console.error('Discord OAuth error:', error)

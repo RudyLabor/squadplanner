@@ -29,19 +29,16 @@ const MOCK_USER = {
 //   2. from('profiles').update({...}).eq('id', ...)
 // We need from() to return independent chains so overriding eq behavior for
 // the update path does not break the select+single path.
-function createMockSupabaseChain(overrides?: {
-  singleData?: unknown
-  updateError?: unknown
-}) {
+function createMockSupabaseChain(overrides?: { singleData?: unknown; updateError?: unknown }) {
   // --- select chain: supports .select().eq().single() ---
   const selectChain: Record<string, ReturnType<typeof vi.fn>> = {}
-  selectChain.single = vi.fn().mockResolvedValue({ data: overrides?.singleData ?? null, error: null })
+  selectChain.single = vi
+    .fn()
+    .mockResolvedValue({ data: overrides?.singleData ?? null, error: null })
   selectChain.eq = vi.fn().mockReturnValue(selectChain)
 
   // --- update chain: supports .update().eq() resolving to { error } ---
-  const updateEqResult = overrides?.updateError
-    ? { error: overrides.updateError }
-    : { error: null }
+  const updateEqResult = overrides?.updateError ? { error: overrides.updateError } : { error: null }
   const updateChain: Record<string, ReturnType<typeof vi.fn>> = {}
   updateChain.eq = vi.fn().mockResolvedValue(updateEqResult)
 
@@ -126,10 +123,13 @@ interface DiscordHandlerDeps {
     redirectUri: string,
     clientId: string,
     clientSecret: string
-  ) => Promise<{ ok: boolean; status: number; text: () => Promise<string>; json: () => Promise<unknown> }>
-  fetchDiscordUser: (
-    accessToken: string
-  ) => Promise<{ ok: boolean; json: () => Promise<unknown> }>
+  ) => Promise<{
+    ok: boolean
+    status: number
+    text: () => Promise<string>
+    json: () => Promise<unknown>
+  }>
+  fetchDiscordUser: (accessToken: string) => Promise<{ ok: boolean; json: () => Promise<unknown> }>
 }
 
 function buildHandler(deps: DiscordHandlerDeps) {
@@ -565,7 +565,10 @@ describe('discord-oauth', () => {
 
       const req = new Request('https://edge.fn/discord-oauth', {
         method: 'POST',
-        body: JSON.stringify({ code: 'valid-code', redirect_uri: 'https://squadplanner.fr/callback' }),
+        body: JSON.stringify({
+          code: 'valid-code',
+          redirect_uri: 'https://squadplanner.fr/callback',
+        }),
         headers: {
           'Content-Type': 'application/json',
           origin: 'https://squadplanner.fr',
@@ -600,7 +603,10 @@ describe('discord-oauth', () => {
 
       const req = new Request('https://edge.fn/discord-oauth', {
         method: 'POST',
-        body: JSON.stringify({ code: 'valid-code', redirect_uri: 'https://squadplanner.fr/callback' }),
+        body: JSON.stringify({
+          code: 'valid-code',
+          redirect_uri: 'https://squadplanner.fr/callback',
+        }),
         headers: { 'Content-Type': 'application/json' },
       })
       const res = await handler(req)
@@ -613,9 +619,7 @@ describe('discord-oauth', () => {
       mockFetchDiscordToken.mockResolvedValue({
         ok: false,
         status: 400,
-        text: vi
-          .fn()
-          .mockResolvedValue(JSON.stringify({ error: 'invalid_grant' })),
+        text: vi.fn().mockResolvedValue(JSON.stringify({ error: 'invalid_grant' })),
         json: vi.fn(),
       })
 
@@ -638,9 +642,7 @@ describe('discord-oauth', () => {
       mockFetchDiscordToken.mockResolvedValue({
         ok: false,
         status: 401,
-        text: vi
-          .fn()
-          .mockResolvedValue(JSON.stringify({ error: 'invalid_client' })),
+        text: vi.fn().mockResolvedValue(JSON.stringify({ error: 'invalid_client' })),
         json: vi.fn(),
       })
 

@@ -164,16 +164,13 @@ function buildHandler(deps: {
       }
 
       if (!stripeCustomerId) {
-        return new Response(
-          JSON.stringify({ error: 'No Stripe customer found for this user' }),
-          {
-            status: 404,
-            headers: {
-              ...getCorsHeaders(req.headers.get('origin')),
-              'Content-Type': 'application/json',
-            },
-          }
-        )
+        return new Response(JSON.stringify({ error: 'No Stripe customer found for this user' }), {
+          status: 404,
+          headers: {
+            ...getCorsHeaders(req.headers.get('origin')),
+            'Content-Type': 'application/json',
+          },
+        })
       }
 
       // Create billing portal session
@@ -247,9 +244,7 @@ describe('create-portal', () => {
     })
 
     it('responds to HEAD with 200', async () => {
-      const res = await handler(
-        new Request('https://edge.fn/create-portal', { method: 'HEAD' })
-      )
+      const res = await handler(new Request('https://edge.fn/create-portal', { method: 'HEAD' }))
       expect(res.status).toBe(200)
     })
 

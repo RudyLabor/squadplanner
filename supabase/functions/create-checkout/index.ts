@@ -141,7 +141,10 @@ serve(async (req) => {
       if (expectedTier && expectedTier !== tier) {
         return new Response(JSON.stringify({ error: 'price_id does not match the claimed tier' }), {
           status: 400,
-          headers: { ...getCorsHeaders(req.headers.get('origin')), 'Content-Type': 'application/json' },
+          headers: {
+            ...getCorsHeaders(req.headers.get('origin')),
+            'Content-Type': 'application/json',
+          },
         })
       }
     }

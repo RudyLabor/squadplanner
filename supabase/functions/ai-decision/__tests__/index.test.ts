@@ -324,7 +324,7 @@ function buildHandler(deps: AiDecisionHandlerDeps) {
         rsvps?.filter((r: { response: string }) => r.response === 'maybe').length || 0
       const totalMembers =
         (session as Record<string, Record<string, number>>).squads?.total_members || 1
-      const minPlayers = (session as Record<string, unknown>).min_players as number || 2
+      const minPlayers = ((session as Record<string, unknown>).min_players as number) || 2
 
       // Calculate time until session
       const sessionTime = new Date((session as Record<string, string>).scheduled_at)
@@ -394,15 +394,17 @@ describe('ai-decision', () => {
   const SQUAD_ID = '660e8400-e29b-41d4-a716-446655440001'
 
   // Helper: create a session with given parameters
-  function makeSession(overrides?: Partial<{
-    status: string
-    scheduled_at: string
-    min_players: number
-    squad_id: string
-    title: string
-    game: string
-    squads: { total_members: number }
-  }>) {
+  function makeSession(
+    overrides?: Partial<{
+      status: string
+      scheduled_at: string
+      min_players: number
+      squad_id: string
+      title: string
+      game: string
+      squads: { total_members: number }
+    }>
+  ) {
     const futureDate = new Date(Date.now() + 72 * 60 * 60 * 1000) // 72h from now
     return {
       id: SESSION_ID,

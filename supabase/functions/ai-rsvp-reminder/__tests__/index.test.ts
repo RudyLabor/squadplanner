@@ -216,10 +216,7 @@ describe('ai-rsvp-reminder: non-responder detection', () => {
   })
 
   it('should return all members when no one has responded', () => {
-    const members = [
-      makeMember('u1', 'Alice'),
-      makeMember('u2', 'Bob'),
-    ]
+    const members = [makeMember('u1', 'Alice'), makeMember('u2', 'Bob')]
     const rsvps: RsvpRecord[] = []
 
     const result = findNonResponders(members, rsvps)
@@ -245,11 +242,7 @@ describe('ai-rsvp-reminder: non-responder detection', () => {
       makeMember('u2', 'Bob'),
       makeMember('u3', 'Charlie'),
     ]
-    const rsvps = [
-      makeRsvp('u1', 'accepted'),
-      makeRsvp('u2', 'declined'),
-      makeRsvp('u3', 'maybe'),
-    ]
+    const rsvps = [makeRsvp('u1', 'accepted'), makeRsvp('u2', 'declined'), makeRsvp('u3', 'maybe')]
 
     const result = findNonResponders(members, rsvps)
     expect(result).toEqual([])
@@ -302,8 +295,7 @@ describe('ai-rsvp-reminder: template messages', () => {
   it('should include session info (title or game) in all templates', () => {
     const templates = getTemplates(mentions, sessionTitle, gameName, sessionTime, squadName)
     templates.forEach((template) => {
-      const hasSessionInfo =
-        template.includes(sessionTitle) || template.includes(gameName!)
+      const hasSessionInfo = template.includes(sessionTitle) || template.includes(gameName!)
       expect(hasSessionInfo).toBe(true)
     })
   })

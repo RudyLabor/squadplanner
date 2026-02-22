@@ -192,7 +192,9 @@ serve(async (req) => {
   try {
     // SEC-3: Require service role key OR authenticated user to prevent spam
     const authHeader = req.headers.get('Authorization')
-    const isServiceRole = authHeader && SUPABASE_SERVICE_ROLE_KEY &&
+    const isServiceRole =
+      authHeader &&
+      SUPABASE_SERVICE_ROLE_KEY &&
       authHeader.replace('Bearer ', '') === SUPABASE_SERVICE_ROLE_KEY
 
     let authenticatedUserId: string | null = null
@@ -201,7 +203,10 @@ serve(async (req) => {
       const authClient = createClient(SUPABASE_URL, Deno.env.get('SUPABASE_ANON_KEY') ?? '', {
         global: { headers: { Authorization: authHeader || '' } },
       })
-      const { data: { user }, error: authError } = await authClient.auth.getUser()
+      const {
+        data: { user },
+        error: authError,
+      } = await authClient.auth.getUser()
       if (authError || !user) {
         return new Response(JSON.stringify({ error: 'Unauthorized' }), {
           status: 401,
@@ -217,10 +222,13 @@ serve(async (req) => {
 
     // SEC-3: If not service role, only allow sending to the authenticated user's own email
     if (!isServiceRole && body.email && !body.userId) {
-      return new Response(JSON.stringify({ error: 'Only service role can send to arbitrary emails' }), {
-        status: 403,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      })
+      return new Response(
+        JSON.stringify({ error: 'Only service role can send to arbitrary emails' }),
+        {
+          status: 403,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        }
+      )
     }
     if (!isServiceRole && body.userId && body.userId !== authenticatedUserId) {
       return new Response(JSON.stringify({ error: 'Cannot send welcome email for another user' }), {

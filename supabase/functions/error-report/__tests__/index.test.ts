@@ -82,14 +82,14 @@ describe('error-report: CORS logic', () => {
 
   it('should always include Allow-Headers', () => {
     expect(getCorsHeaders('https://squadplanner.fr')['Access-Control-Allow-Headers']).toContain(
-      'authorization',
+      'authorization'
     )
     expect(getCorsHeaders(null)['Access-Control-Allow-Headers']).toContain('authorization')
   })
 
   it('should always include Allow-Methods with POST and OPTIONS', () => {
     expect(getCorsHeaders('https://squadplanner.fr')['Access-Control-Allow-Methods']).toContain(
-      'POST',
+      'POST'
     )
     expect(getCorsHeaders(null)['Access-Control-Allow-Methods']).toContain('OPTIONS')
   })

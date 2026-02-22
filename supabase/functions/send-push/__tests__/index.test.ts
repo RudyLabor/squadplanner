@@ -61,7 +61,9 @@ describe('send-push: CORS logic', () => {
   })
 
   it('should always include Allow-Headers', () => {
-    expect(getCorsHeaders('https://squadplanner.fr')['Access-Control-Allow-Headers']).toContain('authorization')
+    expect(getCorsHeaders('https://squadplanner.fr')['Access-Control-Allow-Headers']).toContain(
+      'authorization'
+    )
     expect(getCorsHeaders(null)['Access-Control-Allow-Headers']).toContain('authorization')
   })
 })
@@ -139,10 +141,7 @@ describe('send-push: input validation rules', () => {
 
   it('should accept multiple userIds', () => {
     const userIds: string[] = []
-    const ids = [
-      '550e8400-e29b-41d4-a716-446655440000',
-      '660e8400-e29b-41d4-a716-446655440001',
-    ]
+    const ids = ['550e8400-e29b-41d4-a716-446655440000', '660e8400-e29b-41d4-a716-446655440001']
     userIds.push(...ids)
     expect(userIds.length).toBe(2)
   })
@@ -279,9 +278,27 @@ describe('send-push: notification payload building', () => {
 describe('send-push: expired subscription cleanup', () => {
   it('should identify expired subscriptions from results', () => {
     const subscriptions = [
-      { id: 'sub-1', user_id: 'u1', endpoint: 'https://push.example.com/1', p256dh: 'x', auth: 'y' },
-      { id: 'sub-2', user_id: 'u2', endpoint: 'https://push.example.com/2', p256dh: 'x', auth: 'y' },
-      { id: 'sub-3', user_id: 'u3', endpoint: 'https://push.example.com/3', p256dh: 'x', auth: 'y' },
+      {
+        id: 'sub-1',
+        user_id: 'u1',
+        endpoint: 'https://push.example.com/1',
+        p256dh: 'x',
+        auth: 'y',
+      },
+      {
+        id: 'sub-2',
+        user_id: 'u2',
+        endpoint: 'https://push.example.com/2',
+        p256dh: 'x',
+        auth: 'y',
+      },
+      {
+        id: 'sub-3',
+        user_id: 'u3',
+        endpoint: 'https://push.example.com/3',
+        p256dh: 'x',
+        auth: 'y',
+      },
     ]
     const results = [
       { success: true },
@@ -290,7 +307,7 @@ describe('send-push: expired subscription cleanup', () => {
     ]
 
     const expired = subscriptions.filter(
-      (_sub, index) => results[index].error === 'subscription_expired',
+      (_sub, index) => results[index].error === 'subscription_expired'
     )
 
     expect(expired.length).toBe(1)
@@ -298,13 +315,11 @@ describe('send-push: expired subscription cleanup', () => {
   })
 
   it('should return empty when no subscriptions are expired', () => {
-    const subscriptions = [
-      { id: 'sub-1', user_id: 'u1', endpoint: 'e1', p256dh: 'x', auth: 'y' },
-    ]
+    const subscriptions = [{ id: 'sub-1', user_id: 'u1', endpoint: 'e1', p256dh: 'x', auth: 'y' }]
     const results = [{ success: true }]
 
     const expired = subscriptions.filter(
-      (_sub, index) => results[index].error === 'subscription_expired',
+      (_sub, index) => results[index].error === 'subscription_expired'
     )
     expect(expired.length).toBe(0)
   })

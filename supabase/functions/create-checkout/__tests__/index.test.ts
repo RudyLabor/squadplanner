@@ -160,12 +160,9 @@ function buildHandler(deps: {
 
       // Validate
       const squadId =
-        rawBody.squad_id && rawBody.squad_id !== ''
-          ? String(rawBody.squad_id)
-          : undefined
+        rawBody.squad_id && rawBody.squad_id !== '' ? String(rawBody.squad_id) : undefined
       const priceId = rawBody.price_id
-      const tier =
-        rawBody.tier && typeof rawBody.tier === 'string' ? rawBody.tier : undefined
+      const tier = rawBody.tier && typeof rawBody.tier === 'string' ? rawBody.tier : undefined
       const successUrl =
         rawBody.success_url && typeof rawBody.success_url === 'string'
           ? rawBody.success_url
@@ -194,16 +191,13 @@ function buildHandler(deps: {
           .single()
 
         if (!squad || squad.owner_id !== user.id) {
-          return new Response(
-            JSON.stringify({ error: 'Only squad owner can purchase premium' }),
-            {
-              status: 403,
-              headers: {
-                ...getCorsHeaders(req.headers.get('origin')),
-                'Content-Type': 'application/json',
-              },
-            }
-          )
+          return new Response(JSON.stringify({ error: 'Only squad owner can purchase premium' }), {
+            status: 403,
+            headers: {
+              ...getCorsHeaders(req.headers.get('origin')),
+              'Content-Type': 'application/json',
+            },
+          })
         }
       }
 
@@ -327,9 +321,7 @@ describe('create-checkout', () => {
     })
 
     it('responds to HEAD for health check', async () => {
-      const res = await handler(
-        new Request('https://edge.fn/create-checkout', { method: 'HEAD' })
-      )
+      const res = await handler(new Request('https://edge.fn/create-checkout', { method: 'HEAD' }))
       expect(res.status).toBe(200)
     })
   })
@@ -415,7 +407,11 @@ describe('create-checkout', () => {
       setup({
         user: USER,
         squadData: { id: SQUAD_ID, name: 'Other Squad', owner_id: 'other-user-id' },
-        profileData: { stripe_customer_id: 'cus_existing', email: USER.email, username: 'testuser' },
+        profileData: {
+          stripe_customer_id: 'cus_existing',
+          email: USER.email,
+          username: 'testuser',
+        },
       })
 
       const res = await handler(
@@ -434,7 +430,11 @@ describe('create-checkout', () => {
       setup({
         user: USER,
         squadData: null,
-        profileData: { stripe_customer_id: 'cus_existing', email: USER.email, username: 'testuser' },
+        profileData: {
+          stripe_customer_id: 'cus_existing',
+          email: USER.email,
+          username: 'testuser',
+        },
       })
 
       const res = await handler(
@@ -598,9 +598,7 @@ describe('create-checkout', () => {
 
   describe('error handling', () => {
     it('returns 500 when Stripe API throws', async () => {
-      mockStripe.checkout.sessions.create.mockRejectedValue(
-        new Error('Stripe API error')
-      )
+      mockStripe.checkout.sessions.create.mockRejectedValue(new Error('Stripe API error'))
 
       const res = await handler(
         new Request('https://edge.fn/create-checkout', {

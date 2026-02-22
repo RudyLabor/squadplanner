@@ -126,16 +126,13 @@ function buildHandler(deps: LiveKitHandlerDeps) {
       // Verify user authentication
       const authHeader = req.headers.get('Authorization')
       if (!authHeader || !authHeader.startsWith('Bearer ')) {
-        return new Response(
-          JSON.stringify({ error: 'Missing or invalid Authorization header' }),
-          {
-            status: 401,
-            headers: {
-              ...getCorsHeaders(origin),
-              'Content-Type': 'application/json',
-            },
-          }
-        )
+        return new Response(JSON.stringify({ error: 'Missing or invalid Authorization header' }), {
+          status: 401,
+          headers: {
+            ...getCorsHeaders(origin),
+            'Content-Type': 'application/json',
+          },
+        })
       }
 
       const {
@@ -144,16 +141,13 @@ function buildHandler(deps: LiveKitHandlerDeps) {
       } = await deps.authClient.auth.getUser()
 
       if (authError || !user) {
-        return new Response(
-          JSON.stringify({ error: 'Unauthorized: invalid or expired token' }),
-          {
-            status: 401,
-            headers: {
-              ...getCorsHeaders(origin),
-              'Content-Type': 'application/json',
-            },
-          }
-        )
+        return new Response(JSON.stringify({ error: 'Unauthorized: invalid or expired token' }), {
+          status: 401,
+          headers: {
+            ...getCorsHeaders(origin),
+            'Content-Type': 'application/json',
+          },
+        })
       }
 
       // Parse request body
@@ -289,9 +283,7 @@ describe('livekit-token', () => {
           headers: { origin: `http://localhost:${port}` },
         })
         const res = await handler(req)
-        expect(res.headers.get('Access-Control-Allow-Origin')).toBe(
-          `http://localhost:${port}`
-        )
+        expect(res.headers.get('Access-Control-Allow-Origin')).toBe(`http://localhost:${port}`)
       }
     })
   })

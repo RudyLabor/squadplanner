@@ -54,13 +54,10 @@ serve(async (req) => {
       error: authError,
     } = await supabaseClient.auth.getUser()
     if (authError || !user) {
-      return new Response(
-        JSON.stringify({ success: false, error: 'Non authentifié' }),
-        {
-          status: 401,
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        }
-      )
+      return new Response(JSON.stringify({ success: false, error: 'Non authentifié' }), {
+        status: 401,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      })
     }
 
     // 2. Parse & validate body
@@ -84,31 +81,22 @@ serve(async (req) => {
 
     if (error) {
       console.error('[process-referral] DB error:', error)
-      return new Response(
-        JSON.stringify({ success: false, error: error.message }),
-        {
-          status: 400,
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        }
-      )
+      return new Response(JSON.stringify({ success: false, error: error.message }), {
+        status: 400,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      })
     }
 
     // The DB function returns a JSON with success, referral_id, rewards etc.
-    return new Response(
-      JSON.stringify(data),
-      {
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      }
-    )
+    return new Response(JSON.stringify(data), {
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    })
   } catch (error) {
     console.error('[process-referral] Error:', error)
     const message = error instanceof Error ? error.message : 'Erreur interne'
-    return new Response(
-      JSON.stringify({ success: false, error: message }),
-      {
-        status: 500,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      }
-    )
+    return new Response(JSON.stringify({ success: false, error: message }), {
+      status: 500,
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    })
   }
 })

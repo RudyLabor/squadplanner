@@ -176,7 +176,9 @@ describe('schemas', () => {
     })
 
     it('throws for invalid enum value', () => {
-      expect(() => validateEnum('unknown', 'status', ['active', 'inactive'])).toThrow('must be one of')
+      expect(() => validateEnum('unknown', 'status', ['active', 'inactive'])).toThrow(
+        'must be one of'
+      )
     })
 
     it('includes allowed values in error', () => {
@@ -194,7 +196,9 @@ describe('schemas', () => {
     })
 
     it('accepts URL with path', () => {
-      expect(validateUrl('https://example.com/path?q=1', 'url')).toBe('https://example.com/path?q=1')
+      expect(validateUrl('https://example.com/path?q=1', 'url')).toBe(
+        'https://example.com/path?q=1'
+      )
     })
   })
 })

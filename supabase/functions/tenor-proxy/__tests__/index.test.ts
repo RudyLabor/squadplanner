@@ -144,10 +144,7 @@ describe('tenor-proxy: action validation', () => {
 // Query validation logic (extracted from tenor-proxy/index.ts)
 // =====================================================
 
-function validateQuery(
-  action: string,
-  query: unknown,
-): { valid: boolean; error?: string } {
+function validateQuery(action: string, query: unknown): { valid: boolean; error?: string } {
   if (action === 'search' && (!query || typeof query !== 'string')) {
     return { valid: false, error: 'query is required for search action' }
   }
@@ -191,7 +188,7 @@ function buildTenorUrl(
   apiKey: string,
   action: string,
   query: string | undefined,
-  limit: number = 20,
+  limit: number = 20
 ): string {
   let url = `${TENOR_BASE}/${action}?key=${encodeURIComponent(apiKey)}&client_key=${CLIENT_KEY}&media_filter=tinygif,gif&contentfilter=medium&locale=fr_FR&limit=${limit}`
   if (action === 'search' && query) {

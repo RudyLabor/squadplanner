@@ -60,9 +60,9 @@ describe('ai-reliability: CORS logic', () => {
   })
 
   it('should always include Allow-Headers', () => {
-    expect(
-      getCorsHeaders('https://squadplanner.fr')['Access-Control-Allow-Headers']
-    ).toContain('authorization')
+    expect(getCorsHeaders('https://squadplanner.fr')['Access-Control-Allow-Headers']).toContain(
+      'authorization'
+    )
     expect(getCorsHeaders(null)['Access-Control-Allow-Headers']).toContain('authorization')
   })
 })
@@ -85,8 +85,7 @@ function calculateIndividualTrend(
     const recentHalf = checkins.slice(0, 5)
     const olderHalf = checkins.slice(5)
 
-    const recentScore =
-      recentHalf.filter((c) => c.status === 'present').length / recentHalf.length
+    const recentScore = recentHalf.filter((c) => c.status === 'present').length / recentHalf.length
     const olderScore =
       olderHalf.length > 0
         ? olderHalf.filter((c) => c.status === 'present').length / olderHalf.length
@@ -168,11 +167,7 @@ describe('ai-reliability: individual trend calculation', () => {
   })
 
   it('should return stable when fewer than 5 checkins (not enough data)', () => {
-    const checkins = [
-      { status: 'present' },
-      { status: 'absent' },
-      { status: 'present' },
-    ]
+    const checkins = [{ status: 'present' }, { status: 'absent' }, { status: 'present' }]
     expect(calculateIndividualTrend(checkins)).toBe('stable')
   })
 
@@ -382,14 +377,11 @@ describe('ai-reliability: individual warning', () => {
  * Different from individual trend: uses simple presentRatio thresholds.
  * Requires at least 3 checkins.
  */
-function calculateSquadTrend(
-  checkins: { status: string }[]
-): 'improving' | 'stable' | 'declining' {
+function calculateSquadTrend(checkins: { status: string }[]): 'improving' | 'stable' | 'declining' {
   let trend: 'improving' | 'stable' | 'declining' = 'stable'
 
   if (checkins.length >= 3) {
-    const presentRatio =
-      checkins.filter((c) => c.status === 'present').length / checkins.length
+    const presentRatio = checkins.filter((c) => c.status === 'present').length / checkins.length
     if (presentRatio >= 0.8) trend = 'improving'
     else if (presentRatio <= 0.4) trend = 'declining'
   }
@@ -456,11 +448,7 @@ describe('ai-reliability: squad trend calculation', () => {
   })
 
   it('should return improving when all present (ratio = 1.0)', () => {
-    const checkins = [
-      { status: 'present' },
-      { status: 'present' },
-      { status: 'present' },
-    ]
+    const checkins = [{ status: 'present' }, { status: 'present' }, { status: 'present' }]
     expect(calculateSquadTrend(checkins)).toBe('improving')
   })
 })

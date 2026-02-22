@@ -275,20 +275,12 @@ describe('ai-planning: slot analysis algorithm', () => {
       {
         id: 'session-1',
         scheduled_at: '2026-01-03T20:00:00Z', // Saturday
-        session_checkins: [
-          { status: 'present' },
-          { status: 'present' },
-          { status: 'noshow' },
-        ],
+        session_checkins: [{ status: 'present' }, { status: 'present' }, { status: 'noshow' }],
       },
       {
         id: 'session-2',
         scheduled_at: '2026-01-10T20:00:00Z', // Also Saturday
-        session_checkins: [
-          { status: 'present' },
-          { status: 'late' },
-          { status: 'present' },
-        ],
+        session_checkins: [{ status: 'present' }, { status: 'late' }, { status: 'present' }],
       },
     ]
 
@@ -306,11 +298,7 @@ describe('ai-planning: slot analysis algorithm', () => {
       {
         id: 'session-1',
         scheduled_at: '2026-01-09T20:00:00Z', // Friday
-        session_checkins: [
-          { status: 'present' },
-          { status: 'present' },
-          { status: 'late' },
-        ],
+        session_checkins: [{ status: 'present' }, { status: 'present' }, { status: 'late' }],
       },
     ]
 
@@ -645,7 +633,8 @@ describe('ai-planning: template fallback', () => {
   })
 
   it('should use AI analysis when available', () => {
-    const aiAnalysis = 'Votre squad se retrouve surtout le samedi soir, un classique pour les gamers.'
+    const aiAnalysis =
+      'Votre squad se retrouve surtout le samedi soir, un classique pour les gamers.'
     const sessionsCount = 12
 
     const finalText =

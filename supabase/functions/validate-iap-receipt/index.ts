@@ -39,10 +39,10 @@ const IOS_PRODUCT_TO_TIER: Record<string, string> = {
 }
 
 const ANDROID_PRODUCT_TO_TIER: Record<string, string> = {
-  'premium_monthly': 'premium',
-  'premium_yearly': 'premium',
-  'squad_leader_monthly': 'squad_leader',
-  'squad_leader_yearly': 'squad_leader',
+  premium_monthly: 'premium',
+  premium_yearly: 'premium',
+  squad_leader_monthly: 'squad_leader',
+  squad_leader_yearly: 'squad_leader',
 }
 
 function getTierFromProductId(productId: string, platform: string): string {
@@ -53,10 +53,14 @@ function getTierFromProductId(productId: string, platform: string): string {
 
 function getMaxMembers(tier: string): number {
   switch (tier) {
-    case 'club': return 100
-    case 'squad_leader': return 50
-    case 'premium': return 20
-    default: return 10
+    case 'club':
+      return 100
+    case 'squad_leader':
+      return 50
+    case 'premium':
+      return 20
+    default:
+      return 10
   }
 }
 
@@ -74,7 +78,12 @@ async function validateAppleReceipt(receipt: string): Promise<{
 
   if (!appStoreServerKey || !appStoreKeyId || !appStoreIssuerId) {
     console.error('[validate-iap] Apple App Store Server API credentials not configured')
-    return { valid: false, productId: null, expiresAt: null, error: 'Apple IAP validation not configured' }
+    return {
+      valid: false,
+      productId: null,
+      expiresAt: null,
+      error: 'Apple IAP validation not configured',
+    }
   }
 
   try {
@@ -84,20 +93,29 @@ async function validateAppleReceipt(receipt: string): Promise<{
 
     // Generate JWT for Apple App Store Server API authentication
     const header = btoa(JSON.stringify({ alg: 'ES256', kid: appStoreKeyId, typ: 'JWT' }))
-      .replace(/=/g, '').replace(/\+/g, '-').replace(/\//g, '_')
+      .replace(/=/g, '')
+      .replace(/\+/g, '-')
+      .replace(/\//g, '_')
 
     const now = Math.floor(Date.now() / 1000)
-    const payload = btoa(JSON.stringify({
-      iss: appStoreIssuerId,
-      iat: now,
-      exp: now + 3600,
-      aud: 'appstoreconnect-v1',
-      bid: bundleId,
-    })).replace(/=/g, '').replace(/\+/g, '-').replace(/\//g, '_')
+    const payload = btoa(
+      JSON.stringify({
+        iss: appStoreIssuerId,
+        iat: now,
+        exp: now + 3600,
+        aud: 'appstoreconnect-v1',
+        bid: bundleId,
+      })
+    )
+      .replace(/=/g, '')
+      .replace(/\+/g, '-')
+      .replace(/\//g, '_')
 
     // Import the private key for ES256 signing
-    const keyData = appStoreServerKey.replace(/-----BEGIN PRIVATE KEY-----/g, '')
-      .replace(/-----END PRIVATE KEY-----/g, '').replace(/\s/g, '')
+    const keyData = appStoreServerKey
+      .replace(/-----BEGIN PRIVATE KEY-----/g, '')
+      .replace(/-----END PRIVATE KEY-----/g, '')
+      .replace(/\s/g, '')
     const keyBuffer = Uint8Array.from(atob(keyData), (c) => c.charCodeAt(0))
 
     const cryptoKey = await crypto.subtle.importKey(
@@ -116,7 +134,9 @@ async function validateAppleReceipt(receipt: string): Promise<{
     )
 
     const signature = btoa(String.fromCharCode(...new Uint8Array(signatureBuffer)))
-      .replace(/=/g, '').replace(/\+/g, '-').replace(/\//g, '_')
+      .replace(/=/g, '')
+      .replace(/\+/g, '-')
+      .replace(/\//g, '_')
 
     const jwt = `${header}.${payload}.${signature}`
 
@@ -135,7 +155,12 @@ async function validateAppleReceipt(receipt: string): Promise<{
     if (!response.ok) {
       const errorText = await response.text()
       console.error(`[validate-iap] Apple API error: ${response.status} ${errorText}`)
-      return { valid: false, productId: null, expiresAt: null, error: `Apple validation failed: ${response.status}` }
+      return {
+        valid: false,
+        productId: null,
+        expiresAt: null,
+        error: `Apple validation failed: ${response.status}`,
+      }
     }
 
     const data = await response.json()
@@ -147,7 +172,9 @@ async function validateAppleReceipt(receipt: string): Promise<{
       return { valid: false, productId: null, expiresAt: null, error: 'Invalid transaction format' }
     }
 
-    const transactionInfo = JSON.parse(atob(transactionPayload.replace(/-/g, '+').replace(/_/g, '/')))
+    const transactionInfo = JSON.parse(
+      atob(transactionPayload.replace(/-/g, '+').replace(/_/g, '/'))
+    )
 
     return {
       valid: true,
@@ -159,12 +186,20 @@ async function validateAppleReceipt(receipt: string): Promise<{
     }
   } catch (err) {
     console.error('[validate-iap] Apple validation error:', err)
-    return { valid: false, productId: null, expiresAt: null, error: `Apple validation error: ${(err as Error).message}` }
+    return {
+      valid: false,
+      productId: null,
+      expiresAt: null,
+      error: `Apple validation error: ${(err as Error).message}`,
+    }
   }
 }
 
 // ── Google Play receipt validation ──────────────────────────────
-async function validateGoogleReceipt(receipt: string, productId: string): Promise<{
+async function validateGoogleReceipt(
+  receipt: string,
+  productId: string
+): Promise<{
   valid: boolean
   productId: string | null
   expiresAt: string | null
@@ -175,7 +210,12 @@ async function validateGoogleReceipt(receipt: string, productId: string): Promis
 
   if (!serviceAccountKey) {
     console.error('[validate-iap] Google Play service account key not configured')
-    return { valid: false, productId: null, expiresAt: null, error: 'Google IAP validation not configured' }
+    return {
+      valid: false,
+      productId: null,
+      expiresAt: null,
+      error: 'Google IAP validation not configured',
+    }
   }
 
   try {
@@ -184,16 +224,23 @@ async function validateGoogleReceipt(receipt: string, productId: string): Promis
 
     // Generate JWT for Google API authentication
     const header = btoa(JSON.stringify({ alg: 'RS256', typ: 'JWT' }))
-      .replace(/=/g, '').replace(/\+/g, '-').replace(/\//g, '_')
+      .replace(/=/g, '')
+      .replace(/\+/g, '-')
+      .replace(/\//g, '_')
 
     const now = Math.floor(Date.now() / 1000)
-    const claimSet = btoa(JSON.stringify({
-      iss: serviceAccount.client_email,
-      scope: 'https://www.googleapis.com/auth/androidpublisher',
-      aud: 'https://oauth2.googleapis.com/token',
-      iat: now,
-      exp: now + 3600,
-    })).replace(/=/g, '').replace(/\+/g, '-').replace(/\//g, '_')
+    const claimSet = btoa(
+      JSON.stringify({
+        iss: serviceAccount.client_email,
+        scope: 'https://www.googleapis.com/auth/androidpublisher',
+        aud: 'https://oauth2.googleapis.com/token',
+        iat: now,
+        exp: now + 3600,
+      })
+    )
+      .replace(/=/g, '')
+      .replace(/\+/g, '-')
+      .replace(/\//g, '_')
 
     // Import RSA private key for signing
     const keyData = serviceAccount.private_key
@@ -211,14 +258,12 @@ async function validateGoogleReceipt(receipt: string, productId: string): Promis
     )
 
     const signingInput = new TextEncoder().encode(`${header}.${claimSet}`)
-    const signatureBuffer = await crypto.subtle.sign(
-      'RSASSA-PKCS1-v1_5',
-      cryptoKey,
-      signingInput
-    )
+    const signatureBuffer = await crypto.subtle.sign('RSASSA-PKCS1-v1_5', cryptoKey, signingInput)
 
     const signature = btoa(String.fromCharCode(...new Uint8Array(signatureBuffer)))
-      .replace(/=/g, '').replace(/\+/g, '-').replace(/\//g, '_')
+      .replace(/=/g, '')
+      .replace(/\+/g, '-')
+      .replace(/\//g, '_')
 
     const jwt = `${header}.${claimSet}.${signature}`
 
@@ -250,7 +295,12 @@ async function validateGoogleReceipt(receipt: string, productId: string): Promis
     if (!verifyResponse.ok) {
       const verifyError = await verifyResponse.text()
       console.error(`[validate-iap] Google verify error: ${verifyResponse.status} ${verifyError}`)
-      return { valid: false, productId: null, expiresAt: null, error: `Google validation failed: ${verifyResponse.status}` }
+      return {
+        valid: false,
+        productId: null,
+        expiresAt: null,
+        error: `Google validation failed: ${verifyResponse.status}`,
+      }
     }
 
     const subscription = await verifyResponse.json()
@@ -271,7 +321,12 @@ async function validateGoogleReceipt(receipt: string, productId: string): Promis
     }
   } catch (err) {
     console.error('[validate-iap] Google validation error:', err)
-    return { valid: false, productId: null, expiresAt: null, error: `Google validation error: ${(err as Error).message}` }
+    return {
+      valid: false,
+      productId: null,
+      expiresAt: null,
+      error: `Google validation error: ${(err as Error).message}`,
+    }
   }
 }
 
@@ -333,7 +388,9 @@ serve(async (req) => {
       validatedData = {
         receipt: validateString(rawBody.receipt, 'receipt', { minLength: 1 }),
         platform: validateEnum(rawBody.platform, 'platform', ['ios', 'android']),
-        product_id: rawBody.product_id ? validateString(rawBody.product_id, 'product_id') : undefined,
+        product_id: rawBody.product_id
+          ? validateString(rawBody.product_id, 'product_id')
+          : undefined,
         user_id: validateUUID(rawBody.user_id, 'user_id'),
       }
     } catch (validationError) {
@@ -354,32 +411,44 @@ serve(async (req) => {
     }
 
     // Validate receipt with the appropriate store
-    let validation: { valid: boolean; productId: string | null; expiresAt: string | null; error: string | null }
+    let validation: {
+      valid: boolean
+      productId: string | null
+      expiresAt: string | null
+      error: string | null
+    }
 
     if (platform === 'ios') {
       validation = await validateAppleReceipt(receipt)
     } else {
       if (!product_id) {
-        return new Response(JSON.stringify({ error: 'product_id is required for Android validation' }), {
-          status: 400,
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        })
+        return new Response(
+          JSON.stringify({ error: 'product_id is required for Android validation' }),
+          {
+            status: 400,
+            headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+          }
+        )
       }
       validation = await validateGoogleReceipt(receipt, product_id)
     }
 
     if (!validation.valid) {
-      return new Response(JSON.stringify({ error: validation.error || 'Receipt validation failed' }), {
-        status: 400,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      })
+      return new Response(
+        JSON.stringify({ error: validation.error || 'Receipt validation failed' }),
+        {
+          status: 400,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        }
+      )
     }
 
     // Determine the subscription tier from the validated product ID
     const validatedProductId = validation.productId || product_id || ''
     const tier = getTierFromProductId(validatedProductId, platform)
     const maxMembers = getMaxMembers(tier)
-    const expiresAt = validation.expiresAt || new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString()
+    const expiresAt =
+      validation.expiresAt || new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString()
 
     // Update the database using admin client
     const supabaseAdmin = createClient(
@@ -418,26 +487,27 @@ serve(async (req) => {
         .eq('id', existingSub.id)
     } else {
       // Create new subscription record
-      await supabaseAdmin
-        .from('subscriptions')
-        .insert({
-          user_id,
-          stripe_subscription_id: null,
-          status: 'active',
-          current_period_start: new Date().toISOString(),
-          current_period_end: expiresAt,
-        })
+      await supabaseAdmin.from('subscriptions').insert({
+        user_id,
+        stripe_subscription_id: null,
+        status: 'active',
+        current_period_start: new Date().toISOString(),
+        current_period_end: expiresAt,
+      })
     }
 
     console.log(`[validate-iap] Tier "${tier}" activated for user ${user_id} via ${platform} IAP`)
 
-    return new Response(JSON.stringify({
-      success: true,
-      tier,
-      expires_at: expiresAt,
-    }), {
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-    })
+    return new Response(
+      JSON.stringify({
+        success: true,
+        tier,
+        expires_at: expiresAt,
+      }),
+      {
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      }
+    )
   } catch (error) {
     console.error('[validate-iap] Error:', error)
     return new Response(JSON.stringify({ error: (error as Error).message }), {

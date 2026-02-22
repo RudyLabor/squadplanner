@@ -184,16 +184,13 @@ function buildHandler(deps: {
         .single()
 
       if (!squad || squad.owner_id !== user.id) {
-        return new Response(
-          JSON.stringify({ error: 'Only squad owner can cancel subscription' }),
-          {
-            status: 403,
-            headers: {
-              ...getCorsHeaders(req.headers.get('origin')),
-              'Content-Type': 'application/json',
-            },
-          }
-        )
+        return new Response(JSON.stringify({ error: 'Only squad owner can cancel subscription' }), {
+          status: 403,
+          headers: {
+            ...getCorsHeaders(req.headers.get('origin')),
+            'Content-Type': 'application/json',
+          },
+        })
       }
 
       // Get active subscription
@@ -215,10 +212,9 @@ function buildHandler(deps: {
       }
 
       // Cancel at period end via Stripe
-      const cancelledSub = await stripe.subscriptions.update(
-        subscription.stripe_subscription_id,
-        { cancel_at_period_end: true }
-      )
+      const cancelledSub = await stripe.subscriptions.update(subscription.stripe_subscription_id, {
+        cancel_at_period_end: true,
+      })
 
       // Update local subscription record
       await supabaseClient
@@ -529,9 +525,7 @@ describe('cancel-subscription', () => {
       )
 
       // from('subscriptions') called for select and update
-      const subsCalls = mockSupa.from.mock.calls.filter(
-        (c: unknown[]) => c[0] === 'subscriptions'
-      )
+      const subsCalls = mockSupa.from.mock.calls.filter((c: unknown[]) => c[0] === 'subscriptions')
       expect(subsCalls.length).toBeGreaterThanOrEqual(2) // select + update
     })
   })
@@ -540,9 +534,7 @@ describe('cancel-subscription', () => {
 
   describe('error handling', () => {
     it('returns 500 when Stripe API throws', async () => {
-      mockStripe.subscriptions.update.mockRejectedValue(
-        new Error('Stripe network error')
-      )
+      mockStripe.subscriptions.update.mockRejectedValue(new Error('Stripe network error'))
 
       const res = await handler(
         new Request('https://edge.fn/cancel-subscription', {

@@ -2,7 +2,7 @@ import type { Config } from '@react-router/dev/config'
 
 let presets: Config['presets'] = []
 try {
-  const mod = await import('@vercel/react-router') as any
+  const mod = (await import('@vercel/react-router')) as any
   if (typeof mod.vercelPreset === 'function') {
     presets = [mod.vercelPreset()]
   }
@@ -20,10 +20,15 @@ export default {
 
     return [
       // Core pages
-      '/', '/auth', '/legal', '/help', '/premium', '/maintenance',
+      '/',
+      '/auth',
+      '/legal',
+      '/help',
+      '/premium',
+      '/maintenance',
       // Game pages
-      ...gameSlugs.map(s => `/games/${s}`),
-      ...gameSlugs.map(s => `/lfg/${s}`),
+      ...gameSlugs.map((s) => `/games/${s}`),
+      ...gameSlugs.map((s) => `/lfg/${s}`),
       // Alternative / comparison pages
       '/alternative/guilded',
       '/alternative/gamerlink',

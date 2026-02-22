@@ -182,7 +182,7 @@ export default defineConfig(async () => {
       exclude: [
         // EXCLUSION COMPLÈTE - LiveKit chargé uniquement à la demande
         'livekit-client',
-        '@livekit/components-react'
+        '@livekit/components-react',
       ],
     },
 

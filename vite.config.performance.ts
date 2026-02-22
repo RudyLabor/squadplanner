@@ -8,44 +8,44 @@ export default defineConfig({
       output: {
         manualChunks: {
           // Core essentials seulement
-          'core': ['react', 'react-dom'],
-          
+          core: ['react', 'react-dom'],
+
           // LiveKit uniquement quand nécessaire
-          'voice': ['@livekit/components-react'],
-          
+          voice: ['@livekit/components-react'],
+
           // Supabase minimal
-          'auth': ['@supabase/supabase-js'],
-          
+          auth: ['@supabase/supabase-js'],
+
           // Motion lazy-loaded
-          'motion': ['framer-motion'],
-          
+          motion: ['framer-motion'],
+
           // Heavy components async
-          'messages': ['src/pages/Messages.tsx'],
-          'profile': ['src/pages/Profile.tsx']
-        }
-      }
+          messages: ['src/pages/Messages.tsx'],
+          profile: ['src/pages/Profile.tsx'],
+        },
+      },
     },
-    
+
     // Compression aggressive
     minify: 'terser',
     terserOptions: {
       compress: {
         drop_console: true,
         drop_debugger: true,
-        pure_funcs: ['console.log', 'console.warn']
-      }
-    }
+        pure_funcs: ['console.log', 'console.warn'],
+      },
+    },
   },
-  
+
   plugins: [
     reactRouter(),
-    
+
     // Bundle analyzer
     visualizer({
       filename: 'bundle-analysis.html',
       open: true,
       gzipSize: true,
-      brotliSize: true
-    })
-  ]
+      brotliSize: true,
+    }),
+  ],
 })

@@ -385,7 +385,7 @@ function PlayStep() {
                 style={{
                   backgroundColor: i < 2 ? 'var(--color-success)' : 'var(--color-text-tertiary)',
                 }}
-                animate={i < 2 ? { height: [3, 8 + Math.random() * 4, 3] } : { height: 3 }}
+                animate={i < 2 ? { height: [3, 8 + [3, 1.5, 3.5][j], 3] } : { height: 3 }}
                 transition={
                   i < 2
                     ? { duration: 0.4, repeat: Infinity, delay: j * 0.1, ease: 'easeInOut' }

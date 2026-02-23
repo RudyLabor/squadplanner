@@ -7,13 +7,13 @@ const QUERY = '(prefers-reduced-motion: reduce)'
  * Subscribes to live changes so the value updates without a page reload.
  */
 export function useReducedMotion(): boolean {
-  const [prefersReducedMotion, setPrefersReducedMotion] = useState(() => {
-    if (typeof window === 'undefined') return false
-    return window.matchMedia(QUERY).matches
-  })
+  // Always initialize to false for SSR safety — avoids hydration mismatch
+  // when server renders false but client would read true from matchMedia.
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false)
 
   useEffect(() => {
     const mq = window.matchMedia(QUERY)
+    setPrefersReducedMotion(mq.matches)
     const handler = (e: MediaQueryListEvent) => setPrefersReducedMotion(e.matches)
     mq.addEventListener('change', handler)
     return () => mq.removeEventListener('change', handler)

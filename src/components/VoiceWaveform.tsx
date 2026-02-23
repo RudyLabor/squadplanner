@@ -2,6 +2,11 @@ import { useMemo } from 'react'
 import { m } from 'framer-motion'
 import { useAudioAnalyser } from '../hooks/useAudioAnalyser'
 
+// Deterministic multipliers replacing Math.random() to avoid SSR/client hydration mismatch.
+// Each entry maps to a bar index (0–9). Values ∈ [0, 1) mimic random distribution.
+const DEMO_HEIGHT_FACTORS = [0.7, 0.35, 0.85, 0.5, 0.65, 0.4, 0.9, 0.55, 0.3, 0.75]
+const DEMO_DURATION_OFFSETS = [0.0, 0.12, 0.06, 0.2, 0.15, 0.08, 0.22, 0.03, 0.18, 0.1]
+
 export interface VoiceWaveformProps {
   /** MediaStream from microphone input */
   audioStream?: MediaStream | null
@@ -206,7 +211,7 @@ export function VoiceWaveformDemo({
                       height: [
                         config.minBarHeight,
                         config.minBarHeight +
-                          Math.random() * (config.maxBarHeight - config.minBarHeight),
+                          DEMO_HEIGHT_FACTORS[index % DEMO_HEIGHT_FACTORS.length] * (config.maxBarHeight - config.minBarHeight),
                         config.minBarHeight,
                       ],
                     }
@@ -215,7 +220,7 @@ export function VoiceWaveformDemo({
                     }
               }
               transition={{
-                duration: 0.4 + Math.random() * 0.3,
+                duration: 0.4 + DEMO_DURATION_OFFSETS[index % DEMO_DURATION_OFFSETS.length],
                 repeat: isActive ? Infinity : 0,
                 repeatType: 'reverse',
                 delay: index * 0.08,

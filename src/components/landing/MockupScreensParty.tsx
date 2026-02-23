@@ -2,6 +2,13 @@ import { m } from 'framer-motion'
 import { Users, Headphones, Mic, MicOff } from '../icons'
 import { mockMembers, MockNavbar } from './MockupShared'
 
+// Deterministic values replacing Math.random() to avoid SSR/client hydration mismatch.
+// These create visually varied wave animations without non-deterministic randomness.
+const WAVE_HEIGHTS_4 = [4, 2, 5, 1]       // used for 4-bar wave (range 0-6)
+const WAVE_DURATIONS_4 = [0.15, 0.08, 0.22, 0.05] // added to base duration
+const WAVE_HEIGHTS_9 = [4, 2, 5, 1, 3, 5, 2, 4, 1] // used for 9-bar wave (range 0-6)
+const WAVE_DURATIONS_9 = [0.1, 0.05, 0.2, 0.15, 0.08, 0.18, 0.12, 0.03, 0.22]
+
 // ─── Screen 3: Voice Party ──────────────────────────────
 export function PartyScreen() {
   return (
@@ -74,11 +81,11 @@ export function PartyScreen() {
                   style={{
                     backgroundColor: i < 2 ? 'var(--color-success)' : 'var(--color-text-secondary)',
                   }}
-                  animate={i < 2 ? { height: [3, 8 + Math.random() * 6, 3] } : { height: 3 }}
+                  animate={i < 2 ? { height: [3, 8 + WAVE_HEIGHTS_4[j], 3] } : { height: 3 }}
                   transition={
                     i < 2
                       ? {
-                          duration: 0.4 + Math.random() * 0.3,
+                          duration: 0.4 + WAVE_DURATIONS_4[j],
                           repeat: Infinity,
                           delay: j * 0.08,
                           ease: 'easeInOut',
@@ -106,9 +113,9 @@ export function PartyScreen() {
             <m.div
               key={j}
               className="w-[2px] rounded-full bg-success"
-              animate={{ height: [3, 10 + Math.random() * 6, 3] }}
+              animate={{ height: [3, 10 + WAVE_HEIGHTS_9[j], 3] }}
               transition={{
-                duration: 0.5 + Math.random() * 0.3,
+                duration: 0.5 + WAVE_DURATIONS_9[j],
                 repeat: Infinity,
                 delay: j * 0.06,
                 ease: 'easeInOut',

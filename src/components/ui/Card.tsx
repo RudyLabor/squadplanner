@@ -41,7 +41,7 @@ export function Card({
     outlined: 'bg-surface-card border-2 border-border-default',
     ghost: 'bg-transparent border-none',
     gradient: 'card-gradient-border',
-    glass: 'surface-glass rounded-2xl',
+    glass: 'surface-glass backdrop-blur-[24px] backdrop-saturate-[1.2] rounded-2xl',
   }
 
   const hoverClasses =

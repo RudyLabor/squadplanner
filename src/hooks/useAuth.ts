@@ -5,6 +5,7 @@ import type { User, Session } from '@supabase/supabase-js'
 import type { Profile } from '../types/database'
 import { updateDailyStreak } from './useAuthStreak'
 import { usePremiumStore } from './usePremium'
+import { useGamificationStore } from '../stores/useGamificationStore'
 import { showSuccess } from '../lib/toast'
 
 interface AuthState {
@@ -56,6 +57,10 @@ export const useAuthStore = create<AuthState>((set, get) => ({
           .getState()
           .fetchPremiumStatus()
           .catch(() => {})
+        // Sync gamification store with DB profile data (xp, level)
+        if (updatedProfile) {
+          useGamificationStore.getState().syncFromDB(updatedProfile)
+        }
         set({
           user: session.user,
           session,
@@ -81,6 +86,10 @@ export const useAuthStore = create<AuthState>((set, get) => ({
             .single()
           const updatedProfile = await updateDailyStreak(session.user.id, profile)
           set({ user: session.user, session, profile: updatedProfile })
+          // Sync gamification store with DB profile data
+          if (updatedProfile) {
+            useGamificationStore.getState().syncFromDB(updatedProfile)
+          }
           // Refresh premium status on every sign-in
           usePremiumStore.getState().fetchPremiumStatus()
           // Show welcome toast for OAuth sign-in (Google redirect)
@@ -253,6 +262,10 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     const { user } = get()
     if (!user) return
     const { data: profile } = await supabase.from('profiles').select('*').eq('id', user.id).single()
-    if (profile) set({ profile })
+    if (profile) {
+      set({ profile })
+      // Keep gamification store in sync with DB
+      useGamificationStore.getState().syncFromDB(profile)
+    }
   },
 }))

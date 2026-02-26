@@ -175,6 +175,8 @@ interface GamificationState {
   dismissAchievement: () => void
   getProgress: () => { current: number; needed: number; percent: number }
   getLevelTitle: () => string
+  /** Sync store with Supabase profile data (xp, level) so UI matches DB */
+  syncFromDB: (profile: { xp?: number | null; level?: number | null }) => void
 }
 
 function computeLevel(xp: number): number {
@@ -301,6 +303,21 @@ export const useGamificationStore = create<GamificationStateWithHydration>()(
       getLevelTitle: () => {
         const { level } = get()
         return LEVEL_TITLES[Math.min(level - 1, LEVEL_TITLES.length - 1)]
+      },
+
+      syncFromDB: (profile) => {
+        const dbXP = profile?.xp ?? 0
+        const dbLevel = profile?.level ?? 1
+        const { xp: storeXP, level: storeLevel } = get()
+        // Only update if DB values are higher (DB is source of truth)
+        // or if store is at defaults (never synced)
+        if (dbXP > storeXP || (storeXP === 0 && dbXP >= 0)) {
+          set({
+            xp: dbXP,
+            level: dbLevel > 0 ? dbLevel : computeLevel(dbXP),
+            stats: { ...get().stats, level: dbLevel > 0 ? dbLevel : computeLevel(dbXP) },
+          })
+        }
       },
     }),
     {

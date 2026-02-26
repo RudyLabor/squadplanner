@@ -56,7 +56,7 @@ ${[...staticPages, ...gamePages, ...altPages, ...blogPages, ...programPages].joi
   return new Response(sitemap, {
     headers: {
       'Content-Type': 'application/xml',
-      'Cache-Control': 'public, s-maxage=86400, stale-while-revalidate=604800',
+      'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=7200',
     },
   })
 }

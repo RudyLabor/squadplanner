@@ -199,9 +199,9 @@ serve(async (req) => {
 
 Session: ${session.title || session.game || 'Session gaming'}
 Squad: ${squad?.name || 'Squad'}
-Jeu: ${session.game || 'Non specifie'}
+Jeu: ${session.game || 'Non spécifié'}
 Date: ${new Date(session.scheduled_at).toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' })}
-Duree: ${session.duration_minutes || 120} minutes
+Durée: ${session.duration_minutes || 120} minutes
 
 Statistiques:
 - Inscrits (RSVP present): ${totalRsvps}

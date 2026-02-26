@@ -61,7 +61,5 @@ ${[...staticPages, ...gamePages, ...altPages, ...blogPages, ...programPages].joi
   })
 }
 
-export default function SitemapXml() {
-  // This component is never rendered — the loader returns the XML response directly
-  return null
-}
+// No default export — this is a Resource Route.
+// React Router returns the loader Response as-is (raw XML) when there is no component.

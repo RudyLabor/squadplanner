@@ -2,7 +2,7 @@ import { type ReactNode, type KeyboardEvent } from 'react'
 import { colorMix, colorMixBlend } from '../../utils/colorMix'
 
 interface CardProps {
-  variant?: 'default' | 'elevated' | 'outlined' | 'ghost' | 'gradient'
+  variant?: 'default' | 'elevated' | 'outlined' | 'ghost' | 'gradient' | 'glass'
   padding?: 'default' | 'compact' | 'none'
   loading?: boolean
   selected?: boolean
@@ -41,6 +41,7 @@ export function Card({
     outlined: 'bg-surface-card border-2 border-border-default',
     ghost: 'bg-transparent border-none',
     gradient: 'card-gradient-border',
+    glass: 'surface-glass rounded-2xl',
   }
 
   const hoverClasses =

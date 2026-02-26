@@ -1,6 +1,6 @@
 import { memo } from 'react'
 import { Link } from 'react-router'
-import { m } from 'framer-motion'
+import { m, LayoutGroup } from 'framer-motion'
 import { Home, Users, Calendar, Mic, MessageCircle } from '../icons'
 import { usePrefetch } from '../../hooks/usePrefetch'
 
@@ -67,7 +67,15 @@ const MobileNavLink = memo(function MobileNavLink({
       aria-label={label}
       aria-current={isActive ? 'page' : undefined}
     >
-      <div className="relative">
+      <div className="relative flex flex-col items-center">
+        {isActive && (
+          <m.div
+            layoutId="mobile-active-dot"
+            className="absolute -top-1.5 w-1 h-1 rounded-full bg-primary"
+            transition={{ type: 'spring', stiffness: 400, damping: 25 }}
+            aria-hidden="true"
+          />
+        )}
         <Icon
           className={`w-6 h-6 transition-colors ${isActive ? 'text-text-primary' : 'text-text-tertiary'}`}
           strokeWidth={isActive ? 2 : 1.5}
@@ -160,11 +168,15 @@ export const MobileBottomNav = memo(function MobileBottomNav({
   return (
     <nav
       aria-label="Navigation mobile"
-      className={`mobile-bottom-nav fixed bottom-0 left-0 right-0 z-50 bg-bg-base border-t border-border-subtle transition-transform duration-200 safe-area-pb ${isKeyboardVisible ? 'translate-y-full' : 'translate-y-0'}`}
+      className={`mobile-bottom-nav fixed bottom-0 left-0 right-0 z-50 border-t border-border-subtle transition-transform duration-200 safe-area-pb ${isKeyboardVisible ? 'translate-y-full' : 'translate-y-0'}`}
       style={{
+        background: 'rgba(10, 10, 15, 0.8)',
+        backdropFilter: 'blur(20px) saturate(1.3)',
+        WebkitBackdropFilter: 'blur(20px) saturate(1.3)',
         paddingBottom: 'calc(0.5rem + env(safe-area-inset-bottom, 0))',
       }}
     >
+      <LayoutGroup>
       {mobileNavLeft.map((item) => (
         <div
           key={item.path}
@@ -199,6 +211,7 @@ export const MobileBottomNav = memo(function MobileBottomNav({
           />
         </div>
       ))}
+      </LayoutGroup>
     </nav>
   )
 })

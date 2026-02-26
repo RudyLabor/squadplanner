@@ -1,0 +1,14 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "dev",
+      "runtimeExecutable": "/Users/rudylabor/.nvm/versions/node/v20.20.0/bin/npx",
+      "runtimeArgs": ["react-router", "dev"],
+      "port": 5173,
+      "env": {
+        "PATH": "/Users/rudylabor/.nvm/versions/node/v20.20.0/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+      }
+    }
+  ]
+}

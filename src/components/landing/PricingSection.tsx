@@ -157,8 +157,9 @@ export function PricingSection() {
                 className={`p-5 rounded-2xl relative overflow-hidden ${
                   tier.popular
                     ? 'border-2 border-warning/40 bg-gradient-to-br from-warning/8 to-transparent'
-                    : 'border border-border-default bg-bg-elevated'
+                    : 'surface-glass'
                 }`}
+                style={tier.popular ? { boxShadow: '0 0 30px rgba(245, 158, 11, 0.1)' } : undefined}
               >
                 {tier.badge && (
                   <div

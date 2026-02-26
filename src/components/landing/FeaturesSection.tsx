@@ -183,8 +183,9 @@ export function FeaturesSection() {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3 }}
-              className={`p-8 md:p-10 rounded-3xl bg-gradient-to-br ${pillar.gradient} border`}
-              style={{ borderColor: `${pillar.color}25` }}
+              className={`p-8 md:p-10 rounded-3xl bg-gradient-to-br ${pillar.gradient} border backdrop-blur-md`}
+              style={{ borderColor: `${pillar.color}25`, boxShadow: `0 0 30px ${pillar.color}08` }}
+              whileHover={{ y: -4, transition: { duration: 0.3 } }}
             >
               <div className="flex flex-col md:flex-row gap-8">
                 <div className="flex-1">

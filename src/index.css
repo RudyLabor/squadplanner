@@ -31,10 +31,10 @@
   --color-purple: #a78bfa;
   --color-error: #f87171;
 
-  /* Border - Ultra subtle */
-  --color-border-subtle: rgba(255, 255, 255, 0.04);
-  --color-border-default: rgba(255, 255, 255, 0.06);
-  --color-border-hover: rgba(255, 255, 255, 0.1);
+  /* Border - Visible but refined */
+  --color-border-subtle: rgba(255, 255, 255, 0.06);
+  --color-border-default: rgba(255, 255, 255, 0.08);
+  --color-border-hover: rgba(255, 255, 255, 0.12);
 
   /* Shadows - Refined depth */
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
@@ -74,13 +74,15 @@
   --radius-2xl: 24px;
 
   /* Surface tokens - semantic layer */
-  --color-surface-card: rgba(255, 255, 255, 0.015);
-  --color-surface-card-hover: rgba(255, 255, 255, 0.025);
+  --color-surface-card: rgba(255, 255, 255, 0.035);
+  --color-surface-card-hover: rgba(255, 255, 255, 0.055);
   --color-surface-input: rgba(255, 255, 255, 0.04);
   --color-surface-overlay: rgba(0, 0, 0, 0.6);
+  --color-surface-glass: rgba(255, 255, 255, 0.04);
 
   /* Enhanced shadow scale */
-  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.03);
+  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.04);
+  --shadow-card-hover: 0 8px 24px rgba(0, 0, 0, 0.3), 0 0 20px rgba(92, 96, 239, 0.08);
   --shadow-dropdown: 0 8px 30px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.05);
   --shadow-modal: 0 16px 70px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.05);
 
@@ -274,9 +276,9 @@
   --color-primary-hover: #4f52b2;
 
   /* Border - Subtle on light */
-  --color-border-subtle: rgba(0, 0, 0, 0.04);
-  --color-border-default: rgba(0, 0, 0, 0.08);
-  --color-border-hover: rgba(0, 0, 0, 0.12);
+  --color-border-subtle: rgba(0, 0, 0, 0.06);
+  --color-border-default: rgba(0, 0, 0, 0.10);
+  --color-border-hover: rgba(0, 0, 0, 0.15);
 
   /* Shadows - More pronounced for depth in light mode */
   --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.04);
@@ -285,13 +287,15 @@
   --shadow-glow-primary: 0 0 40px rgba(92, 96, 239, 0.08);
 
   /* Surface tokens - light mode */
-  --color-surface-card: rgba(0, 0, 0, 0.02);
-  --color-surface-card-hover: rgba(0, 0, 0, 0.04);
+  --color-surface-card: rgba(0, 0, 0, 0.025);
+  --color-surface-card-hover: rgba(0, 0, 0, 0.045);
   --color-surface-input: rgba(0, 0, 0, 0.04);
   --color-surface-overlay: rgba(0, 0, 0, 0.4);
+  --color-surface-glass: rgba(255, 255, 255, 0.6);
 
   /* Enhanced shadow scale - light mode */
-  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.06), 0 0 0 1px rgba(0, 0, 0, 0.04);
+  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.06), 0 0 0 1px rgba(0, 0, 0, 0.05);
+  --shadow-card-hover: 0 8px 24px rgba(0, 0, 0, 0.08), 0 0 20px rgba(92, 96, 239, 0.06);
   --shadow-dropdown: 0 8px 30px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(0, 0, 0, 0.06);
   --shadow-modal: 0 16px 70px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(0, 0, 0, 0.06);
 
@@ -1179,9 +1183,72 @@ select:focus-visible,
 /* Glass card - Modern premium */
 .glass-card {
   background: rgba(15, 16, 18, 0.8);
-  border: 1px solid rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.06);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
+}
+
+/* Surface glass - True glassmorphism with visible depth */
+.surface-glass {
+  background: var(--color-surface-glass);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(24px) saturate(1.2);
+  -webkit-backdrop-filter: blur(24px) saturate(1.2);
+  box-shadow:
+    0 4px 16px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.surface-glass:hover {
+  border-color: rgba(255, 255, 255, 0.12);
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    0 0 0 1px rgba(92, 96, 239, 0.06);
+}
+
+[data-theme='light'] .surface-glass {
+  background: var(--color-surface-glass);
+  border-color: rgba(0, 0, 0, 0.06);
+  box-shadow:
+    0 4px 16px rgba(0, 0, 0, 0.04),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+[data-theme='light'] .surface-glass:hover {
+  border-color: rgba(0, 0, 0, 0.10);
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    0 0 0 1px rgba(91, 95, 199, 0.06);
+}
+
+/* Glow border - Subtle primary glow on hover */
+.glow-border {
+  position: relative;
+  transition: box-shadow 0.4s ease, border-color 0.4s ease;
+}
+
+.glow-border:hover {
+  border-color: rgba(92, 96, 239, 0.2);
+  box-shadow: 0 0 20px rgba(92, 96, 239, 0.08), 0 0 40px rgba(92, 96, 239, 0.04);
+}
+
+[data-theme='light'] .glow-border:hover {
+  border-color: rgba(91, 95, 199, 0.2);
+  box-shadow: 0 0 20px rgba(91, 95, 199, 0.06), 0 0 40px rgba(91, 95, 199, 0.03);
+}
+
+/* Glow border permanent (for featured/premium elements) */
+.glow-border-active {
+  border-color: rgba(92, 96, 239, 0.25);
+  box-shadow: 0 0 24px rgba(92, 96, 239, 0.1), 0 0 48px rgba(92, 96, 239, 0.05);
+}
+
+[data-theme='light'] .glow-border-active {
+  border-color: rgba(91, 95, 199, 0.25);
+  box-shadow: 0 0 24px rgba(91, 95, 199, 0.08), 0 0 48px rgba(91, 95, 199, 0.04);
 }
 
 /* Hide scrollbar utility (for horizontal scroll sections) */
@@ -1539,9 +1606,12 @@ select:focus-visible,
 
   /* Ensure all backgrounds are transparent to respect system colors */
   .glass-card,
-  .gaming-card {
+  .gaming-card,
+  .surface-glass {
     background: transparent !important;
     border: 1px solid;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
   }
 }
 
@@ -1583,8 +1653,24 @@ select:focus-visible,
 /* Section dividers - gradient lines */
 .section-divider {
   height: 1px;
-  background: linear-gradient(to right, transparent, rgba(92, 96, 239, 0.2), transparent);
+  background: linear-gradient(to right, transparent, rgba(92, 96, 239, 0.15), rgba(167, 139, 250, 0.1), rgba(92, 96, 239, 0.15), transparent);
   border: none;
+  margin: 0;
+}
+
+/* Mesh background for sections - multi-point radial gradient */
+.mesh-bg {
+  background:
+    radial-gradient(ellipse at 20% 50%, rgba(92, 96, 239, 0.06) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 20%, rgba(167, 139, 250, 0.05) 0%, transparent 50%),
+    radial-gradient(ellipse at 60% 80%, rgba(52, 211, 153, 0.03) 0%, transparent 50%);
+}
+
+[data-theme='light'] .mesh-bg {
+  background:
+    radial-gradient(ellipse at 20% 50%, rgba(91, 95, 199, 0.04) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 20%, rgba(124, 58, 237, 0.03) 0%, transparent 50%),
+    radial-gradient(ellipse at 60% 80%, rgba(5, 150, 105, 0.02) 0%, transparent 50%);
 }
 
 /* CTA idle glow animation - decorative, only when user allows motion */

@@ -393,6 +393,7 @@ export default function Home({ loaderData }: HomeProps) {
                 />
               )}
 
+            <div className="section-divider" />
             <m.div
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
@@ -407,6 +408,7 @@ export default function Home({ loaderData }: HomeProps) {
               />
             </m.div>
 
+            <div className="section-divider" />
             {/* PHASE 5: Weekly Leaderboard with gamification stats */}
             <m.div
               initial={{ opacity: 0, y: 12 }}
@@ -418,6 +420,7 @@ export default function Home({ loaderData }: HomeProps) {
               </Suspense>
             </m.div>
 
+            <div className="section-divider" />
             <m.div
               className="grid grid-cols-1 sm:grid-cols-2 gap-4"
               initial={{ opacity: 0, y: 12 }}
@@ -434,6 +437,7 @@ export default function Home({ loaderData }: HomeProps) {
                 showCTA={!upcomingSessions[0] && squads.length > 0 && !activeParty}
               />
             </m.div>
+            <div className="section-divider" />
             <m.div
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
@@ -447,6 +451,7 @@ export default function Home({ loaderData }: HomeProps) {
                 onCreateSession={openCreateSessionModal}
               />
             </m.div>
+            <div className="section-divider" />
             <m.div
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
@@ -459,6 +464,7 @@ export default function Home({ loaderData }: HomeProps) {
                 onInvite={handleInviteFriend}
               />
             </m.div>
+            <div className="section-divider" />
             <m.div
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
@@ -466,6 +472,7 @@ export default function Home({ loaderData }: HomeProps) {
             >
               <HomeActivityFeed squadIds={(squads || []).map((s) => s.id)} />
             </m.div>
+            <div className="section-divider" />
             <m.div
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}

@@ -78,7 +78,7 @@ const slideVariants = {
 
 function TestimonialCard({ t }: { t: Testimonial }) {
   return (
-    <div className="bg-bg-elevated border border-border-subtle rounded-2xl p-6 h-full flex flex-col">
+    <div className="surface-glass rounded-2xl p-6 h-full flex flex-col">
       <div className="flex items-center gap-3 mb-4">
         <div className="w-12 h-12 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center text-xl">
           {t.avatar}

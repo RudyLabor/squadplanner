@@ -1,6 +1,6 @@
 import { memo, useCallback } from 'react'
 import { Link } from 'react-router'
-import { m, AnimatePresence } from 'framer-motion'
+import { m, AnimatePresence, LayoutGroup } from 'framer-motion'
 import {
   Home,
   Users,
@@ -73,7 +73,7 @@ export const NavLink = memo(function NavLink({
           relative flex items-center ${collapsed ? 'gap-2 px-2.5' : 'gap-3 px-4'} py-3 min-h-[44px] rounded-xl transition-interactive
           ${
             isActive
-              ? 'bg-primary-10 text-primary-hover'
+              ? 'text-primary-hover'
               : 'text-text-secondary hover:bg-surface-card hover:text-text-primary'
           }
         `}
@@ -81,9 +81,17 @@ export const NavLink = memo(function NavLink({
         whileTap={{ scale: 0.98 }}
         transition={{ duration: 0.25 }}
       >
-        <Icon className="w-5 h-5 flex-shrink-0" strokeWidth={2} />
+        {isActive && (
+          <m.div
+            layoutId="nav-active-pill"
+            className="absolute inset-0 rounded-xl bg-primary-10"
+            style={{ boxShadow: '0 0 20px rgba(92, 96, 239, 0.08)' }}
+            transition={{ type: 'spring', stiffness: 350, damping: 30 }}
+          />
+        )}
+        <Icon className="relative z-10 w-5 h-5 flex-shrink-0" strokeWidth={2} />
         {collapsed ? (
-          <span className="text-sm font-medium whitespace-nowrap overflow-hidden text-ellipsis max-w-[80px]">
+          <span className="relative z-10 text-sm font-medium whitespace-nowrap overflow-hidden text-ellipsis max-w-[80px]">
             {label}
           </span>
         ) : (
@@ -94,7 +102,7 @@ export const NavLink = memo(function NavLink({
               animate={{ opacity: 1, width: 'auto' }}
               exit={{ opacity: 0, width: 0 }}
               transition={{ duration: 0.15 }}
-              className="text-md font-medium whitespace-nowrap overflow-hidden"
+              className="relative z-10 text-md font-medium whitespace-nowrap overflow-hidden"
             >
               {label}
             </m.span>
@@ -151,7 +159,8 @@ export const DesktopSidebar = memo(function DesktopSidebar({
   return (
     <m.aside
       aria-label="Navigation principale"
-      className="desktop-only flex-col border-r border-surface-card bg-bg-base fixed h-full z-40 overflow-hidden"
+      className="desktop-only flex-col border-r border-surface-card fixed h-full z-40 overflow-hidden"
+      style={{ background: 'linear-gradient(to bottom, var(--color-bg-primary), var(--color-bg-secondary))' }}
       initial={false}
       animate={{ width: isExpanded ? 256 : 140 }}
       transition={{ duration: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
@@ -265,6 +274,7 @@ export const DesktopSidebar = memo(function DesktopSidebar({
         aria-label="Menu principal"
         className={`flex-1 min-h-0 overflow-y-auto ${isExpanded ? 'px-3' : 'px-2'} py-4 space-y-1`}
       >
+        <LayoutGroup>
         {navItems.map((item) => {
           let badgeCount: number | undefined
           if (item.path === '/messages' && unreadMessages > 0) {
@@ -300,7 +310,14 @@ export const DesktopSidebar = memo(function DesktopSidebar({
         })}
 
         {/* Separator */}
-        <div className="border-t border-surface-card my-2" />
+        <div className="my-3 px-2">
+          <div className="h-px bg-gradient-to-r from-transparent via-border-default to-transparent" />
+          {isExpanded && (
+            <div className="mt-2 px-2 text-[10px] font-semibold uppercase tracking-widest text-text-quaternary">
+              Plus
+            </div>
+          )}
+        </div>
 
         {/* Secondary items — inside scrollable area */}
         <NavLink
@@ -335,6 +352,7 @@ export const DesktopSidebar = memo(function DesktopSidebar({
           collapsed={!isExpanded}
           userId={userId}
         />
+        </LayoutGroup>
       </nav>
 
       <SidebarFooter

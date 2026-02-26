@@ -1662,14 +1662,14 @@ select:focus-visible,
 /* Mesh background for sections - multi-point radial gradient */
 .mesh-bg {
   background:
-    radial-gradient(ellipse at 20% 50%, rgba(92, 96, 239, 0.06) 0%, transparent 50%),
+    radial-gradient(ellipse at 20% 50%, rgba(139, 92, 246, 0.06) 0%, transparent 50%),
     radial-gradient(ellipse at 80% 20%, rgba(167, 139, 250, 0.05) 0%, transparent 50%),
     radial-gradient(ellipse at 60% 80%, rgba(52, 211, 153, 0.03) 0%, transparent 50%);
 }
 
 [data-theme='light'] .mesh-bg {
   background:
-    radial-gradient(ellipse at 20% 50%, rgba(91, 95, 199, 0.04) 0%, transparent 50%),
+    radial-gradient(ellipse at 20% 50%, rgba(139, 92, 246, 0.04) 0%, transparent 50%),
     radial-gradient(ellipse at 80% 20%, rgba(124, 58, 237, 0.03) 0%, transparent 50%),
     radial-gradient(ellipse at 60% 80%, rgba(5, 150, 105, 0.02) 0%, transparent 50%);
 }

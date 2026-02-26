@@ -1837,6 +1837,7 @@ select:focus-visible,
 }
 .landing-page {
   animation: page-fade-in 0.4s ease forwards;
+  overflow-x: hidden;
 }
 
 /* Noise overlay on full page for premium dark feel */

@@ -81,7 +81,7 @@ export function ClubDashboard() {
           .from('squad_members')
           .select('squad_id, squads(*)')
           .eq('user_id', userId)
-          .eq('role', 'leader')
+          .eq('role', 'owner')
 
         if (squadsError) throw squadsError
 
@@ -119,21 +119,27 @@ export function ClubDashboard() {
 
               const sessionCount = sessionsData?.length || 0
 
-              // Fetch average stats
-              const { data: statsData } = await supabase
+              // Fetch average reliability from profiles of squad members
+              const { data: memberIds } = await supabase
                 .from('squad_members')
-                .select('reliability_score, attendance_rate')
+                .select('user_id')
                 .eq('squad_id', squad.id)
 
               let avgReliability = 0
               let avgAttendance = 0
 
-              if (statsData && statsData.length > 0) {
-                avgReliability =
-                  statsData.reduce((sum, m) => sum + (m.reliability_score || 0), 0) /
-                  statsData.length
-                avgAttendance =
-                  statsData.reduce((sum, m) => sum + (m.attendance_rate || 0), 0) / statsData.length
+              if (memberIds && memberIds.length > 0) {
+                const { data: profilesData } = await supabase
+                  .from('profiles')
+                  .select('reliability_score')
+                  .in('id', memberIds.map((m: { user_id: string }) => m.user_id))
+
+                if (profilesData && profilesData.length > 0) {
+                  avgReliability =
+                    profilesData.reduce((sum: number, p: { reliability_score?: number }) => sum + (p.reliability_score || 0), 0) /
+                    profilesData.length
+                  avgAttendance = avgReliability // Use reliability as proxy for attendance
+                }
               }
 
               totalReliability += avgReliability

@@ -44,74 +44,62 @@ export function Wrapped() {
         // Fetch profile
         const { data: profile, error: profileError } = await supabase
           .from('profiles')
-          .select('username, reliability_score, current_streak, best_streak')
+          .select('username, reliability_score, streak_days')
           .eq('id', user.id)
           .single()
 
         if (profileError) throw profileError
 
-        // Fetch RSVPs with session data (sessions don't have created_by — use RSVPs)
-        const { data: rsvps, error: rsvpsError } = await supabase
+        // Fetch RSVPs to find sessions user attended
+        const { data: rsvps } = await supabase
           .from('session_rsvps')
-          .select('*, sessions(*)')
+          .select('session_id')
           .eq('user_id', user.id)
 
-        if (rsvpsError) throw rsvpsError
+        // Get unique session IDs
+        const sessionIds = [...new Set((rsvps || []).map((r: { session_id: string }) => r.session_id))]
 
-        // Calculate statistics from RSVPs
+        // Fetch session details for attended sessions
         let totalHours = 0
-        let sessionCount = 0
-        const attendedSessions = new Set<string>()
+        let sessionCount = sessionIds.length
+        const squadSessionCounts: { [key: string]: number } = {}
 
-        // Count hours from attended sessions
-        if (rsvps && Array.isArray(rsvps)) {
-          rsvps.forEach((rsvp: unknown) => {
-            const r = rsvp as { sessions?: { id: string; duration_minutes?: number; squad_id?: string; squad?: { name?: string } } }
-            if (r.sessions) {
-              attendedSessions.add(r.sessions.id)
-              const durationMinutes = r.sessions.duration_minutes || 120
-              totalHours += durationMinutes / 60
-            }
-          })
+        if (sessionIds.length > 0) {
+          const { data: sessions } = await supabase
+            .from('sessions')
+            .select('id, duration_minutes, squad_id')
+            .in('id', sessionIds)
+
+          if (sessions) {
+            sessions.forEach((s: { id: string; duration_minutes?: number; squad_id?: string }) => {
+              totalHours += (s.duration_minutes || 120) / 60
+              if (s.squad_id) {
+                squadSessionCounts[s.squad_id] = (squadSessionCounts[s.squad_id] || 0) + 1
+              }
+            })
+            sessionCount = sessions.length
+          }
         }
-        sessionCount = attendedSessions.size
 
         // Use real profile data for streak and reliability
-        const bestStreak = profile?.best_streak || profile?.current_streak || 0
-
-        // Use real reliability score from profile
+        const bestStreak = profile?.streak_days || 0
         const reliabilityScore =
           profile?.reliability_score != null ? Math.round(profile.reliability_score) : 0
 
-        // Find favorite squad (most attended sessions)
+        // Find favorite squad
         let favoriteSquad: WrappedStats['favoriteSquad'] = null
-        if (rsvps && Array.isArray(rsvps)) {
-          const squadCounts: { [key: string]: { name: string; count: number } } = {}
+        const topSquadId = Object.entries(squadSessionCounts).sort((a, b) => b[1] - a[1])[0]
 
-          rsvps.forEach((rsvp: unknown) => {
-            const r = rsvp as { sessions?: { squad_id?: string; squad?: { name?: string } } }
-            if (r.sessions?.squad_id) {
-              const squadId = r.sessions.squad_id
-              if (!squadCounts[squadId]) {
-                squadCounts[squadId] = {
-                  name: r.sessions.squad?.name || 'Squad',
-                  count: 0,
-                }
-              }
-              squadCounts[squadId].count++
-            }
-          })
+        if (topSquadId) {
+          const { data: squadData } = await supabase
+            .from('squads')
+            .select('name')
+            .eq('id', topSquadId[0])
+            .single()
 
-          const topSquad = Object.values(squadCounts).reduce(
-            (max, squad) => (squad.count > max.count ? squad : max),
-            { name: '', count: 0 }
-          )
-
-          if (topSquad.count > 0) {
-            favoriteSquad = {
-              name: topSquad.name,
-              sessionsPlayed: topSquad.count,
-            }
+          favoriteSquad = {
+            name: squadData?.name || 'Squad',
+            sessionsPlayed: topSquadId[1],
           }
         }
 

@@ -87,7 +87,15 @@ export function AppLayout({ children }: AppLayoutProps) {
   )
 
   const isPublicPage = ['/legal', '/help', '/premium'].includes(location.pathname)
-  const shouldHideNav = isAuthPage || isOnboarding || isLanding || (isPublicPage && !user)
+  // Pages that use PublicPageShell with their own nav — never show AppLayout nav
+  const hasOwnNavigation =
+    location.pathname === '/ambassador' ||
+    location.pathname.startsWith('/blog') ||
+    location.pathname.startsWith('/games/') ||
+    location.pathname.startsWith('/lfg/') ||
+    location.pathname.startsWith('/alternative/') ||
+    location.pathname.startsWith('/vs/')
+  const shouldHideNav = isAuthPage || isOnboarding || isLanding || hasOwnNavigation || (isPublicPage && !user)
 
   useSquadsStore()
 

@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router'
 import { m, useInView } from 'framer-motion'
 import { useRef } from 'react'
 import { useAuthStore, useReferralStore, useAnalytics } from '../hooks'
@@ -48,7 +47,6 @@ const MILESTONES = [
 ] as const
 
 export function Referrals() {
-  const navigate = useNavigate()
   const { user } = useAuthStore()
   const {
     stats,
@@ -101,10 +99,8 @@ export function Referrals() {
     analytics.track('referral_shared' as any, { platform: 'twitter' })
   }
 
-  if (!user) {
-    navigate('/auth')
-    return null
-  }
+  // Auth is already handled by the _protected layout — no need for a redundant check
+  // that would race with Zustand store hydration and cause a redirect loop.
 
   return (
     <main className="min-h-0 bg-bg-base" aria-label="Parrainage">

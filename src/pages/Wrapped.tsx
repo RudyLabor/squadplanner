@@ -50,15 +50,7 @@ export function Wrapped() {
 
         if (profileError) throw profileError
 
-        // Fetch user's sessions
-        const { data: userSessions, error: sessionsError } = await supabase
-          .from('sessions')
-          .select('*')
-          .eq('created_by', user.id)
-
-        if (sessionsError) throw sessionsError
-
-        // Fetch RSVPs with session data
+        // Fetch RSVPs with session data (sessions don't have created_by — use RSVPs)
         const { data: rsvps, error: rsvpsError } = await supabase
           .from('session_rsvps')
           .select('*, sessions(*)')
@@ -66,24 +58,23 @@ export function Wrapped() {
 
         if (rsvpsError) throw rsvpsError
 
-        // Calculate statistics
+        // Calculate statistics from RSVPs
         let totalHours = 0
         let sessionCount = 0
         const attendedSessions = new Set<string>()
 
-        // Count sessions created
-        sessionCount = userSessions?.length || 0
-
         // Count hours from attended sessions
         if (rsvps && Array.isArray(rsvps)) {
-          rsvps.forEach((rsvp: any) => {
-            if (rsvp.sessions) {
-              attendedSessions.add(rsvp.sessions.id)
-              const durationMinutes = rsvp.sessions.duration_minutes || 120
+          rsvps.forEach((rsvp: unknown) => {
+            const r = rsvp as { sessions?: { id: string; duration_minutes?: number; squad_id?: string; squad?: { name?: string } } }
+            if (r.sessions) {
+              attendedSessions.add(r.sessions.id)
+              const durationMinutes = r.sessions.duration_minutes || 120
               totalHours += durationMinutes / 60
             }
           })
         }
+        sessionCount = attendedSessions.size
 
         // Use real profile data for streak and reliability
         const bestStreak = profile?.best_streak || profile?.current_streak || 0
@@ -97,12 +88,13 @@ export function Wrapped() {
         if (rsvps && Array.isArray(rsvps)) {
           const squadCounts: { [key: string]: { name: string; count: number } } = {}
 
-          rsvps.forEach((rsvp: any) => {
-            if (rsvp.sessions?.squad_id) {
-              const squadId = rsvp.sessions.squad_id
+          rsvps.forEach((rsvp: unknown) => {
+            const r = rsvp as { sessions?: { squad_id?: string; squad?: { name?: string } } }
+            if (r.sessions?.squad_id) {
+              const squadId = r.sessions.squad_id
               if (!squadCounts[squadId]) {
                 squadCounts[squadId] = {
-                  name: rsvp.sessions.squad?.name || 'Squad',
+                  name: r.sessions.squad?.name || 'Squad',
                   count: 0,
                 }
               }
@@ -132,7 +124,7 @@ export function Wrapped() {
           userName: profile?.username || 'Gamer',
         })
       } catch (err) {
-        console.error('Error fetching wrapped data:', err)
+        if (!import.meta.env.PROD) console.error('Error fetching wrapped data:', err)
         setError('Erreur lors du chargement de vos données')
       } finally {
         setIsLoading(false)
@@ -168,7 +160,7 @@ export function Wrapped() {
           url: 'https://squadplanner.fr/wrapped',
         })
       } catch (err) {
-        console.error('Share failed:', err)
+        if (!import.meta.env.PROD) console.error('Share failed:', err)
       }
     } else {
       // Fallback: copy to clipboard
@@ -176,7 +168,7 @@ export function Wrapped() {
         await navigator.clipboard.writeText(shareText)
         alert('Texte copié dans le presse-papiers!')
       } catch (err) {
-        console.error('Copy failed:', err)
+        if (!import.meta.env.PROD) console.error('Copy failed:', err)
       }
     }
   }

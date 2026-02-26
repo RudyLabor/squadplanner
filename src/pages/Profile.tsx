@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useMemo, useCallback } from 'react'
+import { useState, useEffect, useMemo, useCallback } from 'react'
 import { useSearchParams } from 'react-router'
 import { LogOut } from '../components/icons'
 import { ProfileSkeleton } from '../components/ui'
@@ -76,7 +76,13 @@ export function Profile() {
   // Gamification states
   const [showLevelUp, setShowLevelUp] = useState(false)
   const [newLevel, setNewLevel] = useState<number | null>(null)
-  const previousLevelRef = useRef<number | null>(null)
+
+  // Refresh profile on mount to sync with DB (fixes XP/Level inconsistency with /home)
+  useEffect(() => {
+    if (user?.id) {
+      refreshProfile()
+    }
+  }, [user?.id, refreshProfile])
 
   // Fetch premium status on mount
   useEffect(() => {
@@ -85,18 +91,28 @@ export function Profile() {
     }
   }, [user?.id, fetchPremiumStatus])
 
-  // Detect level up
+  // Detect level up — persist last-seen level in localStorage to survive remounts
   useEffect(() => {
     const currentLevel = profile?.level || 1
-    const previousLevel = previousLevelRef.current
+    const storageKey = `sp-last-level-${user?.id || 'anon'}`
+    const savedLevel = (() => {
+      try {
+        const val = localStorage.getItem(storageKey)
+        return val ? parseInt(val, 10) : null
+      } catch {
+        return null
+      }
+    })()
 
-    if (previousLevel !== null && currentLevel > previousLevel) {
+    if (savedLevel !== null && currentLevel > savedLevel) {
       setNewLevel(currentLevel)
       setShowLevelUp(true)
     }
 
-    previousLevelRef.current = currentLevel
-  }, [profile?.level])
+    try {
+      localStorage.setItem(storageKey, String(currentLevel))
+    } catch {}
+  }, [profile?.level, user?.id])
 
   const handleClaimXP = async (challengeId: string) => {
     if (!user?.id) return

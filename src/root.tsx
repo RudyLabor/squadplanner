@@ -43,8 +43,7 @@ function isPublicPath(pathname: string) {
     pathname.startsWith('/alternative/') ||
     pathname.startsWith('/vs/') ||
     pathname.startsWith('/blog/') ||
-    pathname.startsWith('/widget/') ||
-    pathname === '/sitemap.xml'
+    pathname.startsWith('/widget/')
   )
 }
 

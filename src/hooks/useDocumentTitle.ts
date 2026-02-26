@@ -18,6 +18,11 @@ const pageTitles: Record<string, string> = {
   '/auth': 'Connexion — Squad Planner',
   '/onboarding': 'Bienvenue — Squad Planner',
   '/legal': "Conditions d'utilisation — Squad Planner",
+  '/club': 'Dashboard Club — Squad Planner',
+  '/wrapped': 'Gaming Wrapped 2026 — Squad Planner',
+  '/ambassador': 'Programme Ambassadeur — Squad Planner',
+  '/blog': 'Blog — Squad Planner',
+  '/maintenance': 'Maintenance — Squad Planner',
 }
 
 function getTitleForPath(pathname: string): string {
@@ -28,10 +33,17 @@ function getTitleForPath(pathname: string): string {
   if (pathname.startsWith('/squad/')) return 'Squad — Squad Planner'
   if (pathname.startsWith('/session/')) return 'Session — Squad Planner'
   if (pathname.startsWith('/join/')) return 'Rejoindre — Squad Planner'
+  if (pathname.startsWith('/s/')) return 'Session partagée — Squad Planner'
   if (pathname.startsWith('/u/')) {
     const username = pathname.split('/')[2]
     return username ? `${username} — Profil — Squad Planner` : 'Profil joueur — Squad Planner'
   }
+  if (pathname.startsWith('/blog/')) return 'Blog — Squad Planner'
+  if (pathname.startsWith('/games/')) return 'Jeux — Squad Planner'
+  if (pathname.startsWith('/lfg/')) return 'LFG — Squad Planner'
+  if (pathname.startsWith('/alternative/')) return 'Alternatives — Squad Planner'
+  if (pathname.startsWith('/vs/')) return 'Comparaison — Squad Planner'
+  if (pathname.startsWith('/widget/')) return 'Widget — Squad Planner'
 
   // 404 fallback
   return 'Page non trouvée — Squad Planner'

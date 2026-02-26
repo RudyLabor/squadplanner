@@ -74,7 +74,7 @@ export default function Landing() {
 
   return (
     <div
-      className="min-h-screen bg-bg-base landing-page landing-noise mesh-bg"
+      className="min-h-screen bg-bg-base landing-page landing-noise mesh-bg overflow-x-hidden"
     >
 
       <a

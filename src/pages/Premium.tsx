@@ -155,8 +155,11 @@ export function Premium() {
             onStartTrial={handleStartTrial}
           />
         )}
+        <hr className="section-divider my-8" />
         <PremiumFeaturesTable />
+        <hr className="section-divider my-8" />
         <PremiumTestimonials />
+        <hr className="section-divider my-8" />
         <PremiumFAQ />
       </div>
     </main>

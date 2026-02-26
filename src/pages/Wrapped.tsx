@@ -486,7 +486,7 @@ export function Wrapped() {
 
   return (
     <div
-      className="min-h-screen bg-black overflow-hidden"
+      className="min-h-screen bg-black overflow-hidden mesh-bg"
       onKeyDown={handleKeyDown}
       role="region"
       aria-label="Gaming Wrapped 2026"

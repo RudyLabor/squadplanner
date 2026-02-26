@@ -251,6 +251,8 @@ export function Settings() {
           </div>
         </Card>
 
+        <hr className="section-divider my-6" />
+
         <Card id="audio" className="mb-5 p-5 bg-bg-elevated scroll-mt-6">
           <SectionHeader icon={Volume2} title="Audio" />
           <div className="space-y-4">
@@ -320,12 +322,16 @@ export function Settings() {
           </div>
         </Card>
 
+        <hr className="section-divider my-6" />
+
         <Card id="theme" className="mb-5 p-5 bg-bg-elevated scroll-mt-6">
           <SectionHeader icon={Palette} title="Apparence" />
           <SettingRow label="Thème" description="Adapte l'apparence de l'app">
             <ThemeSelector onSaved={showSaveToast} />
           </SettingRow>
         </Card>
+
+        <hr className="section-divider my-6" />
 
         <Card id="privacy" className="mb-5 p-5 bg-bg-elevated scroll-mt-6">
           <SectionHeader icon={Shield} title="Confidentialité" />
@@ -403,6 +409,8 @@ export function Settings() {
             </div>
           </div>
         </Card>
+
+        <hr className="section-divider my-6" />
 
         <Card id="data" className="mb-5 p-5 bg-bg-elevated scroll-mt-6">
           <SectionHeader icon={Database} title="Données" />

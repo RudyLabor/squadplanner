@@ -1,5 +1,5 @@
 
-import { useState } from 'react'
+import { useState, useRef, useCallback } from 'react'
 import { m } from 'framer-motion'
 import { Headphones, Calendar, Target, Check } from '../icons'
 import { HeadphonesIllustration } from './illustrations/HeadphonesIllustration'
@@ -117,8 +117,28 @@ function VoiceMockup() {
   )
 }
 
+function useTilt3D() {
+  const ref = useRef<HTMLDivElement>(null)
+  const [tilt, setTilt] = useState({ rotateX: 0, rotateY: 0 })
+
+  const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+    if (!ref.current) return
+    const rect = ref.current.getBoundingClientRect()
+    const x = (e.clientX - rect.left) / rect.width - 0.5
+    const y = (e.clientY - rect.top) / rect.height - 0.5
+    setTilt({ rotateX: -y * 8, rotateY: x * 8 })
+  }, [])
+
+  const handleMouseLeave = useCallback(() => {
+    setTilt({ rotateX: 0, rotateY: 0 })
+  }, [])
+
+  return { ref, tilt, handleMouseMove, handleMouseLeave }
+}
+
 export function FeaturesSection() {
   const [activeFeature, setActiveFeature] = useState(0)
+  const { ref: tiltRef, tilt, handleMouseMove, handleMouseLeave } = useTilt3D()
 
   return (
     <section
@@ -179,13 +199,20 @@ export function FeaturesSection() {
           const PillarIcon = pillar.icon
           return (
             <m.div
+              ref={tiltRef}
               key={pillar.id}
               initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
+              animate={{ opacity: 1, y: 0, rotateX: tilt.rotateX, rotateY: tilt.rotateY }}
               transition={{ duration: 0.3 }}
-              className={`p-8 md:p-10 rounded-3xl bg-gradient-to-br ${pillar.gradient} border backdrop-blur-xl`}
-              style={{ borderColor: `${pillar.color}30`, boxShadow: `0 0 40px ${pillar.color}12, inset 0 1px 0 rgba(255,255,255,0.04)` }}
-              whileHover={{ y: -4, scale: 1.005, transition: { duration: 0.3 } }}
+              onMouseMove={handleMouseMove}
+              onMouseLeave={handleMouseLeave}
+              className={`p-8 md:p-10 rounded-3xl bg-gradient-to-br ${pillar.gradient} surface-glass glow-border`}
+              style={{
+                borderColor: `${pillar.color}30`,
+                boxShadow: `0 0 40px ${pillar.color}12, inset 0 1px 0 rgba(255,255,255,0.04)`,
+                perspective: '1000px',
+                transformStyle: 'preserve-3d',
+              }}
             >
               <div className="flex flex-col md:flex-row gap-8">
                 <div className="flex-1">

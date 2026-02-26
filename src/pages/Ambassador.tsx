@@ -102,7 +102,7 @@ ${formData.message}
       {/* ─── HERO SECTION ─── */}
       <div
         ref={heroRef}
-        className="relative overflow-hidden bg-gradient-to-br from-purple/15 via-primary/8 to-bg-base pt-8 pb-20"
+        className="relative overflow-hidden bg-gradient-to-br from-purple/15 via-primary/8 to-bg-base pt-8 pb-20 mesh-bg"
       >
         {/* Animated background blobs */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">

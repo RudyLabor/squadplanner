@@ -32,12 +32,20 @@ const activityConfig: Record<
   },
 }
 
+const dotColorMap: Record<ActivityType, string> = {
+  session_rsvp: 'bg-success',
+  session_created: 'bg-primary',
+  squad_joined: 'bg-info',
+}
+
 const ActivityRow = memo(function ActivityRow({
   item,
   index,
+  isLast,
 }: {
   item: ActivityItem
   index: number
+  isLast: boolean
 }) {
   const config = activityConfig[item.type]
   const Icon = config.icon
@@ -51,10 +59,18 @@ const ActivityRow = memo(function ActivityRow({
         duration: 0.35,
         ease: [0.16, 1, 0.3, 1],
       }}
-      className="flex items-center gap-3 py-3"
+      className="flex items-center gap-3 py-3 relative"
     >
+      {/* Timeline dot + vertical bar */}
+      <div className="absolute left-[17px] top-0 bottom-0 flex flex-col items-center pointer-events-none" aria-hidden="true">
+        <div className="flex-1 w-px bg-border-subtle" style={{ minHeight: '12px' }} />
+        <div className={`w-2.5 h-2.5 rounded-full flex-shrink-0 ${dotColorMap[item.type]} ring-2 ring-bg-primary`} />
+        {!isLast && <div className="flex-1 w-px bg-border-subtle" />}
+        {isLast && <div className="flex-1" />}
+      </div>
+
       <div
-        className={`w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 text-sm font-semibold ${item.avatarColor}`}
+        className={`w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 text-sm font-semibold ${item.avatarColor} ml-5`}
       >
         {item.avatarInitial}
       </div>
@@ -130,9 +146,9 @@ export const HomeActivityFeed = memo(function HomeActivityFeed({
   return (
     <section aria-label="Activité récente" className="mb-6">
       <h2 className="text-base font-semibold text-text-primary mb-3">Activité récente</h2>
-      <Card className="px-4 py-1 divide-y divide-border-subtle">
+      <Card className="px-4 py-1 relative">
         {activities.map((item, index) => (
-          <ActivityRow key={item.id} item={item} index={index} />
+          <ActivityRow key={item.id} item={item} index={index} isLast={index === activities.length - 1} />
         ))}
       </Card>
     </section>

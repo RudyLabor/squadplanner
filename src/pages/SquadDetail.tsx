@@ -188,6 +188,8 @@ export default function SquadDetail() {
                 <PartySection squadId={id || ''} />
               </div>
 
+              <hr className="section-divider my-6" />
+
               <SquadSessionsList
                 sessions={sessions || []}
                 squadId={id || ''}
@@ -196,6 +198,8 @@ export default function SquadDetail() {
                 onCreateSession={handleCreateSession}
                 sessionsLoading={sessionsLoading}
               />
+
+              <hr className="section-divider my-6" />
 
               <SquadMembers
                 members={currentSquad.members || []}

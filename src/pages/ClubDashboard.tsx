@@ -296,7 +296,7 @@ export function ClubDashboard() {
       <m.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        className="max-w-6xl mx-auto px-4 md:px-6 lg:px-8 py-6 pb-24"
+        className="max-w-6xl mx-auto px-4 md:px-6 lg:px-8 py-6 pb-24 mesh-bg"
       >
         <MobilePageHeader title="Dashboard Club" />
 
@@ -458,6 +458,8 @@ export function ClubDashboard() {
             </CardContent>
           </Card>
         </m.div>
+
+        <hr className="section-divider my-8" />
 
         {/* Main Content Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">

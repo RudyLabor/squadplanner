@@ -195,12 +195,16 @@ export function Profile() {
           {/* Reliability score + Stats grid */}
           <ProfileStats profile={profile} profileReady={profileReady} />
 
+          <hr className="section-divider my-6" />
+
           {/* Challenges Section - moved up for visibility */}
           {challenges.length > 0 && (
             <section className="mb-5" aria-label="Défis">
               <Challenges challenges={challenges} onClaimXP={handleClaimXP} />
             </section>
           )}
+
+          <hr className="section-divider my-6" />
 
           {/* Activity, AI Coach, Call History, Premium sections */}
           <ProfileHistory
@@ -209,6 +213,8 @@ export function Profile() {
             canAccessFeature={canAccessFeature as any}
             aiCoachTip={aiCoachTip}
           />
+
+          <hr className="section-divider my-6" />
 
           {/* Badges: Seasonal + Achievements */}
           <ProfileBadges

@@ -55,7 +55,7 @@ export function Discover() {
       <m.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        className="max-w-2xl lg:max-w-4xl xl:max-w-5xl mx-auto px-4 md:px-6 lg:px-8 py-6 pb-24 page-enter"
+        className="max-w-2xl lg:max-w-4xl xl:max-w-5xl mx-auto px-4 md:px-6 lg:px-8 py-6 pb-24 page-enter mesh-bg"
       >
         <MobilePageHeader title="Découvrir" />
         {/* Header - hidden on mobile where MobilePageHeader is shown */}

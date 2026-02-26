@@ -26,8 +26,8 @@ export default [
   route('blog', './routes/blog._index.tsx'),
   route('blog/:slug', './routes/blog.$slug.tsx'),
 
-  // Dynamic sitemap
-  route('sitemap.xml', './routes/sitemap[.]xml.tsx'),
+  // sitemap.xml is generated as a static file by scripts/generate-sitemap.mjs
+  // and served directly from public/ by Vercel (no React Router route needed)
 
   // Embeddable widget (public, iframe-friendly)
   route('widget/:squadId', './routes/widget.$squadId.tsx'),

@@ -159,7 +159,7 @@ export default function Auth() {
   }
 
   return (
-    <div className="h-[100dvh] bg-bg-base flex flex-col overflow-y-auto overflow-x-hidden scrollbar-hide-mobile">
+    <div className="h-[100dvh] bg-bg-base mesh-bg flex flex-col overflow-y-auto overflow-x-hidden scrollbar-hide-mobile">
       {showConfetti && typeof window !== 'undefined' && (
         <Confetti
           width={window.innerWidth}

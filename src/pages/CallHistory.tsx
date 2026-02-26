@@ -82,7 +82,7 @@ export function CallHistory() {
   const hasMore = totalCalls > 10
 
   return (
-    <main className="min-h-0 bg-bg-base pb-6" aria-label="Historique d'appels">
+    <main className="min-h-0 bg-bg-base mesh-bg pb-6" aria-label="Historique d'appels">
       <MobilePageHeader title="Appels" />
       <CallToast message={toastMessage} isVisible={showToast} onClose={() => setShowToast(false)} />
 

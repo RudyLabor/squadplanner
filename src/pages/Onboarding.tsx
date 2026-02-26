@@ -305,7 +305,7 @@ export function Onboarding() {
 
   return (
     <main
-      className="h-[100dvh] bg-bg-base flex items-center justify-center p-4 overflow-y-auto overflow-x-hidden scrollbar-hide-mobile"
+      className="h-[100dvh] bg-bg-base mesh-bg flex items-center justify-center p-4 overflow-y-auto overflow-x-hidden scrollbar-hide-mobile"
       aria-label="Onboarding"
     >
       {showMiniConfetti && (

@@ -16,7 +16,7 @@ export function Legal() {
   const [activeTab, setActiveTab] = useStatePersistence<LegalTab>('legal_tab', initialTab)
 
   return (
-    <div className="min-h-[100dvh] bg-bg-base">
+    <div className="min-h-[100dvh] bg-bg-base mesh-bg">
       <ScrollProgress />
       <header className="sticky top-0 z-10 bg-bg-base/90 backdrop-blur-xl border-b border-border-subtle">
         <div className="max-w-3xl mx-auto px-4 md:px-6 py-4 flex items-center gap-4">

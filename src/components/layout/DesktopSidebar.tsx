@@ -85,7 +85,7 @@ export const NavLink = memo(function NavLink({
           <m.div
             layoutId="nav-active-pill"
             className="absolute inset-0 rounded-xl bg-primary-10"
-            style={{ boxShadow: '0 0 20px rgba(139, 92, 246, 0.08)' }}
+            style={{ boxShadow: '0 0 24px rgba(139, 92, 246, 0.14)' }}
             transition={{ type: 'spring', stiffness: 350, damping: 30 }}
           />
         )}
@@ -159,7 +159,7 @@ export const DesktopSidebar = memo(function DesktopSidebar({
   return (
     <m.aside
       aria-label="Navigation principale"
-      className="desktop-only flex-col border-r border-surface-card fixed h-full z-40 overflow-hidden"
+      className="desktop-only flex-col border-r border-border-subtle fixed h-full z-40 overflow-hidden"
       style={{ background: 'linear-gradient(to bottom, var(--color-bg-primary), var(--color-bg-secondary))' }}
       initial={false}
       animate={{ width: isExpanded ? 256 : 140 }}

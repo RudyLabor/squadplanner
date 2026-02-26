@@ -228,7 +228,7 @@ export default function SessionDetail() {
   const isCreator = currentSession.created_by === user?.id
 
   return (
-    <main className="min-h-0 bg-bg-base pb-6" aria-label="Détail de session">
+    <main className="min-h-0 bg-bg-base mesh-bg pb-6" aria-label="Détail de session">
       {showConfetti && typeof window !== 'undefined' && (
         <Confetti
           width={window.innerWidth}

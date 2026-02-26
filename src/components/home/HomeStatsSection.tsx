@@ -53,18 +53,18 @@ function StatsRow({ squadsCount, sessionsThisWeek }: StatsRowProps) {
             transition={{ delay: index * 0.1, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
             whileHover={{
               scale: 1.02,
-              boxShadow: `0 0 20px ${stat.color}25`,
+              boxShadow: `0 0 24px ${stat.color}30`,
             }}
             whileTap={{ scale: 0.98 }}
             className="h-auto min-h-[60px] sm:min-h-[68px] px-2 sm:px-4 py-2.5 flex flex-col gap-1.5 rounded-xl sm:rounded-2xl border border-border-hover shadow-sm hover:bg-surface-card-hover cursor-pointer transition-interactive"
             style={{
-              background: `linear-gradient(to bottom right, ${stat.color}12, transparent)`,
+              background: `linear-gradient(to bottom right, ${stat.color}18, transparent)`,
             }}
           >
             <div className="flex items-center gap-2 sm:gap-3">
               <div
                 className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl flex items-center justify-center flex-shrink-0"
-                style={{ backgroundColor: `${stat.color}15` }}
+                style={{ backgroundColor: `${stat.color}20` }}
               >
                 <stat.icon className="w-4 h-4 sm:w-5 sm:h-5" style={{ color: stat.color }} />
               </div>

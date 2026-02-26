@@ -108,7 +108,7 @@ export function DiscordCallback() {
   }, [searchParams, navigate])
 
   return (
-    <main className="flex items-center justify-center min-h-screen bg-bg-base">
+    <main className="flex items-center justify-center min-h-screen bg-bg-base mesh-bg">
       <div className="text-center space-y-4">
         {error ? (
           <>

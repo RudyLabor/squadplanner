@@ -5,7 +5,7 @@ import { Button } from '../components/ui'
 
 export function NotFound() {
   return (
-    <main className="min-h-0 bg-bg-base pb-6" aria-label="Page introuvable">
+    <main className="min-h-0 bg-bg-base mesh-bg pb-6" aria-label="Page introuvable">
       <div className="px-4 md:px-6 lg:px-8 py-6 max-w-2xl lg:max-w-4xl xl:max-w-6xl mx-auto flex items-center justify-center min-h-[60vh]">
         <div className="text-center max-w-md">
           {/* Animated 404 icon — visible by default, animation is progressive enhancement */}

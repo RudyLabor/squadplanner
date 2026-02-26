@@ -322,7 +322,7 @@ export default function Home({ loaderData }: HomeProps) {
       : null
 
   return (
-    <main className="min-h-0 bg-bg-base pb-6 page-enter" aria-label="Accueil">
+    <main className="min-h-0 bg-bg-base mesh-bg pb-6 page-enter" aria-label="Accueil">
       {showConfetti && typeof window !== 'undefined' && (
         <Confetti
           width={window.innerWidth}

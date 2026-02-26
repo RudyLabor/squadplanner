@@ -140,7 +140,7 @@ export function Premium() {
   }
 
   return (
-    <main className="min-h-0 bg-bg-base pb-6" aria-label="Premium">
+    <main className="min-h-0 bg-bg-base mesh-bg pb-6" aria-label="Premium">
       <PremiumHero
         hasPremium={hasPremium}
         isLoading={isLoading}

@@ -265,7 +265,7 @@ export function ClubDashboard() {
     { value: 'warning', label: 'Jaune', bgClass: 'bg-warning' },
     { value: 'error', label: 'Rouge', bgClass: 'bg-error' },
     { value: 'info', label: 'Cyan', bgClass: 'bg-info' },
-    { value: 'purple', label: 'Violet', bgClass: 'bg-purple-500' },
+    { value: 'purple', label: 'Violet', bgClass: 'bg-purple' },
   ]
 
   // Filter squads based on search

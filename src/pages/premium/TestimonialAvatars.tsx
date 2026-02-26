@@ -12,7 +12,7 @@ export function TestimonialAvatar({ type }: { type: 'alex' | 'marie' | 'lucas' }
       >
         <defs>
           <linearGradient id="alexBg" x1="0" y1="0" x2="48" y2="48" gradientUnits="userSpaceOnUse">
-            <stop stopColor="#6366f1" />
+            <stop stopColor="#8B5CF6" />
             <stop offset="1" stopColor="#a855f7" />
           </linearGradient>
           <linearGradient
@@ -30,7 +30,7 @@ export function TestimonialAvatar({ type }: { type: 'alex' | 'marie' | 'lucas' }
         <circle cx="24" cy="24" r="24" fill="url(#alexBg)" />
         <rect x="19" y="30" width="10" height="6" rx="2" fill="url(#alexSkin)" />
         <path d="M10 48 C10 39 16 35 24 35 C32 35 38 39 38 48" fill="#4F46E5" />
-        <path d="M18 35 L24 38 L30 35" stroke="#6366f1" strokeWidth="1" fill="none" opacity="0.6" />
+        <path d="M18 35 L24 38 L30 35" stroke="#8B5CF6" strokeWidth="1" fill="none" opacity="0.6" />
         <ellipse cx="24" cy="22" rx="10" ry="11" fill="url(#alexSkin)" />
         <path
           d="M14 19 C14 12 18 8 24 8 C30 8 34 12 34 19 C34 16 31 11 24 11 C17 11 14 16 14 19Z"

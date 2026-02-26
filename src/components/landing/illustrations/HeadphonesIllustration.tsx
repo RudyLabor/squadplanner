@@ -56,7 +56,7 @@ export function HeadphonesIllustration({ size = 64, className = '' }: Props) {
         {/* Sound waves from left */}
         <m.path
           d="M6 38C4 36 4 44 6 42"
-          stroke="var(--color-primary, #6366f1)"
+          stroke="var(--color-primary, #8B5CF6)"
           strokeWidth="1.5"
           strokeLinecap="round"
           initial={{ pathLength: 0, opacity: 0 }}
@@ -70,7 +70,7 @@ export function HeadphonesIllustration({ size = 64, className = '' }: Props) {
         {/* Sound waves from right */}
         <m.path
           d="M58 38C60 36 60 44 58 42"
-          stroke="var(--color-primary, #6366f1)"
+          stroke="var(--color-primary, #8B5CF6)"
           strokeWidth="1.5"
           strokeLinecap="round"
           initial={{ pathLength: 0, opacity: 0 }}

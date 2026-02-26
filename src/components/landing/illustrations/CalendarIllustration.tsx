@@ -97,9 +97,9 @@ export function CalendarIllustration({ size = 64, className = '' }: Props) {
           width="12"
           height="10"
           rx="3"
-          fill="var(--color-primary, #6366f1)"
+          fill="var(--color-primary, #8B5CF6)"
           fillOpacity="0.2"
-          stroke="var(--color-primary, #6366f1)"
+          stroke="var(--color-primary, #8B5CF6)"
           strokeWidth="1.5"
           initial={{ scale: 0, opacity: 0 }}
           whileInView={{ scale: 1, opacity: 1 }}

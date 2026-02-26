@@ -166,7 +166,7 @@ function ButtonInner<C extends ElementType = 'button'>(
           ? undefined
           : {
               y: -1,
-              boxShadow: variant === 'gradient' ? '0 6px 28px rgba(99, 102, 241, 0.4)' : undefined,
+              boxShadow: variant === 'gradient' ? '0 6px 28px rgba(139, 92, 246, 0.4)' : undefined,
             }
       }
       whileTap={props.disabled ? undefined : { scale: 0.96 }}

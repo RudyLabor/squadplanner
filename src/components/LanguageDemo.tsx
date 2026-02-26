@@ -27,7 +27,7 @@ export function LanguageDemo() {
         right: '20px',
         padding: '20px',
         background: 'white',
-        border: '2px solid #3b82f6',
+        border: '2px solid #8B5CF6',
         borderRadius: '12px',
         boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
         maxWidth: '300px',
@@ -43,7 +43,7 @@ export function LanguageDemo() {
           style={{
             padding: '8px 16px',
             marginRight: '8px',
-            background: locale === 'fr' ? '#3b82f6' : '#e5e7eb',
+            background: locale === 'fr' ? '#8B5CF6' : '#e5e7eb',
             color: locale === 'fr' ? 'white' : 'black',
             border: 'none',
             borderRadius: '6px',
@@ -57,7 +57,7 @@ export function LanguageDemo() {
           onClick={() => setLocale('en')}
           style={{
             padding: '8px 16px',
-            background: locale === 'en' ? '#3b82f6' : '#e5e7eb',
+            background: locale === 'en' ? '#8B5CF6' : '#e5e7eb',
             color: locale === 'en' ? 'white' : 'black',
             border: 'none',
             borderRadius: '6px',

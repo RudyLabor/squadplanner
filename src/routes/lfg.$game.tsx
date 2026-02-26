@@ -19,19 +19,19 @@ import {
 // ── Color mapping ──────────────────────────────────
 const GAME_COLORS: Record<string, string> = {
   red: '#ef4444',
-  blue: '#3b82f6',
+  blue: '#818CF8',
   purple: '#a855f7',
   cyan: '#06b6d4',
   amber: '#f59e0b',
   emerald: '#10b981',
   green: '#22c55e',
   orange: '#f97316',
-  indigo: '#6366f1',
+  indigo: '#8B5CF6',
   lime: '#84cc16',
 }
 
 function getGameColor(color: string): string {
-  return GAME_COLORS[color] || '#6366f1'
+  return GAME_COLORS[color] || '#8B5CF6'
 }
 
 // ── SEO ────────────────────────────────────────────

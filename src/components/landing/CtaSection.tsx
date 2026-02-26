@@ -11,7 +11,7 @@ export function CtaSection() {
           initial={{ opacity: 0, scale: 0.95 }}
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
-          className="relative p-8 md:p-12 rounded-3xl bg-gradient-to-b from-primary/10 to-cyan-500/[0.04] border border-primary/15 text-center overflow-hidden"
+          className="relative p-8 md:p-12 rounded-3xl bg-gradient-to-b from-primary/10 to-secondary/[0.04] border border-primary/15 text-center overflow-hidden"
         >
           <m.div
             className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,var(--color-primary-10)_0%,transparent_60%)]"

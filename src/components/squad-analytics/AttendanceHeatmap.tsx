@@ -16,10 +16,10 @@ const getHeatmapColor = (value: number, maxValue: number): string => {
   const ratio = value / maxValue
 
   if (ratio === 0) return 'bg-surface-card'
-  if (ratio < 0.25) return 'bg-blue-900'
-  if (ratio < 0.5) return 'bg-blue-700'
-  if (ratio < 0.75) return 'bg-blue-500'
-  return 'bg-blue-400'
+  if (ratio < 0.25) return 'bg-primary/20'
+  if (ratio < 0.5) return 'bg-primary/40'
+  if (ratio < 0.75) return 'bg-primary/60'
+  return 'bg-primary/80'
 }
 
 export default function AttendanceHeatmap({ squadId }: { squadId: string }) {
@@ -186,15 +186,15 @@ export default function AttendanceHeatmap({ squadId }: { squadId: string }) {
             <span className="text-xs text-text-tertiary">0</span>
           </div>
           <div className="flex items-center gap-1">
-            <div className="w-4 h-4 rounded bg-blue-900" />
+            <div className="w-4 h-4 rounded bg-primary/20" />
             <span className="text-xs text-text-tertiary">Faible</span>
           </div>
           <div className="flex items-center gap-1">
-            <div className="w-4 h-4 rounded bg-blue-500" />
+            <div className="w-4 h-4 rounded bg-primary/60" />
             <span className="text-xs text-text-tertiary">Moyen</span>
           </div>
           <div className="flex items-center gap-1">
-            <div className="w-4 h-4 rounded bg-blue-400" />
+            <div className="w-4 h-4 rounded bg-primary/80" />
             <span className="text-xs text-text-tertiary">Haut</span>
           </div>
         </div>

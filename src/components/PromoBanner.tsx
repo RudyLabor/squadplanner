@@ -59,7 +59,7 @@ export function PromoBanner({
   endDate,
   ctaLink = '/premium',
   ctaText = 'En profiter',
-  gradientClasses = 'bg-gradient-to-r from-purple-600 via-primary to-cyan-500',
+  gradientClasses = 'bg-gradient-to-r from-purple via-primary to-secondary',
 }: PromoBannerProps) {
   const storageKey = `sp_promo_dismissed_${promoId}`
   const [dismissed, setDismissed] = useState(() => {

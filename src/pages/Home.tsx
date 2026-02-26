@@ -330,7 +330,7 @@ export default function Home({ loaderData }: HomeProps) {
           recycle={false}
           numberOfPieces={150}
           gravity={0.3}
-          colors={['#34d399', '#6366f1', '#fbbf24', '#a78bfa', '#f7f8f8']}
+          colors={['#34d399', '#8B5CF6', '#fbbf24', '#a78bfa', '#f7f8f8']}
           style={{ position: 'fixed', top: 0, left: 0, zIndex: 100, pointerEvents: 'none' }}
         />
       )}

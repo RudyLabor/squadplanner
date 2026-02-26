@@ -48,10 +48,24 @@ async function fetchSquads(userId: string): Promise<SquadWithMembers[]> {
   const squadsData = memberships.map((m) => m.squads as unknown as Squad)
   const uniqueSquads = squadIds.map((id) => squadsData.find((s) => s.id === id)!).filter(Boolean)
 
+  // Fetch actual member counts per squad (total_members column may be stale/null)
+  const memberCountMap = new Map<string, number>()
+  if (squadIds.length > 0) {
+    const { data: allMembers } = await supabase
+      .from('squad_members')
+      .select('squad_id')
+      .in('squad_id', squadIds)
+    if (allMembers) {
+      for (const m of allMembers) {
+        memberCountMap.set(m.squad_id, (memberCountMap.get(m.squad_id) || 0) + 1)
+      }
+    }
+  }
+
   return uniqueSquads
     .map((squad) => ({
       ...squad,
-      member_count: (squad as any).total_members ?? 1,
+      member_count: memberCountMap.get(squad.id) ?? (squad as unknown as { total_members?: number }).total_members ?? 0,
     }))
     .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
 }

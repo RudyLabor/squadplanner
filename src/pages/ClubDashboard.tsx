@@ -81,7 +81,7 @@ export function ClubDashboard() {
           .from('squad_members')
           .select('squad_id, squads(*)')
           .eq('user_id', userId)
-          .eq('role', 'owner')
+          .eq('role', 'leader')
 
         if (squadsError) throw squadsError
 

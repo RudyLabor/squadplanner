@@ -41,7 +41,7 @@ export function Card({
     outlined: 'bg-surface-card border-2 border-border-default',
     ghost: 'bg-transparent border-none',
     gradient: 'card-gradient-border',
-    glass: 'surface-glass backdrop-blur-[24px] backdrop-saturate-[1.2] rounded-2xl',
+    glass: 'surface-glass rounded-2xl',
   }
 
   const hoverClasses =
@@ -71,6 +71,8 @@ export function Card({
         ${className}
       `}
       style={{
+        backdropFilter: variant === 'glass' ? 'blur(24px) saturate(1.2)' : undefined,
+        WebkitBackdropFilter: variant === 'glass' ? 'blur(24px) saturate(1.2)' : undefined,
         borderColor: selected ? 'var(--color-primary)' : undefined,
         boxShadow: selected
           ? `0 0 0 1px ${colorMix('var(--color-primary)', 20, 'var(--color-primary-20)')}`

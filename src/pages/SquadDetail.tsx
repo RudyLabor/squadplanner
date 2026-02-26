@@ -164,7 +164,7 @@ export default function SquadDetail() {
           recycle={false}
           numberOfPieces={150}
           gravity={0.3}
-          colors={['#6366f1', '#34d399', '#fbbf24', '#f7f8f8', '#a78bfa']}
+          colors={['#8B5CF6', '#34d399', '#fbbf24', '#f7f8f8', '#a78bfa']}
         />
       )}
 

@@ -32,9 +32,9 @@ export function ShieldIllustration({ size = 64, className = '' }: Props) {
         {/* Inner glow shield */}
         <m.path
           d="M32 14L18 22V32C18 41 24 48 32 51C40 48 46 41 46 32V22L32 14Z"
-          fill="var(--color-primary, #6366f1)"
+          fill="var(--color-primary, #8B5CF6)"
           fillOpacity="0.1"
-          stroke="var(--color-primary, #6366f1)"
+          stroke="var(--color-primary, #8B5CF6)"
           strokeWidth="1"
           strokeOpacity="0.3"
           initial={{ scale: 0.8, opacity: 0 }}

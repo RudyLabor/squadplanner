@@ -144,7 +144,7 @@ export const useMessagesStore = create<MessagesState>((set, get) => ({
         .limit(1)
       const { count: unreadCount } = await supabase
         .from('messages')
-        .select('*', { count: 'exact', head: true })
+        .select('id', { count: 'exact', head: true })
         .eq('squad_id', squad.id)
         .is('session_id', null)
         .not('read_by', 'cs', `{${user.id}}`)

@@ -1,5 +1,5 @@
 import { lazy, Suspense } from 'react'
-import { redirect, data } from 'react-router'
+import { data } from 'react-router'
 import type { LoaderFunctionArgs, ClientLoaderFunctionArgs } from 'react-router'
 import { createMinimalSSRClient } from '../lib/supabase-minimal-ssr'
 import { ClientRouteWrapper } from '../components/ClientRouteWrapper'
@@ -22,17 +22,15 @@ export function meta() {
 }
 
 export async function loader({ request }: LoaderFunctionArgs) {
-  const { supabase, headers, getUser } = createMinimalSSRClient(request)
+  const { headers, getUser } = createMinimalSSRClient(request)
   const {
     data: { user },
-    error,
   } = await getUser()
 
-  if (error || !user) {
-    throw redirect('/auth', { headers })
-  }
-
-  return data({ userId: user.id }, { headers })
+  // Don't redirect in SSR — clientLoader.hydrate=true handles auth on the client.
+  // SSR with localStorage-based auth can't authenticate, so redirecting here
+  // would cause a loop: /club → /auth → /home (because user IS authenticated client-side).
+  return data({ userId: user?.id ?? null }, { headers })
 }
 
 export async function clientLoader({ serverLoader }: ClientLoaderFunctionArgs) {

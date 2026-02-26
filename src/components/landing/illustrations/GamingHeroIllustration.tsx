@@ -31,12 +31,12 @@ export function GamingHeroIllustration({ size = 300, className = '' }: Props) {
         <defs>
           {/* Gradient for the central glow */}
           <radialGradient id="heroGlow" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stopColor="var(--color-primary, #6366f1)" stopOpacity="0.15" />
-            <stop offset="100%" stopColor="var(--color-primary, #6366f1)" stopOpacity="0" />
+            <stop offset="0%" stopColor="var(--color-primary, #8B5CF6)" stopOpacity="0.15" />
+            <stop offset="100%" stopColor="var(--color-primary, #8B5CF6)" stopOpacity="0" />
           </radialGradient>
           {/* Gradient for connecting lines */}
           <linearGradient id="lineGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="var(--color-primary, #6366f1)" stopOpacity="0.4" />
+            <stop offset="0%" stopColor="var(--color-primary, #8B5CF6)" stopOpacity="0.4" />
             <stop offset="100%" stopColor="var(--color-purple, #a855f7)" stopOpacity="0.4" />
           </linearGradient>
         </defs>
@@ -58,7 +58,7 @@ export function GamingHeroIllustration({ size = 300, className = '' }: Props) {
           cx="150"
           cy="150"
           r="95"
-          stroke="var(--color-primary, #6366f1)"
+          stroke="var(--color-primary, #8B5CF6)"
           strokeWidth="1"
           strokeOpacity="0.15"
           strokeDasharray="6 8"
@@ -103,7 +103,7 @@ export function GamingHeroIllustration({ size = 300, className = '' }: Props) {
               cx="107"
               cy="95"
               r="32"
-              fill="var(--color-primary, #6366f1)"
+              fill="var(--color-primary, #8B5CF6)"
               fillOpacity="0.08"
             />
             {/* Avatar circle */}
@@ -111,17 +111,17 @@ export function GamingHeroIllustration({ size = 300, className = '' }: Props) {
               cx="107"
               cy="95"
               r="26"
-              fill="var(--color-primary, #6366f1)"
+              fill="var(--color-primary, #8B5CF6)"
               fillOpacity="0.15"
-              stroke="var(--color-primary, #6366f1)"
+              stroke="var(--color-primary, #8B5CF6)"
               strokeWidth="2"
             />
             {/* Head */}
-            <circle cx="107" cy="88" r="8" fill="var(--color-primary, #6366f1)" fillOpacity="0.6" />
+            <circle cx="107" cy="88" r="8" fill="var(--color-primary, #8B5CF6)" fillOpacity="0.6" />
             {/* Body */}
             <path
               d="M95 108 C95 100, 107 96, 107 96 C107 96, 119 100, 119 108"
-              fill="var(--color-primary, #6366f1)"
+              fill="var(--color-primary, #8B5CF6)"
               fillOpacity="0.4"
             />
             {/* Crown (leader icon) */}
@@ -291,15 +291,15 @@ export function GamingHeroIllustration({ size = 300, className = '' }: Props) {
               cx="150"
               cy="148"
               r="22"
-              fill="var(--color-primary, #6366f1)"
+              fill="var(--color-primary, #8B5CF6)"
               fillOpacity="0.12"
             />
             {/* Controller body */}
             <path
               d="M135 144 C135 140, 138 138, 142 138 L158 138 C162 138, 165 140, 165 144 L167 152 C167 156, 164 158, 161 156 L158 154 L142 154 L139 156 C136 158, 133 156, 133 152 Z"
-              fill="var(--color-primary, #6366f1)"
+              fill="var(--color-primary, #8B5CF6)"
               fillOpacity="0.35"
-              stroke="var(--color-primary, #6366f1)"
+              stroke="var(--color-primary, #8B5CF6)"
               strokeWidth="1.5"
             />
             {/* D-pad left */}
@@ -309,7 +309,7 @@ export function GamingHeroIllustration({ size = 300, className = '' }: Props) {
               width="7"
               height="3"
               rx="1"
-              fill="var(--color-primary, #6366f1)"
+              fill="var(--color-primary, #8B5CF6)"
               fillOpacity="0.7"
             />
             <rect
@@ -318,7 +318,7 @@ export function GamingHeroIllustration({ size = 300, className = '' }: Props) {
               width="3"
               height="7"
               rx="1"
-              fill="var(--color-primary, #6366f1)"
+              fill="var(--color-primary, #8B5CF6)"
               fillOpacity="0.7"
             />
             {/* Buttons right */}
@@ -335,18 +335,18 @@ export function GamingHeroIllustration({ size = 300, className = '' }: Props) {
               cx="144"
               cy="150"
               r="2.5"
-              fill="var(--color-primary, #6366f1)"
+              fill="var(--color-primary, #8B5CF6)"
               fillOpacity="0.5"
-              stroke="var(--color-primary, #6366f1)"
+              stroke="var(--color-primary, #8B5CF6)"
               strokeWidth="0.5"
             />
             <circle
               cx="156"
               cy="150"
               r="2.5"
-              fill="var(--color-primary, #6366f1)"
+              fill="var(--color-primary, #8B5CF6)"
               fillOpacity="0.5"
-              stroke="var(--color-primary, #6366f1)"
+              stroke="var(--color-primary, #8B5CF6)"
               strokeWidth="0.5"
             />
           </m.g>
@@ -366,9 +366,9 @@ export function GamingHeroIllustration({ size = 300, className = '' }: Props) {
               width="32"
               height="26"
               rx="6"
-              fill="var(--color-primary, #6366f1)"
+              fill="var(--color-primary, #8B5CF6)"
               fillOpacity="0.1"
-              stroke="var(--color-primary, #6366f1)"
+              stroke="var(--color-primary, #8B5CF6)"
               strokeWidth="1"
             />
             <line
@@ -376,7 +376,7 @@ export function GamingHeroIllustration({ size = 300, className = '' }: Props) {
               y1="48"
               x2="166"
               y2="48"
-              stroke="var(--color-primary, #6366f1)"
+              stroke="var(--color-primary, #8B5CF6)"
               strokeWidth="1"
               strokeOpacity="0.3"
             />
@@ -386,7 +386,7 @@ export function GamingHeroIllustration({ size = 300, className = '' }: Props) {
               y1="54"
               x2="150"
               y2="49"
-              stroke="var(--color-primary, #6366f1)"
+              stroke="var(--color-primary, #8B5CF6)"
               strokeWidth="1.5"
               strokeLinecap="round"
             />
@@ -395,16 +395,16 @@ export function GamingHeroIllustration({ size = 300, className = '' }: Props) {
               y1="54"
               x2="155"
               y2="56"
-              stroke="var(--color-primary, #6366f1)"
+              stroke="var(--color-primary, #8B5CF6)"
               strokeWidth="1.5"
               strokeLinecap="round"
             />
-            <circle cx="150" cy="54" r="1" fill="var(--color-primary, #6366f1)" />
+            <circle cx="150" cy="54" r="1" fill="var(--color-primary, #8B5CF6)" />
             {/* Mini calendar date */}
             <text
               x="142"
               y="45"
-              fill="var(--color-primary, #6366f1)"
+              fill="var(--color-primary, #8B5CF6)"
               fontSize="6"
               fontWeight="bold"
               fontFamily="system-ui"
@@ -416,12 +416,12 @@ export function GamingHeroIllustration({ size = 300, className = '' }: Props) {
 
         {/* === Small Floating Particles / Sparkles === */}
         {[
-          { cx: 60, cy: 60, color: 'var(--color-primary, #6366f1)', delay: 1.0, dur: 2.8 },
+          { cx: 60, cy: 60, color: 'var(--color-primary, #8B5CF6)', delay: 1.0, dur: 2.8 },
           { cx: 245, cy: 55, color: 'var(--color-purple, #a855f7)', delay: 1.3, dur: 3.2 },
           { cx: 255, cy: 145, color: 'var(--color-success, #34d399)', delay: 0.8, dur: 2.5 },
           { cx: 45, cy: 145, color: 'var(--color-pink, #ec4899)', delay: 1.5, dur: 3.0 },
           { cx: 150, cy: 245, color: 'var(--color-warning, #f5a623)', delay: 1.1, dur: 2.6 },
-          { cx: 70, cy: 240, color: 'var(--color-primary, #6366f1)', delay: 0.6, dur: 3.4 },
+          { cx: 70, cy: 240, color: 'var(--color-primary, #8B5CF6)', delay: 0.6, dur: 3.4 },
           { cx: 230, cy: 240, color: 'var(--color-purple, #a855f7)', delay: 1.4, dur: 2.9 },
         ].map((p, i) => (
           <m.circle
@@ -442,7 +442,7 @@ export function GamingHeroIllustration({ size = 300, className = '' }: Props) {
           cx="150"
           cy="148"
           r="36"
-          stroke="var(--color-primary, #6366f1)"
+          stroke="var(--color-primary, #8B5CF6)"
           strokeWidth="1"
           fill="none"
           initial={{ scale: 0.8, opacity: 0 }}
@@ -480,16 +480,16 @@ export function GamingHeroIllustration({ size = 300, className = '' }: Props) {
             width="64"
             height="22"
             rx="11"
-            fill="var(--color-primary, #6366f1)"
+            fill="var(--color-primary, #8B5CF6)"
             fillOpacity="0.15"
-            stroke="var(--color-primary, #6366f1)"
+            stroke="var(--color-primary, #8B5CF6)"
             strokeWidth="1"
           />
           <text
             x="150"
             y="280"
             textAnchor="middle"
-            fill="var(--color-primary, #6366f1)"
+            fill="var(--color-primary, #8B5CF6)"
             fontSize="10"
             fontWeight="700"
             fontFamily="system-ui"

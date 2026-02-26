@@ -119,21 +119,27 @@ export function ClubDashboard() {
 
               const sessionCount = sessionsData?.length || 0
 
-              // Fetch average stats
-              const { data: statsData } = await supabase
+              // Fetch average reliability from profiles of squad members
+              const { data: memberIds } = await supabase
                 .from('squad_members')
-                .select('reliability_score, attendance_rate')
+                .select('user_id')
                 .eq('squad_id', squad.id)
 
               let avgReliability = 0
               let avgAttendance = 0
 
-              if (statsData && statsData.length > 0) {
-                avgReliability =
-                  statsData.reduce((sum, m) => sum + (m.reliability_score || 0), 0) /
-                  statsData.length
-                avgAttendance =
-                  statsData.reduce((sum, m) => sum + (m.attendance_rate || 0), 0) / statsData.length
+              if (memberIds && memberIds.length > 0) {
+                const { data: profilesData } = await supabase
+                  .from('profiles')
+                  .select('reliability_score')
+                  .in('id', memberIds.map((m: { user_id: string }) => m.user_id))
+
+                if (profilesData && profilesData.length > 0) {
+                  avgReliability =
+                    profilesData.reduce((sum: number, p: { reliability_score?: number }) => sum + (p.reliability_score || 0), 0) /
+                    profilesData.length
+                  avgAttendance = avgReliability // Use reliability as proxy for attendance
+                }
               }
 
               totalReliability += avgReliability
@@ -149,7 +155,7 @@ export function ClubDashboard() {
                 avg_attendance_rate: Math.round(avgAttendance),
                 avg_reliability_score: Math.round(avgReliability),
                 created_at: squad.created_at,
-                leader_id: squad.leader_id,
+                leader_id: squad.owner_id,
               })
             }
           }
@@ -168,30 +174,43 @@ export function ClubDashboard() {
 
         // Fetch top 5 most reliable members across all squads
         if (squadIds.length > 0) {
-          const { data: membersData } = await supabase
+          // Get all member user_ids across squads
+          const { data: allMembers } = await supabase
             .from('squad_members')
-            .select(
-              `
-              user_id,
-              reliability_score,
-              profiles:user_id(username),
-              squads:squad_id(name)
-            `
-            )
+            .select('user_id, squad_id')
             .in('squad_id', squadIds)
-            .order('reliability_score', { ascending: false })
-            .limit(5)
 
-          if (membersData) {
-            const topMembersData: TopMember[] = membersData
-              .filter((m) => m.reliability_score)
-              .map((m: any) => ({
-                user_id: m.user_id,
-                username: m.profiles?.username || 'Utilisateur',
-                reliability_score: m.reliability_score,
-                squad_name: m.squads?.name || 'Squad',
-              }))
-            setTopMembers(topMembersData)
+          if (allMembers && allMembers.length > 0) {
+            const uniqueUserIds = [...new Set(allMembers.map((m: { user_id: string }) => m.user_id))]
+
+            // Fetch profiles with reliability_score
+            const { data: profilesWithScore } = await supabase
+              .from('profiles')
+              .select('id, username, reliability_score')
+              .in('id', uniqueUserIds)
+              .order('reliability_score', { ascending: false })
+              .limit(5)
+
+            if (profilesWithScore) {
+              // Build a map of user_id -> squad_name for display
+              const userSquadMap: Record<string, string> = {}
+              for (const m of allMembers) {
+                if (!userSquadMap[m.user_id]) {
+                  const squad = squadsData.find((s) => s.id === m.squad_id)
+                  userSquadMap[m.user_id] = squad?.name || 'Squad'
+                }
+              }
+
+              const topMembersData: TopMember[] = profilesWithScore
+                .filter((p: { reliability_score?: number }) => p.reliability_score && p.reliability_score > 0)
+                .map((p: { id: string; username?: string; reliability_score?: number }) => ({
+                  user_id: p.id,
+                  username: p.username || 'Utilisateur',
+                  reliability_score: p.reliability_score || 0,
+                  squad_name: userSquadMap[p.id] || 'Squad',
+                }))
+              setTopMembers(topMembersData)
+            }
           }
         }
       } catch (err) {
@@ -246,7 +265,7 @@ export function ClubDashboard() {
     { value: 'warning', label: 'Jaune', bgClass: 'bg-warning' },
     { value: 'error', label: 'Rouge', bgClass: 'bg-error' },
     { value: 'info', label: 'Cyan', bgClass: 'bg-info' },
-    { value: 'purple', label: 'Violet', bgClass: 'bg-purple-500' },
+    { value: 'purple', label: 'Violet', bgClass: 'bg-purple' },
   ]
 
   // Filter squads based on search

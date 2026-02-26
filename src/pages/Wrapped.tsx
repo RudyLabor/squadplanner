@@ -44,82 +44,62 @@ export function Wrapped() {
         // Fetch profile
         const { data: profile, error: profileError } = await supabase
           .from('profiles')
-          .select('username, reliability_score, current_streak, best_streak')
+          .select('username, reliability_score, streak_days')
           .eq('id', user.id)
           .single()
 
         if (profileError) throw profileError
 
-        // Fetch user's sessions
-        const { data: userSessions, error: sessionsError } = await supabase
-          .from('sessions')
-          .select('*')
-          .eq('created_by', user.id)
-
-        if (sessionsError) throw sessionsError
-
-        // Fetch RSVPs with session data
-        const { data: rsvps, error: rsvpsError } = await supabase
+        // Fetch RSVPs to find sessions user attended
+        const { data: rsvps } = await supabase
           .from('session_rsvps')
-          .select('*, sessions(*)')
+          .select('session_id')
           .eq('user_id', user.id)
 
-        if (rsvpsError) throw rsvpsError
+        // Get unique session IDs
+        const sessionIds = [...new Set((rsvps || []).map((r: { session_id: string }) => r.session_id))]
 
-        // Calculate statistics
+        // Fetch session details for attended sessions
         let totalHours = 0
-        let sessionCount = 0
-        const attendedSessions = new Set<string>()
+        let sessionCount = sessionIds.length
+        const squadSessionCounts: { [key: string]: number } = {}
 
-        // Count sessions created
-        sessionCount = userSessions?.length || 0
+        if (sessionIds.length > 0) {
+          const { data: sessions } = await supabase
+            .from('sessions')
+            .select('id, duration_minutes, squad_id')
+            .in('id', sessionIds)
 
-        // Count hours from attended sessions
-        if (rsvps && Array.isArray(rsvps)) {
-          rsvps.forEach((rsvp: any) => {
-            if (rsvp.sessions) {
-              attendedSessions.add(rsvp.sessions.id)
-              const durationMinutes = rsvp.sessions.duration_minutes || 120
-              totalHours += durationMinutes / 60
-            }
-          })
+          if (sessions) {
+            sessions.forEach((s: { id: string; duration_minutes?: number; squad_id?: string }) => {
+              totalHours += (s.duration_minutes || 120) / 60
+              if (s.squad_id) {
+                squadSessionCounts[s.squad_id] = (squadSessionCounts[s.squad_id] || 0) + 1
+              }
+            })
+            sessionCount = sessions.length
+          }
         }
 
         // Use real profile data for streak and reliability
-        const bestStreak = profile?.best_streak || profile?.current_streak || 0
-
-        // Use real reliability score from profile
+        const bestStreak = profile?.streak_days || 0
         const reliabilityScore =
           profile?.reliability_score != null ? Math.round(profile.reliability_score) : 0
 
-        // Find favorite squad (most attended sessions)
+        // Find favorite squad
         let favoriteSquad: WrappedStats['favoriteSquad'] = null
-        if (rsvps && Array.isArray(rsvps)) {
-          const squadCounts: { [key: string]: { name: string; count: number } } = {}
+        const topSquadId = Object.entries(squadSessionCounts).sort((a, b) => b[1] - a[1])[0]
 
-          rsvps.forEach((rsvp: any) => {
-            if (rsvp.sessions?.squad_id) {
-              const squadId = rsvp.sessions.squad_id
-              if (!squadCounts[squadId]) {
-                squadCounts[squadId] = {
-                  name: rsvp.sessions.squad?.name || 'Squad',
-                  count: 0,
-                }
-              }
-              squadCounts[squadId].count++
-            }
-          })
+        if (topSquadId) {
+          const { data: squadData } = await supabase
+            .from('squads')
+            .select('name')
+            .eq('id', topSquadId[0])
+            .single()
 
-          const topSquad = Object.values(squadCounts).reduce(
-            (max, squad) => (squad.count > max.count ? squad : max),
-            { name: '', count: 0 }
-          )
-
-          if (topSquad.count > 0) {
-            favoriteSquad = {
-              name: topSquad.name,
-              sessionsPlayed: topSquad.count,
-            }
+          favoriteSquad = {
+            name: squadData?.name || 'Squad',
+            sessionsPlayed: topSquadId[1],
           }
         }
 
@@ -132,7 +112,7 @@ export function Wrapped() {
           userName: profile?.username || 'Gamer',
         })
       } catch (err) {
-        console.error('Error fetching wrapped data:', err)
+        if (!import.meta.env.PROD) console.error('Error fetching wrapped data:', err)
         setError('Erreur lors du chargement de vos données')
       } finally {
         setIsLoading(false)
@@ -168,7 +148,7 @@ export function Wrapped() {
           url: 'https://squadplanner.fr/wrapped',
         })
       } catch (err) {
-        console.error('Share failed:', err)
+        if (!import.meta.env.PROD) console.error('Share failed:', err)
       }
     } else {
       // Fallback: copy to clipboard
@@ -176,7 +156,7 @@ export function Wrapped() {
         await navigator.clipboard.writeText(shareText)
         alert('Texte copié dans le presse-papiers!')
       } catch (err) {
-        console.error('Copy failed:', err)
+        if (!import.meta.env.PROD) console.error('Copy failed:', err)
       }
     }
   }
@@ -189,7 +169,7 @@ export function Wrapped() {
           <m.div
             animate={{ rotate: 360 }}
             transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
-            className="w-12 h-12 border-4 border-purple-600 border-t-orange-500 rounded-full"
+            className="w-12 h-12 border-4 border-purple border-t-orange-500 rounded-full"
           />
         </div>
       </div>
@@ -221,7 +201,7 @@ export function Wrapped() {
   const slides = [
     // Slide 0: Intro
     {
-      bg: 'from-purple-900 via-purple-800 to-purple-900',
+      bg: 'from-[#1a0a33] via-[#2d1054] to-[#1a0a33]',
       content: (
         <div className="flex flex-col items-center justify-center text-center">
           <m.div
@@ -249,7 +229,7 @@ export function Wrapped() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.4 }}
-            className="text-xl text-purple-200"
+            className="text-xl text-purple/70"
           >
             Découvre tes stats gaming!
           </m.p>
@@ -258,7 +238,7 @@ export function Wrapped() {
     },
     // Slide 1: Total hours
     {
-      bg: 'from-blue-900 via-blue-800 to-blue-900',
+      bg: 'from-[#0c0c2e] via-[#161640] to-[#0c0c2e]',
       content: (
         <div className="flex flex-col items-center justify-center text-center">
           <m.p
@@ -266,7 +246,7 @@ export function Wrapped() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.4 }}
-            className="text-lg text-blue-200 mb-4"
+            className="text-lg text-primary/60 mb-4"
           >
             Sessions jouées
           </m.p>
@@ -289,7 +269,7 @@ export function Wrapped() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.4, delay: 0.3 }}
-            className="text-2xl text-blue-200 font-bold"
+            className="text-2xl text-primary/60 font-bold"
           >
             heures avec ta squad
           </m.p>
@@ -423,7 +403,7 @@ export function Wrapped() {
     },
     // Slide 4: Favorite squad & share
     {
-      bg: 'from-pink-900 via-purple-800 to-indigo-900',
+      bg: 'from-[#3d0a2e] via-[#2d1054] to-[#0f0830]',
       content: (
         <div className="flex flex-col items-center justify-center text-center">
           <m.p
@@ -431,7 +411,7 @@ export function Wrapped() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.4 }}
-            className="text-lg text-purple-200 mb-6"
+            className="text-lg text-purple/70 mb-6"
           >
             Ta squad préférée
           </m.p>
@@ -464,7 +444,7 @@ export function Wrapped() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.6, delay: 0.3 }}
-                className="text-lg text-purple-200 mb-8"
+                className="text-lg text-purple/70 mb-8"
               >
                 {stats.favoriteSquad.sessionsPlayed} session
                 {stats.favoriteSquad.sessionsPlayed > 1 ? 's' : ''} jouée
@@ -477,7 +457,7 @@ export function Wrapped() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.4, delay: 0.2 }}
-              className="text-2xl text-purple-200 mb-8"
+              className="text-2xl text-purple/70 mb-8"
             >
               Pas encore de squad favorite
             </m.p>
@@ -492,7 +472,7 @@ export function Wrapped() {
             onClick={handleShare}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className="inline-flex items-center gap-3 px-6 py-3 bg-white text-purple-900 rounded-full font-bold text-lg hover:bg-purple-50 transition-colors"
+            className="inline-flex items-center gap-3 px-6 py-3 bg-white text-[#2d1054] rounded-full font-bold text-lg hover:bg-purple/10 transition-colors"
           >
             <Share2 className="w-5 h-5" />
             Partager mon Wrapped

@@ -191,7 +191,7 @@ export default function Squads({ loaderData: _loaderData }: SquadsProps) {
             recycle={false}
             numberOfPieces={100}
             gravity={0.25}
-            colors={['#6366f1', '#34d399', '#fbbf24', '#a78bfa']}
+            colors={['#8B5CF6', '#34d399', '#fbbf24', '#a78bfa']}
             style={{ position: 'fixed', top: 0, left: 0, zIndex: 100, pointerEvents: 'none' }}
           />
         )}

@@ -28,27 +28,13 @@ function applyTheme(theme: 'dark' | 'light') {
   }
 }
 
-// Read persisted mode synchronously to avoid theme flash during hydration
-function getPersistedMode(): ThemeMode {
-  if (typeof window === 'undefined') return 'dark'
-  try {
-    const raw = localStorage.getItem('squadplanner-theme')
-    if (raw) {
-      const parsed = JSON.parse(raw)
-      if (parsed?.state?.mode) return parsed.state.mode as ThemeMode
-    }
-  } catch {}
-  return 'dark'
-}
-
-const initialMode = getPersistedMode()
-const initialEffective = initialMode === 'system' ? getSystemTheme() : initialMode
-
+// SSR-safe: always start with 'dark' to match server render.
+// Zustand persist's onRehydrateStorage will apply the real theme after hydration.
 export const useThemeStore = create<ThemeState>()(
   persist(
     (set) => ({
-      mode: initialMode,
-      effectiveTheme: initialEffective,
+      mode: 'dark' as ThemeMode,
+      effectiveTheme: 'dark' as 'dark' | 'light',
 
       setMode: (mode: ThemeMode) => {
         const effectiveTheme = mode === 'system' ? getSystemTheme() : mode

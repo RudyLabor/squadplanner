@@ -51,7 +51,7 @@ export function NativeVoiceChat({
       <div className="bg-white rounded-3xl p-8 max-w-md w-full mx-4">
         {/* Call Header */}
         <div className="text-center mb-8">
-          <div className="w-20 h-20 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full mx-auto mb-4 flex items-center justify-center">
+          <div className="w-20 h-20 bg-gradient-to-br from-primary to-purple rounded-full mx-auto mb-4 flex items-center justify-center">
             <span className="text-white text-2xl font-semibold">
               {userName.charAt(0).toUpperCase()}
             </span>
@@ -99,7 +99,7 @@ export function NativeVoiceChat({
             variant="gentle"
             onClick={() => toggleMute()}
             className={`w-16 h-16 rounded-full flex items-center justify-center transition-colors ${
-              isMuted ? 'bg-gray-200 text-gray-600' : 'bg-blue-100 text-blue-600'
+              isMuted ? 'bg-gray-200 text-gray-600' : 'bg-primary/10 text-primary'
             }`}
           >
             {isMuted ? <MicOff className="w-6 h-6" /> : <Mic className="w-6 h-6" />}

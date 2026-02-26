@@ -201,7 +201,7 @@ describe('SquadSessionsList', () => {
     expect(screen.getByText('Titre (optionnel)')).toBeInTheDocument()
     expect(screen.getByText('Date')).toBeInTheDocument()
     expect(screen.getByText('Heure')).toBeInTheDocument()
-    expect(screen.getByText('Duree')).toBeInTheDocument()
+    expect(screen.getByText('Durée')).toBeInTheDocument()
   })
 
   it('has duration options: 1h, 2h, 3h, 4h', () => {

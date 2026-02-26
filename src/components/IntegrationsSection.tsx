@@ -44,7 +44,7 @@ export const IntegrationsSection = memo(function IntegrationsSection() {
       <div className="space-y-4">
         {/* Google Calendar */}
         <IntegrationRow
-          icon={<Calendar className="w-4 h-4 text-blue-400" />}
+          icon={<Calendar className="w-4 h-4 text-primary" />}
           name="Google Calendar"
           description="Exporte tes sessions au format .ics compatible Google Calendar, Apple Calendar, Outlook"
           status="available"
@@ -65,7 +65,7 @@ export const IntegrationsSection = memo(function IntegrationsSection() {
 
         {/* Twitch */}
         <IntegrationRow
-          icon={<Tv className="w-4 h-4 text-purple-400" />}
+          icon={<Tv className="w-4 h-4 text-purple" />}
           name="Twitch"
           description="Affiche ton pseudo Twitch sur ton profil public"
           status="partial"
@@ -76,7 +76,7 @@ export const IntegrationsSection = memo(function IntegrationsSection() {
                 placeholder="Pseudo Twitch"
                 value={twitchUsername}
                 onChange={(e) => setTwitchUsername(e.target.value)}
-                className="w-32 px-2 py-1 rounded bg-overlay-subtle border border-border-subtle text-xs text-text-primary placeholder:text-text-tertiary focus:outline-none focus:ring-1 focus:ring-purple-500/50"
+                className="w-32 px-2 py-1 rounded bg-overlay-subtle border border-border-subtle text-xs text-text-primary placeholder:text-text-tertiary focus:outline-none focus:ring-1 focus:ring-primary/50"
               />
             </div>
           }
@@ -84,7 +84,7 @@ export const IntegrationsSection = memo(function IntegrationsSection() {
 
         {/* Discord */}
         <IntegrationRow
-          icon={<MessageSquare className="w-4 h-4 text-blue-500" />}
+          icon={<MessageSquare className="w-4 h-4 text-info" />}
           name="Discord"
           description="Affiche ton pseudo Discord sur ton profil public"
           status="partial"
@@ -94,7 +94,7 @@ export const IntegrationsSection = memo(function IntegrationsSection() {
               placeholder="Pseudo#1234"
               value={discordUsername}
               onChange={(e) => setDiscordUsername(e.target.value)}
-              className="w-32 px-2 py-1 rounded bg-overlay-subtle border border-border-subtle text-xs text-text-primary placeholder:text-text-tertiary focus:outline-none focus:ring-1 focus:ring-blue-500/50"
+              className="w-32 px-2 py-1 rounded bg-overlay-subtle border border-border-subtle text-xs text-text-primary placeholder:text-text-tertiary focus:outline-none focus:ring-1 focus:ring-primary/50"
             />
           }
         />

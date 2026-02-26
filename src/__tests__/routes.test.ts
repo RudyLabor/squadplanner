@@ -82,9 +82,11 @@ describe('routes configuration', () => {
     expect(catchAll).toBeDefined()
   })
 
-  it('includes sitemap route', () => {
+  it('sitemap.xml is generated as static file (not a route)', () => {
+    // sitemap.xml is now generated at build time by scripts/generate-sitemap.mjs
+    // and served as a static file from public/ — no React Router route needed
     const paths = getAllPaths(routeConfig)
-    expect(paths).toContain('sitemap.xml')
+    expect(paths).not.toContain('sitemap.xml')
   })
 
   it('includes widget route', () => {

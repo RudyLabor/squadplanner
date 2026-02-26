@@ -43,8 +43,7 @@ function isPublicPath(pathname: string) {
     pathname.startsWith('/alternative/') ||
     pathname.startsWith('/vs/') ||
     pathname.startsWith('/blog/') ||
-    pathname.startsWith('/widget/') ||
-    pathname === '/sitemap.xml'
+    pathname.startsWith('/widget/')
   )
 }
 
@@ -62,7 +61,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
           name="description"
           content="Squad Planner | Le Calendly du gaming. Crée ta squad, planifie tes sessions avec RSVP et fiabilité mesurée. Fini les « on verra ». Gratuit."
         />
-        <meta name="theme-color" content="#08090a" />
+        <meta name="theme-color" content="#0c0c14" />
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
         <meta name="apple-mobile-web-app-title" content="Squad Planner" />

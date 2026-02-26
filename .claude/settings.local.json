@@ -20,7 +20,11 @@
       "Bash(npx playwright test)",
       "Bash(CLAUDECODE=\"\" claude mcp list:*)",
       "mcp__figma__generate_figma_design",
-      "mcp__chrome-devtools__take_snapshot"
+      "mcp__chrome-devtools__take_snapshot",
+      "Bash(export PATH=\"/Users/rudylabor/.nvm/versions/node/v20.20.0/bin:$PATH\")",
+      "Bash(npm run typecheck:*)",
+      "Bash(export PATH=\"/Users/rudylabor/.nvm/versions/node/v20.20.0/bin:/usr/bin:/bin:/usr/sbin:/sbin:$PATH\")",
+      "Bash(npm run build:*)"
     ]
   }
 }

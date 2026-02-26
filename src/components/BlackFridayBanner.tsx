@@ -99,7 +99,7 @@ export function BlackFridayBanner({ className = '' }: BlackFridayBannerProps) {
       className={`fixed top-0 left-0 right-0 z-40 w-full ${className}`}
     >
       {/* Animated gradient background */}
-      <div className="relative overflow-hidden bg-gradient-to-r from-purple-600 via-orange-500 to-purple-600 bg-[length:200%_100%]">
+      <div className="relative overflow-hidden bg-gradient-to-r from-purple via-orange-500 to-purple bg-[length:200%_100%]">
         <style>{`
           @keyframes gradient-shift {
             0% { background-position: 0% center; }
@@ -144,7 +144,7 @@ export function BlackFridayBanner({ className = '' }: BlackFridayBannerProps) {
               {/* CTA Button */}
               <a
                 href="/premium"
-                className="inline-flex items-center justify-center px-3 sm:px-4 py-2 bg-white text-purple-600 rounded-lg font-bold text-xs sm:text-sm hover:bg-white/90 transition-colors active:scale-95 whitespace-nowrap"
+                className="inline-flex items-center justify-center px-3 sm:px-4 py-2 bg-white text-purple rounded-lg font-bold text-xs sm:text-sm hover:bg-white/90 transition-colors active:scale-95 whitespace-nowrap"
               >
                 J'en profite
               </a>

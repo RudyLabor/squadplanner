@@ -133,7 +133,7 @@ const LeaderboardRow = memo(function LeaderboardRow({ entry }: { entry: GlobalLe
           decoding="async"
         />
       ) : (
-        <div className="w-8 h-8 rounded-full bg-indigo-500/10 flex items-center justify-center">
+        <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
           <span className="text-xs font-bold text-primary">
             {entry.username.charAt(0).toUpperCase()}
           </span>

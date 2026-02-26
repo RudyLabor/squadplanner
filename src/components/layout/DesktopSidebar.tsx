@@ -85,7 +85,7 @@ export const NavLink = memo(function NavLink({
           <m.div
             layoutId="nav-active-pill"
             className="absolute inset-0 rounded-xl bg-primary-10"
-            style={{ boxShadow: '0 0 20px rgba(92, 96, 239, 0.08)' }}
+            style={{ boxShadow: '0 0 20px rgba(139, 92, 246, 0.08)' }}
             transition={{ type: 'spring', stiffness: 350, damping: 30 }}
           />
         )}

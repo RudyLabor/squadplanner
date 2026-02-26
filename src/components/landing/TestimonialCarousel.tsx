@@ -78,7 +78,7 @@ const slideVariants = {
 
 function TestimonialCard({ t }: { t: Testimonial }) {
   return (
-    <div className="surface-glass rounded-2xl p-6 h-full flex flex-col" style={{ backdropFilter: 'blur(24px) saturate(1.2)', WebkitBackdropFilter: 'blur(24px) saturate(1.2)' }}>
+    <div className="surface-glass rounded-2xl p-6 h-full flex flex-col transition-shadow duration-300 hover:shadow-[0_0_24px_rgba(139,92,246,0.08)]" style={{ backdropFilter: 'blur(24px) saturate(1.2)', WebkitBackdropFilter: 'blur(24px) saturate(1.2)' }}>
       <div className="flex items-center gap-3 mb-4">
         <div className="w-12 h-12 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center text-xl">
           {t.avatar}

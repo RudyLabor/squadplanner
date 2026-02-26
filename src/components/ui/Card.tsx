@@ -35,9 +35,9 @@ export function Card({
   }
 
   const variants: Record<string, string> = {
-    default: 'bg-surface-card border border-border-subtle',
+    default: 'bg-surface-card border border-border-subtle shadow-sm hover:shadow-md hover:border-border-hover',
     elevated:
-      'bg-surface-card border border-border-subtle shadow-lg shadow-black/5 transition-shadow hover:shadow-xl hover:shadow-black/10',
+      'bg-surface-card border border-border-subtle shadow-[var(--shadow-card-elevated)] transition-shadow hover:shadow-xl hover:shadow-black/10',
     outlined: 'bg-surface-card border-2 border-border-default',
     ghost: 'bg-transparent border-none',
     gradient: 'card-gradient-border',

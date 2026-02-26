@@ -39,7 +39,7 @@ export default function Maintenance() {
   const timeUntilRefresh = AUTO_REFRESH_SECONDS - secondsSinceCheck
 
   return (
-    <div className="min-h-screen bg-bg-base flex items-center justify-center p-4">
+    <div className="min-h-screen bg-bg-base mesh-bg flex items-center justify-center p-4">
       <div className="max-w-md w-full text-center">
         {/* Animated wrench icon */}
         <m.div

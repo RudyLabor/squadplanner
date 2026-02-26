@@ -50,21 +50,21 @@ export function LandingHero({
 
       {/* Floating geometric shapes — subtle depth */}
       <m.div
-        className="absolute top-[15%] left-[8%] w-32 h-32 rounded-full opacity-[0.04]"
+        className="absolute top-[15%] left-[8%] w-40 h-40 rounded-full opacity-[0.10] blur-3xl"
         style={{ background: 'radial-gradient(circle, var(--color-primary) 0%, transparent 70%)' }}
         animate={{ y: [0, -20, 0], x: [0, 10, 0] }}
         transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
         aria-hidden="true"
       />
       <m.div
-        className="absolute top-[40%] right-[5%] w-24 h-24 rounded-2xl rotate-45 opacity-[0.03]"
+        className="absolute top-[40%] right-[5%] w-32 h-32 rounded-2xl rotate-45 opacity-[0.08] blur-3xl"
         style={{ background: 'linear-gradient(135deg, var(--color-purple) 0%, transparent 70%)' }}
         animate={{ y: [0, 15, 0], rotate: [45, 50, 45] }}
         transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }}
         aria-hidden="true"
       />
       <m.div
-        className="absolute bottom-[20%] left-[15%] w-20 h-20 rounded-full opacity-[0.03]"
+        className="absolute bottom-[20%] left-[15%] w-28 h-28 rounded-full opacity-[0.08] blur-3xl"
         style={{ background: 'radial-gradient(circle, var(--color-success) 0%, transparent 70%)' }}
         animate={{ y: [0, 12, 0] }}
         transition={{ duration: 7, repeat: Infinity, ease: 'easeInOut', delay: 1 }}

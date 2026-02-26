@@ -229,7 +229,7 @@ export function Party() {
 
   return (
     <PullToRefresh onRefresh={handleRefresh}>
-      <main className="min-h-0 bg-bg-base pb-6 page-enter" aria-label="Party vocale">
+      <main className="min-h-0 bg-bg-base mesh-bg pb-6 page-enter" aria-label="Party vocale">
         {showDuoConfetti && (
           <Confetti
             width={window.innerWidth}

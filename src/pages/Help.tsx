@@ -41,7 +41,7 @@ export function Help() {
   )
 
   return (
-    <main className="min-h-0 bg-bg-base pb-6" aria-label="Aide">
+    <main className="min-h-0 bg-bg-base mesh-bg pb-6" aria-label="Aide">
       <MobilePageHeader title="Aide" />
       <ScrollProgress />
       <div className="px-4 md:px-6 lg:px-8 py-6 max-w-4xl mx-auto">

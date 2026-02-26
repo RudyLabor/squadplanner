@@ -156,7 +156,7 @@ export default function SquadDetail() {
   }
 
   return (
-    <main className="min-h-0 bg-bg-base pb-6" aria-label="Détail de la squad">
+    <main className="min-h-0 bg-bg-base mesh-bg pb-6" aria-label="Détail de la squad">
       {showConfetti && typeof window !== 'undefined' && (
         <Confetti
           width={window.innerWidth}

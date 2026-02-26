@@ -590,7 +590,7 @@ export function Messages() {
     return (
       <>
         {toastEl}
-        <main className="h-[calc(100dvh-3.5rem)] bg-bg-base flex" aria-label="Messages">
+        <main className="h-[calc(100dvh-3.5rem)] bg-bg-base mesh-bg flex" aria-label="Messages">
           <nav
             className="w-[340px] xl:w-[380px] flex-shrink-0 border-r border-border-default bg-bg-elevated overflow-hidden"
             aria-label="Conversations"

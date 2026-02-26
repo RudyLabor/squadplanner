@@ -33,7 +33,7 @@ type InputProps = InputFieldProps | TextareaFieldProps
 const sharedClasses = `w-full rounded-xl bg-surface-input border border-border-default
   hover:bg-bg-hover hover:border-border-hover
   focus:border-primary/60 focus:ring-2 focus:ring-primary/10 focus:outline-none
-  focus:shadow-[0_0_0_3px_rgba(92,96,239,0.08),0_0_16px_rgba(92,96,239,0.1)] text-text-primary placeholder-text-quaternary transition-input`
+  focus:shadow-[0_0_0_3px_rgba(139,92,246,0.08),0_0_16px_rgba(139,92,246,0.1)] text-text-primary placeholder-text-quaternary transition-input`
 
 export const Input = forwardRef<HTMLInputElement | HTMLTextAreaElement, InputProps>(
   (

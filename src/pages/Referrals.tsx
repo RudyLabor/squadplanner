@@ -103,7 +103,7 @@ export function Referrals() {
   // that would race with Zustand store hydration and cause a redirect loop.
 
   return (
-    <main className="min-h-0 bg-bg-base" aria-label="Parrainage">
+    <main className="min-h-0 bg-bg-base mesh-bg" aria-label="Parrainage">
       {/* ─── HERO SECTION (like Premium) ─── */}
       <div
         ref={heroRef}

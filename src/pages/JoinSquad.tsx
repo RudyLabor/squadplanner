@@ -120,7 +120,7 @@ export function JoinSquad() {
   if (!isInitialized || status === 'loading') {
     return (
       <main
-        className="min-h-screen bg-bg-base flex items-center justify-center p-4"
+        className="min-h-screen bg-bg-base mesh-bg flex items-center justify-center p-4"
         aria-label="Rejoindre une squad"
       >
         <div className="text-center">
@@ -135,7 +135,7 @@ export function JoinSquad() {
   if (status === 'not-found') {
     return (
       <main
-        className="min-h-screen bg-bg-base flex items-center justify-center p-4"
+        className="min-h-screen bg-bg-base mesh-bg flex items-center justify-center p-4"
         aria-label="Rejoindre une squad"
       >
         <m.div
@@ -160,7 +160,7 @@ export function JoinSquad() {
   if (status === 'success') {
     return (
       <main
-        className="min-h-screen bg-bg-base flex items-center justify-center p-4"
+        className="min-h-screen bg-bg-base mesh-bg flex items-center justify-center p-4"
         aria-label="Rejoindre une squad"
       >
         <m.div
@@ -186,7 +186,7 @@ export function JoinSquad() {
   // Preview / Join state
   return (
     <main
-      className="min-h-screen bg-bg-base flex items-center justify-center p-4"
+      className="min-h-screen bg-bg-base mesh-bg flex items-center justify-center p-4"
       aria-label="Rejoindre une squad"
     >
       <m.div

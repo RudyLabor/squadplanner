@@ -82,7 +82,7 @@
 
   /* Enhanced shadow scale */
   --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.04);
-  --shadow-card-hover: 0 8px 24px rgba(0, 0, 0, 0.3), 0 0 20px rgba(92, 96, 239, 0.08);
+  --shadow-card-hover: 0 8px 24px rgba(0, 0, 0, 0.3), 0 0 20px rgba(139, 92, 246, 0.08);
   --shadow-dropdown: 0 8px 30px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.05);
   --shadow-modal: 0 16px 70px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.05);
 
@@ -295,7 +295,7 @@
 
   /* Enhanced shadow scale - light mode */
   --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.06), 0 0 0 1px rgba(0, 0, 0, 0.05);
-  --shadow-card-hover: 0 8px 24px rgba(0, 0, 0, 0.08), 0 0 20px rgba(92, 96, 239, 0.06);
+  --shadow-card-hover: 0 8px 24px rgba(0, 0, 0, 0.08), 0 0 20px rgba(139, 92, 246, 0.06);
   --shadow-dropdown: 0 8px 30px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(0, 0, 0, 0.06);
   --shadow-modal: 0 16px 70px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(0, 0, 0, 0.06);
 
@@ -1206,7 +1206,7 @@ select:focus-visible,
   box-shadow:
     0 8px 32px rgba(0, 0, 0, 0.25),
     inset 0 1px 0 rgba(255, 255, 255, 0.06),
-    0 0 0 1px rgba(92, 96, 239, 0.06);
+    0 0 0 1px rgba(139, 92, 246, 0.06);
 }
 
 [data-theme='light'] .surface-glass {
@@ -1222,7 +1222,7 @@ select:focus-visible,
   box-shadow:
     0 8px 32px rgba(0, 0, 0, 0.06),
     inset 0 1px 0 rgba(255, 255, 255, 0.9),
-    0 0 0 1px rgba(91, 95, 199, 0.06);
+    0 0 0 1px rgba(139, 92, 246, 0.06);
 }
 
 /* Glow border - Subtle primary glow on hover */
@@ -1232,24 +1232,24 @@ select:focus-visible,
 }
 
 .glow-border:hover {
-  border-color: rgba(92, 96, 239, 0.2);
-  box-shadow: 0 0 20px rgba(92, 96, 239, 0.08), 0 0 40px rgba(92, 96, 239, 0.04);
+  border-color: rgba(139, 92, 246, 0.2);
+  box-shadow: 0 0 20px rgba(139, 92, 246, 0.08), 0 0 40px rgba(139, 92, 246, 0.04);
 }
 
 [data-theme='light'] .glow-border:hover {
-  border-color: rgba(91, 95, 199, 0.2);
-  box-shadow: 0 0 20px rgba(91, 95, 199, 0.06), 0 0 40px rgba(91, 95, 199, 0.03);
+  border-color: rgba(139, 92, 246, 0.2);
+  box-shadow: 0 0 20px rgba(139, 92, 246, 0.06), 0 0 40px rgba(139, 92, 246, 0.03);
 }
 
 /* Glow border permanent (for featured/premium elements) */
 .glow-border-active {
-  border-color: rgba(92, 96, 239, 0.25);
-  box-shadow: 0 0 24px rgba(92, 96, 239, 0.1), 0 0 48px rgba(92, 96, 239, 0.05);
+  border-color: rgba(139, 92, 246, 0.25);
+  box-shadow: 0 0 24px rgba(139, 92, 246, 0.1), 0 0 48px rgba(139, 92, 246, 0.05);
 }
 
 [data-theme='light'] .glow-border-active {
-  border-color: rgba(91, 95, 199, 0.25);
-  box-shadow: 0 0 24px rgba(91, 95, 199, 0.08), 0 0 48px rgba(91, 95, 199, 0.04);
+  border-color: rgba(139, 92, 246, 0.25);
+  box-shadow: 0 0 24px rgba(139, 92, 246, 0.08), 0 0 48px rgba(139, 92, 246, 0.04);
 }
 
 /* Hide scrollbar utility (for horizontal scroll sections) */

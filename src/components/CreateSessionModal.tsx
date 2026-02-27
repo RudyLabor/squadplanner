@@ -31,7 +31,7 @@ export const useCreateSessionModal = create<CreateSessionModalStore>((set) => ({
 
 export function CreateSessionModal() {
   const { isOpen, preselectedSquadId, close } = useCreateSessionModal()
-  const { squads } = useSquadsStore()
+  const { squads, fetchSquads, isLoading: squadsLoading } = useSquadsStore()
   const { createSession, isLoading } = useSessionsStore()
   const { triggerHaptic } = useHapticFeedback()
   const { user } = useAuthStore()
@@ -61,11 +61,15 @@ export function CreateSessionModal() {
       setThreshold('3')
       setSelectedSquadId('')
       setIsRecurring(false)
+      // Ensure squads are loaded when modal opens
+      if (squads.length === 0) {
+        fetchSquads()
+      }
     }
     if (!isOpen) {
       didInitRef.current = false
     }
-  }, [isOpen])
+  }, [isOpen, squads.length, fetchSquads])
 
   // Auto-select squad when squads load or preselectedSquadId is set,
   // but only if no squad has been manually selected yet
@@ -126,11 +130,11 @@ export function CreateSessionModal() {
     <ResponsiveModal open={isOpen} onClose={close} title="Nouvelle session" size="sm">
       {/* Form */}
       <form onSubmit={handleSubmit} className="p-5 space-y-4">
-        {/* No squads warning */}
-        {squads.length === 0 && (
+        {/* No squads warning — only show after loading is done */}
+        {squads.length === 0 && !squadsLoading && (
           <div className="p-3 rounded-lg bg-warning-10 border border-warning">
             <p className="text-warning text-base">
-              Tu n'as aucun squad. Crée ou rejoins un squad d'abord.
+              Tu n'as aucune squad. Crée ou rejoins une squad d'abord.
             </p>
           </div>
         )}

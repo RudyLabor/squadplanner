@@ -156,7 +156,7 @@ export function NotificationBell() {
   const { activeOverlay, toggle, close } = useOverlayStore()
   const isOpen = activeOverlay === 'notifications'
 
-  // Calculate fixed position from button ref when panel opens + auto-mark as read
+  // Calculate fixed position from button ref when panel opens
   useEffect(() => {
     if (isOpen && buttonRef.current) {
       const rect = buttonRef.current.getBoundingClientRect()
@@ -164,12 +164,8 @@ export function NotificationBell() {
         top: rect.bottom + 8,
         right: Math.max(8, window.innerWidth - rect.right),
       })
-      // Auto-mark all as read when opening the panel (like Instagram/GitHub)
-      if (unreadCount > 0) {
-        markAllAsRead()
-      }
     }
-  }, [isOpen, unreadCount, markAllAsRead])
+  }, [isOpen])
 
   // Fetch once on mount — use user.id (stable string) instead of user object
   // to prevent re-fetching on every navigation
@@ -215,11 +211,18 @@ export function NotificationBell() {
   }, [])
 
   return (
-    <div className="relative" ref={containerRef}>
+    <div className="relative overflow-visible" ref={containerRef}>
       <button
         ref={buttonRef}
         type="button"
-        onClick={() => toggle('notifications')}
+        onClick={() => {
+          const wasOpen = isOpen
+          toggle('notifications')
+          // Mark all as read immediately when opening (like Instagram/GitHub)
+          if (!wasOpen && unreadCount > 0) {
+            markAllAsRead()
+          }
+        }}
         className="relative p-2 rounded-lg text-text-secondary hover:text-text-primary hover:bg-border-subtle transition-colors"
         aria-label={`Notifications${unreadCount > 0 ? ` (${unreadCount} non lues)` : ''}`}
       >
@@ -228,7 +231,7 @@ export function NotificationBell() {
           <m.span
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
-            className="absolute -top-0.5 -right-0.5 w-4 h-4 rounded-full bg-error text-white text-xs font-bold flex items-center justify-center"
+            className="absolute top-0.5 right-0.5 w-4 h-4 rounded-full bg-error text-white text-xs font-bold flex items-center justify-center ring-2 ring-bg-base"
           >
             {unreadCount > 9 ? '9+' : unreadCount}
           </m.span>

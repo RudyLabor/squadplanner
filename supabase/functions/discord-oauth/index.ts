@@ -242,7 +242,8 @@ serve(async (req) => {
       origin
     )
   } catch (error) {
+    // SEC: Don't leak internal error details to clients
     console.error('Discord OAuth error:', error)
-    return jsonResponse({ error: (error as Error).message }, 500, origin)
+    return jsonResponse({ error: 'Internal server error' }, 500, origin)
   }
 })

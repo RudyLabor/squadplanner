@@ -509,8 +509,9 @@ serve(async (req) => {
       }
     )
   } catch (error) {
+    // SEC: Don't leak internal error details to clients
     console.error('[validate-iap] Error:', error)
-    return new Response(JSON.stringify({ error: (error as Error).message }), {
+    return new Response(JSON.stringify({ error: 'Internal server error' }), {
       status: 500,
       headers: { ...getCorsHeaders(req.headers.get('origin')), 'Content-Type': 'application/json' },
     })

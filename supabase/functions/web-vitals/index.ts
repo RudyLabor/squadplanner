@@ -166,9 +166,9 @@ serve(async (req) => {
       },
     })
   } catch (error) {
-    const message = error instanceof Error ? error.message : 'Unknown error'
-    console.error('Error processing web vitals:', message)
-    return new Response(JSON.stringify({ error: message }), {
+    // SEC: Don't leak internal error details to clients
+    console.error('Error processing web vitals:', error)
+    return new Response(JSON.stringify({ error: 'Internal server error' }), {
       status: 500,
       headers: {
         ...getCorsHeaders(req.headers.get('origin')),

@@ -119,7 +119,7 @@ serve(async (req) => {
       })
     }
 
-    const { room_name, participant_identity, participant_name } = body
+    const { room_name, participant_name } = body
 
     if (!room_name || typeof room_name !== 'string') {
       return new Response(JSON.stringify({ error: 'room_name is required' }), {
@@ -131,23 +131,51 @@ serve(async (req) => {
       })
     }
 
-    if (!participant_identity || typeof participant_identity !== 'string') {
-      return new Response(JSON.stringify({ error: 'participant_identity is required' }), {
-        status: 400,
-        headers: {
-          ...getCorsHeaders(req.headers.get('origin')),
-          'Content-Type': 'application/json',
-        },
-      })
+    // SEC: Force participant_identity to authenticated user's ID to prevent impersonation
+    const participant_identity = user.id
+
+    // SEC: Verify user is a member of the squad associated with this room
+    // room_name format is typically the squad_id or "squad-{squad_id}"
+    const squadId = room_name.startsWith('squad-') ? room_name.slice(6) : room_name
+    const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
+    if (uuidRegex.test(squadId)) {
+      const { data: membership, error: membershipError } = await supabaseClient
+        .from('squad_members')
+        .select('squad_id')
+        .eq('squad_id', squadId)
+        .eq('user_id', user.id)
+        .maybeSingle()
+
+      if (membershipError || !membership) {
+        return new Response(JSON.stringify({ error: 'You must be a member of this squad to join voice chat' }), {
+          status: 403,
+          headers: {
+            ...getCorsHeaders(req.headers.get('origin')),
+            'Content-Type': 'application/json',
+          },
+        })
+      }
+    }
+
+    // Get user's display name from profile
+    let displayName = participant_name || participant_identity
+    if (!participant_name) {
+      const { data: profile } = await supabaseClient
+        .from('profiles')
+        .select('username')
+        .eq('id', user.id)
+        .single()
+      if (profile?.username) displayName = profile.username
     }
 
     console.log('Generating LiveKit token for room:', room_name, 'identity:', participant_identity)
 
     // Generate token using official LiveKit SDK
+    // SEC: TTL reduced from 24h to 4h to limit token reuse window
     const at = new AccessToken(LIVEKIT_API_KEY, LIVEKIT_API_SECRET, {
       identity: participant_identity,
-      name: participant_name || participant_identity,
-      ttl: '24h',
+      name: displayName,
+      ttl: '4h',
     })
 
     at.addGrant({
@@ -176,7 +204,7 @@ serve(async (req) => {
     )
   } catch (error) {
     console.error('Error generating LiveKit token:', error)
-    return new Response(JSON.stringify({ error: error.message }), {
+    return new Response(JSON.stringify({ error: 'Internal server error' }), {
       status: 500,
       headers: { ...getCorsHeaders(req.headers.get('origin')), 'Content-Type': 'application/json' },
     })

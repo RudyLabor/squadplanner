@@ -100,31 +100,36 @@ export function Premium() {
     setIsLoading(true)
     setError(null)
     try {
-      // Check if user already used a trial (subscription_expires_at set)
-      const { data: profile } = await supabase
-        .from('profiles')
-        .select('subscription_tier, subscription_expires_at')
-        .eq('id', user.id)
-        .single()
+      // SEC: Call server-side Edge Function instead of direct DB update
+      const { data: sessionData } = await supabase.auth.getSession()
+      const accessToken = sessionData?.session?.access_token
+      if (!accessToken) throw new Error('Not authenticated')
 
-      if (profile?.subscription_expires_at) {
-        showError('Tu as déjà utilisé ton essai gratuit.')
-        setIsLoading(false)
-        return
+      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
+      const response = await fetch(`${supabaseUrl}/functions/v1/start-trial`, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          'Content-Type': 'application/json',
+          apikey: import.meta.env.VITE_SUPABASE_ANON_KEY,
+        },
+        body: JSON.stringify({}),
+      })
+
+      const result = await response.json()
+      if (!response.ok) {
+        if (result.error === 'Trial already used') {
+          showError('Tu as déjà utilisé ton essai gratuit.')
+          setIsLoading(false)
+          return
+        }
+        if (result.error === 'Already has an active premium subscription') {
+          showError('Tu as déjà un abonnement Premium actif.')
+          setIsLoading(false)
+          return
+        }
+        throw new Error(result.error || 'Failed to start trial')
       }
-
-      // Activate 7-day trial
-      const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString()
-      const { error: updateError } = await supabase
-        .from('profiles')
-        .update({
-          subscription_tier: 'premium',
-          subscription_expires_at: expiresAt,
-          updated_at: new Date().toISOString(),
-        })
-        .eq('id', user.id)
-
-      if (updateError) throw updateError
 
       // Refresh premium status
       await usePremiumStore.getState().fetchPremiumStatus()

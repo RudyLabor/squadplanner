@@ -15,6 +15,7 @@ export const supabaseMinimal: any = createClient(supabaseUrl, supabaseAnonKey, {
     autoRefreshToken: true,
     persistSession: true,
     detectSessionInUrl: true,
+    flowType: 'pkce',
     // Prevent navigator.locks deadlock: limit lock acquisition time.
     // On mobile, the browser suspends fetch requests while the app is
     // backgrounded, but the lock and token refresh resume normally when
@@ -50,12 +51,6 @@ export const supabaseMinimal: any = createClient(supabaseUrl, supabaseAnonKey, {
     },
   },
 })
-
-// Expose on window for synchronous access from click handlers (MobileBottomNav).
-// Dynamic import() is async and can't fix the deadlock fast enough at click time.
-if (typeof window !== 'undefined') {
-  ;(window as any).__supabaseMinimal = supabaseMinimal
-}
 
 // Reset internal auth lock state on tab resume.
 // When our custom lock's Promise.race times out while the app is backgrounded,

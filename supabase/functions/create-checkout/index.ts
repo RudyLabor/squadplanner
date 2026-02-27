@@ -198,13 +198,46 @@ serve(async (req) => {
         .eq('id', user.id)
     }
 
+    // SEC: Validate redirect URLs against allowed domains to prevent open redirect
+    const allowedHosts = ['squadplanner.fr', 'www.squadplanner.fr', 'squadplanner.app', 'www.squadplanner.app', 'localhost']
+    function isAllowedUrl(url: string | undefined): string | undefined {
+      if (!url) return undefined
+      try {
+        const parsed = new URL(url)
+        if (allowedHosts.some(h => parsed.hostname === h || parsed.hostname.endsWith(`.${h}`))) {
+          return url
+        }
+      } catch {
+        // Invalid URL
+      }
+      return undefined
+    }
+
+    // SEC: Validate origin for default URLs (prevent header injection)
+    const origin = req.headers.get('origin')
+    let safeOrigin = 'https://squadplanner.fr'
+    if (origin) {
+      try {
+        const parsed = new URL(origin)
+        if (allowedHosts.some(h => parsed.hostname === h || parsed.hostname.endsWith(`.${h}`))) {
+          safeOrigin = origin
+        }
+      } catch {
+        // Invalid origin — use default
+      }
+    }
+
     // Create checkout session
     const defaultSuccessUrl = squad_id
-      ? `${req.headers.get('origin')}/squad/${squad_id}?checkout=success`
-      : `${req.headers.get('origin')}/profile?checkout=success`
+      ? `${safeOrigin}/squad/${squad_id}?checkout=success`
+      : `${safeOrigin}/profile?checkout=success`
     const defaultCancelUrl = squad_id
-      ? `${req.headers.get('origin')}/squad/${squad_id}?checkout=cancelled`
-      : `${req.headers.get('origin')}/profile?checkout=cancelled`
+      ? `${safeOrigin}/squad/${squad_id}?checkout=cancelled`
+      : `${safeOrigin}/profile?checkout=cancelled`
+
+    // SEC: Only use client-provided URLs if they pass domain whitelist validation
+    const safeSuccessUrl = isAllowedUrl(success_url) || defaultSuccessUrl
+    const safeCancelUrl = isAllowedUrl(cancel_url) || defaultCancelUrl
 
     const session = await stripe.checkout.sessions.create({
       customer: customerId,
@@ -228,8 +261,8 @@ serve(async (req) => {
           ...(tier && { tier }),
         },
       },
-      success_url: success_url || defaultSuccessUrl,
-      cancel_url: cancel_url || defaultCancelUrl,
+      success_url: safeSuccessUrl,
+      cancel_url: safeCancelUrl,
       allow_promotion_codes: true,
     })
 
@@ -237,8 +270,9 @@ serve(async (req) => {
       headers: { ...getCorsHeaders(req.headers.get('origin')), 'Content-Type': 'application/json' },
     })
   } catch (error) {
+    // SEC: Don't leak internal error details to clients
     console.error('Error creating checkout session:', error)
-    return new Response(JSON.stringify({ error: error.message }), {
+    return new Response(JSON.stringify({ error: 'Internal server error' }), {
       status: 500,
       headers: { ...getCorsHeaders(req.headers.get('origin')), 'Content-Type': 'application/json' },
     })

@@ -1,15 +1,9 @@
-// Cancel Subscription Edge Function
-// Cancels a squad's premium subscription at period end
+// Start Trial Edge Function
+// Activates a 7-day premium trial for the authenticated user
+// SEC: Server-side validation prevents client-side subscription manipulation
 
 import { serve } from 'https://deno.land/std@0.177.0/http/server.ts'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.0'
-import Stripe from 'https://esm.sh/stripe@14.10.0?target=deno'
-import { validateUUID } from '../_shared/schemas.ts'
-
-const stripe = new Stripe(Deno.env.get('STRIPE_SECRET_KEY') || '', {
-  apiVersion: '2023-10-16',
-  httpClient: Stripe.createFetchHttpClient(),
-})
 
 // CORS Security: Only allow specific origins
 const ALLOWED_ORIGINS = [
@@ -39,7 +33,6 @@ serve(async (req) => {
     return new Response('ok', { headers: getCorsHeaders(req.headers.get('origin')) })
   }
 
-  // Handle HEAD requests for health checks
   if (req.method === 'HEAD') {
     return new Response(null, { status: 200, headers: getCorsHeaders(req.headers.get('origin')) })
   }
@@ -70,61 +63,21 @@ serve(async (req) => {
       })
     }
 
-    // Parse and validate request body
-    let rawBody: Record<string, unknown>
-    try {
-      rawBody = await req.json()
-    } catch {
-      return new Response(JSON.stringify({ error: 'Invalid JSON in request body' }), {
-        status: 400,
-        headers: {
-          ...getCorsHeaders(req.headers.get('origin')),
-          'Content-Type': 'application/json',
-        },
-      })
-    }
+    // Use service role to check and update profile (bypasses RLS)
+    const supabaseAdmin = createClient(
+      Deno.env.get('SUPABASE_URL') ?? '',
+      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
+    )
 
-    let squad_id: string
-
-    try {
-      squad_id = validateUUID(rawBody.squad_id, 'squad_id')
-    } catch (validationError) {
-      return new Response(JSON.stringify({ error: (validationError as Error).message }), {
-        status: 400,
-        headers: {
-          ...getCorsHeaders(req.headers.get('origin')),
-          'Content-Type': 'application/json',
-        },
-      })
-    }
-
-    // Verify user is squad owner
-    const { data: squad } = await supabaseClient
-      .from('squads')
-      .select('id, owner_id')
-      .eq('id', squad_id)
+    // Check current subscription status
+    const { data: profile, error: profileError } = await supabaseAdmin
+      .from('profiles')
+      .select('subscription_tier, subscription_expires_at')
+      .eq('id', user.id)
       .single()
 
-    if (!squad || squad.owner_id !== user.id) {
-      return new Response(JSON.stringify({ error: 'Only squad owner can cancel subscription' }), {
-        status: 403,
-        headers: {
-          ...getCorsHeaders(req.headers.get('origin')),
-          'Content-Type': 'application/json',
-        },
-      })
-    }
-
-    // Get subscription
-    const { data: subscription } = await supabaseClient
-      .from('subscriptions')
-      .select('stripe_subscription_id')
-      .eq('squad_id', squad_id)
-      .eq('status', 'active')
-      .single()
-
-    if (!subscription?.stripe_subscription_id) {
-      return new Response(JSON.stringify({ error: 'No active subscription found' }), {
+    if (profileError || !profile) {
+      return new Response(JSON.stringify({ error: 'Profile not found' }), {
         status: 404,
         headers: {
           ...getCorsHeaders(req.headers.get('origin')),
@@ -133,27 +86,56 @@ serve(async (req) => {
       })
     }
 
-    // Cancel subscription at period end (not immediately)
-    const cancelledSub = await stripe.subscriptions.update(subscription.stripe_subscription_id, {
-      cancel_at_period_end: true,
-    })
-
-    // Update local subscription record
-    await supabaseClient
-      .from('subscriptions')
-      .update({
-        cancel_at_period_end: true,
+    // Check if user already has an active premium subscription
+    if (profile.subscription_tier === 'premium' || profile.subscription_tier === 'squad_leader' || profile.subscription_tier === 'club') {
+      return new Response(JSON.stringify({ error: 'Already has an active premium subscription' }), {
+        status: 409,
+        headers: {
+          ...getCorsHeaders(req.headers.get('origin')),
+          'Content-Type': 'application/json',
+        },
       })
-      .eq('squad_id', squad_id)
-      .eq('status', 'active')
+    }
+
+    // Check if user already used a trial (subscription_expires_at was set before)
+    if (profile.subscription_expires_at) {
+      return new Response(JSON.stringify({ error: 'Trial already used' }), {
+        status: 409,
+        headers: {
+          ...getCorsHeaders(req.headers.get('origin')),
+          'Content-Type': 'application/json',
+        },
+      })
+    }
+
+    // Activate 7-day trial
+    const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString()
+    const { error: updateError } = await supabaseAdmin
+      .from('profiles')
+      .update({
+        subscription_tier: 'premium',
+        subscription_expires_at: expiresAt,
+        updated_at: new Date().toISOString(),
+      })
+      .eq('id', user.id)
+
+    if (updateError) {
+      console.error('Error activating trial:', updateError)
+      return new Response(JSON.stringify({ error: 'Failed to activate trial' }), {
+        status: 500,
+        headers: {
+          ...getCorsHeaders(req.headers.get('origin')),
+          'Content-Type': 'application/json',
+        },
+      })
+    }
+
+    console.log(`Trial activated for user ${user.id}, expires at ${expiresAt}`)
 
     return new Response(
       JSON.stringify({
         success: true,
-        cancel_at: cancelledSub.cancel_at
-          ? new Date(cancelledSub.cancel_at * 1000).toISOString()
-          : null,
-        current_period_end: new Date(cancelledSub.current_period_end * 1000).toISOString(),
+        expires_at: expiresAt,
       }),
       {
         headers: {
@@ -163,8 +145,7 @@ serve(async (req) => {
       }
     )
   } catch (error) {
-    // SEC: Don't leak internal error details to clients
-    console.error('Error cancelling subscription:', error)
+    console.error('Error in start-trial:', error)
     return new Response(JSON.stringify({ error: 'Internal server error' }), {
       status: 500,
       headers: { ...getCorsHeaders(req.headers.get('origin')), 'Content-Type': 'application/json' },

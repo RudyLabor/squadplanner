@@ -85,15 +85,11 @@ serve(async (req) => {
     }
 
     let validatedData: {
-      customer_id?: string
       return_url?: string
     }
 
     try {
       validatedData = {
-        customer_id: validateOptional(rawBody.customer_id, (v) =>
-          validateString(v, 'customer_id', { minLength: 1, maxLength: 100 })
-        ),
         return_url: validateOptional(rawBody.return_url, (v) => validateString(v, 'return_url')),
       }
     } catch (validationError) {
@@ -106,20 +102,17 @@ serve(async (req) => {
       })
     }
 
-    const { customer_id, return_url } = validatedData
+    const { return_url } = validatedData
 
-    // If customer_id not provided, get it from user profile
-    let stripeCustomerId = customer_id
+    // SEC: Always look up customer_id from the authenticated user's profile
+    // Never accept customer_id from client to prevent IDOR attacks
+    const { data: profile } = await supabaseClient
+      .from('profiles')
+      .select('stripe_customer_id')
+      .eq('id', user.id)
+      .single()
 
-    if (!stripeCustomerId) {
-      const { data: profile } = await supabaseClient
-        .from('profiles')
-        .select('stripe_customer_id')
-        .eq('id', user.id)
-        .single()
-
-      stripeCustomerId = profile?.stripe_customer_id
-    }
+    const stripeCustomerId = profile?.stripe_customer_id
 
     if (!stripeCustomerId) {
       return new Response(JSON.stringify({ error: 'No Stripe customer found for this user' }), {
@@ -131,18 +124,33 @@ serve(async (req) => {
       })
     }
 
+    // SEC: Validate return_url against allowed domains to prevent open redirect
+    let safeReturnUrl = `${req.headers.get('origin')}/profile`
+    if (return_url) {
+      try {
+        const parsed = new URL(return_url)
+        const allowedHosts = ['squadplanner.fr', 'www.squadplanner.fr', 'squadplanner.app', 'www.squadplanner.app', 'localhost']
+        if (allowedHosts.some(h => parsed.hostname === h || parsed.hostname.endsWith(`.${h}`))) {
+          safeReturnUrl = return_url
+        }
+      } catch {
+        // Invalid URL — use default
+      }
+    }
+
     // Create billing portal session
     const session = await stripe.billingPortal.sessions.create({
       customer: stripeCustomerId,
-      return_url: return_url || `${req.headers.get('origin')}/profile`,
+      return_url: safeReturnUrl,
     })
 
     return new Response(JSON.stringify({ url: session.url }), {
       headers: { ...getCorsHeaders(req.headers.get('origin')), 'Content-Type': 'application/json' },
     })
   } catch (error) {
+    // SEC: Don't leak internal error details to clients
     console.error('Error creating portal session:', error)
-    return new Response(JSON.stringify({ error: error.message }), {
+    return new Response(JSON.stringify({ error: 'Internal server error' }), {
       status: 500,
       headers: { ...getCorsHeaders(req.headers.get('origin')), 'Content-Type': 'application/json' },
     })

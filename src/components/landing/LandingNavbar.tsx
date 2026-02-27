@@ -141,7 +141,7 @@ export function LandingNavbar({ isLoggedIn }: LandingNavbarProps) {
           animate={{ x: 0 }}
           exit={{ x: '100%' }}
           transition={{ type: 'spring', damping: 30, stiffness: 300 }}
-          className="fixed inset-0 z-40 bg-bg-base/95 backdrop-blur-xl flex flex-col pt-20 px-6"
+          className="fixed inset-0 z-40 bg-bg-base flex flex-col pt-20 px-6"
         >
           <div className="flex flex-col gap-4 mb-8">
             {navLinks.map((link) =>

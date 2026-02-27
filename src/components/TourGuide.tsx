@@ -97,6 +97,14 @@ export function TourGuide() {
     if (!user) return
     if (location.pathname !== '/home' && location.pathname !== '/squads') return
 
+    // Skip tour for accounts older than 1 hour — they are not new users
+    // This prevents the tour from re-appearing if localStorage is cleared
+    const createdAt = (user as { created_at?: string }).created_at
+    if (createdAt) {
+      const accountAgeMs = Date.now() - new Date(createdAt).getTime()
+      if (accountAgeMs > 60 * 60 * 1000) return
+    }
+
     try {
       const completed = localStorage.getItem(tourKey)
       if (completed === 'true' || completed === 'shown') return

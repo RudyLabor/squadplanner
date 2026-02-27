@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react'
-import { useParams, Link } from 'react-router'
+import { useParams } from 'react-router'
 import { m } from 'framer-motion'
-import { ArrowLeft } from '../components/icons'
+import { BarChart3 } from '../components/icons'
+import { Card, CardContent } from '../components/ui'
 import { useAuthStore, usePremiumStore } from '../hooks'
 import { PremiumGate } from '../components/PremiumGate'
-import { supabaseMinimal as supabase } from '../lib/supabaseMinimal'
+import { MobilePageHeader } from '../components/layout/MobilePageHeader'
 import AttendanceHeatmap from '../components/squad-analytics/AttendanceHeatmap'
 import MemberReliabilityChart from '../components/squad-analytics/MemberReliabilityChart'
 import SessionTrends from '../components/squad-analytics/SessionTrends'
@@ -26,91 +27,120 @@ export default function SquadAnalytics() {
 
   if (!id) {
     return (
-      <div className="min-h-screen bg-bg-base text-text-primary p-4">
-        <div className="max-w-6xl mx-auto">
+      <main className="min-h-screen bg-bg-base mesh-bg text-text-primary p-4" aria-label="Analytiques squad">
+        <div className="max-w-2xl md:max-w-3xl lg:max-w-4xl xl:max-w-6xl mx-auto">
           <p className="text-text-secondary">Squad non trouvée</p>
         </div>
-      </div>
+      </main>
     )
   }
 
   return (
-    <div className="min-h-screen bg-bg-base mesh-bg text-text-primary">
-      <div className="max-w-6xl mx-auto px-4 py-6 sm:py-8">
-        {/* En-tête */}
-        <m.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
-          <div className="flex items-center gap-3 mb-6">
-            <Link
-              to={`/squad/${id}`}
-              className="p-2 hover:bg-surface-card rounded-lg transition-colors"
-              aria-label="Retour à la squad"
-            >
-              <ArrowLeft className="w-6 h-6" />
-            </Link>
-            <h1 className="text-3xl font-bold">Analytics Squad</h1>
+    <m.main
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      className="min-h-0 bg-bg-base mesh-bg pb-6 page-enter"
+      aria-label="Analytiques squad"
+    >
+      <div className="max-w-2xl md:max-w-3xl lg:max-w-4xl xl:max-w-6xl mx-auto px-4 md:px-6 lg:px-8 py-6 pb-24">
+        {/* Header mobile */}
+        <MobilePageHeader title="Analytiques Squad" />
+
+        {/* Header desktop */}
+        <m.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+          className="hidden lg:flex items-center gap-3 mb-8"
+        >
+          <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center border border-primary/20">
+            <BarChart3 className="w-6 h-6 text-primary" />
           </div>
-          <p className="text-text-secondary">Découvre les statistiques détaillées de ta squad</p>
+          <div>
+            <h1 className="text-2xl font-bold text-text-primary">Analytiques Squad</h1>
+            <p className="text-sm text-text-tertiary">Découvre les statistiques détaillées de ta squad</p>
+          </div>
         </m.div>
-
-        {/* Grille d'analytics */}
-        <PremiumGate feature="team_analytics" squadId={id} fallback="blur">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {/* Heatmap Attendance */}
-            <m.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 }}
-              className="bg-surface-card border border-border-subtle rounded-2xl p-6"
-            >
-              <h2 className="text-xl font-semibold mb-4">Heatmap de présence</h2>
-              <AttendanceHeatmap squadId={id} />
-            </m.div>
-
-            {/* Member Reliability */}
-            <m.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 }}
-              className="bg-surface-card border border-border-subtle rounded-2xl p-6"
-            >
-              <h2 className="text-xl font-semibold mb-4">Fiabilité des membres</h2>
-              <MemberReliabilityChart squadId={id} />
-            </m.div>
-
-            {/* Session Trends */}
-            <m.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 }}
-              className="bg-surface-card border border-border-subtle rounded-2xl p-6"
-            >
-              <h2 className="text-xl font-semibold mb-4">Tendance des sessions</h2>
-              <SessionTrends squadId={id} />
-            </m.div>
-
-            {/* Best Slots */}
-            <m.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4 }}
-              className="bg-surface-card border border-border-subtle rounded-2xl p-6"
-            >
-              <h2 className="text-xl font-semibold mb-4">Meilleurs créneaux</h2>
-              <BestSlotsCard squadId={id} />
-            </m.div>
-          </div>
-        </PremiumGate>
 
         {error && (
           <m.div
-            initial={{ opacity: 0, y: 10 }}
+            initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="mt-6 p-4 bg-red-50 border border-red-200 rounded-lg text-red-700"
+            className="bg-error/10 border border-error/20 rounded-xl p-4 mb-6 text-error-primary"
           >
             {error}
           </m.div>
         )}
+
+        {/* Grille d'analytics */}
+        <PremiumGate feature="team_analytics" squadId={id} fallback="blur">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
+            {/* Heatmap Attendance */}
+            <m.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.15 }}
+            >
+              <Card padding="none">
+                <CardContent className="p-4 sm:p-6">
+                  <h2 className="text-lg sm:text-xl font-semibold mb-4 flex items-center gap-2">
+                    Heatmap de présence
+                  </h2>
+                  <AttendanceHeatmap squadId={id} />
+                </CardContent>
+              </Card>
+            </m.div>
+
+            {/* Member Reliability */}
+            <m.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+            >
+              <Card padding="none">
+                <CardContent className="p-4 sm:p-6">
+                  <h2 className="text-lg sm:text-xl font-semibold mb-4 flex items-center gap-2">
+                    Fiabilité des membres
+                  </h2>
+                  <MemberReliabilityChart squadId={id} />
+                </CardContent>
+              </Card>
+            </m.div>
+
+            {/* Session Trends */}
+            <m.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.25 }}
+            >
+              <Card padding="none">
+                <CardContent className="p-4 sm:p-6">
+                  <h2 className="text-lg sm:text-xl font-semibold mb-4 flex items-center gap-2">
+                    Tendance des sessions
+                  </h2>
+                  <SessionTrends squadId={id} />
+                </CardContent>
+              </Card>
+            </m.div>
+
+            {/* Best Slots */}
+            <m.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 }}
+            >
+              <Card padding="none">
+                <CardContent className="p-4 sm:p-6">
+                  <h2 className="text-lg sm:text-xl font-semibold mb-4 flex items-center gap-2">
+                    Meilleurs créneaux
+                  </h2>
+                  <BestSlotsCard squadId={id} />
+                </CardContent>
+              </Card>
+            </m.div>
+          </div>
+        </PremiumGate>
       </div>
-    </div>
+    </m.main>
   )
 }

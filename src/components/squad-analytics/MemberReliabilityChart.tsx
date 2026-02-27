@@ -133,7 +133,7 @@ export default function MemberReliabilityChart({ squadId }: { squadId: string })
 
       {/* Statistiques globales */}
       <div className="mt-6 pt-4 border-t border-border-subtle">
-        <div className="grid grid-cols-3 gap-3">
+        <div className="grid grid-cols-3 gap-2">
           <div className="bg-surface-card rounded-lg p-3 text-center border border-border-subtle">
             <div className="text-xs text-text-tertiary mb-1">Moyenne</div>
             <div className="text-lg font-bold text-text-primary">

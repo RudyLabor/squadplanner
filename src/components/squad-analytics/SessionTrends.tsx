@@ -94,7 +94,8 @@ export default function SessionTrends({ squadId }: { squadId: string }) {
   return (
     <div className="space-y-4">
       {/* Graphique */}
-      <div className="space-y-4">
+      <div className="overflow-x-auto">
+        <div className="min-w-[500px] space-y-4">
         {/* Axe Y (labels) */}
         <div className="flex gap-4">
           <div className="flex flex-col justify-between text-xs text-text-tertiary font-medium w-8">
@@ -145,10 +146,11 @@ export default function SessionTrends({ squadId }: { squadId: string }) {
           <div className="w-8" />
           <div className="flex-1 border-t border-border-subtle" />
         </div>
+        </div>
       </div>
 
       {/* Statistiques */}
-      <div className="grid grid-cols-3 gap-3 mt-6 pt-4 border-t border-border-subtle">
+      <div className="grid grid-cols-3 gap-2 mt-6 pt-4 border-t border-border-subtle">
         <div className="bg-surface-card rounded-lg p-3 text-center border border-border-subtle">
           <div className="text-xs text-text-tertiary mb-1">Total</div>
           <div className="text-lg font-bold text-primary">

@@ -122,78 +122,30 @@ export function EditSessionModal({
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-text-secondary mb-2">
+            <label className="block text-sm font-medium text-text-secondary mb-1.5">
               <Calendar className="w-4 h-4 inline mr-1" />
               Date
             </label>
-            <div className="flex gap-1.5 overflow-x-auto pb-1 scrollbar-hide">
-              {Array.from({ length: 14 }, (_, i) => {
-                const d = new Date()
-                d.setDate(d.getDate() + i)
-                const iso = d.toISOString().split('T')[0]
-                const isSelected = date === iso
-                const dayLabel =
-                  i === 0
-                    ? 'Auj.'
-                    : i === 1
-                      ? 'Dem.'
-                      : d.toLocaleDateString('fr', { weekday: 'short' })
-                return (
-                  <button
-                    key={iso}
-                    type="button"
-                    onClick={() => setDate(iso)}
-                    className={`flex-shrink-0 w-14 py-2 rounded-xl text-center transition-colors ${
-                      isSelected
-                        ? 'bg-primary text-white'
-                        : 'bg-surface-card text-text-secondary hover:bg-border-hover'
-                    }`}
-                  >
-                    <div className="text-xs opacity-70">{dayLabel}</div>
-                    <div className="text-lg font-semibold leading-tight">{d.getDate()}</div>
-                  </button>
-                )
-              })}
-            </div>
+            <input
+              type="date"
+              value={date}
+              onChange={(e) => setDate(e.target.value)}
+              min={new Date().toISOString().split('T')[0]}
+              className="w-full h-11 px-4 rounded-xl bg-bg-surface border border-border-default text-md text-text-primary focus:border-primary focus:outline-none transition-colors"
+            />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-text-secondary mb-2">
+            <label className="block text-sm font-medium text-text-secondary mb-1.5">
               <Clock className="w-4 h-4 inline mr-1" />
               Heure
             </label>
-            <div className="flex flex-wrap gap-1.5">
-              {[
-                '14:00',
-                '15:00',
-                '16:00',
-                '17:00',
-                '18:00',
-                '18:30',
-                '19:00',
-                '19:30',
-                '20:00',
-                '20:30',
-                '21:00',
-                '21:30',
-                '22:00',
-                '22:30',
-                '23:00',
-              ].map((t) => (
-                <button
-                  key={t}
-                  type="button"
-                  onClick={() => setTime(t)}
-                  className={`px-3 py-2 rounded-xl text-sm font-medium transition-colors ${
-                    time === t
-                      ? 'bg-primary text-white'
-                      : 'bg-surface-card text-text-secondary hover:bg-border-hover'
-                  }`}
-                >
-                  {t}
-                </button>
-              ))}
-            </div>
+            <input
+              type="time"
+              value={time}
+              onChange={(e) => setTime(e.target.value)}
+              className="w-full h-11 px-4 rounded-xl bg-bg-surface border border-border-default text-md text-text-primary focus:border-primary focus:outline-none transition-colors"
+            />
           </div>
 
           <div>

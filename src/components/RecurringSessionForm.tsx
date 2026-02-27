@@ -113,8 +113,7 @@ export function RecurringSessionForm({
   const [game, setGame] = useState('')
   const [gameDropdownOpen, setGameDropdownOpen] = useState(false)
   const [selectedDays, setSelectedDays] = useState<number[]>([])
-  const [hour, setHour] = useState('21')
-  const [minute, setMinute] = useState('00')
+  const [timeValue, setTimeValue] = useState('21:00')
   const [duration, setDuration] = useState(120)
   const [minPlayers, setMinPlayers] = useState('2')
   const [maxPlayers, setMaxPlayers] = useState('10')
@@ -188,10 +187,11 @@ export function RecurringSessionForm({
     try {
       // Build recurrence rule: "weekly:0,2,4:21:00"
       const daysStr = selectedDays.sort().join(',')
-      const recurrenceRule = `weekly:${daysStr}:${hour}:${minute}`
+      const [parsedHour, parsedMinute] = timeValue.split(':')
+      const recurrenceRule = `weekly:${daysStr}:${parsedHour}:${parsedMinute}`
 
       // Compute next occurrence
-      const nextOccurrence = computeNextOccurrence(selectedDays, parseInt(hour), parseInt(minute))
+      const nextOccurrence = computeNextOccurrence(selectedDays, parseInt(parsedHour), parseInt(parsedMinute))
 
       // Insert into recurring_sessions table
       const { error: insertError } = await supabase.from('recurring_sessions').insert({
@@ -218,8 +218,7 @@ export function RecurringSessionForm({
       setTitle('')
       setGame('')
       setSelectedDays([])
-      setHour('21')
-      setMinute('00')
+      setTimeValue('21:00')
       setDuration(120)
       setMinPlayers('2')
       setMaxPlayers('10')
@@ -358,34 +357,12 @@ export function RecurringSessionForm({
             <Clock className="w-4 h-4 inline mr-1.5" />
             Heure
           </label>
-          <div className="flex gap-2">
-            <div className="flex-1">
-              <select
-                value={hour}
-                onChange={(e) => setHour(e.target.value)}
-                className="w-full px-4 py-3 rounded-xl bg-surface-card border border-border-subtle text-text-primary focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors"
-              >
-                {Array.from({ length: 24 }, (_, i) => (
-                  <option key={i} value={String(i).padStart(2, '0')}>
-                    {String(i).padStart(2, '0')}h
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className="flex-1">
-              <select
-                value={minute}
-                onChange={(e) => setMinute(e.target.value)}
-                className="w-full px-4 py-3 rounded-xl bg-surface-card border border-border-subtle text-text-primary focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors"
-              >
-                {['00', '15', '30', '45'].map((m) => (
-                  <option key={m} value={m}>
-                    {m}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
+          <input
+            type="time"
+            value={timeValue}
+            onChange={(e) => setTimeValue(e.target.value)}
+            className="w-full px-4 py-3 rounded-xl bg-surface-card border border-border-subtle text-text-primary focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors"
+          />
         </div>
 
         {/* Duration */}
@@ -455,7 +432,7 @@ export function RecurringSessionForm({
         >
           <Repeat className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
           <p className="text-sm text-text-secondary">
-            Une nouvelle session sera créée automatiquement chaque semaine à {hour}:{minute}
+            Une nouvelle session sera créée automatiquement chaque semaine à {timeValue}
           </p>
         </m.div>
 

@@ -11,7 +11,6 @@ import {
   useSquadLeaderboardQuery,
   useLeaveSquadMutation,
   useDeleteSquadMutation,
-  useCreateSessionMutation,
   useRsvpMutation,
 } from '../hooks/queries'
 import { SquadHeader, InviteModal, EditSquadModal } from '../components/squads/SquadHeader'
@@ -44,7 +43,6 @@ export default function SquadDetail() {
 
   const leaveSquadMutation = useLeaveSquadMutation()
   const deleteSquadMutation = useDeleteSquadMutation()
-  const createSessionMutation = useCreateSessionMutation()
   const rsvpMutation = useRsvpMutation()
 
   useEffect(() => {
@@ -54,26 +52,6 @@ export default function SquadDetail() {
   useEffect(() => {
     if (user?.id) fetchPremiumStatus()
   }, [user?.id, fetchPremiumStatus])
-
-  const handleCreateSession = useCallback(
-    async (data: {
-      squad_id: string
-      title?: string
-      scheduled_at: string
-      duration_minutes: number
-      auto_confirm_threshold: number
-      game?: string
-    }) => {
-      try {
-        await createSessionMutation.mutateAsync(data)
-        setSuccessMessage('Session créée !')
-        return { session: null, error: null }
-      } catch (error) {
-        return { session: null, error: error as Error }
-      }
-    },
-    [createSessionMutation]
-  )
 
   const handleRsvp = useCallback(
     async (sessionId: string, response: 'present' | 'absent' | 'maybe') => {
@@ -193,9 +171,7 @@ export default function SquadDetail() {
               <SquadSessionsList
                 sessions={sessions || []}
                 squadId={id || ''}
-                squadGame={currentSquad.game}
                 onRsvp={handleRsvp}
-                onCreateSession={handleCreateSession}
                 sessionsLoading={sessionsLoading}
               />
 

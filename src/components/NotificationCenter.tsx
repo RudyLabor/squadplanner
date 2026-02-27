@@ -43,12 +43,28 @@ function persistReadIds(ids: Set<string>) {
   localStorage.setItem(READ_IDS_KEY, JSON.stringify(arr))
 }
 
+// Deduplication: prevent concurrent fetches from two NotificationBell instances
+let inFlightFetch: Promise<void> | null = null
+let lastFetchTime = 0
+const FETCH_COOLDOWN_MS = 30_000 // 30s cooldown between fetches
+
 export const useNotificationStore = create<NotificationStore>((set, get) => ({
   notifications: [],
   unreadCount: 0,
   isLoading: false,
 
   fetchNotifications: async (userId: string) => {
+    // Skip if fetched recently (prevents re-fetch on every navigation)
+    const now = Date.now()
+    if (now - lastFetchTime < FETCH_COOLDOWN_MS && get().notifications.length > 0) {
+      return
+    }
+    // Deduplicate concurrent calls (two NotificationBell instances)
+    if (inFlightFetch) {
+      await inFlightFetch
+      return
+    }
+    const doFetch = async () => {
     try {
       set({ isLoading: true })
       const readIds = getReadIds()
@@ -122,8 +138,16 @@ export const useNotificationStore = create<NotificationStore>((set, get) => ({
         unreadCount: notifs.filter((n) => !n.read).length,
         isLoading: false,
       })
+      lastFetchTime = Date.now()
     } catch {
       set({ isLoading: false })
+    }
+    }
+    inFlightFetch = doFetch()
+    try {
+      await inFlightFetch
+    } finally {
+      inFlightFetch = null
     }
   },
 

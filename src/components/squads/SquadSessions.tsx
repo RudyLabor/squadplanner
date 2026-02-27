@@ -1,9 +1,8 @@
-import { useState } from 'react'
-import { m, AnimatePresence } from 'framer-motion'
-import { Calendar, Plus, Loader2, Mic, MicOff } from '../icons'
-import { Button, Card, CardContent, Badge, Input, Select } from '../ui'
+import { Calendar, Plus, Mic, MicOff, Loader2 } from '../icons'
+import { Button, Card, Badge } from '../ui'
 import { useAuthStore, usePremiumStore } from '../../hooks'
 import { useVoiceChatStore } from '../../hooks/useVoiceChat'
+import { useCreateSessionModal } from '../CreateSessionModal'
 import { SessionCard } from './SessionCard'
 
 // Re-export SessionCard for barrel consumers
@@ -127,174 +126,31 @@ interface SquadSessionsProps {
   squadId: string
   squadGame?: string
   onRsvp: (sessionId: string, response: 'present' | 'absent' | 'maybe') => void
-  onCreateSession: (data: {
-    squad_id: string
-    title?: string
-    scheduled_at: string
-    duration_minutes: number
-    auto_confirm_threshold: number
-    game?: string
-  }) => Promise<{ error: { message: string } | null }>
   sessionsLoading: boolean
 }
 
 export function SquadSessionsList({
   sessions,
   squadId,
-  squadGame,
   onRsvp,
-  onCreateSession,
-  sessionsLoading,
 }: SquadSessionsProps) {
-  const [showCreateSession, setShowCreateSession] = useState(false)
-  const [sessionTitle, setSessionTitle] = useState('')
-  const [sessionDate, setSessionDate] = useState('')
-  const [sessionTime, setSessionTime] = useState('')
-  const [sessionDuration, setSessionDuration] = useState('120')
-  const [sessionThreshold, setSessionThreshold] = useState('3')
-  const [error, setError] = useState<string | null>(null)
+  const openCreateSession = useCreateSessionModal((s) => s.open)
 
   const now = new Date()
+  // Only show truly future sessions (not past ones even if confirmed)
   const futureSessions = (sessions || []).filter(
-    (s) => new Date(s.scheduled_at) >= now || s.status === 'confirmed'
+    (s) => new Date(s.scheduled_at) >= now
   )
-
-  const handleCreateSession = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setError(null)
-
-    if (!sessionDate || !sessionTime) {
-      setError('Date et heure sont requises')
-      return
-    }
-
-    const scheduledAt = new Date(`${sessionDate}T${sessionTime}`).toISOString()
-
-    const { error } = await onCreateSession({
-      squad_id: squadId,
-      title: sessionTitle || undefined,
-      scheduled_at: scheduledAt,
-      duration_minutes: parseInt(sessionDuration),
-      auto_confirm_threshold: parseInt(sessionThreshold),
-      game: squadGame,
-    })
-
-    if (error) {
-      setError(error.message)
-    } else {
-      setShowCreateSession(false)
-      setSessionTitle('')
-      setSessionDate('')
-      setSessionTime('')
-      setSessionThreshold('3')
-    }
-  }
 
   return (
     <>
-      {/* Create session form */}
-      <AnimatePresence>
-        {showCreateSession ? (
-          <m.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            className="mb-6 overflow-hidden"
-          >
-            <Card>
-              <CardContent className="p-5">
-                <h3 className="text-lg font-semibold text-text-primary mb-4">Nouvelle session</h3>
-                <form onSubmit={handleCreateSession} className="space-y-4">
-                  <Input
-                    label="Titre (optionnel)"
-                    value={sessionTitle}
-                    onChange={(e) => setSessionTitle(e.target.value)}
-                    placeholder="Session ranked, Detente, Tryhard..."
-                  />
-                  <div className="grid grid-cols-2 gap-4">
-                    <Input
-                      label="Date"
-                      type="date"
-                      value={sessionDate}
-                      onChange={(e) => setSessionDate(e.target.value)}
-                      required
-                    />
-                    <Input
-                      label="Heure"
-                      type="time"
-                      value={sessionTime}
-                      onChange={(e) => setSessionTime(e.target.value)}
-                      required
-                    />
-                  </div>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-base font-medium text-text-secondary mb-1.5">
-                        Durée
-                      </label>
-                      <Select
-                        options={[
-                          { value: '60', label: '1 heure' },
-                          { value: '120', label: '2 heures' },
-                          { value: '180', label: '3 heures' },
-                          { value: '240', label: '4 heures' },
-                        ]}
-                        value={sessionDuration}
-                        onChange={(val) => setSessionDuration(val as string)}
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-base font-medium text-text-secondary mb-1">
-                        Confirmation automatique
-                      </label>
-                      <p className="text-sm text-text-quaternary mb-1.5">
-                        La session sera confirmée quand ce nombre de joueurs aura répondu "Présent"
-                      </p>
-                      <Select
-                        options={[
-                          { value: '2', label: '2 joueurs' },
-                          { value: '3', label: '3 joueurs' },
-                          { value: '4', label: '4 joueurs' },
-                          { value: '5', label: '5 joueurs' },
-                          { value: '6', label: '6 joueurs' },
-                          { value: '8', label: '8 joueurs' },
-                          { value: '10', label: '10 joueurs' },
-                        ]}
-                        value={sessionThreshold}
-                        onChange={(val) => setSessionThreshold(val as string)}
-                      />
-                    </div>
-                  </div>
-                  {error && (
-                    <div className="p-3 rounded-lg bg-error/10 border border-error/20">
-                      <p className="text-error text-base">{error}</p>
-                    </div>
-                  )}
-                  <div className="flex gap-2 pt-1">
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      onClick={() => setShowCreateSession(false)}
-                    >
-                      Annuler
-                    </Button>
-                    <Button type="submit" disabled={sessionsLoading}>
-                      {sessionsLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Créer'}
-                    </Button>
-                  </div>
-                </form>
-              </CardContent>
-            </Card>
-          </m.div>
-        ) : (
-          <div className="mb-6">
-            <Button onClick={() => setShowCreateSession(true)} className="w-full">
-              <Plus className="w-5 h-5" />
-              Planifier une session
-            </Button>
-          </div>
-        )}
-      </AnimatePresence>
+      {/* Create session button — opens the global CreateSessionModal */}
+      <div className="mb-6">
+        <Button onClick={() => openCreateSession(squadId)} className="w-full">
+          <Plus className="w-5 h-5" />
+          Planifier une session
+        </Button>
+      </div>
 
       {/* Sessions list */}
       <div className="mb-6">
@@ -312,7 +168,7 @@ export function SquadSessionsList({
             <p className="text-sm text-text-quaternary mb-4">
               Propose un créneau pour jouer avec ta squad
             </p>
-            <Button type="button" size="sm" onClick={() => setShowCreateSession(true)}>
+            <Button type="button" size="sm" onClick={() => openCreateSession(squadId)}>
               <Plus className="w-4 h-4" />
               Planifier une session
             </Button>

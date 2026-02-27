@@ -120,7 +120,13 @@ export default function Auth() {
         const redirectUrl = sessionStorage.getItem('redirectAfterAuth')
         if (redirectUrl) {
           sessionStorage.removeItem('redirectAfterAuth')
-          navigate(redirectUrl)
+          // SEC: Validate redirect URL to prevent open redirect attacks.
+          // Only allow relative paths starting with '/' (no protocol/host).
+          if (redirectUrl.startsWith('/') && !redirectUrl.startsWith('//')) {
+            navigate(redirectUrl)
+          } else {
+            navigate('/home')
+          }
         } else {
           // Force fresh fetch (bypass cache) — stale data after sign-out/sign-in could
           // incorrectly send users with existing squads to onboarding.

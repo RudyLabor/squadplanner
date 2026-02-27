@@ -92,9 +92,9 @@ serve(async (req) => {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     })
   } catch (error) {
+    // SEC: Don't leak internal error details to clients
     console.error('[process-referral] Error:', error)
-    const message = error instanceof Error ? error.message : 'Erreur interne'
-    return new Response(JSON.stringify({ success: false, error: message }), {
+    return new Response(JSON.stringify({ success: false, error: 'Internal server error' }), {
       status: 500,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     })

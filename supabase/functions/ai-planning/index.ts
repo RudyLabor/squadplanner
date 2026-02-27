@@ -361,8 +361,9 @@ serve(async (req) => {
       }
     )
   } catch (error) {
+    // SEC: Don't leak internal error details to clients
     console.error('Error in ai-planning:', error)
-    return new Response(JSON.stringify({ error: error.message }), {
+    return new Response(JSON.stringify({ error: 'Internal server error' }), {
       status: 500,
       headers: { ...getCorsHeaders(req.headers.get('origin')), 'Content-Type': 'application/json' },
     })

@@ -528,8 +528,10 @@ serve(async (req) => {
     const token = authHeader.replace('Bearer ', '')
     const serviceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') || ''
 
-    // If not service role, verify the user token
-    if (token !== serviceRoleKey) {
+    // If not service role, verify the user token and relationship
+    let callerUserId: string | null = null
+    const isServiceRole = token === serviceRoleKey
+    if (!isServiceRole) {
       const supabaseClient = createClient(
         Deno.env.get('SUPABASE_URL') ?? '',
         Deno.env.get('SUPABASE_ANON_KEY') ?? '',
@@ -549,6 +551,7 @@ serve(async (req) => {
           headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         })
       }
+      callerUserId = user.id
     }
 
     // Validate VAPID keys
@@ -621,6 +624,47 @@ serve(async (req) => {
         status: 400,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       })
+    }
+
+    // SEC: For user-token calls, verify caller shares at least one squad with each target
+    if (callerUserId) {
+      // Prevent sending push to yourself
+      const otherUserIds = userIds.filter((id) => id !== callerUserId)
+      if (otherUserIds.length > 0) {
+        const supabaseAdmin = createClient(
+          Deno.env.get('SUPABASE_URL') ?? '',
+          Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
+        )
+        // Get squads the caller belongs to
+        const { data: callerSquads } = await supabaseAdmin
+          .from('squad_members')
+          .select('squad_id')
+          .eq('user_id', callerUserId)
+        const callerSquadIds = (callerSquads || []).map((s: { squad_id: string }) => s.squad_id)
+
+        if (callerSquadIds.length === 0) {
+          return new Response(JSON.stringify({ error: 'No shared squad with target users' }), {
+            status: 403,
+            headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+          })
+        }
+
+        // Check that each target user shares at least one squad
+        const { data: targetMembers } = await supabaseAdmin
+          .from('squad_members')
+          .select('user_id, squad_id')
+          .in('user_id', otherUserIds)
+          .in('squad_id', callerSquadIds)
+
+        const reachableUsers = new Set((targetMembers || []).map((m: { user_id: string }) => m.user_id))
+        const unreachable = otherUserIds.filter((id) => !reachableUsers.has(id))
+        if (unreachable.length > 0) {
+          return new Response(
+            JSON.stringify({ error: 'Cannot send push to users outside your squads' }),
+            { status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+          )
+        }
+      }
     }
 
     // Create Supabase client with service role
@@ -809,7 +853,7 @@ serve(async (req) => {
     )
   } catch (error) {
     console.error('Error in send-push:', error)
-    return new Response(JSON.stringify({ error: error.message }), {
+    return new Response(JSON.stringify({ error: 'Internal server error' }), {
       status: 500,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     })

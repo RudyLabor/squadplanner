@@ -971,8 +971,8 @@ Note : Le mot de passe du Compte 1 a ete change de `AuditTest2026!` a `AuditTest
 tester sur squadplanner.fr
 
 identifiants app :
-EMAIL : rudylabor@hotmail.fr
-MOT DE PASSE : ruudboy92
+EMAIL : (voir variables d'environnement E2E_TEST_EMAIL)
+MOT DE PASSE : (voir variables d'environnement E2E_TEST_PASSWORD)
 
 ### Comment tester un flux
 

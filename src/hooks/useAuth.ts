@@ -215,11 +215,20 @@ export const useAuthStore = create<AuthState>((set, get) => ({
         /* squads module may not be loaded */
       }
 
-      // 5. Sign out from Supabase
+      // 5. Clear offline mutation queue to prevent cross-user replay
+      // SEC: Queued mutations contain auth tokens from the previous user
+      try {
+        const { clearMutationQueue } = await import('../lib/offlineMutationQueue')
+        await clearMutationQueue()
+      } catch {
+        /* offline mutation module may not be loaded */
+      }
+
+      // 6. Sign out from Supabase
       const { error } = await supabase.auth.signOut({ scope: 'global' })
       if (error) console.warn('Sign out error:', error)
 
-      // 6. Clear all auth-related storage
+      // 7. Clear all auth-related storage
       const keysToRemove = Object.keys(localStorage).filter(
         (key) => key.startsWith('sb-') || key.includes('supabase') || key.includes('auth-token')
       )
@@ -229,7 +238,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       )
       sessionKeysToRemove.forEach((key) => sessionStorage.removeItem(key))
 
-      // 7. Final state update and redirect
+      // 8. Final state update and redirect
       set({ isLoading: false })
       window.location.replace('/')
     } catch (error) {

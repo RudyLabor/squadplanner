@@ -287,8 +287,9 @@ serve(async (req) => {
       headers: { ...getCorsHeaders(req.headers.get('origin')), 'Content-Type': 'application/json' },
     })
   } catch (error) {
+    // SEC: Don't leak internal error details to clients
     console.error('Webhook error:', error)
-    return new Response(JSON.stringify({ error: error.message }), {
+    return new Response(JSON.stringify({ error: 'Webhook processing error' }), {
       status: 400,
       headers: { ...getCorsHeaders(req.headers.get('origin')), 'Content-Type': 'application/json' },
     })

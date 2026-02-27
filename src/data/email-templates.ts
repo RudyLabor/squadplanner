@@ -19,6 +19,21 @@ export interface EmailTemplate {
   html: (vars: Record<string, string>) => string
 }
 
+/**
+ * SEC: Escape HTML special characters in user-provided values
+ * to prevent XSS injection via email templates.
+ * All user-provided variables (name, squad_name, etc.) MUST be
+ * passed through this function before interpolation into HTML.
+ */
+function escapeHtml(str: string): string {
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#x27;')
+}
+
 // ============================================================================
 // 1. WELCOME EMAIL
 // ============================================================================
@@ -51,7 +66,7 @@ const welcome: EmailTemplate = {
             <td style="background-color: #1c1c2e; border: 1px solid #222238; border-radius: 12px; padding: 40px 30px;">
               <!-- Greeting -->
               <h1 style="color: #ffffff; font-size: 28px; font-weight: 700; margin: 0 0 10px 0; line-height: 1.3;">
-                Bienvenue, ${vars.name || 'Champion'} ! 🎮
+                Bienvenue, ${escapeHtml(vars.name || 'Champion')} ! 🎮
               </h1>
               <p style="color: #9ca3af; font-size: 14px; margin: 0 0 30px 0;">
                 Merci de rejoindre la plus grande communauté de planification de sessions gaming
@@ -465,7 +480,7 @@ const squadPlaying: EmailTemplate = {
               <table width="100%" cellpadding="0" cellspacing="0" style="margin: 30px 0 0 0;">
                 <tr>
                   <td style="text-align: center;">
-                    <a href="https://squadplanner.fr/squads/${vars.squad_id || 'dashboard'}" style="display: inline-block; background-color: #8B5CF6; color: #ffffff; text-decoration: none; padding: 14px 32px; border-radius: 8px; font-weight: 600; font-size: 16px; transition: background-color 0.2s;">Rejoindre ma squad</a>
+                    <a href="https://squadplanner.fr/squads/${escapeHtml(vars.squad_id || 'dashboard')}" style="display: inline-block; background-color: #8B5CF6; color: #ffffff; text-decoration: none; padding: 14px 32px; border-radius: 8px; font-weight: 600; font-size: 16px; transition: background-color 0.2s;">Rejoindre ma squad</a>
                   </td>
                 </tr>
               </table>
@@ -791,13 +806,13 @@ const monthlyDigest: EmailTemplate = {
                     <td style="width: 50%; padding-right: 8px; padding-bottom: 12px;">
                       <div style="background-color: #1c1c2e; border: 1px solid #404050; border-radius: 6px; padding: 15px; text-align: center;">
                         <p style="color: #9ca3af; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; margin: 0 0 6px 0;">Sessions jouées</p>
-                        <p style="color: #8B5CF6; font-size: 32px; font-weight: 700; margin: 0;">${vars.sessions_count || '12'}</p>
+                        <p style="color: #8B5CF6; font-size: 32px; font-weight: 700; margin: 0;">${escapeHtml(vars.sessions_count || '12')}</p>
                       </div>
                     </td>
                     <td style="width: 50%; padding-left: 8px; padding-bottom: 12px;">
                       <div style="background-color: #1c1c2e; border: 1px solid #404050; border-radius: 6px; padding: 15px; text-align: center;">
                         <p style="color: #9ca3af; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; margin: 0 0 6px 0;">Heures jouées</p>
-                        <p style="color: #10b981; font-size: 32px; font-weight: 700; margin: 0;">${vars.hours_played || '48'}h</p>
+                        <p style="color: #10b981; font-size: 32px; font-weight: 700; margin: 0;">${escapeHtml(vars.hours_played || '48')}h</p>
                       </div>
                     </td>
                   </tr>
@@ -805,13 +820,13 @@ const monthlyDigest: EmailTemplate = {
                     <td style="width: 50%; padding-right: 8px;">
                       <div style="background-color: #1c1c2e; border: 1px solid #404050; border-radius: 6px; padding: 15px; text-align: center;">
                         <p style="color: #9ca3af; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; margin: 0 0 6px 0;">Fiabilité</p>
-                        <p style="color: #f59e0b; font-size: 32px; font-weight: 700; margin: 0;">${vars.reliability || '92'}%</p>
+                        <p style="color: #f59e0b; font-size: 32px; font-weight: 700; margin: 0;">${escapeHtml(vars.reliability || '92')}%</p>
                       </div>
                     </td>
                     <td style="width: 50%; padding-left: 8px;">
                       <div style="background-color: #1c1c2e; border: 1px solid #404050; border-radius: 6px; padding: 15px; text-align: center;">
                         <p style="color: #9ca3af; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; margin: 0 0 6px 0;">XP gagnés</p>
-                        <p style="color: #ec4899; font-size: 32px; font-weight: 700; margin: 0;">+${vars.xp_gained || '3450'}</p>
+                        <p style="color: #ec4899; font-size: 32px; font-weight: 700; margin: 0;">+${escapeHtml(vars.xp_gained || '3450')}</p>
                       </div>
                     </td>
                   </tr>
@@ -822,7 +837,7 @@ const monthlyDigest: EmailTemplate = {
               <div style="background-color: #222238; border: 1px solid #404050; border-radius: 8px; padding: 20px; margin: 25px 0;">
                 <h3 style="color: #ffffff; font-size: 16px; font-weight: 600; margin: 0 0 15px 0;">Activité de ta squad</h3>
                 <p style="color: #e5e7eb; font-size: 14px; font-weight: 600; margin: 0 0 10px 0;">
-                  ${vars.squad_name || 'Les Légendaires'}
+                  ${escapeHtml(vars.squad_name || 'Les Légendaires')}
                 </p>
 
                 <table width="100%" cellpadding="0" cellspacing="0">

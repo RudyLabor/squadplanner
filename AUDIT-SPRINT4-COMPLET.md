@@ -1,7 +1,7 @@
 # AUDIT SPRINT 4 "POLISH WORLD-CLASS" — COMPLET (19/02/2026)
 
 > Audit visuel + ARIA + console + réseau sur squadplanner.fr
-> Compte connecté : rudylabor@hotmail.fr (FloydCanShoot)
+> Compte connecté : [REDACTED] (FloydCanShoot)
 > Méthode : captures écran agent précédent + inspection code + **tests navigateur live (Chrome DevTools)**
 > Viewport testé : 1440px desktop, 375px mobile, 812×375 paysage
 

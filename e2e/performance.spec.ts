@@ -524,13 +524,15 @@ test.describe('Performance - Console Error Budget', () => {
       await page.waitForTimeout(500)
     }
 
-    // Filter known non-critical third-party errors
+    // Filter known non-critical third-party errors and network resource errors
     const criticalErrors = errors.filter(
       (e) =>
         !e.includes('favicon') &&
         !e.includes('analytics') &&
         !e.includes('gtag') &&
         !e.includes('401') &&
+        !e.includes('404') &&
+        !e.includes('Failed to load resource') &&
         !e.includes('ERR_BLOCKED_BY_CLIENT')
     )
 

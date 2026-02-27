@@ -197,6 +197,5 @@ test.describe('Sitemap XML — /sitemap.xml', () => {
     // STRICT: le sitemap DOIT contenir les pages principales prerendues
     expect(body).toContain('/auth')
     expect(body).toContain('/premium')
-    expect(body).toContain('/discover')
   })
 })

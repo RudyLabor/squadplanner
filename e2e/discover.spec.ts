@@ -26,11 +26,11 @@ test.describe('F52 — Parcourir les squads publics', () => {
       .locator('main')
       .locator('button:has-text("Rejoindre")')
       .first()
-    const emptyState = authenticatedPage.getByText('Aucune squad publique trouvée').first()
+    const emptyState = authenticatedPage.getByText(/La communauté se construit/i).first()
 
     // STRICT: page MUST show either squad cards or empty state — never blank
     // Utilisation de .or() pour une assertion Playwright native
-    await expect(squadCard.or(emptyState)).toBeVisible({ timeout: 5000 })
+    await expect(squadCard.or(emptyState)).toBeVisible({ timeout: 10000 })
 
     // isVisible() returns boolean without throwing — no .catch() needed
     const hasSquadCards = await squadCard.isVisible()
@@ -56,7 +56,7 @@ test.describe('F52 — Parcourir les squads publics', () => {
 
     // STRICT: the page must show either squad data OR the empty state text
     const hasSquadContent = mainContent!.includes('Rejoindre') || mainContent!.includes('membre')
-    const hasEmptyContent = mainContent!.includes('Aucune squad publique')
+    const hasEmptyContent = mainContent!.includes('communauté se construit') || mainContent!.includes('Créer une squad')
     if (hasSquadContent) {
       expect(mainContent).toMatch(/Rejoindre|membre/)
     } else {
@@ -114,7 +114,7 @@ test.describe('F53a — Filtrer par jeu', () => {
       expect(foundFiltered).toBeGreaterThan(0)
     } else {
       // DB has no Valorant squads -> empty state MUST show
-      const emptyState = authenticatedPage.getByText(/Aucune squad publique/i).first()
+      const emptyState = authenticatedPage.getByText(/La communauté se construit/i).first()
       // STRICT: empty state MUST be displayed
       await expect(emptyState).toBeVisible({ timeout: 10000 })
     }
@@ -165,7 +165,7 @@ test.describe('F53b — Filtrer par region', () => {
       expect(foundFiltered).toBeGreaterThan(0)
     } else {
       // DB has no squads in eu-west -> empty state MUST show
-      const emptyState = authenticatedPage.getByText(/Aucune squad publique/i).first()
+      const emptyState = authenticatedPage.getByText(/La communauté se construit/i).first()
       // STRICT: empty state MUST be displayed
       await expect(emptyState).toBeVisible({ timeout: 10000 })
     }

@@ -74,7 +74,7 @@ export default async function globalTeardown() {
     console.log(`  Warning: temp user cleanup failed: ${err}`)
   }
 
-  // Reset subscription tier to free (in case trial test left it as premium)
+  // Restore subscription tier to 'club' (the user's real plan — tests may have changed it)
   try {
     const { data: usersData2 } = await admin.auth.admin.listUsers()
     const testUser = usersData2?.users?.find(
@@ -84,8 +84,7 @@ export default async function globalTeardown() {
       await admin
         .from('profiles')
         .update({
-          subscription_tier: 'free',
-          subscription_expires_at: null,
+          subscription_tier: 'club',
         })
         .eq('id', testUser.id)
     }

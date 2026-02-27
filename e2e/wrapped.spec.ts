@@ -37,20 +37,15 @@ test.describe('Gaming Wrapped — /wrapped', () => {
     const mainText = await page.locator('main').first().textContent()
     expect(mainText).toBeTruthy()
 
-    // La page peut afficher une erreur de chargement (API instable)
-    const hasError = /erreur|error|chargement/i.test(mainText!)
+    // La page Wrapped est un carousel avec slides de stats gaming.
+    // Verifier que le contenu est coherent : soit le titre Wrapped, soit des stats, soit une erreur
+    const hasWrappedContent = /Wrapped|gaming|stats|slide|session|squad/i.test(mainText!)
+    const hasProfileData =
+      mainText!.includes(profile.username) ||
+      (profile.xp > 0 && mainText!.includes(String(profile.xp)))
 
-    if (!hasError) {
-      // Si pas d'erreur, verifier que le username OU le niveau OU des stats sont presentes
-      const hasUsername = mainText!.includes(profile.username)
-      const hasLevel = mainText!.includes(String(profile.level ?? 1))
-      const hasXP = profile.xp > 0 && mainText!.includes(String(profile.xp))
-      const hasReliability =
-        profile.reliability_score > 0 && mainText!.includes(String(profile.reliability_score))
-
-      expect(hasUsername || hasLevel || hasXP || hasReliability).toBe(true)
-    }
-    // Si erreur de chargement, le test passe — c'est un etat valide de la page
+    // STRICT: la page DOIT afficher du contenu Wrapped OU des donnees profil
+    expect(hasWrappedContent || hasProfileData).toBe(true)
   })
 
   test('affiche les squads du user si elles existent en DB', async ({

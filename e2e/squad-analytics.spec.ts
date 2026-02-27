@@ -23,23 +23,6 @@ test.describe('Squad Analytics — /squad/:id/analytics', () => {
     await expect(heading).toBeVisible({ timeout: 15000 })
   })
 
-  test('affiche le heading Analytics Squad', async ({ authenticatedPage: page, db }) => {
-    const squads = await db.getUserSquads()
-    expect(squads.length).toBeGreaterThan(0)
-    const squad = squads[0].squads
-
-    const loaded = await navigateWithFallback(page, `/squad/${squad.id}/analytics`)
-    expect(loaded).toBe(true)
-    await dismissTourOverlay(page)
-
-    // STRICT: le heading "Analytics Squad" OU le nom de la squad DOIT etre affiche
-    const heading = page
-      .getByText(/Analytics Squad/i)
-      .first()
-      .or(page.getByText(squad.name).first())
-    await expect(heading).toBeVisible({ timeout: 15000 })
-  })
-
   test('affiche le nombre de membres correspondant a la DB', async ({
     authenticatedPage: page,
     db,

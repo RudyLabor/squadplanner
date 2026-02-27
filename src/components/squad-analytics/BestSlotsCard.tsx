@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { m } from 'framer-motion'
 import { Clock, Star } from '../icons'
 import { supabaseMinimal as supabase } from '../../lib/supabaseMinimal'
@@ -14,28 +14,78 @@ const DAYS_FR = ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 
 export default function BestSlotsCard({ squadId }: { squadId: string }) {
   const [bestSlots, setBestSlots] = useState<BestSlot[]>([])
   const [loading, setLoading] = useState(true)
+  const hasFetched = useRef(false)
 
   useEffect(() => {
+    // Guard against re-fetching on re-mount (PremiumGate blur mode)
+    if (hasFetched.current) return
+    hasFetched.current = true
+
     const fetchBestSlots = async () => {
       try {
         setLoading(true)
 
-        // Appeler la RPC get_best_slots
-        const { data, error } = await supabase.rpc('get_best_slots', {
-          squad_id: squadId,
-        })
+        // Récupérer les sessions avec RSVPs pour calculer les meilleurs créneaux
+        const twelveWeeksAgo = new Date(Date.now() - 12 * 7 * 24 * 60 * 60 * 1000)
 
-        if (error) {
-          console.error('Erreur RPC get_best_slots:', error)
+        const { data: sessions, error: sessionsError } = await supabase
+          .from('sessions')
+          .select('id, scheduled_at')
+          .eq('squad_id', squadId)
+          .gte('scheduled_at', twelveWeeksAgo.toISOString())
+
+        if (sessionsError) {
+          console.error('Erreur récupération sessions best slots:', sessionsError)
           setLoading(false)
           return
         }
 
-        // Trier et garder les 3 meilleurs
-        const sorted = (data || [])
-          .sort((a: BestSlot, b: BestSlot) => b.score - a.score)
-          .slice(0, 3)
+        if (!sessions || sessions.length === 0) {
+          setBestSlots([])
+          setLoading(false)
+          return
+        }
 
+        // Récupérer les RSVPs "present" pour ces sessions
+        const sessionIds = sessions.map((s) => s.id)
+        const { data: rsvps, error: rsvpsError } = await supabase
+          .from('session_rsvps')
+          .select('session_id')
+          .in('session_id', sessionIds)
+          .eq('response', 'present')
+
+        if (rsvpsError) {
+          console.error('Erreur récupération RSVPs best slots:', rsvpsError)
+          setLoading(false)
+          return
+        }
+
+        // Compter les présences par créneau (jour + heure)
+        const rsvpCountBySession = new Map<string, number>()
+        rsvps?.forEach((r) => {
+          rsvpCountBySession.set(r.session_id, (rsvpCountBySession.get(r.session_id) || 0) + 1)
+        })
+
+        const slotScores = new Map<string, number>()
+        sessions.forEach((session) => {
+          const date = new Date(session.scheduled_at)
+          const day = date.getDay()
+          const hour = date.getHours()
+          const key = `${day}-${hour}`
+          const rsvpCount = rsvpCountBySession.get(session.id) || 0
+          slotScores.set(key, (slotScores.get(key) || 0) + rsvpCount)
+        })
+
+        // Convertir en tableau et trier par score
+        const slots: BestSlot[] = []
+        slotScores.forEach((score, key) => {
+          const [day, hour] = key.split('-').map(Number)
+          if (score > 0) {
+            slots.push({ day, hour, score })
+          }
+        })
+
+        const sorted = slots.sort((a, b) => b.score - a.score).slice(0, 3)
         setBestSlots(sorted)
       } catch (err) {
         console.error('Erreur best slots:', err)

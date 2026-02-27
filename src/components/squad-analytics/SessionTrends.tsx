@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { m } from 'framer-motion'
 import { supabaseMinimal as supabase } from '../../lib/supabaseMinimal'
 
@@ -12,8 +12,13 @@ export default function SessionTrends({ squadId }: { squadId: string }) {
   const [data, setData] = useState<WeeklyData[]>([])
   const [loading, setLoading] = useState(true)
   const [maxValue, setMaxValue] = useState(1)
+  const hasFetched = useRef(false)
 
   useEffect(() => {
+    // Guard against re-fetching on re-mount (PremiumGate blur mode)
+    if (hasFetched.current) return
+    hasFetched.current = true
+
     const fetchSessionTrends = async () => {
       try {
         setLoading(true)

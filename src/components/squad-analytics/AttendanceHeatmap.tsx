@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { m } from 'framer-motion'
 import { supabaseMinimal as supabase } from '../../lib/supabaseMinimal'
 
@@ -26,8 +26,13 @@ export default function AttendanceHeatmap({ squadId }: { squadId: string }) {
   const [data, setData] = useState<AttendanceData[]>([])
   const [loading, setLoading] = useState(true)
   const [maxValue, setMaxValue] = useState(1)
+  const hasFetched = useRef(false)
 
   useEffect(() => {
+    // Guard against re-fetching on re-mount (PremiumGate blur mode)
+    if (hasFetched.current) return
+    hasFetched.current = true
+
     const fetchAttendanceData = async () => {
       try {
         setLoading(true)
@@ -69,7 +74,7 @@ export default function AttendanceHeatmap({ squadId }: { squadId: string }) {
         // Construire la matrice heatmap
         const heatmapData: AttendanceData[] = []
         const sessionMap = new Map<string, { id: string; scheduled_at: string }>(
-          sessions.map((s: any) => [s.id, s])
+          sessions.map((s) => [s.id, s])
         )
         const rsvpMap = new Map<string, number>()
 

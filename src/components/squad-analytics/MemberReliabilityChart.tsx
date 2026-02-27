@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { m } from 'framer-motion'
 import { supabaseMinimal as supabase } from '../../lib/supabaseMinimal'
 
@@ -9,31 +9,36 @@ interface MemberReliability {
   avatar_url: string | null
 }
 
-// Fonction pour obtenir la couleur en fonction du score
+// Couleurs adaptées au dark mode
 const getReliabilityColor = (score: number): { bg: string; bar: string; text: string } => {
   if (score >= 80) {
-    return { bg: 'bg-emerald-50', bar: 'bg-emerald-500', text: 'text-emerald-700' }
+    return { bg: 'bg-emerald-500/10', bar: 'bg-emerald-500', text: 'text-emerald-400' }
   }
   if (score >= 50) {
-    return { bg: 'bg-amber-50', bar: 'bg-amber-500', text: 'text-amber-700' }
+    return { bg: 'bg-amber-500/10', bar: 'bg-amber-500', text: 'text-amber-400' }
   }
-  return { bg: 'bg-red-50', bar: 'bg-red-500', text: 'text-red-700' }
+  return { bg: 'bg-red-500/10', bar: 'bg-red-500', text: 'text-red-400' }
 }
 
 export default function MemberReliabilityChart({ squadId }: { squadId: string }) {
   const [members, setMembers] = useState<MemberReliability[]>([])
   const [loading, setLoading] = useState(true)
+  const hasFetched = useRef(false)
 
   useEffect(() => {
+    // Guard against re-fetching on re-mount (PremiumGate blur mode)
+    if (hasFetched.current) return
+    hasFetched.current = true
+
     const fetchMemberReliability = async () => {
       try {
         setLoading(true)
 
+        // Ne PAS utiliser .order() sur une colonne de relation — ça échoue avec Supabase
         const { data: squadMembers, error: membersError } = await supabase
           .from('squad_members')
           .select('*, profiles(username, avatar_url, reliability_score)')
           .eq('squad_id', squadId)
-          .order('profiles.reliability_score', { ascending: false })
 
         if (membersError) {
           console.error('Erreur récupération membres:', membersError)

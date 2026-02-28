@@ -305,7 +305,7 @@ const sessionMissed: EmailTemplate = {
             <td style="background-color: #1c1c2e; border: 1px solid #222238; border-radius: 12px; padding: 40px 30px;">
               <!-- Header -->
               <h1 style="color: #ffffff; font-size: 28px; font-weight: 700; margin: 0 0 10px 0; line-height: 1.3;">
-                Gentle reminder 😬
+                Petit rappel 😬
               </h1>
               <p style="color: #9ca3af; font-size: 14px; margin: 0 0 30px 0;">
                 Tu as manqué 3 sessions cette semaine
@@ -586,9 +586,9 @@ const trialEnding: EmailTemplate = {
               <div style="background-color: #222238; border: 1px solid #404050; border-radius: 8px; padding: 20px; margin: 25px 0;">
                 <h3 style="color: #ffffff; font-size: 16px; font-weight: 600; margin: 0 0 15px 0;">Pourquoi Premium ?</h3>
                 <ul style="color: #e5e7eb; font-size: 14px; margin: 0; padding-left: 20px;">
-                  <li style="margin-bottom: 8px;">Suive ta progression en détail avec des graphiques magnifiques</li>
+                  <li style="margin-bottom: 8px;">Suis ta progression en détail avec des graphiques magnifiques</li>
                   <li style="margin-bottom: 8px;">Reçois des recommandations personnalisées pour améliorer ta squad</li>
-                  <li style="margin-bottom: 8px;">Accès aux événements exclusifs et tournaments Premium</li>
+                  <li style="margin-bottom: 8px;">Accès aux événements exclusifs et tournois Premium</li>
                   <li>Support en priorité pour tes questions et problèmes</li>
                 </ul>
               </div>

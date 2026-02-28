@@ -240,7 +240,7 @@ export const fr = {
   // Premium
   premium: {
     title: 'Premium',
-    subtitle: 'Débloquez toutes les fonctionnalités',
+    subtitle: 'Débloque toutes les fonctionnalités',
     features: {
       unlimitedSquads: 'Squads illimitées',
       advancedStats: 'Statistiques avancées',
@@ -248,7 +248,7 @@ export const fr = {
       prioritySupport: 'Support prioritaire',
     },
     upgrade: 'Passer Premium',
-    currentPlan: 'Votre forfait',
+    currentPlan: 'Ton forfait',
   },
 
   // Auth

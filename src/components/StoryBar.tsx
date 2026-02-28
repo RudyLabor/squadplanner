@@ -108,7 +108,7 @@ function CreateStoryModal({
               <textarea
                 value={content}
                 onChange={(e) => setContent(e.target.value)}
-                placeholder="Ecris ta story..."
+                placeholder="Écris ta story..."
                 maxLength={200}
                 className="w-full text-xl font-bold text-center text-white bg-transparent placeholder-white/50 outline-none resize-none"
                 rows={4}

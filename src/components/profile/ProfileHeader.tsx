@@ -173,7 +173,7 @@ export function ProfileHeader({ user, profile, isLoading, updateProfile }: Profi
                     <Input
                       value={bio}
                       onChange={(e) => setBio(e.target.value)}
-                      placeholder="Bio (optionnel)"
+                      placeholder="Bio (optionnelle)"
                     />
                   </div>
                 </div>

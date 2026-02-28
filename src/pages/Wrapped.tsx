@@ -154,7 +154,7 @@ export function Wrapped() {
       // Fallback: copy to clipboard
       try {
         await navigator.clipboard.writeText(shareText)
-        alert('Texte copié dans le presse-papiers!')
+        alert('Texte copié dans le presse-papiers !')
       } catch (err) {
         if (!import.meta.env.PROD) console.error('Copy failed:', err)
       }
@@ -231,7 +231,7 @@ export function Wrapped() {
             transition={{ duration: 0.6, delay: 0.4 }}
             className="text-xl text-purple/70"
           >
-            Découvre tes stats gaming!
+            Découvre tes stats gaming !
           </m.p>
         </div>
       ),

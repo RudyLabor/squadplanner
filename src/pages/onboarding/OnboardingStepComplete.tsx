@@ -156,7 +156,7 @@ export function OnboardingStepComplete({
                   </button>
                 </div>
                 <p className="text-xs text-text-tertiary mt-2">
-                  Partage ce code &agrave; tes amis pour qu'ils rejoignent
+                  Partage ce code avec tes amis pour qu'ils rejoignent
                 </p>
               </div>
             </div>

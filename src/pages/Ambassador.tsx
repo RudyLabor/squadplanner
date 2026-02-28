@@ -76,7 +76,7 @@ Plateforme: ${formData.platform}
 Lien: ${formData.link}
 Followers/Viewers: ${formData.followers}
 
-Pourquoi Squad Planner?
+Pourquoi Squad Planner ?
 ${formData.message}
     `.trim()
 

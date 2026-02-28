@@ -194,7 +194,7 @@ export const CustomStatusModal = memo(function CustomStatusModal({
               <div>
                 <label className="text-base text-text-tertiary font-medium mb-2 flex items-center gap-1.5">
                   <Clock className="w-3.5 h-3.5" />
-                  Effacer apres
+                  Effacer après
                 </label>
                 <div className="grid grid-cols-2 gap-2">
                   {DURATION_OPTIONS.map((option, i) => (

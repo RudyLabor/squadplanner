@@ -19,7 +19,7 @@ export function DiscordCallback() {
     const oauthError = searchParams.get('error')
 
     if (oauthError) {
-      setError('Autorisation Discord refusee')
+      setError('Autorisation Discord refusée')
       setTimeout(() => navigate('/settings', { replace: true }), 2000)
       return
     }
@@ -94,7 +94,7 @@ export function DiscordCallback() {
           })
         }
 
-        showSuccess(`Discord connecte : ${data.discord_username}`)
+        showSuccess(`Discord connecté : ${data.discord_username}`)
         navigate('/settings#connected', { replace: true })
       } catch (err) {
         const message = (err as Error).message
@@ -134,7 +134,7 @@ export function DiscordCallback() {
           <>
             <Loader2 className="w-8 h-8 text-primary animate-spin mx-auto" />
             <p className="text-md text-text-primary">Connexion de ton compte Discord...</p>
-            <p className="text-sm text-text-quaternary">Ca ne prend qu'un instant</p>
+            <p className="text-sm text-text-quaternary">Ça ne prend qu'un instant</p>
           </>
         )}
       </div>

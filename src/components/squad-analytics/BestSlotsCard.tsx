@@ -149,7 +149,7 @@ export default function BestSlotsCard({ squadId }: { squadId: string }) {
                   <h3 className="text-lg font-semibold text-text-primary">{dayName}</h3>
                   <span className="text-base font-bold text-primary">{timeStr}</span>
                 </div>
-                <p className="text-sm text-text-secondary">Score: {slot.score} points</p>
+                <p className="text-sm text-text-secondary">Score : {slot.score} points</p>
               </div>
 
               {/* Star icon pour le top 1 */}
@@ -185,7 +185,7 @@ export default function BestSlotsCard({ squadId }: { squadId: string }) {
         transition={{ delay: 0.3 }}
         className="mt-4 p-3 rounded-lg bg-primary-10 border border-primary-20 text-sm text-text-secondary"
       >
-        <p>💡 Planifiez vos sessions aux meilleurs créneaux pour maximiser la participation!</p>
+        <p>💡 Planifie tes sessions aux meilleurs créneaux pour maximiser la participation !</p>
       </m.div>
     </div>
   )

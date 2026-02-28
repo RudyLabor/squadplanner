@@ -17,7 +17,7 @@ const limitations = [
   },
   {
     title: 'Zéro insight',
-    discord: "Discord: qui a cliqué oui. C'est tout. T'as rien d'autre.",
+    discord: "Discord : qui a cliqué oui. C'est tout. T'as rien d'autre.",
     squadPlanner: 'Stats complètes. Taux de présence. Qui est fiable. Qui flake. Tendances.',
   },
 ]
@@ -80,7 +80,7 @@ export default function AlternativeDiscordEvents() {
           >
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full badge-shimmer border border-purple/25 mb-8">
               <span className="text-base font-medium text-purple">
-                Discord c'est cool, mais pas pour ça
+                Discord, c'est cool, mais pas pour ça
               </span>
             </div>
           </m.div>
@@ -270,7 +270,7 @@ export default function AlternativeDiscordEvents() {
                 <h3 className="text-xl font-bold text-text-primary mb-3">Toujours lié à Discord</h3>
                 <p className="text-text-secondary mb-4 text-md">
                   Squad Planner et Discord, ça se parle. Les notifs arrivent dans Discord.
-                  L'organisation c'est chez nous. Zero config.
+                  L'organisation, c'est chez nous. Zéro config.
                 </p>
                 <div className="flex items-center gap-2 text-sm text-primary font-semibold">
                   <Check className="w-4 h-4" />

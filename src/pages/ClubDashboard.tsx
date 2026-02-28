@@ -227,7 +227,7 @@ export function ClubDashboard() {
 
   // CSV Export handler
   const handleExportCSV = useCallback(() => {
-    const headers = ['Squad', 'Membres', 'Sessions', 'Taux présence', 'Fiabilité']
+    const headers = ['Squad', 'Membres', 'Sessions', 'Taux de présence', 'Fiabilité']
     const rows = squads.map((s) => [
       s.name,
       s.member_count.toString(),
@@ -400,7 +400,7 @@ export function ClubDashboard() {
               <div className="relative z-10">
                 <div className="flex items-center justify-between mb-4">
                   <span className="text-text-tertiary text-sm font-medium">
-                    Taux présence moyen
+                    Taux de présence moyen
                   </span>
                   <div className="w-10 h-10 rounded-lg bg-warning/10 flex items-center justify-center">
                     <Clock className="w-5 h-5 text-warning" />

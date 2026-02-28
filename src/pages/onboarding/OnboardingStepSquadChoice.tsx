@@ -58,7 +58,7 @@ export function OnboardingStepSquadChoice({
             <div className="flex-1">
               <h3 className="text-lg font-semibold text-text-primary mb-1">Rejoindre une squad</h3>
               <p className="text-md text-text-secondary">
-                Un ami t'a donn&eacute; un code ? Entre-le ici pour le rejoindre direct.
+                Un ami t'a donné un code ? Entre-le ici pour la rejoindre direct.
               </p>
             </div>
             <ArrowRight className="w-5 h-5 text-text-tertiary group-hover:text-success transition-colors shrink-0 mt-1" />

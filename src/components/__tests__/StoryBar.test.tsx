@@ -246,7 +246,7 @@ describe('StoryBar', () => {
     setupMock({}, usersWithoutOwn)
     render(<StoryBar />)
     fireEvent.click(screen.getByText('Story'))
-    expect(screen.getByPlaceholderText('Ecris ta story...')).toBeInTheDocument()
+    expect(screen.getByPlaceholderText('Écris ta story...')).toBeInTheDocument()
   })
 
   it('submit button is disabled when content is empty', () => {
@@ -263,7 +263,7 @@ describe('StoryBar', () => {
     setupMock({}, usersWithoutOwn)
     render(<StoryBar />)
     fireEvent.click(screen.getByText('Story'))
-    fireEvent.change(screen.getByPlaceholderText('Ecris ta story...'), {
+    fireEvent.change(screen.getByPlaceholderText('Écris ta story...'), {
       target: { value: 'My story' },
     })
     const submitBtn = screen.getByText('Publier la story')
@@ -275,7 +275,7 @@ describe('StoryBar', () => {
     setupMock({}, usersWithoutOwn)
     render(<StoryBar />)
     fireEvent.click(screen.getByText('Story'))
-    fireEvent.change(screen.getByPlaceholderText('Ecris ta story...'), {
+    fireEvent.change(screen.getByPlaceholderText('Écris ta story...'), {
       target: { value: 'Hello world' },
     })
     fireEvent.click(screen.getByText('Publier la story'))
@@ -291,7 +291,7 @@ describe('StoryBar', () => {
     setupMock({}, usersWithoutOwn)
     render(<StoryBar />)
     fireEvent.click(screen.getByText('Story'))
-    fireEvent.change(screen.getByPlaceholderText('Ecris ta story...'), { target: { value: '   ' } })
+    fireEvent.change(screen.getByPlaceholderText('Écris ta story...'), { target: { value: '   ' } })
     fireEvent.click(screen.getByText('Publier la story'))
     expect(mockCreateStory).not.toHaveBeenCalled()
   })
@@ -302,7 +302,7 @@ describe('StoryBar', () => {
     render(<StoryBar />)
     fireEvent.click(screen.getByText('Story'))
     fireEvent.click(screen.getByLabelText('Rouge'))
-    fireEvent.change(screen.getByPlaceholderText('Ecris ta story...'), {
+    fireEvent.change(screen.getByPlaceholderText('Écris ta story...'), {
       target: { value: 'Red story' },
     })
     fireEvent.click(screen.getByText('Publier la story'))

@@ -255,7 +255,7 @@ export default function BlogPost() {
                 Articles connexes
               </h2>
               <p className="text-text-tertiary">
-                Découvrez d'autres guides pour maîtriser Squad Planner
+                Découvre d'autres guides pour maîtriser Squad Planner
               </p>
             </m.div>
 

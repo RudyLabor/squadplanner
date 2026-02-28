@@ -73,7 +73,7 @@ export const BLOG_POSTS: BlogPost[] = [
 
       <h3>3. TeamSpeak - La référence pour la voix</h3>
 
-      <p>TeamSpeak 5 a été complètement repensé pour rivaliser avec les solutions modernes. Si la qualité audio est ta priorité absolue, TeamSpeak mérite considération.</p>
+      <p>TeamSpeak 5 a été complètement repensé pour rivaliser avec les solutions modernes. Si la qualité audio est ta priorité absolue, TeamSpeak mérite d'être considéré.</p>
 
       <p><strong>Avantages :</strong></p>
       <ul>
@@ -107,7 +107,7 @@ export const BLOG_POSTS: BlogPost[] = [
       <ul>
         <li>Coûteux pour les grands groupes</li>
         <li>Pas de support audio natif de qualité</li>
-        <li>Atmosphère trop "work" pour des gaming communities</li>
+        <li>Atmosphère trop "work" pour des communautés gaming</li>
         <li>Pas de fonctionnalités de gaming spécifiques</li>
       </ul>
 
@@ -226,7 +226,7 @@ export const BLOG_POSTS: BlogPost[] = [
 
       <p><strong>Gère les no-shows :</strong></p>
       <ul>
-        <li>Si quelqu'un confirme mais n'apparaît pas, Squad Planner marque automatiquement leur fiabilité</li>
+        <li>Si quelqu'un confirme mais n'apparaît pas, Squad Planner marque automatiquement sa fiabilité</li>
         <li>Pour les futurs tournois, tu sauras qui est fiable et qui ne l'est pas</li>
         <li>Cela crée une culture d'engagement naturelle dans ta communauté</li>
       </ul>
@@ -239,7 +239,7 @@ export const BLOG_POSTS: BlogPost[] = [
       <ul>
         <li>Tous les joueurs rejoignent ton Discord ou plateforme vocale</li>
         <li>Fais un test audio rapide</li>
-        <li>Rappelle les règles\u00a0: pas d'excuses, pas de recalage</li>
+        <li>Rappelle les règles\u00a0: pas d'excuses, pas de report</li>
       </ul>
 
       <p><strong>Pendant le tournoi :</strong></p>

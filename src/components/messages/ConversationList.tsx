@@ -293,7 +293,7 @@ export function ConversationList({
           <EmptyState
             type="no_messages"
             title="Envoie le premier message"
-            message="Clique sur un membre de ta squad pour lancer la conversation — c'est souvent comme Ã§a que les meilleures sessions commencent."
+            message="Clique sur un membre de ta squad pour lancer la conversation — c'est souvent comme ça que les meilleures sessions commencent."
             actionLabel="Voir mes squads"
             onAction={() => (window.location.href = '/squads')}
           />

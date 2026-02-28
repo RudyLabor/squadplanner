@@ -268,7 +268,7 @@ export default function SquadDetail() {
         onClose={() => setShowLeaveConfirm(false)}
         onConfirm={confirmLeaveSquad}
         title="Quitter cette squad ?"
-        description="Tu perdras l'accÃ¨s aux sessions, messages et ton historique de fiabilité dans cette squad. Tu pourras la rejoindre Ã  nouveau avec un code d'invitation."
+        description="Tu perdras l'accès aux sessions, messages et ton historique de fiabilité dans cette squad. Tu pourras la rejoindre à nouveau avec un code d'invitation."
         confirmLabel="Quitter"
         variant="danger"
       />

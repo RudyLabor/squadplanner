@@ -167,7 +167,7 @@ function RoleAssignDropdown({
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="flex items-center gap-1 px-2 py-1 rounded-lg text-xs font-medium hover:bg-bg-hover transition-colors min-h-[32px]"
-        aria-label={`Changer le rÃ´le de ${member.profiles?.username || 'ce joueur'}`}
+        aria-label={`Changer le rôle de ${member.profiles?.username || 'ce joueur'}`}
         aria-expanded={isOpen}
         aria-haspopup="listbox"
       >
@@ -179,7 +179,7 @@ function RoleAssignDropdown({
         <div
           className="absolute right-0 top-full mt-1 w-56 rounded-xl bg-bg-secondary border border-border-default shadow-xl z-50 py-1 overflow-hidden"
           role="listbox"
-          aria-label="Sélectionner un rÃ´le"
+          aria-label="Sélectionner un rôle"
         >
           {ASSIGNABLE_ROLES.map((role) => {
             const config = getRoleConfig(role)
@@ -335,7 +335,7 @@ const MemberCard = memo(function MemberCard({
           <button
             onClick={handleMessage}
             className="p-2.5 min-w-[44px] min-h-[44px] rounded-lg hover:bg-bg-hover transition-colors flex items-center justify-center"
-            aria-label={`Envoyer un message Ã  ${member.profiles?.username || 'ce joueur'}`}
+            aria-label={`Envoyer un message à ${member.profiles?.username || 'ce joueur'}`}
           >
             <MessageCircle className="w-5 h-5 text-primary" aria-hidden="true" />
           </button>

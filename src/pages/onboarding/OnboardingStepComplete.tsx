@@ -110,7 +110,7 @@ export function OnboardingStepComplete({
         transition={{ delay: 0.4 }}
         className="text-2xl font-extrabold text-text-primary mb-2"
       >
-        {createdSquadName ? `${createdSquadName} est prÃªte Ã  jouer !` : "C'est parti !"}
+        {createdSquadName ? `${createdSquadName} est prête à jouer !` : "C'est parti !"}
       </m.h2>
       <m.p
         initial={{ opacity: 0 }}
@@ -119,7 +119,7 @@ export function OnboardingStepComplete({
         className="text-text-secondary mb-4"
       >
         {createdSquadId
-          ? 'Ta squad est créée. Invite tes potes et planifie ta premiÃ¨re session !'
+          ? 'Ta squad est créée. Invite tes potes et planifie ta première session !'
           : squadsLength > 0
             ? `Tu as rejoint ${firstSquadName} ! L'aventure commence.`
             : 'Tu peux maintenant explorer ou créer ta squad'}

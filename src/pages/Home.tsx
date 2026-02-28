@@ -96,7 +96,7 @@ interface UpcomingSession {
 // Badge fiabilité avec glow subtil et tooltip
 function ReliabilityBadge({ score }: { score: number }) {
   const tooltipText =
-    'Ton score de fiabilité reflÃ¨te ta réputation dans ta squad. +5 % quand tu confirmes, -10 % si tu ne réponds pas. Les joueurs au-dessus de 95 % sont les premiers invités aux sessions !'
+    'Ton score de fiabilité reflète ta réputation dans ta squad. +5 % quand tu confirmes, -10 % si tu ne réponds pas. Les joueurs au-dessus de 95 % sont les premiers invités aux sessions !'
 
   const getBadgeContent = () => {
     if (score >= 95) {

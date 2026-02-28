@@ -449,9 +449,9 @@ export function ClubDashboard() {
                 </m.div>
                 <p className="text-xs text-text-tertiary mt-2">
                   {clubStats.avgReliabilityScore >= 95
-                    ? 'Ton club est au top — continue comme Ã§a'
+                    ? 'Ton club est au top — continue comme ça'
                     : clubStats.avgReliabilityScore >= 80
-                      ? 'TrÃ¨s fiable — encore 15 points pour le top'
+                      ? 'Très fiable — encore 15 points pour le top'
                       : 'Chaque session confirmée fait monter ce score'}
                 </p>
               </div>
@@ -516,7 +516,7 @@ export function ClubDashboard() {
                   <p className="text-text-tertiary mb-4">
                     {searchQuery
                       ? 'Aucune squad trouvée'
-                      : 'Sans squad, impossible de suivre tes stats. Crée ta premiÃ¨re en 30 secondes.'}
+                      : 'Sans squad, impossible de suivre tes stats. Crée ta première en 30 secondes.'}
                   </p>
                   {!searchQuery && (
                     <Link to="/squads">

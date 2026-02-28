@@ -171,7 +171,7 @@ const NextSessionCard = memo(function NextSessionCard({
                 ? "Confirmé ! Ta squad compte sur toi"
                 : session.my_rsvp === 'absent'
                   ? 'Pas dispo — ta place est libre pour quelqu\'un d\'autre'
-                  : 'Peut-Ãªtre… Confirme vite pour ne pas perdre ta place !'}
+                  : 'Peut-être… Confirme vite pour ne pas perdre ta place !'}
             </span>
           </m.div>
         )}
@@ -265,7 +265,7 @@ const SessionEmptyState = memo(function SessionEmptyState({ onCreate }: { onCrea
           animate={{ opacity: 1 }}
           transition={{ delay: 0.5 }}
         >
-          Gratuit, sans engagement — ta squad reÃ§oit la notif en 1 seconde
+          Gratuit, sans engagement — ta squad reçoit la notif en 1 seconde
         </m.p>
       </div>
     </Card>

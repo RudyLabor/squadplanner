@@ -334,7 +334,7 @@ export default function Squads({ loaderData: _loaderData }: SquadsProps) {
                       Crée ta squad en 30 secondes, invite tes potes et finis-en avec les "on verra".
                     </p>
                     <p className="text-sm text-text-quaternary mb-6 max-w-[300px] mx-auto">
-                      Tu as déjÃ  un code d'invitation ? Rejoins ta squad en un clic.
+                      Tu as déjà un code d'invitation ? Rejoins ta squad en un clic.
                     </p>
                     <div className="flex flex-wrap gap-3 justify-center">
                       <Button variant="secondary" onClick={() => setShowJoin(true)}>

@@ -162,7 +162,7 @@ export function CallHistoryList({
           <Phone className="w-10 h-10 text-primary" />
         </m.div>
         <h3 className="text-lg font-semibold text-text-primary mb-2">
-          {filter === 'all' ? 'PrÃªt Ã  appeler ta squad ?' : 'Rien pour le moment'}
+          {filter === 'all' ? 'Prêt à appeler ta squad ?' : 'Rien pour le moment'}
         </h3>
         <p className="text-md text-text-tertiary text-center max-w-[280px] mb-6">
           {filter === 'all'

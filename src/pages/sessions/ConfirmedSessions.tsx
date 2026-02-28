@@ -93,7 +93,7 @@ export const ConfirmedSessions = memo(function ConfirmedSessions({
                 Aucune session confirmée pour toi
               </h3>
               <p className="text-md text-text-secondary mb-4">
-                Clique "Présent" sur une session et elle apparaÃ®t ici — ta squad saura qu'elle peut compter sur toi.
+                Clique "Présent" sur une session et elle apparaît ici — ta squad saura qu'elle peut compter sur toi.
               </p>
               <Link to="/squads">
                 <Button variant="secondary" size="sm">

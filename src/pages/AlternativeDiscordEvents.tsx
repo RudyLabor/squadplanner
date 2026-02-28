@@ -267,7 +267,7 @@ export default function AlternativeDiscordEvents() {
                 Tu migres de Discord Events ? -30% sur ton premier mois
               </p>
               <p className="text-sm text-text-tertiary">
-                Utilise le code <span className="font-mono font-bold text-warning">GUILDED30</span> au moment du paiement. Offre valable jusqu'au 30 juin 2026.
+                Utilise le code <span className="font-mono font-bold text-warning">GAMER30</span> au moment du paiement. Offre valable jusqu'au 30 juin 2026.
               </p>
             </div>
             <Link

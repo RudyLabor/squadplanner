@@ -526,6 +526,69 @@ ${formData.message}
           </div>
         </m.div>
 
+        {/* ─── MILESTONES PROGRESSION ─── */}
+        <m.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={isAdvantagesInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+          transition={{ delay: 0.15, duration: 0.5, ease }}
+          className="mb-16"
+        >
+          <h2 className="text-2xl md:text-3xl font-bold text-text-primary text-center mb-8">
+            Paliers de progression
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {[
+              {
+                milestone: '10 filleuls',
+                reward: 'Commission 25%',
+                detail: 'Ta commission passe de 20% à 25% sur chaque abonnement',
+                icon: TrendingUp,
+                color: 'success',
+              },
+              {
+                milestone: '25 filleuls',
+                reward: 'Squad Leader gratuit à vie',
+                detail: 'Tu passes Squad Leader (14,99€/mois) sans jamais payer',
+                icon: Crown,
+                color: 'warning',
+              },
+              {
+                milestone: '50 filleuls',
+                reward: 'Bonus exceptionnel',
+                detail: 'Commission 30% + bonus cash 500€ + accès Club gratuit',
+                icon: Star,
+                color: 'purple',
+              },
+            ].map((item, i) => {
+              const Icon = item.icon
+              const colorMap: Record<string, string> = {
+                success: 'bg-success/10 text-success border-success/20',
+                warning: 'bg-warning/10 text-warning border-warning/20',
+                purple: 'bg-purple/10 text-purple border-purple/20',
+              }
+              return (
+                <m.div
+                  key={i}
+                  initial={{ opacity: 0, y: 15 }}
+                  animate={isAdvantagesInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 15 }}
+                  transition={{ delay: 0.2 + i * 0.08, duration: 0.4, ease }}
+                >
+                  <Card variant="elevated" className="p-6 h-full text-center">
+                    <div className={`inline-flex items-center justify-center w-14 h-14 rounded-xl ${colorMap[item.color]?.split(' ').slice(0, 2).join(' ')} mb-3`}>
+                      <Icon className={`w-7 h-7 ${colorMap[item.color]?.split(' ')[1]}`} />
+                    </div>
+                    <div className="text-xs font-bold uppercase tracking-wider text-text-quaternary mb-1">
+                      {item.milestone}
+                    </div>
+                    <h3 className="text-lg font-bold text-text-primary mb-2">{item.reward}</h3>
+                    <p className="text-sm text-text-secondary">{item.detail}</p>
+                  </Card>
+                </m.div>
+              )
+            })}
+          </div>
+        </m.div>
+
         {/* ─── PROFILS RECHERCHES ─── */}
         <m.div
           ref={profilesRef}

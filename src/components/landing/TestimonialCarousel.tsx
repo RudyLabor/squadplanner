@@ -12,49 +12,49 @@ interface Testimonial {
 
 const testimonials: Testimonial[] = [
   {
-    name: 'Gamer anonyme',
-    squad: 'Sur Discord, chaque soir',
-    text: "« On joue ce soir ? » — 3 jours plus tard, toujours rien. C'est exactement pour ça qu'on a besoin d'un outil comme Squad Planner.",
+    name: 'Le problème universel',
+    squad: 'Chaque groupe Discord, chaque soir',
+    text: "« On joue ce soir ? » — 3 jours plus tard, toujours rien. Squad Planner met fin aux « on verra » une bonne fois pour toutes.",
     avatar: '💬',
     rating: 5,
     game: 'Valorant',
   },
   {
-    name: 'Bêta-testeur #12',
-    squad: 'Alpha Squad',
-    text: "Depuis qu'on utilise le RSVP, plus personne ne ghost. Tu dis OUI, tu viens. Simple.",
+    name: 'Fini le ghosting',
+    squad: 'Le constat',
+    text: "Avec la confirmation de présence, plus personne ne ghost. Tu dis OUI, tu viens. Ton score de fiabilité parle pour toi.",
     avatar: '🎯',
     rating: 5,
     game: 'League of Legends',
   },
   {
-    name: 'Bêta-testeur #7',
-    squad: 'Les Nocturnes',
-    text: 'On est passés de « on verra demain » à 3 sessions par semaine. Le score de présence, ça motive.',
+    name: 'Des sessions régulières',
+    squad: 'Le résultat',
+    text: "Passe de « on verra demain » à 3 sessions par semaine. Le score de présence motive tout le monde à se pointer.",
     avatar: '🔥',
     rating: 5,
     game: 'Apex Legends',
   },
   {
-    name: 'Tout gamer, ever',
-    squad: "N'importe quel groupe Discord",
-    text: '« Qui est dispo ce week-end ? » *vu par 8, répondu par 2*. Squad Planner règle ça en 30 secondes.',
+    name: 'La question qui tue',
+    squad: 'Chaque week-end',
+    text: "« Qui est dispo ce week-end ? » — vu par 8, répondu par 2. Avec Squad Planner, tout le monde répond en 30 secondes.",
     avatar: '😤',
     rating: 5,
     game: 'Fortnite',
   },
   {
-    name: 'Bêta-testeur #3',
-    squad: 'Ranked Buddies',
-    text: "Le check-in rend tout le monde responsable. Mon pote qui ghostait tout le temps ? Son score l'a calmé.",
+    name: 'Responsabiliser la squad',
+    squad: 'Le game changer',
+    text: "Le check-in rend tout le monde responsable. Ton pote qui ghost tout le temps ? Son score de fiabilité va le calmer.",
     avatar: '🎮',
-    rating: 4,
+    rating: 5,
     game: 'Overwatch 2',
   },
   {
-    name: 'Bêta-testeur #19',
-    squad: 'Vendredi Soir Gaming',
-    text: "La party vocale toujours ouverte, c'est le game changer. On se retrouve même sans session prévue.",
+    name: 'Toujours connectés',
+    squad: 'Le bonus',
+    text: "La party vocale toujours ouverte, c'est le vrai plus. Tu retrouves ta squad même sans session prévue.",
     avatar: '🎧',
     rating: 5,
     game: 'Rocket League',
@@ -172,7 +172,7 @@ export function TestimonialCarousel() {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
       >
-        Nos joueurs en parlent mieux que nous
+        Pourquoi les gamers adoptent Squad Planner
       </m.h2>
       <m.p
         className="text-text-tertiary text-center mb-10"
@@ -181,7 +181,7 @@ export function TestimonialCarousel() {
         viewport={{ once: true }}
         transition={{ delay: 0.1 }}
       >
-        Bêta en cours — premiers retours de nos testeurs
+        Les situations que tu connais par cœur — et comment on les résout
       </m.p>
 
       <div

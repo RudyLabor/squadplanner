@@ -9,35 +9,35 @@ const staggerItemVariants = {
 const faqs = [
   {
     q: 'Squad Planner est-il gratuit ?',
-    a: 'Oui, Squad Planner est 100% gratuit pour commencer. Crée ta squad, invite tes potes, planifie tes sessions — tout est inclus. Des fonctionnalités premium optionnelles sont disponibles pour les squads qui veulent aller plus loin.',
+    a: "Oui, 100% gratuit pour commencer. Tu crées ta squad, tu invites tes potes, tu planifies tes sessions -- tout est inclus. Concrètement, ça veut dire que tu peux organiser tes soirées gaming sans sortir ta CB. Le premium est là pour ceux qui veulent du coaching IA et des stats poussées, mais l'essentiel est gratuit.",
   },
   {
     q: 'Comment inviter mes amis ?',
-    a: "Une fois ta squad créée, tu reçois un code d'invitation unique. Partage-le par message, Discord, ou n'importe quel canal. Tes potes cliquent sur le lien et rejoignent en 10 secondes.",
+    a: "Tu reçois un code d'invitation unique quand tu crées ta squad. Tu le partages par Discord, WhatsApp, SMS -- n'importe quoi. Tes potes cliquent sur le lien et rejoignent en 10 secondes, sans créer de compte au préalable. Résultat : en 2 minutes ta squad est au complet et prête à planifier.",
   },
   {
     q: 'Quelle est la différence avec Discord ?',
-    a: 'Discord est fait pour discuter. Squad Planner est fait pour jouer ensemble. On ajoute le planning avec RSVP, le score de fiabilité, et les check-ins pour que vos sessions aient vraiment lieu.',
+    a: "Discord c'est top pour discuter, mais personne ne sait qui vient mardi soir. Squad Planner ajoute le planning avec confirmation de présence, le score de fiabilité et les check-ins. Concrètement, tu sais à 18h qui sera là à 21h -- plus besoin de relancer tout le monde sur Discord.",
   },
   {
     q: 'Combien de joueurs par squad ?',
-    a: "Une squad peut accueillir de 2 à 10 joueurs. C'est la taille idéale pour une équipe de jeu régulière où chacun se sent impliqué.",
+    a: "De 2 à 10 joueurs par squad. C'est la taille idéale pour une équipe de jeu régulière. Assez pour avoir du choix, assez petit pour que chacun se sente impliqué et responsable. Tu peux créer plusieurs squads si tu joues à différents jeux.",
   },
   {
     q: 'Mes données sont-elles protégées ?',
-    a: 'Absolument. Squad Planner est hébergé en France, conforme au RGPD. Tes données sont chiffrées et tu peux les supprimer à tout moment depuis les paramètres de ton compte.',
+    a: "Absolument. Hébergé en France, conforme RGPD. Tes données sont chiffrées et tu peux tout supprimer à tout moment depuis les paramètres. En gros, tes stats de gaming restent les tiennes, point.",
   },
   {
     q: 'Pourquoi pas juste un Google Calendar ou Doodle ?',
-    a: "Parce que Google Calendar, c'est fait pour des réunions de boulot. Squad Planner est conçu pour le gaming : vocal intégré, score de présence, confirmation auto quand assez de joueurs sont dispo.",
+    a: "Parce que Google Calendar c'est fait pour des réunions de boulot, pas pour tes ranked du mardi. Squad Planner est conçu pour le gaming : vocal intégré, score de présence, confirmation auto quand assez de joueurs sont dispo. Résultat : tu passes moins de temps à organiser et plus de temps à jouer.",
   },
   {
     q: "Mes potes vont vraiment l'utiliser ?",
-    a: "Oui, parce qu'ils n'ont qu'à cliquer OUI ou NON. Pas d'app à installer obligatoirement (version web). S'ils veulent les notifs, l'app mobile existe.",
+    a: "Oui, parce qu'ils n'ont qu'à cliquer OUI ou NON. Pas d'app à installer (ça marche dans le navigateur). Du coup même les plus flemmards de ta squad peuvent confirmer en 2 secondes. S'ils veulent les notifs push, l'app mobile est dispo.",
   },
   {
     q: "C'est vraiment 100% gratuit ?",
-    a: "Oui. Tout le core est gratuit : squads, sessions, RSVP, chat basique, vocal. Premium ajoute le chat complet (GIF, voice, polls), le coach IA et des stats avancées, mais tu n'en as pas besoin pour jouer.",
+    a: "Oui. Squads, sessions, confirmation de présence, chat basique, vocal -- tout ça gratuit, sans limite de temps. Le premium ajoute le chat complet avec GIF et polls, le coach IA et des stats avancées. Mais honnêtement, tu n'en as pas besoin pour bien organiser tes sessions.",
   },
 ]
 

@@ -125,7 +125,7 @@ export const useNotificationStore = create<NotificationStore>((set, get) => ({
           id: r.id,
           type: 'rsvp' as const,
           title: squadMap.get(sess?.squad_id ?? '') || 'Squad',
-          body: `Nouveau RSVP sur "${sess?.title || 'Session'}"`,
+          body: `Nouvelle confirmation sur "${sess?.title || 'Session'}"`,
           read: readIds.has(r.id),
           created_at: r.responded_at,
           squad_id: sess?.squad_id,

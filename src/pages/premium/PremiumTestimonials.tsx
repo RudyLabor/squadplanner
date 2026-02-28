@@ -1,4 +1,4 @@
-import { CheckCircle2, Clock, Star } from '../../components/icons'
+import { Clock, Star } from '../../components/icons'
 import { Card } from '../../components/ui'
 import { TESTIMONIALS } from './PremiumData'
 import { TestimonialAvatar } from './TestimonialAvatars'
@@ -7,10 +7,10 @@ export function PremiumTestimonials() {
   return (
     <div className="animate-fade-in-up mb-16" style={{ animationDelay: '0.4s' }}>
       <h2 className="text-xl font-semibold text-text-primary text-center mb-2">
-        Ils sont passés Premium
+        Ce que Premium change concrètement
       </h2>
       <p className="text-md text-text-secondary text-center mb-8">
-        Et ils ne reviendraient pas en arrière
+        Des cas d'usage réels pour chaque type de joueur
       </p>
       <div className="grid md:grid-cols-3 gap-4">
         {TESTIMONIALS.map((testimonial, index) => (
@@ -30,7 +30,6 @@ export function PremiumTestimonials() {
                       <span className="text-md font-semibold text-text-primary truncate">
                         {testimonial.name}
                       </span>
-                      <CheckCircle2 className="w-4 h-4 text-primary flex-shrink-0" />
                     </div>
                     <div className="text-sm text-text-tertiary">{testimonial.squad}</div>
                     <div className="flex items-center gap-1 text-xs text-text-tertiary/70">

@@ -35,7 +35,7 @@ export const BLOG_POSTS: BlogPost[] = [
       <p><strong>Avantages :</strong></p>
       <ul>
         <li>Système de fiabilité et de scoring pour les joueurs</li>
-        <li>Planification d'événements intégrée avec RSVP avancé</li>
+        <li>Planification d'événements intégrée avec confirmation de présence avancée</li>
         <li>Gestion des sessions et des squads en temps réel</li>
         <li>Interface épurée et intuitive</li>
         <li>Absence de publicités</li>
@@ -212,12 +212,12 @@ export const BLOG_POSTS: BlogPost[] = [
 
       <p><strong>Avant le tournoi :</strong></p>
       <ul>
-        <li>Envoie un message récapitulatif 2 semaines avant : "Hey les gars, tournoi le 1er mars\u00a0! Confirme ta présence sur l'événement"</li>
+        <li>Envoie un message récapitulatif 2 semaines avant : "Hey la team, tournoi le 1er mars\u00a0! Confirme ta présence sur l'événement"</li>
         <li>Relance 1 semaine avant</li>
         <li>Relance 24h avant : c'est crucial pour savoir qui sera là</li>
       </ul>
 
-      <p><strong>Utilise le RSVP de Squad Planner :</strong></p>
+      <p><strong>Utilise la confirmation de présence de Squad Planner :</strong></p>
       <ul>
         <li>Les participants qui cliquent sur "Je viens" sont comptabilisés automatiquement</li>
         <li>Squad Planner t'avertit en temps réel si quelqu'un valide ou annule sa présence</li>
@@ -277,7 +277,7 @@ export const BLOG_POSTS: BlogPost[] = [
 
       <p><strong>Astuces pour ta fiabilité future :</strong></p>
       <ul>
-        <li>Ceux qui n'ont pas honoré leur RSVP se voient automatiquement dégradés dans Squad Planner</li>
+        <li>Ceux qui n'ont pas honoré leur confirmation se voient automatiquement dégradés dans Squad Planner</li>
         <li>Au prochain tournoi, tu peux former des poules en évitant les no-shows connus</li>
         <li>Les gens seront plus vigilants à honorer leurs engagements s'ils savent qu'on suit ça</li>
       </ul>
@@ -323,7 +323,7 @@ export const BLOG_POSTS: BlogPost[] = [
 
       <p>C'est la frustration numéro un des chefs de squad : tu organises une session, 8 personnes confirment, et le jour J, seules 3 apparaissent. C'est ce qu'on appelle le "ghosting" - et c'est une plaie.</p>
 
-      <p>Si tu as déjà vécu ça, tu sais à quel point c'est démotivant de devoir annuler ou jouer en mode dégradé parce que les gens ne respectent pas leurs RSVP.</p>
+      <p>Si tu as déjà vécu ça, tu sais à quel point c'est démotivant de devoir annuler ou jouer en mode dégradé parce que les gens ne respectent pas leurs engagements.</p>
 
       <p>Bonne nouvelle : il existe des solutions éprouvées pour pratiquement éliminer le ghosting. Voici mes 5 astuces favorites, et je peux t'assurer qu'elles fonctionnent.</p>
 
@@ -379,7 +379,7 @@ export const BLOG_POSTS: BlogPost[] = [
 
       <p><strong>Comment faire avec Squad Planner :</strong></p>
       <ul>
-        <li>La liste des RSVP est visible pour tous les participants de la squad</li>
+        <li>La liste des confirmations est visible pour tous les participants de la squad</li>
         <li>Les gens voient qui a dit "oui", "peut-être", "non"</li>
         <li>Juste voir "7 personnes ont confirmé" augmente la responsabilité</li>
       </ul>
@@ -393,7 +393,7 @@ export const BLOG_POSTS: BlogPost[] = [
       <p><strong>Stratégie :</strong></p>
       <ul>
         <li>Identifie 3-4 personnes "flexibles" qui peuvent potentiellement t'aider en dernier recours</li>
-        <li>Dès qu'un RSVP devient "non" ou que tu as un ghost (24h avant), tu les contactes</li>
+        <li>Dès qu'une réponse passe à "non" ou que tu as un ghost (24h avant), tu les contactes</li>
         <li>"Hey, une place s'est libérée pour [Session]... tu peux\u00a0?"</li>
       </ul>
 
@@ -444,7 +444,7 @@ export const BLOG_POSTS: BlogPost[] = [
       <ol>
         <li>Score de fiabilité transparent (Squad Planner fait ça)</li>
         <li>Deadline claire pour annuler (communiquée dans chaque session)</li>
-        <li>RSVP visible à tous (crée la responsabilité)</li>
+        <li>Confirmations visibles par tous (crée la responsabilité)</li>
         <li>File d'attente de remplaçants (safety net)</li>
         <li>Célébration de la fiabilité (positiver la culture)</li>
       </ol>
@@ -453,7 +453,7 @@ export const BLOG_POSTS: BlogPost[] = [
 
       <p>Et le meilleur\u00a0? Ça crée une squad plus soudée, plus motivée, et plus amusante pour tout le monde.</p>
 
-      <p>À tes RSVP\u00a0!</p>
+      <p>À toi de jouer\u00a0!</p>
     </article>`,
   },
 ]

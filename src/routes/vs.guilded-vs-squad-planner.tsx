@@ -41,7 +41,7 @@ export function meta() {
     {
       property: 'og:description',
       content:
-        'Guilded a fermé. Squad Planner offre une meilleure organisation gaming avec calendrier, RSVP fiable, notifications et analytics. Voir la comparaison.',
+        'Guilded a fermé. Squad Planner offre une meilleure organisation gaming avec calendrier, confirmation fiable, notifications et analytics. Voir la comparaison.',
     },
     {
       property: 'og:url',

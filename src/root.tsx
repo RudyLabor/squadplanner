@@ -59,7 +59,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
         <meta
           name="description"
-          content="Squad Planner | Le Calendly du gaming. Crée ta squad, planifie tes sessions avec RSVP et fiabilité mesurée. Fini les « on verra ». Gratuit."
+          content="Squad Planner | Le Calendly du gaming. Crée ta squad, planifie tes sessions avec confirmation de présence et fiabilité mesurée. Fini les « on verra ». Gratuit."
         />
         <meta name="theme-color" content="#0c0c14" />
         <meta name="mobile-web-app-capable" content="yes" />
@@ -124,7 +124,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <meta property="og:title" content="Squad Planner | Le Calendly du gaming" />
         <meta
           property="og:description"
-          content="Crée ta squad, planifie tes sessions avec RSVP et fiabilité mesurée. Fini les « on verra » — ta squad joue pour de vrai. Gratuit, en 30 secondes."
+          content="Crée ta squad, planifie tes sessions avec confirmation de présence et fiabilité mesurée. Fini les « on verra » — ta squad joue pour de vrai. Gratuit, en 30 secondes."
         />
         <meta property="og:url" content="https://squadplanner.fr" />
         <meta property="og:image" content="https://squadplanner.fr/og-image.png" />
@@ -138,7 +138,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <meta name="twitter:title" content="Squad Planner | Le Calendly du gaming" />
         <meta
           name="twitter:description"
-          content="Crée ta squad, planifie tes sessions avec RSVP et fiabilité mesurée. Fini les « on verra » — ta squad joue pour de vrai. Gratuit, en 30 secondes."
+          content="Crée ta squad, planifie tes sessions avec confirmation de présence et fiabilité mesurée. Fini les « on verra » — ta squad joue pour de vrai. Gratuit, en 30 secondes."
         />
         <meta name="twitter:image" content="https://squadplanner.fr/og-image.png" />
 

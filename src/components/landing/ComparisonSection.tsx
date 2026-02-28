@@ -19,7 +19,7 @@ function DiscordIcon({ className }: { className?: string }) {
 
 const comparisons = [
   {
-    feature: 'Planning de sessions avec RSVP',
+    feature: 'Planning de sessions avec confirmation',
     discord: false,
     discordNote: '',
     squad: true,

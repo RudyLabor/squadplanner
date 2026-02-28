@@ -44,7 +44,7 @@ export const FAQ_ITEMS: FAQItem[] = [
   },
   {
     category: 'Sessions',
-    question: 'Je peux changer ma réponse après avoir RSVP ?',
+    question: 'Je peux changer ma réponse après avoir confirmé ?',
     answer:
       'Oui ! Tu peux modifier ta réponse à tout moment avant le début de la session. Mais attention, changer à la dernière minute (moins de 30 minutes avant le début) peut affecter ton score de fiabilité. Pour modifier, retourne simplement sur la session et clique sur ton nouveau statut.',
   },

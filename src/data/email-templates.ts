@@ -107,7 +107,7 @@ const welcome: EmailTemplate = {
                     <div style="background-color: #222238; border: 1px solid #404050; border-radius: 8px; padding: 20px; text-align: center;">
                       <div style="font-size: 28px; margin-bottom: 10px;">📅</div>
                       <h3 style="color: #ffffff; font-size: 16px; font-weight: 600; margin: 0 0 8px 0;">Planifie ta première session</h3>
-                      <p style="color: #9ca3af; font-size: 13px; margin: 0;">Mets en place votre premier jeu ensemble</p>
+                      <p style="color: #9ca3af; font-size: 13px; margin: 0;">Mets en place ton premier jeu ensemble</p>
                     </div>
                   </td>
                 </tr>
@@ -117,7 +117,7 @@ const welcome: EmailTemplate = {
               <table width="100%" cellpadding="0" cellspacing="0" style="margin: 30px 0 0 0;">
                 <tr>
                   <td style="text-align: center;">
-                    <a href="https://squadplanner.fr/squads/create" style="display: inline-block; background-color: #8B5CF6; color: #ffffff; text-decoration: none; padding: 14px 32px; border-radius: 8px; font-weight: 600; font-size: 16px; transition: background-color 0.2s;">Crée ta première squad</a>
+                    <a href="https://squadplanner.fr/squads" style="display: inline-block; background-color: #8B5CF6; color: #ffffff; text-decoration: none; padding: 14px 32px; border-radius: 8px; font-weight: 600; font-size: 16px; transition: background-color 0.2s;">Crée ta première squad</a>
                   </td>
                 </tr>
               </table>
@@ -415,7 +415,7 @@ const squadPlaying: EmailTemplate = {
 
               <!-- Main message -->
               <p style="color: #e5e7eb; font-size: 16px; line-height: 1.6; margin: 0 0 25px 0;">
-                Les gars se sont rassemblés et ils ont déjà quelques sessions au compteur. Pas de panique, tu peux encore les rattraper !
+                Ta squad s'est rassemblée et a déjà quelques sessions au compteur. Pas de panique, tu peux encore les rattraper !
               </p>
 
               <!-- Recent sessions -->
@@ -423,36 +423,12 @@ const squadPlaying: EmailTemplate = {
                 <h3 style="color: #ffffff; font-size: 16px; font-weight: 600; margin: 0 0 15px 0;">Sessions récentes</h3>
 
                 <!-- Session 1 -->
-                <div style="border-bottom: 1px solid #404050; padding-bottom: 12px; margin-bottom: 12px;">
-                  <table width="100%" cellpadding="0" cellspacing="0">
-                    <tr>
-                      <td style="width: 100%;">
-                        <p style="color: #e5e7eb; font-size: 14px; font-weight: 600; margin: 0 0 4px 0;">🎮 Valorant — Session 5v5</p>
-                        <p style="color: #9ca3af; font-size: 13px; margin: 0;">Avec Alex, Jordan, Maya — Il y a 2 jours</p>
-                      </td>
-                    </tr>
-                  </table>
-                </div>
-
-                <!-- Session 2 -->
-                <div style="border-bottom: 1px solid #404050; padding-bottom: 12px; margin-bottom: 12px;">
-                  <table width="100%" cellpadding="0" cellspacing="0">
-                    <tr>
-                      <td style="width: 100%;">
-                        <p style="color: #e5e7eb; font-size: 14px; font-weight: 600; margin: 0 0 4px 0;">🎮 CS2 — Competitive Match</p>
-                        <p style="color: #9ca3af; font-size: 13px; margin: 0;">Avec Alex, Sam, Casey — Il y a 1 jour</p>
-                      </td>
-                    </tr>
-                  </table>
-                </div>
-
-                <!-- Session 3 -->
                 <div style="padding-bottom: 0;">
                   <table width="100%" cellpadding="0" cellspacing="0">
                     <tr>
                       <td style="width: 100%;">
-                        <p style="color: #e5e7eb; font-size: 14px; font-weight: 600; margin: 0 0 4px 0;">🎮 Fortnite — Squad Battle Royale</p>
-                        <p style="color: #9ca3af; font-size: 13px; margin: 0;">Avec Jordan, Maya, Casey — Aujourd'hui</p>
+                        <p style="color: #e5e7eb; font-size: 14px; font-weight: 600; margin: 0 0 4px 0;">🎮 Ta squad t'attend</p>
+                        <p style="color: #9ca3af; font-size: 13px; margin: 0;">Des sessions ont eu lieu pendant ton absence — reviens voir ce que tu as manqué.</p>
                       </td>
                     </tr>
                   </table>
@@ -913,7 +889,7 @@ const monthlyDigest: EmailTemplate = {
               <table width="100%" cellpadding="0" cellspacing="0" style="margin: 30px 0 0 0;">
                 <tr>
                   <td style="text-align: center;">
-                    <a href="https://squadplanner.fr/stats" style="display: inline-block; background-color: #8B5CF6; color: #ffffff; text-decoration: none; padding: 14px 32px; border-radius: 8px; font-weight: 600; font-size: 16px; transition: background-color 0.2s;">Voir mes stats</a>
+                    <a href="https://squadplanner.fr/profile" style="display: inline-block; background-color: #8B5CF6; color: #ffffff; text-decoration: none; padding: 14px 32px; border-radius: 8px; font-weight: 600; font-size: 16px; transition: background-color 0.2s;">Voir mes stats</a>
                   </td>
                 </tr>
               </table>
@@ -994,13 +970,13 @@ const anniversary: EmailTemplate = {
                     <td style="width: 50%; padding-right: 8px; padding-bottom: 12px;">
                       <div style="background-color: #1c1c2e; border: 1px solid #404050; border-radius: 6px; padding: 15px; text-align: center;">
                         <p style="color: #9ca3af; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; margin: 0 0 6px 0;">Sessions totales</p>
-                        <p style="color: #8B5CF6; font-size: 28px; font-weight: 700; margin: 0;">142</p>
+                        <p style="color: #8B5CF6; font-size: 28px; font-weight: 700; margin: 0;">${escapeHtml(vars.sessions_count || '—')}</p>
                       </div>
                     </td>
                     <td style="width: 50%; padding-left: 8px; padding-bottom: 12px;">
                       <div style="background-color: #1c1c2e; border: 1px solid #404050; border-radius: 6px; padding: 15px; text-align: center;">
                         <p style="color: #9ca3af; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; margin: 0 0 6px 0;">Heures jouées</p>
-                        <p style="color: #10b981; font-size: 28px; font-weight: 700; margin: 0;">487h</p>
+                        <p style="color: #10b981; font-size: 28px; font-weight: 700; margin: 0;">${escapeHtml(vars.hours_played || '—')}</p>
                       </div>
                     </td>
                   </tr>
@@ -1008,13 +984,13 @@ const anniversary: EmailTemplate = {
                     <td style="width: 50%; padding-right: 8px;">
                       <div style="background-color: #1c1c2e; border: 1px solid #404050; border-radius: 6px; padding: 15px; text-align: center;">
                         <p style="color: #9ca3af; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; margin: 0 0 6px 0;">XP total</p>
-                        <p style="color: #ec4899; font-size: 28px; font-weight: 700; margin: 0;">42.5K</p>
+                        <p style="color: #ec4899; font-size: 28px; font-weight: 700; margin: 0;">${escapeHtml(vars.total_xp || '—')}</p>
                       </div>
                     </td>
                     <td style="width: 50%; padding-left: 8px;">
                       <div style="background-color: #1c1c2e; border: 1px solid #404050; border-radius: 6px; padding: 15px; text-align: center;">
                         <p style="color: #9ca3af; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; margin: 0 0 6px 0;">Fiabilité moyenne</p>
-                        <p style="color: #f59e0b; font-size: 28px; font-weight: 700; margin: 0;">88%</p>
+                        <p style="color: #f59e0b; font-size: 28px; font-weight: 700; margin: 0;">${escapeHtml(vars.reliability_score || '—')}</p>
                       </div>
                     </td>
                   </tr>

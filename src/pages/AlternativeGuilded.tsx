@@ -27,7 +27,7 @@ const features = [
   },
   {
     icon: Sparkles,
-    name: 'RSVP Fiable',
+    name: 'Confirmation fiable',
     hasOnSP: true,
   },
   {
@@ -70,7 +70,7 @@ const faqs = [
     id: 'free',
     question: "C'est vraiment gratuit ?",
     answer:
-      "Oui. Calendrier illimité, RSVP, notifications. Tout ça gratuit. Premium te donne des analytics avancées si tu veux. Mais l'essentiel reste gratuit.",
+      "Oui. Calendrier illimité, confirmations de présence, notifications. Tout ça gratuit. Premium te donne des analytics avancées si tu veux. Mais l'essentiel reste gratuit.",
   },
 ]
 
@@ -125,7 +125,7 @@ export default function AlternativeGuilded() {
             viewport={{ once: true }}
             className="text-lg md:text-xl text-text-tertiary mb-10 max-w-2xl mx-auto leading-relaxed"
           >
-            Même vibe que Guilded, mais taillé pour tes sessions. Calendrier, RSVP qui tient,
+            Même vibe que Guilded, mais taillé pour tes sessions. Calendrier, confirmations qui tiennent,
             notifications push. Organise sans prise de tête.
           </m.p>
 

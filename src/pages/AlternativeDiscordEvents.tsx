@@ -6,7 +6,7 @@ import { scrollReveal, scrollRevealLight, springTap } from '../utils/animations'
 
 const limitations = [
   {
-    title: 'Des RSVP qui servent à rien',
+    title: 'Des confirmations qui servent à rien',
     discord: 'Les gens disent oui sur Discord mais ne viennent pas. Zéro suivi. Zéro rappel.',
     squadPlanner: "Notif push, rappels 1h avant, scores de fiabilité. Tu sais qui t'oublie.",
   },
@@ -24,14 +24,14 @@ const limitations = [
 
 const advantages = [
   {
-    title: 'RSVP qui tient',
+    title: 'Confirmation qui tient',
     description: 'Notif push, rappels 1h avant. Les gens viennent vraiment. Point.',
     icon: Check,
   },
   {
     title: 'Pensé pour le gaming',
     description:
-      "Squad Planner, c'est l'orga gaming complète\u00a0: calendrier, RSVP, chat intégré et party vocale. Discord = commu.",
+      "Squad Planner, c'est l'orga gaming complète\u00a0: calendrier, confirmation de présence, chat intégré et party vocale. Discord = commu.",
     icon: Users,
   },
   {
@@ -308,7 +308,7 @@ export default function AlternativeDiscordEvents() {
           >
             <p className="text-text-secondary mb-8 leading-relaxed text-lg">
               T'as une squad qui joue chaque mardi 21h. Sur Discord, tu crées un événement chaque
-              fois. Chiant. Chez nous, tu crées une fois, c'est auto. Les mecs reçoivent une notif
+              fois. Chiant. Chez nous, tu crées une fois, c'est auto. Tout le monde reçoit une notif
               1h avant. Tu vois qui flake. T'as des stats. Boom. Une vraie plateforme gaming.
             </p>
             <m.div whileHover={{ scale: 1.02, y: -2 }} {...springTap}>

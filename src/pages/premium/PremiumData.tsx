@@ -168,24 +168,24 @@ export const FEATURES = [
 
 export const TESTIMONIALS = [
   {
-    name: 'AlexGaming',
-    squad: 'Les Ranked du Soir',
-    memberSince: 'Membre depuis 6 mois',
-    text: "Depuis qu'on est Premium, plus personne oublie les sessions. Le coach IA nous a fait gagner 2 ranks !",
+    name: 'Le capitaine de squad',
+    squad: 'Exemple : squad ranked',
+    memberSince: 'Cas d\'usage type',
+    text: "Plus personne n'oublie les sessions. Le coach IA analyse tes habitudes et te propose les meilleurs créneaux pour ta squad.",
     avatarType: 'alex' as const,
   },
   {
-    name: 'MarieGG',
-    squad: 'GG Girls',
-    memberSince: 'Membre depuis 4 mois',
-    text: "L'audio HD fait vraiment la diff en ranked. Et les stats nous aident à voir qui clutch le plus.",
+    name: 'La joueuse compétitive',
+    squad: 'Exemple : squad féminine',
+    memberSince: 'Cas d\'usage type',
+    text: "L'audio HD fait la différence en ranked. Les stats détaillées montrent qui clutch le plus — et ça motive tout le monde.",
     avatarType: 'marie' as const,
   },
   {
-    name: 'LucasApex',
-    squad: 'Apex Legends FR',
-    memberSince: 'Membre depuis 8 mois',
-    text: 'On gère 5 squads différentes maintenant. Impossible sans Premium !',
+    name: 'Le multi-squad',
+    squad: 'Exemple : plusieurs jeux',
+    memberSince: 'Cas d\'usage type',
+    text: "Gérer plusieurs squads sur différents jeux, c'est le vrai avantage. Un seul dashboard pour tout organiser.",
     avatarType: 'lucas' as const,
   },
 ]

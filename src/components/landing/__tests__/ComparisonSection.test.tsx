@@ -112,7 +112,7 @@ describe('ComparisonSection', () => {
 
   it('renders all 7 comparison features', () => {
     render(<ComparisonSection />)
-    expect(screen.getByText('Planning de sessions avec RSVP')).toBeInTheDocument()
+    expect(screen.getByText('Planning de sessions avec confirmation')).toBeInTheDocument()
     expect(screen.getByText('Score de fiabilité par joueur')).toBeInTheDocument()
     expect(screen.getByText('Check-in présence réelle')).toBeInTheDocument()
     expect(screen.getByText('Coach IA personnalisé')).toBeInTheDocument()
@@ -133,7 +133,7 @@ describe('ComparisonSection', () => {
 
   it('renders X icons for features Discord does not have', () => {
     render(<ComparisonSection />)
-    // 4 features where discord === false: Planning RSVP, Score fiabilité, Check-in, Coach IA
+    // 4 features where discord === false: Planning confirmation, Score fiabilité, Check-in, Coach IA
     const xIcons = screen.getAllByTestId('icon-x')
     expect(xIcons.length).toBe(4)
   })

@@ -174,7 +174,7 @@ export const useAIStore = create<AIState>((set) => ({
         tips.push({
           id: 'general',
           type: 'general',
-          content: "Utilisez le RSVP obligatoire pour augmenter l'engagement de votre squad.",
+          content: "Active la confirmation de présence obligatoire pour augmenter l'engagement de ta squad.",
         })
       }
 

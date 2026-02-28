@@ -177,7 +177,7 @@ describe('NotificationBell', () => {
           id: '1',
           type: 'rsvp',
           title: 'MySquad',
-          body: 'Nouveau RSVP sur "Session A"',
+          body: 'Nouvelle confirmation sur "Session A"',
           read: false,
           created_at: new Date().toISOString(),
         },
@@ -185,7 +185,7 @@ describe('NotificationBell', () => {
           id: '2',
           type: 'rsvp',
           title: 'OtherSquad',
-          body: 'Nouveau RSVP sur "Session B"',
+          body: 'Nouvelle confirmation sur "Session B"',
           read: true,
           created_at: new Date().toISOString(),
         },
@@ -195,8 +195,8 @@ describe('NotificationBell', () => {
     render(<NotificationBell />)
     expect(screen.getByText('MySquad')).toBeInTheDocument()
     expect(screen.getByText('OtherSquad')).toBeInTheDocument()
-    expect(screen.getByText('Nouveau RSVP sur "Session A"')).toBeInTheDocument()
-    expect(screen.getByText('Nouveau RSVP sur "Session B"')).toBeInTheDocument()
+    expect(screen.getByText('Nouvelle confirmation sur "Session A"')).toBeInTheDocument()
+    expect(screen.getByText('Nouvelle confirmation sur "Session B"')).toBeInTheDocument()
   })
 
   it('marks notification as read on click', () => {

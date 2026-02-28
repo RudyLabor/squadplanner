@@ -62,7 +62,7 @@ export function meta({ params }: { params: { game: string } }) {
     { property: 'og:title', content: `Chercher des joueurs ${game.name}` },
     {
       property: 'og:description',
-      content: `Trouvez des joueurs ${game.name} et formez votre squad idéale.`,
+      content: `Trouve des joueurs ${game.name} et forme ta squad idéale.`,
     },
   ]
 }
@@ -439,7 +439,7 @@ export default function Component() {
               {
                 name: 'Théo',
                 role: 'Capitaine de squad',
-                text: "Le truc qui change tout c'est le RSVP. Les gens disent OUI ou NON, pas « peut-être ». Du coup quand c'est l'heure, tout le monde est là.",
+                text: "Le truc qui change tout c'est la confirmation. Les gens disent OUI ou NON, pas « peut-être ». Du coup quand c'est l'heure, tout le monde est là.",
                 delay: 0.3,
               },
             ].map((testimonial, idx) => (

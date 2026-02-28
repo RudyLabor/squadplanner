@@ -23,7 +23,7 @@ export function meta() {
     {
       name: 'keywords',
       content:
-        'Guilded fermeture, alternative Guilded, Squad Planner, calendrier gaming, RSVP gaming',
+        'Guilded fermeture, alternative Guilded, Squad Planner, calendrier gaming, confirmation gaming',
     },
     {
       tagName: 'link',
@@ -62,7 +62,7 @@ export function meta() {
     {
       name: 'twitter:description',
       content:
-        'La plateforme gaming parfaite pour remplacer Guilded. Calendrier, RSVP, notifications. Gratuit.',
+        'La plateforme gaming parfaite pour remplacer Guilded. Calendrier, confirmations, notifications. Gratuit.',
     },
     {
       httpEquiv: 'content-language',

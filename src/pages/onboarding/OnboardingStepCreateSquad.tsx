@@ -40,7 +40,7 @@ export function OnboardingStepCreateSquad({
           <Users className="w-8 h-8 text-primary" />
         </div>
         <h2 className="text-xl font-bold text-text-primary mb-2">Cr&eacute;e ta squad</h2>
-        <p className="text-text-secondary">Donne-lui un nom et choisis votre jeu principal</p>
+        <p className="text-text-secondary">Donne-lui un nom et choisis ton jeu principal</p>
       </div>
 
       <Card>

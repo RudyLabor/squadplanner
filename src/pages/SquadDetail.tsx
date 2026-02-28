@@ -76,7 +76,7 @@ export default function SquadDetail() {
         if (!import.meta.env.PROD) console.error('RSVP error:', err)
         setSuccessMessage(null)
         // Brief error toast via success message slot
-        setSuccessMessage('Erreur lors du RSVP. Réessaye.')
+        setSuccessMessage('Erreur lors de la confirmation. Réessaye.')
       }
     },
     [rsvpMutation]

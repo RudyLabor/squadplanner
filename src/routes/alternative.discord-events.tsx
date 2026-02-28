@@ -18,12 +18,12 @@ export function meta() {
     {
       name: 'description',
       content:
-        'Les événements Discord ne sont pas assez pour les sessions gaming. Squad Planner offre calendrier, RSVP fiable, notifications et analytics. Gratuit.',
+        'Les événements Discord ne sont pas assez pour les sessions gaming. Squad Planner offre calendrier, confirmation fiable, notifications et analytics. Gratuit.',
     },
     {
       name: 'keywords',
       content:
-        'alternative événements Discord, calendrier gaming, RSVP fiable, organisation sessions gaming, Squad Planner',
+        'alternative événements Discord, calendrier gaming, confirmation fiable, organisation sessions gaming, Squad Planner',
     },
     {
       tagName: 'link',
@@ -41,7 +41,7 @@ export function meta() {
     {
       property: 'og:description',
       content:
-        "Plus qu'un simple événement Discord. Squad Planner offre une organisation gaming complète avec RSVP fiable, récurrence et analytics.",
+        "Plus qu'un simple événement Discord. Squad Planner offre une organisation gaming complète avec confirmation fiable, récurrence et analytics.",
     },
     {
       property: 'og:url',
@@ -62,7 +62,7 @@ export function meta() {
     {
       name: 'twitter:description',
       content:
-        "Discord pour la commu, Squad Planner pour l'organisation. RSVP fiable, calendrier, notifications push.",
+        "Discord pour la commu, Squad Planner pour l'organisation. Confirmation fiable, calendrier, notifications push.",
     },
     {
       httpEquiv: 'content-language',

@@ -198,7 +198,7 @@ describe('SquadSettings', () => {
     fireEvent.click(screen.getByText('Exporter'))
     expect(mockExportFn).toHaveBeenCalledWith(defaultProps.sessions, defaultProps.squadName)
     expect(defaultProps.onSuccess).toHaveBeenCalledWith(
-      'Calendrier exporte ! Importez le fichier .ics dans votre app calendrier.'
+      'Calendrier exporté ! Importe le fichier .ics dans ton app calendrier.'
     )
   })
 

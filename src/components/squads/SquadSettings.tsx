@@ -170,7 +170,7 @@ export function SquadSettings({
                   try {
                     exportSessionsToICS(sessions, squadName)
                     onSuccess(
-                      'Calendrier exporte ! Importez le fichier .ics dans votre app calendrier.'
+                      'Calendrier exporté ! Importe le fichier .ics dans ton app calendrier.'
                     )
                   } catch (error) {
                     onSuccess(error instanceof Error ? error.message : "Erreur lors de l'export")

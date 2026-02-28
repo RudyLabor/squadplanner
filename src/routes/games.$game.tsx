@@ -83,7 +83,7 @@ export function meta({ params }: { params: { game: string } }) {
             name: `Comment planifier une session ${game.name} ?`,
             acceptedAnswer: {
               '@type': 'Answer',
-              text: `Utilisez Squad Planner pour créer une session ${game.name}, inviter vos amis et gérer les RSVP automatiquement.`,
+              text: `Utilise Squad Planner pour créer une session ${game.name}, inviter tes amis et gérer les confirmations de présence automatiquement.`,
             },
           },
           {

@@ -18,7 +18,7 @@ const comparisonFeatures = [
     description: 'Planifie et répète automatiquement',
   },
   {
-    name: 'RSVP fiable',
+    name: 'Confirmation fiable',
     squadPlanner: true,
     gamerLink: false,
     description: 'Score de fiabilité intégré',
@@ -75,7 +75,7 @@ const advantages = [
     icon: Sparkles,
   },
   {
-    title: 'RSVP qui tient',
+    title: 'Confirmation qui tient',
     description:
       'Notifs push, rappels 1h avant. Ceux qui disent oui viennent vraiment. Plus de no-shows.',
     icon: Check,

@@ -42,10 +42,10 @@ export function OnboardingStepSplash({
         transition={{ delay: 0.2 }}
         className="text-2xl md:text-3xl font-bold text-text-primary mb-4 leading-tight"
       >
-        Arr&ecirc;tez de dire
+        Arr&ecirc;te de dire
         <br />
         <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-purple">
-          "on verra"
+          « on verra »
         </span>
       </m.h1>
 
@@ -55,7 +55,7 @@ export function OnboardingStepSplash({
         transition={{ delay: 0.4 }}
         className="text-lg text-text-secondary mb-10"
       >
-        Jouez vraiment ensemble.
+        Joue vraiment avec ta squad.
       </m.p>
 
       <m.div

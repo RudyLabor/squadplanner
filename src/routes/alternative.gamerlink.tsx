@@ -23,7 +23,7 @@ export function meta() {
     {
       name: 'keywords',
       content:
-        'alternative GamerLink, matchmaking gaming, Squad Planner, calendrier sessions, RSVP gaming fiable',
+        'alternative GamerLink, matchmaking gaming, Squad Planner, calendrier sessions, confirmation gaming fiable',
     },
     {
       tagName: 'link',
@@ -62,7 +62,7 @@ export function meta() {
     {
       name: 'twitter:description',
       content:
-        'Comparaison complète : GamerLink vs Squad Planner. Matchmaking + calendrier + RSVP fiable.',
+        'Comparaison complète : GamerLink vs Squad Planner. Matchmaking + calendrier + confirmation fiable.',
     },
     {
       httpEquiv: 'content-language',

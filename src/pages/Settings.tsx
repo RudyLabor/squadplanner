@@ -306,7 +306,7 @@ export function Settings() {
           <div className="space-y-1">
             <SettingRow
               label="Sons de l'interface"
-              description="Jouer des sons pour les actions (messages, RSVP, etc.)"
+              description="Jouer des sons pour les actions (messages, confirmations, etc.)"
             >
               <SoundToggle />
             </SettingRow>

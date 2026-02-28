@@ -9,14 +9,14 @@ const features = [
   { category: 'Organisation', name: "Calendrier d'événements", guilded: true, squadPlanner: true },
   { category: 'Organisation', name: 'Événements récurrents', guilded: false, squadPlanner: true },
   { category: 'Organisation', name: 'Rappels automatiques', guilded: false, squadPlanner: true },
-  { category: 'Organisation', name: 'RSVP avec fiabilité', guilded: true, squadPlanner: true },
+  { category: 'Organisation', name: 'Confirmation avec fiabilité', guilded: true, squadPlanner: true },
   { category: 'Communauté', name: 'Groupes/Squads', guilded: true, squadPlanner: true },
   { category: 'Communauté', name: 'Messages & Chat', guilded: true, squadPlanner: true },
   { category: 'Communauté', name: 'Party Vocale', guilded: false, squadPlanner: true },
   { category: 'Communauté', name: 'Profils Gaming', guilded: false, squadPlanner: true },
   { category: 'Fiabilité', name: 'Notifications Push', guilded: false, squadPlanner: true },
   { category: 'Fiabilité', name: 'Historique de présence', guilded: false, squadPlanner: true },
-  { category: 'Analytics', name: 'Statistiques RSVP', guilded: false, squadPlanner: true },
+  { category: 'Analytics', name: 'Statistiques de présence', guilded: false, squadPlanner: true },
   { category: 'Analytics', name: 'Taux de présence', guilded: false, squadPlanner: true },
   { category: 'Analytics', name: 'Insights par joueur', guilded: false, squadPlanner: true },
 ]
@@ -38,7 +38,7 @@ const faqs = [
     id: 'premium-worth',
     question: "C'est quoi Premium ?",
     answer:
-      "Premium, c'est : analytics avancées, custom squads, API. Mais calendrier, RSVP, notif push ? Gratuit. L'essentiel, c'est gratuit.",
+      "Premium, c'est : analytics avancées, custom squads, API. Mais calendrier, confirmations, notif push ? Gratuit. L'essentiel, c'est gratuit.",
   },
   {
     id: 'both-platforms',
@@ -286,7 +286,7 @@ export default function VsGuildedVsSquadPlanner() {
                     </li>
                     <li className="flex items-start gap-2">
                       <Check className="w-4 h-4 text-emerald-400 flex-shrink-0 mt-0.5" />
-                      <span>RSVP fiable</span>
+                      <span>Confirmation fiable</span>
                     </li>
                     <li className="flex items-start gap-2">
                       <Check className="w-4 h-4 text-emerald-400 flex-shrink-0 mt-0.5" />
@@ -469,7 +469,7 @@ export default function VsGuildedVsSquadPlanner() {
                 C'est bon, tu viens ?
               </h2>
               <p className="text-text-tertiary mb-8 text-lg">
-                Code GUILDED30 = 30% sur Premium. Mais calendrier et RSVP c'est gratuit anyway.
+                Code GUILDED30 = 30% sur Premium. Mais calendrier et confirmations c'est gratuit anyway.
               </p>
               <m.div whileHover={{ scale: 1.03, y: -3 }} {...springTap} className="inline-flex">
                 <Link

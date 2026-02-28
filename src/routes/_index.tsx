@@ -17,7 +17,7 @@ export function meta() {
     {
       name: 'description',
       content:
-        'Crée ta squad, planifie tes sessions avec RSVP et fiabilité mesurée. Fini les « on verra ». Gratuit.',
+        'Crée ta squad, planifie tes sessions avec confirmation de présence et fiabilité mesurée. Fini les « on verra ». Gratuit.',
     },
     { tagName: 'link', rel: 'canonical', href: 'https://squadplanner.fr/' },
     { property: 'og:url', content: 'https://squadplanner.fr/' },

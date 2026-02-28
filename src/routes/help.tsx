@@ -13,7 +13,7 @@ export function meta() {
     {
       name: 'description',
       content:
-        "Centre d'aide Squad Planner : trouvez des réponses à vos questions sur la création de squads, planification de sessions, RSVP et fonctionnalités Premium.",
+        "Centre d'aide Squad Planner : trouve des réponses à tes questions sur la création de squads, la planification de sessions et les fonctionnalités Premium.",
     },
     { tagName: 'link', rel: 'canonical', href: 'https://squadplanner.fr/help' },
     { property: 'og:url', content: 'https://squadplanner.fr/help' },

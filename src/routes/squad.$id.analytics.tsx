@@ -8,7 +8,7 @@ export function headers(_args: HeadersArgs) {
 export function meta() {
   return [
     { title: 'Analytiques Squad - Squad Planner' },
-    { name: 'description', content: 'Tableau de bord analytique pour votre squad.' },
+    { name: 'description', content: 'Tableau de bord analytique pour ta squad.' },
   ]
 }
 

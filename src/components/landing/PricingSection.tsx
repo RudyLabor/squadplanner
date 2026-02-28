@@ -135,7 +135,7 @@ export function PricingSection() {
             >
               Annuel
               <span className="px-1.5 py-0.5 rounded-full bg-black/25 text-white text-xs font-bold">
-                -20%
+                Jusqu'à -29%
               </span>
             </button>
           </div>

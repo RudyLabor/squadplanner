@@ -113,7 +113,7 @@ export function Wrapped() {
         })
       } catch (err) {
         if (!import.meta.env.PROD) console.error('Error fetching wrapped data:', err)
-        setError('Erreur lors du chargement de vos données')
+        setError('Erreur lors du chargement de tes données')
       } finally {
         setIsLoading(false)
       }
@@ -248,7 +248,7 @@ export function Wrapped() {
             transition={{ duration: 0.4 }}
             className="text-lg text-primary/60 mb-4"
           >
-            Sessions jouées
+            Heures jouées
           </m.p>
           <m.div
             key="hours-counter"

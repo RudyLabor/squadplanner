@@ -28,13 +28,13 @@ const pillars = [
     id: 'planning',
     icon: Calendar,
     illustration: CalendarIllustration,
-    title: 'Planning avec décision',
+    title: 'Planning intelligent',
     description:
       'Propose un créneau. Chacun répond OUI ou NON. Pas de « peut-être ». On sait qui vient.',
     color: 'var(--color-gold)',
     gradient: 'from-warning/[0.08] to-warning/[0.01]',
     details: [
-      'RSVP OUI ou NON — pas de « peut-être »',
+      'Confirme ta présence OUI ou NON — pas de « peut-être »',
       'Confirmation auto quand assez de joueurs',
       'Rappels avant chaque session',
     ],

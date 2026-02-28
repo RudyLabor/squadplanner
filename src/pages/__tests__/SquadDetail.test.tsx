@@ -541,7 +541,7 @@ describe('SquadDetail Page', () => {
     fireEvent.click(screen.getByTestId('rsvp-present'))
 
     await waitFor(() => {
-      expect(screen.getByTestId('success-toast').textContent).toContain('Erreur lors du RSVP')
+      expect(screen.getByTestId('success-toast').textContent).toContain('Erreur lors de la confirmation')
     })
     errorSpy.mockRestore()
   })

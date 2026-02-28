@@ -85,7 +85,7 @@ describe('PricingSection', () => {
       render(<PricingSection />)
       const freeFeatures = [
         '2 squads gratuites',
-        'Sessions avec RSVP',
+        'Sessions avec confirmation',
         'Chat de squad',
         'Score de fiabilité',
         'Party vocale',

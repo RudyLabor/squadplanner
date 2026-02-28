@@ -30,7 +30,7 @@ const TOUR_STEPS: TourStepDef[] = [
     target: '[data-tour="sessions"]',
     title: 'Planifier une session',
     description:
-      'Propose un créneau de jeu et invite ta squad. Le système RSVP force tout le monde à répondre.',
+      'Propose un créneau de jeu et invite ta squad. Le système de confirmation force tout le monde à répondre.',
     icon: Calendar,
     position: 'right',
   },
@@ -54,7 +54,7 @@ const TOUR_STEPS: TourStepDef[] = [
     target: '[data-tour="ai-coach"]',
     title: 'Coach IA',
     description:
-      'Ton assistant perso : suggestions de créneaux, aide à la décision, rappels RSVP intelligents.',
+      'Ton assistant perso : suggestions de créneaux, aide à la décision, rappels intelligents.',
     icon: Sparkles,
     position: 'top',
   },

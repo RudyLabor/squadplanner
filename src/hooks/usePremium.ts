@@ -135,11 +135,11 @@ export const FREE_SESSIONS_PER_WEEK = TIER_LIMITS.free.sessionsPerWeek
 
 // ── Pricing constants ──
 export const PREMIUM_PRICE_MONTHLY = 6.99
-export const PREMIUM_PRICE_YEARLY = 59.88 // 4.99€/mois × 12
+export const PREMIUM_PRICE_YEARLY = 59.88 // 4.99€/mois × 12 — soit ~29% d'économie vs mensuel
 export const SQUAD_LEADER_PRICE_MONTHLY = 14.99
-export const SQUAD_LEADER_PRICE_YEARLY = 143.88 // 11.99€/mois × 12
+export const SQUAD_LEADER_PRICE_YEARLY = 143.88 // 11.99€/mois × 12 — soit ~20% d'économie vs mensuel
 export const CLUB_PRICE_MONTHLY = 39.99
-export const CLUB_PRICE_YEARLY = 383.88 // 31.99€/mois × 12
+export const CLUB_PRICE_YEARLY = 383.88 // 31.99€/mois × 12 — soit ~20% d'économie vs mensuel
 
 // ── Feature type (used by PremiumGate) ──
 export type PremiumFeature =

@@ -39,7 +39,7 @@ export function meta() {
     {
       name: 'description',
       content:
-        'Consulte et gère tes sessions de jeu planifiées. Confirme ta présence avec le système RSVP.',
+        'Consulte et gère tes sessions de jeu planifiées. Confirme ta présence en un clic.',
     },
     { tagName: 'link', rel: 'canonical', href: 'https://squadplanner.fr/sessions' },
     { property: 'og:url', content: 'https://squadplanner.fr/sessions' },
